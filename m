@@ -1,136 +1,250 @@
-From: fabrice.fontaine at orange.com <fabrice.fontaine@orange.com>
-Date: Fri, 22 Apr 2016 16:49:30 +0200
-Subject: [Buildroot] [PATCH 1/1] domoticz: new package
-Message-ID: <30737_1461336609_571A3A21_30737_6929_1_000623e0-df53-498e-8145-247406707520@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
+From: =?UTF-8?B?QmVub8OudA==?= Allard <benoit.allard@greenbone.net>
+Date: Fri, 22 Apr 2016 17:01:14 +0200
+Subject: [Buildroot] [PATCH 1/1] Preliminary support for Raspberry Pi 3.
+In-Reply-To: <1461150240-23107-1-git-send-email-ubaldo@eja.it>
+References: <1461150240-23107-1-git-send-email-ubaldo@eja.it>
+Message-ID: <20160422170114.1d505a64@armant.core.local.os.greenbone.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Domoticz is a Home Automation System that lets you monitor andi
-configure various devices like: Lights, Switches, various
-sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
-and much more. Notifications/Alerts can be sent to any mobile device.
+Hi Ubaldo,
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
----
- package/Config.in            |  1 +
- package/domoticz/Config.in   | 39 +++++++++++++++++++++++++++++++++++++++
- package/domoticz/domoticz.mk | 33 +++++++++++++++++++++++++++++++++
- 3 files changed, 73 insertions(+)
- create mode 100644 package/domoticz/Config.in
- create mode 100644 package/domoticz/domoticz.mk
+I updated a bit your defconfig (see below), and I was able to boot the
+generated image. Weirdly I get no getty on the HDMI, just the kernel
+boot log. Have I done something wrong ?
 
-diff --git a/package/Config.in b/package/Config.in
-index cf697ab..15ed544 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1319,6 +1319,7 @@ menu "Miscellaneous"
- 	source "package/bc/Config.in"
- 	source "package/clamav/Config.in"
- 	source "package/collectd/Config.in"
-+	source "package/domoticz/Config.in"
- 	source "package/empty/Config.in"
- 	source "package/gnuradio/Config.in"
- 	source "package/googlefontdirectory/Config.in"
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-new file mode 100644
-index 0000000..085b260
---- /dev/null
-+++ b/package/domoticz/Config.in
-@@ -0,0 +1,39 @@
-+config BR2_PACKAGE_DOMOTICZ
-+	bool "domoticz"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_PACKAGE_LUA_5_2
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_DATE_TIME
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_MOSQUITTO
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Domoticz is a Home Automation System that lets you monitor andi
-+	  configure various devices like: Lights, Switches, various
-+	  sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
-+	  and much more. Notifications/Alerts can be sent to any mobile device.
-+
-+	  http://domoticz.com
-+
-+comment "domoticz needs lua 5.2 and a toolchain w/ C++, threads, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR || !BR2_PACKAGE_LUA_5_2
-+
-+if BR2_PACKAGE_DOMOTICZ
-+
-+config BR2_PACKAGE_DOMOTICZ_ZWAVE_SUPPORT
-+	bool "domoticz zwave support"
-+	depends on BR2_PACKAGE_OPENZWAVE
-+	help
-+	  Enable ZWave support through openzwave library.
-+
-+comment "domoticz zwave support depends on openzwave library"
-+	depends on !BR2_PACKAGE_OPENZWAVE
-+
-+endif
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-new file mode 100644
-index 0000000..3a427c0
---- /dev/null
-+++ b/package/domoticz/domoticz.mk
-@@ -0,0 +1,33 @@
-+################################################################################
-+#
-+# domoticz
-+#
-+################################################################################
-+
-+DOMOTICZ_VERSION = 3.4834
-+DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
-+DOMOTICZ_LICENSE = GPLv3
-+DOMOTICZ_LICENSE_FILES = License.txt
-+DOMOTICZ_DEPENDENCIES = boost host-pkgconf libcurl lua mosquitto openssl \
-+        sqlite zlib
-+
-+# Do not use static version of boost
-+DOMOTICZ_CONF_OPTS = -DUSE_STATIC_BOOST=no
-+
-+# Do not use any built-in libraries which are enabled by default for lua, 
-+# sqlite and mqtt
-+DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_LUA=no
-+DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_SQLITE=no
-+DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_MQTT=no
-+
-+ifeq ($(BR2_PACKAGE_LIBUSB),y)
-+DOMOTICZ_DEPENDENCIES += libusb
-+endif
-+
-+# ZWave support depends on open-zwave.
-+ifeq ($(BR2_PACKAGE_DOMOTICZ_ZWAVE_SUPPORT),y)
-+DOMOTICZ_DEPENDENCIES += openzwave
-+DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=no
-+endif
-+
-+$(eval $(cmake-package))
--- 
-1.9.1
+Regards,
+Ben.
 
+On Wed, 20 Apr 2016 11:04:00 +0000
+Ubaldo Porcheddu <ubaldo@eja.it> wrote:
 
-_________________________________________________________________________________________________________________________
+> Signed-off-by: Ubaldo Porcheddu <ubaldo@eja.it>
+> ---
+>  board/raspberrypi3/genimage-raspberrypi3.cfg | 30 +++++++++++++
+>  board/raspberrypi3/post-build.sh             |  9 ++++
+>  board/raspberrypi3/post-image.sh             | 22 ++++++++++
+>  board/raspberrypi3/readme.txt                | 64
+> ++++++++++++++++++++++++++++
+> configs/raspberrypi3_defconfig               | 36 ++++++++++++++++ 5
+> files changed, 161 insertions(+) create mode 100644
+> board/raspberrypi3/genimage-raspberrypi3.cfg create mode 100755
+> board/raspberrypi3/post-build.sh create mode 100755
+> board/raspberrypi3/post-image.sh create mode 100644
+> board/raspberrypi3/readme.txt create mode 100644
+> configs/raspberrypi3_defconfig
+> 
+> diff --git a/board/raspberrypi3/genimage-raspberrypi3.cfg
+> b/board/raspberrypi3/genimage-raspberrypi3.cfg new file mode 100644
+> index 0000000..7ba89c5
+> --- /dev/null
+> +++ b/board/raspberrypi3/genimage-raspberrypi3.cfg
+> @@ -0,0 +1,30 @@
+> +image boot.vfat {
+> +  vfat {
+> +    files = {
+> +      "bcm2710-rpi-3-b.dtb",
+> +      "rpi-firmware/bootcode.bin",
+> +      "rpi-firmware/cmdline.txt",
+> +      "rpi-firmware/config.txt",
+> +      "rpi-firmware/fixup.dat",
+> +      "rpi-firmware/start.elf",
+> +      "kernel-marked/zImage"
+> +    }
+> +  }
+> +  size = 32M
+> +}
+> +
+> +image sdcard.img {
+> +  hdimage {
+> +  }
+> +
+> +  partition boot {
+> +    partition-type = 0xC
+> +    bootable = "true"
+> +    image = "boot.vfat"
+> +  }
+> +
+> +  partition rootfs {
+> +    partition-type = 0x83
+> +    image = "rootfs.ext4"
+> +  }
+> +}
+> diff --git a/board/raspberrypi3/post-build.sh
+> b/board/raspberrypi3/post-build.sh new file mode 100755
+> index 0000000..7eae14a
+> --- /dev/null
+> +++ b/board/raspberrypi3/post-build.sh
+> @@ -0,0 +1,9 @@
+> +#!/bin/sh
+> +
+> +set -u
+> +set -e
+> +
+> +# Add a console on tty1
+> +grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
+> +sed -i '/GENERIC_SERIAL/a\
+> +tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console'
+> ${TARGET_DIR}/etc/inittab diff --git
+> a/board/raspberrypi3/post-image.sh b/board/raspberrypi3/post-image.sh
+> new file mode 100755 index 0000000..73ffd65
+> --- /dev/null
+> +++ b/board/raspberrypi3/post-image.sh
+> @@ -0,0 +1,22 @@
+> +#!/bin/sh
+> +
+> +BOARD_DIR="$(dirname $0)"
+> +BOARD_NAME="$(basename ${BOARD_DIR})"
+> +GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
+> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+> +
+> +# Mark the kernel as DT-enabled
+> +mkdir -p "${BINARIES_DIR}/kernel-marked"
+> +${HOST_DIR}/usr/bin/mkknlimg "${BINARIES_DIR}/zImage" \
+> +	"${BINARIES_DIR}/kernel-marked/zImage"
+> +
+> +rm -rf "${GENIMAGE_TMP}"
+> +
+> +genimage                           \
+> +	--rootpath "${TARGET_DIR}"     \
+> +	--tmppath "${GENIMAGE_TMP}"    \
+> +	--inputpath "${BINARIES_DIR}"  \
+> +	--outputpath "${BINARIES_DIR}" \
+> +	--config "${GENIMAGE_CFG}"
+> +
+> +exit $?
+> diff --git a/board/raspberrypi3/readme.txt
+> b/board/raspberrypi3/readme.txt new file mode 100644
+> index 0000000..dcbcffd
+> --- /dev/null
+> +++ b/board/raspberrypi3/readme.txt
+> @@ -0,0 +1,64 @@
+> +Raspberry Pi
+> +
+> +Intro
+> +=====
+> +
+> +These instructions apply to Raspberry Pi 3 version B.
+> +
+> +How to build it
+> +===============
+> +
+> +Configure Buildroot
+> +-------------------
+> +
+> +
+> +  $ make raspberrypi3_defconfig
+> +
+> +
+> +Build the rootfs
+> +----------------
+> +
+> +Note: you will need to have access to the network, since Buildroot
+> will +download the packages' sources.
+> +
+> +You may now build your rootfs with:
+> +
+> +  $ make
+> +
+> +(This may take a while, consider getting yourself a coffee ;-) )
+> +
+> +Result of the build
+> +-------------------
+> +
+> +After building, you should obtain this tree:
+> +
+> +    output/images/
+> +    +-- bcm2710-rpi-3-b.dtb
+> +    +-- boot.vfat
+> +    +-- kernel-marked/zImage        [1]
+> +    +-- rootfs.ext4
+> +    +-- rpi-firmware/
+> +    |   +-- bootcode.bin
+> +    |   +-- cmdline.txt
+> +    |   +-- config.txt
+> +    |   +-- fixup.dat
+> +    |   `-- start.elf
+> +    +-- sdcard.img
+> +    `-- zImage
+> +
+> +[1] This is the mkknlimg DT-marked kernel.
+> +
+> +How to write the SD card
+> +========================
+> +
+> +Once the build process is finished you will have an image called
+> "sdcard.img" +in the output/images/ directory.
+> +
+> +Copy the bootable "sdcard.img" onto an SD card with "dd":
+> +
+> +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+> +
+> +Insert the SDcard into your Raspberry Pi, and power it up. Your new
+> system +should come up now and start two consoles: one on the serial
+> port on +the P1 header, one on the HDMI output where you can login
+> using a USB +keyboard.
+> diff --git a/configs/raspberrypi3_defconfig
+> b/configs/raspberrypi3_defconfig new file mode 100644
+> index 0000000..80ce908
+> --- /dev/null
+> +++ b/configs/raspberrypi3_defconfig
+> @@ -0,0 +1,36 @@
+> +BR2_arm=y
+> +BR2_cortex_a7=y
 
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+Raspberry3 are using A8 processors.
 
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+> +BR2_ARM_EABIHF=y
+> +BR2_ARM_FPU_NEON_VFPV4=y
+> +
+> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> +
+> +BR2_SYSTEM_DHCP="eth0"
+> +
+> +# Linux headers same as kernel, a 4.1 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+> +
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="20fe468af4bb40fec0f81753da4b20a8bfc259c9"
+
+Better use the branch name to allow shallow clones. in this case: 
+"rpi-4.1.y"
+
+Why don't you use a more recent branch ?
+
+> +BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+
+If using the 4.4 branch, there is a defconfig for bcm2710.
+
+> +
+> +# Build the DTB from the kernel sources
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b"
+> +
+> +BR2_PACKAGE_RPI_FIRMWARE=y
+> +# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
+> +
+> +# Required tools to create the SD image
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_MTOOLS=y
+> +
+> +# Filesystem / image
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 473 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160422/dc37e902/attachment.asc>
