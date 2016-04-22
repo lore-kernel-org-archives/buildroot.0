@@ -1,61 +1,68 @@
-From: Romain Izard <romain.izard.pro@gmail.com>
-Date: Fri, 22 Apr 2016 15:51:57 +0200
-Subject: [Buildroot] [PATCH v6] core/pkg-kconfig: Use olddefconfig when
-	available
-In-Reply-To: <20160421224719.GA3426@free.fr>
-References: <1461146052-13261-1-git-send-email-romain.izard.pro@gmail.com>
- <20160421224719.GA3426@free.fr>
-Message-ID: <CAGkQfmN+a=ZOxM94uOdK_EK-LM1B0W9Crji8oA4Fjq2mEZUPEg@mail.gmail.com>
+From: =?UTF-8?Q?Beno=c3=aet_Mauduit?= <bmauduit@beneth.fr>
+Date: Fri, 22 Apr 2016 15:58:26 +0200
+Subject: [Buildroot] [PATCH] yajl: fix build with uClibc
+In-Reply-To: <1461219335.6388.20.camel@embedded.rocks>
+References: <1461145087-63679-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1461219335.6388.20.camel@embedded.rocks>
+Message-ID: <571A2E02.8010904@beneth.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, all,
+Hi Vicente, J?rg,
 
-2016-04-22 0:47 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
->
-> Ok, so... Well... Err...
->
-> Could you respin v4 of the patch, the one that used something like:
->
->     make oldnoconfig || (yes "" |make oldconfig)
->
-> please? ;-)
->
-> OK, what's wrong with my proposal? It works in an unconfigured tree.
-> But as soon as the tree is configured, it breaks, notably with older
-> kernels, like 3.0.
->
->     $ cd linux-3.0
->     $ make -qpn oldefconfig 2>/dev/null |grep olddefconfig
->     [nothing]
->     $ touch .config
->     $ make -qpn oldefconfig 2>/dev/null |grep olddefconfig
->     olddefconfig: scripts_basic outputmakefile FORCE
->
-> But 3.0 does not have olddefconfig. It's jsut the %config generic rule
-> kicking in. So we'd believe there would be support for olddefconfig
-> (or oldnoconfig) when there isn't.
->
-> So, I have to apologise for the delusion. Your v4 is the best we can
-> do.
+On 04/21/2016 08:15 AM, J?rg Krause wrote:
+> (...)
+> 
+> I'm not sure if it's worth, but I would prefer to fix the CMake build
+> files of yajl by checking if libm is needed for isnan and it to the
+> list of LIBS and let all executables link against LIBS. Thomas
+> Petazzoni did this for an autotools package [3]. For CMake it would be
+> something like this:
+> 
+>     # check if isnan needs libm
+>     try_compile(ISNAN_NEEDS_LIBM, ...)
+>     if (ISNAN_NEEDS_LIBM)
+>       set(LIBS ${LIBS} m)
+>     endif ()
+> 
+>     [..]
+> 
+>     TARGET_LINK_LIBRARIES(${testProg} yajl ${LIBS})
+> 
 
-After some more testing, I believe it should work. I've tested the
-following command on the latest commit for all stable branches since
-2.6.11, and I can reliably detect which targets are supported. Moreover,
-I have the same output whether I touched .config or not.
+I just encountered this build issue.
+I end up with a patch like that, in yasl Top-level CMakeList.txt :
 
-make -pn O=dir config 2>/dev/null | grep -oE '^old(no|def)config:'
+  # uclibc does not provide isnan() & isinf().
+  # Symbol are in libm instead.
+  INCLUDE(CheckLibraryExists)
+  CHECK_LIBRARY_EXISTS(c isnan "" HAVE_LIBC_ISNAN)
 
-I believe the problem with your tests is that you try to use both '-q'
-and '-n', while GNU Make's manual states (Chapter 9.3, Instead of
-executing recipes) that:
+  IF (NOT HAVE_LIBC_ISNAN)
+    SET(CMAKE_SHARED_LINKER_FLAGS "-lm ${CMAKE_SHARED_LINKER_FLAGS}")
+  ENDIF (NOT HAVE_LIBC_ISNAN)
 
-"It is an error to use more than one of these three flags [-t -q -n] in
-the same invocation of 'make'."
 
-Best regards,
+It works with uClibc based toolchain.
+
+But I am not sure about this patch for compatibility with other C
+library. I have just test on my host (glibc) with a dummy CMakeList.txt,
+and :
+
+CHECK_LIBRARY_EXISTS(c isnan "" HAVE_LIBC_ISNAN)
+>>
+-- Looking for isnan in c
+-- Looking for isnan in c - found
+
+Anyway, looking at the man page for isnan & isinf, we are supposed to
+link against libmath... (Link with -lm)
+
+Regards,
+
 -- 
-Romain Izard
+Beno?t Mauduit
+Mail : <bmauduit@beneth.fr>
+XMPP : <bmauduit@im.beneth.fr>
