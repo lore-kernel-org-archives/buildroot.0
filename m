@@ -1,57 +1,136 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 22 Apr 2016 16:49:48 +0200
-Subject: [Buildroot] [PATCH 3/3] python-tornado: add Python 2
-	dependencies
-In-Reply-To: <1461332190-18340-3-git-send-email-yegorslists@googlemail.com>
-References: <1461332190-18340-1-git-send-email-yegorslists@googlemail.com>
- <1461332190-18340-3-git-send-email-yegorslists@googlemail.com>
-Message-ID: <CAGm1_kvArs0_DB-7sa40GyjMOc9J6YnPKavN355NcrDFJ0PYXg@mail.gmail.com>
+From: fabrice.fontaine at orange.com <fabrice.fontaine@orange.com>
+Date: Fri, 22 Apr 2016 16:49:30 +0200
+Subject: [Buildroot] [PATCH 1/1] domoticz: new package
+Message-ID: <30737_1461336609_571A3A21_30737_6929_1_000623e0-df53-498e-8145-247406707520@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Apr 22, 2016 at 3:36 PM,  <yegorslists@googlemail.com> wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
->
-> Some Python programs check dependencies of used Python packages at
-> runtime. As both python-backports-ssl-match-hostname and python-certifi
-> are not required for Python > 2.7.9, they are not required for tornado
-> to work. But tornado's setup.py checks only major and minor Python
-> versions, so such packages as python-circus will fail, if those
-> packages are not present at runtime.
->
-> Fixes #8856
->
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Domoticz is a Home Automation System that lets you monitor andi
+configure various devices like: Lights, Switches, various
+sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
+and much more. Notifications/Alerts can be sent to any mobile device.
 
-This patch depends on http://patchwork.ozlabs.org/patch/613610/
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+ package/Config.in            |  1 +
+ package/domoticz/Config.in   | 39 +++++++++++++++++++++++++++++++++++++++
+ package/domoticz/domoticz.mk | 33 +++++++++++++++++++++++++++++++++
+ 3 files changed, 73 insertions(+)
+ create mode 100644 package/domoticz/Config.in
+ create mode 100644 package/domoticz/domoticz.mk
 
-Just didn't want to start a patch series with v2.
+diff --git a/package/Config.in b/package/Config.in
+index cf697ab..15ed544 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1319,6 +1319,7 @@ menu "Miscellaneous"
+ 	source "package/bc/Config.in"
+ 	source "package/clamav/Config.in"
+ 	source "package/collectd/Config.in"
++	source "package/domoticz/Config.in"
+ 	source "package/empty/Config.in"
+ 	source "package/gnuradio/Config.in"
+ 	source "package/googlefontdirectory/Config.in"
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+new file mode 100644
+index 0000000..085b260
+--- /dev/null
++++ b/package/domoticz/Config.in
+@@ -0,0 +1,39 @@
++config BR2_PACKAGE_DOMOTICZ
++	bool "domoticz"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
++	depends on BR2_PACKAGE_LUA_5_2
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_DATE_TIME
++	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_BOOST_THREAD
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_MOSQUITTO
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_SQLITE
++	select BR2_PACKAGE_ZLIB
++	help
++	  Domoticz is a Home Automation System that lets you monitor andi
++	  configure various devices like: Lights, Switches, various
++	  sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
++	  and much more. Notifications/Alerts can be sent to any mobile device.
++
++	  http://domoticz.com
++
++comment "domoticz needs lua 5.2 and a toolchain w/ C++, threads, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR || !BR2_PACKAGE_LUA_5_2
++
++if BR2_PACKAGE_DOMOTICZ
++
++config BR2_PACKAGE_DOMOTICZ_ZWAVE_SUPPORT
++	bool "domoticz zwave support"
++	depends on BR2_PACKAGE_OPENZWAVE
++	help
++	  Enable ZWave support through openzwave library.
++
++comment "domoticz zwave support depends on openzwave library"
++	depends on !BR2_PACKAGE_OPENZWAVE
++
++endif
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+new file mode 100644
+index 0000000..3a427c0
+--- /dev/null
++++ b/package/domoticz/domoticz.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# domoticz
++#
++################################################################################
++
++DOMOTICZ_VERSION = 3.4834
++DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
++DOMOTICZ_LICENSE = GPLv3
++DOMOTICZ_LICENSE_FILES = License.txt
++DOMOTICZ_DEPENDENCIES = boost host-pkgconf libcurl lua mosquitto openssl \
++        sqlite zlib
++
++# Do not use static version of boost
++DOMOTICZ_CONF_OPTS = -DUSE_STATIC_BOOST=no
++
++# Do not use any built-in libraries which are enabled by default for lua, 
++# sqlite and mqtt
++DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_LUA=no
++DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_SQLITE=no
++DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_MQTT=no
++
++ifeq ($(BR2_PACKAGE_LIBUSB),y)
++DOMOTICZ_DEPENDENCIES += libusb
++endif
++
++# ZWave support depends on open-zwave.
++ifeq ($(BR2_PACKAGE_DOMOTICZ_ZWAVE_SUPPORT),y)
++DOMOTICZ_DEPENDENCIES += openzwave
++DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=no
++endif
++
++$(eval $(cmake-package))
+-- 
+1.9.1
 
-Yegor
 
-> ---
->  package/python-tornado/Config.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
-> index ac86682..80db2fd 100644
-> --- a/package/python-tornado/Config.in
-> +++ b/package/python-tornado/Config.in
-> @@ -2,8 +2,10 @@ config BR2_PACKAGE_PYTHON_TORNADO
->         bool "python-tornado"
->         select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
->         select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
-> -       select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
->         select BR2_PACKAGE_PYTHON_BACKPORTS_ABC # runtime
-> +       select BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME if BR2_PACKAGE_PYTHON # runtime
-> +       select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
-> +       select BR2_PACKAGE_PYTHON_CERTIFI if BR2_PACKAGE_PYTHON # runtime
->         help
->           Tornado is a Python web framework and asynchronous networking
->           library, originally developed at FriendFeed.
-> --
-> 2.8.0.rc3
->
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
