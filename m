@@ -1,172 +1,103 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Apr 2016 00:39:57 +0200
-Subject: [Buildroot] [PATCH 1/1] openzwave: new package
-In-Reply-To: <18817_1461334846_571A333E_18817_3477_2_e09544cf-8249-4083-9f10-e131ddeb87e0@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
-References: <18817_1461334846_571A333E_18817_3477_2_e09544cf-8249-4083-9f10-e131ddeb87e0@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
-Message-ID: <20160423003957.215d1683@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 23 Apr 2016 01:24:19 +0200
+Subject: [Buildroot] [PATCH v6] core/pkg-kconfig: Use olddefconfig when
+	available
+In-Reply-To: <CAGkQfmN+a=ZOxM94uOdK_EK-LM1B0W9Crji8oA4Fjq2mEZUPEg@mail.gmail.com>
+References: <1461146052-13261-1-git-send-email-romain.izard.pro@gmail.com>
+ <20160421224719.GA3426@free.fr>
+ <CAGkQfmN+a=ZOxM94uOdK_EK-LM1B0W9Crji8oA4Fjq2mEZUPEg@mail.gmail.com>
+Message-ID: <571AB2A3.7010607@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+On 04/22/16 15:51, Romain Izard wrote:
+> Yann, all,
+>
+> 2016-04-22 0:47 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+>>
+>> Ok, so... Well... Err...
+>>
+>> Could you respin v4 of the patch, the one that used something like:
+>>
+>>      make oldnoconfig || (yes "" |make oldconfig)
+>>
+>> please? ;-)
+>>
+>> OK, what's wrong with my proposal? It works in an unconfigured tree.
+>> But as soon as the tree is configured, it breaks, notably with older
+>> kernels, like 3.0.
+>>
+>>      $ cd linux-3.0
+>>      $ make -qpn oldefconfig 2>/dev/null |grep olddefconfig
+>>      [nothing]
+>>      $ touch .config
+>>      $ make -qpn oldefconfig 2>/dev/null |grep olddefconfig
+>>      olddefconfig: scripts_basic outputmakefile FORCE
+>>
+>> But 3.0 does not have olddefconfig. It's jsut the %config generic rule
+>> kicking in. So we'd believe there would be support for olddefconfig
+>> (or oldnoconfig) when there isn't.
+>>
+>> So, I have to apologise for the delusion. Your v4 is the best we can
+>> do.
+>
+> After some more testing, I believe it should work. I've tested the
+> following command on the latest commit for all stable branches since
+> 2.6.11, and I can reliably detect which targets are supported. Moreover,
+> I have the same output whether I touched .config or not.
+>
+> make -pn O=dir config 2>/dev/null | grep -oE '^old(no|def)config:'
 
-First of all, thanks for your contribution!
+  This indeed seems to work reliably.
 
-On Fri, 22 Apr 2016 16:20:42 +0200, fabrice.fontaine at orange.com wrote:
-> Free software library that interfaces with selected Z-Wave PC
-> controllers, allowing anyone to create applications that manipulate and
-> respond to devices on a Z-Wave network, without requiring in-depth
-> knowledge of the Z-Wave protocol
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+  Yann discovered that when you run exactly the same command twice you get 
+different results [1]. But that's because he uses .DEFAULT as the target instead 
+of config. The problem in that case is that oldno/defconfig don't appear in the 
+top-level Makefile, so they won't be printed. Only the first time it is printed, 
+because of include/config/auto.conf: this is include'd in the Makefile so it 
+will be regenerated (because of the include/config/%.conf: $(KCONFIG_CONFIG) 
+include/config/auto.conf.cmd dependency), which calls the sub-make in 
+scripts/kconfig, which does have the olddefconfig target so it is printed. The 
+second time, auto.conf is newer than .config so it is not regenerated, so the 
+olddefconfig target is not printed.
 
-Your e-mail carries the following footer:
+  Using config as the target elegantly solves that because it forces calling the 
+submake in scripts/kconfig.
 
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+  So yes, you v6 would work I think.
 
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+  However, I think we (= Yann and I) mentioned at some point that we preferred 
+everything in one command, using grep instead of filter. Or was there a 
+counter-argument against that?
 
-According to this, the contents of your e-mail are confidential, which
-is a bit annoying for things that are meant to be contributed to a
-public open-source project.
 
-> diff --git a/package/0001-fix-wcsdup.patch b/package/0001-fix-wcsdup.patch
-> new file mode 100644
-> index 0000000..f0807df
-> --- /dev/null
-> +++ b/package/0001-fix-wcsdup.patch
-> @@ -0,0 +1,11 @@
-> +diff -Naurp openzwave-v1.4/cpp/hidapi/linux/hid.c openzwave-v1.4-wcsdup/cpp/hidapi/linux/hid.c
-> +--- openzwave-v1.4/cpp/hidapi/linux/hid.c	2016-04-22 15:17:56.753232758 +0200
-> ++++ openzwave-v1.4-wcsdup/cpp/hidapi/linux/hid.c	2016-04-22 15:18:11.161482711 +0200
+>
+> I believe the problem with your tests is that you try to use both '-q'
+> and '-n', while GNU Make's manual states (Chapter 9.3, Instead of
+> executing recipes) that:
+>
+> "It is an error to use more than one of these three flags [-t -q -n] in
+> the same invocation of 'make'."
 
-All patches should have a description + Signed-off-by. Also, since
-OpenZwave is on Github:
+  I think the issue is that -q doesn't cause calling sub-make's, ever. That's 
+because it's not needed: if a sub-make is going to be called, something is going 
+to be run so it can return 1 immediately without actually calling the sub-make. 
+So with -q it is in fact guaranteed never to print an olddefconfig.
 
- - We want to have a Git formatted patch.
 
- - Please submit this patch upstream.
+  Regards,
+  Arnout
 
-> diff --git a/package/openzwave/Config.in b/package/openzwave/Config.in
-> new file mode 100644
-> index 0000000..d959ae6
-> --- /dev/null
-> +++ b/package/openzwave/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_OPENZWAVE
-> +	bool "openzwave"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_PACKAGE_HAS_UDEV
-> +	depends on BR2_USE_WCHAR
-> +	help
-> +	  Free software library that interfaces with selected Z-Wave PC
-> +	  controllers, allowing anyone to create applications that manipulate
-> +	  and respond to devices on a Z-Wave network, without requiring
-> +	  in-depth knowledge of the Z-Wave protocol
-> +
-> +	  http://www.openzwave.net
-> +
-> +comment "openzwave needs udev and a toolchain w/ C++, threads, wchar"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_PACKAGE_HAS_UDEV || !BR2_USE_WCHAR
-> +
 
-Unneeded empty new line at the end of file.
+[1] http://code.bulix.org/qwcju4-97419?raw
 
-> diff --git a/package/openzwave/openzwave.mk b/package/openzwave/openzwave.mk
-> new file mode 100644
-> index 0000000..e6a4bd6
-> --- /dev/null
-> +++ b/package/openzwave/openzwave.mk
-> @@ -0,0 +1,43 @@
-> +################################################################################
-> +#
-> +# openzwave
-> +#
-> +################################################################################
-> +
-> +OPENZWAVE_VERSION = v1.4
-> +OPENZWAVE_SITE = $(call github,OpenZWave,open-zwave,$(OPENZWAVE_VERSION))
-
-Since the source code is fetched from Github, please add a hash file to
-your package submission.
-
-> +
-> +# The OpenZWave Library is distributed under the LGPL Version 3 license.
-> +# The Example Programs and some support files are distributed under
-> +# different licenses.
-
-I generally like comments, but in this particular case, the comment
-does nothing but repeat what the <pkg>_LICENSE variable says, so I find
-the comment a bit useless.
-
-> +OPENZWAVE_LICENSE = LGPLv3+, GPLv3 (examples), Apache-2.0 (sh2ju.sh)
-> +OPENZWAVE_LICENSE_FILES = license/license.txt license/lgpl.txt \
-> +	license/gpl.txt license/Apache-License-2.0.txt
-
-I haven't checked the licenses. Arnout, can you fossilify this package
-to see what are the correct licenses?
-
-> +OPENZWAVE_DEPENDENCIES = host-pkgconf udev
-> +OPENZWAVE_INSTALL_STAGING = YES
-> +
-> +define OPENZWAVE_BUILD_CMDS
-> +	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D)
-
-Please add $(TARGET_MAKE_ENV) in the environment:
-
-	$(TARGET_MAKE_ENV) $(MAKE) ...
-
-This mainly ensures that the PATH contains $(HOST_DIR)/usr/bin.
-
-> +# Set pkgconfigdir to /usr/lib/pkgconfig to install libopenzwave.pc in the
-> +# correct directory otherwise openzwave will call
-> +# "pkg-config --variable pc_path pkg-config" which returns an incorrect value
-> +define OPENZWAVE_INSTALL_STAGING_CMDS
-> +	$(MAKE) -C $(@D) \
-
-Ditto TARGET_MAKE_ENV.
-
-> +		PREFIX=/usr DESTDIR=$(STAGING_DIR) \
-> +		pkgconfigdir=/usr/lib/pkgconfig \
-> +		install
-> +endef
-> +
-> +# Apply the same trick on pkgconfigdir even if libopenzwave.pc is not useful in
-> +# release directory 
-> +define OPENZWAVE_INSTALL_TARGET_CMDS
-> +	$(MAKE) -C $(@D) \
-> +		PREFIX=/usr DESTDIR=$(TARGET_DIR) \
-> +		pkgconfigdir=/usr/lib/pkgconfig \
-> +		install
-> +endef
-
-Other than that, it generally looks good. This pkgconfigdir trick is
-not nice, but it's probably the easiest solution indeed.
-
-Could you rework your patch to take into account those comments, and
-send an updated version?
-
-Please note that when sending new version, it should be indicated in
-the title [PATCH v3], and a changelog should be added in the patch,
-after the "---" marking the end of the commit log. This allows the
-reviewers to more easily keep track of what has been changed/fixed
-between revisions.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
