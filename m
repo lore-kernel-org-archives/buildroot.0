@@ -1,217 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Apr 2016 22:15:44 +0200
-Subject: [Buildroot] [git commit] board: add support for Hardkernel
-	ODROID-C2 Board
-Message-ID: <20160423201615.D70CF81D32@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 23 Apr 2016 22:40:57 +0200
+Subject: [Buildroot] [PATCH v1] qt5base: fix sparc glibc libatomic link
+	problem
+Message-ID: <1461444057-5408-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff5ea2f6360a07d885e5c35992210fa57747c9c4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes [1]:
 
-The ODROID-C2 is a 64-bit quad-core single board computer(SBC) that is
-one of the most cost-effective 64bit development boards available in the
-ARM world.
+  undefined reference to `__atomic_fetch_add_4'
 
-http://www.hardkernel.com/main/products/prdt_info.php?g_code=G145457216438
+Upstream patch from QTBUG-51621 ([2], [3]).
 
-[Peter: fix typos, drop neon/C++ settings, use git hash for Linux/U-Boot]
-Signed-off-by: Brian Kim <brian.kim@hardkernel.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[1] http://autobuild.buildroot.net/results/8e7/8e7ff74abdd6274c257a928113e50f534a142650
+[2] https://bugreports.qt.io/browse/QTBUG-51621
+[3] https://codereview.qt-project.org/#/c/151273/3
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- board/hardkernel/odroidc2/boot.ini      | 22 ++++++++++++++
- board/hardkernel/odroidc2/genimage.cfg  | 27 +++++++++++++++++
- board/hardkernel/odroidc2/post-image.sh | 19 ++++++++++++
- board/hardkernel/odroidc2/readme.txt    | 53 +++++++++++++++++++++++++++++++++
- configs/odroidc2_defconfig              | 35 ++++++++++++++++++++++
- 5 files changed, 156 insertions(+)
+ .../0007-build-with-explicitlib-after-all.patch    | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/qt5/qt5base/0007-build-with-explicitlib-after-all.patch
 
-diff --git a/board/hardkernel/odroidc2/boot.ini b/board/hardkernel/odroidc2/boot.ini
+diff --git a/package/qt5/qt5base/0007-build-with-explicitlib-after-all.patch b/package/qt5/qt5base/0007-build-with-explicitlib-after-all.patch
 new file mode 100644
-index 0000000..8b67b5e
+index 0000000..a878ba6
 --- /dev/null
-+++ b/board/hardkernel/odroidc2/boot.ini
-@@ -0,0 +1,22 @@
-+ODROIDC2-UBOOT-CONFIG
++++ b/package/qt5/qt5base/0007-build-with-explicitlib-after-all.patch
+@@ -0,0 +1,51 @@
++From 523c7e3fd55c853dd424d57f28e225d57439cf89 Mon Sep 17 00:00:00 2001
++From: Oswald Buddenhagen <oswald.buddenhagen@theqtcompany.com>
++Date: Thu, 3 Mar 2016 14:12:16 +0100
++Subject: [PATCH] build with explicitlib after all
 +
-+# HDMI mode
-+setenv m "720p60hz" # Progressive 60Hz
++unlike speculated in 2fe363514, this is not a workaround at all: it
++causes that libraries' public link interfaces (LIBS) are exported in the
++first place. unlike with staticlib, this does not export LIBS_PRIVATE,
++so it wouldn't even be a particularly effective workaround for rpath
++brokenness anyway.
 +
-+# HDMI BPP Mode
-+setenv m_bpp "32"
++the problem was pretty well hidden by the qt module system, which at the
++level of libraries is pretty redundant with the .prl file handling,
++which shows just how stupid the whole "design" is.
 +
-+# Default Console Device Setting
-+setenv condev "console=ttyS0,115200n8"	# Serial Console
++unlike before, we now enable explicitlib for all libraries, not just qt
++modules - we enable create_prl for all of them as well, after all.
 +
-+# Boot Arguments
-+setenv bootargs "root=/dev/mmcblk0p2 rootwait ro ${condev} no_console_suspend hdmimode=${m} m_bpp=${m_bpp} vout=${vout} fsck.repair=yes net.ifnames=0 elevator=noop"
++an immediate effect of this change is that it fixes linking on RaspPI:
++the qtcore headers make the user code require linking libatomic, so we
++must add it to our public link interface.
 +
-+# Load Images
-+setenv loadaddr "0x11000000"
-+setenv dtb_loadaddr "0x10000000"
-+fatload mmc 0:1 ${loadaddr} Image
-+fatload mmc 0:1 ${dtb_loadaddr} meson64_odroidc2.dtb
++Task-number: QTBUG-51621
++Change-Id: I5742c88694db8e8a9b79d17222dc6df2b38e5ab2
++Reviewed-by: Joerg Bornemann <joerg.bornemann@theqtcompany.com>
++Reviewed-by: Allan Sandfeld Jensen <allan.jensen@theqtcompany.com>
 +
-+# Booting
-+booti ${loadaddr} - ${dtb_loadaddr}
-diff --git a/board/hardkernel/odroidc2/genimage.cfg b/board/hardkernel/odroidc2/genimage.cfg
-new file mode 100644
-index 0000000..15f97d4
---- /dev/null
-+++ b/board/hardkernel/odroidc2/genimage.cfg
-@@ -0,0 +1,27 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"boot.ini",
-+			"Image",
-+			"meson64_odroidc2.dtb"
-+		}
-+	}
-+	size = 32M
-+}
++Upstream: https://codereview.qt-project.org/gitweb?p=qt%2Fqtbase.git;a=commit;h=523c7e3fd55c853dd424d57f28e225d57439cf89
++Signed-off: Peter Seiderer <ps.report@gmx.net>
++---
++ mkspecs/features/qt_build_config.prf | 4 ++++
++ 1 file changed, 4 insertions(+)
 +
-+image sdcard.img {
-+	hdimage {
-+	}
++diff --git a/mkspecs/features/qt_build_config.prf b/mkspecs/features/qt_build_config.prf
++index 518fd93..b3081b9 100644
++--- a/mkspecs/features/qt_build_config.prf
+++++ b/mkspecs/features/qt_build_config.prf
++@@ -72,6 +72,10 @@ CONFIG += \
++     # However, testcases should be still built with exceptions.
++     exceptions_off testcase_exceptions
++ 
+++# Under Windows, this is neither necessary (transitive deps are automatically
+++# resolved), nor functional (.res files end up in .prl files and break things).
+++unix: CONFIG += explicitlib
+++
++ 
++ defineTest(qtBuildPart) {
++     bp = $$eval($$upper($$section(_QMAKE_CONF_, /, -2, -2))_BUILD_PARTS)
++-- 
++2.7.4
 +
-+	partition vfat {
-+		partition-type = 0xC
-+		image = "boot.vfat"
-+		offset = 1048576
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/hardkernel/odroidc2/post-image.sh b/board/hardkernel/odroidc2/post-image.sh
-new file mode 100755
-index 0000000..aaf12c1
---- /dev/null
-+++ b/board/hardkernel/odroidc2/post-image.sh
-@@ -0,0 +1,19 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+cp ${BOARD_DIR}/boot.ini ${BINARIES_DIR}/
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage                           \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-+
-+dd if=${BINARIES_DIR}/u-boot.bin of=${BINARIES_DIR}/sdcard.img bs=1 count=442 conv=sync,notrunc
-+dd if=${BINARIES_DIR}/u-boot.bin of=${BINARIES_DIR}/sdcard.img bs=512 skip=1 seek=1 conv=fsync,notrunc
-diff --git a/board/hardkernel/odroidc2/readme.txt b/board/hardkernel/odroidc2/readme.txt
-new file mode 100644
-index 0000000..b44aa67
---- /dev/null
-+++ b/board/hardkernel/odroidc2/readme.txt
-@@ -0,0 +1,53 @@
-+ODROID-C2
-+
-+Intro
-+=====
-+To be able to use ODROID-C2 board with the images generated by
-+Buildroot, you have to prepare the SDCard or eMMC.
-+
-+How to build it
-+===============
-+
-+  $ make odroidc2_defconfig
-+
-+Then you can edit the build options using
-+
-+  $ make menuconfig
-+
-+Compile all and build rootfs image:
-+
-+  $ make
-+
-+Note: you will need to have access to the network, since Buildroot will
-+download the packages' sources.
-+
-+Result of the build
-+-------------------
-+
-+After building, you should obtain this tree:
-+
-+    output/images/
-+    +-- Image
-+    +-- boot.ini                   [1]
-+    +-- boot.vfat
-+    +-- meson64_odroidc2.dtb
-+    +-- rootfs.ext2
-+    +-- rootfs.ext4
-+    +-- rootfs.tar
-+    +-- sdcard.img
-+    `-- u-boot.bin
-+
-+[1] This is the ODROID-C2 configuration file used in u-boot.
-+
-+How to write the SD card or eMMC
-+================================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card or eMMC with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Insert the SDcard into your ODROID-C2, and power it up. Your new system
-+should come up now.
-diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
-new file mode 100644
-index 0000000..1945983
---- /dev/null
-+++ b/configs/odroidc2_defconfig
-@@ -0,0 +1,35 @@
-+# Architecture
-+BR2_aarch64=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image.sh"
-+
-+# Kernel
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.14.29"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/hardkernel/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="db9b5cfbd380d2316b7723599ee0c7e9d866db17"
-+BR2_LINUX_KERNEL_DEFCONFIG="odroidc2"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_BUILD_DEFAULT_DTS=y
-+BR2_LINUX_KERNEL_USE_INTREE_DTS=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="meson64_odroidc2"
-+BR2_LINUX_KERNEL_IMAGE=y
-+
-+# U-Boot
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/hardkernel/u-boot.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="f416a769454b89c39d5b217d28bd3c9f5d1594df"
-+BR2_TARGET_UBOOT_BOARDNAME="odroidc2"
-+
-+# Required tools to create the SD image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+-- 
+2.8.1
