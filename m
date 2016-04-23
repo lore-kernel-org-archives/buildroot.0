@@ -1,76 +1,54 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Sat, 23 Apr 2016 15:05:10 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 23 Apr 2016 15:11:29 +0200
 Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
  config (incl. BBB)
-In-Reply-To: <CAGm1_kughQAzmdbaQo4bBb4+-a1rL9-1aZunOCuLtFH4pgSUhA@mail.gmail.com>
+In-Reply-To: <20160423130141.GB10355@smipidev>
 References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
  <20160419212441.6a0454e9@free-electrons.com>
  <20160419201733.GA19934@smipidev>
  <CAGm1_kv4ipig0JpHxiBDV7b0roUrY_7sr0To=iNJuNYR_YhtcA@mail.gmail.com>
  <20160420164216.GA26814@smipidev>
  <CAGm1_kughQAzmdbaQo4bBb4+-a1rL9-1aZunOCuLtFH4pgSUhA@mail.gmail.com>
-Message-ID: <20160423130510.GC10355@smipidev>
+ <20160421132905.7c271814@free-electrons.com>
+ <20160423130141.GB10355@smipidev>
+Message-ID: <20160423151129.479c5f03@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+Hello,
 
-On Thu, Apr 21, 2016 at 12:55:12PM +0200, Yegor Yefremov wrote:
-> On Wed, Apr 20, 2016 at 6:42 PM, Pieter Smith <pieter@boesman.nl> wrote:
-> > Hi Yegor,
-> >
-> > On Wed, Apr 20, 2016 at 04:42:20PM +0200, Yegor Yefremov wrote:
-> >> On Tue, Apr 19, 2016 at 10:17 PM, Pieter Smith <pieter@boesman.nl> wrote:
-> >> > Hi Thomas,
-> >> >
-> >> > On Tue, Apr 19, 2016 at 09:24:41PM +0200, Thomas Petazzoni wrote:
-> >> >> Hello,
-> >> >>
-> >> >> On Sun, 20 Mar 2016 23:35:44 +0100, Pieter Smith wrote:
-> >> >>
-> >> >> > Pieter Smith (7):
-> >> >> >   barebox: support multi-image-build image selection
-> >> >> >   barebox: friendly error on missing built image
-> >> >> >   barebox: support custom barebox output image name
-> >> >> >   barebox: introduce barebox-package function
-> >> >> >   barebox: extract package name argument
-> >> >> >   barebox: support 2nd config build
-> >> >> >   beaglebone: adds barebox bootloader defconfig
-> >> >>
-> >> >> Since there were some comments on this v4, I marked it as Changes
-> >> >> Requested in our patch tracking system. When you find some time, can
-> >> >> you send an updated v5 of this patch series?
-> >> >
-> >> > I have been a little short on time as of late. The patch is complete, but I
-> >> > am having probably unrelated problems with my BBB set-up that I am trying to
-> >> > troubleshoot. Nevertheless, I would like to make sure that everything works
-> >> > before reposting. Maybe Yegor can help to test that everything works?
-> >> >
-> >> > @Yegor: Do you have time to test the branch on your setup?
-> >> >   URL:    https://github.com/smipi1/bbb_buildroot.git
-> >> >   branch: barebox_2nd_config_build-v5
-> >>
-> >> Have made basic tests, i.e. changing configuration for barebox and
-> >> barebox-2 and running make to see, if proper barebox was compiled.
-> >> Everything is working the way it was in v4 from this point of view.
-> >
-> > Thanks! Did you flash a bare SD card or the internal eMMC with boot.vfat and
-> > rootfs.ext4 as part of the tests?
-> 
-> If I copy your images (MLO, barebox.bin) directly to the FAT
-> partition, everything starts as expected. But I dd boot.vfat, the
-> system doesn't boot and shows only CCCCC, though I have no problems
-> mounting the first partition in Linux.
-> 
-> sudo dd if=/tmp/boot.vfat of=/dev/sdd1 bs=1M
+On Sat, 23 Apr 2016 15:01:41 +0200, Pieter Smith wrote:
 
-As Thomas mentioned in a later mail, there appears to be some tight geometry
-restrictions in the ROM. I updated the genimage script to generate a full
-sdcard.img. This seems to work without a hitch. Please give it another twirl.
+> All that is left is the suggested BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE ->
+> BR2_TARGET_BAREBOX_IMAGE_FILE rename and a final master rebase, then I can
+> post.
 
-> Yegor
+Good.
 
-- Pieter
+> Flashing the boot.vfat separately seems to run afoul of such geometry
+> restrictions. Using genimage to generate a full sdcard.img however works well
+> on the BBB. I therefore did not spend more time on the issue because it works
+> now. Do you see any need to dig deeper, or can the patch be merged based on a
+> working sdcard.img?
+
+As long as the sdcard.img is working, that's fine.
+
+However, I'm still unsure we will want to merge a defconfig whose only
+difference compared to the other beablebone defconfig is that it uses
+Barebox. I certainly want to merge the rest of your series, since we do
+want to support the use case of people using Barebox on AM335x
+platforms, or other platforms that have a two-stage boot process. But
+I'm not sure about the defconfig.
+
+Peter, what's your opinion on this?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
