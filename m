@@ -1,32 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Apr 2016 21:27:07 +0200
-Subject: [Buildroot] [git commit] rpi-firmware: bump version
-Message-ID: <20160423192722.7C0A07FE9D@busybox.osuosl.org>
+Date: Sat, 23 Apr 2016 21:27:32 +0200
+Subject: [Buildroot] [PATCH v1 0/4] Raspberry PI
+ (raspberrypi/raspberrypi2) update
+In-Reply-To: <1461429984-12561-1-git-send-email-ps.report@gmx.net>
+References: <1461429984-12561-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20160423212732.5f11660b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc7b1c0c0af792e080f545bf770a26bae8f57963
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rpi-firmware/rpi-firmware.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, 23 Apr 2016 18:46:20 +0200, Peter Seiderer wrote:
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 8476678..cbacacd 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_FIRMWARE_VERSION = 951799bbcd795ddf27769d14acf4813fdcbe53dc
-+RPI_FIRMWARE_VERSION = c5e131971c323f5658c7c5d4b1dd105d37903a99
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+> Peter Seiderer (4):
+>   rpi-firmware: bump version
+>   rpi-userland: bump version
+>   raspberrypi_defconfig: bump to kernel version 4.4.7
+>   raspberrypi2_defconfig: bump to kernel version 4.4.7
+
+All four patches applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
