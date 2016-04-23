@@ -1,62 +1,39 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Sat, 23 Apr 2016 13:39:19 +0200
-Subject: [Buildroot] [PATCH v4 7/7] beaglebone: adds barebox bootloader
-	defconfig
-In-Reply-To: <5716AD73.30309@mind.be>
-References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
- <1458513351-6556-8-git-send-email-pieter@boesman.nl>
- <5702FACA.6080001@mind.be> <20160419202649.GA20663@smipidev>
- <5716AD73.30309@mind.be>
-Message-ID: <20160423113919.GA10355@smipidev>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 23 Apr 2016 13:54:37 +0200
+Subject: [Buildroot] [PATCH v2] opencv: fix compile issues
+References: <20160405111617.GA23318@waldemar-brodkorb.de>
+Message-ID: <tc4sucx7uf.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Am Tue, 05 Apr 2016 13:16:17 +0200 schrieb Waldemar Brodkorb:
 
-On Wed, Apr 20, 2016 at 12:13:07AM +0200, Arnout Vandecappelle wrote:
-> On 04/19/16 22:26, Pieter Smith wrote:
-> >On Tue, Apr 05, 2016 at 01:37:46AM +0200, Arnout Vandecappelle wrote:
-> >>On 03/20/16 23:35, Pieter Smith wrote:
-
-[snip]
-
-> >>>+BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
-> >>
-> >>  Does the default (console) not work well?
-> >
-> >I inherited this from the beaglebone_defconfig. I know that the beaglebone uses
-> >a different serial port for the console than the Phytec am33xx modules (the
-> >default for the BSP), so I am quite sure this is necessary.
+> The first patch from Debian fixes following autobuild failure:
+> http://autobuild.buildroot.net/results/
+eda5c6c43da40a342e0f545a348d2f865eb5ccf2/
 > 
->  The serial port is already set in the barebox config, and is already passed
-> on the kernel command line, so there shouldn't be a need to set it
-> explicitly again in the buildroot config. The default getty port is
-> 'console', which means to use the kernel console as getty port. In most
-> cases that's what you want.
+> Tested with ARM build without a regression.
 > 
->  The beaglebone defconfig still had an explicit getty port because it is
-> still from the time that the default getty port was tty1.
+> The second patch fixes musl arm autobuild failure:
+> http://autobuild.buildroot.net/
+results/6a397de789c809984b851a304078e26b2ac58974/
 > 
->  So, ideally, please test that it still works without this line. But since
-> you don't have a working beaglebone at the moment that will be tough...
+> Signed-off-by: Waldemar Brodkorb
+> <wbx@openadk.org>
+> ---
+> v1 -> v2:
+>   * Add Signed-Off-By and description to Debian patch, suggested by
+>   Arnout * added backport fix for ARM musl from git master
 
-Tested and it works. Will be gone in patch v5.
+Hi,
 
-> [snip]
-> >>>+# Use the barebox built-in dtb
-> >>>+# BR2_LINUX_KERNEL_DTS_SUPPORT is not set
-> >>
-> >>  Good to put this here!
-> >
-> >As per your recommendation on v4 of the patch-set.
-> 
->  I'm so great :-)
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+(compile-tested with sparc64/glibc[1] and musl[2])
 
-Smile once a while when you look down on us mere mortals ;-)
-
-[snip]
-
-- Pieter Smith
+[1] http://autobuild.buildroot.net/
+results/08d/08d41780f1fff3e8dc99d5170457730d2f6e42a2/
+[2] http://autobuild.buildroot.net/
+results/85c/85c9135460de78c35e17dbd791d07732d52abb6a/
