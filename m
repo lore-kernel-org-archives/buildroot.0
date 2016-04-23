@@ -1,44 +1,43 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 23 Apr 2016 21:18:29 +0200
-Subject: [Buildroot] [PATCH v1] Makefile: fix rootfs overlay with
-	BR2_ROOTFS_MERGED_USR enabled
-Message-ID: <1461439109-28101-1-git-send-email-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 23 Apr 2016 21:24:11 +0200
+Subject: [Buildroot] [git commit] raspberrypi_defconfig: bump to kernel
+	version 4.4.7
+Message-ID: <20160423192428.E218F8197C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use rsync with '--keep-dirlinks' option to prevent rootfs overlay to
-overwrite /usr, /bin, /sbin and /lib links in case BR2_ROOTFS_MERGED_USR
-option is enabled.
-
-Steps to reproduce failure:
-
-- enable BR2_ROOTFS_MERGED_USR
-- mkdir some_path/rootfs-overlay/lib/firmware/some_file.txt
-- enable BR2_ROOTFS_OVERLAY="some_path/rootfs-overlay"
-- run 'make'
-- 'target/lib' contains only the files from 'some_path/rootfs-overlay/lib' instead
-  of the original symlink 'lib -> usr/lib'.
+commit: https://git.buildroot.net/buildroot/commit/?id=b21e575c0157bc54c4469cc6a0300e0689bf7258
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/raspberrypi_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 0e4beb2..243823c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -657,7 +657,7 @@ endif
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 8d13381..70818c9 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -4,15 +4,15 @@ BR2_ARM_EABIHF=y
  
- 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
- 		$(call MESSAGE,"Copying overlay $(d)"); \
--		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-+		rsync -a --ignore-times --keep-dirlinks $(RSYNC_VCS_EXCLUSIONS) \
- 			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
- 			$(d)/ $(TARGET_DIR)$(sep))
+ BR2_SYSTEM_DHCP="eth0"
  
--- 
-2.8.1
+-# Linux headers same as kernel, a 4.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++# Linux headers same as kernel, a 4.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+ 
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="d33d0293e245badc4ca6ede3984d8bb8ea63cb1a"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3de232825c9ba5989522b8691eb6ac5df6619458"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ 
+ # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
