@@ -1,10 +1,9 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Apr 2016 16:50:13 +0200
+From: Pieter Smith <pieter@boesman.nl>
+Date: Sat, 23 Apr 2016 18:18:44 +0200
 Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
  config (incl. BBB)
-In-Reply-To: <CAPho-_Kvdg37hhfujbg99BVwhP+jPcwnsZUH2=3G7qt0CVz7yw@mail.gmail.com>
-References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
- <20160419212441.6a0454e9@free-electrons.com>
+In-Reply-To: <20160423165013.10739b58@free-electrons.com>
+References: <20160419212441.6a0454e9@free-electrons.com>
  <20160419201733.GA19934@smipidev>
  <CAGm1_kv4ipig0JpHxiBDV7b0roUrY_7sr0To=iNJuNYR_YhtcA@mail.gmail.com>
  <20160420164216.GA26814@smipidev>
@@ -13,50 +12,66 @@ References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
  <20160423130141.GB10355@smipidev>
  <20160423151129.479c5f03@free-electrons.com>
  <CAPho-_Kvdg37hhfujbg99BVwhP+jPcwnsZUH2=3G7qt0CVz7yw@mail.gmail.com>
-Message-ID: <20160423165013.10739b58@free-electrons.com>
+ <20160423165013.10739b58@free-electrons.com>
+Message-ID: <20160423161844.GA9825@smipidev>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sat, 23 Apr 2016 14:35:22 +0000, Pieter Smith wrote:
+On Sat, Apr 23, 2016 at 04:50:13PM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sat, 23 Apr 2016 14:35:22 +0000, Pieter Smith wrote:
+> 
+> > As I already voiced, I would like to have the defconfig in as a
+> > usage example.
+> 
+> Well, what you want and what the Buildroot maintainer/core developers
+> want may be different :-)
 
-> As I already voiced, I would like to have the defconfig in as a
-> usage example.
+Yup... If all the world was of one mind, it surely would be a boring place ;-)
 
-Well, what you want and what the Buildroot maintainer/core developers
-want may be different :-)
+I do not want to try to force the beaglebone_barebox_defconfig. Everybody knows
+that it doesn't work that way. Is there no value in having SOME FORM of
+defconfig to illustrate feature use in buildroot?
 
-My opinion is that there is no point is having gazillions of different
-defconfigs for the same board. Your focus is on Barebox, but then the
-next developer will want a defconfig for BeagleBone+Qt5, the next one
-for BeagleBone+Wayland, the next one for BeagleBone+Kodi, the next one
-for BeagleBone as a toaster controller, etc, etc. As you can see, it's
-going to be an endless list of unmaintainable defconfigs, so we have to
-cut the line somewhere.
+> My opinion is that there is no point is having gazillions of different
+> defconfigs for the same board. Your focus is on Barebox, but then the
+> next developer will want a defconfig for BeagleBone+Qt5, the next one
+> for BeagleBone+Wayland, the next one for BeagleBone+Kodi, the next one
+> for BeagleBone as a toaster controller, etc, etc. As you can see, it's
+> going to be an endless list of unmaintainable defconfigs, so we have to
+> cut the line somewhere.
 
-And IMO, having a defconfig whose only difference from the
-beaglebone_defconfig is to use Barebox instead of U-Boot is not a
-useful defconfig.
+What? No beaglebone_epilator_defconfig? Pity... ;-)
 
-It would however be useful in a "testing" framework so that we can
-validate automatically that the dual Barebox functionality continues to
-work over time.
+> And IMO, having a defconfig whose only difference from the
+> beaglebone_defconfig is to use Barebox instead of U-Boot is not a
+> useful defconfig.
 
-> I also find the BBB with barebox much easier to play with. It
-> boots faster and is much easier to script.
+I can't find fault with your logic. I am all too aware of how painful the
+maintenance burden can become if you don't say no often enough.
 
-That's very subjective, and the default/defacto standard on BeagleBone
-remains U-Boot (no matter how much I would prefer Barebox to become
-more popular).
+> It would however be useful in a "testing" framework so that we can
+> validate automatically that the dual Barebox functionality continues to
+> work over time.
 
-Best regards,
+Agreed. Where can I stall my shiny BBB barebox "regression test" roadster then?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> > I also find the BBB with barebox much easier to play with. It
+> > boots faster and is much easier to script.
+> 
+> That's very subjective, and the default/defacto standard on BeagleBone
+> remains U-Boot (no matter how much I would prefer Barebox to become
+> more popular).
+
+Oh, if I could change the world... ;-)
+
+Regards,
+Pieter
+
+[snip]
