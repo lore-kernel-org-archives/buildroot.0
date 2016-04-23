@@ -1,103 +1,107 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 23 Apr 2016 01:24:19 +0200
-Subject: [Buildroot] [PATCH v6] core/pkg-kconfig: Use olddefconfig when
-	available
-In-Reply-To: <CAGkQfmN+a=ZOxM94uOdK_EK-LM1B0W9Crji8oA4Fjq2mEZUPEg@mail.gmail.com>
-References: <1461146052-13261-1-git-send-email-romain.izard.pro@gmail.com>
- <20160421224719.GA3426@free.fr>
- <CAGkQfmN+a=ZOxM94uOdK_EK-LM1B0W9Crji8oA4Fjq2mEZUPEg@mail.gmail.com>
-Message-ID: <571AB2A3.7010607@mind.be>
+From: Matthew Weber <matt@thewebers.ws>
+Date: Fri, 22 Apr 2016 20:57:56 -0500
+Subject: [Buildroot] [PATCH v2 1/1] overlay: Add archive-based (tar)
+ rootfs overlays
+In-Reply-To: <1460693286-6245-1-git-send-email-camh@xdna.net>
+References: <1460693286-6245-1-git-send-email-camh@xdna.net>
+Message-ID: <CAFt09wMVqWepo-Ott0Y0nL45RnqoFy6tTunBP-OndgzEJoj_hw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/22/16 15:51, Romain Izard wrote:
-> Yann, all,
+Cam,
+
+On Thu, Apr 14, 2016 at 11:08 PM, Cam Hutchison <camh@xdna.net> wrote:
+> Add a feature to extract tar archives into the target rootfs when
+> building filesystem images. The archives are extracted inside the
+> fakeroot used to build the filesystem images so that the ownership and
+> permissions of files in the archive are preserved.
 >
-> 2016-04-22 0:47 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
->>
->> Ok, so... Well... Err...
->>
->> Could you respin v4 of the patch, the one that used something like:
->>
->>      make oldnoconfig || (yes "" |make oldconfig)
->>
->> please? ;-)
->>
->> OK, what's wrong with my proposal? It works in an unconfigured tree.
->> But as soon as the tree is configured, it breaks, notably with older
->> kernels, like 3.0.
->>
->>      $ cd linux-3.0
->>      $ make -qpn oldefconfig 2>/dev/null |grep olddefconfig
->>      [nothing]
->>      $ touch .config
->>      $ make -qpn oldefconfig 2>/dev/null |grep olddefconfig
->>      olddefconfig: scripts_basic outputmakefile FORCE
->>
->> But 3.0 does not have olddefconfig. It's jsut the %config generic rule
->> kicking in. So we'd believe there would be support for olddefconfig
->> (or oldnoconfig) when there isn't.
->>
->> So, I have to apologise for the delusion. Your v4 is the best we can
->> do.
+> This is useful when an external build process produces rootfs archives
+> or software is supplied as an archive that need to be incorporated the
+> generated rootfs.
 >
-> After some more testing, I believe it should work. I've tested the
-> following command on the latest commit for all stable branches since
-> 2.6.11, and I can reliably detect which targets are supported. Moreover,
-> I have the same output whether I touched .config or not.
+> Configuration options are added to configure a list of paths to archives
+> to be extracted, and to configure how many path components to strip from
+> paths in those archives. It is not possible to configure a different
+> number of components for different archives.
 >
-> make -pn O=dir config 2>/dev/null | grep -oE '^old(no|def)config:'
-
-  This indeed seems to work reliably.
-
-  Yann discovered that when you run exactly the same command twice you get 
-different results [1]. But that's because he uses .DEFAULT as the target instead 
-of config. The problem in that case is that oldno/defconfig don't appear in the 
-top-level Makefile, so they won't be printed. Only the first time it is printed, 
-because of include/config/auto.conf: this is include'd in the Makefile so it 
-will be regenerated (because of the include/config/%.conf: $(KCONFIG_CONFIG) 
-include/config/auto.conf.cmd dependency), which calls the sub-make in 
-scripts/kconfig, which does have the olddefconfig target so it is printed. The 
-second time, auto.conf is newer than .config so it is not regenerated, so the 
-olddefconfig target is not printed.
-
-  Using config as the target elegantly solves that because it forces calling the 
-submake in scripts/kconfig.
-
-  So yes, you v6 would work I think.
-
-  However, I think we (= Yann and I) mentioned at some point that we preferred 
-everything in one command, using grep instead of filter. Or was there a 
-counter-argument against that?
-
-
+> Signed-off-by: Cam Hutchison <camh@xdna.net>
+> ---
+> Changes v1 -> v2:
+>  - Use suitable-extractor instead of the tar -a option
+>  - Split config option from BR2_ROOTFS_OVERLAY
+>  - Add configurable --strip-components
+>  - Move archive extraction to fakeroot from target-finalize target
+> ---
+>  fs/common.mk     |  9 +++++++++
+>  system/Config.in | 21 +++++++++++++++++++++
+>  2 files changed, 30 insertions(+)
 >
-> I believe the problem with your tests is that you try to use both '-q'
-> and '-n', while GNU Make's manual states (Chapter 9.3, Instead of
-> executing recipes) that:
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 3a424f6..414e5e6 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -38,6 +38,10 @@ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+>  USERS_TABLE = $(BUILD_DIR)/_users_table.txt
+>  ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
 >
-> "It is an error to use more than one of these three flags [-t -q -n] in
-> the same invocation of 'make'."
+> +define rootfs-extract-overlay
+> +$(call suitable-extractor,$(1)) $(1) | tar -xf - -C $(TARGET_DIR) --strip-components=$(call qstrip,$(BR2_ROOTFS_OVERLAY_ARCHIVES_STRIP_COMPONENTS))
+> +endef
+> +
+>  # Since this function will be called from within an $(eval ...)
+>  # all variable references except the arguments must be $$-quoted.
+>  define ROOTFS_TARGET_INTERNAL
+> @@ -91,6 +95,11 @@ endif
+>         printf '$$(subst $$(sep),\n,$$(PACKAGES_PERMISSIONS_TABLE))' >> $$(FULL_DEVICE_TABLE)
+>         echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+>  endif
+> +ifneq ($$(BR2_ROOTFS_OVERLAY_ARCHIVES),)
+> +       $$(foreach archive,$$(call qstrip,$$(BR2_ROOTFS_OVERLAY_ARCHIVES)),\
+> +               echo "$$(call rootfs-extract-overlay,$$(archive))" >> $$(FAKEROOT_SCRIPT) \
+> +               $$(sep))
+> +endif
+>         echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
+>         chmod a+x $$(FAKEROOT_SCRIPT)
+>         PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+> diff --git a/system/Config.in b/system/Config.in
+> index 2e14971..df23ea6 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -429,6 +429,27 @@ config BR2_ROOTFS_OVERLAY
+>           They are copied as-is into the rootfs, excluding files ending with
+>           ~ and .git, .svn and .hg directories.
+>
+> +config BR2_ROOTFS_OVERLAY_ARCHIVES
+> +       string "Root filesystem overlay archives"
+> +       default ""
+> +       help
+> +         Specify a list of tar archives that are extracted into the
+> +         output filesystem images as they are built. The archives will
+> +         be extracted while running under the fakeroot environment
+> +         used to build the images so they may contain files that only
+> +         root may extract (such as setuid binaries), and permissions
+> +         and ownerships are maintained.
+> +
+> +config BR2_ROOTFS_OVERLAY_ARCHIVES_STRIP_COMPONENTS
+> +       string "Leading path components to strip from overlay archives"
+> +       default "0"
+> +       help
+> +         The number of leading path components to strip from each
+> +         archive specified under Root filesystem overlay archives.
+> +         The same number of components must be stripped from all
+> +         archives - it is not possible to have a different number of
+> +         components stripped from different archives.
 
-  I think the issue is that -q doesn't cause calling sub-make's, ever. That's 
-because it's not needed: if a sub-make is going to be called, something is going 
-to be run so it can return 1 immediately without actually calling the sub-make. 
-So with -q it is in fact guaranteed never to print an olddefconfig.
+Instead of this strip components option, would it be easier to
+document the expected pathing for the tar?  If you could apply
+specific strip values for each file, I think it would make sense to
+have this option.  What is your scenario where this would be required?
+ As all files would have to be the same to match whichever value is
+used.
 
-
-  Regards,
-  Arnout
-
-
-[1] http://code.bulix.org/qwcju4-97419?raw
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thanks!
+Matt
