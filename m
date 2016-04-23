@@ -1,34 +1,41 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 23 Apr 2016 18:46:20 +0200
-Subject: [Buildroot] [PATCH v1 0/4] Raspberry PI (raspberrypi/raspberrypi2)
-	update
-Message-ID: <1461429984-12561-1-git-send-email-ps.report@gmx.net>
+Date: Sat, 23 Apr 2016 18:46:24 +0200
+Subject: [Buildroot] [PATCH v1 4/4] raspberrypi2_defconfig: bump to kernel
+	version 4.4.7
+In-Reply-To: <1461429984-12561-1-git-send-email-ps.report@gmx.net>
+References: <1461429984-12561-1-git-send-email-ps.report@gmx.net>
+Message-ID: <1461429984-12561-5-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update rpi-firmware/rpi-userland and raspberrypi/raspberrypi2 kernel
-versions.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ configs/raspberrypi2_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Tested raspberrypi_defconfig on Raspberry Pi Model B Rev 2 hardware.
-
-Peter Seiderer (4):
-  rpi-firmware: bump version
-  rpi-userland: bump version
-  raspberrypi_defconfig: bump to kernel version 4.4.7
-  raspberrypi2_defconfig: bump to kernel version 4.4.7
-
- configs/raspberrypi2_defconfig                     |  6 ++--
- configs/raspberrypi_defconfig                      |  6 ++--
- package/rpi-firmware/rpi-firmware.mk               |  2 +-
- ...make-vmcs.cmake-allow-to-override-VMCS_IN.patch | 27 -----------------
- ...6-dtmerge-add-missing-include-for-va_list.patch | 34 ++++++++++++++++++++++
- package/rpi-userland/rpi-userland.mk               |  2 +-
- 6 files changed, 42 insertions(+), 35 deletions(-)
- delete mode 100644 package/rpi-userland/0002-makefiles-cmake-vmcs.cmake-allow-to-override-VMCS_IN.patch
- create mode 100644 package/rpi-userland/0006-dtmerge-add-missing-include-for-va_list.patch
-
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index 7fc39c2..69a5403 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -7,13 +7,13 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_SYSTEM_DHCP="eth0"
+ 
+-# Linux headers same as kernel, a 4.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++# Linux headers same as kernel, a 4.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="d33d0293e245badc4ca6ede3984d8bb8ea63cb1a"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3de232825c9ba5989522b8691eb6ac5df6619458"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
 -- 
 2.1.4
