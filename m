@@ -1,41 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Apr 2016 21:24:17 +0200
-Subject: [Buildroot] [git commit] raspberrypi2_defconfig: bump to kernel
-	version 4.4.7
-Message-ID: <20160423192429.2790F80676@busybox.osuosl.org>
+Date: Sat, 23 Apr 2016 21:26:46 +0200
+Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
+ config (incl. BBB)
+In-Reply-To: <20160423161844.GA9825@smipidev>
+References: <20160419212441.6a0454e9@free-electrons.com>
+ <20160419201733.GA19934@smipidev>
+ <CAGm1_kv4ipig0JpHxiBDV7b0roUrY_7sr0To=iNJuNYR_YhtcA@mail.gmail.com>
+ <20160420164216.GA26814@smipidev>
+ <CAGm1_kughQAzmdbaQo4bBb4+-a1rL9-1aZunOCuLtFH4pgSUhA@mail.gmail.com>
+ <20160421132905.7c271814@free-electrons.com>
+ <20160423130141.GB10355@smipidev>
+ <20160423151129.479c5f03@free-electrons.com>
+ <CAPho-_Kvdg37hhfujbg99BVwhP+jPcwnsZUH2=3G7qt0CVz7yw@mail.gmail.com>
+ <20160423165013.10739b58@free-electrons.com>
+ <20160423161844.GA9825@smipidev>
+Message-ID: <20160423212646.5e6d8f52@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83e53dbb1badfc3d9a3a1d99b9b5e193103c5b85
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- configs/raspberrypi2_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Sat, 23 Apr 2016 18:18:44 +0200, Pieter Smith wrote:
 
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index 7fc39c2..69a5403 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -7,13 +7,13 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 4.1 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+# Linux headers same as kernel, a 4.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="d33d0293e245badc4ca6ede3984d8bb8ea63cb1a"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3de232825c9ba5989522b8691eb6ac5df6619458"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
+> > Well, what you want and what the Buildroot maintainer/core developers
+> > want may be different :-)
+> 
+> Yup... If all the world was of one mind, it surely would be a boring place ;-)
+
+Indeed :)
+
+> I do not want to try to force the beaglebone_barebox_defconfig. Everybody knows
+> that it doesn't work that way. Is there no value in having SOME FORM of
+> defconfig to illustrate feature use in buildroot?
+
+There is a value, but not as a defconfig in configs/ IMO.
+Unfortunately, the place/infrastructure where it would have a value
+doesn't really exist today.
+
+> > My opinion is that there is no point is having gazillions of different
+> > defconfigs for the same board. Your focus is on Barebox, but then the
+> > next developer will want a defconfig for BeagleBone+Qt5, the next one
+> > for BeagleBone+Wayland, the next one for BeagleBone+Kodi, the next one
+> > for BeagleBone as a toaster controller, etc, etc. As you can see, it's
+> > going to be an endless list of unmaintainable defconfigs, so we have to
+> > cut the line somewhere.
+> 
+> What? No beaglebone_epilator_defconfig? Pity... ;-)
+
+beaglebone_toothbrush_defconfig :-)
+
+> > It would however be useful in a "testing" framework so that we can
+> > validate automatically that the dual Barebox functionality continues to
+> > work over time.
+> 
+> Agreed. Where can I stall my shiny BBB barebox "regression test" roadster then?
+
+My grand plan is to promote something like
+https://github.com/tpetazzoni/buildroot-runtime-test in order to
+collect test cases (both build-time tests and runtime tests).
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
