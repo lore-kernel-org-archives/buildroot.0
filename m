@@ -1,69 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Apr 2016 21:26:46 +0200
-Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
- config (incl. BBB)
-In-Reply-To: <20160423161844.GA9825@smipidev>
-References: <20160419212441.6a0454e9@free-electrons.com>
- <20160419201733.GA19934@smipidev>
- <CAGm1_kv4ipig0JpHxiBDV7b0roUrY_7sr0To=iNJuNYR_YhtcA@mail.gmail.com>
- <20160420164216.GA26814@smipidev>
- <CAGm1_kughQAzmdbaQo4bBb4+-a1rL9-1aZunOCuLtFH4pgSUhA@mail.gmail.com>
- <20160421132905.7c271814@free-electrons.com>
- <20160423130141.GB10355@smipidev>
- <20160423151129.479c5f03@free-electrons.com>
- <CAPho-_Kvdg37hhfujbg99BVwhP+jPcwnsZUH2=3G7qt0CVz7yw@mail.gmail.com>
- <20160423165013.10739b58@free-electrons.com>
- <20160423161844.GA9825@smipidev>
-Message-ID: <20160423212646.5e6d8f52@free-electrons.com>
+Date: Sat, 23 Apr 2016 21:27:17 +0200
+Subject: [Buildroot] [git commit] rpi-userland: bump version
+Message-ID: <20160423192722.88D9A7FDD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2ce7c6a9a1e1a6e6afe44122ee4f1bd43063c083
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 23 Apr 2016 18:18:44 +0200, Pieter Smith wrote:
+- remove upstream commited patch:
+  0002-makefiles-cmake-vmcs.cmake-allow-to-override-VMCS_IN.patch
 
-> > Well, what you want and what the Buildroot maintainer/core developers
-> > want may be different :-)
-> 
-> Yup... If all the world was of one mind, it surely would be a boring place ;-)
+- fix compile errror (missing include for va_list with uclibc-1.0.14):
+  0006-dtmerge-add-missing-include-for-va_list.patch
 
-Indeed :)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...make-vmcs.cmake-allow-to-override-VMCS_IN.patch | 27 -----------------
+ ...6-dtmerge-add-missing-include-for-va_list.patch | 34 ++++++++++++++++++++++
+ package/rpi-userland/rpi-userland.mk               |  2 +-
+ 3 files changed, 35 insertions(+), 28 deletions(-)
 
-> I do not want to try to force the beaglebone_barebox_defconfig. Everybody knows
-> that it doesn't work that way. Is there no value in having SOME FORM of
-> defconfig to illustrate feature use in buildroot?
-
-There is a value, but not as a defconfig in configs/ IMO.
-Unfortunately, the place/infrastructure where it would have a value
-doesn't really exist today.
-
-> > My opinion is that there is no point is having gazillions of different
-> > defconfigs for the same board. Your focus is on Barebox, but then the
-> > next developer will want a defconfig for BeagleBone+Qt5, the next one
-> > for BeagleBone+Wayland, the next one for BeagleBone+Kodi, the next one
-> > for BeagleBone as a toaster controller, etc, etc. As you can see, it's
-> > going to be an endless list of unmaintainable defconfigs, so we have to
-> > cut the line somewhere.
-> 
-> What? No beaglebone_epilator_defconfig? Pity... ;-)
-
-beaglebone_toothbrush_defconfig :-)
-
-> > It would however be useful in a "testing" framework so that we can
-> > validate automatically that the dual Barebox functionality continues to
-> > work over time.
-> 
-> Agreed. Where can I stall my shiny BBB barebox "regression test" roadster then?
-
-My grand plan is to promote something like
-https://github.com/tpetazzoni/buildroot-runtime-test in order to
-collect test cases (both build-time tests and runtime tests).
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/rpi-userland/0002-makefiles-cmake-vmcs.cmake-allow-to-override-VMCS_IN.patch b/package/rpi-userland/0002-makefiles-cmake-vmcs.cmake-allow-to-override-VMCS_IN.patch
+deleted file mode 100644
+index c218898..0000000
+--- a/package/rpi-userland/0002-makefiles-cmake-vmcs.cmake-allow-to-override-VMCS_IN.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 8894136ff80a8c6eeadf1799af59aa3aa7b87827 Mon Sep 17 00:00:00 2001
+-From: Samuel Martin <s.martin49@gmail.com>
+-Date: Sat, 24 Jan 2015 19:44:50 +0100
+-Subject: [PATCH] makefiles/cmake/vmcs.cmake: allow to override
+- VMCS_INSTALL_PREFIX
+-
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+----
+- makefiles/cmake/vmcs.cmake | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/makefiles/cmake/vmcs.cmake b/makefiles/cmake/vmcs.cmake
+-index 0f8641b..cc70cca 100644
+---- a/makefiles/cmake/vmcs.cmake
+-+++ b/makefiles/cmake/vmcs.cmake
+-@@ -9,7 +9,7 @@ INCLUDE(CPack)
+- # Where shall we install?
+- if (ANDROID)
+-   SET(VMCS_INSTALL_PREFIX "/vendor/brcm/islands" CACHE PATH "Prefix prepended to install directories" FORCE)
+--else()
+-+elseif(NOT DEFINED VMCS_INSTALL_PREFIX)
+-   SET(VMCS_INSTALL_PREFIX "/opt/vc" CACHE PATH "Prefix prepended to install directories" FORCE)
+- endif()
+- 
+--- 
+-1.9.1
+-
+diff --git a/package/rpi-userland/0006-dtmerge-add-missing-include-for-va_list.patch b/package/rpi-userland/0006-dtmerge-add-missing-include-for-va_list.patch
+new file mode 100644
+index 0000000..f028f67
+--- /dev/null
++++ b/package/rpi-userland/0006-dtmerge-add-missing-include-for-va_list.patch
+@@ -0,0 +1,34 @@
++From 1ffed0e8601afb7e65545bd545772edd0fccc404 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sat, 23 Apr 2016 17:48:13 +0200
++Subject: [PATCH] dtmerge: add missing include for va_list
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes compile error with uclibc-1.0.14:
++
++  In file included from rpi-userland-52eca998aa43f278314579dba4798a3fe1da46c3/host_applications/linux/apps/dtmerge/dtmerge.c:32:0:
++  rpi-userland-52eca998aa43f278314579dba4798a3fe1da46c3/helpers/dtoverlay/dtoverlay.h:65:54: error: unknown type name ???va_list???
++                                     const char *fmt, va_list args);
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ host_applications/linux/apps/dtmerge/dtmerge.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/host_applications/linux/apps/dtmerge/dtmerge.c b/host_applications/linux/apps/dtmerge/dtmerge.c
++index 9243da1..2ac8d39 100644
++--- a/host_applications/linux/apps/dtmerge/dtmerge.c
+++++ b/host_applications/linux/apps/dtmerge/dtmerge.c
++@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <libfdt.h>
+++#include <stdarg.h>
++ 
++ #include "dtoverlay.h"
++ 
++-- 
++2.8.1
++
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index c0a0186..2312fcf 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_USERLAND_VERSION = 8369e390999f4a7c3bc57e577247e0dd502c51f7
++RPI_USERLAND_VERSION = 52eca998aa43f278314579dba4798a3fe1da46c3
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
