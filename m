@@ -1,20 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Apr 2016 10:16:53 +0200
-Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
- config (incl. BBB)
-In-Reply-To: <20160424080407.GB3082@smipidev>
-References: <CAGm1_kv4ipig0JpHxiBDV7b0roUrY_7sr0To=iNJuNYR_YhtcA@mail.gmail.com>
- <20160420164216.GA26814@smipidev>
- <CAGm1_kughQAzmdbaQo4bBb4+-a1rL9-1aZunOCuLtFH4pgSUhA@mail.gmail.com>
- <20160421132905.7c271814@free-electrons.com>
- <20160423130141.GB10355@smipidev>
- <20160423151129.479c5f03@free-electrons.com>
- <CAPho-_Kvdg37hhfujbg99BVwhP+jPcwnsZUH2=3G7qt0CVz7yw@mail.gmail.com>
- <20160423165013.10739b58@free-electrons.com>
- <20160423161844.GA9825@smipidev>
- <20160423212646.5e6d8f52@free-electrons.com>
- <20160424080407.GB3082@smipidev>
-Message-ID: <20160424101653.4d8d78c5@free-electrons.com>
+Date: Sun, 24 Apr 2016 10:20:36 +0200
+Subject: [Buildroot] [PATCH 2/2] package/freeswitch: Fix added license
+In-Reply-To: <1461445189-31992-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1461445189-31992-1-git-send-email-bernd.kuhls@t-online.de>
+ <1461445189-31992-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160424102036.1d53fd35@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,27 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 24 Apr 2016 10:04:07 +0200, Pieter Smith wrote:
+On Sat, 23 Apr 2016 22:59:49 +0200, Bernd Kuhls wrote:
 
-> I will post the patch series including the beaglebone_barebox_defconfig. This
-> will at least illustrate usage, even if it only lives in the mailing archives.
-> Should it be required: The buildroot maintainers have my permission to merge
-> only a sub-set of the patch-series. I do not object to this, and I will make it
-> clear in the summary.
+> diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+> index ec52172..f76ad24 100644
+> --- a/package/freeswitch/freeswitch.mk
+> +++ b/package/freeswitch/freeswitch.mk
+> @@ -161,7 +161,7 @@ FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
+>  # mod_isac supports a limited set of archs
+>  # src/mod/codecs/mod_isac/typedefs.h
+>  ifeq ($(BR2_i386)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_x86_64),y)
+> -FREESWITCH_LICENSE += BSD-3c (mod_isac)
+> +FREESWITCH_LICENSE := $(FREESWITCH_LICENSE) BSD-3c (mod_isac)
 
-It is in any case very useful to include a defconfig in the series to
-ease testing. Another possibility is to include the defconfig used for
-testing inside one of the commit log, so that it remains part of the
-Git history, and easily available if one looks at the Git commits
-touching the barebox package.
+Hum, licenses should be comma separated, so don't we need:
 
-> > My grand plan is to promote something like
-> > https://github.com/tpetazzoni/buildroot-runtime-test in order to
-> > collect test cases (both build-time tests and runtime tests).
-> 
-> Promising. I will remember to have a look at it in a few weeks.
+  FREESWITCH_LICENSE := $(FREESWITCH_LICENSE), BSD-3c (mod_isac)
 
-Well, don't hold your breath: I haven't touched it for months :/
+ ?
 
 Thomas
 -- 
