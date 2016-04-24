@@ -1,52 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Apr 2016 23:59:38 +0200
-Subject: [Buildroot] [PATCH 2/2] configs: add defconfig for TS-4800
-In-Reply-To: <1461255673-11443-3-git-send-email-damien.riegel@savoirfairelinux.com>
-References: <1461255673-11443-1-git-send-email-damien.riegel@savoirfairelinux.com>
- <1461255673-11443-3-git-send-email-damien.riegel@savoirfairelinux.com>
-Message-ID: <20160424235938.78800305@free-electrons.com>
+Date: Mon, 25 Apr 2016 00:00:04 +0200
+Subject: [Buildroot] [git commit] python-iowait: new package
+Message-ID: <20160424220127.CD49B7F9A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2a115cbe589047bc348ff8ba88ef6335bd628178
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 21 Apr 2016 12:21:13 -0400, Damien Riegel wrote:
-> This patch adds support for the TS-4800 SoM manufactured by Technologic
-> Systems based on the Freescale i.MX515 SoC.
-> 
-> The TS-4800 is supported by mainline Linux as of 4.5. There are two
-> patches for U-Boot. The first one modifies the default environment to
-> more sane values. The second defines an errata that seems to affect the
-> board. These patches will be sent upstream and hopefully they will be
-> removed from Buildroot at some point.
-> 
-> mbrboot.bin is a MBR routine which was extracted from the image provided
-> by Technologic Systems. Basically, it scans every partition with the
-> 0xda type and copies the first file to a given offset, and then jump
-> where the first file was copied to start its execution. In our case, we
-> use it to load u-boot. This routine is loaded by the companion FPGA and
-> the board won't be able to boot if this is missing.
-> 
-> A post-image script is provided to generate an image that can be "dd"
-> directly to an SD card.
-> 
-> More details on the board here:
->   http://wiki.embeddedarm.com/wiki/TS-4800
-> 
-> Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                        |  1 +
+ package/python-iowait/Config.in          |  6 ++++++
+ package/python-iowait/python-iowait.hash |  4 ++++
+ package/python-iowait/python-iowait.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
 
-I think you said on IRC you would post a new version of this patch, so
-I've marked this first version as "Changes Requested" in our patch
-tracking system. So don't forget to send a new version, otherwise we'll
-forget about it!
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 5103621..e860f72 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -663,6 +663,7 @@ menu "External python modules"
+ 	source "package/python-id3/Config.in"
+ 	source "package/python-idna/Config.in"
+ 	source "package/python-iniparse/Config.in"
++	source "package/python-iowait/Config.in"
+ 	source "package/python-ipaddr/Config.in"
+ 	source "package/python-ipaddress/Config.in"
+ 	source "package/python-ipy/Config.in"
+diff --git a/package/python-iowait/Config.in b/package/python-iowait/Config.in
+new file mode 100644
+index 0000000..ebe96db
+--- /dev/null
++++ b/package/python-iowait/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_IOWAIT
++	bool "python-iowait"
++	help
++	  Platform-independent module for I/O completion events.
++
++	  https://launchpad.net/python-iowait
+diff --git a/package/python-iowait/python-iowait.hash b/package/python-iowait/python-iowait.hash
+new file mode 100644
+index 0000000..67dac15
+--- /dev/null
++++ b/package/python-iowait/python-iowait.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/iowait/json
++md5	f49ca7766fe4a67e03a731e575614f87  iowait-0.2.tar.gz
++# sha256 calculated by scanpypi
++sha256	ab1bc2eb84c22ccf61f17a0024f9fb6df781b39f1852764a66a7769d5adfb299  iowait-0.2.tar.gz
+diff --git a/package/python-iowait/python-iowait.mk b/package/python-iowait/python-iowait.mk
+new file mode 100644
+index 0000000..99c2922
+--- /dev/null
++++ b/package/python-iowait/python-iowait.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-iowait
++#
++################################################################################
++
++PYTHON_IOWAIT_VERSION = 0.2
++PYTHON_IOWAIT_SOURCE = iowait-$(PYTHON_IOWAIT_VERSION).tar.gz
++PYTHON_IOWAIT_SITE = https://pypi.python.org/packages/65/30/e953673fe9619938e9c74408401cf865f37716da89f61f6e5d9328c0f71e
++PYTHON_IOWAIT_SETUP_TYPE = distutils
++PYTHON_IOWAIT_LICENSE = LGPLv3+
++PYTHON_IOWAIT_LICENSE_FILES = COPYING.LESSER
++
++$(eval $(python-package))
