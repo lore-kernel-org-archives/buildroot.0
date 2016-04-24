@@ -1,124 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Apr 2016 23:28:30 +0200
-Subject: [Buildroot] [git commit] package/glibc: Add security patches to fix
-	CVE-2016-3075
-Message-ID: <20160424212856.4AACE81DEE@busybox.osuosl.org>
+Date: Sun, 24 Apr 2016 23:28:48 +0200
+Subject: [Buildroot] [git commit] package/glibc: add upstream patch to fix
+	glibc-2.23 compile bug with gcc6
+Message-ID: <20160424212856.5B30D81E08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f63ec06a1364ed7f23cafee83f5b05f693cea05c
+commit: https://git.buildroot.net/buildroot/commit/?id=ab8de336eb39ae1cb019a72be65bd0504c86e527
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/glibc/2.22/0003-fix-CVE-2016-3075.patch | 44 +++++++++++++++++++++++
- package/glibc/2.23/0001-fix-CVE-2016-3075.patch | 47 +++++++++++++++++++++++++
- 2 files changed, 91 insertions(+)
+ package/glibc/2.23/0002-gcc6.patch | 88 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 88 insertions(+)
 
-diff --git a/package/glibc/2.22/0003-fix-CVE-2016-3075.patch b/package/glibc/2.22/0003-fix-CVE-2016-3075.patch
+diff --git a/package/glibc/2.23/0002-gcc6.patch b/package/glibc/2.23/0002-gcc6.patch
 new file mode 100644
-index 0000000..1ceb1f6
+index 0000000..f831cae
 --- /dev/null
-+++ b/package/glibc/2.22/0003-fix-CVE-2016-3075.patch
-@@ -0,0 +1,44 @@
-+From 883dceebc8f11921a9890211a4e202e5be17562f Mon Sep 17 00:00:00 2001
-+From: Florian Weimer <fweimer@redhat.com>
-+Date: Tue, 29 Mar 2016 12:57:56 +0200
-+Subject: [PATCH 1/1] CVE-2016-3075: Stack overflow in _nss_dns_getnetbyname_r [BZ #19879]
++++ b/package/glibc/2.23/0002-gcc6.patch
+@@ -0,0 +1,88 @@
++From 5769d5d17cdb4770f1e08167b76c1684ad4e1f73 Mon Sep 17 00:00:00 2001
++From: Yvan Roux <yvan.roux@linaro.org>
++Date: Fri, 15 Apr 2016 13:29:26 +0200
++Subject: [PATCH 1/1] Suppress GCC 6 warning about ambiguous 'else' with -Wparentheses
 +
-+The defensive copy is not needed because the name may not alias the
-+output buffer.
-+
-+(cherry picked from commit 317b199b4aff8cfa27f2302ab404d2bb5032b9a4)
++(cherry picked from commit df1cf48777fe4cd81ad7fb09ecbe5b31432b7c1c)
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +(downloaded from upstream git repo and removed changes to Changelog:
-+ https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=883dceebc8f11921a9890211a4e202e5be17562f;hp=5a1a5f0dd2744044801c91bf2588444c29cda533)
++ https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=5769d5d17cdb4770f1e08167b76c1684ad4e1f73;hp=f1e182acaaa84e844eb96462a92ba532e1c1fff4)
 +---
-+ ChangeLog                    |    7 +++++++
-+ resolv/nss_dns/dns-network.c |    5 +----
-+ 2 files changed, 8 insertions(+), 4 deletions(-)
++ ChangeLog       |    5 +++++
++ nis/nis_call.c  |   20 +++++++++++---------
++ stdlib/setenv.c |   26 ++++++++++++++------------
++ 3 files changed, 30 insertions(+), 21 deletions(-)
 +
-+diff --git a/resolv/nss_dns/dns-network.c b/resolv/nss_dns/dns-network.c
-+index 00f4490..89f8783 100644
-+--- a/resolv/nss_dns/dns-network.c
-++++ b/resolv/nss_dns/dns-network.c
-+@@ -118,17 +118,14 @@ _nss_dns_getnetbyname_r (const char *name, struct netent *result,
-+   } net_buffer;
-+   querybuf *orig_net_buffer;
-+   int anslen;
-+-  char *qbuf;
-+   enum nss_status status;
++diff --git a/nis/nis_call.c b/nis/nis_call.c
++index 3fa37e4..cb7839a 100644
++--- a/nis/nis_call.c
+++++ b/nis/nis_call.c
++@@ -680,16 +680,18 @@ nis_server_cache_add (const_nis_name name, int search_parent,
++   /* Choose which entry should be evicted from the cache.  */
++   loc = &nis_server_cache[0];
++   if (*loc != NULL)
++-    for (i = 1; i < 16; ++i)
++-      if (nis_server_cache[i] == NULL)
++-	{
+++    {
+++      for (i = 1; i < 16; ++i)
+++	if (nis_server_cache[i] == NULL)
+++	  {
+++	    loc = &nis_server_cache[i];
+++	    break;
+++	  }
+++	else if ((*loc)->uses > nis_server_cache[i]->uses
+++		 || ((*loc)->uses == nis_server_cache[i]->uses
+++		     && (*loc)->expires > nis_server_cache[i]->expires))
++ 	  loc = &nis_server_cache[i];
++-	  break;
++-	}
++-      else if ((*loc)->uses > nis_server_cache[i]->uses
++-	       || ((*loc)->uses == nis_server_cache[i]->uses
++-		   && (*loc)->expires > nis_server_cache[i]->expires))
++-	loc = &nis_server_cache[i];
+++    }
++   old = *loc;
++   *loc = new;
 + 
-+   if (__res_maybe_init (&_res, 0) == -1)
-+     return NSS_STATUS_UNAVAIL;
-+ 
-+-  qbuf = strdupa (name);
++diff --git a/stdlib/setenv.c b/stdlib/setenv.c
++index da61ee0..e66045f 100644
++--- a/stdlib/setenv.c
+++++ b/stdlib/setenv.c
++@@ -278,18 +278,20 @@ unsetenv (const char *name)
++   ep = __environ;
++   if (ep != NULL)
++     while (*ep != NULL)
++-      if (!strncmp (*ep, name, len) && (*ep)[len] == '=')
++-	{
++-	  /* Found it.  Remove this pointer by moving later ones back.  */
++-	  char **dp = ep;
 +-
-+   net_buffer.buf = orig_net_buffer = (querybuf *) alloca (1024);
++-	  do
++-	    dp[0] = dp[1];
++-	  while (*dp++);
++-	  /* Continue the loop in case NAME appears again.  */
++-	}
++-      else
++-	++ep;
+++      {
+++	if (!strncmp (*ep, name, len) && (*ep)[len] == '=')
+++	  {
+++	    /* Found it.  Remove this pointer by moving later ones back.  */
+++	    char **dp = ep;
+++
+++	    do
+++		dp[0] = dp[1];
+++	    while (*dp++);
+++	    /* Continue the loop in case NAME appears again.  */
+++	  }
+++	else
+++	  ++ep;
+++      }
 + 
-+-  anslen = __libc_res_nsearch (&_res, qbuf, C_IN, T_PTR, net_buffer.buf->buf,
-++  anslen = __libc_res_nsearch (&_res, name, C_IN, T_PTR, net_buffer.buf->buf,
-+ 			       1024, &net_buffer.ptr, NULL, NULL, NULL, NULL);
-+   if (anslen < 0)
-+     {
-+-- 
-+1.7.1
-+
-diff --git a/package/glibc/2.23/0001-fix-CVE-2016-3075.patch b/package/glibc/2.23/0001-fix-CVE-2016-3075.patch
-new file mode 100644
-index 0000000..6b07116
---- /dev/null
-+++ b/package/glibc/2.23/0001-fix-CVE-2016-3075.patch
-@@ -0,0 +1,47 @@
-+From 146b58d11fddbef15b888906e3be4f33900c416f Mon Sep 17 00:00:00 2001
-+From: Florian Weimer <fweimer@redhat.com>
-+Date: Tue, 29 Mar 2016 12:57:56 +0200
-+Subject: [PATCH 1/1] CVE-2016-3075: Stack overflow in _nss_dns_getnetbyname_r [BZ #19879]
-+
-+The defensive copy is not needed because the name may not alias the
-+output buffer.
-+
-+(cherry picked from commit 317b199b4aff8cfa27f2302ab404d2bb5032b9a4)
-+(cherry picked from commit 883dceebc8f11921a9890211a4e202e5be17562f)
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+(downloaded from upstream git repo and removed changes to files
-+ Changelog and NEWS:
-+ https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=146b58d11fddbef15b888906e3be4f33900c416f;hp=0eb234232eaf925fe4dca3bd60a3e1b4a7ab2882)
-+---
-+ ChangeLog                    |    7 +++++++
-+ NEWS                         |   10 ++++++++--
-+ resolv/nss_dns/dns-network.c |    5 +----
-+ 3 files changed, 16 insertions(+), 6 deletions(-)
-+
-+diff --git a/resolv/nss_dns/dns-network.c b/resolv/nss_dns/dns-network.c
-+index 2eb2f67..8f301a7 100644
-+--- a/resolv/nss_dns/dns-network.c
-++++ b/resolv/nss_dns/dns-network.c
-+@@ -118,17 +118,14 @@ _nss_dns_getnetbyname_r (const char *name, struct netent *result,
-+   } net_buffer;
-+   querybuf *orig_net_buffer;
-+   int anslen;
-+-  char *qbuf;
-+   enum nss_status status;
++   UNLOCK;
 + 
-+   if (__res_maybe_init (&_res, 0) == -1)
-+     return NSS_STATUS_UNAVAIL;
-+ 
-+-  qbuf = strdupa (name);
-+-
-+   net_buffer.buf = orig_net_buffer = (querybuf *) alloca (1024);
-+ 
-+-  anslen = __libc_res_nsearch (&_res, qbuf, C_IN, T_PTR, net_buffer.buf->buf,
-++  anslen = __libc_res_nsearch (&_res, name, C_IN, T_PTR, net_buffer.buf->buf,
-+ 			       1024, &net_buffer.ptr, NULL, NULL, NULL, NULL);
-+   if (anslen < 0)
-+     {
 +-- 
 +1.7.1
 +
