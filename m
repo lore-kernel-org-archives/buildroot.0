@@ -1,52 +1,124 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Apr 2016 21:18:44 +0200
-Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
-	config (incl. BBB)
-In-Reply-To: <20160421132905.7c271814@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 21 Apr 2016 13:29:05 +0200")
-References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
- <20160419212441.6a0454e9@free-electrons.com>
- <20160419201733.GA19934@smipidev>
- <CAGm1_kv4ipig0JpHxiBDV7b0roUrY_7sr0To=iNJuNYR_YhtcA@mail.gmail.com>
- <20160420164216.GA26814@smipidev>
- <CAGm1_kughQAzmdbaQo4bBb4+-a1rL9-1aZunOCuLtFH4pgSUhA@mail.gmail.com>
- <20160421132905.7c271814@free-electrons.com>
-Message-ID: <8760v6rf1n.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 24 Apr 2016 21:50:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/glibc: Add security patches to fix
+	CVE-2016-3075
+Message-ID: <1461527419-31810-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/glibc/2.22/0003-fix-CVE-2016-3075.patch | 44 +++++++++++++++++++++++
+ package/glibc/2.23/0001-fix-CVE-2016-3075.patch | 47 +++++++++++++++++++++++++
+ 2 files changed, 91 insertions(+)
+ create mode 100644 package/glibc/2.22/0003-fix-CVE-2016-3075.patch
+ create mode 100644 package/glibc/2.23/0001-fix-CVE-2016-3075.patch
 
-Hi,
-
->> If I copy your images (MLO, barebox.bin) directly to the FAT
- >> partition, everything starts as expected. But I dd boot.vfat, the
- >> system doesn't boot and shows only CCCCC, though I have no problems
- >> mounting the first partition in Linux.
- >> 
- >> sudo dd if=/tmp/boot.vfat of=/dev/sdd1 bs=1M
-
- > So this means that the Barebox build is OK, and only the genimage part
- > is causing problems. But this doesn't prevent from merging the barebox
- > aspects of the series (patches 1 to 6), which are really the important
- > part. The last patch is really more a defconfig proving that it works,
- > I am not even sure that in practice we want to merge a defconfig for
- > BeagleBone that is just different from beaglebone_defconfig in the fact
- > that it uses Barebox instead of U-Boot. Peter?
-
- > Peter, I think you looked at using genimage on AM335x, what were your
- > conclusion? On OMAP3, there were some very strict geometry restrictions
- > in the romcode, but I don't remember if your conclusion is that they
- > also apply to AM335x or not.
-
-The rom code afaik checks that the partition size matches exactly with
-the size of the fat file system, so just dd'ing a fat fs image to an
-existing partition is unlikely to work:
-
-https://groups.google.com/forum/#!topic/beagleboard/ro5k5r4Cuq4
-
+diff --git a/package/glibc/2.22/0003-fix-CVE-2016-3075.patch b/package/glibc/2.22/0003-fix-CVE-2016-3075.patch
+new file mode 100644
+index 0000000..1ceb1f6
+--- /dev/null
++++ b/package/glibc/2.22/0003-fix-CVE-2016-3075.patch
+@@ -0,0 +1,44 @@
++From 883dceebc8f11921a9890211a4e202e5be17562f Mon Sep 17 00:00:00 2001
++From: Florian Weimer <fweimer@redhat.com>
++Date: Tue, 29 Mar 2016 12:57:56 +0200
++Subject: [PATCH 1/1] CVE-2016-3075: Stack overflow in _nss_dns_getnetbyname_r [BZ #19879]
++
++The defensive copy is not needed because the name may not alias the
++output buffer.
++
++(cherry picked from commit 317b199b4aff8cfa27f2302ab404d2bb5032b9a4)
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(downloaded from upstream git repo and removed changes to Changelog:
++ https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=883dceebc8f11921a9890211a4e202e5be17562f;hp=5a1a5f0dd2744044801c91bf2588444c29cda533)
++---
++ ChangeLog                    |    7 +++++++
++ resolv/nss_dns/dns-network.c |    5 +----
++ 2 files changed, 8 insertions(+), 4 deletions(-)
++
++diff --git a/resolv/nss_dns/dns-network.c b/resolv/nss_dns/dns-network.c
++index 00f4490..89f8783 100644
++--- a/resolv/nss_dns/dns-network.c
+++++ b/resolv/nss_dns/dns-network.c
++@@ -118,17 +118,14 @@ _nss_dns_getnetbyname_r (const char *name, struct netent *result,
++   } net_buffer;
++   querybuf *orig_net_buffer;
++   int anslen;
++-  char *qbuf;
++   enum nss_status status;
++ 
++   if (__res_maybe_init (&_res, 0) == -1)
++     return NSS_STATUS_UNAVAIL;
++ 
++-  qbuf = strdupa (name);
++-
++   net_buffer.buf = orig_net_buffer = (querybuf *) alloca (1024);
++ 
++-  anslen = __libc_res_nsearch (&_res, qbuf, C_IN, T_PTR, net_buffer.buf->buf,
+++  anslen = __libc_res_nsearch (&_res, name, C_IN, T_PTR, net_buffer.buf->buf,
++ 			       1024, &net_buffer.ptr, NULL, NULL, NULL, NULL);
++   if (anslen < 0)
++     {
++-- 
++1.7.1
++
+diff --git a/package/glibc/2.23/0001-fix-CVE-2016-3075.patch b/package/glibc/2.23/0001-fix-CVE-2016-3075.patch
+new file mode 100644
+index 0000000..6b07116
+--- /dev/null
++++ b/package/glibc/2.23/0001-fix-CVE-2016-3075.patch
+@@ -0,0 +1,47 @@
++From 146b58d11fddbef15b888906e3be4f33900c416f Mon Sep 17 00:00:00 2001
++From: Florian Weimer <fweimer@redhat.com>
++Date: Tue, 29 Mar 2016 12:57:56 +0200
++Subject: [PATCH 1/1] CVE-2016-3075: Stack overflow in _nss_dns_getnetbyname_r [BZ #19879]
++
++The defensive copy is not needed because the name may not alias the
++output buffer.
++
++(cherry picked from commit 317b199b4aff8cfa27f2302ab404d2bb5032b9a4)
++(cherry picked from commit 883dceebc8f11921a9890211a4e202e5be17562f)
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(downloaded from upstream git repo and removed changes to files
++ Changelog and NEWS:
++ https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=146b58d11fddbef15b888906e3be4f33900c416f;hp=0eb234232eaf925fe4dca3bd60a3e1b4a7ab2882)
++---
++ ChangeLog                    |    7 +++++++
++ NEWS                         |   10 ++++++++--
++ resolv/nss_dns/dns-network.c |    5 +----
++ 3 files changed, 16 insertions(+), 6 deletions(-)
++
++diff --git a/resolv/nss_dns/dns-network.c b/resolv/nss_dns/dns-network.c
++index 2eb2f67..8f301a7 100644
++--- a/resolv/nss_dns/dns-network.c
+++++ b/resolv/nss_dns/dns-network.c
++@@ -118,17 +118,14 @@ _nss_dns_getnetbyname_r (const char *name, struct netent *result,
++   } net_buffer;
++   querybuf *orig_net_buffer;
++   int anslen;
++-  char *qbuf;
++   enum nss_status status;
++ 
++   if (__res_maybe_init (&_res, 0) == -1)
++     return NSS_STATUS_UNAVAIL;
++ 
++-  qbuf = strdupa (name);
++-
++   net_buffer.buf = orig_net_buffer = (querybuf *) alloca (1024);
++ 
++-  anslen = __libc_res_nsearch (&_res, qbuf, C_IN, T_PTR, net_buffer.buf->buf,
+++  anslen = __libc_res_nsearch (&_res, name, C_IN, T_PTR, net_buffer.buf->buf,
++ 			       1024, &net_buffer.ptr, NULL, NULL, NULL, NULL);
++   if (anslen < 0)
++     {
++-- 
++1.7.1
++
 -- 
-Bye, Peter Korsgaard
+2.8.0.rc3
