@@ -1,36 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Apr 2016 23:25:22 +0200
-Subject: [Buildroot] [git commit] package/kodi-addon-xvdr: mark as deprecated
-Message-ID: <20160424212540.74FB58198C@busybox.osuosl.org>
+Date: Sun, 24 Apr 2016 23:25:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-addon-xvdr: mark as
+ deprecated
+In-Reply-To: <1461518645-4761-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1461518645-4761-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160424232559.5a0d0e7b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31294a5cb1f5ab2120c153303482267a2e600413
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-According to the github project page:
-https://github.com/pipelka/xbmc-addon-xvdr
-this package is discontinued.
+On Sun, 24 Apr 2016 19:24:05 +0200, Bernd Kuhls wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: add a reason for the deprecation.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/kodi-addon-xvdr/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+>  config BR2_PACKAGE_KODI_ADDON_XVDR
+>  	bool "kodi-addon-xvdr"
+> +	depends on BR2_DEPRECATED_SINCE_2016_05
 
-diff --git a/package/kodi-addon-xvdr/Config.in b/package/kodi-addon-xvdr/Config.in
-index 6e713af..85e9d60 100644
---- a/package/kodi-addon-xvdr/Config.in
-+++ b/package/kodi-addon-xvdr/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_KODI_ADDON_XVDR
- 	bool "kodi-addon-xvdr"
-+	# upstream discontinued the development
-+	depends on BR2_DEPRECATED_SINCE_2016_05
- 	help
- 	  This is a PVR add-on for Kodi to add VDR (http://tvdr.de/)
- 	  as a TV/PVR Backend to Kodi.
+I've added a quick note above this dependency that quickly explains why
+it's deprecated, and I've applied. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
