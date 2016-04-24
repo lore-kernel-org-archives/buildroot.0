@@ -1,171 +1,224 @@
 From: Pieter Smith <pieter@boesman.nl>
-Date: Sun, 24 Apr 2016 11:18:47 +0200
-Subject: [Buildroot] [PATCH v5 5/5] beaglebone: adds barebox bootloader
-	defconfig
+Date: Sun, 24 Apr 2016 11:18:44 +0200
+Subject: [Buildroot] [PATCH v5 2/5] barebox: introduce barebox-package
+	function
 In-Reply-To: <cover.1461489060.git.pieter@boesman.nl>
 References: <cover.1461489060.git.pieter@boesman.nl>
-Message-ID: <e985e29f4fde53336379f3e8902dcff2f5d1f543.1461489060.git.pieter@boesman.nl>
+Message-ID: <9431c910cd145263e04a01f0a332555b9212e22e.1461489060.git.pieter@boesman.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Builds the barebox MLO and bootloader.
-* Generates a bootable SD card image with boot and rootfs partitions.
-* Barebox integrates a perfectly good device-tree for the bbb, so no dtb is
-  being generated with the kernel.
+No functional changes: Introduces a barebox-package function towards re-use by
+a 2nd config build.
+
+Because the function is meant to be called from within a $(eval), all instances
+of '$' has to be escaped. I.e. rename '$' -> '$$'.
 
 Signed-off-by: Pieter Smith <pieter@boesman.nl>
 ---
- board/beaglebone/barebox/barebox.env/boot/sd      | 11 ++++++
- board/beaglebone/barebox/barebox.env/config-board |  4 +++
- board/beaglebone/barebox/genimage.cfg             | 32 +++++++++++++++++
- board/beaglebone/barebox/post-image.sh            | 17 +++++++++
- configs/beaglebone_barebox_defconfig              | 43 +++++++++++++++++++++++
- 5 files changed, 107 insertions(+)
- create mode 100644 board/beaglebone/barebox/barebox.env/boot/sd
- create mode 100644 board/beaglebone/barebox/barebox.env/config-board
- create mode 100644 board/beaglebone/barebox/genimage.cfg
- create mode 100755 board/beaglebone/barebox/post-image.sh
- create mode 100644 configs/beaglebone_barebox_defconfig
+ boot/barebox/barebox.mk | 125 ++++++++++++++++++++++++++++--------------------
+ 1 file changed, 72 insertions(+), 53 deletions(-)
 
-diff --git a/board/beaglebone/barebox/barebox.env/boot/sd b/board/beaglebone/barebox/barebox.env/boot/sd
-new file mode 100644
-index 0000000..0cd1be6
---- /dev/null
-+++ b/board/beaglebone/barebox/barebox.env/boot/sd
-@@ -0,0 +1,11 @@
-+#!/bin/sh
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index dbda9a1..883d083 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -4,23 +4,31 @@
+ #
+ ################################################################################
+ 
+-BAREBOX_VERSION = $(call qstrip,$(BR2_TARGET_BAREBOX_VERSION))
++################################################################################
++# inner-barebox-package -- generates the KConfig logic and make targets needed
++# to support a barebox package. All barebox packages are built from the same
++# source (origin, version and patches).
++################################################################################
 +
-+global.bootm.image=/boot/zImage
++define inner-barebox-package
+ 
+-ifeq ($(BAREBOX_VERSION),custom)
++BAREBOX_VERSION = $$(call qstrip,$$(BR2_TARGET_BAREBOX_VERSION))
 +
-+# Default to using the barebox built-in dtb
-+# global.bootm.oftree=/boot/oftree
++ifeq ($$(BAREBOX_VERSION),custom)
+ # Handle custom Barebox tarballs as specified by the configuration
+-BAREBOX_TARBALL = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION))
+-BAREBOX_SITE = $(patsubst %/,%,$(dir $(BAREBOX_TARBALL)))
+-BAREBOX_SOURCE = $(notdir $(BAREBOX_TARBALL))
+-BR_NO_CHECK_HASH_FOR += $(BAREBOX_SOURCE)
+-else ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_GIT),y)
+-BAREBOX_SITE = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
++BAREBOX_TARBALL = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION))
++BAREBOX_SITE = $$(patsubst %/,%,$$(dir $$(BAREBOX_TARBALL)))
++BAREBOX_SOURCE = $$(notdir $$(BAREBOX_TARBALL))
++BR_NO_CHECK_HASH_FOR += $$(BAREBOX_SOURCE)
++else ifeq ($$(BR2_TARGET_BAREBOX_CUSTOM_GIT),y)
++BAREBOX_SITE = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
+ BAREBOX_SITE_METHOD = git
+ else
+ # Handle stable official Barebox versions
+-BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
++BAREBOX_SOURCE = barebox-$$(BAREBOX_VERSION).tar.bz2
+ BAREBOX_SITE = http://www.barebox.org/download
+-ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_VERSION),y)
+-BR_NO_CHECK_HASH_FOR += $(BAREBOX_SOURCE)
++ifeq ($$(BR2_TARGET_BAREBOX_CUSTOM_VERSION),y)
++BR_NO_CHECK_HASH_FOR += $$(BAREBOX_SOURCE)
+ endif
+ endif
+ 
+@@ -28,97 +36,108 @@ BAREBOX_DEPENDENCIES = host-lzop
+ BAREBOX_LICENSE = GPLv2 with exceptions
+ BAREBOX_LICENSE_FILES = COPYING
+ 
+-ifneq ($(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
++ifneq ($$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
+ define BAREBOX_APPLY_CUSTOM_PATCHES
+-	$(APPLY_PATCHES) $(@D) \
+-		$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) \*.patch
++	$$(APPLY_PATCHES) $$(@D) \
++		$$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) \*.patch
+ endef
+ 
+ BAREBOX_POST_PATCH_HOOKS += BAREBOX_APPLY_CUSTOM_PATCHES
+ endif
+ 
+ BAREBOX_INSTALL_IMAGES = YES
+-ifneq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
++ifneq ($$(BR2_TARGET_BAREBOX_BAREBOXENV),y)
+ BAREBOX_INSTALL_TARGET = NO
+ endif
+ 
+-ifeq ($(KERNEL_ARCH),i386)
++ifeq ($$(KERNEL_ARCH),i386)
+ BAREBOX_ARCH = x86
+-else ifeq ($(KERNEL_ARCH),x86_64)
++else ifeq ($$(KERNEL_ARCH),x86_64)
+ BAREBOX_ARCH = x86
+-else ifeq ($(KERNEL_ARCH),powerpc)
++else ifeq ($$(KERNEL_ARCH),powerpc)
+ BAREBOX_ARCH = ppc
+ else
+-BAREBOX_ARCH = $(KERNEL_ARCH)
++BAREBOX_ARCH = $$(KERNEL_ARCH)
+ endif
+ 
+-BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(TARGET_CROSS)"
+-BAREBOX_MAKE_ENV = $(TARGET_MAKE_ENV)
++BAREBOX_MAKE_FLAGS = ARCH=$$(BAREBOX_ARCH) CROSS_COMPILE="$$(TARGET_CROSS)"
++BAREBOX_MAKE_ENV = $$(TARGET_MAKE_ENV)
+ 
+-ifeq ($(BR2_TARGET_BAREBOX_USE_DEFCONFIG),y)
+-BAREBOX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))_defconfig
+-else ifeq ($(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
+-BAREBOX_KCONFIG_FILE = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE))
++ifeq ($$(BR2_TARGET_BAREBOX_USE_DEFCONFIG),y)
++BAREBOX_KCONFIG_DEFCONFIG = $$(call qstrip,$$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))_defconfig
++else ifeq ($$(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
++BAREBOX_KCONFIG_FILE = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE))
+ endif
+ 
+-BAREBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES))
++BAREBOX_KCONFIG_FRAGMENT_FILES = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES))
+ BAREBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+-BAREBOX_KCONFIG_OPTS = $(BAREBOX_MAKE_FLAGS)
++BAREBOX_KCONFIG_OPTS = $$(BAREBOX_MAKE_FLAGS)
+ 
+-ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
++ifeq ($$(BR2_TARGET_BAREBOX_BAREBOXENV),y)
+ define BAREBOX_BUILD_BAREBOXENV_CMDS
+-	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -o $(@D)/bareboxenv \
+-		$(@D)/scripts/bareboxenv.c
++	$$(TARGET_CC) $$(TARGET_CFLAGS) $$(TARGET_LDFLAGS) -o $$(@D)/bareboxenv \
++		$$(@D)/scripts/bareboxenv.c
+ endef
+ endif
+ 
+-ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_ENV),y)
+-BAREBOX_ENV_NAME = $(notdir $(call qstrip,\
+-	$(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)))
++ifeq ($$(BR2_TARGET_BAREBOX_CUSTOM_ENV),y)
++BAREBOX_ENV_NAME = $$(notdir $$(call qstrip,\
++	$$(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)))
+ define BAREBOX_BUILD_CUSTOM_ENV
+-	$(@D)/scripts/bareboxenv -s \
+-		$(call qstrip, $(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)) \
+-		$(@D)/$(BAREBOX_ENV_NAME)
++	$$(@D)/scripts/bareboxenv -s \
++		$$(call qstrip, $$(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)) \
++		$$(@D)/$$(BAREBOX_ENV_NAME)
+ endef
+ define BAREBOX_INSTALL_CUSTOM_ENV
+-	cp $(@D)/$(BAREBOX_ENV_NAME) $(BINARIES_DIR)
++	cp $$(@D)/$$(BAREBOX_ENV_NAME) $$(BINARIES_DIR)
+ endef
+ endif
+ 
+ define BAREBOX_BUILD_CMDS
+-	$(BAREBOX_BUILD_BAREBOXENV_CMDS)
+-	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D)
+-	$(BAREBOX_BUILD_CUSTOM_ENV)
++	$$(BAREBOX_BUILD_BAREBOXENV_CMDS)
++	$$(TARGET_MAKE_ENV) $$(MAKE) $$(BAREBOX_MAKE_FLAGS) -C $$(@D)
++	$$(BAREBOX_BUILD_CUSTOM_ENV)
+ endef
+ 
+-BAREBOX_IMAGE_FILE = $(call qstrip,$(BR2_TARGET_BAREBOX_IMAGE_FILE))
++BAREBOX_IMAGE_FILE = $$(call qstrip,$$(BR2_TARGET_BAREBOX_IMAGE_FILE))
+ 
+ define BAREBOX_INSTALL_IMAGES_CMDS
+-	if test -n "$(BAREBOX_IMAGE_FILE)"; then \
+-		cp -L $(@D)/$(BAREBOX_IMAGE_FILE) $(BINARIES_DIR) ; \
+-	elif test -h $(@D)/barebox-flash-image ; then \
+-		cp -L $(@D)/barebox-flash-image $(BINARIES_DIR)/barebox.bin ; \
++	if test -n "$$(BAREBOX_IMAGE_FILE)"; then \
++		cp -L $$(@D)/$$(BAREBOX_IMAGE_FILE) $$(BINARIES_DIR) ; \
++	elif test -h $$(@D)/barebox-flash-image ; then \
++		cp -L $$(@D)/barebox-flash-image $$(BINARIES_DIR)/barebox.bin ; \
+ 	else \
+-		cp $(@D)/barebox.bin $(BINARIES_DIR);\
++		cp $$(@D)/barebox.bin $$(BINARIES_DIR);\
+ 	fi
+-	$(BAREBOX_INSTALL_CUSTOM_ENV)
++	$$(BAREBOX_INSTALL_CUSTOM_ENV)
+ endef
+ 
+-ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
++ifeq ($$(BR2_TARGET_BAREBOX_BAREBOXENV),y)
+ define BAREBOX_INSTALL_TARGET_CMDS
+-	cp $(@D)/bareboxenv $(TARGET_DIR)/usr/bin
++	cp $$(@D)/bareboxenv $$(TARGET_DIR)/usr/bin
+ endef
+ endif
+ 
+ # Checks to give errors that the user can understand
+ # Must be before we call to kconfig-package
+-ifeq ($(BR2_TARGET_BAREBOX)$(BR_BUILDING),yy)
++ifeq ($$(BR2_TARGET_BAREBOX)$$(BR_BUILDING),yy)
+ # We must use the user-supplied kconfig value, because
+ # BAREBOX_KCONFIG_DEFCONFIG will at least contain the
+ # trailing _defconfig
+-ifeq ($(or $(BAREBOX_KCONFIG_FILE),$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))),)
+-$(error No Barebox config. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG or BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE settings)
++ifeq ($$(or $$(BAREBOX_KCONFIG_FILE),$$(call qstrip,$$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))),)
++$$(error No Barebox config. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG or BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE settings)
+ endif
+ endif
+ 
+-$(eval $(kconfig-package))
++$$(eval $$(kconfig-package))
 +
-+# No initrd
-+# global.bootm.initrd=<path to initrd>
++endef
 +
-+global.linux.bootargs.dyn.root="root=/dev/mmcblk0p2 rootfstype=ext4 rootwait"
-diff --git a/board/beaglebone/barebox/barebox.env/config-board b/board/beaglebone/barebox/barebox.env/config-board
-new file mode 100644
-index 0000000..cd7b26d
---- /dev/null
-+++ b/board/beaglebone/barebox/barebox.env/config-board
-@@ -0,0 +1,4 @@
-+#!/bin/sh
++################################################################################
++# barebox-package -- the target generator macro for barebox packages
++################################################################################
 +
-+global.boot.default=sd
++barebox-package=$(call inner-barebox-package)
 +
-diff --git a/board/beaglebone/barebox/genimage.cfg b/board/beaglebone/barebox/genimage.cfg
-new file mode 100644
-index 0000000..a058ce9
---- /dev/null
-+++ b/board/beaglebone/barebox/genimage.cfg
-@@ -0,0 +1,32 @@
-+image boot.vfat {
-+	vfat {
-+		file MLO {
-+			image = "barebox-am33xx-beaglebone-mlo.img"
-+		}
-+		file barebox.bin {
-+			image = "barebox-am33xx-beaglebone.img"
-+		}
-+		files = {
-+			"barebox.env",
-+			"zImage"
-+		}
-+	}
-+	size = 32M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		in-partition-table = "yes"
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/beaglebone/barebox/post-image.sh b/board/beaglebone/barebox/post-image.sh
-new file mode 100755
-index 0000000..149ffb1
---- /dev/null
-+++ b/board/beaglebone/barebox/post-image.sh
-@@ -0,0 +1,17 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage \
-+	--rootpath "${TARGET_DIR}" \
-+	--tmppath "${GENIMAGE_TMP}" \
-+	--inputpath "${BINARIES_DIR}" \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-+
-+exit $?
-+
-diff --git a/configs/beaglebone_barebox_defconfig b/configs/beaglebone_barebox_defconfig
-new file mode 100644
-index 0000000..ef86e89
---- /dev/null
-+++ b/configs/beaglebone_barebox_defconfig
-@@ -0,0 +1,43 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a8=y
-+BR2_ARM_EABIHF=y
-+
-+# system
-+BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
-+BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y
-+
-+# filesystem
-+BR2_PACKAGE_AM33X_CM3=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Linux headers same as kernel, a 4.5 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
-+
-+# bootloader
-+BR2_TARGET_BAREBOX=y
-+BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="am335x"
-+BR2_TARGET_BAREBOX_IMAGE_FILE="images/barebox-am33xx-beaglebone.img"
-+BR2_TARGET_BAREBOX_CUSTOM_ENV=y
-+BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH="board/beaglebone/barebox/barebox.env"
-+BR2_TARGET_BAREBOX_2=y
-+BR2_TARGET_BAREBOX_2_BOARD_DEFCONFIG="am335x_mlo"
-+BR2_TARGET_BAREBOX_2_IMAGE_FILE="images/barebox-am33xx-beaglebone-mlo.img"
-+
-+# use board/beaglebone/genimage.cfg to generate boot.vfat and sdcard.img
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/barebox/post-image.sh"
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5.2"
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+
-+# use the barebox built-in dtb
-+# BR2_LINUX_KERNEL_DTS_SUPPORT is not set
++# instantiate this barebox package
++$(eval $(barebox-package))
 -- 
 2.5.0
