@@ -1,35 +1,36 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Sun, 24 Apr 2016 23:24:52 +0200
-Subject: [Buildroot] [PATCH v6 0/5] Support building barebox with an
- auxiliary config
-In-Reply-To: <20160424232152.5e757542@free-electrons.com>
-References: <cover.1461531859.git.pieter@boesman.nl>
- <20160424232152.5e757542@free-electrons.com>
-Message-ID: <20160424212452.GA4812@smipidev>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Apr 2016 23:25:22 +0200
+Subject: [Buildroot] [git commit] package/kodi-addon-xvdr: mark as deprecated
+Message-ID: <20160424212540.74FB58198C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=31294a5cb1f5ab2120c153303482267a2e600413
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Apr 24, 2016 at 11:21:52PM +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun, 24 Apr 2016 23:15:22 +0200, Pieter Smith wrote:
-> 
-> > Revision history:
-> > v6: Review rework based on feedback from Thomas Pettazoni:
-> >     - Second config build renamed to auxiliary build.
-> >     - Primary package build moved to boot/barebox/barebox to keep things symmetric.
-> >     - Dropped already merged parts of series.
-> 
-> Thanks for this new version, looks good to me! I'll wait for Arnout to
-> comment and see if he has objections to this way of doing things.
+According to the github project page:
+https://github.com/pipelka/xbmc-addon-xvdr
+this package is discontinued.
 
-A pleasure! I hope it holds up. I will be a little short on time the coming month.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: add a reason for the deprecation.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kodi-addon-xvdr/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-[snip]
-
-- Pieter
+diff --git a/package/kodi-addon-xvdr/Config.in b/package/kodi-addon-xvdr/Config.in
+index 6e713af..85e9d60 100644
+--- a/package/kodi-addon-xvdr/Config.in
++++ b/package/kodi-addon-xvdr/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_KODI_ADDON_XVDR
+ 	bool "kodi-addon-xvdr"
++	# upstream discontinued the development
++	depends on BR2_DEPRECATED_SINCE_2016_05
+ 	help
+ 	  This is a PVR add-on for Kodi to add VDR (http://tvdr.de/)
+ 	  as a TV/PVR Backend to Kodi.
