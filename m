@@ -1,33 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Apr 2016 23:21:52 +0200
-Subject: [Buildroot] [PATCH v6 0/5] Support building barebox with an
- auxiliary config
-In-Reply-To: <cover.1461531859.git.pieter@boesman.nl>
-References: <cover.1461531859.git.pieter@boesman.nl>
-Message-ID: <20160424232152.5e757542@free-electrons.com>
+From: Pieter Smith <pieter@boesman.nl>
+Date: Sun, 24 Apr 2016 23:21:51 +0200
+Subject: [Buildroot] [PATCH v5 3/5] barebox: extract package name
+	argument
+In-Reply-To: <20160424175445.1e355e27@free-electrons.com>
+References: <cover.1461489060.git.pieter@boesman.nl>
+ <25e6116304fc372a998f7091f95a08ea91737470.1461489060.git.pieter@boesman.nl>
+ <20160424175445.1e355e27@free-electrons.com>
+Message-ID: <20160424212151.GC4689@smipidev>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sun, 24 Apr 2016 23:15:22 +0200, Pieter Smith wrote:
+On Sun, Apr 24, 2016 at 05:54:45PM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sun, 24 Apr 2016 11:18:45 +0200, Pieter Smith wrote:
+> > No functional changes: Extracts an argument to the inner-barebox-package
+> > function to automatically determine the uppercase package name. This is needed
+> > to support a 2nd config build. This results in the following renaming:
+> >   'BAREBOX' -> '$(1)'
+> > 
+> > All barebox packages are meant to be built from the same sources, so related
+> > KConfig variables (origin, version and patch directory) are not extracted.
+> > 
+> > Signed-off-by: Pieter Smith <pieter@boesman.nl>
+> > ---
+> >  boot/barebox/barebox.mk | 121 +++++++++++++++++++++++++-----------------------
+> >  1 file changed, 62 insertions(+), 59 deletions(-)
+> 
+> Applied to master, thanks.
 
-> Revision history:
-> v6: Review rework based on feedback from Thomas Pettazoni:
->     - Second config build renamed to auxiliary build.
->     - Primary package build moved to boot/barebox/barebox to keep things symmetric.
->     - Dropped already merged parts of series.
+A pleasure!
 
-Thanks for this new version, looks good to me! I'll wait for Arnout to
-comment and see if he has objections to this way of doing things.
+[snip]
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+- Pieter
