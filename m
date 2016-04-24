@@ -1,38 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Apr 2016 23:34:51 +0200
-Subject: [Buildroot] [git commit] linux-firmware: allow LINUX_FIRMWARE_FILES
-	to contain wildcards
-Message-ID: <20160424214206.EB61381D4C@busybox.osuosl.org>
+Date: Sun, 24 Apr 2016 23:41:12 +0200
+Subject: [Buildroot] [git commit] linux-firmware: add support for intel
+	iwlwifi 8265
+Message-ID: <20160424214207.4728481D4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=095c04f47cea1a3449ae0552c59e164d1f5d8422
+commit: https://git.buildroot.net/buildroot/commit/?id=ba5d1a7253af934a98ef490667ee9750422ffa5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This commit will allow the LINUX_FIRMWARE_FILES variable to contain
-wildcards, which will simplify the handling of firmware that are
-available in numerous revisions.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-firmware/linux-firmware.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/linux-firmware/Config.in         | 6 ++++++
+ package/linux-firmware/linux-firmware.mk | 5 +++++
+ 2 files changed, 11 insertions(+)
 
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 13f7097..6939fc3 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -113,6 +113,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8000C
+ 	  Firmware files for the Intel Wifi 8000C devices supported by
+ 	  the iwlwifi kernel driver.
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8265
++	bool "Intel iwlwifi 8265"
++	help
++	  Firmware files for the Intel Wifi 8265 devices supported by
++	  the iwlwifi kernel driver.
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V8
+ 	bool "Libertas SD 8686 v8"
+ 	help
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 28fe66c..c33eb95 100644
+index b959694..87ae93b 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -356,7 +356,8 @@ endif
- 
- ifneq ($(LINUX_FIRMWARE_FILES),)
- define LINUX_FIRMWARE_INSTALL_FILES
--	$(TAR) c -C $(@D) $(sort $(LINUX_FIRMWARE_FILES)) | \
-+	cd $(@D) ; \
-+	$(TAR) c $(sort $(LINUX_FIRMWARE_FILES)) | \
- 		$(TAR) x -C $(TARGET_DIR)/lib/firmware
- endef
+@@ -267,6 +267,11 @@ LINUX_FIRMWARE_FILES += iwlwifi-8000C-*.ucode
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
  endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_8265),y)
++LINUX_FIRMWARE_FILES += iwlwifi-8265-*.ucode
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BNX2X),y)
+ LINUX_FIRMWARE_FILES += \
+ 	bnx2x/bnx2x-e1-7.10.51.0.fw \
