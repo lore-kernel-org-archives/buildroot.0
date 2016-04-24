@@ -1,49 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Apr 2016 23:06:27 +0200
-Subject: [Buildroot] [PATCH 0/3 v2] xorg: fix installation paths (branch
- yem/xorg)
-In-Reply-To: <20160424161644.GB2583@free.fr>
-References: <cover.1457719643.git.yann.morin.1998@free.fr>
- <20160421220137.4a88ed00@free-electrons.com>
- <20160424161644.GB2583@free.fr>
-Message-ID: <20160424230627.5d24bf92@free-electrons.com>
+From: Pieter Smith <pieter@boesman.nl>
+Date: Sun, 24 Apr 2016 23:15:22 +0200
+Subject: [Buildroot] [PATCH v6 0/5] Support building barebox with an
+	auxiliary config
+Message-ID: <cover.1461531859.git.pieter@boesman.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This patch-set adds support for building barebox with an auxiliary config.
+It can be used to build the barebox x-loader or MLO (also called Secondary
+Program Loader) in addition to the standard barebox build (Tertiary Program
+Loader). This implements the design proposed in
+http://elinux.org/Buildroot#Todo_list, with minor adjustments:
+1. Have boot/barebox contain the common stuff.
+2. Move the non-shared parts to boot/barebox/barebox and duplicate it in
+   boot/barebox/barebox-aux.
+3. There is only one version selection, but each package allows to
+   define the configuration to be used.
+4. Design is a little bit like package/gcc, where we have multiple gcc builds,
+   but share a lot of common definitions between the packages.
 
-On Sun, 24 Apr 2016 18:16:44 +0200, Yann E. MORIN wrote:
+To demonstrate that it works as advertized, the last patch adds a defconfig for
+the beaglebone that makes use of the added functionality.
 
-> > One important thing that this cover letter doesn't explain is why we
-> > don't fix pkg-config instead?
-> 
-> (trying to reconnect the dots...)
-> 
-> Right. But in turns out that pkg-config has been fixed, yet there still
-> are errors, because the Xorg packages define an "sdk_dir" (or so)
-> variable, and use that to prefix a lot of directories, of which the
-> runtime directories.
-> 
-> So, it's not about a pkg-config issue, but mainly because all of the
-> Xorg packages are bran-damaged and try (and fail) to circumvent
-> pkg-config functionality by setting variables that are not common
-> pkg-config variables.
+Revision history:
+v6: Review rework based on feedback from Thomas Pettazoni:
+    - Second config build renamed to auxiliary build.
+    - Primary package build moved to boot/barebox/barebox to keep things symmetric.
+    - Dropped already merged parts of series.
+v5: Review rework based on feedback from Arnout Vandecappelle, Yegor Yefremov
+    and Thomas Petazzoni:
+    - Dropped support to rename output/images (same can be achieved with
+      genimage)
+    - Simplified barebox INSTALL_IMAGE_CMDS
+    - Simplified KConfig option naming
+    - Appends test defconfig to last commit message
+    Improvements to the BBB barebox test config:
+    - Latest kernel and headers
+    - Tunes barebox.env to boot from eMMC/SD
+    - Use genimage to generate a full sdcard.img
+v4: Introduces barebox-package function to reduce duplication and maintenance
+    Simplifies built image selection
+    Ease review with smaller patches
+    Review re-work: Special thanks to Arnout Vandecappelle and Yegor Yefremov
+v3: Updated for master at 544e2c5871f223facd1ab3c2853cd07ad70dd9d1
+v2: Dropped x-loader build specialization in favor of 2 generic barebox builds
+v1: Initial posting
 
-It would be good if you could summarize again the whole story.
-Preferably not in the cover letter, but rather in one of the commit
-log, so that it get preserved in the commit history rather than being
-lost in the mailing list archives.
+Pieter Smith (3):
+  barebox: prepare for auxiliarry build
+  barebox: support auxiliary config build
+  beaglebone: adds barebox bootloader defconfig
 
-I'd really like to understand if we need to do something like we
-propose, or if we have alternate solutions.
+ board/beaglebone/barebox/barebox.env/boot/sd      | 11 ++++
+ board/beaglebone/barebox/barebox.env/config-board |  4 ++
+ board/beaglebone/barebox/genimage.cfg             | 32 +++++++++++
+ board/beaglebone/barebox/post-image.sh            | 17 ++++++
+ boot/barebox/Config.in                            | 70 ++++-------------------
+ boot/barebox/barebox-aux/Config.in                | 60 +++++++++++++++++++
+ boot/barebox/barebox-aux/barebox-aux.hash         |  1 +
+ boot/barebox/barebox-aux/barebox-aux.mk           |  8 +++
+ boot/barebox/barebox.mk                           |  4 +-
+ boot/barebox/barebox/Config.in                    | 65 +++++++++++++++++++++
+ boot/barebox/barebox/barebox.hash                 |  1 +
+ boot/barebox/barebox/barebox.mk                   |  8 +++
+ configs/beaglebone_barebox_defconfig              | 43 ++++++++++++++
+ 13 files changed, 262 insertions(+), 62 deletions(-)
+ create mode 100644 board/beaglebone/barebox/barebox.env/boot/sd
+ create mode 100644 board/beaglebone/barebox/barebox.env/config-board
+ create mode 100644 board/beaglebone/barebox/genimage.cfg
+ create mode 100755 board/beaglebone/barebox/post-image.sh
+ create mode 100644 boot/barebox/barebox-aux/Config.in
+ create mode 120000 boot/barebox/barebox-aux/barebox-aux.hash
+ create mode 100644 boot/barebox/barebox-aux/barebox-aux.mk
+ create mode 100644 boot/barebox/barebox/Config.in
+ create mode 120000 boot/barebox/barebox/barebox.hash
+ create mode 100644 boot/barebox/barebox/barebox.mk
+ create mode 100644 configs/beaglebone_barebox_defconfig
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
