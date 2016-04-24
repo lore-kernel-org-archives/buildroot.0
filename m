@@ -1,28 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Apr 2016 23:24:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jsoncpp: add hash
-In-Reply-To: <1461511552-21874-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1461511552-21874-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160424232424.2d579595@free-electrons.com>
+From: Pieter Smith <pieter@boesman.nl>
+Date: Sun, 24 Apr 2016 23:24:52 +0200
+Subject: [Buildroot] [PATCH v6 0/5] Support building barebox with an
+ auxiliary config
+In-Reply-To: <20160424232152.5e757542@free-electrons.com>
+References: <cover.1461531859.git.pieter@boesman.nl>
+ <20160424232152.5e757542@free-electrons.com>
+Message-ID: <20160424212452.GA4812@smipidev>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sun, 24 Apr 2016 17:25:52 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/jsoncpp/jsoncpp.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/jsoncpp/jsoncpp.hash
+On Sun, Apr 24, 2016 at 11:21:52PM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sun, 24 Apr 2016 23:15:22 +0200, Pieter Smith wrote:
+> 
+> > Revision history:
+> > v6: Review rework based on feedback from Thomas Pettazoni:
+> >     - Second config build renamed to auxiliary build.
+> >     - Primary package build moved to boot/barebox/barebox to keep things symmetric.
+> >     - Dropped already merged parts of series.
+> 
+> Thanks for this new version, looks good to me! I'll wait for Arnout to
+> comment and see if he has objections to this way of doing things.
 
-Applied to master, thanks.
+A pleasure! I hope it holds up. I will be a little short on time the coming month.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+[snip]
+
+- Pieter
