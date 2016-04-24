@@ -1,41 +1,27 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Sun, 24 Apr 2016 23:21:51 +0200
-Subject: [Buildroot] [PATCH v5 3/5] barebox: extract package name
-	argument
-In-Reply-To: <20160424175445.1e355e27@free-electrons.com>
-References: <cover.1461489060.git.pieter@boesman.nl>
- <25e6116304fc372a998f7091f95a08ea91737470.1461489060.git.pieter@boesman.nl>
- <20160424175445.1e355e27@free-electrons.com>
-Message-ID: <20160424212151.GC4689@smipidev>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Apr 2016 23:24:15 +0200
+Subject: [Buildroot] [git commit] package/jsoncpp: add hash
+Message-ID: <20160424212420.DAB5C8198C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=4610564c7dd63f46834cd9f23d5ab68a7edb39a2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Apr 24, 2016 at 05:54:45PM +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun, 24 Apr 2016 11:18:45 +0200, Pieter Smith wrote:
-> > No functional changes: Extracts an argument to the inner-barebox-package
-> > function to automatically determine the uppercase package name. This is needed
-> > to support a 2nd config build. This results in the following renaming:
-> >   'BAREBOX' -> '$(1)'
-> > 
-> > All barebox packages are meant to be built from the same sources, so related
-> > KConfig variables (origin, version and patch directory) are not extracted.
-> > 
-> > Signed-off-by: Pieter Smith <pieter@boesman.nl>
-> > ---
-> >  boot/barebox/barebox.mk | 121 +++++++++++++++++++++++++-----------------------
-> >  1 file changed, 62 insertions(+), 59 deletions(-)
-> 
-> Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/jsoncpp/jsoncpp.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-A pleasure!
-
-[snip]
-
-- Pieter
+diff --git a/package/jsoncpp/jsoncpp.hash b/package/jsoncpp/jsoncpp.hash
+new file mode 100644
+index 0000000..5b4bbcf
+--- /dev/null
++++ b/package/jsoncpp/jsoncpp.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	2179a7df19c1c6dc87e02c65b847efc914625a9b87df3e443d9610fc70c0f557	jsoncpp-1.7.2.tar.gz
