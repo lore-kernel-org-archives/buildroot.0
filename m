@@ -1,54 +1,124 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Apr 2016 23:27:30 +0200
-Subject: [Buildroot] [PATCH] package/yajl: fix build when explicit link
- with libm is needed
-In-Reply-To: <1461522578-25792-1-git-send-email-s.martin49@gmail.com>
-References: <1461522578-25792-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20160424232730.70a495af@free-electrons.com>
+Date: Sun, 24 Apr 2016 23:28:30 +0200
+Subject: [Buildroot] [git commit] package/glibc: Add security patches to fix
+	CVE-2016-3075
+Message-ID: <20160424212856.4AACE81DEE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f63ec06a1364ed7f23cafee83f5b05f693cea05c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 24 Apr 2016 20:29:38 +0200, Samuel Martin wrote:
-> This change adds another fix to the yajl build-system code.
-> This patch checks for isnan function in libc, and if not, it makes sure
-> libm is passed to the linker flags.
-> 
-> This change fixes build failure looking like:
-> 
->   make[3]: Entering directory `/home/peko/autobuild/instance-2/output/build/yajl-2.1.0'
->   [ 81%] Building C object example/CMakeFiles/parse_config.dir/parse_config.c.o
->   ../yajl-2.1.0/lib/libyajl.so.2.1.0: undefined reference to `__isnan'
->   ../yajl-2.1.0/lib/libyajl.so.2.1.0: undefined reference to `__isinf'
->   collect2: error: ld returned 1 exit status
->   make[3]: *** [verify/json_verify] Error 1
-> 
-> Fixes:
->   http://autobuild.buildroot.org/results/312/31268e4d20aa34bb90c09aa771b1923f979578ab/
->   and many others
-> 
-> Cc: Beno?t Mauduit <bmauduit@beneth.fr>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Cc: J?rg Krause <joerg.krause@embedded.rocks>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  ...l-_s-with-libm-when-isnan-is-not-brought-.patch | 64 ++++++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 package/yajl/0004-Link-libyajl-_s-with-libm-when-isnan-is-not-brought-.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/glibc/2.22/0003-fix-CVE-2016-3075.patch | 44 +++++++++++++++++++++++
+ package/glibc/2.23/0001-fix-CVE-2016-3075.patch | 47 +++++++++++++++++++++++++
+ 2 files changed, 91 insertions(+)
 
-Applied to master, thanks. Please submit upstream! Generally speaking,
-if some effort could be made to submit our 4 yajl patches upstream, it
-would be good.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/glibc/2.22/0003-fix-CVE-2016-3075.patch b/package/glibc/2.22/0003-fix-CVE-2016-3075.patch
+new file mode 100644
+index 0000000..1ceb1f6
+--- /dev/null
++++ b/package/glibc/2.22/0003-fix-CVE-2016-3075.patch
+@@ -0,0 +1,44 @@
++From 883dceebc8f11921a9890211a4e202e5be17562f Mon Sep 17 00:00:00 2001
++From: Florian Weimer <fweimer@redhat.com>
++Date: Tue, 29 Mar 2016 12:57:56 +0200
++Subject: [PATCH 1/1] CVE-2016-3075: Stack overflow in _nss_dns_getnetbyname_r [BZ #19879]
++
++The defensive copy is not needed because the name may not alias the
++output buffer.
++
++(cherry picked from commit 317b199b4aff8cfa27f2302ab404d2bb5032b9a4)
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(downloaded from upstream git repo and removed changes to Changelog:
++ https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=883dceebc8f11921a9890211a4e202e5be17562f;hp=5a1a5f0dd2744044801c91bf2588444c29cda533)
++---
++ ChangeLog                    |    7 +++++++
++ resolv/nss_dns/dns-network.c |    5 +----
++ 2 files changed, 8 insertions(+), 4 deletions(-)
++
++diff --git a/resolv/nss_dns/dns-network.c b/resolv/nss_dns/dns-network.c
++index 00f4490..89f8783 100644
++--- a/resolv/nss_dns/dns-network.c
+++++ b/resolv/nss_dns/dns-network.c
++@@ -118,17 +118,14 @@ _nss_dns_getnetbyname_r (const char *name, struct netent *result,
++   } net_buffer;
++   querybuf *orig_net_buffer;
++   int anslen;
++-  char *qbuf;
++   enum nss_status status;
++ 
++   if (__res_maybe_init (&_res, 0) == -1)
++     return NSS_STATUS_UNAVAIL;
++ 
++-  qbuf = strdupa (name);
++-
++   net_buffer.buf = orig_net_buffer = (querybuf *) alloca (1024);
++ 
++-  anslen = __libc_res_nsearch (&_res, qbuf, C_IN, T_PTR, net_buffer.buf->buf,
+++  anslen = __libc_res_nsearch (&_res, name, C_IN, T_PTR, net_buffer.buf->buf,
++ 			       1024, &net_buffer.ptr, NULL, NULL, NULL, NULL);
++   if (anslen < 0)
++     {
++-- 
++1.7.1
++
+diff --git a/package/glibc/2.23/0001-fix-CVE-2016-3075.patch b/package/glibc/2.23/0001-fix-CVE-2016-3075.patch
+new file mode 100644
+index 0000000..6b07116
+--- /dev/null
++++ b/package/glibc/2.23/0001-fix-CVE-2016-3075.patch
+@@ -0,0 +1,47 @@
++From 146b58d11fddbef15b888906e3be4f33900c416f Mon Sep 17 00:00:00 2001
++From: Florian Weimer <fweimer@redhat.com>
++Date: Tue, 29 Mar 2016 12:57:56 +0200
++Subject: [PATCH 1/1] CVE-2016-3075: Stack overflow in _nss_dns_getnetbyname_r [BZ #19879]
++
++The defensive copy is not needed because the name may not alias the
++output buffer.
++
++(cherry picked from commit 317b199b4aff8cfa27f2302ab404d2bb5032b9a4)
++(cherry picked from commit 883dceebc8f11921a9890211a4e202e5be17562f)
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(downloaded from upstream git repo and removed changes to files
++ Changelog and NEWS:
++ https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=146b58d11fddbef15b888906e3be4f33900c416f;hp=0eb234232eaf925fe4dca3bd60a3e1b4a7ab2882)
++---
++ ChangeLog                    |    7 +++++++
++ NEWS                         |   10 ++++++++--
++ resolv/nss_dns/dns-network.c |    5 +----
++ 3 files changed, 16 insertions(+), 6 deletions(-)
++
++diff --git a/resolv/nss_dns/dns-network.c b/resolv/nss_dns/dns-network.c
++index 2eb2f67..8f301a7 100644
++--- a/resolv/nss_dns/dns-network.c
+++++ b/resolv/nss_dns/dns-network.c
++@@ -118,17 +118,14 @@ _nss_dns_getnetbyname_r (const char *name, struct netent *result,
++   } net_buffer;
++   querybuf *orig_net_buffer;
++   int anslen;
++-  char *qbuf;
++   enum nss_status status;
++ 
++   if (__res_maybe_init (&_res, 0) == -1)
++     return NSS_STATUS_UNAVAIL;
++ 
++-  qbuf = strdupa (name);
++-
++   net_buffer.buf = orig_net_buffer = (querybuf *) alloca (1024);
++ 
++-  anslen = __libc_res_nsearch (&_res, qbuf, C_IN, T_PTR, net_buffer.buf->buf,
+++  anslen = __libc_res_nsearch (&_res, name, C_IN, T_PTR, net_buffer.buf->buf,
++ 			       1024, &net_buffer.ptr, NULL, NULL, NULL, NULL);
++   if (anslen < 0)
++     {
++-- 
++1.7.1
++
