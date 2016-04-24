@@ -1,60 +1,97 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Apr 2016 17:58:03 +0200
-Subject: [Buildroot] [PATCH v5 4/5] barebox: support 2nd config build
-In-Reply-To: <f8d6dec31737cde2abaf82ee4f64ea215e48e452.1461489060.git.pieter@boesman.nl>
-References: <cover.1461489060.git.pieter@boesman.nl>
- <f8d6dec31737cde2abaf82ee4f64ea215e48e452.1461489060.git.pieter@boesman.nl>
-Message-ID: <20160424175803.72e59938@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 Apr 2016 18:11:23 +0200
+Subject: [Buildroot] [PATCH] [RFC] U-Boot: don't check hashes for U-Boot
+ external patches
+In-Reply-To: <5717E3FA.4010601@mind.be>
+References: <1460644321-13849-1-git-send-email-julien.boibessot@free.fr>
+ <57100509.8040804@mind.be> <57100ABB.8090206@mind.be>
+ <5714B6C2.6020204@free.fr> <57156B4C.9090203@mind.be>
+ <57174233.9040302@free.fr> <5717E3FA.4010601@mind.be>
+Message-ID: <20160424161123.GA2583@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Arnout, Julien, All,
 
-On Sun, 24 Apr 2016 11:18:46 +0200, Pieter Smith wrote:
+On 2016-04-20 22:18 +0200, Arnout Vandecappelle spake thusly:
+> On 04/20/16 10:47, Julien Boibessot wrote:
+> >On 19/04/2016 01:18, Arnout Vandecappelle wrote:
+> >>On 04/18/16 12:28, Julien Boibessot wrote:
+> >>>Hello,
+> >>>
+> >>>Arnout,
+> >>>
+> >>>thanks for the comments.
+> >>>
+> >>>On 14/04/2016 23:25, Arnout Vandecappelle wrote:
+> >>[snip]
+> >>>>
+> >>>>   Oh, and something similar should be done for LINUX_PATCH as well.
+> >>>
+> >>>LINUX_PATCH is already working well with external patches that have to
+> >>>be downloaded.
+> >>
+> >>  Of course, because we don't have a linux.hash and probably never will
+> >>have one.
+> >
+> >ah ok, got it now ! :-)
+> >So why can't we just get rid of uboot.hash too ?
+> 
+>  I don't think so.
 
->  boot/barebox/Config.in                |  2 +
->  boot/barebox/barebox-2/Config.in      | 72 +++++++++++++++++++++++++++++++++++
->  boot/barebox/barebox-2/barebox-2.hash |  1 +
->  boot/barebox/barebox-2/barebox-2.mk   |  9 +++++
->  boot/barebox/barebox.mk               |  3 ++
+Siding with Arnout on that one: we want to one day make .hash files
+mandatory.
 
-Regarding this one, I am not sure, there are two things that bother me
-a bit:
+>  For the kernel, it is very unlikely that you just use the latest version,
+> most projects will want a specific version and usually even a patched
+> version. With device trees this becomes somewhat less true, but even so,
+> most people just don't use the latest-and-greatest kernel. Therefore, having
+> hashes is quite useless.
 
- - The name "barebox-2", which I find a bit weird. What about
-   "barebox-aux" or something like that, as opposed to "barebox-main" ?
+Yes and no. We could well have hashes for the latest release, at least.
+Then, when bumping, we can leave the old one and just add the new one;
+thus hashes would be piling up as time goes, at least for official
+releases.
 
- - The organization of the folders. Having the barebox "infra" + the
-   main barebox package both defined in boot/barebox/barebox.mk seems
-   weird. Ideally, I would have preferred something like:
+Plus, we could also bulk-add hashes for older official releases. Official
+releases are also very often used, at least for "standard" architectures
+like x86, so it would not be nonsense to have hashes for those releases.
 
-   boot/barebox/barebox.mk <-- common infrastructure
-   boot/barebox/barebox-main/ <-- the main Barebox
-   boot/barebox/barebox-aux/  <-- the auxiliary Barebox
+Normally, when a .hash file does exist, an archive must have at least
+one hash, otherwise this is considered an error. NO_CHECK_HASH_FOR makes
+it so that this is not an error that an archive does not have a hash,
+but won't bar the existing hashes to be checked.
 
-   Of course, some tricks will be needed to make the barebox-main/
-   package behave properly when its options will still be named
-   BR2_TARGET_BAREBOX_<foo> and not BR2_TARGET_BAREBOX_MAIN_<foo>.
-   Alternatively, if that really doesn't work, what about:
+It's on my TODO to add hashes for the kernel.
 
-   boot/barebox/barebox.mk <-- common infrastructure
-   boot/barebox/barebox/ <-- the main Barebox
-   boot/barebox/barebox-aux/  <-- the auxiliary Barebox
+Regards,
+Yann E. MORIN.
 
-I've applied the first three patches of the series to ease your work,
-but I'd like to see if we can get something a bit better for this
-patch. I know Arnout has done a lot of review, so don't hesitate to let
-me know if all this has already been discussed and why the current
-organization has been chosen compared to something more similar to my
-proposal.
+>  For u-boot (and barebox for that matter), this also used to be the case,
+> but nowadays you can very often get away with just using the upstream
+> version. In this case, the hash is indeed valuable.
+> 
+>  Cc-ing Yann, our hash expert :-)
+> 
+>  Regards,
+>  Arnout
+> 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
