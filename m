@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Apr 2016 23:24:15 +0200
-Subject: [Buildroot] [git commit] package/jsoncpp: add hash
-Message-ID: <20160424212420.DAB5C8198C@busybox.osuosl.org>
+Date: Sun, 24 Apr 2016 23:24:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jsoncpp: add hash
+In-Reply-To: <1461511552-21874-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1461511552-21874-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160424232424.2d579595@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4610564c7dd63f46834cd9f23d5ab68a7edb39a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/jsoncpp/jsoncpp.hash | 2 ++
- 1 file changed, 2 insertions(+)
+On Sun, 24 Apr 2016 17:25:52 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/jsoncpp/jsoncpp.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/jsoncpp/jsoncpp.hash
 
-diff --git a/package/jsoncpp/jsoncpp.hash b/package/jsoncpp/jsoncpp.hash
-new file mode 100644
-index 0000000..5b4bbcf
---- /dev/null
-+++ b/package/jsoncpp/jsoncpp.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	2179a7df19c1c6dc87e02c65b847efc914625a9b87df3e443d9610fc70c0f557	jsoncpp-1.7.2.tar.gz
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
