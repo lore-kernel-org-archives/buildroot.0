@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Apr 2016 17:21:11 +0200
-Subject: [Buildroot] [PATCH] mono: disable for sparc/sparc64
-In-Reply-To: <20160424135125.GA8887@waldemar-brodkorb.de>
-References: <20160424135125.GA8887@waldemar-brodkorb.de>
-Message-ID: <20160424172111.5f3c64da@free-electrons.com>
+Date: Sun, 24 Apr 2016 17:21:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jsoncpp: bump version to 1.7.2
+In-Reply-To: <1461506200-8175-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1461506200-8175-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160424172125.677c4b76@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 24 Apr 2016 15:51:26 +0200, Waldemar Brodkorb wrote:
-> It seems mono isn't supported for sparc32, see configure.ac
-> for some comments about it. Tried with sparc64, but this
-> doesn't compile either.
-> So disable for sparc for now.
+On Sun, 24 Apr 2016 15:56:40 +0200, Bernd Kuhls wrote:
+> Removed patches applied upstream.
 > 
-> Fixes following autobuild issues:
-> http://autobuild.buildroot.org/?reason=mono-4.2.2.30
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/mono/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/jsoncpp/0001-Remove-Werror.patch           | 39 -------------
+>  .../0002-Add-option-JSONCPP_WITH_STRICT_ISO.patch  | 68 ----------------------
+>  package/jsoncpp/jsoncpp.mk                         |  2 +-
+>  3 files changed, 1 insertion(+), 108 deletions(-)
+>  delete mode 100644 package/jsoncpp/0001-Remove-Werror.patch
+>  delete mode 100644 package/jsoncpp/0002-Add-option-JSONCPP_WITH_STRICT_ISO.patch
 
-Applied to master, thanks.
+Applied to master, thanks. Since jsoncpp is fetched from github, adding
+a hash file would be good :)
 
 Thomas
 -- 
