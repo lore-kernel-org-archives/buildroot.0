@@ -1,46 +1,74 @@
 From: Pieter Smith <pieter@boesman.nl>
-Date: Sun, 24 Apr 2016 10:50:56 +0200
-Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
- config (incl. BBB)
-In-Reply-To: <20160424104701.0262d08b@free-electrons.com>
-References: <20160423130141.GB10355@smipidev>
- <20160423151129.479c5f03@free-electrons.com>
- <CAPho-_Kvdg37hhfujbg99BVwhP+jPcwnsZUH2=3G7qt0CVz7yw@mail.gmail.com>
- <20160423165013.10739b58@free-electrons.com>
- <20160423161844.GA9825@smipidev>
- <20160423212646.5e6d8f52@free-electrons.com>
- <20160424080407.GB3082@smipidev>
- <20160424101653.4d8d78c5@free-electrons.com>
- <20160424083211.GA2129@smipidev>
- <20160424104701.0262d08b@free-electrons.com>
-Message-ID: <20160424085056.GA22058@smipidev>
+Date: Sun, 24 Apr 2016 11:18:42 +0200
+Subject: [Buildroot] [PATCH v5 0/5] Support building a 2nd Barebox config
+Message-ID: <cover.1461489060.git.pieter@boesman.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This patch-set adds support for building barebox with up to 2 configurations.
+It can be used to build the barebox x-loader or MLO (also called Secondary
+Program Loader) in addition to the standard barebox build (Tertiary Program
+Loader). This implements the design proposed in
+http://elinux.org/Buildroot#Todo_list, with minor adjustments:
+1. Have boot/barebox/barebox.mk contain the common stuff.
+2. Add a second package boot/barebox/barebox-2.
+3. There is only one version selection, but each package allows to
+   define the configuration to be used.
+4. Design is a little bit like package/gcc, where we have multiple gcc builds,
+   but share a lot of common definitions between the packages.
 
-On Sun, Apr 24, 2016 at 10:47:01AM +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun, 24 Apr 2016 10:32:11 +0200, Pieter Smith wrote:
-> 
-> > Augment the last message in the series with the defconfig? Easy enough. Will be
-> > in v5. Or would you like something fancy (E.g. empty commit)?
-> 
-> Yes, just add it in the message of the last commit, something like:
-> 
-> Tested with the following defconfig:
-> 
-> ...
-> 
-> But then it should be a minimal defconfig, not one that includes the
-> kernel and all.
+To demonstrate that it works as advertized, the last patch adds a defconfig for
+the beaglebone that makes use of the added functionality.
 
-Understood. I will also omit all the genimage and barebox env tuning scripts.
+Revision history:
+v5: Review rework based on feedback from Arnout Vandecappelle, Yegor Yefremov
+    and Thomas Petazzoni:
+    - Dropped support to rename output/images (same can be achieved with
+      genimage)
+    - Simplified barebox INSTALL_IMAGE_CMDS
+    - Simplified KConfig option naming
+    - Appends test defconfig to last commit message
+    Improvements to the BBB barebox test config:
+    - Latest kernel and headers
+    - Tunes barebox.env to boot from eMMC/SD
+    - Use genimage to generate a full sdcard.img
+v4: Introduces barebox-package function to reduce duplication and maintenance
+    Simplifies built image selection
+    Ease review with smaller patches
+    Review re-work: Special thanks to Arnout Vandecappelle and Yegor Yefremov
+v3: Updated for master at 544e2c5871f223facd1ab3c2853cd07ad70dd9d1
+v2: Dropped x-loader build specialization in favor of 2 generic barebox builds
+v1: Initial posting
 
-[snip]
+Pieter Smith (5):
+  barebox: support multi-image-build image selection
+  barebox: introduce barebox-package function
+  barebox: extract package name argument
+  barebox: support 2nd config build
+  beaglebone: adds barebox bootloader defconfig
 
-- Pieter
+ board/beaglebone/barebox/barebox.env/boot/sd      |  11 ++
+ board/beaglebone/barebox/barebox.env/config-board |   4 +
+ board/beaglebone/barebox/genimage.cfg             |  32 ++++
+ board/beaglebone/barebox/post-image.sh            |  17 +++
+ boot/barebox/Config.in                            |  12 ++
+ boot/barebox/barebox-2/Config.in                  |  72 +++++++++
+ boot/barebox/barebox-2/barebox-2.hash             |   1 +
+ boot/barebox/barebox-2/barebox-2.mk               |   9 ++
+ boot/barebox/barebox.mk                           | 169 +++++++++++++---------
+ configs/beaglebone_barebox_defconfig              |  43 ++++++
+ 10 files changed, 300 insertions(+), 70 deletions(-)
+ create mode 100644 board/beaglebone/barebox/barebox.env/boot/sd
+ create mode 100644 board/beaglebone/barebox/barebox.env/config-board
+ create mode 100644 board/beaglebone/barebox/genimage.cfg
+ create mode 100755 board/beaglebone/barebox/post-image.sh
+ create mode 100644 boot/barebox/barebox-2/Config.in
+ create mode 120000 boot/barebox/barebox-2/barebox-2.hash
+ create mode 100644 boot/barebox/barebox-2/barebox-2.mk
+ create mode 100644 configs/beaglebone_barebox_defconfig
+
+-- 
+2.5.0
