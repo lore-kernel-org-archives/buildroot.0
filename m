@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Apr 2016 17:54:43 +0200
-Subject: [Buildroot] [PATCH v5 2/5] barebox: introduce barebox-package
- function
-In-Reply-To: <9431c910cd145263e04a01f0a332555b9212e22e.1461489060.git.pieter@boesman.nl>
+Date: Sun, 24 Apr 2016 17:54:45 +0200
+Subject: [Buildroot] [PATCH v5 3/5] barebox: extract package name
+ argument
+In-Reply-To: <25e6116304fc372a998f7091f95a08ea91737470.1461489060.git.pieter@boesman.nl>
 References: <cover.1461489060.git.pieter@boesman.nl>
- <9431c910cd145263e04a01f0a332555b9212e22e.1461489060.git.pieter@boesman.nl>
-Message-ID: <20160424175443.2e0104f2@free-electrons.com>
+ <25e6116304fc372a998f7091f95a08ea91737470.1461489060.git.pieter@boesman.nl>
+Message-ID: <20160424175445.1e355e27@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +14,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 24 Apr 2016 11:18:44 +0200, Pieter Smith wrote:
-> No functional changes: Introduces a barebox-package function towards re-use by
-> a 2nd config build.
+On Sun, 24 Apr 2016 11:18:45 +0200, Pieter Smith wrote:
+> No functional changes: Extracts an argument to the inner-barebox-package
+> function to automatically determine the uppercase package name. This is needed
+> to support a 2nd config build. This results in the following renaming:
+>   'BAREBOX' -> '$(1)'
 > 
-> Because the function is meant to be called from within a $(eval), all instances
-> of '$' has to be escaped. I.e. rename '$' -> '$$'.
+> All barebox packages are meant to be built from the same sources, so related
+> KConfig variables (origin, version and patch directory) are not extracted.
 > 
 > Signed-off-by: Pieter Smith <pieter@boesman.nl>
 > ---
->  boot/barebox/barebox.mk | 125 ++++++++++++++++++++++++++++--------------------
->  1 file changed, 72 insertions(+), 53 deletions(-)
+>  boot/barebox/barebox.mk | 121 +++++++++++++++++++++++++-----------------------
+>  1 file changed, 62 insertions(+), 59 deletions(-)
 
 Applied to master, thanks.
 
