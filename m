@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Apr 2016 23:33:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/glibc: add upstream patch to
- fix glibc-2.23 compile bug with gcc6
-In-Reply-To: <1461527505-9158-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1461527505-9158-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160424233302.7f168eea@free-electrons.com>
+Date: Sun, 24 Apr 2016 23:39:58 +0200
+Subject: [Buildroot] [PATCH v2 1/7] linux-firmware: drop revision
+ handling for iwlwifi
+In-Reply-To: <1461077048-16189-2-git-send-email-gustavo@zacarias.com.ar>
+References: <1461077048-16189-1-git-send-email-gustavo@zacarias.com.ar>
+ <1461077048-16189-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160424233958.25255a93@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +14,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 24 Apr 2016 21:51:45 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Tue, 19 Apr 2016 11:44:02 -0300, Gustavo Zacarias wrote:
+> And enable wildcard firmware file specs.
+> 
+> This avoids a lot of unnecessary complication with lots of revison knobs
+> for different chipsets and it's consequence when bumping linux-firmware
+> as well.
+> 
+> Users can purge unwanted versions from a post processing script if
+> target space is too constrained.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/glibc/2.23/0002-gcc6.patch | 88 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 88 insertions(+)
->  create mode 100644 package/glibc/2.23/0002-gcc6.patch
+>  package/linux-firmware/Config.in         | 41 --------------------------------
+>  package/linux-firmware/linux-firmware.mk |  9 +++----
+>  2 files changed, 5 insertions(+), 45 deletions(-)
 
-To be honest, I hesitated a bit on this one. gcc6 is not released yet,
-so it seems weird to already start carrying patches for it. But
-according to https://gcc.gnu.org/ml/gcc/2016-04/msg00103.html, the
-release of gcc 6 is imminent now, so it makes sense to start getting
-patches for it.
-
-So I've applied, thanks!
+I've applied, but for clarity, I've split this commit into two: a first
+one just adding the support for using wildcards in
+LINUX_FIRMWARE_FILES, and the second one dropping the revision handling
+for iwlwifi. Thanks!
 
 Thomas
 -- 
