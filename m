@@ -1,43 +1,37 @@
-From: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
-Date: Mon, 25 Apr 2016 17:20:32 -0400 (EDT)
-Subject: [Buildroot] [PATCH v1 4/4] ring-daemon: new package
-In-Reply-To: <20160425212434.10734123@free-electrons.com>
-References: <1461358628-9352-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
- <1461358628-9352-5-git-send-email-patrick.keroulas@savoirfairelinux.com>
- <20160423001924.38960007@free-electrons.com>
- <1541125393.275698.1461608322652.JavaMail.zimbra@savoirfairelinux.com>
- <20160425212434.10734123@free-electrons.com>
-Message-ID: <1359905598.420554.1461619232368.JavaMail.zimbra@savoirfairelinux.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 25 Apr 2016 23:44:30 +0200
+Subject: [Buildroot] [PATCH v2 0/3] python-pillow: new package
+Message-ID: <1461620673-31313-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This patch add python-pillow the friendly python fork and bumps
+openjpeg to version 2.1 required to correctly compile.
+Bumping openjpeg to version 2.1 makes poppler unhappy so fixing it.
 
-On Apr 25, 2016, at 3:24 PM, Thomas Petazzoni thomas.petazzoni at free-electrons.com wrote:
- 
-> On Mon, 25 Apr 2016 14:18:42 -0400 (EDT), Patrick Keroulas wrote:
-> 
->> Concerning the D-Bus daemon, Ring relies on a session bus but D-Bus
->> initscript starts a daemon for system bus only. I can change D-Bus
->> initscript instead of starting it from our Ring initscript. In this
->> case, in which package should I add the patch? ring-daemon or dbus?
-> 
-> I *think* it should be handled in the DBus package itself, though I am
-> not entirely sure. As I understand it, a "session bus" is typically
-> associated to one particular user when this user logs into the system,
-> right? How does that work for ring? Does it use a session bus running
-> as the "ring" user? Aren't session buses normally used for "real" users?
+*** BLURB HERE ***
 
-That's right. Ring is mainly intended to be used by real users logged
-on a desktop or a mobile platform. However, we'd like to port it to 
-embedded platforms to cover a larger usage (m2m, video capture, door 
-bell...). And this is why a fake 'ring' user has to be created and the
-D-Bus session address has to be exported.
+Angelo Compagnucci (3):
+  package/openjpeg: bump to version 2.1
+  package/poppler: enable autodetection of openjpeg
+  package/python-pillow: new package
 
-Is it possible to patch a package (dbus) "from" another one (ring-daemon)?
+ package/Config.in                                  |   1 +
+ package/openjpeg/openjpeg.hash                     |   2 +-
+ package/openjpeg/openjpeg.mk                       |  34 +----
+ package/poppler/poppler.mk                         |   2 +-
+ ...y-add-option-to-disable-platform-guessing.patch | 169 +++++++++++++++++++++
+ package/python-pillow/Config.in                    |  12 ++
+ package/python-pillow/python-pillow.hash           |   2 +
+ package/python-pillow/python-pillow.mk             |  39 +++++
+ 8 files changed, 232 insertions(+), 29 deletions(-)
+ create mode 100644 package/python-pillow/0001-setup.py-add-option-to-disable-platform-guessing.patch
+ create mode 100644 package/python-pillow/Config.in
+ create mode 100644 package/python-pillow/python-pillow.hash
+ create mode 100644 package/python-pillow/python-pillow.mk
 
-Regards,
-
-Patrick
+-- 
+1.9.1
