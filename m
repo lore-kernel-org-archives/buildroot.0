@@ -1,60 +1,41 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 25 Apr 2016 22:05:44 +0200
+Date: Mon, 25 Apr 2016 22:06:51 +0200
 Subject: [Buildroot] [PATCH 1/2] package/openjpeg: bump to version 2.1
-In-Reply-To: <20160425212827.07703ac2@free-electrons.com>
+In-Reply-To: <87potdo5bj.fsf@dell.be.48ers.dk>
 References: <1461597623-14629-1-git-send-email-angelo.compagnucci@gmail.com>
  <1461597623-14629-2-git-send-email-angelo.compagnucci@gmail.com>
- <20160425212827.07703ac2@free-electrons.com>
-Message-ID: <CA+TH9Vkf-=t2iS7ep1J3ejZ+LREVprQ+AN6wNn39MDAYVV58uw@mail.gmail.com>
+ <87potdo5bj.fsf@dell.be.48ers.dk>
+Message-ID: <CA+TH9V=0U+=9HYf44Y_ZvCiX6nc74PF4Mw+q8UmKsoP8pXwanA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Dear Peter Korsgaard,
 
-2016-04-25 21:28 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
+2016-04-25 21:29 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
+>>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 >
-> On Mon, 25 Apr 2016 17:20:22 +0200, Angelo Compagnucci wrote:
+>  > This patch bumps openjpeg to version 2.1 and converts the
+>  > package to use cmake.
 >
->> -ifeq ($(BR2_PACKAGE_LIBPNG),y)
->> -OPENJPEG_DEPENDENCIES += libpng
->> -OPENJPEG_CONF_OPTS += --enable-png
->> -else
->> -OPENJPEG_CONF_OPTS += --disable-png
->> -endif
->> -
->> -ifeq ($(BR2_PACKAGE_TIFF),y)
->> -OPENJPEG_DEPENDENCIES += tiff
->> -OPENJPEG_CONF_OPTS += --enable-tiff
->> -else
->> -OPENJPEG_CONF_OPTS += --disable-tiff
->> -endif
->> -
->> -ifeq ($(BR2_PACKAGE_LCMS2),y)
->> -OPENJPEG_DEPENDENCIES += lcms2
->> -OPENJPEG_CONF_OPTS += --enable-lcms2
->> -else
->> -OPENJPEG_CONF_OPTS += --disable-lcms2
->> -endif
+>  > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 >
-> What about those optional dependencies? They are no longer used?
+> A bit more detailed changelog would be good, E.G. the fact that it has
+> now moved to github. What happened to all those optional dependencies?
+>
+> Looking at the 2.x release notes I see it mentions various API
+> changes. Have you verified that the reverse dependencies
+> (efl, gst1-plugins-bad, poppler) still build/work with the new version?
 
-They are no longer present as cmake options, they are handled internally.
+Mmm, intresting observation, i'll try in a moment!
 
 Sincerely, Angelo
 
 >
-> Thanks!
->
-> Thomas
 > --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+> Bye, Peter Korsgaard
 
 
 
