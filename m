@@ -1,10 +1,11 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Apr 2016 15:35:08 +0200
-Subject: [Buildroot] [PATCH] core/pkg-kconfig: use olddefconfig when
- available
-In-Reply-To: <1461433564-21311-1-git-send-email-yann.morin.1998@free.fr>
-References: <1461433564-21311-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160425153508.43945e3c@free-electrons.com>
+From: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Date: Mon, 25 Apr 2016 09:44:09 -0400
+Subject: [Buildroot] [PATCH 2/2] configs: add defconfig for TS-4800
+In-Reply-To: <20160424235938.78800305@free-electrons.com>
+References: <1461255673-11443-1-git-send-email-damien.riegel@savoirfairelinux.com>
+ <1461255673-11443-3-git-send-email-damien.riegel@savoirfairelinux.com>
+ <20160424235938.78800305@free-electrons.com>
+Message-ID: <20160425134409.GA7387@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,48 +14,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 23 Apr 2016 19:46:04 +0200, Yann E. MORIN wrote:
-> From: Romain Izard <romain.izard.pro@gmail.com>
+On Sun, Apr 24, 2016 at 11:59:38PM +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Using 'yes "" | make oldconfig' to regenerate a .config file from an
-> existing defconfig does not work reliably in all cases. Specifically, it
-> does not work well with tristate choice entries.
-> 
-> The correct way to do it is to use 'make olddefconfig', but this target
-> is not supported in projects that use an old version of kconfig. As
-> most projects do not use tristate entries, there is no need for them to
-> upgrade.
-> 
-> 'oldnoconfig' is an alias for 'olddefconfig', but it also is the only
-> name for this target between Linux versions 2.6.36 and 3.6.
-> 
-> Check which targets are supported by the current project, and use the
-> appropriate method to regenerate the .config file.
-> 
-> Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
-> [yann.morin.1998 at free.fr: use a shell construct instead of makefile code]
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> On Thu, 21 Apr 2016 12:21:13 -0400, Damien Riegel wrote:
+> > This patch adds support for the TS-4800 SoM manufactured by Technologic
+> > Systems based on the Freescale i.MX515 SoC.
+> >  ...
+> I think you said on IRC you would post a new version of this patch, so
+> I've marked this first version as "Changes Requested" in our patch
+> tracking system. So don't forget to send a new version, otherwise we'll
+> forget about it!
 
-I am sorry, but I had to revert this commit. While it works in simple
-situations, it badly breaks the Busybox build in some situations:
+You're right, I asked you to delay the integration of this patch because
+I got early feedbacks on IRC about one of the U-Boot patches (I was
+messing with CONDIG_LOADADDR and that was just wrong). I'll send the v2
+in a few minutes!
 
-  http://autobuild.buildroot.org/?reason=busybox-1.24.2
-
-With just Busybox enabled in a minimal configuration, everything is
-fine. Enable "libtirpc" in the configuration, do a full rebuild ->
-Busybox will fail to build. I don't know if it's related specifically
-to libtirpc or to some of its dependencies, but it fails.
-
-A very quick research couldn't spot the source of the problem, so I
-simply reverted for now. Could you work on this and submit a new
-version of the patch that addresses this problem?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thank you,
+Damien
