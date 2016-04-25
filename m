@@ -1,29 +1,65 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 25 Apr 2016 21:18:07 +0000
-Subject: [Buildroot] [Bug 8861] With buildroot 2016.02 trying to build for
- corei7-avx fails while trying to build host-binutils.
-In-Reply-To: <bug-8861-163@https.bugs.busybox.net/>
-References: <bug-8861-163@https.bugs.busybox.net/>
-Message-ID: <bug-8861-163-cYuexxzv0E@https.bugs.busybox.net/>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 25 Apr 2016 23:19:27 +0200
+Subject: [Buildroot] [PATCH 1/2] package/openjpeg: bump to version 2.1
+In-Reply-To: <CA+TH9V=0U+=9HYf44Y_ZvCiX6nc74PF4Mw+q8UmKsoP8pXwanA@mail.gmail.com>
+References: <1461597623-14629-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1461597623-14629-2-git-send-email-angelo.compagnucci@gmail.com>
+ <87potdo5bj.fsf@dell.be.48ers.dk>
+ <CA+TH9V=0U+=9HYf44Y_ZvCiX6nc74PF4Mw+q8UmKsoP8pXwanA@mail.gmail.com>
+Message-ID: <CA+TH9Vna9H0n1PL45-vgO7DPdjGwJUVEELTRaYU9mnd-qEaxbw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8861
+Dear Peter Korsgaard,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+2016-04-25 22:06 GMT+02:00 Angelo Compagnucci <angelo.compagnucci@gmail.com>:
+> Dear Peter Korsgaard,
+>
+> 2016-04-25 21:29 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
+>>>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+>>
+>>  > This patch bumps openjpeg to version 2.1 and converts the
+>>  > package to use cmake.
+>>
+>>  > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>>
+>> A bit more detailed changelog would be good, E.G. the fact that it has
+>> now moved to github. What happened to all those optional dependencies?
+>>
+>> Looking at the 2.x release notes I see it mentions various API
+>> changes. Have you verified that the reverse dependencies
+>> (efl, gst1-plugins-bad, poppler) still build/work with the new version?
+>
+> Mmm, intresting observation, i'll try in a moment!
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|NEW                         |RESOLVED
+The only necessary changing is:
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Fixed by
-https://git.buildroot.net/buildroot/commit/arch?id=633f20002e4184e91ead8599fcc557e9fd17e1e0.
+POPPLER_CONF_OPTS += --enable-libopenjpeg=openjpeg1
+to
+POPPLER_CONF_OPTS += --enable-libopenjpeg
+
+to eneble openjpeg version autodetection.
+
+I'll send a new series shortly.
+
+Sincerely, Angelo
+
+>
+> Sincerely, Angelo
+>
+>>
+>> --
+>> Bye, Peter Korsgaard
+>
+>
+>
+> --
+> Profile: http://it.linkedin.com/in/compagnucciangelo
+
+
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Profile: http://it.linkedin.com/in/compagnucciangelo
