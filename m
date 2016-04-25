@@ -1,34 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Apr 2016 21:32:14 +0200
-Subject: [Buildroot] [PATCH 1/1] Preliminary support for Raspberry Pi 3
-	with symlink
-In-Reply-To: <20160425211936.73f44f62@gmx.net> (Peter Seiderer's message of
- "Mon, 25 Apr 2016 21:19:36 +0200")
-References: <1461442370-22393-1-git-send-email-ubaldo@eja.it>
- <871t5triwb.fsf@dell.be.48ers.dk>
- <81b71ac5323b1793405c3192b6ac5264@eja.it>
- <20160425211936.73f44f62@gmx.net>
-Message-ID: <87lh41o56p.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Apr 2016 21:40:47 +0200
+Subject: [Buildroot] [git commit] linux: properly install all images in the
+	initramfs case
+Message-ID: <20160425194204.5C01281E64@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b1f0212af66e374f2a5f88edd8d3f4b2b8a90d9b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+The target "$(LINUX_DIR)/.stamp_initramfs_rebuilt" uses its own
+'cp' command, instead of LINUX_INSTALL_IMAGE/LINUX_INSTALL_IMAGES_CMDS
+provided by (or updated with) commit 055e6162bba7 ("linux: don't build
+appended DTB image in place and support multiple images") and thus is
+not operating properly when APPENDED_DTB is used.
 
- > Same here on RPi3, but with the suggested fix from Oscar Gomez Fuente
- > [1], adding 'dtoverlay=pi3-disable-bt' to config.txt I get working
- > boot messages and login on HDMI and serial console...
+Indeed, it copies a single image, and does not copy the one with the DTB
+appended.
 
-Just to confirm, neither serial or HDMI works without the dtoverlay
-line?
+This patch replaces the 'cp' command with LINUX_INSTALL_IMAGE which
+handles APPENDED_DTB.
 
-I see various references to a clocking issue with the "new" serial port,
-perhaps that is related?
+Fixes: 055e6162bba7 ("linux: don't build appended DTB image in place and
+support multiple images")
 
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Signed-off-by: Sebastian Frias <sf84@laposte.net>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/linux.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 317587f..d88060e 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -447,8 +447,8 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LI
+ 	# Build the kernel.
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	$(LINUX_APPEND_DTB)
+-	# Copy the kernel image to its final destination
+-	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
++	# Copy the kernel image(s) to its(their) final destination
++	$(call LINUX_INSTALL_IMAGE,$(BINARIES_DIR))
+ 	# If there is a .ub file copy it to the final destination
+ 	test ! -f $(LINUX_IMAGE_PATH).ub || cp $(LINUX_IMAGE_PATH).ub $(BINARIES_DIR)
+ 	$(Q)touch $@
