@@ -1,142 +1,37 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Mon, 25 Apr 2016 22:20:01 +0200
-Subject: [Buildroot] Fwd:  [RPi3] Trying to test WiFi On Raspberr Pi 3
-In-Reply-To: <CALtfCQb5w8ygEpiqE=_RVOzF7FpC62uF=TK7Fau7+xZ3MZMo-g@mail.gmail.com>
-References: <CALtfCQYZXSFWSv8m5y+BkwKx-iOPrgYpZypvmtk_i2MLZebeiw@mail.gmail.com>
- <CALtfCQZ9GAfL3qYuJK97XAETVhE4PNnr+R6aL-2JBC6UrRTn1w@mail.gmail.com>
- <5719EB20.6090107@armadeus.com>
- <CALtfCQb5w8ygEpiqE=_RVOzF7FpC62uF=TK7Fau7+xZ3MZMo-g@mail.gmail.com>
-Message-ID: <CALtfCQaW+aMMoXsm=Fc9r9rPbzsEwYLRbk1DvjN5wVsfzTOMfA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Apr 2016 22:35:17 +0200
+Subject: [Buildroot] [PATCH 2/2] package/python-pillow: new package
+In-Reply-To: <1461597623-14629-3-git-send-email-angelo.compagnucci@gmail.com>
+References: <1461597623-14629-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1461597623-14629-3-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20160425223517.1d98abb3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-I've just solved the problem. First of all, you have to download the
-firmware from this git repository: https://github.com/OpenELEC/wlan-firmware
+On Mon, 25 Apr 2016 17:20:23 +0200, Angelo Compagnucci wrote:
+> This patch adds python pillow, the friendly python fork.
+> The accompaining patch to disable platform guessing was submitted
+> upstream for inclusion.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-Then you have to select the following packages on buildroot:  crda,
-iw,  wireless-regdb and wpa_supplicant.
+Since you're sending it in a series after the openjpeg patch, should we
+assume that this version of the python-pillow package requires the new
+version of openjpeg?
 
-You have to modify the /etc/network/interfaces in the post-build.sh script:
------
-auto lo
-iface lo inet loopback
+You posted other patches for python-pillow in the past, but without an
+update for openjpeg, so I'd prefer to ask, so that we can see if
+python-pillow can be merged independently from the openjpeg update.
 
-auto eth0
-iface eth0 inet dhcp
-        pre-up /etc/network/nfs_check
-        wait-delay 15
+Best regards,
 
-auto wlan0
-iface wlan0 inet dhcp
-        pre-up wpa_supplicant -B -Dwext -iwlan0 -c
-/etc/wpa_supplicant/wpa_supplicant.conf
-        post-down killall -q wpa_supplicant
-
-iface default inet dhcp
------
-
-And you have to add this other file in
-/etc/wpa_supplicant/wpa_supplicant.conf, with SSDI and XXXXXXXXX...
-correctly (for example in the post-build.sh script):
------
-network={
-        ssid="SSID"
-        scan_ssid=1
-        proto=RSN WPA
-        key_mgmt=WPA-PSK
-        pairwise=CCMP TKIP
-        group=CCMP TKIP
-        auth_alg=OPEN
-        priority=0
-        id_str="name"
-        #psk="xxxxxxxxxx"
-        psk=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxx
-}
-
-And these changes works fine.
-
-So It will be very useful to add the files brcmfmac43430-sdio.bin and
-brcmfmac43430-sdio.txt to the linux-firmware package.
-
-Best regards.
------
-
-Oscar Gomez Fuente
-
-
-On 22 April 2016 at 11:13, S?bastien Szymanski <
-sebastien.szymanski@armadeus.com> wrote:
-
-> Hi,
->
-> On 04/22/2016 09:57 AM, Oscar Gomez Fuente wrote:
-> > Hi everyone,
-> >
-> > I've got updates in my WiFi issue. I had to install the following
-> package:
-> > crda, iw & wireless-regdb, and now I've got another log kernel:
-> >
-> > [    5.314552] bcm2835-wdt 3f100000.watchdog: Broadcom BCM2835 watchdog
-> > timer
-> > [    5.402552] cfg80211: Calling CRDA to update world regulatory domain
-> > [    5.531269] brcmfmac: brcmf_sdio_drivestrengthinit: No SDIO Drive
-> > strength init done for chip 43430 rev 1 pmurev 24
-> > [    5.542704] usbcore: registered new interface driver brcmfmac
-> > [    5.646701] cfg80211: World regulatory domain updated:
-> > [    5.651915] cfg80211:  DFS Master region: unset
-> > [    5.656271] cfg80211:   (start_freq - end_freq @ bandwidth),
-> > (max_antenna_gain, max_eirp), (dfs_cac_time)
-> > [    5.666112] cfg80211:   (2402000 KHz - 2472000 KHz @ 40000 KHz), (N/A,
-> > 2000 mBm), (N/A)
-> > [    5.674157] cfg80211:   (2457000 KHz - 2482000 KHz @ 20000 KHz, 92000
-> > KHz AUTO), (N/A, 2000 mBm), (N/A)
-> > [    5.683636] cfg80211:   (2474000 KHz - 2494000 KHz @ 20000 KHz), (N/A,
-> > 2000 mBm), (N/A)
-> > [    5.691672] cfg80211:   (5170000 KHz - 5250000 KHz @ 80000 KHz, 160000
-> > KHz AUTO), (N/A, 2000 mBm), (N/A)
-> > [    5.701197] cfg80211:   (5250000 KHz - 5330000 KHz @ 80000 KHz, 160000
-> > KHz AUTO), (N/A, 2000 mBm), (0 s)
-> > [    5.710708] cfg80211:   (5490000 KHz - 5730000 KHz @ 160000 KHz),
-> (N/A,
-> > 2000 mBm), (0 s)
-> > [    5.718823] cfg80211:   (5735000 KHz - 5835000 KHz @ 80000 KHz), (N/A,
-> > 2000 mBm), (N/A)
-> > [    5.726882] cfg80211:   (57240000 KHz - 63720000 KHz @ 2160000 KHz),
-> > (N/A, 0 mBm), (N/A)
-> > [    6.282934] bcm2835-rng 3f104000.rng: hwrng registered
-> > [    6.287471] gpiomem-bcm2835 3f200000.gpiomem: Initialised: Registers
-> at
-> > 0x3f20000
-> > [    6.297029] spi spi0.0: setting up native-CS0 as GPIO 8
-> > [    6.302858] spi spi0.1: setting up native-CS1 as GPIO 7
-> > [    6.353559] i2c /dev entries driver
-> > [    6.587009] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
-> > clkctl 0x50
-> > [    7.085459] NET: Registered protocol family 10
-> > [    7.597263] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
-> > clkctl 0x50
-> > [    8.607304] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
-> > clkctl 0x50
-> >
->
-> I have the same issue with this chip on the board I'm working on. I have
-> found out that if I unload and reload the module it then works.
->
-> Regards,
->
-> --
-> S?bastien Szymanski
-> Software Engineer
-> Armadeus Systems - A new vision of the embedded world
-> sebastien.szymanski at armadeus.com
-> Tel: +33 (0)9 72 29 41 44
-> Fax: +33 (0)9 72 28 79 26
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160425/6ad51d67/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
