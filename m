@@ -1,47 +1,123 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 25 Apr 2016 11:34:17 +0200
-Subject: [Buildroot] [PATCH 2/2] package/glmark2: gl support depends on X.org
-In-Reply-To: <1461576857-25683-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1461576857-25683-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1461576857-25683-2-git-send-email-bernd.kuhls@t-online.de>
+From: Mylene Josserand <mylene.josserand@free-electrons.com>
+Date: Mon, 25 Apr 2016 11:34:33 +0200
+Subject: [Buildroot] [help] Nitrogen6X with Vivante : restart on Qt5
+	examples
+In-Reply-To: <CAAMH-yvb3G6gp+N9yGFAK7GNPAxy9m25Zjn5-QqHko-aMeJmSw@mail.gmail.com>
+References: <571DDBEB.7070100@free-electrons.com>
+ <CAAMH-yvb3G6gp+N9yGFAK7GNPAxy9m25Zjn5-QqHko-aMeJmSw@mail.gmail.com>
+Message-ID: <571DE4A9.2010605@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://git.busybox.net/buildroot/commit/package/mesa3d?id=f1894ec95728806e09405d26663e0ea371afaeab
-removed the dependency on X.org for DRI drivers, this patch adds it
-again as reverse dependency.
+Gary,
 
-Fixes
-http://autobuild.buildroot.net/results/461/46146a63f83e318f1213ec1d558558e3404d8ff8/
-http://autobuild.buildroot.net/results/c91/c91f6bce6f8a0691467a5ca16d5fe15687ee945c/
-http://autobuild.buildroot.net/results/ac5/ac560e36977f90cf93098c987d401d64edce24cb/
-http://autobuild.buildroot.net/results/c71/c712af468012b1e23e3048207611f0da78fb1ae0/
-http://autobuild.buildroot.net/results/b82/b8251a40f5eb5e1124e1a6e1abe407db83c75371/
-http://autobuild.buildroot.net/results/667/667b7847e47b1d272d028da4a18d77e70ab01875/
-http://autobuild.buildroot.net/results/6a4/6a45e32c0f894508d05c964a9a0fd645b6f3d6e4/
-http://autobuild.buildroot.net/results/d96/d960bcfff386310e265d0d40533ef2ef7f74d5fe/
-http://autobuild.buildroot.net/results/7bd/7bd41a86d60543d3de4483f86f0b5a719cf480b9/
-and others
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/glmark2/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Thank you for your help.
 
-diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
-index 9167fc5..4d455c0 100644
---- a/package/glmark2/Config.in
-+++ b/package/glmark2/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_GLMARK2_GL
- 	bool
- 	default y
- 	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
-+	depends on BR2_PACKAGE_XORG7
- 
- comment "glmark2 needs an OpenGL or an openGL ES and EGL backend provided by mesa3d"
- 	depends on !BR2_PACKAGE_GLMARK2_GL && !BR2_PACKAGE_GLMARK2_EGL_GLES
+
+On 25/04/2016 11:18, Gary Bisson wrote:
+> Mylene, All,
+>
+> On Mon, Apr 25, 2016 at 10:57 AM, Mylene Josserand
+> <mylene.josserand@free-electrons.com> wrote:
+>> Hi,
+>>
+>>
+>> I am currently trying OpenGL with Vivante driver on a Nitrogen6X using
+>> Buildroot.
+>
+> Can you specify which version of Buildroot? v2016.02 or master or older?
+>
+> This will help a lot to know the version of Qt, X11 etc...
+
+
+Yes, sorry to forget this information.
+
+I am currently on 2016.02-rc2. I will update to v2016.02 soon. If it 
+could help you, I can update it right now.
+
+
+>> Previously, I got an segfault error while starting X.
+>> "Segmentation fault at address 0xe0"
+>>
+>> Thanks to Gary Bisson (in cc), using the galcore module from Buildroot
+>> (BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV=y) and not the kernel one + updating
+>> the kernel to 3.14.28, solved the issue.
+>>
+>> With the galcore driver loaded using insmod, the Vivante is, now, working.
+>
+> Same here, please specify the exact Vivante libraries version
+> (5.0.11p6.3 or 7.1).
+
+
+Vivante libraries : version 5.0.11.p7.1
+
+
+>
+>> I compiled Qt5 examples (BR2_PACKAGE_QT5BASE_EXAMPLES=y) and I tested some
+>> openGL examples :
+>>     - "qopenglwindow" : This example is working fine
+>>     - "textures" example : in many case, the board restarts when the
+>> application is launched.
+>>     - "hellogl" : I see the Qt logo from the example but when I try to move
+>> the object, the board restarts.
+>>
+>> Here is my Xorg.log, in case it could help :
+>> http://paste.debian.net/hidden/609ae872/
+>
+> Can you share you xorg.conf? Also specify your setup, how many
+> displays connected, which port (HDMI, LVDS, RGB etc..).
+
+Here is my Xorg.conf :
+
+Section "Device"
+     Identifier  "i.MX Accelerated Framebuffer Device"
+     Driver      "vivante"
+     Option      "fbdev"     "/dev/fb0"
+     Option      "vivante_fbdev" "/dev/fb0"
+     Option      "HWcursor"  "false"
+EndSection
+
+Section "ServerFlags"
+     Option "BlankTime"  "0"
+     Option "StandbyTime"  "0"
+     Option "SuspendTime"  "0"
+     Option "OffTime"  "0"
+EndSection
+
+
+I have one HDMI display (1208x720 66Hz).
+
+
+>
+>> Each time the board reboots, I get an "POR" reset cause in UBoot.
+>
+> Well then it's a feature, the Qt app appears to be restarting the
+> board properly ;-)
+>
+>> Maybe, I have a misconfiguration or I am doing something wrong.
+>> Any help would be great !
+>
+> This might sound strange, but please also provide the U-Boot version
+> you are using. The reason is that we offer a wide range of displays,
+> since we want customers to have a plug and play experience we've added
+> something for kernel >=3.14 where U-Boot is in charge of modifying the
+> device tree on the fly to setup the displays properly.
+
+
+Interesting, my uboot version is : U-Boot 2013.07.
+
+
+> Finally, can you upload your image for me to try?
+
+
+Yes, images are coming :)
+
+
 -- 
-2.8.0.rc3
+Myl?ne Josserand, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
