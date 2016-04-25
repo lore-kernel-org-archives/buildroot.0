@@ -1,54 +1,72 @@
-From: Romain Izard <romain.izard.pro@gmail.com>
-Date: Mon, 25 Apr 2016 18:42:39 +0200
-Subject: [Buildroot] [PATCH] core/pkg-kconfig: use olddefconfig when
-	available
-In-Reply-To: <20160425153508.43945e3c@free-electrons.com>
-References: <1461433564-21311-1-git-send-email-yann.morin.1998@free.fr>
- <20160425153508.43945e3c@free-electrons.com>
-Message-ID: <CAGkQfmNa9MDGNWT2Ygn4B1R5i61frSoyiET+FojiW+8G02ZfcQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 25 Apr 2016 19:50:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jsoncpp: Do not treat conversion
+	warning as error
+Message-ID: <1461606641-14927-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2016-04-25 15:35 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> I am sorry, but I had to revert this commit. While it works in simple
-> situations, it badly breaks the Busybox build in some situations:
->
->   http://autobuild.buildroot.org/?reason=busybox-1.24.2
->
-> With just Busybox enabled in a minimal configuration, everything is
-> fine. Enable "libtirpc" in the configuration, do a full rebuild ->
-> Busybox will fail to build. I don't know if it's related specifically
-> to libtirpc or to some of its dependencies, but it fails.
->
-> A very quick research couldn't spot the source of the problem, so I
-> simply reverted for now. Could you work on this and submit a new
-> version of the patch that addresses this problem?
->
+Fixes
+http://autobuild.buildroot.net/results/74b/74b1b9f8defc275ff2bc3d877faf2863929737b9/
+http://autobuild.buildroot.net/results/71d/71dcaf18e3d42c66af8036a68250eea1be09227b/
+http://autobuild.buildroot.net/results/599/5997a9e4a8ca8b6171438495920d0a487518851c/
+http://autobuild.buildroot.net/results/4ab/4abde1d7fd631d3b50a6b53824a781a08d022bca/
+http://autobuild.buildroot.net/results/968/9680ebd8c804ef15d471519d54f8aa209710414d/
+http://autobuild.buildroot.net/results/d5b/d5be4d51458ca10f3f4ff5fd3ad4b3cfd097f3ad/
+http://autobuild.buildroot.net/results/b1e/b1e3fc27f3d0cdd6ca8f7aff06f7d5e4108817ec/
+http://autobuild.buildroot.net/results/ffb/ffb40572269c63438228000495e1dc78c778788e/
 
-When testing with qemu_x86_defconfig, libtirpc and busybox I reproduce
-the issue. Calling 'make busybox-menuconfig' returns errors when
-updating the config file to merge buildroot-managed options with the new
-busybox config file, as it tries to launch olddefconfig.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...txt-Treat-conversion-warning-as-error-onl.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/jsoncpp/0001-CMakeLists.txt-Treat-conversion-warning-as-error-onl.patch
 
-The first error in the build is "bash: command not found".
-
-There is a problem with the shell command we tried to generate, as the
-command line contains multiple levels of backticks. This comes from
-libtirpc, which uses backticks to generate its CFLAGS.
-
-It is possible to fix this by replacing the backticks in the
-(2)_REGEN_DOT_CONFIG macro. Unfortunately, $(...) is detected by
-make as its own syntax, so it is necessarily to use quadruple dollars.
-
-The v6 revision of the patch, as it did not use backticks, did not have
-this problem.
-
-Best regards,
+diff --git a/package/jsoncpp/0001-CMakeLists.txt-Treat-conversion-warning-as-error-onl.patch b/package/jsoncpp/0001-CMakeLists.txt-Treat-conversion-warning-as-error-onl.patch
+new file mode 100644
+index 0000000..3e009b9
+--- /dev/null
++++ b/package/jsoncpp/0001-CMakeLists.txt-Treat-conversion-warning-as-error-onl.patch
+@@ -0,0 +1,37 @@
++From 98a7f56ed41071240274063b2d4e39e4e1c9589f Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Mon, 25 Apr 2016 19:41:28 +0200
++Subject: [PATCH 1/1] CMakeLists.txt: Treat conversion warning as error only
++ with JSONCPP_WITH_WARNING_AS_ERROR=On
++
++Fixes errors when building with buildroot:
++http://autobuild.buildroot.net/?reason=jsoncpp-1.7.2
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(Patch sent upstream:
++ https://github.com/open-source-parsers/jsoncpp/pull/466)
++---
++ CMakeLists.txt | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 7787850..637fc34 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -107,11 +107,11 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
++   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wconversion -Wshadow -Werror=conversion -Werror=sign-compare")
++ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
++   # using GCC
++-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wconversion -Wshadow -Wextra -Werror=conversion")
+++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wconversion -Wshadow -Wextra")
++   # not yet ready for -Wsign-conversion
++ 
++   if (JSONCPP_WITH_STRICT_ISO AND NOT JSONCPP_WITH_WARNING_AS_ERROR)
++-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
+++    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=conversion -pedantic")
++   endif ()
++ endif()
++ 
++-- 
++2.8.0.rc3
++
 -- 
-Romain Izard
+2.8.0.rc3
