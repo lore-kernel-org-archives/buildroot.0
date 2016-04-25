@@ -1,75 +1,28 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 25 Apr 2016 10:45:40 -0500
-Subject: [Buildroot] [PATCH v3 1/1] jsen: new package
-In-Reply-To: <20160328160732.31d45101@free-electrons.com>
-References: <1456233895-31812-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
- <56CCC4C4.5020402@mind.be>
- <20160223220413.2050528c@free-electrons.com>
- <1456396337.29027.16.camel@embedded.rocks>
- <20160225135137.09136142@free-electrons.com>
- <1456408864.29027.48.camel@embedded.rocks>
- <20160225172028.5482c36e@free-electrons.com>
- <1459173669.2226.8.camel@embedded.rocks>
- <20160328160732.31d45101@free-electrons.com>
-Message-ID: <CANQCQpb9eWS9qe715QbufSe9tjH_9p2_O8HNbXg1aVzedjMoew@mail.gmail.com>
+From: Geoff Levand <geoff@infradead.org>
+Date: Mon, 25 Apr 2016 09:27:21 -0700
+Subject: [Buildroot] [PATCH v3 0/3] Add go language support
+In-Reply-To: <20160421224301.6a05f711@free-electrons.com>
+References: <cover.1459798147.git.geoff@infradead.org>
+ <20160421224301.6a05f711@free-electrons.com>
+Message-ID: <1461601641.27026.0.camel@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+On Thu, 2016-04-21 at 22:43 +0200, Thomas Petazzoni wrote:
+> Now that those patches have been merged, we're starting to see some
+> build issues:
+> 
+>  - With host-go:
+>    http://autobuild.buildroot.org/?reason=host-go-1.5.3
+> 
+>  - With flannel:
+>    http://autobuild.buildroot.org/?reason=flannel-v0.5.5
+> 
+> Could you have a look at those build problems?
 
-On Mon, Mar 28, 2016 at 9:07 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
-> Hello,
->
-> On Mon, 28 Mar 2016 16:01:09 +0200, J?rg Krause wrote:
->
-> > Unfortunatly, scanpypi does not work with latest Buildroot.
->
-> Ah. It would be great if some of our Python contributors could take
-> scanpipy, finish it and send it for merging.
->
-> > But I
-> > tested scancpan and yes, I would say that we need something like this
-> > for Node.js and npm. However, the problem with dependencies of
-> > different versions is still there. For example Code-TidyAll depends on
-> > Moo whatever version. scanspan fetches latest Moo version 2.* and
-> > creates a fine buildroot package. The perl package Tropo however
-> > depends on Moo 1.*. Installing this package with scanspac afterwards
-> > does not change Moo, which is correct I think. However, building Tropo
-> > will use the package Moo 2.*, which might fail (I've not tested).
->
-> This version-dependency thing is indeed a problem. For the specific
-> case you point out, the solution would be to have separate moo1 and
-> moo2 packages, very much like we do for python/python3, qt/qt5, etc.
->
-> However, this is only realistic if there are only a few "major"
-> versions for a few packages. If they break the API at every minor
-> release, then it's clearly not doable.
->
-> I personally don't really care about npm/node.js. Maybe we should just
-> add a big fat legal warning in our legal information when NPM has been
-> used to install additional packages, to explicitly say that those
-> additions are not listed in the legal info output. This would at least
-> warn the user.
+I'll look into them.
 
-
-Please reject this patch as we are not using it in the context of
-NodeJS but instead with HTML5 and JavaScript served up by a standard
-http server.  We're ok with just maintaining it internally at this
-point.
-
-Thanks!
-
--- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+-Geoff
