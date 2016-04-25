@@ -1,56 +1,55 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 25 Apr 2016 22:56:54 +0200
-Subject: [Buildroot] [PATCH 1/2] package/openjpeg: bump to version 2.1
-In-Reply-To: <CA+TH9VnoURBMTiDRPcbj-uEQ9bK7qXXgjmkTvxgyZO7yBUn+3Q@mail.gmail.com>
-References: <1461597623-14629-1-git-send-email-angelo.compagnucci@gmail.com>
- <1461597623-14629-2-git-send-email-angelo.compagnucci@gmail.com>
- <20160425212827.07703ac2@free-electrons.com>
- <CA+TH9Vkf-=t2iS7ep1J3ejZ+LREVprQ+AN6wNn39MDAYVV58uw@mail.gmail.com>
- <CAHXCMMJVXtfZjy153Q82+VyrnOF3nT5ZdAMNsK2zxgdQX3X+3g@mail.gmail.com>
- <CA+TH9VnoURBMTiDRPcbj-uEQ9bK7qXXgjmkTvxgyZO7yBUn+3Q@mail.gmail.com>
-Message-ID: <CAHXCMMKnW85h-k9waOk_F+tJ4eL-4FOSFcOVZF9_9Rim-ZZB+g@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 25 Apr 2016 23:00:04 +0200
+Subject: [Buildroot] [PATCH] network-manager: bump version to 1.2.0
+In-Reply-To: <571A2F7C.2000707@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Fri, 22 Apr 2016 11:04:44 -0300")
+References: <1461236721-60129-1-git-send-email-Vincent.Riera@imgtec.com>
+ <571A2F7C.2000707@zacarias.com.ar>
+Message-ID: <87d1pdo14b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Mon, Apr 25, 2016 at 10:43 PM, Angelo Compagnucci
-<angelo.compagnucci@gmail.com> wrote:
-> Dear Samuel Martin
->
-[...]
->
-> I reviewed the logic a little bit more and I can confirm that keeping
-> the default is sensible:
->
-> [1] if (BUILD_CODEC OR BUILD_MJ2)
-> [2] option(BUILD_THIRDPARTY "Build the thirdparty executables if it is
-> needed" OFF)
-> [3] ELSE (BUILD_THIRDPARTY)
-> [4] IF(ZLIB_FOUND)
->     SET(Z_LIBNAME ${ZLIB_LIBRARIES} PARENT_SCOPE)
->     SET(Z_INCLUDE_DIRNAME ${ZLIB_INCLUDE_DIRS} PARENT_SCOPE)
->     message(STATUS "Your system seems to have a Z lib available, we
-> will use it to generate PNG lib")
->     ELSE (ZLIB_FOUND) # not found
->     message(STATUS "Z lib not found, activate BUILD_THIRDPARTY if you
-> want build it (necessary to build libPNG)")
->
-> So at the end if BUILD_CODEC is ON (default) system libraries will
-> only be used if found.
-> Is not this the intended behaviuor?
-Certainly.
-However, they may exist or not, depending on the package selection and
-the build order, so my questions are:
-- are they required or optional stuff?
-- if optional, can we force using or not using them? (from build
-reproducibility perspective)
+Hi Vicente,
 
+ > On 21/04/16 08:05, Vicente Olivert Riera wrote:
+ >> -NETWORK_MANAGER_VERSION_MAJOR = 1.0
+ >> -NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).12
+ >> +NETWORK_MANAGER_VERSION_MAJOR = 1.2
+ >> +NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
+ >> NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ >> -NETWORK_MANAGER_SITE =
+ >> http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ >> +NETWORK_MANAGER_SITE = http://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ >> NETWORK_MANAGER_INSTALL_STAGING = YES
+ >> NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
 
-Regards,
+ > Hi Vicente.
+ > There are some dependency differences with the new series.
+ > For example dbus-glib is no longer mandatory, it's optional for the
+ > libnm-glib legacy library.
+ > WiFi support can now be disabled (default=y, probably not that
+ > interesting as an option, though it gets rids of the wireless-tools
+ > dependency).
+ > Qt support was remove so --disable-qt can be removed.
+ > There's improved systemd support that requires systemd libraries being
+ > present at build time as well (journal support).
+ > Missing functionality that could also be accounted for (irrespective
+ > of the bump since it was present in 1.0.x as well) is connection
+ > checking via libsoup.
+ > nm-cli and readline are also optional now.
+
+ > I'm sure there are more to look at ;)
+
+Will you rework the patch after taking Gustavoz' feedback into
+consideration? In the mean time I have marked the patch as changes
+requested.
+
+Thanks!
 
 -- 
-Samuel
+Bye, Peter Korsgaard
