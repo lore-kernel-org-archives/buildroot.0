@@ -1,39 +1,55 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 25 Apr 2016 15:41:35 +0100
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.151
-Message-ID: <1461595295-28519-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Sebastian Frias <sf84@laposte.net>
+Date: Mon, 25 Apr 2016 16:52:17 +0200
+Subject: [Buildroot] [PATCH v2] linux: use $(LINUX_INSTALL_IMAGE_CMDS)
+ instead of plain 'cp'
+In-Reply-To: <20160425140615.11e86412@free-electrons.com>
+References: <571E0683.4080306@laposte.net>
+ <20160425140615.11e86412@free-electrons.com>
+Message-ID: <571E2F21.3040903@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The target "$(LINUX_DIR)/.stamp_initramfs_rebuilt" uses its own
+'cp' command, instead of LINUX_INSTALL_IMAGE/LINUX_INSTALL_IMAGES_CMDS
+provided by (or updated with) commit 055e6162bba7 ("linux: don't build
+appended DTB image in place and support multiple images") and thus is
+not operating properly when APPENDED_DTB is used.
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 959be39..7e1458a 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 66d1a247170f685c72d91d5fc52a2394ba5d5a477686101b9a472a8ac163813f9c80c0d75e4f29939b16000456263e9191cd294520ab5b320915f23f0797f22e  LVM2.2.02.150.tgz
-+sha512 b2def85d380fb96b40537fac4fdc7c14a009a45b0a1cdfb48714fe99d6f6a659376e0f762cc7dd778c747bab75427f13948895d6eb28a05cfc752a4eca56ee81  LVM2.2.02.151.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index d78f621..b1783c9 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LVM2_VERSION = 2.02.150
-+LVM2_VERSION = 2.02.151
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+Indeed, it copies a single image, and does not copy the one with the DTB
+appended.
+
+This patch replaces the 'cp' command with LINUX_INSTALL_IMAGE which
+handles APPENDED_DTB.
+
+Fixes: 055e6162bba7 ("linux: don't build appended DTB image in place and
+support multiple images")
+
+Signed-off-by: Sebastian Frias <sf84@laposte.net>
+---
+Changes v1 -> v2:
+  - remove '-v' from cp (as suggested by thomas.petazzoni at free-electrons.com)
+  - use LINUX_INSTALL_IMAGE instead of LINUX_INSTALL_IMAGES_CMDS (also suggested by thomas.petazzoni at free-electrons.com)
+---
+ linux/linux.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 317587f..1f93074 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -447,8 +447,8 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LI
+ 	# Build the kernel.
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	$(LINUX_APPEND_DTB)
+-	# Copy the kernel image to its final destination
+-	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
++	# Copy the kernel image(s) to its(their) final destination
++	$(call LINUX_INSTALL_IMAGE,$(BINARIES_DIR))
+ 	# If there is a .ub file copy it to the final destination
+ 	test ! -f $(LINUX_IMAGE_PATH).ub || cp $(LINUX_IMAGE_PATH).ub $(BINARIES_DIR)
+ 	$(Q)touch $@
 -- 
-2.7.3
+1.7.11.2
