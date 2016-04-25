@@ -1,73 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Apr 2016 23:17:17 +0200
-Subject: [Buildroot] [PATCH 0/5] Align library locations in target and
- staging
-In-Reply-To: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20160425231717.7a85e856@free-electrons.com>
+Date: Mon, 25 Apr 2016 21:56:34 +0200
+Subject: [Buildroot] [git commit] toolchain-external: blackfin: install
+	FDPIC libraries also to staging
+Message-ID: <20160425211729.6823B81E21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=38040b2e1f25e17b94a9ac33dc09fc728ef46381
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 12 Feb 2016 20:20:21 +0100, Thomas De Schampheleire wrote:
+For external Blackfin toolchains with BR2_BFIN_INSTALL_FDPIC_SHARED set,
+the FDPIC shared libraries are currently only copied to the target
+directory, not to staging.
 
-> Thomas De Schampheleire (5):
->   toolchain-external: blackfin: install FDPIC libraries also to staging
->   toolchain-external: remove unused calculation of ARCH_SUBDIR
->   toolchain-external: extract installation of gdbserver to separate
->     define
->   toolchain-external: align library locations in target and staging dir
->   toolchain-external: unify LIB_EXTERNAL_LIBS and USR_LIB_EXTERNAL_LIBS
+For debugging purposes, an unstripped copy in staging is necessary.
+Moreover, this change will simplify a subsequent change that lines up the
+location of shared libraries between target and staging directories.
 
-The entire series is applied. I've also applied two additional cleanups
-(see below). Thanks a lot for your work on this series. Not only it
-makes the thing more functional, but it also makes the code simpler.
-Definitely very good.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Thanks to Arnout and Romain for reviewing those not-so-simple changes!
-
-commit ed2a15b79136db815e034aa9e5aa0635e91222ec
-Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date:   Mon Apr 25 22:53:11 2016 +0200
-
-    toolchain-external: remove useless shell continuations
-    
-    When a message with MESSAGE, we can print it as the first command of
-    the command sequence, and in this case, we don't need to use a shell
-    continuation.
-    
-    In one case, the call to MESSAGE is moved a few lines up in the
-    sequence of commands.
-    
-    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-commit 12584c2c701fab1478da547dc85b69c3377e6d25
-Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date:   Mon Apr 25 22:12:43 2016 +0200
-
-    toolchain-external: rename Blackfin related special variables
-    
-    As suggested by Arnout, this commit renames:
-    
-     - TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC to
-       TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FDPIC
-    
-     - TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT to
-       TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT
-    
-    Which makes it clear that those variables are installing libraries to
-    the target, and make their naming more consistent with the naming of
-    other variables in the file.
-    
-    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-
-
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 66ba23a..ef16da1 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -680,6 +680,20 @@ endef
+ # nonetheless requested the installation of the FDPIC libraries to the
+ # target filesystem.
+ ifeq ($(BR2_BFIN_INSTALL_FDPIC_SHARED),y)
++define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC
++	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to staging...") ; \
++	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
++	FDPIC_SYSROOT_DIR="$(call toolchain_find_sysroot,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
++	FDPIC_LIB_DIR="$(call toolchain_find_libdir,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
++	FDPIC_SUPPORT_LIB_DIR="" ; \
++	if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
++	        FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
++	        if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
++	                FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
++	        fi ; \
++	fi ; \
++	$(call copy_toolchain_sysroot,$${FDPIC_SYSROOT_DIR},$${FDPIC_SYSROOT_DIR},,$${FDPIC_LIB_DIR},$${FDPIC_SUPPORT_LIB_DIR})
++endef
+ define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC
+ 	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
+ 	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
+@@ -779,6 +793,7 @@ TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_BUILD_WRAPPER)
+ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
+ 	$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
++	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+ endef
+@@ -795,3 +810,4 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
+ endef
+ 
+ $(eval $(generic-package))
++
