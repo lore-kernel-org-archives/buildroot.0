@@ -1,56 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Apr 2016 21:21:52 +0200
-Subject: [Buildroot] [git commit]
-	package/x11r7/xdriver_xf86-video-openchrome: bump version to 0.4.0
-Message-ID: <20160425192429.DE1AE803C8@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Apr 2016 21:24:34 +0200
+Subject: [Buildroot] [PATCH v1 4/4] ring-daemon: new package
+In-Reply-To: <1541125393.275698.1461608322652.JavaMail.zimbra@savoirfairelinux.com>
+References: <1461358628-9352-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
+ <1461358628-9352-5-git-send-email-patrick.keroulas@savoirfairelinux.com>
+ <20160423001924.38960007@free-electrons.com>
+ <1541125393.275698.1461608322652.JavaMail.zimbra@savoirfairelinux.com>
+Message-ID: <20160425212434.10734123@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46309a6eb4b91f0af7ae2069ac815b4ea1a6acde
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xdriver_xf86-video-openchrome/Config.in                 | 2 ++
- .../xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash  | 4 ++--
- .../xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk    | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+Please don't do top-posting, it's inappropriate on open-source mailing
+lists. Thanks!
 
-diff --git a/package/x11r7/xdriver_xf86-video-openchrome/Config.in b/package/x11r7/xdriver_xf86-video-openchrome/Config.in
-index db27eef..e2bb6c4 100644
---- a/package/x11r7/xdriver_xf86-video-openchrome/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-openchrome/Config.in
-@@ -15,5 +15,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_OPENCHROME
- 	  Openchrome, A free and Open Source video driver for the VIA/S3G
- 	  UniChrome and UniChrome Pro graphics chipsets.
- 
-+	  https://www.freedesktop.org/wiki/Openchrome/
-+
- comment "xf86-video-openchrome needs mesa3d"
- 	depends on !BR2_PACKAGE_MESA3D
-diff --git a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash
-index cb6617f..b3aef58 100644
---- a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash
-+++ b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2013-May/002220.html
--sha1	1f7b23d4ed53417eda5c6730486b36812f469295	xf86-video-openchrome-0.3.3.tar.bz2
-+# Locally computed
-+sha256	73e7966d01d0d644d3b9204e8bfc106cb99069c58e981626e7352f2693e3e927	xf86-video-openchrome-0.4.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
-index 345beb1..83c12b2 100644
---- a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
-+++ b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_OPENCHROME_VERSION = 0.3.3
-+XDRIVER_XF86_VIDEO_OPENCHROME_VERSION = 0.4.0
- XDRIVER_XF86_VIDEO_OPENCHROME_SOURCE = xf86-video-openchrome-$(XDRIVER_XF86_VIDEO_OPENCHROME_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_OPENCHROME_SITE = http://xorg.freedesktop.org/archive/individual/driver
- XDRIVER_XF86_VIDEO_OPENCHROME_LICENSE = MIT
+On Mon, 25 Apr 2016 14:18:42 -0400 (EDT), Patrick Keroulas wrote:
+
+> Concerning the D-Bus daemon, Ring relies on a session bus but D-Bus
+> initscript starts a daemon for system bus only. I can change D-Bus
+> initscript instead of starting it from our Ring initscript. In this
+> case, in which package should I add the patch? ring-daemon or dbus? 
+
+I *think* it should be handled in the DBus package itself, though I am
+not entirely sure. As I understand it, a "session bus" is typically
+associated to one particular user when this user logs into the system,
+right? How does that work for ring? Does it use a session bus running
+as the "ring" user? Aren't session buses normally used for "real" users?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
