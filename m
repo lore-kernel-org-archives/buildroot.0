@@ -1,202 +1,60 @@
-From: fabrice.fontaine at orange.com <fabrice.fontaine@orange.com>
-Date: Mon, 25 Apr 2016 16:07:10 +0200
-Subject: [Buildroot] [PATCH v3] openzwave: new package
-Message-ID: <18234_1461593236_571E2494_18234_9415_1_d894cc93-b732-4ef7-ad29-329991781b34@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 25 Apr 2016 16:14:08 +0200
+Subject: [Buildroot] [PATCH 1/1] Preliminary support for Raspberry Pi 3
+	with symlink
+In-Reply-To: <81b71ac5323b1793405c3192b6ac5264@eja.it> (Ubaldo Porcheddu's
+ message of "Mon, 25 Apr 2016 15:06:54 +0100")
+References: <1461442370-22393-1-git-send-email-ubaldo@eja.it>
+ <871t5triwb.fsf@dell.be.48ers.dk>
+ <81b71ac5323b1793405c3192b6ac5264@eja.it>
+Message-ID: <87shy9pyhb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Free software library that interfaces with selected Z-Wave PC
-controllers, allowing anyone to create applications that manipulate and
-respond to devices on a Z-Wave network, without requiring in-depth
-knowledge of the Z-Wave protocol
+>>>>> "Ubaldo" == Ubaldo Porcheddu <ubaldo@eja.it> writes:
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
----
-Changes v2 -> v3 (after reviews of Thomas Petazzoni and
-Julien Boibessot):
- - Remove empty line in Config.in
- - Add hash file with locally computed sha256 of openzwave-v1.4.tar.gz
- - Format correctly the wcsdup patch (git patch with signed-off-by
-   description)
- - Remove unneeded comments before OPENZWAVE_LICENSE
- - Add TARGET_MAKE_ENV in openzwave.mk
- - Use instlibdir variable to install library in /usr/lib instead of
-   /usr/lib64
- - Use sysconfdir variable to install configuration files in
-   /etc/openzwave instead of /usr/etc/openzwave
- - Remove unneeded ozw_config binary from target directory
+ > Hi Peter,
+ > Il 2016-04-25 13:07 Peter Korsgaard ha scritto:
+ >>>>>>> "Ubaldo" == Ubaldo Porcheddu <ubaldo@eja.it> writes:
+ >> 
+ >> > Signed-off-by: Ubaldo Porcheddu <ubaldo@eja.it>
+ >> 
+ >> Committed after expanding the commit message, thanks.
+ >> 
+ >> I've also committed a change to sync the kernel version with what is
+ >> used for rpi1/2 (E.G. the rpi-4.4.y branch). Care to verify that
+ >> everything works correctly after that?
 
-Changes v1 -> v2:
- - Fix indentation in Config.in
- - Add dependency on BR2_USE_WCHAR (from patch of Joris Lijssens)
- - Remove TARGET_CONFIGURE_ENV from openzwave.mk
- - Use CROSS_COMPILE variable to build (from patch of Joris Lijssens)
- - Add a patch to fix wcsdup implicit declaration (from review of Julien
-   Boibessot)
+ > I just tested the new kernel version but it doesn't give me the login
+ > prompt, the kernel seems to be booting fine as it can recognize my
+ > keyboard but it doesn't accept any input.
 
- package/Config.in                                  |  1 +
- ...ix-warning-on-wcsdup-implicit-declaration.patch | 29 ++++++++++++
- package/openzwave/Config.in                        | 17 +++++++
- package/openzwave/openzwave.hash                   |  2 +
- package/openzwave/openzwave.mk                     | 52 ++++++++++++++++++++++
- 5 files changed, 101 insertions(+)
- create mode 100644 package/openzwave/0001-Fix-warning-on-wcsdup-implicit-declaration.patch
- create mode 100644 package/openzwave/Config.in
- create mode 100644 package/openzwave/openzwave.hash
- create mode 100644 package/openzwave/openzwave.mk
+Hmm, odd. I do have a rpi1 at home. I'll try the 4.4 kernel on that one.
 
-diff --git a/package/Config.in b/package/Config.in
-index e860f72..f242181 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1172,6 +1172,7 @@ menu "Networking"
- 	source "package/omniorb/Config.in"
- 	source "package/openldap/Config.in"
- 	source "package/openpgm/Config.in"
-+	source "package/openzwave/Config.in"
- 	source "package/ortp/Config.in"
- 	source "package/qdecoder/Config.in"
- 	source "package/qpid-proton/Config.in"
-diff --git a/package/openzwave/0001-Fix-warning-on-wcsdup-implicit-declaration.patch b/package/openzwave/0001-Fix-warning-on-wcsdup-implicit-declaration.patch
-new file mode 100644
-index 0000000..1fe30e4
---- /dev/null
-+++ b/package/openzwave/0001-Fix-warning-on-wcsdup-implicit-declaration.patch
-@@ -0,0 +1,29 @@
-+From 0878d933223158343af3fe13e03bcd128e8b4cbc Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+Date: Fri, 22 Apr 2016 17:06:27 +0200
-+Subject: [PATCH 1/1] Fix warning on wcsdup implicit declaration
-+
-+Define __GNU_SOURCE in cpp/hidapi/linux/hid.c (like already done in
-+cpp/hidapi/libusb/hid.c) to fix implicit declaration of wcsdup function
-+
-+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+---
-+ cpp/hidapi/linux/hid.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/cpp/hidapi/linux/hid.c b/cpp/hidapi/linux/hid.c
-+index dbf9b9b..c3eb22b 100644
-+--- a/cpp/hidapi/linux/hid.c
-++++ b/cpp/hidapi/linux/hid.c
-+@@ -21,6 +21,8 @@
-+         http://github.com/signal11/hidapi .
-+ ********************************************************/
-+ 
-++#define _GNU_SOURCE /* needed for wcsdup() before glibc 2.10 */
-++
-+ /* C */
-+ #include <stdio.h>
-+ #include <string.h>
-+-- 
-+1.9.1
-+
-diff --git a/package/openzwave/Config.in b/package/openzwave/Config.in
-new file mode 100644
-index 0000000..190b88b
---- /dev/null
-+++ b/package/openzwave/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_OPENZWAVE
-+	bool "openzwave"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_USE_WCHAR
-+	help
-+	  Free software library that interfaces with selected Z-Wave PC
-+	  controllers, allowing anyone to create applications that manipulate
-+	  and respond to devices on a Z-Wave network, without requiring
-+	  in-depth knowledge of the Z-Wave protocol
-+
-+	  http://www.openzwave.net
-+
-+comment "openzwave needs udev and a toolchain w/ C++, threads, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_PACKAGE_HAS_UDEV || !BR2_USE_WCHAR
-diff --git a/package/openzwave/openzwave.hash b/package/openzwave/openzwave.hash
-new file mode 100644
-index 0000000..bab940e
---- /dev/null
-+++ b/package/openzwave/openzwave.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	ca122365f6237dc245be0129eb460e78126976b9c7bd06487795d3acfc9f2a5f	openzwave-v1.4.tar.gz
-diff --git a/package/openzwave/openzwave.mk b/package/openzwave/openzwave.mk
-new file mode 100644
-index 0000000..eab9943
---- /dev/null
-+++ b/package/openzwave/openzwave.mk
-@@ -0,0 +1,52 @@
-+################################################################################
-+#
-+# openzwave
-+#
-+################################################################################
-+
-+OPENZWAVE_VERSION = v1.4
-+OPENZWAVE_SITE = $(call github,OpenZWave,open-zwave,$(OPENZWAVE_VERSION))
-+OPENZWAVE_LICENSE = LGPLv3+, GPLv3 (examples), Apache-2.0 (sh2ju.sh)
-+OPENZWAVE_LICENSE_FILES = license/license.txt license/lgpl.txt \
-+	license/gpl.txt license/Apache-License-2.0.txt
-+
-+OPENZWAVE_DEPENDENCIES = host-pkgconf udev
-+OPENZWAVE_INSTALL_STAGING = YES
-+
-+define OPENZWAVE_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D)
-+endef
-+
-+# Set instlibdir to install libopenzwave.so* in the correct directory
-+# otherwise openzwave will check that /lib64 exists (on the host) to
-+# know if the library should be installed in $(PREFIX)/lib or $(PREFIX)/lib64.
-+# Set pkgconfigdir to /lib/pkgconfig to install libopenzwave.pc in the
-+# correct directory otherwise openzwave will call
-+# "pkg-config --variable pc_path pkg-config" which returns an incorrect value.
-+# Set sysconfdir to /etc/openzwave to install openzwave configuration files in
-+# the correct directory otherwise openzwave will install configuration files in
-+# $(PREFIX)/etc/openzwave.
-+define OPENZWAVE_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		PREFIX=/usr DESTDIR=$(STAGING_DIR) \
-+		instlibdir=/usr/lib \
-+		pkgconfigdir=/usr/lib/pkgconfig \
-+		sysconfdir=/etc/openzwave \
-+		install
-+endef
-+
-+# Apply the same tricks (even if the trick on pkgconfigdir is not needed as
-+# libopenzwave.pc is not useful in target directory).
-+# Delete unneeded ozw_config binary from target directory as this is an utility
-+# application used to get the openzwave build configuration.
-+define OPENZWAVE_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		PREFIX=/usr DESTDIR=$(TARGET_DIR) \
-+		instlibdir=/usr/lib \
-+		pkgconfigdir=/usr/lib/pkgconfig \
-+		sysconfdir=/etc/openzwave \
-+		install
-+	rm -f $(TARGET_DIR)/usr/bin/ozw_config
-+endef
-+
-+$(eval $(generic-package))
+So do I understand you correctly that you do see the kernel messages on
+the HDMI output but don't get a login prompt / nothing happens when you
+type on your USB keyboard.
+
+ >> What about the serial console? The rpi3 afaik uses ttyS0 instead of
+ >> ttyAMA0 for the (default) serial console. Do we need to adjust
+ >> cmdline.txt for the rpi?
+ >> 
+ >> I see notes about newer rpi-firmware versions fixing up ttyAMA0 -> 
+ >> ttyS0
+ >> when running on a rpi3, so perhaps it isn't needed?
+ >> 
+ >> https://github.com/RPi-Distro/repo/issues/22
+
+ > I don't have a serial console cable to test with at the moment, but I
+ > can see from the kernel log on screen a message like:
+
+ > console [ttyS0] enabled
+
+Ok, sounds like it does the right thing then - Thanks!
+
 -- 
-1.9.1
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+Venlig hilsen,
+Peter Korsgaard 
