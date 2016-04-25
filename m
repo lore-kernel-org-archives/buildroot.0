@@ -1,53 +1,62 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 25 Apr 2016 21:55:55 +0200
-Subject: [Buildroot] [PATCH 1/1] Preliminary support for Raspberry Pi 3
-	with symlink
-In-Reply-To: <87lh41o56p.fsf@dell.be.48ers.dk>
-References: <1461442370-22393-1-git-send-email-ubaldo@eja.it>
- <871t5triwb.fsf@dell.be.48ers.dk>
- <81b71ac5323b1793405c3192b6ac5264@eja.it>
- <20160425211936.73f44f62@gmx.net> <87lh41o56p.fsf@dell.be.48ers.dk>
-Message-ID: <20160425215555.49b860b7@gmx.net>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 25 Apr 2016 22:05:44 +0200
+Subject: [Buildroot] [PATCH 1/2] package/openjpeg: bump to version 2.1
+In-Reply-To: <20160425212827.07703ac2@free-electrons.com>
+References: <1461597623-14629-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1461597623-14629-2-git-send-email-angelo.compagnucci@gmail.com>
+ <20160425212827.07703ac2@free-electrons.com>
+Message-ID: <CA+TH9Vkf-=t2iS7ep1J3ejZ+LREVprQ+AN6wNn39MDAYVV58uw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Dear Thomas Petazzoni,
 
-On Mon, 25 Apr 2016 21:32:14 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+2016-04-25 21:28 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Mon, 25 Apr 2016 17:20:22 +0200, Angelo Compagnucci wrote:
+>
+>> -ifeq ($(BR2_PACKAGE_LIBPNG),y)
+>> -OPENJPEG_DEPENDENCIES += libpng
+>> -OPENJPEG_CONF_OPTS += --enable-png
+>> -else
+>> -OPENJPEG_CONF_OPTS += --disable-png
+>> -endif
+>> -
+>> -ifeq ($(BR2_PACKAGE_TIFF),y)
+>> -OPENJPEG_DEPENDENCIES += tiff
+>> -OPENJPEG_CONF_OPTS += --enable-tiff
+>> -else
+>> -OPENJPEG_CONF_OPTS += --disable-tiff
+>> -endif
+>> -
+>> -ifeq ($(BR2_PACKAGE_LCMS2),y)
+>> -OPENJPEG_DEPENDENCIES += lcms2
+>> -OPENJPEG_CONF_OPTS += --enable-lcms2
+>> -else
+>> -OPENJPEG_CONF_OPTS += --disable-lcms2
+>> -endif
+>
+> What about those optional dependencies? They are no longer used?
 
-> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
-> 
-> Hi,
-> 
->  > Same here on RPi3, but with the suggested fix from Oscar Gomez Fuente
->  > [1], adding 'dtoverlay=pi3-disable-bt' to config.txt I get working
->  > boot messages and login on HDMI and serial console...
-> 
-> Just to confirm, neither serial or HDMI works without the dtoverlay
-> line?
+They are no longer present as cmake options, they are handled internally.
 
-Without the overlay I get boot messages on HDMI, but no login, last messages
-are from USB keyboard/mouse and I can get more messages removing/adding
-keyboard/mouse...., no messages on serial console (but 'ttyS0: 29 input overrun(s)
-message on HDMI output)
+Sincerely, Angelo
 
-From linux-3de232825c9ba5989522b8691eb6ac5df6619458/arch/arm/boot/dts/overlays/pi3-disable-bt-overlay.dts:
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-  Disable Bluetooth and restore UART0/ttyAMA0 over GPIOs 14 & 15.
 
-So I think the overlay changes the pin muxing (and the orignal config seems to break
-the console, maybe flow control deadlock with the bluetooth chip?)...
 
-> 
-> I see various references to a clocking issue with the "new" serial port,
-> perhaps that is related?
-> 
-
-This was with old kernel/firmware but adding 'core_freq=250' to config.txt
-fixed it...
-
-Regads,
-Peter
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
