@@ -1,43 +1,32 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 25 Apr 2016 22:06:51 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Apr 2016 22:14:55 +0200
 Subject: [Buildroot] [PATCH 1/2] package/openjpeg: bump to version 2.1
-In-Reply-To: <87potdo5bj.fsf@dell.be.48ers.dk>
+In-Reply-To: <CA+TH9Vkf-=t2iS7ep1J3ejZ+LREVprQ+AN6wNn39MDAYVV58uw@mail.gmail.com>
 References: <1461597623-14629-1-git-send-email-angelo.compagnucci@gmail.com>
  <1461597623-14629-2-git-send-email-angelo.compagnucci@gmail.com>
- <87potdo5bj.fsf@dell.be.48ers.dk>
-Message-ID: <CA+TH9V=0U+=9HYf44Y_ZvCiX6nc74PF4Mw+q8UmKsoP8pXwanA@mail.gmail.com>
+ <20160425212827.07703ac2@free-electrons.com>
+ <CA+TH9Vkf-=t2iS7ep1J3ejZ+LREVprQ+AN6wNn39MDAYVV58uw@mail.gmail.com>
+Message-ID: <20160425221455.36312295@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Hello,
 
-2016-04-25 21:29 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
->>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
->
->  > This patch bumps openjpeg to version 2.1 and converts the
->  > package to use cmake.
->
->  > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->
-> A bit more detailed changelog would be good, E.G. the fact that it has
-> now moved to github. What happened to all those optional dependencies?
->
-> Looking at the 2.x release notes I see it mentions various API
-> changes. Have you verified that the reverse dependencies
-> (efl, gst1-plugins-bad, poppler) still build/work with the new version?
+On Mon, 25 Apr 2016 22:05:44 +0200, Angelo Compagnucci wrote:
 
-Mmm, intresting observation, i'll try in a moment!
+> > What about those optional dependencies? They are no longer used?
+> 
+> They are no longer present as cmake options, they are handled internally.
 
-Sincerely, Angelo
+What do you mean by "internally"? They are still optional dependencies,
+but there are no CMake options to enable/disable them? The libpng, tiff
+and lcms2 code has been duplicated in the openjpeg project?
 
->
-> --
-> Bye, Peter Korsgaard
-
-
-
+Thomas
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
