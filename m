@@ -1,130 +1,150 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 25 Apr 2016 14:07:58 +0200
-Subject: [Buildroot] [git commit] configs/*: drop explicit
-	BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
-Message-ID: <20160425120824.1A8A580304@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs: add Raspberry Pi 3 defconfig
+Message-ID: <20160425120824.2A36D7FD4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fac78c51e0cc010a8dd8bc49824a5b1bcd52129
+commit: https://git.buildroot.net/buildroot/commit/?id=b159b15d078580381e089e43c15626eef5bafb95
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 7f1f9185e (system: default to devtmpfs for /dev) changed our default
-for /dev handling, but didn't remove the explicit selection of devtmpfs from
-a number of defconfigs.
+So far identical to the rpi2 one except for the dts file as the SW runs in
+32bit mode.
 
+[Peter: extend commit message]
+Signed-off-by: Ubaldo Porcheddu <ubaldo@eja.it>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/armadeus_apf27_defconfig      | 1 -
- configs/armadeus_apf28_defconfig      | 1 -
- configs/armadeus_apf9328_defconfig    | 1 -
- configs/at91sam9260eknf_defconfig     | 3 ---
- configs/beaglebone_defconfig          | 1 -
- configs/calao_tny_a9g20_lpw_defconfig | 1 -
- configs/openblocks_a6_defconfig       | 1 -
- configs/telit_evk_pro3_defconfig      | 3 ---
- 8 files changed, 12 deletions(-)
+ board/raspberrypi/genimage-raspberrypi3.cfg | 30 ++++++++++++++++++++++++
+ board/raspberrypi/readme.txt                | 10 ++++++--
+ board/raspberrypi3                          |  1 +
+ configs/raspberrypi3_defconfig              | 36 +++++++++++++++++++++++++++++
+ 4 files changed, 75 insertions(+), 2 deletions(-)
 
-diff --git a/configs/armadeus_apf27_defconfig b/configs/armadeus_apf27_defconfig
-index 69c6c01..fd0ba50 100644
---- a/configs/armadeus_apf27_defconfig
-+++ b/configs/armadeus_apf27_defconfig
-@@ -8,7 +8,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- # System
- BR2_TARGET_GENERIC_HOSTNAME="apf27"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+diff --git a/board/raspberrypi/genimage-raspberrypi3.cfg b/board/raspberrypi/genimage-raspberrypi3.cfg
+new file mode 100644
+index 0000000..7ba89c5
+--- /dev/null
++++ b/board/raspberrypi/genimage-raspberrypi3.cfg
+@@ -0,0 +1,30 @@
++image boot.vfat {
++  vfat {
++    files = {
++      "bcm2710-rpi-3-b.dtb",
++      "rpi-firmware/bootcode.bin",
++      "rpi-firmware/cmdline.txt",
++      "rpi-firmware/config.txt",
++      "rpi-firmware/fixup.dat",
++      "rpi-firmware/start.elf",
++      "kernel-marked/zImage"
++    }
++  }
++  size = 32M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++  }
++}
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index 896be2d..a170f8f 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -6,7 +6,8 @@ Intro
+ These instructions apply to all models of the Raspberry Pi:
+   - the original models A and B,
+   - the "enhanced" models A+ and B+,
+-  - the model B2 (aka Raspberry Pi 2).
++  - the model B2 (aka Raspberry Pi 2)
++  - the model B3 (aka Raspberry Pi 3).
  
- # Filesystem
-diff --git a/configs/armadeus_apf28_defconfig b/configs/armadeus_apf28_defconfig
-index 965f3c2..3032906 100644
---- a/configs/armadeus_apf28_defconfig
-+++ b/configs/armadeus_apf28_defconfig
-@@ -8,7 +8,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
- # System
- BR2_TARGET_GENERIC_HOSTNAME="apf28"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ How to build it
+ ===============
+@@ -21,10 +22,14 @@ For models A, B, A+ or B+:
  
- # Kernel
-diff --git a/configs/armadeus_apf9328_defconfig b/configs/armadeus_apf9328_defconfig
-index 324a7dc..d83ed71 100644
---- a/configs/armadeus_apf9328_defconfig
-+++ b/configs/armadeus_apf9328_defconfig
-@@ -16,7 +16,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17=y
- # System
- BR2_TARGET_GENERIC_HOSTNAME="apf9328"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+   $ make raspberrypi_defconfig
  
- # Filesystem
-diff --git a/configs/at91sam9260eknf_defconfig b/configs/at91sam9260eknf_defconfig
-index f0d1d74..92bb071 100644
---- a/configs/at91sam9260eknf_defconfig
-+++ b/configs/at91sam9260eknf_defconfig
-@@ -5,9 +5,6 @@ BR2_arm926t=y
- # Linux headers same as kernel, a 3.9 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_9=y
+-And for model 2 B:
++For model 2 B:
  
--# System
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
--
- # Packages
- BR2_PACKAGE_HOST_SAM_BA=y
+   $ make raspberrypi2_defconfig
  
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 839c1a9..3e3281e 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -5,7 +5,6 @@ BR2_ARM_EABIHF=y
++For model 3 B:
++
++  $ make raspberrypi3_defconfig
++
+ Build the rootfs
+ ----------------
  
- # system
- BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
- # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
-diff --git a/configs/calao_tny_a9g20_lpw_defconfig b/configs/calao_tny_a9g20_lpw_defconfig
-index 0f5d723..d9c6ba6 100644
---- a/configs/calao_tny_a9g20_lpw_defconfig
-+++ b/configs/calao_tny_a9g20_lpw_defconfig
-@@ -4,7 +4,6 @@ BR2_arm926t=y
- 
- # system
- BR2_PACKAGE_HOST_SAM_BA=y
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
- 
- # filesystem
- BR2_TARGET_ROOTFS_UBIFS=y
-diff --git a/configs/openblocks_a6_defconfig b/configs/openblocks_a6_defconfig
-index c0d529c..c0522da 100644
---- a/configs/openblocks_a6_defconfig
-+++ b/configs/openblocks_a6_defconfig
-@@ -4,7 +4,6 @@ BR2_arm926t=y
- 
- # system
- BR2_TARGET_GENERIC_HOSTNAME="openblocks-a6"
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- 
- # filesystem
-diff --git a/configs/telit_evk_pro3_defconfig b/configs/telit_evk_pro3_defconfig
-index 195f36a..946c2f0 100644
---- a/configs/telit_evk_pro3_defconfig
-+++ b/configs/telit_evk_pro3_defconfig
-@@ -5,9 +5,6 @@ BR2_arm926t=y
- # Linux headers same as kernel, a 3.9 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_9=y
- 
--# System
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
--
- # Watchdog is armed by the first stage bootloader
- BR2_PACKAGE_BUSYBOX_WATCHDOG=y
- 
+@@ -46,6 +51,7 @@ After building, you should obtain this tree:
+     +-- bcm2708-rpi-b.dtb           [1]
+     +-- bcm2708-rpi-b-plus.dtb      [1]
+     +-- bcm2709-rpi-2-b.dtb         [1]
++    +-- bcm2710-rpi-3-b.dtb         [1]
+     +-- boot.vfat
+     +-- kernel-marked/zImage        [2]
+     +-- rootfs.ext4
+diff --git a/board/raspberrypi3 b/board/raspberrypi3
+new file mode 120000
+index 0000000..fcdafc8
+--- /dev/null
++++ b/board/raspberrypi3
+@@ -0,0 +1 @@
++raspberrypi
+\ No newline at end of file
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+new file mode 100644
+index 0000000..80ce908
+--- /dev/null
++++ b/configs/raspberrypi3_defconfig
+@@ -0,0 +1,36 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_EABIHF=y
++BR2_ARM_FPU_NEON_VFPV4=y
++
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++
++BR2_SYSTEM_DHCP="eth0"
++
++# Linux headers same as kernel, a 4.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="20fe468af4bb40fec0f81753da4b20a8bfc259c9"
++BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
++
++# Build the DTB from the kernel sources
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b"
++
++BR2_PACKAGE_RPI_FIRMWARE=y
++# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
++
++# Required tools to create the SD image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
