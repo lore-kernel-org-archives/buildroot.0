@@ -1,42 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Apr 2016 14:44:09 +0200
-Subject: [Buildroot] [PATCH 1/1] openzwave: new package
-In-Reply-To: <20160425092535.3c606c2a@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 25 Apr 2016 09:25:35 +0200")
-References: <18817_1461334846_571A333E_18817_3477_2_e09544cf-8249-4083-9f10-e131ddeb87e0@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
- <20160423003957.215d1683@free-electrons.com>
- <4485_1461568414_571DC39E_4485_77_1_EEB3FED4859B6C488DDDEC4B2D3DE92B0FC5BBD4@OPEXCLILM23.corporate.adroot.infra.ftgroup>
- <20160425092535.3c606c2a@free-electrons.com>
-Message-ID: <87wpnlq2na.fsf@dell.be.48ers.dk>
+From: Sebastian Frias <sf84@laposte.net>
+Date: Mon, 25 Apr 2016 14:44:56 +0200
+Subject: [Buildroot] [PATCH] linux: use $(LINUX_INSTALL_IMAGE_CMDS)
+ instead of plain 'cp'
+In-Reply-To: <20160425142345.454fc66a@free-electrons.com>
+References: <571E0683.4080306@laposte.net>	<20160425140615.11e86412@free-electrons.com>	<571E0AEE.3010002@laposte.net>
+ <20160425142345.454fc66a@free-electrons.com>
+Message-ID: <571E1148.2070306@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Thomas,
 
-Hi,
- > I am not sure how much strict we (the Buildroot community) want to be
- > regarding such confidentiality footers. After all, it only says "may
- > contain confidential or privileged information", which means that it
- > may also contain public information. I'm not sure what other
- > open-source projects are doing? Apparently at
- > http://lists.infradead.org/pipermail/linux-mtd/2013-December/050573.html,
- > the Linux MTD maintainer rejected a patch due to a confidentiality
- > footer.
+On 04/25/2016 02:23 PM, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 25 Apr 2016 14:17:50 +0200, Sebastian Frias wrote:
+> 
+>>>>  	# Build the kernel.
+>>>>  	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D)
+>>>> $(LINUX_TARGET_NAME)
+>>
+>> This line is also present on LINUX_BUILD_CMDS, any reason not to reuse it?
+>> LINUX_BUILD_CMDS does a couple of more things than what is done here,
+>> like like running LINUX_BUILD_DTB or 'make modules', and maybe that is
+>> not wanted?
+> 
+> We don't want to do "make modules" again, as this will change the root
+> filesystem (surely by reinstalling the same thing, but still), while we
+> are exactly in the process of adding the filesystem to the kernel image.
 
- > Peter, Arnout, Yann, what's your position on this?
+Ok, thanks for the explanation.
 
-IANAL, but personally I find the disclaimers ugly/noisy to look at but
-not bad enough to reject patches for it.
+> 
+>>> I think I would prefer to have:
+>>>
+>>> 	$(call LINUX_INSTALL_IMAGE,$(BINARIES_DIR))
+>>
+>> Ok, just wondering, why? I mean, IIUC, LINUX_INSTALL_IMAGES_CMDS also
+>> handles the DTB copy when APPENDED_DTB is not set, right?
+> 
+> It also copies the DTB to $(BINARIES_DIR), which is useless here. And in
+> general, I don't like too much seeing the _CMDS variables called from
+> other variables.
 
- > (http://www.economist.com/node/18529895 is an interesting article on
- > the matter, probably useful to share with the relevant folks in
- > Orange :-))
+Ok, just one last question because I seem to be missing something here.
 
-Yeah, indeed.
+In your commit 055e6162bba7 ("linux: don't build appended DTB image in
+place and support multiple images") you indicated:
 
--- 
-Venlig hilsen,
-Peter Korsgaard 
+-----
+<snip>
+    Some of the tested configuration:
+
+     - Normal uImage with several DTBs
+
+       BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v7"
+       BR2_LINUX_KERNEL_UIMAGE=y
+       BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x200000"
+       BR2_LINUX_KERNEL_DTS_SUPPORT=y
+       BR2_LINUX_KERNEL_INTREE_DTS_NAME="armada-xp-matrix armada-xp-gp
+armada-370-mirabox"
+
+       Contents of output/images/:
+
+       armada-370-mirabox.dtb  armada-xp-gp.dtb  armada-xp-matrix.dtb
+uImage
+<snip>
+-----
+
+Hence, the DTB images are intended to be copied to output/images/ under
+some circumstances, right?
+How would that work? I mean, there's no call to LINUX_INSTALL_DTB on
+"$(LINUX_DIR)/.stamp_initramfs_rebuilt".
+Or does that happens through LINUX_INSTALL_TARGET_CMDS and
+package/pkg-generic.mk's "$(BUILD_DIR)/%/.stamp_target_installed" target?
+In that case I think I don't understand why we enter in
+"$(LINUX_DIR)/.stamp_initramfs_rebuilt" target, given there's a target
+$(BUILD_DIR)/%/.stamp_images_installed that calls LINUX_INSTALL_IMAGES_CMDS.
+
+Best regards,
+
+Sebastian
