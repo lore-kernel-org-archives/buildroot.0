@@ -1,8 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 25 Apr 2016 14:17:50 +0200
-Subject: [Buildroot] [PATCH 1/1]
-	package/x11r7/xdriver_xf86-video-openchrome: bmp version to 0.4.0
-Message-ID: <1461586670-12208-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 25 Apr 2016 14:18:54 +0200
+Subject: [Buildroot] [PATCH v2 1/1]
+	package/x11r7/xdriver_xf86-video-openchrome: bump version to 0.4.0
+Message-ID: <1461586734-21181-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,6 +11,8 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+v2: fix typo in subject
+
  package/x11r7/xdriver_xf86-video-openchrome/Config.in                 | 2 ++
  .../xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.hash  | 4 ++--
  .../xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk    | 2 +-
