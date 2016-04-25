@@ -1,47 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Apr 2016 21:28:27 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 25 Apr 2016 21:29:20 +0200
 Subject: [Buildroot] [PATCH 1/2] package/openjpeg: bump to version 2.1
 In-Reply-To: <1461597623-14629-2-git-send-email-angelo.compagnucci@gmail.com>
+ (Angelo Compagnucci's message of "Mon, 25 Apr 2016 17:20:22 +0200")
 References: <1461597623-14629-1-git-send-email-angelo.compagnucci@gmail.com>
  <1461597623-14629-2-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20160425212827.07703ac2@free-electrons.com>
+Message-ID: <87potdo5bj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-On Mon, 25 Apr 2016 17:20:22 +0200, Angelo Compagnucci wrote:
+ > This patch bumps openjpeg to version 2.1 and converts the
+ > package to use cmake.
 
-> -ifeq ($(BR2_PACKAGE_LIBPNG),y)
-> -OPENJPEG_DEPENDENCIES += libpng
-> -OPENJPEG_CONF_OPTS += --enable-png
-> -else
-> -OPENJPEG_CONF_OPTS += --disable-png
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_TIFF),y)
-> -OPENJPEG_DEPENDENCIES += tiff
-> -OPENJPEG_CONF_OPTS += --enable-tiff
-> -else
-> -OPENJPEG_CONF_OPTS += --disable-tiff
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_LCMS2),y)
-> -OPENJPEG_DEPENDENCIES += lcms2
-> -OPENJPEG_CONF_OPTS += --enable-lcms2
-> -else
-> -OPENJPEG_CONF_OPTS += --disable-lcms2
-> -endif
+ > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-What about those optional dependencies? They are no longer used?
+A bit more detailed changelog would be good, E.G. the fact that it has
+now moved to github. What happened to all those optional dependencies?
 
-Thanks!
+Looking at the 2.x release notes I see it mentions various API
+changes. Have you verified that the reverse dependencies
+(efl, gst1-plugins-bad, poppler) still build/work with the new version?
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
