@@ -1,65 +1,43 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 25 Apr 2016 23:19:27 +0200
-Subject: [Buildroot] [PATCH 1/2] package/openjpeg: bump to version 2.1
-In-Reply-To: <CA+TH9V=0U+=9HYf44Y_ZvCiX6nc74PF4Mw+q8UmKsoP8pXwanA@mail.gmail.com>
-References: <1461597623-14629-1-git-send-email-angelo.compagnucci@gmail.com>
- <1461597623-14629-2-git-send-email-angelo.compagnucci@gmail.com>
- <87potdo5bj.fsf@dell.be.48ers.dk>
- <CA+TH9V=0U+=9HYf44Y_ZvCiX6nc74PF4Mw+q8UmKsoP8pXwanA@mail.gmail.com>
-Message-ID: <CA+TH9Vna9H0n1PL45-vgO7DPdjGwJUVEELTRaYU9mnd-qEaxbw@mail.gmail.com>
+From: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+Date: Mon, 25 Apr 2016 17:20:32 -0400 (EDT)
+Subject: [Buildroot] [PATCH v1 4/4] ring-daemon: new package
+In-Reply-To: <20160425212434.10734123@free-electrons.com>
+References: <1461358628-9352-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
+ <1461358628-9352-5-git-send-email-patrick.keroulas@savoirfairelinux.com>
+ <20160423001924.38960007@free-electrons.com>
+ <1541125393.275698.1461608322652.JavaMail.zimbra@savoirfairelinux.com>
+ <20160425212434.10734123@free-electrons.com>
+Message-ID: <1359905598.420554.1461619232368.JavaMail.zimbra@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
 
-2016-04-25 22:06 GMT+02:00 Angelo Compagnucci <angelo.compagnucci@gmail.com>:
-> Dear Peter Korsgaard,
->
-> 2016-04-25 21:29 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
->>>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
->>
->>  > This patch bumps openjpeg to version 2.1 and converts the
->>  > package to use cmake.
->>
->>  > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->>
->> A bit more detailed changelog would be good, E.G. the fact that it has
->> now moved to github. What happened to all those optional dependencies?
->>
->> Looking at the 2.x release notes I see it mentions various API
->> changes. Have you verified that the reverse dependencies
->> (efl, gst1-plugins-bad, poppler) still build/work with the new version?
->
-> Mmm, intresting observation, i'll try in a moment!
+On Apr 25, 2016, at 3:24 PM, Thomas Petazzoni thomas.petazzoni at free-electrons.com wrote:
+ 
+> On Mon, 25 Apr 2016 14:18:42 -0400 (EDT), Patrick Keroulas wrote:
+> 
+>> Concerning the D-Bus daemon, Ring relies on a session bus but D-Bus
+>> initscript starts a daemon for system bus only. I can change D-Bus
+>> initscript instead of starting it from our Ring initscript. In this
+>> case, in which package should I add the patch? ring-daemon or dbus?
+> 
+> I *think* it should be handled in the DBus package itself, though I am
+> not entirely sure. As I understand it, a "session bus" is typically
+> associated to one particular user when this user logs into the system,
+> right? How does that work for ring? Does it use a session bus running
+> as the "ring" user? Aren't session buses normally used for "real" users?
 
-The only necessary changing is:
+That's right. Ring is mainly intended to be used by real users logged
+on a desktop or a mobile platform. However, we'd like to port it to 
+embedded platforms to cover a larger usage (m2m, video capture, door 
+bell...). And this is why a fake 'ring' user has to be created and the
+D-Bus session address has to be exported.
 
-POPPLER_CONF_OPTS += --enable-libopenjpeg=openjpeg1
-to
-POPPLER_CONF_OPTS += --enable-libopenjpeg
+Is it possible to patch a package (dbus) "from" another one (ring-daemon)?
 
-to eneble openjpeg version autodetection.
+Regards,
 
-I'll send a new series shortly.
-
-Sincerely, Angelo
-
->
-> Sincerely, Angelo
->
->>
->> --
->> Bye, Peter Korsgaard
->
->
->
-> --
-> Profile: http://it.linkedin.com/in/compagnucciangelo
-
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Patrick
