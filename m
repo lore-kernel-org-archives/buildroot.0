@@ -1,154 +1,53 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 25 Apr 2016 21:55:32 +0200
-Subject: [Buildroot] [PATCH 1/1] domoticz: new package
-In-Reply-To: <30737_1461336609_571A3A21_30737_6929_1_000623e0-df53-498e-8145-247406707520@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
-References: <30737_1461336609_571A3A21_30737_6929_1_000623e0-df53-498e-8145-247406707520@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
-Message-ID: <CAHXCMMKmyBxevkK-ZDHaquuxLFXQfxEHoJ8vBu8kjJ97Dbfxug@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 25 Apr 2016 21:55:55 +0200
+Subject: [Buildroot] [PATCH 1/1] Preliminary support for Raspberry Pi 3
+	with symlink
+In-Reply-To: <87lh41o56p.fsf@dell.be.48ers.dk>
+References: <1461442370-22393-1-git-send-email-ubaldo@eja.it>
+ <871t5triwb.fsf@dell.be.48ers.dk>
+ <81b71ac5323b1793405c3192b6ac5264@eja.it>
+ <20160425211936.73f44f62@gmx.net> <87lh41o56p.fsf@dell.be.48ers.dk>
+Message-ID: <20160425215555.49b860b7@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Hello Peter,
 
-On Fri, Apr 22, 2016 at 4:49 PM,  <fabrice.fontaine@orange.com> wrote:
-> Domoticz is a Home Automation System that lets you monitor andi
-s/andi/and/
+On Mon, 25 Apr 2016 21:32:14 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> configure various devices like: Lights, Switches, various
-> sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
-> and much more. Notifications/Alerts can be sent to any mobile device.
->
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> ---
->  package/Config.in            |  1 +
->  package/domoticz/Config.in   | 39 +++++++++++++++++++++++++++++++++++++++
->  package/domoticz/domoticz.mk | 33 +++++++++++++++++++++++++++++++++
->  3 files changed, 73 insertions(+)
->  create mode 100644 package/domoticz/Config.in
->  create mode 100644 package/domoticz/domoticz.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index cf697ab..15ed544 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1319,6 +1319,7 @@ menu "Miscellaneous"
->         source "package/bc/Config.in"
->         source "package/clamav/Config.in"
->         source "package/collectd/Config.in"
-> +       source "package/domoticz/Config.in"
->         source "package/empty/Config.in"
->         source "package/gnuradio/Config.in"
->         source "package/googlefontdirectory/Config.in"
-> diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-> new file mode 100644
-> index 0000000..085b260
-> --- /dev/null
-> +++ b/package/domoticz/Config.in
-> @@ -0,0 +1,39 @@
-> +config BR2_PACKAGE_DOMOTICZ
-> +       bool "domoticz"
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on BR2_INSTALL_LIBSTDCPP
-> +       depends on BR2_USE_WCHAR
-> +       depends on BR2_PACKAGE_LUA_5_2
-This certainly needs some comments.
-Why lua-5.2 specifically? it is not working with lua-5.3?
-The cmake code search for Lua>=5.2 [1].
+> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+> 
+> Hi,
+> 
+>  > Same here on RPi3, but with the suggested fix from Oscar Gomez Fuente
+>  > [1], adding 'dtoverlay=pi3-disable-bt' to config.txt I get working
+>  > boot messages and login on HDMI and serial console...
+> 
+> Just to confirm, neither serial or HDMI works without the dtoverlay
+> line?
 
-> +       select BR2_PACKAGE_BOOST
-Boost dep. also pulls the BR2_PACKAGE_BOOST_ARCH_SUPPORTS dependency.
+Without the overlay I get boot messages on HDMI, but no login, last messages
+are from USB keyboard/mouse and I can get more messages removing/adding
+keyboard/mouse...., no messages on serial console (but 'ttyS0: 29 input overrun(s)
+message on HDMI output)
 
-> +       select BR2_PACKAGE_BOOST_DATE_TIME
-> +       select BR2_PACKAGE_BOOST_SYSTEM
-> +       select BR2_PACKAGE_BOOST_THREAD
-> +       select BR2_PACKAGE_LIBCURL
-> +       select BR2_PACKAGE_MOSQUITTO
-Missing deps on BR2_USE_MMU and !BR2_STATIC_LIBS from mosquitto
+From linux-3de232825c9ba5989522b8691eb6ac5df6619458/arch/arm/boot/dts/overlays/pi3-disable-bt-overlay.dts:
 
-> +       select BR2_PACKAGE_OPENSSL
-> +       select BR2_PACKAGE_SQLITE
-> +       select BR2_PACKAGE_ZLIB
-> +       help
-> +         Domoticz is a Home Automation System that lets you monitor andi
-> +         configure various devices like: Lights, Switches, various
-> +         sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
-> +         and much more. Notifications/Alerts can be sent to any mobile device.
-> +
-> +         http://domoticz.com
-> +
-> +comment "domoticz needs lua 5.2 and a toolchain w/ C++, threads, wchar"
-> +       depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +               !BR2_USE_WCHAR || !BR2_PACKAGE_LUA_5_2
-> +
-> +if BR2_PACKAGE_DOMOTICZ
-> +
-> +config BR2_PACKAGE_DOMOTICZ_ZWAVE_SUPPORT
-> +       bool "domoticz zwave support"
-> +       depends on BR2_PACKAGE_OPENZWAVE
-We usually do select in this case. If someone has openzwave and
-domoticz enabled in his/her configuration, he/she most likely want
-zwave support in domoticz.
+  Disable Bluetooth and restore UART0/ttyAMA0 over GPIOs 14 & 15.
 
-> +       help
-> +         Enable ZWave support through openzwave library.
-> +
-> +comment "domoticz zwave support depends on openzwave library"
-> +       depends on !BR2_PACKAGE_OPENZWAVE
-> +
-> +endif
-> diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-> new file mode 100644
-> index 0000000..3a427c0
-> --- /dev/null
-> +++ b/package/domoticz/domoticz.mk
-> @@ -0,0 +1,33 @@
-> +################################################################################
-> +#
-> +# domoticz
-> +#
-> +################################################################################
-> +
-> +DOMOTICZ_VERSION = 3.4834
-> +DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
-> +DOMOTICZ_LICENSE = GPLv3
-> +DOMOTICZ_LICENSE_FILES = License.txt
-> +DOMOTICZ_DEPENDENCIES = boost host-pkgconf libcurl lua mosquitto openssl \
-> +        sqlite zlib
-> +
-> +# Do not use static version of boost
-> +DOMOTICZ_CONF_OPTS = -DUSE_STATIC_BOOST=no
-This could break on static-lib only build...
-But fortunately, thanks to mosquitto, domoticz won't be available in this case.
-Side note: why forcibly disable linking with static boost libs?
-footprint issues? runtime issues?
+So I think the overlay changes the pin muxing (and the orignal config seems to break
+the console, maybe flow control deadlock with the bluetooth chip?)...
 
-> +
-> +# Do not use any built-in libraries which are enabled by default for lua,
-> +# sqlite and mqtt
-> +DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_LUA=no
-> +DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_SQLITE=no
-> +DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_MQTT=no
-> +
-> +ifeq ($(BR2_PACKAGE_LIBUSB),y)
-> +DOMOTICZ_DEPENDENCIES += libusb
-> +endif
-> +
-> +# ZWave support depends on open-zwave.
-> +ifeq ($(BR2_PACKAGE_DOMOTICZ_ZWAVE_SUPPORT),y)
-> +DOMOTICZ_DEPENDENCIES += openzwave
-> +DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=no
-> +endif
-> +
-> +$(eval $(cmake-package))
-> --
-> 1.9.1
->
+> 
+> I see various references to a clocking issue with the "new" serial port,
+> perhaps that is related?
+> 
 
-[1] https://github.com/domoticz/domoticz/blob/master/CMakeLists.txt#L13
+This was with old kernel/firmware but adding 'core_freq=250' to config.txt
+fixed it...
 
-Regards,
-
--- 
-Samuel
+Regads,
+Peter
