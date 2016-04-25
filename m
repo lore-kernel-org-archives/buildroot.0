@@ -1,22 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Apr 2016 21:21:57 +0200
-Subject: [Buildroot] [PATCH v2 1/1]
-	package/x11r7/xdriver_xf86-video-openchrome: bump version to 0.4.0
-In-Reply-To: <1461586734-21181-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Mon, 25 Apr 2016 14:18:54 +0200")
-References: <1461586734-21181-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87y481o5nu.fsf@dell.be.48ers.dk>
+Date: Mon, 25 Apr 2016 21:22:24 +0200
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.151
+In-Reply-To: <1461595295-28519-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Mon, 25 Apr 2016 15:41:35 +0100")
+References: <1461595295-28519-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87twipo5n3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- > v2: fix typo in subject
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed, thanks.
 
