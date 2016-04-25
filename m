@@ -1,55 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Apr 2016 23:00:04 +0200
-Subject: [Buildroot] [PATCH] network-manager: bump version to 1.2.0
-In-Reply-To: <571A2F7C.2000707@zacarias.com.ar> (Gustavo Zacarias's message of
- "Fri, 22 Apr 2016 11:04:44 -0300")
-References: <1461236721-60129-1-git-send-email-Vincent.Riera@imgtec.com>
- <571A2F7C.2000707@zacarias.com.ar>
-Message-ID: <87d1pdo14b.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Apr 2016 23:00:09 +0200
+Subject: [Buildroot] [PATCH 1/5] toolchain-external: blackfin: install
+ FDPIC libraries also to staging
+In-Reply-To: <1455304826-10557-2-git-send-email-patrickdepinguin@gmail.com>
+References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
+ <1455304826-10557-2-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20160425230009.1b2bff10@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Hello,
 
-Hi Vicente,
+On Fri, 12 Feb 2016 20:20:22 +0100, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> For external Blackfin toolchains with BR2_BFIN_INSTALL_FDPIC_SHARED set,
+> the FDPIC shared libraries are currently only copied to the target
+> directory, not to staging.
+> 
+> For debugging purposes, an unstripped copy in staging is necessary.
+> Moreover, this change will simplify a subsequent change that lines up the
+> location of shared libraries between target and staging directories.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> ---
+>  toolchain/toolchain-external/toolchain-external.mk | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
 
- > On 21/04/16 08:05, Vicente Olivert Riera wrote:
- >> -NETWORK_MANAGER_VERSION_MAJOR = 1.0
- >> -NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).12
- >> +NETWORK_MANAGER_VERSION_MAJOR = 1.2
- >> +NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
- >> NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- >> -NETWORK_MANAGER_SITE =
- >> http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- >> +NETWORK_MANAGER_SITE = http://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- >> NETWORK_MANAGER_INSTALL_STAGING = YES
- >> NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
+Applied to master, thanks.
 
- > Hi Vicente.
- > There are some dependency differences with the new series.
- > For example dbus-glib is no longer mandatory, it's optional for the
- > libnm-glib legacy library.
- > WiFi support can now be disabled (default=y, probably not that
- > interesting as an option, though it gets rids of the wireless-tools
- > dependency).
- > Qt support was remove so --disable-qt can be removed.
- > There's improved systemd support that requires systemd libraries being
- > present at build time as well (journal support).
- > Missing functionality that could also be accounted for (irrespective
- > of the bump since it was present in 1.0.x as well) is connection
- > checking via libsoup.
- > nm-cli and readline are also optional now.
-
- > I'm sure there are more to look at ;)
-
-Will you rework the patch after taking Gustavoz' feedback into
-consideration? In the mean time I have marked the patch as changes
-requested.
-
-Thanks!
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
