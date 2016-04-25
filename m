@@ -1,104 +1,166 @@
-From: Julian Scheel <julian@jusst.de>
-Date: Mon, 25 Apr 2016 10:09:29 +0200
-Subject: [Buildroot] [PATCHv2] package/cryptopp: Backport gcc compatibility
-	patch
-Message-ID: <1461571769-29772-1-git-send-email-julian@jusst.de>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 25 Apr 2016 10:09:18 +0200
+Subject: [Buildroot] [PATCH] ficl: new package
+Message-ID: <1461571758-19709-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Import patch from cryptopp upstream which fixes the gcc version checks for
-using attribute deprecated with messages. Fixes build with host gcc versions <
-4.5.
-
-Signed-off-by: Julian Scheel <julian@jusst.de>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
-Changes in v2:
-- Add upstream commit url to patch commit msg
-- Add signed-off-by to patch commit msg
----
- ...ixed-GCC-version-for-deprecated-attribute.patch | 71 ++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100644 package/cryptopp/0001-Fixed-GCC-version-for-deprecated-attribute.patch
+ package/Config.in                    |  1 +
+ package/ficl/0001-fix-Makefile.patch | 45 +++++++++++++++++++++++++++++++++
+ package/ficl/Config.in               |  9 +++++++
+ package/ficl/ficl.hash               |  2 ++
+ package/ficl/ficl.mk                 | 49 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 106 insertions(+)
+ create mode 100644 package/ficl/0001-fix-Makefile.patch
+ create mode 100644 package/ficl/Config.in
+ create mode 100644 package/ficl/ficl.hash
+ create mode 100644 package/ficl/ficl.mk
 
-diff --git a/package/cryptopp/0001-Fixed-GCC-version-for-deprecated-attribute.patch b/package/cryptopp/0001-Fixed-GCC-version-for-deprecated-attribute.patch
+diff --git a/package/Config.in b/package/Config.in
+index bd6b4b5..a782423 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -493,6 +493,7 @@ menu "Erlang libraries/modules"
+ 	source "package/erlang-p1-zlib/Config.in"
+ endmenu
+ endif
++	source "package/ficl/Config.in"
+ 	source "package/gauche/Config.in"
+ 	source "package/guile/Config.in"
+ 	source "package/haserl/Config.in"
+diff --git a/package/ficl/0001-fix-Makefile.patch b/package/ficl/0001-fix-Makefile.patch
 new file mode 100644
-index 0000000..fc9674e
+index 0000000..94cda8a
 --- /dev/null
-+++ b/package/cryptopp/0001-Fixed-GCC-version-for-deprecated-attribute.patch
-@@ -0,0 +1,71 @@
-+From f707b9ef1688d4429ca6239cf2dc236440974681 Mon Sep 17 00:00:00 2001
-+From: Jeffrey Walton <noloader@gmail.com>
-+Date: Sun, 27 Dec 2015 23:44:36 -0500
-+Subject: [PATCH] Fixed GCC version for deprecated attribute
++++ b/package/ficl/0001-fix-Makefile.patch
+@@ -0,0 +1,45 @@
++fix Makefile
 +
-+Taken from cryptopp upstream git:
-+https://github.com/weidai11/cryptopp/commit/f707b9ef1688d4429ca6239cf2dc236440974681
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 +
-+Signed-off-by: Julian Scheel <julian@jusst.de>
-+
-+---
-+ default.h  | 8 ++++----
-+ eccrypto.h | 2 +-
-+ 2 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/default.h b/default.h
-+index 3dfbe7d..00ec664 100644
-+--- a/default.h
-++++ b/default.h
-+@@ -48,7 +48,7 @@ private:
-+ 	SecByteBlock m_passphrase;
-+ 	CBC_Mode<DefaultBlockCipher>::Encryption m_cipher;
++diff --git a/Makefile b/Makefile
++index 976d00a..7f73c44 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
++ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
 + 
-+-#if (CRYPTOPP_GCC_VERSION >= 40300) || (CRYPTOPP_CLANG_VERSION >= 20800)
-++#if (CRYPTOPP_GCC_VERSION >= 40500) || (CRYPTOPP_CLANG_VERSION >= 20800)
-+ } __attribute__((deprecated ("DefaultEncryptor will be changing in the near future because the algorithms are no longer secure")));
-+ #elif (CRYPTOPP_GCC_VERSION)
-+ } __attribute__((deprecated));
-+@@ -101,7 +101,7 @@ private:
-+ 	member_ptr<FilterWithBufferedInput> m_decryptor;
-+ 	bool m_throwException;
++-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
+++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
++ 	$(CC) $(CFLAGS) $(LDFLAGS) main.o -o main -L. -lficl -lm
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
 + 
-+-#if (CRYPTOPP_GCC_VERSION >= 40300) || (CRYPTOPP_CLANG_VERSION >= 20800)
-++#if (CRYPTOPP_GCC_VERSION >= 40500) || (CRYPTOPP_CLANG_VERSION >= 20800)
-+ } __attribute__((deprecated ("DefaultDecryptor will be changing in the near future because the algorithms are no longer secure")));
-+ #elif (CRYPTOPP_GCC_VERSION)
-+ } __attribute__((deprecated));
-+@@ -139,7 +139,7 @@ protected:
-+ private:
-+ 	member_ptr<DefaultMAC> m_mac;
++diff --git a/Makefile.ansi b/Makefile.ansi
++index e510fcd..170e6eb 100644
++--- a/Makefile.ansi
+++++ b/Makefile.ansi
++@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
++ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
 + 
-+-#if (CRYPTOPP_GCC_VERSION >= 40300) || (CRYPTOPP_CLANG_VERSION >= 20800)
-++#if (CRYPTOPP_GCC_VERSION >= 40500) || (CRYPTOPP_CLANG_VERSION >= 20800)
-+ } __attribute__((deprecated ("DefaultEncryptorWithMAC will be changing in the near future because the algorithms are no longer secure")));
-+ #elif (CRYPTOPP_GCC_VERSION)
-+ } __attribute__((deprecated));
-+@@ -188,7 +188,7 @@ private:
-+ 	HashVerifier *m_hashVerifier;
-+ 	bool m_throwException;
++-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
+++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
++ 	$(CC) main.o -o main -L. -lficl -lm
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
 + 
-+-#if (CRYPTOPP_GCC_VERSION >= 40300) || (CRYPTOPP_CLANG_VERSION >= 20800)
-++#if (CRYPTOPP_GCC_VERSION >= 40500) || (CRYPTOPP_CLANG_VERSION >= 20800)
-+ } __attribute__((deprecated ("DefaultDecryptorWithMAC will be changing in the near future because the algorithms are no longer secure")));
-+ #elif (CRYPTOPP_GCC_VERSION)
-+ } __attribute__((deprecated));
-+diff --git a/eccrypto.h b/eccrypto.h
-+index 94a5d6c..7beaccc 100644
-+--- a/eccrypto.h
-++++ b/eccrypto.h
-+@@ -635,7 +635,7 @@ struct ECIES
-+ 	virtual ~ECIES() {}
-+ #endif
-+ 	
-+-#if (CRYPTOPP_GCC_VERSION >= 40300) || (CRYPTOPP_CLANG_VERSION >= 20800)
-++#if (CRYPTOPP_GCC_VERSION >= 40500) || (CRYPTOPP_CLANG_VERSION >= 20800)
-+ } __attribute__((deprecated ("ECIES will be changing in the near future due to (1) an implementation bug and (2) an interop issue")));
-+ #elif (CRYPTOPP_GCC_VERSION)
-+ } __attribute__((deprecated));
++diff --git a/Makefile.linux b/Makefile.linux
++index d447e7e..7f2cdfe 100644
++--- a/Makefile.linux
+++++ b/Makefile.linux
++@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
++ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
++ 
++-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
+++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
++ 	$(CC) main.o -o main -L. -lficl -lm
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
++ 
 +-- 
-+2.8.0
 +
+diff --git a/package/ficl/Config.in b/package/ficl/Config.in
+new file mode 100644
+index 0000000..3445a64
+--- /dev/null
++++ b/package/ficl/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_FICL
++	bool "ficl"
++	help
++	  Ficl is a programming language interpreter designed to be embedded
++	  into other systems as a command, macro, and development
++	  prototyping language.
++	  Ficl is an acronym for "Forth Inspired Command Language".
++
++	  http://ficl.sourceforge.net
+diff --git a/package/ficl/ficl.hash b/package/ficl/ficl.hash
+new file mode 100644
+index 0000000..4bfbbd0
+--- /dev/null
++++ b/package/ficl/ficl.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  4daf74f3d3d6f8b86ea7cb47bc24931d50b4809b50ba34ca32e0ca1e972bd3a3  ficl-4.1.0.tar.gz
+diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
+new file mode 100644
+index 0000000..142b083
+--- /dev/null
++++ b/package/ficl/ficl.mk
+@@ -0,0 +1,49 @@
++################################################################################
++#
++# ficl
++#
++################################################################################
++
++FICL_VERSION = 4.1.0
++FICL_SITE = http://downloads.sourceforge.net/project/ficl/ficl-all/ficl4.1
++FICL_LICENSE = BSD-2c
++FICL_LICENSE_FILES = ReadMe.txt
++FICL_INSTALL_STAGING = YES
++
++ifeq ($(BR2_STATIC_LIBS),y)
++FICL_EXE = ficl
++define FICL_INSTALL_LIB_STAGING
++	$(INSTALL) -D -m 0644 $(@D)/libficl.a $(STAGING_DIR)/usr/lib/libficl.a
++endef
++else
++FICL_EXE = main
++define FICL_INSTALL_LIB_STAGING
++	$(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION) $(STAGING_DIR)/usr/lib/libficl.so.$(FICL_VERSION)
++	ln -sf libficl.so.$(FICL_VERSION) $(STAGING_DIR)/usr/lib/libficl.so.4
++	ln -sf libficl.so.$(FICL_VERSION) $(STAGING_DIR)/usr/lib/libficl.so
++endef
++define FICL_INSTALL_LIB_TARGET
++	$(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION) $(TARGET_DIR)/usr/lib/libficl.so.$(FICL_VERSION)
++	ln -sf libficl.so.$(FICL_VERSION) $(TARGET_DIR)/usr/lib/libficl.so.4
++	ln -sf libficl.so.$(FICL_VERSION) $(TARGET_DIR)/usr/lib/libficl.so
++endef
++endif
++
++define FICL_BUILD_CMDS
++	$(MAKE) -C $(@D) -f Makefile.linux $(TARGET_CONFIGURE_OPTS) \
++	CPPFLAGS="$(TARGET_CPPFLAGS) -I. -Dlinux" $(FICL_EXE)
++endef
++
++define FICL_INSTALL_STAGING_CMDS
++	$(FICL_INSTALL_LIB_STAGING)
++	$(INSTALL) -D -m 0644 $(@D)/ficl.h $(STAGING_DIR)/usr/include/ficl.h
++	$(INSTALL) -D -m 0644 $(@D)/ficllocal.h $(STAGING_DIR)/usr/include/ficllocal.h
++	$(INSTALL) -D -m 0644 $(@D)/ficlplatform/unix.h $(STAGING_DIR)/usr/include/ficlplatform/unix.h
++endef
++
++define FICL_INSTALL_TARGET_CMDS
++	$(FICL_INSTALL_LIB_TARGET)
++	$(INSTALL) -D -m 0755 $(@D)/$(FICL_EXE) $(TARGET_DIR)/usr/bin/ficl
++endef
++
++$(eval $(generic-package))
 -- 
-2.8.0
+2.5.0
