@@ -1,45 +1,46 @@
-From: =?utf-8?B?SsOpcsO0bWU=?= Oufella <jerome.oufella@savoirfairelinux.com>
-Date: Mon, 25 Apr 2016 10:33:35 -0400 (EDT)
-Subject: [Buildroot] [RESEND]  [PATCH v1 4/4] ring-daemon: new package
-Message-ID: <1647993335.99878.1461594815956.JavaMail.zimbra@savoirfairelinux.com>
+From: Ubaldo Porcheddu <ubaldo@eja.it>
+Date: Mon, 25 Apr 2016 15:34:40 +0100
+Subject: [Buildroot] [PATCH 1/1] Preliminary support for Raspberry Pi 3
+	with symlink
+In-Reply-To: <20160425161610.4e5cbe87@armant.core.local.os.greenbone.net>
+References: <1461442370-22393-1-git-send-email-ubaldo@eja.it>
+ <871t5triwb.fsf@dell.be.48ers.dk> <81b71ac5323b1793405c3192b6ac5264@eja.it>
+ <20160425161610.4e5cbe87@armant.core.local.os.greenbone.net>
+Message-ID: <7c641e674768b186ec37e275adbd41da@eja.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oops, I mistyped the list address. My bad.
---
-Hello Thomas,
+Hi Ben,
 
-I'm bumping that thread to ring at lists.savoirfairelinux.net for
-convenience.
-
-Thomas Petazzoni thomas.petazzoni at free-electrons.com wrote:
-(ref http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/146902)
-
-> Hello,
+Il 2016-04-25 15:16 Beno?t Allard ha scritto:
+> On Mon, 25 Apr 2016 15:06:54 +0100
+> Ubaldo Porcheddu <ubaldo@eja.it> wrote:
 > 
-> Thanks again for this contribution. As a side note, we tried Ring at
-> work as a replacement for Google Hangouts, but unfortunately, the
-> quality level was really bad as soon as more than 3/4 persons joined
-> the call. Since I know Savoir Faire Linux is behind the Ring project,
-> do you know if this is something that might be improved in the future?
+>> Hi Peter,
+>> 
+>> Il 2016-04-25 13:07 Peter Korsgaard ha scritto:
+>> >>>>>> "Ubaldo" == Ubaldo Porcheddu <ubaldo@eja.it> writes:
+>> >
+>> >  > Signed-off-by: Ubaldo Porcheddu <ubaldo@eja.it>
+>> >
+>> > Committed after expanding the commit message, thanks.
+>> >
+>> > I've also committed a change to sync the kernel version with what is
+>> > used for rpi1/2 (E.G. the rpi-4.4.y branch). Care to verify that
+>> > everything works correctly after that?
+>> 
+>> I just tested the new kernel version but it doesn't give me the login
+>> prompt, the kernel seems to be booting fine as it can recognize my
+>> keyboard but it doesn't accept any input.
+>> 
+> 
+> I had something similar, removed the 'console=ttyAMA0...' from the
+> cmdline.txt file, and it booted through. Mine was not able to recognize
+> my keyboard, but with dropbear and an extra user I was able to login.
 
-When using Ring in a n-way conferencing setup, the peer
-initiating the conference bridge acts as a network and encoding
-hub for the rest of the audience. This means that if the
-conference hub either reaches bandwidth or cpu limits, the global
-call quality will inevitably be degraded severely, that would be
-a first point to verify.
-
-You may also be impacted by the ambient noise as I don't think
-Ring performs prioritization of the talker (correct me if I'm
-wrong) and the echo canceller may not be super efficient at
-times.
-
-In any cases, any input from you that may allow us to pinpoint and
-avoid the quality drop will be of interest.
-
-Cheers,
-Jerome
+after removing the extra console declaration I can also get the login, 
+my keyboard get recognized by the kernel but it doesn't work properly, 
+seems to be adding extra characters after any key press.
