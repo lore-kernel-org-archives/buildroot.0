@@ -1,65 +1,142 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 25 Apr 2016 22:18:20 +0200
-Subject: [Buildroot] [PATCH 1/2] package/openjpeg: bump to version 2.1
-In-Reply-To: <CA+TH9Vkf-=t2iS7ep1J3ejZ+LREVprQ+AN6wNn39MDAYVV58uw@mail.gmail.com>
-References: <1461597623-14629-1-git-send-email-angelo.compagnucci@gmail.com>
- <1461597623-14629-2-git-send-email-angelo.compagnucci@gmail.com>
- <20160425212827.07703ac2@free-electrons.com>
- <CA+TH9Vkf-=t2iS7ep1J3ejZ+LREVprQ+AN6wNn39MDAYVV58uw@mail.gmail.com>
-Message-ID: <CAHXCMMJVXtfZjy153Q82+VyrnOF3nT5ZdAMNsK2zxgdQX3X+3g@mail.gmail.com>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Mon, 25 Apr 2016 22:20:01 +0200
+Subject: [Buildroot] Fwd:  [RPi3] Trying to test WiFi On Raspberr Pi 3
+In-Reply-To: <CALtfCQb5w8ygEpiqE=_RVOzF7FpC62uF=TK7Fau7+xZ3MZMo-g@mail.gmail.com>
+References: <CALtfCQYZXSFWSv8m5y+BkwKx-iOPrgYpZypvmtk_i2MLZebeiw@mail.gmail.com>
+ <CALtfCQZ9GAfL3qYuJK97XAETVhE4PNnr+R6aL-2JBC6UrRTn1w@mail.gmail.com>
+ <5719EB20.6090107@armadeus.com>
+ <CALtfCQb5w8ygEpiqE=_RVOzF7FpC62uF=TK7Fau7+xZ3MZMo-g@mail.gmail.com>
+Message-ID: <CALtfCQaW+aMMoXsm=Fc9r9rPbzsEwYLRbk1DvjN5wVsfzTOMfA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 25, 2016 at 10:05 PM, Angelo Compagnucci
-<angelo.compagnucci@gmail.com> wrote:
-> Dear Thomas Petazzoni,
+Hi,
+
+I've just solved the problem. First of all, you have to download the
+firmware from this git repository: https://github.com/OpenELEC/wlan-firmware
+
+Then you have to select the following packages on buildroot:  crda,
+iw,  wireless-regdb and wpa_supplicant.
+
+You have to modify the /etc/network/interfaces in the post-build.sh script:
+-----
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+        pre-up /etc/network/nfs_check
+        wait-delay 15
+
+auto wlan0
+iface wlan0 inet dhcp
+        pre-up wpa_supplicant -B -Dwext -iwlan0 -c
+/etc/wpa_supplicant/wpa_supplicant.conf
+        post-down killall -q wpa_supplicant
+
+iface default inet dhcp
+-----
+
+And you have to add this other file in
+/etc/wpa_supplicant/wpa_supplicant.conf, with SSDI and XXXXXXXXX...
+correctly (for example in the post-build.sh script):
+-----
+network={
+        ssid="SSID"
+        scan_ssid=1
+        proto=RSN WPA
+        key_mgmt=WPA-PSK
+        pairwise=CCMP TKIP
+        group=CCMP TKIP
+        auth_alg=OPEN
+        priority=0
+        id_str="name"
+        #psk="xxxxxxxxxx"
+        psk=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxx
+}
+
+And these changes works fine.
+
+So It will be very useful to add the files brcmfmac43430-sdio.bin and
+brcmfmac43430-sdio.txt to the linux-firmware package.
+
+Best regards.
+-----
+
+Oscar Gomez Fuente
+
+
+On 22 April 2016 at 11:13, S?bastien Szymanski <
+sebastien.szymanski@armadeus.com> wrote:
+
+> Hi,
 >
-> 2016-04-25 21:28 GMT+02:00 Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com>:
->> Hello,
->>
->> On Mon, 25 Apr 2016 17:20:22 +0200, Angelo Compagnucci wrote:
->>
->>> -ifeq ($(BR2_PACKAGE_LIBPNG),y)
->>> -OPENJPEG_DEPENDENCIES += libpng
->>> -OPENJPEG_CONF_OPTS += --enable-png
->>> -else
->>> -OPENJPEG_CONF_OPTS += --disable-png
->>> -endif
->>> -
->>> -ifeq ($(BR2_PACKAGE_TIFF),y)
->>> -OPENJPEG_DEPENDENCIES += tiff
->>> -OPENJPEG_CONF_OPTS += --enable-tiff
->>> -else
->>> -OPENJPEG_CONF_OPTS += --disable-tiff
->>> -endif
->>> -
->>> -ifeq ($(BR2_PACKAGE_LCMS2),y)
->>> -OPENJPEG_DEPENDENCIES += lcms2
->>> -OPENJPEG_CONF_OPTS += --enable-lcms2
->>> -else
->>> -OPENJPEG_CONF_OPTS += --disable-lcms2
->>> -endif
->>
->> What about those optional dependencies? They are no longer used?
+> On 04/22/2016 09:57 AM, Oscar Gomez Fuente wrote:
+> > Hi everyone,
+> >
+> > I've got updates in my WiFi issue. I had to install the following
+> package:
+> > crda, iw & wireless-regdb, and now I've got another log kernel:
+> >
+> > [    5.314552] bcm2835-wdt 3f100000.watchdog: Broadcom BCM2835 watchdog
+> > timer
+> > [    5.402552] cfg80211: Calling CRDA to update world regulatory domain
+> > [    5.531269] brcmfmac: brcmf_sdio_drivestrengthinit: No SDIO Drive
+> > strength init done for chip 43430 rev 1 pmurev 24
+> > [    5.542704] usbcore: registered new interface driver brcmfmac
+> > [    5.646701] cfg80211: World regulatory domain updated:
+> > [    5.651915] cfg80211:  DFS Master region: unset
+> > [    5.656271] cfg80211:   (start_freq - end_freq @ bandwidth),
+> > (max_antenna_gain, max_eirp), (dfs_cac_time)
+> > [    5.666112] cfg80211:   (2402000 KHz - 2472000 KHz @ 40000 KHz), (N/A,
+> > 2000 mBm), (N/A)
+> > [    5.674157] cfg80211:   (2457000 KHz - 2482000 KHz @ 20000 KHz, 92000
+> > KHz AUTO), (N/A, 2000 mBm), (N/A)
+> > [    5.683636] cfg80211:   (2474000 KHz - 2494000 KHz @ 20000 KHz), (N/A,
+> > 2000 mBm), (N/A)
+> > [    5.691672] cfg80211:   (5170000 KHz - 5250000 KHz @ 80000 KHz, 160000
+> > KHz AUTO), (N/A, 2000 mBm), (N/A)
+> > [    5.701197] cfg80211:   (5250000 KHz - 5330000 KHz @ 80000 KHz, 160000
+> > KHz AUTO), (N/A, 2000 mBm), (0 s)
+> > [    5.710708] cfg80211:   (5490000 KHz - 5730000 KHz @ 160000 KHz),
+> (N/A,
+> > 2000 mBm), (0 s)
+> > [    5.718823] cfg80211:   (5735000 KHz - 5835000 KHz @ 80000 KHz), (N/A,
+> > 2000 mBm), (N/A)
+> > [    5.726882] cfg80211:   (57240000 KHz - 63720000 KHz @ 2160000 KHz),
+> > (N/A, 0 mBm), (N/A)
+> > [    6.282934] bcm2835-rng 3f104000.rng: hwrng registered
+> > [    6.287471] gpiomem-bcm2835 3f200000.gpiomem: Initialised: Registers
+> at
+> > 0x3f20000
+> > [    6.297029] spi spi0.0: setting up native-CS0 as GPIO 8
+> > [    6.302858] spi spi0.1: setting up native-CS1 as GPIO 7
+> > [    6.353559] i2c /dev entries driver
+> > [    6.587009] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
+> > clkctl 0x50
+> > [    7.085459] NET: Registered protocol family 10
+> > [    7.597263] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
+> > clkctl 0x50
+> > [    8.607304] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
+> > clkctl 0x50
+> >
 >
-> They are no longer present as cmake options, they are handled internally.
-hmm, not that simple.
-These thirdparty are still bundle with openjpeg, the parsing of the
-thirdparty dir. is sensible to BUILD_CODEC [1] (which is ON by default
-[2]) plus some magics [3,4] involving BUILD_THIRDPARTY.
-So to prevent building the bundled 3rd parties, you should explicitly
-add the dependencies and disable these flags.
-
-[1] https://github.com/uclouvain/openjpeg/blob/master/CMakeLists.txt#L268
-[2] https://github.com/uclouvain/openjpeg/blob/master/CMakeLists.txt#L254
-[3] https://github.com/uclouvain/openjpeg/blob/master/CMakeLists.txt#L269
-
-
-Regards,
-
--- 
-Samuel
+> I have the same issue with this chip on the board I'm working on. I have
+> found out that if I unload and reload the module it then works.
+>
+> Regards,
+>
+> --
+> S?bastien Szymanski
+> Software Engineer
+> Armadeus Systems - A new vision of the embedded world
+> sebastien.szymanski at armadeus.com
+> Tel: +33 (0)9 72 29 41 44
+> Fax: +33 (0)9 72 28 79 26
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160425/6ad51d67/attachment.html>
