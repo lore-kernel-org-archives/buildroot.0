@@ -1,123 +1,35 @@
-From: Mylene Josserand <mylene.josserand@free-electrons.com>
-Date: Mon, 25 Apr 2016 11:34:33 +0200
-Subject: [Buildroot] [help] Nitrogen6X with Vivante : restart on Qt5
-	examples
-In-Reply-To: <CAAMH-yvb3G6gp+N9yGFAK7GNPAxy9m25Zjn5-QqHko-aMeJmSw@mail.gmail.com>
-References: <571DDBEB.7070100@free-electrons.com>
- <CAAMH-yvb3G6gp+N9yGFAK7GNPAxy9m25Zjn5-QqHko-aMeJmSw@mail.gmail.com>
-Message-ID: <571DE4A9.2010605@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 25 Apr 2016 11:37:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: remove unneeded comment
+Message-ID: <1461577020-26676-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gary,
+https://git.busybox.net/buildroot/commit/package/mesa3d?id=f1894ec95728806e09405d26663e0ea371afaeab
+removed the dependency on X.org for DRI drivers but forgot to remove
+the corresponding comment.
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/Config.in | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Thank you for your help.
-
-
-On 25/04/2016 11:18, Gary Bisson wrote:
-> Mylene, All,
->
-> On Mon, Apr 25, 2016 at 10:57 AM, Mylene Josserand
-> <mylene.josserand@free-electrons.com> wrote:
->> Hi,
->>
->>
->> I am currently trying OpenGL with Vivante driver on a Nitrogen6X using
->> Buildroot.
->
-> Can you specify which version of Buildroot? v2016.02 or master or older?
->
-> This will help a lot to know the version of Qt, X11 etc...
-
-
-Yes, sorry to forget this information.
-
-I am currently on 2016.02-rc2. I will update to v2016.02 soon. If it 
-could help you, I can update it right now.
-
-
->> Previously, I got an segfault error while starting X.
->> "Segmentation fault at address 0xe0"
->>
->> Thanks to Gary Bisson (in cc), using the galcore module from Buildroot
->> (BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV=y) and not the kernel one + updating
->> the kernel to 3.14.28, solved the issue.
->>
->> With the galcore driver loaded using insmod, the Vivante is, now, working.
->
-> Same here, please specify the exact Vivante libraries version
-> (5.0.11p6.3 or 7.1).
-
-
-Vivante libraries : version 5.0.11.p7.1
-
-
->
->> I compiled Qt5 examples (BR2_PACKAGE_QT5BASE_EXAMPLES=y) and I tested some
->> openGL examples :
->>     - "qopenglwindow" : This example is working fine
->>     - "textures" example : in many case, the board restarts when the
->> application is launched.
->>     - "hellogl" : I see the Qt logo from the example but when I try to move
->> the object, the board restarts.
->>
->> Here is my Xorg.log, in case it could help :
->> http://paste.debian.net/hidden/609ae872/
->
-> Can you share you xorg.conf? Also specify your setup, how many
-> displays connected, which port (HDMI, LVDS, RGB etc..).
-
-Here is my Xorg.conf :
-
-Section "Device"
-     Identifier  "i.MX Accelerated Framebuffer Device"
-     Driver      "vivante"
-     Option      "fbdev"     "/dev/fb0"
-     Option      "vivante_fbdev" "/dev/fb0"
-     Option      "HWcursor"  "false"
-EndSection
-
-Section "ServerFlags"
-     Option "BlankTime"  "0"
-     Option "StandbyTime"  "0"
-     Option "SuspendTime"  "0"
-     Option "OffTime"  "0"
-EndSection
-
-
-I have one HDMI display (1208x720 66Hz).
-
-
->
->> Each time the board reboots, I get an "POR" reset cause in UBoot.
->
-> Well then it's a feature, the Qt app appears to be restarting the
-> board properly ;-)
->
->> Maybe, I have a misconfiguration or I am doing something wrong.
->> Any help would be great !
->
-> This might sound strange, but please also provide the U-Boot version
-> you are using. The reason is that we offer a wide range of displays,
-> since we want customers to have a plug and play experience we've added
-> something for kernel >=3.14 where U-Boot is in charge of modifying the
-> device tree on the fly to setup the displays properly.
-
-
-Interesting, my uboot version is : U-Boot 2013.07.
-
-
-> Finally, can you upload your image for me to try?
-
-
-Yes, images are coming :)
-
-
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index a87f53d..45ca69c 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -97,9 +97,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL
+ 	  virgl is the 3D acceleration backend for the virtio-gpu
+ 	  shipping with qemu.
+ 
+-comment "DRI drivers need X.Org"
+-	depends on !BR2_PACKAGE_XORG7
+-
+ comment "DRI drivers"
+ 
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
 -- 
-Myl?ne Josserand, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.0.rc3
