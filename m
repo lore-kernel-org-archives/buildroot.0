@@ -1,36 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Apr 2016 10:28:01 +0200
-Subject: [Buildroot] [PATCH 0/5] Align library locations in target and
- staging
-In-Reply-To: <CAAXf6LVif-9gQyoBvyWN+BoZj5h+JhSBQo1HiV5b8mqs+hidKA@mail.gmail.com>
-References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
- <20160425231717.7a85e856@free-electrons.com>
- <CAAXf6LVif-9gQyoBvyWN+BoZj5h+JhSBQo1HiV5b8mqs+hidKA@mail.gmail.com>
-Message-ID: <20160426102801.13677b62@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 26 Apr 2016 09:29:25 +0100
+Subject: [Buildroot] [PATCH] network-manager: bump version to 1.2.0
+In-Reply-To: <87d1pdo14b.fsf@dell.be.48ers.dk>
+References: <1461236721-60129-1-git-send-email-Vincent.Riera@imgtec.com>
+ <571A2F7C.2000707@zacarias.com.ar> <87d1pdo14b.fsf@dell.be.48ers.dk>
+Message-ID: <571F26E5.2070300@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Peter and Gustavo,
 
-On Tue, 26 Apr 2016 09:50:08 +0200, Thomas De Schampheleire wrote:
+On 25/04/16 22:00, Peter Korsgaard wrote:
+>>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+> 
+> Hi Vicente,
+> 
+>  > On 21/04/16 08:05, Vicente Olivert Riera wrote:
+>  >> -NETWORK_MANAGER_VERSION_MAJOR = 1.0
+>  >> -NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).12
+>  >> +NETWORK_MANAGER_VERSION_MAJOR = 1.2
+>  >> +NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
+>  >> NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+>  >> -NETWORK_MANAGER_SITE =
+>  >> http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+>  >> +NETWORK_MANAGER_SITE = http://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+>  >> NETWORK_MANAGER_INSTALL_STAGING = YES
+>  >> NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
+> 
+>  > Hi Vicente.
+>  > There are some dependency differences with the new series.
+>  > For example dbus-glib is no longer mandatory, it's optional for the
+>  > libnm-glib legacy library.
+>  > WiFi support can now be disabled (default=y, probably not that
+>  > interesting as an option, though it gets rids of the wireless-tools
+>  > dependency).
+>  > Qt support was remove so --disable-qt can be removed.
+>  > There's improved systemd support that requires systemd libraries being
+>  > present at build time as well (journal support).
+>  > Missing functionality that could also be accounted for (irrespective
+>  > of the bump since it was present in 1.0.x as well) is connection
+>  > checking via libsoup.
+>  > nm-cli and readline are also optional now.
+> 
+>  > I'm sure there are more to look at ;)
+> 
+> Will you rework the patch after taking Gustavoz' feedback into
+> consideration? In the mean time I have marked the patch as changes
+> requested.
 
-> Thomas, Arnout, Romain: many thanks indeed for your review and apply
-> effort, I greatly appreciate it!
+yes, as soon as I have enough free time to do it. I'm quite busy these
+recent days :(
 
-You're welcome. Thanks for your patience!
+Regards,
 
-> As you noticed, I did not yet have the time to apply the suggested
-> changes, but ThomasP took care of it now.
+Vincent.
 
-There were some additional suggestions/questions from Arnout on PATCH
-4/5. I replied to some of them, but there are still a few
-questions/suggestions left.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Thanks!
+> 
