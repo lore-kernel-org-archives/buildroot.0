@@ -1,47 +1,79 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 26 Apr 2016 22:54:00 +0200
-Subject: [Buildroot] [PATCH 1/1] kodi: Enable raspberry-pi2 build support
-References: <1461702074-14376-1-git-send-email-bmauduit@beneth.fr>
- <20160426223256.0798005b@free-electrons.com>
-Message-ID: <8415vcxn9i.ln2@ID-313208.user.individual.net>
+From: =?UTF-8?Q?Beno=c3=aet_Mauduit?= <bmauduit@beneth.fr>
+Date: Tue, 26 Apr 2016 22:58:21 +0200
+Subject: [Buildroot] [git commit] configs/raspberrypi3: sync kernel
+ version with rpi/rpi2
+In-Reply-To: <20160426213916.241241c7@gmx.net>
+References: <CALtfCQbtz27yZXAOf+rZpE7y1LOV5TzTT2e5dUbk7ov-RQEy5A@mail.gmail.com>
+ <878u00o2oi.fsf@dell.be.48ers.dk>
+ <CALtfCQbwAPAwPjyyoY6bLdzsg3i86ZrC8bQor1ycbx8VBKm9og@mail.gmail.com>
+ <874maoo0al.fsf@dell.be.48ers.dk> <87wpnkmf65.fsf@dell.be.48ers.dk>
+ <20160426213916.241241c7@gmx.net>
+Message-ID: <571FD66D.9050305@beneth.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 26 Apr 2016 22:32:56 +0200 schrieb Thomas Petazzoni:
+Hello all,
 
-> Hello,
+On 04/26/2016 09:39 PM, Peter Seiderer wrote:
+> Hello Peter, Oscar,
 > 
-> On Tue, 26 Apr 2016 22:21:14 +0200, Beno?t Mauduit wrote:
->> The previous commit [ef37472b20894c99cad758397f3cd6b90f933df1] was
->> based on a newer version of Kodi :
->> "with-platform=raspberry-pi2" is not yet supported in Kodi "Jarvis" 
-branch.
->> 
->> Backport 2 patches from Kodi master branch into this one.
->> 
->> Signed-off-by: Beno?t Mauduit <bmauduit@beneth.fr>
+> On Tue, 26 Apr 2016 19:51:46 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
 > 
-> Thanks. I do remember seeing a report (on IRC ?) that commit
-> ef37472b20894c99cad758397f3cd6b90f933df1 was indeed causing some
-> problems.
+>>>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>
+>>>>>>> "Oscar" == Oscar Gomez Fuente <oscargomezf@gmail.com> writes:
+>>  >> Hi Peter,
+>>  >> The following models have been checked on a custom buildroot branch of mine
+>>  >> (with a few changes), but it's based on the Latest stable release of
+>>  >> buildroot: 2016.02 and before executing a defconfig I executed a make clean
+>>
+>>  >> I've changed:
+>>  >> BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3de232825c9ba5989522b8691eb6ac5df6619458"
+>>  >> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+>>
+>>  > Ok, can you please try current git to make sure? We've also updated the
+>>  > version of rpi-firmware since 2016.02, so that might make a difference.
+>>
+>> FYI, I've built the 3 defconfigs using current git head (except that I
+>> used precompiled toolchains) and put them online here for easy testing:
+>>
+>> https://buildroot.org/~jacmet/rpi/
+>>
+>> Just dd the sdcard.img matching your board variant to a sdcard. I've
+>> verified the rpi1 version here.
+>>
 > 
-> Yann, Bernd, can you review/ack this patch from Beno?t?
+> 
+> https://buildroot.org/~jacmet/rpi/rpi1/sdcard.img
+> Boots fine on a Raspberry Pi Model B Rev 2 board (console on HDMI and serial)
+> 
+> https://buildroot.org/~jacmet/rpi/rpi3/sdcard.img
+> Boots fine on a Raspberry Pi 3 Model B Rev 1.2 (messages on HDMI,
+> console on HDMI and serial after adding the 'dtoverlay=pi3-disable-bt' fix).
+> 
 
-Hi Thomas,
+For information, I have successfully built a working Linux kernel for
+rpi2 on top of the branch rpi-4.4.y.
 
-reviewing it will be difficult for me because I can not do a runtime test 
-because I do not have access to RPI hardware.
+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="e63db5f23b77ba5e2fa7823e9b3254bb65358b69"
+Do you think we can move to this branch ?
 
-Currently I am preparing a patch series for the 17.0-Krypton version 
-bump, I think I will send the first part of it to my github account in 
-the coming days after some of my PR for the Kodi project are completed.
+Thanks,
+Beno?t.
 
-Backporting feature patches is, afair, something you do not really like ;)
-As always, as a normal Kodi user, I do not know any release dates but 
-17.0-Krypton did not even reach alpha1 yet so expect several months until 
-the next version is released. Maybe we should wait for it nonetheless?
 
-Regards, Bernd
+> Regards,
+> Peter
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+-- 
+Beno?t Mauduit
+<bmauduit@beneth.fr>
+XMPP (Jabber) : <bmauduit@im.beneth.fr>
