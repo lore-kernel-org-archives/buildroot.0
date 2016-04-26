@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Apr 2016 22:25:04 +0200
-Subject: [Buildroot] Multi-File Kernel Module Build Fails
-In-Reply-To: <CAN34foyVVDZTtB06iWVW_g=OrcPy+8g2wiiTPqDwWNqT1cXTAg@mail.gmail.com>
-References: <CAN34fowqUhJX9LZ-7qkzr=20-dKFFX9r8suAuXpVnn-brbacQw@mail.gmail.com>
- <20160426214928.5d518086@free-electrons.com>
- <CAN34foyVVDZTtB06iWVW_g=OrcPy+8g2wiiTPqDwWNqT1cXTAg@mail.gmail.com>
-Message-ID: <20160426222504.66c17f22@free-electrons.com>
+Date: Tue, 26 Apr 2016 22:32:56 +0200
+Subject: [Buildroot] [PATCH 1/1] kodi: Enable raspberry-pi2 build support
+In-Reply-To: <1461702074-14376-1-git-send-email-bmauduit@beneth.fr>
+References: <1461702074-14376-1-git-send-email-bmauduit@beneth.fr>
+Message-ID: <20160426223256.0798005b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-(Resending with the Buildroot mailing list in Cc. Please always keep
-the list in Cc. Thanks!)
-
-On Tue, 26 Apr 2016 16:20:17 -0400, Stephen Beckwith wrote:
-
-> KMOD_MEM_MODULE_MAKE_OPTS = NETAPP_DIR=$(BR2_EXTERNAL)/netapp
-
-Get rid of this.
-
-> #inform the kernel that a module needs to be build
-> obj-m := hwdd_memory.o
-> hwdd_memory-objs := hwdd_mem.o hwdd_memalgo.o hwdd_cache_algos.o
+On Tue, 26 Apr 2016 22:21:14 +0200, Beno?t Mauduit wrote:
+> The previous commit [ef37472b20894c99cad758397f3cd6b90f933df1] was
+> based on a newer version of Kodi :
+> "with-platform=raspberry-pi2" is not yet supported in Kodi "Jarvis" branch.
 > 
-> # Global Includes here
-> GBL_INCLUDES = $(NETAPP_DIR)/include
-> KNL_INCLUDES = $(NETAPP_DIR)/include/kernel
+> Backport 2 patches from Kodi master branch into this one.
+> 
+> Signed-off-by: Beno?t Mauduit <bmauduit@beneth.fr>
 
-And those two variable definitions.
+Thanks. I do remember seeing a report (on IRC ?) that commit
+ef37472b20894c99cad758397f3cd6b90f933df1 was indeed causing some
+problems.
 
-> #Add here the CFLAGS to pass in to get the Defined Symbol
-> CFLAGS_hwdd_memory.o := -DCONFIG_NETAPP_HWDD -I$(GBL_INCLUDES)
-> -I$(KNL_INCLUDES)
+Yann, Bernd, can you review/ack this patch from Beno?t?
 
-And replace this by:
-
-ccflags-y := -DCONFIG_NETAPP_HWDD -I$(src)/include -I$(src)/include/kernel
-
-Again, I've spent time creating an example that I've tested. Since I
-can't reproduce your test case, please try my example, which you can
-test as I'm providing the entire source code :)
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
