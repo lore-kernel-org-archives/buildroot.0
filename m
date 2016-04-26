@@ -1,71 +1,164 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 26 Apr 2016 11:28:58 +0100
-Subject: [Buildroot] [PATCH 2/2] package/nodejs: bump version to 5.11.0
-In-Reply-To: <1461666538-32692-1-git-send-email-martin@barkynet.com>
-References: <1461666538-32692-1-git-send-email-martin@barkynet.com>
-Message-ID: <1461666538-32692-2-git-send-email-martin@barkynet.com>
+From: fabrice.fontaine at orange.com <fabrice.fontaine@orange.com>
+Date: Tue, 26 Apr 2016 13:29:47 +0200
+Subject: [Buildroot] [PATCH v2] domoticz: new package
+Message-ID: <24932_1461670192_571F5130_24932_1368_6_b2fc1042-68bd-4543-a95f-43a1dd14d8ad@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://nodejs.org/en/blog/release/v5.11.0/
+Domoticz is a Home Automation System that lets you monitor andi
+configure various devices like: Lights, Switches, various
+sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
+and much more. Notifications/Alerts can be sent to any mobile device.
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 ---
- .../0001-Remove-dependency-on-Python-bz2-module.patch                 | 0
- .../{5.10.1 => 5.11.0}/0002-gyp-force-link-command-to-use-CXX.patch   | 0
- package/nodejs/{5.10.1 => 5.11.0}/0003-Fix-va_list-not-declared.patch | 0
- .../nodejs/{5.10.1 => 5.11.0}/0004-Fix-support-for-uClibc-ng.patch    | 0
- package/nodejs/Config.in                                              | 2 +-
- package/nodejs/nodejs.hash                                            | 4 ++--
- 6 files changed, 3 insertions(+), 3 deletions(-)
- rename package/nodejs/{5.10.1 => 5.11.0}/0001-Remove-dependency-on-Python-bz2-module.patch (100%)
- rename package/nodejs/{5.10.1 => 5.11.0}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
- rename package/nodejs/{5.10.1 => 5.11.0}/0003-Fix-va_list-not-declared.patch (100%)
- rename package/nodejs/{5.10.1 => 5.11.0}/0004-Fix-support-for-uClibc-ng.patch (100%)
+Changes v1 -> v2 (after review of Samuel Martin):
+ - Add a hash file
+ - Replace the dependency on BR2_PACKAGE_LUA_5_2 by a dependency on
+   BR2_PACKAGE_LUA_5_2 or BR2_PACKAGE_LUA_5_3
+ - Add dependencies on BR2_USE_MMU and !BR2_STATIC_LIBS (from mosquitto)
+ - Add dependency on BR2_PACKAGE_BOOST_ARCH_SUPPORTS (from boost)
+ - Automatically add zwave support in domoticz if the user has selected
+   the openzwave package
+ - Set USE_STATIC_BOOST and USE_STATIC_OPENZWAVE to the correct values
+   in domoticz.mk depending on BR2_STATIC_LIBS value to avoid breaking
+   static-only build
 
-diff --git a/package/nodejs/5.10.1/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/5.11.0/0001-Remove-dependency-on-Python-bz2-module.patch
-similarity index 100%
-rename from package/nodejs/5.10.1/0001-Remove-dependency-on-Python-bz2-module.patch
-rename to package/nodejs/5.11.0/0001-Remove-dependency-on-Python-bz2-module.patch
-diff --git a/package/nodejs/5.10.1/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/5.11.0/0002-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/5.10.1/0002-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/5.11.0/0002-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/5.10.1/0003-Fix-va_list-not-declared.patch b/package/nodejs/5.11.0/0003-Fix-va_list-not-declared.patch
-similarity index 100%
-rename from package/nodejs/5.10.1/0003-Fix-va_list-not-declared.patch
-rename to package/nodejs/5.11.0/0003-Fix-va_list-not-declared.patch
-diff --git a/package/nodejs/5.10.1/0004-Fix-support-for-uClibc-ng.patch b/package/nodejs/5.11.0/0004-Fix-support-for-uClibc-ng.patch
-similarity index 100%
-rename from package/nodejs/5.10.1/0004-Fix-support-for-uClibc-ng.patch
-rename to package/nodejs/5.11.0/0004-Fix-support-for-uClibc-ng.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 268bd92..c1d8331 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "5.10.1"	if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "5.11.0"	if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	default "0.10.44"
- 
- menu "Module Selection"
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 9be1353..9e7fd30 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.44/SHASUMS256.txt
- sha256  25b2cd910822723e972a3990d5687b7ff48581ad2f77aa1942d99a1b024f434a  node-v0.10.44.tar.xz
- 
--# From upstream URL: http://nodejs.org/dist/v5.10.1/SHASUMS256.txt
--sha256  9eecd853cdd06ebee24a1bb8d753cd20af5a19297c5d3a3b1680fe36b47d5cbe  node-v5.10.1.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v5.11.0/SHASUMS256.txt
-+sha256  083766aff72fc5c78f6999dd0d00bc0340a052ab270fd60d6928b719ca2b3fd1  node-v5.11.0.tar.xz
+ package/Config.in              |  1 +
+ package/domoticz/Config.in     | 32 +++++++++++++++++++++++++++++
+ package/domoticz/domoticz.hash |  2 ++
+ package/domoticz/domoticz.mk   | 46 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 81 insertions(+)
+ create mode 100644 package/domoticz/Config.in
+ create mode 100644 package/domoticz/domoticz.hash
+ create mode 100644 package/domoticz/domoticz.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index f242181..2156d5b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1320,6 +1320,7 @@ menu "Miscellaneous"
+ 	source "package/bc/Config.in"
+ 	source "package/clamav/Config.in"
+ 	source "package/collectd/Config.in"
++	source "package/domoticz/Config.in"
+ 	source "package/empty/Config.in"
+ 	source "package/gnuradio/Config.in"
+ 	source "package/googlefontdirectory/Config.in"
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+new file mode 100644
+index 0000000..c7c2878
+--- /dev/null
++++ b/package/domoticz/Config.in
+@@ -0,0 +1,32 @@
++config BR2_PACKAGE_DOMOTICZ
++	bool "domoticz"
++	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
++	depends on BR2_USE_MMU # mosquitto
++	depends on !BR2_STATIC_LIBS # mosquitto
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
++	depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_DATE_TIME
++	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_BOOST_THREAD
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_MOSQUITTO
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_SQLITE
++	select BR2_PACKAGE_ZLIB
++	help
++	  Domoticz is a Home Automation System that lets you monitor andi
++	  configure various devices like: Lights, Switches, various
++	  sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
++	  and much more. Notifications/Alerts can be sent to any mobile device.
++
++	  http://domoticz.com
++
++comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynamic library"
++	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
++		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
+diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
+new file mode 100644
+index 0000000..9180a9b
+--- /dev/null
++++ b/package/domoticz/domoticz.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	02b4cdde8e376258aeae3d5621edf8bb6b3563c34282e50194db343fcec9c0f5	domoticz-3.4834.tar.gz
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+new file mode 100644
+index 0000000..1ca0a24
+--- /dev/null
++++ b/package/domoticz/domoticz.mk
+@@ -0,0 +1,46 @@
++################################################################################
++#
++# domoticz
++#
++################################################################################
++
++DOMOTICZ_VERSION = 3.4834
++DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
++DOMOTICZ_LICENSE = GPLv3
++DOMOTICZ_LICENSE_FILES = License.txt
++DOMOTICZ_DEPENDENCIES = boost host-pkgconf libcurl lua mosquitto openssl \
++        sqlite zlib
++
++# USE_STATIC_BOOST has to be set manually otherwise domoticz will not found the
++# boost libraries
++# By default, domoticz sets USE_STATIC_BOOST to no
++ifeq ($(BR2_STATIC_LIBS),y)
++DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=yes
++else
++DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=no
++endif
++
++# Do not use any built-in libraries which are enabled by default for lua, 
++# sqlite and mqtt
++DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_LUA=no
++DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_SQLITE=no
++DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_MQTT=no
++
++ifeq ($(BR2_PACKAGE_LIBUSB),y)
++DOMOTICZ_DEPENDENCIES += libusb
++endif
++
++ifeq ($(BR2_PACKAGE_OPENZWAVE),y)
++DOMOTICZ_DEPENDENCIES += openzwave
++
++# USE_STATIC_OPENZWAVE has to be set manually otherwise domoticz will not found
++# the openzwave library
++# By default, domoticz sets USE_STATIC_OPENZWAVE to yes
++ifeq ($(BR2_STATIC_LIBS),y)
++DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=yes
++else
++DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=no
++endif
++endif
++
++$(eval $(cmake-package))
 -- 
-2.7.4
+1.9.1
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
