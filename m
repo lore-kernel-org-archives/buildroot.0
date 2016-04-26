@@ -1,96 +1,64 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@intel.com>
-Date: Tue, 26 Apr 2016 16:21:44 +0200
-Subject: [Buildroot] [PATCH] i7z: new package
-Message-ID: <1461680504-21604-1-git-send-email-vincent.stehle@intel.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 26 Apr 2016 16:22:01 +0200
+Subject: [Buildroot] [PATCH 1/1] Preliminary support for Raspberry Pi 3
+ with symlink
+In-Reply-To: <87oa8xpx9j.fsf@dell.be.48ers.dk>
+References: <1461442370-22393-1-git-send-email-ubaldo@eja.it>
+ <871t5triwb.fsf@dell.be.48ers.dk> <81b71ac5323b1793405c3192b6ac5264@eja.it>
+ <20160425161610.4e5cbe87@armant.core.local.os.greenbone.net>
+ <7c641e674768b186ec37e275adbd41da@eja.it> <87oa8xpx9j.fsf@dell.be.48ers.dk>
+Message-ID: <571F7989.4040807@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"A better i7 (and now i3, i5) reporting tool for Linux."
+Peter, Ubaldo,
 
-i7z can print out the C-states and temperature for i3, i5 and i7 based Core
-processors from Intel (including Nehalems, Sandy Bridge and Ivy Bridge).
+On 25/04/2016 16:40, Peter Korsgaard wrote:
+>>>>>> "Ubaldo" == Ubaldo Porcheddu <ubaldo@eja.it> writes:
+> 
+> Hi,
+> 
+>>>> I just tested the new kernel version but it doesn't give me the login
+>  >>> prompt, the kernel seems to be booting fine as it can recognize my
+>  >>> keyboard but it doesn't accept any input.
+>  >>> 
+>  >> 
+>  >> I had something similar, removed the 'console=ttyAMA0...' from the
+>  >> cmdline.txt file, and it booted through. Mine was not able to recognize
+>  >> my keyboard, but with dropbear and an extra user I was able to login.
+> 
+>  > after removing the extra console declaration I can also get the login,
+>  > my keyboard get recognized by the kernel but it doesn't work properly,
+>  > seems to be adding extra characters after any key press.
+> 
+> Funky. Removing console=ttyAMA0 (or console=ttyS0) would mean that tty1
+> becomes /dev/console, so we end up having two gettys running on tty1
+> which could explain the double characters.
+> 
+> I'm not sure why it doesn't work with console= pointing at the serial
+> port. Luca, you added the serial console handling, any idea what might
+> be going wrong?
 
-https://code.google.com/archive/p/i7z/
+At first sight, no. But I experienced a similar issue while I was
+testing my patch [0].
 
-Signed-off-by: Vincent Stehl? <vincent.stehle@intel.com>
----
- package/Config.in     |  1 +
- package/i7z/Config.in | 12 ++++++++++++
- package/i7z/i7z.hash  |  2 ++
- package/i7z/i7z.mk    | 22 ++++++++++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/i7z/Config.in
- create mode 100644 package/i7z/i7z.hash
- create mode 100644 package/i7z/i7z.mk
+I was able to login on tty1 with a USB keyboard, but typing a few
+characters such as "ls<ENTER>" just after login would do weird things
+like logging me out. This was using a super-cheap keyboard I had never
+used before. I retried with a trusted one, and it was working just fine.
+This got me clueless, so I triple-checked, and the problem was always
+happening with the cheap keyboard, never with the trusted one.
 
-diff --git a/package/Config.in b/package/Config.in
-index e860f72..2967244 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -387,6 +387,7 @@ endif
- 	source "package/hwdata/Config.in"
- 	source "package/hwloc/Config.in"
- 	source "package/i2c-tools/Config.in"
-+	source "package/i7z/Config.in"
- 	source "package/input-event-daemon/Config.in"
- 	source "package/input-tools/Config.in"
- 	source "package/intel-microcode/Config.in"
-diff --git a/package/i7z/Config.in b/package/i7z/Config.in
-new file mode 100644
-index 0000000..b4b8982
---- /dev/null
-+++ b/package/i7z/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_I7Z
-+	bool "i7z"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  "A better i7 (and now i3, i5) reporting tool for Linux."
-+
-+	  i7z can print out the C-states and temperature for i3, i5 and i7
-+	  based Core processors from Intel (including Nehalems, Sandy Bridge
-+	  and Ivy Bridge).
-+
-+	  https://code.google.com/archive/p/i7z/
-diff --git a/package/i7z/i7z.hash b/package/i7z/i7z.hash
-new file mode 100644
-index 0000000..1bcf2c6
---- /dev/null
-+++ b/package/i7z/i7z.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 e127bddf850e7febd39cef2d2b13dca5fe19cc2a1bb1099d72b683be5d8bd1c0 i7z-5023138d7c35c4667c938b853e5ea89737334e92.tar.gz
-diff --git a/package/i7z/i7z.mk b/package/i7z/i7z.mk
-new file mode 100644
-index 0000000..e21fd9f
---- /dev/null
-+++ b/package/i7z/i7z.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# i7z
-+#
-+################################################################################
-+
-+I7Z_VERSION = 5023138d7c35c4667c938b853e5ea89737334e92
-+I7Z_SITE = $(call github,ajaiantilal,i7z,$(I7Z_VERSION))
-+I7Z_LICENSE = GPLv2
-+I7Z_LICENSE_FILES = COPYING
-+I7Z_DEPENDENCIES = ncurses
-+
-+define I7Z_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+endef
-+
-+define I7Z_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
-+		DESTDIR="$(TARGET_DIR)"
-+endef
-+
-+$(eval $(generic-package))
+I thought the cheap keyboard must be broken and "archived" it.
+
+I would be surprised if you could solve your issues by changing
+keyboard, but it's worth giving it a try...
+
+[0]
+https://git.buildroot.net/buildroot/commit/?id=20878a1017e2bf7eb8c5f870dc6d2641493cb0f9
+
 -- 
-2.8.0.rc3
+Luca
