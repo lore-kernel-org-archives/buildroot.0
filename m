@@ -1,42 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Apr 2016 19:51:46 +0200
-Subject: [Buildroot] [git commit] configs/raspberrypi3: sync kernel
-	version with rpi/rpi2
-In-Reply-To: <874maoo0al.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Tue, 26 Apr 2016 17:30:10 +0200")
-References: <CALtfCQbtz27yZXAOf+rZpE7y1LOV5TzTT2e5dUbk7ov-RQEy5A@mail.gmail.com>
- <878u00o2oi.fsf@dell.be.48ers.dk>
- <CALtfCQbwAPAwPjyyoY6bLdzsg3i86ZrC8bQor1ycbx8VBKm9og@mail.gmail.com>
- <874maoo0al.fsf@dell.be.48ers.dk>
-Message-ID: <87wpnkmf65.fsf@dell.be.48ers.dk>
+From: Stephen Beckwith <embeddedsteve@gmail.com>
+Date: Tue, 26 Apr 2016 14:44:28 -0400
+Subject: [Buildroot] Multi-File Kernel Module Build Fails
+Message-ID: <CAN34fowqUhJX9LZ-7qkzr=20-dKFFX9r8suAuXpVnn-brbacQw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Greetings,
+   I posted this same issue last week and received no response.  After some
+more investigation and trying several different options, I am still STUCK
+and cannot move forward.
+Problem:
+ -  if a kernel module has more than 1 source file, Buildroot does NOT pass
+in the MAKE_OPTS defined (path for header files).  Compile fails due to
+"file not found".
 
->>>>> "Oscar" == Oscar Gomez Fuente <oscargomezf@gmail.com> writes:
- >> Hi Peter,
- >> The following models have been checked on a custom buildroot branch of mine
- >> (with a few changes), but it's based on the Latest stable release of
- >> buildroot: 2016.02 and before executing a defconfig I executed a make clean
+With a single source file, no problems.
 
- >> I've changed:
- >> BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3de232825c9ba5989522b8691eb6ac5df6619458"
- >> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+In the .mk file:
 
- > Ok, can you please try current git to make sure? We've also updated the
- > version of rpi-firmware since 2016.02, so that might make a difference.
+KMOD_MEM_MODULE_MAKE_OPTS = NETAPP_DIR=$(BR2_EXTERNAL)/netapp
 
-FYI, I've built the 3 defconfigs using current git head (except that I
-used precompiled toolchains) and put them online here for easy testing:
+The "Makefile" in the directory:
 
-https://buildroot.org/~jacmet/rpi/
+#inform the kernel that a module needs to be build
+obj-m := hwdd_memory.o
+hwdd_memory-objs := hwdd_mem.o hwdd_memalgo.o hwdd_cache_algos.o
 
-Just dd the sdcard.img matching your board variant to a sdcard. I've
-verified the rpi1 version here.
+# Global Includes here
+GBL_INCLUDES = $(NETAPP_DIR)/include
+KNL_INCLUDES = $(NETAPP_DIR)/include/kernel
 
--- 
-Bye, Peter Korsgaard
+#Add here the CFLAGS to pass in to get the Defined Symbol
+CFLAGS_hwdd_memory.o := -DCONFIG_NETAPP_HWDD -I$(GBL_INCLUDES)
+-I$(KNL_INCLUDES)
+
+Failure:
+In file included from
+/home/sbeckwith/HBE-1/hwdd/output/build/kmod_mem-0.1.0/./hwdd_memalgo.c:11:0:
+/home/sbeckwith/HBE-1/hwdd/output/build/kmod_mem-0.1.0/./hwdd_mem.h:12:26:
+fatal error: hwdd_klogger.h: No such file or directory
+compilation terminated.
+
+The .mk setup uses:
+
+$(eval $(kernel-module))
+$(eval $(generic-package))
+
+Are multi-file inputs NOT supported in this scheme?  These are custom
+kernel modules, referencing unique hardware on the target.
+Can someone please verify that multi-file kernel modules work using this
+setup?
+
+Thanks!
+Stephen
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160426/515eca24/attachment.html>
