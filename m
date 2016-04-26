@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Apr 2016 21:57:05 +0200
-Subject: [Buildroot] [PATCH] libsoup: bump to version 2.54.1
-In-Reply-To: <1461689904-28232-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1461689904-28232-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160426215705.6e93e8da@free-electrons.com>
+Date: Tue, 26 Apr 2016 21:57:08 +0200
+Subject: [Buildroot] [PATCH] glib-networking: bump to version 2.48.1
+In-Reply-To: <1461689921-28279-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1461689921-28279-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160426215708.56563722@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 26 Apr 2016 13:58:24 -0300, Gustavo Zacarias wrote:
+On Tue, 26 Apr 2016 13:58:41 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/libsoup/libsoup.hash | 4 ++--
->  package/libsoup/libsoup.mk   | 2 +-
+>  package/glib-networking/glib-networking.hash | 4 ++--
+>  package/glib-networking/glib-networking.mk   | 2 +-
 >  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
