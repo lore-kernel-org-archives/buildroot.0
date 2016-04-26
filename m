@@ -1,40 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Apr 2016 16:38:37 +0200
-Subject: [Buildroot] [git commit] configs/raspberrypi3: sync kernel
-	version with rpi/rpi2
-In-Reply-To: <CALtfCQbtz27yZXAOf+rZpE7y1LOV5TzTT2e5dUbk7ov-RQEy5A@mail.gmail.com>
- (Oscar Gomez Fuente's message of "Tue, 26 Apr 2016 16:27:33 +0200")
-References: <CALtfCQbtz27yZXAOf+rZpE7y1LOV5TzTT2e5dUbk7ov-RQEy5A@mail.gmail.com>
-Message-ID: <878u00o2oi.fsf@dell.be.48ers.dk>
+From: rfinkelstein at rtsys.fr <rfinkelstein@rtsys.fr>
+Date: Tue, 26 Apr 2016 16:44:45 +0200
+Subject: [Buildroot] QMAKESPEC has not been set
+In-Reply-To: <20160426114218.1ee9c489@free-electrons.com>
+References: <cbbb11e2c7e662c45ad8c288e9f113d8@rtsys.fr>
+ <20160425170410.394d5384@free-electrons.com>
+ <e196f3adfdc7b795a8b8aa0f555f6a35@rtsys.fr>
+ <20160426114218.1ee9c489@free-electrons.com>
+Message-ID: <0a9cdf44d25e1fda4ca87cbc97c879e7@rtsys.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Oscar" == Oscar Gomez Fuente <oscargomezf@gmail.com> writes:
+Hi,
 
- > Hi Peter,
- > I've tried to compile the repo version:
- > BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3de232825c9ba5989522b8691eb6ac5df6619458"
+> So you should first change the python-sip package to make it possible
+> to build it without selecting Qt4.
 
- > with:
- > BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+I've removed the Qt of the python-sip dependencies, now I'm using only 
+the Qt5
 
- > For rpi/rpi2 and it doesn't work. The compiling is right but it doesn't
- > work, I can see the message on /dev/ttyAMA0 terminal:
+>> The error I've mentioned (QMAKESPEC has not been set, so configuration
+>> cannot be deduced), as the command that generates the error can be 
+>> seen
+>> in the copy of my terminal in the link below
+>> https://gist.github.com/Finkelrf/035f2f7554039ee1ce1008425340e8b3
+> 
+> For Qt5, we need to pass the spec file in argument to qmake, which is
+> done automatically if you use $(QT5_QMAKE). So in python-sip, you
+> should replace:
+> 
+>    $(HOST_DIR)/usr/bin/qmake
+> 
+> by:
+> 
+>    $(QT5_QMAKE)
+> 
+> if Qt5 is being used.
+> 
 
- > Uncompressing Linux... done, booting the kernel.
+I've replaced the $(HOST_DIR)/usr/bin/qmake to $(QT5_QMAKE) and it seems 
+to fix the QMAKESPEC problem but now I'm getting the error 
+(https://gist.github.com/Finkelrf/4f7ac78cb48e231c233b31b3270b1b14):
+> /media/secure/sda416/zynq_buildroot/host/usr/mkspecs/features/device_config.prf:4: 
+> Missing ] terminator [found /]
 
- > But it's stuck at this point, however in RPi3 works fine.
+In the line 4 of the device_config.prf there is the following line:
+> DEVICE_PRI = $$[QT_HOST_DATA/get]/mkspecs/qdevice.pri
 
-So you are saying that the current raspberrypi_defconfig /
-raspberrypi2_defconfig doesn't boot on your rpi1 / rpi2 boards? That's
-odd as I verified raspberrypi_defconfig on my rpi1 (very old B version)
-the other day without problems.
+If i call:
+> /media/secure/sda416/zynq_buildroot/host/usr/bin/qmake -query
 
-Are you sure you did a clean build of everything?
+I don't get the QT_HOST_DATA 
+(https://gist.github.com/Finkelrf/d64bf44ea8662de238cceae3e2bdbcd6)
 
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Shouldn't it be defined as a qmake property?
