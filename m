@@ -1,164 +1,104 @@
-From: fabrice.fontaine at orange.com <fabrice.fontaine@orange.com>
-Date: Tue, 26 Apr 2016 13:29:47 +0200
-Subject: [Buildroot] [PATCH v2] domoticz: new package
-Message-ID: <24932_1461670192_571F5130_24932_1368_6_b2fc1042-68bd-4543-a95f-43a1dd14d8ad@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 26 Apr 2016 13:32:25 +0200
+Subject: [Buildroot] [PATCH 4/5] toolchain-external: align library
+ locations in target and staging dir
+In-Reply-To: <20160425231556.46640d32@free-electrons.com>
+References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
+ <1455304826-10557-5-git-send-email-patrickdepinguin@gmail.com>
+ <56F843D0.2030202@mind.be> <20160425231556.46640d32@free-electrons.com>
+Message-ID: <CAAXf6LXv6H4pydWVU-2TQ8SSfsOr9cQTibfBTw-pcsH0OZv7SA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Domoticz is a Home Automation System that lets you monitor andi
-configure various devices like: Lights, Switches, various
-sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
-and much more. Notifications/Alerts can be sent to any mobile device.
+On Mon, Apr 25, 2016 at 11:15 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Sun, 27 Mar 2016 22:34:24 +0200, Arnout Vandecappelle wrote:
+>
+>> >   package/glibc/glibc.mk                             |  2 +-
+>> >   toolchain/helpers.mk                               | 57 ++--------------------
+>> >   toolchain/toolchain-external/toolchain-external.mk | 39 ++++-----------
+>> >   3 files changed, 15 insertions(+), 83 deletions(-)
+>>
+>>   -65 net lines, that's the kind of patch I like!
+>
+> Me too!
+>
+>
+>> > +   LIBPATHS=`find $(STAGING_DIR) -follow -name "$${LIB}" 2>/dev/null` ; \
+>>
+>>   -follow is documented as depracated, use -L instead. But why do we need this?
+>
+> I've applied after changing -follow to -L. Note that the -L needs to be
+> *before* $(STAGING_DIR), since the difference between -follow and -L is
+> that -L only applies to the arguments that *follow* it. And since
+> $(STAGING_DIR) is a symbolic link, we need -L before it.
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
----
-Changes v1 -> v2 (after review of Samuel Martin):
- - Add a hash file
- - Replace the dependency on BR2_PACKAGE_LUA_5_2 by a dependency on
-   BR2_PACKAGE_LUA_5_2 or BR2_PACKAGE_LUA_5_3
- - Add dependencies on BR2_USE_MMU and !BR2_STATIC_LIBS (from mosquitto)
- - Add dependency on BR2_PACKAGE_BOOST_ARCH_SUPPORTS (from boost)
- - Automatically add zwave support in domoticz if the user has selected
-   the openzwave package
- - Set USE_STATIC_BOOST and USE_STATIC_OPENZWAVE to the correct values
-   in domoticz.mk depending on BR2_STATIC_LIBS value to avoid breaking
-   static-only build
+I was not aware about -L and agree that it is the right solution. I
+used -follow just to make sure that STAGING_DIR is entered. It seems
+to work without just because STAGING_DIR happens to be defined with a
+trailing slash, in which case its contents are evaluated anyhow by
+find. I considered this dependency too fragile and wanted it to work
+even if someone optimizes away the trailing slash. Another solution
+would be to add a trailing slash manually as $(STAGING_DIR)/ but -L is
+much cleaner.
 
- package/Config.in              |  1 +
- package/domoticz/Config.in     | 32 +++++++++++++++++++++++++++++
- package/domoticz/domoticz.hash |  2 ++
- package/domoticz/domoticz.mk   | 46 ++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 81 insertions(+)
- create mode 100644 package/domoticz/Config.in
- create mode 100644 package/domoticz/domoticz.hash
- create mode 100644 package/domoticz/domoticz.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index f242181..2156d5b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1320,6 +1320,7 @@ menu "Miscellaneous"
- 	source "package/bc/Config.in"
- 	source "package/clamav/Config.in"
- 	source "package/collectd/Config.in"
-+	source "package/domoticz/Config.in"
- 	source "package/empty/Config.in"
- 	source "package/gnuradio/Config.in"
- 	source "package/googlefontdirectory/Config.in"
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-new file mode 100644
-index 0000000..c7c2878
---- /dev/null
-+++ b/package/domoticz/Config.in
-@@ -0,0 +1,32 @@
-+config BR2_PACKAGE_DOMOTICZ
-+	bool "domoticz"
-+	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
-+	depends on BR2_USE_MMU # mosquitto
-+	depends on !BR2_STATIC_LIBS # mosquitto
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_DATE_TIME
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_MOSQUITTO
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Domoticz is a Home Automation System that lets you monitor andi
-+	  configure various devices like: Lights, Switches, various
-+	  sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
-+	  and much more. Notifications/Alerts can be sent to any mobile device.
-+
-+	  http://domoticz.com
-+
-+comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynamic library"
-+	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
-+		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
-diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
-new file mode 100644
-index 0000000..9180a9b
---- /dev/null
-+++ b/package/domoticz/domoticz.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	02b4cdde8e376258aeae3d5621edf8bb6b3563c34282e50194db343fcec9c0f5	domoticz-3.4834.tar.gz
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-new file mode 100644
-index 0000000..1ca0a24
---- /dev/null
-+++ b/package/domoticz/domoticz.mk
-@@ -0,0 +1,46 @@
-+################################################################################
-+#
-+# domoticz
-+#
-+################################################################################
-+
-+DOMOTICZ_VERSION = 3.4834
-+DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
-+DOMOTICZ_LICENSE = GPLv3
-+DOMOTICZ_LICENSE_FILES = License.txt
-+DOMOTICZ_DEPENDENCIES = boost host-pkgconf libcurl lua mosquitto openssl \
-+        sqlite zlib
-+
-+# USE_STATIC_BOOST has to be set manually otherwise domoticz will not found the
-+# boost libraries
-+# By default, domoticz sets USE_STATIC_BOOST to no
-+ifeq ($(BR2_STATIC_LIBS),y)
-+DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=yes
-+else
-+DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=no
-+endif
-+
-+# Do not use any built-in libraries which are enabled by default for lua, 
-+# sqlite and mqtt
-+DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_LUA=no
-+DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_SQLITE=no
-+DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_MQTT=no
-+
-+ifeq ($(BR2_PACKAGE_LIBUSB),y)
-+DOMOTICZ_DEPENDENCIES += libusb
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENZWAVE),y)
-+DOMOTICZ_DEPENDENCIES += openzwave
-+
-+# USE_STATIC_OPENZWAVE has to be set manually otherwise domoticz will not found
-+# the openzwave library
-+# By default, domoticz sets USE_STATIC_OPENZWAVE to yes
-+ifeq ($(BR2_STATIC_LIBS),y)
-+DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=yes
-+else
-+DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=no
-+endif
-+endif
-+
-+$(eval $(cmake-package))
--- 
-1.9.1
+>
+>> I tried without it and it seems to work just the same. I also don't think the
+>> error redirect is needed anymore (at least when the -follow is removed).
+>
+> I've left it as-is for now, those can be handled later if needed.
+>
+>> >     for LIBPATH in $${LIBPATHS} ; do \
+>> > +           DESTDIR=`echo $${LIBPATH} | sed "s,^$(STAGING_DIR)/,," | xargs dirname` ; \
+>>
+>>   I would have written this as
+>>
+>> DESTDIR=`echo $${LIBPATH} | sed "s,^$(STAGING_DIR)/\(.*\)/[^/]*,\1,"` ; \
+>>
+>> but perhaps I'm too much of a regexp lover :-)
+>
+> Yeah, I think I find Thomas DS version easier to understand.
+>
+>> > +           mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
+>> >             while true ; do \
+>>
+>>   I wonder if the loop is still needed now. As far as I can see, the idea of
+>> this loop was to make sure that the library pointed to was also copied. But
+>> since we now copy everything even if it is not in the expected lib path, it
+>> shouldn't be needed anymore. Except if the library pointed to doesn't match the
+>> glob pattern we are searching for... Anyway, that's something for a separate patch.
+>
+> The library pointed to doesn't always match the glob pattern. Let's
+> take the case of uClibc. The pattern for the C library itself is:
+>
+>         libc.so.*
+>
+> But for uClibc, we have:
+>
+>         libc.so.1 -> libuClibc-1.0.12.so
+>
+> and libuClibc-1.0.12.so doesn't match libc.so.*.
+>
+>
+>> > +   $(Q)if test -z "$(BR2_STATIC_LIBS)" ; then \
+>>
+>>   This can now be converted into a make condition instead of a shell condition,
+>> which simplifies the logic even more. Well, actually, it could have been a make
+>> condition from the start because all of the above doesn't do anything except set
+>> some variables...
+>
+> Before the previous patch, the installation of gdbserver was done as
+> part of the same variable, so that's why a make condition was not used.
+> But I've converted it to a make condition, now that it is possible.
 
 
-_________________________________________________________________________________________________________________________
+I agree with all other responses raised by ThomasP. I don't see any
+other open points, but please let me know if I missed something.
 
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+Thanks,
+Thomas
