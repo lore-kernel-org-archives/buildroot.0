@@ -1,38 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Apr 2016 21:59:15 +0200
-Subject: [Buildroot] [PATCH 1/2] package/nodejs: bump version to 0.10.44
-In-Reply-To: <1461666538-32692-1-git-send-email-martin@barkynet.com>
-References: <1461666538-32692-1-git-send-email-martin@barkynet.com>
-Message-ID: <20160426215915.7ac3d838@free-electrons.com>
+Date: Tue, 26 Apr 2016 22:00:38 +0200
+Subject: [Buildroot] [git commit] c-icap: bump to version 0.4.2
+Message-ID: <20160426200119.B62B981E40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=716e7d5ef82fc19db286dceeeb3e686f24a48461
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 26 Apr 2016 11:28:57 +0100, Martin Bark wrote:
-> See https://nodejs.org/en/blog/release/v0.10.44/
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> ---
->  .../{0.10.43 => 0.10.44}/0001-remove-python-bz2-dependency.patch      | 0
->  .../{0.10.43 => 0.10.44}/0002-gyp-force-link-command-to-use-CXX.patch | 0
->  .../{0.10.43 => 0.10.44}/0003-fix-musl-USE-MISC-build-issue.patch     | 0
->  .../nodejs/{0.10.43 => 0.10.44}/0004-Fix-support-for-uClibc-ng.patch  | 0
->  package/nodejs/Config.in                                              | 2 +-
->  package/nodejs/nodejs.hash                                            | 4 ++--
->  6 files changed, 3 insertions(+), 3 deletions(-)
->  rename package/nodejs/{0.10.43 => 0.10.44}/0001-remove-python-bz2-dependency.patch (100%)
->  rename package/nodejs/{0.10.43 => 0.10.44}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
->  rename package/nodejs/{0.10.43 => 0.10.44}/0003-fix-musl-USE-MISC-build-issue.patch (100%)
->  rename package/nodejs/{0.10.43 => 0.10.44}/0004-Fix-support-for-uClibc-ng.patch (100%)
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/c-icap/c-icap.hash | 2 +-
+ package/c-icap/c-icap.mk   | 5 ++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-Both applied to master, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/c-icap/c-icap.hash b/package/c-icap/c-icap.hash
+index 89c70f4..2b083ef 100644
+--- a/package/c-icap/c-icap.hash
++++ b/package/c-icap/c-icap.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 46b97fab73dbb9e8def8e34c3f94048c92f50a5341bb85bec4f6f6349aec529a c_icap-0.3.5.tar.gz
++sha256 b138c7d7d9828d54c3307bcfe7b4917911266593832ffc26a60df9a0dfd2511e c_icap-0.4.2.tar.gz
+diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+index b4defb8..cff642c 100644
+--- a/package/c-icap/c-icap.mk
++++ b/package/c-icap/c-icap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-C_ICAP_VERSION = 0.3.5
++C_ICAP_VERSION = 0.4.2
+ C_ICAP_SOURCE = c_icap-$(C_ICAP_VERSION).tar.gz
+ C_ICAP_SITE = http://downloads.sourceforge.net/c-icap
+ C_ICAP_LICENSE = LGPLv2.1+
+@@ -17,6 +17,9 @@ C_ICAP_CONF_OPTS = \
+ 	--without-perl \
+ 	--enable-large-files \
+ 	--enable-ipv6
++# Pre-seed cache variables for tests done with AC_TRY_RUN that are not
++# cross-compile friendly
++C_ICAP_CONF_ENV = ac_cv_10031b_ipc_sem=yes ac_cv_fcntl=yes
+ 
+ ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+ C_ICAP_CONF_OPTS += --with-berkeleydb
