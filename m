@@ -1,142 +1,100 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 26 Apr 2016 23:13:12 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/tripwire: new package
-Message-ID: <1461705192-15282-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 Apr 2016 23:14:15 +0200
+Subject: [Buildroot] [PATCH] core/pkg-kconfig: use olddefconfig when
+ available
+In-Reply-To: <CAGkQfmNa9MDGNWT2Ygn4B1R5i61frSoyiET+FojiW+8G02ZfcQ@mail.gmail.com>
+References: <1461433564-21311-1-git-send-email-yann.morin.1998@free.fr>
+ <20160425153508.43945e3c@free-electrons.com>
+ <CAGkQfmNa9MDGNWT2Ygn4B1R5i61frSoyiET+FojiW+8G02ZfcQ@mail.gmail.com>
+Message-ID: <20160426211415.GB3482@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: - fixed depends for comment (Thomas)
-    - updated patch to git format and added note about why the patch was
-      not sent upstream
+Romain, All,
 
- package/Config.in                                  |  1 +
- ...ent-running-an-interactive-install-script.patch | 39 ++++++++++++++++++++++
- package/tripwire/Config.in                         | 21 ++++++++++++
- package/tripwire/tripwire.hash                     |  2 ++
- package/tripwire/tripwire.mk                       | 15 +++++++++
- 5 files changed, 78 insertions(+)
- create mode 100644 package/tripwire/0001-Prevent-running-an-interactive-install-script.patch
- create mode 100644 package/tripwire/Config.in
- create mode 100644 package/tripwire/tripwire.hash
- create mode 100644 package/tripwire/tripwire.mk
+On 2016-04-25 18:42 +0200, Romain Izard spake thusly:
+> 2016-04-25 15:35 GMT+02:00 Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com>:
+> > Hello,
+> >
+> > I am sorry, but I had to revert this commit. While it works in simple
+> > situations, it badly breaks the Busybox build in some situations:
+> >
+> >   http://autobuild.buildroot.org/?reason=busybox-1.24.2
+> >
+> > With just Busybox enabled in a minimal configuration, everything is
+> > fine. Enable "libtirpc" in the configuration, do a full rebuild ->
+> > Busybox will fail to build. I don't know if it's related specifically
+> > to libtirpc or to some of its dependencies, but it fails.
+> >
+> > A very quick research couldn't spot the source of the problem, so I
+> > simply reverted for now. Could you work on this and submit a new
+> > version of the patch that addresses this problem?
+> >
+> 
+> When testing with qemu_x86_defconfig, libtirpc and busybox I reproduce
+> the issue. Calling 'make busybox-menuconfig' returns errors when
+> updating the config file to merge buildroot-managed options with the new
+> busybox config file, as it tries to launch olddefconfig.
+> 
+> The first error in the build is "bash: command not found".
+> 
+> There is a problem with the shell command we tried to generate, as the
+> command line contains multiple levels of backticks. This comes from
+> libtirpc, which uses backticks to generate its CFLAGS.
 
-diff --git a/package/Config.in b/package/Config.in
-index e860f72..a3f7163 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1675,6 +1675,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/tar/Config.in"
- endif
- 	source "package/tpm-tools/Config.in"
-+	source "package/tripwire/Config.in"
- 	source "package/unscd/Config.in"
- 	source "package/util-linux/Config.in"
- endmenu
-diff --git a/package/tripwire/0001-Prevent-running-an-interactive-install-script.patch b/package/tripwire/0001-Prevent-running-an-interactive-install-script.patch
-new file mode 100644
-index 0000000..d48432e
---- /dev/null
-+++ b/package/tripwire/0001-Prevent-running-an-interactive-install-script.patch
-@@ -0,0 +1,39 @@
-+From e5da8136ee2028ca84fecd28c05a46d75504e383 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Tue, 26 Apr 2016 23:10:36 +0200
-+Subject: [PATCH 1/1] Prevent running an interactive install script
-+
-+Downloaded from
-+http://repository.timesys.com/buildsources/t/tripwire/tripwire-2.4.2.2/tripwire-2.4.2.2-disable-install-data-hook.patch
-+
-+Patch was not sent upstream because it changes the desired behaviour
-+during the install process.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ Makefile.in | 9 ++++++---
-+ 1 file changed, 6 insertions(+), 3 deletions(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index 342ff95..05a7ca3 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -594,9 +594,12 @@ uninstall-info: uninstall-info-recursive
-+ 
-+ 
-+ install-data-hook:
-+-	prefix="$(prefix)" sysconfdir="$(sysconfdir)" \
-+-        path_to_vi="$(path_to_vi)" path_to_sendmail="$(path_to_sendmail)" \
-+-        ./install/install.sh
-++	$(mkdir_p) $(DESTDIR)$(sbindir)
-++	$(install_sh_SCRIPT) install/install.sh $(DESTDIR)$(sbindir)
-++#	prefix="$(prefix)" sysconfdir="$(sysconfdir)" \
-++#        path_to_vi="$(path_to_vi)" path_to_sendmail="$(path_to_sendmail)" \
-++#        ./install/install.sh
-++
-+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
-+ # Otherwise a system limit (for SysV at least) may be exceeded.
-+ .NOEXPORT:
-+-- 
-+2.8.0.rc3
-+
-diff --git a/package/tripwire/Config.in b/package/tripwire/Config.in
-new file mode 100644
-index 0000000..1373bb6
---- /dev/null
-+++ b/package/tripwire/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_TRIPWIRE
-+	bool "tripwire"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  Open Source Tripwire? software is a security and data integrity
-+	  tool useful for monitoring and alerting on specific file
-+	  change(s) on a range of systems. The project is based on code
-+	  originally contributed by Tripwire, Inc. in 2000.
-+	  Open Source Tripwire is suitable for monitoring a small number
-+	  of Linux servers, where centralized control and reporting is
-+	  not needed and professional support or system automation is not
-+	  a requirement.
-+
-+	  https://github.com/Tripwire/tripwire-open-source
-+
-+comment "tripwire needs a toolchain w/ C++, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-+	depends on BR2_USE_MMU
-diff --git a/package/tripwire/tripwire.hash b/package/tripwire/tripwire.hash
-new file mode 100644
-index 0000000..2d78812
---- /dev/null
-+++ b/package/tripwire/tripwire.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	9744af4de7ecb1d643442eb22f08c819556494bb6f56f5879e22c3438f2db896	tripwire-2.4.3.1.tar.gz
-diff --git a/package/tripwire/tripwire.mk b/package/tripwire/tripwire.mk
-new file mode 100644
-index 0000000..5cf40ca
---- /dev/null
-+++ b/package/tripwire/tripwire.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# tripwire
-+#
-+################################################################################
-+
-+TRIPWIRE_VERSION = 2.4.3.1
-+TRIPWIRE_SITE = $(call github,Tripwire,tripwire-open-source,$(TRIPWIRE_VERSION))
-+TRIPWIRE_LICENSE = GPLv2+
-+TRIPWIRE_LICENSE_FILES = COPYING
-+TRIPWIRE_DEPENDENCIES = openssl
-+TRIPWIRE_CONF_ENV = \
-+	ac_cv_openssldir=$(STAGING_DIR)/usr
-+
-+$(eval $(autotools-package))
+No, it does not come from libtirpc. It comes from the busybox package,
+see:
+    https://git.buildroot.org/buildroot/tree/package/busybox/busybox.mk#n23
+    https://git.buildroot.org/buildroot/tree/package/busybox/busybox.mk#n26
+
+And that's really the reason why I dislike back-quotes...
+
+However, because our .mk are written in Makefile, and we can't always
+know the number of expansion the Makefile variables will undergo, we
+can't safely use $(xxx) to replace `xxx`... Sad... :-(
+
+> It is possible to fix this by replacing the backticks in the
+> (2)_REGEN_DOT_CONFIG macro. Unfortunately, $(...) is detected by
+> make as its own syntax, so it is necessarily to use quadruple dollars.
+
+Meh... Peolple like to think they'd be happier if they had more $, but
+really more $ really hurts! ;-p
+
+> The v6 revision of the patch, as it did not use backticks, did not have
+> this problem.
+
+I'm afraid we'll have to resort to using the makefile syntax, indeed...
+
+Romain, could you please respin your latest revision that was using the
+Makefile syntax? IIRC, I did add my reviewed-by tag to it, so you can
+keep it (unless you were to tweak the code). However, please add an
+explanation in the commit log that we can't use shell constructs,
+something along the lines of:
+
+    We use a Makefile syntax because using a shell construct does not
+    work:
+      - some packages may have shell-expansion in their _KCONFIG_OPTS
+      - we can't safely use $() for command substituion, so we have to
+        use ``
+      - `` does not nest nicely
+    Using a shell construct here to check the rule, would mean using ``,
+    which could conflict with the `` from the package's _KCONFIG_OPTS.
+
+(Feel free to adapt or re-use as-is! ;-) )
+
+Tyanks!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.8.0.rc3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
