@@ -1,51 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Apr 2016 22:00:38 +0200
-Subject: [Buildroot] [git commit] c-icap: bump to version 0.4.2
-Message-ID: <20160426200119.B62B981E40@busybox.osuosl.org>
+Date: Tue, 26 Apr 2016 22:01:09 +0200
+Subject: [Buildroot] [git commit] c-icap: avoid host library search path
+Message-ID: <20160426200120.0DD3F81E40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=716e7d5ef82fc19db286dceeeb3e686f24a48461
+commit: https://git.buildroot.net/buildroot/commit/?id=fcebe9f1f8d44fbd642330ee498268d49f2238d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add AUTORECONF as a workaround to the effect of '-Wl,-rpath -Wl,/usr/lib' that
+c-icap adds to the linker command.
+
+Fixes:
+http://autobuild.buildroot.net/results/077/077374329b2782dbb4b4a9ee7af264cdda311ccc/
+http://autobuild.buildroot.net/results/057/057a88179150a4f02990d7b9b0d8f2de3c9da1a3/
+http://autobuild.buildroot.net/results/da6/da62b80989df6b8f1b5557b4987d7a6999d30bb8/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/c-icap/c-icap.hash | 2 +-
- package/c-icap/c-icap.mk   | 5 ++++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/c-icap/c-icap.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/c-icap/c-icap.hash b/package/c-icap/c-icap.hash
-index 89c70f4..2b083ef 100644
---- a/package/c-icap/c-icap.hash
-+++ b/package/c-icap/c-icap.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 46b97fab73dbb9e8def8e34c3f94048c92f50a5341bb85bec4f6f6349aec529a c_icap-0.3.5.tar.gz
-+sha256 b138c7d7d9828d54c3307bcfe7b4917911266593832ffc26a60df9a0dfd2511e c_icap-0.4.2.tar.gz
 diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-index b4defb8..cff642c 100644
+index cff642c..3078721 100644
 --- a/package/c-icap/c-icap.mk
 +++ b/package/c-icap/c-icap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--C_ICAP_VERSION = 0.3.5
-+C_ICAP_VERSION = 0.4.2
- C_ICAP_SOURCE = c_icap-$(C_ICAP_VERSION).tar.gz
- C_ICAP_SITE = http://downloads.sourceforge.net/c-icap
- C_ICAP_LICENSE = LGPLv2.1+
-@@ -17,6 +17,9 @@ C_ICAP_CONF_OPTS = \
- 	--without-perl \
- 	--enable-large-files \
- 	--enable-ipv6
-+# Pre-seed cache variables for tests done with AC_TRY_RUN that are not
-+# cross-compile friendly
-+C_ICAP_CONF_ENV = ac_cv_10031b_ipc_sem=yes ac_cv_fcntl=yes
+@@ -20,6 +20,13 @@ C_ICAP_CONF_OPTS = \
+ # Pre-seed cache variables for tests done with AC_TRY_RUN that are not
+ # cross-compile friendly
+ C_ICAP_CONF_ENV = ac_cv_10031b_ipc_sem=yes ac_cv_fcntl=yes
++# c-icap adds '-Wl,-rpath -Wl,/usr/lib' to the link command line. This
++# causes the linker to search for libraries that are listed as NEEDED
++# in the libicapapi.so ELF header in host libraries, which breaks the
++# build. The affected library is libz. Forcing AUTORECONF adds -lz to
++# the link command line, and that makes the linker look first in
++# sysroot, thus avoiding the build breakage.
++C_ICAP_AUTORECONF = YES
  
  ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
  C_ICAP_CONF_OPTS += --with-berkeleydb
