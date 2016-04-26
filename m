@@ -1,52 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 26 Apr 2016 10:36:53 +0300
-Subject: [Buildroot] [PATCH 1/3] c-icap: bump to version 0.4.2
-Message-ID: <24318128fb13b0eb0c7ee751441e2fb644139ed0.1461656215.git.baruch@tkos.co.il>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 26 Apr 2016 09:50:08 +0200
+Subject: [Buildroot] [PATCH 0/5] Align library locations in target and
+	staging
+In-Reply-To: <20160425231717.7a85e856@free-electrons.com>
+References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
+ <20160425231717.7a85e856@free-electrons.com>
+Message-ID: <CAAXf6LVif-9gQyoBvyWN+BoZj5h+JhSBQo1HiV5b8mqs+hidKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v2:
-	Add a comment explaining the need to pre-seed (Thomas P)
----
- package/c-icap/c-icap.hash | 2 +-
- package/c-icap/c-icap.mk   | 5 ++++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+On Mon, Apr 25, 2016 at 11:17 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Fri, 12 Feb 2016 20:20:21 +0100, Thomas De Schampheleire wrote:
+>
+>> Thomas De Schampheleire (5):
+>>   toolchain-external: blackfin: install FDPIC libraries also to staging
+>>   toolchain-external: remove unused calculation of ARCH_SUBDIR
+>>   toolchain-external: extract installation of gdbserver to separate
+>>     define
+>>   toolchain-external: align library locations in target and staging dir
+>>   toolchain-external: unify LIB_EXTERNAL_LIBS and USR_LIB_EXTERNAL_LIBS
+>
+> The entire series is applied. I've also applied two additional cleanups
+> (see below). Thanks a lot for your work on this series. Not only it
+> makes the thing more functional, but it also makes the code simpler.
+> Definitely very good.
+>
+> Thanks to Arnout and Romain for reviewing those not-so-simple changes!
 
-diff --git a/package/c-icap/c-icap.hash b/package/c-icap/c-icap.hash
-index 89c70f423e00..2b083ef659ab 100644
---- a/package/c-icap/c-icap.hash
-+++ b/package/c-icap/c-icap.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 46b97fab73dbb9e8def8e34c3f94048c92f50a5341bb85bec4f6f6349aec529a c_icap-0.3.5.tar.gz
-+sha256 b138c7d7d9828d54c3307bcfe7b4917911266593832ffc26a60df9a0dfd2511e c_icap-0.4.2.tar.gz
-diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-index b4defb87379a..cff642cd9cc1 100644
---- a/package/c-icap/c-icap.mk
-+++ b/package/c-icap/c-icap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--C_ICAP_VERSION = 0.3.5
-+C_ICAP_VERSION = 0.4.2
- C_ICAP_SOURCE = c_icap-$(C_ICAP_VERSION).tar.gz
- C_ICAP_SITE = http://downloads.sourceforge.net/c-icap
- C_ICAP_LICENSE = LGPLv2.1+
-@@ -17,6 +17,9 @@ C_ICAP_CONF_OPTS = \
- 	--without-perl \
- 	--enable-large-files \
- 	--enable-ipv6
-+# Pre-seed cache variables for tests done with AC_TRY_RUN that are not
-+# cross-compile friendly
-+C_ICAP_CONF_ENV = ac_cv_10031b_ipc_sem=yes ac_cv_fcntl=yes
- 
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
- C_ICAP_CONF_OPTS += --with-berkeleydb
--- 
-2.8.0.rc3
+
+Thomas, Arnout, Romain: many thanks indeed for your review and apply
+effort, I greatly appreciate it!
+As you noticed, I did not yet have the time to apply the suggested
+changes, but ThomasP took care of it now.
+
+Thanks!
+Thomas
