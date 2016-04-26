@@ -1,75 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Apr 2016 11:42:18 +0200
-Subject: [Buildroot] QMAKESPEC has not been set
-In-Reply-To: <e196f3adfdc7b795a8b8aa0f555f6a35@rtsys.fr>
-References: <cbbb11e2c7e662c45ad8c288e9f113d8@rtsys.fr>
- <20160425170410.394d5384@free-electrons.com>
- <e196f3adfdc7b795a8b8aa0f555f6a35@rtsys.fr>
-Message-ID: <20160426114218.1ee9c489@free-electrons.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 26 Apr 2016 11:28:57 +0100
+Subject: [Buildroot] [PATCH 1/2] package/nodejs: bump version to 0.10.44
+Message-ID: <1461666538-32692-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+See https://nodejs.org/en/blog/release/v0.10.44/
 
-On Tue, 26 Apr 2016 11:15:02 +0200, rfinkelstein at rtsys.fr wrote:
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ .../{0.10.43 => 0.10.44}/0001-remove-python-bz2-dependency.patch      | 0
+ .../{0.10.43 => 0.10.44}/0002-gyp-force-link-command-to-use-CXX.patch | 0
+ .../{0.10.43 => 0.10.44}/0003-fix-musl-USE-MISC-build-issue.patch     | 0
+ .../nodejs/{0.10.43 => 0.10.44}/0004-Fix-support-for-uClibc-ng.patch  | 0
+ package/nodejs/Config.in                                              | 2 +-
+ package/nodejs/nodejs.hash                                            | 4 ++--
+ 6 files changed, 3 insertions(+), 3 deletions(-)
+ rename package/nodejs/{0.10.43 => 0.10.44}/0001-remove-python-bz2-dependency.patch (100%)
+ rename package/nodejs/{0.10.43 => 0.10.44}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
+ rename package/nodejs/{0.10.43 => 0.10.44}/0003-fix-musl-USE-MISC-build-issue.patch (100%)
+ rename package/nodejs/{0.10.43 => 0.10.44}/0004-Fix-support-for-uClibc-ng.patch (100%)
 
-> Hi, sorry for the lack of information, I'll try to better show my 
-> problem.
-> 
-> In fact there is no package called python-pyqt5 yet in Buildroot, I've 
-> created the configuration files.
-> But i believe it is not the source of the problem (yet) because I'm 
-> stuck before the build of the python-pyqt5. My problem is happening when 
-> building the package python-sip (dependency for the python-pyqt5), 
-> already supported by Buildroot.
-
-OK. However, I did a build of python-qt when I saw your original
-report, and python-sip was part of the build, and it built fine.
-
-> By "the Buildroot configuration that produces the problem" you mean the 
-> file .config?
-> https://gist.github.com/Finkelrf/dbe8280c705162c135dcbe0ea9fca845
-
-You have both Qt4 and Qt5 enabled here, which I'm not sure will work
-really well, especially since both of them will install a
-$(HOST_DIR)/usr/bin/qmake.
-
-So you should first change the python-sip package to make it possible
-to build it without selecting Qt4. One thing that I find weird is that
-our python-sip package depends on Qt, while the SIP web site at
-https://www.riverbankcomputing.com/software/sip/intro) clearly says:
-
-"""
-SIP is a tool that makes it very easy to create Python bindings for C
-and C++ libraries. It was originally developed to create PyQt, the
-Python bindings for the Qt toolkit, but can be used to create bindings
-for any C or C++ library. 
-"""
-
-So it should theoretically be usable with other libraries than Qt.
-
-> The error I've mentioned (QMAKESPEC has not been set, so configuration 
-> cannot be deduced), as the command that generates the error can be seen 
-> in the copy of my terminal in the link below
-> https://gist.github.com/Finkelrf/035f2f7554039ee1ce1008425340e8b3
-
-For Qt5, we need to pass the spec file in argument to qmake, which is
-done automatically if you use $(QT5_QMAKE). So in python-sip, you
-should replace:
-
-   $(HOST_DIR)/usr/bin/qmake
-
-by:
-
-   $(QT5_QMAKE)
-
-if Qt5 is being used.
-
-Thomas
+diff --git a/package/nodejs/0.10.43/0001-remove-python-bz2-dependency.patch b/package/nodejs/0.10.44/0001-remove-python-bz2-dependency.patch
+similarity index 100%
+rename from package/nodejs/0.10.43/0001-remove-python-bz2-dependency.patch
+rename to package/nodejs/0.10.44/0001-remove-python-bz2-dependency.patch
+diff --git a/package/nodejs/0.10.43/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/0.10.44/0002-gyp-force-link-command-to-use-CXX.patch
+similarity index 100%
+rename from package/nodejs/0.10.43/0002-gyp-force-link-command-to-use-CXX.patch
+rename to package/nodejs/0.10.44/0002-gyp-force-link-command-to-use-CXX.patch
+diff --git a/package/nodejs/0.10.43/0003-fix-musl-USE-MISC-build-issue.patch b/package/nodejs/0.10.44/0003-fix-musl-USE-MISC-build-issue.patch
+similarity index 100%
+rename from package/nodejs/0.10.43/0003-fix-musl-USE-MISC-build-issue.patch
+rename to package/nodejs/0.10.44/0003-fix-musl-USE-MISC-build-issue.patch
+diff --git a/package/nodejs/0.10.43/0004-Fix-support-for-uClibc-ng.patch b/package/nodejs/0.10.44/0004-Fix-support-for-uClibc-ng.patch
+similarity index 100%
+rename from package/nodejs/0.10.43/0004-Fix-support-for-uClibc-ng.patch
+rename to package/nodejs/0.10.44/0004-Fix-support-for-uClibc-ng.patch
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 69d7f9b..268bd92 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -44,7 +44,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	string
+ 	default "5.10.1"	if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+-	default "0.10.43"
++	default "0.10.44"
+ 
+ menu "Module Selection"
+ 
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index c42b6be..9be1353 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From upstream URL: http://nodejs.org/dist/v0.10.43/SHASUMS256.txt
+-sha256  6c5185cbfad3538484c9d97eec0110b5cd5826126f15b776015dfee1f51cd32a  node-v0.10.43.tar.xz
++# From upstream URL: http://nodejs.org/dist/v0.10.44/SHASUMS256.txt
++sha256  25b2cd910822723e972a3990d5687b7ff48581ad2f77aa1942d99a1b024f434a  node-v0.10.44.tar.xz
+ 
+ # From upstream URL: http://nodejs.org/dist/v5.10.1/SHASUMS256.txt
+ sha256  9eecd853cdd06ebee24a1bb8d753cd20af5a19297c5d3a3b1680fe36b47d5cbe  node-v5.10.1.tar.xz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
