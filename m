@@ -1,62 +1,84 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 26 Apr 2016 09:29:25 +0100
-Subject: [Buildroot] [PATCH] network-manager: bump version to 1.2.0
-In-Reply-To: <87d1pdo14b.fsf@dell.be.48ers.dk>
-References: <1461236721-60129-1-git-send-email-Vincent.Riera@imgtec.com>
- <571A2F7C.2000707@zacarias.com.ar> <87d1pdo14b.fsf@dell.be.48ers.dk>
-Message-ID: <571F26E5.2070300@imgtec.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 26 Apr 2016 09:34:31 +0100
+Subject: [Buildroot] CC node modules with target using buildroot
+	toolchain
+In-Reply-To: <DUB127-W482A55DDA661B3445A2037B0610@phx.gbl>
+References: <DUB127-W482A55DDA661B3445A2037B0610@phx.gbl>
+Message-ID: <CAFGQKxdh7VW9VpDVXaA6noXL+itaSPJeK24TXxSmjsuqk77zDw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter and Gustavo,
+Muhammet Ilendemli,
 
-On 25/04/16 22:00, Peter Korsgaard wrote:
->>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
-> 
-> Hi Vicente,
-> 
->  > On 21/04/16 08:05, Vicente Olivert Riera wrote:
->  >> -NETWORK_MANAGER_VERSION_MAJOR = 1.0
->  >> -NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).12
->  >> +NETWORK_MANAGER_VERSION_MAJOR = 1.2
->  >> +NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
->  >> NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
->  >> -NETWORK_MANAGER_SITE =
->  >> http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
->  >> +NETWORK_MANAGER_SITE = http://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
->  >> NETWORK_MANAGER_INSTALL_STAGING = YES
->  >> NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
-> 
->  > Hi Vicente.
->  > There are some dependency differences with the new series.
->  > For example dbus-glib is no longer mandatory, it's optional for the
->  > libnm-glib legacy library.
->  > WiFi support can now be disabled (default=y, probably not that
->  > interesting as an option, though it gets rids of the wireless-tools
->  > dependency).
->  > Qt support was remove so --disable-qt can be removed.
->  > There's improved systemd support that requires systemd libraries being
->  > present at build time as well (journal support).
->  > Missing functionality that could also be accounted for (irrespective
->  > of the bump since it was present in 1.0.x as well) is connection
->  > checking via libsoup.
->  > nm-cli and readline are also optional now.
-> 
->  > I'm sure there are more to look at ;)
-> 
-> Will you rework the patch after taking Gustavoz' feedback into
-> consideration? In the mean time I have marked the patch as changes
-> requested.
+Instead of calling the command line npm directly you're better to get
+buildroot to call it for you.  This is because npm needs to be called
+correctly to so it can cross compile C/C++ code for the target.  To do
+this i tend to use these two methods
 
-yes, as soon as I have enough free time to do it. I'm quite busy these
-recent days :(
+1) Set BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL to a package you want
+installed globally. For example if you set it to hap-nodejs it will
+download, cross compile and install hap-nodejs to
+$(TARGTE_DIR)/usr/lib/node_modules.  hap-nodejs seems to need the
+avahi header files installed so you need to make sure you select
+BR2_PACKAGE_AVAHI, BR2_PACKAGE_AVAHI_DAEMON and
+BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY.  Also you need to set
+BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS to avahi so nodejs knows
+hap-nodejs needs avahi to be built first.
 
-Regards,
+I tried all this myself and it managed build and install hap-nodejs to
+the target fine.  So you'll end up with the following in your
+buildroot config.
 
-Vincent.
+BR2_PACKAGE_NODEJS=y
+BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="hap-nodejs"
+BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS="avahi"
+BR2_PACKAGE_AVAHI=y
+BR2_PACKAGE_AVAHI_DAEMON=y
+BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY=y
 
-> Thanks!
-> 
+2) The other option is to create a package to install your node
+modules to the target.  A simple package.mk file might look like this:
+
+    HAP_NODEJS_VERSION = v0.3.1
+    HAP_NODEJS_SITE = $(call github,KhaosT,HAP-NodeJS,$(HAP_NODEJS_VERSION))
+    HAP_NODEJS_DEPENDENCIES = nodejs avahi
+
+    define HAP_NODEJS_INSTALL_TARGET_CMDS
+        $(NPM) install -g $(@D)
+    endef
+
+    $(eval $(generic-package))
+
+Once you have a package.mk you can then use all the normal features
+like installing a systemd service to start you nodejs app.  You can
+use the Config.in to select avahi as a dependency.
+
+Note the $(NPM) is a convenience wrapper around the host version of
+npm and will call npm in the correct way to cross compile any C/C++
+code it has.  The -g option will cause npm to install the package
+globally to the target i.e. to $(TARGET_DIR)/usr/lib/node_modules
+
+Hope that helps
+
+Thanks
+
+Martin
+
+On 24 April 2016 at 16:14, Muhammet Ilendemli <ilendemli@live.at> wrote:
+> Hey!
+>
+> I am trying to cross compile some nodejs modules which are required by
+> https://github.com/KhaosT/HAP-NodeJS using the buildroots compiled toolchain
+> for raspberry pi. When i try to CC the modules on the host device by typing
+> "npm install --target_arch=arm6" inside the cloned project, it fails with
+> the following error:
+> gyp: Undefined variable openssl_config_path in binding.gyp while trying to
+> load binding.gyp
+>
+> could you take a look into this? i was told to email you about this.
+>
+> Sincerely
+> Muhammet Ilendemli
