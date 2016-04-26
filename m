@@ -1,101 +1,168 @@
 From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Tue, 26 Apr 2016 17:35:55 +0100
-Subject: [Buildroot] [PATCH 1/2] uboot and arm trusted firmware build added
-	to juno board
-Message-ID: <eeb5c500573a8584bfbfe6d33bf160c725683a18.1461688139.git.jpinto@synopsys.com>
+Date: Tue, 26 Apr 2016 17:35:56 +0100
+Subject: [Buildroot] [PATCH 2/2] ARM Trusted Firmware (ATF) added to boot/
+In-Reply-To: <eeb5c500573a8584bfbfe6d33bf160c725683a18.1461688139.git.jpinto@synopsys.com>
+References: <eeb5c500573a8584bfbfe6d33bf160c725683a18.1461688139.git.jpinto@synopsys.com>
+Message-ID: <8acf7d43ca7e5392a31b8739074c5bc6beb27c71.1461688139.git.jpinto@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds more options to the juno's default configuration file
-and more content to the readme.txt, regarding the introduction of u-boot and
-arm trusted firmware build.
+New package atfirmware which has the goal to build the ARM Trusted Firmware.
 
 Signed-off-by: Joao Pinto <jpinto@synopsys.com>
 ---
- board/arm/juno/readme.txt  | 26 +++++++++++++++++++++-----
- configs/arm_juno_defconfig | 12 ++++++++++++
- 2 files changed, 33 insertions(+), 5 deletions(-)
+ boot/Config.in                |  1 +
+ boot/atfirmware/Config.in     | 81 +++++++++++++++++++++++++++++++++++++++++++
+ boot/atfirmware/atfirmware.mk | 39 +++++++++++++++++++++
+ 3 files changed, 121 insertions(+)
+ create mode 100644 boot/atfirmware/Config.in
+ create mode 100644 boot/atfirmware/atfirmware.mk
 
-diff --git a/board/arm/juno/readme.txt b/board/arm/juno/readme.txt
-index 52fabf9..507ed6d 100644
---- a/board/arm/juno/readme.txt
-+++ b/board/arm/juno/readme.txt
-@@ -7,8 +7,8 @@ These instructions apply to all models of the ARM Juno:
-   - Juno r0 (does not support PCIe)
-   - Juno r1 (supports PCIe)
+diff --git a/boot/Config.in b/boot/Config.in
+index 54760b9..e162fcc 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -13,5 +13,6 @@ source "boot/mxs-bootlets/Config.in"
+ source "boot/syslinux/Config.in"
+ source "boot/uboot/Config.in"
+ source "boot/xloader/Config.in"
++source "boot/atfirmware/Config.in"
  
--Buildroot will generate the kernel image, device tree blob and a
--minimal root filesystem.
-+Buildroot will generate the kernel image, device tree blob, a minimal 
-+root filesystem, a u-boot binary and ARM Trusted Firmware binaries.
- 
- How to build it
- ===============
-@@ -42,6 +42,21 @@ After building, you should obtain this tree:
-     +-- juno.dtb (if Juno r0 is used)
-     +-- juno-r1.dtb (if Juno r1 is used)
-     +-- Image
-+    +-- u-boot.bin
-+    +-- bl1.bin
-+    +-- bl2.bin
-+    +-- bl2u.bin
-+    +-- bl31.bin
-+    +-- fip.bin
+ endmenu
+diff --git a/boot/atfirmware/Config.in b/boot/atfirmware/Config.in
+new file mode 100644
+index 0000000..67a0831
+--- /dev/null
++++ b/boot/atfirmware/Config.in
+@@ -0,0 +1,81 @@
++config BR2_ATFIRMWARE
++	
++	bool "ARM Trusted Firmware (ATF)"
++	help
++	  Enable this option if you want to build the ATF for your ARM based
++	  embedded device.
 +
-+Other ARM Trusted Firmware options
-+==================================
-+If you need to include the bootlader into the fip package, please
-+configure BR2_TARGET_ATFIRMWARE_PAYLOAD_PATH to specify the path to the
-+binary.
++if BR2_ATFIRMWARE
 +
-+If you need to include the SCP Firmware into the fip package please
-+specify SCP_BL2=<binary_path> in BR2_TARGET_ATFIRMWARE_ADDITIONAL_VARIABLES.
- 
- Preparing your rootfs
- ======================
-@@ -89,8 +104,8 @@ NOR3LOAD: 00000000               ;Image Load Address
- NOR3ENTRY: 00000000              ;Image Entry Point
- ......
- 
--Installing kernel image and DTB
--===============================
-+Installing kernel image, DTB and bootloader
-+===========================================
- 
- 1. Connect to the ARM Juno UART0 and execute USB_ON in the terminal
- 2. Connect a USB cable between your PC and ARM Juno USB type B connector
-@@ -98,7 +113,8 @@ Installing kernel image and DTB
- 3. Open the software/ folder
- 4. Copy the 'Image' file to software/
- 5. Copy the 'juno-r1.dtb' (r1) or the 'juno.dtb' (r0) file to software/
--6. Press the red button in the front pannel of ARM Juno
-+6. Copy the 'bl1.bin' and 'fip.bin' files to software/
-+7. Press the red button in the front pannel of ARM Juno
- 
- At this time, the board will erase the Flash entry for each new item and
- replace it with the lastest ones.
-diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
-index 87b6374..b94d04c 100644
---- a/configs/arm_juno_defconfig
-+++ b/configs/arm_juno_defconfig
-@@ -12,3 +12,15 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arm/juno/linux-juno-defconfig"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
-+BR2_TARGET_ATFIRMWARE=y
-+BR2_TARGET_ATFIRMWARE_CUSTOM_GIT=y
-+BR2_TARGET_ATFIRMWARE_VERSION="v1.2"
-+BR2_TARGET_ATFIRMWARE_CUSTOM_GIT_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
-+BR2_TARGET_ATFIRMWARE_CUSTOM_GIT_VERSION="v1.2"
-+BR2_TARGET_ATFIRMWARE_PLATFORM="juno"
++choice
++	prompt "ATF version"
 +
++config BR2_ATFIRMWARE_CUSTOM_TARBALL
++	bool "Custom tarball"
++	help
++	  This option allows to specify a URL pointing to a ATF source
++	  tarball. This URL can use any protocol recognized by Buildroot,
++	  like http://, ftp://, file:// or scp://.
++
++	  When pointing to a local tarball using file://, you may want to
++	  use a make variable like $(TOPDIR) to reference the root of the
++	  Buildroot tree.
++
++config BR2_ATFIRMWARE_CUSTOM_GIT
++	bool "Custom Git repository"
++	help
++	  This option allows Buildroot to get the ATF source code from a 
++	  Git repository.
++
++config BR2_ATFIRMWARE_CUSTOM_LOCAL
++	bool "Local directory"
++	help
++	  This option allows Buildroot to get the ATF kernel source code from
++	  a local directory.
++
++endchoice
++
++config BR2_ATFIRMWARE_CUSTOM_TARBALL_LOCATION
++	string "URL of custom kernel tarball"
++	depends on BR2_ATFIRMWARE_CUSTOM_TARBALL
++
++if BR2_ATFIRMWARE_CUSTOM_GIT
++
++config BR2_ATFIRMWARE_CUSTOM_REPO_URL
++	string "URL of custom repository"
++	depends on BR2_ATFIRMWARE_CUSTOM_GIT
++
++config BR2_ATFIRMWARE_CUSTOM_REPO_VERSION
++	string "Custom repository version"
++	depends on BR2_ATFIRMWARE_CUSTOM_GIT
++	help
++	  Revision to use in the typical format used by Git
++	  E.G. a sha id, a tag, branch, ..
++
++endif
++
++config BR2_ATFIRMWARE_CUSTOM_LOCAL_PATH
++	string "Path to the local directory"
++	depends on BR2_ATFIRMWARE_CUSTOM_LOCAL
++	help
++	  Path to the local directory with the ATF source code.
++
++config BR2_ATFIRMWARE_PLATFORM
++	string "ATF Target Platform"
++	help
++	  E.G. If using a Juno board, you should specify 'juno' as 
++	  your platform.
++
++config BR2_BOOT_ATFIRMWARE_PAYLOAD_PATH
++	string "Path to the BL33 binary"
++	help
++	  If you wish to build into the ATF a bootloader like U-Boot, you
++	  should indicate the path to its binary here.
++
++config BR2_BOOT_ATFIRMWARE_ADDITIONAL_VARIABLES
++	string "Additional ATF build variables"
++	help
++	  Additional parameters for the ATF build
++	  E.G. 'SCP_BL2=<path_to_bl2> DEBUG=1 LOG_LEVEL=20'
++
++endif # BR2_ATFIRMWARE
+diff --git a/boot/atfirmware/atfirmware.mk b/boot/atfirmware/atfirmware.mk
+new file mode 100644
+index 0000000..ce1e01e
+--- /dev/null
++++ b/boot/atfirmware/atfirmware.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# ARM Trusted Firmware
++#
++################################################################################
++
++# Compute ATF_SOURCE and ATF_SITE from the configuration
++ifeq ($(BR2_ATFIRMWARE_CUSTOM_TARBALL),y)
++ATFIRMWARE_TARBALL = $(call qstrip,$(BR2_ATFIRMWARE_CUSTOM_TARBALL_LOCATION))
++ATFIRMWARE_SITE = $(patsubst %/,%,$(dir $(ATFIRMWARE_TARBALL)))
++ATFIRMWARE_SOURCE = $(notdir $(ATFIRMWARE_TARBALL))
++BR_NO_CHECK_HASH_FOR += $(ATFIRMWARE_SOURCE)
++else ifeq ($(BR2_ATFIRMWARE_CUSTOM_LOCAL),y)
++ATFIRMWARE_SITE = $(call qstrip,$(BR2_ATFIRMWARE_CUSTOM_LOCAL_PATH))
++ATFIRMWARE_SITE_METHOD = local
++else ifeq ($(BR2_ATFIRMWARE_CUSTOM_GIT),y)
++ATFIRMWARE_SITE = $(call qstrip,$(BR2_ATFIRMWARE_CUSTOM_REPO_URL))
++ATFIRMWARE_SITE_METHOD = git
++endif
++
++ATFIRMWARE_INSTALL_IMAGES = YES
++
++define ATFIRMWARE_BUILD_CMDS
++	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) \
++	BL33=$(call qstrip,$(BR2_BOOT_ATFIRMWARE_PAYLOAD_PATH) \
++	$(BR2_BOOT_ATFIRMWARE_ADDITIONAL_VARIABLES) \
++	all fip
++endef
++
++define ATFIRMWARE_INSTALL_IMAGES_CMDS
++	if test -h $(@D)/build/$(BR2_ATFIRMWARE_PLATFORM)/bl1.bin ; then \
++		cp -L $(@D)/build/$(BR2_ATFIRMWARE_PLATFORM)/bl1.bin $(BINARIES_DIR)/ ; \
++	fi
++	if test -h $(@D)/build/$(BR2_ATFIRMWARE_PLATFORM)/fip.bin ; then \
++		cp -L $(@D)/build/$(BR2_ATFIRMWARE_PLATFORM)/fip.bin $(BINARIES_DIR)/ ; \
++	fi
++endef
++
++$(eval $(kconfig-package))
 -- 
 1.8.1.5
