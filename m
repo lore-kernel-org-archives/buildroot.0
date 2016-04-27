@@ -1,9 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Apr 2016 22:58:29 +0200
-Subject: [Buildroot] [PATCH] yajl: remove obsolete patch
-In-Reply-To: <1461614083-29745-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1461614083-29745-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20160427225829.591fe687@free-electrons.com>
+Date: Wed, 27 Apr 2016 22:56:19 +0200
+Subject: [Buildroot] [PATCH 1/8] package/mesa3d: introduce new Kconfig
+ option to indicate full OpenGL support
+In-Reply-To: <XnsA5F7E7BF5206DID313208userindividu@bernd-kuhls.de>
+References: <1461586822-1003-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160427213040.327325f8@free-electrons.com>
+ <XnsA5F7E7BF5206DID313208userindividu@bernd-kuhls.de>
+Message-ID: <20160427225619.39a3c7e7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +15,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 25 Apr 2016 21:54:43 +0200, J?rg Krause wrote:
-> Commit 302563539dacb284576a443401cdfd061eb2e1e8 fixes link with libm for all
-> targets linking against libyajl{,_s}. This makes patch "0001-cmake-uClibc-Fix
-> -missing-libm-for-tests" obsolete so it is safe to remove it.
-> 
-> Instead of renumbering all remaining patches the patch defined in YAJL_PATCH
-> is fetched and put intto the packages directory. Having all the patches in one
-> places makes the number and order of the patches applied to the package more
-> clear.
-> 
-> Align patch "0003-Link-with-shared-libyajl-in-a-shared-build" with commit
-> 302563539dacb284576a443401cdfd061eb2e1e8 and remove linking with libm from
-> test/api/CMakeLists.txt.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  ...red-and-the-static-library-have-the-same-.patch | 34 ++++++++++++++++++++++
->  ...1-cmake-uClibc-Fix-missing-libm-for-tests.patch | 30 -------------------
->  ...ink-with-shared-libyajl-in-a-shared-build.patch | 12 ++++----
->  package/yajl/yajl.hash                             |  1 -
->  package/yajl/yajl.mk                               |  1 -
->  5 files changed, 41 insertions(+), 37 deletions(-)
->  create mode 100644 package/yajl/0001-Let-the-shared-and-the-static-library-have-the-same-.patch
->  delete mode 100644 package/yajl/0001-cmake-uClibc-Fix-missing-libm-for-tests.patch
+On Wed, 27 Apr 2016 22:46:54 +0200, Bernd Kuhls wrote:
 
-Applied to master, thanks.
+> the goal of my patch series was to make the presence of OpenGL support in
+> mesa3d visible to the user, your proposal is technically also fine with me
+> but it needs more technical experience by users to enable the correct
+> options to enable OpenGL support because the OpenGL option is a blind one.
+
+Right, but your implementation is really weird. Due to:
+
++	select BR2_PACKAGE_MESA3D_OPENGL_GL if BR2_PACKAGE_XORG7
+
+even if the user does *NOT* enable BR2_PACKAGE_MESA3D_OPENGL_GL, it
+will get forcefully selected as soon as the dependencies
+(BR2_PACKAGE_XORG7 && BR2_PACKAGE_MESA3D_DRI_DRIVER) are enabled.
+
+In the end, you're creating an option that is not an option!
+
+If you really want, you can improve my proposal by doing:
+
+config BR2_PACKAGE_MESA3D_OPENGL_GL
+	bool
+	default y
+	depends on BR2_PACKAGE_XORG7
+	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
+
+comment "full OpenGL supports needs X.org and a DRI driver"
+	depends on !BR2_PACKAGE_MESA3D_OPENGL_GL
+
+Best regards,
 
 Thomas
 -- 
