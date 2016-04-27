@@ -1,55 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Apr 2016 22:06:42 +0200
-Subject: [Buildroot] [PATCH 1/1] lksctp-tools: allow building the
- library without the tools
-In-Reply-To: <3c566d3c65caadb3a7c897ec56b93c0c@vanbemten.com>
-References: <3c566d3c65caadb3a7c897ec56b93c0c@vanbemten.com>
-Message-ID: <20160427220642.50950224@free-electrons.com>
+Date: Wed, 27 Apr 2016 22:07:00 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{4, 12, 18}.x series
+Message-ID: <20160427200709.DF44581E39@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7e40766473e8ebf5ad342ebc94f018c0e22d4fb8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->  From 6ec58aa8226a212e7b1d7bd7f058f52313f3e0e8 Mon Sep 17 00:00:00
-> 2001 From: Lionel Van Bemten <lionel@vanbemten.com>
-> Date: Tue, 26 Apr 2016 18:43:55 +0200
-> Subject: [PATCH 1/1] lksctp-tools: allow building the library without 
-> the tools
-> 
-> lksctp-tools provides three things:
->    * C language header files (netinet/sctp.h)
->    * a user-space library (libsctp)
->    * some helper utilities around SCTP (sctp_darn,
->      checksctp, sctp_status, withsctp and sctp_test)
-> 
-> This change makes it possible to
->    * publish the header file without building the library
->      nor the tools (for applications using only system calls)
->    * build the library without the tools (typical usecase
->      for an embedded application)
-> 
-> Signed-off-by: Lionel Van Bemten <lionel@vanbemten.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thanks for your contribution! However, due to the fact that you sent it
-with your webmail, the patch is badly line-wrapped and cannot be
-applied. Could you resend it by using "git send-email" (it just
-requires a standard SMTP server), which will ensure that the patch is
-properly formatted?
-
-Overall regarding the patch, I am wondering if want to go into such
-granularity in the installation of this package. The library weights 5
-KB, and the total size of the binaries is 84 KB. This really seems very
-light, both in build time and in filesystem size consumption. This is
-typically the kind of fine-tuning that we generally prefer to do in a
-post-build script.
-
-What do you think?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7acbf61..2e01e3d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -211,11 +211,11 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.79"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.111"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.12.57"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.59"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.67"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.18.31"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.32"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.22"	if BR2_KERNEL_HEADERS_4_1
