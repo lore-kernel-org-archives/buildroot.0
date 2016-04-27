@@ -1,45 +1,24 @@
-From: =?UTF-8?Q?Beno=c3=aet_Mauduit?= <bmauduit@beneth.fr>
-Date: Wed, 27 Apr 2016 23:16:22 +0200
-Subject: [Buildroot] [git commit] configs/raspberrypi3: sync kernel
- version with rpi/rpi2
-In-Reply-To: <87d1pa23b2.fsf@dell.be.48ers.dk>
-References: <CALtfCQbtz27yZXAOf+rZpE7y1LOV5TzTT2e5dUbk7ov-RQEy5A@mail.gmail.com>
- <878u00o2oi.fsf@dell.be.48ers.dk>
- <CALtfCQbwAPAwPjyyoY6bLdzsg3i86ZrC8bQor1ycbx8VBKm9og@mail.gmail.com>
- <874maoo0al.fsf@dell.be.48ers.dk> <87wpnkmf65.fsf@dell.be.48ers.dk>
- <20160426213916.241241c7@gmx.net> <571FD66D.9050305@beneth.fr>
- <87d1pa23b2.fsf@dell.be.48ers.dk>
-Message-ID: <57212C26.5090308@beneth.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Apr 2016 23:20:08 +0200
+Subject: [Buildroot] [PATCH v2] mpv: new package
+In-Reply-To: <1461762722-10026-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 27 Apr 2016 10:12:02 -0300")
+References: <1461762722-10026-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wpnizr3r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/27/2016 10:40 PM, Peter Korsgaard wrote:
-> 
-> Ehh, but we are already using rpi-4.4.y? (3de2328 from April 21st) -
-> With that said, we can certainly move to e63db5. Care to send a patch to
-> update raspberry{,2,3}_defconfig?
-> 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Ouuups, I was already on this 4.4 branch after trying to work on Kodi,
-before April 21st, I missed the buildroot change...
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ > Changes for v2:
+ >  * As pointed by Arnout add missing inherited nios2 exclusion (ffmpeg)
 
-Patchs are ready for raspberry{,2,3}_defconfig, I am just waiting a
-build to confirm that it is working.
-
-I took the last commit on rpi-4.4.y branch, which is now :
-26f3b72a9c049be10e6af196252283e1f6ab9d1f. (Kernel 4.4.8).
-
-Just a question, seeing how buildroot manage defconfig : Is it really
-useful to add comments (And re-order Kconfig option) in defconfig ? Some
-people read defconfigs ?
-
-Thanks,
-Regards,
+Committed, thanks.
 
 -- 
-Beno?t Mauduit
-<bmauduit@beneth.fr>
-XMPP (Jabber) : <bmauduit@im.beneth.fr>
+Bye, Peter Korsgaard
