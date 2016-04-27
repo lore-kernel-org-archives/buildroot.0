@@ -1,86 +1,141 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Apr 2016 22:40:13 +0200
-Subject: [Buildroot] [git commit] libusbgx: new package
-Message-ID: <20160427204046.4A8E781D75@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 27 Apr 2016 22:46:51 +0200
+Subject: [Buildroot] [PATCH 1/4] package/efl: switch to luajit support
+Message-ID: <1461790014-17051-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=409a00a12d6922e706ef40d8db09223f1cdfe9af
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+In efl 1.15.x, Lua "old" support is broken with Lua 5.2+ [1].
 
-libusbgx is a C library encapsulating the kernel USB gadget-configfs
-userspace API functionality.
+With the patch added in efl 1.16 to fixes this issue, libevas fail to link with
+the following error:
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-[Thomas: adjust license information, there are included examples that
-are installed by default, licensed under GPLv2+.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+CCLD bin/ecore_evas/ecore_evas_convert
+host-efl-1.16.1/src/lib/evas/.libs/libevas.so: undefined reference to `luaL_openlib'
+collect2: error: ld returned 1 exit status
+Makefile:19021: recipe for target 'bin/ecore_evas/ecore_evas_convert' failed
+
+Since 9ba8d1cce4ab00307827083bae234d87b37fb967, the luajit support can be
+enabled in efl package.
+In order to update the efl stack to 1.17, switch to luajit support and remove
+Lua "old" support since it's not fixed upstream yet. But the drawback is the
+efl stack depends implicitely on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS.
+
+[1] https://phab.enlightenment.org/T2728
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/Config.in              |  1 +
- package/libusbgx/Config.in     | 12 ++++++++++++
- package/libusbgx/libusbgx.hash |  2 ++
- package/libusbgx/libusbgx.mk   | 15 +++++++++++++++
- 4 files changed, 30 insertions(+)
+ package/efl/Config.in |  6 +++---
+ package/efl/efl.mk    | 17 +++++++++--------
+ 2 files changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2967244..480569c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -994,6 +994,7 @@ menu "Hardware handling"
- 	source "package/libsoc/Config.in"
- 	source "package/libusb/Config.in"
- 	source "package/libusb-compat/Config.in"
-+	source "package/libusbgx/Config.in"
- 	source "package/libv4l/Config.in"
- 	source "package/libxkbcommon/Config.in"
- 	source "package/mraa/Config.in"
-diff --git a/package/libusbgx/Config.in b/package/libusbgx/Config.in
-new file mode 100644
-index 0000000..fcebf3c
---- /dev/null
-+++ b/package/libusbgx/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBUSBGX
-+	bool "libusbgx"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBCONFIG
-+	help
-+	  libusbgx is a C library encapsulating the kernel USB
-+	  gadget-configfs userspace API functionality.
-+
-+	  https://github.com/libusbgx/libusbgx
-+
-+comment "libusbgx needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libusbgx/libusbgx.hash b/package/libusbgx/libusbgx.hash
-new file mode 100644
-index 0000000..c185c58
---- /dev/null
-+++ b/package/libusbgx/libusbgx.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  1e258205dcde99d0eeb52404ee7ff1bc9a39eb3878e8455fb72bad7cf90c7357  libusbgx-2e3d43ee098ed928d1baa61ce791ce9ff4788c5a.tar.gz
-diff --git a/package/libusbgx/libusbgx.mk b/package/libusbgx/libusbgx.mk
-new file mode 100644
-index 0000000..1340d2d
---- /dev/null
-+++ b/package/libusbgx/libusbgx.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libusbgx
-+#
-+################################################################################
-+
-+LIBUSBGX_VERSION = 2e3d43ee098ed928d1baa61ce791ce9ff4788c5a
-+LIBUSBGX_SITE = $(call github,libusbgx,libusbgx,$(LIBUSBGX_VERSION))
-+LIBUSBGX_LICENSE = GPLv2+ (examples), LGPLv2.1+ (library)
-+LIBUSBGX_LICENSE_FILES = COPYING COPYING.LGPL
-+LIBUSBGX_DEPENDENCIES = host-pkgconf libconfig
-+LIBUSBGX_AUTORECONF = YES
-+LIBUSBGX_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 88e2c36..c8e17d2 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_EFL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_HAS_UDEV # libudev
+ 	# https://phab.enlightenment.org/T2728
+-	depends on BR2_PACKAGE_LUA_5_1 # needs lua 5.1, broken with 5.2+
++	depends on BR2_PACKAGE_LUAJIT # Lua support broken with 5.2+
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_USE_WCHAR # use wchar_t
+@@ -186,6 +186,6 @@ comment "efl needs udev /dev management and a toolchain w/ C++, dynamic library,
+ 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU
+ 
+-comment "efl needs lua 5.1"
+-	depends on !BR2_PACKAGE_LUA_5_1
++comment "efl needs luajit"
++	depends on !BR2_PACKAGE_LUAJIT
+ 	depends on BR2_USE_MMU
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 2ea2592..916999d 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -19,8 +19,8 @@ EFL_LICENSE_FILES = \
+ 
+ EFL_INSTALL_STAGING = YES
+ 
+-EFL_DEPENDENCIES = host-pkgconf host-efl dbus freetype jpeg lua udev \
+-	util-linux zlib
++EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
++	jpeg luajit udev util-linux zlib
+ 
+ # Regenerate the autotools:
+ #  - to fix an issue in eldbus-codegen: https://phab.enlightenment.org/T2718
+@@ -29,19 +29,20 @@ EFL_GETTEXTIZE = YES
+ 
+ # Configure options:
+ # --disable-cxx-bindings: disable C++11 bindings.
++# --disable-lua-old: build elua for the target.
+ # --disable-sdl: disable sdl2 support.
+ # --disable-systemd: disable systemd support.
+ # --disable-xinput22: disable X11 XInput v2.2+ support.
+-# --enable-lua-old: disable Elua and remove luajit dependency.
+ # --with-opengl=none: disable opengl support.
+ EFL_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
++	--with-elua=$(HOST_DIR)/usr/bin/elua \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+ 	--disable-cxx-bindings \
++	--disable-lua-old \
+ 	--disable-sdl \
+ 	--disable-systemd \
+ 	--disable-xinput22 \
+-	--enable-lua-old \
+ 	--with-opengl=none
+ 
+ # Disable untested configuration warning.
+@@ -227,7 +228,7 @@ $(eval $(autotools-package))
+ # * host-freetype: for libevas
+ # * host-libglib2: for libecore
+ # * host-libjpeg, host-libpng: for libevas image loader
+-# * host-lua: disable luajit dependency
++# * host-luajit for Elua tool for the host
+ HOST_EFL_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-dbus \
+@@ -235,7 +236,7 @@ HOST_EFL_DEPENDENCIES = \
+ 	host-libglib2 \
+ 	host-libjpeg \
+ 	host-libpng \
+-	host-lua \
++	host-luajit \
+ 	host-zlib
+ 
+ # Configure options:
+@@ -246,10 +247,10 @@ HOST_EFL_DEPENDENCIES = \
+ # --disable-gstreamer1: remove dependency on gtreamer 1.0.
+ # --disable-libeeze: remove libudev dependency.
+ # --disable-libmount: remove dependency on host-util-linux libmount.
++# --disable-lua-old: build elua for the host.
+ # --disable-physics: remove Bullet dependency.
+ # --enable-image-loader-gif=no: disable Gif dependency.
+ # --enable-image-loader-tiff=no: disable Tiff dependency.
+-# --enable-lua-old: disable Elua and remove luajit dependency.
+ # --with-crypto=none: remove dependencies on openssl or gnutls.
+ # --with-x11=none: remove dependency on X.org.
+ #   Yes I really know what I am doing.
+@@ -261,13 +262,13 @@ HOST_EFL_CONF_OPTS += \
+ 	--disable-gstreamer1 \
+ 	--disable-libeeze \
+ 	--disable-libmount \
++	--disable-lua-old \
+ 	--disable-multisense \
+ 	--disable-physics \
+ 	--enable-image-loader-gif=no \
+ 	--enable-image-loader-jpeg=yes \
+ 	--enable-image-loader-png=yes \
+ 	--enable-image-loader-tiff=no \
+-	--enable-lua-old \
+ 	--with-crypto=none \
+ 	--with-glib=yes \
+ 	--with-opengl=none \
+-- 
+2.5.5
