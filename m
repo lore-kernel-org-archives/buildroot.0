@@ -1,52 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Apr 2016 22:56:19 +0200
-Subject: [Buildroot] [PATCH 1/8] package/mesa3d: introduce new Kconfig
- option to indicate full OpenGL support
-In-Reply-To: <XnsA5F7E7BF5206DID313208userindividu@bernd-kuhls.de>
-References: <1461586822-1003-1-git-send-email-bernd.kuhls@t-online.de>
- <20160427213040.327325f8@free-electrons.com>
- <XnsA5F7E7BF5206DID313208userindividu@bernd-kuhls.de>
-Message-ID: <20160427225619.39a3c7e7@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Apr 2016 23:14:00 +0200
+Subject: [Buildroot] [PATCH] gcc: add support for gcc 6
+In-Reply-To: <1461765243-19631-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 27 Apr 2016 15:54:03 +0200")
+References: <1461765243-19631-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <871t5q21rb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Wed, 27 Apr 2016 22:46:54 +0200, Bernd Kuhls wrote:
+ > This commit adds the support for gcc 6. This release allows to remove
+ > a large number of our gcc patches, mainly thanks to the Xtensa and
+ > musl related patches being merged upstream.
 
-> the goal of my patch series was to make the presence of OpenGL support in
-> mesa3d visible to the user, your proposal is technically also fine with me
-> but it needs more technical experience by users to enable the correct
-> options to enable OpenGL support because the OpenGL option is a blind one.
+ > Patches kept with no changes:
 
-Right, but your implementation is really weird. Due to:
+ >  100-uclibc-conf.patch
+ >  301-missing-execinfo_h.patch
+ >  810-arm-softfloat-libgcc.patch
+ >  830-arm_unbreak_armv4t.patch
+ >  840-microblaze-enable-dwarf-eh-support.patch
+ >  860-cilk-wchar.patch
+ >  890-fix-m68k-compile.patch
 
-+	select BR2_PACKAGE_MESA3D_OPENGL_GL if BR2_PACKAGE_XORG7
+ > Patches dropped because they have been merged upstream, or were
+ > already upstream backports:
 
-even if the user does *NOT* enable BR2_PACKAGE_MESA3D_OPENGL_GL, it
-will get forcefully selected as soon as the dependencies
-(BR2_PACKAGE_XORG7 && BR2_PACKAGE_MESA3D_DRI_DRIVER) are enabled.
+ >  120-gcc-config.gcc-fix-typo-for-powerpc-e6500-cpu_is_64b.patch (merged)
+ >  850-libstdcxx-uclibc-c99.patch (merged in a different form, see
+ >  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58393)
+ >  870-xtensa-add-mauto-litpools-option.patch (upstream backport)
+ >  871-xtensa-reimplement-register-spilling.patch (upstream backport)
+ >  872-xtensa-use-unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch (upstream backport)
+ >  873-xtensa-fix-_Unwind_GetCFA.patch (upstream backport)
+ >  874-xtensa-add-uclinux-support.patch (upstream backport)
+ >  900-libitm-fixes-for-musl-support.patch (upstream backport)
+ >  901-fixincludes-update-for-musl-support.patch (upstream backport)
+ >  902-unwind-fix-for-musl.patch (upstream backport)
+ >  903-libstdc++-libgfortran-gthr-workaround-for-musl.patch (upstream backport)
+ >  904-musl-libc-config.patch (upstream backport)
+ >  905-add-musl-support-to-gcc.patch (upstream backport)
+ >  905-add-musl-support-to-gcc.patch (upstream backport)
+ >  906-mips-musl-support.patch (upstream backport)
+ >  907-x86-musl-support.patch (upstream backport)
+ >  908-arm-musl-support.patch (upstream backport)
+ >  909-aarch64-musl-support.patch (upstream backport)
 
-In the end, you're creating an option that is not an option!
+Nice! Committed, thanks.
 
-If you really want, you can improve my proposal by doing:
-
-config BR2_PACKAGE_MESA3D_OPENGL_GL
-	bool
-	default y
-	depends on BR2_PACKAGE_XORG7
-	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
-
-comment "full OpenGL supports needs X.org and a DRI driver"
-	depends on !BR2_PACKAGE_MESA3D_OPENGL_GL
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
