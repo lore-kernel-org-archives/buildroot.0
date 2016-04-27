@@ -1,9 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 27 Apr 2016 11:25:09 +0100
-Subject: [Buildroot] [PATCH 2/2] gzip: bump version to 1.8
-In-Reply-To: <1461752709-37272-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1461752709-37272-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1461752709-37272-2-git-send-email-Vincent.Riera@imgtec.com>
+Date: Wed, 27 Apr 2016 11:25:08 +0100
+Subject: [Buildroot] [PATCH 1/2] ruby: bump version to 2.3.1
+Message-ID: <1461752709-37272-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/gzip/gzip.hash | 2 +-
- package/gzip/gzip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
-index 755c450..466f846 100644
---- a/package/gzip/gzip.hash
-+++ b/package/gzip/gzip.hash
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 3499263..4e90eed 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	fb31c57e7ce7703596ef57329be7cc5c5fd741b4a0f659fea7ee6a54706b41ab  gzip-1.7.tar.xz
-+sha256 ff1767ec444f71e5daf8972f6f8bf68cfcca1d2f76c248eb18e8741fc91dbbd3  gzip-1.8.tar.xz
-diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
-index b5dc361..6dc910e 100644
---- a/package/gzip/gzip.mk
-+++ b/package/gzip/gzip.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/
+-sha256	70125af0cfd7048e813a5eecab3676249582bfb65cfd57b868c3595f966e4097	ruby-2.3.0.tar.xz
++# From https://www.ruby-lang.org/en/news/2016/04/26/ruby-2-3-1-released/
++sha256 6725b5534d5a3a21ec4f14d6d7b9921a0d00d08acb88fd04cd50b47b70496338  ruby-2.3.1.tar.xz
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 19b33de..728e43d 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,8 +5,8 @@
  ################################################################################
  
--GZIP_VERSION = 1.7
-+GZIP_VERSION = 1.8
- GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
- GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
- # Some other tools expect it to be in /bin
+ RUBY_VERSION_MAJOR = 2.3
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).0
+-RUBY_VERSION_EXT = 2.3.0
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
++RUBY_VERSION_EXT = 2.3.1
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+ RUBY_DEPENDENCIES = host-pkgconf host-ruby
 -- 
 2.7.3
