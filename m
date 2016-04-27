@@ -1,17 +1,16 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 27 Apr 2016 16:06:12 -0300
-Subject: [Buildroot] [PATCH 4/8] package/libva: Update OpenGL check
-In-Reply-To: <1461586822-1003-4-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 27 Apr 2016 16:06:38 -0300
+Subject: [Buildroot] [PATCH 5/8] package/x11r7/xdriver_xf86-video-intel:
+ Update OpenGL check
+In-Reply-To: <1461586822-1003-5-git-send-email-bernd.kuhls@t-online.de>
 References: <1461586822-1003-1-git-send-email-bernd.kuhls@t-online.de>
- <1461586822-1003-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <57210DA4.3030506@zacarias.com.ar>
+ <1461586822-1003-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <57210DBE.4090709@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-
 
 On 25/04/16 09:20, Bernd Kuhls wrote:
 
