@@ -1,41 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 27 Apr 2016 22:46:54 +0200
-Subject: [Buildroot] [PATCH 1/8] package/mesa3d: introduce new Kconfig
-	option to indicate full OpenGL support
-References: <1461586822-1003-1-git-send-email-bernd.kuhls@t-online.de>
- <20160427213040.327325f8@free-electrons.com>
-Message-ID: <XnsA5F7E7BF5206DID313208userindividu@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Apr 2016 22:41:52 +0200
+Subject: [Buildroot] [PATCH 1/1] libusbgx: new package
+In-Reply-To: <1461752328-28760-1-git-send-email-gwenj@trabucayre.com>
+References: <1461752328-28760-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20160427224152.59684010@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Hello,
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20160427213040.327325f8 at free-electrons.com: 
+On Wed, 27 Apr 2016 12:18:48 +0200, Gwenhael Goavec-Merou wrote:
 
-> This way, BR2_PACKAGE_MESA3D_OPENGL_GL is a blind option, that
-> indicates to mesa3d.mk whether full OpenGL support is enabled or not.
+> +LIBUSBGX_VERSION = 2e3d43ee098ed928d1baa61ce791ce9ff4788c5a
+> +LIBUSBGX_SITE = $(call github,libusbgx,libusbgx,$(LIBUSBGX_VERSION))
+> +LIBUSBGX_LICENSE = LGPLv2.1+
+> +LIBUSBGX_LICENSE_FILES = COPYING COPYING.LGPL
 
-Hi Thomas,
+The COPYING file contains the text of the GPLv2, so this should have
+hinted you that the whole thing is not under LGPLv2.1+ only. In fact,
+the library is under LGPLv2.1+ and the examples (which are
+built and installed by default) are under GPLv2+.
 
-the goal of my patch series was to make the presence of OpenGL support in
-mesa3d visible to the user, your proposal is technically also fine with me
-but it needs more technical experience by users to enable the correct
-options to enable OpenGL support because the OpenGL option is a blind one.
-Users need to analyse the .mk files to get to know what is needed for
-certain features, these two philosophies can be seen at work with the Kodi
-and the Freeswitch package; the Kodi package provides a long list of
-options which enable other packages while the Freeswitch package, in its
-current state, relies only on previously enabled packages. 
+I've fixed that and applied. Thanks!
 
-Is there a general preference in either direction? If we want to have as
-few visible Kconfig options as possible, then hiding the OpenGL option is
-ok, but if we want to show behind-the-stage dependencies to the user I
-vote for a visible OpenGL option as well, which is only visible if OpenGL
-support is active, like in my patch series. 
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
