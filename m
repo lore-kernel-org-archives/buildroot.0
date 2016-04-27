@@ -1,22 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 27 Apr 2016 07:41:41 -0300
-Subject: [Buildroot] [PATCH 1/2] ruby: bump version to 2.3.1
-In-Reply-To: <1461752709-37272-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1461752709-37272-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <57209765.8070904@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 27 Apr 2016 12:49:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x264: bump version
+Message-ID: <1461754143-11897-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27/04/16 07:25, Vicente Olivert Riera wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x264/x264.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> -RUBY_VERSION_EXT = 2.3.0
-> +RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
-> +RUBY_VERSION_EXT = 2.3.1
-
-Hi Vicente.
-Oops? You shouldn't update RUBY_VERSION_EXT that lightly since it only 
-changes among major bumps.
-Regards.
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index cf5e385..6055a8a 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-X264_VERSION = a01e33913655f983df7a4d64b0a4178abb1eb618
++X264_VERSION = 3b70645597bea052d2398005bc723212aeea6875
+ X264_SITE = git://git.videolan.org/x264.git
+ X264_LICENSE = GPLv2+
+ X264_DEPENDENCIES = host-pkgconf
+-- 
+2.8.0.rc3
