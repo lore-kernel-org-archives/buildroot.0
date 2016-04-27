@@ -1,87 +1,41 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed, 27 Apr 2016 12:18:48 +0200
-Subject: [Buildroot] [PATCH 1/1] libusbgx: new package
-Message-ID: <1461752328-28760-1-git-send-email-gwenj@trabucayre.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 27 Apr 2016 11:25:09 +0100
+Subject: [Buildroot] [PATCH 2/2] gzip: bump version to 1.8
+In-Reply-To: <1461752709-37272-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1461752709-37272-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1461752709-37272-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-
-libusbgx is a C library encapsulating the kernel USB gadget-configfs
-userspace API functionality.
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/Config.in              |  1 +
- package/libusbgx/Config.in     | 12 ++++++++++++
- package/libusbgx/libusbgx.hash |  2 ++
- package/libusbgx/libusbgx.mk   | 15 +++++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/libusbgx/Config.in
- create mode 100644 package/libusbgx/libusbgx.hash
- create mode 100644 package/libusbgx/libusbgx.mk
+ package/gzip/gzip.hash | 2 +-
+ package/gzip/gzip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 64822bf..de23ad5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -987,6 +987,7 @@ menu "Hardware handling"
- 	source "package/libsoc/Config.in"
- 	source "package/libusb/Config.in"
- 	source "package/libusb-compat/Config.in"
-+	source "package/libusbgx/Config.in"
- 	source "package/libv4l/Config.in"
- 	source "package/libxkbcommon/Config.in"
- 	source "package/mraa/Config.in"
-diff --git a/package/libusbgx/Config.in b/package/libusbgx/Config.in
-new file mode 100644
-index 0000000..fcebf3c
---- /dev/null
-+++ b/package/libusbgx/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBUSBGX
-+	bool "libusbgx"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBCONFIG
-+	help
-+	  libusbgx is a C library encapsulating the kernel USB
-+	  gadget-configfs userspace API functionality.
-+
-+	  https://github.com/libusbgx/libusbgx
-+
-+comment "libusbgx needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libusbgx/libusbgx.hash b/package/libusbgx/libusbgx.hash
-new file mode 100644
-index 0000000..c185c58
---- /dev/null
-+++ b/package/libusbgx/libusbgx.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  1e258205dcde99d0eeb52404ee7ff1bc9a39eb3878e8455fb72bad7cf90c7357  libusbgx-2e3d43ee098ed928d1baa61ce791ce9ff4788c5a.tar.gz
-diff --git a/package/libusbgx/libusbgx.mk b/package/libusbgx/libusbgx.mk
-new file mode 100644
-index 0000000..9d22e0b
---- /dev/null
-+++ b/package/libusbgx/libusbgx.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libusbgx
-+#
-+################################################################################
-+
-+LIBUSBGX_VERSION = 2e3d43ee098ed928d1baa61ce791ce9ff4788c5a
-+LIBUSBGX_SITE = $(call github,libusbgx,libusbgx,$(LIBUSBGX_VERSION))
-+LIBUSBGX_LICENSE = LGPLv2.1+
-+LIBUSBGX_LICENSE_FILES = COPYING COPYING.LGPL
-+LIBUSBGX_DEPENDENCIES = host-pkgconf libconfig
-+LIBUSBGX_AUTORECONF = YES
-+LIBUSBGX_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
+diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
+index 755c450..466f846 100644
+--- a/package/gzip/gzip.hash
++++ b/package/gzip/gzip.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	fb31c57e7ce7703596ef57329be7cc5c5fd741b4a0f659fea7ee6a54706b41ab  gzip-1.7.tar.xz
++sha256 ff1767ec444f71e5daf8972f6f8bf68cfcca1d2f76c248eb18e8741fc91dbbd3  gzip-1.8.tar.xz
+diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
+index b5dc361..6dc910e 100644
+--- a/package/gzip/gzip.mk
++++ b/package/gzip/gzip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GZIP_VERSION = 1.7
++GZIP_VERSION = 1.8
+ GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
+ GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
+ # Some other tools expect it to be in /bin
 -- 
 2.7.3
