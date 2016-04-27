@@ -1,72 +1,107 @@
-From: =?UTF-8?Q?Beno=c3=aet_Mauduit?= <bmauduit@beneth.fr>
-Date: Wed, 27 Apr 2016 11:08:56 +0200
-Subject: [Buildroot] [PATCH 1/1] kodi: Enable raspberry-pi2 build support
-In-Reply-To: <8415vcxn9i.ln2@ID-313208.user.individual.net>
-References: <1461702074-14376-1-git-send-email-bmauduit@beneth.fr>
- <20160426223256.0798005b@free-electrons.com>
- <8415vcxn9i.ln2@ID-313208.user.individual.net>
-Message-ID: <572081A8.7060506@beneth.fr>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@intel.com>
+Date: Wed, 27 Apr 2016 11:25:07 +0200
+Subject: [Buildroot] [PATCH v2] i7z: new package
+In-Reply-To: <20160427081316.GB6060@jazz.nc.intel.com>
+References: <20160427081316.GB6060@jazz.nc.intel.com>
+Message-ID: <1461749107-2341-1-git-send-email-vincent.stehle@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+"A better i7 (and now i3, i5) reporting tool for Linux."
 
-On 04/26/2016 10:54 PM, Bernd Kuhls wrote:
-> Am Tue, 26 Apr 2016 22:32:56 +0200 schrieb Thomas Petazzoni:
-> 
->> Hello,
->>
->> On Tue, 26 Apr 2016 22:21:14 +0200, Beno?t Mauduit wrote:
->>> The previous commit [ef37472b20894c99cad758397f3cd6b90f933df1] was
->>> based on a newer version of Kodi :
->>> "with-platform=raspberry-pi2" is not yet supported in Kodi "Jarvis" 
-> branch.
->>>
->>> Backport 2 patches from Kodi master branch into this one.
->>>
->>> Signed-off-by: Beno?t Mauduit <bmauduit@beneth.fr>
->>
->> Thanks. I do remember seeing a report (on IRC ?) that commit
->> ef37472b20894c99cad758397f3cd6b90f933df1 was indeed causing some
->> problems.
->>
->> Yann, Bernd, can you review/ack this patch from Beno?t?
-> 
-> Hi Thomas,
-> 
-> reviewing it will be difficult for me because I can not do a runtime test 
-> because I do not have access to RPI hardware.
-> 
-> Currently I am preparing a patch series for the 17.0-Krypton version 
-> bump, I think I will send the first part of it to my github account in 
-> the coming days after some of my PR for the Kodi project are completed.
-> 
-> Backporting feature patches is, afair, something you do not really like ;)
-> As always, as a normal Kodi user, I do not know any release dates but 
-> 17.0-Krypton did not even reach alpha1 yet so expect several months until 
-> the next version is released. Maybe we should wait for it nonetheless?
+i7z can print out the C-states and temperature for i3, i5 and i7 based Core
+processors from Intel (including Nehalems, Sandy Bridge and Ivy Bridge).
 
-Sorry to ask this, but do you have an explanation about not taking
-upstream patches ? It is not obvious for me.
+https://github.com/ajaiantilal/i7z
 
-Also, I began to implement this fix on my own, and after seeing that
-master branch have implemented this, I thought that it would better to
-backport it. (Plus some addition from my side, that I will try to report
-upstream).
+Signed-off-by: Vincent Stehl? <vincent.stehle@intel.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
 
-From my point of view, we can integrate this patch (affecting only
-raspberry-pi2 build) and remove it when the newer version of Kodi will
-integrate it ?
 
-Anyway, thanks for your feedbacks !
-Regards,
+Changes in v2 after Bernd's review:
+- Change URL
+- Depend on threads
 
-Ps: I have tested Kodi on my raspberry-pi2. It works like a charm :)
 
+ package/Config.in     |  1 +
+ package/i7z/Config.in | 13 +++++++++++++
+ package/i7z/i7z.hash  |  2 ++
+ package/i7z/i7z.mk    | 22 ++++++++++++++++++++++
+ 4 files changed, 38 insertions(+)
+ create mode 100644 package/i7z/Config.in
+ create mode 100644 package/i7z/i7z.hash
+ create mode 100644 package/i7z/i7z.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index e860f72..2967244 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -387,6 +387,7 @@ endif
+ 	source "package/hwdata/Config.in"
+ 	source "package/hwloc/Config.in"
+ 	source "package/i2c-tools/Config.in"
++	source "package/i7z/Config.in"
+ 	source "package/input-event-daemon/Config.in"
+ 	source "package/input-tools/Config.in"
+ 	source "package/intel-microcode/Config.in"
+diff --git a/package/i7z/Config.in b/package/i7z/Config.in
+new file mode 100644
+index 0000000..a6b8a38
+--- /dev/null
++++ b/package/i7z/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_I7Z
++	bool "i7z"
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_NCURSES
++	help
++	  "A better i7 (and now i3, i5) reporting tool for Linux."
++
++	  i7z can print out the C-states and temperature for i3, i5 and i7
++	  based Core processors from Intel (including Nehalems, Sandy Bridge
++	  and Ivy Bridge).
++
++	  https://github.com/ajaiantilal/i7z
+diff --git a/package/i7z/i7z.hash b/package/i7z/i7z.hash
+new file mode 100644
+index 0000000..1bcf2c6
+--- /dev/null
++++ b/package/i7z/i7z.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 e127bddf850e7febd39cef2d2b13dca5fe19cc2a1bb1099d72b683be5d8bd1c0 i7z-5023138d7c35c4667c938b853e5ea89737334e92.tar.gz
+diff --git a/package/i7z/i7z.mk b/package/i7z/i7z.mk
+new file mode 100644
+index 0000000..e21fd9f
+--- /dev/null
++++ b/package/i7z/i7z.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# i7z
++#
++################################################################################
++
++I7Z_VERSION = 5023138d7c35c4667c938b853e5ea89737334e92
++I7Z_SITE = $(call github,ajaiantilal,i7z,$(I7Z_VERSION))
++I7Z_LICENSE = GPLv2
++I7Z_LICENSE_FILES = COPYING
++I7Z_DEPENDENCIES = ncurses
++
++define I7Z_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++define I7Z_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
++		DESTDIR="$(TARGET_DIR)"
++endef
++
++$(eval $(generic-package))
 -- 
-Beno?t Mauduit
-Mail : <bmauduit@beneth.fr>
-XMPP : <bmauduit@im.beneth.fr>
+2.8.0.rc3
