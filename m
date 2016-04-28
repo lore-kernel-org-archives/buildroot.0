@@ -1,66 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Apr 2016 21:57:33 +0200
-Subject: [Buildroot] [PATCH 1/2] uboot and arm trusted firmware build
- added to juno board
-In-Reply-To: <572246AE.9070804@synopsys.com>
-References: <20160426221915.2651d4b2@free-electrons.com>
- <20160427102302.GM28464@e106497-lin.cambridge.arm.com>
- <20160427133149.330a7ea0@free-electrons.com>
- <5720A627.6000109@synopsys.com>
- <20160427120454.GN28464@e106497-lin.cambridge.arm.com>
- <20160427143915.4c66a19d@free-electrons.com>
- <20160427124632.GO28464@e106497-lin.cambridge.arm.com>
- <20160427145339.36ff162b@free-electrons.com>
- <5720C9FE.9000507@synopsys.com>
- <20160427163122.0002b7ef@free-electrons.com>
- <20160427144110.GR28464@e106497-lin.cambridge.arm.com>
- <572246AE.9070804@synopsys.com>
-Message-ID: <20160428215733.378ce9ac@free-electrons.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 28 Apr 2016 21:59:31 +0200
+Subject: [Buildroot] [PATCH] moarvm: use libtommath
+Message-ID: <1461873571-26319-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/moarvm/Config.in | 1 +
+ package/moarvm/moarvm.mk | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-On Thu, 28 Apr 2016 18:21:50 +0100, Joao Pinto wrote:
-
-> # Automatically find the U-Boot binary
-> ifeq ($(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME), )
-
-use qstrip, otherwise this will never be true. Also, remove the space
-after the comma.
-
-> ATFIRMWARE_PAYLOAD_PATH = $(BINARIES_DIR)/"u-boot.bin"
-
-Remove the quotes.
-
-> else
-> ATFIRMWARE_PAYLOAD_PATH = $(BINARIES_DIR)/$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME)
-
-Use qstrip here as well.
-
-Are you sure it's either u-boot.bin or a custom name? There are plenty
-of other possible image names in uboot.mk (but quite certainly not all
-of them apply to ARM64).
-
-> In terms of the SCP_FW, I think for now is more reliable to make the final stage
-> manually if using a Juno board. From my experience stuff in Linaro repositories
-> change frequently and so we have a good probability of breaking the binary download.
-> I suggest to put a note in the readme.txt saying what should be done, since
-> everyone using a Juno will have access to the SCP FW in the board.
-> 
-> What do you think?
-
-Sounds OK. Having everything built automatically is better, but as a
-first step, it's definitely OK as long as there are explanations in
-readme.txt.
-
-Thanks!
-
-Thomas
+diff --git a/package/moarvm/Config.in b/package/moarvm/Config.in
+index 6bc3090..82e4509 100644
+--- a/package/moarvm/Config.in
++++ b/package/moarvm/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_MOARVM
+ 	# needs AO_fetch_compare_and_swap, not implemented for sparcv9
+ 	depends on !BR2_sparc64
+ 	select BR2_PACKAGE_LIBUV
++	select BR2_PACKAGE_LIBTOMMATH
+ 	select BR2_PACKAGE_LIBATOMIC_OPS
+ 	help
+ 	  Short for "Metamodel On A Runtime", MoarVM is a virtual machine
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index 734c027..ee58f76 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
+@@ -10,7 +10,7 @@ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
+ MOARVM_LICENSE_FILES = Artistic2.txt
+ MOARVM_INSTALL_STAGING = YES
+-MOARVM_DEPENDENCIES = host-luajit libuv libatomic_ops
++MOARVM_DEPENDENCIES = host-luajit libuv libtommath libatomic_ops
+ 
+ MOARVM_CONF_OPTS = \
+ 	--build=$(GNU_HOST_NAME) \
+@@ -21,6 +21,7 @@ MOARVM_CONF_OPTS = \
+ 	--prefix="/usr" \
+ 	--lua=$(HOST_DIR)/usr/bin/luajit \
+ 	--has-libuv \
++	--has-libtommath \
+ 	--has-libatomic
+ 
+ ifeq ($(BR2_ENDIAN),"BIG")
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
