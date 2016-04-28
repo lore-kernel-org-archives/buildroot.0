@@ -1,56 +1,119 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Apr 2016 00:27:23 +0200
-Subject: [Buildroot] [PATCH 05/13 v6] core/pkg-generic: add variable to
-	store the package rawname-version
+Date: Fri, 29 Apr 2016 00:27:27 +0200
+Subject: [Buildroot] [PATCH 09/13 v6] core/legal-info: also save patches
 In-Reply-To: <cover.1461881416.git.yann.morin.1998@free.fr>
 References: <cover.1461881416.git.yann.morin.1998@free.fr>
-Message-ID: <c299afc659a583d605825f6d6bde49a2451d6653.1461881416.git.yann.morin.1998@free.fr>
+Message-ID: <a7e7051240a104410c93d42b2a987bc48f2f8615.1461881416.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce a new per-package variable to store the 'rawname-version'
-tuple, instead of computing it every time we need it.
+Currently, the legal-info infra only saves the source archive of a
+package. However, that's not enough as we may apply some patches on
+packages sources.
 
-Currently, it's only a single location, but follow-up patches will
-introduce more use of it.
+We do suggest users to also redistribute the Buildroot sources as part
+of their compliance distribution, so the patches bundled in Buildroot
+would indeed be included in the compliance distribution.
 
-Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
+However, that's still not enough, since we may download some patches, or
+the user may use a global patch directory. Patches in there might not
+end up in the compliance distribution, and there are risks of
+non-conformity.
+
+So, always include patches alongside the source archive.
+
+To ensure reproducibility, we also generate a series file, so patches
+can be re-applied in the correct order.
+
+We get the list of patches to include from the list of patches that were
+applied by the package infrastructure (via the apply-patches support
+script). So, we need to get packages properly extracted and patched
+before we can save their legal-info, not just in the case they define
+_LICENSE_FILES.
+
+Update the legal-info header accordingly.
+
+Note: this means that, when a package is not patched and defines no
+LICENSE_FILES, we will extract and patch it for nothing. There is no
+easy way to know whether we have to patch a package or not. We can only
+either duplicate the logic to detect patches (bad) or rely on the infra
+actually patching the package. Also, a vast majority of packages are
+either patched, or define _LICENSE_FILES, so it is best and easiest to
+always extract and patch them prior to legal-info.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 ---
-Changes v5 -> v6:
-  - rename variable  (Thomas)
+Changes v3 -> v4:
+  - typo  (Luca)
+
+Changes v2 -> v3:
+  - also mention that patches have been saved  (Luca)
+
+Changes v1 -> v2:
+  - don't recompute rawname-version needlessly  (Luca)
 ---
- package/pkg-generic.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/pkg-generic.mk           | 13 ++++++++-----
+ support/legal-info/README.header |  9 +++++----
+ 2 files changed, 13 insertions(+), 9 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 2c405e1..7aca958 100644
+index f48c58b..65c0db5 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -399,6 +399,7 @@ ifdef $(3)_OVERRIDE_SRCDIR
+@@ -778,12 +778,10 @@ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
  endif
+ $(2)_MANIFEST_LICENSE_FILES ?= not saved
  
- $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
-+$(2)_RAW_BASE_NAME = $$($(2)_RAWNAME)-$$($(2)_VERSION)
- $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
- $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+-# If the package declares _LICENSE_FILES, we need to extract it,
+-# for overriden, local or normal remote packages alike, whether
+-# we want to redistribute it or not.
+-ifneq ($$($(2)_LICENSE_FILES),)
++# We need to extract and patch a package to be able to retrieve its
++# license files (if any) and the list of patches applied to it (if
++# any).
+ $(1)-legal-info: $(1)-patch
+-endif
  
-@@ -429,7 +430,7 @@ ifndef $(2)_SOURCE
-  ifdef $(3)_SOURCE
-   $(2)_SOURCE = $$($(3)_SOURCE)
-  else
--  $(2)_SOURCE			?= $$($(2)_RAWNAME)-$$($(2)_VERSION).tar.gz
-+  $(2)_SOURCE			?= $$($(2)_RAW_BASE_NAME).tar.gz
-  endif
- endif
+ # We only save the sources of packages we want to redistribute, that are
+ # non-overriden (local or true override).
+@@ -827,6 +825,11 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ # Save the source tarball
+ 	$$(Q)$$(HARDLINK_OR_COPY) $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) \
+ 				  $$($(2)_REDIST_SOURCES_DIR)
++# Save patches and generate the series file
++	$$(Q)while read f; do \
++		$$(HARDLINK_OR_COPY) $$$${f} $$($(2)_REDIST_SOURCES_DIR) || exit 1; \
++		printf "%s\n" "$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
++	done <$$($(2)_DIR)/.applied_patches_list
+ endif # redistribute
  
+ endif # other packages
+diff --git a/support/legal-info/README.header b/support/legal-info/README.header
+index d07c45d..418de14 100644
+--- a/support/legal-info/README.header
++++ b/support/legal-info/README.header
+@@ -14,10 +14,11 @@ This material is composed of the following items.
+    compiled programs.
+    Note: this may have not been saved due to technical limitations, you may
+    need to collect it manually.
+- * The source code for all packages; this has been saved in the sources/
+-   subdirectory (except for the non-redistributable packages, which have not
+-   been saved); patches applied to some packages by Buildroot are included in
+-   the Buildroot sources and were not duplicated in the sources/ subdirectory.
++ * The original source code for all packages; this has been saved in the
++   sources/ subdirectory (except for the non-redistributable packages, which
++   have not been saved). Patches that were applied are also saved, along
++   with a file named 'series' that lists the patches in the order they were
++   applied.
+  * A manifest file listing the configured packages and related information.
+  * The license text of the packages; they have been saved in the licenses/
+    subdirectory.
 -- 
 1.9.1
