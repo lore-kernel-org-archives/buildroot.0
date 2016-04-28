@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 28 Apr 2016 18:41:12 +0200
-Subject: [Buildroot] [PATCH v3 2/7] package/ffmpeg: bump to version 3.0.2
+Date: Thu, 28 Apr 2016 18:41:13 +0200
+Subject: [Buildroot] [PATCH v3 3/7] package/ffmpeg: cosmetic change for the
+	mips fpu option
 In-Reply-To: <1461861677-22146-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1461861677-22146-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1461861677-22146-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1461861677-22146-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,72 +13,29 @@ To: buildroot@busybox.net
 
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-- Remove non-existen configure options:
-  - --disable-mips32r2
-  - --disable-libvo-aacenc
-
-- Amend renamed configure options:
-  - --disable-mipsdspr1 has been renamed to --disable-mipsdsp
-
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ffmpeg/ffmpeg.hash |  2 +-
- package/ffmpeg/ffmpeg.mk   | 13 ++-----------
- 2 files changed, 3 insertions(+), 12 deletions(-)
+ package/ffmpeg/ffmpeg.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 8643bff..ed88281 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	25bcedbdafadac3d09c325c1d46a51f53d858b26a260d5aed6b4f17fea6e07fa	ffmpeg-2.8.6.tar.xz
-+sha256	82943cc7b0c4d14b612404de0dd7b24cd8ca3511d51e4fd3ae36b2d71bb95223	ffmpeg-3.0.2.tar.xz
 diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index ddfac20..6ada850 100644
+index 6ada850..80f8e22 100644
 --- a/package/ffmpeg/ffmpeg.mk
 +++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 2.8.6
-+FFMPEG_VERSION = 3.0.2
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
-@@ -41,7 +41,7 @@ FFMPEG_CONF_OPTS = \
- 	--enable-runtime-cpudetect \
- 	--disable-hardcoded-tables \
- 	--disable-memalign-hack \
--	--disable-mipsdspr1 \
-+	--disable-mipsdsp \
- 	--disable-mipsdspr2 \
- 	--disable-msa \
- 	--enable-hwaccels \
-@@ -58,7 +58,6 @@ FFMPEG_CONF_OPTS = \
- 	--disable-libnut \
- 	--disable-libopenjpeg \
- 	--disable-libschroedinger \
--	--disable-libvo-aacenc \
- 	--disable-libvo-amrwbenc \
- 	--disable-symver \
- 	--disable-doc
-@@ -437,14 +436,6 @@ FFMPEG_CONF_OPTS += \
- 	--enable-mipsfpu
+@@ -429,11 +429,9 @@ FFMPEG_CONF_OPTS += --enable-neon
  endif
  
--ifeq ($(BR2_mips_32r2),y)
+ ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
 -FFMPEG_CONF_OPTS += \
--	--enable-mips32r2
--else
--FFMPEG_CONF_OPTS += \
--	--disable-mips32r2
--endif
--
- ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
- FFMPEG_CONF_OPTS += --enable-altivec
+-	--disable-mipsfpu
++FFMPEG_CONF_OPTS += --disable-mipsfpu
  else
+-FFMPEG_CONF_OPTS += \
+-	--enable-mipsfpu
++FFMPEG_CONF_OPTS += --enable-mipsfpu
+ endif
+ 
+ ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
 -- 
 2.8.0.rc3
