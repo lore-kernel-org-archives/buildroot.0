@@ -1,61 +1,60 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 28 Apr 2016 14:26:56 +0200
-Subject: [Buildroot] [PATCH v3] domoticz: new package
-In-Reply-To: <5721E517.1080804@free.fr>
-References: <28446_1461740616_57206448_28446_378_1_b908e8f2-8c6a-4068-b4d9-be1630cc0fa5@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
- <5721E517.1080804@free.fr>
-Message-ID: <CAHXCMMJphUpUNKRkCs1rgj64MOy2cHUoNsf_ic0recC4vNu_Nw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 28 Apr 2016 10:17:09 -0300
+Subject: [Buildroot] [PATCH] mpv: jack/sdl/sdl2 require 64-bit sync
+	intrinsics
+Message-ID: <1461849429-3365-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Fixes:
+http://autobuild.buildroot.net/results/578/578beb2f3b34fc83109e79d8db7de7219dd8340e/
+http://autobuild.buildroot.net/results/21c/21ce67041792d29082f5bba76299da19dd1856eb/
 
-On Thu, Apr 28, 2016 at 12:25 PM, Julien Boibessot
-<julien.boibessot@free.fr> wrote:
-> Hello Fabrice,
->
-> On 27/04/2016 09:03, fabrice.fontaine at orange.com wrote:
->> Domoticz is a Home Automation System that lets you monitor andi
->> configure various devices like: Lights, Switches, various
->> sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
->> and much more. Notifications/Alerts can be sent to any mobile device.
->
-> cool, one more domotic stuff in BR !
-> any plan on Enocean ? :-)
->
-> my comments below
->
-[...]
->
-> I have build tested and run tested your patch and noticed the following
-> things:
-> * why is domoticz binary installed in /usr and not /usr/bin ?
-Looks like domoticz kinda screws the install rules [1] :-/
-It could be fixed like [2], but some additional changes would
-certainly be needed to adjust the search location for scripts, config,
-etc.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mpv/mpv.mk | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-> * updatedomo, License.txt and History.txt are installed in /usr, but
-> IMHO not needed
-> * why don't you add a config option that would install domoticz.sh in
-> /etc/init.d to automatically start domoticz at startup ?
->
-> Otherwise it runs fine with openzwave ;-)
->
-> Best regards,
-> Julien
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-[1] https://github.com/domoticz/domoticz/blob/master/CMakeLists.txt#L635
-[2] http://code.bulix.org/pi7pxt-98018?raw
-
-Regards,
-
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index 605e891..1c2498d 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -33,7 +33,8 @@ MPV_CONF_OPTS = \
+ 	--disable-uchardet \
+ 	--disable-vapoursynth \
+ 	--disable-vapoursynth-lazy \
+-	--disable-vdpau
++	--disable-vdpau \
++	--disable-libmpv-static --disable-static-build
+ 
+ # ALSA support requires pcm+mixer
+ ifeq ($(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yy)
+@@ -52,7 +53,8 @@ MPV_CONF_OPTS += --disable-gbm
+ endif
+ 
+ # jack support
+-ifeq ($(BR2_PACKAGE_JACK2),y)
++# It also requires 64-bit sync intrinsics
++ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_8)$(BR2_PACKAGE_JACK2),yy)
+ MPV_CONF_OPTS += --enable-jack
+ MPV_DEPENDENCIES += jack2
+ else
+@@ -166,10 +168,11 @@ endif
+ 
+ # SDL support
+ # Both can't be used at the same time, prefer newer API
+-ifeq ($(BR2_PACKAGE_SDL2),y)
++# It also requires 64-bit sync intrinsics
++ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_8)$(BR2_PACKAGE_SDL2),yy)
+ MPV_CONF_OPTS += --enable-sdl2 --disable-sdl1
+ MPV_DEPENDENCIES += sdl2
+-else ifeq ($(BR2_PACKAGE_SDL),y)
++else ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_8)$(BR2_PACKAGE_SDL),yy)
+ MPV_CONF_OPTS += --enable-sdl1 --disable-sdl2
+ MPV_DEPENDENCIES += sdl
+ else
 -- 
-Samuel
+2.7.3
