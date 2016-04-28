@@ -1,40 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 28 Apr 2016 16:26:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.68
-Message-ID: <1461853583-21263-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 28 Apr 2016 11:33:07 -0300
+Subject: [Buildroot] [PATCH] mpv: va-api requires egl-drm, wayland and/or x11
+Message-ID: <1461853987-5313-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libdrm/libdrm.hash | 4 ++--
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The VA-API acceleration requires one or more of the egl-drm, wayland
+and/or x11 backends.
+Since the egl-drm backend means LIBGL (X11) + EGL + DRM we'll handle it
+later once the mesa3d libgl hidden knob is applied.
+So for now we'll support wayland and x11 until that happens. Fixes:
+http://autobuild.buildroot.net/results/4b9/4b98d0c2c0617715e77fb47b3d97037c6b7562ec/
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 8e3104c..8bd3d95 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2016-February/100859.html
--sha256	ee5b71e1113be37544d0752681c12f040c01f782e2933df7d7bc21fd0d10cebe	libdrm-2.4.67.tar.bz2
-+# From https://lists.freedesktop.org/archives/dri-devel/2016-April/106211.html
-+sha256	5b4bd9a5922929bc716411cb74061fbf31b06ba36feb89bc1358a91a8d0ca9df	libdrm-2.4.68.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 4082a19..1d41f05 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mpv/mpv.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index 0a13aee..fb45aef 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -179,11 +179,15 @@ MPV_CONF_OPTS += --disable-sdl1 --disable-sdl2
+ endif
  
--LIBDRM_VERSION = 2.4.67
-+LIBDRM_VERSION = 2.4.68
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+ # va-api support
++# This requires one or more of the egl-drm, wayland, x11 backends
++# For now we support wayland and x11
+ ifeq ($(BR2_PACKAGE_LIBVA),y)
++ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_XLIB_LIBX11),)
++MPV_CONF_OPTS += --disable-vaapi
++else
+ MPV_CONF_OPTS += --enable-vaapi
+ MPV_DEPENDENCIES += libva
+-else
+-MPV_CONF_OPTS += --disable-vaapi
++endif
+ endif
+ 
+ # wayland support
 -- 
-2.8.0.rc3
+2.7.3
