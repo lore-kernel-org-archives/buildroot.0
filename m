@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Apr 2016 22:41:47 +0200
-Subject: [Buildroot] [git commit] xterm: bump to version 324
-Message-ID: <20160428204527.031F881ECE@busybox.osuosl.org>
+Date: Thu, 28 Apr 2016 22:39:51 +0200
+Subject: [Buildroot] [git commit] sshfs: bump to version 2.7
+Message-ID: <20160428204526.DBD2081ECE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2aa0f88a0f495b4287abc4e38abac6c78ec5f923
+commit: https://git.buildroot.net/buildroot/commit/?id=82d6c702610cf783a2e46f6230a1182016fdc1da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xterm/xterm.hash | 2 +-
- package/xterm/xterm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sshfs/sshfs.hash | 2 +-
+ package/sshfs/sshfs.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-index c9d06eb..f68b29f 100644
---- a/package/xterm/xterm.hash
-+++ b/package/xterm/xterm.hash
+diff --git a/package/sshfs/sshfs.hash b/package/sshfs/sshfs.hash
+index 16253e0..77f6a0f 100644
+--- a/package/sshfs/sshfs.hash
++++ b/package/sshfs/sshfs.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	9adb41b53f76a3fccaa65d47a87d336094a523985d1d6a6b8cc468375ed109d6	xterm-322.tgz
-+sha256	70ecbec8d27789248e8ae2dc2cf159a2e189c152a6559a2b3df7f4838da36092	xterm-324.tgz
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 0429685..38271bb 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -4,7 +4,7 @@
+ # Locally computed
+-sha256	e9171452e5d0150b9c6a2158fd2e2dcefb5d5d03ba4d208949e00a3a46c6e63e	sshfs-fuse-2.5.tar.gz
++sha256	ce5f9d390934fc88c287dd937a39d15c2b40cbea6967ba24ad93ed90e0027128	sshfs-2.7.tar.gz
+diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
+index f59f7ea..716b362 100644
+--- a/package/sshfs/sshfs.mk
++++ b/package/sshfs/sshfs.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--XTERM_VERSION = 322
-+XTERM_VERSION = 324
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = http://invisible-mirror.net/archives/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+-SSHFS_VERSION = 2.5
+-SSHFS_SITE = https://github.com/libfuse/sshfs/releases/download/sshfs_$(subst .,_,$(SSHFS_VERSION))
+-SSHFS_SOURCE = sshfs-fuse-$(SSHFS_VERSION).tar.gz
++SSHFS_VERSION = 2.7
++SSHFS_SITE = https://github.com/libfuse/sshfs/releases/download/sshfs-$(SSHFS_VERSION)
+ SSHFS_LICENSE = GPLv2
+ SSHFS_LICENSE_FILES = COPYING
+ SSHFS_DEPENDENCIES = \
