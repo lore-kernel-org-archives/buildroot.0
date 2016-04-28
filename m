@@ -1,76 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Apr 2016 00:27:26 +0200
-Subject: [Buildroot] [PATCH 08/13 v6] core/apply-patches: store full path of
-	applied patches
+Date: Fri, 29 Apr 2016 00:27:31 +0200
+Subject: [Buildroot] [PATCH 13/13 v6] legal-info: explicitly state how
+	patches are licensed
 In-Reply-To: <cover.1461881416.git.yann.morin.1998@free.fr>
 References: <cover.1461881416.git.yann.morin.1998@free.fr>
-Message-ID: <8f397bc9cb46fa80c630a1d6844097f418852be2.1461881416.git.yann.morin.1998@free.fr>
+Message-ID: <d7b10938001e539340479d97a2b64f4ab49d3726.1461881416.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we only store the filename of the applied patches.
+From: Luca Ceresoli <luca@lucaceresoli.net>
 
-However, we are soon to want to install those patches in the legal-info
-directory, so we'll have to know where those patches come from.
-
-Instead of duplicating the logic to find the patches (bundled,
-downloaded, from a global patch dir...), just store the full path to
-each of those patches so we can retrieve them more easily later on.
-
-Also always create the list-file, even if empty, so that we need not
-test for its existence before reading it.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-[Tested only with patches in the Buildroot sources]
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[yann.morin.1998 at free.fr: slightyl tweak after Arnout's review]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
 ---
-Changes v1 -> v2:
-  - do not duplicate '/' in paths  (Luca)
+Changes v5 -> v6:
+  - slightly tweak the phrasing  (Arnout)
 ---
- support/scripts/apply-patches.sh | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ support/legal-info/README.header | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 201278d..20a1552 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -63,8 +63,12 @@ find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print0 | \
-     xargs -0 -r rm -f
- 
- function apply_patch {
--    path=$1
--    patch=$2
-+    path="${1%%/}"
-+    patch="${2}"
-+    case "${path}" in
-+        /*) ;;
-+        *)  path="$(pwd)/${path}";;
-+    esac
-     if [ "$3" ]; then
-         type="series"; uncomp="cat"
-     else
-@@ -99,7 +103,7 @@ function apply_patch {
-         echo "Error: missing patch file ${path}/$patch"
-         exit 1
-     fi
--    echo $patch >> ${builddir}/.applied_patches_list
-+    echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
-     ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
-     if [ $? != 0 ] ; then
-         echo "Patch failed!  Please fix ${patch}!"
-@@ -141,6 +145,7 @@ function scan_patchdir {
-     fi
- }
- 
-+touch ${builddir}/.applied_patches_list
- scan_patchdir "$patchdir" "$patchpattern"
- 
- # Check for rejects...
+diff --git a/support/legal-info/README.header b/support/legal-info/README.header
+index 418de14..1f3524f 100644
+--- a/support/legal-info/README.header
++++ b/support/legal-info/README.header
+@@ -18,7 +18,8 @@ This material is composed of the following items.
+    sources/ subdirectory (except for the non-redistributable packages, which
+    have not been saved). Patches that were applied are also saved, along
+    with a file named 'series' that lists the patches in the order they were
+-   applied.
++   applied. Patches are under the same license as the files that they modify
++   in the original package.
+  * A manifest file listing the configured packages and related information.
+  * The license text of the packages; they have been saved in the licenses/
+    subdirectory.
 -- 
 1.9.1
