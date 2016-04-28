@@ -1,65 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Apr 2016 21:35:51 +0200
-Subject: [Buildroot] [PATCH] linux: linux.mk: _defconfig not required
-	for arm64 instead use defconfig
-In-Reply-To: <1461082701-8144-1-git-send-email-naresh.kamboju@linaro.org>
- (naresh kamboju's message of "Tue, 19 Apr 2016 17:18:21 +0100")
-References: <1461082701-8144-1-git-send-email-naresh.kamboju@linaro.org>
-Message-ID: <87a8kdwmp4.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Apr 2016 21:57:33 +0200
+Subject: [Buildroot] [PATCH 1/2] uboot and arm trusted firmware build
+ added to juno board
+In-Reply-To: <572246AE.9070804@synopsys.com>
+References: <20160426221915.2651d4b2@free-electrons.com>
+ <20160427102302.GM28464@e106497-lin.cambridge.arm.com>
+ <20160427133149.330a7ea0@free-electrons.com>
+ <5720A627.6000109@synopsys.com>
+ <20160427120454.GN28464@e106497-lin.cambridge.arm.com>
+ <20160427143915.4c66a19d@free-electrons.com>
+ <20160427124632.GO28464@e106497-lin.cambridge.arm.com>
+ <20160427145339.36ff162b@free-electrons.com>
+ <5720C9FE.9000507@synopsys.com>
+ <20160427163122.0002b7ef@free-electrons.com>
+ <20160427144110.GR28464@e106497-lin.cambridge.arm.com>
+ <572246AE.9070804@synopsys.com>
+Message-ID: <20160428215733.378ce9ac@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "naresh" == naresh kamboju <naresh.kamboju@linaro.org> writes:
+Hello,
 
- > From: Naresh Kamboju <naresh.kamboju@linaro.org>
- > Linux arch/arm64 contains configs/defconfig not the <board>_defconfig
+On Thu, 28 Apr 2016 18:21:50 +0100, Joao Pinto wrote:
 
-But is that likely to stay like that, even for various vendor trees?
+> # Automatically find the U-Boot binary
+> ifeq ($(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME), )
 
-I've recently merged the defconfig for odroidc2, and that one use
+use qstrip, otherwise this will never be true. Also, remove the space
+after the comma.
 
-BR2_LINUX_KERNEL_DEFCONFIG="odroidc2"
+> ATFIRMWARE_PAYLOAD_PATH = $(BINARIES_DIR)/"u-boot.bin"
 
-With a vendor kernel based on 3.14:
+Remove the quotes.
 
-https://github.com/hardkernel/linux/tree/odroidc2-3.14.y/arch/arm64/configs
+> else
+> ATFIRMWARE_PAYLOAD_PATH = $(BINARIES_DIR)/$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME)
 
-Perhaps we should instead interpret BR2_LINUX_KERNEL_DEFCONFIG="" as
-defconfig and not _defconfig (and then drop the check around line 423).
+Use qstrip here as well.
 
+Are you sure it's either u-boot.bin or a custom name? There are plenty
+of other possible image names in uboot.mk (but quite certainly not all
+of them apply to ARM64).
 
- > Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
- > ---
- >  linux/linux.mk | 4 ++++
- >  1 file changed, 4 insertions(+)
+> In terms of the SCP_FW, I think for now is more reliable to make the final stage
+> manually if using a Juno board. From my experience stuff in Linaro repositories
+> change frequently and so we have a good probability of breaking the binary download.
+> I suggest to put a note in the readme.txt saying what should be done, since
+> everyone using a Juno will have access to the SCP FW in the board.
+> 
+> What do you think?
 
- > diff --git a/linux/linux.mk b/linux/linux.mk
- > index 317587f..f7fb244 100644
- > --- a/linux/linux.mk
- > +++ b/linux/linux.mk
- > @@ -198,7 +198,11 @@ endef
- >  LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
- 
- >  ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
- > +ifeq ($(KERNEL_ARCH),arm64)
- > +LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))
- > +else
- >  LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
- > +endif
- >  else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
- >  LINUX_KCONFIG_FILE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
- >  endif
- > -- 
- > 2.8.1
+Sounds OK. Having everything built automatically is better, but as a
+first step, it's definitely OK as long as there are explanations in
+readme.txt.
 
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+Thanks!
 
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
