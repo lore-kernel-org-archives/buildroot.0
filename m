@@ -1,21 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Apr 2016 20:15:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.68
-In-Reply-To: <1461853583-21263-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Thu, 28 Apr 2016 16:26:23 +0200")
-References: <1461853583-21263-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <8737q5y4zi.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 28 Apr 2016 15:28:43 -0300
+Subject: [Buildroot] [PATCH] subversion: security bump to version 1.9.4
+Message-ID: <1461868123-1547-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Fixes:
+CVE-2016-2167 - svnserve/sasl may authenticate users using the wrong
+realm.
+CVE-2016-2168 - Remotely triggerable DoS vulnerability in mod_authz_svn
+during COPY/MOVE authorization check.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/subversion/subversion.hash | 2 +-
+ package/subversion/subversion.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
+diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
+index 4f0a446..926bbc5 100644
+--- a/package/subversion/subversion.hash
++++ b/package/subversion/subversion.hash
+@@ -1,2 +1,2 @@
+ # From http://subversion.apache.org/download.cgi#recommended-release
+-sha1	27e8df191c92095f48314a415194ec37c682cbcf	subversion-1.9.3.tar.bz2
++sha1	bc7d51fdda43bea01e1272dfe9d23d0a9d6cd11c	subversion-1.9.4.tar.bz2
+diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
+index e9aa0ae..720a1a1 100644
+--- a/package/subversion/subversion.mk
++++ b/package/subversion/subversion.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUBVERSION_VERSION = 1.9.3
++SUBVERSION_VERSION = 1.9.4
+ SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
+ SUBVERSION_SITE = http://mirror.catn.com/pub/apache/subversion
+ SUBVERSION_LICENSE = Apache-2.0
 -- 
-Bye, Peter Korsgaard
+2.7.3
