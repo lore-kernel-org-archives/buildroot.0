@@ -1,67 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Apr 2016 00:27:24 +0200
-Subject: [Buildroot] [PATCH 06/13 v6] core/legal-info: install source
-	archives in their own sub-dir
+Date: Fri, 29 Apr 2016 00:27:25 +0200
+Subject: [Buildroot] [PATCH 07/13 v6] core/legal-info: add package version
+	to license directory
 In-Reply-To: <cover.1461881416.git.yann.morin.1998@free.fr>
 References: <cover.1461881416.git.yann.morin.1998@free.fr>
-Message-ID: <c8abc350498d27f8b6a31a2db583da0dcf2e6d0a.1461881416.git.yann.morin.1998@free.fr>
+Message-ID: <5208009e8a627e58c3602435a8936a5957c57ab7.1461881416.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we put all source archives side-by-side in the same
-directory.
+Now that we save the source archives in a directory named after the
+package and its version, do the same for the license files, for
+consistency.
 
-Since we're about to also save individual patches that were applied
-on those sources, we don't want to make that directory a complete
-mess of unassorted files.
+It has a not-so-bad side-effect of also saving the version string in
+the all-licenses list.
 
-So, we install each source archive in its own sub-directory, where
-we'll later store the patches too. Store that location in a variable,
-so it can be re-used later on (to install patches in a future commit).
+The only (small) side-effect, is that the warnings about undefined
+_LICENSE_FILES now contains the version string, too. That's unavoidable,
+since that's what is stored in the legal report.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
 Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 ---
 Chages v5 -> v6:
-  - variable with raw name was renamed  (Thomas)
+  - raw name variable was renamed  (Thomas)
 
 Changes v1 -> v2:
-  - perl no longer has a post-legal-info hook  (Thomas, Luca)
+  - s/drawback/side-effect/  (Luca)
 ---
- package/pkg-generic.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/pkg-generic.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 7aca958..a362b73 100644
+index a362b73..f48c58b 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -496,6 +496,8 @@ endif
+@@ -807,10 +807,10 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ # is that the license still applies to the files distributed as part
+ # of the rootfs, even if the sources are not themselves redistributed.
+ ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
+-	@$$(call legal-license-nofiles,$$($(2)_RAWNAME),$$(call UPPERCASE,$(4)))
+-	@$$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
++	@$$(call legal-license-nofiles,$$($(2)_RAW_BASE_NAME),$$(call UPPERCASE,$(4)))
++	@$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))
+ else
+-	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
++	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAW_BASE_NAME),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
+ endif # license files
  
- $(2)_REDISTRIBUTE		?= YES
- 
-+$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAW_BASE_NAME)
-+
- # When a target package is a toolchain dependency set this variable to
- # 'NO' so the 'toolchain' dependency is not added to prevent a circular
- # dependency
-@@ -823,8 +825,8 @@ else
- 
- ifeq ($$($(2)_REDISTRIBUTE),YES)
- # Save the source tarball
--	$$(Q)$$(HARDLINK_OR_COPY) $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
--				  $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
-+	$$(Q)$$(HARDLINK_OR_COPY) $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) \
-+				  $$($(2)_REDIST_SOURCES_DIR)
- endif # redistribute
- 
- endif # other packages
+ ifeq ($$($(2)_SITE_METHOD),local)
 -- 
 1.9.1
