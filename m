@@ -1,43 +1,38 @@
-From: Julien CORJON <corjon.j@ecagroup.com>
-Date: Thu, 28 Apr 2016 14:15:05 +0000
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Apr 2016 16:20:40 +0200
 Subject: [Buildroot] 2016.05-rc1 approaching: what to merge?
-In-Reply-To: <20160428160000.5db9d1cb@free-electrons.com>
+In-Reply-To: <CAGm1_ktmOkBg-VoOC2QM+Zn=WKs9ve6YKdc16FctDaohpjz-Sg@mail.gmail.com>
 References: <20160428160000.5db9d1cb@free-electrons.com>
-Message-ID: <57221AE9.2060207@ecagroup.com>
+ <CAGm1_ktmOkBg-VoOC2QM+Zn=WKs9ve6YKdc16FctDaohpjz-Sg@mail.gmail.com>
+Message-ID: <20160428162040.35a424a9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-Le 28/04/2016 16:00, Thomas Petazzoni a ?crit :
-> Hello,
->
-> We're approaching the end of April, and therefore the beginning of May,
-> which means that 2016.05-rc1 will be released soon, most likely in
-> about a week.
->
-> As a reminder, once -rc1 is released, we don't merge new packages or
-> version bumps, but only build fixes, security fixes, documentation
-> updates, etc. Of course, anything that doesn't get merged before -rc1
-> can be merged for the next release, 2016.08.
->
-> So the question is: we have ~230 patches pending patchwork. Do you see
-> anything that we should really merge before 2016.05-rc1 is released?
+On Thu, 28 Apr 2016 16:06:40 +0200, Yegor Yefremov wrote:
 
-I would really appreciate to see android-tools[1] in 2016.05 as I use it 
-for target production which will start in about 2 month.
+> I would like to see Barebox double config feature merged.
 
->
-> Thanks for your feedback,
->
-> Thomas
->
+On that one, I was waiting for the final review from Arnout. With the
+latest changes done by Pieter, I'm happy as it is. I'll merge it over
+the WE, hopefully after Arnout gave his Reviewed-by.
 
-Regards,
+> Perhaps Python 3.5 and pyc related stuff.
 
-Julien
+So Python 3.5 is http://patchwork.ozlabs.org/patch/562627/.
 
-[1] https://patchwork.ozlabs.org/patch/547683/
+For the .pyc stuff, we have http://patchwork.ozlabs.org/patch/546542/
+and http://patchwork.ozlabs.org/patch/580512/. Are you talking about
+both of them, or more specifically one of the two?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
