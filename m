@@ -1,21 +1,27 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 28 Apr 2016 19:03:59 +0200
-Subject: [Buildroot] [PATCH] network-manager: bump version to 1.2.0
-In-Reply-To: <571F26E5.2070300@imgtec.com>
-References: <1461236721-60129-1-git-send-email-Vincent.Riera@imgtec.com>
- <571A2F7C.2000707@zacarias.com.ar>
- <87d1pdo14b.fsf@dell.be.48ers.dk> <571F26E5.2070300@imgtec.com>
-Message-ID: <20160428170357.GB789@x230>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 28 Apr 2016 19:05:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-mga:
+ disable DRI support when not available
+References: <1447004673-18164-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160419214702.GH3505@free.fr>
+Message-ID: <9fs9vcx3pr.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vincent, Peter and Gustavo,
+Am Tue, 19 Apr 2016 23:47:02 +0200 schrieb Yann E. MORIN:
 
-do you thing it's still relevant to keep the patch I added, which fixes build error
-kernels headers < 3.17?
+> Is this patch still applicable?
 
-Kind regards,
-Petr
+Hi Yann,
+
+yes, the bug still occurs:
+
+http://autobuild.buildroot.net/
+results/8ae/8aec759b0e485b2c90e2a26d60c7776c2684c44a//
+
+and is still fixed by my patch.
+
+Regards, Bernd
