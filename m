@@ -1,26 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 28 Apr 2016 08:33:02 -0300
-Subject: [Buildroot] [PATCH v2] mpv: new package
-In-Reply-To: <20160428133031.39b4a7bf@free-electrons.com>
-References: <1461762722-10026-1-git-send-email-gustavo@zacarias.com.ar>
- <20160428131945.1fb83683@free-electrons.com>
- <5721F276.5040304@zacarias.com.ar>
- <20160428133031.39b4a7bf@free-electrons.com>
-Message-ID: <5721F4EE.8050509@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Apr 2016 13:34:39 +0200
+Subject: [Buildroot] [git commit] mpv: fix wayland deps
+Message-ID: <20160428113452.0BD1C816A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/04/16 08:30, Thomas Petazzoni wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a451a9480563d01dcfa51c2ed4020414f3c6426f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The ones related to j1() being not available, I guess so. But many of
-> the failures are related to the detection of wayland, sdl1, sdl2. Are
-> those also related to the XSI_MATH thing?
->
-> Thomas
+The wayland backend requires libxkbcommon, so when wayland is available
+select it to avoid build failure and obscure dependencies. Fixes:
+http://autobuild.buildroot.net/results/ed2/ed2660361c9720e48dd5959f2711fd7f14031b0d/
 
-No, wayland requires xkbcommon, i've already sent a patch, i'm looking 
-at the sdl failures shortly.
-Regards.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mpv/Config.in | 2 ++
+ package/mpv/mpv.mk    | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/mpv/Config.in b/package/mpv/Config.in
+index 0f5aa97..36617e5 100644
+--- a/package/mpv/Config.in
++++ b/package/mpv/Config.in
+@@ -6,6 +6,8 @@ config BR2_PACKAGE_MPV
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FFMPEG_SWSCALE
+ 	select BR2_PACKAGE_ZLIB
++	# Select xkbcommon for wayland to avoid being misterious
++	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
+ 	help
+ 	  mpv is a fork of mplayer2 and MPlayer. It shares some features
+ 	  with the former projects while introducing many more.
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index 0032eb5..605e891 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -187,7 +187,7 @@ endif
+ # wayland support
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ MPV_CONF_OPTS += --enable-wayland
+-MPV_DEPENDENCIES += wayland
++MPV_DEPENDENCIES += libxkbcommon wayland
+ else
+ MPV_CONF_OPTS += --disable-wayland
+ endif
