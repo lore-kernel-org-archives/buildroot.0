@@ -1,40 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Apr 2016 23:19:04 +0200
-Subject: [Buildroot] [PATCH] moarvm: use libtommath
-In-Reply-To: <87fuu5v3xg.fsf@dell.be.48ers.dk>
-References: <1461873571-26319-1-git-send-email-francois.perrad@gadz.org>
- <20160428221227.79cf3ccf@free-electrons.com>
- <87oa8tv4y8.fsf@dell.be.48ers.dk>
- <20160428230418.25c63d4c@free-electrons.com>
- <87fuu5v3xg.fsf@dell.be.48ers.dk>
-Message-ID: <20160428231904.199e0eb0@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Apr 2016 23:29:13 +0200
+Subject: [Buildroot] [git commit] configs/sheevaplug_defconfig: use 4.5.2
+	kernel, configure eth0
+Message-ID: <20160428213146.7549581ED5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=61451d7dd95c4b764465e1e14b894c52477cb779
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 28 Apr 2016 23:06:35 +0200, Peter Korsgaard wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/sheevaplug_defconfig | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
->  > Would be good if it had been mentioned in the commit log...
-> 
-> Ehh yes, I actually wanted to amend the commit message - But I somehow
-> forgot to do so before pushing :/
-
-That's OK. I was mainly referring to the fact that it would have been
-if Fran?ois had written this down in the commit log in the first place,
-so that we wouldn't have had to dig the information ourselves.
-
-Fran?ois, I've asked you 2039809823 times to write some detailed commit
-logs. Once gain, this patch had an empty commit log. I've asked you so
-many times to do this that I'm personally considering dropping any of
-your patch that doesn't have a proper commit log. Without even looking
-at the patch itself.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
+index b10e48e..3632ed0 100644
+--- a/configs/sheevaplug_defconfig
++++ b/configs/sheevaplug_defconfig
+@@ -5,13 +5,14 @@ BR2_arm926t=y
+ # system
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_SYSTEM_DHCP="eth0"
+ 
+ # filesystem
+ BR2_TARGET_ROOTFS_JFFS2=y
+ BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_128K=y
+ 
+-# Linux headers same as kernel, a 4.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++# Linux headers same as kernel, a 4.5 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
+ 
+ # bootloader
+ BR2_TARGET_UBOOT=y
+@@ -25,7 +26,7 @@ BR2_TARGET_UBOOT_FORMAT_KWB=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v5"
+ BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
