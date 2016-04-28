@@ -1,114 +1,99 @@
-From: gwenhael.goavec <gwenj@trabucayre.com>
-Date: Thu, 28 Apr 2016 09:18:43 +0200
-Subject: [Buildroot] CMake can't find Boost
-In-Reply-To: <5721AAA5.40208@gpsatsys.com.au>
-References: <5721AAA5.40208@gpsatsys.com.au>
-Message-ID: <20160428091843.114485d3@x230.trabucayre.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Apr 2016 10:24:12 +0200
+Subject: [Buildroot] migrating manual makefile to autotools-based
+	packages
+In-Reply-To: <loom.20160408T102819-442@post.gmane.org> (aurelien coulaud's
+ message of "Fri, 8 Apr 2016 08:49:27 +0000 (UTC)")
+References: <loom.20160406T145801-819@post.gmane.org>
+ <loom.20160406T191601-706@post.gmane.org>
+ <20160408043143.3da6fc7e@free-electrons.com>
+ <loom.20160408T102819-442@post.gmane.org>
+Message-ID: <8737q6ywcz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "aurelien" == aurelien coulaud <aurelien.coulaud@thalesgroup.com> writes:
 
-On Thu, 28 Apr 2016 16:16:05 +1000
-Gareth Pye <garethp@gpsatsys.com.au> wrote:
+ > Hello Thomas, thank in advance.
 
-> Hi,
-> 
-> I've had a lot trouble convincing cmake that boost is available. I'm 
-> trying to add the UHD drivers to buildroot. We need it to connect up
-> the USR B200 to our Odroid C1s.
-> 
-> My uhd.mk looks like:
-> 
-> ################################################################################
-> #
-> # UHD driver for USRP hardware (ettus research)
-> #
-> ################################################################################
-> 
-> UHD_VERSION = 003_009_001
-> UHD_SOURCE = /release_$(UHD_VERSION).tar.gz
-> UHD_SITE = https://github.com/EttusResearch/uhd/archive
-> UHD_INSTALL_STAGING = YES
-> UHD_INSTALL_TARGET = YES
-> 
-> UHD_CONF_OPTS += -DENABLE_EXAMPLES=OFF
-> UHD_CONF_OPTS += -DENABLE_USB=ON
-> UHD_CONF_OPTS += -DENABLE_MANUAL=OFF
-> UHD_CONF_OPTS += -DENABLE_DOXYGEN=OFF
-> UHD_CONF_OPTS += -DENABLE_UTILS=OFF
-> UHD_CONF_OPTS += -DENABLE_TESTS=OFF
-> 
-> UHD_CONF_OPTS += 
-> -Dtarget_link_libraries=/data/Build/buildroot/output/target/usr/lib/
-> 
-> UHD_CONF_OPTS +=
-> -DBoost_INCLUDE_DIR=../../../../output/build/boost-1.60.0
-> UHD_CONF_OPTS +=
-> -DBoost_LIBRARY_DIR=../../../../output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
-> UHD_CONF_OPTS += -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH
-> 
-> UHD_DEPENDENCIES = libglib2 host-pkgconf python-mako libusb boost
-> UHD_SUBDIR = host
-> UHD_SUPPORTS_IN_SOURCE_BUILD = NO
-> 
-> define UHD_PRE_CONFIGURE_FIXUP
->            cp -r output/target/usr/lib/python2.7/site-packages/mako 
-> output/host/usr/lib/python2.7/site-packages/
-> endef
-> UHD_PRE_CONFIGURE_HOOKS += UHD_PRE_CONFIGURE_FIXUP
-It's not a good thing to hard code everything. UHD is able to
-work not only on ARM. But it not the current subject.
-> 
-> $(eval $(cmake-package))
-> 
-> And an attempt at building it looks like (full paste at: 
-> http://pastebin.com/eQmf0YW8):
-> 
-> <snip>
-> -- Could NOT find Boost
-I think you must check if all needs boot's modules are available.
-For example host/CMakeLists.txt checks for these boost's modules :
-date_time, filesystem, program_options, regex, system, thread,
-unit_test_framework, serialization.
+ > Here is my file: codebase.mk
+
+This looks like a pretty normal autotools based package. Look at
+E.G. package/libdaemon/libdaemon.mk for an example.
+
+ > #############################################################
+ > #
+ > # codebase
+ > #
+ > #############################################################
+
+ > CODEBASE_SOURCE=codebase__20061027.tgz
+ > CODEBASE_DIR:=$(BUILD_DIR)/codebase
 
 
-> CMake Warning (dev) at CMakeLists.txt:221 (LINK_DIRECTORIES):
->    This command specifies the relative path
-> 
-> ../../../../output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
-> 
->    as a link directory.
-> 
->    Policy CMP0015 is not set: link_directories() treats paths
-> relative to the
->    source dir.  Run "cmake --help-policy CMP0015" for policy
-> details. Use the
->    cmake_policy command to set the policy and suppress this warning.
-> This warning is for project developers.  Use -Wno-dev to suppress it.
-> 
-> -- Boost include directories: ../../../../output/build/boost-1.60.0
-> -- Boost library directories: 
-> ../../../../output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
-> -- Boost libraries:
-> -- Looking for log2
-> -- Looking for log2 - found
-> <snip>
-> 
-> 
-> The uhd.mk file is similar to what worked several months ago, but it 
-> appears I didn't event commit to my local repository correctly as
-> trying to make that doesn't work either.
-> 
-> Should a cmake project using boost 'just work' & I should be
-> complaining to the UHD guys or is there something I should be
-> tweaking in buildroot?
-> 
-In my experience boost works with cmake. It's used successfully to
-build, for example, gnuradio and gr-osmosdr.
+ > $(CODEBASE_DIR)/.source: $(DL_DIR)/$(CODEBASE_SOURCE)
+ > 	$(ZCAT) $(DL_DIR)/$(CODEBASE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ > 	toolchain/patch-kernel.sh $(CODEBASE_DIR) package/codebase/ patch*
+ > 	touch $(CODEBASE_DIR)/.source
 
-Regard.
-Gwen
+This is all handled by the infrastructure if you define something like:
+
+CODEBASE_VERSION = 20061027
+CODEBASE_SOURCE = codebase__$(CODEBASE_VERSION).tgz
+
+
+ > $(CODEBASE_DIR)/.configured: $(CODEBASE_DIR)/.source
+ > 	(cd $(CODEBASE_DIR); \
+ > 	export PATH="/usr/local/bin:$(PATH)" ; \
+ > 	./bootstrap ; \
+
+I take it that bootstrap runs autoreconf - If so, you can tell buildroot
+to do so with:
+
+CODEBASE_AUTORECONF = YES
+
+>         $(TARGET_CONFIGURE_OPTS) \
+ > 	CPPFLAGS=-DS4NO_FCVT \
+ >         CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
+ >         LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
+
+STAGING_DIR should already be in CFLAGS/LDFLAGS.
+
+> 	./configure \
+ > 	--target=$(GNU_TARGET_NAME) \
+ > 	--host=$(GNU_TARGET_NAME) \
+ > 	--build=$(GNU_HOST_NAME) \
+ > 	--prefix=/usr );
+ > 	touch $(CODEBASE_DIR)/.configured
+	
+ > $(CODEBASE_DIR)/.compiled: $(CODEBASE_DIR)/.configured
+ > 	        $(MAKE) -C $(CODEBASE_DIR)
+ > 	        touch $(CODEBASE_DIR)/.compiled
+
+ > $(STAGING_DIR)/usr/lib/libcb.so: $(CODEBASE_DIR)/.compiled
+ > 	$(MAKE) -C $(CODEBASE_DIR) install prefix=$(STAGING_DIR)/usr
+ > exec_prefix=$(STAGING_DIR)/usr
+ > 	touch -c $(STAGING_DIR)/usr/lib/libcb.so
+
+This looks odd. Are you sure you don't just want to do:
+
+make -C $(CODEBASE_DIR) DESTDIR=$(STAGING_DIR) install
+
+If so, that's what buildroot does by default.
+
+
+ > $(TARGET_DIR)/usr/lib/libcb.so: $(STAGING_DIR)/usr/lib/libcb.so
+ > 	cp -dpf $(STAGING_DIR)/usr/lib/libcb* $(STAGING_DIR)/usr/lib/libcbx*
+ > $(TARGET_DIR)/usr/lib/
+ > 	-$(STRIP) --strip-unneeded \
+ > 		$(TARGET_DIR)/usr/lib/libcb.so \
+ > 		$(TARGET_DIR)/usr/lib/libcbx.so \
+	
+
+And here it does the same except it passes DESTDIR=$(TARGET_DIR)
+
+-- 
+Bye, Peter Korsgaard
