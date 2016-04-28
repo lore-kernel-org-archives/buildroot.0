@@ -1,59 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Apr 2016 00:27:25 +0200
-Subject: [Buildroot] [PATCH 07/13 v6] core/legal-info: add package version
-	to license directory
+Date: Fri, 29 Apr 2016 00:27:23 +0200
+Subject: [Buildroot] [PATCH 05/13 v6] core/pkg-generic: add variable to
+	store the package rawname-version
 In-Reply-To: <cover.1461881416.git.yann.morin.1998@free.fr>
 References: <cover.1461881416.git.yann.morin.1998@free.fr>
-Message-ID: <5208009e8a627e58c3602435a8936a5957c57ab7.1461881416.git.yann.morin.1998@free.fr>
+Message-ID: <c299afc659a583d605825f6d6bde49a2451d6653.1461881416.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we save the source archives in a directory named after the
-package and its version, do the same for the license files, for
-consistency.
+Introduce a new per-package variable to store the 'rawname-version'
+tuple, instead of computing it every time we need it.
 
-It has a not-so-bad side-effect of also saving the version string in
-the all-licenses list.
+Currently, it's only a single location, but follow-up patches will
+introduce more use of it.
 
-The only (small) side-effect, is that the warnings about undefined
-_LICENSE_FILES now contains the version string, too. That's unavoidable,
-since that's what is stored in the legal report.
-
+Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 ---
-Chages v5 -> v6:
-  - raw name variable was renamed  (Thomas)
-
-Changes v1 -> v2:
-  - s/drawback/side-effect/  (Luca)
+Changes v5 -> v6:
+  - rename variable  (Thomas)
 ---
- package/pkg-generic.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-generic.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index a362b73..f48c58b 100644
+index 2c405e1..7aca958 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -807,10 +807,10 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- # is that the license still applies to the files distributed as part
- # of the rootfs, even if the sources are not themselves redistributed.
- ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
--	@$$(call legal-license-nofiles,$$($(2)_RAWNAME),$$(call UPPERCASE,$(4)))
--	@$$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
-+	@$$(call legal-license-nofiles,$$($(2)_RAW_BASE_NAME),$$(call UPPERCASE,$(4)))
-+	@$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))
- else
--	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
-+	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAW_BASE_NAME),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
- endif # license files
+@@ -399,6 +399,7 @@ ifdef $(3)_OVERRIDE_SRCDIR
+ endif
  
- ifeq ($$($(2)_SITE_METHOD),local)
+ $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
++$(2)_RAW_BASE_NAME = $$($(2)_RAWNAME)-$$($(2)_VERSION)
+ $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
+ $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+ 
+@@ -429,7 +430,7 @@ ifndef $(2)_SOURCE
+  ifdef $(3)_SOURCE
+   $(2)_SOURCE = $$($(3)_SOURCE)
+  else
+-  $(2)_SOURCE			?= $$($(2)_RAWNAME)-$$($(2)_VERSION).tar.gz
++  $(2)_SOURCE			?= $$($(2)_RAW_BASE_NAME).tar.gz
+  endif
+ endif
+ 
 -- 
 1.9.1
