@@ -1,8 +1,8 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 28 Apr 2016 10:17:09 -0300
-Subject: [Buildroot] [PATCH] mpv: jack/sdl/sdl2 require 64-bit sync
+Date: Thu, 28 Apr 2016 10:20:18 -0300
+Subject: [Buildroot] [PATCH v2] mpv: jack/sdl/sdl2 require 64-bit sync
 	intrinsics
-Message-ID: <1461849429-3365-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1461849618-3622-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,24 +15,16 @@ http://autobuild.buildroot.net/results/21c/21ce67041792d29082f5bba76299da19dd185
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/mpv/mpv.mk | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+Change for v2: drop testing static kludges
+
+ package/mpv/mpv.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 605e891..1c2498d 100644
+index 605e891..0a13aee 100644
 --- a/package/mpv/mpv.mk
 +++ b/package/mpv/mpv.mk
-@@ -33,7 +33,8 @@ MPV_CONF_OPTS = \
- 	--disable-uchardet \
- 	--disable-vapoursynth \
- 	--disable-vapoursynth-lazy \
--	--disable-vdpau
-+	--disable-vdpau \
-+	--disable-libmpv-static --disable-static-build
- 
- # ALSA support requires pcm+mixer
- ifeq ($(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yy)
-@@ -52,7 +53,8 @@ MPV_CONF_OPTS += --disable-gbm
+@@ -52,7 +52,8 @@ MPV_CONF_OPTS += --disable-gbm
  endif
  
  # jack support
@@ -42,7 +34,7 @@ index 605e891..1c2498d 100644
  MPV_CONF_OPTS += --enable-jack
  MPV_DEPENDENCIES += jack2
  else
-@@ -166,10 +168,11 @@ endif
+@@ -166,10 +167,11 @@ endif
  
  # SDL support
  # Both can't be used at the same time, prefer newer API
