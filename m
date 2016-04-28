@@ -1,47 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Apr 2016 21:14:06 +0200
-Subject: [Buildroot] [git commit] subversion: security bump to version 1.9.4
-Message-ID: <20160428193042.88BA78198B@busybox.osuosl.org>
+Date: Thu, 28 Apr 2016 21:35:51 +0200
+Subject: [Buildroot] [PATCH] linux: linux.mk: _defconfig not required
+	for arm64 instead use defconfig
+In-Reply-To: <1461082701-8144-1-git-send-email-naresh.kamboju@linaro.org>
+ (naresh kamboju's message of "Tue, 19 Apr 2016 17:18:21 +0100")
+References: <1461082701-8144-1-git-send-email-naresh.kamboju@linaro.org>
+Message-ID: <87a8kdwmp4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2cae3b0c0a4c6ed0b89ca64e9762e52831b27530
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "naresh" == naresh kamboju <naresh.kamboju@linaro.org> writes:
 
-Fixes:
-CVE-2016-2167 - svnserve/sasl may authenticate users using the wrong
-realm.
-CVE-2016-2168 - Remotely triggerable DoS vulnerability in mod_authz_svn
-during COPY/MOVE authorization check.
+ > From: Naresh Kamboju <naresh.kamboju@linaro.org>
+ > Linux arch/arm64 contains configs/defconfig not the <board>_defconfig
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/subversion/subversion.hash | 2 +-
- package/subversion/subversion.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+But is that likely to stay like that, even for various vendor trees?
 
-diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
-index 4f0a446..926bbc5 100644
---- a/package/subversion/subversion.hash
-+++ b/package/subversion/subversion.hash
-@@ -1,2 +1,2 @@
- # From http://subversion.apache.org/download.cgi#recommended-release
--sha1	27e8df191c92095f48314a415194ec37c682cbcf	subversion-1.9.3.tar.bz2
-+sha1	bc7d51fdda43bea01e1272dfe9d23d0a9d6cd11c	subversion-1.9.4.tar.bz2
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-index e9aa0ae..720a1a1 100644
---- a/package/subversion/subversion.mk
-+++ b/package/subversion/subversion.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+I've recently merged the defconfig for odroidc2, and that one use
+
+BR2_LINUX_KERNEL_DEFCONFIG="odroidc2"
+
+With a vendor kernel based on 3.14:
+
+https://github.com/hardkernel/linux/tree/odroidc2-3.14.y/arch/arm64/configs
+
+Perhaps we should instead interpret BR2_LINUX_KERNEL_DEFCONFIG="" as
+defconfig and not _defconfig (and then drop the check around line 423).
+
+
+ > Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+ > ---
+ >  linux/linux.mk | 4 ++++
+ >  1 file changed, 4 insertions(+)
+
+ > diff --git a/linux/linux.mk b/linux/linux.mk
+ > index 317587f..f7fb244 100644
+ > --- a/linux/linux.mk
+ > +++ b/linux/linux.mk
+ > @@ -198,7 +198,11 @@ endef
+ >  LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
  
--SUBVERSION_VERSION = 1.9.3
-+SUBVERSION_VERSION = 1.9.4
- SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
- SUBVERSION_SITE = http://mirror.catn.com/pub/apache/subversion
- SUBVERSION_LICENSE = Apache-2.0
+ >  ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ > +ifeq ($(KERNEL_ARCH),arm64)
+ > +LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))
+ > +else
+ >  LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
+ > +endif
+ >  else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+ >  LINUX_KCONFIG_FILE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
+ >  endif
+ > -- 
+ > 2.8.1
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+-- 
+Bye, Peter Korsgaard
