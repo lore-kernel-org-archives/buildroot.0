@@ -1,91 +1,23 @@
-From: Gareth Pye <garethp@gpsatsys.com.au>
-Date: Thu, 28 Apr 2016 16:16:05 +1000
-Subject: [Buildroot] CMake can't find Boost
-Message-ID: <5721AAA5.40208@gpsatsys.com.au>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Apr 2016 08:52:56 +0200
+Subject: [Buildroot] [PATCH 1/3] raspberrypi_defconfig: bump to kernel
+	version 4.4.8
+In-Reply-To: <1461792060-32385-1-git-send-email-bmauduit@beneth.fr>
+ (=?utf-8?Q?=22Beno=C3=AEt?=
+ Mauduit"'s message of "Wed, 27 Apr 2016 23:20:58 +0200")
+References: <1461792060-32385-1-git-send-email-bmauduit@beneth.fr>
+Message-ID: <87k2jiz0l3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Beno?t" == Beno?t Mauduit <bmauduit@beneth.fr> writes:
 
-I've had a lot trouble convincing cmake that boost is available. I'm 
-trying to add the UHD drivers to buildroot. We need it to connect up the 
-USR B200 to our Odroid C1s.
+ > Signed-off-by: Beno?t Mauduit <bmauduit@beneth.fr>
 
-My uhd.mk looks like:
+Committed all 3, thanks.
 
-################################################################################
-#
-# UHD driver for USRP hardware (ettus research)
-#
-################################################################################
-
-UHD_VERSION = 003_009_001
-UHD_SOURCE = /release_$(UHD_VERSION).tar.gz
-UHD_SITE = https://github.com/EttusResearch/uhd/archive
-UHD_INSTALL_STAGING = YES
-UHD_INSTALL_TARGET = YES
-
-UHD_CONF_OPTS += -DENABLE_EXAMPLES=OFF
-UHD_CONF_OPTS += -DENABLE_USB=ON
-UHD_CONF_OPTS += -DENABLE_MANUAL=OFF
-UHD_CONF_OPTS += -DENABLE_DOXYGEN=OFF
-UHD_CONF_OPTS += -DENABLE_UTILS=OFF
-UHD_CONF_OPTS += -DENABLE_TESTS=OFF
-
-UHD_CONF_OPTS += 
--Dtarget_link_libraries=/data/Build/buildroot/output/target/usr/lib/
-
-UHD_CONF_OPTS += -DBoost_INCLUDE_DIR=../../../../output/build/boost-1.60.0
-UHD_CONF_OPTS += 
--DBoost_LIBRARY_DIR=../../../../output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
-UHD_CONF_OPTS += -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH
-
-UHD_DEPENDENCIES = libglib2 host-pkgconf python-mako libusb boost
-UHD_SUBDIR = host
-UHD_SUPPORTS_IN_SOURCE_BUILD = NO
-
-define UHD_PRE_CONFIGURE_FIXUP
-           cp -r output/target/usr/lib/python2.7/site-packages/mako 
-output/host/usr/lib/python2.7/site-packages/
-endef
-UHD_PRE_CONFIGURE_HOOKS += UHD_PRE_CONFIGURE_FIXUP
-
-$(eval $(cmake-package))
-
-And an attempt at building it looks like (full paste at: 
-http://pastebin.com/eQmf0YW8):
-
-<snip>
--- Could NOT find Boost
-CMake Warning (dev) at CMakeLists.txt:221 (LINK_DIRECTORIES):
-   This command specifies the relative path
-
-../../../../output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
-
-   as a link directory.
-
-   Policy CMP0015 is not set: link_directories() treats paths relative 
-to the
-   source dir.  Run "cmake --help-policy CMP0015" for policy details.  
-Use the
-   cmake_policy command to set the policy and suppress this warning.
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
--- Boost include directories: ../../../../output/build/boost-1.60.0
--- Boost library directories: 
-../../../../output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
--- Boost libraries:
--- Looking for log2
--- Looking for log2 - found
-<snip>
-
-
-The uhd.mk file is similar to what worked several months ago, but it 
-appears I didn't event commit to my local repository correctly as trying 
-to make that doesn't work either.
-
-Should a cmake project using boost 'just work' & I should be complaining 
-to the UHD guys or is there something I should be tweaking in buildroot?
+-- 
+Bye, Peter Korsgaard
