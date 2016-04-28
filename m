@@ -1,22 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 28 Apr 2016 16:18:26 -0300
-Subject: [Buildroot] [PATCH] libxkbcommon: bump to version 0.6.0
-In-Reply-To: <87inz1wnja.fsf@dell.be.48ers.dk>
-References: <1461869277-1738-1-git-send-email-gustavo@zacarias.com.ar>
- <87inz1wnja.fsf@dell.be.48ers.dk>
-Message-ID: <57226202.70007@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Apr 2016 21:23:00 +0200
+Subject: [Buildroot] Multi-File Kernel Module Build Fails
+In-Reply-To: <20160426214928.5d518086@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 26 Apr 2016 21:49:28 +0200")
+References: <CAN34fowqUhJX9LZ-7qkzr=20-dKFFX9r8suAuXpVnn-brbacQw@mail.gmail.com>
+ <20160426214928.5d518086@free-electrons.com>
+Message-ID: <87eg9pwnaj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On 28/04/16 16:17, Peter Korsgaard wrote:
+ > Hello,
+ > On Tue, 26 Apr 2016 14:44:28 -0400, Stephen Beckwith wrote:
 
-> It is apparently fixed in 0.6.1 - Care to update to that instead?
->
-> https://lists.freedesktop.org/archives/wayland-devel/2016-April/027962.html
+ >> I posted this same issue last week and received no response.  After some
+ >> more investigation and trying several different options, I am still STUCK
+ >> and cannot move forward.
 
-Sure, i'll respin.
-Regards.
+ > Since you didn't post your entire code, we're not able to reproduce the
+ > exact same situation. However, to show how things can work, I've
+ > created a minimal example of a kernel module with two C files and one
+ > header file (to mimic your use case) and then the corresponding
+ > Buildroot package.
+
+ > See:
+
+ >   http://thomas.enix.org/example-kernel-module.html
+
+ > for all the files, both the kernel module itself and the Buildroot
+ > packaging.
+
+Nice! Notice that the browser ate the <> in your include statements of
+mymod-test1.c. I believe you need to use &gt; / &lt; even within <pre>
+tags.
+
+-- 
+Bye, Peter Korsgaard
