@@ -1,85 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Apr 2016 19:41:09 +0200
-Subject: [Buildroot] [git commit] libtommath: new package
-Message-ID: <20160428174450.4F9FA80110@busybox.osuosl.org>
+Date: Thu, 28 Apr 2016 19:41:27 +0200
+Subject: [Buildroot] [git commit] libtomcrypt: new package
+Message-ID: <20160428174450.5F03B80110@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2282f8276776144802b85cdf9f65aabdc178ea5
+commit: https://git.buildroot.net/buildroot/commit/?id=cbed1c3b4a89e4c4d4b5cc715b1fd7202ad36881
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: fix building without wchar]
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                  |  1 +
- package/libtommath/Config.in       |  7 +++++++
- package/libtommath/libtommath.hash |  2 ++
- package/libtommath/libtommath.mk   | 23 +++++++++++++++++++++++
- 4 files changed, 33 insertions(+)
+ package/Config.in                    |  1 +
+ package/libtomcrypt/Config.in        | 11 +++++++++++
+ package/libtomcrypt/libtomcrypt.hash |  2 ++
+ package/libtomcrypt/libtomcrypt.mk   | 27 +++++++++++++++++++++++++++
+ 4 files changed, 41 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index c7d415c..e645dfe 100644
+index e645dfe..c7743a2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1244,6 +1244,7 @@ menu "Other"
- 	source "package/libsigc/Config.in"
- 	source "package/libsigsegv/Config.in"
- 	source "package/libtasn1/Config.in"
-+	source "package/libtommath/Config.in"
- 	source "package/libtpl/Config.in"
- 	source "package/libubox/Config.in"
- 	source "package/libuci/Config.in"
-diff --git a/package/libtommath/Config.in b/package/libtommath/Config.in
+@@ -848,6 +848,7 @@ menu "Crypto"
+ 	source "package/libsodium/Config.in"
+ 	source "package/libssh/Config.in"
+ 	source "package/libssh2/Config.in"
++	source "package/libtomcrypt/Config.in"
+ 	source "package/libuecc/Config.in"
+ 	source "package/mbedtls/Config.in"
+ 	source "package/nettle/Config.in"
+diff --git a/package/libtomcrypt/Config.in b/package/libtomcrypt/Config.in
 new file mode 100644
-index 0000000..b2ffc72
+index 0000000..6678b30
 --- /dev/null
-+++ b/package/libtommath/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBTOMMATH
-+	bool "libtommath"
++++ b/package/libtomcrypt/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBTOMCRYPT
++	bool "libtomcrypt"
++	select BR2_PACKAGE_LIBTOMMATH
 +	help
-+	  LibTomMath is a free open source portable number theoretic
-+	  multiple-precision integer library written entirely in C.
++	  LibTomCrypt is a fairly comprehensive, modular and portable
++	  cryptographic toolkit that provides developers with a vast array
++	  of well known published block ciphers, one-way hash functions,
++	  chaining modes, pseudo-random number generators, public key
++	  cryptography and a plethora of other routines.
 +
 +	  http://www.libtom.net
-diff --git a/package/libtommath/libtommath.hash b/package/libtommath/libtommath.hash
+diff --git a/package/libtomcrypt/libtomcrypt.hash b/package/libtomcrypt/libtomcrypt.hash
 new file mode 100644
-index 0000000..fcf2ddc
+index 0000000..562016d
 --- /dev/null
-+++ b/package/libtommath/libtommath.hash
++++ b/package/libtomcrypt/libtomcrypt.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256  993a7df9ee091fca430cdde3263df57d88ef62af8103903214da49fc51bbb56c  ltm-1.0.tar.xz
-diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
++sha256  e33b47d77a495091c8703175a25c8228aff043140b2554c08a3c3cd71f79d116  crypt-1.17.tar.bz2
+diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
 new file mode 100644
-index 0000000..463ea7b
+index 0000000..53dbfd5
 --- /dev/null
-+++ b/package/libtommath/libtommath.mk
-@@ -0,0 +1,23 @@
++++ b/package/libtomcrypt/libtomcrypt.mk
+@@ -0,0 +1,27 @@
 +################################################################################
 +#
-+# libtommath
++# libtomcrypt
 +#
 +################################################################################
 +
-+LIBTOMMATH_VERSION = 1.0
-+LIBTOMMATH_SITE = https://github.com/libtom/libtommath/releases/download/v$(LIBTOMMATH_VERSION)
-+LIBTOMMATH_SOURCE = ltm-$(LIBTOMMATH_VERSION).tar.xz
-+LIBTOMMATH_LICENSE = WTFPL
-+LIBTOMMATH_LICENSE_FILES = LICENSE
-+LIBTOMMATH_INSTALL_STAGING = YES
-+LIBTOMMATH_INSTALL_TARGET = NO  # only static library
++LIBTOMCRYPT_VERSION = 1.17
++LIBTOMCRYPT_SITE = https://github.com/libtom/libtomcrypt/releases/download/$(LIBTOMCRYPT_VERSION)
++LIBTOMCRYPT_SOURCE = crypt-$(LIBTOMCRYPT_VERSION).tar.bz2
++LIBTOMCRYPT_LICENSE = WTFPL
++LIBTOMCRYPT_LICENSE_FILES = LICENSE
++LIBTOMCRYPT_INSTALL_STAGING = YES
++LIBTOMCRYPT_INSTALL_TARGET = NO # only static library
++LIBTOMCRYPT_DEPENDENCIES = libtommath
 +
-+define LIBTOMMATH_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="-I./ $(TARGET_CFLAGS)"
++LIBTOMCRYPT_CFLAGS = -I./src/headers $(TARGET_CFLAGS) -DLTC_SOURCE -DLTM_DESC \
++	$(if $(BR2_USE_WCHAR),,-DLTC_NO_WCHAR)
++
++define LIBTOMCRYPT_BUILD_CMDS
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(LIBTOMCRYPT_CFLAGS)"
 +endef
 +
-+define LIBTOMMATH_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" install
++define LIBTOMCRYPT_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" NODOCS=1 INSTALL_USER=$(shell id -u) INSTALL_GROUP=$(shell id -g) install
 +endef
 +
 +$(eval $(generic-package))
