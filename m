@@ -1,112 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Apr 2016 00:27:19 +0200
-Subject: [Buildroot] [PATCH 01/13 v6] support/scripts: add helper to
-	hardlink-or-copy
+Date: Fri, 29 Apr 2016 00:27:21 +0200
+Subject: [Buildroot] [PATCH 03/13 v6] core/pkg-generic: reorder variables
+	definitions for legal-info
 In-Reply-To: <cover.1461881416.git.yann.morin.1998@free.fr>
 References: <cover.1461881416.git.yann.morin.1998@free.fr>
-Message-ID: <0b6395f0d572eec63e4f14fd02d094b5b60f3de9.1461881416.git.yann.morin.1998@free.fr>
+Message-ID: <91c9d245f46eddf663259865e81210e14665c2ff.1461881416.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This helper will try to copy a source file into a destination directory,
-by first attempting to hard-link, and falling back to a plain copy.
+Move the declarations of _ACTUAL_SOURCE and _ACTUAL_SITE earlier, so
+that they are close to where _SOURCE and _SITE are handled.
 
-In some situations, it will be necessary that the destination file is
-named differently than the source, so if a third argument is specified,
-it is treated as the basename of the destination file.
-
-Add a make variable to easily call that script.
+This looks so far like a purely cosmetic change, but makes more sense
+with the follow-up patch, where we'll need them earlier in the file.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 ---
-Changes v5 -> v6:
-  - rename script  (Thomas, Arnout)
-  - drop the macro  (Thomas, Arnout)
-  - drop Luca's reviewed-by and tested-by tags, because the macro
-    disapeared
-  - fix redundancy in comments in the script
-
-Changes v4 -> v5:
-  - move the body of the macro to a shell script  (Luca)
-
-Changes v3 -> v4:
-  - forcibly remove destination file first  (Arnout, Luca)
-  - typoes  (Luca)
-  - drop trailing slash in destination directory name
-
-Changes v2 -> v3;
-  - use "ln" instead of "cp -l"
-  - accept third argument, as the basename of the destination file
-  - drop reviewed-by and tested-by tags given in v2, due to the above
-    two changes
-
-Changes RFC -> v1:
-  - move to pkg-utils  (Luca)
+Changes v2 -> v3:
+  - move that to its own patch  (Arnout)
 ---
- package/pkg-utils.mk             |  4 ++++
- support/scripts/hardlink-or-copy | 34 ++++++++++++++++++++++++++++++++++
- 2 files changed, 38 insertions(+)
- create mode 100755 support/scripts/hardlink-or-copy
+ package/pkg-generic.mk | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index f88313a..2692576 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -113,6 +113,10 @@ $$(error Package error: use $(2) instead of $(1). Please fix your .mk file)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 5c2e46d..cbdf96e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -427,6 +427,14 @@ ifndef $(2)_SOURCE
+  endif
  endif
- endef
  
-+# hardlink-or-copy -- helper script to first try to hardlink,
-+# and fallback to copy.
-+HARDLINK_OR_COPY := support/scripts/hardlink-or-copy
++# If FOO_ACTUAL_SOURCE_TARBALL is explicitly defined, it means FOO_SOURCE is
++# indeed a binary (e.g. external toolchain) and FOO_ACTUAL_SOURCE_TARBALL/_SITE
++# point to the actual sources tarball. Use the actual sources for legal-info.
++# For most packages the FOO_SITE/FOO_SOURCE pair points to real source code,
++# so these are the defaults for FOO_ACTUAL_*.
++$(2)_ACTUAL_SOURCE_TARBALL ?= $$($(2)_SOURCE)
++$(2)_ACTUAL_SOURCE_SITE    ?= $$(call qstrip,$$($(2)_SITE))
 +
- #
- # legal-info helper functions
- #
-diff --git a/support/scripts/hardlink-or-copy b/support/scripts/hardlink-or-copy
-new file mode 100755
-index 0000000..b581c51
---- /dev/null
-+++ b/support/scripts/hardlink-or-copy
-@@ -0,0 +1,34 @@
-+#!/bin/bash
-+
-+# Try to hardlink a file into a directory, fallback to copy on failure.
-+#
-+# Hardlink-or-copy the source file in the first argument into the
-+# destination directory in the second argument, using the basename in
-+# the third argument as basename for the destination file. If the third
-+# argument is missing, use the basename of the source file as basename
-+# for the destination file.
-+#
-+# In either case, remove the destination prior to doing the
-+# hardlink-or-copy.
-+#
-+# Note that this is NOT an atomic operation.
-+
-+set -e
-+
-+main() {
-+    local src_f="${1}"
-+    local dst_d="${2}"
-+    local dst_f="${3}"
-+
-+    if [ -n "${dst_f}" ]; then
-+        dst_f="${dst_d}/${dst_f}"
-+    else
-+        dst_f="${dst_d}/$( basename "${src_f}" )"
-+    fi
-+
-+    mkdir -p "${dst_d}"
-+    rm -f "${dst_f}"
-+    ln -f "${src_f}" "${dst_f}" 2>/dev/null || cp -f "${src_f}" "${dst_f}"
-+}
-+
-+main "${@}"
+ ifndef $(2)_PATCH
+  ifdef $(3)_PATCH
+   $(2)_PATCH = $$($(3)_PATCH)
+@@ -762,14 +770,6 @@ $(1)-legal-info: $(1)-source $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
+ endif
+ endif
+ 
+-# If FOO_ACTUAL_SOURCE_TARBALL is explicitly defined, it means FOO_SOURCE is
+-# indeed a binary (e.g. external toolchain) and FOO_ACTUAL_SOURCE_TARBALL/_SITE
+-# point to the actual sources tarball. Use the actual sources for legal-info.
+-# For most packages the FOO_SITE/FOO_SOURCE pair points to real source code,
+-# so these are the defaults for FOO_ACTUAL_*.
+-$(2)_ACTUAL_SOURCE_TARBALL ?= $$($(2)_SOURCE)
+-$(2)_ACTUAL_SOURCE_SITE    ?= $$(call qstrip,$$($(2)_SITE))
+-
+ # legal-info: produce legally relevant info.
+ $(1)-legal-info:
+ # Packages without a source are assumed to be part of Buildroot, skip them.
 -- 
 1.9.1
