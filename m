@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Apr 2016 14:04:35 +0200
-Subject: [Buildroot] [PATCH] ficl: new package
-In-Reply-To: <1461571758-19709-1-git-send-email-francois.perrad@gadz.org>
-References: <1461571758-19709-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20160428140435.75da877f@free-electrons.com>
+Date: Thu, 28 Apr 2016 14:10:23 +0200
+Subject: [Buildroot] [PATCH v2 4/8] php: bump version to 7.0.5
+In-Reply-To: <1460980391-65336-5-git-send-email-Vincent.Riera@imgtec.com>
+References: <1460980391-65336-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1460980391-65336-5-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160428141023.72a8e7c9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,113 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 25 Apr 2016 10:09:18 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On Mon, 18 Apr 2016 12:53:07 +0100, Vicente Olivert Riera wrote:
 
-I'm curious: are you really using this stuff? The last release dates
-back from 2010, there has been no commits in the CVS (irk!) repository
-for the last 5 years. And the previous release was made in 2004, i.e 12
-years ago. I really would like to understand if this is really used by
-you on embedded systems before accepting in Buildroot a package for
-which we know nothing will ever move upstream.
+> -PHP_VERSION = 5.6.20
+> +PHP_VERSION = 7.0.5
 
-> diff --git a/package/ficl/0001-fix-Makefile.patch b/package/ficl/0001-fix-Makefile.patch
-> new file mode 100644
-> index 0000000..94cda8a
-> --- /dev/null
-> +++ b/package/ficl/0001-fix-Makefile.patch
-> @@ -0,0 +1,45 @@
-> +fix Makefile
+I haven't looked at the details, but about PHP 7,
+https://en.wikipedia.org/wiki/PHP says:
 
-Please write a better description. "fix Makefile" is clearly not
-enough. Explain *what* you are fixing.
+""Several unmaintained or deprecated server application programming
+interfaces (SAPIs) and extensions were removed from the PHP core, most
+notably the legacy mysql extension""
 
-> diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
-> new file mode 100644
-> index 0000000..142b083
-> --- /dev/null
-> +++ b/package/ficl/ficl.mk
-> @@ -0,0 +1,49 @@
-> +################################################################################
-> +#
-> +# ficl
-> +#
-> +################################################################################
-> +
-> +FICL_VERSION = 4.1.0
-> +FICL_SITE = http://downloads.sourceforge.net/project/ficl/ficl-all/ficl4.1
-
-Please do something like:
-
-FICL_VERSION_MAJOR = 4.1
-FICL_VERSION = $(FICL_VERSION_MAJOR).0
-FICL_SITE = http://downloads.sourceforge.net/project/ficl/ficl-all/ficl$(FICL_VERSION_MAJOR)
-
-> +FICL_LICENSE = BSD-2c
-> +FICL_LICENSE_FILES = ReadMe.txt
-> +FICL_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +FICL_EXE = ficl
-> +define FICL_INSTALL_LIB_STAGING
-> +	$(INSTALL) -D -m 0644 $(@D)/libficl.a $(STAGING_DIR)/usr/lib/libficl.a
-> +endef
-> +else
-> +FICL_EXE = main
-> +define FICL_INSTALL_LIB_STAGING
-> +	$(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION) $(STAGING_DIR)/usr/lib/libficl.so.$(FICL_VERSION)
-> +	ln -sf libficl.so.$(FICL_VERSION) $(STAGING_DIR)/usr/lib/libficl.so.4
-> +	ln -sf libficl.so.$(FICL_VERSION) $(STAGING_DIR)/usr/lib/libficl.so
-> +endef
-> +define FICL_INSTALL_LIB_TARGET
-> +	$(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION) $(TARGET_DIR)/usr/lib/libficl.so.$(FICL_VERSION)
-> +	ln -sf libficl.so.$(FICL_VERSION) $(TARGET_DIR)/usr/lib/libficl.so.4
-> +	ln -sf libficl.so.$(FICL_VERSION) $(TARGET_DIR)/usr/lib/libficl.so
-> +endef
-> +endif
-
-This doesn't really take into account the BR2_SHARED_STATIC_LIBS=y
-case. What about instead something like this:
-
-ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-define FICL_INSTALL_STATIC_LIB
-	$(INSTALL) -D -m 0644 $(@D)/libficl.a $(STAGING_DIR)/usr/lib/libficl.a
-endef
-endif
-
-ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-define FICL_INSTALL_SHARED_LIB
-	$(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so.$(FICL_VERSION)
-	ln -sf libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so.4
-	ln -sf libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so
-endef
-endif
-
-and then:
-
-define FICL_INSTALL_STAGING_CMDS
-	$(FICL_INSTALL_STATIC_LIB,$(STAGING_DIR))
-	$(FICL_INSTALL_SHARED_LIB,$(STAGING_DIR))
-	... install headers ...
-endef
-
-define FICL_INSTALL_TARGET_CMDS
-	$(FICL_INSTALL_STATIC_LIB,$(TARGET_DIR))
-	$(FICL_INSTALL_SHARED_LIB,$(TARGET_DIR))
-	... install programs ...
-endef
-
-> +define FICL_BUILD_CMDS
-> +	$(MAKE) -C $(@D) -f Makefile.linux $(TARGET_CONFIGURE_OPTS) \
-> +	CPPFLAGS="$(TARGET_CPPFLAGS) -I. -Dlinux" $(FICL_EXE)
-
-This last line should be indented with one more tab.
-
-Also, it's not clear to me why the ficl executable to build is
-different between the static case and the shared case. Can you
-elaborate on that?
-
-Thanks!
+But there is still an option for MySQL in package/php/Config.ext.
 
 Thomas
 -- 
