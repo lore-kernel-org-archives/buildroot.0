@@ -1,101 +1,66 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 28 Apr 2016 18:41:11 +0200
-Subject: [Buildroot] [PATCH v3 1/7] package/freerdp: add support for ffmpeg
-	3.0
-In-Reply-To: <1461861677-22146-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1461861677-22146-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1461861677-22146-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu, 28 Apr 2016 18:41:10 +0200
+Subject: [Buildroot] [PATCH v3 0/7] package/ffmpeg: bump to version 3.0.2
+Message-ID: <1461861677-22146-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/freerdp/0004-ffmpeg30.patch | 74 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 package/freerdp/0004-ffmpeg30.patch
+Hi,
 
-diff --git a/package/freerdp/0004-ffmpeg30.patch b/package/freerdp/0004-ffmpeg30.patch
-new file mode 100644
-index 0000000..a7998b7
---- /dev/null
-+++ b/package/freerdp/0004-ffmpeg30.patch
-@@ -0,0 +1,74 @@
-+From b7b66968f93f6ce75dd06d12638e14029bf3717b Mon Sep 17 00:00:00 2001
-+From: Alexis Ballier <aballier@gentoo.org>
-+Date: Thu, 17 Sep 2015 10:36:44 +0200
-+Subject: [PATCH] channels/tsmf/client/ffmpeg: Fix build with ffmpeg git
-+ master.
-+
-+Replace old, deprecated and now removed, APIs with their new equivalent while retaining backward compatibility with old ffmpeg versions.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Downloaded from upstream commit:
-+ https://github.com/FreeRDP/FreeRDP/commit/f8ceb3f6061583c650bd4f6cddc10bc0471f2076]
-+---
-+ channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c | 17 ++++++++++++++++-
-+ 1 file changed, 16 insertions(+), 1 deletion(-)
-+
-+diff --git a/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c b/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
-+index d0880e7..e1b9f83 100644
-+--- a/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
-++++ b/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
-+@@ -61,6 +61,9 @@
-+ #define AV_CODEC_ID_AC3 CODEC_ID_AC3
-+ #endif
-+ 
-++#if LIBAVUTIL_VERSION_MAJOR < 52
-++#define AV_PIX_FMT_YUV420P PIX_FMT_YUV420P
-++#endif
-+ 
-+ typedef struct _TSMFFFmpegDecoder
-+ {
-+@@ -102,7 +105,11 @@ static BOOL tsmf_ffmpeg_init_video_stream(ITSMFDecoder* decoder, const TS_AM_MED
-+ 	mdecoder->codec_context->bit_rate = media_type->BitRate;
-+ 	mdecoder->codec_context->time_base.den = media_type->SamplesPerSecond.Numerator;
-+ 	mdecoder->codec_context->time_base.num = media_type->SamplesPerSecond.Denominator;
-++#if LIBAVCODEC_VERSION_MAJOR < 55
-+ 	mdecoder->frame = avcodec_alloc_frame();
-++#else
-++	mdecoder->frame = av_frame_alloc();
-++#endif
-+ 	return TRUE;
-+ }
-+ 
-+@@ -328,7 +335,11 @@ static BOOL tsmf_ffmpeg_decode_video(ITSMFDecoder* decoder, const BYTE *data, UI
-+ 		if (!mdecoder->decoded_data)
-+ 			return FALSE;
-+ 
-++#if LIBAVCODEC_VERSION_MAJOR < 55
-+ 		frame = avcodec_alloc_frame();
-++#else
-++		frame = av_frame_alloc();
-++#endif
-+ 		avpicture_fill((AVPicture*) frame, mdecoder->decoded_data,
-+ 					   mdecoder->codec_context->pix_fmt,
-+ 					   mdecoder->codec_context->width, mdecoder->codec_context->height);
-+@@ -400,7 +411,11 @@ static BOOL tsmf_ffmpeg_decode_audio(ITSMFDecoder* decoder, const BYTE *data, UI
-+ 									(int16_t *) dst, &frame_size, src, src_size);
-+ #else
-+ 		{
-++#if LIBAVCODEC_VERSION_MAJOR < 55
-+ 			AVFrame *decoded_frame = avcodec_alloc_frame();
-++#else
-++			AVFrame *decoded_frame = av_frame_alloc();
-++#endif
-+ 			int got_frame = 0;
-+ 			AVPacket pkt;
-+ 			av_init_packet(&pkt);
-+@@ -480,7 +495,7 @@ static UINT32 tsmf_ffmpeg_get_decoded_format(ITSMFDecoder* decoder)
-+ 
-+ 	switch (mdecoder->codec_context->pix_fmt)
-+ 	{
-+-		case PIX_FMT_YUV420P:
-++		case AV_PIX_FMT_YUV420P:
-+ 			return RDP_PIXFMT_I420;
-+ 		default:
-+ 			WLog_ERR(TAG, "unsupported pixel format %u",
+here is the updated version of my ffmpeg 3.x patch series.
+
+Regards, Bernd
+
+v3:
+- bump to ffmpeg 3.0.2
+- bumped vlc to latest git master
+- added patch to remove a tvheadend patch which ensured compatability
+  with ffmpeg 2.x
+
+v2:
+in the v2 series of the remaining patches to bump ffmpeg to 3.0.x I only
+updated the vlc patch. In vlc.mk I added some explanation for the
+updated code, two source code fixes needed to build VLC with buildroot
+were accepted today upstream:
+http://git.videolan.org/?p=vlc.git;a=search;s=Bernd+Kuhls;st=author
+and for the patch included as 0008- the discussion is still going on 
+
+
+
+Bernd Kuhls (4):
+  package/freerdp: add support for ffmpeg 3.0
+  package/ffmpeg: Add patch required by Kodi 16.0-Jarvis
+  package/vlc: bump version to git master (to be released as 3.0)
+  package/tvheadend: remove compat patch for ffmpeg < 3.x
+
+Vicente Olivert Riera (3):
+  package/ffmpeg: bump to version 3.0.2
+  package/ffmpeg: cosmetic change for the mips fpu option
+  package/ffmpeg: default to --cpu=generic for MIPS architecture
+
+ .../ffmpeg/0013-hevc-support-main10-decoding.patch | 77 ++++++++++++++++++++++
+ package/ffmpeg/ffmpeg.hash                         |  2 +-
+ package/ffmpeg/ffmpeg.mk                           | 24 +++----
+ package/freerdp/0004-ffmpeg30.patch                | 74 +++++++++++++++++++++
+ ...g-revert-minimum-required-version-numbers.patch | 51 --------------
+ package/vlc/0001-vlc-static.patch                  | 10 +--
+ ...ac-add-check-for-libgcrypt-config-program.patch | 36 +++++-----
+ .../vlc/0004-implicit-function-declaration.patch   |  4 +-
+ package/vlc/0006-qt-x11.patch                      | 12 ++--
+ package/vlc/0007-strerror.patch                    | 10 +--
+ ...-error-using-uClibc-by-adding-sys-types.h.patch | 44 +++++++++++++
+ package/vlc/Config.in                              |  6 +-
+ package/vlc/vlc.hash                               |  2 -
+ package/vlc/vlc.mk                                 | 24 +++++--
+ 14 files changed, 263 insertions(+), 113 deletions(-)
+ create mode 100644 package/ffmpeg/0013-hevc-support-main10-decoding.patch
+ create mode 100644 package/freerdp/0004-ffmpeg30.patch
+ delete mode 100644 package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
+ create mode 100644 package/vlc/0008-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch
+ delete mode 100644 package/vlc/vlc.hash
+
 -- 
 2.8.0.rc3
