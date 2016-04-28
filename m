@@ -1,35 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 28 Apr 2016 11:51:59 -0300
-Subject: [Buildroot] [PATCH] mpv: va-api requires egl-drm,
- wayland and/or x11
-In-Reply-To: <20160428164216.0e28690d@free-electrons.com>
-References: <1461853987-5313-1-git-send-email-gustavo@zacarias.com.ar>
- <20160428164216.0e28690d@free-electrons.com>
-Message-ID: <5722238F.9080308@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 28 Apr 2016 17:00:19 +0200
+Subject: [Buildroot] 2016.05-rc1 approaching: what to merge?
+References: <20160428160000.5db9d1cb@free-electrons.com>
+Message-ID: <XnsA5F8ACFCD9CA4ID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/04/16 11:42, Thomas Petazzoni wrote:
+[posted and mailed]
 
-> Can we make that positive logic ?
->
-> ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_XLIB_LIBX11),y)
-> enable vaapi
-> else
-> disable vaapi
-> endif
->
-> or you have cases where wayland on X is used, so you have both options
-> set to 'y' and still want the vaapi support ?
->
-> Thomas
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20160428160000.5db9d1cb at free-electrons.com: 
 
-Hi.
-Unfortunately both at the same time is possible, hence why i shyed away 
-of including egl-drm support without clean knobs.
-If you look at the libva package it can conditionally enable xorg and/or 
-wayland support.
-Regards.
+> So the question is: we have ~230 patches pending patchwork. Do you see
+> anything that we should really merge before 2016.05-rc1 is released?
+
+Hi Thomas,
+
+despite the fact that vlc 3.0, which contains support for ffmpeg 3.x, is
+not released yet I would still like to see the bump to ffmpeg 3.0 in
+2016.05. Currently I am preparing a new iteration of the patchset with the
+latest ffmpeg 3.0.2 bump.
+
+Regards, Bernd
