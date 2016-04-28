@@ -1,29 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 28 Apr 2016 11:40:57 -0300
-Subject: [Buildroot] 2016.05-rc1 approaching: what to merge?
-In-Reply-To: <20160428160000.5db9d1cb@free-electrons.com>
-References: <20160428160000.5db9d1cb@free-electrons.com>
-Message-ID: <572220F9.20601@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Apr 2016 16:42:16 +0200
+Subject: [Buildroot] [PATCH] mpv: va-api requires egl-drm,
+ wayland and/or x11
+In-Reply-To: <1461853987-5313-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1461853987-5313-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160428164216.0e28690d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/04/16 11:00, Thomas Petazzoni wrote:
+Hello,
 
-> So the question is: we have ~230 patches pending patchwork. Do you see
-> anything that we should really merge before 2016.05-rc1 is released?
->
-> Thanks for your feedback,
->
-> Thomas
+On Thu, 28 Apr 2016 11:33:07 -0300, Gustavo Zacarias wrote:
 
-Hi.
-webkitgtk/midori bumps?
-Now that the bulk of the hard patches (gtk3/epoxy/wayland) have landed 
-these would be a nice addition.
-I'm also interested in the enlightenment bump to have a more meaningful 
-desktop to test and play with wayland (needs extra support, but the bump 
-is a prereq) so i'll likely look into it.
-Regards.
+>  # va-api support
+> +# This requires one or more of the egl-drm, wayland, x11 backends
+> +# For now we support wayland and x11
+>  ifeq ($(BR2_PACKAGE_LIBVA),y)
+> +ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_XLIB_LIBX11),)
+> +MPV_CONF_OPTS += --disable-vaapi
+> +else
+>  MPV_CONF_OPTS += --enable-vaapi
+>  MPV_DEPENDENCIES += libva
+> -else
+
+Can we make that positive logic ?
+
+ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_XLIB_LIBX11),y)
+enable vaapi
+else
+disable vaapi
+endif
+
+or you have cases where wayland on X is used, so you have both options
+set to 'y' and still want the vaapi support ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
