@@ -1,7 +1,7 @@
 From: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-Date: Fri, 29 Apr 2016 19:01:51 +0530
-Subject: [Buildroot] [PATCH v2 2/3] aufs: new kernel extension
-Message-ID: <1461936711-1432-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
+Date: Fri, 29 Apr 2016 19:02:24 +0530
+Subject: [Buildroot] [PATCH v2 3/3] aufs-util: new package
+Message-ID: <1461936744-1528-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,92 +10,131 @@ To: buildroot@busybox.net
 
 From: Christian Stewart <christian@paral.in>
 
-Adding a kernel extension that patches the kernel with the correct
-version of aufs-standalone. This relies on the user ensuring the
-correct version is set in the configs.
+Adding the aufs-util utilities. Uses the linux header version settings
+to guess the correct version of aufs-util but ultimately relies on the
+user to enter the correct version of aufs-util to use.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 [Atul:
- - Removed the depends on.
- - Changed the name of the variable BR2_PACKAGE_AUFS_STANDALONE_VERSION.
- - Removed the comment  "aufs needs a toolchain w/ threads".
- - Removed the choice BR2_PACKAGE_AUFS_3X or BR2_PACKAGE_AUFS_4X.
- - Default left to empty rather than some text.
- - Used AUFS_DIR instead of AUFS_SRCDIR.
- - Used $(@D) instead of $(LINUX_DIR).
+ - Updated the default to empty.
+ - Updated the license to GPLv2.
+ - Used patches instead of SED commands.
+ - CC and LD are replaced by TARGET_CC and TARGET_LD.
 ]
+As per the suggestion by Thomas, we should not use make headers install here in aufs-util.mk file.
+but I could not find an alternative so I am also looking for some suggestions for that problem for this package.
+
 Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
 ---
- linux/Config.ext.in     | 28 ++++++++++++++++++++++++++++
- linux/linux-ext-aufs.mk | 23 +++++++++++++++++++++++
- 2 files changed, 51 insertions(+)
- create mode 100644 linux/linux-ext-aufs.mk
+ package/Config.in                                |  1 +
+ package/aufs-util/001-remove-user-settings.patch | 11 ++++++++
+ package/aufs-util/Config.in                      | 36 ++++++++++++++++++++++++
+ package/aufs-util/aufs-util.mk                   | 24 ++++++++++++++++
+ 4 files changed, 72 insertions(+)
+ create mode 100644 package/aufs-util/001-remove-user-settings.patch
+ create mode 100644 package/aufs-util/Config.in
+ create mode 100644 package/aufs-util/aufs-util.mk
 
-diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-index 755c23b..7fa1156 100644
---- a/linux/Config.ext.in
-+++ b/linux/Config.ext.in
-@@ -64,4 +64,32 @@ config BR2_LINUX_KERNEL_EXT_FBTFT
+diff --git a/package/Config.in b/package/Config.in
+index 54166b1..b43a46d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -161,6 +161,7 @@ endmenu
  
- 	  https://github.com/notro/fbtft
- 
-+# aufs-standalone
-+config BR2_LINUX_KERNEL_EXT_AUFS
-+	bool "Aufs Filesystem Module patch"
-+	select BR2_PACKAGE_AUFS
+ menu "Filesystem and flash utilities"
+ 	source "package/aufs/Config.in"
++	source "package/aufs-util/Config.in"
+ 	source "package/autofs/Config.in"
+ 	source "package/btrfs-progs/Config.in"
+ 	source "package/cifs-utils/Config.in"
+diff --git a/package/aufs-util/001-remove-user-settings.patch b/package/aufs-util/001-remove-user-settings.patch
+new file mode 100644
+index 0000000..5e9567d
+--- /dev/null
++++ b/package/aufs-util/001-remove-user-settings.patch
+@@ -0,0 +1,11 @@
++--- a/Makefile
+++++ b/Makefile
++@@ -21,7 +21,7 @@
++ override CPPFLAGS += -DAUFHSM_CMD=\"/usr/bin/aufhsm\"
++ override CFLAGS += -O -Wall
++ INSTALL ?= install
++-Install = ${INSTALL} -o root -g root -p
+++Install = ${INSTALL} -p
++ ManDir = /usr/share/man
++ 
++ #
+diff --git a/package/aufs-util/Config.in b/package/aufs-util/Config.in
+new file mode 100644
+index 0000000..2cc5ccc
+--- /dev/null
++++ b/package/aufs-util/Config.in
+@@ -0,0 +1,36 @@
++comment "aufs-util needs a linux kernel"
++	depends on BR2_USE_MMU
++	depends on !BR2_LINUX_KERNEL
++
++comment "aufs-util needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on BR2_LINUX_KERNEL
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_AUFS_UTIL
++	bool "aufs-util"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_PACKAGE_AUFS
 +	help
-+	  Aufs is split in two parts: a kernel part and a userspace
-+	  part. Enabling this option automatically selects the aufs
-+	  standalone (module) package and patches the Linux kernel
-+	  built by Buildroot with the aufs kernel part (ie fs/aufs).
++	  Aufs command line utilities.
++	  Needs a kernel with aufs support. A kernel
++	  extension package is available.
 +
-+	  It is important to use the correct branch of aufs-standalone.
++	  http://sourceforge.net/p/aufs/aufs-util/
 +
-+if BR2_LINUX_KERNEL_EXT_AUFS
++if BR2_PACKAGE_AUFS_UTIL
 +
-+config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
-+	string "aufs-standalone branch"
++config BR2_PACKAGE_AUFS_UTIL_VERSION
++	string "aufs-util branch"
 +	default ""
 +	help
-+	  Aufs-standalone repository branch must be selected and
-+	  must match the current kernel version.  Review the
-+	  following pages to determine what branch number is valid
-+	  depending on which major version that was selected.
++	  Aufs-util repository branch must be selected and
++	  match the current kernel version.  Review the
++	  following page to determine what branch number
++	  is valid.
 +
-+	  https://sourceforge.net/p/aufs/aufs3-standalone/ref/master/branches/
-+	  https://github.com/sfjro/aufs4-standalone/branches/all
++	  https://sourceforge.net/p/aufs/aufs-util/ci/master/tree/
 +
 +endif
-+
- endmenu
-diff --git a/linux/linux-ext-aufs.mk b/linux/linux-ext-aufs.mk
+diff --git a/package/aufs-util/aufs-util.mk b/package/aufs-util/aufs-util.mk
 new file mode 100644
-index 0000000..7d48745
+index 0000000..54139ad
 --- /dev/null
-+++ b/linux/linux-ext-aufs.mk
-@@ -0,0 +1,23 @@
++++ b/package/aufs-util/aufs-util.mk
+@@ -0,0 +1,24 @@
 +################################################################################
-+# Linux Aufs extensions
 +#
-+# Patch the linux kernel with aufs extension
++# aufs-util
++#
 +################################################################################
 +
-+LINUX_EXTENSIONS += aufs
++# linux-headers
++AUFS_UTIL_VERSION = aufs$(call qstrip,$(BR2_PACKAGE_AUFS_UTIL_VERSION))
++AUFS_UTIL_SITE = http://git.code.sf.net/p/aufs/aufs-util
++AUFS_UTIL_SITE_METHOD = git
++AUFS_UTIL_DEPENDENCIES = linux
++AUFS_UTIL_LICENSE = GPLv2
++AUFS_UTIL_LICENSE_FILES = COPYING
 +
-+define AUFS_PREPARE_KERNEL
-+	if test -d $(@D)/fs/aufs/; then \
-+		echo "Your kernel already supports AUFS. Not patching."; \
-+	else \
-+		$(APPLY_PATCHES) $(@D) $(AUFS_DIR) \
-+			$(AUFS_MAJOR_VERSION)-kbuild.patch \
-+			$(AUFS_MAJOR_VERSION)-base.patch \
-+			$(AUFS_MAJOR_VERSION)-mmap.patch \
-+			$(AUFS_MAJOR_VERSION)-standalone.patch ; \
-+	fi
-+	cp $(AUFS_DIR)/Documentation/ABI/testing/* $(@D)/Documentation/ABI/testing/
-+	cp -r $(AUFS_DIR)/Documentation/filesystems/aufs/ $(@D)/Documentation/filesystems/aufs/
-+	cp -r $(AUFS_DIR)/fs/aufs/ $(@D)/fs/
-+	cp $(AUFS_DIR)/include/uapi/linux/aufs_type.h $(@D)/include/uapi/linux/
++define AUFS_UTIL_BUILD_CMDS
++       $(MAKE) -C $(LINUX_BUILDDIR) headers_install
++       $(MAKE) -C $(@D) CPPFLAGS="-I $(LINUX_BUILDDIR)/usr/include/" HOSTCC="$(TARGET_CC)" HOSTLD="$(TARGET_LD)" INSTALL="$(INSTALL)" all
 +endef
++
++define AUFS_UTIL_INSTALL_TARGET_CMDS
++       $(MAKE) -C $(@D) INSTALL="$(INSTALL)" DESTDIR="$(TARGET_DIR)" install
++endef
++
++$(eval $(generic-package))
 -- 
 2.5.0
