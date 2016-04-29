@@ -1,7 +1,8 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 29 Apr 2016 19:59:38 +0200
-Subject: [Buildroot] [PATCH] opkg: add missing dependency on libarchive
-Message-ID: <1461952778-12479-1-git-send-email-patrickdepinguin@gmail.com>
+Date: Fri, 29 Apr 2016 20:02:53 +0200
+Subject: [Buildroot] [PATCH] ccache: fix explicit build 'make clean
+	host-ccache'
+Message-ID: <1461952973-20054-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +11,35 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-opkg requires libarchive. This was expressed in the Config.in file with a
-select, but not in the .mk file.
+To build host-ccache we need to call the bare compiler. With a standard
+'make', this is guaranteed because host-ccache is built as part of the
+dependencies, and a target-specific variable sets HOSTCC/HOSTCXX to the
+no-ccache version (see support/dependencies/dependencies.mk).
+However, this is not the case when using 'make host-ccache' explicitly
+from a clean build.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- package/opkg/opkg.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ccache/ccache.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
-index 6e4d4ff..bf19a60 100644
---- a/package/opkg/opkg.mk
-+++ b/package/opkg/opkg.mk
-@@ -8,7 +8,7 @@ OPKG_VERSION = v0.3.1
- OPKG_SITE = http://git.yoctoproject.org/git/opkg
- OPKG_SITE_METHOD = git
- # Uses PKG_CHECK_MODULES() in configure.ac
--OPKG_DEPENDENCIES = host-pkgconf
-+OPKG_DEPENDENCIES = host-pkgconf libarchive
- OPKG_LICENSE = GPLv2+
- OPKG_LICENSE_FILES = COPYING
- OPKG_INSTALL_STAGING = YES
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index c4f0310..ae369a6 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -21,6 +21,13 @@ CCACHE_LICENSE_FILES = LICENSE.txt GPL-3.0.txt
+ # has zero dependency besides the C library.
+ HOST_CCACHE_CONF_OPTS += --with-bundled-zlib
+ 
++# To build host-ccache we need to call the bare compiler. With a standard
++# 'make', this is guaranteed because host-ccache is built as part of the
++# dependencies, and a target-specific variable sets HOSTCC/HOSTCXX to the
++# no-ccache version (see support/dependencies/dependencies.mk).
++# However, this is not the case when using 'make host-ccache'.
++HOST_CCACHE_CONF_ENV += CC=$(HOSTCC_NOCCACHE) CXX=$(HOSTCXX_NOCCACHE)
++
+ # Patch host-ccache as follows:
+ #  - Use BR_CACHE_DIR instead of CCACHE_DIR, because CCACHE_DIR
+ #    is already used by autotargets for the ccache package.
 -- 
 2.7.3
