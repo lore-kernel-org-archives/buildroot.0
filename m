@@ -1,41 +1,35 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 29 Apr 2016 11:30:23 +0200
-Subject: [Buildroot] Qt5.6 no text rendered
-In-Reply-To: <eb2ed3f2-4aa6-5ff3-4052-df67bc17fc3c@progel.net>
-References: <eb2ed3f2-4aa6-5ff3-4052-df67bc17fc3c@progel.net>
-Message-ID: <trinity-f163fb80-19a5-4df5-864e-d2fe10260c70-1461922223398@3capp-gmx-bs73>
+From: =?UTF-8?q?Myl=C3=A8ne=20Josserand?= <mylene.josserand@free-electrons.com>
+Date: Fri, 29 Apr 2016 13:40:51 +0200
+Subject: [Buildroot] [PATH RFC] Fix glmark2 error with Vivante
+Message-ID: <1461930052-21032-1-git-send-email-mylene.josserand@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mattia,
+While using Vivante OpenGL driver, I got an error on glmark2 :
+   "Checking for 'gbm' : not found
+    The configuration failed [...]"
 
-> Gesendet:?Freitag, 29. April 2016 um 10:56 Uhr
-> Von:?"Mattia Adducchio" <m.adducchio@progel.net>
-> An:?buildroot at busybox.net
-> Betreff:?[Buildroot] Qt5.6 no text rendered
-> 
-> Hi,
-> I compiled buildroot for raspi2 with QT5 libraries, OpenGL API, OpenGL module, fontconfig and some others qt module.
-> I have no problem to cross-compile my application but when it run on raspbian2 the widgets are displayed correctly, but no text > is shown.
-> I also tried to compile Qt's examples but the result is the same.
-> I'm trying to googling but I find only this[https://forum.qt.io/topic/43702/buildroot-qt5-no-fonts-rendered/2] old post.
-> My buildroot version is the last stable 2016-02.
+This is due to the fact that, with Vivante driver, mesa3d is not
+configured to enable "gdm" (as BR2_PACKAGE_MESA3D_OPENGL_EGL=n).
+As the gdm is used only on "drm" flavors of glmark2, this patch
+proposes to check if the MESA3D OpenGL is enabled before adding
+"drm" flavors on configuration (so the need of "gbm").
 
-With QT5.6 there are no (more) default fonts deliverd/installed.
+This is a RFC patch because I do not really know how all OpenGL stuff
+are handled in buildroot and maybe, this is not the best way to do it.
 
-One solution is to enable:
+If you have any ideas, remarks or questions, do not hesitate.
 
-BR2_PACKAGE_QT5BASE_FONTCONFIG=y
-BR2_PACKAGE_DEJAVU=y (or any other font package)
+Best regards,
 
-Or find a package providing the basic legacy Qt fonts...
+Myl?ne Josserand (1):
+  glmark2: check mesa3d opengl when adding drm
 
-Regards,
-Peter
+ package/glmark2/glmark2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Thank you,
-> Mattia
-?
+-- 
+2.8.0.rc3
