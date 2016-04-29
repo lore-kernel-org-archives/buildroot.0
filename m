@@ -1,54 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 29 Apr 2016 00:27:30 +0200
-Subject: [Buildroot] [PATCH 12/13 v6] core/legal-info: generate a hash of
-	all saved files
-In-Reply-To: <cover.1461881416.git.yann.morin.1998@free.fr>
-References: <cover.1461881416.git.yann.morin.1998@free.fr>
-Message-ID: <afc28d89dd0b897c2a095743128ce2aa4b6c4ca3.1461881416.git.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 28 Apr 2016 21:19:56 -0300
+Subject: [Buildroot] [PATCH] php: security bump to version 5.6.21
+Message-ID: <1461889196-21981-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Having a hash of the saved files can be interesting for the recipient to
-verify the integrity of the files.
+Fixes (CVEs not assigned yet):
+bug #72094 - Out of bounds heap read access in exif header processing
+bug #71912 - libgd: signedness vulnerability
+bug #72061 - Out-of-bounds reads in zif_grapheme_stripos with negative offset
+bug #71843 - null ptr deref ZEND_RETURN_SPEC_CONST_HANDLER
+bug #71952 - Corruption inside imageaffinematrixget
 
-We remove the warning file earlier, to exclude it from the hash list.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Changes v1 -> v2:
-  - simplify getting rid of the ..../legal-info/ prefix  (Luca)
-  - always sort with the C locale
----
- Makefile | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index daa32a4..688bf26 100644
---- a/Makefile
-+++ b/Makefile
-@@ -701,8 +701,14 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
- 		cat support/legal-info/README.warnings-header \
- 			$(LEGAL_WARNINGS) >>$(LEGAL_REPORT); \
- 		cat $(LEGAL_WARNINGS); fi
--	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
- 	@rm -f $(LEGAL_WARNINGS)
-+	@(cd $(LEGAL_INFO_DIR); \
-+	  find * -type f -exec sha256sum {} + \
-+	  |LC_ALL=C sort -k2 \
-+	  >.legal-info.sha256; \
-+	  mv .legal-info.sha256 legal-info.sha256 \
-+	)
-+	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
+diff --git a/package/php/php.hash b/package/php/php.hash
+index e359bf7..4feb3ca 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-sha256	2b87d40213361112af49157a435e0d4cdfd334c9b7c731c8b844932b1f444e7a	php-5.6.20.tar.xz
++sha256	566ff1a486cb0485ed477a91ea292423f77a58671270ff73b74e67e3ce7084f9	php-5.6.21.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 1c92060..d58c4fd 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- show-targets:
- 	@echo $(PACKAGES) $(TARGETS_ROOTFS)
+-PHP_VERSION = 5.6.20
++PHP_VERSION = 5.6.21
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
-1.9.1
+2.7.3
