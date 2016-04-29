@@ -1,46 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 28 Apr 2016 21:19:56 -0300
-Subject: [Buildroot] [PATCH] php: security bump to version 5.6.21
-Message-ID: <1461889196-21981-1-git-send-email-gustavo@zacarias.com.ar>
+From: Julian Scheel <julian@jusst.de>
+Date: Fri, 29 Apr 2016 07:52:10 +0200
+Subject: [Buildroot] [PATCHv2] package/cryptopp: Backport gcc
+ compatibility patch
+In-Reply-To: <20160428135149.79bf2358@free-electrons.com>
+References: <1461571769-29772-1-git-send-email-julian@jusst.de>
+ <20160428135149.79bf2358@free-electrons.com>
+Message-ID: <c04ddb58-9cd6-39be-191d-267926119e91@jusst.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes (CVEs not assigned yet):
-bug #72094 - Out of bounds heap read access in exif header processing
-bug #71912 - libgd: signedness vulnerability
-bug #72061 - Out-of-bounds reads in zif_grapheme_stripos with negative offset
-bug #71843 - null ptr deref ZEND_RETURN_SPEC_CONST_HANDLER
-bug #71952 - Corruption inside imageaffinematrixget
+Hi Thomas,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 28.04.2016 13:51, Thomas Petazzoni wrote:
+> On Mon, 25 Apr 2016 10:09:29 +0200, Julian Scheel wrote:
+>> Import patch from cryptopp upstream which fixes the gcc version
+>> checks for using attribute deprecated with messages. Fixes build with
+>> host gcc versions < 4.5.
+>>
+>> Signed-off-by: Julian Scheel <julian@jusst.de>
+>
+> The patch on the cryptopp source didn't apply once applied from your
+> e-mail, since the DOS line endings had been turned into Unix line
+> endings. But the upstream source is really using DOS line endings.
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index e359bf7..4feb3ca 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256	2b87d40213361112af49157a435e0d4cdfd334c9b7c731c8b844932b1f444e7a	php-5.6.20.tar.xz
-+sha256	566ff1a486cb0485ed477a91ea292423f77a58671270ff73b74e67e3ce7084f9	php-5.6.21.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 1c92060..d58c4fd 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 5.6.20
-+PHP_VERSION = 5.6.21
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
--- 
-2.7.3
+How nasty...
+
+> So in the end, since the patch is easily available from Github, I've
+> simply used the <pkg>_PATCH variable to let Buildroot download and
+> apply the patch, rather than importing it in package/cryptopp/. And
+> then I've applied. See:
+>
+>    https://git.buildroot.net/buildroot/commit/?id=b4ccab90608efca6a7c753a4980c546a61f715ad
+
+That's neat, I wasn't aware of that <pkg>_PATH option.
+
+Thanks for merging,
+Julian
