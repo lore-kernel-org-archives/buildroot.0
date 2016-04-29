@@ -1,7 +1,9 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Fri, 29 Apr 2016 10:12:12 +0200
-Subject: [Buildroot] [PATCH 1/3] gnuradio: add gr-audio support
-Message-ID: <1461917534-27882-1-git-send-email-gwenj@trabucayre.com>
+Date: Fri, 29 Apr 2016 10:12:14 +0200
+Subject: [Buildroot] [PATCH 3/3] gnuradio: add qtgui support
+In-Reply-To: <1461917534-27882-1-git-send-email-gwenj@trabucayre.com>
+References: <1461917534-27882-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1461917534-27882-3-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,54 +12,61 @@ To: buildroot@busybox.net
 
 From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-gr-audio is a gnuradio module to use audio card as sink or source.
+gr-qtgui provides a set of module to display time/frequency/waterfall.
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 ---
- package/gnuradio/Config.in   |  6 ++++++
- package/gnuradio/gnuradio.mk | 12 ++++++++++++
- 2 files changed, 18 insertions(+)
+ package/gnuradio/Config.in   | 12 +++++++++++-
+ package/gnuradio/gnuradio.mk |  7 +++++++
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 603532c..3cbc9b2 100644
+index dc29dfc..a572773 100644
 --- a/package/gnuradio/Config.in
 +++ b/package/gnuradio/Config.in
-@@ -32,6 +32,12 @@ config BR2_PACKAGE_GNURADIO
- 
- if BR2_PACKAGE_GNURADIO
- 
-+config BR2_PACKAGE_GNURADIO_AUDIO
-+	bool "gr-audio"
-+	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO
-+	help
-+	  Add audio source/sink to GNU Radio
-+
- config BR2_PACKAGE_GNURADIO_BLOCKS
- 	bool "blocks support"
+@@ -69,7 +69,7 @@ config BR2_PACKAGE_GNURADIO_UTILS
  	help
+ 	  Misc python utilities
+ 
+-comment "gr-fft, -filter, -analog, -channels, -digital, -trellis, -pager depends fftw's single precision"
++comment "gr-fft, -filter, -analog, -channels, -digital, -trellis, -pager, -qtgui depends fftw's single precision"
+ 	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
+ 
+ if BR2_PACKAGE_FFTW_PRECISION_SINGLE
+@@ -110,6 +110,16 @@ config BR2_PACKAGE_GNURADIO_PAGER
+ 	help
+ 	  FLEX pager decoder implementation blocks
+ 
++config BR2_PACKAGE_GNURADIO_QTGUI
++	bool "gr-qtgui"
++	depends on BR2_PACKAGE_PYTHON_PYQT
++	depends on BR2_PACKAGE_QWT
++	depends on BR2_PACKAGE_QT_STL
++	select BR2_PACKAGE_GNURADIO_FFT
++	select BR2_PACKAGE_GNURADIO_FILTER
++	help
++	  GNU Radio Qt scopes
++
+ config BR2_PACKAGE_GNURADIO_TRELLIS
+ 	bool "gr-trellis support"
+ 	select BR2_PACKAGE_GNURADIO_DIGITAL
 diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index 46d1f4f..8f771fc 100644
+index b193569..972f7a4 100644
 --- a/package/gnuradio/gnuradio.mk
 +++ b/package/gnuradio/gnuradio.mk
-@@ -52,6 +52,18 @@ else
- GNURADIO_CONF_OPTS += -DENABLE_GR_ANALOG=OFF
+@@ -120,6 +120,13 @@ else
+ GNURADIO_CONF_OPTS += -DENABLE_PAGER=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_GNURADIO_AUDIO),y)
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+GNURADIO_DEPENDENCIES += alsa-lib
-+endif
-+ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
-+GNURADIO_DEPENDENCIES += portaudio
-+endif
-+GNURADIO_CONF_OPTS += -DENABLE_GR_AUDIO=ON
++ifeq ($(BR2_PACKAGE_GNURADIO_QTGUI),y)
++GNURADIO_DEPENDENCIES += python-pyqt qwt
++GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=ON
 +else
-+GNURADIO_CONF_OPTS += -DENABLE_GR_AUDIO=OFF
++GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_GNURADIO_BLOCKS),y)
- GNURADIO_CONF_OPTS += -DENABLE_GR_BLOCKS=ON
+ ifeq ($(BR2_PACKAGE_GNURADIO_TRELLIS),y)
+ GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=ON
  else
 -- 
 2.7.3
