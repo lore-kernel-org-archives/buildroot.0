@@ -1,41 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Apr 2016 08:49:33 +0200
-Subject: [Buildroot] [git commit] shairport-sync: bump to version 2.8.3
-Message-ID: <20160429065012.2688D80DB6@busybox.osuosl.org>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 29 Apr 2016 09:56:57 +0200
+Subject: [Buildroot] [PATCH 0/3] package/swupdate: bump to version 2016.04
+Message-ID: <1461916620-5170-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b639c7f318aec5a18907ae11a1f13e70be7eab4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bumping swupdate to version 2016.04 requires some changes to the packages mtd
+and uboot-tools. Before the new version swupdate bundled the header files from
+mtd and the environment sources from u-boot. To keep in sync with those packages
+swupdate dropped the bundled headers and sources and needs them available on
+the target system.
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+To satisfy the build dependency the patch set installs the necessary header
+files from the package mtd and the static library libubootenv from the package
+uboot-tools to the staging directory.
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index 5667d2c..a452bbd 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  de7d9002b87ce2f62e70cb625c9a1d312056144e01812e708f5c6d2bd376fdba  shairport-sync-2.8.2.tar.gz
-+sha256  4dfdaf0883b94c7061c894be295c878ede3048355bd415905db14ccb74159b72  shairport-sync-2.8.3.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index bd95941..32127b1 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHAIRPORT_SYNC_VERSION = 2.8.2
-+SHAIRPORT_SYNC_VERSION = 2.8.3
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+J?rg Krause (3):
+  mtd: install header files to staging directory
+  uboot-tools: install libubootenv to staging
+  swupdate: bump to version 2016.04
+
+ package/mtd/mtd.mk                 |  3 +++
+ package/swupdate/Config.in         | 18 ++++++++++--------
+ package/swupdate/swupdate.config   | 36 +++++++++++++++++++++++++++++++++++-
+ package/swupdate/swupdate.hash     |  5 ++---
+ package/swupdate/swupdate.mk       | 27 ++++++++++++++++++++-------
+ package/uboot-tools/uboot-tools.mk |  8 ++++++++
+ 6 files changed, 78 insertions(+), 19 deletions(-)
+
+-- 
+2.8.0
