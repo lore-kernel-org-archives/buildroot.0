@@ -1,140 +1,56 @@
-From: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-Date: Fri, 29 Apr 2016 19:02:24 +0530
-Subject: [Buildroot] [PATCH v2 3/3] aufs-util: new package
-Message-ID: <1461936744-1528-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 29 Apr 2016 10:46:07 -0300
+Subject: [Buildroot] [PATCH v4 0/3] Webkitgtk 2.12.x bump
+Message-ID: <1461937570-13049-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Christian Stewart <christian@paral.in>
+This series bumps webkitgtk from the current 2.4.x series to 2.12.x and
+midori to match as well.
 
-Adding the aufs-util utilities. Uses the linux header version settings
-to guess the correct version of aufs-util but ultimately relies on the
-user to enter the correct version of aufs-util to use.
+It's a major bump that deprecates the 2.4.x series since it isn't 100%
+security supported by upstream.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-[Atul:
- - Updated the default to empty.
- - Updated the license to GPLv2.
- - Used patches instead of SED commands.
- - CC and LD are replaced by TARGET_CC and TARGET_LD.
-]
-As per the suggestion by Thomas, we should not use make headers install here in aufs-util.mk file.
-but I could not find an alternative so I am also looking for some suggestions for that problem for this package.
+Changes for v4:
+ * Bump to version 2.12.2 of webkitgtk
 
-Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
----
- package/Config.in                                |  1 +
- package/aufs-util/001-remove-user-settings.patch | 11 ++++++++
- package/aufs-util/Config.in                      | 36 ++++++++++++++++++++++++
- package/aufs-util/aufs-util.mk                   | 24 ++++++++++++++++
- 4 files changed, 72 insertions(+)
- create mode 100644 package/aufs-util/001-remove-user-settings.patch
- create mode 100644 package/aufs-util/Config.in
- create mode 100644 package/aufs-util/aufs-util.mk
+Changes for v3:
+ * Bump to version 2.12.1 of webkitgtk
 
-diff --git a/package/Config.in b/package/Config.in
-index 54166b1..b43a46d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -161,6 +161,7 @@ endmenu
- 
- menu "Filesystem and flash utilities"
- 	source "package/aufs/Config.in"
-+	source "package/aufs-util/Config.in"
- 	source "package/autofs/Config.in"
- 	source "package/btrfs-progs/Config.in"
- 	source "package/cifs-utils/Config.in"
-diff --git a/package/aufs-util/001-remove-user-settings.patch b/package/aufs-util/001-remove-user-settings.patch
-new file mode 100644
-index 0000000..5e9567d
---- /dev/null
-+++ b/package/aufs-util/001-remove-user-settings.patch
-@@ -0,0 +1,11 @@
-+--- a/Makefile
-++++ b/Makefile
-+@@ -21,7 +21,7 @@
-+ override CPPFLAGS += -DAUFHSM_CMD=\"/usr/bin/aufhsm\"
-+ override CFLAGS += -O -Wall
-+ INSTALL ?= install
-+-Install = ${INSTALL} -o root -g root -p
-++Install = ${INSTALL} -p
-+ ManDir = /usr/share/man
-+ 
-+ #
-diff --git a/package/aufs-util/Config.in b/package/aufs-util/Config.in
-new file mode 100644
-index 0000000..2cc5ccc
---- /dev/null
-+++ b/package/aufs-util/Config.in
-@@ -0,0 +1,36 @@
-+comment "aufs-util needs a linux kernel"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_LINUX_KERNEL
-+
-+comment "aufs-util needs a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_LINUX_KERNEL
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_AUFS_UTIL
-+	bool "aufs-util"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_LINUX_KERNEL
-+	depends on BR2_PACKAGE_AUFS
-+	help
-+	  Aufs command line utilities.
-+	  Needs a kernel with aufs support. A kernel
-+	  extension package is available.
-+
-+	  http://sourceforge.net/p/aufs/aufs-util/
-+
-+if BR2_PACKAGE_AUFS_UTIL
-+
-+config BR2_PACKAGE_AUFS_UTIL_VERSION
-+	string "aufs-util branch"
-+	default ""
-+	help
-+	  Aufs-util repository branch must be selected and
-+	  match the current kernel version.  Review the
-+	  following page to determine what branch number
-+	  is valid.
-+
-+	  https://sourceforge.net/p/aufs/aufs-util/ci/master/tree/
-+
-+endif
-diff --git a/package/aufs-util/aufs-util.mk b/package/aufs-util/aufs-util.mk
-new file mode 100644
-index 0000000..54139ad
---- /dev/null
-+++ b/package/aufs-util/aufs-util.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# aufs-util
-+#
-+################################################################################
-+
-+# linux-headers
-+AUFS_UTIL_VERSION = aufs$(call qstrip,$(BR2_PACKAGE_AUFS_UTIL_VERSION))
-+AUFS_UTIL_SITE = http://git.code.sf.net/p/aufs/aufs-util
-+AUFS_UTIL_SITE_METHOD = git
-+AUFS_UTIL_DEPENDENCIES = linux
-+AUFS_UTIL_LICENSE = GPLv2
-+AUFS_UTIL_LICENSE_FILES = COPYING
-+
-+define AUFS_UTIL_BUILD_CMDS
-+       $(MAKE) -C $(LINUX_BUILDDIR) headers_install
-+       $(MAKE) -C $(@D) CPPFLAGS="-I $(LINUX_BUILDDIR)/usr/include/" HOSTCC="$(TARGET_CC)" HOSTLD="$(TARGET_LD)" INSTALL="$(INSTALL)" all
-+endef
-+
-+define AUFS_UTIL_INSTALL_TARGET_CMDS
-+       $(MAKE) -C $(@D) INSTALL="$(INSTALL)" DESTDIR="$(TARGET_DIR)" install
-+endef
-+
-+$(eval $(generic-package))
+Changes for v2:
+ * webkitgtk: dedup/group x11 dependencies
+ * webkitgtk: spin GLES handling outside wayland
+ * midori: it's available for libgtk3 in general (any backend)
+ * defer demo config until it get more polish
+
+Gustavo Zacarias (3):
+  webkitgtk: new package
+  midori: bump to version 0.5.11
+  webkitgtk24: mark as deprecated
+
+ package/Config.in                            |  1 +
+ package/midori/0001-disable-libnotify.patch  | 43 --------------
+ package/midori/0001-fix-bug-1492932.patch    | 44 ++++++++++++++
+ package/midori/0002-gcr-for-x11-only.patch   | 32 ++++++++++
+ package/midori/0002-new-vala.patch           | 26 --------
+ package/midori/Config.in                     | 36 ++++-------
+ package/midori/midori.hash                   |  2 +-
+ package/midori/midori.mk                     | 36 +++--------
+ package/{webkitgtk24 => webkitgtk}/Config.in | 46 +++++++-------
+ package/webkitgtk/webkitgtk.hash             |  4 ++
+ package/webkitgtk/webkitgtk.mk               | 89 ++++++++++++++++++++++++++++
+ package/webkitgtk24/Config.in                |  2 +
+ 12 files changed, 215 insertions(+), 146 deletions(-)
+ delete mode 100644 package/midori/0001-disable-libnotify.patch
+ create mode 100644 package/midori/0001-fix-bug-1492932.patch
+ create mode 100644 package/midori/0002-gcr-for-x11-only.patch
+ delete mode 100644 package/midori/0002-new-vala.patch
+ copy package/{webkitgtk24 => webkitgtk}/Config.in (60%)
+ create mode 100644 package/webkitgtk/webkitgtk.hash
+ create mode 100644 package/webkitgtk/webkitgtk.mk
+
 -- 
-2.5.0
+2.7.3
