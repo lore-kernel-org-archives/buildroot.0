@@ -1,72 +1,54 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Fri, 29 Apr 2016 10:12:14 +0200
-Subject: [Buildroot] [PATCH 3/3] gnuradio: add qtgui support
-In-Reply-To: <1461917534-27882-1-git-send-email-gwenj@trabucayre.com>
-References: <1461917534-27882-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1461917534-27882-3-git-send-email-gwenj@trabucayre.com>
+From: naresh.kamboju at linaro.org <naresh.kamboju@linaro.org>
+Date: Fri, 29 Apr 2016 09:23:21 +0100
+Subject: [Buildroot] [PATCH] linux: linux.mk: _defconfig not generic instead
+	use defconfig
+Message-ID: <1461918201-21233-1-git-send-email-naresh.kamboju@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
 
-gr-qtgui provides a set of module to display time/frequency/waterfall.
+In generic linux tree contains arch/<architecture>/configs/defconfig
+and get rid of <machine>_defconfig
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Avoid checking the defconfig entry
+
+Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 ---
- package/gnuradio/Config.in   | 12 +++++++++++-
- package/gnuradio/gnuradio.mk |  7 +++++++
- 2 files changed, 18 insertions(+), 1 deletion(-)
+ linux/linux.mk | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index dc29dfc..a572773 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -69,7 +69,7 @@ config BR2_PACKAGE_GNURADIO_UTILS
- 	help
- 	  Misc python utilities
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 317587f..0c5f1a0 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -198,7 +198,7 @@ endef
+ LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
  
--comment "gr-fft, -filter, -analog, -channels, -digital, -trellis, -pager depends fftw's single precision"
-+comment "gr-fft, -filter, -analog, -channels, -digital, -trellis, -pager, -qtgui depends fftw's single precision"
- 	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
- 
- if BR2_PACKAGE_FFTW_PRECISION_SINGLE
-@@ -110,6 +110,16 @@ config BR2_PACKAGE_GNURADIO_PAGER
- 	help
- 	  FLEX pager decoder implementation blocks
- 
-+config BR2_PACKAGE_GNURADIO_QTGUI
-+	bool "gr-qtgui"
-+	depends on BR2_PACKAGE_PYTHON_PYQT
-+	depends on BR2_PACKAGE_QWT
-+	depends on BR2_PACKAGE_QT_STL
-+	select BR2_PACKAGE_GNURADIO_FFT
-+	select BR2_PACKAGE_GNURADIO_FILTER
-+	help
-+	  GNU Radio Qt scopes
-+
- config BR2_PACKAGE_GNURADIO_TRELLIS
- 	bool "gr-trellis support"
- 	select BR2_PACKAGE_GNURADIO_DIGITAL
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index b193569..972f7a4 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -120,6 +120,13 @@ else
- GNURADIO_CONF_OPTS += -DENABLE_PAGER=OFF
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+-LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
++LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))defconfig
+ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+ LINUX_KCONFIG_FILE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
  endif
+@@ -416,15 +416,6 @@ LINUX_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
+ # Checks to give errors that the user can understand
+ ifeq ($(BR_BUILDING),y)
  
-+ifeq ($(BR2_PACKAGE_GNURADIO_QTGUI),y)
-+GNURADIO_DEPENDENCIES += python-pyqt qwt
-+GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=ON
-+else
-+GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_GNURADIO_TRELLIS),y)
- GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=ON
- else
+-ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+-# We must use the user-supplied kconfig value, because
+-# LINUX_KCONFIG_DEFCONFIG will at least contain the
+-# trailing _defconfig
+-ifeq ($(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG)),)
+-$(error No kernel defconfig name specified, check your BR2_LINUX_KERNEL_DEFCONFIG setting)
+-endif
+-endif
+-
+ ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+ ifeq ($(LINUX_KCONFIG_FILE),)
+ $(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE setting)
 -- 
-2.7.3
+2.8.1
