@@ -1,41 +1,39 @@
-From: Julian Scheel <julian@jusst.de>
-Date: Fri, 29 Apr 2016 07:52:10 +0200
-Subject: [Buildroot] [PATCHv2] package/cryptopp: Backport gcc
- compatibility patch
-In-Reply-To: <20160428135149.79bf2358@free-electrons.com>
-References: <1461571769-29772-1-git-send-email-julian@jusst.de>
- <20160428135149.79bf2358@free-electrons.com>
-Message-ID: <c04ddb58-9cd6-39be-191d-267926119e91@jusst.de>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 29 Apr 2016 08:24:46 +0200
+Subject: [Buildroot] [PATCH] shairport-sync: bump to version 2.8.3
+Message-ID: <1461911086-10892-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 28.04.2016 13:51, Thomas Petazzoni wrote:
-> On Mon, 25 Apr 2016 10:09:29 +0200, Julian Scheel wrote:
->> Import patch from cryptopp upstream which fixes the gcc version
->> checks for using attribute deprecated with messages. Fixes build with
->> host gcc versions < 4.5.
->>
->> Signed-off-by: Julian Scheel <julian@jusst.de>
->
-> The patch on the cryptopp source didn't apply once applied from your
-> e-mail, since the DOS line endings had been turned into Unix line
-> endings. But the upstream source is really using DOS line endings.
-
-How nasty...
-
-> So in the end, since the patch is easily available from Github, I've
-> simply used the <pkg>_PATCH variable to let Buildroot download and
-> apply the patch, rather than importing it in package/cryptopp/. And
-> then I've applied. See:
->
->    https://git.buildroot.net/buildroot/commit/?id=b4ccab90608efca6a7c753a4980c546a61f715ad
-
-That's neat, I wasn't aware of that <pkg>_PATH option.
-
-Thanks for merging,
-Julian
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index 5667d2c..a452bbd 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  de7d9002b87ce2f62e70cb625c9a1d312056144e01812e708f5c6d2bd376fdba  shairport-sync-2.8.2.tar.gz
++sha256  4dfdaf0883b94c7061c894be295c878ede3048355bd415905db14ccb74159b72  shairport-sync-2.8.3.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index bd95941..32127b1 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 2.8.2
++SHAIRPORT_SYNC_VERSION = 2.8.3
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+-- 
+2.8.0
