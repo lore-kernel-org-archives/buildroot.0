@@ -1,117 +1,202 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Fri, 29 Apr 2016 18:15:28 +0200
-Subject: [Buildroot] [PATCH] board: add a readme for Armadeus boards.
-In-Reply-To: <1460725197-29678-1-git-send-email-julien.boibessot@free.fr>
-References: <1460725197-29678-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <572388A0.4040601@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 29 Apr 2016 18:27:32 +0200
+Subject: [Buildroot] [PATCH] m68k: add support for coldfire with qemu
+ config
+In-Reply-To: <20160427220228.11902bd7@free-electrons.com>
+References: <20160427173655.GA4947@waldemar-brodkorb.de>
+ <20160427220228.11902bd7@free-electrons.com>
+Message-ID: <20160429162732.GJ26720@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ping ?
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-Regards,
-Julien
+Thanks for the detailed feedback.
 
-On 15/04/2016 14:59, julien.boibessot at free.fr wrote:
-> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
->
-> Common readme.txt for all supported Armadeus boards.
->
-> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-> ---
->  board/armadeus/readme.txt | 83 +++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 board/armadeus/readme.txt
->
-> diff --git a/board/armadeus/readme.txt b/board/armadeus/readme.txt
-> new file mode 100644
-> index 0000000..57b6998
-> --- /dev/null
-> +++ b/board/armadeus/readme.txt
-> @@ -0,0 +1,83 @@
-> +Intro
-> +=====
-> +
-> +Armadeus APFxx are Systems On Module (SOM) based on Freescale/NXP i.MX
-> +processors associated with an FPGA (except on APF28). Non volatile data are
-> +stored in on-module NOR or NAND Flash, depending on the model.
-> +These SOM can be used on Armadeus development boards or with custom docking
-> +boards.
-> +
-> +Supported platforms
-> +===================
-> +
-> +Buildroot currently supports the following Armadeus platforms with the
-> +associated defconfigs:
-> + * APF9328 SOM + devt boards -> armadeus_apf9328_defconfig
-> + * APF27 SOM + devt board    -> armadeus_apf27_defconfig
-> + * APF51 SOM + devt board    -> armadeus_apf51_defconfig
-> + * APF28 SOM + devt board    -> armadeus_apf28_defconfig
-> +
-> +Vanilla Linux versions are preferred to Freescale's one in these
-> +configurations.
-> +
-> +How to build it
-> +===============
-> +
-> +Configure Buildroot
-> +-------------------
-> +
-> +Let's say you own an APFxx SOM with it's corresponding development board, all
-> +you have to do is:
-> +
-> +  $ make armadeus_apfxx_defconfig
-> +where "apfxx" is the version of your SOM.
-> +
-> +Launch build
-> +------------
-> +
-> +  $ make
-> +
-> +Result of the build
-> +-------------------
-> +
-> +When build is finished you will endup with:
-> +    output/images/
-> +    ??? imx**-apfxxdev.dtb	[1]
-> +    ??? rootfs.jffs2		[2]
-> +    ??? rootfs.tar
-> +    ??? rootfs.ubi		[2]
-> +    ??? rootfs.ubifs		[2]
-> +    ??? uImage
-> +
-> +[1] Only if kernel version of SOM is supporting device tree.
-> +[2] .ubi/.ubifs images are not available on APF9328 and replaced by a .jffs2
-> +    one in this case.
-> +
-> +U-Boot building is currently not supported in these configurations.
-> +
-> +Installation
-> +============
-> +
-> +You will require a serial connection to the board and a TFTP server on your
-> +Host PC. Supposing your server is configured for exporting /tftpboot/
-> +directory, you will have to copy generated images to it:
-> +
-> +  $ cp output/images/uImage /tftpboot/apfxx-linux.bin
-> +  $ cp output/images/*.dtb /tftpboot/
-> +  $ cp output/images/rootfs.ubi /tftpboot/apfxx-rootfs.ubi
-> +  $ cp output/images/rootfs.jffs2 /tftpboot/apfxx-rootfs.jffs2
-> +where "apfxx" is the version of your SOM, as used with _defconfigs.
-> +
-> +Then on your serial terminal, all you have to do is:
-> +* interrupt the boot process and access U-Boot console by pressing any key
-> +  when booting,
-> +* configure board and server IP addresses with "ipaddr" and "serverip" envt
-> +  variables,
-> +* if you want to update kernel:
-> +  BIOS > run update_kernel
-> +* if you want to update device tree:
-> +  BIOS > run update_dtb
-> +* if you want to update rootfs:
-> +  BIOS > run update_rootfs
-> +
-> +That's it !
+> Hello,
+> 
+> Cool, some coldfire stuff!
+> 
+> On Wed, 27 Apr 2016 19:36:55 +0200, Waldemar Brodkorb wrote:
+> > There are four different possibilities for m68k
+> > architecture and cpu support:
+> > m68k with MMU f.e m68040
+> > m68k without MMU f.e. m68020 (without coprocessor)
+> > coldfire without MMU f.e. mcf5208
+> > coldfire with MMU f.e. mcf5475
+> > 
+> > This adds just support for mcf5208.
+> > 
+> > We need to enable multilib to gcc build to support coldfire.
+> 
+> Can you give more details as to why multilib is needed? That's a fairly
+> significant change, so we shouldn't do it lightly.
+
+I have done more testing, it seems not to be required :)
+ 
+> Is this minimal Busybox config significantly different than the one in
+> board/stmicroelectronics/busybox-minimal.config ? If not, then maybe
+> it's time to move it to package/busybox/.
+
+It is the same. Maybe networking stuff could be enabled later,
+because with a minor kernel patch you can enable networking
+in qemu-system-m68k. 
+ 
+> This whole thing should be split into more patches. At least split the:
+> 
+>  1/ Architecture + toolchain support
+>  2/ Defconfig stuff
+>  3/ Addition of the Busybox configuration in package/busybox
+
+Will be done in the next patch series.
+ 
+> >  config BR2_m68k_68040
+> >  	bool "68040"
+> > +	select BR2_m68k_m68k
+> > +	select BR2_ARCH_HAS_MMU_OPTIONAL
+> 
+> We used to select BR2_ARCH_HAS_MMU_MANDATORY. Are you sure you can
+> effectively run Linux on a 68040 with the MMU disabled? If you're not
+> sure, just keep BR2_ARCH_HAS_MMU_MANDATORY.
+
+Okay.
+ 
+> > +config BR2_m68k_cf5208
+> > +	bool "5208"
+> > +	select BR2_m68k_cf
+> > +	select BR2_SOFT_FLOAT
+> >  
+> >  endchoice
+> >  
+> >  config BR2_GCC_TARGET_CPU
+> >  	default "68040"		if BR2_m68k_68040
+> > +	default "5208"		if BR2_m68k_cf5208
+> 
+> You also want to add:
+> 
+> config BR2_GCC_TARGET_ARCH
+> 	default "m68k" if BR2_m68k_m68k
+> 	default "cf" if BR2_m68k_cf
+> 
+> this will allow to remove some stuff later on.
+> 
+> > +rm -f ${TARGET_DIR}/etc/init.d/S20urandom
+> 
+> Why ?
+
+No reason. It was there because I tried to get the thing booting to
+the command line and iteratively disabled or add some stuff to make
+it work. :)
+ 
+> > +# mdev does not work correctly
+> > +BR2_ROOTFS_DEVICE_CREATION_STATIC=y
+> 
+> The default is not to use mdev, but to use devtmpfs only. Do you have
+> issues with this?
+
+Yes, it does not boot, no shell or getty.
+ 
+> > diff --git a/package/gcc/4.8.5/891-fix-m68k-uclinux.patch b/package/gcc/4.8.5/891-fix-m68k-uclinux.patch
+> > new file mode 100644
+> > index 0000000..13bf0d9
+> > --- /dev/null
+> > +++ b/package/gcc/4.8.5/891-fix-m68k-uclinux.patch
+> > @@ -0,0 +1,17 @@
+> > +See here:
+> > +https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53833
+> 
+> Giving a link is good, but it's still good to add a quick description
+> of the patch nonetheless.
+
+Okay.
+ 
+> > diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+> > index 69fdc0c..f07d4a0 100644
+> > --- a/package/gcc/gcc-final/gcc-final.mk
+> > +++ b/package/gcc/gcc-final/gcc-final.mk
+> > @@ -74,6 +74,14 @@ HOST_GCC_FINAL_CONF_OPTS += "--with-multilib-list=m4a,m4a-nofpu"
+> >  HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib/!m4*
+> >  endif
+> >  
+> > +# m68k/coldfire needs special configure options
+> > +ifeq ($(BR2_m68k_m68k),y)
+> > +HOST_GCC_INITIAL_CONF_OPTS += --with-arch=m68k --enable-multilib --with-system-zlib
+> 
+> You're in gcc-final, so touching HOST_GCC_INITIAL_CONF_OPTS looks weird.
+> 
+> You can remove the --with-arch part, is it already passed by
+> package/gcc/gcc.mk:
+> 
+> ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
+> HOST_GCC_COMMON_CONF_OPTS += --with-arch=$(BR2_GCC_TARGET_ARCH)
+> endif
+> 
+> Also, if you need to pass options to both the gcc-initial and
+> gcc-final, you should do it in package/gcc/gcc.mk, by appending to
+> HOST_GCC_COMMON_CONF_OPTS.
+> 
+> It would be good to have a better justification than "m68k/coldfire
+> needs special configure options" to explain why --enable-multilib
+> --with-system-zlib are needed.
+
+Completely removed as not needed. :)
+ 
+> > +# coldfire is not working without removing these object files from libgcc.a
+> > +ifeq ($(BR2_m68k_cf),y)
+> > +define HOST_GCC_FINAL_M68K_LIBGCC_FIXUP
+> > +	find $(STAGING_DIR) -name libgcc.a -print | while read t; do $(GNU_TARGET_NAME)-ar dv "$t" _ctors.o; done
+> 
+> Yerk, this looks really ugly. Is this a known problem in upstream gcc?
+ 
+Sorry, yes this is required. In the past I used a gcc wrapper and a
+modified spec file, this is a more simple solution I got from
+uClinux toolchain build script. I asked on the uClinux mailinglist
+about this, but the technical reasons for this workaround are
+unknown to at least Greg, which seems the only active uClinux
+developer. So at the moment I would say, let keep it this way.
+I like to have the linux-atomic.c ice stuff next to get fixed in gcc upstream.
+The other m68k fix got applied to trunk recently.
+
+Sometimes bugs in binutils/gcc needs 1-2 years to get fixed upstream, so don't give
+up ;)
+https://sourceware.org/bugzilla/show_bug.cgi?id=17334
+
+ 
+> > +# m68k/coldfire needs special configure options
+> > +ifeq ($(BR2_m68k_m68k),y)
+> > +HOST_GCC_INITIAL_CONF_OPTS += --with-arch=m68k --enable-multilib --with-system-zlib
+> > +endif
+> > +ifeq ($(BR2_m68k_cf),y)
+> > +HOST_GCC_INITIAL_CONF_OPTS += --with-arch=cf --enable-multilib --with-system-zlib
+> > +endif
+> 
+> Same comments as above.
+> 
+> 
+> >  #
+> > +# m68k/coldfire definitions
+> > +#
+> > +
+> > +ifeq ($(UCLIBC_TARGET_ARCH),m68k)
+> > +
+> > +# disable DOPIC for flat without separate data
+> > +ifeq ($(BR2_BINFMT_FLAT_ONE),y)
+> > +define UCLIBC_M68K_BINFMT_FLAT
+> > +	$(call KCONFIG_DISABLE_OPT,DOPIC,$(@D)/.config)
+> > +endef
+> > +endif
+> 
+> In the end, isn't the removal of DOPIC necessary for all architectures
+> when binfmt_flat is used? We did the same thing for ARMv7-M, so I'm
+> wondering if we shouldn't make that generic.
+
+It is not required for Blackfin binfmt_flat, so I would like to keep
+it only for ARM and M68K for now. May be I will add some code to
+make it automatically right inside uClibc-ng.
+
+best regards
+ Waldemar
