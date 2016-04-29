@@ -1,63 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Apr 2016 14:23:48 +0200
-Subject: [Buildroot] [genimage] Create a folder with a file using
-	genimage
-In-Reply-To: <CALtfCQbB6e2mipiVj=jKKbFGwjq3r_od1EFppQg_8jV99Y7e=A@mail.gmail.com>
- (Oscar Gomez Fuente's message of "Fri, 29 Apr 2016 08:26:57 +0200")
-References: <CALtfCQYZn9FVyFPfjsL6YmGsPpkGwfsDeGWg_bdNezkKjm5=qg@mail.gmail.com>
- <87bn4tv2d2.fsf@dell.be.48ers.dk>
- <CALtfCQbB6e2mipiVj=jKKbFGwjq3r_od1EFppQg_8jV99Y7e=A@mail.gmail.com>
-Message-ID: <87r3dotxgr.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 29 Apr 2016 09:39:02 -0300
+Subject: [Buildroot] [PATCH 2/4] package/efl: bump to 1.17.0
+In-Reply-To: <1461790014-17051-2-git-send-email-romain.naour@gmail.com>
+References: <1461790014-17051-1-git-send-email-romain.naour@gmail.com>
+ <1461790014-17051-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <572355E6.4040400@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Oscar" == Oscar Gomez Fuente <oscargomezf@gmail.com> writes:
+On 27/04/16 17:46, Romain Naour wrote:
 
- > Thank you very much Peter,
- > I've got two more questions related to genimage.
+> Autoreconf has been fixed upstream.
+> Update the untested configuration warning option.
+>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
- > 1?.- Is there any way to give the partition boot the label "BOOT" and the
- > partition rootfs the label "rootfs"? It will be very useful because when I
- > insert the sd card in a computer I'm going to know the folder name where is
- > going to be mounted the sd card.
+Hi Romain.
+host-efl is failing to build in my tests:
 
-I think you are referring to fat/ext2 filesystem labels as PC-style
-partitions don't have labels.
+   ELUA     lib/ecore_con/ecore_con_base.eo.lua
+ERR<2199>:elua lib/elua/elua.c:647 _elua_errmsg() ../src/bin/elua/elua: 
+...t/build/host-efl-1.17.0/src/bindings/luajit/eina/log.lua:53: 
+libeina.so: cannot open shared object file: No such file or directory
+stack traceback:
+         [C]: in function 'error'
+ 
+...put/build/host-efl-1.17.0/src/scripts/elua/core/util.lua:162: in 
+function 'lib_load'
+         ...t/build/host-efl-1.17.0/src/bindings/luajit/eina/log.lua:53: 
+in function <...t/build/host-efl-1.17.0/src/bindings/luajit/eina/log.lua:52>
+         [C]: in function 'init_module'
+         ...t/build/host-efl-1.17.0/src/bindings/luajit/eina/log.lua:63: 
+in function 'loader'
+         ...t/build/host-efl-1.17.0/src/scripts/elua/core/module.lua:94: 
+in function 'require'
+         ...ild/host-efl-1.17.0/src/scripts/elua/modules/lualian.lua:5: 
+in function 'loader'
+         ...t/build/host-efl-1.17.0/src/scripts/elua/core/module.lua:94: 
+in function 'require'
+         .../build/host-efl-1.17.0/src/scripts/elua/apps/lualian.lua:4: 
+in main chunk
+         [C]: at 0x00401460
+Makefile:40673: recipe for target 'lib/ecore_con/ecore_con_base.eo.lua' 
+failed
 
-We currently don't have an option to set the ext2 label of the
-filesystem Buildroot creates, but I'll add that now.
+libeina.so in fact doesn't exist in the host dir, however it does inside 
+the host-efl build dir in src/lib/eina/.libs/libeina.so
+Got any ideas to look into/try?
 
-For the fat filesystem genimage creates it seems like you can set an
-"extraargs" parameter in the genimage.cfg. These arguments will be
-passed to mkdosfs, so you can do something like:
-
-
-image boot.vfat {
-  vfat {
-    extraargs = "-n mylabel"
-    ..
-
- > 2?.- When the sdcard.img is generated and when you make a dd command to the
- > sd card, it's wasted most of the size of the sd card. I usually use a
- > 16GBytes sd card, and my sdcard.img is only  around 110 MB so the remaining
- > space is wasted. Is there any way to give the rootfs partition an extra
- > size (for example 1 Gbyte o something like that)? I was trying to use this,
- > but it doesn't work:
-
-There's two parts to this:
-
- - The size of the partition (what you specify with size = )
- - The size of the filesystem
-
-Buildroot will per default only make the filesystem as big as needed to
-contain the files you have built. You can either specify extra space
-with BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS or simply resize the filesystem
-to match the partition after writing it to a sdcard using resize2fs
-<device>.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Regards.
