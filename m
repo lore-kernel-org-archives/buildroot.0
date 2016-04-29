@@ -1,9 +1,7 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Fri, 29 Apr 2016 10:12:13 +0200
-Subject: [Buildroot] [PATCH 2/3] gnuradio: add gr-ctrlport support
-In-Reply-To: <1461917534-27882-1-git-send-email-gwenj@trabucayre.com>
-References: <1461917534-27882-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1461917534-27882-2-git-send-email-gwenj@trabucayre.com>
+Date: Fri, 29 Apr 2016 10:12:12 +0200
+Subject: [Buildroot] [PATCH 1/3] gnuradio: add gr-audio support
+Message-ID: <1461917534-27882-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +10,54 @@ To: buildroot@busybox.net
 
 From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-gr-ctrlport is a gnuradio module to create distributed control applications.
+gr-audio is a gnuradio module to use audio card as sink or source.
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 ---
- package/gnuradio/Config.in   | 5 +++++
- package/gnuradio/gnuradio.mk | 6 ++++++
- 2 files changed, 11 insertions(+)
+ package/gnuradio/Config.in   |  6 ++++++
+ package/gnuradio/gnuradio.mk | 12 ++++++++++++
+ 2 files changed, 18 insertions(+)
 
 diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 3cbc9b2..dc29dfc 100644
+index 603532c..3cbc9b2 100644
 --- a/package/gnuradio/Config.in
 +++ b/package/gnuradio/Config.in
-@@ -43,6 +43,11 @@ config BR2_PACKAGE_GNURADIO_BLOCKS
- 	help
- 	  GNU Radio basic block library
+@@ -32,6 +32,12 @@ config BR2_PACKAGE_GNURADIO
  
-+config BR2_PACKAGE_GNURADIO_CTRLPORT
-+	bool "ctrlport support"
+ if BR2_PACKAGE_GNURADIO
+ 
++config BR2_PACKAGE_GNURADIO_AUDIO
++	bool "gr-audio"
++	depends on BR2_PACKAGE_ALSA_LIB || BR2_PACKAGE_PORTAUDIO
 +	help
-+	  GNU Radio ctrlport block
++	  Add audio source/sink to GNU Radio
 +
- config BR2_PACKAGE_GNURADIO_FEC
- 	bool "gr-fec support"
- 	select BR2_PACKAGE_GNURADIO_BLOCKS
+ config BR2_PACKAGE_GNURADIO_BLOCKS
+ 	bool "blocks support"
+ 	help
 diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index 8f771fc..b193569 100644
+index 46d1f4f..8f771fc 100644
 --- a/package/gnuradio/gnuradio.mk
 +++ b/package/gnuradio/gnuradio.mk
-@@ -76,6 +76,12 @@ else
- GNURADIO_CONF_OPTS += -DENABLE_GR_CHANNELS=OFF
+@@ -52,6 +52,18 @@ else
+ GNURADIO_CONF_OPTS += -DENABLE_GR_ANALOG=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_GNURADIO_CTRLPORT),y)
-+GNURADIO_CONF_OPTS += -DENABLE_GR_CTRLPORT=ON
++ifeq ($(BR2_PACKAGE_GNURADIO_AUDIO),y)
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++GNURADIO_DEPENDENCIES += alsa-lib
++endif
++ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
++GNURADIO_DEPENDENCIES += portaudio
++endif
++GNURADIO_CONF_OPTS += -DENABLE_GR_AUDIO=ON
 +else
-+GNURADIO_CONF_OPTS += -DENABLE_GR_CTRLPORT=OFF
++GNURADIO_CONF_OPTS += -DENABLE_GR_AUDIO=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_GNURADIO_DIGITAL),y)
- GNURADIO_CONF_OPTS += -DENABLE_GR_DIGITAL=ON
+ ifeq ($(BR2_PACKAGE_GNURADIO_BLOCKS),y)
+ GNURADIO_CONF_OPTS += -DENABLE_GR_BLOCKS=ON
  else
 -- 
 2.7.3
