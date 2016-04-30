@@ -1,37 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Apr 2016 21:43:46 +0200
-Subject: [Buildroot] [PATCH] libtommath: add -fPIC
-In-Reply-To: <20160430211311.215e9c1d@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 30 Apr 2016 21:13:11 +0200")
-References: <1462005187-32394-1-git-send-email-francois.perrad@gadz.org>
- <20160430145512.34b475dc@free-electrons.com>
- <87twijrl81.fsf@dell.be.48ers.dk>
- <20160430211311.215e9c1d@free-electrons.com>
-Message-ID: <87pot6swzx.fsf@dell.be.48ers.dk>
+Date: Sat, 30 Apr 2016 22:07:03 +0200
+Subject: [Buildroot] Bluetooth BCM20702A1
+In-Reply-To: <5724F1FF.7070408@gmail.com> (Marco Trapanese's message of "Sat, 
+ 30 Apr 2016 19:57:19 +0200")
+References: <5724F1FF.7070408@gmail.com>
+Message-ID: <87lh3usvx4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Marco" == Marco Trapanese <marcotrapanese@gmail.com> writes:
 
- >> Hmm, isn't it a bit odd to build a static library with -fPIC?
- >> 
- >> But OK, the error message seems to be from trying to link a shared
- >> library with it.
+ > Hi!
+ > Does buildroot provide the firmware for this common USB/BT dongle?
+ > I'm running the latest version on an RPi3.
+ > Here the output of dmesg:
 
- > Well, as you've seen yourself, this static library is then used inside
- > a shared library, so it has to be built -fPIC.
+ >> [    3.126672] usb 1-1.2: Product: BCM20702A0
+ >> [    4.435485] Bluetooth: hci0: BCM20702A
+ >> [    4.442507] Bluetooth: hci0: BCM20702A1 (001.002.014) build 0000
+ >> [    4.442572] bluetooth hci0: Direct firmware load for
+ >> brcm/BCM20702A1-0a5c-21e8.hcd failed with error -2
+ >> [    4.442579] Bluetooth: hci0: BCM: Patch
+ >> brcm/BCM20702A1-0a5c-21e8.hcd not found
 
- > If you want to build the static library without -fPIC, then the
- > libtommath package should also provide a shared version of its library,
- > so that it gets used instead of the static one when linked into a
- > shared library.
+It seems it is not available in linux-firmware:
 
-Hmm, should we do this for all static only libraries in case they would
-ever get used by a shared library? E.G. ezxml is a similar package.
+find build/linux-firmware-b0668886def608d352cd0263a7ef04e64e25574a \
+     -name BCM20702A1-0a5c-21e8.hcd
+
+According to this bugreport:
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1275122
+
+It is indeed not available in linux-firmware. The bugreport does refer
+to places where you can download the firmware, but it is not clear what
+license it is available under and if we are allowed to redistribute it.
+
+Judging from the kernel commits to this driver it sounds like it should
+be usable without firmware though:
+
+commit ad750fa142747f3f42b66ae051a0f275bd2035df
+Author: Petri Gynther <pgynther@google.com>
+Date:   Wed Feb 10 12:00:46 2016 -0800
+
+    Bluetooth: btbcm: Fix handling of firmware not found
+
+    If the call to request_firmware() fails in btbcm_setup_patchram(),
+    the BCM chip will be operating with its default firmware.
+
+    In this case, btbcm_setup_patchram() should not return immediately
+    but instead should skip to btbcm_check_bdaddr() and quirk setup.
+
+    Signed-off-by: Petri Gynther <pgynther@google.com>
+    Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+
+But that commit is probably not present in the rpi kernel yet.
+
+
+ > The dongle works fine with Raspbian Jessie.
+ > If you need other information, please feel free to ask!
+
+It would be interesting to know where they get the firmware from. Can
+you check what package provides the file?
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Bye, Peter Korsgaard
