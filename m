@@ -1,44 +1,160 @@
 From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Date: Sat, 30 Apr 2016 09:48:59 +0200
-Subject: [Buildroot] [PATCH 03/34] reproducibility: generate
-	SOURCE_DATE_EPOCH
+Date: Sat, 30 Apr 2016 09:49:30 +0200
+Subject: [Buildroot] [PATCH 34/34] reproducible/grub2: get a reproducible
+	grub2 full installation
 In-Reply-To: <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
 References: <20160430074358.GE1781@hermes.click-hack.org>
  <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <1462002570-14706-3-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <1462002570-14706-34-git-send-email-gilles.chanteperdrix@xenomai.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When reproducibility is wanted, generates a global SOURCE_DATE_EPOCH
-environment variable which contains either the date of buildroot last
-commit if running from a git repository, or the latest release date.
-
-This means that all packages embedding build dates will appear to
-have the same build date, so in case of new commit or release, all
-packages will appear to have been change, even though some of them
-may not have changed in fact.
+Get a reproducible modules dependencies file by fixing the awk script to
+avoid depending on awk hash order, in order to get the same result
+independently of the particular variant of awk used.
+Compile grub2 with the target toolchain in the "full install" case, so
+that the generated binaries do not depend on the host toolchain used.
 ---
- Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+ boot/grub2/grub2-deterministic-awk.patch | 68 ++++++++++++++++++++++++++++++++
+ boot/grub2/grub2.mk                      | 34 ++++++++++------
+ 2 files changed, 91 insertions(+), 11 deletions(-)
+ create mode 100644 boot/grub2/grub2-deterministic-awk.patch
 
-diff --git a/Makefile b/Makefile
-index 86b2ed2..c1d2961 100644
---- a/Makefile
-+++ b/Makefile
-@@ -223,6 +223,11 @@ ifeq ($(BR2_REPRODUCIBLE),y)
- export TZ=UTC
- export LANG=C
- export LC_ALL=C
-+SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
-+SOURCE_DATE_CHANGES = $(shell head -n 1 $(TOPDIR)/CHANGES | \
-+	sed 's/^.*Released \(.*\)$$/\1/;s/\(st\|nd\|rd\|th\),//' | \
-+	LANG=C LC_ALL=C TZ=UTC xargs -i date -d \{\} +%s)
-+export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(SOURCE_DATE_CHANGES))
+diff --git a/boot/grub2/grub2-deterministic-awk.patch b/boot/grub2/grub2-deterministic-awk.patch
+new file mode 100644
+index 0000000..7f4d886
+--- /dev/null
++++ b/boot/grub2/grub2-deterministic-awk.patch
+@@ -0,0 +1,68 @@
++--- grub2-2.00/grub-core/genmoddep.awk~	2016-03-27 15:36:25.138050578 +0200
+++++ grub2-2.00/grub-core/genmoddep.awk	2016-03-27 15:39:33.704636947 +0200
++@@ -15,17 +15,21 @@
++ BEGIN {
++   error = 0
++   lineno = 0;
+++  i = 1;
++   while (getline <"/dev/stdin") {
++     lineno++;
++     if ($1 == "defined") {
++       symtab[$3] = $2;
++-      modtab[$2] = "" modtab[$2]
+++      if (!modtab_index[$2])
+++        modtab_index[$2]=i++
++     } else if ($1 == "undefined") {
+++      if (!modtab_index[$2])
+++        modtab_index[$2]=i++
++       if ($3 in symtab)
++-	modtab[$2] = modtab[$2] " " symtab[$3];
+++        modtab[modtab_index[$2]] = modtab[modtab_index[$2]] " " symtab[$3];
++       else if ($3 != "__gnu_local_gp") {
++-	printf "%s in %s is not defined\n", $3, $2 >"/dev/stderr";
++-	error++;
+++        printf "%s in %s is not defined\n", $3, $2 >"/dev/stderr";
+++        error++;
++       }
++     }
++     else {
++@@ -41,24 +45,28 @@ END {
++   if (error >= 1)
++     exit 1;
++ 
++-  for (mod in modtab) {
+++  for (j = 1; j < i; j++) {
+++    for (mod in modtab_index)
+++      if (modtab_index[mod] == j)
+++        break;
++     # Remove duplications.
++-    split(modtab[mod], depmods, " ");
+++    len=split(modtab[j], depmods, " ");
++     for (depmod in uniqmods) {
++       delete uniqmods[depmod];
++     }
++-    for (i in depmods) {
++-      depmod = depmods[i];
++-      # Ignore kernel, as always loaded.
++-      if (depmod != "kernel" && depmod != mod)
++-	uniqmods[depmod] = 1;
++-    }
++     modlist = ""
++-    for (depmod in uniqmods) {
++-      modlist = modlist " " depmod;
+++    for (k = 1; k <= len; k++) {
+++      depmod = depmods[k]
+++      if (uniqmods[depmod])
+++        continue
+++      # Ignore kernel, as always loaded.
+++      if (depmod != "kernel" && depmod != mod) {
+++        uniqmods[depmod] = 1;
+++        modlist = modlist " " depmod;
+++      }
++     }
++     if (mod == "all_video") {
++-	continue;
+++       continue;
++     }
++     printf "%s:%s\n", mod, modlist;
++   }
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index e2352b6..e94f524 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -46,17 +46,6 @@ endif
+ # bootloader itself; none of these are used to build the native
+ # tools.
+ 
+-GRUB2_CONF_ENV = \
+-	$(HOST_CONFIGURE_OPTS) \
+-	CPP="$(HOSTCC) -E" \
+-	TARGET_CC="$(TARGET_CC)" \
+-	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+-	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
+-	TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
+-	NM="$(TARGET_NM)" \
+-	OBJCOPY="$(TARGET_OBJCOPY)" \
+-	STRIP="$(TARGET_STRIP)"
+-
+ GRUB2_CONF_OPTS = \
+ 	--target=$(GRUB2_TARGET) \
+ 	--with-platform=$(GRUB2_PLATFORM) \
+@@ -68,6 +57,17 @@ GRUB2_CONF_OPTS = \
+ 	--disable-werror
+ 
+ ifneq ($(BR2_TARGET_FULL_INSTALL),y)
++GRUB2_CONF_ENV = \
++	$(HOST_CONFIGURE_OPTS) \
++	CPP="$(HOSTCC) -E" \
++	TARGET_CC="$(TARGET_CC)" \
++	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
++	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
++	TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
++	NM="$(TARGET_NM)" \
++	OBJCOPY="$(TARGET_OBJCOPY)" \
++	STRIP="$(TARGET_STRIP)"
++
+ # We don't want all the native tools and Grub2 modules to be installed
+ # in the target. So we in fact install everything into the host
+ # directory, and the image generation process (below) will use the
+@@ -104,6 +104,18 @@ define GRUB2_EFI_STARTUP_NSH
+ endef
+ GRUB2_POST_INSTALL_TARGET_HOOKS += GRUB2_EFI_STARTUP_NSH
+ endif
++
++else
++GRUB2_CONF_ENV = \
++	$(TARGET_CONFIGURE_OPTS) \
++	CPP="$(TARGET_CC) -E" \
++	TARGET_CC="$(TARGET_CC)" \
++	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
++	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
++	TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
++	NM="$(TARGET_NM)" \
++	OBJCOPY="$(TARGET_OBJCOPY)" \
++	STRIP="$(TARGET_STRIP)"
  endif
  
- # To put more focus on warnings, be less verbose as default
+ $(eval $(autotools-package))
 -- 
 2.7.4
