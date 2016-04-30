@@ -1,61 +1,232 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Apr 2016 18:48:38 +0200
-Subject: [Buildroot] [RFC PATCH v2 1/2] toolchain/helper: check for
- symlink from lib to lib64
-In-Reply-To: <1451485816-17554-1-git-send-email-romain.naour@gmail.com>
-References: <1451485816-17554-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160430184838.70ee582a@free-electrons.com>
+Date: Sat, 30 Apr 2016 18:50:46 +0200
+Subject: [Buildroot] [git commit] toolchain: add coldfire support
+Message-ID: <20160430165403.7D06381D60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=015322fccb0b785af3f7dd62618aa717f8aca064
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Dec 2015 15:30:15 +0100, Romain Naour wrote:
-> Buildroot picks up libc/lib64 and all its contents, but does not
-> pickup libc/lib to populate the staging and target directories.
-> 
-> With the CodeSourcery AArch64 2014.05 toolchain the extracted sources
-> contains a single symlink in the aarch64-linux-gnu/libc/lib directory
-> which is lost during Buildroot staging import.
-> 
-> aarch64-linux-gnu/libc/lib/ld-linux-aarch64.so.1 -> ../lib64/ld-2.18.so
-> 
-> So, if we use a 64 bits toolchain we also look at "lib" directory to
-> see if there are some symlink to libraries belonging to "lib64".
-> If yes, we create the corresponding symlink in STAGING_DIR in
-> copy_toolchain_sysroot()
-> 
-> The same kind of change should be done in copy_toolchain_lib_root()
-> to copy the dynamic loader.
-> In the common case, we expect that it match this pattern: ld*.so.*
-> But it's not the case here because the symlink to the dynamic loader
-> is in another directory (lib) and we are looking for it in (lib64).
-> So the LIB_EXTERNAL_LIBS += ld*.so.* doesn't match any library during
-> the copy to TARGET_DIR.
-> That's why the system doesn't boot at runtime.
-> 
-> If the path to the dynamic loader is found in lib directory, it's
-> appended to LIBSPATH.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Add support for m68k/coldfire. A gcc patch is required
+to avoid gcc ICE.
 
-In the end, I found this solution to be really complicated, just to
-solve the use case of one specific toolchain. So instead, I've applied
-your original fix which is just a one line tweak only for the
-CodeSourcery AArch64 toolchain. If we see more toolchains with the same
-issue, we will revisit this.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in                               |  2 +-
+ arch/Config.in.m68k                          | 20 ++++++++++++++++++++
+ package/gcc/4.8.5/891-fix-m68k-uclinux.patch | 18 ++++++++++++++++++
+ package/gcc/4.9.3/891-fix-m68k-uclinux.patch | 18 ++++++++++++++++++
+ package/gcc/5.3.0/891-fix-m68k-uclinux.patch | 18 ++++++++++++++++++
+ package/gcc/6.1.0/891-fix-m68k-uclinux.patch | 18 ++++++++++++++++++
+ package/gcc/gcc-final/gcc-final.mk           |  9 +++++++++
+ package/uclibc/uclibc.mk                     | 16 ++++++++++++++++
+ 8 files changed, 118 insertions(+), 1 deletion(-)
 
-See:
-
-  https://git.busybox.net/buildroot/commit/?id=4d39ca1c2ab19766abf0430abe9b65ba0e16602b
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/arch/Config.in b/arch/Config.in
+index 3f1453f..be37481 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -94,7 +94,7 @@ config BR2_i386
+ 
+ config BR2_m68k
+ 	bool "m68k"
+-	select BR2_ARCH_HAS_MMU_MANDATORY
++	# MMU support is set by the subarchitecture file, arch/Config.in.m68k
+ 	help
+ 	  Motorola 68000 family microprocessor
+ 	  http://en.wikipedia.org/wiki/M68k
+diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
+index 94494c8..da06c3a 100644
+--- a/arch/Config.in.m68k
++++ b/arch/Config.in.m68k
+@@ -4,6 +4,14 @@ config BR2_ARCH
+ config BR2_ENDIAN
+ 	default "BIG"
+ 
++# symbols used to distinguish between m68k and coldfire
++# for gcc multilib
++config BR2_m68k_m68k
++	bool
++
++config BR2_m68k_cf
++	bool
++
+ # coldfire variants will be added later
+ choice
+ 	prompt "Target CPU"
+@@ -14,8 +22,20 @@ choice
+ 
+ config BR2_m68k_68040
+ 	bool "68040"
++	select BR2_m68k_m68k
++	select BR2_ARCH_HAS_MMU_MANDATORY
++
++config BR2_m68k_cf5208
++	bool "5208"
++	select BR2_m68k_cf
++	select BR2_SOFT_FLOAT
+ 
+ endchoice
+ 
+ config BR2_GCC_TARGET_CPU
+ 	default "68040"		if BR2_m68k_68040
++	default "5208"		if BR2_m68k_cf5208
++
++config BR2_GCC_TARGET_ARCH
++	default "m68k"		if BR2_m68k_m68k
++	default "cf"		if BR2_m68k_cf
+diff --git a/package/gcc/4.8.5/891-fix-m68k-uclinux.patch b/package/gcc/4.8.5/891-fix-m68k-uclinux.patch
+new file mode 100644
+index 0000000..37c7ac4
+--- /dev/null
++++ b/package/gcc/4.8.5/891-fix-m68k-uclinux.patch
+@@ -0,0 +1,18 @@
++avoids internal compiler error while compiling linux-atomic.c
++See here:
++https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53833
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gcc-4.8.5.orig/libgcc/config.host gcc-4.8.5/libgcc/config.host
++--- gcc-4.8.5.orig/libgcc/config.host	2014-03-20 17:12:30.000000000 +0100
+++++ gcc-4.8.5/libgcc/config.host	2016-04-27 15:04:01.521171537 +0200
++@@ -689,7 +689,7 @@
++ m68k*-*-openbsd*)
++ 	;;
++ m68k-*-uclinux*)	# Motorola m68k/ColdFire running uClinux with uClibc
++-	tmake_file="$tmake_file m68k/t-floatlib m68k/t-linux"
+++	tmake_file="$tmake_file m68k/t-floatlib"
++ 	md_unwind_header=m68k/linux-unwind.h
++ 	;;
++ m68k-*-linux*)			# Motorola m68k's running GNU/Linux
+diff --git a/package/gcc/4.9.3/891-fix-m68k-uclinux.patch b/package/gcc/4.9.3/891-fix-m68k-uclinux.patch
+new file mode 100644
+index 0000000..4347642
+--- /dev/null
++++ b/package/gcc/4.9.3/891-fix-m68k-uclinux.patch
+@@ -0,0 +1,18 @@
++avoids internal compiler error while compiling linux-atomic.c
++See here:
++https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53833
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gcc-4.9.3.orig/libgcc/config.host gcc-4.9.3/libgcc/config.host
++--- gcc-4.9.3.orig/libgcc/config.host	2014-03-27 16:40:31.000000000 +0100
+++++ gcc-4.9.3/libgcc/config.host	2016-04-05 16:20:53.422809885 +0200
++@@ -750,7 +750,7 @@
++ m68k*-*-openbsd*)
++ 	;;
++ m68k-*-uclinux*)	# Motorola m68k/ColdFire running uClinux with uClibc
++-	tmake_file="$tmake_file m68k/t-floatlib m68k/t-linux"
+++	tmake_file="$tmake_file m68k/t-floatlib"
++ 	md_unwind_header=m68k/linux-unwind.h
++ 	;;
++ m68k-*-linux*)			# Motorola m68k's running GNU/Linux
+diff --git a/package/gcc/5.3.0/891-fix-m68k-uclinux.patch b/package/gcc/5.3.0/891-fix-m68k-uclinux.patch
+new file mode 100644
+index 0000000..4e186bd
+--- /dev/null
++++ b/package/gcc/5.3.0/891-fix-m68k-uclinux.patch
+@@ -0,0 +1,18 @@
++avoids internal compiler error while compiling linux-atomic.c
++See here:
++https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53833
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gcc-5.3.0.orig/libgcc/config.host gcc-5.3.0/libgcc/config.host
++--- gcc-5.3.0.orig/libgcc/config.host	2015-10-01 14:01:18.000000000 +0200
+++++ gcc-5.3.0/libgcc/config.host	2016-04-26 21:30:25.353691745 +0200
++@@ -794,7 +794,7 @@
++ m68k*-*-openbsd*)
++ 	;;
++ m68k-*-uclinux*)	# Motorola m68k/ColdFire running uClinux with uClibc
++-	tmake_file="$tmake_file m68k/t-floatlib m68k/t-linux"
+++	tmake_file="$tmake_file m68k/t-floatlib"
++ 	md_unwind_header=m68k/linux-unwind.h
++ 	;;
++ m68k-*-linux*)			# Motorola m68k's running GNU/Linux
+diff --git a/package/gcc/6.1.0/891-fix-m68k-uclinux.patch b/package/gcc/6.1.0/891-fix-m68k-uclinux.patch
+new file mode 100644
+index 0000000..754aa74
+--- /dev/null
++++ b/package/gcc/6.1.0/891-fix-m68k-uclinux.patch
+@@ -0,0 +1,18 @@
++avoids internal compiler error while compiling linux-atomic.c
++See here:
++https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53833
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gcc-6.1.0.orig/libgcc/config.host gcc-6.1.0/libgcc/config.host
++--- gcc-6.1.0.orig/libgcc/config.host	2016-02-26 21:02:28.000000000 +0100
+++++ gcc-6.1.0/libgcc/config.host	2016-04-29 09:18:40.377989160 +0200
++@@ -812,7 +812,7 @@
++ m68k*-*-openbsd*)
++ 	;;
++ m68k-*-uclinux*)	# Motorola m68k/ColdFire running uClinux with uClibc
++-	tmake_file="$tmake_file m68k/t-floatlib m68k/t-linux"
+++	tmake_file="$tmake_file m68k/t-floatlib"
++ 	md_unwind_header=m68k/linux-unwind.h
++ 	;;
++ m68k-*-linux*)			# Motorola m68k's running GNU/Linux
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 69fdc0c..1d1d72e 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -125,6 +125,15 @@ endef
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_LD_LINUX_LINK
+ endif
+ 
++# coldfire is not working without removing these object files from libgcc.a
++ifeq ($(BR2_m68k_cf),y)
++define HOST_GCC_FINAL_M68K_LIBGCC_FIXUP
++	find $(STAGING_DIR) -name libgcc.a -print | \
++		while read t; do $(GNU_TARGET_NAME)-ar dv "$t" _ctors.o; done
++endef
++HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_M68K_LIBGCC_FIXUP
++endif
++
+ # Cannot use the HOST_GCC_FINAL_USR_LIBS mechanism below, because we want
+ # libgcc_s to be installed in /lib and not /usr/lib.
+ define HOST_GCC_FINAL_INSTALL_LIBGCC
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 0dfb454..b8ccee2 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -101,6 +101,21 @@ endif
+ endif # arm
+ 
+ #
++# m68k/coldfire definitions
++#
++
++ifeq ($(UCLIBC_TARGET_ARCH),m68k)
++
++# disable DOPIC for flat without separate data
++ifeq ($(BR2_BINFMT_FLAT_ONE),y)
++define UCLIBC_M68K_BINFMT_FLAT
++	$(call KCONFIG_DISABLE_OPT,DOPIC,$(@D)/.config)
++endef
++endif
++
++endif # m68k/coldfire
++
++#
+ # MIPS definitions
+ #
+ 
+@@ -372,6 +387,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_ARM_ABI_CONFIG)
+ 	$(UCLIBC_ARM_BINFMT_FLAT)
+ 	$(UCLIBC_ARM_NO_CONTEXT_FUNCS)
++	$(UCLIBC_M68K_BINFMT_FLAT)
+ 	$(UCLIBC_MIPS_ABI_CONFIG)
+ 	$(UCLIBC_MIPS_ISA_CONFIG)
+ 	$(UCLIBC_SH_TYPE_CONFIG)
