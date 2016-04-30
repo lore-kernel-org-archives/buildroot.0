@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Apr 2016 19:05:19 +0200
-Subject: [Buildroot] 2016.05-rc1 approaching: what to merge?
-In-Reply-To: <57221AE9.2060207@ecagroup.com>
-References: <20160428160000.5db9d1cb@free-electrons.com>
- <57221AE9.2060207@ecagroup.com>
-Message-ID: <20160430190519.308e4a53@free-electrons.com>
+Date: Sat, 30 Apr 2016 19:06:15 +0200
+Subject: [Buildroot] [PATCH v4] android-tools: add new package
+In-Reply-To: <1448296032-7781-1-git-send-email-gary.bisson@boundarydevices.com>
+References: <1448296032-7781-1-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <20160430190615.345e2145@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +12,41 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 28 Apr 2016 14:15:05 +0000, Julien CORJON wrote:
-
-> > So the question is: we have ~230 patches pending patchwork. Do you see
-> > anything that we should really merge before 2016.05-rc1 is released?  
+On Mon, 23 Nov 2015 17:27:12 +0100, Gary Bisson wrote:
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
-> I would really appreciate to see android-tools[1] in 2016.05 as I use it 
-> for target production which will start in about 2 month.
+> This package allows to build the fastboot and adb host utilities,
+> which can be used to interact with target devices implementing one of
+> these protocols.
+> 
+> The work behind the host utilities was funded by ECA Group
+> <http://www.ecagroup.com>. ECA Group is the copyright owner of the
+> contributed code.
+> 
+> The package also allows to build fastboot, adb and adbd daemon for the
+> target.
+> 
+> Regarding adbd, the target is required to have the FunctionFS USB Gadget
+> configuration. Then the following commands enable the use of adb:
+>  # modprobe g_ffs idVendor=0x18d1 idProduct=0x4e42 \
+>    iSerialNumber="buildroot"
+>  # mkdir -p /dev/usb-ffs/adb
+>  # mount -t functionfs adb /dev/usb-ffs/adb -o uid=2000,gid=2000
+>  # adbd &
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
-Thanks for the reminder, I've applied the android-tools patch.
+I wasn't very happy with this package due to the size of the patches,
+and the fact that there is no real upstream to which we could submit
+those patches. But I guess that's just how it is, and there's not much
+we can do about it. And it's really a useful package.
+
+So I've applied, after rebasing on master and fixing the Config.in.host
+prompt, as you noted during the review.
+
+Thanks!
 
 Thomas
 -- 
