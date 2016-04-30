@@ -1,99 +1,171 @@
 From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Date: Sat, 30 Apr 2016 09:49:13 +0200
-Subject: [Buildroot] [PATCH 17/34] reproducibility/libnspr: override build
-	timestamps
+Date: Sat, 30 Apr 2016 09:49:25 +0200
+Subject: [Buildroot] [PATCH 29/34] cdrkit: add patch allowing to set
+	creation date
 In-Reply-To: <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
 References: <20160430074358.GE1781@hermes.click-hack.org>
  <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <1462002570-14706-17-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <1462002570-14706-29-git-send-email-gilles.chanteperdrix@xenomai.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-with SOURCE_DATE_EPOCH
----
- package/libnspr/0003-honor-SOURCE_DATE_EPOCH.patch | 71 ++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100644 package/libnspr/0003-honor-SOURCE_DATE_EPOCH.patch
+The patch was posted here:
+https://lists.gnu.org/archive/html/bug-cpio/2014-08/msg00000.html
 
-diff --git a/package/libnspr/0003-honor-SOURCE_DATE_EPOCH.patch b/package/libnspr/0003-honor-SOURCE_DATE_EPOCH.patch
+And allows generating reproducible iso images with genisoimage.
+---
+ ...-reproducible-allow-setting-creation-date.patch | 140 +++++++++++++++++++++
+ 1 file changed, 140 insertions(+)
+ create mode 100644 package/cdrkit/0003-reproducible-allow-setting-creation-date.patch
+
+diff --git a/package/cdrkit/0003-reproducible-allow-setting-creation-date.patch b/package/cdrkit/0003-reproducible-allow-setting-creation-date.patch
 new file mode 100644
-index 0000000..1a0fb7c
+index 0000000..f5ed465
 --- /dev/null
-+++ b/package/libnspr/0003-honor-SOURCE_DATE_EPOCH.patch
-@@ -0,0 +1,71 @@
-+--- libnspr-4.10.10/nspr/lib/libc/src/Makefile.in~	2015-10-16 15:22:19.000000000 +0200
-++++ libnspr-4.10.10/nspr/lib/libc/src/Makefile.in	2016-02-27 16:11:13.745483215 +0100
-+@@ -103,7 +103,7 @@ ECHO = echo
-+ TINC = $(OBJDIR)/_pl_bld.h
-+ PROD = $(notdir $(SHARED_LIBRARY))
-+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
-+-SH_DATE = $(shell date "+%Y-%m-%d %T")
-++SH_DATE = $(shell date `test -n "$$SOURCE_DATE_EPOCH" && echo -d @$$SOURCE_DATE_EPOCH` "+%Y-%m-%d %T")
-+ SH_NOW = $(shell $(NOW))
++++ b/package/cdrkit/0003-reproducible-allow-setting-creation-date.patch
+@@ -0,0 +1,140 @@
++diff --git a/genisoimage/.eltorito.c.swp b/genisoimage/.eltorito.c.swp
++new file mode 100644
++index 0000000..a49fcbd
++Binary files /dev/null and b/genisoimage/.eltorito.c.swp differ
++diff --git a/genisoimage/genisoimage.1 b/genisoimage/genisoimage.1
++index d05b24a..d69a1d4 100644
++--- a/genisoimage/genisoimage.1
+++++ b/genisoimage/genisoimage.1
++@@ -976,6 +976,12 @@ in the
++ .I .genisoimagerc
++ file.
++ .TP
+++.BI \-creation-date " epoch"
+++Specifies the date to be used as creation, modification and effective
+++date in the volume descriptor and for files and relocations created
+++on the fly. Specified as a number of second since
+++1970-01-01 00:00:00 +0000 (UTC); if 0, the current time is used.
+++.TP
++ .B \-print\-size
++ Print estimated filesystem size in multiples of the sector size (2048 bytes)
++ and exit. This option is needed for
++diff --git a/genisoimage/genisoimage.c b/genisoimage/genisoimage.c
++index cfd079a..58397e9 100644
++--- a/genisoimage/genisoimage.c
+++++ b/genisoimage/genisoimage.c
++@@ -169,6 +169,7 @@ char	*abstract = ABSTRACT_DEFAULT;
++ char	*volset_id = VOLSET_ID_DEFAULT;
++ char	*volume_id = VOLUME_ID_DEFAULT;
++ char	*system_id = SYSTEM_ID_DEFAULT;
+++time_t  creation_date = 0;
++ char	*boot_catalog = BOOT_CATALOG_DEFAULT;
++ char	*boot_image = BOOT_IMAGE_DEFAULT;
++ char	*genboot_image = BOOT_IMAGE_DEFAULT;
++@@ -405,6 +406,8 @@ struct ld_option {
++ #define	OPTION_ALLOW_LEADING_DOTS	1070
++ #define	OPTION_PUBLISHER		1071
 + 
-+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
-+--- libnspr-4.10.10/nspr/lib/ds/Makefile.in~	2015-10-16 15:22:19.000000000 +0200
-++++ libnspr-4.10.10/nspr/lib/ds/Makefile.in	2016-02-27 16:11:28.115738828 +0100
-+@@ -101,7 +101,7 @@ ECHO = echo
-+ TINC = $(OBJDIR)/_pl_bld.h
-+ PROD = $(notdir $(SHARED_LIBRARY))
-+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
-+-SH_DATE = $(shell date "+%Y-%m-%d %T")
-++SH_DATE = $(shell date `test -n "$$SOURCE_DATE_EPOCH" && echo -d @$$SOURCE_DATE_EPOCH` "+%Y-%m-%d %T")
-+ SH_NOW = $(shell $(NOW))
-+ 
-+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
-+--- libnspr-4.10.10/nspr/lib/prstreams/Makefile.in~	2015-10-16 15:22:19.000000000 +0200
-++++ libnspr-4.10.10/nspr/lib/prstreams/Makefile.in	2016-02-27 16:11:39.799279987 +0100
-+@@ -105,7 +105,7 @@ ECHO = echo
-+ TINC = $(OBJDIR)/_pl_bld.h
-+ PROD = $(notdir $(SHARED_LIBRARY))
-+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
-+-SH_DATE = $(shell date "+%Y-%m-%d %T")
-++SH_DATE = $(shell date `test -n "$$SOURCE_DATE_EPOCH" && echo -d @$$SOURCE_DATE_EPOCH` "+%Y-%m-%d %T")
-+ SH_NOW = $(shell $(NOW))
-+ 
-+ ifeq ($(OS_ARCH), WINNT)
-+--- libnspr-4.10.10/nspr/pr/src/Makefile.in~	2015-10-16 15:22:19.000000000 +0200
-++++ libnspr-4.10.10/nspr/pr/src/Makefile.in	2016-02-27 16:18:55.560364508 +0100
-+@@ -315,7 +315,7 @@ PROD = $(notdir $(SHARED_LIBRARY))
-+ endif
-+ 
-+ NOW = $(MOD_DEPTH)/config/$(OBJDIR)/now
-+-SH_DATE = $(shell date "+%Y-%m-%d %T")
-++SH_DATE = $(shell date `test -n "$$SOURCE_DATE_EPOCH" && echo -d @$$SOURCE_DATE_EPOCH` "+%Y-%m-%d %T")
-+ SH_NOW = $(shell $(NOW))
-+ 
-+ ifeq ($(NS_USE_GCC)_$(OS_ARCH),_WINNT)
-+--- libnspr-4.10.10/nspr/config/now.c~	2015-10-16 15:22:19.000000000 +0200
-++++ libnspr-4.10.10/nspr/config/now.c	2016-02-27 16:29:53.862069883 +0100
-+@@ -4,6 +4,7 @@
-+  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-+ 
-+ #include <stdio.h>
-++#include <stdlib.h>
-+ #include <time.h>
-+ 
-+ int main(int argc, char **argv)
-+@@ -27,10 +28,15 @@ int main(int argc, char **argv)
-+     now = (1000000i64) * sec;
-+     fprintf(stdout, "%I64d", now);
-+ #else
-++    const char *source_date_epoch = getenv("SOURCE_DATE_EPOCH");
-+     long long now;
-+     time_t sec;
-+ 
-+-    sec = time(NULL);
-++    if (!source_date_epoch)
-++      sec = time(NULL);
-++    else
-++      sec = (time_t)atoll(source_date_epoch);
+++#define OPTION_CREATION_DATE            1072
 ++
-+     now = (1000000LL) * sec;
-+     fprintf(stdout, "%lld", now);
++ #ifdef		JIGDO_TEMPLATE
++ #define	OPTION_JTT_OUTPUT		1101
++ #define	OPTION_JTJ_OUTPUT		1102
++@@ -522,6 +525,8 @@ static const struct ld_option ld_options[] =
++ 	'\0', "FILE", "Check all ISO9660 names from previous session", ONE_DASH},
++ 	{{"copyright", required_argument, NULL, OPTION_COPYRIGHT},
++ 	'\0', "FILE", "Set Copyright filename", ONE_DASH},
+++	{{"creation-date", required_argument, NULL, OPTION_CREATION_DATE},
+++	'\0', NULL, "Set volume creation date", ONE_DASH},
++ 	{{"debug", no_argument, NULL, OPTION_DEBUG},
++ 	'\0', NULL, "Set debug flag", ONE_DASH},
++ 	{{"eltorito-boot", required_argument, NULL, 'b'},
++@@ -1721,6 +1726,22 @@ int main(int argc, char *argv[])
 + #endif
++ 			}
++ 			break;
+++		case OPTION_CREATION_DATE:
+++		{
+++			char	*end = 0;
+++
+++			creation_date = strtol(optarg, &end, 10);
+++			if (!end || *end != 0) {
+++#ifdef	USE_LIBSCHILY
+++				comerrno(EX_BAD, "Bad epoch for -creation-date\n");
+++#else
+++				fprintf(stderr, "Bad epoch for -creation-date\n");
+++				exit(1);
+++#endif
+++			}
+++			break;
+++		}
+++
++ 		case OPTION_DEBUG:
++ 			debug++;
++ 			break;
++diff --git a/genisoimage/genisoimage.h b/genisoimage/genisoimage.h
++index bbedfb0..c49576c 100644
++--- a/genisoimage/genisoimage.h
+++++ b/genisoimage/genisoimage.h
++@@ -650,6 +650,7 @@ extern char	*appid;
++ extern char	*volset_id;
++ extern char	*system_id;
++ extern char	*volume_id;
+++extern time_t	creation_date;
++ extern char	*boot_catalog;
++ extern char	*boot_image;
++ extern char	*genboot_image;
++diff --git a/genisoimage/tree.c b/genisoimage/tree.c
++index 7805888..f17a662 100644
++--- a/genisoimage/tree.c
+++++ b/genisoimage/tree.c
++@@ -783,7 +783,11 @@ generate_reloc_directory()
++ 	struct directory_entry *s_entry;
++ 
++ 	/* Create an  entry for our internal tree */
++-	time(&current_time);
+++	if (creation_date == 0) {
+++		time(&current_time);
+++	} else {
+++		current_time = creation_date;
+++	}
++ 	reloc_dir = (struct directory *)
++ 		e_malloc(sizeof (struct directory));
++ 	memset(reloc_dir, 0, sizeof (struct directory));
++@@ -2680,7 +2684,11 @@ init_fstatbuf()
++ 	time_t	current_time;
++ 
++ 	if (fstatbuf.st_ctime == 0) {
++-		time(&current_time);
+++		if (creation_date == 0) {
+++			time(&current_time);
+++		} else {
+++			current_time = creation_date;
+++		}
++ 		if (rationalize_uid)
++ 			fstatbuf.st_uid = uid_to_use;
++ 		else
++diff --git a/genisoimage/write.c b/genisoimage/write.c
++index a423ab1..f63507c 100644
++--- a/genisoimage/write.c
+++++ b/genisoimage/write.c
++@@ -1885,12 +1885,17 @@ pvd_write(FILE *outfile)
++ 	int		should_write;
++ 	struct tm	local;
++ 	struct tm	gmt;
+++	time_t		pvd_date;
++ 
++ 
++ 	time(&begun);
++ 
++-	local = *localtime(&begun);
++-	gmt = *gmtime(&begun);
+++	if (creation_date == 0) {
+++		creation_date = begun;
+++	}
+++
+++	local = *localtime(&creation_date);
+++	gmt = *gmtime(&creation_date);
++ 
++ 	/*
++ 	 * There was a comment here about breaking in the year 2000.
 -- 
 2.7.4
