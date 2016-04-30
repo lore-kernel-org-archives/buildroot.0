@@ -1,35 +1,35 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 30 Apr 2016 20:30:22 +0200
-Subject: [Buildroot] Can not boot sdcard.img for raspberry pi 2
-In-Reply-To: <CAPeTicN2Ov=iSNMxwJ85xYABtsJNubVADU4sYq7jBhw6Fp-jkg@mail.gmail.com>
-References: <CAPeTicN2Ov=iSNMxwJ85xYABtsJNubVADU4sYq7jBhw6Fp-jkg@mail.gmail.com>
-Message-ID: <20160430203022.0581ec14@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 30 Apr 2016 20:43:26 +0200
+Subject: [Buildroot] [PATCH] libtommath: add -fPIC
+In-Reply-To: <20160430145512.34b475dc@free-electrons.com> (Thomas Petazzoni's
+ message of "Sat, 30 Apr 2016 14:55:12 +0200")
+References: <1462005187-32394-1-git-send-email-francois.perrad@gadz.org>
+ <20160430145512.34b475dc@free-electrons.com>
+Message-ID: <87twijrl81.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sat, 30 Apr 2016 20:16:35 +0300, sonntex <sonntex@gmail.com> wrote:
+ > Hello,
+ > On Sat, 30 Apr 2016 10:33:07 +0200, Francois Perrad wrote:
+ >> fix build with x86_64, see
+ >> http://autobuild.buildroot.net/results/212/212469db5dc8399070390603c0fdf7f12b130cda/
+ >> 
+ >> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ >> ---
+ >> package/libtommath/libtommath.mk | 2 +-
+ >> 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> I checkouted to the latest master commit with hash
-> 70fc85f969c6aee7253d4098a70946e5b16eed4b and trying to build image for
-> raspberry pi 2.
-> 
-> make raspberrypi2_defconfig
-> make
-> dd if=output/images/sdcard.img of=/dev/sdb
-> 
-> The image is not booted. Is it a bug? Can I correct it? I tryed to use two
-> different hosts: debian jessie and gentoo.
+ > Applied to master, thanks.
 
-Mind to test some some prebuild images (see [1])? Know they work on RPi1/Rpi3
-(not personally tested on PPi2 because of lack of hardware)...
+Hmm, isn't it a bit odd to build a static library with -fPIC?
 
-Regards,
-Peter
+But OK, the error message seems to be from trying to link a shared
+library with it.
 
-
-[1] http://lists.busybox.net/pipermail/buildroot/2016-April/159757.html
+-- 
+Bye, Peter Korsgaard
