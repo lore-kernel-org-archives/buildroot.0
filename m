@@ -1,37 +1,35 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Sat, 30 Apr 2016 19:57:19 +0200
-Subject: [Buildroot] Bluetooth BCM20702A1
-Message-ID: <5724F1FF.7070408@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 30 Apr 2016 20:30:22 +0200
+Subject: [Buildroot] Can not boot sdcard.img for raspberry pi 2
+In-Reply-To: <CAPeTicN2Ov=iSNMxwJ85xYABtsJNubVADU4sYq7jBhw6Fp-jkg@mail.gmail.com>
+References: <CAPeTicN2Ov=iSNMxwJ85xYABtsJNubVADU4sYq7jBhw6Fp-jkg@mail.gmail.com>
+Message-ID: <20160430203022.0581ec14@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
-Does buildroot provide the firmware for this common USB/BT dongle?
-I'm running the latest version on an RPi3.
-Here the output of dmesg:
+Hello,
 
-> [    3.126672] usb 1-1.2: Product: BCM20702A0
-> [    4.435485] Bluetooth: hci0: BCM20702A
-> [    4.442507] Bluetooth: hci0: BCM20702A1 (001.002.014) build 0000
-> [    4.442572] bluetooth hci0: Direct firmware load for 
-> brcm/BCM20702A1-0a5c-21e8.hcd failed with error -2
-> [    4.442579] Bluetooth: hci0: BCM: Patch 
-> brcm/BCM20702A1-0a5c-21e8.hcd not found
+On Sat, 30 Apr 2016 20:16:35 +0300, sonntex <sonntex@gmail.com> wrote:
 
-and here lsmod:
+> I checkouted to the latest master commit with hash
+> 70fc85f969c6aee7253d4098a70946e5b16eed4b and trying to build image for
+> raspberry pi 2.
+> 
+> make raspberrypi2_defconfig
+> make
+> dd if=output/images/sdcard.img of=/dev/sdb
+> 
+> The image is not booted. Is it a bug? Can I correct it? I tryed to use two
+> different hosts: debian jessie and gentoo.
 
-> # lsmod | grep bt
-> btusb                  27112  0
-> btrtl                   3573  1 btusb
-> btintel                 6072  1 btusb
-> btbcm                   5627  1 btusb
-> bluetooth             315678  7 btusb,btrtl,btintel,btbcm
+Mind to test some some prebuild images (see [1])? Know they work on RPi1/Rpi3
+(not personally tested on PPi2 because of lack of hardware)...
 
-The dongle works fine with Raspbian Jessie.
-If you need other information, please feel free to ask!
+Regards,
+Peter
 
-Thanks in advance
-Marco
+
+[1] http://lists.busybox.net/pipermail/buildroot/2016-April/159757.html
