@@ -1,30 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Apr 2016 15:28:04 +0200
-Subject: [Buildroot] [PATCH 1/3] qemu/x86: use symlinked kernel config
-In-Reply-To: <1461951506-12010-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1461951506-12010-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160430152804.0256a4ba@free-electrons.com>
+Date: Sat, 30 Apr 2016 15:28:32 +0200
+Subject: [Buildroot] [git commit] move busybox-minimal.config to be used by
+	other noMMU targets
+Message-ID: <20160430132939.05C7281794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5e1b132495fe8c27af3cfac73d75121f82734c13
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 29 Apr 2016 14:38:24 -0300, Gustavo Zacarias wrote:
-> It's exactly the same as the x86_64 variant so just create a symlink.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  board/qemu/x86/linux-4.5.config | 32 +-------------------------------
->  1 file changed, 1 insertion(+), 31 deletions(-)
->  mode change 100644 => 120000 board/qemu/x86/linux-4.5.config
+Config can be used by other noMMU targets as qemu-system-m68k
+with coldfire emulation.
 
-All three patches applied, thanks!
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/stm32f429_disco_defconfig                                    | 2 +-
+ configs/stm32f469_disco_defconfig                                    | 2 +-
+ {board/stmicroelectronics => package/busybox}/busybox-minimal.config | 0
+ 3 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Patch is too large, so refusing to show it
