@@ -1,74 +1,227 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 30 Apr 2016 21:02:42 +0200
-Subject: [Buildroot] [PATCH 3/3] toolchain-external: bump version of
- Linaro AArch64 toolchain
-In-Reply-To: <1462020184-29735-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1462020184-29735-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1462020184-29735-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <e79cbe68-1f05-45a8-ecc0-22e06fe31d35@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 30 Apr 2016 19:08:14 +0200
+Subject: [Buildroot] [git commit] webkitgtk: new package
+Message-ID: <20160430190738.78B4A818E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=1f5bb4454474886a2e321ab59f71bdc919516312
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 30/04/2016 ? 14:43, Thomas Petazzoni a ?crit :
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Add the latest 2.12.x upstream stable branch.
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-[Tested with Qemu qemu_aarch64_virt_defconfig]
-Tested-by; Romain Naour <romain.naour@gmail.com>
+Both 2.4.x and 2.12.x can live side-by-side, however only the latest
+stable branch/releases are security-maintained, so add it unslotted.
 
-Best regards,
-Romain
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                |  1 +
+ package/webkitgtk/Config.in      | 77 ++++++++++++++++++++++++++++++++++
+ package/webkitgtk/webkitgtk.hash |  4 ++
+ package/webkitgtk/webkitgtk.mk   | 89 ++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 171 insertions(+)
 
-> ---
->  toolchain/toolchain-external/Config.in               | 2 +-
->  toolchain/toolchain-external/toolchain-external.hash | 2 +-
->  toolchain/toolchain-external/toolchain-external.mk   | 4 ++--
->  3 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 8ba8583..a769632 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -583,7 +583,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
->  
->  # See note about Linaro ARM/ARMEB toolchains, above.
->  config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
-> -	bool "Linaro AArch64 2015.11"
-> +	bool "Linaro AArch64 2016.02"
->  	depends on BR2_aarch64
->  	depends on BR2_HOSTARCH = "x86_64"
->  	depends on !BR2_STATIC_LIBS
-> diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-> index 89be483..bbcbc39 100644
-> --- a/toolchain/toolchain-external/toolchain-external.hash
-> +++ b/toolchain/toolchain-external/toolchain-external.hash
-> @@ -49,7 +49,7 @@ sha256 bf5d3111dad5aa9aef0e955875fb7fc9e918cb24519af7014dd67a9e581a49b1  gcc-lin
->  sha256 f488caf46680b0c0a16b66b43fbfd157e3d6389df18e957983132e89529a9804  gcc-linaro-5.3-2016.02-x86_64_armeb-linux-gnueabihf.tar.xz
->  sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
->  sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
-> -sha256 b318a1837a54146b0120a13852386576e38355513b4e2cd5e2125f9c26913777  gcc-linaro-5.2-2015.11-2-x86_64_aarch64-linux-gnu.tar.xz
-> +sha256 1c85af550bedd378be583317b4abbdc96342b42c19fb19873c13d3093ff694ad  gcc-linaro-5.3-2016.02-x86_64_aarch64-linux-gnu.tar.xz
->  
->  # Codescape toolchains from Imagination Technologies
->  # From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.10-04/
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index 7b42582..d3a6d0b 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -377,8 +377,8 @@ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.x
->  TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
->  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
->  else
-> -TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/aarch64-linux-gnu
-> -TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_aarch64-linux-gnu.tar.xz
-> +TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/aarch64-linux-gnu
-> +TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_aarch64-linux-gnu.tar.xz
->  endif
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
->  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/aarch64-linux-gnu
-> 
+diff --git a/package/Config.in b/package/Config.in
+index 8a5feed..9d668bf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -954,6 +954,7 @@ menu "Graphics"
+ 	source "package/wayland/Config.in"
+ 	source "package/wayland-protocols/Config.in"
+ 	source "package/webkit/Config.in"
++	source "package/webkitgtk/Config.in"
+ 	source "package/webkitgtk24/Config.in"
+ 	source "package/webp/Config.in"
+ 	source "package/zbar/Config.in"
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+new file mode 100644
+index 0000000..e662fed
+--- /dev/null
++++ b/package/webkitgtk/Config.in
+@@ -0,0 +1,77 @@
++config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
++	bool
++	# ARM needs BLX, so v5t+, BE completely untested so disabled
++	default y if BR2_arm && !BR2_ARM_CPU_ARMV4
++	default y if BR2_i386 || BR2_x86_64
++	# Disabled on MIPS big endian due to sigbus
++	default y if BR2_mipsel || BR2_mips64el
++	# Disabled on PowerPC pending runtime testing
++	# Disabled on SuperH because of segfault
++	depends on BR2_USE_MMU # libglib2
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++
++comment "webkitgtk needs libgtk3 and an (e)glibc toolchain w/ C++, gcc >= 4.9"
++	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
++	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_USES_GLIBC || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	depends on BR2_USE_MMU
++
++config BR2_PACKAGE_WEBKITGTK
++	bool "webkitgtk"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_PACKAGE_LIBGTK3
++	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
++	select BR2_PACKAGE_CAIRO
++	select BR2_PACKAGE_CAIRO_PNG
++	select BR2_PACKAGE_ENCHANT
++	select BR2_PACKAGE_HARFBUZZ
++	select BR2_PACKAGE_ICU
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBSECRET
++	select BR2_PACKAGE_LIBSOUP
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_LIBXSLT
++	select BR2_PACKAGE_SQLITE
++	select BR2_PACKAGE_WEBP
++	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_LIBGTK3_X11
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_LIBGTK3_X11
++	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_LIBGTK3_X11
++	select BR2_PACKAGE_XLIB_LIBXT if BR2_PACKAGE_LIBGTK3_X11
++	help
++	  WebKit is an open source, standards compliant web browser engine.
++
++	  http://www.webkitgtk.org/
++
++if BR2_PACKAGE_WEBKITGTK
++
++config BR2_PACKAGE_WEBKITGTK_HTTPS
++	bool "HTTPS support"
++	select BR2_PACKAGE_CA_CERTIFICATES # runtime
++	select BR2_PACKAGE_LIBSOUP_SSL
++	help
++	  Enable HTTPS protocol support.
++
++config BR2_PACKAGE_WEBKITGTK_MULTIMEDIA
++	bool "multimedia support"
++	select BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
++	select BR2_PACKAGE_GST1_PLUGINS_GOOD
++	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_ISOMP4
++	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTSP
++	select BR2_PACKAGE_GST1_LIBAV
++	help
++	  This option pulls in all of the required dependencies
++	  to enable multimedia (video/audio) support.
++
++endif
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+new file mode 100644
+index 0000000..20959fd
+--- /dev/null
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -0,0 +1,4 @@
++# From http://www.webkitgtk.org/releases/webkitgtk-2.12.2.tar.xz.sha1
++sha1	84d02caadd3d39805e83a4719e2424c1ba4a54d6	webkitgtk-2.12.2.tar.xz
++# Calculated based on the hash above
++sha256	9dc49b908b1c37da739703e1402a7f07c4ea9093b8ecfb34f20e8f74e328f124	webkitgtk-2.12.2.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+new file mode 100644
+index 0000000..8bed9c5
+--- /dev/null
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -0,0 +1,89 @@
++################################################################################
++#
++# webkitgtk
++#
++################################################################################
++
++WEBKITGTK_VERSION = 2.12.2
++WEBKITGTK_SITE = http://www.webkitgtk.org/releases
++WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
++WEBKITGTK_INSTALL_STAGING = YES
++WEBKITGTK_LICENSE = LGPLv2.1+, BSD-2c
++WEBKITGTK_LICENSE_FILES = \
++	Source/WebCore/LICENSE-APPLE \
++	Source/WebCore/LICENSE-LGPL-2.1
++WEBKITGTK_DEPENDENCIES = host-ruby host-flex host-bison host-gperf \
++	enchant harfbuzz icu jpeg libgtk3 libsecret libsoup \
++	libxml2 libxslt sqlite webp
++WEBKITGTK_CONF_OPTS = \
++	-DENABLE_API_TESTS=OFF \
++	-DENABLE_GEOLOCATION=OFF \
++	-DENABLE_GTKDOC=OFF \
++	-DENABLE_INTROSPECTION=OFF \
++	-DENABLE_MINIBROWSER=ON \
++	-DENABLE_SPELLCHECK=ON \
++	-DPORT=GTK \
++	-DUSE_LIBNOTIFY=OFF \
++	-DUSE_LIBHYPHEN=OFF
++
++# ARM needs NEON for JIT
++# i386 & x86_64 don't seem to have any special requirements
++ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_i386)$(BR2_x86_64),y)
++WEBKITGTK_CONF_OPTS += -DENABLE_JIT=ON
++else
++WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_WEBKITGTK_MULTIMEDIA),y)
++WEBKITGTK_CONF_OPTS += \
++	-DENABLE_VIDEO=ON \
++	-DENABLE_WEB_AUDIO=ON
++WEBKITGTK_DEPENDENCIES += gstreamer1 gst1-libav gst1-plugins-base gst1-plugins-good
++else
++WEBKITGTK_CONF_OPTS += \
++	-DENABLE_VIDEO=OFF \
++	-DENABLE_WEB_AUDIO=OFF
++endif
++
++# Only one target platform can be built, assume X11 > Wayland
++
++# GTK3-X11 target gives OpenGL from newer libgtk3 versions
++# Consider this better than EGL + maybe GLESv2 since both can't be built
++# 2D CANVAS acceleration requires OpenGL proper with cairo-gl
++ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
++WEBKITGTK_CONF_OPTS += \
++	-DENABLE_ACCELERATED_2D_CANVAS=ON \
++	-DENABLE_GLES2=OFF \
++	-DENABLE_OPENGL=ON \
++	-DENABLE_X11_TARGET=ON
++WEBKITGTK_DEPENDENCIES += libgl \
++	xlib_libXcomposite xlib_libXdamage xlib_libXrender xlib_libXt
++# It can use libgtk2 for npapi plugins
++ifeq ($(BR2_PACKAGE_LIBGTK2),y)
++WEBKITGTK_CONF_OPTS += -DENABLE_PLUGIN_PROCESS_GTK2=ON
++WEBKITGTK_DEPENDENCIES += libgtk2
++else
++WEBKITGTK_CONF_OPTS += -DENABLE_PLUGIN_PROCESS_GTK2=OFF
++endif
++else # !X11
++# GTK3-BROADWAY/WAYLAND needs at least EGL
++WEBKITGTK_DEPENDENCIES += libegl
++# GLESv2 support is optional though
++ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
++WEBKITGTK_CONF_OPTS += \
++	-DENABLE_GLES2=ON \
++	-DENABLE_OPENGL=ON
++WEBKITGTK_DEPENDENCIES += libgles
++else
++# Disable general OpenGL (shading) if there's no GLESv2
++WEBKITGTK_CONF_OPTS += \
++	-DENABLE_GLES2=OFF \
++	-DENABLE_OPENGL=OFF
++endif
++# We must explicitly state the wayland target
++ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
++WEBKITGTK_CONF_OPTS += -DENABLE_WAYLAND_TARGET=ON
++endif
++endif
++
++$(eval $(cmake-package))
