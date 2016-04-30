@@ -1,11 +1,11 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 30 Apr 2016 22:56:56 +0200
-Subject: [Buildroot] [PATCH v2 2/4] python: align the target finalize
-	hooks with python3
-In-Reply-To: <1462020471-29986-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 30 Apr 2016 22:57:14 +0200
+Subject: [Buildroot] [PATCH v2 3/4] python/python3: globalize *.pyc
+	files compilation
+In-Reply-To: <1462020471-29986-4-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1462020471-29986-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1462020471-29986-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHXCMMKHp7PcbRxaCCqyd3A=qTKsCCxToZfG=UcKZ7CAP4Wpgw@mail.gmail.com>
+ <1462020471-29986-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAHXCMMLJz9FjgJYg2c2a1dsMoP-52kdMvZ38LTR9=Vy563maxw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,57 +16,40 @@ Thomas, all,
 
 On Sat, Apr 30, 2016 at 2:47 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> Since the bump of python3 to 3.5.x, the target finalize hooks
-> registered by the python3 have been changed a little bit. For the sake
-> of consistency, this commit aligns the target finalize hooks
-> registered by the python package so that they look the same as the
-> ones used by python3.
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 >
+> Currently, each python package (be it the python interpreter package
+> itself or external python modules) is responsible for compiling its
+> .py into .pyc files. Unfortunately, this is not ideal as some packages
+> only install .py files without compiling them into .pyc files. In this
+> case, if the Buildroot configuration specifies to keep only the .pyc
+> files, the .py files are removed and lost.
+>
+> To address this, this commit changes the logic by making the
+> compilation of .pyc files a global operation: the python interpreter
+> packages register a target finalize hook that is in charge of
+> compiling all installed .py files.
+>
+> The *.pyc generation on a per package basis is disabled in the
+> python-package infrastructure by passing the "--no-compile" option to
+> setup.py.
+>
+> The *.pyc generation for the Python interpreter internal modules is
+> disabled through --disable-pyc-build configure option.
+>
+> A small helper script is used to perform the compilation, the purpose
+> of this script is to abort the compilation process if one of the .py
+> file cannot be compiled. It has been provided by Samuel Martin and
+> integrated into this commit.
+>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> [Thomas:
+>  - rework for python 3.5
+>  - integrate Samuel proposal that allows to detect compilation
+>    failures.]
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-On this change:
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-
-> ---
->  package/python/python.mk | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/package/python/python.mk b/package/python/python.mk
-> index 4ecd0d1..819d32b 100644
-> --- a/package/python/python.mk
-> +++ b/package/python/python.mk
-> @@ -218,15 +218,15 @@ $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
->
->  ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
-> -define PYTHON_FINALIZE_TARGET
-> +define PYTHON_REMOVE_PY_FILES
->         find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
->  endef
-> +TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
->  endif
->
->  ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
-> -define PYTHON_FINALIZE_TARGET
-> +define PYTHON_REMOVE_PYC_FILES
->         find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
-
-However, some packages call compile_all by themselves, so this can
-lead to have some remaining *.pyo in
-$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) (e.g. [1] with
-this defconfig [2]).
-
-[1] http://code.bulix.org/l1hybv-98186
-[2] http://code.bulix.org/o86r2k-98185
-
->  endef
-> +TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYC_FILES
->  endif
-> -
-> -TARGET_FINALIZE_HOOKS += PYTHON_FINALIZE_TARGET
-> --
-> 2.6.4
->
 
 Regards,
 
