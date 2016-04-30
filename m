@@ -1,36 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Apr 2016 14:03:14 +0200
-Subject: [Buildroot] [PATCH v3 0/3] Add go language support
-In-Reply-To: <1461965160.27026.9.camel@infradead.org>
-References: <cover.1459798147.git.geoff@infradead.org>
- <20160421224301.6a05f711@free-electrons.com>
- <1461965160.27026.9.camel@infradead.org>
-Message-ID: <20160430140314.4ff30ff1@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 30 Apr 2016 09:22:54 -0300
+Subject: [Buildroot] [PATCH 2/4] package/efl: bump to 1.17.0
+In-Reply-To: <f6b845e4-97b0-a3f5-57c5-dfce944dcd6a@gmail.com>
+References: <1461790014-17051-1-git-send-email-romain.naour@gmail.com>
+ <1461790014-17051-2-git-send-email-romain.naour@gmail.com>
+ <572355E6.4040400@zacarias.com.ar>
+ <f6b845e4-97b0-a3f5-57c5-dfce944dcd6a@gmail.com>
+Message-ID: <5724A39E.8000308@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 29/04/16 17:26, Romain Naour wrote:
 
-On Fri, 29 Apr 2016 14:26:00 -0700, Geoff Levand wrote:
+> Weird, I'm able to build host-efl here... let me retry again.
+> Can you share your Buildroot config and the host-efl config.log ?
+>
+> Can you try to autoreconf the efl package ?
+> EFL_AUTORECONF = YES
+> EFL_GETTEXTIZE = YES
 
-> Just to give an update, I've got fixes for the host-go problems,
-> and am working on the flannel problem.
-> 
-> WIP patches are in my master branch here:
-> 
->   git at github.com:glevand/buildroot--buildroot.git
-
-Hum, I'm looking at this repository, and I see only 3 branches, and
-none of them seem to contain things that look like fixes. Did I miss
-something?
-
+Hi Romain.
+It fails the same, so https://www.zacarias.com.ar/host-efl-config.log
+and https://www.zacarias.com.ar/efl-defconfig.txt
 Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards.
