@@ -1,49 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Apr 2016 14:53:37 +0200
-Subject: [Buildroot] [git commit] perl: bump to version 5.22.2
-Message-ID: <20160430125348.44CF58183C@busybox.osuosl.org>
+Date: Sat, 30 Apr 2016 14:54:41 +0200
+Subject: [Buildroot] [git commit] libtommath: build with -fPIC
+Message-ID: <20160430125452.5340381D5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62c8864cad27582e0bdb6f8c4a699b77c71a6cb8
+commit: https://git.buildroot.net/buildroot/commit/?id=ab51fb01f0a6205fb5a86557685561931f68a6e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This fixes the build on x86_64, see:
+
+  http://autobuild.buildroot.net/results/212/212469db5dc8399070390603c0fdf7f12b130cda/
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl/perl.hash | 8 ++++----
- package/perl/perl.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libtommath/libtommath.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 3f1bd1a..4afbd06 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,7 +1,7 @@
--# Hashes from: http://www.cpan.org/src/5.0/perl-5.22.1.tar.bz2.{md5,sha1,sha256}.txt
--md5    67242b9bd642b458bec884ed2a040910                                 perl-5.22.1.tar.bz2
--sha1   29f9b320b0299577a3e1d02e9e8ef8f26f160332                         perl-5.22.1.tar.bz2
--sha256 e98e4075a3167fa40524abe447c30bcca10c60e02a54ee1361eff278947a1221 perl-5.22.1.tar.bz2
-+# Hashes from: http://www.cpan.org/src/5.0/perl-5.22.2.tar.bz2.{md5,sha1,sha256}.txt
-+md5    24ec0b41fdd1a4cce0e66811ae1f5e1b                                 perl-5.22.2.tar.bz2
-+sha1   e2f465446dcd45a7fa3da696037f9ebe73e78e55                         perl-5.22.2.tar.bz2
-+sha256 f2322b9b04fe0cdbca9fe755360da04892cb6483d44959457cfebc0bcddc8058 perl-5.22.2.tar.bz2
+diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
+index 463ea7b..eb3b00e 100644
+--- a/package/libtommath/libtommath.mk
++++ b/package/libtommath/libtommath.mk
+@@ -13,7 +13,7 @@ LIBTOMMATH_INSTALL_STAGING = YES
+ LIBTOMMATH_INSTALL_TARGET = NO  # only static library
  
- # No upstream hashes for the following
- sha256 250ab6e6c034a8b7ae447fa2b453fa0b61ebb7db4d039eba60c52e44ab5899bd perl-5.22.1-cross-1.0.2.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 0bd10ad..11b10ff 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ define LIBTOMMATH_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="-I./ $(TARGET_CFLAGS)"
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="-I./ -fPIC $(TARGET_CFLAGS)"
+ endef
  
- PERL_VERSION_MAJOR = 22
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
- PERL_LICENSE = Artistic or GPLv1+
+ define LIBTOMMATH_INSTALL_STAGING_CMDS
