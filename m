@@ -1,56 +1,84 @@
 From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Date: Sat, 30 Apr 2016 09:49:03 +0200
-Subject: [Buildroot] [PATCH 07/34] reproducibility/libgcrypt: override
-	timestamps
+Date: Sat, 30 Apr 2016 09:49:17 +0200
+Subject: [Buildroot] [PATCH 21/34] hddtemp: add
 In-Reply-To: <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
 References: <20160430074358.GE1781@hermes.click-hack.org>
  <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <1462002570-14706-7-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <1462002570-14706-21-git-send-email-gilles.chanteperdrix@xenomai.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-with SOURCE_DATE_EPOCH
 ---
- package/libgcrypt/0003-honor-source-date-epoch.patch | 15 +++++++++++++++
- package/libgcrypt/libgcrypt.mk                       |  1 +
- 2 files changed, 16 insertions(+)
- create mode 100644 package/libgcrypt/0003-honor-source-date-epoch.patch
+ package/Config.in            |  1 +
+ package/hddtemp/Config.in    |  8 ++++++++
+ package/hddtemp/hddtemp.hash |  2 ++
+ package/hddtemp/hddtemp.mk   | 19 +++++++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/hddtemp/Config.in
+ create mode 100644 package/hddtemp/hddtemp.hash
+ create mode 100644 package/hddtemp/hddtemp.mk
 
-diff --git a/package/libgcrypt/0003-honor-source-date-epoch.patch b/package/libgcrypt/0003-honor-source-date-epoch.patch
+diff --git a/package/Config.in b/package/Config.in
+index bdc3063..76665e6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1458,6 +1458,7 @@ comment "Utilities"
+ 	source "package/file/Config.in"
+ 	source "package/gnupg/Config.in"
+ 	source "package/gnupg2/Config.in"
++	source "package/hddtemp/Config.in"
+ 	source "package/inotify-tools/Config.in"
+ 	source "package/lockfile-progs/Config.in"
+ 	source "package/logrotate/Config.in"
+diff --git a/package/hddtemp/Config.in b/package/hddtemp/Config.in
 new file mode 100644
-index 0000000..0f41c1b
+index 0000000..0d28250
 --- /dev/null
-+++ b/package/libgcrypt/0003-honor-source-date-epoch.patch
-@@ -0,0 +1,15 @@
-+--- libgcrypt-1.6.4/configure.ac.orig	2015-09-08 08:27:26.000000000 +0200
-++++ libgcrypt-1.6.4/configure.ac	2016-02-23 21:31:19.290079195 +0100
-+@@ -1993,7 +1993,11 @@ changequote([,])dnl
-+ BUILD_FILEVERSION="${BUILD_FILEVERSION}mym4_revision_dec"
-+ AC_SUBST(BUILD_FILEVERSION)
-+ 
-+-BUILD_TIMESTAMP=`date -u +%Y-%m-%dT%H:%M+0000 2>/dev/null || date`
-++if test x"${SOURCE_DATE_EPOCH}" = x; then
-++   	BUILD_TIMESTAMP=`date -u +%Y-%m-%dT%H:%M+0000 2>/dev/null || date`
-++else
-++	BUILD_TIMESTAMP=`date -u -d @${SOURCE_DATE_EPOCH} +%Y-%m-%dT%H:%M+0000 2>/dev/null || date -d @${SOURCE_DATE_EPOCH}`
-++fi
-+ AC_SUBST(BUILD_TIMESTAMP)
-+ AC_DEFINE_UNQUOTED(BUILD_TIMESTAMP, "$BUILD_TIMESTAMP",
-+                    [The time this package was configured for a build])
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 53d1d6c..768e42f 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -12,6 +12,7 @@ LIBGCRYPT_SITE = ftp://ftp.gnupg.org/gcrypt/libgcrypt
- LIBGCRYPT_INSTALL_STAGING = YES
- LIBGCRYPT_DEPENDENCIES = libgpg-error
- LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
-+LIBGCRYPT_AUTORECONF = YES
- 
- LIBGCRYPT_CONF_ENV = \
- 	ac_cv_sys_symbol_underscore=no
++++ b/package/hddtemp/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HDDTEMP
++	bool "hddtemp"
++	help
++	  hddtemp is a small utility that gives you the temperature of your
++	  hard drive by reading S.M.A.R.T. informations, for drives that
++	  support this feature. 
++
++	  http://www.guzu.net/linux/hddtemp.php
+diff --git a/package/hddtemp/hddtemp.hash b/package/hddtemp/hddtemp.hash
+new file mode 100644
+index 0000000..c308989
+--- /dev/null
++++ b/package/hddtemp/hddtemp.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	618541584054093d53be8a2d9e81c97174f30f00af91cb8700a97e442d79ef5b  hddtemp-0.3-beta15.tar.bz2
+diff --git a/package/hddtemp/hddtemp.mk b/package/hddtemp/hddtemp.mk
+new file mode 100644
+index 0000000..a51548d
+--- /dev/null
++++ b/package/hddtemp/hddtemp.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# hddtemp
++#
++################################################################################
++
++HDDTEMP_VERSION = 0.3-beta15
++HDDTEMP_SOURCE = hddtemp-$(HDDTEMP_VERSION).tar.bz2
++HDDTEMP_SITE = http://download.savannah.gnu.org/releases/hddtemp
++HDDTEMP_LICENSE = GPLv2
++HDDTEMP_LICENSE_FILES = GPL-2
++
++define HDDTEMP_REMOVE_MAN
++	rm -rf $(TARGET_DIR)/usr/man
++endef
++
++HDDTEMP_POST_INSTALL_TARGET_HOOKS += HDDTEMP_REMOVE_MAN
++
++$(eval $(autotools-package))
 -- 
 2.7.4
