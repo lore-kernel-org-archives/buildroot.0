@@ -1,66 +1,130 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 May 2016 22:20:51 +0200
-Subject: [Buildroot] [PATCH] ccache: fix explicit build 'make clean
- host-ccache'
-In-Reply-To: <CAAXf6LWxP-Z-aonTSkjsOn0sGq6zhsB2gYta6K1AQYSK3DwmoQ@mail.gmail.com>
-References: <1461952973-20054-1-git-send-email-patrickdepinguin@gmail.com>
- <20160501143931.7f767fb8@free-electrons.com>
- <CAAXf6LWxP-Z-aonTSkjsOn0sGq6zhsB2gYta6K1AQYSK3DwmoQ@mail.gmail.com>
-Message-ID: <20160501222051.33f7dda9@free-electrons.com>
+Date: Sun, 1 May 2016 22:21:33 +0200
+Subject: [Buildroot] [git commit] package/mpd: bump to version 0.19.15
+Message-ID: <20160501202148.5DE127FA9C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=21e611273851d503dd3145fa9564c71c461808c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 1 May 2016 22:11:18 +0200, Thomas De Schampheleire wrote:
+Drop patches applied upstream:
+ - 0001: notify: Don't use constexpr on Haiku
+ - 0002: notify: use "constexpr" only with glibc
 
-> > I think this means that the CC/CXX assignments in
-> > support/dependencies/dependencies.mk are useless, no? If you do "make
-> > clean host-tar", or "make clean host-xz" or "make clean host-sstrip",
-> > it will fail the same way, no? Doesn't this mean that those "special"
-> > package should be fixed to define CC=$(HOSTCC_NOCCACHE)
-> > CXX=$(HOSTCXX_NOCCACHE) in their environment ?  
-> 
-> After some quick checking, it seems to depend which packages are in
-> DEPENDENCIES_HOST_PREREQ: 'make clean host-foo' will fail if host-foo
-> is in DEPENDENCIES_HOST_PREREQ but will succeed if it is not. This is
-> because packages that all packages get 'dependencies' as dependency,
-> except packages that are itself in DEPENDENCIES_HOST_PREREQ.
-> 
-> So, on my system, 'make clean host-xz' worked fine because I have a
-> suitable xzcat already and hence host-xz is not put in
-> DEPENDENCIES_HOST_PREREQ. Similar for host-tar. If I cheat and add
-> host-xz in DEPENDENCIES_HOST_PREREQ unconditionally, 'make clean
-> host-xz' indeed fails.
-> 
-> This difference depending on the host system also means that a
-> solution where e.g. host-xz is changed to set CC and CXX to
-> no-ccache-versions is suboptimal: in case host-xz is not in
-> DEPENDENCIES_HOST_PREREQ, the package would be built without ccache
-> even if it were available. One could argue that there's no need to
-> build host-xz in this scenario, but I can imagine other packages that
-> can be mandatory in some situations and optional in others.
-> Maybe this is nothing to worry about and we should keep things simple:
-> don't use ccache for host packages that are potentially a core
-> dependency for buildroot.
-> 
-> What are your thoughts?
+Renumber remaining patches.
 
-I think we should be simple, and indeed build those few packages always
-without ccache. I don't think we have any package that depends on
-"host-tar". Regarding host-xz, I'm not that sure, but it's a small
-package, so building it without ccache is not a big deal.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...onfigure.ac-check-if-libatomic-is-needed.patch} |  0
+ .../0001-notify-Don-t-use-constexpr-on-Haiku.patch | 28 -------------------
+ ...0002-notify-use-constexpr-only-with-glibc.patch | 31 ----------------------
+ ...d-Name-include-stdio.h-for-prctl-as-well.patch} |  0
+ package/mpd/mpd.hash                               |  2 +-
+ package/mpd/mpd.mk                                 |  2 +-
+ 6 files changed, 2 insertions(+), 61 deletions(-)
 
-Alternatively, we could try to make those packages depend on
-host-ccache. But I'm really not sure it's worth it.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mpd/0003-configure.ac-check-if-libatomic-is-needed.patch b/package/mpd/0001-configure.ac-check-if-libatomic-is-needed.patch
+similarity index 100%
+rename from package/mpd/0003-configure.ac-check-if-libatomic-is-needed.patch
+rename to package/mpd/0001-configure.ac-check-if-libatomic-is-needed.patch
+diff --git a/package/mpd/0001-notify-Don-t-use-constexpr-on-Haiku.patch b/package/mpd/0001-notify-Don-t-use-constexpr-on-Haiku.patch
+deleted file mode 100644
+index 2685578..0000000
+--- a/package/mpd/0001-notify-Don-t-use-constexpr-on-Haiku.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From f7d5081b727f69ae3a894a4a3310670a5d9ab077 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Fran=C3=A7ois=20Revol?= <revol@free.fr>
+-Date: Thu, 17 Sep 2015 22:18:10 +0200
+-Subject: [PATCH] notify: Don't use constexpr on Haiku
+-
+-[Thomas: taken from upstream commit bf73d0f9051fd5740c22bf6e5114ceb4535d548f.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- src/notify.hxx | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/notify.hxx b/src/notify.hxx
+-index 3e62a01..1ee413f 100644
+---- a/src/notify.hxx
+-+++ b/src/notify.hxx
+-@@ -28,7 +28,8 @@ struct notify {
+- 	Cond cond;
+- 	bool pending;
+- 
+--#if !defined(WIN32) && !defined(__NetBSD__) && !defined(__BIONIC__)
+-+#if !defined(WIN32) && !defined(__NetBSD__) && !defined(__BIONIC__) && \
+-+	!defined(__HAIKU__)
+- 	constexpr
+- #endif
+- 	notify():pending(false) {}
+--- 
+-2.6.4
+-
+diff --git a/package/mpd/0002-notify-use-constexpr-only-with-glibc.patch b/package/mpd/0002-notify-use-constexpr-only-with-glibc.patch
+deleted file mode 100644
+index e50f598..0000000
+--- a/package/mpd/0002-notify-use-constexpr-only-with-glibc.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 09830d448d6299a47fbccf39af6f325be5f2b514 Mon Sep 17 00:00:00 2001
+-From: Max Kellermann <max@duempel.org>
+-Date: Thu, 17 Sep 2015 22:56:35 +0200
+-Subject: [PATCH] notify: use "constexpr" only with glibc
+-
+-The Mutex and Cond constructors are only "constexpr" with glibc, and
+-this is what this #ifdef is about.
+-
+-[Thomas: taken from upstream commit 459a812a54509ebfd634a3df2998395c9cb5b98f.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- src/notify.hxx | 3 +--
+- 1 file changed, 1 insertion(+), 2 deletions(-)
+-
+-diff --git a/src/notify.hxx b/src/notify.hxx
+-index 1ee413f..c96390b 100644
+---- a/src/notify.hxx
+-+++ b/src/notify.hxx
+-@@ -28,8 +28,7 @@ struct notify {
+- 	Cond cond;
+- 	bool pending;
+- 
+--#if !defined(WIN32) && !defined(__NetBSD__) && !defined(__BIONIC__) && \
+--	!defined(__HAIKU__)
+-+#ifdef __GLIBC__
+- 	constexpr
+- #endif
+- 	notify():pending(false) {}
+--- 
+-2.6.4
+-
+diff --git a/package/mpd/0004-thread-Name-include-stdio.h-for-prctl-as-well.patch b/package/mpd/0002-thread-Name-include-stdio.h-for-prctl-as-well.patch
+similarity index 100%
+rename from package/mpd/0004-thread-Name-include-stdio.h-for-prctl-as-well.patch
+rename to package/mpd/0002-thread-Name-include-stdio.h-for-prctl-as-well.patch
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index e47cefd..2d35aae 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	2fd23805132e5002a4d24930001a7c7d3aaf55e3bd0cd71af5385895160e99e7	mpd-0.19.14.tar.xz
++sha256  0cb9a223894b038ce966ce6d651d9b3ea3bdc7d7b9bec8d1e9e7e091cbc29b8b  mpd-0.19.15.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 9a1c957..6247d15 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).14
++MPD_VERSION = $(MPD_VERSION_MAJOR).15
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
