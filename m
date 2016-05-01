@@ -1,44 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  1 May 2016 22:15:20 +0200
-Subject: [Buildroot] [PATCH v3 9/9] samba4: remove compilation of .pyc files
-In-Reply-To: <1462133720-409-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1462133720-409-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1462133720-409-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 1 May 2016 22:17:06 +0200
+Subject: [Buildroot] [PATCH v2 0/4] Bump to Python 3.5 and pyc
+ compilation improvements
+In-Reply-To: <CAHXCMMLdTCD5CgsNwaCZRXWa4EXcuHpm18JjuWyLh_TBVx1k4Q@mail.gmail.com>
+References: <1462020471-29986-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAHXCMMLdTCD5CgsNwaCZRXWa4EXcuHpm18JjuWyLh_TBVx1k4Q@mail.gmail.com>
+Message-ID: <20160501221706.4506533a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that .py files are globally compiled into .pyc files, we can get
-rid of the samba4 specific logic doing this compilation.
+Samuel,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
----
- package/samba4/samba4.mk | 10 ----------
- 1 file changed, 10 deletions(-)
+On Sat, 30 Apr 2016 22:56:25 +0200, Samuel Martin wrote:
 
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 0d73662..6359802 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -118,16 +118,6 @@ define SAMBA4_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
- endef
- 
--# Samba just installs .py files so the purge causes problems with some tools
--ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
--define SAMBA4_BUILD_PYC_FILES
--	PYTHONPATH="$(PYTHON_PATH)" \
--		$(HOST_DIR)/usr/bin/python -c "import compileall; \
--		compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/samba')"
--endef
--SAMBA4_POST_INSTALL_TARGET_HOOKS += SAMBA4_BUILD_PYC_FILES
--endif
--
- ifeq ($(BR2_PACKAGE_SAMBA4_AD_DC),)
- SAMBA4_CONF_OPTS += --without-ad-dc
- endif
+> I ran few quick build tests using:
+> - this python3-based defconfig [1];
+> - this python2-based defconfig [8].
+
+Following your feedback, I just sent a new version of the patch series:
+
+  http://lists.busybox.net/pipermail/buildroot/2016-May/160240.html
+
+If you have some time to review :-)
+
+Thanks a lot!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
