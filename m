@@ -1,66 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  1 May 2016 22:15:15 +0200
-Subject: [Buildroot] [PATCH v3 4/9] python-crossbar: fix byte-compilation of
-	.pyc files
+Date: Sun,  1 May 2016 22:15:18 +0200
+Subject: [Buildroot] [PATCH v3 7/9] python-pexpect: fix byte-compilation
+	with Python 2
 In-Reply-To: <1462133720-409-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1462133720-409-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1462133720-409-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1462133720-409-8-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For its continuous integration tests, python-crossbar includes one .py
-file that intentionally has a syntax error. Until now, this wasn't
-causing any problem, but with the introduction of a Python
-byte-compilation process that errors out when there is a failure, it
-is going to become a problem.
+pexpect contains one file, async.py, that is only meant to be used
+with Python 3. Due to this, it fails to byte-compile with Python 2,
+which will become a problem once we make byte-compilation failures
+fatal failures that abort the build.
 
-We simply add a patch that removes the syntax error, as we don't care
-about it in the context of Buildroot. The problem has been reported
-upstream to see if a better fix is possible.
+As suggested by upstream at
+https://github.com/pexpect/pexpect/issues/290, we simply remove the
+problematic file when building with Python 2.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-Avoid-intentional-syntax-error.patch      | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
+ package/python-pexpect/python-pexpect.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch b/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
-new file mode 100644
-index 0000000..fb8e4a2
---- /dev/null
-+++ b/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
-@@ -0,0 +1,29 @@
-+From 9ab2b96c2ee679c6dcb387174be211db5d70fa97 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 1 May 2016 15:35:32 +0200
-+Subject: [PATCH] Avoid intentional syntax error
+diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
+index b74bf83..40a1741 100644
+--- a/package/python-pexpect/python-pexpect.mk
++++ b/package/python-pexpect/python-pexpect.mk
+@@ -11,4 +11,14 @@ PYTHON_PEXPECT_LICENSE = ISC
+ PYTHON_PEXPECT_LICENSE_FILES = LICENSE
+ PYTHON_PEXPECT_SETUP_TYPE = distutils
+ 
++# async.py is not usable with Python 2, and removing is the solution
++# recommended by upstream:
++# https://github.com/pexpect/pexpect/issues/290
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++define PYTHON_PEXPECT_REMOVE_ASYNC_PY
++	$(RM) $(@D)/pexpect/async.py
++endef
++PYTHON_PEXPECT_POST_PATCH_HOOKS += PYTHON_PEXPECT_REMOVE_ASYNC_PY
++endif
 +
-+This file has an intentional syntax error, meant to validate QA, but
-+it breaks byte compilation of this package.
-+
-+Issue reported upstream:
-+https://github.com/crossbario/crossbar/issues/750.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ crossbar/worker/test/examples/syntaxerror.py | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/crossbar/worker/test/examples/syntaxerror.py b/crossbar/worker/test/examples/syntaxerror.py
-+index a5947cc..585c995 100644
-+--- a/crossbar/worker/test/examples/syntaxerror.py
-++++ b/crossbar/worker/test/examples/syntaxerror.py
-+@@ -29,5 +29,3 @@
-+ #####################################################################################
-+ 
-+ from __future__ import absolute_import, division
-+-
-+-class # noqa
-+-- 
-+2.7.4
-+
+ $(eval $(python-package))
 -- 
 2.7.4
