@@ -1,58 +1,129 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 1 May 2016 10:18:57 -0300
-Subject: [Buildroot] [PATCH 2/4] package/efl: bump to 1.17.0
-In-Reply-To: <9c17ab05-1c5c-8c9d-66d8-9faa54f0578a@gmail.com>
-References: <1461790014-17051-1-git-send-email-romain.naour@gmail.com>
- <1461790014-17051-2-git-send-email-romain.naour@gmail.com>
- <572355E6.4040400@zacarias.com.ar>
- <f6b845e4-97b0-a3f5-57c5-dfce944dcd6a@gmail.com>
- <5724A39E.8000308@zacarias.com.ar> <5724C7A2.7040704@gmail.com>
- <9c17ab05-1c5c-8c9d-66d8-9faa54f0578a@gmail.com>
-Message-ID: <57260241.5060403@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 1 May 2016 15:26:42 +0200
+Subject: [Buildroot] [PATCH v2 0/4] Bump to Python 3.5 and pyc
+ compilation improvements
+In-Reply-To: <CAHXCMMLdTCD5CgsNwaCZRXWa4EXcuHpm18JjuWyLh_TBVx1k4Q@mail.gmail.com>
+References: <1462020471-29986-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAHXCMMLdTCD5CgsNwaCZRXWa4EXcuHpm18JjuWyLh_TBVx1k4Q@mail.gmail.com>
+Message-ID: <20160501152642.3f888793@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30/04/16 20:04, Romain Naour wrote:
+Samuel,
 
+Thanks a lot for your testing and feedback! However there's one thing
+that isn't clear in your feedback, is which patches from my series you
+think can be applied right now on master, and which patches should not.
 
-> The .pc file is manually generated in the luajit Makefile, so it give a wrong
-> path for host-luajit.
->
-> $ host/usr/bin/pkgconf --cflags luajit
-> /usr/include/luajit-2.0
->
-> It should be:
-> $ host/usr/bin/pkgconf --cflags luajit
-> [...]output/host/usr/include/luajit-2.0
->
-> Can you try with this patch ?
->
-> diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-> index 623bfcc..0aab04d 100644
-> --- a/package/luajit/luajit.mk
-> +++ b/package/luajit/luajit.mk
-> @@ -75,5 +75,11 @@ define HOST_LUAJIT_INSTALL_CMDS
->          $(MAKE) PREFIX="/usr" DESTDIR="$(HOST_DIR)" LDCONFIG=true -C $(@D) install
->   endef
->
-> +define HOST_LUAJIT_FIX_PC_FILE
-> +       sed -i -e "s|^prefix=.*|prefix=$(HOST_DIR)/usr|"
-> $(HOST_DIR)/usr/lib/pkgconfig/luajit.pc
-> +endef
-> +
-> +HOST_LUAJIT_POST_INSTALL_HOOKS = HOST_LUAJIT_FIX_PC_FILE
-> +
->   $(eval $(generic-package))
->   $(eval $(host-generic-package))
->
-> Best regards,
-> Romain
+On one hand, you gave your Reviewed-by to all four patches, but on the
+other hand, you point some issues, so it's a bit difficult to
+understand your exact opinion :)
 
-Hi Romain.
-It doesn't help, the problem seems to be that efl is picking up the 
-distro luajit (which i have installed) over any other alternative.
-I'll try to cook a patch on my side.
-Regards.
+From your feedback, I believe patches 1 and 2 could be applied, but not
+patch 3 and 4. Is this correct?
+
+See below for more detailed feedback.
+
+On Sat, 30 Apr 2016 22:56:25 +0200, Samuel Martin wrote:
+
+> With python3 enabled (i.e. using [1] defonfig), the series works as
+> expected, but I noticed a coupled of things:
+> - there are still some *.pyc installed by py-gobject [2]. This
+> clean-up can come in another patchset.
+
+This is not a regression from this patch series, it was already broken.
+Perhaps we should do the .pyc/.py removal globally ? Or just in
+usr/lib/python and usr/share ? Doing it globally means that a real
+Python script installed as foobar.py in usr/bin will be removed, even
+though this will never be compiled as a .pyc.
+
+Or should we simply say that the packages that install Python stuff
+outside of usr/lib/pythonX.Y are responsible for doing their own stuff?
+
+> - Using the defconfig from [1], but with BR2_PACKAGE_PYTHON3_PY_PYC=y
+> instead of BR2_PACKAGE_PYTHON3_PY_ONLY=y, some packages trigger the
+> pycompile wrapper error because of missing 2to3-fixes, or
+> broken-on-purpose modules:
+>   - python-crossbar [3] (syntaxerror.py)
+
+What do you suggest to handle this one? It seems to be an intentional
+failure.
+
+>   - python-pyftpdlib [4]
+
+This one is clearly a python 3 compatibility problem, which is trivial
+to fix. But the package is said by upstream to support Python 3, so
+it's a bit weird.
+
+>   - python-pygame [5,6]
+
+Same here, those are trivial Python 3 issues. Why do we mark the
+package as available for Python 3 if it doesn't actually build ? :-)
+
+>   IMHO, these fixes should be addressed before merging the series to
+> avoid a.b.o. turning red...
+
+We can easily fix python-pyftpdlib and python-pygame, but I'm not sure
+about python-crossbar.
+
+> - it seems python-twisted has some broken install rules since it
+> installs its stuff directly in $(TARGET_DIR)/usr (see [7])...
+
+Is it broken install rules, or something that's purely intentional?
+Also, note that those are not Python modules, there is no __init__.py
+in those directories. Which probably means they would anyway not be
+compiled as .pyc anyway.
+
+> With pyhton2 (i.e. using [8] defconfig), the series does not work as expected:
+> - there are some *.pyo in $(TARGET_DIR)/usr/lib/python2.7/site-package (see [9])
+
+That's not a regression from this series.
+
+> - Using the defconfig from [8], but with BR2_PACKAGE_PYTHON_PY_PYC=y
+> instead of BR2_PACKAGE_PYTHON_PY_ONLY=y, some packages trigger the
+> pycompile wrapper error because of python3-only-by-design modules, or
+> broken-on-purpose modules:
+>   - python-crossbar (same reason as with python3, see [3])
+
+Yeah, so same question: what do you suggest to do for this package?
+
+>   - python-pexpect (triggers this issue [10])
+
+For that one, people suggest to remove async.py when building on Python
+2, and it's apparently what Fedora is doing.
+
+> Also whatever the python version is, some packages install stuff
+> outside /usr/lib/python*/ and compile its themselves (e.g.
+> python-gobject, python-web2py).
+> Shall we do something about that?
+
+I don't think so. Some packages install .py files outside of
+usr/lib/pythonX.Y which are *not* Python modules. So then if you go
+ahead and get rid of all .py files system-wide, you will remove useful
+files.
+
+So, can we summarize the issues that we have to solve:
+
+ (1) Remove *.pyo files for Python 2 installations.
+
+ (2) Solve the python-crossbar intentional problem. A quick patch that
+     makes the intentional problem disappear?
+
+ (3) Solve the Python 3 compatibility issues in python-pyftpdlib and
+     python-pygame. Those should be easy.
+
+ (4) Solve the python-pexpect problem by removing async.py on Python 2.
+
+I think for now, we should simply not bother with .py/.pyc files
+outside of usr/lib/pythonX.Y. Do you agree?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
