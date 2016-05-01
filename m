@@ -1,32 +1,30 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sun, 01 May 2016 03:35:55 +0000
-Subject: [Buildroot] [PATCH v2 1/3] aufs: new package
-In-Reply-To: <1461936690-1389-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-References: <1461936690-1389-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-Message-ID: <1462073755408-ed6569b0-db01d863-a1bdac39@mixmax.com>
+Date: Sun, 01 May 2016 03:43:58 +0000
+Subject: [Buildroot] [PATCH v3 0/3] Add go language support
+In-Reply-To: <20160430140314.4ff30ff1@free-electrons.com>
+References: <cover.1459798147.git.geoff@infradead.org>
+ <20160421224301.6a05f711@free-electrons.com>
+ <1461965160.27026.9.camel@infradead.org>
+ <20160430140314.4ff30ff1@free-electrons.com>
+Message-ID: <1462074238901-b9436b8a-0eb718e2-8f9a915c@mixmax.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Atul,
+Geoff, Thomas,
 
-On Fri, Apr 29, 2016 at 9:31 AM Atul Singh
-<atul.singh.mandla@rockwellcollins.com> wrote:
-> - Changed the name of variable from BR2_PACKAGE_AUFS_STANDALONE_VERSION to
-BR2_LINUX_KERNEL_EXT_AUFS_VERSION.
-Trying to compile Buildroot without Aufs selected whatsoever gives me:
-
-Unknown aufs major version. Stop.
-This is because you're checking BR2_LINUX_KERNEL_EXT_AUFS_VERSION for the major
-version, but it's not set. However, I don't think this should have any effect if
-the package isn't selected in the first place.
-You might consider instead setting something like AUFS_VERSION_MAJOR_INVALID=yes
-and erroring out at aufs configuration time, not makefile variable interpret
-time.
-Thanks!
-Christian
+On Sat, Apr 30, 2016 at 8:03 AM Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote: > Hum, I'm looking at this repository, and I see only 3 branches, and none of them seem to contain things that look like fixes. Did I miss something?
+If I try to directly compile something that references Go, it seems that Go does
+not have the cross compiler as a dependency in the Makefile tree.
+# runtime/cgo fork/exec
+/home/paralin/Documents/skiffos/buildroot/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc:
+no such file or directory
+Indeed, the cross compiler toolchain is NOT compiled before Go. I think a
+dependency needs to be added for this.
+Thanks, Christian Stewart
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160501/106bee22/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160501/a2286545/attachment.html>
