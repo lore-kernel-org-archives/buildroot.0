@@ -1,49 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 May 2016 22:45:13 +0200
-Subject: [Buildroot] [PATCH 2/3] uboot-tools: install libubootenv to
- staging
-In-Reply-To: <1461916620-5170-3-git-send-email-joerg.krause@embedded.rocks>
-References: <1461916620-5170-1-git-send-email-joerg.krause@embedded.rocks>
- <1461916620-5170-3-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20160501224513.473583ba@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 1 May 2016 22:45:55 +0200
+Subject: [Buildroot] [PATCH v3 3/9] python: remove *.pyo files
+In-Reply-To: <1462133720-409-4-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1462133720-409-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1462133720-409-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAHXCMMKH31WxNPbP_5_TMwxTVa8ykKByvAuxn+5sdeCod_n56Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, all,
 
-On Fri, 29 Apr 2016 09:56:59 +0200, J?rg Krause wrote:
-
-> diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-> index f47b3db..ed17fba 100644
-> --- a/package/uboot-tools/uboot-tools.mk
-> +++ b/package/uboot-tools/uboot-tools.mk
-> @@ -9,6 +9,7 @@ UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
->  UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
->  UBOOT_TOOLS_LICENSE = GPLv2+
->  UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
-> +UBOOT_TOOLS_INSTALL_STAGING = YES
->  
->  define UBOOT_TOOLS_CONFIGURE_CMDS
->  	mkdir -p $(@D)/include/config
-> @@ -50,6 +51,9 @@ define UBOOT_TOOLS_INSTALL_FWPRINTENV
->  	$(INSTALL) -m 0755 -D $(@D)/tools/env/fw_printenv $(TARGET_DIR)/usr/sbin/fw_printenv
->  	ln -sf fw_printenv $(TARGET_DIR)/usr/sbin/fw_setenv
+On Sun, May 1, 2016 at 10:15 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Even though we disable the build of .pyo files in the interpreter,
+> nothing prevents other packages to install them. Since we only want to
+> keep either .py or .pyc or both, let's add a target finalize hooks
+> that removes all .pyo files.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/python/python.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/package/python/python.mk b/package/python/python.mk
+> index 819d32b..c9aa0af 100644
+> --- a/package/python/python.mk
+> +++ b/package/python/python.mk
+> @@ -230,3 +230,11 @@ define PYTHON_REMOVE_PYC_FILES
 >  endef
-> +define UBOOT_TOOLS_INSTALL_LIBUBOOTENV
-> +	$(INSTALL) -D -m 0755 $(@D)/tools/env/lib.a $(STAGING_DIR)/usr/lib/libubootenv.a
+>  TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYC_FILES
+>  endif
+> +
+> +# In all cases, we don't want to keep the optimized .pyo files
+> +ifeq ($(BR2_PACKAGE_PYTHON),y)
+> +define PYTHON_REMOVE_PYO_FILES
+> +       find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyo' -print0 | xargs -0 rm -f
+I think xargs should be called with the --no-run-if-empty option.
+And certainly PYTHON_REMOVE_PYC_FILES could benefit from similar fix.
+Sorry for not noticing this earlier :-/
+
 > +endef
+> +TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYO_FILES
+> +endif
+> --
+> 2.7.4
+>
 
-Why do you to this inside the BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
-conditional? I think you could simply install this static library to
-staging unconditionally.
+With this fix, you have my:
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-Thanks!
+Regards,
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
