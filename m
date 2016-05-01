@@ -1,30 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 May 2016 23:42:37 +0200
-Subject: [Buildroot] [PATCH 3/5] package/nginx: add thread pool support
-In-Reply-To: <1462132345-28253-3-git-send-email-martin@barkynet.com>
-References: <1462132345-28253-1-git-send-email-martin@barkynet.com>
- <1462132345-28253-3-git-send-email-martin@barkynet.com>
-Message-ID: <20160501234237.2618d1a3@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun,  1 May 2016 18:47:30 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.2.x series
+Message-ID: <1462139250-28208-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Sun,  1 May 2016 20:52:23 +0100, Martin Bark wrote:
-
->  NGINX_CONF_OPTS += \
-> -	$(if $(BR2_PACKAGE_NGINX_FILE_AIO),--with-file-aio)
-> +	$(if $(BR2_PACKAGE_NGINX_FILE_AIO),--with-file-aio) \
-> +	$(if $(BR2_PACKAGE_NGINX_THREADS),--with-threads)
-
-Just curious, any reason to not enable this as soon as
-BR2_TOOLCHAIN_HAS_THREADS=y ?
-
-Thomas
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2da947b..46f34e6 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -210,7 +210,7 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.79"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.80"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.59"	if BR2_KERNEL_HEADERS_3_12
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
