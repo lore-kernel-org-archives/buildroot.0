@@ -1,41 +1,35 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Sun, 1 May 2016 22:46:41 +0200
-Subject: [Buildroot] [PATCH v6 3/3] beaglebone: adds barebox bootloader
- defconfig
-In-Reply-To: <20160501143518.750be17c@free-electrons.com>
-References: <cover.1461531859.git.pieter@boesman.nl>
- <f0177f323edba43b5df02ba0313698a16a68e287.1461531859.git.pieter@boesman.nl>
- <20160501143518.750be17c@free-electrons.com>
-Message-ID: <20160501204641.GA32055@smipidev>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 1 May 2016 22:46:18 +0200
+Subject: [Buildroot] [PATCH v3 4/9] python-crossbar: fix
+	byte-compilation of .pyc files
+In-Reply-To: <1462133720-409-5-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1462133720-409-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1462133720-409-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAHXCMM+PmA=FYUwsm5Si7LNhXL6qEM=UpJLJ88wVg0m0osnMUA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thomas, all,
 
-On Sun, May 01, 2016 at 02:35:18PM +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun, 24 Apr 2016 23:15:25 +0200, Pieter Smith wrote:
-> > * Builds the barebox MLO and bootloader.
-> > * Generates a bootable SD card image with boot and rootfs partitions.
-> > * Barebox integrates a perfectly good device-tree for the bbb, so no dtb is
-> >   being generated with the kernel.
-> > 
-> > Signed-off-by: Pieter Smith <pieter@boesman.nl>
-> 
-> As we discussed, I've marked this one as rejected in patchwork. I don't
-> think it's worth hacving a separate defconfig for the BeagleBone, whose
-> only difference is to use Barebox instead of U-Boot.
+On Sun, May 1, 2016 at 10:15 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> For its continuous integration tests, python-crossbar includes one .py
+> file that intentionally has a syntax error. Until now, this wasn't
+> causing any problem, but with the introduction of a Python
+> byte-compilation process that errors out when there is a failure, it
+> is going to become a problem.
+>
+> We simply add a patch that removes the syntax error, as we don't care
+> about it in the context of Buildroot. The problem has been reported
+> upstream to see if a better fix is possible.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-Understood. Hopefully people can find it back in the mail archives. ;-)
+Regards,
 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-- Pieter
+-- 
+Samuel
