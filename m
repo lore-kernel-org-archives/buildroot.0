@@ -1,48 +1,193 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  1 May 2016 22:15:18 +0200
-Subject: [Buildroot] [PATCH v3 7/9] python-pexpect: fix byte-compilation
-	with Python 2
+Date: Sun,  1 May 2016 22:15:19 +0200
+Subject: [Buildroot] [PATCH v3 8/9] python/python3: globalize *.pyc files
+	compilation
 In-Reply-To: <1462133720-409-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1462133720-409-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1462133720-409-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1462133720-409-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pexpect contains one file, async.py, that is only meant to be used
-with Python 3. Due to this, it fails to byte-compile with Python 2,
-which will become a problem once we make byte-compilation failures
-fatal failures that abort the build.
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-As suggested by upstream at
-https://github.com/pexpect/pexpect/issues/290, we simply remove the
-problematic file when building with Python 2.
+Currently, each python package (be it the python interpreter package
+itself or external python modules) is responsible for compiling its
+.py into .pyc files. Unfortunately, this is not ideal as some packages
+only install .py files without compiling them into .pyc files. In this
+case, if the Buildroot configuration specifies to keep only the .pyc
+files, the .py files are removed and lost.
 
+To address this, this commit changes the logic by making the
+compilation of .pyc files a global operation: the python interpreter
+packages register a target finalize hook that is in charge of
+compiling all installed .py files.
+
+The *.pyc generation on a per package basis is disabled in the
+python-package infrastructure by passing the "--no-compile" option to
+setup.py.
+
+The *.pyc generation for the Python interpreter internal modules is
+disabled through --disable-pyc-build configure option.
+
+A small helper script is used to perform the compilation, the purpose
+of this script is to abort the compilation process if one of the .py
+file cannot be compiled. It has been provided by Samuel Martin and
+integrated into this commit.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
+[Thomas:
+ - rework for python 3.5
+ - integrate Samuel proposal that allows to detect compilation
+   failures.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/python-pexpect/python-pexpect.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/pkg-python.mk        |  2 +-
+ package/python/python.mk     | 16 +++++++++++++++-
+ package/python3/python3.mk   | 20 +++++++++++++++-----
+ support/scripts/pycompile.py | 24 ++++++++++++++++++++++++
+ 4 files changed, 55 insertions(+), 7 deletions(-)
+ create mode 100644 support/scripts/pycompile.py
 
-diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
-index b74bf83..40a1741 100644
---- a/package/python-pexpect/python-pexpect.mk
-+++ b/package/python-pexpect/python-pexpect.mk
-@@ -11,4 +11,14 @@ PYTHON_PEXPECT_LICENSE = ISC
- PYTHON_PEXPECT_LICENSE_FILES = LICENSE
- PYTHON_PEXPECT_SETUP_TYPE = distutils
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index b7a702d..9725d24 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -253,7 +253,7 @@ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	(cd $$($$(PKG)_BUILDDIR)/; \
+ 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
+-		$$($(2)_PYTHON_INTERPRETER) setup.py install \
++		$$($(2)_PYTHON_INTERPRETER) setup.py install --no-compile \
+ 		$$($$(PKG)_BASE_INSTALL_TARGET_OPTS) \
+ 		$$($$(PKG)_INSTALL_TARGET_OPTS))
+ endef
+diff --git a/package/python/python.mk b/package/python/python.mk
+index c9aa0af..c05d7a5 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -143,7 +143,8 @@ PYTHON_CONF_OPTS += \
+ 	--disable-tk		\
+ 	--disable-nis		\
+ 	--disable-dbm		\
+-	--disable-pyo-build
++	--disable-pyo-build	\
++	--disable-pyc-build
  
-+# async.py is not usable with Python 2, and removing is the solution
-+# recommended by upstream:
-+# https://github.com/pexpect/pexpect/issues/290
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+define PYTHON_PEXPECT_REMOVE_ASYNC_PY
-+	$(RM) $(@D)/pexpect/async.py
+ # This is needed to make sure the Python build process doesn't try to
+ # regenerate those files with the pgen program. Otherwise, it builds
+@@ -217,6 +218,17 @@ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
++define PYTHON_CREATE_PYC_FILES
++	PYTHONPATH="$(PYTHON_PATH)" \
++	$(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
++		support/scripts/pycompile.py \
++		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
 +endef
-+PYTHON_PEXPECT_POST_PATCH_HOOKS += PYTHON_PEXPECT_REMOVE_ASYNC_PY
++
++ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON_PY_PYC),y)
++TARGET_FINALIZE_HOOKS += PYTHON_CREATE_PYC_FILES
 +endif
 +
- $(eval $(python-package))
+ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+ define PYTHON_REMOVE_PY_FILES
+ 	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
+@@ -224,6 +236,8 @@ endef
+ TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
+ endif
+ 
++# Normally, *.pyc files should not have been compiled, but just in
++# case, we make sure we remove all of them.
+ ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
+ define PYTHON_REMOVE_PYC_FILES
+ 	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index fddbf1b..80a2ab6 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -78,10 +78,6 @@ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+ PYTHON3_CONF_OPTS += --enable-old-stdlib-cache
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
+-PYTHON3_CONF_OPTS += --disable-pyc-build
+-endif
+-
+ ifeq ($(BR2_PACKAGE_PYTHON3_SQLITE),y)
+ PYTHON3_DEPENDENCIES += sqlite
+ else
+@@ -135,7 +131,8 @@ PYTHON3_CONF_OPTS += \
+ 	--disable-lib2to3	\
+ 	--disable-tk		\
+ 	--disable-nis		\
+-	--disable-idle3
++	--disable-idle3		\
++	--disable-pyc-build
+ 
+ # Python builds two tools to generate code: 'pgen' and
+ # '_freeze_importlib'. Unfortunately, for the target Python, they are
+@@ -212,6 +209,17 @@ PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdat
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
++define PYTHON3_CREATE_PYC_FILES
++	PYTHONPATH="$(PYTHON3_PATH)" \
++	$(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
++		support/scripts/pycompile.py \
++		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
++endef
++
++ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PY_PYC),y)
++TARGET_FINALIZE_HOOKS += PYTHON3_CREATE_PYC_FILES
++endif
++
+ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+ define PYTHON3_REMOVE_PY_FILES
+ 	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
+@@ -219,6 +227,8 @@ endef
+ TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
+ endif
+ 
++# Normally, *.pyc files should not have been compiled, but just in
++# case, we make sure we remove all of them.
+ ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
+ define PYTHON3_REMOVE_PYC_FILES
+ 	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
+diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+new file mode 100644
+index 0000000..fde711a
+--- /dev/null
++++ b/support/scripts/pycompile.py
+@@ -0,0 +1,24 @@
++#!/usr/bin/env python
++
++# Wrapper for python2 and python3 around compileall to raise exception
++# when a python byte code generation failed.
++#
++# Inspired from:
++#   http://stackoverflow.com/questions/615632/how-to-detect-errors-from-compileall-compile-dir
++
++from __future__ import print_function
++import sys
++import py_compile
++import compileall
++
++class ReportProblem:
++    def __nonzero__(self):
++        type, value, traceback = sys.exc_info()
++        if type is not None and issubclass(type, py_compile.PyCompileError):
++            print("Cannot compile %s" %value.file)
++            raise value
++        return 1
++
++report_problem = ReportProblem()
++
++compileall.compile_dir(sys.argv[1], quiet=report_problem)
 -- 
 2.7.4
