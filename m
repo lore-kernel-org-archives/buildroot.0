@@ -1,38 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 May 2016 22:35:20 +0200
-Subject: [Buildroot] [PATCH] fdk-aac: fix build with GCC 6
-In-Reply-To: <1462094288-8110-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1462094288-8110-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20160501223520.73aba2d7@free-electrons.com>
+Date: Sun, 1 May 2016 22:35:42 +0200
+Subject: [Buildroot] [git commit] crda: fix build with GCC 6
+Message-ID: <20160501203545.AC0FF819C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=34130233023233ab8c59df38af9c9771fa706902
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  1 May 2016 11:18:08 +0200, J?rg Krause wrote:
-> GCC 6 defaults to -std=gnu++14 instead of -std=gnu++98. The C++11 standard does
-> not allow "narrowing conversions" which is why building fdk-aac with GCC 6
-> fails:
-> 
-> libAACenc/src/aacEnc_rom.cpp:661:1: error: narrowing conversion of '2180108801u' from 'unsigned int' to 'FIXP_DBL {aka long int}' inside { } [-Wnarrowing]
-> 
-> Use '-std=gnu++98' as suggested by "Porting to GCC 6" [1].
-> 
-> [1] https://gcc.gnu.org/gcc-6/porting_to.html
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/fdk-aac/fdk-aac.mk | 3 +++
->  1 file changed, 3 insertions(+)
+Building crda with GCC 6 fails because of all compiler warnings are treated as
+errors. Disable the compiler option '-Werror':
 
-Applied to master, but please report the bug upstream so that they fix
-in their source code or build system. Thanks!
+keys-gcrypt.c:94:32: error: ???keys??? defined but not used [-Werror=unused-const-variable=]
+ static const struct key_params keys[] = {
+                                ^~~~
+cc1: all warnings being treated as errors
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Add a patch to drop '-Werror' from CFLAGS.
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/crda/0003-drop-werror.patch | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+diff --git a/package/crda/0003-drop-werror.patch b/package/crda/0003-drop-werror.patch
+new file mode 100644
+index 0000000..072e3fc
+--- /dev/null
++++ b/package/crda/0003-drop-werror.patch
+@@ -0,0 +1,37 @@
++From f38253e066dee96b148be1b79a6b4a696ee0ae0b Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Sun, 1 May 2016 10:05:48 +0200
++Subject: [PATCH] drop werror
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Building crda with GCC 6 fails because of all compiler warnings are treated as
++errors. Disable the compiler option '-Werror':
++
++keys-gcrypt.c:94:32: error: ???keys??? defined but not used [-Werror=unused-const-variable=]
++ static const struct key_params keys[] = {
++                                ^~~~
++cc1: all warnings being treated as errors
++
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 74f1172..e9b417f 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -26,7 +26,7 @@ PUBKEY_DIR?=pubkeys
++ RUNTIME_PUBKEY_DIR?=/etc/wireless-regdb/pubkeys
++ 
++ CFLAGS += -O2 -fpic
++-CFLAGS += -std=gnu99 -Wall -Werror -pedantic
+++CFLAGS += -std=gnu99 -Wall -pedantic
++ CFLAGS += -Wall -g
++ LDLIBREG += -lreg
++ LDLIBS += $(LDLIBREG)
++-- 
++2.8.2
++
