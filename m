@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 May 2016 14:58:19 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: bump CodeSourcery
- NiosII to 2015.11-130
-In-Reply-To: <1462045292-22024-1-git-send-email-romain.naour@gmail.com>
-References: <1462045292-22024-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160501145819.26065bdf@free-electrons.com>
+Date: Sun, 1 May 2016 14:58:22 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain-external: bump CodeSourcery
+ AMD64 to 2015.11-139
+In-Reply-To: <1462050625-9973-1-git-send-email-romain.naour@gmail.com>
+References: <1462050625-9973-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160501145822.66ab6ea2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +13,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 30 Apr 2016 21:41:32 +0200, Romain Naour wrote:
+On Sat, 30 Apr 2016 23:10:24 +0200, Romain Naour wrote:
 > From getting-started.pdf:
-> - DWARF signed LEB128 encoding fix
-> - Fix CVE 2015-7547 getaddrinfo
-> - Breakpoint in non-existent file bug fix
+> - Linker bug fix.
+> - Fix CVE 2015-7547 getaddrinfo.
+> - Breakpoint in non-existent file bug fix.
 > 
 > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
