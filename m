@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 May 2016 14:58:24 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain-external: bump CodeSourcery
- MIPS to 2016.06-8
-In-Reply-To: <1462050625-9973-2-git-send-email-romain.naour@gmail.com>
-References: <1462050625-9973-1-git-send-email-romain.naour@gmail.com>
- <1462050625-9973-2-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160501145824.4a1e1fb5@free-electrons.com>
+Date: Sun, 1 May 2016 15:00:14 +0200
+Subject: [Buildroot] [PATCH buildroot-test] toolchains/config: remove
+ sourcery powerpc toolchains
+In-Reply-To: <1461935953-6011-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1461935953-6011-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160501150014.45b60d88@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 30 Apr 2016 23:10:25 +0200, Romain Naour wrote:
-> Add hash for the toolchain sources.
+On Fri, 29 Apr 2016 10:19:13 -0300, Gustavo Zacarias wrote:
+> To match their removal from main buildroot.
 > 
-> Runtime tested with Qemu with qemu_mips_malta_defconfig
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  toolchain/toolchain-external/Config.in               | 8 ++++----
->  toolchain/toolchain-external/toolchain-external.hash | 7 +++----
->  toolchain/toolchain-external/toolchain-external.mk   | 2 +-
->  3 files changed, 8 insertions(+), 9 deletions(-)
+>  web/toolchains/configs/sourcery-powerpc-e500v2.config | 3 ---
+>  web/toolchains/configs/sourcery-powerpc.config        | 2 --
+>  web/toolchains/configs/toolchain-configs.csv          | 2 --
+>  3 files changed, 7 deletions(-)
+>  delete mode 100644 web/toolchains/configs/sourcery-powerpc-e500v2.config
+>  delete mode 100644 web/toolchains/configs/sourcery-powerpc.config
 
-Applied to master, thanks.
+Applied to buildroot-test, thanks!
 
 Thomas
 -- 
