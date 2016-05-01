@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 May 2016 23:02:12 +0200
-Subject: [Buildroot] [git commit] php-zmq: bump version to 1.1.3
-Message-ID: <20160501210216.CC9C481E5A@busybox.osuosl.org>
+Date: Sun, 1 May 2016 23:02:01 +0200
+Subject: [Buildroot] [git commit] php-geoip: bump version to HEAD of master
+	on GitHub
+Message-ID: <20160501210216.B49CF81E5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f4a88209a4eecfda4935aa86a03a09276712417
+commit: https://git.buildroot.net/buildroot/commit/?id=266e0d443e2337f613fd46ec665eee334f15681c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Related: https://bugs.php.net/bug.php?id=71083
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php-zmq/php-zmq.hash | 2 +-
- package/php-zmq/php-zmq.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/php-geoip/php-geoip.hash | 2 +-
+ package/php-geoip/php-geoip.mk   | 6 ++----
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/php-zmq/php-zmq.hash b/package/php-zmq/php-zmq.hash
-index 50ce639..c99e351 100644
---- a/package/php-zmq/php-zmq.hash
-+++ b/package/php-zmq/php-zmq.hash
+diff --git a/package/php-geoip/php-geoip.hash b/package/php-geoip/php-geoip.hash
+index 275a098..61945cf 100644
+--- a/package/php-geoip/php-geoip.hash
++++ b/package/php-geoip/php-geoip.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	c9b0af56826fc5e1a95a0fef25e671d9839a421d79e174931faacd8bee389f31	zmq-1.1.2.tgz
-+sha256 c492375818bd51b355352798fb94f04d6828c6aeda41ba813849624af74144ce  zmq-1.1.3.tgz
-diff --git a/package/php-zmq/php-zmq.mk b/package/php-zmq/php-zmq.mk
-index 88c962d..2730996 100644
---- a/package/php-zmq/php-zmq.mk
-+++ b/package/php-zmq/php-zmq.mk
-@@ -4,10 +4,9 @@
+-sha256	82c6deb7264d2ff7c4d6c45a7d27cff7ab097be965795e317e04a9c5b7be98b9	geoip-1.1.0.tgz
++sha256 8b5e8dec6353c437809e58d798627927ae659682b5bbdad023e9e569c278bfed  php-geoip-1fd53288458100e9e30acf5a62bc9ef8426513d3.tar.gz
+diff --git a/package/php-geoip/php-geoip.mk b/package/php-geoip/php-geoip.mk
+index 0826c19..93dcf01 100644
+--- a/package/php-geoip/php-geoip.mk
++++ b/package/php-geoip/php-geoip.mk
+@@ -4,10 +4,8 @@
  #
  ################################################################################
  
--PHP_ZMQ_VERSION = 1.1.2
-+PHP_ZMQ_VERSION = 1.1.3
- PHP_ZMQ_SOURCE = zmq-$(PHP_ZMQ_VERSION).tgz
+-PHP_GEOIP_VERSION = 1.1.0
+-PHP_GEOIP_SOURCE = geoip-$(PHP_GEOIP_VERSION).tgz
 -# pecl.php.net returns html with db connect failed
--PHP_ZMQ_SITE = http://sources.buildroot.net
-+PHP_ZMQ_SITE = https://pecl.php.net/get
+-PHP_GEOIP_SITE = http://sources.buildroot.net
++PHP_GEOIP_VERSION = 1fd53288458100e9e30acf5a62bc9ef8426513d3
++PHP_GEOIP_SITE = $(call github,php7-extensions,ext-php7-geoip,$(PHP_GEOIP_VERSION))
+ PHP_GEOIP_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+ 	--with-geoip=$(STAGING_DIR)/usr
  # phpize does the autoconf magic
- PHP_ZMQ_DEPENDENCIES = php zeromq host-autoconf host-pkgconf
- PHP_ZMQ_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config
