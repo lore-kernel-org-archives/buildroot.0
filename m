@@ -1,63 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 May 2016 22:59:50 +0200
-Subject: [Buildroot] [PATCH] package/luajit: luajit.pc: return the path
- to host-luajit from the Buildroot package
-In-Reply-To: <1462135800-10581-1-git-send-email-romain.naour@gmail.com>
-References: <1462135800-10581-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160501225950.7bdfbbd4@free-electrons.com>
+Date: Sun, 1 May 2016 23:02:12 +0200
+Subject: [Buildroot] [git commit] php-zmq: bump version to 1.1.3
+Message-ID: <20160501210216.CC9C481E5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3f4a88209a4eecfda4935aa86a03a09276712417
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  1 May 2016 22:50:00 +0200, Romain Naour wrote:
-> The luajit.pc file is manually generated in the luajit Makefile, so it give a wrong
-> path for host-luajit.
-> 
-> $ host/usr/bin/pkgconf --cflags luajit
-> /usr/include/luajit-2.0
-> 
-> It should be:
-> $ host/usr/bin/pkgconf --cflags luajit
-> [...]output/host/usr/include/luajit-2.0
-> 
-> Add a port install hook to fix luajit.pc for host-luajit.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/php-zmq/php-zmq.hash | 2 +-
+ package/php-zmq/php-zmq.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-That's the wrong solution. The proper solution is:
-
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 623bfcc..81a2660 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -66,13 +66,13 @@ LUAJIT_POST_INSTALL_TARGET_HOOKS += LUAJIT_INSTALL_SYMLINK
+diff --git a/package/php-zmq/php-zmq.hash b/package/php-zmq/php-zmq.hash
+index 50ce639..c99e351 100644
+--- a/package/php-zmq/php-zmq.hash
++++ b/package/php-zmq/php-zmq.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	c9b0af56826fc5e1a95a0fef25e671d9839a421d79e174931faacd8bee389f31	zmq-1.1.2.tgz
++sha256 c492375818bd51b355352798fb94f04d6828c6aeda41ba813849624af74144ce  zmq-1.1.3.tgz
+diff --git a/package/php-zmq/php-zmq.mk b/package/php-zmq/php-zmq.mk
+index 88c962d..2730996 100644
+--- a/package/php-zmq/php-zmq.mk
++++ b/package/php-zmq/php-zmq.mk
+@@ -4,10 +4,9 @@
+ #
+ ################################################################################
  
- # host-efl package needs host-luajit to be linked dynamically.
- define HOST_LUAJIT_BUILD_CMDS
--       $(MAKE) PREFIX="/usr" BUILDMODE=dynamic \
-+       $(MAKE) PREFIX="$(HOST_DIR)/usr" BUILDMODE=dynamic \
-                TARGET_LDFLAGS="$(HOST_LDFLAGS)" \
-                -C $(@D) amalg
- endef
- 
- define HOST_LUAJIT_INSTALL_CMDS
--       $(MAKE) PREFIX="/usr" DESTDIR="$(HOST_DIR)" LDCONFIG=true -C $(@D) install
-+       $(MAKE) PREFIX="$(HOST_DIR)/usr" LDCONFIG=true -C $(@D) install
- endef
- 
- $(eval $(generic-package))
-
-Indeed, for host packages, the prefix should be $(HOST_DIR)/usr.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-PHP_ZMQ_VERSION = 1.1.2
++PHP_ZMQ_VERSION = 1.1.3
+ PHP_ZMQ_SOURCE = zmq-$(PHP_ZMQ_VERSION).tgz
+-# pecl.php.net returns html with db connect failed
+-PHP_ZMQ_SITE = http://sources.buildroot.net
++PHP_ZMQ_SITE = https://pecl.php.net/get
+ # phpize does the autoconf magic
+ PHP_ZMQ_DEPENDENCIES = php zeromq host-autoconf host-pkgconf
+ PHP_ZMQ_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config
