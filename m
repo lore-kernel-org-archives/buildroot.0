@@ -1,104 +1,37 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Sun,  1 May 2016 20:52:22 +0100
-Subject: [Buildroot] [PATCH 2/5] package/nginx: add support for stream proxy
-	modules
-In-Reply-To: <1462132345-28253-1-git-send-email-martin@barkynet.com>
-References: <1462132345-28253-1-git-send-email-martin@barkynet.com>
-Message-ID: <1462132345-28253-2-git-send-email-martin@barkynet.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 1 May 2016 21:53:41 +0200
+Subject: [Buildroot] [PATCH v2 0/4] Bump to Python 3.5 and pyc
+ compilation improvements
+In-Reply-To: <CAGm1_ksm6GehBroL6ExvON2+BjWEj2XiFH+AD6p2p3fQ6tCsvA@mail.gmail.com>
+References: <1462020471-29986-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAHXCMMLdTCD5CgsNwaCZRXWa4EXcuHpm18JjuWyLh_TBVx1k4Q@mail.gmail.com>
+ <20160501152642.3f888793@free-electrons.com>
+ <CAHXCMMJ+01WoVug=55dYer2175Wsvdvfo4GTBfTQhi6j-2Ge+w@mail.gmail.com>
+ <CAGm1_kt8nCDByM4Hhbc+GGzTF_EiKdKtOHBjtKnyGRwtzTLs=Q@mail.gmail.com>
+ <20160501191117.40a7456b@free-electrons.com>
+ <CAGm1_ksm6GehBroL6ExvON2+BjWEj2XiFH+AD6p2p3fQ6tCsvA@mail.gmail.com>
+Message-ID: <20160501215341.33f04f34@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/nginx/Config.in | 43 +++++++++++++++++++++++++++++++++++++++++++
- package/nginx/nginx.mk  | 18 ++++++++++++++++++
- 2 files changed, 61 insertions(+)
+Hello,
 
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index 0c39a63..f925cc7 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -304,6 +304,49 @@ config BR2_PACKAGE_NGINX_MAIL_SMTP_MODULE
- 
- endif #BR2_PACKAGE_NGINX_MAIL
- 
-+config BR2_PACKAGE_NGINX_STREAM
-+	bool "stream proxy modules"
-+
-+if BR2_PACKAGE_NGINX_STREAM
-+
-+config BR2_PACKAGE_NGINX_STREAM_SSL_MODULE
-+	bool "ngx_stream_ssl_module"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  Enable ngx_stream_ssl_module
-+
-+config BR2_PACKAGE_NGINX_STREAM_LIMIT_CONN_MODULE
-+	bool "ngx_stream_limit_conn_module"
-+	default y
-+	help
-+	  Enable ngx_stream_limit_conn_module
-+
-+config BR2_PACKAGE_NGINX_STREAM_ACCESS_MODULE
-+	bool "ngx_stream_access_module"
-+	default y
-+	help
-+	  Enable ngx_stream_access_module
-+
-+config BR2_PACKAGE_NGINX_STREAM_UPSTREAM_HASH_MODULE
-+	bool "ngx_stream_upstream_hash_module"
-+	default y
-+	help
-+	  Enable ngx_stream_upstream_hash_module
-+
-+config BR2_PACKAGE_NGINX_STREAM_UPSTREAM_LEAST_CONN_MODULE
-+	bool "ngx_stream_upstream_least_conn_module"
-+	default y
-+	help
-+	  Enable ngx_stream_upstream_least_conn_module
-+
-+config BR2_PACKAGE_NGINX_STREAM_UPSTREAM_ZONE_MODULE
-+	bool "ngx_stream_upstream_zone_module"
-+	default y
-+	help
-+	  Enable ngx_stream_upstream_zone_module
-+
-+endif #BR2_PACKAGE_NGINX_STREAM
-+
- comment "misc. modules"
- 
- config BR2_PACKAGE_NGINX_SELECT_MODULE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 25fb9a8..7f3b075 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -207,6 +207,24 @@ NGINX_CONF_OPTS += \
- 
- endif # BR2_PACKAGE_NGINX_MAIL
- 
-+# stream modules
-+ifeq ($(BR2_PACKAGE_NGINX_STREAM),y)
-+NGINX_CONF_OPTS += --with-stream
-+
-+ifeq ($(BR2_PACKAGE_NGINX_STREAM_SSL_MODULE),y)
-+NGINX_DEPENDENCIES += openssl
-+NGINX_CONF_OPTS += --with-stream_ssl_module
-+endif
-+
-+NGINX_CONF_OPTS += \
-+	$(if $(BR2_PACKAGE_NGINX_STREAM_LIMIT_CONN_MODULE),,--without-stream_limit_conn_module) \
-+	$(if $(BR2_PACKAGE_NGINX_STREAM_ACCESS_MODULE),,--without-stream_access_module) \
-+	$(if $(BR2_PACKAGE_NGINX_STREAM_UPSTREAM_HASH_MODULE),,--without-stream_upstream_hash_module) \
-+	$(if $(BR2_PACKAGE_NGINX_STREAM_UPSTREAM_LEAST_CONN_MODULE),,--without-stream_upstream_least_conn_module) \
-+	$(if $(BR2_PACKAGE_NGINX_STREAM_UPSTREAM_ZONE_MODULE),,--without-stream_upstream_zone_module)
-+
-+endif # BR2_PACKAGE_NGINX_STREAM
-+
- define NGINX_DISABLE_WERROR
- 	$(SED) 's/-Werror//g' -i $(@D)/auto/cc/*
- endef
+On Sun, 1 May 2016 19:21:54 +0200, Yegor Yefremov wrote:
+
+> > Can you refresh me on that one, I don't remember.  
+> 
+> https://github.com/crossbario/crossbar/pull/638
+
+Thanks for reminding me. I did some filesystem size tests, and added
+them to the issue as a comment.
+
+Thanks!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
