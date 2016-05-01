@@ -1,200 +1,105 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Sun, 01 May 2016 17:53:58 +0200
-Subject: [Buildroot] [PATCH v4] domoticz: new package
-In-Reply-To: <22056_1461930489_572349F9_22056_4261_12_bebd6583-479b-48a1-be4c-17c5c21aa34a@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
-References: <22056_1461930489_572349F9_22056_4261_12_bebd6583-479b-48a1-be4c-17c5c21aa34a@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
-Message-ID: <57262696.8010503@free.fr>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sun,  1 May 2016 11:58:07 -0400
+Subject: [Buildroot] [PATCH] syslinux: fix boot hang when host-gcc is 5.3
+Message-ID: <1462118287-5017-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Syslinux uses the host version of gcc to build to bootloader. On systems
+with gcc 5.3, this results in a bootloader that hangs. This issue has
+been addressed in upstream syslinux, but an official release has not
+been made yet. This commit adds the upstream patch to fix the issue.
 
-On 29/04/2016 13:48, fabrice.fontaine at orange.com wrote:
-> Domoticz is a Home Automation System that lets you monitor andi
-> configure various devices like: Lights, Switches, various
-> sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
-> and much more. Notifications/Alerts can be sent to any mobile device.
->
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> ---
-> Changes v3 -> v4 (after review of Julien Boibessot):
->  - Remove unneeded files (License and updatedomo) from target directory.
->    Do not remove History.txt as it is used in source code
->  - Install domoticz binary and all its files in /opt/domoticz instead of
->    /usr by overriding CMAKE_INSTALL_PREFIX
->  - Modify and install domoticz.sh if systemV is enabled by defining
->    DOMOTICZ_INSTALL_INIT_SYSV
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ .../0001-Fix-gcc-5-ALIGN-causing-Boot-error.patch  | 76 ++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100644 boot/syslinux/0001-Fix-gcc-5-ALIGN-causing-Boot-error.patch
 
-Shame on me for having asked for this, but after test of your patch v4
-it seems that domoticz.sh isn't compatible with
-busybox init system (script misses log_xxxx_msg helpers and can't source
-neither /lib/init/vars.sh nor /lib/lsb/init-functions).
-Don't know if it better to do some more "sed" in domoticz.sh or add a
-custom init script... :-(
-
-Maybe Thomas would be of better advise ?
-
-Otherwise your package builds fine and works with zwave and enocean
-stuff on ARM.
-
-Regards,
-Julien
-
-
->
-> Changes v2 -> v3 (after review of Samuel Martin):
->  - Use OFF instead of no for consistency with other cmake packages
->  - Always set USE_STATIC_BOOST and USE_STATIC_OPENZWAVE to OFF as
->    BR2_STATIC_LIBS will always be false due to mosquitto dependency
->
-> Changes v1 -> v2 (after review of Samuel Martin):
->  - Add a hash file
->  - Replace the dependency on BR2_PACKAGE_LUA_5_2 by a dependency on
->    BR2_PACKAGE_LUA_5_2 or BR2_PACKAGE_LUA_5_3
->  - Add dependencies on BR2_USE_MMU and !BR2_STATIC_LIBS (from mosquitto)
->  - Add dependency on BR2_PACKAGE_BOOST_ARCH_SUPPORTS (from boost)
->  - Automatically add zwave support in domoticz if the user has selected
->    the openzwave package
->  - Set USE_STATIC_BOOST and USE_STATIC_OPENZWAVE to the correct values
->    in domoticz.mk depending on BR2_STATIC_LIBS value to avoid breaking
->    static-only build
->
->  package/Config.in              |  1 +
->  package/domoticz/Config.in     | 32 +++++++++++++++++++++
->  package/domoticz/domoticz.hash |  2 ++
->  package/domoticz/domoticz.mk   | 63 ++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 98 insertions(+)
->  create mode 100644 package/domoticz/Config.in
->  create mode 100644 package/domoticz/domoticz.hash
->  create mode 100644 package/domoticz/domoticz.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index f242181..2156d5b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1320,6 +1320,7 @@ menu "Miscellaneous"
->  	source "package/bc/Config.in"
->  	source "package/clamav/Config.in"
->  	source "package/collectd/Config.in"
-> +	source "package/domoticz/Config.in"
->  	source "package/empty/Config.in"
->  	source "package/gnuradio/Config.in"
->  	source "package/googlefontdirectory/Config.in"
-> diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-> new file mode 100644
-> index 0000000..c7c2878
-> --- /dev/null
-> +++ b/package/domoticz/Config.in
-> @@ -0,0 +1,32 @@
-> +config BR2_PACKAGE_DOMOTICZ
-> +	bool "domoticz"
-> +	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
-> +	depends on BR2_USE_MMU # mosquitto
-> +	depends on !BR2_STATIC_LIBS # mosquitto
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_USE_WCHAR
-> +	depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
-> +	select BR2_PACKAGE_BOOST
-> +	select BR2_PACKAGE_BOOST_DATE_TIME
-> +	select BR2_PACKAGE_BOOST_SYSTEM
-> +	select BR2_PACKAGE_BOOST_THREAD
-> +	select BR2_PACKAGE_LIBCURL
-> +	select BR2_PACKAGE_MOSQUITTO
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_SQLITE
-> +	select BR2_PACKAGE_ZLIB
-> +	help
-> +	  Domoticz is a Home Automation System that lets you monitor andi
-> +	  configure various devices like: Lights, Switches, various
-> +	  sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
-> +	  and much more. Notifications/Alerts can be sent to any mobile device.
-> +
-> +	  http://domoticz.com
-> +
-> +comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynamic library"
-> +	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
-> +		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
-> diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
-> new file mode 100644
-> index 0000000..9180a9b
-> --- /dev/null
-> +++ b/package/domoticz/domoticz.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256	02b4cdde8e376258aeae3d5621edf8bb6b3563c34282e50194db343fcec9c0f5	domoticz-3.4834.tar.gz
-> diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-> new file mode 100644
-> index 0000000..7402be5
-> --- /dev/null
-> +++ b/package/domoticz/domoticz.mk
-> @@ -0,0 +1,63 @@
-> +################################################################################
-> +#
-> +# domoticz
-> +#
-> +################################################################################
-> +
-> +DOMOTICZ_VERSION = 3.4834
-> +DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
-> +DOMOTICZ_LICENSE = GPLv3
-> +DOMOTICZ_LICENSE_FILES = License.txt
-> +DOMOTICZ_DEPENDENCIES = boost host-pkgconf libcurl lua mosquitto openssl \
-> +        sqlite zlib
-> +
-> +# Due to mosquitto dependency, domoticz depends on !BR2_STATIC_LIBS so sets
-> +# USE_STATIC_BOOST to OFF
-> +DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
-> +
-> +# Do not use any built-in libraries which are enabled by default for lua,
-> +# sqlite and mqtt
-> +DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_LUA=OFF
-> +DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_SQLITE=OFF
-> +DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_MQTT=OFF
-> +
-> +ifeq ($(BR2_PACKAGE_LIBUSB),y)
-> +DOMOTICZ_DEPENDENCIES += libusb
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_OPENZWAVE),y)
-> +DOMOTICZ_DEPENDENCIES += openzwave
-> +
-> +# Due to mosquitto dependency, domoticz depends on !BR2_STATIC_LIBS so sets
-> +# USE_STATIC_OPENZWAVE to OFF otherwise domoticz will not found openzwave
-> +# library as it searchs by default a static library
-> +DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=OFF
-> +endif
-> +
-> +# Install domoticz in a dedicated directory (/opt/domoticz) as domoticz expects
-> +# by default that all its subdirectories (www, Config, scripts, ...) are in the
-> +# binary directory
-> +DOMOTICZ_TARGET_DIR = /opt/domoticz
-> +DOMOTICZ_CONF_OPTS += -DCMAKE_INSTALL_PREFIX=$(DOMOTICZ_TARGET_DIR)
-> +
-> +# Delete License.txt and updatedomo files installed by domoticz in target
-> +# directory
-> +# Do not delete History.txt as it is used in source code
-> +define DOMOTICZ_REMOVE_UNNEEDED_FILES
-> +	$(RM) $(TARGET_DIR)/$(DOMOTICZ_TARGET_DIR)/License.txt
-> +	$(RM) $(TARGET_DIR)/$(DOMOTICZ_TARGET_DIR)/updatedomo
-> +endef
-> +
-> +DOMOTICZ_POST_INSTALL_TARGET_HOOKS += DOMOTICZ_REMOVE_UNNEEDED_FILES
-> +
-> +# domoticz.sh must be modifed to be used on buildroot as USERNAME and DAEMON
-> +# variables are set respectively to "pi" and "/home/$USERNAME/domoticz/$NAME"
-> +define DOMOTICZ_INSTALL_INIT_SYSV
-> +	$(SED) 's,USERNAME=pi,USERNAME=root,' \
-> +		-e 's,DAEMON=.*,DAEMON=$(DOMOTICZ_TARGET_DIR)/domoticz,' \
-> +		$(@D)/domoticz.sh
-> +	$(INSTALL) -m 755 -D $(@D)/domoticz.sh \
-> +		$(TARGET_DIR)/etc/init.d/S99domoticz
-> +endef
-> +
-> +$(eval $(cmake-package))
+diff --git a/boot/syslinux/0001-Fix-gcc-5-ALIGN-causing-Boot-error.patch b/boot/syslinux/0001-Fix-gcc-5-ALIGN-causing-Boot-error.patch
+new file mode 100644
+index 0000000..2df6766
+--- /dev/null
++++ b/boot/syslinux/0001-Fix-gcc-5-ALIGN-causing-Boot-error.patch
+@@ -0,0 +1,76 @@
++commit e5f2b577ded109291c9632dacb6eaa621d8a59fe
++Author: Sylvain Gault <sylvain.gault@gmail.com>
++Date:   Tue Sep 29 02:38:25 2015 +0200
++
++    bios: Fix alignment change with gcc 5
++    
++    The section aligment specified in the ld scripts have to be greater or
++    equal to those in the .o files generated by gcc.
++    
++    Signed-off-by: Sylvain Gault <sylvain.gault@gmail.com>
++    Tested-by: poma <pomidorabelisima@gmail.com>
++    Signed-off-by: Paulo Alcantara <pcacjr@zytor.com>
++    Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
++
++diff --git a/core/i386/syslinux.ld b/core/i386/syslinux.ld
++index 7b4e012..7390451 100644
++--- a/core/i386/syslinux.ld
+++++ b/core/i386/syslinux.ld
++@@ -266,7 +266,7 @@ SECTIONS
++ 		__text_end = .;
++ 	}
++ 
++-	. = ALIGN(16);
+++	. = ALIGN(32);
++ 
++ 	__rodata_vma = .;
++ 	__rodata_lma = __rodata_vma + __text_lma - __text_vma;
++@@ -361,7 +361,7 @@ SECTIONS
++ 		__dynamic_end = .;
++ 	}
++ 
++-	. = ALIGN(16);
+++	. = ALIGN(32);
++ 
++ 	__data_vma = .;
++ 	__data_lma = __data_vma + __text_lma - __text_vma;
++@@ -377,7 +377,7 @@ SECTIONS
++ 	__pm_code_dwords = (__pm_code_len + 3) >> 2;
++ 
++ 	. = ALIGN(128);
++-	
+++
++ 	__bss_vma = .;
++ 	__bss_lma = .;		/* Dummy */
++ 	.bss (NOLOAD) : AT (__bss_lma) {
++diff --git a/core/x86_64/syslinux.ld b/core/x86_64/syslinux.ld
++index 1057112..bf815c4 100644
++--- a/core/x86_64/syslinux.ld
+++++ b/core/x86_64/syslinux.ld
++@@ -266,7 +266,7 @@ SECTIONS
++ 		__text_end = .;
++ 	}
++ 
++-	. = ALIGN(16);
+++	. = ALIGN(32);
++ 
++ 	__rodata_vma = .;
++ 	__rodata_lma = __rodata_vma + __text_lma - __text_vma;
++@@ -361,7 +361,7 @@ SECTIONS
++ 		__dynamic_end = .;
++ 	}
++ 
++-	. = ALIGN(16);
+++	. = ALIGN(32);
++ 
++ 	__data_vma = .;
++ 	__data_lma = __data_vma + __text_lma - __text_vma;
++@@ -377,7 +377,7 @@ SECTIONS
++ 	__pm_code_dwords = (__pm_code_len + 3) >> 2;
++ 
++ 	. = ALIGN(128);
++-	
+++
++ 	__bss_vma = .;
++ 	__bss_lma = .;		/* Dummy */
++ 	.bss (NOLOAD) : AT (__bss_lma) {
+-- 
+2.5.0
