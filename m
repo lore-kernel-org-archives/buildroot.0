@@ -1,37 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 May 2016 21:53:41 +0200
-Subject: [Buildroot] [PATCH v2 0/4] Bump to Python 3.5 and pyc
- compilation improvements
-In-Reply-To: <CAGm1_ksm6GehBroL6ExvON2+BjWEj2XiFH+AD6p2p3fQ6tCsvA@mail.gmail.com>
-References: <1462020471-29986-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAHXCMMLdTCD5CgsNwaCZRXWa4EXcuHpm18JjuWyLh_TBVx1k4Q@mail.gmail.com>
- <20160501152642.3f888793@free-electrons.com>
- <CAHXCMMJ+01WoVug=55dYer2175Wsvdvfo4GTBfTQhi6j-2Ge+w@mail.gmail.com>
- <CAGm1_kt8nCDByM4Hhbc+GGzTF_EiKdKtOHBjtKnyGRwtzTLs=Q@mail.gmail.com>
- <20160501191117.40a7456b@free-electrons.com>
- <CAGm1_ksm6GehBroL6ExvON2+BjWEj2XiFH+AD6p2p3fQ6tCsvA@mail.gmail.com>
-Message-ID: <20160501215341.33f04f34@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 1 May 2016 22:11:18 +0200
+Subject: [Buildroot] [PATCH] ccache: fix explicit build 'make clean
+	host-ccache'
+In-Reply-To: <20160501143931.7f767fb8@free-electrons.com>
+References: <1461952973-20054-1-git-send-email-patrickdepinguin@gmail.com>
+ <20160501143931.7f767fb8@free-electrons.com>
+Message-ID: <CAAXf6LWxP-Z-aonTSkjsOn0sGq6zhsB2gYta6K1AQYSK3DwmoQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sun, 1 May 2016 19:21:54 +0200, Yegor Yefremov wrote:
+On Sun, May 1, 2016 at 2:39 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Fri, 29 Apr 2016 20:02:53 +0200, Thomas De Schampheleire wrote:
+>
+>> To build host-ccache we need to call the bare compiler. With a standard
+>> 'make', this is guaranteed because host-ccache is built as part of the
+>> dependencies, and a target-specific variable sets HOSTCC/HOSTCXX to the
+>> no-ccache version (see ).fo
+>> However, this is not the case when using 'make host-ccache' explicitly
+>> from a clean build.
+>
+> I think this means that the CC/CXX assignments in
+> support/dependencies/dependencies.mk are useless, no? If you do "make
+> clean host-tar", or "make clean host-xz" or "make clean host-sstrip",
+> it will fail the same way, no? Doesn't this mean that those "special"
+> package should be fixed to define CC=$(HOSTCC_NOCCACHE)
+> CXX=$(HOSTCXX_NOCCACHE) in their environment ?
 
-> > Can you refresh me on that one, I don't remember.  
-> 
-> https://github.com/crossbario/crossbar/pull/638
+After some quick checking, it seems to depend which packages are in
+DEPENDENCIES_HOST_PREREQ: 'make clean host-foo' will fail if host-foo
+is in DEPENDENCIES_HOST_PREREQ but will succeed if it is not. This is
+because packages that all packages get 'dependencies' as dependency,
+except packages that are itself in DEPENDENCIES_HOST_PREREQ.
 
-Thanks for reminding me. I did some filesystem size tests, and added
-them to the issue as a comment.
+So, on my system, 'make clean host-xz' worked fine because I have a
+suitable xzcat already and hence host-xz is not put in
+DEPENDENCIES_HOST_PREREQ. Similar for host-tar. If I cheat and add
+host-xz in DEPENDENCIES_HOST_PREREQ unconditionally, 'make clean
+host-xz' indeed fails.
 
-Thanks!
+This difference depending on the host system also means that a
+solution where e.g. host-xz is changed to set CC and CXX to
+no-ccache-versions is suboptimal: in case host-xz is not in
+DEPENDENCIES_HOST_PREREQ, the package would be built without ccache
+even if it were available. One could argue that there's no need to
+build host-xz in this scenario, but I can imagine other packages that
+can be mandatory in some situations and optional in others.
+Maybe this is nothing to worry about and we should keep things simple:
+don't use ccache for host packages that are potentially a core
+dependency for buildroot.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+What are your thoughts?
+
+>
+>> +# To build host-ccache we need to call the bare compiler. With a standard
+>> +# 'make', this is guaranteed because host-ccache is built as part of the
+>> +# dependencies, and a target-specific variable sets HOSTCC/HOSTCXX to the
+>> +# no-ccache version (see support/dependencies/dependencies.mk).
+>> +# However, this is not the case when using 'make host-ccache'.
+>> +HOST_CCACHE_CONF_ENV += CC=$(HOSTCC_NOCCACHE) CXX=$(HOSTCXX_NOCCACHE)
+>
+> Double quotes around the variable value?
+
+Yes, indeed. Need to fix that in any case.
+
+/Thomas
