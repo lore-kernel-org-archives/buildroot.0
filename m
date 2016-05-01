@@ -1,79 +1,50 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 1 May 2016 23:22:27 +0200
-Subject: [Buildroot] [PATCH v3 6/9] python-pygame: bump version to fix
- Python 3 byte-compilation issue
-In-Reply-To: <1462133720-409-7-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1462133720-409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1462133720-409-7-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAHXCMM+F8XzmFgz4RQax8yr+E9-4hcmUtRf7O0NN7AkOJrj=9w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 1 May 2016 23:29:56 +0200
+Subject: [Buildroot] [git commit] luajit: fix host installation
+Message-ID: <20160501213132.A234781983@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, all,
+commit: https://git.buildroot.net/buildroot/commit/?id=e05a5b8e342f94aae7d79fe648003dd1a65ebc41
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, May 1, 2016 at 10:15 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> The current version of python-pygame in Buildroot does not
-> byte-compile properly with Python 3. Commit 22efec0b44da from upstream
-> fixes the problem, so we take this opportunity to bump the pygame
-> version.
->
-> Fixing byte-compilation is necessary as we will soon enable a
-> mechanism that aborts the build in case of error during the
-> byte-compilation process (while they are today considered as
-> warnings).
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Packages installed for the host should have their prefix set to
+$(HOST_DIR)/usr, and therefore not use DESTDIR at installation time.
 
-> ---
->  package/python-pygame/python-pygame.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/package/python-pygame/python-pygame.mk b/package/python-pygame/python-pygame.mk
-> index 995f80a..1ef2bdf 100644
-> --- a/package/python-pygame/python-pygame.mk
-> +++ b/package/python-pygame/python-pygame.mk
-> @@ -6,7 +6,7 @@
->
->  # stable 1.9.1 release requires V4L which has been wiped out of recent Linux
->  # kernels, so use latest mercurial revision until next stable release is out.
-> -PYTHON_PYGAME_VERSION = f0bb4a4b365d
-> +PYTHON_PYGAME_VERSION = d61ea8eabd56
->  PYTHON_PYGAME_SOURCE = pygame-$(PYTHON_PYGAME_VERSION).tar.gz
->  PYTHON_PYGAME_SITE = https://bitbucket.org/pygame/pygame
->  PYTHON_PYGAME_SITE_METHOD = hg
-> @@ -66,6 +66,10 @@ define PYTHON_PYGAME_UNCONFIGURE_SCRAP
->  endef
->  endif
->
-> +define PYTHON_PYGAME_UNCONFIGURE_FREETYPE
-> +       $(SED) 's/^_freetype/#_freetype/' $(@D)/Setup
-> +endef
-Note that in version f0bb4a4b365d, _freetype stuff was already there
-but disable.
-(see https://bitbucket.org/pygame/pygame/commits/0a3be7313aa4)
+Using PREFIX=/usr DESTDIR=$(HOST_DIR) is wrong, and leads for example to
+luajit.pc containing prefix=/usr, which means pkg-config returns
+incorrect results for host-luajit.
 
-> +
->  PYTHON_PYGAME_SDL_FLAGS = `$(STAGING_DIR)/usr/bin/sdl-config --cflags`
->  PYTHON_PYGAME_SDL_FLAGS += `$(STAGING_DIR)/usr/bin/sdl-config --libs`
->
-> @@ -82,6 +86,7 @@ define PYTHON_PYGAME_CONFIGURE_CMDS
->         $(PYTHON_PYGAME_UNCONFIGURE_SURFARRAY)
->         $(PYTHON_PYGAME_UNCONFIGURE_MOVIE)
->         $(PYTHON_PYGAME_UNCONFIGURE_SCRAP)
-> +       $(PYTHON_PYGAME_UNCONFIGURE_FREETYPE)
->  endef
->
->  define PYTHON_PYGAME_REMOVE_DOC
-> --
-> 2.7.4
->
+This patch fixes the luajit package to conform to this rule.
 
-Regards,
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Thomas: rewrite commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/luajit/luajit.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Samuel
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 623bfcc..81a2660 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -66,13 +66,13 @@ LUAJIT_POST_INSTALL_TARGET_HOOKS += LUAJIT_INSTALL_SYMLINK
+ 
+ # host-efl package needs host-luajit to be linked dynamically.
+ define HOST_LUAJIT_BUILD_CMDS
+-	$(MAKE) PREFIX="/usr" BUILDMODE=dynamic \
++	$(MAKE) PREFIX="$(HOST_DIR)/usr" BUILDMODE=dynamic \
+ 		TARGET_LDFLAGS="$(HOST_LDFLAGS)" \
+ 		-C $(@D) amalg
+ endef
+ 
+ define HOST_LUAJIT_INSTALL_CMDS
+-	$(MAKE) PREFIX="/usr" DESTDIR="$(HOST_DIR)" LDCONFIG=true -C $(@D) install
++	$(MAKE) PREFIX="$(HOST_DIR)/usr" LDCONFIG=true -C $(@D) install
+ endef
+ 
+ $(eval $(generic-package))
