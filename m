@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 May 2016 14:35:52 +0200
-Subject: [Buildroot] 2016.05-rc1 approaching: what to merge?
-In-Reply-To: <CAGm1_ktmOkBg-VoOC2QM+Zn=WKs9ve6YKdc16FctDaohpjz-Sg@mail.gmail.com>
-References: <20160428160000.5db9d1cb@free-electrons.com>
- <CAGm1_ktmOkBg-VoOC2QM+Zn=WKs9ve6YKdc16FctDaohpjz-Sg@mail.gmail.com>
-Message-ID: <20160501143552.548ea0dd@free-electrons.com>
+Date: Sun, 1 May 2016 14:39:31 +0200
+Subject: [Buildroot] [PATCH] ccache: fix explicit build 'make clean
+ host-ccache'
+In-Reply-To: <1461952973-20054-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1461952973-20054-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20160501143931.7f767fb8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +13,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 28 Apr 2016 16:06:40 +0200, Yegor Yefremov wrote:
+On Fri, 29 Apr 2016 20:02:53 +0200, Thomas De Schampheleire wrote:
 
-> I would like to see Barebox double config feature merged.
+> To build host-ccache we need to call the bare compiler. With a standard
+> 'make', this is guaranteed because host-ccache is built as part of the
+> dependencies, and a target-specific variable sets HOSTCC/HOSTCXX to the
+> no-ccache version (see ).
+> However, this is not the case when using 'make host-ccache' explicitly
+> from a clean build.
 
-Merged. Thanks for reminding me about this feature!
+I think this means that the CC/CXX assignments in
+support/dependencies/dependencies.mk are useless, no? If you do "make
+clean host-tar", or "make clean host-xz" or "make clean host-sstrip",
+it will fail the same way, no? Doesn't this mean that those "special"
+package should be fixed to define CC=$(HOSTCC_NOCCACHE)
+CXX=$(HOSTCXX_NOCCACHE) in their environment ?
+
+> +# To build host-ccache we need to call the bare compiler. With a standard
+> +# 'make', this is guaranteed because host-ccache is built as part of the
+> +# dependencies, and a target-specific variable sets HOSTCC/HOSTCXX to the
+> +# no-ccache version (see support/dependencies/dependencies.mk).
+> +# However, this is not the case when using 'make host-ccache'.
+> +HOST_CCACHE_CONF_ENV += CC=$(HOSTCC_NOCCACHE) CXX=$(HOSTCXX_NOCCACHE)
+
+Double quotes around the variable value?
+
+Thanks,
 
 Thomas
 -- 
