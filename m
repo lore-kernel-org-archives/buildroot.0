@@ -1,47 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 May 2016 14:39:31 +0200
-Subject: [Buildroot] [PATCH] ccache: fix explicit build 'make clean
- host-ccache'
-In-Reply-To: <1461952973-20054-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1461952973-20054-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20160501143931.7f767fb8@free-electrons.com>
+Date: Sun, 1 May 2016 14:41:47 +0200
+Subject: [Buildroot] [git commit] toolchain-external: add GCC 6.x option
+Message-ID: <20160501124201.A377081E5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8f972c2aeda83dfeae8b5e7c66ffaa8e5d8a9361
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 29 Apr 2016 20:02:53 +0200, Thomas De Schampheleire wrote:
+Commit 519d83bfa0442439026db4e71e605a5c1347e566 adds support for GCC
+6. Add an GCC 6.x option for external toolchains, too.
 
-> To build host-ccache we need to call the bare compiler. With a standard
-> 'make', this is guaranteed because host-ccache is built as part of the
-> dependencies, and a target-specific variable sets HOSTCC/HOSTCXX to the
-> no-ccache version (see ).
-> However, this is not the case when using 'make host-ccache' explicitly
-> from a clean build.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-I think this means that the CC/CXX assignments in
-support/dependencies/dependencies.mk are useless, no? If you do "make
-clean host-tar", or "make clean host-xz" or "make clean host-sstrip",
-it will fail the same way, no? Doesn't this mean that those "special"
-package should be fixed to define CC=$(HOSTCC_NOCCACHE)
-CXX=$(HOSTCXX_NOCCACHE) in their environment ?
-
-> +# To build host-ccache we need to call the bare compiler. With a standard
-> +# 'make', this is guaranteed because host-ccache is built as part of the
-> +# dependencies, and a target-specific variable sets HOSTCC/HOSTCXX to the
-> +# no-ccache version (see support/dependencies/dependencies.mk).
-> +# However, this is not the case when using 'make host-ccache'.
-> +HOST_CCACHE_CONF_ENV += CC=$(HOSTCC_NOCCACHE) CXX=$(HOSTCXX_NOCCACHE)
-
-Double quotes around the variable value?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 0236b2c..d4e72a8 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -768,6 +768,10 @@ choice
+ 	  Set to the gcc version that is used by your external
+ 	  toolchain.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_GCC_6
++	bool "6.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
++
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_5
+ 	bool "5.x"
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
