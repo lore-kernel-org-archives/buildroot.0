@@ -1,44 +1,39 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sun,  1 May 2016 03:39:10 -0400
-Subject: [Buildroot] [PATCH v1 1/1] rtl8821au: bump to 4c298b
-Message-ID: <1462088350-9697-1-git-send-email-christian@paral.in>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun,  1 May 2016 11:18:08 +0200
+Subject: [Buildroot] [PATCH] fdk-aac: fix build with GCC 6
+Message-ID: <1462094288-8110-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Includes numerous stablity and cleanup passes by ulli-kroll.
+GCC 6 defaults to -std=gnu++14 instead of -std=gnu++98. The C++11 standard does
+not allow "narrowing conversions" which is why building fdk-aac with GCC 6
+fails:
 
-I've also added a hash file, which was missing before.
+libAACenc/src/aacEnc_rom.cpp:661:1: error: narrowing conversion of '2180108801u' from 'unsigned int' to 'FIXP_DBL {aka long int}' inside { } [-Wnarrowing]
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Use '-std=gnu++98' as suggested by "Porting to GCC 6" [1].
+
+[1] https://gcc.gnu.org/gcc-6/porting_to.html
+
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/rtl8821au/rtl8821au.hash | 2 ++
- package/rtl8821au/rtl8821au.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/rtl8821au/rtl8821au.hash
+ package/fdk-aac/fdk-aac.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
-new file mode 100644
-index 0000000..2e3c56c
---- /dev/null
-+++ b/package/rtl8821au/rtl8821au.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 26e1a72b553a044ec34b57d9264ae7616c008a598a9009faba51331b55285a5b  rtl8821au-4c298b160253a7efa507c8ecdb868d1579ad02a7.tar.gz
-diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
-index eddb18e..58a91da 100644
---- a/package/rtl8821au/rtl8821au.mk
-+++ b/package/rtl8821au/rtl8821au.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/fdk-aac/fdk-aac.mk b/package/fdk-aac/fdk-aac.mk
+index a872c54..45a3cf5 100644
+--- a/package/fdk-aac/fdk-aac.mk
++++ b/package/fdk-aac/fdk-aac.mk
+@@ -11,4 +11,7 @@ FDK_AAC_LICENSE_FILES = NOTICE
  
--RTL8821AU_VERSION = fef8c9d67d076eee9dfb9e19cb7cb69815d5a207
-+RTL8821AU_VERSION = 4c298b160253a7efa507c8ecdb868d1579ad02a7
- RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
- RTL8821AU_LICENSE = GPLv2, proprietary (rtl8821au.bin firmware)
- RTL8821AU_LICENSE_FILES = COPYING
+ FDK_AAC_INSTALL_STAGING = YES
+ 
++# Not compatible with GCC 6 which defaults to GNU++14
++FDK_AAC_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=gnu++98"
++
+ $(eval $(autotools-package))
 -- 
-2.7.3
+2.8.2
