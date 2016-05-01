@@ -1,74 +1,49 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 1 May 2016 12:20:58 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: remove sourcery powerpc
- toolchains
-In-Reply-To: <dc8e2f3c-5c65-2d3f-3e9f-4d7fb1625ace@gmail.com>
-References: <1461935936-9390-1-git-send-email-gustavo@zacarias.com.ar>
- <dc8e2f3c-5c65-2d3f-3e9f-4d7fb1625ace@gmail.com>
-Message-ID: <d8384ec1-051f-d7fe-d7f2-67eb6038ac2d@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 1 May 2016 13:59:43 +0200
+Subject: [Buildroot] [PATCH v2] toolchain: add a harmless link when
+ sysroot detection is not accurate
+In-Reply-To: <a96a4788-f871-3fe0-4887-29d77489dc73@gmail.com>
+References: <1453475155-49586-1-git-send-email-Vincent.Riera@imgtec.com>
+ <56B08B91.5080704@imgtec.com> <56B0BB7E.7020305@gmail.com>
+ <56B0C7DE.1030400@imgtec.com> <56B0CB8D.2030306@gmail.com>
+ <a96a4788-f871-3fe0-4887-29d77489dc73@gmail.com>
+Message-ID: <20160501135943.6e4d4f40@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+Hello,
 
-Le 30/04/2016 ? 23:57, Romain Naour a ?crit :
-> Hi Gustavo,
-> 
-> Le 29/04/2016 ? 15:18, Gustavo Zacarias a ?crit :
->> These are running long on the teeth - the bundled (e)glibc versions are
->> very old with several security bugs, they don't work reliably with -Os
->> and have several build failures related to internal compiler errors such
->> as:
->>
->> http://autobuild.buildroot.net/results/fe7/fe7bdba5faf199275aedea2918705b5d19d228bf/
->> http://autobuild.buildroot.net/results/935/935ac42c30ed893939c06c077534f060aed80e9a/
->> http://autobuild.buildroot.net/results/a47/a476af82c8fe4a279117314b278b08af9a08fe54/
->> http://autobuild.buildroot.net/results/cae/cae720b5096be2672b4dc1311ae3fc4ed06a3b53/
->>
->> The situation will not provide, and will in fact get worse with older kernel
->> headers precluding modern package versions and the old gcc version doing as
->> well so remove them.
->>
->> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->> ---
->>  package/liquid-dsp/Config.in                       |  2 -
->>  package/pixman/pixman.mk                           |  5 --
->>  toolchain/toolchain-external/Config.in             | 54 ----------------------
->>  .../toolchain-external/toolchain-external.hash     |  5 --
->>  toolchain/toolchain-external/toolchain-external.mk |  6 ---
->>  5 files changed, 72 deletions(-)
->>
->> diff --git a/package/liquid-dsp/Config.in b/package/liquid-dsp/Config.in
->> index ad887cb..ebdc46e 100644
->> --- a/package/liquid-dsp/Config.in
->> +++ b/package/liquid-dsp/Config.in
->> @@ -1,5 +1,4 @@
->>  comment "liquid-dsp requires a (e)glibc/musl toolchain w/ dynamic library"
->> -	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC
->>  	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || BR2_STATIC_LIBS
->>  
->>  config BR2_PACKAGE_LIQUID_DSP
->> @@ -7,7 +6,6 @@ config BR2_PACKAGE_LIQUID_DSP
->>  	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
->>  	depends on !BR2_STATIC_LIBS
->>  	# These result in internal compiler error
-> 
-> This comment should be removed.
+On Sat, 30 Apr 2016 21:27:33 +0200, Romain Naour wrote:
 
-Also, add a new entry for BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC and
-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_E500V2 in Config.in.legacy
+> >> Well, the whole point for this patch [1] was to get rid of that hook (which was
+> >> the first approach when I sent the patches to add the Codescape toolchains) and
+> >> add that functionality in the toolchain infra just in case more toolchains with
+> >> this problem were added in the future.  
+> > 
+> > I understand, let see what maintainers says.  
+> 
+> Like for CodeSourcery AArch64 toolchain recently [1], what about adding a
+> post-install hook instead ?
+> 
+> [1]
+> https://git.busybox.net/buildroot/commit/?id=4d39ca1c2ab19766abf0430abe9b65ba0e16602b
 
-Best regards,
-Romain
+Yeah, I don't know. There's a trade-off here:
 
-> 
-> With that fixed:
-> 
-> Reviewed-by: Romain Naour <romain.naour@gmail.com>
-> 
-> Best regards,
-> Romain
-> 
+ - By having the logic in the common external toolchain logic, it's
+   usually more complicated, but at least it works for "custom"
+   external toolchains as well.
+  
+ - By having a custom logic only for this toolchain, it's usually much
+   simpler, but it doesn't work for custom external toolchains.
+
+Not easy to decide which approach is the most appropriate.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
