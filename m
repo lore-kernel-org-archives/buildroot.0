@@ -1,14 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 May 2016 19:11:17 +0200
-Subject: [Buildroot] [PATCH v2 0/4] Bump to Python 3.5 and pyc
- compilation improvements
-In-Reply-To: <CAGm1_kt8nCDByM4Hhbc+GGzTF_EiKdKtOHBjtKnyGRwtzTLs=Q@mail.gmail.com>
-References: <1462020471-29986-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAHXCMMLdTCD5CgsNwaCZRXWa4EXcuHpm18JjuWyLh_TBVx1k4Q@mail.gmail.com>
- <20160501152642.3f888793@free-electrons.com>
- <CAHXCMMJ+01WoVug=55dYer2175Wsvdvfo4GTBfTQhi6j-2Ge+w@mail.gmail.com>
- <CAGm1_kt8nCDByM4Hhbc+GGzTF_EiKdKtOHBjtKnyGRwtzTLs=Q@mail.gmail.com>
-Message-ID: <20160501191117.40a7456b@free-electrons.com>
+Date: Sun, 1 May 2016 19:14:38 +0200
+Subject: [Buildroot] [PATCH] syslinux: fix boot hang when host-gcc is 5.3
+In-Reply-To: <1462118287-5017-1-git-send-email-fhunleth@troodon-software.com>
+References: <1462118287-5017-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20160501191438.64efbf4c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,18 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 1 May 2016 16:14:58 +0200, Yegor Yefremov wrote:
-
-> >> What do you suggest to handle this one? It seems to be an intentional
-> >> failure.  
-> > Yes it is intentional. Removing this file (that contains nothing but a
-> > syntax error...) in post-install hook is ok.  
+On Sun,  1 May 2016 11:58:07 -0400, Frank Hunleth wrote:
+> Syslinux uses the host version of gcc to build to bootloader. On systems
+> with gcc 5.3, this results in a bootloader that hangs. This issue has
+> been addressed in upstream syslinux, but an official release has not
+> been made yet. This commit adds the upstream patch to fix the issue.
 > 
-> Here we just need a dependnecy on PY files only as there is also a
-> run-time issue, that upstream authors didn't want to patch (Thomas and
-> me opened an issue on crossbar's GitHub).
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 
-Can you refresh me on that one, I don't remember.
+Thanks! Do you think this could fix bug
+https://bugs.busybox.net/show_bug.cgi?id=8866 ?
 
 Thomas
 -- 
