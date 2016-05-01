@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 May 2016 15:06:23 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: remove sourcery powerpc
- toolchains
-In-Reply-To: <1461935936-9390-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1461935936-9390-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160501150623.5f119bcd@free-electrons.com>
+Date: Sun, 1 May 2016 15:07:21 +0200
+Subject: [Buildroot] [PATCH] libgee: disable for external CS PowerPC
+ toolchain
+In-Reply-To: <1462086845-3820-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1462086845-3820-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20160501150721.4a6111ad@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 29 Apr 2016 10:18:56 -0300, Gustavo Zacarias wrote:
-> These are running long on the teeth - the bundled (e)glibc versions are
-> very old with several security bugs, they don't work reliably with -Os
-> and have several build failures related to internal compiler errors such
-> as:
+On Sun,  1 May 2016 09:14:05 +0200, J?rg Krause wrote:
+> The external CodeSourcery PowerPC toolchain is unable to build libgee
+> successfully resuling in an internal compiler error:
 > 
-> http://autobuild.buildroot.net/results/fe7/fe7bdba5faf199275aedea2918705b5d19d228bf/
-> http://autobuild.buildroot.net/results/935/935ac42c30ed893939c06c077534f060aed80e9a/
-> http://autobuild.buildroot.net/results/a47/a476af82c8fe4a279117314b278b08af9a08fe54/
-> http://autobuild.buildroot.net/results/cae/cae720b5096be2672b4dc1311ae3fc4ed06a3b53/
-> 
-> The situation will not provide, and will in fact get worse with older kernel
-> headers precluding modern package versions and the old gcc version doing as
-> well so remove them.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/liquid-dsp/Config.in                       |  2 -
->  package/pixman/pixman.mk                           |  5 --
->  toolchain/toolchain-external/Config.in             | 54 ----------------------
->  .../toolchain-external/toolchain-external.hash     |  5 --
->  toolchain/toolchain-external/toolchain-external.mk |  6 ---
->  5 files changed, 72 deletions(-)
+> hazardpointer.c: In function 'gee_hazard_pointer_release_policy_ensure_start':
+> hazardpointer.c:845:1: error: insn does not satisfy its constraints:
+> (insn 151 150 152 8 hazardpointer.c:838 (set (reg:SI 11 11)
+>         (plus:SI (reg:SI 0 0 [orig:128 D.16455 ] [128])
+>             (const_int -2147483648 [0xffffffff80000000]))) 82 {*addsi3_internal1} (nil))
+> hazardpointer.c:845:1: internal compiler error: in copyprop_hardreg_forward_1, at regcprop.c:768
 
-I've applied, after doing the following changes:
+Thanks for the patch, but Gustavo had already submitted a patch that
+completely removes the Sourcery PowerPC toolchains from Buildroot, as
+they are too old and causing too many problems.
 
-    [Thomas:
-     - remove no longer needed comment in liquid-dsp Config.in file, as
-       noticed by Romain Naour.
-     - add Config.in.legacy options, as noticed by Romain Naour.]
-
-Thanks Romain for the review of the patch!
+I've marked your patch as "Rejected" in patchwork.
 
 Thomas
 -- 
