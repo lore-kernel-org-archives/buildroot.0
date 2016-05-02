@@ -1,74 +1,31 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  2 May 2016 09:21:22 -0300
-Subject: [Buildroot] [PATCH] ntp: security bump to version 4.2.8p7
-Message-ID: <1462191682-23465-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  2 May 2016 09:44:47 -0300
+Subject: [Buildroot] [PATCH] x264: needs mmu
+Message-ID: <1462193087-19193-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-
-CVE-2016-1551 - Refclock impersonation vulnerability, AKA:
-refclock-peering
-
-CVE-2016-1549 - Sybil vulnerability: ephemeral association attack, AKA:
-ntp-sybil - MITIGATION ONLY
-
-CVE-2016-2516 - Duplicate IPs on unconfig directives will cause an
-assertion botch
-
-CVE-2016-2517 - Remote configuration trustedkey/requestkey values are not
-properly validated
-
-CVE-2016-2518 - Crafted addpeer with hmode > 7 causes array wraparound
-with MATCH_ASSOC
-
-CVE-2016-2519 - ctl_getitem() return value not always checked
-
-CVE-2016-1547 - Validate crypto-NAKs, AKA: nak-dos
-
-CVE-2016-1548 - Interleave-pivot - MITIGATION ONLY
-
-CVE-2015-7704 - KoD fix: peer associations were broken by the fix for
-NtpBug2901, AKA: Symmetric active/passive mode is broken
-
-CVE-2015-8138 - Zero Origin Timestamp Bypass, AKA: Additional KoD Checks
-
-CVE-2016-1550 - Improve NTP security against buffer comparison timing
-attacks, authdecrypt-timing, AKA: authdecrypt-timing
+Uses madvise() which is not available in NOMMU. Fixes:
+http://autobuild.buildroot.net/results/837/837fd5a63d59b5c65818ec005a565cb7741a1cdd/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ntp/ntp.hash | 6 +++---
- package/ntp/ntp.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x264/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
-index 0c2c29d..6be52aa 100644
---- a/package/ntp/ntp.hash
-+++ b/package/ntp/ntp.hash
-@@ -1,4 +1,4 @@
--# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p6.tar.gz.md5
--md5	60049f51e9c8305afe30eb22b711c5c6	ntp-4.2.8p6.tar.gz
-+# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p7.tar.gz.md5
-+md5	46dfba933c3e4bc924d8e55068797578	ntp-4.2.8p7.tar.gz
- # Calculated based on the hash above
--sha256	583d0e1c573ace30a9c6afbea0fc52cae9c8c916dbc15c026e485a0dda4ba048	ntp-4.2.8p6.tar.gz
-+sha256	81d20c06a0b01abe3b84fac092185bf014252d38fe5e7b2758f604680a0220dc	ntp-4.2.8p7.tar.gz
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 2b99ef2..d8ac534 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NTP_VERSION_MAJOR = 4.2
--NTP_VERSION = $(NTP_VERSION_MAJOR).8p6
-+NTP_VERSION = $(NTP_VERSION_MAJOR).8p7
- NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
- NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- NTP_LICENSE = ntp license
+diff --git a/package/x264/Config.in b/package/x264/Config.in
+index be3ab3f..d042ddc 100644
+--- a/package/x264/Config.in
++++ b/package/x264/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_X264
+ 	bool "x264"
++	depends on BR2_USE_MMU # madvise()
+ 	help
+ 	  x264 is a free software library and application for
+ 	  encoding video streams into the H.264/MPEG-4 AVC
 -- 
 2.7.3
