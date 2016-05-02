@@ -1,48 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 2 May 2016 13:14:32 -0300
-Subject: [Buildroot] SDL2_ttf requires libpng12 but Buildroot installs
- libpng16
-In-Reply-To: <CAGrGpJCvESbiBVRkYkyxX_oMgkhnxqNjq5BKGs50LCa1Na_JSw@mail.gmail.com>
-References: <CAGrGpJCvESbiBVRkYkyxX_oMgkhnxqNjq5BKGs50LCa1Na_JSw@mail.gmail.com>
-Message-ID: <57277CE8.9020008@zacarias.com.ar>
+From: Geoff Levand <geoff@infradead.org>
+Date: Mon, 02 May 2016 09:21:27 -0700
+Subject: [Buildroot] [PATCH v3 0/3] Add go language support
+In-Reply-To: <20160430140314.4ff30ff1@free-electrons.com>
+References: <cover.1459798147.git.geoff@infradead.org>
+ <20160421224301.6a05f711@free-electrons.com>
+ <1461965160.27026.9.camel@infradead.org>
+ <20160430140314.4ff30ff1@free-electrons.com>
+Message-ID: <1462206087.27026.15.camel@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/05/16 12:57, Peter Thompson wrote:
+On Sat, 2016-04-30 at 14:03 +0200, Thomas Petazzoni wrote:
+> Hum, I'm looking at this repository, and I see only 3 branches, and
+> none of them seem to contain things that look like fixes. Did I miss
+> something?
 
-> I am trying to install the SDL2 suite  (SDL2, SDL2_gfx, SDL2_image,
-> SDL2_ttf) using Buildroot-2016-02.  SDL2 is incorporated into
-> Buildroot-2016-02.   SDL2_gfx and SDL2_image are relatively straight
-> forward to add,  but SDL2_ttf is being problematic.    SDL2_ttf
-> can't/won't use libpng16.
+Here's a browser link:
 
-Hi.
-SDL2_ttf doesn't use libpng at all, combined with the fact that you're 
-building the additional SDL2* packages manually is a recipe for trouble.
+https://github.com/glevand/buildroot--buildroot/commits/master
 
-> My questions are:
->
-> 1. Can I change Buildroot-2016-02 to use libpng12 instead of libpng16?
-> I looked at libpng dependencies in Buildroot and they are HUGE!   I see
-> no easy way to change to libpng12.
+You should see these:
 
-Maybe, but expect other packages breaking because they require newer API 
-functionality or decided they didn't want to deal with old libpng.
+b461b3a package/go: Add BR2_TOOLCHAIN_HAS_THREADS
+149dbc4 package/go: Add not BR2_TOOLCHAIN_USES_UCLIBC
+abb61c6 package/go: Fix powerpc64 config typo
+044579e package/go: Upgrade 1.5.3 to 1.6.2
 
-> 2. Does an earlier version of buildroot use libpng12?  Should I use
-> that?  I would miss having SDL2 available in buildroot - I had problems
-> compiling that earlier.
+I don't think 'package/go: Add not BR2_TOOLCHAIN_USES_UCLIBC' is the
+righ fix though.  I think the problem is something else.  I need to
+look at that one some more.
 
-Not really, i think you're wrong in trying to manually build everything.
-
-> 3. Should I use buildroot to build a barebones rootfs without libpng and
-> create what I need from there.  Looking briefly at the dependencies, I
-> am not sure that is possible.
-
-No, again, make the additional SDL2* packages (sic) proper packages, 
-that's the way, i'm pretty sure it will just work(tm) at least for 
-SDL2_ttf since there's no mention of anything png-related in the source.
-Regards.
+-Geoff
