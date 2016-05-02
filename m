@@ -1,65 +1,50 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Mon, 02 May 2016 21:40:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/macchanger: fix musl build
-In-Reply-To: <1453588987-16758-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453588987-16758-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1462218005.2955.1.camel@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 02 May 2016 21:45:06 +0200
+Subject: [Buildroot] [PATCH] x264: needs mmu
+In-Reply-To: <87eg9kqxmk.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Mon, 02 May 2016 17:37:39 +0200")
+References: <1462193087-19193-1-git-send-email-gustavo@zacarias.com.ar>
+ <87inywqy9f.fsf@dell.be.48ers.dk> <572771B9.6080807@zacarias.com.ar>
+ <87eg9kqxmk.fsf@dell.be.48ers.dk>
+Message-ID: <8760uwqm65.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Sa, 2016-01-23 at 23:43 +0100, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/2bc/2bccf3fd7060870a337c0bd7a9
-> a750d0ad4e2c1c/
-> http://autobuild.buildroot.net/results/7d3/7d3f5bb036039b6966682eaf59
-> b8600849f27034/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> ?package/macchanger/0001-fix-build-with-musl.patch | 23
-> +++++++++++++++++++++++
-> ?1 file changed, 23 insertions(+)
-> ?create mode 100644 package/macchanger/0001-fix-build-with-musl.patch
-> 
-> diff --git a/package/macchanger/0001-fix-build-with-musl.patch
-> b/package/macchanger/0001-fix-build-with-musl.patch
-> new file mode 100644
-> index 0000000..e6f6db5
-> --- /dev/null
-> +++ b/package/macchanger/0001-fix-build-with-musl.patch
-> @@ -0,0 +1,23 @@
-> +Fix musl build
-> +
-> +Downloaded from:
-> +https://github.com/openwrt/packages/blob/master/utils/macchanger/pat
-> ches/0001-fix-build-with-musl.patch
-> +
-> +Bug was already reported upstream:
-> +https://github.com/alobbs/macchanger/issues/14
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +
-> +Index: macchanger-1.7.0/src/netinfo.c
-> +===================================================================
-> +--- macchanger-1.7.0.orig/src/netinfo.c
-> ++++ macchanger-1.7.0/src/netinfo.c
-> +@@ -113,7 +113,7 @@ mc_net_info_get_permanent_mac (const net
-> +?	epa->size = IFHWADDRLEN;
-> +?
-> +?	memcpy(&req, &(net->dev), sizeof(struct ifreq));
-> +-	req.ifr_data = (caddr_t)epa;
-> ++	req.ifr_data = (char *)epa;
-> +?
-> +?	if (ioctl(net->sock, SIOCETHTOOL, &req) < 0) {
-> +?		perror ("[ERROR] Could not read permanent MAC");
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+ >> On 02/05/16 12:23, Peter Korsgaard wrote:
+ >>> Hmm, is that really generally true? I don't quite see why you cannot
+ >>> have madvise() without mmu. Looking at uClibc-ng, the option enabling
+ >>> madvise support doesn't depend on MMU support.
 
-any reason why this patch is marked as "Changes Requested"? The build
-error is still present...
+ >> I've based the rule on previous 80b9dfce, 5b309e1a and 8d446718
+ >> scenarios and didn't investigate myself.
 
-Best regards
-J?rg Krause
+ > Ok - Thomas, do you know if madvise generally isn't available or if it
+ > is something specific to the binary bfin toolchain?
+
+ > I'll kick off a build with our new stm32f defconfig and look.
+
+As expected, building stm32f429_disco_defconfig with x264 works:
+
+arm-linux-nm staging/usr/lib/libc.a | egrep 'fork|madvise'
+vfork.o:
+00000000 T __GI_vfork
+00000000 W vfork
+00000000 T __vfork
+madvise.o:
+00000000 T madvise
+posix_madvise.o:
+00000000 T posix_madvise
+         U __GI_vfork
+00000000 T _fork_parent
+         U __GI_vfork
+
+So I'll change it to simply disable for that bfin toolchain instead.
+
+-- 
+Bye, Peter Korsgaard
