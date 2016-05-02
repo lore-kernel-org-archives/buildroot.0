@@ -1,36 +1,155 @@
-From: Geoff Levand <geoff@infradead.org>
-Date: Mon, 02 May 2016 09:21:27 -0700
-Subject: [Buildroot] [PATCH v3 0/3] Add go language support
-In-Reply-To: <20160430140314.4ff30ff1@free-electrons.com>
-References: <cover.1459798147.git.geoff@infradead.org>
- <20160421224301.6a05f711@free-electrons.com>
- <1461965160.27026.9.camel@infradead.org>
- <20160430140314.4ff30ff1@free-electrons.com>
-Message-ID: <1462206087.27026.15.camel@infradead.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 2 May 2016 18:33:32 +0200
+Subject: [Buildroot] [PATCH v8] core/pkg-kconfig: Use olddefconfig when
+	available
+In-Reply-To: <1462178199-21742-1-git-send-email-romain.izard.pro@gmail.com>
+References: <1462178199-21742-1-git-send-email-romain.izard.pro@gmail.com>
+Message-ID: <20160502163331.GA3627@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 2016-04-30 at 14:03 +0200, Thomas Petazzoni wrote:
-> Hum, I'm looking at this repository, and I see only 3 branches, and
-> none of them seem to contain things that look like fixes. Did I miss
-> something?
+Romain, All,
 
-Here's a browser link:
+On 2016-05-02 10:36 +0200, Romain Izard spake thusly:
+> Using 'yes "" | make oldconfig' to regenerate a .config file from an
+> existing defconfig does not work reliably in all cases. Specifically, it
+> does not work well with tristate choice entries.
+> 
+> The correct way to do it is to use 'make olddefconfig', but this target
+> is not supported in projects that use an old version of kconfig. As
+> most projects do not use tristate entries, there is no need for them to
+> upgrade.
+> 
+> 'oldnoconfig' is an alias for 'olddefconfig', but it also is the only
+> name for this target between Linux versions 2.6.36 and 3.6.
+> 
+> Check which targets are supported by the current project, and use the
+> appropriate method to regenerate the .config file.
+> 
+> Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-https://github.com/glevand/buildroot--buildroot/commits/master
+Tested with:
+  - linux 4.5.2        -> olddefconfig
+  - linux 3.6.11       -> oldnoconfig
+  - linux 2.6.31.14    -> oldconfig
+  - busybox 1.24.2     -> oldconfig
+  - basrebox 2016.04.0 -> olddefconfig
 
-You should see these:
+The test was done with and without libtirpc enabled, and the busybox
+configuration went OK.
 
-b461b3a package/go: Add BR2_TOOLCHAIN_HAS_THREADS
-149dbc4 package/go: Add not BR2_TOOLCHAIN_USES_UCLIBC
-abb61c6 package/go: Fix powerpc64 config typo
-044579e package/go: Upgrade 1.5.3 to 1.6.2
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-I don't think 'package/go: Add not BR2_TOOLCHAIN_USES_UCLIBC' is the
-righ fix though.  I think the problem is something else.  I need to
-look at that one some more.
+Thanks Romain! :-)
 
--Geoff
+Note however that there is a spurious errior mesage on the console (but
+it is not due to this patch):
+
+    /bin/sh: /home/ymorin/dev/buildroot/O/host/usr/bin/pkg-config: No
+    such file or directory
+
+... which is repeated multiple times.
+
+This is because, with libtirpc enabled, when we run "make busybox-menuconfig"
+from a clean tree (ie.e right after "make menuconfig"), host-pkgconf is
+not built.
+
+We should probably redirect those error messages to /dev/null, no?
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> Changelog:
+> v1: New patch
+> v2: Use oldnoconfig instead of olddefconfig
+>     Fix silent mode
+>     Change the pattern in both places where it is used
+>     Use a macro to avoid redundancy
+> v3: Do not use $(call ...)
+>     Use the $(2)_KCONFIG_MAKE variable
+> v4: No change
+> v5: Detect available methods and use the most recent one
+> v6: Remove colon from matched rule names
+> v7: Shell-based conditons, does not work with backticks
+> v8: Return to v6, with more comments
+> 
+>  package/pkg-kconfig.mk | 34 ++++++++++++++++++++++++++++++----
+>  1 file changed, 30 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+> index 4033915..f32a198 100644
+> --- a/package/pkg-kconfig.mk
+> +++ b/package/pkg-kconfig.mk
+> @@ -60,18 +60,44 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+>  $(2)_KCONFIG_MAKE = \
+>  	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) $$($(2)_KCONFIG_OPTS)
+>  
+> +# $(2)_KCONFIG_MAKE may already rely on shell expansion. As the $() syntax
+> +# of the shell conflicts with Make's own syntax, this means that backticks
+> +# are used with those shell constructs. Unfortunately, the backtick syntax
+> +# does not nest, and we need to use Make instead of the shell to handle
+> +# conditions.
+> +
+> +# A recursively expanded variable is necessary, to be sure that the shell
+> +# command is called when the rule is processed during the build and not
+> +# when the rule is created when parsing all packages.
+> +$(2)_KCONFIG_RULES = \
+> +	$$(shell $$($(2)_KCONFIG_MAKE) -pn config 2>/dev/null | \
+> +		sed 's/^\([_0-9a-zA-Z]*config\):.*/\1/ p; d')
+> +
+> +# The correct way to regenerate a .config file is to use 'make olddefconfig'.
+> +# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
+> +# versions 2.6.36 and 3.6, and remains as an alias in later versions.
+> +# In older versions, and in some other projects that use kconfig, the target is
+> +# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
+> +# only, as this can fail in complex cases.
+> +define $(2)_REGEN_DOT_CONFIG
+> +	$$(if $$(filter olddefconfig,$$($(2)_KCONFIG_RULES)),
+> +		$$(Q)$$($(2)_KCONFIG_MAKE) olddefconfig,
+> +		$$(if $$(filter oldnoconfig,$$($(2)_KCONFIG_RULES)),
+> +			$$(Q)$$($(2)_KCONFIG_MAKE) oldnoconfig,
+> +			$$(Q)(yes "" | $$($(2)_KCONFIG_MAKE) oldconfig)))
+> +endef
+> +
+>  # The specified source configuration file and any additional configuration file
+>  # fragments are merged together to .config, after the package has been patched.
+>  # Since the file could be a defconfig file it needs to be expanded to a
+> -# full .config first. We use 'make oldconfig' because this can be safely
+> -# done even when the package does not support defconfigs.
+> +# full .config first.
+>  $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+>  	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+>  		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
+>  		cp $$($(2)_KCONFIG_FILE) $$(@))
+>  	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
+>  		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
+> -	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
+> +	$$($(2)_REGEN_DOT_CONFIG)
+>  
+>  # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
+>  # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
+> @@ -82,7 +108,7 @@ $$($(2)_DIR)/.config: | $(1)-patch
+>  # The exact rules are specified by the package .mk file.
+>  define $(2)_FIXUP_DOT_CONFIG
+>  	$$($(2)_KCONFIG_FIXUP_CMDS)
+> -	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
+> +	$$($(2)_REGEN_DOT_CONFIG)
+>  	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>  endef
+>  
+> -- 
+> 2.7.4
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
