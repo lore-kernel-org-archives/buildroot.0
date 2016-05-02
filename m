@@ -1,53 +1,41 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon,  2 May 2016 13:16:53 +0200
-Subject: [Buildroot] [PATCH v3 1/3] uboot-tools: install libubootenv to
-	staging
-Message-ID: <1462187815-2414-1-git-send-email-joerg.krause@embedded.rocks>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  2 May 2016 09:21:08 -0300
+Subject: [Buildroot] [PATCH] samba4: bump to version 4.4.3
+Message-ID: <1462191668-23421-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libubootenv is required by swupdate.
+Fixes a few regressions from the previous security bump.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-v3:
- - install the library header file fw_env.h to staging, too
-v2:
- - install the static library to staging unconditionally (Thomas Petazzoni)
----
- package/uboot-tools/uboot-tools.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index f47b3db..bc8e7c1 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -9,6 +9,7 @@ UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPLv2+
- UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
-+UBOOT_TOOLS_INSTALL_STAGING = YES
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index d762452..042c7db 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	eaecd41a85ebb9507b8db9856ada2a949376e9d53cf75664b5493658f6e5926a	samba-4.4.2.tar.gz
++sha256	031e6ada6d15deae6850845eed41497af32207fb679d6c6c74f19acc99d437ba	samba-4.4.3.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 0d73662..9ccc6a7 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define UBOOT_TOOLS_CONFIGURE_CMDS
- 	mkdir -p $(@D)/include/config
-@@ -58,6 +59,15 @@ define UBOOT_TOOLS_INSTALL_DUMPIMAGE
- endef
- endif
- 
-+define UBOOT_TOOLS_INSTALL_LIBUBOOTENV
-+	$(INSTALL) -D -m 0755 $(@D)/tools/env/lib.a $(STAGING_DIR)/usr/lib/libubootenv.a
-+	$(INSTALL) -D -m 0644 $(@D)/tools/env/fw_env.h $(STAGING_DIR)/usr/include/fw_env.h
-+endef
-+
-+define UBOOT_TOOLS_INSTALL_STAGING_CMDS
-+	$(UBOOT_TOOLS_INSTALL_LIBUBOOTENV)
-+endef
-+
- define UBOOT_TOOLS_INSTALL_TARGET_CMDS
- 	$(UBOOT_TOOLS_INSTALL_MKIMAGE)
- 	$(UBOOT_TOOLS_INSTALL_MKENVIMAGE)
+-SAMBA4_VERSION = 4.4.2
++SAMBA4_VERSION = 4.4.3
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-2.8.2
+2.7.3
