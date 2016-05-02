@@ -1,41 +1,74 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  2 May 2016 09:21:08 -0300
-Subject: [Buildroot] [PATCH] samba4: bump to version 4.4.3
-Message-ID: <1462191668-23421-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  2 May 2016 09:21:22 -0300
+Subject: [Buildroot] [PATCH] ntp: security bump to version 4.2.8p7
+Message-ID: <1462191682-23465-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a few regressions from the previous security bump.
+Fixes:
+
+CVE-2016-1551 - Refclock impersonation vulnerability, AKA:
+refclock-peering
+
+CVE-2016-1549 - Sybil vulnerability: ephemeral association attack, AKA:
+ntp-sybil - MITIGATION ONLY
+
+CVE-2016-2516 - Duplicate IPs on unconfig directives will cause an
+assertion botch
+
+CVE-2016-2517 - Remote configuration trustedkey/requestkey values are not
+properly validated
+
+CVE-2016-2518 - Crafted addpeer with hmode > 7 causes array wraparound
+with MATCH_ASSOC
+
+CVE-2016-2519 - ctl_getitem() return value not always checked
+
+CVE-2016-1547 - Validate crypto-NAKs, AKA: nak-dos
+
+CVE-2016-1548 - Interleave-pivot - MITIGATION ONLY
+
+CVE-2015-7704 - KoD fix: peer associations were broken by the fix for
+NtpBug2901, AKA: Symmetric active/passive mode is broken
+
+CVE-2015-8138 - Zero Origin Timestamp Bypass, AKA: Additional KoD Checks
+
+CVE-2016-1550 - Improve NTP security against buffer comparison timing
+attacks, authdecrypt-timing, AKA: authdecrypt-timing
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ntp/ntp.hash | 6 +++---
+ package/ntp/ntp.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index d762452..042c7db 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	eaecd41a85ebb9507b8db9856ada2a949376e9d53cf75664b5493658f6e5926a	samba-4.4.2.tar.gz
-+sha256	031e6ada6d15deae6850845eed41497af32207fb679d6c6c74f19acc99d437ba	samba-4.4.3.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 0d73662..9ccc6a7 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/ntp/ntp.hash b/package/ntp/ntp.hash
+index 0c2c29d..6be52aa 100644
+--- a/package/ntp/ntp.hash
++++ b/package/ntp/ntp.hash
+@@ -1,4 +1,4 @@
+-# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p6.tar.gz.md5
+-md5	60049f51e9c8305afe30eb22b711c5c6	ntp-4.2.8p6.tar.gz
++# From http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/ntp-4.2.8p7.tar.gz.md5
++md5	46dfba933c3e4bc924d8e55068797578	ntp-4.2.8p7.tar.gz
+ # Calculated based on the hash above
+-sha256	583d0e1c573ace30a9c6afbea0fc52cae9c8c916dbc15c026e485a0dda4ba048	ntp-4.2.8p6.tar.gz
++sha256	81d20c06a0b01abe3b84fac092185bf014252d38fe5e7b2758f604680a0220dc	ntp-4.2.8p7.tar.gz
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 2b99ef2..d8ac534 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SAMBA4_VERSION = 4.4.2
-+SAMBA4_VERSION = 4.4.3
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ NTP_VERSION_MAJOR = 4.2
+-NTP_VERSION = $(NTP_VERSION_MAJOR).8p6
++NTP_VERSION = $(NTP_VERSION_MAJOR).8p7
+ NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+ NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ NTP_LICENSE = ntp license
 -- 
 2.7.3
