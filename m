@@ -1,109 +1,84 @@
-From: Romain Izard <romain.izard.pro@gmail.com>
-Date: Mon,  2 May 2016 10:36:39 +0200
-Subject: [Buildroot] [PATCH v8] core/pkg-kconfig: Use olddefconfig when
-	available
-Message-ID: <1462178199-21742-1-git-send-email-romain.izard.pro@gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 02 May 2016 10:48:41 +0200
+Subject: [Buildroot] [PATCH 3/3] swupdate: bump to version 2016.04
+In-Reply-To: <20160501224841.396f3844@free-electrons.com>
+References: <1461916620-5170-1-git-send-email-joerg.krause@embedded.rocks>
+ <1461916620-5170-4-git-send-email-joerg.krause@embedded.rocks>
+ <20160501224841.396f3844@free-electrons.com>
+Message-ID: <1462178921.5359.5.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using 'yes "" | make oldconfig' to regenerate a .config file from an
-existing defconfig does not work reliably in all cases. Specifically, it
-does not work well with tristate choice entries.
+On So, 2016-05-01 at 22:48 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 29 Apr 2016 09:57:00 +0200, J?rg Krause wrote:
+> > Also:
+> > ?* Update the .config file and the help text:
+> > ????- clarify project name is SWupdate
+> 
+> This doesn't really belong in the same commit. Also even
+> https://github.com/sbabic/swupdate is not really consistent. In just
+> three sentences, they use:
+> 
+> SWupdate - Software Update for Embedded Systems
+> 
+> SWuPdate is a Linux Update agent with the goal to provide an
+> efficient
+> and safe way to update an embedded system. SWUpdate supports local...
+> 
+> So: SWupdate, SWuPdate and SWUpdate. Do we really care?
 
-The correct way to do it is to use 'make olddefconfig', but this target
-is not supported in projects that use an old version of kconfig. As
-most projects do not use tristate entries, there is no need for them to
-upgrade.
+Not really.
 
-'oldnoconfig' is an alias for 'olddefconfig', but it also is the only
-name for this target between Linux versions 2.6.36 and 3.6.
+> > ????- U-Boot supports needs now BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
+> 
+> Are you sure? Isn't this simply because you made the installation of
+> libubootenv conditional on BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV ?
 
-Check which targets are supported by the current project, and use the
-appropriate method to regenerate the .config file.
+You're right! I haven't seen that?BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV is
+only for installation and not for building the fw_printenv tool.
 
-Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
-Changelog:
-v1: New patch
-v2: Use oldnoconfig instead of olddefconfig
-    Fix silent mode
-    Change the pattern in both places where it is used
-    Use a macro to avoid redundancy
-v3: Do not use $(call ...)
-    Use the $(2)_KCONFIG_MAKE variable
-v4: No change
-v5: Detect available methods and use the most recent one
-v6: Remove colon from matched rule names
-v7: Shell-based conditons, does not work with backticks
-v8: Return to v6, with more comments
+I fix this by using BR2_PACKAGE_UBOOT_TOOLS.
 
- package/pkg-kconfig.mk | 34 ++++++++++++++++++++++++++++++----
- 1 file changed, 30 insertions(+), 4 deletions(-)
+> > ?* Remove comment about bundled lsqlite3, it has been removed.
+> > ?* Remove upstream patches:
+> > ????- "Kbuild: Fix link error for CONFIG_UBOUT and missing libz"
+> > [1]
+> > ????- "Kbuild: Link with GCC instead of LD" [2]
+> > ?* Add patch from upstream:
+> > ????- "Fix build without MTD support" [3]
+> > ?* Add optional dependency for libarchive
+> > ?* Add optional dependency for uboot-tools
+> > ?* Lua support is not restricted to Lua 5.2
+> > 
+> > [1] https://github.com/sbabic/swupdate/commit/5a5ef5909f5da5b2070d5
+> > 8ffaee924bb8e6a51e1
+> > [2] https://github.com/sbabic/swupdate/commit/f26577423eb65728fcd10
+> > f78f9978dd07d51dcb9
+> > [3] https://github.com/sbabic/swupdate/commit/69c0e66994f01ce1bf229
+> > 9fbce86aee7a1baa37b
+> > 
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> 
+> > ?	??* Select BR2_PACKAGE_ZLIB if you want to deal with gzip
+> > compressed
+> > ?	????archives.
+> > +	??* Select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV and
+> > BR2_PACKAGE_ZLIB to
+> > +	????add support for setting the U-Boot environment.
+> 
+> But in the .mk file itself you're setting HAVE_LIBUBOOTENV=y as soon
+> as
+> BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV=y, even if BR2_PACKAGE_ZLIB is
+> disabled. Isn't that somewhat inconsistent?
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 4033915..f32a198 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -60,18 +60,44 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
- $(2)_KCONFIG_MAKE = \
- 	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) $$($(2)_KCONFIG_OPTS)
- 
-+# $(2)_KCONFIG_MAKE may already rely on shell expansion. As the $() syntax
-+# of the shell conflicts with Make's own syntax, this means that backticks
-+# are used with those shell constructs. Unfortunately, the backtick syntax
-+# does not nest, and we need to use Make instead of the shell to handle
-+# conditions.
-+
-+# A recursively expanded variable is necessary, to be sure that the shell
-+# command is called when the rule is processed during the build and not
-+# when the rule is created when parsing all packages.
-+$(2)_KCONFIG_RULES = \
-+	$$(shell $$($(2)_KCONFIG_MAKE) -pn config 2>/dev/null | \
-+		sed 's/^\([_0-9a-zA-Z]*config\):.*/\1/ p; d')
-+
-+# The correct way to regenerate a .config file is to use 'make olddefconfig'.
-+# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
-+# versions 2.6.36 and 3.6, and remains as an alias in later versions.
-+# In older versions, and in some other projects that use kconfig, the target is
-+# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
-+# only, as this can fail in complex cases.
-+define $(2)_REGEN_DOT_CONFIG
-+	$$(if $$(filter olddefconfig,$$($(2)_KCONFIG_RULES)),
-+		$$(Q)$$($(2)_KCONFIG_MAKE) olddefconfig,
-+		$$(if $$(filter oldnoconfig,$$($(2)_KCONFIG_RULES)),
-+			$$(Q)$$($(2)_KCONFIG_MAKE) oldnoconfig,
-+			$$(Q)(yes "" | $$($(2)_KCONFIG_MAKE) oldconfig)))
-+endef
-+
- # The specified source configuration file and any additional configuration file
- # fragments are merged together to .config, after the package has been patched.
- # Since the file could be a defconfig file it needs to be expanded to a
--# full .config first. We use 'make oldconfig' because this can be safely
--# done even when the package does not support defconfigs.
-+# full .config first.
- $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
- 	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
- 		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
- 		cp $$($(2)_KCONFIG_FILE) $$(@))
- 	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
- 		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
--	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
-+	$$($(2)_REGEN_DOT_CONFIG)
- 
- # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
- # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
-@@ -82,7 +108,7 @@ $$($(2)_DIR)/.config: | $(1)-patch
- # The exact rules are specified by the package .mk file.
- define $(2)_FIXUP_DOT_CONFIG
- 	$$($(2)_KCONFIG_FIXUP_CMDS)
--	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
-+	$$($(2)_REGEN_DOT_CONFIG)
- 	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
- endef
- 
--- 
-2.7.4
+No. It's not about enable U-Boot support, but setting the available
+libraries through the environment. With this, swupdates KConfig checks
+for?HAVE_LIBUBOOTENV and?HAVE_ZLIB to enable U-Boot support.
+
+Best regards
+J?rg Krause
