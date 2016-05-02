@@ -1,111 +1,76 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon,  2 May 2016 22:25:44 +0200
-Subject: [Buildroot] [PATCH v2] raspberrypi3: fix serial console (load
-	pi3-miniuart-bt overlay)
-Message-ID: <1462220744-6368-1-git-send-email-ps.report@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 2 May 2016 22:44:40 +0200
+Subject: [Buildroot] [PATCH v5] package/radlib: new package
+In-Reply-To: <1461510916.5247.21.camel@intel.com>
+References: <1460563603-3748-1-git-send-email-ray.kinsella@intel.com>
+ <1460563603-3748-2-git-send-email-ray.kinsella@intel.com>
+ <57195C19.3070307@mind.be> <1461510916.5247.21.camel@intel.com>
+Message-ID: <a4b92b7c-5ef9-f00b-48fe-8253afd71c4f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- enable BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS in raspberrypi3_defconfig
-- add copy of rpi-firmware/overlays directory to boot partition in genimage-raspberrypi3.cfg
-- enhance post-image.sh script to add 'dtoverlay=pi3-miniuart-bt' on request
-- add BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay" in raspberrypi3_defconfig
+On 04/24/16 17:15, Kinsella, Ray wrote:
+> Thanks Arnout,
+>
+> See inline.
+>
+> On Fri, 2016-04-22 at 01:02 +0200, Arnout Vandecappelle wrote:
+[snip]
+>>   I think this should be the first patch; our autoreconf will not be
+>> happy
+>> without subdir-objects.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 --> v2:
-  - use pi3-miniuart-bt instead of pi3-disable-bt
-  - fix post-image.sh to add overlay lines only once
-  - add overlay description (and alternative solution) to readme.txt
----
- board/raspberrypi/genimage-raspberrypi3.cfg |  1 +
- board/raspberrypi/post-image.sh             | 13 +++++++++++++
- board/raspberrypi/readme.txt                |  8 +++++++-
- configs/raspberrypi3_defconfig              |  3 ++-
- 4 files changed, 23 insertions(+), 2 deletions(-)
+  Actually, this was a silly argument: our build will only work with all patches 
+applied, of course.
 
-diff --git a/board/raspberrypi/genimage-raspberrypi3.cfg b/board/raspberrypi/genimage-raspberrypi3.cfg
-index 7ba89c5..baab0c4 100644
---- a/board/raspberrypi/genimage-raspberrypi3.cfg
-+++ b/board/raspberrypi/genimage-raspberrypi3.cfg
-@@ -7,6 +7,7 @@ image boot.vfat {
-       "rpi-firmware/config.txt",
-       "rpi-firmware/fixup.dat",
-       "rpi-firmware/start.elf",
-+      "rpi-firmware/overlays",
-       "kernel-marked/zImage"
-     }
-   }
-diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-index 73ffd65..c009752 100755
---- a/board/raspberrypi/post-image.sh
-+++ b/board/raspberrypi/post-image.sh
-@@ -5,6 +5,19 @@ BOARD_NAME="$(basename ${BOARD_DIR})"
- GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
- GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
- 
-+case "${2}" in
-+	--add-pi3-miniuart-bt-overlay)
-+	if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-+		echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
-+		cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
-+
-+# fixes rpi3 ttyAMA0 serial console
-+dtoverlay=pi3-miniuart-bt
-+__EOF__
-+	fi
-+	;;
-+esac
-+
- # Mark the kernel as DT-enabled
- mkdir -p "${BINARIES_DIR}/kernel-marked"
- ${HOST_DIR}/usr/bin/mkknlimg "${BINARIES_DIR}/zImage" \
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index a170f8f..03178ff 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -60,7 +60,8 @@ After building, you should obtain this tree:
-     |   +-- cmdline.txt
-     |   +-- config.txt
-     |   +-- fixup.dat
--    |   `-- start.elf
-+    |   +-- start.elf
-+    |   `-- overlays/               [3]
-     +-- sdcard.img
-     `-- zImage
- 
-@@ -69,6 +70,11 @@ After building, you should obtain this tree:
- 
- [2] This is the mkknlimg DT-marked kernel.
- 
-+[3] Only for the Raspberry Pi 3 Model (overlay pi3-miniuart-bt is needed
-+    to enable the RPi3 serial console otherwise occupied by the bluetooth
-+    chip). Alternative would be to disable the serial console in cmdline.txt
-+    and /etc/inittab.
-+
- How to write the SD card
- ========================
- 
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 4eb5333..8600cd8 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -21,7 +21,7 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b"
- 
- BR2_PACKAGE_RPI_FIRMWARE=y
--# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
-+BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
- 
- # Required tools to create the SD image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-@@ -34,3 +34,4 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
+>
+> autoreconf does complain without the subdir-objects. The removal of the
+> CROSS_COMPILE in the same patch is important as the linker breaks
+> without it. It won't even get to linking stage if it can't find the
+> various database libraries fixed in the two previous patches.
+>
+> Suggest a new first patch to fix sudir-objects (patch number 4.), but
+> then leave the other patches as they are. So the flow would be.
+>
+> 1. Fix subdir-objects
+> 2. Fix sqlite + postgresql
+> 3. Fix mysql
+> 4. Fix the linker (CROSS_COMPILE).
+>
+> What do you think?
+
+  That sounds good. Perhaps 2+3 could be combined, it doesn't matter that much.
+
+
+[snip]
+>>   I'm not really happy with this choice, I'd prefer an automatic
+>> selection. But
+>> it's true, if both mysql and postgresql are selected it's hard to
+>> decide which
+>> one should be used...
+>
+> sent a seperate email on this.
+> mysql and postgresql are mutually exclusive.
+> sqlite lite can be safely enabled/disable depending on
+> BR2_PACKAGE_SQLITE.
+
+  Still, I'd prefer an automatic selection. E.g. if mysql is selected, build 
+mysql support, else if pgsql is selected, build pgsql support, else disable both.
+
+
+[snip]
+
+
+  Regards,
+  Arnout
+
 -- 
-2.8.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
