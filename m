@@ -1,37 +1,111 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 May 2016 21:51:24 +0200
-Subject: [Buildroot] [git commit] x264: needs madvise(),
-	disable for bfin external toolchain
-Message-ID: <20160502195405.4704A802F0@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  2 May 2016 22:25:44 +0200
+Subject: [Buildroot] [PATCH v2] raspberrypi3: fix serial console (load
+	pi3-miniuart-bt overlay)
+Message-ID: <1462220744-6368-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63cd7b84a331dcba7c53a375cc33f53b6b48474a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- enable BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS in raspberrypi3_defconfig
+- add copy of rpi-firmware/overlays directory to boot partition in genimage-raspberrypi3.cfg
+- enhance post-image.sh script to add 'dtoverlay=pi3-miniuart-bt' on request
+- add BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay" in raspberrypi3_defconfig
 
-x264 uses madvise() which is not available in the bfin external toolchain.
-
-Fixes:
-http://autobuild.buildroot.net/results/837/837fd5a63d59b5c65818ec005a565cb7741a1cdd/
-
-[Peter: Issue is specific to bfin toolchain, so only disable for that one]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/x264/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Changes v1 --> v2:
+  - use pi3-miniuart-bt instead of pi3-disable-bt
+  - fix post-image.sh to add overlay lines only once
+  - add overlay description (and alternative solution) to readme.txt
+---
+ board/raspberrypi/genimage-raspberrypi3.cfg |  1 +
+ board/raspberrypi/post-image.sh             | 13 +++++++++++++
+ board/raspberrypi/readme.txt                |  8 +++++++-
+ configs/raspberrypi3_defconfig              |  3 ++-
+ 4 files changed, 23 insertions(+), 2 deletions(-)
 
-diff --git a/package/x264/Config.in b/package/x264/Config.in
-index be3ab3f..7bf2319 100644
---- a/package/x264/Config.in
-+++ b/package/x264/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_X264
- 	bool "x264"
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX # madvise()
- 	help
- 	  x264 is a free software library and application for
- 	  encoding video streams into the H.264/MPEG-4 AVC
+diff --git a/board/raspberrypi/genimage-raspberrypi3.cfg b/board/raspberrypi/genimage-raspberrypi3.cfg
+index 7ba89c5..baab0c4 100644
+--- a/board/raspberrypi/genimage-raspberrypi3.cfg
++++ b/board/raspberrypi/genimage-raspberrypi3.cfg
+@@ -7,6 +7,7 @@ image boot.vfat {
+       "rpi-firmware/config.txt",
+       "rpi-firmware/fixup.dat",
+       "rpi-firmware/start.elf",
++      "rpi-firmware/overlays",
+       "kernel-marked/zImage"
+     }
+   }
+diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+index 73ffd65..c009752 100755
+--- a/board/raspberrypi/post-image.sh
++++ b/board/raspberrypi/post-image.sh
+@@ -5,6 +5,19 @@ BOARD_NAME="$(basename ${BOARD_DIR})"
+ GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
+ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+ 
++case "${2}" in
++	--add-pi3-miniuart-bt-overlay)
++	if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
++		echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
++		cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
++
++# fixes rpi3 ttyAMA0 serial console
++dtoverlay=pi3-miniuart-bt
++__EOF__
++	fi
++	;;
++esac
++
+ # Mark the kernel as DT-enabled
+ mkdir -p "${BINARIES_DIR}/kernel-marked"
+ ${HOST_DIR}/usr/bin/mkknlimg "${BINARIES_DIR}/zImage" \
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index a170f8f..03178ff 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -60,7 +60,8 @@ After building, you should obtain this tree:
+     |   +-- cmdline.txt
+     |   +-- config.txt
+     |   +-- fixup.dat
+-    |   `-- start.elf
++    |   +-- start.elf
++    |   `-- overlays/               [3]
+     +-- sdcard.img
+     `-- zImage
+ 
+@@ -69,6 +70,11 @@ After building, you should obtain this tree:
+ 
+ [2] This is the mkknlimg DT-marked kernel.
+ 
++[3] Only for the Raspberry Pi 3 Model (overlay pi3-miniuart-bt is needed
++    to enable the RPi3 serial console otherwise occupied by the bluetooth
++    chip). Alternative would be to disable the serial console in cmdline.txt
++    and /etc/inittab.
++
+ How to write the SD card
+ ========================
+ 
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index 4eb5333..8600cd8 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
+@@ -21,7 +21,7 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b"
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
+-# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
++BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
+ 
+ # Required tools to create the SD image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+@@ -34,3 +34,4 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
+-- 
+2.8.1
