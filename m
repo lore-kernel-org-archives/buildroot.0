@@ -1,40 +1,24 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  2 May 2016 12:21:31 -0300
-Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.2.7
-Message-ID: <1462202491-27154-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 02 May 2016 17:23:56 +0200
+Subject: [Buildroot] [PATCH] x264: needs mmu
+In-Reply-To: <1462193087-19193-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 2 May 2016 09:44:47 -0300")
+References: <1462193087-19193-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87inywqy9f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 4b49c30..e8a909d 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.6.tar.bz2.sha256
--sha256	7537bacccb3524df0cd2a4d5bc7e168bcc10e8171e0324f3cd522583868192c1	harfbuzz-1.2.6.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.7.tar.bz2.sha256
-+sha256	bba0600ae08b84384e6d2d7175bea10b5fc246c4583dc841498d01894d479026	harfbuzz-1.2.7.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index c8bf206..8e8e7b6 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 1.2.6
-+HARFBUZZ_VERSION = 1.2.7
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+ > Uses madvise() which is not available in NOMMU. Fixes:
+ > http://autobuild.buildroot.net/results/837/837fd5a63d59b5c65818ec005a565cb7741a1cdd/
+
+Hmm, is that really generally true? I don't quite see why you cannot
+have madvise() without mmu. Looking at uClibc-ng, the option enabling
+madvise support doesn't depend on MMU support.
+
 -- 
-2.7.3
+Bye, Peter Korsgaard
