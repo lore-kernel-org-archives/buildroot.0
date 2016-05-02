@@ -1,24 +1,63 @@
-From: Geoff Levand <geoff@infradead.org>
-Date: Mon, 02 May 2016 09:37:50 -0700
-Subject: [Buildroot] [PATCH v3 0/3] Add go language support
-In-Reply-To: <1462074238901-b9436b8a-0eb718e2-8f9a915c@mixmax.com>
-References: <cover.1459798147.git.geoff@infradead.org>
- <20160421224301.6a05f711@free-electrons.com>
- <1461965160.27026.9.camel@infradead.org>
- <20160430140314.4ff30ff1@free-electrons.com>
- <1462074238901-b9436b8a-0eb718e2-8f9a915c@mixmax.com>
-Message-ID: <1462207070.27026.20.camel@infradead.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 02 May 2016 18:53:42 +0000
+Subject: [Buildroot] [Bug 8901] New: gcc failes to build if fortran is
+	enabled
+Message-ID: <bug-8901-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2016-05-01 at 03:43 +0000, Christian Stewart wrote:
-> Indeed, the cross compiler toolchain is NOT compiled before Go. I
-> think a dependency needs to be added for this.
+https://bugs.busybox.net/show_bug.cgi?id=8901
 
-I have the patch below that adds BR2_TOOLCHAIN_HAS_THREADS.  Is
-it enough to pull in the toolchain?
+            Bug ID: 8901
+           Summary: gcc failes to build if fortran is enabled
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: thijsvermeir at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
--Geoff
+When BR2_TOOLCHAIN_BUILDROOT_FORTRAN is enabled, gcc failes to build with this
+error:
+
+---
+In file included from ../../../libgfortran/generated/any_l4.c:26:0:
+../../../libgfortran/libgfortran.h:60:29: fatal error: quadmath_weak.h: No such
+file or directory
+ #  include "quadmath_weak.h"
+                             ^
+compilation terminated.
+---
+
+A quick fix is to also enable BR2_TOOLCHAIN_BUILDROOT_WCHAR as this is enabling
+libquadmath in `package/gcc/gcc.mk`.
+
+This can be reproduces with a minimal qemu config:
+---
+BR2_x86_64=y
+BR2_DL_DIR="$(TOPDIR)/../dl"
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
+BR2_TOOLCHAIN_BUILDROOT_FORTRAN=y
+BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+BR2_SYSTEM_DHCP="eth0"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.5.config"
+BR2_TARGET_ROOTFS_EXT2=y
+# BR2_TARGET_ROOTFS_TAR is not set
+---
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
