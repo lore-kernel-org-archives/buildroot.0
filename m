@@ -1,24 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 May 2016 17:23:56 +0200
-Subject: [Buildroot] [PATCH] x264: needs mmu
-In-Reply-To: <1462193087-19193-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 2 May 2016 09:44:47 -0300")
-References: <1462193087-19193-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87inywqy9f.fsf@dell.be.48ers.dk>
+Date: Mon, 2 May 2016 17:19:19 +0200
+Subject: [Buildroot] [git commit] samba4: bump to version 4.4.3
+Message-ID: <20160502152436.AE46A80767@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=31acaf78c56d730620cc6982a78c84711d06aaf5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Uses madvise() which is not available in NOMMU. Fixes:
- > http://autobuild.buildroot.net/results/837/837fd5a63d59b5c65818ec005a565cb7741a1cdd/
+Fixes a few regressions from the previous security bump.
 
-Hmm, is that really generally true? I don't quite see why you cannot
-have madvise() without mmu. Looking at uClibc-ng, the option enabling
-madvise support doesn't depend on MMU support.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index d762452..042c7db 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	eaecd41a85ebb9507b8db9856ada2a949376e9d53cf75664b5493658f6e5926a	samba-4.4.2.tar.gz
++sha256	031e6ada6d15deae6850845eed41497af32207fb679d6c6c74f19acc99d437ba	samba-4.4.3.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 0d73662..9ccc6a7 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.4.2
++SAMBA4_VERSION = 4.4.3
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
