@@ -1,51 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 May 2016 17:19:33 +0200
-Subject: [Buildroot] [PATCH] ntp: security bump to version 4.2.8p7
-In-Reply-To: <1462191682-23465-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 2 May 2016 09:21:22 -0300")
-References: <1462191682-23465-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mvo8qygq.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  2 May 2016 12:21:31 -0300
+Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.2.7
+Message-ID: <1462202491-27154-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/harfbuzz/harfbuzz.hash | 4 ++--
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Fixes:
- > CVE-2016-1551 - Refclock impersonation vulnerability, AKA:
- > refclock-peering
-
- > CVE-2016-1549 - Sybil vulnerability: ephemeral association attack, AKA:
- > ntp-sybil - MITIGATION ONLY
-
- > CVE-2016-2516 - Duplicate IPs on unconfig directives will cause an
- > assertion botch
-
- > CVE-2016-2517 - Remote configuration trustedkey/requestkey values are not
- > properly validated
-
- > CVE-2016-2518 - Crafted addpeer with hmode > 7 causes array wraparound
- > with MATCH_ASSOC
-
- > CVE-2016-2519 - ctl_getitem() return value not always checked
-
- > CVE-2016-1547 - Validate crypto-NAKs, AKA: nak-dos
-
- > CVE-2016-1548 - Interleave-pivot - MITIGATION ONLY
-
- > CVE-2015-7704 - KoD fix: peer associations were broken by the fix for
- > NtpBug2901, AKA: Symmetric active/passive mode is broken
-
- > CVE-2015-8138 - Zero Origin Timestamp Bypass, AKA: Additional KoD Checks
-
- > CVE-2016-1550 - Improve NTP security against buffer comparison timing
- > attacks, authdecrypt-timing, AKA: authdecrypt-timing
-
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
-
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 4b49c30..e8a909d 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,2 +1,2 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.6.tar.bz2.sha256
+-sha256	7537bacccb3524df0cd2a4d5bc7e168bcc10e8171e0324f3cd522583868192c1	harfbuzz-1.2.6.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.7.tar.bz2.sha256
++sha256	bba0600ae08b84384e6d2d7175bea10b5fc246c4583dc841498d01894d479026	harfbuzz-1.2.7.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index c8bf206..8e8e7b6 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 1.2.6
++HARFBUZZ_VERSION = 1.2.7
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
-Bye, Peter Korsgaard
+2.7.3
