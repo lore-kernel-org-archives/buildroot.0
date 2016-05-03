@@ -1,57 +1,57 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Tue,  3 May 2016 10:36:57 +0100
-Subject: [Buildroot] [PATCH v2 6/6] package/nginx: add debug logging support
-In-Reply-To: <1462268217-31545-1-git-send-email-martin@barkynet.com>
-References: <1462268217-31545-1-git-send-email-martin@barkynet.com>
-Message-ID: <1462268217-31545-6-git-send-email-martin@barkynet.com>
+Date: Tue, 3 May 2016 11:23:50 +0100
+Subject: [Buildroot] [PATCH v2] raspberrypi3: fix serial console (load
+ pi3-miniuart-bt overlay)
+In-Reply-To: <871t5jr7e6.fsf@dell.be.48ers.dk>
+References: <1462220744-6368-1-git-send-email-ps.report@gmx.net>
+ <CALtfCQZowiGZUJ0HV4oTyRMfMY02TherviK_ZE6D4wgfUcQ3gg@mail.gmail.com>
+ <871t5jr7e6.fsf@dell.be.48ers.dk>
+Message-ID: <CAFGQKxeRKWNCOH2YV0FYA17tdfyeemv3Xau2Bkrzmrxh5Rm-4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+All,
 
----
-Changes v1 -> v2
- - no changes
----
- package/nginx/Config.in | 8 ++++++++
- package/nginx/nginx.mk  | 3 +++
- 2 files changed, 11 insertions(+)
+On 3 May 2016 at 07:18, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Oscar" == Oscar Gomez Fuente <oscargomezf@gmail.com> writes:
+>
+>  > Hi Peter Seiderer,
+>  > What's the difference between enabling pi3-miniuart-bt instead of
+>  > pi3-disable-bt?
+>
+>  > With pi3-disable-bt enables it works fine the serial console on (14 [TxD] &
+>  > 15 [RxD] pins).
+>
+> From the names I would guess it is the difference between completely
+> disabling access to the bluetooth module and providing access to it
+> though the secondary (mini) uart.
+>
+> The miniuart has some limitations, but I guess basic bluetooth stuff
+> should work with it.
 
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index ca3e3eb..0ae022b 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -354,6 +354,14 @@ config BR2_PACKAGE_NGINX_STREAM_UPSTREAM_ZONE_MODULE
- 
- endif #BR2_PACKAGE_NGINX_STREAM
- 
-+config BR2_PACKAGE_NGINX_DEBUG
-+	bool "debug logging"
-+	help
-+	  Enable debug logging.  The debug level should be set with the error_log
-+	  directive.  For example
-+
-+	  error_log /var/log/nginx/error.log debug;
-+
- comment "misc. modules"
- 
- config BR2_PACKAGE_NGINX_SELECT_MODULE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 91772b3..c1e8367 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -226,6 +226,9 @@ NGINX_CONF_OPTS += \
- 
- endif # BR2_PACKAGE_NGINX_STREAM
- 
-+# Debug logging
-+NGINX_CONF_OPTS += $(if $(BR2_PACKAGE_NGINX_DEBUG),--with-debug)
-+
- define NGINX_DISABLE_WERROR
- 	$(SED) 's/-Werror//g' -i $(@D)/auto/cc/*
- endef
--- 
-2.7.4
+I've got a bit lost in the rpi3 serial console issues but as i
+understand the current situation all you need to do is set
+enable_uart=1 in config.txt.  See
+https://github.com/raspberrypi/firmware/issues/553#issuecomment-199486644.
+I've not tested this.
+
+I think you also need to change cmdline.txt to use console=serial0 as
+the pi3-miniuart-bt will replace it with the correct serial device
+(ttyAMA0 or ttyS0) depending if it's enabled or not.  See the comments
+in https://github.com/raspberrypi/linux/blob/rpi-4.1.y/arch/arm/boot/dts/overlays/pi3-miniuart-bt-overlay.dts.
+
+Thanks
+
+Martin
+
+>
+> --
+> Venlig hilsen,
+> Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
