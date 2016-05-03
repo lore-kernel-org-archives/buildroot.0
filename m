@@ -1,398 +1,267 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 May 2016 09:31:05 +0200
-Subject: [Buildroot] [git commit] wpa_supplicant: add security fixes
-Message-ID: <20160503073744.1ACD780046@busybox.osuosl.org>
+From: fabrice.fontaine at orange.com <fabrice.fontaine@orange.com>
+Date: Tue, 3 May 2016 10:14:09 +0200
+Subject: [Buildroot] [PATCH v5] domoticz: new package
+Message-ID: <30357_1462263258_57285DDA_30357_1304_1_d5a28a6b-c41a-4918-a007-feff96280fbe@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6c2e55a87e5a0032765199de434cf85a7bdb90e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Domoticz is a Home Automation System that lets you monitor andi
+configure various devices like: Lights, Switches, various
+sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
+and much more. Notifications/Alerts can be sent to any mobile device.
 
-Add upstream patching fixing CVE-2016-2447: psk configuration parameter update
-allowing arbitrary data to be written.
-
-See http://w1.fi/security/2016-1/psk-parameter-config-update.txt for details.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 ---
- ...ject-a-Credential-with-invalid-passphrase.patch | 85 ++++++++++++++++++++++
- ...parameter-set-with-invalid-passphrase-cha.patch | 53 ++++++++++++++
- ...ines-from-wpa_supplicant-config-network-o.patch | 84 +++++++++++++++++++++
- ...CRED-commands-with-newline-characters-in-.patch | 65 +++++++++++++++++
- ...commands-with-newline-characters-in-the-s.patch | 53 ++++++++++++++
- 5 files changed, 340 insertions(+)
+Changes v4 -> v5 (after review of Julien Boibessot):
+ - Add dedicated init scripts for systemV and systemd instead of using
+   domoticz.sh as it is not compatible with buildroot init system
 
-diff --git a/package/wpa_supplicant/0008-WPS-Reject-a-Credential-with-invalid-passphrase.patch b/package/wpa_supplicant/0008-WPS-Reject-a-Credential-with-invalid-passphrase.patch
+Changes v3 -> v4 (after review of Julien Boibessot):
+ - Remove unneeded files (License and updatedomo) from target directory.
+   Do not remove History.txt as it is used in source code
+ - Install domoticz binary and all its files in /opt/domoticz instead of
+   /usr by overriding CMAKE_INSTALL_PREFIX
+ - Modify and install domoticz.sh if systemV is enabled by defining
+   DOMOTICZ_INSTALL_INIT_SYSV
+
+Changes v2 -> v3 (after review of Samuel Martin):
+ - Use OFF instead of no for consistency with other cmake packages
+ - Always set USE_STATIC_BOOST and USE_STATIC_OPENZWAVE to OFF as
+   BR2_STATIC_LIBS will always be false due to mosquitto dependency
+
+Changes v1 -> v2 (after review of Samuel Martin):
+ - Add a hash file
+ - Replace the dependency on BR2_PACKAGE_LUA_5_2 by a dependency on
+   BR2_PACKAGE_LUA_5_2 or BR2_PACKAGE_LUA_5_3
+ - Add dependencies on BR2_USE_MMU and !BR2_STATIC_LIBS (from mosquitto)
+ - Add dependency on BR2_PACKAGE_BOOST_ARCH_SUPPORTS (from boost)
+ - Automatically add zwave support in domoticz if the user has selected
+   the openzwave package
+ - Set USE_STATIC_BOOST and USE_STATIC_OPENZWAVE to the correct values
+   in domoticz.mk depending on BR2_STATIC_LIBS value to avoid breaking
+   static-only build
+
+ package/Config.in                 |  1 +
+ package/domoticz/Config.in        | 32 ++++++++++++++++++
+ package/domoticz/S99domoticz      | 38 ++++++++++++++++++++++
+ package/domoticz/domoticz.hash    |  2 ++
+ package/domoticz/domoticz.mk      | 68 +++++++++++++++++++++++++++++++++++++++
+ package/domoticz/domoticz.service | 10 ++++++
+ 6 files changed, 151 insertions(+)
+ create mode 100644 package/domoticz/Config.in
+ create mode 100644 package/domoticz/S99domoticz
+ create mode 100644 package/domoticz/domoticz.hash
+ create mode 100644 package/domoticz/domoticz.mk
+ create mode 100644 package/domoticz/domoticz.service
+
+diff --git a/package/Config.in b/package/Config.in
+index 10d9a6e..6b33a02 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1326,6 +1326,7 @@ menu "Miscellaneous"
+ 	source "package/bc/Config.in"
+ 	source "package/clamav/Config.in"
+ 	source "package/collectd/Config.in"
++	source "package/domoticz/Config.in"
+ 	source "package/empty/Config.in"
+ 	source "package/gnuradio/Config.in"
+ 	source "package/googlefontdirectory/Config.in"
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
 new file mode 100644
-index 0000000..282aa95
+index 0000000..c7c2878
 --- /dev/null
-+++ b/package/wpa_supplicant/0008-WPS-Reject-a-Credential-with-invalid-passphrase.patch
-@@ -0,0 +1,85 @@
-+From ecbb0b3dc122b0d290987cf9c84010bbe53e1022 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <jouni@qca.qualcomm.com>
-+Date: Fri, 4 Mar 2016 17:20:18 +0200
-+Subject: [PATCH] WPS: Reject a Credential with invalid passphrase
++++ b/package/domoticz/Config.in
+@@ -0,0 +1,32 @@
++config BR2_PACKAGE_DOMOTICZ
++	bool "domoticz"
++	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
++	depends on BR2_USE_MMU # mosquitto
++	depends on !BR2_STATIC_LIBS # mosquitto
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
++	depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_DATE_TIME
++	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_BOOST_THREAD
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_MOSQUITTO
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_SQLITE
++	select BR2_PACKAGE_ZLIB
++	help
++	  Domoticz is a Home Automation System that lets you monitor andi
++	  configure various devices like: Lights, Switches, various
++	  sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
++	  and much more. Notifications/Alerts can be sent to any mobile device.
 +
-+WPA/WPA2-Personal passphrase is not allowed to include control
-+characters. Reject a Credential received from a WPS Registrar both as
-+STA (Credential) and AP (AP Settings) if the credential is for WPAPSK or
-+WPA2PSK authentication type and includes an invalid passphrase.
++	  http://domoticz.com
 +
-+This fixes an issue where hostapd or wpa_supplicant could have updated
-+the configuration file PSK/passphrase parameter with arbitrary data from
-+an external device (Registrar) that may not be fully trusted. Should
-+such data include a newline character, the resulting configuration file
-+could become invalid and fail to be parsed.
-+
-+Signed-off-by: Jouni Malinen <jouni@qca.qualcomm.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream (ecbb0b3dc122b0d290987cf9c84010bbe53e1022)
-+
-+ src/utils/common.c         | 12 ++++++++++++
-+ src/utils/common.h         |  1 +
-+ src/wps/wps_attr_process.c | 10 ++++++++++
-+ 3 files changed, 23 insertions(+)
-+
-+diff --git a/src/utils/common.c b/src/utils/common.c
-+index 450e2c6519ba..27b7c02de10b 100644
-+--- a/src/utils/common.c
-++++ b/src/utils/common.c
-+@@ -697,6 +697,18 @@ int is_hex(const u8 *data, size_t len)
-+ }
-+ 
-+ 
-++int has_ctrl_char(const u8 *data, size_t len)
-++{
-++	size_t i;
-++
-++	for (i = 0; i < len; i++) {
-++		if (data[i] < 32 || data[i] == 127)
-++			return 1;
-++	}
-++	return 0;
-++}
-++
-++
-+ size_t merge_byte_arrays(u8 *res, size_t res_len,
-+ 			 const u8 *src1, size_t src1_len,
-+ 			 const u8 *src2, size_t src2_len)
-+diff --git a/src/utils/common.h b/src/utils/common.h
-+index 701dbb236ed5..a97224070385 100644
-+--- a/src/utils/common.h
-++++ b/src/utils/common.h
-+@@ -488,6 +488,7 @@ const char * wpa_ssid_txt(const u8 *ssid, size_t ssid_len);
-+ 
-+ char * wpa_config_parse_string(const char *value, size_t *len);
-+ int is_hex(const u8 *data, size_t len);
-++int has_ctrl_char(const u8 *data, size_t len);
-+ size_t merge_byte_arrays(u8 *res, size_t res_len,
-+ 			 const u8 *src1, size_t src1_len,
-+ 			 const u8 *src2, size_t src2_len);
-+diff --git a/src/wps/wps_attr_process.c b/src/wps/wps_attr_process.c
-+index eadb22fe2e78..e8c4579309ab 100644
-+--- a/src/wps/wps_attr_process.c
-++++ b/src/wps/wps_attr_process.c
-+@@ -229,6 +229,16 @@ static int wps_workaround_cred_key(struct wps_credential *cred)
-+ 		cred->key_len--;
-+ #endif /* CONFIG_WPS_STRICT */
-+ 	}
-++
-++
-++	if (cred->auth_type & (WPS_AUTH_WPAPSK | WPS_AUTH_WPA2PSK) &&
-++	    (cred->key_len < 8 || has_ctrl_char(cred->key, cred->key_len))) {
-++		wpa_printf(MSG_INFO, "WPS: Reject credential with invalid WPA/WPA2-Personal passphrase");
-++		wpa_hexdump_ascii_key(MSG_INFO, "WPS: Network Key",
-++				      cred->key, cred->key_len);
-++		return -1;
-++	}
-++
-+ 	return 0;
-+ }
-+ 
-+-- 
-+2.8.1
-+
-diff --git a/package/wpa_supplicant/0009-Reject-psk-parameter-set-with-invalid-passphrase-cha.patch b/package/wpa_supplicant/0009-Reject-psk-parameter-set-with-invalid-passphrase-cha.patch
++comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynamic library"
++	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
++		!(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
+diff --git a/package/domoticz/S99domoticz b/package/domoticz/S99domoticz
 new file mode 100644
-index 0000000..316c070
+index 0000000..9a53105
 --- /dev/null
-+++ b/package/wpa_supplicant/0009-Reject-psk-parameter-set-with-invalid-passphrase-cha.patch
-@@ -0,0 +1,53 @@
-+From 73e4abb24a936014727924d8b0b2965edfc117dd Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <jouni@qca.qualcomm.com>
-+Date: Fri, 4 Mar 2016 18:46:41 +0200
-+Subject: [PATCH] Reject psk parameter set with invalid passphrase character
++++ b/package/domoticz/S99domoticz
+@@ -0,0 +1,38 @@
++#!/bin/sh
 +
-+WPA/WPA2-Personal passphrase is not allowed to include control
-+characters. Reject a passphrase configuration attempt if that passphrase
-+includes an invalid passphrase.
++NAME=domoticz
++PIDFILE=/var/run/$NAME.pid
++DAEMON=/opt/domoticz/$NAME
++DAEMON_ARGS="-daemon -www 18080 -sslwww 443"
 +
-+This fixes an issue where wpa_supplicant could have updated the
-+configuration file psk parameter with arbitrary data from the control
-+interface or D-Bus interface. While those interfaces are supposed to be
-+accessible only for trusted users/applications, it may be possible that
-+an untrusted user has access to a management software component that
-+does not validate the passphrase value before passing it to
-+wpa_supplicant.
++start() {
++	printf "Starting $NAME: "
++	start-stop-daemon -S -q -m -b -p $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++stop() {
++	printf "Stopping $NAME: "
++	start-stop-daemon -K -q -p $PIDFILE
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++restart() {
++	stop
++	start
++}
 +
-+This could allow such an untrusted user to inject up to 63 characters of
-+almost arbitrary data into the configuration file. Such configuration
-+file could result in wpa_supplicant trying to load a library (e.g.,
-+opensc_engine_path, pkcs11_engine_path, pkcs11_module_path,
-+load_dynamic_eap) from user controlled location when starting again.
-+This would allow code from that library to be executed under the
-+wpa_supplicant process privileges.
++case "$1" in
++  start)
++	start
++	;;
++  stop)
++	stop
++	;;
++  restart|reload)
++	restart
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
 +
-+Signed-off-by: Jouni Malinen <jouni@qca.qualcomm.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream (73e4abb24a936014727924d8b0b2965edfc117dd)
-+
-+ wpa_supplicant/config.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/wpa_supplicant/config.c b/wpa_supplicant/config.c
-+index b1c7870dafe0..fdd964356afa 100644
-+--- a/wpa_supplicant/config.c
-++++ b/wpa_supplicant/config.c
-+@@ -478,6 +478,12 @@ static int wpa_config_parse_psk(const struct parse_data *data,
-+ 		}
-+ 		wpa_hexdump_ascii_key(MSG_MSGDUMP, "PSK (ASCII passphrase)",
-+ 				      (u8 *) value, len);
-++		if (has_ctrl_char((u8 *) value, len)) {
-++			wpa_printf(MSG_ERROR,
-++				   "Line %d: Invalid passphrase character",
-++				   line);
-++			return -1;
-++		}
-+ 		if (ssid->passphrase && os_strlen(ssid->passphrase) == len &&
-+ 		    os_memcmp(ssid->passphrase, value, len) == 0) {
-+ 			/* No change to the previously configured value */
-+-- 
-+2.8.1
-+
-diff --git a/package/wpa_supplicant/0010-Remove-newlines-from-wpa_supplicant-config-network-o.patch b/package/wpa_supplicant/0010-Remove-newlines-from-wpa_supplicant-config-network-o.patch
++exit $?
+diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
 new file mode 100644
-index 0000000..8a40dce
+index 0000000..9180a9b
 --- /dev/null
-+++ b/package/wpa_supplicant/0010-Remove-newlines-from-wpa_supplicant-config-network-o.patch
-@@ -0,0 +1,84 @@
-+From 0fe5a234240a108b294a87174ad197f6b5cb38e9 Mon Sep 17 00:00:00 2001
-+From: Paul Stewart <pstew@google.com>
-+Date: Thu, 3 Mar 2016 15:40:19 -0800
-+Subject: [PATCH] Remove newlines from wpa_supplicant config network output
-+
-+Spurious newlines output while writing the config file can corrupt the
-+wpa_supplicant configuration. Avoid writing these for the network block
-+parameters. This is a generic filter that cover cases that may not have
-+been explicitly addressed with a more specific commit to avoid control
-+characters in the psk parameter.
-+
-+Signed-off-by: Paul Stewart <pstew@google.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream (0fe5a234240a108b294a87174ad197f6b5cb38e9)
-+
-+ src/utils/common.c      | 11 +++++++++++
-+ src/utils/common.h      |  1 +
-+ wpa_supplicant/config.c | 15 +++++++++++++--
-+ 3 files changed, 25 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/utils/common.c b/src/utils/common.c
-+index 27b7c02de10b..9856463242c7 100644
-+--- a/src/utils/common.c
-++++ b/src/utils/common.c
-+@@ -709,6 +709,17 @@ int has_ctrl_char(const u8 *data, size_t len)
-+ }
-+ 
-+ 
-++int has_newline(const char *str)
-++{
-++	while (*str) {
-++		if (*str == '\n' || *str == '\r')
-++			return 1;
-++		str++;
-++	}
-++	return 0;
-++}
-++
-++
-+ size_t merge_byte_arrays(u8 *res, size_t res_len,
-+ 			 const u8 *src1, size_t src1_len,
-+ 			 const u8 *src2, size_t src2_len)
-+diff --git a/src/utils/common.h b/src/utils/common.h
-+index a97224070385..d19927b375bf 100644
-+--- a/src/utils/common.h
-++++ b/src/utils/common.h
-+@@ -489,6 +489,7 @@ const char * wpa_ssid_txt(const u8 *ssid, size_t ssid_len);
-+ char * wpa_config_parse_string(const char *value, size_t *len);
-+ int is_hex(const u8 *data, size_t len);
-+ int has_ctrl_char(const u8 *data, size_t len);
-++int has_newline(const char *str);
-+ size_t merge_byte_arrays(u8 *res, size_t res_len,
-+ 			 const u8 *src1, size_t src1_len,
-+ 			 const u8 *src2, size_t src2_len);
-+diff --git a/wpa_supplicant/config.c b/wpa_supplicant/config.c
-+index fdd964356afa..eb97cd5e4e6e 100644
-+--- a/wpa_supplicant/config.c
-++++ b/wpa_supplicant/config.c
-+@@ -2699,8 +2699,19 @@ char * wpa_config_get(struct wpa_ssid *ssid, const char *var)
-+ 
-+ 	for (i = 0; i < NUM_SSID_FIELDS; i++) {
-+ 		const struct parse_data *field = &ssid_fields[i];
-+-		if (os_strcmp(var, field->name) == 0)
-+-			return field->writer(field, ssid);
-++		if (os_strcmp(var, field->name) == 0) {
-++			char *ret = field->writer(field, ssid);
-++
-++			if (ret && has_newline(ret)) {
-++				wpa_printf(MSG_ERROR,
-++					   "Found newline in value for %s; not returning it",
-++					   var);
-++				os_free(ret);
-++				ret = NULL;
-++			}
-++
-++			return ret;
-++		}
-+ 	}
-+ 
-+ 	return NULL;
-+-- 
-+2.8.1
-+
-diff --git a/package/wpa_supplicant/0011-Reject-SET_CRED-commands-with-newline-characters-in-.patch b/package/wpa_supplicant/0011-Reject-SET_CRED-commands-with-newline-characters-in-.patch
++++ b/package/domoticz/domoticz.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	02b4cdde8e376258aeae3d5621edf8bb6b3563c34282e50194db343fcec9c0f5	domoticz-3.4834.tar.gz
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
 new file mode 100644
-index 0000000..530681f
+index 0000000..64d4074
 --- /dev/null
-+++ b/package/wpa_supplicant/0011-Reject-SET_CRED-commands-with-newline-characters-in-.patch
-@@ -0,0 +1,65 @@
-+From b166cd84a77a6717be9600bf95378a0055d6f5a5 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <jouni@qca.qualcomm.com>
-+Date: Tue, 5 Apr 2016 23:33:10 +0300
-+Subject: [PATCH] Reject SET_CRED commands with newline characters in the
-+ string values
++++ b/package/domoticz/domoticz.mk
+@@ -0,0 +1,68 @@
++################################################################################
++#
++# domoticz
++#
++################################################################################
 +
-+Most of the cred block parameters are written as strings without
-+filtering and if there is an embedded newline character in the value,
-+unexpected configuration file data might be written.
++DOMOTICZ_VERSION = 3.4834
++DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
++DOMOTICZ_LICENSE = GPLv3
++DOMOTICZ_LICENSE_FILES = License.txt
++DOMOTICZ_DEPENDENCIES = boost host-pkgconf libcurl lua mosquitto openssl \
++        sqlite zlib
 +
-+This fixes an issue where wpa_supplicant could have updated the
-+configuration file cred parameter with arbitrary data from the control
-+interface or D-Bus interface. While those interfaces are supposed to be
-+accessible only for trusted users/applications, it may be possible that
-+an untrusted user has access to a management software component that
-+does not validate the credential value before passing it to
-+wpa_supplicant.
++# Due to mosquitto dependency, domoticz depends on !BR2_STATIC_LIBS so sets
++# USE_STATIC_BOOST to OFF
++DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
 +
-+This could allow such an untrusted user to inject almost arbitrary data
-+into the configuration file. Such configuration file could result in
-+wpa_supplicant trying to load a library (e.g., opensc_engine_path,
-+pkcs11_engine_path, pkcs11_module_path, load_dynamic_eap) from user
-+controlled location when starting again. This would allow code from that
-+library to be executed under the wpa_supplicant process privileges.
++# Do not use any built-in libraries which are enabled by default for lua, 
++# sqlite and mqtt
++DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_LUA=OFF
++DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_SQLITE=OFF
++DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_MQTT=OFF
 +
-+Signed-off-by: Jouni Malinen <jouni@qca.qualcomm.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream (b166cd84a77a6717be9600bf95378a0055d6f5a5)
++ifeq ($(BR2_PACKAGE_LIBUSB),y)
++DOMOTICZ_DEPENDENCIES += libusb
++endif
 +
-+ wpa_supplicant/config.c | 9 ++++++++-
-+ 1 file changed, 8 insertions(+), 1 deletion(-)
++ifeq ($(BR2_PACKAGE_OPENZWAVE),y)
++DOMOTICZ_DEPENDENCIES += openzwave
 +
-+diff --git a/wpa_supplicant/config.c b/wpa_supplicant/config.c
-+index eb97cd5e4e6e..69152efdea1a 100644
-+--- a/wpa_supplicant/config.c
-++++ b/wpa_supplicant/config.c
-+@@ -2896,6 +2896,8 @@ int wpa_config_set_cred(struct wpa_cred *cred, const char *var,
-+ 
-+ 	if (os_strcmp(var, "password") == 0 &&
-+ 	    os_strncmp(value, "ext:", 4) == 0) {
-++		if (has_newline(value))
-++			return -1;
-+ 		str_clear_free(cred->password);
-+ 		cred->password = os_strdup(value);
-+ 		cred->ext_password = 1;
-+@@ -2946,9 +2948,14 @@ int wpa_config_set_cred(struct wpa_cred *cred, const char *var,
-+ 	}
-+ 
-+ 	val = wpa_config_parse_string(value, &len);
-+-	if (val == NULL) {
-++	if (val == NULL ||
-++	    (os_strcmp(var, "excluded_ssid") != 0 &&
-++	     os_strcmp(var, "roaming_consortium") != 0 &&
-++	     os_strcmp(var, "required_roaming_consortium") != 0 &&
-++	     has_newline(val))) {
-+ 		wpa_printf(MSG_ERROR, "Line %d: invalid field '%s' string "
-+ 			   "value '%s'.", line, var, value);
-++		os_free(val);
-+ 		return -1;
-+ 	}
-+ 
-+-- 
-+2.8.1
++# Due to mosquitto dependency, domoticz depends on !BR2_STATIC_LIBS so sets
++# USE_STATIC_OPENZWAVE to OFF otherwise domoticz will not found openzwave
++# library as it searchs by default a static library
++DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=OFF
++endif
 +
-diff --git a/package/wpa_supplicant/0012-Reject-SET-commands-with-newline-characters-in-the-s.patch b/package/wpa_supplicant/0012-Reject-SET-commands-with-newline-characters-in-the-s.patch
++# Install domoticz in a dedicated directory (/opt/domoticz) as domoticz expects
++# by default that all its subdirectories (www, Config, scripts, ...) are in the
++# binary directory
++DOMOTICZ_TARGET_DIR = /opt/domoticz
++DOMOTICZ_CONF_OPTS += -DCMAKE_INSTALL_PREFIX=$(DOMOTICZ_TARGET_DIR)
++
++# Delete License.txt and updatedomo files installed by domoticz in target
++# directory
++# Do not delete History.txt as it is used in source code
++define DOMOTICZ_REMOVE_UNNEEDED_FILES
++	$(RM) $(TARGET_DIR)/$(DOMOTICZ_TARGET_DIR)/License.txt
++	$(RM) $(TARGET_DIR)/$(DOMOTICZ_TARGET_DIR)/updatedomo
++endef
++
++DOMOTICZ_POST_INSTALL_TARGET_HOOKS += DOMOTICZ_REMOVE_UNNEEDED_FILES
++
++# Use dedicated init scripts for systemV and systemd instead of using
++# domoticz.sh as it is not compatible with buildroot init system
++define DOMOTICZ_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/domoticz/S99domoticz \
++		$(TARGET_DIR)/etc/init.d/S99domoticz
++endef
++
++define DOMOTICZ_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/domoticz/domoticz.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/domoticz.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf ../../../../usr/lib/systemd/system/domoticz.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/domoticz.service
++endef
++
++$(eval $(cmake-package))
+diff --git a/package/domoticz/domoticz.service b/package/domoticz/domoticz.service
 new file mode 100644
-index 0000000..a29df07
+index 0000000..446b41a
 --- /dev/null
-+++ b/package/wpa_supplicant/0012-Reject-SET-commands-with-newline-characters-in-the-s.patch
-@@ -0,0 +1,53 @@
-+From 2a3f56502b52375c3bf113cf92adfa99bad6b488 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <jouni@qca.qualcomm.com>
-+Date: Tue, 5 Apr 2016 23:55:48 +0300
-+Subject: [PATCH] Reject SET commands with newline characters in the string
-+ values
++++ b/package/domoticz/domoticz.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=Domoticz Home Automation System
++After=network.target
 +
-+Many of the global configuration parameters are written as strings
-+without filtering and if there is an embedded newline character in the
-+value, unexpected configuration file data might be written.
++[Service]
++ExecStart=/opt/domoticz/domoticz -daemon -www 8080 -sslwww 443
++Restart=always
 +
-+This fixes an issue where wpa_supplicant could have updated the
-+configuration file global parameter with arbitrary data from the control
-+interface or D-Bus interface. While those interfaces are supposed to be
-+accessible only for trusted users/applications, it may be possible that
-+an untrusted user has access to a management software component that
-+does not validate the value of a parameter before passing it to
-+wpa_supplicant.
-+
-+This could allow such an untrusted user to inject almost arbitrary data
-+into the configuration file. Such configuration file could result in
-+wpa_supplicant trying to load a library (e.g., opensc_engine_path,
-+pkcs11_engine_path, pkcs11_module_path, load_dynamic_eap) from user
-+controlled location when starting again. This would allow code from that
-+library to be executed under the wpa_supplicant process privileges.
-+
-+Signed-off-by: Jouni Malinen <jouni@qca.qualcomm.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream (2a3f56502b52375c3bf113cf92adfa99bad6b488)
-+
-+ wpa_supplicant/config.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/wpa_supplicant/config.c b/wpa_supplicant/config.c
-+index 69152efdea1a..d9a1603f6d7e 100644
-+--- a/wpa_supplicant/config.c
-++++ b/wpa_supplicant/config.c
-+@@ -3764,6 +3764,12 @@ static int wpa_global_config_parse_str(const struct global_parse_data *data,
-+ 		return -1;
-+ 	}
-+ 
-++	if (has_newline(pos)) {
-++		wpa_printf(MSG_ERROR, "Line %d: invalid %s value with newline",
-++			   line, data->name);
-++		return -1;
-++	}
-++
-+ 	tmp = os_strdup(pos);
-+ 	if (tmp == NULL)
-+ 		return -1;
-+-- 
-+2.8.1
-+
++[Install]
++WantedBy=multi-user.target
+-- 
+2.7.4
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
