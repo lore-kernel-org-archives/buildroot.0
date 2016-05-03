@@ -1,17 +1,17 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 May 2016 09:30:47 +0200
-Subject: [Buildroot] [git commit] hostapd: add security fix
-Message-ID: <20160503073744.0E33780408@busybox.osuosl.org>
+Date: Tue, 3 May 2016 09:31:05 +0200
+Subject: [Buildroot] [git commit] wpa_supplicant: add security fixes
+Message-ID: <20160503073744.1ACD780046@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1297fc980b7b702754ce2fd089df9cf6f3638694
+commit: https://git.buildroot.net/buildroot/commit/?id=f6c2e55a87e5a0032765199de434cf85a7bdb90e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add upstream patch fixing CVE-2016-2447: psk configuration parameter update
+Add upstream patching fixing CVE-2016-2447: psk configuration parameter update
 allowing arbitrary data to be written.
 
 See http://w1.fi/security/2016-1/psk-parameter-config-update.txt for details.
@@ -20,13 +20,17 @@ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  ...ject-a-Credential-with-invalid-passphrase.patch | 85 ++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
+ ...parameter-set-with-invalid-passphrase-cha.patch | 53 ++++++++++++++
+ ...ines-from-wpa_supplicant-config-network-o.patch | 84 +++++++++++++++++++++
+ ...CRED-commands-with-newline-characters-in-.patch | 65 +++++++++++++++++
+ ...commands-with-newline-characters-in-the-s.patch | 53 ++++++++++++++
+ 5 files changed, 340 insertions(+)
 
-diff --git a/package/hostapd/0005-WPS-Reject-a-Credential-with-invalid-passphrase.patch b/package/hostapd/0005-WPS-Reject-a-Credential-with-invalid-passphrase.patch
+diff --git a/package/wpa_supplicant/0008-WPS-Reject-a-Credential-with-invalid-passphrase.patch b/package/wpa_supplicant/0008-WPS-Reject-a-Credential-with-invalid-passphrase.patch
 new file mode 100644
 index 0000000..282aa95
 --- /dev/null
-+++ b/package/hostapd/0005-WPS-Reject-a-Credential-with-invalid-passphrase.patch
++++ b/package/wpa_supplicant/0008-WPS-Reject-a-Credential-with-invalid-passphrase.patch
 @@ -0,0 +1,85 @@
 +From ecbb0b3dc122b0d290987cf9c84010bbe53e1022 Mon Sep 17 00:00:00 2001
 +From: Jouni Malinen <jouni@qca.qualcomm.com>
@@ -110,6 +114,285 @@ index 0000000..282aa95
 + 	return 0;
 + }
 + 
++-- 
++2.8.1
++
+diff --git a/package/wpa_supplicant/0009-Reject-psk-parameter-set-with-invalid-passphrase-cha.patch b/package/wpa_supplicant/0009-Reject-psk-parameter-set-with-invalid-passphrase-cha.patch
+new file mode 100644
+index 0000000..316c070
+--- /dev/null
++++ b/package/wpa_supplicant/0009-Reject-psk-parameter-set-with-invalid-passphrase-cha.patch
+@@ -0,0 +1,53 @@
++From 73e4abb24a936014727924d8b0b2965edfc117dd Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <jouni@qca.qualcomm.com>
++Date: Fri, 4 Mar 2016 18:46:41 +0200
++Subject: [PATCH] Reject psk parameter set with invalid passphrase character
++
++WPA/WPA2-Personal passphrase is not allowed to include control
++characters. Reject a passphrase configuration attempt if that passphrase
++includes an invalid passphrase.
++
++This fixes an issue where wpa_supplicant could have updated the
++configuration file psk parameter with arbitrary data from the control
++interface or D-Bus interface. While those interfaces are supposed to be
++accessible only for trusted users/applications, it may be possible that
++an untrusted user has access to a management software component that
++does not validate the passphrase value before passing it to
++wpa_supplicant.
++
++This could allow such an untrusted user to inject up to 63 characters of
++almost arbitrary data into the configuration file. Such configuration
++file could result in wpa_supplicant trying to load a library (e.g.,
++opensc_engine_path, pkcs11_engine_path, pkcs11_module_path,
++load_dynamic_eap) from user controlled location when starting again.
++This would allow code from that library to be executed under the
++wpa_supplicant process privileges.
++
++Signed-off-by: Jouni Malinen <jouni@qca.qualcomm.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream (73e4abb24a936014727924d8b0b2965edfc117dd)
++
++ wpa_supplicant/config.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/wpa_supplicant/config.c b/wpa_supplicant/config.c
++index b1c7870dafe0..fdd964356afa 100644
++--- a/wpa_supplicant/config.c
+++++ b/wpa_supplicant/config.c
++@@ -478,6 +478,12 @@ static int wpa_config_parse_psk(const struct parse_data *data,
++ 		}
++ 		wpa_hexdump_ascii_key(MSG_MSGDUMP, "PSK (ASCII passphrase)",
++ 				      (u8 *) value, len);
+++		if (has_ctrl_char((u8 *) value, len)) {
+++			wpa_printf(MSG_ERROR,
+++				   "Line %d: Invalid passphrase character",
+++				   line);
+++			return -1;
+++		}
++ 		if (ssid->passphrase && os_strlen(ssid->passphrase) == len &&
++ 		    os_memcmp(ssid->passphrase, value, len) == 0) {
++ 			/* No change to the previously configured value */
++-- 
++2.8.1
++
+diff --git a/package/wpa_supplicant/0010-Remove-newlines-from-wpa_supplicant-config-network-o.patch b/package/wpa_supplicant/0010-Remove-newlines-from-wpa_supplicant-config-network-o.patch
+new file mode 100644
+index 0000000..8a40dce
+--- /dev/null
++++ b/package/wpa_supplicant/0010-Remove-newlines-from-wpa_supplicant-config-network-o.patch
+@@ -0,0 +1,84 @@
++From 0fe5a234240a108b294a87174ad197f6b5cb38e9 Mon Sep 17 00:00:00 2001
++From: Paul Stewart <pstew@google.com>
++Date: Thu, 3 Mar 2016 15:40:19 -0800
++Subject: [PATCH] Remove newlines from wpa_supplicant config network output
++
++Spurious newlines output while writing the config file can corrupt the
++wpa_supplicant configuration. Avoid writing these for the network block
++parameters. This is a generic filter that cover cases that may not have
++been explicitly addressed with a more specific commit to avoid control
++characters in the psk parameter.
++
++Signed-off-by: Paul Stewart <pstew@google.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream (0fe5a234240a108b294a87174ad197f6b5cb38e9)
++
++ src/utils/common.c      | 11 +++++++++++
++ src/utils/common.h      |  1 +
++ wpa_supplicant/config.c | 15 +++++++++++++--
++ 3 files changed, 25 insertions(+), 2 deletions(-)
++
++diff --git a/src/utils/common.c b/src/utils/common.c
++index 27b7c02de10b..9856463242c7 100644
++--- a/src/utils/common.c
+++++ b/src/utils/common.c
++@@ -709,6 +709,17 @@ int has_ctrl_char(const u8 *data, size_t len)
++ }
++ 
++ 
+++int has_newline(const char *str)
+++{
+++	while (*str) {
+++		if (*str == '\n' || *str == '\r')
+++			return 1;
+++		str++;
+++	}
+++	return 0;
+++}
+++
+++
++ size_t merge_byte_arrays(u8 *res, size_t res_len,
++ 			 const u8 *src1, size_t src1_len,
++ 			 const u8 *src2, size_t src2_len)
++diff --git a/src/utils/common.h b/src/utils/common.h
++index a97224070385..d19927b375bf 100644
++--- a/src/utils/common.h
+++++ b/src/utils/common.h
++@@ -489,6 +489,7 @@ const char * wpa_ssid_txt(const u8 *ssid, size_t ssid_len);
++ char * wpa_config_parse_string(const char *value, size_t *len);
++ int is_hex(const u8 *data, size_t len);
++ int has_ctrl_char(const u8 *data, size_t len);
+++int has_newline(const char *str);
++ size_t merge_byte_arrays(u8 *res, size_t res_len,
++ 			 const u8 *src1, size_t src1_len,
++ 			 const u8 *src2, size_t src2_len);
++diff --git a/wpa_supplicant/config.c b/wpa_supplicant/config.c
++index fdd964356afa..eb97cd5e4e6e 100644
++--- a/wpa_supplicant/config.c
+++++ b/wpa_supplicant/config.c
++@@ -2699,8 +2699,19 @@ char * wpa_config_get(struct wpa_ssid *ssid, const char *var)
++ 
++ 	for (i = 0; i < NUM_SSID_FIELDS; i++) {
++ 		const struct parse_data *field = &ssid_fields[i];
++-		if (os_strcmp(var, field->name) == 0)
++-			return field->writer(field, ssid);
+++		if (os_strcmp(var, field->name) == 0) {
+++			char *ret = field->writer(field, ssid);
+++
+++			if (ret && has_newline(ret)) {
+++				wpa_printf(MSG_ERROR,
+++					   "Found newline in value for %s; not returning it",
+++					   var);
+++				os_free(ret);
+++				ret = NULL;
+++			}
+++
+++			return ret;
+++		}
++ 	}
++ 
++ 	return NULL;
++-- 
++2.8.1
++
+diff --git a/package/wpa_supplicant/0011-Reject-SET_CRED-commands-with-newline-characters-in-.patch b/package/wpa_supplicant/0011-Reject-SET_CRED-commands-with-newline-characters-in-.patch
+new file mode 100644
+index 0000000..530681f
+--- /dev/null
++++ b/package/wpa_supplicant/0011-Reject-SET_CRED-commands-with-newline-characters-in-.patch
+@@ -0,0 +1,65 @@
++From b166cd84a77a6717be9600bf95378a0055d6f5a5 Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <jouni@qca.qualcomm.com>
++Date: Tue, 5 Apr 2016 23:33:10 +0300
++Subject: [PATCH] Reject SET_CRED commands with newline characters in the
++ string values
++
++Most of the cred block parameters are written as strings without
++filtering and if there is an embedded newline character in the value,
++unexpected configuration file data might be written.
++
++This fixes an issue where wpa_supplicant could have updated the
++configuration file cred parameter with arbitrary data from the control
++interface or D-Bus interface. While those interfaces are supposed to be
++accessible only for trusted users/applications, it may be possible that
++an untrusted user has access to a management software component that
++does not validate the credential value before passing it to
++wpa_supplicant.
++
++This could allow such an untrusted user to inject almost arbitrary data
++into the configuration file. Such configuration file could result in
++wpa_supplicant trying to load a library (e.g., opensc_engine_path,
++pkcs11_engine_path, pkcs11_module_path, load_dynamic_eap) from user
++controlled location when starting again. This would allow code from that
++library to be executed under the wpa_supplicant process privileges.
++
++Signed-off-by: Jouni Malinen <jouni@qca.qualcomm.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream (b166cd84a77a6717be9600bf95378a0055d6f5a5)
++
++ wpa_supplicant/config.c | 9 ++++++++-
++ 1 file changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/wpa_supplicant/config.c b/wpa_supplicant/config.c
++index eb97cd5e4e6e..69152efdea1a 100644
++--- a/wpa_supplicant/config.c
+++++ b/wpa_supplicant/config.c
++@@ -2896,6 +2896,8 @@ int wpa_config_set_cred(struct wpa_cred *cred, const char *var,
++ 
++ 	if (os_strcmp(var, "password") == 0 &&
++ 	    os_strncmp(value, "ext:", 4) == 0) {
+++		if (has_newline(value))
+++			return -1;
++ 		str_clear_free(cred->password);
++ 		cred->password = os_strdup(value);
++ 		cred->ext_password = 1;
++@@ -2946,9 +2948,14 @@ int wpa_config_set_cred(struct wpa_cred *cred, const char *var,
++ 	}
++ 
++ 	val = wpa_config_parse_string(value, &len);
++-	if (val == NULL) {
+++	if (val == NULL ||
+++	    (os_strcmp(var, "excluded_ssid") != 0 &&
+++	     os_strcmp(var, "roaming_consortium") != 0 &&
+++	     os_strcmp(var, "required_roaming_consortium") != 0 &&
+++	     has_newline(val))) {
++ 		wpa_printf(MSG_ERROR, "Line %d: invalid field '%s' string "
++ 			   "value '%s'.", line, var, value);
+++		os_free(val);
++ 		return -1;
++ 	}
++ 
++-- 
++2.8.1
++
+diff --git a/package/wpa_supplicant/0012-Reject-SET-commands-with-newline-characters-in-the-s.patch b/package/wpa_supplicant/0012-Reject-SET-commands-with-newline-characters-in-the-s.patch
+new file mode 100644
+index 0000000..a29df07
+--- /dev/null
++++ b/package/wpa_supplicant/0012-Reject-SET-commands-with-newline-characters-in-the-s.patch
+@@ -0,0 +1,53 @@
++From 2a3f56502b52375c3bf113cf92adfa99bad6b488 Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <jouni@qca.qualcomm.com>
++Date: Tue, 5 Apr 2016 23:55:48 +0300
++Subject: [PATCH] Reject SET commands with newline characters in the string
++ values
++
++Many of the global configuration parameters are written as strings
++without filtering and if there is an embedded newline character in the
++value, unexpected configuration file data might be written.
++
++This fixes an issue where wpa_supplicant could have updated the
++configuration file global parameter with arbitrary data from the control
++interface or D-Bus interface. While those interfaces are supposed to be
++accessible only for trusted users/applications, it may be possible that
++an untrusted user has access to a management software component that
++does not validate the value of a parameter before passing it to
++wpa_supplicant.
++
++This could allow such an untrusted user to inject almost arbitrary data
++into the configuration file. Such configuration file could result in
++wpa_supplicant trying to load a library (e.g., opensc_engine_path,
++pkcs11_engine_path, pkcs11_module_path, load_dynamic_eap) from user
++controlled location when starting again. This would allow code from that
++library to be executed under the wpa_supplicant process privileges.
++
++Signed-off-by: Jouni Malinen <jouni@qca.qualcomm.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream (2a3f56502b52375c3bf113cf92adfa99bad6b488)
++
++ wpa_supplicant/config.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/wpa_supplicant/config.c b/wpa_supplicant/config.c
++index 69152efdea1a..d9a1603f6d7e 100644
++--- a/wpa_supplicant/config.c
+++++ b/wpa_supplicant/config.c
++@@ -3764,6 +3764,12 @@ static int wpa_global_config_parse_str(const struct global_parse_data *data,
++ 		return -1;
++ 	}
++ 
+++	if (has_newline(pos)) {
+++		wpa_printf(MSG_ERROR, "Line %d: invalid %s value with newline",
+++			   line, data->name);
+++		return -1;
+++	}
+++
++ 	tmp = os_strdup(pos);
++ 	if (tmp == NULL)
++ 		return -1;
 +-- 
 +2.8.1
 +
