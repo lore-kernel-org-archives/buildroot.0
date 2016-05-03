@@ -1,146 +1,70 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 May 2016 15:30:14 -0300
-Subject: [Buildroot] [PATCH] lft: new package
-Message-ID: <1462300214-8562-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 3 May 2016 20:46:03 +0200
+Subject: [Buildroot] How to enable rtmp support in gst1-plugins-bad?
+In-Reply-To: <CAPeTicPDug8fDDk=_z7esK-txLUC0w36xPh+d3-b0FNGrOs_MA@mail.gmail.com>
+References: <CAPeTicPDug8fDDk=_z7esK-txLUC0w36xPh+d3-b0FNGrOs_MA@mail.gmail.com>
+Message-ID: <20160503204603.66114582@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in                |  1 +
- package/lft/0001-no-strip.patch  | 19 +++++++++++++++++++
- package/lft/0002-no-incdir.patch | 27 +++++++++++++++++++++++++++
- package/lft/Config.in            | 10 ++++++++++
- package/lft/lft.hash             |  2 ++
- package/lft/lft.mk               | 19 +++++++++++++++++++
- 6 files changed, 78 insertions(+)
- create mode 100644 package/lft/0001-no-strip.patch
- create mode 100644 package/lft/0002-no-incdir.patch
- create mode 100644 package/lft/Config.in
- create mode 100644 package/lft/lft.hash
- create mode 100644 package/lft/lft.mk
+Hello sonntex,
 
-diff --git a/package/Config.in b/package/Config.in
-index 12cfdd8..ca16a24 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1425,6 +1425,7 @@ endif
- 	source "package/kismet/Config.in"
- 	source "package/knock/Config.in"
- 	source "package/leafnode2/Config.in"
-+	source "package/lft/Config.in"
- 	source "package/lftp/Config.in"
- 	source "package/lighttpd/Config.in"
- 	source "package/linknx/Config.in"
-diff --git a/package/lft/0001-no-strip.patch b/package/lft/0001-no-strip.patch
-new file mode 100644
-index 0000000..f1bd700
---- /dev/null
-+++ b/package/lft/0001-no-strip.patch
-@@ -0,0 +1,19 @@
-+Don't forcibly strip binaries, we do so on our own.
-+Also using strip rather than $(STRIP) is bad when cross-compiling.
-+
-+Patch status: notified upstream.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura lft-3.74.orig/Makefile.in lft-3.74/Makefile.in
-+--- lft-3.74.orig/Makefile.in	2016-05-03 14:11:30.965530923 -0300
-++++ lft-3.74/Makefile.in	2016-05-03 14:11:42.120918849 -0300
-+@@ -50,8 +50,6 @@
-+ 
-+ install: lft lft.8 whob whob.8
-+ 	@echo "LFT and WhoB"
-+-	@echo "  \_Stripping binaries"
-+-	@strip lft whob
-+ 	@echo "  \_Copying files to their intended destinations"
-+ 	@test -d $(DESTDIR)$(bindir)/. || $(MKDIR) $(DESTDIR)$(bindir)
-+ 	$(INSTALL) lft $(DESTDIR)$(bindir)/lft
-diff --git a/package/lft/0002-no-incdir.patch b/package/lft/0002-no-incdir.patch
-new file mode 100644
-index 0000000..dbfaad5
---- /dev/null
-+++ b/package/lft/0002-no-incdir.patch
-@@ -0,0 +1,27 @@
-+Don't pollute incdir with absolute directories, it's bad when
-+cross-compiling.
-+Patch configure directly since autoreconf isn't clean.
-+
-+Patch status: notified upstream.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura lft-3.74.orig/configure lft-3.74/configure
-+--- lft-3.74.orig/configure	2016-05-03 14:11:30.964530888 -0300
-++++ lft-3.74/configure	2016-05-03 14:12:45.038106775 -0300
-+@@ -5732,15 +5732,6 @@
-+ 
-+ 
-+ 
-+-for incdir in /usr/local/include /usr/include
-+-do
-+-  if test -d $incdir/pcap
-+-  then
-+-    CFLAGS="$CFLAGS -I$incdir/pcap"
-+-    CPPFLAGS="$CFLAGS -I$incdir/pcap"
-+-  fi
-+-done
-+-
-+ cat >conftest.$ac_ext <<_ACEOF
-+ /* confdefs.h.  */
-+ _ACEOF
-diff --git a/package/lft/Config.in b/package/lft/Config.in
-new file mode 100644
-index 0000000..9ed7b8b
---- /dev/null
-+++ b/package/lft/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LFT
-+	bool "lft"
-+	select BR2_PACKAGE_LIBPCAP
-+	help
-+	  LFT, short for Layer Four Traceroute, is a sort of
-+	  'traceroute' that often works much faster (than the
-+	  commonly-used Van Jacobson method) and goes through many
-+	  configurations of packet-filters (firewalls).
-+
-+	  http://pwhois.org/lft/
-diff --git a/package/lft/lft.hash b/package/lft/lft.hash
-new file mode 100644
-index 0000000..dc3945c
---- /dev/null
-+++ b/package/lft/lft.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated, matches download from fossies.org and pwhois.org
-+sha256	d7f142b9198162a48dd41261f5982e5189b951e7746e171d6b2c5b9581f26000	lft-3.74.tar.gz
-diff --git a/package/lft/lft.mk b/package/lft/lft.mk
-new file mode 100644
-index 0000000..9128618
---- /dev/null
-+++ b/package/lft/lft.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# lft
-+#
-+################################################################################
-+
-+LFT_VERSION = 3.74
-+# Download from pwhois.org is form-wrapped resulting in ugly filename
-+LFT_SITE = https://fossies.org/linux/privat
-+LFT_DEPENDENCIES = libpcap
-+LFT_LICENSE = VOSTROM
-+LFT_LICENSE_FILES = COPYING
-+LFT_CONF_OPTS = --with-pcap=$(STAGING_DIR)/usr
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LFT_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
-+endif
-+
-+$(eval $(autotools-package))
--- 
-2.7.3
+On Tue, 3 May 2016 15:14:05 +0300, sonntex <sonntex@gmail.com> wrote:
+
+> I did not find rtmp support in gst1-plugins-bad. There is only rtp support.
+> So, I think that it is a misprint. Is it? Patch looks like:
+
+No misprint, only a missing update  since version bump to 1.8.0.
+
+Rtp support was moved from gst-plugins-bad to gst-plugins-good (see [1]),
+same with mpg123 support, moved from -bad to -ugly (see [2])...
+
+Time to do a re-check of the options for 1.8.x, but did not yet find the
+time for it....
+
+Regards,
+Peter
+
+[1] https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/commit/configure.ac?id=f649e85bc9e6c6f52abcdd9fe1e5de670b0f580e
+[2] https://cgit.freedesktop.org/gstreamer/gst-plugins-bad/commit/configure.ac?id=08d8aefcdaaf89ecb6dd53ec1e4f95cd42d01664
+
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in
+> b/package/gstreamer1/gst1-plugins-bad/Config.in
+> index a9667af..afbe2bf 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> @@ -382,8 +382,8 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REMOVESILENCE
+>         help
+>           Removes silence from an audio stream
+> 
+> -config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTP
+> -       bool "rtp"
+> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTMP
+> +       bool "rtmp"
+> 
+>  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDI
+>         bool "sdi"
+> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> index a92c4a6..30c4999 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> @@ -479,10 +479,11 @@ else
+>  GST1_PLUGINS_BAD_CONF_OPTS += --disable-removesilence
+>  endif
+> 
+> -ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTP),y)
+> -GST1_PLUGINS_BAD_CONF_OPTS += --enable-rtp
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTMP),y)
+> +GST1_PLUGINS_BAD_CONF_OPTS += --enable-rtmp
+> +GST1_PLUGINS_BAD_DEPENDENCIES += rtmpdump
+>  else
+> -GST1_PLUGINS_BAD_CONF_OPTS += --disable-rtp
+> +GST1_PLUGINS_BAD_CONF_OPTS += --disable-rtmp
+>  endif
+> 
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDI),y)
