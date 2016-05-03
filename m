@@ -1,27 +1,57 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 3 May 2016 16:56:12 -0300
-Subject: [Buildroot] [PATCH 3/3] gst1-plugins-bad: add rtmp support
-In-Reply-To: <572901AF.6030003@dawncrow.de>
-References: <1462304656-17156-1-git-send-email-gustavo@zacarias.com.ar>
- <1462304656-17156-3-git-send-email-gustavo@zacarias.com.ar>
- <572901AF.6030003@dawncrow.de>
-Message-ID: <5729025C.3080301@zacarias.com.ar>
+Date: Tue,  3 May 2016 16:56:51 -0300
+Subject: [Buildroot] [PATCH v2] gst1-plugins-bad: add rtmp support
+Message-ID: <1462305411-30866-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/05/16 16:53, Andr? Hentschel wrote:
+As pointed by sonnex on the mailing list.
 
->> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTMP
->> +	bool "rtmp"
->> +	select BR2_PACKAGE_RTMPDUMP
->> +	help
->> +	  RTMP plugni
->
-> just caught that typo while looking at the patch...
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+v2: fix typo.
 
-Hi.
-Thanks, too quick a patch, i'll send v2.
-Regards.
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 6 ++++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 7 +++++++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 53ce589..5248c4d 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -382,6 +382,12 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REMOVESILENCE
+ 	help
+ 	  Removes silence from an audio stream
+ 
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTMP
++	bool "rtmp"
++	select BR2_PACKAGE_RTMPDUMP
++	help
++	  RTMP plugin
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDI
+ 	bool "sdi"
+ 
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 6d8cac7..e2446a3 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -479,6 +479,13 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-removesilence
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTMP),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-rtmp
++GST1_PLUGINS_BAD_DEPENDENCIES += rtmpdump
++else
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-rtmp
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDI),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-sdi
+ else
+-- 
+2.7.3
