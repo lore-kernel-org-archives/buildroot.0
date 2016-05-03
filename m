@@ -1,144 +1,34 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Tue, 3 May 2016 07:58:47 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 03 May 2016 08:18:57 +0200
 Subject: [Buildroot] [PATCH v2] raspberrypi3: fix serial console (load
 	pi3-miniuart-bt overlay)
-In-Reply-To: <1462220744-6368-1-git-send-email-ps.report@gmx.net>
+In-Reply-To: <CALtfCQZowiGZUJ0HV4oTyRMfMY02TherviK_ZE6D4wgfUcQ3gg@mail.gmail.com>
+ (Oscar Gomez Fuente's message of "Tue, 3 May 2016 07:58:47 +0200")
 References: <1462220744-6368-1-git-send-email-ps.report@gmx.net>
-Message-ID: <CALtfCQZowiGZUJ0HV4oTyRMfMY02TherviK_ZE6D4wgfUcQ3gg@mail.gmail.com>
+ <CALtfCQZowiGZUJ0HV4oTyRMfMY02TherviK_ZE6D4wgfUcQ3gg@mail.gmail.com>
+Message-ID: <871t5jr7e6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter Seiderer,
+>>>>> "Oscar" == Oscar Gomez Fuente <oscargomezf@gmail.com> writes:
 
+ > Hi Peter Seiderer,
+ > What's the difference between enabling pi3-miniuart-bt instead of
+ > pi3-disable-bt?
 
-What's the difference between enabling pi3-miniuart-bt instead of
-pi3-disable-bt?
+ > With pi3-disable-bt enables it works fine the serial console on (14 [TxD] &
+ > 15 [RxD] pins).
 
-With pi3-disable-bt enables it works fine the serial console on (14 [TxD] &
-15 [RxD] pins).
+From the names I would guess it is the difference between completely
+disabling access to the bluetooth module and providing access to it
+though the secondary (mini) uart.
 
+The miniuart has some limitations, but I guess basic bluetooth stuff
+should work with it.
 
-Best regards.
-
-Oscar Gomez Fuente.
-
-On 2 May 2016 at 22:25, Peter Seiderer <ps.report@gmx.net> wrote:
-
-> - enable BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS in
-> raspberrypi3_defconfig
-> - add copy of rpi-firmware/overlays directory to boot partition in
-> genimage-raspberrypi3.cfg
-> - enhance post-image.sh script to add 'dtoverlay=pi3-miniuart-bt' on
-> request
-> - add BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay" in
-> raspberrypi3_defconfig
->
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 --> v2:
->   - use pi3-miniuart-bt instead of pi3-disable-bt
->   - fix post-image.sh to add overlay lines only once
->   - add overlay description (and alternative solution) to readme.txt
-> ---
->  board/raspberrypi/genimage-raspberrypi3.cfg |  1 +
->  board/raspberrypi/post-image.sh             | 13 +++++++++++++
->  board/raspberrypi/readme.txt                |  8 +++++++-
->  configs/raspberrypi3_defconfig              |  3 ++-
->  4 files changed, 23 insertions(+), 2 deletions(-)
->
-> diff --git a/board/raspberrypi/genimage-raspberrypi3.cfg
-> b/board/raspberrypi/genimage-raspberrypi3.cfg
-> index 7ba89c5..baab0c4 100644
-> --- a/board/raspberrypi/genimage-raspberrypi3.cfg
-> +++ b/board/raspberrypi/genimage-raspberrypi3.cfg
-> @@ -7,6 +7,7 @@ image boot.vfat {
->        "rpi-firmware/config.txt",
->        "rpi-firmware/fixup.dat",
->        "rpi-firmware/start.elf",
-> +      "rpi-firmware/overlays",
->        "kernel-marked/zImage"
->      }
->    }
-> diff --git a/board/raspberrypi/post-image.sh
-> b/board/raspberrypi/post-image.sh
-> index 73ffd65..c009752 100755
-> --- a/board/raspberrypi/post-image.sh
-> +++ b/board/raspberrypi/post-image.sh
-> @@ -5,6 +5,19 @@ BOARD_NAME="$(basename ${BOARD_DIR})"
->  GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
->  GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
->
-> +case "${2}" in
-> +       --add-pi3-miniuart-bt-overlay)
-> +       if ! grep -qE '^dtoverlay='
-> "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-> +               echo "Adding 'dtoverlay=pi3-miniuart-bt' to config.txt
-> (fixes ttyAMA0 serial console)."
-> +               cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
-> +
-> +# fixes rpi3 ttyAMA0 serial console
-> +dtoverlay=pi3-miniuart-bt
-> +__EOF__
-> +       fi
-> +       ;;
-> +esac
-> +
->  # Mark the kernel as DT-enabled
->  mkdir -p "${BINARIES_DIR}/kernel-marked"
->  ${HOST_DIR}/usr/bin/mkknlimg "${BINARIES_DIR}/zImage" \
-> diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-> index a170f8f..03178ff 100644
-> --- a/board/raspberrypi/readme.txt
-> +++ b/board/raspberrypi/readme.txt
-> @@ -60,7 +60,8 @@ After building, you should obtain this tree:
->      |   +-- cmdline.txt
->      |   +-- config.txt
->      |   +-- fixup.dat
-> -    |   `-- start.elf
-> +    |   +-- start.elf
-> +    |   `-- overlays/               [3]
->      +-- sdcard.img
->      `-- zImage
->
-> @@ -69,6 +70,11 @@ After building, you should obtain this tree:
->
->  [2] This is the mkknlimg DT-marked kernel.
->
-> +[3] Only for the Raspberry Pi 3 Model (overlay pi3-miniuart-bt is needed
-> +    to enable the RPi3 serial console otherwise occupied by the bluetooth
-> +    chip). Alternative would be to disable the serial console in
-> cmdline.txt
-> +    and /etc/inittab.
-> +
->  How to write the SD card
->  ========================
->
-> diff --git a/configs/raspberrypi3_defconfig
-> b/configs/raspberrypi3_defconfig
-> index 4eb5333..8600cd8 100644
-> --- a/configs/raspberrypi3_defconfig
-> +++ b/configs/raspberrypi3_defconfig
-> @@ -21,7 +21,7 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b"
->
->  BR2_PACKAGE_RPI_FIRMWARE=y
-> -# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
-> +BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
->
->  # Required tools to create the SD image
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> @@ -34,3 +34,4 @@ BR2_TARGET_ROOTFS_EXT2_4=y
->  # BR2_TARGET_ROOTFS_TAR is not set
->  BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
-> --
-> 2.8.1
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160503/1ca24628/attachment.html>
+-- 
+Venlig hilsen,
+Peter Korsgaard 
