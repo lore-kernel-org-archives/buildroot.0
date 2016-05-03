@@ -1,178 +1,146 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  3 May 2016 19:05:48 +0200
-Subject: [Buildroot] [V2] ficl: new package
-Message-ID: <1462295148-4335-1-git-send-email-francois.perrad@gadz.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  3 May 2016 15:30:14 -0300
+Subject: [Buildroot] [PATCH] lft: new package
+Message-ID: <1462300214-8562-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                    |  1 +
- package/ficl/0001-fix-Makefile.patch | 47 ++++++++++++++++++++++++++++
- package/ficl/Config.in               |  9 ++++++
- package/ficl/ficl.hash               |  2 ++
- package/ficl/ficl.mk                 | 59 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 118 insertions(+)
- create mode 100644 package/ficl/0001-fix-Makefile.patch
- create mode 100644 package/ficl/Config.in
- create mode 100644 package/ficl/ficl.hash
- create mode 100644 package/ficl/ficl.mk
+ package/Config.in                |  1 +
+ package/lft/0001-no-strip.patch  | 19 +++++++++++++++++++
+ package/lft/0002-no-incdir.patch | 27 +++++++++++++++++++++++++++
+ package/lft/Config.in            | 10 ++++++++++
+ package/lft/lft.hash             |  2 ++
+ package/lft/lft.mk               | 19 +++++++++++++++++++
+ 6 files changed, 78 insertions(+)
+ create mode 100644 package/lft/0001-no-strip.patch
+ create mode 100644 package/lft/0002-no-incdir.patch
+ create mode 100644 package/lft/Config.in
+ create mode 100644 package/lft/lft.hash
+ create mode 100644 package/lft/lft.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index bd6b4b5..a782423 100644
+index 12cfdd8..ca16a24 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -493,6 +493,7 @@ menu "Erlang libraries/modules"
- 	source "package/erlang-p1-zlib/Config.in"
- endmenu
- endif
-+	source "package/ficl/Config.in"
- 	source "package/gauche/Config.in"
- 	source "package/guile/Config.in"
- 	source "package/haserl/Config.in"
-diff --git a/package/ficl/0001-fix-Makefile.patch b/package/ficl/0001-fix-Makefile.patch
+@@ -1425,6 +1425,7 @@ endif
+ 	source "package/kismet/Config.in"
+ 	source "package/knock/Config.in"
+ 	source "package/leafnode2/Config.in"
++	source "package/lft/Config.in"
+ 	source "package/lftp/Config.in"
+ 	source "package/lighttpd/Config.in"
+ 	source "package/linknx/Config.in"
+diff --git a/package/lft/0001-no-strip.patch b/package/lft/0001-no-strip.patch
 new file mode 100644
-index 0000000..d5a25c4
+index 0000000..f1bd700
 --- /dev/null
-+++ b/package/ficl/0001-fix-Makefile.patch
-@@ -0,0 +1,47 @@
-+fix dependency in Makefiles
++++ b/package/lft/0001-no-strip.patch
+@@ -0,0 +1,19 @@
++Don't forcibly strip binaries, we do so on our own.
++Also using strip rather than $(STRIP) is bad when cross-compiling.
 +
-+there is no longer a sysdep.h file.
++Patch status: notified upstream.
 +
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+diff --git a/Makefile b/Makefile
-+index 976d00a..7f73c44 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
-+ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
-+ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
++diff -Nura lft-3.74.orig/Makefile.in lft-3.74/Makefile.in
++--- lft-3.74.orig/Makefile.in	2016-05-03 14:11:30.965530923 -0300
+++++ lft-3.74/Makefile.in	2016-05-03 14:11:42.120918849 -0300
++@@ -50,8 +50,6 @@
 + 
-+-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
-++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
-+ 	$(CC) $(CFLAGS) $(LDFLAGS) main.o -o main -L. -lficl -lm
-+ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
-+ 
-+diff --git a/Makefile.ansi b/Makefile.ansi
-+index e510fcd..170e6eb 100644
-+--- a/Makefile.ansi
-++++ b/Makefile.ansi
-+@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
-+ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
-+ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
-+ 
-+-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
-++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
-+ 	$(CC) main.o -o main -L. -lficl -lm
-+ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
-+ 
-+diff --git a/Makefile.linux b/Makefile.linux
-+index d447e7e..7f2cdfe 100644
-+--- a/Makefile.linux
-++++ b/Makefile.linux
-+@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
-+ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
-+ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
-+ 
-+-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
-++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
-+ 	$(CC) main.o -o main -L. -lficl -lm
-+ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
-+ 
-+-- 
-+
-diff --git a/package/ficl/Config.in b/package/ficl/Config.in
++ install: lft lft.8 whob whob.8
++ 	@echo "LFT and WhoB"
++-	@echo "  \_Stripping binaries"
++-	@strip lft whob
++ 	@echo "  \_Copying files to their intended destinations"
++ 	@test -d $(DESTDIR)$(bindir)/. || $(MKDIR) $(DESTDIR)$(bindir)
++ 	$(INSTALL) lft $(DESTDIR)$(bindir)/lft
+diff --git a/package/lft/0002-no-incdir.patch b/package/lft/0002-no-incdir.patch
 new file mode 100644
-index 0000000..3445a64
+index 0000000..dbfaad5
 --- /dev/null
-+++ b/package/ficl/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_FICL
-+	bool "ficl"
++++ b/package/lft/0002-no-incdir.patch
+@@ -0,0 +1,27 @@
++Don't pollute incdir with absolute directories, it's bad when
++cross-compiling.
++Patch configure directly since autoreconf isn't clean.
++
++Patch status: notified upstream.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura lft-3.74.orig/configure lft-3.74/configure
++--- lft-3.74.orig/configure	2016-05-03 14:11:30.964530888 -0300
+++++ lft-3.74/configure	2016-05-03 14:12:45.038106775 -0300
++@@ -5732,15 +5732,6 @@
++ 
++ 
++ 
++-for incdir in /usr/local/include /usr/include
++-do
++-  if test -d $incdir/pcap
++-  then
++-    CFLAGS="$CFLAGS -I$incdir/pcap"
++-    CPPFLAGS="$CFLAGS -I$incdir/pcap"
++-  fi
++-done
++-
++ cat >conftest.$ac_ext <<_ACEOF
++ /* confdefs.h.  */
++ _ACEOF
+diff --git a/package/lft/Config.in b/package/lft/Config.in
+new file mode 100644
+index 0000000..9ed7b8b
+--- /dev/null
++++ b/package/lft/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LFT
++	bool "lft"
++	select BR2_PACKAGE_LIBPCAP
 +	help
-+	  Ficl is a programming language interpreter designed to be embedded
-+	  into other systems as a command, macro, and development
-+	  prototyping language.
-+	  Ficl is an acronym for "Forth Inspired Command Language".
++	  LFT, short for Layer Four Traceroute, is a sort of
++	  'traceroute' that often works much faster (than the
++	  commonly-used Van Jacobson method) and goes through many
++	  configurations of packet-filters (firewalls).
 +
-+	  http://ficl.sourceforge.net
-diff --git a/package/ficl/ficl.hash b/package/ficl/ficl.hash
++	  http://pwhois.org/lft/
+diff --git a/package/lft/lft.hash b/package/lft/lft.hash
 new file mode 100644
-index 0000000..4bfbbd0
+index 0000000..dc3945c
 --- /dev/null
-+++ b/package/ficl/ficl.hash
++++ b/package/lft/lft.hash
 @@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  4daf74f3d3d6f8b86ea7cb47bc24931d50b4809b50ba34ca32e0ca1e972bd3a3  ficl-4.1.0.tar.gz
-diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
++# Locally calculated, matches download from fossies.org and pwhois.org
++sha256	d7f142b9198162a48dd41261f5982e5189b951e7746e171d6b2c5b9581f26000	lft-3.74.tar.gz
+diff --git a/package/lft/lft.mk b/package/lft/lft.mk
 new file mode 100644
-index 0000000..c3feea2
+index 0000000..9128618
 --- /dev/null
-+++ b/package/ficl/ficl.mk
-@@ -0,0 +1,59 @@
++++ b/package/lft/lft.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# ficl
++# lft
 +#
 +################################################################################
 +
-+FICL_VERSION_MAJOR = 4.1
-+FICL_VERSION = $(FICL_VERSION_MAJOR).0
-+FICL_SITE = http://downloads.sourceforge.net/project/ficl/ficl-all/ficl$(FICL_VERSION_MAJOR)
-+FICL_LICENSE = BSD-2c
-+FICL_LICENSE_FILES = ReadMe.txt
-+FICL_INSTALL_STAGING = YES
++LFT_VERSION = 3.74
++# Download from pwhois.org is form-wrapped resulting in ugly filename
++LFT_SITE = https://fossies.org/linux/privat
++LFT_DEPENDENCIES = libpcap
++LFT_LICENSE = VOSTROM
++LFT_LICENSE_FILES = COPYING
++LFT_CONF_OPTS = --with-pcap=$(STAGING_DIR)/usr
 +
 +ifeq ($(BR2_STATIC_LIBS),y)
-+FICL_BUILD_TARGETS += ficl
-+define FICL_INSTALL_STATIC_BIN
-+	$(INSTALL) -D -m 0755 $(@D)/ficl $(TARGET_DIR)/usr/bin/ficl
-+endef
++LFT_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
 +endif
 +
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+FICL_BUILD_TARGETS += libficl.a
-+define FICL_INSTALL_STATIC_LIB
-+	$(INSTALL) -D -m 0644 $(@D)/libficl.a $(STAGING_DIR)/usr/lib/libficl.a
-+endef
-+endif
-+
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+FICL_BUILD_TARGETS += main libficl.so.$(FICL_VERSION)
-+define FICL_INSTALL_SHARED_BIN
-+	$(INSTALL) -D -m 0755 $(@D)/main $(TARGET_DIR)/usr/bin/ficl
-+endef
-+define FICL_INSTALL_SHARED_LIB
-+	$(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so.$(FICL_VERSION)
-+	ln -sf libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so.4
-+	ln -sf libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so
-+endef
-+endif
-+
-+define FICL_BUILD_CMDS
-+	$(MAKE) -C $(@D) -f Makefile.linux $(TARGET_CONFIGURE_OPTS) \
-+		CPPFLAGS="$(TARGET_CPPFLAGS) -I. -Dlinux" $(FICL_BUILD_TARGETS)
-+endef
-+
-+define FICL_INSTALL_STAGING_CMDS
-+	$(FICL_INSTALL_STATIC_LIB)
-+	$(call FICL_INSTALL_SHARED_LIB, $(STAGING_DIR))
-+	$(INSTALL) -D -m 0644 $(@D)/ficl.h $(STAGING_DIR)/usr/include/ficl.h
-+	$(INSTALL) -D -m 0644 $(@D)/ficllocal.h $(STAGING_DIR)/usr/include/ficllocal.h
-+	$(INSTALL) -D -m 0644 $(@D)/ficlplatform/unix.h $(STAGING_DIR)/usr/include/ficlplatform/unix.h
-+endef
-+
-+define FICL_INSTALL_TARGET_CMDS
-+	$(FICL_INSTALL_STATIC_BIN)
-+	$(FICL_INSTALL_SHARED_BIN)
-+	$(call FICL_INSTALL_SHARED_LIB, $(TARGET_DIR))
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
-2.5.0
+2.7.3
