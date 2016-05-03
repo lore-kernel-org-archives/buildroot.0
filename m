@@ -1,11 +1,12 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Tue, 3 May 2016 09:54:26 +0100
-Subject: [Buildroot] [PATCH 3/5] package/nginx: add thread pool support
-In-Reply-To: <20160501234237.2618d1a3@free-electrons.com>
+Date: Tue, 3 May 2016 10:00:37 +0100
+Subject: [Buildroot] [PATCH 5/5] package/nginx: fix error is
+	nginx.service
+In-Reply-To: <20160501234746.084c2e61@free-electrons.com>
 References: <1462132345-28253-1-git-send-email-martin@barkynet.com>
- <1462132345-28253-3-git-send-email-martin@barkynet.com>
- <20160501234237.2618d1a3@free-electrons.com>
-Message-ID: <CAFGQKxdv2YVsge73txW5L06Ym=vJMFnXMy9uWXG28MoNazw1bg@mail.gmail.com>
+ <1462132345-28253-5-git-send-email-martin@barkynet.com>
+ <20160501234746.084c2e61@free-electrons.com>
+Message-ID: <CAFGQKxd47yDZ8O+eXNHR8q=nStrBNsAg=vsNgqiWda7prjfXDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,34 +15,41 @@ To: buildroot@busybox.net
 
 Thomas,
 
-On 1 May 2016 at 22:42, Thomas Petazzoni
+On 1 May 2016 at 22:47, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
 >
-> On Sun,  1 May 2016 20:52:23 +0100, Martin Bark wrote:
+> On Sun,  1 May 2016 20:52:25 +0100, Martin Bark wrote:
 >
->>  NGINX_CONF_OPTS += \
->> -     $(if $(BR2_PACKAGE_NGINX_FILE_AIO),--with-file-aio)
->> +     $(if $(BR2_PACKAGE_NGINX_FILE_AIO),--with-file-aio) \
->> +     $(if $(BR2_PACKAGE_NGINX_THREADS),--with-threads)
+>> -ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx; /usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
+>> +ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx ; /usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
 >
-> Just curious, any reason to not enable this as soon as
-> BR2_TOOLCHAIN_HAS_THREADS=y ?
+> Isn't:
+>
+> ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
+> ExecStartPre=/usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
+>
+> a better solution?
 
-Well it does add code so if you just want nginx as a static webserver
-on an embedded device you probably don't need this.  Just for interest
-there is some info on nginx thread pools here
-https://www.nginx.com/blog/thread-pools-boost-performance-9x/.  I
-really just added the option for completeness.
-
-What is missing is a dependency on BR2_TOOLCHAIN_HAS_THREADS for
-BR2_PACKAGE_NGINX_THREADS in the Config.in so I'll resubmit with that
-fixed.
+Yes you are right, that will work and i agree it looks neater.  I'll
+update the patch and resubmit.
 
 Thanks
 
 Martin
 
+>
+> According to man systemd.service:
+>
+>        ExecStartPre=, ExecStartPost=
+>            Additional commands that are executed before or after the command
+>            in ExecStart=, respectively. Syntax is the same as for ExecStart=,
+>            except that multiple command lines are allowed and the commands are
+>            executed one after the other, serially.
+>
+> (To be tested, I don't know much about systemd).
+>
+> Thanks!
 >
 > Thomas
 > --
