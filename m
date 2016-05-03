@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 4 May 2016 01:13:05 +0200
-Subject: [Buildroot] [PATCH 04/13 v6] core/legal-info: ensure legal-info
- works in off-line mode
-In-Reply-To: <6bf538c34537182a32f40d0a1ec9ca2fe086cfba.1461881416.git.yann.morin.1998@free.fr>
+Date: Wed, 4 May 2016 01:14:49 +0200
+Subject: [Buildroot] [PATCH 06/13 v6] core/legal-info: install source
+ archives in their own sub-dir
+In-Reply-To: <c8abc350498d27f8b6a31a2db583da0dcf2e6d0a.1461881416.git.yann.morin.1998@free.fr>
 References: <cover.1461881416.git.yann.morin.1998@free.fr>
- <6bf538c34537182a32f40d0a1ec9ca2fe086cfba.1461881416.git.yann.morin.1998@free.fr>
-Message-ID: <d5c76a15-742e-4426-2cea-bafb15b9ad7e@mind.be>
+ <c8abc350498d27f8b6a31a2db583da0dcf2e6d0a.1461881416.git.yann.morin.1998@free.fr>
+Message-ID: <2db32ff5-7ff9-e343-d31b-cb06404a1017@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,193 +13,64 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 04/29/16 00:27, Yann E. MORIN wrote:
-> Almost all packages which are saved for legal-info have their source
-> archives downloaded as part of 'make source', which makes an off-line
-> build completely possible [0].
+> Currently, we put all source archives side-by-side in the same
+> directory.
 >
-> However, for the pre-configured external toolchains, the source tarball
-> is different, as the main tarball is a binary package. And that source
-> tarball is only downloaded during the legal-info phase, which makes it
-> inconvenient for full off-line builds.
+> Since we're about to also save individual patches that were applied
+> on those sources, we don't want to make that directory a complete
+> mess of unassorted files.
 >
-> We fix that by adding a new rule, $(1)-legal-source which only
-> $(1)-all-source depends on, so that we only download it for a top-level
-> 'make source', not as part of the standard download mechanism (i.e. only
-> what is really needed to build).
->
-> This new rule depends, like the normal download mechanism, on a stamp
-> file, so that we do not emit a spurious hash-check message on successive
-> runs of 'make source'.
->
-> This way, we can do a complete [0] off-line build and are still able to
-> generate legal-info, while at the same time we do not incur any download
-> overhead during a simple build.
->
-> Also, we previously downloaded the _ACTUAL_SOURCE_TARBALL when it was
-> not empty. However, since _ACTUAL_SOURCE_TARBALL defaults to the value
-> of _SOURCE, it can not be empty when _SOURCE is not. Thus, we'd get a
-> spurious report of a missing hash for the tarball, since it was not in
-> a standard package rule (configure, build, install..) and thus would
-> miss the PKG and PKGDIR variables to find the .hash file.
->
-> We fix that in this commit as well, by:
->
->   - setting PKG and PKGDIR just for the -legal-source rule;
->
->   - only downloading _ACTUAL_SOURCE_TARBALL if it is not empty *and* not
->     the same as _SOURCE (to avoid a second report about the hash).
->
-> [0] Save for nodejs which invarriably wants to download stuff at build
-> time. Sigh... :-( Fixing that is work for another time...
+> So, we install each source archive in its own sub-directory, where
+> we'll later store the patches too. Store that location in a variable,
+> so it can be re-used later on (to install patches in a future commit).
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 > Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 >
 > ---
-> Notes: here is a case where one would need to be able to do an off-line
-> legal-info:
->   - a build farm (e.g. Jenkins slaves) without access to the internet;
->   - a single machine (not part of the farm) has access to the internet;
->   - that machine runs "make source" to populate a mirror (a "primary
->     mirror" or an NFS-mounted directory or anything else) that is
->     accessible to the build farm;
->   - machines in the build farm need the actual sources to run
->     legal-info, doing so off-line.
->
-> So, "make source" has to be complete, i.e. it must also download the
-> acutal source archives.
-
-  Although I agree that this a valid and worthwhile use case, I'm not convinced 
-that it's worth adding 20 lines of code. Up to Peter to decide here :-)
-
-  But I really do like the way it's handled here: in normal builds, the actual 
-source will not be downloaded; only for legal-info and 'make source' it will be 
-there. Perfect.
-
->
-> ---
-> Changes v3 -> v4:
->   - handle it with a stamp file  (Luca)
->
-> Changes v2 -> v3:
->   - re-order the PHONY targets  (Arnout)
->   - don't reorder setting _ACTUAL_SOURCE/_SITE, it's done in its own
->     patch now  (Arnout)
->   - adapt the commit log accordingly  (Arnout)
->   - typo
+> Chages v5 -> v6:
+>   - variable with raw name was renamed  (Thomas)
 >
 > Changes v1 -> v2:
->   - drop the 'redistribute == ignore', it does not exist yet
+>   - perl no longer has a post-legal-info hook  (Thomas, Luca)
 > ---
->  package/pkg-generic.mk | 25 ++++++++++++++++++++++---
->  1 file changed, 22 insertions(+), 3 deletions(-)
+>  package/pkg-generic.mk | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >
 > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index cbdf96e..2c405e1 100644
+> index 7aca958..a362b73 100644
 > --- a/package/pkg-generic.mk
 > +++ b/package/pkg-generic.mk
-> @@ -123,6 +123,12 @@ $(BUILD_DIR)/%/.stamp_downloaded:
->  	$(Q)mkdir -p $(@D)
->  	$(Q)touch $@
+> @@ -496,6 +496,8 @@ endif
 >
-> +# Retrieve actual source archive, e.g. for prebuilt external toolchains
-> +$(BUILD_DIR)/%/.stamp_actual_downloaded:
-> +	$(call DOWNLOAD,$($(PKG)_ACTUAL_SOURCE_SITE)/$($(PKG)_ACTUAL_SOURCE_TARBALL)); \
-> +	$(Q)mkdir -p $(@D)
-> +	$(Q)touch $@
+>  $(2)_REDISTRIBUTE		?= YES
+>
+> +$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAW_BASE_NAME)
 > +
->  # Unpack the archive
->  $(BUILD_DIR)/%/.stamp_extracted:
->  	@$(call step_start,extract)
-> @@ -527,6 +533,7 @@ $(2)_TARGET_RSYNC =	        $$($(2)_DIR)/.stamp_rsynced
->  $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
->  $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
->  $(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
-> +$(2)_TARGET_ACTUAL_SOURCE =	$$($(2)_DIR)/.stamp_actual_downloaded
->  $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
+>  # When a target package is a toolchain dependency set this variable to
+>  # 'NO' so the 'toolchain' dependency is not added to prevent a circular
+>  # dependency
+> @@ -823,8 +825,8 @@ else
 >
->  # default extract command
-> @@ -634,6 +641,17 @@ $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
->
->  $(1)-source:		$$($(2)_TARGET_SOURCE)
->
-> +$(1)-all-source:	$(1)-legal-source
-> +$(1)-legal-info:	$(1)-legal-source
-> +$(1)-legal-source:	$(1)-source
+>  ifeq ($$($(2)_REDISTRIBUTE),YES)
+>  # Save the source tarball
+> -	$$(Q)$$(HARDLINK_OR_COPY) $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
+> -				  $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
+> +	$$(Q)$$(HARDLINK_OR_COPY) $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) \
 
-  Instead of adding that here, I think it makes more sense to put these 
-dependencies where we already have them for -source, so:
-
-$(1)-all-source:        $(1)-source $(1)-legal-source
-...
-# Packages that have a tarball need it downloaded beforehand
-$(1)-legal-info: $(1)-source $(1)-legal-source $$(REDIST_SOURCES_DIR_$$(call 
-UPPERCASE,$(4)))
-
-> +
-> +# Only download the actual source if it differs from the 'main' archive
-> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),)
-> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
-> +$(1)-legal-source:	$$($(2)_TARGET_ACTUAL_SOURCE)
-> +endif # actual sources != sources
-> +endif # actual sources != ""
-> +
->  $(1)-source-check:
->  	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
->
-> @@ -659,6 +677,7 @@ $(1)-extract:		$(1)-rsync
->  $(1)-rsync:		$$($(2)_TARGET_RSYNC)
->
->  $(1)-source:
-> +$(1)-legal-source:
-
-  This is not actually needed because it's already declared PHONY. The -source 
-bit is a redundant leftover. That said, for symmetry it's probably best to keep 
-it there.
-
->
->  $(1)-source-check:
-
-  Hm, what about source-check?
-
-  Well, we should probably remove the source-check feature :-) It's a lot of 
-code for something that is hardly used IMHO.
-
+  Did I really give my Rev-by without noticing that comma disappearing? :-)
 
   Regards,
   Arnout
 
->  	test -d $$($(2)_OVERRIDE_SRCDIR)
-> @@ -733,6 +752,8 @@ $$($(2)_TARGET_PATCH):			PKGDIR=$(pkgdir)
->  $$($(2)_TARGET_EXTRACT):		PKG=$(2)
->  $$($(2)_TARGET_SOURCE):			PKG=$(2)
->  $$($(2)_TARGET_SOURCE):			PKGDIR=$(pkgdir)
-> +$$($(2)_TARGET_ACTUAL_SOURCE):		PKG=$(2)
-> +$$($(2)_TARGET_ACTUAL_SOURCE):		PKGDIR=$(pkgdir)
->  $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
+> +				  $$($(2)_REDIST_SOURCES_DIR)
+>  endif # redistribute
 >
->  # Compute the name of the Kconfig option that correspond to the
-> @@ -800,9 +821,6 @@ else
->  # Other packages
->
->  ifeq ($$($(2)_REDISTRIBUTE),YES)
-> -ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
-> -	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
-> -endif
->  # Save the source tarball
->  	$$(Q)$$(HARDLINK_OR_COPY) $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
->  				  $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
-> @@ -896,6 +914,7 @@ endif
->  	$(1)-install-staging \
->  	$(1)-install-target \
->  	$(1)-legal-info \
-> +	$(1)-legal-source \
->  	$(1)-patch \
->  	$(1)-rebuild \
->  	$(1)-reconfigure \
+>  endif # other packages
 >
 
 
