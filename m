@@ -1,29 +1,115 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 May 2016 09:33:31 +0200
-Subject: [Buildroot] [PATCH 2/2] wpa_supplicant: add security fixes
-In-Reply-To: <badade66af4f20865100911c1669d5f68a3984a9.1462257619.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 3 May 2016 09:40:19 +0300")
-References: <a33b448fd0611e1ff359de562e180e59a2d062e6.1462257619.git.baruch@tkos.co.il>
- <badade66af4f20865100911c1669d5f68a3984a9.1462257619.git.baruch@tkos.co.il>
-Message-ID: <87shxzppdg.fsf@dell.be.48ers.dk>
+Date: Tue, 3 May 2016 09:30:47 +0200
+Subject: [Buildroot] [git commit] hostapd: add security fix
+Message-ID: <20160503073744.0E33780408@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1297fc980b7b702754ce2fd089df9cf6f3638694
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add upstream patching fixing CVE-2016-2447: psk configuration
- > parameter update
- > allowing arbitrary data to be written.
+Add upstream patch fixing CVE-2016-2447: psk configuration parameter update
+allowing arbitrary data to be written.
 
- > See http://w1.fi/security/2016-1/psk-parameter-config-update.txt for
- > details.
+See http://w1.fi/security/2016-1/psk-parameter-config-update.txt for details.
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ject-a-Credential-with-invalid-passphrase.patch | 85 ++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/hostapd/0005-WPS-Reject-a-Credential-with-invalid-passphrase.patch b/package/hostapd/0005-WPS-Reject-a-Credential-with-invalid-passphrase.patch
+new file mode 100644
+index 0000000..282aa95
+--- /dev/null
++++ b/package/hostapd/0005-WPS-Reject-a-Credential-with-invalid-passphrase.patch
+@@ -0,0 +1,85 @@
++From ecbb0b3dc122b0d290987cf9c84010bbe53e1022 Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <jouni@qca.qualcomm.com>
++Date: Fri, 4 Mar 2016 17:20:18 +0200
++Subject: [PATCH] WPS: Reject a Credential with invalid passphrase
++
++WPA/WPA2-Personal passphrase is not allowed to include control
++characters. Reject a Credential received from a WPS Registrar both as
++STA (Credential) and AP (AP Settings) if the credential is for WPAPSK or
++WPA2PSK authentication type and includes an invalid passphrase.
++
++This fixes an issue where hostapd or wpa_supplicant could have updated
++the configuration file PSK/passphrase parameter with arbitrary data from
++an external device (Registrar) that may not be fully trusted. Should
++such data include a newline character, the resulting configuration file
++could become invalid and fail to be parsed.
++
++Signed-off-by: Jouni Malinen <jouni@qca.qualcomm.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream (ecbb0b3dc122b0d290987cf9c84010bbe53e1022)
++
++ src/utils/common.c         | 12 ++++++++++++
++ src/utils/common.h         |  1 +
++ src/wps/wps_attr_process.c | 10 ++++++++++
++ 3 files changed, 23 insertions(+)
++
++diff --git a/src/utils/common.c b/src/utils/common.c
++index 450e2c6519ba..27b7c02de10b 100644
++--- a/src/utils/common.c
+++++ b/src/utils/common.c
++@@ -697,6 +697,18 @@ int is_hex(const u8 *data, size_t len)
++ }
++ 
++ 
+++int has_ctrl_char(const u8 *data, size_t len)
+++{
+++	size_t i;
+++
+++	for (i = 0; i < len; i++) {
+++		if (data[i] < 32 || data[i] == 127)
+++			return 1;
+++	}
+++	return 0;
+++}
+++
+++
++ size_t merge_byte_arrays(u8 *res, size_t res_len,
++ 			 const u8 *src1, size_t src1_len,
++ 			 const u8 *src2, size_t src2_len)
++diff --git a/src/utils/common.h b/src/utils/common.h
++index 701dbb236ed5..a97224070385 100644
++--- a/src/utils/common.h
+++++ b/src/utils/common.h
++@@ -488,6 +488,7 @@ const char * wpa_ssid_txt(const u8 *ssid, size_t ssid_len);
++ 
++ char * wpa_config_parse_string(const char *value, size_t *len);
++ int is_hex(const u8 *data, size_t len);
+++int has_ctrl_char(const u8 *data, size_t len);
++ size_t merge_byte_arrays(u8 *res, size_t res_len,
++ 			 const u8 *src1, size_t src1_len,
++ 			 const u8 *src2, size_t src2_len);
++diff --git a/src/wps/wps_attr_process.c b/src/wps/wps_attr_process.c
++index eadb22fe2e78..e8c4579309ab 100644
++--- a/src/wps/wps_attr_process.c
+++++ b/src/wps/wps_attr_process.c
++@@ -229,6 +229,16 @@ static int wps_workaround_cred_key(struct wps_credential *cred)
++ 		cred->key_len--;
++ #endif /* CONFIG_WPS_STRICT */
++ 	}
+++
+++
+++	if (cred->auth_type & (WPS_AUTH_WPAPSK | WPS_AUTH_WPA2PSK) &&
+++	    (cred->key_len < 8 || has_ctrl_char(cred->key, cred->key_len))) {
+++		wpa_printf(MSG_INFO, "WPS: Reject credential with invalid WPA/WPA2-Personal passphrase");
+++		wpa_hexdump_ascii_key(MSG_INFO, "WPS: Network Key",
+++				      cred->key, cred->key_len);
+++		return -1;
+++	}
+++
++ 	return 0;
++ }
++ 
++-- 
++2.8.1
++
