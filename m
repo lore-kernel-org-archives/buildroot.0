@@ -1,42 +1,50 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 3 May 2016 14:08:42 +0100
-Subject: [Buildroot] [PATCH 4/4] vlc: bump version to 2.2.3
-In-Reply-To: <1462280922-17100-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1462280922-17100-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1462280922-17100-4-git-send-email-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  3 May 2016 11:39:33 -0300
+Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.2h
+Message-ID: <1462286373-24276-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Fixes:
+CVE-2016-2105 - Fix EVP_EncodeUpdate overflow
+CVE-2016-2106 - Fix EVP_EncryptUpdate overflow
+CVE-2016-2107 - Prevent padding oracle in AES-NI CBC MAC check
+CVE-2016-2109 - Prevent ASN.1 BIO excessive memory allocation
+CVE-2016-2176 - EBCDIC overread
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/vlc/vlc.hash | 4 ++--
- package/vlc/vlc.mk   | 2 +-
+ package/openssl/openssl.hash | 4 ++--
+ package/openssl/openssl.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 6754b82..04632e0 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,2 +1,2 @@
--# From http://download.videolan.org/pub/videolan/vlc/2.2.2/vlc-2.2.2.tar.xz.sha256
--sha256	9ad23128be16f9b40ed772961272cb0748ed8e4aa1bc79c129e589feebea5fb5	vlc-2.2.2.tar.xz
-+# From http://download.videolan.org/pub/videolan/vlc/2.2.3/vlc-2.2.3.tar.xz.sha256
-+sha256 b9d7587d35f13c3c981964c8cc8b03f1c7c8edf528be476b3ca1d2efedd5bf5b  vlc-2.2.3.tar.xz
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 46a7cad..30887bd 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index e3ea2ae..edbce8e 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.0.2g.tar.gz.sha256
+-sha256	b784b1b3907ce39abf4098702dade6365522a253ad1552e267a9a0e89594aa33	openssl-1.0.2g.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2h.tar.gz.sha256
++sha256	1d4007e53aad94a5b2002fe045ee7bb0b3d98f1a47f8b2bc851dcd1c74332919	openssl-1.0.2h.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 2f50dfb..2368aa9 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VLC_VERSION = 2.2.2
-+VLC_VERSION = 2.2.3
- VLC_SITE = http://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPLv2+ LGPLv2.1+
+-OPENSSL_VERSION = 1.0.2g
++OPENSSL_VERSION = 1.0.2h
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
 -- 
 2.7.3
