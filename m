@@ -1,154 +1,178 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 3 May 2016 19:05:06 +0200
-Subject: [Buildroot] [PATCH] ficl: new package
-In-Reply-To: <20160428140435.75da877f@free-electrons.com>
-References: <1461571758-19709-1-git-send-email-francois.perrad@gadz.org>
- <20160428140435.75da877f@free-electrons.com>
-Message-ID: <CAB0FRstDSqLh9JZdO7s+7Nrhb4Y3a4NuVVCc9NmoC4BZ0ZpeLg@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue,  3 May 2016 19:05:48 +0200
+Subject: [Buildroot] [V2] ficl: new package
+Message-ID: <1462295148-4335-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2016-04-28 14:04 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Mon, 25 Apr 2016 10:09:18 +0200, Francois Perrad wrote:
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->
-> I'm curious: are you really using this stuff? The last release dates
-> back from 2010, there has been no commits in the CVS (irk!) repository
-> for the last 5 years. And the previous release was made in 2004, i.e 12
-> years ago. I really would like to understand if this is really used by
-> you on embedded systems before accepting in Buildroot a package for
-> which we know nothing will ever move upstream.
->
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/Config.in                    |  1 +
+ package/ficl/0001-fix-Makefile.patch | 47 ++++++++++++++++++++++++++++
+ package/ficl/Config.in               |  9 ++++++
+ package/ficl/ficl.hash               |  2 ++
+ package/ficl/ficl.mk                 | 59 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 118 insertions(+)
+ create mode 100644 package/ficl/0001-fix-Makefile.patch
+ create mode 100644 package/ficl/Config.in
+ create mode 100644 package/ficl/ficl.hash
+ create mode 100644 package/ficl/ficl.mk
 
-Yes. I'll do it.
-
->> diff --git a/package/ficl/0001-fix-Makefile.patch b/package/ficl/0001-fix-Makefile.patch
->> new file mode 100644
->> index 0000000..94cda8a
->> --- /dev/null
->> +++ b/package/ficl/0001-fix-Makefile.patch
->> @@ -0,0 +1,45 @@
->> +fix Makefile
->
-> Please write a better description. "fix Makefile" is clearly not
-> enough. Explain *what* you are fixing.
-
-OK
-
->
->> diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
->> new file mode 100644
->> index 0000000..142b083
->> --- /dev/null
->> +++ b/package/ficl/ficl.mk
->> @@ -0,0 +1,49 @@
->> +################################################################################
->> +#
->> +# ficl
->> +#
->> +################################################################################
->> +
->> +FICL_VERSION = 4.1.0
->> +FICL_SITE = http://downloads.sourceforge.net/project/ficl/ficl-all/ficl4.1
->
-> Please do something like:
->
-> FICL_VERSION_MAJOR = 4.1
-> FICL_VERSION = $(FICL_VERSION_MAJOR).0
-> FICL_SITE = http://downloads.sourceforge.net/project/ficl/ficl-all/ficl$(FICL_VERSION_MAJOR)
-
-OK
-
->
->> +FICL_LICENSE = BSD-2c
->> +FICL_LICENSE_FILES = ReadMe.txt
->> +FICL_INSTALL_STAGING = YES
->> +
->> +ifeq ($(BR2_STATIC_LIBS),y)
->> +FICL_EXE = ficl
->> +define FICL_INSTALL_LIB_STAGING
->> +     $(INSTALL) -D -m 0644 $(@D)/libficl.a $(STAGING_DIR)/usr/lib/libficl.a
->> +endef
->> +else
->> +FICL_EXE = main
->> +define FICL_INSTALL_LIB_STAGING
->> +     $(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION) $(STAGING_DIR)/usr/lib/libficl.so.$(FICL_VERSION)
->> +     ln -sf libficl.so.$(FICL_VERSION) $(STAGING_DIR)/usr/lib/libficl.so.4
->> +     ln -sf libficl.so.$(FICL_VERSION) $(STAGING_DIR)/usr/lib/libficl.so
->> +endef
->> +define FICL_INSTALL_LIB_TARGET
->> +     $(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION) $(TARGET_DIR)/usr/lib/libficl.so.$(FICL_VERSION)
->> +     ln -sf libficl.so.$(FICL_VERSION) $(TARGET_DIR)/usr/lib/libficl.so.4
->> +     ln -sf libficl.so.$(FICL_VERSION) $(TARGET_DIR)/usr/lib/libficl.so
->> +endef
->> +endif
->
-> This doesn't really take into account the BR2_SHARED_STATIC_LIBS=y
-> case. What about instead something like this:
->
-> ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-> define FICL_INSTALL_STATIC_LIB
->         $(INSTALL) -D -m 0644 $(@D)/libficl.a $(STAGING_DIR)/usr/lib/libficl.a
-> endef
-> endif
->
-> ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-> define FICL_INSTALL_SHARED_LIB
->         $(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so.$(FICL_VERSION)
->         ln -sf libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so.4
->         ln -sf libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so
-> endef
-> endif
->
-> and then:
->
-> define FICL_INSTALL_STAGING_CMDS
->         $(FICL_INSTALL_STATIC_LIB,$(STAGING_DIR))
->         $(FICL_INSTALL_SHARED_LIB,$(STAGING_DIR))
->         ... install headers ...
-> endef
->
-> define FICL_INSTALL_TARGET_CMDS
->         $(FICL_INSTALL_STATIC_LIB,$(TARGET_DIR))
->         $(FICL_INSTALL_SHARED_LIB,$(TARGET_DIR))
->         ... install programs ...
-> endef
->
-
-OK
-
->> +define FICL_BUILD_CMDS
->> +     $(MAKE) -C $(@D) -f Makefile.linux $(TARGET_CONFIGURE_OPTS) \
->> +     CPPFLAGS="$(TARGET_CPPFLAGS) -I. -Dlinux" $(FICL_EXE)
->
-> This last line should be indented with one more tab.
-
-OK
-
->
-> Also, it's not clear to me why the ficl executable to build is
-> different between the static case and the shared case. Can you
-> elaborate on that?
-
-See in the weird Makefile.linux
-
-Fran?ois
-
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/Config.in b/package/Config.in
+index bd6b4b5..a782423 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -493,6 +493,7 @@ menu "Erlang libraries/modules"
+ 	source "package/erlang-p1-zlib/Config.in"
+ endmenu
+ endif
++	source "package/ficl/Config.in"
+ 	source "package/gauche/Config.in"
+ 	source "package/guile/Config.in"
+ 	source "package/haserl/Config.in"
+diff --git a/package/ficl/0001-fix-Makefile.patch b/package/ficl/0001-fix-Makefile.patch
+new file mode 100644
+index 0000000..d5a25c4
+--- /dev/null
++++ b/package/ficl/0001-fix-Makefile.patch
+@@ -0,0 +1,47 @@
++fix dependency in Makefiles
++
++there is no longer a sysdep.h file.
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++diff --git a/Makefile b/Makefile
++index 976d00a..7f73c44 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
++ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
++ 
++-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
+++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
++ 	$(CC) $(CFLAGS) $(LDFLAGS) main.o -o main -L. -lficl -lm
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
++ 
++diff --git a/Makefile.ansi b/Makefile.ansi
++index e510fcd..170e6eb 100644
++--- a/Makefile.ansi
+++++ b/Makefile.ansi
++@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
++ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
++ 
++-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
+++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
++ 	$(CC) main.o -o main -L. -lficl -lm
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
++ 
++diff --git a/Makefile.linux b/Makefile.linux
++index d447e7e..7f2cdfe 100644
++--- a/Makefile.linux
+++++ b/Makefile.linux
++@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
++ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
++ 
++-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
+++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
++ 	$(CC) main.o -o main -L. -lficl -lm
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
++ 
++-- 
++
+diff --git a/package/ficl/Config.in b/package/ficl/Config.in
+new file mode 100644
+index 0000000..3445a64
+--- /dev/null
++++ b/package/ficl/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_FICL
++	bool "ficl"
++	help
++	  Ficl is a programming language interpreter designed to be embedded
++	  into other systems as a command, macro, and development
++	  prototyping language.
++	  Ficl is an acronym for "Forth Inspired Command Language".
++
++	  http://ficl.sourceforge.net
+diff --git a/package/ficl/ficl.hash b/package/ficl/ficl.hash
+new file mode 100644
+index 0000000..4bfbbd0
+--- /dev/null
++++ b/package/ficl/ficl.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  4daf74f3d3d6f8b86ea7cb47bc24931d50b4809b50ba34ca32e0ca1e972bd3a3  ficl-4.1.0.tar.gz
+diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
+new file mode 100644
+index 0000000..c3feea2
+--- /dev/null
++++ b/package/ficl/ficl.mk
+@@ -0,0 +1,59 @@
++################################################################################
++#
++# ficl
++#
++################################################################################
++
++FICL_VERSION_MAJOR = 4.1
++FICL_VERSION = $(FICL_VERSION_MAJOR).0
++FICL_SITE = http://downloads.sourceforge.net/project/ficl/ficl-all/ficl$(FICL_VERSION_MAJOR)
++FICL_LICENSE = BSD-2c
++FICL_LICENSE_FILES = ReadMe.txt
++FICL_INSTALL_STAGING = YES
++
++ifeq ($(BR2_STATIC_LIBS),y)
++FICL_BUILD_TARGETS += ficl
++define FICL_INSTALL_STATIC_BIN
++	$(INSTALL) -D -m 0755 $(@D)/ficl $(TARGET_DIR)/usr/bin/ficl
++endef
++endif
++
++ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++FICL_BUILD_TARGETS += libficl.a
++define FICL_INSTALL_STATIC_LIB
++	$(INSTALL) -D -m 0644 $(@D)/libficl.a $(STAGING_DIR)/usr/lib/libficl.a
++endef
++endif
++
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++FICL_BUILD_TARGETS += main libficl.so.$(FICL_VERSION)
++define FICL_INSTALL_SHARED_BIN
++	$(INSTALL) -D -m 0755 $(@D)/main $(TARGET_DIR)/usr/bin/ficl
++endef
++define FICL_INSTALL_SHARED_LIB
++	$(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so.$(FICL_VERSION)
++	ln -sf libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so.4
++	ln -sf libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so
++endef
++endif
++
++define FICL_BUILD_CMDS
++	$(MAKE) -C $(@D) -f Makefile.linux $(TARGET_CONFIGURE_OPTS) \
++		CPPFLAGS="$(TARGET_CPPFLAGS) -I. -Dlinux" $(FICL_BUILD_TARGETS)
++endef
++
++define FICL_INSTALL_STAGING_CMDS
++	$(FICL_INSTALL_STATIC_LIB)
++	$(call FICL_INSTALL_SHARED_LIB, $(STAGING_DIR))
++	$(INSTALL) -D -m 0644 $(@D)/ficl.h $(STAGING_DIR)/usr/include/ficl.h
++	$(INSTALL) -D -m 0644 $(@D)/ficllocal.h $(STAGING_DIR)/usr/include/ficllocal.h
++	$(INSTALL) -D -m 0644 $(@D)/ficlplatform/unix.h $(STAGING_DIR)/usr/include/ficlplatform/unix.h
++endef
++
++define FICL_INSTALL_TARGET_CMDS
++	$(FICL_INSTALL_STATIC_BIN)
++	$(FICL_INSTALL_SHARED_BIN)
++	$(call FICL_INSTALL_SHARED_LIB, $(TARGET_DIR))
++endef
++
++$(eval $(generic-package))
+-- 
+2.5.0
