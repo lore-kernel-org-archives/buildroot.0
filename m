@@ -1,57 +1,57 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 May 2016 16:56:51 -0300
-Subject: [Buildroot] [PATCH v2] gst1-plugins-bad: add rtmp support
-Message-ID: <1462305411-30866-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 3 May 2016 19:23:13 +0200
+Subject: [Buildroot] [PATCH v2 1/1] flatcc: new package
+In-Reply-To: <CALupW3BnsWbBFZhd+GQe26rtXsg-KZUsxkxupZ_5J88Yb14PeA@mail.gmail.com>
+References: <1462145376-1377-1-git-send-email-steve.derosier@lairdtech.com>
+ <CAHXCMM+wVwqthUOEh+e3fHDA_=J0FS6FqG2cBF+zhVM0BGVoFQ@mail.gmail.com>
+ <CALupW3BnsWbBFZhd+GQe26rtXsg-KZUsxkxupZ_5J88Yb14PeA@mail.gmail.com>
+Message-ID: <c0a641fc-b5ce-7c69-14f1-1b53f0af7623@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As pointed by sonnex on the mailing list.
+On 05/02/16 23:35, Steve deRosier wrote:
+> Hi Samuel,
+>
+> Thanks for taking a detailed look at this. Hopefully my answers below
+> will address your concerns.
+>
+>
+> On Mon, May 2, 2016 at 12:44 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+>>> +
+>>> ++# Options to control if we build static or shared libraries. Needed because
+>>> ++# cmake has us explicitly do both versions if we want both versions.
+>>> ++option(FLATCC_WITH_STATIC "Build the static version of the library" ON)
+>>> ++option(FLATCC_WITH_SHARED "Build the shared version of the library" ON)
+>> I'm not a big fan of this because:
+>> - it kinda adds some feature to flatcc;
+>> - it completely by-passes the standard CMake way of driving
+>> shared/static libs build (using BUILD_SHARED_LIBS) that the Buildroot
+>> infrastructure automaticllay set [1].
+>>
+>
+> I wish you spoke up two weeks ago when Arnout explicitly asked me to
+> add the shared+static to the build. You could've saved me a good week
+> of work and two weeks delay in getting support for this upstreamed.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
-v2: fix typo.
+  Well, I was just talking about your custom install commands. I didn't realize 
+that in the shared+static case, the static libs weren't even built. I just 
+noticed in your code that for a config variable that can have three values 
+(static, shared, static+shared) you only handled two (static, others). So I made 
+the remark that you forgot about the static+shared case, with a suggestion about 
+how it could be handled.
 
- package/gstreamer1/gst1-plugins-bad/Config.in           | 6 ++++++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 7 +++++++
- 2 files changed, 13 insertions(+)
+[snip]
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 53ce589..5248c4d 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -382,6 +382,12 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REMOVESILENCE
- 	help
- 	  Removes silence from an audio stream
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTMP
-+	bool "rtmp"
-+	select BR2_PACKAGE_RTMPDUMP
-+	help
-+	  RTMP plugin
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDI
- 	bool "sdi"
- 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 6d8cac7..e2446a3 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -479,6 +479,13 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-removesilence
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTMP),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += --enable-rtmp
-+GST1_PLUGINS_BAD_DEPENDENCIES += rtmpdump
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += --disable-rtmp
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDI),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-sdi
- else
+  Regards,
+  Arnout
+
 -- 
-2.7.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
