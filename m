@@ -1,114 +1,32 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  3 May 2016 09:40:18 +0300
-Subject: [Buildroot] [PATCH 1/2] hostapd: add security fix
-Message-ID: <a33b448fd0611e1ff359de562e180e59a2d062e6.1462257619.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 3 May 2016 09:08:57 +0200
+Subject: [Buildroot] [PATCH v3 0/3] Add go language support
+In-Reply-To: <1462207070.27026.20.camel@infradead.org>
+References: <cover.1459798147.git.geoff@infradead.org>
+ <20160421224301.6a05f711@free-electrons.com>
+ <1461965160.27026.9.camel@infradead.org>
+ <20160430140314.4ff30ff1@free-electrons.com>
+ <1462074238901-b9436b8a-0eb718e2-8f9a915c@mixmax.com>
+ <1462207070.27026.20.camel@infradead.org>
+Message-ID: <20160503090857.23f362ea@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch fixing CVE-2016-2447: psk configuration parameter update
-allowing arbitrary data to be written.
+Hello,
 
-See http://w1.fi/security/2016-1/psk-parameter-config-update.txt for details.
+On Mon, 02 May 2016 09:37:50 -0700, Geoff Levand wrote:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...ject-a-Credential-with-invalid-passphrase.patch | 85 ++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
- create mode 100644 package/hostapd/0005-WPS-Reject-a-Credential-with-invalid-passphrase.patch
+> I have the patch below that adds BR2_TOOLCHAIN_HAS_THREADS.  Is
+> it enough to pull in the toolchain?
 
-diff --git a/package/hostapd/0005-WPS-Reject-a-Credential-with-invalid-passphrase.patch b/package/hostapd/0005-WPS-Reject-a-Credential-with-invalid-passphrase.patch
-new file mode 100644
-index 000000000000..282aa952b5a2
---- /dev/null
-+++ b/package/hostapd/0005-WPS-Reject-a-Credential-with-invalid-passphrase.patch
-@@ -0,0 +1,85 @@
-+From ecbb0b3dc122b0d290987cf9c84010bbe53e1022 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <jouni@qca.qualcomm.com>
-+Date: Fri, 4 Mar 2016 17:20:18 +0200
-+Subject: [PATCH] WPS: Reject a Credential with invalid passphrase
-+
-+WPA/WPA2-Personal passphrase is not allowed to include control
-+characters. Reject a Credential received from a WPS Registrar both as
-+STA (Credential) and AP (AP Settings) if the credential is for WPAPSK or
-+WPA2PSK authentication type and includes an invalid passphrase.
-+
-+This fixes an issue where hostapd or wpa_supplicant could have updated
-+the configuration file PSK/passphrase parameter with arbitrary data from
-+an external device (Registrar) that may not be fully trusted. Should
-+such data include a newline character, the resulting configuration file
-+could become invalid and fail to be parsed.
-+
-+Signed-off-by: Jouni Malinen <jouni@qca.qualcomm.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream (ecbb0b3dc122b0d290987cf9c84010bbe53e1022)
-+
-+ src/utils/common.c         | 12 ++++++++++++
-+ src/utils/common.h         |  1 +
-+ src/wps/wps_attr_process.c | 10 ++++++++++
-+ 3 files changed, 23 insertions(+)
-+
-+diff --git a/src/utils/common.c b/src/utils/common.c
-+index 450e2c6519ba..27b7c02de10b 100644
-+--- a/src/utils/common.c
-++++ b/src/utils/common.c
-+@@ -697,6 +697,18 @@ int is_hex(const u8 *data, size_t len)
-+ }
-+ 
-+ 
-++int has_ctrl_char(const u8 *data, size_t len)
-++{
-++	size_t i;
-++
-++	for (i = 0; i < len; i++) {
-++		if (data[i] < 32 || data[i] == 127)
-++			return 1;
-++	}
-++	return 0;
-++}
-++
-++
-+ size_t merge_byte_arrays(u8 *res, size_t res_len,
-+ 			 const u8 *src1, size_t src1_len,
-+ 			 const u8 *src2, size_t src2_len)
-+diff --git a/src/utils/common.h b/src/utils/common.h
-+index 701dbb236ed5..a97224070385 100644
-+--- a/src/utils/common.h
-++++ b/src/utils/common.h
-+@@ -488,6 +488,7 @@ const char * wpa_ssid_txt(const u8 *ssid, size_t ssid_len);
-+ 
-+ char * wpa_config_parse_string(const char *value, size_t *len);
-+ int is_hex(const u8 *data, size_t len);
-++int has_ctrl_char(const u8 *data, size_t len);
-+ size_t merge_byte_arrays(u8 *res, size_t res_len,
-+ 			 const u8 *src1, size_t src1_len,
-+ 			 const u8 *src2, size_t src2_len);
-+diff --git a/src/wps/wps_attr_process.c b/src/wps/wps_attr_process.c
-+index eadb22fe2e78..e8c4579309ab 100644
-+--- a/src/wps/wps_attr_process.c
-++++ b/src/wps/wps_attr_process.c
-+@@ -229,6 +229,16 @@ static int wps_workaround_cred_key(struct wps_credential *cred)
-+ 		cred->key_len--;
-+ #endif /* CONFIG_WPS_STRICT */
-+ 	}
-++
-++
-++	if (cred->auth_type & (WPS_AUTH_WPAPSK | WPS_AUTH_WPA2PSK) &&
-++	    (cred->key_len < 8 || has_ctrl_char(cred->key, cred->key_len))) {
-++		wpa_printf(MSG_INFO, "WPS: Reject credential with invalid WPA/WPA2-Personal passphrase");
-++		wpa_hexdump_ascii_key(MSG_INFO, "WPS: Network Key",
-++				      cred->key, cred->key_len);
-++		return -1;
-++	}
-++
-+ 	return 0;
-+ }
-+ 
-+-- 
-+2.8.1
-+
+No, adding dependencies at the Config.in level doesn't change anything
+in terms of build order.
+
+Thomas
 -- 
-2.8.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
