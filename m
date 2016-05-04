@@ -1,94 +1,50 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 4 May 2016 17:08:34 +0200
-Subject: [Buildroot] [PATCH] uboot: install multiple spl images
-In-Reply-To: <1457648583-25071-1-git-send-email-jason.abele@gmail.com>
-References: <1457648583-25071-1-git-send-email-jason.abele@gmail.com>
-Message-ID: <CAAXf6LXZaUpnRxKqP28fKaMWwPqssq+TkR3MDhsntv_VcGa7ZQ@mail.gmail.com>
+From: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+Date: Wed, 4 May 2016 11:22:24 -0400 (EDT)
+Subject: [Buildroot] [PATCH v1 1/4] libpjsip: add gnutls support and fix
+ various things
+In-Reply-To: <59f2bcec-6b91-7ddf-0a79-f5a85d6383fa@mind.be>
+References: <1461358628-9352-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
+ <1461358628-9352-2-git-send-email-patrick.keroulas@savoirfairelinux.com>
+ <20160422232155.6ac9c7e2@free-electrons.com>
+ <1719666448.88685.1462309711357.JavaMail.zimbra@savoirfairelinux.com>
+ <59f2bcec-6b91-7ddf-0a79-f5a85d6383fa@mind.be>
+Message-ID: <23158982.107504.1462375344849.JavaMail.zimbra@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Arnout, all,
 
-(late reply, just noticed this patch)
+On May 3, 2016, at 5:43 PM, Arnout Vandecappelle arnout at mind.be wrote:
+> On 05/03/16 23:08, Patrick Keroulas wrote:
+>> Hello Thomas,
+>> 
+>> On Apr 22, 2016, at 5:21 PM, Thomas Petazzoni
+>> thomas.petazzoni at free-electrons.com wrote:
+>>> However, Buildroot has the policy of not carrying feature patches,
+>>> which this one clearly is. Some please get this patch integrated
+>>> upstream first, and then we can benefit from this feature in Buildroot.
+>>> 
+>>> Having large feature patches like this one in Buildroot would prevent
+>>> us from easily updating libpjsip in the future, which is not a
+>>> situation we like.
+>> 
+>> We've been trying to push these patches up-stream for 2 years now, without
+>> response from pjproject.
+>> http://lists.pjsip.org/pipermail/pjsip_lists.pjsip.org/2014-May/017492.html
+>> http://lists.pjsip.org/pipermail/pjsip_lists.pjsip.org/2015-January/018072.html
+> 
+> Well, in that case, we're even less motivated to carry these feature patches...
+> 
+> But you can easily keep it in your own BR2_GLOBAL_PATCH_DIR.
 
-On Thu, Mar 10, 2016 at 11:23 PM, Jason Abele <jason.abele@gmail.com> wrote:
-> From: Jason Abele <jason@nextthing.co>
->
-> For some platforms, there are multiple generated spl images.  Extend
-> BR2_TARGET_UBOOT_SPL_NAME to allow these multiple images to be installed
-> after uboot build completes.
->
-> Signed-off-by: Jason Abele <jason@nextthing.co>
-> ---
-> For example, the NextThingCo C.H.I.P. uses two binaries from uboot,
-> spl/sunxi-spl.bin and spl/sunxi-spl-with-ecc.bin.
->
-> This patch allows them to be listed explicitly.
->
->  boot/uboot/Config.in |  2 +-
->  boot/uboot/uboot.mk  | 12 ++++++++----
->  2 files changed, 9 insertions(+), 5 deletions(-)
->
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 4a6dc56..d4f9445 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -322,7 +322,7 @@ config BR2_TARGET_UBOOT_SPL_NAME
->         default "spl/u-boot-spl.bin"
->         depends on BR2_TARGET_UBOOT_SPL
->         help
-> -         This is the name of the SPL binary, generated during
-> +         A space-separated list of SPL binaries, generated during
->           u-boot build. For most platform it is spl/u-boot-spl.bin
->           but not always. It is MLO on OMAP for example.
->
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index d539b31..aae99f8 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -169,7 +169,9 @@ define UBOOT_INSTALL_IMAGES_CMDS
->         $(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
->                 cp -dpf $(@D)/$(UBOOT_MAKE_TARGET) $(BINARIES_DIR))
->         $(if $(BR2_TARGET_UBOOT_SPL),
-> -               cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
-> +               for p in $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)); do \
-> +                       cp -dpf $(@D)/$$p $(BINARIES_DIR)/; \
-> +               done)
->         $(if $(BR2_TARGET_UBOOT_ENVIMAGE),
->                 $(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
->                 $(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-> @@ -196,9 +198,11 @@ endif
->
->  ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
->  define UBOOT_GENERATE_ZYNQ_IMAGE
-> -       $(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
-> -               -u $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))     \
-> -               -o $(BINARIES_DIR)/BOOT.BIN
-> +       for p in $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)); do \
-> +               $(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
-> +                       -u $(@D)/$$p -o $(BINARIES_DIR)/BOOT.BIN; \
-> +               fi; \
-> +       done
->  endef
->  UBOOT_DEPENDENCIES += host-zynq-boot-bin
->  UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_GENERATE_ZYNQ_IMAGE
+What if my intended package (ring-daemon in patch 4/4) doesn't even build 
+without this gnutls support in libpjsip?
+Is it acceptable to include <global-patch-dir> in package/ring-daemon/?
+Do I have an alternative?
 
-We have a similar modification in our tree but for the real u-boot
-image and not the SPL image. In this case, the UBOOT_BOARD_NAME can
-take a list of board names, and we use a similar for loop to iterate
-over the configure, build, install step for each board.
+Regards,
 
-Use case is to use a single defconfig for different hardware boards
-that are very much alike but need some different u-boot (different
-device tree, among other subtleties).
-
-I thought I once shared this patch with the list but I cannot find it back.
-
-If the path is now more open for inclusion of such change, I would be
-more than happy to send it.
-
-Let me know,
-Thomas
+Patrick
