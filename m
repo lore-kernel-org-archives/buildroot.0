@@ -1,103 +1,78 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 4 May 2016 19:02:32 +0200
-Subject: [Buildroot] [PATCH v2 1/1] flatcc: new package
-In-Reply-To: <CALupW3B76bWmAnLSLAizMgZBGwig5Gm6o3dG9q5ydtEaSyqqpw@mail.gmail.com>
-References: <1462145376-1377-1-git-send-email-steve.derosier@lairdtech.com>
- <CAHXCMM+wVwqthUOEh+e3fHDA_=J0FS6FqG2cBF+zhVM0BGVoFQ@mail.gmail.com>
- <CALupW3BnsWbBFZhd+GQe26rtXsg-KZUsxkxupZ_5J88Yb14PeA@mail.gmail.com>
- <c0a641fc-b5ce-7c69-14f1-1b53f0af7623@mind.be>
- <CALupW3B76bWmAnLSLAizMgZBGwig5Gm6o3dG9q5ydtEaSyqqpw@mail.gmail.com>
-Message-ID: <bbbedfcc-6c2f-4441-95ad-543ea1c53fef@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 04 May 2016 17:26:10 +0000
+Subject: [Buildroot] [Bug 8911] New: Using sysvinit inittab and "single"
+ user mode the rcS script still runs
+Message-ID: <bug-8911-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/04/16 18:12, Steve deRosier wrote:
-> On Tue, May 3, 2016 at 10:23 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 05/02/16 23:35, Steve deRosier wrote:
->>>
->>> Hi Samuel,
->>>
->>> Thanks for taking a detailed look at this. Hopefully my answers below
->>> will address your concerns.
->>>
->>>
->>> On Mon, May 2, 2016 at 12:44 PM, Samuel Martin <s.martin49@gmail.com>
->>> wrote:
->>>>>
->>>>> +
->>>>> ++# Options to control if we build static or shared libraries. Needed
->>>>> because
->>>>> ++# cmake has us explicitly do both versions if we want both versions.
->>>>> ++option(FLATCC_WITH_STATIC "Build the static version of the library"
->>>>> ON)
->>>>> ++option(FLATCC_WITH_SHARED "Build the shared version of the library"
->>>>> ON)
->>>>
->>>> I'm not a big fan of this because:
->>>> - it kinda adds some feature to flatcc;
->>>> - it completely by-passes the standard CMake way of driving
->>>> shared/static libs build (using BUILD_SHARED_LIBS) that the Buildroot
->>>> infrastructure automaticllay set [1].
->>>>
->>>
->>> I wish you spoke up two weeks ago when Arnout explicitly asked me to
->>> add the shared+static to the build. You could've saved me a good week
->>> of work and two weeks delay in getting support for this upstreamed.
->>
->>
->>  Well, I was just talking about your custom install commands. I didn't
->> realize that in the shared+static case, the static libs weren't even built.
->> I just noticed in your code that for a config variable that can have three
->> values (static, shared, static+shared) you only handled two (static,
->> others). So I made the remark that you forgot about the static+shared case,
->> with a suggestion about how it could be handled.
->>
->
-> OK, understood. I guess I could've responded then that it doesn't
-> build both and put some code in there to eliminate that case. Sorry, I
-> misunderstood the review.
->
-> But, now the work's been done to handle the extra case. I'd like see
-> it go in with the extra functionality as we're going to upstream the
-> feature anyway.
->
-> @Samuel and @Arnout, does that plan sound OK? Can we move forward with
-> this?  Or are there other things that I need to address?
+https://bugs.busybox.net/show_bug.cgi?id=8911
 
-  Hm, tricky...
+            Bug ID: 8911
+           Summary: Using sysvinit inittab and "single" user mode the rcS
+                    script still runs
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: ckhardin at exablox.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-  On the one hand, I don't want to block your submission over this issue.
+Expected single user behavior to NOT run the rcS script when runlevel S is
+given to sysvinit.
 
-  On the other hand, we don't want to carry a feature patch that may never be 
-accepted upstream.
 
-  Since the patch wasn't OK yet as it was (it should look at the global 
-BUILD_SHARED_LIBS), isn't it easier to just drop that patch, and revert the 
-installation commands to your original version, adding a comment that in the 
-SHARED_STATIC case only shared libs are built anyway? Or is that too frustrating 
-because you did redundant work?
+From the busybox code - when going into single user, the logic is conditional
+to not even parse the inittab and jump into the single user shell.
 
-  I can understand that it's frustrating. Actually, reading back what I wrote 
-yesterday, I'm afraid that I may have made it worse by making you feel it was 
-your own fault. But that's not at all the case: I haven't been sufficiently 
-clear in my original review, and you can't magically know all the constraints 
-that we try to satisfy.
+busybox/init/init.c
 
-  That said, a bit of frustration is going to be unavoidable here... I'm sorry 
-we haven't been a better upstream for you. And to make it worse, it looks like 
-your first submission has been even more unappreciated...
+        /* Check if we are supposed to be in single user mode */
+        if (argv[1]
+         && (strcmp(argv[1], "single") == 0 || strcmp(argv[1], "-s") == 0 ||
+LONE_CHAR(argv[1], '1'))
+        ) {
+                /* ??? shouldn't we set RUNLEVEL="b" here? */
+                /* Start a shell on console */
+                new_init_action(RESPAWN, bb_default_login_shell, "");
+        } else {
+                /* Not in single user mode - see what inittab says */
 
-  Regards,
-  Arnout
+                /* NOTE that if CONFIG_FEATURE_USE_INITTAB is NOT defined,
+                 * then parse_inittab() simply adds in some default
+                 * actions (i.e., INIT_SCRIPT and a pair
+                 * of "askfirst" shells) */
+                parse_inittab();
+        }
 
+However, the sysvinit uses the runlevels and the sysinit action runs before a
+runlevel has been selected - so, the rcS always runs.
+
+I believe this diff gets what should happen, but their might be a context that
+I don't know about for not doing this.
+
+diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
+index 27eb4a6..fad91ea 100644
+--- a/package/sysvinit/inittab
++++ b/package/sysvinit/inittab
+@@ -10,7 +10,7 @@ si2::sysinit:/bin/mkdir -p /dev/pts
+ si3::sysinit:/bin/mkdir -p /dev/shm
+ si4::sysinit:/bin/mount -a
+ si5::sysinit:/bin/hostname -F /etc/hostname
+-si6::sysinit:/etc/init.d/rcS
++rcS:12345:wait:/etc/init.d/rcS
+
+ # S0:1:respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+You are receiving this mail because:
+You are on the CC list for the bug.
