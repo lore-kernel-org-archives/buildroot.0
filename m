@@ -1,61 +1,73 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 4 May 2016 21:23:11 +0200
-Subject: [Buildroot] [PATCH v1 1/4] libpjsip: add gnutls support and fix
- various things
-In-Reply-To: <23158982.107504.1462375344849.JavaMail.zimbra@savoirfairelinux.com>
-References: <1461358628-9352-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
- <1461358628-9352-2-git-send-email-patrick.keroulas@savoirfairelinux.com>
- <20160422232155.6ac9c7e2@free-electrons.com>
- <1719666448.88685.1462309711357.JavaMail.zimbra@savoirfairelinux.com>
- <59f2bcec-6b91-7ddf-0a79-f5a85d6383fa@mind.be>
- <23158982.107504.1462375344849.JavaMail.zimbra@savoirfairelinux.com>
-Message-ID: <7b6e08cd-7b0e-6fc4-a55e-c09a28beb703@mind.be>
+Date: Wed, 4 May 2016 21:31:45 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/ca-certificates: depend on
+ host-python or host-python3
+In-Reply-To: <1462371474-27987-1-git-send-email-martin@barkynet.com>
+References: <1462371474-27987-1-git-send-email-martin@barkynet.com>
+Message-ID: <a1a2c597-df76-5768-c894-e787d4daefa6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/04/16 17:22, Patrick Keroulas wrote:
-> Arnout, all,
+On 05/04/16 16:17, Martin Bark wrote:
+> The ca-certificates Makefile directly calls python but if python3 has been
+> selected then it is possible for $(HOST_DIR)/usr/bin/python to not exist
+> in the PATH at the time ca-certificates is built.  This means the Makefile
+> will use python installed on the build host. If the build hosts python is
+> less than python 2.7 then the build will fail.
+
+  I'm not sure if this explanation if very clear...
+
 >
-> On May 3, 2016, at 5:43 PM, Arnout Vandecappelle arnout at mind.be wrote:
->> On 05/03/16 23:08, Patrick Keroulas wrote:
->>> Hello Thomas,
->>>
->>> On Apr 22, 2016, at 5:21 PM, Thomas Petazzoni
->>> thomas.petazzoni at free-electrons.com wrote:
->>>> However, Buildroot has the policy of not carrying feature patches,
->>>> which this one clearly is. Some please get this patch integrated
->>>> upstream first, and then we can benefit from this feature in Buildroot.
->>>>
->>>> Having large feature patches like this one in Buildroot would prevent
->>>> us from easily updating libpjsip in the future, which is not a
->>>> situation we like.
->>>
->>> We've been trying to push these patches up-stream for 2 years now, without
->>> response from pjproject.
->>> http://lists.pjsip.org/pipermail/pjsip_lists.pjsip.org/2014-May/017492.html
->>> http://lists.pjsip.org/pipermail/pjsip_lists.pjsip.org/2015-January/018072.html
->>
->> Well, in that case, we're even less motivated to carry these feature patches...
->>
->> But you can easily keep it in your own BR2_GLOBAL_PATCH_DIR.
+> ca-certificates will build using host-python3. Fix the issue by depending
+> on host-python3 if python3 is being used otherwise depend on host-python.
 >
-> What if my intended package (ring-daemon in patch 4/4) doesn't even build
-> without this gnutls support in libpjsip?
-> Is it acceptable to include <global-patch-dir> in package/ring-daemon/?
-> Do I have an alternative?
+> This fixes:
+>  http://autobuild.buildroot.net/results/a2a4fed293c836b9cf63ff2aaa463b0704dec07e/
+>  http://autobuild.buildroot.net/results/bbed4afa8e30382b8892062f31ba64cbb0ea14e4/
+>  http://autobuild.buildroot.net/results/1af5562be3c0d233cea81834a898f7ac6ae48271/
+>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Martin Bark <martin@barkynet.com>
+>
+> ---
+> Changes v1 -> v2
+>  - Depend on host-python or host-python3 instead of directly calling
+>    $(HOST_DIR)/usr/bin/python2 (Suggested by Arnout Vandecappelle)
+>  - Added comments to ca-certificates.mk (Suggested by Arnout Vandecappelle)
+> ---
+>  package/ca-certificates/ca-certificates.mk | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+> index da1b70d..393c8cd 100644
+> --- a/package/ca-certificates/ca-certificates.mk
+> +++ b/package/ca-certificates/ca-certificates.mk
+> @@ -7,7 +7,11 @@
+>  CA_CERTIFICATES_VERSION = 20160104
+>  CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+>  CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20160104T220912Z/pool/main/c/ca-certificates
+> -CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
+> +CA_CERTIFICATES_DEPENDENCIES = host-openssl
+> +# ca-certificates can be built with either python 2 or python 3
+> +# but it must be at least python 2.7
 
-  Argh! No, it is not possible for a package to require a patched version of a 
-different package.
+  But this explanation definitely is clear, and that's the most important.
 
-  I wonder, how do you prepare ring for other distros? AFAICS Debian for 
-instance doesn't have a patched pjsip.
-
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
   Regards,
   Arnout
+
+
+> +CA_CERTIFICATES_DEPENDENCIES += \
+> +	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
+>  CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
+>  CA_CERTIFICATES_LICENSE_FILES = debian/copyright
+>
+>
 
 
 -- 
