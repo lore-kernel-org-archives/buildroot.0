@@ -1,50 +1,69 @@
-From: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
-Date: Wed, 4 May 2016 11:22:24 -0400 (EDT)
-Subject: [Buildroot] [PATCH v1 1/4] libpjsip: add gnutls support and fix
- various things
-In-Reply-To: <59f2bcec-6b91-7ddf-0a79-f5a85d6383fa@mind.be>
-References: <1461358628-9352-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
- <1461358628-9352-2-git-send-email-patrick.keroulas@savoirfairelinux.com>
- <20160422232155.6ac9c7e2@free-electrons.com>
- <1719666448.88685.1462309711357.JavaMail.zimbra@savoirfairelinux.com>
- <59f2bcec-6b91-7ddf-0a79-f5a85d6383fa@mind.be>
-Message-ID: <23158982.107504.1462375344849.JavaMail.zimbra@savoirfairelinux.com>
+From: Steve deRosier <derosier@gmail.com>
+Date: Wed, 4 May 2016 09:12:54 -0700
+Subject: [Buildroot] [PATCH v2 1/1] flatcc: new package
+In-Reply-To: <c0a641fc-b5ce-7c69-14f1-1b53f0af7623@mind.be>
+References: <1462145376-1377-1-git-send-email-steve.derosier@lairdtech.com>
+ <CAHXCMM+wVwqthUOEh+e3fHDA_=J0FS6FqG2cBF+zhVM0BGVoFQ@mail.gmail.com>
+ <CALupW3BnsWbBFZhd+GQe26rtXsg-KZUsxkxupZ_5J88Yb14PeA@mail.gmail.com>
+ <c0a641fc-b5ce-7c69-14f1-1b53f0af7623@mind.be>
+Message-ID: <CALupW3B76bWmAnLSLAizMgZBGwig5Gm6o3dG9q5ydtEaSyqqpw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, all,
+On Tue, May 3, 2016 at 10:23 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 05/02/16 23:35, Steve deRosier wrote:
+>>
+>> Hi Samuel,
+>>
+>> Thanks for taking a detailed look at this. Hopefully my answers below
+>> will address your concerns.
+>>
+>>
+>> On Mon, May 2, 2016 at 12:44 PM, Samuel Martin <s.martin49@gmail.com>
+>> wrote:
+>>>>
+>>>> +
+>>>> ++# Options to control if we build static or shared libraries. Needed
+>>>> because
+>>>> ++# cmake has us explicitly do both versions if we want both versions.
+>>>> ++option(FLATCC_WITH_STATIC "Build the static version of the library"
+>>>> ON)
+>>>> ++option(FLATCC_WITH_SHARED "Build the shared version of the library"
+>>>> ON)
+>>>
+>>> I'm not a big fan of this because:
+>>> - it kinda adds some feature to flatcc;
+>>> - it completely by-passes the standard CMake way of driving
+>>> shared/static libs build (using BUILD_SHARED_LIBS) that the Buildroot
+>>> infrastructure automaticllay set [1].
+>>>
+>>
+>> I wish you spoke up two weeks ago when Arnout explicitly asked me to
+>> add the shared+static to the build. You could've saved me a good week
+>> of work and two weeks delay in getting support for this upstreamed.
+>
+>
+>  Well, I was just talking about your custom install commands. I didn't
+> realize that in the shared+static case, the static libs weren't even built.
+> I just noticed in your code that for a config variable that can have three
+> values (static, shared, static+shared) you only handled two (static,
+> others). So I made the remark that you forgot about the static+shared case,
+> with a suggestion about how it could be handled.
+>
 
-On May 3, 2016, at 5:43 PM, Arnout Vandecappelle arnout at mind.be wrote:
-> On 05/03/16 23:08, Patrick Keroulas wrote:
->> Hello Thomas,
->> 
->> On Apr 22, 2016, at 5:21 PM, Thomas Petazzoni
->> thomas.petazzoni at free-electrons.com wrote:
->>> However, Buildroot has the policy of not carrying feature patches,
->>> which this one clearly is. Some please get this patch integrated
->>> upstream first, and then we can benefit from this feature in Buildroot.
->>> 
->>> Having large feature patches like this one in Buildroot would prevent
->>> us from easily updating libpjsip in the future, which is not a
->>> situation we like.
->> 
->> We've been trying to push these patches up-stream for 2 years now, without
->> response from pjproject.
->> http://lists.pjsip.org/pipermail/pjsip_lists.pjsip.org/2014-May/017492.html
->> http://lists.pjsip.org/pipermail/pjsip_lists.pjsip.org/2015-January/018072.html
-> 
-> Well, in that case, we're even less motivated to carry these feature patches...
-> 
-> But you can easily keep it in your own BR2_GLOBAL_PATCH_DIR.
+OK, understood. I guess I could've responded then that it doesn't
+build both and put some code in there to eliminate that case. Sorry, I
+misunderstood the review.
 
-What if my intended package (ring-daemon in patch 4/4) doesn't even build 
-without this gnutls support in libpjsip?
-Is it acceptable to include <global-patch-dir> in package/ring-daemon/?
-Do I have an alternative?
+But, now the work's been done to handle the extra case. I'd like see
+it go in with the extra functionality as we're going to upstream the
+feature anyway.
 
-Regards,
+@Samuel and @Arnout, does that plan sound OK? Can we move forward with
+this?  Or are there other things that I need to address?
 
-Patrick
+Thanks,
+- Steve
