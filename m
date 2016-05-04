@@ -1,52 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 May 2016 22:44:51 +0200
-Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.2h
-Message-ID: <20160504205128.5473A81ED2@busybox.osuosl.org>
+Date: Wed, 4 May 2016 22:45:26 +0200
+Subject: [Buildroot] [git commit] git: bump version to 2.8.2
+Message-ID: <20160504205128.617A9802B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2de25704771bfe34fb87a01dad3987c5c93404eb
+commit: https://git.buildroot.net/buildroot/commit/?id=f3698c600c43e0c2b9a5b210aa9a88946d35d6dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2016-2105 - Fix EVP_EncodeUpdate overflow
-CVE-2016-2106 - Fix EVP_EncryptUpdate overflow
-CVE-2016-2107 - Prevent padding oracle in AES-NI CBC MAC check
-CVE-2016-2109 - Prevent ASN.1 BIO excessive memory allocation
-CVE-2016-2176 - EBCDIC overread
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssl/openssl.hash | 4 ++--
- package/openssl/openssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index e3ea2ae..edbce8e 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.0.2g.tar.gz.sha256
--sha256	b784b1b3907ce39abf4098702dade6365522a253ad1552e267a9a0e89594aa33	openssl-1.0.2g.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2h.tar.gz.sha256
-+sha256	1d4007e53aad94a5b2002fe045ee7bb0b3d98f1a47f8b2bc851dcd1c74332919	openssl-1.0.2h.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 2f50dfb..2368aa9 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 923f05d..dabe964 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 e6626b43ba4bc63ad4918df4c275f50bd7f8af2ab54bde60496ad75e91e927fc  git-2.8.1.tar.xz
++sha256 ec0283d78a0f1c8408c5fd43610697b953fbaafe4077bb1e41446a9ee3a2f83d  git-2.8.2.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 517f9db..db26036 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSSL_VERSION = 1.0.2g
-+OPENSSL_VERSION = 1.0.2h
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+-GIT_VERSION = 2.8.1
++GIT_VERSION = 2.8.2
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
