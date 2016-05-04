@@ -1,134 +1,94 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 4 May 2016 21:46:05 +0200
-Subject: [Buildroot] [PATCH v3] barebox: add an option to embed
-	environment image
-In-Reply-To: <1462360499-29955-1-git-send-email-yegorslists@googlemail.com>
-References: <1462360499-29955-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <bf329c47-a1d6-09ff-2d5d-a67bf95308cb@mind.be>
+Date: Wed, 4 May 2016 21:51:25 +0200
+Subject: [Buildroot] How to enable rtmp support in gst1-plugins-bad?
+In-Reply-To: <CAPeTicPX80UHtZHFESZ+mPs54Opvq0t0cyetPnx83py7ouDRvA@mail.gmail.com>
+References: <CAPeTicPX80UHtZHFESZ+mPs54Opvq0t0cyetPnx83py7ouDRvA@mail.gmail.com>
+Message-ID: <470fe675-7468-d86f-c7a8-3aa5cceefd5a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/04/16 13:14, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On 05/04/16 13:01, sonntex wrote:
+> I remade patch using git format-patch. Gustavo, is it what do you want?
+
+  As explained in the manual, you should also send it with git send-email, to 
+avoid whitespace corruption.
+
 >
-> Barebox provides an option to embed a custom environment image into
-> barebox binary. This image will be used, when the environment found
-> in the environment sector is invalid.
+> From f03e8de9b664f4aec27c1412de6aea6be80288b7 Mon Sep 17 00:00:00 2001
+> From: Nikolay Beloborodov <sonntex at gmail.com <mailto:sonntex@gmail.com>>
+> Date: Wed, 4 May 2016 17:39:21 +0300
+> Subject: gst1-plugins-bad: add rtmp support
 >
-> This patch sets barebox Kconfig option CONFIG_DEFAULT_ENVIRONMENT_PATH
-> to user specified path. This way one can use such BR's variables like
-> BR2_EXTERNAL, TOPDIR etc. to provide paths to custom environment folders.
->
-> Cc: Pieter Smith <pieter@boesman.nl>
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+  Add a Signed-off-by line for yourself.  This is a short way for you to
+assert that you are entitled to contribute the patch under buildroot's
+GPL license.  See  http://elinux.org/Developer_Certificate_Of_Origin
+for more details.
+
 > ---
-> Changes:
-> 	v3: fix setting boolean option (Arnout Vandecappelle)
-> 	    simplify config by just checking, if path was set (Arnout Vandecappelle)
-> 	    use qstrip for path variable (Arnout Vandecappelle)
+>  package/gstreamer1/gst1-plugins-bad/Config.in           | 4 ++--
+>  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> <http://gst1-plugins-bad.mk> | 7 ++++---
+>  2 files changed, 6 insertions(+), 5 deletions(-)
 >
-> 	v2: set CONFIG_DEFAULT_ENVIRONMENT too, to enable default env at all
->  boot/barebox/barebox-aux/Config.in | 14 ++++++++++++++
->  boot/barebox/barebox.mk            |  7 +++++++
->  boot/barebox/barebox/Config.in     | 14 ++++++++++++++
->  3 files changed, 35 insertions(+)
+> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in
+> b/package/gstreamer1/gst1-plugins-bad/Config.in
+> index a9667af..afbe2bf 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> @@ -382,8 +382,8 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REMOVESILENCE
+>         help
+>           Removes silence from an audio stream
 >
-> diff --git a/boot/barebox/barebox-aux/Config.in b/boot/barebox/barebox-aux/Config.in
-> index 35aadc0..e381d10 100644
-> --- a/boot/barebox/barebox-aux/Config.in
-> +++ b/boot/barebox/barebox-aux/Config.in
-> @@ -57,3 +57,17 @@ config BR2_TARGET_BAREBOX_AUX_CUSTOM_ENV_PATH
->  	  the additions needed. The output will be an image in the
->  	  barebox devfs format, stored in the images directory, with
->  	  the same name as the directory name given here.
-> +
-> +config BR2_TARGET_BAREBOX_AUX_CUSTOM_EMBEDDED_ENV_PATH
-> +	string "Embedded environment path"
-> +	help
-> +	  Embed a custom environment image into barebox binary. If this
-> +	  path is provided both barebox internal CONFIG_DEFAULT_ENVIRONMENT
+> -config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTP
+> -       bool "rtp"
+> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTMP
+> +       bool "rtmp"
 
-  This line is too long (should be 72 chars where tab counts as 8).
+  In addition, you should add an entry to Config.in.legacy that signals the 
+removal of the RTP plugin. Something like:
 
-  But actually, I find the text of your commit message more helpful. How about.
+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTP
+	bool "gst1-plugins-bad rtp plugin moved to gst1-plugins-good"
+	select BR2_LEGACY
+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTP
 
-	  If this option is not empty, it is the path to a custom
-	  embedded barebox environment. This image will be used when the
-	  environment found in the environment sector is invalid. This
-	  option sets the barebox Kconfig option
-	  CONFIG_DEFAULT_ENVIRONMENT_PATH to the specified path. This way
-	  it is possible to use Buildroot variables like BR2_EXTERNAL,
-	  TOPDIR etc. to refer to the custom environment.
 
-	  Depending on your setup, the custom embedded environment will
-	  probably be based on either the content of the defaultenv or
-	  defaultenv-2 directories in the barebox source code.
-
-  (Note that we spell Barebox with a capital everywhere, except for the options 
-just added by Pieter. But the website itself says barebox without capital, so 
-that's indeed better.)
-
-> +	  and CONFIG_DEFAULT_ENVIRONMENT_PATH will be configured.
-> +
-> +	  Barebox CONFIG_DEFAULT_ENVIRONMENT_PATH
-> +	  will be set to the path containing custom barebox
-> +	  environment. Depending on your setup, it will probably be
-> +	  based on either the content of the defaultenv or
-> +	  defaultenv-2 directories in the barebox source code, plus
-> +	  the additions needed.
-> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-> index 949fb9f..6ed072f 100644
-> --- a/boot/barebox/barebox.mk
-> +++ b/boot/barebox/barebox.mk
-> @@ -96,6 +96,13 @@ define $(1)_INSTALL_CUSTOM_ENV
->  endef
->  endif
->
-> +ifneq ($$(call qstrip,$$(BR2_TARGET_$(1)_CUSTOM_EMBEDDED_ENV_PATH)),)
-
-  I think it's better to use an auxiliary variable for the qstripped path.
-
-> +define $(1)_KCONFIG_FIXUP_CMDS
-> +	$$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_ENVIRONMENT,$$(@D)/.config)
-> +	$$(call KCONFIG_SET_OPT,CONFIG_DEFAULT_ENVIRONMENT_PATH,"$$(call qstrip,$$(BR2_TARGET_$(1)_CUSTOM_EMBEDDED_ENV_PATH))",$$(@D)/.config)
-> +endef
-> +endif
-> +
->  define $(1)_BUILD_CMDS
->  	$$($(1)_BUILD_BAREBOXENV_CMDS)
->  	$$(TARGET_MAKE_ENV) $$(MAKE) $$($(1)_MAKE_FLAGS) -C $$(@D)
-> diff --git a/boot/barebox/barebox/Config.in b/boot/barebox/barebox/Config.in
-> index bf13ea5..a95b123 100644
-> --- a/boot/barebox/barebox/Config.in
-> +++ b/boot/barebox/barebox/Config.in
-> @@ -63,3 +63,17 @@ config BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH
->  	  the additions needed. The output will be an image in the
->  	  barebox devfs format, stored in the images directory, with
->  	  the same name as the directory name given here.
-> +
-> +config BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV_PATH
-> +	string "Embedded environment path"
-> +	help
-
-  Same help as above, of course.
+  Thanks!
 
   Regards,
   Arnout
 
-> +	  Embed a custom environment image into barebox binary. If this
-> +	  path is provided both barebox internal CONFIG_DEFAULT_ENVIRONMENT
-> +	  and CONFIG_DEFAULT_ENVIRONMENT_PATH will be configured.
-> +
-> +	  Barebox CONFIG_DEFAULT_ENVIRONMENT_PATH
-> +	  will be set to the path containing custom barebox
-> +	  environment. Depending on your setup, it will probably be
-> +	  based on either the content of the defaultenv or
-> +	  defaultenv-2 directories in the barebox source code, plus
-> +	  the additions needed.
 >
+>  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDI
+>         bool "sdi"
+> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> <http://gst1-plugins-bad.mk>
+> b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> <http://gst1-plugins-bad.mk>
+> index a92c4a6..30c4999 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> <http://gst1-plugins-bad.mk>
+> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> <http://gst1-plugins-bad.mk>
+> @@ -479,10 +479,11 @@ else
+>  GST1_PLUGINS_BAD_CONF_OPTS += --disable-removesilence
+>  endif
+>
+> -ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTP),y)
+> -GST1_PLUGINS_BAD_CONF_OPTS += --enable-rtp
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTMP),y)
+> +GST1_PLUGINS_BAD_CONF_OPTS += --enable-rtmp
+> +GST1_PLUGINS_BAD_DEPENDENCIES += rtmpdump
+>  else
+> -GST1_PLUGINS_BAD_CONF_OPTS += --disable-rtp
+> +GST1_PLUGINS_BAD_CONF_OPTS += --disable-rtmp
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDI),y)
 
 
 -- 
