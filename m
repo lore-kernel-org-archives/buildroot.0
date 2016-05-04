@@ -1,149 +1,131 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 4 May 2016 11:25:35 +0200
-Subject: [Buildroot] [PATCH v2] barebox: add an option to embed
- environment image
-In-Reply-To: <0a54707b-6bc8-979d-8eac-8aa87a388f08@mind.be>
-References: <1462280172-23389-1-git-send-email-yegorslists@googlemail.com>
- <0a54707b-6bc8-979d-8eac-8aa87a388f08@mind.be>
-Message-ID: <CAGm1_ku-6e-8=CXoK-ATG98yXKbV+vdBGU_R+nbpgfpU91TTbA@mail.gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Wed, 4 May 2016 11:06:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ca-certificates: use host-python
+In-Reply-To: <e0b19e0d-0dfd-9ac8-0891-114cdd416eae@mind.be>
+References: <1462275976-31982-1-git-send-email-martin@barkynet.com>
+ <e0b19e0d-0dfd-9ac8-0891-114cdd416eae@mind.be>
+Message-ID: <CAFGQKxdUfAbMr7d-7E5dTnzYHDr7dpqht35AiQdD8tj2SdgBEQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 3, 2016 at 7:38 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 05/03/16 14:56, yegorslists at googlemail.com wrote:
+Arnout,
+
+On 3 May 2016 at 18:28, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 05/03/16 13:46, Martin Bark wrote:
 >>
->> From: Yegor Yefremov <yegorslists@googlemail.com>
+>> The ca-certificates Makefile directly calls python and hence does not
+>> pickup the buildroot host-python.
+>
+>
+>  Not entirely accurate, I think (didn't check with the autobuild failure
+> output, but this is my guess based on the source). I think it does use
+> host-python because that comes first in the path. However, at that point,
+> host-python is symlinked to python3 instead of python2.
+
+No it's not using python3, certdata2pem.py worked fine with python3
+when i tested.  That was my first thought too but as you can see in
+the error below it's using python 2.6 off the host.
+
+Traceback (most recent call last):
+  File "certdata2pem.py", line 152, in <module>
+    encoded = base64.b64encode(obj['CKA_VALUE']).decode('utf-8')
+  File "/usr/lib/python2.6/base64.py", line 53, in b64encode
+    encoded = binascii.b2a_base64(s)[:-1]
+TypeError: b2a_base64() argument 1 must be string or read-only buffer,
+not bytearray
+
+
+you're right it should be picking up the host-python from PATH but
+it's clearly not.  I had a deeper look and I now i understand the
+issue more.  The steps are as follows:
+
+ - you need to select python3
+ - when host-python builds it detects python3 is going to be installed
+to the target so does not setup a symlink to
+$(HOST_DIR)/usr/bin/python
+ - ca-certificates builds and but no $(HOST_DIR)/usr/bin/python exists
+so it uses the hosts own python version
+ - since the auto build server has python 2.6 installed the script
+uses this and fails.
+ - To see this error ca-certificates needs to be built before a
+package that depends on host-python3 because if
+$(HOST_DIR)/usr/bin/python points to python3 then certdata2pem.py will
+work fine.
+
+So the fix is using $(HOST_DIR)/usr/bin/python2 and not relying on
+$(HOST_DIR)/usr/bin/python existing.  Since you can't rely on
+$(HOST_DIR)/usr/bin/python existing or being a particular version of
+python I'm wondering why is it even be created?
+
+I'll update my comments and resubmit
+
+>
 >>
->> Barebox provides an option to embed a custom environment image into
->> barebox.bin. This image will be used, when the environment found in
->> the environment sector is invalid.
+>> During the build all the Makefile does is execute mozilla/certdata2pem.py.
+>> Simplify the build process by directly calling this script using
+>> host-python.
+>
+>
+>  While you're at it, you could also add a comment to the code why
+> host-python is needed (i.e. why system python is not OK). I couldn't find a
+> reference to that in the logs. Something like:
+>
+> # certdata2pem.py needs python2.7 - not python2.6, not python3. So system
+> # can't be used.
+
+Yes that's a good idea, I'll add that comment it needs at least
+python2.7 and resubmit.
+
+Thanks
+
+Martin
+
+
+>
+>  With that:
+>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+>  Regards,
+>  Arnout
+>
 >>
->> This patch sets barebox Kconfig option CONFIG_DEFAULT_ENVIRONMENT_PATH
->> to user specified path. This way one can use such BR's variables like
->> BR2_EXTERNAL, TOPDIR etc. to provide paths to custom environment folders.
+>> This fixes:
 >>
->> Cc: Pieter Smith <pieter@boesman.nl>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> http://autobuild.buildroot.net/results/a2a4fed293c836b9cf63ff2aaa463b0704dec07e/
+>>
+>> http://autobuild.buildroot.net/results/bbed4afa8e30382b8892062f31ba64cbb0ea14e4/
+>>
+>> http://autobuild.buildroot.net/results/1af5562be3c0d233cea81834a898f7ac6ae48271/
+>>
+>> Signed-off-by: Martin Bark <martin@barkynet.com>
+>>
 >> ---
->> Changes:
->>         v2: set CONFIG_DEFAULT_ENVIRONMENT too, to enable default env at
->> all
+>> Note: to reproduce the auto build errors you need to have python 2.6
+>> installed on the host.
+>> ---
+>>  package/ca-certificates/ca-certificates.mk | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
 >>
->>  boot/barebox/barebox-aux/Config.in | 17 +++++++++++++++++
->>  boot/barebox/barebox.mk            |  7 +++++++
->>  boot/barebox/barebox/Config.in     | 17 +++++++++++++++++
->>  3 files changed, 41 insertions(+)
+>> diff --git a/package/ca-certificates/ca-certificates.mk
+>> b/package/ca-certificates/ca-certificates.mk
+>> index da1b70d..8a3389f 100644
+>> --- a/package/ca-certificates/ca-certificates.mk
+>> +++ b/package/ca-certificates/ca-certificates.mk
+>> @@ -12,7 +12,8 @@ CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0
+>> (data)
+>>  CA_CERTIFICATES_LICENSE_FILES = debian/copyright
 >>
->> diff --git a/boot/barebox/barebox-aux/Config.in
->> b/boot/barebox/barebox-aux/Config.in
->> index 35aadc0..00d550e 100644
->> --- a/boot/barebox/barebox-aux/Config.in
->> +++ b/boot/barebox/barebox-aux/Config.in
->> @@ -57,3 +57,20 @@ config BR2_TARGET_BAREBOX_AUX_CUSTOM_ENV_PATH
->>           the additions needed. The output will be an image in the
->>           barebox devfs format, stored in the images directory, with
->>           the same name as the directory name given here.
->> +
->> +config BR2_TARGET_BAREBOX_AUX_CUSTOM_EMBEDDED_ENV
->> +       bool "Embed custom environment"
->> +       help
->> +         Embed a custom environment image into barebox.bin. This option
->> +         enables barebox internal CONFIG_DEFAULT_ENVIRONMENT option.
->> +
->> +config BR2_TARGET_BAREBOX_AUX_CUSTOM_EMBEDDED_ENV_PATH
->> +       string "Embedded environment path"
->> +       depends on BR2_TARGET_BAREBOX_AUX_CUSTOM_EMBEDDED_ENV
->
->
->  I'm not altogether sure of this, but we could remove the
-> _CUSTOM_EMBEDDED_ENV option and instead check for non-empty
-> _CUSTOM_EMBEDDED_ENV_PATH. Or was this discussed before already?
-
-No, this wasn't discussed before. I like the idea.
-
->> +       help
->> +         Barebox CONFIG_DEFAULT_ENVIRONMENT_PATH
->> +         will be set to the path containing custom barebox
->> +         environment. Depending on your setup, it will probably be
->> +         based on either the content of the defaultenv or
->> +         defaultenv-2 directories in the barebox source code, plus
->
->
->  Not that I really know what all this is about, but isn't 'defaultenv'
-> typical for plain barebox, and 'defaultenv-2' typical for barebox-aux? Then
-> maybe the help text can suggest this as well.
-
-defaultenv-2 is just a second generation of defaultenv and AFAIK has
-nothing to do with botloader stage. See description here:
-http://www.barebox.org/doc/latest/user/defaultenv-2.html
-
->> +         the additions needed.
->> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
->> index 949fb9f..36a9cf5 100644
->> --- a/boot/barebox/barebox.mk
->> +++ b/boot/barebox/barebox.mk
->> @@ -96,6 +96,13 @@ define $(1)_INSTALL_CUSTOM_ENV
+>>  define CA_CERTIFICATES_BUILD_CMDS
+>> -       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
+>> +       cd $(@D)/mozilla ;\
+>> +               $(HOST_DIR)/usr/bin/python2 ./certdata2pem.py
 >>  endef
->>  endif
 >>
->> +ifeq ($(BR2_TARGET_$(1)_CUSTOM_EMBEDDED_ENV),y)
->> +define $(1)_KCONFIG_FIXUP_CMDS
->> +       $$(call
->> KCONFIG_SET_OPT,CONFIG_DEFAULT_ENVIRONMENT,$$(BR2_TARGET_$(1)_CUSTOM_EMBEDDED_ENV_PATH),$$(@D)/.config)
->
->
->  Without actually knowing barebox, it seems to me that this should be a
-> KCONFIG_ENABLE_OPT instead...
-
-Yes. Good catch.
-
->> +       $$(call
->> KCONFIG_SET_OPT,CONFIG_DEFAULT_ENVIRONMENT_PATH,$$(BR2_TARGET_$(1)_CUSTOM_EMBEDDED_ENV_PATH),$$(@D)/.config)
->
->
->  This should be qstripped and then "" added explicitly. That way, it will
-> also work when the variable is overridden from the command line.
-
-Something like that?
-
-$$(call KCONFIG_SET_OPT,CONFIG_DEFAULT_ENVIRONMENT_PATH,"$$(call
-qstrip,$$(BR2_TARGET_$(1)_CUSTOM_EMBEDDED_ENV_PATH))",$$(@D)/.config)
-
->> +endef
->> +endif
->> +
->>  define $(1)_BUILD_CMDS
->>         $$($(1)_BUILD_BAREBOXENV_CMDS)
->>         $$(TARGET_MAKE_ENV) $$(MAKE) $$($(1)_MAKE_FLAGS) -C $$(@D)
->> diff --git a/boot/barebox/barebox/Config.in
->> b/boot/barebox/barebox/Config.in
->> index bf13ea5..a3a7767 100644
->> --- a/boot/barebox/barebox/Config.in
->> +++ b/boot/barebox/barebox/Config.in
->> @@ -63,3 +63,20 @@ config BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH
->>           the additions needed. The output will be an image in the
->>           barebox devfs format, stored in the images directory, with
->>           the same name as the directory name given here.
->> +
->> +config BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV
->> +       bool "Embed custom environment"
->> +       help
->> +         Embed a custom environment image into barebox.bin. This option
->> +         enables barebox internal CONFIG_DEFAULT_ENVIRONMENT option.
->> +
->> +config BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV_PATH
->> +       string "Embedded environment path"
->> +       depends on BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV
->> +       help
->> +         Barebox CONFIG_DEFAULT_ENVIRONMENT_PATH
->> +         will be set to the path containing custom barebox
->> +         environment. Depending on your setup, it will probably be
->> +         based on either the content of the defaultenv or
->> +         defaultenv-2 directories in the barebox source code, plus
->> +         the additions needed.
+>>  define CA_CERTIFICATES_INSTALL_TARGET_CMDS
 >>
 >
 >
