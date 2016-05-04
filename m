@@ -1,41 +1,184 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 May 2016 22:45:55 +0200
-Subject: [Buildroot] [git commit] mutt: bump version to 1.6.1
-Message-ID: <20160504205128.7E168802B5@busybox.osuosl.org>
+Date: Wed, 4 May 2016 22:47:43 +0200
+Subject: [Buildroot] [git commit] bind: security bump to version 9.10.4
+Message-ID: <20160504205128.9413A802B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d807b457f205d4c71c5717afaa537f6b4a9d566c
+commit: https://git.buildroot.net/buildroot/commit/?id=80c0d7ce1c49854bbf1f2c5daf4a358548193a2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Fixes:
+CVE-2016-2088 - Duplicate EDNS COOKIE options in a response could
+trigger an assertion failure.
+
+Drop libressl support patch since it's upstream now.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...0001-Fix-LibreSSL-compatibility.-RT-40977.patch | 129 ---------------------
+ package/bind/bind.hash                             |   4 +-
+ package/bind/bind.mk                               |   2 +-
+ 3 files changed, 3 insertions(+), 132 deletions(-)
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index 324c04b..baee620 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
+diff --git a/package/bind/0001-Fix-LibreSSL-compatibility.-RT-40977.patch b/package/bind/0001-Fix-LibreSSL-compatibility.-RT-40977.patch
+deleted file mode 100644
+index 921ec36..0000000
+--- a/package/bind/0001-Fix-LibreSSL-compatibility.-RT-40977.patch
++++ /dev/null
+@@ -1,129 +0,0 @@
+-From f824c65d1fb6a2490b03228e63cc43dae6844f73 Mon Sep 17 00:00:00 2001
+-From: Mark Andrews <marka@isc.org>
+-Date: Mon, 19 Oct 2015 10:43:58 +1100
+-Subject: [PATCH] 4340.  [port]          Fix LibreSSL compatibility. [RT
+- #40977]
+-
+-Status: upstream git
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- lib/dns/dst_openssl.h     | 2 +-
+- lib/dns/openssl_link.c    | 8 ++++----
+- lib/dns/openssldh_link.c  | 4 ++--
+- lib/dns/openssldsa_link.c | 4 ++--
+- lib/dns/opensslrsa_link.c | 2 +-
+-
+-diff --git a/lib/dns/dst_openssl.h b/lib/dns/dst_openssl.h
+-index dd67405..12f8bfc 100644
+---- a/lib/dns/dst_openssl.h
+-+++ b/lib/dns/dst_openssl.h
+-@@ -36,7 +36,7 @@
+- #define USE_ENGINE 1
+- #endif
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+- /*
+-  * These are new in OpenSSL 1.1.0.  BN_GENCB _cb needs to be declared in
+-  * the function like this before the BN_GENCB_new call:
+-diff --git a/lib/dns/openssl_link.c b/lib/dns/openssl_link.c
+-index 8683bee..6a52b31 100644
+---- a/lib/dns/openssl_link.c
+-+++ b/lib/dns/openssl_link.c
+-@@ -88,7 +88,7 @@ entropy_getpseudo(unsigned char *buf, int num) {
+- 	return (result == ISC_R_SUCCESS ? 1 : -1);
+- }
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+- static void
+- entropy_add(const void *buf, int num, double entropy) {
+- 	/*
+-@@ -121,7 +121,7 @@ lock_callback(int mode, int type, const char *file, int line) {
+- 		UNLOCK(&locks[type]);
+- }
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+- static unsigned long
+- id_callback(void) {
+- 	return ((unsigned long)isc_thread_self());
+-@@ -187,7 +187,7 @@ dst__openssl_init(const char *engine) {
+- 	if (result != ISC_R_SUCCESS)
+- 		goto cleanup_mutexalloc;
+- 	CRYPTO_set_locking_callback(lock_callback);
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+- 	CRYPTO_set_id_callback(id_callback);
+- #endif
+- 
+-@@ -287,7 +287,7 @@ dst__openssl_destroy(void) {
+- 	CRYPTO_cleanup_all_ex_data();
+- #endif
+- 	ERR_clear_error();
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+- 	ERR_remove_state(0);
+- #endif
+- 	ERR_free_strings();
+-diff --git a/lib/dns/openssldh_link.c b/lib/dns/openssldh_link.c
+-index 9f42219..67fbf69 100644
+---- a/lib/dns/openssldh_link.c
+-+++ b/lib/dns/openssldh_link.c
+-@@ -173,7 +173,7 @@ openssldh_generate(dst_key_t *key, int generator, void (*callback)(int)) {
+- 	DH *dh = NULL;
+- #if OPENSSL_VERSION_NUMBER > 0x00908000L
+- 	BN_GENCB *cb;
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+- 	BN_GENCB _cb;
+- #endif
+- 	union {
+-@@ -210,7 +210,7 @@ openssldh_generate(dst_key_t *key, int generator, void (*callback)(int)) {
+- 		if (dh == NULL)
+- 			return (dst__openssl_toresult(ISC_R_NOMEMORY));
+- 		cb = BN_GENCB_new();
+--#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
+- 		if (cb == NULL) {
+- 			DH_free(dh);
+- 			return (dst__openssl_toresult(ISC_R_NOMEMORY));
+-diff --git a/lib/dns/openssldsa_link.c b/lib/dns/openssldsa_link.c
+-index 963e2f5..d47b265 100644
+---- a/lib/dns/openssldsa_link.c
+-+++ b/lib/dns/openssldsa_link.c
+-@@ -359,7 +359,7 @@ openssldsa_generate(dst_key_t *key, int unused, void (*callback)(int)) {
+- 	isc_result_t result;
+- #if OPENSSL_VERSION_NUMBER > 0x00908000L
+- 	BN_GENCB *cb;
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+- 	BN_GENCB _cb;
+- #endif
+- 	union {
+-@@ -383,7 +383,7 @@ openssldsa_generate(dst_key_t *key, int unused, void (*callback)(int)) {
+- 	if (dsa == NULL)
+- 		return (dst__openssl_toresult(DST_R_OPENSSLFAILURE));
+- 	cb = BN_GENCB_new();
+--#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER >= 0x10100000L && !defined(LIBRESSL_VERSION_NUMBER)
+- 	if (cb == NULL) {
+- 		DSA_free(dsa);
+- 		return (dst__openssl_toresult(DST_R_OPENSSLFAILURE));
+-diff --git a/lib/dns/opensslrsa_link.c b/lib/dns/opensslrsa_link.c
+-index 94aced2..d799be0 100644
+---- a/lib/dns/opensslrsa_link.c
+-+++ b/lib/dns/opensslrsa_link.c
+-@@ -771,7 +771,7 @@ opensslrsa_generate(dst_key_t *key, int exp, void (*callback)(int)) {
+- 	} u;
+- 	RSA *rsa = RSA_new();
+- 	BIGNUM *e = BN_new();
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+- 	BN_GENCB _cb;
+- #endif
+- 	BN_GENCB *cb = BN_GENCB_new();
+--- 
+-2.4.10
+-
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index cd76a54..1f8b8b7 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	29afb6238ab7a540c0e3a78ce25c970f975ab6c0f0bc9f919993aab772136c19	mutt-1.6.0.tar.gz
-+sha256 98b26cecc6b1713082fc880344fa345c20bd7ded6459abe18c84429c7cf8ed20  mutt-1.6.1.tar.gz
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 3ab64d5..e6ea6e4 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
+-# Verified from ftp://ftp.isc.org/isc/bind9/9.10.3-P4/bind-9.10.3-P4.tar.gz.sha256.asc
+-sha256	2ac044b5fbdf45fb45107af0df961b3b7cb5262a3bf1948ed3fe7a170dd13e3e	bind-9.10.3-P4.tar.gz
++# Verified from ftp://ftp.isc.org/isc/bind9/9.10.4/bind-9.10.4.tar.gz.sha256.asc
++sha256	f8d412b38d5ac390275b943bde69f4608f67862a45487ec854b30e4448fcb056	bind-9.10.4.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 895217a..8cfcf7f 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MUTT_VERSION = 1.6.0
-+MUTT_VERSION = 1.6.1
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPLv2+
- MUTT_LICENSE_FILES = GPL
+-BIND_VERSION = 9.10.3-P4
++BIND_VERSION = 9.10.4
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
