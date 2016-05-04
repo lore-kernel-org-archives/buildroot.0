@@ -1,100 +1,62 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 4 May 2016 21:51:25 +0200
-Subject: [Buildroot] How to enable rtmp support in gst1-plugins-bad?
-In-Reply-To: <CAPeTicPX80UHtZHFESZ+mPs54Opvq0t0cyetPnx83py7ouDRvA@mail.gmail.com>
-References: <CAPeTicPX80UHtZHFESZ+mPs54Opvq0t0cyetPnx83py7ouDRvA@mail.gmail.com>
-Message-ID: <470fe675-7468-d86f-c7a8-3aa5cceefd5a@mind.be>
+From: Steve deRosier <derosier@gmail.com>
+Date: Wed, 4 May 2016 13:25:52 -0700
+Subject: [Buildroot] [PATCH v2 1/1] flatcc: new package
+In-Reply-To: <bbbedfcc-6c2f-4441-95ad-543ea1c53fef@mind.be>
+References: <1462145376-1377-1-git-send-email-steve.derosier@lairdtech.com>
+ <CAHXCMM+wVwqthUOEh+e3fHDA_=J0FS6FqG2cBF+zhVM0BGVoFQ@mail.gmail.com>
+ <CALupW3BnsWbBFZhd+GQe26rtXsg-KZUsxkxupZ_5J88Yb14PeA@mail.gmail.com>
+ <c0a641fc-b5ce-7c69-14f1-1b53f0af7623@mind.be>
+ <CALupW3B76bWmAnLSLAizMgZBGwig5Gm6o3dG9q5ydtEaSyqqpw@mail.gmail.com>
+ <bbbedfcc-6c2f-4441-95ad-543ea1c53fef@mind.be>
+Message-ID: <CALupW3C+oU9maQSa_FC1bRA=Wt83e=mDpk0NFe1atBKO5WmW6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/04/16 13:01, sonntex wrote:
-> I remade patch using git format-patch. Gustavo, is it what do you want?
-
-  As explained in the manual, you should also send it with git send-email, to 
-avoid whitespace corruption.
-
+On Wed, May 4, 2016 at 10:02 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 05/04/16 18:12, Steve deRosier wrote:
+>> @Samuel and @Arnout, does that plan sound OK? Can we move forward with
+>> this?  Or are there other things that I need to address?
 >
-> From f03e8de9b664f4aec27c1412de6aea6be80288b7 Mon Sep 17 00:00:00 2001
-> From: Nikolay Beloborodov <sonntex at gmail.com <mailto:sonntex@gmail.com>>
-> Date: Wed, 4 May 2016 17:39:21 +0300
-> Subject: gst1-plugins-bad: add rtmp support
+>
+>  Hm, tricky...
+>
+>  On the one hand, I don't want to block your submission over this issue.
+>
+>  On the other hand, we don't want to carry a feature patch that may never be
+> accepted upstream.
+>
+>  Since the patch wasn't OK yet as it was (it should look at the global
+> BUILD_SHARED_LIBS), isn't it easier to just drop that patch, and revert the
+> installation commands to your original version, adding a comment that in the
+> SHARED_STATIC case only shared libs are built anyway? Or is that too
+> frustrating because you did redundant work?
+>
+>  I can understand that it's frustrating. Actually, reading back what I wrote
+> yesterday, I'm afraid that I may have made it worse by making you feel it
+> was your own fault. But that's not at all the case: I haven't been
+> sufficiently clear in my original review, and you can't magically know all
+> the constraints that we try to satisfy.
+>
+>  That said, a bit of frustration is going to be unavoidable here... I'm
+> sorry we haven't been a better upstream for you. And to make it worse, it
+> looks like your first submission has been even more unappreciated...
 >
 
-  Add a Signed-off-by line for yourself.  This is a short way for you to
-assert that you are entitled to contribute the patch under buildroot's
-GPL license.  See  http://elinux.org/Developer_Certificate_Of_Origin
-for more details.
+Frustrating, sure, a bit. It's the things you think are going to be
+easy and straightforward that always seem to the most frustrating. But
+hey, I've upstreamed to the kernel and other things in the past, so I
+know these things happen and I'll get over it. That's why we
+communicate about these things. ;)
 
-> ---
->  package/gstreamer1/gst1-plugins-bad/Config.in           | 4 ++--
->  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> <http://gst1-plugins-bad.mk> | 7 ++++---
->  2 files changed, 6 insertions(+), 5 deletions(-)
->
-> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in
-> b/package/gstreamer1/gst1-plugins-bad/Config.in
-> index a9667af..afbe2bf 100644
-> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
-> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-> @@ -382,8 +382,8 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_REMOVESILENCE
->         help
->           Removes silence from an audio stream
->
-> -config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTP
-> -       bool "rtp"
-> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTMP
-> +       bool "rtmp"
+How about this: I'll work with Mikkel a bit and see what we can do
+upstream in flatcc to make it a bit more buildroot compatible so I
+don't have to do heroic measures to make it work. Then I'll resubmit
+for v0.3.4 or .5 and get it in. For now I'll just have to live with my
+version in my buildroot fork so we can get our work done on v0.3.3.
 
-  In addition, you should add an entry to Config.in.legacy that signals the 
-removal of the RTP plugin. Something like:
+So, please don't merge v2 of this patch. I'll try again in a few weeks.
 
-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTP
-	bool "gst1-plugins-bad rtp plugin moved to gst1-plugins-good"
-	select BR2_LEGACY
-	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_RTP
-
-
-  Thanks!
-
-  Regards,
-  Arnout
-
->
->  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDI
->         bool "sdi"
-> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> <http://gst1-plugins-bad.mk>
-> b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> <http://gst1-plugins-bad.mk>
-> index a92c4a6..30c4999 100644
-> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> <http://gst1-plugins-bad.mk>
-> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-> <http://gst1-plugins-bad.mk>
-> @@ -479,10 +479,11 @@ else
->  GST1_PLUGINS_BAD_CONF_OPTS += --disable-removesilence
->  endif
->
-> -ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTP),y)
-> -GST1_PLUGINS_BAD_CONF_OPTS += --enable-rtp
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTMP),y)
-> +GST1_PLUGINS_BAD_CONF_OPTS += --enable-rtmp
-> +GST1_PLUGINS_BAD_DEPENDENCIES += rtmpdump
->  else
-> -GST1_PLUGINS_BAD_CONF_OPTS += --disable-rtp
-> +GST1_PLUGINS_BAD_CONF_OPTS += --disable-rtmp
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDI),y)
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+- Steve
