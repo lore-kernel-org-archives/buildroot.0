@@ -1,138 +1,39 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Wed, 4 May 2016 11:06:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ca-certificates: use host-python
-In-Reply-To: <e0b19e0d-0dfd-9ac8-0891-114cdd416eae@mind.be>
-References: <1462275976-31982-1-git-send-email-martin@barkynet.com>
- <e0b19e0d-0dfd-9ac8-0891-114cdd416eae@mind.be>
-Message-ID: <CAFGQKxdUfAbMr7d-7E5dTnzYHDr7dpqht35AiQdD8tj2SdgBEQ@mail.gmail.com>
+Date: Wed, 4 May 2016 11:10:00 +0100
+Subject: [Buildroot] [PATCH 1/5] package/nginx: bump version to 1.10.0
+In-Reply-To: <20160503163329.GR26720@waldemar-brodkorb.de>
+References: <1462132345-28253-1-git-send-email-martin@barkynet.com>
+ <20160503163329.GR26720@waldemar-brodkorb.de>
+Message-ID: <CAFGQKxc7s3ufeQV80Bgm9qvr863S94o_0Pk_MnsrSu_nMG-mvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Waldemar,
 
-On 3 May 2016 at 18:28, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 05/03/16 13:46, Martin Bark wrote:
+On 3 May 2016 at 17:33, Waldemar Brodkorb <wbx@openadk.org> wrote:
+> Hi Martin,
+> Martin Bark wrote,
+>
+>> The ngx_http_spdy_module has been superseded by the ngx_http_v2_module
+>> so BR2_PACKAGE_NGINX_HTTP_SPDY_MODULE has changed to
+>> BR2_PACKAGE_NGINX_HTTP_V2_MODULE
 >>
->> The ca-certificates Makefile directly calls python and hence does not
->> pickup the buildroot host-python.
+>> Signed-off-by: Martin Bark <martin@barkynet.com>
 >
->
->  Not entirely accurate, I think (didn't check with the autobuild failure
-> output, but this is my guess based on the source). I think it does use
-> host-python because that comes first in the path. However, at that point,
-> host-python is symlinked to python3 instead of python2.
+> Could you check on sparc? I think nginx depends nowadays on some
+> atomics which aren't available for sparc32.
+> Could you take care of it? There are autobuild failures...
 
-No it's not using python3, certdata2pem.py worked fine with python3
-when i tested.  That was my first thought too but as you can see in
-the error below it's using python 2.6 off the host.
-
-Traceback (most recent call last):
-  File "certdata2pem.py", line 152, in <module>
-    encoded = base64.b64encode(obj['CKA_VALUE']).decode('utf-8')
-  File "/usr/lib/python2.6/base64.py", line 53, in b64encode
-    encoded = binascii.b2a_base64(s)[:-1]
-TypeError: b2a_base64() argument 1 must be string or read-only buffer,
-not bytearray
-
-
-you're right it should be picking up the host-python from PATH but
-it's clearly not.  I had a deeper look and I now i understand the
-issue more.  The steps are as follows:
-
- - you need to select python3
- - when host-python builds it detects python3 is going to be installed
-to the target so does not setup a symlink to
-$(HOST_DIR)/usr/bin/python
- - ca-certificates builds and but no $(HOST_DIR)/usr/bin/python exists
-so it uses the hosts own python version
- - since the auto build server has python 2.6 installed the script
-uses this and fails.
- - To see this error ca-certificates needs to be built before a
-package that depends on host-python3 because if
-$(HOST_DIR)/usr/bin/python points to python3 then certdata2pem.py will
-work fine.
-
-So the fix is using $(HOST_DIR)/usr/bin/python2 and not relying on
-$(HOST_DIR)/usr/bin/python existing.  Since you can't rely on
-$(HOST_DIR)/usr/bin/python existing or being a particular version of
-python I'm wondering why is it even be created?
-
-I'll update my comments and resubmit
-
->
->>
->> During the build all the Makefile does is execute mozilla/certdata2pem.py.
->> Simplify the build process by directly calling this script using
->> host-python.
->
->
->  While you're at it, you could also add a comment to the code why
-> host-python is needed (i.e. why system python is not OK). I couldn't find a
-> reference to that in the logs. Something like:
->
-> # certdata2pem.py needs python2.7 - not python2.6, not python3. So system
-> # can't be used.
-
-Yes that's a good idea, I'll add that comment it needs at least
-python2.7 and resubmit.
+I just ran a quick test and 1.10.0 shows the same errors on sparc as
+1.8.1 does.  I'll have a look at fixing it.
 
 Thanks
 
 Martin
 
-
 >
->  With that:
->
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
->  Regards,
->  Arnout
->
->>
->> This fixes:
->>
->> http://autobuild.buildroot.net/results/a2a4fed293c836b9cf63ff2aaa463b0704dec07e/
->>
->> http://autobuild.buildroot.net/results/bbed4afa8e30382b8892062f31ba64cbb0ea14e4/
->>
->> http://autobuild.buildroot.net/results/1af5562be3c0d233cea81834a898f7ac6ae48271/
->>
->> Signed-off-by: Martin Bark <martin@barkynet.com>
->>
->> ---
->> Note: to reproduce the auto build errors you need to have python 2.6
->> installed on the host.
->> ---
->>  package/ca-certificates/ca-certificates.mk | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/ca-certificates/ca-certificates.mk
->> b/package/ca-certificates/ca-certificates.mk
->> index da1b70d..8a3389f 100644
->> --- a/package/ca-certificates/ca-certificates.mk
->> +++ b/package/ca-certificates/ca-certificates.mk
->> @@ -12,7 +12,8 @@ CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0
->> (data)
->>  CA_CERTIFICATES_LICENSE_FILES = debian/copyright
->>
->>  define CA_CERTIFICATES_BUILD_CMDS
->> -       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
->> +       cd $(@D)/mozilla ;\
->> +               $(HOST_DIR)/usr/bin/python2 ./certdata2pem.py
->>  endef
->>
->>  define CA_CERTIFICATES_INSTALL_TARGET_CMDS
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> best regards
+>  Waldemar
