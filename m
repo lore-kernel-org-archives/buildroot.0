@@ -1,10 +1,10 @@
 From: Simon Maes <simonn.maes@gmail.com>
-Date: Wed,  4 May 2016 09:47:55 +0200
-Subject: [Buildroot] [PATCH 2/6] qemu: make qemu and host-qemu packages'
-	version (separately) configurable
+Date: Wed,  4 May 2016 09:47:56 +0200
+Subject: [Buildroot] [PATCH 3/6] qemu: code cleanup - (mostly) wrapping
+	lines at 80 characters
 In-Reply-To: <1462348079-7631-1-git-send-email-simonn.maes@gmail.com>
 References: <1462348079-7631-1-git-send-email-simonn.maes@gmail.com>
-Message-ID: <1462348079-7631-2-git-send-email-simonn.maes@gmail.com>
+Message-ID: <1462348079-7631-3-git-send-email-simonn.maes@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,96 +13,128 @@ To: buildroot@busybox.net
 
 Signed-off-by: Simon Maes <simonn.maes@gmail.com>
 ---
- package/qemu/Config.in      |  8 ++++++++
- package/qemu/Config.in.host |  8 ++++++++
- package/qemu/qemu.mk        | 26 ++++++++++++++++++--------
- 3 files changed, 34 insertions(+), 8 deletions(-)
+ package/qemu/Config.in |  6 ++++--
+ package/qemu/qemu.mk   | 49 ++++++++++++++++++++++++++++---------------------
+ 2 files changed, 32 insertions(+), 23 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index ea6b946..a16a65c 100644
+index a16a65c..9447e11 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -36,6 +36,14 @@ config BR2_PACKAGE_QEMU
+@@ -86,7 +86,9 @@ endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
  
- if BR2_PACKAGE_QEMU
+ config BR2_PACKAGE_QEMU_HAS_EMULS
+ 	def_bool y
+-	depends on BR2_PACKAGE_QEMU_SYSTEM || BR2_PACKAGE_QEMU_LINUX_USER || BR2_PACKAGE_QEMU_CUSTOM_TARGETS != ""
++	depends on BR2_PACKAGE_QEMU_SYSTEM ||     \
++			BR2_PACKAGE_QEMU_LINUX_USER ||    \
++			BR2_PACKAGE_QEMU_CUSTOM_TARGETS != ""
  
-+config BR2_PACKAGE_QEMU_VERSION
-+	string "qemu version"
-+	default "2.5.0"
-+	help
-+	  QEMU version to use target qemu
-+	  Sometimes the latest version is broken for some specific
-+	  architecture or target machine
-+
- comment "Emulators selection"
+ if BR2_PACKAGE_QEMU_HAS_EMULS
  
- config BR2_PACKAGE_QEMU_CUSTOM_TARGETS
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index 71f697e..c86768f 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -18,6 +18,14 @@ config BR2_PACKAGE_HOST_QEMU
+@@ -106,7 +108,7 @@ config BR2_PACKAGE_QEMU_FDT
+ 	depends on !BR2_STATIC_LIBS # dtc
+ 	select BR2_PACKAGE_DTC
+ 	help
+-	  Say 'y' here to have QEMU capable of constructing Device Trees,
++	  Say 'y' to have QEMU capable of constructing Device Trees,
+ 	  and passing them to the VMs.
  
- if BR2_PACKAGE_HOST_QEMU
- 
-+config BR2_PACKAGE_HOST_QEMU_VERSION
-+	string "host qemu version"
-+	default "2.5.0"
-+	help
-+	  QEMU version to use for host qemu
-+	  Sometimes the latest version is broken for some specific
-+	  architecture or target machine
-+
- #
- # Configuration selection
- #
+ comment "FDT support needs a toolchain w/ dynamic library"
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 0e99138..151060b 100644
+index 151060b..1910dbd 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -4,18 +4,19 @@
- #
- ################################################################################
+@@ -17,7 +17,8 @@ HOST_QEMU_LICENSE_FILES = COPYING COPYING.LIB
+ #       the non-(L)GPL license texts are specified in the affected
+ #       individual source files.
  
--QEMU_VERSION = 2.5.1
--QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
--QEMU_SITE = http://wiki.qemu.org/download
--QEMU_LICENSE = GPLv2, LGPLv2.1, MIT, BSD-3c, BSD-2c, Others/BSD-1c
--QEMU_LICENSE_FILES = COPYING COPYING.LIB
--#??NOTE: there is no top-level license file for non-(L)GPL licenses;
--#       the non-(L)GPL license texts are specified in the affected
--#       individual source files.
- 
- #-------------------------------------------------------------
- # Host-qemu
- 
-+HOST_QEMU_VERSION = $(call qstrip,$(BR2_PACKAGE_HOST_QEMU_VERSION))
-+HOST_QEMU_SOURCE = qemu-$(HOST_QEMU_VERSION).tar.bz2
-+HOST_QEMU_SITE = http://wiki.qemu.org/download
-+HOST_QEMU_LICENSE = GPLv2, LGPLv2.1, MIT, BSD-3c, BSD-2c, Others/BSD-1c
-+HOST_QEMU_LICENSE_FILES = COPYING COPYING.LIB
-+#??NOTE: there is no top-level license file for non-(L)GPL licenses;
-+#       the non-(L)GPL license texts are specified in the affected
-+#       individual source files.
-+
- HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-pixman
+-HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-pixman
++HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 \
++						 host-pixman
  HOST_QEMU_SITE = $(QEMU_SITE)
  HOST_QEMU_SOURCE = $(QEMU_SOURCE)
-@@ -146,6 +147,15 @@ QEMU_USER = $(HOST_DIR)/usr/bin/qemu-$(HOST_QEMU_ARCH)
- #-------------------------------------------------------------
- # Target-qemu
  
-+QEMU_VERSION = $(call qstrip,$(BR2_PACKAGE_QEMU_VERSION))
-+QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
-+QEMU_SITE = http://wiki.qemu.org/download
-+QEMU_LICENSE = GPLv2, LGPLv2.1, MIT, BSD-3c, BSD-2c, Others/BSD-1c
-+QEMU_LICENSE_FILES = COPYING COPYING.LIB
-+#??NOTE: there is no top-level license file for non-(L)GPL licenses;
-+#       the non-(L)GPL license texts are specified in the affected
-+#       individual source files.
+@@ -94,9 +95,15 @@ HOST_QEMU_TARGETS += $(HOST_QEMU_ARCH)-linux-user
+ HOST_QEMU_OPTS += --enable-linux-user
+ 
+ # kernel version as major*256 + minor
+-HOST_QEMU_HOST_SYSTEM_VERSION = $(shell uname -r | awk -F. '{ print $$1 * 256 + $$2 }')
+-HOST_QEMU_TARGET_SYSTEM_VERSION = $(shell echo $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) | awk -F. '{ print $$1 * 256 + $$2 }')
+-HOST_QEMU_COMPARE_VERSION = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION) -ge $(HOST_QEMU_TARGET_SYSTEM_VERSION) && echo OK)
++HOST_QEMU_HOST_SYSTEM_VERSION = $(shell uname -r | awk -F. \
++								'{ print $$1 * 256 + $$2 }')
 +
- QEMU_DEPENDENCIES = host-pkgconf host-python libglib2 zlib pixman
++HOST_QEMU_TARGET_SYSTEM_VERSION = $(shell \
++								echo $(BR2_TOOLCHAIN_HEADERS_AT_LEAST) \
++								| awk -F. '{ print $$1 * 256 + $$2 }')
++
++HOST_QEMU_COMPARE_VERSION = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION) -ge \
++							$(HOST_QEMU_TARGET_SYSTEM_VERSION) && echo OK)
  
- # Need the LIBS variable because librt and libm are
+ ifeq ($(BR_BUILDING),y)
+ ifneq ($(HOST_QEMU_COMPARE_VERSION),OK)
+@@ -120,14 +127,14 @@ endif
+ 
+ define HOST_QEMU_CONFIGURE_CMDS
+ 	cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
+-		--target-list="$(HOST_QEMU_TARGETS)"    \
+-		--prefix="$(HOST_DIR)/usr"              \
+-		--interp-prefix=$(STAGING_DIR)          \
+-		--cc="$(HOSTCC)"                        \
+-		--host-cc="$(HOSTCC)"                   \
+-		--python=$(HOST_DIR)/usr/bin/python2    \
+-		--extra-cflags="$(HOST_CFLAGS)"         \
+-		--extra-ldflags="$(HOST_LDFLAGS)"       \
++		--target-list="$(HOST_QEMU_TARGETS)"        \
++		--prefix="$(HOST_DIR)/usr"                  \
++		--interp-prefix=$(STAGING_DIR)              \
++		--cc="$(HOSTCC)"                            \
++		--host-cc="$(HOSTCC)"                       \
++		--python=$(HOST_DIR)/usr/bin/python2        \
++		--extra-cflags="$(HOST_CFLAGS)"             \
++		--extra-ldflags="$(HOST_LDFLAGS)"           \
+ 		$(HOST_QEMU_OPTS)
+ endef
+ 
+@@ -211,12 +218,12 @@ QEMU_OPTS += --disable-fdt
+ endif
+ 
+ define QEMU_CONFIGURE_CMDS
+-	( cd $(@D);                                     \
+-		LIBS='$(QEMU_LIBS)'                     \
+-		$(TARGET_CONFIGURE_OPTS)                \
+-		$(TARGET_CONFIGURE_ARGS)                \
+-		$(QEMU_VARS)                            \
+-		./configure                             \
++	cd $(@D);                               \
++		LIBS='$(QEMU_LIBS)'                 \
++		$(TARGET_CONFIGURE_OPTS)            \
++		$(TARGET_CONFIGURE_ARGS)            \
++		$(QEMU_VARS)                        \
++		./configure                         \
+ 			--prefix=/usr                   \
+ 			--cross-prefix=$(TARGET_CROSS)  \
+ 			--with-system-pixman            \
+@@ -246,8 +253,7 @@ define QEMU_CONFIGURE_CMDS
+ 			--disable-seccomp               \
+ 			--disable-sparse                \
+ 			--disable-tools                 \
+-			$(QEMU_OPTS)                    \
+-	)
++			$(QEMU_OPTS)
+ endef
+ 
+ define QEMU_BUILD_CMDS
+@@ -255,7 +261,8 @@ define QEMU_BUILD_CMDS
+ endef
+ 
+ define QEMU_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(QEMU_MAKE_ENV) DESTDIR=$(TARGET_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(QEMU_MAKE_ENV) \
++			DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.6.2
