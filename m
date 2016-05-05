@@ -1,93 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 6 May 2016 00:01:55 +0200
-Subject: [Buildroot] [PATCH 00/13 v6] legal-info improvements and
- completeness (branch yem/legal-3)
-In-Reply-To: <ef5ac802-80d2-e842-fb45-4a32aa0e3507@mind.be>
-References: <cover.1461881416.git.yann.morin.1998@free.fr>
- <ef5ac802-80d2-e842-fb45-4a32aa0e3507@mind.be>
-Message-ID: <20160505220155.GD4367@free.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri,  6 May 2016 00:09:28 +0200
+Subject: [Buildroot] [PATCH] python-ubjson: new package
+Message-ID: <1462486168-5597-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                        |  1 +
+ package/python-ubjson/Config.in          |  7 +++++++
+ package/python-ubjson/python-ubjson.hash |  3 +++
+ package/python-ubjson/python-ubjson.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-ubjson/Config.in
+ create mode 100644 package/python-ubjson/python-ubjson.hash
+ create mode 100644 package/python-ubjson/python-ubjson.mk
 
-On 2016-05-04 00:33 +0200, Arnout Vandecappelle spake thusly:
-> On 04/29/16 00:27, Yann E. MORIN wrote:
-> >Hello All!
-> >
-> >This series brings improvements to the legal-info infrastructure, so
-> >that we provide the most complete and correct content in the output of
-> >legal-info.
-> >
-> >TL;DR:
-> >
-> >Currently, our legal-info ouput is missing two types of files that might
-> >be important to have included in the legal-info output:
-> >  - patches
-> >  - extra downloads
-> >
-> >
-> >This series is split in 5 consecutive parts, each depending on the
-> >previous ones:
-> >
-> >  - patches 1-4 make sure legal-info will work in off-line mode;
-> >
-> >  - patches 5-7 reorganise the legal-info directory structure to
-> >    accomodate for the fact that more than one source archive/file may
-> >    be saved for each package;
-> >
-> >  - patches 8-11 actually save the patches and extra downloads in the
-> >    legal-info output;
-> >
-> >  - patch 12 adds a list of hashes for all files in the legal-info
-> >    output;
-> >
-> >  - patch 15 (from Luca) explicits patches licensing.
-> 
->  That's patch 13, actually :-)
-
-Doh... Are you sure?  ;-)
-
-/me looks at his keyboard. '3' and '5' are not side-by-side; there is
-'4' in-between... Damn, so far for my kbd-dislexia... ;-)
-
->  For 2016.05, we certainly still want patch 13, and probably also patches 1,
-> 2, 5, 6, 7, 8, 9, 11 (because they fix a real issue, that legal-info is
-> incomplete). I do have some comments on these but it's nitpicking mostly.
-> 
->  The other patches are more controversial.
-
-As much as I can see that patch 4 (and 3) might be controversial, I fail
-to see why patch 10 (bail-out when two patches are named the same) is
-still controversial.
-
-For that patch, I switched from renaming to bailing out after both
-Thomas, Luca and you commented that was what you prefered.
-
-I also stated that I had implemented both solutions, but posted the
-renaming one so as to not break existing system. But surely, if I had
-both solutions, it was for a reason: I also prefer bailing out. ;-)
-
-So, I fail to see the controversy on that patch. ;-)
-
-As for 12, Thomas and Luca already acked it...
-
->  If you would repost, do you think you could take that order?
-
-I doubt it...
-
-I can try, but if I face a rebase hell, I'll bail out...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/Config.in b/package/Config.in
+index 9d668bf..a34d670 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -748,6 +748,7 @@ menu "External python modules"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
++	source "package/python-ubjson/Config.in"
+ 	source "package/python-ujson/Config.in"
+ 	source "package/python-urllib3/Config.in"
+ 	source "package/python-urwid/Config.in"
+diff --git a/package/python-ubjson/Config.in b/package/python-ubjson/Config.in
+new file mode 100644
+index 0000000..86ed3b2
+--- /dev/null
++++ b/package/python-ubjson/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_UBJSON
++	bool "python-ubjson"
++	help
++	  This is a Python v3.2+ (and 2.7+) Universal Binary JSON
++	  encoder/decoder based on the draft-12 specification.
++
++	  https://pypi.python.org/pypi/py-ubjson
+diff --git a/package/python-ubjson/python-ubjson.hash b/package/python-ubjson/python-ubjson.hash
+new file mode 100644
+index 0000000..1995da6
+--- /dev/null
++++ b/package/python-ubjson/python-ubjson.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=7d7e7b9b67acfb8c6b417dab78ac4639,sha256 locally computed.
++md5	7d7e7b9b67acfb8c6b417dab78ac4639  py-ubjson-0.8.4.tar.gz
++sha256	395c0cbbb097d88bb0db92fe1ac82d31b56f3be396946fe02d38f08e86a8efe9  py-ubjson-0.8.4.tar.gz
+diff --git a/package/python-ubjson/python-ubjson.mk b/package/python-ubjson/python-ubjson.mk
+new file mode 100644
+index 0000000..a69efab
+--- /dev/null
++++ b/package/python-ubjson/python-ubjson.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-ubjson
++#
++################################################################################
++
++PYTHON_UBJSON_VERSION = 0.8.4
++PYTHON_UBJSON_SOURCE = py-ubjson-$(PYTHON_UBJSON_VERSION).tar.gz
++PYTHON_UBJSON_SITE = https://pypi.python.org/packages/bf/a3/990c47fa0d2d244a3d493ae917d5cbf2a0632c1ac6aa53445f4e53ce3675
++PYTHON_UBJSON_LICENSE = Apache-2.0
++PYTHON_UBJSON_LICENSE_FILES = LICENSE
++PYTHON_UBJSON_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.5.0
