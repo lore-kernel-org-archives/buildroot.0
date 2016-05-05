@@ -1,46 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 5 May 2016 00:40:39 +0200
-Subject: [Buildroot] Which package for bluetooth management?
-In-Reply-To: <572A61D4.10905@gmail.com>
-References: <572A61D4.10905@gmail.com>
-Message-ID: <7132491b-5080-2001-1717-250d698244e9@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 05 May 2016 08:15:15 +0200
+Subject: [Buildroot] [PATCH v8] core/pkg-kconfig: Use olddefconfig when
+	available
+In-Reply-To: <1462178199-21742-1-git-send-email-romain.izard.pro@gmail.com>
+ (Romain Izard's message of "Mon, 2 May 2016 10:36:39 +0200")
+References: <1462178199-21742-1-git-send-email-romain.izard.pro@gmail.com>
+Message-ID: <87pot1ni8c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/04/16 22:55, Marco Trapanese wrote:
-> Hi! I've searched through the available packages - I'm looking for something
-> like bluetoothctl in debian.
-> I have a working bluez+pulseaudio/alsa system, but I need a way to request a pin
-> for incoming connection requests, to trust some addresses and to enable BT and
-> BLE profiles as desired.
+>>>>> "Romain" == Romain Izard <romain.izard.pro@gmail.com> writes:
 
-  Isn't it part of bluez5_utils?
+ > Using 'yes "" | make oldconfig' to regenerate a .config file from an
+ > existing defconfig does not work reliably in all cases. Specifically, it
+ > does not work well with tristate choice entries.
 
-  Regards,
-  Arnout
+ > The correct way to do it is to use 'make olddefconfig', but this target
+ > is not supported in projects that use an old version of kconfig. As
+ > most projects do not use tristate entries, there is no need for them to
+ > upgrade.
 
->
-> Is there anything about?
-> Otherwise I will try to add a package by myself.
->
-> Best regards
-> Marco
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+ > 'oldnoconfig' is an alias for 'olddefconfig', but it also is the only
+ > name for this target between Linux versions 2.6.36 and 3.6.
 
+ > Check which targets are supported by the current project, and use the
+ > appropriate method to regenerate the .config file.
+
+ > Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
+ > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > ---
+ > Changelog:
+ > v1: New patch
+ > v2: Use oldnoconfig instead of olddefconfig
+ >     Fix silent mode
+ >     Change the pattern in both places where it is used
+ >     Use a macro to avoid redundancy
+ > v3: Do not use $(call ...)
+ >     Use the $(2)_KCONFIG_MAKE variable
+ > v4: No change
+ > v5: Detect available methods and use the most recent one
+ > v6: Remove colon from matched rule names
+ > v7: Shell-based conditons, does not work with backticks
+ > v8: Return to v6, with more comments
+
+Committed, thanks everyone!
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
