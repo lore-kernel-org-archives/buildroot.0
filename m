@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 May 2016 22:58:06 +0200
-Subject: [Buildroot] [PATCH v2] mpv: jack/sdl/sdl2 require 64-bit sync
- intrinsics
-In-Reply-To: <1461849618-3622-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1461849618-3622-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160505225806.656937d7@free-electrons.com>
+Date: Thu, 5 May 2016 23:22:44 +0200
+Subject: [Buildroot] [PATCH] python-singledispatch: add missing runtime
+ dependency
+In-Reply-To: <1462351483-24003-1-git-send-email-yegorslists@googlemail.com>
+References: <1462351483-24003-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160505232244.5c065d36@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 28 Apr 2016 10:20:18 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/578/578beb2f3b34fc83109e79d8db7de7219dd8340e/
-> http://autobuild.buildroot.net/results/21c/21ce67041792d29082f5bba76299da19dd1856eb/
+On Wed,  4 May 2016 10:44:43 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> setup.py mentions python-six as required.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
-> Change for v2: drop testing static kludges
+>  package/python-singledispatch/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
 
