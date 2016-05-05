@@ -1,44 +1,78 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 5 May 2016 21:02:12 +0200
-Subject: [Buildroot] [PATCH v3] barebox: add an option to embed
- environment image
-In-Reply-To: <20160505193014.59240f3b@free-electrons.com>
-References: <1462360499-29955-1-git-send-email-yegorslists@googlemail.com>
- <20160505155645.53ec9414@free-electrons.com>
- <CAGm1_ktZovu04emMf9Xgpm4EadvnVttude3atO98zzii1CEgew@mail.gmail.com>
- <20160505193014.59240f3b@free-electrons.com>
-Message-ID: <CAGm1_kttR6moeGokox6vqytEvAVLy-akC57mZLuax-o9G=C6PA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 May 2016 22:09:01 +0200
+Subject: [Buildroot] [PATCH 1/1] uboot-tools: add missing dependency on
+ host-dtc for the host package
+In-Reply-To: <1462372709-24828-1-git-send-email-casantos@datacom.ind.br>
+References: <1462372709-24828-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <20160505220901.4db9e9a2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, May 5, 2016 at 7:30 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Thu, 5 May 2016 17:17:54 +0200, Yegor Yefremov wrote:
->
->> We've already discussed this. Both images can be useful together.
->> Embedded image contains recovery scripts and external image real
->> scripts, variables. For example at production stage you don't have
->> external image, so embedded one takes care, after production external
->> image will be used and so on.
->
-> OK. Sorry for asking the same question again, there's so many different
-> topics going on at the same time that I easily lose track of previous
-> discussions. Whenever this sort of discussion happens, it's a good idea
-> to improve the commit log in the next iterations of the patch with the
-> result of the discussion. Not only this avoids getting asked the same
-> questions, but it also means that the discussion/reasoning gets kept in
-> the Git history, which might prove useful in the future.
->
-> Can you nonetheless resend a v4 with the minor improvements suggested
-> by Arnout (and possibly with an improved commit log explaining why we
-> need to support both an "external" environment and an "embedded"
-> environment) ?
+Hello,
 
-Sure. Will do it tomorrow.
+Thanks for this patch. See my comments below.
 
-Yegor
+On Wed,  4 May 2016 11:38:29 -0300, Carlos Santos wrote:
+> The mkimage utility needs dtc when the input is in Flat Image Trees (FIT)
+> format. If dtc is not available mkimage fails. Example:
+> 
+>     $ mkimage -f firmware.its firmware.im
+>     sh: dtc: command not found
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+>  package/uboot-tools/Config.in.host | 1 +
+>  package/uboot-tools/uboot-tools.mk | 2 ++
+>  2 files changed, 3 insertions(+)
+> 
+> diff --git a/package/uboot-tools/Config.in.host b/package/uboot-tools/Config.in.host
+> index b5a42d9..5c44eaf 100644
+> --- a/package/uboot-tools/Config.in.host
+> +++ b/package/uboot-tools/Config.in.host
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_HOST_UBOOT_TOOLS
+>  	bool "host u-boot tools"
+> +	select BR2_PACKAGE_HOST_DTC
+>  	help
+>  	  Companion tools for Das U-Boot bootloader.
+>  
+> diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+> index f47b3db..a07fbfa 100644
+> --- a/package/uboot-tools/uboot-tools.mk
+> +++ b/package/uboot-tools/uboot-tools.mk
+> @@ -65,6 +65,8 @@ define UBOOT_TOOLS_INSTALL_TARGET_CMDS
+>  	$(UBOOT_TOOLS_INSTALL_DUMPIMAGE)
+>  endef
+>  
+> +HOST_UBOOT_TOOLS_DEPENDENCIES += host-dtc
+
+I am not sure I like the idea of having host-uboot-tools always depend
+on host-dtc, as it adds build time while host-dtc is only needed for
+some specific use cases of mkimage (generating FIT images).
+
+There are really three options I believe:
+
+ (1) What you did, i.e have host-dtc as an unconditional dependency of
+     host-uboot-tools. Everybody pays the price of building host-dtc
+     even if it's not needed.
+
+ (2) Add a sub-option to host-uboot-tools so that people can say "I
+     need it with FIT image support", which will add host-dtc as a
+     dependency.
+
+ (3) Just do nothing, and let our users be smart enough to realize that
+     when mkimage complains that dtc is missing, they should enable
+     host-dtc.
+
+Arnout, Yann, Peter?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
