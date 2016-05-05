@@ -1,40 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 May 2016 22:36:21 +0200
-Subject: [Buildroot] [PATCH 1/1] uboot-tools: add missing dependency on
- host-dtc for the host package
-In-Reply-To: <1040860357.13861098.1462480371842.JavaMail.zimbra@datacom.ind.br>
-References: <1462372709-24828-1-git-send-email-casantos@datacom.ind.br>
- <20160505220901.4db9e9a2@free-electrons.com>
- <1040860357.13861098.1462480371842.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20160505223621.54bbda0b@free-electrons.com>
+Date: Thu, 5 May 2016 22:22:56 +0200
+Subject: [Buildroot] [git commit] package/nginx: fix error is nginx.service
+Message-ID: <20160505204505.93445801A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=851376149380a47cc34d34227f7333a576e3cd72
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 5 May 2016 17:32:51 -0300 (BRT), Carlos Santos wrote:
+When using systemd nginx fails to start with the error
 
-> The extra time needed to build host-dtc is negligible. This is what I get when I build it on my Core i5 notebook, including download time:
-> 
-> 	$ time make host-dtc-dirclean host-dtc
-> 	[...]
-> 	real	0m8.387s
-> 	user	0m7.552s
-> 	sys	0m2.231s
+    /usr/bin/mkdir: invalid option -- 't'
 
-This is just the time for host-dtc. But host-dtc depends on host-bison
-and host-flex, which in turn bring host-m4. In total, on my machine,
-the time to build host-dtc from a clean build is almost one minute.
+This is due to a missing space before the semicolon in nginx.service.
+For systemd to handle multiple commands in ExecStartPre it requires the
+semicolon to be a separate word or the use of multiple ExecStartPre.
 
-Not a big amount of time. But FIT images are not that common, and one
-key aspect of Buildroot is its build time, which we try to keep low by
-making sure we don't rebuild the whole world needlessly.
+This commit splits the multiple commands into two ExecStartPre lines
+which fixes the error and improves readability.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nginx/nginx.service | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/nginx/nginx.service b/package/nginx/nginx.service
+index 619755f..320df9a 100644
+--- a/package/nginx/nginx.service
++++ b/package/nginx/nginx.service
+@@ -5,7 +5,8 @@ After=syslog.target network.target
+ [Service]
+ Type=forking
+ PIDFile=/var/run/nginx.pid
+-ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx; /usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
++ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
++ExecStartPre=/usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
+ ExecStart=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
+ ExecReload=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;' -s reload
+ ExecStop=/usr/sbin/nginx -g 'pid /var/run/nginx.pid;' -s quit
