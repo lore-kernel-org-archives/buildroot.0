@@ -1,41 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  5 May 2016 15:47:19 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump defaut to version 4.5.3
-In-Reply-To: <1462474039-13393-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1462474039-13393-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1462474039-13393-2-git-send-email-gustavo@zacarias.com.ar>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 5 May 2016 21:02:12 +0200
+Subject: [Buildroot] [PATCH v3] barebox: add an option to embed
+ environment image
+In-Reply-To: <20160505193014.59240f3b@free-electrons.com>
+References: <1462360499-29955-1-git-send-email-yegorslists@googlemail.com>
+ <20160505155645.53ec9414@free-electrons.com>
+ <CAGm1_ktZovu04emMf9Xgpm4EadvnVttude3atO98zzii1CEgew@mail.gmail.com>
+ <20160505193014.59240f3b@free-electrons.com>
+Message-ID: <CAGm1_kttR6moeGokox6vqytEvAVLy-akC57mZLuax-o9G=C6PA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Thu, May 5, 2016 at 7:30 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Thu, 5 May 2016 17:17:54 +0200, Yegor Yefremov wrote:
+>
+>> We've already discussed this. Both images can be useful together.
+>> Embedded image contains recovery scripts and external image real
+>> scripts, variables. For example at production stage you don't have
+>> external image, so embedded one takes care, after production external
+>> image will be used and so on.
+>
+> OK. Sorry for asking the same question again, there's so many different
+> topics going on at the same time that I easily lose track of previous
+> discussions. Whenever this sort of discussion happens, it's a good idea
+> to improve the commit log in the next iterations of the patch with the
+> result of the discussion. Not only this avoids getting asked the same
+> questions, but it also means that the discussion/reasoning gets kept in
+> the Git history, which might prove useful in the future.
+>
+> Can you nonetheless resend a v4 with the minor improvements suggested
+> by Arnout (and possibly with an improved commit log explaining why we
+> need to support both an "external" environment and an "embedded"
+> environment) ?
 
-diff --git a/linux/Config.in b/linux/Config.in
-index ef93489..306405b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -27,7 +27,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.5.2)"
-+	bool "Latest version (4.5.3)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -110,7 +110,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.5.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.5.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
--- 
-2.7.3
+Sure. Will do it tomorrow.
+
+Yegor
