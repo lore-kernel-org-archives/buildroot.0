@@ -1,32 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 5 May 2016 09:32:38 -0300
-Subject: [Buildroot] [PATCH 1/2] configs/qemu: use zImage for sh4/sh4eb
- samples
-In-Reply-To: <20160505142429.1853d011@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 5 May 2016 15:05:37 +0200
+Subject: [Buildroot] [PATCH 2/2] configs/qemu: bump to the latest version
+In-Reply-To: <1462447857-29400-2-git-send-email-gustavo@zacarias.com.ar>
 References: <1462447857-29400-1-git-send-email-gustavo@zacarias.com.ar>
- <20160505142429.1853d011@free-electrons.com>
-Message-ID: <572B3D66.2090207@zacarias.com.ar>
+ <1462447857-29400-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160505130537.GX26720@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/05/16 09:24, Thomas Petazzoni wrote:
+Hi,
+Gustavo Zacarias wrote,
 
-> On Thu,  5 May 2016 08:30:56 -0300, Gustavo Zacarias wrote:
->> The default for ARM was changed to uImage in 5c67cb1d, however the
->
-> 5c67cb1d changed ARM to default to *zImage*.
+> Results table:
+> 
+> Defconfig               Kernel          Qemu        Network Status
+> ------------------------------------------------------------------
+> aarch64_virt            4.5.3           2.5.0         YES     OK
+> arm_versatile           4.5.3           2.5.0         YES     OK
+> arm_vexpress            4.5.3           2.5.0         YES     OK
+> m68k_mcf5208            4.5.3           2.5.0         NO      SO-SO (3)
+> m68k_q800               4.5.3           q800-v2.4.0   NO (4)  OK
+> microblazebe            4.5.3           2.5.0         YES     OK
+> microblazeel            4.5.3           2.5.0         YES     OK
+> mips64el_malta          4.5.3           2.5.0         YES     OK
+> mips64_malta            4.5.3           2.5.0         YES     OK
+> mipsel_malta            4.5.3           2.5.0         YES     OK
+> mips_malta              4.5.3           2.5.0         YES     OK
+> ppc_g3beige             4.5.3           2.5.0         YES     OK
+> ppc_mpc8544ds           4.5.3           2.5.0         YES     OK
+> ppc_virtex_ml507        4.5.3           2.5.0         NO      OK
+> ppc64_pseries           4.5.3           2.5.0         YES     OK
+> sh4                     4.5.3           2.5.0         YES     OK
+> sh4eb                   4.5.3           2.5.0         NO (1)  OK
+> sparc_ss10              4.5.3           2.5.0         YES     OK
+> sparc64_sun4u           4.5.3           2.5.0         YES     OK
+> sparc_sun4u             4.5.3           2.5.0         YES     OK
+> x86                     4.5.3           2.5.0         YES     OK
+> x86_64                  4.5.3           2.5.0         YES     OK
+> xtensa_lx60             4.4.9           2.5.0         YES (2) OK
+> xtensa_lx60_nommu       4.4.9           2.5.0         YES (2) OK
+> 
+> (1) - Probably an endian issue with 8139 emulation/driver
+> (2) - xtensa ethernet broken in 4.5
+> (3) - It boots, you can login, but apps exit/crash often
 
-Hi, right, word puzzle!
+What kind of crashes do you see? Can you tell me the applications?
 
-> Right, that's a mistake. However, seems like the SPARC defconfig was
-> also changed while it shouldn't have been changed.
+Thanks for the nice overview.
 
-That's not a problem - it was redudant, sparc doesn't support uImage 
-hence zImage is the default anyway.
-I've tested all of this with the qemu defconfig rebuilds and noticed 
-sh4(eb) was still running 4.5.0 (rsync without delete when copying to 
-run the tests, hence previous kernel).
-Regards.
+best regards
+ Waldemar
