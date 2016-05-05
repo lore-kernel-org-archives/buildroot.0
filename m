@@ -1,33 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 May 2016 15:41:18 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/qemu: bump to the latest version
-In-Reply-To: <572B459D.8060304@zacarias.com.ar>
-References: <1462447857-29400-1-git-send-email-gustavo@zacarias.com.ar>
- <1462447857-29400-2-git-send-email-gustavo@zacarias.com.ar>
- <20160505130537.GX26720@waldemar-brodkorb.de>
- <572B459D.8060304@zacarias.com.ar>
-Message-ID: <20160505154118.323b19a2@free-electrons.com>
+Date: Thu, 5 May 2016 15:39:51 +0200
+Subject: [Buildroot] [git commit] configs/qemu: use zImage for sh4/sh4eb
+	samples
+Message-ID: <20160505134140.06A8981F33@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2df5abd7a190af5791bdb23dfbc4c616833db679
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 5 May 2016 10:07:41 -0300, Gustavo Zacarias wrote:
+The default for ARM was changed to zImage in 5c67cb1d, however the
+sh4/sh4eb sample configs were updated to switch to uImage in error,
+hence end up building uImage which doesn't work with Qemu.
 
-> uname -a will quick you out (logout).
-> ps will do as well.
-> Seems that anything that's run will throw the parent shell down.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Thomas: fix commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/qemu_sh4_r2d_defconfig   | 1 +
+ configs/qemu_sh4eb_r2d_defconfig | 1 +
+ 2 files changed, 2 insertions(+)
 
-I've seen the same behavior. Any application you start will make the
-parent shell exit/crash when the application exists.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+index 57d5578..c7f4ec1 100644
+--- a/configs/qemu_sh4_r2d_defconfig
++++ b/configs/qemu_sh4_r2d_defconfig
+@@ -19,3 +19,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-4.5.config"
++BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_sh4eb_r2d_defconfig b/configs/qemu_sh4eb_r2d_defconfig
+index d356434..06215c9 100644
+--- a/configs/qemu_sh4eb_r2d_defconfig
++++ b/configs/qemu_sh4eb_r2d_defconfig
+@@ -18,3 +18,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4eb-r2d/linux-4.5.config"
++BR2_LINUX_KERNEL_ZIMAGE=y
