@@ -1,47 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 5 May 2016 11:33:13 -0300
-Subject: [Buildroot] Xorg crash
-In-Reply-To: <1274ad69-0abb-26b0-b623-67de78c0274f@brickedbrain.com>
-References: <1274ad69-0abb-26b0-b623-67de78c0274f@brickedbrain.com>
-Message-ID: <572B59A9.2070602@zacarias.com.ar>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 5 May 2016 17:17:54 +0200
+Subject: [Buildroot] [PATCH v3] barebox: add an option to embed
+ environment image
+In-Reply-To: <20160505155645.53ec9414@free-electrons.com>
+References: <1462360499-29955-1-git-send-email-yegorslists@googlemail.com>
+ <20160505155645.53ec9414@free-electrons.com>
+Message-ID: <CAGm1_ktZovu04emMf9Xgpm4EadvnVttude3atO98zzii1CEgew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/05/16 11:19, Luca Ellero wrote:
+Hi Thomas,
 
-> Hi,
-> I'm trying to get a minimal Xorg with Buildroot 2016.02 on Raspberry Pi
-> 2, but the Xserver crashes as soon I launch dillo web-browser.
-> I get the same crash if I launch fluxbox (or openbox or matchbox).
-> I tried even on a iMX6 custom board but the same problem happens.
-> The strange thing is that if I use only xterm and twm everything works
-> correctly.
+On Thu, May 5, 2016 at 3:56 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
 >
-> I get:
+> On Wed,  4 May 2016 13:14:59 +0200, yegorslists at googlemail.com wrote:
 >
-> (EE) Segmentation fault at address 0x0
-> (EE) Fatal server error:
-> (EE) Caught signal 11 (Segmentation fault). Server aborting
-> (EE)
-> (EE) Please consult the The X.Org Foundation support
->       at http://wiki.x.org for help.
-> (EE) Please also check the log file at "/var/log/Xorg.0.log" for
-> additional information.
-> (EE)
-> (EE) Server terminated with error (1). Closing log file.
+>> +config BR2_TARGET_BAREBOX_AUX_CUSTOM_EMBEDDED_ENV_PATH
+>> +     string "Embedded environment path"
+>> +     help
 >
-> In attachment you can find the Xorg log and configuration file.
-> Could someone please explain me what is going wrong.
+> We already have an option BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH, which if
+> I understand correctly, generates a Barebox environment image (but not
+> built into the Barebox binary itself).
 >
-> Thanks
-> Regards
-> Luca
+> Wouldn't it make more sense to simply add a boolean option that says
+> whether the Barebox environment should be built-in or not? Something
+> like:
+>
+>         (board/foo/bar/barebox.env) Environment path
+>         [*] Embed the environment in the image
 
-Hi.
-Try using BR2_OPTIMIZE_2=y and rebuild everything - the X server is 
-notoriously fragile when optimizing for size with certain toolchain 
-combinations/architectures.
-Regards.
+We've already discussed this. Both images can be useful together.
+Embedded image contains recovery scripts and external image real
+scripts, variables. For example at production stage you don't have
+external image, so embedded one takes care, after production external
+image will be used and so on.
+
+Yegor
