@@ -1,102 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 6 May 2016 00:55:25 +0200
-Subject: [Buildroot] [PATCH 06/13 v6] core/legal-info: install source
- archives in their own sub-dir
-In-Reply-To: <2db32ff5-7ff9-e343-d31b-cb06404a1017@mind.be>
-References: <cover.1461881416.git.yann.morin.1998@free.fr>
- <c8abc350498d27f8b6a31a2db583da0dcf2e6d0a.1461881416.git.yann.morin.1998@free.fr>
- <2db32ff5-7ff9-e343-d31b-cb06404a1017@mind.be>
-Message-ID: <20160505225525.GG4367@free.fr>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu,  5 May 2016 20:47:25 -0300
+Subject: [Buildroot] [PATCH] configs: freescale_imx6ulevk_defconfig: Add
+	alsa-utils
+Message-ID: <1462492045-21257-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+From: Fabio Estevam <fabio.estevam@nxp.com>
 
-On 2016-05-04 01:14 +0200, Arnout Vandecappelle spake thusly:
-> On 04/29/16 00:27, Yann E. MORIN wrote:
-> >Currently, we put all source archives side-by-side in the same
-> >directory.
-> >
-> >Since we're about to also save individual patches that were applied
-> >on those sources, we don't want to make that directory a complete
-> >mess of unassorted files.
-> >
-> >So, we install each source archive in its own sub-directory, where
-> >we'll later store the patches too. Store that location in a variable,
-> >so it can be re-used later on (to install patches in a future commit).
-> >
-> >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> >Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-> >Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-> >Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> >Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> >
-> >---
-> >Chages v5 -> v6:
-> >  - variable with raw name was renamed  (Thomas)
-> >
-> >Changes v1 -> v2:
-> >  - perl no longer has a post-legal-info hook  (Thomas, Luca)
-> >---
-> > package/pkg-generic.mk | 6 ++++--
-> > 1 file changed, 4 insertions(+), 2 deletions(-)
-> >
-> >diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> >index 7aca958..a362b73 100644
-> >--- a/package/pkg-generic.mk
-> >+++ b/package/pkg-generic.mk
-> >@@ -496,6 +496,8 @@ endif
-> >
-> > $(2)_REDISTRIBUTE		?= YES
-> >
-> >+$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAW_BASE_NAME)
-> >+
-> > # When a target package is a toolchain dependency set this variable to
-> > # 'NO' so the 'toolchain' dependency is not added to prevent a circular
-> > # dependency
-> >@@ -823,8 +825,8 @@ else
-> >
-> > ifeq ($$($(2)_REDISTRIBUTE),YES)
-> > # Save the source tarball
-> >-	$$(Q)$$(HARDLINK_OR_COPY) $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
-> >-				  $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
-> >+	$$(Q)$$(HARDLINK_OR_COPY) $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) \
-> 
->  Did I really give my Rev-by without noticing that comma disappearing? :-)
+Add support for alsa-utils.
 
-No, you did not; it's a tag from a previous review.
+Also select BR2_TOOLCHAIN_BUILDROOT_WCHAR as this is a requirement
+for alsamixer.
 
-I dropped some tags from some patches, but forgot to do so here. Sorry...
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ configs/freescale_imx6ulevk_defconfig | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
->  Regards,
->  Arnout
-> 
-> >+				  $$($(2)_REDIST_SOURCES_DIR)
-> > endif # redistribute
-> >
-> > endif # other packages
-> >
-> 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-
+diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
+index b8a1f86..8f36971 100644
+--- a/configs/freescale_imx6ulevk_defconfig
++++ b/configs/freescale_imx6ulevk_defconfig
+@@ -6,6 +6,7 @@ BR2_cortex_a7=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+ 
+ # system
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ 
+ # kernel
+@@ -31,5 +32,10 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
+ 
+ # filesystem / image
++BR2_PACKAGE_ALSA_UTILS=y
++BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
++BR2_PACKAGE_ALSA_UTILS_APLAY=y
++BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
++BR2_TARGET_ROOTFS_EXT2=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/imx6ulevk/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
