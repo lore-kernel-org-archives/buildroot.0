@@ -1,33 +1,33 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Thu, 5 May 2016 09:54:07 +0200
-Subject: [Buildroot] Which package for bluetooth management?
-In-Reply-To: <572AEB2E.1050305@gmail.com>
-References: <572A61D4.10905@gmail.com>
- <7132491b-5080-2001-1717-250d698244e9@mind.be> <572AEB2E.1050305@gmail.com>
-Message-ID: <572AFC1F.3070004@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 05 May 2016 11:31:46 +0200
+Subject: [Buildroot] [PATCH] uboot: ensure u-boot-dtb.img gets built if
+	enabled
+In-Reply-To: <1462224412-836-1-git-send-email-peter@korsgaard.com> (Peter
+ Korsgaard's message of "Mon, 2 May 2016 23:26:52 +0200")
+References: <1462224412-836-1-git-send-email-peter@korsgaard.com>
+Message-ID: <87zis4n94t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 05/05/2016 08:41, Marco Trapanese ha scritto:
->
-> I apologize. I need to use bluez4 due to the issues of bluez5 with 
-> pulseaudio about HFP profiles.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Anyway I'm rebuilding with bluez5 to see if I can reach my goals. Because:
+ > u-boot-dtb.img only gets built by default (all target) if
+ > CONFIG_OF_SEPARATE _AND_ CONFIG_SPL_FRAMEWORK are enabled.
 
-- bluez4 is recommended with pulseaudio due to simpler configuration of 
-A2DP and HFP
-- but connman 1.32 doesn't support bluez4 anymore
-- but QtConnectivity doesn't support bluez5
+ > Certain SoCs (E.G. Action Semi S500) use a proprietary first level
+ > bootloader instead of u-boot SPL, but still use u-boot-dtb.img as the first
+ > level bootloader parses the uImage header for size/loadaddr.
 
-It's a bit frustrating :)
-So I selected:
+ > Ensure u-boot-dtb.img gets built if enabled by explicitly listing it as a
+ > u-boot make target (next to all) to support such setups.
 
-- bluez5
-- pulseaudio
-- connman
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Let's see if I can manage A2DP/HFP/BLE services at the same time.
+Committed, thanks.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
