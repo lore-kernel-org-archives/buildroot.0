@@ -1,39 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 May 2016 22:54:43 +0200
-Subject: [Buildroot] [PATCH v2 1/6] package/nginx: fix mail modules not
- building
-In-Reply-To: <1462268217-31545-1-git-send-email-martin@barkynet.com>
-References: <1462268217-31545-1-git-send-email-martin@barkynet.com>
-Message-ID: <20160505225443.3cafddf4@free-electrons.com>
+Date: Thu, 5 May 2016 22:55:32 +0200
+Subject: [Buildroot] [git commit] python-singledispatch: add missing runtime
+	dependency
+Message-ID: <20160505205538.606DB81DA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0074622162cc4d53a60f296ba68e79cd9dd460ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  3 May 2016 10:36:52 +0100, Martin Bark wrote:
-> Add the missing --with-mail configure option
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> 
-> ---
-> Changes v1 -> v2
->  - new in v2. split from the patch to bump nginx to 1.10.0
->    (suggested by Thomas Petazzoni)
-> ---
->  package/nginx/nginx.mk | 1 +
->  1 file changed, 1 insertion(+)
+setup.py mentions python-six as required.
 
-Thanks, I've applied the entire series. On a few patches, I had to
-rewrap the Config.in help text so that it fits in 72 characters before
-applying.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-singledispatch/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-singledispatch/Config.in b/package/python-singledispatch/Config.in
+index 192e516..4abc219 100644
+--- a/package/python-singledispatch/Config.in
++++ b/package/python-singledispatch/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_SINGLEDISPATCH
+ 	bool "python-singledispatch"
+ 	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+ 	  This library brings functools.singledispatch from
+ 	  Python 3.4 to Python 2.6-3.3
