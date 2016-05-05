@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 6 May 2016 00:44:47 +0200
-Subject: [Buildroot] [PATCH 02/13 v6] core/legal-info: use the helper to
- install source archives
-In-Reply-To: <0afcd8fe-1b36-3cb8-4ce2-3747c8e3b252@mind.be>
+Date: Fri, 6 May 2016 00:55:25 +0200
+Subject: [Buildroot] [PATCH 06/13 v6] core/legal-info: install source
+ archives in their own sub-dir
+In-Reply-To: <2db32ff5-7ff9-e343-d31b-cb06404a1017@mind.be>
 References: <cover.1461881416.git.yann.morin.1998@free.fr>
- <049c6d8a781651f1ad91d9e76554c572fc5d63a9.1461881416.git.yann.morin.1998@free.fr>
- <0afcd8fe-1b36-3cb8-4ce2-3747c8e3b252@mind.be>
-Message-ID: <20160505224447.GF4367@free.fr>
+ <c8abc350498d27f8b6a31a2db583da0dcf2e6d0a.1461881416.git.yann.morin.1998@free.fr>
+ <2db32ff5-7ff9-e343-d31b-cb06404a1017@mind.be>
+Message-ID: <20160505225525.GG4367@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,50 +15,62 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2016-05-04 00:57 +0200, Arnout Vandecappelle spake thusly:
+On 2016-05-04 01:14 +0200, Arnout Vandecappelle spake thusly:
 > On 04/29/16 00:27, Yann E. MORIN wrote:
-> >.. and use $(Q) instead of a hard-coded @.
+> >Currently, we put all source archives side-by-side in the same
+> >directory.
+> >
+> >Since we're about to also save individual patches that were applied
+> >on those sources, we don't want to make that directory a complete
+> >mess of unassorted files.
+> >
+> >So, we install each source archive in its own sub-directory, where
+> >we'll later store the patches too. Store that location in a variable,
+> >so it can be re-used later on (to install patches in a future commit).
 > >
 > >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > >Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> >Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+> >Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+> >Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> >Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > >
 > >---
-> >Changes v5 -> v6:
-> >  - directly call the helper script  (Thomas, Arnout)
-> >  - drop Luca's and Arnout's tags, as the code did change a bit
+> >Chages v5 -> v6:
+> >  - variable with raw name was renamed  (Thomas)
 > >
-> >Changes v4 -> v5:
-> >  - s/Copy/Save/ because we're not really copying
-> >
-> >Changes v2 -> v3:
-> >  - comment the @ -> $(Q) change  (Arnout)
+> >Changes v1 -> v2:
+> >  - perl no longer has a post-legal-info hook  (Thomas, Luca)
 > >---
-> > package/pkg-generic.mk | 6 +++---
-> > 1 file changed, 3 insertions(+), 3 deletions(-)
+> > package/pkg-generic.mk | 6 ++++--
+> > 1 file changed, 4 insertions(+), 2 deletions(-)
 > >
 > >diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> >index 3904c09..5c2e46d 100644
+> >index 7aca958..a362b73 100644
 > >--- a/package/pkg-generic.mk
 > >+++ b/package/pkg-generic.mk
-> >@@ -803,9 +803,9 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
-> > ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
-> > 	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
-> > endif
-> >-# Copy the source tarball (just hardlink if possible)
-> >-	@cp -l $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))) 2>/dev/null || \
-> >-	    cp $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
-> >+# Save the source tarball
-> >+	$$(Q)$$(HARDLINK_OR_COPY) $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
+> >@@ -496,6 +496,8 @@ endif
+> >
+> > $(2)_REDISTRIBUTE		?= YES
+> >
+> >+$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAW_BASE_NAME)
+> >+
+> > # When a target package is a toolchain dependency set this variable to
+> > # 'NO' so the 'toolchain' dependency is not added to prevent a circular
+> > # dependency
+> >@@ -823,8 +825,8 @@ else
+> >
+> > ifeq ($$($(2)_REDISTRIBUTE),YES)
+> > # Save the source tarball
+> >-	$$(Q)$$(HARDLINK_OR_COPY) $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
+> >-				  $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
+> >+	$$(Q)$$(HARDLINK_OR_COPY) $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) \
 > 
->  Did you test this? I don't think it can work with that comma...
+>  Did I really give my Rev-by without noticing that comma disappearing? :-)
 
-Wooppsss... :-/
+No, you did not; it's a tag from a previous review.
 
-> Ah, but it gets fixed in patch 6 :-)
-
-Re-wooppsss... :-/
-
-Thanks! :-)
+I dropped some tags from some patches, but forgot to do so here. Sorry...
 
 Regards,
 Yann E. MORIN.
@@ -66,7 +78,7 @@ Yann E. MORIN.
 >  Regards,
 >  Arnout
 > 
-> >+				  $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
+> >+				  $$($(2)_REDIST_SOURCES_DIR)
 > > endif # redistribute
 > >
 > > endif # other packages
