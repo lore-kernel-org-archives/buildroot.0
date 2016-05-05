@@ -1,54 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 May 2016 15:42:17 +0200
-Subject: [Buildroot] [git commit] package/ca-certificates: depend on
-	host-python or host-python3
-Message-ID: <20160505134452.46D4781EF0@busybox.osuosl.org>
+Date: Thu, 5 May 2016 15:45:11 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/qemu: use zImage for sh4/sh4eb
+ samples
+In-Reply-To: <1462447857-29400-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1462447857-29400-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160505154511.6e53076d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27f09940670723fb7cfe9e1f39b23fc4b047e5ae
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The ca-certificates build process runs a Python script that needs at
-least Python 2.7. While Buildroot requires Python as a hard dependency
-on the build system, we don't require Python >= 2.7.
+On Thu,  5 May 2016 08:30:56 -0300, Gustavo Zacarias wrote:
+> The default for ARM was changed to uImage in 5c67cb1d, however the
+> sh4/sh4eb sample configs were updated to drop zImage in error, hence
+> end up building uImage which doesn't work with Qemu.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  configs/qemu_sh4_r2d_defconfig   | 1 +
+>  configs/qemu_sh4eb_r2d_defconfig | 1 +
+>  2 files changed, 2 insertions(+)
 
-So in order to ensure that a Python >= 2.7 is installed, this commit
-makes the ca-certificates package depend either on host-python or
-host-python3.
+Both patches applied. As discussed, for the first patch, I've reworked
+the commit log.
 
-Fixes:
+Thanks!
 
- http://autobuild.buildroot.net/results/a2a4fed293c836b9cf63ff2aaa463b0704dec07e/
- http://autobuild.buildroot.net/results/bbed4afa8e30382b8892062f31ba64cbb0ea14e4/
- http://autobuild.buildroot.net/results/1af5562be3c0d233cea81834a898f7ac6ae48271/
-
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: rewrite commit log.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ca-certificates/ca-certificates.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index da1b70d..393c8cd 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -7,7 +7,11 @@
- CA_CERTIFICATES_VERSION = 20160104
- CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
- CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20160104T220912Z/pool/main/c/ca-certificates
--CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
-+CA_CERTIFICATES_DEPENDENCIES = host-openssl
-+# ca-certificates can be built with either python 2 or python 3
-+# but it must be at least python 2.7
-+CA_CERTIFICATES_DEPENDENCIES += \
-+	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
- CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
- CA_CERTIFICATES_LICENSE_FILES = debian/copyright
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
