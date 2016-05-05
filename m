@@ -1,21 +1,32 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Thu, 5 May 2016 14:29:02 +0200
-Subject: [Buildroot] Which package for bluetooth management?
-In-Reply-To: <20160505142533.67f8e473@free-electrons.com>
-References: <572A61D4.10905@gmail.com>
- <7132491b-5080-2001-1717-250d698244e9@mind.be> <572AEB2E.1050305@gmail.com>
- <572AFC1F.3070004@gmail.com> <20160505142533.67f8e473@free-electrons.com>
-Message-ID: <572B3C8E.2040305@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 5 May 2016 09:32:38 -0300
+Subject: [Buildroot] [PATCH 1/2] configs/qemu: use zImage for sh4/sh4eb
+ samples
+In-Reply-To: <20160505142429.1853d011@free-electrons.com>
+References: <1462447857-29400-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160505142429.1853d011@free-electrons.com>
+Message-ID: <572B3D66.2090207@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 05/05/2016 14:25, Thomas Petazzoni ha scritto:
-> - but QtConnectivity doesn't support bluez5
-> I think it does, see https://patchwork.ozlabs.org/patch/612073/.
+On 05/05/16 09:24, Thomas Petazzoni wrote:
 
+> On Thu,  5 May 2016 08:30:56 -0300, Gustavo Zacarias wrote:
+>> The default for ARM was changed to uImage in 5c67cb1d, however the
+>
+> 5c67cb1d changed ARM to default to *zImage*.
 
-Great!
-I will try it... another full rebuild on sight!
+Hi, right, word puzzle!
+
+> Right, that's a mistake. However, seems like the SPARC defconfig was
+> also changed while it shouldn't have been changed.
+
+That's not a problem - it was redudant, sparc doesn't support uImage 
+hence zImage is the default anyway.
+I've tested all of this with the qemu defconfig rebuilds and noticed 
+sh4(eb) was still running 4.5.0 (rsync without delete when copying to 
+run the tests, hence previous kernel).
+Regards.
