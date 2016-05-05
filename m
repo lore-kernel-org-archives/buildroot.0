@@ -1,55 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 May 2016 20:40:42 +0200
-Subject: [Buildroot] Xorg crash
-In-Reply-To: <572B84E6.1000503@zacarias.com.ar> (Gustavo Zacarias's message of
- "Thu, 5 May 2016 14:37:42 -0300")
-References: <1274ad69-0abb-26b0-b623-67de78c0274f@brickedbrain.com>
- <572B59A9.2070602@zacarias.com.ar>
- <20160505193148.721ba349@free-electrons.com>
- <572B84E6.1000503@zacarias.com.ar>
-Message-ID: <87vb2smjpx.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  5 May 2016 15:47:18 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.14.x and 4.{4,
+	5}.x series
+Message-ID: <1462474039-13393-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- > On 05/05/16 14:31, Thomas Petazzoni wrote:
- >> Hello,
- >> 
- >> On Thu, 5 May 2016 11:33:13 -0300, Gustavo Zacarias wrote:
- >> 
- >>> Try using BR2_OPTIMIZE_2=y and rebuild everything - the X server is
- >>> notoriously fragile when optimizing for size with certain toolchain
- >>> combinations/architectures.
- >> 
- >> Should we:
- >> 
- >> (1) Switch to -O2 as the default optimization level ?
- >> 
- >> (2) Force -O2 for the X.org server ?
- >> 
- >> Thomas
-
- > Hi.
- > From the little testing i've done it seems that switching the xorg
- > server alone to -O2 is enough.
- > I'm not a fan of "dark magic" scenarios, however it seems to be a
- > recurring problem, at least for ARM & MIPS, doesn't seem to be the
- > case for x86_64.
- > I could make a couple test configs to see on which combinations it's
- > failing by extending the Qemu ones, but it's probably more hassle than
- > anything since there seems to be a wide spectrum of gcc versions
- > affected.
- > Going for -O2 might be the quickest solution, at least for xorg-server
- > itself.
-
-Yes, I agree. Simply forcing -O2 for xorg-server (with a sensible
-comment explaining why) is good enough. People including Xorg are most
-likely not as tight on space that -Os / -O2 matters much.
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 46f34e6..04d5890 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -214,13 +214,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.59"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.67"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.68"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.18.32"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.23"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.8"		if BR2_KERNEL_HEADERS_4_4
+-	default "4.5.2"		if BR2_KERNEL_HEADERS_4_5
++	default "4.4.9"		if BR2_KERNEL_HEADERS_4_4
++	default "4.5.3"		if BR2_KERNEL_HEADERS_4_5
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.7.3
