@@ -1,44 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 May 2016 22:22:56 +0200
-Subject: [Buildroot] [git commit] package/nginx: fix error is nginx.service
-Message-ID: <20160505204505.93445801A2@busybox.osuosl.org>
+Date: Thu, 5 May 2016 22:30:06 +0200
+Subject: [Buildroot] [git commit] package/nginx: add thread pool support
+Message-ID: <20160505204505.CA16C801A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=851376149380a47cc34d34227f7333a576e3cd72
+commit: https://git.buildroot.net/buildroot/commit/?id=2748bc6b6544347c75837205c8537d2321d4393f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-When using systemd nginx fails to start with the error
-
-    /usr/bin/mkdir: invalid option -- 't'
-
-This is due to a missing space before the semicolon in nginx.service.
-For systemd to handle multiple commands in ExecStartPre it requires the
-semicolon to be a separate word or the use of multiple ExecStartPre.
-
-This commit splits the multiple commands into two ExecStartPre lines
-which fixes the error and improves readability.
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nginx/nginx.service | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/nginx/Config.in | 7 +++++++
+ package/nginx/nginx.mk  | 3 ++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/nginx/nginx.service b/package/nginx/nginx.service
-index 619755f..320df9a 100644
---- a/package/nginx/nginx.service
-+++ b/package/nginx/nginx.service
-@@ -5,7 +5,8 @@ After=syslog.target network.target
- [Service]
- Type=forking
- PIDFile=/var/run/nginx.pid
--ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx; /usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
-+ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
-+ExecStartPre=/usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
- ExecStart=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
- ExecReload=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;' -s reload
- ExecStop=/usr/sbin/nginx -g 'pid /var/run/nginx.pid;' -s quit
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index f925cc7..ca3e3eb 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -18,6 +18,13 @@ config BR2_PACKAGE_NGINX_FILE_AIO
+ 	depends on !BR2_aarch64
+ 	depends on !BR2_arc
+ 
++config BR2_PACKAGE_NGINX_THREADS
++	bool "thread pool support"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++
++comment "thread pool support needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+ config BR2_PACKAGE_NGINX_HTTP
+ 	bool "http server"
+ 	default y
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 7f3b075..91772b3 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -64,7 +64,8 @@ NGINX_CONF_OPTS += \
+ 	--http-uwsgi-temp-path=/var/tmp/nginx/uwsgi
+ 
+ NGINX_CONF_OPTS += \
+-	$(if $(BR2_PACKAGE_NGINX_FILE_AIO),--with-file-aio)
++	$(if $(BR2_PACKAGE_NGINX_FILE_AIO),--with-file-aio) \
++	$(if $(BR2_PACKAGE_NGINX_THREADS),--with-threads)
+ 
+ ifeq ($(BR2_PACKAGE_PCRE),y)
+ NGINX_DEPENDENCIES += pcre
