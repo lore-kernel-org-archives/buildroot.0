@@ -1,44 +1,38 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 5 May 2016 17:17:54 +0200
-Subject: [Buildroot] [PATCH v3] barebox: add an option to embed
- environment image
-In-Reply-To: <20160505155645.53ec9414@free-electrons.com>
-References: <1462360499-29955-1-git-send-email-yegorslists@googlemail.com>
- <20160505155645.53ec9414@free-electrons.com>
-Message-ID: <CAGm1_ktZovu04emMf9Xgpm4EadvnVttude3atO98zzii1CEgew@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  5 May 2016 12:30:28 -0300
+Subject: [Buildroot] [PATCH 1/3] configs/freescale_mpc8315erdb: lock down
+	binutils version
+Message-ID: <1462462230-30078-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The used U-Boot version (2014.04) isn't too happy with newer (>= 2.25)
+binutils versions, so keep it locked down until the config is updated
+for a newer version.
+U-Boot 2016.03 in fact does work for mpc8315erdb - however it doesn't
+yet support SPL which is necessary for NAND boot and would be a massive
+defconfig revamp switching to NOR.
 
-On Thu, May 5, 2016 at 3:56 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Wed,  4 May 2016 13:14:59 +0200, yegorslists at googlemail.com wrote:
->
->> +config BR2_TARGET_BAREBOX_AUX_CUSTOM_EMBEDDED_ENV_PATH
->> +     string "Embedded environment path"
->> +     help
->
-> We already have an option BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH, which if
-> I understand correctly, generates a Barebox environment image (but not
-> built into the Barebox binary itself).
->
-> Wouldn't it make more sense to simply add a boolean option that says
-> whether the Barebox environment should be built-in or not? Something
-> like:
->
->         (board/foo/bar/barebox.env) Environment path
->         [*] Embed the environment in the image
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ configs/freescale_mpc8315erdb_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-We've already discussed this. Both images can be useful together.
-Embedded image contains recovery scripts and external image real
-scripts, variables. For example at production stage you don't have
-external image, so embedded one takes care, after production external
-image will be used and so on.
-
-Yegor
+diff --git a/configs/freescale_mpc8315erdb_defconfig b/configs/freescale_mpc8315erdb_defconfig
+index 457736e..b931471 100644
+--- a/configs/freescale_mpc8315erdb_defconfig
++++ b/configs/freescale_mpc8315erdb_defconfig
+@@ -28,6 +28,8 @@ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ 
+ # Bootloader
++# Lock down binutils to <2.25 to avoid U-Boot build failure
++BR2_BINUTILS_VERSION_2_24_X=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="MPC8315ERDB_NAND"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-- 
+2.7.3
