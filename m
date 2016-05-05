@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 May 2016 22:20:45 +0200
-Subject: [Buildroot] [PATCH 1/3] configs/freescale_mpc8315erdb: lock
- down binutils version
-In-Reply-To: <1462462230-30078-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1462462230-30078-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160505222045.0a8356f7@free-electrons.com>
+Date: Thu, 5 May 2016 22:20:53 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.14.x and 4.{4,
+ 5}.x series
+In-Reply-To: <1462474039-13393-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1462474039-13393-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160505222053.536aa3bb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  5 May 2016 12:30:28 -0300, Gustavo Zacarias wrote:
-> The used U-Boot version (2014.04) isn't too happy with newer (>= 2.25)
-> binutils versions, so keep it locked down until the config is updated
-> for a newer version.
-> U-Boot 2016.03 in fact does work for mpc8315erdb - however it doesn't
-> yet support SPL which is necessary for NAND boot and would be a massive
-> defconfig revamp switching to NOR.
-> 
+On Thu,  5 May 2016 15:47:18 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  configs/freescale_mpc8315erdb_defconfig | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/linux-headers/Config.in.host | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-All three applied, thanks!
+Both patches applied, thanks!
 
 Thomas
 -- 
