@@ -1,12 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 May 2016 08:29:49 +0200
-Subject: [Buildroot] [PATCH 2/3] gst1-plugins-bad: remove rtp plugin
-	option
-In-Reply-To: <1462304656-17156-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 3 May 2016 16:44:15 -0300")
-References: <1462304656-17156-1-git-send-email-gustavo@zacarias.com.ar>
- <1462304656-17156-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87d1p1nhk2.fsf@dell.be.48ers.dk>
+Date: Thu, 05 May 2016 08:31:06 +0200
+Subject: [Buildroot] [PATCH v2] gst1-plugins-bad: add rtmp support
+In-Reply-To: <1462305411-30866-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 3 May 2016 16:56:51 -0300")
+References: <1462305411-30866-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <878tzpnhhx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,12 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > The plugin was moved from -bad to -good so remove the option.
- > Support in -good was added via 301e8ffb.
- > Add legacy entry to notify users of this, however we can't automatically
- > select the good variant since good might be disabled.
-
+ > As pointed by sonnex on the mailing list.
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ > v2: fix typo.
+
 
 Committed, thanks.
 
