@@ -1,43 +1,47 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri,  6 May 2016 12:23:32 -0400
+From: Geoff Levand <geoff@infradead.org>
+Date: Fri, 06 May 2016 11:01:42 -0700
 Subject: [Buildroot] [PATCH 1/1] package/go: bump version to 1.6.2
-Message-ID: <1462551812-8952-1-git-send-email-christian@paral.in>
+In-Reply-To: <1462551812-8952-1-git-send-email-christian@paral.in>
+References: <1462551812-8952-1-git-send-email-christian@paral.in>
+Message-ID: <1462557702.27026.27.camel@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Golang has significant improvements to support for multiarch in later
-versions. This bump is required to make many go programs functional
-under arm64, for example.
+On Fri, 2016-05-06 at 12:23 -0400, Christian Stewart wrote:
+> Golang has significant improvements to support for multiarch in later
+> versions. This bump is required to make many go programs functional
+> under arm64, for example.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+MIPS support was added in 1.6.
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index e7c72de..6826891 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  754e06dab1c31ab168fc9db9e32596734015ea9e24bc44cae7f237f417ce4efe  go1.5.3.src.tar.gz
-+sha256 787b0b750d037016a30c6ed05a8a70a91b2e9db4bd9b1a2453aa502a63f1bccc   go1.6.2.src.tar.gz
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 5454fd5..720c75a 100644
+Otherwise, Acked-by: Geoff Levand <geoff@infradead.org>
+
+
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -2,5 +2,5 @@ config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	bool
+ 	default y
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 || BR2_powerpc64 || BR2_powerpc64le
++	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 || BR2_powerpc64 || BR2_powerpc64le || BR2_mips64 || BR2_mips64el
+ 	depends on !BR2_ARM_CPU_ARMV4
+
 --- a/package/go/go.mk
 +++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -30,6 +30,10 @@ else ifeq ($(BR2_powerpc64),y)
+ GO_GOARCH = ppc64
+ else ifeq ($(BR2_powerpc64le),y)
+ GO_GOARCH = ppc64le
++else ifeq ($(BR2_mips64),y)
++GO_GOARCH = mips64
++else ifeq ($(BR2_mips64el),y)
++GO_GOARCH = mips64le
+ endif
  
--GO_VERSION = 1.5.3
-+GO_VERSION = 1.6.2
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+ HOST_GO_DEPENDENCIES = host-go-bootstrap
 -- 
-2.7.3
+2.5.0
