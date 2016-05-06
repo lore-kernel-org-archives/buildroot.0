@@ -1,106 +1,67 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 6 May 2016 14:56:56 +0100
-Subject: [Buildroot] [PATCH 1/2] Revert "toolchain: allow side by side
-	sysroot directories"
+Date: Fri, 6 May 2016 14:56:57 +0100
+Subject: [Buildroot] [PATCH 2/2] toolchain-external.mk: hook for Codescape
+	toolchain side-by-side layout
 In-Reply-To: <1462543017-42054-1-git-send-email-Vincent.Riera@imgtec.com>
 References: <1462543017-42054-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1462543017-42054-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1462543017-42054-3-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 9a1e9efe2618ebbf12ed2567bcd6e8cca5619547.
----
- toolchain/helpers.mk | 59 ++++++++++++++++------------------------------------
- 1 file changed, 18 insertions(+), 41 deletions(-)
+The Codescape toolchain uses a sysroot layout that places them
+side-by-side instead of nested like multilibs. A symlink is needed much
+like for the nested sysroots which are handled in copy_toolchain_sysroot
+but there is not enough information in there to determine whether the
+sysroot layout was nested or side-by-side.
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index d28a2ca..f61f084 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -50,22 +50,10 @@ copy_toolchain_lib_root = \
- # corresponding architecture variants), and we don't want to import
- # them.
- #
--# Then, we need to support two types of multilib toolchains:
-+# Then, if the selected architecture variant is not the default one
-+# (i.e, if SYSROOT_DIR != ARCH_SYSROOT_DIR), then we :
- #
--#  - The toolchains that have nested sysroots: a main sysroot, and
--#    then additional sysroots available as subdirectories of the main
--#    one. This is for example used by Sourcery CodeBench toolchains.
--#
--#  - The toolchains that have side-by-side sysroots. Each sysroot is a
--#    complete one, they simply leave one next to each other. This is
--#    for example used by MIPS Codescape toolchains.
--#
--# So, we first detect if the selected architecture variant is not the
--# default one (i.e, if SYSROOT_DIR != ARCH_SYSROOT_DIR).
--#
--# If we are in the situation of a nested sysroot, we:
--#
--#  * If needed, import the header files from the default architecture
-+#  * Import the header files from the default architecture
- #    variant. Header files are typically shared between the sysroots
- #    for the different architecture variants. If we use the
- #    non-default one, header files were not copied by the previous
-@@ -79,14 +67,10 @@ copy_toolchain_lib_root = \
- #    non-default architecture variant is used. Without this, the
- #    compiler fails to find libraries and headers.
- #
--# If we are in the situation of a side-by-side sysroot, we:
--#
--# * Create a symbolic link
--#
--# Finally, some toolchains (i.e Linaro binary toolchains) store
--# support libraries (libstdc++, libgcc_s) outside of the sysroot, so
--# we simply copy all the libraries from the "support lib directory"
--# into our sysroot.
-+# Some toolchains (i.e Linaro binary toolchains) store support
-+# libraries (libstdc++, libgcc_s) outside of the sysroot, so we simply
-+# copy all the libraries from the "support lib directory" into our
-+# sysroot.
- #
- # Note that the 'locale' directories are not copied. They are huge
- # (400+MB) in CodeSourcery toolchains, and they are not really useful.
-@@ -111,25 +95,18 @@ copy_toolchain_sysroot = \
- 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
- 		fi ; \
- 	done ; \
--	SYSROOT_DIR_CANON=`readlink -f $${SYSROOT_DIR}` ; \
--	ARCH_SYSROOT_DIR_CANON=`readlink -f $${ARCH_SYSROOT_DIR}` ; \
--	if [ $${SYSROOT_DIR_CANON} != $${ARCH_SYSROOT_DIR_CANON} ] ; then \
--		relpath="./" ; \
--		if [ $${ARCH_SYSROOT_DIR_CANON:0:$${\#SYSROOT_DIR_CANON}} == $${SYSROOT_DIR_CANON} ] ; then \
--			if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
--				cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
--			fi ; \
--			mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
--			nbslashs=`printf $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
--			for slash in `seq 1 $${nbslashs}` ; do \
--				relpath=$${relpath}"../" ; \
--			done ; \
--			ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
--			echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
--		elif [ `dirname $${ARCH_SYSROOT_DIR_CANON}` == `dirname $${SYSROOT_DIR_CANON}` ] ; then \
--			ln -snf $${relpath} $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` ; \
--			echo "Symlinking $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` -> $${relpath}" ; \
-+	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
-+		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
-+			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
- 		fi ; \
-+		mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
-+		relpath="./" ; \
-+		nbslashs=`printf $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
-+		for slash in `seq 1 $${nbslashs}` ; do \
-+			relpath=$${relpath}"../" ; \
-+		done ; \
-+		ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
-+		echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
- 	fi ; \
- 	if test -n "$${SUPPORT_LIB_DIR}" ; then \
- 		cp -a $${SUPPORT_LIB_DIR}/* $(STAGING_DIR)/lib/ ; \
+For the above reason plus the fact that this is the only toolchain
+needing this, better to handle that symlink creation using a hook which
+will be executed only when that toolchain is selected.
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 0ca4b91..93cbe7c 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -262,6 +262,18 @@ define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+ 	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
+ endef
+ 
++# The Codescape toolchain uses a sysroot layout that places them
++# side-by-side instead of nested like multilibs. A symlink is needed
++# much like for the nested sysroots which are handled in
++# copy_toolchain_sysroot but there is not enough information in there
++# to determine whether the sysroot layout was nested or side-by-side.
++# Add the symlink here for now.
++define TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_SYMLINK
++	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))"; \
++	ARCH_SUBDIR=`basename $${ARCH_SYSROOT_DIR}`; \
++	ln -snf . $(STAGING_DIR)/$${ARCH_SUBDIR}
++endef
++
+ # Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
+ # sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
+ # -> sbin-<abi> so that the rest of Buildroot can find the toolchain
+@@ -351,11 +363,13 @@ TOOLCHAIN_EXTERNAL_SOURCE = amd-2015.11-139-x86_64-amd-linux-gnu-i686-pc-linux-g
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.10-04
+ TOOLCHAIN_EXTERNAL_SOURCE = Codescape.GNU.Tools.Package.2015.10-04.for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_SYMLINK
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_STAGING_FIXUPS
+ TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.10-04
+ TOOLCHAIN_EXTERNAL_SOURCE = Codescape.GNU.Tools.Package.2015.10-04.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_SYMLINK
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_STAGING_FIXUPS
+ TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX),y)
 -- 
 2.7.3
