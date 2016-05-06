@@ -1,43 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 May 2016 15:48:32 +0200
-Subject: [Buildroot] [PATCH v4] barebox: add an option to embed
- environment image
-In-Reply-To: <1462513564-11289-1-git-send-email-yegorslists@googlemail.com>
-References: <1462513564-11289-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160506154832.1b1e7c88@free-electrons.com>
+Date: Fri, 6 May 2016 15:50:02 +0200
+Subject: [Buildroot] [git commit] xserver_xorg-server: use -O2 build
+	optimization level
+Message-ID: <20160506135113.944BE802FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5500211e201f84b6e2ce0dd5ff3013fb92628860
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  6 May 2016 07:46:04 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Barebox provides an option to embed a custom environment image into
-> barebox binary. This image will be used, when the environment found
-> in the environment sector is invalid. Both embedded and external
-> images can be used together, so having both options at the same
-> time is justified.
-> 
-> This patch sets barebox Kconfig option CONFIG_DEFAULT_ENVIRONMENT_PATH
-> to user specified path. This way one can use such BR's variables like
-> BR2_EXTERNAL, TOPDIR etc. to provide paths to custom environment folders.
-> 
-> Cc: Pieter Smith <pieter@boesman.nl>
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes:
-> 	v4: reword help text (Arnout Vandecappelle)
-> 	    add auxiliary variable holding env path (Arnout Vandecappelle)
-> 	    add notion about having both env images in parallel to commit message (Thomas Petazzoni)
+The xorg server is somewhat sensitive to certain gcc versions combined
+with -Os, particularly for ARM and MIPS, typically in the form of the
+following symptom/error:
 
-Applied to master, thanks a lot!
+(EE) Segmentation fault at address 0x0
+(EE)
+Fatal server error:
+(EE) Caught signal 11 (Segmentation fault). Server aborting
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Force -O2 to work around this problem - for a target rootfs that uses
+X11 the tradeoff is minimal since a sample/test image for qemu vexpress
+with X11 + xinit + xterm + twm + xclock + gtk2 with demos is 60+ MB.
+
+And it's less complicated than trying to find all of the bad
+combinations.
+
+Fixes bug #8436.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Thomas: add comment in .mk file, add reference to bug.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 617bcbc..31f6d0d 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -56,13 +56,16 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ 	mcookie 			\
+ 	host-pkgconf
+ 
++# We force -O2 regardless of the optimization level chosen by the
++# user, as the X.org server is known to trigger some compiler bugs at
++# -Os on several architectures.
+ XSERVER_XORG_SERVER_CONF_OPTS = \
+ 	--disable-config-hal \
+ 	--disable-xnest \
+ 	--disable-xephyr \
+ 	--disable-dmx \
+ 	--with-builder-addr=buildroot at buildroot.org \
+-	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1" \
++	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1 -O2" \
+ 	--with-fontrootdir=/usr/share/fonts/X11/ \
+ 	--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB),en,dis)able-xvfb
+ 
