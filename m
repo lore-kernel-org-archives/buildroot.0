@@ -1,24 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 May 2016 15:54:27 +0200
-Subject: [Buildroot] Anybody with a Cubieboard (original) ?
-Message-ID: <20160506155427.4c0d9dc0@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 6 May 2016 14:56:55 +0100
+Subject: [Buildroot] [PATCH 0/2] Fix Codescape toolchain side by side
+	sysroot issue
+Message-ID: <1462543017-42054-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Currently Codescape toolchains cannot be used to generate a big endian
+root file system because the support for side by side sysroots is not
+complete.
 
-If someone has Cubieboard 1, then it would be very useful if that
-person could look at improving the cubieboard_defconfig to use
-genimage. This would make the defconfig more useful, and also allow us
-to finally fix bug https://bugs.busybox.net/show_bug.cgi?id=8516.
+There is a patch [1] waiting in the queue which fixes the issue for the
+current version of Codescape toolchains we have, but it will not work
+for the next one that is coming. So, instead of messing more with the
+toolchain infra I think it's better to handle these specific Codescape
+toolchain's weirdness in hooks which won't affect others.
 
-Thanks in advance!
+[1]: http://patchwork.ozlabs.org/patch/571708/
 
-Thomas
+Vicente Olivert Riera (2):
+  Revert "toolchain: allow side by side sysroot directories"
+  toolchain-external.mk: hook for Codescape toolchain side-by-side
+    layout
+
+ toolchain/helpers.mk                               | 59 +++++++---------------
+ toolchain/toolchain-external/toolchain-external.mk | 14 +++++
+ 2 files changed, 32 insertions(+), 41 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
