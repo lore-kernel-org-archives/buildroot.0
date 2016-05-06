@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  6 May 2016 08:21:24 +0200
-Subject: [Buildroot] [PATCH 1/3] python-argh: new package
-Message-ID: <1462515686-26545-1-git-send-email-yegorslists@googlemail.com>
+Date: Fri,  6 May 2016 08:21:25 +0200
+Subject: [Buildroot] [PATCH 2/3] python-pathtools: new package
+In-Reply-To: <1462515686-26545-1-git-send-email-yegorslists@googlemail.com>
+References: <1462515686-26545-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1462515686-26545-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,66 +14,67 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                    |  1 +
- package/python-argh/Config.in        |  6 ++++++
- package/python-argh/python-argh.hash |  4 ++++
- package/python-argh/python-argh.mk   | 13 +++++++++++++
- 4 files changed, 24 insertions(+)
- create mode 100644 package/python-argh/Config.in
- create mode 100644 package/python-argh/python-argh.hash
- create mode 100644 package/python-argh/python-argh.mk
+ package/Config.in                              |  1 +
+ package/python-pathtools/Config.in             |  6 ++++++
+ package/python-pathtools/python-pathtools.hash |  4 ++++
+ package/python-pathtools/python-pathtools.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-pathtools/Config.in
+ create mode 100644 package/python-pathtools/python-pathtools.hash
+ create mode 100644 package/python-pathtools/python-pathtools.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9d668bf..e53e9bd 100644
+index e53e9bd..f0d8b72 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -630,6 +630,7 @@ endif
- if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "External python modules"
- 	source "package/python-alsaaudio/Config.in"
-+	source "package/python-argh/Config.in"
- 	source "package/python-autobahn/Config.in"
- 	source "package/python-backports-abc/Config.in"
- 	source "package/python-beautifulsoup4/Config.in"
-diff --git a/package/python-argh/Config.in b/package/python-argh/Config.in
+@@ -693,6 +693,7 @@ menu "External python modules"
+ 	source "package/python-paho-mqtt/Config.in"
+ 	source "package/python-pam/Config.in"
+ 	source "package/python-paramiko/Config.in"
++	source "package/python-pathtools/Config.in"
+ 	source "package/python-pexpect/Config.in"
+ 	source "package/python-posix-ipc/Config.in"
+ 	source "package/python-protobuf/Config.in"
+diff --git a/package/python-pathtools/Config.in b/package/python-pathtools/Config.in
 new file mode 100644
-index 0000000..5da6625
+index 0000000..63777bd
 --- /dev/null
-+++ b/package/python-argh/Config.in
++++ b/package/python-pathtools/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_ARGH
-+	bool "python-argh"
++config BR2_PACKAGE_PYTHON_PATHTOOLS
++	bool "python-pathtools"
 +	help
-+	  An unobtrusive argparse wrapper with natural syntax.
++	  File system general utilities.
 +
-+	  http://github.com/neithere/argh/
-diff --git a/package/python-argh/python-argh.hash b/package/python-argh/python-argh.hash
++	  http://github.com/gorakhargosh/pathtools
+diff --git a/package/python-pathtools/python-pathtools.hash b/package/python-pathtools/python-pathtools.hash
 new file mode 100644
-index 0000000..9e2e068
+index 0000000..1fa624d
 --- /dev/null
-+++ b/package/python-argh/python-argh.hash
++++ b/package/python-pathtools/python-pathtools.hash
 @@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/argh/json
-+md5	5a97ce2ae74bbe3b63194906213f1184  argh-0.26.1.tar.gz
++# md5 from https://pypi.python.org/pypi/pathtools/json
++md5	9a1af5c605768ea5804b03b734ff0f82  pathtools-0.1.2.tar.gz
 +# sha256 calculated by scanpypi
-+sha256	06a7442cb9130fb8806fe336000fcf20edf1f2f8ad205e7b62cec118505510db  argh-0.26.1.tar.gz
-diff --git a/package/python-argh/python-argh.mk b/package/python-argh/python-argh.mk
++sha256	7c35c5421a39bb82e58018febd90e3b6e5db34c5443aaaf742b3f33d4655f1c0  pathtools-0.1.2.tar.gz
+diff --git a/package/python-pathtools/python-pathtools.mk b/package/python-pathtools/python-pathtools.mk
 new file mode 100644
-index 0000000..9e4c09c
+index 0000000..2b4a271
 --- /dev/null
-+++ b/package/python-argh/python-argh.mk
-@@ -0,0 +1,13 @@
++++ b/package/python-pathtools/python-pathtools.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-argh
++# python-pathtools
 +#
 +################################################################################
 +
-+PYTHON_ARGH_VERSION = 0.26.1
-+PYTHON_ARGH_SOURCE = argh-$(PYTHON_ARGH_VERSION).tar.gz
-+PYTHON_ARGH_SITE = https://pypi.python.org/packages/14/7f/794a7f4a48cba505a4b4c714f81fed844a3a5f7340b171f448711439b09e
-+PYTHON_ARGH_SETUP_TYPE = setuptools
-+PYTHON_ARGH_LICENSE = LGPLv3+
++PYTHON_PATHTOOLS_VERSION = 0.1.2
++PYTHON_PATHTOOLS_SOURCE = pathtools-$(PYTHON_PATHTOOLS_VERSION).tar.gz
++PYTHON_PATHTOOLS_SITE = https://pypi.python.org/packages/e7/7f/470d6fcdf23f9f3518f6b0b76be9df16dcc8630ad409947f8be2eb0ed13a
++PYTHON_PATHTOOLS_SETUP_TYPE = setuptools
++PYTHON_PATHTOOLS_LICENSE = MIT
++PYTHON_PATHTOOLS_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
