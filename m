@@ -1,42 +1,80 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 6 May 2016 09:15:10 -0300
-Subject: [Buildroot] [PATCH] xserver_xorg-server: use -O2 build
- optimization level
-In-Reply-To: <20160506084734.56e5caad@gmx.net>
-References: <1462493307-21675-1-git-send-email-gustavo@zacarias.com.ar>
- <20160506084734.56e5caad@gmx.net>
-Message-ID: <572C8ACE.4010307@zacarias.com.ar>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Fri, 6 May 2016 14:17:32 +0200
+Subject: [Buildroot] [dtc] Compiling a .dts overlay
+Message-ID: <CALtfCQZz2htRMAtsGTpehAwshDLeLFfQki1b1UJEW+pVVcR1Aw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/05/16 03:47, Peter Seiderer wrote:
+Hi,
 
-> Thanks for the patch, will surely improve the 'out of the box' usability of buildroot,
-> but I would prefer a 'blacklist' of known failing combinations and simply disable
-> xserver (with comment why) in this case(s), the only know to me is RPi1:
->
->    BR2_ARCH="arm"
->    BR2_GCC_TARGET_CPU="arm1176jzf-s"
->    BR2_OPTIMIZE_S=y
->
-> The perfect solution would be a fix for gcc (and/or xserver)...
->
-> Regards,
-> Peter
+I'm working with the latest stable release: 2016.02 and with the raspberry
+pi 3B.
 
-Hi Peter.
-Isn't that a bit harsh?
-I'm not 100% comfortable with this solution either, however blacklisting 
-xorg will be messy to put it lightly.
-Also finding the failing combinations will not be simple - it seems ARM 
-in general is affected on several toolchain combinations, as is MIPS as 
-well (both tested in Qemu) - so it goes beyond some particular platforms.
-Another alternative could be finding the exact gcc option that's causing 
-it diffing the output of --help=optimizers and trying enabling/disabling 
-one by one until it's fixed or fails since this would probably help 
-pinpoint the precise optimizations that's causing it (which would in 
-turn help in making a minimal test case to help upstream).
-Regards.
+I'm trying to compile my own .dtb overlay, because I need to add the IO
+Expander i2c TCA6424A to my HW. And I would like to know how to do this
+using overlays and device tree.
+
+But I've got this error when I tried to compile de .dts file:
+
+# dtc -I dts -O dtb -o tca6424a-overlay.dtb tca6424a-overlay.dts
+Error: tca6424a-overlay.dts:3.2-8 syntax error
+FATAL ERROR: Unable to parse input tree
+# dtc -v
+Version: DTC 1.4.1-g8ead5b66
+#
+
+This is the .dts file:
+----------
+// Definitions for TCA6424A IO Extender from Texas Instruments
+/dts-v1/;
+/plugin/;
+/ {
+compatible = "brcm,bcm2835", "brcm,bcm2708", "brcm,bcm2709";
+
+fragment at 0 {
+target = <&i2c1>;
+__overlay__ {
+status = "okay";
+};
+};
+
+fragment at 1 {
+target = <&gpio>;
+__overlay__ {
+tca6424_pins: tca6424_pins {
+brcm,pins = <4>;
+brcm,function = <0>;
+};
+};
+};
+
+fragment at 2 {
+target = <&i2c1>;
+__overlay__ {
+#address-cells = <1>;
+#size-cells = <0>;
+tca6424 at 22 {
+compatible = "ti,tca6424";
+reg = <0x22>;
+pinctrl-names = "default";
+pinctrl-0 = <&tca6424_pins>;
+interrupt-parent = <&gpio4>;
+interrupts = <23 IRQ_TYPE_LEVEL_LOW>;
+};
+
+};
+};
+};
+-----------
+
+Anyone could help me how to do this?
+
+Best regards.
+
+Oscar Gomez Fuente.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160506/c24b270d/attachment.html>
