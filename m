@@ -1,80 +1,117 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Fri, 6 May 2016 14:17:32 +0200
-Subject: [Buildroot] [dtc] Compiling a .dts overlay
-Message-ID: <CALtfCQZz2htRMAtsGTpehAwshDLeLFfQki1b1UJEW+pVVcR1Aw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 6 May 2016 15:13:15 +0200
+Subject: [Buildroot] [git commit] board: add a readme for Armadeus boards
+Message-ID: <20160506131332.552818183D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=e994eaeaab348c0a035045acb5fe2e59b5ba4be8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'm working with the latest stable release: 2016.02 and with the raspberry
-pi 3B.
+Common readme.txt for all supported Armadeus boards.
 
-I'm trying to compile my own .dtb overlay, because I need to add the IO
-Expander i2c TCA6424A to my HW. And I would like to know how to do this
-using overlays and device tree.
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+[Thomas: minor tweaks in the readme.txt]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/armadeus/readme.txt | 89 +++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 89 insertions(+)
 
-But I've got this error when I tried to compile de .dts file:
-
-# dtc -I dts -O dtb -o tca6424a-overlay.dtb tca6424a-overlay.dts
-Error: tca6424a-overlay.dts:3.2-8 syntax error
-FATAL ERROR: Unable to parse input tree
-# dtc -v
-Version: DTC 1.4.1-g8ead5b66
-#
-
-This is the .dts file:
-----------
-// Definitions for TCA6424A IO Extender from Texas Instruments
-/dts-v1/;
-/plugin/;
-/ {
-compatible = "brcm,bcm2835", "brcm,bcm2708", "brcm,bcm2709";
-
-fragment at 0 {
-target = <&i2c1>;
-__overlay__ {
-status = "okay";
-};
-};
-
-fragment at 1 {
-target = <&gpio>;
-__overlay__ {
-tca6424_pins: tca6424_pins {
-brcm,pins = <4>;
-brcm,function = <0>;
-};
-};
-};
-
-fragment at 2 {
-target = <&i2c1>;
-__overlay__ {
-#address-cells = <1>;
-#size-cells = <0>;
-tca6424 at 22 {
-compatible = "ti,tca6424";
-reg = <0x22>;
-pinctrl-names = "default";
-pinctrl-0 = <&tca6424_pins>;
-interrupt-parent = <&gpio4>;
-interrupts = <23 IRQ_TYPE_LEVEL_LOW>;
-};
-
-};
-};
-};
------------
-
-Anyone could help me how to do this?
-
-Best regards.
-
-Oscar Gomez Fuente.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160506/c24b270d/attachment.html>
+diff --git a/board/armadeus/readme.txt b/board/armadeus/readme.txt
+new file mode 100644
+index 0000000..a1f1325
+--- /dev/null
++++ b/board/armadeus/readme.txt
+@@ -0,0 +1,89 @@
++Introduction
++============
++
++Armadeus APFxx are Systems On Module (SOM) based on Freescale/NXP i.MX
++processors associated with an FPGA (except on APF28). Non volatile
++data are stored in on-module NOR or NAND Flash, depending on the
++model. These SOM can be used on Armadeus development boards or with
++custom docking boards.
++
++Supported platforms
++===================
++
++Buildroot currently supports the following Armadeus platforms with the
++associated defconfigs:
++
++ * APF9328 SOM + devt boards -> armadeus_apf9328_defconfig
++ * APF27 SOM + devt board    -> armadeus_apf27_defconfig
++ * APF51 SOM + devt board    -> armadeus_apf51_defconfig
++ * APF28 SOM + devt board    -> armadeus_apf28_defconfig
++
++Vanilla Linux versions are preferred to Freescale's one in these
++configurations.
++
++How to build it
++===============
++
++Configure Buildroot
++-------------------
++
++Let's say you own an APFxx SOM with it's corresponding development
++board, all you have to do is:
++
++  $ make armadeus_apfxx_defconfig
++
++where "apfxx" is the version of your SOM.
++
++Launch build
++------------
++
++  $ make
++
++Result of the build
++-------------------
++
++When the build is finished, you will end up with:
++
++    output/images/
++    ????????? imx**-apfxxdev.dtb	[1]
++    ????????? rootfs.jffs2		[2]
++    ????????? rootfs.tar
++    ????????? rootfs.ubi		[2]
++    ????????? rootfs.ubifs		[2]
++    ????????? uImage
++
++[1] Only if the kernel version used uses a Device Tree.
++[2] .ubi/.ubifs images are not available on APF9328 and replaced by a
++    .jffs2 one in this case.
++
++Building U-Boot is currently not supported in these configurations.
++
++Installation
++============
++
++You will require a serial connection to the board and a TFTP server on
++your Host PC. Assuming your server is configured for exporting
++/tftpboot/ directory, you will have to copy the generated images to
++it:
++
++  $ cp output/images/uImage /tftpboot/apfxx-linux.bin
++  $ cp output/images/*.dtb /tftpboot/
++  $ cp output/images/rootfs.ubi /tftpboot/apfxx-rootfs.ubi
++  $ cp output/images/rootfs.jffs2 /tftpboot/apfxx-rootfs.jffs2
++
++where "apfxx" is the version of your SOM, as used with _defconfigs.
++
++Then on your serial terminal, all you have to do is:
++
++* interrupt the boot process and access U-Boot console by pressing any
++  key when booting,
++* configure board and server IP addresses with "ipaddr" and "serverip"
++  environment variables,
++* if you want to update kernel:
++  BIOS > run update_kernel
++* if you want to update device tree:
++  BIOS > run update_dtb
++* if you want to update rootfs:
++  BIOS > run update_rootfs
++
++That's it !
