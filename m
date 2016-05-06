@@ -1,63 +1,65 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 6 May 2016 23:33:56 +0200
-Subject: [Buildroot] [PATCH] xserver_xorg-server: use -O2 build
- optimization level
-In-Reply-To: <572C8ACE.4010307@zacarias.com.ar>
-References: <1462493307-21675-1-git-send-email-gustavo@zacarias.com.ar>
- <20160506084734.56e5caad@gmx.net>
- <572C8ACE.4010307@zacarias.com.ar>
-Message-ID: <20160506233356.18752d8d@gmx.net>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sat,  7 May 2016 01:25:03 +0200
+Subject: [Buildroot] [PATCH] taskd: add patch to fix musl build issue
+Message-ID: <1462577103-7598-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gustavo,
+taskd checks for `get_current_dir_name` but forgets to add a `cmakedefine`
+in cmake.h.in, so `HAVE_GET_CURRENT_DIR_NAME` is always undefined.
 
-On Fri, 6 May 2016 09:15:10 -0300, Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
+CMake detects correctly that the musl C library defines `get_current_dir_name`.
+However, as `HAVE_GET_CURRENT_DIR_NAME` is not set, the block of code evaluated
+cannot be compiled as musl does not define `PATH_MAX`.
 
-> On 06/05/16 03:47, Peter Seiderer wrote:
-> 
-> > Thanks for the patch, will surely improve the 'out of the box' usability of buildroot,
-> > but I would prefer a 'blacklist' of known failing combinations and simply disable
-> > xserver (with comment why) in this case(s), the only know to me is RPi1:
-> >
-> >    BR2_ARCH="arm"
-> >    BR2_GCC_TARGET_CPU="arm1176jzf-s"
-> >    BR2_OPTIMIZE_S=y
-> >
-> > The perfect solution would be a fix for gcc (and/or xserver)...
-> >
-> > Regards,
-> > Peter
-> 
-> Hi Peter.
-> Isn't that a bit harsh?
+Reported upstream:
+https://bug.tasktools.org/browse/TD-120
 
-Ups, sorry, apologize for my wrong/misleading wording, was not meant so...
+Fixes:
+http://autobuild.buildroot.net/results/121/121aa15235e06c80d65428626da5a2da9d11c9ba/
 
-> I'm not 100% comfortable with this solution either, however blacklisting 
-> xorg will be messy to put it lightly.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ ...ing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/taskd/0001-Fix-missing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch
 
-Yes, did not catch it that more than one combination is affected (thought it
-was only RPi1....until sending the first e-mail, and only afterward registered
-the original post was about RPi2...
- 
-> Also finding the failing combinations will not be simple - it seems ARM 
-> in general is affected on several toolchain combinations, as is MIPS as 
-> well (both tested in Qemu) - so it goes beyond some particular platforms.
-
-Mind to share your configs and test commands (specially the MIPS one)?
-
-> Another alternative could be finding the exact gcc option that's causing 
-> it diffing the output of --help=optimizers and trying enabling/disabling 
-> one by one until it's fixed or fails since this would probably help 
-> pinpoint the precise optimizations that's causing it (which would in 
-> turn help in making a minimal test case to help upstream).
-> Regards.
-
-Thanks for the suggestion, will try it with a test case...
-
-Regards,
-Peter
+diff --git a/package/taskd/0001-Fix-missing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch b/package/taskd/0001-Fix-missing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch
+new file mode 100644
+index 0000000..960c71b
+--- /dev/null
++++ b/package/taskd/0001-Fix-missing-cmakedefine-HAVE_GET_CURRENT_DIR_NAME.patch
+@@ -0,0 +1,28 @@
++From b067ab9bf667bb9257bb9eeaa6bf25f9a1a17f06 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Fri, 6 May 2016 23:35:42 +0200
++Subject: [PATCH] Fix missing cmakedefine HAVE_GET_CURRENT_DIR_NAME
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ cmake.h.in | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/cmake.h.in b/cmake.h.in
++index 4124ce9..0b8f9d0 100644
++--- a/cmake.h.in
+++++ b/cmake.h.in
++@@ -51,6 +51,7 @@
++ #cmakedefine HAVE_ST_BIRTHTIME
++ 
++ /* Functions */
+++#cmakedefine HAVE_GET_CURRENT_DIR_NAME
++ #cmakedefine HAVE_TIMEGM
++ #cmakedefine HAVE_UUID_UNPARSE_LOWER
++ 
++-- 
++2.8.2
++
+-- 
+2.8.2
