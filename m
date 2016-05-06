@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  6 May 2016 08:21:25 +0200
-Subject: [Buildroot] [PATCH 2/3] python-pathtools: new package
+Date: Fri,  6 May 2016 08:21:26 +0200
+Subject: [Buildroot] [PATCH 3/3] python-watchdog: new package
 In-Reply-To: <1462515686-26545-1-git-send-email-yegorslists@googlemail.com>
 References: <1462515686-26545-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1462515686-26545-2-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1462515686-26545-3-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,67 +14,70 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                              |  1 +
- package/python-pathtools/Config.in             |  6 ++++++
- package/python-pathtools/python-pathtools.hash |  4 ++++
- package/python-pathtools/python-pathtools.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-pathtools/Config.in
- create mode 100644 package/python-pathtools/python-pathtools.hash
- create mode 100644 package/python-pathtools/python-pathtools.mk
+ package/Config.in                            |  1 +
+ package/python-watchdog/Config.in            |  9 +++++++++
+ package/python-watchdog/python-watchdog.hash |  4 ++++
+ package/python-watchdog/python-watchdog.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/python-watchdog/Config.in
+ create mode 100644 package/python-watchdog/python-watchdog.hash
+ create mode 100644 package/python-watchdog/python-watchdog.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e53e9bd..f0d8b72 100644
+index f0d8b72..0f7997c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -693,6 +693,7 @@ menu "External python modules"
- 	source "package/python-paho-mqtt/Config.in"
- 	source "package/python-pam/Config.in"
- 	source "package/python-paramiko/Config.in"
-+	source "package/python-pathtools/Config.in"
- 	source "package/python-pexpect/Config.in"
- 	source "package/python-posix-ipc/Config.in"
- 	source "package/python-protobuf/Config.in"
-diff --git a/package/python-pathtools/Config.in b/package/python-pathtools/Config.in
+@@ -754,6 +754,7 @@ menu "External python modules"
+ 	source "package/python-urllib3/Config.in"
+ 	source "package/python-urwid/Config.in"
+ 	source "package/python-versiontools/Config.in"
++	source "package/python-watchdog/Config.in"
+ 	source "package/python-web2py/Config.in"
+ 	source "package/python-webpy/Config.in"
+ 	source "package/python-werkzeug/Config.in"
+diff --git a/package/python-watchdog/Config.in b/package/python-watchdog/Config.in
 new file mode 100644
-index 0000000..63777bd
+index 0000000..e529089
 --- /dev/null
-+++ b/package/python-pathtools/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_PATHTOOLS
-+	bool "python-pathtools"
++++ b/package/python-watchdog/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_WATCHDOG
++	bool "python-watchdog"
++	select BR2_PACKAGE_PYTHON_PYYAML
++	select BR2_PACKAGE_PYTHON_ARGH
++	select BR2_PACKAGE_PYTHON_PATHTOOLS
 +	help
-+	  File system general utilities.
++	  Python API and shell utilities to monitor file system events.
 +
-+	  http://github.com/gorakhargosh/pathtools
-diff --git a/package/python-pathtools/python-pathtools.hash b/package/python-pathtools/python-pathtools.hash
++	  http://github.com/gorakhargosh/watchdog
+diff --git a/package/python-watchdog/python-watchdog.hash b/package/python-watchdog/python-watchdog.hash
 new file mode 100644
-index 0000000..1fa624d
+index 0000000..9da2b37
 --- /dev/null
-+++ b/package/python-pathtools/python-pathtools.hash
++++ b/package/python-watchdog/python-watchdog.hash
 @@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/pathtools/json
-+md5	9a1af5c605768ea5804b03b734ff0f82  pathtools-0.1.2.tar.gz
++# md5 from https://pypi.python.org/pypi/watchdog/json
++md5	bb16926bccc98eae2a04535e4512ddf1  watchdog-0.8.3.tar.gz
 +# sha256 calculated by scanpypi
-+sha256	7c35c5421a39bb82e58018febd90e3b6e5db34c5443aaaf742b3f33d4655f1c0  pathtools-0.1.2.tar.gz
-diff --git a/package/python-pathtools/python-pathtools.mk b/package/python-pathtools/python-pathtools.mk
++sha256	7e65882adb7746039b6f3876ee174952f8eaaa34491ba34333ddf1fe35de4162  watchdog-0.8.3.tar.gz
+diff --git a/package/python-watchdog/python-watchdog.mk b/package/python-watchdog/python-watchdog.mk
 new file mode 100644
-index 0000000..2b4a271
+index 0000000..3dd92e3
 --- /dev/null
-+++ b/package/python-pathtools/python-pathtools.mk
++++ b/package/python-watchdog/python-watchdog.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-pathtools
++# python-watchdog
 +#
 +################################################################################
 +
-+PYTHON_PATHTOOLS_VERSION = 0.1.2
-+PYTHON_PATHTOOLS_SOURCE = pathtools-$(PYTHON_PATHTOOLS_VERSION).tar.gz
-+PYTHON_PATHTOOLS_SITE = https://pypi.python.org/packages/e7/7f/470d6fcdf23f9f3518f6b0b76be9df16dcc8630ad409947f8be2eb0ed13a
-+PYTHON_PATHTOOLS_SETUP_TYPE = setuptools
-+PYTHON_PATHTOOLS_LICENSE = MIT
-+PYTHON_PATHTOOLS_LICENSE_FILES = LICENSE
++PYTHON_WATCHDOG_VERSION = 0.8.3
++PYTHON_WATCHDOG_SOURCE = watchdog-$(PYTHON_WATCHDOG_VERSION).tar.gz
++PYTHON_WATCHDOG_SITE = https://pypi.python.org/packages/54/7d/c7c0ad1e32b9f132075967fc353a244eb2b375a3d2f5b0ce612fd96e107e
++PYTHON_WATCHDOG_SETUP_TYPE = setuptools
++PYTHON_WATCHDOG_LICENSE = Apache-2.0
++PYTHON_WATCHDOG_LICENSE_FILES = LICENSE COPYING
 +
 +$(eval $(python-package))
 -- 
