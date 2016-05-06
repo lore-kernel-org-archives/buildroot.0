@@ -1,39 +1,104 @@
-From: Geoff Levand <geoff@infradead.org>
-Date: Fri, 06 May 2016 12:58:55 -0700
-Subject: [Buildroot] [PATCH v3 0/3] Add go language support
-In-Reply-To: <1462564658.27026.31.camel@infradead.org>
-References: <cover.1459798147.git.geoff@infradead.org>
- <20160421224301.6a05f711@free-electrons.com>
- <1461965160.27026.9.camel@infradead.org>
- <20160430140314.4ff30ff1@free-electrons.com>
- <1462074238901-b9436b8a-0eb718e2-8f9a915c@mixmax.com>
- <1462207070.27026.20.camel@infradead.org>
- <20160503090857.23f362ea@free-electrons.com>
- <1462564658.27026.31.camel@infradead.org>
-Message-ID: <1462564735.27026.32.camel@infradead.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 6 May 2016 23:08:28 +0200
+Subject: [Buildroot] [dtc] Compiling a .dts overlay
+In-Reply-To: <CALtfCQZz2htRMAtsGTpehAwshDLeLFfQki1b1UJEW+pVVcR1Aw@mail.gmail.com>
+References: <CALtfCQZz2htRMAtsGTpehAwshDLeLFfQki1b1UJEW+pVVcR1Aw@mail.gmail.com>
+Message-ID: <20160506230828.71dddb88@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2016-05-06 at 12:57 -0700, Geoff Levand wrote:
-> On Tue, 2016-05-03 at 09:08 +0200, Thomas Petazzoni wrote:
-> > On Mon, 02 May 2016 09:37:50 -0700, Geoff Levand wrote:
-> > 
-> > > I have the patch below that adds BR2_TOOLCHAIN_HAS_THREADS.  Is
-> > > it enough to pull in the toolchain?
-> > 
-> > No, adding dependencies at the Config.in level doesn't change
-> > anything
-> > in terms of build order.
-> 
-> It seems one of these in go-bootstrap.mk should work, is either
-> one prefered?
-> 
->  +HOST_GO_BOOTSTRAP_DEPENDENCIES = host-go-bootstrap
+Hello Oscar,
 
-+HOST_GO_BOOTSTRAP_DEPENDENCIES = host-toolchain
+On Fri, 6 May 2016 14:17:32 +0200, Oscar Gomez Fuente <oscargomezf@gmail.com> wrote:
 
+> Hi,
 > 
->  +HOST_GO_BOOTSTRAP_ADD_TOOLCHAIN_DEPENDENCY = YES
+> I'm working with the latest stable release: 2016.02 and with the raspberry
+> pi 3B.
+> 
+> I'm trying to compile my own .dtb overlay, because I need to add the IO
+> Expander i2c TCA6424A to my HW. And I would like to know how to do this
+> using overlays and device tree.
+> 
+> But I've got this error when I tried to compile de .dts file:
+> 
+> # dtc -I dts -O dtb -o tca6424a-overlay.dtb tca6424a-overlay.dts
+> Error: tca6424a-overlay.dts:3.2-8 syntax error
+> FATAL ERROR: Unable to parse input tree
+> # dtc -v
+> Version: DTC 1.4.1-g8ead5b66
+> #
+> 
+
+You need to use a overlay enhanced dtc e.g. the one provided with the
+Raspberry Pi linux kernel:
+
+./build/linux-9118192d7357b0942885c2c8baf65d5501c12913/scripts/dtc/dtc --version
+Version: DTC 1.4.1-g25efc119
+
+./build/linux-9118192d7357b0942885c2c8baf65d5501c12913/scripts/dtc/dtc -@ -I dts -O dtb -o -o tca6424a-overlay.dtb tca6424a-overlay.dts
+
+Not sure if the '-@' is still needed. Only one change needed for your example, see below...
+
+> This is the .dts file:
+> ----------
+> // Definitions for TCA6424A IO Extender from Texas Instruments
+> /dts-v1/;
+> /plugin/;
+> / {
+> compatible = "brcm,bcm2835", "brcm,bcm2708", "brcm,bcm2709";
+> 
+> fragment at 0 {
+> target = <&i2c1>;
+> __overlay__ {
+> status = "okay";
+> };
+> };
+> 
+> fragment at 1 {
+> target = <&gpio>;
+> __overlay__ {
+> tca6424_pins: tca6424_pins {
+> brcm,pins = <4>;
+> brcm,function = <0>;
+> };
+> };
+> };
+> 
+> fragment at 2 {
+> target = <&i2c1>;
+> __overlay__ {
+> #address-cells = <1>;
+> #size-cells = <0>;
+> tca6424 at 22 {
+> compatible = "ti,tca6424";
+> reg = <0x22>;
+> pinctrl-names = "default";
+> pinctrl-0 = <&tca6424_pins>;
+> interrupt-parent = <&gpio4>;
+> interrupts = <23 IRQ_TYPE_LEVEL_LOW>;
+
+Changed to:
+
+interrupts = <23 2>;
+
+Seems no constants supported (or missing include) and '2' was just some guess...
+
+Regards,
+Peter
+
+> };
+> 
+> };
+> };
+> };
+> -----------
+> 
+> Anyone could help me how to do this?
+> 
+> Best regards.
+> 
+> Oscar Gomez Fuente.
