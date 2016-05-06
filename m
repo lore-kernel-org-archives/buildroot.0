@@ -1,50 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 May 2016 15:29:07 +0200
-Subject: [Buildroot] [git commit] python-cffi: bump to version 1.6.0
-Message-ID: <20160506132916.811D67FED2@busybox.osuosl.org>
+Date: Fri, 6 May 2016 15:29:06 +0200
+Subject: [Buildroot] [git commit] python-twisted: bump to version 16.1.1
+Message-ID: <20160506132916.70E418180F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17e85d938353639b60c830ea1f89bc4881157256
+commit: https://git.buildroot.net/buildroot/commit/?id=b607f0cc6a16c95cb38bf97d3737db97fc1312cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Change download location.
+Add upstream md5 checksum.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-cffi/python-cffi.hash | 6 +++---
- package/python-cffi/python-cffi.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-twisted/python-twisted.hash | 5 +++--
+ package/python-twisted/python-twisted.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
-index 52f5198..125c93e 100644
---- a/package/python-cffi/python-cffi.hash
-+++ b/package/python-cffi/python-cffi.hash
-@@ -1,4 +1,4 @@
--# From https://pypi.python.org/pypi?:action=show_md5&digest=fa766133f7299464c8bf857e0c966a82
--md5  fa766133f7299464c8bf857e0c966a82  cffi-1.5.2.tar.gz
-+# From https://pypi.python.org/pypi?:action=show_md5&digest=2fae9160991afefb20ff0fbde3b14faf
-+md5  2fae9160991afefb20ff0fbde3b14faf  cffi-1.6.0.tar.gz
- # Calculated based on the hash above
--sha256	 da9bde99872e46f7bb5cff40a9b1cc08406765efafb583c704de108b6cb821dd  cffi-1.5.2.tar.gz
-+sha256	 a7f75c4ef2362c0a0e54657add0a6c509fecbfa3b3807bc0925f5cb1c9f927db  cffi-1.6.0.tar.gz
-diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
-index 2b35832..3c2d534 100644
---- a/package/python-cffi/python-cffi.mk
-+++ b/package/python-cffi/python-cffi.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
+index 9a9436f..275cea8 100644
+--- a/package/python-twisted/python-twisted.hash
++++ b/package/python-twisted/python-twisted.hash
+@@ -1,2 +1,3 @@
+-# Locally computed:
+-sha256  a8046804a0dfae090234bbb90fc560a6cc11a208b3d048b55244c79c1945c17f  Twisted-15.5.0.tar.bz2
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=266a085f5ce3fbc060818bd00bd6a888, sha256 locally computed
++md5     266a085f5ce3fbc060818bd00bd6a888 Twisted-16.1.1.tar.bz2
++sha256  fe7d001d9a803ed26cd0fd2f69fa4212ff025f3af6ef1a559d905fe551ab04e9  Twisted-16.1.1.tar.bz2
+diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
+index 29fd510..e98e03f 100644
+--- a/package/python-twisted/python-twisted.mk
++++ b/package/python-twisted/python-twisted.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CFFI_VERSION = 1.5.2
-+PYTHON_CFFI_VERSION = 1.6.0
- PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
--PYTHON_CFFI_SITE = https://pypi.python.org/packages/source/c/cffi
-+PYTHON_CFFI_SITE = https://pypi.python.org/packages/b6/98/11feff87072e2e640fb8320712b781eccdef05d588618915236b32289d5a
- PYTHON_CFFI_SETUP_TYPE = setuptools
- PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
- PYTHON_CFFI_LICENSE = MIT
+-PYTHON_TWISTED_VERSION = 15.5.0
++PYTHON_TWISTED_VERSION = 16.1.1
+ PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.bz2
+ PYTHON_TWISTED_SITE = https://pypi.python.org/packages/source/T/Twisted
+ PYTHON_TWISTED_SETUP_TYPE = setuptools
