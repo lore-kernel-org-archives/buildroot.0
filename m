@@ -1,96 +1,63 @@
-From: Nicholas Walton <nicholas.walton@gmail.com>
-Date: Fri, 6 May 2016 14:20:46 -0700
-Subject: [Buildroot] [dtc] Compiling a .dts overlay
-In-Reply-To: <CALtfCQZz2htRMAtsGTpehAwshDLeLFfQki1b1UJEW+pVVcR1Aw@mail.gmail.com>
-References: <CALtfCQZz2htRMAtsGTpehAwshDLeLFfQki1b1UJEW+pVVcR1Aw@mail.gmail.com>
-Message-ID: <CAKXOQBxS0OTJC4o_UKM2GS+DZmydXbk2-H3zhd9Gas7ivH2JEA@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 6 May 2016 23:33:56 +0200
+Subject: [Buildroot] [PATCH] xserver_xorg-server: use -O2 build
+ optimization level
+In-Reply-To: <572C8ACE.4010307@zacarias.com.ar>
+References: <1462493307-21675-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160506084734.56e5caad@gmx.net>
+ <572C8ACE.4010307@zacarias.com.ar>
+Message-ID: <20160506233356.18752d8d@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Plugin overlays are not part of mainline dtc. Try
-https://git.kernel.org/cgit/utils/dtc/dtc.git and the instructions at
-https://learn.adafruit.com/introduction-to-the-beaglebone-black-device-tree/compiling-an-overlay
-.
+Hello Gustavo,
 
-On Fri, May 6, 2016 at 5:17 AM, Oscar Gomez Fuente <oscargomezf@gmail.com>
-wrote:
+On Fri, 6 May 2016 09:15:10 -0300, Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
 
-> Hi,
->
-> I'm working with the latest stable release: 2016.02 and with the raspberry
-> pi 3B.
->
-> I'm trying to compile my own .dtb overlay, because I need to add the IO
-> Expander i2c TCA6424A to my HW. And I would like to know how to do this
-> using overlays and device tree.
->
-> But I've got this error when I tried to compile de .dts file:
->
-> # dtc -I dts -O dtb -o tca6424a-overlay.dtb tca6424a-overlay.dts
-> Error: tca6424a-overlay.dts:3.2-8 syntax error
-> FATAL ERROR: Unable to parse input tree
-> # dtc -v
-> Version: DTC 1.4.1-g8ead5b66
-> #
->
-> This is the .dts file:
-> ----------
-> // Definitions for TCA6424A IO Extender from Texas Instruments
-> /dts-v1/;
-> /plugin/;
-> / {
-> compatible = "brcm,bcm2835", "brcm,bcm2708", "brcm,bcm2709";
->
-> fragment at 0 {
-> target = <&i2c1>;
-> __overlay__ {
-> status = "okay";
-> };
-> };
->
-> fragment at 1 {
-> target = <&gpio>;
-> __overlay__ {
-> tca6424_pins: tca6424_pins {
-> brcm,pins = <4>;
-> brcm,function = <0>;
-> };
-> };
-> };
->
-> fragment at 2 {
-> target = <&i2c1>;
-> __overlay__ {
-> #address-cells = <1>;
-> #size-cells = <0>;
-> tca6424 at 22 {
-> compatible = "ti,tca6424";
-> reg = <0x22>;
-> pinctrl-names = "default";
-> pinctrl-0 = <&tca6424_pins>;
-> interrupt-parent = <&gpio4>;
-> interrupts = <23 IRQ_TYPE_LEVEL_LOW>;
-> };
->
-> };
-> };
-> };
-> -----------
->
-> Anyone could help me how to do this?
->
-> Best regards.
->
-> Oscar Gomez Fuente.
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160506/2456c74d/attachment.html>
+> On 06/05/16 03:47, Peter Seiderer wrote:
+> 
+> > Thanks for the patch, will surely improve the 'out of the box' usability of buildroot,
+> > but I would prefer a 'blacklist' of known failing combinations and simply disable
+> > xserver (with comment why) in this case(s), the only know to me is RPi1:
+> >
+> >    BR2_ARCH="arm"
+> >    BR2_GCC_TARGET_CPU="arm1176jzf-s"
+> >    BR2_OPTIMIZE_S=y
+> >
+> > The perfect solution would be a fix for gcc (and/or xserver)...
+> >
+> > Regards,
+> > Peter
+> 
+> Hi Peter.
+> Isn't that a bit harsh?
+
+Ups, sorry, apologize for my wrong/misleading wording, was not meant so...
+
+> I'm not 100% comfortable with this solution either, however blacklisting 
+> xorg will be messy to put it lightly.
+
+Yes, did not catch it that more than one combination is affected (thought it
+was only RPi1....until sending the first e-mail, and only afterward registered
+the original post was about RPi2...
+ 
+> Also finding the failing combinations will not be simple - it seems ARM 
+> in general is affected on several toolchain combinations, as is MIPS as 
+> well (both tested in Qemu) - so it goes beyond some particular platforms.
+
+Mind to share your configs and test commands (specially the MIPS one)?
+
+> Another alternative could be finding the exact gcc option that's causing 
+> it diffing the output of --help=optimizers and trying enabling/disabling 
+> one by one until it's fixed or fails since this would probably help 
+> pinpoint the precise optimizations that's causing it (which would in 
+> turn help in making a minimal test case to help upstream).
+> Regards.
+
+Thanks for the suggestion, will try it with a test case...
+
+Regards,
+Peter
