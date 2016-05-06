@@ -1,99 +1,49 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri,  6 May 2016 08:59:13 -0300
-Subject: [Buildroot] [PATCH v2 1/1] uboot-tools: add missing dependency on
-	host-dtc for the host package
-In-Reply-To: <1462372709-24828-1-git-send-email-casantos@datacom.ind.br>
+Date: Fri, 6 May 2016 09:02:40 -0300 (BRT)
+Subject: [Buildroot] [PATCH 1/1] uboot-tools: add missing dependency on
+ host-dtc for the host package
+In-Reply-To: <20160505214432.GC4367@free.fr>
 References: <1462372709-24828-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <1462535953-4427-1-git-send-email-casantos@datacom.ind.br>
+ <20160505220901.4db9e9a2@free-electrons.com>
+ <1040860357.13861098.1462480371842.JavaMail.zimbra@datacom.ind.br>
+ <20160505212716.GA4367@free.fr> <20160505233851.26f9854f@free-electrons.com>
+ <20160505214432.GC4367@free.fr>
+Message-ID: <897552526.13921419.1462536160384.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The mkimage utility needs dtc when support for Flat Image Trees (FIT)
-is enabled. If dtc is not available mkimage may fail. Example:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> To: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> Cc: "Carlos Santos" <casantos@datacom.ind.br>, buildroot at buildroot.org, "Arnout Vandecappelle" <arnout@mind.be>, "Peter
+> Korsgaard" <peter@korsgaard.com>
+> Sent: Thursday, May 5, 2016 6:44:32 PM
+> Subject: Re: [Buildroot] [PATCH 1/1] uboot-tools: add missing dependency on host-dtc for the host package
 
-    $ mkimage -f firmware.its firmware.im
-    sh: dtc: command not found
+> Thomas, All,
+> 
+> On 2016-05-05 23:38 +0200, Thomas Petazzoni spake thusly:
+>> On Thu, 5 May 2016 23:27:16 +0200, Yann E. MORIN wrote:
+>> > However, given how pervasive DTC is becoming, I think it would kinda
+>> > make sense to have a mkimage that supports DT every time (I hope that
+>> > adding DT support to mkimage does not remove functionality, does it?)
+>> 
+>> Read again in which cases mkimage needs host-dtc. It is *NOT* related
+>> to Device Tree at all. It is related to the FIT image format, which
+>> happens to rely on the Device Tree syntax and compiler, but has
+>> *nothing* to do with the Device Tree being used by the kernel to get a
+>> description of the HW.
+> 
+> Oh, OK.
+> 
+> /me unconsciously associated dtc with generating DTB. But if it can be
+> used for other things as well...
+> 
+> Then option 2 is the best solution IMHO.
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- package/uboot-tools/Config.in      | 16 +++++++++++++---
- package/uboot-tools/Config.in.host |  1 +
- package/uboot-tools/uboot-tools.mk |  5 +++++
- 3 files changed, 19 insertions(+), 3 deletions(-)
+Done (see patch v2).
 
-diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-index aca310b..4622f6b 100644
---- a/package/uboot-tools/Config.in
-+++ b/package/uboot-tools/Config.in
-@@ -13,10 +13,22 @@ config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
- 	  The mkimage tool from Das U-Boot bootloader, which allows
- 	  generation of U-Boot images in various formats.
- 
--if BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
-+config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SUPPORT
-+	bool "Flat Image Trees (FIT) support"
-+	depends on BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
-+	select BR2_PACKAGE_HOST_DTC
-+	help
-+	  Enables support for FIT Signature Verification.
-+
-+	  This option allows to boot the new uImage structrure,
-+	  Flattened Image Tree.  FIT is formally a FDT, which can include
-+	  images of various types (kernel, FDT blob, ramdisk, etc.)
-+	  in a single blob.  To boot this new uImage structure,
-+	  pass the address of the blob to the "bootm" command.
- 
- config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT
- 	bool "FIT signature verification support"
-+	depends on BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SUPPORT
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Enables support for FIT Signature Verification.
-@@ -36,8 +48,6 @@ config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT
- 	  libcrypto, and possibly GPL/OpenSSL licensing
- 	  incompatibility issues.
- 
--endif
--
- config BR2_PACKAGE_UBOOT_TOOLS_MKENVIMAGE
- 	bool "mkenvimage"
- 	help
-diff --git a/package/uboot-tools/Config.in.host b/package/uboot-tools/Config.in.host
-index b5a42d9..5c44eaf 100644
---- a/package/uboot-tools/Config.in.host
-+++ b/package/uboot-tools/Config.in.host
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_HOST_UBOOT_TOOLS
- 	bool "host u-boot tools"
-+	select BR2_PACKAGE_HOST_DTC
- 	help
- 	  Companion tools for Das U-Boot bootloader.
- 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index f47b3db..9bb2b54 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -65,6 +65,10 @@ define UBOOT_TOOLS_INSTALL_TARGET_CMDS
- 	$(UBOOT_TOOLS_INSTALL_DUMPIMAGE)
- endef
- 
-+ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),y)
-+HOST_UBOOT_TOOLS_DEPENDENCIES += host-dtc
-+endif
-+
- ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
- HOST_UBOOT_TOOLS_DEPENDENCIES += host-openssl
- endif
-@@ -76,6 +80,7 @@ endef
- 
- define HOST_UBOOT_TOOLS_BUILD_CMDS
- 	$(MAKE1) -C $(@D) 			\
-+		CONFIG_FIT=$(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SUPPORT) \
- 		CONFIG_FIT_SIGNATURE=$(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT) \
- 		HOSTCC="$(HOSTCC)"		\
- 		HOSTCFLAGS="$(HOST_CFLAGS)"	\
--- 
-2.5.5
+Carlos Santos (Casantos)
+DATACOM, P&D
