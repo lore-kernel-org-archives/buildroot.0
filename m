@@ -1,67 +1,88 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Fri, 06 May 2016 18:13:25 +0000
-Subject: [Buildroot] [PATCH v4] barebox: add an option to embed
- environment image
-In-Reply-To: <20160506154832.1b1e7c88@free-electrons.com>
-References: <1462513564-11289-1-git-send-email-yegorslists@googlemail.com>
- <20160506154832.1b1e7c88@free-electrons.com>
-Message-ID: <CAPho-_KS4H7u2t4PQhdMn6rC0uPucXnY21SozrrD03RoTKyDew@mail.gmail.com>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Fri,  6 May 2016 14:30:18 -0400
+Subject: [Buildroot] [PATCH 1/2] bluez5_utils: bump to version 5.39
+Message-ID: <1462559419-20212-1-git-send-email-mike@mikebwilliams.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+Drop upstreamed patch
 
-On Fri, 6 May 2016, 15:48 Thomas Petazzoni, <
-thomas.petazzoni@free-electrons.com> wrote:
+Signed-off-by: Mike Williams <mike@mikebwilliams.com>
+---
+ .../0001-tools-avinfo-Fix-big-endian-build.patch   | 39 ----------------------
+ package/bluez5_utils/bluez5_utils.hash             |  2 +-
+ package/bluez5_utils/bluez5_utils.mk               |  2 +-
+ 3 files changed, 2 insertions(+), 41 deletions(-)
+ delete mode 100644 package/bluez5_utils/0001-tools-avinfo-Fix-big-endian-build.patch
 
-> Hello,
->
-> On Fri,  6 May 2016 07:46:04 +0200, yegorslists at googlemail.com wrote:
-> > From: Yegor Yefremov <yegorslists@googlemail.com>
-> >
-> > Barebox provides an option to embed a custom environment image into
-> > barebox binary. This image will be used, when the environment found
-> > in the environment sector is invalid. Both embedded and external
-> > images can be used together, so having both options at the same
-> > time is justified.
-> >
-> > This patch sets barebox Kconfig option CONFIG_DEFAULT_ENVIRONMENT_PATH
-> > to user specified path. This way one can use such BR's variables like
-> > BR2_EXTERNAL, TOPDIR etc. to provide paths to custom environment folders.
->
-
-Nice work. Sorry for being too busy to keep up with the conversation.
-
->
-> > Cc: Pieter Smith <pieter@boesman.nl>
-> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> > ---
-> > Changes:
-> >       v4: reword help text (Arnout Vandecappelle)
-> >           add auxiliary variable holding env path (Arnout Vandecappelle)
-> >           add notion about having both env images in parallel to commit
-> message (Thomas Petazzoni)
->
-> Applied to master, thanks a lot!
->
-
-Thanks Thomas. I really need this too.
-
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-
-- Pieter
-
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160506/f4a2074c/attachment.html>
+diff --git a/package/bluez5_utils/0001-tools-avinfo-Fix-big-endian-build.patch b/package/bluez5_utils/0001-tools-avinfo-Fix-big-endian-build.patch
+deleted file mode 100644
+index 06c368d..0000000
+--- a/package/bluez5_utils/0001-tools-avinfo-Fix-big-endian-build.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 01d85fdf6a45150e82143803be3373d779d18522 Mon Sep 17 00:00:00 2001
+-From: John Keeping <john@metanate.com>
+-Date: Wed, 24 Feb 2016 13:57:38 +0000
+-Subject: [PATCH] tools/avinfo: Fix big endian build
+-
+-Commit 101b439 (tools/avinfo: Add partial support for Sony LDAC) added a
+-new a2dp_ldac_t structure but only inside a little endian ifdef.  Add
+-the same structure in the big endian code.
+-
+-The structure definition doesn't differ for the big/little endian cases
+-but if the unknown fields are discovered in the future it might, so a
+-copy is added rather than pulling the existing definition below the
+-endif.
+-
+-[John: backport from upstream commit 01d85fdf6a45150e82143803be3373d779d18522.]
+-Signed-off-by: John Keeping <john@metanate.com>
+----
+- profiles/audio/a2dp-codecs.h | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/profiles/audio/a2dp-codecs.h b/profiles/audio/a2dp-codecs.h
+-index e9da0bf..4fb5c0c 100644
+---- a/profiles/audio/a2dp-codecs.h
+-+++ b/profiles/audio/a2dp-codecs.h
+-@@ -234,6 +234,11 @@ typedef struct {
+- 	uint8_t channel_mode:4;
+- } __attribute__ ((packed)) a2dp_aptx_t;
+- 
+-+typedef struct {
+-+	a2dp_vendor_codec_t info;
+-+	uint8_t unknown[2];
+-+} __attribute__ ((packed)) a2dp_ldac_t;
+-+
+- #else
+- #error "Unknown byte order"
+- #endif
+--- 
+-2.7.0.226.gfe986fe
+-
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index 75c53b3..cbb3aa3 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256  c14ba9ddcb0055522073477b8fd8bf1ddf5d219e75fdfd4699b7e0ce5350d6b0    bluez-5.37.tar.xz
++sha256  21d1bc9150d3576296595217efb98a746b592389d25d5637e8bee5da7272593b    bluez-5.39.tar.xz
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 1308e4e..0a76738 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BLUEZ5_UTILS_VERSION = 5.37
++BLUEZ5_UTILS_VERSION = 5.39
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
+-- 
+2.5.0
