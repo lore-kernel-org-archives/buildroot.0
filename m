@@ -1,50 +1,61 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  6 May 2016 10:35:46 +0200
-Subject: [Buildroot] [PATCH] python-cffi: bump to version 1.6.0
-Message-ID: <1462523746-3040-1-git-send-email-yegorslists@googlemail.com>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Fri, 06 May 2016 12:13:03 +0200
+Subject: [Buildroot] [PATCH] configs: freescale_imx6ulevk_defconfig: Add
+ alsa-utils
+In-Reply-To: <1462492045-21257-1-git-send-email-festevam@gmail.com>
+References: <1462492045-21257-1-git-send-email-festevam@gmail.com>
+Message-ID: <572C6E2F.1070703@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello Fabio,
 
-Change download location.
+On 06/05/2016 01:47, Fabio Estevam wrote:
+> From: Fabio Estevam <fabio.estevam@nxp.com>
+>
+> Add support for alsa-utils.
+>
+> Also select BR2_TOOLCHAIN_BUILDROOT_WCHAR as this is a requirement
+> for alsamixer.
+>
+> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+> ---
+>  configs/freescale_imx6ulevk_defconfig | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
+> index b8a1f86..8f36971 100644
+> --- a/configs/freescale_imx6ulevk_defconfig
+> +++ b/configs/freescale_imx6ulevk_defconfig
+> @@ -6,6 +6,7 @@ BR2_cortex_a7=y
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+>  
+>  # system
+> +BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+>  BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+>  
+>  # kernel
+> @@ -31,5 +32,10 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+>  BR2_PACKAGE_HOST_MTOOLS=y
+>  
+>  # filesystem / image
+> +BR2_PACKAGE_ALSA_UTILS=y
+> +BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
+> +BR2_PACKAGE_ALSA_UTILS_APLAY=y
+> +BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
+> +BR2_TARGET_ROOTFS_EXT2=y
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-cffi/python-cffi.hash | 6 +++---
- package/python-cffi/python-cffi.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+I think this one can be removed because it's already defined 2 lines below:
 
-diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
-index 52f5198..125c93e 100644
---- a/package/python-cffi/python-cffi.hash
-+++ b/package/python-cffi/python-cffi.hash
-@@ -1,4 +1,4 @@
--# From https://pypi.python.org/pypi?:action=show_md5&digest=fa766133f7299464c8bf857e0c966a82
--md5  fa766133f7299464c8bf857e0c966a82  cffi-1.5.2.tar.gz
-+# From https://pypi.python.org/pypi?:action=show_md5&digest=2fae9160991afefb20ff0fbde3b14faf
-+md5  2fae9160991afefb20ff0fbde3b14faf  cffi-1.6.0.tar.gz
- # Calculated based on the hash above
--sha256	 da9bde99872e46f7bb5cff40a9b1cc08406765efafb583c704de108b6cb821dd  cffi-1.5.2.tar.gz
-+sha256	 a7f75c4ef2362c0a0e54657add0a6c509fecbfa3b3807bc0925f5cb1c9f927db  cffi-1.6.0.tar.gz
-diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
-index 2b35832..3c2d534 100644
---- a/package/python-cffi/python-cffi.mk
-+++ b/package/python-cffi/python-cffi.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CFFI_VERSION = 1.5.2
-+PYTHON_CFFI_VERSION = 1.6.0
- PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
--PYTHON_CFFI_SITE = https://pypi.python.org/packages/source/c/cffi
-+PYTHON_CFFI_SITE = https://pypi.python.org/packages/b6/98/11feff87072e2e640fb8320712b781eccdef05d588618915236b32289d5a
- PYTHON_CFFI_SETUP_TYPE = setuptools
- PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
- PYTHON_CFFI_LICENSE = MIT
--- 
-2.8.1
+>  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/imx6ulevk/post-image.sh"
+>  BR2_TARGET_ROOTFS_EXT2=y						<<<<<<<<<<<<<<
+
+Thomas will confirm but, IIRC, Buildroot mainlined defconfigs only
+define the mininal options to boot the boards and then it's up to the
+user to choose the packages it needs.
+
+Best regards,
+Julien
