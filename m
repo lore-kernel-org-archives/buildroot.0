@@ -1,81 +1,78 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 6 May 2016 08:20:55 +0200
-Subject: [Buildroot] Xorg crash
-In-Reply-To: <1274ad69-0abb-26b0-b623-67de78c0274f@brickedbrain.com>
-References: <1274ad69-0abb-26b0-b623-67de78c0274f@brickedbrain.com>
-Message-ID: <20160506082055.1bfeec8e@gmx.net>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri,  6 May 2016 08:21:24 +0200
+Subject: [Buildroot] [PATCH 1/3] python-argh: new package
+Message-ID: <1462515686-26545-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Luca,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Thu, 5 May 2016 16:19:29 +0200, Luca Ellero <luca.ellero@brickedbrain.com> wrote:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                    |  1 +
+ package/python-argh/Config.in        |  6 ++++++
+ package/python-argh/python-argh.hash |  4 ++++
+ package/python-argh/python-argh.mk   | 13 +++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-argh/Config.in
+ create mode 100644 package/python-argh/python-argh.hash
+ create mode 100644 package/python-argh/python-argh.mk
 
-> Hi,
-> I'm trying to get a minimal Xorg with Buildroot 2016.02 on Raspberry Pi 
-> 2, but the Xserver crashes as soon I launch dillo web-browser.
-> I get the same crash if I launch fluxbox (or openbox or matchbox).
-> I tried even on a iMX6 custom board but the same problem happens.
-> The strange thing is that if I use only xterm and twm everything works 
-> correctly.
-> 
-> I configured the system with:
-> 
-> - Modular X.org (but same problem with KDrive/TinyX)
-> - xf86-input-evdev
-> - xf86-video-fbdev
-> - twm
-> - xterm
-> - dillo
-> 
-> When I launch X with the following
-> 
-> # X :0 &
-> # export DISPLAY=:0
-> # twm &
-> # xterm &
-> 
-> Xorg, twm and xterm are working fine.
-> 
-> But with this:
-> 
-> # X :0 &
-> # export DISPLAY=:0
-> # dillo &
-> 
-> I get:
-> 
-> (EE) Segmentation fault at address 0x0
-> (EE) Fatal server error:
-> (EE) Caught signal 11 (Segmentation fault). Server aborting
-> (EE)
-> (EE) Please consult the The X.Org Foundation support
-> 	 at http://wiki.x.org for help.
-> (EE) Please also check the log file at "/var/log/Xorg.0.log" for 
-> additional information.
-> (EE)
-> (EE) Server terminated with error (1). Closing log file.
-> 
-> In attachment you can find the Xorg log and configuration file.
-> Could someone please explain me what is going wrong.
-> 
-
-Known bug with gcc/xserver when compiled with '-Os', see [1] for the gcc bug report...
-
-Try to build with other buildroot optimization option e.g. -O2/-O3...
-
-Regards,
-Peter
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63346
-
-
-> Thanks
-> Regards
-> Luca
-> 
-> 
-> 
+diff --git a/package/Config.in b/package/Config.in
+index 9d668bf..e53e9bd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -630,6 +630,7 @@ endif
+ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ menu "External python modules"
+ 	source "package/python-alsaaudio/Config.in"
++	source "package/python-argh/Config.in"
+ 	source "package/python-autobahn/Config.in"
+ 	source "package/python-backports-abc/Config.in"
+ 	source "package/python-beautifulsoup4/Config.in"
+diff --git a/package/python-argh/Config.in b/package/python-argh/Config.in
+new file mode 100644
+index 0000000..5da6625
+--- /dev/null
++++ b/package/python-argh/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_ARGH
++	bool "python-argh"
++	help
++	  An unobtrusive argparse wrapper with natural syntax.
++
++	  http://github.com/neithere/argh/
+diff --git a/package/python-argh/python-argh.hash b/package/python-argh/python-argh.hash
+new file mode 100644
+index 0000000..9e2e068
+--- /dev/null
++++ b/package/python-argh/python-argh.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/argh/json
++md5	5a97ce2ae74bbe3b63194906213f1184  argh-0.26.1.tar.gz
++# sha256 calculated by scanpypi
++sha256	06a7442cb9130fb8806fe336000fcf20edf1f2f8ad205e7b62cec118505510db  argh-0.26.1.tar.gz
+diff --git a/package/python-argh/python-argh.mk b/package/python-argh/python-argh.mk
+new file mode 100644
+index 0000000..9e4c09c
+--- /dev/null
++++ b/package/python-argh/python-argh.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-argh
++#
++################################################################################
++
++PYTHON_ARGH_VERSION = 0.26.1
++PYTHON_ARGH_SOURCE = argh-$(PYTHON_ARGH_VERSION).tar.gz
++PYTHON_ARGH_SITE = https://pypi.python.org/packages/14/7f/794a7f4a48cba505a4b4c714f81fed844a3a5f7340b171f448711439b09e
++PYTHON_ARGH_SETUP_TYPE = setuptools
++PYTHON_ARGH_LICENSE = LGPLv3+
++
++$(eval $(python-package))
+-- 
+2.8.1
