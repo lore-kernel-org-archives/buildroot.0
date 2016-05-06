@@ -1,79 +1,46 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  6 May 2016 09:37:23 +0200
-Subject: [Buildroot] [PATCH] python-u-msgpack: new package
-Message-ID: <1462520243-1315-1-git-send-email-yegorslists@googlemail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri,  6 May 2016 09:45:12 +0200
+Subject: [Buildroot] [PATCH 1/2] macchanger: bump to version 1.7.0
+Message-ID: <1462520713-9222-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Switch to github repository to fetch latest version, which also added the
+missing license file.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/Config.in                              |  1 +
- package/python-u-msgpack/Config.in             |  7 +++++++
- package/python-u-msgpack/python-u-msgpack.hash |  4 ++++
- package/python-u-msgpack/python-u-msgpack.mk   | 13 +++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-u-msgpack/Config.in
- create mode 100644 package/python-u-msgpack/python-u-msgpack.hash
- create mode 100644 package/python-u-msgpack/python-u-msgpack.mk
+ package/macchanger/macchanger.hash | 2 +-
+ package/macchanger/macchanger.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 0f7997c..e676d5c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -750,6 +750,7 @@ menu "External python modules"
- 	source "package/python-treq/Config.in"
- 	source "package/python-twisted/Config.in"
- 	source "package/python-txaio/Config.in"
-+	source "package/python-u-msgpack/Config.in"
- 	source "package/python-ujson/Config.in"
- 	source "package/python-urllib3/Config.in"
- 	source "package/python-urwid/Config.in"
-diff --git a/package/python-u-msgpack/Config.in b/package/python-u-msgpack/Config.in
-new file mode 100644
-index 0000000..ad0f90e
---- /dev/null
-+++ b/package/python-u-msgpack/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_U_MSGPACK
-+	bool "python-u-msgpack"
-+	help
-+	  A portable, lightweight MessagePack serializer and deserializer
-+	  written in pure Python.
-+
-+	  https://github.com/vsergeev/u-msgpack-python
-diff --git a/package/python-u-msgpack/python-u-msgpack.hash b/package/python-u-msgpack/python-u-msgpack.hash
-new file mode 100644
-index 0000000..16f5040
---- /dev/null
-+++ b/package/python-u-msgpack/python-u-msgpack.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/u-msgpack-python/json
-+md5	2ccadbf06c7e70bbdb58e920d045d50c  u-msgpack-python-2.1.tar.gz
-+# sha256 calculated by scanpypi
-+sha256	66a39ddc6830be29b6d304dee9d4ab37104550ac4565eab1aa4c2bd3d34d759f  u-msgpack-python-2.1.tar.gz
-diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
-new file mode 100644
-index 0000000..024dac1
---- /dev/null
-+++ b/package/python-u-msgpack/python-u-msgpack.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-u-msgpack
-+#
-+################################################################################
-+
-+PYTHON_U_MSGPACK_VERSION = 2.1
-+PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
-+PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/b7/8d/791f037a0954f98a8eceb09c7c14babb97db0a81c985108bb21939b801eb
-+PYTHON_U_MSGPACK_SETUP_TYPE = distutils
-+PYTHON_U_MSGPACK_LICENSE = MIT
-+
-+$(eval $(python-package))
+diff --git a/package/macchanger/macchanger.hash b/package/macchanger/macchanger.hash
+index d0b6f35..ce3a7f5 100644
+--- a/package/macchanger/macchanger.hash
++++ b/package/macchanger/macchanger.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	31534f138f1d21fa247be74ba6bef3fbfa47bbcd5033e99bd10c432fe58e51f7	macchanger-1.6.0.tar.gz
++sha256  dae2717c270fd5f62d790dbf80c19793c651b1b26b62c101b82d5fdf25a845bf  macchanger-1.7.0.tar.gz
+diff --git a/package/macchanger/macchanger.mk b/package/macchanger/macchanger.mk
+index a7ea943..2e716d9 100644
+--- a/package/macchanger/macchanger.mk
++++ b/package/macchanger/macchanger.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-MACCHANGER_VERSION = 1.6.0
+-MACCHANGER_SITE = $(BR2_GNU_MIRROR)/macchanger
++MACCHANGER_VERSION = 1.7.0
++MACCHANGER_SITE = https://github.com/alobbs/macchanger/releases/download/$(MACCHANGER_VERSION)
+ MACCHANGER_LICENSE = GPLv2+
+-MACCHANGER_LICENSE_FILES = src/main.c
++MACCHANGER_LICENSE_FILES = COPYING
+ 
+ $(eval $(autotools-package))
 -- 
-2.8.1
+2.8.2
