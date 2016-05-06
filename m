@@ -1,84 +1,79 @@
-From: Luca Ellero <luca.ellero@brickedbrain.com>
-Date: Fri, 6 May 2016 08:54:48 +0200
-Subject: [Buildroot] Xorg crash
-In-Reply-To: <20160506082055.1bfeec8e@gmx.net>
-References: <1274ad69-0abb-26b0-b623-67de78c0274f@brickedbrain.com>
- <20160506082055.1bfeec8e@gmx.net>
-Message-ID: <a354e11f-9175-3484-9efc-80e5cb0fd234@brickedbrain.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri,  6 May 2016 09:37:23 +0200
+Subject: [Buildroot] [PATCH] python-u-msgpack: new package
+Message-ID: <1462520243-1315-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/05/2016 08:20, Peter Seiderer wrote:
-> Hello Luca,
->
-> On Thu, 5 May 2016 16:19:29 +0200, Luca Ellero <luca.ellero@brickedbrain.com> wrote:
->
->> Hi,
->> I'm trying to get a minimal Xorg with Buildroot 2016.02 on Raspberry Pi
->> 2, but the Xserver crashes as soon I launch dillo web-browser.
->> I get the same crash if I launch fluxbox (or openbox or matchbox).
->> I tried even on a iMX6 custom board but the same problem happens.
->> The strange thing is that if I use only xterm and twm everything works
->> correctly.
->>
->> I configured the system with:
->>
->> - Modular X.org (but same problem with KDrive/TinyX)
->> - xf86-input-evdev
->> - xf86-video-fbdev
->> - twm
->> - xterm
->> - dillo
->>
->> When I launch X with the following
->>
->> # X :0 &
->> # export DISPLAY=:0
->> # twm &
->> # xterm &
->>
->> Xorg, twm and xterm are working fine.
->>
->> But with this:
->>
->> # X :0 &
->> # export DISPLAY=:0
->> # dillo &
->>
->> I get:
->>
->> (EE) Segmentation fault at address 0x0
->> (EE) Fatal server error:
->> (EE) Caught signal 11 (Segmentation fault). Server aborting
->> (EE)
->> (EE) Please consult the The X.Org Foundation support
->> 	 at http://wiki.x.org for help.
->> (EE) Please also check the log file at "/var/log/Xorg.0.log" for
->> additional information.
->> (EE)
->> (EE) Server terminated with error (1). Closing log file.
->>
->> In attachment you can find the Xorg log and configuration file.
->> Could someone please explain me what is going wrong.
->>
->
-> Known bug with gcc/xserver when compiled with '-Os', see [1] for the gcc bug report...
->
-> Try to build with other buildroot optimization option e.g. -O2/-O3...
->
-> Regards,
-> Peter
->
-> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63346
->
->
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Hi everybody,
-thank you very much for your help. This saved me a lot of frustration...
-I confirm that building with -O2, Xorg works fine. I tested it on both 
-boards: Raspberry Pi 2 and iMX6Q custom board.
-Best regards
-Luca
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                              |  1 +
+ package/python-u-msgpack/Config.in             |  7 +++++++
+ package/python-u-msgpack/python-u-msgpack.hash |  4 ++++
+ package/python-u-msgpack/python-u-msgpack.mk   | 13 +++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-u-msgpack/Config.in
+ create mode 100644 package/python-u-msgpack/python-u-msgpack.hash
+ create mode 100644 package/python-u-msgpack/python-u-msgpack.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 0f7997c..e676d5c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -750,6 +750,7 @@ menu "External python modules"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
++	source "package/python-u-msgpack/Config.in"
+ 	source "package/python-ujson/Config.in"
+ 	source "package/python-urllib3/Config.in"
+ 	source "package/python-urwid/Config.in"
+diff --git a/package/python-u-msgpack/Config.in b/package/python-u-msgpack/Config.in
+new file mode 100644
+index 0000000..ad0f90e
+--- /dev/null
++++ b/package/python-u-msgpack/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_U_MSGPACK
++	bool "python-u-msgpack"
++	help
++	  A portable, lightweight MessagePack serializer and deserializer
++	  written in pure Python.
++
++	  https://github.com/vsergeev/u-msgpack-python
+diff --git a/package/python-u-msgpack/python-u-msgpack.hash b/package/python-u-msgpack/python-u-msgpack.hash
+new file mode 100644
+index 0000000..16f5040
+--- /dev/null
++++ b/package/python-u-msgpack/python-u-msgpack.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/u-msgpack-python/json
++md5	2ccadbf06c7e70bbdb58e920d045d50c  u-msgpack-python-2.1.tar.gz
++# sha256 calculated by scanpypi
++sha256	66a39ddc6830be29b6d304dee9d4ab37104550ac4565eab1aa4c2bd3d34d759f  u-msgpack-python-2.1.tar.gz
+diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
+new file mode 100644
+index 0000000..024dac1
+--- /dev/null
++++ b/package/python-u-msgpack/python-u-msgpack.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-u-msgpack
++#
++################################################################################
++
++PYTHON_U_MSGPACK_VERSION = 2.1
++PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
++PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/b7/8d/791f037a0954f98a8eceb09c7c14babb97db0a81c985108bb21939b801eb
++PYTHON_U_MSGPACK_SETUP_TYPE = distutils
++PYTHON_U_MSGPACK_LICENSE = MIT
++
++$(eval $(python-package))
+-- 
+2.8.1
