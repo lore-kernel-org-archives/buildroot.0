@@ -1,88 +1,34 @@
 From: Mike Williams <mike@mikebwilliams.com>
-Date: Fri,  6 May 2016 14:30:18 -0400
-Subject: [Buildroot] [PATCH 1/2] bluez5_utils: bump to version 5.39
-Message-ID: <1462559419-20212-1-git-send-email-mike@mikebwilliams.com>
+Date: Fri,  6 May 2016 14:30:19 -0400
+Subject: [Buildroot] [PATCH 2/2] bluez5_utils: start systemd service on boot
+In-Reply-To: <1462559419-20212-1-git-send-email-mike@mikebwilliams.com>
+References: <1462559419-20212-1-git-send-email-mike@mikebwilliams.com>
+Message-ID: <1462559419-20212-2-git-send-email-mike@mikebwilliams.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstreamed patch
-
 Signed-off-by: Mike Williams <mike@mikebwilliams.com>
 ---
- .../0001-tools-avinfo-Fix-big-endian-build.patch   | 39 ----------------------
- package/bluez5_utils/bluez5_utils.hash             |  2 +-
- package/bluez5_utils/bluez5_utils.mk               |  2 +-
- 3 files changed, 2 insertions(+), 41 deletions(-)
- delete mode 100644 package/bluez5_utils/0001-tools-avinfo-Fix-big-endian-build.patch
+ package/bluez5_utils/bluez5_utils.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/bluez5_utils/0001-tools-avinfo-Fix-big-endian-build.patch b/package/bluez5_utils/0001-tools-avinfo-Fix-big-endian-build.patch
-deleted file mode 100644
-index 06c368d..0000000
---- a/package/bluez5_utils/0001-tools-avinfo-Fix-big-endian-build.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 01d85fdf6a45150e82143803be3373d779d18522 Mon Sep 17 00:00:00 2001
--From: John Keeping <john@metanate.com>
--Date: Wed, 24 Feb 2016 13:57:38 +0000
--Subject: [PATCH] tools/avinfo: Fix big endian build
--
--Commit 101b439 (tools/avinfo: Add partial support for Sony LDAC) added a
--new a2dp_ldac_t structure but only inside a little endian ifdef.  Add
--the same structure in the big endian code.
--
--The structure definition doesn't differ for the big/little endian cases
--but if the unknown fields are discovered in the future it might, so a
--copy is added rather than pulling the existing definition below the
--endif.
--
--[John: backport from upstream commit 01d85fdf6a45150e82143803be3373d779d18522.]
--Signed-off-by: John Keeping <john@metanate.com>
-----
-- profiles/audio/a2dp-codecs.h | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/profiles/audio/a2dp-codecs.h b/profiles/audio/a2dp-codecs.h
--index e9da0bf..4fb5c0c 100644
----- a/profiles/audio/a2dp-codecs.h
--+++ b/profiles/audio/a2dp-codecs.h
--@@ -234,6 +234,11 @@ typedef struct {
-- 	uint8_t channel_mode:4;
-- } __attribute__ ((packed)) a2dp_aptx_t;
-- 
--+typedef struct {
--+	a2dp_vendor_codec_t info;
--+	uint8_t unknown[2];
--+} __attribute__ ((packed)) a2dp_ldac_t;
--+
-- #else
-- #error "Unknown byte order"
-- #endif
---- 
--2.7.0.226.gfe986fe
--
-diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
-index 75c53b3..cbb3aa3 100644
---- a/package/bluez5_utils/bluez5_utils.hash
-+++ b/package/bluez5_utils/bluez5_utils.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
--sha256  c14ba9ddcb0055522073477b8fd8bf1ddf5d219e75fdfd4699b7e0ce5350d6b0    bluez-5.37.tar.xz
-+sha256  21d1bc9150d3576296595217efb98a746b592389d25d5637e8bee5da7272593b    bluez-5.39.tar.xz
 diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 1308e4e..0a76738 100644
+index 0a76738..659f05d 100644
 --- a/package/bluez5_utils/bluez5_utils.mk
 +++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -79,4 +79,10 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-systemd
+ endif
  
--BLUEZ5_UTILS_VERSION = 5.37
-+BLUEZ5_UTILS_VERSION = 5.39
- BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
- BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ5_UTILS_INSTALL_STAGING = YES
++define BLUEZ5_UTILS_INSTALL_INIT_SYSTEMD
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
++	ln -fs ../../../../usr/lib/systemd/system/bluetooth.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/bluetooth.service
++endef
++
+ $(eval $(autotools-package))
 -- 
 2.5.0
