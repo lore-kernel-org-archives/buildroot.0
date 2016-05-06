@@ -1,49 +1,42 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri, 6 May 2016 09:02:40 -0300 (BRT)
-Subject: [Buildroot] [PATCH 1/1] uboot-tools: add missing dependency on
- host-dtc for the host package
-In-Reply-To: <20160505214432.GC4367@free.fr>
-References: <1462372709-24828-1-git-send-email-casantos@datacom.ind.br>
- <20160505220901.4db9e9a2@free-electrons.com>
- <1040860357.13861098.1462480371842.JavaMail.zimbra@datacom.ind.br>
- <20160505212716.GA4367@free.fr> <20160505233851.26f9854f@free-electrons.com>
- <20160505214432.GC4367@free.fr>
-Message-ID: <897552526.13921419.1462536160384.JavaMail.zimbra@datacom.ind.br>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 6 May 2016 09:15:10 -0300
+Subject: [Buildroot] [PATCH] xserver_xorg-server: use -O2 build
+ optimization level
+In-Reply-To: <20160506084734.56e5caad@gmx.net>
+References: <1462493307-21675-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160506084734.56e5caad@gmx.net>
+Message-ID: <572C8ACE.4010307@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> To: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> Cc: "Carlos Santos" <casantos@datacom.ind.br>, buildroot at buildroot.org, "Arnout Vandecappelle" <arnout@mind.be>, "Peter
-> Korsgaard" <peter@korsgaard.com>
-> Sent: Thursday, May 5, 2016 6:44:32 PM
-> Subject: Re: [Buildroot] [PATCH 1/1] uboot-tools: add missing dependency on host-dtc for the host package
+On 06/05/16 03:47, Peter Seiderer wrote:
 
-> Thomas, All,
-> 
-> On 2016-05-05 23:38 +0200, Thomas Petazzoni spake thusly:
->> On Thu, 5 May 2016 23:27:16 +0200, Yann E. MORIN wrote:
->> > However, given how pervasive DTC is becoming, I think it would kinda
->> > make sense to have a mkimage that supports DT every time (I hope that
->> > adding DT support to mkimage does not remove functionality, does it?)
->> 
->> Read again in which cases mkimage needs host-dtc. It is *NOT* related
->> to Device Tree at all. It is related to the FIT image format, which
->> happens to rely on the Device Tree syntax and compiler, but has
->> *nothing* to do with the Device Tree being used by the kernel to get a
->> description of the HW.
-> 
-> Oh, OK.
-> 
-> /me unconsciously associated dtc with generating DTB. But if it can be
-> used for other things as well...
-> 
-> Then option 2 is the best solution IMHO.
+> Thanks for the patch, will surely improve the 'out of the box' usability of buildroot,
+> but I would prefer a 'blacklist' of known failing combinations and simply disable
+> xserver (with comment why) in this case(s), the only know to me is RPi1:
+>
+>    BR2_ARCH="arm"
+>    BR2_GCC_TARGET_CPU="arm1176jzf-s"
+>    BR2_OPTIMIZE_S=y
+>
+> The perfect solution would be a fix for gcc (and/or xserver)...
+>
+> Regards,
+> Peter
 
-Done (see patch v2).
-
-Carlos Santos (Casantos)
-DATACOM, P&D
+Hi Peter.
+Isn't that a bit harsh?
+I'm not 100% comfortable with this solution either, however blacklisting 
+xorg will be messy to put it lightly.
+Also finding the failing combinations will not be simple - it seems ARM 
+in general is affected on several toolchain combinations, as is MIPS as 
+well (both tested in Qemu) - so it goes beyond some particular platforms.
+Another alternative could be finding the exact gcc option that's causing 
+it diffing the output of --help=optimizers and trying enabling/disabling 
+one by one until it's fixed or fails since this would probably help 
+pinpoint the precise optimizations that's causing it (which would in 
+turn help in making a minimal test case to help upstream).
+Regards.
