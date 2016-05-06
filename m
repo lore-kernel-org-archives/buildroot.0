@@ -1,84 +1,74 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  6 May 2016 08:21:26 +0200
-Subject: [Buildroot] [PATCH 3/3] python-watchdog: new package
-In-Reply-To: <1462515686-26545-1-git-send-email-yegorslists@googlemail.com>
-References: <1462515686-26545-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1462515686-26545-3-git-send-email-yegorslists@googlemail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Fri, 06 May 2016 08:26:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/macchanger: fix musl build
+In-Reply-To: <18bdd441-ce98-cdb6-b233-5c97b328ad9e@mind.be>
+References: <1453588987-16758-1-git-send-email-bernd.kuhls@t-online.de>
+ <1462218005.2955.1.camel@embedded.rocks>
+ <18bdd441-ce98-cdb6-b233-5c97b328ad9e@mind.be>
+Message-ID: <1462516018.2064.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Dear Arnout,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                            |  1 +
- package/python-watchdog/Config.in            |  9 +++++++++
- package/python-watchdog/python-watchdog.hash |  4 ++++
- package/python-watchdog/python-watchdog.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-watchdog/Config.in
- create mode 100644 package/python-watchdog/python-watchdog.hash
- create mode 100644 package/python-watchdog/python-watchdog.mk
+On Mo, 2016-05-02 at 23:32 +0200, Arnout Vandecappelle wrote:
+> On 05/02/16 21:40, J?rg Krause wrote:
+> > Hi,
+> > 
+> > On Sa, 2016-01-23 at 23:43 +0100, Bernd Kuhls wrote:
+> [snip]
+> > > +@@ -113,7 +113,7 @@ mc_net_info_get_permanent_mac (const net
+> > > +?	epa->size = IFHWADDRLEN;
+> > > +
+> > > +?	memcpy(&req, &(net->dev), sizeof(struct ifreq));
+> > > +-	req.ifr_data = (caddr_t)epa;
+> > > ++	req.ifr_data = (char *)epa;
+> > > +
+> > > +?	if (ioctl(net->sock, SIOCETHTOOL, &req) < 0) {
+> > > +?		perror ("[ERROR] Could not read permanent
+> > > MAC");
+> > 
+> > any reason why this patch is marked as "Changes Requested"? The
+> > build
+> > error is still present...
+> 
+> ? IIRC, Bernd posted almost a hundred patches at the time for musl
+> fixes, most?
+> of which were taken from Alpine Linux, and almost all of which had
+> insufficient?
+> explanation of the problem and of the fix (nothing more than "fix
+> musl build"?
+> and a reference to the alpine patch). Also many of them were simply
+> incorrect:?
+> they would maybe fix the build, but possibly introducing other bugs
+> or sometimes?
+> just breaking the code. So after reviewing and rejecting a dozen of
+> them,?
+> ThomasP just made a generic comment that all of them should be done
+> more?
+> carefully and marked all of them as Changes Requested.
+> 
+> ? If you would like to recover and review them, just select in
+> patchwork patches?
+> from Bernd that are marked as changes requested and that have musl in
+> the?
+> subject. Feel free to repost (with better commit messages of course).
 
-diff --git a/package/Config.in b/package/Config.in
-index f0d8b72..0f7997c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -754,6 +754,7 @@ menu "External python modules"
- 	source "package/python-urllib3/Config.in"
- 	source "package/python-urwid/Config.in"
- 	source "package/python-versiontools/Config.in"
-+	source "package/python-watchdog/Config.in"
- 	source "package/python-web2py/Config.in"
- 	source "package/python-webpy/Config.in"
- 	source "package/python-werkzeug/Config.in"
-diff --git a/package/python-watchdog/Config.in b/package/python-watchdog/Config.in
-new file mode 100644
-index 0000000..e529089
---- /dev/null
-+++ b/package/python-watchdog/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_WATCHDOG
-+	bool "python-watchdog"
-+	select BR2_PACKAGE_PYTHON_PYYAML
-+	select BR2_PACKAGE_PYTHON_ARGH
-+	select BR2_PACKAGE_PYTHON_PATHTOOLS
-+	help
-+	  Python API and shell utilities to monitor file system events.
-+
-+	  http://github.com/gorakhargosh/watchdog
-diff --git a/package/python-watchdog/python-watchdog.hash b/package/python-watchdog/python-watchdog.hash
-new file mode 100644
-index 0000000..9da2b37
---- /dev/null
-+++ b/package/python-watchdog/python-watchdog.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/watchdog/json
-+md5	bb16926bccc98eae2a04535e4512ddf1  watchdog-0.8.3.tar.gz
-+# sha256 calculated by scanpypi
-+sha256	7e65882adb7746039b6f3876ee174952f8eaaa34491ba34333ddf1fe35de4162  watchdog-0.8.3.tar.gz
-diff --git a/package/python-watchdog/python-watchdog.mk b/package/python-watchdog/python-watchdog.mk
-new file mode 100644
-index 0000000..3dd92e3
---- /dev/null
-+++ b/package/python-watchdog/python-watchdog.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-watchdog
-+#
-+################################################################################
-+
-+PYTHON_WATCHDOG_VERSION = 0.8.3
-+PYTHON_WATCHDOG_SOURCE = watchdog-$(PYTHON_WATCHDOG_VERSION).tar.gz
-+PYTHON_WATCHDOG_SITE = https://pypi.python.org/packages/54/7d/c7c0ad1e32b9f132075967fc353a244eb2b375a3d2f5b0ce612fd96e107e
-+PYTHON_WATCHDOG_SETUP_TYPE = setuptools
-+PYTHON_WATCHDOG_LICENSE = Apache-2.0
-+PYTHON_WATCHDOG_LICENSE_FILES = LICENSE COPYING
-+
-+$(eval $(python-package))
--- 
-2.8.1
+I see! Yes, I will do this for some packages.
+
+> ? This one specifically does look good to me - except for the commit
+> message,?
+> which should be something like:
+> 
+> caddr_t is a BSD type. POSIX usually uses void* instead, but
+> specifically in?
+> struct ifreq the type of ifr_data is char*.
+> 
+
+Many thanks!
+
+Best regards
+J?rg Krause
