@@ -1,61 +1,99 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Fri, 06 May 2016 12:13:03 +0200
-Subject: [Buildroot] [PATCH] configs: freescale_imx6ulevk_defconfig: Add
- alsa-utils
-In-Reply-To: <1462492045-21257-1-git-send-email-festevam@gmail.com>
-References: <1462492045-21257-1-git-send-email-festevam@gmail.com>
-Message-ID: <572C6E2F.1070703@free.fr>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri,  6 May 2016 08:59:13 -0300
+Subject: [Buildroot] [PATCH v2 1/1] uboot-tools: add missing dependency on
+	host-dtc for the host package
+In-Reply-To: <1462372709-24828-1-git-send-email-casantos@datacom.ind.br>
+References: <1462372709-24828-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <1462535953-4427-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabio,
+The mkimage utility needs dtc when support for Flat Image Trees (FIT)
+is enabled. If dtc is not available mkimage may fail. Example:
 
-On 06/05/2016 01:47, Fabio Estevam wrote:
-> From: Fabio Estevam <fabio.estevam@nxp.com>
->
-> Add support for alsa-utils.
->
-> Also select BR2_TOOLCHAIN_BUILDROOT_WCHAR as this is a requirement
-> for alsamixer.
->
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-> ---
->  configs/freescale_imx6ulevk_defconfig | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
-> index b8a1f86..8f36971 100644
-> --- a/configs/freescale_imx6ulevk_defconfig
-> +++ b/configs/freescale_imx6ulevk_defconfig
-> @@ -6,6 +6,7 @@ BR2_cortex_a7=y
->  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
->  
->  # system
-> +BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
->  BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
->  
->  # kernel
-> @@ -31,5 +32,10 @@ BR2_PACKAGE_HOST_GENIMAGE=y
->  BR2_PACKAGE_HOST_MTOOLS=y
->  
->  # filesystem / image
-> +BR2_PACKAGE_ALSA_UTILS=y
-> +BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
-> +BR2_PACKAGE_ALSA_UTILS_APLAY=y
-> +BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
-> +BR2_TARGET_ROOTFS_EXT2=y
+    $ mkimage -f firmware.its firmware.im
+    sh: dtc: command not found
 
-I think this one can be removed because it's already defined 2 lines below:
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ package/uboot-tools/Config.in      | 16 +++++++++++++---
+ package/uboot-tools/Config.in.host |  1 +
+ package/uboot-tools/uboot-tools.mk |  5 +++++
+ 3 files changed, 19 insertions(+), 3 deletions(-)
 
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/imx6ulevk/post-image.sh"
->  BR2_TARGET_ROOTFS_EXT2=y						<<<<<<<<<<<<<<
-
-Thomas will confirm but, IIRC, Buildroot mainlined defconfigs only
-define the mininal options to boot the boards and then it's up to the
-user to choose the packages it needs.
-
-Best regards,
-Julien
+diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
+index aca310b..4622f6b 100644
+--- a/package/uboot-tools/Config.in
++++ b/package/uboot-tools/Config.in
+@@ -13,10 +13,22 @@ config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
+ 	  The mkimage tool from Das U-Boot bootloader, which allows
+ 	  generation of U-Boot images in various formats.
+ 
+-if BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
++config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SUPPORT
++	bool "Flat Image Trees (FIT) support"
++	depends on BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
++	select BR2_PACKAGE_HOST_DTC
++	help
++	  Enables support for FIT Signature Verification.
++
++	  This option allows to boot the new uImage structrure,
++	  Flattened Image Tree.  FIT is formally a FDT, which can include
++	  images of various types (kernel, FDT blob, ramdisk, etc.)
++	  in a single blob.  To boot this new uImage structure,
++	  pass the address of the blob to the "bootm" command.
+ 
+ config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT
+ 	bool "FIT signature verification support"
++	depends on BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SUPPORT
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Enables support for FIT Signature Verification.
+@@ -36,8 +48,6 @@ config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT
+ 	  libcrypto, and possibly GPL/OpenSSL licensing
+ 	  incompatibility issues.
+ 
+-endif
+-
+ config BR2_PACKAGE_UBOOT_TOOLS_MKENVIMAGE
+ 	bool "mkenvimage"
+ 	help
+diff --git a/package/uboot-tools/Config.in.host b/package/uboot-tools/Config.in.host
+index b5a42d9..5c44eaf 100644
+--- a/package/uboot-tools/Config.in.host
++++ b/package/uboot-tools/Config.in.host
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_HOST_UBOOT_TOOLS
+ 	bool "host u-boot tools"
++	select BR2_PACKAGE_HOST_DTC
+ 	help
+ 	  Companion tools for Das U-Boot bootloader.
+ 
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index f47b3db..9bb2b54 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -65,6 +65,10 @@ define UBOOT_TOOLS_INSTALL_TARGET_CMDS
+ 	$(UBOOT_TOOLS_INSTALL_DUMPIMAGE)
+ endef
+ 
++ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),y)
++HOST_UBOOT_TOOLS_DEPENDENCIES += host-dtc
++endif
++
+ ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
+ HOST_UBOOT_TOOLS_DEPENDENCIES += host-openssl
+ endif
+@@ -76,6 +80,7 @@ endef
+ 
+ define HOST_UBOOT_TOOLS_BUILD_CMDS
+ 	$(MAKE1) -C $(@D) 			\
++		CONFIG_FIT=$(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SUPPORT) \
+ 		CONFIG_FIT_SIGNATURE=$(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT) \
+ 		HOSTCC="$(HOSTCC)"		\
+ 		HOSTCFLAGS="$(HOST_CFLAGS)"	\
+-- 
+2.5.5
