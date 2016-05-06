@@ -1,48 +1,47 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu,  5 May 2016 20:47:25 -0300
-Subject: [Buildroot] [PATCH] configs: freescale_imx6ulevk_defconfig: Add
-	alsa-utils
-Message-ID: <1462492045-21257-1-git-send-email-festevam@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  5 May 2016 21:08:27 -0300
+Subject: [Buildroot] [PATCH] xserver_xorg-server: use -O2 build optimization
+	level
+Message-ID: <1462493307-21675-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+The xorg server is somewhat sensitive to certain gcc versions combined
+with -Os, particularly for ARM and MIPS, typically in the form of the
+following symptom/error:
 
-Add support for alsa-utils.
+(EE) Segmentation fault at address 0x0
+(EE)
+Fatal server error:
+(EE) Caught signal 11 (Segmentation fault). Server aborting
 
-Also select BR2_TOOLCHAIN_BUILDROOT_WCHAR as this is a requirement
-for alsamixer.
+Force -O2 to work around this problem - for a target rootfs that uses
+X11 the tradeoff is minimal since a sample/test image for qemu vexpress
+with X11 + xinit + xterm + twm + xclock + gtk2 with demos is 60+ MB.
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+And it's less complicated than trying to find all of the bad
+combinations.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- configs/freescale_imx6ulevk_defconfig | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
-index b8a1f86..8f36971 100644
---- a/configs/freescale_imx6ulevk_defconfig
-+++ b/configs/freescale_imx6ulevk_defconfig
-@@ -6,6 +6,7 @@ BR2_cortex_a7=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 617bcbc..9de6d91 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -62,7 +62,7 @@ XSERVER_XORG_SERVER_CONF_OPTS = \
+ 	--disable-xephyr \
+ 	--disable-dmx \
+ 	--with-builder-addr=buildroot at buildroot.org \
+-	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1" \
++	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1 -O2" \
+ 	--with-fontrootdir=/usr/share/fonts/X11/ \
+ 	--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB),en,dis)able-xvfb
  
- # system
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- 
- # kernel
-@@ -31,5 +32,10 @@ BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
- 
- # filesystem / image
-+BR2_PACKAGE_ALSA_UTILS=y
-+BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
-+BR2_PACKAGE_ALSA_UTILS_APLAY=y
-+BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
-+BR2_TARGET_ROOTFS_EXT2=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/imx6ulevk/post-image.sh"
- BR2_TARGET_ROOTFS_EXT2=y
 -- 
-1.9.1
+2.7.3
