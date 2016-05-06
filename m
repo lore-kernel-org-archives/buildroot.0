@@ -1,80 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 May 2016 15:34:43 +0200
-Subject: [Buildroot] [git commit] macchanger: add patch to fix musl build
-Message-ID: <20160506134555.908657FB1B@busybox.osuosl.org>
+Date: Fri, 6 May 2016 15:34:41 +0200
+Subject: [Buildroot] [git commit] macchanger: bump to version 1.7.0
+Message-ID: <20160506134555.5A09C81F5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1cc99eb33ea7ebed9052d6e4f848d7fe5e3ed74f
+commit: https://git.buildroot.net/buildroot/commit/?id=0b538bae1144b5ed064b4d194d089b0b84892bc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch to fix a build error with the musl C library.
-
-caddr_t is defined in <sys/types.h>. This header file must be included to fix
-build with the musl C library:
-
-netinfo.c: In function 'mc_net_info_get_permanent_mac':
-netinfo.c:116:28: error: 'caddr_t' undeclared (first use in this function)
-  req.ifr_data = (caddr_t)epa;
-
-The project looks dead, the last commit dates Jan 1, 2014. So the fix is not
-sent upstream.
-
-Fixes:
-http://autobuild.buildroot.net/results/796/7966ad4f994d893918368891107f660295164f07/
-http://autobuild.buildroot.net/results/177/177db3c7cbb59e4388c6742e987f92df53a23fc3/
-.. and many more
-
-Replaces:
-http://patchwork.ozlabs.org/patch/572195/
+Switch to github repository to fetch latest version, which also added the
+missing license file.
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-Fix-missing-include-for-caddr_t.patch     | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/macchanger/macchanger.hash | 2 +-
+ package/macchanger/macchanger.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/macchanger/0001-Fix-missing-include-for-caddr_t.patch b/package/macchanger/0001-Fix-missing-include-for-caddr_t.patch
-new file mode 100644
-index 0000000..cf5ade8
---- /dev/null
-+++ b/package/macchanger/0001-Fix-missing-include-for-caddr_t.patch
-@@ -0,0 +1,35 @@
-+From 4eeb901b7aadb167e44f476fd665f7fedf491e51 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Fri, 6 May 2016 09:28:36 +0200
-+Subject: [PATCH] Fix missing include for caddr_t
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+caddr_t is defined in <sys/types.h>. This header file must be included to fix
-+build with the musl C library:
-+
-+netinfo.c: In function 'mc_net_info_get_permanent_mac':
-+netinfo.c:116:28: error: 'caddr_t' undeclared (first use in this function)
-+  req.ifr_data = (caddr_t)epa;
-+
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+ src/netinfo.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/netinfo.c b/src/netinfo.c
-+index 3525123..1aa3293 100644
-+--- a/src/netinfo.c
-++++ b/src/netinfo.c
-+@@ -28,6 +28,7 @@
-+ #include <string.h>
-+ #include <unistd.h>
-+ #include <sys/ioctl.h>
-++#include <sys/types.h>
-+ 
-+ #include <linux/ethtool.h>
-+ #include <linux/sockios.h>
-+-- 
-+2.8.2
-+
+diff --git a/package/macchanger/macchanger.hash b/package/macchanger/macchanger.hash
+index d0b6f35..ce3a7f5 100644
+--- a/package/macchanger/macchanger.hash
++++ b/package/macchanger/macchanger.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	31534f138f1d21fa247be74ba6bef3fbfa47bbcd5033e99bd10c432fe58e51f7	macchanger-1.6.0.tar.gz
++sha256  dae2717c270fd5f62d790dbf80c19793c651b1b26b62c101b82d5fdf25a845bf  macchanger-1.7.0.tar.gz
+diff --git a/package/macchanger/macchanger.mk b/package/macchanger/macchanger.mk
+index a7ea943..2e716d9 100644
+--- a/package/macchanger/macchanger.mk
++++ b/package/macchanger/macchanger.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-MACCHANGER_VERSION = 1.6.0
+-MACCHANGER_SITE = $(BR2_GNU_MIRROR)/macchanger
++MACCHANGER_VERSION = 1.7.0
++MACCHANGER_SITE = https://github.com/alobbs/macchanger/releases/download/$(MACCHANGER_VERSION)
+ MACCHANGER_LICENSE = GPLv2+
+-MACCHANGER_LICENSE_FILES = src/main.c
++MACCHANGER_LICENSE_FILES = COPYING
+ 
+ $(eval $(autotools-package))
