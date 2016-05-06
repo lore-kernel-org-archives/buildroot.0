@@ -1,67 +1,43 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 6 May 2016 14:56:57 +0100
-Subject: [Buildroot] [PATCH 2/2] toolchain-external.mk: hook for Codescape
-	toolchain side-by-side layout
-In-Reply-To: <1462543017-42054-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1462543017-42054-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1462543017-42054-3-git-send-email-Vincent.Riera@imgtec.com>
+From: Christian Stewart <christian@paral.in>
+Date: Fri,  6 May 2016 12:23:32 -0400
+Subject: [Buildroot] [PATCH 1/1] package/go: bump version to 1.6.2
+Message-ID: <1462551812-8952-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Codescape toolchain uses a sysroot layout that places them
-side-by-side instead of nested like multilibs. A symlink is needed much
-like for the nested sysroots which are handled in copy_toolchain_sysroot
-but there is not enough information in there to determine whether the
-sysroot layout was nested or side-by-side.
+Golang has significant improvements to support for multiarch in later
+versions. This bump is required to make many go programs functional
+under arm64, for example.
 
-For the above reason plus the fact that this is the only toolchain
-needing this, better to handle that symlink creation using a hook which
-will be executed only when that toolchain is selected.
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 0ca4b91..93cbe7c 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -262,6 +262,18 @@ define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
- 	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
- endef
+diff --git a/package/go/go.hash b/package/go/go.hash
+index e7c72de..6826891 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  754e06dab1c31ab168fc9db9e32596734015ea9e24bc44cae7f237f417ce4efe  go1.5.3.src.tar.gz
++sha256 787b0b750d037016a30c6ed05a8a70a91b2e9db4bd9b1a2453aa502a63f1bccc   go1.6.2.src.tar.gz
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 5454fd5..720c75a 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# The Codescape toolchain uses a sysroot layout that places them
-+# side-by-side instead of nested like multilibs. A symlink is needed
-+# much like for the nested sysroots which are handled in
-+# copy_toolchain_sysroot but there is not enough information in there
-+# to determine whether the sysroot layout was nested or side-by-side.
-+# Add the symlink here for now.
-+define TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_SYMLINK
-+	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))"; \
-+	ARCH_SUBDIR=`basename $${ARCH_SYSROOT_DIR}`; \
-+	ln -snf . $(STAGING_DIR)/$${ARCH_SUBDIR}
-+endef
-+
- # Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
- # sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
- # -> sbin-<abi> so that the rest of Buildroot can find the toolchain
-@@ -351,11 +363,13 @@ TOOLCHAIN_EXTERNAL_SOURCE = amd-2015.11-139-x86_64-amd-linux-gnu-i686-pc-linux-g
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS),y)
- TOOLCHAIN_EXTERNAL_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.10-04
- TOOLCHAIN_EXTERNAL_SOURCE = Codescape.GNU.Tools.Package.2015.10-04.for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_SYMLINK
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_STAGING_FIXUPS
- TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS),y)
- TOOLCHAIN_EXTERNAL_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.10-04
- TOOLCHAIN_EXTERNAL_SOURCE = Codescape.GNU.Tools.Package.2015.10-04.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_SYMLINK
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_STAGING_FIXUPS
- TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX),y)
+-GO_VERSION = 1.5.3
++GO_VERSION = 1.6.2
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
 2.7.3
