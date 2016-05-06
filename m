@@ -1,34 +1,35 @@
-From: Mike Williams <mike@mikebwilliams.com>
-Date: Fri,  6 May 2016 14:30:19 -0400
-Subject: [Buildroot] [PATCH 2/2] bluez5_utils: start systemd service on boot
-In-Reply-To: <1462559419-20212-1-git-send-email-mike@mikebwilliams.com>
-References: <1462559419-20212-1-git-send-email-mike@mikebwilliams.com>
-Message-ID: <1462559419-20212-2-git-send-email-mike@mikebwilliams.com>
+From: Geoff Levand <geoff@infradead.org>
+Date: Fri, 06 May 2016 12:57:38 -0700
+Subject: [Buildroot] [PATCH v3 0/3] Add go language support
+In-Reply-To: <20160503090857.23f362ea@free-electrons.com>
+References: <cover.1459798147.git.geoff@infradead.org>
+ <20160421224301.6a05f711@free-electrons.com>
+ <1461965160.27026.9.camel@infradead.org>
+ <20160430140314.4ff30ff1@free-electrons.com>
+ <1462074238901-b9436b8a-0eb718e2-8f9a915c@mixmax.com>
+ <1462207070.27026.20.camel@infradead.org>
+ <20160503090857.23f362ea@free-electrons.com>
+Message-ID: <1462564658.27026.31.camel@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mike Williams <mike@mikebwilliams.com>
----
- package/bluez5_utils/bluez5_utils.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Tue, 2016-05-03 at 09:08 +0200, Thomas Petazzoni wrote:
+> On Mon, 02 May 2016 09:37:50 -0700, Geoff Levand wrote:
+> 
+> > I have the patch below that adds BR2_TOOLCHAIN_HAS_THREADS.  Is
+> > it enough to pull in the toolchain?
+> 
+> No, adding dependencies at the Config.in level doesn't change anything
+> in terms of build order.
 
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 0a76738..659f05d 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -79,4 +79,10 @@ else
- BLUEZ5_UTILS_CONF_OPTS += --disable-systemd
- endif
- 
-+define BLUEZ5_UTILS_INSTALL_INIT_SYSTEMD
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
-+	ln -fs ../../../../usr/lib/systemd/system/bluetooth.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/bluetooth.service
-+endef
-+
- $(eval $(autotools-package))
--- 
-2.5.0
+It seems one of these in go-bootstrap.mk should work, is either
+one prefered?
+
+ +HOST_GO_BOOTSTRAP_DEPENDENCIES = host-go-bootstrap
+
+ +HOST_GO_BOOTSTRAP_ADD_TOOLCHAIN_DEPENDENCY = YES
+
+-Geoff
