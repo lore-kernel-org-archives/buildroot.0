@@ -1,46 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 May 2016 09:20:09 +0200
-Subject: [Buildroot] [PATCH] taskd: add patch to fix musl build issue
-In-Reply-To: <1462577103-7598-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1462577103-7598-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20160507092009.5792b4c9@free-electrons.com>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Sat, 7 May 2016 09:32:46 +0200
+Subject: [Buildroot] Which package for bluetooth management?
+In-Reply-To: <20160505142533.67f8e473@free-electrons.com>
+References: <572A61D4.10905@gmail.com>
+ <7132491b-5080-2001-1717-250d698244e9@mind.be> <572AEB2E.1050305@gmail.com>
+ <572AFC1F.3070004@gmail.com> <20160505142533.67f8e473@free-electrons.com>
+Message-ID: <572D9A1E.20609@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Il 05/05/2016 14:25, Thomas Petazzoni ha scritto:
+>> - bluez4 is recommended with pulseaudio due to simpler configuration of
+>> A2DP and HFP
+>> - but connman 1.32 doesn't support bluez4 anymore
+>> - but QtConnectivity doesn't support bluez5
+> I think it does, see https://patchwork.ozlabs.org/patch/612073/.
 
-On Sat,  7 May 2016 01:25:03 +0200, J?rg Krause wrote:
-> taskd checks for `get_current_dir_name` but forgets to add a `cmakedefine`
-> in cmake.h.in, so `HAVE_GET_CURRENT_DIR_NAME` is always undefined.
-> 
-> CMake detects correctly that the musl C library defines `get_current_dir_name`.
-> However, as `HAVE_GET_CURRENT_DIR_NAME` is not set, the block of code evaluated
-> cannot be compiled as musl does not define `PATH_MAX`.
-> 
-> Reported upstream:
-> https://bug.tasktools.org/browse/TD-120
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/121/121aa15235e06c80d65428626da5a2da9d11c9ba/
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-Thanks, applied!
+I've just seen bluez5 requires glibc or musl toolchain.
+I tried to rebuild all with glibc (instead of uClibc) but the RPi3 
+refuses to boot due to a kernel panic.
 
-I saw that you asked why I rejected some of Bernd's patches fixing musl
-issues, and Arnout answered you.
+It's a known behavior? Otherwise I'm afraid I have to do a "regression" 
+with older versions.
 
-This patch from you is exactly what I expect: a real analysis of the
-problem, a proper Git formatted patch that has a good explanation other
-than "fixes musl build" and an issue reported upstream. Simply perfect.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: kernel-panic.jpg
+Type: image/jpeg
+Size: 137771 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160507/a8f32b0d/attachment-0001.jpg>
