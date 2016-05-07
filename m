@@ -1,53 +1,59 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Sat, 7 May 2016 21:27:15 +0200
-Subject: [Buildroot] Kernel panic with glibc
-In-Reply-To: <20160507142800.6fec8574@free-electrons.com>
-References: <572DBAB9.3060607@gmail.com> <572DD6A2.8030406@gmail.com>
- <20160507141147.65fe012a@free-electrons.com> <572DDCA5.8060204@gmail.com>
- <20160507142800.6fec8574@free-electrons.com>
-Message-ID: <572E4193.9070604@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 7 May 2016 21:51:36 +0200
+Subject: [Buildroot] [PATCH 04/34] reproducibility: make rootfs.tar
+ reproducible
+In-Reply-To: <20160507152318.017bf013@free-electrons.com>
+References: <20160430074358.GE1781@hermes.click-hack.org>
+ <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <1462002570-14706-4-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <20160507152318.017bf013@free-electrons.com>
+Message-ID: <8465e4e8-3c5b-13ac-ee57-552bceeaa768@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 07/05/2016 14:28, Thomas Petazzoni ha scritto:
+On 05/07/16 15:23, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Sat, 30 Apr 2016 09:49:00 +0200, Gilles Chanteperdrix wrote:
+>
+>> +define ROOTFS_TAR_CMD
+>> +	cd $(TARGET_DIR) && { \
+>> +		find . -\( -! -type d -o -empty -\) -print0 | \
+>> +		sort -z | \
+>> +		tar --null -T - -c$(TAR_OPTS)f $@ --mtime=@$(SOURCE_DATE_EPOCH) --numeric-owner; \
+>> +	}
+>
+> We normally write such constructs as:
+>
+> 	(cd $(TARGET_DIR) && \
+> 		foo ....)
 
-> Once you have changed those configuration options and removed your
-> local Buildroot modifications, please try again a complete build "make
-> clean all" and see if it works or not. If it doesn't, I'll try to
-> reproduce here.
+  Actually, we don't AFAIK... In general, the parenthesis are not needed so they 
+should be removed. So also in this case it should be
+
+	cd $(TARGET_DIR);
+		find ....
+
+>
+> However, this raises the question of what's needed for all the other
+> filesystem formats. Will they all have to implement a different
+> ROOTFS_<foo>_CMD variable ? Or will there be some commonalities that
+> should be factored out in the common rootfs image infrastructure ?
+
+  Yes, to me it makes more sense to do this in the actual target directory after 
+the post-build scripts have been run.
 
 
-I'm very sorry, the building was successful, but it still doesn't boot 
-due to the kernel panic. I attach again the .config.
+  Regards,
+  Arnout
 
-Please, would you help me to fix this? I don't know how to go ahead with 
-my work. I need glibc mainly to support bluez5:
-
-http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/137079
-
-I also found this old message:
-
-https://patchwork.ozlabs.org/patch/208855/
-
-do you think I can enable wordexp also in the latest release?
-In the meanwhile I'm going to try to use bluez 5.27 which should not 
-have the dependency of regexp as you written.
-
-I haven't enough knowledge to fully understand how to solve these 
-issues, thus I'm afraid I'm not contributing to the buildroot community.
-
-Best regards
-Marco
-
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/xml
-Size: 92413 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160507/c2ea4140/attachment-0001.wsdl>
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
