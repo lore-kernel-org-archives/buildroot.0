@@ -1,56 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 8 May 2016 00:08:30 +0200
-Subject: [Buildroot] Qt5 fails to compile with gcc 6.1.0
-In-Reply-To: <572DBAB9.3060607@gmail.com>
-References: <572DBAB9.3060607@gmail.com>
-Message-ID: <93637a3f-dd9b-c499-538b-5fbb0b65be97@mind.be>
+Date: Sat, 7 May 2016 22:52:37 +0200
+Subject: [Buildroot] [PATCH 05/34] reproducibility/linux: override build
+ timestamp
+In-Reply-To: <1462002570-14706-5-git-send-email-gilles.chanteperdrix@xenomai.org>
+References: <20160430074358.GE1781@hermes.click-hack.org>
+ <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <1462002570-14706-5-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <a897f700-cdcd-96b2-c080-c68814e5b93a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/07/16 11:51, Marco Trapanese wrote:
-> Same environment of the previous email. Qt5 fails with this error:
+On 04/30/16 09:49, Gilles Chanteperdrix wrote:
+> with SOURCE_DATE_EPOCH
+> ---
+>  linux/linux.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 >
->> In file included from
->> /home/femtotech/dev/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/include/c++/6.1.0/bits/stl_algo.h:59:0,
->>
->>                  from
->> /home/femtotech/dev/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/include/c++/6.1.0/algorithm:62,
->>
->>                  from ../../include/QtCore/../../src/corelib/global/qglobal.h:85,
->>                  from ../../include/QtCore/qglobal.h:1,
->>                  from accessible/qaccessible.h:34,
->>                  from accessible/qaccessible.cpp:34:
->> /home/femtotech/dev/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/include/c++/6.1.0/cstdlib:75:25:
->> fatal error: stdlib.h: File o directory non esistente
->>  #include_next <stdlib.h>
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 9507837..d882702 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -74,6 +74,14 @@ LINUX_MAKE_ENV = \
+>  	$(TARGET_MAKE_ENV) \
+>  	BR_BINARIES_DIR=$(BINARIES_DIR)
 >
-> which means: "file or directory not found".
-> stdlib.h is in sysroot/usr/include:
->
->> /host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/stdlib.h
->
-> It seems the same behavior reported here:
->
-> https://bugs.musicpd.org/view.php?id=4524
+> +ifeq ($(BR2_REPRODUCIBLE),y)
+> +LINUX_MAKE_ENV += \
+> +	KBUILD_BUILD_VERSION=1 \
+> +	KBUILD_BUILD_USER=buildroot \
+> +	KBUILD_BUILD_HOST=buildroot \
 
-  It's also been reported for Fedora [1]. The problem is that qt5 adds a 
-completely redundant -isystem <system-include-path> to the gcc command line. I 
-guess in gcc6 the include path for the standard C++ headers has changed which 
-makes the #include_next <stdlib.h> fail.
+  This is for example something that really should be inside BR2_REPRODUCIBLE, 
+because the build user and version gives me useful information while developing.
 
-  I couldn't find anything in the qt bugtracker, so we should probably report it 
-there.
+> +	KBUILD_BUILD_TIMESTAMP="$(shell TZ=UTC LANG=C LC_ALL=C date -d @$(SOURCE_DATE_EPOCH))"
+
+  I think the TZ LANG LC_ALL things are redundant, because we already exported 
+those.
+
+  This timestamp is used in several places, so I think it's useful to save it in 
+a global SOURCE_DATE variable.
 
   Regards,
   Arnout
 
-[1] 
-https://lists.fedoraproject.org/archives/list/devel at lists.fedoraproject.org/thread/Q5SWCUUMWQ4EMS7CU2CBOZHV3WZYOOTT/
-
-
+> +endif
+> +
+>  # Get the real Linux version, which tells us where kernel modules are
+>  # going to be installed in the target filesystem.
+>  LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
+>
 
 
 -- 
