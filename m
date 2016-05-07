@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 May 2016 15:15:50 +0200
-Subject: [Buildroot] [PATCH 02/34] reproducibility: override locale and
- timezone
-In-Reply-To: <1462002570-14706-2-git-send-email-gilles.chanteperdrix@xenomai.org>
+Date: Sat, 7 May 2016 15:20:50 +0200
+Subject: [Buildroot] [PATCH 03/34] reproducibility: generate
+ SOURCE_DATE_EPOCH
+In-Reply-To: <1462002570-14706-3-git-send-email-gilles.chanteperdrix@xenomai.org>
 References: <20160430074358.GE1781@hermes.click-hack.org>
  <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1462002570-14706-2-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <20160507151550.48e49913@free-electrons.com>
+ <1462002570-14706-3-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <20160507152050.7a143515@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,37 +15,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 30 Apr 2016 09:48:58 +0200, Gilles Chanteperdrix wrote:
-> ---
->  Makefile | 7 +++++++
->  1 file changed, 7 insertions(+)
+On Sat, 30 Apr 2016 09:48:59 +0200, Gilles Chanteperdrix wrote:
+> When reproducibility is wanted, generates a global SOURCE_DATE_EPOCH
+
+wanted -> requested
+
+generates -> generate
+
+> environment variable which contains either the date of buildroot last
+> commit if running from a git repository, or the latest release date.
+> 
+> This means that all packages embedding build dates will appear to
+> have the same build date, so in case of new commit or release, all
+> packages will appear to have been change, even though some of them
+> may not have changed in fact.
 
 Missing SoB.
 
-> diff --git a/Makefile b/Makefile
-> index ec7dccb..86b2ed2 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -218,6 +218,13 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
->  -include $(BR2_CONFIG)
->  endif
->  
-> +export BR2_REPRODUCIBLE
+> +SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
+> +SOURCE_DATE_CHANGES = $(shell head -n 1 $(TOPDIR)/CHANGES | \
+> +	sed 's/^.*Released \(.*\)$$/\1/;s/\(st\|nd\|rd\|th\),//' | \
+> +	LANG=C LC_ALL=C TZ=UTC xargs -i date -d \{\} +%s)
 
-Why ?
-
-> +ifeq ($(BR2_REPRODUCIBLE),y)
-> +export TZ=UTC
-> +export LANG=C
-> +export LC_ALL=C
-> +endif
-
-Regarding overriding TZ, LANG and LC_ALL, I'm wondering if we shouldn't
-do it unconditionally, regardless of the value of BR2_REPRODUCIBLE.
-What is the benefit of leaving those variable to their value from the
-build environment?
-
-Thanks!
+Yirk. I'm wondering if we shouldn't simply have a BR2_RELEASE_DATE
+variable next to BR2_VERSION in the top level Makefile that gives the
+release date.
 
 Thomas
 -- 
