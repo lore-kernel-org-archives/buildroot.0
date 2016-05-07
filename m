@@ -1,36 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 May 2016 14:11:47 +0200
-Subject: [Buildroot] Qt5 fails to compile with gcc 6.1.0
-In-Reply-To: <572DD6A2.8030406@gmail.com>
-References: <572DBAB9.3060607@gmail.com>
-	<572DD6A2.8030406@gmail.com>
-Message-ID: <20160507141147.65fe012a@free-electrons.com>
+Date: Sat, 7 May 2016 14:15:49 +0200
+Subject: [Buildroot] [git commit] imagemagick: bump to version 6.9.3-10
+Message-ID: <20160507121600.792D08183D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1f2744bfa9b8a2b6d1e0eaef5f8745204c803a3a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 7 May 2016 13:50:58 +0200, Marco Trapanese wrote:
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> I don't know how to configure a working environment with Qt5 and bluez5.
-> I will try with musl, but I confess I really don't understand what's happening.
-
-Every time you do such tests, please make sure you do a complete
-rebuild, i.e:
-
-	make clean all
-
-If it still doesn't work for you after a "make clean all", then please
-report the version of Buildroot being used, as well as the .config file
-that reproduces the problem.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index ca80848..135989f 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 6731c414b5b939713a73a088840ed68c22c91d1335514d228d6687d07ce2e1c8 ImageMagick-6.9.3-7.tar.xz
++sha256 e33f021c879f31703f9e620f578ccf7d221a34941589da4bbe967b16a814336a ImageMagick-6.9.3-10.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 4d37873..8ecf5d6 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 6.9.3-7
++IMAGEMAGICK_VERSION = 6.9.3-10
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
