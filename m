@@ -1,45 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 8 May 2016 01:41:37 +0200
-Subject: [Buildroot] Which package for bluetooth management?
-In-Reply-To: <572D9A1E.20609@gmail.com>
-References: <572A61D4.10905@gmail.com>
- <7132491b-5080-2001-1717-250d698244e9@mind.be> <572AEB2E.1050305@gmail.com>
- <572AFC1F.3070004@gmail.com> <20160505142533.67f8e473@free-electrons.com>
- <572D9A1E.20609@gmail.com>
-Message-ID: <e3cfa132-94c0-2b3d-7593-3286bab1e535@mind.be>
+Date: Sun, 8 May 2016 01:48:17 +0200
+Subject: [Buildroot] [PATCH v3 0/3] Add go language support
+In-Reply-To: <1462564735.27026.32.camel@infradead.org>
+References: <cover.1459798147.git.geoff@infradead.org>
+ <20160421224301.6a05f711@free-electrons.com>
+ <1461965160.27026.9.camel@infradead.org>
+ <20160430140314.4ff30ff1@free-electrons.com>
+ <1462074238901-b9436b8a-0eb718e2-8f9a915c@mixmax.com>
+ <1462207070.27026.20.camel@infradead.org>
+ <20160503090857.23f362ea@free-electrons.com>
+ <1462564658.27026.31.camel@infradead.org>
+ <1462564735.27026.32.camel@infradead.org>
+Message-ID: <64ce3a2e-c0ef-7b2f-f54d-2652ad5840a8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/07/16 09:32, Marco Trapanese wrote:
-> Il 05/05/2016 14:25, Thomas Petazzoni ha scritto:
->>> - bluez4 is recommended with pulseaudio due to simpler configuration of
->>> A2DP and HFP
->>> - but connman 1.32 doesn't support bluez4 anymore
->>> - but QtConnectivity doesn't support bluez5
->> I think it does, see https://patchwork.ozlabs.org/patch/612073/.
+On 05/06/16 21:58, Geoff Levand wrote:
+> On Fri, 2016-05-06 at 12:57 -0700, Geoff Levand wrote:
+>> On Tue, 2016-05-03 at 09:08 +0200, Thomas Petazzoni wrote:
+>>> On Mon, 02 May 2016 09:37:50 -0700, Geoff Levand wrote:
+>>>
+>>>> I have the patch below that adds BR2_TOOLCHAIN_HAS_THREADS.  Is
+>>>> it enough to pull in the toolchain?
+>>>
+>>> No, adding dependencies at the Config.in level doesn't change
+>>> anything
+>>> in terms of build order.
+>>
+>> It seems one of these in go-bootstrap.mk should work, is either
+>> one prefered?
+>>
+>>  +HOST_GO_BOOTSTRAP_DEPENDENCIES = host-go-bootstrap
 >
+> +HOST_GO_BOOTSTRAP_DEPENDENCIES = host-toolchain
 >
-> I've just seen bluez5 requires glibc or musl toolchain.
-> I tried to rebuild all with glibc (instead of uClibc) but the RPi3 refuses to
-> boot due to a kernel panic.
+>>
+>>  +HOST_GO_BOOTSTRAP_ADD_TOOLCHAIN_DEPENDENCY = YES
 
-  Please use a serial port for debugging: the screenshot isn't really readable, 
-and the interesting part has probably scrolled off-screen.
+  I don't see how either of these could work... AFAICS, host-toolchain doesn't 
+exist, and _ADD_TOOLCHAIN_DEPENDENCY is only checked for target packages.
 
-  However, it's extremely unlikely that changing uClibc to glibc would cause a 
-kernel panic, because the kernel isn't using libc. So you have probably 
-inadvertedly changed something else as well.
+  What should work however:
+
+HOST_GO_BOOTSTRAP_DEPENDENCIES = toolchain
+
 
   Regards,
   Arnout
-
->
-> It's a known behavior? Otherwise I'm afraid I have to do a "regression" with
-> older versions.
->
 
 
 -- 
