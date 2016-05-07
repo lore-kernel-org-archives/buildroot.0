@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 May 2016 22:25:56 +0200
-Subject: [Buildroot] [PATCH 16/34] reproducibility/lzo: forbid lzo with
- reproducible builds
-In-Reply-To: <1462002570-14706-16-git-send-email-gilles.chanteperdrix@xenomai.org>
+Date: Sat, 7 May 2016 22:27:07 +0200
+Subject: [Buildroot] [PATCH 17/34] reproducibility/libnspr: override
+ build timestamps
+In-Reply-To: <1462002570-14706-17-git-send-email-gilles.chanteperdrix@xenomai.org>
 References: <20160430074358.GE1781@hermes.click-hack.org>
  <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1462002570-14706-16-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <20160507222556.0b498615@free-electrons.com>
+ <1462002570-14706-17-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <20160507222707.2420ef79@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,46 +15,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 30 Apr 2016 09:49:12 +0200, Gilles Chanteperdrix wrote:
-> The lzo archive contains a timestamp.
+On Sat, 30 Apr 2016 09:49:13 +0200, Gilles Chanteperdrix wrote:
+> with SOURCE_DATE_EPOCH
 
-Missing Signed-off-by line.
+Missing SoB line here.
 
 > ---
->  fs/tar/Config.in | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  package/libnspr/0003-honor-SOURCE_DATE_EPOCH.patch | 71 ++++++++++++++++++++++
+>  1 file changed, 71 insertions(+)
+>  create mode 100644 package/libnspr/0003-honor-SOURCE_DATE_EPOCH.patch
 > 
-> diff --git a/fs/tar/Config.in b/fs/tar/Config.in
-> index 63663ec..7e4b603 100644
-> --- a/fs/tar/Config.in
-> +++ b/fs/tar/Config.in
-> @@ -33,6 +33,7 @@ config BR2_TARGET_ROOTFS_TAR_LZMA
->  
->  config BR2_TARGET_ROOTFS_TAR_LZO
->  	bool "lzo"
-> +	depends on !BR2_REPRODUCIBLE
->  	help
->  	  Do compress the tarball with lzop.
->  
-> @@ -43,6 +44,12 @@ config BR2_TARGET_ROOTFS_TAR_XZ
->  
->  endchoice
->  
-> +if BR2_REPRODUCIBLE
-> +
-> +comment "lzo compression is only available with non-reproducible builds"
-> +
-> +endif
+> diff --git a/package/libnspr/0003-honor-SOURCE_DATE_EPOCH.patch b/package/libnspr/0003-honor-SOURCE_DATE_EPOCH.patch
+> new file mode 100644
+> index 0000000..1a0fb7c
+> --- /dev/null
+> +++ b/package/libnspr/0003-honor-SOURCE_DATE_EPOCH.patch
 
-When we are in such situations, we normally do:
+Missing patch description and Signed-off-by line. Also, did you submit
+this upstream? Does Debian carry a similar patch for its Reproducible
+Builds effort?
 
-comment "blablabla"
-	depends on BR2_REPRODUCIBLE
+Those questions are relevant for every package for which you're adding
+a patch.
 
-however, in this specific case, I would simply not bother adding a
-comment. If we start adding a comment for everything that is not
-suitable for reproducible builds, we're going to add hundreds of them I
-believe.
+Thanks!
 
 Thomas
 -- 
