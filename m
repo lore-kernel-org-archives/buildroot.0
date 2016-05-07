@@ -1,63 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 7 May 2016 23:07:40 +0200
-Subject: [Buildroot] [PATCH 10/34] reproducibility/sysstat: override gcc
- macros
-In-Reply-To: <1462002570-14706-10-git-send-email-gilles.chanteperdrix@xenomai.org>
-References: <20160430074358.GE1781@hermes.click-hack.org>
- <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1462002570-14706-10-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <b1e39f6f-9fad-e51a-0917-012d2a63e74a@mind.be>
+Date: Sun, 8 May 2016 00:08:30 +0200
+Subject: [Buildroot] Qt5 fails to compile with gcc 6.1.0
+In-Reply-To: <572DBAB9.3060607@gmail.com>
+References: <572DBAB9.3060607@gmail.com>
+Message-ID: <93637a3f-dd9b-c499-538b-5fbb0b65be97@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/30/16 09:49, Gilles Chanteperdrix wrote:
-> Override the __DATE__ and __TIME__ macros with values obtained from
-> the package SOURCE_DATE_EPOCH.
-> ---
->  package/sysstat/sysstat.mk | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
+On 05/07/16 11:51, Marco Trapanese wrote:
+> Same environment of the previous email. Qt5 fails with this error:
 >
-> diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-> index 7568a4b..5cc6cd6 100644
-> --- a/package/sysstat/sysstat.mk
-> +++ b/package/sysstat/sysstat.mk
-> @@ -17,6 +17,25 @@ SYSSTAT_DEPENDENCIES += gettext
->  SYSSTAT_MAKE_OPTS += LFLAGS="$(TARGET_LDFLAGS) -lintl"
->  endif
+>> In file included from
+>> /home/femtotech/dev/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/include/c++/6.1.0/bits/stl_algo.h:59:0,
+>>
+>>                  from
+>> /home/femtotech/dev/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/include/c++/6.1.0/algorithm:62,
+>>
+>>                  from ../../include/QtCore/../../src/corelib/global/qglobal.h:85,
+>>                  from ../../include/QtCore/qglobal.h:1,
+>>                  from accessible/qaccessible.h:34,
+>>                  from accessible/qaccessible.cpp:34:
+>> /home/femtotech/dev/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/include/c++/6.1.0/cstdlib:75:25:
+>> fatal error: stdlib.h: File o directory non esistente
+>>  #include_next <stdlib.h>
 >
-> +SYSSTAT_CONF_OPTS += \
-> +	sa_lib_dir=/usr/lib/sa
-> +
-> +ifeq ($(BR2_REPRODUCIBLE),y)
-> +SYSSTAT_SOURCE_DATE = `TZ=UTC LANG=C LC_ALL=C date -d @$(SOURCE_DATE_EPOCH) '+%b %_d %Y'`
-> +SYSSTAT_SOURCE_TIME = `TZ=UTC LANG=C LC_ALL=C date -d @$(SOURCE_DATE_EPOCH) '+%T'`
-> +
-> +SYSSTAT_CONF_OPTS += \
-> +	CFLAGS="$(TARGET_CFLAGS) -Wno-builtin-macro-redefined -include $(SYSSTAT_DIR)/.br_date_override.h"
-> +
-> +define SYSSTAT_OVERRIDE_DATE_HOOK
-> +	echo "#define buildroot_stringify(x) #x" > $(SYSSTAT_DIR)/.br_date_override.h
-> +	echo "#define __DATE__ buildroot_stringify($(SYSSTAT_SOURCE_DATE))" >> $(SYSSTAT_DIR)/.br_date_override.h
-> +	echo "#define __TIME__ buildroot_stringify($(SYSSTAT_SOURCE_TIME))" >> $(SYSSTAT_DIR)/.br_date_override.h
+> which means: "file or directory not found".
+> stdlib.h is in sysroot/usr/include:
+>
+>> /host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/stdlib.h
+>
+> It seems the same behavior reported here:
+>
+> https://bugs.musicpd.org/view.php?id=4524
 
-  Actually, we have the toolchain wrapper that could do this override much more 
-elegantly, and globally for all packages.
+  It's also been reported for Fedora [1]. The problem is that qt5 adds a 
+completely redundant -isystem <system-include-path> to the gcc command line. I 
+guess in gcc6 the include path for the standard C++ headers has changed which 
+makes the #include_next <stdlib.h> fail.
+
+  I couldn't find anything in the qt bugtracker, so we should probably report it 
+there.
 
   Regards,
   Arnout
 
-> +endef
-> +
-> +SYSSTAT_POST_PATCH_HOOKS += SYSSTAT_OVERRIDE_DATE_HOOK
-> +endif
-> +
->  # The isag tool is a post processing script that depends on tcl/tk
->  # among other things. So we don't install it.
->  SYSSTAT_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) INSTALL_ISAG=n install
->
+[1] 
+https://lists.fedoraproject.org/archives/list/devel at lists.fedoraproject.org/thread/Q5SWCUUMWQ4EMS7CU2CBOZHV3WZYOOTT/
+
+
 
 
 -- 
