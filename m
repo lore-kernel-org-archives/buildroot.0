@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 May 2016 09:13:43 +0200
-Subject: [Buildroot] [PATCH v3 1/3] uboot-tools: install libubootenv to
- staging
-In-Reply-To: <1462187815-2414-1-git-send-email-joerg.krause@embedded.rocks>
+Date: Sat, 7 May 2016 09:13:48 +0200
+Subject: [Buildroot] [PATCH v3 2/3] uboot-tools: add patch to fix
+ linking with libubootenv
+In-Reply-To: <1462187815-2414-2-git-send-email-joerg.krause@embedded.rocks>
 References: <1462187815-2414-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20160507091343.0c7fc7d2@free-electrons.com>
+ <1462187815-2414-2-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20160507091348.6fe357f1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +14,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  2 May 2016 13:16:53 +0200, J?rg Krause wrote:
+On Mon,  2 May 2016 13:16:54 +0200, J?rg Krause wrote:
+> Backport a patch from upstream [1] to fix linking with libubootenv:
+> 	fw_env.c:(.text+0x94): undefined reference to `common_args'
+> 
+> [1] http://git.denx.de/?p=u-boot.git;a=commit;h=43cb65b7a00e4759427a6e4b8a02039e43dab5a5
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  ...ug-config-structs-must-be-defined-in-tool.patch | 58 ++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>  create mode 100644 package/uboot-tools/0003-tools-env-bug-config-structs-must-be-defined-in-tool.patch
 
-> +define UBOOT_TOOLS_INSTALL_LIBUBOOTENV
-
-I've dropped this variable, and simply done the installation directly
-in UBOOT_TOOLS_INSTALL_STAGING_CMDS.
-
-> +	$(INSTALL) -D -m 0755 $(@D)/tools/env/lib.a $(STAGING_DIR)/usr/lib/libubootenv.a
-> +	$(INSTALL) -D -m 0644 $(@D)/tools/env/fw_env.h $(STAGING_DIR)/usr/include/fw_env.h
-> +endef
-> +
-> +define UBOOT_TOOLS_INSTALL_STAGING_CMDS
-> +	$(UBOOT_TOOLS_INSTALL_LIBUBOOTENV)
-> +endef
-
-Applied with this change. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
