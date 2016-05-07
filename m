@@ -1,68 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  7 May 2016 18:14:29 +0200
-Subject: [Buildroot] [PATCH 04/13 v7] core/legal-info: install source
-	archives in their own sub-dir
+Date: Sat,  7 May 2016 18:14:32 +0200
+Subject: [Buildroot] [PATCH 07/13 v7] support/apply-patches: bail-out on
+	duplicate patch basenames
 In-Reply-To: <cover.1462637351.git.yann.morin.1998@free.fr>
 References: <cover.1462637351.git.yann.morin.1998@free.fr>
-Message-ID: <596aa96d1442410a2ffe8c28e131112c57424b91.1462637351.git.yann.morin.1998@free.fr>
+Message-ID: <648b1696ba75005d025780eb2ff64e8b9731a266.1462637351.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we put all source archives side-by-side in the same
-directory.
+Patches we save can come from various locations;
+  - bundled with Buildroot
+  - downloaded
+  - from one or more global-patch-dir
 
-Since we're about to also save individual patches that were applied
-on those sources, we don't want to make that directory a complete
-mess of unassorted files.
+It is possible that two patches lying into different locations have the
+same basename, like so (first is bundled, second is from an hypothetical
+global-patch-dir):
+    package/foo/0001-fix-Makefile.patch
+    /path/to/my/patches/foo/0001-fix-Makefile.patch
 
-So, we install each source archive in its own sub-directory, where
-we'll later store the patches too. Store that location in a variable,
-so it can be re-used later on (to install patches in a future commit).
+In that case, when running legal-info, we'd save only the second patch,
+overwriting the first. That would be oproblematic, because:
+
+  - either the second patch depends on the first, and thus would no longer
+    apply (this is easy to detect, though),
+
+  - or the second patch does not dpend on the first, and the compliance
+    delivery will not be complete (this is much arder to detect).
+
+We fix that by checking that no two patches have the same same basename.
+If we find that the basename of the patch to be applied collides with
+that of a previously applied patch, we error out and report the duplicate.
+
+The unfortunate side-effect is that existing setups will now break in
+that situation, but that's a minor, corner-case issue that is easily
+fixed.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 ---
 Changes v6 -> v7:
-  - directly call the helper
+  - reword error message
 
 Changes v5 -> v6:
-  - variable with raw name was renamed  (Thomas)
-
-Changes v1 -> v2:
-  - perl no longer has a post-legal-info hook  (Thomas, Luca)
+  - don't renumber, detect collision and error out  (Luca, Arnout,
+    Thomas)
 ---
- package/pkg-generic.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ support/scripts/apply-patches.sh | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 688123c..b031879 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -482,6 +482,8 @@ endif
- 
- $(2)_REDISTRIBUTE		?= YES
- 
-+$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAW_BASE_NAME)
-+
- # When a target package is a toolchain dependency set this variable to
- # 'NO' so the 'toolchain' dependency is not added to prevent a circular
- # dependency
-@@ -807,7 +809,7 @@ endif
- # Save the source tarball
- 	$$(Q)support/scripts/hardlink-or-copy \
- 		$$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) \
--		$$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
-+		$$($(2)_REDIST_SOURCES_DIR)
- endif # redistribute
- 
- endif # other packages
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 20a1552..f8b6ca3 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -103,6 +103,14 @@ function apply_patch {
+         echo "Error: missing patch file ${path}/$patch"
+         exit 1
+     fi
++    existing="$( grep -E "/${patch}\$" ${builddir}/.applied_patches_list )"
++    if [ -n "${existing}" ]; then
++        echo "Error: duplicate filename '${patch}'"
++        echo "Conflicting files are:"
++        echo "  already applied: ${existing}"
++        echo "  to be applied  : ${path}/${patch}"
++        exit 1
++    fi
+     echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
+     ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
+     if [ $? != 0 ] ; then
 -- 
 2.7.4
