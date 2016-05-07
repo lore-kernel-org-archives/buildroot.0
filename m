@@ -1,129 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 May 2016 14:39:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: bump version to 1.6.8
-Message-ID: <1462624756-5887-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 7 May 2016 14:31:04 +0200
+Subject: [Buildroot] [git commit] package/go: bump version to 1.6.2
+Message-ID: <20160507124203.5A9E580333@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patches applied upstream:
-https://freeswitch.org/stash/projects/FS/repos/freeswitch/commits/eadb3f890f6e7ba3b3ca23c6feb144fb35d304ce
-https://freeswitch.org/stash/projects/FS/repos/freeswitch/commits/b024c752fb2e9789fdbaf769be9998f62bb5c483
+commit: https://git.buildroot.net/buildroot/commit/?id=abfaf47e4c4054cac9e8869f43ddf77c28fbb588
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Golang has significant improvements to support for multiarch in later
+versions. This bump is required to make many go programs functional
+under arm64, for example.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Acked-by: Geoff Levand <geoff@infradead.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freeswitch/0001-zrtp.patch                 | 33 --------------------
- .../0002-mod_cv-remove-unneeded-includes.patch     | 36 ----------------------
- package/freeswitch/freeswitch.hash                 |  4 +--
- package/freeswitch/freeswitch.mk                   |  2 +-
- 4 files changed, 3 insertions(+), 72 deletions(-)
- delete mode 100644 package/freeswitch/0001-zrtp.patch
- delete mode 100644 package/freeswitch/0002-mod_cv-remove-unneeded-includes.patch
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freeswitch/0001-zrtp.patch b/package/freeswitch/0001-zrtp.patch
-deleted file mode 100644
-index c1cdeed..0000000
---- a/package/freeswitch/0001-zrtp.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--Fix PowerPC detection (needs __linux__) and add aarch64 support.
--
--Patch sent upstream: https://freeswitch.org/jira/browse/FS-8746
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr freeswitch-1.6.6.org/libs/libzrtp/include/zrtp_config.h freeswitch-1.6.6/libs/libzrtp/include/zrtp_config.h
----- freeswitch-1.6.6.org/libs/libzrtp/include/zrtp_config.h	2016-01-12 17:32:36.000000000 +0100
--+++ freeswitch-1.6.6/libs/libzrtp/include/zrtp_config.h	2016-01-16 14:09:17.830860603 +0100
--@@ -21,7 +21,7 @@
-- #		define ZRTP_PLATFORM ZP_ANDROID
-- #	elif defined(__FreeBSD__)
-- #		define ZRTP_PLATFORM ZP_BSD
---#	elif defined(linux) || defined(__linux)
--+#	elif defined(linux) || defined(__linux__)
-- #		include <linux/version.h>
-- #		define ZRTP_PLATFORM ZP_LINUX
-- #	elif defined(__MACOSX__) || defined (__APPLE__) || defined (__MACH__)
--@@ -88,7 +88,13 @@
--  */
-- #define ZRTP_BYTE_ORDER ZBO_BIG_ENDIAN
-- 
---#elif defined(ARM) || defined(_ARM_) || defined(ARMV4) || defined(__arm__)
--+#elif defined(__AARCH64EB__)
--+/*
--+ * aarch64, big endian
--+ */
--+#define ZRTP_BYTE_ORDER ZBO_BIG_ENDIAN
--+
--+#elif defined(ARM) || defined(_ARM_) || defined(ARMV4) || defined(__arm__) || defined(__AARCH64EL__)
-- /*
--  * ARM, default to little endian
--  */
-diff --git a/package/freeswitch/0002-mod_cv-remove-unneeded-includes.patch b/package/freeswitch/0002-mod_cv-remove-unneeded-includes.patch
-deleted file mode 100644
-index f211363..0000000
---- a/package/freeswitch/0002-mod_cv-remove-unneeded-includes.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 83774b612a39ae81d1a4c9a4ca14278cd9e674e7 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Thu, 21 Apr 2016 19:10:52 +0200
--Subject: [PATCH 1/1] mod_cv: remove unneeded includes
--
--OpenCV contains various modules which have inter-module dependencies.
--While including freeswitch into buildroot we stumbled over the fact
--that mod_cv.cpp includes more headers than needed[1]. These OpenCV
--headers are generic headers which require more OpenCV modules enabled
--than really used by Freeswitch. The attached fixes the problem.
--
--[1] http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/146662
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Patch sent upstream: https://freeswitch.org/jira/browse/FS-9093]
-----
-- src/mod/applications/mod_cv/mod_cv.cpp | 3 ---
-- 1 file changed, 3 deletions(-)
--
--diff --git a/src/mod/applications/mod_cv/mod_cv.cpp b/src/mod/applications/mod_cv/mod_cv.cpp
--index 5183adc..5c10b8d 100644
----- a/src/mod/applications/mod_cv/mod_cv.cpp
--+++ b/src/mod/applications/mod_cv/mod_cv.cpp
--@@ -40,9 +40,6 @@ using namespace cv;
-- 
-- #include <switch.h>
-- 
---#include <cv.h>
---#include "cvaux.h"
---#include "cxmisc.h"
-- #include "highgui.h"
-- #include <stdio.h>
-- #include <stdlib.h>
---- 
--2.8.0.rc3
--
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index 31915cd..36bd75e 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
+diff --git a/package/go/go.hash b/package/go/go.hash
+index e7c72de..6826891 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
 @@ -1,2 +1,2 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.7.tar.xz.sha256
--sha256	9c7ca2d39985fdc39659054179465540e926880f032f855c0df74d6eec41a794	freeswitch-1.6.7.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.6.8.tar.xz.sha256
-+sha256	a9834667c0afc164631611b4862acd6411e4e6ddb706e4af4b51eab4adbe4fc1	freeswitch-1.6.8.tar.xz
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 8d7667b..3663e34 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
+ # Locally computed:
+-sha256  754e06dab1c31ab168fc9db9e32596734015ea9e24bc44cae7f237f417ce4efe  go1.5.3.src.tar.gz
++sha256 787b0b750d037016a30c6ed05a8a70a91b2e9db4bd9b1a2453aa502a63f1bccc   go1.6.2.src.tar.gz
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 5454fd5..720c75a 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREESWITCH_VERSION = 1.6.7
-+FREESWITCH_VERSION = 1.6.8
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
- FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
- FREESWITCH_LICENSE = MPLv1.1, \
--- 
-2.8.1
+-GO_VERSION = 1.5.3
++GO_VERSION = 1.6.2
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
