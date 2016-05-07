@@ -1,127 +1,48 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 7 May 2016 20:44:55 +0200
-Subject: [Buildroot] [PATCH 01/13 v6] support/scripts: add helper to
+Date: Sat, 7 May 2016 20:48:13 +0200
+Subject: [Buildroot] [PATCH 01/13 v7] support/scripts: add helper to
  hardlink-or-copy
-In-Reply-To: <20160505223841.GE4367@free.fr>
-References: <cover.1461881416.git.yann.morin.1998@free.fr>
- <0b6395f0d572eec63e4f14fd02d094b5b60f3de9.1461881416.git.yann.morin.1998@free.fr>
- <8e95b534-d9f0-5582-a0a8-495e018d88b8@mind.be>
- <20160505223841.GE4367@free.fr>
-Message-ID: <c09bf375-50ae-5e3d-77a1-4637c34bb888@mind.be>
+In-Reply-To: <7c92d1e222419fef1422295dd3027ec4e205fca5.1462637351.git.yann.morin.1998@free.fr>
+References: <cover.1462637351.git.yann.morin.1998@free.fr>
+ <7c92d1e222419fef1422295dd3027ec4e205fca5.1462637351.git.yann.morin.1998@free.fr>
+Message-ID: <7e8771df-0900-deba-a33f-a1094e8cd560@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/06/16 00:38, Yann E. MORIN wrote:
-> Arnout, All,
+On 05/07/16 18:14, Yann E. MORIN wrote:
+> When preparing the legal-info, the source archives are copied in the
+> legal-info/ output directory. When the archives are big, it can take
+> quite a bit of time and unnecessarily uses disk space. When the
+> legal-info output directory is on the same filesystem as the BR2_DL_DIR,
+> we can easily reduce copy time and disk usage by just using hardlins
+> instead of copying. However, the BR2_DL_DIR may be on a different
+> filesystem, so we must fallback to copying in this case
 >
-> On 2016-05-04 00:53 +0200, Arnout Vandecappelle spake thusly:
->> On 04/29/16 00:27, Yann E. MORIN wrote:
-[snip]
->>> +# hardlink-or-copy -- helper script to first try to hardlink,
->>> +# and fallback to copy.
->>> +HARDLINK_OR_COPY := support/scripts/hardlink-or-copy
->>
->>  = instead of :=
->>
->>
->>  However (and here starts the difference of opinion in coding style): why do
->> you need to define a variable for this? In general, I'm not a big fan of
->> variables that just contain a constant string. For numbers, it makes sense,
->> because a number is meaningless by itself. But a string is already something
->> that is searchable and identifiable. And in this specific case, the variable
->> name is even the same as the value... So what's the point? OK, you save 13
->> characters in every place where you use it (that's in only 2 (TWO) places,
->> by the way).
->>
->>  We do have a few existing cases of such variables, but IMHO they are
->> equally useless. And mostly introduced by you, BTW :-)
+> Introduce a helper script that copies a source file into a destination
+> directory, by first attempting to hard-link, and falling back to a
+> plain copy in case the hardlink fails.
 >
-> Well, when the thing s used in multiple places, I find it "better" to
-> use a variable so as to be able to change all locations at once with a
-> single edit (even if we don't plan on renaming or moving it).
+> In case the destination already exists, it is forcibly removed first, to
+> avoid clobering any existing target file (and especially any hardlink to
+> it), since cp -f does not remove the destination file, but clobbers it.
+>
+> In some situations, it will be necessary that the destination file is
+> named differently than the source, so if a third argument is specified,
+> it is treated as the basename of the destination file.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
 
-  I was going to build a big argument about why I disagree, but I see in v7 you 
-already dropped the variable so let's leave it at that :-)
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-[snip]
->>> +    rm -f "${dst_f}"
->>> +    ln -f "${src_f}" "${dst_f}" 2>/dev/null || cp -f "${src_f}" "${dst_f}"
->>
->>  Since there's an rm just above, is there any point in adding the -f still
->> here? Yes, for race conditions, but then the rm wasn't much use to begin
->> with.
->
-> That's what was diuscussed in the previous reviews. And didn't you
-> explcitly mentioned we should use an explicit rm -f :
->
->     http://lists.busybox.net/pipermail/buildroot/2016-February/151140.html
-
-  This one you didn't change in v7... The rm -f is perfect; it's the -f of ln/cp 
-which is redundant.
-
-  But it's not really important, so I'll probably just Rev-by the v7.
-
->
-> ;-)
->
->>> +}
->>> +
->>> +main "${@}"
->>
->>  Anothing coding style disagreement. What's the point of putting your
->> complete shell script in a function? I don't really have arguments against
->> it, but do you have reasons why you think it's better like that?
->
-> I am not sure what advantages it has, technically-wise (i.e. I am not
-> sure it allows things that would not be possible without main).
->
-> I've been writing (bash) shell scripts for ages now, and I find it very
-> cnvenient to use a main():
->
->   - do not use global variables (even though variables are inherited by
->     sub-functions): declare all variables used in the function and only
->     use that, with explciitly docuemented exceptions;
->
->   - it helps organise the code: it is cleaner in my head;
->
->   - I'm not the only one: https://google.github.io/styleguide/shell.xml
-
-  Great explanation, thanks.
 
   Regards,
   Arnout
 
-
->
->>  Note that currently we have both styles of shell scripts, though the ones
->> with a main function are a minority.
->
-> ... and probably mines. ;-)
->
-> Regards,
-> Yann E. MORIN.
->
->> And none of the python scripts have a
->> main.
->>
->>  Regards,
->>  Arnout
->>
->>
->>
->> --
->> Arnout Vandecappelle                          arnout at mind be
->> Senior Embedded Software Architect            +32-16-286500
->> Essensium/Mind                                http://www.mind.be
->> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
->> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
->> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
-
-
+[snip]
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
