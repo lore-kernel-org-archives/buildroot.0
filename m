@@ -1,65 +1,142 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 7 May 2016 20:54:24 +0200
-Subject: [Buildroot] [PATCH 02/34] reproducibility: override locale and
- timezone
-In-Reply-To: <20160507151550.48e49913@free-electrons.com>
-References: <20160430074358.GE1781@hermes.click-hack.org>
- <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1462002570-14706-2-git-send-email-gilles.chanteperdrix@xenomai.org>
- <20160507151550.48e49913@free-electrons.com>
-Message-ID: <968b80a6-b811-52dc-c4e8-0b8b3401216d@mind.be>
+Date: Sat, 7 May 2016 21:01:37 +0200
+Subject: [Buildroot] [PATCH 2/6] qemu: make qemu and host-qemu packages'
+ version (separately) configurable
+In-Reply-To: <1462348079-7631-2-git-send-email-simonn.maes@gmail.com>
+References: <1462348079-7631-1-git-send-email-simonn.maes@gmail.com>
+ <1462348079-7631-2-git-send-email-simonn.maes@gmail.com>
+Message-ID: <2e48560e-3ff3-449a-2914-caeae7ae5d1e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/07/16 15:15, Thomas Petazzoni wrote:
-> Hello,
+On 05/04/16 09:47, Simon Maes wrote:
+> Signed-off-by: Simon Maes <simonn.maes@gmail.com>
+> ---
+>  package/qemu/Config.in      |  8 ++++++++
+>  package/qemu/Config.in.host |  8 ++++++++
+>  package/qemu/qemu.mk        | 26 ++++++++++++++++++--------
+>  3 files changed, 34 insertions(+), 8 deletions(-)
 >
-> On Sat, 30 Apr 2016 09:48:58 +0200, Gilles Chanteperdrix wrote:
->> ---
->>  Makefile | 7 +++++++
->>  1 file changed, 7 insertions(+)
+> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+> index ea6b946..a16a65c 100644
+> --- a/package/qemu/Config.in
+> +++ b/package/qemu/Config.in
+> @@ -36,6 +36,14 @@ config BR2_PACKAGE_QEMU
 >
-> Missing SoB.
+>  if BR2_PACKAGE_QEMU
 >
->> diff --git a/Makefile b/Makefile
->> index ec7dccb..86b2ed2 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -218,6 +218,13 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
->>  -include $(BR2_CONFIG)
->>  endif
->>
->> +export BR2_REPRODUCIBLE
->
-> Why ?
+> +config BR2_PACKAGE_QEMU_VERSION
+> +	string "qemu version"
+> +	default "2.5.0"
 
-  I guess because it will (or may be) be used in some helper scripts...
+  Our current version is 2.5.1, so the default should be that as well.
+
+> +	help
+> +	  QEMU version to use target qemu
+                              ^^for
+
+> +	  Sometimes the latest version is broken for some specific
+> +	  architecture or target machine
+> +
+>  comment "Emulators selection"
+>
+>  config BR2_PACKAGE_QEMU_CUSTOM_TARGETS
+> diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+> index 71f697e..c86768f 100644
+> --- a/package/qemu/Config.in.host
+> +++ b/package/qemu/Config.in.host
+> @@ -18,6 +18,14 @@ config BR2_PACKAGE_HOST_QEMU
+>
+>  if BR2_PACKAGE_HOST_QEMU
+>
+> +config BR2_PACKAGE_HOST_QEMU_VERSION
+> +	string "host qemu version"
+> +	default "2.5.0"
+
+  Same here, default 2.5.1.
+
+> +	help
+> +	  QEMU version to use for host qemu
+> +	  Sometimes the latest version is broken for some specific
+> +	  architecture or target machine
+> +
+>  #
+>  # Configuration selection
+>  #
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index 0e99138..151060b 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -4,18 +4,19 @@
+>  #
+>  ################################################################################
+>
+> -QEMU_VERSION = 2.5.1
+> -QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
+> -QEMU_SITE = http://wiki.qemu.org/download
+> -QEMU_LICENSE = GPLv2, LGPLv2.1, MIT, BSD-3c, BSD-2c, Others/BSD-1c
+> -QEMU_LICENSE_FILES = COPYING COPYING.LIB
+> -# NOTE: there is no top-level license file for non-(L)GPL licenses;
+> -#       the non-(L)GPL license texts are specified in the affected
+> -#       individual source files.
+
+  There is no reason to move all this. When there are differences between host 
+and target, we put target first. So just replace
+
+QEMU_VERSION = $(call qstrip,$(BR2_PACKAGE_QEMU_VERSION))
+
+and leave the rest as is.
 
 >
->> +ifeq ($(BR2_REPRODUCIBLE),y)
->> +export TZ=UTC
->> +export LANG=C
->> +export LC_ALL=C
->> +endif
+>  #-------------------------------------------------------------
+>  # Host-qemu
 >
-> Regarding overriding TZ, LANG and LC_ALL, I'm wondering if we shouldn't
-> do it unconditionally, regardless of the value of BR2_REPRODUCIBLE.
-> What is the benefit of leaving those variable to their value from the
-> build environment?
+> +HOST_QEMU_VERSION = $(call qstrip,$(BR2_PACKAGE_HOST_QEMU_VERSION))
+> +HOST_QEMU_SOURCE = qemu-$(HOST_QEMU_VERSION).tar.bz2
+> +HOST_QEMU_SITE = http://wiki.qemu.org/download
+> +HOST_QEMU_LICENSE = GPLv2, LGPLv2.1, MIT, BSD-3c, BSD-2c, Others/BSD-1c
+> +HOST_QEMU_LICENSE_FILES = COPYING COPYING.LIB
 
-  For the record: I had the same comment about this entire series. Most of it 
-should be done unconditionally, only the aspects that may be annoying for 
-debugging (like the timestamps) should be conditional.
+  Only the first two are needed, all the rest can be inherited from target.
 
-  Unfortunately, that will be a cause for discussion... For instance, LANG=C 
-means that compiler error messages will be in English instead of in your native 
-language. Do we really want that by default?
 
   Regards,
   Arnout
+
+> +# NOTE: there is no top-level license file for non-(L)GPL licenses;
+> +#       the non-(L)GPL license texts are specified in the affected
+> +#       individual source files.
+> +
+>  HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-pixman
+>  HOST_QEMU_SITE = $(QEMU_SITE)
+>  HOST_QEMU_SOURCE = $(QEMU_SOURCE)
+> @@ -146,6 +147,15 @@ QEMU_USER = $(HOST_DIR)/usr/bin/qemu-$(HOST_QEMU_ARCH)
+>  #-------------------------------------------------------------
+>  # Target-qemu
+>
+> +QEMU_VERSION = $(call qstrip,$(BR2_PACKAGE_QEMU_VERSION))
+> +QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
+> +QEMU_SITE = http://wiki.qemu.org/download
+> +QEMU_LICENSE = GPLv2, LGPLv2.1, MIT, BSD-3c, BSD-2c, Others/BSD-1c
+> +QEMU_LICENSE_FILES = COPYING COPYING.LIB
+> +# NOTE: there is no top-level license file for non-(L)GPL licenses;
+> +#       the non-(L)GPL license texts are specified in the affected
+> +#       individual source files.
+> +
+>  QEMU_DEPENDENCIES = host-pkgconf host-python libglib2 zlib pixman
+>
+>  # Need the LIBS variable because librt and libm are
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
 
 -- 
