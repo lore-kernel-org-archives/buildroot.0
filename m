@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 May 2016 22:22:31 +0200
-Subject: [Buildroot] [PATCH 13/34] reproducibility/libtool: fix
- reproducibility issues
-In-Reply-To: <1462002570-14706-13-git-send-email-gilles.chanteperdrix@xenomai.org>
+Date: Sat, 7 May 2016 22:24:11 +0200
+Subject: [Buildroot] [PATCH 14/34] reproducibility/python: also remove
+ pyo files
+In-Reply-To: <1462002570-14706-14-git-send-email-gilles.chanteperdrix@xenomai.org>
 References: <20160430074358.GE1781@hermes.click-hack.org>
  <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1462002570-14706-13-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <20160507222231.56f0e905@free-electrons.com>
+ <1462002570-14706-14-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <20160507222411.4a47806a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,67 +15,45 @@ To: buildroot@busybox.net
 
 Hello,
 
-This probably should be several separate patches.
+On Sat, 30 Apr 2016 09:49:10 +0200, Gilles Chanteperdrix wrote:
+> when BR2_PACKAGE_PYTHON_PY_ONLY is selected. Make that option the
+> default when BR2_REPRODUCIBLE is selected in order to avoid problems
+> with timestamps embedded in compiled python files.
 
-On Sat, 30 Apr 2016 09:49:09 +0200, Gilles Chanteperdrix wrote:
-> - remove libtool and libtoolize; they are full of references to the
->   build environment tools, and unlikely to be needed on target;
-> - do not use /etc/ld.so.conf contents in libtool search path: they are
->   not relevant on target, and cause a useless dependency of libltdl
->   on the build environment.
-> ---
->  package/libtool/0001-fix-cross-compilation.patch | 11 +++++++++++
->  package/libtool/libtool.mk                       |  8 ++++++--
->  2 files changed, 17 insertions(+), 2 deletions(-)
->  create mode 100644 package/libtool/0001-fix-cross-compilation.patch
-> 
-> diff --git a/package/libtool/0001-fix-cross-compilation.patch b/package/libtool/0001-fix-cross-compilation.patch
-> new file mode 100644
-> index 0000000..c203371
-> --- /dev/null
-> +++ b/package/libtool/0001-fix-cross-compilation.patch
+The title of the patch says "also remove pyo files", but this patch
+does a lot more.
 
-This patch should have a description + Signed-off-by.
-
-However, libtool is really a core package, and not a simple one, so I'm
-a bit uneasy with the idea of carrying patches against it. What are the
-chances of having something like this submitted upstream?
-
-> +   fi
-> diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
-> index 8688f8b..c177626 100644
-> --- a/package/libtool/libtool.mk
-> +++ b/package/libtool/libtool.mk
-> @@ -8,7 +8,7 @@ LIBTOOL_VERSION = 2.4.6
->  LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.xz
->  LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
->  LIBTOOL_INSTALL_STAGING = YES
-> -LIBTOOL_CONF_ENV = HELP2MAN=true
-> +LIBTOOL_CONF_OPTS = HELP2MAN=true
-
-Why?
-
->  LIBTOOL_DEPENDENCIES = host-m4
->  LIBTOOL_LICENSE = GPLv2+
->  LIBTOOL_LICENSE_FILES = COPYING
-> @@ -33,9 +33,13 @@ define LIBTOOL_AVOID_AUTORECONF_HOOK
->  	find $(@D) -name configure -exec touch '{}' \;
->  	find $(@D) -name Makefile.in -exec touch '{}' \;
->  endef
-> -LIBTOOL_PRE_CONFIGURE_HOOKS += LIBTOOL_AVOID_AUTORECONF_HOOK
-
-Why?
-
->  HOST_LIBTOOL_PRE_CONFIGURE_HOOKS += LIBTOOL_AVOID_AUTORECONF_HOOK
+> diff --git a/package/python/Config.in b/package/python/Config.in
+> index fa83e77..2c62559 100644
+> --- a/package/python/Config.in
+> +++ b/package/python/Config.in
+> @@ -19,7 +19,8 @@ if BR2_PACKAGE_PYTHON
 >  
-> +define LIBTOOL_REMOVE_LIBTOOL
-> +	rm $(TARGET_DIR)/usr/bin/libtool $(TARGET_DIR)/usr/bin/libtoolize
-> +endef
-> +LIBTOOL_POST_INSTALL_TARGET_HOOKS += LIBTOOL_REMOVE_LIBTOOL
+>  choice
+>  	prompt "python module format to install"
+> -	default BR2_PACKAGE_PYTHON_PYC_ONLY
+> +	default BR2_PACKAGE_PYTHON_PYC_ONLY if !BR2_REPRODUCIBLE
+> +	default BR2_PACKAGE_PYTHON_PY_ONLY if BR2_REPRODUCIBLE
 
-This part could be a separate patch that would be easy to apply today,
-so don't hesitate to resend just this part, with your Signed-off-by
-line, of course.
+If .pyc files are really not suitable for reproducible builds, then the
+option of having .pyc files should be completely hidden when
+BR2_REPRODUCIBLE=y.
+
+> diff --git a/package/python/python.mk b/package/python/python.mk
+> index 80ffbde..5c5ebb8 100644
+> --- a/package/python/python.mk
+> +++ b/package/python/python.mk
+> @@ -225,7 +225,7 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
+>  define PYTHON_FINALIZE_TARGET
+> -	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
+> +	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py[co]' -print0 | xargs -0 rm -f
+
+This part is already handled in another patch series I have sent around
+Python. See https://patchwork.ozlabs.org/patch/617272/ specifically.
+
+Thanks!
 
 Thomas
 -- 
