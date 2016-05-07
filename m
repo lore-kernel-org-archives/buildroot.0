@@ -1,49 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 May 2016 15:58:06 +0200
-Subject: [Buildroot] [git commit] uboot-tools: install libubootenv to staging
-Message-ID: <20160507071254.09D8C817FA@busybox.osuosl.org>
+Date: Sat, 7 May 2016 09:13:43 +0200
+Subject: [Buildroot] [PATCH v3 1/3] uboot-tools: install libubootenv to
+ staging
+In-Reply-To: <1462187815-2414-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1462187815-2414-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20160507091343.0c7fc7d2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e0ea8cf5e2c57d6b3db0b6a3b36a324d678d7f7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-libubootenv is required by swupdate.
+On Mon,  2 May 2016 13:16:53 +0200, J?rg Krause wrote:
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-[Thomas: do the installation directly in <pkg>_INSTALL_STAGING_CMDS.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/uboot-tools/uboot-tools.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+> +define UBOOT_TOOLS_INSTALL_LIBUBOOTENV
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index f47b3db..d1ebd6f 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -9,6 +9,7 @@ UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPLv2+
- UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
-+UBOOT_TOOLS_INSTALL_STAGING = YES
- 
- define UBOOT_TOOLS_CONFIGURE_CMDS
- 	mkdir -p $(@D)/include/config
-@@ -58,6 +59,14 @@ define UBOOT_TOOLS_INSTALL_DUMPIMAGE
- endef
- endif
- 
-+define UBOOT_TOOLS_INSTALL_LIBUBOOTENV
-+endef
-+
-+define UBOOT_TOOLS_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/tools/env/lib.a $(STAGING_DIR)/usr/lib/libubootenv.a
-+	$(INSTALL) -D -m 0644 $(@D)/tools/env/fw_env.h $(STAGING_DIR)/usr/include/fw_env.h
-+endef
-+
- define UBOOT_TOOLS_INSTALL_TARGET_CMDS
- 	$(UBOOT_TOOLS_INSTALL_MKIMAGE)
- 	$(UBOOT_TOOLS_INSTALL_MKENVIMAGE)
+I've dropped this variable, and simply done the installation directly
+in UBOOT_TOOLS_INSTALL_STAGING_CMDS.
+
+> +	$(INSTALL) -D -m 0755 $(@D)/tools/env/lib.a $(STAGING_DIR)/usr/lib/libubootenv.a
+> +	$(INSTALL) -D -m 0644 $(@D)/tools/env/fw_env.h $(STAGING_DIR)/usr/include/fw_env.h
+> +endef
+> +
+> +define UBOOT_TOOLS_INSTALL_STAGING_CMDS
+> +	$(UBOOT_TOOLS_INSTALL_LIBUBOOTENV)
+> +endef
+
+Applied with this change. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
