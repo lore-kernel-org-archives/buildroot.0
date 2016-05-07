@@ -1,70 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  7 May 2016 18:14:34 +0200
-Subject: [Buildroot] [PATCH 09/13 v7] core/legal-info: also save extra
-	downloads
+Date: Sat,  7 May 2016 18:14:37 +0200
+Subject: [Buildroot] [PATCH 12/13 v7] core/pkg-generic: reorder variables
+	definitions for legal-info
 In-Reply-To: <cover.1462637351.git.yann.morin.1998@free.fr>
 References: <cover.1462637351.git.yann.morin.1998@free.fr>
-Message-ID: <66a5a152ccbbd6bae8f776c21d53d05c35444ad4.1462637351.git.yann.morin.1998@free.fr>
+Message-ID: <0a79662be4ed8170a4608293a294d9131cf89857.1462637351.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages, like perl, download extra files that end up as part of
-the source that Buildroot builds. Up until now, those files were not
-saved in the legal-info output.
+Move the declarations of _ACTUAL_SOURCE and _ACTUAL_SITE earlier, so
+that they are close to where _SOURCE and _SITE are handled.
 
-Add those files to the legal-info output.
-
-The unfortunate side-effect is that we will also save the secondary
-archive for the external blackfin toolchains; however, we already do
-save the binary release of some external toolchains when they do not
-provide actual source archives.
-
-This is inherently bad, as those are not source archives, but solving
-this is a bigger concern, for another series...
+This looks so far like a purely cosmetic change, but makes more sense
+with the follow-up patch, where we'll need them earlier in the file.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 ---
-Changes v6 -> v7:
-  - directly call the wrapper
-  - fix after re-ordering patches
-
 Changes v2 -> v3:
-  - typo  (Luca)
-  - incorporate the post-commit log message (the part about the
-    side-effect) into the commit log itself, it makes sense to not
-    forget about that
+  - move that to its own patch  (Arnout)
 ---
- package/pkg-generic.mk | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ package/pkg-generic.mk | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 13455d1..a720930 100644
+index a720930..6e834dd 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -804,10 +804,12 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
- ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
- 	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
+@@ -428,6 +428,14 @@ ifndef $(2)_SOURCE
+  endif
  endif
--# Save the source tarball
--	$$(Q)support/scripts/hardlink-or-copy \
--		$$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) \
--		$$($(2)_REDIST_SOURCES_DIR)
-+# Save the source tarball and any extra downloads, but not
-+# patches, as they are handled specially afterwards.
-+	$$(foreach e,$$($(2)_ACTUAL_SOURCE_TARBALL) $$(notdir $$($(2)_EXTRA_DOWNLOADS)),\
-+		$$(Q)support/scripts/hardlink-or-copy \
-+			$$(DL_DIR)/$$(e) \
-+			$$($(2)_REDIST_SOURCES_DIR)$$(sep))
- # Save patches and generate the series file
- 	$$(Q)while read f; do \
- 		support/scripts/hardlink-or-copy \
+ 
++# If FOO_ACTUAL_SOURCE_TARBALL is explicitly defined, it means FOO_SOURCE is
++# indeed a binary (e.g. external toolchain) and FOO_ACTUAL_SOURCE_TARBALL/_SITE
++# point to the actual sources tarball. Use the actual sources for legal-info.
++# For most packages the FOO_SITE/FOO_SOURCE pair points to real source code,
++# so these are the defaults for FOO_ACTUAL_*.
++$(2)_ACTUAL_SOURCE_TARBALL ?= $$($(2)_SOURCE)
++$(2)_ACTUAL_SOURCE_SITE    ?= $$(call qstrip,$$($(2)_SITE))
++
+ ifndef $(2)_PATCH
+  ifdef $(3)_PATCH
+   $(2)_PATCH = $$($(3)_PATCH)
+@@ -763,14 +771,6 @@ $(1)-legal-info: $(1)-source $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
+ endif
+ endif
+ 
+-# If FOO_ACTUAL_SOURCE_TARBALL is explicitly defined, it means FOO_SOURCE is
+-# indeed a binary (e.g. external toolchain) and FOO_ACTUAL_SOURCE_TARBALL/_SITE
+-# point to the actual sources tarball. Use the actual sources for legal-info.
+-# For most packages the FOO_SITE/FOO_SOURCE pair points to real source code,
+-# so these are the defaults for FOO_ACTUAL_*.
+-$(2)_ACTUAL_SOURCE_TARBALL ?= $$($(2)_SOURCE)
+-$(2)_ACTUAL_SOURCE_SITE    ?= $$(call qstrip,$$($(2)_SITE))
+-
+ # legal-info: produce legally relevant info.
+ $(1)-legal-info:
+ # Packages without a source are assumed to be part of Buildroot, skip them.
 -- 
 2.7.4
