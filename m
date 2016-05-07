@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 May 2016 22:29:26 +0200
-Subject: [Buildroot] [PATCH 19/34] reproducibility/python: make python
- reproducible
-In-Reply-To: <1462002570-14706-19-git-send-email-gilles.chanteperdrix@xenomai.org>
+Date: Sat, 7 May 2016 22:31:12 +0200
+Subject: [Buildroot] [PATCH 21/34] hddtemp: add
+In-Reply-To: <1462002570-14706-21-git-send-email-gilles.chanteperdrix@xenomai.org>
 References: <20160430074358.GE1781@hermes.click-hack.org>
  <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1462002570-14706-19-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <20160507222926.33bded73@free-electrons.com>
+ <1462002570-14706-21-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <20160507223112.6b0d7c73@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,37 +14,55 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 30 Apr 2016 09:49:15 +0200, Gilles Chanteperdrix wrote:
-> python build is not reproducible for two reasons:
-> - the libpython library embeds the build timestamps, fix this by
->   overriding the __DATE__ and __TIME__ macro using SOURCE_DATE_EPOCH;
-> - _sysconfigdata.py and config/Makefile on target includes references
->   through INSTALL and MKDIR_P variables to host tools, fix this by
->   overriding these variables values with the corresponding paths on
->   buildroot rootfs.
+On Sat, 30 Apr 2016 09:49:17 +0200, Gilles Chanteperdrix wrote:
+> ---
+>  package/Config.in            |  1 +
+>  package/hddtemp/Config.in    |  8 ++++++++
+>  package/hddtemp/hddtemp.hash |  2 ++
+>  package/hddtemp/hddtemp.mk   | 19 +++++++++++++++++++
+>  4 files changed, 30 insertions(+)
+>  create mode 100644 package/hddtemp/Config.in
+>  create mode 100644 package/hddtemp/hddtemp.hash
+>  create mode 100644 package/hddtemp/hddtemp.mk
 
-For this second part, are you really aiming at having reproducible
-builds with different build directories ? As you say in your cover
-letter, that's an even more complicated problem.
+Generally looks good. As usual your SoB line is missing, so we can't
+apply for the moment. Some more comments below.
 
-> +ifeq ($(BR2_REPRODUCIBLE),y)
-> +PYTHON_SOURCE_DATE = `TZ=UTC LANG=C LC_ALL=C date -d @$(SOURCE_DATE_EPOCH) '+%b %_d %Y'`
-> +PYTHON_SOURCE_TIME = `TZ=UTC LANG=C LC_ALL=C date -d @$(SOURCE_DATE_EPOCH) '+%T'`
+> diff --git a/package/hddtemp/Config.in b/package/hddtemp/Config.in
+> new file mode 100644
+> index 0000000..0d28250
+> --- /dev/null
+> +++ b/package/hddtemp/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_HDDTEMP
+> +	bool "hddtemp"
+
+Really no toolchain dependencies? Not using fork() ? Not using
+threads ?
+
+> +++ b/package/hddtemp/hddtemp.mk
+> @@ -0,0 +1,19 @@
+> +################################################################################
+> +#
+> +# hddtemp
+> +#
+> +################################################################################
 > +
-> +PYTHON_CONF_OPTS += \
-> +	CFLAGS="$(TARGET_CFLAGS) -Wno-builtin-macro-redefined -include $(PYTHON_DIR)/.br_date_override.h"
+> +HDDTEMP_VERSION = 0.3-beta15
+> +HDDTEMP_SOURCE = hddtemp-$(HDDTEMP_VERSION).tar.bz2
+> +HDDTEMP_SITE = http://download.savannah.gnu.org/releases/hddtemp
+> +HDDTEMP_LICENSE = GPLv2
+> +HDDTEMP_LICENSE_FILES = GPL-2
 > +
-> +define PYTHON_OVERRIDE_DATE_HOOK
-> +	echo "#define buildroot_stringify(x) #x" > $(PYTHON_DIR)/.br_date_override.h
-> +	echo "#define __DATE__ buildroot_stringify($(PYTHON_SOURCE_DATE))" >> $(PYTHON_DIR)/.br_date_override.h
-> +	echo "#define __TIME__ buildroot_stringify($(PYTHON_SOURCE_TIME))" >> $(PYTHON_DIR)/.br_date_override.h
+> +define HDDTEMP_REMOVE_MAN
+> +	rm -rf $(TARGET_DIR)/usr/man
 > +endef
-> +
-> +PYTHON_POST_PATCH_HOOKS += PYTHON_OVERRIDE_DATE_HOOK
-> +endif
 
-This really needs to be factored out somewhere. Maybe our compiler
-wrapper should take of this. Arnout?
+This is not needed usr/man is removed from $(TARGET_DIR) at the end of
+the build. See the target-finalize make target in the main Buildroot
+Makefile.
+
+Thanks!
 
 Thomas
 -- 
