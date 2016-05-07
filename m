@@ -1,39 +1,80 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sat,  7 May 2016 09:57:48 +0200
-Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.9.3-10
-Message-ID: <1462607868-28290-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Sat, 7 May 2016 11:04:24 +0200
+Subject: [Buildroot] host-mtools 4.0.18 fails to install to host directory
+Message-ID: <572DAF98.6070002@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+With Buildroot 2016.05-git-01197-gda433d6-dirty and .config attached, 
+host-mtools fails to install to the host directory:
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index ca80848..135989f 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 6731c414b5b939713a73a088840ed68c22c91d1335514d228d6687d07ce2e1c8 ImageMagick-6.9.3-7.tar.xz
-+sha256 e33f021c879f31703f9e620f578ccf7d221a34941589da4bbe967b16a814336a ImageMagick-6.9.3-10.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 4d37873..8ecf5d6 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 6.9.3-7
-+IMAGEMAGICK_VERSION = 6.9.3-10
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
--- 
-1.9.1
+> >>> host-mtools 4.0.18 Installing to host directory
+> PATH="/home/tech/dev/buildroot/output/host/bin:/home/tech/dev/buildroot/output/host/sbin:/home/tech/dev/buildroot/output/host/usr/bin:/home/tech/dev/buildroot/output/host/usr/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games" 
+> PKG_CONFIG="/home/tech/dev/buildroot/output/host/usr/bin/pkg-config" 
+> PKG_CONFIG_SYSROOT_DIR="/" 
+> PKG_CONFIG_LIBDIR="/home/tech/dev/buildroot/output/host/usr/lib/pkgconfig" 
+> /usr/bin/make -j1 install -C 
+> /home/tech/dev/buildroot/output/build/host-mtools-4.0.18/
+> make[1]: ingresso nella directory 
+> "/home/tech/dev/buildroot/output/build/host-mtools-4.0.18"
+>
+> [...]
+>
+> ./mkinstalldirs /home/tech/dev/buildroot/output/host/usr/share/info
+> if test -f mtools.info; then \
+>   for i in mtools.info*; do \
+>     /usr/bin/install -c -m 644 $i 
+> /home/tech/dev/buildroot/output/host/usr/share/info/$i; \
+>   done; \
+> else \
+>   for i in ./mtools.info*; do \
+>     /usr/bin/install -c -m 644 $i 
+> /home/tech/dev/buildroot/output/host/usr/share/info/`echo $i | sed 
+> 's|^./||'`; \
+>   done; \
+> fi; \
+> if [ -n "/usr/bin/install-info" ] ; then \
+>     /usr/bin/install-info 
+> --info-dir=/home/tech/dev/buildroot/output/host/usr/share/info 
+> /home/tech/dev/buildroot/output/host/usr/share/info/mtools.info; \
+> fi
+> install-info: /home/tech/dev/buildroot/output/host/usr/share/info/dir: 
+> file vuoto
+> Makefile:222: set di istruzioni per l'obiettivo "install-info" non 
+> riuscito
+> make[1]: *** [install-info] Errore 1
+> make[1]: uscita dalla directory 
+> "/home/tech/dev/buildroot/output/build/host-mtools-4.0.18"
+> package/pkg-generic.mk:205: set di istruzioni per l'obiettivo 
+> "/home/tech/dev/buildroot/output/build/host-mtools-4.0.18/.stamp_host_installed" 
+> non riuscito
+> make: *** 
+> [/home/tech/dev/buildroot/output/build/host-mtools-4.0.18/.stamp_host_installed] 
+> Errore 2
+
+
+In English:
+
+> install-info: /home/tech/dev/buildroot/output/host/usr/share/info/dir: 
+> file vuoto
+
+means:
+
+file empty.
+In fact /home/tech/dev/buildroot/output/host/usr/share/info/dir has 0 
+byte length.
+
+
+
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/xml
+Size: 94390 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160507/814f84b9/attachment.wsdl>
