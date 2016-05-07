@@ -1,64 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 7 May 2016 22:52:37 +0200
-Subject: [Buildroot] [PATCH 05/34] reproducibility/linux: override build
- timestamp
-In-Reply-To: <1462002570-14706-5-git-send-email-gilles.chanteperdrix@xenomai.org>
-References: <20160430074358.GE1781@hermes.click-hack.org>
- <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1462002570-14706-5-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <a897f700-cdcd-96b2-c080-c68814e5b93a@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 7 May 2016 22:50:43 +0200
+Subject: [Buildroot] [PATCH 1/1] kodi: Enable raspberry-pi2 build support
+In-Reply-To: <1461702074-14376-1-git-send-email-bmauduit@beneth.fr>
+References: <1461702074-14376-1-git-send-email-bmauduit@beneth.fr>
+Message-ID: <20160507225043.56bdc54f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/30/16 09:49, Gilles Chanteperdrix wrote:
-> with SOURCE_DATE_EPOCH
-> ---
->  linux/linux.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 9507837..d882702 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -74,6 +74,14 @@ LINUX_MAKE_ENV = \
->  	$(TARGET_MAKE_ENV) \
->  	BR_BINARIES_DIR=$(BINARIES_DIR)
->
-> +ifeq ($(BR2_REPRODUCIBLE),y)
-> +LINUX_MAKE_ENV += \
-> +	KBUILD_BUILD_VERSION=1 \
-> +	KBUILD_BUILD_USER=buildroot \
-> +	KBUILD_BUILD_HOST=buildroot \
+Hello,
 
-  This is for example something that really should be inside BR2_REPRODUCIBLE, 
-because the build user and version gives me useful information while developing.
+On Tue, 26 Apr 2016 22:21:14 +0200, Beno?t Mauduit wrote:
 
-> +	KBUILD_BUILD_TIMESTAMP="$(shell TZ=UTC LANG=C LC_ALL=C date -d @$(SOURCE_DATE_EPOCH))"
+> +Original commit from "popcornmix" [0], and fixed by "wsnipex" [1] on Kodi branch master.
+> +Commit-id in xbmc/kodi upstream git :
+> +[0] Commit-id : 253ec417519afe9415612add80ff5a1753208b75
+> +[1] Commit-id : 1da2f07be715865bf7cf9731d7147dc4f43459be
 
-  I think the TZ LANG LC_ALL things are redundant, because we already exported 
-those.
+In these are two patches upstream, then it should be two patches in
+Buildroot as well.
 
-  This timestamp is used in several places, so I think it's useful to save it in 
-a global SOURCE_DATE variable.
-
-  Regards,
-  Arnout
-
-> +endif
 > +
->  # Get the real Linux version, which tells us where kernel modules are
->  # going to be installed in the target filesystem.
->  LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
->
+> +Addition to original patches :
+> + * Add optimization flag for rpi2 in main xbmc build
+> + * Add -mtune & -mvectorize-with-neon-quad flag in "tools/depends" build
 
+Why are you doing those additional changes compared to upstream?
 
+Like Yann said, we prefer to not backport too much stuff, except when
+it's actually fixing a problem (which is not the case here).
+
+Yann, will you send a patch that reverts your commit adding explicit RPi
+2 support in the Kodi package ? This way we can have this for 2016.05,
+and when a new Kodi release is done with built-in support for RPi2, we
+can revisit this.
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
