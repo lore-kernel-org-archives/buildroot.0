@@ -1,48 +1,67 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 7 May 2016 20:48:13 +0200
-Subject: [Buildroot] [PATCH 01/13 v7] support/scripts: add helper to
- hardlink-or-copy
-In-Reply-To: <7c92d1e222419fef1422295dd3027ec4e205fca5.1462637351.git.yann.morin.1998@free.fr>
-References: <cover.1462637351.git.yann.morin.1998@free.fr>
- <7c92d1e222419fef1422295dd3027ec4e205fca5.1462637351.git.yann.morin.1998@free.fr>
-Message-ID: <7e8771df-0900-deba-a33f-a1094e8cd560@mind.be>
+Date: Sat, 7 May 2016 20:54:24 +0200
+Subject: [Buildroot] [PATCH 02/34] reproducibility: override locale and
+ timezone
+In-Reply-To: <20160507151550.48e49913@free-electrons.com>
+References: <20160430074358.GE1781@hermes.click-hack.org>
+ <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <1462002570-14706-2-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <20160507151550.48e49913@free-electrons.com>
+Message-ID: <968b80a6-b811-52dc-c4e8-0b8b3401216d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/07/16 18:14, Yann E. MORIN wrote:
-> When preparing the legal-info, the source archives are copied in the
-> legal-info/ output directory. When the archives are big, it can take
-> quite a bit of time and unnecessarily uses disk space. When the
-> legal-info output directory is on the same filesystem as the BR2_DL_DIR,
-> we can easily reduce copy time and disk usage by just using hardlins
-> instead of copying. However, the BR2_DL_DIR may be on a different
-> filesystem, so we must fallback to copying in this case
+On 05/07/16 15:15, Thomas Petazzoni wrote:
+> Hello,
 >
-> Introduce a helper script that copies a source file into a destination
-> directory, by first attempting to hard-link, and falling back to a
-> plain copy in case the hardlink fails.
+> On Sat, 30 Apr 2016 09:48:58 +0200, Gilles Chanteperdrix wrote:
+>> ---
+>>  Makefile | 7 +++++++
+>>  1 file changed, 7 insertions(+)
 >
-> In case the destination already exists, it is forcibly removed first, to
-> avoid clobering any existing target file (and especially any hardlink to
-> it), since cp -f does not remove the destination file, but clobbers it.
+> Missing SoB.
 >
-> In some situations, it will be necessary that the destination file is
-> named differently than the source, so if a third argument is specified,
-> it is treated as the basename of the destination file.
+>> diff --git a/Makefile b/Makefile
+>> index ec7dccb..86b2ed2 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -218,6 +218,13 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+>>  -include $(BR2_CONFIG)
+>>  endif
+>>
+>> +export BR2_REPRODUCIBLE
 >
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Why ?
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  I guess because it will (or may be) be used in some helper scripts...
 
+>
+>> +ifeq ($(BR2_REPRODUCIBLE),y)
+>> +export TZ=UTC
+>> +export LANG=C
+>> +export LC_ALL=C
+>> +endif
+>
+> Regarding overriding TZ, LANG and LC_ALL, I'm wondering if we shouldn't
+> do it unconditionally, regardless of the value of BR2_REPRODUCIBLE.
+> What is the benefit of leaving those variable to their value from the
+> build environment?
+
+  For the record: I had the same comment about this entire series. Most of it 
+should be done unconditionally, only the aspects that may be annoying for 
+debugging (like the timestamps) should be conditional.
+
+  Unfortunately, that will be a cause for discussion... For instance, LANG=C 
+means that compiler error messages will be in English instead of in your native 
+language. Do we really want that by default?
 
   Regards,
   Arnout
 
-[snip]
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
