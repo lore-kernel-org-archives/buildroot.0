@@ -1,60 +1,72 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 7 May 2016 23:00:11 +0200
-Subject: [Buildroot] [PATCH 03/34] reproducibility: generate
- SOURCE_DATE_EPOCH
-In-Reply-To: <1462002570-14706-3-git-send-email-gilles.chanteperdrix@xenomai.org>
+Date: Sat, 7 May 2016 23:01:03 +0200
+Subject: [Buildroot] [PATCH 07/34] reproducibility/libgcrypt: override
+ timestamps
+In-Reply-To: <1462002570-14706-7-git-send-email-gilles.chanteperdrix@xenomai.org>
 References: <20160430074358.GE1781@hermes.click-hack.org>
  <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1462002570-14706-3-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <67fd2e37-e216-0d27-ba6d-893b0baf7f28@mind.be>
+ <1462002570-14706-7-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <58e63226-45fc-0c93-fd5b-d5a79f1bb5bb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/30/16 09:48, Gilles Chanteperdrix wrote:
-> When reproducibility is wanted, generates a global SOURCE_DATE_EPOCH
-> environment variable which contains either the date of buildroot last
-> commit if running from a git repository, or the latest release date.
->
-> This means that all packages embedding build dates will appear to
-> have the same build date, so in case of new commit or release, all
-> packages will appear to have been change, even though some of them
-> may not have changed in fact.
+On 04/30/16 09:49, Gilles Chanteperdrix wrote:
+> with SOURCE_DATE_EPOCH
 > ---
->  Makefile | 5 +++++
->  1 file changed, 5 insertions(+)
+>  package/libgcrypt/0003-honor-source-date-epoch.patch | 15 +++++++++++++++
+>  package/libgcrypt/libgcrypt.mk                       |  1 +
+>  2 files changed, 16 insertions(+)
+>  create mode 100644 package/libgcrypt/0003-honor-source-date-epoch.patch
 >
-> diff --git a/Makefile b/Makefile
-> index 86b2ed2..c1d2961 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -223,6 +223,11 @@ ifeq ($(BR2_REPRODUCIBLE),y)
->  export TZ=UTC
->  export LANG=C
->  export LC_ALL=C
-> +SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
-> +SOURCE_DATE_CHANGES = $(shell head -n 1 $(TOPDIR)/CHANGES | \
-> +	sed 's/^.*Released \(.*\)$$/\1/;s/\(st\|nd\|rd\|th\),//' | \
-> +	LANG=C LC_ALL=C TZ=UTC xargs -i date -d \{\} +%s)
-> +export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(SOURCE_DATE_CHANGES))
+> diff --git a/package/libgcrypt/0003-honor-source-date-epoch.patch b/package/libgcrypt/0003-honor-source-date-epoch.patch
+> new file mode 100644
+> index 0000000..0f41c1b
+> --- /dev/null
+> +++ b/package/libgcrypt/0003-honor-source-date-epoch.patch
+> @@ -0,0 +1,15 @@
+> +--- libgcrypt-1.6.4/configure.ac.orig	2015-09-08 08:27:26.000000000 +0200
+> ++++ libgcrypt-1.6.4/configure.ac	2016-02-23 21:31:19.290079195 +0100
+> +@@ -1993,7 +1993,11 @@ changequote([,])dnl
+> + BUILD_FILEVERSION="${BUILD_FILEVERSION}mym4_revision_dec"
+> + AC_SUBST(BUILD_FILEVERSION)
+> +
+> +-BUILD_TIMESTAMP=`date -u +%Y-%m-%dT%H:%M+0000 2>/dev/null || date`
+> ++if test x"${SOURCE_DATE_EPOCH}" = x; then
+> ++   	BUILD_TIMESTAMP=`date -u +%Y-%m-%dT%H:%M+0000 2>/dev/null || date`
+> ++else
+> ++	BUILD_TIMESTAMP=`date -u -d @${SOURCE_DATE_EPOCH} +%Y-%m-%dT%H:%M+0000 2>/dev/null || date -d @${SOURCE_DATE_EPOCH}`
 
-  I really don't like exporting a variable that is not well-known and that 
-doesn't have a BR_ prefix. Where it is used by packages, it will anyway be in 
-Buildroot-specific patches, so we can just as well add the BR_ prefix.
+  Seems to me that SOURCE_DATE_EPOCH is something that is too
+> ++fi
+> + AC_SUBST(BUILD_TIMESTAMP)
+> + AC_DEFINE_UNQUOTED(BUILD_TIMESTAMP, "$BUILD_TIMESTAMP",
+> +                    [The time this package was configured for a build])
+> diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+> index 53d1d6c..768e42f 100644
+> --- a/package/libgcrypt/libgcrypt.mk
+> +++ b/package/libgcrypt/libgcrypt.mk
+> @@ -12,6 +12,7 @@ LIBGCRYPT_SITE = ftp://ftp.gnupg.org/gcrypt/libgcrypt
+>  LIBGCRYPT_INSTALL_STAGING = YES
+>  LIBGCRYPT_DEPENDENCIES = libgpg-error
+>  LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
+> +LIBGCRYPT_AUTORECONF = YES
 
-  But actually, we don't want to introduce buildroot-specific (and therefore 
-unupstreamable) things in patches either. So there is not much point in 
-exporting, except if it's used by scripts.
+  Isn't it sufficient to do
+
+ifeq ($(BR2_REPRODUCIBLE),y)
+LIBGCRYPT_MAKE_OPTS = BUILD_TIMESTAMP=$(SOURCE_DATE)
+endif
 
 
   Regards,
   Arnout
 
->  endif
 >
->  # To put more focus on warnings, be less verbose as default
+>  LIBGCRYPT_CONF_ENV = \
+>  	ac_cv_sys_symbol_underscore=no
 >
 
 
