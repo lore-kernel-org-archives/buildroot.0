@@ -1,124 +1,172 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  7 May 2016 18:14:33 +0200
-Subject: [Buildroot] [PATCH 08/13 v7] core/legal-info: also save patches
+Date: Sat,  7 May 2016 18:14:38 +0200
+Subject: [Buildroot] [PATCH 13/13 v7] core/legal-info: ensure legal-info
+	works in off-line mode
 In-Reply-To: <cover.1462637351.git.yann.morin.1998@free.fr>
 References: <cover.1462637351.git.yann.morin.1998@free.fr>
-Message-ID: <d280d1c64b43031e31feef82091e5bb59ba43d86.1462637351.git.yann.morin.1998@free.fr>
+Message-ID: <073f2f8f95adc65a29ba10b04ce2072d04731b6c.1462637351.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the legal-info infra only saves the source archive of a
-package. However, that's not enough as we may apply some patches on
-packages sources.
+Almost all packages which are saved for legal-info have their source
+archives downloaded as part of 'make source', which makes an off-line
+build completely possible [0].
 
-We do suggest users to also redistribute the Buildroot sources as part
-of their compliance distribution, so the patches bundled in Buildroot
-would indeed be included in the compliance distribution.
+However, for the pre-configured external toolchains, the source tarball
+is different, as the main tarball is a binary package. And that source
+tarball is only downloaded during the legal-info phase, which makes it
+inconvenient for full off-line builds.
 
-However, that's still not enough, since we may download some patches, or
-the user may use a global patch directory. Patches in there might not
-end up in the compliance distribution, and there are risks of
-non-conformity.
+We fix that by adding a new rule, $(1)-legal-source which only
+$(1)-all-source depends on, so that we only download it for a top-level
+'make source', not as part of the standard download mechanism (i.e. only
+what is really needed to build).
 
-So, always include patches alongside the source archive.
+This new rule depends, like the normal download mechanism, on a stamp
+file, so that we do not emit a spurious hash-check message on successive
+runs of 'make source'.
 
-To ensure reproducibility, we also generate a series file, so patches
-can be re-applied in the correct order.
+This way, we can do a complete [0] off-line build and are still able to
+generate legal-info, while at the same time we do not incur any download
+overhead during a simple build.
 
-We get the list of patches to include from the list of patches that were
-applied by the package infrastructure (via the apply-patches support
-script). So, we need to get packages properly extracted and patched
-before we can save their legal-info, not just in the case they define
-_LICENSE_FILES.
+Also, we previously downloaded the _ACTUAL_SOURCE_TARBALL when it was
+not empty. However, since _ACTUAL_SOURCE_TARBALL defaults to the value
+of _SOURCE, it can not be empty when _SOURCE is not. Thus, we'd get a
+spurious report of a missing hash for the tarball, since it was not in
+a standard package rule (configure, build, install..) and thus would
+miss the PKG and PKGDIR variables to find the .hash file.
 
-Update the legal-info header accordingly.
+We fix that in this commit as well, by:
 
-Note: this means that, when a package is not patched and defines no
-LICENSE_FILES, we will extract and patch it for nothing. There is no
-easy way to know whether we have to patch a package or not. We can only
-either duplicate the logic to detect patches (bad) or rely on the infra
-actually patching the package. Also, a vast majority of packages are
-either patched, or define _LICENSE_FILES, so it is best and easiest to
-always extract and patch them prior to legal-info.
+  - setting PKG and PKGDIR just for the -legal-source rule;
+
+  - only downloading _ACTUAL_SOURCE_TARBALL if it is not empty *and* not
+    the same as _SOURCE (to avoid a second report about the hash).
+
+[0] Save for nodejs which invarriably wants to download stuff at build
+time. Sigh... :-( Fixing that is work for another time...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
 Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+---
+Notes: here is a case where one would need to be able to do an off-line
+legal-info:
+  - a build farm (e.g. Jenkins slaves) without access to the internet;
+  - a single machine (not part of the farm) has access to the internet;
+  - that machine runs "make source" to populate a mirror (a "primary
+    mirror" or an NFS-mounted directory or anything else) that is
+    accessible to the build farm;
+  - machines in the build farm need the actual sources to run
+    legal-info, doing so off-line.
+
+So, "make source" has to be complete, i.e. it must also download the
+acutal source archives.
 
 ---
 Changes v6 -> v7:
-  - directly call the helper
+  - fix after re-ordering patches
 
 Changes v3 -> v4:
-  - typo  (Luca)
+  - handle it with a stamp file  (Luca)
 
 Changes v2 -> v3:
-  - also mention that patches have been saved  (Luca)
+  - re-order the PHONY targets  (Arnout)
+  - don't reorder setting _ACTUAL_SOURCE/_SITE, it's done in its own
+    patch now  (Arnout)
+  - adapt the commit log accordingly  (Arnout)
+  - typo
 
 Changes v1 -> v2:
-  - don't recompute rawname-version needlessly  (Luca)
+  - drop the 'redistribute == ignore', it does not exist yet
 ---
- package/pkg-generic.mk           | 15 ++++++++++-----
- support/legal-info/README.header |  9 +++++----
- 2 files changed, 15 insertions(+), 9 deletions(-)
+ package/pkg-generic.mk | 25 ++++++++++++++++++++++---
+ 1 file changed, 22 insertions(+), 3 deletions(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 7a86355..13455d1 100644
+index 6e834dd..5f413a2 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -749,12 +749,10 @@ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
- endif
- $(2)_MANIFEST_LICENSE_FILES ?= not saved
+@@ -123,6 +123,12 @@ $(BUILD_DIR)/%/.stamp_downloaded:
+ 	$(Q)mkdir -p $(@D)
+ 	$(Q)touch $@
  
--# If the package declares _LICENSE_FILES, we need to extract it,
--# for overriden, local or normal remote packages alike, whether
--# we want to redistribute it or not.
--ifneq ($$($(2)_LICENSE_FILES),)
-+# We need to extract and patch a package to be able to retrieve its
-+# license files (if any) and the list of patches applied to it (if
-+# any).
- $(1)-legal-info: $(1)-patch
++# Retrieve actual source archive, e.g. for prebuilt external toolchains
++$(BUILD_DIR)/%/.stamp_actual_downloaded:
++	$(call DOWNLOAD,$($(PKG)_ACTUAL_SOURCE_SITE)/$($(PKG)_ACTUAL_SOURCE_TARBALL)); \
++	$(Q)mkdir -p $(@D)
++	$(Q)touch $@
++
+ # Unpack the archive
+ $(BUILD_DIR)/%/.stamp_extracted:
+ 	@$(call step_start,extract)
+@@ -530,6 +536,7 @@ $(2)_TARGET_RSYNC =	        $$($(2)_DIR)/.stamp_rsynced
+ $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
+ $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
+ $(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
++$(2)_TARGET_ACTUAL_SOURCE =	$$($(2)_DIR)/.stamp_actual_downloaded
+ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
+ 
+ # default extract command
+@@ -637,6 +644,17 @@ $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
+ 
+ $(1)-source:		$$($(2)_TARGET_SOURCE)
+ 
++$(1)-all-source:	$(1)-legal-source
++$(1)-legal-info:	$(1)-legal-source
++$(1)-legal-source:	$(1)-source
++
++# Only download the actual source if it differs from the 'main' archive
++ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),)
++ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
++$(1)-legal-source:	$$($(2)_TARGET_ACTUAL_SOURCE)
++endif # actual sources != sources
++endif # actual sources != ""
++
+ $(1)-source-check:
+ 	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
+ 
+@@ -662,6 +680,7 @@ $(1)-extract:		$(1)-rsync
+ $(1)-rsync:		$$($(2)_TARGET_RSYNC)
+ 
+ $(1)-source:
++$(1)-legal-source:
+ 
+ $(1)-source-check:
+ 	test -d $$($(2)_OVERRIDE_SRCDIR)
+@@ -736,6 +755,8 @@ $$($(2)_TARGET_PATCH):			PKGDIR=$(pkgdir)
+ $$($(2)_TARGET_EXTRACT):		PKG=$(2)
+ $$($(2)_TARGET_SOURCE):			PKG=$(2)
+ $$($(2)_TARGET_SOURCE):			PKGDIR=$(pkgdir)
++$$($(2)_TARGET_ACTUAL_SOURCE):		PKG=$(2)
++$$($(2)_TARGET_ACTUAL_SOURCE):		PKGDIR=$(pkgdir)
+ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
+ 
+ # Compute the name of the Kconfig option that correspond to the
+@@ -801,9 +822,6 @@ else
+ # Other packages
+ 
+ ifeq ($$($(2)_REDISTRIBUTE),YES)
+-ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
+-	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
 -endif
- 
- # We only save the sources of packages we want to redistribute, that are
- # non-overriden (local or true override).
-@@ -810,6 +808,13 @@ endif
- 	$$(Q)support/scripts/hardlink-or-copy \
- 		$$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) \
- 		$$($(2)_REDIST_SOURCES_DIR)
-+# Save patches and generate the series file
-+	$$(Q)while read f; do \
-+		support/scripts/hardlink-or-copy \
-+			$$$${f} \
-+			$$($(2)_REDIST_SOURCES_DIR) || exit 1; \
-+		printf "%s\n" "$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
-+	done <$$($(2)_DIR)/.applied_patches_list
- endif # redistribute
- 
- endif # other packages
-diff --git a/support/legal-info/README.header b/support/legal-info/README.header
-index d07c45d..418de14 100644
---- a/support/legal-info/README.header
-+++ b/support/legal-info/README.header
-@@ -14,10 +14,11 @@ This material is composed of the following items.
-    compiled programs.
-    Note: this may have not been saved due to technical limitations, you may
-    need to collect it manually.
-- * The source code for all packages; this has been saved in the sources/
--   subdirectory (except for the non-redistributable packages, which have not
--   been saved); patches applied to some packages by Buildroot are included in
--   the Buildroot sources and were not duplicated in the sources/ subdirectory.
-+ * The original source code for all packages; this has been saved in the
-+   sources/ subdirectory (except for the non-redistributable packages, which
-+   have not been saved). Patches that were applied are also saved, along
-+   with a file named 'series' that lists the patches in the order they were
-+   applied.
-  * A manifest file listing the configured packages and related information.
-  * The license text of the packages; they have been saved in the licenses/
-    subdirectory.
+ # Save the source tarball and any extra downloads, but not
+ # patches, as they are handled specially afterwards.
+ 	$$(foreach e,$$($(2)_ACTUAL_SOURCE_TARBALL) $$(notdir $$($(2)_EXTRA_DOWNLOADS)),\
+@@ -907,6 +925,7 @@ endif
+ 	$(1)-install-staging \
+ 	$(1)-install-target \
+ 	$(1)-legal-info \
++	$(1)-legal-source \
+ 	$(1)-patch \
+ 	$(1)-rebuild \
+ 	$(1)-reconfigure \
 -- 
 2.7.4
