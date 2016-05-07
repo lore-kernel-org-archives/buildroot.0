@@ -1,28 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 May 2016 14:15:59 +0200
-Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.9.3-10
-In-Reply-To: <1462607868-28290-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1462607868-28290-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20160507141559.40666f49@free-electrons.com>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Sat, 7 May 2016 14:16:37 +0200
+Subject: [Buildroot] Qt5 fails to compile with gcc 6.1.0
+In-Reply-To: <20160507141147.65fe012a@free-electrons.com>
+References: <572DBAB9.3060607@gmail.com> <572DD6A2.8030406@gmail.com>
+ <20160507141147.65fe012a@free-electrons.com>
+Message-ID: <572DDCA5.8060204@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Il 07/05/2016 14:11, Thomas Petazzoni ha scritto:
+> Every time you do such tests, please make sure you do a complete 
+> rebuild, i.e: make clean all If it still doesn't work for you after a 
+> "make clean all", then please report the version of Buildroot being 
+> used, as well as the .config file that reproduces the problem.
 
-On Sat,  7 May 2016 09:57:48 +0200, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/imagemagick/imagemagick.hash | 2 +-
->  package/imagemagick/imagemagick.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Yes, I always "make clean all".
 
-Applied to master, thanks.
+Attached there is the .config file.
+The version is Buildroot 2016.05-git-01197-gda433d6-dirty
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/xml
+Size: 94390 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160507/0586e04f/attachment.wsdl>
