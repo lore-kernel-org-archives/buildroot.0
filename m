@@ -1,34 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 May 2016 15:30:26 +0200
-Subject: [Buildroot] [PATCH 12/34] reproducibility/wireshark: remove
- documentation
-In-Reply-To: <1462002570-14706-12-git-send-email-gilles.chanteperdrix@xenomai.org>
-References: <20160430074358.GE1781@hermes.click-hack.org>
- <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1462002570-14706-12-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <20160507153026.7522d667@free-electrons.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat,  7 May 2016 11:32:18 -0300
+Subject: [Buildroot] [PATCH] imx6ulevk: Use ext4 as filesystem type
+Message-ID: <1462631538-17941-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Extend the filesystem type to ext4.
 
-On Sat, 30 Apr 2016 09:49:08 +0200, Gilles Chanteperdrix wrote:
-> HTML documentation contains a link to a mail address specific to
-> the distribution of the build machine. Remove html documentation
-> from the rootfs as it is unlikely to be needed. At this chance
-> also remove the txt documentation.
-> ---
->  package/wireshark/wireshark.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ board/freescale/imx6ulevk/genimage.cfg | 4 ++--
+ configs/freescale_imx6ulevk_defconfig  | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-If this one had your Signed-off-by, I could have applied it. Can you
-respin?
-
-Thomas
+diff --git a/board/freescale/imx6ulevk/genimage.cfg b/board/freescale/imx6ulevk/genimage.cfg
+index 36ede1c..b58193a 100644
+--- a/board/freescale/imx6ulevk/genimage.cfg
++++ b/board/freescale/imx6ulevk/genimage.cfg
+@@ -4,7 +4,7 @@
+ # * the microSD card must have 1 kB free space at the beginning,
+ # * U-Boot is dumped as is,
+ # * a FAT partition at offset 8 MB is containing zImage and dtbs,
+-# * a single root filesystem partition is required (Ext2 in this case).
++# * a single root filesystem partition is required (Ext4 in this case).
+ #
+ 
+ image boot.vfat {
+@@ -36,6 +36,6 @@ image sdcard.img {
+ 
+   partition rootfs {
+     partition-type = 0x83
+-    image = "rootfs.ext2"
++    image = "rootfs.ext4"
+   }
+ }
+diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
+index b8a1f86..fbb420e 100644
+--- a/configs/freescale_imx6ulevk_defconfig
++++ b/configs/freescale_imx6ulevk_defconfig
+@@ -33,3 +33,4 @@ BR2_PACKAGE_HOST_MTOOLS=y
+ # filesystem / image
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/imx6ulevk/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
