@@ -1,45 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 May 2016 09:44:42 +0200
-Subject: [Buildroot] [PATCH] Revert "package/kodi: optimise for RPi2"
-Message-ID: <1462693482-29650-1-git-send-email-yann.morin.1998@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 8 May 2016 11:02:07 +0200
+Subject: [Buildroot] [PATCH 1/4] uclibc: generate valid config for BFLT/FDPIC
+Message-ID: <20160508090207.GA32273@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Optimised support for the RPi-2 was only inttroduced in Krypton, the
-next release of Kodi. Jarvis, the current release, does not have this
-support.
+Generate a valid configuration for architectures with
+FDPIC and BFLT support.
 
-This reverts commit ef37472b20894c99cad758397f3cd6b90f933df1.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Beno?t Mauduit <bmauduit@beneth.fr>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/kodi/kodi.mk | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ package/uclibc/uclibc.mk | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index e812b50..e163c24 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -47,14 +47,7 @@ endif
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index b8ccee2..c17ed21 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -47,6 +47,40 @@ UCLIBC_LOCALES = \
+ 	$(firstword $(subst .,$(space),$(locale))))
+ endif
  
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- KODI_DEPENDENCIES += rpi-userland
--# Kodi has specific configuration flags for RPi/RPi2. Configure for a
--# RPi2 when we're sure, fallback to RPi otherwise.
--ifeq ($(BR2_cortex_a7),y)
--KODI_CONF_OPTS += --with-platform=raspberry-pi2
--else
--KODI_CONF_OPTS += --with-platform=raspberry-pi
--endif
--KODI_CONF_OPTS += --enable-player=omxplayer
-+KODI_CONF_OPTS += --with-platform=raspberry-pi --enable-player=omxplayer
- KODI_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
- 	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux" \
- 	LIBS="-lvcos -lvchostif"
++# noMMU binary formats
++ifeq ($(BR2_BINFMT_FDPIC),y)
++define UCLIBC_BINFMT_CONFIG
++       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
++       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
++       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
++       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
++endef
++endif
++ifeq ($(BR2_BINFMT_FLAT_ONE),y)
++define UCLIBC_BINFMT_CONFIG
++       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
++       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
++       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
++       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
++endef
++endif
++ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
++define UCLIBC_BINFMT_CONFIG
++       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
++       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
++       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
++       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
++endef
++endif
++ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
++define UCLIBC_BINFMT_CONFIG
++       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
++       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
++       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
++       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
++endef
++endif
++
+ #
+ # ARC definitions
+ #
+@@ -382,6 +416,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(call KCONFIG_SET_OPT,DEVEL_PREFIX,"/usr",$(@D)/.config)
+ 	$(call KCONFIG_SET_OPT,SHARED_LIB_LOADER_PREFIX,"/lib",$(@D)/.config)
+ 	$(UCLIBC_MMU_CONFIG)
++	$(UCLIBC_BINFMT_CONFIG)
+ 	$(UCLIBC_ARC_TYPE_CONFIG)
+ 	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
+ 	$(UCLIBC_ARM_ABI_CONFIG)
 -- 
-2.7.4
+2.1.4
