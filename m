@@ -1,11 +1,10 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sun,  8 May 2016 16:46:40 -0300
+Date: Sun,  8 May 2016 16:46:39 -0300
 Subject: [Buildroot] [PATCH v3] uboot-tools: fix FIT support and make it
 	optional
-In-Reply-To: <1462736800-9552-1-git-send-email-casantos@datacom.ind.br>
+In-Reply-To: <1462535953-4427-1-git-send-email-casantos@datacom.ind.br>
 References: <1462535953-4427-1-git-send-email-casantos@datacom.ind.br>
- <1462736800-9552-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <1462736800-9552-2-git-send-email-casantos@datacom.ind.br>
+Message-ID: <1462736800-9552-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
