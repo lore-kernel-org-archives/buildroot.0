@@ -1,36 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 May 2016 17:41:49 +0200
-Subject: [Buildroot] [PATCH] legacy: i386 is legacy, inform the user
-Message-ID: <1462722109-17239-1-git-send-email-yann.morin.1998@free.fr>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Sun, 8 May 2016 18:09:40 +0200
+Subject: [Buildroot] Pulseaudio does not detect ofono and bluez5
+In-Reply-To: <572F38E0.3040004@gmail.com>
+References: <572F38E0.3040004@gmail.com>
+Message-ID: <572F64C4.2000605@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When we dropped support for i386, we added the corresponding opiton to
-the legacy menu, but forgot to select BR2_LEGACY.
 
-Fix that.
+Found. libsbc was missing.
+I guess should automatically selected when pulseaudio is enabled.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- Config.in.legacy | 1 +
- 1 file changed, 1 insertion(+)
+Marco
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 897a6d2..824a220 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -189,6 +189,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_E500V2
- 
- config BR2_x86_i386
- 	bool "x86 i386 support removed"
-+	select BR2_LEGACY
- 	help
- 	  The support for the i386 processors of the x86 architecture
- 	  has been removed.
--- 
-2.7.4
+--
+
+Il 08/05/2016 15:02, Marco Trapanese ha scritto:
+>
+> Compiling pulseaudio with bluez5 and ofono should lead to their support.
+> Instead the configure process doesn't detect them as you can see in 
+> the Makefile:
+>
+>> HAVE_ALSA = 1
+>> HAVE_AVAHI = 0
+>> HAVE_BLUEZ = 0
+>> HAVE_BLUEZ_4 = 0
+>> HAVE_BLUEZ_5 = 0
+>> HAVE_BLUEZ_5_NATIVE_HEADSET = 0
+>> HAVE_BLUEZ_5_OFONO_HEADSET = 0
+>
+> I tried to rebuild pulseaudio after the whole image is generated (i.e. 
+> if it was compiled before ofono and bluez5) but with no chance.
+>
+> Then, I save the output of the rebuilding (attached to this email):
+>
+>> Enable D-Bus:                  yes
+>>       Enable BlueZ 4:              no
+>>       Enable BlueZ 5:              no
+>>         Enable ofono headsets:     no
+>>         Enable native headsets:    no
+>
+>
+> I also see this warning:
+>
+>> configure: WARNING: unrecognized options: --disable-gtk-doc, 
+>> --disable-gtk-doc-html, --disable-doc, --disable-docs, 
+>> --disable-documentation, --with-xmlto, --with-fop, --enable-libudev
+>
+> I also attach the .config file. Please be aware about the changes I 
+> made to compile bluez5. Version: Buildroot 
+> 2016.05-git-01212-gabfaf47-dirty.
+>
+> Marco
+>
+>
