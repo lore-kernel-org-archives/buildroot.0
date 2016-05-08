@@ -1,83 +1,92 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 8 May 2016 21:53:41 +0200
-Subject: [Buildroot] [PATCH] alsa-lib: Add option to allow calculations
- in float for soft float targets
-In-Reply-To: <1462710802.22644.13.camel@embedded.rocks>
-References: <1462603525-4427-1-git-send-email-joerg.krause@embedded.rocks>
- <20160507091654.0b03f2fd@free-electrons.com>
- <1462710802.22644.13.camel@embedded.rocks>
-Message-ID: <9e37a66a-58b8-6d99-04aa-a2ab4685a246@mind.be>
+From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+Date: Sun, 8 May 2016 22:15:42 +0200
+Subject: [Buildroot] [PATCH 13/34] reproducibility/libtool: fix
+ reproducibility issues
+In-Reply-To: <20160507222231.56f0e905@free-electrons.com>
+References: <20160430074358.GE1781@hermes.click-hack.org>
+ <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <1462002570-14706-13-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <20160507222231.56f0e905@free-electrons.com>
+Message-ID: <20160508201542.GO13285@hermes.click-hack.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/08/16 14:33, J?rg Krause wrote:
-> On Sa, 2016-05-07 at 09:16 +0200, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Sat,  7 May 2016 08:45:25 +0200, J?rg Krause wrote:
->>
->>> -ifeq ($(BR2_SOFT_FLOAT),y)
->>> +ifeq ($(BR2_PACKAGE_ALSA_LIB_NO_FLOAT),y)
->>>  ALSA_LIB_CONF_OPTS += --with-softfloat
->>>  endif
->>
->> So we were already passing --with-softfloat when BR2_SOFT_FLOAT=y. So
->> what your option brings is:
->>
->>  - Ability to use floating point operations when BR2_SOFT_FLOAT=y.
->>
->>  - Ability to not use floating point operations when BR2_SOFT_FLOAT
->> is
->>    disabled.
->>
->> Do you have any actual use for such possibilities ?
->
-> Yes, for the first case.
->
-> I want to use a feature from the alsa-lib which is opted-out at compile
-> time for softfloat targets by #ifndef HAVE_SOFT_FLOAT [1]. This
-> functionality requires floating point data types and libmath
-> operations.
->
-> I do not see any point in disabling this unconditionally for softfloat
-> targets, as a software floating point library can emulate this.
+On Sat, May 07, 2016 at 10:22:31PM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> This probably should be several separate patches.
+> 
+> On Sat, 30 Apr 2016 09:49:09 +0200, Gilles Chanteperdrix wrote:
+> > - remove libtool and libtoolize; they are full of references to the
+> >   build environment tools, and unlikely to be needed on target;
+> > - do not use /etc/ld.so.conf contents in libtool search path: they are
+> >   not relevant on target, and cause a useless dependency of libltdl
+> >   on the build environment.
+> > ---
+> >  package/libtool/0001-fix-cross-compilation.patch | 11 +++++++++++
+> >  package/libtool/libtool.mk                       |  8 ++++++--
+> >  2 files changed, 17 insertions(+), 2 deletions(-)
+> >  create mode 100644 package/libtool/0001-fix-cross-compilation.patch
+> > 
+> > diff --git a/package/libtool/0001-fix-cross-compilation.patch b/package/libtool/0001-fix-cross-compilation.patch
+> > new file mode 100644
+> > index 0000000..c203371
+> > --- /dev/null
+> > +++ b/package/libtool/0001-fix-cross-compilation.patch
+> 
+> This patch should have a description + Signed-off-by.
+> 
+> However, libtool is really a core package, and not a simple one, so I'm
+> a bit uneasy with the idea of carrying patches against it. What are the
+> chances of having something like this submitted upstream?
+> 
+> > +   fi
+> > diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+> > index 8688f8b..c177626 100644
+> > --- a/package/libtool/libtool.mk
+> > +++ b/package/libtool/libtool.mk
+> > @@ -8,7 +8,7 @@ LIBTOOL_VERSION = 2.4.6
+> >  LIBTOOL_SOURCE = libtool-$(LIBTOOL_VERSION).tar.xz
+> >  LIBTOOL_SITE = $(BR2_GNU_MIRROR)/libtool
+> >  LIBTOOL_INSTALL_STAGING = YES
+> > -LIBTOOL_CONF_ENV = HELP2MAN=true
+> > +LIBTOOL_CONF_OPTS = HELP2MAN=true
+> 
+> Why?
 
-  The question is: is there a point in disabling it at all, ever? Does it have a 
-big impact on size, or does it require functionality which may not be available 
-for a particular target arch?
+Well, passing autoconf configure arguments on its command line and
+not in its environment has been the recommended way for something
+like 16 years. It is recommended in the "goat book", published in
+2000.
 
-  If not, I'd vote for unconditionally disabling the softfloat option.
+If you pass the argument on the command line, its gets built into
+config.status, so that if config.status needs to be run again, the
+option gets passed to configure again. On the other hand, if you use
+the environment, if config.status is not run in an environment where
+the option is defined, the option gets forgotten.
 
-  That said, I remember that there was some option (not sure if it was alsalib 
-or another lib) to choose between floating point (accurate but slower) and fixed 
-point (less accurate but faster) for some filtering operations. *That* would be 
-a relevant user-settable option.
+We patch the autotools files and (have to) run autoreconf, and for
+a reason of file dates I forgot, when we run make, config.status is
+re-run without the LIBTOOL_CONV_ENV, and the HELP2MAN variable gets
+forgotten. 
 
-  Regards,
-  Arnout
+> 
+> >  LIBTOOL_DEPENDENCIES = host-m4
+> >  LIBTOOL_LICENSE = GPLv2+
+> >  LIBTOOL_LICENSE_FILES = COPYING
+> > @@ -33,9 +33,13 @@ define LIBTOOL_AVOID_AUTORECONF_HOOK
+> >  	find $(@D) -name configure -exec touch '{}' \;
+> >  	find $(@D) -name Makefile.in -exec touch '{}' \;
+> >  endef
+> > -LIBTOOL_PRE_CONFIGURE_HOOKS += LIBTOOL_AVOID_AUTORECONF_HOOK
+> 
+> Why?
 
-
->
-> [1]
-> http://git.alsa-project.org/?p=alsa-lib.git;a=blob;f=src/pcm/pcm_softvo
-> l.c;h=802aa4b7cb68e444b8b47e7140870141aad65ffc;hb=HEAD#l785
->
-> Best regards
-> J?rg Krause
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
+Because the patch touches the autoconf files.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+					    Gilles.
+https://click-hack.org
