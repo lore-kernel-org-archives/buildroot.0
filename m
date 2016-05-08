@@ -1,11 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 May 2016 07:51:20 +0200
-Subject: [Buildroot] Reproducible builds
-In-Reply-To: <2b0081e4-61c0-ef40-3830-215982a984ed@mind.be>
-References: <20160430074358.GE1781@hermes.click-hack.org>
- <20160507151117.33428d9f@free-electrons.com>
- <2b0081e4-61c0-ef40-3830-215982a984ed@mind.be>
-Message-ID: <20160508075120.090f082b@free-electrons.com>
+Date: Sun, 8 May 2016 07:52:40 +0200
+Subject: [Buildroot] Which package for bluetooth management?
+In-Reply-To: <e3cfa132-94c0-2b3d-7593-3286bab1e535@mind.be>
+References: <572A61D4.10905@gmail.com>
+ <7132491b-5080-2001-1717-250d698244e9@mind.be>
+ <572AEB2E.1050305@gmail.com> <572AFC1F.3070004@gmail.com>
+ <20160505142533.67f8e473@free-electrons.com>
+ <572D9A1E.20609@gmail.com>
+ <e3cfa132-94c0-2b3d-7593-3286bab1e535@mind.be>
+Message-ID: <20160508075240.142f5f78@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +17,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 7 May 2016 22:55:35 +0200, Arnout Vandecappelle wrote:
+On Sun, 8 May 2016 01:41:37 +0200, Arnout Vandecappelle wrote:
 
->   Even if it is not regularly tested, I think we can start including this 
-> feature. But the help text should clarify that there are no guarantees.
+> > I've just seen bluez5 requires glibc or musl toolchain.
+> > I tried to rebuild all with glibc (instead of uClibc) but the RPi3 refuses to
+> > boot due to a kernel panic.  
+> 
+>   Please use a serial port for debugging: the screenshot isn't really readable, 
+> and the interesting part has probably scrolled off-screen.
+> 
+>   However, it's extremely unlikely that changing uClibc to glibc would cause a 
+> kernel panic, because the kernel isn't using libc. So you have probably 
+> inadvertedly changed something else as well.
 
-Yes, absolutely. My question was more about what is the long term plan
-for this feature. I have no problem with starting to include this
-feature before we have such a test infrastructure in place, as long as
-the feature is marked experimental.
+If you look at the kernel panic from the screenshot (I was able to read
+it), it says that init was killed, i.e that the kernel couldn't run it
+init. So uClibc vs. glibc could definitely make a difference here.
+
+Marco: could you upload online the tarball image of your root
+filesystem, so that we can have a look?
+
+Thanks,
 
 Thomas
 -- 
