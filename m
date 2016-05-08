@@ -1,232 +1,40 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Sun, 8 May 2016 14:33:14 -0300
-Subject: [Buildroot] [PATCH] supertuxkart: new package
-In-Reply-To: <570D80C2.70508@mind.be>
-References: <1460439224-29314-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <570D80C2.70508@mind.be>
-Message-ID: <CAAEAJfBO034-Nonhz=2u4=akxD1ZY4Hx5yRgXfV2+CbprK9+9g@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Sun, 8 May 2016 16:39:07 -0300 (BRT)
+Subject: [Buildroot] [PATCH v2 1/1] uboot-tools: add missing dependency
+ on host-dtc for the host package
+In-Reply-To: <20160506152539.121b536c@free-electrons.com>
+References: <1462372709-24828-1-git-send-email-casantos@datacom.ind.br>
+ <1462535953-4427-1-git-send-email-casantos@datacom.ind.br>
+ <20160506152539.121b536c@free-electrons.com>
+Message-ID: <1410733015.14174716.1462736347333.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: buildroot at buildroot.org
+> Sent: Friday, May 6, 2016 10:25:39 AM
+> Subject: Re: [Buildroot] [PATCH v2 1/1] uboot-tools: add missing dependency on host-dtc for the host package
 
-Thanks a lot for your feedback, and sorry for the delay.
-I did this during vacations... and then vacations was over :/
+> Hello,
+> 
+> On Fri,  6 May 2016 08:59:13 -0300, Carlos Santos wrote:
+>> The mkimage utility needs dtc when support for Flat Image Trees (FIT)
+>> is enabled. If dtc is not available mkimage may fail. Example:
+>> 
+>>     $ mkimage -f firmware.its firmware.im
+>>     sh: dtc: command not found
+>> 
+>> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> 
+> Thanks for this new version. Unfortunately, this patch is incorrect, as
+> it badly mixes things for the target version of uboot-tools with things
+> for the host version of uboot-tools.
 
-On 12 April 2016 at 20:12, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 04/12/16 07:33, Ezequiel Garcia wrote:
->>
->> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
->> ---
->>   package/Config.in                      |  1 +
->>   package/supertuxkart/Config.in         | 29
->> +++++++++++++++++++++++++++++
->>   package/supertuxkart/supertuxkart.hash |  2 ++
->>   package/supertuxkart/supertuxkart.mk   | 24 ++++++++++++++++++++++++
->>   4 files changed, 56 insertions(+)
->>   create mode 100644 package/supertuxkart/Config.in
->>   create mode 100644 package/supertuxkart/supertuxkart.hash
->>   create mode 100644 package/supertuxkart/supertuxkart.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 64822bf5f6fa..8438bca33195 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -232,6 +232,7 @@ menu "Games"
->>         source "package/prboom/Config.in"
->>         source "package/rubix/Config.in"
->>         source "package/sl/Config.in"
->> +       source "package/supertuxkart/Config.in"
->>   endmenu
->>
->>   menu "Graphic libraries and applications (graphic/text)"
->> diff --git a/package/supertuxkart/Config.in
->> b/package/supertuxkart/Config.in
->> new file mode 100644
->> index 000000000000..4e9f5bb09ac6
->> --- /dev/null
->> +++ b/package/supertuxkart/Config.in
->> @@ -0,0 +1,29 @@
->> +config BR2_PACKAGE_SUPERTUXKART
->> +       bool "supertuxkart"
->> +       depends on BR2_USE_MMU # fork()
->> +       depends on BR2_PACKAGE_HAS_LIBGL
->> +       depends on BR2_PACKAGE_XORG7
->> +       select BR2_PACKAGE_BLUEZ5_UTILS
->
->
->  Needs:
->
->         depends on BR2_USE_WCHAR # libglib2
+Thanks for the review. After analyzing the package deeply I noticed that it has additional problems and that U-Boot needs an additional patch to allow turning FIT support on/off. I will send a new patch to solve these problems.
 
-Don't see the libglib2 dependency. Where is it?
-
-Is it because of fribidi? In that case, should we really depend on it?
-
->         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
-
-Ditto: dbus?
-
->         depends on !BR2_STATIC_LIBS # uses dlfcn
->         depends on !BR2_PACKAGE_BLUEZ_UTILS # conflicts with 4.x version
->         depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-
-Why 3.4 ?
-
->         # wordexp support not in our uClibc configuration
-
-wordexp?
-
->         depends on !BR2_TOOLCHAIN_USES_UCLIBC
->         depends on BR2_TOOLCHAIN_HAS_SYNC_4
->
->  (though wchar and threads are already covered by Xorg)
->
->  Unless of course it can also work with bluez4. In that case the
-> dependencies get pretty complicated...
->
->> +       select BR2_PACKAGE_JPEG
->> +       select BR2_PACKAGE_LIBCURL
->> +       select BR2_PACKAGE_LIBFRIBIDI
->> +       select BR2_PACKAGE_LIBGLU
->> +       select BR2_PACKAGE_LIBOGG
->> +       select BR2_PACKAGE_LIBPNG
->> +       select BR2_PACKAGE_LIBVORBIS
->> +       select BR2_PACKAGE_OPENAL
->
->
->  Needs:
->
->         depends on BR2_INSTALL_LIBSTDCPP
->         depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->         depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
->
->> +       select BR2_PACKAGE_XLIB_LIBXRANDR
->> +       select BR2_PACKAGE_ZLIB
->> +       help
->> +         Karts. Nitro. Action! SuperTuxKart is a free 3D arcade kart
->> +         racer with multiple karts, tracks and modes you can play.
->> +         Beat the evil Nolok by any means necessary, and make the
->> +         mascot kingdom safe once again!
->> +
->> +         http://supertuxkart.sourceforge.net/Main_Page
->> +
->> +comment "supertuxkart needs a toolchain w/ threads, C++"
->> +       depends on !(BR2_INSTALL_LIBSTDCPP || BR2_TOOLCHAIN_HAS_THREADS)
->
->
->  This needs to be updated with all the dependencies above.
->
->
->> +
->> +comment "supertuxkart needs an OpenGL backend"
->> +       depends on !BR2_PACKAGE_HAS_LIBGL
->> diff --git a/package/supertuxkart/supertuxkart.hash
->> b/package/supertuxkart/supertuxkart.hash
->> new file mode 100644
->> index 000000000000..d8e7ac30f6d1
->> --- /dev/null
->> +++ b/package/supertuxkart/supertuxkart.hash
->> @@ -0,0 +1,2 @@
->> +# Locally computed
->> +sha256 c50f00a71df165fb613d20e86bea2d9d5e51ed3e27e1d436fbac3b07cf2ea149
->> supertuxkart-0.9.1-src.tar.xz
->> diff --git a/package/supertuxkart/supertuxkart.mk
->> b/package/supertuxkart/supertuxkart.mk
->> new file mode 100644
->> index 000000000000..e1c67b4e14f4
->> --- /dev/null
->> +++ b/package/supertuxkart/supertuxkart.mk
->> @@ -0,0 +1,24 @@
->>
->> +################################################################################
->> +#
->> +# supertuxkart
->> +#
->>
->> +################################################################################
->> +
->> +SUPERTUXKART_VERSION = 0.9.1
->> +SUPERTUXKART_SOURCE = supertuxkart-$(SUPERTUXKART_VERSION)-src.tar.xz
->> +SUPERTUXKART_SITE =
->> http://downloads.sourceforge.net/project/supertuxkart/SuperTuxKart/$(SUPERTUXKART_VERSION)
->> +SUPERTUXKART_LICENSE = GPLv3
->> +SUPERTUXKART_LICENSE_FILES = COPYING
->> +
->> +SUPERTUXKART_DEPENDENCIES += bluez5_utils jpeg libcurl libfribidi libgl
->> libglu libpng \
->> +                            libogg libvorbis openal xlib_libXrandr zlib
->
->
->  From the CMakeLists, it looks like fribidi and Xrandr are optional
-> (controlled by USE_FRIBIDI and USE_XRANDR).
->
-
-OK.
-
->  I don't see why libglu is needed.
->
-
-I don't know much about glu, I just saw this stuff:
-
-$ grep -r glu .
-./lib/glew/include/GL/glew.h:/* <glu.h> */
-./lib/glew/include/GL/glew.h:#    include <OpenGL/glu.h>
-./lib/glew/include/GL/glew.h:#    include <GL/glu.h>
-./lib/glew/CMakeFiles/glew.dir/C.includecache:OpenGL/glu.h
-./lib/glew/CMakeFiles/glew.dir/C.includecache:GL/glu.h
-[..]
-./INSTALL.md:libgl1-mesa-dev libglu1-mesa-dev libcurl4-openssl-dev
-libfribidi-dev libbluetooth-dev libxrandr-dev
-
->  I also see a dependency on freetype.
->
-
-Where?
-
->
->> +
->> +# Since supertuxkart is not installing libstkirrlicht.so,
->> +# and given we don't really need that library to be shared
->> +# we turn off shared libs here.
->> +SUPERTUXKART_CONF_OPTS = -DBUILD_SHARED_LIBS=OFF
->> +
->> +# Disable Wiimote support
->
->
->  Why?
->
-
-No reason.
-
->  Actually, it looks like bluez is only needed for wiimote support, so you
-> could probably enable this conditionally depending on
-> BR2_PACKAGE_BLUEZ5_UTILS and avoid the complicated dependencies in
-> Config.in.
->
-
-OK.
-
->
->> +SUPERTUXKART_CONF_OPTS += -DUSE_WIIUSE=OFF
->> +
->> +$(eval $(cmake-package))
->>
->
->  It looks like irrlicht adds -I/usr/X11R6/include - this will have to be
-> patched away.
->
-
-Hm, I see.
-
->  It would also be nice if CMakeLists could be updated to use the system glew
-> instead of the bundled one.
->
-
-Why? If the package bundles a glew, why not using it?
--- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+Carlos Santos (Casantos)
+DATACOM, P&D
