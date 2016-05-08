@@ -1,61 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 May 2016 14:59:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/go: bump version to 1.6.2
-In-Reply-To: <CABa6e=oxJ48BAe9c9itArAB-7CLHw71gKjNiMO0s0jigqH2DvA@mail.gmail.com>
-References: <1462551812-8952-1-git-send-email-christian@paral.in>
- <20160507144313.4e7112af@free-electrons.com>
- <20160507184514.GA2419@tarshish>
- <20160507214016.5592aea2@free-electrons.com>
- <CABa6e=og-BDA_VY=wJ17uc9=-S0D34SEstRv1W_FyFVUU=ehcw@mail.gmail.com>
- <20160508143956.4b5a4db0@free-electrons.com>
- <CABa6e=oxJ48BAe9c9itArAB-7CLHw71gKjNiMO0s0jigqH2DvA@mail.gmail.com>
-Message-ID: <20160508145944.09f42d02@free-electrons.com>
+Date: Sun, 8 May 2016 15:01:52 +0200
+Subject: [Buildroot] [git commit] configs/imx6ulevk: Use ext4 as filesystem
+	type
+Message-ID: <20160508130214.63C9781780@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2f37ef48e82e3ba75fdc5e800c90e10e848983a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 8 May 2016 22:46:14 +1000, Cam Hutchison wrote:
+Extend the filesystem type to ext4.
 
-> I don't know anything about bootstraping the compiler with anything other
-> than go 1.4 - as far as my limited understanding goes, that is still necessary.
-> 
-> What I meant was that it should not be necessary to backport the patch
-> as you suggested, but instead compile the bootstrap compiler with
-> CGO_ENABLED=0 in the environment. That worked for me when I
-> saw the same problem building the bootstrap compiler (but the problem
-> was not consistent and no one else seemed to have it, so I just assumed
-> there was an issue in my build environment - so I never posted this
-> fix).
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/freescale/imx6ulevk/genimage.cfg | 4 ++--
+ configs/freescale_imx6ulevk_defconfig  | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Aah, OK! I can indeed confirm that the following patch fixes the build
-problem for me.
-
-Geoff, if that's OK for you, could you send a proper patch that does
-this?
-
-diff --git a/package/go-bootstrap/go-bootstrap.mk b/package/go-bootstrap/go-bootstrap.mk
-index e404cb6..2b46694 100644
---- a/package/go-bootstrap/go-bootstrap.mk
-+++ b/package/go-bootstrap/go-bootstrap.mk
-@@ -17,7 +17,8 @@ HOST_GO_BOOTSTRAP_MAKE_ENV = \
-        GOOS=linux \
-        GOROOT_FINAL="$(HOST_GO_BOOTSTRAP_ROOT)" \
-        GOROOT="$(@D)" \
--       GOBIN="$(@D)/bin"
-+       GOBIN="$(@D)/bin" \
-+       CGO_ENABLED=0
+diff --git a/board/freescale/imx6ulevk/genimage.cfg b/board/freescale/imx6ulevk/genimage.cfg
+index 36ede1c..b58193a 100644
+--- a/board/freescale/imx6ulevk/genimage.cfg
++++ b/board/freescale/imx6ulevk/genimage.cfg
+@@ -4,7 +4,7 @@
+ # * the microSD card must have 1 kB free space at the beginning,
+ # * U-Boot is dumped as is,
+ # * a FAT partition at offset 8 MB is containing zImage and dtbs,
+-# * a single root filesystem partition is required (Ext2 in this case).
++# * a single root filesystem partition is required (Ext4 in this case).
+ #
  
- define HOST_GO_BOOTSTRAP_BUILD_CMDS
-        cd $(@D)/src && $(HOST_GO_BOOTSTRAP_MAKE_ENV) ./make.bash
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ image boot.vfat {
+@@ -36,6 +36,6 @@ image sdcard.img {
+ 
+   partition rootfs {
+     partition-type = 0x83
+-    image = "rootfs.ext2"
++    image = "rootfs.ext4"
+   }
+ }
+diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
+index b8a1f86..fbb420e 100644
+--- a/configs/freescale_imx6ulevk_defconfig
++++ b/configs/freescale_imx6ulevk_defconfig
+@@ -33,3 +33,4 @@ BR2_PACKAGE_HOST_MTOOLS=y
+ # filesystem / image
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/imx6ulevk/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
