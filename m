@@ -1,51 +1,42 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 08 May 2016 14:33:22 +0200
-Subject: [Buildroot] [PATCH] alsa-lib: Add option to allow calculations
- in float for soft float targets
-In-Reply-To: <20160507091654.0b03f2fd@free-electrons.com>
-References: <1462603525-4427-1-git-send-email-joerg.krause@embedded.rocks>
- <20160507091654.0b03f2fd@free-electrons.com>
-Message-ID: <1462710802.22644.13.camel@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 May 2016 14:39:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/go: bump version to 1.6.2
+In-Reply-To: <CABa6e=og-BDA_VY=wJ17uc9=-S0D34SEstRv1W_FyFVUU=ehcw@mail.gmail.com>
+References: <1462551812-8952-1-git-send-email-christian@paral.in>
+ <20160507144313.4e7112af@free-electrons.com>
+ <20160507184514.GA2419@tarshish>
+ <20160507214016.5592aea2@free-electrons.com>
+ <CABa6e=og-BDA_VY=wJ17uc9=-S0D34SEstRv1W_FyFVUU=ehcw@mail.gmail.com>
+Message-ID: <20160508143956.4b5a4db0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sa, 2016-05-07 at 09:16 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sat,??7 May 2016 08:45:25 +0200, J?rg Krause wrote:
-> 
-> > -ifeq ($(BR2_SOFT_FLOAT),y)
-> > +ifeq ($(BR2_PACKAGE_ALSA_LIB_NO_FLOAT),y)
-> > ?ALSA_LIB_CONF_OPTS += --with-softfloat
-> > ?endif
-> 
-> So we were already passing --with-softfloat when BR2_SOFT_FLOAT=y. So
-> what your option brings is:
-> 
-> ?- Ability to use floating point operations when BR2_SOFT_FLOAT=y.
-> 
-> ?- Ability to not use floating point operations when BR2_SOFT_FLOAT
-> is
-> ???disabled.
-> 
-> Do you have any actual use for such possibilities ?
+Hello,
 
-Yes, for the first case.
+On Sun, 8 May 2016 06:55:36 +1000, Cam Hutchison wrote:
 
-I want to use a feature from the alsa-lib which is opted-out at compile
-time for softfloat targets by #ifndef HAVE_SOFT_FLOAT [1]. This
-functionality requires floating point data types and libmath
-operations.
+> > As far as I understand, we can't use go 1.5.2 as the bootstrap
+> > compiler, because since 1.5.x, Go is written in Go. I guess we will
+> > have to backport the patch.  
+> 
+> I think it should be sufficient to build the go-bootstrap compiler with
+> "CGO_ENABLED=0" in its environment. This worked for me when I
+> played with it and looks like the correct solution according to
+> https://github.com/golang/go/issues/13114
 
-I do not see any point in disabling this unconditionally for softfloat
-targets, as a?software floating point library can emulate this.
+When the packaging of Go was added to Buildroot, I was pointed to
+https://docs.google.com/document/d/1OaatvGhEAq7VseQ9kkavxKNAfepWy2yhPUBs96FGV28/edit,
+which says that using Go 1.4 as the bootstrap compiler to build Go 1.5
+was the proper solution.
 
-[1]
-http://git.alsa-project.org/?p=alsa-lib.git;a=blob;f=src/pcm/pcm_softvo
-l.c;h=802aa4b7cb68e444b8b47e7140870141aad65ffc;hb=HEAD#l785
+Now, if it is possible to use a two-stage build of go 1.5, then that's
+also fine with me, but it somewhat contradicts the above document.
 
-Best regards
-J?rg Krause
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
