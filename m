@@ -1,42 +1,46 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 9 May 2016 10:04:41 +0100
-Subject: [Buildroot] [PATCH 2/2] mc: bump version to 4.8.17
-In-Reply-To: <1462784681-63929-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1462784681-63929-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1462784681-63929-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Joao Pinto <Joao.Pinto@synopsys.com>
+Date: Mon, 9 May 2016 10:27:12 +0100
+Subject: [Buildroot] [PATCH 0/2] new package: atfirmware
+In-Reply-To: <cover.1462269854.git.jpinto@synopsys.com>
+References: <cover.1462269854.git.jpinto@synopsys.com>
+Message-ID: <573057F0.3000606@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/mc/mc.hash | 4 ++--
- package/mc/mc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi guys,
+I will have to give a Juno training soon, and this feature would be great to
+have in the time. Could you comment of the atfirmware patch? Do you have any
+improvement suggestions?
 
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index a93432b..0d22d80 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
-@@ -1,2 +1,2 @@
--# Hash from http://ftp.midnight-commander.org/mc-4.8.16.sha256:
--sha256  bbbcbe3097d3160f865d24aa38ff122f1c59752b5ef153ca4ade5ac0f82b7020  mc-4.8.16.tar.xz
-+# Hash from http://ftp.midnight-commander.org/mc-4.8.17.sha256:
-+sha256 0447bdddc0baa81866e66f50f9a545d29d6eebb68b0ab46c98d8fddd2bf4e44d  mc-4.8.17.tar.xz
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index 05e5243..808f81c 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MC_VERSION = 4.8.16
-+MC_VERSION = 4.8.17
- MC_SOURCE = mc-$(MC_VERSION).tar.xz
- MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE = GPLv3+
--- 
-2.7.3
+Thanks.
+
+On 5/3/2016 11:13 AM, Joao Pinto wrote:
+> This patch adds to buildroot an important package for ARM64 based development 
+> boards: The ARM Trusted Firmware (atfirmware).
+> It also adds the scpfirmware which is a hidden package to get the System Control
+> Processor (SCP) binary to be included in the bootloader (fip image), which is
+> a requirement for ARM Juno's board. With this 2 packages, Juno gets fully 
+> supported in the Buildroot.
+> 
+> Joao Pinto (2):
+>   new packages: atfirmware and scpfirmware
+>   configs: add u-noot and atfirmware options to juno
+> 
+>  board/arm/juno/readme.txt       | 21 ++++++++--
+>  boot/Config.in                  |  2 +
+>  boot/atfirmware/Config.in       | 70 +++++++++++++++++++++++++++++++++
+>  boot/atfirmware/atfirmware.hash |  5 +++
+>  boot/atfirmware/atfirmware.mk   | 85 +++++++++++++++++++++++++++++++++++++++++
+>  boot/scpfirmware/Config.in      | 23 +++++++++++
+>  boot/scpfirmware/scpfirmware.mk | 18 +++++++++
+>  configs/arm_juno_defconfig      |  9 +++++
+>  8 files changed, 230 insertions(+), 3 deletions(-)
+>  create mode 100644 boot/atfirmware/Config.in
+>  create mode 100644 boot/atfirmware/atfirmware.hash
+>  create mode 100644 boot/atfirmware/atfirmware.mk
+>  create mode 100644 boot/scpfirmware/Config.in
+>  create mode 100644 boot/scpfirmware/scpfirmware.mk
+> 
