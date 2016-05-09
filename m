@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 May 2016 23:21:19 +0200
-Subject: [Buildroot] [PATCH 1/1] rrdtool: bump version to 1.6.0
-In-Reply-To: <1462824635-15327-1-git-send-email-fli4l@franke-prem.de>
-References: <1462824635-15327-1-git-send-email-fli4l@franke-prem.de>
-Message-ID: <20160509232119.668c0b36@free-electrons.com>
+Date: Mon, 9 May 2016 23:22:06 +0200
+Subject: [Buildroot] [PATCH 1/2] Revert "toolchain: allow side by side
+ sysroot directories"
+In-Reply-To: <1462543017-42054-2-git-send-email-Vincent.Riera@imgtec.com>
+References: <1462543017-42054-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1462543017-42054-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160509232206.5dcf486d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,29 +14,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  9 May 2016 22:10:35 +0200, Roland Franke wrote:
-> delete patch 0001-Add-configure-option-to-disable-documentation.patch
-> as this is now include in the new version.
-> 
-> Signed-off-by: Roland Franke <fli4l@franke-prem.de>
+On Fri, 6 May 2016 14:56:56 +0100, Vicente Olivert Riera wrote:
+> This reverts commit 9a1e9efe2618ebbf12ed2567bcd6e8cca5619547.
 
-Thanks for your patch. One question below, though.
+This should have a proper commit log and carry a SoB line.
 
-> -# For 0001-Add-configure-option-to-disable-documentation.patch
->  RRDTOOL_AUTORECONF = YES
->  RRDTOOL_GETTEXTIZE = YES
+Basically for the commit log, re-use what you have written in your
+cover letter.
 
-Enabling autoreconf and gettextize was added when
-0001-Add-configure-option-to-disable-documentation.patch was added by
-Gustavo. So I would assume that they could now be removed.
+Can you respin after fixing this?
 
-However, it turns out that rrdtool 1.6.0 doesn't build without
-autoreconf+gettextize, I'm not sure why. In any case, the comment
-should be updated and not removed.
-
-I'm Cc'ing Gustavo who originally added the patch.
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
