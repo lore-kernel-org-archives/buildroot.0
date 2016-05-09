@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 May 2016 22:02:51 +0200
-Subject: [Buildroot] [PATCH 2/2] package/freeswitch: Fix added license
-In-Reply-To: <1461445189-31992-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1461445189-31992-1-git-send-email-bernd.kuhls@t-online.de>
- <1461445189-31992-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160509220251.1a85412d@free-electrons.com>
+Date: Mon, 9 May 2016 22:02:58 +0200
+Subject: [Buildroot] [PATCH] legacy: i386 is legacy, inform the user
+In-Reply-To: <1462722109-17239-1-git-send-email-yann.morin.1998@free.fr>
+References: <1462722109-17239-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160509220258.034ba1d7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 23 Apr 2016 22:59:49 +0200, Bernd Kuhls wrote:
-> Noted by Thomas:
-> http://lists.busybox.net/pipermail/buildroot/2016-April/158864.html
+On Sun,  8 May 2016 17:41:49 +0200, Yann E. MORIN wrote:
+> When we dropped support for i386, we added the corresponding opiton to
+> the legacy menu, but forgot to select BR2_LEGACY.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Fix that.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 > ---
->  package/freeswitch/freeswitch.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Config.in.legacy | 1 +
+>  1 file changed, 1 insertion(+)
 
-Applied to master after fixing the code so that licenses are comma
-separated.
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
