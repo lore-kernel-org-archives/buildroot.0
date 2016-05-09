@@ -1,75 +1,64 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Mon,  9 May 2016 12:29:01 +0100
-Subject: [Buildroot] [PATCH 3/5] package/nginx: fix libgd support
+Date: Mon,  9 May 2016 12:29:02 +0100
+Subject: [Buildroot] [PATCH 4/5] package/nginx: fix dlopen support
 In-Reply-To: <1462793343-20234-1-git-send-email-martin@barkynet.com>
 References: <1462793343-20234-1-git-send-email-martin@barkynet.com>
-Message-ID: <1462793343-20234-3-git-send-email-martin@barkynet.com>
+Message-ID: <1462793343-20234-4-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change to using gdlib-config to find libgd and its dependencies.
+Only include dlfcn.h on systems that support it
 
 This fixes:
- http://autobuild.buildroot.net/results/d1806140eccb1202cb8b223289510d64fb28acb6/
+ http://autobuild.buildroot.net/results/f72a9a81e21166af20332d835d71651be7c016c3/
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- .../0007-auto-lib-libgd-conf-use-pkg-config.patch  | 31 ++++++++++++++++++++++
- package/nginx/nginx.mk                             |  1 +
- 2 files changed, 32 insertions(+)
- create mode 100644 package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
+ ...-ngx_linux_config.h-only-include-dlfcn.h-.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/nginx/0008-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch
 
-diff --git a/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
+diff --git a/package/nginx/0008-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch b/package/nginx/0008-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch
 new file mode 100644
-index 0000000..3750f22
+index 0000000..a6f7c0d
 --- /dev/null
-+++ b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
-@@ -0,0 +1,31 @@
-+From fd9885fe5fef5826034547ca6be7299863f99769 Mon Sep 17 00:00:00 2001
++++ b/package/nginx/0008-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch
+@@ -0,0 +1,33 @@
++From 8dc9dffc1f99ac951865f3135dfb5061a08d1f85 Mon Sep 17 00:00:00 2001
 +From: Martin Bark <martin@barkynet.com>
-+Date: Fri, 6 May 2016 14:48:49 +0100
-+Subject: [PATCH 7/8] auto/lib/libgd/conf: use pkg-config
-+
-+Change to using pkg-config to find the path to libgd and its
-+dependencies.
++Date: Fri, 6 May 2016 16:29:17 +0100
++Subject: [PATCH 8/8] src/os/unix/ngx_linux_config.h: only include dlfcn.h if
++ available
 +
 +Signed-off-by: Martin Bark <martin@barkynet.com>
 +---
-+ auto/lib/libgd/conf | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ src/os/unix/ngx_linux_config.h | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
 +
-+diff --git a/auto/lib/libgd/conf b/auto/lib/libgd/conf
-+index 6e4e91c..1c536a2 100644
-+--- a/auto/lib/libgd/conf
-++++ b/auto/lib/libgd/conf
-+@@ -7,8 +7,8 @@
-+     ngx_feature_name=
-+     ngx_feature_run=no
-+     ngx_feature_incs="#include <gd.h>"
-+-    ngx_feature_path=
-+-    ngx_feature_libs="-lgd"
-++    ngx_feature_path="$(${GDLIB_CONFIG:=gdlib-config} --includedir)"
-++    ngx_feature_libs="$(${GDLIB_CONFIG:=gdlib-config} --libs)"
-+     ngx_feature_test="gdImagePtr img = gdImageCreateFromGifPtr(1, NULL);"
-+     . auto/feature
++diff --git a/src/os/unix/ngx_linux_config.h b/src/os/unix/ngx_linux_config.h
++index 2f6129d..4244086 100644
++--- a/src/os/unix/ngx_linux_config.h
+++++ b/src/os/unix/ngx_linux_config.h
++@@ -55,10 +55,12 @@
++ #include <crypt.h>
++ #include <sys/utsname.h>        /* uname() */
 + 
++-#include <dlfcn.h>
+++#include <ngx_auto_config.h>
++ 
++ 
++-#include <ngx_auto_config.h>
+++#if (NGX_HAVE_DLOPEN)
+++#include <dlfcn.h>
+++#endif
++ 
++ 
++ #if (NGX_HAVE_POSIX_SEM)
 +-- 
 +2.8.2
 +
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 24f4ac3..9cc2326 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -237,6 +237,7 @@ NGINX_PRE_CONFIGURE_HOOKS += NGINX_DISABLE_WERROR
- define NGINX_CONFIGURE_CMDS
- 	cd $(@D) ; $(NGINX_CONF_ENV) \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+		GDLIB_CONFIG=$(STAGING_DIR)/usr/bin/gdlib-config \
- 		./configure $(NGINX_CONF_OPTS)
- endef
- 
 -- 
 2.8.2
