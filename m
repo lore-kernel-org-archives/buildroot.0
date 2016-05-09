@@ -1,62 +1,75 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Mon,  9 May 2016 12:29:00 +0100
-Subject: [Buildroot] [PATCH 2/5] package/nginx: fix openssl support
+Date: Mon,  9 May 2016 12:29:01 +0100
+Subject: [Buildroot] [PATCH 3/5] package/nginx: fix libgd support
 In-Reply-To: <1462793343-20234-1-git-send-email-martin@barkynet.com>
 References: <1462793343-20234-1-git-send-email-martin@barkynet.com>
-Message-ID: <1462793343-20234-2-git-send-email-martin@barkynet.com>
+Message-ID: <1462793343-20234-3-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change to using pkg-config to find openssl and its dependencies.
+Change to using gdlib-config to find libgd and its dependencies.
 
 This fixes:
- http://autobuild.buildroot.net/results/17db76c3a099e7592af343bbe119dfe717cd7999/
+ http://autobuild.buildroot.net/results/d1806140eccb1202cb8b223289510d64fb28acb6/
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- ...0006-auto-lib-openssl-conf-use-pkg-config.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch
+ .../0007-auto-lib-libgd-conf-use-pkg-config.patch  | 31 ++++++++++++++++++++++
+ package/nginx/nginx.mk                             |  1 +
+ 2 files changed, 32 insertions(+)
+ create mode 100644 package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
 
-diff --git a/package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch b/package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch
+diff --git a/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
 new file mode 100644
-index 0000000..494e6f4
+index 0000000..3750f22
 --- /dev/null
-+++ b/package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch
++++ b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
 @@ -0,0 +1,31 @@
-+From 756556d127da291cad8a2c007a89124a692aef7f Mon Sep 17 00:00:00 2001
++From fd9885fe5fef5826034547ca6be7299863f99769 Mon Sep 17 00:00:00 2001
 +From: Martin Bark <martin@barkynet.com>
-+Date: Fri, 6 May 2016 14:48:31 +0100
-+Subject: [PATCH 6/8] auto/lib/openssl/conf: use pkg-config
++Date: Fri, 6 May 2016 14:48:49 +0100
++Subject: [PATCH 7/8] auto/lib/libgd/conf: use pkg-config
 +
-+Change to using pkg-config to find the path to openssl and its
++Change to using pkg-config to find the path to libgd and its
 +dependencies.
 +
 +Signed-off-by: Martin Bark <martin@barkynet.com>
 +---
-+ auto/lib/openssl/conf | 4 ++--
++ auto/lib/libgd/conf | 4 ++--
 + 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/auto/lib/openssl/conf b/auto/lib/openssl/conf
-+index 39d9602..995c6f3 100644
-+--- a/auto/lib/openssl/conf
-++++ b/auto/lib/openssl/conf
-+@@ -50,8 +50,8 @@ else
-+         ngx_feature_name="NGX_OPENSSL"
-+         ngx_feature_run=no
-+         ngx_feature_incs="#include <openssl/ssl.h>"
-+-        ngx_feature_path=
-+-        ngx_feature_libs="-lssl -lcrypto $NGX_LIBDL"
-++        ngx_feature_path="$(${PKG_CONFIG:=pkg-config} --cflags-only-I openssl|sed 's/-I//g')"
-++        ngx_feature_libs="$(${PKG_CONFIG:=pkg-config} --libs openssl)"
-+         ngx_feature_test="SSL_CTX_set_options(NULL, 0)"
-+         . auto/feature
++diff --git a/auto/lib/libgd/conf b/auto/lib/libgd/conf
++index 6e4e91c..1c536a2 100644
++--- a/auto/lib/libgd/conf
+++++ b/auto/lib/libgd/conf
++@@ -7,8 +7,8 @@
++     ngx_feature_name=
++     ngx_feature_run=no
++     ngx_feature_incs="#include <gd.h>"
++-    ngx_feature_path=
++-    ngx_feature_libs="-lgd"
+++    ngx_feature_path="$(${GDLIB_CONFIG:=gdlib-config} --includedir)"
+++    ngx_feature_libs="$(${GDLIB_CONFIG:=gdlib-config} --libs)"
++     ngx_feature_test="gdImagePtr img = gdImageCreateFromGifPtr(1, NULL);"
++     . auto/feature
 + 
 +-- 
 +2.8.2
 +
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 24f4ac3..9cc2326 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -237,6 +237,7 @@ NGINX_PRE_CONFIGURE_HOOKS += NGINX_DISABLE_WERROR
+ define NGINX_CONFIGURE_CMDS
+ 	cd $(@D) ; $(NGINX_CONF_ENV) \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++		GDLIB_CONFIG=$(STAGING_DIR)/usr/bin/gdlib-config \
+ 		./configure $(NGINX_CONF_OPTS)
+ endef
+ 
 -- 
 2.8.2
