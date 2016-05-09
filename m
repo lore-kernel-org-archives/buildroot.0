@@ -1,42 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 May 2016 15:11:16 +0200
-Subject: [Buildroot] [PATCH 01/34] reproducibility: introduce config knob
-In-Reply-To: <87mvnzl70e.fsf@dell.be.48ers.dk>
-References: <20160430074358.GE1781@hermes.click-hack.org>
- <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <878tzjn0du.fsf@dell.be.48ers.dk>
- <20160509145309.1ae28c04@free-electrons.com>
- <87mvnzl70e.fsf@dell.be.48ers.dk>
-Message-ID: <20160509151116.1761093e@free-electrons.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Mon, 9 May 2016 14:19:48 +0100
+Subject: [Buildroot] [PATCH v2] raspberrypi3: fix serial console (load
+ pi3-miniuart-bt overlay)
+In-Reply-To: <20160503210200.12d685a7@gmx.net>
+References: <1462220744-6368-1-git-send-email-ps.report@gmx.net>
+ <CALtfCQZowiGZUJ0HV4oTyRMfMY02TherviK_ZE6D4wgfUcQ3gg@mail.gmail.com>
+ <871t5jr7e6.fsf@dell.be.48ers.dk>
+ <CAFGQKxeRKWNCOH2YV0FYA17tdfyeemv3Xau2Bkrzmrxh5Rm-4g@mail.gmail.com>
+ <20160503210200.12d685a7@gmx.net>
+Message-ID: <CAFGQKxc63EUZX8RNL_NE=VWnsVf_CoyK5b9K_SWyk2rgc4CutA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Peter,
 
-On Mon, 09 May 2016 15:01:53 +0200, Peter Korsgaard wrote:
+On 3 May 2016 at 20:02, Peter Seiderer <ps.report@gmx.net> wrote:
+> Hello Martin,
+>
+> On Tue, 3 May 2016 11:23:50 +0100, Martin Bark <martin@barkynet.com> wrote:
+>
+>> All,
+>>
+>> On 3 May 2016 at 07:18, Peter Korsgaard <peter@korsgaard.com> wrote:
+>> >>>>>> "Oscar" == Oscar Gomez Fuente <oscargomezf@gmail.com> writes:
+>> >
+>> >  > Hi Peter Seiderer,
+>> >  > What's the difference between enabling pi3-miniuart-bt instead of
+>> >  > pi3-disable-bt?
+>> >
+>> >  > With pi3-disable-bt enables it works fine the serial console on (14 [TxD] &
+>> >  > 15 [RxD] pins).
+>> >
+>> > From the names I would guess it is the difference between completely
+>> > disabling access to the bluetooth module and providing access to it
+>> > though the secondary (mini) uart.
+>> >
+>> > The miniuart has some limitations, but I guess basic bluetooth stuff
+>> > should work with it.
+>>
+>> I've got a bit lost in the rpi3 serial console issues but as i
+>> understand the current situation all you need to do is set
+>> enable_uart=1 in config.txt.  See
+>> https://github.com/raspberrypi/firmware/issues/553#issuecomment-199486644.
+>> I've not tested this.
+>>
+>> I think you also need to change cmdline.txt to use console=serial0 as
+>> the pi3-miniuart-bt will replace it with the correct serial device
+>> (ttyAMA0 or ttyS0) depending if it's enabled or not.  See the comments
+>> in https://github.com/raspberrypi/linux/blob/rpi-4.1.y/arch/arm/boot/dts/overlays/pi3-miniuart-bt-overlay.dts.
+>>
+>
+> This works too, not sure whats the better solution, explicit via device tree overlay
+> or some firmware magic....
+>
+> - pi3-miniuart-bt 'dmesg | grep tty':
+> [    0.000000] Kernel command line: 8250.nr_uarts=1 dma.dmachans=0x7f35 bcm2708_fb.fbwidth=1920 bcm2708_fb.fbheight=1200 bcm2709.boardrev=0xa02082 bcm2709.serial=0xa60340 smsc95xx.macaddr=B8:27:EB:A6:03:40 bcm2708_fb.fbswap=1 bcm2709.uart_clock=48000000 vc_mem.mem_base=0x3dc00000 vc_mem.mem_size=0x3f000000  root=/dev/mmcblk0p2 rootwait console=tty1 console=ttyAMA0,115200
+> [    0.001320] console [tty1] enabled
+> [    0.318181] 3f215040.uart: ttyS0 at MMIO 0x3f215040 (irq = 59, base_baud = 50000000) is a 16550
+> [    2.008162] 3f201000.uart: ttyAMA0 at MMIO 0x3f201000 (irq = 87, base_baud = 0) is a PL011 rev2
+> [    3.296233] console [ttyAMA0] enabled
+>
+> - enable-uart=1, serial0 dmesg | grep tty':
+> [    0.000000] Kernel command line: 8250.nr_uarts=1 dma.dmachans=0x7f35 bcm2708_fb.fbwidth=1920 bcm2708_fb.fbheight=1200 bcm2709.boardrev=0xa02082 bcm2709.serial=0xa60340 smsc95xx.macaddr=B8:27:EB:A6:03:40 bcm2708_fb.fbswap=1 bcm2709.uart_clock=48000000 vc_mem.mem_base=0x3dc00000 vc_mem.mem_size=0x3f000000  root=/dev/mmcblk0p2 rootwait console=tty1 console=ttyS0,115200
+> [    0.001318] console [tty1] enabled
+> [    0.318270] console [ttyS0] disabled
+> [    0.318389] 3f215040.uart: ttyS0 at MMIO 0x3f215040 (irq = 59, base_baud = 31250000) is a 16550
+> [    1.042714] console [ttyS0] enabled
+> [    3.020277] 3f201000.uart: ttyAMA0 at MMIO 0x3f201000 (irq = 87, base_baud = 0) is a PL011 rev2
+>
 
->  > I use timestamps all the time to verify that I'm indeed running the
->  > version of the code I intend to run. As I work on the kernel, I use the
->  > kernel timestamp, but I really use it all the time, to double check
->  > that I'm running the kernel image I just built and not one that was
->  > left around, built several days/weeks ago.  
-> 
-> Ok, what timestamps exactly? Embedded timestamps like uname -v or
-> filesystem timestamps of the files?
+I wonder if the solution is to just document the situation in
+board/raspberrypi/readme.txt.  The documentation could just detail the
+available choices for Bluetooth and serial console on the rpi3 and how
+to configure each manually.  A summary of the available choices is:
 
-The one I use for the kernel is obviously the embedded time stamp,
-displayed at boot time (and also in uname -v).
+1) Default setup - Serial console does not work, Bluetooth works
+2) Add enable-uart=1 - Serial console works but the core frequency is
+fixed.  Serial console max baud rate is less than the rpi2. Bluetooth
+works.
+3) Use pi3-miniuart-bt - Serial console works the same as the rpi2 but
+Bluetooth runs slow.
+4) Use pi3-disable-bt - Serial console works the same as the rpi2 but
+Bluetooth is disabled.
 
-I guess the filesystem time stamps are not that useful, but they are
-the "easy" part (i.e they can be fixed globally when generating the
-filesystem image). The embedded timestamps all over the place in
-different programs/libraries are really the annoying part.
+What do you think?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks
+
+Martin
+
+> Regards,
+> Peter
+>
+>
+>> Thanks
+>>
+>> Martin
+>>
+>> >
+>> > --
+>> > Venlig hilsen,
+>> > Peter Korsgaard
+>> > _______________________________________________
+>> > buildroot mailing list
+>> > buildroot at busybox.net
+>> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
