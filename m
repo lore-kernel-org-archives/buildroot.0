@@ -1,40 +1,54 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  9 May 2016 13:44:42 -0300
-Subject: [Buildroot] [PATCH] gvfs: bump to version 1.28.2
-Message-ID: <1462812282-1862-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  9 May 2016 18:46:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+	mesa3d-headers}: bump version to 11.2.2
+Message-ID: <1462812413-14475-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gvfs/gvfs.hash | 4 ++--
- package/gvfs/gvfs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 2 +-
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
-index 66411c1..1fec32c 100644
---- a/package/gvfs/gvfs.hash
-+++ b/package/gvfs/gvfs.hash
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 551cb2e..11e79cb 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 11.2.1
++MESA3D_HEADERS_VERSION = 11.2.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 1914b79..fa06593 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.28/gvfs-1.28.1.sha256sum
--sha256	4ecfe5ac35c1b3e61d6abddc98902b6c7faf243308c60b165f01990783f17999	gvfs-1.28.1.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.28/gvfs-1.28.2.sha256sum
-+sha256	bc6af45cff7e7e8d33c3a4be1d27e479f10f80105a6f2d1fae75c5c0d40636d9	gvfs-1.28.2.tar.xz
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index 5bf35fc..8e88573 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
+ # From https://lists.freedesktop.org/archives/mesa-announce/2016-April/000209.html
+-sha256	a65207e9ae5c5f1c29f863c6a2cc98a7ab99762a24b82a248337f0ea9cfce01b	mesa-11.2.1.tar.xz
++sha256	40e148812388ec7c6d7b6657d5a16e2e8dabba8b97ddfceea5197947647bdfb4	mesa-11.2.2.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index ab3c9be..4e0d255 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- GVFS_VERSION_MAJOR = 1.28
--GVFS_VERSION = $(GVFS_VERSION_MAJOR).1
-+GVFS_VERSION = $(GVFS_VERSION_MAJOR).2
- GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
- GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
- GVFS_INSTALL_STAGING = YES
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 11.2.1
++MESA3D_VERSION = 11.2.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.7.3
+2.8.1
