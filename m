@@ -1,39 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  9 May 2016 18:29:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 2.8.7
-Message-ID: <1462811360-3563-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  9 May 2016 13:44:42 -0300
+Subject: [Buildroot] [PATCH] gvfs: bump to version 1.28.2
+Message-ID: <1462812282-1862-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gvfs/gvfs.hash | 4 ++--
+ package/gvfs/gvfs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 8643bff..3120a7a 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
+diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
+index 66411c1..1fec32c 100644
+--- a/package/gvfs/gvfs.hash
++++ b/package/gvfs/gvfs.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	25bcedbdafadac3d09c325c1d46a51f53d858b26a260d5aed6b4f17fea6e07fa	ffmpeg-2.8.6.tar.xz
-+sha256	97be8a6c1cab2c52015544f76d40f6fd0babcb1b40cf601b4e57fb818564157c	ffmpeg-2.8.7.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index ddfac20..a2026dc 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.28/gvfs-1.28.1.sha256sum
+-sha256	4ecfe5ac35c1b3e61d6abddc98902b6c7faf243308c60b165f01990783f17999	gvfs-1.28.1.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.28/gvfs-1.28.2.sha256sum
++sha256	bc6af45cff7e7e8d33c3a4be1d27e479f10f80105a6f2d1fae75c5c0d40636d9	gvfs-1.28.2.tar.xz
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index 5bf35fc..8e88573 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--FFMPEG_VERSION = 2.8.6
-+FFMPEG_VERSION = 2.8.7
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+ GVFS_VERSION_MAJOR = 1.28
+-GVFS_VERSION = $(GVFS_VERSION_MAJOR).1
++GVFS_VERSION = $(GVFS_VERSION_MAJOR).2
+ GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
+ GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
+ GVFS_INSTALL_STAGING = YES
 -- 
-2.8.1
+2.7.3
