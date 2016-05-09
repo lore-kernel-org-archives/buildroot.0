@@ -1,49 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 May 2016 22:26:56 +0200
-Subject: [Buildroot] [git commit] package/clamav: bump version to 0.99.2
-Message-ID: <20160509202911.7EA4880DB4@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  9 May 2016 17:34:53 -0300
+Subject: [Buildroot] [PATCH] glib-networking: bump to version 2.48.2
+Message-ID: <1462826093-2952-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71ad4dadb6fb1e5543d11716f1ddcbde7bf77266
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Changed upstream URL to project site clamav.net, the tarball for the
-new version is not available on sourceforge.net anymore.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/clamav/clamav.hash | 6 ++----
- package/clamav/clamav.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ package/glib-networking/glib-networking.hash | 4 ++--
+ package/glib-networking/glib-networking.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index f80474b..d2a1a12 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,4 +1,2 @@
--# From http://sourceforge.net/projects/clamav/files/clamav/0.99.1/
--sha1	9b9706b951fbb35cf6743ef497649fdf20f167f9	clamav-0.99.1.tar.gz
--# Calculated based on the hash above
--sha256	e144689122d3f91293808c82cbb06b7d3ac9eca7ae29564c5d148ffe7b25d58a	clamav-0.99.1.tar.gz
-+# Locally calculated
-+sha256	167bd6a13e05ece326b968fdb539b05c2ffcfef6018a274a10aeda85c2c0027a	clamav-0.99.2.tar.gz
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 16178cd..6a82d66 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,8 +4,8 @@
- #
+diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
+index 223ebcd..a495af1 100644
+--- a/package/glib-networking/glib-networking.hash
++++ b/package/glib-networking/glib-networking.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.48/glib-networking-2.48.1.sha256sum
+-sha256	cf9923ab9860011c5af6d58b0aa1db693d353f2008014a3dcb07af1952bea44a	glib-networking-2.48.1.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.48/glib-networking-2.48.2.sha256sum
++sha256	925c0c49d6b2b8b5695f2e33cd952d1dbb7d18d3f2f796413577719315bb3a84	glib-networking-2.48.2.tar.xz
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index 6930967..d4782e0 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--CLAMAV_VERSION = 0.99.1
--CLAMAV_SITE = http://sourceforge.net/projects/clamav/files/clamav/$(CLAMAV_VERSION)
-+CLAMAV_VERSION = 0.99.2
-+CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPLv2
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
- 	COPYING.LGPL COPYING.llvm COPYING.lzma COPYING.pcre COPYING.regex \
+ GLIB_NETWORKING_VERSION_MAJOR = 2.48
+-GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).1
++GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).2
+ GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
+ GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
+ GLIB_NETWORKING_INSTALL_STAGING = YES
+-- 
+2.7.3
