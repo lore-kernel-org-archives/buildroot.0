@@ -1,36 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 May 2016 14:03:12 +0200
-Subject: [Buildroot] [git commit] configs: warpboard: Use the final U-boot
-	release version
-Message-ID: <20160509120456.952D680755@busybox.osuosl.org>
+Date: Mon, 09 May 2016 14:05:21 +0200
+Subject: [Buildroot] [PATCH 1/2] lvm2: bump version to 2.02.153
+In-Reply-To: <1462784681-63929-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Mon, 9 May 2016 10:04:40 +0100")
+References: <1462784681-63929-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87vb2nl9mm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=098ff7f9026a58609b1ada18eedd79f5d6b809b8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-We should better use the final U-boot version rather than the release
-candidate one.
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/warpboard_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Committed, thanks.
 
-diff --git a/configs/warpboard_defconfig b/configs/warpboard_defconfig
-index 8bc3117..798afed 100644
---- a/configs/warpboard_defconfig
-+++ b/configs/warpboard_defconfig
-@@ -31,7 +31,7 @@ BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="warp"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07-rc2"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # host utility
+-- 
+Bye, Peter Korsgaard
