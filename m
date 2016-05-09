@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 May 2016 14:05:21 +0200
-Subject: [Buildroot] [PATCH 1/2] lvm2: bump version to 2.02.153
-In-Reply-To: <1462784681-63929-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Mon, 9 May 2016 10:04:40 +0100")
+Date: Mon, 09 May 2016 14:05:26 +0200
+Subject: [Buildroot] [PATCH 2/2] mc: bump version to 4.8.17
+In-Reply-To: <1462784681-63929-2-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Mon, 9 May 2016 10:04:41 +0100")
 References: <1462784681-63929-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87vb2nl9mm.fsf@dell.be.48ers.dk>
+ <1462784681-63929-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87r3dbl9mh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
