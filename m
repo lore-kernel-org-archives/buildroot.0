@@ -1,111 +1,189 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Mon, 9 May 2016 14:19:48 +0100
-Subject: [Buildroot] [PATCH v2] raspberrypi3: fix serial console (load
- pi3-miniuart-bt overlay)
-In-Reply-To: <20160503210200.12d685a7@gmx.net>
-References: <1462220744-6368-1-git-send-email-ps.report@gmx.net>
- <CALtfCQZowiGZUJ0HV4oTyRMfMY02TherviK_ZE6D4wgfUcQ3gg@mail.gmail.com>
- <871t5jr7e6.fsf@dell.be.48ers.dk>
- <CAFGQKxeRKWNCOH2YV0FYA17tdfyeemv3Xau2Bkrzmrxh5Rm-4g@mail.gmail.com>
- <20160503210200.12d685a7@gmx.net>
-Message-ID: <CAFGQKxc63EUZX8RNL_NE=VWnsVf_CoyK5b9K_SWyk2rgc4CutA@mail.gmail.com>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Mon,  9 May 2016 16:12:28 +0200
+Subject: [Buildroot] [PATCH] gcc: fix 5.x version build when using gcc6 on
+	host
+Message-ID: <1462803148-1388-1-git-send-email-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+When we use gcc6 on host PC and try to build gcc5 in Buildroot we fail
+on host-gcc-final. This issue is already known [1] and fixed in gcc, but
+there is no gcc5 release containing this fix yet.
 
-On 3 May 2016 at 20:02, Peter Seiderer <ps.report@gmx.net> wrote:
-> Hello Martin,
->
-> On Tue, 3 May 2016 11:23:50 +0100, Martin Bark <martin@barkynet.com> wrote:
->
->> All,
->>
->> On 3 May 2016 at 07:18, Peter Korsgaard <peter@korsgaard.com> wrote:
->> >>>>>> "Oscar" == Oscar Gomez Fuente <oscargomezf@gmail.com> writes:
->> >
->> >  > Hi Peter Seiderer,
->> >  > What's the difference between enabling pi3-miniuart-bt instead of
->> >  > pi3-disable-bt?
->> >
->> >  > With pi3-disable-bt enables it works fine the serial console on (14 [TxD] &
->> >  > 15 [RxD] pins).
->> >
->> > From the names I would guess it is the difference between completely
->> > disabling access to the bluetooth module and providing access to it
->> > though the secondary (mini) uart.
->> >
->> > The miniuart has some limitations, but I guess basic bluetooth stuff
->> > should work with it.
->>
->> I've got a bit lost in the rpi3 serial console issues but as i
->> understand the current situation all you need to do is set
->> enable_uart=1 in config.txt.  See
->> https://github.com/raspberrypi/firmware/issues/553#issuecomment-199486644.
->> I've not tested this.
->>
->> I think you also need to change cmdline.txt to use console=serial0 as
->> the pi3-miniuart-bt will replace it with the correct serial device
->> (ttyAMA0 or ttyS0) depending if it's enabled or not.  See the comments
->> in https://github.com/raspberrypi/linux/blob/rpi-4.1.y/arch/arm/boot/dts/overlays/pi3-miniuart-bt-overlay.dts.
->>
->
-> This works too, not sure whats the better solution, explicit via device tree overlay
-> or some firmware magic....
->
-> - pi3-miniuart-bt 'dmesg | grep tty':
-> [    0.000000] Kernel command line: 8250.nr_uarts=1 dma.dmachans=0x7f35 bcm2708_fb.fbwidth=1920 bcm2708_fb.fbheight=1200 bcm2709.boardrev=0xa02082 bcm2709.serial=0xa60340 smsc95xx.macaddr=B8:27:EB:A6:03:40 bcm2708_fb.fbswap=1 bcm2709.uart_clock=48000000 vc_mem.mem_base=0x3dc00000 vc_mem.mem_size=0x3f000000  root=/dev/mmcblk0p2 rootwait console=tty1 console=ttyAMA0,115200
-> [    0.001320] console [tty1] enabled
-> [    0.318181] 3f215040.uart: ttyS0 at MMIO 0x3f215040 (irq = 59, base_baud = 50000000) is a 16550
-> [    2.008162] 3f201000.uart: ttyAMA0 at MMIO 0x3f201000 (irq = 87, base_baud = 0) is a PL011 rev2
-> [    3.296233] console [ttyAMA0] enabled
->
-> - enable-uart=1, serial0 dmesg | grep tty':
-> [    0.000000] Kernel command line: 8250.nr_uarts=1 dma.dmachans=0x7f35 bcm2708_fb.fbwidth=1920 bcm2708_fb.fbheight=1200 bcm2709.boardrev=0xa02082 bcm2709.serial=0xa60340 smsc95xx.macaddr=B8:27:EB:A6:03:40 bcm2708_fb.fbswap=1 bcm2709.uart_clock=48000000 vc_mem.mem_base=0x3dc00000 vc_mem.mem_size=0x3f000000  root=/dev/mmcblk0p2 rootwait console=tty1 console=ttyS0,115200
-> [    0.001318] console [tty1] enabled
-> [    0.318270] console [ttyS0] disabled
-> [    0.318389] 3f215040.uart: ttyS0 at MMIO 0x3f215040 (irq = 59, base_baud = 31250000) is a 16550
-> [    1.042714] console [ttyS0] enabled
-> [    3.020277] 3f201000.uart: ttyAMA0 at MMIO 0x3f201000 (irq = 87, base_baud = 0) is a PL011 rev2
->
+Add upstream patch (r233720 [2]) to fix building host-gcc-final.
 
-I wonder if the solution is to just document the situation in
-board/raspberrypi/readme.txt.  The documentation could just detail the
-available choices for Bluetooth and serial console on the rpi3 and how
-to configure each manually.  A summary of the available choices is:
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69959
+[2] https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=233720
 
-1) Default setup - Serial console does not work, Bluetooth works
-2) Add enable-uart=1 - Serial console works but the core frequency is
-fixed.  Serial console max baud rate is less than the rpi2. Bluetooth
-works.
-3) Use pi3-miniuart-bt - Serial console works the same as the rpi2 but
-Bluetooth runs slow.
-4) Use pi3-disable-bt - Serial console works the same as the rpi2 but
-Bluetooth is disabled.
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+---
+ .../gcc/5.3.0/931-fix-build-when-using-gcc6.patch  | 155 +++++++++++++++++++++
+ 1 file changed, 155 insertions(+)
+ create mode 100644 package/gcc/5.3.0/931-fix-build-when-using-gcc6.patch
 
-What do you think?
-
-Thanks
-
-Martin
-
-> Regards,
-> Peter
->
->
->> Thanks
->>
->> Martin
->>
->> >
->> > --
->> > Venlig hilsen,
->> > Peter Korsgaard
->> > _______________________________________________
->> > buildroot mailing list
->> > buildroot at busybox.net
->> > http://lists.busybox.net/mailman/listinfo/buildroot
->
+diff --git a/package/gcc/5.3.0/931-fix-build-when-using-gcc6.patch b/package/gcc/5.3.0/931-fix-build-when-using-gcc6.patch
+new file mode 100644
+index 0000000..65f3d98
+--- /dev/null
++++ b/package/gcc/5.3.0/931-fix-build-when-using-gcc6.patch
+@@ -0,0 +1,155 @@
++From 1e5f1089dec3af328fd03125d6778f666d0bd4e4 Mon Sep 17 00:00:00 2001
++From: edlinger <edlinger@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Thu, 25 Feb 2016 15:33:50 +0000
++Subject: [PATCH] fix build when using gcc6
++
++2016-02-25  Bernd Edlinger  <bernd.edlinger@hotmail.de>
++
++        Backported from mainline
++        2016-02-19  Jakub Jelinek  <jakub@redhat.com>
++                    Bernd Edlinger  <bernd.edlinger@hotmail.de>
++
++        * Make-lang.in: Invoke gperf with -L C++.
++        * cfns.gperf: Remove prototypes for hash and libc_name_p
++        inlines.
++        * cfns.h: Regenerated.
++        * except.c (nothrow_libfn_p): Adjust.
++
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-5-branch at 233720 138bc75d-0d04-0410-961f-82ee72b054a4
++---
++ gcc/cp/Make-lang.in |  2 +-
++ gcc/cp/cfns.gperf   | 10 ++--------
++ gcc/cp/cfns.h       | 41 ++++++++++++++---------------------------
++ gcc/cp/except.c     |  3 ++-
++ 5 files changed, 31 insertions(+), 37 deletions(-)
++
++
++diff --git a/gcc/cp/Make-lang.in b/gcc/cp/Make-lang.in
++index e98beb1..b09fb02 100644
++--- a/gcc/cp/Make-lang.in
+++++ b/gcc/cp/Make-lang.in
++@@ -111,7 +111,7 @@ else
++ # deleting the $(srcdir)/cp/cfns.h file.
++ $(srcdir)/cp/cfns.h:
++ endif
++-	gperf -o -C -E -k '1-6,$$' -j1 -D -N 'libc_name_p' -L ANSI-C \
+++	gperf -o -C -E -k '1-6,$$' -j1 -D -N 'libc_name_p' -L C++ \
++ 		$(srcdir)/cp/cfns.gperf --output-file $(srcdir)/cp/cfns.h
++ 
++ #
++diff --git a/gcc/cp/cfns.gperf b/gcc/cp/cfns.gperf
++index 68acd3d..214ecf6 100644
++--- a/gcc/cp/cfns.gperf
+++++ b/gcc/cp/cfns.gperf
++@@ -1,3 +1,5 @@
+++%language=C++
+++%define class-name libc_name
++ %{
++ /* Copyright (C) 2000-2015 Free Software Foundation, Inc.
++ 
++@@ -16,14 +18,6 @@ for more details.
++ You should have received a copy of the GNU General Public License
++ along with GCC; see the file COPYING3.  If not see
++ <http://www.gnu.org/licenses/>.  */
++-#ifdef __GNUC__
++-__inline
++-#endif
++-static unsigned int hash (const char *, unsigned int);
++-#ifdef __GNUC__
++-__inline
++-#endif
++-const char * libc_name_p (const char *, unsigned int);
++ %}
++ %%
++ # The standard C library functions, for feeding to gperf; the result is used
++diff --git a/gcc/cp/cfns.h b/gcc/cp/cfns.h
++index 1c6665d..596f413 100644
++--- a/gcc/cp/cfns.h
+++++ b/gcc/cp/cfns.h
++@@ -1,5 +1,5 @@
++-/* ANSI-C code produced by gperf version 3.0.3 */
++-/* Command-line: gperf -o -C -E -k '1-6,$' -j1 -D -N libc_name_p -L ANSI-C cfns.gperf  */
+++/* C++ code produced by gperf version 3.0.4 */
+++/* Command-line: gperf -o -C -E -k '1-6,$' -j1 -D -N libc_name_p -L C++ --output-file cfns.h cfns.gperf  */
++ 
++ #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
++       && ('%' == 37) && ('&' == 38) && ('\'' == 39) && ('(' == 40) \
++@@ -28,7 +28,7 @@
++ #error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gnu-gperf@gnu.org>."
++ #endif
++ 
++-#line 1 "cfns.gperf"
+++#line 3 "cfns.gperf"
++ 
++ /* Copyright (C) 2000-2015 Free Software Foundation, Inc.
++ 
++@@ -47,25 +47,18 @@ for more details.
++ You should have received a copy of the GNU General Public License
++ along with GCC; see the file COPYING3.  If not see
++ <http://www.gnu.org/licenses/>.  */
++-#ifdef __GNUC__
++-__inline
++-#endif
++-static unsigned int hash (const char *, unsigned int);
++-#ifdef __GNUC__
++-__inline
++-#endif
++-const char * libc_name_p (const char *, unsigned int);
++ /* maximum key range = 391, duplicates = 0 */
++ 
++-#ifdef __GNUC__
++-__inline
++-#else
++-#ifdef __cplusplus
++-inline
++-#endif
++-#endif
++-static unsigned int
++-hash (register const char *str, register unsigned int len)
+++class libc_name
+++{
+++private:
+++  static inline unsigned int hash (const char *str, unsigned int len);
+++public:
+++  static const char *libc_name_p (const char *str, unsigned int len);
+++};
+++
+++inline unsigned int
+++libc_name::hash (register const char *str, register unsigned int len)
++ {
++   static const unsigned short asso_values[] =
++     {
++@@ -122,14 +115,8 @@ hash (register const char *str, register unsigned int len)
++   return hval + asso_values[(unsigned char)str[len - 1]];
++ }
++ 
++-#ifdef __GNUC__
++-__inline
++-#ifdef __GNUC_STDC_INLINE__
++-__attribute__ ((__gnu_inline__))
++-#endif
++-#endif
++ const char *
++-libc_name_p (register const char *str, register unsigned int len)
+++libc_name::libc_name_p (register const char *str, register unsigned int len)
++ {
++   enum
++     {
++diff --git a/gcc/cp/except.c b/gcc/cp/except.c
++index 3ff1ce6..2f2e396 100644
++--- a/gcc/cp/except.c
+++++ b/gcc/cp/except.c
++@@ -1040,7 +1040,8 @@ nothrow_libfn_p (const_tree fn)
++      unless the system headers are playing rename tricks, and if
++      they are, we don't want to be confused by them.  */
++   id = DECL_NAME (fn);
++-  return !!libc_name_p (IDENTIFIER_POINTER (id), IDENTIFIER_LENGTH (id));
+++  return !!libc_name::libc_name_p (IDENTIFIER_POINTER (id),
+++				   IDENTIFIER_LENGTH (id));
++ }
++ 
++ /* Returns nonzero if an exception of type FROM will be caught by a
++-- 
++2.8.2
++
+-- 
+2.8.2
