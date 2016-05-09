@@ -1,58 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 May 2016 08:41:09 +0200
-Subject: [Buildroot] [PATCH 23/34] pkg-download: allow git+ssh URLs
-In-Reply-To: <20160507223904.1217db52@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 7 May 2016 22:39:04 +0200")
-References: <20160430074358.GE1781@hermes.click-hack.org>
- <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1462002570-14706-23-git-send-email-gilles.chanteperdrix@xenomai.org>
- <20160507223904.1217db52@free-electrons.com>
-Message-ID: <87k2j3n37e.fsf@dell.be.48ers.dk>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 09 May 2016 09:38:21 +0200
+Subject: [Buildroot] [PATCH] alsa-lib: Add option to allow calculations
+ in float for soft float targets
+In-Reply-To: <9e37a66a-58b8-6d99-04aa-a2ab4685a246@mind.be>
+References: <1462603525-4427-1-git-send-email-joerg.krause@embedded.rocks>
+ <20160507091654.0b03f2fd@free-electrons.com>
+ <1462710802.22644.13.camel@embedded.rocks>
+ <9e37a66a-58b8-6d99-04aa-a2ab4685a246@mind.be>
+Message-ID: <1462779501.1434.24.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On So, 2016-05-08 at 21:53 +0200, Arnout Vandecappelle wrote:
+> On 05/08/16 14:33, J?rg Krause wrote:
+> > On Sa, 2016-05-07 at 09:16 +0200, Thomas Petazzoni wrote:
+> > > Hello,
+> > > 
+> > > On Sat,??7 May 2016 08:45:25 +0200, J?rg Krause wrote:
+> > > 
+> > > > -ifeq ($(BR2_SOFT_FLOAT),y)
+> > > > +ifeq ($(BR2_PACKAGE_ALSA_LIB_NO_FLOAT),y)
+> > > > ?ALSA_LIB_CONF_OPTS += --with-softfloat
+> > > > ?endif
+> > > 
+> > > So we were already passing --with-softfloat when
+> > > BR2_SOFT_FLOAT=y. So
+> > > what your option brings is:
+> > > 
+> > > ?- Ability to use floating point operations when
+> > > BR2_SOFT_FLOAT=y.
+> > > 
+> > > ?- Ability to not use floating point operations when
+> > > BR2_SOFT_FLOAT
+> > > is
+> > > ???disabled.
+> > > 
+> > > Do you have any actual use for such possibilities ?
+> > 
+> > Yes, for the first case.
+> > 
+> > I want to use a feature from the alsa-lib which is opted-out at
+> > compile
+> > time for softfloat targets by #ifndef HAVE_SOFT_FLOAT [1]. This
+> > functionality requires floating point data types and libmath
+> > operations.
+> > 
+> > I do not see any point in disabling this unconditionally for
+> > softfloat
+> > targets, as a software floating point library can emulate this.
+> 
+> ? The question is: is there a point in disabling it at all, ever?
+> Does it have a?
+> big impact on size, or does it require functionality which may not be
+> available?
+> for a particular target arch?
 
- > Hello,
- > On Sat, 30 Apr 2016 09:49:19 +0200, Gilles Chanteperdrix wrote:
- >> ---
- >> package/pkg-download.mk | 2 +-
- >> 1 file changed, 1 insertion(+), 1 deletion(-)
+No, it does not. Setting softfloat only disables functionality using
+floating point types and routines.
 
- > This looks good I believe, so please resend with your SoB line. Maybe
- > an update to the Buildroot manual is also needed.
+> ? If not, I'd vote for unconditionally disabling the softfloat
+> option.
 
-I'm not sure we want to advertise this feature too much (or at least
-mention it is deprecated). I've personally not heard about git+ssh://,
-and googling around I didn't find anything right away.
+I agree. However, this changes the current behaviour how alsa-lib is
+build for soft-float targets. That's why I added an option which
+preserves the current configuration.
 
-The only reference I have found is in the git source code:
+> ? That said, I remember that there was some option (not sure if it
+> was alsalib?
+> or another lib) to choose between floating point (accurate but
+> slower) and fixed?
+> point (less accurate but faster) for some filtering operations.
+> *That* would be?
+> a relevant user-settable option.
 
-static enum protocol get_protocol(const char *name)
-{
-	if (!strcmp(name, "ssh"))
-		return PROTO_SSH;
-	if (!strcmp(name, "git"))
-		return PROTO_GIT;
-	if (!strcmp(name, "git+ssh")) /* deprecated - do not use */
-		return PROTO_SSH;
-	if (!strcmp(name, "ssh+git")) /* deprecated - do not use */
-		return PROTO_SSH;
-	if (!strcmp(name, "file"))
-		return PROTO_FILE;
-	die("I don't handle protocol '%s'", name);
-}
+Yes, but it does not apply to alsa-lib.
 
-So the question is how long git will continue to support it.
-
-With that said, I don't have a problem with us detecting git+ssh:// (and
-perhaps ssh+git://) as git URLs and forwarding it to the download
-wrapper - But if we start documenting it as supported we should continue
-to do so, so we might end up having to rewrite git+ssh:// -> ssh:// URLs
-and so on when/if git stops supporting them natively.
-
--- 
-Bye, Peter Korsgaard
+Best regards
+J?rg Krause
