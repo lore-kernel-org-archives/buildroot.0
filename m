@@ -1,38 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 May 2016 15:08:12 +0200
-Subject: [Buildroot] [git commit] legacy: i386 is legacy, inform the user
-Message-ID: <20160509200131.046D781D5E@busybox.osuosl.org>
+Date: Mon, 9 May 2016 22:02:51 +0200
+Subject: [Buildroot] [PATCH 2/2] package/freeswitch: Fix added license
+In-Reply-To: <1461445189-31992-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1461445189-31992-1-git-send-email-bernd.kuhls@t-online.de>
+ <1461445189-31992-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160509220251.1a85412d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7aaa730ce296b8f4ab4272141ad463290944863b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-When we dropped support for i386, we added the corresponding opiton to
-the legacy menu, but forgot to select BR2_LEGACY.
+On Sat, 23 Apr 2016 22:59:49 +0200, Bernd Kuhls wrote:
+> Noted by Thomas:
+> http://lists.busybox.net/pipermail/buildroot/2016-April/158864.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/freeswitch/freeswitch.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Fix that.
+Applied to master after fixing the code so that licenses are comma
+separated.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Config.in.legacy | 1 +
- 1 file changed, 1 insertion(+)
+Thanks,
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 897a6d2..824a220 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -189,6 +189,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_E500V2
- 
- config BR2_x86_i386
- 	bool "x86 i386 support removed"
-+	select BR2_LEGACY
- 	help
- 	  The support for the i386 processors of the x86 architecture
- 	  has been removed.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
