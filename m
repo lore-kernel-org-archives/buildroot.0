@@ -1,52 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 May 2016 22:54:19 +0200
-Subject: [Buildroot] [git commit] package/nodejs: bump version to 6.1.0
-Message-ID: <20160509205453.2E2F58188C@busybox.osuosl.org>
+Date: Mon, 9 May 2016 22:55:05 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 2.8.7
+Message-ID: <20160509205513.4D0728183F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbd387c08cde92ca629495d7b5f7265ef0ba5bd6
+commit: https://git.buildroot.net/buildroot/commit/?id=69c3f7e86f6cfde3d7d59e3a1040d5ad167e5e07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See https://nodejs.org/en/blog/release/v6.1.0/
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../{6.0.0 => 6.1.0}/0001-gyp-force-link-command-to-use-CXX.patch     | 0
- package/nodejs/Config.in                                              | 2 +-
- package/nodejs/nodejs.hash                                            | 4 ++--
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/6.0.0/0001-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/6.1.0/0001-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/6.0.0/0001-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/6.1.0/0001-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 850f9b8..6fa0e8d 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 8643bff..3120a7a 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	25bcedbdafadac3d09c325c1d46a51f53d858b26a260d5aed6b4f17fea6e07fa	ffmpeg-2.8.6.tar.xz
++sha256	97be8a6c1cab2c52015544f76d40f6fd0babcb1b40cf601b4e57fb818564157c	ffmpeg-2.8.7.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index ddfac20..a2026dc 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "6.0.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "6.1.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	default "0.10.44"
- 
- menu "Module Selection"
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 4b15fd7..101b988 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.44/SHASUMS256.txt
- sha256  25b2cd910822723e972a3990d5687b7ff48581ad2f77aa1942d99a1b024f434a  node-v0.10.44.tar.xz
- 
--# From upstream URL: http://nodejs.org/dist/v6.0.0/SHASUMS256.txt
--sha256  f0e5bdc3cf4af85b8a24bdbebed81e1a9f7fda91cab8a9475737940aa90da617  node-v6.0.0.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v6.1.0/SHASUMS256.txt
-+sha256  c7940301917232527490a166df78f9d3d58e70e10fd502f73889d936763cfe84  node-v6.1.0.tar.xz
+-FFMPEG_VERSION = 2.8.6
++FFMPEG_VERSION = 2.8.7
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
