@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 May 2016 22:55:24 +0200
-Subject: [Buildroot] [PATCH 1/2] package/nodejs: bump version to 6.1.0
-In-Reply-To: <1462803501-15901-1-git-send-email-martin@barkynet.com>
-References: <1462803501-15901-1-git-send-email-martin@barkynet.com>
-Message-ID: <20160509225524.5e93b334@free-electrons.com>
+Date: Mon, 9 May 2016 22:55:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 2.8.7
+In-Reply-To: <1462811360-3563-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1462811360-3563-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160509225530.7305feca@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  9 May 2016 15:18:20 +0100, Martin Bark wrote:
-> See https://nodejs.org/en/blog/release/v6.1.0/
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+On Mon,  9 May 2016 18:29:20 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  .../{6.0.0 => 6.1.0}/0001-gyp-force-link-command-to-use-CXX.patch     | 0
->  package/nodejs/Config.in                                              | 2 +-
->  package/nodejs/nodejs.hash                                            | 4 ++--
->  3 files changed, 3 insertions(+), 3 deletions(-)
->  rename package/nodejs/{6.0.0 => 6.1.0}/0001-gyp-force-link-command-to-use-CXX.patch (100%)
+>  package/ffmpeg/ffmpeg.hash | 2 +-
+>  package/ffmpeg/ffmpeg.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks, both patches applied!
+Applied to master, thanks.
 
 Thomas
 -- 
