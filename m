@@ -1,54 +1,51 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 10 May 2016 20:40:22 +0200
-Subject: [Buildroot] [PATCH 5/6] package/kodi-visualisation-shadertoy: needs
-	libglew for OpenGL build
-In-Reply-To: <1462905623-17739-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1462905623-17739-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1462905623-17739-5-git-send-email-bernd.kuhls@t-online.de>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 10 May 2016 21:39:29 +0200
+Subject: [Buildroot] [PATCH] m68k: fix open issues with qemu coldfire
+In-Reply-To: <20160509220507.033b1faf@free-electrons.com>
+References: <20160509195102.GA11121@waldemar-brodkorb.de>
+ <20160509220507.033b1faf@free-electrons.com>
+Message-ID: <20160510193929.GR26720@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
--- Found OpenGL: /home/bernd/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libGL.so
-CMake Error at /home/bernd/buildroot/output/host/usr/share/cmake-3.5/Modules/FindPackageHandleStandardArgs.cmake:148
- (message):
-  Could NOT find GLEW (missing: GLEW_INCLUDE_DIRS GLEW_LIBRARIES)
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-For details have a look at
-https://github.com/notspiff/visualization.shadertoy/blob/master/CMakeLists.txt#L21
+> Hello,
+> 
+> On Mon, 9 May 2016 21:51:02 +0200, Waldemar Brodkorb wrote:
+> > Enable kernel drivers for networking and add a simple
+> > busybox config with basic network tools.
+> > 
+> > Add kernel patch from Linux git to fix hush segfaults while
+> > using signal handler.
+> > 
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> > ---
+> >  board/qemu/m68k-mcf5208/linux-4.5.config           |    7 +
+> >  .../patches/linux/0001-fix-do_sigreturn.patch      |  100 ++
+> >  configs/qemu_m68k_mcf5208_defconfig                |    8 +-
+> >  .../busybox/busybox-minimal-with-network.config    | 1057 ++++++++++++++++++++
+> >  4 files changed, 1168 insertions(+), 4 deletions(-)
+> >  create mode 100644 board/qemu/m68k-mcf5208/patches/linux/0001-fix-do_sigreturn.patch
+> >  create mode 100644 package/busybox/busybox-minimal-with-network.config
+> 
+> Thanks for the patch! However, I am not super happy with the
+> busybox-minimal-with-network.config. I don't want to see an increasing
+> number of Busybox default configurations.
+> 
+> If you have a STM32 platform handy, could you test if your
+> busybox-minimal-with-network.config works fine for it? If it does, then
+> please simply update busybox-minimal.config with whatever is needed for
+> basic networking to work.
+> 
+> Thanks!
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-visualisation-shadertoy/Config.in                       | 1 +
- package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk | 4 ++++
- 2 files changed, 5 insertions(+)
+Okay, verified on my STM32F429discovery, resulting image is not too
+big. Will resend the patch.
 
-diff --git a/package/kodi-visualisation-shadertoy/Config.in b/package/kodi-visualisation-shadertoy/Config.in
-index 3b981d0..ac17702 100644
---- a/package/kodi-visualisation-shadertoy/Config.in
-+++ b/package/kodi-visualisation-shadertoy/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY
- 	bool "kodi-visualisation-shadertoy"
-+	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_LIBPLATFORM
- 	help
- 	  Shadertoy visualiser for Kodi
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-index 308016e..e5f2d91 100644
---- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-@@ -10,4 +10,8 @@ KODI_VISUALISATION_SHADERTOY_LICENSE = GPLv2+
- KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = src/main.cpp
- KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = kodi libplatform
- 
-+ifeq ($(BR2_PACKAGE_LIBGLEW),y)
-+KODI_VISUALISATION_SHADERTOY_DEPENDENCIES += libglew
-+endif
-+
- $(eval $(cmake-package))
--- 
-2.8.1
+best regards
+ Waldemar
