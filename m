@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 May 2016 15:54:57 +0200
-Subject: [Buildroot] [PATCH] libglib2: bump to version 2.48.1
-In-Reply-To: <1462880084-26496-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1462880084-26496-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160510155457.2d156be3@free-electrons.com>
+Date: Tue, 10 May 2016 15:54:59 +0200
+Subject: [Buildroot] [PATCH] qemu: bump version to 2.5.1.1
+In-Reply-To: <1462880387-14117-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1462880387-14117-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160510155459.0d8a7b9c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 10 May 2016 08:34:44 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Tue, 10 May 2016 12:39:47 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/libglib2/libglib2.hash | 4 ++--
->  package/libglib2/libglib2.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/qemu/qemu.hash | 2 +-
+>  package/qemu/qemu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
