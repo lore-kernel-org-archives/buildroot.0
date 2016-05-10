@@ -1,41 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 May 2016 21:47:26 +0200
-Subject: [Buildroot] [PATCH 1/1] rrdtool: bump version to 1.6.0
-In-Reply-To: <6F0EDAB157804BB59AB100B24715D868@ROLANDAMD64> (Roland Franke's
- message of "Tue, 10 May 2016 19:22:31 +0200")
-References: <1462824635-15327-1-git-send-email-fli4l@franke-prem.de>
- <20160509232119.668c0b36@free-electrons.com>
- <5731B8FC.8070403@zacarias.com.ar>
- <6F0EDAB157804BB59AB100B24715D868@ROLANDAMD64>
-Message-ID: <87wpn1k84x.fsf@dell.be.48ers.dk>
+Date: Tue, 10 May 2016 21:44:50 +0200
+Subject: [Buildroot] [git commit] imagemagick: security bump to version
+	6.9.4-1
+Message-ID: <20160510194859.92BED81E9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Roland" == Roland Franke <fli4l@franke-prem.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=72b93bb6768654bc37e0dd9bc301a7ce5876962b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > On 09/05/16 18:21, Thomas Petazzoni wrote:
+Fixes:
+Fix GetNextToken() off by one error.
+Check for buffer overflow in magick/draw.c/DrawStrokePolygon().
+Remove support for internal ephemeral coder.
 
- >>> Enabling autoreconf and gettextize was added when
- >>> 0001-Add-configure-option-to-disable-documentation.patch was added by
- >>> Gustavo. So I would assume that they could now be removed.
- >>> 
- >>> However, it turns out that rrdtool 1.6.0 doesn't build without
- >>> autoreconf+gettextize, I'm not sure why. In any case, the comment
- >>> should be updated and not removed.
+These are all related to the recent ImageTragick bundle that were
+partially fixed in 6.9.3-10 as well.
 
- >> Hi all.
- >> What's the failure you're seeing by dropping autoreconf/gettextize?
- >> On my end it seems to build just fine.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > my fault. was not testing without autoreconf+gettextize first.
- > Now made localy on my system and build was working fine.
-
-Ok, great. Will you send an updated patch removing
-autoreconf/gettextize?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 135989f..9a2a3ee 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 e33f021c879f31703f9e620f578ccf7d221a34941589da4bbe967b16a814336a ImageMagick-6.9.3-10.tar.xz
++sha256 2ea0fef839cd5d6f134502b7cf7ee0e57a3f230b19771515d4aa44354f4c6b3b ImageMagick-6.9.4-1.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 8ecf5d6..c952c2a 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 6.9.3-10
++IMAGEMAGICK_VERSION = 6.9.4-1
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
