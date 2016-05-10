@@ -1,35 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 May 2016 15:46:25 +0200
-Subject: [Buildroot] [git commit] php-geoip: fix legal info
-Message-ID: <20160510135146.2288E81880@busybox.osuosl.org>
+Date: Tue, 10 May 2016 15:46:16 +0200
+Subject: [Buildroot] [git commit] smartmontools: bump to version 6.5
+Message-ID: <20160510135145.D51C281880@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc45fb08f3b34aba9b30a6d6f2fd4a6a9c4fe9f9
+commit: https://git.buildroot.net/buildroot/commit/?id=7103990107073f486ef8cde15ed3888da3d3927e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The LICENSE file is gone, so use the lone .c source fle. Fixes:
-http://autobuild.buildroot.net/results/acd/acd763e7eefb8be2bbd0bf973bb7855fceee7377/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php-geoip/php-geoip.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/smartmontools/smartmontools.hash | 6 +++---
+ package/smartmontools/smartmontools.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/php-geoip/php-geoip.mk b/package/php-geoip/php-geoip.mk
-index 93dcf01..cda8d4e 100644
---- a/package/php-geoip/php-geoip.mk
-+++ b/package/php-geoip/php-geoip.mk
-@@ -11,7 +11,7 @@ PHP_GEOIP_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
- # phpize does the autoconf magic
- PHP_GEOIP_DEPENDENCIES = geoip php host-autoconf
- PHP_GEOIP_LICENSE = PHP
--PHP_GEOIP_LICENSE_FILES = LICENSE
-+PHP_GEOIP_LICENSE_FILES = geoip.c
+diff --git a/package/smartmontools/smartmontools.hash b/package/smartmontools/smartmontools.hash
+index bbaa6dd..2f2b7aa 100644
+--- a/package/smartmontools/smartmontools.hash
++++ b/package/smartmontools/smartmontools.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/smartmontools/files/smartmontools/6.4/
+-md5	56812c8312fd123ed40ef65afde1049e	smartmontools-6.4.tar.gz
+-sha1	855c7d555dd405e5b392b1631dc36dd9632db8b8	smartmontools-6.4.tar.gz
++# From http://sourceforge.net/projects/smartmontools/files/smartmontools/6.5/
++md5	093aeec3f8f39fa9a37593c4012d3156	smartmontools-6.5.tar.gz
++sha1	7e788b429534a4ae627858fbcc826b93402cee7e	smartmontools-6.5.tar.gz
+diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
+index 6d0a82b..cd0c076 100644
+--- a/package/smartmontools/smartmontools.mk
++++ b/package/smartmontools/smartmontools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define PHP_GEOIP_PHPIZE
- 	(cd $(@D); \
+-SMARTMONTOOLS_VERSION = 6.4
++SMARTMONTOOLS_VERSION = 6.5
+ SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
+ SMARTMONTOOLS_LICENSE = GPLv2+
+ SMARTMONTOOLS_LICENSE_FILES = COPYING
