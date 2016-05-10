@@ -1,134 +1,315 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 May 2016 08:30:22 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-05-09
-Message-ID: <20160510063022.EAB531023BF@stock.ovh.net>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Tue, 10 May 2016 09:48:35 +0200
+Subject: [Buildroot] [dtc] Compiling a .dts overlay
+In-Reply-To: <20160509224632.20316e68@gmx.net>
+References: <CALtfCQZz2htRMAtsGTpehAwshDLeLFfQki1b1UJEW+pVVcR1Aw@mail.gmail.com>
+ <CAKXOQBxS0OTJC4o_UKM2GS+DZmydXbk2-H3zhd9Gas7ivH2JEA@mail.gmail.com>
+ <CALtfCQa3LcBpbWuYucEn3eafXnbvp_hwidC1XyrzmK2z6mkSSA@mail.gmail.com>
+ <CALtfCQYgM9Lh9iu-iPFB5PUHJBL-vxno4s8ocOECjhrVJ6bT3Q@mail.gmail.com>
+ <20160509224632.20316e68@gmx.net>
+Message-ID: <CALtfCQZdTS6zkP4D3mizPUTYaqYLK5+xZ23_i4FTFMMigqKhJA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2016-05-09
-===============================
+Ok Peter,
 
-        success : 157
-       failures : 66 
-       timeouts : 0  
-          TOTAL : 223
+Thank you very much.
 
-Classification of failures by reason
-====================================
+I've got another concern. I've realized that sometimes the i2c device
+tca6424a doesn't init correctly and I see these messages in the kernel log :
 
-      python-coherence-0.6.6.2 | 6 
-          php-geoip-legal-info | 5 
-                 jack2-v1.9.10 | 4 
-                    mpv-0.17.0 | 4 
-android-tools-4.2.2+git2013... | 4 
-                  ffmpeg-2.8.6 | 3 
-                     vlc-2.2.3 | 2 
-                collectd-5.5.1 | 2 
-liquid-dsp-df5a459fa05dba41... | 2 
-                   erlang-18.3 | 2 
-                   ulogd-2.0.5 | 2 
-                    qemu-2.5.1 | 2 
-                 host-go-1.6.2 | 2 
-               linknx-0.0.1.32 | 1 
-                    ruby-2.3.1 | 1 
-                    ustr-1.0.4 | 1 
-                 lvm2-2.02.152 | 1 
-                libinput-1.2.4 | 1 
-                libpjsip-2.4.5 | 1 
-               wireshark-2.0.3 | 1 
-host-gdb-6be65fb56ea6694a92... | 1 
-     python-setproctitle-1.1.9 | 1 
-       gadgetfs-test-undefined | 1 
-                 lvm2-2.02.153 | 1 
-                sg3_utils-1.42 | 1 
-                flannel-v0.5.5 | 1 
-                oprofile-1.1.0 | 1 
-            lttng-libust-2.7.1 | 1 
-                   mplayer-1.2 | 1 
-          sane-backends-1.0.25 | 1 
-             fxload-2008_10_13 | 1 
-                       unknown | 1 
-            gst-ffmpeg-0.10.13 | 1 
-                  psmisc-22.21 | 1 
- toolchain-external-legal-info | 1 
-                grantlee-0.5.1 | 1 
-gmrender-resurrect-aa3d02cf... | 1 
-               valgrind-3.11.0 | 1 
-                  connman-1.32 | 1 
+[    3.638369] pca953x 1-0022: failed reading register
+[    3.644342] pca953x: probe of 1-0022 failed with error -
 
-Detail of failures
-===================
+I think I can solve this If I use correctly the reset signal of the
+tca6424a. Right now I don't use this signal, It's connected to a pull-up
+resistor. Is there anyway to manage this type of reset signals in i2c
+devices? I was surfing on the internet and I read this patch for the
+gpio-pca953x driver.
 
-      xtensa | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/ce674b7a7f676afd11766f3c8befe4fdc8bb5ade/
-     sparc64 | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/d0b330140c30b01e06d8fe5bb1cb252f4623d97c/
-        bfin | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/6c99d068bc73c224e4795d116b57cdc35c90e57c/
-    mips64el | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/3552a6a79a83fb0aa7ddf41ff76dece6d54eeb15/
-      xtensa |                 collectd-5.5.1 | NOK | http://autobuild.buildroot.net/results/e2a97e50b8118c41cc01271e0d0ad5287c06ee01/
-     powerpc |                 collectd-5.5.1 | NOK | http://autobuild.buildroot.net/results/7f79c16a9c30c7da05e890ff83fafa65d43d4320/
-         arm |                   connman-1.32 | NOK | http://autobuild.buildroot.net/results/4eb25afed253f5410288995cdcb098b199c97c74/
-     aarch64 |                    erlang-18.3 | NOK | http://autobuild.buildroot.net/results/b970f5f614deb8e0f4dfc2a6f7948cc9a2dd80e4/
-       sparc |                    erlang-18.3 | NOK | http://autobuild.buildroot.net/results/e7620d0ba1d382305530c127bb60f26737bb85d9/
-    mips64el |                   ffmpeg-2.8.6 | NOK | http://autobuild.buildroot.net/results/64483b8dd4844ed7760ffe394346373e595e7531/
-       nios2 |                   ffmpeg-2.8.6 | NOK | http://autobuild.buildroot.net/results/50f0f92e3089a60ff1fb6d96afb1606759871055/
-    mips64el |                   ffmpeg-2.8.6 | NOK | http://autobuild.buildroot.net/results/1faa10b7b7ea9587dc716b039bd8c77f05848d52/
-      x86_64 |                 flannel-v0.5.5 | NOK | http://autobuild.buildroot.net/results/e364bdc5469443570915aaf5626b884e44a67705/
-microblazeel |              fxload-2008_10_13 | NOK | http://autobuild.buildroot.net/results/4d9d8d67c3771cafe1a851e97a349d917272cbff/
-     powerpc |        gadgetfs-test-undefined | NOK | http://autobuild.buildroot.net/results/ff9a3768829f2b7412fd44078a99853bf4def85d/
-         arm | gmrender-resurrect-aa3d02cf... | NOK | http://autobuild.buildroot.net/results/a6cbf4c35c1709632033e9e860470363d3e1be97/
-     powerpc |                 grantlee-0.5.1 | NOK | http://autobuild.buildroot.net/results/5b37ae5011e2baf1efc652c44e5ab830f3ac433b/
-         sh4 |             gst-ffmpeg-0.10.13 | NOK | http://autobuild.buildroot.net/results/6d737334a30283ecd8e0801c6eeb7959f2d8eb50/
-microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/5aaad26ac5a6b03a5a26e81e5edff2535b4990ca/
-         arm |                  host-go-1.6.2 | NOK | http://autobuild.buildroot.net/results/014213d789096480ab64b0632ee6108d665f1b9d/
-         arm |                  host-go-1.6.2 | NOK | http://autobuild.buildroot.net/results/625dbd61b42369cfd1d2f7f94f205759b7ef6f09/
-      x86_64 |                  jack2-v1.9.10 | NOK | http://autobuild.buildroot.net/results/8cb6a9495155de5bea5bcc33105e2860c9549481/
-      xtensa |                  jack2-v1.9.10 | NOK | http://autobuild.buildroot.net/results/354fcaba6d1a32a191e4c717a2c0b971c0eb5b21/
-         sh4 |                  jack2-v1.9.10 | NOK | http://autobuild.buildroot.net/results/3353dca2f5b8cc54c459ac7e3865436cf38eb347/
-     powerpc |                  jack2-v1.9.10 | NOK | http://autobuild.buildroot.net/results/056752ff6e96935f8785d489e14e7207f5cb9601/
-         arm |                 libinput-1.2.4 | NOK | http://autobuild.buildroot.net/results/e36de9bcf2d1716c5d1e647d30007f9eeaee8f5a/
-         arm |                 libpjsip-2.4.5 | NOK | http://autobuild.buildroot.net/results/bed263dfe05a6c964ea0bba7b552ffdbafac0b5d/
-      x86_64 |                linknx-0.0.1.32 | NOK | http://autobuild.buildroot.net/results/e54d169d77fda9a72cf709d81dc82b648d7a11cd/
-    mips64el | liquid-dsp-df5a459fa05dba41... | NOK | http://autobuild.buildroot.net/results/87012c647fe6637e635cac46b2535dd6c95fe2e9/
-    mips64el | liquid-dsp-df5a459fa05dba41... | NOK | http://autobuild.buildroot.net/results/276409200a19997ef883b53d1427ac65084f341d/
-      x86_64 |             lttng-libust-2.7.1 | NOK | http://autobuild.buildroot.net/results/ff459bbaeeaab0c0438a77ef66e7a9863796255d/
-      x86_64 |                  lvm2-2.02.152 | NOK | http://autobuild.buildroot.net/results/669914843389341662193078ef0169b0d00a2e1d/
-         arm |                  lvm2-2.02.153 | NOK | http://autobuild.buildroot.net/results/c62580315237fd7b771d864158432b714e111871/
-       sparc |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/3ac170c5b06d9e6bc96374fd0c28d436533df946/
-         arm |                     mpv-0.17.0 | NOK | http://autobuild.buildroot.net/results/1e63045a26e174b5db274d1c39d839a89c96b2e3/
-      mipsel |                     mpv-0.17.0 | NOK | http://autobuild.buildroot.net/results/3906cd59231870ca097193c458697d251993e3e6/
-       sparc |                     mpv-0.17.0 | NOK | http://autobuild.buildroot.net/results/852f22d607766de5789598f7fbed79dd200ba345/
-     powerpc |                     mpv-0.17.0 | NOK | http://autobuild.buildroot.net/results/1b3fa6c01f0b22c8454df8c25c2250e0ee6ebbf4/
-microblazeel |                 oprofile-1.1.0 | NOK | http://autobuild.buildroot.net/results/3bfe9918e074d208b5d5ecbc53697f20f5f1d215/
-    mips64el |           php-geoip-legal-info | NOK | http://autobuild.buildroot.net/results/b6b7e2ca820ba20fa81e4700e46f349e5f3297e2/
-       nios2 |           php-geoip-legal-info | NOK | http://autobuild.buildroot.net/results/d97f9907fb1d0ca4654e5309e77886aa829833b3/
-microblazeel |           php-geoip-legal-info | NOK | http://autobuild.buildroot.net/results/638caf09901d40958ee93962c72ff4fbdf30ebe1/
-        sh4a |           php-geoip-legal-info | NOK | http://autobuild.buildroot.net/results/0bcfbb636448f5d3423edf697d56b026c21c5fc9/
-     aarch64 |           php-geoip-legal-info | NOK | http://autobuild.buildroot.net/results/752bd9a8a3286049fc55c72641dfa3cd8ba32682/
-    mips64el |                   psmisc-22.21 | NOK | http://autobuild.buildroot.net/results/d7450105b5be85cf6ea9d42e3300b1d2079944f7/
-      xtensa |       python-coherence-0.6.6.2 | NOK | http://autobuild.buildroot.net/results/4d94b0f37b8e6a06e107be2931fd2d5cee851962/
-      xtensa |       python-coherence-0.6.6.2 | NOK | http://autobuild.buildroot.net/results/ffe15da0849d03fc300b767b91b7907c94719568/
-    mips64el |       python-coherence-0.6.6.2 | NOK | http://autobuild.buildroot.net/results/cf4057038c44136d1487851a4f043db131700380/
-    mips64el |       python-coherence-0.6.6.2 | NOK | http://autobuild.buildroot.net/results/e0caeaf689d2cffe178dd803d94af0b18ce72da3/
-    mips64el |       python-coherence-0.6.6.2 | NOK | http://autobuild.buildroot.net/results/725801bfff7b1d70e9b0986dbe5e4e9d706811d0/
-      x86_64 |       python-coherence-0.6.6.2 | NOK | http://autobuild.buildroot.net/results/cd366cd2c36208a6e979f93bda32daf39a0fbf0a/
-      x86_64 |      python-setproctitle-1.1.9 | NOK | http://autobuild.buildroot.net/results/dac6e291dae9f42d71f1e9de6cf0362d613b2d5a/
-         arm |                     qemu-2.5.1 | NOK | http://autobuild.buildroot.net/results/19b863d1339b9972d02bef857d20cac8f5037da0/
-         arm |                     qemu-2.5.1 | NOK | http://autobuild.buildroot.net/results/5f8f938b2dee904baf601faf8ebf8df38ebe74ca/
-        bfin |                     ruby-2.3.1 | NOK | http://autobuild.buildroot.net/results/9a0ea8575270e78b91ef404a78e464f357a1b048/
-        i686 |           sane-backends-1.0.25 | NOK | http://autobuild.buildroot.net/results/9bdd4af660122b9fe1902ab9634146438e8eaf3f/
-        bfin |                 sg3_utils-1.42 | NOK | http://autobuild.buildroot.net/results/3431ebbf4d1afe639f2c4a8df57c7b9748e2b63c/
-      x86_64 |  toolchain-external-legal-info | NOK | http://autobuild.buildroot.net/results/07a14d42565c8b69337480a86e314d1ff27e6e9c/
-      x86_64 |                    ulogd-2.0.5 | NOK | http://autobuild.buildroot.net/results/e63dc2335e99100443176c396824fd15dd88d56a/
-         arm |                    ulogd-2.0.5 | NOK | http://autobuild.buildroot.net/results/3fd29096b7e8eba3fc36b239090cbb7faf66e007/
-         arc |                        unknown | NOK | http://autobuild.buildroot.net/results/dc701ab5b54fc2ccbc97e5a31f972804591b72ec/
-        i686 |                     ustr-1.0.4 | NOK | http://autobuild.buildroot.net/results/38900db68726f60bfec873274dec39da82c831c7/
-    mips64el |                valgrind-3.11.0 | NOK | http://autobuild.buildroot.net/results/69202940dafaa4af685f3aa0ac59cbf2a01111fa/
-         arm |                      vlc-2.2.3 | NOK | http://autobuild.buildroot.net/results/034eeafb44d62ea6f65a7dddd11e3d95e31c9564/
-         arm |                      vlc-2.2.3 | NOK | http://autobuild.buildroot.net/results/db7f940cb44b0535a07b8ed2bd6682845b20e4f7/
-         arm |                wireshark-2.0.3 | NOK | http://autobuild.buildroot.net/results/f70d5897328e82520ea10e7e9c1f37ff6d041acf/
+http://www.spinics.net/lists/arm-kernel/msg351168.html
+
+I've applied this patch and know I can see the resetsignal  falling and
+rising, but now the i2c device always fails in the init. But this patch
+isn't committed on linux kernel, so I think it isn't the way to do this.
+
+Does anyone have any suggestion how to manage this type of signal?
 
 
--- 
-http://autobuild.buildroot.net
+Best regards.
+
+Oscar Gomez Fuente.
+
+On 9 May 2016 at 22:46, Peter Seiderer <ps.report@gmx.net> wrote:
+
+> Hello Oscar,
+>
+> On Mon, 9 May 2016 11:57:02 +0200, Oscar Gomez Fuente <
+> oscargomezf at gmail.com> wrote:
+>
+> > Hi everyone,
+> >
+> > The dtb overlay loaded fine. I've checked this with the command: vcdbg
+> log
+> > msg
+> > ...
+> > 001402.187: Loading 'bcm2710-rpi-3-b.dtb' from SD card
+> > 001468.661: dtparam: uart0_clkrate=48000000
+> > 001488.609: Loaded overlay 'pi3-disable-bt'
+> > 001523.385: Loaded overlay 'tca6424a'
+> > ...
+> >
+> > Now I can see the device: /sys/call/gpiochip488
+> >
+> > I can access to the 24 pins of my TCA6424A IC [488 to 511]
+> >
+> > # echo 488 > /sys/class/gpio/export
+> > # echo "out" > /sys/class/gpio/gpio488/direction
+> > # echo 1 > /sys/class/gpio/gpio488/value
+> >
+> > But I couldn't see the interrupt in /proc/interrupts:
+> >
+> > # cat /proc/interrupts
+> >            CPU0       CPU1       CPU2       CPU3
+> >  16:          0          0          0          0   ARMCTRL  16 Edge
+> >  bcm2708_fb dma
+> >  20:          0          0          0          0   ARMCTRL  20 Edge
+> >  DMA IRQ
+> >  21:          0          0          0          0   ARMCTRL  21 Edge
+> >  DMA IRQ
+> >  24:          0          0          0          0   ARMCTRL  24 Edge
+> >  DMA IRQ
+> >  32:     424138          0          0          0   ARMCTRL  32 Edge
+> >  dwc_otg, dwc_otg_pcd, dwc_otg_hcd:usb1
+> >  49:          0          0          0          0   ARMCTRL  49 Edge
+> >  3f200000.gpio:bank0
+> >  50:          0          0          0          0   ARMCTRL  50 Edge
+> >  3f200000.gpio:bank1
+> >  65:         14          0          0          0   ARMCTRL  65 Edge
+> >  3f00b880.mailbox
+> >  66:          2          0          0          0   ARMCTRL  66 Edge
+> >  VCHIQ doorbell
+> >  75:          1          0          0          0   ARMCTRL  75 Edge
+> >  77:        554          0          0          0   ARMCTRL  77 Edge
+> >  DMA IRQ
+> >  79:       6148          0          0          0   ARMCTRL  79 Edge
+> >  3f804000.i2c
+> >  80:          0          0          0          0   ARMCTRL  80 Edge
+> >  3f204000.spi
+> >  82:        136          0          0          0   ARMCTRL  82 Edge
+> >  mmc0
+> >  83:      10895          0          0          0   ARMCTRL  83 Edge
+> >  uart-pl011
+> >  84:       9475          0          0          0   ARMCTRL  84 Edge
+> >  mmc1
+> >  96:          0          0          0          0   ARMCTRL  96 Edge
+> >  arch_timer
+> >  97:      10595       8874       3133        458   ARMCTRL  97 Edge
+> >  arch_timer
+> > ...
+> >
+> > According to my .dts file, I've configured the pin GPIO04 as an input
+> > [interrupt]. I think I had to see an interrupt related to tca6424a,
+> didn't
+> > I? but it didn't appear. I've read the kernel log and I've seen this
+> > suspicious message:
+> >
+> > # dmesg
+> > ..
+> > [    3.633230] pca953x 1-0022: interrupt support not compiled in
+> > ..
+> >
+> > So I was surfing on the internet and It seems to be you have to select in
+> > the kernel the option:
+> >
+> > Device Drivers > GPIO Support > I2C GPIO expanders > [*] GPIO_PCA953X_IRQ
+> >
+> > But If you want to select this option you can't select the driver:
+> > PCA95[357]x, PCA9698, TCA64xx, and MAX7310 I/O ports like a module. (I
+> > don't have any idea why?)
+> >
+> > Eventually, everything works fine.
+> >
+> >
+> > So this is my final tca6424a-overlay.dts [i2c1 and INT pin connected to
+> > GPI04] working fine on my raspberry pi 3B.
+> >
+> > ---
+> > // Definitions for TCA6424A IO Expander from Texas Instruments
+> > /dts-v1/;
+> > /plugin/;
+> > / {
+> > compatible = "brcm,bcm2835", "brcm,bcm2708", "brcm,bcm2709";
+> >
+> > fragment at 0 {
+> > target = <&i2c1>;
+> > __overlay__ {
+> > status = "okay";
+> > };
+> > };
+> >
+> > fragment at 1 {
+> > target = <&gpio>;
+> > __overlay__ {
+> > tca6424_pins: tca6424_pins {
+> > brcm,pins = <4>;
+> > brcm,function = <0>;
+> > };
+> > };
+> > };
+> >
+> > fragment at 2 {
+> > target = <&i2c1>;
+> > __overlay__ {
+> > #address-cells = <1>;
+> > #size-cells = <0>;
+> > tca6424 at 22 {
+> > compatible = "ti,tca6424";
+> > reg = <0x22>;
+> > pinctrl-names = "default";
+> > pinctrl-0 = <&tca6424_pins>;
+> > interrupt-parent = <&gpio>;
+> > interrupts = <4 2>;
+> > };
+> >
+> > };
+> > };
+> > };
+> > ---
+> >
+> > I would like to place this overlay dts file in
+> > https://github.com/raspberrypi/linux.git/arch/arm/boot/dts/overlays
+> >
+> > Does anyone know how to apply for uploading this overlay dts file, to the
+> > person in charge of https://github.com/raspberrypi/linux?
+> >
+> >
+>
+> Try to announce it somewhere on RPi forum [1] or create a git(hub) pull
+> request against https://github.com/raspberrypi/linux?
+>
+> But I think chances are higher for a widely available ready to use
+> devices/add-on-boards than for individual solutions...
+>
+> Regards,
+> Peter
+>
+> [1] https://www.raspberrypi.org/forum
+>
+> > Best regards.
+> >
+> > On 9 May 2016 at 08:37, Oscar Gomez Fuente <oscargomezf@gmail.com>
+> wrote:
+> >
+> > > Hi,
+> > >
+> > >
+> > > I've tried what told me Peter Seiderer, and it compiled fine: "using
+> > > interrupts = <23 2>;". Now I'm going to check if the .dtb file works
+> fine.
+> > >
+> > > Thank you very much.
+> > >
+> > > Best regards.
+> > >
+> > > Oscar Gomez Fuente
+> > >
+> > > On 6 May 2016 at 23:20, Nicholas Walton <nicholas.walton@gmail.com>
+> wrote:
+> > >
+> > >> Plugin overlays are not part of mainline dtc. Try
+> > >> https://git.kernel.org/cgit/utils/dtc/dtc.git and the instructions at
+> > >>
+> https://learn.adafruit.com/introduction-to-the-beaglebone-black-device-tree/compiling-an-overlay
+> > >> .
+> > >>
+> > >> On Fri, May 6, 2016 at 5:17 AM, Oscar Gomez Fuente <
+> oscargomezf at gmail.com
+> > >> > wrote:
+> > >>
+> > >>> Hi,
+> > >>>
+> > >>> I'm working with the latest stable release: 2016.02 and with the
+> > >>> raspberry pi 3B.
+> > >>>
+> > >>> I'm trying to compile my own .dtb overlay, because I need to add the
+> IO
+> > >>> Expander i2c TCA6424A to my HW. And I would like to know how to do
+> this
+> > >>> using overlays and device tree.
+> > >>>
+> > >>> But I've got this error when I tried to compile de .dts file:
+> > >>>
+> > >>> # dtc -I dts -O dtb -o tca6424a-overlay.dtb tca6424a-overlay.dts
+> > >>> Error: tca6424a-overlay.dts:3.2-8 syntax error
+> > >>> FATAL ERROR: Unable to parse input tree
+> > >>> # dtc -v
+> > >>> Version: DTC 1.4.1-g8ead5b66
+> > >>> #
+> > >>>
+> > >>> This is the .dts file:
+> > >>> ----------
+> > >>> // Definitions for TCA6424A IO Extender from Texas Instruments
+> > >>> /dts-v1/;
+> > >>> /plugin/;
+> > >>> / {
+> > >>> compatible = "brcm,bcm2835", "brcm,bcm2708", "brcm,bcm2709";
+> > >>>
+> > >>> fragment at 0 {
+> > >>> target = <&i2c1>;
+> > >>> __overlay__ {
+> > >>> status = "okay";
+> > >>> };
+> > >>> };
+> > >>>
+> > >>> fragment at 1 {
+> > >>> target = <&gpio>;
+> > >>> __overlay__ {
+> > >>> tca6424_pins: tca6424_pins {
+> > >>> brcm,pins = <4>;
+> > >>> brcm,function = <0>;
+> > >>> };
+> > >>> };
+> > >>> };
+> > >>>
+> > >>> fragment at 2 {
+> > >>> target = <&i2c1>;
+> > >>> __overlay__ {
+> > >>> #address-cells = <1>;
+> > >>> #size-cells = <0>;
+> > >>> tca6424 at 22 {
+> > >>> compatible = "ti,tca6424";
+> > >>> reg = <0x22>;
+> > >>> pinctrl-names = "default";
+> > >>> pinctrl-0 = <&tca6424_pins>;
+> > >>> interrupt-parent = <&gpio4>;
+> > >>> interrupts = <23 IRQ_TYPE_LEVEL_LOW>;
+> > >>> };
+> > >>>
+> > >>> };
+> > >>> };
+> > >>> };
+> > >>> -----------
+> > >>>
+> > >>> Anyone could help me how to do this?
+> > >>>
+> > >>> Best regards.
+> > >>>
+> > >>> Oscar Gomez Fuente.
+> > >>>
+> > >>> _______________________________________________
+> > >>> buildroot mailing list
+> > >>> buildroot at busybox.net
+> > >>> http://lists.busybox.net/mailman/listinfo/buildroot
+> > >>>
+> > >>
+> > >>
+> > >
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160510/56e7d1a5/attachment.html>
