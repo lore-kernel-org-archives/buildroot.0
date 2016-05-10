@@ -1,44 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 10 May 2016 12:11:14 -0300
-Subject: [Buildroot] [PATCH 2/2] openvpn: security bump to version 2.3.11
-In-Reply-To: <1462893074-29188-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1462893074-29188-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1462893074-29188-2-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 10 May 2016 17:16:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: bump version to 6.9.4-1
+Message-ID: <1462893393-18580-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixed port-share bug with DoS potential.
-Fix buffer overflow by user supplied data.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/openvpn/openvpn.hash | 2 +-
- package/openvpn/openvpn.mk   | 2 +-
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 4ab916e..179198e 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 135989f..0f8ab18 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	52f16bef3a02369682f1464fbd2821070c98d0bd993f4c46c764e87375abdcc1 	openvpn-2.3.9.tar.xz
-+sha256	0f5f1ca1dc5743fa166d93dd4ec952f014b5f33bafd88f0ea34b455cae1434a7 	openvpn-2.3.11.tar.xz
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 1d06636..f3985cd 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 e33f021c879f31703f9e620f578ccf7d221a34941589da4bbe967b16a814336a ImageMagick-6.9.3-10.tar.xz
++sha256	2ea0fef839cd5d6f134502b7cf7ee0e57a3f230b19771515d4aa44354f4c6b3b	ImageMagick-6.9.4-1.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 8ecf5d6..c952c2a 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENVPN_VERSION = 2.3.9
-+OPENVPN_VERSION = 2.3.11
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf openssl
+-IMAGEMAGICK_VERSION = 6.9.3-10
++IMAGEMAGICK_VERSION = 6.9.4-1
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
 -- 
-2.7.3
+2.8.1
