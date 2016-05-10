@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 May 2016 15:55:15 +0200
-Subject: [Buildroot] [PATCH] smartmontools: bump to version 6.5
-In-Reply-To: <1462829088-17004-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1462829088-17004-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160510155515.74c1d4db@free-electrons.com>
+Date: Tue, 10 May 2016 15:55:18 +0200
+Subject: [Buildroot] [PATCH] lksctp-tools: bump to version 1.0.17
+In-Reply-To: <1462869606-22527-1-git-send-email-yegorslists@googlemail.com>
+References: <1462869606-22527-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160510155518.054df2c0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  9 May 2016 18:24:48 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Tue, 10 May 2016 10:40:06 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Remove upstreamed patch and autoreconf related hook. Add
+> --disable-tests config option to reduce build time.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/smartmontools/smartmontools.hash | 6 +++---
->  package/smartmontools/smartmontools.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/lksctp-tools/0001-Fix-musl-build.patch | 46 --------------------------
+>  package/lksctp-tools/lksctp-tools.hash         |  4 +--
+>  package/lksctp-tools/lksctp-tools.mk           |  9 ++---
+>  3 files changed, 4 insertions(+), 55 deletions(-)
+>  delete mode 100644 package/lksctp-tools/0001-Fix-musl-build.patch
 
 Applied to master, thanks.
 
