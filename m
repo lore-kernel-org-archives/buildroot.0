@@ -1,47 +1,202 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 10 May 2016 15:25:46 -0300
-Subject: [Buildroot] [PATCH] imagemagick: security bump to version 6.9.4-1
-Message-ID: <1462904746-23217-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 10 May 2016 20:40:18 +0200
+Subject: [Buildroot] [PATCH 1/6]
+	package/kodi-screensaver-*/kodi-visualisation-*: fix comments
+Message-ID: <1462905623-17739-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-Fix GetNextToken() off by one error.
-Check for buffer overflow in magick/draw.c/DrawStrokePolygon().
-Remove support for internal ephemeral coder.
+Various small changes to comments:
+- shorten OpenGL info (Thomas)
+- fix typos
+- add full packages names when missing (Thomas)
 
-These are all related to the recent ImageTragick bundle that were
-partially fixed in 6.9.3-10 as well.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-screensaver-asteroids/Config.in    | 2 +-
+ package/kodi-screensaver-asterwave/Config.in    | 2 +-
+ package/kodi-screensaver-biogenesis/Config.in   | 2 +-
+ package/kodi-screensaver-cpblobs/Config.in      | 2 +-
+ package/kodi-screensaver-crystalmorph/Config.in | 2 +-
+ package/kodi-screensaver-greynetic/Config.in    | 2 +-
+ package/kodi-screensaver-matrixtrails/Config.in | 2 +-
+ package/kodi-screensaver-pingpong/Config.in     | 2 +-
+ package/kodi-screensaver-planestate/Config.in   | 2 +-
+ package/kodi-screensaver-pyro/Config.in         | 2 +-
+ package/kodi-screensaver-rsxs/Config.in         | 2 +-
+ package/kodi-screensaver-stars/Config.in        | 2 +-
+ package/kodi-visualisation-fishbmc/Config.in    | 2 +-
+ package/kodi-visualisation-fountain/Config.in   | 2 +-
+ package/kodi-visualisation-goom/Config.in       | 2 +-
+ 15 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 135989f..9a2a3ee 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 e33f021c879f31703f9e620f578ccf7d221a34941589da4bbe967b16a814336a ImageMagick-6.9.3-10.tar.xz
-+sha256 2ea0fef839cd5d6f134502b7cf7ee0e57a3f230b19771515d4aa44354f4c6b3b ImageMagick-6.9.4-1.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 8ecf5d6..c952c2a 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi-screensaver-asteroids/Config.in b/package/kodi-screensaver-asteroids/Config.in
+index d5d92c6..3aa03fb 100644
+--- a/package/kodi-screensaver-asteroids/Config.in
++++ b/package/kodi-screensaver-asteroids/Config.in
+@@ -6,5 +6,5 @@ config BR2_PACKAGE_KODI_SCREENSAVER_ASTEROIDS
  
--IMAGEMAGICK_VERSION = 6.9.3-10
-+IMAGEMAGICK_VERSION = 6.9.4-1
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+ 	  https://github.com/notspiff/screensaver.asteroids
+ 
+-comment "kodi-screensaver-asteroids needs an OpenGL backend"
++comment "kodi-screensaver-asteroids needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-asterwave/Config.in b/package/kodi-screensaver-asterwave/Config.in
+index c430cff..5e929ca 100644
+--- a/package/kodi-screensaver-asterwave/Config.in
++++ b/package/kodi-screensaver-asterwave/Config.in
+@@ -7,5 +7,5 @@ config BR2_PACKAGE_KODI_SCREENSAVER_ASTERWAVE
+ 
+ 	  https://github.com/notspiff/screensaver.asterwave
+ 
+-comment "asterwave needs an OpenGL backend"
++comment "kodi-screensaver-asterwave needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-biogenesis/Config.in b/package/kodi-screensaver-biogenesis/Config.in
+index 4b0d053..f2789a0 100644
+--- a/package/kodi-screensaver-biogenesis/Config.in
++++ b/package/kodi-screensaver-biogenesis/Config.in
+@@ -6,5 +6,5 @@ config BR2_PACKAGE_KODI_SCREENSAVER_BIOGENESIS
+ 
+ 	  https://github.com/notspiff/screensaver.biogenesis
+ 
+-comment "kodi-screensaver-biogenesis needs an OpenGL backend"
++comment "kodi-screensaver-biogenesis needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-cpblobs/Config.in b/package/kodi-screensaver-cpblobs/Config.in
+index 184509e..aa39f15 100644
+--- a/package/kodi-screensaver-cpblobs/Config.in
++++ b/package/kodi-screensaver-cpblobs/Config.in
+@@ -7,5 +7,5 @@ config BR2_PACKAGE_KODI_SCREENSAVER_CPBLOBS
+ 
+ 	  https://github.com/notspiff/screensaver.cpblobs
+ 
+-comment "cpblobs needs an OpenGL backend"
++comment "kodi-screensaver-cpblobs needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-crystalmorph/Config.in b/package/kodi-screensaver-crystalmorph/Config.in
+index ad29a90..75c8845 100644
+--- a/package/kodi-screensaver-crystalmorph/Config.in
++++ b/package/kodi-screensaver-crystalmorph/Config.in
+@@ -6,5 +6,5 @@ config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
+ 
+ 	  https://github.com/notspiff/screensaver.crystalmorph
+ 
+-comment "kodi-screensaver-crystalmorph needs an OpenGL backend"
++comment "kodi-screensaver-crystalmorph needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-greynetic/Config.in b/package/kodi-screensaver-greynetic/Config.in
+index 14cab18..611ba51 100644
+--- a/package/kodi-screensaver-greynetic/Config.in
++++ b/package/kodi-screensaver-greynetic/Config.in
+@@ -6,5 +6,5 @@ config BR2_PACKAGE_KODI_SCREENSAVER_GREYNETIC
+ 
+ 	  https://github.com/notspiff/screensaver.greynetic
+ 
+-comment "kodi-screensaver-greynetic needs an OpenGL backend"
++comment "kodi-screensaver-greynetic needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-matrixtrails/Config.in b/package/kodi-screensaver-matrixtrails/Config.in
+index 72ed958..50629d8 100644
+--- a/package/kodi-screensaver-matrixtrails/Config.in
++++ b/package/kodi-screensaver-matrixtrails/Config.in
+@@ -7,5 +7,5 @@ config BR2_PACKAGE_KODI_SCREENSAVER_MATRIXTRAILS
+ 
+ 	  https://github.com/notspiff/screensaver.matrixtrails
+ 
+-comment "matrixtrails needs an OpenGL backend"
++comment "kodi-screensaver-matrixtrails needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-pingpong/Config.in b/package/kodi-screensaver-pingpong/Config.in
+index 4ccf4c4..aea0833 100644
+--- a/package/kodi-screensaver-pingpong/Config.in
++++ b/package/kodi-screensaver-pingpong/Config.in
+@@ -6,5 +6,5 @@ config BR2_PACKAGE_KODI_SCREENSAVER_PINGPONG
+ 
+ 	  https://github.com/notspiff/screensaver.pingpong
+ 
+-comment "kodi-screensaver-greynetic needs an OpenGL backend"
++comment "kodi-screensaver-pingpong needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-planestate/Config.in b/package/kodi-screensaver-planestate/Config.in
+index 1032292..2f816b2 100644
+--- a/package/kodi-screensaver-planestate/Config.in
++++ b/package/kodi-screensaver-planestate/Config.in
+@@ -7,5 +7,5 @@ config BR2_PACKAGE_KODI_SCREENSAVER_PLANESTATE
+ 
+ 	  https://github.com/notspiff/screensaver.planestate
+ 
+-comment "planestate needs an OpenGL backend"
++comment "kodi-screensaver-planestate needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-pyro/Config.in b/package/kodi-screensaver-pyro/Config.in
+index 45432c4..35a2be2 100644
+--- a/package/kodi-screensaver-pyro/Config.in
++++ b/package/kodi-screensaver-pyro/Config.in
+@@ -6,5 +6,5 @@ config BR2_PACKAGE_KODI_SCREENSAVER_PYRO
+ 
+ 	  https://github.com/notspiff/screensaver.pyro
+ 
+-comment "kodi-screensaver-pyro needs an OpenGL backend"
++comment "kodi-screensaver-pyro needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-rsxs/Config.in b/package/kodi-screensaver-rsxs/Config.in
+index da12651..b489303 100644
+--- a/package/kodi-screensaver-rsxs/Config.in
++++ b/package/kodi-screensaver-rsxs/Config.in
+@@ -6,5 +6,5 @@ config BR2_PACKAGE_KODI_SCREENSAVER_RSXS
+ 
+ 	  https://github.com/notspiff/screensavers.rsxs
+ 
+-comment "kodi-screensaver-rsxs needs an OpenGL backend"
++comment "kodi-screensaver-rsxs needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-stars/Config.in b/package/kodi-screensaver-stars/Config.in
+index c78021a..3c14773 100644
+--- a/package/kodi-screensaver-stars/Config.in
++++ b/package/kodi-screensaver-stars/Config.in
+@@ -6,5 +6,5 @@ config BR2_PACKAGE_KODI_SCREENSAVER_STARS
+ 
+ 	  https://github.com/notspiff/screensaver.stars
+ 
+-comment "kodi-screensaver-starts needs an OpenGL backend"
++comment "kodi-screensaver-stars needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-visualisation-fishbmc/Config.in b/package/kodi-visualisation-fishbmc/Config.in
+index 9f1a4c5..50472a9 100644
+--- a/package/kodi-visualisation-fishbmc/Config.in
++++ b/package/kodi-visualisation-fishbmc/Config.in
+@@ -6,5 +6,5 @@ config BR2_PACKAGE_KODI_VISUALISATION_FISHBMC
+ 
+ 	  https://github.com/notspiff/visualization.fishbmc
+ 
+-comment "fishbmc needs an OpenGL backend"
++comment "kodi-visualisation-fishbmc needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-visualisation-fountain/Config.in b/package/kodi-visualisation-fountain/Config.in
+index 2c52edd..3eeef16 100644
+--- a/package/kodi-visualisation-fountain/Config.in
++++ b/package/kodi-visualisation-fountain/Config.in
+@@ -7,5 +7,5 @@ config BR2_PACKAGE_KODI_VISUALISATION_FOUNTAIN
+ 
+ 	  https://github.com/notspiff/visualization.fountain
+ 
+-comment "fountain needs an OpenGL backend"
++comment "kodi-visualisation-fountain needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-visualisation-goom/Config.in b/package/kodi-visualisation-goom/Config.in
+index c5fa982..8577e61 100644
+--- a/package/kodi-visualisation-goom/Config.in
++++ b/package/kodi-visualisation-goom/Config.in
+@@ -6,5 +6,5 @@ config BR2_PACKAGE_KODI_VISUALISATION_GOOM
+ 
+ 	  https://github.com/notspiff/visualization.goom
+ 
+-comment "kodi-visualization-goom needs an OpenGL backend"
++comment "kodi-visualization-goom needs OpenGL"
+ 	depends on !BR2_PACKAGE_KODI_GL
 -- 
-2.7.3
+2.8.1
