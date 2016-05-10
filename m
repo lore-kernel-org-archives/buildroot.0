@@ -1,35 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 May 2016 15:55:18 +0200
-Subject: [Buildroot] [PATCH] lksctp-tools: bump to version 1.0.17
-In-Reply-To: <1462869606-22527-1-git-send-email-yegorslists@googlemail.com>
-References: <1462869606-22527-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160510155518.054df2c0@free-electrons.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 10 May 2016 10:56:40 -0300
+Subject: [Buildroot] [PATCH] configs: warpboard: Use the final U-boot
+	release version
+In-Reply-To: <87eg9akoj8.fsf@dell.be.48ers.dk>
+References: <1462714647-10521-1-git-send-email-festevam@gmail.com>
+ <87zirzl9np.fsf@dell.be.48ers.dk>
+ <CAOMZO5CbTHnCi7O8v6OY2_UooOdZaRNiQAp+yAcG55sv7=VsSg@mail.gmail.com>
+ <CAOMZO5AXzsVJUt_c9+CJH7b5Q7e4whN9BZszm7dKrCJxY4D76A@mail.gmail.com>
+ <87eg9akoj8.fsf@dell.be.48ers.dk>
+Message-ID: <CAOMZO5D-tsHdDubUMQEu4fs3jUh3r3KNYFMVWFGuXzOQCgL47g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, May 10, 2016 at 10:53 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-On Tue, 10 May 2016 10:40:06 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Remove upstreamed patch and autoreconf related hook. Add
-> --disable-tests config option to reduce build time.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/lksctp-tools/0001-Fix-musl-build.patch | 46 --------------------------
->  package/lksctp-tools/lksctp-tools.hash         |  4 +--
->  package/lksctp-tools/lksctp-tools.mk           |  9 ++---
->  3 files changed, 4 insertions(+), 55 deletions(-)
->  delete mode 100644 package/lksctp-tools/0001-Fix-musl-build.patch
+> Great, will you send a patch?
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Yes, but I prefer to send a patch upgrading to 2016.05, which should
+come out very soon.
