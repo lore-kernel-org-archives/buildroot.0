@@ -1,30 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 May 2016 21:45:07 +0200
-Subject: [Buildroot] [PATCH] imagemagick: security bump to version
+Date: Tue, 10 May 2016 21:46:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: bump version to
 	6.9.4-1
-In-Reply-To: <1462904746-23217-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 10 May 2016 15:25:46 -0300")
-References: <1462904746-23217-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8760ullmt8.fsf@dell.be.48ers.dk>
+In-Reply-To: <1462893393-18580-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Tue, 10 May 2016 17:16:33 +0200")
+References: <1462893393-18580-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <871t59lmrd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fixes:
- > Fix GetNextToken() off by one error.
- > Check for buffer overflow in magick/draw.c/DrawStrokePolygon().
- > Remove support for internal ephemeral coder.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- > These are all related to the recent ImageTragick bundle that were
- > partially fixed in 6.9.3-10 as well.
-
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
+Thanks. I've already committed Gustavoz' variant which has a more
+detailed description of the security impact.
 
 -- 
 Bye, Peter Korsgaard
