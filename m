@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 May 2016 15:55:02 +0200
-Subject: [Buildroot] [PATCH] libksba: security bump to version 1.3.4
-In-Reply-To: <1462885297-9450-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1462885297-9450-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160510155502.1474a247@free-electrons.com>
+Date: Tue, 10 May 2016 15:55:05 +0200
+Subject: [Buildroot] [PATCH] php-geoip: fix legal info
+In-Reply-To: <1462886131-9724-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1462886131-9724-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160510155505.1ecdf44e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 10 May 2016 10:01:37 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2016-4356 - Fix encoding of invalid utf-8 strings in
-> dn.c" and "read access out of bounds".
+On Tue, 10 May 2016 10:15:31 -0300, Gustavo Zacarias wrote:
+> The LICENSE file is gone, so use the lone .c source fle. Fixes:
+> http://autobuild.buildroot.net/results/acd/acd763e7eefb8be2bbd0bf973bb7855fceee7377/
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/libksba/libksba.hash | 2 +-
->  package/libksba/libksba.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/php-geoip/php-geoip.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
