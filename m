@@ -1,104 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 May 2016 22:04:00 +0200
-Subject: [Buildroot] [git commit] libarchive: add security patch for
-	CVE-2016-1541
-Message-ID: <20160511200558.8B06081E16@busybox.osuosl.org>
+Date: Wed, 11 May 2016 22:01:59 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{14, 18}.x and 4.{1,
+	4, 5}.x series
+Message-ID: <20160511200558.772BF81E16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=156633ace8195997c374f901f5e61772f31b1ddc
+commit: https://git.buildroot.net/buildroot/commit/?id=5883703bcd840663d1afb2f618febc276f00da92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-CVE-2016-1541 - heap-based buffer overflow vulnerability in the
-zip_read_mac_metadata function in libarchive, a multi-format archive and
-compression library, which may lead to the execution of arbitrary code
-if a user or automated system is tricked into processing a specially
-crafted ZIP file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libarchive/0001-fix-CVE-2016-1541.patch | 71 +++++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libarchive/0001-fix-CVE-2016-1541.patch b/package/libarchive/0001-fix-CVE-2016-1541.patch
-new file mode 100644
-index 0000000..ef2448c
---- /dev/null
-+++ b/package/libarchive/0001-fix-CVE-2016-1541.patch
-@@ -0,0 +1,71 @@
-+From d0331e8e5b05b475f20b1f3101fe1ad772d7e7e7 Mon Sep 17 00:00:00 2001
-+From: Tim Kientzle <kientzle@acm.org>
-+Date: Sun, 24 Apr 2016 17:13:45 -0700
-+Subject: [PATCH] Issue #656:  Fix CVE-2016-1541, VU#862384
-+
-+When reading OS X metadata entries in Zip archives that were stored
-+without compression, libarchive would use the uncompressed entry size
-+to allocate a buffer but would use the compressed entry size to limit
-+the amount of data copied into that buffer.  Since the compressed
-+and uncompressed sizes are provided by data in the archive itself,
-+an attacker could manipulate these values to write data beyond
-+the end of the allocated buffer.
-+
-+This fix provides three new checks to guard against such
-+manipulation and to make libarchive generally more robust when
-+handling this type of entry:
-+ 1. If an OS X metadata entry is stored without compression,
-+    abort the entire archive if the compressed and uncompressed
-+    data sizes do not match.
-+ 2. When sanity-checking the size of an OS X metadata entry,
-+    abort this entry if either the compressed or uncompressed
-+    size is larger than 4MB.
-+ 3. When copying data into the allocated buffer, check the copy
-+    size against both the compressed entry size and uncompressed
-+    entry size.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+Status: from upstream https://github.com/libarchive/libarchive/issues/656
-+
-+ libarchive/archive_read_support_format_zip.c | 13 +++++++++++++
-+ 1 file changed, 13 insertions(+)
-+
-+diff --git a/libarchive/archive_read_support_format_zip.c b/libarchive/archive_read_support_format_zip.c
-+index 0f8262c..0a0be96 100644
-+--- a/libarchive/archive_read_support_format_zip.c
-++++ b/libarchive/archive_read_support_format_zip.c
-+@@ -2778,6 +2778,11 @@ zip_read_mac_metadata(struct archive_read *a, struct archive_entry *entry,
-+ 
-+ 	switch(rsrc->compression) {
-+ 	case 0:  /* No compression. */
-++		if (rsrc->uncompressed_size != rsrc->compressed_size) {
-++			archive_set_error(&a->archive, ARCHIVE_ERRNO_FILE_FORMAT,
-++			    "Malformed OS X metadata entry: inconsistent size");
-++			return (ARCHIVE_FATAL);
-++		}
-+ #ifdef HAVE_ZLIB_H
-+ 	case 8: /* Deflate compression. */
-+ #endif
-+@@ -2798,6 +2803,12 @@ zip_read_mac_metadata(struct archive_read *a, struct archive_entry *entry,
-+ 		    (intmax_t)rsrc->uncompressed_size);
-+ 		return (ARCHIVE_WARN);
-+ 	}
-++	if (rsrc->compressed_size > (4 * 1024 * 1024)) {
-++		archive_set_error(&a->archive, ARCHIVE_ERRNO_FILE_FORMAT,
-++		    "Mac metadata is too large: %jd > 4M bytes",
-++		    (intmax_t)rsrc->compressed_size);
-++		return (ARCHIVE_WARN);
-++	}
-+ 
-+ 	metadata = malloc((size_t)rsrc->uncompressed_size);
-+ 	if (metadata == NULL) {
-+@@ -2836,6 +2847,8 @@ zip_read_mac_metadata(struct archive_read *a, struct archive_entry *entry,
-+ 			bytes_avail = remaining_bytes;
-+ 		switch(rsrc->compression) {
-+ 		case 0:  /* No compression. */
-++			if ((size_t)bytes_avail > metadata_bytes)
-++				bytes_avail = metadata_bytes;
-+ 			memcpy(mp, p, bytes_avail);
-+ 			bytes_used = (size_t)bytes_avail;
-+ 			metadata_bytes -= bytes_used;
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 04d5890..7c080d6 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -214,13 +214,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.59"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.68"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.18.32"	if BR2_KERNEL_HEADERS_3_18
++	default "3.14.69"	if BR2_KERNEL_HEADERS_3_14
++	default "3.18.33"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.23"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.24"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.9"		if BR2_KERNEL_HEADERS_4_4
+-	default "4.5.3"		if BR2_KERNEL_HEADERS_4_5
++	default "4.4.10"	if BR2_KERNEL_HEADERS_4_4
++	default "4.5.4"		if BR2_KERNEL_HEADERS_4_5
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
