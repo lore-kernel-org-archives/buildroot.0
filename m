@@ -1,44 +1,58 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 11 May 2016 23:39:57 +0200
-Subject: [Buildroot] dependencies calcualtion
-In-Reply-To: <trinity-e1cc7e5a-9d9e-4d12-8e74-34995cf3d68f-1462998745265@3capp-mailcom-bs06>
-References: <trinity-e1cc7e5a-9d9e-4d12-8e74-34995cf3d68f-1462998745265@3capp-mailcom-bs06>
-Message-ID: <20160511233957.68165813@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 May 2016 23:39:37 +0200
+Subject: [Buildroot] [git commit branch/next] core/legal-info: install
+	source archives in their own sub-dir
+Message-ID: <20160511214018.41FAE81839@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello daggs,
+commit: https://git.buildroot.net/buildroot/commit/?id=de2f89edd389e655fd705ea7c9d367878a6719ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 11 May 2016 22:32:25 +0200, daggs <daggs@gmx.com> wrote:
+Currently, we put all source archives side-by-side in the same
+directory.
 
-> Greetings,
-> 
-> I got a question, how does a package knows of it's dependencies?
-> for example, kodi needs libgles, lets assume that I'm using sunxi-mali which provides gles.
-> how does buildroot know to compile sunxi-mali before it compiles kodi?
-> 
+Since we're about to also save individual patches that were applied
+on those sources, we don't want to make that directory a complete
+mess of unassorted files.
 
-From package/kodi/kodi.mk:
+So, we install each source archive in its own sub-directory, where
+we'll later store the patches too. Store that location in a variable,
+so it can be re-used later on (to install patches in a future commit).
 
-...
-ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
-KODI_DEPENDENCIES += libegl libgles
-...
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-generic.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-From  package/sunxi-mali/sunxi-mali.mk:
-
-...
-SUNXI_MALI_PROVIDES = libegl libgles
-...
-
-Regards,
-Peter
-
-> Thanks.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 688123c..b031879 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -482,6 +482,8 @@ endif
+ 
+ $(2)_REDISTRIBUTE		?= YES
+ 
++$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAW_BASE_NAME)
++
+ # When a target package is a toolchain dependency set this variable to
+ # 'NO' so the 'toolchain' dependency is not added to prevent a circular
+ # dependency
+@@ -807,7 +809,7 @@ endif
+ # Save the source tarball
+ 	$$(Q)support/scripts/hardlink-or-copy \
+ 		$$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) \
+-		$$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
++		$$($(2)_REDIST_SOURCES_DIR)
+ endif # redistribute
+ 
+ endif # other packages
