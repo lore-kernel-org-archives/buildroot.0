@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 May 2016 16:07:27 +0200
-Subject: [Buildroot] [PATCH 1/6]
- package/kodi-screensaver-*/kodi-visualisation-*: fix comments
-In-Reply-To: <1462905623-17739-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 11 May 2016 16:08:22 +0200
+Subject: [Buildroot] [PATCH 4/6] package/kodi-screensaver-rsxs: needs
+ xlib_libXmu
+In-Reply-To: <1462905623-17739-4-git-send-email-bernd.kuhls@t-online.de>
 References: <1462905623-17739-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160511160727.1e6472be@free-electrons.com>
+ <1462905623-17739-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160511160822.53d36c6a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +14,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 10 May 2016 20:40:18 +0200, Bernd Kuhls wrote:
-> Various small changes to comments:
-> - shorten OpenGL info (Thomas)
-> - fix typos
-> - add full packages names when missing (Thomas)
+On Tue, 10 May 2016 20:40:21 +0200, Bernd Kuhls wrote:
+> Fixes
+> 
+> /home/bernd/buildroot/output/build/kodi-screensaver-rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259/lib/rsxs-1.0/src/common.cc:42:27:
+>  fatal error: X11/Xmu/StdCmap.h: No such file or directory
+> 
+> X11/Xmu/StdCmap.h is included here:
+> https://github.com/notspiff/screensavers.rsxs/blob/master/lib/rsxs-1.0/src/common.cc#L48
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi-screensaver-asteroids/Config.in    | 2 +-
->  package/kodi-screensaver-asterwave/Config.in    | 2 +-
->  package/kodi-screensaver-biogenesis/Config.in   | 2 +-
->  package/kodi-screensaver-cpblobs/Config.in      | 2 +-
->  package/kodi-screensaver-crystalmorph/Config.in | 2 +-
->  package/kodi-screensaver-greynetic/Config.in    | 2 +-
->  package/kodi-screensaver-matrixtrails/Config.in | 2 +-
->  package/kodi-screensaver-pingpong/Config.in     | 2 +-
->  package/kodi-screensaver-planestate/Config.in   | 2 +-
->  package/kodi-screensaver-pyro/Config.in         | 2 +-
->  package/kodi-screensaver-rsxs/Config.in         | 2 +-
->  package/kodi-screensaver-stars/Config.in        | 2 +-
->  package/kodi-visualisation-fishbmc/Config.in    | 2 +-
->  package/kodi-visualisation-fountain/Config.in   | 2 +-
->  package/kodi-visualisation-goom/Config.in       | 2 +-
->  15 files changed, 15 insertions(+), 15 deletions(-)
 
-Patches 1 to 5 applied. I've not applied PATCH 6 for now, as I have
-some comments/questions.
+I've applied, but I believe you should report an issue upstream: this
+package should have a check for libxmu in its configure.ac script, so
+that it fails at configure time as expected rather than badly failing
+to build later on.
+
+Best regards,
 
 Thomas
 -- 
