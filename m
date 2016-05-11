@@ -1,58 +1,41 @@
-From: Charles Hardin <ckhardin@exablox.com>
-Date: Wed, 11 May 2016 09:39:16 -0700
-Subject: [Buildroot] [QUESTION] supporting both a GRUB2 EFI and BIOS target
-Message-ID: <3A4B5FF0-CE09-4361-8FC0-0DE2630BFDC0@exablox.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 11 May 2016 14:04:04 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{14, 18}.x and 4.{1, 4,
+	5}.x series
+Message-ID: <1462986244-22602-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have a slight issue on a variation of two development boards where one
-supports EFI and one supports BIOS - some hardware issue that prevents the
-EFI BIOS from running.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-The ?rest? of the rootfs is the same for the build collatoral, so is there a
-best practice to build two variants of grub2 to get the images and tools out without
-having to create a separate config file? or just clone the grub2 package
-and modify it to build the setup? or some other magic incantation?
-
-The current config is just an option for the target preventing multiple selection.
-
-if BR2_TARGET_GRUB2
-
-choice
-        prompt "Platform"
-
-config BR2_TARGET_GRUB2_I386_PC
-        bool "i386-pc"
-        help
-          Select this option if the platform you're targetting is a
-          x86 or x86-64 legacy BIOS based platform.
-
-config BR2_TARGET_GRUB2_I386_EFI
-        bool "i386-efi"
-        help
-          Select this option if the platform you're targetting has a
-          32 bits EFI BIOS. Note that some x86-64 platforms use a 32
-          bits EFI BIOS, and this option should be used in this case.
-
-config BR2_TARGET_GRUB2_X86_64_EFI
-        bool "x86-64-efi"
-        depends on BR2_ARCH_IS_64
-        help
-          Select this option if the platform you're targetting has a
-          64 bits EFI BIOS.
-
-endchoice
-
-Thanks in advance,
-Charles
-
-?
-Bits go in, bytes go out
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160511/f569c9a8/attachment.html>
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 04d5890..7c080d6 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -214,13 +214,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.59"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.68"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.18.32"	if BR2_KERNEL_HEADERS_3_18
++	default "3.14.69"	if BR2_KERNEL_HEADERS_3_14
++	default "3.18.33"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.23"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.24"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.9"		if BR2_KERNEL_HEADERS_4_4
+-	default "4.5.3"		if BR2_KERNEL_HEADERS_4_5
++	default "4.4.10"	if BR2_KERNEL_HEADERS_4_4
++	default "4.5.4"		if BR2_KERNEL_HEADERS_4_5
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+2.7.3
