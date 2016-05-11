@@ -1,45 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 May 2016 23:08:37 +0200
-Subject: [Buildroot] [PATCH] toolchain: bump ARC tools to arc-2016.03-rc2
-In-Reply-To: <1462914304-24813-1-git-send-email-abrodkin@synopsys.com> (Alexey
- Brodkin's message of "Wed, 11 May 2016 00:05:04 +0300")
-References: <1462914304-24813-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <87possi9pm.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 May 2016 23:11:07 +0200
+Subject: [Buildroot] [PATCH 1/1] rrdtool: bump version to 1.6.0
+In-Reply-To: <5731B8FC.8070403@zacarias.com.ar>
+References: <1462824635-15327-1-git-send-email-fli4l@franke-prem.de>
+ <20160509232119.668c0b36@free-electrons.com>
+ <5731B8FC.8070403@zacarias.com.ar>
+Message-ID: <20160511231107.1679ba7b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+Hello,
 
- > This change switches ARC tools to RC2 of the most recent arc-2016.03
- > version.
+On Tue, 10 May 2016 07:33:32 -0300, Gustavo Zacarias wrote:
 
- > Essentially once final release is ready version will be bumped again.
+> What's the failure you're seeing by dropping autoreconf/gettextize?
+> On my end it seems to build just fine.
 
- > ARC GNU tools of version arc-2016.03 bring some quite significant
- > changes like:
- >  * Binutils v2.26+ (upstream commit id 202ac19 with additional ARC patches)
- >  * GCC v4.8.5
- >  * GDB 7.10
+I get:
 
- > More about changes, improvements and fixes could be found here:
- > https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2016.03-rc2
+  CCLD     rrdcached
+/home/test/outputs/rrdtool/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.7.4/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: rrd_tool.o: undefined reference to symbol 'libintl_gettext'
+/home/test/outputs/rrdtool/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
+collect2: error: ld returned 1 exit status
 
- > Also in this change we realign custom Buildroot patches for binutils and
- > gcc for ARC tools. Looks like earlier most of arch-independent patches
- > for binutils and gcc were either unintentionally removed or not even
- > added in patch folders for ARC's binutils and gcc. Now arch-independent
- > patches for binutils-2.26 and gcc-4.8.5 were added in
- > package/{binutils|gcc}/arc-2016.03-rc2 folders.
+When building rrdtool 1.6.0 with autoreconf/gettextize disabled, using
+the following defconfig:
 
- > Build and run-tested in nSIM for both ARC700 and ARC HS38.
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2016.02-3-g762b7c9.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_RRDTOOL=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
- > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+built in the chroot that I use to run the autobuilder testing.
 
-Committed to next, thanks.
+Re-adding autoreconf/gettextize fixes the problem.
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
