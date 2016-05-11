@@ -1,34 +1,28 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 11 May 2016 17:10:11 -0300
-Subject: [Buildroot] [PATCH] imx6ulevk: readme: Update the rootfs type to
-	ext4
-Message-ID: <1462997411-7455-1-git-send-email-festevam@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 May 2016 22:21:42 +0200
+Subject: [Buildroot] [PATCH v3] linux: Bump default to version 4.5.4
+In-Reply-To: <1462997169-7237-1-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Wed, 11 May 2016 17:06:09 -0300")
+References: <1462997169-7237-1-git-send-email-festevam@gmail.com>
+Message-ID: <8737pojqg9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit 2f37ef48e82e3ba ("configs/imx6ulevk: Use ext4 as filesystem type")
-the rootfs type is ext4, so update the readme.txt accordingly.
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- board/freescale/imx6ulevk/readme.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ > Changes since v2:
+ > - Resent from my gmail account as my other email is not subscribed to the list
+ > Changes since v1:
+ > - Fix Subject to 4.5.4
 
-diff --git a/board/freescale/imx6ulevk/readme.txt b/board/freescale/imx6ulevk/readme.txt
-index b8243dc..462715c 100644
---- a/board/freescale/imx6ulevk/readme.txt
-+++ b/board/freescale/imx6ulevk/readme.txt
-@@ -20,7 +20,7 @@ Build all components:
- 
- You will find in ./output/images/ the following files:
-   - imx6ul-14x14-evk.dtb
--  - rootfs.ext2
-+  - rootfs.ext4
-   - rootfs.tar
-   - sdcard.img
-   - u-boot.imx
+Committed, thanks.
+
 -- 
-1.9.1
+Venlig hilsen,
+Peter Korsgaard 
