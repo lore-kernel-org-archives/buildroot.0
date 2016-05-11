@@ -1,57 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 May 2016 23:11:07 +0200
-Subject: [Buildroot] [PATCH 1/1] rrdtool: bump version to 1.6.0
-In-Reply-To: <5731B8FC.8070403@zacarias.com.ar>
-References: <1462824635-15327-1-git-send-email-fli4l@franke-prem.de>
- <20160509232119.668c0b36@free-electrons.com>
- <5731B8FC.8070403@zacarias.com.ar>
-Message-ID: <20160511231107.1679ba7b@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 May 2016 23:06:45 +0200
+Subject: [Buildroot] [git commit branch/next] toolchain: bump ARC tools to
+	arc-2016.03-rc2
+Message-ID: <20160511211155.97FBD7FE2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=adbdc6e58f2b387dc4200f2acbf9cc307cbc8838
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 10 May 2016 07:33:32 -0300, Gustavo Zacarias wrote:
+This change switches ARC tools to RC2 of the most recent arc-2016.03
+version.
 
-> What's the failure you're seeing by dropping autoreconf/gettextize?
-> On my end it seems to build just fine.
+Essentially once final release is ready version will be bumped again.
 
-I get:
+ARC GNU tools of version arc-2016.03 bring some quite significant
+changes like:
+ * Binutils v2.26+ (upstream commit id 202ac19 with additional ARC patches)
+ * GCC v4.8.5
+ * GDB 7.10
 
-  CCLD     rrdcached
-/home/test/outputs/rrdtool/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.7.4/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: rrd_tool.o: undefined reference to symbol 'libintl_gettext'
-/home/test/outputs/rrdtool/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
-collect2: error: ld returned 1 exit status
+More about changes, improvements and fixes could be found here:
+https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2016.03-rc2
 
-When building rrdtool 1.6.0 with autoreconf/gettextize disabled, using
-the following defconfig:
+Also in this change we realign custom Buildroot patches for binutils and
+gcc for ARC tools. Looks like earlier most of arch-independent patches
+for binutils and gcc were either unintentionally removed or not even
+added in patch folders for ARC's binutils and gcc. Now arch-independent
+patches for binutils-2.26 and gcc-4.8.5 were added in
+package/{binutils|gcc}/arc-2016.03-rc2 folders.
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2016.02-3-g762b7c9.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_RRDTOOL=y
-# BR2_TARGET_ROOTFS_TAR is not set
+Build and run-tested in nSIM for both ARC700 and ARC HS38.
 
-built in the chroot that I use to run the autobuilder testing.
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/binutils/Config.in.host                    |   2 +-
+ .../binutils/arc-2015.12/0001-PR-other-56780.patch | 236 ---------------------
+ .../arc-2016.03-rc2/0300-ld-makefile.patch         |  41 ++++
+ .../0301-check-ldrunpath-length.patch              |  36 ++++
+ .../0500-add-sysroot-fix-from-bug-3049.patch       |  52 +++++
+ .../0600-poison-system-directories.patch}          | 217 ++++++++++---------
+ package/binutils/binutils.hash                     |   2 +-
+ package/binutils/binutils.mk                       |   2 +-
+ package/gcc/Config.in.host                         |   2 +-
+ ...900-UPDATE-Fix-handling-complex-PIC-moves.patch | 103 ---------
+ ...01-UPDATE1-Fix-handling-complex-PIC-moves.patch |  83 --------
+ ...950-Don-t-allow-mcompact-casesi-for-ARCv2.patch | 100 ---------
+ package/gcc/arc-2016.03-rc2/130-pr43538.patch      |  25 +++
+ .../arc-2016.03-rc2/301-missing-execinfo_h.patch   |  13 ++
+ .../305-libmudflap-susv3-legacy.patch              |  49 +++++
+ package/gcc/arc-2016.03-rc2/842-PR60155.patch      | 111 ++++++++++
+ .../850-libstdcxx-uclibc-c99.patch}                |   4 +-
+ .../851-PR-other-56780.patch                       |   0
+ .../930-libgcc-disable-split-stack-nothreads.patch |  14 ++
+ package/gcc/gcc.hash                               |   2 +-
+ package/gdb/Config.in.host                         |   2 +-
+ package/gdb/gdb.hash                               |   2 +-
+ 22 files changed, 472 insertions(+), 626 deletions(-)
 
-Re-adding autoreconf/gettextize fixes the problem.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Patch is too large, so refusing to show it
