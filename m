@@ -1,66 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 May 2016 23:06:45 +0200
-Subject: [Buildroot] [git commit branch/next] toolchain: bump ARC tools to
-	arc-2016.03-rc2
-Message-ID: <20160511211155.97FBD7FE2C@busybox.osuosl.org>
+Date: Wed, 11 May 2016 23:06:36 +0200
+Subject: [Buildroot] [git commit branch/next] barebox: bump to version
+	2016.05.0
+Message-ID: <20160511211155.806DA81E69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=adbdc6e58f2b387dc4200f2acbf9cc307cbc8838
+commit: https://git.buildroot.net/buildroot/commit/?id=3ef13c49966d1cbfe08fc3d9d12b1f9d8d4f558b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This change switches ARC tools to RC2 of the most recent arc-2016.03
-version.
-
-Essentially once final release is ready version will be bumped again.
-
-ARC GNU tools of version arc-2016.03 bring some quite significant
-changes like:
- * Binutils v2.26+ (upstream commit id 202ac19 with additional ARC patches)
- * GCC v4.8.5
- * GDB 7.10
-
-More about changes, improvements and fixes could be found here:
-https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2016.03-rc2
-
-Also in this change we realign custom Buildroot patches for binutils and
-gcc for ARC tools. Looks like earlier most of arch-independent patches
-for binutils and gcc were either unintentionally removed or not even
-added in patch folders for ARC's binutils and gcc. Now arch-independent
-patches for binutils-2.26 and gcc-4.8.5 were added in
-package/{binutils|gcc}/arc-2016.03-rc2 folders.
-
-Build and run-tested in nSIM for both ARC700 and ARC HS38.
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/binutils/Config.in.host                    |   2 +-
- .../binutils/arc-2015.12/0001-PR-other-56780.patch | 236 ---------------------
- .../arc-2016.03-rc2/0300-ld-makefile.patch         |  41 ++++
- .../0301-check-ldrunpath-length.patch              |  36 ++++
- .../0500-add-sysroot-fix-from-bug-3049.patch       |  52 +++++
- .../0600-poison-system-directories.patch}          | 217 ++++++++++---------
- package/binutils/binutils.hash                     |   2 +-
- package/binutils/binutils.mk                       |   2 +-
- package/gcc/Config.in.host                         |   2 +-
- ...900-UPDATE-Fix-handling-complex-PIC-moves.patch | 103 ---------
- ...01-UPDATE1-Fix-handling-complex-PIC-moves.patch |  83 --------
- ...950-Don-t-allow-mcompact-casesi-for-ARCv2.patch | 100 ---------
- package/gcc/arc-2016.03-rc2/130-pr43538.patch      |  25 +++
- .../arc-2016.03-rc2/301-missing-execinfo_h.patch   |  13 ++
- .../305-libmudflap-susv3-legacy.patch              |  49 +++++
- package/gcc/arc-2016.03-rc2/842-PR60155.patch      | 111 ++++++++++
- .../850-libstdcxx-uclibc-c99.patch}                |   4 +-
- .../851-PR-other-56780.patch                       |   0
- .../930-libgcc-disable-split-stack-nothreads.patch |  14 ++
- package/gcc/gcc.hash                               |   2 +-
- package/gdb/Config.in.host                         |   2 +-
- package/gdb/gdb.hash                               |   2 +-
- 22 files changed, 472 insertions(+), 626 deletions(-)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 0bb19d3..52a83a9 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2016.04.0"
++	bool "2016.05.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2016.04.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2016.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 0e30dbd..fe3b8b2 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+-# http://www.barebox.org/download/barebox-2016.04.0.tar.bz2.md5
+-md5 178150b9d7fa9a27db513a629b9200c2 barebox-2016.04.0.tar.bz2
++# http://www.barebox.org/download/barebox-2016.05.0.tar.bz2.md5
++md5 4df21ad084faa54ea0310288c7b03049 barebox-2016.05.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 ad2618a7df5fe5e923d8fd4c8d99f95a8b44166ff7d016bba73e5cb677802027 barebox-2016.04.0.tar.bz2
++sha256 e3a85fd0d9b4c92421258ba38f5bee112ec9dcae87246c93a2353c62bf16d988 barebox-2016.05.0.tar.bz2
