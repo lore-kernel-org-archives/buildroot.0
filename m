@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 May 2016 23:40:37 +0200
-Subject: [Buildroot] [PATCH 04/13 v7] core/legal-info: install source
- archives in their own sub-dir
-In-Reply-To: <596aa96d1442410a2ffe8c28e131112c57424b91.1462637351.git.yann.morin.1998@free.fr>
+Date: Wed, 11 May 2016 23:43:43 +0200
+Subject: [Buildroot] [PATCH 05/13 v7] core/legal-info: add package
+ version to license directory
+In-Reply-To: <f99ee6fa-bb3a-411e-9b78-899dcad0c5b8@mind.be>
 References: <cover.1462637351.git.yann.morin.1998@free.fr>
- <596aa96d1442410a2ffe8c28e131112c57424b91.1462637351.git.yann.morin.1998@free.fr>
-Message-ID: <20160511234037.144063f0@free-electrons.com>
+ <5e1963c6feb57cd7a5096d296b86624f14bf3d8d.1462637351.git.yann.morin.1998@free.fr>
+ <f99ee6fa-bb3a-411e-9b78-899dcad0c5b8@mind.be>
+Message-ID: <20160511234343.55332952@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +15,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  7 May 2016 18:14:29 +0200, Yann E. MORIN wrote:
-> Currently, we put all source archives side-by-side in the same
-> directory.
-> 
-> Since we're about to also save individual patches that were applied
-> on those sources, we don't want to make that directory a complete
-> mess of unassorted files.
-> 
-> So, we install each source archive in its own sub-directory, where
-> we'll later store the patches too. Store that location in a variable,
-> so it can be re-used later on (to install patches in a future commit).
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> ---
-> Changes v6 -> v7:
->   - directly call the helper
+On Sat, 7 May 2016 22:01:28 +0200, Arnout Vandecappelle wrote:
 
-Applied to next, thanks.
+> > +	@$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))  
+> 
+>   I think this should stay $(2)_RAWNAME, or either it should change as well for 
+> the legal-warning-source below.
+> 
+>   Other than that:
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+I agree with Arnout here (we should keep using $(2)_RAWNAME for the
+warning). Yann, what do you think?
 
 Thomas
 -- 
