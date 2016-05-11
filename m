@@ -1,55 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 May 2016 23:12:11 +0200
-Subject: [Buildroot] [PATCH v2 2/2] rrdtool: bump version to 1.6.0
-In-Reply-To: <1462976617-24524-2-git-send-email-fli4l@franke-prem.de>
-References: <1462976617-24524-1-git-send-email-fli4l@franke-prem.de>
- <1462976617-24524-2-git-send-email-fli4l@franke-prem.de>
-Message-ID: <20160511231211.1a1bd0c2@free-electrons.com>
+Date: Wed, 11 May 2016 23:14:37 +0200
+Subject: [Buildroot] [git commit branch/next] support/scripts: add helper to
+	hardlink-or-copy
+Message-ID: <20160511211510.607EC81EE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=88bad8f462c31679106fe68b6c3b1bd4be68cc2f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 11 May 2016 16:23:37 +0200, Roland Franke wrote:
+When preparing the legal-info, the source archives are copied in the
+legal-info/ output directory. When the archives are big, it can take
+quite a bit of time and unnecessarily uses disk space. When the
+legal-info output directory is on the same filesystem as the BR2_DL_DIR,
+we can easily reduce copy time and disk usage by just using hardlins
+instead of copying. However, the BR2_DL_DIR may be on a different
+filesystem, so we must fallback to copying in this case
 
-> -RRDTOOL_AUTORECONF = YES
-> -RRDTOOL_GETTEXTIZE = YES
+Introduce a helper script that copies a source file into a destination
+directory, by first attempting to hard-link, and falling back to a
+plain copy in case the hardlink fails.
 
-If anything, this should be done as part of the patch bumping to
-version 1.6.0. I.e, your two patches should be merged into just one.
+In case the destination already exists, it is forcibly removed first, to
+avoid clobering any existing target file (and especially any hardlink to
+it), since cp -f does not remove the destination file, but clobbers it.
 
-Also, this breaks the build for me, as I just reported on the v1 of
-your patch:
+In some situations, it will be necessary that the destination file is
+named differently than the source, so if a third argument is specified,
+it is treated as the basename of the destination file.
 
-/home/test/outputs/rrdtool/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.7.4/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: rrd_tool.o: undefined reference to symbol 'libintl_gettext'
-/home/test/outputs/rrdtool/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/hardlink-or-copy | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-With the following defconfig:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2016.02-3-g762b7c9.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_RRDTOOL=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/scripts/hardlink-or-copy b/support/scripts/hardlink-or-copy
+new file mode 100755
+index 0000000..b046bdf
+--- /dev/null
++++ b/support/scripts/hardlink-or-copy
+@@ -0,0 +1,35 @@
++#!/bin/bash
++
++# Try to hardlink a file into a directory, fallback to copy on failure.
++#
++# Hardlink-or-copy the source file in the first argument into the
++# destination directory in the second argument, using the basename in
++# the third argument as basename for the destination file. If the third
++# argument is missing, use the basename of the source file as basename
++# for the destination file.
++#
++# In either case, remove the destination prior to doing the
++# hardlink-or-copy.
++#
++# Note that this is NOT an atomic operation.
++
++set -e
++
++main() {
++    local src_file="${1}"
++    local dst_dir="${2}"
++    local dst_file="${3}"
++
++    if [ -n "${dst_file}" ]; then
++        dst_file="${dst_dir}/${dst_file}"
++    else
++        dst_file="${dst_dir}/${src_file##*/}"
++    fi
++
++    mkdir -p "${dst_dir}"
++    rm -f "${dst_file}"
++    ln -f "${src_file}" "${dst_file}" 2>/dev/null \
++    || cp -f "${src_file}" "${dst_file}"
++}
++
++main "${@}"
