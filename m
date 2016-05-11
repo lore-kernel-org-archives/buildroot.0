@@ -1,99 +1,35 @@
-From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Date: Wed, 11 May 2016 09:17:48 +0200
-Subject: [Buildroot] [PATCH 03/34] reproducibility: generate
- SOURCE_DATE_EPOCH
-In-Reply-To: <27c16676-ddd2-1e02-d22a-ca6c97a1c833@mind.be>
-References: <20160430074358.GE1781@hermes.click-hack.org>
- <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1462002570-14706-3-git-send-email-gilles.chanteperdrix@xenomai.org>
- <67fd2e37-e216-0d27-ba6d-893b0baf7f28@mind.be>
- <20160508202240.GS13285@hermes.click-hack.org>
- <27c16676-ddd2-1e02-d22a-ca6c97a1c833@mind.be>
-Message-ID: <20160511071748.GI13285@hermes.click-hack.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 May 2016 09:29:45 +0200
+Subject: [Buildroot] Clarification about init system
+In-Reply-To: <5731B0DD.1080201@gmail.com> (Marco Trapanese's message of "Tue, 
+ 10 May 2016 11:58:53 +0200")
+References: <5731B0DD.1080201@gmail.com>
+Message-ID: <87oa8djbme.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 10, 2016 at 01:28:14AM +0200, Arnout Vandecappelle wrote:
-> On 05/08/16 22:22, Gilles Chanteperdrix wrote:
-> > On Sat, May 07, 2016 at 11:00:11PM +0200, Arnout Vandecappelle wrote:
-> >> On 04/30/16 09:48, Gilles Chanteperdrix wrote:
-> >>> When reproducibility is wanted, generates a global SOURCE_DATE_EPOCH
-> >>> environment variable which contains either the date of buildroot last
-> >>> commit if running from a git repository, or the latest release date.
-> >>>
-> >>> This means that all packages embedding build dates will appear to
-> >>> have the same build date, so in case of new commit or release, all
-> >>> packages will appear to have been change, even though some of them
-> >>> may not have changed in fact.
-> >>> ---
-> >>>  Makefile | 5 +++++
-> >>>  1 file changed, 5 insertions(+)
-> >>>
-> >>> diff --git a/Makefile b/Makefile
-> >>> index 86b2ed2..c1d2961 100644
-> >>> --- a/Makefile
-> >>> +++ b/Makefile
-> >>> @@ -223,6 +223,11 @@ ifeq ($(BR2_REPRODUCIBLE),y)
-> >>>  export TZ=UTC
-> >>>  export LANG=C
-> >>>  export LC_ALL=C
-> >>> +SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
-> >>> +SOURCE_DATE_CHANGES = $(shell head -n 1 $(TOPDIR)/CHANGES | \
-> >>> +	sed 's/^.*Released \(.*\)$$/\1/;s/\(st\|nd\|rd\|th\),//' | \
-> >>> +	LANG=C LC_ALL=C TZ=UTC xargs -i date -d \{\} +%s)
-> >>> +export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(SOURCE_DATE_CHANGES))
-> >>
-> >>   I really don't like exporting a variable that is not well-known and that
-> >> doesn't have a BR_ prefix. Where it is used by packages, it will anyway be in
-> >> Buildroot-specific patches, so we can just as well add the BR_ prefix.
-> >
-> > SOURCE_DATE_EPOCH is well-known. Its meaning is defined by a
-> > specification:
-> > https://wiki.debian.org/ReproducibleBuilds/TimestampsProposal
-> 
->   Ah, good.
-> 
->   Actually, a better reference is
-> https://reproducible-builds.org/specs/source-date-epoch/
-> (actually the same developers wrote this spec, but it's supposedly not 
-> debian-specific).
-> 
->   When you repost, could you make sure that the commit message mentions this 
-> explicitly?
-> 
-> >
-> >>
-> >>   But actually, we don't want to introduce buildroot-specific (and therefore
-> >> unupstreamable) things in patches either. So there is not much point in
-> >> exporting, except if it's used by scripts.
-> >
-> > I used it in some patched configure scripts (libnspr, if I remember
-> > correctly). Which is why I exported it.
-> 
->   As I said: used in patches.
-> 
->   But indeed, it is well-known. So OK to export it.
-> 
->   BTW, when it is possible to download a debian patch for a package (by setting 
-> FOO_PATCH = ...) rather than rolling our own, we prefer that.
+>>>>> "Marco" == Marco Trapanese <marcotrapanese@gmail.com> writes:
 
-The thing is that trying and understanding what Debian does is not
-convenient for me and most of the time a waste of time:
-- things that I believe are problems for buildroot may not be
-considered problems for Debian (see for instance the libltdl issue,
-or the grub2 issue). 
-- the Debian wiki has a high noise/signal ratio, and is not always
-up to date, and this when I can access it, because the IP addresses
-I use for browsing are blacklisted by Debian, so I have to take
-special steps to access it.
+Hi,
 
-So, I gave up on Debian pretty early, and I am not interested in
-trying that painful exercise again. If someone else wants to do it
-though, go ahead.
+ > In the manual I read:
+ >     systemd will be useful on relatively complex embedded systems, for
+ >     example the ones requiring D-Bus and services communicating
+ >     between each other
+
+ > Currently I'm using busybox, but I'm facing issues to get pulseaudio,
+ > bluez and ofono to communicate each other via dbus.
+ > Of course it might be something wrong in my configuration.
+
+ > Generally speaking, do you recommend to use systemd or I can safely
+ > rely on busybox and just digging further my issues?
+
+Systemd is fine, but it shouldn't make any difference regarding
+functionality of pulseaudio (and if it does, it sounds like a bug we
+should fix).
 
 -- 
-					    Gilles.
-https://click-hack.org
+Bye, Peter Korsgaard
