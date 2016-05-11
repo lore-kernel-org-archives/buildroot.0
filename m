@@ -1,58 +1,88 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 11 May 2016 12:58:47 +0930
-Subject: [Buildroot] [PATCH] host-fakeroot: re-run autotools to fix
- build on ppc64le host
-In-Reply-To: <20160303121530.5727120f@free-electrons.com>
-References: <1456984671-10123-1-git-send-email-stewart@linux.vnet.ibm.com>
- <20160303121530.5727120f@free-electrons.com>
-Message-ID: <CACPK8Xckxuf-4bA27UTNfXZ_C_KpT8Fmw5wRYOBNuM+PUHbWYg@mail.gmail.com>
+From: Cyril Bur <cyrilbur@gmail.com>
+Date: Wed, 11 May 2016 14:34:17 +1000
+Subject: [Buildroot] [PATCH 1/1] Makefile: Support merged defconfigs
+In-Reply-To: <90639972664ebd51802b3c2b94b8c01e235bd956.1462771329.git.sam.bobroff@au1.ibm.com>
+References: <90639972664ebd51802b3c2b94b8c01e235bd956.1462771329.git.sam.bobroff@au1.ibm.com>
+Message-ID: <20160511143417.0dae9edb@camb691>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+On Mon,  9 May 2016 15:22:32 +1000
+Sam Bobroff <sam.bobroff@au1.ibm.com> wrote:
 
-On Thu, Mar 3, 2016 at 9:45 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> On Thu,  3 Mar 2016 16:57:51 +1100, Stewart Smith wrote:
->> When building on ppc64le host (notably Ubuntu 14.04, where this was
->> reported), the configure/libtool combination in fakeroot would
->> incorrectly detect that ld doesn't know how to build shared libraries.
->> Instead of checking for ppc64le libs, it was checking if we could build
->> *big* endian libraries, which the native Ubuntu toolchain on Ubuntu 14.04
->> cannot. The end result would be that you wouldn't get libfakeroot.so,
->> causing a build failure later on.
->>
->> However, if we rerun autotools, this works. Additionally, due to
->> the strange way that fakeroot builds, we need to mkdir build-aux as
->> this directory does not exist in the original source package.
->>
->> With this patch, you can now successfully build OpenPower firmware
->> (which uses buildroot infrastructure) on an Ubuntu 14.04 ppc64le
->> system.
->>
->> Fixes: https://github.com/open-power/op-build/issues/194
->> Signed-off-by: Stewart Smith <stewart@linux.vnet.ibm.com>
->
-> I understand the issue, but I don't really like the solution, because
-> it means that from now on, host-autoconf, host-automake and
-> host-libtool are always going to be built as dependencies of
-> host-fakeroot, making a "minimal" build longer.
->
-> Unfortunately, I don't have a lot of other proposals to make, except
-> maybe seeing if there is a more recent version of fakeroot that has
-> an already re-generated configure script that works for you.
+> Within the Linux kernel, and several other packages, it's currently
+> possible to maintain defconfigs as diffs (fragments) against other
+> configs but this is not possible with buildroot itself.
+> 
+> This patch adds the capability, although using a slightly different
+> implementation. Files may be added in the normal config directories
+> ($TOPDIR/configs or $BR2_EXTERNAL/configs) with the format
+> "xxx_defconfig.merge" that contain, one per line, the files to be
+> passed to merge_config.sh to create the matching xxx_defconfig file
+> (the first line should contain the base config followed by the
+> fragments).  The generated defconfig file is then handled as it would
+> normally be.
+> 
+> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> ---
+> For a discussion about this from the OP build project, see
+> https://github.com/open-power/op-build/issues/457
+> 
 
-I'm updating the OpenPower firmware builds to use 2016.05 and came
-across Stewarts patch in our tree. It would be good to get a fix
-upstream.
+Hi Sam,
 
-Would you take a patch to update the autotools generated files in
-fakeroot? This way we can build our firmware on the systems that they
-run on, without anyone having to spend the extra time building.
+> A couple of things about the implementation:
+> 
+> * merge_config.sh will only output to a file called ".config" so I've set it up
+>   to output directly to $TOPDIR/.config, since that's about to be overwritten
+>   anyway, but I don't feel this is particularly nice.
+> * It seems strange to pass --defconfig=.config when running conf but I couldn't
+>   quickly tell if there was something better to do. Using --oldconfig would
+>   pick up .config by default but I don't know if it would then process the file
+>   correctly so I went with what seemed safe.
 
-Cheers,
+Looks like what you've done will work. I've come to the same conclusion as you
+that --oldconfig might actually be a better fit, and by extension
+--olddefconfig may be even better moving forward as the fragments age and new
+symbols get added.
 
-Joel
+Then it occurred to me I've had this question before and I had to go look what I
+did for linux in arch/powerpc/Makefile and turns out, olddefconfig.
+
+> * I realise that there are now four very similar rules that handle defconfigs.
+>   I could look at factoring them but it didn't seem worth the effort and
+>   complexity at this point.
+> 
+
+I have no doubt there may be a refactored solution in there somewhere but I
+don't believe it will be as easy to follow as what currently exists. Currently
+it is easy to understand why there are four, what they are trying to achieve,
+I'd bet that with any refactoring that clarity will be dulled.
+
+>  Makefile | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 71735b5..eb80152 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -845,6 +845,16 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+>  	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
+>  		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
+>  
+> +%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig.merge outputmakefile
+> +	cd $(TOPDIR)/configs && xargs -a $@.merge -x -P 1 $(TOPDIR)/support/kconfig/merge_config.sh -m -O $(TOPDIR)
+> +	$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(TOPDIR)/.config \
+> +		$< --defconfig=$(TOPDIR)/.config $(CONFIG_CONFIG_IN)
+> +
+> +%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig.merge outputmakefile
+> +	cd $(BR2_EXTERNAL)/configs && xargs -a $@.merge -x -P 1 $(TOPDIR)/support/kconfig/merge_config.sh -m -O $(TOPDIR)
+> +	$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(TOPDIR)/.config \
+> +		$< --defconfig=$(TOPDIR)/.config $(CONFIG_CONFIG_IN)
+> +
+>  savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+>  	@$(COMMON_CONFIG_ENV) $< \
+>  		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
