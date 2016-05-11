@@ -1,68 +1,92 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 11 May 2016 23:33:04 +0200
-Subject: [Buildroot] uClibc debug symbols
-In-Reply-To: <ddfc826b-9bf7-38c8-a442-bea33bf05621@brickedbrain.com>
-References: <ddfc826b-9bf7-38c8-a442-bea33bf05621@brickedbrain.com>
-Message-ID: <20160511233304.2c528c3b@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 May 2016 23:33:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/quagga: Fix directories and
+ permissions
+In-Reply-To: <1462953673-1190-1-git-send-email-nroach44@gmail.com>
+References: <1462953673-1190-1-git-send-email-nroach44@gmail.com>
+Message-ID: <20160511233309.1ea81a24@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Luca,
+Hello,
 
-On Wed, 11 May 2016 11:43:12 +0200, Luca Ellero <luca.ellero@brickedbrain.com> wrote:
+I'm adding in Cc: Baruch, since he has done most of the recent updates
+to the Quagga package. Baruch, could you review/test this patch,
+according to your knowledge of Quagga?
 
-> Hi everybody,
-> I'm trying to debug uClibc with a debugger, but even if I enable "build 
-> packages with debugging symbols" it seems that debug symbols are not 
-> present in the final binaries.
-> 
-> My .config reports:
-> BR2_ENABLE_DEBUG=y
-> BR2_DEBUG_2=y
-> 
-> I'm using binaries in output/staging/lib (is this the correct place to go?)
-> 
-> If I do "objdump -h | grep debug" on this libraries I get the following:
-> 
-> $ arm-buildroot-linux-uclibcgnueabi-objdump -h ld-uClibc-1.0.12.so | 
-> grep debug
-> 
-> $ arm-buildroot-linux-uclibcgnueabi-objdump -h libuClibc-1.0.12.so | 
-> grep debug
->    20 .debug_aranges 00000180  00000000  00000000  0004b310  2**3
->    21 .debug_info   00000c7a  00000000  00000000  0004b490  2**0
->    22 .debug_abbrev 00000353  00000000  00000000  0004c10a  2**0
->    23 .debug_line   000008ce  00000000  00000000  0004c45d  2**0
->    24 .debug_frame  00000124  00000000  00000000  0004cd2c  2**2
->    25 .debug_str    00000330  00000000  00000000  0004ce50  2**0
->    26 .debug_loc    0000068c  00000000  00000000  0004d180  2**0
->    27 .debug_ranges 00000038  00000000  00000000  0004d80c  2**0
-> 
-> Could someone please tell me what is wrong with this approach?
-> 
+I'm also adding some comments below.
 
-For remote debugging this should work, the staging/sysroot libs
-should have all debugging information, the libs on the target are
-stripped until you enable:
+> Quagga runs as the "quagga" user, but it also needs to modify files
+> in /etc and /var - config files, pid files and vty sockets for vtysh.
 
-  # BR2_STRIP_strip is not set
-  BR2_STRIP_none=y
+Does it really need to write in /etc ? If that's the case, then it
+seems a bit wrong, and we have a bigger problem. What happens if /etc
+is read-only ?
 
-Worked for me with glibc/xserver etc. for local debugging on the
-target, not tested with uClibc (do not forget to complete rebuild)...
 
-Regards,
-Peter
+On Wed, 11 May 2016 16:01:13 +0800, Nathaniel Roach wrote:
 
-> Thanks
-> Regards
-> Luca
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+> index 6b98367..3592aee 100644
+> --- a/package/quagga/quagga.mk
+> +++ b/package/quagga/quagga.mk
+> @@ -10,7 +10,11 @@ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+>  QUAGGA_DEPENDENCIES = host-gawk
+>  QUAGGA_LICENSE = GPLv2+
+>  QUAGGA_LICENSE_FILES = COPYING
+> -QUAGGA_CONF_OPTS = --program-transform-name=''
+> +QUAGGA_CONF_OPTS = \
+> +  --program-transform-name='' \
+> +  --sysconfdir=/etc/quagga \
+> +  --localstatedir=/var/run/quagga
+
+Indentation should be one tab for those lines. But why isn't
+sysconfdir=/etc appropriate? Is it because quagga writes to some files
+in /etc? If that's the case, as said above, I'm believe it's bad.
+
+> +define QUAGGA_PERMISSIONS
+> +	/etc/quagga r 600 quagga quagga - - - - -
+> +	/etc/quagga d 755 quagga quagga - - - - -
+
+Hum, does this actually work?
+
+> +	/var/run/quagga d 755 quagga quagga - - - - -
+> +endef
+> +
+>  ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
+>  QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
+>  QUAGGA_CONF_OPTS += --enable-snmp=agentx
+> @@ -50,4 +64,10 @@ ifeq ($(BR2_arc),y)
+>  QUAGGA_CONF_OPTS += --disable-pie
+>  endif
+>  
+> +define QUAGGA_INSTALL_INIT_SYSTEMD
+> +	mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
+
+This mkdir -p is useless, as $(INSTALL) -D creates all sub-directories
+needed to be able to copy to the destination path.
+
+> +	$(INSTALL) -D -m 644 package/quagga/quagga_tmpfiles.conf \
+> +		$(TARGET_DIR)/usr/lib/tmpfiles.d/quagga.conf
+> +endef
+> +
+>  $(eval $(autotools-package))
+> diff --git a/package/quagga/quagga_tmpfiles.conf b/package/quagga/quagga_tmpfiles.conf
+> new file mode 100644
+> index 0000000..ad82cc6
+> --- /dev/null
+> +++ b/package/quagga/quagga_tmpfiles.conf
+> @@ -0,0 +1,2 @@
+> +d /var/run/quagga/ 1755 quagga quagga -
+> +
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
