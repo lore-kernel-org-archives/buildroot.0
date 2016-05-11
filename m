@@ -1,60 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 May 2016 16:04:49 +0200
-Subject: [Buildroot] [git commit] package/kodi-screensaver-rsxs: needs
-	xlib_libXmu
-Message-ID: <20160511140632.6439F81ED5@busybox.osuosl.org>
+Date: Wed, 11 May 2016 16:02:49 +0200
+Subject: [Buildroot] [git commit] package/kodi-screensaver-asterwave: needs
+	libglu
+Message-ID: <20160511140632.5A0567F9D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51ad7ed67636556b13653f0a094c3cd829970375
+commit: https://git.buildroot.net/buildroot/commit/?id=b7e4eb68e0542987df947db8497bea1fb8651a41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes
 
-/home/bernd/buildroot/output/build/kodi-screensaver-rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259/lib/rsxs-1.0/src/common.cc:42:27:
- fatal error: X11/Xmu/StdCmap.h: No such file or directory
-
-X11/Xmu/StdCmap.h is included here:
-https://github.com/notspiff/screensavers.rsxs/blob/master/lib/rsxs-1.0/src/common.cc#L48
+/home/bernd/buildroot/output/build/kodi-screensaver-asterwave-0dc2c48dadb100954eef823e7e3a5f502ce65b1e/src/Water.cpp:25:20:
+ fatal error: GL/glu.h: No such file or directory
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-screensaver-rsxs/Config.in                | 6 ++++--
- package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/kodi-screensaver-asterwave/Config.in                     | 1 +
+ package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/kodi-screensaver-rsxs/Config.in b/package/kodi-screensaver-rsxs/Config.in
-index b489303..0698c7d 100644
---- a/package/kodi-screensaver-rsxs/Config.in
-+++ b/package/kodi-screensaver-rsxs/Config.in
-@@ -1,10 +1,12 @@
- config BR2_PACKAGE_KODI_SCREENSAVER_RSXS
- 	bool "kodi-screensaver-rsxs"
- 	depends on BR2_PACKAGE_KODI_GL # libglu
-+	depends on BR2_PACKAGE_XORG7 # xlib_libXmu
-+	select BR2_PACKAGE_XLIB_LIBXMU
+diff --git a/package/kodi-screensaver-asterwave/Config.in b/package/kodi-screensaver-asterwave/Config.in
+index 5e929ca..05ce58a 100644
+--- a/package/kodi-screensaver-asterwave/Config.in
++++ b/package/kodi-screensaver-asterwave/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_ASTERWAVE
+ 	bool "kodi-screensaver-asterwave"
+ 	depends on BR2_PACKAGE_KODI_GL # libsoil
++	select BR2_PACKAGE_LIBGLU
+ 	select BR2_PACKAGE_LIBSOIL
  	help
- 	  RSXS screensaver add-ons for Kodi
+ 	  AsterWave screensaver for Kodi
+diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
+index 1cb74f3..7c718cc 100644
+--- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
++++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
+@@ -6,6 +6,6 @@
  
- 	  https://github.com/notspiff/screensavers.rsxs
- 
--comment "kodi-screensaver-rsxs needs OpenGL"
--	depends on !BR2_PACKAGE_KODI_GL
-+comment "kodi-screensaver-rsxs depends on X.org and needs OpenGL"
-+	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_KODI_GL
-diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-index c76e9da..7df6c22 100644
---- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-+++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
-@@ -9,6 +9,6 @@ KODI_SCREENSAVER_RSXS_SITE = $(call github,notspiff,screensavers.rsxs,$(KODI_SCR
- KODI_SCREENSAVER_RSXS_LICENSE = GPLv3
- KODI_SCREENSAVER_RSXS_LICENSE_FILES = lib/rsxs-1.0/COPYING
- 
--KODI_SCREENSAVER_RSXS_DEPENDENCIES = kodi
-+KODI_SCREENSAVER_RSXS_DEPENDENCIES = kodi xlib_libXmu
+ KODI_SCREENSAVER_ASTERWAVE_VERSION = 0dc2c48dadb100954eef823e7e3a5f502ce65b1e
+ KODI_SCREENSAVER_ASTERWAVE_SITE = $(call github,notspiff,screensaver.asterwave,$(KODI_SCREENSAVER_ASTERWAVE_VERSION))
+-KODI_SCREENSAVER_ASTERWAVE_DEPENDENCIES = kodi libsoil
++KODI_SCREENSAVER_ASTERWAVE_DEPENDENCIES = kodi libglu libsoil
  
  $(eval $(cmake-package))
