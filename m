@@ -1,56 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 May 2016 23:06:36 +0200
-Subject: [Buildroot] [git commit branch/next] barebox: bump to version
-	2016.05.0
-Message-ID: <20160511211155.806DA81E69@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 May 2016 23:12:11 +0200
+Subject: [Buildroot] [PATCH v2 2/2] rrdtool: bump version to 1.6.0
+In-Reply-To: <1462976617-24524-2-git-send-email-fli4l@franke-prem.de>
+References: <1462976617-24524-1-git-send-email-fli4l@franke-prem.de>
+ <1462976617-24524-2-git-send-email-fli4l@franke-prem.de>
+Message-ID: <20160511231211.1a1bd0c2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ef13c49966d1cbfe08fc3d9d12b1f9d8d4f558b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Wed, 11 May 2016 16:23:37 +0200, Roland Franke wrote:
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 0bb19d3..52a83a9 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2016.04.0"
-+	bool "2016.05.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2016.04.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2016.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 0e30dbd..fe3b8b2 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# http://www.barebox.org/download/barebox-2016.04.0.tar.bz2.md5
--md5 178150b9d7fa9a27db513a629b9200c2 barebox-2016.04.0.tar.bz2
-+# http://www.barebox.org/download/barebox-2016.05.0.tar.bz2.md5
-+md5 4df21ad084faa54ea0310288c7b03049 barebox-2016.05.0.tar.bz2
- 
- # Locally calculated
--sha256 ad2618a7df5fe5e923d8fd4c8d99f95a8b44166ff7d016bba73e5cb677802027 barebox-2016.04.0.tar.bz2
-+sha256 e3a85fd0d9b4c92421258ba38f5bee112ec9dcae87246c93a2353c62bf16d988 barebox-2016.05.0.tar.bz2
+> -RRDTOOL_AUTORECONF = YES
+> -RRDTOOL_GETTEXTIZE = YES
+
+If anything, this should be done as part of the patch bumping to
+version 1.6.0. I.e, your two patches should be merged into just one.
+
+Also, this breaks the build for me, as I just reported on the v1 of
+your patch:
+
+/home/test/outputs/rrdtool/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.7.4/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: rrd_tool.o: undefined reference to symbol 'libintl_gettext'
+/home/test/outputs/rrdtool/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
+
+With the following defconfig:
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2016.02-3-g762b7c9.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_RRDTOOL=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
