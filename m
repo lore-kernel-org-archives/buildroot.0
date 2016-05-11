@@ -1,54 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 May 2016 16:06:39 +0200
-Subject: [Buildroot] [git commit] package/kodi-visualisation-shadertoy:
-	needs libglew for OpenGL build
-Message-ID: <20160511140701.C347F8045D@busybox.osuosl.org>
+Date: Wed, 11 May 2016 16:07:27 +0200
+Subject: [Buildroot] [PATCH 1/6]
+ package/kodi-screensaver-*/kodi-visualisation-*: fix comments
+In-Reply-To: <1462905623-17739-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1462905623-17739-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160511160727.1e6472be@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25ab35697e497810be92724eb84e0af4c49f6436
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes
--- Found OpenGL: /home/bernd/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libGL.so
-CMake Error at /home/bernd/buildroot/output/host/usr/share/cmake-3.5/Modules/FindPackageHandleStandardArgs.cmake:148
- (message):
-  Could NOT find GLEW (missing: GLEW_INCLUDE_DIRS GLEW_LIBRARIES)
+On Tue, 10 May 2016 20:40:18 +0200, Bernd Kuhls wrote:
+> Various small changes to comments:
+> - shorten OpenGL info (Thomas)
+> - fix typos
+> - add full packages names when missing (Thomas)
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/kodi-screensaver-asteroids/Config.in    | 2 +-
+>  package/kodi-screensaver-asterwave/Config.in    | 2 +-
+>  package/kodi-screensaver-biogenesis/Config.in   | 2 +-
+>  package/kodi-screensaver-cpblobs/Config.in      | 2 +-
+>  package/kodi-screensaver-crystalmorph/Config.in | 2 +-
+>  package/kodi-screensaver-greynetic/Config.in    | 2 +-
+>  package/kodi-screensaver-matrixtrails/Config.in | 2 +-
+>  package/kodi-screensaver-pingpong/Config.in     | 2 +-
+>  package/kodi-screensaver-planestate/Config.in   | 2 +-
+>  package/kodi-screensaver-pyro/Config.in         | 2 +-
+>  package/kodi-screensaver-rsxs/Config.in         | 2 +-
+>  package/kodi-screensaver-stars/Config.in        | 2 +-
+>  package/kodi-visualisation-fishbmc/Config.in    | 2 +-
+>  package/kodi-visualisation-fountain/Config.in   | 2 +-
+>  package/kodi-visualisation-goom/Config.in       | 2 +-
+>  15 files changed, 15 insertions(+), 15 deletions(-)
 
-For details have a look at
-https://github.com/notspiff/visualization.shadertoy/blob/master/CMakeLists.txt#L21
+Patches 1 to 5 applied. I've not applied PATCH 6 for now, as I have
+some comments/questions.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/kodi-visualisation-shadertoy/Config.in                       | 1 +
- package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk | 4 ++++
- 2 files changed, 5 insertions(+)
-
-diff --git a/package/kodi-visualisation-shadertoy/Config.in b/package/kodi-visualisation-shadertoy/Config.in
-index 3b981d0..ac17702 100644
---- a/package/kodi-visualisation-shadertoy/Config.in
-+++ b/package/kodi-visualisation-shadertoy/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY
- 	bool "kodi-visualisation-shadertoy"
-+	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_LIBPLATFORM
- 	help
- 	  Shadertoy visualiser for Kodi
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-index 308016e..e5f2d91 100644
---- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-@@ -10,4 +10,8 @@ KODI_VISUALISATION_SHADERTOY_LICENSE = GPLv2+
- KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = src/main.cpp
- KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = kodi libplatform
- 
-+ifeq ($(BR2_PACKAGE_LIBGLEW),y)
-+KODI_VISUALISATION_SHADERTOY_DEPENDENCIES += libglew
-+endif
-+
- $(eval $(cmake-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
