@@ -1,42 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 May 2016 15:27:39 +0200
-Subject: [Buildroot] [PATCH v2] m68k: fix open issues with qemu coldfire
-In-Reply-To: <20160510205007.GA14378@waldemar-brodkorb.de>
-References: <20160510205007.GA14378@waldemar-brodkorb.de>
-Message-ID: <20160511152739.3aa14749@free-electrons.com>
+Date: Wed, 11 May 2016 16:02:13 +0200
+Subject: [Buildroot] [git commit] package/kodi-visualisation-shadertoy:
+	needs libplatform
+Message-ID: <20160511140632.4F4BD80404@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=27a82980e6d63501376c7b82eefaba4ea8e30c35
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 10 May 2016 22:50:07 +0200, Waldemar Brodkorb wrote:
-> Enable kernel drivers for networking and add a simple
-> busybox config with basic network tools.
-> 
-> Add kernel patch from Linux git to fix hush segfaults while
-> using signal handler.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> v1 -> v2:
->   * use generic busybox-minimal.config with networking tools
->     enabled as requested by Thomas Petazzoni
->   * verified to still work with STM32F429 discovery board
-> ---
->  board/qemu/m68k-mcf5208/linux-4.5.config           |   7 ++
->  .../patches/linux/0001-fix-do_sigreturn.patch      | 100 +++++++++++++++++++++
->  configs/qemu_m68k_mcf5208_defconfig                |   6 +-
->  package/busybox/busybox-minimal.config             |  82 ++++++++---------
->  4 files changed, 151 insertions(+), 44 deletions(-)
->  create mode 100644 board/qemu/m68k-mcf5208/patches/linux/0001-fix-do_sigreturn.patch
+Fixes
 
-Applied to master, thanks.
+Makefile:477: *** libplatform is in the dependency chain of
+ kodi-visualisation-shadertoy that has added it to its _DEPENDENCIES
+ variable without selecting it or depending on it from Config.in.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kodi-visualisation-shadertoy/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/kodi-visualisation-shadertoy/Config.in b/package/kodi-visualisation-shadertoy/Config.in
+index 10a6e55..3b981d0 100644
+--- a/package/kodi-visualisation-shadertoy/Config.in
++++ b/package/kodi-visualisation-shadertoy/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY
+ 	bool "kodi-visualisation-shadertoy"
++	select BR2_PACKAGE_LIBPLATFORM
+ 	help
+ 	  Shadertoy visualiser for Kodi
+ 
