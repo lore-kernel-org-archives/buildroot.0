@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 May 2016 15:20:43 +0200
-Subject: [Buildroot] [PATCH v1 1/1] raptor: Patch to remove the support
- for blackfin architecture.
-In-Reply-To: <1463057814-9991-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-References: <1463057814-9991-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-Message-ID: <20160512152043.68e8e85c@free-electrons.com>
+Date: Thu, 12 May 2016 15:27:14 +0200
+Subject: [Buildroot] [v2] package/quagga: Fix directories and permissions
+In-Reply-To: <1463037440-8933-1-git-send-email-nroach44@gmail.com>
+References: <1463037440-8933-1-git-send-email-nroach44@gmail.com>
+Message-ID: <20160512152714.1d08ee16@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +12,53 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 12 May 2016 18:26:54 +0530, Atul Singh wrote:
-> Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
+On Thu, 12 May 2016 15:17:19 +0800, Nathaniel Roach wrote:
+> Quagga runs as the "quagga" user, but it also needs to modify files
+> in /etc and /var - config files, pid files and vty sockets for vtysh.
+> 
+> Tell the configure script the right folders to use, create the
+> user, fix the permissions, and then let systemd know (if needed).
+> 
+> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
 
-Why are you doing this? I.e, why do you want to disable raptor on the
-Blackfin architecture ?
+Thanks for this new iteration. However, there's one thing that I missed
+in my review of the previous iteration.
 
-> ---
->  package/raptor/0002-remove-blackfin-support.patch | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->  create mode 100644 package/raptor/0002-remove-blackfin-support.patch
+> +define QUAGGA_PERMISSIONS
+> +	/etc/quagga r 600 quagga quagga - - - - -
+> +	/etc/quagga d 755 quagga quagga - - - - -
+> +	/var/run/quagga d 755 quagga quagga - - - - -
+> +endef
 
-This patch is completely wrong. You're adding a patch to the Buildroot
-raptor package, which will be applied on the raptor source code once
-extracted by Buildroot.
+I think setting permissions on /var/run/quagga here is useless.
+Indeed, /var/run is a symbolic link to /run, which is mounted at boot
+time as a tmpfs filesystem. I.e, the permissions set in
+<pkg>_PERMISSIONS (which affect the generated filesystem image) have no
+affect to the contents of /run.
 
-This clearly indicates that you have not even tested this change.
+Thanks to your tmpfiles.d thing, you probably haven't seen this if
+you're using systemd. But if you try to use the Busybox init, it won't
+work. Only an init script can adjust the permissions in /run.
 
-Best regards,
+So I believe this line should be removed.
+
+BTW, what about adding a systemd service file and an init script for
+Quagga? Of course, I'm fine if it's done as part of a separate change,
+submitted later.
+
+> diff --git a/package/quagga/quagga_tmpfiles.conf b/package/quagga/quagga_tmpfiles.conf
+> new file mode 100644
+> index 0000000..ad82cc6
+> --- /dev/null
+> +++ b/package/quagga/quagga_tmpfiles.conf
+> @@ -0,0 +1,2 @@
+> +d /var/run/quagga/ 1755 quagga quagga -
+> +
+
+While you're at it, remove this extra empty line at the end of the
+file, I don't think it is needed.
+
+Thanks!
 
 Thomas
 -- 
