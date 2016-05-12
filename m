@@ -1,239 +1,37 @@
-From: Brian 'redbeard' Harrington <redbeard@coreos.com>
-Date: Wed, 11 May 2016 15:34:27 -0700
-Subject: [Buildroot] [PATCH 1/1] fs/aci: Add App Container Image (ACI)
- support to filesystems
-Message-ID: <5733B373.9090807@coreos.com>
+From: Geoff Levand <geoff@infradead.org>
+Date: Thu, 12 May 2016 00:08:46 +0000
+Subject: [Buildroot] [PATCH 2/9] package/go-bootstrap: Set CGO_ENABLED=0
+In-Reply-To: <cover.1463010771.git.geoff@infradead.org>
+References: <cover.1463010771.git.geoff@infradead.org>
+Message-ID: <2e8ab7d6d36bdc954535b9637f9ab8e131d64313.1463010771.git.geoff@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-App Container Images (ACI) are a Linux containerization image format
-defined as a part of the AppC specification as defined by CoreOS,
-Red Hat, Google, and community members. These images consist of a Linux
-userland and a JSON metadata file describing how to execute the actual
-runtime.
+Fixes build erorros like these:
 
-This filesystem package utilizes Buildroot for the generation of
-the userland and provides the user with a mechanism for configuring the
-contents of the manifest file.
+  cgo.a(_all.o): unknown relocation type 42; compiled without -fpic?
 
-Signed-off-by: Brian 'redbeard' Harrington <redbeard@coreos.com>
+Signed-off-by: Geoff Levand <geoff@infradead.org>
 ---
- fs/Config.in     |  1 +
- fs/aci/Config.in | 72 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- fs/aci/aci.json  | 34 ++++++++++++++++++++++++++
- fs/aci/aci.mk    | 70 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 177 insertions(+)
- create mode 100644 fs/aci/Config.in
- create mode 100644 fs/aci/aci.json
- create mode 100644 fs/aci/aci.mk
+ package/go-bootstrap/go-bootstrap.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/fs/Config.in b/fs/Config.in
-index 51ccf28..1c468c5 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -1,5 +1,6 @@
- menu "Filesystem images"
+diff --git a/package/go-bootstrap/go-bootstrap.mk b/package/go-bootstrap/go-bootstrap.mk
+index bcf7c0b..1ced355 100644
+--- a/package/go-bootstrap/go-bootstrap.mk
++++ b/package/go-bootstrap/go-bootstrap.mk
+@@ -19,7 +19,8 @@ HOST_GO_BOOTSTRAP_MAKE_ENV = \
+ 	GOOS=linux \
+ 	GOROOT_FINAL="$(HOST_GO_BOOTSTRAP_ROOT)" \
+ 	GOROOT="$(@D)" \
+-	GOBIN="$(@D)/bin"
++	GOBIN="$(@D)/bin" \
++	CGO_ENABLED=0
  
-+source "fs/aci/Config.in"
- source "fs/axfs/Config.in"
- source "fs/cloop/Config.in"
- source "fs/cpio/Config.in"
-diff --git a/fs/aci/Config.in b/fs/aci/Config.in
-new file mode 100644
-index 0000000..7dcac6b
---- /dev/null
-+++ b/fs/aci/Config.in
-@@ -0,0 +1,72 @@
-+config BR2_TARGET_ROOTFS_ACI
-+	bool "Generate App Container Image (ACI)"
-+	default y
-+	select BR2_PACKAGE_HOST_JQ
-+	help
-+	  Build an App Container Image for use with a Linux
-+	  containerization engine like rkt, Kurma, 3ofCoins, nosecone,
-+	  etc.
-+
-+choice
-+	prompt "Compression method"
-+	default BR2_TARGET_ROOTFS_ACI_NONE
-+	depends on BR2_TARGET_ROOTFS_ACI
-+	help
-+	  Select compressor for application container image
-+
-+config BR2_TARGET_ROOTFS_ACI_NONE
-+	bool "no compression"
-+	help
-+	  Do not compress the ACI.
-+
-+config BR2_TARGET_ROOTFS_ACI_GZIP
-+	bool "gzip"
-+	help
-+	  Do compress the ACI with gzip.
-+
-+config BR2_TARGET_ROOTFS_ACI_BZIP2
-+	bool "bzip2"
-+	help
-+	  Do compress the ACI with bzip2.
-+
-+config BR2_TARGET_ROOTFS_ACI_LZMA
-+	bool "lzma"
-+	help
-+	  Do compress the ACI with lzma.
-+
-+config BR2_TARGET_ROOTFS_ACI_LZO
-+	bool "lzo"
-+	help
-+	  Do compress the ACI with lzop.
-+
-+config BR2_TARGET_ROOTFS_ACI_XZ
-+	bool "xz"
-+	help
-+	  Do compress the ACI with xz.
-+
-+endchoice
-+
-+config BR2_TARGET_ROOTFS_ACI_OPTIONS_NAME
-+	string "Name of the ACI image (e.g. example.com/my_app)"
-+	depends on BR2_TARGET_ROOTFS_ACI 
-+	help
-+	  A human-readable name for this App Container Image
-+
-+comment "ACI images must have a name"
-+	depends on BR2_TARGET_ROOTFS_ACI_OPTIONS_NAME = ""
-+
-+config BR2_TARGET_ROOTFS_ACI_OPTIONS_EXEC
-+	string "Command to execute inside the container (e.g. /bin/sh)"
-+	depends on BR2_TARGET_ROOTFS_ACI 
-+	help
-+	  Executable to launch and any flags
-+
-+config BR2_TARGET_ROOTFS_ACI_OPTIONS_VERSION
-+	string "Version number of the container (e.g. v1.3.2)"
-+	depends on BR2_TARGET_ROOTFS_ACI
-+	help
-+	  When combined with "name", this SHOULD be unique for every 
-+	  build of an app (on a given "os"/"arch" combination).
-+
-+comment "ACI images should be supplied with a version"
-+	depends on BR2_TARGET_ROOTFS_ACI_OPTIONS_VERSION = ""
-diff --git a/fs/aci/aci.json b/fs/aci/aci.json
-new file mode 100644
-index 0000000..bce9d39
---- /dev/null
-+++ b/fs/aci/aci.json
-@@ -0,0 +1,34 @@
-+{
-+	"acKind":"ImageManifest",
-+	"acVersion":"0.7.4",
-+	"name":env.aciname,
-+	"labels":
-+		[{
-+			"name":"os",
-+			"value":"linux"
-+		},{
-+			"name":"arch",
-+			"value": env.aciarch
-+		},{ 
-+			"name":"version",
-+			"value": env.aciver
-+		}],
-+	"app":
-+	{
-+		"exec":
-+			[
-+			env.aciexec
-+			],
-+		"user": (if (env.aciexec == "") then "0" else env.aciexec end),
-+		"group": (if (env.aciexec == "") then "0" else env.aciexec end)
-+	},
-+	"annotations":
-+	[{
-+		"name": "buildroot.org/aci",
-+		"value": "Generated by Buildroot"
-+	},
-+	{
-+		"name": "created",
-+		"value": env.created_at 
-+	}]
-+}
-diff --git a/fs/aci/aci.mk b/fs/aci/aci.mk
-new file mode 100644
-index 0000000..5af6c13
---- /dev/null
-+++ b/fs/aci/aci.mk
-@@ -0,0 +1,70 @@
-+################################################################################
-+#
-+# Generate ACI image
-+# https://github.com/appc/spec/blob/master/spec/aci.md
-+#
-+################################################################################
-+ROOTFS_ACI_DEPENDS += host-jq
-+
-+# ACIs follow the Golang naming spec for CPU  architecture
-+
-+ifeq ($(BR2_arm),y)
-+ifeq ($(BR2_ARM_CPU_ARMV5),y)
-+	ACI_ARCH = arm5l
-+else ifeq ($(BR2_ARM_CPU_ARMV6),y)
-+	ACI_ARCH = arm6l
-+else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
-+	ACI_ARCH = arm7l
-+endif
-+else ifeq ($(BR2_armeb),y)
-+ifeq ($(BR2_ARM_CPU_ARMV5),y)
-+	ACI_ARCH = arm5b
-+else ifeq ($(BR2_ARM_CPU_ARMV6),y)
-+	ACI_ARCH = arm6b
-+else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
-+	ACI_ARCH = arm7b
-+endif
-+else ifeq ($(BR2_aarch64),y)
-+	ACI_ARCH = aarch64
-+else ifeq ($(BR2_aarch64_be),y)
-+	ACI_ARCH = aarch64_be
-+else ifeq ($(BR2_i386),y)
-+	ACI_ARCH = 386
-+else ifeq ($(BR2_x86_64),y)
-+	ACI_ARCH = amd64
-+else ifeq ($(BR2_powerpc),y)
-+	ACI_ARCH = ppc64
-+endif
-+
-+# For the generation of our ACI we include a timestamp and pass the variables
-+# from the main configuration into jq to generate a JSON manifest.  We then
-+# create the TAR archive of all components, making sure all paths are
-+# represented correctly.
-+
-+define ROOTFS_ACI_CMD
-+	created_at='$(shell date --rfc-3339=ns | tr " " "T")' \
-+	aciname=$(BR2_TARGET_ROOTFS_ACI_OPTIONS_NAME) \
-+	aciexec=$(BR2_TARGET_ROOTFS_ACI_OPTIONS_EXEC) \
-+	aciver=$(BR2_TARGET_ROOTFS_ACI_OPTIONS_VERSION) \
-+	aciarch=$(ACI_ARCH) \
-+	$(HOST_DIR)/usr/bin/jq -n -f fs/aci/aci.json > $(TARGET_DIR)/manifest && \
-+	tar -c$(TAR_OPTS)f $@ --xattrs --numeric-owner -C $(TARGET_DIR) \
-+	  --transform 's,^\./,rootfs/,' --exclude=*/manifest manifest .
-+endef
-+
-+# ACI images are required to end in ".aci" regardless of compression
-+
-+ifneq ($(BR2_TARGET_ROOTFS_ACI_NONE),y)
-+
-+define ROOTFS_ACI_MOVE
-+	echo "br2 var - $(BR2_TARGET_ROOTFS_ACI_NONE)" && \
-+	mv -f $(BINARIES_DIR)/rootfs.aci$(ROOTFS_ACI_COMPRESS_EXT) \
-+		$(BINARIES_DIR)/rootfs.aci && \
-+	echo "Compressed ACI moved to $(BINARIES_DIR)/rootfs.aci"
-+
-+endef
-+
-+ROOTFS_ACI_POST_GEN_HOOKS += ROOTFS_ACI_MOVE
-+endif
-+
-+$(eval $(call ROOTFS_TARGET,aci))
+ define HOST_GO_BOOTSTRAP_BUILD_CMDS
+ 	cd $(@D)/src && $(HOST_GO_BOOTSTRAP_MAKE_ENV) ./make.bash
 -- 
-2.4.11
+2.5.0
