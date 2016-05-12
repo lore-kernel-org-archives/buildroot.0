@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 May 2016 16:11:21 +0200
-Subject: [Buildroot] [PATCH 2/9] package/go-bootstrap: Set CGO_ENABLED=0
-In-Reply-To: <2e8ab7d6d36bdc954535b9637f9ab8e131d64313.1463010771.git.geoff@infradead.org>
+Date: Thu, 12 May 2016 16:12:52 +0200
+Subject: [Buildroot] [PATCH 4/9] package/go: Add
+ BR2_TOOLCHAIN_HAS_THREADS
+In-Reply-To: <62cf6f9a00fe67cf999e45f7cbf4bf2e295a0fd5.1463010771.git.geoff@infradead.org>
 References: <cover.1463010771.git.geoff@infradead.org>
- <2e8ab7d6d36bdc954535b9637f9ab8e131d64313.1463010771.git.geoff@infradead.org>
-Message-ID: <20160512161121.081e1116@free-electrons.com>
+ <62cf6f9a00fe67cf999e45f7cbf4bf2e295a0fd5.1463010771.git.geoff@infradead.org>
+Message-ID: <20160512161252.7471bf1e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +15,31 @@ To: buildroot@busybox.net
 Hello,
 
 On Thu, 12 May 2016 00:08:46 +0000, Geoff Levand wrote:
-> Fixes build erorros like these:
+> CGO needs thread support.  Fixes build errors like these:
 > 
->   cgo.a(_all.o): unknown relocation type 42; compiled without -fpic?
+>   warning requested reentrant code, but thread support was disabled
 > 
 > Signed-off-by: Geoff Levand <geoff@infradead.org>
 > ---
->  package/go-bootstrap/go-bootstrap.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  package/go/Config.in.host | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+> index 094e402..e988483 100644
+> --- a/package/go/Config.in.host
+> +++ b/package/go/Config.in.host
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+>  	bool
+>  	default y
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
 
-Applied to master, thanks.
+This is not an architecture dependency, it's a toolchain dependency. We
+normally show a comment about such a dependency so that users know they
+need to enable thread support in their toolchain.
+
+When you say "CGO needs thread support", is CGO the go runtime on the
+target? Does this means that any Go program needs threads?
 
 Thomas
 -- 
