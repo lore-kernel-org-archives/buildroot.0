@@ -1,43 +1,47 @@
-From: Charles Hardin <ckhardin@exablox.com>
-Date: Thu, 12 May 2016 11:04:10 -0700
-Subject: [Buildroot] [FYI] if BR2_STRIP_none=y then grub2 doesn't build
-Message-ID: <1F75FA56-B481-497A-8922-9A856A3EC5E8@exablox.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 12 May 2016 20:25:04 +0200
+Subject: [Buildroot] [PATCH v1] uclibc: enable debug build option
+Message-ID: <1463077504-3646-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tracked this down to the TARGET_STRIP getting set to ?true? but grub2 expects
-the STRIP command to actually generate output.
+Set uclibc DODEBUG in case BR2_ENABLE_DEBUG is set.
 
-if test x = xyes; then   true  -o kernel.img.bin kernel.exec;    -felf64 -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -wd1106 -nu -nd kernel.img.bin kernel.img; else true  -R .rel.dyn -R .reginfo -R .note -R .comment -R .note.gnu.gold-version --strip-unneeded -K start -R .note -R .comment -R .note.gnu.gold-version  -o kernel.img kernel.exec; fi
-if test x = xyes; then   true  -o kernel.img.bin kernel.exec;    -felf64 -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -wd1106 -nu -nd kernel.img.bin kernel.img; else true  -R .rel.dyn -R .reginfo -R .note -R .comment -R .note.gnu.gold-version --strip-unneeded -K start -R .note -R .comment -R .note.gnu.gold-version  -o kernel.img kernel.exec; fi
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/uclibc/uclibc.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-You can see the ?true? not doing anything to make the kernel.img
-
-So, this diff makes grub2 build and work regardless of BR2_STRIP_none - but,
-this pattern isn?t used anywhere else so it is unclear if it is appropriate.
-
-I?ll toss a patch over the fence in a bit.
-
-Regards,
-Charles
-
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index 88a46f4..9cc800c 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -55,7 +55,7 @@ GRUB2_CONF_ENV = \
-        TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
-        NM="$(TARGET_NM)" \
-        OBJCOPY="$(TARGET_OBJCOPY)" \
--       STRIP="$(TARGET_STRIP)"
-+       STRIP="$(TARGET_CROSS)strip"
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index b8ccee2..d68385d 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -182,6 +182,15 @@ endef
+ endif
  
- GRUB2_CONF_OPTS = \
-        --target=$(GRUB2_TARGET) \
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160512/924161d6/attachment.html>
+ #
++# Debug
++#
++ifeq ($(BR2_ENABLE_DEBUG),y)
++define UCLIBC_DEBUG_CONFIG
++	$(call KCONFIG_ENABLE_OPT,DODEBUG=y,$(@D)/.config)
++endef
++endif
++
++#
+ # Endianness
+ #
+ 
+@@ -394,6 +403,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_SPARC_TYPE_CONFIG)
+ 	$(UCLIBC_POWERPC_TYPE_CONFIG)
+ 	$(UCLIBC_X86_TYPE_CONFIG)
++	$(UCLIBC_DEBUG_CONFIG)
+ 	$(UCLIBC_ENDIAN_CONFIG)
+ 	$(UCLIBC_LARGEFILE_CONFIG)
+ 	$(UCLIBC_IPV6_CONFIG)
+-- 
+2.8.1
