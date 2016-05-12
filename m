@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 May 2016 15:30:05 +0200
-Subject: [Buildroot] [PATCH 4/9] package/go: Add
- BR2_TOOLCHAIN_HAS_THREADS
-In-Reply-To: <62cf6f9a00fe67cf999e45f7cbf4bf2e295a0fd5.1463010771.git.geoff@infradead.org>
-References: <cover.1463010771.git.geoff@infradead.org>
- <62cf6f9a00fe67cf999e45f7cbf4bf2e295a0fd5.1463010771.git.geoff@infradead.org>
-Message-ID: <20160512153005.29571aec@free-electrons.com>
+Date: Thu, 12 May 2016 15:41:48 +0200
+Subject: [Buildroot] uClibc debug symbols
+In-Reply-To: <38268c60-77cb-a127-4d16-35ea58fc5766@brickedbrain.com>
+References: <ddfc826b-9bf7-38c8-a442-bea33bf05621@brickedbrain.com>
+ <20160511233304.2c528c3b@gmx.net>
+ <38268c60-77cb-a127-4d16-35ea58fc5766@brickedbrain.com>
+Message-ID: <20160512154148.66906dd2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +14,64 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 12 May 2016 00:08:46 +0000, Geoff Levand wrote:
-> CGO needs thread support.  Fixes build errors like these:
+On Thu, 12 May 2016 12:23:52 +0200, Luca Ellero wrote:
+
+> ifeq ($(BR2_ENABLE_DEBUG),y)
+> GLIBC_EXTRA_CFLAGS += -g
+> endif
 > 
->   warning requested reentrant code, but thread support was disabled
-> 
-> Signed-off-by: Geoff Levand <geoff@infradead.org>
+> But I cannot find anything similar in UClibc.
 
-When a commit fixes some build issues reported by the autobuilders,
-please add something like:
+Right, we should add explicit handling for BR2_ENABLE_DEBUG in the
+uClibc package.
 
-Fixes:
+> So my questions are:
+> - what is the clean way to enable debug symbols on all packages (or at 
+> least on some of them)?
 
-   http://autobuild.buildroot.net/results/0f0f5892e474bdf9145242cee836b8acc383734f/
+Enabling BR2_ENABLE_DEBUG, as you did.
 
-in the commit log.
+> - what is the purpose of BR2_ENABLE_DEBUG if it doesn't enable debug on 
+> all packages?
 
-Thanks!
+The main thing that BR2_ENABLE_DEBUG does is to enable the following
+piece of code from package/Makefile.in:
+
+ifeq ($(BR2_DEBUG_1),y)
+TARGET_DEBUGGING = -g1
+endif
+ifeq ($(BR2_DEBUG_2),y)
+TARGET_DEBUGGING = -g2
+endif
+ifeq ($(BR2_DEBUG_3),y)
+TARGET_DEBUGGING = -g3
+endif
+
+[...]
+
+TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+
+So TARGET_CFLAGS and TARGET_CXXFLAGS will contain -g1, -g2 or -g3
+depending on the debugging "level" requested.
+
+Then, it all depends on each package whether it properly observes
+TARGET_CFLAGS/TARGET_CXXFLAGS. I think most autotools-based packages
+should behave fine, and all CMake-based packages should also behave
+fine.
+
+However, for other packages (mainly the ones that use the
+generic-package infrastructure), it is very possible that they don't
+pass TARGET_CFLAGS/TARGET_CXXFLAGS everywhere.
+
+Actually, a very useful check to add at the end of the Buidroot build
+would be to verify that all binaries have debugging symbols in
+STAGING_DIR when BR2_ENABLE_DEBUG=y. This way, the autobuilders would
+automatically catch packages that don't behave properly. Adding this
+check is probably easy. Fixing the issues that will be found by this
+check might prove to be more difficult, however.
+
+Best regards,
 
 Thomas
 -- 
