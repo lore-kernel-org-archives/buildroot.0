@@ -1,36 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 12 May 2016 19:26:26 +0200
-Subject: [Buildroot] [PATCH 1/1] kodi: Enable raspberry-pi2 build support
-References: <1461702074-14376-1-git-send-email-bmauduit@beneth.fr>
- <20160507225043.56bdc54f@free-electrons.com> <57347FBA.7070605@beneth.fr>
-Message-ID: <2vqe0dx72u.ln2@ID-313208.user.individual.net>
+From: Charles Hardin <ckhardin@exablox.com>
+Date: Thu, 12 May 2016 11:04:10 -0700
+Subject: [Buildroot] [FYI] if BR2_STRIP_none=y then grub2 doesn't build
+Message-ID: <1F75FA56-B481-497A-8922-9A856A3EC5E8@exablox.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 12 May 2016 15:06:02 +0200 schrieb Beno?t Mauduit:
+Tracked this down to the TARGET_STRIP getting set to ?true? but grub2 expects
+the STRIP command to actually generate output.
 
-> Ps: I just see that archlinux is providing a patch[2] for building kodi
-> with gcc 6. Are we interested ? or are we waiting the next kodi ?
-> 
-> [1] : https://archlinuxarm.org/packages/armv6h/kodi-rbp/files/PKGBUILD
-> [2] :
-> https://archlinuxarm.org/packages/armv6h/kodi-rbp/files/gcc6_fix.patch
+if test x = xyes; then   true  -o kernel.img.bin kernel.exec;    -felf64 -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -wd1106 -nu -nd kernel.img.bin kernel.img; else true  -R .rel.dyn -R .reginfo -R .note -R .comment -R .note.gnu.gold-version --strip-unneeded -K start -R .note -R .comment -R .note.gnu.gold-version  -o kernel.img kernel.exec; fi
+if test x = xyes; then   true  -o kernel.img.bin kernel.exec;    -felf64 -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -wd1106 -nu -nd kernel.img.bin kernel.img; else true  -R .rel.dyn -R .reginfo -R .note -R .comment -R .note.gnu.gold-version --strip-unneeded -K start -R .note -R .comment -R .note.gnu.gold-version  -o kernel.img kernel.exec; fi
 
-Hi Beno?t,
+You can see the ?true? not doing anything to make the kernel.img
 
-I created that patch and send it to already here:
-http://patchwork.ozlabs.org/patch/616330/
+So, this diff makes grub2 build and work regardless of BR2_STRIP_none - but,
+this pattern isn?t used anywhere else so it is unclear if it is appropriate.
 
-Please review the patch to help its integration in buildroot. Upstream 
-(https://github.com/xbmc/xbmc/pull/9703) had no technical complaints 
-about the patch but will not commit it because they won't do another 
-release for the Jarvis-16 branch. The next version Krypton-17 will not 
-need the patch.
+I?ll toss a patch over the fence in a bit.
 
-You can also test my kodi17 branch for buildroot:
-https://github.com/bkuhls/buildroot/tree/kodi17
+Regards,
+Charles
 
-Regards, Bernd
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 88a46f4..9cc800c 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -55,7 +55,7 @@ GRUB2_CONF_ENV = \
+        TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
+        NM="$(TARGET_NM)" \
+        OBJCOPY="$(TARGET_OBJCOPY)" \
+-       STRIP="$(TARGET_STRIP)"
++       STRIP="$(TARGET_CROSS)strip"
+ 
+ GRUB2_CONF_OPTS = \
+        --target=$(GRUB2_TARGET) \
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160512/924161d6/attachment.html>
