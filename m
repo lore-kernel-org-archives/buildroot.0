@@ -1,49 +1,38 @@
 From: Geoff Levand <geoff@infradead.org>
-Date: Thu, 12 May 2016 00:08:47 +0000
-Subject: [Buildroot] [PATCH 6/9] package/go: Enable MIPS support
+Date: Thu, 12 May 2016 00:08:48 +0000
+Subject: [Buildroot] [PATCH 9/9] package/flannel: Set go env variables
 In-Reply-To: <cover.1463010771.git.geoff@infradead.org>
 References: <cover.1463010771.git.geoff@infradead.org>
-Message-ID: <a4a18c6b3164161c73f9c1b29d58ce8378a8edb5.1463010771.git.geoff@infradead.org>
+Message-ID: <9caa1646d3da7936fb25fd4e4cd2dcd8b8387374.1463010772.git.geoff@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable go language support for mips64 and mips64el (mips64le), which
-were added in go-1.6.2.
+To get cross compile builds working correctly.
 
 Signed-off-by: Geoff Levand <geoff@infradead.org>
 ---
- package/go/Config.in.host | 2 +-
- package/go/go.mk          | 4 ++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/flannel/flannel.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index 5833bd9..3d8fe45 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -2,5 +2,5 @@ config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	bool
- 	default y
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 || BR2_powerpc64 || BR2_powerpc64le
-+	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 || BR2_powerpc64 || BR2_powerpc64le || BR2_mips64 || BR2_mips64el
- 	depends on !BR2_ARM_CPU_ARMV4
-diff --git a/package/go/go.mk b/package/go/go.mk
-index a9e16dd..00b1d21 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -30,6 +30,10 @@ else ifeq ($(BR2_powerpc64),y)
- GO_GOARCH = ppc64
- else ifeq ($(BR2_powerpc64le),y)
- GO_GOARCH = ppc64le
-+else ifeq ($(BR2_mips64),y)
-+GO_GOARCH = mips64
-+else ifeq ($(BR2_mips64el),y)
-+GO_GOARCH = mips64le
- endif
+diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
+index 876efe6..dd500bb 100644
+--- a/package/flannel/flannel.mk
++++ b/package/flannel/flannel.mk
+@@ -17,7 +17,11 @@ FLANNEL_MAKE_ENV = \
+ 	GOBIN="$(@D)/bin" \
+ 	GOPATH="$(@D)/gopath" \
+ 	GOARCH=$(GO_GOARCH) \
+-	CGO_ENABLED=1
++	CGO_ENABLED=1 \
++	CC=$(TARGET_CC) \
++	CXX=$(TARGET_CXX) \
++	GOROOT="$(HOST_GO_ROOT)" \
++	GOTOOLDIR="$(HOST_GO_TOOLDIR)"
  
- HOST_GO_DEPENDENCIES = host-go-bootstrap
+ FLANNEL_GLDFLAGS = \
+ 	-X github.com/coreos/flannel/version.Version=$(FLANNEL_VERSION) \
 -- 
 2.5.0
