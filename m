@@ -1,37 +1,34 @@
 From: Geoff Levand <geoff@infradead.org>
 Date: Thu, 12 May 2016 00:08:46 +0000
-Subject: [Buildroot] [PATCH 2/9] package/go-bootstrap: Set CGO_ENABLED=0
+Subject: [Buildroot] [PATCH 4/9] package/go: Add BR2_TOOLCHAIN_HAS_THREADS
 In-Reply-To: <cover.1463010771.git.geoff@infradead.org>
 References: <cover.1463010771.git.geoff@infradead.org>
-Message-ID: <2e8ab7d6d36bdc954535b9637f9ab8e131d64313.1463010771.git.geoff@infradead.org>
+Message-ID: <62cf6f9a00fe67cf999e45f7cbf4bf2e295a0fd5.1463010771.git.geoff@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes build erorros like these:
+CGO needs thread support.  Fixes build errors like these:
 
-  cgo.a(_all.o): unknown relocation type 42; compiled without -fpic?
+  warning requested reentrant code, but thread support was disabled
 
 Signed-off-by: Geoff Levand <geoff@infradead.org>
 ---
- package/go-bootstrap/go-bootstrap.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/go/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/go-bootstrap/go-bootstrap.mk b/package/go-bootstrap/go-bootstrap.mk
-index bcf7c0b..1ced355 100644
---- a/package/go-bootstrap/go-bootstrap.mk
-+++ b/package/go-bootstrap/go-bootstrap.mk
-@@ -19,7 +19,8 @@ HOST_GO_BOOTSTRAP_MAKE_ENV = \
- 	GOOS=linux \
- 	GOROOT_FINAL="$(HOST_GO_BOOTSTRAP_ROOT)" \
- 	GOROOT="$(@D)" \
--	GOBIN="$(@D)/bin"
-+	GOBIN="$(@D)/bin" \
-+	CGO_ENABLED=0
- 
- define HOST_GO_BOOTSTRAP_BUILD_CMDS
- 	cd $(@D)/src && $(HOST_GO_BOOTSTRAP_MAKE_ENV) ./make.bash
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index 094e402..e988483 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	bool
+ 	default y
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 || BR2_powerpc
+ 	depends on !BR2_ARM_CPU_ARMV4
 -- 
 2.5.0
