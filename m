@@ -1,80 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 May 2016 15:41:48 +0200
-Subject: [Buildroot] uClibc debug symbols
-In-Reply-To: <38268c60-77cb-a127-4d16-35ea58fc5766@brickedbrain.com>
-References: <ddfc826b-9bf7-38c8-a442-bea33bf05621@brickedbrain.com>
- <20160511233304.2c528c3b@gmx.net>
- <38268c60-77cb-a127-4d16-35ea58fc5766@brickedbrain.com>
-Message-ID: <20160512154148.66906dd2@free-electrons.com>
+Date: Thu, 12 May 2016 15:46:14 +0200
+Subject: [Buildroot] [git commit] libpjsip: disable parallel build
+Message-ID: <20160512134627.0410781789@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=781ce19d746efb6a5408b4d50b30626784eff324
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 12 May 2016 12:23:52 +0200, Luca Ellero wrote:
+The libpjsip package has build issues on the autobuilders that look
+like parallel build issues. These issues seem to be extremely hard to
+reproduce, so let's disable parallel build and see if this fixes the
+issue.
 
-> ifeq ($(BR2_ENABLE_DEBUG),y)
-> GLIBC_EXTRA_CFLAGS += -g
-> endif
-> 
-> But I cannot find anything similar in UClibc.
+The suspect error message is:
+  ...-ld: cannot find -lpjsua
+  collect2: error: ld returned 1 exit status
 
-Right, we should add explicit handling for BR2_ENABLE_DEBUG in the
-uClibc package.
+Some of the failures:
+  http://autobuild.buildroot.org/results/d6b/d6bff569bc9238cdf07970e11b5535d570be59bf
+  http://autobuild.buildroot.org/results/f72/f721d5390bc61274c224bfe3a675ee194172ac91
+  http://autobuild.buildroot.org/results/b45/b45262971a7d7ce0604d124734223abca190c11e
+  http://autobuild.buildroot.org/results/75e/75ee45b746ab8b80eb84297e2e4babbace1b5608
+  http://autobuild.buildroot.org/results/873/873771fbcc859578ed40a3c81b69ac3a388ae585
 
-> So my questions are:
-> - what is the clean way to enable debug symbols on all packages (or at 
-> least on some of them)?
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libpjsip/libpjsip.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Enabling BR2_ENABLE_DEBUG, as you did.
-
-> - what is the purpose of BR2_ENABLE_DEBUG if it doesn't enable debug on 
-> all packages?
-
-The main thing that BR2_ENABLE_DEBUG does is to enable the following
-piece of code from package/Makefile.in:
-
-ifeq ($(BR2_DEBUG_1),y)
-TARGET_DEBUGGING = -g1
-endif
-ifeq ($(BR2_DEBUG_2),y)
-TARGET_DEBUGGING = -g2
-endif
-ifeq ($(BR2_DEBUG_3),y)
-TARGET_DEBUGGING = -g3
-endif
-
-[...]
-
-TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
-TARGET_CXXFLAGS = $(TARGET_CFLAGS)
-
-So TARGET_CFLAGS and TARGET_CXXFLAGS will contain -g1, -g2 or -g3
-depending on the debugging "level" requested.
-
-Then, it all depends on each package whether it properly observes
-TARGET_CFLAGS/TARGET_CXXFLAGS. I think most autotools-based packages
-should behave fine, and all CMake-based packages should also behave
-fine.
-
-However, for other packages (mainly the ones that use the
-generic-package infrastructure), it is very possible that they don't
-pass TARGET_CFLAGS/TARGET_CXXFLAGS everywhere.
-
-Actually, a very useful check to add at the end of the Buidroot build
-would be to verify that all binaries have debugging symbols in
-STAGING_DIR when BR2_ENABLE_DEBUG=y. This way, the autobuilders would
-automatically catch packages that don't behave properly. Adding this
-check is probably easy. Fixing the issues that will be found by this
-check might prove to be more difficult, however.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 730d9fe..ebb5897 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -11,6 +11,7 @@ LIBPJSIP_DEPENDENCIES = libsrtp
+ LIBPJSIP_LICENSE = GPLv2+
+ LIBPJSIP_LICENSE_FILES = COPYING
+ LIBPJSIP_INSTALL_STAGING = YES
++LIBPJSIP_MAKE = $(MAKE1)
+ 
+ LIBPJSIP_CONF_ENV = \
+ 	LD="$(TARGET_CC)" \
