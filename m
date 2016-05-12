@@ -1,30 +1,45 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 12 May 2016 00:15:09 +0000
-Subject: [Buildroot] [PATCH 0/9] Fixes for go language support
-In-Reply-To: <cover.1463010771.git.geoff@infradead.org>
-References: <cover.1463010771.git.geoff@infradead.org>
-Message-ID: <CA+h8R2rdC89Xrs+1Kg03YUgW2RWi1wHZ9ixqz2pqO0Presns8g@mail.gmail.com>
+From: Patrick Williams <patrick@stwcx.xyz>
+Date: Wed, 11 May 2016 21:12:43 -0500
+Subject: [Buildroot] [PATCH] Support nested config directories
+In-Reply-To: <1460734834-32123-1-git-send-email-patrick@stwcx.xyz>
+References: <1460734834-32123-1-git-send-email-patrick@stwcx.xyz>
+Message-ID: <1463019163-27543-1-git-send-email-patrick@stwcx.xyz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+From: Elizabeth Liner <eliner@us.ibm.com>
 
-On Wed, May 11, 2016, 5:09 PM Geoff Levand <geoff@infradead.org> wrote:
+Adds an additional recipe to search configs/*/ for defconfig files.
+Recipe added for both $(TOPDIR) and $(BR2_EXTERNAL) to allow nested
+directories for both locations.
 
-> This series includes a number of fixup and enhancments for the go language
-> support.  All the buildbot problems pointed out by Thomas [1] are resolved
-> by
-> this series.
+Signed-off-by: Elizabeth Liner <eliner@us.ibm.com>
+Signed-off-by: Patrick Williams <patrick@stwcx.xyz>
+---
+ Makefile | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-
-Looks good to me.
-
-Acked-by: Christian Stewart <christian@paral.in>
-
-~ Christian
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160512/df81f2a9/attachment.html>
+diff --git a/Makefile b/Makefile
+index 32bbfc4..81a9c6d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -850,6 +850,14 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
+ 		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
+ 
++%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(wildcard $(TOPDIR)/configs/*/%_defconfig) outputmakefile
++	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(wildcard $(TOPDIR)/configs/*/$@) \
++		$< --defconfig=$(wildcard $(TOPDIR)/configs/*/$@) $(CONFIG_CONFIG_IN)
++
++%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(wildcard $(BR2_EXTERNAL)/configs/*/%_defconfig) outputmakefile
++	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(wildcard $(BR2_EXTERNAL)/configs/*/$@) \
++		$< --defconfig=$(wildcard $(BR2_EXTERNAL)/configs/*/$@) $(CONFIG_CONFIG_IN)
++
+ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< \
+ 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+-- 
+2.6.3
