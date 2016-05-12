@@ -1,56 +1,31 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 12 May 2016 19:03:23 +0200
-Subject: [Buildroot] Is uClibc dead?
-In-Reply-To: <nh26a3$g4l$1@ger.gmane.org>
-References: <nh26a3$g4l$1@ger.gmane.org>
-Message-ID: <20160512170323.GU26720@waldemar-brodkorb.de>
+Date: Thu, 12 May 2016 19:07:15 +0200
+Subject: [Buildroot] uClibc debug symbols
+In-Reply-To: <2dbe4eba-67f7-c8c5-1551-b8a31439b6c6@brickedbrain.com>
+References: <ddfc826b-9bf7-38c8-a442-bea33bf05621@brickedbrain.com>
+ <20160511233304.2c528c3b@gmx.net>
+ <38268c60-77cb-a127-4d16-35ea58fc5766@brickedbrain.com>
+ <20160512154148.66906dd2@free-electrons.com>
+ <2dbe4eba-67f7-c8c5-1551-b8a31439b6c6@brickedbrain.com>
+Message-ID: <20160512170714.GV26720@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Grant,
-Grant Edwards wrote,
+Hi,
+Luca Ellero wrote,
 
-> I recently decided to check to see what changes had been made to
-> uClibc since the 4 year old version we're using in our product.  So I
-> went to https://uclibc.org.
+> Can you please suggest a way to check whether binaries have debugging
+> symbols? So, maybe, we can send patches.
 > 
-> After jumping through hoops because all the SSL certificates are
-> invalid/expired I see under latest news:
+> I've tried:
+> objdump -h ... | grep debug
+> but it doesn't seem to always behave reliably.
 > 
->   15 May 2012, uClibc 0.9.33.2 Released
-> 
->   uClibc-0.9.33.2 was released today. 
-> 
-> Odd... no releases for four years?
+> Thank you
 
-Yes. That was the reason for uClibc-ng.
- 
-> Is uClibc abandoned?
-
-Hard to tell as the maintainer does not respond anymore.
- 
-> I see that buildroot now uses uclibc-ng which, according Wikipedia, is
-> 
->   "a spin-off of uClibc that regularly provides a stable and tested
->    release, which is more suitable for different software development
->    processes."
-> 
-> So... processes different than what?
-
-I am not sure what the wikipedia editor is meaning.
-
-If you have a more clear description, feel free to update ;)
-
-uClibc-ng is a try to revive uClibc. There are not many new features
-or hardware platforms supported, as there is a lack of developers
-and contributors. I have support for NDS32 architecture in the
-queue, but I need to resolve some LTP problems first, to have some
-proof that the port is working good.
-
-If you have any questions, feel free to ask.
-
-best regards
- Waldemar
+Just 'file' should do the job,
+ best regards
+  Waldemar
