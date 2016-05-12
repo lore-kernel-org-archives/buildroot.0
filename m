@@ -1,25 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 May 2016 12:29:03 +0200
-Subject: [Buildroot] SSL / HSTS issue with git.busybox.net
-In-Reply-To: <ph9d4pbe3ii050fibo946l51.1463034609289@email.lge.com>
- (root@renaud.io's message of "Thu, 12 May 2016 08:30:09 +0200")
-References: <ph9d4pbe3ii050fibo946l51.1463034609289@email.lge.com>
-Message-ID: <87lh3fin80.fsf@dell.be.48ers.dk>
+Date: Thu, 12 May 2016 13:26:38 +0200
+Subject: [Buildroot] [PATCH] python-setproctitle: bump to version 1.1.10
+In-Reply-To: <1463039720-15651-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Thu, 12 May 2016 09:55:20
+ +0200")
+References: <1463039720-15651-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87h9e3ikk1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "root at renaud" == root at renaud io <root@renaud.io> writes:
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
- > Hi,
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Change download location.
 
-> Trying to fetch this morning and facing a
-> SEC_ERROR_EXPIRED_CERTIFICATE (since 06:43 this very morning).
+ > Fixes:
+ > http://autobuild.buildroot.net/results/dac/dac6e291dae9f42d71f1e9de6cf0362d613b2d5a
 
-Ups, indeed. Seems like our letsencrypt update handling isn't
-working. Mike, care to take a look?
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
