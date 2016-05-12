@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 May 2016 16:29:36 +0200
-Subject: [Buildroot] [PATCH 0/9] Fixes for go language support
-In-Reply-To: <cover.1463010771.git.geoff@infradead.org>
+Date: Thu, 12 May 2016 16:34:18 +0200
+Subject: [Buildroot] [PATCH 8/9] package/go: Build special host binaries
+In-Reply-To: <5bc0cf8e34e53eee49c11c7b4fc9b523530ad393.1463010772.git.geoff@infradead.org>
 References: <cover.1463010771.git.geoff@infradead.org>
-Message-ID: <20160512162936.3538cf40@free-electrons.com>
+ <5bc0cf8e34e53eee49c11c7b4fc9b523530ad393.1463010772.git.geoff@infradead.org>
+Message-ID: <20160512163418.6382e3d2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +13,111 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 12 May 2016 00:08:46 +0000, Geoff Levand wrote:
+On Thu, 12 May 2016 00:08:48 +0000, Geoff Levand wrote:
+> To work around cross compile limitations of go's build scripts, when the
+> host and target arches are the same build the host go binaries with
+> CC_FOR_TARGET set to the host compiler.
 
-> Geoff Levand (9):
->       package/go-bootstrap: Add toolchain dependency
->       package/go-bootstrap: Set CGO_ENABLED=0
->       package/go-bootstrap: Set CC to host CC
->       package/go: Add BR2_TOOLCHAIN_HAS_THREADS
->       package/go: Fix powerpc64 config typo
->       package/go: Enable MIPS support
->       package/go: Add HOST_GO_TOOLDIR
->       package/go: Build special host binaries
->       package/flannel: Set go env variables
+What happens when the host and target architectures are different? It
+all works fine?
 
-I've applied a few patches, and made comments on a few others. However,
-there's one key issue with this series: it mixes new features (like
-"Enable MIPS support") with build/bug fixes, without saying which patch
-is a build/bug fix and which patch is a feature addition. For example,
-I have no idea if "package/go: Add HOST_GO_TOOLDIR" or "package/go:
-Build special host binaries" are needed to fix the build issues or not.
+Is the problem just that Go doesn't "cross compile" properly when the
+host and target architectures are the same ?
 
-Also, as I said as a reply to one of the patches, please add references
-to the autobuilder failures.
+> +# To work around cross compile limitations of go's build scripts, when the
 
-Could you resend a new series, on top of the latest master (since I've
-applied some of your patches), which contains as the first patches the
-build/bug fixes and then as the last patches the feature
-additions/improvements? The former will be committed in the master
-branch, while the latter will be committed in the next branch.
+Please give more details about those "limitations".
+
+> +# host and target arches are the same build the host go binaries with
+> +# CC_FOR_TARGET set to the host compiler.
+> +ifeq ($(ARCH),$(HOSTARCH))
+> +	HOST_GO_BUILD_SPECIAL = y
+
+Don't indent this line.
+
+> +endif
+> +
+> +HOST_GO_ENV_COMMON = \
+>  	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_ROOT) \
+>  	GOROOT_FINAL=$(HOST_GO_ROOT) \
+> -	GOROOT="$(@D)" \
+>  	GOBIN="$(@D)/bin" \
+>  	GOARCH=$(GO_GOARCH) \
+>  	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
+>  	GOOS=linux \
+>  	CGO_ENABLED=1 \
+> +	CC=$(HOSTCC_NOCCACHE)
+
+This addition seems unrelated to the patch. And why are you using
+HOSTCC_NOCCACHE and not just HOSTCC ?
+
+> +
+> +HOST_GO_MAKE_ENV = \
+> +	$(HOST_GO_ENV_COMMON) \
+> +	GOROOT="$(@D)" \
+>  	CC_FOR_TARGET=$(TARGET_CC) \
+>  	CXX_FOR_TARGET=$(TARGET_CXX)
+>  
+> +HOST_GO_MAKE_ENV_SPECIAL = \
+> +	$(HOST_GO_ENV_COMMON) \
+> +	GOROOT="$(@D).host" \
+> +	CC_FOR_TARGET=$(HOSTCC_NOCCACHE) \
+> +	CXX_FOR_TARGET=$(HOSTCC_NOCCACHE) \
+
+Please no final backslash on the last line.
+
+> +define HOST_GO_CONFIGURE_CMDS
+> +	if [ "$(HOST_GO_BUILD_SPECIAL)" ]; then \
+> +		cp -a $(@D) $(@D).host; \
+> +	fi
+> +endef
+
+Please use make conditionals, i.e:
+
+ifeq ($(HOST_GO_BUILD_SPECIAL),y)
+define HOST_GO_CONFIGURE_CMDS
+	cp -a $(@D) $(@D).host
+endef
+endif
+
+> +
+>  define HOST_GO_BUILD_CMDS
+>  	cd $(@D)/src && $(HOST_GO_MAKE_ENV) ./make.bash
+
+You really need a different set of environment variables for here?
+
+> +	if [ "$(HOST_GO_BUILD_SPECIAL)" ]; then \
+> +		rm -f $(@D)/bin/go $(@D)/bin/gofmt; \
+> +		cd $(@D).host/src && $(HOST_GO_MAKE_ENV_SPECIAL) ./make.bash; \
+
+And here ?
+
+Also, same here: use make conditionals, i.e:
+
+ifeq ($(HOST_GO_BUILD_SPECIAL),y)
+define HOST_GO_BUILD_SPECIAL_CMDS
+	...
+endef
+endif
+
+define HOST_GO_BUILD_CMDS
+	.... build go normally ...
+	$(HOST_GO_BUILD_SPECIAL_CMDS)
+endef
+
+> +	fi
+>  endef
+>  
+>  define HOST_GO_INSTALL_CMDS
+> @@ -66,7 +93,8 @@ define HOST_GO_INSTALL_CMDS
+>  	cp -a $(@D)/lib $(HOST_GO_ROOT)/
+>  
+>  	mkdir -p $(HOST_GO_ROOT)/pkg
+> -	cp -a $(@D)/pkg/include $(@D)/pkg/linux_* $(HOST_GO_ROOT)/pkg/
+> +	cp -a $(@D)/pkg/include $(HOST_GO_ROOT)/pkg/
+> +	cp -a $(@D)/pkg/linux_* $(HOST_GO_ROOT)/pkg/
+
+This change seems useless and unrelated.
 
 Thanks!
 
