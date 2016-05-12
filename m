@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 May 2016 15:50:24 +0200
-Subject: [Buildroot] [PATCH] libpjsip: disable parallel build
-In-Reply-To: <1463057293-2833-1-git-send-email-luca@lucaceresoli.net>
-References: <1463057293-2833-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20160512155024.7fe37f68@free-electrons.com>
+Date: Thu, 12 May 2016 15:55:54 +0200
+Subject: [Buildroot] [PATCH] Support nested config directories
+In-Reply-To: <1463019163-27543-1-git-send-email-patrick@stwcx.xyz>
+References: <1460734834-32123-1-git-send-email-patrick@stwcx.xyz>
+ <1463019163-27543-1-git-send-email-patrick@stwcx.xyz>
+Message-ID: <20160512155554.2add30bd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 12 May 2016 14:48:13 +0200, Luca Ceresoli wrote:
-> The libpjsip package has build issues on the autobuilders that look
-> like parallel build issues. These issues seem to be extremely hard to
-> reproduce, so let's disable parallel build and see if this fixes the
-> issue.
+On Wed, 11 May 2016 21:12:43 -0500, Patrick Williams wrote:
+> From: Elizabeth Liner <eliner@us.ibm.com>
 > 
-> The suspect error message is:
->   ...-ld: cannot find -lpjsua
->   collect2: error: ld returned 1 exit status
+> Adds an additional recipe to search configs/*/ for defconfig files.
+> Recipe added for both $(TOPDIR) and $(BR2_EXTERNAL) to allow nested
+> directories for both locations.
 > 
-> Some of the failures:
->   http://autobuild.buildroot.org/results/d6b/d6bff569bc9238cdf07970e11b5535d570be59bf
->   http://autobuild.buildroot.org/results/f72/f721d5390bc61274c224bfe3a675ee194172ac91
->   http://autobuild.buildroot.org/results/b45/b45262971a7d7ce0604d124734223abca190c11e
->   http://autobuild.buildroot.org/results/75e/75ee45b746ab8b80eb84297e2e4babbace1b5608
->   http://autobuild.buildroot.org/results/873/873771fbcc859578ed40a3c81b69ac3a388ae585
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> 
-> ---
+> Signed-off-by: Elizabeth Liner <eliner@us.ibm.com>
+> Signed-off-by: Patrick Williams <patrick@stwcx.xyz>
 
-I also hate to apply such patches without really knowing what's going
-on. But I've applied it nonetheless, so that we can see if it actually
-solves the problem or not. If it does, then we can think of a better
-solution, or at least reporting the build issue upstreaming to the
-pjsip developers.
+I believe this would not work well without changes if we were to merge
+something like https://patchwork.ozlabs.org/patch/619719/ (which allows
+to generate defconfig from fragments).
 
-So, applied to master! Please monitor the autobuilders in the next
-hours/days to see if the issue is resolved or not.
+Could you work with your IBM colleagues to have a solution that works
+for both use cases?
 
 Best regards,
 
