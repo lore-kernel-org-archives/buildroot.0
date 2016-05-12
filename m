@@ -1,83 +1,92 @@
 From: Nathaniel Roach <nroach44@gmail.com>
-Date: Thu, 12 May 2016 15:01:50 +0800
-Subject: [Buildroot] [PATCH 1/1] package/quagga: Fix directories and
- permissions
-In-Reply-To: <20160512085809.5615a161@free-electrons.com>
-References: <1462953673-1190-1-git-send-email-nroach44@gmail.com>
- <20160511233309.1ea81a24@free-electrons.com> <5733E878.4090700@gmail.com>
- <20160512085809.5615a161@free-electrons.com>
-Message-ID: <57342A5E.5070301@gmail.com>
+Date: Thu, 12 May 2016 15:17:19 +0800
+Subject: [Buildroot] [v2] package/quagga: Fix directories and permissions
+Message-ID: <1463037440-8933-1-git-send-email-nroach44@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Quagga runs as the "quagga" user, but it also needs to modify files
+in /etc and /var - config files, pid files and vty sockets for vtysh.
 
+Tell the configure script the right folders to use, create the
+user, fix the permissions, and then let systemd know (if needed).
 
-On 12/05/16 14:58, Thomas Petazzoni wrote:
-> Hello,
->
-> On Thu, 12 May 2016 10:20:40 +0800, Nathaniel Roach wrote:
->
->> If you're using vtysh to configure Quagga, yes, it absolutely needs
->> write permissions to the config folder, as it's more than likely you'd
->> want to save your config. (Running commands in vtysh is very similar to
->> Cisco routers, there's a "running-config" and a "startup-config" -
->> commands are saved into running, but are not copied into startup by default)
->>
->> The daemons themselves don't write to /etc unless you tell it to:
->>
->> $sudo vtysh
->> ...
->> charon# copy run start
->> Building Configuration...
->> Configuration saved to /etc/quagga/zebra.conf
->> Configuration saved to /etc/quagga/ospfd.conf
->> [OK]
->>
->> It needs write permissions to the folder as it moves the old config and
->> writes a new one, rather than just overwriting.
->>
->> In the instance that /etc/ is RO, the user simply won't be able to save
->> an updated configuration.
-> Right, makes sense. Then, perhaps you want to add a comment on top of
-> QUAGGA_CONF_OPTS to indicate why we override localstatedir and
-> sysconfdir. Just something like:
->
-> # Override localstatedir and sysconfdir so that quagga has its own
-> # directories, which is will access with its own user.
->
-> or something along those lines (I'm sure a better wording is possible).
->
->>>> +define QUAGGA_PERMISSIONS
->>>> +	/etc/quagga r 600 quagga quagga - - - - -
->>>> +	/etc/quagga d 755 quagga quagga - - - - -
->>> Hum, does this actually work?
->> Yup, unfortunately wildcards don't, and I didn't feel that adding a line
->> for each daemon was appropriate. (There's one for each daemon, and it's
->> only installed if that daemon is selected, hence why I need to
->> effectively do a wildcard chmod here)
-> So you need the first line to make every file in /etc/quagga owned by
-> quagga, 600, and then the second line to make the /etc/quagga directory
-> owned by the quagga user and 755, so that quagga can create more files
-> in this directory, right?
-That's precisely it. I'll comment this too so it's clearer.
->
->>>> +define QUAGGA_INSTALL_INIT_SYSTEMD
->>>> +	mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
->>> This mkdir -p is useless, as $(INSTALL) -D creates all sub-directories
->>> needed to be able to copy to the destination path.
->> Huh, thanks! I believe I copied this from somewhere else, but I'll take
->> it out in the next revision.
-> If you've seen it somewhere, try to remember where so that we can fix
-> this place as well :-)
-Found it: package/audit/audit.mk:49 I'll send that through in another patch.
->
-> So overall, looks good. Just fix the very minor nits that I mentioned,
-> and it's good to go.
->
-> Thanks!
->
-> Thomas
-Cheers!
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+
+---
+Changes v1 -> v2:
+ - Minor nits (Thomas)
+ - Add some comments about why permissions are changed as such
+
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+---
+ package/quagga/quagga.mk            | 29 ++++++++++++++++++++++++++++-
+ package/quagga/quagga_tmpfiles.conf |  2 ++
+ 2 files changed, 30 insertions(+), 1 deletion(-)
+ create mode 100644 package/quagga/quagga_tmpfiles.conf
+
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 6b98367..312a7db 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -10,7 +10,14 @@ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+ QUAGGA_DEPENDENCIES = host-gawk
+ QUAGGA_LICENSE = GPLv2+
+ QUAGGA_LICENSE_FILES = COPYING
+-QUAGGA_CONF_OPTS = --program-transform-name=''
++
++# We need to override these directories so that quagga can create
++# files as the quagga user without extra intervention
++QUAGGA_CONF_OPTS = \
++	--program-transform-name='' \
++	--sysconfdir=/etc/quagga \
++	--localstatedir=/var/run/quagga
++
+ # 0002-configure-fix-static-linking-with-readline.patch
+ QUAGGA_AUTORECONF = YES
+ 
+@@ -33,6 +40,21 @@ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ISISD),--enable-isisd,--disable-is
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BGP_ANNOUNCE),--enable-bgp-announce,--disable-bgp-announce)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_TCP_ZERBRA),--enable-tcp-zebra,--disable-tcp-zebra)
+ 
++define QUAGGA_USERS
++	quagga -1 quagga -1 * - - - Quagga priv drop user
++endef
++
++# Set the permissions of /etc/quagga such that quagga (through vtysh) can
++# save the configuration - set the folder recursively as the files need to
++# be 600, and then set the folder (non-recursively) to 755 so it can used.
++# Quagga also needs to write to the folder as it moves and creates, rather
++# than overwriting.
++define QUAGGA_PERMISSIONS
++	/etc/quagga r 600 quagga quagga - - - - -
++	/etc/quagga d 755 quagga quagga - - - - -
++	/var/run/quagga d 755 quagga quagga - - - - -
++endef
++
+ ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
+ QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
+ QUAGGA_CONF_OPTS += --enable-snmp=agentx
+@@ -50,4 +72,9 @@ ifeq ($(BR2_arc),y)
+ QUAGGA_CONF_OPTS += --disable-pie
+ endif
+ 
++define QUAGGA_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/quagga/quagga_tmpfiles.conf \
++		$(TARGET_DIR)/usr/lib/tmpfiles.d/quagga.conf
++endef
++
+ $(eval $(autotools-package))
+diff --git a/package/quagga/quagga_tmpfiles.conf b/package/quagga/quagga_tmpfiles.conf
+new file mode 100644
+index 0000000..ad82cc6
+--- /dev/null
++++ b/package/quagga/quagga_tmpfiles.conf
+@@ -0,0 +1,2 @@
++d /var/run/quagga/ 1755 quagga quagga -
++
+-- 
+2.8.1
