@@ -1,53 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 May 2016 13:25:39 +0200
-Subject: [Buildroot] [git commit branch/next] python-setproctitle: bump to
-	version 1.1.10
-Message-ID: <20160512112755.F364F80E3D@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 12 May 2016 14:48:13 +0200
+Subject: [Buildroot] [PATCH] libpjsip: disable parallel build
+Message-ID: <1463057293-2833-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a669d683b37e7bcc23a82b5ef71d31511d752c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+The libpjsip package has build issues on the autobuilders that look
+like parallel build issues. These issues seem to be extremely hard to
+reproduce, so let's disable parallel build and see if this fixes the
+issue.
 
-Change download location.
+The suspect error message is:
+  ...-ld: cannot find -lpjsua
+  collect2: error: ld returned 1 exit status
 
-Fixes:
-http://autobuild.buildroot.net/results/dac/dac6e291dae9f42d71f1e9de6cf0362d613b2d5a
+Some of the failures:
+  http://autobuild.buildroot.org/results/d6b/d6bff569bc9238cdf07970e11b5535d570be59bf
+  http://autobuild.buildroot.org/results/f72/f721d5390bc61274c224bfe3a675ee194172ac91
+  http://autobuild.buildroot.org/results/b45/b45262971a7d7ce0604d124734223abca190c11e
+  http://autobuild.buildroot.org/results/75e/75ee45b746ab8b80eb84297e2e4babbace1b5608
+  http://autobuild.buildroot.org/results/873/873771fbcc859578ed40a3c81b69ac3a388ae585
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+
 ---
- package/python-setproctitle/python-setproctitle.hash | 6 +++---
- package/python-setproctitle/python-setproctitle.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-setproctitle/python-setproctitle.hash b/package/python-setproctitle/python-setproctitle.hash
-index 3b0fd71..bf4d960 100644
---- a/package/python-setproctitle/python-setproctitle.hash
-+++ b/package/python-setproctitle/python-setproctitle.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=95d9e56c69437246460a20804961d70d, sha256 locally computed.
--md5	95d9e56c69437246460a20804961d70d  setproctitle-1.1.9.tar.gz
--sha256	1c3414d18f9cacdab78b0ffd8e886d56ad45f22e55001a72aaa0b2aeb56a0ad7  setproctitle-1.1.9.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=2dcdd1b761700a5a13252fea3dfd1977, sha256 locally computed.
-+md5	2dcdd1b761700a5a13252fea3dfd1977  setproctitle-1.1.10.tar.gz
-+sha256	6283b7a58477dd8478fbb9e76defb37968ee4ba47b05ec1c053cb39638bd7398  setproctitle-1.1.10.tar.gz
-diff --git a/package/python-setproctitle/python-setproctitle.mk b/package/python-setproctitle/python-setproctitle.mk
-index 63dfad0..36cfec3 100644
---- a/package/python-setproctitle/python-setproctitle.mk
-+++ b/package/python-setproctitle/python-setproctitle.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+No, this is _not_ the fix that I would like to see. But I'm still
+unable to reproduce despite having attempted several builds, so this
+is the best I could come up with... :-|
+---
+ package/libpjsip/libpjsip.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 730d9fe..ebb5897 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -11,6 +11,7 @@ LIBPJSIP_DEPENDENCIES = libsrtp
+ LIBPJSIP_LICENSE = GPLv2+
+ LIBPJSIP_LICENSE_FILES = COPYING
+ LIBPJSIP_INSTALL_STAGING = YES
++LIBPJSIP_MAKE = $(MAKE1)
  
--PYTHON_SETPROCTITLE_VERSION = 1.1.9
-+PYTHON_SETPROCTITLE_VERSION = 1.1.10
- PYTHON_SETPROCTITLE_SOURCE = setproctitle-$(PYTHON_SETPROCTITLE_VERSION).tar.gz
--PYTHON_SETPROCTITLE_SITE = http://pypi.python.org/packages/source/s/setproctitle
-+PYTHON_SETPROCTITLE_SITE = https://pypi.python.org/packages/5a/0d/dc0d2234aacba6cf1a729964383e3452c52096dc695581248b548786f2b3
- PYTHON_SETPROCTITLE_LICENSE = BSD-3c
- PYTHON_SETPROCTITLE_LICENSE_FILES = COPYRIGHT
- PYTHON_SETPROCTITLE_SETUP_TYPE = distutils
+ LIBPJSIP_CONF_ENV = \
+ 	LD="$(TARGET_CC)" \
+-- 
+2.7.4
