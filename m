@@ -1,47 +1,68 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 13 May 2016 16:48:18 +0300
-Subject: [Buildroot] [PATCH] libinput: remove unneeded patch
-In-Reply-To: <20160513152314.19eebd42@free-electrons.com>
-References: <e86e590ddd7ea6cbc8886ed86d78ee48ae1265db.1463119792.git.baruch@tkos.co.il>
- <20160513075625.GT2419@tarshish>
- <20160513152314.19eebd42@free-electrons.com>
-Message-ID: <20160513134818.GU2419@tarshish>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Fri, 13 May 2016 21:48:20 +0800
+Subject: [Buildroot] package/quagga: Add systemd service
+In-Reply-To: <1463141985-23802-1-git-send-email-nroach44@gmail.com>
+References: <1463141985-23802-1-git-send-email-nroach44@gmail.com>
+Message-ID: <5735DB24.6060009@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+There's two things wrong with this that I've spotted:
 
-On Fri, May 13, 2016 at 03:23:14PM +0200, Thomas Petazzoni wrote:
-> On Fri, 13 May 2016 10:56:25 +0300, Baruch Siach wrote:
-> > On Fri, May 13, 2016 at 09:09:52AM +0300, Baruch Siach wrote:
-> > > The log_msg symbol conflict was fixed in libevdev commit e4c315fc1603 (Rename
-> > > symbols leaking from static library to avoid name clashes, 2014-08-18) that
-> > > was included in version 1.3. Remove the patch that used to fix this issue.  
-> > 
-> > I meant libevdev version in this last line, since it's a libevdev commit. 
-> > We're at 1.4.6 on that.
-> 
-> You're already saying "libevdev" in your commit log. But the fact that
-> you're removing a patch from libinput is not clear. I guess it's
-> because libinput links against libevdev, but this should be made
-> clearer in your commit message.
+Firstly, do we want to run any binary under /sbin? Do we change the 
+output folder of quagga's ./configure? Do we make a folder with symlinks?
 
-I see. It's just that the patch being removed itself says:
+Secondly, I'll change Requires=quagga at zebra.service to Wants= as we 
+allow building quagga without zebra, and the other dameons can still 
+talk on the network without it.
 
-  This fixes a conflict between libevdev and libinput on the definition
-  of the log_msg() symbol.
+Thanks,
 
-So I thought is should be self evident.
-
-Should I respin with a clearer commit log?
-
-Thanks for reviewing,
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Nathaniel
+On 13/05/16 20:19, Nathaniel Roach wrote:
+> Create a template unit, as there are a few different daemons
+> available, but all of them accept/use the same basic runtime arguments.
+>
+> Allow use of a /etc/default/ file to customise each daemon.
+>
+> (Some daemons, like the zebra backend, have custom flags that cause
+> other daemons to exit when used)
+>
+> The zebra backend is required to modify routes on the host system,
+> so we require it. Systemd handles this just fine, and a circular
+> dependency is avoided
+>
+> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+> ---
+>   package/quagga/quagga.service | 19 +++++++++++++++++++
+>   1 file changed, 19 insertions(+)
+>   create mode 100644 package/quagga/quagga.service
+>
+> diff --git a/package/quagga/quagga.service b/package/quagga/quagga.service
+> new file mode 100644
+> index 0000000..e7ab584
+> --- /dev/null
+> +++ b/package/quagga/quagga.service
+> @@ -0,0 +1,19 @@
+> +[Unit]
+> +Description=Quagga %i routing daemon
+> +PartOf=quagga.service
+> +ReloadPropagatedFrom=quagga.service
+> +Requires=quagga at zebra.service
+> +
+> +[Service]
+> +PrivateTmp=true
+> +KillMode=mixed
+> +Type=forking
+> +EnvironmentFile=/etc/default/quagga-%i.conf
+> +ExecStart=/sbin/%i --daemon $OPTS -f /etc/quagga/%i.conf -i /var/run/quagga/%i.pid
+> +PIDFile=/var/run/quagga/%i.pid
+> +KillSignal=SIGINT
+> +Restart=on-failure
+> +RestartSec=1
+> +
+> +[Install]
+> +WantedBy=multi-user.target
