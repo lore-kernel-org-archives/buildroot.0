@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 May 2016 15:08:44 +0200
-Subject: [Buildroot] [PATCH 0/2] new package: atfirmware
-In-Reply-To: <5735AA81.8010908@synopsys.com>
-References: <cover.1462269854.git.jpinto@synopsys.com>
- <573057F0.3000606@synopsys.com>
- <20160509225510.GA18182@e106497-lin.cambridge.arm.com>
- <5731A32E.7080200@synopsys.com> <5735AA81.8010908@synopsys.com>
-Message-ID: <20160513150844.506a38ee@free-electrons.com>
+Date: Fri, 13 May 2016 15:23:14 +0200
+Subject: [Buildroot] [PATCH] libinput: remove unneeded patch
+In-Reply-To: <20160513075625.GT2419@tarshish>
+References: <e86e590ddd7ea6cbc8886ed86d78ee48ae1265db.1463119792.git.baruch@tkos.co.il>
+ <20160513075625.GT2419@tarshish>
+Message-ID: <20160513152314.19eebd42@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +13,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 13 May 2016 11:20:49 +0100, Joao Pinto wrote:
+On Fri, 13 May 2016 10:56:25 +0300, Baruch Siach wrote:
+> Hi Peter,
+> 
+> On Fri, May 13, 2016 at 09:09:52AM +0300, Baruch Siach wrote:
+> > The log_msg symbol conflict was fixed in libevdev commit e4c315fc1603 (Rename
+> > symbols leaking from static library to avoid name clashes, 2014-08-18) that
+> > was included in version 1.3. Remove the patch that used to fix this issue.  
+> 
+> I meant libevdev version in this last line, since it's a libevdev commit. 
+> We're at 1.4.6 on that.
 
-> Could you please check the patches?
+You're already saying "libevdev" in your commit log. But the fact that
+you're removing a patch from libinput is not clear. I guess it's
+because libinput links against libevdev, but this should be made
+clearer in your commit message.
 
-Joao, I really do appreciate your patches, but it is definitely not
-useful to ping every two days about them. There are currently 282
-patches in the queue, so there's many many other patches than yours.
-
-If you want to help, please review and/or test patches from others.
-
-I'll get to your patches at some point (or someone else will), but this
-may not happen in just two days.
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
