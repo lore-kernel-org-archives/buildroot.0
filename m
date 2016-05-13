@@ -1,47 +1,93 @@
-From: Luca Ellero <luca.ellero@brickedbrain.com>
-Date: Fri, 13 May 2016 10:34:50 +0200
-Subject: [Buildroot] uClibc debug symbols
-In-Reply-To: <20160512170714.GV26720@waldemar-brodkorb.de>
-References: <ddfc826b-9bf7-38c8-a442-bea33bf05621@brickedbrain.com>
- <20160511233304.2c528c3b@gmx.net>
- <38268c60-77cb-a127-4d16-35ea58fc5766@brickedbrain.com>
- <20160512154148.66906dd2@free-electrons.com>
- <2dbe4eba-67f7-c8c5-1551-b8a31439b6c6@brickedbrain.com>
- <20160512170714.GV26720@waldemar-brodkorb.de>
-Message-ID: <82a50810-beef-8f52-aaac-2dfc9dc1fd17@brickedbrain.com>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Fri, 13 May 2016 16:56:21 +0800
+Subject: [Buildroot] [v3] package/quagga: Fix directories and permissions
+Message-ID: <1463129781-676-1-git-send-email-nroach44@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Quagga runs as the "quagga" user, but it also needs to modify files
+in /etc and /var - config files, pid files and vty sockets for vtysh.
 
-On 12/05/2016 19:07, Waldemar Brodkorb wrote:
-> Hi,
-> Luca Ellero wrote,
->
->> Can you please suggest a way to check whether binaries have debugging
->> symbols? So, maybe, we can send patches.
->>
->> I've tried:
->> objdump -h ... | grep debug
->> but it doesn't seem to always behave reliably.
->>
->> Thank you
->
-> Just 'file' should do the job,
+Tell the configure script the right folders to use, create the
+user, fix the permissions, and then let systemd know (if needed).
 
-file doesn't seem to indicate debug symbols (at least on my system).
-Compiling with or without -g has exactly the same output.
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
 
-$ arm-buildroot-linux-uclibcgnueabi-gcc -o myapp myapp.c
-$ file myapp
-myapp: ELF 32-bit LSB  executable, ARM, EABI5 version 1 (SYSV), 
-dynamically linked (uses shared libs), not stripped
-$ arm-buildroot-linux-uclibcgnueabi-gcc -g -o myapp myapp.c
-$ file myapp
-myapp: ELF 32-bit LSB  executable, ARM, EABI5 version 1 (SYSV), 
-dynamically linked (uses shared libs), not stripped
+---
+Changes v1 -> v2:
+ - Minor nits (Thomas)
+ - Add some comments about why permissions are changed as such
 
-Regards
+Changes v2 -> v3:
+ - Removed extra whitespace
+ - Removed redundant makedev on /var/run
+ (Both Thomas)
+---
+ package/quagga/quagga.mk            | 28 +++++++++++++++++++++++++++-
+ package/quagga/quagga_tmpfiles.conf |  1 +
+ 2 files changed, 28 insertions(+), 1 deletion(-)
+ create mode 100644 package/quagga/quagga_tmpfiles.conf
+
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 6b98367..419b502 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -10,7 +10,14 @@ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+ QUAGGA_DEPENDENCIES = host-gawk
+ QUAGGA_LICENSE = GPLv2+
+ QUAGGA_LICENSE_FILES = COPYING
+-QUAGGA_CONF_OPTS = --program-transform-name=''
++
++# We need to override these directories so that quagga can create
++# files as the quagga user without extra intervention
++QUAGGA_CONF_OPTS = \
++	--program-transform-name='' \
++	--sysconfdir=/etc/quagga \
++	--localstatedir=/var/run/quagga
++
+ # 0002-configure-fix-static-linking-with-readline.patch
+ QUAGGA_AUTORECONF = YES
+ 
+@@ -33,6 +40,20 @@ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ISISD),--enable-isisd,--disable-is
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BGP_ANNOUNCE),--enable-bgp-announce,--disable-bgp-announce)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_TCP_ZERBRA),--enable-tcp-zebra,--disable-tcp-zebra)
+ 
++define QUAGGA_USERS
++	quagga -1 quagga -1 * - - - Quagga priv drop user
++endef
++
++# Set the permissions of /etc/quagga such that quagga (through vtysh) can
++# save the configuration - set the folder recursively as the files need to
++# be 600, and then set the folder (non-recursively) to 755 so it can used.
++# Quagga also needs to write to the folder as it moves and creates, rather
++# than overwriting.
++define QUAGGA_PERMISSIONS
++	/etc/quagga r 600 quagga quagga - - - - -
++	/etc/quagga d 755 quagga quagga - - - - -
++endef
++
+ ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
+ QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
+ QUAGGA_CONF_OPTS += --enable-snmp=agentx
+@@ -50,4 +71,9 @@ ifeq ($(BR2_arc),y)
+ QUAGGA_CONF_OPTS += --disable-pie
+ endif
+ 
++define QUAGGA_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/quagga/quagga_tmpfiles.conf \
++		$(TARGET_DIR)/usr/lib/tmpfiles.d/quagga.conf
++endef
++
+ $(eval $(autotools-package))
+diff --git a/package/quagga/quagga_tmpfiles.conf b/package/quagga/quagga_tmpfiles.conf
+new file mode 100644
+index 0000000..e16c475
+--- /dev/null
++++ b/package/quagga/quagga_tmpfiles.conf
+@@ -0,0 +1 @@
++d /var/run/quagga/ 1755 quagga quagga -
+-- 
+2.8.1
