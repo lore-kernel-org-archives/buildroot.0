@@ -1,77 +1,24 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 13 May 2016 09:01:08 +0200
-Subject: [Buildroot] [PATCH v2 1/4] uclibc: generate valid config for
-	BFLT/FDPIC
-Message-ID: <20160513070108.GA5748@waldemar-brodkorb.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 13 May 2016 09:40:30 +0200
+Subject: [Buildroot] [PATCH] libinput: remove unneeded patch
+In-Reply-To: <e86e590ddd7ea6cbc8886ed86d78ee48ae1265db.1463119792.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 13 May 2016 09:09:52 +0300")
+References: <e86e590ddd7ea6cbc8886ed86d78ee48ae1265db.1463119792.git.baruch@tkos.co.il>
+Message-ID: <874ma2iexd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Generate a valid configuration for architectures with
-FDPIC and BFLT support.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-v1 -> v2:
-  - no changes
----
- package/uclibc/uclibc.mk | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ > The log_msg symbol conflict was fixed in libevdev commit e4c315fc1603 (Rename
+ > symbols leaking from static library to avoid name clashes, 2014-08-18) that
+ > was included in version 1.3. Remove the patch that used to fix this issue.
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index b8ccee2..c17ed21 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -47,6 +47,40 @@ UCLIBC_LOCALES = \
- 	$(firstword $(subst .,$(space),$(locale))))
- endif
- 
-+# noMMU binary formats
-+ifeq ($(BR2_BINFMT_FDPIC),y)
-+define UCLIBC_BINFMT_CONFIG
-+       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
-+       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
-+       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
-+       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
-+endef
-+endif
-+ifeq ($(BR2_BINFMT_FLAT_ONE),y)
-+define UCLIBC_BINFMT_CONFIG
-+       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
-+       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
-+       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
-+       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
-+endef
-+endif
-+ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
-+define UCLIBC_BINFMT_CONFIG
-+       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
-+       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
-+       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
-+       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
-+endef
-+endif
-+ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
-+define UCLIBC_BINFMT_CONFIG
-+       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
-+       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
-+       $(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_SHARED_FLAT,$(@D)/.config)
-+       $(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
-+endef
-+endif
-+
- #
- # ARC definitions
- #
-@@ -382,6 +416,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
- 	$(call KCONFIG_SET_OPT,DEVEL_PREFIX,"/usr",$(@D)/.config)
- 	$(call KCONFIG_SET_OPT,SHARED_LIB_LOADER_PREFIX,"/lib",$(@D)/.config)
- 	$(UCLIBC_MMU_CONFIG)
-+	$(UCLIBC_BINFMT_CONFIG)
- 	$(UCLIBC_ARC_TYPE_CONFIG)
- 	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
- 	$(UCLIBC_ARM_ABI_CONFIG)
+Ehh, but we are still on 1.2.4. Shouldn't this go together with the
+version bump to 1.3?
+
 -- 
-2.1.4
+Bye, Peter Korsgaard
