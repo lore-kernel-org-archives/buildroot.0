@@ -1,93 +1,45 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Fri, 13 May 2016 16:56:21 +0800
-Subject: [Buildroot] [v3] package/quagga: Fix directories and permissions
-Message-ID: <1463129781-676-1-git-send-email-nroach44@gmail.com>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Fri, 13 May 2016 12:00:24 +0200
+Subject: [Buildroot] [PATCH] package/turbolua: Fix optional openssl
+	dependency
+Message-ID: <1463133624-25458-1-git-send-email-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Quagga runs as the "quagga" user, but it also needs to modify files
-in /etc and /var - config files, pid files and vty sockets for vtysh.
+turbolua fails to build when we have openssl selected, because it didn't
+mention openssl in the dependency list.
 
-Tell the configure script the right folders to use, create the
-user, fix the permissions, and then let systemd know (if needed).
+Fix build failure by specifying openssl in dependency list when it is
+selected.
 
-Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
-
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
-Changes v1 -> v2:
- - Minor nits (Thomas)
- - Add some comments about why permissions are changed as such
+ package/turbolua/turbolua.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Changes v2 -> v3:
- - Removed extra whitespace
- - Removed redundant makedev on /var/run
- (Both Thomas)
----
- package/quagga/quagga.mk            | 28 +++++++++++++++++++++++++++-
- package/quagga/quagga_tmpfiles.conf |  1 +
- 2 files changed, 28 insertions(+), 1 deletion(-)
- create mode 100644 package/quagga/quagga_tmpfiles.conf
-
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 6b98367..419b502 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -10,7 +10,14 @@ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
- QUAGGA_DEPENDENCIES = host-gawk
- QUAGGA_LICENSE = GPLv2+
- QUAGGA_LICENSE_FILES = COPYING
--QUAGGA_CONF_OPTS = --program-transform-name=''
-+
-+# We need to override these directories so that quagga can create
-+# files as the quagga user without extra intervention
-+QUAGGA_CONF_OPTS = \
-+	--program-transform-name='' \
-+	--sysconfdir=/etc/quagga \
-+	--localstatedir=/var/run/quagga
-+
- # 0002-configure-fix-static-linking-with-readline.patch
- QUAGGA_AUTORECONF = YES
+diff --git a/package/turbolua/turbolua.mk b/package/turbolua/turbolua.mk
+index cf66e70..fe6db31 100644
+--- a/package/turbolua/turbolua.mk
++++ b/package/turbolua/turbolua.mk
+@@ -12,9 +12,15 @@ TURBOLUA_LICENSE_FILES = LICENSE
  
-@@ -33,6 +40,20 @@ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ISISD),--enable-isisd,--disable-is
- QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BGP_ANNOUNCE),--enable-bgp-announce,--disable-bgp-announce)
- QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_TCP_ZERBRA),--enable-tcp-zebra,--disable-tcp-zebra)
+ TURBOLUA_MAKE_OPTS = \
+ 	$(TARGET_CONFIGURE_OPTS) \
+-	SSL=$(if $(BR2_PACKAGE_OPENSSL),openssl,none) \
+ 	LUAJIT_VERSION="$(LUAJIT_VERSION)"
  
-+define QUAGGA_USERS
-+	quagga -1 quagga -1 * - - - Quagga priv drop user
-+endef
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++TURBOLUA_MAKE_OPTS += SSL=openssl
++TURBOLUA_DEPENDENCIES += openssl
++else
++TURBOLUA_MAKE_OPTS += SSL=none
++endif
 +
-+# Set the permissions of /etc/quagga such that quagga (through vtysh) can
-+# save the configuration - set the folder recursively as the files need to
-+# be 600, and then set the folder (non-recursively) to 755 so it can used.
-+# Quagga also needs to write to the folder as it moves and creates, rather
-+# than overwriting.
-+define QUAGGA_PERMISSIONS
-+	/etc/quagga r 600 quagga quagga - - - - -
-+	/etc/quagga d 755 quagga quagga - - - - -
-+endef
-+
- ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
- QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
- QUAGGA_CONF_OPTS += --enable-snmp=agentx
-@@ -50,4 +71,9 @@ ifeq ($(BR2_arc),y)
- QUAGGA_CONF_OPTS += --disable-pie
- endif
- 
-+define QUAGGA_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/quagga/quagga_tmpfiles.conf \
-+		$(TARGET_DIR)/usr/lib/tmpfiles.d/quagga.conf
-+endef
-+
- $(eval $(autotools-package))
-diff --git a/package/quagga/quagga_tmpfiles.conf b/package/quagga/quagga_tmpfiles.conf
-new file mode 100644
-index 0000000..e16c475
---- /dev/null
-+++ b/package/quagga/quagga_tmpfiles.conf
-@@ -0,0 +1 @@
-+d /var/run/quagga/ 1755 quagga quagga -
+ define TURBOLUA_BUILD_CMDS
+ 	$(MAKE) $(TURBOLUA_MAKE_OPTS) -C $(@D) all
+ endef
 -- 
-2.8.1
+2.8.2
