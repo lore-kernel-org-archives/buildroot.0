@@ -1,30 +1,43 @@
-From: Geoff Levand <geoff@infradead.org>
-Date: Fri, 13 May 2016 11:40:50 -0700
-Subject: [Buildroot] [PATCH 2/9] package/go-bootstrap: Set CGO_ENABLED=0
-In-Reply-To: <87twi1hofs.fsf@dell.be.48ers.dk>
-References: <cover.1463010771.git.geoff@infradead.org>
- <2e8ab7d6d36bdc954535b9637f9ab8e131d64313.1463010771.git.geoff@infradead.org>
- <87y47egohi.fsf@dell.be.48ers.dk> <1463155543.23824.44.camel@infradead.org>
- <87twi1hofs.fsf@dell.be.48ers.dk>
-Message-ID: <1463164850.23824.56.camel@infradead.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 13 May 2016 21:48:38 +0200
+Subject: [Buildroot] [git commit branch/next] postgresql: bump version to
+	9.5.3
+Message-ID: <20160513194848.0A9ED7FFAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2016-05-13 at 19:12 +0200, Peter Korsgaard wrote:
-> > > > >  > This change disables cgo support for the bootstrap compiler.  It is not
->  > needed.  The bootstrap compiler is just used to build the final go
->  > compiler.  We need full cgo support in the final go compiler to support
->  > any go programs that may need cgo support.
-> 
->  > I hope this makes more sense.
-> 
-> Ok, thanks - But why did you then add toolchain to
-> HOST_GO_BOOTSTRAP_DEPENDENCIES and not to HOST_GO_DEPENDENCIES with the
-> comment that it was about cgo?
+commit: https://git.buildroot.net/buildroot/commit/?id=17b034e64082b82c0b03952d4959bd8139c1b182
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Yes, we could do it that way.  I'll update the patch.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--Geoff
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 4e4adcb..4dde589 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.postgresql.org/pub/source/v9.5.2/postgresql-9.5.2.tar.bz2.sha256
+-sha256 f8d132e464506b551ef498719f18cfe9d777709c7a1589dc360afc0b20e47c41  postgresql-9.5.2.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.5.3/postgresql-9.5.3.tar.bz2.sha256
++sha256 7385c01dc58acba8d7ac4e6ad42782bd7c0b59272862a3a3d5fe378d4503a0b4  postgresql-9.5.3.tar.bz2
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 3572821..10da15e 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 9.5.2
++POSTGRESQL_VERSION = 9.5.3
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
