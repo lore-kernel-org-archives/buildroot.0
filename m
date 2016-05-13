@@ -1,41 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 May 2016 22:07:41 +0200
-Subject: [Buildroot] [PATCH v1] Makefile: fix rootfs overlay with
- BR2_ROOTFS_MERGED_USR enabled
-In-Reply-To: <1461439109-28101-1-git-send-email-ps.report@gmx.net>
-References: <1461439109-28101-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20160513220741.4800124c@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 13 May 2016 22:11:35 +0200
+Subject: [Buildroot] [PATCH 05/13 v7] core/legal-info: add package
+ version to license directory
+In-Reply-To: <20160511234343.55332952@free-electrons.com>
+References: <cover.1462637351.git.yann.morin.1998@free.fr>
+ <5e1963c6feb57cd7a5096d296b86624f14bf3d8d.1462637351.git.yann.morin.1998@free.fr>
+ <f99ee6fa-bb3a-411e-9b78-899dcad0c5b8@mind.be>
+ <20160511234343.55332952@free-electrons.com>
+Message-ID: <20160513201135.GA3682@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Sat, 23 Apr 2016 21:18:29 +0200, Peter Seiderer wrote:
-> Use rsync with '--keep-dirlinks' option to prevent rootfs overlay to
-> overwrite /usr, /bin, /sbin and /lib links in case BR2_ROOTFS_MERGED_USR
-> option is enabled.
+On 2016-05-11 23:43 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 7 May 2016 22:01:28 +0200, Arnout Vandecappelle wrote:
 > 
-> Steps to reproduce failure:
+> > > +	@$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))  
+> > 
+> >   I think this should stay $(2)_RAWNAME, or either it should change as well for 
+> > the legal-warning-source below.
+> > 
+> >   Other than that:
+> > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
-> - enable BR2_ROOTFS_MERGED_USR
-> - mkdir some_path/rootfs-overlay/lib/firmware/some_file.txt
-> - enable BR2_ROOTFS_OVERLAY="some_path/rootfs-overlay"
-> - run 'make'
-> - 'target/lib' contains only the files from 'some_path/rootfs-overlay/lib' instead
->   of the original symlink 'lib -> usr/lib'.
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> I agree with Arnout here (we should keep using $(2)_RAWNAME for the
+> warning). Yann, what do you think?
 
-Applied to master, thanks.
+1. With this patch (and the following one), legal-info now gets saved in
+   sub-directories named after the paclage name and version, i.e.:
 
-Thomas
+    legal-info/licenses/pkg-version/
+    legal-info/sources/pkg-version/
+
+2. With this patch, we also store the package name and version in the
+   manifest.
+
+3. The warnings are stored in the legal-info report.
+
+So, I think it is better that the info about packages is the same
+everywhere: sources/ and licenses/ sub-dirs, entries in the manifest and
+warnings alike.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
