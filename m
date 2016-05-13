@@ -1,81 +1,87 @@
 From: Geoff Levand <geoff@infradead.org>
-Date: Fri, 13 May 2016 09:05:43 -0700
-Subject: [Buildroot] [PATCH 2/9] package/go-bootstrap: Set CGO_ENABLED=0
-In-Reply-To: <87y47egohi.fsf@dell.be.48ers.dk>
+Date: Fri, 13 May 2016 09:21:33 -0700
+Subject: [Buildroot] [PATCH 4/9] package/go: Add
+ BR2_TOOLCHAIN_HAS_THREADS
+In-Reply-To: <20160513153502.47b944fe@free-electrons.com>
 References: <cover.1463010771.git.geoff@infradead.org>
- <2e8ab7d6d36bdc954535b9637f9ab8e131d64313.1463010771.git.geoff@infradead.org>
- <87y47egohi.fsf@dell.be.48ers.dk>
-Message-ID: <1463155543.23824.44.camel@infradead.org>
+ <62cf6f9a00fe67cf999e45f7cbf4bf2e295a0fd5.1463010771.git.geoff@infradead.org>
+ <20160512161252.7471bf1e@free-electrons.com>
+ <1463077924.23824.35.camel@infradead.org>
+ <20160513153502.47b944fe@free-electrons.com>
+Message-ID: <1463156493.23824.55.camel@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, 2016-05-13 at 15:35 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu, 12 May 2016 11:32:04 -0700, Geoff Levand wrote:
+> 
+> > OK, so a Config.host.in like this?
+> > 
+> > config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+> > 	bool
+> > 	default y
+> > 	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 ||
+> > BR2_powerpc64 || BR2_powerpc64le || BR2_mips64 || BR2_mips64el
+> > 	depends on !BR2_ARM_CPU_ARMV4
+> > 
+> > comment "go needs a toolchain w/ threads"
+> > 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> > 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+> 
+> No, because we don't show comments for host packages (since most of
+> them are not selectable in menuconfig).
 
-On Fri, 2016-05-13 at 13:56 +0200, Peter Korsgaard wrote:
-> > > > > > "Geoff" == Geoff Levand <geoff@infradead.org> writes:
-> 
->  > Fixes build erorros like these:
->  >   cgo.a(_all.o): unknown relocation type 42; compiled without 
-> -fpic?
-> 
->  > Signed-off-by: Geoff Levand <geoff@infradead.org>
->  > ---
->  >  package/go-bootstrap/go-bootstrap.mk | 3 ++-
->  >  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
->  > diff --git a/package/go-bootstrap/go-bootstrap.mk b/package/go
-> -bootstrap/go-bootstrap.mk
->  > index bcf7c0b..1ced355 100644
->  > --- a/package/go-bootstrap/go-bootstrap.mk
->  > +++ b/package/go-bootstrap/go-bootstrap.mk
->  > @@ -19,7 +19,8 @@ HOST_GO_BOOTSTRAP_MAKE_ENV = \
->  >  	GOOS=linux \
->  >  	GOROOT_FINAL="$(HOST_GO_BOOTSTRAP_ROOT)" \
->  >  	GOROOT="$(@D)" \
->  > -	GOBIN="$(@D)/bin"
->  > +	GOBIN="$(@D)/bin" \
->  > +	CGO_ENABLED=0
-> 
-> That is not a very detailed description. I know next to nothing about
-> go, but according to google this doesn't have anything directly to do
-> with -fpic or not. From https://golang.org/cmd/cgo/
+OK.
 
-Sure, I'll add some more details to the comment.
+> Unfortunately, the only solution that I see now is that *target* go
+> packages (such as flannel) should have this dependency on
+> BR2_TOOLCHAIN_HAS_THREADS + the comment.
 
-> Cgo enables the creation of Go packages that call C code.
-> ..
-> The cgo tool is enabled by default for native builds on systems where
-> it
-> is expected to work. It is disabled by default when cross-compiling.
-> You
-> can control this by setting the CGO_ENABLED environment variable when
-> running the go tool: set it to 1 to enable the use of cgo, and to 0
-> to
-> disable it. The go tool will set the build constraint "cgo" if cgo is
-> enabled.
-> 
-> When cross-compiling, you must specify a C cross-compiler for cgo to
-> use. You can do this by setting the CC_FOR_TARGET environment
-> variable
-> when building the toolchain using make.bash, or by setting the CC
-> environment variable any time you run the go tool. The CXX_FOR_TARGET
-> and CXX environment variables work in a similar way for C++ code.
-> 
-> 
-> So it sounds like this change disables the cgo tool. How does that
-> match
-> with your other change to pull in the toolchain dependencies which
-> was
-> "To build programs that need cgo support"?
+That seems like it will work.
 
-This change disables cgo support for the bootstrap compiler.  It is not
-needed.  The bootstrap compiler is just used to build the final go
-compiler.  We need full cgo support in the final go compiler to support
-any go programs that may need cgo support.
+> All in all, I am in fact not super happy with how we're handling
+> this,
+> but I don't really see how to do it better. One option would be to
+> make
+> the go package a target package rather than a host package. But it's
+> also weird because it basically installs nothing to the target.
+> 
+> > > When you say "CGO needs thread support", is CGO the go runtime on
+> > > the
+> > > target? Does this means that any Go program needs threads?  
+> > 
+> > cgo is the C language call support and has a runtime component (the
+> > cgo package).
+> 
+> Are all Go packages going to use "cgo" ? Or are pure Go software
+> potentially not using cgo ?
 
-I hope this makes more sense.
+No, see below.
+
+> The host go compiler and some host tools use pthreads, and so are
+> > linked with libpthread.
+> 
+> The fact that the host go compiler uses threads is irrelevant. The
+> BR2_TOOLCHAIN_HAS_THREADS boolean indicate whether there is thread
+> support or not on the *target*. You can basically assume that thread
+> support is always available on the host.
+> 
+> > If a target go program uses the cgo package, it will need to be
+> > linked with libpthread.
+> 
+> So if I understand correctly, it's only a subset of target Go
+> programs
+> that need thread support?
+
+Yes, if they don't use the cgo package, they shouldn't need thread
+support, so the solution seems to be to just leave it to the target
+package to specify thread support is needed.
+
+I'll make a non-cgo test package to verify.
 
 -Geoff
