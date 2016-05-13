@@ -1,71 +1,62 @@
-From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Fri, 13 May 2016 11:20:49 +0100
-Subject: [Buildroot] [PATCH 0/2] new package: atfirmware
-In-Reply-To: <5731A32E.7080200@synopsys.com>
-References: <cover.1462269854.git.jpinto@synopsys.com>
- <573057F0.3000606@synopsys.com>
- <20160509225510.GA18182@e106497-lin.cambridge.arm.com>
- <5731A32E.7080200@synopsys.com>
-Message-ID: <5735AA81.8010908@synopsys.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 13 May 2016 13:56:57 +0200
+Subject: [Buildroot] [PATCH 2/9] package/go-bootstrap: Set CGO_ENABLED=0
+In-Reply-To: <2e8ab7d6d36bdc954535b9637f9ab8e131d64313.1463010771.git.geoff@infradead.org>
+ (Geoff Levand's message of "Thu, 12 May 2016 00:08:46 +0000")
+References: <cover.1463010771.git.geoff@infradead.org>
+ <2e8ab7d6d36bdc954535b9637f9ab8e131d64313.1463010771.git.geoff@infradead.org>
+Message-ID: <87y47egohi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Could you please check the patches?
+>>>>> "Geoff" == Geoff Levand <geoff@infradead.org> writes:
 
-Thanks a lot!
+ > Fixes build erorros like these:
+ >   cgo.a(_all.o): unknown relocation type 42; compiled without -fpic?
 
-On 5/10/2016 10:00 AM, Joao Pinto wrote:
-> On 5/9/2016 11:55 PM, Liviu.Dudau at arm.com wrote:
->> On Mon, May 09, 2016 at 10:27:12AM +0100, Joao Pinto wrote:
->>> Hi guys,
->>> I will have to give a Juno training soon, and this feature would be great to
->>> have in the time. Could you comment of the atfirmware patch? Do you have any
->>> improvement suggestions?
->>
->> It looks good to me but I have no ACK powers in the buildroot world.
->>
->> I am traveling away from my Juno boards at the moment so I cannot add my Tested-by.
->>
->> Best regards,
->> Liviu
-> 
-> Thanks Liviu!
-> 
->>
->>>
->>> Thanks.
->>>
->>> On 5/3/2016 11:13 AM, Joao Pinto wrote:
->>>> This patch adds to buildroot an important package for ARM64 based development 
->>>> boards: The ARM Trusted Firmware (atfirmware).
->>>> It also adds the scpfirmware which is a hidden package to get the System Control
->>>> Processor (SCP) binary to be included in the bootloader (fip image), which is
->>>> a requirement for ARM Juno's board. With this 2 packages, Juno gets fully 
->>>> supported in the Buildroot.
->>>>
->>>> Joao Pinto (2):
->>>>   new packages: atfirmware and scpfirmware
->>>>   configs: add u-noot and atfirmware options to juno
->>>>
->>>>  board/arm/juno/readme.txt       | 21 ++++++++--
->>>>  boot/Config.in                  |  2 +
->>>>  boot/atfirmware/Config.in       | 70 +++++++++++++++++++++++++++++++++
->>>>  boot/atfirmware/atfirmware.hash |  5 +++
->>>>  boot/atfirmware/atfirmware.mk   | 85 +++++++++++++++++++++++++++++++++++++++++
->>>>  boot/scpfirmware/Config.in      | 23 +++++++++++
->>>>  boot/scpfirmware/scpfirmware.mk | 18 +++++++++
->>>>  configs/arm_juno_defconfig      |  9 +++++
->>>>  8 files changed, 230 insertions(+), 3 deletions(-)
->>>>  create mode 100644 boot/atfirmware/Config.in
->>>>  create mode 100644 boot/atfirmware/atfirmware.hash
->>>>  create mode 100644 boot/atfirmware/atfirmware.mk
->>>>  create mode 100644 boot/scpfirmware/Config.in
->>>>  create mode 100644 boot/scpfirmware/scpfirmware.mk
->>>>
->>>
->>
-> 
+ > Signed-off-by: Geoff Levand <geoff@infradead.org>
+ > ---
+ >  package/go-bootstrap/go-bootstrap.mk | 3 ++-
+ >  1 file changed, 2 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/go-bootstrap/go-bootstrap.mk b/package/go-bootstrap/go-bootstrap.mk
+ > index bcf7c0b..1ced355 100644
+ > --- a/package/go-bootstrap/go-bootstrap.mk
+ > +++ b/package/go-bootstrap/go-bootstrap.mk
+ > @@ -19,7 +19,8 @@ HOST_GO_BOOTSTRAP_MAKE_ENV = \
+ >  	GOOS=linux \
+ >  	GOROOT_FINAL="$(HOST_GO_BOOTSTRAP_ROOT)" \
+ >  	GOROOT="$(@D)" \
+ > -	GOBIN="$(@D)/bin"
+ > +	GOBIN="$(@D)/bin" \
+ > +	CGO_ENABLED=0
+
+That is not a very detailed description. I know next to nothing about
+go, but according to google this doesn't have anything directly to do
+with -fpic or not. From https://golang.org/cmd/cgo/
+
+Cgo enables the creation of Go packages that call C code.
+..
+The cgo tool is enabled by default for native builds on systems where it
+is expected to work. It is disabled by default when cross-compiling. You
+can control this by setting the CGO_ENABLED environment variable when
+running the go tool: set it to 1 to enable the use of cgo, and to 0 to
+disable it. The go tool will set the build constraint "cgo" if cgo is
+enabled.
+
+When cross-compiling, you must specify a C cross-compiler for cgo to
+use. You can do this by setting the CC_FOR_TARGET environment variable
+when building the toolchain using make.bash, or by setting the CC
+environment variable any time you run the go tool. The CXX_FOR_TARGET
+and CXX environment variables work in a similar way for C++ code.
+
+
+So it sounds like this change disables the cgo tool. How does that match
+with your other change to pull in the toolchain dependencies which was
+"To build programs that need cgo support"?
+
+-- 
+Bye, Peter Korsgaard
