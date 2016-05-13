@@ -1,86 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 May 2016 22:38:57 +0200
-Subject: [Buildroot] [git commit] package/quagga: Fix directories and
-	permissions
-Message-ID: <20160513203912.62B7181E7B@busybox.osuosl.org>
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
+Date: Fri, 13 May 2016 14:39:23 -0600
+Subject: [Buildroot] SDL2_ttf requires libpng12 but Buildroot installs
+	libpng16
+In-Reply-To: <20160512234548.20d6cd28@free-electrons.com>
+References: <CAGrGpJB1XFuZWdXS7rWeaA9E7N2yzde8JuSp_A8KjU2vD6h_VA@mail.gmail.com>
+ <20160512234548.20d6cd28@free-electrons.com>
+Message-ID: <CAGrGpJANYGqcDrpsP_YXp_UrUAr-HP7ONbykBrT713K+J1JisA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f338c69c631faedca4e2da3f8c8379a3a29013f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
+The  answer is that I was unaware of the Buildroot autotools capability.
+Without really searching, I assumed if something was not already in
+Buildroot, I had to add it manually.    I have re-examined the Buildroot
+users manual
+     https://*buildroot*.org/manual.html
+and the Free Electrons notes
+     http://free-electrons.com/~thomas/buildroot/manual/html/ch11.html
+and it seems like a much better way to do it and is something within my
+capability.
 
-Quagga runs as the "quagga" user, but it also needs to modify files
-in /etc and /var - config files, pid files and vty sockets for vtysh.
+Having said that,  I learned a lot doing things manually even though it was
+extremely frustrating and took me a very long time.    I almost gave up a
+couple of times.    The help I got from you guys was super - and really
+encouraging.
 
-Tell the configure script the right folders to use, create the
-user, fix the permissions, and then let systemd know (if needed).
+Thanks
+Peter
 
-Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/quagga/quagga.mk            | 29 ++++++++++++++++++++++++++++-
- package/quagga/quagga_tmpfiles.conf |  1 +
- 2 files changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 6b98367..22e90ad 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -10,7 +10,15 @@ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
- QUAGGA_DEPENDENCIES = host-gawk
- QUAGGA_LICENSE = GPLv2+
- QUAGGA_LICENSE_FILES = COPYING
--QUAGGA_CONF_OPTS = --program-transform-name=''
-+
-+# We need to override the sysconf and localstate directories so that
-+# quagga can create files as the quagga user without extra
-+# intervention
-+QUAGGA_CONF_OPTS = \
-+	--program-transform-name='' \
-+	--sysconfdir=/etc/quagga \
-+	--localstatedir=/var/run/quagga
-+
- # 0002-configure-fix-static-linking-with-readline.patch
- QUAGGA_AUTORECONF = YES
- 
-@@ -33,6 +41,20 @@ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ISISD),--enable-isisd,--disable-is
- QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BGP_ANNOUNCE),--enable-bgp-announce,--disable-bgp-announce)
- QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_TCP_ZERBRA),--enable-tcp-zebra,--disable-tcp-zebra)
- 
-+define QUAGGA_USERS
-+	quagga -1 quagga -1 * - - - Quagga priv drop user
-+endef
-+
-+# Set the permissions of /etc/quagga such that quagga (through vtysh)
-+# can save the configuration - set the folder recursively as the files
-+# need to be 600, and then set the folder (non-recursively) to 755 so
-+# it can used.  Quagga also needs to write to the folder as it moves
-+# and creates, rather than overwriting.
-+define QUAGGA_PERMISSIONS
-+	/etc/quagga r 600 quagga quagga - - - - -
-+	/etc/quagga d 755 quagga quagga - - - - -
-+endef
-+
- ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
- QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
- QUAGGA_CONF_OPTS += --enable-snmp=agentx
-@@ -50,4 +72,9 @@ ifeq ($(BR2_arc),y)
- QUAGGA_CONF_OPTS += --disable-pie
- endif
- 
-+define QUAGGA_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/quagga/quagga_tmpfiles.conf \
-+		$(TARGET_DIR)/usr/lib/tmpfiles.d/quagga.conf
-+endef
-+
- $(eval $(autotools-package))
-diff --git a/package/quagga/quagga_tmpfiles.conf b/package/quagga/quagga_tmpfiles.conf
-new file mode 100644
-index 0000000..e16c475
---- /dev/null
-+++ b/package/quagga/quagga_tmpfiles.conf
-@@ -0,0 +1 @@
-+d /var/run/quagga/ 1755 quagga quagga -
+On Thu, May 12, 2016 at 3:45 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Hello,
+>
+> On Thu, 12 May 2016 13:05:56 -0600, Peter Thompson wrote:
+>
+> > Below are my personal notes on how I compiled the SDL2 suite  -   in the
+> > hopes it is helpful to someone else.   pmtstaging is a copy of the
+> > buildroot sysroot which I wanted to keep pristine during this process.
+> >
+> > I will try to convert these  notes into a buildroot patch and submit it -
+> > making life much easier in the future.
+>
+> Quick question that might sound silly, but I believe worth asking: why
+> are you taking this terribly complicated path to build SDL2_ttf
+> manually, rather than creating a Buildroot package directly?
+>
+> The Buildroot autotools package infrastructure already handles most of
+> the cross-compilation problems by itself. So all this terrible dance of
+> CFLAGS and LDFLAGS, copying of sysroot and stuff that you're doing
+> would have been completely unneeded if you had done a Buildroot package
+> from the beginning.
+>
+> It seems to me like you've wasted a huge amount of time :-/
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160513/785cc619/attachment.html>
