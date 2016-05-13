@@ -1,74 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 May 2016 23:04:57 +0200
-Subject: [Buildroot] [git commit] package/nginx: fix libgd support
-Message-ID: <20160513212128.CA26581F97@busybox.osuosl.org>
+Date: Fri, 13 May 2016 23:26:04 +0200
+Subject: [Buildroot] [PATCH 1/5] package/nginx: fix libxslt support
+In-Reply-To: <1462793343-20234-1-git-send-email-martin@barkynet.com>
+References: <1462793343-20234-1-git-send-email-martin@barkynet.com>
+Message-ID: <20160513232604.348f29fe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65778b870049653980b47b4f483f0e23c1fec000
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Change to using gdlib-config to find libgd and its dependencies.
+On Mon,  9 May 2016 12:28:59 +0100, Martin Bark wrote:
+> Change to using pkg-config to find libxslt and it dependencies.
+> 
+> This Fixes:
+>  http://autobuild.buildroot.net/results/382699bbed15f598625b9296e464d1349ef559f8
+> 
+> Signed-off-by: Martin Bark <martin@barkynet.com>
+> ---
+>  ...bxslt-conf-allow-to-override-ngx_feature_.patch | 42 ----------------------
+>  ...0004-auto-lib-libxslt-conf-use-pkg-config.patch | 31 ++++++++++++++++
+>  package/nginx/nginx.mk                             |  7 ++--
+>  3 files changed, 35 insertions(+), 45 deletions(-)
+>  delete mode 100644 package/nginx/0004-auto-lib-libxslt-conf-allow-to-override-ngx_feature_.patch
+>  create mode 100644 package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch
 
-This fixes:
- http://autobuild.buildroot.net/results/d1806140eccb1202cb8b223289510d64fb28acb6/
+I've applied your 5 patches to the master branch, thanks for doing this
+work around nginx, much appreciated.
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0007-auto-lib-libgd-conf-use-pkg-config.patch  | 31 ++++++++++++++++++++++
- package/nginx/nginx.mk                             |  1 +
- 2 files changed, 32 insertions(+)
+I have two comments though:
 
-diff --git a/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
-new file mode 100644
-index 0000000..3750f22
---- /dev/null
-+++ b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
-@@ -0,0 +1,31 @@
-+From fd9885fe5fef5826034547ca6be7299863f99769 Mon Sep 17 00:00:00 2001
-+From: Martin Bark <martin@barkynet.com>
-+Date: Fri, 6 May 2016 14:48:49 +0100
-+Subject: [PATCH 7/8] auto/lib/libgd/conf: use pkg-config
-+
-+Change to using pkg-config to find the path to libgd and its
-+dependencies.
-+
-+Signed-off-by: Martin Bark <martin@barkynet.com>
-+---
-+ auto/lib/libgd/conf | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/auto/lib/libgd/conf b/auto/lib/libgd/conf
-+index 6e4e91c..1c536a2 100644
-+--- a/auto/lib/libgd/conf
-++++ b/auto/lib/libgd/conf
-+@@ -7,8 +7,8 @@
-+     ngx_feature_name=
-+     ngx_feature_run=no
-+     ngx_feature_incs="#include <gd.h>"
-+-    ngx_feature_path=
-+-    ngx_feature_libs="-lgd"
-++    ngx_feature_path="$(${GDLIB_CONFIG:=gdlib-config} --includedir)"
-++    ngx_feature_libs="$(${GDLIB_CONFIG:=gdlib-config} --libs)"
-+     ngx_feature_test="gdImagePtr img = gdImageCreateFromGifPtr(1, NULL);"
-+     . auto/feature
-+ 
-+-- 
-+2.8.2
-+
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 24f4ac3..9cc2326 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -237,6 +237,7 @@ NGINX_PRE_CONFIGURE_HOOKS += NGINX_DISABLE_WERROR
- define NGINX_CONFIGURE_CMDS
- 	cd $(@D) ; $(NGINX_CONF_ENV) \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+		GDLIB_CONFIG=$(STAGING_DIR)/usr/bin/gdlib-config \
- 		./configure $(NGINX_CONF_OPTS)
- endef
- 
+ 1/ Could you submit the nginx patches upstream? We currently have 8
+    patches on nginx, and it would be really good to reduce the size of
+    this stack of patches.
+
+ 2/ We normally don't number the patches on packages, i.e we don't want
+    the patches do have "PATCH x/y" in their title. Since the nginx
+    patches already had a numbering, I applied your patches as-is. But
+    as you can see now, this numbering is meaningless (which is why we
+    don't want it in the first place). A follow-up commit removing this
+    numbering would be good.
+
+Thanks again!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
