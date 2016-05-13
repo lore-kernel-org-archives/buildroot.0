@@ -1,54 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 May 2016 14:59:44 +0200
-Subject: [Buildroot] [PATCH 1/1] Makefile: Support merged defconfigs
-In-Reply-To: <b44b67ae-4aa1-5740-cdf4-22f3296fc58f@mind.be>
-References: <90639972664ebd51802b3c2b94b8c01e235bd956.1462771329.git.sam.bobroff@au1.ibm.com>
- <20160512160226.62bb28bd@free-electrons.com>
- <b44b67ae-4aa1-5740-cdf4-22f3296fc58f@mind.be>
-Message-ID: <20160513145944.4246bbdd@free-electrons.com>
+Date: Fri, 13 May 2016 15:05:25 +0200
+Subject: [Buildroot] [git commit] toolchain-external: fix user provided
+	libraries deployment
+Message-ID: <20160513130548.7C21980AEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8389b623528016d83c7e54a59fbecdc02c846836
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 12 May 2016 23:58:55 +0200, Arnout Vandecappelle wrote:
+In commit 919b4f9eab3e6dcd18cf9220af2c9bb2ca3e5098 the internal symbol
+LIB_EXTERNAL_LIBS was renamed TOOLCHAIN_EXTERNAL_LIBS but the find and
+replace command also renamed BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS to
+BR2_TOOLCHAIN_EXTRA_TOOLCHAIN_EXTERNAL_LIBS which doesn't exist.
 
->   I tend to agree with Thomas's reasoning. However, I think it would be good if 
-> there was a clearer canonical way of using buildroot. Gustavoz' genconfig script 
-> could be part of that. I, for example, have a local.mk fragment that autodetects 
-> packages you have checked out in $(BR2_EXTERNAL)/src and adds OVERRIDE_SRCDIR 
-> for them. I remember there was this template br2-external github repo at some 
-> point that you could use as a basis to start your own br2-external project (but 
-> I can't find it back).
+So user provided libraries defined in BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+are not copied anymore to staging and target directories.
 
-You're probably referring to
-https://github.com/Openwide-Ingenierie/buildroot-submodule.
+For example:
+BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS="libasan.* libubsan.*"
 
->   I do think it is good if such supporting functionality is carried in the core 
-> buildroot repo. But it's better if it's a bit out of the way, not in the main 
-> Makefile, and probably called through some helper script.
-> 
->   I have a similar feeling about the genimage template script BTW.
+Simply revert this change by renaming
+BR2_TOOLCHAIN_EXTRA_TOOLCHAIN_EXTERNAL_LIBS to BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
 
-Should we create a section in the manual with some kind of "best
-practices" or "going further" ideas?
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regarding Gustavo's 'genconfig' script, I am not sure it makes a lot of
-sense to have something like that in the tree. All what it does is very
-project-specific, and down the road, it simply calls the
-merge_config.sh script, which is already in our tree.
-
-So, for the specific situation of creating a defconfig by combining
-fragments, isn't the problem more a documentation problem than anything
-else?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 24c1f03..34217c0 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -90,7 +90,7 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ TOOLCHAIN_EXTERNAL_LIBS += libstdc++.so.*
+ endif
+ 
+-TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_TOOLCHAIN_EXTERNAL_LIBS))
++TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
+ 
+ # Details about sysroot directory selection.
+ #
