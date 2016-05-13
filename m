@@ -1,47 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 May 2016 15:05:25 +0200
-Subject: [Buildroot] [git commit] toolchain-external: fix user provided
-	libraries deployment
-Message-ID: <20160513130548.7C21980AEA@busybox.osuosl.org>
+Date: Fri, 13 May 2016 15:08:44 +0200
+Subject: [Buildroot] [PATCH 0/2] new package: atfirmware
+In-Reply-To: <5735AA81.8010908@synopsys.com>
+References: <cover.1462269854.git.jpinto@synopsys.com>
+ <573057F0.3000606@synopsys.com>
+ <20160509225510.GA18182@e106497-lin.cambridge.arm.com>
+ <5731A32E.7080200@synopsys.com> <5735AA81.8010908@synopsys.com>
+Message-ID: <20160513150844.506a38ee@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8389b623528016d83c7e54a59fbecdc02c846836
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-In commit 919b4f9eab3e6dcd18cf9220af2c9bb2ca3e5098 the internal symbol
-LIB_EXTERNAL_LIBS was renamed TOOLCHAIN_EXTERNAL_LIBS but the find and
-replace command also renamed BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS to
-BR2_TOOLCHAIN_EXTRA_TOOLCHAIN_EXTERNAL_LIBS which doesn't exist.
+On Fri, 13 May 2016 11:20:49 +0100, Joao Pinto wrote:
 
-So user provided libraries defined in BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
-are not copied anymore to staging and target directories.
+> Could you please check the patches?
 
-For example:
-BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS="libasan.* libubsan.*"
+Joao, I really do appreciate your patches, but it is definitely not
+useful to ping every two days about them. There are currently 282
+patches in the queue, so there's many many other patches than yours.
 
-Simply revert this change by renaming
-BR2_TOOLCHAIN_EXTRA_TOOLCHAIN_EXTERNAL_LIBS to BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+If you want to help, please review and/or test patches from others.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-external/toolchain-external.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'll get to your patches at some point (or someone else will), but this
+may not happen in just two days.
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 24c1f03..34217c0 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -90,7 +90,7 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- TOOLCHAIN_EXTERNAL_LIBS += libstdc++.so.*
- endif
- 
--TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_TOOLCHAIN_EXTERNAL_LIBS))
-+TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
- 
- # Details about sysroot directory selection.
- #
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
