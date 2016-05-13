@@ -1,88 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 May 2016 23:21:14 +0200
-Subject: [Buildroot] [git commit] package/nginx: add libatomic_ops support
-Message-ID: <20160513212128.E5BB081FAB@busybox.osuosl.org>
+Date: Fri, 13 May 2016 23:04:57 +0200
+Subject: [Buildroot] [git commit] package/nginx: fix libgd support
+Message-ID: <20160513212128.CA26581F97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ab21916e17be3434023deaf9cb74dcdd4f172c1
+commit: https://git.buildroot.net/buildroot/commit/?id=65778b870049653980b47b4f483f0e23c1fec000
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Force the use of libatomics_ops on the sparc v8 and leon3 platforms to
-allow nginx to build.  Optionally use libatomic_ops on other platforms.
+Change to using gdlib-config to find libgd and its dependencies.
 
 This fixes:
- http://autobuild.buildroot.net/results/20dc41cd62887222d2569d81b5865893baeafaae/
- http://autobuild.buildroot.net/results/eb47af0c8df6fae82859865fb8b9912f45960444/
+ http://autobuild.buildroot.net/results/d1806140eccb1202cb8b223289510d64fb28acb6/
 
-Cc: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nginx/Config.in |  1 +
- package/nginx/nginx.mk  | 16 +++++++++++++---
- 2 files changed, 14 insertions(+), 3 deletions(-)
+ .../0007-auto-lib-libgd-conf-use-pkg-config.patch  | 31 ++++++++++++++++++++++
+ package/nginx/nginx.mk                             |  1 +
+ 2 files changed, 32 insertions(+)
 
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index 9f3c218..e6f2d96 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -1,6 +1,7 @@
- menuconfig BR2_PACKAGE_NGINX
- 	bool "nginx"
- 	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBATOMIC_OPS if BR2_sparc_v8 || BR2_sparc_leon3
- 	help
- 	  nginx is an HTTP and reverse proxy server, as well as a mail proxy
- 	  server.
+diff --git a/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
+new file mode 100644
+index 0000000..3750f22
+--- /dev/null
++++ b/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
+@@ -0,0 +1,31 @@
++From fd9885fe5fef5826034547ca6be7299863f99769 Mon Sep 17 00:00:00 2001
++From: Martin Bark <martin@barkynet.com>
++Date: Fri, 6 May 2016 14:48:49 +0100
++Subject: [PATCH 7/8] auto/lib/libgd/conf: use pkg-config
++
++Change to using pkg-config to find the path to libgd and its
++dependencies.
++
++Signed-off-by: Martin Bark <martin@barkynet.com>
++---
++ auto/lib/libgd/conf | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/auto/lib/libgd/conf b/auto/lib/libgd/conf
++index 6e4e91c..1c536a2 100644
++--- a/auto/lib/libgd/conf
+++++ b/auto/lib/libgd/conf
++@@ -7,8 +7,8 @@
++     ngx_feature_name=
++     ngx_feature_run=no
++     ngx_feature_incs="#include <gd.h>"
++-    ngx_feature_path=
++-    ngx_feature_libs="-lgd"
+++    ngx_feature_path="$(${GDLIB_CONFIG:=gdlib-config} --includedir)"
+++    ngx_feature_libs="$(${GDLIB_CONFIG:=gdlib-config} --libs)"
++     ngx_feature_test="gdImagePtr img = gdImageCreateFromGifPtr(1, NULL);"
++     . auto/feature
++ 
++-- 
++2.8.2
++
 diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 9cc2326..fecef7b 100644
+index 24f4ac3..9cc2326 100644
 --- a/package/nginx/nginx.mk
 +++ b/package/nginx/nginx.mk
-@@ -14,7 +14,6 @@ NGINX_CONF_OPTS = \
- 	--crossbuild=Linux::$(BR2_ARCH) \
- 	--with-cc="$(TARGET_CC)" \
- 	--with-cpp="$(TARGET_CC)" \
--	--with-cc-opt="$(TARGET_CFLAGS)" \
- 	--with-ld-opt="$(TARGET_LDFLAGS)" \
- 	--with-ipv6
- 
-@@ -36,7 +35,6 @@ NGINX_CONF_ENV += \
- 	ngx_force_c99_have_variadic_macros=yes \
- 	ngx_force_gcc_have_variadic_macros=yes \
- 	ngx_force_gcc_have_atomic=yes \
--	ngx_force_have_libatomic=no \
- 	ngx_force_have_epoll=yes \
- 	ngx_force_have_sendfile=yes \
- 	ngx_force_have_sendfile64=yes \
-@@ -68,6 +66,17 @@ NGINX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_NGINX_FILE_AIO),--with-file-aio) \
- 	$(if $(BR2_PACKAGE_NGINX_THREADS),--with-threads)
- 
-+ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
-+NGINX_DEPENDENCIES += libatomic_ops
-+NGINX_CONF_OPTS += --with-libatomic
-+NGINX_CONF_ENV += ngx_force_have_libatomic=yes
-+ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
-+NGINX_CFLAGS += "-DAO_NO_SPARC_V9"
-+endif
-+else
-+NGINX_CONF_ENV += ngx_force_have_libatomic=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_PCRE),y)
- NGINX_DEPENDENCIES += pcre
- NGINX_CONF_OPTS += --with-pcre
-@@ -238,7 +247,8 @@ define NGINX_CONFIGURE_CMDS
+@@ -237,6 +237,7 @@ NGINX_PRE_CONFIGURE_HOOKS += NGINX_DISABLE_WERROR
+ define NGINX_CONFIGURE_CMDS
  	cd $(@D) ; $(NGINX_CONF_ENV) \
  		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		GDLIB_CONFIG=$(STAGING_DIR)/usr/bin/gdlib-config \
--		./configure $(NGINX_CONF_OPTS)
-+		./configure $(NGINX_CONF_OPTS) \
-+			--with-cc-opt="$(TARGET_CFLAGS) $(NGINX_CFLAGS)"
++		GDLIB_CONFIG=$(STAGING_DIR)/usr/bin/gdlib-config \
+ 		./configure $(NGINX_CONF_OPTS)
  endef
  
- define NGINX_BUILD_CMDS
