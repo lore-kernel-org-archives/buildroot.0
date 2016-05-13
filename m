@@ -1,45 +1,71 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Fri, 13 May 2016 12:00:24 +0200
-Subject: [Buildroot] [PATCH] package/turbolua: Fix optional openssl
-	dependency
-Message-ID: <1463133624-25458-1-git-send-email-m.niestroj@grinn-global.com>
+From: Joao Pinto <Joao.Pinto@synopsys.com>
+Date: Fri, 13 May 2016 11:20:49 +0100
+Subject: [Buildroot] [PATCH 0/2] new package: atfirmware
+In-Reply-To: <5731A32E.7080200@synopsys.com>
+References: <cover.1462269854.git.jpinto@synopsys.com>
+ <573057F0.3000606@synopsys.com>
+ <20160509225510.GA18182@e106497-lin.cambridge.arm.com>
+ <5731A32E.7080200@synopsys.com>
+Message-ID: <5735AA81.8010908@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-turbolua fails to build when we have openssl selected, because it didn't
-mention openssl in the dependency list.
+Hi Thomas,
+Could you please check the patches?
 
-Fix build failure by specifying openssl in dependency list when it is
-selected.
+Thanks a lot!
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/turbolua/turbolua.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/package/turbolua/turbolua.mk b/package/turbolua/turbolua.mk
-index cf66e70..fe6db31 100644
---- a/package/turbolua/turbolua.mk
-+++ b/package/turbolua/turbolua.mk
-@@ -12,9 +12,15 @@ TURBOLUA_LICENSE_FILES = LICENSE
- 
- TURBOLUA_MAKE_OPTS = \
- 	$(TARGET_CONFIGURE_OPTS) \
--	SSL=$(if $(BR2_PACKAGE_OPENSSL),openssl,none) \
- 	LUAJIT_VERSION="$(LUAJIT_VERSION)"
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+TURBOLUA_MAKE_OPTS += SSL=openssl
-+TURBOLUA_DEPENDENCIES += openssl
-+else
-+TURBOLUA_MAKE_OPTS += SSL=none
-+endif
-+
- define TURBOLUA_BUILD_CMDS
- 	$(MAKE) $(TURBOLUA_MAKE_OPTS) -C $(@D) all
- endef
--- 
-2.8.2
+On 5/10/2016 10:00 AM, Joao Pinto wrote:
+> On 5/9/2016 11:55 PM, Liviu.Dudau at arm.com wrote:
+>> On Mon, May 09, 2016 at 10:27:12AM +0100, Joao Pinto wrote:
+>>> Hi guys,
+>>> I will have to give a Juno training soon, and this feature would be great to
+>>> have in the time. Could you comment of the atfirmware patch? Do you have any
+>>> improvement suggestions?
+>>
+>> It looks good to me but I have no ACK powers in the buildroot world.
+>>
+>> I am traveling away from my Juno boards at the moment so I cannot add my Tested-by.
+>>
+>> Best regards,
+>> Liviu
+> 
+> Thanks Liviu!
+> 
+>>
+>>>
+>>> Thanks.
+>>>
+>>> On 5/3/2016 11:13 AM, Joao Pinto wrote:
+>>>> This patch adds to buildroot an important package for ARM64 based development 
+>>>> boards: The ARM Trusted Firmware (atfirmware).
+>>>> It also adds the scpfirmware which is a hidden package to get the System Control
+>>>> Processor (SCP) binary to be included in the bootloader (fip image), which is
+>>>> a requirement for ARM Juno's board. With this 2 packages, Juno gets fully 
+>>>> supported in the Buildroot.
+>>>>
+>>>> Joao Pinto (2):
+>>>>   new packages: atfirmware and scpfirmware
+>>>>   configs: add u-noot and atfirmware options to juno
+>>>>
+>>>>  board/arm/juno/readme.txt       | 21 ++++++++--
+>>>>  boot/Config.in                  |  2 +
+>>>>  boot/atfirmware/Config.in       | 70 +++++++++++++++++++++++++++++++++
+>>>>  boot/atfirmware/atfirmware.hash |  5 +++
+>>>>  boot/atfirmware/atfirmware.mk   | 85 +++++++++++++++++++++++++++++++++++++++++
+>>>>  boot/scpfirmware/Config.in      | 23 +++++++++++
+>>>>  boot/scpfirmware/scpfirmware.mk | 18 +++++++++
+>>>>  configs/arm_juno_defconfig      |  9 +++++
+>>>>  8 files changed, 230 insertions(+), 3 deletions(-)
+>>>>  create mode 100644 boot/atfirmware/Config.in
+>>>>  create mode 100644 boot/atfirmware/atfirmware.hash
+>>>>  create mode 100644 boot/atfirmware/atfirmware.mk
+>>>>  create mode 100644 boot/scpfirmware/Config.in
+>>>>  create mode 100644 boot/scpfirmware/scpfirmware.mk
+>>>>
+>>>
+>>
+> 
