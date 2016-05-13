@@ -1,28 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 13 May 2016 10:56:25 +0300
-Subject: [Buildroot] [PATCH] libinput: remove unneeded patch
-In-Reply-To: <e86e590ddd7ea6cbc8886ed86d78ee48ae1265db.1463119792.git.baruch@tkos.co.il>
-References: <e86e590ddd7ea6cbc8886ed86d78ee48ae1265db.1463119792.git.baruch@tkos.co.il>
-Message-ID: <20160513075625.GT2419@tarshish>
+From: Luca Ellero <luca.ellero@brickedbrain.com>
+Date: Fri, 13 May 2016 10:34:50 +0200
+Subject: [Buildroot] uClibc debug symbols
+In-Reply-To: <20160512170714.GV26720@waldemar-brodkorb.de>
+References: <ddfc826b-9bf7-38c8-a442-bea33bf05621@brickedbrain.com>
+ <20160511233304.2c528c3b@gmx.net>
+ <38268c60-77cb-a127-4d16-35ea58fc5766@brickedbrain.com>
+ <20160512154148.66906dd2@free-electrons.com>
+ <2dbe4eba-67f7-c8c5-1551-b8a31439b6c6@brickedbrain.com>
+ <20160512170714.GV26720@waldemar-brodkorb.de>
+Message-ID: <82a50810-beef-8f52-aaac-2dfc9dc1fd17@brickedbrain.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Waldemar,
 
-On Fri, May 13, 2016 at 09:09:52AM +0300, Baruch Siach wrote:
-> The log_msg symbol conflict was fixed in libevdev commit e4c315fc1603 (Rename
-> symbols leaking from static library to avoid name clashes, 2014-08-18) that
-> was included in version 1.3. Remove the patch that used to fix this issue.
+On 12/05/2016 19:07, Waldemar Brodkorb wrote:
+> Hi,
+> Luca Ellero wrote,
+>
+>> Can you please suggest a way to check whether binaries have debugging
+>> symbols? So, maybe, we can send patches.
+>>
+>> I've tried:
+>> objdump -h ... | grep debug
+>> but it doesn't seem to always behave reliably.
+>>
+>> Thank you
+>
+> Just 'file' should do the job,
 
-I meant libevdev version in this last line, since it's a libevdev commit. 
-We're at 1.4.6 on that.
+file doesn't seem to indicate debug symbols (at least on my system).
+Compiling with or without -g has exactly the same output.
 
-baruch
+$ arm-buildroot-linux-uclibcgnueabi-gcc -o myapp myapp.c
+$ file myapp
+myapp: ELF 32-bit LSB  executable, ARM, EABI5 version 1 (SYSV), 
+dynamically linked (uses shared libs), not stripped
+$ arm-buildroot-linux-uclibcgnueabi-gcc -g -o myapp myapp.c
+$ file myapp
+myapp: ELF 32-bit LSB  executable, ARM, EABI5 version 1 (SYSV), 
+dynamically linked (uses shared libs), not stripped
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Regards
