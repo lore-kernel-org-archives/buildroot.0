@@ -1,42 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 May 2016 22:37:45 +0200
-Subject: [Buildroot] [PATCH] post-image: Do not hardcode the
- genimage.cfg path
-In-Reply-To: <1463171605-15987-1-git-send-email-festevam@gmail.com>
-References: <1463171605-15987-1-git-send-email-festevam@gmail.com>
-Message-ID: <20160513223745.26f5d118@free-electrons.com>
+Date: Fri, 13 May 2016 22:38:57 +0200
+Subject: [Buildroot] [git commit] package/quagga: Fix directories and
+	permissions
+Message-ID: <20160513203912.62B7181E7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7f338c69c631faedca4e2da3f8c8379a3a29013f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 13 May 2016 17:33:25 -0300, Fabio Estevam wrote:
-> Instead of hardcoding the genimage.cfg path, let's add a BOARD_DIR
-> variable to improve readability.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  board/freescale/imx6ulevk/post-image.sh | 3 ++-
->  board/via/imx6_vab820/post-image.sh     | 3 ++-
->  board/wandboard/post-image.sh           | 3 ++-
->  3 files changed, 6 insertions(+), 3 deletions(-)
+Quagga runs as the "quagga" user, but it also needs to modify files
+in /etc and /var - config files, pid files and vty sockets for vtysh.
 
-Applied to next, thanks.
+Tell the configure script the right folders to use, create the
+user, fix the permissions, and then let systemd know (if needed).
 
-(Retrospectively, I should have changed the title of your commit.
-Something like:
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/quagga/quagga.mk            | 29 ++++++++++++++++++++++++++++-
+ package/quagga/quagga_tmpfiles.conf |  1 +
+ 2 files changed, 29 insertions(+), 1 deletion(-)
 
-	configs: don't hardcode board directory path in Freescale post-image scripts
-
-or something along those lines. But now that I've pushed it, too late.)
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 6b98367..22e90ad 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -10,7 +10,15 @@ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+ QUAGGA_DEPENDENCIES = host-gawk
+ QUAGGA_LICENSE = GPLv2+
+ QUAGGA_LICENSE_FILES = COPYING
+-QUAGGA_CONF_OPTS = --program-transform-name=''
++
++# We need to override the sysconf and localstate directories so that
++# quagga can create files as the quagga user without extra
++# intervention
++QUAGGA_CONF_OPTS = \
++	--program-transform-name='' \
++	--sysconfdir=/etc/quagga \
++	--localstatedir=/var/run/quagga
++
+ # 0002-configure-fix-static-linking-with-readline.patch
+ QUAGGA_AUTORECONF = YES
+ 
+@@ -33,6 +41,20 @@ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ISISD),--enable-isisd,--disable-is
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BGP_ANNOUNCE),--enable-bgp-announce,--disable-bgp-announce)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_TCP_ZERBRA),--enable-tcp-zebra,--disable-tcp-zebra)
+ 
++define QUAGGA_USERS
++	quagga -1 quagga -1 * - - - Quagga priv drop user
++endef
++
++# Set the permissions of /etc/quagga such that quagga (through vtysh)
++# can save the configuration - set the folder recursively as the files
++# need to be 600, and then set the folder (non-recursively) to 755 so
++# it can used.  Quagga also needs to write to the folder as it moves
++# and creates, rather than overwriting.
++define QUAGGA_PERMISSIONS
++	/etc/quagga r 600 quagga quagga - - - - -
++	/etc/quagga d 755 quagga quagga - - - - -
++endef
++
+ ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
+ QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
+ QUAGGA_CONF_OPTS += --enable-snmp=agentx
+@@ -50,4 +72,9 @@ ifeq ($(BR2_arc),y)
+ QUAGGA_CONF_OPTS += --disable-pie
+ endif
+ 
++define QUAGGA_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/quagga/quagga_tmpfiles.conf \
++		$(TARGET_DIR)/usr/lib/tmpfiles.d/quagga.conf
++endef
++
+ $(eval $(autotools-package))
+diff --git a/package/quagga/quagga_tmpfiles.conf b/package/quagga/quagga_tmpfiles.conf
+new file mode 100644
+index 0000000..e16c475
+--- /dev/null
++++ b/package/quagga/quagga_tmpfiles.conf
+@@ -0,0 +1 @@
++d /var/run/quagga/ 1755 quagga quagga -
