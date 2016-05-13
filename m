@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 May 2016 15:23:14 +0200
-Subject: [Buildroot] [PATCH] libinput: remove unneeded patch
-In-Reply-To: <20160513075625.GT2419@tarshish>
-References: <e86e590ddd7ea6cbc8886ed86d78ee48ae1265db.1463119792.git.baruch@tkos.co.il>
- <20160513075625.GT2419@tarshish>
-Message-ID: <20160513152314.19eebd42@free-electrons.com>
+Date: Fri, 13 May 2016 15:30:20 +0200
+Subject: [Buildroot] [PATCH 3/9] package/go-bootstrap: Set CC to host CC
+In-Reply-To: <1463072012.23824.3.camel@infradead.org>
+References: <cover.1463010771.git.geoff@infradead.org>
+ <14cc3c8334b20ed8b9f5510556a4b83dc4f85e55.1463010771.git.geoff@infradead.org>
+ <20160512152854.56c727f2@free-electrons.com>
+ <1463072012.23824.3.camel@infradead.org>
+Message-ID: <20160513153020.04adab18@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +15,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 13 May 2016 10:56:25 +0300, Baruch Siach wrote:
-> Hi Peter,
-> 
-> On Fri, May 13, 2016 at 09:09:52AM +0300, Baruch Siach wrote:
-> > The log_msg symbol conflict was fixed in libevdev commit e4c315fc1603 (Rename
-> > symbols leaking from static library to avoid name clashes, 2014-08-18) that
-> > was included in version 1.3. Remove the patch that used to fix this issue.  
-> 
-> I meant libevdev version in this last line, since it's a libevdev commit. 
-> We're at 1.4.6 on that.
+On Thu, 12 May 2016 09:53:32 -0700, Geoff Levand wrote:
 
-You're already saying "libevdev" in your commit log. But the fact that
-you're removing a patch from libinput is not clear. I guess it's
-because libinput links against libevdev, but this should be made
-clearer in your commit message.
+> Yes, it is generally known that the go build system is not compatible
+> with the use of ccache.
+> 
+>   https://github.com/golang/go/issues/11685
 
-Thanks,
+OK. Then please improve the commit log to explain this, and add a
+comment in the code that it is intentional to not use ccache because it
+doesn't play well with Go's build system.
+
+Thanks!
 
 Thomas
 -- 
