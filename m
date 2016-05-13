@@ -1,72 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 May 2016 15:35:02 +0200
-Subject: [Buildroot] [PATCH 4/9] package/go: Add
- BR2_TOOLCHAIN_HAS_THREADS
-In-Reply-To: <1463077924.23824.35.camel@infradead.org>
-References: <cover.1463010771.git.geoff@infradead.org>
- <62cf6f9a00fe67cf999e45f7cbf4bf2e295a0fd5.1463010771.git.geoff@infradead.org>
- <20160512161252.7471bf1e@free-electrons.com>
- <1463077924.23824.35.camel@infradead.org>
-Message-ID: <20160513153502.47b944fe@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 13 May 2016 16:48:18 +0300
+Subject: [Buildroot] [PATCH] libinput: remove unneeded patch
+In-Reply-To: <20160513152314.19eebd42@free-electrons.com>
+References: <e86e590ddd7ea6cbc8886ed86d78ee48ae1265db.1463119792.git.baruch@tkos.co.il>
+ <20160513075625.GT2419@tarshish>
+ <20160513152314.19eebd42@free-electrons.com>
+Message-ID: <20160513134818.GU2419@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Thu, 12 May 2016 11:32:04 -0700, Geoff Levand wrote:
-
-> OK, so a Config.host.in like this?
+On Fri, May 13, 2016 at 03:23:14PM +0200, Thomas Petazzoni wrote:
+> On Fri, 13 May 2016 10:56:25 +0300, Baruch Siach wrote:
+> > On Fri, May 13, 2016 at 09:09:52AM +0300, Baruch Siach wrote:
+> > > The log_msg symbol conflict was fixed in libevdev commit e4c315fc1603 (Rename
+> > > symbols leaking from static library to avoid name clashes, 2014-08-18) that
+> > > was included in version 1.3. Remove the patch that used to fix this issue.  
+> > 
+> > I meant libevdev version in this last line, since it's a libevdev commit. 
+> > We're at 1.4.6 on that.
 > 
-> config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> 	bool
-> 	default y
-> 	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 || BR2_powerpc64 || BR2_powerpc64le || BR2_mips64 || BR2_mips64el
-> 	depends on !BR2_ARM_CPU_ARMV4
-> 
-> comment "go needs a toolchain w/ threads"
-> 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+> You're already saying "libevdev" in your commit log. But the fact that
+> you're removing a patch from libinput is not clear. I guess it's
+> because libinput links against libevdev, but this should be made
+> clearer in your commit message.
 
-No, because we don't show comments for host packages (since most of
-them are not selectable in menuconfig).
+I see. It's just that the patch being removed itself says:
 
-Unfortunately, the only solution that I see now is that *target* go
-packages (such as flannel) should have this dependency on
-BR2_TOOLCHAIN_HAS_THREADS + the comment.
+  This fixes a conflict between libevdev and libinput on the definition
+  of the log_msg() symbol.
 
-All in all, I am in fact not super happy with how we're handling this,
-but I don't really see how to do it better. One option would be to make
-the go package a target package rather than a host package. But it's
-also weird because it basically installs nothing to the target.
+So I thought is should be self evident.
 
-> > When you say "CGO needs thread support", is CGO the go runtime on the
-> > target? Does this means that any Go program needs threads?  
-> 
-> cgo is the C language call support and has a runtime component (the
-> cgo package).
+Should I respin with a clearer commit log?
 
-Are all Go packages going to use "cgo" ? Or are pure Go software
-potentially not using cgo ?
+Thanks for reviewing,
+baruch
 
-> The host go compiler and some host tools use pthreads, and so are
-> linked with libpthread.
-
-The fact that the host go compiler uses threads is irrelevant. The
-BR2_TOOLCHAIN_HAS_THREADS boolean indicate whether there is thread
-support or not on the *target*. You can basically assume that thread
-support is always available on the host.
-
-> If a target go program uses the cgo package, it will need to be
-> linked with libpthread.
-
-So if I understand correctly, it's only a subset of target Go programs
-that need thread support?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
