@@ -1,60 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 May 2016 14:25:58 +0200
-Subject: [Buildroot] [PATCH] Config.in: add -Og option
-In-Reply-To: <1463183826-28562-1-git-send-email-martin@surround.io>
-References: <1463183826-28562-1-git-send-email-martin@surround.io>
-Message-ID: <20160514142558.70fb92f4@free-electrons.com>
+Date: Sat, 14 May 2016 15:22:28 +0200
+Subject: [Buildroot] [git commit] glmark2: narrow down libgl requirements
+Message-ID: <20160514132242.6739F7FAA4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3c87cc9e424a7752c06b5f51cc81c2a0260cc7e0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 13 May 2016 16:57:06 -0700, Martin Kelly wrote:
-> -Og (introduced in GCC 4.8) lets you optimize for debugging experience,
-> which can be useful for when you want optimized code that is nonetheless
-> debuggable.
-> 
-> Signed-off-by: Martin Kelly <martin@surround.io>
+Mesa3d DRI drivers can be enabled without support for libgl (for
+example without x11). So make glmark2 gl (x11) support depend on
+BR2_PACKAGE_HAS_LIBGL being present as well.
+It doesn't exactly mean mesa3d providing libgl, but since we can't have
+more than one libgl provider at the same time it's equivalent.
+This is fallout from f1894ec95728806e09405d26663e0ea371afaeab which
+enabled DRI drivers for non-xorg builds. Fixes:
+http://autobuild.buildroot.net/results/174/1743ee5a340e5f4b1f8519e0b11eb196caa4f30e/
 
-Thanks for submitting this patch. I had never heard of -Og, but it
-seems like a useful addition.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/glmark2/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +config BR2_OPTIMIZE_g
-> +	bool "optimize debugging experience"
-> +	select BR2_HOST_GCC_AT_LEAST_4_8
-
-select? You can't select an option such as BR2_HOST_GCC_AT_LEAST_4_8.
-How could Buildroot *force* the host machine to have gcc >= 4.8 ?
-
-In addition, using BR2_HOST_GCC_AT_LEAST_4_8 is wrong here: what we
-care about is the version of the *target* compiler, not the version of
-the host compiler.
-
-So this line should instead be:
-
-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-
-> +	help
-> +	  Optimize debugging experience. -Og enables optimizations that do not
-> +	  interfere with debugging. It should be the optimization level of choice for
-> +	  the standard edit-compile-debug cycle, offering a reasonable level of
-> +	  optimization while maintaining fast compilation and a good debugging
-> +	  experience. If you use multiple -O options, with or without level numbers,
-> +	  the last such option is the one that is effective.
-
-I believe some of those lines are too long. They should have a maximum
-length of 72 characters.
-
-Would you mind reworking your patch to address those two issues and
-sending an updated version?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
+index 9167fc5..c8380b1 100644
+--- a/package/glmark2/Config.in
++++ b/package/glmark2/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_GLMARK2_EGL_GLES
+ config BR2_PACKAGE_GLMARK2_GL
+ 	bool
+ 	default y
++	depends on BR2_PACKAGE_HAS_LIBGL
+ 	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 
+ comment "glmark2 needs an OpenGL or an openGL ES and EGL backend provided by mesa3d"
