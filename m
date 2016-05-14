@@ -1,75 +1,72 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 15 May 2016 01:48:29 +0200
-Subject: [Buildroot] [PATCH 09/34] reproducibility/libglib2: allow
- removing codegen
-In-Reply-To: <20160514133442.GE27354@hermes.click-hack.org>
-References: <20160430074358.GE1781@hermes.click-hack.org>
- <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1462002570-14706-9-git-send-email-gilles.chanteperdrix@xenomai.org>
- <88864677-f612-bd6b-3158-5c2980bb9825@mind.be>
- <20160508202511.GT13285@hermes.click-hack.org>
- <00b9819d-dbe3-52ce-75f7-6d7a8217f47a@mind.be>
- <20160510194257.GE13285@hermes.click-hack.org>
- <a5ff4b5b-d255-17d5-1393-d16b72965482@mind.be>
- <20160514133442.GE27354@hermes.click-hack.org>
-Message-ID: <95f1c231-275c-4fca-e6df-a138bd3d4c0d@mind.be>
+Date: Sun, 15 May 2016 01:54:07 +0200
+Subject: [Buildroot] How to choose C library dependencies
+In-Reply-To: <9f06d929-7f0c-7461-d6b2-c85b46515c4d@yandex.ru>
+References: <5731B0DD.1080201@gmail.com>
+ <9f06d929-7f0c-7461-d6b2-c85b46515c4d@yandex.ru>
+Message-ID: <4904ae0d-f790-063e-a365-675596985f02@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/14/16 15:34, Gilles Chanteperdrix wrote:
-> On Thu, May 12, 2016 at 10:05:36PM +0200, Arnout Vandecappelle wrote:
->> On 05/10/16 21:42, Gilles Chanteperdrix wrote:
->>> On Tue, May 10, 2016 at 01:40:30AM +0200, Arnout Vandecappelle wrote:
-[snip]
->>>>   I think it would make sense to run 'touch -d @$(SOURCE_DATE_EPOCH)' on all
->>>> files after patching to capture this aspect. This was also proposed for
->>>> Fedora[1] (though there it was only for the .py files). Not sure what happened
->>>> with that proposal in the end.
->>>
->>> I think I tried running "touch" before compiling, unfortunately
->>> playing with file dates before running "make" is a bit like playing
->>> with fire. For instance with autotools based projects for which
->>> autoreconf is not run, the project may use versions of the autotools
->>> not installed on the user machine, and because of file dates may
->>> want to rerun autoconf or autmake and whine because the right
->>> versions are not available. Doing this only for .py files is much
->>> more reasonable.
->>
->>   I tested this as well, with make-3.81 and make-4.04. Both of them do _not_
->> rebuild if the timestamps are identical. And since the idea is to use touch -d
->> @$(SOURCE_DATE_EPOCH), all timestamps will be identical.
+On 05/14/16 05:59, ???? ?????? wrote:
+> Hello!
+> I want to compile ejabberd and run it on my router. I choose erlang package with
+> SMP support and all modules and ejabberd package, does not configure defconfig.
+> Then I run /make ejabberd/, copy ejabberd, erlang and busybox from /target/
+> folder to router and run it.
+
+  Buildroot in't really meant for that kind of scenario. That said, it should be 
+possible to do it. Basically you must create a toolchain that matches exactly 
+with what is already installed on the target.
+
+
+> I found that at least ejabberd compiled with glibc dependence and won't run
+> without it. Running /cd /path/to/ejabberd && ./ejabberdctl start/ ends with
+>> /opt/lib/erlang/bin/erl: exec: line 29: /usr/lib/erlang/erts-7.3/bin/erlexec
+> As I found before, it's because erlexec want glibc which missing in router.
+> Than I enable Linux kernel, set defconfig to bcm and try to run /make/ and copy
+> these programms from rootfs image to router with same result.
 >
-> You checked both the pyo and the pyc?
+> How can I compile these programms (ejabberd, erlang and busybox) with uClibc
+> dependence?
 
-  Yep.
+  The config file you attached indeed selects uClibc, so I don't see how it 
+could possibly link against glibc. How do you know it links with glibc?
 
+  To verify something like that, do:
 
->>   But it does indeed mean that if a package has a generated file with an earlier
->> date than the source files, it will now suddenly no longer be
->> rebuilt.
->
-> Yes, that is another problem. But I tried it, and this is not the
-> one I had, the one I had was the contrary: the dates made make want
-> to rebuild some files (the autotools/automake files), whereas the
-> right versions of autoconf and automake were not installed, this was
-> a package that did not run autoreconf. The "make" tool is completely
-> based on file dates, so again, I think messing with file dates
-> before running make is a bad idea.
+readelf -d output/target/usr/lib/erlang/erts-7.3/bin/erlexec
 
-  Hm, I don't see how this could happen... My test showed that 'make' would not 
-try to rebuild the autotools/automake files when they have the same timestamp as 
-the corresponding source file. So what triggers the reconf then?
-
-  I've tried with a random package (bash) and it's not reconfiguring after 
-touching all sources. Do you remember for which package you saw this?
+and check that all the libraries mentioned there exist on the target.
 
 
   Regards,
   Arnout
 
+>
+> *Buildroot:* snapshot from 2016.05.13
+> *C library in menuconfig:* uClibc with C++ support
+> *defconfig:* bcm
+> *Target Architecture:* ARM (little endian)
+> *Target Architecture Variant:* cortex-A9
+> *System running buildroot:* Debian 8 x64
+> *Router:* Broadcom BCM4708A0, 2xARM Cortex A9, asuswrt-merlin 380.58_0
+> *.config:* in attach
+>
+> --
+> ????????????? ????????? ?????: 1D38C8C9
+> ?????????: 6210 01B6 A34E E490 A9E4  87DD 841D 0ABE 1D38 C8C9
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
 
 -- 
