@@ -1,42 +1,54 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 14 May 2016 23:09:16 +0200
-Subject: [Buildroot] [PATCH 2/2] package/android-tools: fix host tools
-	dependency
-In-Reply-To: <1463260156-23406-1-git-send-email-s.martin49@gmail.com>
-References: <1463260156-23406-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1463260156-23406-3-git-send-email-s.martin49@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 14 May 2016 23:20:01 +0200
+Subject: [Buildroot] [PATCH v1] Makefile: fix rootfs overlay with
+ BR2_ROOTFS_MERGED_USR enabled
+In-Reply-To: <20160512210625.6c04e7d8@gmx.net>
+References: <1461439109-28101-1-git-send-email-ps.report@gmx.net>
+ <20160508141313.GD24011@free.fr> <20160512210625.6c04e7d8@gmx.net>
+Message-ID: <a49b8176-f38e-5ce0-b088-6ff7bd03310e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Host android-tools only makes sense when the target package is enable,
-so make it available only when the android-tools is already part of the
-target package selection.
+On 05/12/16 21:06, Peter Seiderer wrote:
+> Hello Yann,
+>
+> On Sun, 8 May 2016 16:13:13 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>
+>> Peter, All,
+>>
+>> Nit-picking: when you send the 'v1' of a patch, you need not add 'v1' to
+>> it. Only 'v2' and above need a version /tag/.
+>>
+>
+> Yes I know it is not necessary...., but I find it supportive for my 'workflow',
+> having local copies of the sent patches combined e.g.
+>
+>   v1-0001-some-patch-subject.patch
+>   v2-0001-some-patch-subject.patch
+>   ....
+>
+> instead of
+>
+>   0001-some-patch-subject.patch
+>   v2-0001-some-patch-subject.patch
+>
+> But I can try to change my habit in case more mailing list people prefer it otherwise...
 
-This change fixes in a simpler way the missing selection on
-BR2_PACKAGE_ANDROID_TOOLS and the missing dependency on BR2_USE_MMU.
+  It certainly doesn't bother me, and I doubt that interferes with Peter's or 
+Thomas's workflow too. So unless they object a second time, just keep on doing 
+what works for you.
 
-This patch fixes the following kconfig warning:
+  Regards,
+  Arnout
 
-  warning: (BR2_PACKAGE_HOST_ANDROID_TOOLS) selects BR2_PACKAGE_ANDROID_TOOLS_ADB which has unmet direct dependencies (BR2_PACKAGE_ANDROID_TOOLS && BR2_USE_MMU)
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/android-tools/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/android-tools/Config.in.host b/package/android-tools/Config.in.host
-index 4326014..7ac9636 100644
---- a/package/android-tools/Config.in.host
-+++ b/package/android-tools/Config.in.host
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_HOST_ANDROID_TOOLS
- 	bool "host android-tools"
-+	depends on BR2_PACKAGE_ANDROID_TOOLS
- 	select BR2_PACKAGE_ANDROID_TOOLS_ADB if \
- 		!BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT
- 	help
 -- 
-2.8.2
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
