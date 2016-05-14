@@ -1,33 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 May 2016 16:20:28 +0200
-Subject: [Buildroot] [PATCH] mali-t76x: depends on mesa3d-headers
-In-Reply-To: <1463235396-17533-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1463235396-17533-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160514162028.0d8216b2@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 14 May 2016 11:54:55 -0300
+Subject: [Buildroot] [PATCH] sg3-utils: disable for blackfin
+Message-ID: <1463237695-28471-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Suffers from the usual symbol prefixing problems for bfin, it's probably
+easy to fix, however no bfin has/will be used for storage apps since
+they lack the usual ports for it. Fixes:
+http://autobuild.buildroot.net/results/314/31447787e70cd351ce01b7a49ba029758d0c68e5/
 
-On Sat, 14 May 2016 11:16:36 -0300, Gustavo Zacarias wrote:
-> It selects them, but doesn't depend on them, and since the package only
-> provides binaries there's a complete lack of headers. When some other
-> package pulls in the egl/gles provider this doesn't result in headers
-> being pulled in, hence the API is completely missing. Fixes:
-> http://autobuild.buildroot.net/results/dab/dab91372b7bfde57796a7e3de7e823dc44adfb76/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/mali-t76x/mali-t76x.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/sg3_utils/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/sg3_utils/Config.in b/package/sg3_utils/Config.in
+index f4db4b9..4b74eda 100644
+--- a/package/sg3_utils/Config.in
++++ b/package/sg3_utils/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SG3_UTILS
+ 	bool "sg3-utils"
++	depends on !BR2_bfin # symbol prefixing problems
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Low level utilities for devices that use a SCSI command set.
+@@ -15,4 +16,5 @@ config BR2_PACKAGE_SG3_UTILS_PROGS
+ endif
+ 
+ comment "sg3-utils needs a toolchain w/ threads"
++	depends on !BR2_bfin
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
