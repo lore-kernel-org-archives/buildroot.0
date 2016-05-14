@@ -1,11 +1,11 @@
 From: Troy Dack <troy@dack.com.au>
-Date: Sun, 15 May 2016 09:33:09 +1000
-Subject: [Buildroot] [PATCH 2/3] OrangePi Plus files required to generate SD
-	card image and a self extracting fel-boot command for booting
-	from RAM using USB-OTG and sunxi-fel
+Date: Sun, 15 May 2016 09:33:10 +1000
+Subject: [Buildroot] [PATCH 3/3] Default config for OrangePi Plus. Generates
+	kernel using sunxi/for-next branch of
+	git.kernel.org/git/mripard U-boot built from git tag v2016.05-rc3
 In-Reply-To: <1463268790-1076-1-git-send-email-troy@dack.com.au>
 References: <1463268790-1076-1-git-send-email-troy@dack.com.au>
-Message-ID: <1463268790-1076-3-git-send-email-troy@dack.com.au>
+Message-ID: <1463268790-1076-4-git-send-email-troy@dack.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,276 +14,79 @@ To: buildroot@busybox.net
 
 Signed-off-by: Troy Dack <troy@dack.com.au>
 ---
- board/orangepi/orangepi_plus/boot-fel.cmd    |  4 +++
- board/orangepi/orangepi_plus/boot-sdcard.cmd |  8 +++++
- board/orangepi/orangepi_plus/boot.cmd        |  4 +++
- board/orangepi/orangepi_plus/decompress      | 21 +++++++++++
- board/orangepi/orangepi_plus/genimage.cfg    | 35 ++++++++++++++++++
- board/orangepi/orangepi_plus/payload.sh      | 21 +++++++++++
- board/orangepi/orangepi_plus/post-build.sh   | 15 ++++++++
- board/orangepi/orangepi_plus/post-image.sh   | 54 ++++++++++++++++++++++++++++
- board/orangepi/orangepi_plus/readme.txt      | 35 ++++++++++++++++++
- 9 files changed, 197 insertions(+)
- create mode 100644 board/orangepi/orangepi_plus/boot-fel.cmd
- create mode 100644 board/orangepi/orangepi_plus/boot-sdcard.cmd
- create mode 100644 board/orangepi/orangepi_plus/boot.cmd
- create mode 100644 board/orangepi/orangepi_plus/decompress
- create mode 100644 board/orangepi/orangepi_plus/genimage.cfg
- create mode 100644 board/orangepi/orangepi_plus/payload.sh
- create mode 100755 board/orangepi/orangepi_plus/post-build.sh
- create mode 100755 board/orangepi/orangepi_plus/post-image.sh
- create mode 100644 board/orangepi/orangepi_plus/readme.txt
+ configs/orangepi_plus_defconfig | 64 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
+ create mode 100644 configs/orangepi_plus_defconfig
 
-diff --git a/board/orangepi/orangepi_plus/boot-fel.cmd b/board/orangepi/orangepi_plus/boot-fel.cmd
+diff --git a/configs/orangepi_plus_defconfig b/configs/orangepi_plus_defconfig
 new file mode 100644
-index 0000000..50e80a3
+index 0000000..c4668ad
 --- /dev/null
-+++ b/board/orangepi/orangepi_plus/boot-fel.cmd
-@@ -0,0 +1,4 @@
-+setenv fdt_high ffffffff
-+setenv bootargs console=ttyS0,115200 earlyprintk rootwait
++++ b/configs/orangepi_plus_defconfig
+@@ -0,0 +1,64 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_FPU_VFPV4=y
++# Kernel is a pre-release of 4.5, so we do not yet have a _CUSTOM_4_5
++# option for the headers. Thus, we stick with the 4.4 headers for now.
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="4.4"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Plus"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi_plus/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepi_plus/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.kernel.org/pub/scm/linux/kernel/git/mripard/linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="sunxi/for-next"
++BR2_LINUX_KERNEL_VERSION="sunxi/for-next"
++BR2_LINUX_KERNEL_PATCH=""
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES=""
++BR2_LINUX_KERNEL_UBOOT_IMAGE=y
++BR2_LINUX_KERNEL_UIMAGE=y
++BR2_LINUX_KERNEL_GZIP=y
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_USE_INTREE_DTS=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-plus"
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL=""
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION=""
 +
-+bootm $kernel_addr_r $ramdisk_addr_r $fdt_addr_r
-diff --git a/board/orangepi/orangepi_plus/boot-sdcard.cmd b/board/orangepi/orangepi_plus/boot-sdcard.cmd
-new file mode 100644
-index 0000000..5fe9920
---- /dev/null
-+++ b/board/orangepi/orangepi_plus/boot-sdcard.cmd
-@@ -0,0 +1,8 @@
-+setenv fdt_high ffffffff
++BR2_TARGET_ROOTFS_CPIO=y
++BR2_TARGET_ROOTFS_CPIO_GZIP=y
++BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
 +
-+setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 +
-+fatload mmc 0 $kernel_addr_r uImage
-+fatload mmc 0 $fdt_addr_r sun8i-h3-orangepi-plus.dtb
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.denx.de/u-boot.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2016.05-rc3"
++BR2_TARGET_UBOOT_VERSION="v2016.05-rc3"
++BR2_TARGET_UBOOT_PATCH=""
++BR2_TARGET_UBOOT_USE_DEFCONFIG=y
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_plus"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL=""
++BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION=""
 +
-+bootm $kernel_addr_r - $fdt_addr_r
-diff --git a/board/orangepi/orangepi_plus/boot.cmd b/board/orangepi/orangepi_plus/boot.cmd
-new file mode 100644
-index 0000000..50e80a3
---- /dev/null
-+++ b/board/orangepi/orangepi_plus/boot.cmd
-@@ -0,0 +1,4 @@
-+setenv fdt_high ffffffff
-+setenv bootargs console=ttyS0,115200 earlyprintk rootwait
++BR2_CCACHE=y
++BR2_CCACHE_DIR="$(HOME)/.buildroot-ccache"
++BR2_CCACHE_INITIAL_SETUP=""
++BR2_CCACHE_USE_BASEDIR=y
 +
-+bootm $kernel_addr_r $ramdisk_addr_r $fdt_addr_r
-diff --git a/board/orangepi/orangepi_plus/decompress b/board/orangepi/orangepi_plus/decompress
-new file mode 100644
-index 0000000..5f10737
---- /dev/null
-+++ b/board/orangepi/orangepi_plus/decompress
-@@ -0,0 +1,21 @@
-+#!/bin/bash
-+echo ""
-+echo "Self Extracting sunxi-fel USB boot"
-+echo ""
-+
-+export TMPDIR=`mktemp -d /tmp/selfextract.XXXXXX`
-+
-+ARCHIVE=`awk '/^__ARCHIVE_BELOW__/ {print NR + 1; exit 0; }' $0`
-+
-+tail -n+$ARCHIVE $0 | tar xjv -C $TMPDIR
-+
-+CDIR=`pwd`
-+cd $TMPDIR
-+./fel-boot.sh
-+
-+cd $CDIR
-+rm -rf $TMPDIR
-+
-+exit 0
-+
-+__ARCHIVE_BELOW__
-diff --git a/board/orangepi/orangepi_plus/genimage.cfg b/board/orangepi/orangepi_plus/genimage.cfg
-new file mode 100644
-index 0000000..c607b9e
---- /dev/null
-+++ b/board/orangepi/orangepi_plus/genimage.cfg
-@@ -0,0 +1,35 @@
-+# Minimal SD card image for the OrangePi PC
-+#
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"uImage",
-+			"sun8i-h3-orangepi-plus.dtb",
-+			"boot-sdcard.scr"
-+		}
-+	}
-+	size = 10M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8192
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/orangepi/orangepi_plus/payload.sh b/board/orangepi/orangepi_plus/payload.sh
-new file mode 100644
-index 0000000..ca247fd
---- /dev/null
-+++ b/board/orangepi/orangepi_plus/payload.sh
-@@ -0,0 +1,21 @@
-+#!/bin/bash
-+cd ${BINARIES_DIR}
-+tar czf .tar ./*
-+
-+if [ -e "payload.tar" ]; then
-+    gzip payload.tar
-+
-+    if [ -e "payload.tar.gz" ]; then
-+        cat decompress payload.tar.gz > selfextract.bsx
-+    else
-+        echo "payload.tar.gz does not exist"
-+        exit 1
-+    fi
-+else
-+    echo "payload.tar does not exist"
-+    exit 1
-+fi
-+
-+echo "selfextract.bsx created"
-+exit 0
-+
-diff --git a/board/orangepi/orangepi_plus/post-build.sh b/board/orangepi/orangepi_plus/post-build.sh
-new file mode 100755
-index 0000000..9885453
---- /dev/null
-+++ b/board/orangepi/orangepi_plus/post-build.sh
-@@ -0,0 +1,15 @@
-+#!/bin/sh
-+# post-build.sh for OrangePi Plus
-+# based on OrangePi PC by Carlo Caione <carlo.caione@gmail.com>
-+# 2016, Troy Dack <troy@dack.com.au>
-+
-+BOARD_DIR="$(dirname $0)"
-+MKIMAGE=$HOST_DIR/usr/bin/mkimage
-+
-+for F in fel sdcard; do
-+	BOOT_CMD=$BOARD_DIR/boot-$F.cmd
-+	BOOT_CMD_H=$BINARIES_DIR/boot-$F.scr
-+	# U-Boot script
-+	$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
-+done
-+
-diff --git a/board/orangepi/orangepi_plus/post-image.sh b/board/orangepi/orangepi_plus/post-image.sh
-new file mode 100755
-index 0000000..2be26a8
---- /dev/null
-+++ b/board/orangepi/orangepi_plus/post-image.sh
-@@ -0,0 +1,54 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname ${BR2_CONFIG})/$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+echo ">>> Generating fel-boot.bsx self-extracting boot image"
-+# Create fel-boot.sh
-+cat > ${BINARIES_DIR}/fel-boot.sh <<__EOF__
-+#!/bin/bash
-+
-+SUNXI_TOOLS=${HOST_DIR}
-+BINARIES_DIR=${BINARIES_DIR}
-+
-+sudo \${SUNXI_TOOLS}/usr/bin/sunxi-fel -v -p \\
-+	uboot \${BINARIES_DIR}\\u-boot-sunxi-with-spl.bin \\
-+	write 0x42000000 \${BINARIES_DIR}\\uImage \\
-+	write 0x43000000 \${BINARIES_DIR}\\sun8i-h3-orangepi-plus.dtb \\
-+	write 0x43100000 \${BINARIES_DIR}\\boot-fel.scr \\
-+	write 0x43300000 \${BINARIES_DIR}\\rootfs.cpio.uboot
-+__EOF__
-+chmod +x ${BINARIES_DIR}/fel-boot.sh
-+
-+# Create self-extracting fel-boot.bsx
-+tar cjf ${BINARIES_DIR}/payload.tar.bz2 -C ${BINARIES_DIR} \
-+	u-boot-sunxi-with-spl.bin \
-+	uImage \
-+	sun8i-h3-orangepi-plus.dtb \
-+	boot-fel.scr \
-+	rootfs.cpio.uboot \
-+	fel-boot.sh
-+
-+if [ -e "${BINARIES_DIR}/payload.tar.bz2" ]; then
-+    cat ${BOARD_DIR}/decompress ${BINARIES_DIR}/payload.tar.bz2 > ${BINARIES_DIR}/fel-boot.bsx
-+    rm ${BINARIES_DIR}/payload.tar.bz2
-+else
-+    echo "${BINARIES_DIR}/payload.tar.bz2 does not exist"
-+    exit 1
-+fi
-+chmod +x ${BINARIES_DIR}/fel-boot.bsx
-+
-+echo ">>> Generating SD card image"
-+# Generate SD Card image
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage                               \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-+
-+
-+exit $?
-diff --git a/board/orangepi/orangepi_plus/readme.txt b/board/orangepi/orangepi_plus/readme.txt
-new file mode 100644
-index 0000000..818cfa5
---- /dev/null
-+++ b/board/orangepi/orangepi_plus/readme.txt
-@@ -0,0 +1,35 @@
-+OrangePi Plus
-+
-+Intro
-+=====
-+
-+This default configuration will allow you to start experimenting with the
-+buildroot environment for the OrangePi PC. With the current configuration
-+it will bring-up the board, and allow access through the serial console.
-+
-+How to build it
-+===============
-+
-+Configure Buildroot:
-+
-+    $ make orangepi_plus_defconfig
-+
-+Compile everything and build the self extracting initrd FEL boot image:
-+
-+    $ make
-+
-+Booting
-+=======
-+
-+Once the build process is finished you will have a script called 
-+"fel-boot.bsx" in the output/images/ directory.
-+
-+Make sure sunxi-tools/sunxi-fel is in your current PATH if they are
-+not installed.
-+
-+Connect your OrangePi Plus via the OSB-OTG port and put it into FEL
-+mode by pressing the FEL button. Run fel-boot.bsx and the OrangePi
-+Plus will boot from the compiled image.
-+
-+  $ sudo fel-boot.bsx
-+
++BR2_PACKAGE_HOST_DTC=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_SUNXI_TOOLS=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
 2.7.4
