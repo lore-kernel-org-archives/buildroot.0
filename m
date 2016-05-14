@@ -1,45 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 May 2016 18:02:42 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-05-13
-In-Reply-To: <20160514145905.GA3877@free.fr>
-References: <20160514063024.2C7B91025E9@stock.ovh.net>
- <20160514154655.57ae0bad@free-electrons.com>
- <20160514145905.GA3877@free.fr>
-Message-ID: <20160514160242.GB3877@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 14 May 2016 13:25:14 -0300
+Subject: [Buildroot] [PATCH] mtr: bump to latest git version (newdns branch)
+Message-ID: <1463243114-10163-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+This fixes the musl build issues and the need to specially patch for
+uClibc at the same time. Fixes:
+http://autobuild.buildroot.net/results/deb/debeb3ded02c3de63182c3433ff02062192d3fd1/
 
-On 2016-05-14 16:59 +0200, Yann E. MORIN spake thusly:
-> On 2016-05-14 15:46 +0200, Thomas Petazzoni spake thusly:
-> > >         i686 |             host-python3-3.4.3 | NOK | http://autobuild.buildroot.net/results/e5b005a3ac9d7313b71eaf492d03d6b61b87e683/
-> > 
-> > /usr/bin/ld: BFD (GNU Binutils for Ubuntu) 2.24 internal error, aborting at ../../bfd/merge.c line 873 in _bfd_merged_section_offset
-> > 
-> > Yann, this is happening on your machine. Can you have a look, and see
-> > if it's reproducible, or if it's a bug due a HW issue?
-[--SNIP--]
-> So it all looks to me like there is a parallel build issue.
+Also add hash file.
 
-I've just run this config on my autobuilder, and the build was fine
-(twice in a row, once with the machine already loaded, once with the
-machine otherwise idle).
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mtr/mtr.hash |  2 ++
+ package/mtr/mtr.mk   | 12 +-----------
+ 2 files changed, 3 insertions(+), 11 deletions(-)
+ create mode 100644 package/mtr/mtr.hash
 
-I'll do a few such builds in loop, just to see if the issue is
-reproducible.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/mtr/mtr.hash b/package/mtr/mtr.hash
+new file mode 100644
+index 0000000..f3df81f
+--- /dev/null
++++ b/package/mtr/mtr.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	12a6a94c0ec04d508de27eda5f5ba91f50d4b5fe74a98aca0973e2c16a42555a	mtr-66de3ecbab28b054b868a73fbb57f30549d770ac.tar.gz
+diff --git a/package/mtr/mtr.mk b/package/mtr/mtr.mk
+index 3f73a5f..5ee6124 100644
+--- a/package/mtr/mtr.mk
++++ b/package/mtr/mtr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MTR_VERSION = v0.86
++MTR_VERSION = 66de3ecbab28b054b868a73fbb57f30549d770ac
+ MTR_SITE = $(call github,traviscross,mtr,$(MTR_VERSION))
+ MTR_AUTORECONF = YES
+ MTR_CONF_OPTS = --without-gtk
+@@ -12,14 +12,4 @@ MTR_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_NCURSES),ncurses)
+ MTR_LICENSE = GPLv2
+ MTR_LICENSE_FILES = COPYING
+ 
+-# uClibc has res_ninit but not res_nmkquery
+-ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+-define MTR_DISABLE_RES_NINIT
+-	$(SED) 's/#ifdef res_ninit/#if 0/' \
+-		$(@D)/dns.c
+-endef
+-endif
+-
+-MTR_POST_PATCH_HOOKS += MTR_DISABLE_RES_NINIT
+-
+ $(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.3
