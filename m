@@ -1,84 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 May 2016 16:17:11 +0200
-Subject: [Buildroot] [PATCH 1/4] android-tools: fix dependency on libselinux
-Message-ID: <1463235434-31134-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 14 May 2016 16:19:10 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-05-13
+In-Reply-To: <20160514154655.57ae0bad@free-electrons.com>
+References: <20160514063024.2C7B91025E9@stock.ovh.net>
+ <20160514154655.57ae0bad@free-electrons.com>
+Message-ID: <20160514161910.309e5f33@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The fastboot sub-option of android-tools did not properly replicate the
-dependency of libselinux, which it is selecting. Due to this, an invalid
-configuration could be generated, with fastboot selected while thread
-support is not available for example (and therefore libselinux is not
-available). This problem was causing the following build failure:
+Hello,
 
- http://autobuild.buildroot.net/results/21e45cee04fd983c85c6702595ee3f7ed8470931/
+On Sat, 14 May 2016 15:46:55 +0200, Thomas Petazzoni wrote:
 
-This is fixed by replicating the selinux dependencies in the fastboot
-sub-option and adding the relevant Config.in comment.
+> >      powerpc | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/1b8ace1a083b419c1ab913fda0d36a1d2d910f13/
+> >       xtensa | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/5bb304c91367f1570903c8c527b387c65e572e56/
+> >      powerpc | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/5f6cacf3125518d8c071397582569c659461690a/  
+> 
+> This was due to an issue building on big endian systems, I'm about to
+> send a patch that fixes it.
 
-In addition, the main android-tools option had some logic to make sure
-at least one of its sub-option is enabled: adbd by default on systems
-with MMU, and fastboot by default on systems without MMU (because
-fastboot is the only part that builds on noMMU systems).
+Patch available at http://patchwork.ozlabs.org/patch/622247/
 
-However, with the new dependencies in the fastboot sub-option, this
-logic would have become a lot more complicated. Since fastboot is very
-unlikely to be used on noMMU systems, we simply make the whole package
-not available on noMMU systems.
+> >          arm |                     cups-2.1.2 | NOK | http://autobuild.buildroot.net/results/445a401da2f63a6c43d7c166516287db6cc977ab/  
+> 
+> Caused by using PIE, which requires Scrt1.o, which isn't available in
+> our uClibc toolchains. Since we don't really need PIE support, I've
+> sent a patch that disables it.
 
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
-Cc: Antoine Tenart <antoine.tenart@free-electrons.com>
-Cc: Julien Corjon <corjon.j@ecagroup.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/android-tools/Config.in | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+Patch available at http://patchwork.ozlabs.org/patch/622248/
 
-diff --git a/package/android-tools/Config.in b/package/android-tools/Config.in
-index 84f18e8..9be3f40 100644
---- a/package/android-tools/Config.in
-+++ b/package/android-tools/Config.in
-@@ -1,12 +1,14 @@
- config BR2_PACKAGE_ANDROID_TOOLS
- 	bool "android-tools"
--	# adb/adbd needs mmu
-+	# Technically, fastboot could build on noMMU systems. But
-+	# since we need at least one of the three sub-options enabled,
-+	# and adb/adbd can't be built on noMMU systems, and fastboot
-+	# has some complicated dependencies, we simply make the whole
-+	# package not available on noMMU platforms.
-+	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_ANDROID_TOOLS_ADBD if \
- 	      !BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT && \
--	      !BR2_PACKAGE_ANDROID_TOOLS_ADB && \
--	      BR2_USE_MMU
--	select BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT if \
--	      !BR2_USE_MMU
-+	      !BR2_PACKAGE_ANDROID_TOOLS_ADB
- 	help
- 	  This package contains the fastboot and adb utilities, that
- 	  can be used to interact with target devices using of these
-@@ -18,11 +20,18 @@ config BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT
- 	bool "fastboot"
- 	select BR2_PACKAGE_LIBSELINUX
- 	select BR2_PACKAGE_ZLIB
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libselinux
-+	depends on !BR2_STATIC_LIBS # libselinux
-+	depends on !BR2_arc # libselinux
- 	help
- 	  This option will build and install the fastboot utility for
- 	  the target, which can be used to reflash other target devices
- 	  implementing the fastboot protocol.
- 
-+comment "fastboot needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_arc
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+
- config BR2_PACKAGE_ANDROID_TOOLS_ADB
- 	bool "adb"
- 	depends on BR2_USE_MMU # uses fork()
+> >          arm | gmrender-resurrect-aa3d02cf... | NOK | http://autobuild.buildroot.net/results/96a280a8115cd01d64670e4caf2471d3ee4581d9/
+> >          arm | gmrender-resurrect-aa3d02cf... | NOK | http://autobuild.buildroot.net/results/43babb56cf9860ac60e51452d2f9362fc4a331e2/
+> >       x86_64 | gmrender-resurrect-aa3d02cf... | NOK | http://autobuild.buildroot.net/results/cd064a8bcb297ba47168bde44cefeb2db9721cc6/  
+> 
+> musl build issue, due to the usage of <error.h>. I'm tempted to simply
+> mark the package as not available on musl.
+
+Patch available at http://patchwork.ozlabs.org/patch/622249/
+
+
+> >          arc |                        unknown | NOK | http://autobuild.buildroot.net/results/ae3cbba85934100f7f4dc7361de544f87d84d433/
+> >          arm |                        unknown | NOK | http://autobuild.buildroot.net/results/21e45cee04fd983c85c6702595ee3f7ed8470931/  
+> 
+> Some dependency problem.
+
+Patch available at http://patchwork.ozlabs.org/patch/622250/
+
+Review welcome :)
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
