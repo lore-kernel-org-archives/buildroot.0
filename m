@@ -1,92 +1,69 @@
-From: Troy Dack <troy@dack.com.au>
-Date: Sun, 15 May 2016 09:33:10 +1000
-Subject: [Buildroot] [PATCH 3/3] Default config for OrangePi Plus. Generates
-	kernel using sunxi/for-next branch of
-	git.kernel.org/git/mripard U-boot built from git tag v2016.05-rc3
-In-Reply-To: <1463268790-1076-1-git-send-email-troy@dack.com.au>
-References: <1463268790-1076-1-git-send-email-troy@dack.com.au>
-Message-ID: <1463268790-1076-4-git-send-email-troy@dack.com.au>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 15 May 2016 01:45:52 +0200
+Subject: [Buildroot] [PATCH 4/4] gmrender-resurrect: disable on musl
+ configurations
+In-Reply-To: <1463235434-31134-4-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1463235434-31134-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1463235434-31134-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <243af410-2e48-e534-041d-959151473e62@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Troy Dack <troy@dack.com.au>
----
- configs/orangepi_plus_defconfig | 64 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 configs/orangepi_plus_defconfig
+On 05/14/16 16:17, Thomas Petazzoni wrote:
+> gmrender-resurrect uses <error.h>, which isn't available on musl
+> configuration, so let's disable this package in such situations.
+>
+> Fixes:
+>
+>   http://autobuild.buildroot.net/results/96a280a8115cd01d64670e4caf2471d3ee4581d9/
+>   (and numerous similar build failures)
+>
+> Cc: kei-k at ca2.so-net.ne.jp <kei-k@ca2.so-net.ne.jp>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/configs/orangepi_plus_defconfig b/configs/orangepi_plus_defconfig
-new file mode 100644
-index 0000000..c4668ad
---- /dev/null
-+++ b/configs/orangepi_plus_defconfig
-@@ -0,0 +1,64 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_FPU_VFPV4=y
-+# Kernel is a pre-release of 4.5, so we do not yet have a _CUSTOM_4_5
-+# option for the headers. Thus, we stick with the 4.4 headers for now.
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="4.4"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Plus"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi_plus/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepi_plus/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.kernel.org/pub/scm/linux/kernel/git/mripard/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="sunxi/for-next"
-+BR2_LINUX_KERNEL_VERSION="sunxi/for-next"
-+BR2_LINUX_KERNEL_PATCH=""
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES=""
-+BR2_LINUX_KERNEL_UBOOT_IMAGE=y
-+BR2_LINUX_KERNEL_UIMAGE=y
-+BR2_LINUX_KERNEL_GZIP=y
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_USE_INTREE_DTS=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-plus"
-+BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL=""
-+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION=""
-+
-+BR2_TARGET_ROOTFS_CPIO=y
-+BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.denx.de/u-boot.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2016.05-rc3"
-+BR2_TARGET_UBOOT_VERSION="v2016.05-rc3"
-+BR2_TARGET_UBOOT_PATCH=""
-+BR2_TARGET_UBOOT_USE_DEFCONFIG=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_plus"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL=""
-+BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION=""
-+
-+BR2_CCACHE=y
-+BR2_CCACHE_DIR="$(HOME)/.buildroot-ccache"
-+BR2_CCACHE_INITIAL_SETUP=""
-+BR2_CCACHE_USE_BASEDIR=y
-+
-+BR2_PACKAGE_HOST_DTC=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_SUNXI_TOOLS=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+  Regards,
+  Arnout
+
+
+> ---
+>  package/gmrender-resurrect/Config.in | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/gmrender-resurrect/Config.in b/package/gmrender-resurrect/Config.in
+> index db655ad..1a46225 100644
+> --- a/package/gmrender-resurrect/Config.in
+> +++ b/package/gmrender-resurrect/Config.in
+> @@ -3,6 +3,8 @@ config BR2_PACKAGE_GMRENDER_RESURRECT
+>  	depends on BR2_USE_WCHAR # gstreamer1 -> libglib2
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer1 -> libglib2, libupnp
+>  	depends on BR2_USE_MMU # gstreamer1
+> +	# uses <error.h>
+> +	depends on !BR2_TOOLCHAIN_USES_MUSL
+>  	select BR2_PACKAGE_GSTREAMER1
+>  	select BR2_PACKAGE_GST1_PLUGINS_BASE # run-time only
+>  	select BR2_PACKAGE_LIBUPNP
+> @@ -11,6 +13,7 @@ config BR2_PACKAGE_GMRENDER_RESURRECT
+>
+>  	  https://github.com/hzeller/gmrender-resurrect
+>
+> -comment "gmrender-resurrect needs a toolchain w/ wchar, threads"
+> +comment "gmrender-resurrect needs an (e)glibc or uClibc toolchain w/ wchar, threads"
+>  	depends on BR2_USE_MMU
+> -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		BR2_TOOLCHAIN_USES_MUSL
+>
+
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
