@@ -1,39 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 14 May 2016 12:29:11 -0300
-Subject: [Buildroot] [PATCH] file: bump to version 5.27
-Message-ID: <1463239751-13395-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 14 May 2016 18:02:42 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-05-13
+In-Reply-To: <20160514145905.GA3877@free.fr>
+References: <20160514063024.2C7B91025E9@stock.ovh.net>
+ <20160514154655.57ae0bad@free-electrons.com>
+ <20160514145905.GA3877@free.fr>
+Message-ID: <20160514160242.GB3877@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/file/file.hash | 2 +-
- package/file/file.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thomas, All,
 
-diff --git a/package/file/file.hash b/package/file/file.hash
-index 2c53af1..d20fe46 100644
---- a/package/file/file.hash
-+++ b/package/file/file.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	2ef32b4ec936b0ff7b59a021dce56086a716663b6df1138c7ea597d396bf50cf	file-5.26.tar.gz
-+sha256	c2e7d509b1167c4915901ecd257ee924d229a348bf988df6d1934ef0fa34a1a7	file-5.27.tar.gz
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 282b2da..0154c10 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FILE_VERSION = 5.26
-+FILE_VERSION = 5.27
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
- FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+On 2016-05-14 16:59 +0200, Yann E. MORIN spake thusly:
+> On 2016-05-14 15:46 +0200, Thomas Petazzoni spake thusly:
+> > >         i686 |             host-python3-3.4.3 | NOK | http://autobuild.buildroot.net/results/e5b005a3ac9d7313b71eaf492d03d6b61b87e683/
+> > 
+> > /usr/bin/ld: BFD (GNU Binutils for Ubuntu) 2.24 internal error, aborting at ../../bfd/merge.c line 873 in _bfd_merged_section_offset
+> > 
+> > Yann, this is happening on your machine. Can you have a look, and see
+> > if it's reproducible, or if it's a bug due a HW issue?
+[--SNIP--]
+> So it all looks to me like there is a parallel build issue.
+
+I've just run this config on my autobuilder, and the build was fine
+(twice in a row, once with the machine already loaded, once with the
+machine otherwise idle).
+
+I'll do a few such builds in loop, just to see if the issue is
+reproducible.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
