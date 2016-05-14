@@ -1,99 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 May 2016 16:17:12 +0200
-Subject: [Buildroot] [PATCH 2/4] android-tools: fix build on big endian
-	systems
+Date: Sat, 14 May 2016 16:17:13 +0200
+Subject: [Buildroot] [PATCH 3/4] cups: fix static linking problem
 In-Reply-To: <1463235434-31134-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1463235434-31134-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1463235434-31134-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1463235434-31134-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a patch to the android-tools package to make it build
-properly on big-endian systems.
+In static linking configurations, cups fails to build due to the lack of
+Scrt1.o from uClibc toolchains. This Scrt1.o is only needed for PIE
+binaries. Since we don't really care about PIE binaries in the context
+of Buildroot, this commit solves the problem by patching cups to not
+generate a PIE binary.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/1b8ace1a083b419c1ab913fda0d36a1d2d910f13/ (PowerPC)
-  http://autobuild.buildroot.net/results/5bb304c91367f1570903c8c527b387c65e572e56/ (Xtensa)
+  http://autobuild.buildroot.net/results/445a401da2f63a6c43d7c166516287db6cc977ab/
 
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
-Cc: Antoine Tenart <antoine.tenart@free-electrons.com>
-Cc: Julien Corjon <corjon.j@ecagroup.com>
+Cc: Olivier Schonken <olivier.schonken@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../android-tools/0005-fix-big-endian-build.patch  | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/android-tools/0005-fix-big-endian-build.patch
+ package/cups/0004-remove-pie.patch | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 package/cups/0004-remove-pie.patch
 
-diff --git a/package/android-tools/0005-fix-big-endian-build.patch b/package/android-tools/0005-fix-big-endian-build.patch
+diff --git a/package/cups/0004-remove-pie.patch b/package/cups/0004-remove-pie.patch
 new file mode 100644
-index 0000000..c35fdcb
+index 0000000..3d81941
 --- /dev/null
-+++ b/package/android-tools/0005-fix-big-endian-build.patch
-@@ -0,0 +1,61 @@
-+Fix build on big endian systems
++++ b/package/cups/0004-remove-pie.patch
+@@ -0,0 +1,21 @@
++Remove PIE flags from the build
 +
-+The usb_linux_client.c file defines cpu_to_le16/32 by using the C
-+library htole16/32 function calls. However, cpu_to_le16/32 are used
-+when initializing structures, i.e in a context where a function call
-+is not allowed.
-+
-+It works fine on little endian systems because htole16/32 are defined
-+by the C library as no-ops. But on big-endian systems, they are
-+actually doing something, which might involve calling a function,
-+causing build failures.
-+
-+To solve this, we simply open-code cpu_to_le16/32 in a way that allows
-+them to be used when initializing structures.
++Generating a statically linked binary built with PIE requires the
++Scrt1.o file, which isn't part of Buildroot uClibc toolchains. To
++solve this, we simply disable the PIE flags.
 +
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
-+Index: b/core/adb/usb_linux_client.c
++Index: b/Makedefs.in
 +===================================================================
-+--- a/core/adb/usb_linux_client.c
-++++ b/core/adb/usb_linux_client.c
-+@@ -34,8 +34,15 @@
-+ #define MAX_PACKET_SIZE_FS	64
-+ #define MAX_PACKET_SIZE_HS	512
-+ 
-+-#define cpu_to_le16(x)  htole16(x)
-+-#define cpu_to_le32(x)  htole32(x)
-++#if __BYTE_ORDER == __LITTLE_ENDIAN
-++# define cpu_to_le16(x) (x)
-++# define cpu_to_le32(x) (x)
-++#else
-++# define cpu_to_le16(x) ((((x) >> 8) & 0xffu) | (((x) & 0xffu) << 8))
-++# define cpu_to_le32(x) \
-++	((((x) & 0xff000000u) >> 24) | (((x) & 0x00ff0000u) >>  8) | \
-++	 (((x) & 0x0000ff00u) <<  8) | (((x) & 0x000000ffu) << 24))
-++#endif
-+ 
-+ struct usb_handle
-+ {
-+Index: b/core/adbd/usb_linux_client.c
-+===================================================================
-+--- a/core/adbd/usb_linux_client.c
-++++ b/core/adbd/usb_linux_client.c
-+@@ -34,8 +34,15 @@
-+ #define MAX_PACKET_SIZE_FS	64
-+ #define MAX_PACKET_SIZE_HS	512
-+ 
-+-#define cpu_to_le16(x)  htole16(x)
-+-#define cpu_to_le32(x)  htole32(x)
-++#if __BYTE_ORDER == __LITTLE_ENDIAN
-++# define cpu_to_le16(x) (x)
-++# define cpu_to_le32(x) (x)
-++#else
-++# define cpu_to_le16(x) ((((x) >> 8) & 0xffu) | (((x) & 0xffu) << 8))
-++# define cpu_to_le32(x) \
-++	((((x) & 0xff000000u) >> 24) | (((x) & 0x00ff0000u) >>  8) | \
-++	 (((x) & 0x0000ff00u) <<  8) | (((x) & 0x000000ffu) << 24))
-++#endif
-+ 
-+ struct usb_handle
-+ {
++--- a/Makedefs.in
+++++ b/Makedefs.in
++@@ -142,7 +142,7 @@
++ IPPFIND_MAN	=	@IPPFIND_MAN@
++ LDFLAGS		=	-L../cgi-bin -L../cups -L../filter -L../ppdc \
++ 			-L../scheduler @LDARCHFLAGS@ \
++-			@LDFLAGS@ @RELROFLAGS@ @PIEFLAGS@ $(OPTIM)
+++			@LDFLAGS@ @RELROFLAGS@ $(OPTIM)
++ LINKCUPS	=	@LINKCUPS@ $(LIBGSSAPI) $(DNSSDLIBS) $(LIBZ)
++ LINKCUPSIMAGE	=	@LINKCUPSIMAGE@
++ LIBS		=	$(LINKCUPS) $(COMMONLIBS)
 -- 
 2.7.4
