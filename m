@@ -1,52 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 May 2016 16:17:14 +0200
-Subject: [Buildroot] [PATCH 4/4] gmrender-resurrect: disable on musl
-	configurations
-In-Reply-To: <1463235434-31134-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1463235434-31134-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1463235434-31134-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 14 May 2016 16:17:11 +0200
+Subject: [Buildroot] [PATCH 1/4] android-tools: fix dependency on libselinux
+Message-ID: <1463235434-31134-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gmrender-resurrect uses <error.h>, which isn't available on musl
-configuration, so let's disable this package in such situations.
+The fastboot sub-option of android-tools did not properly replicate the
+dependency of libselinux, which it is selecting. Due to this, an invalid
+configuration could be generated, with fastboot selected while thread
+support is not available for example (and therefore libselinux is not
+available). This problem was causing the following build failure:
 
-Fixes:
+ http://autobuild.buildroot.net/results/21e45cee04fd983c85c6702595ee3f7ed8470931/
 
-  http://autobuild.buildroot.net/results/96a280a8115cd01d64670e4caf2471d3ee4581d9/
-  (and numerous similar build failures)
+This is fixed by replicating the selinux dependencies in the fastboot
+sub-option and adding the relevant Config.in comment.
 
-Cc: kei-k at ca2.so-net.ne.jp <kei-k@ca2.so-net.ne.jp>
+In addition, the main android-tools option had some logic to make sure
+at least one of its sub-option is enabled: adbd by default on systems
+with MMU, and fastboot by default on systems without MMU (because
+fastboot is the only part that builds on noMMU systems).
+
+However, with the new dependencies in the fastboot sub-option, this
+logic would have become a lot more complicated. Since fastboot is very
+unlikely to be used on noMMU systems, we simply make the whole package
+not available on noMMU systems.
+
+Cc: Gary Bisson <gary.bisson@boundarydevices.com>
+Cc: Antoine Tenart <antoine.tenart@free-electrons.com>
+Cc: Julien Corjon <corjon.j@ecagroup.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gmrender-resurrect/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/android-tools/Config.in | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/package/gmrender-resurrect/Config.in b/package/gmrender-resurrect/Config.in
-index db655ad..1a46225 100644
---- a/package/gmrender-resurrect/Config.in
-+++ b/package/gmrender-resurrect/Config.in
-@@ -3,6 +3,8 @@ config BR2_PACKAGE_GMRENDER_RESURRECT
- 	depends on BR2_USE_WCHAR # gstreamer1 -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer1 -> libglib2, libupnp
- 	depends on BR2_USE_MMU # gstreamer1
-+	# uses <error.h>
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_GSTREAMER1
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE # run-time only
- 	select BR2_PACKAGE_LIBUPNP
-@@ -11,6 +13,7 @@ config BR2_PACKAGE_GMRENDER_RESURRECT
+diff --git a/package/android-tools/Config.in b/package/android-tools/Config.in
+index 84f18e8..9be3f40 100644
+--- a/package/android-tools/Config.in
++++ b/package/android-tools/Config.in
+@@ -1,12 +1,14 @@
+ config BR2_PACKAGE_ANDROID_TOOLS
+ 	bool "android-tools"
+-	# adb/adbd needs mmu
++	# Technically, fastboot could build on noMMU systems. But
++	# since we need at least one of the three sub-options enabled,
++	# and adb/adbd can't be built on noMMU systems, and fastboot
++	# has some complicated dependencies, we simply make the whole
++	# package not available on noMMU platforms.
++	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_ANDROID_TOOLS_ADBD if \
+ 	      !BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT && \
+-	      !BR2_PACKAGE_ANDROID_TOOLS_ADB && \
+-	      BR2_USE_MMU
+-	select BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT if \
+-	      !BR2_USE_MMU
++	      !BR2_PACKAGE_ANDROID_TOOLS_ADB
+ 	help
+ 	  This package contains the fastboot and adb utilities, that
+ 	  can be used to interact with target devices using of these
+@@ -18,11 +20,18 @@ config BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT
+ 	bool "fastboot"
+ 	select BR2_PACKAGE_LIBSELINUX
+ 	select BR2_PACKAGE_ZLIB
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libselinux
++	depends on !BR2_STATIC_LIBS # libselinux
++	depends on !BR2_arc # libselinux
+ 	help
+ 	  This option will build and install the fastboot utility for
+ 	  the target, which can be used to reflash other target devices
+ 	  implementing the fastboot protocol.
  
- 	  https://github.com/hzeller/gmrender-resurrect
- 
--comment "gmrender-resurrect needs a toolchain w/ wchar, threads"
-+comment "gmrender-resurrect needs an (e)glibc or uClibc toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_TOOLCHAIN_USES_MUSL
++comment "fastboot needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_arc
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_ANDROID_TOOLS_ADB
+ 	bool "adb"
+ 	depends on BR2_USE_MMU # uses fork()
 -- 
 2.7.4
