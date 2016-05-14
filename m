@@ -1,63 +1,75 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 15 May 2016 01:45:52 +0200
-Subject: [Buildroot] [PATCH 4/4] gmrender-resurrect: disable on musl
- configurations
-In-Reply-To: <1463235434-31134-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1463235434-31134-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1463235434-31134-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <243af410-2e48-e534-041d-959151473e62@mind.be>
+Date: Sun, 15 May 2016 01:48:29 +0200
+Subject: [Buildroot] [PATCH 09/34] reproducibility/libglib2: allow
+ removing codegen
+In-Reply-To: <20160514133442.GE27354@hermes.click-hack.org>
+References: <20160430074358.GE1781@hermes.click-hack.org>
+ <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <1462002570-14706-9-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <88864677-f612-bd6b-3158-5c2980bb9825@mind.be>
+ <20160508202511.GT13285@hermes.click-hack.org>
+ <00b9819d-dbe3-52ce-75f7-6d7a8217f47a@mind.be>
+ <20160510194257.GE13285@hermes.click-hack.org>
+ <a5ff4b5b-d255-17d5-1393-d16b72965482@mind.be>
+ <20160514133442.GE27354@hermes.click-hack.org>
+Message-ID: <95f1c231-275c-4fca-e6df-a138bd3d4c0d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/14/16 16:17, Thomas Petazzoni wrote:
-> gmrender-resurrect uses <error.h>, which isn't available on musl
-> configuration, so let's disable this package in such situations.
+On 05/14/16 15:34, Gilles Chanteperdrix wrote:
+> On Thu, May 12, 2016 at 10:05:36PM +0200, Arnout Vandecappelle wrote:
+>> On 05/10/16 21:42, Gilles Chanteperdrix wrote:
+>>> On Tue, May 10, 2016 at 01:40:30AM +0200, Arnout Vandecappelle wrote:
+[snip]
+>>>>   I think it would make sense to run 'touch -d @$(SOURCE_DATE_EPOCH)' on all
+>>>> files after patching to capture this aspect. This was also proposed for
+>>>> Fedora[1] (though there it was only for the .py files). Not sure what happened
+>>>> with that proposal in the end.
+>>>
+>>> I think I tried running "touch" before compiling, unfortunately
+>>> playing with file dates before running "make" is a bit like playing
+>>> with fire. For instance with autotools based projects for which
+>>> autoreconf is not run, the project may use versions of the autotools
+>>> not installed on the user machine, and because of file dates may
+>>> want to rerun autoconf or autmake and whine because the right
+>>> versions are not available. Doing this only for .py files is much
+>>> more reasonable.
+>>
+>>   I tested this as well, with make-3.81 and make-4.04. Both of them do _not_
+>> rebuild if the timestamps are identical. And since the idea is to use touch -d
+>> @$(SOURCE_DATE_EPOCH), all timestamps will be identical.
 >
-> Fixes:
->
->   http://autobuild.buildroot.net/results/96a280a8115cd01d64670e4caf2471d3ee4581d9/
->   (and numerous similar build failures)
->
-> Cc: kei-k at ca2.so-net.ne.jp <kei-k@ca2.so-net.ne.jp>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> You checked both the pyo and the pyc?
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  Yep.
+
+
+>>   But it does indeed mean that if a package has a generated file with an earlier
+>> date than the source files, it will now suddenly no longer be
+>> rebuilt.
+>
+> Yes, that is another problem. But I tried it, and this is not the
+> one I had, the one I had was the contrary: the dates made make want
+> to rebuild some files (the autotools/automake files), whereas the
+> right versions of autoconf and automake were not installed, this was
+> a package that did not run autoreconf. The "make" tool is completely
+> based on file dates, so again, I think messing with file dates
+> before running make is a bad idea.
+
+  Hm, I don't see how this could happen... My test showed that 'make' would not 
+try to rebuild the autotools/automake files when they have the same timestamp as 
+the corresponding source file. So what triggers the reconf then?
+
+  I've tried with a random package (bash) and it's not reconfiguring after 
+touching all sources. Do you remember for which package you saw this?
+
 
   Regards,
   Arnout
 
-
-> ---
->  package/gmrender-resurrect/Config.in | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/package/gmrender-resurrect/Config.in b/package/gmrender-resurrect/Config.in
-> index db655ad..1a46225 100644
-> --- a/package/gmrender-resurrect/Config.in
-> +++ b/package/gmrender-resurrect/Config.in
-> @@ -3,6 +3,8 @@ config BR2_PACKAGE_GMRENDER_RESURRECT
->  	depends on BR2_USE_WCHAR # gstreamer1 -> libglib2
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer1 -> libglib2, libupnp
->  	depends on BR2_USE_MMU # gstreamer1
-> +	# uses <error.h>
-> +	depends on !BR2_TOOLCHAIN_USES_MUSL
->  	select BR2_PACKAGE_GSTREAMER1
->  	select BR2_PACKAGE_GST1_PLUGINS_BASE # run-time only
->  	select BR2_PACKAGE_LIBUPNP
-> @@ -11,6 +13,7 @@ config BR2_PACKAGE_GMRENDER_RESURRECT
->
->  	  https://github.com/hzeller/gmrender-resurrect
->
-> -comment "gmrender-resurrect needs a toolchain w/ wchar, threads"
-> +comment "gmrender-resurrect needs an (e)glibc or uClibc toolchain w/ wchar, threads"
->  	depends on BR2_USE_MMU
-> -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +		BR2_TOOLCHAIN_USES_MUSL
->
 
 
 -- 
