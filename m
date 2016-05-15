@@ -1,86 +1,44 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 15 May 2016 22:38:26 +0200
-Subject: [Buildroot] [PATCH v1] uclibc: enable debug build option
-In-Reply-To: <20160515215950.1e41e583@free-electrons.com>
-References: <1463077504-3646-1-git-send-email-ps.report@gmx.net>
- <20160515215950.1e41e583@free-electrons.com>
-Message-ID: <20160515223826.39e5ada6@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 May 2016 22:41:30 +0200
+Subject: [Buildroot] [git commit] openvpn: security bump to version 2.3.11
+Message-ID: <20160515204148.7349D8014B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=814e99d21a23cabd0b93c5b5abb55fe22e6a50b0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 15 May 2016 21:59:50 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Fixed port-share bug with DoS potential.
+Fix buffer overflow by user supplied data.
 
-> Hello,
-> 
-> On Thu, 12 May 2016 20:25:04 +0200, Peter Seiderer wrote:
-> 
-> >  #
-> > +# Debug
-> > +#
-> > +ifeq ($(BR2_ENABLE_DEBUG),y)
-> > +define UCLIBC_DEBUG_CONFIG
-> > +	$(call KCONFIG_ENABLE_OPT,DODEBUG=y,$(@D)/.config)
-> 
-> Has this patch really been tested? Inded, I think this line should be:
-> 
-> 	$(call KCONFIG_ENABLE_OPT,DODEBUG,$(@D)/.config)
-> 
-> Indeed, setting =y is done by KCONFIG_ENABLE_OPT.
-> 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Yes, seems to work including the typo:
-
-$ diff -u uclibc-1.0.14-config-orig build/uclibc-1.0.14/.config
---- uclibc-1.0.14-config-orig   2016-05-12 20:09:24.612415956 +0200
-+++ build/uclibc-1.0.14/.config 2016-05-15 22:20:47.504628970 +0200
-@@ -237,13 +237,12 @@
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 4ab916e..179198e 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	52f16bef3a02369682f1464fbd2821070c98d0bd993f4c46c764e87375abdcc1 	openvpn-2.3.9.tar.xz
++sha256	0f5f1ca1dc5743fa166d93dd4ec952f014b5f33bafd88f0ea34b455cae1434a7 	openvpn-2.3.11.tar.xz
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 1d06636..f3985cd 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
  #
- CROSS_COMPILER_PREFIX="/home/seiderer/Work/zeiss/freescale-imx6/build_rpi_010/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-"
- UCLIBC_EXTRA_CFLAGS=""
--# DODEBUG is not set
--# DOSTRIP is not set
-+DODEBUG=y
- # DOASSERTS is not set
- # SUPPORT_LD_DEBUG is not set
- # SUPPORT_LD_DEBUG_EARLY is not set
- # UCLIBC_MALLOC_DEBUGGING is not set
- # UCLIBC_HAS_BACKTRACE is not set
- WARNINGS="-Wall"
--# EXTRA_WARNINGS is not set
-+EXTRA_WARNINGS=y
- # DOMULTI is not set
-
-Will send an updated patch with the typo fixed immediately...
-
-> It is worth mentioning that we used to do exactly this (setting
-> DODEBUG=y when BR2_ENABLE_DEBUG=y), but removed that in commit
-> 70b7079d3797304fe3c9ba2941d3f446af3cea79in December 2013 because
-> DODEBUG=y was breaking the build. But since then, uClibc has been
-> replaced by uClibc-ng and I guess Waldemar has fixed DODEBUG=y.
-> 
-> Peter, did you do a test build on ARM, to verify that you're not
-> falling into the issue mentioned in commit
-> 70b7079d3797304fe3c9ba2941d3f446af3cea79 ?
-> 
-
-Was not aware of the history, but I did compile test the patch with
-raspberrypi3_defconfig and additional BR2_ENABLE_DEBUG=y
+ ################################################################################
  
-> In any case, please resend an updated version with the =y removed. I
-> normally do such minor fixups myself when applying, but in this case, I
-> really want to be sure that you have done a test build.
-> 
-
-Thanks for spotting the typo, updated patch follows...
-
-Regards,
-Peter
-
-> Thanks!
-> 
-> Thomas
+-OPENVPN_VERSION = 2.3.9
++OPENVPN_VERSION = 2.3.11
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf openssl
