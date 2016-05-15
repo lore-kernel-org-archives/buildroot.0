@@ -1,37 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 May 2016 22:43:13 +0200
-Subject: [Buildroot] [PATCH v2 1/2] openvpn: remove polarssl crypto
- backend option
-In-Reply-To: <1463232828-2957-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1463232828-2957-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160515224313.7d703e9d@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 15 May 2016 22:50:25 +0200
+Subject: [Buildroot] [PATCH v2] uclibc: enable debug build option
+Message-ID: <1463345425-10074-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Set uClibc DODEBUG in case BR2_ENABLE_DEBUG is set.
 
-On Sat, 14 May 2016 10:33:47 -0300, Gustavo Zacarias wrote:
-> Now that we need to bump openvpn to version 2.3.11 for security fixes
-> the time has come to remove the polarssl option.
-> Add legacy handling explaining the situation:
-> PolarSSL 1.2.x can coexist with mbedTLS 2.x+, but OpenVPN requires
-> PolarSSL/mbedTLS 1.3.x (the transition branch) >= 1.3.8 but doesn't
-> build/work with the 2.x series. And PolarSSL/mbedTLS 1.3.x can't coexist
-> with mbedTLS 2.x on the same target.
-> So, unfortunately, openssl is now the only option (until libressl
-> arrives) which means no more backend options in general.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
-> Change for v2: remove legacy handling for openssl case.
+Setting DODEBUG was removed with commit 70b7079d3797304fe3c9ba2941d3f446af3cea79
+in Dec. 2013 because of build failures with the old uClibc (now replaced
+with uClibc-ng), no build failure with raspberrypi3_defconfig and
+BR2_ENABLE_DEBUG enabled.
 
-Both applied to master, thanks.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 --> v2:
+  - fix 'DODEBUG=y' typo (spotted by Thomas Petazzoni)
+  - fix uClibc spelling
+  - add DODEBUG history hint
+---
+ package/uclibc/uclibc.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Thomas
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index b8ccee2..6782682 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -182,6 +182,15 @@ endef
+ endif
+ 
+ #
++# Debug
++#
++ifeq ($(BR2_ENABLE_DEBUG),y)
++define UCLIBC_DEBUG_CONFIG
++	$(call KCONFIG_ENABLE_OPT,DODEBUG,$(@D)/.config)
++endef
++endif
++
++#
+ # Endianness
+ #
+ 
+@@ -394,6 +403,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_SPARC_TYPE_CONFIG)
+ 	$(UCLIBC_POWERPC_TYPE_CONFIG)
+ 	$(UCLIBC_X86_TYPE_CONFIG)
++	$(UCLIBC_DEBUG_CONFIG)
+ 	$(UCLIBC_ENDIAN_CONFIG)
+ 	$(UCLIBC_LARGEFILE_CONFIG)
+ 	$(UCLIBC_IPV6_CONFIG)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
