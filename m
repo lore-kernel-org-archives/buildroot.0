@@ -1,261 +1,41 @@
-From: Matthew Weber <matt@thewebers.ws>
-Date: Sun, 15 May 2016 08:45:31 -0500
-Subject: [Buildroot] [PATCH 1/1] package/igmpproxy: fix musl build
-In-Reply-To: <1453584463-4865-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453584463-4865-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <CAFt09wN-r66SVooA1w-L3CxBap5UMJBM9QuDXmV4W53PT__mvw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 May 2016 19:05:56 +0200
+Subject: [Buildroot] [git commit] toolchain: update paranoid unsafe path
+	comment
+Message-ID: <20160515170606.B628881841@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=f9d311edc633717428376fb401e96d42ebd8738a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, Jan 23, 2016 at 3:27 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/943/9432748bf7b1e24db9fcb0a8cce6942fcdf6be5b/
-> http://autobuild.buildroot.net/results/083/083c61f43c2f1f0dec69d44583b447a0520933b7/
-> and many others
->
+Since 919c06c28295f19ca49459b98d8954148b381360 the calls to gcc always pass
+through the toolchain wrapper and all gcc patches to support poisoning has been
+removed.
 
-I'm looking into the current igmp musl failures and noticed this
-patch.  It doesn't seem to be listed in patchworks at this point, was
-there rework requested possibly over IRC (I couldn't find any email
-traffic)?
+Update the BR2_COMPILER_PARANOID_UNSAFE_PATH comment.
 
-Thanks!
-Matt
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../0002-Use-standard-unsigned-integer-types.patch | 213 +++++++++++++++++++++
->  1 file changed, 213 insertions(+)
->  create mode 100644 package/igmpproxy/0002-Use-standard-unsigned-integer-types.patch
->
-> diff --git a/package/igmpproxy/0002-Use-standard-unsigned-integer-types.patch b/package/igmpproxy/0002-Use-standard-unsigned-integer-types.patch
-> new file mode 100644
-> index 0000000..200bf23
-> --- /dev/null
-> +++ b/package/igmpproxy/0002-Use-standard-unsigned-integer-types.patch
-> @@ -0,0 +1,213 @@
-> +Fix musl build
-> +
-> +Downloaded from:
-> +https://github.com/alpinelinux/aports/blob/master/main/igmpproxy/0001-Use-standard-unsigned-integer-types.patch
-> +
-> +Patch was reported upstream:
-> +http://sourceforge.net/p/igmpproxy/bugs/22/
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +
-> +
-> +From ed3dff27f360239910310be6706fd54572398992 Mon Sep 17 00:00:00 2001
-> +From: Natanael Copa <ncopa@alpinelinux.org>
-> +Date: Mon, 3 Mar 2014 12:11:26 +0000
-> +Subject: [PATCH] Use standard unsigned integer types
-> +
-> +Use the stanard unsigned integer types instead of the non-standard
-> +u_char, u_short and u_int.
-> +
-> +This fixes build with musl libc.
-> +
-> +(cherry picked from commit b914bcf882c6189be7a0ce6fceb34422372c3606)
-> +
-> +Conflicts:
-> +       src/igmp.c
-> +---
-> + src/igmp.c         |  4 ++--
-> + src/kern.c         |  4 ++--
-> + src/lib.c          | 10 +++++-----
-> + src/os-dragonfly.h |  4 ++--
-> + src/os-freebsd.h   |  4 ++--
-> + src/os-linux.h     |  4 ++--
-> + src/os-netbsd.h    |  4 ++--
-> + src/os-openbsd.h   |  4 ++--
-> + 8 files changed, 19 insertions(+), 19 deletions(-)
-> +
-> +diff --git a/src/igmp.c b/src/igmp.c
-> +index a0cd27d..92f37e7 100644
-> +--- a/src/igmp.c
-> ++++ b/src/igmp.c
-> +@@ -79,7 +79,7 @@ void initIgmp() {
-> + /**
-> + *   Finds the textual name of the supplied IGMP request.
-> + */
-> +-char *igmpPacketKind(u_int type, u_int code) {
-> ++char *igmpPacketKind(unsigned int type, unsigned int code) {
-> +     static char unknown[20];
-> +
-> +     switch (type) {
-> +@@ -226,7 +226,7 @@ void buildIgmp(uint32_t src, uint32_t dst, int type, int code, uint32_t group, i
-> +     igmp->igmp_code         = code;
-> +     igmp->igmp_group.s_addr = group;
-> +     igmp->igmp_cksum        = 0;
-> +-    igmp->igmp_cksum        = inetChksum((u_short *)igmp,
-> ++    igmp->igmp_cksum        = inetChksum((unsigned short *)igmp,
-> +                                          IGMP_MINLEN + datalen);
-> + }
-> +
-> +diff --git a/src/kern.c b/src/kern.c
-> +index 2055636..12c613f 100644
-> +--- a/src/kern.c
-> ++++ b/src/kern.c
-> +@@ -82,7 +82,7 @@ void k_hdr_include(int hdrincl) {
-> +
-> + void k_set_ttl(int t) {
-> + #ifndef RAW_OUTPUT_IS_RAW
-> +-    u_char ttl;
-> ++    unsigned char ttl;
-> +
-> +     ttl = t;
-> +     if (setsockopt(MRouterFD, IPPROTO_IP, IP_MULTICAST_TTL,
-> +@@ -94,7 +94,7 @@ void k_set_ttl(int t) {
-> +
-> +
-> + void k_set_loop(int l) {
-> +-    u_char loop;
-> ++    unsigned char loop;
-> +
-> +     loop = l;
-> +     if (setsockopt(MRouterFD, IPPROTO_IP, IP_MULTICAST_LOOP,
-> +diff --git a/src/lib.c b/src/lib.c
-> +index 70a730a..0eed9ce 100644
-> +--- a/src/lib.c
-> ++++ b/src/lib.c
-> +@@ -61,9 +61,9 @@ char *fmtInAdr( char *St, struct in_addr InAdr ) {
-> +  * Convert an IP address in u_long (network) format into a printable string.
-> +  */
-> + char *inetFmt(uint32_t addr, char *s) {
-> +-    register u_char *a;
-> ++    register unsigned char *a;
-> +
-> +-    a = (u_char *)&addr;
-> ++    a = (unsigned char *)&addr;
-> +     sprintf(s, "%u.%u.%u.%u", a[0], a[1], a[2], a[3]);
-> +     return(s);
-> + }
-> +@@ -74,15 +74,15 @@ char *inetFmt(uint32_t addr, char *s) {
-> +  * string including the netmask as a number of bits.
-> +  */
-> + char *inetFmts(uint32_t addr, uint32_t mask, char *s) {
-> +-    register u_char *a, *m;
-> ++    register unsigned char *a, *m;
-> +     int bits;
-> +
-> +     if ((addr == 0) && (mask == 0)) {
-> +         sprintf(s, "default");
-> +         return(s);
-> +     }
-> +-    a = (u_char *)&addr;
-> +-    m = (u_char *)&mask;
-> ++    a = (unsigned char *)&addr;
-> ++    m = (unsigned char *)&mask;
-> +     bits = 33 - ffs(ntohl(mask));
-> +
-> +     if (m[3] != 0) sprintf(s, "%u.%u.%u.%u/%d", a[0], a[1], a[2], a[3],
-> +diff --git a/src/os-dragonfly.h b/src/os-dragonfly.h
-> +index 735401c..189dfb2 100644
-> +--- a/src/os-dragonfly.h
-> ++++ b/src/os-dragonfly.h
-> +@@ -3,12 +3,12 @@
-> + #include <netinet/ip.h>
-> + #include <netinet/igmp.h>
-> +
-> +-static inline u_short ip_data_len(const struct ip *ip)
-> ++static inline unsigned short ip_data_len(const struct ip *ip)
-> + {
-> +       return ip->ip_len;
-> + }
-> +
-> +-static inline void ip_set_len(struct ip *ip, u_short len)
-> ++static inline void ip_set_len(struct ip *ip, unsigned short len)
-> + {
-> +       ip->ip_len = len;
-> + }
-> +diff --git a/src/os-freebsd.h b/src/os-freebsd.h
-> +index ca01cc5..60b897c 100644
-> +--- a/src/os-freebsd.h
-> ++++ b/src/os-freebsd.h
-> +@@ -12,12 +12,12 @@
-> + #define IGMP_V2_LEAVE_GROUP IGMP_HOST_LEAVE_MESSAGE
-> + #endif
-> +
-> +-static inline u_short ip_data_len(const struct ip *ip)
-> ++static inline unsigned short ip_data_len(const struct ip *ip)
-> + {
-> +       return ip->ip_len;
-> + }
-> +
-> +-static inline void ip_set_len(struct ip *ip, u_short len)
-> ++static inline void ip_set_len(struct ip *ip, unsigned short len)
-> + {
-> +       ip->ip_len = len;
-> + }
-> +diff --git a/src/os-linux.h b/src/os-linux.h
-> +index 7504b1f..6cdcdc7 100644
-> +--- a/src/os-linux.h
-> ++++ b/src/os-linux.h
-> +@@ -4,12 +4,12 @@
-> + #include <netinet/ip.h>
-> + #include <netinet/igmp.h>
-> +
-> +-static inline u_short ip_data_len(const struct ip *ip)
-> ++static inline unsigned short ip_data_len(const struct ip *ip)
-> + {
-> +       return ntohs(ip->ip_len) - (ip->ip_hl << 2);
-> + }
-> +
-> +-static inline void ip_set_len(struct ip *ip, u_short len)
-> ++static inline void ip_set_len(struct ip *ip, unsigned short len)
-> + {
-> +       ip->ip_len = htons(len);
-> + }
-> +diff --git a/src/os-netbsd.h b/src/os-netbsd.h
-> +index 17bd5fa..22f74e5 100644
-> +--- a/src/os-netbsd.h
-> ++++ b/src/os-netbsd.h
-> +@@ -8,12 +8,12 @@
-> + #define IGMP_V2_MEMBERSHIP_REPORT IGMP_v2_HOST_MEMBERSHIP_REPORT
-> + #define IGMP_V2_LEAVE_GROUP IGMP_HOST_LEAVE_MESSAGE
-> +
-> +-static inline u_short ip_data_len(const struct ip *ip)
-> ++static inline unsigned short ip_data_len(const struct ip *ip)
-> + {
-> +       return ip->ip_len;
-> + }
-> +
-> +-static inline void ip_set_len(struct ip *ip, u_short len)
-> ++static inline void ip_set_len(struct ip *ip, unsigned short len)
-> + {
-> +       ip->ip_len = len;
-> + }
-> +diff --git a/src/os-openbsd.h b/src/os-openbsd.h
-> +index 873e5fb..75ddf80 100644
-> +--- a/src/os-openbsd.h
-> ++++ b/src/os-openbsd.h
-> +@@ -10,12 +10,12 @@
-> +
-> + #define INADDR_ALLRTRS_GROUP INADDR_ALLROUTERS_GROUP
-> +
-> +-static inline u_short ip_data_len(const struct ip *ip)
-> ++static inline unsigned short ip_data_len(const struct ip *ip)
-> + {
-> +       return ntohs(ip->ip_len) - (ip->ip_hl << 2);
-> + }
-> +
-> +-static inline void ip_set_len(struct ip *ip, u_short len)
-> ++static inline void ip_set_len(struct ip *ip, unsigned short len)
-> + {
-> +       ip->ip_len = htons(len);
-> + }
-> +--
-> +1.9.0
-> +
-> --
-> 2.7.0.rc3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/Config.in b/Config.in
+index b5cc892..9bc8e51 100644
+--- a/Config.in
++++ b/Config.in
+@@ -694,8 +694,8 @@ config BR2_COMPILER_PARANOID_UNSAFE_PATH
+ 	  unsafe paths are encountered.
+ 
+ 	  Note that this mechanism is available for both the internal
+-	  toolchain (through gcc and binutils patches) and external
+-	  toolchain backends (through the external toolchain wrapper).
++	  toolchain (through the toolchain wrapper and binutils patches)
++	  and external toolchain backends (through the toolchain wrapper).
+ 
+ endmenu
+ 
