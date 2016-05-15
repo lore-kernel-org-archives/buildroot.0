@@ -1,30 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 May 2016 22:21:47 +0200
-Subject: [Buildroot] [PATCH v1] Makefile: fix rootfs overlay with
-	BR2_ROOTFS_MERGED_USR enabled
-In-Reply-To: <20160515154253.3f1cba23@free-electrons.com> (Thomas Petazzoni's
- message of "Sun, 15 May 2016 15:42:53 +0200")
-References: <1461439109-28101-1-git-send-email-ps.report@gmx.net>
- <20160508141313.GD24011@free.fr> <20160512210625.6c04e7d8@gmx.net>
- <a49b8176-f38e-5ce0-b088-6ff7bd03310e@mind.be>
- <20160515154253.3f1cba23@free-electrons.com>
-Message-ID: <87lh3bgjhg.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 15 May 2016 22:38:26 +0200
+Subject: [Buildroot] [PATCH v1] uclibc: enable debug build option
+In-Reply-To: <20160515215950.1e41e583@free-electrons.com>
+References: <1463077504-3646-1-git-send-email-ps.report@gmx.net>
+ <20160515215950.1e41e583@free-electrons.com>
+Message-ID: <20160515223826.39e5ada6@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello Thomas,
 
- >> It certainly doesn't bother me, and I doubt that interferes with
- >> Peter's or Thomas's workflow too. So unless they object a second
- >> time, just keep on doing what works for you.
+On Sun, 15 May 2016 21:59:50 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
- > It doesn't matter at all for me, I'm fine with seeing "v1" for the
- > first version.
+> Hello,
+> 
+> On Thu, 12 May 2016 20:25:04 +0200, Peter Seiderer wrote:
+> 
+> >  #
+> > +# Debug
+> > +#
+> > +ifeq ($(BR2_ENABLE_DEBUG),y)
+> > +define UCLIBC_DEBUG_CONFIG
+> > +	$(call KCONFIG_ENABLE_OPT,DODEBUG=y,$(@D)/.config)
+> 
+> Has this patch really been tested? Inded, I think this line should be:
+> 
+> 	$(call KCONFIG_ENABLE_OPT,DODEBUG,$(@D)/.config)
+> 
+> Indeed, setting =y is done by KCONFIG_ENABLE_OPT.
+> 
 
-yeah, same here.
+Yes, seems to work including the typo:
 
--- 
-Bye, Peter Korsgaard
+$ diff -u uclibc-1.0.14-config-orig build/uclibc-1.0.14/.config
+--- uclibc-1.0.14-config-orig   2016-05-12 20:09:24.612415956 +0200
++++ build/uclibc-1.0.14/.config 2016-05-15 22:20:47.504628970 +0200
+@@ -237,13 +237,12 @@
+ #
+ CROSS_COMPILER_PREFIX="/home/seiderer/Work/zeiss/freescale-imx6/build_rpi_010/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-"
+ UCLIBC_EXTRA_CFLAGS=""
+-# DODEBUG is not set
+-# DOSTRIP is not set
++DODEBUG=y
+ # DOASSERTS is not set
+ # SUPPORT_LD_DEBUG is not set
+ # SUPPORT_LD_DEBUG_EARLY is not set
+ # UCLIBC_MALLOC_DEBUGGING is not set
+ # UCLIBC_HAS_BACKTRACE is not set
+ WARNINGS="-Wall"
+-# EXTRA_WARNINGS is not set
++EXTRA_WARNINGS=y
+ # DOMULTI is not set
+
+Will send an updated patch with the typo fixed immediately...
+
+> It is worth mentioning that we used to do exactly this (setting
+> DODEBUG=y when BR2_ENABLE_DEBUG=y), but removed that in commit
+> 70b7079d3797304fe3c9ba2941d3f446af3cea79in December 2013 because
+> DODEBUG=y was breaking the build. But since then, uClibc has been
+> replaced by uClibc-ng and I guess Waldemar has fixed DODEBUG=y.
+> 
+> Peter, did you do a test build on ARM, to verify that you're not
+> falling into the issue mentioned in commit
+> 70b7079d3797304fe3c9ba2941d3f446af3cea79 ?
+> 
+
+Was not aware of the history, but I did compile test the patch with
+raspberrypi3_defconfig and additional BR2_ENABLE_DEBUG=y
+ 
+> In any case, please resend an updated version with the =y removed. I
+> normally do such minor fixups myself when applying, but in this case, I
+> really want to be sure that you have done a test build.
+> 
+
+Thanks for spotting the typo, updated patch follows...
+
+Regards,
+Peter
+
+> Thanks!
+> 
+> Thomas
