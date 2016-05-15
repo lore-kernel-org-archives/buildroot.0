@@ -1,50 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 May 2016 21:59:50 +0200
-Subject: [Buildroot] [PATCH v1] uclibc: enable debug build option
-In-Reply-To: <1463077504-3646-1-git-send-email-ps.report@gmx.net>
-References: <1463077504-3646-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20160515215950.1e41e583@free-electrons.com>
+Date: Sun, 15 May 2016 22:00:30 +0200
+Subject: [Buildroot] [git commit] mtr: bump to latest git version (newdns
+	branch)
+Message-ID: <20160515200042.EC6A0807C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0490a09fd73d45f0832e179074cdbe514deb977e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 12 May 2016 20:25:04 +0200, Peter Seiderer wrote:
+This fixes the musl build issues and the need to specially patch for
+uClibc at the same time. Fixes:
+http://autobuild.buildroot.net/results/deb/debeb3ded02c3de63182c3433ff02062192d3fd1/
 
->  #
-> +# Debug
-> +#
-> +ifeq ($(BR2_ENABLE_DEBUG),y)
-> +define UCLIBC_DEBUG_CONFIG
-> +	$(call KCONFIG_ENABLE_OPT,DODEBUG=y,$(@D)/.config)
+Also add hash file.
 
-Has this patch really been tested? Inded, I think this line should be:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mtr/mtr.hash |  2 ++
+ package/mtr/mtr.mk   | 12 +-----------
+ 2 files changed, 3 insertions(+), 11 deletions(-)
 
-	$(call KCONFIG_ENABLE_OPT,DODEBUG,$(@D)/.config)
-
-Indeed, setting =y is done by KCONFIG_ENABLE_OPT.
-
-It is worth mentioning that we used to do exactly this (setting
-DODEBUG=y when BR2_ENABLE_DEBUG=y), but removed that in commit
-70b7079d3797304fe3c9ba2941d3f446af3cea79in December 2013 because
-DODEBUG=y was breaking the build. But since then, uClibc has been
-replaced by uClibc-ng and I guess Waldemar has fixed DODEBUG=y.
-
-Peter, did you do a test build on ARM, to verify that you're not
-falling into the issue mentioned in commit
-70b7079d3797304fe3c9ba2941d3f446af3cea79 ?
-
-In any case, please resend an updated version with the =y removed. I
-normally do such minor fixups myself when applying, but in this case, I
-really want to be sure that you have done a test build.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mtr/mtr.hash b/package/mtr/mtr.hash
+new file mode 100644
+index 0000000..f3df81f
+--- /dev/null
++++ b/package/mtr/mtr.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	12a6a94c0ec04d508de27eda5f5ba91f50d4b5fe74a98aca0973e2c16a42555a	mtr-66de3ecbab28b054b868a73fbb57f30549d770ac.tar.gz
+diff --git a/package/mtr/mtr.mk b/package/mtr/mtr.mk
+index 3f73a5f..5ee6124 100644
+--- a/package/mtr/mtr.mk
++++ b/package/mtr/mtr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MTR_VERSION = v0.86
++MTR_VERSION = 66de3ecbab28b054b868a73fbb57f30549d770ac
+ MTR_SITE = $(call github,traviscross,mtr,$(MTR_VERSION))
+ MTR_AUTORECONF = YES
+ MTR_CONF_OPTS = --without-gtk
+@@ -12,14 +12,4 @@ MTR_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_NCURSES),ncurses)
+ MTR_LICENSE = GPLv2
+ MTR_LICENSE_FILES = COPYING
+ 
+-# uClibc has res_ninit but not res_nmkquery
+-ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+-define MTR_DISABLE_RES_NINIT
+-	$(SED) 's/#ifdef res_ninit/#if 0/' \
+-		$(@D)/dns.c
+-endef
+-endif
+-
+-MTR_POST_PATCH_HOOKS += MTR_DISABLE_RES_NINIT
+-
+ $(eval $(autotools-package))
