@@ -1,59 +1,50 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 15 May 2016 22:01:12 +0200
-Subject: [Buildroot] [PATCH] package/gcc: 4.8.x to 5.x: backport a fix
- for building gcc with gcc-6
-In-Reply-To: <20160515211743.0dba51fd@free-electrons.com>
-References: <1463291260-2544-1-git-send-email-s.martin49@gmail.com>
- <20160515211743.0dba51fd@free-electrons.com>
-Message-ID: <CAHXCMMLLCTp79YOTj0N_U1FfdK0XwYp5dTmnFpBO-sw4OD_QJg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 15 May 2016 22:03:18 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-05-13
+In-Reply-To: <20160515215531.7824d583@free-electrons.com>
+References: <20160514063024.2C7B91025E9@stock.ovh.net>
+ <20160514154655.57ae0bad@free-electrons.com>
+ <20160514145905.GA3877@free.fr> <20160514160242.GB3877@free.fr>
+ <20160515215531.7824d583@free-electrons.com>
+Message-ID: <20160515200318.GE3877@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, May 15, 2016 at 9:17 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Sun, 15 May 2016 07:47:40 +0200, Samuel Martin wrote:
->> When the host system compiler is gcc-6, this patch is needed to build
->> Buildroot toolchain and cleanly apply on gcc version 4.8.x to 5.x (not
->> needed for 4.7.x series).
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->> ---
->>  package/gcc/4.8.5/130-build_gcc-5_with_gcc-6.patch | 153 +++++++++++++++++++++
->>  package/gcc/4.9.3/130-build_gcc-5_with_gcc-6.patch | 153 +++++++++++++++++++++
->
-> Isn't it a bit odd to have a patch named "build_gcc-5_with_gcc-6" when
-> in fact you're fixing gcc 4.x ?
+Thomas, All,
 
-Well, I just imported the patch from crosstool-ng without renaming it,
-but I did run the build test for the 6 versions of gcc Buildroot
-currently supports:
-- 4.7.4 (deprecated): patch not needed
-- 4.8.5: patch needed
-- 4.9.3: patch needed
-- 5.3.0: patch needed
-- 6.1.0: patch needed
-- arc-2015.12 (based on gcc-4.8.5): patch needed
+On 2016-05-15 21:55 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 14 May 2016 18:02:42 +0200, Yann E. MORIN wrote:
+> > I've just run this config on my autobuilder, and the build was fine
+> > (twice in a row, once with the machine already loaded, once with the
+> > machine otherwise idle).
+> > 
+> > I'll do a few such builds in loop, just to see if the issue is
+> > reproducible.
+> 
+> I think the issue is hard to reproduce: according to
+> http://autobuild.buildroot.net/?reason=host-python3-3.4.3, it occurred
+> only 15 times over the last 6 months, while I believe the host-python3
+> package has been built hundreds to thousands of times.
 
-If you prefer, I can rename them, then repost the patch...
+Well, I was able to reproduce it at least twice on two different
+machines (i.e. four times total, out of something like 30 builds),
+provided they were otherwise highly loaded.
 
->
->>  package/gcc/5.3.0/130-build_gcc-5_with_gcc-6.patch | 153 +++++++++++++++++++++
->>  .../arc-2015.12/130-build_gcc-5_with_gcc-6.patch   | 153 +++++++++++++++++++++
->
-> This one is also based on 4.8 as far as I know.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+However, I am not sure we can easily do somehing about it. Disablign
+parallel build is not nice, indeed. I can have a look to see if there is
+something obvious in their buildsystem, but I can make no promise...
 
 Regards,
+Yann E. MORIN.
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
