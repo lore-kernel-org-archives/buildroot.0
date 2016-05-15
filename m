@@ -1,46 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 May 2016 22:03:30 +0200
-Subject: [Buildroot] [git commit] android-tools: needs thread support
-Message-ID: <20160515200421.4438E8183F@busybox.osuosl.org>
+Date: Sun, 15 May 2016 22:10:08 +0200
+Subject: [Buildroot] [git commit] android-tools: add patch to fix static
+	linking
+Message-ID: <20160515201041.81ADF817A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=247592ed00adadcdcb14948ada2bc7fdd5aa20a1
+commit: https://git.buildroot.net/buildroot/commit/?id=9194be9f3acfda7eb32a1ede9918f913bb59b2c9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Both adb and adbd use <pthread.h>, and fastboot needs thread due to
-its dependency on libselinux, so we put the dependency in the
-top-level android-tools Config.in option.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/bafadedc0ae91f8a1e26d14f30b37d6bb9486816/
+  http://autobuild.buildroot.net/results/c3b95741a5f6622dc9542f9eaefe295a328e2e40/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/android-tools/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../android-tools/0005-fix-static-link-zlib.patch  | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/android-tools/Config.in b/package/android-tools/Config.in
-index 9be3f40..35bb8af 100644
---- a/package/android-tools/Config.in
-+++ b/package/android-tools/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_ANDROID_TOOLS
- 	# has some complicated dependencies, we simply make the whole
- 	# package not available on noMMU platforms.
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_ANDROID_TOOLS_ADBD if \
- 	      !BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT && \
- 	      !BR2_PACKAGE_ANDROID_TOOLS_ADB
-@@ -53,3 +54,7 @@ config BR2_PACKAGE_ANDROID_TOOLS_ADBD
- 	  implementing the ADB protocol.
- 
- endif
+diff --git a/package/android-tools/0005-fix-static-link-zlib.patch b/package/android-tools/0005-fix-static-link-zlib.patch
+new file mode 100644
+index 0000000..dff4df6
+--- /dev/null
++++ b/package/android-tools/0005-fix-static-link-zlib.patch
+@@ -0,0 +1,36 @@
++Fix static linking of adb/adbd
 +
-+comment "android-tools needs a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
++Both adb and adbd use OpenSSL, which indirectly uses zlib. Since
++adb/adbd also use zlib directly -lz is included in the linker flags,
++but not at the right position to ensure that static linking works: to
++make it possible for OpenSSL symbols to see zlib symbols, -lz must
++appear after -lcrypto.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/debian/makefiles/adb.mk
++===================================================================
++--- a/debian/makefiles/adb.mk
+++++ b/debian/makefiles/adb.mk
++@@ -41,7 +41,7 @@
++ CPPFLAGS+= -I$(SRCDIR)/core/adb
++ CPPFLAGS+= -I$(SRCDIR)/core/include
++ 
++-LIBS+= -lc -lpthread -lz -lcrypto
+++LIBS+= -lc -lpthread -lcrypto -lz
++ 
++ OBJS= $(SRCS:.c=.o)
++ 
++Index: b/debian/makefiles/adbd.mk
++===================================================================
++--- a/debian/makefiles/adbd.mk
+++++ b/debian/makefiles/adbd.mk
++@@ -44,7 +44,7 @@
++ CPPFLAGS+= -I$(SRCDIR)/core/adbd
++ CPPFLAGS+= -I$(SRCDIR)/core/include
++ 
++-LIBS+= -lc -lpthread -lz -lcrypto -lcrypt
+++LIBS+= -lc -lpthread -lcrypto -lz -lcrypt
++ 
++ OBJS= $(patsubst %, %.o, $(basename $(SRCS)))
++ 
