@@ -1,52 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 May 2016 21:21:35 +0200
-Subject: [Buildroot] [PATCH 1/4] android-tools: fix dependency on
- libselinux
-In-Reply-To: <1463235434-31134-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1463235434-31134-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160515212135.4d85f193@free-electrons.com>
+Date: Sun, 15 May 2016 21:22:20 +0200
+Subject: [Buildroot] [git commit] gmrender-resurrect: disable on musl
+	configurations
+Message-ID: <20160515192224.4B3B3818F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6e1174c2689a73707c64c55d88d2e5dcd8379bb8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 14 May 2016 16:17:11 +0200, Thomas Petazzoni wrote:
-> The fastboot sub-option of android-tools did not properly replicate the
-> dependency of libselinux, which it is selecting. Due to this, an invalid
-> configuration could be generated, with fastboot selected while thread
-> support is not available for example (and therefore libselinux is not
-> available). This problem was causing the following build failure:
-> 
->  http://autobuild.buildroot.net/results/21e45cee04fd983c85c6702595ee3f7ed8470931/
-> 
-> This is fixed by replicating the selinux dependencies in the fastboot
-> sub-option and adding the relevant Config.in comment.
-> 
-> In addition, the main android-tools option had some logic to make sure
-> at least one of its sub-option is enabled: adbd by default on systems
-> with MMU, and fastboot by default on systems without MMU (because
-> fastboot is the only part that builds on noMMU systems).
-> 
-> However, with the new dependencies in the fastboot sub-option, this
-> logic would have become a lot more complicated. Since fastboot is very
-> unlikely to be used on noMMU systems, we simply make the whole package
-> not available on noMMU systems.
-> 
-> Cc: Gary Bisson <gary.bisson@boundarydevices.com>
-> Cc: Antoine Tenart <antoine.tenart@free-electrons.com>
-> Cc: Julien Corjon <corjon.j@ecagroup.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/android-tools/Config.in | 19 ++++++++++++++-----
->  1 file changed, 14 insertions(+), 5 deletions(-)
+gmrender-resurrect uses <error.h>, which isn't available on musl
+configuration, so let's disable this package in such situations.
 
-Applied to master.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  http://autobuild.buildroot.net/results/96a280a8115cd01d64670e4caf2471d3ee4581d9/
+  (and numerous similar build failures)
+
+Cc: kei-k at ca2.so-net.ne.jp <kei-k@ca2.so-net.ne.jp>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gmrender-resurrect/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/gmrender-resurrect/Config.in b/package/gmrender-resurrect/Config.in
+index db655ad..1a46225 100644
+--- a/package/gmrender-resurrect/Config.in
++++ b/package/gmrender-resurrect/Config.in
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_GMRENDER_RESURRECT
+ 	depends on BR2_USE_WCHAR # gstreamer1 -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer1 -> libglib2, libupnp
+ 	depends on BR2_USE_MMU # gstreamer1
++	# uses <error.h>
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_GSTREAMER1
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE # run-time only
+ 	select BR2_PACKAGE_LIBUPNP
+@@ -11,6 +13,7 @@ config BR2_PACKAGE_GMRENDER_RESURRECT
+ 
+ 	  https://github.com/hzeller/gmrender-resurrect
+ 
+-comment "gmrender-resurrect needs a toolchain w/ wchar, threads"
++comment "gmrender-resurrect needs an (e)glibc or uClibc toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_TOOLCHAIN_USES_MUSL
