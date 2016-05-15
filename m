@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 May 2016 21:36:46 +0200
-Subject: [Buildroot] [PATCH 2/2] package/android-tools: fix host tools
- dependency
-In-Reply-To: <1463260156-23406-3-git-send-email-s.martin49@gmail.com>
-References: <1463260156-23406-1-git-send-email-s.martin49@gmail.com>
- <1463260156-23406-3-git-send-email-s.martin49@gmail.com>
-Message-ID: <20160515213646.6530b595@free-electrons.com>
+Date: Sun, 15 May 2016 21:38:55 +0200
+Subject: [Buildroot] [PATCH] stress-ng: workaround sparc64 gcc ICE
+In-Reply-To: <20160514184227.GA2898@waldemar-brodkorb.de>
+References: <20160514184227.GA2898@waldemar-brodkorb.de>
+Message-ID: <20160515213855.75ba5344@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,52 +12,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 14 May 2016 23:09:16 +0200, Samuel Martin wrote:
-> Host android-tools only makes sense when the target package is enable,
-> so make it available only when the android-tools is already part of the
-> target package selection.
-> 
-> This change fixes in a simpler way the missing selection on
-> BR2_PACKAGE_ANDROID_TOOLS and the missing dependency on BR2_USE_MMU.
-> 
-> This patch fixes the following kconfig warning:
-> 
->   warning: (BR2_PACKAGE_HOST_ANDROID_TOOLS) selects BR2_PACKAGE_ANDROID_TOOLS_ADB which has unmet direct dependencies (BR2_PACKAGE_ANDROID_TOOLS && BR2_USE_MMU)
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/android-tools/Config.in.host | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/android-tools/Config.in.host b/package/android-tools/Config.in.host
-> index 4326014..7ac9636 100644
-> --- a/package/android-tools/Config.in.host
-> +++ b/package/android-tools/Config.in.host
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_HOST_ANDROID_TOOLS
->  	bool "host android-tools"
-> +	depends on BR2_PACKAGE_ANDROID_TOOLS
->  	select BR2_PACKAGE_ANDROID_TOOLS_ADB if \
->  		!BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT
+On Sat, 14 May 2016 20:42:27 +0200, Waldemar Brodkorb wrote:
 
-This is not the correct fix, for two reasons:
+> diff --git a/package/stress-ng/0001-disable-vector-sparc64.patch b/package/stress-ng/0001-disable-vector-sparc64.patch
+> new file mode 100644
+> index 0000000..e740b76
+> --- /dev/null
+> +++ b/package/stress-ng/0001-disable-vector-sparc64.patch
+> @@ -0,0 +1,21 @@
+> +Reported upstream:
+> +https://bugs.launchpad.net/ubuntu/+source/stress-ng/+bug/1581843
 
- 1/ The intent of the "select" is to make sure that either adb or
-    fastboot support is enabled, so basically the mistake is that the
-    select are using the options of the *target* android-tools package,
-    while it should be using the options of the *host* android-tools
-    package, defined below in the same file.
+It was weird to report a gcc bug against the package that fails to
+build.
+> +diff -Nur stress-ng-0.04.16.orig/stress-ng.h stress-ng-0.04.16/stress-ng.h
+> +--- stress-ng-0.04.16.orig/stress-ng.h	2015-09-07 11:04:09.000000000 +0200
+> ++++ stress-ng-0.04.16/stress-ng.h	2016-05-14 20:16:10.543917851 +0200
+> +@@ -457,9 +457,12 @@
+> + #define STRESS_X86	1
+> + #endif
+> + 
+> ++/* triggers gcc ICE */
+> ++#if !defined(__sparc_v9__)
+> + #if NEED_GNUC(4,7,0)
+> + #define STRESS_VECTOR	1
+> + #endif
+> ++#endif
+> + 
+> + /* NetBSD does not define MAP_ANONYMOUS */
+> + #if defined(MAP_ANON) && !defined(MAP_ANONYMOUS)
 
- 2/ Your assumption that android-tools on the host are needed only if
-    android-tools are installed on the target are wrong. The original
-    reason for which I started packaging the android-tools is because
-    we wanted to have the fastboot command on our host machine, to talk
-    to a fastboot implementation in U-Boot. So there's no android-tools
-    in the target, but we need android-tools on the host.
-
-So, I committed a fix that simply changes the select to use the
-sub-options of the host android-tools package. See
-https://git.buildroot.net/buildroot/commit/?id=f0d995cafd0c664f436bc9d082a3bb14b683dd75.
+What about using the patch that was actually committed upstream, i.e
+http://kernel.ubuntu.com/git/cking/stress-ng.git/commit/?id=9b5a3aaffdd613f03c10ebe3550b89193e9993ef
+according to the bug report you're pointing to?
 
 Thanks!
 
