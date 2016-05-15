@@ -1,66 +1,59 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 15 May 2016 13:55:05 +0200
-Subject: [Buildroot] [PATCH] libinput: fix missing static_assert symbol
-In-Reply-To: <20160515094941.7402c3fa@gmx.net>
-References: <9c014a2f0264db4085efccf537f76e8f1993c27b.1463282640.git.baruch@tkos.co.il>
- <20160515053404.GA658@tarshish> <20160515094941.7402c3fa@gmx.net>
-Message-ID: <20160515135505.71404da2@gmx.net>
+Date: Sun, 15 May 2016 14:05:11 +0200
+Subject: [Buildroot] QtMultimedia and gstreamer-1.0
+In-Reply-To: <5738333D.8010707@gmail.com>
+References: <5738116B.9050904@gmail.com> <20160515100303.003752e2@gmx.net>
+ <5738333D.8010707@gmail.com>
+Message-ID: <20160515140511.5973b7ce@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Baruch,
+Hello Marco,
 
-On Sun, 15 May 2016 09:49:41 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+On Sun, 15 May 2016 10:28:45 +0200, Marco Trapanese <marcotrapanese@gmail.com> wrote:
 
-> Hello Baruch,
+> Il 15/05/2016 10:03, Peter Seiderer ha scritto:
+> > This means the header files etc. which are installed into the staging 
+> > directory (and not into the target directory) which Qt needs to detect 
+> > and compile with GStreamer support... 
 > 
-> On Sun, 15 May 2016 08:34:04 +0300, Baruch Siach <baruch@tkos.co.il> wrote:
-> 
-> > Hi Buildroot list,
-> > 
-> > On Sun, May 15, 2016 at 06:24:00AM +0300, Baruch Siach wrote:
-> > > static_assert() in from C++. Don't use it in C code.
-> > 
-> > This is wrong. As upstream developer Jonas ?dahl pointed out, C11 also defines 
-> > static_assert as a convenience macro for _Static_assert. uClibc{,-ng} however 
-> > that does not provide this macro. Would it make sense to disable libinput for 
-> > uClibc{,-ng}?
-> 
-> Or honor the second part of Jonas answer [1]: '... or define a no-op fallback
-> when it is not defined.'
-> 
-> Seems a less radical solution than disable complete package (plus dependencies)
-> for uClibc because of a minor issue?
+> Thus, those files are needed only during the build process, they don't 
+> need to be copied to the target, do they?
 > 
 
-Thinking more about it, I think your suggested patch is a good enough solution
-for buildroot purpose, so you can add my
+Yes...
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+> I found a config.log in my qt5multimedia-5.6.0 output/build/ directory. 
+> It is attached to this email. It seems the gstreamer tests were 
+> successfully. Furthermore in the plugins/mediaservice subdirectory I find:
+> 
+> libgstaudiodecoder.so
+> libgstcamerabin.so
+> libgstmediacapture.so
+> libgstmediaplayer.so
+> 
+> which are installed on target under /usr/lib/qt/plugins/mediaservice/
+> 
+> By the way, on target their size is slightly smaller. This is because 
+> they are stripped or perhaps this may lead to an hidden problem? (just 
+> to be sure I tried to copy them to the target but the behavior is the same).
+> I can rebuild all from scratch, but if it's correct it would be useless!
 
-in case you change the patch descriptions to mention it is not a C++ thing but
-static_assert is from C11 standard [2] (and besides your patch changes the logic
-from compile time error to possible run time error (dependent on NDEBUG flag)...
+Yes the target files are stripped (to remove possible debug/linking information
+size overhead, but should not change functionality)...
+
+> 
+> What else I should check?
+
+Would suspect some missing library....maybe I find some time tonight to
+do some local test to check/verify your problem...
 
 Regards,
 Peter
 
-[2] http://en.cppreference.com/w/c/error/static_assert
-
-> Regards,
-> Peter
+> Best regards
+> Marco
 > 
-> 
-> [1] https://lists.freedesktop.org/archives/wayland-devel/2016-May/028877.html
-> 
-> > 
-> > baruch
-> > 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
