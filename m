@@ -1,37 +1,41 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 15 May 2016 12:26:00 +0200
-Subject: [Buildroot] [for-next: PATCH 1/2] toolchain: enable paranoid unsafe
-	path check by default
-Message-ID: <1463307961-29759-1-git-send-email-romain.naour@gmail.com>
+Date: Sun, 15 May 2016 12:26:01 +0200
+Subject: [Buildroot] [for-next: PATCH 2/2] toolchain: update paranoid unsafe
+	path comment
+In-Reply-To: <1463307961-29759-1-git-send-email-romain.naour@gmail.com>
+References: <1463307961-29759-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <1463307961-29759-2-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This check is enabled for all build in the Buildroot autobuilders since [1]
-(i.e since 2015.02 release).
+Since 919c06c28295f19ca49459b98d8954148b381360 the calls to gcc always pass
+through the toolchain wrapper and all gcc patches to support poisoning has been
+removed.
 
-Enable this option by default.
-
-[1] https://git.busybox.net/buildroot-test/commit/?id=41552e2a249de4568aa01f14bd588d1c8166f70b
+Update the BR2_COMPILER_PARANOID_UNSAFE_PATH comment.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/Config.in b/Config.in
-index b5cc892..93b4f69 100644
+index 93b4f69..849d7f5 100644
 --- a/Config.in
 +++ b/Config.in
-@@ -683,6 +683,7 @@ menu "Advanced"
+@@ -695,8 +695,8 @@ config BR2_COMPILER_PARANOID_UNSAFE_PATH
+ 	  unsafe paths are encountered.
  
- config BR2_COMPILER_PARANOID_UNSAFE_PATH
- 	bool "paranoid check of library/header paths"
-+	default y
- 	help
- 	  By default, when this option is disabled, when the Buildroot
- 	  cross-compiler will encounter an unsafe library or header
+ 	  Note that this mechanism is available for both the internal
+-	  toolchain (through gcc and binutils patches) and external
+-	  toolchain backends (through the external toolchain wrapper).
++	  toolchain (through the toolchain wrapper and binutils patches)
++	  and external toolchain backends (through the toolchain wrapper).
+ 
+ endmenu
+ 
 -- 
 2.5.5
