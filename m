@@ -1,78 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 15 May 2016 01:54:07 +0200
-Subject: [Buildroot] How to choose C library dependencies
-In-Reply-To: <9f06d929-7f0c-7461-d6b2-c85b46515c4d@yandex.ru>
-References: <5731B0DD.1080201@gmail.com>
- <9f06d929-7f0c-7461-d6b2-c85b46515c4d@yandex.ru>
-Message-ID: <4904ae0d-f790-063e-a365-675596985f02@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 15 May 2016 06:24:00 +0300
+Subject: [Buildroot] [PATCH] libinput: fix missing static_assert symbol
+Message-ID: <9c014a2f0264db4085efccf537f76e8f1993c27b.1463282640.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/14/16 05:59, ???? ?????? wrote:
-> Hello!
-> I want to compile ejabberd and run it on my router. I choose erlang package with
-> SMP support and all modules and ejabberd package, does not configure defconfig.
-> Then I run /make ejabberd/, copy ejabberd, erlang and busybox from /target/
-> folder to router and run it.
+static_assert() in from C++. Don't use it in C code.
 
-  Buildroot in't really meant for that kind of scenario. That said, it should be 
-possible to do it. Basically you must create a toolchain that matches exactly 
-with what is already installed on the target.
+Fixes:
+http://autobuild.buildroot.net/results/3eb/3eb32c19f90a5fd8d45a0c36676e015e8278a469/
+http://autobuild.buildroot.net/results/184/1844890c65615f1676a85c6fac78937249eee9f1/
+http://autobuild.buildroot.net/results/3a3/3a3f8c5624e8019a6eababbf6e7440fdd668f85f/
 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ .../0002-tablet-remove-C-static_assert.patch       | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/libinput/0002-tablet-remove-C-static_assert.patch
 
-> I found that at least ejabberd compiled with glibc dependence and won't run
-> without it. Running /cd /path/to/ejabberd && ./ejabberdctl start/ ends with
->> /opt/lib/erlang/bin/erl: exec: line 29: /usr/lib/erlang/erts-7.3/bin/erlexec
-> As I found before, it's because erlexec want glibc which missing in router.
-> Than I enable Linux kernel, set defconfig to bcm and try to run /make/ and copy
-> these programms from rootfs image to router with same result.
->
-> How can I compile these programms (ejabberd, erlang and busybox) with uClibc
-> dependence?
-
-  The config file you attached indeed selects uClibc, so I don't see how it 
-could possibly link against glibc. How do you know it links with glibc?
-
-  To verify something like that, do:
-
-readelf -d output/target/usr/lib/erlang/erts-7.3/bin/erlexec
-
-and check that all the libraries mentioned there exist on the target.
-
-
-  Regards,
-  Arnout
-
->
-> *Buildroot:* snapshot from 2016.05.13
-> *C library in menuconfig:* uClibc with C++ support
-> *defconfig:* bcm
-> *Target Architecture:* ARM (little endian)
-> *Target Architecture Variant:* cortex-A9
-> *System running buildroot:* Debian 8 x64
-> *Router:* Broadcom BCM4708A0, 2xARM Cortex A9, asuswrt-merlin 380.58_0
-> *.config:* in attach
->
-> --
-> ????????????? ????????? ?????: 1D38C8C9
-> ?????????: 6210 01B6 A34E E490 A9E4  87DD 841D 0ABE 1D38 C8C9
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
+diff --git a/package/libinput/0002-tablet-remove-C-static_assert.patch b/package/libinput/0002-tablet-remove-C-static_assert.patch
+new file mode 100644
+index 000000000000..6998c13437a5
+--- /dev/null
++++ b/package/libinput/0002-tablet-remove-C-static_assert.patch
+@@ -0,0 +1,39 @@
++From f0a145dea72d1ff2ef6c110c7eaa505bc5ccec02 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Sat, 14 May 2016 22:50:38 +0300
++Subject: [PATCH] tablet: remove C++ static_assert
++
++static_assert() is C++ only. Build may fail with:
++
++  CCLD     event-debug
++../src/.libs/libinput.so: undefined reference to `static_assert'
++collect2: error: ld returned 1 exit status
++
++Use just assert() like the rest of the code.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: reported upstream 
++(https://lists.freedesktop.org/archives/wayland-devel/2016-May/028876.html)
++
++ src/evdev-tablet.c | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
++
++diff --git a/src/evdev-tablet.c b/src/evdev-tablet.c
++index be828d965552..9c81be434d2f 100644
++--- a/src/evdev-tablet.c
+++++ b/src/evdev-tablet.c
++@@ -1178,9 +1178,7 @@ static void
++ tablet_mark_all_axes_changed(struct tablet_dispatch *tablet,
++ 			     struct libinput_tablet_tool *tool)
++ {
++-	static_assert(sizeof(tablet->changed_axes) ==
++-			      sizeof(tool->axis_caps),
++-		      "Mismatching array sizes");
+++	assert(sizeof(tablet->changed_axes) == sizeof(tool->axis_caps));
++ 
++ 	memcpy(tablet->changed_axes,
++ 	       tool->axis_caps,
++-- 
++2.8.1
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.8.1
