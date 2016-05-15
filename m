@@ -1,13 +1,13 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 May 2016 23:47:21 +0200
-Subject: [Buildroot] [PATCH 3/3] Default config for OrangePi Plus.
-	Generates kernel using sunxi/for-next branch of
-	git.kernel.org/git/mripard U-boot built from git tag v2016.05-rc3
-In-Reply-To: <1463268790-1076-4-git-send-email-troy@dack.com.au> (Troy Dack's
- message of "Sun, 15 May 2016 09:33:10 +1000")
+Date: Sun, 15 May 2016 23:56:54 +0200
+Subject: [Buildroot] [PATCH 2/3] OrangePi Plus files required to
+	generate SD card image and a self extracting fel-boot command
+	for booting from RAM using USB-OTG and sunxi-fel
+In-Reply-To: <1463268790-1076-3-git-send-email-troy@dack.com.au> (Troy Dack's
+ message of "Sun, 15 May 2016 09:33:09 +1000")
 References: <1463268790-1076-1-git-send-email-troy@dack.com.au>
- <1463268790-1076-4-git-send-email-troy@dack.com.au>
-Message-ID: <878tzbgfiu.fsf@dell.be.48ers.dk>
+ <1463268790-1076-3-git-send-email-troy@dack.com.au>
+Message-ID: <874m9zgf2x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,106 +18,162 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Troy Dack <troy@dack.com.au>
  > ---
- >  configs/orangepi_plus_defconfig | 64 +++++++++++++++++++++++++++++++++++++++++
+ >  board/orangepi/orangepi_plus/boot-fel.cmd    |  4 +++
+ >  board/orangepi/orangepi_plus/boot-sdcard.cmd |  8 +++++
 
-Thanks. This should be in the same patch as the one adding the
-post-image/build scripts.
+Is there any specific reason to support fel boot? As we create a full
+blown sd card image, isn't that just as easy to use as fel boot?
 
->  1 file changed, 64 insertions(+)
- >  create mode 100644 configs/orangepi_plus_defconfig
+ >  board/orangepi/orangepi_plus/boot.cmd        |  4 +++
 
- > diff --git a/configs/orangepi_plus_defconfig b/configs/orangepi_plus_defconfig
+This looks identical to boot-fel.cmd.
+
+ > +++ b/board/orangepi/orangepi_plus/decompress
+ > @@ -0,0 +1,21 @@
+ > +#!/bin/bash
+ > +echo ""
+ > +echo "Self Extracting sunxi-fel USB boot"
+ > +echo ""
+ > +
+ > +export TMPDIR=`mktemp -d /tmp/selfextract.XXXXXX`
+ > +
+ > +ARCHIVE=`awk '/^__ARCHIVE_BELOW__/ {print NR + 1; exit 0; }' $0`
+ > +
+ > +tail -n+$ARCHIVE $0 | tar xjv -C $TMPDIR
+ > +
+ > +CDIR=`pwd`
+ > +cd $TMPDIR
+ > +./fel-boot.sh
+ > +
+ > +cd $CDIR
+ > +rm -rf $TMPDIR
+ > +
+ > +exit 0
+ > +
+ > +__ARCHIVE_BELOW__
+
+A description what this is about would be nice.
+
+
+> diff --git a/board/orangepi/orangepi_plus/payload.sh b/board/orangepi/orangepi_plus/payload.sh
  > new file mode 100644
- > index 0000000..c4668ad
+ > index 0000000..ca247fd
  > --- /dev/null
- > +++ b/configs/orangepi_plus_defconfig
- > @@ -0,0 +1,64 @@
- > +BR2_arm=y
- > +BR2_cortex_a7=y
- > +BR2_ARM_FPU_VFPV4=y
- > +# Kernel is a pre-release of 4.5, so we do not yet have a _CUSTOM_4_5
- > +# option for the headers. Thus, we stick with the 4.4 headers for now.
- > +BR2_KERNEL_HEADERS_VERSION=y
- > +BR2_DEFAULT_KERNEL_VERSION="4.4"
- > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- > +BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
- > +BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Plus"
- > +BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepi_plus/post-build.sh"
- > +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepi_plus/post-image.sh"
- > +BR2_LINUX_KERNEL=y
- > +BR2_LINUX_KERNEL_CUSTOM_GIT=y
- > +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.kernel.org/pub/scm/linux/kernel/git/mripard/linux.git"
- > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="sunxi/for-next"
- > +BR2_LINUX_KERNEL_VERSION="sunxi/for-next"
-
-Why can't you use 4.5 like orangepipc_defconfig? This for-next branch
-most likely isn't stable (E.G. it gets rebased and recreated once it is
-merged into mainline). We want reproducable builds, so  _REPO_VERSION
-has to point to a git commit hash or a tag, and not to a branch.
-
-> +BR2_LINUX_KERNEL_PATCH=""
- > +BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- > +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- > +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES=""
-
-Please drop unneeded lines (E.G. the ones equal to the default values).
-
- > +BR2_LINUX_KERNEL_UBOOT_IMAGE=y
- > +BR2_LINUX_KERNEL_UIMAGE=y
-
-Why? U-boot supports zImage (and orangepipc_defconfig already uses it)
-
- > +BR2_LINUX_KERNEL_GZIP=y
- > +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
- > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
- > +BR2_LINUX_KERNEL_USE_INTREE_DTS=y
- > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-plus"
- > +BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL=""
- > +BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION=""
-
-Huh?
-
+ > +++ b/board/orangepi/orangepi_plus/payload.sh
+ > @@ -0,0 +1,21 @@
+ > +#!/bin/bash
+ > +cd ${BINARIES_DIR}
+ > +tar czf .tar ./*
  > +
- > +BR2_TARGET_ROOTFS_CPIO=y
- > +BR2_TARGET_ROOTFS_CPIO_GZIP=y
- > +BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
-
-What is this for? Fel boot?
-
- > +BR2_TARGET_ROOTFS_EXT2=y
- > +BR2_TARGET_ROOTFS_EXT2_4=y
+ > +if [ -e "payload.tar" ]; then
+ > +    gzip payload.tar
  > +
- > +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ > +    if [ -e "payload.tar.gz" ]; then
+ > +        cat decompress payload.tar.gz > selfextract.bsx
+ > +    else
+ > +        echo "payload.tar.gz does not exist"
+ > +        exit 1
+ > +    fi
+ > +else
+ > +    echo "payload.tar does not exist"
+ > +    exit 1
+ > +fi
  > +
- > +BR2_TARGET_UBOOT=y
- > +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- > +BR2_TARGET_UBOOT_CUSTOM_GIT=y
- > +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.denx.de/u-boot.git"
- > +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2016.05-rc3"
- > +BR2_TARGET_UBOOT_VERSION="v2016.05-rc3"
- > +BR2_TARGET_UBOOT_PATCH=""
- > +BR2_TARGET_UBOOT_USE_DEFCONFIG=y
- > +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_plus"
- > +BR2_TARGET_UBOOT_NEEDS_DTC=y
- > +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- > +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ > +echo "selfextract.bsx created"
+ > +exit 0
 
+And this as well?
 
- > +BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL=""
- > +BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION=""
-
-Again, huh?
-
-
+ > +++ b/board/orangepi/orangepi_plus/post-image.sh
+ > @@ -0,0 +1,54 @@
+ > +#!/bin/sh
  > +
- > +BR2_CCACHE=y
- > +BR2_CCACHE_DIR="$(HOME)/.buildroot-ccache"
- > +BR2_CCACHE_INITIAL_SETUP=""
- > +BR2_CCACHE_USE_BASEDIR=y
+ > +BOARD_DIR="$(dirname ${BR2_CONFIG})/$(dirname $0)"
+ > +GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+ > +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+ > +
+ > +echo ">>> Generating fel-boot.bsx self-extracting boot image"
+ > +# Create fel-boot.sh
+ > +cat > ${BINARIES_DIR}/fel-boot.sh <<__EOF__
+ > +#!/bin/bash
+ > +
+ > +SUNXI_TOOLS=${HOST_DIR}
+ > +BINARIES_DIR=${BINARIES_DIR}
+ > +
+ > +sudo \${SUNXI_TOOLS}/usr/bin/sunxi-fel -v -p \\
 
-This is not specific to this board, so it doesn't belong here.
+Calling sudo from the post-image.sh script isn't nice. I think the best
+option is perhaps to just drop all the fel stuff, unless you have a
+specific reason to have it?
 
-Care to fixup these issues and resend? Thanks!
+
+> +echo ">>> Generating SD card image"
+ > +# Generate SD Card image
+ > +rm -rf "${GENIMAGE_TMP}"
+ > +
+ > +genimage                               \
+ > +	--rootpath "${TARGET_DIR}"     \
+ > +	--tmppath "${GENIMAGE_TMP}"    \
+ > +	--inputpath "${BINARIES_DIR}"  \
+ > +	--outputpath "${BINARIES_DIR}" \
+ > +	--config "${GENIMAGE_CFG}"
+ > +
+ > +
+ > +exit $?
+
+The exit line (and empty lines above) can be dropped.
+
+> diff --git a/board/orangepi/orangepi_plus/readme.txt b/board/orangepi/orangepi_plus/readme.txt
+ > new file mode 100644
+ > index 0000000..818cfa5
+ > --- /dev/null
+ > +++ b/board/orangepi/orangepi_plus/readme.txt
+ > @@ -0,0 +1,35 @@
+ > +OrangePi Plus
+ > +
+ > +Intro
+ > +=====
+ > +
+ > +This default configuration will allow you to start experimenting with the
+ > +buildroot environment for the OrangePi PC. With the current configuration
+
+s/OrangePi PC/OrangePi Plus/
+
+> +it will bring-up the board, and allow access through the serial console.
+
+
+> +
+ > +How to build it
+ > +===============
+ > +
+ > +Configure Buildroot:
+ > +
+ > +    $ make orangepi_plus_defconfig
+ > +
+ > +Compile everything and build the self extracting initrd FEL boot image:
+ > +
+ > +    $ make
+ > +
+ > +Booting
+ > +=======
+ > +
+ > +Once the build process is finished you will have a script called 
+ > +"fel-boot.bsx" in the output/images/ directory.
+ > +
+ > +Make sure sunxi-tools/sunxi-fel is in your current PATH if they are
+ > +not installed.
+
+If needed, we should use the tools built by buildroot (but I think we
+shold just drop the fel stuff).
+
+> +
+ > +Connect your OrangePi Plus via the OSB-OTG port and put it into FEL
+ > +mode by pressing the FEL button. Run fel-boot.bsx and the OrangePi
+ > +Plus will boot from the compiled image.
+ > +
+ > +  $ sudo fel-boot.bsx
+
+It would be better to document how to use the sd card image.
 
 -- 
 Bye, Peter Korsgaard
