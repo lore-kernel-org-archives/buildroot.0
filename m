@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 May 2016 21:18:11 +0200
-Subject: [Buildroot] [PATCH] sg3-utils: disable for blackfin
-In-Reply-To: <1463237695-28471-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1463237695-28471-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160515211811.2dd1f222@free-electrons.com>
+Date: Sun, 15 May 2016 21:15:43 +0200
+Subject: [Buildroot] [PATCH] package/opencv: disable toolchains affected
+ by PR19405
+In-Reply-To: <1463301803-15333-1-git-send-email-romain.naour@gmail.com>
+References: <1463301803-15333-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160515211543.153f2279@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +13,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 14 May 2016 11:54:55 -0300, Gustavo Zacarias wrote:
-> Suffers from the usual symbol prefixing problems for bfin, it's probably
-> easy to fix, however no bfin has/will be used for storage apps since
-> they lack the usual ports for it. Fixes:
-> http://autobuild.buildroot.net/results/314/31447787e70cd351ce01b7a49ba029758d0c68e5/
+On Sun, 15 May 2016 10:43:23 +0200, Romain Naour wrote:
+> opencv libphoto fail to link with the following error:
+> nios2-linux-gnu/bin/ld: BFD (Sourcery CodeBench Lite 2015.11-130) 2.25.51
+> assertion fail binutils-src-2015.11-130-nios2-linux-gnu-i686-pc-linux-gnu/bfd/elf32-nios2.c:1908
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Fixes:
+> http://autobuild.buildroot.net/results/fd0cc1cb09d07be94770d984efb28eea7c6f25b7
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  package/sg3_utils/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/opencv/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
 
 Applied to master, thanks.
 
