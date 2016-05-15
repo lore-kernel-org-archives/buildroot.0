@@ -1,55 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 May 2016 21:15:25 +0200
-Subject: [Buildroot] [git commit] package/opencv: disable toolchains
-	affected by PR19405
-Message-ID: <20160515191531.AC29E807F7@busybox.osuosl.org>
+Date: Sun, 15 May 2016 21:17:43 +0200
+Subject: [Buildroot] [PATCH] package/gcc: 4.8.x to 5.x: backport a fix
+ for building gcc with gcc-6
+In-Reply-To: <1463291260-2544-1-git-send-email-s.martin49@gmail.com>
+References: <1463291260-2544-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20160515211743.0dba51fd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59679785e8153db25b79589bae74a45c9aec78d9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-opencv libphoto fail to link with the following error:
-nios2-linux-gnu/bin/ld: BFD (Sourcery CodeBench Lite 2015.11-130) 2.25.51
-assertion fail binutils-src-2015.11-130-nios2-linux-gnu-i686-pc-linux-gnu/bfd/elf32-nios2.c:1908
+On Sun, 15 May 2016 07:47:40 +0200, Samuel Martin wrote:
+> When the host system compiler is gcc-6, this patch is needed to build
+> Buildroot toolchain and cleanly apply on gcc version 4.8.x to 5.x (not
+> needed for 4.7.x series).
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/gcc/4.8.5/130-build_gcc-5_with_gcc-6.patch | 153 +++++++++++++++++++++
+>  package/gcc/4.9.3/130-build_gcc-5_with_gcc-6.patch | 153 +++++++++++++++++++++
 
-Fixes:
-http://autobuild.buildroot.net/results/fd0cc1cb09d07be94770d984efb28eea7c6f25b7
+Isn't it a bit odd to have a patch named "build_gcc-5_with_gcc-6" when
+in fact you're fixing gcc 4.x ?
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/opencv/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+>  package/gcc/5.3.0/130-build_gcc-5_with_gcc-6.patch | 153 +++++++++++++++++++++
+>  .../arc-2015.12/130-build_gcc-5_with_gcc-6.patch   | 153 +++++++++++++++++++++
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 908eb37..d06135c 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -51,6 +51,7 @@ config BR2_PACKAGE_OPENCV_LIB_FLANN
- 
- config BR2_PACKAGE_OPENCV_LIB_GPU
- 	bool "gpu"
-+	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405 # opencv libphoto
- 	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	select BR2_PACKAGE_OPENCV_LIB_LEGACY
-@@ -109,6 +110,7 @@ config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- config BR2_PACKAGE_OPENCV_LIB_PHOTO
- 	bool "photo"
- 	default y
-+	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405 # Binutils 2.25 nios2 issue
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_photo module into the OpenCV build.
-@@ -156,6 +158,7 @@ config BR2_PACKAGE_OPENCV_LIB_VIDEO
- config BR2_PACKAGE_OPENCV_LIB_VIDEOSTAB
- 	bool "videostab"
- 	default y
-+	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405 # opencv libphoto
- 	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
- 	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+This one is also based on 4.8 as far as I know.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
