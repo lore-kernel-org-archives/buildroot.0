@@ -1,36 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 May 2016 22:00:52 +0200
-Subject: [Buildroot] [PATCH] mtr: bump to latest git version (newdns
- branch)
-In-Reply-To: <1463243114-10163-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1463243114-10163-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160515220052.78192b8a@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 15 May 2016 22:01:12 +0200
+Subject: [Buildroot] [PATCH] package/gcc: 4.8.x to 5.x: backport a fix
+ for building gcc with gcc-6
+In-Reply-To: <20160515211743.0dba51fd@free-electrons.com>
+References: <1463291260-2544-1-git-send-email-s.martin49@gmail.com>
+ <20160515211743.0dba51fd@free-electrons.com>
+Message-ID: <CAHXCMMLLCTp79YOTj0N_U1FfdK0XwYp5dTmnFpBO-sw4OD_QJg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, May 15, 2016 at 9:17 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Sun, 15 May 2016 07:47:40 +0200, Samuel Martin wrote:
+>> When the host system compiler is gcc-6, this patch is needed to build
+>> Buildroot toolchain and cleanly apply on gcc version 4.8.x to 5.x (not
+>> needed for 4.7.x series).
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> ---
+>>  package/gcc/4.8.5/130-build_gcc-5_with_gcc-6.patch | 153 +++++++++++++++++++++
+>>  package/gcc/4.9.3/130-build_gcc-5_with_gcc-6.patch | 153 +++++++++++++++++++++
+>
+> Isn't it a bit odd to have a patch named "build_gcc-5_with_gcc-6" when
+> in fact you're fixing gcc 4.x ?
 
-On Sat, 14 May 2016 13:25:14 -0300, Gustavo Zacarias wrote:
-> This fixes the musl build issues and the need to specially patch for
-> uClibc at the same time. Fixes:
-> http://autobuild.buildroot.net/results/deb/debeb3ded02c3de63182c3433ff02062192d3fd1/
-> 
-> Also add hash file.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/mtr/mtr.hash |  2 ++
->  package/mtr/mtr.mk   | 12 +-----------
->  2 files changed, 3 insertions(+), 11 deletions(-)
->  create mode 100644 package/mtr/mtr.hash
+Well, I just imported the patch from crosstool-ng without renaming it,
+but I did run the build test for the 6 versions of gcc Buildroot
+currently supports:
+- 4.7.4 (deprecated): patch not needed
+- 4.8.5: patch needed
+- 4.9.3: patch needed
+- 5.3.0: patch needed
+- 6.1.0: patch needed
+- arc-2015.12 (based on gcc-4.8.5): patch needed
 
-Applied to master, thanks.
+If you prefer, I can rename them, then repost the patch...
 
-Thomas
+>
+>>  package/gcc/5.3.0/130-build_gcc-5_with_gcc-6.patch | 153 +++++++++++++++++++++
+>>  .../arc-2015.12/130-build_gcc-5_with_gcc-6.patch   | 153 +++++++++++++++++++++
+>
+> This one is also based on 4.8 as far as I know.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+Regards,
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
