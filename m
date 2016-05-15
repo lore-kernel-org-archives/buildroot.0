@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 May 2016 21:55:31 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-05-13
-In-Reply-To: <20160514160242.GB3877@free.fr>
-References: <20160514063024.2C7B91025E9@stock.ovh.net>
- <20160514154655.57ae0bad@free-electrons.com>
- <20160514145905.GA3877@free.fr> <20160514160242.GB3877@free.fr>
-Message-ID: <20160515215531.7824d583@free-electrons.com>
+Date: Sun, 15 May 2016 21:59:50 +0200
+Subject: [Buildroot] [PATCH v1] uclibc: enable debug build option
+In-Reply-To: <1463077504-3646-1-git-send-email-ps.report@gmx.net>
+References: <1463077504-3646-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20160515215950.1e41e583@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,19 +12,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 14 May 2016 18:02:42 +0200, Yann E. MORIN wrote:
+On Thu, 12 May 2016 20:25:04 +0200, Peter Seiderer wrote:
 
-> I've just run this config on my autobuilder, and the build was fine
-> (twice in a row, once with the machine already loaded, once with the
-> machine otherwise idle).
-> 
-> I'll do a few such builds in loop, just to see if the issue is
-> reproducible.
+>  #
+> +# Debug
+> +#
+> +ifeq ($(BR2_ENABLE_DEBUG),y)
+> +define UCLIBC_DEBUG_CONFIG
+> +	$(call KCONFIG_ENABLE_OPT,DODEBUG=y,$(@D)/.config)
 
-I think the issue is hard to reproduce: according to
-http://autobuild.buildroot.net/?reason=host-python3-3.4.3, it occurred
-only 15 times over the last 6 months, while I believe the host-python3
-package has been built hundreds to thousands of times.
+Has this patch really been tested? Inded, I think this line should be:
+
+	$(call KCONFIG_ENABLE_OPT,DODEBUG,$(@D)/.config)
+
+Indeed, setting =y is done by KCONFIG_ENABLE_OPT.
+
+It is worth mentioning that we used to do exactly this (setting
+DODEBUG=y when BR2_ENABLE_DEBUG=y), but removed that in commit
+70b7079d3797304fe3c9ba2941d3f446af3cea79in December 2013 because
+DODEBUG=y was breaking the build. But since then, uClibc has been
+replaced by uClibc-ng and I guess Waldemar has fixed DODEBUG=y.
+
+Peter, did you do a test build on ARM, to verify that you're not
+falling into the issue mentioned in commit
+70b7079d3797304fe3c9ba2941d3f446af3cea79 ?
+
+In any case, please resend an updated version with the =y removed. I
+normally do such minor fixups myself when applying, but in this case, I
+really want to be sure that you have done a test build.
+
+Thanks!
 
 Thomas
 -- 
