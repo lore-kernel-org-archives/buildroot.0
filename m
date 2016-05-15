@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 May 2016 21:17:43 +0200
-Subject: [Buildroot] [PATCH] package/gcc: 4.8.x to 5.x: backport a fix
- for building gcc with gcc-6
-In-Reply-To: <1463291260-2544-1-git-send-email-s.martin49@gmail.com>
-References: <1463291260-2544-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20160515211743.0dba51fd@free-electrons.com>
+Date: Sun, 15 May 2016 21:18:11 +0200
+Subject: [Buildroot] [PATCH] sg3-utils: disable for blackfin
+In-Reply-To: <1463237695-28471-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1463237695-28471-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160515211811.2dd1f222@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 15 May 2016 07:47:40 +0200, Samuel Martin wrote:
-> When the host system compiler is gcc-6, this patch is needed to build
-> Buildroot toolchain and cleanly apply on gcc version 4.8.x to 5.x (not
-> needed for 4.7.x series).
+On Sat, 14 May 2016 11:54:55 -0300, Gustavo Zacarias wrote:
+> Suffers from the usual symbol prefixing problems for bfin, it's probably
+> easy to fix, however no bfin has/will be used for storage apps since
+> they lack the usual ports for it. Fixes:
+> http://autobuild.buildroot.net/results/314/31447787e70cd351ce01b7a49ba029758d0c68e5/
 > 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/gcc/4.8.5/130-build_gcc-5_with_gcc-6.patch | 153 +++++++++++++++++++++
->  package/gcc/4.9.3/130-build_gcc-5_with_gcc-6.patch | 153 +++++++++++++++++++++
+>  package/sg3_utils/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Isn't it a bit odd to have a patch named "build_gcc-5_with_gcc-6" when
-in fact you're fixing gcc 4.x ?
-
->  package/gcc/5.3.0/130-build_gcc-5_with_gcc-6.patch | 153 +++++++++++++++++++++
->  .../arc-2015.12/130-build_gcc-5_with_gcc-6.patch   | 153 +++++++++++++++++++++
-
-This one is also based on 4.8 as far as I know.
+Applied to master, thanks.
 
 Thomas
 -- 
