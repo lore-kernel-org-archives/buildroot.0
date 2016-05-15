@@ -1,51 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 May 2016 22:17:45 +0200
-Subject: [Buildroot] [PATCH] package/gcc: 4.8.x to 5.x: backport a fix
- for building gcc with gcc-6
-In-Reply-To: <CAHXCMMLLCTp79YOTj0N_U1FfdK0XwYp5dTmnFpBO-sw4OD_QJg@mail.gmail.com>
-References: <1463291260-2544-1-git-send-email-s.martin49@gmail.com>
- <20160515211743.0dba51fd@free-electrons.com>
- <CAHXCMMLLCTp79YOTj0N_U1FfdK0XwYp5dTmnFpBO-sw4OD_QJg@mail.gmail.com>
-Message-ID: <20160515221745.6db55477@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 15 May 2016 22:21:47 +0200
+Subject: [Buildroot] [PATCH v1] Makefile: fix rootfs overlay with
+	BR2_ROOTFS_MERGED_USR enabled
+In-Reply-To: <20160515154253.3f1cba23@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 15 May 2016 15:42:53 +0200")
+References: <1461439109-28101-1-git-send-email-ps.report@gmx.net>
+ <20160508141313.GD24011@free.fr> <20160512210625.6c04e7d8@gmx.net>
+ <a49b8176-f38e-5ce0-b088-6ff7bd03310e@mind.be>
+ <20160515154253.3f1cba23@free-electrons.com>
+Message-ID: <87lh3bgjhg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sun, 15 May 2016 22:01:12 +0200, Samuel Martin wrote:
+ >> It certainly doesn't bother me, and I doubt that interferes with
+ >> Peter's or Thomas's workflow too. So unless they object a second
+ >> time, just keep on doing what works for you.
 
-> >>  package/gcc/4.8.5/130-build_gcc-5_with_gcc-6.patch | 153 +++++++++++++++++++++
-> >>  package/gcc/4.9.3/130-build_gcc-5_with_gcc-6.patch | 153 +++++++++++++++++++++  
-> >
-> > Isn't it a bit odd to have a patch named "build_gcc-5_with_gcc-6" when
-> > in fact you're fixing gcc 4.x ?  
-> 
-> Well, I just imported the patch from crosstool-ng without renaming it,
-> but I did run the build test for the 6 versions of gcc Buildroot
-> currently supports:
-> - 4.7.4 (deprecated): patch not needed
-> - 4.8.5: patch needed
-> - 4.9.3: patch needed
-> - 5.3.0: patch needed
-> - 6.1.0: patch needed
+ > It doesn't matter at all for me, I'm fine with seeing "v1" for the
+ > first version.
 
-gcc 6 cannot be built with gcc 6 without patches? Plus your patch did
-not contain any patch against gcc 6.
+yeah, same here.
 
-> - arc-2015.12 (based on gcc-4.8.5): patch needed
-> 
-> If you prefer, I can rename them, then repost the patch...
-
-Yes, renaming would be nicer. Just 130-fix-build-with-gcc-6.patch is
-fine, for example.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
