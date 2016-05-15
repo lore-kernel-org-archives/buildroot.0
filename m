@@ -1,65 +1,35 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 15 May 2016 21:46:35 +0200
-Subject: [Buildroot] [PATCH] stress-ng: workaround sparc64 gcc ICE
-In-Reply-To: <20160515213855.75ba5344@free-electrons.com>
-References: <20160514184227.GA2898@waldemar-brodkorb.de>
- <20160515213855.75ba5344@free-electrons.com>
-Message-ID: <20160515194634.GY26720@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 May 2016 21:47:53 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-05-13
+In-Reply-To: <20160514145905.GA3877@free.fr>
+References: <20160514063024.2C7B91025E9@stock.ovh.net>
+ <20160514154655.57ae0bad@free-electrons.com>
+ <20160514145905.GA3877@free.fr>
+Message-ID: <20160515214753.67974bf6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Hello,
 
-> Hello,
-> 
-> On Sat, 14 May 2016 20:42:27 +0200, Waldemar Brodkorb wrote:
-> 
-> > diff --git a/package/stress-ng/0001-disable-vector-sparc64.patch b/package/stress-ng/0001-disable-vector-sparc64.patch
-> > new file mode 100644
-> > index 0000000..e740b76
-> > --- /dev/null
-> > +++ b/package/stress-ng/0001-disable-vector-sparc64.patch
-> > @@ -0,0 +1,21 @@
-> > +Reported upstream:
-> > +https://bugs.launchpad.net/ubuntu/+source/stress-ng/+bug/1581843
-> 
-> It was weird to report a gcc bug against the package that fails to
-> build.
+On Sat, 14 May 2016 16:59:05 +0200, Yann E. MORIN wrote:
 
-Why? I think ICE must be reported to GCC upstream.
-I reported a bug to stress-ng, and someone else reported some time
-ago a gcc bug regarding the same code failing for powerpc.
-What is weird here?
+> I'm not sure my machine is the only one to have the issue. There are
+> very similar issues building host-python3:
 
-> > +diff -Nur stress-ng-0.04.16.orig/stress-ng.h stress-ng-0.04.16/stress-ng.h
-> > +--- stress-ng-0.04.16.orig/stress-ng.h	2015-09-07 11:04:09.000000000 +0200
-> > ++++ stress-ng-0.04.16/stress-ng.h	2016-05-14 20:16:10.543917851 +0200
-> > +@@ -457,9 +457,12 @@
-> > + #define STRESS_X86	1
-> > + #endif
-> > + 
-> > ++/* triggers gcc ICE */
-> > ++#if !defined(__sparc_v9__)
-> > + #if NEED_GNUC(4,7,0)
-> > + #define STRESS_VECTOR	1
-> > + #endif
-> > ++#endif
-> > + 
-> > + /* NetBSD does not define MAP_ANONYMOUS */
-> > + #if defined(MAP_ANON) && !defined(MAP_ANONYMOUS)
-> 
-> What about using the patch that was actually committed upstream, i.e
-> http://kernel.ubuntu.com/git/cking/stress-ng.git/commit/?id=9b5a3aaffdd613f03c10ebe3550b89193e9993ef
-> according to the bug report you're pointing to?
+Gaah, indeed :-/
 
-First, it was committed after my buildroot submission, second it
-does not apply for the old version used in buildroot and can't be
-used. Either we update to latest and add the patch, or we add my
-hack.
+Python is a big and widely used package, it's a bit annoying to disable
+parallel build for it. But I guess it's the best we can do right now,
+unless you have an idea to fix the problem (but parallel build issues
+are often complex to understand, especially in a convoluted build
+system like the one of Python...).
 
-best regards
- Waldemar
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
