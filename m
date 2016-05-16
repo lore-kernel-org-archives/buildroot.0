@@ -1,20 +1,30 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 16 May 2016 16:22:07 -0300
-Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2016.05
-In-Reply-To: <87vb2dg6hn.fsf@dell.be.48ers.dk>
-References: <1463425659-18053-1-git-send-email-festevam@gmail.com>
- <87vb2dg6hn.fsf@dell.be.48ers.dk>
-Message-ID: <CAOMZO5DZT9azWqaG+TgjfYGwCwN_rVsJQNLi8Qj0QJ7zankXaQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 16 May 2016 21:24:29 +0200
+Subject: [Buildroot] Problem with cuImage on 83x
+In-Reply-To: <001701d1af64$acb860d0$06292270$@gmail.com> (Giuseppe Lippolis's
+ message of "Mon, 16 May 2016 13:18:29 +0200")
+References: <001701d1af64$acb860d0$06292270$@gmail.com>
+Message-ID: <87a8jpg61e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 16, 2016 at 4:14 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>> "Giuseppe" == Giuseppe Lippolis <giu.lippolis@gmail.com> writes:
 
-> Committed to next, thanks.
->
-> Will you also send a patch to bump uboot-tools?
+Hi,
 
-Yes, just sent it. Thanks
+ > But I do not see anything in the console.
+ > The problem seems releted to the vmlinux call in arc/powerpc/boot/main.c
+
+ > kentry = (kernel_entry_t) vmlinux.addr;
+
+ > Any suggestion?
+
+I haven't personally worked with mpc834x since 2009 or so - So I don't
+recall any details. Perhaps ask on the linuxppc list
+(linuxppc-dev at lists.ozlabs.org)?
+
+-- 
+Bye, Peter Korsgaard
