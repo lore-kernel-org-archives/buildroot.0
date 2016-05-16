@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 May 2016 22:03:32 +0200
-Subject: [Buildroot] [PATCH v2] boot-tools: bump to version 2016.05
-In-Reply-To: <1463428934-21015-1-git-send-email-festevam@gmail.com>
-References: <1463428934-21015-1-git-send-email-festevam@gmail.com>
-Message-ID: <20160516220332.32dbc2ee@free-electrons.com>
+Date: Mon, 16 May 2016 22:03:40 +0200
+Subject: [Buildroot] [PATCH v2] stress-ng: update to 0.06.02
+In-Reply-To: <20160516081456.GA15481@waldemar-brodkorb.de>
+References: <20160516081456.GA15481@waldemar-brodkorb.de>
+Message-ID: <20160516220340.1bf31038@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-Minor nit in commit title: s/boot-tools/uboot-tools/. But it can be
-fixed when applying, of course.
-
-On Mon, 16 May 2016 17:02:14 -0300, Fabio Estevam wrote:
-> Bump to version 2016.05 and also remove patch
-> 003-tools-env-bug-config-structs-must-be-defined-in-tool.patch, as it is
-> upstreamed now.
+On Mon, 16 May 2016 10:14:56 +0200, Waldemar Brodkorb wrote:
+> Fixes following autobuilder errors:
+> http://autobuild.buildroot.net/results/b527ccdbdfeaba6789528e68df93d9c7216e758a/
+> http://autobuild.buildroot.net/results/d658f82c66d93515276dcb6cec8d3690459fbf05/
 > 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+> v1->v2: 
+>   - upstream made a new release including a bugfix for sparc64 build
+>     failure, Thomas Petazzoni agreed via #buildroot, that bumping
+>     this package would be okay
+> ---
+>  package/stress-ng/stress-ng.hash | 2 +-
+>  package/stress-ng/stress-ng.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
