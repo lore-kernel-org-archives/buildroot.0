@@ -1,58 +1,104 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Mon, 16 May 2016 13:23:44 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-05-13
-In-Reply-To: <20160516131538.70d77f39@free-electrons.com>
-References: <20160514063024.2C7B91025E9@stock.ovh.net>
- <20160514154655.57ae0bad@free-electrons.com>
- <CAFGQKxf_m8c_u4j5_RKwLvKog3HC=mmAzqv-L3LJqX-tgbCL8w@mail.gmail.com>
- <20160516131538.70d77f39@free-electrons.com>
-Message-ID: <CAFGQKxdxSt8LBiipFExEE1KYY+DN_njddHCk0vDMyrK0Eg-2RA@mail.gmail.com>
+From: =?UTF-8?B?0JjQu9GM0Y8g0JLQsNC70LXQtdCy?= <ilya-valeev@yandex.ru>
+Date: Mon, 16 May 2016 17:32:03 +0500
+Subject: [Buildroot] How to choose C library dependencies
+In-Reply-To: <4904ae0d-f790-063e-a365-675596985f02@mind.be>
+References: <5731B0DD.1080201@gmail.com>
+ <9f06d929-7f0c-7461-d6b2-c85b46515c4d@yandex.ru>
+ <4904ae0d-f790-063e-a365-675596985f02@mind.be>
+Message-ID: <e1fbcc44-5d41-e996-dd6b-8b301d83883b@yandex.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomans,
+> On 05/14/16 05:59, ???? ?????? wrote:
+>> Hello!
+>> I want to compile ejabberd and run it on my router. I choose erlang
+>> package with
+>> SMP support and all modules and ejabberd package, does not configure
+>> defconfig.
+>> Then I run /make ejabberd/, copy ejabberd, erlang and busybox from
+>> /target/
+>> folder to router and run it.
+>
+>  Buildroot in't really meant for that kind of scenario. That said, it
+> should be possible to do it. Basically you must create a toolchain
+> that matches exactly with what is already installed on the target.
+Is there any manual how to do this?
 
-On 16 May 2016 at 12:15, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Mon, 16 May 2016 11:19:20 +0100, Martin Bark wrote:
->
->> >>          arm | iputils-3a86a2542c6fe29413c... | NOK | http://autobuild.buildroot.net/results/55a7db5c0cbc34bbf6a2cbc52713d8822deec5b2/
->> >
->> > Some static linking issue. Martin, you already did some work on
->> > iputils, can you have a look?
+
+>> I found that at least ejabberd compiled with glibc dependence and
+>> won't run
+>> without it. Running /cd /path/to/ejabberd && ./ejabberdctl start/
+>> ends with
+>>> /opt/lib/erlang/bin/erl: exec: line 29:
+>>> /usr/lib/erlang/erts-7.3/bin/erlexec
+>> As I found before, it's because erlexec want glibc which missing in
+>> router.
+>> Than I enable Linux kernel, set defconfig to bcm and try to run
+>> /make/ and copy
+>> these programms from rootfs image to router with same result.
 >>
->> It's an issue with static builds and using libgcrypt.  I've submitted
->> a pull request to fix the issue (see
->> https://github.com/iputils/iputils/pull/50).  Last time i submitted a
->> pull request the author of iputils was very quick to merge my changes
->> so I'll wait to see what happens before i submit any changes to
->> buildroot.
+>> How can I compile these programms (ejabberd, erlang and busybox) with
+>> uClibc
+>> dependence?
 >
-> And indeed, it has been merged half an hour ago. However, I'm wondering
-> why you have not used pkg-config instead. The drawback of -lgcrypt
-> -lgpg-error is that now, even in dynamic linking situations, the
-> iputils binary has a direct reference to libgpg-error.
+>  The config file you attached indeed selects uClibc, so I don't see
+> how it could possibly link against glibc. How do you know it links
+> with glibc?
+>
+>  To verify something like that, do:
+>
+> readelf -d output/target/usr/lib/erlang/erts-7.3/bin/erlexec
+>
+> and check that all the libraries mentioned there exist on the target.
+>
+I've run /readelf -l output/target/usr/lib/erlang/erts-7.3/bin/erlexec/
+and it show glibc as "requesting program interpreter".
+My erlexec wants:
+libm.so.1
+libc.so.1
+I copy them to router from buildroot generated rootfs, and error
+"'/opt/lib/libc.so.1' library contains unsupported TLS" appears. So it
+seems you are right about toolchain.
 
-yes my first thought was to use libgrypt-config but in the end I
-decided to keep it simple because iputils only has a basic Makefile
-with no configure script.  It's the same situation we had with linking
-against the libm.  I going to asking the maintainer if they would
-accept a change to add a cmake or autotools build system so solve this
-kind of issue neatly.
-
-Thanks
-
-Martin
 
 >
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+>  Regards,
+>  Arnout
+>
+>>
+>> *Buildroot:* snapshot from 2016.05.13
+>> *C library in menuconfig:* uClibc with C++ support
+>> *defconfig:* bcm
+>> *Target Architecture:* ARM (little endian)
+>> *Target Architecture Variant:* cortex-A9
+>> *System running buildroot:* Debian 8 x64
+>> *Router:* Broadcom BCM4708A0, 2xARM Cortex A9, asuswrt-merlin 380.58_0
+>> *.config:* in attach
+>>
+>> -- 
+>> ????????????? ????????? ?????: 1D38C8C9
+>> ?????????: 6210 01B6 A34E E490 A9E4  87DD 841D 0ABE 1D38 C8C9
+>>
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
+>
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160516/46eee123/attachment.html>
