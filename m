@@ -1,37 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 May 2016 22:08:04 +0200
-Subject: [Buildroot] [PATCH] libinput: fix missing static_assert
-In-Reply-To: <a6598fc63aae9386451821fd854bfef032073a35.1463422790.git.baruch@tkos.co.il>
-References: <a6598fc63aae9386451821fd854bfef032073a35.1463422790.git.baruch@tkos.co.il>
-Message-ID: <20160516220804.105a6bf1@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 16 May 2016 22:18:06 +0200
+Subject: [Buildroot] QtMultimedia and gstreamer-1.0
+In-Reply-To: <57386743.1030708@gmail.com>
+References: <5738116B.9050904@gmail.com> <20160515100303.003752e2@gmx.net>
+ <5738333D.8010707@gmail.com> <20160515140511.5973b7ce@gmx.net>
+ <57386743.1030708@gmail.com>
+Message-ID: <20160516221806.0df441c0@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Marco,
 
-On Mon, 16 May 2016 21:19:50 +0300, Baruch Siach wrote:
-> uClibc-ng does not define the C11 static_assert macro. Patch configure.ac to
-> detect this and define a nop macro.
+On Sun, 15 May 2016 14:10:43 +0200, Marco Trapanese <marcotrapanese@gmail.com> wrote:
+
+> Il 15/05/2016 14:05, Peter Seiderer ha scritto:
+> > Would suspect some missing library....maybe I find some time tonight 
+> > to do some local test to check/verify your problem... 
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/3eb/3eb32c19f90a5fd8d45a0c36676e015e8278a469/
-> http://autobuild.buildroot.net/results/184/1844890c65615f1676a85c6fac78937249eee9f1/
-> http://autobuild.buildroot.net/results/3a3/3a3f8c5624e8019a6eababbf6e7440fdd668f85f/
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...-Add-configure.ac-check-for-static_assert.patch | 34 ++++++++++++++++++++++
->  package/libinput/libinput.mk                       |  2 ++
->  2 files changed, 36 insertions(+)
->  create mode 100644 package/libinput/0002-Add-configure.ac-check-for-static_assert.patch
+> I thank you very much. Please, feel free to ask me any other details or 
+> test if they may help you!
+> 
 
-Applied to master, thanks.
+Buildroot with Qt5 and Qt5Multimedia using gstreamer1 packages still works
+for me (on RPi 3, buildroot master from git).....
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Maybe try a complete rebuild? Try to find out why Qt5Multimedia plugin is
+not loaded, maybe a missing library (try strace and/or ldd)?
+
+Mind to share your buildroot .config file?
+
+Regards, Peter
