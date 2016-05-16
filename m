@@ -1,51 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 May 2016 21:14:09 +0200
-Subject: [Buildroot] [git commit branch/next] boot/uboot: bump to version
-	2016.05
-Message-ID: <20160516192028.0EEB181DD3@busybox.osuosl.org>
+Date: Mon, 16 May 2016 21:18:02 +0200
+Subject: [Buildroot] [git commit branch/next] linux-headers: add 4.6.x series
+Message-ID: <20160516192028.2777180260@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=316986e3363499a3d8c392b6de205b07896b9a6d
+commit: https://git.buildroot.net/buildroot/commit/?id=d038cce505c1e45db482756cbc42d132fc8113c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/Config.in  | 4 ++--
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/linux-headers/Config.in.host | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 4613dd3..21f9abd 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -38,7 +38,7 @@ choice
- 	  Select the specific U-Boot version you want to use
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 04d5890..cc0ab41 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,7 @@ comment "Kernel Header Options"
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_4_5
++	default BR2_KERNEL_HEADERS_4_6
+ 	help
+ 	  Select the version of kernel header files you wish to use.
+ 	  You must select the correct set of header files to match
+@@ -78,6 +78,10 @@ choice
+ 		bool "Linux 4.5.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
  
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2016.03"
-+	bool "2016.05"
++	config BR2_KERNEL_HEADERS_4_6
++		bool "Linux 4.6.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
++
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
+ endchoice
+@@ -99,6 +103,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
  
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -86,7 +86,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2016.03"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2016.05"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index 747d133..2076b3b 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  e49337262ecac44dbdeac140f2c6ebd1eba345e0162b0464172e7f05583ed7bb  u-boot-2016.03.tar.bz2
-+sha256  87d02275615aaf0cd007b54cbe9fbadceef2bee7c79e6c323ea1ae8956dcb171  u-boot-2016.05.tar.bz2
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6
++	bool "4.6.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5
+ 	bool "4.5.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+@@ -223,4 +231,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+ 	default "4.4.9"		if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.3"		if BR2_KERNEL_HEADERS_4_5
++	default "4.6"		if BR2_KERNEL_HEADERS_4_6
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
