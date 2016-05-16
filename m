@@ -1,33 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 May 2016 21:25:58 +0200
-Subject: [Buildroot] [PATCH] package/samba4: create tempfile with systemd
-In-Reply-To: <1463399550-4040-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Mon, 16 May 2016 13:52:30 +0200")
-References: <1463399550-4040-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <8760udg5yx.fsf@dell.be.48ers.dk>
+Date: Mon, 16 May 2016 21:25:42 +0200
+Subject: [Buildroot] [git commit] package/samba4: create tempfile with
+	systemd
+Message-ID: <20160516192609.7BD8A81DDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c6b4a5fcc4a94d3182c11665ffa6e0531addf053
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > With systemd, samba4 will need some special temporary files to be
- > created on each boot, as explained in:
- >     packaging/systemd/README
+With systemd, samba4 will need some special temporary files to be
+created on each boot, as explained in:
+    packaging/systemd/README
 
- > Install the provided template file as configuration.
+Install the provided template file as configuration.
 
- > However, this is not enough, as even the log directory is a tmpfs in
- > the default Buildroot configuration, so we must also create the log
- > directory on each boot. Hence we append this to the template installed
- > above.
+However, this is not enough, as even the log directory is a tmpfs in
+the default Buildroot configuration, so we must also create the log
+directory on each boot. Hence we append this to the template installed
+above.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/samba4/samba4.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 9ccc6a7..c097068 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -165,6 +165,9 @@ define SAMBA4_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/smb.service
+ 	ln -sf ../../../../usr/lib/systemd/system/winbind.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/winbind.service
++	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/samba.conf.tmp \
++		$(TARGET_DIR)/etc/tmpfiles.d/samba.conf
++	printf "d /var/log/samba  755 root root\n" >>$(TARGET_DIR)/etc/tmpfiles.d/samba.conf
+ endef
+ 
+ $(eval $(generic-package))
