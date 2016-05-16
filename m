@@ -1,49 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 May 2016 19:06:08 +0200
-Subject: [Buildroot] [git commit] package/iputils: bump version to
-	31d947cf7156cf78d3f57e0bd82b33e6f6ece6b4
-Message-ID: <20160516170625.AE8A181801@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 16 May 2016 19:18:16 +0200
+Subject: [Buildroot] kodi 16 on aarch64
+References: <trinity-8cc2631d-885d-437a-aec1-a88667084c0c-1463257448483@3capp-mailcom-bs05>
+Message-ID: <XnsA60AC45F57D8AberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5787cf2516a32b921314799a2e84ee5a3a3777c4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+daggs <daggs@gmx.com> wrote in news:trinity-8cc2631d-
+885d-437a-aec1-a88667084c0c-1463257448483 at 3capp-mailcom-bs05:
 
-Includes a fix for static builds using libgcrypt.
+> I'm trying to compile a buildroot aarch64 env with kodi on it.
 
-Fixes:
- http://autobuild.buildroot.net/results/55a7db5c0cbc34bbf6a2cbc52713d8822deec5b2
- http://autobuild.buildroot.net/results/864d8901eb901182ce186cf9a845636040e242bb
- http://autobuild.buildroot.net/results/aba522aa164267993fb1f1bbc57733be0cbea680
+Hi,
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/iputils/iputils.hash | 2 +-
- package/iputils/iputils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Kodi 16.x-Jarvis has no support for aarch64, the next version 17.x-Krypton 
+will have it after my pull request was accepted:
+https://github.com/xbmc/xbmc/commit/62c160c23ed4c074d106f30a43638fac66568ac6
 
-diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-index 1cd8ed3..42ea5fd 100644
---- a/package/iputils/iputils.hash
-+++ b/package/iputils/iputils.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	73de246aee1fd3cd69b1341a0c4e1b4acfa655fe6f7363fd9424824aa8bf5a57	iputils-3a86a2542c6fe29413c439bebeae11ec8a57ec7c.tar.gz
-+sha256	08b9f686fcc874f75b465f90f3e831aa9ac1f2e043f4bb61e6d99868e8869025	iputils-31d947cf7156cf78d3f57e0bd82b33e6f6ece6b4.tar.gz
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 522be9b..18e48b4 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -11,7 +11,7 @@
- # and IPv6 updates.
- # http://www.spinics.net/lists/netdev/msg279881.html
- 
--IPUTILS_VERSION = 3a86a2542c6fe29413c439bebeae11ec8a57ec7c
-+IPUTILS_VERSION = 31d947cf7156cf78d3f57e0bd82b33e6f6ece6b4
- IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
- IPUTILS_LICENSE = GPLv2+, BSD-3c, BSD-4c
- # Only includes a license file for BSD
+You can also try my buildroot fork with Kodi 17 patches:
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/148325
+
+Regards, Bernd
