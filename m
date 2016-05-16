@@ -1,60 +1,93 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 May 2016 22:59:00 +0200
-Subject: [Buildroot] [PATCH v2] package/gcc: 4.8.x to 5.x: backport a
-	fix for building gcc with gcc-6
-In-Reply-To: <20160516085019.237fbc76@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 16 May 2016 08:50:19 +0200")
-References: <1463371428-5117-1-git-send-email-s.martin49@gmail.com>
- <20160516085019.237fbc76@free-electrons.com>
-Message-ID: <87oa85en3f.fsf@dell.be.48ers.dk>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 16 May 2016 23:03:35 +0200
+Subject: [Buildroot] [PATCH] package/jack2: fix build WRT backtrace support
+Message-ID: <1463432615-14092-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+This change adds a patch checking for the presence of execinfo.h header
+and enabling the backtrace support depending on the check result.
 
- > Hello,
- > On Mon, 16 May 2016 06:03:48 +0200, Samuel Martin wrote:
- >> When the host system compiler is gcc-6, this patch is needed to build
- >> Buildroot toolchain and cleanly apply on gcc version 4.8.x to 5.x (not
- >> needed for 4.7.x series).
- >> 
- >> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- >> 
- >> ---
- >> changes v1->v2:
- >> - rename patches {ThomasP)
- >> ---
- >> package/gcc/4.8.5/130-fix_build_with_gcc-6.patch   | 153 +++++++++++++++++++++
- >> package/gcc/4.9.3/130-fix_build_with_gcc-6.patch   | 153 +++++++++++++++++++++
- >> package/gcc/5.3.0/130-fix_build_with_gcc-6.patch   | 153 +++++++++++++++++++++
- >> .../gcc/arc-2015.12/130-fix_build_with_gcc-6.patch | 153 +++++++++++++++++++++
- >> 4 files changed, 612 insertions(+)
- >> create mode 100644 package/gcc/4.8.5/130-fix_build_with_gcc-6.patch
- >> create mode 100644 package/gcc/4.9.3/130-fix_build_with_gcc-6.patch
- >> create mode 100644 package/gcc/5.3.0/130-fix_build_with_gcc-6.patch
- >> create mode 100644 package/gcc/arc-2015.12/130-fix_build_with_gcc-6.patch
+Fixes:
+  http://autobuild.buildroot.org/results/415/415e2100dc59d35e58646c07f7cdccabecdda966/
+  http://autobuild.buildroot.org/results/43c/43ca1b103434ae582fdf93cb5912b311960f303b/
+  http://autobuild.buildroot.org/results/391/391e71a988250ea66ec4dbee6f60fdce9eaf2766/
+  ...
 
- > Thanks for this new iteration, looks good. Now, I'm wondering whether I
- > should apply this to master or to next.
+Adapted from the PR:
+  https://github.com/jackaudio/jack2/pull/206
 
- > It really is a build fix, so master is normally appropriate. However:
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ ...ace-support-depends-on-execinfo.h-existen.patch | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 package/jack2/0002-make-backtrace-support-depends-on-execinfo.h-existen.patch
 
- >  1/ It is touching really a core component, gcc, so we should be more
- >     conservative than for other packages.
-
- >  2/ There are probably tons of other host packages that don't yet build
- >     with gcc 6, so we might as well decide that Buildroot 2016.05 is
- >     not gcc 6 compatible, and to make it a goal for Buildroot 2016.08
- >     to support gcc 6 on the host.
-
- > Opinions welcome.
-
-I also would prefer to err on the side of caution. From IRC I see that
-so far only Arch has moved to gcc6 by default, so I think we should only
-add it in next.
-
+diff --git a/package/jack2/0002-make-backtrace-support-depends-on-execinfo.h-existen.patch b/package/jack2/0002-make-backtrace-support-depends-on-execinfo.h-existen.patch
+new file mode 100644
+index 0000000..2b95dc2
+--- /dev/null
++++ b/package/jack2/0002-make-backtrace-support-depends-on-execinfo.h-existen.patch
+@@ -0,0 +1,57 @@
++From 4cf9986b00f928d465866e427d310bd3e70a972f Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Mon, 16 May 2016 22:26:05 +0200
++Subject: [PATCH] make backtrace support depends on execinfo.h existence
++
++---
++ dbus/sigsegv.c | 8 +++++++-
++ wscript        | 1 +
++ 2 files changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/dbus/sigsegv.c b/dbus/sigsegv.c
++index ee12f91..0b31d89 100644
++--- a/dbus/sigsegv.c
+++++ b/dbus/sigsegv.c
++@@ -27,7 +27,9 @@
++ #include <stdio.h>
++ #include <signal.h>
++ #include <dlfcn.h>
++-#include <execinfo.h>
+++#if defined(HAVE_EXECINFO_H)
+++# include <execinfo.h>
+++#endif /* defined(HAVE_EXECINFO_H) */
++ #include <errno.h>
++ #ifndef NO_CPP_DEMANGLE
++ char * __cxa_demangle(const char * __mangled_name, char * __output_buffer, size_t * __length, int * __status);
++@@ -161,12 +163,16 @@ static void signal_segv(int signum, siginfo_t* info, void*ptr) {
++         bp = (void**)bp[0];
++     }
++ #else
+++# if defined(HAVE_EXECINFO_H)
++     jack_error("Stack trace (non-dedicated):");
++     sz = backtrace(bt, 20);
++     strings = backtrace_symbols(bt, sz);
++ 
++     for(i = 0; i < sz; ++i)
++         jack_error("%s", strings[i]);
+++# else /* defined(HAVE_EXECINFO_H) */
+++    jack_error("Stack trace not available");
+++# endif /* defined(HAVE_EXECINFO_H) */
++ #endif
++     jack_error("End of stack trace");
++     exit (-1);
++diff --git a/wscript b/wscript
++index aef4bd8..63ba3aa 100644
++--- a/wscript
+++++ b/wscript
++@@ -166,6 +166,7 @@ def configure(conf):
++         if conf.env['BUILD_JACKDBUS'] != True:
++             conf.fatal('jackdbus was explicitly requested but cannot be built')
++ 
+++    conf.check_cc(header_name='execinfo.h', define_name="HAVE_EXECINFO_H", mandatory=False)
++     conf.check_cc(header_name='samplerate.h', define_name="HAVE_SAMPLERATE")
++ 
++     if conf.is_defined('HAVE_SAMPLERATE'):
++-- 
++2.8.2
++
 -- 
-Bye, Peter Korsgaard
+2.8.2
