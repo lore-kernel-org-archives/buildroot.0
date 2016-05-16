@@ -1,40 +1,31 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Mon, 16 May 2016 22:22:11 +0200
-Subject: [Buildroot] QtMultimedia and gstreamer-1.0
-In-Reply-To: <20160516221806.0df441c0@gmx.net>
-References: <5738116B.9050904@gmail.com> <20160515100303.003752e2@gmx.net>
- <5738333D.8010707@gmail.com> <20160515140511.5973b7ce@gmx.net>
- <57386743.1030708@gmail.com> <20160516221806.0df441c0@gmx.net>
-Message-ID: <573A2BF3.1080701@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 16 May 2016 22:40:00 +0200
+Subject: [Buildroot] [PATCH v3] uboot-tools: bump to version 2016.05
+In-Reply-To: <1463429144-21142-1-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Mon, 16 May 2016 17:05:44 -0300")
+References: <1463429144-21142-1-git-send-email-festevam@gmail.com>
+Message-ID: <87wpmtenz3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 16/05/2016 22:18, Peter Seiderer ha scritto:
->
-> Buildroot with Qt5 and Qt5Multimedia using gstreamer1 packages still works
-> for me (on RPi 3, buildroot master from git).....
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
-Great!
+ > Bump to version 2016.05 and also remove patch
+ > 003-tools-env-bug-config-structs-must-be-defined-in-tool.patch, as it is
+ > upstreamed now.
 
-> Maybe try a complete rebuild? Try to find out why Qt5Multimedia plugin is
-> not loaded, maybe a missing library (try strace and/or ldd)?
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+ > Changes since v2:
+ > - Use uboot-tools in the Subject (Thomas)
+ > Changes since v1:
+ > - Remove patch 0003 (Peter)
 
-I will try to ldd files under /usr/lib/qt/plugins/
+Committed to next, thanks.
 
-> Mind to share your buildroot .config file?
-
-
-Here it is!
-Thanks
-Marco
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/xml
-Size: 93124 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160516/b5cf2564/attachment-0001.wsdl>
+-- 
+Venlig hilsen,
+Peter Korsgaard 
