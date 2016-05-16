@@ -1,36 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 May 2016 20:10:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iputils: bump version to
- 31d947cf7156cf78d3f57e0bd82b33e6f6ece6b4
-In-Reply-To: <1463410859-7543-1-git-send-email-martin@barkynet.com>
-References: <1463410859-7543-1-git-send-email-martin@barkynet.com>
-Message-ID: <20160516201040.0655ecc8@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 16 May 2016 21:19:50 +0300
+Subject: [Buildroot] [PATCH] libinput: fix missing static_assert
+Message-ID: <a6598fc63aae9386451821fd854bfef032073a35.1463422790.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+uClibc-ng does not define the C11 static_assert macro. Patch configure.ac to
+detect this and define a nop macro.
 
-On Mon, 16 May 2016 16:00:59 +0100, Martin Bark wrote:
-> Includes a fix for static builds using libgcrypt.
-> 
-> Fixes:
->  http://autobuild.buildroot.net/results/55a7db5c0cbc34bbf6a2cbc52713d8822deec5b2
->  http://autobuild.buildroot.net/results/864d8901eb901182ce186cf9a845636040e242bb
->  http://autobuild.buildroot.net/results/aba522aa164267993fb1f1bbc57733be0cbea680
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> ---
->  package/iputils/iputils.hash | 2 +-
->  package/iputils/iputils.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/3eb/3eb32c19f90a5fd8d45a0c36676e015e8278a469/
+http://autobuild.buildroot.net/results/184/1844890c65615f1676a85c6fac78937249eee9f1/
+http://autobuild.buildroot.net/results/3a3/3a3f8c5624e8019a6eababbf6e7440fdd668f85f/
 
-Applied to master, thanks.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...-Add-configure.ac-check-for-static_assert.patch | 34 ++++++++++++++++++++++
+ package/libinput/libinput.mk                       |  2 ++
+ 2 files changed, 36 insertions(+)
+ create mode 100644 package/libinput/0002-Add-configure.ac-check-for-static_assert.patch
 
-Thomas
+diff --git a/package/libinput/0002-Add-configure.ac-check-for-static_assert.patch b/package/libinput/0002-Add-configure.ac-check-for-static_assert.patch
+new file mode 100644
+index 000000000000..4df47b9a2be8
+--- /dev/null
++++ b/package/libinput/0002-Add-configure.ac-check-for-static_assert.patch
+@@ -0,0 +1,34 @@
++From 0df21f54942dc82ddde4095824e7b65efb96d261 Mon Sep 17 00:00:00 2001
++From: Peter Hutterer <peter.hutterer@who-t.net>
++Date: Mon, 16 May 2016 13:32:07 +1000
++Subject: [PATCH] Add configure.ac check for static_assert
++
++Part of C11, defined via assert.h.
++
++Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: suggested upstream
++(https://lists.freedesktop.org/archives/wayland-devel/2016-May/028881.html)
++
++ configure.ac | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 602a86026544..28a5197cfa2e 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -55,6 +55,10 @@ AC_CHECK_DECL(TFD_CLOEXEC,[],
++ AC_CHECK_DECL(CLOCK_MONOTONIC,[],
++ 	      [AC_MSG_ERROR("CLOCK_MONOTONIC is needed to compile libinput")],
++ 	      [[#include <time.h>]])
+++AC_CHECK_DECL(static_assert, [],
+++	      [AC_DEFINE(static_assert(...), [/* */], [noop static_assert() replacement]),
+++              AC_MSG_RESULT([no])],
+++	      [[#include <assert.h>]])
++ 
++ PKG_PROG_PKG_CONFIG()
++ PKG_CHECK_MODULES(MTDEV, [mtdev >= 1.1.0])
++-- 
++2.8.1
++
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index de6a81cb529c..bd8fe2cbcc76 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -13,6 +13,8 @@ LIBINPUT_LICENSE = MIT
+ LIBINPUT_LICENSE_FILES = COPYING
+ # Tests need fork, so just disable them everywhere.
+ LIBINPUT_CONF_OPTS = --disable-tests --disable-libwacom
++# Patching configure.ac
++LIBINPUT_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+ LIBINPUT_CONF_OPTS += --enable-event-gui
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
