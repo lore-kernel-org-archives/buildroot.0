@@ -1,81 +1,48 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 16 May 2016 08:57:39 +0200
-Subject: [Buildroot] [PATCH 2/2] package/android-tools: fix host tools
-	dependency
-In-Reply-To: <20160515213646.6530b595@free-electrons.com>
-References: <1463260156-23406-1-git-send-email-s.martin49@gmail.com>
- <1463260156-23406-3-git-send-email-s.martin49@gmail.com>
- <20160515213646.6530b595@free-electrons.com>
-Message-ID: <CAHXCMM+bhCK9km3EmxvcwzHihf=hh26=CRXMXr-VXpLPd0mOyw@mail.gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 16 May 2016 10:14:56 +0200
+Subject: [Buildroot] [PATCH v2] stress-ng: update to 0.06.02
+Message-ID: <20160516081456.GA15481@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, May 15, 2016 at 9:36 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Sat, 14 May 2016 23:09:16 +0200, Samuel Martin wrote:
->> Host android-tools only makes sense when the target package is enable,
->> so make it available only when the android-tools is already part of the
->> target package selection.
->>
->> This change fixes in a simpler way the missing selection on
->> BR2_PACKAGE_ANDROID_TOOLS and the missing dependency on BR2_USE_MMU.
->>
->> This patch fixes the following kconfig warning:
->>
->>   warning: (BR2_PACKAGE_HOST_ANDROID_TOOLS) selects BR2_PACKAGE_ANDROID_TOOLS_ADB which has unmet direct dependencies (BR2_PACKAGE_ANDROID_TOOLS && BR2_USE_MMU)
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->> ---
->>  package/android-tools/Config.in.host | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/package/android-tools/Config.in.host b/package/android-tools/Config.in.host
->> index 4326014..7ac9636 100644
->> --- a/package/android-tools/Config.in.host
->> +++ b/package/android-tools/Config.in.host
->> @@ -1,5 +1,6 @@
->>  config BR2_PACKAGE_HOST_ANDROID_TOOLS
->>       bool "host android-tools"
->> +     depends on BR2_PACKAGE_ANDROID_TOOLS
->>       select BR2_PACKAGE_ANDROID_TOOLS_ADB if \
->>               !BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT
->
-> This is not the correct fix, for two reasons:
->
->  1/ The intent of the "select" is to make sure that either adb or
->     fastboot support is enabled, so basically the mistake is that the
->     select are using the options of the *target* android-tools package,
->     while it should be using the options of the *host* android-tools
->     package, defined below in the same file.
->
->  2/ Your assumption that android-tools on the host are needed only if
->     android-tools are installed on the target are wrong. The original
->     reason for which I started packaging the android-tools is because
->     we wanted to have the fastboot command on our host machine, to talk
->     to a fastboot implementation in U-Boot. So there's no android-tools
->     in the target, but we need android-tools on the host.
+Fixes following autobuilder errors:
+http://autobuild.buildroot.net/results/b527ccdbdfeaba6789528e68df93d9c7216e758a/
+http://autobuild.buildroot.net/results/d658f82c66d93515276dcb6cec8d3690459fbf05/
 
-Thanks for the clarification, I was not aware of this use-case.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+v1->v2: 
+  - upstream made a new release including a bugfix for sparc64 build
+    failure, Thomas Petazzoni agreed via #buildroot, that bumping
+    this package would be okay
+---
+ package/stress-ng/stress-ng.hash | 2 +-
+ package/stress-ng/stress-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->
-> So, I committed a fix that simply changes the select to use the
-> sub-options of the host android-tools package. See
-> https://git.buildroot.net/buildroot/commit/?id=f0d995cafd0c664f436bc9d082a3bb14b683dd75.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-Regards,
-
+diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
+index 4979303..d09edc0 100644
+--- a/package/stress-ng/stress-ng.hash
++++ b/package/stress-ng/stress-ng.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	9d17dffafdf8dd71eb5c191973b65d4eb2964ecc31f1d01ad188fd03a0c49f6c	stress-ng-0.04.16.tar.gz
++sha256	7af9759a37902ebf401f92fedeada0b82bcd1e3f4e9e10130177344f143470eb	stress-ng-0.06.02.tar.gz
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index 114c427..6015a1e 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRESS_NG_VERSION = 0.04.16
++STRESS_NG_VERSION = 0.06.02
+ STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
+ STRESS_NG_LICENSE = GPLv2+
+ STRESS_NG_LICENSE_FILES = COPYING
 -- 
-Samuel
+2.1.4
