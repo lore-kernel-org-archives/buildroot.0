@@ -1,41 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 May 2016 23:19:22 +0200
-Subject: [Buildroot] How to choose C library dependencies
-In-Reply-To: <4904ae0d-f790-063e-a365-675596985f02@mind.be>
-References: <5731B0DD.1080201@gmail.com>
- <9f06d929-7f0c-7461-d6b2-c85b46515c4d@yandex.ru>
- <4904ae0d-f790-063e-a365-675596985f02@mind.be>
-Message-ID: <20160516231922.7ebb515f@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 16 May 2016 21:20:09 +0000
+Subject: [Buildroot] [Bug 8931] segment fault when compile argp-help.c using
+ aarch64-buildroot-linux-gnu-gcc
+In-Reply-To: <bug-8931-163@https.bugs.busybox.net/>
+References: <bug-8931-163@https.bugs.busybox.net/>
+Message-ID: <bug-8931-163-oDG67OQPfZ@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=8931
 
-On Sun, 15 May 2016 01:54:07 +0200, Arnout Vandecappelle wrote:
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks for the report. Could you attach your Buildroot .config file?
 
-> > I want to compile ejabberd and run it on my router. I choose erlang package with
-> > SMP support and all modules and ejabberd package, does not configure defconfig.
-> > Then I run /make ejabberd/, copy ejabberd, erlang and busybox from /target/
-> > folder to router and run it.  
-> 
->   Buildroot in't really meant for that kind of scenario. That said, it should be 
-> possible to do it. Basically you must create a toolchain that matches exactly 
-> with what is already installed on the target.
-
-Or:
-
- 1/ Use a statically linked binary.
-
- 2/ Use a chroot.
-
-In both cases, you must make sure that the C library uses kernel
-headers that are at least as old at the kernel running on your target.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
