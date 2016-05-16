@@ -1,68 +1,55 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Mon, 16 May 2016 09:48:16 +0100
-Subject: [Buildroot] [PATCH 1/5] package/nginx: fix libxslt support
-In-Reply-To: <20160513232604.348f29fe@free-electrons.com>
-References: <1462793343-20234-1-git-send-email-martin@barkynet.com>
- <20160513232604.348f29fe@free-electrons.com>
-Message-ID: <CAFGQKxccKT+zwVzWeHW=3wTuVLpbanRFE1VYQwTwMLUzWSQTLw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 16 May 2016 11:38:01 +0200
+Subject: [Buildroot] [PATCH 0/3] OrangePi Plus: Add support
+In-Reply-To: <7B019F86-2725-4B09-854C-592B85C9FDD1@dack.com.au> (Troy Dack's
+ message of "Mon, 16 May 2016 12:17:13 +1000")
+References: <1463268790-1076-1-git-send-email-troy@dack.com.au>
+ <87d1ongh8f.fsf@dell.be.48ers.dk>
+ <7B019F86-2725-4B09-854C-592B85C9FDD1@dack.com.au>
+Message-ID: <87zirqfime.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+>>>>> "Troy" == Troy Dack <troy@dack.com.au> writes:
 
-On 13 May 2016 at 22:26, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Mon,  9 May 2016 12:28:59 +0100, Martin Bark wrote:
->> Change to using pkg-config to find libxslt and it dependencies.
->>
->> This Fixes:
->>  http://autobuild.buildroot.net/results/382699bbed15f598625b9296e464d1349ef559f8
->>
->> Signed-off-by: Martin Bark <martin@barkynet.com>
->> ---
->>  ...bxslt-conf-allow-to-override-ngx_feature_.patch | 42 ----------------------
->>  ...0004-auto-lib-libxslt-conf-use-pkg-config.patch | 31 ++++++++++++++++
->>  package/nginx/nginx.mk                             |  7 ++--
->>  3 files changed, 35 insertions(+), 45 deletions(-)
->>  delete mode 100644 package/nginx/0004-auto-lib-libxslt-conf-allow-to-override-ngx_feature_.patch
->>  create mode 100644 package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch
->
-> I've applied your 5 patches to the master branch, thanks for doing this
-> work around nginx, much appreciated.
->
-> I have two comments though:
->
->  1/ Could you submit the nginx patches upstream? We currently have 8
->     patches on nginx, and it would be really good to reduce the size of
->     this stack of patches.
+ >> On 16 May 2016, at 07:10, Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> 
+ >>>>>>> "Troy" == Troy Dack <troy@dack.com.au> writes:
+ >> 
+ >>> Add support for the OrangePi Plus board.
+ >> 
+ >> In what way does this differ from our existing orangepipc support? Can
+ >> anything be shared between them?
 
-yes I'll work on that
+ > More than likely yes.  Although the OrangePi PC support does rename the
+ > Plus .dts as U-boot doesn?t generate one for the PC yet.
 
->
->  2/ We normally don't number the patches on packages, i.e we don't want
->     the patches do have "PATCH x/y" in their title. Since the nginx
->     patches already had a numbering, I applied your patches as-is. But
->     as you can see now, this numbering is meaningless (which is why we
->     don't want it in the first place). A follow-up commit removing this
->     numbering would be good.
+ > Thanks for the comments on the patches themselves.
 
-I have submitted a patch to correct this.  Thanks for letting me know,
-I'll avoid that in the future.
+Ok, good - And you're welcome.
 
-Thanks
+ > The intent was to create a minimal system that could be used either by
+ > putting it onto an SD card, or boot via fel with a usable initrd - without
+ > needing to create an SD card. This was mainly because network support in
+ > mainline on the H3 based OrangePi?s isn?t the best at the moment.
 
-Martin
+Ahh, yes - The plus has a onboard eMMC? The PC variant doesn't, so
+that's not really an option there.
 
->
-> Thanks again!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+Still, the easiest is probably to just go with the sdcard image for now.
+
+ > Is it possible to have a generic configuration (say OrangePi-H3) that is
+ > shared and then configs that include the specifics for the OrangePi
+ > Plus/PC etc?
+
+We can have multiple defconfigs sharing the same board files, or a
+single config working on multiple boards (if u-boot can detect the board
+variant), but there's currently no support for having a base defconfig
+that gets included/overridden by other defconfigs.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
