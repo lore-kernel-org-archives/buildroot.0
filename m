@@ -1,47 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 May 2016 21:25:42 +0200
-Subject: [Buildroot] [git commit] package/samba4: create tempfile with
-	systemd
-Message-ID: <20160516192609.7BD8A81DDC@busybox.osuosl.org>
+Date: Mon, 16 May 2016 21:35:44 +0200
+Subject: [Buildroot] [PATCH] uboot-tools: bump to version 2016.05
+In-Reply-To: <1463426487-18372-1-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Mon, 16 May 2016 16:21:27 -0300")
+References: <1463426487-18372-1-git-send-email-festevam@gmail.com>
+Message-ID: <871t51g5in.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6b4a5fcc4a94d3182c11665ffa6e0531addf053
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
-With systemd, samba4 will need some special temporary files to be
-created on each boot, as explained in:
-    packaging/systemd/README
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > ---
+ >  package/uboot-tools/uboot-tools.hash | 2 +-
+ >  package/uboot-tools/uboot-tools.mk   | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Install the provided template file as configuration.
-
-However, this is not enough, as even the log directory is a tmpfs in
-the default Buildroot configuration, so we must also create the log
-directory on each boot. Hence we append this to the template installed
-above.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/samba4/samba4.mk | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 9ccc6a7..c097068 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -165,6 +165,9 @@ define SAMBA4_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/smb.service
- 	ln -sf ../../../../usr/lib/systemd/system/winbind.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/winbind.service
-+	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/samba.conf.tmp \
-+		$(TARGET_DIR)/etc/tmpfiles.d/samba.conf
-+	printf "d /var/log/samba  755 root root\n" >>$(TARGET_DIR)/etc/tmpfiles.d/samba.conf
- endef
+ > diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
+ > index 747d133..2076b3b 100644
+ > --- a/package/uboot-tools/uboot-tools.hash
+ > +++ b/package/uboot-tools/uboot-tools.hash
+ > @@ -1,2 +1,2 @@
+ >  # Locally computed:
+ > -sha256  e49337262ecac44dbdeac140f2c6ebd1eba345e0162b0464172e7f05583ed7bb  u-boot-2016.03.tar.bz2
+ > +sha256  87d02275615aaf0cd007b54cbe9fbadceef2bee7c79e6c323ea1ae8956dcb171  u-boot-2016.05.tar.bz2
+ > diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+ > index d1ebd6f..987e89b 100644
+ > --- a/package/uboot-tools/uboot-tools.mk
+ > +++ b/package/uboot-tools/uboot-tools.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
  
- $(eval $(generic-package))
+ > -UBOOT_TOOLS_VERSION = 2016.03
+ > +UBOOT_TOOLS_VERSION = 2016.05
+ >  UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ >  UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
+ >  UBOOT_TOOLS_LICENSE = GPLv2+
+
+What about the patches?
+
+make uboot-tools-patch
+u-boot-2016.05.tar.bz2: OK (sha256: 87d02275615aaf0cd007b54cbe9fbadceef2bee7c79e6c323ea1ae8956dcb171)
+>>> uboot-tools 2016.05 Extracting
+bzcat /var/lib/downloads/u-boot-2016.05.tar.bz2 | tar --strip-components=1 -C /home/peko/source/buildroot/output/build/uboot-tools-2016.05   -xf -
+>>> uboot-tools 2016.05 Patching
+
+Applying 0001-drop-configh-from-tools.patch using patch:
+patching file tools/env/fw_env.h
+Hunk #1 succeeded at 8 with fuzz 2 (offset 3 lines).
+
+Applying 0002-tools-only-in-no-dot-config-targets.patch using patch:
+patching file Makefile
+Hunk #1 succeeded at 424 (offset 7 lines).
+
+Applying 0003-tools-env-bug-config-structs-must-be-defined-in-tool.patch using patch:
+patching file tools/env/fw_env.c
+Reversed (or previously applied) patch detected!  Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file tools/env/fw_env.c.rej
+patching file tools/env/fw_env_main.c
+Reversed (or previously applied) patch detected!  Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file tools/env/fw_env_main.c.rej
+Patch failed!  Please fix 0003-tools-env-bug-config-structs-must-be-defined-in-tool.patch!
+package/pkg-generic.mk:159: recipe for target '/home/peko/source/buildroot/output/build/uboot-tools-2016.05/.stamp_patched' failed
+make: *** [/home/peko/source/buildroot/output/build/uboot-tools-2016.05/.stamp_patched] Error 1
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
