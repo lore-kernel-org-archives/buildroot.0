@@ -1,62 +1,32 @@
 From: Martin Kelly <martin@surround.io>
-Date: Mon, 16 May 2016 16:36:53 -0700
+Date: Mon, 16 May 2016 16:37:47 -0700
 Subject: [Buildroot] [PATCH] Config.in: add -Og option
-In-Reply-To: <20160514142558.70fb92f4@free-electrons.com>
+In-Reply-To: <06c3a186-7b7e-a66e-9a55-fe6afcaef10e@mind.be>
 References: <1463183826-28562-1-git-send-email-martin@surround.io>
- <20160514142558.70fb92f4@free-electrons.com>
-Message-ID: <573A5995.6020201@surround.io>
+ <06c3a186-7b7e-a66e-9a55-fe6afcaef10e@mind.be>
+Message-ID: <573A59CB.1030903@surround.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/14/2016 05:25 AM, Thomas Petazzoni wrote:
-> Hello,
+On 05/14/2016 03:50 PM, Arnout Vandecappelle wrote:
+>   Hi Martin,
 >
-> On Fri, 13 May 2016 16:57:06 -0700, Martin Kelly wrote:
->> -Og (introduced in GCC 4.8) lets you optimize for debugging experience,
->> which can be useful for when you want optimized code that is nonetheless
->> debuggable.
->>
->> Signed-off-by: Martin Kelly <martin@surround.io>
+>   In addition to Thomas's comments, I'd like to reword the help text a
+> little.
 >
-> Thanks for submitting this patch. I had never heard of -Og, but it
-> seems like a useful addition.
 >
->> +config BR2_OPTIMIZE_g
->> +	bool "optimize debugging experience"
->> +	select BR2_HOST_GCC_AT_LEAST_4_8
 >
-> select? You can't select an option such as BR2_HOST_GCC_AT_LEAST_4_8.
-> How could Buildroot *force* the host machine to have gcc >= 4.8 ?
+>   The last sentence doesn't fit here. So:
 >
-> In addition, using BR2_HOST_GCC_AT_LEAST_4_8 is wrong here: what we
-> care about is the version of the *target* compiler, not the version of
-> the host compiler.
->
-> So this line should instead be:
->
-> 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+>        Optimize for debugging. This enables optimizations that do not
+>        interfere with debugging. It should be the optimisation level of
+>        choice for the standard edit-compile-debug cycle, offering a
+>        reasonable level of optimization while maintaining fast compilation
+>        and a good debugging experience.
 >
 
-Thanks, I agree. I wasn't sure whether to use select or depends. In 
-hindsight, I should have checked, but I'll fix up the patch and send a 
-revision.
-
->> +	help
->> +	  Optimize debugging experience. -Og enables optimizations that do not
->> +	  interfere with debugging. It should be the optimization level of choice for
->> +	  the standard edit-compile-debug cycle, offering a reasonable level of
->> +	  optimization while maintaining fast compilation and a good debugging
->> +	  experience. If you use multiple -O options, with or without level numbers,
->> +	  the last such option is the one that is effective.
->
-> I believe some of those lines are too long. They should have a maximum
-> length of 72 characters.
->
-> Would you mind reworking your patch to address those two issues and
-> sending an updated version?
->
-
-Got it, will do. I wrapped it to 80 lines.
+Your wording seems fine. Mine was just copied from the manpage :). I'll 
+revise the patch to use that wording.
