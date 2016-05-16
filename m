@@ -1,202 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 00:12:54 +0200
-Subject: [Buildroot] [PATCH 1/9] gcc: fix build of gcc 6.x on Microblaze
+Date: Tue, 17 May 2016 00:12:56 +0200
+Subject: [Buildroot] [PATCH 3/9] gdb: add support for gdb 7.11
 In-Reply-To: <1463436782-17051-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1463436782-17051-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1463436782-17051-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1463436782-17051-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Due to patch 840-microblaze-enable-dwarf-eh-support.patch, gcc 6.x
-does not build:
-
-../../gcc/config/microblaze/microblaze.c: In function 'void microblaze_expand_epilogue()':
-../../gcc/config/microblaze/microblaze.c:3046: error: 'gen_rtx_raw_REG' was not declared in this scope
-
-This patch was originally added to gcc 4.9 to make it capable of
-building glibc. However, this is no longer needed with gcc 6.x, which
-builds glibc just fine.
+gdb 7.11 was released on February 2016, it's time to include it in
+Buildroot, which this commit does.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../840-microblaze-enable-dwarf-eh-support.patch   | 166 ---------------------
- 1 file changed, 166 deletions(-)
- delete mode 100644 package/gcc/6.1.0/840-microblaze-enable-dwarf-eh-support.patch
+ package/gdb/Config.in.host | 4 ++++
+ package/gdb/gdb.hash       | 2 ++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/gcc/6.1.0/840-microblaze-enable-dwarf-eh-support.patch b/package/gcc/6.1.0/840-microblaze-enable-dwarf-eh-support.patch
-deleted file mode 100644
-index 81bf60a..0000000
---- a/package/gcc/6.1.0/840-microblaze-enable-dwarf-eh-support.patch
-+++ /dev/null
-@@ -1,166 +0,0 @@
--Fetched from Xilinx gcc git at https://github.com/Xilinx/gcc
--
--From 23c35173490ac2d6348a668dfc9c1a6eb62171f2 Mon Sep 17 00:00:00 2001
--From: "Edgar E. Iglesias" <edgar.iglesias@gmail.com>
--Date: Mon, 18 Jun 2012 20:18:13 +0200
--Subject: [PATCH] [Patch, microblaze]: Enable DWARF exception handling support.
--
--Changelog
--
--2013-03-18  Edgar E. Iglesias <edgar.iglesias@xilinx.com>
--            David Holsgrove <david.holsgrove@xilinx.com>
--
-- * common/config/microblaze/microblaze-common.c: Remove
--   TARGET_EXCEPT_UNWIND_INFO definition.
-- * config/microblaze/microblaze-protos.h: Add
--   microblaze_eh_return prototype.
-- * gcc/config/microblaze/microblaze.c: (microblaze_must_save_register,
--   microblaze_expand_epilogue, microblaze_return_addr): Handle
--   calls_eh_return
--   (microblaze_eh_return): New function.
-- * gcc/config/microblaze/microblaze.h: Define RETURN_ADDR_OFFSET,
--   EH_RETURN_DATA_REGNO, MB_EH_STACKADJ_REGNUM, EH_RETURN_STACKADJ_RTX,
--   ASM_PREFERRED_EH_DATA_FORMAT
-- * gcc/config/microblaze/microblaze.md: Define eh_return pattern.
--
--Signed-off-by: David Holsgrove <david.holsgrove@xilinx.com>
--Signed-off-by: Edgar E. Iglesias <edgar.iglesias@gmail.com>
-----
-- gcc/common/config/microblaze/microblaze-common.c |  3 ---
-- gcc/config/microblaze/microblaze-protos.h        |  1 +
-- gcc/config/microblaze/microblaze.c               | 29 ++++++++++++++++++++----
-- gcc/config/microblaze/microblaze.h               | 15 ++++++++++++
-- gcc/config/microblaze/microblaze.md              | 11 +++++++++
-- 5 files changed, 52 insertions(+), 7 deletions(-)
--
--Index: b/gcc/common/config/microblaze/microblaze-common.c
--===================================================================
----- a/gcc/common/config/microblaze/microblaze-common.c
--+++ b/gcc/common/config/microblaze/microblaze-common.c
--@@ -37,7 +37,4 @@
-- #undef  TARGET_OPTION_OPTIMIZATION_TABLE
-- #define TARGET_OPTION_OPTIMIZATION_TABLE microblaze_option_optimization_table
-- 
---#undef TARGET_EXCEPT_UNWIND_INFO
---#define TARGET_EXCEPT_UNWIND_INFO  sjlj_except_unwind_info
---
-- struct gcc_targetm_common targetm_common = TARGETM_COMMON_INITIALIZER;
--Index: b/gcc/config/microblaze/microblaze-protos.h
--===================================================================
----- a/gcc/config/microblaze/microblaze-protos.h
--+++ b/gcc/config/microblaze/microblaze-protos.h
--@@ -57,6 +57,7 @@
-- extern int symbol_mentioned_p (rtx);
-- extern int label_mentioned_p (rtx);
-- extern bool microblaze_cannot_force_const_mem (machine_mode, rtx);
--+extern void microblaze_eh_return (rtx op0);
-- #endif  /* RTX_CODE */
-- 
-- /* Declare functions in microblaze-c.c.  */
--Index: b/gcc/config/microblaze/microblaze.c
--===================================================================
----- a/gcc/config/microblaze/microblaze.c
--+++ b/gcc/config/microblaze/microblaze.c
--@@ -1924,6 +1924,11 @@
--   if (frame_pointer_needed && (regno == HARD_FRAME_POINTER_REGNUM))
--     return 1;
-- 
--+  if (crtl->calls_eh_return
--+      && regno == MB_ABI_SUB_RETURN_ADDR_REGNUM) {
--+    return 1;
--+  }
--+
--   if (!crtl->is_leaf)
--     {
--       if (regno == MB_ABI_SUB_RETURN_ADDR_REGNUM)
--@@ -1951,6 +1956,13 @@
-- 	return 1;
--     }
-- 
--+  if (crtl->calls_eh_return
--+      && (regno == EH_RETURN_DATA_REGNO (0)
--+          || regno == EH_RETURN_DATA_REGNO (1)))
--+    {
--+      return 1;
--+    }
--+
--   return 0;
-- }
-- 
--@@ -3027,6 +3039,12 @@
--       emit_insn (gen_addsi3 (stack_pointer_rtx, stack_pointer_rtx, fsiz_rtx));
--     }
-- 
--+  if (crtl->calls_eh_return)
--+    emit_insn (gen_addsi3 (stack_pointer_rtx,
--+                           stack_pointer_rtx,
--+                           gen_rtx_raw_REG (SImode,
--+                                            MB_EH_STACKADJ_REGNUM)));
--+
--   emit_jump_insn (gen_return_internal (gen_rtx_REG (Pmode, GP_REG_FIRST +
-- 						    MB_ABI_SUB_RETURN_ADDR_REGNUM)));
-- }
--@@ -3324,10 +3342,13 @@
--   if (count != 0)
--     return NULL_RTX;
-- 
---  return gen_rtx_PLUS (Pmode,
---		       get_hard_reg_initial_val (Pmode,
---						 MB_ABI_SUB_RETURN_ADDR_REGNUM),
---		       GEN_INT (8));
--+  return get_hard_reg_initial_val (Pmode,
--+                                   MB_ABI_SUB_RETURN_ADDR_REGNUM);
--+}
--+
--+void microblaze_eh_return (rtx op0)
--+{
--+  emit_insn (gen_movsi(gen_rtx_MEM(Pmode, stack_pointer_rtx), op0));
-- }
-- 
-- /* Queue an .ident string in the queue of top-level asm statements.
--Index: b/gcc/config/microblaze/microblaze.h
--===================================================================
----- a/gcc/config/microblaze/microblaze.h
--+++ b/gcc/config/microblaze/microblaze.h
--@@ -184,6 +184,21 @@
-- #define INCOMING_RETURN_ADDR_RTX  			\
--   gen_rtx_REG (VOIDmode, GP_REG_FIRST + MB_ABI_SUB_RETURN_ADDR_REGNUM)
-- 
--+/* Specifies the offset from INCOMING_RETURN_ADDR_RTX and the actual return PC.  */
--+#define RETURN_ADDR_OFFSET (8)
--+
--+/* Describe how we implement __builtin_eh_return.  */
--+#define EH_RETURN_DATA_REGNO(N) (((N) < 2) ? MB_ABI_FIRST_ARG_REGNUM + (N) : INVALID_REGNUM)
--+
--+#define MB_EH_STACKADJ_REGNUM  MB_ABI_INT_RETURN_VAL2_REGNUM
--+#define EH_RETURN_STACKADJ_RTX  gen_rtx_REG (Pmode, MB_EH_STACKADJ_REGNUM)
--+
--+/* Select a format to encode pointers in exception handling data.  CODE
--+   is 0 for data, 1 for code labels, 2 for function pointers.  GLOBAL is
--+   true if the symbol may be affected by dynamic relocations.  */
--+#define ASM_PREFERRED_EH_DATA_FORMAT(CODE,GLOBAL) \
--+  ((flag_pic || GLOBAL) ? DW_EH_PE_aligned : DW_EH_PE_absptr)
--+
-- /* Use DWARF 2 debugging information by default.  */
-- #define DWARF2_DEBUGGING_INFO
-- #define PREFERRED_DEBUGGING_TYPE DWARF2_DEBUG
--Index: b/gcc/config/microblaze/microblaze.md
--===================================================================
----- a/gcc/config/microblaze/microblaze.md
--+++ b/gcc/config/microblaze/microblaze.md
--@@ -2324,4 +2324,15 @@
--   (set_attr "mode"      "SI")
--   (set_attr "length"    "4")])
-- 
--+; This is used in compiling the unwind routines.
--+(define_expand "eh_return"
--+  [(use (match_operand 0 "general_operand" ""))]
--+  ""
--+  "
--+{
--+  microblaze_eh_return(operands[0]);
--+  DONE;
--+}")
--+
-- (include "sync.md")
--+
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index cc1dc40..35eb418 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -40,6 +40,9 @@ choice
+ 	config BR2_GDB_VERSION_7_10
+ 		bool "gdb 7.10.x"
+ 
++	config BR2_GDB_VERSION_7_11
++		bool "gdb 7.11.x"
++
+ endchoice
+ 
+ endif
+@@ -53,3 +56,4 @@ config BR2_GDB_VERSION
+ 	default "7.8.2"	   if BR2_GDB_VERSION_7_8
+ 	default "7.9.1"    if BR2_GDB_VERSION_7_9 || !BR2_PACKAGE_HOST_GDB
+ 	default "7.10.1"   if BR2_GDB_VERSION_7_10
++	default "7.11"	   if BR2_GDB_VERSION_7_11
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index ee0ec73..87ce09c 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -2,6 +2,8 @@
+ sha512	face5bf1b4ce144fc8604fc84620beed956177a11fd632b4e41906fc7f632910b2b43a50e6cfdfd6cbd876ee527c813bddab8df29dc560a6c36694cdb8edc4e4	gdb-7.8.2.tar.xz
+ sha512	eebdf88b24e52e792b8a4b89ea85790de72b462a7810b44975fdf4232c068f353b15506071f450102a9d4bcecdde8e93dc3748a10699b7f73f3e04fb2d9d8414	gdb-7.9.1.tar.xz
+ sha512	17a5138277a31685a5c2a841cb47ed9bc4626ea617b8ca77750513b300299f4fbbffe504958b5372de610dcb952c679cf8fa9c1bdadd380294fbf59b6e366010	gdb-7.10.1.tar.xz
++sha512  eadd2a59a1e48b1484eb2bea85256d6b1912926bc8b690793d02babf2639608bd22a0f2de77d4f60092da3b1dafeaa6d75a7cff3e84bd4e22fc46364b68e5e9f	gdb-7.11.tar.xz
++
+ # No hash for the ARC & microblaze variants, comes from the github-helper:
+ none	xxx	gdb-arc-2016.03-rc2-gdb.tar.gz
+ none	xxx	gdb-6be65fb56ea6694a9260733a536a023a1e2d4d57.tar.gz
 -- 
 2.7.4
