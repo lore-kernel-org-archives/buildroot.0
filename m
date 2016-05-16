@@ -1,59 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 16 May 2016 09:36:41 +0300
-Subject: [Buildroot] [PATCH] libinput: fix missing static_assert symbol
-In-Reply-To: <20160515135505.71404da2@gmx.net>
-References: <9c014a2f0264db4085efccf537f76e8f1993c27b.1463282640.git.baruch@tkos.co.il>
- <20160515053404.GA658@tarshish> <20160515094941.7402c3fa@gmx.net>
- <20160515135505.71404da2@gmx.net>
-Message-ID: <20160516063641.GE2583@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 May 2016 08:47:45 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-05-13
+In-Reply-To: <CAFt09wOkNnAGgjHrrcw8Pg-J0=cqUxGhX9k80uGqS0yP94PBbg@mail.gmail.com>
+References: <20160514063024.2C7B91025E9@stock.ovh.net>
+ <20160514154655.57ae0bad@free-electrons.com>
+ <CAFt09wOkNnAGgjHrrcw8Pg-J0=cqUxGhX9k80uGqS0yP94PBbg@mail.gmail.com>
+Message-ID: <20160516084745.24288e17@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello,
 
-On Sun, May 15, 2016 at 01:55:05PM +0200, Peter Seiderer wrote:
-> On Sun, 15 May 2016 09:49:41 +0200, Peter Seiderer <ps.report@gmx.net> 
-> wrote:
-> > On Sun, 15 May 2016 08:34:04 +0300, Baruch Siach <baruch@tkos.co.il> 
-> > wrote:
-> > > On Sun, May 15, 2016 at 06:24:00AM +0300, Baruch Siach wrote:
-> > > > static_assert() in from C++. Don't use it in C code.
-> > > 
-> > > This is wrong. As upstream developer Jonas ?dahl pointed out, C11 also defines 
-> > > static_assert as a convenience macro for _Static_assert. uClibc{,-ng} however 
-> > > that does not provide this macro. Would it make sense to disable libinput for 
-> > > uClibc{,-ng}?
-> > 
-> > Or honor the second part of Jonas answer [1]: '... or define a no-op fallback
-> > when it is not defined.'
-> > 
-> > Seems a less radical solution than disable complete package (plus dependencies)
-> > for uClibc because of a minor issue?
+On Sun, 15 May 2016 16:43:56 -0500, Matthew Weber wrote:
+
+> >>       x86_64 |                  igmpproxy-0.1 | NOK | http://autobuild.buildroot.net/results/c6a6eec34cffb2c7876595b36fb8a01f475583f9/  
+> >
+> > Musl build issue. Matt, you originally added the igmpproxy package,
+> > could you take care of this issue?  
 > 
-> Thinking more about it, I think your suggested patch is a good enough solution
-> for buildroot purpose, so you can add my
-> 
-> Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-> 
-> in case you change the patch descriptions to mention it is not a C++ thing but
-> static_assert is from C11 standard [2] (and besides your patch changes the logic
-> from compile time error to possible run time error (dependent on NDEBUG flag)...
+> Looks like Bernd Kuhls had submitted a patch back in Jan.  I've
+> retested his patch against this autobr failure and re-submitted the
+> patch.
 
-That alone is a good enough reason to not apply this patch IMO. Upstream has a 
-better suggestion along the line of no-op fallback. I plan to respin with that 
-fix instead
+Thanks!
 
-Thanks for reviewing,
-baruch
-
-> [2] http://en.cppreference.com/w/c/error/static_assert
-> > [1] 
-> > https://lists.freedesktop.org/archives/wayland-devel/2016-May/028877.html
-
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
