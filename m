@@ -1,30 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 May 2016 21:24:29 +0200
-Subject: [Buildroot] Problem with cuImage on 83x
-In-Reply-To: <001701d1af64$acb860d0$06292270$@gmail.com> (Giuseppe Lippolis's
- message of "Mon, 16 May 2016 13:18:29 +0200")
-References: <001701d1af64$acb860d0$06292270$@gmail.com>
-Message-ID: <87a8jpg61e.fsf@dell.be.48ers.dk>
+Date: Mon, 16 May 2016 21:25:58 +0200
+Subject: [Buildroot] [PATCH] package/samba4: create tempfile with systemd
+In-Reply-To: <1463399550-4040-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Mon, 16 May 2016 13:52:30 +0200")
+References: <1463399550-4040-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <8760udg5yx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giuseppe" == Giuseppe Lippolis <giu.lippolis@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Hi,
+ > With systemd, samba4 will need some special temporary files to be
+ > created on each boot, as explained in:
+ >     packaging/systemd/README
 
- > But I do not see anything in the console.
- > The problem seems releted to the vmlinux call in arc/powerpc/boot/main.c
+ > Install the provided template file as configuration.
 
- > kentry = (kernel_entry_t) vmlinux.addr;
+ > However, this is not enough, as even the log directory is a tmpfs in
+ > the default Buildroot configuration, so we must also create the log
+ > directory on each boot. Hence we append this to the template installed
+ > above.
 
- > Any suggestion?
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-I haven't personally worked with mpc834x since 2009 or so - So I don't
-recall any details. Perhaps ask on the linuxppc list
-(linuxppc-dev at lists.ozlabs.org)?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
