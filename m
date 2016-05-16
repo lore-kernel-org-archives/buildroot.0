@@ -1,55 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 May 2016 11:38:01 +0200
-Subject: [Buildroot] [PATCH 0/3] OrangePi Plus: Add support
-In-Reply-To: <7B019F86-2725-4B09-854C-592B85C9FDD1@dack.com.au> (Troy Dack's
- message of "Mon, 16 May 2016 12:17:13 +1000")
-References: <1463268790-1076-1-git-send-email-troy@dack.com.au>
- <87d1ongh8f.fsf@dell.be.48ers.dk>
- <7B019F86-2725-4B09-854C-592B85C9FDD1@dack.com.au>
-Message-ID: <87zirqfime.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 16 May 2016 10:46:59 +0100
+Subject: [Buildroot] [PATCH next] lvm2: bump version to 2.02.154
+Message-ID: <1463392019-24317-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Troy" == Troy Dack <troy@dack.com.au> writes:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- >> On 16 May 2016, at 07:10, Peter Korsgaard <peter@korsgaard.com> wrote:
- >> 
- >>>>>>> "Troy" == Troy Dack <troy@dack.com.au> writes:
- >> 
- >>> Add support for the OrangePi Plus board.
- >> 
- >> In what way does this differ from our existing orangepipc support? Can
- >> anything be shared between them?
-
- > More than likely yes.  Although the OrangePi PC support does rename the
- > Plus .dts as U-boot doesn?t generate one for the PC yet.
-
- > Thanks for the comments on the patches themselves.
-
-Ok, good - And you're welcome.
-
- > The intent was to create a minimal system that could be used either by
- > putting it onto an SD card, or boot via fel with a usable initrd - without
- > needing to create an SD card. This was mainly because network support in
- > mainline on the H3 based OrangePi?s isn?t the best at the moment.
-
-Ahh, yes - The plus has a onboard eMMC? The PC variant doesn't, so
-that's not really an option there.
-
-Still, the easiest is probably to just go with the sdcard image for now.
-
- > Is it possible to have a generic configuration (say OrangePi-H3) that is
- > shared and then configs that include the specifics for the OrangePi
- > Plus/PC etc?
-
-We can have multiple defconfigs sharing the same board files, or a
-single config working on multiple boards (if u-boot can detect the board
-variant), but there's currently no support for having a base defconfig
-that gets included/overridden by other defconfigs.
-
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 2aa7d78..97b1b58 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 1c1c3f95ab76e23629ee54b87d36536f887d8a30976413206491a3a13101b717948b3ab4a7778cb1e74f258f429871076f0b9d098785835c4885eb61def793ca  LVM2.2.02.153.tgz
++sha512 aa0599d9c77099f750237ad230c91a35890b248130b81bfd81fc72f510b2b21f28a87491532f4ab1d040338fa6945af6391d032a574538f8672072ac8c185eef  LVM2.2.02.154.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index d45a108..1a3241d 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.153
++LVM2_VERSION = 2.02.154
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.7.3
