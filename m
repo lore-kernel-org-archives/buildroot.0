@@ -1,60 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 May 2016 19:05:58 +0200
-Subject: [Buildroot] [PATCH] erlang-p1-stringprep: backport upstream commit
-	to fix musl build
-Message-ID: <1463418358-30464-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 May 2016 19:06:08 +0200
+Subject: [Buildroot] [git commit] package/iputils: bump version to
+	31d947cf7156cf78d3f57e0bd82b33e6f6ece6b4
+Message-ID: <20160516170625.AE8A181801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Amusingly, a fix made upstream to fix the build on Windows also fixes
-the build with the musl C library.
+commit: https://git.buildroot.net/buildroot/commit/?id=5787cf2516a32b921314799a2e84ee5a3a3777c4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Includes a fix for static builds using libgcrypt.
 
 Fixes:
+ http://autobuild.buildroot.net/results/55a7db5c0cbc34bbf6a2cbc52713d8822deec5b2
+ http://autobuild.buildroot.net/results/864d8901eb901182ce186cf9a845636040e242bb
+ http://autobuild.buildroot.net/results/aba522aa164267993fb1f1bbc57733be0cbea680
 
-  http://autobuild.buildroot.net/results/d7b0cacc5d99d8dc91fdeaf770bb5d2b1b1975b6/
-
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-Stdint-is-required-on-windows.patch       | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/erlang-p1-stringprep/0001-Stdint-is-required-on-windows.patch
+ package/iputils/iputils.hash | 2 +-
+ package/iputils/iputils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-stringprep/0001-Stdint-is-required-on-windows.patch b/package/erlang-p1-stringprep/0001-Stdint-is-required-on-windows.patch
-new file mode 100644
-index 0000000..7385503
---- /dev/null
-+++ b/package/erlang-p1-stringprep/0001-Stdint-is-required-on-windows.patch
-@@ -0,0 +1,28 @@
-+From f5a2b8b78afb253630ee8833f16f131b3b52701e Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Pawe=C5=82=20Chmielowski?= <pchmielowski@process-one.net>
-+Date: Mon, 29 Feb 2016 10:56:32 +0100
-+Subject: [PATCH] Stdint is required on windows
-+
-+[Backport from upstream commit
-+4fc5cae81122540fff983e40dda1fa905c329fd0, which happens to not only
-+fix the build on Windows, but also with the musl C library.]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ c_src/stringprep.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/c_src/stringprep.cpp b/c_src/stringprep.cpp
-+index 461cf09..26215cf 100644
-+--- a/c_src/stringprep.cpp
-++++ b/c_src/stringprep.cpp
-+@@ -19,6 +19,7 @@
-+  */
-+ 
-+ #include <string.h>
-++#include <stdint.h>
-+ #include <erl_nif.h>
-+ 
-+ #include "uni_data.c"
-+-- 
-+2.7.4
-+
--- 
-2.7.4
+diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
+index 1cd8ed3..42ea5fd 100644
+--- a/package/iputils/iputils.hash
++++ b/package/iputils/iputils.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	73de246aee1fd3cd69b1341a0c4e1b4acfa655fe6f7363fd9424824aa8bf5a57	iputils-3a86a2542c6fe29413c439bebeae11ec8a57ec7c.tar.gz
++sha256	08b9f686fcc874f75b465f90f3e831aa9ac1f2e043f4bb61e6d99868e8869025	iputils-31d947cf7156cf78d3f57e0bd82b33e6f6ece6b4.tar.gz
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 522be9b..18e48b4 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -11,7 +11,7 @@
+ # and IPv6 updates.
+ # http://www.spinics.net/lists/netdev/msg279881.html
+ 
+-IPUTILS_VERSION = 3a86a2542c6fe29413c439bebeae11ec8a57ec7c
++IPUTILS_VERSION = 31d947cf7156cf78d3f57e0bd82b33e6f6ece6b4
+ IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
+ IPUTILS_LICENSE = GPLv2+, BSD-3c, BSD-4c
+ # Only includes a license file for BSD
