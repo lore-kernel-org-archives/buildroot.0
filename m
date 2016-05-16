@@ -1,45 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 May 2016 22:02:19 +0200
-Subject: [Buildroot] [git commit] stress-ng: update to 0.06.02
-Message-ID: <20160516200240.620B1802AB@busybox.osuosl.org>
+Date: Mon, 16 May 2016 22:03:32 +0200
+Subject: [Buildroot] [PATCH v2] boot-tools: bump to version 2016.05
+In-Reply-To: <1463428934-21015-1-git-send-email-festevam@gmail.com>
+References: <1463428934-21015-1-git-send-email-festevam@gmail.com>
+Message-ID: <20160516220332.32dbc2ee@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08fe324b8b0e12a2ada22db8ee268a99cdde4322
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes following autobuilder errors:
-http://autobuild.buildroot.net/results/b527ccdbdfeaba6789528e68df93d9c7216e758a/
-http://autobuild.buildroot.net/results/d658f82c66d93515276dcb6cec8d3690459fbf05/
+Minor nit in commit title: s/boot-tools/uboot-tools/. But it can be
+fixed when applying, of course.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/stress-ng/stress-ng.hash | 2 +-
- package/stress-ng/stress-ng.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 16 May 2016 17:02:14 -0300, Fabio Estevam wrote:
+> Bump to version 2016.05 and also remove patch
+> 003-tools-env-bug-config-structs-must-be-defined-in-tool.patch, as it is
+> upstreamed now.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
-index 4979303..d09edc0 100644
---- a/package/stress-ng/stress-ng.hash
-+++ b/package/stress-ng/stress-ng.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	9d17dffafdf8dd71eb5c191973b65d4eb2964ecc31f1d01ad188fd03a0c49f6c	stress-ng-0.04.16.tar.gz
-+sha256	7af9759a37902ebf401f92fedeada0b82bcd1e3f4e9e10130177344f143470eb	stress-ng-0.06.02.tar.gz
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index 114c427..6015a1e 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRESS_NG_VERSION = 0.04.16
-+STRESS_NG_VERSION = 0.06.02
- STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
- STRESS_NG_LICENSE = GPLv2+
- STRESS_NG_LICENSE_FILES = COPYING
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
