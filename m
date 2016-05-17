@@ -1,39 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 22:32:43 +0200
-Subject: [Buildroot] [PATCH v2] uclibc: enable debug build option
-In-Reply-To: <1463345425-10074-1-git-send-email-ps.report@gmx.net>
-References: <1463345425-10074-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20160517223243.5368f860@free-electrons.com>
+Date: Tue, 17 May 2016 22:32:56 +0200
+Subject: [Buildroot] [git commit branch/next] toolchain: enable paranoid
+	unsafe path check by default
+Message-ID: <20160517203301.0539E7FCD9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=61c8854cef2a41be3175bbf7f0992c31560a1dd7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 15 May 2016 22:50:25 +0200, Peter Seiderer wrote:
-> Set uClibc DODEBUG in case BR2_ENABLE_DEBUG is set.
-> 
-> Setting DODEBUG was removed with commit 70b7079d3797304fe3c9ba2941d3f446af3cea79
-> in Dec. 2013 because of build failures with the old uClibc (now replaced
-> with uClibc-ng), no build failure with raspberrypi3_defconfig and
-> BR2_ENABLE_DEBUG enabled.
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 --> v2:
->   - fix 'DODEBUG=y' typo (spotted by Thomas Petazzoni)
->   - fix uClibc spelling
->   - add DODEBUG history hint
-> ---
->  package/uclibc/uclibc.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+This check is enabled for all build in the Buildroot autobuilders since [1]
+(i.e since 2015.02 release).
 
-Applied to next, thanks.
+Enable this option by default.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+[1] https://git.busybox.net/buildroot-test/commit/?id=41552e2a249de4568aa01f14bd588d1c8166f70b
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Config.in b/Config.in
+index b5cc892..93b4f69 100644
+--- a/Config.in
++++ b/Config.in
+@@ -683,6 +683,7 @@ menu "Advanced"
+ 
+ config BR2_COMPILER_PARANOID_UNSAFE_PATH
+ 	bool "paranoid check of library/header paths"
++	default y
+ 	help
+ 	  By default, when this option is disabled, when the Buildroot
+ 	  cross-compiler will encounter an unsafe library or header
