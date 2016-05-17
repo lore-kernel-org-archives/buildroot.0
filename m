@@ -1,45 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 May 2016 00:30:08 +0200
-Subject: [Buildroot] [PATCH] Config.in.legacy: fallback to glibc when
- eglibc was selected
-In-Reply-To: <20160517092642.05c8c118@free-electrons.com>
-References: <1463469451-18931-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <D52038F0-6ED4-4510-B67C-D71ADB9008A3@free.fr>
- <20160517092642.05c8c118@free-electrons.com>
-Message-ID: <8a38175e-d5c8-e2da-543d-7f45d36fc36c@mind.be>
+Date: Wed, 18 May 2016 00:39:28 +0200
+Subject: [Buildroot] [PATCH 1/1] linux: arm: config endiness based on
+ BR2 config
+In-Reply-To: <1463474820-18073-1-git-send-email-oferh@marvell.com>
+References: <1463474820-18073-1-git-send-email-oferh@marvell.com>
+Message-ID: <e02c9bd7-58c2-8ed3-70d9-dee7785ca5bc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/17/16 09:26, Thomas Petazzoni wrote:
-> Hello,
+On 05/17/16 10:47, oferh at marvell.com wrote:
+> From: Ofer Heifetz <oferh@marvell.com>
 >
-> On Tue, 17 May 2016 09:23:03 +0200, Yann E. MORIN wrote:
+> By default linux ARM arch is implicit configured LE,
+> when BR2 is configured BE, modify the linux config to BE
+> for ARM arch.
 >
->> BR2_TOOLCHAIN_BUILDROOT_GLIBC is part of a choice, so you can't select it.
->>
->> That's the limit of our legacy handling: it can't handle choices.
+> Signed-off-by: Ofer Heifetz <oferh@marvell.com>
+> ---
+>  linux/linux.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> Gah, yes, indeed. I guess the only option is to keep a:
->
-> 	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
->
-> but it's rather annoying to keep legacy code forever elsewhere than in
-> Config.in.legacy. So I'd prefer that we don't do anything in fact: the
-> number of users using eglibc in their configuration is probably pretty
-> low.
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index d88060e..71545e4 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -218,6 +218,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
+>  	)
+>  	$(if $(BR2_arm)$(BR2_armeb),
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
+> +	$(if $(BR2_armeb)$(BR2_aarch64_be),
+> +		$(call KCONFIG_ENABLE_OPT,CONFIG_CPU_BIG_ENDIAN,$(@D)/.config))
 
-  Agreed.
+  Instead of doing this specifically for ARM, perhaps it's better to do this in 
+general for all platforms? Something like (untested)
+
+ifeq ($(BR2_ENDIAN),"BIG")
+	$(call KCONFIG_ENABLE_OPT,CONFIG_CPU_BIG_ENDIAN,$(@D)/.config))
+else
+	$(call KCONFIG_ENABLE_OPT,CONFIG_CPU_LITTLE_ENDIAN,$(@D)/.config))
+endif
+
+  Even though not all arches support these options, it's harmless to add it for 
+the ones which don't have them. The subsequent olddefconfig should just remove 
+it again.
 
   Regards,
   Arnout
 
->
-> Thanks for the review!
->
-> Thomas
+>  	$(if $(BR2_TARGET_ROOTFS_CPIO),
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
+>  	# As the kernel gets compiled before root filesystems are
 >
 
 
