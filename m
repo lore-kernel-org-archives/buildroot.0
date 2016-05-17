@@ -1,81 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 21:34:07 +0200
-Subject: [Buildroot] Analysis of build results for 2016-05-16
-In-Reply-To: <1463511367.5420.26.camel@infradead.org>
-References: <20160517063022.7001A10142D@stock.ovh.net>
- <20160517153611.2a3b4199@free-electrons.com>
- <1463511367.5420.26.camel@infradead.org>
-Message-ID: <20160517213407.7d47b4a3@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 17 May 2016 20:58:36 +0100
+Subject: [Buildroot] [PATCH] Add openmpi package
+Message-ID: <1463515117-26333-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This patch adds openmpi package, but it has one problem that I don't
+know how to fix.
 
-On Tue, 17 May 2016 11:56:07 -0700, Geoff Levand wrote:
+When building it for uClibc it fails to compile showing this error
+message:
 
-> On Tue, 2016-05-17 at 15:36 +0200, Thomas Petazzoni wrote:
-> >       x86_64 |                 flannel-v0.5.5 | NOK | http://autobuild.buildroot.net/results/6664189a6f3a815978e8d0a1d7ef408ca47e2874/
-> > 
-> > Geoff, can you look into this one?  
-> 
-> I believe I have the fix for this one in my patch 'package/go: Build
-> special host binaries'.  This is a reworked version of what I posted
-> last time.
+/bin/sh ../libtool  --tag=CC   --mode=compile
+/home/ldap/vriera/git-clones/buildroot-1/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+-DHAVE_CONFIG_H -I. -I..   -DINSIDE_OPENMPI
+-I/home/ldap/vriera/git-clones/buildroot-1/output/build/openmpi-1.10.2/ompi/include
+-I/home/ldap/vriera/git-clones/buildroot-1/output/build/openmpi-1.10.2/ompi/contrib/vt/vt/../../../include
+-I/home/ldap/vriera/git-clones/buildroot-1/output/build/openmpi-1.10.2/ompi/contrib/vt/vt/../../../include
+-I../include -I../include -I../rfg -DVT_GETCPU   -I../extlib/otf/otflib
+-I../extlib/otf/otflib -DVT_PLUGIN_CNTR -DVT_RUSAGE -DVT_MT
+-DVT_EXECWRAP  -DVT_IOWRAP -DVT_LIBWRAP  -DVT_PTHREAD -DVT_THRD_PTHREAD
+-pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os  -c -o libvt_mt_la-vt_execwrap.lo `test -f
+'vt_execwrap.c' || echo './'`vt_execwrap.c
+/tmp/ccY2VE00.s: Assembler messages:
+/tmp/ccY2VE00.s:3670: Error: symbol `open64' is already defined
+/tmp/ccY2VE00.s:4170: Error: symbol `creat64' is already defined
+/tmp/ccY2VE00.s:5275: Error: symbol `lseek64' is already defined
+/tmp/ccY2VE00.s:6859: Error: symbol `pread64' is already defined
+/tmp/ccY2VE00.s:7100: Error: symbol `pwrite64' is already defined
+/tmp/ccY2VE00.s:7605: Error: symbol `fopen64' is already defined
+/tmp/ccY2VE00.s:8809: Error: symbol `fseeko64' is already defined
+/tmp/ccY2VE00.s:9498: Error: symbol `fsetpos64' is already defined
+Makefile:3204: recipe for target 'libvt_la-vt_iowrap.lo' failed
 
-OK.
+According to this thread [1] it will never compile in 32-bit mode with
+LARGEFILE-support, but for glibc I haven't had any problem.
 
-> > >          arm |                  host-go-1.6.2 | NOK | http://autobuild.buildroot.net/results/42a8d07101d8d954511d1c884ecb66e8d861899e/  
-> > 
-> > error: #warning requested reentrant code
-> > 
-> > Geoff, in fact it seems like host-go itself needs thread support in the
-> > target toolchain to build properly, so our plan to have only the Go
-> > packages depend on BR2_TOOLCHAIN_HAS_THREADS does not work.  
-> 
-> Yes, the solution I came up with is that the go target package must
+1: http://www.linuxquestions.org/questions/programming-9/openmpi-1-8-1-compilation-error-4175504854/#post5170760
 
-By "go target package", you mean a target package that is written in
-Go, and not specifically the package/go/ package (which doesn't have a
-target variant), right?
+Vicente Olivert Riera (1):
+  openmpi: new package
 
-> specify BR2_TOOLCHAIN_HAS_THREADS if it uses cgo support.  If
-> BR2_TOOLCHAIN_HAS_THREADS is set, then host-go sets CGO_ENABLED=1 and
-> builds a compiler with cgo support.  If BR2_TOOLCHAIN_HAS_THREADS is
-> not set, then host-go does not build in cgo support.  The two cases:
-> 
-> A go package which does not use cgo sets BR2_TOOLCHAIN_HAS_THREADS=n,
+ package/Config.in            |  1 +
+ package/openmpi/Config.in    | 27 +++++++++++++++++++++++++++
+ package/openmpi/openmpi.hash |  3 +++
+ package/openmpi/openmpi.mk   | 27 +++++++++++++++++++++++++++
+ 4 files changed, 58 insertions(+)
+ create mode 100644 package/openmpi/Config.in
+ create mode 100644 package/openmpi/openmpi.hash
+ create mode 100644 package/openmpi/openmpi.mk
 
-A package cannot *set* BR2_TOOLCHAIN_HAS_THREADS.
-BR2_TOOLCHAIN_HAS_THREADS is a property of the toolchain.
-
-> the host-go is not build with cgo support.  Both the target package
-> and host-go should build OK since no thread support is needed.
-> 
-> A package that uses cgo sets BR2_TOOLCHAIN_HAS_THREADS=y, host-go
-> is build with cgo support.  Both build OK since the toolchain has
-> thread support.
-
-What needs to happen instead is the following (and is quite similar to
-what you said, except for the interaction with
-BR2_TOOLCHAIN_HAS_THREADS=y) :
-
- *) The host-go package will build cgo support when
-    BR2_TOOLCHAIN_HAS_THREADS=y and otherwise not build cgo support.
-
- *) Any target package that is written in Go and that needs cgo support
-    should have a "depends on BR2_TOOLCHAIN_HAS_THREADS" in its
-    dependencies.
-
-This needs to be explained by a comment in package/go/go.mk, as it is
-not trivial.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
