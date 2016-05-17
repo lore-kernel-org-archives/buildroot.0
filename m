@@ -1,66 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 22:48:10 +0200
-Subject: [Buildroot] [git commit] python-crossbar: fix byte-compilation of
-	.pyc files
-Message-ID: <20160601161308.D9181802A0@busybox.osuosl.org>
+Date: Tue, 17 May 2016 22:32:31 +0200
+Subject: [Buildroot] [git commit] uclibc: enable debug build option
+Message-ID: <20160601161308.9622B802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1ff2b7faa52c3ce23c4735d221da49a15188e9d
+commit: https://git.buildroot.net/buildroot/commit/?id=e35c2c1ae1b6486bc928cbee430ad362ab3c5294
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For its continuous integration tests, python-crossbar includes one .py
-file that intentionally has a syntax error. Until now, this wasn't
-causing any problem, but with the introduction of a Python
-byte-compilation process that errors out when there is a failure, it
-is going to become a problem.
+Set uClibc DODEBUG in case BR2_ENABLE_DEBUG is set.
 
-We simply add a patch that removes the syntax error, as we don't care
-about it in the context of Buildroot. The problem has been reported
-upstream to see if a better fix is possible.
+Setting DODEBUG was removed with commit 70b7079d3797304fe3c9ba2941d3f446af3cea79
+in Dec. 2013 because of build failures with the old uClibc (now replaced
+with uClibc-ng), no build failure with raspberrypi3_defconfig and
+BR2_ENABLE_DEBUG enabled.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-Avoid-intentional-syntax-error.patch      | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ package/uclibc/uclibc.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch b/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
-new file mode 100644
-index 0000000..fb8e4a2
---- /dev/null
-+++ b/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
-@@ -0,0 +1,29 @@
-+From 9ab2b96c2ee679c6dcb387174be211db5d70fa97 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 1 May 2016 15:35:32 +0200
-+Subject: [PATCH] Avoid intentional syntax error
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index b8ccee2..6782682 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -182,6 +182,15 @@ endef
+ endif
+ 
+ #
++# Debug
++#
++ifeq ($(BR2_ENABLE_DEBUG),y)
++define UCLIBC_DEBUG_CONFIG
++	$(call KCONFIG_ENABLE_OPT,DODEBUG,$(@D)/.config)
++endef
++endif
 +
-+This file has an intentional syntax error, meant to validate QA, but
-+it breaks byte compilation of this package.
-+
-+Issue reported upstream:
-+https://github.com/crossbario/crossbar/issues/750.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ crossbar/worker/test/examples/syntaxerror.py | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/crossbar/worker/test/examples/syntaxerror.py b/crossbar/worker/test/examples/syntaxerror.py
-+index a5947cc..585c995 100644
-+--- a/crossbar/worker/test/examples/syntaxerror.py
-++++ b/crossbar/worker/test/examples/syntaxerror.py
-+@@ -29,5 +29,3 @@
-+ #####################################################################################
-+ 
-+ from __future__ import absolute_import, division
-+-
-+-class # noqa
-+-- 
-+2.7.4
-+
++#
+ # Endianness
+ #
+ 
+@@ -394,6 +403,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_SPARC_TYPE_CONFIG)
+ 	$(UCLIBC_POWERPC_TYPE_CONFIG)
+ 	$(UCLIBC_X86_TYPE_CONFIG)
++	$(UCLIBC_DEBUG_CONFIG)
+ 	$(UCLIBC_ENDIAN_CONFIG)
+ 	$(UCLIBC_LARGEFILE_CONFIG)
+ 	$(UCLIBC_IPV6_CONFIG)
