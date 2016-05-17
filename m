@@ -1,54 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 May 2016 13:22:11 +0200
-Subject: [Buildroot] [git commit] assimp: disable on Microblaze
-Message-ID: <20160517112332.300F881938@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 May 2016 13:45:15 +0200
+Subject: [Buildroot] [PATCH v1] qt5multimedia: select Qt5OpenGL module
+ in case OpenGL support is enabled
+In-Reply-To: <1463483348-8157-1-git-send-email-ps.report@gmx.net>
+References: <1463483348-8157-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20160517134515.0b826f02@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9acd598bccaab7e5edef5444abf97c840737c5b4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This package triggers an infinite loop bug in gcc on the Microblaze
-architecture when the optimization level is O1, O2 or O3. This bug has
-been reported at https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71124.
+On Tue, 17 May 2016 13:09:08 +0200, Peter Seiderer wrote:
 
-While Buildroot by default uses an Os optimization level, assimp's build
-system overrides that by O3 by default.
+> diff --git a/package/qt5/qt5multimedia/Config.in b/package/qt5/qt5multimedia/Config.in
+> index 59c3984..7549b35 100644
+> --- a/package/qt5/qt5multimedia/Config.in
+> +++ b/package/qt5/qt5multimedia/Config.in
+> @@ -3,6 +3,7 @@ config BR2_PACKAGE_QT5MULTIMEDIA
+>  	select BR2_PACKAGE_QT5BASE
+>  	select BR2_PACKAGE_QT5BASE_GUI
+>  	select BR2_PACKAGE_QT5BASE_NETWORK
+> +	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5BASE_OPENGL
 
-This problem is causing timeouts in the autobuilders that make them
-consume 100% of CPU during 8 hours (the timeout used by the autobuilder
-scripts).
+Do you know why we have this BR2_PACKAGE_QT5BASE_OPENGL_LIB option,
+rather than just installing Qt5OpenGL as soon as
+BR2_PACKAGE_QT5BASE_OPENGL is true?
 
-Fixes:
+Whenever BR2_PACKAGE_QT5BASE_OPENGL is enabled, either
+BR2_PACKAGE_QT5BASE_OPENGL_DESKTOP or BR2_PACKAGE_QT5BASE_OPENGL_ES2
+are selected, since they are part of a choice. And both of them enable
+OpenGL support in Qt:
 
-  http://autobuild.buildroot.net/results/084fc537ab81aed278126f173daf99f2699ef22c/
+ifeq ($(BR2_PACKAGE_QT5BASE_OPENGL_DESKTOP),y)
+QT5BASE_CONFIGURE_OPTS += -opengl desktop
+QT5BASE_DEPENDENCIES   += libgl
+else ifeq ($(BR2_PACKAGE_QT5BASE_OPENGL_ES2),y)
+QT5BASE_CONFIGURE_OPTS += -opengl es2
+QT5BASE_DEPENDENCIES   += libgles
+else
+QT5BASE_CONFIGURE_OPTS += -no-opengl
+endif
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/assimp/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+So it seems weird to enable OpenGL support in Qt but to not install the
+corresponding library. Or are there use cases where OpenGL support is
+used, but the Qt5OpenGL library is not needed?
 
-diff --git a/package/assimp/Config.in b/package/assimp/Config.in
-index 35e2f23..93020f7 100644
---- a/package/assimp/Config.in
-+++ b/package/assimp/Config.in
-@@ -1,5 +1,9 @@
- config BR2_PACKAGE_ASSIMP
- 	bool "assimp"
-+	# All gcc versions affected by
-+	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71124, that
-+	# cause an infinite loop in gcc when building this package.
-+	depends on !BR2_microblaze
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_ZLIB
- 	help
-@@ -11,4 +15,5 @@ config BR2_PACKAGE_ASSIMP
- 	  http://www.assimp.org
- 
- comment "assimp needs a toolchain w/ C++"
-+	depends on !BR2_microblaze
- 	depends on !BR2_INSTALL_LIBSTDCPP
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
