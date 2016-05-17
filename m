@@ -1,62 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 22:31:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/igmpproxy: fix musl build
-In-Reply-To: <1463348471-30704-1-git-send-email-matt@thewebers.ws>
-References: <1463348471-30704-1-git-send-email-matt@thewebers.ws>
-Message-ID: <20160517223147.40e5fcb8@free-electrons.com>
+Date: Tue, 17 May 2016 22:32:31 +0200
+Subject: [Buildroot] [git commit branch/next] uclibc: enable debug build
+	option
+Message-ID: <20160517203237.90C86818F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e35c2c1ae1b6486bc928cbee430ad362ab3c5294
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 15 May 2016 16:41:11 -0500, Matt Weber wrote:
+Set uClibc DODEBUG in case BR2_ENABLE_DEBUG is set.
 
-> diff --git a/package/igmpproxy/0002-Use-standard-unsigned-integer-types.patch b/package/igmpproxy/0002-Use-standard-unsigned-integer-types.patch
-> new file mode 100644
-> index 0000000..200bf23
-> --- /dev/null
-> +++ b/package/igmpproxy/0002-Use-standard-unsigned-integer-types.patch
-> @@ -0,0 +1,213 @@
-> +Fix musl build
-> +
-> +Downloaded from:
-> +https://github.com/alpinelinux/aports/blob/master/main/igmpproxy/0001-Use-standard-unsigned-integer-types.patch
-> +
-> +Patch was reported upstream:
-> +http://sourceforge.net/p/igmpproxy/bugs/22/
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Setting DODEBUG was removed with commit 70b7079d3797304fe3c9ba2941d3f446af3cea79
+in Dec. 2013 because of build failures with the old uClibc (now replaced
+with uClibc-ng), no build failure with raspberrypi3_defconfig and
+BR2_ENABLE_DEBUG enabled.
 
-This should be below the commit log of the original patch, and the "Fix
-musl build" is not good. We don't care about "Fixing the musl build",
-we want to make the source code better, which has the consequence of
-fixing the musl build. So the original patch title "Use standard
-unsigned integer types" is good.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uclibc/uclibc.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-> +From ed3dff27f360239910310be6706fd54572398992 Mon Sep 17 00:00:00 2001
-> +From: Natanael Copa <ncopa@alpinelinux.org>
-> +Date: Mon, 3 Mar 2014 12:11:26 +0000
-> +Subject: [PATCH] Use standard unsigned integer types
-> +
-> +Use the stanard unsigned integer types instead of the non-standard
-> +u_char, u_short and u_int.
-> +
-> +This fixes build with musl libc.
-> +
-> +(cherry picked from commit b914bcf882c6189be7a0ce6fceb34422372c3606)
-
-From where is this commit b914bcf882c6189be7a0ce6fceb34422372c3606
-coming? Upstream seems to be https://github.com/pali/igmpproxy, and I
-don't see any commit identified as
-b914bcf882c6189be7a0ce6fceb34422372c3606.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index b8ccee2..6782682 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -182,6 +182,15 @@ endef
+ endif
+ 
+ #
++# Debug
++#
++ifeq ($(BR2_ENABLE_DEBUG),y)
++define UCLIBC_DEBUG_CONFIG
++	$(call KCONFIG_ENABLE_OPT,DODEBUG,$(@D)/.config)
++endef
++endif
++
++#
+ # Endianness
+ #
+ 
+@@ -394,6 +403,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_SPARC_TYPE_CONFIG)
+ 	$(UCLIBC_POWERPC_TYPE_CONFIG)
+ 	$(UCLIBC_X86_TYPE_CONFIG)
++	$(UCLIBC_DEBUG_CONFIG)
+ 	$(UCLIBC_ENDIAN_CONFIG)
+ 	$(UCLIBC_LARGEFILE_CONFIG)
+ 	$(UCLIBC_IPV6_CONFIG)
