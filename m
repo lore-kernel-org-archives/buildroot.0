@@ -1,47 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 23:23:50 +0200
-Subject: [Buildroot] [PATCH 3/3] flann: disable on microblaze
-In-Reply-To: <1463520230-6127-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1463520230-6127-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1463520230-6127-3-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 17 May 2016 23:36:47 +0200
+Subject: [Buildroot] [PATCH v4 1/4] python/python3: use
+	--no-run-if-empty xargs option
+In-Reply-To: <1463519956-5599-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1463519956-5599-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1463519956-5599-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAHXCMMLs5GMoPsZ6ooO1Oj+b6pWiY0ozu5B2+=RAaA6N2B8avg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All gcc versions fail to build flann on the Microblaze architecture, due
-to gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69401, so let's
-disable this package on this architecture.
+Thomas, all,
 
-Fixes:
+On Tue, May 17, 2016 at 11:19 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> As suggested by Samuel Martin, this commit adds the option
+> --no-run-if-empty xargs option to the "find ... | xargs ..." logic used
+> in the python and python3 target-finalize hooks to remove py/pyc/pyo
+> files. This ensures that the command doesn't fail if there are no files
+> matching the pattern.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
-  http://autobuild.buildroot.net/results/3f44a1f30a88dbe4a3a83055267b472b58769e15/
+Regards,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/flann/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/flann/Config.in b/package/flann/Config.in
-index 3725fc7..a2cd50c 100644
---- a/package/flann/Config.in
-+++ b/package/flann/Config.in
-@@ -2,6 +2,9 @@ config BR2_PACKAGE_FLANN
- 	bool "flann"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
-+	# all gcc versions fail to build flann on Microblaze due to
-+	# gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69401
-+	depends on !BR2_microblaze
- 	help
- 	  FLANN is a library for performing fast approximate nearest
- 	  neighbor searches in high dimensional spaces. It contains a
-@@ -22,4 +25,5 @@ config BR2_PACKAGE_FLANN_EXAMPLES
- endif
- 
- comment "flann needs a toolchain w/ C++, dynamic library"
-+	depends on !BR2_microblaze
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
 -- 
-2.7.4
+Samuel
