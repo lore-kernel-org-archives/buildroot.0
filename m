@@ -1,46 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 17 May 2016 20:56:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: configure.ac does not support
-	--en/--disable-freerdp
-Message-ID: <1463511419-31833-1-git-send-email-bernd.kuhls@t-online.de>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 17 May 2016 14:04:42 -0500
+Subject: [Buildroot] [PATCH 3/4] fmc: bump to SDK 1.8
+In-Reply-To: <1463511883-27657-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1463511883-27657-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1463511883-27657-3-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vlc configure does not allow disabling freerdp support:
-http://git.videolan.org/?p=vlc/vlc-2.2.git;a=blob;f=configure.ac;h=e021546e284d7daefdb4d94f430eb0bc57722210;hb=HEAD#l1890
-
-The problem
-
-configure: WARNING: unrecognized options: --disable-gtk-doc,
- --disable-gtk-doc-html, --disable-doc, --disable-docs,
- --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6,
- --disable-libfreerdp
-
-can be seen for example in
-
-http://autobuild.buildroot.net/results/1a7/1a7893c13f6144e0ecd9f37f2f047c596ccedd35/build-end.log
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/vlc/vlc.mk | 3 ---
- 1 file changed, 3 deletions(-)
+ package/fmc/fmc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 30887bd..4dc8dfe 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -137,10 +137,7 @@ VLC_CONF_OPTS += --disable-flac
- endif
+diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
+index 4712385..8b469a0 100644
+--- a/package/fmc/fmc.mk
++++ b/package/fmc/fmc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_FREERDP),y)
--VLC_CONF_OPTS += --enable-freerdp
- VLC_DEPENDENCIES += freerdp
--else
--VLC_CONF_OPTS += --disable-libfreerdp
- endif
- 
- ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+-FMC_VERSION = fsl-sdk-v1.5-rc3
++FMC_VERSION = fsl-sdk-v1.8
+ FMC_SITE = git://git.freescale.com/ppc/sdk/fmc.git
+ FMC_LICENSE = MIT
+ FMC_LICENSE_FILES = COPYING
 -- 
-2.8.1
+1.9.1
