@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 17 May 2016 18:30:57 +0200
+Date: Tue, 17 May 2016 18:32:44 +0200
 Subject: [Buildroot] kodi 16 on aarch64
 References: <trinity-8cc2631d-885d-437a-aec1-a88667084c0c-1463257448483@3capp-mailcom-bs05>
  <XnsA60AC45F57D8AberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <trinity-0209bbe1-f2c4-4b12-8756-00ade5864efc-1463423339523@3capp-mailcom-bs13>
-Message-ID: <XnsA60BBC5AFEAAEID313208userindividu@bernd-kuhls.de>
+ <20160516215001.330f6437@free-electrons.com>
+Message-ID: <XnsA60BBCA81C503ID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,26 @@ To: buildroot@busybox.net
 
 [posted and mailed]
 
-Hi daggs,
+Hi Thomas,
 
-daggs <daggs@gmx.com> wrote in
-news:trinity-0209bbe1-f2c4-4b12-8756-00ade5864efc-1463423339523 at 3capp-mailc
-om-bs13: 
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote 
+in news:20160516215001.330f6437 at free-electrons.com:
 
-> Greetings,
->> Sent: Monday, May 16, 2016 at 8:18 PM
->> From: "Bernd Kuhls"
->> <bernd.kuhls@t-online.de> 
-[...]
->> Kodi 16.x-Jarvis has no support for aarch64, the next version
->> 17.x-Krypton will have it after my pull request was accepted:
->> https://github.com/xbmc/xbmc/commit/62c160c23ed4c074d106f30a43638fac6656
->> 8ac6 
-> I've tried that patch, it isn't enough, there is a need for more patches
-> as it fails compilation. 
-
-I never said that Kodi 16.x compiles on aarch64 since I never tested it,
-compiling Kodi 17.x worked without problems. Due to lack of hardware I can
-not do runtime testing. 
-
+> Hello,
+> 
+> On Mon, 16 May 2016 19:18:16 +0200, Bernd Kuhls wrote:
+> 
 >> You can also try my buildroot fork with Kodi 17 patches:
 >> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/148325
->> 
-> I'm trying to backport the needed patches to kodi 16, in general it
-> compiles (one of the patches is questionable), didn't got to test it
-> yet. 
+> 
+> BTW, the next branch is opened, so we can take your Kodi 17 patches.
 
-My fork is not meant to be backported since Kodi 17 contains numerous
-changes regarding internal libs, you are on your own here ;) 
+I doubt you will take them because
+
+- Kodi 17.x depends on ffmpeg3
+- the ffmpeg series contains bumping vlc to git master, vlc 3.0 was not released yet
+- Kodi 17.0 is also not released, git master is at alpha2 atm
+
+My github stuff is only a RFC, as usual ;)
 
 Regards, Bernd
