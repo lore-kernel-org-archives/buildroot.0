@@ -1,56 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 23:19:12 +0200
-Subject: [Buildroot] [PATCH v4 0/4] Python: globalize pyc file compilation
-Message-ID: <1463519956-5599-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 May 2016 23:19:13 +0200
+Subject: [Buildroot] [PATCH v4 1/4] python/python3: use --no-run-if-empty
+	xargs option
+In-Reply-To: <1463519956-5599-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1463519956-5599-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1463519956-5599-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As suggested by Samuel Martin, this commit adds the option
+--no-run-if-empty xargs option to the "find ... | xargs ..." logic used
+in the python and python3 target-finalize hooks to remove py/pyc/pyo
+files. This ensures that the command doesn't fail if there are no files
+matching the pattern.
 
-This patch series contains just the remaining patches of my "Python 3
-bump" patch series. Compared to the v3:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python/python.mk   | 9 ++++++---
+ package/python3/python3.mk | 9 ++++++---
+ 2 files changed, 12 insertions(+), 6 deletions(-)
 
- - Drop patches that have been merged.
-
- - Add a patch suggested by Samuel Martin, that consists in adding the
-   --no-run-if-empty option to xargs to avoid issues.
-
- - Instead of adding a patch to python-pyftpdlib to fix a Python 3
-   byte-compilation failure, bump from 1.5.0 to 1.5.1, since 1.5.1 was
-   released by upstream specifically to address the Python 3 issue
-   after we reported the problem.
-
-   Yegor: there is a question for you in this patch: I had to use a
-   different URL than the standard pypi download URL, because the
-   standard one returns a 404. If you could have a look, it would be
-   great.
-
-Review/comments welcome.
-
-Thanks!
-
-Thomas
-
-Thomas Petazzoni (3):
-  python/python3: use --no-run-if-empty xargs option
-  python-pyftpdlib: bump version to 1.5.1, fixing Python 3 issue
-  samba4: remove compilation of .pyc files
-
-Yegor Yefremov (1):
-  python/python3: globalize *.pyc files compilation
-
- package/pkg-python.mk                          |  2 +-
- package/python-pyftpdlib/python-pyftpdlib.hash |  6 +++---
- package/python-pyftpdlib/python-pyftpdlib.mk   |  4 ++--
- package/python/python.mk                       | 25 ++++++++++++++++++----
- package/python3/python3.mk                     | 29 +++++++++++++++++++-------
- package/samba4/samba4.mk                       | 10 ---------
- support/scripts/pycompile.py                   | 24 +++++++++++++++++++++
- 7 files changed, 72 insertions(+), 28 deletions(-)
- create mode 100644 support/scripts/pycompile.py
-
+diff --git a/package/python/python.mk b/package/python/python.mk
+index c96d218..4e92766 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -219,14 +219,16 @@ $(eval $(host-autotools-package))
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+ define PYTHON_REMOVE_PY_FILES
+-	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
++		xargs -0 --no-run-if-empty rm -f
+ endef
+ TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
+ define PYTHON_REMOVE_PYC_FILES
+-	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | \
++		xargs -0 --no-run-if-empty rm -f
+ endef
+ TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYC_FILES
+ endif
+@@ -234,7 +236,8 @@ endif
+ # In all cases, we don't want to keep the optimized .pyo files
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ define PYTHON_REMOVE_PYO_FILES
+-	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyo' -print0 | xargs -0 --no-run-if-empty rm -f
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyo' -print0 | \
++		xargs -0 --no-run-if-empty rm -f
+ endef
+ TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYO_FILES
+ endif
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index fddbf1b..3089c03 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -214,14 +214,16 @@ $(eval $(host-autotools-package))
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+ define PYTHON3_REMOVE_PY_FILES
+-	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | \
++		xargs -0 --no-run-if-empty rm -f
+ endef
+ TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
+ define PYTHON3_REMOVE_PYC_FILES
+-	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.pyc' -print0 | \
++		xargs -0 --no-run-if-empty rm -f
+ endef
+ TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PYC_FILES
+ endif
+@@ -231,7 +233,8 @@ endif
+ # variant.
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ define PYTHON3_REMOVE_OPTIMIZED_PYC_FILES
+-	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.opt-1.pyc' -print0 -o -name '*.opt-2.pyc' -print0 | xargs -0 rm -f
++	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.opt-1.pyc' -print0 -o -name '*.opt-2.pyc' -print0 | \
++		xargs -0 --no-run-if-empty rm -f
+ endef
+ TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_OPTIMIZED_PYC_FILES
+ endif
 -- 
 2.7.4
