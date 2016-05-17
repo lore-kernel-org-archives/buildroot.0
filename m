@@ -1,114 +1,663 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 May 2016 10:35:34 +0200
-Subject: [Buildroot] [git commit] boot: add s500-bootloader package
-Message-ID: <20160601161310.84B9081F53@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 May 2016 22:27:29 +0200
+Subject: [Buildroot] [git commit] package/gcc: 4.8.x to 5.x: backport a fix
+	for building gcc with gcc-6
+Message-ID: <20160601161308.8436E802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c4d98362802449bd5010f7c391cea348635b84d
+commit: https://git.buildroot.net/buildroot/commit/?id=45ce84f1fe3174fdada4b9bc947be2ddfb8c92eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is the first level bootloader for the Actions Semiconductor S500 SoC,
-which is used on boards like Roseapple Pi and LeMaker Guitar.
+When the host system compiler is gcc-6, this patch is needed to build
+Buildroot toolchain and cleanly apply on gcc version 4.8.x to 5.x (not
+needed for 4.7.x series).
 
-The bootloader performs basic configuration and chain loads u-boot for
-futher setup.
-
-This bootloader is unfortunately only available as a binary blob. It gets
-configured for a specific board using a binary (32bit x86) tool based on a
-.ini file (somewhat similar to sunxi .fex).
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/Config.in                            |  1 +
- boot/s500-bootloader/Config.in            | 17 ++++++++++++++++
- boot/s500-bootloader/s500-bootloader.hash |  2 ++
- boot/s500-bootloader/s500-bootloader.mk   | 34 +++++++++++++++++++++++++++++++
- 4 files changed, 54 insertions(+)
+ package/gcc/4.8.5/130-fix_build_with_gcc-6.patch   | 153 +++++++++++++++++++++
+ package/gcc/4.9.3/130-fix_build_with_gcc-6.patch   | 153 +++++++++++++++++++++
+ package/gcc/5.3.0/130-fix_build_with_gcc-6.patch   | 153 +++++++++++++++++++++
+ .../gcc/arc-2015.12/130-fix_build_with_gcc-6.patch | 153 +++++++++++++++++++++
+ 4 files changed, 612 insertions(+)
 
-diff --git a/boot/Config.in b/boot/Config.in
-index 4daf079..cd10cd8 100644
---- a/boot/Config.in
-+++ b/boot/Config.in
-@@ -11,6 +11,7 @@ source "boot/grub2/Config.in"
- source "boot/gummiboot/Config.in"
- source "boot/lpc32xxcdl/Config.in"
- source "boot/mxs-bootlets/Config.in"
-+source "boot/s500-bootloader/Config.in"
- source "boot/syslinux/Config.in"
- source "boot/uboot/Config.in"
- source "boot/xloader/Config.in"
-diff --git a/boot/s500-bootloader/Config.in b/boot/s500-bootloader/Config.in
+diff --git a/package/gcc/4.8.5/130-fix_build_with_gcc-6.patch b/package/gcc/4.8.5/130-fix_build_with_gcc-6.patch
 new file mode 100644
-index 0000000..7bb689f
+index 0000000..62ac3cb
 --- /dev/null
-+++ b/boot/s500-bootloader/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_TARGET_S500_BOOTLOADER
-+	bool "s500-bootloader"
-+	depends on BR2_arm
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	help
-+	  1st level bootloader for Actions Semiconductor S500 SoC.
++++ b/package/gcc/4.8.5/130-fix_build_with_gcc-6.patch
+@@ -0,0 +1,153 @@
++From 1e5f1089dec3af328fd03125d6778f666d0bd4e4 Mon Sep 17 00:00:00 2001
++From: edlinger <edlinger@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Thu, 25 Feb 2016 15:33:50 +0000
++Subject: [PATCH 1/1] 2016-02-25  Bernd Edlinger  <bernd.edlinger@hotmail.de>
 +
-+	  https://github.com/xapp-le/owl
++        Backported from mainline
++        2016-02-19  Jakub Jelinek  <jakub@redhat.com>
++                    Bernd Edlinger  <bernd.edlinger@hotmail.de>
 +
-+config BR2_TARGET_S500_BOOTLOADER_BOARD
-+	string "board to configure for"
-+	depends on BR2_TARGET_S500_BOOTLOADER
-+	help
-+	  Specify the board to configure the bootloader for.
-+	  This should be the name of a directory under s500/boards
-+	  containing a suitable bootloader.ini file.
-diff --git a/boot/s500-bootloader/s500-bootloader.hash b/boot/s500-bootloader/s500-bootloader.hash
++        * Make-lang.in: Invoke gperf with -L C++.
++        * cfns.gperf: Remove prototypes for hash and libc_name_p
++        inlines.
++        * cfns.h: Regenerated.
++        * except.c (nothrow_libfn_p): Adjust.
++
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-5-branch at 233720 138bc75d-0d04-0410-961f-82ee72b054a4
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ gcc/cp/Make-lang.in |    2 +-
++ gcc/cp/cfns.gperf   |   10 ++--------
++ gcc/cp/cfns.h       |   41 ++++++++++++++---------------------------
++ gcc/cp/except.c     |    3 ++-
++ 5 files changed, 31 insertions(+), 37 deletions(-)
++
++diff --git a/gcc/cp/Make-lang.in b/gcc/cp/Make-lang.in
++index e98beb1..b09fb02 100644
++--- a/gcc/cp/Make-lang.in
+++++ b/gcc/cp/Make-lang.in
++@@ -111,7 +111,7 @@ else
++ # deleting the $(srcdir)/cp/cfns.h file.
++ $(srcdir)/cp/cfns.h:
++ endif
++-	gperf -o -C -E -k '1-6,$$' -j1 -D -N 'libc_name_p' -L ANSI-C \
+++	gperf -o -C -E -k '1-6,$$' -j1 -D -N 'libc_name_p' -L C++ \
++ 		$(srcdir)/cp/cfns.gperf --output-file $(srcdir)/cp/cfns.h
++ 
++ #
++diff --git a/gcc/cp/cfns.gperf b/gcc/cp/cfns.gperf
++index 68acd3d..214ecf6 100644
++--- a/gcc/cp/cfns.gperf
+++++ b/gcc/cp/cfns.gperf
++@@ -1,3 +1,5 @@
+++%language=C++
+++%define class-name libc_name
++ %{
++ /* Copyright (C) 2000-2015 Free Software Foundation, Inc.
++ 
++@@ -16,14 +18,6 @@ for more details.
++ You should have received a copy of the GNU General Public License
++ along with GCC; see the file COPYING3.  If not see
++ <http://www.gnu.org/licenses/>.  */
++-#ifdef __GNUC__
++-__inline
++-#endif
++-static unsigned int hash (const char *, unsigned int);
++-#ifdef __GNUC__
++-__inline
++-#endif
++-const char * libc_name_p (const char *, unsigned int);
++ %}
++ %%
++ # The standard C library functions, for feeding to gperf; the result is used
++diff --git a/gcc/cp/cfns.h b/gcc/cp/cfns.h
++index 1c6665d..596f413 100644
++--- a/gcc/cp/cfns.h
+++++ b/gcc/cp/cfns.h
++@@ -1,5 +1,5 @@
++-/* ANSI-C code produced by gperf version 3.0.3 */
++-/* Command-line: gperf -o -C -E -k '1-6,$' -j1 -D -N libc_name_p -L ANSI-C cfns.gperf  */
+++/* C++ code produced by gperf version 3.0.4 */
+++/* Command-line: gperf -o -C -E -k '1-6,$' -j1 -D -N libc_name_p -L C++ --output-file cfns.h cfns.gperf  */
++ 
++ #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
++       && ('%' == 37) && ('&' == 38) && ('\'' == 39) && ('(' == 40) \
++@@ -28,7 +28,7 @@
++ #error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gnu-gperf@gnu.org>."
++ #endif
++ 
++-#line 1 "cfns.gperf"
+++#line 3 "cfns.gperf"
++ 
++ /* Copyright (C) 2000-2015 Free Software Foundation, Inc.
++ 
++@@ -47,25 +47,18 @@ for more details.
++ You should have received a copy of the GNU General Public License
++ along with GCC; see the file COPYING3.  If not see
++ <http://www.gnu.org/licenses/>.  */
++-#ifdef __GNUC__
++-__inline
++-#endif
++-static unsigned int hash (const char *, unsigned int);
++-#ifdef __GNUC__
++-__inline
++-#endif
++-const char * libc_name_p (const char *, unsigned int);
++ /* maximum key range = 391, duplicates = 0 */
++ 
++-#ifdef __GNUC__
++-__inline
++-#else
++-#ifdef __cplusplus
++-inline
++-#endif
++-#endif
++-static unsigned int
++-hash (register const char *str, register unsigned int len)
+++class libc_name
+++{
+++private:
+++  static inline unsigned int hash (const char *str, unsigned int len);
+++public:
+++  static const char *libc_name_p (const char *str, unsigned int len);
+++};
+++
+++inline unsigned int
+++libc_name::hash (register const char *str, register unsigned int len)
++ {
++   static const unsigned short asso_values[] =
++     {
++@@ -122,14 +115,8 @@ hash (register const char *str, register unsigned int len)
++   return hval + asso_values[(unsigned char)str[len - 1]];
++ }
++ 
++-#ifdef __GNUC__
++-__inline
++-#ifdef __GNUC_STDC_INLINE__
++-__attribute__ ((__gnu_inline__))
++-#endif
++-#endif
++ const char *
++-libc_name_p (register const char *str, register unsigned int len)
+++libc_name::libc_name_p (register const char *str, register unsigned int len)
++ {
++   enum
++     {
++diff --git a/gcc/cp/except.c b/gcc/cp/except.c
++index 3ff1ce6..2f2e396 100644
++--- a/gcc/cp/except.c
+++++ b/gcc/cp/except.c
++@@ -1040,7 +1040,8 @@ nothrow_libfn_p (const_tree fn)
++      unless the system headers are playing rename tricks, and if
++      they are, we don't want to be confused by them.  */
++   id = DECL_NAME (fn);
++-  return !!libc_name_p (IDENTIFIER_POINTER (id), IDENTIFIER_LENGTH (id));
+++  return !!libc_name::libc_name_p (IDENTIFIER_POINTER (id),
+++				   IDENTIFIER_LENGTH (id));
++ }
++ 
++ /* Returns nonzero if an exception of type FROM will be caught by a
++-- 
++1.7.1
+diff --git a/package/gcc/4.9.3/130-fix_build_with_gcc-6.patch b/package/gcc/4.9.3/130-fix_build_with_gcc-6.patch
 new file mode 100644
-index 0000000..d538f23
+index 0000000..62ac3cb
 --- /dev/null
-+++ b/boot/s500-bootloader/s500-bootloader.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 b183024ac69f51ea7befd28d03b2ec35a7280e270405600fb4f37aa91d9c9571  s500-bootloader-a8d7fa1d9a7f353ec4613febf30f4ca99a10a106.tar.gz
-diff --git a/boot/s500-bootloader/s500-bootloader.mk b/boot/s500-bootloader/s500-bootloader.mk
++++ b/package/gcc/4.9.3/130-fix_build_with_gcc-6.patch
+@@ -0,0 +1,153 @@
++From 1e5f1089dec3af328fd03125d6778f666d0bd4e4 Mon Sep 17 00:00:00 2001
++From: edlinger <edlinger@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Thu, 25 Feb 2016 15:33:50 +0000
++Subject: [PATCH 1/1] 2016-02-25  Bernd Edlinger  <bernd.edlinger@hotmail.de>
++
++        Backported from mainline
++        2016-02-19  Jakub Jelinek  <jakub@redhat.com>
++                    Bernd Edlinger  <bernd.edlinger@hotmail.de>
++
++        * Make-lang.in: Invoke gperf with -L C++.
++        * cfns.gperf: Remove prototypes for hash and libc_name_p
++        inlines.
++        * cfns.h: Regenerated.
++        * except.c (nothrow_libfn_p): Adjust.
++
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-5-branch at 233720 138bc75d-0d04-0410-961f-82ee72b054a4
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ gcc/cp/Make-lang.in |    2 +-
++ gcc/cp/cfns.gperf   |   10 ++--------
++ gcc/cp/cfns.h       |   41 ++++++++++++++---------------------------
++ gcc/cp/except.c     |    3 ++-
++ 5 files changed, 31 insertions(+), 37 deletions(-)
++
++diff --git a/gcc/cp/Make-lang.in b/gcc/cp/Make-lang.in
++index e98beb1..b09fb02 100644
++--- a/gcc/cp/Make-lang.in
+++++ b/gcc/cp/Make-lang.in
++@@ -111,7 +111,7 @@ else
++ # deleting the $(srcdir)/cp/cfns.h file.
++ $(srcdir)/cp/cfns.h:
++ endif
++-	gperf -o -C -E -k '1-6,$$' -j1 -D -N 'libc_name_p' -L ANSI-C \
+++	gperf -o -C -E -k '1-6,$$' -j1 -D -N 'libc_name_p' -L C++ \
++ 		$(srcdir)/cp/cfns.gperf --output-file $(srcdir)/cp/cfns.h
++ 
++ #
++diff --git a/gcc/cp/cfns.gperf b/gcc/cp/cfns.gperf
++index 68acd3d..214ecf6 100644
++--- a/gcc/cp/cfns.gperf
+++++ b/gcc/cp/cfns.gperf
++@@ -1,3 +1,5 @@
+++%language=C++
+++%define class-name libc_name
++ %{
++ /* Copyright (C) 2000-2015 Free Software Foundation, Inc.
++ 
++@@ -16,14 +18,6 @@ for more details.
++ You should have received a copy of the GNU General Public License
++ along with GCC; see the file COPYING3.  If not see
++ <http://www.gnu.org/licenses/>.  */
++-#ifdef __GNUC__
++-__inline
++-#endif
++-static unsigned int hash (const char *, unsigned int);
++-#ifdef __GNUC__
++-__inline
++-#endif
++-const char * libc_name_p (const char *, unsigned int);
++ %}
++ %%
++ # The standard C library functions, for feeding to gperf; the result is used
++diff --git a/gcc/cp/cfns.h b/gcc/cp/cfns.h
++index 1c6665d..596f413 100644
++--- a/gcc/cp/cfns.h
+++++ b/gcc/cp/cfns.h
++@@ -1,5 +1,5 @@
++-/* ANSI-C code produced by gperf version 3.0.3 */
++-/* Command-line: gperf -o -C -E -k '1-6,$' -j1 -D -N libc_name_p -L ANSI-C cfns.gperf  */
+++/* C++ code produced by gperf version 3.0.4 */
+++/* Command-line: gperf -o -C -E -k '1-6,$' -j1 -D -N libc_name_p -L C++ --output-file cfns.h cfns.gperf  */
++ 
++ #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
++       && ('%' == 37) && ('&' == 38) && ('\'' == 39) && ('(' == 40) \
++@@ -28,7 +28,7 @@
++ #error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gnu-gperf@gnu.org>."
++ #endif
++ 
++-#line 1 "cfns.gperf"
+++#line 3 "cfns.gperf"
++ 
++ /* Copyright (C) 2000-2015 Free Software Foundation, Inc.
++ 
++@@ -47,25 +47,18 @@ for more details.
++ You should have received a copy of the GNU General Public License
++ along with GCC; see the file COPYING3.  If not see
++ <http://www.gnu.org/licenses/>.  */
++-#ifdef __GNUC__
++-__inline
++-#endif
++-static unsigned int hash (const char *, unsigned int);
++-#ifdef __GNUC__
++-__inline
++-#endif
++-const char * libc_name_p (const char *, unsigned int);
++ /* maximum key range = 391, duplicates = 0 */
++ 
++-#ifdef __GNUC__
++-__inline
++-#else
++-#ifdef __cplusplus
++-inline
++-#endif
++-#endif
++-static unsigned int
++-hash (register const char *str, register unsigned int len)
+++class libc_name
+++{
+++private:
+++  static inline unsigned int hash (const char *str, unsigned int len);
+++public:
+++  static const char *libc_name_p (const char *str, unsigned int len);
+++};
+++
+++inline unsigned int
+++libc_name::hash (register const char *str, register unsigned int len)
++ {
++   static const unsigned short asso_values[] =
++     {
++@@ -122,14 +115,8 @@ hash (register const char *str, register unsigned int len)
++   return hval + asso_values[(unsigned char)str[len - 1]];
++ }
++ 
++-#ifdef __GNUC__
++-__inline
++-#ifdef __GNUC_STDC_INLINE__
++-__attribute__ ((__gnu_inline__))
++-#endif
++-#endif
++ const char *
++-libc_name_p (register const char *str, register unsigned int len)
+++libc_name::libc_name_p (register const char *str, register unsigned int len)
++ {
++   enum
++     {
++diff --git a/gcc/cp/except.c b/gcc/cp/except.c
++index 3ff1ce6..2f2e396 100644
++--- a/gcc/cp/except.c
+++++ b/gcc/cp/except.c
++@@ -1040,7 +1040,8 @@ nothrow_libfn_p (const_tree fn)
++      unless the system headers are playing rename tricks, and if
++      they are, we don't want to be confused by them.  */
++   id = DECL_NAME (fn);
++-  return !!libc_name_p (IDENTIFIER_POINTER (id), IDENTIFIER_LENGTH (id));
+++  return !!libc_name::libc_name_p (IDENTIFIER_POINTER (id),
+++				   IDENTIFIER_LENGTH (id));
++ }
++ 
++ /* Returns nonzero if an exception of type FROM will be caught by a
++-- 
++1.7.1
+diff --git a/package/gcc/5.3.0/130-fix_build_with_gcc-6.patch b/package/gcc/5.3.0/130-fix_build_with_gcc-6.patch
 new file mode 100644
-index 0000000..bc87b09
+index 0000000..62ac3cb
 --- /dev/null
-+++ b/boot/s500-bootloader/s500-bootloader.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# s500-bootloader
-+#
-+################################################################################
++++ b/package/gcc/5.3.0/130-fix_build_with_gcc-6.patch
+@@ -0,0 +1,153 @@
++From 1e5f1089dec3af328fd03125d6778f666d0bd4e4 Mon Sep 17 00:00:00 2001
++From: edlinger <edlinger@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Thu, 25 Feb 2016 15:33:50 +0000
++Subject: [PATCH 1/1] 2016-02-25  Bernd Edlinger  <bernd.edlinger@hotmail.de>
 +
-+S500_BOOTLOADER_VERSION = a8d7fa1d9a7f353ec4613febf30f4ca99a10a106
-+S500_BOOTLOADER_SITE = $(call github,xapp-le,owl,$(S500_BOOTLOADER_VERSION))
-+S500_BOOTLOADER_LICENSE = PROPRIETARY
-+S500_BOOTLOADER_INSTALL_TARGET = NO
-+S500_BOOTLOADER_INSTALL_IMAGES = YES
++        Backported from mainline
++        2016-02-19  Jakub Jelinek  <jakub@redhat.com>
++                    Bernd Edlinger  <bernd.edlinger@hotmail.de>
 +
-+S500_BOOTLOADER_BOARD = $(call qstrip,$(BR2_TARGET_S500_BOOTLOADER_BOARD))
++        * Make-lang.in: Invoke gperf with -L C++.
++        * cfns.gperf: Remove prototypes for hash and libc_name_p
++        inlines.
++        * cfns.h: Regenerated.
++        * except.c (nothrow_libfn_p): Adjust.
 +
-+define S500_BOOTLOADER_BUILD_CMDS
-+	cd $(@D) && ./tools/utils/bootloader_pack \
-+		s500/bootloader/bootloader.bin \
-+		s500/boards/$(S500_BOOTLOADER_BOARD)/bootloader.ini \
-+		s500-bootloader.bin
-+endef
 +
-+define S500_BOOTLOADER_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -m 0644 -D $(@D)/s500-bootloader.bin \
-+		$(BINARIES_DIR)/s500-bootloader.bin
-+endef
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-5-branch at 233720 138bc75d-0d04-0410-961f-82ee72b054a4
 +
-+$(eval $(generic-package))
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ gcc/cp/Make-lang.in |    2 +-
++ gcc/cp/cfns.gperf   |   10 ++--------
++ gcc/cp/cfns.h       |   41 ++++++++++++++---------------------------
++ gcc/cp/except.c     |    3 ++-
++ 5 files changed, 31 insertions(+), 37 deletions(-)
 +
-+ifeq ($(BR2_TARGET_S500_BOOTLOADER)$(BR_BUILDING),yy)
-+# we NEED a board name
-+ifeq ($(S500_BOOTLOADER_BOARD),)
-+$(error No s500-bootloader board specified. Check your BR2_TARGET_S500_BOOTLOADER settings)
-+endif
-+endif
++diff --git a/gcc/cp/Make-lang.in b/gcc/cp/Make-lang.in
++index e98beb1..b09fb02 100644
++--- a/gcc/cp/Make-lang.in
+++++ b/gcc/cp/Make-lang.in
++@@ -111,7 +111,7 @@ else
++ # deleting the $(srcdir)/cp/cfns.h file.
++ $(srcdir)/cp/cfns.h:
++ endif
++-	gperf -o -C -E -k '1-6,$$' -j1 -D -N 'libc_name_p' -L ANSI-C \
+++	gperf -o -C -E -k '1-6,$$' -j1 -D -N 'libc_name_p' -L C++ \
++ 		$(srcdir)/cp/cfns.gperf --output-file $(srcdir)/cp/cfns.h
++ 
++ #
++diff --git a/gcc/cp/cfns.gperf b/gcc/cp/cfns.gperf
++index 68acd3d..214ecf6 100644
++--- a/gcc/cp/cfns.gperf
+++++ b/gcc/cp/cfns.gperf
++@@ -1,3 +1,5 @@
+++%language=C++
+++%define class-name libc_name
++ %{
++ /* Copyright (C) 2000-2015 Free Software Foundation, Inc.
++ 
++@@ -16,14 +18,6 @@ for more details.
++ You should have received a copy of the GNU General Public License
++ along with GCC; see the file COPYING3.  If not see
++ <http://www.gnu.org/licenses/>.  */
++-#ifdef __GNUC__
++-__inline
++-#endif
++-static unsigned int hash (const char *, unsigned int);
++-#ifdef __GNUC__
++-__inline
++-#endif
++-const char * libc_name_p (const char *, unsigned int);
++ %}
++ %%
++ # The standard C library functions, for feeding to gperf; the result is used
++diff --git a/gcc/cp/cfns.h b/gcc/cp/cfns.h
++index 1c6665d..596f413 100644
++--- a/gcc/cp/cfns.h
+++++ b/gcc/cp/cfns.h
++@@ -1,5 +1,5 @@
++-/* ANSI-C code produced by gperf version 3.0.3 */
++-/* Command-line: gperf -o -C -E -k '1-6,$' -j1 -D -N libc_name_p -L ANSI-C cfns.gperf  */
+++/* C++ code produced by gperf version 3.0.4 */
+++/* Command-line: gperf -o -C -E -k '1-6,$' -j1 -D -N libc_name_p -L C++ --output-file cfns.h cfns.gperf  */
++ 
++ #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
++       && ('%' == 37) && ('&' == 38) && ('\'' == 39) && ('(' == 40) \
++@@ -28,7 +28,7 @@
++ #error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gnu-gperf@gnu.org>."
++ #endif
++ 
++-#line 1 "cfns.gperf"
+++#line 3 "cfns.gperf"
++ 
++ /* Copyright (C) 2000-2015 Free Software Foundation, Inc.
++ 
++@@ -47,25 +47,18 @@ for more details.
++ You should have received a copy of the GNU General Public License
++ along with GCC; see the file COPYING3.  If not see
++ <http://www.gnu.org/licenses/>.  */
++-#ifdef __GNUC__
++-__inline
++-#endif
++-static unsigned int hash (const char *, unsigned int);
++-#ifdef __GNUC__
++-__inline
++-#endif
++-const char * libc_name_p (const char *, unsigned int);
++ /* maximum key range = 391, duplicates = 0 */
++ 
++-#ifdef __GNUC__
++-__inline
++-#else
++-#ifdef __cplusplus
++-inline
++-#endif
++-#endif
++-static unsigned int
++-hash (register const char *str, register unsigned int len)
+++class libc_name
+++{
+++private:
+++  static inline unsigned int hash (const char *str, unsigned int len);
+++public:
+++  static const char *libc_name_p (const char *str, unsigned int len);
+++};
+++
+++inline unsigned int
+++libc_name::hash (register const char *str, register unsigned int len)
++ {
++   static const unsigned short asso_values[] =
++     {
++@@ -122,14 +115,8 @@ hash (register const char *str, register unsigned int len)
++   return hval + asso_values[(unsigned char)str[len - 1]];
++ }
++ 
++-#ifdef __GNUC__
++-__inline
++-#ifdef __GNUC_STDC_INLINE__
++-__attribute__ ((__gnu_inline__))
++-#endif
++-#endif
++ const char *
++-libc_name_p (register const char *str, register unsigned int len)
+++libc_name::libc_name_p (register const char *str, register unsigned int len)
++ {
++   enum
++     {
++diff --git a/gcc/cp/except.c b/gcc/cp/except.c
++index 3ff1ce6..2f2e396 100644
++--- a/gcc/cp/except.c
+++++ b/gcc/cp/except.c
++@@ -1040,7 +1040,8 @@ nothrow_libfn_p (const_tree fn)
++      unless the system headers are playing rename tricks, and if
++      they are, we don't want to be confused by them.  */
++   id = DECL_NAME (fn);
++-  return !!libc_name_p (IDENTIFIER_POINTER (id), IDENTIFIER_LENGTH (id));
+++  return !!libc_name::libc_name_p (IDENTIFIER_POINTER (id),
+++				   IDENTIFIER_LENGTH (id));
++ }
++ 
++ /* Returns nonzero if an exception of type FROM will be caught by a
++-- 
++1.7.1
+diff --git a/package/gcc/arc-2015.12/130-fix_build_with_gcc-6.patch b/package/gcc/arc-2015.12/130-fix_build_with_gcc-6.patch
+new file mode 100644
+index 0000000..62ac3cb
+--- /dev/null
++++ b/package/gcc/arc-2015.12/130-fix_build_with_gcc-6.patch
+@@ -0,0 +1,153 @@
++From 1e5f1089dec3af328fd03125d6778f666d0bd4e4 Mon Sep 17 00:00:00 2001
++From: edlinger <edlinger@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Thu, 25 Feb 2016 15:33:50 +0000
++Subject: [PATCH 1/1] 2016-02-25  Bernd Edlinger  <bernd.edlinger@hotmail.de>
++
++        Backported from mainline
++        2016-02-19  Jakub Jelinek  <jakub@redhat.com>
++                    Bernd Edlinger  <bernd.edlinger@hotmail.de>
++
++        * Make-lang.in: Invoke gperf with -L C++.
++        * cfns.gperf: Remove prototypes for hash and libc_name_p
++        inlines.
++        * cfns.h: Regenerated.
++        * except.c (nothrow_libfn_p): Adjust.
++
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-5-branch at 233720 138bc75d-0d04-0410-961f-82ee72b054a4
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ gcc/cp/Make-lang.in |    2 +-
++ gcc/cp/cfns.gperf   |   10 ++--------
++ gcc/cp/cfns.h       |   41 ++++++++++++++---------------------------
++ gcc/cp/except.c     |    3 ++-
++ 5 files changed, 31 insertions(+), 37 deletions(-)
++
++diff --git a/gcc/cp/Make-lang.in b/gcc/cp/Make-lang.in
++index e98beb1..b09fb02 100644
++--- a/gcc/cp/Make-lang.in
+++++ b/gcc/cp/Make-lang.in
++@@ -111,7 +111,7 @@ else
++ # deleting the $(srcdir)/cp/cfns.h file.
++ $(srcdir)/cp/cfns.h:
++ endif
++-	gperf -o -C -E -k '1-6,$$' -j1 -D -N 'libc_name_p' -L ANSI-C \
+++	gperf -o -C -E -k '1-6,$$' -j1 -D -N 'libc_name_p' -L C++ \
++ 		$(srcdir)/cp/cfns.gperf --output-file $(srcdir)/cp/cfns.h
++ 
++ #
++diff --git a/gcc/cp/cfns.gperf b/gcc/cp/cfns.gperf
++index 68acd3d..214ecf6 100644
++--- a/gcc/cp/cfns.gperf
+++++ b/gcc/cp/cfns.gperf
++@@ -1,3 +1,5 @@
+++%language=C++
+++%define class-name libc_name
++ %{
++ /* Copyright (C) 2000-2015 Free Software Foundation, Inc.
++ 
++@@ -16,14 +18,6 @@ for more details.
++ You should have received a copy of the GNU General Public License
++ along with GCC; see the file COPYING3.  If not see
++ <http://www.gnu.org/licenses/>.  */
++-#ifdef __GNUC__
++-__inline
++-#endif
++-static unsigned int hash (const char *, unsigned int);
++-#ifdef __GNUC__
++-__inline
++-#endif
++-const char * libc_name_p (const char *, unsigned int);
++ %}
++ %%
++ # The standard C library functions, for feeding to gperf; the result is used
++diff --git a/gcc/cp/cfns.h b/gcc/cp/cfns.h
++index 1c6665d..596f413 100644
++--- a/gcc/cp/cfns.h
+++++ b/gcc/cp/cfns.h
++@@ -1,5 +1,5 @@
++-/* ANSI-C code produced by gperf version 3.0.3 */
++-/* Command-line: gperf -o -C -E -k '1-6,$' -j1 -D -N libc_name_p -L ANSI-C cfns.gperf  */
+++/* C++ code produced by gperf version 3.0.4 */
+++/* Command-line: gperf -o -C -E -k '1-6,$' -j1 -D -N libc_name_p -L C++ --output-file cfns.h cfns.gperf  */
++ 
++ #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
++       && ('%' == 37) && ('&' == 38) && ('\'' == 39) && ('(' == 40) \
++@@ -28,7 +28,7 @@
++ #error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gnu-gperf@gnu.org>."
++ #endif
++ 
++-#line 1 "cfns.gperf"
+++#line 3 "cfns.gperf"
++ 
++ /* Copyright (C) 2000-2015 Free Software Foundation, Inc.
++ 
++@@ -47,25 +47,18 @@ for more details.
++ You should have received a copy of the GNU General Public License
++ along with GCC; see the file COPYING3.  If not see
++ <http://www.gnu.org/licenses/>.  */
++-#ifdef __GNUC__
++-__inline
++-#endif
++-static unsigned int hash (const char *, unsigned int);
++-#ifdef __GNUC__
++-__inline
++-#endif
++-const char * libc_name_p (const char *, unsigned int);
++ /* maximum key range = 391, duplicates = 0 */
++ 
++-#ifdef __GNUC__
++-__inline
++-#else
++-#ifdef __cplusplus
++-inline
++-#endif
++-#endif
++-static unsigned int
++-hash (register const char *str, register unsigned int len)
+++class libc_name
+++{
+++private:
+++  static inline unsigned int hash (const char *str, unsigned int len);
+++public:
+++  static const char *libc_name_p (const char *str, unsigned int len);
+++};
+++
+++inline unsigned int
+++libc_name::hash (register const char *str, register unsigned int len)
++ {
++   static const unsigned short asso_values[] =
++     {
++@@ -122,14 +115,8 @@ hash (register const char *str, register unsigned int len)
++   return hval + asso_values[(unsigned char)str[len - 1]];
++ }
++ 
++-#ifdef __GNUC__
++-__inline
++-#ifdef __GNUC_STDC_INLINE__
++-__attribute__ ((__gnu_inline__))
++-#endif
++-#endif
++ const char *
++-libc_name_p (register const char *str, register unsigned int len)
+++libc_name::libc_name_p (register const char *str, register unsigned int len)
++ {
++   enum
++     {
++diff --git a/gcc/cp/except.c b/gcc/cp/except.c
++index 3ff1ce6..2f2e396 100644
++--- a/gcc/cp/except.c
+++++ b/gcc/cp/except.c
++@@ -1040,7 +1040,8 @@ nothrow_libfn_p (const_tree fn)
++      unless the system headers are playing rename tricks, and if
++      they are, we don't want to be confused by them.  */
++   id = DECL_NAME (fn);
++-  return !!libc_name_p (IDENTIFIER_POINTER (id), IDENTIFIER_LENGTH (id));
+++  return !!libc_name::libc_name_p (IDENTIFIER_POINTER (id),
+++				   IDENTIFIER_LENGTH (id));
++ }
++ 
++ /* Returns nonzero if an exception of type FROM will be caught by a
++-- 
++1.7.1
