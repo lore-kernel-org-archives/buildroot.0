@@ -1,93 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 23:19:13 +0200
-Subject: [Buildroot] [PATCH v4 1/4] python/python3: use --no-run-if-empty
-	xargs option
+Date: Tue, 17 May 2016 23:19:14 +0200
+Subject: [Buildroot] [PATCH v4 2/4] python-pyftpdlib: bump version to 1.5.1,
+	fixing Python 3 issue
 In-Reply-To: <1463519956-5599-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1463519956-5599-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1463519956-5599-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1463519956-5599-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As suggested by Samuel Martin, this commit adds the option
---no-run-if-empty xargs option to the "find ... | xargs ..." logic used
-in the python and python3 target-finalize hooks to remove py/pyc/pyo
-files. This ensures that the command doesn't fail if there are no files
-matching the pattern.
+This commit bumpds the version of python-pyftpdlib to fix a
+byte-compilation problem occuring with Python 3. The current version of
+pyftpdlib contained a file that had mistakenly been added to the
+release, and which wasn't Python 3 compliant. The new 1.5.1 version has
+been released specifically to address this problem, see:
+
+  https://github.com/giampaolo/pyftpdlib/issues/381
+
+Until now, this wasn't causing any problem as a byte-compilation problem
+was not a fatal failure. But upcoming commits will make it a fatal
+failure, so it needs to be fixed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python/python.mk   | 9 ++++++---
- package/python3/python3.mk | 9 ++++++---
- 2 files changed, 12 insertions(+), 6 deletions(-)
+Yegor: the URL is not the conventional pypi URL, but
+https://pypi.python.org/packages/source/p/pyftpdlib/pyftpdlib-1.5.1.tar.gz
+returns a 404, while the URL I've used is working. Any idea?
+---
+ package/python-pyftpdlib/python-pyftpdlib.hash | 6 +++---
+ package/python-pyftpdlib/python-pyftpdlib.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index c96d218..4e92766 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -219,14 +219,16 @@ $(eval $(host-autotools-package))
+diff --git a/package/python-pyftpdlib/python-pyftpdlib.hash b/package/python-pyftpdlib/python-pyftpdlib.hash
+index b6d0cca..9726f9f 100644
+--- a/package/python-pyftpdlib/python-pyftpdlib.hash
++++ b/package/python-pyftpdlib/python-pyftpdlib.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=0c6f7c447fb702af4d5ca0123003c9fd, sha256 locally computed
+-md5     0c6f7c447fb702af4d5ca0123003c9fd  pyftpdlib-1.5.0.tar.gz
+-sha256  0111127418e9012a8e9e6c05a0c64af1acef8c31128834805fb0f9a49c746261  pyftpdlib-1.5.0.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=61b23e2362df23d0dfa5fe76f6e2ab55, sha256 locally computed
++md5  61b23e2362df23d0dfa5fe76f6e2ab55  pyftpdlib-1.5.1.tar.gz
++sha256  7bcd7fc825123414a157718c6dcdcb0978208d3c865d4650564acef4acce3354  pyftpdlib-1.5.1.tar.gz
+diff --git a/package/python-pyftpdlib/python-pyftpdlib.mk b/package/python-pyftpdlib/python-pyftpdlib.mk
+index 11e24e2..85d0b56 100644
+--- a/package/python-pyftpdlib/python-pyftpdlib.mk
++++ b/package/python-pyftpdlib/python-pyftpdlib.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- define PYTHON_REMOVE_PY_FILES
--	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
-+		xargs -0 --no-run-if-empty rm -f
- endef
- TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
- endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
- define PYTHON_REMOVE_PYC_FILES
--	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | \
-+		xargs -0 --no-run-if-empty rm -f
- endef
- TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYC_FILES
- endif
-@@ -234,7 +236,8 @@ endif
- # In all cases, we don't want to keep the optimized .pyo files
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- define PYTHON_REMOVE_PYO_FILES
--	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyo' -print0 | xargs -0 --no-run-if-empty rm -f
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyo' -print0 | \
-+		xargs -0 --no-run-if-empty rm -f
- endef
- TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYO_FILES
- endif
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index fddbf1b..3089c03 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -214,14 +214,16 @@ $(eval $(host-autotools-package))
- 
- ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
- define PYTHON3_REMOVE_PY_FILES
--	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | \
-+		xargs -0 --no-run-if-empty rm -f
- endef
- TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
- endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
- define PYTHON3_REMOVE_PYC_FILES
--	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.pyc' -print0 | \
-+		xargs -0 --no-run-if-empty rm -f
- endef
- TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PYC_FILES
- endif
-@@ -231,7 +233,8 @@ endif
- # variant.
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- define PYTHON3_REMOVE_OPTIMIZED_PYC_FILES
--	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.opt-1.pyc' -print0 -o -name '*.opt-2.pyc' -print0 | xargs -0 rm -f
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.opt-1.pyc' -print0 -o -name '*.opt-2.pyc' -print0 | \
-+		xargs -0 --no-run-if-empty rm -f
- endef
- TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_OPTIMIZED_PYC_FILES
- endif
+-PYTHON_PYFTPDLIB_VERSION = 1.5.0
++PYTHON_PYFTPDLIB_VERSION = 1.5.1
+ PYTHON_PYFTPDLIB_SOURCE = pyftpdlib-$(PYTHON_PYFTPDLIB_VERSION).tar.gz
+-PYTHON_PYFTPDLIB_SITE = https://pypi.python.org/packages/source/p/pyftpdlib
++PYTHON_PYFTPDLIB_SITE = https://pypi.python.org/packages/a8/f8/0f6db156898616dbcbd7bf865660295c81479071ab0fcd1898fe1b3a4fc4
+ PYTHON_PYFTPDLIB_SETUP_TYPE = setuptools
+ PYTHON_PYFTPDLIB_LICENSE = MIT
+ PYTHON_PYFTPDLIB_LICENSE_FILES = LICENSE
 -- 
 2.7.4
