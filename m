@@ -1,9 +1,7 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 17 May 2016 14:04:42 -0500
-Subject: [Buildroot] [PATCH 3/4] fmc: bump to SDK 1.8
-In-Reply-To: <1463511883-27657-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1463511883-27657-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1463511883-27657-3-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Tue, 17 May 2016 14:04:40 -0500
+Subject: [Buildroot] [PATCH 1/4] fmc: add powerpc e6500 support
+Message-ID: <1463511883-27657-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +10,52 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/fmc/fmc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/fmc/Config.in | 6 +++---
+ package/fmc/fmc.mk    | 8 +++++++-
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
+diff --git a/package/fmc/Config.in b/package/fmc/Config.in
+index a50f80d..b7398e2 100644
+--- a/package/fmc/Config.in
++++ b/package/fmc/Config.in
+@@ -1,14 +1,14 @@
+ comment "fmc needs a toolchain w/ C++"
+-	depends on BR2_powerpc_e500mc
++	depends on BR2_powerpc_e500mc || BR2_powerpc_e6500
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+ 
+ comment "fmc needs a Linux kernel to be built"
+-	depends on BR2_powerpc_e500mc
++	depends on BR2_powerpc_e500mc || BR2_powerpc_e6500
+ 	depends on !BR2_LINUX_KERNEL
+ 
+ config BR2_PACKAGE_FMC
+ 	bool "fmc"
+-	depends on BR2_powerpc_e500mc
++	depends on BR2_powerpc_e500mc || BR2_powerpc_e6500
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_LINUX_KERNEL # fmlib
+ 	select BR2_PACKAGE_TCLAP
 diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
-index 4712385..8b469a0 100644
+index 49c5fe8..4712385 100644
 --- a/package/fmc/fmc.mk
 +++ b/package/fmc/fmc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -18,9 +18,15 @@ FMC_MAKE_OPTS = \
+ 	LIBXML2_HEADER_PATH="$(STAGING_DIR)/usr/include/libxml2" \
+ 	TCLAP_HEADER_PATH="$(STAGING_DIR)/usr/include"
  
--FMC_VERSION = fsl-sdk-v1.5-rc3
-+FMC_VERSION = fsl-sdk-v1.8
- FMC_SITE = git://git.freescale.com/ppc/sdk/fmc.git
- FMC_LICENSE = MIT
- FMC_LICENSE_FILES = COPYING
++ifeq ($(BR2_powerpc64), y)
++	EXTRA_FLAGS = "M64BIT=1"
++else
++	EXTRA_FLAGS = ""
++endif
++
+ define FMC_BUILD_CMDS
+ 	# The linking step has dependency issues so using MAKE1
+-	$(TARGET_MAKE_ENV) $(MAKE1) $(FMC_MAKE_OPTS) -C $(@D)/source
++	$(TARGET_MAKE_ENV) $(MAKE1) $(FMC_MAKE_OPTS) $(call qstrip,$(EXTRA_FLAGS)) -C $(@D)/source
+ endef
+ 
+ define FMC_INSTALL_TARGET_CMDS
 -- 
 1.9.1
