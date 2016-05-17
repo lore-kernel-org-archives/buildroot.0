@@ -1,62 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 May 2016 08:53:12 +0200
-Subject: [Buildroot] [git commit branch/next] toolchain: musl support is no
-	longer experimental
-Message-ID: <20160517065436.0F2AF81ED9@busybox.osuosl.org>
+Date: Tue, 17 May 2016 08:45:55 +0200
+Subject: [Buildroot] [git commit branch/next] gdb: switch to 7.10 as the
+	default version
+Message-ID: <20160517065435.B72E67FE3C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8e6f52f0c567d2d001da98968eb64cd807526e9
+commit: https://git.buildroot.net/buildroot/commit/?id=23519d0753b32749b2409a4516be91a76298ada9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Our musl support has now been around for quite some time, numerous
-packages have been fixed (although admittedly not all). It's time to no
-longer call our musl support "experimental": things are now expected to
-be working with musl just like with the other two C libraries we
-support.
+7.11 is around, 7.10 has already seen a point release, so it's time to
+make 7.10 the default version for gdb.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-buildroot/Config.in | 2 +-
- toolchain/toolchain-external/Config.in  | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gdb/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index b046a61..2b0ebc1 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -67,7 +67,7 @@ comment "(e)glibc only available with shared lib support"
- 	depends on BR2_STATIC_LIBS
- 
- config BR2_TOOLCHAIN_BUILDROOT_MUSL
--	bool "musl (experimental)"
-+	bool "musl"
- 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
- 		BR2_microblaze || BR2_mips || BR2_mipsel || BR2_powerpc || \
- 		BR2_sh || BR2_x86_64
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index a037d67..0ba5d46 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -562,7 +562,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
- 	  3.16.2.
- 
- config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
--	bool "Musl 1.1.12 toolchain (experimental)"
-+	bool "Musl 1.1.12 toolchain"
- 	depends on (BR2_arm && BR2_ARM_EABI) || \
- 		(BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4) || \
- 		(BR2_armeb && BR2_ARM_EABI) || BR2_i386 || \
-@@ -914,7 +914,7 @@ comment "(e)glibc only available with shared lib support"
- 	depends on BR2_STATIC_LIBS
- 
- config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
--	bool "musl (experimental)"
-+	bool "musl"
- 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 35eb418..46e00f6 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -27,7 +27,7 @@ choice
+ 	prompt "GDB debugger Version"
+ 	depends on !BR2_arc
+ 	depends on !BR2_microblaze
+-	default BR2_GDB_VERSION_7_9
++	default BR2_GDB_VERSION_7_10
  	help
- 	  Select this option if your external toolchain uses the
+ 	  Select the version of gdb you wish to use.
+ 
+@@ -54,6 +54,6 @@ config BR2_GDB_VERSION
+ 	default "arc-2016.03-rc2-gdb" if BR2_arc
+ 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+ 	default "7.8.2"	   if BR2_GDB_VERSION_7_8
+-	default "7.9.1"    if BR2_GDB_VERSION_7_9 || !BR2_PACKAGE_HOST_GDB
+-	default "7.10.1"   if BR2_GDB_VERSION_7_10
++	default "7.9.1"    if BR2_GDB_VERSION_7_9
++	default "7.10.1"   if BR2_GDB_VERSION_7_10 || !BR2_PACKAGE_HOST_GDB
+ 	default "7.11"	   if BR2_GDB_VERSION_7_11
