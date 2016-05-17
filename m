@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 May 2016 08:50:51 +0200
-Subject: [Buildroot] [PATCH 7/9] toolchain: remove eglibc support
-In-Reply-To: <1463436782-17051-8-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 17 May 2016 00:13:00 +0200")
+Date: Tue, 17 May 2016 08:53:01 +0200
+Subject: [Buildroot] [PATCH 8/9] binutils: remove support for version
+	2.23
+In-Reply-To: <1463436782-17051-9-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 17 May 2016 00:13:01 +0200")
 References: <1463436782-17051-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1463436782-17051-8-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87poslch4k.fsf@dell.be.48ers.dk>
+ <1463436782-17051-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87inydch0y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,57 +15,22 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > The eglibc support has been marked deprecated since 2015.08, so it's
- > time to remove it.
+ > Now that we have added support for the lastest binutils version 2.26,
+ > it is time to remove the oldest version we currently support, 2.23, in
+ > order to keep only 3 versions: 2.24, 2.25 and 2.26.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  > ---
- >  Config.in.legacy                                   |   8 +
- >  package/gcc/Config.in.host                         |   2 +-
- >  .../2.18-svnr23787/0001-CVE-2014-7817-eglibc.patch | 174 ---------------------
- >  .../glibc/2.18-svnr23787/0002-accept-make4.patch   |  33 ----
- >  .../glibc/2.18-svnr23787/0003-CVE-2014-6040.patch  | 141 -----------------
- >  .../glibc/2.18-svnr23787/0004-CVE-2014-9402.patch  |  20 ---
- >  .../glibc/2.18-svnr23787/0005-CVE-2015-1472.patch  |  88 -----------
- >  .../2.19-svnr25243/0001-CVE-2014-7817-eglibc.patch | 174 ---------------------
- >  .../glibc/2.19-svnr25243/0002-CVE-2014-6040.patch  | 141 -----------------
- >  .../glibc/2.19-svnr25243/0003-CVE-2014-9402.patch  |  20 ---
- >  .../glibc/2.19-svnr25243/0004-CVE-2015-1472.patch  |  88 -----------
- >  package/glibc/Config.in                            |  27 ----
- >  package/glibc/glibc.mk                             |   7 -
- >  toolchain/toolchain-buildroot/Config.in            |  23 ---
- >  14 files changed, 9 insertions(+), 937 deletions(-)
- >  delete mode 100644 package/glibc/2.18-svnr23787/0001-CVE-2014-7817-eglibc.patch
- >  delete mode 100644 package/glibc/2.18-svnr23787/0002-accept-make4.patch
- >  delete mode 100644 package/glibc/2.18-svnr23787/0003-CVE-2014-6040.patch
- >  delete mode 100644 package/glibc/2.18-svnr23787/0004-CVE-2014-9402.patch
- >  delete mode 100644 package/glibc/2.18-svnr23787/0005-CVE-2015-1472.patch
- >  delete mode 100644 package/glibc/2.19-svnr25243/0001-CVE-2014-7817-eglibc.patch
- >  delete mode 100644 package/glibc/2.19-svnr25243/0002-CVE-2014-6040.patch
- >  delete mode 100644 package/glibc/2.19-svnr25243/0003-CVE-2014-9402.patch
- >  delete mode 100644 package/glibc/2.19-svnr25243/0004-CVE-2015-1472.patch
+ > Changes since v2:
+ >  - As suggested by Arnout, fix the previously existing
+ >    BR2_BINUTILS_VERSION_2_23_2 legacy option to make it not select
+ >    BR2_BINUTILS_VERSION_2_23_X, which is also a legacy option now, and
+ >    update its help text.
+ > Changes since v1:
+ >   - Remove hash from the hash file, as noticed by Romain Naour.
+ >   - Add Config.in.legacy entry, as noticed by Romain Naour.
 
- > diff --git a/Config.in.legacy b/Config.in.legacy
- > index ff11d75..7b76f28 100644
- > --- a/Config.in.legacy
- > +++ b/Config.in.legacy
- > @@ -145,6 +145,14 @@ endif
- >  ###############################################################################
- >  comment "Legacy options removed in 2016.08"
- 
- > +config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
- > +	bool "eglibc support has been removed"
- > +	select BR2_LEGACY
- > +	help
- > +	  The eglibc project no longer exists, as it has been merged
- > +	  back into the glibc project. Therefore, support for eglibc
- > +	  has been removed, and glibc should be used instead.
-
-Committed to next, thanks. Perhaps we should add:
-
-select BR2_TOOLCHAIN_BUILDROOT_GLIBC
-
-As the defconfig otherwise falls back to uClibc.
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
