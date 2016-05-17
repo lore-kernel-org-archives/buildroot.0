@@ -1,33 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 17 May 2016 20:50:19 +0300
-Subject: [Buildroot] buildroot Kernel from local directory
-In-Reply-To: <CACvocV47XHGZrtqhv=ugJi-DEA3mtkJZPYSDpsRh0XVkeTZt1g@mail.gmail.com>
-References: <CACvocV47XHGZrtqhv=ugJi-DEA3mtkJZPYSDpsRh0XVkeTZt1g@mail.gmail.com>
-Message-ID: <20160517175018.GC2178@tarshish>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 17 May 2016 20:41:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: Execute
+	MESA3D_REMOVE_OPENGL_PC also for DRI configs lacking OpenGL
+Message-ID: <1463510499-1418-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Giovanni,
+Mesa3d provides libgl only with DRI drivers and X.org enabled. Since
 
-On Tue, May 17, 2016 at 03:43:17PM +0200, astrolite . wrote:
-> If i have compiled my custom kernel (with relative patch and config)
-> outside buildroot, and copied into boot partion, it is necessary for the
-> purpose of compilation pass the path of the local kernel with relative
-> config file and dts files?
+https://git.busybox.net/buildroot/commit/package/mesa3d/mesa3d.mk?id=f1894ec95728806e09405d26663e0ea371afaeab
 
-You may build your kernel outside of Buildroot. You should only make sure that 
-the kernel headers that are part of your toolchain are from a kernel version 
-that is not newer than the kernel you run. When Buildroot builds your 
-toolchain you may choose the headers version under Toolchain -> Kernel 
-Headers. If you use an external toolchain it is up to you to get right.
+DRI drivers can be enabled without X.org support, but mesa3d still does
+not provide OpenGL support so we also need to remove the pkgconf files
+in this case. A POST_INSTALL_*_HOOK is already present but needs to be
+executed not only when DRI support was disabled but also with DRI en-
+and X.org disabled.
 
-Hope this helps,
-baruch
+Fixes
+http://autobuild.buildroot.net/results/342/3420ad6aa8e1e8151bf11b43be2c97cbe1dbb400/
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/mesa3d.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 4e0d255..3c98f8d 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -108,6 +108,8 @@ endif
+ # libGL is only provided for a full xorg stack
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_PROVIDES += libgl
++else
++MESA3D_POST_INSTALL_STAGING_HOOKS += MESA3D_REMOVE_OPENGL_PC
+ endif
+ MESA3D_CONF_OPTS += \
+ 	--enable-shared-glapi \
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.8.1
