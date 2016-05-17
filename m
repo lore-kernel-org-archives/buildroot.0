@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 21:19:05 +0200
-Subject: [Buildroot] [PATCH 2/4] fmlib: add powerpc e6500 support
-In-Reply-To: <1463511883-27657-2-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1463511883-27657-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1463511883-27657-2-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20160517211905.58a63674@free-electrons.com>
+Date: Tue, 17 May 2016 21:24:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: configure.ac does not
+ support --en/--disable-freerdp
+In-Reply-To: <1463511419-31833-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1463511419-31833-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160517212453.6931ed33@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,96 +13,49 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 17 May 2016 14:04:41 -0500, Matt Weber wrote:
+On Tue, 17 May 2016 20:56:59 +0200, Bernd Kuhls wrote:
+> Vlc configure does not allow disabling freerdp support:
+> http://git.videolan.org/?p=vlc/vlc-2.2.git;a=blob;f=configure.ac;h=e021546e284d7daefdb4d94f430eb0bc57722210;hb=HEAD#l1890
+> 
+> The problem
+> 
+> configure: WARNING: unrecognized options: --disable-gtk-doc,
+>  --disable-gtk-doc-html, --disable-doc, --disable-docs,
+>  --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6,
+>  --disable-libfreerdp
+> 
+> can be seen for example in
+> 
+> http://autobuild.buildroot.net/results/1a7/1a7893c13f6144e0ecd9f37f2f047c596ccedd35/build-end.log
 
-> +if BR2_PACKAGE_FMLIB
+Missing empty new line here.
 
-One empty new line here.
-
-> +choice
-> +	prompt "QORIQ Target Family"
-
-QORIQ -> QorIQ
-
-> +	default BR2_FMLIB_QORIQ_FAMILY_P4080
-
-I would suggest to remove this "default" statement. By default, kconfig
-will select the first available choice, which is good enough for this
-case.
-
-> +	help
-> +	  Select the family of QORIQ processor.
-
-QorIQ
-
-> +
-> +config BR2_FMLIB_QORIQ_FAMILY_P4080
-> +	bool "p40xx"
-> +	depends on BR2_powerpc_e500mc
-> +
-> +config BR2_FMLIB_QORIQ_FAMILY_T4240
-> +	bool "t42xx"
-> +	depends on BR2_powerpc_e500mc
-> +
-> +config BR2_FMLIB_QORIQ_FAMILY_T2080
-> +	bool "t208x"
-> +	depends on BR2_powerpc_e6500
-
-Empty new line.
-
-> +endchoice
-
-Ditto.
-
-> +endif
-
-I would probably suggest to do something like this as well:
-
-config BR2_PACKAGE_FMLIB_ARCHTYPE
-	string
-	default "e500mc" if BR2_powerpc_e500mc
-	default "ppc64e6500" if BR2_powerpc_e6500 && BR2_powerpc64
-	default "ppc32e6500" if BR2_powerpc_e6500 && BR2_powerpc
-
-config BR2_PACKAGE_FMLIB_PLATFORM
-	string
-	default "P4080" if BR2_FMLIB_QORIQ_FAMILY_P4080
-	default "T4240" if ...
-	default "..." if "..."
-
-> diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
-> index 978810b..a4d28d0 100644
-> --- a/package/fmlib/fmlib.mk
-> +++ b/package/fmlib/fmlib.mk
-> @@ -25,6 +25,21 @@ ifeq ($(BR2_powerpc_e500mc),y)
->  FMLIB_ARCHTYPE = ppce500mc
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/vlc/vlc.mk | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+> index 30887bd..4dc8dfe 100644
+> --- a/package/vlc/vlc.mk
+> +++ b/package/vlc/vlc.mk
+> @@ -137,10 +137,7 @@ VLC_CONF_OPTS += --disable-flac
 >  endif
 >  
-> +ifeq ($(BR2_powerpc_e6500),y)
-> +ifeq ($(BR2_powerpc64), y)
-> +	FMLIB_ARCHTYPE = ppc64e6500
-> +else ifeq ($(BR2_powerpc), y)
-> +	FMLIB_ARCHTYPE = ppc32e6500
-> +endif
-> +endif
+>  ifeq ($(BR2_PACKAGE_FREERDP),y)
+> -VLC_CONF_OPTS += --enable-freerdp
+>  VLC_DEPENDENCIES += freerdp
+> -else
+> -VLC_CONF_OPTS += --disable-libfreerdp
+>  endif
 
-Replace all this with:
+Several things are not clear for me here:
 
-FMLIB_ARCHTYPE = $(call qstrip,$(BR2_PACKAGE_FMLIB_ARCHTYPE))
+ 1/ Is freerdp an optional or a mandatory dependency of VLC ?
 
-> +
-> +FMLIB_PLATFORM=P4080
-> +ifeq ($(BR2_FMLIB_QORIQ_FAMILY_T4240),y)
-> +	FMLIB_PLATFORM=T4240
-> +else ifeq ($(BR2_FMLIB_QORIQ_FAMILY_T2080),y)
-> +	FMLIB_PLATFORM=FMAN_V3H
-> +endif
+ 2/ Who is this freerdp thing related to a link failure against -lGL ?
 
-I don't see this variable being used anywhere in your code.
-
-Also, for the record, we don't indent variable assignments.
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
