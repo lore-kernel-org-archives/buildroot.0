@@ -1,112 +1,77 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 17 May 2016 20:58:37 +0100
-Subject: [Buildroot] [PATCH] openmpi: new package
-In-Reply-To: <1463515117-26333-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1463515117-26333-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1463515117-26333-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Geoff Levand <geoff@infradead.org>
+Date: Tue, 17 May 2016 13:15:11 -0700
+Subject: [Buildroot] Analysis of build results for 2016-05-16
+In-Reply-To: <20160517213407.7d47b4a3@free-electrons.com>
+References: <20160517063022.7001A10142D@stock.ovh.net>
+ <20160517153611.2a3b4199@free-electrons.com>
+ <1463511367.5420.26.camel@infradead.org>
+ <20160517213407.7d47b4a3@free-electrons.com>
+Message-ID: <1463516111.5420.32.camel@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/Config.in            |  1 +
- package/openmpi/Config.in    | 27 +++++++++++++++++++++++++++
- package/openmpi/openmpi.hash |  3 +++
- package/openmpi/openmpi.mk   | 27 +++++++++++++++++++++++++++
- 4 files changed, 58 insertions(+)
- create mode 100644 package/openmpi/Config.in
- create mode 100644 package/openmpi/openmpi.hash
- create mode 100644 package/openmpi/openmpi.mk
+On Tue, 2016-05-17 at 21:34 +0200, Thomas Petazzoni wrote:
+>          arm |                  host-go-1.6.2 | NOK | http://au
+> > > > tobuild.buildroot.net/results/42a8d07101d8d954511d1c884ecb66e8d
+> > > > 861899e/  ;
+> > > 
+> > > error: #warning requested reentrant code
+> > > 
+> > > Geoff, in fact it seems like host-go itself needs thread support
+> > > in the
+> > > target toolchain to build properly, so our plan to have only the
+> > > Go
+> > > packages depend on BR2_TOOLCHAIN_HAS_THREADS does not work.  
+> > 
+> > Yes, the solution I came up with is that the go target package must
+> 
+> By "go target package", you mean a target package that is written in
+> Go, and not specifically the package/go/ package (which doesn't have
+> a
+> target variant), right?
 
-diff --git a/package/Config.in b/package/Config.in
-index 8668612..0056beb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1177,6 +1177,7 @@ menu "Networking"
- 	source "package/nss-pam-ldapd/Config.in"
- 	source "package/omniorb/Config.in"
- 	source "package/openldap/Config.in"
-+	source "package/openmpi/Config.in"
- 	source "package/openpgm/Config.in"
- 	source "package/ortp/Config.in"
- 	source "package/qdecoder/Config.in"
-diff --git a/package/openmpi/Config.in b/package/openmpi/Config.in
-new file mode 100644
-index 0000000..0307a62
---- /dev/null
-+++ b/package/openmpi/Config.in
-@@ -0,0 +1,27 @@
-+comment "openmpi needs a toolchain w/ dynamic library, NPTL, wchar, C++"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
-+		|| !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_OPENMPI
-+	bool "openmpi"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	help
-+	  A High Performance Message Passing Library.
-+
-+	  https://www.open-mpi.org/
-+
-+if BR2_PACKAGE_OPENMPI
-+
-+config BR2_PACKAGE_OPENMPI_EXTRACONF
-+	string "Additional parameters for ./configure"
-+	default ""
-+	help
-+	  Extra parameters that will be appended to openmpi's
-+	  ./configure commandline.
-+
-+endif
-diff --git a/package/openmpi/openmpi.hash b/package/openmpi/openmpi.hash
-new file mode 100644
-index 0000000..92152a2
---- /dev/null
-+++ b/package/openmpi/openmpi.hash
-@@ -0,0 +1,3 @@
-+# From: https://www.open-mpi.org/software/ompi/v1.10/
-+md5 b2f43d9635d2d52826e5ef9feb97fd4c  openmpi-1.10.2.tar.bz2
-+sha1 03934fc0a2dd0d0d2d0459d714a976eabca938fb  openmpi-1.10.2.tar.bz2
-diff --git a/package/openmpi/openmpi.mk b/package/openmpi/openmpi.mk
-new file mode 100644
-index 0000000..33e42a0
---- /dev/null
-+++ b/package/openmpi/openmpi.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# openmpi
-+#
-+################################################################################
-+
-+OPENMPI_VERSION_MAJOR = 1.10
-+OPENMPI_VERSION = $(OPENMPI_VERSION_MAJOR).2
-+OPENMPI_SITE = https://www.open-mpi.org/software/ompi/v$(OPENMPI_VERSION_MAJOR)/downloads
-+OPENMPI_SOURCE = openmpi-$(OPENMPI_VERSION).tar.bz2
-+OPENMPI_LICENSE = BSD
-+OPENMPI_LICENSE_FILES = LICENSE
-+OPENMPI_INSTALL_STAGING = YES
-+OPENMPI_PATCH = https://github.com/vriera/ompi-release/commit/56a27e5dce8fc78941f26ccb0e688f331fb0641e.patch
-+
-+# Disable fortran if the fortran compiler doesn't actually exist.
-+ifeq ($(wildcard $(TARGET_FC)),)
-+OPENMPI_CONF_OPTS += --enable-mpi-fortran=no
-+else
-+OPENMPI_CONF_OPTS += --enable-mpi-fortran=yes
-+endif
-+
-+# The amount of configure options in openmpi is huge. Let the user to have the
-+# posibility to pass the desired options in BR2_PACKAGE_OPENMPI_EXTRACONF.
-+OPENMPI_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_OPENMPI_EXTRACONF))
-+
-+$(eval $(autotools-package))
--- 
-2.7.3
+Yes, a target package that has go source code.
+
+> > specify BR2_TOOLCHAIN_HAS_THREADS if it uses cgo support.  If
+> > BR2_TOOLCHAIN_HAS_THREADS is set, then host-go sets CGO_ENABLED=1
+> > and
+> > builds a compiler with cgo support.  If BR2_TOOLCHAIN_HAS_THREADS
+> > is
+> > not set, then host-go does not build in cgo support.  The two
+> > cases:
+> > 
+> > A go package which does not use cgo sets
+> > BR2_TOOLCHAIN_HAS_THREADS=n,
+> 
+> A package cannot *set* BR2_TOOLCHAIN_HAS_THREADS.
+> BR2_TOOLCHAIN_HAS_THREADS is a property of the toolchain.
+
+> > the host-go is not build with cgo support.  Both the target package
+> > and host-go should build OK since no thread support is needed.
+> > 
+> > A package that uses cgo sets BR2_TOOLCHAIN_HAS_THREADS=y, host-go
+> > is build with cgo support.  Both build OK since the toolchain has
+> > thread support.
+> 
+> What needs to happen instead is the following (and is quite similar
+> to
+> what you said, except for the interaction with
+> BR2_TOOLCHAIN_HAS_THREADS=y) :
+> 
+>  *) The host-go package will build cgo support when
+>     BR2_TOOLCHAIN_HAS_THREADS=y and otherwise not build cgo support.
+> 
+>  *) Any target package that is written in Go and that needs cgo
+> support
+>     should have a "depends on BR2_TOOLCHAIN_HAS_THREADS" in its
+>     dependencies.
+
+Yes, sorry, that is correct.
+
+> This needs to be explained by a comment in package/go/go.mk, as it is
+> not trivial.
+
+OK.
