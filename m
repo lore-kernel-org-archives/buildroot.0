@@ -1,50 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 17 May 2016 19:24:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: select libvpx/x264 for
-	transcoding support
-Message-ID: <1463505862-3783-1-git-send-email-bernd.kuhls@t-online.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 17 May 2016 20:50:19 +0300
+Subject: [Buildroot] buildroot Kernel from local directory
+In-Reply-To: <CACvocV47XHGZrtqhv=ugJi-DEA3mtkJZPYSDpsRh0XVkeTZt1g@mail.gmail.com>
+References: <CACvocV47XHGZrtqhv=ugJi-DEA3mtkJZPYSDpsRh0XVkeTZt1g@mail.gmail.com>
+Message-ID: <20160517175018.GC2178@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ffmpeg needs libvpx and x264 to support transcoding.
+Hi Giovanni,
 
-Fixes this error message from tvheadend log:
-2016-05-14 22:52:21.962 [  ERROR]:transcode: 0006: Unable to find libx264 encoder
-2016-05-14 22:52:21.962 [   INFO]:transcode: 0006: 1:H264 ==> Passthrough
-2016-05-14 22:52:21.963 [   INFO]:transcode: 0006: 2:MPEG2AUDIO ==> AAC (aac)
+On Tue, May 17, 2016 at 03:43:17PM +0200, astrolite . wrote:
+> If i have compiled my custom kernel (with relative patch and config)
+> outside buildroot, and copied into boot partion, it is necessary for the
+> purpose of compilation pass the path of the local kernel with relative
+> config file and dts files?
 
-or
+You may build your kernel outside of Buildroot. You should only make sure that 
+the kernel headers that are part of your toolchain are from a kernel version 
+that is not newer than the kernel you run. When Buildroot builds your 
+toolchain you may choose the headers version under Toolchain -> Kernel 
+Headers. If you use an external toolchain it is up to you to get right.
 
-2016-05-14 22:58:01.529 [  ERROR]:transcode: 0009: Unable to find libvpx encoder
-2016-05-14 22:58:01.529 [   INFO]:transcode: 0009: 1:H264 ==> Passthrough
-2016-05-14 22:58:01.529 [   INFO]:transcode: 0009: 2:MPEG2AUDIO ==> VORBIS (libvorbis)
+Hope this helps,
+baruch
 
-With this patch transcoding is logged like this:
-
-2016-05-16 20:14:56.515 [   INFO]:transcode: 0004: 1:TELETEXT ==> Filtered
-2016-05-16 20:14:56.516 [   INFO]:transcode: 0004: 2:MPEG2VIDEO 720x576 ==> H264 640x512 (libx264)
-2016-05-16 20:14:56.516 [   INFO]:transcode: 0004: 3:MPEG2AUDIO ==> AAC (aac)
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/tvheadend/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index 67a4b14..b274a13 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -12,6 +12,8 @@ config BR2_PACKAGE_TVHEADEND
- 	select BR2_PACKAGE_DTV_SCAN_TABLES
- 	select BR2_PACKAGE_FFMPEG_AVRESAMPLE if BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE if BR2_PACKAGE_FFMPEG
-+	select BR2_PACKAGE_LIBVPX if BR2_PACKAGE_FFMPEG
-+	select BR2_PACKAGE_X264 if BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_OPENSSL
- 	help
 -- 
-2.8.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
