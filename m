@@ -1,104 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 May 2016 08:53:37 +0200
-Subject: [Buildroot] [git commit branch/next] tar: bump to version 1.29
-Message-ID: <20160517065436.18D1381ED9@busybox.osuosl.org>
+Date: Tue, 17 May 2016 08:45:11 +0200
+Subject: [Buildroot] [git commit branch/next] gdb: add support for gdb 7.11
+Message-ID: <20160517065435.AB17A8183A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6966645da049bfb1582de3cfe3628dc70698b86
+commit: https://git.buildroot.net/buildroot/commit/?id=0ab3a9dde395beea92fed05c776d10ce03e0bd2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Patch is upstream so remove it.
+gdb 7.11 was released on February 2016, it's time to include it in
+Buildroot, which this commit does.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tar/0001-fix-build-failure.patch | 52 --------------------------------
- package/tar/tar.hash                     |  4 +--
- package/tar/tar.mk                       |  2 +-
- 3 files changed, 3 insertions(+), 55 deletions(-)
+ package/gdb/Config.in.host | 4 ++++
+ package/gdb/gdb.hash       | 2 ++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/tar/0001-fix-build-failure.patch b/package/tar/0001-fix-build-failure.patch
-deleted file mode 100644
-index 8550a3e..0000000
---- a/package/tar/0001-fix-build-failure.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--Status: upstream
--http://git.savannah.gnu.org/cgit/tar.git/commit/?id=e9ddc08da0982f36581ae5a8c7763453ff41cfe8
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--From e9ddc08da0982f36581ae5a8c7763453ff41cfe8 Mon Sep 17 00:00:00 2001
--From: Sergey Poznyakoff <gray@gnu.org>
--Date: Wed, 24 Sep 2014 21:22:16 +0000
--Subject: Bugfixes.
--
--* doc/tar.1: Fix typo in font spec.
--* src/tar.c (sort_mode_arg, sort_mode_flag): Protect "inode"
--(SAVEDIR_SORT_INODE) with D_INO_IN_DIRENT
-----
--diff --git a/doc/tar.1 b/doc/tar.1
--index 9000627..b91de63 100644
----- a/doc/tar.1
--+++ b/doc/tar.1
--@@ -879,7 +879,7 @@ Exclude files matching patterns listed in FILE.
-- \fB\-\-strip\-components\fR=\fINUMBER\fR
-- Strip \fINUMBER\fR leading components from file names on extraction.
-- .TP
---\fB\-\-transform\fR=\fIEXPRESSION\dR, \fB\-\-xform\fR=\fIEXPRESSION\fR
--+\fB\-\-transform\fR=\fIEXPRESSION\fR, \fB\-\-xform\fR=\fIEXPRESSION\fR
-- Use sed replace \fIEXPRESSION\fR to transform file names.
-- .SS File name matching options
-- These options affect both exclude and include patterns.
--diff --git a/src/tar.c b/src/tar.c
--index 225c624..f8102e0 100644
----- a/src/tar.c
--+++ b/src/tar.c
--@@ -1341,14 +1341,18 @@ static char filename_terminator;
-- static char const *const sort_mode_arg[] = {
--   "none",
--   "name",
--+#if D_INO_IN_DIRENT
--   "inode",
--+#endif
--   NULL
-- };
-- 
-- static int sort_mode_flag[] = {
--     SAVEDIR_SORT_NONE,
--     SAVEDIR_SORT_NAME,
--+#if D_INO_IN_DIRENT
--     SAVEDIR_SORT_INODE
--+#endif
-- };
-- 
-- ARGMATCH_VERIFY (sort_mode_arg, sort_mode_flag);
----
--cgit v0.9.0.2
-diff --git a/package/tar/tar.hash b/package/tar/tar.hash
-index 5d2f1db..e563456 100644
---- a/package/tar/tar.hash
-+++ b/package/tar/tar.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking signature
--sha256	64ee8d88ec1b47a0961033493f919d27218c41b580138fd6802327462aff22f2	tar-1.28.tar.xz
--sha256	a3906a862f83dac1dfaf0ed200c62bd21f6d00f184a7f42b91978593a8553104	tar-1.28.cpio.gz
-+sha256	402dcfd0022fd7a1f2c5611f5c61af1cd84910a760a44a688e18ddbff4e9f024	tar-1.29.tar.xz
-+sha256	9173f222464dd3676118408840da5990527062b5c7daf6487bed7c396c45bfb1	tar-1.29.cpio.gz
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index 2b47e33..767c02f 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index cc1dc40..35eb418 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -40,6 +40,9 @@ choice
+ 	config BR2_GDB_VERSION_7_10
+ 		bool "gdb 7.10.x"
  
--TAR_VERSION = 1.28
-+TAR_VERSION = 1.29
- TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
- TAR_SITE = $(BR2_GNU_MIRROR)/tar
- # busybox installs in /bin, so we need tar to install as well in /bin
++	config BR2_GDB_VERSION_7_11
++		bool "gdb 7.11.x"
++
+ endchoice
+ 
+ endif
+@@ -53,3 +56,4 @@ config BR2_GDB_VERSION
+ 	default "7.8.2"	   if BR2_GDB_VERSION_7_8
+ 	default "7.9.1"    if BR2_GDB_VERSION_7_9 || !BR2_PACKAGE_HOST_GDB
+ 	default "7.10.1"   if BR2_GDB_VERSION_7_10
++	default "7.11"	   if BR2_GDB_VERSION_7_11
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index ee0ec73..87ce09c 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -2,6 +2,8 @@
+ sha512	face5bf1b4ce144fc8604fc84620beed956177a11fd632b4e41906fc7f632910b2b43a50e6cfdfd6cbd876ee527c813bddab8df29dc560a6c36694cdb8edc4e4	gdb-7.8.2.tar.xz
+ sha512	eebdf88b24e52e792b8a4b89ea85790de72b462a7810b44975fdf4232c068f353b15506071f450102a9d4bcecdde8e93dc3748a10699b7f73f3e04fb2d9d8414	gdb-7.9.1.tar.xz
+ sha512	17a5138277a31685a5c2a841cb47ed9bc4626ea617b8ca77750513b300299f4fbbffe504958b5372de610dcb952c679cf8fa9c1bdadd380294fbf59b6e366010	gdb-7.10.1.tar.xz
++sha512  eadd2a59a1e48b1484eb2bea85256d6b1912926bc8b690793d02babf2639608bd22a0f2de77d4f60092da3b1dafeaa6d75a7cff3e84bd4e22fc46364b68e5e9f	gdb-7.11.tar.xz
++
+ # No hash for the ARC & microblaze variants, comes from the github-helper:
+ none	xxx	gdb-arc-2016.03-rc2-gdb.tar.gz
+ none	xxx	gdb-6be65fb56ea6694a9260733a536a023a1e2d4d57.tar.gz
