@@ -1,11 +1,10 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 09:26:42 +0200
-Subject: [Buildroot] [PATCH] Config.in.legacy: fallback to glibc when
- eglibc	was selected
-In-Reply-To: <D52038F0-6ED4-4510-B67C-D71ADB9008A3@free.fr>
-References: <1463469451-18931-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <D52038F0-6ED4-4510-B67C-D71ADB9008A3@free.fr>
-Message-ID: <20160517092642.05c8c118@free-electrons.com>
+From: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Tue, 17 May 2016 09:35:58 +0200
+Subject: [Buildroot] [PATCH 1/2] python-flask-jsonrpc: new package
+In-Reply-To: <20160513223526.50f5264d@free-electrons.com>
+References: <1462975669-18032-1-git-send-email-sebastien.szymanski@armadeus.com>
+ <20160513223526.50f5264d@free-electrons.com>
+Message-ID: <e98205ca-9b8e-d464-5566-a208d158f086@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +13,41 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 17 May 2016 09:23:03 +0200, Yann E. MORIN wrote:
-
-> BR2_TOOLCHAIN_BUILDROOT_GLIBC is part of a choice, so you can't select it.
+On 05/13/2016 10:35 PM, Thomas Petazzoni wrote:
+> Hello,
 > 
-> That's the limit of our legacy handling: it can't handle choices.
+> On Wed, 11 May 2016 16:07:48 +0200, S?bastien Szymanski wrote:
+>> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+>> ---
+>>  package/Config.in                                      |  1 +
+>>  package/python-flask-jsonrpc/Config.in                 |  7 +++++++
+>>  package/python-flask-jsonrpc/python-flask-jsonrpc.hash |  3 +++
+>>  package/python-flask-jsonrpc/python-flask-jsonrpc.mk   | 14 ++++++++++++++
+>>  4 files changed, 25 insertions(+)
+>>  create mode 100644 package/python-flask-jsonrpc/Config.in
+>>  create mode 100644 package/python-flask-jsonrpc/python-flask-jsonrpc.hash
+>>  create mode 100644 package/python-flask-jsonrpc/python-flask-jsonrpc.mk
+> 
+> I've applied to next, after doing the following changes:
+> 
+>     [Thomas:
+>      - make python-flask a runtime dependency only, as noticed by Yegor
+>        Yefremov.
+>      - use setup.py as the license file.]
+> 
+> Thanks for the contribution, and thanks Yegor for the review!
+> 
+> Thomas
+> 
 
-Gah, yes, indeed. I guess the only option is to keep a:
+FYI, I've sent an e-mail to the maintainer, as suggested by Yegor, but
+he didn't answer me.
+Anyway, thank you !
 
-	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
-
-but it's rather annoying to keep legacy code forever elsewhere than in
-Config.in.legacy. So I'd prefer that we don't do anything in fact: the
-number of users using eglibc in their configuration is probably pretty
-low.
-
-Thanks for the review!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+S?bastien Szymanski
+Software Engineer
+Armadeus Systems - A new vision of the embedded world
+sebastien.szymanski at armadeus.com
+Tel: +33 (0)9 72 29 41 44
+Fax: +33 (0)9 72 28 79 26
