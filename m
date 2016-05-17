@@ -1,33 +1,47 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 May 2016 00:28:07 +0200
-Subject: [Buildroot] [PATCH 7/9] toolchain: remove eglibc support
-In-Reply-To: <1463436782-17051-8-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1463436782-17051-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1463436782-17051-8-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <85f0bbfe-6fa1-ad89-21b4-88d1b9c7c9c8@mind.be>
+Date: Wed, 18 May 2016 00:30:08 +0200
+Subject: [Buildroot] [PATCH] Config.in.legacy: fallback to glibc when
+ eglibc was selected
+In-Reply-To: <20160517092642.05c8c118@free-electrons.com>
+References: <1463469451-18931-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <D52038F0-6ED4-4510-B67C-D71ADB9008A3@free.fr>
+ <20160517092642.05c8c118@free-electrons.com>
+Message-ID: <8a38175e-d5c8-e2da-543d-7f45d36fc36c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/17/16 00:13, Thomas Petazzoni wrote:
-> The eglibc support has been marked deprecated since 2015.08, so it's
-> time to remove it.
+On 05/17/16 09:26, Thomas Petazzoni wrote:
+> Hello,
 >
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> On Tue, 17 May 2016 09:23:03 +0200, Yann E. MORIN wrote:
+>
+>> BR2_TOOLCHAIN_BUILDROOT_GLIBC is part of a choice, so you can't select it.
+>>
+>> That's the limit of our legacy handling: it can't handle choices.
+>
+> Gah, yes, indeed. I guess the only option is to keep a:
+>
+> 	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+>
+> but it's rather annoying to keep legacy code forever elsewhere than in
+> Config.in.legacy. So I'd prefer that we don't do anything in fact: the
+> number of users using eglibc in their configuration is probably pretty
+> low.
 
-  It's probably a good idea to do a "sed 's/(e)glibc/glibc/' as well. Even 
-though we still have Linaro and possibly custom external toolchains with eglibc, 
-I don't think it makes much sense anymore to make that distinction explicit.
-
-  The glibc.hash file wasn't updated.
-
-  There are also still some references to eglibc in the manual, these should 
-probably be removed.
+  Agreed.
 
   Regards,
   Arnout
+
+>
+> Thanks for the review!
+>
+> Thomas
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
