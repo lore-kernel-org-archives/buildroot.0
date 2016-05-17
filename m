@@ -1,32 +1,27 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 17 May 2016 18:22:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mtr: uses fork(), needs mmu
-Message-ID: <1463502178-27740-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Tue, 17 May 2016 18:27:02 +0200
+Subject: [Buildroot] Analysis of build results for 2016-05-16
+References: <20160517063022.7001A10142D@stock.ovh.net>
+ <20160517153611.2a3b4199@free-electrons.com>
+Message-ID: <XnsA60BBBB0E47FCID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/dcb/dcbd39878b1a80d6a16032e967bd8e2b928f7a78/
-http://autobuild.buildroot.net/results/e05/e05632e0b160ee995ce46aaf3ceddf46d3658adf/
+[posted and mailed]
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mtr/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Hi Thomas,
 
-diff --git a/package/mtr/Config.in b/package/mtr/Config.in
-index 5e2d5b2..ec83e25 100644
---- a/package/mtr/Config.in
-+++ b/package/mtr/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_MTR
- 	bool "mtr"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  mtr combines the functionality of the 'traceroute' and 'ping'
- 	  programs in a single network diagnostic tool.
--- 
-2.8.1
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote 
+in news:20160517153611.2a3b4199 at free-electrons.com:
+ 
+>>         bfin | mtr-66de3ecbab28b054b868a73... | NOK | 
+http://autobuild.buildroot.net/results/e05632e0b160ee995ce46aaf3ceddf46d3658adf/
+> 
+> Uses fork(), needs a dependency on BR2_USE_MMU.
+
+fixed by http://patchwork.ozlabs.org/patch/623207/
+
+Regards, Bernd
