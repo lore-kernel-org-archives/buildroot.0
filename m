@@ -1,39 +1,25 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 17 May 2016 20:47:54 +0200
-Subject: [Buildroot] Analysis of build results for 2016-05-16
-References: <20160517063022.7001A10142D@stock.ovh.net>
- <20160517153611.2a3b4199@free-electrons.com>
-Message-ID: <XnsA60BD392F6F5FID313208userindividu@bernd-kuhls.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 May 2016 20:54:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mtr: uses fork(), needs mmu
+In-Reply-To: <1463502178-27740-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Tue, 17 May 2016 18:22:58 +0200")
+References: <1463502178-27740-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <878tz8bjm9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-[posted and mailed]
+ > Fixes
+ > http://autobuild.buildroot.net/results/dcb/dcbd39878b1a80d6a16032e967bd8e2b928f7a78/
+ > http://autobuild.buildroot.net/results/e05/e05632e0b160ee995ce46aaf3ceddf46d3658adf/
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20160517153611.2a3b4199 at free-electrons.com: 
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
->>          arm |                      vlc-2.2.3 | NOK |
->>          http://autobuild.buildroot.net/results/1a7893c13f6144e0ecd9f37f
->>          2f047c596ccedd35/ 
-> 
-> ld: cannot find -lGL
-> 
-> Bernd?
+Committed, thanks.
 
-should be fixed by http://patchwork.ozlabs.org/patch/623236/
-
-VLC has no switch for detecting OpenGL support and searches only for gl.pc
-
-http://git.videolan.org/?p=vlc/vlc-2.2.git;a=blob;f=configure.ac;h=e021546e
-284d7daefdb4d94f430eb0bc57722210;hb=HEAD#l3079
-
-which needs to be removed by the mesa3d package when OpenGL is not
-available. 
-
-Regards, Bernd
+-- 
+Bye, Peter Korsgaard
