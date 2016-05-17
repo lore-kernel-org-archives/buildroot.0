@@ -1,41 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 May 2016 22:48:16 +0200
-Subject: [Buildroot] [git commit] git: bump version to 2.8.3
-Message-ID: <20160601161309.479A781922@busybox.osuosl.org>
+Date: Tue, 17 May 2016 22:32:56 +0200
+Subject: [Buildroot] [git commit] toolchain: enable paranoid unsafe path
+	check by default
+Message-ID: <20160601161308.9F6C4802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae61f4ecbbd11cf1593681775c4bc6ed3c155dc5
+commit: https://git.buildroot.net/buildroot/commit/?id=61c8854cef2a41be3175bbf7f0992c31560a1dd7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+This check is enabled for all build in the Buildroot autobuilders since [1]
+(i.e since 2015.02 release).
+
+Enable this option by default.
+
+[1] https://git.busybox.net/buildroot-test/commit/?id=41552e2a249de4568aa01f14bd588d1c8166f70b
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index dabe964..9e047a3 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 ec0283d78a0f1c8408c5fd43610697b953fbaafe4077bb1e41446a9ee3a2f83d  git-2.8.2.tar.xz
-+sha256 7d8e6c274a88b4a73b3c98c70d3438ec12871300ce8bb4ca179ea19fcf74aa91  git-2.8.3.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index db26036..1d6574d 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in b/Config.in
+index b5cc892..93b4f69 100644
+--- a/Config.in
++++ b/Config.in
+@@ -683,6 +683,7 @@ menu "Advanced"
  
--GIT_VERSION = 2.8.2
-+GIT_VERSION = 2.8.3
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
+ config BR2_COMPILER_PARANOID_UNSAFE_PATH
+ 	bool "paranoid check of library/header paths"
++	default y
+ 	help
+ 	  By default, when this option is disabled, when the Buildroot
+ 	  cross-compiler will encounter an unsafe library or header
