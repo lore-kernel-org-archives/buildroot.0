@@ -1,37 +1,33 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 17 May 2016 13:09:08 +0200
-Subject: [Buildroot] [PATCH v1] qt5multimedia: select Qt5OpenGL module in
-	case OpenGL support is enabled
-Message-ID: <1463483348-8157-1-git-send-email-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 May 2016 13:23:09 +0200
+Subject: [Buildroot] [PATCH] assimp: disable on Microblaze
+In-Reply-To: <1463436199-15509-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 17 May 2016 00:03:19 +0200")
+References: <1463436199-15509-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8760udc4iq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt5Multimedia needs Qt5OpenGL module in case OpenGL support is
-enabled.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes bug reported by Marco Trapanese ([1]).
+ > This package triggers an infinite loop bug in gcc on the Microblaze
+ > architecture when the optimization level is O1, O2 or O3. This bug has
+ > been reported at https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71124.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2016-May/161288.html
+ > While Buildroot by default uses an Os optimization level, assimp's build
+ > system overrides that by O3 by default.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/qt5/qt5multimedia/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ > This problem is causing timeouts in the autobuilders that make them
+ > consume 100% of CPU during 8 hours (the timeout used by the autobuilder
+ > scripts).
 
-diff --git a/package/qt5/qt5multimedia/Config.in b/package/qt5/qt5multimedia/Config.in
-index 59c3984..7549b35 100644
---- a/package/qt5/qt5multimedia/Config.in
-+++ b/package/qt5/qt5multimedia/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_QT5MULTIMEDIA
- 	select BR2_PACKAGE_QT5BASE
- 	select BR2_PACKAGE_QT5BASE_GUI
- 	select BR2_PACKAGE_QT5BASE_NETWORK
-+	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5BASE_OPENGL
- 	help
- 	  Qt is a cross-platform application and UI framework for
- 	  developers using C++.
+It would be good if some CMake person could figure out how to drop this
+hardcoded -O3 so it uses our CFLAGS - But until then:
+
+Committed, thanks.
+
 -- 
-2.8.1
+Bye, Peter Korsgaard
