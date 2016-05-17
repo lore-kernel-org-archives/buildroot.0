@@ -1,51 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 23:39:57 +0200
-Subject: [Buildroot] [PATCH 1/3] midori: add missing
-	BR2_TOOLCHAIN_USES_GLIBC dependency
-Message-ID: <1463521199-13662-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 May 2016 23:39:58 +0200
+Subject: [Buildroot] [PATCH 2/3] python-service-identity: add missing
+	BR2_INSTALL_LIBSTDCPP dependency
+In-Reply-To: <1463521199-13662-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1463521199-13662-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1463521199-13662-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-midori selects webkitgtk, and webkitgtk needs a glibc toolchain, but
-midori did not propagate this dependency, causing the following kconfig
-warning:
+python-service-identity selects python-pyopenssl and python-pyasn, both
+of which depend on C++ support, but this dependency was not propagated
+to python-service-identity causing the following kconfig warning:
 
-warning: (BR2_PACKAGE_MIDORI) selects BR2_PACKAGE_WEBKITGTK which has unmet direct dependencies (BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 && BR2_TOOLCHAIN_USES_GLIBC && BR2_PACKAGE_LIBGTK3 && BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS)
+warning: (BR2_PACKAGE_PYTHON_SERVICE_IDENTITY) selects BR2_PACKAGE_PYTHON_PYOPENSSL which has unmet direct dependencies ((BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3) && BR2_INSTALL_LIBSTDCPP)
+warning: (BR2_PACKAGE_PYTHON_SERVICE_IDENTITY) selects BR2_PACKAGE_PYTHON_PYASN which has unmet direct dependencies ((BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3) && BR2_INSTALL_LIBSTDCPP)
+warning: (BR2_PACKAGE_PYTHON_SERVICE_IDENTITY) selects BR2_PACKAGE_PYTHON_PYASN_MODULES which has unmet direct dependencies ((BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3) && BR2_INSTALL_LIBSTDCPP)
 
-Interestingly, the Config.in comment of the midori package already
-mentionned the (e)glibc dependency, but the BR2_TOOLCHAIN_USES_GLIBC
-dependency was not expressed (either on the comment or on the main
-package option itself).
-
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/midori/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/python-service-identity/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/midori/Config.in b/package/midori/Config.in
-index 91a63af..9751f33 100644
---- a/package/midori/Config.in
-+++ b/package/midori/Config.in
-@@ -1,7 +1,7 @@
- comment "midori needs libgtk3 and an (e)glibc toolchain w/ C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_USES_GLIBC
- 
- config BR2_PACKAGE_MIDORI
- 	bool "midori"
-@@ -18,6 +18,7 @@ config BR2_PACKAGE_MIDORI
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on BR2_INSTALL_LIBSTDCPP # webkitgtk
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # webkitgtk
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # webkitgtk
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
+index e2200f6..ee6ca4a 100644
+--- a/package/python-service-identity/Config.in
++++ b/package/python-service-identity/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
+ 	select BR2_PACKAGE_PYTHON_PYASN # runtime
+ 	select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
+ 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
++	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl, python-pyasn
  	help
- 	  Midori is a lightweight web browser based on WebKit
+ 	  Service identity verification for pyOpenSSL.
+ 
 -- 
 2.7.4
