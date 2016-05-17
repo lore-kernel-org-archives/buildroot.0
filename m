@@ -1,27 +1,64 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 17 May 2016 23:10:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-screensaver-matrixtrails: add
-	hash
-Message-ID: <1463519430-11933-1-git-send-email-bernd.kuhls@t-online.de>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 17 May 2016 16:11:42 -0500
+Subject: [Buildroot] [PATCH 1/4] fmc: add powerpc e6500 support
+In-Reply-To: <20160517211405.6e6584ef@free-electrons.com>
+References: <1463511883-27657-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20160517211405.6e6584ef@free-electrons.com>
+Message-ID: <CANQCQpZ9br=NmCO4tns9SiThfBs-BkeTEMvXOs9Wi+DTDa17AQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash    | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
+Thomas,
 
-diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-new file mode 100644
-index 0000000..5ae2459
---- /dev/null
-+++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 91990a29072cf85f4b9253a16a362d83fdfcc7595de796d982a189aa8618555c  kodi-screensaver-matrixtrails-16057e7195f930109f0a4aea999296ca315700e5.tar.gz
--- 
-2.8.1
+On Tue, May 17, 2016 at 2:14 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Hello,
+>
+> On Tue, 17 May 2016 14:04:40 -0500, Matt Weber wrote:
+>
+> > +ifeq ($(BR2_powerpc64), y)
+>
+> Remove the sparc before "y".
+>
+> > +     EXTRA_FLAGS = "M64BIT=1"
+>
+> EXTRA_FLAGS is not a proper variable name. Remember that the variable
+> namespace is global in Buildroot, to *all* variables should be prefixed
+> by the name of the package they are related to.
+>
+> However, in this case, why not just appending to FMC_MAKE_OPTS ?
+>
+> Also, your double quotes are not needed.
+>
+> > +else
+> > +     EXTRA_FLAGS = ""
+>
+> Not needed.
+>
+> >  define FMC_BUILD_CMDS
+> >       # The linking step has dependency issues so using MAKE1
+> > -     $(TARGET_MAKE_ENV) $(MAKE1) $(FMC_MAKE_OPTS) -C $(@D)/source
+> > +     $(TARGET_MAKE_ENV) $(MAKE1) $(FMC_MAKE_OPTS) $(call
+> qstrip,$(EXTRA_FLAGS)) -C $(@D)/source
+>
+> Change not needed if you append to FMC_MAKE_OPTS.
+>
+> So, the only change needed to the .mk file is:
+>
+> ifeq ($(BR2_powerpc64),y)
+> FMC_MAKE_OPTS += M64BIT=1
+> endif
+>
+> Can you rework this?
+>
+
+Will do.
+
+-Matt
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160517/76afcd82/attachment.html>
