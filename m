@@ -1,37 +1,56 @@
-From: oferh at marvell.com <oferh@marvell.com>
-Date: Tue, 17 May 2016 11:47:00 +0300
-Subject: [Buildroot] [PATCH 1/1] linux: arm: config endiness based on BR2
-	config
-Message-ID: <1463474820-18073-1-git-send-email-oferh@marvell.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 17 May 2016 12:58:24 +0200
+Subject: [Buildroot] QtMultimedia and gstreamer-1.0
+In-Reply-To: <573A36BC.90807@gmail.com>
+References: <5738116B.9050904@gmail.com> <20160515100303.003752e2@gmx.net>
+ <5738333D.8010707@gmail.com> <20160515140511.5973b7ce@gmx.net>
+ <57386743.1030708@gmail.com> <20160516221806.0df441c0@gmx.net>
+ <573A2BF3.1080701@gmail.com> <573A36BC.90807@gmail.com>
+Message-ID: <20160517125824.203d2759@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ofer Heifetz <oferh@marvell.com>
+Hello Marco,
 
-By default linux ARM arch is implicit configured LE,
-when BR2 is configured BE, modify the linux config to BE
-for ARM arch.
+On Mon, 16 May 2016 23:08:12 +0200, Marco Trapanese <marcotrapanese@gmail.com> wrote:
 
-Signed-off-by: Ofer Heifetz <oferh@marvell.com>
----
- linux/linux.mk | 2 ++
- 1 file changed, 2 insertions(+)
+> Il 16/05/2016 22:22, Marco Trapanese ha scritto:
+> > I will try to ldd files under /usr/lib/qt/plugins/
+> 
+> 
+> I attach to this email the output for:
+> 
+> ldd libgstmediaplayer.so
+> 
+> please, how to read the results?
+> Two questions:
+> 
+> 1) "checking sub-depends for '/blabla.so' " means it found the 
+> sub-depends, doesn't it?
+> 
+> 2) what does "checking sub-depends for 'not found'" mean???
+> 
+> It doesn't found libQt5OpenGL:
+> 
+> > libQt5OpenGL.so.5 => not found (0x00000000)
+> 
+> I guess due to the missing of "opengl" module.
+> I'm rebuilding Qt5... let's see if it fixes.
+> 
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index d88060e..71545e4 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -218,6 +218,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 	)
- 	$(if $(BR2_arm)$(BR2_armeb),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
-+	$(if $(BR2_armeb)$(BR2_aarch64_be),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_CPU_BIG_ENDIAN,$(@D)/.config))
- 	$(if $(BR2_TARGET_ROOTFS_CPIO),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
- 	# As the kernel gets compiled before root filesystems are
--- 
-1.9.1
+Enabling 'BR2_PACKAGE_QT5BASE_OPENGL_LIB=y' and doing
+
+	$ rm build/qt5base-5.6.0/.stamp_staging_installed
+	$ rm build/qt5base-5.6.0/.stamp_target_installed
+	$ make
+
+(and copy the new image to sd card, or copy only the missing libQt5OpenGL.so.5)
+should do the trick...
+
+Patch for qt5multimedia follows....
+
+Regards,
+Peter
