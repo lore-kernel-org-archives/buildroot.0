@@ -1,26 +1,39 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Tue, 17 May 2016 20:44:03 +0200
-Subject: [Buildroot] New pre-built Buildroot toolchains in the
-	autobuilder
-In-Reply-To: <20160517151217.045c17c4@free-electrons.com>
-References: <20160517151217.045c17c4@free-electrons.com>
-Message-ID: <573B6673.70203@dawncrow.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 17 May 2016 20:47:54 +0200
+Subject: [Buildroot] Analysis of build results for 2016-05-16
+References: <20160517063022.7001A10142D@stock.ovh.net>
+ <20160517153611.2a3b4199@free-electrons.com>
+Message-ID: <XnsA60BD392F6F5FID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 17.05.2016 um 15:12 schrieb Thomas Petazzoni:
-> Hello,
+Hi Thomas,
+
+[posted and mailed]
+
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20160517153611.2a3b4199 at free-electrons.com: 
+
+>>          arm |                      vlc-2.2.3 | NOK |
+>>          http://autobuild.buildroot.net/results/1a7893c13f6144e0ecd9f37f
+>>          2f047c596ccedd35/ 
 > 
-> I have just rebuilt and deployed all the pre-built Buildroot external
-> toolchains used on the autobuilders with Buildroot 2016.05-rc1. Most
-> notably, this should fix numerous build failures of the 'mpv' package,
-> which are due to missing support for XSI math in uClibc (it has been
-> enabled in the uClibc configuration recently).
+> ld: cannot find -lGL
 > 
-Hi, http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv needs an update
-e.g. the line http://autobuild.buildroot.org/toolchains/configs/br-sparc-glibc.config
-that file gives a 404
-that breaks my autobuild task
+> Bernd?
+
+should be fixed by http://patchwork.ozlabs.org/patch/623236/
+
+VLC has no switch for detecting OpenGL support and searches only for gl.pc
+
+http://git.videolan.org/?p=vlc/vlc-2.2.git;a=blob;f=configure.ac;h=e021546e
+284d7daefdb4d94f430eb0bc57722210;hb=HEAD#l3079
+
+which needs to be removed by the mesa3d package when OpenGL is not
+available. 
+
+Regards, Bernd
