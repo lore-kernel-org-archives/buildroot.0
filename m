@@ -1,67 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 May 2016 23:05:30 +0200
-Subject: [Buildroot] [git commit] weston: add support for X11 backend
-Message-ID: <20160601161311.37127802A0@busybox.osuosl.org>
+Date: Tue, 17 May 2016 22:26:18 +0200
+Subject: [Buildroot] [git commit] fmlib: bump to SDK 1.8
+Message-ID: <20160601161308.7A319802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6af110aaba55f7b1fb9b746e4852649d3571f20
+commit: https://git.buildroot.net/buildroot/commit/?id=01f7a01420a2234386a626aa4b6fc736995ecd7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/weston/Config.in | 10 ++++++++++
- package/weston/weston.mk | 10 +++++++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
+ package/fmlib/fmlib.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 8cefa41..44f954a 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -82,4 +82,14 @@ config BR2_PACKAGE_WESTON_RPI
- 	depends on BR2_PACKAGE_RPI_USERLAND
- 	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
+index 978810b..6b154d0 100644
+--- a/package/fmlib/fmlib.mk
++++ b/package/fmlib/fmlib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_WESTON_X11
-+	bool "X11 compositor"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBXCB
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
-+
-+comment "X11 compositor needs X.org enabled"
-+	depends on !BR2_PACKAGE_XORG7
-+
- endif
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 63c43a3..3a0189f 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -19,7 +19,6 @@ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
- WESTON_CONF_OPTS = \
- 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
- 	--disable-xwayland \
--	--disable-x11-compositor \
- 	--disable-wayland-compositor \
- 	--disable-headless-compositor \
- 	--disable-colord \
-@@ -103,6 +102,15 @@ else
- WESTON_CONF_OPTS += --disable-rpi-compositor
- endif # BR2_PACKAGE_WESTON_RPI
- 
-+ifeq ($(BR2_PACKAGE_WESTON_X11),y)
-+WESTON_CONF_OPTS += \
-+	--enable-x11-compositor \
-+	WESTON_NATIVE_BACKEND=x11-backend.so
-+WESTON_DEPENDENCIES += libxcb xlib_libX11
-+else
-+WESTON_CONF_OPTS += --disable-x11-compositor
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBVA),y)
- WESTON_CONF_OPTS += --enable-vaapi-recorder
- WESTON_DEPENDENIES += libva
+-FMLIB_VERSION = fsl-sdk-v1.5-rc3
++FMLIB_VERSION = fsl-sdk-v1.8
+ FMLIB_SITE = git://git.freescale.com/ppc/sdk/fmlib.git
+ FMLIB_LICENSE = BSD-3c, GPLv2+
+ FMLIB_LICENSE_FILES = COPYING
