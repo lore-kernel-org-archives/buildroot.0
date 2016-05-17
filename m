@@ -1,51 +1,201 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 May 2016 08:44:30 +0200
-Subject: [Buildroot] [PATCH 2/9] glibc: disable build of glibc 2.22 with
-	gcc 6.x
-In-Reply-To: <1463436782-17051-3-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 17 May 2016 00:12:55 +0200")
-References: <1463436782-17051-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1463436782-17051-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87bn45dvzl.fsf@dell.be.48ers.dk>
+Date: Tue, 17 May 2016 08:42:56 +0200
+Subject: [Buildroot] [git commit] gcc: fix build of gcc 6.x on Microblaze
+Message-ID: <20160517064458.CDC4580069@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7540fe0c50715eb1e9706f59c8bc733f8bc92ed7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > glibc-2.22 does not build with gcc 6.x. The first issues can be fixed
- > by:
+Due to patch 840-microblaze-enable-dwarf-eh-support.patch, gcc 6.x
+does not build:
 
- >  - Using the same 0004-gcc6.patch as we're using with glibc 2.23 since
- >    Buildroot commit ab8de336eb39ae1cb019a72be65bd0504c86e527.
+../../gcc/config/microblaze/microblaze.c: In function 'void microblaze_expand_epilogue()':
+../../gcc/config/microblaze/microblaze.c:3046: error: 'gen_rtx_raw_REG' was not declared in this scope
 
- >  - Backport glibc commit 5542236837c5c41435f8282ec92799f480c36f18 to fix
- >    strchr() build failure.
+This patch was originally added to gcc 4.9 to make it capable of
+building glibc. However, this is no longer needed with gcc 6.x, which
+builds glibc just fine.
 
- > But then, there are some more failures caused by the fact that numerous
- > glibc files were not using modern prototypes in the function
- > definitions, causing build failures such as:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../840-microblaze-enable-dwarf-eh-support.patch   | 166 ---------------------
+ 1 file changed, 166 deletions(-)
 
- > ../sysdeps/unix/sysv/linux/dl-openat64.c:26:1: error: 'openat64' defined as variadic function without prototype [-Werror]
- >  openat64 (dfd, file, oflag)
- >  ^~~~~~~~
- > In file included from ../include/fcntl.h:2:0,
- >                  from ../sysdeps/unix/sysv/linux/dl-openat64.c:21:
- > ../io/fcntl.h:214:12: note: previous declaration of 'openat64' was here
- >  extern int openat64 (int __fd, const char *__file, int __oflag, ...)
- >             ^~~~~~~~
-
- > This could be fixed by backporting glibc commit
- > 9dd346ff431fc761f1b748bd4da8bb59f7652094, but this is a large commit,
- > touching a significant number of files. We probably don't want to take
- > this path, and instead making glibc 2.22 as not available with gcc 6.x
- > seems like the right course of action.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gcc/6.1.0/840-microblaze-enable-dwarf-eh-support.patch b/package/gcc/6.1.0/840-microblaze-enable-dwarf-eh-support.patch
+deleted file mode 100644
+index 81bf60a..0000000
+--- a/package/gcc/6.1.0/840-microblaze-enable-dwarf-eh-support.patch
++++ /dev/null
+@@ -1,166 +0,0 @@
+-Fetched from Xilinx gcc git at https://github.com/Xilinx/gcc
+-
+-From 23c35173490ac2d6348a668dfc9c1a6eb62171f2 Mon Sep 17 00:00:00 2001
+-From: "Edgar E. Iglesias" <edgar.iglesias@gmail.com>
+-Date: Mon, 18 Jun 2012 20:18:13 +0200
+-Subject: [PATCH] [Patch, microblaze]: Enable DWARF exception handling support.
+-
+-Changelog
+-
+-2013-03-18  Edgar E. Iglesias <edgar.iglesias@xilinx.com>
+-            David Holsgrove <david.holsgrove@xilinx.com>
+-
+- * common/config/microblaze/microblaze-common.c: Remove
+-   TARGET_EXCEPT_UNWIND_INFO definition.
+- * config/microblaze/microblaze-protos.h: Add
+-   microblaze_eh_return prototype.
+- * gcc/config/microblaze/microblaze.c: (microblaze_must_save_register,
+-   microblaze_expand_epilogue, microblaze_return_addr): Handle
+-   calls_eh_return
+-   (microblaze_eh_return): New function.
+- * gcc/config/microblaze/microblaze.h: Define RETURN_ADDR_OFFSET,
+-   EH_RETURN_DATA_REGNO, MB_EH_STACKADJ_REGNUM, EH_RETURN_STACKADJ_RTX,
+-   ASM_PREFERRED_EH_DATA_FORMAT
+- * gcc/config/microblaze/microblaze.md: Define eh_return pattern.
+-
+-Signed-off-by: David Holsgrove <david.holsgrove@xilinx.com>
+-Signed-off-by: Edgar E. Iglesias <edgar.iglesias@gmail.com>
+----
+- gcc/common/config/microblaze/microblaze-common.c |  3 ---
+- gcc/config/microblaze/microblaze-protos.h        |  1 +
+- gcc/config/microblaze/microblaze.c               | 29 ++++++++++++++++++++----
+- gcc/config/microblaze/microblaze.h               | 15 ++++++++++++
+- gcc/config/microblaze/microblaze.md              | 11 +++++++++
+- 5 files changed, 52 insertions(+), 7 deletions(-)
+-
+-Index: b/gcc/common/config/microblaze/microblaze-common.c
+-===================================================================
+---- a/gcc/common/config/microblaze/microblaze-common.c
+-+++ b/gcc/common/config/microblaze/microblaze-common.c
+-@@ -37,7 +37,4 @@
+- #undef  TARGET_OPTION_OPTIMIZATION_TABLE
+- #define TARGET_OPTION_OPTIMIZATION_TABLE microblaze_option_optimization_table
+- 
+--#undef TARGET_EXCEPT_UNWIND_INFO
+--#define TARGET_EXCEPT_UNWIND_INFO  sjlj_except_unwind_info
+--
+- struct gcc_targetm_common targetm_common = TARGETM_COMMON_INITIALIZER;
+-Index: b/gcc/config/microblaze/microblaze-protos.h
+-===================================================================
+---- a/gcc/config/microblaze/microblaze-protos.h
+-+++ b/gcc/config/microblaze/microblaze-protos.h
+-@@ -57,6 +57,7 @@
+- extern int symbol_mentioned_p (rtx);
+- extern int label_mentioned_p (rtx);
+- extern bool microblaze_cannot_force_const_mem (machine_mode, rtx);
+-+extern void microblaze_eh_return (rtx op0);
+- #endif  /* RTX_CODE */
+- 
+- /* Declare functions in microblaze-c.c.  */
+-Index: b/gcc/config/microblaze/microblaze.c
+-===================================================================
+---- a/gcc/config/microblaze/microblaze.c
+-+++ b/gcc/config/microblaze/microblaze.c
+-@@ -1924,6 +1924,11 @@
+-   if (frame_pointer_needed && (regno == HARD_FRAME_POINTER_REGNUM))
+-     return 1;
+- 
+-+  if (crtl->calls_eh_return
+-+      && regno == MB_ABI_SUB_RETURN_ADDR_REGNUM) {
+-+    return 1;
+-+  }
+-+
+-   if (!crtl->is_leaf)
+-     {
+-       if (regno == MB_ABI_SUB_RETURN_ADDR_REGNUM)
+-@@ -1951,6 +1956,13 @@
+- 	return 1;
+-     }
+- 
+-+  if (crtl->calls_eh_return
+-+      && (regno == EH_RETURN_DATA_REGNO (0)
+-+          || regno == EH_RETURN_DATA_REGNO (1)))
+-+    {
+-+      return 1;
+-+    }
+-+
+-   return 0;
+- }
+- 
+-@@ -3027,6 +3039,12 @@
+-       emit_insn (gen_addsi3 (stack_pointer_rtx, stack_pointer_rtx, fsiz_rtx));
+-     }
+- 
+-+  if (crtl->calls_eh_return)
+-+    emit_insn (gen_addsi3 (stack_pointer_rtx,
+-+                           stack_pointer_rtx,
+-+                           gen_rtx_raw_REG (SImode,
+-+                                            MB_EH_STACKADJ_REGNUM)));
+-+
+-   emit_jump_insn (gen_return_internal (gen_rtx_REG (Pmode, GP_REG_FIRST +
+- 						    MB_ABI_SUB_RETURN_ADDR_REGNUM)));
+- }
+-@@ -3324,10 +3342,13 @@
+-   if (count != 0)
+-     return NULL_RTX;
+- 
+--  return gen_rtx_PLUS (Pmode,
+--		       get_hard_reg_initial_val (Pmode,
+--						 MB_ABI_SUB_RETURN_ADDR_REGNUM),
+--		       GEN_INT (8));
+-+  return get_hard_reg_initial_val (Pmode,
+-+                                   MB_ABI_SUB_RETURN_ADDR_REGNUM);
+-+}
+-+
+-+void microblaze_eh_return (rtx op0)
+-+{
+-+  emit_insn (gen_movsi(gen_rtx_MEM(Pmode, stack_pointer_rtx), op0));
+- }
+- 
+- /* Queue an .ident string in the queue of top-level asm statements.
+-Index: b/gcc/config/microblaze/microblaze.h
+-===================================================================
+---- a/gcc/config/microblaze/microblaze.h
+-+++ b/gcc/config/microblaze/microblaze.h
+-@@ -184,6 +184,21 @@
+- #define INCOMING_RETURN_ADDR_RTX  			\
+-   gen_rtx_REG (VOIDmode, GP_REG_FIRST + MB_ABI_SUB_RETURN_ADDR_REGNUM)
+- 
+-+/* Specifies the offset from INCOMING_RETURN_ADDR_RTX and the actual return PC.  */
+-+#define RETURN_ADDR_OFFSET (8)
+-+
+-+/* Describe how we implement __builtin_eh_return.  */
+-+#define EH_RETURN_DATA_REGNO(N) (((N) < 2) ? MB_ABI_FIRST_ARG_REGNUM + (N) : INVALID_REGNUM)
+-+
+-+#define MB_EH_STACKADJ_REGNUM  MB_ABI_INT_RETURN_VAL2_REGNUM
+-+#define EH_RETURN_STACKADJ_RTX  gen_rtx_REG (Pmode, MB_EH_STACKADJ_REGNUM)
+-+
+-+/* Select a format to encode pointers in exception handling data.  CODE
+-+   is 0 for data, 1 for code labels, 2 for function pointers.  GLOBAL is
+-+   true if the symbol may be affected by dynamic relocations.  */
+-+#define ASM_PREFERRED_EH_DATA_FORMAT(CODE,GLOBAL) \
+-+  ((flag_pic || GLOBAL) ? DW_EH_PE_aligned : DW_EH_PE_absptr)
+-+
+- /* Use DWARF 2 debugging information by default.  */
+- #define DWARF2_DEBUGGING_INFO
+- #define PREFERRED_DEBUGGING_TYPE DWARF2_DEBUG
+-Index: b/gcc/config/microblaze/microblaze.md
+-===================================================================
+---- a/gcc/config/microblaze/microblaze.md
+-+++ b/gcc/config/microblaze/microblaze.md
+-@@ -2324,4 +2324,15 @@
+-   (set_attr "mode"      "SI")
+-   (set_attr "length"    "4")])
+- 
+-+; This is used in compiling the unwind routines.
+-+(define_expand "eh_return"
+-+  [(use (match_operand 0 "general_operand" ""))]
+-+  ""
+-+  "
+-+{
+-+  microblaze_eh_return(operands[0]);
+-+  DONE;
+-+}")
+-+
+- (include "sync.md")
+-+
