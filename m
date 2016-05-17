@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 22:28:15 +0200
-Subject: [Buildroot] [PATCH v2] package/gcc: 4.8.x to 5.x: backport a
- fix for building gcc with gcc-6
-In-Reply-To: <1463371428-5117-1-git-send-email-s.martin49@gmail.com>
-References: <1463371428-5117-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20160517222815.7e539789@free-electrons.com>
+Date: Tue, 17 May 2016 22:31:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/igmpproxy: fix musl build
+In-Reply-To: <1463348471-30704-1-git-send-email-matt@thewebers.ws>
+References: <1463348471-30704-1-git-send-email-matt@thewebers.ws>
+Message-ID: <20160517223147.40e5fcb8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +12,48 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 16 May 2016 06:03:48 +0200, Samuel Martin wrote:
-> When the host system compiler is gcc-6, this patch is needed to build
-> Buildroot toolchain and cleanly apply on gcc version 4.8.x to 5.x (not
-> needed for 4.7.x series).
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v1->v2:
-> - rename patches {ThomasP)
-> ---
->  package/gcc/4.8.5/130-fix_build_with_gcc-6.patch   | 153 +++++++++++++++++++++
->  package/gcc/4.9.3/130-fix_build_with_gcc-6.patch   | 153 +++++++++++++++++++++
->  package/gcc/5.3.0/130-fix_build_with_gcc-6.patch   | 153 +++++++++++++++++++++
->  .../gcc/arc-2015.12/130-fix_build_with_gcc-6.patch | 153 +++++++++++++++++++++
->  4 files changed, 612 insertions(+)
->  create mode 100644 package/gcc/4.8.5/130-fix_build_with_gcc-6.patch
->  create mode 100644 package/gcc/4.9.3/130-fix_build_with_gcc-6.patch
->  create mode 100644 package/gcc/5.3.0/130-fix_build_with_gcc-6.patch
->  create mode 100644 package/gcc/arc-2015.12/130-fix_build_with_gcc-6.patch
+On Sun, 15 May 2016 16:41:11 -0500, Matt Weber wrote:
 
-Applied to next, thanks.
+> diff --git a/package/igmpproxy/0002-Use-standard-unsigned-integer-types.patch b/package/igmpproxy/0002-Use-standard-unsigned-integer-types.patch
+> new file mode 100644
+> index 0000000..200bf23
+> --- /dev/null
+> +++ b/package/igmpproxy/0002-Use-standard-unsigned-integer-types.patch
+> @@ -0,0 +1,213 @@
+> +Fix musl build
+> +
+> +Downloaded from:
+> +https://github.com/alpinelinux/aports/blob/master/main/igmpproxy/0001-Use-standard-unsigned-integer-types.patch
+> +
+> +Patch was reported upstream:
+> +http://sourceforge.net/p/igmpproxy/bugs/22/
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+This should be below the commit log of the original patch, and the "Fix
+musl build" is not good. We don't care about "Fixing the musl build",
+we want to make the source code better, which has the consequence of
+fixing the musl build. So the original patch title "Use standard
+unsigned integer types" is good.
+
+> +From ed3dff27f360239910310be6706fd54572398992 Mon Sep 17 00:00:00 2001
+> +From: Natanael Copa <ncopa@alpinelinux.org>
+> +Date: Mon, 3 Mar 2014 12:11:26 +0000
+> +Subject: [PATCH] Use standard unsigned integer types
+> +
+> +Use the stanard unsigned integer types instead of the non-standard
+> +u_char, u_short and u_int.
+> +
+> +This fixes build with musl libc.
+> +
+> +(cherry picked from commit b914bcf882c6189be7a0ce6fceb34422372c3606)
+
+From where is this commit b914bcf882c6189be7a0ce6fceb34422372c3606
+coming? Upstream seems to be https://github.com/pali/igmpproxy, and I
+don't see any commit identified as
+b914bcf882c6189be7a0ce6fceb34422372c3606.
+
+Thanks,
 
 Thomas
 -- 
