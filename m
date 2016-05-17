@@ -1,38 +1,73 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 17 May 2016 18:32:44 +0200
-Subject: [Buildroot] kodi 16 on aarch64
-References: <trinity-8cc2631d-885d-437a-aec1-a88667084c0c-1463257448483@3capp-mailcom-bs05>
- <XnsA60AC45F57D8AberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20160516215001.330f6437@free-electrons.com>
-Message-ID: <XnsA60BBCA81C503ID313208userindividu@bernd-kuhls.de>
+Date: Tue, 17 May 2016 19:18:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi: Fix crash in pictureviewer
+	when opening directories with many files
+Message-ID: <1463505490-2864-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+backported upstream commit:
+https://github.com/xbmc/xbmc/commit/f63563615e357b7d794a38e1d37276c325d1466f
 
-Hi Thomas,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...r-out-of-memory-errors-with-large-numbers.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/kodi/0007-exif-Fix-for-out-of-memory-errors-with-large-numbers.patch
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote 
-in news:20160516215001.330f6437 at free-electrons.com:
-
-> Hello,
-> 
-> On Mon, 16 May 2016 19:18:16 +0200, Bernd Kuhls wrote:
-> 
->> You can also try my buildroot fork with Kodi 17 patches:
->> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/148325
-> 
-> BTW, the next branch is opened, so we can take your Kodi 17 patches.
-
-I doubt you will take them because
-
-- Kodi 17.x depends on ffmpeg3
-- the ffmpeg series contains bumping vlc to git master, vlc 3.0 was not released yet
-- Kodi 17.0 is also not released, git master is at alpha2 atm
-
-My github stuff is only a RFC, as usual ;)
-
-Regards, Bernd
+diff --git a/package/kodi/0007-exif-Fix-for-out-of-memory-errors-with-large-numbers.patch b/package/kodi/0007-exif-Fix-for-out-of-memory-errors-with-large-numbers.patch
+new file mode 100644
+index 0000000..9b0e47d
+--- /dev/null
++++ b/package/kodi/0007-exif-Fix-for-out-of-memory-errors-with-large-numbers.patch
+@@ -0,0 +1,45 @@
++From f63563615e357b7d794a38e1d37276c325d1466f Mon Sep 17 00:00:00 2001
++From: popcornmix <popcornmix@gmail.com>
++Date: Sat, 7 May 2016 13:47:42 +0100
++Subject: [PATCH] [exif] Fix for out-of-memory errors with large numbers
++ of jpegs
++
++This reverts part of https://github.com/xbmc/xbmc/pull/7472
++
++Basically the commit made the 4 comments in the exif block increase
++from 2K to 64K each, so you now need 256K per photo.
++
++When opening a folder exif information for all photos is extracted.
++So, for a folder of 5000 jpegs, 1.2GB of RAM is needed just for
++the comments.
++
++As a 64K comment string is of no use to kodi, just truncate them to 2K
++like we used to.
++
++See:
++http://trac.kodi.tv/ticket/16193
++http://forum.kodi.tv/showthread.php?tid=251908
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(backported from upstream commit in master branch:
++ https://github.com/xbmc/xbmc/commit/f63563615e357b7d794a38e1d37276c325d1466f)
++---
++ lib/libexif/libexif.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/libexif/libexif.h b/lib/libexif/libexif.h
++index aa8da07..519ac30 100644
++--- a/lib/libexif/libexif.h
+++++ b/lib/libexif/libexif.h
++@@ -81,7 +81,7 @@ typedef struct {
++ #define EXIF_COMMENT_CHARSET_UNICODE    3 // Exif: Unicode (UTF-16)
++ #define EXIF_COMMENT_CHARSET_JIS        4 // Exif: JIS X208-1990
++ 
++-#define MAX_COMMENT 65533 // 2 bytes - 2 for the length param
+++#define MAX_COMMENT 2000
++ #define MAX_DATE_COPIES 10
++ 
++ typedef struct {
++-- 
++2.8.1
++
+-- 
+2.8.1
