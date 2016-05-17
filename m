@@ -1,64 +1,56 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 17 May 2016 16:11:42 -0500
-Subject: [Buildroot] [PATCH 1/4] fmc: add powerpc e6500 support
-In-Reply-To: <20160517211405.6e6584ef@free-electrons.com>
-References: <1463511883-27657-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20160517211405.6e6584ef@free-electrons.com>
-Message-ID: <CANQCQpZ9br=NmCO4tns9SiThfBs-BkeTEMvXOs9Wi+DTDa17AQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 May 2016 23:19:12 +0200
+Subject: [Buildroot] [PATCH v4 0/4] Python: globalize pyc file compilation
+Message-ID: <1463519956-5599-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello,
 
-On Tue, May 17, 2016 at 2:14 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+This patch series contains just the remaining patches of my "Python 3
+bump" patch series. Compared to the v3:
 
-> Hello,
->
-> On Tue, 17 May 2016 14:04:40 -0500, Matt Weber wrote:
->
-> > +ifeq ($(BR2_powerpc64), y)
->
-> Remove the sparc before "y".
->
-> > +     EXTRA_FLAGS = "M64BIT=1"
->
-> EXTRA_FLAGS is not a proper variable name. Remember that the variable
-> namespace is global in Buildroot, to *all* variables should be prefixed
-> by the name of the package they are related to.
->
-> However, in this case, why not just appending to FMC_MAKE_OPTS ?
->
-> Also, your double quotes are not needed.
->
-> > +else
-> > +     EXTRA_FLAGS = ""
->
-> Not needed.
->
-> >  define FMC_BUILD_CMDS
-> >       # The linking step has dependency issues so using MAKE1
-> > -     $(TARGET_MAKE_ENV) $(MAKE1) $(FMC_MAKE_OPTS) -C $(@D)/source
-> > +     $(TARGET_MAKE_ENV) $(MAKE1) $(FMC_MAKE_OPTS) $(call
-> qstrip,$(EXTRA_FLAGS)) -C $(@D)/source
->
-> Change not needed if you append to FMC_MAKE_OPTS.
->
-> So, the only change needed to the .mk file is:
->
-> ifeq ($(BR2_powerpc64),y)
-> FMC_MAKE_OPTS += M64BIT=1
-> endif
->
-> Can you rework this?
->
+ - Drop patches that have been merged.
 
-Will do.
+ - Add a patch suggested by Samuel Martin, that consists in adding the
+   --no-run-if-empty option to xargs to avoid issues.
 
--Matt
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160517/76afcd82/attachment.html>
+ - Instead of adding a patch to python-pyftpdlib to fix a Python 3
+   byte-compilation failure, bump from 1.5.0 to 1.5.1, since 1.5.1 was
+   released by upstream specifically to address the Python 3 issue
+   after we reported the problem.
+
+   Yegor: there is a question for you in this patch: I had to use a
+   different URL than the standard pypi download URL, because the
+   standard one returns a 404. If you could have a look, it would be
+   great.
+
+Review/comments welcome.
+
+Thanks!
+
+Thomas
+
+Thomas Petazzoni (3):
+  python/python3: use --no-run-if-empty xargs option
+  python-pyftpdlib: bump version to 1.5.1, fixing Python 3 issue
+  samba4: remove compilation of .pyc files
+
+Yegor Yefremov (1):
+  python/python3: globalize *.pyc files compilation
+
+ package/pkg-python.mk                          |  2 +-
+ package/python-pyftpdlib/python-pyftpdlib.hash |  6 +++---
+ package/python-pyftpdlib/python-pyftpdlib.mk   |  4 ++--
+ package/python/python.mk                       | 25 ++++++++++++++++++----
+ package/python3/python3.mk                     | 29 +++++++++++++++++++-------
+ package/samba4/samba4.mk                       | 10 ---------
+ support/scripts/pycompile.py                   | 24 +++++++++++++++++++++
+ 7 files changed, 72 insertions(+), 28 deletions(-)
+ create mode 100644 support/scripts/pycompile.py
+
+-- 
+2.7.4
