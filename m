@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 22:49:20 +0200
-Subject: [Buildroot] [PATCH v3 3/9] python: remove *.pyo files
-In-Reply-To: <CAHXCMMKH31WxNPbP_5_TMwxTVa8ykKByvAuxn+5sdeCod_n56Q@mail.gmail.com>
+Date: Tue, 17 May 2016 22:49:24 +0200
+Subject: [Buildroot] [PATCH v3 4/9] python-crossbar: fix
+ byte-compilation of .pyc files
+In-Reply-To: <1462133720-409-5-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1462133720-409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1462133720-409-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAHXCMMKH31WxNPbP_5_TMwxTVa8ykKByvAuxn+5sdeCod_n56Q@mail.gmail.com>
-Message-ID: <20160517224920.39c7fff6@free-electrons.com>
+ <1462133720-409-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160517224924.7d0f7aae@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 1 May 2016 22:45:55 +0200, Samuel Martin wrote:
+On Sun,  1 May 2016 22:15:15 +0200, Thomas Petazzoni wrote:
+> For its continuous integration tests, python-crossbar includes one .py
+> file that intentionally has a syntax error. Until now, this wasn't
+> causing any problem, but with the introduction of a Python
+> byte-compilation process that errors out when there is a failure, it
+> is going to become a problem.
+> 
+> We simply add a patch that removes the syntax error, as we don't care
+> about it in the context of Buildroot. The problem has been reported
+> upstream to see if a better fix is possible.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  .../0001-Avoid-intentional-syntax-error.patch      | 29 ++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+>  create mode 100644 package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
 
-> > +# In all cases, we don't want to keep the optimized .pyo files
-> > +ifeq ($(BR2_PACKAGE_PYTHON),y)
-> > +define PYTHON_REMOVE_PYO_FILES
-> > +       find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyo' -print0 | xargs -0 rm -f  
-> I think xargs should be called with the --no-run-if-empty option.
-
-Thanks for the hint, I've fixed this patch to add the
---no-run-if-empty. Other occurrences will have to be fixed separately.
-
-Patch applied to next with your suggested change.
+Applied to next, thanks.
 
 Thomas
 -- 
