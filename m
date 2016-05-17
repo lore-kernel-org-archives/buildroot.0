@@ -1,45 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 15:12:17 +0200
-Subject: [Buildroot] New pre-built Buildroot toolchains in the autobuilder
-Message-ID: <20160517151217.045c17c4@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 May 2016 15:21:19 +0200
+Subject: [Buildroot] [PATCH v2] package/jack2: fix build WRT backtrace
+	support
+In-Reply-To: <1463458206-3829-1-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Tue, 17 May 2016 06:10:06 +0200")
+References: <1463458206-3829-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <871t50ddm8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-I have just rebuilt and deployed all the pre-built Buildroot external
-toolchains used on the autobuilders with Buildroot 2016.05-rc1. Most
-notably, this should fix numerous build failures of the 'mpv' package,
-which are due to missing support for XSI math in uClibc (it has been
-enabled in the uClibc configuration recently).
+ > This change adds a patch checking for the presence of execinfo.h header
+ > and enabling the backtrace support depending on the check result.
 
-The other changes are:
+ > Fixes:
+ >   http://autobuild.buildroot.org/results/415/415e2100dc59d35e58646c07f7cdccabecdda966/
+ >   http://autobuild.buildroot.org/results/43c/43ca1b103434ae582fdf93cb5912b311960f303b/
+ >   http://autobuild.buildroot.org/results/391/391e71a988250ea66ec4dbee6f60fdce9eaf2766/
+ >   ...
 
- - br-arm-basic, br-arm-cortex-a9-glibc, br-arm-cortex-a9-musl,
-   br-arm-full-nothread, br-mips32r6-el-hf-glibc, br-mips64-n64-full,
-   br-mips64r6-el-hf-glibc, br-mipsel-o32-full, br-nios2-glibc,
-   br-powerpc-603e-basic-cpp, br-powerpc-e500mc-full, br-sh4-full,
-   br-x86-64-musl, br-xtensa-full now use 4.5 kernel headers instead
-   of 4.4 kernel headers
+ > Adapted from the PR:
+ >   https://github.com/jackaudio/jack2/pull/206
 
- - br-arm-full now uses gcc 4.8 instead of gcc 4.7
+ > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
- - br-sparc-glibc has been removed, in favor of br-sparc-uclibc. The
-   reasoning is that uClibc is now the default C library chosen for
-   the Sparc architecture in Buildroot. br-sparc-uclibc uses uClibc,
-   3.14 kernel headers (i.e intentionally not the latest), gcc 4.9.
+ > ---
+ > changes v1->v2:
+ > - update commit log + add SoB line of the patch (Baruch)
 
-I have not yet added configurations for ARM noMMU and m68k, as I'm
-waiting for 2016.05 to be released to start getting build failures for
-those architectures.
+Committed, thanks.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
