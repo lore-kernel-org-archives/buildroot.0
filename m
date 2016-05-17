@@ -1,69 +1,37 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Tue, 17 May 2016 13:07:13 +0200
-Subject: [Buildroot] QtMultimedia and gstreamer-1.0
-In-Reply-To: <20160517125824.203d2759@gmx.net>
-References: <5738116B.9050904@gmail.com> <20160515100303.003752e2@gmx.net>
- <5738333D.8010707@gmail.com> <20160515140511.5973b7ce@gmx.net>
- <57386743.1030708@gmail.com> <20160516221806.0df441c0@gmx.net>
- <573A2BF3.1080701@gmail.com> <573A36BC.90807@gmail.com>
- <20160517125824.203d2759@gmx.net>
-Message-ID: <CACuFa1b+foMXJB36Z+M6xQTWfmdjVt8bwxeAarkOG3qhuzJL2g@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 17 May 2016 13:09:08 +0200
+Subject: [Buildroot] [PATCH v1] qt5multimedia: select Qt5OpenGL module in
+	case OpenGL support is enabled
+Message-ID: <1463483348-8157-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes, it works. Anyway I didn't find that requisite in the QtMultimedia docs
+Qt5Multimedia needs Qt5OpenGL module in case OpenGL support is
+enabled.
 
-Best regards
-Marco
-Il 17/Mag/2016 12:58, "Peter Seiderer" <ps.report@gmx.net> ha scritto:
+Fixes bug reported by Marco Trapanese ([1]).
 
-> Hello Marco,
->
-> On Mon, 16 May 2016 23:08:12 +0200, Marco Trapanese <
-> marcotrapanese at gmail.com> wrote:
->
-> > Il 16/05/2016 22:22, Marco Trapanese ha scritto:
-> > > I will try to ldd files under /usr/lib/qt/plugins/
-> >
-> >
-> > I attach to this email the output for:
-> >
-> > ldd libgstmediaplayer.so
-> >
-> > please, how to read the results?
-> > Two questions:
-> >
-> > 1) "checking sub-depends for '/blabla.so' " means it found the
-> > sub-depends, doesn't it?
-> >
-> > 2) what does "checking sub-depends for 'not found'" mean???
-> >
-> > It doesn't found libQt5OpenGL:
-> >
-> > > libQt5OpenGL.so.5 => not found (0x00000000)
-> >
-> > I guess due to the missing of "opengl" module.
-> > I'm rebuilding Qt5... let's see if it fixes.
-> >
->
-> Enabling 'BR2_PACKAGE_QT5BASE_OPENGL_LIB=y' and doing
->
->         $ rm build/qt5base-5.6.0/.stamp_staging_installed
->         $ rm build/qt5base-5.6.0/.stamp_target_installed
->         $ make
->
-> (and copy the new image to sd card, or copy only the missing
-> libQt5OpenGL.so.5)
-> should do the trick...
->
-> Patch for qt5multimedia follows....
->
-> Regards,
-> Peter
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160517/fdc4fa54/attachment.html>
+[1] http://lists.busybox.net/pipermail/buildroot/2016-May/161288.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qt5/qt5multimedia/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/qt5/qt5multimedia/Config.in b/package/qt5/qt5multimedia/Config.in
+index 59c3984..7549b35 100644
+--- a/package/qt5/qt5multimedia/Config.in
++++ b/package/qt5/qt5multimedia/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_QT5MULTIMEDIA
+ 	select BR2_PACKAGE_QT5BASE
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_NETWORK
++	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5BASE_OPENGL
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
+-- 
+2.8.1
