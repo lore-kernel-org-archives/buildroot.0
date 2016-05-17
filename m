@@ -1,57 +1,81 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 17 May 2016 09:51:57 +0200
-Subject: [Buildroot] [PATCH 1/2] python-flask-jsonrpc: new package
-In-Reply-To: <e98205ca-9b8e-d464-5566-a208d158f086@armadeus.com>
-References: <1462975669-18032-1-git-send-email-sebastien.szymanski@armadeus.com>
- <20160513223526.50f5264d@free-electrons.com>
- <e98205ca-9b8e-d464-5566-a208d158f086@armadeus.com>
-Message-ID: <CAGm1_kvU9wdLV-xJw8F=VVXnh_wLwdfws0usdCUXCew9yfxm8A@mail.gmail.com>
+From: Olivier Schonken <olivier.schonken@gmail.com>
+Date: Tue, 17 May 2016 10:47:56 +0200
+Subject: [Buildroot] [PATCH 3/4] cups: fix static linking problem
+In-Reply-To: <1463235434-31134-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1463235434-31134-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1463235434-31134-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CALdGskLAUYXKTz-4tZt69u5zGiH6yXpXo1K4auEnwAu6t1weyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 17, 2016 at 9:35 AM, S?bastien Szymanski
-<sebastien.szymanski@armadeus.com> wrote:
-> Hello,
+Hi Thomas
+
+Thanks for fixing this issue.  I had unfortunately parked it to focus on
+more pressing issues.
+
+The patch looks good, and fixes the build error.
+
+Regards
+
+Olivier
+
+On 14 May 2016 at 16:17, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> In static linking configurations, cups fails to build due to the lack of
+> Scrt1.o from uClibc toolchains. This Scrt1.o is only needed for PIE
+> binaries. Since we don't really care about PIE binaries in the context
+> of Buildroot, this commit solves the problem by patching cups to not
+> generate a PIE binary.
 >
-> On 05/13/2016 10:35 PM, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Wed, 11 May 2016 16:07:48 +0200, S?bastien Szymanski wrote:
->>> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
->>> ---
->>>  package/Config.in                                      |  1 +
->>>  package/python-flask-jsonrpc/Config.in                 |  7 +++++++
->>>  package/python-flask-jsonrpc/python-flask-jsonrpc.hash |  3 +++
->>>  package/python-flask-jsonrpc/python-flask-jsonrpc.mk   | 14 ++++++++++++++
->>>  4 files changed, 25 insertions(+)
->>>  create mode 100644 package/python-flask-jsonrpc/Config.in
->>>  create mode 100644 package/python-flask-jsonrpc/python-flask-jsonrpc.hash
->>>  create mode 100644 package/python-flask-jsonrpc/python-flask-jsonrpc.mk
->>
->> I've applied to next, after doing the following changes:
->>
->>     [Thomas:
->>      - make python-flask a runtime dependency only, as noticed by Yegor
->>        Yefremov.
->>      - use setup.py as the license file.]
->>
->> Thanks for the contribution, and thanks Yegor for the review!
->>
->> Thomas
->>
+> Fixes:
 >
-> FYI, I've sent an e-mail to the maintainer, as suggested by Yegor, but
-> he didn't answer me.
-> Anyway, thank you !
-
-Perhaps it were better to create an issue on GitHub instead of
-contacting the maintainer directly, but let's just wait a week and
-see, what happens.
-
-Btw. a new version was already released 0.3.1 :-) License file isn't
-in the release archive :-(
-
-Yegor
+>
+> http://autobuild.buildroot.net/results/445a401da2f63a6c43d7c166516287db6cc977ab/
+>
+> Cc: Olivier Schonken <olivier.schonken@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/cups/0004-remove-pie.patch | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>  create mode 100644 package/cups/0004-remove-pie.patch
+>
+> diff --git a/package/cups/0004-remove-pie.patch
+> b/package/cups/0004-remove-pie.patch
+> new file mode 100644
+> index 0000000..3d81941
+> --- /dev/null
+> +++ b/package/cups/0004-remove-pie.patch
+> @@ -0,0 +1,21 @@
+> +Remove PIE flags from the build
+> +
+> +Generating a statically linked binary built with PIE requires the
+> +Scrt1.o file, which isn't part of Buildroot uClibc toolchains. To
+> +solve this, we simply disable the PIE flags.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +
+> +Index: b/Makedefs.in
+> +===================================================================
+> +--- a/Makedefs.in
+> ++++ b/Makedefs.in
+> +@@ -142,7 +142,7 @@
+> + IPPFIND_MAN   =       @IPPFIND_MAN@
+> + LDFLAGS               =       -L../cgi-bin -L../cups -L../filter
+> -L../ppdc \
+> +                       -L../scheduler @LDARCHFLAGS@ \
+> +-                      @LDFLAGS@ @RELROFLAGS@ @PIEFLAGS@ $(OPTIM)
+> ++                      @LDFLAGS@ @RELROFLAGS@ $(OPTIM)
+> + LINKCUPS      =       @LINKCUPS@ $(LIBGSSAPI) $(DNSSDLIBS) $(LIBZ)
+> + LINKCUPSIMAGE =       @LINKCUPSIMAGE@
+> + LIBS          =       $(LINKCUPS) $(COMMONLIBS)
+> --
+> 2.7.4
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160517/d6d1fd0b/attachment.html>
