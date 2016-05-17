@@ -1,41 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 23:39:59 +0200
-Subject: [Buildroot] [PATCH 3/3] python-treq: add missing
-	BR2_INSTALL_LIBSTDCPP dependency
-In-Reply-To: <1463521199-13662-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1463521199-13662-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1463521199-13662-3-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 18 May 2016 00:28:07 +0200
+Subject: [Buildroot] [PATCH 7/9] toolchain: remove eglibc support
+In-Reply-To: <1463436782-17051-8-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1463436782-17051-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1463436782-17051-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <85f0bbfe-6fa1-ad89-21b4-88d1b9c7c9c8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python-treq selects python-pyopenssl, which depends on C++ support, but
-this dependency was not propagated to python-treq, causing the following
-kconfig warning:
+On 05/17/16 00:13, Thomas Petazzoni wrote:
+> The eglibc support has been marked deprecated since 2015.08, so it's
+> time to remove it.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-warning: (BR2_PACKAGE_PYTHON_TREQ) selects BR2_PACKAGE_PYTHON_PYOPENSSL which has unmet direct dependencies ((BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3) && BR2_INSTALL_LIBSTDCPP)
+  It's probably a good idea to do a "sed 's/(e)glibc/glibc/' as well. Even 
+though we still have Linaro and possibly custom external toolchains with eglibc, 
+I don't think it makes much sense anymore to make that distinction explicit.
 
-This commit fixes that by adding the appropriate dependency.
+  The glibc.hash file wasn't updated.
 
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-treq/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+  There are also still some references to eglibc in the manual, these should 
+probably be removed.
 
-diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
-index a8590a9..d560ba3 100644
---- a/package/python-treq/Config.in
-+++ b/package/python-treq/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_TREQ
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
- 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
-+	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
- 	help
- 	  treq is an HTTP library inspired by requests but written on
- 	  top of Twisted's Agents.  It provides a simple, higher level
+  Regards,
+  Arnout
+
 -- 
-2.7.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
