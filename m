@@ -1,54 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 17 May 2016 22:48:44 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/vlc: configure.ac does not
-	support --en/--disable-freerdp
-Message-ID: <1463518124-29879-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 May 2016 22:49:20 +0200
+Subject: [Buildroot] [PATCH v3 3/9] python: remove *.pyo files
+In-Reply-To: <CAHXCMMKH31WxNPbP_5_TMwxTVa8ykKByvAuxn+5sdeCod_n56Q@mail.gmail.com>
+References: <1462133720-409-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1462133720-409-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAHXCMMKH31WxNPbP_5_TMwxTVa8ykKByvAuxn+5sdeCod_n56Q@mail.gmail.com>
+Message-ID: <20160517224920.39c7fff6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vlc configure does not allow disabling the optional dependency to
-freerdp:
-http://git.videolan.org/?p=vlc/vlc-2.2.git;a=blob;f=configure.ac;h=e021546e284d7daefdb4d94f430eb0bc57722210;hb=HEAD#l1890
+Hello,
 
-Vlc configure prints a warning that the option --disable-libfreerdp
-is not used:
+On Sun, 1 May 2016 22:45:55 +0200, Samuel Martin wrote:
 
-configure: WARNING: unrecognized options: --disable-gtk-doc,
- --disable-gtk-doc-html, --disable-doc, --disable-docs,
- --disable-documentation, --with-xmlto, --with-fop, --enable-ipv6,
- --disable-libfreerdp
+> > +# In all cases, we don't want to keep the optimized .pyo files
+> > +ifeq ($(BR2_PACKAGE_PYTHON),y)
+> > +define PYTHON_REMOVE_PYO_FILES
+> > +       find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyo' -print0 | xargs -0 rm -f  
+> I think xargs should be called with the --no-run-if-empty option.
 
-This can be seen for example in autobuilder logs:
-http://autobuild.buildroot.net/results/1a7/1a7893c13f6144e0ecd9f37f2f047c596ccedd35/build-end.log
+Thanks for the hint, I've fixed this patch to add the
+--no-run-if-empty. Other occurrences will have to be fixed separately.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: added new line before SoB (Thomas)
-    clarified patch comment (Thomas):
-    - freerdp is an optional dependency
-    - this patch does not fix a build error, the reference to the
-      autobuilder log is only present to show the problem
+Patch applied to next with your suggested change.
 
- package/vlc/vlc.mk | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 30887bd..4dc8dfe 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -137,10 +137,7 @@ VLC_CONF_OPTS += --disable-flac
- endif
- 
- ifeq ($(BR2_PACKAGE_FREERDP),y)
--VLC_CONF_OPTS += --enable-freerdp
- VLC_DEPENDENCIES += freerdp
--else
--VLC_CONF_OPTS += --disable-libfreerdp
- endif
- 
- ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+Thomas
 -- 
-2.8.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
