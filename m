@@ -1,50 +1,17 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 17 May 2016 20:58:36 +0100
-Subject: [Buildroot] [PATCH] Add openmpi package
-Message-ID: <1463515117-26333-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Tue, 17 May 2016 20:58:37 +0100
+Subject: [Buildroot] [PATCH] openmpi: new package
+In-Reply-To: <1463515117-26333-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1463515117-26333-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1463515117-26333-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds openmpi package, but it has one problem that I don't
-know how to fix.
-
-When building it for uClibc it fails to compile showing this error
-message:
-
-/bin/sh ../libtool  --tag=CC   --mode=compile
-/home/ldap/vriera/git-clones/buildroot-1/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
--DHAVE_CONFIG_H -I. -I..   -DINSIDE_OPENMPI
--I/home/ldap/vriera/git-clones/buildroot-1/output/build/openmpi-1.10.2/ompi/include
--I/home/ldap/vriera/git-clones/buildroot-1/output/build/openmpi-1.10.2/ompi/contrib/vt/vt/../../../include
--I/home/ldap/vriera/git-clones/buildroot-1/output/build/openmpi-1.10.2/ompi/contrib/vt/vt/../../../include
--I../include -I../include -I../rfg -DVT_GETCPU   -I../extlib/otf/otflib
--I../extlib/otf/otflib -DVT_PLUGIN_CNTR -DVT_RUSAGE -DVT_MT
--DVT_EXECWRAP  -DVT_IOWRAP -DVT_LIBWRAP  -DVT_PTHREAD -DVT_THRD_PTHREAD
--pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -Os  -c -o libvt_mt_la-vt_execwrap.lo `test -f
-'vt_execwrap.c' || echo './'`vt_execwrap.c
-/tmp/ccY2VE00.s: Assembler messages:
-/tmp/ccY2VE00.s:3670: Error: symbol `open64' is already defined
-/tmp/ccY2VE00.s:4170: Error: symbol `creat64' is already defined
-/tmp/ccY2VE00.s:5275: Error: symbol `lseek64' is already defined
-/tmp/ccY2VE00.s:6859: Error: symbol `pread64' is already defined
-/tmp/ccY2VE00.s:7100: Error: symbol `pwrite64' is already defined
-/tmp/ccY2VE00.s:7605: Error: symbol `fopen64' is already defined
-/tmp/ccY2VE00.s:8809: Error: symbol `fseeko64' is already defined
-/tmp/ccY2VE00.s:9498: Error: symbol `fsetpos64' is already defined
-Makefile:3204: recipe for target 'libvt_la-vt_iowrap.lo' failed
-
-According to this thread [1] it will never compile in 32-bit mode with
-LARGEFILE-support, but for glibc I haven't had any problem.
-
-1: http://www.linuxquestions.org/questions/programming-9/openmpi-1-8-1-compilation-error-4175504854/#post5170760
-
-Vicente Olivert Riera (1):
-  openmpi: new package
-
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
  package/Config.in            |  1 +
  package/openmpi/Config.in    | 27 +++++++++++++++++++++++++++
  package/openmpi/openmpi.hash |  3 +++
@@ -54,5 +21,92 @@ Vicente Olivert Riera (1):
  create mode 100644 package/openmpi/openmpi.hash
  create mode 100644 package/openmpi/openmpi.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 8668612..0056beb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1177,6 +1177,7 @@ menu "Networking"
+ 	source "package/nss-pam-ldapd/Config.in"
+ 	source "package/omniorb/Config.in"
+ 	source "package/openldap/Config.in"
++	source "package/openmpi/Config.in"
+ 	source "package/openpgm/Config.in"
+ 	source "package/ortp/Config.in"
+ 	source "package/qdecoder/Config.in"
+diff --git a/package/openmpi/Config.in b/package/openmpi/Config.in
+new file mode 100644
+index 0000000..0307a62
+--- /dev/null
++++ b/package/openmpi/Config.in
+@@ -0,0 +1,27 @@
++comment "openmpi needs a toolchain w/ dynamic library, NPTL, wchar, C++"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
++		|| !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
++
++config BR2_PACKAGE_OPENMPI
++	bool "openmpi"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	help
++	  A High Performance Message Passing Library.
++
++	  https://www.open-mpi.org/
++
++if BR2_PACKAGE_OPENMPI
++
++config BR2_PACKAGE_OPENMPI_EXTRACONF
++	string "Additional parameters for ./configure"
++	default ""
++	help
++	  Extra parameters that will be appended to openmpi's
++	  ./configure commandline.
++
++endif
+diff --git a/package/openmpi/openmpi.hash b/package/openmpi/openmpi.hash
+new file mode 100644
+index 0000000..92152a2
+--- /dev/null
++++ b/package/openmpi/openmpi.hash
+@@ -0,0 +1,3 @@
++# From: https://www.open-mpi.org/software/ompi/v1.10/
++md5 b2f43d9635d2d52826e5ef9feb97fd4c  openmpi-1.10.2.tar.bz2
++sha1 03934fc0a2dd0d0d2d0459d714a976eabca938fb  openmpi-1.10.2.tar.bz2
+diff --git a/package/openmpi/openmpi.mk b/package/openmpi/openmpi.mk
+new file mode 100644
+index 0000000..33e42a0
+--- /dev/null
++++ b/package/openmpi/openmpi.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# openmpi
++#
++################################################################################
++
++OPENMPI_VERSION_MAJOR = 1.10
++OPENMPI_VERSION = $(OPENMPI_VERSION_MAJOR).2
++OPENMPI_SITE = https://www.open-mpi.org/software/ompi/v$(OPENMPI_VERSION_MAJOR)/downloads
++OPENMPI_SOURCE = openmpi-$(OPENMPI_VERSION).tar.bz2
++OPENMPI_LICENSE = BSD
++OPENMPI_LICENSE_FILES = LICENSE
++OPENMPI_INSTALL_STAGING = YES
++OPENMPI_PATCH = https://github.com/vriera/ompi-release/commit/56a27e5dce8fc78941f26ccb0e688f331fb0641e.patch
++
++# Disable fortran if the fortran compiler doesn't actually exist.
++ifeq ($(wildcard $(TARGET_FC)),)
++OPENMPI_CONF_OPTS += --enable-mpi-fortran=no
++else
++OPENMPI_CONF_OPTS += --enable-mpi-fortran=yes
++endif
++
++# The amount of configure options in openmpi is huge. Let the user to have the
++# posibility to pass the desired options in BR2_PACKAGE_OPENMPI_EXTRACONF.
++OPENMPI_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_OPENMPI_EXTRACONF))
++
++$(eval $(autotools-package))
 -- 
 2.7.3
