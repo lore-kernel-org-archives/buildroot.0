@@ -1,41 +1,66 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Tue, 31 May 2016 18:47:31 -0400
-Subject: [Buildroot] [PATCH] libconfuse: bump to version 3.0
-Message-ID: <1464734851-9627-1-git-send-email-fhunleth@troodon-software.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 May 2016 22:48:10 +0200
+Subject: [Buildroot] [git commit] python-crossbar: fix byte-compilation of
+	.pyc files
+Message-ID: <20160601161308.D9181802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/libconfuse/libconfuse.hash | 5 +++--
- package/libconfuse/libconfuse.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=c1ff2b7faa52c3ce23c4735d221da49a15188e9d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/libconfuse/libconfuse.hash b/package/libconfuse/libconfuse.hash
-index 3e221d2..ec485a1 100644
---- a/package/libconfuse/libconfuse.hash
-+++ b/package/libconfuse/libconfuse.hash
-@@ -1,2 +1,3 @@
--# From https://github.com/martinh/libconfuse/releases/download/v2.8/confuse-2.8.tar.xz.md5
--md5  cb552c5737a72ef164733f0118971eb0  confuse-2.8.tar.xz
-+# From https://github.com/martinh/libconfuse/releases/download/v3.0/confuse-3.0.tar.xz.md5, sha256 locally computed.
-+md5  c534b51a2118ed57031dc548032304a3  confuse-3.0.tar.xz
-+sha256  bb75174e02aa8b44fa1a872a47beeea1f5fe715ab669694c97803eb6127cc861  confuse-3.0.tar.xz
-diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
-index 1a01896..089e12c 100644
---- a/package/libconfuse/libconfuse.mk
-+++ b/package/libconfuse/libconfuse.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCONFUSE_VERSION = 2.8
-+LIBCONFUSE_VERSION = 3.0
- LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.xz
- LIBCONFUSE_SITE = https://github.com/martinh/libconfuse/releases/download/v$(LIBCONFUSE_VERSION)
- LIBCONFUSE_INSTALL_STAGING = YES
--- 
-2.5.0
+For its continuous integration tests, python-crossbar includes one .py
+file that intentionally has a syntax error. Until now, this wasn't
+causing any problem, but with the introduction of a Python
+byte-compilation process that errors out when there is a failure, it
+is going to become a problem.
+
+We simply add a patch that removes the syntax error, as we don't care
+about it in the context of Buildroot. The problem has been reported
+upstream to see if a better fix is possible.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-Avoid-intentional-syntax-error.patch      | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch b/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
+new file mode 100644
+index 0000000..fb8e4a2
+--- /dev/null
++++ b/package/python-crossbar/0001-Avoid-intentional-syntax-error.patch
+@@ -0,0 +1,29 @@
++From 9ab2b96c2ee679c6dcb387174be211db5d70fa97 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 1 May 2016 15:35:32 +0200
++Subject: [PATCH] Avoid intentional syntax error
++
++This file has an intentional syntax error, meant to validate QA, but
++it breaks byte compilation of this package.
++
++Issue reported upstream:
++https://github.com/crossbario/crossbar/issues/750.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ crossbar/worker/test/examples/syntaxerror.py | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/crossbar/worker/test/examples/syntaxerror.py b/crossbar/worker/test/examples/syntaxerror.py
++index a5947cc..585c995 100644
++--- a/crossbar/worker/test/examples/syntaxerror.py
+++++ b/crossbar/worker/test/examples/syntaxerror.py
++@@ -29,5 +29,3 @@
++ #####################################################################################
++ 
++ from __future__ import absolute_import, division
++-
++-class # noqa
++-- 
++2.7.4
++
