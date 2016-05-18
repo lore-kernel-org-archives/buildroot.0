@@ -1,297 +1,58 @@
-From: =?UTF-8?Q?Thiago_A=2E_Corr=C3=AAa?= <thiago.correa@gmail.com>
-Date: Wed, 18 May 2016 15:43:30 -0300
-Subject: [Buildroot] [PATCH v5] domoticz: new package
-In-Reply-To: <573CA642.8050305@free.fr>
-References: <30357_1462263258_57285DDA_30357_1304_1_d5a28a6b-c41a-4918-a007-feff96280fbe@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
- <573CA642.8050305@free.fr>
-Message-ID: <CAExDhvZaABjAALGBdro-0CLFJiTZnAnKcNzBwz3SyZHO+0NifQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 18 May 2016 20:52:25 +0200
+Subject: [Buildroot] [PATCH/next 2/2] python-tornado: select
+ python-backports-abc for Python 2.x only
+In-Reply-To: <1463578504-1257-2-git-send-email-yegorslists@googlemail.com>
+References: <1463578504-1257-1-git-send-email-yegorslists@googlemail.com>
+ <1463578504-1257-2-git-send-email-yegorslists@googlemail.com>
+Message-ID: <b8848bf7-0828-170b-2510-c709e8fdd335@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is a problem with domoticz on JFFS2 systems, because it enables
-some pragmas. Sqlite then tries to mmap on JFFS2 which is not
-supported and everything fails, Domoticz can't even create the tables.
- I fixed it changing sqlite.mk to add:
+On 05/18/16 15:35, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+>
+> With the introduction of Pyton 3.5 python-backports-abc is only
+> needed for Python 2.x.
 
-+SQLITE_CFLAGS += -DSQLITE_TEMP_STORE=3
-+SQLITE_CFLAGS += -DSQLITE_SHM_DIRECTORY=/tmp
-+SQLITE_CFLAGS += -DSQLITE_OMIT_WAL
+  This patch should be squashed with the previous one, otherwise we have a 
+non-working state in the middle.
 
-Maybe it could be added to the patch, checking if JFFS2 output is enabled.
+  With that you can add my
+  Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+  Regards,
+  Arnout
+
+>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/python-tornado/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
+> index ac86682..3ead2af 100644
+> --- a/package/python-tornado/Config.in
+> +++ b/package/python-tornado/Config.in
+> @@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_TORNADO
+>  	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+>  	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+>  	select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
+> -	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	# runtime
+> +	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	if BR2_PACKAGE_PYTHON # runtime
+>  	help
+>  	  Tornado is a Python web framework and asynchronous networking
+>  	  library, originally developed at FriendFeed.
+>
 
 
-On Wed, May 18, 2016 at 2:28 PM, Julien Boibessot
-<julien.boibessot@free.fr> wrote:
-> Hello Fabrice,
->
-> I finally got time to test your v5...
->
-> On 03/05/2016 10:14, fabrice.fontaine at orange.com wrote:
->> Domoticz is a Home Automation System that lets you monitor andi
->
-> typo: andi -> and
->
->> configure various devices like: Lights, Switches, various
->> sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
->> and much more. Notifications/Alerts can be sent to any mobile device.
->>
->> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
->> ---
->> Changes v4 -> v5 (after review of Julien Boibessot):
->>  - Add dedicated init scripts for systemV and systemd instead of using
->>    domoticz.sh as it is not compatible with buildroot init system
->>
->> Changes v3 -> v4 (after review of Julien Boibessot):
->>  - Remove unneeded files (License and updatedomo) from target directory.
->>    Do not remove History.txt as it is used in source code
->>  - Install domoticz binary and all its files in /opt/domoticz instead of
->>    /usr by overriding CMAKE_INSTALL_PREFIX
->>  - Modify and install domoticz.sh if systemV is enabled by defining
->>    DOMOTICZ_INSTALL_INIT_SYSV
->>
->> Changes v2 -> v3 (after review of Samuel Martin):
->>  - Use OFF instead of no for consistency with other cmake packages
->>  - Always set USE_STATIC_BOOST and USE_STATIC_OPENZWAVE to OFF as
->>    BR2_STATIC_LIBS will always be false due to mosquitto dependency
->>
->> Changes v1 -> v2 (after review of Samuel Martin):
->>  - Add a hash file
->>  - Replace the dependency on BR2_PACKAGE_LUA_5_2 by a dependency on
->>    BR2_PACKAGE_LUA_5_2 or BR2_PACKAGE_LUA_5_3
->>  - Add dependencies on BR2_USE_MMU and !BR2_STATIC_LIBS (from mosquitto)
->>  - Add dependency on BR2_PACKAGE_BOOST_ARCH_SUPPORTS (from boost)
->>  - Automatically add zwave support in domoticz if the user has selected
->>    the openzwave package
->>  - Set USE_STATIC_BOOST and USE_STATIC_OPENZWAVE to the correct values
->>    in domoticz.mk depending on BR2_STATIC_LIBS value to avoid breaking
->>    static-only build
->>
->>  package/Config.in                 |  1 +
->>  package/domoticz/Config.in        | 32 ++++++++++++++++++
->>  package/domoticz/S99domoticz      | 38 ++++++++++++++++++++++
->>  package/domoticz/domoticz.hash    |  2 ++
->>  package/domoticz/domoticz.mk      | 68 +++++++++++++++++++++++++++++++++++++++
->>  package/domoticz/domoticz.service | 10 ++++++
->>  6 files changed, 151 insertions(+)
->>  create mode 100644 package/domoticz/Config.in
->>  create mode 100644 package/domoticz/S99domoticz
->>  create mode 100644 package/domoticz/domoticz.hash
->>  create mode 100644 package/domoticz/domoticz.mk
->>  create mode 100644 package/domoticz/domoticz.service
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 10d9a6e..6b33a02 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -1326,6 +1326,7 @@ menu "Miscellaneous"
->>       source "package/bc/Config.in"
->>       source "package/clamav/Config.in"
->>       source "package/collectd/Config.in"
->> +     source "package/domoticz/Config.in"
->>       source "package/empty/Config.in"
->>       source "package/gnuradio/Config.in"
->>       source "package/googlefontdirectory/Config.in"
->> diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
->> new file mode 100644
->> index 0000000..c7c2878
->> --- /dev/null
->> +++ b/package/domoticz/Config.in
->> @@ -0,0 +1,32 @@
->> +config BR2_PACKAGE_DOMOTICZ
->> +     bool "domoticz"
->> +     depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
->> +     depends on BR2_USE_MMU # mosquitto
->> +     depends on !BR2_STATIC_LIBS # mosquitto
->> +     depends on BR2_TOOLCHAIN_HAS_THREADS
->> +     depends on BR2_INSTALL_LIBSTDCPP
->> +     depends on BR2_USE_WCHAR
->> +     depends on BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
->> +     select BR2_PACKAGE_BOOST
->> +     select BR2_PACKAGE_BOOST_DATE_TIME
->> +     select BR2_PACKAGE_BOOST_SYSTEM
->> +     select BR2_PACKAGE_BOOST_THREAD
->> +     select BR2_PACKAGE_LIBCURL
->> +     select BR2_PACKAGE_MOSQUITTO
->> +     select BR2_PACKAGE_OPENSSL
->> +     select BR2_PACKAGE_SQLITE
->> +     select BR2_PACKAGE_ZLIB
->> +     help
->> +       Domoticz is a Home Automation System that lets you monitor andi
->
-> typo: andi -> and
->
->> +       configure various devices like: Lights, Switches, various
->> +       sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
->> +       and much more. Notifications/Alerts can be sent to any mobile device.
->> +
->> +       http://domoticz.com
->> +
->> +comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynamic library"
->> +     depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
->> +     depends on BR2_USE_MMU
->> +     depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
->> +             !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
->> +             !(BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3)
->> diff --git a/package/domoticz/S99domoticz b/package/domoticz/S99domoticz
->> new file mode 100644
->> index 0000000..9a53105
->> --- /dev/null
->> +++ b/package/domoticz/S99domoticz
->> @@ -0,0 +1,38 @@
->> +#!/bin/sh
->> +
->> +NAME=domoticz
->> +PIDFILE=/var/run/$NAME.pid
->> +DAEMON=/opt/domoticz/$NAME
->> +DAEMON_ARGS="-daemon -www 18080 -sslwww 443"
->
-> hum isn't it 8080 instead of 18080 ?
->
-> otherwise it still build and run fine for me (ARM uclibc and systemV init).
->
-> So:
-> Tested-by: Julien Boibessot <julien.boibessot@armadeus.com>
->
-> And hoping it will soon be merged into BR mainline...
->
-> Best regards,
-> Julien
->
->> +
->> +start() {
->> +     printf "Starting $NAME: "
->> +     start-stop-daemon -S -q -m -b -p $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
->> +     [ $? = 0 ] && echo "OK" || echo "FAIL"
->> +}
->> +stop() {
->> +     printf "Stopping $NAME: "
->> +     start-stop-daemon -K -q -p $PIDFILE
->> +     [ $? = 0 ] && echo "OK" || echo "FAIL"
->> +}
->> +restart() {
->> +     stop
->> +     start
->> +}
->> +
->> +case "$1" in
->> +  start)
->> +     start
->> +     ;;
->> +  stop)
->> +     stop
->> +     ;;
->> +  restart|reload)
->> +     restart
->> +     ;;
->> +  *)
->> +     echo "Usage: $0 {start|stop|restart}"
->> +     exit 1
->> +esac
->> +
->> +exit $?
->> diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
->> new file mode 100644
->> index 0000000..9180a9b
->> --- /dev/null
->> +++ b/package/domoticz/domoticz.hash
->> @@ -0,0 +1,2 @@
->> +# Locally computed:
->> +sha256       02b4cdde8e376258aeae3d5621edf8bb6b3563c34282e50194db343fcec9c0f5        domoticz-3.4834.tar.gz
->> diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
->> new file mode 100644
->> index 0000000..64d4074
->> --- /dev/null
->> +++ b/package/domoticz/domoticz.mk
->> @@ -0,0 +1,68 @@
->> +################################################################################
->> +#
->> +# domoticz
->> +#
->> +################################################################################
->> +
->> +DOMOTICZ_VERSION = 3.4834
->> +DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
->> +DOMOTICZ_LICENSE = GPLv3
->> +DOMOTICZ_LICENSE_FILES = License.txt
->> +DOMOTICZ_DEPENDENCIES = boost host-pkgconf libcurl lua mosquitto openssl \
->> +        sqlite zlib
->> +
->> +# Due to mosquitto dependency, domoticz depends on !BR2_STATIC_LIBS so sets
->> +# USE_STATIC_BOOST to OFF
->> +DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
->> +
->> +# Do not use any built-in libraries which are enabled by default for lua,
->> +# sqlite and mqtt
->> +DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_LUA=OFF
->> +DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_SQLITE=OFF
->> +DOMOTICZ_CONF_OPTS += -DUSE_BUILTIN_MQTT=OFF
->> +
->> +ifeq ($(BR2_PACKAGE_LIBUSB),y)
->> +DOMOTICZ_DEPENDENCIES += libusb
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_OPENZWAVE),y)
->> +DOMOTICZ_DEPENDENCIES += openzwave
->> +
->> +# Due to mosquitto dependency, domoticz depends on !BR2_STATIC_LIBS so sets
->> +# USE_STATIC_OPENZWAVE to OFF otherwise domoticz will not found openzwave
->> +# library as it searchs by default a static library
->> +DOMOTICZ_CONF_OPTS += -DUSE_STATIC_OPENZWAVE=OFF
->> +endif
->> +
->> +# Install domoticz in a dedicated directory (/opt/domoticz) as domoticz expects
->> +# by default that all its subdirectories (www, Config, scripts, ...) are in the
->> +# binary directory
->> +DOMOTICZ_TARGET_DIR = /opt/domoticz
->> +DOMOTICZ_CONF_OPTS += -DCMAKE_INSTALL_PREFIX=$(DOMOTICZ_TARGET_DIR)
->> +
->> +# Delete License.txt and updatedomo files installed by domoticz in target
->> +# directory
->> +# Do not delete History.txt as it is used in source code
->> +define DOMOTICZ_REMOVE_UNNEEDED_FILES
->> +     $(RM) $(TARGET_DIR)/$(DOMOTICZ_TARGET_DIR)/License.txt
->> +     $(RM) $(TARGET_DIR)/$(DOMOTICZ_TARGET_DIR)/updatedomo
->> +endef
->> +
->> +DOMOTICZ_POST_INSTALL_TARGET_HOOKS += DOMOTICZ_REMOVE_UNNEEDED_FILES
->> +
->> +# Use dedicated init scripts for systemV and systemd instead of using
->> +# domoticz.sh as it is not compatible with buildroot init system
->> +define DOMOTICZ_INSTALL_INIT_SYSV
->> +     $(INSTALL) -D -m 0755 package/domoticz/S99domoticz \
->> +             $(TARGET_DIR)/etc/init.d/S99domoticz
->> +endef
->> +
->> +define DOMOTICZ_INSTALL_INIT_SYSTEMD
->> +     $(INSTALL) -D -m 644 package/domoticz/domoticz.service \
->> +             $(TARGET_DIR)/usr/lib/systemd/system/domoticz.service
->> +     mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
->> +     ln -sf ../../../../usr/lib/systemd/system/domoticz.service \
->> +             $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/domoticz.service
->> +endef
->> +
->> +$(eval $(cmake-package))
->> diff --git a/package/domoticz/domoticz.service b/package/domoticz/domoticz.service
->> new file mode 100644
->> index 0000000..446b41a
->> --- /dev/null
->> +++ b/package/domoticz/domoticz.service
->> @@ -0,0 +1,10 @@
->> +[Unit]
->> +Description=Domoticz Home Automation System
->> +After=network.target
->> +
->> +[Service]
->> +ExecStart=/opt/domoticz/domoticz -daemon -www 8080 -sslwww 443
->> +Restart=always
->> +
->> +[Install]
->> +WantedBy=multi-user.target
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
