@@ -1,73 +1,63 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 May 2016 22:23:56 +0200
-Subject: [Buildroot] [PATCH v4 0/4] Python: globalize pyc file
-	compilation
-In-Reply-To: <1463519956-5599-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1463519956-5599-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <980554dc-c874-30f3-bb80-d0b433c4769a@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 18 May 2016 20:24:56 +0000
+Subject: [Buildroot] [Bug 8941] New: "ls" of an NFSv4 share only works when
+ pumped through strace
+Message-ID: <bug-8941-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/17/16 23:19, Thomas Petazzoni wrote:
-> Hello,
->
-> This patch series contains just the remaining patches of my "Python 3
-> bump" patch series. Compared to the v3:
->
->  - Drop patches that have been merged.
->
->  - Add a patch suggested by Samuel Martin, that consists in adding the
->    --no-run-if-empty option to xargs to avoid issues.
->
->  - Instead of adding a patch to python-pyftpdlib to fix a Python 3
->    byte-compilation failure, bump from 1.5.0 to 1.5.1, since 1.5.1 was
->    released by upstream specifically to address the Python 3 issue
->    after we reported the problem.
->
->    Yegor: there is a question for you in this patch: I had to use a
->    different URL than the standard pypi download URL, because the
->    standard one returns a 404. If you could have a look, it would be
->    great.
->
-> Review/comments welcome.
->
-> Thanks!
->
-> Thomas
->
-> Thomas Petazzoni (3):
->   python/python3: use --no-run-if-empty xargs option
->   python-pyftpdlib: bump version to 1.5.1, fixing Python 3 issue
->   samba4: remove compilation of .pyc files
+https://bugs.busybox.net/show_bug.cgi?id=8941
 
-  Similar to samba4, python-pyqt also has a custom compileall.
+            Bug ID: 8941
+           Summary: "ls" of an NFSv4 share only works when pumped through
+                    strace
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: stevejhorton at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-  Regards,
-  Arnout
+Buildroot = Nightly build commit (46f9454ae177f309c226f4cb8fe7b7f68a109b29)
+nfs-utils = 1.3.3
+busybox = 1.24.1 also tried 1.24.2
+Network = 10 Gigabit Ethernet on all hosts
 
->
-> Yegor Yefremov (1):
->   python/python3: globalize *.pyc files compilation
->
->  package/pkg-python.mk                          |  2 +-
->  package/python-pyftpdlib/python-pyftpdlib.hash |  6 +++---
->  package/python-pyftpdlib/python-pyftpdlib.mk   |  4 ++--
->  package/python/python.mk                       | 25 ++++++++++++++++++----
->  package/python3/python3.mk                     | 29 +++++++++++++++++++-------
->  package/samba4/samba4.mk                       | 10 ---------
->  support/scripts/pycompile.py                   | 24 +++++++++++++++++++++
->  7 files changed, 72 insertions(+), 28 deletions(-)
->  create mode 100644 support/scripts/pycompile.py
->
+I'm placing the bug here because I can't tell if it's a buildroot or a busybox
+issue. 
 
+NOTES: With a good NFS mount from a buildroot image I can not see the file
+names unless I use strace like so. 
+------------------------
+
+# ls -la /share/FILES   # I get nothing
+
+# strace -o /dev/null ls -la /share/FILES/
+total 44
+drwxrwxrwx    4 42949672 42949672      4096 Apr  4 15:58 .
+drwxrwxrwx 1045 42949672 42949672     32768 May 18 20:03 ..
+drwxrwxrwx    2 42949672 42949672      4096 May 18 15:05 dir1
+drwxrwxrwx    2 42949672 42949672      4096 Apr  4 15:58 dir2
+
+# nfsstat -m
+/share from server:/lab/1
+ Flags:
+rw,relatime,vers=4.0,rsize=1048576,wsize=1048576,namlen=255,hard,proto=tcp,port=0,timeo=14,retrans=2,sec=sys,clientaddr=10.10.50.230,local_lock=none,addr=10.10.90.10
+
+# 
+Any Ideas?
+Many Thanks!
+-S
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+You are receiving this mail because:
+You are on the CC list for the bug.
