@@ -1,82 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 May 2016 22:05:27 +0200
-Subject: [Buildroot] [PATCH v4 2/4] python-pyftpdlib: bump version to
- 1.5.1, fixing Python 3 issue
-In-Reply-To: <1463519956-5599-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1463519956-5599-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1463519956-5599-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <77dcdf0b-e020-8938-0a87-e637bbfca59a@mind.be>
+From: Martin Kelly <martin@surround.io>
+Date: Wed, 18 May 2016 13:06:20 -0700
+Subject: [Buildroot] [PATCH v2] Config.in: add -Og option
+In-Reply-To: <7e07c970-b00e-f605-7192-3152d53885e1@mind.be>
+References: <1463442955-8178-1-git-send-email-martin@surround.io>
+ <7e07c970-b00e-f605-7192-3152d53885e1@mind.be>
+Message-ID: <573CCB3C.1040703@surround.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/17/16 23:19, Thomas Petazzoni wrote:
-> This commit bumpds the version of python-pyftpdlib to fix a
-> byte-compilation problem occuring with Python 3. The current version of
-> pyftpdlib contained a file that had mistakenly been added to the
-> release, and which wasn't Python 3 compliant. The new 1.5.1 version has
-> been released specifically to address this problem, see:
+On 05/18/2016 12:52 PM, Arnout Vandecappelle wrote:
+> On 05/17/16 01:55, Martin Kelly wrote:
+>> -Og (introduced in GCC 4.8) lets you optimize for debugging experience,
+>> which can be useful for when you want optimized code that is nonetheless
+>> debuggable.
+>>
+>> Signed-off-by: Martin Kelly <martin@surround.io>
+>> ---
+>> Changes based on feedback:
+>> - select --> depends on
+>> - Reworded help text
+>> - Wrapped text to 72 lines
 >
->   https://github.com/giampaolo/pyftpdlib/issues/381
->
-> Until now, this wasn't causing any problem as a byte-compilation problem
-> was not a fatal failure. But upcoming commits will make it a fatal
-> failure, so it needs to be fixed.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> Yegor: the URL is not the conventional pypi URL, but
-> https://pypi.python.org/packages/source/p/pyftpdlib/pyftpdlib-1.5.1.tar.gz
-> returns a 404, while the URL I've used is working. Any idea?
-
-  It's the URL that is specified in the pypi metadata, so it looks OK to me.
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-  Regards,
-  Arnout
-
-> ---
->  package/python-pyftpdlib/python-pyftpdlib.hash | 6 +++---
->  package/python-pyftpdlib/python-pyftpdlib.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/package/python-pyftpdlib/python-pyftpdlib.hash b/package/python-pyftpdlib/python-pyftpdlib.hash
-> index b6d0cca..9726f9f 100644
-> --- a/package/python-pyftpdlib/python-pyftpdlib.hash
-> +++ b/package/python-pyftpdlib/python-pyftpdlib.hash
-> @@ -1,3 +1,3 @@
-> -# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=0c6f7c447fb702af4d5ca0123003c9fd, sha256 locally computed
-> -md5     0c6f7c447fb702af4d5ca0123003c9fd  pyftpdlib-1.5.0.tar.gz
-> -sha256  0111127418e9012a8e9e6c05a0c64af1acef8c31128834805fb0f9a49c746261  pyftpdlib-1.5.0.tar.gz
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=61b23e2362df23d0dfa5fe76f6e2ab55, sha256 locally computed
-> +md5  61b23e2362df23d0dfa5fe76f6e2ab55  pyftpdlib-1.5.1.tar.gz
-> +sha256  7bcd7fc825123414a157718c6dcdcb0978208d3c865d4650564acef4acce3354  pyftpdlib-1.5.1.tar.gz
-> diff --git a/package/python-pyftpdlib/python-pyftpdlib.mk b/package/python-pyftpdlib/python-pyftpdlib.mk
-> index 11e24e2..85d0b56 100644
-> --- a/package/python-pyftpdlib/python-pyftpdlib.mk
-> +++ b/package/python-pyftpdlib/python-pyftpdlib.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->
-> -PYTHON_PYFTPDLIB_VERSION = 1.5.0
-> +PYTHON_PYFTPDLIB_VERSION = 1.5.1
->  PYTHON_PYFTPDLIB_SOURCE = pyftpdlib-$(PYTHON_PYFTPDLIB_VERSION).tar.gz
-> -PYTHON_PYFTPDLIB_SITE = https://pypi.python.org/packages/source/p/pyftpdlib
-> +PYTHON_PYFTPDLIB_SITE = https://pypi.python.org/packages/a8/f8/0f6db156898616dbcbd7bf865660295c81479071ab0fcd1898fe1b3a4fc4
->  PYTHON_PYFTPDLIB_SETUP_TYPE = setuptools
->  PYTHON_PYFTPDLIB_LICENSE = MIT
->  PYTHON_PYFTPDLIB_LICENSE_FILES = LICENSE
+>   Well, actually you didn't: you just copied my text, which I
+> incorrectly wrapped at 78 columns instead of 72...
 >
 
+You may have wrapped to 78, but I rewrapped it to 72 columns, so I think 
+the patch I sent is correctly wrapped.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>> ---
+>>
+>>  Config.in           | 10 ++++++++++
+>>  package/Makefile.in |  3 +++
+>>  2 files changed, 13 insertions(+)
+>>
+>> diff --git a/Config.in b/Config.in
+>> index 9bc8e51..3fe6b7a 100644
+>> --- a/Config.in
+>> +++ b/Config.in
+>> @@ -510,6 +510,16 @@ config BR2_OPTIMIZE_3
+>>        and also turns on the -finline-functions, -funswitch-loops and
+>>        -fgcse-after-reload options.
+>>
+>> +config BR2_OPTIMIZE_g
+>
+>   I didn't notice this the first time: config options should be all
+> capitals, like BR2_OPTIMIZE_S (for the -Os option).
+>
+
+I will change this and send a revised patch. Note that there are 
+currently several config options that are not all capital (e.g. 
+BR2_STRIP_strip), but perhaps those should change too.
