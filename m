@@ -1,56 +1,73 @@
-From: Martin Kelly <martin@surround.io>
-Date: Wed, 18 May 2016 13:06:20 -0700
-Subject: [Buildroot] [PATCH v2] Config.in: add -Og option
-In-Reply-To: <7e07c970-b00e-f605-7192-3152d53885e1@mind.be>
-References: <1463442955-8178-1-git-send-email-martin@surround.io>
- <7e07c970-b00e-f605-7192-3152d53885e1@mind.be>
-Message-ID: <573CCB3C.1040703@surround.io>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 18 May 2016 22:23:56 +0200
+Subject: [Buildroot] [PATCH v4 0/4] Python: globalize pyc file
+	compilation
+In-Reply-To: <1463519956-5599-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1463519956-5599-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <980554dc-c874-30f3-bb80-d0b433c4769a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/18/2016 12:52 PM, Arnout Vandecappelle wrote:
-> On 05/17/16 01:55, Martin Kelly wrote:
->> -Og (introduced in GCC 4.8) lets you optimize for debugging experience,
->> which can be useful for when you want optimized code that is nonetheless
->> debuggable.
->>
->> Signed-off-by: Martin Kelly <martin@surround.io>
->> ---
->> Changes based on feedback:
->> - select --> depends on
->> - Reworded help text
->> - Wrapped text to 72 lines
+On 05/17/16 23:19, Thomas Petazzoni wrote:
+> Hello,
 >
->   Well, actually you didn't: you just copied my text, which I
-> incorrectly wrapped at 78 columns instead of 72...
+> This patch series contains just the remaining patches of my "Python 3
+> bump" patch series. Compared to the v3:
+>
+>  - Drop patches that have been merged.
+>
+>  - Add a patch suggested by Samuel Martin, that consists in adding the
+>    --no-run-if-empty option to xargs to avoid issues.
+>
+>  - Instead of adding a patch to python-pyftpdlib to fix a Python 3
+>    byte-compilation failure, bump from 1.5.0 to 1.5.1, since 1.5.1 was
+>    released by upstream specifically to address the Python 3 issue
+>    after we reported the problem.
+>
+>    Yegor: there is a question for you in this patch: I had to use a
+>    different URL than the standard pypi download URL, because the
+>    standard one returns a 404. If you could have a look, it would be
+>    great.
+>
+> Review/comments welcome.
+>
+> Thanks!
+>
+> Thomas
+>
+> Thomas Petazzoni (3):
+>   python/python3: use --no-run-if-empty xargs option
+>   python-pyftpdlib: bump version to 1.5.1, fixing Python 3 issue
+>   samba4: remove compilation of .pyc files
+
+  Similar to samba4, python-pyqt also has a custom compileall.
+
+  Regards,
+  Arnout
+
+>
+> Yegor Yefremov (1):
+>   python/python3: globalize *.pyc files compilation
+>
+>  package/pkg-python.mk                          |  2 +-
+>  package/python-pyftpdlib/python-pyftpdlib.hash |  6 +++---
+>  package/python-pyftpdlib/python-pyftpdlib.mk   |  4 ++--
+>  package/python/python.mk                       | 25 ++++++++++++++++++----
+>  package/python3/python3.mk                     | 29 +++++++++++++++++++-------
+>  package/samba4/samba4.mk                       | 10 ---------
+>  support/scripts/pycompile.py                   | 24 +++++++++++++++++++++
+>  7 files changed, 72 insertions(+), 28 deletions(-)
+>  create mode 100644 support/scripts/pycompile.py
 >
 
-You may have wrapped to 78, but I rewrapped it to 72 columns, so I think 
-the patch I sent is correctly wrapped.
 
->> ---
->>
->>  Config.in           | 10 ++++++++++
->>  package/Makefile.in |  3 +++
->>  2 files changed, 13 insertions(+)
->>
->> diff --git a/Config.in b/Config.in
->> index 9bc8e51..3fe6b7a 100644
->> --- a/Config.in
->> +++ b/Config.in
->> @@ -510,6 +510,16 @@ config BR2_OPTIMIZE_3
->>        and also turns on the -finline-functions, -funswitch-loops and
->>        -fgcse-after-reload options.
->>
->> +config BR2_OPTIMIZE_g
->
->   I didn't notice this the first time: config options should be all
-> capitals, like BR2_OPTIMIZE_S (for the -Os option).
->
-
-I will change this and send a revised patch. Note that there are 
-currently several config options that are not all capital (e.g. 
-BR2_STRIP_strip), but perhaps those should change too.
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
