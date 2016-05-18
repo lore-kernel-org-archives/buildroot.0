@@ -1,50 +1,41 @@
-From: Martin Kelly <martin@surround.io>
-Date: Tue, 17 May 2016 16:54:24 -0700
-Subject: [Buildroot] [PATCH] Config.in: add -Og option
-In-Reply-To: <573A5995.6020201@surround.io>
-References: <1463183826-28562-1-git-send-email-martin@surround.io>
- <20160514142558.70fb92f4@free-electrons.com> <573A5995.6020201@surround.io>
-Message-ID: <573BAF30.3060404@surround.io>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 18 May 2016 06:57:18 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libbluray: bump version to
+	0.9.3
+Message-ID: <1463547438-18551-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/16/2016 04:36 PM, Martin Kelly wrote:
-> On 05/14/2016 05:25 AM, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Fri, 13 May 2016 16:57:06 -0700, Martin Kelly wrote:
->>> -Og (introduced in GCC 4.8) lets you optimize for debugging experience,
->>> which can be useful for when you want optimized code that is nonetheless
->>> debuggable.
->>>
->>> Signed-off-by: Martin Kelly <martin@surround.io>
->>
->> Thanks for submitting this patch. I had never heard of -Og, but it
->> seems like a useful addition.
->>
->>> +config BR2_OPTIMIZE_g
->>> +    bool "optimize debugging experience"
->>> +    select BR2_HOST_GCC_AT_LEAST_4_8
->>
->> select? You can't select an option such as BR2_HOST_GCC_AT_LEAST_4_8.
->> How could Buildroot *force* the host machine to have gcc >= 4.8 ?
->>
->> In addition, using BR2_HOST_GCC_AT_LEAST_4_8 is wrong here: what we
->> care about is the version of the *target* compiler, not the version of
->> the host compiler.
->>
->> So this line should instead be:
->>
->>     depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
->>
->
-> Thanks, I agree. I wasn't sure whether to use select or depends. In
-> hindsight, I should have checked, but I'll fix up the patch and send a
-> revision.
->
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libbluray/libbluray.hash | 4 ++--
+ package/libbluray/libbluray.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I sent a revised patch to the list. Please tell me if you notice 
-anything else to fix up.
+diff --git a/package/libbluray/libbluray.hash b/package/libbluray/libbluray.hash
+index 9acd89d..ea0df50 100644
+--- a/package/libbluray/libbluray.hash
++++ b/package/libbluray/libbluray.hash
+@@ -1,2 +1,2 @@
+-# From http://get.videolan.org/libbluray/0.9.2/libbluray-0.9.2.tar.bz2.sha512
+-sha512	f7fda2ef4c0ec70eb9a38aed0e76d21d8784410cb13713e7ee66ecd23a1cc58325977b046d40c526554a4a4e4cf96706a233e15451bf34892aff201b47e25aef	libbluray-0.9.2.tar.bz2
++# From http://get.videolan.org/libbluray/0.9.3/libbluray-0.9.3.tar.bz2.sha512
++sha512	1e308b85c51d43b23b186fdd2631f963d4c25de8aff29f335e131b32a175434ee21460a7aa470c508ad13662cf9052649bb4eb974dbd709eb9e6797fb84e0823	libbluray-0.9.3.tar.bz2
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index 2cc27f1..dfe58f4 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBBLURAY_VERSION = 0.9.2
++LIBBLURAY_VERSION = 0.9.3
+ LIBBLURAY_SITE = http://get.videolan.org/libbluray/$(LIBBLURAY_VERSION)
+ LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
+ LIBBLURAY_INSTALL_STAGING = YES
+-- 
+2.8.1
