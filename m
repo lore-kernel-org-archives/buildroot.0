@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 18 May 2016 16:22:27 -0300
-Subject: [Buildroot] [PATCH] dnsmasq: bump to version 2.76
-Message-ID: <1463599347-21468-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 18 May 2016 16:23:17 -0300
+Subject: [Buildroot] [PATCH] gdbm: bump to version 1.12
+Message-ID: <1463599397-21520-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/dnsmasq/dnsmasq.hash | 2 +-
- package/dnsmasq/dnsmasq.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gdbm/gdbm.hash | 5 +++--
+ package/gdbm/gdbm.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
-index 57dc4b1..a73e911 100644
---- a/package/dnsmasq/dnsmasq.hash
-+++ b/package/dnsmasq/dnsmasq.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	640c4e1d4c298e42458419cd78cfc26acc549401b1a34d271cd3e0e4226941f1	dnsmasq-2.75.tar.xz
-+sha256	4b92698dee19ca0cb2a8f2e48f1d2dffd01a21eb15d1fbed4cf085630c8c9f96	dnsmasq-2.76.tar.xz
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 7fb1200..e8240b9 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
+diff --git a/package/gdbm/gdbm.hash b/package/gdbm/gdbm.hash
+index e7d3592..9759d87 100644
+--- a/package/gdbm/gdbm.hash
++++ b/package/gdbm/gdbm.hash
+@@ -1,2 +1,3 @@
+-# From http://lists.gnu.org/archive/html/info-gnu/2013-12/msg00012.html
+-sha1	ce433d0f192c21d41089458ca5c8294efe9806b4	gdbm-1.11.tar.gz
++# From http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00009.html
++md5	9ce96ff4c99e74295ea19040931c8fb9	gdbm-1.12.tar.gz
++sha1	86513e8871bb376bc014e9e5a2d18a8e0a8ea2f5	gdbm-1.12.tar.gz
+diff --git a/package/gdbm/gdbm.mk b/package/gdbm/gdbm.mk
+index f7a4370..55ece88 100644
+--- a/package/gdbm/gdbm.mk
++++ b/package/gdbm/gdbm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DNSMASQ_VERSION = 2.75
-+DNSMASQ_VERSION = 2.76
- DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+-GDBM_VERSION = 1.11
++GDBM_VERSION = 1.12
+ GDBM_SITE = $(BR2_GNU_MIRROR)/gdbm
+ GDBM_LICENSE = GPLv3+
+ GDBM_LICENSE_FILES = COPYING
 -- 
 2.7.3
