@@ -1,42 +1,39 @@
 From: Patrick Williams <patrick@stwcx.xyz>
-Date: Wed, 18 May 2016 14:25:27 -0500
-Subject: [Buildroot] [PATCH 3/6] Makefile: Support nested config directories
+Date: Wed, 18 May 2016 14:25:29 -0500
+Subject: [Buildroot] [PATCH 5/6] Makefile: Add merged defconfigs to
+	list-defconfigs.
 In-Reply-To: <1463599530-28752-1-git-send-email-patrick@stwcx.xyz>
 References: <1463599530-28752-1-git-send-email-patrick@stwcx.xyz>
-Message-ID: <1463599530-28752-4-git-send-email-patrick@stwcx.xyz>
+Message-ID: <1463599530-28752-6-git-send-email-patrick@stwcx.xyz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Elizabeth Liner <eliner@us.ibm.com>
-
-Extend the BR2_DEFCONFIG_PATH to support nested config directories.
-This allows us to place config files in both .../config and
-.../config/<arch>.
-
-Both $(TOPDIR) and $(BR2_EXTERNAL) are supported.
-
-Signed-off-by: Elizabeth Liner <eliner@us.ibm.com>
 Signed-off-by: Patrick Williams <patrick@stwcx.xyz>
 ---
- Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 47e0d8a..c9b6030 100644
+index 8a9bb2b..2694339 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -851,7 +851,8 @@ define CREATE_DEFCONFIG_RECIPES
- 		$$< --defconfig=$$(CONFIG_DIR)/.config $$(CONFIG_CONFIG_IN)
- endef
+@@ -988,12 +988,12 @@ endif
  
--BR2_DEFCONFIG_PATHS=$(TOPDIR)/configs $(BR2_EXTERNAL)/configs
-+BR2_DEFCONFIG_PATHS=$(sort $(dir $(wildcard $(TOPDIR)/configs/*/))) \
-+		$(sort $(dir $(wildcard $(BR2_EXTERNAL)/configs/*/)))
- $(foreach path,$(BR2_DEFCONFIG_PATHS),$(eval $(call CREATE_DEFCONFIG_RECIPES,$(path))))
- 
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ list-defconfigs:
+ 	@echo 'Built-in configs:'
+-	@$(foreach b, $(sort $(notdir $(foreach path,$(BR2_DEFCONFIG_PATHS_LOCAL),$(wildcard $(path)/*_defconfig)))), \
++	@$(foreach b, $(sort $(notdir $(foreach path,$(BR2_DEFCONFIG_PATHS_LOCAL),$(basename $(wildcard $(path)/*_defconfig $(path)/*_defconfig.merge))))), \
+ 	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
+ ifneq ($(wildcard $(BR2_EXTERNAL)/configs/*_defconfig),)
+ 	@echo
+ 	@echo 'User-provided configs:'
+-	@$(foreach b, $(sort $(notdir $(foreach path,$(BR2_DEFCONFIG_PATHS_USER),$(wildcard $(path)/*_defconfig)))), \
++	@$(foreach b, $(sort $(notdir $(foreach path,$(BR2_DEFCONFIG_PATHS_USER),$(basename $(wildcard $(path)/*_defconfig $(path)/*_defconfig.merge))))), \
+ 	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
+ endif
+ 	@echo
 -- 
 2.6.3
