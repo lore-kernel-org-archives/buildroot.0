@@ -1,24 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 18 May 2016 11:57:50 +0000
-Subject: [Buildroot] [Bug 8936] Aircrack-ng - Alot of missing dependencies
-In-Reply-To: <bug-8936-163@https.bugs.busybox.net/>
-References: <bug-8936-163@https.bugs.busybox.net/>
-Message-ID: <bug-8936-163-3Z3RURxi3Y@https.bugs.busybox.net/>
+From: Anatoly Asviyan <aanatoly@gmail.com>
+Date: Wed, 18 May 2016 15:15:57 +0300
+Subject: [Buildroot] building qt5webengine
+Message-ID: <CAPTQzAD5Kugi=Aov5bW-L=oyypo15OJFsTNkvt=YSyAeScox+A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8936
+Hi
+I have succeeded to build qt5webengine for imx6. I've started from Julien
+Corjon patch and added the following:
 
-lipkegu at gmail.com changed:
+   - compile host python with bz2
+   - compile target code with -std=c++11 flag
+   - compile host code without that flag
+   - hint gyp/ninja voodoo to do Unix build (it should be auto detected,
+   but it does not)
+   - inject missing V4L2 enum (it exists in my kernel headers but not in
+   toolchain's /usr/include/linux)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-            Summary|Aircrack-ng - Alot of       |Aircrack-ng - Alot of
-                   |missing depencies           |missing dependencies
+I've tried to do above things in a clean way, by changing *.pro or *.gyp
+files. but it did not worked, so I ended up with an ugly hack.
+
+Todo
+
+   - do above steps in a clean way
+   - configure qt5webengine to use BR2's  ssl, ffmpeg and icu and not its
+   own copies. This is specifically important for me, since I have patched
+   ffmpeg
+
+
+Patch: https://gist.github.com/aanatoly/76a2310d41d797d266700c70f0890de7
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Regards, Anatoly
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160518/28c228bc/attachment.html>
