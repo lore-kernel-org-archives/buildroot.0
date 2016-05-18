@@ -1,71 +1,80 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 May 2016 00:18:57 +0200
-Subject: [Buildroot] [PATCH v2] Config.in: add -Og option
-In-Reply-To: <573CE8F0.80200@surround.io>
-References: <1463442955-8178-1-git-send-email-martin@surround.io>
- <7e07c970-b00e-f605-7192-3152d53885e1@mind.be> <573CCB3C.1040703@surround.io>
- <2cb76318-9eb7-eacc-cdc3-e014604d2628@mind.be> <573CE8F0.80200@surround.io>
-Message-ID: <0df6a0c0-1280-94a8-03ab-b1b6e4ca9eb0@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 19 May 2016 00:23:30 +0200
+Subject: [Buildroot] [PATCH: for-next] toolchain-external: bump CodeSourcery
+	NIOSII to 2016.05
+Message-ID: <1463610210-657-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/19/16 00:13, Martin Kelly wrote:
-> On 05/18/2016 03:00 PM, Arnout Vandecappelle wrote:
->> On 05/18/16 22:06, Martin Kelly wrote:
->>> On 05/18/2016 12:52 PM, Arnout Vandecappelle wrote:
->>>> On 05/17/16 01:55, Martin Kelly wrote:
->>>>> -Og (introduced in GCC 4.8) lets you optimize for debugging experience,
->>>>> which can be useful for when you want optimized code that is
->>>>> nonetheless
->>>>> debuggable.
->>>>>
->>>>> Signed-off-by: Martin Kelly <martin@surround.io>
->>>>> ---
->>>>> Changes based on feedback:
->>>>> - select --> depends on
->>>>> - Reworded help text
->>>>> - Wrapped text to 72 lines
->>>>
->>>>   Well, actually you didn't: you just copied my text, which I
->>>> incorrectly wrapped at 78 columns instead of 72...
->>>>
->>>
->>> You may have wrapped to 78, but I rewrapped it to 72 columns, so I
->>> think the
->>> patch I sent is correctly wrapped.
->>
->>   By my count, the line 'reasonable level of optimization while
->> maintaining fast compilation' is 68 characters long. with the tab + 2
->> spaces that becomes 78.
->>
->
-> I was working under the assumption that tabs count as 1 character. If tabs count
-> as 8 characters instead, then the rest of the file is already miswrapped; there
-> are many lines containing a tab, 2 spaces, and 70 characters after. Under
-> BR_OPTIMIZE_2, the line starting with "the performance of the generated code" is
-> an example of that. In addition, most text editors seem to count a tab as 1
-> character when displaying width (Vim certainly does).
->
-> If the intention is to count a tab as 8 characters, I'd be happy to do so, but
-> then we should also rewrap the rest of the file for consistency.
+The toolchain still use binutils 2.25 without the fix for PR19405.
 
-  You have a point there. I'll Ack your v3, care to send a follow-up that 
-rewraps the entire file?
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ toolchain/toolchain-external/Config.in               | 8 ++++----
+ toolchain/toolchain-external/toolchain-external.hash | 4 ++--
+ toolchain/toolchain-external/toolchain-external.mk   | 2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-  Regards,
-  Arnout
-
-
-[snip]
-
-
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 0ba5d46..ce2d91e 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -403,7 +403,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
+ 	      Disable 'Use soft-float'
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+-	bool "Sourcery CodeBench Nios-II 2015.11"
++	bool "Sourcery CodeBench Nios-II 2016.05"
+ 	depends on BR2_nios2
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_STATIC_LIBS
+@@ -411,13 +411,13 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	select BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405 # based-on binutils-2.25.1
+ 	help
+ 	  Sourcery CodeBench toolchain for the Nios-II architecture,
+-	  from Mentor Graphics. It uses gcc 5.2, binutils 2.25.51,
+-	  glibc 2.22, gdb 7.10.50 and kernel headers 4.2.
++	  from Mentor Graphics. It uses gcc 5.3, binutils 2.25.51,
++	  glibc 2.23, gdb 7.10.50 and kernel headers 4.4.
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+ 	bool "Sourcery CodeBench SH 2012.09"
+diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+index fcd735b..ef4c7e2 100644
+--- a/toolchain/toolchain-external/toolchain-external.hash
++++ b/toolchain/toolchain-external/toolchain-external.hash
+@@ -10,8 +10,8 @@ sha256 c65b1b4b918d5185349d62a3b7bf43b4b21e1175c52598ec047ca56b3f11d857  blackfi
+ sha256 39ee0e789034334ecc89af94e838e3a4815400ac5ff980f808f466b04778532e  arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+ sha256 e16a5b1e41d7ff1e74161f9405182001bc8d1360d89564e73911032e6966cc0d  arm-2014.05-29-arm-none-linux-gnueabi.src.tar.bz2
+ # NiosII
+-sha256 e43899fd950e5d06e90c2eb01527c626240b6b4a603cbbeb532fad9fb8ea58c3  sourceryg++-2015.11-130-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-sha256 c412375ba3f93bafc9225de22366fa5b3f4d073ef856cf19595237ddb0815e6d  sourceryg++-2015.11-130-nios2-linux-gnu.src.tar.bz2
++sha256 750639290744adda931c81fa2cd2ffc2bde972488047824dcfaa53c42562191d  sourceryg++-2016.05-10-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
++sha256 3dc1c2685c0472059547dd7becb5dc991541b8176af39fa7aa5f601d38b9879a  sourceryg++-2016.05-10-nios2-linux-gnu.src.tar.bz2
+ # SuperH
+ sha256 59d6766fde244931aa52db01433d5acd051998762a931121c5fc109536a1a802  renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ sha256 e2e58c10e52395d5d35157e35f85233f713c6f9223a652dfc56194cfd2eed004  renesas-2012.09-61-sh-linux-gnu.src.tar.bz2
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 24c1f03..3d71ef4 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -338,7 +338,7 @@ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-l
+ TOOLCHAIN_EXTERNAL_SOURCE = mips-2016.05-8-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu
+-TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2015.11-130-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
++TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2016.05-10-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH),y)
+ TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.5.5
