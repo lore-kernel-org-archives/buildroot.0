@@ -1,168 +1,82 @@
-From: =?UTF-8?B?0JjQu9GM0Y8g0JLQsNC70LXQtdCy?= <ilya-valeev@yandex.ru>
-Date: Thu, 19 May 2016 00:55:10 +0500
-Subject: [Buildroot] How to choose C library dependencies
-In-Reply-To: <e6d6aaf9-744a-2c05-277a-2ca4d5aef0de@mind.be>
-References: <5731B0DD.1080201@gmail.com>
- <9f06d929-7f0c-7461-d6b2-c85b46515c4d@yandex.ru>
- <4904ae0d-f790-063e-a365-675596985f02@mind.be>
- <e1fbcc44-5d41-e996-dd6b-8b301d83883b@yandex.ru>
- <e6d6aaf9-744a-2c05-277a-2ca4d5aef0de@mind.be>
-Message-ID: <753ed175-fd1b-0c92-80d3-77e38cff091e@yandex.ru>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 18 May 2016 22:05:27 +0200
+Subject: [Buildroot] [PATCH v4 2/4] python-pyftpdlib: bump version to
+ 1.5.1, fixing Python 3 issue
+In-Reply-To: <1463519956-5599-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1463519956-5599-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1463519956-5599-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <77dcdf0b-e020-8938-0a87-e637bbfca59a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-17.05.2016 02:15, Arnout Vandecappelle ?????:
-> On 05/16/16 14:32, ???? ?????? wrote:
->>> On 05/14/16 05:59, ???? ?????? wrote:
->>>> Hello!
->>>> I want to compile ejabberd and run it on my router. I choose erlang
->>>> package with
->>>> SMP support and all modules and ejabberd package, does not
->>>> configure defconfig.
->>>> Then I run /make ejabberd/, copy ejabberd, erlang and busybox from
->>>> /target/
->>>> folder to router and run it.
->>>
->>>  Buildroot in't really meant for that kind of scenario. That said,
->>> it should
->>> be possible to do it. Basically you must create a toolchain that
->>> matches
->>> exactly with what is already installed on the target.
->> Is there any manual how to do this?
+On 05/17/16 23:19, Thomas Petazzoni wrote:
+> This commit bumpds the version of python-pyftpdlib to fix a
+> byte-compilation problem occuring with Python 3. The current version of
+> pyftpdlib contained a file that had mistakenly been added to the
+> release, and which wasn't Python 3 compliant. The new 1.5.1 version has
+> been released specifically to address this problem, see:
 >
->  I'm afraid not. First of all you should check the kernel version and
-> select the appropriate headers. Then check which libc is installed,
-> and if it's uClibc you should also find which kind of threading is
-> used by looking at /lib/*threads*.
-Kernel is 2.6.36.4, I'll configure it in /make menuconfig/.
-I think uClibc installed (see above). Where should be /lib/*threads*? On
-host PC? In buildroot tree? In generated image? On target? What mean
-asterisks around "threads" word?
-
->>>> I found that at least ejabberd compiled with glibc dependence and
->>>> won't run
->>>> without it. Running /cd /path/to/ejabberd && ./ejabberdctl start/
->>>> ends with
->>>>> /opt/lib/erlang/bin/erl: exec: line 29:
->>>>> /usr/lib/erlang/erts-7.3/bin/erlexec
->>>> As I found before, it's because erlexec want glibc which missing in
->>>> router.
->>>> Than I enable Linux kernel, set defconfig to bcm and try to run
->>>> /make/ and copy
->>>> these programms from rootfs image to router with same result.
->>>>
->>>> How can I compile these programms (ejabberd, erlang and busybox)
->>>> with uClibc
->>>> dependence?
->>>
->>>  The config file you attached indeed selects uClibc, so I don't see
->>> how it
->>> could possibly link against glibc. How do you know it links with glibc?
->>>
->>>  To verify something like that, do:
->>>
->>> readelf -d output/target/usr/lib/erlang/erts-7.3/bin/erlexec
->>>
->>> and check that all the libraries mentioned there exist on the target.
->>>
->> I've run /readelf -l
->> output/target/usr/lib/erlang/erts-7.3/bin/erlexec/ and it
->> show glibc as "requesting program interpreter".
+>   https://github.com/giampaolo/pyftpdlib/issues/381
 >
->  glibc? It should be either /lib/ld-uClibc.so.0 or
-> /lib/ld-linux-armhf.so.3 or something like that. Anyway, the point is:
-> does that exist on the target?
+> Until now, this wasn't causing any problem as a byte-compilation problem
+> was not a fatal failure. But upcoming commits will make it a fatal
+> failure, so it needs to be fixed.
 >
->> My erlexec wants:
->> libm.so.1
->> libc.so.1
->  And do these exist on the target? If not, your target is not actually
-> uClibc.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> Yegor: the URL is not the conventional pypi URL, but
+> https://pypi.python.org/packages/source/p/pyftpdlib/pyftpdlib-1.5.1.tar.gz
+> returns a 404, while the URL I've used is working. Any idea?
 
-These files exist on target filesystem:
-libc.so.0 (needs libc.so.1)
-ld-uClibc.so.0
-libm.so.0 (needs libm.so.1)
+  It's the URL that is specified in the pypi metadata, so it looks OK to me.
 
-If I make symbol link to existing libs, ejabberd still does not start
-with this error:
-//opt/lib/erlang/erts-7.3/bin/erlexec: symbol '__ctype_b': can't resolve
-symbol/
-This means, as I know, wrong libs.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
->> I copy them to router from buildroot generated rootfs, and error
->> "'/opt/lib/libc.so.1' library contains unsupported TLS" appears. So
->> it seems you
->> are right about toolchain.
+  Regards,
+  Arnout
+
+> ---
+>  package/python-pyftpdlib/python-pyftpdlib.hash | 6 +++---
+>  package/python-pyftpdlib/python-pyftpdlib.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 >
->  How does it find things in /opt? Did you pass LD_LIBRARY_PATH?
-
-Yes, I change LD_LIBRARY_PATH to erlexec find libraries in /opt too.
-
-> You could copy the entire buildroot rootfs, then you're sure to have
-> everything needed.
+> diff --git a/package/python-pyftpdlib/python-pyftpdlib.hash b/package/python-pyftpdlib/python-pyftpdlib.hash
+> index b6d0cca..9726f9f 100644
+> --- a/package/python-pyftpdlib/python-pyftpdlib.hash
+> +++ b/package/python-pyftpdlib/python-pyftpdlib.hash
+> @@ -1,3 +1,3 @@
+> -# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=0c6f7c447fb702af4d5ca0123003c9fd, sha256 locally computed
+> -md5     0c6f7c447fb702af4d5ca0123003c9fd  pyftpdlib-1.5.0.tar.gz
+> -sha256  0111127418e9012a8e9e6c05a0c64af1acef8c31128834805fb0f9a49c746261  pyftpdlib-1.5.0.tar.gz
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=61b23e2362df23d0dfa5fe76f6e2ab55, sha256 locally computed
+> +md5  61b23e2362df23d0dfa5fe76f6e2ab55  pyftpdlib-1.5.1.tar.gz
+> +sha256  7bcd7fc825123414a157718c6dcdcb0978208d3c865d4650564acef4acce3354  pyftpdlib-1.5.1.tar.gz
+> diff --git a/package/python-pyftpdlib/python-pyftpdlib.mk b/package/python-pyftpdlib/python-pyftpdlib.mk
+> index 11e24e2..85d0b56 100644
+> --- a/package/python-pyftpdlib/python-pyftpdlib.mk
+> +++ b/package/python-pyftpdlib/python-pyftpdlib.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
 >
->  Regards,
->  Arnout
-
-Where should be destination of copying? /opt or target filesystem? If
-last, it is read only and I should recompile it all to add buildroot
-files not to /opt.
-
->>
->>
->>>
->>>  Regards,
->>>  Arnout
->>>
->>>>
->>>> *Buildroot:* snapshot from 2016.05.13
->>>> *C library in menuconfig:* uClibc with C++ support
->>>> *defconfig:* bcm
->>>> *Target Architecture:* ARM (little endian)
->>>> *Target Architecture Variant:* cortex-A9
->>>> *System running buildroot:* Debian 8 x64
->>>> *Router:* Broadcom BCM4708A0, 2xARM Cortex A9, asuswrt-merlin 380.58_0
->>>> *.config:* in attach
->>>>
->>>> -- 
->>>> ????????????? ????????? ?????: 1D38C8C9
->>>> ?????????: 6210 01B6 A34E E490 A9E4  87DD 841D 0ABE 1D38 C8C9
->>>>
->>>>
->>>>
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot at busybox.net
->>>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>>
->>>
->>>
->>> -- 
->>> Arnout Vandecappelle                          arnout at mind be
->>> Senior Embedded Software Architect            +32-16-286500
->>> Essensium/Mind                                http://www.mind.be
->>> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
->>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
->>> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->>
->>
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
+> -PYTHON_PYFTPDLIB_VERSION = 1.5.0
+> +PYTHON_PYFTPDLIB_VERSION = 1.5.1
+>  PYTHON_PYFTPDLIB_SOURCE = pyftpdlib-$(PYTHON_PYFTPDLIB_VERSION).tar.gz
+> -PYTHON_PYFTPDLIB_SITE = https://pypi.python.org/packages/source/p/pyftpdlib
+> +PYTHON_PYFTPDLIB_SITE = https://pypi.python.org/packages/a8/f8/0f6db156898616dbcbd7bf865660295c81479071ab0fcd1898fe1b3a4fc4
+>  PYTHON_PYFTPDLIB_SETUP_TYPE = setuptools
+>  PYTHON_PYFTPDLIB_LICENSE = MIT
+>  PYTHON_PYFTPDLIB_LICENSE_FILES = LICENSE
 >
->
+
 
 -- 
-????????????? ????????? ?????: 1D38C8C9
-?????????: 6210 01B6 A34E E490 A9E4  87DD 841D 0ABE 1D38 C8C9
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160519/31e2d41e/attachment-0001.html>
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
