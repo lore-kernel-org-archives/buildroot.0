@@ -1,43 +1,39 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 18 May 2016 09:45:50 +0200
-Subject: [Buildroot] [PATCH] qt5serialbus: depend on toolchain headers >= 3.6
-Message-ID: <1463557550-3622-1-git-send-email-yegorslists@googlemail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 18 May 2016 11:14:37 +0100
+Subject: [Buildroot] [PATCH next] libcurl: bump version to 7.49.0
+Message-ID: <1463566477-50773-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
-
-qt5serialbus requires CAN FD support, that was introduced
-in kernel 3.6. Add appropriate toolchain headers dependency.
-
-Fixes:
-http://autobuild.buildroot.net/results/617/6176a24799b5d80312be954089efbbb498fa1571/
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/qt5/qt5serialbus/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libcurl/libcurl.hash | 2 +-
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5serialbus/Config.in b/package/qt5/qt5serialbus/Config.in
-index 504141c..f5b713d 100644
---- a/package/qt5/qt5serialbus/Config.in
-+++ b/package/qt5/qt5serialbus/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_QT5SERIALBUS
- 	bool "qt5serialbus"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6 # CAN FD
- 	select BR2_PACKAGE_QT5BASE
- 	select BR2_PACKAGE_QT5SERIALPORT
- 	help
-@@ -9,3 +10,6 @@ config BR2_PACKAGE_QT5SERIALBUS
- 	  This package corresponds to the qt5serialbus module.
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index a8208de..f1f2ee5 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	864e7819210b586d42c674a1fdd577ce75a78b3dda64c63565abe5aefd72c753	curl-7.48.0.tar.bz2
++sha256 14f44ed7b5207fea769ddb2c31bd9e720d37312e1c02315def67923a4a636078  curl-7.49.0.tar.bz2
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index d2c39d5..60c80c8 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://qt.io
-+
-+comment "qt5serialbus needs headers >= 3.6"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
+-LIBCURL_VERSION = 7.48.0
++LIBCURL_VERSION = 7.49.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = http://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 -- 
-2.1.4
+2.7.3
