@@ -1,39 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 22:32:56 +0200
-Subject: [Buildroot] [git commit] toolchain: enable paranoid unsafe path
-	check by default
-Message-ID: <20160601161308.9F6C4802A0@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 19 May 2016 21:12:38 +0200
+Subject: [Buildroot] [git commit] toolchain: bump ARC tools to arc-2016.03
+	release
+Message-ID: <20160601161308.EE671802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61c8854cef2a41be3175bbf7f0992c31560a1dd7
+commit: https://git.buildroot.net/buildroot/commit/?id=09439560b9f959e4477155eb1b2963e33c43db73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This check is enabled for all build in the Buildroot autobuilders since [1]
-(i.e since 2015.02 release).
+This change switches ARC tools to the most recent arc-2016.03
+version.
 
-Enable this option by default.
+ARC GNU tools of version arc-2016.03 bring some quite significant
+changes like:
+ * Binutils v2.26+ (upstream commit id 202ac19 with additional ARC
+ * patches)
+ * GCC v4.8.5
+ * GDB 7.10
 
-[1] https://git.busybox.net/buildroot-test/commit/?id=41552e2a249de4568aa01f14bd588d1c8166f70b
+More about changes, improvements and fixes could be found here:
+https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2016.03
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Note in this change we're adding sha512 checksums for
+both binutils and gcc tarballs fetched from GitHub.
+
+Build and run-tested in nSIM for both ARC700 and ARC HS38.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/binutils/Config.in.host                                      | 2 +-
+ .../binutils/{arc-2016.03-rc2 => arc-2016.03}/0300-ld-makefile.patch | 0
+ .../0301-check-ldrunpath-length.patch                                | 0
+ .../0500-add-sysroot-fix-from-bug-3049.patch                         | 0
+ .../0600-poison-system-directories.patch                             | 0
+ package/binutils/binutils.hash                                       | 5 +++--
+ package/binutils/binutils.mk                                         | 2 +-
+ package/gcc/Config.in.host                                           | 2 +-
+ package/gcc/{arc-2016.03-rc2 => arc-2016.03}/130-pr43538.patch       | 0
+ .../{arc-2016.03-rc2 => arc-2016.03}/301-missing-execinfo_h.patch    | 0
+ .../305-libmudflap-susv3-legacy.patch                                | 0
+ package/gcc/{arc-2016.03-rc2 => arc-2016.03}/842-PR60155.patch       | 0
+ .../{arc-2016.03-rc2 => arc-2016.03}/850-libstdcxx-uclibc-c99.patch  | 0
+ .../gcc/{arc-2016.03-rc2 => arc-2016.03}/851-PR-other-56780.patch    | 0
+ .../930-libgcc-disable-split-stack-nothreads.patch                   | 0
+ package/gcc/gcc.hash                                                 | 5 +++--
+ package/gdb/Config.in.host                                           | 2 +-
+ package/gdb/gdb.hash                                                 | 2 +-
+ 18 files changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index b5cc892..93b4f69 100644
---- a/Config.in
-+++ b/Config.in
-@@ -683,6 +683,7 @@ menu "Advanced"
- 
- config BR2_COMPILER_PARANOID_UNSAFE_PATH
- 	bool "paranoid check of library/header paths"
-+	default y
- 	help
- 	  By default, when this option is disabled, when the Buildroot
- 	  cross-compiler will encounter an unsafe library or header
+Patch is too large, so refusing to show it
