@@ -1,30 +1,37 @@
-From: Jaap Crezee <jaap@jcz.nl>
-Date: Thu, 19 May 2016 22:08:53 +0200
-Subject: [Buildroot] host-lzop failing when host is using gcc-6
-Message-ID: <ba2ba1aa-3774-89b9-f8bf-270bc3ebac78@jcz.nl>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 19 May 2016 22:17:32 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-05-18
+In-Reply-To: <1463686416.2081.20.camel@embedded.rocks>
+References: <20160519063019.BA798101875@stock.ovh.net>
+ <1463686416.2081.20.camel@embedded.rocks>
+Message-ID: <1463689052.2081.22.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+On Do, 2016-05-19 at 21:33 +0200, J?rg Krause wrote:
+> On Do, 2016-05-19 at 08:30 +0200, Thomas Petazzoni wrote:
+> > Build statistics for 2016-05-18
+> > ===============================
+> > 
+> > ??????x86_64 |??????????????????????lxc-1.1.5 | NOK |
+> > http://autobuild.buildroot.net/results/f321823be6b477be7dc55393e563
+> > a3
+> > a61794265d/
+> 
+> musl build issues...
+> 
+> Upstreams version 2.0.x includes a series of 7 patches to allow
+> building lxc with the musl libc. I would prefer to update rather than
+> backport all the necessary patches. However, we're already in the
+> release candidate cycle.
 
+In fact, those patches are not needed for our configuration of lxc.
+However, another patch is required which is not yet available on
+upstream. I will submit a patch soon.
 
-host-lzop seems to be failing when Archlinux switched to gcc-6.x 
-recently. One can see the attached logfile. Anybody willing to 
-investigate? I don't have time at the moment.
-HOSTCC=gcc-4.8 bypasses the issue for me...
-
-
-regards,
-
-
-Jaap Crezee
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: host-lzop.log
-Type: text/x-log
-Size: 2488 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160519/428db00a/attachment.bin>
+Best regards
+J?rg Krause
