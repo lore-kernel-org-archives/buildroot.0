@@ -1,41 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 22:47:33 +0200
-Subject: [Buildroot] [git commit] python: remove *.pyo files
-Message-ID: <20160601161308.D071A7FBB0@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 19 May 2016 21:15:45 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-bad: add sbc support
+Message-ID: <20160601161309.0E17B802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59972daa39fe90de7c353eaa79834571efb4cd08
+commit: https://git.buildroot.net/buildroot/commit/?id=5d9389ebc2d9a3020277102466a9f223c2a3f24b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even though we disable the build of .pyo files in the interpreter,
-nothing prevents other packages to install them. Since we only want to
-keep either .py or .pyc or both, let's add a target finalize hooks
-that removes all .pyo files.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[Thomas: add --no-run-if-empty option to xargs, as suggested by Samuel.]
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Reviewed-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python/python.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 4 ++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 8 +++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 819d32b..c96d218 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -230,3 +230,11 @@ define PYTHON_REMOVE_PYC_FILES
- endef
- TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYC_FILES
- endif
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index c4c4e43..046c2aa 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -638,6 +638,10 @@ comment "rsvg plugin needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SBC
++	bool "sbc"
++	select BR2_PACKAGE_SBC
 +
-+# In all cases, we don't want to keep the optimized .pyo files
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+define PYTHON_REMOVE_PYO_FILES
-+	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyo' -print0 | xargs -0 --no-run-if-empty rm -f
-+endef
-+TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYO_FILES
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDL
+ 	bool "sdl"
+ 	select BR2_PACKAGE_SDL
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index c3c4682..8ddf5d9 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -71,7 +71,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
+ 	--disable-gme \
+ 	--disable-xvid \
+ 	--disable-vdpau \
+-	--disable-sbc \
+ 	--disable-schro \
+ 	--disable-zbar \
+ 	--disable-rtmp \
+@@ -743,6 +742,13 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-rsvg
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SBC),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-sbc
++GST1_PLUGINS_BAD_DEPENDENCIES += sbc
++else
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-sbc
 +endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDL),y)
+ GST1_PLUGINS_BAD_CONF_ENV += ac_cv_path_SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-sdl
