@@ -1,55 +1,44 @@
 From: Geoff Levand <geoff@infradead.org>
 Date: Thu, 19 May 2016 22:33:25 +0000
-Subject: [Buildroot] [PATCH 0/3] go language enhancements
-Message-ID: <cover.1463696779.git.geoff@infradead.org>
+Subject: [Buildroot] [PATCH 1/3] package/go-bootstrap: Build host tools with
+	host CC
+In-Reply-To: <cover.1463696779.git.geoff@infradead.org>
+References: <cover.1463696779.git.geoff@infradead.org>
+Message-ID: <78eb610ef2c82ae5c2adb5be9309401eeffe8cfb.1463696779.git.geoff@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch 3 adds a new package etcd, which does not use cgo support and can be used
-to test builds without BR2_TOOLCHAIN_HAS_THREADS.
+Use the host compiler when building host tools.
 
--Geoff
+The go build system is not compatable with ccache, so use HOSTCC_NOCCACHE
+here.  See https://github.com/golang/go/issues/11685.
 
-The following changes since commit 3f3342a581970977f28620f17391d8aaf2204fec:
+Signed-off-by: Geoff Levand <geoff@infradead.org>
+---
+ package/go-bootstrap/go-bootstrap.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-  Update for 2016.05-rc2 (2016-05-17 16:11:24 +0200)
-
-are available in the git repository at:
-
-  git at github.com:glevand/buildroot--buildroot.git for-merge-go-enhancements
-
-for you to fetch changes up to 2693e1ba9409afcdea6b26f0d118c48cdfd0766e:
-
-  etcd: new package (2016-05-19 15:20:13 -0700)
-
-----------------------------------------------------------------
-Geoff Levand (3):
-      package/go-bootstrap: Build host tools with host CC
-      package/go: Enable MIPS support
-      etcd: new package
-
- package/Config.in                    |  1 +
- package/etcd/Config.in               |  9 +++++
- package/etcd/S80etcd2                | 33 ++++++++++++++++++
- package/etcd/etcd.hash               |  2 ++
- package/etcd/etcd.mk                 | 67 ++++++++++++++++++++++++++++++++++++
- package/etcd/etcd2.service           | 17 +++++++++
- package/etcd/etcd2_sysv.conf         | 13 +++++++
- package/etcd/etcd2_tmpfiles.conf     |  1 +
- package/go-bootstrap/go-bootstrap.mk |  3 ++
- package/go/Config.in.host            |  2 +-
- package/go/go.mk                     |  4 +++
- 11 files changed, 151 insertions(+), 1 deletion(-)
- create mode 100644 package/etcd/Config.in
- create mode 100644 package/etcd/S80etcd2
- create mode 100644 package/etcd/etcd.hash
- create mode 100644 package/etcd/etcd.mk
- create mode 100644 package/etcd/etcd2.service
- create mode 100644 package/etcd/etcd2_sysv.conf
- create mode 100644 package/etcd/etcd2_tmpfiles.conf
-
+diff --git a/package/go-bootstrap/go-bootstrap.mk b/package/go-bootstrap/go-bootstrap.mk
+index 47f5013..29f2b03 100644
+--- a/package/go-bootstrap/go-bootstrap.mk
++++ b/package/go-bootstrap/go-bootstrap.mk
+@@ -19,11 +19,14 @@ HOST_GO_BOOTSTRAP_DEPENDENCIES = toolchain
+ 
+ HOST_GO_BOOTSTRAP_ROOT = $(HOST_DIR)/usr/lib/go-$(GO_BOOTSTRAP_VERSION)
+ 
++# The go build system is not compatable with ccache, so use HOSTCC_NOCCACHE
++# here.  See https://github.com/golang/go/issues/11685.
+ HOST_GO_BOOTSTRAP_MAKE_ENV = \
+ 	GOOS=linux \
+ 	GOROOT_FINAL="$(HOST_GO_BOOTSTRAP_ROOT)" \
+ 	GOROOT="$(@D)" \
+ 	GOBIN="$(@D)/bin" \
++	CC=$(HOSTCC_NOCCACHE) \
+ 	CGO_ENABLED=0
+ 
+ define HOST_GO_BOOTSTRAP_BUILD_CMDS
 -- 
 2.5.0
