@@ -1,92 +1,35 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 19 May 2016 10:25:37 -0300
-Subject: [Buildroot] [PATCH 2/2] connman: remove xtables build fix patch
-In-Reply-To: <1463664337-881-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1463664337-881-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1463664337-881-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 19 May 2016 10:26:47 -0300
+Subject: [Buildroot] Analysis of build results for 2016-05-16
+In-Reply-To: <20160517153611.2a3b4199@free-electrons.com>
+References: <20160517063022.7001A10142D@stock.ovh.net>
+ <20160517153611.2a3b4199@free-electrons.com>
+Message-ID: <573DBF17.3070406@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This was added in 0dece985 to deal with kernel headers 4.5 -> 4.5.4
-breakage. Unfortunately the fix in 4.5.5 and 4.6+ doesn't deal correctly
-with this causing more build breakage, so we'd rather "break" for the
-small range of 4.5.x versions broken than for the rest of time.
+On 17/05/16 10:36, Thomas Petazzoni wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/connman/0001-xtables.patch | 61 --------------------------------------
- 1 file changed, 61 deletions(-)
- delete mode 100644 package/connman/0001-xtables.patch
+>>           arm |                 collectd-5.5.1 | NOK | http://autobuild.buildroot.net/results/80a75aaebd55fca1220048d1d4dfb434ce4d9804/
+>>        x86_64 |                 collectd-5.5.1 | NOK | http://autobuild.buildroot.net/results/ae1e3a33a1c2b7433ca7a04659467e2017756b00/
+>
+> Gustavo, any solution in sight for this collectd problem?
 
-diff --git a/package/connman/0001-xtables.patch b/package/connman/0001-xtables.patch
-deleted file mode 100644
-index 277fce6..0000000
---- a/package/connman/0001-xtables.patch
-+++ /dev/null
-@@ -1,61 +0,0 @@
--Use some preprocessor tricks to route around incompatibilies seen
--between newer Linux kernels and glibc when both net/if.h and linux/if.h
--are included in the same source.
--
--Patch from gentoo, see https://bugs.gentoo.org/show_bug.cgi?id=577584
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
----- connman-1.31/src/iptables.c.old	2016-03-22 20:12:47.829460752 -0700
--+++ connman-1.31/src/iptables.c	2016-03-22 21:33:36.835384724 -0700
--@@ -28,11 +28,11 @@
-- #include <stdio.h>
-- #include <string.h>
-- #include <unistd.h>
-- #include <sys/errno.h>
-- #include <sys/socket.h>
---#include <xtables.h>
--+#include "connman_xtables.h"
-- #include <inttypes.h>
-- 
-- #include <linux/netfilter_ipv4/ip_tables.h>
-- 
-- #include "connman.h"
----- connman-1.31/src/firewall.c.old	2016-03-22 21:29:01.959472262 -0700
--+++ connman-1.31/src/firewall.c	2016-03-22 21:33:53.048144181 -0700
--@@ -23,11 +23,11 @@
-- #include <config.h>
-- #endif
-- 
-- #include <errno.h>
-- 
---#include <xtables.h>
--+#include "connman_xtables.h"
-- #include <linux/netfilter_ipv4/ip_tables.h>
-- 
-- #include "connman.h"
-- 
-- #define CHAIN_PREFIX "connman-"
----- /dev/null	2016-03-18 06:21:16.372989086 -0700
--+++ connman-1.31/include/connman_xtables.h	2016-03-22 21:32:21.349504786 -0700
--@@ -0,0 +1,20 @@
--+#ifndef CONNMAN_XTABLES_H
--+#define CONNMAN_XTABLES_H
--+
--+#include <linux/version.h>
--+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 5, 0)
--+#include <xtables.h>
--+#else
--+#ifdef __USE_MISC
--+#define GENTOO_USE_MISC __USE_MISC
--+#undef __USE_MISC
--+#endif
--+
--+#include <xtables.h>
--+
--+#ifdef GENTOO_USE_MISC
--+#define __USE_MISC GENTOO_USE_MISC
--+#undef GENTOO_USE_MISC
--+#endif
--+#endif
--+#endif
--- 
-2.7.3
+Hi.
+This is the same problem that was fixed for connman in 0dece985, fixed 
+in linux via 4a91cb61.
+The problem is that the connman fix breaks the proper fix in the kernel, 
+and now that 4.5.5 and 4.6 are out i think the best approach is to bump 
+the 4.5.x series for the release and drop the connman patch.
+This has the side-effect of making connman/collectd with iptables and 
+possibly some other netfilter-wielding code to be effectively broken for 
+4.5.0 -> 4.5.4 headers though, but as long as we don't ship these in a 
+release i think we should genrally be fine.
+Regarding external toolchains time will tell, but any package patches we 
+make about this will likely fall on silent ears upstream.
+http://patchwork.ozlabs.org/patch/624067/ and 
+http://patchwork.ozlabs.org/patch/624068/ address this.
+Regards.
