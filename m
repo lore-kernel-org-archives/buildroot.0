@@ -1,18 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 19 May 2016 15:33:30 -0300
-Subject: [Buildroot] [PATCH 2/2] gst1-plugins-bad: add sbc support
-In-Reply-To: <1463680895-6026-2-git-send-email-marcin.nowakowski@imgtec.com>
-References: <1463680895-6026-1-git-send-email-marcin.nowakowski@imgtec.com>
- <1463680895-6026-2-git-send-email-marcin.nowakowski@imgtec.com>
-Message-ID: <573E06FA.50702@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 19 May 2016 21:39:31 +0300
+Subject: [Buildroot] [PATCH] boot/uboot: fix missing host-openssl for
+ i.MX28 target
+In-Reply-To: <1463682441.2081.4.camel@embedded.rocks>
+References: <1463659540-28813-1-git-send-email-joerg.krause@embedded.rocks>
+ <20160519130203.GB2178@tarshish>
+ <1463682441.2081.4.camel@embedded.rocks>
+Message-ID: <20160519183931.GD2178@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/05/16 15:01, Marcin Nowakowski wrote:
+Hi J?rg,
 
-> Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+On Thu, May 19, 2016 at 08:27:21PM +0200, J?rg Krause wrote:
+> On Do, 2016-05-19 at 16:02 +0300, Baruch Siach wrote:
+> > On Thu, May 19, 2016 at 02:05:40PM +0200, J?rg Krause wrote:
+> > > From: J?rg Krause <jk@lintech.de>
+> > 
+> > I think you should keep Julien's authorship of this patch.
+> 
+> Yes! Honestly, I was suprised by this. In fact I didn't applied the
+> patch with git, but by copy & paste and then did a git commit & git
+> format-patch at work and git commit at home...
 
-Reviewed-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+You can set the authorship of your latest commit with
+
+  git --amend --author=[author]
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
