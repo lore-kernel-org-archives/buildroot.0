@@ -1,51 +1,42 @@
 From: Geoff Levand <geoff@infradead.org>
 Date: Thu, 19 May 2016 22:25:02 +0000
-Subject: [Buildroot] [PATCH v2 0/6] Fixes for go language support
-Message-ID: <cover.1463696454.git.geoff@infradead.org>
+Subject: [Buildroot] [PATCH v2 2/6] package/go: Add HOST_GO_TARGET_ENV
+In-Reply-To: <cover.1463696454.git.geoff@infradead.org>
+References: <cover.1463696454.git.geoff@infradead.org>
+Message-ID: <81f0d1d22fd706218b4daa92b4c7f82507c1e1ed.1463696454.git.geoff@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+For the convenience of package makefiles define the new
+make variables HOST_GO_TOOLDIR and HOST_GO_TARGET_ENV.
 
-This series includes a number of fixup for the go language support.  All the
-buildbot problems pointed out by Thomas [1] should be resolved by this series.
+Signed-off-by: Geoff Levand <geoff@infradead.org>
+---
+ package/go/go.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-As requested, I pulled out the enhancment patches to post as a seperate
-series [2].  Please consider all patches in this series to apply to master.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2016-April/159336.html
-[2] https://github.com/glevand/buildroot--buildroot/tree/for-merge-go-enhancements
-
--Geoff
-
-The following changes since commit 3f3342a581970977f28620f17391d8aaf2204fec:
-
-  Update for 2016.05-rc2 (2016-05-17 16:11:24 +0200)
-
-are available in the git repository at:
-
-  git at github.com:glevand/buildroot--buildroot.git for-merge-go-fixes
-
-for you to fetch changes up to ec83a5927025fc759d5bfc26ee01aabde3658a7c:
-
-  package/go: Set file timestamp (2016-05-19 15:17:20 -0700)
-
-----------------------------------------------------------------
-Geoff Levand (6):
-      package/go: Build host tools with host CC
-      package/go: Add HOST_GO_TARGET_ENV
-      package/flannel: Use HOST_GO_TARGET_ENV
-      package/go: Add HOST_GO_CGO_ENABLED
-      package/flannel: Add BR2_TOOLCHAIN_HAS_THREADS
-      package/go: Set file timestamp
-
- package/flannel/Config.in  |  4 +++
- package/flannel/flannel.mk |  2 +-
- package/go/go.mk           | 66 ++++++++++++++++++++++++++++++++++++++++++----
- 3 files changed, 66 insertions(+), 6 deletions(-)
-
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 5acd75f..5e4ee09 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -35,6 +35,15 @@ endif
+ HOST_GO_DEPENDENCIES = host-go-bootstrap
+ HOST_GO_ROOT = $(HOST_DIR)/usr/lib/go
+ 
++# For the convienience of target packages.
++HOST_GO_TOOLDIR = $(HOST_GO_ROOT)/pkg/tool/linux_$(GO_GOARCH)
++HOST_GO_TARGET_ENV = \
++	GOARCH=$(GO_GOARCH) \
++	GOROOT="$(HOST_GO_ROOT)" \
++	CC=$(TARGET_CC) \
++	CXX=$(TARGET_CXX) \
++	GOTOOLDIR="$(HOST_GO_TOOLDIR)"
++
+ # The go build system doesn't have the notion of cross compiling, but just the
+ # notion of architecture.  When the host and target architectures are different
+ # it expects to be given a target cross compiler in CC_FOR_TARGET.  When the
 -- 
 2.5.0
