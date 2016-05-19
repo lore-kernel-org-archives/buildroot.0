@@ -1,78 +1,90 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 18 May 2016 23:55:04 +0000
-Subject: [Buildroot] [Bug 8946] New: Valgrind fails to build with stack
- protection turned on
-Message-ID: <bug-8946-163@https.bugs.busybox.net/>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 18 May 2016 22:47:36 -0500
+Subject: [Buildroot] [PATCH 1/1] package/igmpproxy: fix musl build
+In-Reply-To: <CANQCQpYawdhZvJ7pAUEKrVUPgp7x5u-jMP9jE8DV=oe5h1_ocQ@mail.gmail.com>
+References: <1463348471-30704-1-git-send-email-matt@thewebers.ws>
+ <20160517223147.40e5fcb8@free-electrons.com>
+ <CANQCQpYawdhZvJ7pAUEKrVUPgp7x5u-jMP9jE8DV=oe5h1_ocQ@mail.gmail.com>
+Message-ID: <CANQCQpbk1VR3=3MM_4z2WwmyjEOeXABY+XZ8Mkv4oDdi3OBX-Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8946
+Thomas,
 
-            Bug ID: 8946
-              Host: ARM
-            Target: IMX6
-             Build: Ubuntu 16.04
-           Summary: Valgrind fails to build with stack protection turned
-                    on
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: nnabavian at sonendo.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Wed, May 18, 2016 at 11:33 AM, Matthew Weber <
+matthew.weber@rockwellcollins.com> wrote:
 
-arm-none-linux-gnueabi-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -Os  -fstack-protector   -o memcheck-arm-linux -O2 -g
--std=gnu99 -Wall -Wmissing-prototypes -Wshadow -Wpointer-arith
--Wstrict-prototypes -Wmissing-declarations -Wcast-qual -Wwrite-strings
--Wempty-body -Wformat -Wformat-security -Wignored-qualifiers
--Wmissing-parameter-type -Wold-style-declaration -fno-stack-protector
--fno-strict-aliasing -fno-builtin  -marm -mcpu=cortex-a8 -O2 -static
--nodefaultlibs -nostartfiles -u _start   memcheck_arm_linux-mc_leakcheck.o
-memcheck_arm_linux-mc_malloc_wrappers.o memcheck_arm_linux-mc_main.o
-memcheck_arm_linux-mc_translate.o memcheck_arm_linux-mc_machine.o
-memcheck_arm_linux-mc_errors.o ../coregrind/libcoregrind-arm-linux.a
-../VEX/libvex-arm-linux.a -lgcc 
-mkdir -p ../.in_place; \
-for f in ; do \
-  rm -f ../.in_place/$f.dSYM; \
-  ln -f -s ../memcheck/$f.dSYM ../.in_place; \
-done
-memcheck_arm_linux-mc_main.o: In function `mc_post_reg_write':
-/projects/nitrogen6x/buildroot-2016.05-rc1/output/build/valgrind-3.11.0/memcheck/mc_main.c:4165:
-undefined reference to `__stack_chk_fail'
+> All,
+>
+> On May 17, 2016 3:32 PM, "Thomas Petazzoni" <
+> thomas.petazzoni at free-electrons.com> wrote:
+> >
+> > Hello,
+> >
+> > On Sun, 15 May 2016 16:41:11 -0500, Matt Weber wrote:
+> >
+> > > diff --git
+> a/package/igmpproxy/0002-Use-standard-unsigned-integer-types.patch
+> b/package/igmpproxy/0002-Use-standard-unsigned-integer-types.patch
+> > > new file mode 100644
+> > > index 0000000..200bf23
+> > > --- /dev/null
+> > > +++ b/package/igmpproxy/0002-Use-standard-unsigned-integer-types.patch
+> > > @@ -0,0 +1,213 @@
+> > > +Fix musl build
+> > > +
+> > > +Downloaded from:
+> > > +
+> https://github.com/alpinelinux/aports/blob/master/main/igmpproxy/0001-Use-standard-unsigned-integer-types.patch
+> > > +
+> > > +Patch was reported upstream:
+> > > +http://sourceforge.net/p/igmpproxy/bugs/22/
+> > > +
+> > > +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> >
+> > This should be below the commit log of the original patch, and the "Fix
+> > musl build" is not good. We don't care about "Fixing the musl build",
+> > we want to make the source code better, which has the consequence of
+> > fixing the musl build. So the original patch title "Use standard
+> > unsigned integer types" is good.
+>
+> Noted.
+>
+> >
+> > > +From ed3dff27f360239910310be6706fd54572398992 Mon Sep 17 00:00:00 2001
+> > > +From: Natanael Copa <ncopa@alpinelinux.org>
+> > > +Date: Mon, 3 Mar 2014 12:11:26 +0000
+> > > +Subject: [PATCH] Use standard unsigned integer types
+> > > +
+> > > +Use the stanard unsigned integer types instead of the non-standard
+> > > +u_char, u_short and u_int.
+> > > +
+> > > +This fixes build with musl libc.
+> > > +
+> > > +(cherry picked from commit b914bcf882c6189be7a0ce6fceb34422372c3606)
+> >
+> > From where is this commit b914bcf882c6189be7a0ce6fceb34422372c3606
+> > coming? Upstream seems to be https://github.com/pali/igmpproxy, and I
+> > don't see any commit identified as
+> > b914bcf882c6189be7a0ce6fceb34422372c3606.
+>
+> Sorry, bad assumption on my part about the original patch's origin being
+> good.  I'll open an upstream issue and work  on getting it merged or at
+> minimum something we can reference correctly.
+>
+>
+So if looks like b914bc,,,,, is the hash of the patch posted with the
+sourceforge issue ticket.  There isn't a repository with the change that I
+could find.
+https://sourceforge.net/p/igmpproxy/bugs/22/attachment/0001-Use-standard-unsigned-integer-types.patch
 
-and many more of the same
+I'll update this comment to mention that the patch was based on the patch
+attached to the sourceforge issue ticket.
 
-/projects/nitrogen6x/buildroot-2016.05-rc1/output/build/valgrind-3.11.0/VEX/priv/main_util.c:493:
-undefined reference to `__stack_chk_guard'
-collect2: error: ld returned 1 exit status
-Makefile:1014: recipe for target 'memcheck-arm-linux' failed
-make[5]: *** [memcheck-arm-linux] Error 1
-Makefile:1290: recipe for target 'all-recursive' failed
-make[4]: *** [all-recursive] Error 1
-Makefile:825: recipe for target 'all-recursive' failed
-make[3]: *** [all-recursive] Error 1
-Makefile:694: recipe for target 'all' failed
-make[2]: *** [all] Error 2
-package/pkg-generic.mk:195: recipe for target
-'/projects/nitrogen6x/buildroot-2016.05-rc1/output/build/valgrind-3.11.0/.stamp_built'
-failed
-make[1]: ***
-[/projects/nitrogen6x/buildroot-2016.05-rc1/output/build/valgrind-3.11.0/.stamp_built]
-Error 2
-Makefile:36: recipe for target '_all' failed
-make: *** [_all] Error 2
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+-- Matt
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160518/bd3e7d65/attachment.html>
