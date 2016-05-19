@@ -1,29 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 19 May 2016 15:52:01 -0300
-Subject: [Buildroot] Analysis of build results for 2016-05-16
-In-Reply-To: <20160517153611.2a3b4199@free-electrons.com>
-References: <20160517063022.7001A10142D@stock.ovh.net>
- <20160517153611.2a3b4199@free-electrons.com>
-Message-ID: <573E0B51.7010000@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 19 May 2016 21:13:08 +0200
+Subject: [Buildroot] [PATCH] toolchain: bump ARC tools to arc-2016.03
+	release
+In-Reply-To: <1463606806-5676-1-git-send-email-abrodkin@synopsys.com> (Alexey
+ Brodkin's message of "Thu, 19 May 2016 00:26:46 +0300")
+References: <1463606806-5676-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <87zirlamkb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/05/16 10:36, Thomas Petazzoni wrote:
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
->>       powerpc |        gadgetfs-test-undefined | NOK | http://autobuild.buildroot.net/results/163fbc2ccd88282be2f5d5354b125429bfb4ff4b/
->
-> Gustavo, another _restgpr_29_x issue, and this is with a Buildroot
-> toolchain, so we can't blame an old CT-NG or Sourcery toolchain here :)
+ > This change switches ARC tools to the most recent arc-2016.03
+ > version.
 
-Hi.
-No no no, the other was a _restgpr_31_x issue ;)
-The recurring problem is that gcc targetting powerpc has bugs when using 
--Os.
-We could override per-package given this condition, or simply switch to 
--O2 as default for powerpc. I'm more inclined for the second option.
-I believe there are patches floating around the internets to fix this 
-but they were never committed upstream.
-Regards.
+ > ARC GNU tools of version arc-2016.03 bring some quite significant
+ > changes like:
+ >  * Binutils v2.26+ (upstream commit id 202ac19 with additional ARC
+ >  * patches)
+ >  * GCC v4.8.5
+ >  * GDB 7.10
+
+ > More about changes, improvements and fixes could be found here:
+ > https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2016.03
+
+ > Note in this change we're adding sha512 checksums for
+ > both binutils and gcc tarballs fetched from GitHub.
+
+ > Build and run-tested in nSIM for both ARC700 and ARC HS38.
+
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to next, thanks.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
