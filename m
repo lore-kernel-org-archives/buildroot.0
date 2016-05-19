@@ -1,35 +1,61 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 19 May 2016 09:22:20 -0500
-Subject: [Buildroot] [PATCH v3 1/2] igmpproxy: uclinux support merged
-	upstream
-In-Reply-To: <20160519125512.GA2178@tarshish>
-References: <1463661925-56795-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20160519125512.GA2178@tarshish>
-Message-ID: <CANQCQpauSzRoVfA8CAS8CUCHaMX4G-oTyLpr-YLW-pD7Lj5v_Q@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 19 May 2016 11:23:10 -0300
+Subject: [Buildroot] [PATCH] ruby: fix build for nommu
+Message-ID: <1463667790-2335-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch,
+Fixes:
+http://autobuild.buildroot.net/results/a8b/a8b5fe95bbc1b3cc23db828fbc80d815c88f18c2/
 
-On Thu, May 19, 2016 at 7:55 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...-process.c-fix-rb_spawn_process-for-nommu.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/ruby/0001-process.c-fix-rb_spawn_process-for-nommu.patch
 
-> Hi Matthew,
->
-> On Thu, May 19, 2016 at 07:45:24AM -0500, Matt Weber wrote:
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> > --
-> > v2 -> v3
-> >  - Upstream version bump now contains this feature
->
-> Then both patches should be squashed into one.
->
->
-Sure.
-
--Matt
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160519/3c39e5b2/attachment.html>
+diff --git a/package/ruby/0001-process.c-fix-rb_spawn_process-for-nommu.patch b/package/ruby/0001-process.c-fix-rb_spawn_process-for-nommu.patch
+new file mode 100644
+index 0000000..701c105
+--- /dev/null
++++ b/package/ruby/0001-process.c-fix-rb_spawn_process-for-nommu.patch
+@@ -0,0 +1,34 @@
++From 24e6d5bcf791a5c3f46191e544731420ff8b1312 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Thu, 19 May 2016 11:10:02 -0300
++Subject: [PATCH] process.c: fix rb_spawn_process() for nommu
++
++rb_spawn_process() in process.c tries different solutions for when fork
++and/or spawnv are/aren't available.
++The last resort when both aren't is to use the system() call which
++stores the value in the status variable, which isn't declared.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Patch status: reported https://bugs.ruby-lang.org/issues/12398
++
++ process.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/process.c b/process.c
++index e196639..40967f7 100644
++--- a/process.c
+++++ b/process.c
++@@ -3897,6 +3897,9 @@ rb_spawn_process(struct rb_execarg *eargp, char *errmsg, size_t errmsg_buflen)
++     VALUE prog;
++     struct rb_execarg sarg;
++ #endif
+++#if !defined HAVE_WORKING_FORK || !USE_SPAWNV
+++    int status;
+++#endif
++ 
++ #if defined HAVE_WORKING_FORK && !USE_SPAWNV
++     pid = rb_fork_async_signal_safe(NULL, rb_exec_atfork, eargp, eargp->redirect_fds, errmsg, errmsg_buflen);
++-- 
++2.7.3
++
+-- 
+2.7.3
