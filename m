@@ -1,43 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 May 2016 23:21:38 +0200
-Subject: [Buildroot] [PATCH v5] domoticz: new package
-In-Reply-To: <CAExDhvZaABjAALGBdro-0CLFJiTZnAnKcNzBwz3SyZHO+0NifQ@mail.gmail.com>
-References: <30357_1462263258_57285DDA_30357_1304_1_d5a28a6b-c41a-4918-a007-feff96280fbe@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
- <573CA642.8050305@free.fr>
- <CAExDhvZaABjAALGBdro-0CLFJiTZnAnKcNzBwz3SyZHO+0NifQ@mail.gmail.com>
-Message-ID: <15dbf3d6-df7f-8c61-8abb-da22eb93234d@mind.be>
+Date: Thu, 19 May 2016 23:31:32 +0200
+Subject: [Buildroot] Analysis of build results for 2016-05-16
+In-Reply-To: <573E0B51.7010000@zacarias.com.ar>
+References: <20160517063022.7001A10142D@stock.ovh.net>
+ <20160517153611.2a3b4199@free-electrons.com>
+ <573E0B51.7010000@zacarias.com.ar>
+Message-ID: <4784d6a9-fc6a-de4c-9e4f-7d7daf418d91@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/18/16 20:43, Thiago A. Corr?a wrote:
-> There is a problem with domoticz on JFFS2 systems, because it enables
-> some pragmas. Sqlite then tries to mmap on JFFS2 which is not
-> supported and everything fails, Domoticz can't even create the tables.
->  I fixed it changing sqlite.mk to add:
+On 05/19/16 20:52, Gustavo Zacarias wrote:
+> On 17/05/16 10:36, Thomas Petazzoni wrote:
 > 
-> +SQLITE_CFLAGS += -DSQLITE_TEMP_STORE=3
-> +SQLITE_CFLAGS += -DSQLITE_SHM_DIRECTORY=/tmp
-> +SQLITE_CFLAGS += -DSQLITE_OMIT_WAL
-
- If I understand correctly, the problem is that domoticz is creating sqlite
-tables with pragmas that don't work on JFFS2, right? In that case, it's a
-problem of domoticz and it shouldn't affect all other users of sqlite. In other
-words, it's not OK to change the build options of sqlite.
-
- On the other hand, if sqlite never works at all on jffs2, then I think it could
-be useful to add a config option to sqlite "support filesystems without mmap".
-
+>>>       powerpc |        gadgetfs-test-undefined | NOK |
+>>> http://autobuild.buildroot.net/results/163fbc2ccd88282be2f5d5354b125429bfb4ff4b/
+>>
+>> Gustavo, another _restgpr_29_x issue, and this is with a Buildroot
+>> toolchain, so we can't blame an old CT-NG or Sourcery toolchain here :)
 > 
-> Maybe it could be added to the patch, checking if JFFS2 output is enabled.
+> Hi.
+> No no no, the other was a _restgpr_31_x issue ;)
+> The recurring problem is that gcc targetting powerpc has bugs when using -Os.
+> We could override per-package given this condition, or simply switch to -O2 as
+> default for powerpc. I'm more inclined for the second option.
 
- No, it's very well possible (likely even) that the filesystem on which the
-database is stored is different from the rootfs.
+ Even better: disallow -Os completely for powerpc. If it's fixed in recent gcc
+we can add a gcc version dependency as well.
 
  Regards,
  Arnout
+
+> I believe there are patches floating around the internets to fix this but they
+> were never committed upstream.
+> Regards.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 
 -- 
