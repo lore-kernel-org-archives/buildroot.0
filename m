@@ -1,63 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 May 2016 21:15:45 +0200
-Subject: [Buildroot] [git commit branch/next] gst1-plugins-bad: add sbc
-	support
-Message-ID: <20160519191751.374FE8079C@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 19 May 2016 21:32:32 +0200
+Subject: [Buildroot] [PATCH v3] Config.in: add -Og option
+In-Reply-To: <573CF4DC.2020009@surround.io>
+References: <1463606275-21768-1-git-send-email-martin@surround.io>
+ <bb06b33b-475c-3f3d-7482-36b98aff0be3@mind.be> <573CF4DC.2020009@surround.io>
+Message-ID: <07b2b8bc-ea7b-cbd0-481e-90f6048c5d1e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d9389ebc2d9a3020277102466a9f223c2a3f24b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 05/19/16 01:03, Martin Kelly wrote:
+> On 05/18/2016 03:25 PM, Arnout Vandecappelle wrote:
+>> On 05/18/16 23:17, Martin Kelly wrote:
+>>> -Og (introduced in GCC 4.8) lets you optimize for debugging experience,
+>>> which can be useful for when you want optimized code that is nonetheless
+>>> debuggable.
+>>>
+>>> Signed-off-by: Martin Kelly <martin@surround.io>
+>>
+>> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>>
+>>   For next, obviously.
+>>
+>>   As I wrote separately, rewrapping the entire Config.in can be done in
+>> a separate patch.
+>>
+> 
+> I'd be happy to submit a rewrapping patch, once this one is accepted (to avoid
+> merge conflicts). However, it has high merge conflict potential. I'll base it on
+> next, but it may need a bit of fixing up before being accepted if any patches go
+> in between submission and acceptance.
 
-Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-Reviewed-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gstreamer1/gst1-plugins-bad/Config.in           | 4 ++++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 8 +++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ There have just been 6 changes this year in Config.in so the risk of conflicts
+is not that high.
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index c4c4e43..046c2aa 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -638,6 +638,10 @@ comment "rsvg plugin needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SBC
-+	bool "sbc"
-+	select BR2_PACKAGE_SBC
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDL
- 	bool "sdl"
- 	select BR2_PACKAGE_SDL
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index c3c4682..8ddf5d9 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -71,7 +71,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
- 	--disable-gme \
- 	--disable-xvid \
- 	--disable-vdpau \
--	--disable-sbc \
- 	--disable-schro \
- 	--disable-zbar \
- 	--disable-rtmp \
-@@ -743,6 +742,13 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-rsvg
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SBC),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += --enable-sbc
-+GST1_PLUGINS_BAD_DEPENDENCIES += sbc
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += --disable-sbc
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDL),y)
- GST1_PLUGINS_BAD_CONF_ENV += ac_cv_path_SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-sdl
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
