@@ -1,39 +1,40 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 May 2016 23:15:44 +0200
-Subject: [Buildroot] [PATCH v3 next] openblas: new package
-In-Reply-To: <20160519160040.1eee27e6@free-electrons.com>
-References: <1463652602-3276-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160519142103.507c1395@free-electrons.com> <573DC2D6.5090003@imgtec.com>
- <20160519160040.1eee27e6@free-electrons.com>
-Message-ID: <65c4eb1a-5c6e-39f1-aec1-66857ced57a4@mind.be>
+Date: Thu, 19 May 2016 23:21:38 +0200
+Subject: [Buildroot] [PATCH v5] domoticz: new package
+In-Reply-To: <CAExDhvZaABjAALGBdro-0CLFJiTZnAnKcNzBwz3SyZHO+0NifQ@mail.gmail.com>
+References: <30357_1462263258_57285DDA_30357_1304_1_d5a28a6b-c41a-4918-a007-feff96280fbe@OPEXCLILM6D.corporate.adroot.infra.ftgroup>
+ <573CA642.8050305@free.fr>
+ <CAExDhvZaABjAALGBdro-0CLFJiTZnAnKcNzBwz3SyZHO+0NifQ@mail.gmail.com>
+Message-ID: <15dbf3d6-df7f-8c61-8abb-da22eb93234d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/19/16 16:00, Thomas Petazzoni wrote:
-> Hello,
+On 05/18/16 20:43, Thiago A. Corr?a wrote:
+> There is a problem with domoticz on JFFS2 systems, because it enables
+> some pragmas. Sqlite then tries to mmap on JFFS2 which is not
+> supported and everything fails, Domoticz can't even create the tables.
+>  I fixed it changing sqlite.mk to add:
 > 
-> On Thu, 19 May 2016 14:42:46 +0100, Vicente Olivert Riera wrote:
-[snip]
->>> > > I think that for such small patches, that are not taken from upstream,
->>> > > my preference is to have them in Buildroot itself rather than
->>> > > downloaded by <pkg>_PATCH.  
->> > 
->> > I remember someone told me that we prefer this method when possible...
->
-> Yeah, we don't have a very fixed policy on this. My own thinking is
-> that it's fine to use <pkg>_PATCH to fetch patches that are already
-> otherwise available (from another distribution or from upstream), but
-> when it's done by "us", it's better to have the patch in Buildroot
-> itself. But I agree that the line between both solutions is thin.
+> +SQLITE_CFLAGS += -DSQLITE_TEMP_STORE=3
+> +SQLITE_CFLAGS += -DSQLITE_SHM_DIRECTORY=/tmp
+> +SQLITE_CFLAGS += -DSQLITE_OMIT_WAL
 
- I indeed once wrote "we prefer to download patches through FOO_PATCH rather
-than including it". I think in that particular case it was a patch from a
-different distro. Anyway, I didn't really think it through at the time. I
-certainly agree that it should only be for upstream patches, and maybe also
-patches from different distros.
+ If I understand correctly, the problem is that domoticz is creating sqlite
+tables with pragmas that don't work on JFFS2, right? In that case, it's a
+problem of domoticz and it shouldn't affect all other users of sqlite. In other
+words, it's not OK to change the build options of sqlite.
+
+ On the other hand, if sqlite never works at all on jffs2, then I think it could
+be useful to add a config option to sqlite "support filesystems without mmap".
+
+> 
+> Maybe it could be added to the patch, checking if JFFS2 output is enabled.
+
+ No, it's very well possible (likely even) that the filesystem on which the
+database is stored is different from the rootfs.
 
  Regards,
  Arnout
