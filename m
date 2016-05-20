@@ -1,320 +1,81 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 20 May 2016 12:01:01 +0100
-Subject: [Buildroot] [PATCH v4 next 2/2] openblas: new package
-In-Reply-To: <1463742061-56758-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1463742061-56758-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1463742061-56758-2-git-send-email-Vincent.Riera@imgtec.com>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Fri, 20 May 2016 13:29:02 +0200
+Subject: [Buildroot] [PATCH v2 1/1] python-flask-login: new package
+Message-ID: <1463743742-13361-1-git-send-email-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 ---
-Changes v3 -> v4:
- - Disable Fortran by default. It can be added back in the future when
-   we have a BR2_TOOLCHAIN_HAS_FORTRAN hidden symbol.
- - Bump version so we can get rid of the patch.
- - Match OpenBLAS target cores with Buildroot target cores as much as
-   possible, and drop the ones unsupported in Buildroot.
- - Drop the OpenMP bits in the openblas.mk file. It can be added back
-   in the future when we have a BR2_TOOLCHAIN_HAS_OPENMP hidden symbol.
-
-Changes v2 -> v3:
- - Switch version to HEAD of develop branch as it contains support for
-   MIPS32.
- - Add a patch to fix build failure of P5600 and I6400 targets.
- - Add support for OpenMP when toolchain has NPTL threads.
-
 Changes v1 -> v2:
- - Multi-threading is not available for static-only since it uses
-   dlfcn.h, so modify the "ifeq" statement accordingly.
+ - make python-flask a runtime dependency only.
 
- package/Config.in              |   1 +
- package/openblas/Config.in     | 198 +++++++++++++++++++++++++++++++++++++++++
- package/openblas/openblas.hash |   2 +
- package/openblas/openblas.mk   |  46 ++++++++++
- 4 files changed, 247 insertions(+)
- create mode 100644 package/openblas/Config.in
- create mode 100644 package/openblas/openblas.hash
- create mode 100644 package/openblas/openblas.mk
+package/Config.in                                  |  1 +
+ package/python-flask-login/Config.in               |  8 ++++++++
+ package/python-flask-login/python-flask-login.hash |  3 +++
+ package/python-flask-login/python-flask-login.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-flask-login/Config.in
+ create mode 100644 package/python-flask-login/python-flask-login.hash
+ create mode 100644 package/python-flask-login/python-flask-login.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 0056beb..b59c2f1 100644
+index 804df8b..b7b4984 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1270,6 +1270,7 @@ endif
- 	source "package/msgpack/Config.in"
- 	source "package/mtdev2tuio/Config.in"
- 	source "package/netbsd-queue/Config.in"
-+	source "package/openblas/Config.in"
- 	source "package/orc/Config.in"
- 	source "package/p11-kit/Config.in"
- 	source "package/poco/Config.in"
-diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+@@ -659,6 +659,7 @@ menu "External python modules"
+ 	source "package/python-enum34/Config.in"
+ 	source "package/python-flask/Config.in"
+ 	source "package/python-flask-jsonrpc/Config.in"
++	source "package/python-flask-login/Config.in"
+ 	source "package/python-flup/Config.in"
+ 	source "package/python-gobject/Config.in"
+ 	source "package/python-html5lib/Config.in"
+diff --git a/package/python-flask-login/Config.in b/package/python-flask-login/Config.in
 new file mode 100644
-index 0000000..bfb71b5
+index 0000000..88c413e
 --- /dev/null
-+++ b/package/openblas/Config.in
-@@ -0,0 +1,198 @@
-+config BR2_PACKAGE_OPENBLAS
-+	bool "openblas"
-+	depends on BR2_i386 || BR2_x86_64 || \
-+		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
-+		BR2_mips || BR2_mipsel || \
-+		BR2_mips64 || BR2_mips64el || \
-+		BR2_sparc || BR2_sparc64 || \
-+		BR2_arm || BR2_armeb || \
-+		BR2_aarch64 || BR2_aarch64_be
++++ b/package/python-flask-login/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_FLASK_LOGIN
++	bool "python-flask-login"
++	# runtime dependency
++	select BR2_PACKAGE_PYTHON_FLASK
 +	help
-+	  An optimized BLAS library based on GotoBLAS2 1.13 BSD version.
++	  Flask-Login provides user session management for Flask.
 +
-+	  https://www.openblas.net/
-+
-+if BR2_PACKAGE_OPENBLAS
-+
-+choice
-+	prompt "OpenBLAS target CPU"
-+	help
-+	  OpenBLAS target CPU
-+
-+config BR2_PACKAGE_OPENBLAS_TARGET_P2
-+	bool "P2"
-+	depends on BR2_x86_pentium2
-+config BR2_PACKAGE_OPENBLAS_TARGET_KATMAI
-+	bool "KATMAI"
-+	depends on BR2_x86_pentium3
-+config BR2_PACKAGE_OPENBLAS_TARGET_COPPERMINE
-+	bool "COPPERMINE"
-+	depends on BR2_x86_pentium3
-+config BR2_PACKAGE_OPENBLAS_TARGET_NORTHWOOD
-+	bool "NORTHWOOD"
-+	depends on BR2_x86_pentium4
-+config BR2_PACKAGE_OPENBLAS_TARGET_PRESCOTT
-+	bool "PRESCOTT"
-+	depends on BR2_x86_prescott
-+config BR2_PACKAGE_OPENBLAS_TARGET_BANIAS
-+	bool "BANIAS"
-+	depends on BR2_x86_pentium_m
-+config BR2_PACKAGE_OPENBLAS_TARGET_YONAH
-+	bool "YONAH"
-+	depends on BR2_x86_pentium_m
-+config BR2_PACKAGE_OPENBLAS_TARGET_CORE2
-+	bool "CORE2"
-+	depends on BR2_x86_core2
-+config BR2_PACKAGE_OPENBLAS_TARGET_PENRYN
-+	bool "PENRYN"
-+	depends on BR2_x86_core2
-+config BR2_PACKAGE_OPENBLAS_TARGET_DUNNINGTON
-+	bool "DUNNINGTON"
-+	depends on BR2_x86_core2
-+config BR2_PACKAGE_OPENBLAS_TARGET_NEHALEM
-+	bool "NEHALEM"
-+	depends on BR2_x86_corei7
-+config BR2_PACKAGE_OPENBLAS_TARGET_SANDYBRIDGE
-+	bool "SANDYBRIDGE"
-+	depends on BR2_x86_corei7_avx
-+config BR2_PACKAGE_OPENBLAS_TARGET_HASWELL
-+	bool "HASWELL"
-+	depends on BR2_x86_core_avx2
-+config BR2_PACKAGE_OPENBLAS_TARGET_ATOM
-+	bool "ATOM"
-+	depends on BR2_x86_atom
-+config BR2_PACKAGE_OPENBLAS_TARGET_ATHLON
-+	bool "ATHLON"
-+	depends on BR2_x86_athlon || BR2_x86_athlon_4
-+config BR2_PACKAGE_OPENBLAS_TARGET_OPTERON
-+	bool "OPTERON"
-+	depends on BR2_x86_opteron
-+config BR2_PACKAGE_OPENBLAS_TARGET_OPTERON_SSE3
-+	bool "OPTERON_SSE3"
-+	depends on BR2_x86_opteron_sse3
-+config BR2_PACKAGE_OPENBLAS_TARGET_BARCELONA
-+	bool "BARCELONA"
-+	depends on BR2_x86_barcelona
-+config BR2_PACKAGE_OPENBLAS_TARGET_STEAMROLLER
-+	bool "STEAMROLLER"
-+	depends on BR2_x86_steamroller
-+config BR2_PACKAGE_OPENBLAS_TARGET_SSE_GENERIC
-+	bool "SSE_GENERIC"
-+	depends on BR2_i386 || BR2_x86_64
-+config BR2_PACKAGE_OPENBLAS_TARGET_VIAC3
-+	bool "VIAC3"
-+	depends on BR2_x86_c3 || BR2_x86_c32
-+config BR2_PACKAGE_OPENBLAS_TARGET_POWER4
-+	bool "POWER4"
-+	depends on BR2_powerpc_power4
-+config BR2_PACKAGE_OPENBLAS_TARGET_POWER5
-+	bool "POWER5"
-+	depends on BR2_powerpc_power5
-+config BR2_PACKAGE_OPENBLAS_TARGET_POWER6
-+	bool "POWER6"
-+	depends on BR2_powerpc_power6
-+config BR2_PACKAGE_OPENBLAS_TARGET_POWER7
-+	bool "POWER7"
-+	depends on BR2_powerpc_power7
-+config BR2_PACKAGE_OPENBLAS_TARGET_POWER8
-+	bool "POWER8"
-+	depends on BR2_powerpc_power8
-+config BR2_PACKAGE_OPENBLAS_TARGET_PPCG4
-+	bool "PPCG4"
-+	depends on BR2_powerpc_7400 || BR2_powerpc_7450
-+config BR2_PACKAGE_OPENBLAS_TARGET_PPC970
-+	bool "PPC970"
-+	depends on BR2_powerpc_970
-+config BR2_PACKAGE_OPENBLAS_TARGET_PPC440
-+	bool "PPC440"
-+	depends on BR2_powerpc_440
-+config BR2_PACKAGE_OPENBLAS_TARGET_PPC440FP2
-+	bool "PPC440FP2"
-+	depends on BR2_powerpc_440fp
-+config BR2_PACKAGE_OPENBLAS_TARGET_P5600
-+	bool "P5600"
-+	depends on BR2_mips_32r2
-+config BR2_PACKAGE_OPENBLAS_TARGET_SICORTEX
-+	bool "SICORTEX"
-+	depends on BR2_mips_64
-+config BR2_PACKAGE_OPENBLAS_TARGET_LOONGSON3A
-+	bool "LOONGSON3A"
-+	depends on BR2_mips_64
-+config BR2_PACKAGE_OPENBLAS_TARGET_LOONGSON3B
-+	bool "LOONGSON3B"
-+	depends on BR2_mips_64
-+config BR2_PACKAGE_OPENBLAS_TARGET_I6400
-+	bool "I6400"
-+	depends on BR2_mips_64r6
-+config BR2_PACKAGE_OPENBLAS_TARGET_SPARC
-+	bool "SPARC"
-+	depends on BR2_sparc
-+config BR2_PACKAGE_OPENBLAS_TARGET_SPARCV7
-+	bool "SPARCV7"
-+	depends on BR2_sparc
-+config BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA15
-+	bool "CORTEXA15"
-+	depends on BR2_cortex_a15
-+config BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA9
-+	bool "CORTEXA9"
-+	depends on BR2_cortex_a9
-+config BR2_PACKAGE_OPENBLAS_TARGET_ARMV7
-+	bool "ARMV7"
-+	depends on BR2_cortex_a5 || BR2_cortex_a7 || BR2_cortex_a8 || \
-+		BR2_cortex_a9 || BR2_cortex_a12 || BR2_cortex_a15 || \
-+		BR2_cortex_a17
-+config BR2_PACKAGE_OPENBLAS_TARGET_ARMV8
-+	bool "ARMV8"
-+	depends on BR2_aarch64 || BR2_aarch64_be
-+config BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA57
-+	bool "CORTEXA57"
-+	depends on BR2_aarch64 || BR2_aarch64_be
-+
-+endchoice
-+
-+config BR2_PACKAGE_OPENBLAS_TARGET
-+	string
-+	default "P2"           if BR2_PACKAGE_OPENBLAS_TARGET_P2
-+	default "KATMAI"       if BR2_PACKAGE_OPENBLAS_TARGET_KATMAI
-+	default "COPPERMINE"   if BR2_PACKAGE_OPENBLAS_TARGET_COPPERMINE
-+	default "NORTHWOOD"    if BR2_PACKAGE_OPENBLAS_TARGET_NORTHWOOD
-+	default "PRESCOTT"     if BR2_PACKAGE_OPENBLAS_TARGET_PRESCOTT
-+	default "BANIAS"       if BR2_PACKAGE_OPENBLAS_TARGET_BANIAS
-+	default "YONAH"        if BR2_PACKAGE_OPENBLAS_TARGET_YONAH
-+	default "CORE2"        if BR2_PACKAGE_OPENBLAS_TARGET_CORE2
-+	default "PENRYN"       if BR2_PACKAGE_OPENBLAS_TARGET_PENRYN
-+	default "DUNNINGTON"   if BR2_PACKAGE_OPENBLAS_TARGET_DUNNINGTON
-+	default "NEHALEM"      if BR2_PACKAGE_OPENBLAS_TARGET_NEHALEM
-+	default "SANDYBRIDGE"  if BR2_PACKAGE_OPENBLAS_TARGET_SANDYBRIDGE
-+	default "HASWELL"      if BR2_PACKAGE_OPENBLAS_TARGET_HASWELL
-+	default "ATOM"         if BR2_PACKAGE_OPENBLAS_TARGET_ATOM
-+	default "ATHLON"       if BR2_PACKAGE_OPENBLAS_TARGET_ATHLON
-+	default "OPTERON"      if BR2_PACKAGE_OPENBLAS_TARGET_OPTERON
-+	default "OPTERON_SSE3" if BR2_PACKAGE_OPENBLAS_TARGET_OPTERON_SSE3
-+	default "BARCELONA"    if BR2_PACKAGE_OPENBLAS_TARGET_BARCELONA
-+	default "STEAMROLLER"  if BR2_PACKAGE_OPENBLAS_TARGET_STEAMROLLER
-+	default "SSE_GENERIC"  if BR2_PACKAGE_OPENBLAS_TARGET_SSE_GENERIC
-+	default "VIAC3"        if BR2_PACKAGE_OPENBLAS_TARGET_VIAC3
-+	default "POWER4"       if BR2_PACKAGE_OPENBLAS_TARGET_POWER4
-+	default "POWER5"       if BR2_PACKAGE_OPENBLAS_TARGET_POWER5
-+	default "POWER6"       if BR2_PACKAGE_OPENBLAS_TARGET_POWER6
-+	default "POWER7"       if BR2_PACKAGE_OPENBLAS_TARGET_POWER7
-+	default "POWER8"       if BR2_PACKAGE_OPENBLAS_TARGET_POWER8
-+	default "PPCG4"        if BR2_PACKAGE_OPENBLAS_TARGET_PPCG4
-+	default "PPC970"       if BR2_PACKAGE_OPENBLAS_TARGET_PPC970
-+	default "PPC440"       if BR2_PACKAGE_OPENBLAS_TARGET_PPC440
-+	default "PPC440FP2"    if BR2_PACKAGE_OPENBLAS_TARGET_PPC440FP2
-+	default "P5600"        if BR2_PACKAGE_OPENBLAS_TARGET_P5600
-+	default "SICORTEX"     if BR2_PACKAGE_OPENBLAS_TARGET_SICORTEX
-+	default "LOONGSON3A"   if BR2_PACKAGE_OPENBLAS_TARGET_LOONGSON3A
-+	default "LOONGSON3B"   if BR2_PACKAGE_OPENBLAS_TARGET_LOONGSON3B
-+	default "I6400"        if BR2_PACKAGE_OPENBLAS_TARGET_I6400
-+	default "SPARC"        if BR2_PACKAGE_OPENBLAS_TARGET_SPARC
-+	default "SPARCV7"      if BR2_PACKAGE_OPENBLAS_TARGET_SPARCV7
-+	default "CORTEXA15"    if BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA15
-+	default "CORTEXA9"     if BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA9
-+	default "ARMV7"        if BR2_PACKAGE_OPENBLAS_TARGET_ARMV7
-+	default "ARMV8"        if BR2_PACKAGE_OPENBLAS_TARGET_ARMV8
-+	default "CORTEXA57"    if BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA57
-+
-+endif
-diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
++	  https://github.com/maxcountryman/flask-login
+diff --git a/package/python-flask-login/python-flask-login.hash b/package/python-flask-login/python-flask-login.hash
 new file mode 100644
-index 0000000..1fdb0ba
+index 0000000..c488a35
 --- /dev/null
-+++ b/package/openblas/openblas.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 fa32d00dfca6b7e7580dbc8696daa5bf8fee4ad7771f52450ab9dc1e9c87fe73  openblas-a8fcd89d6d1666185c8c27ea46672b9897630f21.tar.gz
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
++++ b/package/python-flask-login/python-flask-login.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/Flask-Login/0.3.2, sha256 locally computed:
++md5    d95c2275d3e1c755145910077366dc45                                 Flask-Login-0.3.2.tar.gz
++sha256 e72eff5c35e5a31db1aeca1db5d2501be702674ea88e8f223b5d2b11644beee6 Flask-Login-0.3.2.tar.gz
+diff --git a/package/python-flask-login/python-flask-login.mk b/package/python-flask-login/python-flask-login.mk
 new file mode 100644
-index 0000000..02dc361
+index 0000000..aa6d8e3
 --- /dev/null
-+++ b/package/openblas/openblas.mk
-@@ -0,0 +1,46 @@
++++ b/package/python-flask-login/python-flask-login.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# openblas
++# python-flask-login
 +#
 +################################################################################
 +
-+OPENBLAS_VERSION = a8fcd89d6d1666185c8c27ea46672b9897630f21
-+OPENBLAS_SITE = $(call github,xianyi,OpenBLAS,$(OPENBLAS_VERSION))
-+OPENBLAS_LICENSE = BSD-3
-+OPENBLAS_LICENSE_FILES = LICENSE
-+OPENBLAS_INSTALL_STAGING = YES
++PYTHON_FLASK_LOGIN_VERSION = 0.3.2
++PYTHON_FLASK_LOGIN_SOURCE = Flask-Login-$(PYTHON_FLASK_LOGIN_VERSION).tar.gz
++PYTHON_FLASK_LOGIN_SITE = http://pypi.python.org/packages/source/F/Flask-Login
++PYTHON_FLASK_LOGIN_LICENSE = MIT
++PYTHON_FLASK_LOGIN_LICENSE_FILES = LICENSE
++PYTHON_FLASK_LOGIN_SETUP_TYPE = setuptools
 +
-+# Disable fortran by default until we add BR2_TOOLCHAIN_HAS_FORTRAN
-+# hidden symbol to our toolchain infrastructure
-+OPENBLAS_MAKE_OPTS += ONLY_CBLAS=1
-+
-+# Enable/Disable multi-threading (not for static-only since it uses dlfcn.h)
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)x$(BR2_STATIC_LIBS),yx)
-+OPENBLAS_MAKE_OPTS += USE_THREAD=1
-+else
-+OPENBLAS_MAKE_OPTS += USE_THREAD=0
-+endif
-+
-+# Static-only/Shared-only toggle
-+ifeq ($(BR2_STATIC_LIBS),y)
-+OPENBLAS_MAKE_OPTS += NO_SHARED=1
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+OPENBLAS_MAKE_OPTS += NO_STATIC=1
-+endif
-+
-+define OPENBLAS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) $(OPENBLAS_MAKE_OPTS) \
-+		CROSS=1 TARGET=$(BR2_PACKAGE_OPENBLAS_TARGET) -C $(@D)
-+endef
-+
-+define OPENBLAS_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(OPENBLAS_MAKE_OPTS) \
-+		-C $(@D) install PREFIX=$(STAGING_DIR)/usr
-+endef
-+
-+define OPENBLAS_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(OPENBLAS_MAKE_OPTS) \
-+		-C $(@D) install PREFIX=$(TARGET_DIR)/usr
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(python-package))
 -- 
-2.7.3
+2.3.6
