@@ -1,7 +1,9 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 20 May 2016 12:01:00 +0100
-Subject: [Buildroot] [PATCH v2 next 1/2] openmpi: new package
-Message-ID: <1463742061-56758-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Fri, 20 May 2016 12:01:01 +0100
+Subject: [Buildroot] [PATCH v4 next 2/2] openblas: new package
+In-Reply-To: <1463742061-56758-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1463742061-56758-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1463742061-56758-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,157 +12,309 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
-Changes v1 -> v2:
- - Disable Fortran by default.
- - Backport upstream patch into Buildroot.
+Changes v3 -> v4:
+ - Disable Fortran by default. It can be added back in the future when
+   we have a BR2_TOOLCHAIN_HAS_FORTRAN hidden symbol.
+ - Bump version so we can get rid of the patch.
+ - Match OpenBLAS target cores with Buildroot target cores as much as
+   possible, and drop the ones unsupported in Buildroot.
+ - Drop the OpenMP bits in the openblas.mk file. It can be added back
+   in the future when we have a BR2_TOOLCHAIN_HAS_OPENMP hidden symbol.
 
- package/Config.in                                  |  1 +
- ...-check-if-fgetc-and-fputc-have-been-alrea.patch | 48 ++++++++++++++++++++++
- package/openmpi/Config.in                          | 27 ++++++++++++
- package/openmpi/openmpi.hash                       |  3 ++
- package/openmpi/openmpi.mk                         | 23 +++++++++++
- 5 files changed, 102 insertions(+)
- create mode 100644 package/openmpi/0001-vt_iowrap.c-check-if-fgetc-and-fputc-have-been-alrea.patch
- create mode 100644 package/openmpi/Config.in
- create mode 100644 package/openmpi/openmpi.hash
- create mode 100644 package/openmpi/openmpi.mk
+Changes v2 -> v3:
+ - Switch version to HEAD of develop branch as it contains support for
+   MIPS32.
+ - Add a patch to fix build failure of P5600 and I6400 targets.
+ - Add support for OpenMP when toolchain has NPTL threads.
+
+Changes v1 -> v2:
+ - Multi-threading is not available for static-only since it uses
+   dlfcn.h, so modify the "ifeq" statement accordingly.
+
+ package/Config.in              |   1 +
+ package/openblas/Config.in     | 198 +++++++++++++++++++++++++++++++++++++++++
+ package/openblas/openblas.hash |   2 +
+ package/openblas/openblas.mk   |  46 ++++++++++
+ 4 files changed, 247 insertions(+)
+ create mode 100644 package/openblas/Config.in
+ create mode 100644 package/openblas/openblas.hash
+ create mode 100644 package/openblas/openblas.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 8668612..0056beb 100644
+index 0056beb..b59c2f1 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1177,6 +1177,7 @@ menu "Networking"
- 	source "package/nss-pam-ldapd/Config.in"
- 	source "package/omniorb/Config.in"
- 	source "package/openldap/Config.in"
-+	source "package/openmpi/Config.in"
- 	source "package/openpgm/Config.in"
- 	source "package/ortp/Config.in"
- 	source "package/qdecoder/Config.in"
-diff --git a/package/openmpi/0001-vt_iowrap.c-check-if-fgetc-and-fputc-have-been-alrea.patch b/package/openmpi/0001-vt_iowrap.c-check-if-fgetc-and-fputc-have-been-alrea.patch
+@@ -1270,6 +1270,7 @@ endif
+ 	source "package/msgpack/Config.in"
+ 	source "package/mtdev2tuio/Config.in"
+ 	source "package/netbsd-queue/Config.in"
++	source "package/openblas/Config.in"
+ 	source "package/orc/Config.in"
+ 	source "package/p11-kit/Config.in"
+ 	source "package/poco/Config.in"
+diff --git a/package/openblas/Config.in b/package/openblas/Config.in
 new file mode 100644
-index 0000000..00562d0
+index 0000000..bfb71b5
 --- /dev/null
-+++ b/package/openmpi/0001-vt_iowrap.c-check-if-fgetc-and-fputc-have-been-alrea.patch
-@@ -0,0 +1,48 @@
-+From 56a27e5dce8fc78941f26ccb0e688f331fb0641e Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Tue, 17 May 2016 20:46:11 +0100
-+Subject: [PATCH] vt_iowrap.c: check if fgetc and fputc have been already
-+ defined
-+
-+This will fix an error like this one:
-+
-+vt_iowrap.c:1216:5: error: expected identifier or '(' before '__extension__'
-+ int fgetc(FILE *stream)
-+     ^
-+vt_iowrap.c:1329:5: error: expected identifier or '(' before '__extension__'
-+ int fputc(int c, FILE *stream)
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+---
-+ ompi/contrib/vt/vt/vtlib/vt_iowrap.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/ompi/contrib/vt/vt/vtlib/vt_iowrap.c b/ompi/contrib/vt/vt/vtlib/vt_iowrap.c
-+index 218b8a7..ba3e63d 100644
-+--- a/ompi/contrib/vt/vt/vtlib/vt_iowrap.c
-++++ b/ompi/contrib/vt/vt/vtlib/vt_iowrap.c
-+@@ -1213,6 +1213,10 @@ size_t fwrite( const void *buf, size_t size, size_t nmemb, FILE *stream)
-+ }
-+ 
-+ 
-++/* fgetc may be defined as a macro, so we must disable it */
-++#if defined(fgetc)
-++# undef fgetc
-++#endif
-+ int fgetc(FILE *stream)
-+ {
-+ #define VT_IOWRAP_THISFUNCNAME fgetc
-+@@ -1326,6 +1330,10 @@ char *gets(char *s)
-+ }
-+ 
-+ 
-++/* fputc may be defined as a macro, so we must disable it */
-++#if defined(fputc)
-++# undef fputc
-++#endif
-+ int fputc(int c, FILE *stream)
-+ {
-+ #define VT_IOWRAP_THISFUNCNAME fputc
-+-- 
-+2.7.3
-+
-diff --git a/package/openmpi/Config.in b/package/openmpi/Config.in
-new file mode 100644
-index 0000000..0307a62
---- /dev/null
-+++ b/package/openmpi/Config.in
-@@ -0,0 +1,27 @@
-+comment "openmpi needs a toolchain w/ dynamic library, NPTL, wchar, C++"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
-+		|| !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_OPENMPI
-+	bool "openmpi"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
++++ b/package/openblas/Config.in
+@@ -0,0 +1,198 @@
++config BR2_PACKAGE_OPENBLAS
++	bool "openblas"
++	depends on BR2_i386 || BR2_x86_64 || \
++		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
++		BR2_mips || BR2_mipsel || \
++		BR2_mips64 || BR2_mips64el || \
++		BR2_sparc || BR2_sparc64 || \
++		BR2_arm || BR2_armeb || \
++		BR2_aarch64 || BR2_aarch64_be
 +	help
-+	  A High Performance Message Passing Library.
++	  An optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 +
-+	  https://www.open-mpi.org/
++	  https://www.openblas.net/
 +
-+if BR2_PACKAGE_OPENMPI
++if BR2_PACKAGE_OPENBLAS
 +
-+config BR2_PACKAGE_OPENMPI_EXTRACONF
-+	string "Additional parameters for ./configure"
-+	default ""
++choice
++	prompt "OpenBLAS target CPU"
 +	help
-+	  Extra parameters that will be appended to openmpi's
-+	  ./configure commandline.
++	  OpenBLAS target CPU
++
++config BR2_PACKAGE_OPENBLAS_TARGET_P2
++	bool "P2"
++	depends on BR2_x86_pentium2
++config BR2_PACKAGE_OPENBLAS_TARGET_KATMAI
++	bool "KATMAI"
++	depends on BR2_x86_pentium3
++config BR2_PACKAGE_OPENBLAS_TARGET_COPPERMINE
++	bool "COPPERMINE"
++	depends on BR2_x86_pentium3
++config BR2_PACKAGE_OPENBLAS_TARGET_NORTHWOOD
++	bool "NORTHWOOD"
++	depends on BR2_x86_pentium4
++config BR2_PACKAGE_OPENBLAS_TARGET_PRESCOTT
++	bool "PRESCOTT"
++	depends on BR2_x86_prescott
++config BR2_PACKAGE_OPENBLAS_TARGET_BANIAS
++	bool "BANIAS"
++	depends on BR2_x86_pentium_m
++config BR2_PACKAGE_OPENBLAS_TARGET_YONAH
++	bool "YONAH"
++	depends on BR2_x86_pentium_m
++config BR2_PACKAGE_OPENBLAS_TARGET_CORE2
++	bool "CORE2"
++	depends on BR2_x86_core2
++config BR2_PACKAGE_OPENBLAS_TARGET_PENRYN
++	bool "PENRYN"
++	depends on BR2_x86_core2
++config BR2_PACKAGE_OPENBLAS_TARGET_DUNNINGTON
++	bool "DUNNINGTON"
++	depends on BR2_x86_core2
++config BR2_PACKAGE_OPENBLAS_TARGET_NEHALEM
++	bool "NEHALEM"
++	depends on BR2_x86_corei7
++config BR2_PACKAGE_OPENBLAS_TARGET_SANDYBRIDGE
++	bool "SANDYBRIDGE"
++	depends on BR2_x86_corei7_avx
++config BR2_PACKAGE_OPENBLAS_TARGET_HASWELL
++	bool "HASWELL"
++	depends on BR2_x86_core_avx2
++config BR2_PACKAGE_OPENBLAS_TARGET_ATOM
++	bool "ATOM"
++	depends on BR2_x86_atom
++config BR2_PACKAGE_OPENBLAS_TARGET_ATHLON
++	bool "ATHLON"
++	depends on BR2_x86_athlon || BR2_x86_athlon_4
++config BR2_PACKAGE_OPENBLAS_TARGET_OPTERON
++	bool "OPTERON"
++	depends on BR2_x86_opteron
++config BR2_PACKAGE_OPENBLAS_TARGET_OPTERON_SSE3
++	bool "OPTERON_SSE3"
++	depends on BR2_x86_opteron_sse3
++config BR2_PACKAGE_OPENBLAS_TARGET_BARCELONA
++	bool "BARCELONA"
++	depends on BR2_x86_barcelona
++config BR2_PACKAGE_OPENBLAS_TARGET_STEAMROLLER
++	bool "STEAMROLLER"
++	depends on BR2_x86_steamroller
++config BR2_PACKAGE_OPENBLAS_TARGET_SSE_GENERIC
++	bool "SSE_GENERIC"
++	depends on BR2_i386 || BR2_x86_64
++config BR2_PACKAGE_OPENBLAS_TARGET_VIAC3
++	bool "VIAC3"
++	depends on BR2_x86_c3 || BR2_x86_c32
++config BR2_PACKAGE_OPENBLAS_TARGET_POWER4
++	bool "POWER4"
++	depends on BR2_powerpc_power4
++config BR2_PACKAGE_OPENBLAS_TARGET_POWER5
++	bool "POWER5"
++	depends on BR2_powerpc_power5
++config BR2_PACKAGE_OPENBLAS_TARGET_POWER6
++	bool "POWER6"
++	depends on BR2_powerpc_power6
++config BR2_PACKAGE_OPENBLAS_TARGET_POWER7
++	bool "POWER7"
++	depends on BR2_powerpc_power7
++config BR2_PACKAGE_OPENBLAS_TARGET_POWER8
++	bool "POWER8"
++	depends on BR2_powerpc_power8
++config BR2_PACKAGE_OPENBLAS_TARGET_PPCG4
++	bool "PPCG4"
++	depends on BR2_powerpc_7400 || BR2_powerpc_7450
++config BR2_PACKAGE_OPENBLAS_TARGET_PPC970
++	bool "PPC970"
++	depends on BR2_powerpc_970
++config BR2_PACKAGE_OPENBLAS_TARGET_PPC440
++	bool "PPC440"
++	depends on BR2_powerpc_440
++config BR2_PACKAGE_OPENBLAS_TARGET_PPC440FP2
++	bool "PPC440FP2"
++	depends on BR2_powerpc_440fp
++config BR2_PACKAGE_OPENBLAS_TARGET_P5600
++	bool "P5600"
++	depends on BR2_mips_32r2
++config BR2_PACKAGE_OPENBLAS_TARGET_SICORTEX
++	bool "SICORTEX"
++	depends on BR2_mips_64
++config BR2_PACKAGE_OPENBLAS_TARGET_LOONGSON3A
++	bool "LOONGSON3A"
++	depends on BR2_mips_64
++config BR2_PACKAGE_OPENBLAS_TARGET_LOONGSON3B
++	bool "LOONGSON3B"
++	depends on BR2_mips_64
++config BR2_PACKAGE_OPENBLAS_TARGET_I6400
++	bool "I6400"
++	depends on BR2_mips_64r6
++config BR2_PACKAGE_OPENBLAS_TARGET_SPARC
++	bool "SPARC"
++	depends on BR2_sparc
++config BR2_PACKAGE_OPENBLAS_TARGET_SPARCV7
++	bool "SPARCV7"
++	depends on BR2_sparc
++config BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA15
++	bool "CORTEXA15"
++	depends on BR2_cortex_a15
++config BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA9
++	bool "CORTEXA9"
++	depends on BR2_cortex_a9
++config BR2_PACKAGE_OPENBLAS_TARGET_ARMV7
++	bool "ARMV7"
++	depends on BR2_cortex_a5 || BR2_cortex_a7 || BR2_cortex_a8 || \
++		BR2_cortex_a9 || BR2_cortex_a12 || BR2_cortex_a15 || \
++		BR2_cortex_a17
++config BR2_PACKAGE_OPENBLAS_TARGET_ARMV8
++	bool "ARMV8"
++	depends on BR2_aarch64 || BR2_aarch64_be
++config BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA57
++	bool "CORTEXA57"
++	depends on BR2_aarch64 || BR2_aarch64_be
++
++endchoice
++
++config BR2_PACKAGE_OPENBLAS_TARGET
++	string
++	default "P2"           if BR2_PACKAGE_OPENBLAS_TARGET_P2
++	default "KATMAI"       if BR2_PACKAGE_OPENBLAS_TARGET_KATMAI
++	default "COPPERMINE"   if BR2_PACKAGE_OPENBLAS_TARGET_COPPERMINE
++	default "NORTHWOOD"    if BR2_PACKAGE_OPENBLAS_TARGET_NORTHWOOD
++	default "PRESCOTT"     if BR2_PACKAGE_OPENBLAS_TARGET_PRESCOTT
++	default "BANIAS"       if BR2_PACKAGE_OPENBLAS_TARGET_BANIAS
++	default "YONAH"        if BR2_PACKAGE_OPENBLAS_TARGET_YONAH
++	default "CORE2"        if BR2_PACKAGE_OPENBLAS_TARGET_CORE2
++	default "PENRYN"       if BR2_PACKAGE_OPENBLAS_TARGET_PENRYN
++	default "DUNNINGTON"   if BR2_PACKAGE_OPENBLAS_TARGET_DUNNINGTON
++	default "NEHALEM"      if BR2_PACKAGE_OPENBLAS_TARGET_NEHALEM
++	default "SANDYBRIDGE"  if BR2_PACKAGE_OPENBLAS_TARGET_SANDYBRIDGE
++	default "HASWELL"      if BR2_PACKAGE_OPENBLAS_TARGET_HASWELL
++	default "ATOM"         if BR2_PACKAGE_OPENBLAS_TARGET_ATOM
++	default "ATHLON"       if BR2_PACKAGE_OPENBLAS_TARGET_ATHLON
++	default "OPTERON"      if BR2_PACKAGE_OPENBLAS_TARGET_OPTERON
++	default "OPTERON_SSE3" if BR2_PACKAGE_OPENBLAS_TARGET_OPTERON_SSE3
++	default "BARCELONA"    if BR2_PACKAGE_OPENBLAS_TARGET_BARCELONA
++	default "STEAMROLLER"  if BR2_PACKAGE_OPENBLAS_TARGET_STEAMROLLER
++	default "SSE_GENERIC"  if BR2_PACKAGE_OPENBLAS_TARGET_SSE_GENERIC
++	default "VIAC3"        if BR2_PACKAGE_OPENBLAS_TARGET_VIAC3
++	default "POWER4"       if BR2_PACKAGE_OPENBLAS_TARGET_POWER4
++	default "POWER5"       if BR2_PACKAGE_OPENBLAS_TARGET_POWER5
++	default "POWER6"       if BR2_PACKAGE_OPENBLAS_TARGET_POWER6
++	default "POWER7"       if BR2_PACKAGE_OPENBLAS_TARGET_POWER7
++	default "POWER8"       if BR2_PACKAGE_OPENBLAS_TARGET_POWER8
++	default "PPCG4"        if BR2_PACKAGE_OPENBLAS_TARGET_PPCG4
++	default "PPC970"       if BR2_PACKAGE_OPENBLAS_TARGET_PPC970
++	default "PPC440"       if BR2_PACKAGE_OPENBLAS_TARGET_PPC440
++	default "PPC440FP2"    if BR2_PACKAGE_OPENBLAS_TARGET_PPC440FP2
++	default "P5600"        if BR2_PACKAGE_OPENBLAS_TARGET_P5600
++	default "SICORTEX"     if BR2_PACKAGE_OPENBLAS_TARGET_SICORTEX
++	default "LOONGSON3A"   if BR2_PACKAGE_OPENBLAS_TARGET_LOONGSON3A
++	default "LOONGSON3B"   if BR2_PACKAGE_OPENBLAS_TARGET_LOONGSON3B
++	default "I6400"        if BR2_PACKAGE_OPENBLAS_TARGET_I6400
++	default "SPARC"        if BR2_PACKAGE_OPENBLAS_TARGET_SPARC
++	default "SPARCV7"      if BR2_PACKAGE_OPENBLAS_TARGET_SPARCV7
++	default "CORTEXA15"    if BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA15
++	default "CORTEXA9"     if BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA9
++	default "ARMV7"        if BR2_PACKAGE_OPENBLAS_TARGET_ARMV7
++	default "ARMV8"        if BR2_PACKAGE_OPENBLAS_TARGET_ARMV8
++	default "CORTEXA57"    if BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA57
 +
 +endif
-diff --git a/package/openmpi/openmpi.hash b/package/openmpi/openmpi.hash
+diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
 new file mode 100644
-index 0000000..92152a2
+index 0000000..1fdb0ba
 --- /dev/null
-+++ b/package/openmpi/openmpi.hash
-@@ -0,0 +1,3 @@
-+# From: https://www.open-mpi.org/software/ompi/v1.10/
-+md5 b2f43d9635d2d52826e5ef9feb97fd4c  openmpi-1.10.2.tar.bz2
-+sha1 03934fc0a2dd0d0d2d0459d714a976eabca938fb  openmpi-1.10.2.tar.bz2
-diff --git a/package/openmpi/openmpi.mk b/package/openmpi/openmpi.mk
++++ b/package/openblas/openblas.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 fa32d00dfca6b7e7580dbc8696daa5bf8fee4ad7771f52450ab9dc1e9c87fe73  openblas-a8fcd89d6d1666185c8c27ea46672b9897630f21.tar.gz
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
 new file mode 100644
-index 0000000..7b19631
+index 0000000..02dc361
 --- /dev/null
-+++ b/package/openmpi/openmpi.mk
-@@ -0,0 +1,23 @@
++++ b/package/openblas/openblas.mk
+@@ -0,0 +1,46 @@
 +################################################################################
 +#
-+# openmpi
++# openblas
 +#
 +################################################################################
 +
-+OPENMPI_VERSION_MAJOR = 1.10
-+OPENMPI_VERSION = $(OPENMPI_VERSION_MAJOR).2
-+OPENMPI_SITE = https://www.open-mpi.org/software/ompi/v$(OPENMPI_VERSION_MAJOR)/downloads
-+OPENMPI_SOURCE = openmpi-$(OPENMPI_VERSION).tar.bz2
-+OPENMPI_LICENSE = BSD
-+OPENMPI_LICENSE_FILES = LICENSE
-+OPENMPI_INSTALL_STAGING = YES
++OPENBLAS_VERSION = a8fcd89d6d1666185c8c27ea46672b9897630f21
++OPENBLAS_SITE = $(call github,xianyi,OpenBLAS,$(OPENBLAS_VERSION))
++OPENBLAS_LICENSE = BSD-3
++OPENBLAS_LICENSE_FILES = LICENSE
++OPENBLAS_INSTALL_STAGING = YES
 +
 +# Disable fortran by default until we add BR2_TOOLCHAIN_HAS_FORTRAN
 +# hidden symbol to our toolchain infrastructure
-+OPENMPI_CONF_OPTS += --enable-mpi-fortran=no
++OPENBLAS_MAKE_OPTS += ONLY_CBLAS=1
 +
-+# The amount of configure options in openmpi is huge. Let the user to have the
-+# posibility to pass the desired options in BR2_PACKAGE_OPENMPI_EXTRACONF.
-+OPENMPI_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_OPENMPI_EXTRACONF))
++# Enable/Disable multi-threading (not for static-only since it uses dlfcn.h)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)x$(BR2_STATIC_LIBS),yx)
++OPENBLAS_MAKE_OPTS += USE_THREAD=1
++else
++OPENBLAS_MAKE_OPTS += USE_THREAD=0
++endif
 +
-+$(eval $(autotools-package))
++# Static-only/Shared-only toggle
++ifeq ($(BR2_STATIC_LIBS),y)
++OPENBLAS_MAKE_OPTS += NO_SHARED=1
++else ifeq ($(BR2_SHARED_LIBS),y)
++OPENBLAS_MAKE_OPTS += NO_STATIC=1
++endif
++
++define OPENBLAS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) $(OPENBLAS_MAKE_OPTS) \
++		CROSS=1 TARGET=$(BR2_PACKAGE_OPENBLAS_TARGET) -C $(@D)
++endef
++
++define OPENBLAS_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(OPENBLAS_MAKE_OPTS) \
++		-C $(@D) install PREFIX=$(STAGING_DIR)/usr
++endef
++
++define OPENBLAS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(OPENBLAS_MAKE_OPTS) \
++		-C $(@D) install PREFIX=$(TARGET_DIR)/usr
++endef
++
++$(eval $(generic-package))
 -- 
 2.7.3
