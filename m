@@ -1,39 +1,174 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 20 May 2016 14:40:16 -0300
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.4.12
-Message-ID: <1463766016-9216-1-git-send-email-gustavo@zacarias.com.ar>
+From: Matthew Fornero <mfornero@mathworks.com>
+Date: Fri, 20 May 2016 13:52:05 -0400
+Subject: [Buildroot] [PATCH v4] toolchain-external: Commonize /lib/<tuple>
+	symlinks
+In-Reply-To: <1459381580-18169-1-git-send-email-mfornero@mathworks.com>
+References: <1459381580-18169-1-git-send-email-mfornero@mathworks.com>
+Message-ID: <1463766725-15724-1-git-send-email-mfornero@mathworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnutls/gnutls.hash | 2 +-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Commonize the creation of symlinks from {/usr}/lib to
+{/usr}/lib/<tuple>.
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 450b12b..41e0ccb 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	70ef9c9f95822d363036c6e6b5479750e5b7fc34f50e750c3464a98ec65a9ab8	gnutls-3.4.11.tar.xz
-+sha256	e3370a3bf60f2ca4a6204461ea99e7d7047ee46f96bc2fb7c63f103312d3c9c7	gnutls-3.4.12.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 676476d..d19f443 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+These were originally defined on a per-toolchain basis for the Linaro
+toolchains, but there is currently no support for creating symlinks
+for custom toolchains that may have been based on Linaro (or older
+versions of the Linaro toolchain).
+
+Add common code for all supported Linaro toolchains and add a new
+config option, BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK to enable custom
+toolchains to enable the symbolic link creation.
+
+Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
+---
+v4: Rebase to current master
+v3: Invert Kconfig and cleanup as suggested by Arnout and Baruch Siach
+v2: Cleanup as suggested by Arnout Vandecappelle
+---
+ toolchain/toolchain-external/Config.in             |   17 +++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk |   26 ++++++--------------
+ 2 files changed, 25 insertions(+), 18 deletions(-)
+
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index b7f9241..fa698b1 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -23,6 +23,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+@@ -45,6 +46,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+@@ -67,6 +69,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+@@ -89,6 +92,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+@@ -523,6 +527,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	help
+@@ -538,6 +543,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	help
+@@ -692,6 +698,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX \
+ 					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
  
- GNUTLS_VERSION_MAJOR = 3.4
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).11
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).12
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+, LGPLv2.1+
++config BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
++	bool
++
+ config BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	bool
+ 	select BR2_TOOLCHAIN_USES_GLIBC
+@@ -1005,6 +1014,14 @@ config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+ 	  need to be copied to the target filesystem, enter them
+ 	  here, separated by spaces.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
++	bool "Symlink /lib/<tuple>"
++	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
++	help
++	  Select this option if your external toolchain needs a symlink
++	  from {/usr}/lib to {/usr}/lib/<tuple>. This may be required if
++	  your toolchain is based on one from Linaro.
++
+ endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 34217c0..6706fbf 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -244,23 +244,16 @@ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+ TOOLCHAIN_EXTERNAL_DEPENDENCIES += netbsd-queue
+ endif
+ 
+-# The Linaro ARMhf toolchain expects the libraries in
+-# {/usr,}/lib/arm-linux-gnueabihf, but Buildroot copies them to
++# Some toolchains, such as Linaro, expect the libraries in
++# {/usr,}/lib/<tuple>, but Buildroot copies them to
+ # {/usr,}/lib, so we need to create a symbolic link.
+-define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+-	ln -snf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
+-	ln -snf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
+-endef
+-
+-define TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+-	ln -snf . $(TARGET_DIR)/lib/armeb-linux-gnueabihf
+-	ln -snf . $(TARGET_DIR)/usr/lib/armeb-linux-gnueabihf
+-endef
+-
+-define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+-	ln -snf . $(TARGET_DIR)/lib/aarch64-linux-gnu
+-	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK),y)
++define TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
++	ln -snf . $(TARGET_DIR)/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
++	ln -snf . $(TARGET_DIR)/usr/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
+ endef
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
++endif
+ 
+ # Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
+ # sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
+@@ -318,7 +311,6 @@ ifeq ($(HOSTARCH),x86)
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_src.tar.bz2
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+ else
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/arm-linux-gnueabihf
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_arm-linux-gnueabihf.tar.xz
+@@ -328,7 +320,6 @@ ifeq ($(HOSTARCH),x86)
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_src.tar.bz2
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+ else
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/armeb-linux-gnueabihf
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_armeb-linux-gnueabihf.tar.xz
+@@ -369,7 +360,6 @@ ifeq ($(HOSTARCH),x86)
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+ else
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/aarch64-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_aarch64-linux-gnu.tar.xz
 -- 
-2.7.3
+1.7.10.4
