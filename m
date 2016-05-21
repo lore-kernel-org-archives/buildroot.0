@@ -1,47 +1,25 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 May 2016 11:06:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: fix snprintf() detection
-Message-ID: <1463821606-15237-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 21 May 2016 13:17:12 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.14.x and 4.{4,
+	5}.x series
+References: <1463664337-881-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <oms51dx2gs.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://git.busybox.net/buildroot/commit/package/postgresql/postgresql.mk?id=3d3f70b567718ae308b5704ddd7d107c4849309e
-forced postgresql not to use its own snprintf() implementation which
-needs libm. This fix got broken after this upstream commit
+Am Thu, 19 May 2016 10:25:36 -0300 schrieb Gustavo Zacarias:
 
-http://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=ce486056ecd28050f367894a2b5aad3656d37511#patch1
+> Kernel headers 4.5 -> 4.5.4 broke netfilter uapi headers leading to
+> build failures for cases where glibc's net/if.h was included before
+> linux/if.h This is fixed since 4.5.5 via linux kernel commit 4a91cb61
+> and fixes:
+> http://autobuild.buildroot.net/
+results/736/7362431f62ebb1b436ac41ea3ef85228c763e6f3/
 
-changed the variable name from
-  pgac_cv_snprintf_long_long_int_format
-to
-  pgac_cv_snprintf_long_long_int_modifier
-
-leading to problems in the rsyslog package while detecting postgresql
-support.
-
-Fixes
-http://autobuild.buildroot.net/results/1cd/1cda32983fdf9522e4a9d48cc1304cc1451771a9/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/postgresql/postgresql.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 3572821..584ab47 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -12,7 +12,7 @@ POSTGRESQL_LICENSE_FILES = COPYRIGHT
- POSTGRESQL_INSTALL_STAGING = YES
- POSTGRESQL_CONFIG_SCRIPTS = pg_config
- POSTGRESQL_CONF_ENV = ac_cv_type_struct_sockaddr_in6=yes \
--		      pgac_cv_snprintf_long_long_int_format="%lld" \
-+		      pgac_cv_snprintf_long_long_int_modifier="%lld" \
- 		      pgac_cv_snprintf_size_t_support=yes
- POSTGRESQL_CONF_OPTS = --disable-rpath
- 
--- 
-2.8.1
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+(compile-tested collectd, fixes
+http://autobuild.buildroot.net/results/ae1/
+ae1e3a33a1c2b7433ca7a04659467e2017756b00/)
