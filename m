@@ -1,43 +1,29 @@
-From: Charles Hardin <ckhardin@exablox.com>
-Date: Fri, 20 May 2016 15:02:57 -0700
-Subject: [Buildroot] [FYI] Think the CMake build for debug symbols is
-	RelWithDebInfo
-Message-ID: <49BF7B7F-D120-4004-8ABB-11D2B33DD1AD@exablox.com>
+From: Doha Ehab <dohaehab@gmail.com>
+Date: Sat, 21 May 2016 03:26:22 +0200
+Subject: [Buildroot] building opencv-2.4 using buildroot
+Message-ID: <CAEjFr-YHkDmrwrx9cx2Bx7R=CVkivKzS8qDpUZpjH7SWWEHE1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the debug information in Config,in
+Hello
+ I am trying to build opencv-2.4 for arm using buildroot-2015.08.01 from
+build options ->libraries I have chosen static libraries only . when I try
+to compile opencv code using the following command :
+" buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc
+-static ocv.c -o ocvccode "
 
-config BR2_ENABLE_DEBUG
-        bool "build packages with debugging symbols"
-        help
-          Build packages with debugging symbols enabled. All libraries
-          and binaries in the 'staging' directory will have debugging
-          symbols, which allows remote debugging even if libraries and
-          binaries are stripped on the target. Whether libraries and
-          binaries are stripped on the target is controlled by the
-          BR2_STRIP_* options below.
+I got this error
+buildroot/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+cannot find -ldl
+collect2: error: ld returned 1 exit status
 
-So, I think the proper interpretation of this for a cmake build type is actually RelWithDebInfo to
-get the debug symbols for the release builds.
+how can I solve this linking issue?
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 81dcfcc..bca3603 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -87,7 +87,7 @@ define $(2)_CONFIGURE_CMDS
-        PATH=$$(BR_PATH) \
-        $$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
-                -DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
--               -DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
-+               -DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release) \
-                -DCMAKE_INSTALL_PREFIX="/usr" \
-                -DCMAKE_COLOR_MAKEFILE=OFF \
-                -DBUILD_DOC=OFF \
-
+Regards
+Doha.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160520/73abab30/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160521/030ffe49/attachment.html>
