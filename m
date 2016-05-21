@@ -1,39 +1,47 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 21 May 2016 08:54:28 +0200
-Subject: [Buildroot] building opencv-2.4 using buildroot
-In-Reply-To: <CAEjFr-YHkDmrwrx9cx2Bx7R=CVkivKzS8qDpUZpjH7SWWEHE1w@mail.gmail.com>
-References: <CAEjFr-YHkDmrwrx9cx2Bx7R=CVkivKzS8qDpUZpjH7SWWEHE1w@mail.gmail.com>
-Message-ID: <CAHXCMML9juH57AmACV3ezg_6Zn88SuiBnz_HCA-jPK=So5ESRw@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 21 May 2016 09:22:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/stress-ng: mark as not available on
+	nios2
+Message-ID: <1463815337-3115-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+For technical details see
+https://git.busybox.net/buildroot/commit/package/ffmpeg/Config.in?id=8b58ec016973bee87a4fc1cc99a32b206bdee136
 
-On Sat, May 21, 2016 at 3:26 AM, Doha Ehab <dohaehab@gmail.com> wrote:
-> Hello
->  I am trying to build opencv-2.4 for arm using buildroot-2015.08.01 from
-> build options ->libraries I have chosen static libraries only . when I try
-> to compile opencv code using the following command :
-> " buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc
-> -static ocv.c -o ocvccode "
->
-> I got this error
-> buildroot/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
-> cannot find -ldl
-> collect2: error: ld returned 1 exit status
->
-> how can I solve this linking issue?
+Fixes
+http://autobuild.buildroot.net/results/bb3/bb3b748a14465a6168917bfbed90b2ff84fbdedf/
+http://autobuild.buildroot.net/results/0ee/0ee3132f4ee6b5f21851f93516e0d0c419b36b1b/
 
-Some OpenCV modules cannot be built in a static-lib-only configuration.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/stress-ng/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-A patch [1] fixing this issue has been merged recently on master.
-
-[1] https://github.com/buildroot/buildroot/commit/07144093d4fd0d5c6f59006a0e58fd5074da0f92
-
-Regards,
-
+diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
+index 1e475b1..20ec93a 100644
+--- a/package/stress-ng/Config.in
++++ b/package/stress-ng/Config.in
+@@ -7,6 +7,8 @@ config BR2_PACKAGE_STRESS_NG
+ 	# perf.c needs PERF_COUNT_HW_REF_CPU_CYCLES
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+ 	depends on !BR2_microblaze # keyutils
++	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
++	depends on !BR2_nios2
+ 	depends on !BR2_STATIC_LIBS # keyutils
+ 	select BR2_PACKAGE_KEYUTILS # stress-key.c needs keyutils.h
+ 	select BR2_PACKAGE_ATTR # stress-xattr.c needs xattr.h
+@@ -19,7 +21,7 @@ config BR2_PACKAGE_STRESS_NG
+ 	  http://kernel.ubuntu.com/~cking/stress-ng/
+ 
+ comment "stress-ng needs a glibc toolchain w/ dynamic library, headers >= 3.3"
+-	depends on !BR2_microblaze
++	depends on !BR2_microblaze && !BR2_nios2
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3 \
+ 		|| !BR2_TOOLCHAIN_USES_GLIBC
 -- 
-Samuel
+2.8.1
