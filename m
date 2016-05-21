@@ -1,43 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 May 2016 08:48:41 +0200
-Subject: [Buildroot] package not found
-In-Reply-To: <CAG7w3y=BmwXxz_8KVDEi95f56fu4v+YHU7PQQrn5pb4yZ15Hjg@mail.gmail.com>
-References: <CAG7w3y=BmwXxz_8KVDEi95f56fu4v+YHU7PQQrn5pb4yZ15Hjg@mail.gmail.com>
-Message-ID: <20160521084841.3a95cd3a@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 21 May 2016 08:54:28 +0200
+Subject: [Buildroot] building opencv-2.4 using buildroot
+In-Reply-To: <CAEjFr-YHkDmrwrx9cx2Bx7R=CVkivKzS8qDpUZpjH7SWWEHE1w@mail.gmail.com>
+References: <CAEjFr-YHkDmrwrx9cx2Bx7R=CVkivKzS8qDpUZpjH7SWWEHE1w@mail.gmail.com>
+Message-ID: <CAHXCMML9juH57AmACV3ezg_6Zn88SuiBnz_HCA-jPK=So5ESRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Sat, 21 May 2016 09:29:50 +0530, gdbabu Krishnan wrote:
+On Sat, May 21, 2016 at 3:26 AM, Doha Ehab <dohaehab@gmail.com> wrote:
+> Hello
+>  I am trying to build opencv-2.4 for arm using buildroot-2015.08.01 from
+> build options ->libraries I have chosen static libraries only . when I try
+> to compile opencv code using the following command :
+> " buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc
+> -static ocv.c -o ocvccode "
+>
+> I got this error
+> buildroot/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+> cannot find -ldl
+> collect2: error: ld returned 1 exit status
+>
+> how can I solve this linking issue?
 
->       1.libgtk3+
+Some OpenCV modules cannot be built in a static-lib-only configuration.
 
-Search packages by running "/" in menuconfig, and then watch their
-dependencies. You can also read package/libgtk3/Config.in to learn
-about the dependencies of gtk3.
+A patch [1] fixing this issue has been merged recently on master.
 
-In essence, for Gtk3, you will need either X.org or Wayland, and also
-an OpenGL implementation (which for Raspberry Pi is in the rpi-userland
-package).
+[1] https://github.com/buildroot/buildroot/commit/07144093d4fd0d5c6f59006a0e58fd5074da0f92
 
->       2.nano  text editor
+Regards,
 
-Again, use "/" to find it. This one does not have any complicated
-dependency like libgtk3, so you should find it easily.
-
->       3.gcc compiler
-
-We don't support building a compiler for the target:
-https://buildroot.org/downloads/manual/manual.html#faq-no-compiler-on-target.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
