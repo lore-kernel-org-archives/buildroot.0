@@ -1,53 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 21 May 2016 21:28:41 +0300
-Subject: [Buildroot] [PATCH] libgtk3: bump to version 320.5
-In-Reply-To: <1463766005-9156-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1463766005-9156-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160521182841.GF2178@tarshish>
+From: Charles Hardin <ckhardin@exablox.com>
+Date: Sat, 21 May 2016 13:08:34 -0700
+Subject: [Buildroot] [PATCH 1/1] package/cmake: with BR2_ENABLE_DEBUG use
+	RelWithDebInfo
+Message-ID: <1463861314-15547-1-git-send-email-ckhardin@exablox.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+From the documentation on BR2_ENABLE_DEBUG, the intention is to get
+a build with debug symbols and not a "debug build" since that can have
+the unintended consequence of being a different code path then a
+release build type definition.
 
-On Fri, May 20, 2016 at 02:40:05PM -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Switch the "Debug" to "RelWithDebInfo" in the cmake package support
+to accomodate getting the debug symbols and still be a release
+build.
 
-Subject should change to 3.20.5.
+Signed-off-by: Charles Hardin <ckhardin@exablox.com>
+---
+ package/pkg-cmake.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-baruch
-
-> ---
->  package/libgtk3/libgtk3.hash | 4 ++--
->  package/libgtk3/libgtk3.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-> index 78bfc86..47f5977 100644
-> --- a/package/libgtk3/libgtk3.hash
-> +++ b/package/libgtk3/libgtk3.hash
-> @@ -1,2 +1,2 @@
-> -# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.4.sha256sum
-> -sha256	e7e3aaf54a54dd1c1ca0588939254abe31329e0bcd280a12290d5306b41ea03f	gtk+-3.20.4.tar.xz
-> +# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.5.sha256sum
-> +sha256	9790b0267384904ad8a08e7f16e5f9ff1c4037de57788d48d1eaf528355b1564	gtk+-3.20.5.tar.xz
-> diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-> index 0ba7928..469ff13 100644
-> --- a/package/libgtk3/libgtk3.mk
-> +++ b/package/libgtk3/libgtk3.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  LIBGTK3_VERSION_MAJOR = 3.20
-> -LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).4
-> +LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).5
->  LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
->  LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
->  LIBGTK3_LICENSE = LGPLv2+
-
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 81dcfcc..bca3603 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -87,7 +87,7 @@ define $(2)_CONFIGURE_CMDS
+ 	PATH=$$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+-		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
++		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release) \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
+ 		-DBUILD_DOC=OFF \
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.7.4 (Apple Git-66)
