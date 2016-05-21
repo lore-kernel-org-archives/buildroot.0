@@ -1,29 +1,34 @@
-From: Doha Ehab <dohaehab@gmail.com>
-Date: Sat, 21 May 2016 03:26:22 +0200
-Subject: [Buildroot] building opencv-2.4 using buildroot
-Message-ID: <CAEjFr-YHkDmrwrx9cx2Bx7R=CVkivKzS8qDpUZpjH7SWWEHE1w@mail.gmail.com>
+From: gdbabu Krishnan <gdbabu.krishnan@gmail.com>
+Date: Sat, 21 May 2016 09:29:50 +0530
+Subject: [Buildroot] package not found
+Message-ID: <CAG7w3y=BmwXxz_8KVDEi95f56fu4v+YHU7PQQrn5pb4yZ15Hjg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
- I am trying to build opencv-2.4 for arm using buildroot-2015.08.01 from
-build options ->libraries I have chosen static libraries only . when I try
-to compile opencv code using the following command :
-" buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc
--static ocv.c -o ocvccode "
+Hi,
 
-I got this error
-buildroot/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
-cannot find -ldl
-collect2: error: ld returned 1 exit status
 
-how can I solve this linking issue?
+    I have working with buildroot for Raspberry pi, i want to run GTK+
+based application on PI board could you tell me what are packages i want to
+select in build root.
 
-Regards
-Doha.
+i have already searched following package but couldn't found that,
+
+      1.libgtk3+
+      2.nano  text editor
+      3.gcc compiler
+
+how can i select these packages and how to run GTK application
+
+(Gtk application already compiled in another Raspbian OS)
+
+kindly help to solve these problems.
+
+
+Thank you,
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160521/030ffe49/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160521/4dda7076/attachment.html>
