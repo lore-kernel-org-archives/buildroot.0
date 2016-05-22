@@ -1,36 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 May 2016 21:47:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qlibc: fix musl build by
- removing usage of internal glibc header sys/cdefs.h
-In-Reply-To: <1463818533-14713-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1463818533-14713-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160522214748.6f8b76e2@free-electrons.com>
+From: Mauro Condarelli <mc5686@mclink.it>
+Date: Sun, 22 May 2016 22:24:02 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix config.mak.uname to allow
+	cross-compilation
+Message-ID: <1463948643-21344-1-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This patch is part of a patchset for BuildRoot (https://buildroot.org/)
+needed to correctly cross-compile GIT.
 
-On Sat, 21 May 2016 10:15:33 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/15c/15ce460214875c2e56d5d26372778b43cd7325ad/
-> http://autobuild.buildroot.net/results/790/79098fb27ef2d5b09df777cd7365a61d6de55c52/
-> http://autobuild.buildroot.net/results/8d3/8d3dad2dcf5b3c7fa94cc759386759b1ac9e3287/
-> http://autobuild.buildroot.net/results/9d8/9d8f6259c62e15cc528ec99d6375cc02c2bc7489/
-> http://autobuild.buildroot.net/results/a05/a0540ed23bd2d48cd742aa1b0228719b13e162b6/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...l-build-by-removing-usage-of-internal-gli.patch | 60 ++++++++++++++++++++++
->  1 file changed, 60 insertions(+)
->  create mode 100644 package/qlibc/0004-md5-fix-musl-build-by-removing-usage-of-internal-gli.patch
+Git compilation relies on "uname" program to determine several system
+charcteristics, but that does not work well in a cross-compilation
+environment because "uname" will run on host, while we are interested
+in information concerning target.
 
-Applied to master, thanks.
+The file "config.mak.uname" unconditionally assigns variables using
+":=", this prevents changing their value from the command line.
+This minimal patch changes the flavor of the variable and assigns it
+only if not already assigned, opening the road to spcify target-consistent
+values on the command line (which is done in the other patches for
+BuildRoot, but are not relevant here).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+We are sending this patch upstream because we feel this might be
+useful in other cross-compilation contexts.
+
+Note this patch also changes variable "flavor" thus incurring in a
+computational overhead; Makefile perusal doesn't seem to indicate
+this as a problem, but it is possible to overcome this problem,
+if deemed relevant, by using the construct:
+
+  ifeq ($(origin uname_X), undefined)
+    uname_X := $(shell sh -c 'uname -x 2>/dev/null || echo not')
+  endif
+
+If required I will submit another patch to this effect.
+
+Regards
+Mauro
