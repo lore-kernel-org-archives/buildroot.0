@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 May 2016 22:42:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ustr: Fix musl build by forcing
- glibc detection to true
-In-Reply-To: <1463848097-26113-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1463848097-26113-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160522224216.38058be5@free-electrons.com>
+Date: Sun, 22 May 2016 22:44:47 +0200
+Subject: [Buildroot] [PATCH] Add support GLES/EGL for odroidc2 broads
+In-Reply-To: <trinity-ef9ecd45-f3e8-4e2e-9864-38a32d51531a-1463939159661@3capp-mailcom-bs03>
+References: <trinity-ef9ecd45-f3e8-4e2e-9864-38a32d51531a-1463939159661@3capp-mailcom-bs03>
+Message-ID: <20160522224447.6294f65a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +12,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 21 May 2016 18:28:17 +0200, Bernd Kuhls wrote:
+On Sun, 22 May 2016 19:45:59 +0200, daggs wrote:
 
-> +--- ustr-1.0.4/configure.ac.orig	2016-05-21 18:08:02.000000000 +0200
-> ++++ ustr-1.0.4/configure.ac	2016-05-21 18:18:47.170881727 +0200
-> +@@ -24,7 +24,7 @@
-> + int version = __GLIBC__;
-> + 	]])],
-> + 	[AC_MSG_RESULT([yes]); GLIBC_USED=1;],
-> +-	[AC_MSG_RESULT([no]); GLIBC_USED=0;])
-> ++	[AC_MSG_RESULT([no]); GLIBC_USED=1;])
+> the following patch adds GLES/EGL support for odroidc2 broads.
+> this means that programs like kodi which needs ui can be run.
 
-I know this is the easiest/shortest fix, but it's not very pretty. The
-good solution IMHO is to remove this glibc check completely, and
-instead use AC_CACHE_VAL() so that a cache variable allows to override
-the result of the AC_TRY_RUN() test.
+Thanks for this patch! Great to see some OpenGL enabling on ARM64.
+However, could you:
 
-That being said, you said in a reply that libsemanage, which is the
-only package that uses ustr, does not build with musl due to
-getpwent_r() being missing. getpwent_r() is a glibc-specific extension,
-so it will most likely not be implemented by musl. So either
-libsemanage can be changed to use getpwent() (making sure that
-libsemanage didn't need the reentrant characteristic of getpwent_r), or
-we should simply make libsemanage/ustr not available on musl.
+ 1/ Send your patch with git send-email so that the patch appears
+    inline and not as an attachment, which allows us to do proper review
+    of the patch.
+
+ 2/ Split the patches in multiple patches? You need to at least
+    separate the following aspects:
+
+    a/ odroid-mali package addition
+    b/ kodi package changes
+    c/ odroidc2 changes
+
+Note that in the odroid-mali package, you use variables like
+INSTALL_LIBS, INSTALL_HDRS, etc. This is not a good idea, since the
+namespace of variables in Buildroot is global. Due to this, *all*
+variables defined by a package must be prefixed by the name of the
+package.
+
+Thanks!
 
 Thomas
 -- 
