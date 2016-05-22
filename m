@@ -1,7 +1,7 @@
 From: Sebastien Van Cauwenberghe <svancau@gmail.com>
-Date: Sun, 22 May 2016 17:43:16 +0200
+Date: Sun, 22 May 2016 17:50:56 +0200
 Subject: [Buildroot] [PATCH] Add support for Digilent Zybo (Xilinx Zynq-7000)
-Message-ID: <0cc2bfc5-9c58-902c-df87-1c3f1ceab456@gmail.com>
+Message-ID: <2a3f44ad-9013-6af8-08f7-bec58222b43d@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
