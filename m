@@ -1,8 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 22 May 2016 09:28:39 +0200
-Subject: [Buildroot] [PATCH 1/2] package/gstreamer1/gst1-libav: not
-	available on nios2
-Message-ID: <1463902120-8275-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 22 May 2016 09:28:40 +0200
+Subject: [Buildroot] [PATCH 2/2] package/vice: not available on nios2
+In-Reply-To: <1463902120-8275-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1463902120-8275-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1463902120-8275-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +13,29 @@ To: buildroot@busybox.net
 ffmpeg is not available on nios2, this limitation was not reverse-
 propagated to this package.
 
-Fixes
-http://autobuild.buildroot.net/results/267/2674395c1d804df68e7e4bc9bba1d6b7fc6d2dce/
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gstreamer1/gst1-libav/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/vice/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-libav/Config.in b/package/gstreamer1/gst1-libav/Config.in
-index b4b7aa7..8c3c834 100644
---- a/package/gstreamer1/gst1-libav/Config.in
-+++ b/package/gstreamer1/gst1-libav/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_GST1_LIBAV
- 	bool "gst1-libav"
+diff --git a/package/vice/Config.in b/package/vice/Config.in
+index 1b9dee0..5f2c83d 100644
+--- a/package/vice/Config.in
++++ b/package/vice/Config.in
+@@ -13,6 +13,7 @@ config BR2_PACKAGE_VICE
+ 	select BR2_PACKAGE_SDL_SOUND
+ 	select BR2_PACKAGE_SDL_X11 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_ZLIB
 +	depends on !BR2_nios2 # ffmpeg
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+ 	depends on BR2_USE_MMU # fork()
+@@ -28,5 +29,6 @@ config BR2_PACKAGE_VICE
+ 	  http://vice-emu.sourceforge.net
+ 
+ comment "vice needs a toolchain w/ dynamic library, threads"
++	depends on !BR2_nios2 # ffmpeg
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.8.1
