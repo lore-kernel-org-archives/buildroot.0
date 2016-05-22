@@ -1,61 +1,49 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 22 May 2016 22:17:16 +0300
-Subject: [Buildroot] [PATCH] putty: fix musl build for 64-bit targets
-Message-ID: <a70938c68e64db7ca57acc45cf20ebc0601c2805.1463944636.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 May 2016 21:31:59 +0200
+Subject: [Buildroot] [git commit branch/next] python-pexpect: fix
+	byte-compilation with Python 2
+Message-ID: <20160522193223.027F4807E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch fixing MinGW build that also fixes musl build. Both of them
-do not provide __uint64_t on 64-bit targets.
+commit: https://git.buildroot.net/buildroot/commit/?id=944d0a95454306a000e604388014eebf7a6affc4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/8f7/8f7683b2e204249c37690bae915208298ea94490/
-http://autobuild.buildroot.net/results/f28/f2836f3a7e27f74f5adf38d1769b9b047d59c385/
+pexpect contains one file, async.py, that is only meant to be used
+with Python 3. Due to this, it fails to byte-compile with Python 2,
+which will become a problem once we make byte-compilation failures
+fatal failures that abort the build.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+As suggested by upstream at
+https://github.com/pexpect/pexpect/issues/290, we simply remove the
+problematic file when building with Python 2.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...02-Fix-__uint128_t-compile-error-on-MinGW.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/putty/0002-Fix-__uint128_t-compile-error-on-MinGW.patch
+ package/python-pexpect/python-pexpect.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/putty/0002-Fix-__uint128_t-compile-error-on-MinGW.patch b/package/putty/0002-Fix-__uint128_t-compile-error-on-MinGW.patch
-new file mode 100644
-index 000000000000..514b6298d93c
---- /dev/null
-+++ b/package/putty/0002-Fix-__uint128_t-compile-error-on-MinGW.patch
-@@ -0,0 +1,30 @@
-+From 3377ea57f5d333d65d44a1130161396782389e88 Mon Sep 17 00:00:00 2001
-+From: Tim Kosse <tim.kosse@filezilla-project.org>
-+Date: Tue, 11 Aug 2015 09:43:34 +0200
-+Subject: [PATCH] Fix  __uint128_t compile error on MinGW.
+diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
+index b74bf83..40a1741 100644
+--- a/package/python-pexpect/python-pexpect.mk
++++ b/package/python-pexpect/python-pexpect.mk
+@@ -11,4 +11,14 @@ PYTHON_PEXPECT_LICENSE = ISC
+ PYTHON_PEXPECT_LICENSE_FILES = LICENSE
+ PYTHON_PEXPECT_SETUP_TYPE = distutils
+ 
++# async.py is not usable with Python 2, and removing is the solution
++# recommended by upstream:
++# https://github.com/pexpect/pexpect/issues/290
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++define PYTHON_PEXPECT_REMOVE_ASYNC_PY
++	$(RM) $(@D)/pexpect/async.py
++endef
++PYTHON_PEXPECT_POST_PATCH_HOOKS += PYTHON_PEXPECT_REMOVE_ASYNC_PY
++endif
 +
-+MinGW has __uint128_t, but not __uint64_t.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: upstream commit 3377ea57f5
-+
-+ sshbn.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/sshbn.h b/sshbn.h
-+index a043241eea67..9366f614ae4c 100644
-+--- a/sshbn.h
-++++ b/sshbn.h
-+@@ -26,7 +26,7 @@
-+  * using the same 'two machine registers' kind of code generation that
-+  * 32-bit targets use for 64-bit ints. If we have one of these, we can
-+  * use a 64-bit BignumInt and a 128-bit BignumDblInt. */
-+-typedef __uint64_t BignumInt;
-++typedef unsigned long long BignumInt;
-+ typedef __uint128_t BignumDblInt;
-+ #define BIGNUM_INT_MASK  0xFFFFFFFFFFFFFFFFULL
-+ #define BIGNUM_TOP_BIT   0x8000000000000000ULL
-+-- 
-+2.8.1
-+
--- 
-2.8.1
+ $(eval $(python-package))
