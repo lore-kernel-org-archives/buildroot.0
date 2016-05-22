@@ -1,51 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 May 2016 22:46:29 +0200
-Subject: [Buildroot] [git commit] python: align the target finalize hooks
-	with python3
-Message-ID: <20160601161308.C49D77FBB0@busybox.osuosl.org>
+Date: Sun, 22 May 2016 22:48:16 +0200
+Subject: [Buildroot] [git commit] git: bump version to 2.8.3
+Message-ID: <20160601161309.479A781922@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f76543601ff21af23e2828fcb9b3262378120d78
+commit: https://git.buildroot.net/buildroot/commit/?id=ae61f4ecbbd11cf1593681775c4bc6ed3c155dc5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the bump of python3 to 3.5.x, the target finalize hooks
-registered by the python3 have been changed a little bit. For the sake
-of consistency, this commit aligns the target finalize hooks
-registered by the python package so that they look the same as the
-ones used by python3.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python/python.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 4ecd0d1..819d32b 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -218,15 +218,15 @@ $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/package/git/git.hash b/package/git/git.hash
+index dabe964..9e047a3 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 ec0283d78a0f1c8408c5fd43610697b953fbaafe4077bb1e41446a9ee3a2f83d  git-2.8.2.tar.xz
++sha256 7d8e6c274a88b4a73b3c98c70d3438ec12871300ce8bb4ca179ea19fcf74aa91  git-2.8.3.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index db26036..1d6574d 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
--define PYTHON_FINALIZE_TARGET
-+define PYTHON_REMOVE_PY_FILES
- 	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | xargs -0 rm -f
- endef
-+TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
- endif
- 
- ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
--define PYTHON_FINALIZE_TARGET
-+define PYTHON_REMOVE_PYC_FILES
- 	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | xargs -0 rm -f
- endef
-+TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYC_FILES
- endif
--
--TARGET_FINALIZE_HOOKS += PYTHON_FINALIZE_TARGET
+-GIT_VERSION = 2.8.2
++GIT_VERSION = 2.8.3
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
