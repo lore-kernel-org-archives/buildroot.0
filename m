@@ -1,51 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 May 2016 17:08:09 +0200
-Subject: [Buildroot] [git commit] python-backports-abc: depend on Python 2.x
-Message-ID: <20160601161309.D888081F53@busybox.osuosl.org>
+Date: Sun, 22 May 2016 21:35:39 +0200
+Subject: [Buildroot] [git commit] gnutls: bump to version 3.4.12
+Message-ID: <20160601161309.3694E802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e3515849f202b681e84f1b3001e6c938e070e08
+commit: https://git.buildroot.net/buildroot/commit/?id=f8799db7903ebedaad220a0a60b4209a9e1701b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package is a backport from Python 3.5, so it is not needed
-for Python 3.5.x environment.
-
-Fix python-tornado dependecies, so that python-backports-abc
-is only selected for Python 2.x.
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-backports-abc/Config.in | 1 +
- package/python-tornado/Config.in       | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/gnutls/gnutls.hash | 2 +-
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-backports-abc/Config.in b/package/python-backports-abc/Config.in
-index 26d8cfd..4356627 100644
---- a/package/python-backports-abc/Config.in
-+++ b/package/python-backports-abc/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_BACKPORTS_ABC
- 	bool "python-backports-abc"
-+	depends on BR2_PACKAGE_PYTHON
- 	help
- 	  A backport of recent additions to the 'collections.abc'
- 	  module.
-diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
-index ac86682..3ead2af 100644
---- a/package/python-tornado/Config.in
-+++ b/package/python-tornado/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_TORNADO
- 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
- 	select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
--	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	# runtime
-+	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	if BR2_PACKAGE_PYTHON # runtime
- 	help
- 	  Tornado is a Python web framework and asynchronous networking
- 	  library, originally developed at FriendFeed.
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 450b12b..41e0ccb 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	70ef9c9f95822d363036c6e6b5479750e5b7fc34f50e750c3464a98ec65a9ab8	gnutls-3.4.11.tar.xz
++sha256	e3370a3bf60f2ca4a6204461ea99e7d7047ee46f96bc2fb7c63f103312d3c9c7	gnutls-3.4.12.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 676476d..d19f443 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.4
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).11
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).12
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+, LGPLv2.1+
