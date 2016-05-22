@@ -1,41 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 May 2016 17:40:41 +0200
-Subject: [Buildroot] [git commit] sysstat: bump to version 11.2.4
-Message-ID: <20160601161310.2D69C81F53@busybox.osuosl.org>
+Date: Sun, 22 May 2016 21:31:59 +0200
+Subject: [Buildroot] [git commit] python-pexpect: fix byte-compilation with
+	Python 2
+Message-ID: <20160601161309.1B087802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1cc23f31d8b91f24c4a6e872de89208c06d7ba5
+commit: https://git.buildroot.net/buildroot/commit/?id=944d0a95454306a000e604388014eebf7a6affc4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+pexpect contains one file, async.py, that is only meant to be used
+with Python 3. Due to this, it fails to byte-compile with Python 2,
+which will become a problem once we make byte-compilation failures
+fatal failures that abort the build.
+
+As suggested by upstream at
+https://github.com/pexpect/pexpect/issues/290, we simply remove the
+problematic file when building with Python 2.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sysstat/sysstat.hash | 2 +-
- package/sysstat/sysstat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pexpect/python-pexpect.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
-index 655cafe..95c39db 100644
---- a/package/sysstat/sysstat.hash
-+++ b/package/sysstat/sysstat.hash
-@@ -1,2 +1,2 @@
- # From: http://sebastien.godard.pagesperso-orange.fr/download.html
--sha1	7e9422e985b65728d007bd38d4a8d090aa795826	sysstat-11.2.3.tar.xz
-+sha1	ddf1ed67f1ce4b09081c49d0fa228600b8ed5660	sysstat-11.2.4.tar.xz
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index a16054f..3b0eb2b 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
+index b74bf83..40a1741 100644
+--- a/package/python-pexpect/python-pexpect.mk
++++ b/package/python-pexpect/python-pexpect.mk
+@@ -11,4 +11,14 @@ PYTHON_PEXPECT_LICENSE = ISC
+ PYTHON_PEXPECT_LICENSE_FILES = LICENSE
+ PYTHON_PEXPECT_SETUP_TYPE = distutils
  
--SYSSTAT_VERSION = 11.2.3
-+SYSSTAT_VERSION = 11.2.4
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
- SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
++# async.py is not usable with Python 2, and removing is the solution
++# recommended by upstream:
++# https://github.com/pexpect/pexpect/issues/290
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++define PYTHON_PEXPECT_REMOVE_ASYNC_PY
++	$(RM) $(@D)/pexpect/async.py
++endef
++PYTHON_PEXPECT_POST_PATCH_HOOKS += PYTHON_PEXPECT_REMOVE_ASYNC_PY
++endif
++
+ $(eval $(python-package))
