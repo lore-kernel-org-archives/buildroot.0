@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 May 2016 22:38:00 +0200
-Subject: [Buildroot] [PATCH v2] Fix for GIT cross-compilation.
-In-Reply-To: <1463948975-21495-1-git-send-email-mc5686@mclink.it>
-References: <1463948975-21495-1-git-send-email-mc5686@mclink.it>
-Message-ID: <20160522223800.0adabe05@free-electrons.com>
+Date: Sun, 22 May 2016 22:42:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ustr: Fix musl build by forcing
+ glibc detection to true
+In-Reply-To: <1463848097-26113-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1463848097-26113-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160522224216.38058be5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +13,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 22 May 2016 22:29:35 +0200, Mauro Condarelli wrote:
-> GIT configuration partially relies on system parameters retrieved
-> using 'uname -?' directlly at make time.
-> This does not mix well with cross compilation.
-> This patch allows to feed canned uname results directly from git.mk.
-> 
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+On Sat, 21 May 2016 18:28:17 +0200, Bernd Kuhls wrote:
 
-This one looks good. Have you submitted the Git patch to the upstream
-Git project?
+> +--- ustr-1.0.4/configure.ac.orig	2016-05-21 18:08:02.000000000 +0200
+> ++++ ustr-1.0.4/configure.ac	2016-05-21 18:18:47.170881727 +0200
+> +@@ -24,7 +24,7 @@
+> + int version = __GLIBC__;
+> + 	]])],
+> + 	[AC_MSG_RESULT([yes]); GLIBC_USED=1;],
+> +-	[AC_MSG_RESULT([no]); GLIBC_USED=0;])
+> ++	[AC_MSG_RESULT([no]); GLIBC_USED=1;])
 
+I know this is the easiest/shortest fix, but it's not very pretty. The
+good solution IMHO is to remove this glibc check completely, and
+instead use AC_CACHE_VAL() so that a cache variable allows to override
+the result of the AC_TRY_RUN() test.
 
-> +# git has make-time configuration based on uname; pass over specific
-> +# values to be used in config.mak.uname unstead of `uname -#` output
-> +GIT_MAKE_OPTS += \
-> +	uname_S="Linux" \
-> +	uname_M=$(BR2_ARCH) \
-> +	uname_O="GNU/Linux" \
-> +	uname_R=$(BR2_LINUX_KERNEL_VERSION) \
-> +	uname_P="unknown" \
-> +	uname_V="BuildRoot Linux $(patsubst "%",%,$(BR2_LINUX_KERNEL_VERSION))"
-
-One small nit: Buildroot is written Buildroot, not BuildRoot.
-
-A bigger issue is that you're using BR2_LINUX_KERNEL_VERSION, but
-there's absolutely no guarantee that this variable will have a value.
-It only has a value if you are building a Linux kernel with Buildroot,
-which is not mandatory. I would rather suggest to use the kernel
-headers version, since you're sure this one is always defined.
-
-So, perhaps the BR2_TOOLCHAIN_HEADERS_AT_LEAST variable?
-
-Also, don't do $(patsubst "%",%,...). Use $(call qstrip,...) instead.
-
-Best regards,
+That being said, you said in a reply that libsemanage, which is the
+only package that uses ustr, does not build with musl due to
+getpwent_r() being missing. getpwent_r() is a glibc-specific extension,
+so it will most likely not be implemented by musl. So either
+libsemanage can be changed to use getpwent() (making sure that
+libsemanage didn't need the reentrant characteristic of getpwent_r), or
+we should simply make libsemanage/ustr not available on musl.
 
 Thomas
 -- 
