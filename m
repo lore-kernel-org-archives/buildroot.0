@@ -1,60 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 May 2016 21:36:58 +0200
-Subject: [Buildroot] [git commit] putty: fix musl build
-Message-ID: <20160522193712.5A7CB817D5@busybox.osuosl.org>
+Date: Sun, 22 May 2016 21:37:04 +0200
+Subject: [Buildroot] [git commit] putty: fix musl build for 64-bit targets
+Message-ID: <20160522193712.725DB8041C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=671603fd2e90ba5d9cab1c361837bf4950e7a069
+commit: https://git.buildroot.net/buildroot/commit/?id=5d6c0bcc3420fe89cc95f3135b67e5edd032bc00
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add upstream patch for fixing build with musl.
+Add upstream patch fixing MinGW build that also fixes musl build. Both of them
+do not provide __uint64_t on 64-bit targets.
 
 Fixes:
-http://autobuild.buildroot.net/results/84b/84b8e3e73f7e70ea1f013fc7c1120cf23095a77a/
-http://autobuild.buildroot.net/results/b7c/b7cd550af983165d7d930bcc68fcab5bad00159d/
+http://autobuild.buildroot.net/results/8f7/8f7683b2e204249c37690bae915208298ea94490/
+http://autobuild.buildroot.net/results/f28/f2836f3a7e27f74f5adf38d1769b9b047d59c385/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/putty/0001-uxcons-Fix-on-musl-libc.patch | 29 ++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ ...02-Fix-__uint128_t-compile-error-on-MinGW.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/putty/0001-uxcons-Fix-on-musl-libc.patch b/package/putty/0001-uxcons-Fix-on-musl-libc.patch
+diff --git a/package/putty/0002-Fix-__uint128_t-compile-error-on-MinGW.patch b/package/putty/0002-Fix-__uint128_t-compile-error-on-MinGW.patch
 new file mode 100644
-index 0000000..5f43af0
+index 0000000..514b629
 --- /dev/null
-+++ b/package/putty/0001-uxcons-Fix-on-musl-libc.patch
-@@ -0,0 +1,29 @@
-+From 4ae1577b432c1859704d2763f70a764dee23bd98 Mon Sep 17 00:00:00 2001
-+From: Kylie McClain <somasis@exherbo.org>
-+Date: Thu, 28 Apr 2016 22:40:32 -0400
-+Subject: [PATCH] uxcons: Fix on musl libc
++++ b/package/putty/0002-Fix-__uint128_t-compile-error-on-MinGW.patch
+@@ -0,0 +1,30 @@
++From 3377ea57f5d333d65d44a1130161396782389e88 Mon Sep 17 00:00:00 2001
++From: Tim Kosse <tim.kosse@filezilla-project.org>
++Date: Tue, 11 Aug 2015 09:43:34 +0200
++Subject: [PATCH] Fix  __uint128_t compile error on MinGW.
 +
-+musl libc exports FD_SET and friends in sys/select.h.
++MinGW has __uint128_t, but not __uint64_t.
 +
 +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
-+Patch status: upstream commit 4ae1577b432c
++Patch status: upstream commit 3377ea57f5
 +
-+ unix/uxcons.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ sshbn.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/unix/uxcons.c b/unix/uxcons.c
-+index b9fd67fe9274..f2a25f3fed70 100644
-+--- a/unix/uxcons.c
-++++ b/unix/uxcons.c
-+@@ -12,6 +12,7 @@
-+ #include <termios.h>
-+ #include <unistd.h>
-+ #include <fcntl.h>
-++#include <sys/select.h>
-+ 
-+ #include "putty.h"
-+ #include "storage.h"
++diff --git a/sshbn.h b/sshbn.h
++index a043241eea67..9366f614ae4c 100644
++--- a/sshbn.h
+++++ b/sshbn.h
++@@ -26,7 +26,7 @@
++  * using the same 'two machine registers' kind of code generation that
++  * 32-bit targets use for 64-bit ints. If we have one of these, we can
++  * use a 64-bit BignumInt and a 128-bit BignumDblInt. */
++-typedef __uint64_t BignumInt;
+++typedef unsigned long long BignumInt;
++ typedef __uint128_t BignumDblInt;
++ #define BIGNUM_INT_MASK  0xFFFFFFFFFFFFFFFFULL
++ #define BIGNUM_TOP_BIT   0x8000000000000000ULL
 +-- 
 +2.8.1
 +
