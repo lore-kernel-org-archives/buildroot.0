@@ -1,56 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 May 2016 16:27:00 +0200
-Subject: [Buildroot] [git commit] systemd: bump version to 230
-Message-ID: <20160601161309.B384A81922@busybox.osuosl.org>
+Date: Sun, 22 May 2016 21:32:42 +0200
+Subject: [Buildroot] [git commit] libgtk3: bump to version 3.20.5
+Message-ID: <20160601161309.26FAA802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25bd16a5914ec5a59162926bd502cf8b913cb580
+commit: https://git.buildroot.net/buildroot/commit/?id=ee092f112eb74bbc6ed18eae39889e68c0a46bcf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We pass "--with-default-dnssec=no" to "configure" as it might create
-incompatibilities with a few DNS servers and networks.
-
-Announcement URL:
-
-  https://lists.freedesktop.org/archives/systemd-devel/2016-May/036583.html
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 7295986..141eadf 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 78bfc86..47f5977 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
 @@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 b51b0a48d1beb388d95bd6a98d62be05490335d4bb388aefecdcb576e91e0741  systemd-229.tar.gz
-+sha256 46b07568142adcd017c62e6230d39eb10d219ed3b2f13ffc12d9a3a6b1c840cd  systemd-230.tar.gz
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 8a6aa44..b525397 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.4.sha256sum
+-sha256	e7e3aaf54a54dd1c1ca0588939254abe31329e0bcd280a12290d5306b41ea03f	gtk+-3.20.4.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.5.sha256sum
++sha256	9790b0267384904ad8a08e7f16e5f9ff1c4037de57788d48d1eaf528355b1564	gtk+-3.20.5.tar.xz
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 0ba7928..469ff13 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SYSTEMD_VERSION = 229
-+SYSTEMD_VERSION = 230
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
-@@ -36,6 +36,7 @@ SYSTEMD_CONF_OPTS += \
- 	--disable-gnuefi \
- 	--disable-ldconfig \
- 	--disable-tests \
-+	--with-default-dnssec=no \
- 	--without-python
- 
- SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
+ LIBGTK3_VERSION_MAJOR = 3.20
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).4
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).5
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPLv2+
