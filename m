@@ -1,59 +1,52 @@
-From: Charles Hardin <ckhardin@exablox.com>
-Date: Tue, 24 May 2016 06:31:16 -0700
-Subject: [Buildroot] [PATCH 1/1] package/xfsprogs: install in the same
-	location as e2fsprogs
-Message-ID: <1464096676-41655-1-git-send-email-ckhardin@exablox.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 May 2016 17:08:09 +0200
+Subject: [Buildroot] [git commit branch/next] python-backports-abc: depend
+	on Python 2.x
+Message-ID: <20160523150814.9864D80132@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The configure script hard codes "/sbin" for installation which
-installs the XFS tools in a different location then the e2fsprogs.
+commit: https://git.buildroot.net/buildroot/commit/?id=1e3515849f202b681e84f1b3001e6c938e070e08
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This is just a cosmetic patch so all the tools end up in "/usr/sbin"
-for consistency.
+This package is a backport from Python 3.5, so it is not needed
+for Python 3.5.x environment.
 
-Signed-off-by: Charles Hardin <ckhardin@exablox.com>
+Fix python-tornado dependecies, so that python-backports-abc
+is only selected for Python 2.x.
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0004-xfsprogs-configure-exec-prefix.patch      | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/xfsprogs/0004-xfsprogs-configure-exec-prefix.patch
+ package/python-backports-abc/Config.in | 1 +
+ package/python-tornado/Config.in       | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/xfsprogs/0004-xfsprogs-configure-exec-prefix.patch b/package/xfsprogs/0004-xfsprogs-configure-exec-prefix.patch
-new file mode 100644
-index 0000000..f8c1aeb
---- /dev/null
-+++ b/package/xfsprogs/0004-xfsprogs-configure-exec-prefix.patch
-@@ -0,0 +1,28 @@
-+diff -Naur xfsprogs-3.1.11.orig/configure xfsprogs-3.1.11/configure
-+--- xfsprogs-3.1.11.orig/configure	2016-01-03 19:27:44.603418507 +0000
-++++ xfsprogs-3.1.11/configure	2016-01-03 19:26:16.029757743 +0000
-+@@ -10036,8 +10036,8 @@
-+ # case.  If the user choses a different prefix assume he just wants
-+ # a local install for testing and not a system install.
-+ #
-+-case $exec_prefix:$prefix in
-+-NONE:NONE | NONE:/usr | /usr:*)
-++case $cross_compiling:$exec_prefix:$prefix in
-++no:NONE:NONE | no:NONE:/usr | no:/usr:*)
-+   root_sbindir='/sbin'
-+   root_libdir="/${base_libdir}"
-+   ;;
-+diff -Naur xfsprogs-3.1.11.orig/configure.ac xfsprogs-3.1.11/configure.ac
-+--- xfsprogs-3.1.11.orig/configure.ac	2016-01-03 19:28:02.258949863 +0000
-++++ xfsprogs-3.1.11/configure.ac	2016-01-03 19:25:45.918554215 +0000
-+@@ -64,8 +64,8 @@
-+ # case.  If the user choses a different prefix assume he just wants
-+ # a local install for testing and not a system install.
-+ #
-+-case $exec_prefix:$prefix in
-+-NONE:NONE | NONE:/usr | /usr:*)
-++case $cross_compiling:$exec_prefix:$prefix in
-++no:NONE:NONE | no:NONE:/usr | no:/usr:*)
-+   root_sbindir='/sbin'
-+   root_libdir="/${base_libdir}"
-+   ;;
--- 
-2.7.4 (Apple Git-66)
+diff --git a/package/python-backports-abc/Config.in b/package/python-backports-abc/Config.in
+index 26d8cfd..4356627 100644
+--- a/package/python-backports-abc/Config.in
++++ b/package/python-backports-abc/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_BACKPORTS_ABC
+ 	bool "python-backports-abc"
++	depends on BR2_PACKAGE_PYTHON
+ 	help
+ 	  A backport of recent additions to the 'collections.abc'
+ 	  module.
+diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
+index ac86682..3ead2af 100644
+--- a/package/python-tornado/Config.in
++++ b/package/python-tornado/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_TORNADO
+ 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+ 	select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	# runtime
++	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	if BR2_PACKAGE_PYTHON # runtime
+ 	help
+ 	  Tornado is a Python web framework and asynchronous networking
+ 	  library, originally developed at FriendFeed.
