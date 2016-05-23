@@ -1,39 +1,48 @@
-From: Dagg <daggs@gmx.com>
-Date: Mon, 23 May 2016 22:21:55 +0300
-Subject: [Buildroot] [PATCH v2 2/3] add support for odroid mali GL in kodi
-Message-ID: <20160523192155.7231-1-daggs@gmx.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 23 May 2016 21:38:30 +0200
+Subject: [Buildroot] [PATCH] Config.in: Use CDN kernel.org mirror
+In-Reply-To: <20160523180451.73efcf39@free-electrons.com> (Thomas Petazzoni's
+ message of "Mon, 23 May 2016 18:04:51 +0200")
+References: <1464017813-22503-1-git-send-email-abrodkin@synopsys.com>
+ <20160523174643.777faf11@free-electrons.com>
+ <87bn3wepiq.fsf@dell.be.48ers.dk>
+ <20160523180451.73efcf39@free-electrons.com>
+Message-ID: <877fekef9l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Dagg <daggs@gmx.com>
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
----
- package/kodi/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > Hello,
+ > On Mon, 23 May 2016 17:57:01 +0200, Peter Korsgaard wrote:
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index ff2e75c..7b26abf 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	bool
--	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
-+	default y if (BR2_arm || BR2_aarch64 || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
- 		&& BR2_PACKAGE_BOOST_ARCH_SUPPORTS \
- 		&& BR2_TOOLCHAIN_HAS_SYNC_8
- 
-@@ -24,7 +24,7 @@ config BR2_PACKAGE_KODI_GL
- 	bool
- 	default y
- 	depends on BR2_PACKAGE_HAS_LIBGL
--	depends on !BR2_arm # kodi needs egl/gles on arm
-+	depends on !BR2_arm || !BR2_aarch64 # kodi needs egl/gles on arm
- 
- comment "kodi needs an OpenGL or an openGL ES and EGL backend"
- 	depends on BR2_i386 || BR2_x86_64
+ >> > Should this list of mirrors be removed?  
+ >> 
+ >> Does it even make sense to have a configuration option for it if the CDN
+ >> is used?
+
+ > I asked the exact same question when a person came on IRC to suggest
+ > this change. I referred to what we did for the SourceForge situation.
+
+ > But apparently, this CDN thing is less smart than the SourceForge thing
+ > in that it might redirect you to a non-working mirror (i.e it doesn't
+ > check).
+
+:/
+
+ > However, the person on IRC was also suggesting to do the change for
+ > BR2_GNU_MIRROR, so maybe the case is different.
+
+ > So, I would suggest to change the default values for now, leave it this
+ > way for a while, and if nobody complains of failed downloads, we can
+ > remove the option completely.
+
+Ok. Missing files should normally fall back to sources.b.o, so we might
+not hear about it though.
+
 -- 
-2.8.3
+Venlig hilsen,
+Peter Korsgaard 
