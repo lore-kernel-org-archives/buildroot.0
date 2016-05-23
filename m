@@ -1,62 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 May 2016 21:15:45 +0200
-Subject: [Buildroot] [git commit] gst1-plugins-bad: add sbc support
-Message-ID: <20160601161309.0E17B802A0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 May 2016 13:57:34 +0200
+Subject: [Buildroot] [git commit] gdbm: bump to version 1.12
+Message-ID: <20160601161309.85A2681922@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d9389ebc2d9a3020277102466a9f223c2a3f24b
+commit: https://git.buildroot.net/buildroot/commit/?id=279f4a0eaa54a003b7f245145de952b1d5188e2a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-Reviewed-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in           | 4 ++++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 8 +++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ package/gdbm/gdbm.hash | 5 +++--
+ package/gdbm/gdbm.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index c4c4e43..046c2aa 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -638,6 +638,10 @@ comment "rsvg plugin needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/gdbm/gdbm.hash b/package/gdbm/gdbm.hash
+index e7d3592..9759d87 100644
+--- a/package/gdbm/gdbm.hash
++++ b/package/gdbm/gdbm.hash
+@@ -1,2 +1,3 @@
+-# From http://lists.gnu.org/archive/html/info-gnu/2013-12/msg00012.html
+-sha1	ce433d0f192c21d41089458ca5c8294efe9806b4	gdbm-1.11.tar.gz
++# From http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00009.html
++md5	9ce96ff4c99e74295ea19040931c8fb9	gdbm-1.12.tar.gz
++sha1	86513e8871bb376bc014e9e5a2d18a8e0a8ea2f5	gdbm-1.12.tar.gz
+diff --git a/package/gdbm/gdbm.mk b/package/gdbm/gdbm.mk
+index f7a4370..55ece88 100644
+--- a/package/gdbm/gdbm.mk
++++ b/package/gdbm/gdbm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SBC
-+	bool "sbc"
-+	select BR2_PACKAGE_SBC
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDL
- 	bool "sdl"
- 	select BR2_PACKAGE_SDL
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index c3c4682..8ddf5d9 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -71,7 +71,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
- 	--disable-gme \
- 	--disable-xvid \
- 	--disable-vdpau \
--	--disable-sbc \
- 	--disable-schro \
- 	--disable-zbar \
- 	--disable-rtmp \
-@@ -743,6 +742,13 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-rsvg
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SBC),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += --enable-sbc
-+GST1_PLUGINS_BAD_DEPENDENCIES += sbc
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += --disable-sbc
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDL),y)
- GST1_PLUGINS_BAD_CONF_ENV += ac_cv_path_SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-sdl
+-GDBM_VERSION = 1.11
++GDBM_VERSION = 1.12
+ GDBM_SITE = $(BR2_GNU_MIRROR)/gdbm
+ GDBM_LICENSE = GPLv3+
+ GDBM_LICENSE_FILES = COPYING
