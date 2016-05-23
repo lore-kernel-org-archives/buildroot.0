@@ -1,41 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 May 2016 16:26:51 +0200
-Subject: [Buildroot] [git commit] pciutils: bump to version 3.5.1
-Message-ID: <20160601161309.A71B381922@busybox.osuosl.org>
+Date: Mon, 23 May 2016 16:27:00 +0200
+Subject: [Buildroot] [git commit] systemd: bump version to 230
+Message-ID: <20160601161309.B384A81922@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78f949ad246b1d7da3fa7b040a559e12e7a4c58d
+commit: https://git.buildroot.net/buildroot/commit/?id=25bd16a5914ec5a59162926bd502cf8b913cb580
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+We pass "--with-default-dnssec=no" to "configure" as it might create
+incompatibilities with a few DNS servers and networks.
+
+Announcement URL:
+
+  https://lists.freedesktop.org/archives/systemd-devel/2016-May/036583.html
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pciutils/pciutils.hash | 2 +-
- package/pciutils/pciutils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/systemd/systemd.hash | 2 +-
+ package/systemd/systemd.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/pciutils/pciutils.hash b/package/pciutils/pciutils.hash
-index dd75e42..efdb108 100644
---- a/package/pciutils/pciutils.hash
-+++ b/package/pciutils/pciutils.hash
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 7295986..141eadf 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/utils/pciutils/sha256sums.asc
--sha256	865554cc5604d1644bd8da38d94845405e2a319a6d5acabc6a0296417684a82a	pciutils-3.4.1.tar.xz
-+sha256	2bf3a4605a562fb6b8b7673bff85a474a5cf383ed7e4bd8886b4f0939013d42f	pciutils-3.5.1.tar.xz
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index d3a0e20..4714cea 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
+ # sha256 locally computed
+-sha256 b51b0a48d1beb388d95bd6a98d62be05490335d4bb388aefecdcb576e91e0741  systemd-229.tar.gz
++sha256 46b07568142adcd017c62e6230d39eb10d219ed3b2f13ffc12d9a3a6b1c840cd  systemd-230.tar.gz
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 8a6aa44..b525397 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PCIUTILS_VERSION = 3.4.1
-+PCIUTILS_VERSION = 3.5.1
- PCIUTILS_SITE = $(BR2_KERNEL_MIRROR)/software/utils/pciutils
- PCIUTILS_SOURCE = pciutils-$(PCIUTILS_VERSION).tar.xz
- PCIUTILS_INSTALL_STAGING = YES
+-SYSTEMD_VERSION = 229
++SYSTEMD_VERSION = 230
+ SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
+@@ -36,6 +36,7 @@ SYSTEMD_CONF_OPTS += \
+ 	--disable-gnuefi \
+ 	--disable-ldconfig \
+ 	--disable-tests \
++	--with-default-dnssec=no \
+ 	--without-python
+ 
+ SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
