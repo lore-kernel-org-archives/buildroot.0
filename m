@@ -1,28 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 May 2016 13:58:17 +0200
-Subject: [Buildroot] [PATCH] dnsmasq: bump to version 2.76
-In-Reply-To: <1463599347-21468-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1463599347-21468-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160523135817.762d28b6@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 23 May 2016 12:58:28 +0100
+Subject: [Buildroot] [PATCH] valgrind: disable for MIPS soft-float
+In-Reply-To: <20160523135515.0bc85032@free-electrons.com>
+References: <1464003111-59011-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20160523135515.0bc85032@free-electrons.com>
+Message-ID: <5742F064.5010300@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Wed, 18 May 2016 16:22:27 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/dnsmasq/dnsmasq.hash | 2 +-
->  package/dnsmasq/dnsmasq.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On 23/05/16 12:55, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 23 May 2016 12:31:51 +0100, Vicente Olivert Riera wrote:
+> 
+>> diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+>> index 21b2608..40e219d 100644
+>> --- a/package/valgrind/Config.in
+>> +++ b/package/valgrind/Config.in
+>> @@ -8,6 +8,7 @@ config BR2_PACKAGE_VALGRIND
+>>  		   BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
+>>  		   BR2_x86_64
+>>  	depends on !BR2_STATIC_LIBS
+>> +	depends on !BR2_MIPS_SOFT_FLOAT
+> 
+> I am wondering if it isn't better to do:
+> 
+>         depends on BR2_ARM_CPU_ARMV7A || BR2_i386 || \
+> -                  BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+> +                  ((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && !BR2_MIPS_SOFT_FLOAT) || \
+>                    BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
+>                    BR2_x86_64
+> 
+> But I'm not sure. It's completely equivalent from a functionality point
+> of view, I'm just wondering which one is more logical.
 
-Applied to next, thanks.
+I prefer mine.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+We have architecture support in one block, and features support in
+another one. More readable IMHO.
+
+Anyway, you can commit whichever you want as at the end of the day they
+will have the same functionality.
+
+Regards,
+
+Vincent.
+
+> Thomas
+> 
