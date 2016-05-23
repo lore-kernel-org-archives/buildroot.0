@@ -1,37 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 May 2016 23:06:58 +0200
-Subject: [Buildroot] [PATCH] expat: add fix for CVE-2016-0718
-In-Reply-To: <1463661234-4110-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1463661234-4110-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160522230658.2dc002c5@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 23 May 2016 06:02:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/hplip: fix static linking with cups
+Message-ID: <1463976152-12874-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes
+http://autobuild.buildroot.net/results/c52/c5277c42344d194e004dcd0a5af71bc6110da97e/
 
-On Thu, 19 May 2016 09:33:54 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2016-0718 - The Expat XML parser mishandles certain kinds of
-> malformed input documents, resulting in buffer overflows during
-> processing and error reporting. The overflows can manifest as a
-> segmentation fault or as memory corruption during a parse operation. The
-> bugs allow for a denial of service attack in many applications by an
-> unauthenticated attacker, and could conceivably result in remote code
-> execution.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/expat/0001-fix-CVE-2016-0718.patch | 757 +++++++++++++++++++++++++++++
->  1 file changed, 757 insertions(+)
->  create mode 100644 package/expat/0001-fix-CVE-2016-0718.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/hplip/hplip.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
+index b1e8cb5..d70e2e9 100644
+--- a/package/hplip/hplip.mk
++++ b/package/hplip/hplip.mk
+@@ -27,6 +27,9 @@ HPLIP_CONF_OPTS = \
+ 	--enable-new-hpcups \
+ 	--enable-lite-build
+ 
++# build system does not support cups-config
++HPLIP_CONF_ENV = LIBS=`$(STAGING_DIR)/usr/bin/cups-config --libs`
++
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ HPLIP_CONF_OPTS += --enable-dbus-build
+ HPLIP_DEPENDENCIES += dbus
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
