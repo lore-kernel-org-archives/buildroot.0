@@ -1,45 +1,84 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 23 May 2016 12:31:51 +0100
-Subject: [Buildroot] [PATCH] valgrind: disable for MIPS soft-float
-Message-ID: <1464003111-59011-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 May 2016 13:51:45 +0200
+Subject: [Buildroot] [git commit] package/openpgm: Rework headers includes
+	to fix build with musl libc
+Message-ID: <20160523115159.63309818B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As stated here [1], recent changes on the MIPS binutils sources have
-made it necessary for GCC to pass the -msoft-float to the assembler. Due
-to that, valgrind fails to build for MIPS soft-float when using a
-version of binutils >= 2.25 because its using some hard-float
-instructions.
+commit: https://git.buildroot.net/buildroot/commit/?id=92bd1acb83f687212e0678a836b92bd6604e5e97
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-However, we cannot just disable it for the soft-float and binutils >=
-2.25 combination since external toolchains don't provide information
-about the binutils version they use. So, instead, we simply disable it
-for soft-float.
+Fixes
+http://autobuild.buildroot.net/results/420/420367cc4640c893f48336d71fa04eaeff55c8e6/
 
-1: https://gcc.gnu.org/ml/gcc-patches/2014-08/msg00905.html
-
-Fixes:
-  http://autobuild.buildroot.net/results/5f5/5f576c7f8d56058a19ed0e7ff4b1ec620bcafb65/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/valgrind/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ ...ders-includes-to-fix-build-with-musl-libc.patch | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
-index 21b2608..40e219d 100644
---- a/package/valgrind/Config.in
-+++ b/package/valgrind/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_VALGRIND
- 		   BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
- 		   BR2_x86_64
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_MIPS_SOFT_FLOAT
- 	help
- 	  Tool for debugging and profiling Linux programs.
- 
--- 
-2.7.3
+diff --git a/package/openpgm/0003-Rework-headers-includes-to-fix-build-with-musl-libc.patch b/package/openpgm/0003-Rework-headers-includes-to-fix-build-with-musl-libc.patch
+new file mode 100644
+index 0000000..4d700fb
+--- /dev/null
++++ b/package/openpgm/0003-Rework-headers-includes-to-fix-build-with-musl-libc.patch
+@@ -0,0 +1,55 @@
++From 01128a2d8ad3288e8b96a908888049f186d156ee Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 21 May 2016 19:44:48 +0200
++Subject: [PATCH 1/1] Rework headers includes to fix build with musl libc
++
++Downloaded patch from
++http://git.alpinelinux.org/cgit/aports/plain/main/openpgm/openpgm-fix-includes.patch
++and adjusted paths by prefixing with "openpgm/pgm/"
++
++A build log with the compile error can be found here:
++http://autobuild.buildroot.net/results/854/854554827ead82f29b293ddceced6eb7fbfeec27/build-end.log
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(Patch sent upstream: https://github.com/steve-o/openpgm/pull/44)
++---
++ openpgm/pgm/include/impl/security.h | 3 ++-
++ openpgm/pgm/include/pgm/types.h     | 1 +
++ 2 files changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/openpgm/pgm/include/impl/security.h b/openpgm/pgm/include/impl/security.h
++index c2b3e3d..896316f 100644
++--- a/openpgm/pgm/include/impl/security.h
+++++ b/openpgm/pgm/include/impl/security.h
++@@ -33,7 +33,6 @@
++ #include <stdio.h>
++ #include <stdarg.h>
++ #include <sys/types.h>
++-#include <sys/timeb.h>
++ #include <impl/i18n.h>
++ #include <impl/errno.h>
++ #include <impl/string.h>
++@@ -41,6 +40,8 @@
++ PGM_BEGIN_DECLS
++ 
++ #ifdef HAVE_FTIME
+++#include <sys/timeb.h>
+++
++ static inline
++ errno_t
++ #	if   !defined( _WIN32 )
++diff --git a/openpgm/pgm/include/pgm/types.h b/openpgm/pgm/include/pgm/types.h
++index 4e41261..58731a3 100644
++--- a/openpgm/pgm/include/pgm/types.h
+++++ b/openpgm/pgm/include/pgm/types.h
++@@ -27,6 +27,7 @@
++ 
++ #ifndef _MSC_VER
++ #	include <sys/param.h>
+++#	include <sys/types.h>
++ #endif
++ #include <pgm/macros.h>
++ 
++-- 
++2.8.1
++
