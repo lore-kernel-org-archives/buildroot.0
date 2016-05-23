@@ -1,48 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 May 2016 20:44:09 +0200
-Subject: [Buildroot] [git commit] Config.in: Use CDN kernel.org mirror
-Message-ID: <20160601161310.3F94481F53@busybox.osuosl.org>
+Date: Mon, 23 May 2016 17:08:09 +0200
+Subject: [Buildroot] [git commit] python-backports-abc: depend on Python 2.x
+Message-ID: <20160601161309.D888081F53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de76cb7da734dde2204a7ea9ff60e24cbe857ddb
+commit: https://git.buildroot.net/buildroot/commit/?id=1e3515849f202b681e84f1b3001e6c938e070e08
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It turned out for quite some time CDN-powered mirror
-of kernel.org is available. See this announce:
-https://www.kernel.org/introducing-fastly-cdn.html
+This package is a backport from Python 3.5, so it is not needed
+for Python 3.5.x environment.
 
-This change switches to that faster mirror by default.
+Fix python-tornado dependecies, so that python-backports-abc
+is only selected for Python 2.x.
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-[Thomas: tweak the help text.]
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/python-backports-abc/Config.in | 1 +
+ package/python-tornado/Config.in       | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Config.in b/Config.in
-index 93b4f69..b8e5d18 100644
---- a/Config.in
-+++ b/Config.in
-@@ -225,10 +225,12 @@ config BR2_BACKUP_SITE
- 
- config BR2_KERNEL_MIRROR
- 	string "Kernel.org mirror"
--	default "https://www.kernel.org/pub"
-+	default "https://cdn.kernel.org/pub"
+diff --git a/package/python-backports-abc/Config.in b/package/python-backports-abc/Config.in
+index 26d8cfd..4356627 100644
+--- a/package/python-backports-abc/Config.in
++++ b/package/python-backports-abc/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_BACKPORTS_ABC
+ 	bool "python-backports-abc"
++	depends on BR2_PACKAGE_PYTHON
  	help
--	  kernel.org is mirrored on a number of servers around the world.
--	  The following allows you to select your preferred mirror.
-+	  kernel.org is mirrored on a number of servers around the
-+	  world.  The following allows you to select your preferred
-+	  mirror. By default, a CDN is used, which automatically
-+	  redirects to a mirror geographically close to you.
- 
- 	  Have a look on the kernel.org site for a list of mirrors, then enter
- 	  the URL to the base directory.  Examples:
+ 	  A backport of recent additions to the 'collections.abc'
+ 	  module.
+diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
+index ac86682..3ead2af 100644
+--- a/package/python-tornado/Config.in
++++ b/package/python-tornado/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_TORNADO
+ 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+ 	select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	# runtime
++	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	if BR2_PACKAGE_PYTHON # runtime
+ 	help
+ 	  Tornado is a Python web framework and asynchronous networking
+ 	  library, originally developed at FriendFeed.
