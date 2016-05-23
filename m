@@ -1,39 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 May 2016 17:26:31 +0200
-Subject: [Buildroot] [PATCH] ruby: fix build for nommu
-In-Reply-To: <1463667790-2335-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1463667790-2335-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160523172631.1eaa6e79@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 23 May 2016 18:36:53 +0300
+Subject: [Buildroot] [PATCH] Config.in: Use CDN kernel.org mirror
+Message-ID: <1464017813-22503-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+It turned out for quite some time CDN-powered mirror
+of kernel.org is available. See this announce:
+https://www.kernel.org/introducing-fastly-cdn.html
 
-On Thu, 19 May 2016 11:23:10 -0300, Gustavo Zacarias wrote:
+This change switches to that faster mirror by default.
 
-> +Subject: [PATCH] process.c: fix rb_spawn_process() for nommu
-> +
-> +rb_spawn_process() in process.c tries different solutions for when fork
-> +and/or spawnv are/aren't available.
-> +The last resort when both aren't is to use the system() call which
-> +stores the value in the status variable, which isn't declared.
-> +
-> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> +---
-> +Patch status: reported https://bugs.ruby-lang.org/issues/12398
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-The maintainer asked some questions there, and seemed to suggest that
-he might remove support for no-MMU platforms in the future.
-
-In the mean time, patch applied to master.
-
-Thanks!
-
-Thomas
+diff --git a/Config.in b/Config.in
+index 93b4f69..71f0161 100644
+--- a/Config.in
++++ b/Config.in
+@@ -225,7 +225,7 @@ config BR2_BACKUP_SITE
+ 
+ config BR2_KERNEL_MIRROR
+ 	string "Kernel.org mirror"
+-	default "https://www.kernel.org/pub"
++	default "https://cdn.kernel.org/pub"
+ 	help
+ 	  kernel.org is mirrored on a number of servers around the world.
+ 	  The following allows you to select your preferred mirror.
+@@ -236,6 +236,9 @@ config BR2_KERNEL_MIRROR
+ 	     http://www.XX.kernel.org/pub (XX = country code)
+ 	     http://mirror.aarnet.edu.au/pub/ftp.kernel.org
+ 
++	  Now when kernel.org is mirrored by CDN as well we'll be using
++	  it by default to speed-up downloads all over the world.
++
+ config BR2_GNU_MIRROR
+ 	string "GNU Software mirror"
+ 	default "http://ftp.gnu.org/pub/gnu"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.5
