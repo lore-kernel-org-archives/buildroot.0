@@ -1,41 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 May 2016 13:57:28 +0200
-Subject: [Buildroot] [git commit] dnsmasq: bump to version 2.76
-Message-ID: <20160601161309.7B57181922@busybox.osuosl.org>
+Date: Mon, 23 May 2016 12:37:41 +0200
+Subject: [Buildroot] [git commit] lft: switch to upstream provided URL
+Message-ID: <20160601161309.5AB9681922@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad3ffb283aef538b29cb93b7c68ad68498675d3d
+commit: https://git.buildroot.net/buildroot/commit/?id=5a2d79a51bc28756deecceb7d6e9265d93b23a0f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dnsmasq/dnsmasq.hash | 2 +-
- package/dnsmasq/dnsmasq.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lft/lft.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
-index 57dc4b1..a73e911 100644
---- a/package/dnsmasq/dnsmasq.hash
-+++ b/package/dnsmasq/dnsmasq.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	640c4e1d4c298e42458419cd78cfc26acc549401b1a34d271cd3e0e4226941f1	dnsmasq-2.75.tar.xz
-+sha256	4b92698dee19ca0cb2a8f2e48f1d2dffd01a21eb15d1fbed4cf085630c8c9f96	dnsmasq-2.76.tar.xz
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 7fb1200..e8240b9 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/lft/lft.mk b/package/lft/lft.mk
+index 0779300..24e6a10 100644
+--- a/package/lft/lft.mk
++++ b/package/lft/lft.mk
+@@ -5,8 +5,7 @@
  ################################################################################
  
--DNSMASQ_VERSION = 2.75
-+DNSMASQ_VERSION = 2.76
- DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+ LFT_VERSION = 3.74
+-# Download from pwhois.org is form-wrapped resulting in ugly filename
+-LFT_SITE = https://fossies.org/linux/privat
++LFT_SITE = http://pwhois.org/get
+ LFT_DEPENDENCIES = libpcap
+ LFT_LICENSE = VOSTROM Public License for Open Source
+ LFT_LICENSE_FILES = COPYING
