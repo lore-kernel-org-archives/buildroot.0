@@ -1,56 +1,67 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 23 May 2016 10:57:41 +0100
-Subject: [Buildroot] [PATCH next 2/2] systemd: bump version to 230
-In-Reply-To: <1463997461-16181-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1463997461-16181-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1463997461-16181-2-git-send-email-Vincent.Riera@imgtec.com>
+Date: Mon, 23 May 2016 11:27:16 +0100
+Subject: [Buildroot] [PATCH next] lftp: bump version to 4.7.2
+Message-ID: <1463999236-8470-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We pass "--with-default-dnssec=no" to "configure" as it might create
-incompatibilities with a few DNS servers and networks.
+Help lftp to find readline and zlib so it will not fail this way:
 
-Announcement URL:
+checking for Readline... no
+configure: error: cannot find readline library, install readline-devel
+package
 
-  https://lists.freedesktop.org/archives/systemd-devel/2016-May/036583.html
+checking if zlib is wanted... yes
+checking for inflateEnd in -lz... no
+checking zlib.h usability... no
+checking zlib.h presence... no
+checking for zlib.h... no
+configure: error: cannot find -lz library, install zlib-devel package
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/lftp/lftp.hash |  2 +-
+ package/lftp/lftp.mk   | 10 +++++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 7295986..141eadf 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
+diff --git a/package/lftp/lftp.hash b/package/lftp/lftp.hash
+index 4c5d799..3185fc5 100644
+--- a/package/lftp/lftp.hash
++++ b/package/lftp/lftp.hash
 @@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 b51b0a48d1beb388d95bd6a98d62be05490335d4bb388aefecdcb576e91e0741  systemd-229.tar.gz
-+sha256 46b07568142adcd017c62e6230d39eb10d219ed3b2f13ffc12d9a3a6b1c840cd  systemd-230.tar.gz
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 8a6aa44..b525397 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
+ # Locally calculated
+-sha256  1e7cb674c83ace48172263f86847ed04bb6ab2f24116b11a8505f70a15e8805c  lftp-4.6.4.tar.xz
++sha256 475d7699b1390f951efee867ba1ad600f78329e13fd2a04d92f82bfffb70d872  lftp-4.7.2.tar.xz
+diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
+index 5051f70..80479ee 100644
+--- a/package/lftp/lftp.mk
++++ b/package/lftp/lftp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSTEMD_VERSION = 229
-+SYSTEMD_VERSION = 230
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
-@@ -36,6 +36,7 @@ SYSTEMD_CONF_OPTS += \
- 	--disable-gnuefi \
- 	--disable-ldconfig \
- 	--disable-tests \
-+	--with-default-dnssec=no \
- 	--without-python
+-LFTP_VERSION = 4.6.4
++LFTP_VERSION = 4.7.2
+ LFTP_SOURCE = lftp-$(LFTP_VERSION).tar.xz
+ LFTP_SITE = http://lftp.yar.ru/ftp
+ LFTP_LICENSE = GPLv3+
+@@ -13,6 +13,14 @@ LFTP_LICENSE_FILES = COPYING
+ LFTP_AUTORECONF = YES
+ LFTP_DEPENDENCIES = readline zlib host-pkgconf
  
- SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
++# Help lftp finding readline
++LFTP_CONF_OPTS += --with-readline=$(STAGING_DIR)/usr
++LFTP_CONF_OPTS += --with-readline-inc=$(STAGING_DIR)/usr/include/readline
++LFTP_CONF_OPTS += --with-readline-lib=$(STAGING_DIR)/usr/lib
++
++# Help lftp finding zlib
++LFTP_CONF_OPTS += --with-zlib=$(STAGING_DIR)/usr
++
+ ifneq ($(BR2_STATIC_LIBS),y)
+ LFTP_CONF_OPTS += --with-modules
+ endif
 -- 
 2.7.3
