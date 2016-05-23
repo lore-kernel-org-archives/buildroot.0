@@ -1,72 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 May 2016 21:23:05 +0200
-Subject: [Buildroot] [git commit] toolchain: arc-2016.03: fix generation of
-	dynamic relocs for -pie
-Message-ID: <20160601161310.B28F781F53@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 23 May 2016 23:16:16 +0200
+Subject: [Buildroot] [git commit] libgtk3: bump to version 3.20.6
+Message-ID: <20160601161310.0D3E581F53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1845a68cef2da2dd46c6165cb2459f805eb1d8a0
+commit: https://git.buildroot.net/buildroot/commit/?id=70f4ea42fad5c0976b9ea9af313b4e9ea643954a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently even if -pie flag is provided to LD dynamic relocations
-won't be created. That in its turn will break U-Boot self-relocation
-functionality.
-
-This fix resolves mentioned problem.
-
-Note as of today this is a sort of off-the-tree patch right from
-our binutils guy but in coming day similar fix will be applied to
-upstream binutils as well.
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ith-dynamic-relocs-not-being-generated-wi.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/binutils/arc-2016.03/0700-Fix-issue-with-dynamic-relocs-not-being-generated-wi.patch b/package/binutils/arc-2016.03/0700-Fix-issue-with-dynamic-relocs-not-being-generated-wi.patch
-new file mode 100644
-index 0000000..c2967a3
---- /dev/null
-+++ b/package/binutils/arc-2016.03/0700-Fix-issue-with-dynamic-relocs-not-being-generated-wi.patch
-@@ -0,0 +1,34 @@
-+From e59d8728f2fd57938ff28bb48cb47ddc7dbf8271 Mon Sep 17 00:00:00 2001
-+From: Cupertino Miranda <cmiranda@synopsys.com>
-+Date: Tue, 24 May 2016 18:00:28 +0200
-+Subject: [PATCH] Fix issue with dynamic relocs not being generated with -pie.
-+
-+---
-+ bfd/elf32-arc.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/bfd/elf32-arc.c b/bfd/elf32-arc.c
-+index c2d05e4..00af1a5 100644
-+--- a/bfd/elf32-arc.c
-++++ b/bfd/elf32-arc.c
-+@@ -1492,7 +1492,7 @@ elf_arc_relocate_section (bfd *		   output_bfd,
-+ 	  case R_ARC_32_ME:
-+ 	  case R_ARC_PC32:
-+ 	  case R_ARC_32_PCREL:
-+-	    if (bfd_link_pic (info) && !bfd_link_pie (info)
-++	    if ((bfd_link_pic (info) || bfd_link_pie (info))
-+ 		&& ((r_type != R_ARC_PC32 && r_type != R_ARC_32_PCREL)
-+ 		    || (h != NULL
-+ 			&& h->dynindx != -1
-+@@ -1774,7 +1774,7 @@ elf_arc_check_relocs (bfd *		         abfd,
-+ 	    /* FALLTHROUGH */
-+ 	  case R_ARC_PC32:
-+ 	  case R_ARC_32_PCREL:
-+-	    if (bfd_link_pic (info) && !bfd_link_pie (info)
-++	    if ((bfd_link_pic (info) || bfd_link_pie (info))
-+ 		&& ((r_type != R_ARC_PC32 && r_type != R_ARC_32_PCREL)
-+ 		    || (h != NULL
-+ 			&& h->dynindx != -1
-+-- 
-+2.5.5
-+
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 47f5977..b6998a4 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.5.sha256sum
+-sha256	9790b0267384904ad8a08e7f16e5f9ff1c4037de57788d48d1eaf528355b1564	gtk+-3.20.5.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.6.sha256sum
++sha256	3f8016563a96b1cfef4ac9e795647f6316deb2978ff939b19e4e4f8f936fa4b2	gtk+-3.20.6.tar.xz
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 469ff13..f447e7a 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGTK3_VERSION_MAJOR = 3.20
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).5
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).6
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPLv2+
