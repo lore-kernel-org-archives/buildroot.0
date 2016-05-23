@@ -1,56 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 May 2016 16:27:00 +0200
-Subject: [Buildroot] [git commit branch/next] systemd: bump version to 230
-Message-ID: <20160523142736.D42237FC74@busybox.osuosl.org>
+Date: Mon, 23 May 2016 16:27:05 +0200
+Subject: [Buildroot] [git commit branch/next] package/make: bump version to
+	4.2
+Message-ID: <20160523142736.F32EE81E59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25bd16a5914ec5a59162926bd502cf8b913cb580
+commit: https://git.buildroot.net/buildroot/commit/?id=a2da155d27649ae876b739637b728e7808f2ccb3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-We pass "--with-default-dnssec=no" to "configure" as it might create
-incompatibilities with a few DNS servers and networks.
 
 Announcement URL:
 
-  https://lists.freedesktop.org/archives/systemd-devel/2016-May/036583.html
+  http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00013.html
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/make/make.hash | 4 +++-
+ package/make/make.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 7295986..141eadf 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 b51b0a48d1beb388d95bd6a98d62be05490335d4bb388aefecdcb576e91e0741  systemd-229.tar.gz
-+sha256 46b07568142adcd017c62e6230d39eb10d219ed3b2f13ffc12d9a3a6b1c840cd  systemd-230.tar.gz
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 8a6aa44..b525397 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
+diff --git a/package/make/make.hash b/package/make/make.hash
+index db95c60..528822f 100644
+--- a/package/make/make.hash
++++ b/package/make/make.hash
+@@ -1,2 +1,4 @@
++# From http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00013.html
++sha1 85ad14d08766201ffe71efa866f4fb91  make-4.2.tar.bz2
+ # Locally calculated after checking signature
+-sha256	0bc7613389650ee6a24554b52572a272f7356164fd2c4132b0bcf13123e4fca5	make-4.1.tar.bz2
++sha256 4e5ce3b62fe5d75ff8db92b7f6df91e476d10c3aceebf1639796dc5bfece655f  make-4.2.tar.bz2
+diff --git a/package/make/make.mk b/package/make/make.mk
+index 20702dc..43f4f77 100644
+--- a/package/make/make.mk
++++ b/package/make/make.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSTEMD_VERSION = 229
-+SYSTEMD_VERSION = 230
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
-@@ -36,6 +36,7 @@ SYSTEMD_CONF_OPTS += \
- 	--disable-gnuefi \
- 	--disable-ldconfig \
- 	--disable-tests \
-+	--with-default-dnssec=no \
- 	--without-python
- 
- SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
+-MAKE_VERSION = 4.1
++MAKE_VERSION = 4.2
+ MAKE_SOURCE = make-$(MAKE_VERSION).tar.bz2
+ MAKE_SITE = $(BR2_GNU_MIRROR)/make
+ MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
