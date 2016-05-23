@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 May 2016 21:36:33 +0200
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.4.12
-In-Reply-To: <1463766016-9216-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1463766016-9216-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160522213633.67d8c578@free-electrons.com>
+Date: Mon, 23 May 2016 12:39:23 +0200
+Subject: [Buildroot] [PATCH] lft: switch to upstream provided URL
+In-Reply-To: <1463660989-20934-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1463660989-20934-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160523123923.07e203f1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 20 May 2016 14:40:16 -0300, Gustavo Zacarias wrote:
+On Thu, 19 May 2016 09:29:49 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/gnutls/gnutls.hash | 2 +-
->  package/gnutls/gnutls.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/lft/lft.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 
 Applied to next, thanks.
 
