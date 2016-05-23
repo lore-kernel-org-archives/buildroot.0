@@ -1,27 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 May 2016 21:49:46 +0200
-Subject: [Buildroot] [PATCH] strongswan: needs __atomic operations
-In-Reply-To: <1464103793-13228-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 24 May 2016 17:29:53 +0200")
-References: <1464103793-13228-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87fut7b5id.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 23 May 2016 13:55:59 +0100
+Subject: [Buildroot] [PATCH next] make: bump version to 4.2
+Message-ID: <1464008159-15180-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Announcement URL:
 
- > strongswan uses the __atomic_*() intrinsics, so we make it depend on
- > BR2_TOOLCHAIN_HAS_ATOMIC and link with libatomic when available. This
- > allows to fix the build on SPARC, therefore fixing:
+  http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00013.html
 
- >   http://autobuild.buildroot.org/results/7e090237801874fb889c76f84863dc4c2ca20450/
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/make/make.hash | 4 +++-
+ package/make/make.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
+diff --git a/package/make/make.hash b/package/make/make.hash
+index db95c60..528822f 100644
+--- a/package/make/make.hash
++++ b/package/make/make.hash
+@@ -1,2 +1,4 @@
++# From http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00013.html
++sha1 85ad14d08766201ffe71efa866f4fb91  make-4.2.tar.bz2
+ # Locally calculated after checking signature
+-sha256	0bc7613389650ee6a24554b52572a272f7356164fd2c4132b0bcf13123e4fca5	make-4.1.tar.bz2
++sha256 4e5ce3b62fe5d75ff8db92b7f6df91e476d10c3aceebf1639796dc5bfece655f  make-4.2.tar.bz2
+diff --git a/package/make/make.mk b/package/make/make.mk
+index 20702dc..43f4f77 100644
+--- a/package/make/make.mk
++++ b/package/make/make.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MAKE_VERSION = 4.1
++MAKE_VERSION = 4.2
+ MAKE_SOURCE = make-$(MAKE_VERSION).tar.bz2
+ MAKE_SITE = $(BR2_GNU_MIRROR)/make
+ MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
 -- 
-Bye, Peter Korsgaard
+2.7.3
