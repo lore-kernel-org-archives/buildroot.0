@@ -1,63 +1,48 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 23 May 2016 18:47:56 +0200
-Subject: [Buildroot] [PATCH 2/2] package/jack2: Fix build on arc
-In-Reply-To: <1464022076-24135-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1464022076-24135-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1464022076-24135-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 23 May 2016 19:06:46 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/iptraf-ng: Needs -D_GNU_SOURCE
+	to fix musl build
+Message-ID: <1464023206-9875-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Compiling iptraf-ng using musl is broken:
+
+src/ipfrag.c:193:52: error: 'struct tcphdr' has no member named 'source'
+    ftmp->s_port = ntohs(((struct tcphdr *) tpacket)->source);
+
+Musl guards these fields in the netinet/tcp.h header file with
+_GNU_SOURCE, for details see https://dev.openwrt.org/ticket/19889
+
+Patch ported from
+http://git.alpinelinux.org/cgit/aports/tree/main/iptraf-ng/APKBUILD#n28
+
 Fixes
-http://autobuild.buildroot.net/results/483/48367bdc5e2f466ea12eb573ba9f5265887a62f4/
+http://autobuild.buildroot.net/results/4ce/4cedd4dbaafca76e839f45cc0a4bb8c2c181920d/
+http://autobuild.buildroot.net/results/72b/72b019ce5bb52b8b87d92cce675708f7b9f8a96e/
+http://autobuild.buildroot.net/results/f67/f67f1c2a627a6d535dd5c00e2ee131b5c5a99a0a/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/jack2/0004-Add-support-for-arc.patch | 34 ++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/jack2/0004-Add-support-for-arc.patch
+v2: extended patch comment (Thomas)
 
-diff --git a/package/jack2/0004-Add-support-for-arc.patch b/package/jack2/0004-Add-support-for-arc.patch
-new file mode 100644
-index 0000000..d594e52
---- /dev/null
-+++ b/package/jack2/0004-Add-support-for-arc.patch
-@@ -0,0 +1,34 @@
-+From 0d78be7887bd4a86f9b4065faee5c4827a67d667 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Mon, 23 May 2016 17:44:09 +0200
-+Subject: [PATCH 2/2] Add support for arc
-+
-+When compiling jack on nios2, compilation fails because NGREGS is not
-+defined. Since this is only for debug output on segmentation faults, stub
-+the debug print out like it's been done for other platforms before.
-+
-+Inspired by
-+https://github.com/jackaudio/jack2/commit/d11bb095291d8880508c87adfe625bf2bcab1456
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+(Patch sent upstream: https://github.com/jackaudio/jack2/pull/210)
-+---
-+ dbus/sigsegv.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/dbus/sigsegv.c b/dbus/sigsegv.c
-+index 137adf1..f521ae9 100644
-+--- a/dbus/sigsegv.c
-++++ b/dbus/sigsegv.c
-+@@ -104,7 +104,7 @@ static void signal_segv(int signum, siginfo_t* info, void*ptr) {
-+     jack_error("info.si_errno = %d", info->si_errno);
-+     jack_error("info.si_code  = %d (%s)", info->si_code, si_code_str);
-+     jack_error("info.si_addr  = %p", info->si_addr);
-+-#if !defined(__alpha__) && !defined(__ia64__) && !defined(__FreeBSD_kernel__) && !defined(__arm__) && !defined(__hppa__) && !defined(__sh__) && !defined(__aarch64__) && !defined(nios2) && !defined(__XTENSA__)
-++#if !defined(__alpha__) && !defined(__ia64__) && !defined(__FreeBSD_kernel__) && !defined(__arm__) && !defined(__hppa__) && !defined(__sh__) && !defined(__aarch64__) && !defined(nios2) && !defined(__XTENSA__) && !defined(__arc__)
-+     for(i = 0; i < NGREG; i++)
-+         jack_error("reg[%02d]       = 0x" REGFORMAT, i, 
-+ #if defined(__powerpc64__)
-+-- 
-+2.8.1
-+
+ package/iptraf-ng/iptraf-ng.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/iptraf-ng/iptraf-ng.mk b/package/iptraf-ng/iptraf-ng.mk
+index 7313873..404db8b 100644
+--- a/package/iptraf-ng/iptraf-ng.mk
++++ b/package/iptraf-ng/iptraf-ng.mk
+@@ -11,5 +11,6 @@ IPTRAF_NG_LICENSE_FILES = LICENSE
+ IPTRAF_NG_DEPENDENCIES = ncurses
+ 
+ IPTRAF_NG_MAKE_ENV = NCURSES_LDFLAGS="-lpanel -lncurses"
++IPTRAF_NG_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ 
+ $(eval $(autotools-package))
 -- 
 2.8.1
