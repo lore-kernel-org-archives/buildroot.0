@@ -1,54 +1,48 @@
-From: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Wed, 25 May 2016 18:04:11 +0200
-Subject: [Buildroot] [PATCH 1/1] support/scripts/apply-patches.sh:
- handle tar and mkdir failures
-In-Reply-To: <20160525171145.6d8950d9@free-electrons.com>
-References: <1464178439-3333-1-git-send-email-sebastien.szymanski@armadeus.com>
- <20160525171145.6d8950d9@free-electrons.com>
-Message-ID: <7fd7c351-9916-5591-e308-42efeb652dfb@armadeus.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 May 2016 21:16:44 +0200
+Subject: [Buildroot] [PATCH v4] toolchain: improve SSP logic
+In-Reply-To: <1458060038-38164-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1458060038-38164-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160523211644.6b54c857@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-On 05/25/2016 05:11 PM, Thomas Petazzoni wrote:
-> Hello,
+On Tue, 15 Mar 2016 16:40:38 +0000, Vicente Olivert Riera wrote:
+> Don't enable SSP support on external toolchains just because they use
+> glibc or musl. Instead of that, make the external toolchains explictily
+> declare if they support SSP or not. And also add a check to detect SSP
+> support when using custom external toolchains.
 > 
-> On Wed, 25 May 2016 14:13:59 +0200, S?bastien Szymanski wrote:
->> With several archives in a space-separated list of patches, if one archive
->> cannot be untar (i.e because it is not readable), Buildroot keeps going instead
->> of aborting. Fix this by checking the tar return code.
->> While at it, check if the unpack archive directory creation is successful.
->>
->> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
->> ---
->>  support/scripts/apply-patches.sh | 6 +++++-
->>  1 file changed, 5 insertions(+), 1 deletion(-)
+> For internal toolchains we always enable SSP support for glibc and musl.
 > 
-> Thanks for the patch. One question though: are you actually using the
-> capability of Buildroot to take a tarball, and apply the patches that
-> it contains? If so, for what use case?
-> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Yes, we use this Buildroot feature. We have an old kernel with several
-tarballs of patches for our i.MX28-based SoM. They was provided that way
-by Freescale I guess.
+A reference to some autobuilder failures was missing here, to justify
+applying this on master rather than next, so I've added one.
 
-Regards,
+> +check_toolchain_ssp = \
+> +	__CROSS_CC=$(strip $1) ; \
+> +	__HAS_SSP=`echo 'void main(){}' | $${__CROSS_CC} -fstack-protector -x c - -o $(BUILD_DIR)/.br-toolchain-test.tmp && echo y` ; \
 
-> Thanks,
-> 
-> Thomas
-> 
+I've redirected stdout/stderr from gcc to /dev/null in order to avoid
+causing confusion for the user, who would have seen some weird gcc
+errors when the ssp test fails.
 
+And also, I've removed the existing SSP test which was done
+specifically for uClibc external toolchains, since there is now a more
+generic check for SSP, which works for all C libraries.
 
+Applied to master with those changes.
+
+Thanks!
+
+Thomas
 -- 
-S?bastien Szymanski
-Software Engineer
-Armadeus Systems - A new vision of the embedded world
-sebastien.szymanski at armadeus.com
-Tel: +33 (0)9 72 29 41 44
-Fax: +33 (0)9 72 28 79 26
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
