@@ -1,55 +1,145 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 23 May 2016 20:41:34 +0300
-Subject: [Buildroot] [PATCH] libxml2: security bump to version 2.9.4
-Message-ID: <f46d54cfeae4ab63d1820c71f41a732160290159.1464025294.git.baruch@tkos.co.il>
+From: daggs <daggs@gmx.com>
+Date: Mon, 23 May 2016 20:04:16 +0200
+Subject: [Buildroot] [PATCH v2 3/3] odroid c2 changes
+Message-ID: <trinity-b605cec6-d049-4b8e-8da2-b563e46c2251-1464026656102@3capp-mailcom-bs13>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a bunch of security issues including:
 
-  CVE-2016-1762: Heap-based buffer overread in xmlNextChar
+ - allow building of odroid mali GL libs when using defconfig.
+ - add S50display which sets the odroid mali fb.
 
-  CVE-2016-1834: heap-buffer-overflow in xmlStrncat
+Signed-off-by: Dagg <daggs@gmx.com>
 
-  CVE-2016-3705: Missing increments of recursion depth counter to XML parser
-
-A few more security fixes are listed in the release announcement at
-https://mail.gnome.org/archives/xml/2016-May/msg00023.html.
-
-Also fixes:
-http://autobuild.buildroot.net/results/6db/6db405a097b192876c0b1b8d59051d614563c617/
-http://autobuild.buildroot.net/results/62a/62addf4abd2a0df8222a81a83c16b2b9a61c9481/
-http://autobuild.buildroot.net/results/204/20402690ad05d10d456a219da5252a38badf1da0/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/libxml2/libxml2.hash | 2 +-
- package/libxml2/libxml2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../odroidc2/fs-overlay/etc/init.d/S50display      | 103 +++++++++++++++++++++
+ configs/odroidc2_defconfig                         |   1 +
+ 2 files changed, 104 insertions(+)
+ create mode 100644 board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index 00fbf4372bdc..098121e11741 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	4de9e31f46b44d34871c22f54bfc54398ef124d6f7cafb1f4a5958fbcd3ba12d	libxml2-2.9.3.tar.gz
-+sha256	ffb911191e509b966deb55de705387f14156e1a56b21824357cdf0053233633c	libxml2-2.9.4.tar.gz
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index ee9b2ca44e30..ed6f9af49b36 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display b/board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display
+new file mode 100644
+index 0000000..68f8c6c
+--- /dev/null
++++ b/board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display
+@@ -0,0 +1,103 @@
++#!/bin/sh
++
++export mode=`cat /proc/cmdline | sed -rn 's/.+(hdmimode=)(\S+)\s.+/\2/p'`
++export bpp=`cat /proc/cmdline | sed -rn 's/.+(m_bpp=)(\S+)\s.+/\2/p'`
++
++common_display_setup() {
++	M="0 0 $(($X - 1)) $(($Y - 1))"
++	Y_VIRT=$(($Y * 2))
++	fbset -fb /dev/fb0 -g $X $Y $X $Y_VIRT $bpp
++	fbset -fb /dev/fb1 -g 32 32 32 32 32
++	echo $mode > /sys/class/display/mode
++	echo 0 > /sys/class/graphics/fb0/free_scale
++	echo 1 > /sys/class/graphics/fb0/freescale_mode
++	echo $M > /sys/class/graphics/fb0/free_scale_axis
++	echo $M > /sys/class/graphics/fb0/window_axis
++	echo 0 > /sys/class/graphics/fb1/free_scale
++}
++
++case $mode in
++	480*) 
++		export X=720 
++		export Y=480 
++		;;
++	576*)
++		export X=720
++		export Y=576
++		;;
++	720p*)
++		export X=1280
++		export Y=720
++		;;
++	1080*)
++		export X=1920
++		export Y=1080
++		;;
++	2160p*)
++		export X=3840
++		export Y=2160
++		;;
++	smpte24hz*)
++		export X=3840
++		export Y=2160
++		;;
++	640x480p60hz*)
++		export X=640
++		export Y=480
++		;;
++	800x480p60hz*)
++		export X=800
++		export Y=480
++		;;
++	800x600p60hz*)
++		export X=800
++		export Y=600
++		;;
++	1024x600p60hz*)
++		export X=1024
++		export Y=600
++		;;
++	1024x768p60hz*)
++		export X=1024
++		export Y=768
++		;;
++	1280x800p60hz*)
++		export X=1280
++		export Y=800
++		;;
++	1280x1024p60hz*)
++		export X=1280
++		export Y=1024
++		;;
++	1360x768p60hz*)
++		export X=1360
++		export Y=768
++		;;
++	1366x768p60hz*)
++		export X=1366
++		export Y=768
++		;;
++	1440x900p60hz*)
++		export X=1440
++		export Y=900
++		;;
++	1600x900p60hz*)
++		export X=1600
++		export Y=900
++		;;
++	1680x1050p60hz*)
++		export X=1680
++		export Y=1050
++		;;
++	1920x1200p60hz*)
++		export X=1920
++		export Y=1200
++		;;
++esac
++
++common_display_setup
++
++echo 0 > /sys/class/graphics/fb0/blank
++echo 0 > /sys/class/graphics/fb1/blank
++
++exit $?
+diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
+index 1945983..590d54c 100644
+--- a/configs/odroidc2_defconfig
++++ b/configs/odroidc2_defconfig
+@@ -6,6 +6,7 @@ BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image.sh"
++BR2_ROOTFS_OVERLAY="board/hardkernel/odroidc2/fs-overlay"
  
--LIBXML2_VERSION = 2.9.3
-+LIBXML2_VERSION = 2.9.4
- LIBXML2_SITE = ftp://xmlsoft.org/libxml2
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_LICENSE = MIT
+ # Kernel
+ BR2_KERNEL_HEADERS_VERSION=y
 -- 
-2.8.1
+2.8.3
