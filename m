@@ -1,48 +1,62 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 23 May 2016 19:06:46 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/iptraf-ng: Needs -D_GNU_SOURCE
-	to fix musl build
-Message-ID: <1464023206-9875-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 May 2016 19:18:58 +0200
+Subject: [Buildroot] [PATCH] Config.in: Use CDN kernel.org mirror
+In-Reply-To: <1464019414.7749.8.camel@synopsys.com>
+References: <1464017813-22503-1-git-send-email-abrodkin@synopsys.com>
+ <20160523174643.777faf11@free-electrons.com>
+ <1464019414.7749.8.camel@synopsys.com>
+Message-ID: <20160523191858.6b3e878c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Compiling iptraf-ng using musl is broken:
+Hello,
 
-src/ipfrag.c:193:52: error: 'struct tcphdr' has no member named 'source'
-    ftmp->s_port = ntohs(((struct tcphdr *) tpacket)->source);
+On Mon, 23 May 2016 16:04:05 +0000, Alexey Brodkin wrote:
 
-Musl guards these fields in the netinet/tcp.h header file with
-_GNU_SOURCE, for details see https://dev.openwrt.org/ticket/19889
+> > > ?	?????http://www.XX.kernel.org/pub (XX = country code)
+> > > ?	?????http://mirror.aarnet.edu.au/pub/ftp.kernel.org  
+> > Should this list of mirrors be removed?  
+> 
+> Well I have no preference here.
+> I mean user still may have a preferred mirror so why would we
+> limit him or her here?
 
-Patch ported from
-http://git.alpinelinux.org/cgit/aports/tree/main/iptraf-ng/APKBUILD#n28
+Well, if we're pointing to a CDN then really there is no longer any
+reason to point users to www.XXX.kernel.org with XX = country code,
+since that's what a CDN is doing automatically.
 
-Fixes
-http://autobuild.buildroot.net/results/4ce/4cedd4dbaafca76e839f45cc0a4bb8c2c181920d/
-http://autobuild.buildroot.net/results/72b/72b019ce5bb52b8b87d92cce675708f7b9f8a96e/
-http://autobuild.buildroot.net/results/f67/f67f1c2a627a6d535dd5c00e2ee131b5c5a99a0a/
+> > > +	??Now when kernel.org is mirrored by CDN as well we'll be using
+> > > +	??it by default to speed-up downloads all over the world.  
+> > I'm sorry, but I don't understand this sentence.  
+> 
+> If I'm not mistaken CDN allows to use the best server for each user
+> (based on some criteria). Now kerenl.org is mirrored with use of that
+> technology. And in theory users of Buildroot all over the world will
+> benefit from much faster downloads from this CDN mirror (which will
+> be in real life different physical servers for different users).
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Tested-by: J?rg Krause <joerg.krause@embedded.rocks>
----
-v2: extended patch comment (Thomas)
+Yes, of course. But I still think the wording is wrong. The wording
+feels like something for the commit log, not for the help text. A
+correct wording for the help text could be:
 
- package/iptraf-ng/iptraf-ng.mk | 1 +
- 1 file changed, 1 insertion(+)
+	The default value points to kernel.org's CDN, which will
+	automatically redirect you to a mirror geographically close to
+	you.
 
-diff --git a/package/iptraf-ng/iptraf-ng.mk b/package/iptraf-ng/iptraf-ng.mk
-index 7313873..404db8b 100644
---- a/package/iptraf-ng/iptraf-ng.mk
-+++ b/package/iptraf-ng/iptraf-ng.mk
-@@ -11,5 +11,6 @@ IPTRAF_NG_LICENSE_FILES = LICENSE
- IPTRAF_NG_DEPENDENCIES = ncurses
- 
- IPTRAF_NG_MAKE_ENV = NCURSES_LDFLAGS="-lpanel -lncurses"
-+IPTRAF_NG_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- $(eval $(autotools-package))
+> But for me use of CDN gave 2.5 boost (1.8 vs 5 Mbit/sec).
+> And still there's a probability that it was our ISP that limited to
+> 5 Mbit'sec and given I have a wider channel download speed might be
+> even higher.
+
+Right.
+
+Thanks,
+
+Thomas
 -- 
-2.8.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
