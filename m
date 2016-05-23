@@ -1,35 +1,49 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 23 May 2016 10:07:09 +0200
-Subject: [Buildroot] systemd and journald
-In-Reply-To: <20160522124140.GA3630@free.fr>
-References: <20160522124140.GA3630@free.fr>
-Message-ID: <20160523100709.3e2f0feb@itchy>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 23 May 2016 10:16:28 +0100
+Subject: [Buildroot] [PATCH v3 next] openblas: new package
+In-Reply-To: <CAHXCMMKz9DXeajqsv2_+N2Cwo6Q6H5njKoUrZpRSXFu7QFD4TQ@mail.gmail.com>
+References: <1463652602-3276-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20160519142103.507c1395@free-electrons.com> <573DC2D6.5090003@imgtec.com>
+ <20160519160040.1eee27e6@free-electrons.com> <573ECB77.9080100@imgtec.com>
+ <20160520110001.026d8cc6@free-electrons.com>
+ <CAHXCMMKz9DXeajqsv2_+N2Cwo6Q6H5njKoUrZpRSXFu7QFD4TQ@mail.gmail.com>
+Message-ID: <5742CA6C.4040303@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Thanks Samuel.
 
-Le Sun, 22 May 2016 14:41:40 +0200,
-"Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
+Regards,
 
-> So, because our /var/log is a symlink to /tmp , the journal is
-> correctly created
-> in /tmp/journal/c30ad28b21d444ba9fff7fb25b5454b1/system.journal but
-> since another filesystem is mounted over it later, it is no longer
-> accessible, so journalctl does not find it.
+Vincent.
+
+On 20/05/16 22:07, Samuel Martin wrote:
+> Hi Vicente, all,
 > 
-> I'm not sure where to go forward rom there, but it looks like our
-> skeleton is wrong when the init system is systemd.
-
-I haven't played with a systemd-based setup for a while, but I used to fix this with a post-build script [1]. 
-
-There was also a discussion some times ago about the need for a skeleton package per init system [2].
-
-[1] https://github.com/elebihan/buildroot-ext-elb/blob/master/overlays/base-systemd/post-build.sh
-[2] http://buildroot-busybox.2317881.n4.nabble.com/How-to-provide-one-default-skeleton-per-init-system-td72124.html
-
--- 
-ELB
+> On Fri, May 20, 2016 at 11:00 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Hello,
+>>
+>> On Fri, 20 May 2016 09:31:51 +0100, Vicente Olivert Riera wrote:
+>>
+>>> do you have those patches Thomas is talking about? If so, do you plan to
+>>> send them to the ML?
+>>
+>> See: https://github.com/tSed/buildroot/commits/sma/ext-toolchain-options
+> 
+> Yes, I will send them at some point ;-)
+> In its current state the branch should be easily rebased on master I think.
+> But there is some part of this work that could benefit from the shell
+> module work from this series [1], so I'm waiting for this series [1]
+> to be merged before.
+> I plan to poke people about [1] as soon as the 2016.05 release is out,
+> and continue works based on it.
+> 
+> 
+> [1] http://patchwork.ozlabs.org/bundle/smartin/rpath_v9_part01/
+> 
+> Regards,
+> 
