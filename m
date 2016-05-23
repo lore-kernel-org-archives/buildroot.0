@@ -1,145 +1,82 @@
-From: daggs <daggs@gmx.com>
-Date: Mon, 23 May 2016 20:04:16 +0200
-Subject: [Buildroot] [PATCH v2 3/3] odroid c2 changes
-Message-ID: <trinity-b605cec6-d049-4b8e-8da2-b563e46c2251-1464026656102@3capp-mailcom-bs13>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 May 2016 17:36:11 +0200
+Subject: [Buildroot] [git commit branch/next] toolchain-external: bump
+	CodeSourcery NIOSII to 2016.05
+Message-ID: <20160523180823.D5DCA81E16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=04c9d650398b8ad5be53336854a323eadcd648dc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- - allow building of odroid mali GL libs when using defconfig.
- - add S50display which sets the odroid mali fb.
+The toolchain still use binutils 2.25 without the fix for PR19405.
 
-Signed-off-by: Dagg <daggs@gmx.com>
-
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../odroidc2/fs-overlay/etc/init.d/S50display      | 103 +++++++++++++++++++++
- configs/odroidc2_defconfig                         |   1 +
- 2 files changed, 104 insertions(+)
- create mode 100644 board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display
+ toolchain/toolchain-external/Config.in               | 8 ++++----
+ toolchain/toolchain-external/toolchain-external.hash | 4 ++--
+ toolchain/toolchain-external/toolchain-external.mk   | 2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display b/board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display
-new file mode 100644
-index 0000000..68f8c6c
---- /dev/null
-+++ b/board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display
-@@ -0,0 +1,103 @@
-+#!/bin/sh
-+
-+export mode=`cat /proc/cmdline | sed -rn 's/.+(hdmimode=)(\S+)\s.+/\2/p'`
-+export bpp=`cat /proc/cmdline | sed -rn 's/.+(m_bpp=)(\S+)\s.+/\2/p'`
-+
-+common_display_setup() {
-+	M="0 0 $(($X - 1)) $(($Y - 1))"
-+	Y_VIRT=$(($Y * 2))
-+	fbset -fb /dev/fb0 -g $X $Y $X $Y_VIRT $bpp
-+	fbset -fb /dev/fb1 -g 32 32 32 32 32
-+	echo $mode > /sys/class/display/mode
-+	echo 0 > /sys/class/graphics/fb0/free_scale
-+	echo 1 > /sys/class/graphics/fb0/freescale_mode
-+	echo $M > /sys/class/graphics/fb0/free_scale_axis
-+	echo $M > /sys/class/graphics/fb0/window_axis
-+	echo 0 > /sys/class/graphics/fb1/free_scale
-+}
-+
-+case $mode in
-+	480*) 
-+		export X=720 
-+		export Y=480 
-+		;;
-+	576*)
-+		export X=720
-+		export Y=576
-+		;;
-+	720p*)
-+		export X=1280
-+		export Y=720
-+		;;
-+	1080*)
-+		export X=1920
-+		export Y=1080
-+		;;
-+	2160p*)
-+		export X=3840
-+		export Y=2160
-+		;;
-+	smpte24hz*)
-+		export X=3840
-+		export Y=2160
-+		;;
-+	640x480p60hz*)
-+		export X=640
-+		export Y=480
-+		;;
-+	800x480p60hz*)
-+		export X=800
-+		export Y=480
-+		;;
-+	800x600p60hz*)
-+		export X=800
-+		export Y=600
-+		;;
-+	1024x600p60hz*)
-+		export X=1024
-+		export Y=600
-+		;;
-+	1024x768p60hz*)
-+		export X=1024
-+		export Y=768
-+		;;
-+	1280x800p60hz*)
-+		export X=1280
-+		export Y=800
-+		;;
-+	1280x1024p60hz*)
-+		export X=1280
-+		export Y=1024
-+		;;
-+	1360x768p60hz*)
-+		export X=1360
-+		export Y=768
-+		;;
-+	1366x768p60hz*)
-+		export X=1366
-+		export Y=768
-+		;;
-+	1440x900p60hz*)
-+		export X=1440
-+		export Y=900
-+		;;
-+	1600x900p60hz*)
-+		export X=1600
-+		export Y=900
-+		;;
-+	1680x1050p60hz*)
-+		export X=1680
-+		export Y=1050
-+		;;
-+	1920x1200p60hz*)
-+		export X=1920
-+		export Y=1200
-+		;;
-+esac
-+
-+common_display_setup
-+
-+echo 0 > /sys/class/graphics/fb0/blank
-+echo 0 > /sys/class/graphics/fb1/blank
-+
-+exit $?
-diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
-index 1945983..590d54c 100644
---- a/configs/odroidc2_defconfig
-+++ b/configs/odroidc2_defconfig
-@@ -6,6 +6,7 @@ BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image.sh"
-+BR2_ROOTFS_OVERLAY="board/hardkernel/odroidc2/fs-overlay"
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 0ba5d46..ce2d91e 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -403,7 +403,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
+ 	      Disable 'Use soft-float'
  
- # Kernel
- BR2_KERNEL_HEADERS_VERSION=y
--- 
-2.8.3
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+-	bool "Sourcery CodeBench Nios-II 2015.11"
++	bool "Sourcery CodeBench Nios-II 2016.05"
+ 	depends on BR2_nios2
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_STATIC_LIBS
+@@ -411,13 +411,13 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	select BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405 # based-on binutils-2.25.1
+ 	help
+ 	  Sourcery CodeBench toolchain for the Nios-II architecture,
+-	  from Mentor Graphics. It uses gcc 5.2, binutils 2.25.51,
+-	  glibc 2.22, gdb 7.10.50 and kernel headers 4.2.
++	  from Mentor Graphics. It uses gcc 5.3, binutils 2.25.51,
++	  glibc 2.23, gdb 7.10.50 and kernel headers 4.4.
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+ 	bool "Sourcery CodeBench SH 2012.09"
+diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+index fcd735b..ef4c7e2 100644
+--- a/toolchain/toolchain-external/toolchain-external.hash
++++ b/toolchain/toolchain-external/toolchain-external.hash
+@@ -10,8 +10,8 @@ sha256 c65b1b4b918d5185349d62a3b7bf43b4b21e1175c52598ec047ca56b3f11d857  blackfi
+ sha256 39ee0e789034334ecc89af94e838e3a4815400ac5ff980f808f466b04778532e  arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+ sha256 e16a5b1e41d7ff1e74161f9405182001bc8d1360d89564e73911032e6966cc0d  arm-2014.05-29-arm-none-linux-gnueabi.src.tar.bz2
+ # NiosII
+-sha256 e43899fd950e5d06e90c2eb01527c626240b6b4a603cbbeb532fad9fb8ea58c3  sourceryg++-2015.11-130-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-sha256 c412375ba3f93bafc9225de22366fa5b3f4d073ef856cf19595237ddb0815e6d  sourceryg++-2015.11-130-nios2-linux-gnu.src.tar.bz2
++sha256 750639290744adda931c81fa2cd2ffc2bde972488047824dcfaa53c42562191d  sourceryg++-2016.05-10-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
++sha256 3dc1c2685c0472059547dd7becb5dc991541b8176af39fa7aa5f601d38b9879a  sourceryg++-2016.05-10-nios2-linux-gnu.src.tar.bz2
+ # SuperH
+ sha256 59d6766fde244931aa52db01433d5acd051998762a931121c5fc109536a1a802  renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ sha256 e2e58c10e52395d5d35157e35f85233f713c6f9223a652dfc56194cfd2eed004  renesas-2012.09-61-sh-linux-gnu.src.tar.bz2
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 24c1f03..3d71ef4 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -338,7 +338,7 @@ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-l
+ TOOLCHAIN_EXTERNAL_SOURCE = mips-2016.05-8-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu
+-TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2015.11-130-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
++TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2016.05-10-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH),y)
+ TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
