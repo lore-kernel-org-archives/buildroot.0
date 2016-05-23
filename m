@@ -1,60 +1,41 @@
-From: Damien Lanson <damien@zeetim.com>
-Date: Mon, 23 May 2016 17:25:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dmidecode: bump to version 3.0
-Message-ID: <1464017147-5836-1-git-send-email-damien@zeetim.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 May 2016 13:57:28 +0200
+Subject: [Buildroot] [git commit branch/next] dnsmasq: bump to version 2.76
+Message-ID: <20160523115739.E042781979@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Damien Lanson <damien@zeetim.com>
----
- package/dmidecode/0001-build-system-fixes.patch | 6 +++---
- package/dmidecode/dmidecode.hash                | 4 ++--
- package/dmidecode/dmidecode.mk                  | 3 ++-
- 3 files changed, 7 insertions(+), 6 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=ad3ffb283aef538b29cb93b7c68ad68498675d3d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff --git a/package/dmidecode/0001-build-system-fixes.patch b/package/dmidecode/0001-build-system-fixes.patch
-index 275f9df..00897f8 100644
---- a/package/dmidecode/0001-build-system-fixes.patch
-+++ b/package/dmidecode/0001-build-system-fixes.patch
-@@ -21,10 +21,10 @@ Index: b/Makefile
- +override CFLAGS  += \
- +	-W -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual \
- +        -Wcast-align -Wwrite-strings -Wmissing-prototypes -Winline -Wundef
-- #CFLAGS += -DBIGENDIAN
-- #CFLAGS += -DALIGNMENT_WORKAROUND
-  
--@@ -23,7 +24,7 @@
-+ # Let lseek and mmap support 64-bit wide offsets
-+ CFLAGS += -D_FILE_OFFSET_BITS=64
-+@@ -27,7 +28,7 @@ CFLAGS += -O2
-  #CFLAGS += -g
-  
-  # Pass linker flags here
-diff --git a/package/dmidecode/dmidecode.hash b/package/dmidecode/dmidecode.hash
-index 7098ed0..307c306 100644
---- a/package/dmidecode/dmidecode.hash
-+++ b/package/dmidecode/dmidecode.hash
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dnsmasq/dnsmasq.hash | 2 +-
+ package/dnsmasq/dnsmasq.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 57dc4b1..a73e911 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
 @@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256	5a8214b99c1762f4510bd92baa279336e5fed6e5cd2e418d46d95a4ecc783922	dmidecode-2.12.tar.gz
-+# http://http.debian.net/debian/pool/main/d/dmidecode/dmidecode_3.0-2.dsc
-+sha256	7ec35bb193729c1d593a1460b59d82d24b89102ab23fd0416e6cf4325d077e45	dmidecode-3.0.tar.xz
-diff --git a/package/dmidecode/dmidecode.mk b/package/dmidecode/dmidecode.mk
-index 06ac19b..4298d88 100644
---- a/package/dmidecode/dmidecode.mk
-+++ b/package/dmidecode/dmidecode.mk
-@@ -4,7 +4,8 @@
+ # Locally calculated after checking pgp signature
+-sha256	640c4e1d4c298e42458419cd78cfc26acc549401b1a34d271cd3e0e4226941f1	dnsmasq-2.75.tar.xz
++sha256	4b92698dee19ca0cb2a8f2e48f1d2dffd01a21eb15d1fbed4cf085630c8c9f96	dnsmasq-2.76.tar.xz
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 7fb1200..e8240b9 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DMIDECODE_VERSION = 2.12
-+DMIDECODE_VERSION = 3.0
-+DMIDECODE_SOURCE = dmidecode-$(DMIDECODE_VERSION).tar.xz
- DMIDECODE_SITE = http://download.savannah.gnu.org/releases/dmidecode
- DMIDECODE_LICENSE = GPLv2+
- DMIDECODE_LICENSE_FILES = LICENSE
--- 
-2.8.1
+-DNSMASQ_VERSION = 2.75
++DNSMASQ_VERSION = 2.76
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
