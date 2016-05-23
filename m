@@ -1,287 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 May 2016 21:07:24 +0200
-Subject: [Buildroot] [git commit] toolchain: improve SSP logic
-Message-ID: <20160523190749.19052800E9@busybox.osuosl.org>
+From: Dagg <daggs@gmx.com>
+Date: Mon, 23 May 2016 22:21:55 +0300
+Subject: [Buildroot] [PATCH v2 2/3] add support for odroid mali GL in kodi
+Message-ID: <20160523192155.7231-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=794935068bf67171dd101c673c3cb4954035a413
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Signed-off-by: Dagg <daggs@gmx.com>
 
-Don't enable SSP support on external toolchains just because they use
-glibc or musl. Instead of that, make the external toolchains explictily
-declare if they support SSP or not. And also add a check to detect SSP
-support when using custom external toolchains.
-
-For internal toolchains we always enable SSP support for glibc and musl.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/ac7c9b3ad2e52abfe6b79a80045e4218eeb87175/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-[Thomas:
- - remove uClibc-specific SSP check, since there is now a generic
-   check being done.
- - send potential compilation errors caused by the SSP check to
-   oblivion, in order to avoid causing confusion for the user.
- - add autobuilder reference.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/glibc/Config.in                            |  1 +
- package/musl/Config.in                             |  1 +
- toolchain/Config.in                                |  2 --
- toolchain/helpers.mk                               | 21 +++++++++++++++++++--
- toolchain/toolchain-external/Config.in             | 22 ++++++++++++++++++++--
- toolchain/toolchain-external/toolchain-external.mk |  1 +
- 6 files changed, 42 insertions(+), 6 deletions(-)
+ package/kodi/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index 5b82170..f719d5c 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -29,6 +29,7 @@ config BR2_PACKAGE_GLIBC
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index ff2e75c..7b26abf 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+-	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
++	default y if (BR2_arm || BR2_aarch64 || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
+ 		&& BR2_PACKAGE_BOOST_ARCH_SUPPORTS \
+ 		&& BR2_TOOLCHAIN_HAS_SYNC_8
+ 
+@@ -24,7 +24,7 @@ config BR2_PACKAGE_KODI_GL
  	bool
  	default y
- 	select BR2_PACKAGE_LINUX_HEADERS
-+	select BR2_TOOLCHAIN_HAS_SSP
+ 	depends on BR2_PACKAGE_HAS_LIBGL
+-	depends on !BR2_arm # kodi needs egl/gles on arm
++	depends on !BR2_arm || !BR2_aarch64 # kodi needs egl/gles on arm
  
- choice
- 	prompt "glibc version"
-diff --git a/package/musl/Config.in b/package/musl/Config.in
-index f1a3150..c263006 100644
---- a/package/musl/Config.in
-+++ b/package/musl/Config.in
-@@ -4,3 +4,4 @@ config BR2_PACKAGE_MUSL
- 	default y
- 	select BR2_PACKAGE_LINUX_HEADERS
- 	select BR2_PACKAGE_NETBSD_QUEUE
-+	select BR2_TOOLCHAIN_HAS_SSP
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index fc30c6e..e0044c1 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -15,7 +15,6 @@ config BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
--	select BR2_TOOLCHAIN_HAS_SSP
- 
- config BR2_TOOLCHAIN_USES_UCLIBC
- 	bool
-@@ -27,7 +26,6 @@ config BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	select BR2_TOOLCHAIN_HAS_SSP
- 
- choice
- 	prompt "Toolchain type"
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index d28a2ca..5512759 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -294,8 +294,7 @@ check_uclibc = \
- 	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_THREADS__,BR2_TOOLCHAIN_HAS_THREADS,$${UCLIBC_CONFIG_FILE},Thread support) ;\
- 	$(call check_uclibc_feature,__PTHREADS_DEBUG_SUPPORT__,BR2_TOOLCHAIN_HAS_THREADS_DEBUG,$${UCLIBC_CONFIG_FILE},Thread debugging support) ;\
--	$(call check_uclibc_feature,__UCLIBC_HAS_THREADS_NATIVE__,BR2_TOOLCHAIN_HAS_THREADS_NPTL,$${UCLIBC_CONFIG_FILE},NPTL thread support) ;\
--	$(call check_uclibc_feature,__UCLIBC_HAS_SSP__,BR2_TOOLCHAIN_HAS_SSP,$${UCLIBC_CONFIG_FILE},Stack Smashing Protection support)
-+	$(call check_uclibc_feature,__UCLIBC_HAS_THREADS_NATIVE__,BR2_TOOLCHAIN_HAS_THREADS_NPTL,$${UCLIBC_CONFIG_FILE},NPTL thread support)
- 
- #
- # Check that the Buildroot configuration of the ABI matches the
-@@ -387,6 +386,24 @@ check_unusable_toolchain = \
- 	fi
- 
- #
-+# Check if the toolchain has SSP (stack smashing protector) support
-+#
-+# $1: cross-gcc path
-+#
-+check_toolchain_ssp = \
-+	__CROSS_CC=$(strip $1) ; \
-+	__HAS_SSP=`echo 'void main(){}' | $${__CROSS_CC} -fstack-protector -x c - -o $(BUILD_DIR)/.br-toolchain-test.tmp >/dev/null 2>&1 && echo y` ; \
-+	if [ "$(BR2_TOOLCHAIN_HAS_SSP)" != "y" -a "$${__HAS_SSP}" = "y" ] ; then \
-+		echo "SSP support available in this toolchain, please enable BR2_TOOLCHAIN_EXTERNAL_HAS_SSP" ; \
-+		exit 1 ; \
-+	fi ; \
-+	if [ "$(BR2_TOOLCHAIN_HAS_SSP)" = "y" -a "$${__HAS_SSP}" != "y" ] ; then \
-+		echo "SSP support not available in this toolchain, please disable BR2_TOOLCHAIN_EXTERNAL_HAS_SSP" ; \
-+		exit 1 ; \
-+	fi ; \
-+	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
-+
-+#
- # Generate gdbinit file for use with Buildroot
- #
- gen_gdbinit_file = \
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index b7f9241..8a8195d 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -22,6 +22,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
- 	depends on BR2_ARM_EABIHF
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-@@ -44,6 +45,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
- 	depends on BR2_ARM_EABIHF
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-@@ -66,6 +68,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
- 	depends on BR2_ARM_EABIHF
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
-@@ -88,6 +91,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
- 	depends on BR2_ARM_EABIHF
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-@@ -108,6 +112,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
- 	depends on BR2_ARM_EABI
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -143,6 +148,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
- 	depends on BR2_ARM_CPU_HAS_VFPV3
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -166,6 +172,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
- 	depends on BR2_ARM_EABI
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -185,6 +192,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
- 	depends on !BR2_MIPS_NABI32
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -408,6 +416,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -425,6 +434,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -451,6 +461,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_x86_jaguar || BR2_x86_steamroller
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -476,6 +487,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
- 	depends on !BR2_x86_jaguar
- 	depends on !BR2_x86_steamroller
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-@@ -521,6 +533,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
- 	depends on BR2_HOSTARCH = "x86"
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-@@ -536,6 +549,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
- 	depends on BR2_HOSTARCH = "x86_64"
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-@@ -550,6 +564,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-@@ -574,6 +589,7 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
- 	# Unsupported for MIPS R6
- 	depends on !BR2_mips_32r6 && !BR2_mips_64r6
- 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-@@ -969,17 +985,19 @@ config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL
- 
- endif # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS
- 
-+endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
-+
- config BR2_TOOLCHAIN_EXTERNAL_HAS_SSP
- 	bool "Toolchain has SSP support?"
- 	select BR2_TOOLCHAIN_HAS_SSP
-+	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	default y if BR2_TOOLCHAIN_EXTERNAL_MUSL
- 	help
- 	  Selection this option if your external toolchain has Stack
- 	  Smashing Protection support enabled. If you don't know,
- 	  leave the default value, Buildroot will tell you if it's
- 	  correct or not.
- 
--endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
--
- config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
- 	bool "Toolchain has RPC support?"
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 34217c0..47b951d 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -522,6 +522,7 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
- 	else \
- 		$(call check_glibc,$${SYSROOT_DIR}) ; \
- 	fi
-+	$(Q)$(call check_toolchain_ssp,$(TOOLCHAIN_EXTERNAL_CC))
- endef
- 
- # With the musl C library, the libc.so library directly plays the role
+ comment "kodi needs an OpenGL or an openGL ES and EGL backend"
+ 	depends on BR2_i386 || BR2_x86_64
+-- 
+2.8.3
