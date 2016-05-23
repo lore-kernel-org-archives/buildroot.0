@@ -1,62 +1,35 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 23 May 2016 09:05:20 +0200
-Subject: [Buildroot] [PATCH 3/3] python-tornado: add Python 2
-	dependencies
-In-Reply-To: <CAGm1_kvArs0_DB-7sa40GyjMOc9J6YnPKavN355NcrDFJ0PYXg@mail.gmail.com>
-References: <1461332190-18340-1-git-send-email-yegorslists@googlemail.com>
- <1461332190-18340-3-git-send-email-yegorslists@googlemail.com>
- <CAGm1_kvArs0_DB-7sa40GyjMOc9J6YnPKavN355NcrDFJ0PYXg@mail.gmail.com>
-Message-ID: <CAGm1_kvqbwrTQZmcgdOou=9QF9avBURVK01335PPVAjgFqHdWA@mail.gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 23 May 2016 10:07:09 +0200
+Subject: [Buildroot] systemd and journald
+In-Reply-To: <20160522124140.GA3630@free.fr>
+References: <20160522124140.GA3630@free.fr>
+Message-ID: <20160523100709.3e2f0feb@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Apr 22, 2016 at 4:49 PM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> On Fri, Apr 22, 2016 at 3:36 PM,  <yegorslists@googlemail.com> wrote:
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> Some Python programs check dependencies of used Python packages at
->> runtime. As both python-backports-ssl-match-hostname and python-certifi
->> are not required for Python > 2.7.9, they are not required for tornado
->> to work. But tornado's setup.py checks only major and minor Python
->> versions, so such packages as python-circus will fail, if those
->> packages are not present at runtime.
->>
->> Fixes #8856
->>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->
-> This patch depends on http://patchwork.ozlabs.org/patch/613610/
->
-> Just didn't want to start a patch series with v2.
+Hi!
 
-I'll change this patch so, that only certifi package is selected.
+Le Sun, 22 May 2016 14:41:40 +0200,
+"Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
 
-Yegor
+> So, because our /var/log is a symlink to /tmp , the journal is
+> correctly created
+> in /tmp/journal/c30ad28b21d444ba9fff7fb25b5454b1/system.journal but
+> since another filesystem is mounted over it later, it is no longer
+> accessible, so journalctl does not find it.
+> 
+> I'm not sure where to go forward rom there, but it looks like our
+> skeleton is wrong when the init system is systemd.
 
->> ---
->>  package/python-tornado/Config.in | 4 +++-
->>  1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
->> index ac86682..80db2fd 100644
->> --- a/package/python-tornado/Config.in
->> +++ b/package/python-tornado/Config.in
->> @@ -2,8 +2,10 @@ config BR2_PACKAGE_PYTHON_TORNADO
->>         bool "python-tornado"
->>         select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
->>         select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
->> -       select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
->>         select BR2_PACKAGE_PYTHON_BACKPORTS_ABC # runtime
->> +       select BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME if BR2_PACKAGE_PYTHON # runtime
->> +       select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
->> +       select BR2_PACKAGE_PYTHON_CERTIFI if BR2_PACKAGE_PYTHON # runtime
->>         help
->>           Tornado is a Python web framework and asynchronous networking
->>           library, originally developed at FriendFeed.
->> --
->> 2.8.0.rc3
->>
+I haven't played with a systemd-based setup for a while, but I used to fix this with a post-build script [1]. 
+
+There was also a discussion some times ago about the need for a skeleton package per init system [2].
+
+[1] https://github.com/elebihan/buildroot-ext-elb/blob/master/overlays/base-systemd/post-build.sh
+[2] http://buildroot-busybox.2317881.n4.nabble.com/How-to-provide-one-default-skeleton-per-init-system-td72124.html
+
+-- 
+ELB
