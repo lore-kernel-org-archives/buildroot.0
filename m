@@ -1,49 +1,45 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 23 May 2016 10:16:28 +0100
-Subject: [Buildroot] [PATCH v3 next] openblas: new package
-In-Reply-To: <CAHXCMMKz9DXeajqsv2_+N2Cwo6Q6H5njKoUrZpRSXFu7QFD4TQ@mail.gmail.com>
-References: <1463652602-3276-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160519142103.507c1395@free-electrons.com> <573DC2D6.5090003@imgtec.com>
- <20160519160040.1eee27e6@free-electrons.com> <573ECB77.9080100@imgtec.com>
- <20160520110001.026d8cc6@free-electrons.com>
- <CAHXCMMKz9DXeajqsv2_+N2Cwo6Q6H5njKoUrZpRSXFu7QFD4TQ@mail.gmail.com>
-Message-ID: <5742CA6C.4040303@imgtec.com>
+Date: Mon, 23 May 2016 10:57:40 +0100
+Subject: [Buildroot] [PATCH next 1/2] make: bump version to 4.2
+Message-ID: <1463997461-16181-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Samuel.
+Announcement URL:
 
-Regards,
+  http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00013.html
 
-Vincent.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/make/make.hash | 4 +++-
+ package/make/make.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-On 20/05/16 22:07, Samuel Martin wrote:
-> Hi Vicente, all,
-> 
-> On Fri, May 20, 2016 at 11:00 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
->>
->> On Fri, 20 May 2016 09:31:51 +0100, Vicente Olivert Riera wrote:
->>
->>> do you have those patches Thomas is talking about? If so, do you plan to
->>> send them to the ML?
->>
->> See: https://github.com/tSed/buildroot/commits/sma/ext-toolchain-options
-> 
-> Yes, I will send them at some point ;-)
-> In its current state the branch should be easily rebased on master I think.
-> But there is some part of this work that could benefit from the shell
-> module work from this series [1], so I'm waiting for this series [1]
-> to be merged before.
-> I plan to poke people about [1] as soon as the 2016.05 release is out,
-> and continue works based on it.
-> 
-> 
-> [1] http://patchwork.ozlabs.org/bundle/smartin/rpath_v9_part01/
-> 
-> Regards,
-> 
+diff --git a/package/make/make.hash b/package/make/make.hash
+index db95c60..528822f 100644
+--- a/package/make/make.hash
++++ b/package/make/make.hash
+@@ -1,2 +1,4 @@
++# From http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00013.html
++sha1 85ad14d08766201ffe71efa866f4fb91  make-4.2.tar.bz2
+ # Locally calculated after checking signature
+-sha256	0bc7613389650ee6a24554b52572a272f7356164fd2c4132b0bcf13123e4fca5	make-4.1.tar.bz2
++sha256 4e5ce3b62fe5d75ff8db92b7f6df91e476d10c3aceebf1639796dc5bfece655f  make-4.2.tar.bz2
+diff --git a/package/make/make.mk b/package/make/make.mk
+index 20702dc..43f4f77 100644
+--- a/package/make/make.mk
++++ b/package/make/make.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MAKE_VERSION = 4.1
++MAKE_VERSION = 4.2
+ MAKE_SOURCE = make-$(MAKE_VERSION).tar.bz2
+ MAKE_SITE = $(BR2_GNU_MIRROR)/make
+ MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+-- 
+2.7.3
