@@ -1,59 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 May 2016 12:58:27 +0200
-Subject: [Buildroot] [PATCH] liquid-dsp: wrapping isnan in T_ABS to help
- compilation w/ certain gcc
-In-Reply-To: <1464000218-48218-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1464000218-48218-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160523125827.1ca52536@free-electrons.com>
+Date: Mon, 23 May 2016 12:58:54 +0200
+Subject: [Buildroot] [git commit] package/openpowerlink: fix build issue
+	with debugging symbols
+Message-ID: <20160523105858.63CE97FCAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7561d7cf4061e65932a6c747d6e0ea889af909c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 23 May 2016 11:43:38 +0100, Vicente Olivert Riera wrote:
+Update the top level build patch to fix a build issue with debugging symbols.
 
-> diff --git a/package/liquid-dsp/0002-math-poly-wrapping-isnan-in-T_ABS-to-help-compilatio.patch b/package/liquid-dsp/0002-math-poly-wrapping-isnan-in-T_ABS-to-help-compilatio.patch
-> new file mode 100644
-> index 0000000..e65af33
-> --- /dev/null
-> +++ b/package/liquid-dsp/0002-math-poly-wrapping-isnan-in-T_ABS-to-help-compilatio.patch
-> @@ -0,0 +1,42 @@
-> +wrapping isnan in T_ABS to help compilation w/ certain gcc versions
-> +
-> +This is an upstreamed patch backported from here:
-> +
-> +https://github.com/jgaeddert/liquid-dsp/commit/3055eb3da9d0a202c1a975f7db0c8370a09a30bc
-> +
-> +It will fix the following error:
-> +
-> +src/math/src/poly.findroots.c: In function
-> +'polyc_findroots_bairstow_recursion':
-> +src/math/src/poly.findroots.c:305:9: error: non-floating-point argument
-> +in call to function '__builtin_isnan'
-> +         if (isnan(du) || isnan(dv)) {
-> +
-> +Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+This only affect the demo applications build.
 
-This stuff should go....
+Fixes:
+http://autobuild.buildroot.net/results/da4/da445b65cb136d71577f04e3a17fdb2ef6302a9b
 
-> +
-> +From 3055eb3da9d0a202c1a975f7db0c8370a09a30bc Mon Sep 17 00:00:00 2001
-> +From: "Joseph D. Gaeddert" <joseph@liquidsdr.org>
-> +Date: Thu, 25 Feb 2016 17:47:07 -0500
-> +Subject: [PATCH] math/poly: wrapping isnan in T_ABS to help compilation w/
-> + certain gcc versions
-> +
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0005-Add-top-level-CMakeLists.txt.patch        | 31 +++++++++++++++++++---
+ 1 file changed, 27 insertions(+), 4 deletions(-)
 
-here.
-
-I've fixed that up when applying. Thanks for investigating this issue
-and providing a fix!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/openpowerlink/0005-Add-top-level-CMakeLists.txt.patch b/package/openpowerlink/0005-Add-top-level-CMakeLists.txt.patch
+index f7e3c16..259a81a 100644
+--- a/package/openpowerlink/0005-Add-top-level-CMakeLists.txt.patch
++++ b/package/openpowerlink/0005-Add-top-level-CMakeLists.txt.patch
+@@ -1,4 +1,4 @@
+-From 5cf3f37e12d0bb4649e3cda29a43d748708aa554 Mon Sep 17 00:00:00 2001
++From 6f4bcf829efe5ce31592003e049606ae1de05e90 Mon Sep 17 00:00:00 2001
+ From: Romain Naour <romain.naour@openwide.fr>
+ Date: Wed, 12 Aug 2015 11:24:24 +0200
+ Subject: [PATCH] Add top level CMakeLists.txt
+@@ -11,15 +11,25 @@ level build (ie CFG_OPLK_LIB is ON).
+ For a top level build, CMake will automatically add a build
+ dependency on oplk libraries for building demos applications.
+ 
+-This patch has been submitted upstream:
++Also replace OPLKLIB_DEBUG by OPLKLIB in OPLK_LINK_LIBRARIES macro
++if CMAKE_BUILD_TYPE is "Debug", otherwise TARGET_LINK_LIBRARIES can't
++find the openpowerlink library.
++This issue may be related to:
++https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/issues/109
++
++Fixes:
++http://autobuild.buildroot.net/results/da4/da445b65cb136d71577f04e3a17fdb2ef6302a9b
++
++This patch has not been accepted by upstream:
+ https://github.com/openPOWERLINK/openPOWERLINK_V2/pull/57
+ 
+ Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+ ---
+  CMakeLists.txt                               | 36 +++++++++++++++
+  apps/common/cmake/findoplklib.cmake          | 68 +++++++++++++++-------------
++ apps/common/cmake/linkoplklib.cmake          |  2 +-
+  drivers/linux/drv_daemon_pcap/CMakeLists.txt | 12 +++--
+- 3 files changed, 82 insertions(+), 34 deletions(-)
++ 4 files changed, 83 insertions(+), 35 deletions(-)
+  create mode 100644 CMakeLists.txt
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+@@ -142,6 +152,19 @@ index 1bf570e..79ea35b 100644
+ +    ENDIF(CFG_OPLK_LIB)
+  
+  ENDMACRO(FIND_OPLK_LIBRARY)
++diff --git a/apps/common/cmake/linkoplklib.cmake b/apps/common/cmake/linkoplklib.cmake
++index 49aab66..d9fd418 100644
++--- a/apps/common/cmake/linkoplklib.cmake
+++++ b/apps/common/cmake/linkoplklib.cmake
++@@ -33,7 +33,7 @@ MACRO(OPLK_LINK_LIBRARIES EXECUTABLE_NAME)
++         TARGET_LINK_LIBRARIES(${EXECUTABLE_NAME} optimized ${OPLKLIB} debug ${OPLKLIB_DEBUG})
++     ELSE()
++         IF(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
++-            TARGET_LINK_LIBRARIES(${EXECUTABLE_NAME} debug ${OPLKLIB_DEBUG})
+++            TARGET_LINK_LIBRARIES(${EXECUTABLE_NAME} debug ${OPLKLIB})
++         ELSE ()
++             TARGET_LINK_LIBRARIES(${EXECUTABLE_NAME} optimized ${OPLKLIB})
++         ENDIF()
+ diff --git a/drivers/linux/drv_daemon_pcap/CMakeLists.txt b/drivers/linux/drv_daemon_pcap/CMakeLists.txt
+ index 2702abd..81bb598 100644
+ --- a/drivers/linux/drv_daemon_pcap/CMakeLists.txt
+@@ -166,5 +189,5 @@ index 2702abd..81bb598 100644
+  
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -std=c99 -pthread -fno-strict-aliasing")
+ -- 
+-2.4.3
++2.5.5
+ 
