@@ -1,108 +1,163 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 May 2016 13:56:55 +0200
-Subject: [Buildroot] [git commit branch/next] e2fsprogs: bump to version 1.43
-Message-ID: <20160523115739.D2986800D8@busybox.osuosl.org>
+From: Dagg <daggs@gmx.com>
+Date: Mon, 23 May 2016 22:21:14 +0300
+Subject: [Buildroot] [PATCH v2 1/3] add odroid mali GL support.
+Message-ID: <20160523192114.7176-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32c91623422f34619024f3e51f978195bdbe5d55
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Signed-off-by: Dagg <daggs@gmx.com>
 
-Add new fuse2fs option and disable it for host-e2fsprogs to avoid
-carrying over unused/unnecessary distro/host dependencies.
-
-Move E2FSPROGS_DEPENDENCIES to the top to avoid nasty mistakes (like
-resetting a previous conditional addition).
-
-License file renamed from COPYING to NOTICE.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/e2fsprogs/Config.in      |  9 +++++++++
- package/e2fsprogs/e2fsprogs.hash |  4 ++--
- package/e2fsprogs/e2fsprogs.mk   | 17 ++++++++++++-----
- 3 files changed, 23 insertions(+), 7 deletions(-)
+ package/Config.in                    |  1 +
+ package/odroid-mali/Config.in        | 19 +++++++++++++
+ package/odroid-mali/egl.pc           | 10 +++++++
+ package/odroid-mali/glesv2.pc        | 10 +++++++
+ package/odroid-mali/odroid-mali.hash |  1 +
+ package/odroid-mali/odroid-mali.mk   | 53 ++++++++++++++++++++++++++++++++++++
+ 6 files changed, 94 insertions(+)
+ create mode 100644 package/odroid-mali/Config.in
+ create mode 100644 package/odroid-mali/egl.pc
+ create mode 100644 package/odroid-mali/glesv2.pc
+ create mode 100644 package/odroid-mali/odroid-mali.hash
+ create mode 100644 package/odroid-mali/odroid-mali.mk
 
-diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
-index e540337..cf43dbc 100644
---- a/package/e2fsprogs/Config.in
-+++ b/package/e2fsprogs/Config.in
-@@ -62,6 +62,15 @@ config BR2_PACKAGE_E2FSPROGS_FSCK
- 	bool "fsck"
- 	default y
- 
-+config BR2_PACKAGE_E2FSPROGS_FUSE2FS
-+	bool "fuse2fs"
-+	depends on !BR2_STATIC_LIBS # libfuse
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
-+	select BR2_PACKAGE_LIBFUSE
+diff --git a/package/Config.in b/package/Config.in
+index 9d668bf..6c6a562 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -418,6 +418,7 @@ endif
+ 	source "package/nvidia-driver/Config.in"
+ 	source "package/nvidia-tegra23/Config.in"
+ 	source "package/nvme/Config.in"
++	source "package/odroid-mali/Config.in"
+ 	source "package/ofono/Config.in"
+ 	source "package/ola/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+diff --git a/package/odroid-mali/Config.in b/package/odroid-mali/Config.in
+new file mode 100644
+index 0000000..65b1d4f
+--- /dev/null
++++ b/package/odroid-mali/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_ODROID_MALI
++	bool "odroid-mali"
++	select BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_HAS_LIBGLES
++	select BR2_PACKAGE_FBSET
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_aarch64
++	help
++	  Install the ARM Mali drivers for odroid based systems.
 +
-+comment "fuse2fs needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	  http://github.com/linux-odroid/odroid-mali
 +
- config BR2_PACKAGE_E2FSPROGS_LOGSAVE
- 	bool "logsave"
- 	default y
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index 1585037..3cc90fd 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -1,2 +1,2 @@
--# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.42.13/sha256sums.asc
--sha256 e16474b5a3a30f9197160c4b91bd48d5a463583049c0fcc405b6f0f7075aa0c7 e2fsprogs-1.42.13.tar.xz
-+# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43/sha256sums.asc
-+sha256	d027eec0282e169eb55229beefca258c425c9d96f65292e2c004012d5353cd38	e2fsprogs-1.43.tar.xz
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 3de4cd4..c1cbf71 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -4,17 +4,19 @@
- #
- ################################################################################
- 
--E2FSPROGS_VERSION = 1.42.13
-+E2FSPROGS_VERSION = 1.43
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
--E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
-+E2FSPROGS_LICENSE_FILES = NOTICE lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
- E2FSPROGS_INSTALL_STAGING = YES
- E2FSPROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-libs
-+E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
- 
- # e4defrag doesn't build on older systems like RHEL5.x, and we don't
- # need it on the host anyway.
--HOST_E2FSPROGS_CONF_OPTS += --disable-defrag
-+# Disable fuse2fs as well to avoid carrying over deps, and it's unused
-+HOST_E2FSPROGS_CONF_OPTS += --disable-defrag --disable-fuse2fs
- 
- E2FSPROGS_CONF_OPTS = \
- 	$(if $(BR2_STATIC_LIBS),,--enable-elf-shlibs) \
-@@ -30,6 +32,13 @@ E2FSPROGS_CONF_OPTS = \
- 	--disable-testio-debug \
- 	--disable-rpath
- 
-+ifeq ($(BR2_PACKAGE_E2FSPROGS_FUSE2FS),y)
-+E2FSPROGS_CONF_OPTS += --enable-fuse2fs
-+E2FSPROGS_DEPENDENCIES += libfuse
-+else
-+E2FSPROGS_CONF_OPTS += --disable-fuse2fs
++if BR2_PACKAGE_ODROID_MALI
++config BR2_PACKAGE_PROVIDES_LIBEGL
++	default "odroid-mali"
++
++config BR2_PACKAGE_PROVIDES_LIBGLES
++	default "odroid-mali"
 +endif
+diff --git a/package/odroid-mali/egl.pc b/package/odroid-mali/egl.pc
+new file mode 100644
+index 0000000..5f79b71
+--- /dev/null
++++ b/package/odroid-mali/egl.pc
+@@ -0,0 +1,10 @@
++prefix=/usr
++exec_prefix=/usr
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
 +
- ifeq ($(BR2_nios2),y)
- E2FSPROGS_CONF_ENV += ac_cv_func_fallocate=no
- endif
-@@ -40,8 +49,6 @@ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- E2FSPROGS_CONF_ENV += LIBS=-lintl
- endif
- 
--E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
--
- E2FSPROGS_MAKE_OPTS = \
- 	LDCONFIG=true
- 
++Name: egl
++Description: Amlogic implementation of EGL
++Version: 0.99
++Libs: -L${libdir} -lEGL -lGLESv2
++Cflags: -I${includedir}/ 
+diff --git a/package/odroid-mali/glesv2.pc b/package/odroid-mali/glesv2.pc
+new file mode 100644
+index 0000000..7dfb286
+--- /dev/null
++++ b/package/odroid-mali/glesv2.pc
+@@ -0,0 +1,10 @@
++prefix=/usr
++exec_prefix=/usr
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
++
++Name: glesv2
++Description: Amlogic implementation of OpenGL ESv2
++Version: 0.99
++Libs: -L${libdir} -lGLESv2
++Cflags: -I${includedir}/
+diff --git a/package/odroid-mali/odroid-mali.hash b/package/odroid-mali/odroid-mali.hash
+new file mode 100644
+index 0000000..792d30c
+--- /dev/null
++++ b/package/odroid-mali/odroid-mali.hash
+@@ -0,0 +1 @@
++sha256 1cddeb6990a9446339abde79ca1d01a8480b98cf107019f0847390b9549d90cc  opengl-meson-gxbb-r5p1-01rel0.tar.xz
+diff --git a/package/odroid-mali/odroid-mali.mk b/package/odroid-mali/odroid-mali.mk
+new file mode 100644
+index 0000000..4f2e1ab
+--- /dev/null
++++ b/package/odroid-mali/odroid-mali.mk
+@@ -0,0 +1,53 @@
++################################################################################
++#
++# odroid-mali
++#
++################################################################################
++
++ODROID_MALI_VERSION = $(ODROID_DRIVER_VERSION)
++ODROID_MALI_TARBALL = opengl-meson-gxbb-r5p1-01rel0.tar.xz
++ODROID_MALI_SITE = http://sources.openelec.tv/devel
++ODROID_MALI_SOURCE = opengl-meson-gxbb-r5p1-01rel0.tar.xz
++
++ODROID_MALI_INSTALL_STAGING = YES
++ODROID_MALI_PROVIDES = libegl libgles
++
++define ODROID_MALI_LIBS
++	$(INSTALL) -D -m 0644 $(@D)/usr/lib/libMali.so $(1)/lib
++
++	cd $(1)/lib
++	ln -s libMali.so $(1)/lib/libEGL.so
++	ln -s libMali.so $(1)/lib/libGLESv1_CM.so
++	ln -s libMali.so $(1)/lib/libGLESv2.so
++
++	ln -s libEGL.so $(1)/lib/libEGL.so.1
++	ln -s libEGL.so $(1)/lib/libEGL.so.1.4
++	ln -s libGLESv1_CM.so $(1)/lib/libGLESv1_CM.so.1
++	ln -s libGLESv1_CM.so $(1)/lib/libGLESv1_CM.so.1.1
++	ln -s libGLESv2.so $(1)/lib/libGLESv2.so.2
++	ln -s libGLESv2.so $(1)/lib/libGLESv2.so.2.0
++endef
++
++define ODROID_MALI_HDRS
++	mkdir -p $(@D)/usr/include
++	cp -R $(@D)/usr/include/* $(1)/usr/include
++endef
++
++define ODROID_MALI_PCS
++	$(INSTALL) -D -m 0644 package/odroid-mali/egl.pc $(1)/usr/lib/pkgconfig/egl.pc
++	$(INSTALL) -D -m 0644 package/odroid-mali/glesv2.pc $(1)/usr/lib/pkgconfig/glesv2.pc
++endef
++
++define ODROID_MALI_INSTALL_STAGING_CMDS
++	$(call ODROID_MALI_LIBS,$(STAGING_DIR))
++	$(call ODROID_MALI_HDRS,$(STAGING_DIR))
++	$(call ODROID_MALI_PCS,$(STAGING_DIR))
++endef
++
++define ODROID_MALI_INSTALL_CMDS
++	$(call ODROID_MALI_LIBS,$(TARGET_DIR))
++	$(call ODROID_MALI_HDRS,$(TARGET_DIR))
++	$(call ODROID_MALI_PCS,$(TARGET_DIR))
++endef
++
++$(eval $(generic-package))
+-- 
+2.8.3
