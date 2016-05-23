@@ -1,60 +1,64 @@
-From: Damien Lanson <damien@kal-host.com>
-Date: Mon, 23 May 2016 18:17:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dmidecode: bump to version 3.0
-Message-ID: <1464020255-13640-1-git-send-email-damien@kal-host.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 23 May 2016 18:28:52 +0200
+Subject: [Buildroot] [PATCH next] systemd: bump version to 230
+In-Reply-To: <574316D2.5020903@imgtec.com>
+References: <1464008187-15431-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20160523162800.5dc8b7a5@free-electrons.com> <574316D2.5020903@imgtec.com>
+Message-ID: <CAGduivxx794UeWhNNQbUR8HK9WMtADTAfPnoiYiFsmWoZxDTVQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Damien Lanson <damien@kal-host.com>
----
- package/dmidecode/0001-build-system-fixes.patch |    6 +++---
- package/dmidecode/dmidecode.hash                |    4 ++--
- package/dmidecode/dmidecode.mk                  |    3 ++-
- 3 files changed, 7 insertions(+), 6 deletions(-)
+Hi all,
 
-diff --git a/package/dmidecode/0001-build-system-fixes.patch b/package/dmidecode/0001-build-system-fixes.patch
-index 275f9df..00897f8 100644
---- a/package/dmidecode/0001-build-system-fixes.patch
-+++ b/package/dmidecode/0001-build-system-fixes.patch
-@@ -21,10 +21,10 @@ Index: b/Makefile
- +override CFLAGS  += \
- +	-W -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual \
- +        -Wcast-align -Wwrite-strings -Wmissing-prototypes -Winline -Wundef
-- #CFLAGS += -DBIGENDIAN
-- #CFLAGS += -DALIGNMENT_WORKAROUND
-  
--@@ -23,7 +24,7 @@
-+ # Let lseek and mmap support 64-bit wide offsets
-+ CFLAGS += -D_FILE_OFFSET_BITS=64
-+@@ -27,7 +28,7 @@ CFLAGS += -O2
-  #CFLAGS += -g
-  
-  # Pass linker flags here
-diff --git a/package/dmidecode/dmidecode.hash b/package/dmidecode/dmidecode.hash
-index 7098ed0..307c306 100644
---- a/package/dmidecode/dmidecode.hash
-+++ b/package/dmidecode/dmidecode.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256	5a8214b99c1762f4510bd92baa279336e5fed6e5cd2e418d46d95a4ecc783922	dmidecode-2.12.tar.gz
-+# http://http.debian.net/debian/pool/main/d/dmidecode/dmidecode_3.0-2.dsc
-+sha256	7ec35bb193729c1d593a1460b59d82d24b89102ab23fd0416e6cf4325d077e45	dmidecode-3.0.tar.xz
-diff --git a/package/dmidecode/dmidecode.mk b/package/dmidecode/dmidecode.mk
-index 06ac19b..4298d88 100644
---- a/package/dmidecode/dmidecode.mk
-+++ b/package/dmidecode/dmidecode.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
- 
--DMIDECODE_VERSION = 2.12
-+DMIDECODE_VERSION = 3.0
-+DMIDECODE_SOURCE = dmidecode-$(DMIDECODE_VERSION).tar.xz
- DMIDECODE_SITE = http://download.savannah.gnu.org/releases/dmidecode
- DMIDECODE_LICENSE = GPLv2+
- DMIDECODE_LICENSE_FILES = LICENSE
--- 
-1.7.10.4
+Vicente, systemd doesn't include bootchart anymore, it's now a separate package.
+
+I have started a branch about that on my github:
+https://github.com/maximeh/buildroot/tree/systemd_bump
+I'm in holiday, so I won't have time to look at that before I came
+back, so feel free to take any of theses patches, I have already told
+that to Yann E. Morin on IRC.
+
+On Mon, May 23, 2016 at 4:42 PM, Vicente Olivert Riera
+<Vincent.Riera@imgtec.com> wrote:
+> Hello Thomas,
+>
+> I just read this:
+>
+> http://www.phoronix.com/scan.php?page=news_item&px=Systemd-230-FBDEV-Woe
+>
+> I don't know how important is this for Buildroot.
+>
+> Should we revert this commit?
+>
+> Regards,
+>
+> Vincent.
+>
+> On 23/05/16 15:28, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> On Mon, 23 May 2016 13:56:27 +0100, Vicente Olivert Riera wrote:
+>>> We pass "--with-default-dnssec=no" to "configure" as it might create
+>>> incompatibilities with a few DNS servers and networks.
+>>>
+>>> Announcement URL:
+>>>
+>>>   https://lists.freedesktop.org/archives/systemd-devel/2016-May/036583.html
+>>>
+>>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>>> ---
+>>>  package/systemd/systemd.hash | 2 +-
+>>>  package/systemd/systemd.mk   | 3 ++-
+>>>  2 files changed, 3 insertions(+), 2 deletions(-)
+>>
+>> Applied to next, thanks.
+>>
+>> Thomas
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
