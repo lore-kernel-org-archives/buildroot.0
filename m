@@ -1,95 +1,62 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 23 May 2016 09:02:00 +0200
-Subject: [Buildroot] [PATCH v2] python-backports-ssl-match-hostname: new
-	package
-In-Reply-To: <1461332125-18295-1-git-send-email-yegorslists@googlemail.com>
-References: <1461332125-18295-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <CAGm1_kvgg-hqRB2UMm=o5aC9LuLcxW-1jE=bjxysc8Y5oPOnoQ@mail.gmail.com>
+Date: Mon, 23 May 2016 09:05:20 +0200
+Subject: [Buildroot] [PATCH 3/3] python-tornado: add Python 2
+	dependencies
+In-Reply-To: <CAGm1_kvArs0_DB-7sa40GyjMOc9J6YnPKavN355NcrDFJ0PYXg@mail.gmail.com>
+References: <1461332190-18340-1-git-send-email-yegorslists@googlemail.com>
+ <1461332190-18340-3-git-send-email-yegorslists@googlemail.com>
+ <CAGm1_kvArs0_DB-7sa40GyjMOc9J6YnPKavN355NcrDFJ0PYXg@mail.gmail.com>
+Message-ID: <CAGm1_kvqbwrTQZmcgdOou=9QF9avBURVK01335PPVAjgFqHdWA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Apr 22, 2016 at 3:35 PM,  <yegorslists@googlemail.com> wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On Fri, Apr 22, 2016 at 4:49 PM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> On Fri, Apr 22, 2016 at 3:36 PM,  <yegorslists@googlemail.com> wrote:
+>> From: Yegor Yefremov <yegorslists@googlemail.com>
+>>
+>> Some Python programs check dependencies of used Python packages at
+>> runtime. As both python-backports-ssl-match-hostname and python-certifi
+>> are not required for Python > 2.7.9, they are not required for tornado
+>> to work. But tornado's setup.py checks only major and minor Python
+>> versions, so such packages as python-circus will fail, if those
+>> packages are not present at runtime.
+>>
+>> Fixes #8856
+>>
+>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 >
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes:
->         v2: add Python 2 only dependency
+> This patch depends on http://patchwork.ozlabs.org/patch/613610/
+>
+> Just didn't want to start a patch series with v2.
 
-I've got this patch [1] merged. So we don't really need this package.
-I can either apply this patch or wait for next python-tornado release.
-
-[1] https://github.com/tornadoweb/tornado/commit/24e7d3d1526ad915887062a8463dbd200ef97958
+I'll change this patch so, that only certifi package is selected.
 
 Yegor
 
->  package/Config.in                                          |  1 +
->  package/python-backports-ssl-match-hostname/Config.in      |  7 +++++++
->  .../python-backports-ssl-match-hostname.hash               |  4 ++++
->  .../python-backports-ssl-match-hostname.mk                 | 14 ++++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/python-backports-ssl-match-hostname/Config.in
->  create mode 100644 package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
->  create mode 100644 package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index f6407bb..e635b7d 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -630,6 +630,7 @@ menu "External python modules"
->         source "package/python-alsaaudio/Config.in"
->         source "package/python-autobahn/Config.in"
->         source "package/python-backports-abc/Config.in"
-> +       source "package/python-backports-ssl-match-hostname/Config.in"
->         source "package/python-beautifulsoup4/Config.in"
->         source "package/python-bottle/Config.in"
->         source "package/python-can/Config.in"
-> diff --git a/package/python-backports-ssl-match-hostname/Config.in b/package/python-backports-ssl-match-hostname/Config.in
-> new file mode 100644
-> index 0000000..8e55191
-> --- /dev/null
-> +++ b/package/python-backports-ssl-match-hostname/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME
-> +       bool "python-backports-ssl-match-hostname"
-> +       depends on BR2_PACKAGE_PYTHON
-> +       help
-> +         The ssl.match_hostname() function from Python 3.5.
-> +
-> +         http://bitbucket.org/brandon/backports.ssl_match_hostname
-> diff --git a/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
-> new file mode 100644
-> index 0000000..8313d96
-> --- /dev/null
-> +++ b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
-> @@ -0,0 +1,4 @@
-> +# md5 from https://pypi.python.org/pypi/backports.ssl_match_hostname/json
-> +md5    c03fc5e2c7b3da46b81acf5cbacfe1e6  backports.ssl_match_hostname-3.5.0.1.tar.gz
-> +# sha256 calculated by scanpypi
-> +sha256 502ad98707319f4a51fa2ca1c677bd659008d27ded9f6380c79e8932e38dcdf2  backports.ssl_match_hostname-3.5.0.1.tar.gz
-> diff --git a/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
-> new file mode 100644
-> index 0000000..6848dd2
-> --- /dev/null
-> +++ b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-backports-ssl-match-hostname
-> +#
-> +################################################################################
-> +
-> +PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_VERSION = 3.5.0.1
-> +PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SOURCE = backports.ssl_match_hostname-$(PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_VERSION).tar.gz
-> +PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SITE = https://pypi.python.org/packages/source/b/backports.ssl_match_hostname
-> +PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SETUP_TYPE = distutils
-> +PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_LICENSE = Python Software Foundation License v2
-> +PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_LICENSE_FILES = backports/ssl_match_hostname/LICENSE.txt
-> +
-> +$(eval $(python-package))
-> --
-> 2.8.0.rc3
->
+>> ---
+>>  package/python-tornado/Config.in | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
+>> index ac86682..80db2fd 100644
+>> --- a/package/python-tornado/Config.in
+>> +++ b/package/python-tornado/Config.in
+>> @@ -2,8 +2,10 @@ config BR2_PACKAGE_PYTHON_TORNADO
+>>         bool "python-tornado"
+>>         select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+>>         select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+>> -       select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
+>>         select BR2_PACKAGE_PYTHON_BACKPORTS_ABC # runtime
+>> +       select BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME if BR2_PACKAGE_PYTHON # runtime
+>> +       select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
+>> +       select BR2_PACKAGE_PYTHON_CERTIFI if BR2_PACKAGE_PYTHON # runtime
+>>         help
+>>           Tornado is a Python web framework and asynchronous networking
+>>           library, originally developed at FriendFeed.
+>> --
+>> 2.8.0.rc3
+>>
