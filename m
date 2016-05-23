@@ -1,39 +1,64 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 23 May 2016 09:50:11 -0300
-Subject: [Buildroot] [PATCH] pciutils: bump to version 3.5.1
-Message-ID: <1464007811-30488-1-git-send-email-gustavo@zacarias.com.ar>
+From: gdbabu Krishnan <gdbabu.krishnan@gmail.com>
+Date: Mon, 23 May 2016 18:24:34 +0530
+Subject: [Buildroot] GTK NOT WORKING
+Message-ID: <CAG7w3ykc6-Uc-aXWbabxBPVyJKVoA=gjz+0O6xCWaqJTcBGyYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/pciutils/pciutils.hash | 2 +-
- package/pciutils/pciutils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/package/pciutils/pciutils.hash b/package/pciutils/pciutils.hash
-index dd75e42..efdb108 100644
---- a/package/pciutils/pciutils.hash
-+++ b/package/pciutils/pciutils.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/utils/pciutils/sha256sums.asc
--sha256	865554cc5604d1644bd8da38d94845405e2a319a6d5acabc6a0296417684a82a	pciutils-3.4.1.tar.xz
-+sha256	2bf3a4605a562fb6b8b7673bff85a474a5cf383ed7e4bd8886b4f0939013d42f	pciutils-3.5.1.tar.xz
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index d3a0e20..4714cea 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PCIUTILS_VERSION = 3.4.1
-+PCIUTILS_VERSION = 3.5.1
- PCIUTILS_SITE = $(BR2_KERNEL_MIRROR)/software/utils/pciutils
- PCIUTILS_SOURCE = pciutils-$(PCIUTILS_VERSION).tar.xz
- PCIUTILS_INSTALL_STAGING = YES
--- 
-2.7.3
+     i have working with buildroot for raspberry pi i want to run gtk3+
+based application, i alredy selected libgtk3 and build successfully when i
+run demo application i got the following warning message
+
+Unable to init server: could not connect : connection refused
+
+(gtk3-demo :136) : Gtk-warning **: cannot open display
+
+after this warrning message i have select some packages under,
+
+target packages---->
+         |
+    |------>Graphic libraries and application
+        |
+        |---------->x.org xwindow system
+                |
+                |-------->xorg server
+                    |
+                    |---> x window system system type
+                                (modular x.org)
+
+
+but i got following error
+
+Making all in xwayland
+  CC       Xwayland-xwayland.o
+xwayland.c:33:26: fatal error: compositeext.h: No such file or directory
+ #include <compositeext.h>
+                          ^
+compilation terminated.
+make[4]: *** [Xwayland-xwayland.o] Error 1
+make[3]: *** [all-recursive] Error 1
+make[2]: *** [all-recursive] Error 1
+make[1]: ***
+[/home/malar/Documents/build_root/buildroot/output/build/xserver_xorg-server-1.18.3/.stamp_built]
+Error 2
+make: *** [_all] Error 2
+
+when i unselect "x.org server" that compile good
+
+i dont need any desktop environment i want to run only gtk3 based
+application, i don't know which are the packages are need to run the gtk
+application. i have working last three days i didn't get any improvement
+
+
+i am beginner to buildroot kindly help me to resolve this problem
+
+
+thank you ,
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160523/f6bc2c71/attachment.html>
