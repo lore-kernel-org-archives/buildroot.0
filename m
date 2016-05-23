@@ -1,45 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 23 May 2016 21:15:54 +0200
-Subject: [Buildroot] [PATCH 2/2] package/ustr: disable on musl
-In-Reply-To: <1464030954-22737-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1464030954-22737-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1464030954-22737-2-git-send-email-bernd.kuhls@t-online.de>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 23 May 2016 13:59:08 +0100
+Subject: [Buildroot] [PATCH next] make: bump version to 4.2
+Message-ID: <1464008348-16451-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libsemanage is the only package depending on ustr, both packages do not
-build using a musl-based toolchain, suggested by Thomas:
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/149138
-
-Fixes
-http://autobuild.buildroot.net/results/a41/a416001516d98d58849f1d1f8f49f49d3d28f3a2/
-http://autobuild.buildroot.net/results/f51/f5115516bd514afbb71a9460e82c889bcc18e7e2/
-and many others
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/ustr/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/make/make.hash | 2 +-
+ package/make/make.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ustr/Config.in b/package/ustr/Config.in
-index 0d9c272..9d6561c 100644
---- a/package/ustr/Config.in
-+++ b/package/ustr/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_USTR
- 	bool "ustr"
- 	# unconditionally builds a shared library
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # broken vsnprintf detection
- 	help
- 	  A small, safe string library.
+diff --git a/package/make/make.hash b/package/make/make.hash
+index db95c60..99aea2f 100644
+--- a/package/make/make.hash
++++ b/package/make/make.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking signature
+-sha256	0bc7613389650ee6a24554b52572a272f7356164fd2c4132b0bcf13123e4fca5	make-4.1.tar.bz2
++sha256 4e5ce3b62fe5d75ff8db92b7f6df91e476d10c3aceebf1639796dc5bfece655f  make-4.2.tar.bz2
+diff --git a/package/make/make.mk b/package/make/make.mk
+index 20702dc..43f4f77 100644
+--- a/package/make/make.mk
++++ b/package/make/make.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -9,3 +10,4 @@ config BR2_PACKAGE_USTR
- 
- comment "ustr needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
+-MAKE_VERSION = 4.1
++MAKE_VERSION = 4.2
+ MAKE_SOURCE = make-$(MAKE_VERSION).tar.bz2
+ MAKE_SITE = $(BR2_GNU_MIRROR)/make
+ MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
 -- 
-2.8.1
+2.7.3
