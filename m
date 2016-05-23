@@ -1,37 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 May 2016 22:44:22 +0200
-Subject: [Buildroot] [git commit] docs: Fixed syntax error in makedev-syntax
-	example.
-Message-ID: <20160523204702.7B6CF81E81@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 23 May 2016 18:07:43 -0300
+Subject: [Buildroot] [PATCH] libepoxy: cosmetic fixes
+Message-ID: <1464037663-1310-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caf4caa49b72de20dc3f60a4e4e53d11f747cfd5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+It's --enable-glx rather than --enable-egl, both are automatic though.
+Change the autoreconf comment to reflect that it's required for all
+patches.
 
-In the makedev syntax documentation, one of the examples lacks the "mode"
-value.  This patch fixes that example.
-
-Signed-off-by: Alan Yaniger <alan@tkos.co.il>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- docs/manual/makedev-syntax.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libepoxy/libepoxy.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
-index 0bbc16e..e4dffc9 100644
---- a/docs/manual/makedev-syntax.txt
-+++ b/docs/manual/makedev-syntax.txt
-@@ -44,7 +44,7 @@ this syntax, you will need to write:
- ----
- /usr/bin/foo f 755 0 0 - - - - -
- /usr/bin/bar f 755 root root - - - - -
--/data/buz f buz-user buz-group - - - - -
-+/data/buz f 644 buz-user buz-group - - - - -
- ----
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index 8e717ce..7436e8f 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -7,9 +7,7 @@
+ LIBEPOXY_VERSION = v1.3.1
+ LIBEPOXY_SITE = $(call github,anholt,libepoxy,$(LIBEPOXY_VERSION))
+ LIBEPOXY_INSTALL_STAGING = YES
+-# For patches:
+-# 0001-make-egl-and-glx-conditional.patch
+-# 0002-Forward-egl-cflags-into-epoxy.pc.patch
++# For patches 0001-0006:
+ LIBEPOXY_AUTORECONF = YES
+ LIBEPOXY_DEPENDENCIES = xutil_util-macros
+ LIBEPOXY_LICENSE = MIT
+@@ -23,7 +21,7 @@ LIBEPOXY_CONF_OPTS += --disable-egl
+ endif
  
- Alternatively, if you want to change owner/permission of a directory
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_XLIB_LIBX11),yy)
+-LIBEPOXY_CONF_OPTS += --enable-egl
++LIBEPOXY_CONF_OPTS += --enable-glx
+ LIBEPOXY_DEPENDENCIES += libgl xlib_libX11
+ else
+ LIBEPOXY_CONF_OPTS += --disable-glx
+-- 
+2.7.3
