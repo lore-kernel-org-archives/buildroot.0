@@ -1,55 +1,32 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 23 May 2016 12:58:28 +0100
-Subject: [Buildroot] [PATCH] valgrind: disable for MIPS soft-float
-In-Reply-To: <20160523135515.0bc85032@free-electrons.com>
-References: <1464003111-59011-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160523135515.0bc85032@free-electrons.com>
-Message-ID: <5742F064.5010300@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 May 2016 14:01:19 +0200
+Subject: [Buildroot] [PATCH] e2fsprogs: bump to version 1.43
+In-Reply-To: <20160523135753.4d742f41@free-electrons.com>
+References: <1463598503-13738-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160523135753.4d742f41@free-electrons.com>
+Message-ID: <20160523140119.524c4c97@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On 23/05/16 12:55, Thomas Petazzoni wrote:
-> Hello,
+On Mon, 23 May 2016 13:57:53 +0200, Thomas Petazzoni wrote:
+
+> >  package/e2fsprogs/Config.in      |  9 +++++++++
+> >  package/e2fsprogs/e2fsprogs.hash |  4 ++--
+> >  package/e2fsprogs/e2fsprogs.mk   | 17 ++++++++++++-----
+> >  3 files changed, 23 insertions(+), 7 deletions(-)  
 > 
-> On Mon, 23 May 2016 12:31:51 +0100, Vicente Olivert Riera wrote:
-> 
->> diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
->> index 21b2608..40e219d 100644
->> --- a/package/valgrind/Config.in
->> +++ b/package/valgrind/Config.in
->> @@ -8,6 +8,7 @@ config BR2_PACKAGE_VALGRIND
->>  		   BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
->>  		   BR2_x86_64
->>  	depends on !BR2_STATIC_LIBS
->> +	depends on !BR2_MIPS_SOFT_FLOAT
-> 
-> I am wondering if it isn't better to do:
-> 
->         depends on BR2_ARM_CPU_ARMV7A || BR2_i386 || \
-> -                  BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
-> +                  ((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && !BR2_MIPS_SOFT_FLOAT) || \
->                    BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
->                    BR2_x86_64
-> 
-> But I'm not sure. It's completely equivalent from a functionality point
-> of view, I'm just wondering which one is more logical.
+> Applied to master, thanks.
 
-I prefer mine.
+Obviously, I've applied to next, not to master. I used the wrong key
+shortcut to send the "Applied" e-mail :)
 
-We have architecture support in one block, and features support in
-another one. More readable IMHO.
-
-Anyway, you can commit whichever you want as at the end of the day they
-will have the same functionality.
-
-Regards,
-
-Vincent.
-
-> Thomas
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
