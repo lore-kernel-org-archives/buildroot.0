@@ -1,64 +1,54 @@
-From: gdbabu Krishnan <gdbabu.krishnan@gmail.com>
-Date: Mon, 23 May 2016 18:24:34 +0530
-Subject: [Buildroot] GTK NOT WORKING
-Message-ID: <CAG7w3ykc6-Uc-aXWbabxBPVyJKVoA=gjz+0O6xCWaqJTcBGyYA@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 23 May 2016 13:56:27 +0100
+Subject: [Buildroot] [PATCH next] systemd: bump version to 230
+Message-ID: <1464008187-15431-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+We pass "--with-default-dnssec=no" to "configure" as it might create
+incompatibilities with a few DNS servers and networks.
 
-     i have working with buildroot for raspberry pi i want to run gtk3+
-based application, i alredy selected libgtk3 and build successfully when i
-run demo application i got the following warning message
+Announcement URL:
 
-Unable to init server: could not connect : connection refused
+  https://lists.freedesktop.org/archives/systemd-devel/2016-May/036583.html
 
-(gtk3-demo :136) : Gtk-warning **: cannot open display
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/systemd/systemd.hash | 2 +-
+ package/systemd/systemd.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-after this warrning message i have select some packages under,
-
-target packages---->
-         |
-    |------>Graphic libraries and application
-        |
-        |---------->x.org xwindow system
-                |
-                |-------->xorg server
-                    |
-                    |---> x window system system type
-                                (modular x.org)
-
-
-but i got following error
-
-Making all in xwayland
-  CC       Xwayland-xwayland.o
-xwayland.c:33:26: fatal error: compositeext.h: No such file or directory
- #include <compositeext.h>
-                          ^
-compilation terminated.
-make[4]: *** [Xwayland-xwayland.o] Error 1
-make[3]: *** [all-recursive] Error 1
-make[2]: *** [all-recursive] Error 1
-make[1]: ***
-[/home/malar/Documents/build_root/buildroot/output/build/xserver_xorg-server-1.18.3/.stamp_built]
-Error 2
-make: *** [_all] Error 2
-
-when i unselect "x.org server" that compile good
-
-i dont need any desktop environment i want to run only gtk3 based
-application, i don't know which are the packages are need to run the gtk
-application. i have working last three days i didn't get any improvement
-
-
-i am beginner to buildroot kindly help me to resolve this problem
-
-
-thank you ,
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160523/f6bc2c71/attachment.html>
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 7295986..141eadf 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 b51b0a48d1beb388d95bd6a98d62be05490335d4bb388aefecdcb576e91e0741  systemd-229.tar.gz
++sha256 46b07568142adcd017c62e6230d39eb10d219ed3b2f13ffc12d9a3a6b1c840cd  systemd-230.tar.gz
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 8a6aa44..b525397 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSTEMD_VERSION = 229
++SYSTEMD_VERSION = 230
+ SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
+@@ -36,6 +36,7 @@ SYSTEMD_CONF_OPTS += \
+ 	--disable-gnuefi \
+ 	--disable-ldconfig \
+ 	--disable-tests \
++	--with-default-dnssec=no \
+ 	--without-python
+ 
+ SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
+-- 
+2.7.3
