@@ -1,78 +1,168 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 May 2016 14:04:11 +0200
-Subject: [Buildroot] [git commit] python-flask-login: new package
-Message-ID: <20160601161309.909F681922@busybox.osuosl.org>
+Date: Mon, 23 May 2016 14:05:57 +0200
+Subject: [Buildroot] [git commit] libiio: Bump version to 0.6
+Message-ID: <20160601161309.9DB0F81F53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4946b1956790618fb31ded9970d10a88ba77b545
+commit: https://git.buildroot.net/buildroot/commit/?id=17ee15da70d23c314a3264c87a785101cbd9d85d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+v0.6 API offers some major additions, including:
+* iio_device_set_kernel_buffers_counts
+* iio_buffer_get_poll_fd
+* iio_bufer_set_blocking_mode
+* iio_buffer_push_partial
+
+Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  |  1 +
- package/python-flask-login/Config.in               |  8 ++++++++
- package/python-flask-login/python-flask-login.hash |  3 +++
- package/python-flask-login/python-flask-login.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
+ ...l2-detection-try-first-the-CMake-module-f.patch | 57 +++++++++++-----------
+ ...ake-fix-build-on-unix-systems-without-cpp.patch | 36 --------------
+ package/libiio/libiio.hash                         |  4 +-
+ package/libiio/libiio.mk                           |  2 +-
+ 4 files changed, 32 insertions(+), 67 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 8668612..e64e058 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -659,6 +659,7 @@ menu "External python modules"
- 	source "package/python-enum34/Config.in"
- 	source "package/python-flask/Config.in"
- 	source "package/python-flask-jsonrpc/Config.in"
-+	source "package/python-flask-login/Config.in"
- 	source "package/python-flup/Config.in"
- 	source "package/python-gobject/Config.in"
- 	source "package/python-html5lib/Config.in"
-diff --git a/package/python-flask-login/Config.in b/package/python-flask-login/Config.in
-new file mode 100644
-index 0000000..88c413e
---- /dev/null
-+++ b/package/python-flask-login/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_FLASK_LOGIN
-+	bool "python-flask-login"
-+	# runtime dependency
-+	select BR2_PACKAGE_PYTHON_FLASK
-+	help
-+	  Flask-Login provides user session management for Flask.
+diff --git a/package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch b/package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
+index 9f44169..17fbdab 100644
+--- a/package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
++++ b/package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
+@@ -1,42 +1,43 @@
+-From 4f849e1d2287206cfb7ff0fdeca96c22383b0d53 Mon Sep 17 00:00:00 2001
++From b613e0fe7999cfff9efb646eb388ea1e58952e30 Mon Sep 17 00:00:00 2001
+ From: Samuel Martin <s.martin49@gmail.com>
+-Date: Mon, 29 Dec 2014 19:05:13 +0100
+-Subject: [PATCH] cmake: libxml2 detection: try first the CMake module from
+- libxml2
++Date: Thu, 14 Apr 2016 12:59:27 -0400
++Subject: [PATCH] cmake: libxml2 detection: try CMake module from libxml2
+ 
+ Libxml2 >=2.9.2 provides its own CMake module, so check for it before
+ falling back on the CMake's module FindLibXml2.cmake.
+ 
++Updated for v0.6 by: Matt Fornero <matt.fornero@mathworks.com>
 +
-+	  https://github.com/maxcountryman/flask-login
-diff --git a/package/python-flask-login/python-flask-login.hash b/package/python-flask-login/python-flask-login.hash
-new file mode 100644
-index 0000000..c488a35
---- /dev/null
-+++ b/package/python-flask-login/python-flask-login.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/Flask-Login/0.3.2, sha256 locally computed:
-+md5    d95c2275d3e1c755145910077366dc45                                 Flask-Login-0.3.2.tar.gz
-+sha256 e72eff5c35e5a31db1aeca1db5d2501be702674ea88e8f223b5d2b11644beee6 Flask-Login-0.3.2.tar.gz
-diff --git a/package/python-flask-login/python-flask-login.mk b/package/python-flask-login/python-flask-login.mk
-new file mode 100644
-index 0000000..aa6d8e3
---- /dev/null
-+++ b/package/python-flask-login/python-flask-login.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-flask-login
-+#
-+################################################################################
-+
-+PYTHON_FLASK_LOGIN_VERSION = 0.3.2
-+PYTHON_FLASK_LOGIN_SOURCE = Flask-Login-$(PYTHON_FLASK_LOGIN_VERSION).tar.gz
-+PYTHON_FLASK_LOGIN_SITE = http://pypi.python.org/packages/source/F/Flask-Login
-+PYTHON_FLASK_LOGIN_LICENSE = MIT
-+PYTHON_FLASK_LOGIN_LICENSE_FILES = LICENSE
-+PYTHON_FLASK_LOGIN_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++Signed-off-by: Matt Fornero <matt.fornero@mathworks.com>
+ ---
+- CMakeLists.txt | 14 +++++++++++++-
+- 1 file changed, 13 insertions(+), 1 deletion(-)
++ CMakeLists.txt |   13 ++++++++++++-
++ 1 file changed, 12 insertions(+), 1 deletion(-)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 393fee3..b4f1d26 100644
++index 70f61f0..4a4209b 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -38,7 +38,19 @@ endif()
+- find_library(AVAHI_CLIENT_LIBRARIES avahi-client)
+- find_library(AVAHI_COMMON_LIBRARIES avahi-common)
+- find_library(PTHREAD_LIBRARIES pthread)
+--include(FindLibXml2)
+-+
+-+# Since libxml2-2.9.2, libxml2 provides its own LibXml2-config.cmake, with all
+-+# variables correctly set.
+-+# So, try first to find the CMake module provided by libxml2 package, then fallback
+-+# on the CMake's FindLibXml2.cmake module (which can lack some definition, especially
+-+# in static build case).
+-+find_package(LibXml2 QUIET NO_MODULE)
+-+if(DEFINED LIBXML2_VERSION_STRING)
+-+  set(LIBXML2_FOUND ON)
+-+  set(LIBXML2_INCLUDE_DIR ${LIBXML2_INCLUDE_DIRS})
+-+else()
+-+  include(FindLibXml2)
+-+endif()
++@@ -143,7 +143,18 @@ if(WITH_NETWORK_BACKEND)
++ endif()
++ 
++ if (NEED_LIBXML2)
++-	include(FindLibXml2)
+++	# Since libxml2-2.9.2, libxml2 provides its own LibXml2-config.cmake, with all
+++	# variables correctly set.
+++	# So, try first to find the CMake module provided by libxml2 package, then fallback
+++	# on the CMake's FindLibXml2.cmake module (which can lack some definition, especially
+++	# in static build case).
+++	find_package(LibXml2 QUIET NO_MODULE)
+++	if(DEFINED LIBXML2_VERSION_STRING)
+++		set(LIBXML2_FOUND ON)
+++		set(LIBXML2_INCLUDE_DIR ${LIBXML2_INCLUDE_DIRS})
+++	else()
+++		include(FindLibXml2)
+++	endif()
+  
+- set(LIBIIO_CFILES channel.c device.c context.c buffer.c utilities.c)
+- set(LIBIIO_HEADERS iio.h)
++ 	if (NOT LIBXML2_FOUND)
++ 		message(SEND_ERROR "The selected backends require libxml2 to be installed")
+ -- 
+-2.2.1
++1.7.10.4
+ 
+diff --git a/package/libiio/0002-cmake-fix-build-on-unix-systems-without-cpp.patch b/package/libiio/0002-cmake-fix-build-on-unix-systems-without-cpp.patch
+deleted file mode 100644
+index 4839a39..0000000
+--- a/package/libiio/0002-cmake-fix-build-on-unix-systems-without-cpp.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 2e6fa357ffbe755bfecaecad4fc82e3307fe2831 Mon Sep 17 00:00:00 2001
+-From: Paul Cercueil <paul.cercueil@analog.com>
+-Date: Wed, 22 Jul 2015 10:25:01 +0200
+-Subject: [PATCH] CMake: Fix build on UNIX systems without a C++ compiler
+-
+-Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+----
+- bindings/csharp/CMakeLists.txt | 2 +-
+- bindings/python/CMakeLists.txt | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/bindings/csharp/CMakeLists.txt b/bindings/csharp/CMakeLists.txt
+-index 8aafb8f..fceab88 100644
+---- a/bindings/csharp/CMakeLists.txt
+-+++ b/bindings/csharp/CMakeLists.txt
+-@@ -1,5 +1,5 @@
+- cmake_minimum_required(VERSION 2.8.7)
+--project(libiio-sharp)
+-+project(libiio-sharp LANGUAGES NONE)
+- 
+- find_program(MCS_EXECUTABLE
+- 	NAMES mcs csc
+-diff --git a/bindings/python/CMakeLists.txt b/bindings/python/CMakeLists.txt
+-index 22ffdb4..76ceae8 100644
+---- a/bindings/python/CMakeLists.txt
+-+++ b/bindings/python/CMakeLists.txt
+-@@ -1,5 +1,5 @@
+- cmake_minimum_required(VERSION 2.8.7)
+--project(libiio-py)
+-+project(libiio-py LANGUAGES NONE)
+- 
+- include(FindPythonInterp)
+- 
+--- 
+-2.1.4
+-
+diff --git a/package/libiio/libiio.hash b/package/libiio/libiio.hash
+index 28b9c63..da42c21 100644
+--- a/package/libiio/libiio.hash
++++ b/package/libiio/libiio.hash
+@@ -1,2 +1,2 @@
+-# From https://github.com/analogdevicesinc/libiio/archive/v0.5/
+-sha256	c41cdcfeae8717e72f1100b4dac9d7cc9d86f4e0731da3354149cb7e051666f3	libiio-0.5.tar.gz
++# From https://github.com/analogdevicesinc/libiio/archive/v0.6/
++sha256  efd3b4ebdba01dd2bfbdce8e222356b4fec2b96daab14f99691b5c1c9089e466    libiio-0.6.tar.gz
+diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+index 0e92b73..e5edb5c 100644
+--- a/package/libiio/libiio.mk
++++ b/package/libiio/libiio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBIIO_VERSION = 0.5
++LIBIIO_VERSION = 0.6
+ LIBIIO_SITE = $(call github,analogdevicesinc,libiio,v$(LIBIIO_VERSION))
+ LIBIIO_INSTALL_STAGING = YES
+ LIBIIO_LICENSE = LGPLv2.1+
