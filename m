@@ -1,57 +1,37 @@
-From: Patrick Williams <patrick@stwcx.xyz>
-Date: Tue, 24 May 2016 10:31:37 -0500
-Subject: [Buildroot] [PATCH 0/6] Makefile: Support merged and nested
-	defconfigs.
-In-Reply-To: <1463599530-28752-1-git-send-email-patrick@stwcx.xyz>
-References: <1463599530-28752-1-git-send-email-patrick@stwcx.xyz>
-Message-ID: <20160524153137.GM19968@asimov.austin.ibm.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 May 2016 17:32:47 +0200
+Subject: [Buildroot] [git commit] toolchain-external: correct hash value for
+	Linaro AArch64 toolchain source
+Message-ID: <20160524153400.5B6D281E16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Any feedback on this patch set?
+commit: https://git.buildroot.net/buildroot/commit/?id=9891e5cbfa35c660362c032a06d1270f3ff37479
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, May 18, 2016 at 02:25:24PM -0500, Patrick Williams wrote:
-> This is a combination and cleanup of the previous efforts by
-> Sam Bobroff and Elizabeth Liner to introduce merged defconfigs
-> and nested defconfig directories respectively.
-> 
-> Merged defconfigs allow us to create defconfig snippets for aspects
-> that are common across multiple machines and create a combined defconfig
-> from the snippets.  The support scripts for merged kernel defconfigs is
-> reused.
-> 
-> Nested defconfig directories allow us to organize the defconfig
-> directory into sub-directories.  A likely use for this is to place
-> defconfigs into architecture-specific subdirectories.
-> 
-> Elizabeth Liner (1):
->   Makefile: Support nested config directories
-> 
-> Patrick Williams (4):
->   Makefile: Generate %_defconfig recipes from macro.
->   Makefile: Add nested config dirs to list-defconfigs
->   Makefile: Add merged defconfigs to list-defconfigs.
->   Makefile: Fix merge defconfig clobber of .config.old
-> 
-> Sam Bobroff (1):
->   Makefile: Support merged defconfigs
-> 
->  Makefile | 27 +++++++++++++++++++--------
->  1 file changed, 19 insertions(+), 8 deletions(-)
-> 
-> -- 
-> 2.6.3
-> 
+The aarch64 Linaro toolchain source hash is not correct, probably due
+to a copy/paste error. The new hash has been verified by downloading
+the tarball, validating the signature, and computing the hash.
 
--- 
-Patrick Williams
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160524/3382ea7d/attachment.asc>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/toolchain-external.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+index fcd735b..9be3c7a 100644
+--- a/toolchain/toolchain-external/toolchain-external.hash
++++ b/toolchain/toolchain-external/toolchain-external.hash
+@@ -42,7 +42,7 @@ sha256 4bc9d86390f8fa67a693ba4768ba5b12faaf7dd37c706c05ccd9321e765226e4  gcc-lin
+ sha256 bf5d3111dad5aa9aef0e955875fb7fc9e918cb24519af7014dd67a9e581a49b1  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_src.tar.bz2
+ sha256 f488caf46680b0c0a16b66b43fbfd157e3d6389df18e957983132e89529a9804  gcc-linaro-5.3-2016.02-x86_64_armeb-linux-gnueabihf.tar.xz
+ sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+-sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
++sha256 a7b8f842fdc9d9be22ca4e0c999429780fc6f16ea798b032421b5ec0cfa53b3e  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
+ sha256 1c85af550bedd378be583317b4abbdc96342b42c19fb19873c13d3093ff694ad  gcc-linaro-5.3-2016.02-x86_64_aarch64-linux-gnu.tar.xz
+ 
+ # Codescape toolchains from Imagination Technologies
