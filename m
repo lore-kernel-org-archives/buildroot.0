@@ -1,47 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 May 2016 13:16:08 +0200
-Subject: [Buildroot] [git commit] valgrind: disable for MIPS soft-float
-Message-ID: <20160524111911.1A92281EE9@busybox.osuosl.org>
+Date: Tue, 24 May 2016 13:12:49 +0200
+Subject: [Buildroot] [git commit] libepoxy: cosmetic fixes
+Message-ID: <20160524111911.0E07981EE9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7baf8e45e413a411fdb3adf0175025e3e5685690
+commit: https://git.buildroot.net/buildroot/commit/?id=2474d556f8e1426949cd613b5331c665cf76cd4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As stated here [1], recent changes on the MIPS binutils sources have
-made it necessary for GCC to pass the -msoft-float to the assembler. Due
-to that, valgrind fails to build for MIPS soft-float when using a
-version of binutils >= 2.25 because its using some hard-float
-instructions.
+It's --enable-glx rather than --enable-egl, both are automatic though.
+Change the autoreconf comment to reflect that it's required for all
+patches.
 
-However, we cannot just disable it for the soft-float and binutils >=
-2.25 combination since external toolchains don't provide information
-about the binutils version they use. So, instead, we simply disable it
-for soft-float.
-
-1: https://gcc.gnu.org/ml/gcc-patches/2014-08/msg00905.html
-
-Fixes:
-  http://autobuild.buildroot.net/results/5f5/5f576c7f8d56058a19ed0e7ff4b1ec620bcafb65/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/valgrind/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/libepoxy/libepoxy.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
-index 21b2608..40e219d 100644
---- a/package/valgrind/Config.in
-+++ b/package/valgrind/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_VALGRIND
- 		   BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
- 		   BR2_x86_64
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_MIPS_SOFT_FLOAT
- 	help
- 	  Tool for debugging and profiling Linux programs.
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index 8e717ce..7436e8f 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -7,9 +7,7 @@
+ LIBEPOXY_VERSION = v1.3.1
+ LIBEPOXY_SITE = $(call github,anholt,libepoxy,$(LIBEPOXY_VERSION))
+ LIBEPOXY_INSTALL_STAGING = YES
+-# For patches:
+-# 0001-make-egl-and-glx-conditional.patch
+-# 0002-Forward-egl-cflags-into-epoxy.pc.patch
++# For patches 0001-0006:
+ LIBEPOXY_AUTORECONF = YES
+ LIBEPOXY_DEPENDENCIES = xutil_util-macros
+ LIBEPOXY_LICENSE = MIT
+@@ -23,7 +21,7 @@ LIBEPOXY_CONF_OPTS += --disable-egl
+ endif
  
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_XLIB_LIBX11),yy)
+-LIBEPOXY_CONF_OPTS += --enable-egl
++LIBEPOXY_CONF_OPTS += --enable-glx
+ LIBEPOXY_DEPENDENCIES += libgl xlib_libX11
+ else
+ LIBEPOXY_CONF_OPTS += --disable-glx
