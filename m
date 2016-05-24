@@ -1,43 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 24 May 2016 15:30:17 +0300
-Subject: [Buildroot] [PATCH] libgpgme: fix musl build with argp-standalone
-Message-ID: <c36ebee5f307f61019940cc0ba7037c728ffe79c.1464093017.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 May 2016 15:00:02 +0200
+Subject: [Buildroot] [git commit] package/iptraf-ng: Needs -D_GNU_SOURCE to
+	fix musl build
+Message-ID: <20160524130024.4B10E81E92@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libgpgme configure script does not detect the error_t type under musl,
-because musl does not define error_t in errno.h. As a result config.h adds a
-local definition of error_t. When argp-standalone is present this local
-definition collides with the error_t typedef in argp.h. Assume we always have
-error_t when argp-standalone is present.
+commit: https://git.buildroot.net/buildroot/commit/?id=00680faa00f56c16686b1671f6fbf3c1a1530f63
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/656/6566a1c77983404d90920997bfd15bd98c7ddde7/
-http://autobuild.buildroot.net/results/a7b/a7b92ad68ff6e13d20ff44e955dc5748b2efd6a4/
-http://autobuild.buildroot.net/results/0db/0db1b2aa0969d6cbae57b1400b7b766a5988abf9/
+Compiling iptraf-ng using musl is broken:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+src/ipfrag.c:193:52: error: 'struct tcphdr' has no member named 'source'
+    ftmp->s_port = ntohs(((struct tcphdr *) tpacket)->source);
+
+Musl guards these fields in the netinet/tcp.h header file with
+_GNU_SOURCE, for details see https://dev.openwrt.org/ticket/19889
+
+Patch ported from
+http://git.alpinelinux.org/cgit/aports/tree/main/iptraf-ng/APKBUILD#n28
+
+Fixes
+http://autobuild.buildroot.net/results/4ce/4cedd4dbaafca76e839f45cc0a4bb8c2c181920d/
+http://autobuild.buildroot.net/results/72b/72b019ce5bb52b8b87d92cce675708f7b9f8a96e/
+http://autobuild.buildroot.net/results/f67/f67f1c2a627a6d535dd5c00e2ee131b5c5a99a0a/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: J??rg Krause <joerg.krause@embedded.rocks>
+[Thomas: one assignment only for IPTRAF_NG_CONF_ENV.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgpgme/libgpgme.mk | 4 +++-
+ package/iptraf-ng/iptraf-ng.mk | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index 186809985ca4..574ddd6be14d 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
-@@ -23,7 +23,9 @@ LIBGPGME_CONF_OPTS = --with-gpg=/usr/bin/gpg \
+diff --git a/package/iptraf-ng/iptraf-ng.mk b/package/iptraf-ng/iptraf-ng.mk
+index 7313873..ea64e1d 100644
+--- a/package/iptraf-ng/iptraf-ng.mk
++++ b/package/iptraf-ng/iptraf-ng.mk
+@@ -10,6 +10,8 @@ IPTRAF_NG_LICENSE = GPLv2+
+ IPTRAF_NG_LICENSE_FILES = LICENSE
+ IPTRAF_NG_DEPENDENCIES = ncurses
  
- # Handle argp-standalone or it errors out during build
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
--LIBGPGME_CONF_ENV += LIBS="-largp"
-+# musl libc does not define error_t in errno.h, but argp.h does.
-+# Assume we have error_t to avoid collision with the argp.h error_t.
-+LIBGPGME_CONF_ENV += LIBS="-largp" ac_cv_type_error_t=yes
- LIBGPGME_DEPENDENCIES += argp-standalone
- endif
+-IPTRAF_NG_MAKE_ENV = NCURSES_LDFLAGS="-lpanel -lncurses"
++IPTRAF_NG_MAKE_ENV = \
++	NCURSES_LDFLAGS="-lpanel -lncurses" \
++	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
  
--- 
-2.8.1
+ $(eval $(autotools-package))
