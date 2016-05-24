@@ -1,40 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 May 2016 23:26:25 +0200
-Subject: [Buildroot] [git commit] support/scripts: fix graph-build-time help
-	text
-Message-ID: <20160524212703.824E081F05@busybox.osuosl.org>
+Date: Tue, 24 May 2016 17:15:29 +0200
+Subject: [Buildroot] [git commit] python-service-identity: add missing
+	BR2_INSTALL_LIBSTDCPP dependency
+Message-ID: <20160524151833.1106A81F0B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bf947e0ef62362cda991537520b94a090a652ca
+commit: https://git.buildroot.net/buildroot/commit/?id=518cb7ff03ceb0bbc7aa6eb6fafbf43d1e3025b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The graph-build-time help text currently looks like this:
+python-service-identity selects python-pyopenssl and python-pyasn, both
+of which depend on C++ support, but this dependency was not propagated
+to python-service-identity causing the following kconfig warning:
 
-usage: graph-build-time [-h] [--type GRAPH_TYPE] [--order GRAPH_ORDER]
-                        [--alternate-colors] [--input OUTPUT] --output OUTPUT
+warning: (BR2_PACKAGE_PYTHON_SERVICE_IDENTITY) selects BR2_PACKAGE_PYTHON_PYOPENSSL which has unmet direct dependencies ((BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3) && BR2_INSTALL_LIBSTDCPP)
+warning: (BR2_PACKAGE_PYTHON_SERVICE_IDENTITY) selects BR2_PACKAGE_PYTHON_PYASN which has unmet direct dependencies ((BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3) && BR2_INSTALL_LIBSTDCPP)
+warning: (BR2_PACKAGE_PYTHON_SERVICE_IDENTITY) selects BR2_PACKAGE_PYTHON_PYASN_MODULES which has unmet direct dependencies ((BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3) && BR2_INSTALL_LIBSTDCPP)
 
-Obviously, naming the parameter for --input as OUTPUT is not a very
-good idea, so this commit fixes that to name it "INPUT", as expected.
-
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Thomas: add Config.in comment.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/graph-build-time | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-service-identity/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
-index 7eb3e47..0ba0f2d 100755
---- a/support/scripts/graph-build-time
-+++ b/support/scripts/graph-build-time
-@@ -276,7 +276,7 @@ parser.add_argument("--order", '-O', metavar="GRAPH_ORDER",
-                     help="Ordering of packages: build or duration (for histogram only)")
- parser.add_argument("--alternate-colors", '-c', action="store_true",
-                     help="Use alternate colour-scheme")
--parser.add_argument("--input", '-i', metavar="OUTPUT",
-+parser.add_argument("--input", '-i', metavar="INPUT",
-                     help="Input file (usually $(O)/build/build-time.log)")
- parser.add_argument("--output", '-o', metavar="OUTPUT", required=True,
-                     help="Output file (.pdf or .png extension)")
+diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
+index e2200f6..c9cbb6c 100644
+--- a/package/python-service-identity/Config.in
++++ b/package/python-service-identity/Config.in
+@@ -4,7 +4,11 @@ config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
+ 	select BR2_PACKAGE_PYTHON_PYASN # runtime
+ 	select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
+ 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
++	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl, python-pyasn
+ 	help
+ 	  Service identity verification for pyOpenSSL.
+ 
+ 	  https://pypi.python.org/pypi/service_identity
++
++comment "python-service-identify needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
