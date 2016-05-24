@@ -1,57 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 May 2016 17:29:53 +0200
-Subject: [Buildroot] [PATCH] strongswan: needs __atomic operations
-Message-ID: <1464103793-13228-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Patrick Williams <patrick@stwcx.xyz>
+Date: Tue, 24 May 2016 10:31:37 -0500
+Subject: [Buildroot] [PATCH 0/6] Makefile: Support merged and nested
+	defconfigs.
+In-Reply-To: <1463599530-28752-1-git-send-email-patrick@stwcx.xyz>
+References: <1463599530-28752-1-git-send-email-patrick@stwcx.xyz>
+Message-ID: <20160524153137.GM19968@asimov.austin.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-strongswan uses the __atomic_*() intrinsics, so we make it depend on
-BR2_TOOLCHAIN_HAS_ATOMIC and link with libatomic when available. This
-allows to fix the build on SPARC, therefore fixing:
+Any feedback on this patch set?
 
-  http://autobuild.buildroot.org/results/7e090237801874fb889c76f84863dc4c2ca20450/
+On Wed, May 18, 2016 at 02:25:24PM -0500, Patrick Williams wrote:
+> This is a combination and cleanup of the previous efforts by
+> Sam Bobroff and Elizabeth Liner to introduce merged defconfigs
+> and nested defconfig directories respectively.
+> 
+> Merged defconfigs allow us to create defconfig snippets for aspects
+> that are common across multiple machines and create a combined defconfig
+> from the snippets.  The support scripts for merged kernel defconfigs is
+> reused.
+> 
+> Nested defconfig directories allow us to organize the defconfig
+> directory into sub-directories.  A likely use for this is to place
+> defconfigs into architecture-specific subdirectories.
+> 
+> Elizabeth Liner (1):
+>   Makefile: Support nested config directories
+> 
+> Patrick Williams (4):
+>   Makefile: Generate %_defconfig recipes from macro.
+>   Makefile: Add nested config dirs to list-defconfigs
+>   Makefile: Add merged defconfigs to list-defconfigs.
+>   Makefile: Fix merge defconfig clobber of .config.old
+> 
+> Sam Bobroff (1):
+>   Makefile: Support merged defconfigs
+> 
+>  Makefile | 27 +++++++++++++++++++--------
+>  1 file changed, 19 insertions(+), 8 deletions(-)
+> 
+> -- 
+> 2.6.3
+> 
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/strongswan/Config.in     | 2 ++
- package/strongswan/strongswan.mk | 4 ++++
- 2 files changed, 6 insertions(+)
-
-diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-index cada78b..b49435c 100644
---- a/package/strongswan/Config.in
-+++ b/package/strongswan/Config.in
-@@ -1,11 +1,13 @@
- comment "strongswan needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
- menuconfig BR2_PACKAGE_STRONGSWAN
- 	bool "strongswan"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_STATIC_LIBS
- 	help
- 	  strongSwan is an OpenSource IPsec implementation for the
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index e7606c0..36b5148 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -35,6 +35,10 @@ STRONGSWAN_CONF_OPTS += \
- 	--enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
- 	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no)
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+STRONGSWAN_CONF_ENV += LIBS='-latomic'
-+endif
-+
- ifeq ($(BR2_PACKAGE_STRONGSWAN_EAP),y)
- STRONGSWAN_CONF_OPTS += \
- 	--enable-eap-sim \
 -- 
-2.7.4
+Patrick Williams
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160524/3382ea7d/attachment.asc>
