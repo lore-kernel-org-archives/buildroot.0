@@ -1,59 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 May 2016 21:49:33 +0200
-Subject: [Buildroot] [git commit] strongswan: needs __atomic operations
-Message-ID: <20160524195008.8DC068042F@busybox.osuosl.org>
+Date: Tue, 24 May 2016 21:58:34 +0200
+Subject: [Buildroot] [PATCH] libgpgme: fix musl build with
+	argp-standalone
+In-Reply-To: <c36ebee5f307f61019940cc0ba7037c728ffe79c.1464093017.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 24 May 2016 15:30:17 +0300")
+References: <c36ebee5f307f61019940cc0ba7037c728ffe79c.1464093017.git.baruch@tkos.co.il>
+Message-ID: <877fejb53p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45eaede51b6817abc53e71d9e73c4c17ee29039e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-strongswan uses the __atomic_*() intrinsics, so we make it depend on
-BR2_TOOLCHAIN_HAS_ATOMIC and link with libatomic when available. This
-allows to fix the build on SPARC, therefore fixing:
+ > The libgpgme configure script does not detect the error_t type under musl,
+ > because musl does not define error_t in errno.h. As a result config.h adds a
+ > local definition of error_t. When argp-standalone is present this local
+ > definition collides with the error_t typedef in argp.h. Assume we always have
+ > error_t when argp-standalone is present.
 
-  http://autobuild.buildroot.org/results/7e090237801874fb889c76f84863dc4c2ca20450/
+ > Fixes:
+ > http://autobuild.buildroot.net/results/656/6566a1c77983404d90920997bfd15bd98c7ddde7/
+ > http://autobuild.buildroot.net/results/a7b/a7b92ad68ff6e13d20ff44e955dc5748b2efd6a4/
+ > http://autobuild.buildroot.net/results/0db/0db1b2aa0969d6cbae57b1400b7b766a5988abf9/
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/strongswan/Config.in     | 2 ++
- package/strongswan/strongswan.mk | 4 ++++
- 2 files changed, 6 insertions(+)
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-index cada78b..b49435c 100644
---- a/package/strongswan/Config.in
-+++ b/package/strongswan/Config.in
-@@ -1,11 +1,13 @@
- comment "strongswan needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
- menuconfig BR2_PACKAGE_STRONGSWAN
- 	bool "strongswan"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_STATIC_LIBS
- 	help
- 	  strongSwan is an OpenSource IPsec implementation for the
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index e7606c0..36b5148 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -35,6 +35,10 @@ STRONGSWAN_CONF_OPTS += \
- 	--enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
- 	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no)
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+STRONGSWAN_CONF_ENV += LIBS='-latomic'
-+endif
-+
- ifeq ($(BR2_PACKAGE_STRONGSWAN_EAP),y)
- STRONGSWAN_CONF_OPTS += \
- 	--enable-eap-sim \
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
