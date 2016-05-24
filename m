@@ -1,82 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 May 2016 15:04:26 -0300
-Subject: [Buildroot] [PATCH] libxslt: security bump to version 1.1.29
-Message-ID: <1464113066-31069-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 May 2016 20:41:07 +0200
+Subject: [Buildroot] [PATCH] mpg123: unbreak static linking with
+ alsa/portaudio
+In-Reply-To: <1464112745-4450-1-git-send-email-peter@korsgaard.com>
+References: <1464112745-4450-1-git-send-email-peter@korsgaard.com>
+Message-ID: <20160524204107.570fbb64@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2015-7995 - Fix for type confusion in preprocessing attributes
+Hello,
 
-Also drop upstream patch.
+On Tue, 24 May 2016 19:59:05 +0200, Peter Korsgaard wrote:
+> Fixes:
+> http://autobuild.buildroot.org/results/b2b/b2bc143fbd0b34e75a44af41ab6899dd9fa3c21a/
+> http://autobuild.buildroot.org/results/60d/60d56b0a75d209f2cfeff0727c2f900abc89d263/
+> http://autobuild.buildroot.org/results/6a8/6a8729ce69055821fdf0b91adcea2ea201d40189/
+> 
+> And many more.
+> 
+> A recent upstream build system change caused LIBS to be ignored at build
+> time (but still used a configure time), causing our static linking
+> workarounds to no longer work.
+> 
+> Fix it by adding a patch to cause it to no longer ignore LIBS.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../libxslt/0001-Make-maxvars-option-work.patch    | 30 ----------------------
- package/libxslt/libxslt.hash                       |  4 +--
- package/libxslt/libxslt.mk                         |  2 +-
- 3 files changed, 3 insertions(+), 33 deletions(-)
- delete mode 100644 package/libxslt/0001-Make-maxvars-option-work.patch
+It would be so much better to use pkg-config, especially since they
+already use PKG_CHECK_MODULES() in their configure script to detect
+other packages.
 
-diff --git a/package/libxslt/0001-Make-maxvars-option-work.patch b/package/libxslt/0001-Make-maxvars-option-work.patch
-deleted file mode 100644
-index d37cf62..0000000
---- a/package/libxslt/0001-Make-maxvars-option-work.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 5af7ad745323004984287e48b42712e7305de35c Mon Sep 17 00:00:00 2001
--From: Per Hedeland <per@hedeland.org>
--Date: Fri, 13 Dec 2013 14:43:06 +0100
--Subject: [PATCH] Make --maxvars option work
--
--From upstream: https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- xsltproc/xsltproc.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/xsltproc/xsltproc.c b/xsltproc/xsltproc.c
--index b22df37..66d8cbb 100644
----- a/xsltproc/xsltproc.c
--+++ b/xsltproc/xsltproc.c
--@@ -803,6 +803,10 @@ main(int argc, char **argv)
--             (!strcmp(argv[i], "--maxdepth"))) {
--             i++;
--             continue;
--+        } else if ((!strcmp(argv[i], "-maxvars")) ||
--+            (!strcmp(argv[i], "--maxvars"))) {
--+            i++;
--+            continue;
--         } else if ((!strcmp(argv[i], "-maxparserdepth")) ||
--             (!strcmp(argv[i], "--maxparserdepth"))) {
--             i++;
---- 
--2.1.0
--
-diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
-index 140db09..8222bc5 100644
---- a/package/libxslt/libxslt.hash
-+++ b/package/libxslt/libxslt.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256	5fc7151a57b89c03d7b825df5a0fae0a8d5f05674c0e7cf2937ecec4d54a028c	libxslt-1.1.28.tar.gz
-+# Locally calculated after checking pgp signature
-+sha256	b5976e3857837e7617b29f2249ebb5eeac34e249208d31f1fbf7a6ba7a4090ce	libxslt-1.1.29.tar.gz
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 0cc4bb9..868ba6a 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXSLT_VERSION = 1.1.28
-+LIBXSLT_VERSION = 1.1.29
- LIBXSLT_SITE = ftp://xmlsoft.org/libxslt
- LIBXSLT_INSTALL_STAGING = YES
- LIBXSLT_LICENSE = MIT
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
