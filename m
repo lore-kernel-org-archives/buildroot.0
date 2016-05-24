@@ -1,34 +1,83 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 May 2016 23:08:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: Execute
-	MESA3D_REMOVE_OPENGL_PC also for DRI configs lacking OpenGL
-In-Reply-To: <1463510499-1418-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Tue, 17 May 2016 20:41:39 +0200")
-References: <1463510499-1418-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87d1ob9nb0.fsf@dell.be.48ers.dk>
+Date: Tue, 24 May 2016 22:47:21 +0200
+Subject: [Buildroot] [git commit] libxslt: security bump to version 1.1.29
+Message-ID: <20160524210903.E3B7D80E24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8fc3764110b64ad68b5ea08c3193514c446560d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Mesa3d provides libgl only with DRI drivers and X.org enabled. Since
- > https://git.busybox.net/buildroot/commit/package/mesa3d/mesa3d.mk?id=f1894ec95728806e09405d26663e0ea371afaeab
+CVE-2015-7995 - Fix for type confusion in preprocessing attributes
 
- > DRI drivers can be enabled without X.org support, but mesa3d still does
- > not provide OpenGL support so we also need to remove the pkgconf files
- > in this case. A POST_INSTALL_*_HOOK is already present but needs to be
- > executed not only when DRI support was disabled but also with DRI en-
- > and X.org disabled.
+Also drop upstream patch.
 
- > Fixes
- > http://autobuild.buildroot.net/results/342/3420ad6aa8e1e8151bf11b43be2c97cbe1dbb400/
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../libxslt/0001-Make-maxvars-option-work.patch    | 30 ----------------------
+ package/libxslt/libxslt.hash                       |  4 +--
+ package/libxslt/libxslt.mk                         |  2 +-
+ 3 files changed, 3 insertions(+), 33 deletions(-)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libxslt/0001-Make-maxvars-option-work.patch b/package/libxslt/0001-Make-maxvars-option-work.patch
+deleted file mode 100644
+index d37cf62..0000000
+--- a/package/libxslt/0001-Make-maxvars-option-work.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 5af7ad745323004984287e48b42712e7305de35c Mon Sep 17 00:00:00 2001
+-From: Per Hedeland <per@hedeland.org>
+-Date: Fri, 13 Dec 2013 14:43:06 +0100
+-Subject: [PATCH] Make --maxvars option work
+-
+-From upstream: https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- xsltproc/xsltproc.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/xsltproc/xsltproc.c b/xsltproc/xsltproc.c
+-index b22df37..66d8cbb 100644
+---- a/xsltproc/xsltproc.c
+-+++ b/xsltproc/xsltproc.c
+-@@ -803,6 +803,10 @@ main(int argc, char **argv)
+-             (!strcmp(argv[i], "--maxdepth"))) {
+-             i++;
+-             continue;
+-+        } else if ((!strcmp(argv[i], "-maxvars")) ||
+-+            (!strcmp(argv[i], "--maxvars"))) {
+-+            i++;
+-+            continue;
+-         } else if ((!strcmp(argv[i], "-maxparserdepth")) ||
+-             (!strcmp(argv[i], "--maxparserdepth"))) {
+-             i++;
+--- 
+-2.1.0
+-
+diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
+index 140db09..8222bc5 100644
+--- a/package/libxslt/libxslt.hash
++++ b/package/libxslt/libxslt.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256	5fc7151a57b89c03d7b825df5a0fae0a8d5f05674c0e7cf2937ecec4d54a028c	libxslt-1.1.28.tar.gz
++# Locally calculated after checking pgp signature
++sha256	b5976e3857837e7617b29f2249ebb5eeac34e249208d31f1fbf7a6ba7a4090ce	libxslt-1.1.29.tar.gz
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 0cc4bb9..868ba6a 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXSLT_VERSION = 1.1.28
++LIBXSLT_VERSION = 1.1.29
+ LIBXSLT_SITE = ftp://xmlsoft.org/libxslt
+ LIBXSLT_INSTALL_STAGING = YES
+ LIBXSLT_LICENSE = MIT
