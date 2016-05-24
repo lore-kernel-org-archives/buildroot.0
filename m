@@ -1,39 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 May 2016 22:12:18 +0200
-Subject: [Buildroot] [git commit] package/skeleton: fix message about
-	non-merged custom skeleton
-Message-ID: <20160524201558.D326E81836@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 24 May 2016 17:31:53 -0300
+Subject: [Buildroot] [PATCH] libxslt: security bump to version 1.1.29
+Message-ID: <1464121913-9284-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be8270d3e3b153c95926446081897c4bfc44ef81
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+CVE-2015-7995 - Fix for type confusion in preprocessing attributes
 
-Use of a merged /usr is not restricted to systemd anymore, thus the
-current error message is misleading, as it only speaks about systemd.
+Also drop upstream patch.
 
-Fix the message by just ditching the reference to systemd altogether.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/skeleton/skeleton.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ .../libxslt/0001-Make-maxvars-option-work.patch    | 30 ----------------------
+ package/libxslt/libxslt.hash                       |  4 +--
+ package/libxslt/libxslt.mk                         |  2 +-
+ 3 files changed, 3 insertions(+), 33 deletions(-)
+ delete mode 100644 package/libxslt/0001-Make-maxvars-option-work.patch
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 7618835..4e3cdc6 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -48,8 +48,7 @@ SKELETON_CUSTOM_NOT_MERGED_USR += /sbin
- endif
+diff --git a/package/libxslt/0001-Make-maxvars-option-work.patch b/package/libxslt/0001-Make-maxvars-option-work.patch
+deleted file mode 100644
+index d37cf62..0000000
+--- a/package/libxslt/0001-Make-maxvars-option-work.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 5af7ad745323004984287e48b42712e7305de35c Mon Sep 17 00:00:00 2001
+-From: Per Hedeland <per@hedeland.org>
+-Date: Fri, 13 Dec 2013 14:43:06 +0100
+-Subject: [PATCH] Make --maxvars option work
+-
+-From upstream: https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- xsltproc/xsltproc.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/xsltproc/xsltproc.c b/xsltproc/xsltproc.c
+-index b22df37..66d8cbb 100644
+---- a/xsltproc/xsltproc.c
+-+++ b/xsltproc/xsltproc.c
+-@@ -803,6 +803,10 @@ main(int argc, char **argv)
+-             (!strcmp(argv[i], "--maxdepth"))) {
+-             i++;
+-             continue;
+-+        } else if ((!strcmp(argv[i], "-maxvars")) ||
+-+            (!strcmp(argv[i], "--maxvars"))) {
+-+            i++;
+-+            continue;
+-         } else if ((!strcmp(argv[i], "-maxparserdepth")) ||
+-             (!strcmp(argv[i], "--maxparserdepth"))) {
+-             i++;
+--- 
+-2.1.0
+-
+diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
+index 140db09..8222bc5 100644
+--- a/package/libxslt/libxslt.hash
++++ b/package/libxslt/libxslt.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256	5fc7151a57b89c03d7b825df5a0fae0a8d5f05674c0e7cf2937ecec4d54a028c	libxslt-1.1.28.tar.gz
++# Locally calculated after checking pgp signature
++sha256	b5976e3857837e7617b29f2249ebb5eeac34e249208d31f1fbf7a6ba7a4090ce	libxslt-1.1.29.tar.gz
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 0cc4bb9..868ba6a 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifneq ($(SKELETON_CUSTOM_NOT_MERGED_USR),)
--$(error Use of systemd as an init system requires a merged /usr. \
--	However, the custom skeleton in $(SKELETON_PATH) is not \
-+$(error The custom skeleton in $(SKELETON_PATH) is not \
- 	using a merged /usr for the following directories: \
- 	$(SKELETON_CUSTOM_NOT_MERGED_USR))
- endif
+-LIBXSLT_VERSION = 1.1.28
++LIBXSLT_VERSION = 1.1.29
+ LIBXSLT_SITE = ftp://xmlsoft.org/libxslt
+ LIBXSLT_INSTALL_STAGING = YES
+ LIBXSLT_LICENSE = MIT
+-- 
+2.7.3
