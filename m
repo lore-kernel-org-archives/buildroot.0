@@ -1,40 +1,46 @@
-From: daggs <daggs@gmx.com>
-Date: Mon, 23 May 2016 20:03:54 +0200
-Subject: [Buildroot] [PATCH v1 2/3] add support for odroid mali GL in kodi
-Message-ID: <trinity-706efa54-6bd9-477c-8338-38db661c3d22-1464026634841@3capp-mailcom-bs13>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 May 2016 20:36:44 +0200
+Subject: [Buildroot] [PATCH] time: mark as not available for static-only
+	builds
+Message-ID: <1464115004-26552-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Due to some code imported from gnulib, the time package doesn't build
+in static-only configurations. Indeed the gnulib code redefines the
+error() and error_at_line() functions, which are also provided by the
+C library. Since fixing the gnulib code is really difficult, let's
+just disable this package for static-only builds.
 
-Signed-off-by: Dagg <daggs@gmx.com>
+Fixes:
 
+  http://autobuild.buildroot.org/results/a0e64faba69fa86755c693f575fb258a77e4e9d1/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/time/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index ff2e75c..7b26abf 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	bool
--	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
-+	default y if (BR2_arm || BR2_aarch64 || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
- 		&& BR2_PACKAGE_BOOST_ARCH_SUPPORTS \
- 		&& BR2_TOOLCHAIN_HAS_SYNC_8
+diff --git a/package/time/Config.in b/package/time/Config.in
+index 0ec3be3..f4694a2 100644
+--- a/package/time/Config.in
++++ b/package/time/Config.in
+@@ -1,7 +1,13 @@
+ config BR2_PACKAGE_TIME
+ 	bool "time"
+ 	depends on BR2_USE_MMU # fork()
++	# See https://savannah.gnu.org/bugs/index.php?48000
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  The GNU time utility.
  
-@@ -24,7 +24,7 @@ config BR2_PACKAGE_KODI_GL
- 	bool
- 	default y
- 	depends on BR2_PACKAGE_HAS_LIBGL
--	depends on !BR2_arm # kodi needs egl/gles on arm
-+	depends on !BR2_arm || !BR2_aarch64 # kodi needs egl/gles on arm
- 
- comment "kodi needs an OpenGL or an openGL ES and EGL backend"
- 	depends on BR2_i386 || BR2_x86_64
+ 	  http://savannah.gnu.org/projects/time/
++
++comment "time needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
 -- 
-2.8.3
+2.7.4
