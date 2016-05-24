@@ -1,43 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 May 2016 20:46:33 +0200
-Subject: [Buildroot] [PATCH] mpg123: unbreak static linking with
-	alsa/portaudio
-In-Reply-To: <20160524204107.570fbb64@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 24 May 2016 20:41:07 +0200")
-References: <1464112745-4450-1-git-send-email-peter@korsgaard.com>
- <20160524204107.570fbb64@free-electrons.com>
-Message-ID: <87wpmjb8fq.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 May 2016 20:48:26 +0200
+Subject: [Buildroot] [PATCH] Config.in: use better URL for GNU mirrors
+Message-ID: <1464115706-29940-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+As explained on http://www.gnu.org/prep/ftp.en.html, the network of
+GNU mirrors provide a generic address, http://ftpmirror.gnu.org/,
+which automatically redirects to an up-to-date and local mirror. This
+allows to greatly speed-up downloads, and also reduces the load on the
+main GNU server.
 
- > Hello,
- > On Tue, 24 May 2016 19:59:05 +0200, Peter Korsgaard wrote:
- >> Fixes:
- >> http://autobuild.buildroot.org/results/b2b/b2bc143fbd0b34e75a44af41ab6899dd9fa3c21a/
- >> http://autobuild.buildroot.org/results/60d/60d56b0a75d209f2cfeff0727c2f900abc89d263/
- >> http://autobuild.buildroot.org/results/6a8/6a8729ce69055821fdf0b91adcea2ea201d40189/
- >> 
- >> And many more.
- >> 
- >> A recent upstream build system change caused LIBS to be ignored at build
- >> time (but still used a configure time), causing our static linking
- >> workarounds to no longer work.
- >> 
- >> Fix it by adding a patch to cause it to no longer ignore LIBS.
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
- > It would be so much better to use pkg-config, especially since they
- > already use PKG_CHECK_MODULES() in their configure script to detect
- > other packages.
-
-Agreed, but I wanted as minimalistic as possible fix for 2016.05.
-
+diff --git a/Config.in b/Config.in
+index b8e5d18..6f5003c 100644
+--- a/Config.in
++++ b/Config.in
+@@ -240,10 +240,12 @@ config BR2_KERNEL_MIRROR
+ 
+ config BR2_GNU_MIRROR
+ 	string "GNU Software mirror"
+-	default "http://ftp.gnu.org/pub/gnu"
++	default "http://ftpmirror.gnu.org"
+ 	help
+-	  GNU has multiple software mirrors scattered around the world.
+-	  The following allows you to select your preferred mirror.
++	  GNU has multiple software mirrors scattered around the
++	  world.  The following allows you to select your preferred
++	  mirror. By default, a generic address is used, which
++	  automatically selects an up-to-date and local mirror.
+ 
+ 	  Have a look on the gnu.org site for a list of mirrors, then enter
+ 	  the URL to the base directory.  Examples:
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.7.4
