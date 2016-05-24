@@ -1,35 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 24 May 2016 23:01:58 +0200
-Subject: [Buildroot] Analysis of build results for 2016-05-23
-References: <20160524063023.4C8B610173F@stock.ovh.net>
- <20160524224834.4fb29814@free-electrons.com>
-Message-ID: <XnsA612EA4CE6775berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 24 May 2016 23:08:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: Execute
+	MESA3D_REMOVE_OPENGL_PC also for DRI configs lacking OpenGL
+In-Reply-To: <1463510499-1418-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
+ Kuhls's message of "Tue, 17 May 2016 20:41:39 +0200")
+References: <1463510499-1418-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87d1ob9nb0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20160524224834.4fb29814 at free-electrons.com:
+ > Mesa3d provides libgl only with DRI drivers and X.org enabled. Since
+ > https://git.busybox.net/buildroot/commit/package/mesa3d/mesa3d.mk?id=f1894ec95728806e09405d26663e0ea371afaeab
 
->>          arm |                      vlc-2.2.3 | NOK | 
-http://autobuild.buildroot.net/results/967f032a509c4e3cf059a1ac5ceb53269fd841
-9f/
-> 
->   CCLD     libgl_plugin.la
-> /home/peko/autobuild/instance-0/output/host/opt/ext-
-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/4.9.3/../../../../x86_
-64-buildroot-linux-uclibc/bin/ld: cannot find -lGL
-> collect2: error: ld returned 1 exit status
-> 
-> Bernd, Gustavo, do we have patches for this one?
+ > DRI drivers can be enabled without X.org support, but mesa3d still does
+ > not provide OpenGL support so we also need to remove the pkgconf files
+ > in this case. A POST_INSTALL_*_HOOK is already present but needs to be
+ > executed not only when DRI support was disabled but also with DRI en-
+ > and X.org disabled.
 
-Hi Thomas,
+ > Fixes
+ > http://autobuild.buildroot.net/results/342/3420ad6aa8e1e8151bf11b43be2c97cbe1dbb400/
 
-yes, the problem is caused by mesa3d: 
-http://patchwork.ozlabs.org/patch/623236/
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Regards, Bernd
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
