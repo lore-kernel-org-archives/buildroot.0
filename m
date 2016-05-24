@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 May 2016 17:20:26 +0200
-Subject: [Buildroot] [PATCH 1/3] midori: add missing
- BR2_TOOLCHAIN_USES_GLIBC dependency
-In-Reply-To: <1463521199-13662-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 May 2016 17:25:13 +0200
+Subject: [Buildroot] [PATCH 2/3] python-service-identity: add missing
+ BR2_INSTALL_LIBSTDCPP dependency
+In-Reply-To: <1463521199-13662-2-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1463521199-13662-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160524172026.58eed807@free-electrons.com>
+ <1463521199-13662-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160524172513.7ad258bc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +14,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 17 May 2016 23:39:57 +0200, Thomas Petazzoni wrote:
-> midori selects webkitgtk, and webkitgtk needs a glibc toolchain, but
-> midori did not propagate this dependency, causing the following kconfig
-> warning:
-> 
-> warning: (BR2_PACKAGE_MIDORI) selects BR2_PACKAGE_WEBKITGTK which has unmet direct dependencies (BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 && BR2_TOOLCHAIN_USES_GLIBC && BR2_PACKAGE_LIBGTK3 && BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS)
-> 
-> Interestingly, the Config.in comment of the midori package already
-> mentionned the (e)glibc dependency, but the BR2_TOOLCHAIN_USES_GLIBC
-> dependency was not expressed (either on the comment or on the main
-> package option itself).
-> 
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/midori/Config.in | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+On Tue, 17 May 2016 23:39:58 +0200, Thomas Petazzoni wrote:
 
-Applied to master, thanks.
+> diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
+> index e2200f6..ee6ca4a 100644
+> --- a/package/python-service-identity/Config.in
+> +++ b/package/python-service-identity/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
+>  	select BR2_PACKAGE_PYTHON_PYASN # runtime
+>  	select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
+>  	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+> +	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl, python-pyasn
+>  	help
+>  	  Service identity verification for pyOpenSSL.
+>  
+
+I forgot to add the Config.in comment for this dependency. So I've
+added it, and applied to master.
 
 Thomas
 -- 
