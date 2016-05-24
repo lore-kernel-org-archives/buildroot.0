@@ -1,46 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 May 2016 21:59:48 +0200
-Subject: [Buildroot] [PATCH] time: mark as not available for static-only
-	builds
-Message-ID: <1464119988-10694-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 24 May 2016 22:01:03 +0200
+Subject: [Buildroot] [git commit] erlang-p1-stringprep: backport upstream
+	commit to fix musl build
+Message-ID: <20160524200143.AF216807F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Due to some code imported from gnulib, the time package doesn't build
-in static-only configurations. Indeed the gnulib code redefines the
-error() and error_at_line() functions, which are also provided by the
-C library. Since fixing the gnulib code is really difficult, let's
-just disable this package for static-only builds.
+commit: https://git.buildroot.net/buildroot/commit/?id=20b3ed7408dd106b5d6d64ab0683e493537b7411
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Amusingly, a fix made upstream to fix the build on Windows also fixes
+the build with the musl C library.
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/a0e64faba69fa86755c693f575fb258a77e4e9d1/
+  http://autobuild.buildroot.net/results/d7b0cacc5d99d8dc91fdeaf770bb5d2b1b1975b6/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/time/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../0001-Stdint-is-required-on-windows.patch       | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/package/time/Config.in b/package/time/Config.in
-index 0ec3be3..f4694a2 100644
---- a/package/time/Config.in
-+++ b/package/time/Config.in
-@@ -1,7 +1,13 @@
- config BR2_PACKAGE_TIME
- 	bool "time"
- 	depends on BR2_USE_MMU # fork()
-+	# See https://savannah.gnu.org/bugs/index.php?48000
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  The GNU time utility.
- 
- 	  http://savannah.gnu.org/projects/time/
+diff --git a/package/erlang-p1-stringprep/0001-Stdint-is-required-on-windows.patch b/package/erlang-p1-stringprep/0001-Stdint-is-required-on-windows.patch
+new file mode 100644
+index 0000000..7385503
+--- /dev/null
++++ b/package/erlang-p1-stringprep/0001-Stdint-is-required-on-windows.patch
+@@ -0,0 +1,28 @@
++From f5a2b8b78afb253630ee8833f16f131b3b52701e Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Pawe=C5=82=20Chmielowski?= <pchmielowski@process-one.net>
++Date: Mon, 29 Feb 2016 10:56:32 +0100
++Subject: [PATCH] Stdint is required on windows
 +
-+comment "time needs a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS
--- 
-2.7.4
++[Backport from upstream commit
++4fc5cae81122540fff983e40dda1fa905c329fd0, which happens to not only
++fix the build on Windows, but also with the musl C library.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ c_src/stringprep.cpp | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/c_src/stringprep.cpp b/c_src/stringprep.cpp
++index 461cf09..26215cf 100644
++--- a/c_src/stringprep.cpp
+++++ b/c_src/stringprep.cpp
++@@ -19,6 +19,7 @@
++  */
++ 
++ #include <string.h>
+++#include <stdint.h>
++ #include <erl_nif.h>
++ 
++ #include "uni_data.c"
++-- 
++2.7.4
++
