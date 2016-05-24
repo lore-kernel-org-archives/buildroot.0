@@ -1,42 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 May 2016 23:16:16 +0200
-Subject: [Buildroot] [git commit] libgtk3: bump to version 3.20.6
-Message-ID: <20160601161310.0D3E581F53@busybox.osuosl.org>
+Date: Tue, 24 May 2016 21:47:18 +0200
+Subject: [Buildroot] [git commit] xtables-addons: bump to version 2.11
+Message-ID: <20160601161310.4B82281F53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70f4ea42fad5c0976b9ea9af313b4e9ea643954a
+commit: https://git.buildroot.net/buildroot/commit/?id=86409e1a4bc94ef6754a31b48561b72fad352f36
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/xtables-addons/xtables-addons.hash | 6 +++---
+ package/xtables-addons/xtables-addons.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 47f5977..b6998a4 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.5.sha256sum
--sha256	9790b0267384904ad8a08e7f16e5f9ff1c4037de57788d48d1eaf528355b1564	gtk+-3.20.5.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.6.sha256sum
-+sha256	3f8016563a96b1cfef4ac9e795647f6316deb2978ff939b19e4e4f8f936fa4b2	gtk+-3.20.6.tar.xz
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 469ff13..f447e7a 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+index be8cb6e..323393d 100644
+--- a/package/xtables-addons/xtables-addons.hash
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -1,4 +1,4 @@
+-# From http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.10/
+-sha1	bc6dcb1eb1328931189f6e73a1a02ef4cc51bc44	xtables-addons-2.10.tar.xz
++# From https://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.11/
++sha1	356abeb8ae24da67178f1612bc0fcbfd83a5e7e7	xtables-addons-2.11.tar.xz
+ # Calculated based on the hash above
+-sha256	2a2d92ae924437d757f55514502c6ef3aeccc6106f729c702efe703ad30f4007	xtables-addons-2.10.tar.xz
++sha256	f14f8953a9d3a70157a82883886ff6ec866c61dbea1585edb421478107279921	xtables-addons-2.11.tar.xz
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index b4e5992..7fc7312 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- LIBGTK3_VERSION_MAJOR = 3.20
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).5
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).6
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPLv2+
+-XTABLES_ADDONS_VERSION = 2.10
++XTABLES_ADDONS_VERSION = 2.11
+ XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
+-XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
++XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons/$(XTABLES_ADDONS_VERSION)
+ XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
+ XTABLES_ADDONS_LICENSE = GPLv2+
+ XTABLES_ADDONS_LICENSE_FILES = LICENSE
