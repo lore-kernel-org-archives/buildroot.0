@@ -1,39 +1,54 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 May 2016 10:21:00 -0300
-Subject: [Buildroot] [PATCH] sysstat: bump to version 11.2.4
-Message-ID: <1464096060-11745-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 24 May 2016 14:36:30 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-05-23
+In-Reply-To: <20160524063023.4C8B610173F@stock.ovh.net>
+References: <20160524063023.4C8B610173F@stock.ovh.net>
+Message-ID: <574458DE.4040302@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sysstat/sysstat.hash | 2 +-
- package/sysstat/sysstat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello everyone,
 
-diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
-index 655cafe..95c39db 100644
---- a/package/sysstat/sysstat.hash
-+++ b/package/sysstat/sysstat.hash
-@@ -1,2 +1,2 @@
- # From: http://sebastien.godard.pagesperso-orange.fr/download.html
--sha1	7e9422e985b65728d007bd38d4a8d090aa795826	sysstat-11.2.3.tar.xz
-+sha1	ddf1ed67f1ce4b09081c49d0fa228600b8ed5660	sysstat-11.2.4.tar.xz
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index a16054f..3b0eb2b 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSSTAT_VERSION = 11.2.3
-+SYSSTAT_VERSION = 11.2.4
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
- SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
--- 
-2.7.3
+On 24/05/16 07:30, Thomas Petazzoni wrote:
+> ===================
+> 
+>          arm |                 collectd-5.5.1 | NOK | http://autobuild.buildroot.net/results/24a35b63921cb9d747052f3bbfc3549ed20e18d7/
+>     mips64el |                 collectd-5.5.1 | NOK | http://autobuild.buildroot.net/results/af1eec00e472349c7dca76dcc8dd5cd37d82f5c3/
+>        nios2 |                   connman-1.32 | NOK | http://autobuild.buildroot.net/results/af3743bc0840cecf13664c081d6d205e5a8c9eca/
+>     mips64el |                   connman-1.32 | NOK | http://autobuild.buildroot.net/results/6593e1ca94f98e3c2a5fd90401f709cf2f7b1743/
+>          arm |                   connman-1.32 | NOK | http://autobuild.buildroot.net/results/5937a416c1f320a581b54a7bc61cbb69075e9e43/
+>       mipsel |                   connman-1.32 | NOK | http://autobuild.buildroot.net/results/5ff215f7c91411fef335890d8a86a3482dfdac3b/
+
+I've been looking at these ones and they fail due to some changes made
+in the Linux kernel that causes conflicts between Linux's linux/if.h and
+glibc's net/if.h.
+
+The failure looks like this in collectd's config.log:
+
+linux/if.h:71:2: error: redeclaration of enumerator 'IFF_UP'
+      IFF_UP    = 1<<0,  /* sysfs */
+
+net/if.h:44:5: note: previous definition of 'IFF_UP' was here
+      IFF_UP = 0x1,  /* Interface is up.  */
+
+And like this on conman:
+
+linux/if.h:86:2: error: redeclaration of enumerator 'IFF_DYNAMIC'
+  IFF_DYNAMIC   = 1<<15, /* sysfs */
+
+net/if.h:79:5: note: previous definition of 'IFF_DYNAMIC' was here
+     IFF_DYNAMIC = 0x8000 /* Dialup device with changing addresses.  */
+
+This problem has been already fixed upstream:
+
+https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=4a91cb61bb995e5571098188092e296192309c77
+
+Anyone has an idea how to workaround this downstream?
+
+Regards,
+
+Vincent.
