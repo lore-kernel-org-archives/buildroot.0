@@ -1,49 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 24 May 2016 14:13:20 +0300
-Subject: [Buildroot] [PATCH] xorriso: fix musl build
-Message-ID: <851221e66c460e766b01cb962c4a2f0c39863284.1464088400.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 24 May 2016 13:16:29 +0200
+Subject: [Buildroot] [PATCH] valgrind: disable for MIPS soft-float
+In-Reply-To: <1464003111-59011-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Mon, 23 May 2016 12:31:51 +0100")
+References: <1464003111-59011-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87h9dnd7ua.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch that adds the missing header for ssize_t.
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/820/82014874f5b97de8504d8409b286889b582a7454/
+ > As stated here [1], recent changes on the MIPS binutils sources have
+ > made it necessary for GCC to pass the -msoft-float to the assembler. Due
+ > to that, valgrind fails to build for MIPS soft-float when using a
+ > version of binutils >= 2.25 because its using some hard-float
+ > instructions.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/xorriso/0001-fix-musl-build.patch | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
- create mode 100644 package/xorriso/0001-fix-musl-build.patch
+ > However, we cannot just disable it for the soft-float and binutils >=
+ > 2.25 combination since external toolchains don't provide information
+ > about the binutils version they use. So, instead, we simply disable it
+ > for soft-float.
 
-diff --git a/package/xorriso/0001-fix-musl-build.patch b/package/xorriso/0001-fix-musl-build.patch
-new file mode 100644
-index 000000000000..86d251d747a4
---- /dev/null
-+++ b/package/xorriso/0001-fix-musl-build.patch
-@@ -0,0 +1,20 @@
-+Fix musl build
-+
-+Add missing header needed for ssize_t.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: posted upstream
-+(http://lists.gnu.org/archive/html/bug-xorriso/2016-05/msg00000.html)
-+
-+diff -Nuar xorriso-1.4.2-orig/libisofs/aaip_0_2.h xorriso-1.4.2/libisofs/aaip_0_2.h
-+--- xorriso-1.4.2-orig/libisofs/aaip_0_2.h	2015-11-28 16:41:33.000000000 +0200
-++++ xorriso-1.4.2/libisofs/aaip_0_2.h	2016-05-24 11:40:43.874191174 +0300
-+@@ -16,6 +16,7 @@
-+ #ifndef Aaip_h_is_includeD
-+ #define Aaip_h_is_includeD yes
-+ 
-++#include <unistd.h>
-+ 
-+ /* --------------------------------- Encoder ---------------------------- */
-+ 
+ > 1: https://gcc.gnu.org/ml/gcc-patches/2014-08/msg00905.html
+
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/5f5/5f576c7f8d56058a19ed0e7ff4b1ec620bcafb65/
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Committed, thanks.
+
 -- 
-2.8.1
+Bye, Peter Korsgaard
