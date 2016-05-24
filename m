@@ -1,122 +1,104 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 24 May 2016 23:53:32 +0200
-Subject: [Buildroot] [PATCH 0/2] pulseview: fix build failures
-In-Reply-To: <20160524221001.2a2fce00@free-electrons.com>
-References: <1435660874-14116-1-git-send-email-bgolaszewski@baylibre.com>
- <20160524221001.2a2fce00@free-electrons.com>
-Message-ID: <CAHXCMMKZyb24v_O4PCNQ8ghapdK4da_8Ybcwmyk=F1vCCnbcTA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 24 May 2016 19:40:51 -0300
+Subject: [Buildroot] [PATCH] libbsd: bump to version 0.8.3
+Message-ID: <1464129651-32232-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Drop upstream patch.
 
-On Tue, May 24, 2016 at 10:10 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello Bartosz,
->
-> On Tue, 30 Jun 2015 12:41:12 +0200, Bartosz Golaszewski wrote:
->> Autobuilders frequently report the following issue with pulseview:
->>   http://autobuild.buildroot.net/results/993/993622312239fe56946fdde4d3dfec73786393e5/build-end.log
->>
->> It's caused by passing a nullptr as argument where
->> boost::optional<std::pair<(...)> > is expected. Commit ec6cc07f
->> fixed the issue in PulseView and the second patch makes buildroot
->> use it when building PV. The first patch is needed too due to some
->> API changes in libsigrokcxx.
->>
->> NOTE: this builds fine on x86 and actually also used to build
->> properly on other architectures at commit edbeeef. Something must
->> have changed along the way that exposed the bug.
->
-> We are still seeing some build issue with the pulseview package, on the
-> SPARC architecture:
->
->   http://autobuild.buildroot.org/results/1e3/1e3101261252d5f30fdf842cc99604e4f4c25eef/build-end.log
->
-> On SPARC, when the __atomic intrinsics are used, you must link with the
-> libatomic library (which is part of the toolchain). When you take the
-> pulseview link command line, and just add "-latomic", it links fine. So
-> I've tried to add some CMake logic to have pulseview link against
-> libatomic when needed. This CMake logic is inspired (copied) from LLVM,
-> and looks like this:
->
-> include(CheckCXXSourceCompiles)
->
-> function(check_working_cxx_atomics varname)
->   set(OLD_CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
->   set(CMAKE_REQUIRED_FLAGS "-std=c++11")
->   CHECK_CXX_SOURCE_COMPILES("
-> #include <atomic>
-> std::atomic<int> x;
-> int main() {
->   return x;
-> }
-> " ${varname})
->   set(CMAKE_REQUIRED_FLAGS ${OLD_CMAKE_REQUIRED_FLAGS})
-> endfunction(check_working_cxx_atomics)
->
-> # First check if atomics work without the library.
-> check_working_cxx_atomics(HAVE_CXX_ATOMICS_WITHOUT_LIB)
-> # If not, check if the library exists, and atomics work with it.
-> if(NOT HAVE_CXX_ATOMICS_WITHOUT_LIB)
->   check_library_exists(atomic __atomic_fetch_add_4 "" HAVE_LIBATOMIC)
->   if( HAVE_LIBATOMIC )
->     list(APPEND CMAKE_REQUIRED_LIBRARIES "atomic")
->     check_working_cxx_atomics(HAVE_CXX_ATOMICS_WITH_LIB)
->     if (NOT HAVE_CXX_ATOMICS_WITH_LIB)
->       message(FATAL_ERROR "Host compiler must support std::atomic!")
->     endif()
->   else()
->     message(FATAL_ERROR "Host compiler appears to require libatomic, but cannot find it.")
->   endif()
-> endif()
->
-> Unfortunately, for some reason the sample code in this check builds
-> just fine without -latomic, and therefore HAVE_CXX_ATOMICS_WITHOUT_LIB
-> gets defined and -latomic is not added to the libraries to link with.
->
-> Could you investigate this issue, and see which CMake check can be
-> written to make sure we link against libatomic when needed?
->
-> Here is a minimal defconfig that reproduces the problem:
->
-> BR2_sparc=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sparc-uclibc-2016.05-rc1-2-g44038df.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_QT5=y
-> BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-> BR2_PACKAGE_PULSEVIEW=y
-> # BR2_TARGET_ROOTFS_TAR is not set
->
-> Thanks a lot!
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...0001-build-clock_gettime-might-need-librt.patch | 49 ----------------------
+ package/libbsd/libbsd.hash                         |  2 +-
+ package/libbsd/libbsd.mk                           |  4 +-
+ 3 files changed, 2 insertions(+), 53 deletions(-)
+ delete mode 100644 package/libbsd/0001-build-clock_gettime-might-need-librt.patch
 
-Thanks a lot for these materials, it helped me a lot cooking a working
-patch [1].
-
-I still need to polish it, and I'm also wondering whether
-__atomic_fetch_add_4 is available on all architectures that have
-atomic support?
-(sorry for this silly question, I don't know much about atomic
-support, and their architecture dependency).
-If __atomic_fetch_add_4 is ok, then I'll post the patch shortly.
-
-
-[1] http://code.bulix.org/f3zjiv-99265?raw
-
-Regards,
-
+diff --git a/package/libbsd/0001-build-clock_gettime-might-need-librt.patch b/package/libbsd/0001-build-clock_gettime-might-need-librt.patch
+deleted file mode 100644
+index ad6fcdb..0000000
+--- a/package/libbsd/0001-build-clock_gettime-might-need-librt.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From 188049ac7adcabfa66e5b6a674ac28a2f7da81f3 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Fri, 12 Feb 2016 11:06:58 -0300
+-Subject: [PATCH] build: clock_gettime might need librt
+-
+-In older glibc versions (< 2.17) clock_gettime is in librt.
+-Add a check for this to avoid build breakage for programs/libraries that
+-use libbsd on such systems.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+-Patch status: submitted upstream
+-
+- configure.ac    | 5 +++++
+- src/Makefile.am | 2 ++
+- 2 files changed, 7 insertions(+)
+-
+-diff --git a/configure.ac b/configure.ac
+-index d334774..1862d19 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -44,6 +44,11 @@ AC_SUBST([TESTU01_LIBS])
+- AM_CONDITIONAL([HAVE_LIBTESTU01],
+-                [test "x$ac_cv_lib_testu01_unif01_CreateExternGenBits" = "xyes"])
+- 
+-+# In old glibc versions (< 2.17) clock_gettime() is in librt
+-+AC_SEARCH_LIBS([clock_gettime], [rt],
+-+             [LIB_CLOCK_GETTIME="-lrt"])
+-+AC_SUBST([LIB_CLOCK_GETTIME])
+-+
+- # Checks for header files.
+- AC_CHECK_HEADERS([sys/ndir.h sys/dir.h ndir.h dirent.h])
+- 
+-diff --git a/src/Makefile.am b/src/Makefile.am
+-index 4649937..6b705f0 100644
+---- a/src/Makefile.am
+-+++ b/src/Makefile.am
+-@@ -52,6 +52,8 @@ hash/md5hl.c: $(srcdir)/hash/helper.c
+- libbsd_la_DEPENDENCIES = \
+- 	$(libbsd_la_included_sources) \
+- 	libbsd.map
+-+libbsd_la_LIBADD = \
+-+	$(LIB_CLOCK_GETTIME)
+- libbsd_la_LDFLAGS = \
+- 	-Wl,--version-script=$(srcdir)/libbsd.map \
+- 	-version-number $(LIBBSD_ABI)
+--- 
+-2.4.10
+-
+diff --git a/package/libbsd/libbsd.hash b/package/libbsd/libbsd.hash
+index f77c0aa..bc6c7cf 100644
+--- a/package/libbsd/libbsd.hash
++++ b/package/libbsd/libbsd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	b2f644cae94a6e2fe109449c20ad79a0f6ee4faec2205b07eefa0020565e250a	libbsd-0.8.2.tar.xz
++sha256	934b634f4dfd865b6482650b8f522c70ae65c463529de8be907b53c89c3a34a8	libbsd-0.8.3.tar.xz
+diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
+index f750d75..a932f2b 100644
+--- a/package/libbsd/libbsd.mk
++++ b/package/libbsd/libbsd.mk
+@@ -4,13 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBBSD_VERSION = 0.8.2
++LIBBSD_VERSION = 0.8.3
+ LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
+ LIBBSD_SITE = http://libbsd.freedesktop.org/releases
+ LIBBSD_LICENSE = BSD-3c, MIT
+ LIBBSD_LICENSE_FILES = COPYING
+ LIBBSD_INSTALL_STAGING = YES
+-# For 0001-build-clock_gettime-might-need-librt.patch
+-LIBBSD_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
 -- 
-Samuel
+2.7.3
