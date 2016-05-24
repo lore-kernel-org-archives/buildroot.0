@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 May 2016 15:16:56 +0200
-Subject: [Buildroot] [PATCH] qt5serialbus: depend on toolchain headers
- >= 3.6
-In-Reply-To: <1463557550-3622-1-git-send-email-yegorslists@googlemail.com>
-References: <1463557550-3622-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160524151656.65ff9aa2@free-electrons.com>
+Date: Tue, 24 May 2016 15:18:05 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libbluray: bump version to
+ 0.9.3
+In-Reply-To: <1463547438-18551-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1463547438-18551-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160524151805.17169082@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 18 May 2016 09:45:50 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> qt5serialbus requires CAN FD support, that was introduced
-> in kernel 3.6. Add appropriate toolchain headers dependency.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/617/6176a24799b5d80312be954089efbbb498fa1571/
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+On Wed, 18 May 2016 06:57:18 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/qt5/qt5serialbus/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
+>  package/libbluray/libbluray.hash | 4 ++--
+>  package/libbluray/libbluray.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Applied to next, thanks.
 
 Thomas
 -- 
