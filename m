@@ -1,49 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 May 2016 16:31:49 -0300
-Subject: [Buildroot] [PATCH] webkitgtk: security bump to version 2.12.3
-Message-ID: <1464118309-8772-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 24 May 2016 21:38:10 +0200
+Subject: [Buildroot] systemd and journald
+In-Reply-To: <20160523100709.3e2f0feb@itchy>
+References: <20160522124140.GA3630@free.fr>
+ <20160523100709.3e2f0feb@itchy>
+Message-ID: <20160524193810.GC3621@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2016-1856 - allows remote attackers to execute arbitrary code or
-cause a denial of service (memory corruption) via a crafted web site
-CVE-2016-1857 - allows remote attackers to execute arbitrary code or
-cause a denial of service (memory corruption) via a crafted web site
+?ric, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/webkitgtk/webkitgtk.hash | 6 +++---
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On 2016-05-23 10:07 +0200, Eric Le Bihan spake thusly:
+> Le Sun, 22 May 2016 14:41:40 +0200,
+> "Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
+> 
+> > So, because our /var/log is a symlink to /tmp , the journal is
+> > correctly created
+> > in /tmp/journal/c30ad28b21d444ba9fff7fb25b5454b1/system.journal but
+> > since another filesystem is mounted over it later, it is no longer
+> > accessible, so journalctl does not find it.
+> > 
+> > I'm not sure where to go forward rom there, but it looks like our
+> > skeleton is wrong when the init system is systemd.
+> 
+> I haven't played with a systemd-based setup for a while, but I used to
+> fix this with a post-build script [1]. 
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 20959fd..faccb3f 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,4 +1,4 @@
--# From http://www.webkitgtk.org/releases/webkitgtk-2.12.2.tar.xz.sha1
--sha1	84d02caadd3d39805e83a4719e2424c1ba4a54d6	webkitgtk-2.12.2.tar.xz
-+# From http://www.webkitgtk.org/releases/webkitgtk-2.12.3.tar.xz.sha1
-+sha1	d6a0d598c09d2d56ba0862f8d9206e89d75317cb	webkitgtk-2.12.3.tar.xz
- # Calculated based on the hash above
--sha256	9dc49b908b1c37da739703e1402a7f07c4ea9093b8ecfb34f20e8f74e328f124	webkitgtk-2.12.2.tar.xz
-+sha256	173cbb9a2eca23eee52e99965483ab25aa9c0569ef5b57041fc0c129cc26c307	webkitgtk-2.12.3.tar.xz
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 8bed9c5..2479872 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.12.2
-+WEBKITGTK_VERSION = 2.12.3
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+Hmm.. that's what maxime told me on IRC, too...
+
+> There was also a discussion some times ago about the need for a
+> skeleton package per init system [2].
+
+Right, and it's been there a long time ago...
+
+> [1] https://github.com/elebihan/buildroot-ext-elb/blob/master/overlays/base-systemd/post-build.sh
+> [2] http://buildroot-busybox.2317881.n4.nabble.com/How-to-provide-one-default-skeleton-per-init-system-td72124.html
+
+Thanks for the poitners, I'll try to see what I can come up with.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
