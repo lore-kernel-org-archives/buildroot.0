@@ -1,47 +1,43 @@
-From: gdbabu Krishnan <gdbabu.krishnan@gmail.com>
-Date: Tue, 24 May 2016 17:52:45 +0530
-Subject: [Buildroot] startx error
-Message-ID: <CAG7w3y=axgJ1Gmess405FtXm9CCaLX91HBKrN=Pk-SxoxkYhsw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 24 May 2016 15:30:17 +0300
+Subject: [Buildroot] [PATCH] libgpgme: fix musl build with argp-standalone
+Message-ID: <c36ebee5f307f61019940cc0ba7037c728ffe79c.1464093017.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HI,
+The libgpgme configure script does not detect the error_t type under musl,
+because musl does not define error_t in errno.h. As a result config.h adds a
+local definition of error_t. When argp-standalone is present this local
+definition collides with the error_t typedef in argp.h. Assume we always have
+error_t when argp-standalone is present.
 
-when i run an X server( "startx" command) it show some error
+Fixes:
+http://autobuild.buildroot.net/results/656/6566a1c77983404d90920997bfd15bd98c7ddde7/
+http://autobuild.buildroot.net/results/a7b/a7b92ad68ff6e13d20ff44e955dc5748b2efd6a4/
+http://autobuild.buildroot.net/results/0db/0db1b2aa0969d6cbae57b1400b7b766a5988abf9/
 
-# startx
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libgpgme/libgpgme.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-expr: warning: '^/dev/tty[0-9]\+s': using '^' as the first character of
-basic regular  expression is not portable;
-it is ignored
-
-xauth: file /root/.serverauth.123 does not exist
-
-xinit: unable to run server "/usr/bin/x": no such file or directory use the
---option, or make sure that /usr/bin is in your path and
-that "/usr/bin/x" is aprogram or link to the rigth type of server for your
-display.
-
-possible sarver names include
-
-xorg     common x server for most display
-xvfb     virtual frame buffer
-xfake     kdrive-based virtual frame buffer
-xnest     x server nested in a window on another x window
-xephyr     kdrive-based nested xserver
-xvnc     xsever accessed over vnc
-xdmx     distributed multi-head xserver
-
-xinit : giving up
-xinit : unable to connect to x server : connection refused
-xinit : server error
-
-i dont know where i made mistake please help me to solve this problem
-
-thank you
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160524/da86414d/attachment.html>
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index 186809985ca4..574ddd6be14d 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -23,7 +23,9 @@ LIBGPGME_CONF_OPTS = --with-gpg=/usr/bin/gpg \
+ 
+ # Handle argp-standalone or it errors out during build
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+-LIBGPGME_CONF_ENV += LIBS="-largp"
++# musl libc does not define error_t in errno.h, but argp.h does.
++# Assume we have error_t to avoid collision with the argp.h error_t.
++LIBGPGME_CONF_ENV += LIBS="-largp" ac_cv_type_error_t=yes
+ LIBGPGME_DEPENDENCIES += argp-standalone
+ endif
+ 
+-- 
+2.8.1
