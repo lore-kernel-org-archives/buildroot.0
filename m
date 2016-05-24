@@ -1,47 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 May 2016 17:18:11 +0200
-Subject: [Buildroot] [git commit] python-treq: add missing
-	BR2_INSTALL_LIBSTDCPP dependency
-Message-ID: <20160524151833.1C06E8049D@busybox.osuosl.org>
+Date: Tue, 24 May 2016 17:20:26 +0200
+Subject: [Buildroot] [PATCH 1/3] midori: add missing
+ BR2_TOOLCHAIN_USES_GLIBC dependency
+In-Reply-To: <1463521199-13662-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1463521199-13662-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160524172026.58eed807@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4eed1ac0c47a0165d42be30f1731b85baa0a122d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-python-treq selects python-pyopenssl, which depends on C++ support, but
-this dependency was not propagated to python-treq, causing the following
-kconfig warning:
+On Tue, 17 May 2016 23:39:57 +0200, Thomas Petazzoni wrote:
+> midori selects webkitgtk, and webkitgtk needs a glibc toolchain, but
+> midori did not propagate this dependency, causing the following kconfig
+> warning:
+> 
+> warning: (BR2_PACKAGE_MIDORI) selects BR2_PACKAGE_WEBKITGTK which has unmet direct dependencies (BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 && BR2_TOOLCHAIN_USES_GLIBC && BR2_PACKAGE_LIBGTK3 && BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS)
+> 
+> Interestingly, the Config.in comment of the midori package already
+> mentionned the (e)glibc dependency, but the BR2_TOOLCHAIN_USES_GLIBC
+> dependency was not expressed (either on the comment or on the main
+> package option itself).
+> 
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/midori/Config.in | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-warning: (BR2_PACKAGE_PYTHON_TREQ) selects BR2_PACKAGE_PYTHON_PYOPENSSL which has unmet direct dependencies ((BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3) && BR2_INSTALL_LIBSTDCPP)
+Applied to master, thanks.
 
-This commit fixes that by adding the appropriate dependency.
-
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-[Thomas: add Config.in comment.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-treq/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
-index a8590a9..4a23737 100644
---- a/package/python-treq/Config.in
-+++ b/package/python-treq/Config.in
-@@ -5,9 +5,13 @@ config BR2_PACKAGE_PYTHON_TREQ
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
- 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
-+	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
- 	help
- 	  treq is an HTTP library inspired by requests but written on
- 	  top of Twisted's Agents.  It provides a simple, higher level
- 	  API for making HTTP requests when using Twisted.
- 
- 	  https://github.com/twisted/treq
-+
-+comment "python-treq needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
