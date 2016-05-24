@@ -1,51 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 May 2016 21:48:13 +0200
-Subject: [Buildroot] [git commit] webkitgtk: security bump to version 2.12.3
-Message-ID: <20160524194848.0E79281E5A@busybox.osuosl.org>
+Date: Tue, 24 May 2016 21:49:33 +0200
+Subject: [Buildroot] [git commit] strongswan: needs __atomic operations
+Message-ID: <20160524195008.8DC068042F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b429a90fad9681caa8d057098b76470c5dd498e
+commit: https://git.buildroot.net/buildroot/commit/?id=45eaede51b6817abc53e71d9e73c4c17ee29039e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2016-1856 - allows remote attackers to execute arbitrary code or
-cause a denial of service (memory corruption) via a crafted web site
-CVE-2016-1857 - allows remote attackers to execute arbitrary code or
-cause a denial of service (memory corruption) via a crafted web site
+strongswan uses the __atomic_*() intrinsics, so we make it depend on
+BR2_TOOLCHAIN_HAS_ATOMIC and link with libatomic when available. This
+allows to fix the build on SPARC, therefore fixing:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+  http://autobuild.buildroot.org/results/7e090237801874fb889c76f84863dc4c2ca20450/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 6 +++---
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/strongswan/Config.in     | 2 ++
+ package/strongswan/strongswan.mk | 4 ++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 20959fd..faccb3f 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,4 +1,4 @@
--# From http://www.webkitgtk.org/releases/webkitgtk-2.12.2.tar.xz.sha1
--sha1	84d02caadd3d39805e83a4719e2424c1ba4a54d6	webkitgtk-2.12.2.tar.xz
-+# From http://www.webkitgtk.org/releases/webkitgtk-2.12.3.tar.xz.sha1
-+sha1	d6a0d598c09d2d56ba0862f8d9206e89d75317cb	webkitgtk-2.12.3.tar.xz
- # Calculated based on the hash above
--sha256	9dc49b908b1c37da739703e1402a7f07c4ea9093b8ecfb34f20e8f74e328f124	webkitgtk-2.12.2.tar.xz
-+sha256	173cbb9a2eca23eee52e99965483ab25aa9c0569ef5b57041fc0c129cc26c307	webkitgtk-2.12.3.tar.xz
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 8bed9c5..2479872 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+index cada78b..b49435c 100644
+--- a/package/strongswan/Config.in
++++ b/package/strongswan/Config.in
+@@ -1,11 +1,13 @@
+ comment "strongswan needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
  
--WEBKITGTK_VERSION = 2.12.2
-+WEBKITGTK_VERSION = 2.12.3
- WEBKITGTK_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+ menuconfig BR2_PACKAGE_STRONGSWAN
+ 	bool "strongswan"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  strongSwan is an OpenSource IPsec implementation for the
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index e7606c0..36b5148 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -35,6 +35,10 @@ STRONGSWAN_CONF_OPTS += \
+ 	--enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
+ 	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no)
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++STRONGSWAN_CONF_ENV += LIBS='-latomic'
++endif
++
+ ifeq ($(BR2_PACKAGE_STRONGSWAN_EAP),y)
+ STRONGSWAN_CONF_OPTS += \
+ 	--enable-eap-sim \
