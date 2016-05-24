@@ -1,36 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 May 2016 17:40:22 +0200
-Subject: [Buildroot] [PATCH 1/3] flann: bump version to fix build with
- gcc 6
-In-Reply-To: <1463520230-6127-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1463520230-6127-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160524174022.189ce4a6@free-electrons.com>
+Date: Tue, 24 May 2016 17:40:41 +0200
+Subject: [Buildroot] [git commit branch/next] sysstat: bump to version 11.2.4
+Message-ID: <20160524154048.7C98481EE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c1cc23f31d8b91f24c4a6e872de89208c06d7ba5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 17 May 2016 23:23:48 +0200, Thomas Petazzoni wrote:
-> The current version of flann in Buildroot fails to build with gcc 6.x,
-> with the following failure:
-> 
->   error: call of overloaded 'abs(flann::KDTreeIndex<flann::L2<float> >::ElementType)' is ambiguous
-> 
-> By bumping the upstream version one commit further, we get an upstream
-> fix that fixes the build problem.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/flann/flann.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sysstat/sysstat.hash | 2 +-
+ package/sysstat/sysstat.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-All three patches applied to master.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
+index 655cafe..95c39db 100644
+--- a/package/sysstat/sysstat.hash
++++ b/package/sysstat/sysstat.hash
+@@ -1,2 +1,2 @@
+ # From: http://sebastien.godard.pagesperso-orange.fr/download.html
+-sha1	7e9422e985b65728d007bd38d4a8d090aa795826	sysstat-11.2.3.tar.xz
++sha1	ddf1ed67f1ce4b09081c49d0fa228600b8ed5660	sysstat-11.2.4.tar.xz
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index a16054f..3b0eb2b 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSSTAT_VERSION = 11.2.3
++SYSSTAT_VERSION = 11.2.4
+ SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
+ SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
+ SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
