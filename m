@@ -1,58 +1,57 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 24 May 2016 10:26:08 -0500
-Subject: [Buildroot] Genimage last partition size issue
-Message-ID: <CANQCQpb634S9qdGcoZubqLcpFupyLyD8a=5hEOOXiNeOq1Vsrw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 May 2016 17:29:53 +0200
+Subject: [Buildroot] [PATCH] strongswan: needs __atomic operations
+Message-ID: <1464103793-13228-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As noted in the partition options, size = 0 should cause the last
-partition to take the rest of the space on the device.  However, when
-I set size = 0 and then write the image to a SD card using "sudo dd
-if=foo.img of=/dev/sdb", the rootfs partition only has 190M (the same
-amount as when I don't use the size argument) when there is almost 4G
-worth of space available.  I know the size argument works in general
-as if I set the size to 3000M, the rootfs partition is 3000M after
-writing it to the SD card.
+strongswan uses the __atomic_*() intrinsics, so we make it depend on
+BR2_TOOLCHAIN_HAS_ATOMIC and link with libatomic when available. This
+allows to fix the build on SPARC, therefore fixing:
 
+  http://autobuild.buildroot.org/results/7e090237801874fb889c76f84863dc4c2ca20450/
 
-Below is the config file for genimage that I am using.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/strongswan/Config.in     | 2 ++
+ package/strongswan/strongswan.mk | 4 ++++
+ 2 files changed, 6 insertions(+)
 
-> image boot.vfat {
->   vfat {
->     files = {
->       "MLO",
->       "u-boot.img"
->     }
->   }
->   size = 32M
-> }
-> image foo.img {
->   hdimage {
->   }
->   partition boot {
->     partition-type = 0xC
->     bootable = "true"
->     image = "boot.vfat"
->   }
->   partition rootfs {
->     partition-type = 0x83
->     image = "rootfs.ext4"
->     size = 0
->   }
-> }
-
-
-
-
+diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+index cada78b..b49435c 100644
+--- a/package/strongswan/Config.in
++++ b/package/strongswan/Config.in
+@@ -1,11 +1,13 @@
+ comment "strongswan needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ menuconfig BR2_PACKAGE_STRONGSWAN
+ 	bool "strongswan"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  strongSwan is an OpenSource IPsec implementation for the
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index e7606c0..36b5148 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -35,6 +35,10 @@ STRONGSWAN_CONF_OPTS += \
+ 	--enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
+ 	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no)
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++STRONGSWAN_CONF_ENV += LIBS='-latomic'
++endif
++
+ ifeq ($(BR2_PACKAGE_STRONGSWAN_EAP),y)
+ STRONGSWAN_CONF_OPTS += \
+ 	--enable-eap-sim \
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+2.7.4
