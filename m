@@ -1,31 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 May 2016 17:56:50 +0200
-Subject: [Buildroot] Genimage last partition size issue
-In-Reply-To: <CANQCQpb634S9qdGcoZubqLcpFupyLyD8a=5hEOOXiNeOq1Vsrw@mail.gmail.com>
- (Matthew Weber's message of "Tue, 24 May 2016 10:26:08 -0500")
-References: <CANQCQpb634S9qdGcoZubqLcpFupyLyD8a=5hEOOXiNeOq1Vsrw@mail.gmail.com>
-Message-ID: <871t4rcuv1.fsf@dell.be.48ers.dk>
+From: Brian Foster <brian.foster@maximintegrated.com>
+Date: Tue, 24 May 2016 17:16:32 +0200
+Subject: [Buildroot] [DOC BUG] Misleading password hash algorithm
+Message-ID: <1828734.H60eMAyuYm@laclwks004>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
 
- > As noted in the partition options, size = 0 should cause the last
- > partition to take the rest of the space on the device.  However, when
- > I set size = 0 and then write the image to a SD card using "sudo dd
- > if=foo.img of=/dev/sdb", the rootfs partition only has 190M (the same
- > amount as when I don't use the size argument) when there is almost 4G
- > worth of space available.  I know the size argument works in general
- > as if I set the size to 3000M, the rootfs partition is 3000M after
- > writing it to the SD card.
+  In ?23, ?Makeusers syntax documentation?, currently on the website,
+  https://buildroot.org/downloads/manual/manual.html#makeuser-syntax
+  it claims (in multiple places) that a plaintext <password> is hashed
+  using MD5.  However, in at least the current source (2016.05-rc2),
+  as I read the `support/scripts/mkusers' script, the cryptographic
+  hash used is that configured by `BR2_TARGET_GENERIC_PASSWD_METHOD',
+  which clearly makes more sense and can be, as one example, SHA-256.
 
-How should genimage know what the size is of your SD card when you
-generate the foo.img image? I guess you would need to add size = 4G
-inside image foo.img { }, but notice that this is isn't very efficient
-as you will be writing lots of zeros to the sd card.
+cheers!
+	-blf-
 
 -- 
-Bye, Peter Korsgaard
+Brian Foster
+Principal MTS, Software        |  La Ciotat, France
+Maxim Integrated               |  http://www.maximintegrated.com/
