@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 May 2016 15:16:23 +0200
-Subject: [Buildroot] [PATCH] aircrack-ng: mention script dependencies in
- the help text
-In-Reply-To: <1463599723-12836-1-git-send-email-arnout@mind.be>
-References: <1463599723-12836-1-git-send-email-arnout@mind.be>
-Message-ID: <20160524151623.6eb3fcbb@free-electrons.com>
+Date: Tue, 24 May 2016 15:16:56 +0200
+Subject: [Buildroot] [PATCH] qt5serialbus: depend on toolchain headers
+ >= 3.6
+In-Reply-To: <1463557550-3622-1-git-send-email-yegorslists@googlemail.com>
+References: <1463557550-3622-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160524151656.65ff9aa2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 18 May 2016 21:28:43 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> aircrack-ng has some scripts (airmon-ng, airmon-zc) that use external
-> tools for their functionality. We don't select the corresponding
-> packages because some of the other aircrack-ng tools don't need these
-> at all.
+On Wed, 18 May 2016 09:45:50 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Still, the user should be informed of this. So update the help text to
-> refer to all packages used by the scripts:
-> - ethtool
-> - iw
-> - rfkill
-> - util-linux for lspci and lsusb (script uses options not available in
->   busybox)
-> - wireless_tools for iwconfig and iwpriv
+> qt5serialbus requires CAN FD support, that was introduced
+> in kernel 3.6. Add appropriate toolchain headers dependency.
 > 
-> See also bug #8936
+> Fixes:
+> http://autobuild.buildroot.net/results/617/6176a24799b5d80312be954089efbbb498fa1571/
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: lipkegu at gmail.com
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/aircrack-ng/Config.in | 3 +++
->  1 file changed, 3 insertions(+)
+>  package/qt5/qt5serialbus/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 
 Applied to master, thanks.
 
