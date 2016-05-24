@@ -1,39 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 May 2016 17:25:33 +0200
-Subject: [Buildroot] [PATCH 3/3] python-treq: add missing
- BR2_INSTALL_LIBSTDCPP dependency
-In-Reply-To: <1463521199-13662-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1463521199-13662-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1463521199-13662-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160524172533.6355b265@free-electrons.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 24 May 2016 10:26:08 -0500
+Subject: [Buildroot] Genimage last partition size issue
+Message-ID: <CANQCQpb634S9qdGcoZubqLcpFupyLyD8a=5hEOOXiNeOq1Vsrw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As noted in the partition options, size = 0 should cause the last
+partition to take the rest of the space on the device.  However, when
+I set size = 0 and then write the image to a SD card using "sudo dd
+if=foo.img of=/dev/sdb", the rootfs partition only has 190M (the same
+amount as when I don't use the size argument) when there is almost 4G
+worth of space available.  I know the size argument works in general
+as if I set the size to 3000M, the rootfs partition is 3000M after
+writing it to the SD card.
 
-On Tue, 17 May 2016 23:39:59 +0200, Thomas Petazzoni wrote:
 
-> diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
-> index a8590a9..d560ba3 100644
-> --- a/package/python-treq/Config.in
-> +++ b/package/python-treq/Config.in
-> @@ -5,6 +5,7 @@ config BR2_PACKAGE_PYTHON_TREQ
->  	select BR2_PACKAGE_PYTHON_SIX # runtime
->  	select BR2_PACKAGE_PYTHON_TWISTED # runtime
->  	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
-> +	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
->  	help
->  	  treq is an HTTP library inspired by requests but written on
->  	  top of Twisted's Agents.  It provides a simple, higher level
+Below is the config file for genimage that I am using.
 
-Same here, I've added the Config.in comment for the dependency, which
-was missing in my patch, and applied to master.
+> image boot.vfat {
+>   vfat {
+>     files = {
+>       "MLO",
+>       "u-boot.img"
+>     }
+>   }
+>   size = 32M
+> }
+> image foo.img {
+>   hdimage {
+>   }
+>   partition boot {
+>     partition-type = 0xC
+>     bootable = "true"
+>     image = "boot.vfat"
+>   }
+>   partition rootfs {
+>     partition-type = 0x83
+>     image = "rootfs.ext4"
+>     size = 0
+>   }
+> }
 
-Thomas
+
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
