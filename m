@@ -1,46 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 May 2016 16:13:39 -0300
-Subject: [Buildroot] [PATCH] xtables-addons: bump to version 2.11
-Message-ID: <1464117219-8712-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 May 2016 21:13:54 +0200
+Subject: [Buildroot] [PATCH v2 6/6] package/go: Set file timestamp
+In-Reply-To: <ec83a5927025fc759d5bfc26ee01aabde3658a7c.1463696454.git.geoff@infradead.org>
+References: <cover.1463696454.git.geoff@infradead.org>
+ <ec83a5927025fc759d5bfc26ee01aabde3658a7c.1463696454.git.geoff@infradead.org>
+Message-ID: <20160524211354.20788c35@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/xtables-addons/xtables-addons.hash | 6 +++---
- package/xtables-addons/xtables-addons.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Hello,
 
-diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
-index be8cb6e..323393d 100644
---- a/package/xtables-addons/xtables-addons.hash
-+++ b/package/xtables-addons/xtables-addons.hash
-@@ -1,4 +1,4 @@
--# From http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.10/
--sha1	bc6dcb1eb1328931189f6e73a1a02ef4cc51bc44	xtables-addons-2.10.tar.xz
-+# From https://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.11/
-+sha1	356abeb8ae24da67178f1612bc0fcbfd83a5e7e7	xtables-addons-2.11.tar.xz
- # Calculated based on the hash above
--sha256	2a2d92ae924437d757f55514502c6ef3aeccc6106f729c702efe703ad30f4007	xtables-addons-2.10.tar.xz
-+sha256	f14f8953a9d3a70157a82883886ff6ec866c61dbea1585edb421478107279921	xtables-addons-2.11.tar.xz
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index b4e5992..7fc7312 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--XTABLES_ADDONS_VERSION = 2.10
-+XTABLES_ADDONS_VERSION = 2.11
- XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
--XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
-+XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons/$(XTABLES_ADDONS_VERSION)
- XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
- XTABLES_ADDONS_LICENSE = GPLv2+
- XTABLES_ADDONS_LICENSE_FILES = LICENSE
+On Thu, 19 May 2016 22:25:02 +0000, Geoff Levand wrote:
+> Set all file timestamps to prevent the go compiler from rebuilding any
+> built in packages when programs are built.
+> 
+> Signed-off-by: Geoff Levand <geoff@infradead.org>
+> ---
+>  package/go/go.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/go/go.mk b/package/go/go.mk
+> index 8565a86..a2babab 100644
+> --- a/package/go/go.mk
+> +++ b/package/go/go.mk
+> @@ -119,6 +119,10 @@ define HOST_GO_INSTALL_CMDS
+>  	# There is a known issue which requires the go sources to be installed
+>  	# https://golang.org/issue/2775
+>  	cp -a $(@D)/src $(HOST_GO_ROOT)/
+> +
+> +	# Set all file timestamps to prevent the go compiler from rebuilding any
+> +	# built in packages when programs are built.
+> +	find $(HOST_GO_ROOT) -type f -exec touch -r $(HOST_GO_TMP)/bin/go {} \;
+>  endef
+
+That's weird, why is it needed? Why are timestamps wrong in the first
+place?
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
