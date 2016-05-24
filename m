@@ -1,48 +1,41 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 24 May 2016 09:07:59 +0200
-Subject: [Buildroot] [PATCH 2/3] python-service-identity: add missing
- BR2_INSTALL_LIBSTDCPP dependency
-In-Reply-To: <1463521199-13662-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1463521199-13662-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1463521199-13662-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAGm1_ks5UnppAo-O+iCGDeeuhAfDAHpyC9Xjg0kf29_VpP2+ag@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 24 May 2016 09:22:58 +0200
+Subject: [Buildroot] building error
+In-Reply-To: <CAG7w3y=Fp_Dm9bUQvANvt97Q_Nhpx75jF556EMm04_txG7LEdA@mail.gmail.com>
+ (gdbabu Krishnan's message of "Tue, 24 May 2016 10:11:46 +0530")
+References: <CAG7w3y=Fp_Dm9bUQvANvt97Q_Nhpx75jF556EMm04_txG7LEdA@mail.gmail.com>
+Message-ID: <87posbdinh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 17, 2016 at 11:39 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> python-service-identity selects python-pyopenssl and python-pyasn, both
-> of which depend on C++ support, but this dependency was not propagated
-> to python-service-identity causing the following kconfig warning:
->
-> warning: (BR2_PACKAGE_PYTHON_SERVICE_IDENTITY) selects BR2_PACKAGE_PYTHON_PYOPENSSL which has unmet direct dependencies ((BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3) && BR2_INSTALL_LIBSTDCPP)
-> warning: (BR2_PACKAGE_PYTHON_SERVICE_IDENTITY) selects BR2_PACKAGE_PYTHON_PYASN which has unmet direct dependencies ((BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3) && BR2_INSTALL_LIBSTDCPP)
-> warning: (BR2_PACKAGE_PYTHON_SERVICE_IDENTITY) selects BR2_PACKAGE_PYTHON_PYASN_MODULES which has unmet direct dependencies ((BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3) && BR2_INSTALL_LIBSTDCPP)
->
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>>>> "gdbabu" == gdbabu Krishnan <gdbabu.krishnan@gmail.com> writes:
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Hi
+ >    i have given "make  clean all " in terminal i got same error,
 
-> ---
->  package/python-service-identity/Config.in | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
-> index e2200f6..ee6ca4a 100644
-> --- a/package/python-service-identity/Config.in
-> +++ b/package/python-service-identity/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
->         select BR2_PACKAGE_PYTHON_PYASN # runtime
->         select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
->         select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
-> +       depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl, python-pyasn
->         help
->           Service identity verification for pyOpenSSL.
->
-> --
-> 2.7.4
->
+ > make[7]: Nothing to be done for `all-am'.
+ > Making all in xwayland
+ >   CC       Xwayland-xwayland.o
+ >   CC       Xwayland-miinitext.o
+ > xwayland.c:33:26: fatal error: compositeext.h: No such file or directory
+ >  #include <compositeext.h>
+ >                           ^
+ > compilation terminated.
+ > make[4]: *** [Xwayland-xwayland.o] Error 1
+ > make[4]: *** Waiting for unfinished jobs....
+ > make[3]: *** [all-recursive] Error 1
+ > make[2]: *** [all-recursive] Error 1
+ > make[1]: ***
+ > [/home/malar/Documents/build_root/buildroot/output/build/xserver_xorg-server-1.18.3/.stamp_built]
+ > Error 2
+ > make: *** [_all] Error 2
+
+Sounds like a missing dependency. I'm doing a test build to verify.
+
+Do you really want to build wayland AND xserver?
+
+-- 
+Bye, Peter Korsgaard
