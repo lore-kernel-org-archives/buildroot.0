@@ -1,35 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 May 2016 20:44:40 +0200
-Subject: [Buildroot] [PATCH] Config.in: Use CDN kernel.org mirror
-In-Reply-To: <1464017813-22503-1-git-send-email-abrodkin@synopsys.com>
-References: <1464017813-22503-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20160524204440.6f9dd0e9@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 24 May 2016 20:46:33 +0200
+Subject: [Buildroot] [PATCH] mpg123: unbreak static linking with
+	alsa/portaudio
+In-Reply-To: <20160524204107.570fbb64@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 24 May 2016 20:41:07 +0200")
+References: <1464112745-4450-1-git-send-email-peter@korsgaard.com>
+ <20160524204107.570fbb64@free-electrons.com>
+Message-ID: <87wpmjb8fq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Mon, 23 May 2016 18:36:53 +0300, Alexey Brodkin wrote:
-> It turned out for quite some time CDN-powered mirror
-> of kernel.org is available. See this announce:
-> https://www.kernel.org/introducing-fastly-cdn.html
-> 
-> This change switches to that faster mirror by default.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  Config.in | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+ > Hello,
+ > On Tue, 24 May 2016 19:59:05 +0200, Peter Korsgaard wrote:
+ >> Fixes:
+ >> http://autobuild.buildroot.org/results/b2b/b2bc143fbd0b34e75a44af41ab6899dd9fa3c21a/
+ >> http://autobuild.buildroot.org/results/60d/60d56b0a75d209f2cfeff0727c2f900abc89d263/
+ >> http://autobuild.buildroot.org/results/6a8/6a8729ce69055821fdf0b91adcea2ea201d40189/
+ >> 
+ >> And many more.
+ >> 
+ >> A recent upstream build system change caused LIBS to be ignored at build
+ >> time (but still used a configure time), causing our static linking
+ >> workarounds to no longer work.
+ >> 
+ >> Fix it by adding a patch to cause it to no longer ignore LIBS.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Applied to next after slightly tweaking the help text, thanks!
+ > It would be so much better to use pkg-config, especially since they
+ > already use PKG_CHECK_MODULES() in their configure script to detect
+ > other packages.
 
-Thomas
+Agreed, but I wanted as minimalistic as possible fix for 2016.05.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
