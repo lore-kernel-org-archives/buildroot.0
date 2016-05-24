@@ -1,20 +1,25 @@
-From: gdbabu Krishnan <gdbabu.krishnan@gmail.com>
-Date: Tue, 24 May 2016 13:04:43 +0530
-Subject: [Buildroot] x server need for gtk3
-Message-ID: <CAG7w3y=8wySyTebHH2YENUaj7LLPdxHcGw2GbVEp1wgWUEz+JA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 24 May 2016 13:12:52 +0200
+Subject: [Buildroot] [PATCH] libepoxy: cosmetic fixes
+In-Reply-To: <1464037663-1310-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 23 May 2016 18:07:43 -0300")
+References: <1464037663-1310-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87lh2zd80b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
+ > It's --enable-glx rather than --enable-egl, both are automatic though.
+ > Change the autoreconf comment to reflect that it's required for all
+ > patches.
 
-i am beginner to buildroot, wayland no need but x server need to run gtk3
-application on raspberry pi board.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-thank you,
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160524/cd0e592f/attachment.html>
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
