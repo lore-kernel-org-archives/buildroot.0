@@ -1,27 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 May 2016 21:48:33 +0200
-Subject: [Buildroot] [PATCH] webkitgtk: security bump to version 2.12.3
-In-Reply-To: <1464118309-8772-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 24 May 2016 16:31:49 -0300")
-References: <1464118309-8772-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k2ijb5ke.fsf@dell.be.48ers.dk>
+Date: Tue, 24 May 2016 21:48:13 +0200
+Subject: [Buildroot] [git commit] webkitgtk: security bump to version 2.12.3
+Message-ID: <20160524194848.0E79281E5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9b429a90fad9681caa8d057098b76470c5dd498e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- > CVE-2016-1856 - allows remote attackers to execute arbitrary code or
- > cause a denial of service (memory corruption) via a crafted web site
- > CVE-2016-1857 - allows remote attackers to execute arbitrary code or
- > cause a denial of service (memory corruption) via a crafted web site
+Fixes:
+CVE-2016-1856 - allows remote attackers to execute arbitrary code or
+cause a denial of service (memory corruption) via a crafted web site
+CVE-2016-1857 - allows remote attackers to execute arbitrary code or
+cause a denial of service (memory corruption) via a crafted web site
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/webkitgtk/webkitgtk.hash | 6 +++---
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 20959fd..faccb3f 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,4 +1,4 @@
+-# From http://www.webkitgtk.org/releases/webkitgtk-2.12.2.tar.xz.sha1
+-sha1	84d02caadd3d39805e83a4719e2424c1ba4a54d6	webkitgtk-2.12.2.tar.xz
++# From http://www.webkitgtk.org/releases/webkitgtk-2.12.3.tar.xz.sha1
++sha1	d6a0d598c09d2d56ba0862f8d9206e89d75317cb	webkitgtk-2.12.3.tar.xz
+ # Calculated based on the hash above
+-sha256	9dc49b908b1c37da739703e1402a7f07c4ea9093b8ecfb34f20e8f74e328f124	webkitgtk-2.12.2.tar.xz
++sha256	173cbb9a2eca23eee52e99965483ab25aa9c0569ef5b57041fc0c129cc26c307	webkitgtk-2.12.3.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 8bed9c5..2479872 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.12.2
++WEBKITGTK_VERSION = 2.12.3
+ WEBKITGTK_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
