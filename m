@@ -1,82 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 May 2016 17:31:53 -0300
-Subject: [Buildroot] [PATCH] libxslt: security bump to version 1.1.29
-Message-ID: <1464121913-9284-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 24 May 2016 22:46:00 +0200
+Subject: [Buildroot] [PATCH v2] dosfstools: security bump to version 4.0
+In-Reply-To: <1464120815-9160-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 24 May 2016 17:13:35 -0300")
+References: <1464120815-9160-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87lh2z9oc7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2015-7995 - Fix for type confusion in preprocessing attributes
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Also drop upstream patch.
+ > Fixes:
+ > CVE-2015-8872 - if the third to last entry was written on a FAT12
+ > filesystem with an odd number of clusters, the second to last entry
+ > would be corrupted. This corruption may also lead to invalid memory
+ > accesses when the corrupted entry becomes out of bounds and is used
+ > late.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../libxslt/0001-Make-maxvars-option-work.patch    | 30 ----------------------
- package/libxslt/libxslt.hash                       |  4 +--
- package/libxslt/libxslt.mk                         |  2 +-
- 3 files changed, 3 insertions(+), 33 deletions(-)
- delete mode 100644 package/libxslt/0001-Make-maxvars-option-work.patch
+ > CVE-2016-4804 - the variable used for storing the FAT size (in bytes)
+ > was an unsigned int. Since the size in sectors read from the BPB was not
+ > sufficiently checked, this could end up being zero after multiplying it
+ > with the sector size while some offsets still stayed excessive.
+ > Ultimately it would cause segfaults when accessing FAT entries for which
+ > no memory was allocated.
 
-diff --git a/package/libxslt/0001-Make-maxvars-option-work.patch b/package/libxslt/0001-Make-maxvars-option-work.patch
-deleted file mode 100644
-index d37cf62..0000000
---- a/package/libxslt/0001-Make-maxvars-option-work.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 5af7ad745323004984287e48b42712e7305de35c Mon Sep 17 00:00:00 2001
--From: Per Hedeland <per@hedeland.org>
--Date: Fri, 13 Dec 2013 14:43:06 +0100
--Subject: [PATCH] Make --maxvars option work
--
--From upstream: https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- xsltproc/xsltproc.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/xsltproc/xsltproc.c b/xsltproc/xsltproc.c
--index b22df37..66d8cbb 100644
----- a/xsltproc/xsltproc.c
--+++ b/xsltproc/xsltproc.c
--@@ -803,6 +803,10 @@ main(int argc, char **argv)
--             (!strcmp(argv[i], "--maxdepth"))) {
--             i++;
--             continue;
--+        } else if ((!strcmp(argv[i], "-maxvars")) ||
--+            (!strcmp(argv[i], "--maxvars"))) {
--+            i++;
--+            continue;
--         } else if ((!strcmp(argv[i], "-maxparserdepth")) ||
--             (!strcmp(argv[i], "--maxparserdepth"))) {
--             i++;
---- 
--2.1.0
--
-diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
-index 140db09..8222bc5 100644
---- a/package/libxslt/libxslt.hash
-+++ b/package/libxslt/libxslt.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256	5fc7151a57b89c03d7b825df5a0fae0a8d5f05674c0e7cf2937ecec4d54a028c	libxslt-1.1.28.tar.gz
-+# Locally calculated after checking pgp signature
-+sha256	b5976e3857837e7617b29f2249ebb5eeac34e249208d31f1fbf7a6ba7a4090ce	libxslt-1.1.29.tar.gz
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 0cc4bb9..868ba6a 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXSLT_VERSION = 1.1.28
-+LIBXSLT_VERSION = 1.1.29
- LIBXSLT_SITE = ftp://xmlsoft.org/libxslt
- LIBXSLT_INSTALL_STAGING = YES
- LIBXSLT_LICENSE = MIT
+ > Converted package to autotools infra to match upstream.
+
+ > The install options are now removals, enabled compatibilty symlinks and
+ > exec-prefix set to / to match previous install names/locations.
+
+ > Accounted for optional udev usage.
+
+ > Dropped musl compatibility patch since it's upstream.
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ > Change for v2: drop duplicate rm -f as pointed by Yann.
+
+Thanks, but it seems it needs some more love for the host variant. First
+of all, genimage uses mkdosfs so we need --enable-compat-symlinks for
+the host variant as well. After fixing that, pandaboard_defconfig fails
+with:
+
+>>>   Executing post-image script board/pandaboard/post-image.sh
+vfat(boot.vfat): adding file 'MLO' as 'MLO' ...
+Total number of sectors (16384) not a multiple of sectors per track (63)!
+Add mtools_skip_check=1 to your .mtoolsrc file to skip this test
+vfat(boot.vfat): failed to generate boot.vfat
+Makefile:672: recipe for target 'target-post-image' failed
+
 -- 
-2.7.3
+Bye, Peter Korsgaard
