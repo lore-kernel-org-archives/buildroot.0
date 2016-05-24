@@ -1,83 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 May 2016 22:47:21 +0200
-Subject: [Buildroot] [git commit] libxslt: security bump to version 1.1.29
-Message-ID: <20160524210903.E3B7D80E24@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 May 2016 23:26:25 +0200
+Subject: [Buildroot] [git commit] oprofile: not available on Microblaze
+Message-ID: <20160524212703.9674D81F05@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fc3764110b64ad68b5ea08c3193514c446560d7
+commit: https://git.buildroot.net/buildroot/commit/?id=b71bdd68562f82db9d5515de1ca4a33789c05cb9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CVE-2015-7995 - Fix for type confusion in preprocessing attributes
+Commit c45979c732cb610ad5d54e23dd7d4d49e519d45b marked OProfile as not
+available on the Xtensa architecture, due to the lack of memory
+barrier operations. This commit does the same for the Microblaze
+architecture, for the same reason, which allows to fix the following
+autobuilder failure:
 
-Also drop upstream patch.
+  http://autobuild.buildroot.org/results/9a872ddc906e9d552d30762e849a1b537b4e5095/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+It is worth mentioning that most likely Xtensa and Microblaze are
+architectures implementing a strongly-ordered memory model, in which
+case we could define the memory barriers as no-ops. But until someone
+who actually cares about OProfile on Xtensa and Microblaze shows up,
+it's probably better to disable the package on those architectures.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../libxslt/0001-Make-maxvars-option-work.patch    | 30 ----------------------
- package/libxslt/libxslt.hash                       |  4 +--
- package/libxslt/libxslt.mk                         |  2 +-
- 3 files changed, 3 insertions(+), 33 deletions(-)
+ package/oprofile/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libxslt/0001-Make-maxvars-option-work.patch b/package/libxslt/0001-Make-maxvars-option-work.patch
-deleted file mode 100644
-index d37cf62..0000000
---- a/package/libxslt/0001-Make-maxvars-option-work.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 5af7ad745323004984287e48b42712e7305de35c Mon Sep 17 00:00:00 2001
--From: Per Hedeland <per@hedeland.org>
--Date: Fri, 13 Dec 2013 14:43:06 +0100
--Subject: [PATCH] Make --maxvars option work
--
--From upstream: https://gitorious.org/libxslt/libxslt/commit/5af7ad745323004984287e48b42
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- xsltproc/xsltproc.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/xsltproc/xsltproc.c b/xsltproc/xsltproc.c
--index b22df37..66d8cbb 100644
----- a/xsltproc/xsltproc.c
--+++ b/xsltproc/xsltproc.c
--@@ -803,6 +803,10 @@ main(int argc, char **argv)
--             (!strcmp(argv[i], "--maxdepth"))) {
--             i++;
--             continue;
--+        } else if ((!strcmp(argv[i], "-maxvars")) ||
--+            (!strcmp(argv[i], "--maxvars"))) {
--+            i++;
--+            continue;
--         } else if ((!strcmp(argv[i], "-maxparserdepth")) ||
--             (!strcmp(argv[i], "--maxparserdepth"))) {
--             i++;
---- 
--2.1.0
--
-diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
-index 140db09..8222bc5 100644
---- a/package/libxslt/libxslt.hash
-+++ b/package/libxslt/libxslt.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256	5fc7151a57b89c03d7b825df5a0fae0a8d5f05674c0e7cf2937ecec4d54a028c	libxslt-1.1.28.tar.gz
-+# Locally calculated after checking pgp signature
-+sha256	b5976e3857837e7617b29f2249ebb5eeac34e249208d31f1fbf7a6ba7a4090ce	libxslt-1.1.29.tar.gz
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 0cc4bb9..868ba6a 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index 9cf5693..7a88e4a 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -7,7 +7,8 @@ config BR2_PACKAGE_OPROFILE
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_aarch64 && !BR2_nios2 # binutils
+ 	depends on BR2_USE_WCHAR # binutils
+-	depends on !BR2_xtensa
++	# no memory barrier functions
++	depends on !BR2_xtensa && !BR2_microblaze
+ 	# libpfm4 is needed on PowerPC, and requires thread support
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_powerpc
+ 	help
+@@ -28,7 +29,7 @@ config BR2_PACKAGE_OPROFILE
  
--LIBXSLT_VERSION = 1.1.28
-+LIBXSLT_VERSION = 1.1.29
- LIBXSLT_SITE = ftp://xmlsoft.org/libxslt
- LIBXSLT_INSTALL_STAGING = YES
- LIBXSLT_LICENSE = MIT
+ comment "oprofile needs a toolchain w/ C++, wchar"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_aarch64 && !BR2_nios2 && !BR2_xtensa
++	depends on !BR2_aarch64 && !BR2_nios2 && !BR2_xtensa && !BR2_microblaze
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+ 
+ comment "oprofile needs a toolchain w/ NPTL on PPC"
