@@ -1,43 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 May 2016 22:15:34 +0200
-Subject: [Buildroot] host-lzop failing when host is using gcc-6
-In-Reply-To: <ba2ba1aa-3774-89b9-f8bf-270bc3ebac78@jcz.nl> (Jaap Crezee's
- message of "Thu, 19 May 2016 22:08:53 +0200")
-References: <ba2ba1aa-3774-89b9-f8bf-270bc3ebac78@jcz.nl>
-Message-ID: <87twhn9pqx.fsf@dell.be.48ers.dk>
+Date: Tue, 24 May 2016 22:12:18 +0200
+Subject: [Buildroot] [git commit] package/skeleton: fix message about
+	non-merged custom skeleton
+Message-ID: <20160524201558.D326E81836@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jaap" == Jaap Crezee <jaap@jcz.nl> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=be8270d3e3b153c95926446081897c4bfc44ef81
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi all,
- > host-lzop seems to be failing when Archlinux switched to gcc-6.x
- > recently. One can see the attached logfile. Anybody willing to
- > investigate? I don't have time at the moment.
- > HOSTCC=gcc-4.8 bypasses the issue for me...
+Use of a merged /usr is not restricted to systemd anymore, thus the
+current error message is misleading, as it only speaks about systemd.
 
+Fix the message by just ditching the reference to systemd altogether.
 
- > regards,
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/skeleton/skeleton.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-
- > Jaap Crezee
-
- > checking whether your compiler passes the ACC conformance test... FAILED
- > configure: 
- > configure: Your compiler failed the ACC conformance test - for details see 
- > configure: `config.log'. Please check that log file and consider sending
- > configure: a patch or bug-report to <lzop-bugs@oberhumer.com>.
- > configure: Thanks for your support.
-
-This sounds like this:
-
-http://patchwork.openembedded.org/patch/122249/
-https://build.opensuse.org/package/view_file/Archiving/lzop/lzop-1.03-gcc6.patch?expand=1
-
-Care to give it a try?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 7618835..4e3cdc6 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -48,8 +48,7 @@ SKELETON_CUSTOM_NOT_MERGED_USR += /sbin
+ endif
+ 
+ ifneq ($(SKELETON_CUSTOM_NOT_MERGED_USR),)
+-$(error Use of systemd as an init system requires a merged /usr. \
+-	However, the custom skeleton in $(SKELETON_PATH) is not \
++$(error The custom skeleton in $(SKELETON_PATH) is not \
+ 	using a merged /usr for the following directories: \
+ 	$(SKELETON_CUSTOM_NOT_MERGED_USR))
+ endif
