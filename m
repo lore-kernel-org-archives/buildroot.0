@@ -1,40 +1,47 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Wed, 25 May 2016 14:13:59 +0200
-Subject: [Buildroot] [PATCH 1/1] support/scripts/apply-patches.sh: handle
-	tar and mkdir failures
-Message-ID: <1464178439-3333-1-git-send-email-sebastien.szymanski@armadeus.com>
+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Date: Wed, 25 May 2016 09:44:46 -0500
+Subject: [Buildroot] Analysis of build results for 2016-05-16
+In-Reply-To: <20160517153611.2a3b4199@free-electrons.com>
+References: <20160517063022.7001A10142D@stock.ovh.net>
+ <20160517153611.2a3b4199@free-electrons.com>
+Message-ID: <CANn-YGQtktWrFm-1a3okv+6SB0ymwt+KPyA5pCMKR-jyE8LN+A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With several archives in a space-separated list of patches, if one archive
-cannot be untar (i.e because it is not readable), Buildroot keeps going instead
-of aborting. Fix this by checking the tar return code.
-While at it, check if the unpack archive directory creation is successful.
+Thomas,
 
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
----
- support/scripts/apply-patches.sh | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+On Tue, May 17, 2016 at 8:36 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> Hello,
+>
+> Rodrigo, Geoff, Gustavo, Vicente, Gwenhael, Samuel, Yegor, Ben,
+> Clayton, Bernd, please see below, there are questions/issues for you.
+>
+> Note to others: there are also plenty of build failures below with
+> nobody assigned. Feel free to pick some of them and investigate. Thanks!
+>
+>
+> >          arm |                     ustr-1.0.4 | NOK | http://autobuild.buildroot.net/results/cebfd7e29a6521ae7ba4c229586a3ef662aa9de1/
+>
+> libustr-debug-1.0.so.1': File exists
+>
+> Gah, smells like parallel installation issue. Clayton, since you added
+> this package, can you have a look?
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 201278d..b0a8ad4 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -132,7 +132,11 @@ function scan_patchdir {
-                 unpackedarchivedir="$builddir/.patches-$(basename $i)-unpacked"
-                 rm -rf "$unpackedarchivedir" 2> /dev/null
-                 mkdir "$unpackedarchivedir"
--                tar -C "$unpackedarchivedir" -xaf "${path}/$i"
-+                if [ $? != 0 ] ; then
-+                    echo "Error: cannot create $unpackedarchivedir directory."
-+                    exit 1
-+                fi
-+                tar -C "$unpackedarchivedir" -xaf "${path}/$i" || exit 1
-                 scan_patchdir "$unpackedarchivedir"
-             else
-                 apply_patch "$path" "$i"
--- 
-2.3.6
+I took a look at the errors but I can't seem to reproduce it on my
+local setup. I can submit a patch that tries to fix it but I'm not
+sure what the root cause of the error is. The commands make is running
+should not allow for the error to happen (removes the link before it
+is created). I'll submit the patch for review and then we can go from
+there.
+
+Thanks,
+Clayton
+
+Clayton Shotwell
+Senior Software Engineer, Rockwell Collins
+clayton.shotwell at rockwellcollins.com
