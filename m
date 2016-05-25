@@ -1,57 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 May 2016 22:45:46 +0200
-Subject: [Buildroot] [git commit] cups: fix static linking problem
-Message-ID: <20160525205523.1B46381EE3@busybox.osuosl.org>
+Date: Wed, 25 May 2016 22:58:06 +0200
+Subject: [Buildroot] [PATCH] hidapi: fix the patch renaming a file
+In-Reply-To: <1464169350-10752-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 25 May 2016 11:42:30 +0200")
+References: <1464169350-10752-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87bn3t97oh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da4264210f14259961352b9be39a4e1b10e6ed28
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-In static linking configurations, cups fails to build due to the lack of
-Scrt1.o from uClibc toolchains. This Scrt1.o is only needed for PIE
-binaries. Since we don't really care about PIE binaries in the context
-of Buildroot, this commit solves the problem by patching cups to not
-generate a PIE binary.
+ > The patch
+ > 0001-hidtest-dont-use-a-C-source-file-since-it-s-pure-C.patch in the
+ > hidapi package needs to rename a file from .cpp to .c to avoid a
+ > dependency on C++. This renaming currently uses the Git-way of
+ > describing renames in patches. While this is interpreted properly by
+ > recent enough versions of the 'patch' tool, it is ignored and not
+ > understood by older versions of 'patch'. Due to this, with these older
+ > versions of 'patch', the file is not renamed, and it causes a build
+ > failure.
 
-Fixes:
+ > We fix this by not using the Git-like way of describing rename, but
+ > rather using the old-style way of doing renames. It makes the patch
+ > longer, but compatible with older versions of 'patch'.
 
-  http://autobuild.buildroot.net/results/445a401da2f63a6c43d7c166516287db6cc977ab/
+ > Fixes:
 
-Cc: Olivier Schonken <olivier.schonken@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cups/0004-remove-pie.patch | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ >   http://autobuild.buildroot.org/results/d7509d9fdf8f86332a023358a740975f535eafef/
 
-diff --git a/package/cups/0004-remove-pie.patch b/package/cups/0004-remove-pie.patch
-new file mode 100644
-index 0000000..3d81941
---- /dev/null
-+++ b/package/cups/0004-remove-pie.patch
-@@ -0,0 +1,21 @@
-+Remove PIE flags from the build
-+
-+Generating a statically linked binary built with PIE requires the
-+Scrt1.o file, which isn't part of Buildroot uClibc toolchains. To
-+solve this, we simply disable the PIE flags.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/Makedefs.in
-+===================================================================
-+--- a/Makedefs.in
-++++ b/Makedefs.in
-+@@ -142,7 +142,7 @@
-+ IPPFIND_MAN	=	@IPPFIND_MAN@
-+ LDFLAGS		=	-L../cgi-bin -L../cups -L../filter -L../ppdc \
-+ 			-L../scheduler @LDARCHFLAGS@ \
-+-			@LDFLAGS@ @RELROFLAGS@ @PIEFLAGS@ $(OPTIM)
-++			@LDFLAGS@ @RELROFLAGS@ $(OPTIM)
-+ LINKCUPS	=	@LINKCUPS@ $(LIBGSSAPI) $(DNSSDLIBS) $(LIBZ)
-+ LINKCUPSIMAGE	=	@LINKCUPSIMAGE@
-+ LIBS		=	$(LINKCUPS) $(COMMONLIBS)
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
