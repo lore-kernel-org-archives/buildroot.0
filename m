@@ -1,41 +1,57 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Wed, 25 May 2016 22:47:31 +0200
-Subject: [Buildroot] [PATCH v2 resend 1/3] add odroid mali GL support.
-In-Reply-To: <20160525174632.7086-1-daggs@gmx.com>
-References: <20160525174632.7086-1-daggs@gmx.com>
-Message-ID: <20160525224731.3731e26b@itchy>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 25 May 2016 22:45:46 +0200
+Subject: [Buildroot] [git commit] cups: fix static linking problem
+Message-ID: <20160525205523.1B46381EE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+commit: https://git.buildroot.net/buildroot/commit/?id=da4264210f14259961352b9be39a4e1b10e6ed28
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le Wed, 25 May 2016 20:46:30 +0300,
-Dagg <daggs@gmx.com> a ?crit :
+In static linking configurations, cups fails to build due to the lack of
+Scrt1.o from uClibc toolchains. This Scrt1.o is only needed for PIE
+binaries. Since we don't really care about PIE binaries in the context
+of Buildroot, this commit solves the problem by patching cups to not
+generate a PIE binary.
 
-<snip>
-> +################################################################################
-> +#
-> +# odroid-mali
-> +#
-> +################################################################################
-> +
-> +ODROID_MALI_VERSION = $(ODROID_DRIVER_VERSION)
-> +ODROID_MALI_TARBALL = opengl-meson-gxbb-r5p1-01rel0.tar.xz
-> +ODROID_MALI_SITE = http://sources.openelec.tv/devel
-> +ODROID_MALI_SOURCE = opengl-meson-gxbb-r5p1-01rel0.tar.xz
-<snip>
+Fixes:
 
-I've just received an odroidc2 and I am very interested by this patch.
-However, why is the binary userspace driver hijacked from another FOSS
-project (OpenELEC)? 
+  http://autobuild.buildroot.net/results/445a401da2f63a6c43d7c166516287db6cc977ab/
 
-Is'nt there an official repository for the MALI 450 userspace driver? I
-looked at the MALI developer site [1], but could not find anything for it...
+Cc: Olivier Schonken <olivier.schonken@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cups/0004-remove-pie.patch | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-[1] https://malideveloper.arm.com/resources/drivers/arm-mali-midgard-gpu-user-space-drivers/	
-
--- 
-ELB
+diff --git a/package/cups/0004-remove-pie.patch b/package/cups/0004-remove-pie.patch
+new file mode 100644
+index 0000000..3d81941
+--- /dev/null
++++ b/package/cups/0004-remove-pie.patch
+@@ -0,0 +1,21 @@
++Remove PIE flags from the build
++
++Generating a statically linked binary built with PIE requires the
++Scrt1.o file, which isn't part of Buildroot uClibc toolchains. To
++solve this, we simply disable the PIE flags.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/Makedefs.in
++===================================================================
++--- a/Makedefs.in
+++++ b/Makedefs.in
++@@ -142,7 +142,7 @@
++ IPPFIND_MAN	=	@IPPFIND_MAN@
++ LDFLAGS		=	-L../cgi-bin -L../cups -L../filter -L../ppdc \
++ 			-L../scheduler @LDARCHFLAGS@ \
++-			@LDFLAGS@ @RELROFLAGS@ @PIEFLAGS@ $(OPTIM)
+++			@LDFLAGS@ @RELROFLAGS@ $(OPTIM)
++ LINKCUPS	=	@LINKCUPS@ $(LIBGSSAPI) $(DNSSDLIBS) $(LIBZ)
++ LINKCUPSIMAGE	=	@LINKCUPSIMAGE@
++ LIBS		=	$(LINKCUPS) $(COMMONLIBS)
