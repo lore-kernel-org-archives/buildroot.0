@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 May 2016 23:49:35 +0200
-Subject: [Buildroot] [PATCH 1/3] package/tinc: needs libdl for OpenSSL
- support
-In-Reply-To: <1463919991-28382-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 25 May 2016 23:56:20 +0200
+Subject: [Buildroot] [PATCH 2/3] package/tinc: optionally include
+ linux/if_tun.h to fix musl build
+In-Reply-To: <1463919991-28382-2-git-send-email-bernd.kuhls@t-online.de>
 References: <1463919991-28382-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160525234935.541a332b@free-electrons.com>
+ <1463919991-28382-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160525235620.662a768e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +14,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 22 May 2016 14:26:29 +0200, Bernd Kuhls wrote:
+On Sun, 22 May 2016 14:26:30 +0200, Bernd Kuhls wrote:
 > Fixes
-> http://autobuild.buildroot.net/results/d5b/d5b2f905d8da79cebda1408ffceac6d4c99f9e7b/
+> http://autobuild.buildroot.net/results/5b1/5b1d0c8c1bd75f7e228c313cb21b1638301568ae/
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/tinc/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
+>  package/tinc/0001-musl.patch | 32 ++++++++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 package/tinc/0001-musl.patch
 
-It is somewhat weird that they decide that OpenSSL needs dlopen, while
-it doesn't seem like it use it. But well, that's what tinc's configure
-script has decided, so I've applied to master. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
