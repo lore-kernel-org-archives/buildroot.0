@@ -1,96 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 May 2016 16:00:00 +0200
-Subject: [Buildroot] [PATCH] lirc-tools: add patch to fix parallel build
-	issue
-Message-ID: <1464184800-25714-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 May 2016 16:05:29 +0200
+Subject: [Buildroot] [PATCH v2.1 1/6] package/go: Build host tools with
+ host CC
+In-Reply-To: <1464125645.5014.52.camel@infradead.org>
+References: <cover.1463696454.git.geoff@infradead.org>
+ <aa4ea0467b1c08f0afb3d5ba2cf7af201f6ceeef.1463696454.git.geoff@infradead.org>
+ <1464125645.5014.52.camel@infradead.org>
+Message-ID: <20160525160529.2c19eea9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The lirc-tools package fails to build once in a while in the
-autobuilders. Some quick analysis of the problematic Makefile.am has
-revealed one issue. However, since the issue is difficult to
-reproduce, we could only check that the new solution continue to work,
-and we're not 100% sure it fixes the entire problem: only the
-autobuilders can say, over time.
+Hello,
 
-Supposedly fixes:
+On Tue, 24 May 2016 14:34:05 -0700, Geoff Levand wrote:
 
-  http://autobuild.buildroot.org/results/eb47d57de8182d25b1dacbf0ac3726ed20063d04/
+> +ifneq ($(ARCH),$(HOSTARCH))
+>  define HOST_GO_BUILD_CMDS
+> -	cd $(@D)/src && $(HOST_GO_MAKE_ENV) ./make.bash
+> +	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) ./make.bash
+> +	mkdir -p $(HOST_GO_TMP)
+> +	mv $(@D)/pkg/tool $(HOST_GO_TMP)/
+> +	mv $(@D)/bin/ $(HOST_GO_TMP)/
+>  endef
+> +else
+> +define HOST_GO_BUILD_CMDS
+> +	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) ./make.bash
+> +	mkdir -p $(HOST_GO_TMP)
+> +	mv $(@D)/pkg/tool $(HOST_GO_TMP)/
+> +	mv $(@D)/bin/ $(HOST_GO_TMP)/
+> +	cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) ./make.bash
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...per-linking-method-to-avoid-parallel-buil.patch | 46 ++++++++++++++++++++++
- package/lirc-tools/lirc-tools.mk                   |  2 +
- 2 files changed, 48 insertions(+)
- create mode 100644 package/lirc-tools/0001-lib-use-proper-linking-method-to-avoid-parallel-buil.patch
+Just to make sure I understand correctly: you build everything with
+HOST_GO_HOST_CC first, and put the files generated in pkg/tool and bin/
+on the side in HOST_GO_TMP, and then rebuild everything again with
+HOST_GO_TARGET_CC. Then later on, the installation step will pick up
+bin/ and pkg/tool from HOST_GO_TMP, and the rest from $(@D) directly ?
 
-diff --git a/package/lirc-tools/0001-lib-use-proper-linking-method-to-avoid-parallel-buil.patch b/package/lirc-tools/0001-lib-use-proper-linking-method-to-avoid-parallel-buil.patch
-new file mode 100644
-index 0000000..5863128
---- /dev/null
-+++ b/package/lirc-tools/0001-lib-use-proper-linking-method-to-avoid-parallel-buil.patch
-@@ -0,0 +1,46 @@
-+From f2fc8c48e5e55a91b309225f377b6cb3783fc6f6 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Wed, 25 May 2016 15:21:57 +0200
-+Subject: [PATCH] lib: use proper linking method to avoid parallel build issue
-+
-+Using <foo>_LDFLAGS = -l<library> is correct when <library> is an
-+external library. However, when it is built by the same package, and
-+especially in the same directory, this is wrong and can cause parallel
-+build issues. In lib/Makefile.am, there was:
-+
-+libirrecord_la_LDFLAGS      = -llirc
-+
-+But the liblirc library is built in the same directory. Or, due to the
-+using of <foo>_LDFLAGS, make is not aware of the build dependency
-+between libirrecord and liblirc.
-+
-+To solve this, <foo>_LIBADD should be used instead, as follows:
-+
-+libirrecord_la_LIBADD       = liblirc.la
-+
-+This fixes parallel build issues seen by automated build tests
-+conducted by the Buildroot project, such as:
-+
-+  http://autobuild.buildroot.org/results/eb4/eb47d57de8182d25b1dacbf0ac3726ed20063d04/build-end.log
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ lib/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/Makefile.am b/lib/Makefile.am
-+index ce5c94c..8780f88 100644
-+--- a/lib/Makefile.am
-++++ b/lib/Makefile.am
-+@@ -29,7 +29,7 @@ liblirc_la_SOURCES          = config_file.c \
-+                               transmit.c \
-+                               util.c
-+ 
-+-libirrecord_la_LDFLAGS      = -llirc
-++libirrecord_la_LIBADD       = liblirc.la
-+ libirrecord_la_SOURCES      = irrecord.c
-+ 
-+ liblirc_client_la_LDFLAGS   = -version-info 4:0:4
-+-- 
-+2.7.4
-+
-diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
-index 46886a9..289b9ed 100644
---- a/package/lirc-tools/lirc-tools.mk
-+++ b/package/lirc-tools/lirc-tools.mk
-@@ -11,6 +11,8 @@ LIRC_TOOLS_LICENSE = GPLv2+
- LIRC_TOOLS_LICENSE_FILES = COPYING
- LIRC_TOOLS_DEPENDENCIES = host-libxslt host-pkgconf host-python3
- LIRC_TOOLS_INSTALL_STAGING = YES
-+# 0001-lib-use-proper-linking-method-to-avoid-parallel-buil.patch
-+LIRC_TOOLS_AUTORECONF = YES
- 
- LIRC_TOOLS_CONF_ENV = XSLTPROC=yes
- LIRC_TOOLS_CONF_OPTS = --without-x
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
