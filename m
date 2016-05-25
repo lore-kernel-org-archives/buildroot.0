@@ -1,163 +1,468 @@
-From: Dagg <daggs@gmx.com>
-Date: Mon, 23 May 2016 22:21:14 +0300
-Subject: [Buildroot] [PATCH v2 1/3] add odroid mali GL support.
-Message-ID: <20160523192114.7176-1-daggs@gmx.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 May 2016 11:42:30 +0200
+Subject: [Buildroot] [PATCH] hidapi: fix the patch renaming a file
+Message-ID: <1464169350-10752-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Dagg <daggs@gmx.com>
+The patch
+0001-hidtest-dont-use-a-C-source-file-since-it-s-pure-C.patch in the
+hidapi package needs to rename a file from .cpp to .c to avoid a
+dependency on C++. This renaming currently uses the Git-way of
+describing renames in patches. While this is interpreted properly by
+recent enough versions of the 'patch' tool, it is ignored and not
+understood by older versions of 'patch'. Due to this, with these older
+versions of 'patch', the file is not renamed, and it causes a build
+failure.
 
+We fix this by not using the Git-like way of describing rename, but
+rather using the old-style way of doing renames. It makes the patch
+longer, but compatible with older versions of 'patch'.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/d7509d9fdf8f86332a023358a740975f535eafef/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                    |  1 +
- package/odroid-mali/Config.in        | 19 +++++++++++++
- package/odroid-mali/egl.pc           | 10 +++++++
- package/odroid-mali/glesv2.pc        | 10 +++++++
- package/odroid-mali/odroid-mali.hash |  1 +
- package/odroid-mali/odroid-mali.mk   | 53 ++++++++++++++++++++++++++++++++++++
- 6 files changed, 94 insertions(+)
- create mode 100644 package/odroid-mali/Config.in
- create mode 100644 package/odroid-mali/egl.pc
- create mode 100644 package/odroid-mali/glesv2.pc
- create mode 100644 package/odroid-mali/odroid-mali.hash
- create mode 100644 package/odroid-mali/odroid-mali.mk
+ ...ont-use-a-C-source-file-since-it-s-pure-C.patch | 416 ++++++++++++++++++++-
+ 1 file changed, 407 insertions(+), 9 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9d668bf..6c6a562 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -418,6 +418,7 @@ endif
- 	source "package/nvidia-driver/Config.in"
- 	source "package/nvidia-tegra23/Config.in"
- 	source "package/nvme/Config.in"
-+	source "package/odroid-mali/Config.in"
- 	source "package/ofono/Config.in"
- 	source "package/ola/Config.in"
- 	source "package/on2-8170-modules/Config.in"
-diff --git a/package/odroid-mali/Config.in b/package/odroid-mali/Config.in
-new file mode 100644
-index 0000000..65b1d4f
---- /dev/null
-+++ b/package/odroid-mali/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_ODROID_MALI
-+	bool "odroid-mali"
-+	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_FBSET
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_aarch64
-+	help
-+	  Install the ARM Mali drivers for odroid based systems.
-+
-+	  http://github.com/linux-odroid/odroid-mali
-+
-+if BR2_PACKAGE_ODROID_MALI
-+config BR2_PACKAGE_PROVIDES_LIBEGL
-+	default "odroid-mali"
-+
-+config BR2_PACKAGE_PROVIDES_LIBGLES
-+	default "odroid-mali"
-+endif
-diff --git a/package/odroid-mali/egl.pc b/package/odroid-mali/egl.pc
-new file mode 100644
-index 0000000..5f79b71
---- /dev/null
-+++ b/package/odroid-mali/egl.pc
-@@ -0,0 +1,10 @@
-+prefix=/usr
-+exec_prefix=/usr
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: egl
-+Description: Amlogic implementation of EGL
-+Version: 0.99
-+Libs: -L${libdir} -lEGL -lGLESv2
-+Cflags: -I${includedir}/ 
-diff --git a/package/odroid-mali/glesv2.pc b/package/odroid-mali/glesv2.pc
-new file mode 100644
-index 0000000..7dfb286
---- /dev/null
-+++ b/package/odroid-mali/glesv2.pc
-@@ -0,0 +1,10 @@
-+prefix=/usr
-+exec_prefix=/usr
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: glesv2
-+Description: Amlogic implementation of OpenGL ESv2
-+Version: 0.99
-+Libs: -L${libdir} -lGLESv2
-+Cflags: -I${includedir}/
-diff --git a/package/odroid-mali/odroid-mali.hash b/package/odroid-mali/odroid-mali.hash
-new file mode 100644
-index 0000000..792d30c
---- /dev/null
-+++ b/package/odroid-mali/odroid-mali.hash
-@@ -0,0 +1 @@
-+sha256 1cddeb6990a9446339abde79ca1d01a8480b98cf107019f0847390b9549d90cc  opengl-meson-gxbb-r5p1-01rel0.tar.xz
-diff --git a/package/odroid-mali/odroid-mali.mk b/package/odroid-mali/odroid-mali.mk
-new file mode 100644
-index 0000000..4f2e1ab
---- /dev/null
-+++ b/package/odroid-mali/odroid-mali.mk
-@@ -0,0 +1,53 @@
-+################################################################################
-+#
-+# odroid-mali
-+#
-+################################################################################
-+
-+ODROID_MALI_VERSION = $(ODROID_DRIVER_VERSION)
-+ODROID_MALI_TARBALL = opengl-meson-gxbb-r5p1-01rel0.tar.xz
-+ODROID_MALI_SITE = http://sources.openelec.tv/devel
-+ODROID_MALI_SOURCE = opengl-meson-gxbb-r5p1-01rel0.tar.xz
-+
-+ODROID_MALI_INSTALL_STAGING = YES
-+ODROID_MALI_PROVIDES = libegl libgles
-+
-+define ODROID_MALI_LIBS
-+	$(INSTALL) -D -m 0644 $(@D)/usr/lib/libMali.so $(1)/lib
-+
-+	cd $(1)/lib
-+	ln -s libMali.so $(1)/lib/libEGL.so
-+	ln -s libMali.so $(1)/lib/libGLESv1_CM.so
-+	ln -s libMali.so $(1)/lib/libGLESv2.so
-+
-+	ln -s libEGL.so $(1)/lib/libEGL.so.1
-+	ln -s libEGL.so $(1)/lib/libEGL.so.1.4
-+	ln -s libGLESv1_CM.so $(1)/lib/libGLESv1_CM.so.1
-+	ln -s libGLESv1_CM.so $(1)/lib/libGLESv1_CM.so.1.1
-+	ln -s libGLESv2.so $(1)/lib/libGLESv2.so.2
-+	ln -s libGLESv2.so $(1)/lib/libGLESv2.so.2.0
-+endef
-+
-+define ODROID_MALI_HDRS
-+	mkdir -p $(@D)/usr/include
-+	cp -R $(@D)/usr/include/* $(1)/usr/include
-+endef
-+
-+define ODROID_MALI_PCS
-+	$(INSTALL) -D -m 0644 package/odroid-mali/egl.pc $(1)/usr/lib/pkgconfig/egl.pc
-+	$(INSTALL) -D -m 0644 package/odroid-mali/glesv2.pc $(1)/usr/lib/pkgconfig/glesv2.pc
-+endef
-+
-+define ODROID_MALI_INSTALL_STAGING_CMDS
-+	$(call ODROID_MALI_LIBS,$(STAGING_DIR))
-+	$(call ODROID_MALI_HDRS,$(STAGING_DIR))
-+	$(call ODROID_MALI_PCS,$(STAGING_DIR))
-+endef
-+
-+define ODROID_MALI_INSTALL_CMDS
-+	$(call ODROID_MALI_LIBS,$(TARGET_DIR))
-+	$(call ODROID_MALI_HDRS,$(TARGET_DIR))
-+	$(call ODROID_MALI_PCS,$(TARGET_DIR))
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/hidapi/0001-hidtest-dont-use-a-C-source-file-since-it-s-pure-C.patch b/package/hidapi/0001-hidtest-dont-use-a-C-source-file-since-it-s-pure-C.patch
+index 3ea4fdb..4740cb7 100644
+--- a/package/hidapi/0001-hidtest-dont-use-a-C-source-file-since-it-s-pure-C.patch
++++ b/package/hidapi/0001-hidtest-dont-use-a-C-source-file-since-it-s-pure-C.patch
+@@ -8,10 +8,12 @@ C++ support.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ ---
+- hidtest/Makefile.am                | 6 +++---
+- hidtest/{hidtest.cpp => hidtest.c} | 0
+- 2 files changed, 3 insertions(+), 3 deletions(-)
+- rename hidtest/{hidtest.cpp => hidtest.c} (100%)
++ hidtest/Makefile.am |   6 +-
++ hidtest/hidtest.c   | 194 ++++++++++++++++++++++++++++++++++++++++++++++++++++
++ hidtest/hidtest.cpp | 194 ----------------------------------------------------
++ 3 files changed, 197 insertions(+), 197 deletions(-)
++ create mode 100644 hidtest/hidtest.c
++ delete mode 100644 hidtest/hidtest.cpp
+ 
+ diff --git a/hidtest/Makefile.am b/hidtest/Makefile.am
+ index d278644..5f52c3f 100644
+@@ -38,10 +40,406 @@ index d278644..5f52c3f 100644
+  hidtest_LDADD = $(top_builddir)/$(backend)/libhidapi.la
+  
+  endif
+-diff --git a/hidtest/hidtest.cpp b/hidtest/hidtest.c
+-similarity index 100%
+-rename from hidtest/hidtest.cpp
+-rename to hidtest/hidtest.c
++diff --git a/hidtest/hidtest.c b/hidtest/hidtest.c
++new file mode 100644
++index 0000000..94f0a5c
++--- /dev/null
+++++ b/hidtest/hidtest.c
++@@ -0,0 +1,194 @@
+++/*******************************************************
+++ Windows HID simplification
+++
+++ Alan Ott
+++ Signal 11 Software
+++
+++ 8/22/2009
+++
+++ Copyright 2009
+++ 
+++ This contents of this file may be used by anyone
+++ for any reason without any conditions and may be
+++ used as a starting point for your own applications
+++ which use HIDAPI.
+++********************************************************/
+++
+++#include <stdio.h>
+++#include <wchar.h>
+++#include <string.h>
+++#include <stdlib.h>
+++#include "hidapi.h"
+++
+++// Headers needed for sleeping.
+++#ifdef _WIN32
+++	#include <windows.h>
+++#else
+++	#include <unistd.h>
+++#endif
+++
+++int main(int argc, char* argv[])
+++{
+++	int res;
+++	unsigned char buf[256];
+++	#define MAX_STR 255
+++	wchar_t wstr[MAX_STR];
+++	hid_device *handle;
+++	int i;
+++
+++#ifdef WIN32
+++	UNREFERENCED_PARAMETER(argc);
+++	UNREFERENCED_PARAMETER(argv);
+++#endif
+++
+++	struct hid_device_info *devs, *cur_dev;
+++	
+++	if (hid_init())
+++		return -1;
+++
+++	devs = hid_enumerate(0x0, 0x0);
+++	cur_dev = devs;	
+++	while (cur_dev) {
+++		printf("Device Found\n  type: %04hx %04hx\n  path: %s\n  serial_number: %ls", cur_dev->vendor_id, cur_dev->product_id, cur_dev->path, cur_dev->serial_number);
+++		printf("\n");
+++		printf("  Manufacturer: %ls\n", cur_dev->manufacturer_string);
+++		printf("  Product:      %ls\n", cur_dev->product_string);
+++		printf("  Release:      %hx\n", cur_dev->release_number);
+++		printf("  Interface:    %d\n",  cur_dev->interface_number);
+++		printf("\n");
+++		cur_dev = cur_dev->next;
+++	}
+++	hid_free_enumeration(devs);
+++
+++	// Set up the command buffer.
+++	memset(buf,0x00,sizeof(buf));
+++	buf[0] = 0x01;
+++	buf[1] = 0x81;
+++	
+++
+++	// Open the device using the VID, PID,
+++	// and optionally the Serial number.
+++	////handle = hid_open(0x4d8, 0x3f, L"12345");
+++	handle = hid_open(0x4d8, 0x3f, NULL);
+++	if (!handle) {
+++		printf("unable to open device\n");
+++ 		return 1;
+++	}
+++
+++	// Read the Manufacturer String
+++	wstr[0] = 0x0000;
+++	res = hid_get_manufacturer_string(handle, wstr, MAX_STR);
+++	if (res < 0)
+++		printf("Unable to read manufacturer string\n");
+++	printf("Manufacturer String: %ls\n", wstr);
+++
+++	// Read the Product String
+++	wstr[0] = 0x0000;
+++	res = hid_get_product_string(handle, wstr, MAX_STR);
+++	if (res < 0)
+++		printf("Unable to read product string\n");
+++	printf("Product String: %ls\n", wstr);
+++
+++	// Read the Serial Number String
+++	wstr[0] = 0x0000;
+++	res = hid_get_serial_number_string(handle, wstr, MAX_STR);
+++	if (res < 0)
+++		printf("Unable to read serial number string\n");
+++	printf("Serial Number String: (%d) %ls", wstr[0], wstr);
+++	printf("\n");
+++
+++	// Read Indexed String 1
+++	wstr[0] = 0x0000;
+++	res = hid_get_indexed_string(handle, 1, wstr, MAX_STR);
+++	if (res < 0)
+++		printf("Unable to read indexed string 1\n");
+++	printf("Indexed String 1: %ls\n", wstr);
+++
+++	// Set the hid_read() function to be non-blocking.
+++	hid_set_nonblocking(handle, 1);
+++	
+++	// Try to read from the device. There shoud be no
+++	// data here, but execution should not block.
+++	res = hid_read(handle, buf, 17);
+++
+++	// Send a Feature Report to the device
+++	buf[0] = 0x2;
+++	buf[1] = 0xa0;
+++	buf[2] = 0x0a;
+++	buf[3] = 0x00;
+++	buf[4] = 0x00;
+++	res = hid_send_feature_report(handle, buf, 17);
+++	if (res < 0) {
+++		printf("Unable to send a feature report.\n");
+++	}
+++
+++	memset(buf,0,sizeof(buf));
+++
+++	// Read a Feature Report from the device
+++	buf[0] = 0x2;
+++	res = hid_get_feature_report(handle, buf, sizeof(buf));
+++	if (res < 0) {
+++		printf("Unable to get a feature report.\n");
+++		printf("%ls", hid_error(handle));
+++	}
+++	else {
+++		// Print out the returned buffer.
+++		printf("Feature Report\n   ");
+++		for (i = 0; i < res; i++)
+++			printf("%02hhx ", buf[i]);
+++		printf("\n");
+++	}
+++
+++	memset(buf,0,sizeof(buf));
+++
+++	// Toggle LED (cmd 0x80). The first byte is the report number (0x1).
+++	buf[0] = 0x1;
+++	buf[1] = 0x80;
+++	res = hid_write(handle, buf, 17);
+++	if (res < 0) {
+++		printf("Unable to write()\n");
+++		printf("Error: %ls\n", hid_error(handle));
+++	}
+++	
+++
+++	// Request state (cmd 0x81). The first byte is the report number (0x1).
+++	buf[0] = 0x1;
+++	buf[1] = 0x81;
+++	hid_write(handle, buf, 17);
+++	if (res < 0)
+++		printf("Unable to write() (2)\n");
+++
+++	// Read requested state. hid_read() has been set to be
+++	// non-blocking by the call to hid_set_nonblocking() above.
+++	// This loop demonstrates the non-blocking nature of hid_read().
+++	res = 0;
+++	while (res == 0) {
+++		res = hid_read(handle, buf, sizeof(buf));
+++		if (res == 0)
+++			printf("waiting...\n");
+++		if (res < 0)
+++			printf("Unable to read()\n");
+++		#ifdef WIN32
+++		Sleep(500);
+++		#else
+++		usleep(500*1000);
+++		#endif
+++	}
+++
+++	printf("Data read:\n   ");
+++	// Print out the returned buffer.
+++	for (i = 0; i < res; i++)
+++		printf("%02hhx ", buf[i]);
+++	printf("\n");
+++
+++	hid_close(handle);
+++
+++	/* Free static HIDAPI objects. */
+++	hid_exit();
+++
+++#ifdef WIN32
+++	system("pause");
+++#endif
+++
+++	return 0;
+++}
++diff --git a/hidtest/hidtest.cpp b/hidtest/hidtest.cpp
++deleted file mode 100644
++index 94f0a5c..0000000
++--- a/hidtest/hidtest.cpp
+++++ /dev/null
++@@ -1,194 +0,0 @@
++-/*******************************************************
++- Windows HID simplification
++-
++- Alan Ott
++- Signal 11 Software
++-
++- 8/22/2009
++-
++- Copyright 2009
++- 
++- This contents of this file may be used by anyone
++- for any reason without any conditions and may be
++- used as a starting point for your own applications
++- which use HIDAPI.
++-********************************************************/
++-
++-#include <stdio.h>
++-#include <wchar.h>
++-#include <string.h>
++-#include <stdlib.h>
++-#include "hidapi.h"
++-
++-// Headers needed for sleeping.
++-#ifdef _WIN32
++-	#include <windows.h>
++-#else
++-	#include <unistd.h>
++-#endif
++-
++-int main(int argc, char* argv[])
++-{
++-	int res;
++-	unsigned char buf[256];
++-	#define MAX_STR 255
++-	wchar_t wstr[MAX_STR];
++-	hid_device *handle;
++-	int i;
++-
++-#ifdef WIN32
++-	UNREFERENCED_PARAMETER(argc);
++-	UNREFERENCED_PARAMETER(argv);
++-#endif
++-
++-	struct hid_device_info *devs, *cur_dev;
++-	
++-	if (hid_init())
++-		return -1;
++-
++-	devs = hid_enumerate(0x0, 0x0);
++-	cur_dev = devs;	
++-	while (cur_dev) {
++-		printf("Device Found\n  type: %04hx %04hx\n  path: %s\n  serial_number: %ls", cur_dev->vendor_id, cur_dev->product_id, cur_dev->path, cur_dev->serial_number);
++-		printf("\n");
++-		printf("  Manufacturer: %ls\n", cur_dev->manufacturer_string);
++-		printf("  Product:      %ls\n", cur_dev->product_string);
++-		printf("  Release:      %hx\n", cur_dev->release_number);
++-		printf("  Interface:    %d\n",  cur_dev->interface_number);
++-		printf("\n");
++-		cur_dev = cur_dev->next;
++-	}
++-	hid_free_enumeration(devs);
++-
++-	// Set up the command buffer.
++-	memset(buf,0x00,sizeof(buf));
++-	buf[0] = 0x01;
++-	buf[1] = 0x81;
++-	
++-
++-	// Open the device using the VID, PID,
++-	// and optionally the Serial number.
++-	////handle = hid_open(0x4d8, 0x3f, L"12345");
++-	handle = hid_open(0x4d8, 0x3f, NULL);
++-	if (!handle) {
++-		printf("unable to open device\n");
++- 		return 1;
++-	}
++-
++-	// Read the Manufacturer String
++-	wstr[0] = 0x0000;
++-	res = hid_get_manufacturer_string(handle, wstr, MAX_STR);
++-	if (res < 0)
++-		printf("Unable to read manufacturer string\n");
++-	printf("Manufacturer String: %ls\n", wstr);
++-
++-	// Read the Product String
++-	wstr[0] = 0x0000;
++-	res = hid_get_product_string(handle, wstr, MAX_STR);
++-	if (res < 0)
++-		printf("Unable to read product string\n");
++-	printf("Product String: %ls\n", wstr);
++-
++-	// Read the Serial Number String
++-	wstr[0] = 0x0000;
++-	res = hid_get_serial_number_string(handle, wstr, MAX_STR);
++-	if (res < 0)
++-		printf("Unable to read serial number string\n");
++-	printf("Serial Number String: (%d) %ls", wstr[0], wstr);
++-	printf("\n");
++-
++-	// Read Indexed String 1
++-	wstr[0] = 0x0000;
++-	res = hid_get_indexed_string(handle, 1, wstr, MAX_STR);
++-	if (res < 0)
++-		printf("Unable to read indexed string 1\n");
++-	printf("Indexed String 1: %ls\n", wstr);
++-
++-	// Set the hid_read() function to be non-blocking.
++-	hid_set_nonblocking(handle, 1);
++-	
++-	// Try to read from the device. There shoud be no
++-	// data here, but execution should not block.
++-	res = hid_read(handle, buf, 17);
++-
++-	// Send a Feature Report to the device
++-	buf[0] = 0x2;
++-	buf[1] = 0xa0;
++-	buf[2] = 0x0a;
++-	buf[3] = 0x00;
++-	buf[4] = 0x00;
++-	res = hid_send_feature_report(handle, buf, 17);
++-	if (res < 0) {
++-		printf("Unable to send a feature report.\n");
++-	}
++-
++-	memset(buf,0,sizeof(buf));
++-
++-	// Read a Feature Report from the device
++-	buf[0] = 0x2;
++-	res = hid_get_feature_report(handle, buf, sizeof(buf));
++-	if (res < 0) {
++-		printf("Unable to get a feature report.\n");
++-		printf("%ls", hid_error(handle));
++-	}
++-	else {
++-		// Print out the returned buffer.
++-		printf("Feature Report\n   ");
++-		for (i = 0; i < res; i++)
++-			printf("%02hhx ", buf[i]);
++-		printf("\n");
++-	}
++-
++-	memset(buf,0,sizeof(buf));
++-
++-	// Toggle LED (cmd 0x80). The first byte is the report number (0x1).
++-	buf[0] = 0x1;
++-	buf[1] = 0x80;
++-	res = hid_write(handle, buf, 17);
++-	if (res < 0) {
++-		printf("Unable to write()\n");
++-		printf("Error: %ls\n", hid_error(handle));
++-	}
++-	
++-
++-	// Request state (cmd 0x81). The first byte is the report number (0x1).
++-	buf[0] = 0x1;
++-	buf[1] = 0x81;
++-	hid_write(handle, buf, 17);
++-	if (res < 0)
++-		printf("Unable to write() (2)\n");
++-
++-	// Read requested state. hid_read() has been set to be
++-	// non-blocking by the call to hid_set_nonblocking() above.
++-	// This loop demonstrates the non-blocking nature of hid_read().
++-	res = 0;
++-	while (res == 0) {
++-		res = hid_read(handle, buf, sizeof(buf));
++-		if (res == 0)
++-			printf("waiting...\n");
++-		if (res < 0)
++-			printf("Unable to read()\n");
++-		#ifdef WIN32
++-		Sleep(500);
++-		#else
++-		usleep(500*1000);
++-		#endif
++-	}
++-
++-	printf("Data read:\n   ");
++-	// Print out the returned buffer.
++-	for (i = 0; i < res; i++)
++-		printf("%02hhx ", buf[i]);
++-	printf("\n");
++-
++-	hid_close(handle);
++-
++-	/* Free static HIDAPI objects. */
++-	hid_exit();
++-
++-#ifdef WIN32
++-	system("pause");
++-#endif
++-
++-	return 0;
++-}
+ -- 
+-2.6.4
++2.7.4
+ 
 -- 
-2.8.3
+2.7.4
