@@ -1,54 +1,54 @@
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Wed, 25 May 2016 10:44:57 -0500
-Subject: [Buildroot] [PATCH] ustr: Makefile fixes for link failures
-In-Reply-To: <20160525171627.072cade5@free-electrons.com>
-References: <1464187973-11273-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <20160525171627.072cade5@free-electrons.com>
-Message-ID: <CANn-YGSiK9XikXa8UHTO_VwUMr7Uk9U2em0np2O49zjgO7aeFg@mail.gmail.com>
+From: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Wed, 25 May 2016 18:04:11 +0200
+Subject: [Buildroot] [PATCH 1/1] support/scripts/apply-patches.sh:
+ handle tar and mkdir failures
+In-Reply-To: <20160525171145.6d8950d9@free-electrons.com>
+References: <1464178439-3333-1-git-send-email-sebastien.szymanski@armadeus.com>
+ <20160525171145.6d8950d9@free-electrons.com>
+Message-ID: <7fd7c351-9916-5591-e308-42efeb652dfb@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hi,
 
-On Wed, May 25, 2016 at 10:16 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+On 05/25/2016 05:11 PM, Thomas Petazzoni wrote:
 > Hello,
->
-> On Wed, 25 May 2016 09:52:53 -0500, Clayton Shotwell wrote:
->
->> +--- a/Makefile.in    2016-05-23 08:46:46.337481574 -0500
->> ++++ b/Makefile.in    2016-05-23 08:45:12.327380457 -0500
->> +@@ -425,11 +425,11 @@
->> +             @echo Installing files
->> +             install -m 644 -t $(DESTDIR)$(libdir) $(OPT_LIB_STATIC)
->> +             install -m 755 -t $(DESTDIR)$(libdir) $(OPT_LIB_SHARED)
->> +-            -rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
->> ++            rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
->
-> Just changing this cannot fix the failures. The "-" at the beginning of
-> the line is not about whether is mandatory or not, it is about ignoring
-> the return value or not.
->
-> Normally, make aborts as soon as one command returns a non-zero value.
-> When you prefix the command with "-", it will ignore the return value
-> and continue executing the rest.
->
-> But like you said, since the command is "rm -f", it returns 0
-> regardless of whether the file to be removed existed or not, or if the
-> removal was possible or not.
->
-> Hence, I believe your patch is a no-op and cannot fix the original
-> problem.
+> 
+> On Wed, 25 May 2016 14:13:59 +0200, S?bastien Szymanski wrote:
+>> With several archives in a space-separated list of patches, if one archive
+>> cannot be untar (i.e because it is not readable), Buildroot keeps going instead
+>> of aborting. Fix this by checking the tar return code.
+>> While at it, check if the unpack archive directory creation is successful.
+>>
+>> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+>> ---
+>>  support/scripts/apply-patches.sh | 6 +++++-
+>>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> Thanks for the patch. One question though: are you actually using the
+> capability of Buildroot to take a tarball, and apply the patches that
+> it contains? If so, for what use case?
+> 
 
-I completely agree with your assessment but I am unfortunately out of
-ideas on what could be causing the build failures.
+Yes, we use this Buildroot feature. We have an old kernel with several
+tarballs of patches for our i.MX28-based SoM. They was provided that way
+by Freescale I guess.
 
-Thanks,
-Clayton
+Regards,
 
-Clayton Shotwell
-Senior Software Engineer, Rockwell Collins
-clayton.shotwell at rockwellcollins.com
+> Thanks,
+> 
+> Thomas
+> 
+
+
+-- 
+S?bastien Szymanski
+Software Engineer
+Armadeus Systems - A new vision of the embedded world
+sebastien.szymanski at armadeus.com
+Tel: +33 (0)9 72 29 41 44
+Fax: +33 (0)9 72 28 79 26
