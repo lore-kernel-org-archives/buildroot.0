@@ -1,45 +1,34 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 23 May 2016 13:55:59 +0100
-Subject: [Buildroot] [PATCH next] make: bump version to 4.2
-Message-ID: <1464008159-15180-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 24 May 2016 17:35:00 -0700
+Subject: [Buildroot] [PATCH 0/2] batman-adv 2016.1 kernel module
+Message-ID: <1464136502-302-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Announcement URL:
+This patch series bumps batctl to 2016.1 from 2015.1 and introduces
+batman-adv as a selectable package. This allows users to build the
+batman-adv kernel module out-of-tree. While batman-adv exists in the
+kernel tree today, adding it as a separate package allows compilation
+against kernel trees without batman-adv, as well as the use of newer
+batman-adv versions than exist in the current kernel tree.
 
-  http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00013.html
+Christian Stewart (2):
+  package/batctl: bump to 2016.1
+  batman-adv: new package
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/make/make.hash | 4 +++-
- package/make/make.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/Config.in                  |  1 +
+ package/batctl/batctl.hash         |  6 +++---
+ package/batctl/batctl.mk           |  2 +-
+ package/batman-adv/Config.in       | 40 ++++++++++++++++++++++++++++++++++++++
+ package/batman-adv/batman-adv.hash |  2 ++
+ package/batman-adv/batman-adv.mk   | 36 ++++++++++++++++++++++++++++++++++
+ 6 files changed, 83 insertions(+), 4 deletions(-)
+ create mode 100644 package/batman-adv/Config.in
+ create mode 100644 package/batman-adv/batman-adv.hash
+ create mode 100644 package/batman-adv/batman-adv.mk
 
-diff --git a/package/make/make.hash b/package/make/make.hash
-index db95c60..528822f 100644
---- a/package/make/make.hash
-+++ b/package/make/make.hash
-@@ -1,2 +1,4 @@
-+# From http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00013.html
-+sha1 85ad14d08766201ffe71efa866f4fb91  make-4.2.tar.bz2
- # Locally calculated after checking signature
--sha256	0bc7613389650ee6a24554b52572a272f7356164fd2c4132b0bcf13123e4fca5	make-4.1.tar.bz2
-+sha256 4e5ce3b62fe5d75ff8db92b7f6df91e476d10c3aceebf1639796dc5bfece655f  make-4.2.tar.bz2
-diff --git a/package/make/make.mk b/package/make/make.mk
-index 20702dc..43f4f77 100644
---- a/package/make/make.mk
-+++ b/package/make/make.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MAKE_VERSION = 4.1
-+MAKE_VERSION = 4.2
- MAKE_SOURCE = make-$(MAKE_VERSION).tar.bz2
- MAKE_SITE = $(BR2_GNU_MIRROR)/make
- MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
 -- 
 2.7.3
