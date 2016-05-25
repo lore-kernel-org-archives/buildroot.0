@@ -1,54 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 May 2016 17:08:59 +0200
-Subject: [Buildroot] [git commit] midori: add missing
-	BR2_TOOLCHAIN_USES_GLIBC dependency
-Message-ID: <20160524151833.067A78049D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 25 May 2016 17:20:39 +0200
+Subject: [Buildroot] [PATCH v3] boot/uboot: fix missing host-openssl for
+	i.MX28 target
+In-Reply-To: <1463720244-2491-1-git-send-email-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s message of "Fri, 20 May 2016 06:57:24
+ +0200")
+References: <1463720244-2491-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <87oa7u88qg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ebf6282413c96937ffabf4d2d3b6ce75a344693
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-midori selects webkitgtk, and webkitgtk needs a glibc toolchain, but
-midori did not propagate this dependency, causing the following kconfig
-warning:
+ > From: Julien Boibessot <julien.boibessot@armadeus.com>
+ > Building an U-Boot image for the i.MX23 or i.MX28 target requires to run the
+ > bootloaders 'mxsimage' tool on the host. As mxsimage needs unconditionally
+ > OpenSSL, building U-Boot for those targets fails if it is not available on
+ > the host:
 
-warning: (BR2_PACKAGE_MIDORI) selects BR2_PACKAGE_WEBKITGTK which has unmet direct dependencies (BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 && BR2_TOOLCHAIN_USES_GLIBC && BR2_PACKAGE_LIBGTK3 && BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS)
+ > tools/mxsimage.c:18:25: fatal error: openssl/evp.h: No such file or directory
+ >   #include <openssl/evp.h>
 
-Interestingly, the Config.in comment of the midori package already
-mentionned the (e)glibc dependency, but the BR2_TOOLCHAIN_USES_GLIBC
-dependency was not expressed (either on the comment or on the main
-package option itself).
+ > Add the required dependency 'host-openssl' to all the different U-Boot image
+ > types used to build a bootloader image for an i.MX23/i.MX28 target.
 
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/midori/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > Also pass HOST_CFLAGS and HOST_LDFLAGS to the U-Boot build process so the right
+ > -I/-L options will be used to find OpenSSL.
 
-diff --git a/package/midori/Config.in b/package/midori/Config.in
-index 91a63af..9751f33 100644
---- a/package/midori/Config.in
-+++ b/package/midori/Config.in
-@@ -1,7 +1,7 @@
- comment "midori needs libgtk3 and an (e)glibc toolchain w/ C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_USES_GLIBC
- 
- config BR2_PACKAGE_MIDORI
- 	bool "midori"
-@@ -18,6 +18,7 @@ config BR2_PACKAGE_MIDORI
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on BR2_INSTALL_LIBSTDCPP # webkitgtk
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # webkitgtk
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # webkitgtk
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	help
- 	  Midori is a lightweight web browser based on WebKit
+ > Ported from the Armadeus project:
+ > https://sourceforge.net/p/armadeus/mailman/message/33595402/
+
+ > Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+ > [J?rg: port to recent Buildroot version]
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+
+ > ---
+ > v3:
+ >  - set authorship to Julien Boibessot <julien.boibessot@armadeus.com> (Baruch)
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
