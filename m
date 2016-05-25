@@ -1,100 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 May 2016 18:09:41 +0200
-Subject: [Buildroot] [PATCH] ustr: Makefile fixes for link failures
-In-Reply-To: <CANn-YGSiK9XikXa8UHTO_VwUMr7Uk9U2em0np2O49zjgO7aeFg@mail.gmail.com>
-References: <1464187973-11273-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <20160525171627.072cade5@free-electrons.com>
- <CANn-YGSiK9XikXa8UHTO_VwUMr7Uk9U2em0np2O49zjgO7aeFg@mail.gmail.com>
-Message-ID: <20160525180941.1c7bbed7@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 25 May 2016 17:14:12 +0100
+Subject: [Buildroot] [PATCH] ffmpeg: disable for mips64r2 and mips64r6
+Message-ID: <1464192852-53397-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+MIPS architecture detection is not accurate and is always detected as
+mips64 even if we are using mips64r2 or mips64r6. Due to that, ffmpeg's
+build system will pass the -mips64 flag which will conflict with the
+-march option that our toolchain wrapper uses, and it will fail to build
+showing errors like this one:
 
-On Wed, 25 May 2016 10:44:57 -0500, Clayton Shotwell wrote:
+error: '-mips64' conflicts with the other architecture options, which
+specify a mips64r2 processor
 
-> I completely agree with your assessment but I am unfortunately out of
-> ideas on what could be causing the build failures.
+This problem has been already fixed upstream, but we would need to
+backport 17 patches plus some changes in the ffmpeg.mk file. This is too
+much, so better to just disable ffmpeg for mips64r2 and mips64r6 for the
+upcoming Buildroot release.
 
-Inspecting the log and looking at the makefile, I believe I have a
-possible interpretation.
+This commit can be reverted in the next ffmpeg's version bump.
 
-Here is the relevant part of the Makefile:
+Fixes:
 
-"""
-install: install-opt install-dbg
+  http://autobuild.buildroot.net/results/7fd/7fd8187c0110cdcac622e667f4a81d2db84f11ef/
 
-install-opt: install-dirs install-opt-lib install-common
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/ffmpeg/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-install-dbg: install-dirs install-dbg-lib install-common
-
-install-opt-lib: $(OPT_LIB_STATIC) $(OPT_LIB_SHARED) ustr.pc
-                @echo Installing files
-                install -m 644 -t $(DESTDIR)$(libdir) $(OPT_LIB_STATIC)
-                install -m 755 -t $(DESTDIR)$(libdir) $(OPT_LIB_SHARED)
-                -rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
-                ln -s $(OPT_LIB_SHARED) $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
-                -rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV)
-                ln -s $(OPT_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV)
-                -rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV_BSO)
-                ln -s $(OPT_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV_BSO)
-                $(LDCONFIG) -n $(DESTDIR)$(libdir)
-                install -pm 644 -t $(DESTDIR)$(libdir)/pkgconfig ustr.pc
-
-install-dbg-lib: $(DBG_LIB_STATIC) $(DBG_LIB_SHARED) ustr-debug.pc
-                @echo Installing files
-                install -m 644 -t $(DESTDIR)$(libdir) $(DBG_LIB_STATIC)
-                install -m 755 -t $(DESTDIR)$(libdir) $(DBG_LIB_SHARED)
-                -rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
-                ln -s $(DBG_LIB_SHARED) $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
-                -rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV)
-                ln -s $(DBG_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV)
-                -rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV_BSO)
-                ln -s $(DBG_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV_BSO)
-                $(LDCONFIG) -n $(DESTDIR)$(libdir)
-                install -pm 644 -t $(DESTDIR)$(libdir)/pkgconfig ustr-debug.pc
-"""
-
-Since install-opt-lib and install-dbg-lib don't have any dependency on
-each other, they can execute concurrently.
-
-What is important to realize is that $(LDCONFIG) -n $(DESTDIR)$(libdir)
-will create the symbolic links to the libraries if they don't exist.
-So, if you have the following sequence of step:
-
- [1] The install-dbg-lib installs its libraries and removes its
-     symbolic link:
-
-     install -m 644 -t $(DESTDIR)$(libdir) $(DBG_LIB_STATIC)
-     install -m 755 -t $(DESTDIR)$(libdir) $(DBG_LIB_SHARED)
-     -rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
-
- [2] The install-opt-lib runs its LDCONFIG
-
-     $(LDCONFIG) -n $(DESTDIR)$(libdir)
-
- [3] The install-dbg-lib continues its work and creates symlinks:
-
-     ln -s $(DBG_LIB_SHARED) $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
-
-Then, when [3] will run, the symbolic link will already have been
-created by step [2], and [3] will therefore fail. Of course, there is
-only a very short window of time between the "rm" and the "ln", but it
-might be sufficient for the ldconfig to create the symbolic link during
-this, causing the failure.
-
-Possible solutions:
-
- (1) Get rid of ldconfig by passing LDCONFIG=/bin/true in the
-     environment. Probably the easiest.
-
- (2) Add -f in the option to ln to not fail if the link already exists.
-
-Thomas
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index a273aea..debef0a 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -2,6 +2,10 @@ menuconfig BR2_PACKAGE_FFMPEG
+ 	bool "ffmpeg"
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
+ 	depends on !BR2_nios2
++	# MIPS architecture detection is not accurate for 64-bit
++	# variants. This has been already fixed upstream, so please
++	# remove it in the next version bump.
++	depends on !BR2_mips_64r2 && !BR2_mips_64r6
+ 	help
+ 	  FFmpeg is a complete, cross-platform solution to record, convert
+ 	  and stream audio and video.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
