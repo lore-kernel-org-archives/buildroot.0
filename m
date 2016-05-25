@@ -1,51 +1,100 @@
-From: Geoff Levand <geoff@infradead.org>
-Date: Wed, 25 May 2016 09:41:54 -0700
-Subject: [Buildroot] [PATCH v2.1 1/6] package/go: Build host tools with
- host CC
-In-Reply-To: <20160525160529.2c19eea9@free-electrons.com>
-References: <cover.1463696454.git.geoff@infradead.org>
- <aa4ea0467b1c08f0afb3d5ba2cf7af201f6ceeef.1463696454.git.geoff@infradead.org>
- <1464125645.5014.52.camel@infradead.org>
- <20160525160529.2c19eea9@free-electrons.com>
-Message-ID: <1464194514.30545.5.camel@infradead.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 May 2016 18:09:41 +0200
+Subject: [Buildroot] [PATCH] ustr: Makefile fixes for link failures
+In-Reply-To: <CANn-YGSiK9XikXa8UHTO_VwUMr7Uk9U2em0np2O49zjgO7aeFg@mail.gmail.com>
+References: <1464187973-11273-1-git-send-email-clayton.shotwell@rockwellcollins.com>
+ <20160525171627.072cade5@free-electrons.com>
+ <CANn-YGSiK9XikXa8UHTO_VwUMr7Uk9U2em0np2O49zjgO7aeFg@mail.gmail.com>
+Message-ID: <20160525180941.1c7bbed7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2016-05-25 at 16:05 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 24 May 2016 14:34:05 -0700, Geoff Levand wrote:
-> 
-> > +ifneq ($(ARCH),$(HOSTARCH))
-> >  define HOST_GO_BUILD_CMDS
-> > -> > 	> > cd $(@D)/src && $(HOST_GO_MAKE_ENV) ./make.bash
-> > +> > 	> > cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) ./make.bash
-> > +> > 	> > mkdir -p $(HOST_GO_TMP)
-> > +> > 	> > mv $(@D)/pkg/tool $(HOST_GO_TMP)/
-> > +> > 	> > mv $(@D)/bin/ $(HOST_GO_TMP)/
-> >  endef
-> > +else
-> > +define HOST_GO_BUILD_CMDS
-> > +> > 	> > cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) ./make.bash
-> > +> > 	> > mkdir -p $(HOST_GO_TMP)
-> > +> > 	> > mv $(@D)/pkg/tool $(HOST_GO_TMP)/
-> > +> > 	> > mv $(@D)/bin/ $(HOST_GO_TMP)/
-> > +> > 	> > cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) ./make.bash
-> 
-> Just to make sure I understand correctly: you build everything with
-> HOST_GO_HOST_CC first, and put the files generated in pkg/tool and bin/
-> on the side in HOST_GO_TMP, and then rebuild everything again with
-> HOST_GO_TARGET_CC. Then later on, the installation step will pick up
-> bin/ and pkg/tool from HOST_GO_TMP, and the rest from $(@D) directly ?
+Hello,
 
-Yes, that is correct.
+On Wed, 25 May 2016 10:44:57 -0500, Clayton Shotwell wrote:
 
-bin and tool with HOST_GO_HOST_CC, because those are host binaries.
-The rest with HOST_GO_TARGET_CC because those are target binaries.
+> I completely agree with your assessment but I am unfortunately out of
+> ideas on what could be causing the build failures.
 
-If you can think of a better way to do this two step build I can try it.
+Inspecting the log and looking at the makefile, I believe I have a
+possible interpretation.
 
--Geoff
+Here is the relevant part of the Makefile:
+
+"""
+install: install-opt install-dbg
+
+install-opt: install-dirs install-opt-lib install-common
+
+install-dbg: install-dirs install-dbg-lib install-common
+
+install-opt-lib: $(OPT_LIB_STATIC) $(OPT_LIB_SHARED) ustr.pc
+                @echo Installing files
+                install -m 644 -t $(DESTDIR)$(libdir) $(OPT_LIB_STATIC)
+                install -m 755 -t $(DESTDIR)$(libdir) $(OPT_LIB_SHARED)
+                -rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
+                ln -s $(OPT_LIB_SHARED) $(DESTDIR)$(libdir)/$(OPT_LIB_SHARED_NAME)
+                -rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV)
+                ln -s $(OPT_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV)
+                -rm -f $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV_BSO)
+                ln -s $(OPT_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(OPT_LIB_SHAREDEV_BSO)
+                $(LDCONFIG) -n $(DESTDIR)$(libdir)
+                install -pm 644 -t $(DESTDIR)$(libdir)/pkgconfig ustr.pc
+
+install-dbg-lib: $(DBG_LIB_STATIC) $(DBG_LIB_SHARED) ustr-debug.pc
+                @echo Installing files
+                install -m 644 -t $(DESTDIR)$(libdir) $(DBG_LIB_STATIC)
+                install -m 755 -t $(DESTDIR)$(libdir) $(DBG_LIB_SHARED)
+                -rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
+                ln -s $(DBG_LIB_SHARED) $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
+                -rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV)
+                ln -s $(DBG_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV)
+                -rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV_BSO)
+                ln -s $(DBG_LIB_SHARED_NAME) $(DESTDIR)$(libdir)/$(DBG_LIB_SHAREDEV_BSO)
+                $(LDCONFIG) -n $(DESTDIR)$(libdir)
+                install -pm 644 -t $(DESTDIR)$(libdir)/pkgconfig ustr-debug.pc
+"""
+
+Since install-opt-lib and install-dbg-lib don't have any dependency on
+each other, they can execute concurrently.
+
+What is important to realize is that $(LDCONFIG) -n $(DESTDIR)$(libdir)
+will create the symbolic links to the libraries if they don't exist.
+So, if you have the following sequence of step:
+
+ [1] The install-dbg-lib installs its libraries and removes its
+     symbolic link:
+
+     install -m 644 -t $(DESTDIR)$(libdir) $(DBG_LIB_STATIC)
+     install -m 755 -t $(DESTDIR)$(libdir) $(DBG_LIB_SHARED)
+     -rm -f $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
+
+ [2] The install-opt-lib runs its LDCONFIG
+
+     $(LDCONFIG) -n $(DESTDIR)$(libdir)
+
+ [3] The install-dbg-lib continues its work and creates symlinks:
+
+     ln -s $(DBG_LIB_SHARED) $(DESTDIR)$(libdir)/$(DBG_LIB_SHARED_NAME)
+
+Then, when [3] will run, the symbolic link will already have been
+created by step [2], and [3] will therefore fail. Of course, there is
+only a very short window of time between the "rm" and the "ln", but it
+might be sufficient for the ldconfig to create the symbolic link during
+this, causing the failure.
+
+Possible solutions:
+
+ (1) Get rid of ldconfig by passing LDCONFIG=/bin/true in the
+     environment. Probably the easiest.
+
+ (2) Add -f in the option to ln to not fail if the link already exists.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
