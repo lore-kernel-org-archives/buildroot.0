@@ -1,31 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 May 2016 23:32:32 +0200
-Subject: [Buildroot] [PATCH 2/2] package/ustr: disable on musl
-In-Reply-To: <1464030954-22737-2-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Mon, 23 May 2016 21:15:54 +0200")
-References: <1464030954-22737-1-git-send-email-bernd.kuhls@t-online.de>
- <1464030954-22737-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87twhl7rin.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 May 2016 23:27:18 +0200
+Subject: [Buildroot] [git commit] package/tinc: needs libdl for OpenSSL
+	support
+Message-ID: <20160525213243.66B9C81992@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1e87d4908cd3c53ddad0b2826f5fc7080064dd55
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > libsemanage is the only package depending on ustr, both packages do not
- > build using a musl-based toolchain, suggested by Thomas:
- > http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/149138
+Fixes
+http://autobuild.buildroot.net/results/d5b/d5b2f905d8da79cebda1408ffceac6d4c99f9e7b/
 
- > Fixes
- > http://autobuild.buildroot.net/results/a41/a416001516d98d58849f1d1f8f49f49d3d28f3a2/
- > http://autobuild.buildroot.net/results/f51/f5115516bd514afbb71a9460e82c889bcc18e7e2/
- > and many others
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tinc/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tinc/Config.in b/package/tinc/Config.in
+index 5390ff3..1d8e2c4 100644
+--- a/package/tinc/Config.in
++++ b/package/tinc/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_TINC
+ 	select BR2_PACKAGE_LZO
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
++	depends on !BR2_STATIC_LIBS # tinc requires libdl for OpenSSL
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  tinc is a Virtual Private Network (VPN) daemon that uses
+@@ -10,3 +11,6 @@ config BR2_PACKAGE_TINC
+ 	  between hosts on the Internet.
+ 
+ 	  http://www.tinc-vpn.org/
++
++comment "tinc needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
