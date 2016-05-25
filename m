@@ -1,49 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 May 2016 21:31:59 +0200
-Subject: [Buildroot] [git commit] python-pexpect: fix byte-compilation with
-	Python 2
-Message-ID: <20160601161309.1B087802A0@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 25 May 2016 07:24:58 +0200
+Subject: [Buildroot] [git commit] Config.in: use better URL for GNU mirrors
+Message-ID: <20160601161310.6D3BF81F53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=944d0a95454306a000e604388014eebf7a6affc4
+commit: https://git.buildroot.net/buildroot/commit/?id=3999f0ad3c30fba64d0362aa68d34d1a43cfb3df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-pexpect contains one file, async.py, that is only meant to be used
-with Python 3. Due to this, it fails to byte-compile with Python 2,
-which will become a problem once we make byte-compilation failures
-fatal failures that abort the build.
-
-As suggested by upstream at
-https://github.com/pexpect/pexpect/issues/290, we simply remove the
-problematic file when building with Python 2.
+As explained on http://www.gnu.org/prep/ftp.en.html, the network of
+GNU mirrors provide a generic address, http://ftpmirror.gnu.org/,
+which automatically redirects to an up-to-date and local mirror. This
+allows to greatly speed-up downloads, and also reduces the load on the
+main GNU server.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pexpect/python-pexpect.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ Config.in | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
-index b74bf83..40a1741 100644
---- a/package/python-pexpect/python-pexpect.mk
-+++ b/package/python-pexpect/python-pexpect.mk
-@@ -11,4 +11,14 @@ PYTHON_PEXPECT_LICENSE = ISC
- PYTHON_PEXPECT_LICENSE_FILES = LICENSE
- PYTHON_PEXPECT_SETUP_TYPE = distutils
+diff --git a/Config.in b/Config.in
+index 4b48c00..681c00c 100644
+--- a/Config.in
++++ b/Config.in
+@@ -240,10 +240,12 @@ config BR2_KERNEL_MIRROR
  
-+# async.py is not usable with Python 2, and removing is the solution
-+# recommended by upstream:
-+# https://github.com/pexpect/pexpect/issues/290
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+define PYTHON_PEXPECT_REMOVE_ASYNC_PY
-+	$(RM) $(@D)/pexpect/async.py
-+endef
-+PYTHON_PEXPECT_POST_PATCH_HOOKS += PYTHON_PEXPECT_REMOVE_ASYNC_PY
-+endif
-+
- $(eval $(python-package))
+ config BR2_GNU_MIRROR
+ 	string "GNU Software mirror"
+-	default "http://ftp.gnu.org/pub/gnu"
++	default "http://ftpmirror.gnu.org"
+ 	help
+-	  GNU has multiple software mirrors scattered around the world.
+-	  The following allows you to select your preferred mirror.
++	  GNU has multiple software mirrors scattered around the
++	  world.  The following allows you to select your preferred
++	  mirror. By default, a generic address is used, which
++	  automatically selects an up-to-date and local mirror.
+ 
+ 	  Have a look on the gnu.org site for a list of mirrors, then enter
+ 	  the URL to the base directory.  Examples:
