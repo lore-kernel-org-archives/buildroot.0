@@ -1,124 +1,42 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 25 May 2016 17:16:08 -0300
-Subject: [Buildroot] [PATCH 3/3] imx53loco: Use common script for generating
-	sdcard image
-In-Reply-To: <1464207368-22532-1-git-send-email-festevam@gmail.com>
-References: <1464207368-22532-1-git-send-email-festevam@gmail.com>
-Message-ID: <1464207368-22532-3-git-send-email-festevam@gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Wed, 25 May 2016 22:37:07 +0200
+Subject: [Buildroot] [PATCH v2 resend 3/3] - allow building of odroid
+ mali GL libs when using defconfig. - add S50display which sets the odroid
+ mali fb.
+In-Reply-To: <20160525174921.7217-1-daggs@gmx.com>
+References: <20160525174921.7217-1-daggs@gmx.com>
+Message-ID: <20160525223707.203198b1@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the common script used by other i.mx boards to generate the sdcard image.
+Hi!
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- board/freescale/imx53loco/create-boot-sd.sh |  1 -
- board/freescale/imx53loco/genimage.cfg      | 42 +++++++++++++++++++++++++++++
- board/freescale/imx53loco/post-image.sh     | 16 +++++++++++
- configs/mx53loco_defconfig                  |  6 +++++
- 4 files changed, 64 insertions(+), 1 deletion(-)
- delete mode 120000 board/freescale/imx53loco/create-boot-sd.sh
- create mode 100644 board/freescale/imx53loco/genimage.cfg
- create mode 100644 board/freescale/imx53loco/post-image.sh
+Le Wed, 25 May 2016 20:49:21 +0300,
+Dagg <daggs@gmx.com> a ?crit :
 
-diff --git a/board/freescale/imx53loco/create-boot-sd.sh b/board/freescale/imx53loco/create-boot-sd.sh
-deleted file mode 120000
-index d45d639..0000000
---- a/board/freescale/imx53loco/create-boot-sd.sh
-+++ /dev/null
-@@ -1 +0,0 @@
--../create-boot-sd.sh
-\ No newline at end of file
-diff --git a/board/freescale/imx53loco/genimage.cfg b/board/freescale/imx53loco/genimage.cfg
-new file mode 100644
-index 0000000..b56c168
---- /dev/null
-+++ b/board/freescale/imx53loco/genimage.cfg
-@@ -0,0 +1,42 @@
-+# Minimal microSD card image for the Freescale's i.MX53 QSB board
-+#
-+# We mimic the .sdcard Freescale's image format for i.MX53:
-+# * the microSD card must have 1 kB free space at the beginning,
-+# * U-Boot is dumped as is,
-+# * a FAT partition at offset 8 MB is containing zImage and dtbs,
-+# * a single root filesystem partition is required (Ext4 in this case).
-+#
-+
-+image boot.vfat {
-+  vfat {
-+    files = {
-+      "imx53-qsb.dtb",
-+      "imx53-qsrb.dtb",
-+      "zImage"
-+    }
-+  }
-+  size = 16M
-+}
-+
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition u-boot {
-+    in-partition-table = "no"
-+    image = "u-boot.imx"
-+    offset = 1024
-+  }
-+
-+  partition boot {
-+    partition-type = 0xC
-+    bootable = "true"
-+    image = "boot.vfat"
-+    offset = 8M
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext4"
-+  }
-+}
-diff --git a/board/freescale/imx53loco/post-image.sh b/board/freescale/imx53loco/post-image.sh
-new file mode 100644
-index 0000000..8757355
---- /dev/null
-+++ b/board/freescale/imx53loco/post-image.sh
-@@ -0,0 +1,16 @@
-+#!/usr/bin/env bash
-+
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage \
-+  --rootpath "${TARGET_DIR}" \
-+  --tmppath "${GENIMAGE_TMP}" \
-+  --inputpath "${BINARIES_DIR}" \
-+  --outputpath "${BINARIES_DIR}" \
-+  --config "${GENIMAGE_CFG}"
-+
-+exit $?
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index e461f7a..b62172c 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -11,7 +11,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- # patches
- BR2_GLOBAL_PATCH_DIR="board/freescale/imx53loco/patches/"
- 
-+# required tools to create the SD card image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+
- # Filesystem
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/imx53loco/post-image.sh"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- 
+>  .../odroidc2/fs-overlay/etc/init.d/S50display      | 103
+> +++++++++++++++++++++
+> configs/odroidc2_defconfig                         |   1 + 2 files
+> changed, 104 insertions(+) create mode 100644
+> board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display
+> 
+> diff --git
+> a/board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display
+> b/board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display new file
+> mode 100644 index 0000000..68f8c6c --- /dev/null
+> +++ b/board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display
+> @@ -0,0 +1,103 @@
+
+Would it be possible to extract the functions from the S50display
+service to an external script (e.g. 
+board/hardkernel/odroidc2/fs-overlay/usr/sbin/setup-fb) and have
+the service call it? This would allow reusing it with another init system
+(namely systemd).
+
+Thanks.
+
 -- 
-1.9.1
+ELB
