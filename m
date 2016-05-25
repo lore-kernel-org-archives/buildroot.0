@@ -1,46 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 May 2016 07:24:58 +0200
-Subject: [Buildroot] [git commit branch/next] Config.in: use better URL for
-	GNU mirrors
-Message-ID: <20160525053042.119E281D89@busybox.osuosl.org>
+Date: Wed, 25 May 2016 07:45:04 +0200
+Subject: [Buildroot] [PATCH] mpg123: unbreak static linking with
+	alsa/portaudio
+In-Reply-To: <1464112745-4450-1-git-send-email-peter@korsgaard.com> (Peter
+ Korsgaard's message of "Tue, 24 May 2016 19:59:05 +0200")
+References: <1464112745-4450-1-git-send-email-peter@korsgaard.com>
+Message-ID: <87shx68zdr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3999f0ad3c30fba64d0362aa68d34d1a43cfb3df
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-As explained on http://www.gnu.org/prep/ftp.en.html, the network of
-GNU mirrors provide a generic address, http://ftpmirror.gnu.org/,
-which automatically redirects to an up-to-date and local mirror. This
-allows to greatly speed-up downloads, and also reduces the load on the
-main GNU server.
+ > Fixes:
+ > http://autobuild.buildroot.org/results/b2b/b2bc143fbd0b34e75a44af41ab6899dd9fa3c21a/
+ > http://autobuild.buildroot.org/results/60d/60d56b0a75d209f2cfeff0727c2f900abc89d263/
+ > http://autobuild.buildroot.org/results/6a8/6a8729ce69055821fdf0b91adcea2ea201d40189/
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ > And many more.
 
-diff --git a/Config.in b/Config.in
-index 4b48c00..681c00c 100644
---- a/Config.in
-+++ b/Config.in
-@@ -240,10 +240,12 @@ config BR2_KERNEL_MIRROR
- 
- config BR2_GNU_MIRROR
- 	string "GNU Software mirror"
--	default "http://ftp.gnu.org/pub/gnu"
-+	default "http://ftpmirror.gnu.org"
- 	help
--	  GNU has multiple software mirrors scattered around the world.
--	  The following allows you to select your preferred mirror.
-+	  GNU has multiple software mirrors scattered around the
-+	  world.  The following allows you to select your preferred
-+	  mirror. By default, a generic address is used, which
-+	  automatically selects an up-to-date and local mirror.
- 
- 	  Have a look on the gnu.org site for a list of mirrors, then enter
- 	  the URL to the base directory.  Examples:
+ > A recent upstream build system change caused LIBS to be ignored at build
+ > time (but still used a configure time), causing our static linking
+ > workarounds to no longer work.
+
+ > Fix it by adding a patch to cause it to no longer ignore LIBS.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
