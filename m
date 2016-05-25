@@ -1,48 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 May 2016 21:16:44 +0200
-Subject: [Buildroot] [PATCH v4] toolchain: improve SSP logic
-In-Reply-To: <1458060038-38164-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1458060038-38164-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160523211644.6b54c857@free-electrons.com>
+From: Geoff Levand <geoff@infradead.org>
+Date: Wed, 25 May 2016 09:41:54 -0700
+Subject: [Buildroot] [PATCH v2.1 1/6] package/go: Build host tools with
+ host CC
+In-Reply-To: <20160525160529.2c19eea9@free-electrons.com>
+References: <cover.1463696454.git.geoff@infradead.org>
+ <aa4ea0467b1c08f0afb3d5ba2cf7af201f6ceeef.1463696454.git.geoff@infradead.org>
+ <1464125645.5014.52.camel@infradead.org>
+ <20160525160529.2c19eea9@free-electrons.com>
+Message-ID: <1464194514.30545.5.camel@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Tue, 15 Mar 2016 16:40:38 +0000, Vicente Olivert Riera wrote:
-> Don't enable SSP support on external toolchains just because they use
-> glibc or musl. Instead of that, make the external toolchains explictily
-> declare if they support SSP or not. And also add a check to detect SSP
-> support when using custom external toolchains.
+On Wed, 2016-05-25 at 16:05 +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> For internal toolchains we always enable SSP support for glibc and musl.
+> On Tue, 24 May 2016 14:34:05 -0700, Geoff Levand wrote:
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> > +ifneq ($(ARCH),$(HOSTARCH))
+> >  define HOST_GO_BUILD_CMDS
+> > -> > 	> > cd $(@D)/src && $(HOST_GO_MAKE_ENV) ./make.bash
+> > +> > 	> > cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) ./make.bash
+> > +> > 	> > mkdir -p $(HOST_GO_TMP)
+> > +> > 	> > mv $(@D)/pkg/tool $(HOST_GO_TMP)/
+> > +> > 	> > mv $(@D)/bin/ $(HOST_GO_TMP)/
+> >  endef
+> > +else
+> > +define HOST_GO_BUILD_CMDS
+> > +> > 	> > cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_HOST_CC) ./make.bash
+> > +> > 	> > mkdir -p $(HOST_GO_TMP)
+> > +> > 	> > mv $(@D)/pkg/tool $(HOST_GO_TMP)/
+> > +> > 	> > mv $(@D)/bin/ $(HOST_GO_TMP)/
+> > +> > 	> > cd $(@D)/src && $(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) ./make.bash
+> 
+> Just to make sure I understand correctly: you build everything with
+> HOST_GO_HOST_CC first, and put the files generated in pkg/tool and bin/
+> on the side in HOST_GO_TMP, and then rebuild everything again with
+> HOST_GO_TARGET_CC. Then later on, the installation step will pick up
+> bin/ and pkg/tool from HOST_GO_TMP, and the rest from $(@D) directly ?
 
-A reference to some autobuilder failures was missing here, to justify
-applying this on master rather than next, so I've added one.
+Yes, that is correct.
 
-> +check_toolchain_ssp = \
-> +	__CROSS_CC=$(strip $1) ; \
-> +	__HAS_SSP=`echo 'void main(){}' | $${__CROSS_CC} -fstack-protector -x c - -o $(BUILD_DIR)/.br-toolchain-test.tmp && echo y` ; \
+bin and tool with HOST_GO_HOST_CC, because those are host binaries.
+The rest with HOST_GO_TARGET_CC because those are target binaries.
 
-I've redirected stdout/stderr from gcc to /dev/null in order to avoid
-causing confusion for the user, who would have seen some weird gcc
-errors when the ssp test fails.
+If you can think of a better way to do this two step build I can try it.
 
-And also, I've removed the existing SSP test which was done
-specifically for uClibc external toolchains, since there is now a more
-generic check for SSP, which works for all C libraries.
-
-Applied to master with those changes.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-Geoff
