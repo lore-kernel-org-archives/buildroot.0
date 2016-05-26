@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 May 2016 21:35:21 +0200
-Subject: [Buildroot] [git commit] dos2unix: bump to version 7.3.4
-Message-ID: <20160601161310.C97B081F53@busybox.osuosl.org>
+Date: Thu, 26 May 2016 21:52:21 +0200
+Subject: [Buildroot] [git commit] libinput: bump to version 1.3.0
+Message-ID: <20160601161310.E514781F53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7bd8ccdfc7db2841b85ecdeadef329148090acc
+commit: https://git.buildroot.net/buildroot/commit/?id=7c7fe54ec2a3247f0e3a8fb8080dde06691c8fc9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dos2unix/dos2unix.hash | 2 +-
- package/dos2unix/dos2unix.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
-index 7e1a120..1169592 100644
---- a/package/dos2unix/dos2unix.hash
-+++ b/package/dos2unix/dos2unix.hash
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 43fcf5d..bd77321 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	f4d5df24d181c2efecf7631aab6e894489012396092cf206829f1f9a98556b94	dos2unix-7.3.1.tar.gz
-+sha256	8ccda7bbc5a2f903dafd95900abb5bf5e77a769b572ef25150fde4056c5f30c5	dos2unix-7.3.4.tar.gz
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index 21e03ae..82fa26f 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
+-# From https://lists.freedesktop.org/archives/wayland-devel/2016-April/028215.html
+-sha256	aee3650ad2a864ab9a10e7e63df543cc2b475f6bf3974751037a2df325dabbb1	libinput-1.2.4.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2016-May/028704.html
++sha256	998a75fb261d161efaa7da44411cdc9a32a953280e4ffc6322ca19f057d0c1ea	libinput-1.3.0.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index d994d29..25ca818 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOS2UNIX_VERSION = 7.3.1
-+DOS2UNIX_VERSION = 7.3.4
- DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
- DOS2UNIX_LICENSE = BSD-2c
- DOS2UNIX_LICENSE_FILES = COPYING.txt
+-LIBINPUT_VERSION = 1.2.4
++LIBINPUT_VERSION = 1.3.0
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
