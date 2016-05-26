@@ -1,45 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 May 2016 07:24:58 +0200
-Subject: [Buildroot] [git commit] Config.in: use better URL for GNU mirrors
-Message-ID: <20160601161310.6D3BF81F53@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 May 2016 21:23:05 +0200
+Subject: [Buildroot] [git commit] toolchain: arc-2016.03: fix generation of
+	dynamic relocs for -pie
+Message-ID: <20160601161310.B28F781F53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3999f0ad3c30fba64d0362aa68d34d1a43cfb3df
+commit: https://git.buildroot.net/buildroot/commit/?id=1845a68cef2da2dd46c6165cb2459f805eb1d8a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As explained on http://www.gnu.org/prep/ftp.en.html, the network of
-GNU mirrors provide a generic address, http://ftpmirror.gnu.org/,
-which automatically redirects to an up-to-date and local mirror. This
-allows to greatly speed-up downloads, and also reduces the load on the
-main GNU server.
+Currently even if -pie flag is provided to LD dynamic relocations
+won't be created. That in its turn will break U-Boot self-relocation
+functionality.
 
+This fix resolves mentioned problem.
+
+Note as of today this is a sort of off-the-tree patch right from
+our binutils guy but in coming day similar fix will be applied to
+upstream binutils as well.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ ...ith-dynamic-relocs-not-being-generated-wi.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index 4b48c00..681c00c 100644
---- a/Config.in
-+++ b/Config.in
-@@ -240,10 +240,12 @@ config BR2_KERNEL_MIRROR
- 
- config BR2_GNU_MIRROR
- 	string "GNU Software mirror"
--	default "http://ftp.gnu.org/pub/gnu"
-+	default "http://ftpmirror.gnu.org"
- 	help
--	  GNU has multiple software mirrors scattered around the world.
--	  The following allows you to select your preferred mirror.
-+	  GNU has multiple software mirrors scattered around the
-+	  world.  The following allows you to select your preferred
-+	  mirror. By default, a generic address is used, which
-+	  automatically selects an up-to-date and local mirror.
- 
- 	  Have a look on the gnu.org site for a list of mirrors, then enter
- 	  the URL to the base directory.  Examples:
+diff --git a/package/binutils/arc-2016.03/0700-Fix-issue-with-dynamic-relocs-not-being-generated-wi.patch b/package/binutils/arc-2016.03/0700-Fix-issue-with-dynamic-relocs-not-being-generated-wi.patch
+new file mode 100644
+index 0000000..c2967a3
+--- /dev/null
++++ b/package/binutils/arc-2016.03/0700-Fix-issue-with-dynamic-relocs-not-being-generated-wi.patch
+@@ -0,0 +1,34 @@
++From e59d8728f2fd57938ff28bb48cb47ddc7dbf8271 Mon Sep 17 00:00:00 2001
++From: Cupertino Miranda <cmiranda@synopsys.com>
++Date: Tue, 24 May 2016 18:00:28 +0200
++Subject: [PATCH] Fix issue with dynamic relocs not being generated with -pie.
++
++---
++ bfd/elf32-arc.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/bfd/elf32-arc.c b/bfd/elf32-arc.c
++index c2d05e4..00af1a5 100644
++--- a/bfd/elf32-arc.c
+++++ b/bfd/elf32-arc.c
++@@ -1492,7 +1492,7 @@ elf_arc_relocate_section (bfd *		   output_bfd,
++ 	  case R_ARC_32_ME:
++ 	  case R_ARC_PC32:
++ 	  case R_ARC_32_PCREL:
++-	    if (bfd_link_pic (info) && !bfd_link_pie (info)
+++	    if ((bfd_link_pic (info) || bfd_link_pie (info))
++ 		&& ((r_type != R_ARC_PC32 && r_type != R_ARC_32_PCREL)
++ 		    || (h != NULL
++ 			&& h->dynindx != -1
++@@ -1774,7 +1774,7 @@ elf_arc_check_relocs (bfd *		         abfd,
++ 	    /* FALLTHROUGH */
++ 	  case R_ARC_PC32:
++ 	  case R_ARC_32_PCREL:
++-	    if (bfd_link_pic (info) && !bfd_link_pie (info)
+++	    if ((bfd_link_pic (info) || bfd_link_pie (info))
++ 		&& ((r_type != R_ARC_PC32 && r_type != R_ARC_32_PCREL)
++ 		    || (h != NULL
++ 			&& h->dynindx != -1
++-- 
++2.5.5
++
