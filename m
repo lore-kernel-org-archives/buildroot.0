@@ -1,29 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 May 2016 15:15:30 +0200
-Subject: [Buildroot] [PATCH] jamvm: add patch to fix musl build
-In-Reply-To: <1464268095-19912-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 26 May 2016 15:08:15 +0200")
-References: <1464268095-19912-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87y46x55al.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 26 May 2016 16:24:33 +0300
+Subject: [Buildroot] [PATCH] eudev: link to real homepage
+Message-ID: <4a9840c0685e7e59af8909d3550c4122c0daa824.1464269073.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+The Gentoo wiki page is much more informative than the download directory.
+This is the official homepage according to top level README.md.
 
- > Add a patch available from JamVM's bug tracker to fix the build with
- > the musl C library. The build was verified with the musl and uClibc C
- > libraries.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/eudev/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Fixes:
-
- >   http://autobuild.buildroot.org/results/8292973e9f6f2971d090f02f24d11a31709254cf/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
+diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+index 76df409b6ce8..cda06e7678d4 100644
+--- a/package/eudev/Config.in
++++ b/package/eudev/Config.in
+@@ -15,7 +15,7 @@ config BR2_PACKAGE_EUDEV
+ 	  eudev requires a Linux kernel >= 2.6.34: it relies on devtmpfs
+ 	  and inotify.
+ 
+-	  http://dev.gentoo.org/~blueness/eudev
++	  https://wiki.gentoo.org/wiki/Project:Eudev
+ 
+ if BR2_PACKAGE_EUDEV
+ 
 -- 
-Bye, Peter Korsgaard
+2.8.1
