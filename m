@@ -1,205 +1,289 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 May 2016 16:33:47 -0300
-Subject: [Buildroot] [PATCH] libpng: bump to version 1.6.22
-Message-ID: <1464291227-1261-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 May 2016 21:34:53 +0200
+Subject: [Buildroot] [PATCH v3 3/3] docker-engine: new package
+In-Reply-To: <1464219082-3818-4-git-send-email-christian@paral.in>
+References: <1464219082-3818-1-git-send-email-christian@paral.in>
+ <1464219082-3818-4-git-send-email-christian@paral.in>
+Message-ID: <20160526213453.51e3ee7b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rebase patch 1 in git format, and rebase patch 2 against 1.6.22.
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../0001-Disable-pngfix-and-png-fix-itxt.patch     | 44 ++++++++++++++++++++++
- package/libpng/0001-disable-tools.patch            | 30 ---------------
- ...prefix-to-symbol-names-in-version-script.patch} | 29 +++++++-------
- package/libpng/libpng.hash                         |  6 +--
- package/libpng/libpng.mk                           |  2 +-
- 5 files changed, 63 insertions(+), 48 deletions(-)
- create mode 100644 package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch
- delete mode 100644 package/libpng/0001-disable-tools.patch
- rename package/libpng/{0002-ignore-symbol-prefix.patch => 0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch} (64%)
+Great, docker in Buildroot! :-)
 
-diff --git a/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch b/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch
-new file mode 100644
-index 0000000..30c3623
---- /dev/null
-+++ b/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch
-@@ -0,0 +1,44 @@
-+From 60c3ee917c8e7a4760b1ef7c3dc2b44a615150d3 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Thu, 26 May 2016 16:26:18 -0300
-+Subject: [PATCH] Disable pngfix and png-fix-itxt
-+
-+Disable the new pngfix and png-fix-itxt tools: they take up space, fail
-+to build on some oddball toolchain configurations and aren't
-+expected/needed in a non-interactive embedded system.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ Makefile.am | 2 +-
-+ Makefile.in | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 7212951..3430dca 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -18,7 +18,7 @@ check_PROGRAMS += timepng
-+ endif
-+ 
-+ # Utilities - installed
-+-bin_PROGRAMS= pngfix png-fix-itxt
-++bin_PROGRAMS=
-+ 
-+ # This ensures that pnglibconf.h gets built at the start of 'make all' or
-+ # 'make check', but it does not add dependencies to the individual programs,
-+diff --git a/Makefile.in b/Makefile.in
-+index a66f6aa..4e67782 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -104,7 +104,7 @@ check_PROGRAMS = pngtest$(EXEEXT) pngunknown$(EXEEXT) \
-+ 	pngstest$(EXEEXT) pngvalid$(EXEEXT) pngimage$(EXEEXT) \
-+ 	$(am__EXEEXT_1)
-+ @HAVE_CLOCK_GETTIME_TRUE at am__append_1 = timepng
-+-bin_PROGRAMS = pngfix$(EXEEXT) png-fix-itxt$(EXEEXT)
-++bin_PROGRAMS =
-+ @PNG_ARM_NEON_TRUE at am__append_2 = arm/arm_init.c\
-+ @PNG_ARM_NEON_TRUE@	arm/filter_neon.S arm/filter_neon_intrinsics.c
-+ 
-+-- 
-+2.7.3
-+
-diff --git a/package/libpng/0001-disable-tools.patch b/package/libpng/0001-disable-tools.patch
-deleted file mode 100644
-index e30eca9..0000000
---- a/package/libpng/0001-disable-tools.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--Disable the new pngfix and png-fix-itxt tools: they take up space, fail to
--build on some oddball toolchain configurations and aren't expected/needed
--in a non-interactive embedded system.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura libpng-1.6.10.orig/Makefile.am libpng-1.6.10/Makefile.am
----- libpng-1.6.10.orig/Makefile.am	2014-03-17 08:51:25.812005079 -0300
--+++ libpng-1.6.10/Makefile.am	2014-03-17 09:14:28.807586433 -0300
--@@ -10,7 +10,7 @@
-- check_PROGRAMS= pngtest pngunknown pngstest pngvalid pngimage
-- 
-- # Utilities - installed
---bin_PROGRAMS= pngfix png-fix-itxt
--+bin_PROGRAMS=
-- 
-- # This ensures that pnglibconf.h gets built at the start of 'make all' or
-- # 'make check', but it does not add dependencies to the individual programs,
--diff -Nura libpng-1.6.10.orig/Makefile.in libpng-1.6.10/Makefile.in
----- libpng-1.6.10.orig/Makefile.in	2014-03-17 08:51:25.807005070 -0300
--+++ libpng-1.6.10/Makefile.in	2014-03-17 09:14:44.846617623 -0300
--@@ -87,7 +87,7 @@
-- host_triplet = @host@
-- check_PROGRAMS = pngtest$(EXEEXT) pngunknown$(EXEEXT) \
-- 	pngstest$(EXEEXT) pngvalid$(EXEEXT) pngimage$(EXEEXT)
---bin_PROGRAMS = pngfix$(EXEEXT) png-fix-itxt$(EXEEXT)
--+bin_PROGRAMS =
-- @PNG_ARM_NEON_TRUE at am__append_1 = arm/arm_init.c\
-- @PNG_ARM_NEON_TRUE@	arm/filter_neon.S arm/filter_neon_intrinsics.c
-- 
-diff --git a/package/libpng/0002-ignore-symbol-prefix.patch b/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch
-similarity index 64%
-rename from package/libpng/0002-ignore-symbol-prefix.patch
-rename to package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch
-index 5a8ede5..0754e21 100644
---- a/package/libpng/0002-ignore-symbol-prefix.patch
-+++ b/package/libpng/0002-Don-t-append-prefix-to-symbol-names-in-version-script.patch
-@@ -1,7 +1,7 @@
--From dbfea83a7436cbac34cc883ab2b7befacaf02c40 Mon Sep 17 00:00:00 2001
--From: Danomi Manchego <danomimanchego123@gmail.com>
--Date: Tue, 23 Jun 2015 13:54:42 -0400
--Subject: libpng: don't append prefix to symbol names in version script
-+From 473fdecd9a580b45251480b8ccbbb1927c598310 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Thu, 26 May 2016 16:27:13 -0300
-+Subject: [PATCH] Don't append prefix to symbol names in version script
- 
- Even if Blackfin GNU toolchain add prefix '_' to all symbols,
- symbol prefix is not accepted in the link flag --version-script.
-@@ -9,19 +9,20 @@ Don't append prefix in the symbols in the version script file.
- 
- Original patch by: Sonic Zhang <sonic.zhang@analog.com>
- 
--Rebase to apply cleanly.
-+[Gustavo: update for 1.6.22]
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- 
--Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- ---
-- Makefile.am |    2 +-
-- Makefile.in |    2 +-
-+ Makefile.am | 2 +-
-+ Makefile.in | 2 +-
-  2 files changed, 2 insertions(+), 2 deletions(-)
- 
- diff --git a/Makefile.am b/Makefile.am
--index dcc5439..e543c81 100644
-+index 3430dca..db6a7a2 100644
- --- a/Makefile.am
- +++ b/Makefile.am
--@@ -231,7 +231,7 @@ contrib/tools/pngfix.o: pnglibconf.h
-+@@ -236,7 +236,7 @@ contrib/tools/pngfix.o: pnglibconf.h
-  # interfering with the symbol file format.
-  SYMBOL_CFLAGS = -DPNGLIB_LIBNAME='PNG at PNGLIB_MAJOR@@PNGLIB_MINOR at _0'\
-  		-DPNGLIB_VERSION='@PNGLIB_VERSION@'\
-@@ -31,18 +32,18 @@ index dcc5439..e543c81 100644
-  
-  if DO_PNG_PREFIX
- diff --git a/Makefile.in b/Makefile.in
--index 975f931..a3e0552 100644
-+index 4e67782..5f468d9 100644
- --- a/Makefile.in
- +++ b/Makefile.in
--@@ -747,7 +747,7 @@ SUFFIXES = .chk .out
-+@@ -754,7 +754,7 @@ SUFFIXES = .chk .out
-  # interfering with the symbol file format.
-  SYMBOL_CFLAGS = -DPNGLIB_LIBNAME='PNG at PNGLIB_MAJOR@@PNGLIB_MINOR at _0' \
-  	-DPNGLIB_VERSION='@PNGLIB_VERSION@' \
- -	-DSYMBOL_PREFIX='$(SYMBOL_PREFIX)' -DPNG_NO_USE_READ_MACROS \
- +	-DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS \
-- 	-DPNG_BUILDING_SYMBOL_TABLE $(am__append_5)
-+ 	-DPNG_BUILDING_SYMBOL_TABLE $(am__append_6)
-  
-  # EXT_LIST is a list of the possibly library directory extensions, this exists
- -- 
--1.7.9.5
-+2.7.3
- 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index 3b2db43..e9d3674 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.21/
--md5	3bacb4728f6694a64ad9052769d6a4ce	libpng-1.6.21.tar.xz
--sha1	978b2f4e007eda56032001493ddb97d20f0ab291	libpng-1.6.21.tar.xz
-+# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.22/
-+md5	f4ca54a3d945b8678fafed168c503f3b	libpng-1.6.22.tar.xz
-+sha1	e82ec5ba0e05698c221c78f70b4c5513eb40e199	libpng-1.6.22.tar.xz
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 7ce4a3a..df2cbcd 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPNG_VERSION = 1.6.21
-+LIBPNG_VERSION = 1.6.22
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
+On Wed, 25 May 2016 16:31:22 -0700, Christian Stewart wrote:
+
+> +	source "package/docker-engine/Config.in"
+>  	source "package/docker-containerd/Config.in"
+
+Alphabetic ordering please.
+
+>  	source "package/cgroupfs-mount/Config.in"
+>  	source "package/dsp-tools/Config.in"
+> diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+> new file mode 100644
+> index 0000000..e25b16b
+> --- /dev/null
+> +++ b/package/docker-engine/Config.in
+> @@ -0,0 +1,70 @@
+> +config BR2_PACKAGE_DOCKER_ENGINE
+> +	bool "docker-engine"
+> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+
+Thread dependency?
+
+> +	select BR2_PACKAGE_DOCKER_CONTAINERD
+> +	select BR2_PACKAGE_RUNC
+> +	select BR2_PACKAGE_SQLITE
+> +	select BR2_PACKAGE_UTIL_LINUX
+> +	select BR2_PACKAGE_UTIL_LINUX_BINARIES
+> +	select BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
+> +	select BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT
+> +	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+
+You need to replicate the dependency of util-linux here, so:
+
+	depends on BR2_USE_WCHAR
+	depends on BR2_USE_MMU
+
+
+> +	help
+> +		Docker is a platform to build, ship,
+> +		and run applications as lightweight containers.
+> +
+> +		https://github.com/docker/docker
+
+Indentation of the help text: one tab + two spaces.
+
+> +
+> +if BR2_PACKAGE_DOCKER_ENGINE
+> +
+> +config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
+> +	bool "docker daemon"
+> +	default y
+> +	help
+> +		Build the Docker system daemon. If not selected, will build client only.
+
+Identation: one tab + two spaces, plus wrap at 72 characters.
+
+> +
+> +config BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL
+> +	bool "build experimental features"
+> +
+> +if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
+> +
+> +config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_AUFS
+> +	bool "aufs filesystem driver"
+> +	depends on BR2_USE_WCHAR # aufs-util
+> +	depends on BR2_USE_MMU # aufs-util
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # aufs-util
+> +	select BR2_PACKAGE_AUFS_UTIL
+> +	help
+> +	  Build the aufs filesystem driver for Docker.
+
+Didn't you say in your cover letter that the AUFS support was not
+integrated? The symbol BR2_PACKAGE_AUFS_UTIL does not exist in
+Buildroot.
+
+> +
+> +config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
+> +	bool "btrfs filesystem driver"
+> +	depends on BR2_USE_WCHAR # btrfs-progs
+> +	depends on BR2_USE_MMU # btrfs-progs
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
+> +	select BR2_PACKAGE_BTRFS_PROGS
+> +	help
+> +		Build the btrfs filesystem driver for Docker.
+
+Indentation.
+
+> +
+> +config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
+> +	bool "devicemapper filesystem driver"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+> +	depends on BR2_USE_MMU # lvm2
+> +	depends on !BR2_STATIC_LIBS # lvm2
+> +	select BR2_PACKAGE_LVM2
+> +	select BR2_PACKAGE_LVM2_APP_LIBRARY
+> +	help
+> +		Build the devicemapper filesystem driver for Docker.
+
+Ditto.
+
+> +
+> +config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
+> +	bool "vfs filesystem driver"
+
+Is the driver called vfs or gvfs ?
+
+> +	depends on BR2_USE_WCHAR # gvfs
+> +	depends on BR2_USE_MMU # gvfs
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # gvfs
+> +	select BR2_PACKAGE_GVFS
+> +	help
+> +		Build the vfs filesystem driver for Docker.
+
+Ditto.
+
+> +
+> +endif
+> +
+> +endif
+> diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+> new file mode 100644
+> index 0000000..7b93669
+> --- /dev/null
+> +++ b/package/docker-engine/docker-engine.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 04de3750738b6f888f03520fb67db22e95e8a8e016ae901428e6c5791c9841cc  docker-engine-v1.11.1.tar.gz
+> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+> new file mode 100644
+> index 0000000..0dc6b46
+> --- /dev/null
+> +++ b/package/docker-engine/docker-engine.mk
+> @@ -0,0 +1,110 @@
+> +################################################################################
+> +#
+> +# docker-engine
+> +#
+> +################################################################################
+> +
+> +DOCKER_ENGINE_VERSION = v1.11.1
+> +DOCKER_ENGINE_VERSION_COMMIT = 5604cbed50d51c4039b1abcb1cf87c4e01bce924
+
+Same question :)
+
+> +DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
+> +
+> +DOCKER_ENGINE_LICENSE = Apache-2.0
+> +DOCKER_ENGINE_LICENSE_FILES = LICENSE
+> +
+> +DOCKER_ENGINE_DEPENDENCIES = host-go docker-containerd
+> +
+> +DOCKER_ENGINE_MAKE_ENV = \
+> +	GOBIN="$(@D)/bin" \
+> +	GOPATH="$(@D)/vendor" \
+> +	GOARCH=$(GO_GOARCH) \
+> +	CGO_ENABLED=1 \
+> +	CGO_NO_EMULATION=1
+
+HOST_GO_TARGET_ENV usage
+
+> +
+> +DOCKER_ENGINE_GLDFLAGS = \
+> +	-X main.GitCommit=$(DOCKER_ENGINE_VERSION_COMMIT) \
+> +	-X main.Version=$(DOCKER_ENGINE_VERSION) \
+> +	-extldflags '-static'
+> +
+> +DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs
+> +
+> +ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+> +DOCKER_ENGINE_BUILD_TAGS += seccomp
+> +DOCKER_ENGINE_DEPENDENCIES += libseccomp
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
+> +DOCKER_ENGINE_BUILD_TAGS += daemon
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
+> +DOCKER_ENGINE_BUILD_TAGS += experimental
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS),y)
+> +DOCKER_ENGINE_DEPENDENCIES += btrfs-progs
+
+So docker links with some btrfs library?
+
+> +else
+> +DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_btrfs
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_AUFS),y)
+> +DOCKER_ENGINE_DEPENDENCIES += aufs-util
+> +else
+> +DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_aufs
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER),y)
+> +DOCKER_ENGINE_DEPENDENCIES += lvm2
+> +else
+> +DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_devicemapper
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS),y)
+> +DOCKER_ENGINE_DEPENDENCIES += gvfs
+> +else
+> +DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_vfs
+> +endif
+> +
+> +define DOCKER_ENGINE_CONFIGURE_CMDS
+> +	# Put sources at prescribed GOPATH location.
+> +	export $(DOCKER_ENGINE_MAKE_ENV) && \
+> +		$(SED) '/^clean$$/d' $(@D)/hack/vendor.sh && \
+> +		cd $(@D) && bash ./hack/vendor.sh && \
+> +		mkdir -p $(@D)/vendor/src/github.com/docker && \
+> +		ln -s $(@D) $(@D)/vendor/src/github.com/docker/docker && \
+> +		ln -s $(DOCKER_CONTAINERD_SRCDIR) $(@D)/vendor/src/github.com/docker/containerd && \
+> +		mkdir -p $$GOPATH/src/github.com/opencontainers && \
+> +		ln -s $(RUNC_SRCDIR) $(@D)/vendor/src/github.com/opencontainers/runc
+
+Same comments as with other packages.
+
+> +endef
+> +
+> +define DOCKER_ENGINE_BUILD_CMDS
+> +	cd $(@D) && export $(DOCKER_ENGINE_MAKE_ENV) && \
+> +		$(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/docker -tags "$(DOCKER_ENGINE_BUILD_TAGS)" -ldflags "$(DOCKER_ENGINE_GLDFLAGS)" ./docker
+> +endef
+
+Ditto.
+
+> +
+> +define DOCKER_ENGINE_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/docker $(TARGET_DIR)/usr/bin/docker
+> +endef
+> +
+> +define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
+> +	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.socket \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/docker.socket
+> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
+> +	ln -fs ../../../../usr/lib/systemd/system/docker.service \
+> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/docker.service
+> +endef
+> +
+> +define DOCKER_ENGINE_INSTALL_INIT_SYSV
+> +	$(INSTALL) -D -m 755 $(@D)/contrib/init/sysvinit-redhat/docker \
+> +		$(TARGET_DIR)/etc/init.d/S61docker
+
+Is the sysvinit-redhat script actually working in Buildroot with a
+Busybox shell?
+
+> +	mkdir -p $(TARGET_DIR)/etc/sysconfig
+
+Not needed $(INSTALL) -D does it for you.
+
+> +	$(INSTALL) -D -m 644 $(@D)/contrib/init/sysvinit-redhat/docker.sysconfig \
+> +		$(TARGET_DIR)/etc/sysconfig/docker.sysconfig
+> +endef
+> +
+> +define DOCKER_ENGINE_USERS
+> +	- - docker -1 * - - - Docker Application Container Framework
+> +endef
+> +
+> +$(eval $(generic-package))
+
+Thanks a lot!
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
