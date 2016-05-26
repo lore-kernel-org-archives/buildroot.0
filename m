@@ -1,42 +1,52 @@
 From: Geoff Levand <geoff@infradead.org>
 Date: Thu, 26 May 2016 18:21:32 +0000
-Subject: [Buildroot] [PATCH v3 2/6] package/go: Add HOST_GO_TARGET_ENV
-In-Reply-To: <cover.1464286518.git.geoff@infradead.org>
-References: <cover.1464286518.git.geoff@infradead.org>
-Message-ID: <5251fd64eb4f2b365fd5e30abb0dc30439fd5201.1464286518.git.geoff@infradead.org>
+Subject: [Buildroot] [PATCH v3 0/6] Fixes for go language support
+Message-ID: <cover.1464286518.git.geoff@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For the convenience of package makefiles define the new
-make variables HOST_GO_TOOLDIR and HOST_GO_TARGET_ENV.
+Hi,
 
-Signed-off-by: Geoff Levand <geoff@infradead.org>
----
- package/go/go.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+This series includes a number of fixup for the go language support.  All the
+buildbot problems pointed out by Thomas [1] should be resolved by this series.
 
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 7ac2540..090c5e4 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -35,6 +35,15 @@ endif
- HOST_GO_DEPENDENCIES = host-go-bootstrap
- HOST_GO_ROOT = $(HOST_DIR)/usr/lib/go
- 
-+# For the convienience of target packages.
-+HOST_GO_TOOLDIR = $(HOST_GO_ROOT)/pkg/tool/linux_$(GO_GOARCH)
-+HOST_GO_TARGET_ENV = \
-+	GOARCH=$(GO_GOARCH) \
-+	GOROOT="$(HOST_GO_ROOT)" \
-+	CC=$(TARGET_CC) \
-+	CXX=$(TARGET_CXX) \
-+	GOTOOLDIR="$(HOST_GO_TOOLDIR)"
-+
- # The go build system doesn't have the notion of cross compiling, but just the
- # notion of architecture.  When the host and target architectures are different
- # it expects to be given a target cross compiler in CC_FOR_TARGET.  When the
+Please consider all patches in this series to apply to master.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2016-April/159336.html
+
+Changes for V3:
+ o Use two step compiler build for all configs.
+
+-Geoff
+
+The following changes since commit b5630ad7125d30cb5d65de49cc2f120bb5cf62ec:
+
+  eudev: link to real homepage (2016-05-26 15:50:01 +0200)
+
+are available in the git repository at:
+
+  git at github.com:glevand/buildroot--buildroot.git for-merge-go-fixes-v3
+
+for you to fetch changes up to a514602fc2cdd03806a41028d9943a7c94cf92b8:
+
+  package/go: Set file timestamp (2016-05-26 11:10:42 -0700)
+
+----------------------------------------------------------------
+Geoff Levand (6):
+      package/go: Build host tools with host CC
+      package/go: Add HOST_GO_TARGET_ENV
+      package/flannel: Use HOST_GO_TARGET_ENV
+      package/go: Add HOST_GO_CGO_ENABLED
+      package/flannel: Add BR2_TOOLCHAIN_HAS_THREADS
+      package/go: Set file timestamp
+
+ package/flannel/Config.in  |  4 ++++
+ package/flannel/flannel.mk |  2 +-
+ package/go/go.mk           | 54 +++++++++++++++++++++++++++++++++++++++++-----
+ 3 files changed, 54 insertions(+), 6 deletions(-)
+
 -- 
 2.5.0
