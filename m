@@ -1,48 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 May 2016 21:06:55 +0200
-Subject: [Buildroot] [git commit] package/go: add double quotes around
-	TARGET_CC/TARGET_CXX
-Message-ID: <20160526191312.642B881926@busybox.osuosl.org>
+Date: Thu, 26 May 2016 21:04:43 +0200
+Subject: [Buildroot] [git commit] package/flannel: Use HOST_GO_TARGET_ENV
+Message-ID: <20160526191312.295297F93D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a1e4a5c7dd94e0490df95597635eb48e4f7f7fb
+commit: https://git.buildroot.net/buildroot/commit/?id=18ce12f0e1c54cc8d3b13063fbb0665c5554b474
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Using double quotes around TARGET_CC/TARGET_CXX is mandatory, since
-they are composed of several words when ccache support is enabled.
+Use the newly added HOST_GO_TARGET_ENV variable to pickup the
+correct go environment for package builds.
 
+Signed-off-by: Geoff Levand <geoff@infradead.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/go/go.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/flannel/flannel.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 98615aa..a1d6cf9 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -40,8 +40,8 @@ HOST_GO_TOOLDIR = $(HOST_GO_ROOT)/pkg/tool/linux_$(GO_GOARCH)
- HOST_GO_TARGET_ENV = \
- 	GOARCH=$(GO_GOARCH) \
- 	GOROOT="$(HOST_GO_ROOT)" \
--	CC=$(TARGET_CC) \
--	CXX=$(TARGET_CXX) \
-+	CC="$(TARGET_CC)" \
-+	CXX="$(TARGET_CXX)" \
- 	GOTOOLDIR="$(HOST_GO_TOOLDIR)"
+diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
+index 876efe6..b5f61a0 100644
+--- a/package/flannel/flannel.mk
++++ b/package/flannel/flannel.mk
+@@ -14,9 +14,9 @@ FLANNEL_LICENSE_FILES = LICENSE
+ FLANNEL_DEPENDENCIES = host-go
  
- # The go compiler's cgo support uses threads.  If BR2_TOOLCHAIN_HAS_THREADS is
-@@ -74,8 +74,8 @@ HOST_GO_MAKE_ENV = \
- 	CC=$(HOSTCC_NOCCACHE)
+ FLANNEL_MAKE_ENV = \
++	$(HOST_GO_TARGET_ENV) \
+ 	GOBIN="$(@D)/bin" \
+ 	GOPATH="$(@D)/gopath" \
+-	GOARCH=$(GO_GOARCH) \
+ 	CGO_ENABLED=1
  
- HOST_GO_TARGET_CC = \
--	CC_FOR_TARGET=$(TARGET_CC) \
--	CXX_FOR_TARGET=$(TARGET_CXX)
-+	CC_FOR_TARGET="$(TARGET_CC)" \
-+	CXX_FOR_TARGET="$(TARGET_CXX)"
- 
- HOST_GO_HOST_CC = \
- 	CC_FOR_TARGET=$(HOSTCC_NOCCACHE) \
+ FLANNEL_GLDFLAGS = \
