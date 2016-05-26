@@ -1,11 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 May 2016 21:15:25 +0200
-Subject: [Buildroot] [PATCH v3 5/6] package/flannel: Add
- BR2_TOOLCHAIN_HAS_THREADS
-In-Reply-To: <627469f0b7b4e604da3a5ab3ef721f138a1c95a8.1464286518.git.geoff@infradead.org>
-References: <cover.1464286518.git.geoff@infradead.org>
- <627469f0b7b4e604da3a5ab3ef721f138a1c95a8.1464286518.git.geoff@infradead.org>
-Message-ID: <20160526211525.32e8b448@free-electrons.com>
+Date: Thu, 26 May 2016 21:18:00 +0200
+Subject: [Buildroot] Genimage last partition size issue
+In-Reply-To: <5747443D.2020109@zacarias.com.ar>
+References: <CANQCQpb634S9qdGcoZubqLcpFupyLyD8a=5hEOOXiNeOq1Vsrw@mail.gmail.com>
+ <871t4rcuv1.fsf@dell.be.48ers.dk>
+ <20160526203517.1a2a3670@free-electrons.com>
+ <57474262.2020500@zacarias.com.ar>
+ <20160526204157.201c0d78@free-electrons.com>
+ <5747443D.2020109@zacarias.com.ar>
+Message-ID: <20160526211800.798637f5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,33 +17,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 26 May 2016 18:21:33 +0000, Geoff Levand wrote:
-> flannel uses the cgo package, so needs a toolchain with thread
-> support.
-> 
-> Signed-off-by: Geoff Levand <geoff@infradead.org>
-> ---
->  package/flannel/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/flannel/Config.in b/package/flannel/Config.in
-> index c6a84ef..32d9f66 100644
-> --- a/package/flannel/Config.in
-> +++ b/package/flannel/Config.in
-> @@ -1,6 +1,10 @@
-> +comment "flannel needs a toolchain w/ threads"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+On Thu, 26 May 2016 15:45:17 -0300, Gustavo Zacarias wrote:
 
-This also needs:
+> Yes, that would be suitable, expect for 8 GB cards where you "loose" 
+> space :)
 
-	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-
-so that the comment doesn't show up on architectures that anyway don't
-support Go.
-
-I've fixed that when applying.
-
-Thanks!
+Well, when you'll be shipping a product, you know what will be the size
+of your eMMC / SD card, and it's gonna be the same for all your units,
+so you can generate an image with the appropriate size.
 
 Thomas
 -- 
