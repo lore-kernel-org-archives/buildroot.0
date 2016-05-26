@@ -1,42 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 May 2016 21:04:24 +0200
-Subject: [Buildroot] [git commit] package/go: Add HOST_GO_TARGET_ENV
-Message-ID: <20160526191312.1828C7F93D@busybox.osuosl.org>
+Date: Thu, 26 May 2016 21:14:13 +0200
+Subject: [Buildroot] [PATCH v3 0/6] Fixes for go language support
+In-Reply-To: <cover.1464286518.git.geoff@infradead.org>
+References: <cover.1464286518.git.geoff@infradead.org>
+Message-ID: <20160526211413.2307341d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86b0f0e68553eb5019f23ebfd4ac29c13149c882
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-For the convenience of package makefiles define the new
-make variables HOST_GO_TOOLDIR and HOST_GO_TARGET_ENV.
+On Thu, 26 May 2016 18:21:32 +0000, Geoff Levand wrote:
 
-Signed-off-by: Geoff Levand <geoff@infradead.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/go/go.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+> Geoff Levand (6):
+>       package/go: Build host tools with host CC
+>       package/go: Add HOST_GO_TARGET_ENV
+>       package/flannel: Use HOST_GO_TARGET_ENV
+>       package/go: Add HOST_GO_CGO_ENABLED
+>       package/flannel: Add BR2_TOOLCHAIN_HAS_THREADS
+>       package/go: Set file timestamp
 
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 7ac2540..090c5e4 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -35,6 +35,15 @@ endif
- HOST_GO_DEPENDENCIES = host-go-bootstrap
- HOST_GO_ROOT = $(HOST_DIR)/usr/lib/go
- 
-+# For the convienience of target packages.
-+HOST_GO_TOOLDIR = $(HOST_GO_ROOT)/pkg/tool/linux_$(GO_GOARCH)
-+HOST_GO_TARGET_ENV = \
-+	GOARCH=$(GO_GOARCH) \
-+	GOROOT="$(HOST_GO_ROOT)" \
-+	CC=$(TARGET_CC) \
-+	CXX=$(TARGET_CXX) \
-+	GOTOOLDIR="$(HOST_GO_TOOLDIR)"
-+
- # The go build system doesn't have the notion of cross compiling, but just the
- # notion of architecture.  When the host and target architectures are different
- # it expects to be given a target cross compiler in CC_FOR_TARGET.  When the
+Thanks, I've applied the series. I made a few changes on two patches
+(I'll comment on them directly), and I added an additional patch that
+adds double quotes around $(TARGET_CC) and $(TARGET_CXX). Indeed, when
+ccache support is enabled, those variables contain two words.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
