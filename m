@@ -1,204 +1,53 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 26 May 2016 16:54:19 +0100
-Subject: [Buildroot] [PATCH 1/2] ffmpeg: add BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-Message-ID: <1464278060-49999-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Thu, 26 May 2016 16:54:20 +0100
+Subject: [Buildroot] [PATCH 2/2] ffmpeg: disable for mips64r2 and mips64r6
+In-Reply-To: <1464278060-49999-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1464278060-49999-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1464278060-49999-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+MIPS architecture detection is not accurate and is always detected as
+mips64 even if we are using mips64r2 or mips64r6. Due to that, ffmpeg's
+build system will pass the -mips64 flag which will conflict with the
+-march option that our toolchain wrapper uses, and it will fail to build
+showing errors like this one:
+
+error: '-mips64' conflicts with the other architecture options, which
+specify a mips64r2 processor
+
+This problem has been already fixed upstream, but we would need to
+backport 17 patches plus some changes in the ffmpeg.mk file. This is too
+much, so better to just disable ffmpeg for mips64r2 and mips64r6 for the
+upcoming Buildroot release.
+
+This commit can be reverted in the next ffmpeg's version bump.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/7fd/7fd8187c0110cdcac622e667f4a81d2db84f11ef/
+
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/ffmpeg/Config.in                | 8 ++++++--
- package/gstreamer1/gst1-libav/Config.in | 2 +-
- package/kodi/Config.in                  | 1 +
- package/minidlna/Config.in              | 4 ++--
- package/mpd/Config.in                   | 2 +-
- package/mpv/Config.in                   | 4 ++--
- package/opencv/Config.in                | 2 +-
- package/opencv3/Config.in               | 2 +-
- package/squeezelite/Config.in           | 2 +-
- package/tovid/Config.in                 | 4 +++-
- 10 files changed, 19 insertions(+), 12 deletions(-)
+ package/ffmpeg/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index a273aea..6b7a6e7 100644
+index 6b7a6e7..096ff95 100644
 --- a/package/ffmpeg/Config.in
 +++ b/package/ffmpeg/Config.in
-@@ -1,7 +1,11 @@
-+config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-+	bool
-+	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
-+	default y if !BR2_nios2
-+
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	bool
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
+-	default y if !BR2_nios2
++	# ffmpeg's configure script only supports mips64 (r1) variant
++	default y if !BR2_nios2 && !BR2_mips_64r2 && !BR2_mips_64r6
+ 
  menuconfig BR2_PACKAGE_FFMPEG
  	bool "ffmpeg"
--	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
--	depends on !BR2_nios2
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	help
- 	  FFmpeg is a complete, cross-platform solution to record, convert
- 	  and stream audio and video.
-diff --git a/package/gstreamer1/gst1-libav/Config.in b/package/gstreamer1/gst1-libav/Config.in
-index 8c3c834..23d78b6 100644
---- a/package/gstreamer1/gst1-libav/Config.in
-+++ b/package/gstreamer1/gst1-libav/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_GST1_LIBAV
- 	bool "gst1-libav"
--	depends on !BR2_nios2 # ffmpeg
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index ff2e75c..d9760ca 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	bool
- 	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
-+		&& BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS \
- 		&& BR2_PACKAGE_BOOST_ARCH_SUPPORTS \
- 		&& BR2_TOOLCHAIN_HAS_SYNC_8
- 
-diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
-index 999ea01..c900143 100644
---- a/package/minidlna/Config.in
-+++ b/package/minidlna/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_MINIDLNA
- 	depends on BR2_USE_WCHAR # flac
- 	depends on BR2_USE_MMU # fork
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FLAC
- 	select BR2_PACKAGE_LIBVORBIS # selects libogg
-@@ -13,7 +14,6 @@ config BR2_PACKAGE_MINIDLNA
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
--	depends on !BR2_nios2 # ffmpeg
- 	help
- 	  MiniDLNA (aka ReadyDLNA) is server software with the aim of being
- 	  fully compliant with DLNA/UPnP-AV clients.
-@@ -22,6 +22,6 @@ config BR2_PACKAGE_MINIDLNA
- 
- comment "minidlna needs a toolchain w/ dynamic library, threads, wchar"
- 	depends on BR2_USE_MMU
--	depends on !BR2_nios2
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
- 		BR2_STATIC_LIBS
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 3ac806f..31be8bb 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -77,8 +77,8 @@ config BR2_PACKAGE_MPD_FAAD2
- 
- config BR2_PACKAGE_MPD_FFMPEG
- 	bool "ffmpeg"
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	select BR2_PACKAGE_FFMPEG
--	depends on !BR2_nios2 # ffmpeg
- 	help
- 	  Enable ffmpeg input support.
- 	  Select this if you want to play back files supported by
-diff --git a/package/mpv/Config.in b/package/mpv/Config.in
-index b354d4d..1cef6c5 100644
---- a/package/mpv/Config.in
-+++ b/package/mpv/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_MPV
- 	bool "mpv"
--	depends on !BR2_nios2 # ffmpeg
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
-@@ -15,5 +15,5 @@ config BR2_PACKAGE_MPV
- 	  https://mpv.io/
- 
- comment "mpv needs a toolchain w/ threads"
--	depends on !BR2_nios2
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 05c1fc1..c046baa 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -191,10 +191,10 @@ comment "3rd party support"
- 
- config BR2_PACKAGE_OPENCV_WITH_FFMPEG
- 	bool "ffmpeg support"
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
--	depends on !BR2_nios2 # ffmpeg
- 	help
- 	  Use ffmpeg from the target system.
- 
-diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-index 9629a64..2f4aa7a 100644
---- a/package/opencv3/Config.in
-+++ b/package/opencv3/Config.in
-@@ -242,11 +242,11 @@ comment "3rd party support"
- 
- config BR2_PACKAGE_OPENCV3_WITH_FFMPEG
- 	bool "ffmpeg support"
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_AVRESAMPLE
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
--	depends on !BR2_nios2 # ffmpeg
- 	help
- 	  Use ffmpeg from the target system.
- 
-diff --git a/package/squeezelite/Config.in b/package/squeezelite/Config.in
-index 1c2960e..79d2947 100644
---- a/package/squeezelite/Config.in
-+++ b/package/squeezelite/Config.in
-@@ -21,8 +21,8 @@ if BR2_PACKAGE_SQUEEZELITE
- config BR2_PACKAGE_SQUEEZELITE_FFMPEG
- 	bool "Enable WMA and ALAC decoding"
- 	default y
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	select BR2_PACKAGE_FFMPEG
--	depends on !BR2_nios2 # ffmpeg
- 
- config BR2_PACKAGE_SQUEEZELITE_DSD
- 	bool "Enable DSD decoding"
-diff --git a/package/tovid/Config.in b/package/tovid/Config.in
-index 093bfdf..1288f84 100644
---- a/package/tovid/Config.in
-+++ b/package/tovid/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_TOVID
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
--	depends on !BR2_nios2 # ffmpeg
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
- 	# The below dependencies are runtime dependencies only
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps_ng
-@@ -28,6 +28,7 @@ config BR2_PACKAGE_TOVID
- 
- comment "tovid needs a toolchain w/ threads, C++, wchar"
- 	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_INSTALL_LIBSTDCPP \
-@@ -35,4 +36,5 @@ comment "tovid needs a toolchain w/ threads, C++, wchar"
- 
- comment "tovid depends on python or python3"
- 	depends on !BR2_PACKAGE_PYTHON && !BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
 -- 
 2.7.3
