@@ -1,54 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 May 2016 19:30:59 +0200
-Subject: [Buildroot] [PATCH v2.1 1/6] package/go: Build host tools with
- host CC
-In-Reply-To: <1464283496.2374.20.camel@infradead.org>
-References: <cover.1463696454.git.geoff@infradead.org>
- <aa4ea0467b1c08f0afb3d5ba2cf7af201f6ceeef.1463696454.git.geoff@infradead.org>
- <1464125645.5014.52.camel@infradead.org>
- <20160525160529.2c19eea9@free-electrons.com>
- <1464194514.30545.5.camel@infradead.org>
- <20160525225947.15913a38@free-electrons.com>
- <1464283496.2374.20.camel@infradead.org>
-Message-ID: <20160526193059.67057700@free-electrons.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 26 May 2016 12:42:36 -0500
+Subject: [Buildroot] Genimage last partition size issue
+In-Reply-To: <871t4rcuv1.fsf@dell.be.48ers.dk>
+References: <CANQCQpb634S9qdGcoZubqLcpFupyLyD8a=5hEOOXiNeOq1Vsrw@mail.gmail.com>
+ <871t4rcuv1.fsf@dell.be.48ers.dk>
+Message-ID: <CANQCQpa+ViouS7GyWLn4cxw6h4puDmMnLiFMTQy=dhFAfaQX7Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, May 24, 2016 at 10:56 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+>
+>  > As noted in the partition options, size = 0 should cause the last
+>  > partition to take the rest of the space on the device.  However, when
+>  > I set size = 0 and then write the image to a SD card using "sudo dd
+>  > if=foo.img of=/dev/sdb", the rootfs partition only has 190M (the same
+>  > amount as when I don't use the size argument) when there is almost 4G
+>  > worth of space available.  I know the size argument works in general
+>  > as if I set the size to 3000M, the rootfs partition is 3000M after
+>  > writing it to the SD card.
+>
+> How should genimage know what the size is of your SD card when you
+> generate the foo.img image? I guess you would need to add size = 4G
+> inside image foo.img { }, but notice that this is isn't very efficient
+> as you will be writing lots of zeros to the sd card.
+>
+Good point, I should have looked a bit closer before forwarding this
+question from one of my developers.  He didn't want to specify the
+size anywhere and wanted it to make the last partition fit the disk.
+Which with pre-builts is obviously not realistic.  Instead he dd's his
+image and then adjusts the partition / re-tunes the fs to make it fill
+the rest of the disk. Whick works....
 
-On Thu, 26 May 2016 10:24:56 -0700, Geoff Levand wrote:
-
-> There is a subtle difference, when we build with HOST_GO_HOST_CC the
-> resulting host compiler binaries have the go environment variables CC
-> and CXX set to the host compilers.  They should be set to the target
-> cross compilers so that by default go programs are built with the target
-> cross compiler.  That was one motivation for my follow up patch
-> 'package/go: Add HOST_GO_TARGET_ENV', which sets those to the proper
-> values for target package builds.
-
-Ah, indeed.
-
-> I had planned to look into how to fix this environment problem.  One
-> idea was to use a custom version of ./make.bash that would do the
-> right thing.
-> 
-> On thinking about it, it seems it would be best for now to do the
-> two step build for all configs and expect package maintainers to
-> either use HOST_GO_TARGET_ENV or set CC and CXX.  That would avoid
-> the situation where the maintainer does not test with host arch
-> equal to target arch.
-
-OK. Can you respin the patch quickly to address this? the host-go and
-flannel issues are the main remaining build issues we have, and it
-would be good to fix them for 2016.05.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks
+Matt
