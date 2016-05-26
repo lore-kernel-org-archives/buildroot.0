@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 May 2016 21:20:13 +0200
-Subject: [Buildroot] [PATCH 1/2] ffmpeg: add
- BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-In-Reply-To: <1464278060-49999-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1464278060-49999-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160526212013.1a007aad@free-electrons.com>
+Date: Thu, 26 May 2016 21:20:28 +0200
+Subject: [Buildroot] [PATCH] toolchain: arc-2016.03: fix generation of
+ dynamic relocs for -pie
+In-Reply-To: <1464177700-23646-1-git-send-email-abrodkin@synopsys.com>
+References: <1464177700-23646-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20160526212028.413005ca@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 26 May 2016 16:54:19 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Wed, 25 May 2016 15:01:40 +0300, Alexey Brodkin wrote:
+> Currently even if -pie flag is provided to LD dynamic relocations
+> won't be created. That in its turn will break U-Boot self-relocation
+> functionality.
+> 
+> This fix resolves mentioned problem.
+> 
+> Note as of today this is a sort of off-the-tree patch right from
+> our binutils guy but in coming day similar fix will be applied to
+> upstream binutils as well.
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/ffmpeg/Config.in                | 8 ++++++--
->  package/gstreamer1/gst1-libav/Config.in | 2 +-
->  package/kodi/Config.in                  | 1 +
->  package/minidlna/Config.in              | 4 ++--
->  package/mpd/Config.in                   | 2 +-
->  package/mpv/Config.in                   | 4 ++--
->  package/opencv/Config.in                | 2 +-
->  package/opencv3/Config.in               | 2 +-
->  package/squeezelite/Config.in           | 2 +-
->  package/tovid/Config.in                 | 4 +++-
->  10 files changed, 19 insertions(+), 12 deletions(-)
+>  ...ith-dynamic-relocs-not-being-generated-wi.patch | 34 ++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>  create mode 100644 package/binutils/arc-2016.03/0700-Fix-issue-with-dynamic-relocs-not-being-generated-wi.patch
 
-Both applied to master, thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
