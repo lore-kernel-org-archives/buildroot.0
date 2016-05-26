@@ -1,44 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 May 2016 22:08:36 +0200
-Subject: [Buildroot] [git commit] samba4: remove compilation of .pyc files
-Message-ID: <20160601161311.2134E802A0@busybox.osuosl.org>
+Date: Thu, 26 May 2016 21:35:21 +0200
+Subject: [Buildroot] [git commit] dos2unix: bump to version 7.3.4
+Message-ID: <20160601161310.C97B081F53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfa73104fa8cc12925b56a482e7bd4b200f6be9e
+commit: https://git.buildroot.net/buildroot/commit/?id=d7bd8ccdfc7db2841b85ecdeadef329148090acc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that .py files are globally compiled into .pyc files, we can get
-rid of the samba4 specific logic doing this compilation.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba4/samba4.mk | 10 ----------
- 1 file changed, 10 deletions(-)
+ package/dos2unix/dos2unix.hash | 2 +-
+ package/dos2unix/dos2unix.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 9ccc6a7..bb546f0 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -118,16 +118,6 @@ define SAMBA4_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
- endef
+diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
+index 7e1a120..1169592 100644
+--- a/package/dos2unix/dos2unix.hash
++++ b/package/dos2unix/dos2unix.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	f4d5df24d181c2efecf7631aab6e894489012396092cf206829f1f9a98556b94	dos2unix-7.3.1.tar.gz
++sha256	8ccda7bbc5a2f903dafd95900abb5bf5e77a769b572ef25150fde4056c5f30c5	dos2unix-7.3.4.tar.gz
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+index 21e03ae..82fa26f 100644
+--- a/package/dos2unix/dos2unix.mk
++++ b/package/dos2unix/dos2unix.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Samba just installs .py files so the purge causes problems with some tools
--ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
--define SAMBA4_BUILD_PYC_FILES
--	PYTHONPATH="$(PYTHON_PATH)" \
--		$(HOST_DIR)/usr/bin/python -c "import compileall; \
--		compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/samba')"
--endef
--SAMBA4_POST_INSTALL_TARGET_HOOKS += SAMBA4_BUILD_PYC_FILES
--endif
--
- ifeq ($(BR2_PACKAGE_SAMBA4_AD_DC),)
- SAMBA4_CONF_OPTS += --without-ad-dc
- endif
+-DOS2UNIX_VERSION = 7.3.1
++DOS2UNIX_VERSION = 7.3.4
+ DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
+ DOS2UNIX_LICENSE = BSD-2c
+ DOS2UNIX_LICENSE_FILES = COPYING.txt
