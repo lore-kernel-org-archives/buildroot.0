@@ -1,51 +1,46 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 26 May 2016 22:47:43 +0200
-Subject: [Buildroot] [PATCH v2 resend 1/3] add odroid mali GL support.
-In-Reply-To: <20160525174632.7086-1-daggs@gmx.com>
-References: <20160525174632.7086-1-daggs@gmx.com>
-Message-ID: <20160526224743.70f1c378@itchy>
+From: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+Date: Thu, 26 May 2016 17:03:51 -0400
+Subject: [Buildroot] [PATCH v3 0/2] ARM: ts4800: add basic board support
+Message-ID: <1464296633-1880-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 25 May 2016 20:46:30 +0300,
-Dagg <daggs@gmx.com> a ?crit :
+This patchset adds support for the TS-4800 SoM manufactured by
+Technologic Systems based on the Freescale i.MX515 SoC.
 
-> add GL support to the odroid c2 boards
-> 
-> Signed-off-by: Dagg <daggs@gmx.com>
+Patrick Keroulas (2):
+  ts4800-mbrboot: new package
+  configs: add defconfig for TS-4800
 
-I took the liberty to update this patch as follow:
+ board/technologic/ts4800/genimage.cfg              | 37 +++++++++++
+ board/technologic/ts4800/linux.fragment            |  3 +
+ ...800-add-CONFIG_SYS_FSL_ERRATUM_ESDHC_A001.patch | 36 +++++++++++
+ .../uboot/0002-ts4800-patch-env-to-boot-dts.patch  | 56 +++++++++++++++++
+ board/technologic/ts4800/post-image.sh             | 23 +++++++
+ configs/ts4800_defconfig                           | 28 +++++++++
+ package/Config.in                                  |  1 +
+ package/ts4800-mbrboot/Config.in                   |  5 ++
+ package/ts4800-mbrboot/src/LICENSE                 | 25 ++++++++
+ package/ts4800-mbrboot/src/Makefile                | 21 +++++++
+ package/ts4800-mbrboot/src/mbrboot.c               | 72 ++++++++++++++++++++++
+ package/ts4800-mbrboot/src/mbrboot.ld              | 56 +++++++++++++++++
+ package/ts4800-mbrboot/ts4800-mbrboot.mk           | 22 +++++++
+ 13 files changed, 385 insertions(+)
+ create mode 100644 board/technologic/ts4800/genimage.cfg
+ create mode 100644 board/technologic/ts4800/linux.fragment
+ create mode 100644 board/technologic/ts4800/patches/uboot/0001-ts4800-add-CONFIG_SYS_FSL_ERRATUM_ESDHC_A001.patch
+ create mode 100644 board/technologic/ts4800/patches/uboot/0002-ts4800-patch-env-to-boot-dts.patch
+ create mode 100755 board/technologic/ts4800/post-image.sh
+ create mode 100644 configs/ts4800_defconfig
+ create mode 100644 package/ts4800-mbrboot/Config.in
+ create mode 100644 package/ts4800-mbrboot/src/LICENSE
+ create mode 100644 package/ts4800-mbrboot/src/Makefile
+ create mode 100644 package/ts4800-mbrboot/src/mbrboot.c
+ create mode 100644 package/ts4800-mbrboot/src/mbrboot.ld
+ create mode 100644 package/ts4800-mbrboot/ts4800-mbrboot.mk
 
-1. extract the commands from the sysv service from first patch to an
-helper tool (odroid-setup-display).
-2. add sys/systemd services installation according to Buildroot standards.
-3. fix installation of the libs on the target.
-
-So, now you can drop the first patch, as there is no need anymore for a
-dedicated fs overlay.
-
-I tested it on a systemd-based firmware on my odroidc2 device. To spawn
-a tty on the screen, the following commands should be executed on the
-target:
-
-```
-cd /etc/systemd/system/getty.target.wants/
-ln -s ../../../../lib/systemd/system/getty at .service getty at tty0.service
-reboot
-```
-
-Regards,
-
---
-ELB
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-odroid-mali-new-package.patch
-Type: text/x-patch
-Size: 9270 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160526/b0a29c99/attachment.bin>
+-- 
+1.9.1
