@@ -1,31 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 May 2016 20:43:26 +0200
-Subject: [Buildroot] [PATCH 1/2] package/jack2: Fix build on xtensa
-In-Reply-To: <20160523223033.0500246d@free-electrons.com>
-References: <1464022076-24135-1-git-send-email-bernd.kuhls@t-online.de>
- <20160523223033.0500246d@free-electrons.com>
-Message-ID: <20160526204326.2308bcad@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 26 May 2016 15:45:17 -0300
+Subject: [Buildroot] Genimage last partition size issue
+In-Reply-To: <20160526204157.201c0d78@free-electrons.com>
+References: <CANQCQpb634S9qdGcoZubqLcpFupyLyD8a=5hEOOXiNeOq1Vsrw@mail.gmail.com>
+ <871t4rcuv1.fsf@dell.be.48ers.dk>
+ <20160526203517.1a2a3670@free-electrons.com>
+ <57474262.2020500@zacarias.com.ar>
+ <20160526204157.201c0d78@free-electrons.com>
+Message-ID: <5747443D.2020109@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 26/05/16 15:41, Thomas Petazzoni wrote:
 
-On Mon, 23 May 2016 22:30:33 +0200, Thomas Petazzoni wrote:
+> Well, I was thinking of really creating a 4 GB image file when you have
+> a 4 GB SD card, so that the partition table is exactly in the state it
+> will be on the SD card. But by using sparse files, the 4 GB image file
+> isn't really taking up 4 GB on your disk, and you don't have to dd the
+> entire 4 GB, since zeros can be skipped.
+>
+> Thomas
 
-> I've tested that it properly detects the absence of NGREG on Xtensa.
-> However, I have not tested on architectures where it exists, so I hope
-> I didn't do any typo.
-
-Bernd, do you think you will have some time to propose a patch based on
-something similar to what I suggested, to fix the NGREG jack2 failure?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Yes, that would be suitable, expect for 8 GB cards where you "loose" 
+space :)
+The other approach which i briefly mentioned is on first boot running a 
+resize script that adjusts the partition table to grow the last 
+partition to fit the running block device and resizes the filesystem.
+Of course it has some limitations, like ext2/3/4 filesystems (some 
+others as well) and having some tools around for the trick.
+Regards.
