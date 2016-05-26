@@ -1,10 +1,12 @@
 From: daggs <daggs@gmx.com>
-Date: Thu, 26 May 2016 08:02:00 +0200
-Subject: [Buildroot] [PATCH v2 resend 1/3] add odroid mali GL support.
-In-Reply-To: <20160525224731.3731e26b@itchy>
-References: <20160525174632.7086-1-daggs@gmx.com>,
- <20160525224731.3731e26b@itchy>
-Message-ID: <trinity-a7e8c525-ac22-4f8d-a6ba-5e9443f5fa66-1464242520166@3capp-mailcom-bs10>
+Date: Thu, 26 May 2016 08:05:18 +0200
+Subject: [Buildroot] [PATCH v2 resend 3/3] - allow building of odroid
+ mali GL libs when using defconfig. - add S50display which sets the odroid
+ mali fb.
+In-Reply-To: <20160525223707.203198b1@itchy>
+References: <20160525174921.7217-1-daggs@gmx.com>,
+ <20160525223707.203198b1@itchy>
+Message-ID: <trinity-64a924f5-be62-4d20-ab65-b4f0f1ec63f3-1464242718878@3capp-mailcom-bs10>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +15,42 @@ To: buildroot@busybox.net
 
 Greetings,
 
-> Sent: Wednesday, May 25, 2016 at 11:47 PM
+> Sent: Wednesday, May 25, 2016 at 11:37 PM
 > From: "Eric Le Bihan" <eric.le.bihan.dev@free.fr>
 > To: Dagg <daggs@gmx.com>
 > Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH v2 resend 1/3] add odroid mali GL support.
+> Subject: Re: [Buildroot] [PATCH v2 resend 3/3] - allow building of odroid mali GL libs when using defconfig. - add S50display which sets the odroid mali fb.
 >
 > Hi!
 > 
-> Le Wed, 25 May 2016 20:46:30 +0300,
+> Le Wed, 25 May 2016 20:49:21 +0300,
 > Dagg <daggs@gmx.com> a ?crit :
 > 
-> <snip>
-> > +################################################################################
-> > +#
-> > +# odroid-mali
-> > +#
-> > +################################################################################
-> > +
-> > +ODROID_MALI_VERSION = $(ODROID_DRIVER_VERSION)
-> > +ODROID_MALI_TARBALL = opengl-meson-gxbb-r5p1-01rel0.tar.xz
-> > +ODROID_MALI_SITE = http://sources.openelec.tv/devel
-> > +ODROID_MALI_SOURCE = opengl-meson-gxbb-r5p1-01rel0.tar.xz
-> <snip>
+> >  .../odroidc2/fs-overlay/etc/init.d/S50display      | 103
+> > +++++++++++++++++++++
+> > configs/odroidc2_defconfig                         |   1 + 2 files
+> > changed, 104 insertions(+) create mode 100644
+> > board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display
+> > 
+> > diff --git
+> > a/board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display
+> > b/board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display new file
+> > mode 100644 index 0000000..68f8c6c --- /dev/null
+> > +++ b/board/hardkernel/odroidc2/fs-overlay/etc/init.d/S50display
+> > @@ -0,0 +1,103 @@
 > 
-> I've just received an odroidc2 and I am very interested by this patch.
-> However, why is the binary userspace driver hijacked from another FOSS
-> project (OpenELEC)? 
+> Would it be possible to extract the functions from the S50display
+> service to an external script (e.g. 
+> board/hardkernel/odroidc2/fs-overlay/usr/sbin/setup-fb) and have
+> the service call it? This would allow reusing it with another init system
+> (namely systemd).
 > 
-> Is'nt there an official repository for the MALI 450 userspace driver? I
-> looked at the MALI developer site [1], but could not find anything for it...
-> 
-> [1] https://malideveloper.arm.com/resources/drivers/arm-mali-midgard-gpu-user-space-drivers/	
+> Thanks.
 > 
 > -- 
 > ELB
 
-that is the only place I could find it without the need to find a place to store it.
-
-it can be taken from the official buildroot of hardkernel but it will need a place to store it as it needs to be taken from https://github.com/hardkernel/buildroot/tree/master/package/opengl/src/lib
-
-I can try and modify the file to download the files from the git repo if it is the right way to do this.
+it can be done easily, but as adjusting the code to work with systemd isn't high on my todo list, I'll not be doing it now.
+my apologies.
 
 Dagg.
