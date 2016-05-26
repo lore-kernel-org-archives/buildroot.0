@@ -1,54 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 May 2016 21:18:52 +0200
-Subject: [Buildroot] [git commit] ffmpeg: disable for mips64r2 and mips64r6
-Message-ID: <20160526191902.6477381F98@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 26 May 2016 16:19:53 -0300
+Subject: [Buildroot] Genimage last partition size issue
+In-Reply-To: <20160526211800.798637f5@free-electrons.com>
+References: <CANQCQpb634S9qdGcoZubqLcpFupyLyD8a=5hEOOXiNeOq1Vsrw@mail.gmail.com>
+ <871t4rcuv1.fsf@dell.be.48ers.dk>
+ <20160526203517.1a2a3670@free-electrons.com>
+ <57474262.2020500@zacarias.com.ar>
+ <20160526204157.201c0d78@free-electrons.com>
+ <5747443D.2020109@zacarias.com.ar>
+ <20160526211800.798637f5@free-electrons.com>
+Message-ID: <57474C59.6050409@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd8cbe16c4e3909da13528d72b2573efc8d355fd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 26/05/16 16:18, Thomas Petazzoni wrote:
 
-MIPS architecture detection is not accurate and is always detected as
-mips64 even if we are using mips64r2 or mips64r6. Due to that, ffmpeg's
-build system will pass the -mips64 flag which will conflict with the
--march option that our toolchain wrapper uses, and it will fail to build
-showing errors like this one:
+> Well, when you'll be shipping a product, you know what will be the size
+> of your eMMC / SD card, and it's gonna be the same for all your units,
+> so you can generate an image with the appropriate size.
 
-error: '-mips64' conflicts with the other architecture options, which
-specify a mips64r2 processor
-
-This problem has been already fixed upstream, but we would need to
-backport 17 patches plus some changes in the ffmpeg.mk file. This is too
-much, so better to just disable ffmpeg for mips64r2 and mips64r6 for the
-upcoming Buildroot release.
-
-This commit can be reverted in the next ffmpeg's version bump.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/7fd/7fd8187c0110cdcac622e667f4a81d2db84f11ef/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ffmpeg/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 6b7a6e7..096ff95 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	bool
- 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
--	default y if !BR2_nios2
-+	# ffmpeg's configure script only supports mips64 (r1) variant
-+	default y if !BR2_nios2 && !BR2_mips_64r2 && !BR2_mips_64r6
- 
- menuconfig BR2_PACKAGE_FFMPEG
- 	bool "ffmpeg"
+Hi.
+Unless you're shipping software images to be burnt by users, where you 
+don't ;)
+Regards.
