@@ -1,74 +1,69 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 26 May 2016 10:36:38 +0100
-Subject: [Buildroot] [PATCH] ffmpeg: disable for mips64r2 and mips64r6
-In-Reply-To: <21ei1dxhr9.ln2@ID-313208.user.individual.net>
-References: <1464192852-53397-1-git-send-email-Vincent.Riera@imgtec.com>
- <21ei1dxhr9.ln2@ID-313208.user.individual.net>
-Message-ID: <5746C3A6.2030501@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 26 May 2016 11:38:20 +0200
+Subject: [Buildroot] [PATCH 1/1] sysvinit: update the inittab to support
+	"single" from the kernel
+In-Reply-To: <67E90783-9B37-464B-8F1A-42EA80AE0A1B@exablox.com> (Charles
+ Hardin's message of "Wed, 11 May 2016 09:24:39 -0700")
+References: <1462471997-98580-1-git-send-email-ckhardin@exablox.com>
+ <67E90783-9B37-464B-8F1A-42EA80AE0A1B@exablox.com>
+Message-ID: <8737p56twz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+>>>>> "Charles" == Charles Hardin <ckhardin@exablox.com> writes:
 
-On 26/05/16 06:26, Bernd Kuhls wrote:
-> Hi,
-> 
-> Am Wed, 25 May 2016 17:14:12 +0100 schrieb Vicente Olivert Riera:
-> 
->> This commit can be reverted in the next ffmpeg's version bump.
-> 
-> [...]
->> +	# MIPS architecture detection is not accurate for 64-bit
->> +	# variants. This has been already fixed upstream, so please
->> +	# remove it in the next version bump.
->> +	depends on !BR2_mips_64r2 && !BR2_mips_64r6
-> 
-> you need to propagate this exception as reverse dependency to the following packages:
-> 
-> - gst1-libav
-> - kodi
-> - minidlna
-> - mpd
-> - mpv
-> - opencv
-> - opencv3
-> - squeezelite
-> - tovid
-> 
-> Imho this is too much work, we should live with the build error and
-> bump ffmpeg to 3.0.2 after the next buildroot release to fix the
-> problem. On github you can test my patch series already:
-> 
-> https://github.com/bkuhls/buildroot/tree/ffmpeg3
+Hi,
 
-I can mark this patch as rejected and live with the build error by now.
+ > Following up on this patch - any feedback or problems with this going in?
+ > It is pretty useful to have ?single? passed to the kernel bootargs to work when
+ > trying to repair a system during development.
 
-> The main problem is that vlc 2.2.x is incompatible with ffmpeg3, only
-> vlc master branch works, this branch will be released as vlc 3.0
-> sometime in the future. We would carry a pre-released version of vlc
-> in buildroot, which is something we want to avoid if possible.
-> 
-> Before the ffmpeg 3 vs. vlc problem arose I thought we could remove
-> the vlc warning in its Config.in:
-> https://git.busybox.net/buildroot/tree/package/vlc/Config.in#n2
-> 
-> When bumping to a pre-release version we should keep it ;)
+Sorry for the slow reponse - Committed to next, thanks.
 
-I was wondering why you marked as superseded your patches to bump ffmpeg.
+ >> On May 5, 2016, at 11:13 AM, Charles Hardin <ckhardin@exablox.com> wrote:
+ >> 
+ >> When the kernel passes single in the command line, this translates
+ >> into an init -s option that is suppose to drop into a shell after
+ >> the sysinit and before the runlevel.
+ >> 
+ >> So, in busybox this is hardcoded - but, in sysvinit using the
+ >> sysinit action for the rcS means that it will always be executed
+ >> even when trying to get into single user mode for repair.
+ >> 
+ >> This change should run rcS in all of the expected runlevels
+ >> 1-5 and should achieve the desired result compared to the busybox
+ >> and still allow a single user shell to get started as expected
+ >> before running rcS.
+ >> 
+ >> Signed-off-by: Charles Hardin <ckhardin@exablox.com>
+ >> ---
+ >> package/sysvinit/inittab | 2 +-
+ >> 1 file changed, 1 insertion(+), 1 deletion(-)
+ >> 
+ >> diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
+ >> index 27eb4a6..fad91ea 100644
+ >> --- a/package/sysvinit/inittab
+ >> +++ b/package/sysvinit/inittab
+ >> @@ -10,7 +10,7 @@ si2::sysinit:/bin/mkdir -p /dev/pts
+ >> si3::sysinit:/bin/mkdir -p /dev/shm
+ >> si4::sysinit:/bin/mount -a
+ >> si5::sysinit:/bin/hostname -F /etc/hostname
+ >> -si6::sysinit:/etc/init.d/rcS
+ >> +rcS:12345:wait:/etc/init.d/rcS
+ >> 
+ >> # S0:1:respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
+ >> 
+ >> -- 
+ >> 2.7.4 (Apple Git-66)
+ >> 
 
-Ok, then let's wait.
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
 
-Regards,
-
-Vincent.
-
-> Regards, Bernd
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+-- 
+Bye, Peter Korsgaard
