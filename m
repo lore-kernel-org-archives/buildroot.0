@@ -1,33 +1,33 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 26 May 2016 16:24:33 +0300
-Subject: [Buildroot] [PATCH] eudev: link to real homepage
-Message-ID: <4a9840c0685e7e59af8909d3550c4122c0daa824.1464269073.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 26 May 2016 15:47:54 +0200
+Subject: [Buildroot] [PATCH] lirc-tools: add patch to fix parallel build
+	issue
+In-Reply-To: <1464184800-25714-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 25 May 2016 16:00:00 +0200")
+References: <1464184800-25714-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87pos953sl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Gentoo wiki page is much more informative than the download directory.
-This is the official homepage according to top level README.md.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/eudev/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > The lirc-tools package fails to build once in a while in the
+ > autobuilders. Some quick analysis of the problematic Makefile.am has
+ > revealed one issue. However, since the issue is difficult to
+ > reproduce, we could only check that the new solution continue to work,
+ > and we're not 100% sure it fixes the entire problem: only the
+ > autobuilders can say, over time.
 
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index 76df409b6ce8..cda06e7678d4 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -15,7 +15,7 @@ config BR2_PACKAGE_EUDEV
- 	  eudev requires a Linux kernel >= 2.6.34: it relies on devtmpfs
- 	  and inotify.
- 
--	  http://dev.gentoo.org/~blueness/eudev
-+	  https://wiki.gentoo.org/wiki/Project:Eudev
- 
- if BR2_PACKAGE_EUDEV
- 
+ > Supposedly fixes:
+
+ >   http://autobuild.buildroot.org/results/eb47d57de8182d25b1dacbf0ac3726ed20063d04/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-2.8.1
+Bye, Peter Korsgaard
