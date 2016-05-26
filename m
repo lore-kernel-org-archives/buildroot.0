@@ -1,53 +1,58 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 26 May 2016 16:54:20 +0100
-Subject: [Buildroot] [PATCH 2/2] ffmpeg: disable for mips64r2 and mips64r6
-In-Reply-To: <1464278060-49999-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1464278060-49999-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1464278060-49999-2-git-send-email-Vincent.Riera@imgtec.com>
+Date: Thu, 26 May 2016 16:55:51 +0100
+Subject: [Buildroot] [PATCH] ffmpeg: disable for mips64r2 and mips64r6
+In-Reply-To: <20160526164803.39a58695@free-electrons.com>
+References: <1464192852-53397-1-git-send-email-Vincent.Riera@imgtec.com>
+ <21ei1dxhr9.ln2@ID-313208.user.individual.net>
+ <20160526164803.39a58695@free-electrons.com>
+Message-ID: <57471C87.2080100@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MIPS architecture detection is not accurate and is always detected as
-mips64 even if we are using mips64r2 or mips64r6. Due to that, ffmpeg's
-build system will pass the -mips64 flag which will conflict with the
--march option that our toolchain wrapper uses, and it will fail to build
-showing errors like this one:
+Hello Thomas,
 
-error: '-mips64' conflicts with the other architecture options, which
-specify a mips64r2 processor
+On 26/05/16 15:48, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu, 26 May 2016 07:26:26 +0200, Bernd Kuhls wrote:
+> 
+>>> +	# MIPS architecture detection is not accurate for 64-bit
+>>> +	# variants. This has been already fixed upstream, so please
+>>> +	# remove it in the next version bump.
+>>> +	depends on !BR2_mips_64r2 && !BR2_mips_64r6  
+>>
+>> you need to propagate this exception as reverse dependency to the following packages:
+>>
+>> - gst1-libav
+>> - kodi
+>> - minidlna
+>> - mpd
+>> - mpv
+>> - opencv
+>> - opencv3
+>> - squeezelite
+>> - tovid
+>>
+>> Imho this is too much work, we should live with the build error and
+>> bump ffmpeg to 3.0.2 after the next buildroot release to fix the
+>> problem. On github you can test my patch series already:
+> 
+> ffmpeg already has an architecture exception for nios2. So we could
+> also replace that with a BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS option, and
+> therefore easily add the exception for mips64r2/r6.
 
-This problem has been already fixed upstream, but we would need to
-backport 17 patches plus some changes in the ffmpeg.mk file. This is too
-much, so better to just disable ffmpeg for mips64r2 and mips64r6 for the
-upcoming Buildroot release.
+Done and marked this patch as superseded.
 
-This commit can be reverted in the next ffmpeg's version bump.
+Regards,
 
-Fixes:
+Vincent.
 
-  http://autobuild.buildroot.net/results/7fd/7fd8187c0110cdcac622e667f4a81d2db84f11ef/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/ffmpeg/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 6b7a6e7..096ff95 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	bool
- 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
--	default y if !BR2_nios2
-+	# ffmpeg's configure script only supports mips64 (r1) variant
-+	default y if !BR2_nios2 && !BR2_mips_64r2 && !BR2_mips_64r6
- 
- menuconfig BR2_PACKAGE_FFMPEG
- 	bool "ffmpeg"
--- 
-2.7.3
+> We're down to very few build failures per day, so I would really like
+> to get this issue out of the way, and see what other failures we have.
+> ffmpeg on mips64r2/r6 is now the #1 failure.
+> 
+> Thomas
+> 
