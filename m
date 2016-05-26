@@ -1,43 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 May 2016 22:05:48 +0200
-Subject: [Buildroot] Genimage last partition size issue
-In-Reply-To: <20160526215929.61993c8f@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 26 May 2016 21:59:29 +0200")
-References: <CANQCQpb634S9qdGcoZubqLcpFupyLyD8a=5hEOOXiNeOq1Vsrw@mail.gmail.com>
- <871t4rcuv1.fsf@dell.be.48ers.dk>
- <20160526203517.1a2a3670@free-electrons.com>
- <87bn3s61en.fsf@dell.be.48ers.dk>
- <20160526215929.61993c8f@free-electrons.com>
-Message-ID: <8737p460v7.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 May 2016 22:08:36 +0200
+Subject: [Buildroot] [git commit branch/next] samba4: remove compilation of
+	.pyc files
+Message-ID: <20160526200855.DF44B802E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=cfa73104fa8cc12925b56a482e7bd4b200f6be9e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Hello,
- > On Thu, 26 May 2016 21:54:08 +0200, Peter Korsgaard wrote:
+Now that .py files are globally compiled into .pyc files, we can get
+rid of the samba4 specific logic doing this compilation.
 
- >> Can dd detect and do something sensible about sparse files? I thought it
- >> was only able to create sparse files (by seeking)? I would guess you
- >> need a tool that understand the filesystem to know if you can really
- >> skip sequences of zeros when writing.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/samba4/samba4.mk | 10 ----------
+ 1 file changed, 10 deletions(-)
 
- > man dd(1):
-
- >        sparse try to seek rather than write the output for NUL input blocks
-
- > So it doesn't seem to need a sparse file, it's just that it detects
- > blocks that are completely zero and does not write them.
-
-Yes, but you cannot safely use that. What if you have a file on your
-filesystem containing a block of zeroes? (or as part of the filesystem
-meta data like block bitmap or journal) You need to make sure that does
-get written to the card, otherwise you will read back whatever was
-written before to the card.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 9ccc6a7..bb546f0 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -118,16 +118,6 @@ define SAMBA4_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+-# Samba just installs .py files so the purge causes problems with some tools
+-ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+-define SAMBA4_BUILD_PYC_FILES
+-	PYTHONPATH="$(PYTHON_PATH)" \
+-		$(HOST_DIR)/usr/bin/python -c "import compileall; \
+-		compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/samba')"
+-endef
+-SAMBA4_POST_INSTALL_TARGET_HOOKS += SAMBA4_BUILD_PYC_FILES
+-endif
+-
+ ifeq ($(BR2_PACKAGE_SAMBA4_AD_DC),)
+ SAMBA4_CONF_OPTS += --without-ad-dc
+ endif
