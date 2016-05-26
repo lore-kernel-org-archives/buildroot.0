@@ -1,36 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 May 2016 21:14:13 +0200
-Subject: [Buildroot] [PATCH v3 0/6] Fixes for go language support
-In-Reply-To: <cover.1464286518.git.geoff@infradead.org>
-References: <cover.1464286518.git.geoff@infradead.org>
-Message-ID: <20160526211413.2307341d@free-electrons.com>
+From: wechat:goodguywang <buildroot@uclibc.org>
+Date: Fri, 27 May 2016 03:14:49 +0800
+Subject: [Buildroot] enquiry from Anqing Kason Imp.&Exp. Co,
+	.Ltd|www.chinakason.com463541621
+Message-ID: <20160527031502351025@yun151.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Sir/Madam;
+This is one promotion letter. If there is no use for you, please ingore it!
+This is Maria from http://chinakason.blogspot.com and www.facebook.com/chinakason  
+We are one leading exporter of of household cleaning products & personal care,Health care product in China. 
+We can supply the following products:
+1.Shaving products: disposable razor & razor blades;
 
-On Thu, 26 May 2016 18:21:32 +0000, Geoff Levand wrote:
 
-> Geoff Levand (6):
->       package/go: Build host tools with host CC
->       package/go: Add HOST_GO_TARGET_ENV
->       package/flannel: Use HOST_GO_TARGET_ENV
->       package/go: Add HOST_GO_CGO_ENABLED
->       package/flannel: Add BR2_TOOLCHAIN_HAS_THREADS
->       package/go: Set file timestamp
+2. Health care products:detox foot patch, lose weight patch, glutathione patch, cooling patch,eye patch,facial mask,cold and hot pain relief patch,
+mosquito repellent patch,anti smoke patch,hand mask,foot mask,herbal pain relief patch,sex patch,breast enlargement patch,
+capsicum patch,magnet herbal slim patch,guarana slim patch,wonder patch,warmer pad, etc.
 
-Thanks, I've applied the series. I made a few changes on two patches
-(I'll comment on them directly), and I added an additional patch that
-adds double quotes around $(TARGET_CC) and $(TARGET_CXX). Indeed, when
-ccache support is enabled, those variables contain two words.
 
-Thanks a lot!
+3.Cleaning products: grill brick, gril stone, cleaning block,foam glass, pumice stone, cellular glass, pumice sticker, scouring bar,
+bath sponge, mesh sponge,bath puff, pumice sponge,building material foam glass insulation material.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+
+If you are interested in the above products, please feel free to write email to our company. Please @ chinakasoncompany at vip.163.com 
+or twitter @chinakason to us.
+
+
+Thanks/Maria
+http://chinakason.blogspot.com 
+www.facebook.com/chinakason  
+www.twitter.com/chinakason
+
+7772
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160527/d0548b22/attachment.html>
