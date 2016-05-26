@@ -1,89 +1,190 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 21:32:27 +0200
-Subject: [Buildroot] [git commit] php-yaml: re add package,
-	now compatible with PHP 7
-Message-ID: <20160601161312.67931802A0@busybox.osuosl.org>
+Date: Thu, 26 May 2016 22:07:35 +0200
+Subject: [Buildroot] [git commit] python/python3: globalize *.pyc files
+	compilation
+Message-ID: <20160601161311.16C38802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d119288ea369fada7bf8811ac2300f828645fd6
+commit: https://git.buildroot.net/buildroot/commit/?id=549bbba67f5c1656f566b08911aa553e57dc3f59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Currently, each python package (be it the python interpreter package
+itself or external python modules) is responsible for compiling its
+.py into .pyc files. Unfortunately, this is not ideal as some packages
+only install .py files without compiling them into .pyc files. In this
+case, if the Buildroot configuration specifies to keep only the .pyc
+files, the .py files are removed and lost.
+
+To address this, this commit changes the logic by making the
+compilation of .pyc files a global operation: the python interpreter
+packages register a target finalize hook that is in charge of
+compiling all installed .py files.
+
+The *.pyc generation on a per package basis is disabled in the
+python-package infrastructure by passing the "--no-compile" option to
+setup.py.
+
+The *.pyc generation for the Python interpreter internal modules is
+disabled through --disable-pyc-build configure option.
+
+A small helper script is used to perform the compilation, the purpose
+of this script is to abort the compilation process if one of the .py
+file cannot be compiled. It has been provided by Samuel Martin and
+integrated into this commit.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
+[Thomas:
+ - rework for python 3.5
+ - integrate Samuel proposal that allows to detect compilation
+   failures.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in              |  1 +
- package/php-yaml/Config.in     |  8 ++++++++
- package/php-yaml/php-yaml.hash |  2 ++
- package/php-yaml/php-yaml.mk   | 26 ++++++++++++++++++++++++++
- 4 files changed, 37 insertions(+)
+ package/pkg-python.mk        |  2 +-
+ package/python/python.mk     | 16 +++++++++++++++-
+ package/python3/python3.mk   | 20 +++++++++++++++-----
+ support/scripts/pycompile.py | 24 ++++++++++++++++++++++++
+ 4 files changed, 55 insertions(+), 7 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 4639587..ae74f17 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -618,6 +618,7 @@ menu "External php extensions"
- 	source "package/php-imagick/Config.in"
- 	source "package/php-memcached/Config.in"
- 	source "package/php-ssh2/Config.in"
-+	source "package/php-yaml/Config.in"
- 	source "package/php-zmq/Config.in"
- endmenu
- endif
-diff --git a/package/php-yaml/Config.in b/package/php-yaml/Config.in
-new file mode 100644
-index 0000000..8d09ce2
---- /dev/null
-+++ b/package/php-yaml/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PHP_YAML
-+	bool "php-yaml"
-+	depends on BR2_PACKAGE_PHP
-+	select BR2_PACKAGE_LIBYAML
-+	help
-+	  PHP YAML-1.1 parser and emitter.
-+
-+	  http://pecl.php.net/package/yaml
-diff --git a/package/php-yaml/php-yaml.hash b/package/php-yaml/php-yaml.hash
-new file mode 100644
-index 0000000..a40677e
---- /dev/null
-+++ b/package/php-yaml/php-yaml.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 d49acf2b7843258957a16df0d7ced56c0e1fc3eaa54f54289e4012edc002814c  yaml-2.0.0RC7.tgz
-diff --git a/package/php-yaml/php-yaml.mk b/package/php-yaml/php-yaml.mk
-new file mode 100644
-index 0000000..2711890
---- /dev/null
-+++ b/package/php-yaml/php-yaml.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# php-yaml
-+#
-+################################################################################
-+
-+PHP_YAML_VERSION = 2.0.0RC7
-+PHP_YAML_SOURCE = yaml-$(PHP_YAML_VERSION).tgz
-+PHP_YAML_SITE = https://pecl.php.net/get
-+PHP_YAML_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
-+	--with-yaml=$(STAGING_DIR)/usr
-+# phpize does the autoconf magic
-+PHP_YAML_DEPENDENCIES = libyaml php host-autoconf
-+PHP_YAML_LICENSE = MIT
-+PHP_YAML_LICENSE_FILES = LICENSE
-+
-+define PHP_YAML_PHPIZE
-+	(cd $(@D); \
-+		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
-+		$(STAGING_DIR)/usr/bin/phpize)
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index b7a702d..9725d24 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -253,7 +253,7 @@ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	(cd $$($$(PKG)_BUILDDIR)/; \
+ 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
+-		$$($(2)_PYTHON_INTERPRETER) setup.py install \
++		$$($(2)_PYTHON_INTERPRETER) setup.py install --no-compile \
+ 		$$($$(PKG)_BASE_INSTALL_TARGET_OPTS) \
+ 		$$($$(PKG)_INSTALL_TARGET_OPTS))
+ endef
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 4e92766..913dc2c 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -143,7 +143,8 @@ PYTHON_CONF_OPTS += \
+ 	--disable-tk		\
+ 	--disable-nis		\
+ 	--disable-dbm		\
+-	--disable-pyo-build
++	--disable-pyo-build	\
++	--disable-pyc-build
+ 
+ # This is needed to make sure the Python build process doesn't try to
+ # regenerate those files with the pgen program. Otherwise, it builds
+@@ -217,6 +218,17 @@ PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
++define PYTHON_CREATE_PYC_FILES
++	PYTHONPATH="$(PYTHON_PATH)" \
++	$(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
++		support/scripts/pycompile.py \
++		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
 +endef
 +
-+PHP_YAML_PRE_CONFIGURE_HOOKS += PHP_YAML_PHPIZE
++ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON_PY_PYC),y)
++TARGET_FINALIZE_HOOKS += PYTHON_CREATE_PYC_FILES
++endif
 +
-+$(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+ define PYTHON_REMOVE_PY_FILES
+ 	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
+@@ -225,6 +237,8 @@ endef
+ TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
+ endif
+ 
++# Normally, *.pyc files should not have been compiled, but just in
++# case, we make sure we remove all of them.
+ ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY),y)
+ define PYTHON_REMOVE_PYC_FILES
+ 	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | \
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 3089c03..8459b11 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -78,10 +78,6 @@ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+ PYTHON3_CONF_OPTS += --enable-old-stdlib-cache
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
+-PYTHON3_CONF_OPTS += --disable-pyc-build
+-endif
+-
+ ifeq ($(BR2_PACKAGE_PYTHON3_SQLITE),y)
+ PYTHON3_DEPENDENCIES += sqlite
+ else
+@@ -135,7 +131,8 @@ PYTHON3_CONF_OPTS += \
+ 	--disable-lib2to3	\
+ 	--disable-tk		\
+ 	--disable-nis		\
+-	--disable-idle3
++	--disable-idle3		\
++	--disable-pyc-build
+ 
+ # Python builds two tools to generate code: 'pgen' and
+ # '_freeze_importlib'. Unfortunately, for the target Python, they are
+@@ -212,6 +209,17 @@ PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdat
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+ 
++define PYTHON3_CREATE_PYC_FILES
++	PYTHONPATH="$(PYTHON3_PATH)" \
++	$(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
++		support/scripts/pycompile.py \
++		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
++endef
++
++ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PY_PYC),y)
++TARGET_FINALIZE_HOOKS += PYTHON3_CREATE_PYC_FILES
++endif
++
+ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+ define PYTHON3_REMOVE_PY_FILES
+ 	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | \
+@@ -220,6 +228,8 @@ endef
+ TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
+ endif
+ 
++# Normally, *.pyc files should not have been compiled, but just in
++# case, we make sure we remove all of them.
+ ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
+ define PYTHON3_REMOVE_PYC_FILES
+ 	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.pyc' -print0 | \
+diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+new file mode 100644
+index 0000000..fde711a
+--- /dev/null
++++ b/support/scripts/pycompile.py
+@@ -0,0 +1,24 @@
++#!/usr/bin/env python
++
++# Wrapper for python2 and python3 around compileall to raise exception
++# when a python byte code generation failed.
++#
++# Inspired from:
++#   http://stackoverflow.com/questions/615632/how-to-detect-errors-from-compileall-compile-dir
++
++from __future__ import print_function
++import sys
++import py_compile
++import compileall
++
++class ReportProblem:
++    def __nonzero__(self):
++        type, value, traceback = sys.exc_info()
++        if type is not None and issubclass(type, py_compile.PyCompileError):
++            print("Cannot compile %s" %value.file)
++            raise value
++        return 1
++
++report_problem = ReportProblem()
++
++compileall.compile_dir(sys.argv[1], quiet=report_problem)
