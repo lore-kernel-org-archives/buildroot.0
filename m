@@ -1,119 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 May 2016 15:15:02 +0200
-Subject: [Buildroot] [git commit] jamvm: add patch to fix musl build
-Message-ID: <20160526135039.911AC81EE9@busybox.osuosl.org>
+Date: Thu, 26 May 2016 15:47:18 +0200
+Subject: [Buildroot] [git commit] lirc-tools: add patch to fix parallel
+	build issue
+Message-ID: <20160526135039.9AF1481F75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b6b67f34d6d4aeb340bbca579dbf85363c3f4ea
+commit: https://git.buildroot.net/buildroot/commit/?id=e6f976b6d4fdd307b81372e9ffbf94ea93852c90
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch available from JamVM's bug tracker to fix the build with
-the musl C library. The build was verified with the musl and uClibc C
-libraries.
+The lirc-tools package fails to build once in a while in the
+autobuilders. Some quick analysis of the problematic Makefile.am has
+revealed one issue. However, since the issue is difficult to
+reproduce, we could only check that the new solution continue to work,
+and we're not 100% sure it fixes the entire problem: only the
+autobuilders can say, over time.
 
-Fixes:
+Supposedly fixes:
 
-  http://autobuild.buildroot.org/results/8292973e9f6f2971d090f02f24d11a31709254cf/
+  http://autobuild.buildroot.org/results/eb47d57de8182d25b1dacbf0ac3726ed20063d04/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Use-fenv.h-instead-of-fpu_control.h.patch | 86 ++++++++++++++++++++++
- 1 file changed, 86 insertions(+)
+ ...per-linking-method-to-avoid-parallel-buil.patch | 46 ++++++++++++++++++++++
+ package/lirc-tools/lirc-tools.mk                   |  2 +
+ 2 files changed, 48 insertions(+)
 
-diff --git a/package/jamvm/0001-Use-fenv.h-instead-of-fpu_control.h.patch b/package/jamvm/0001-Use-fenv.h-instead-of-fpu_control.h.patch
+diff --git a/package/lirc-tools/0001-lib-use-proper-linking-method-to-avoid-parallel-buil.patch b/package/lirc-tools/0001-lib-use-proper-linking-method-to-avoid-parallel-buil.patch
 new file mode 100644
-index 0000000..50f95cd
+index 0000000..5863128
 --- /dev/null
-+++ b/package/jamvm/0001-Use-fenv.h-instead-of-fpu_control.h.patch
-@@ -0,0 +1,86 @@
-+From 7152ded5219453c9ff1cd062cecbeaf4d77e4cab Mon Sep 17 00:00:00 2001
++++ b/package/lirc-tools/0001-lib-use-proper-linking-method-to-avoid-parallel-buil.patch
+@@ -0,0 +1,46 @@
++From f2fc8c48e5e55a91b309225f377b6cb3783fc6f6 Mon Sep 17 00:00:00 2001
 +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Thu, 26 May 2016 15:05:48 +0200
-+Subject: [PATCH] Use <fenv.h> instead of <fpu_control.h>
++Date: Wed, 25 May 2016 15:21:57 +0200
++Subject: [PATCH] lib: use proper linking method to avoid parallel build issue
 +
-+musl libc (http://musl-libc.org lack the non-standard <fpu_control.h>
-+header, which is used in src/os/linux/{i386,x86_64}/init.c files to
-+setup the floating point precision. This patch makes it use the
-+standard C <fenv.h> header instead.
++Using <foo>_LDFLAGS = -l<library> is correct when <library> is an
++external library. However, when it is built by the same package, and
++especially in the same directory, this is wrong and can cause parallel
++build issues. In lib/Makefile.am, there was:
 +
-+Original patch at Felix Janda at
-+https://sourceforge.net/p/jamvm/patches/6/.
++libirrecord_la_LDFLAGS      = -llirc
++
++But the liblirc library is built in the same directory. Or, due to the
++using of <foo>_LDFLAGS, make is not aware of the build dependency
++between libirrecord and liblirc.
++
++To solve this, <foo>_LIBADD should be used instead, as follows:
++
++libirrecord_la_LIBADD       = liblirc.la
++
++This fixes parallel build issues seen by automated build tests
++conducted by the Buildroot project, such as:
++
++  http://autobuild.buildroot.org/results/eb4/eb47d57de8182d25b1dacbf0ac3726ed20063d04/build-end.log
 +
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ src/os/linux/i386/init.c   | 12 ++++++------
-+ src/os/linux/x86_64/init.c | 16 ++++++----------
-+ 2 files changed, 12 insertions(+), 16 deletions(-)
++ lib/Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/os/linux/i386/init.c b/src/os/linux/i386/init.c
-+index d9c6648..94a733e 100644
-+--- a/src/os/linux/i386/init.c
-++++ b/src/os/linux/i386/init.c
-+@@ -19,18 +19,18 @@
-+  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-+  */
++diff --git a/lib/Makefile.am b/lib/Makefile.am
++index ce5c94c..8780f88 100644
++--- a/lib/Makefile.am
+++++ b/lib/Makefile.am
++@@ -29,7 +29,7 @@ liblirc_la_SOURCES          = config_file.c \
++                               transmit.c \
++                               util.c
 + 
-+-#include <fpu_control.h>
-++#include <fenv.h>
++-libirrecord_la_LDFLAGS      = -llirc
+++libirrecord_la_LIBADD       = liblirc.la
++ libirrecord_la_SOURCES      = irrecord.c
 + 
-+ /* Change floating point precision to double (64-bit) from
-+  * the extended (80-bit) Linux default. */
-+ 
-+ void setDoublePrecision() {
-+-    fpu_control_t cw;
-++    fenv_t fenv;
-+ 
-+-    _FPU_GETCW(cw);
-+-    cw &= ~_FPU_EXTENDED;
-+-    cw |= _FPU_DOUBLE;
-+-    _FPU_SETCW(cw);
-++    fegetenv(&fenv);
-++    fenv.__control_word &= ~0x300; /* _FPU_EXTENDED */
-++    fenv.__control_word |= 0x200; /* _FPU_DOUBLE */
-++    fesetenv(&fenv);
-+ }
-+ 
-+ void initialisePlatform() {
-+diff --git a/src/os/linux/x86_64/init.c b/src/os/linux/x86_64/init.c
-+index 9d55229..a76a923 100644
-+--- a/src/os/linux/x86_64/init.c
-++++ b/src/os/linux/x86_64/init.c
-+@@ -19,9 +19,7 @@
-+  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-+  */
-+ 
-+-#ifdef __linux__
-+-#include <fpu_control.h>
-+-#endif
-++#include <fenv.h>
-+ 
-+ /* Change the x87 FPU precision to double (64-bit) from the extended
-+    (80-bit) Linux default.  Note, unlike on i386, my testcases pass
-+@@ -30,14 +28,12 @@
-+ */
-+ 
-+ void setDoublePrecision() {
-+-#ifdef __linux__
-+-    fpu_control_t cw;
-++    fenv_t fenv;
-+ 
-+-    _FPU_GETCW(cw);
-+-    cw &= ~_FPU_EXTENDED;
-+-    cw |= _FPU_DOUBLE;
-+-    _FPU_SETCW(cw);
-+-#endif
-++    fegetenv(&fenv);
-++    fenv.__control_word &= ~0x300; /*_FPU_EXTENDED */
-++    fenv.__control_word |= 0x200; /*_FPU_DOUBLE */
-++    fesetenv(&fenv);
-+ }
-+ 
-+ void initialisePlatform() {
++ liblirc_client_la_LDFLAGS   = -version-info 4:0:4
 +-- 
 +2.7.4
 +
+diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
+index 46886a9..289b9ed 100644
+--- a/package/lirc-tools/lirc-tools.mk
++++ b/package/lirc-tools/lirc-tools.mk
+@@ -11,6 +11,8 @@ LIRC_TOOLS_LICENSE = GPLv2+
+ LIRC_TOOLS_LICENSE_FILES = COPYING
+ LIRC_TOOLS_DEPENDENCIES = host-libxslt host-pkgconf host-python3
+ LIRC_TOOLS_INSTALL_STAGING = YES
++# 0001-lib-use-proper-linking-method-to-avoid-parallel-buil.patch
++LIRC_TOOLS_AUTORECONF = YES
+ 
+ LIRC_TOOLS_CONF_ENV = XSLTPROC=yes
+ LIRC_TOOLS_CONF_OPTS = --without-x
