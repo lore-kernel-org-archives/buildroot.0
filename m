@@ -1,42 +1,28 @@
-From: Geoff Levand <geoff@infradead.org>
-Date: Thu, 26 May 2016 12:51:49 -0700
-Subject: [Buildroot] [PATCH v3 1/3] runc: new package
-In-Reply-To: <20160526211207.06e27be6@free-electrons.com>
-References: <1464219082-3818-1-git-send-email-christian@paral.in>
- <1464219082-3818-2-git-send-email-christian@paral.in>
- <20160526211207.06e27be6@free-electrons.com>
-Message-ID: <1464292309.2374.38.camel@infradead.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 May 2016 21:52:10 +0200
+Subject: [Buildroot] [PATCH] dos2unix: bump to version 7.3.4
+In-Reply-To: <1464291083-16556-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1464291083-16556-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160526215210.63c87bb3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-On Thu, 2016-05-26 at 21:12 +0200, Thomas Petazzoni wrote:
-> On Wed, 25 May 2016 16:31:20 -0700, Christian Stewart wrote:
-> +define RUNC_CONFIGURE_CMDS
-> > +> > 	> > # Put sources at prescribed GOPATH location.
-> > +> > 	> > export $(RUNC_MAKE_ENV) && \
-> 
-> What is the export doing here?
-> 
-> > +> > 	> > 	> > mkdir -p $$GOPATH/src/github.com/opencontainers && \
-> > +> > 	> > 	> > ln -s $(@D) $$GOPATH/src/github.com/opencontainers/runc
-> 
-> There is no need for a && between those lines.
-> 
-> And why is this needed at all? What is this "prescribed GOPATH" thing ?
+On Thu, 26 May 2016 16:31:23 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/dos2unix/dos2unix.hash | 2 +-
+>  package/dos2unix/dos2unix.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Go expects the developer to have a 'workspace' with a
-prescribed directory layout.  Many projects archive their
-sources with a truncated path, so when they are extracted
-to a directory (@D in buildroot's case) things need to be
-fix enough for the go compiler to work.  This is a common
-situation, and these fixups are often seen in project
-build scripts.
+Applied to next, thanks.
 
-See https://golang.org/doc/code.html#Workspaces
-
--Geoff
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
