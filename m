@@ -1,31 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 May 2016 15:47:54 +0200
-Subject: [Buildroot] [PATCH] lirc-tools: add patch to fix parallel build
-	issue
-In-Reply-To: <1464184800-25714-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 25 May 2016 16:00:00 +0200")
-References: <1464184800-25714-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87pos953sl.fsf@dell.be.48ers.dk>
+Date: Thu, 26 May 2016 15:50:22 +0200
+Subject: [Buildroot] [PATCH] eudev: link to real homepage
+In-Reply-To: <4a9840c0685e7e59af8909d3550c4122c0daa824.1464269073.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 26 May 2016 16:24:33 +0300")
+References: <4a9840c0685e7e59af8909d3550c4122c0daa824.1464269073.git.baruch@tkos.co.il>
+Message-ID: <87lh2x53oh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > The lirc-tools package fails to build once in a while in the
- > autobuilders. Some quick analysis of the problematic Makefile.am has
- > revealed one issue. However, since the issue is difficult to
- > reproduce, we could only check that the new solution continue to work,
- > and we're not 100% sure it fixes the entire problem: only the
- > autobuilders can say, over time.
+ > The Gentoo wiki page is much more informative than the download directory.
+ > This is the official homepage according to top level README.md.
 
- > Supposedly fixes:
-
- >   http://autobuild.buildroot.org/results/eb47d57de8182d25b1dacbf0ac3726ed20063d04/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
