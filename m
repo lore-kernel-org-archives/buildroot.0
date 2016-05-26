@@ -1,38 +1,37 @@
 From: Geoff Levand <geoff@infradead.org>
 Date: Thu, 26 May 2016 18:21:33 +0000
-Subject: [Buildroot] [PATCH v3 5/6] package/flannel: Add
-	BR2_TOOLCHAIN_HAS_THREADS
+Subject: [Buildroot] [PATCH v3 3/6] package/flannel: Use HOST_GO_TARGET_ENV
 In-Reply-To: <cover.1464286518.git.geoff@infradead.org>
 References: <cover.1464286518.git.geoff@infradead.org>
-Message-ID: <627469f0b7b4e604da3a5ab3ef721f138a1c95a8.1464286518.git.geoff@infradead.org>
+Message-ID: <e11c125146bda639dbf31b256450f7ae61fd3678.1464286518.git.geoff@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-flannel uses the cgo package, so needs a toolchain with thread
-support.
+Use the newly added HOST_GO_TARGET_ENV variable to pickup the
+correct go environment for package builds.
 
 Signed-off-by: Geoff Levand <geoff@infradead.org>
 ---
- package/flannel/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/flannel/flannel.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/flannel/Config.in b/package/flannel/Config.in
-index c6a84ef..32d9f66 100644
---- a/package/flannel/Config.in
-+++ b/package/flannel/Config.in
-@@ -1,6 +1,10 @@
-+comment "flannel needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_FLANNEL
- 	bool "flannel"
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Flannel is a virtual network that gives a subnet to each
- 	  host for use with container runtimes.
+diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
+index 876efe6..b5f61a0 100644
+--- a/package/flannel/flannel.mk
++++ b/package/flannel/flannel.mk
+@@ -14,9 +14,9 @@ FLANNEL_LICENSE_FILES = LICENSE
+ FLANNEL_DEPENDENCIES = host-go
+ 
+ FLANNEL_MAKE_ENV = \
++	$(HOST_GO_TARGET_ENV) \
+ 	GOBIN="$(@D)/bin" \
+ 	GOPATH="$(@D)/gopath" \
+-	GOARCH=$(GO_GOARCH) \
+ 	CGO_ENABLED=1
+ 
+ FLANNEL_GLDFLAGS = \
 -- 
 2.5.0
