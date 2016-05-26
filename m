@@ -1,38 +1,118 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Thu, 26 May 2016 14:11:05 +0200
-Subject: [Buildroot] auto login
-In-Reply-To: <CAG7w3y=RoEyLovRoYeNjf1uhRw3TZrVZdyNEFMQan4T99GQwyg@mail.gmail.com>
-References: <CAG7w3y=RoEyLovRoYeNjf1uhRw3TZrVZdyNEFMQan4T99GQwyg@mail.gmail.com>
-Message-ID: <0ddfa798-219c-bc26-d5be-75623c30529c@mclink.it>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 May 2016 15:08:15 +0200
+Subject: [Buildroot] [PATCH] jamvm: add patch to fix musl build
+Message-ID: <1464268095-19912-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gdbabu.
+Add a patch available from JamVM's bug tracker to fix the build with
+the musl C library. The build was verified with the musl and uClibc C
+libraries.
 
-Il 26/05/2016 11:53, gdbabu Krishnan ha scritto:
-> HI,
->
-> i am working with buildroot for raspberry pi, i have successfully  build image for pi board, i have some doubts,
->
->
-> 1. how can i do  auto login
->
-> 2.run X11 after boot completed by "startx" command.
-It depends on which kind od startup (/sbin/init) You are using.
-Assuming You are using the basic Busybox init (or any kind of sysV init) you have
-to modify /etc/inittab.
+Fixes:
 
-This is normal *nix administration and has nothing to do with Buildroot.
-Notice "init" service provided by Busybox is rather limited compared to standard
-sysV init; see https://git.busybox.net/busybox/tree/examples/inittab
+  http://autobuild.buildroot.org/results/8292973e9f6f2971d090f02f24d11a31709254cf/
 
-For Your problems make sure You have something like:|
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-Use-fenv.h-instead-of-fpu_control.h.patch | 86 ++++++++++++++++++++++
+ 1 file changed, 86 insertions(+)
+ create mode 100644 package/jamvm/0001-Use-fenv.h-instead-of-fpu_control.h.patch
 
-::askfirst:-/bin/sh|
-|||::respawn:/usr/bin/startx|
-||
-
-|Regards Mauro |
+diff --git a/package/jamvm/0001-Use-fenv.h-instead-of-fpu_control.h.patch b/package/jamvm/0001-Use-fenv.h-instead-of-fpu_control.h.patch
+new file mode 100644
+index 0000000..50f95cd
+--- /dev/null
++++ b/package/jamvm/0001-Use-fenv.h-instead-of-fpu_control.h.patch
+@@ -0,0 +1,86 @@
++From 7152ded5219453c9ff1cd062cecbeaf4d77e4cab Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Thu, 26 May 2016 15:05:48 +0200
++Subject: [PATCH] Use <fenv.h> instead of <fpu_control.h>
++
++musl libc (http://musl-libc.org lack the non-standard <fpu_control.h>
++header, which is used in src/os/linux/{i386,x86_64}/init.c files to
++setup the floating point precision. This patch makes it use the
++standard C <fenv.h> header instead.
++
++Original patch at Felix Janda at
++https://sourceforge.net/p/jamvm/patches/6/.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/os/linux/i386/init.c   | 12 ++++++------
++ src/os/linux/x86_64/init.c | 16 ++++++----------
++ 2 files changed, 12 insertions(+), 16 deletions(-)
++
++diff --git a/src/os/linux/i386/init.c b/src/os/linux/i386/init.c
++index d9c6648..94a733e 100644
++--- a/src/os/linux/i386/init.c
+++++ b/src/os/linux/i386/init.c
++@@ -19,18 +19,18 @@
++  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
++  */
++ 
++-#include <fpu_control.h>
+++#include <fenv.h>
++ 
++ /* Change floating point precision to double (64-bit) from
++  * the extended (80-bit) Linux default. */
++ 
++ void setDoublePrecision() {
++-    fpu_control_t cw;
+++    fenv_t fenv;
++ 
++-    _FPU_GETCW(cw);
++-    cw &= ~_FPU_EXTENDED;
++-    cw |= _FPU_DOUBLE;
++-    _FPU_SETCW(cw);
+++    fegetenv(&fenv);
+++    fenv.__control_word &= ~0x300; /* _FPU_EXTENDED */
+++    fenv.__control_word |= 0x200; /* _FPU_DOUBLE */
+++    fesetenv(&fenv);
++ }
++ 
++ void initialisePlatform() {
++diff --git a/src/os/linux/x86_64/init.c b/src/os/linux/x86_64/init.c
++index 9d55229..a76a923 100644
++--- a/src/os/linux/x86_64/init.c
+++++ b/src/os/linux/x86_64/init.c
++@@ -19,9 +19,7 @@
++  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
++  */
++ 
++-#ifdef __linux__
++-#include <fpu_control.h>
++-#endif
+++#include <fenv.h>
++ 
++ /* Change the x87 FPU precision to double (64-bit) from the extended
++    (80-bit) Linux default.  Note, unlike on i386, my testcases pass
++@@ -30,14 +28,12 @@
++ */
++ 
++ void setDoublePrecision() {
++-#ifdef __linux__
++-    fpu_control_t cw;
+++    fenv_t fenv;
++ 
++-    _FPU_GETCW(cw);
++-    cw &= ~_FPU_EXTENDED;
++-    cw |= _FPU_DOUBLE;
++-    _FPU_SETCW(cw);
++-#endif
+++    fegetenv(&fenv);
+++    fenv.__control_word &= ~0x300; /*_FPU_EXTENDED */
+++    fenv.__control_word |= 0x200; /*_FPU_DOUBLE */
+++    fesetenv(&fenv);
++ }
++ 
++ void initialisePlatform() {
++-- 
++2.7.4
++
+-- 
+2.7.4
