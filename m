@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 May 2016 22:30:33 +0200
-Subject: [Buildroot] [git commit] olimex_a20_olinuxino_lime: bump u-boot to
-	2016.05
-Message-ID: <20160601161311.2BA06802A0@busybox.osuosl.org>
+Date: Fri, 27 May 2016 23:06:16 +0200
+Subject: [Buildroot] [git commit] weston: enable nested wayland compositor
+Message-ID: <20160601161311.4E095802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e764b640a8e66a4106184353bd97ec1d2371337
+commit: https://git.buildroot.net/buildroot/commit/?id=716ac19502392e0306ddcd9a5dc28edd6caf4205
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+It may be useful in some scenarios and size growth is marginal at best.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/olimex_a20_olinuxino_lime_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/weston/weston.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index bfa95c4..389fdd6 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 38a0d37..8455a94 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -18,7 +18,6 @@ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
+ 
+ WESTON_CONF_OPTS = \
+ 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
+-	--disable-wayland-compositor \
+ 	--disable-headless-compositor \
+ 	--disable-colord \
+ 	--disable-setuid-install
