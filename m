@@ -1,67 +1,59 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 27 May 2016 17:00:25 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 27 May 2016 13:05:36 -0300
 Subject: [Buildroot] gstreamer-1.0 and egl
-In-Reply-To: <57486EB5.90406@imgtec.com>
+In-Reply-To: <63233783-a7e5-8971-7403-4f52cb5af733@gmail.com>
 References: <63233783-a7e5-8971-7403-4f52cb5af733@gmail.com>
- <57486EB5.90406@imgtec.com>
-Message-ID: <57486F19.5000309@imgtec.com>
+Message-ID: <57487050.4040309@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ah, sorry, I thought you were getting the errors when building
-gstreamer. Ignore my last email.
+On 27/05/16 12:49, Marco Trapanese wrote:
 
-Regards,
+> Hello,
+>
+> I attach the configuration of my (dirty) Buildroot environment for RPi3,
+> baseup upon 2016.05-git-01212-gabfaf47.
+> In gst-1-plugins-bad I selected opengl (gles2, egl and dispmanx) and
+> wayland but the opengl support is still not available:
+>
+>> checking for GLES2... yes
+>> checking for EGL... yes
+>> checking EGL/fbdev_window.h usability... no
+>> checking EGL/fbdev_window.h presence... no
+>> checking for EGL/fbdev_window.h... no
+>> checking for bcm_host_init in -lbcm_host... yes
+>> checking bcm_host.h usability... yes
+>> checking bcm_host.h presence... yes
+>> checking for bcm_host.h... yes
+>> checking for eglGetProcAddress in -lEGL... yes
+>> checking EGL/egl.h usability... yes
+>> checking EGL/egl.h presence... yes
+>> checking for EGL/egl.h... yes
+>> checking for glEnable in -lGLESv2... yes
+>> checking GLES2/gl2.h usability... yes
+>> checking GLES2/gl2.h presence... yes
+>> checking for GLES2/gl2.h... yes
+>> checking for WAYLAND_EGL... no
+>> checking libdrm/drm_fourcc.h usability... no
+>> checking libdrm/drm_fourcc.h presence... no
+>> checking for libdrm/drm_fourcc.h... no
+>> checking for GST_ALLOCATORS... yes
+>> host is arm-buildroot-linux-uclibcgnueabihf
+>> configure: WARNING: X or Wayland is required for OpenGL support
+>
+> it's not enough to select BR2_PACKAGE_WAYLAND=y ?
+> I don't find any reference to WAYLAND_EGL
+> My goal is to have a suitable videosink without X, in order to use
+> gstreamer as backend for Qt5Multimedia.
 
-Vincent.
-
-On 27/05/16 16:58, Vicente Olivert Riera wrote:
-> Hello Marco,
-> 
-> On 27/05/16 16:49, Marco Trapanese wrote:
-> [...]
-> 
->> Another weird thing about gstreamer. The very first time I launch any
->> gstreamer command I get this errors:
->>
->>> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_begin':
->>> can't resolve symbol
-> 
-> [..]
-> 
->>
->>
->> The second time it acts as expected.
->> Any idea?
-> 
-> the first time fails and the second time works..., it looks to me as a
-> race-condition problem. Try with only one job for make:
-> 
-> BR2_JLEVEL=1
-> 
-> You can set it in the "Build options" menu.
-> 
-> Regards,
-> 
-> Vincent.
-> 
->> Thanks in advance
->> Marco
->>
->>
->>
->>
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Hi.
+wayland-egl is normally provided by open EGL implementations, such as 
+mesa. It's basically small glue code into the EGL surface for wayland.
+I'm not aware of closed EGL providers providing it (basically 
+wayland-egl.pc and minions).
+It may be possible to just hack and use the mesa bits with closed ones 
+since it's pretty generic, however i've never pursued this.
+Regards.
