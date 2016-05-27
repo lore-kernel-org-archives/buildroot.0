@@ -1,35 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 May 2016 22:32:29 +0200
-Subject: [Buildroot] [PATCH] tinyalsa: fix musl build
-In-Reply-To: <6d0482c749131f39bcdfe130d4e8ec169fc25921.1464337923.git.baruch@tkos.co.il>
-References: <6d0482c749131f39bcdfe130d4e8ec169fc25921.1464337923.git.baruch@tkos.co.il>
-Message-ID: <20160527223229.174ca6c3@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 27 May 2016 22:34:51 +0200
+Subject: [Buildroot] [PATCH] system: add comment about busybox-show-others
+Message-ID: <1464381291-24985-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When the chosen init system is sysvinit, BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+is forcibly enabled.
 
-On Fri, 27 May 2016 11:32:03 +0300, Baruch Siach wrote:
-> Add upstream patch adding missing header include.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/042/04259ddbdf24afc507b0f21e1f5ba8738ec492b1/
-> http://autobuild.buildroot.net/results/371/371a1eab885d1a6b5b06bdab6c2280b20593eed4/
-> http://autobuild.buildroot.net/results/377/37743b3e73fcb0df9fd50113e082eac712c25e35/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...clude-time.h-to-get-struct-timespec-proto.patch | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/tinyalsa/0002-asound.h-include-time.h-to-get-struct-timespec-proto.patch
+This option looks like it is an option of the Busybox package, and thus
+that it would not be available if Busybox is disabled (which can happen
+when Busybox is not the init system).
 
-Applied to master, thanks.
+Add a comment that explicitly states that BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+is also available when Busybox is not enabled.
 
-Thomas
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+
+---
+Hopefully, this will avoid people to go hunting like I did, and loose a
+few precious minutes of hair-pulling... ;-]
+---
+ system/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/system/Config.in b/system/Config.in
+index 2e14971..1820029 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -74,6 +74,7 @@ config BR2_INIT_BUSYBOX
+ 
+ config BR2_INIT_SYSV
+ 	bool "systemV"
++	# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS exists even when Busybox is not enabled
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
+ 	select BR2_PACKAGE_INITSCRIPTS
+ 	select BR2_PACKAGE_SYSVINIT
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
