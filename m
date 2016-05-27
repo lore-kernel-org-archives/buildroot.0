@@ -1,49 +1,38 @@
-From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
-Date: Sat, 28 May 2016 00:03:28 +0200
-Subject: [Buildroot] [PATCH 1/1] core/pkg-kconfig: pass host PKG_CONFIG_PATH
-	env var
-Message-ID: <1464386608-13165-1-git-send-email-bjorn.forsman@gmail.com>
+From: Martin Kelly <martin@surround.io>
+Date: Fri, 27 May 2016 16:08:01 -0700
+Subject: [Buildroot] [PATCH] Config.in: wrap to column width 72
+In-Reply-To: <20160527230450.10a646c2@free-electrons.com>
+References: <1464298507-22817-1-git-send-email-martin@surround.io>
+ <20160527230450.10a646c2@free-electrons.com>
+Message-ID: <5748D351.9060302@surround.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is basically the same change as in 0515fe45661b6d320f8d2071df2
-("Makefile: pass host PKG_CONFIG_PATH at "make menuconfig" time"). That
-commit made sure to pass host PKG_CONFIG_PATH when invoking Buildroot's
-own menuconfig program. This change ensures that the same is true for
-third party menuconfig programs (i.e. Linux, uClibc and Busybox).
+On 05/27/2016 02:04 PM, Thomas Petazzoni wrote:
+> Hello,
+>
+> Thanks for this patch. Looks good, except for one thing.
+>
+> On Thu, 26 May 2016 14:35:07 -0700, Martin Kelly wrote:
+>
+>> +	  Command to be used to extract a gzip'ed file to stdout.  zcat
+>
+> Why do you have two spaces after the . here ? Only one is enough.
+>
+> There are other occurrences of the same issue in the rest of the patch.
+> Could you fix this and send an updated version?
+>
 
-This unbreaks "make {linux,uclibc}-menuconfig" for host platforms which
-rely on PKG_CONFIG_PATH to find .pc files (e.g. NixOS). (When Busybox
-updates to a more recent Kconfig snapshot, one that uses pkg-config to
-find ncurses, "make busybox-menuconfig" will also start working.)
+Some of these cases are caused by my rewrapping accidentally adding a 
+space. Other cases were already present prior to wrapping. For example:
 
-Tested on Ubuntu and NixOS:
+-   Have a look on the kernel.org site for a list of mirrors, then enter
+-   the URL to the base directory.  Examples:
++   Have a look on the kernel.org site for a list of mirrors, then
++   enter the URL to the base directory.  Examples:
 
-  $ make qemu_arm_versatile_defconfig
-  $ make linux-menuconfig
-  $ make
-
-Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
----
- package/pkg-kconfig.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 40d2f88..b0f5178 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -143,7 +143,8 @@ endif
- # nconfig, gconfig, xconfig).
- # So we simply remove our PATH and PKG_CONFIG_* variables.
- $(2)_CONFIGURATOR_MAKE_ENV = \
--	$$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV))
-+	$$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
-+	PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
- 
- # Configuration editors (menuconfig, ...)
- #
--- 
-2.8.0
+Would you like me to fix up all ".  " --> ". " as well, or just fix the 
+newly introduced ".  " ? I'm happy to do either way.
