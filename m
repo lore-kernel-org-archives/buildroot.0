@@ -1,68 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 May 2016 23:06:10 +0200
-Subject: [Buildroot] [git commit branch/next] weston: add support for
-	XWayland
-Message-ID: <20160527210630.DDAB781801@busybox.osuosl.org>
+Date: Fri, 27 May 2016 23:10:00 +0200
+Subject: [Buildroot] [PATCH] system: add comment about
+ busybox-show-others
+In-Reply-To: <20160527205924.GE3624@free.fr>
+References: <1464381291-24985-1-git-send-email-yann.morin.1998@free.fr>
+ <20160527225012.2ed6e4e6@free-electrons.com>
+ <20160527205924.GE3624@free.fr>
+Message-ID: <20160527231000.56429fde@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36366add9754244730607a3397c9393c4fbe8f5a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/weston/Config.in | 12 ++++++++++++
- package/weston/weston.mk |  8 +++++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
+On Fri, 27 May 2016 22:59:24 +0200, Yann E. MORIN wrote:
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 44f954a..0812279 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -92,4 +92,16 @@ config BR2_PACKAGE_WESTON_X11
- comment "X11 compositor needs X.org enabled"
- 	depends on !BR2_PACKAGE_XORG7
- 
-+config BR2_PACKAGE_WESTON_XWAYLAND
-+	bool "XWayland support"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_LIBEPOXY
-+	select BR2_PACKAGE_CAIRO
-+	select BR2_PACKAGE_LIBXCB
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXCURSOR
-+
-+comment "XWayland support needs libepoxy and X.org enabled"
-+	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
-+
- endif
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 3a0189f..38a0d37 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -18,7 +18,6 @@ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
- 
- WESTON_CONF_OPTS = \
- 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
--	--disable-xwayland \
- 	--disable-wayland-compositor \
- 	--disable-headless-compositor \
- 	--disable-colord \
-@@ -111,6 +110,13 @@ else
- WESTON_CONF_OPTS += --disable-x11-compositor
- endif
- 
-+ifeq ($(BR2_PACKAGE_WESTON_XWAYLAND),y)
-+WESTON_CONF_OPTS += --enable-xwayland
-+WESTON_DEPENDENCIES += cairo libepoxy libxcb xlib_libX11 xlib_libXcursor
-+else
-+WESTON_CONF_OPTS += --disable-xwayland
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBVA),y)
- WESTON_CONF_OPTS += --enable-vaapi-recorder
- WESTON_DEPENDENIES += libva
+> What was puzzling me is that BR2_PACKAGE_BUSYBOX_SHOW_OTHERS *appears*
+> to be a Busybox option.
+> 
+> Package options should not be selected before ensurign that the package
+> itself is enabled, so we have wither:
+> 
+>     select BR2_PACKAGE_FOO
+>     select BR2_PACKAGE_FOO_OPTION
+> 
+> or:
+> 
+>     depends on BR2_PACKAGE_FOO
+>     select BR2_PACKAGE_FOO_OPTION
+> 
+> or:
+> 
+>     select BR2_PACKAGE_FOO_OPTION if BR2_PACKAGE_FOO
+> 
+> However, for this specific option, it is *also* available when Busybox
+> is *not* enabled: it is not a package option.
+> 
+> So it is perfectly legit to select it without checking that Busybix
+> itself is enabled.
+
+Then change the code to:
+
+	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS if BR2_PACKAGE_BUSYBOX
+
+Indeed, when BR2_PACKAGE_BUSYBOX is disabled,
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is *always* set to 'y'.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
