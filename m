@@ -1,31 +1,30 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Fri, 27 May 2016 18:21:41 +0200
-Subject: [Buildroot] [PATCH] fftw: Disable combined threads when building
-	with OpenMP support
-Message-ID: <1464366101-637-1-git-send-email-nerv@dawncrow.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 27 May 2016 13:24:30 -0300
+Subject: [Buildroot] gstreamer-1.0 and egl
+In-Reply-To: <fed59547-54cb-ff07-5d54-8e9e0b263ca5@gmail.com>
+References: <63233783-a7e5-8971-7403-4f52cb5af733@gmail.com>
+ <57487050.4040309@zacarias.com.ar>
+ <b35e550d-8cf4-5912-e700-b050ab498e0c@gmail.com>
+ <57487323.8090101@zacarias.com.ar>
+ <fed59547-54cb-ff07-5d54-8e9e0b263ca5@gmail.com>
+Message-ID: <574874BE.7050300@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/fftw/fftw.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 27/05/16 13:21, Marco Trapanese wrote:
 
-diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-index 5045ab6..f4b1794 100644
---- a/package/fftw/fftw.mk
-+++ b/package/fftw/fftw.mk
-@@ -35,7 +35,7 @@ FFTW_CONF_OPTS += --enable-threads --with-combined-threads
- else
- FFTW_CONF_OPTS += --disable-threads
- endif
--FFTW_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
-+FFTW_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--without-combined-threads --enable,--disable)-openmp
- 
- FFTW_CONF_OPTS += CFLAGS="$(FFTW_CFLAGS)"
- 
--- 
-1.9.1
+> Thanks for the clarifications.
+> Tonight I'm going to rebuild the whole environment using mesa3d - I hope
+> it will work!
+>
+> Best regards
+
+Keep in mind that in order to use the open vc4 driver you need a special 
+(different) kernel config with the dts patches at the least, plus some 
+config.txt tweaks.
+There are some notes here, but they don't seem to be up to date:
+https://dri.freedesktop.org/wiki/VC4/
+Regards.
