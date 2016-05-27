@@ -1,134 +1,49 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 27 May 2016 23:48:46 +0200
-Subject: [Buildroot] [PATCH for-master] package/openpowerlink: avoid kernel
-	header issue with musl
-Message-ID: <1464385726-24744-1-git-send-email-romain.naour@gmail.com>
+From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Sat, 28 May 2016 00:03:28 +0200
+Subject: [Buildroot] [PATCH 1/1] core/pkg-kconfig: pass host PKG_CONFIG_PATH
+	env var
+Message-ID: <1464386608-13165-1-git-send-email-bjorn.forsman@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Virtual Ethernet driver doesn't build when the musl libc is used on the
-system. As stated in the musl wiki [1], the userspace and kernel headers are
-mixed leading to a "clash" with the definitions provided by musl.
+This is basically the same change as in 0515fe45661b6d320f8d2071df2
+("Makefile: pass host PKG_CONFIG_PATH at "make menuconfig" time"). That
+commit made sure to pass host PKG_CONFIG_PATH when invoking Buildroot's
+own menuconfig program. This change ensures that the same is true for
+third party menuconfig programs (i.e. Linux, uClibc and Busybox).
 
-Remove netinet/if_ether.h userspace header and replace ETHER_ADDR_LEN by
-ETH_ALEN [2] and ETHERMTU by ETH_DATA_LEN [3] in veth-linuxuser.c.
+This unbreaks "make {linux,uclibc}-menuconfig" for host platforms which
+rely on PKG_CONFIG_PATH to find .pc files (e.g. NixOS). (When Busybox
+updates to a more recent Kconfig snapshot, one that uses pkg-config to
+find ncurses, "make busybox-menuconfig" will also start working.)
 
-Fixes:
-http://autobuild.buildroot.org/results/2ca/2ca04bb046263e479e7597867b56469893d3c11d/
+Tested on Ubuntu and NixOS:
 
-Upsteam status: pending
-https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/120
+  $ make qemu_arm_versatile_defconfig
+  $ make linux-menuconfig
+  $ make
 
-[Rebase on v2.2.2]
-[1] http://wiki.musl-libc.org/wiki/FAQ#Q:_why_am_i_getting_.22error:_redefinition_of_struct_ethhdr.2Ftcphdr.2Fetc.22_.3F
-[2] https://git.musl-libc.org/cgit/musl/tree/include/net/ethernet.h?h=v1.1.14#n35
-[3] https://git.musl-libc.org/cgit/musl/tree/include/net/ethernet.h?h=v1.1.14#n48
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
 ---
- ...-veth-avoid-kernel-header-issue-with-musl.patch | 91 ++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
- create mode 100644 package/openpowerlink/0006-veth-avoid-kernel-header-issue-with-musl.patch
+ package/pkg-kconfig.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/openpowerlink/0006-veth-avoid-kernel-header-issue-with-musl.patch b/package/openpowerlink/0006-veth-avoid-kernel-header-issue-with-musl.patch
-new file mode 100644
-index 0000000..383f047
---- /dev/null
-+++ b/package/openpowerlink/0006-veth-avoid-kernel-header-issue-with-musl.patch
-@@ -0,0 +1,91 @@
-+From 42a95209c5650662b86d222678ec14e7edfae156 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Wed, 25 May 2016 13:26:49 +0200
-+Subject: [PATCH] veth: avoid kernel header issue with musl
-+
-+The Virtual Ethernet driver doesn't build when the musl libc is used on the
-+system. As stated in the musl wiki [1], the userspace and kernel headers are
-+mixed leading to a "clash" with the definitions provided by musl.
-+
-+Remove netinet/if_ether.h userspace header and replace ETHER_ADDR_LEN by
-+ETH_ALEN [2] and ETHERMTU by ETH_DATA_LEN [3] in veth-linuxuser.c.
-+
-+Fixes:
-+http://autobuild.buildroot.org/results/2ca/2ca04bb046263e479e7597867b56469893d3c11d/build-end.log
-+
-+Upsteam status: pending
-+https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/120
-+
-+[Rebase on v2.2.2]
-+[1] http://wiki.musl-libc.org/wiki/FAQ#Q:_why_am_i_getting_.22error:_redefinition_of_struct_ethhdr.2Ftcphdr.2Fetc.22_.3F
-+[2] https://git.musl-libc.org/cgit/musl/tree/include/net/ethernet.h?h=v1.1.14#n35
-+[3] https://git.musl-libc.org/cgit/musl/tree/include/net/ethernet.h?h=v1.1.14#n48
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ stack/src/kernel/veth/veth-linuxuser.c | 13 ++++++-------
-+ 1 file changed, 6 insertions(+), 7 deletions(-)
-+
-+diff --git a/stack/src/kernel/veth/veth-linuxuser.c b/stack/src/kernel/veth/veth-linuxuser.c
-+index 2a0bdd0..2bfaa87 100644
-+--- a/stack/src/kernel/veth/veth-linuxuser.c
-++++ b/stack/src/kernel/veth/veth-linuxuser.c
-+@@ -61,7 +61,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-+ #include <arpa/inet.h>
-+ #include <linux/if.h>
-+ #include <linux/if_tun.h>
-+-#include <netinet/if_ether.h>
-+ 
-+ //============================================================================//
-+ //            G L O B A L   D E F I N I T I O N S                             //
-+@@ -248,7 +247,7 @@ static void getMacAdrs(UINT8* pMac_p)
-+ 
-+     close(sock);
-+ 
-+-    OPLK_MEMCPY(pMac_p, &ifr.ifr_hwaddr.sa_data[0], ETHER_ADDR_LEN);
-++    OPLK_MEMCPY(pMac_p, &ifr.ifr_hwaddr.sa_data[0], ETH_ALEN);
-+ }
-+ 
-+ //------------------------------------------------------------------------------
-+@@ -272,9 +271,9 @@ static tOplkError veth_receiveFrame(tFrameInfo* pFrameInfo_p,
-+ 
-+     // replace the MAC address of the POWERLINK Ethernet interface with virtual
-+     // Ethernet MAC address before forwarding it into the virtual Ethernet interface
-+-    if (OPLK_MEMCMP(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.macAdrs, ETHER_ADDR_LEN) == 0)
-++    if (OPLK_MEMCMP(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.macAdrs, ETH_ALEN) == 0)
-+     {
-+-        OPLK_MEMCPY(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.tapMacAdrs, ETHER_ADDR_LEN);
-++        OPLK_MEMCPY(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.tapMacAdrs, ETH_ALEN);
-+     }
-+ 
-+     nwrite = write(vethInstance_l.fd, pFrameInfo_p->pFrame, pFrameInfo_p->frameSize);
-+@@ -302,7 +301,7 @@ to be used as a thread which does a blocking read in a while loop.
-+ //------------------------------------------------------------------------------
-+ static void* vethRecvThread(void* pArg_p)
-+ {
-+-    UINT8               buffer[ETHERMTU];
-++    UINT8               buffer[ETH_DATA_LEN];
-+     UINT                nread;
-+     tFrameInfo          frameInfo;
-+     tOplkError          ret = kErrorOk;
-+@@ -331,7 +330,7 @@ static void* vethRecvThread(void* pArg_p)
-+                 break;
-+ 
-+             default:    // data from tun/tap ready for read
-+-                nread = read(pInstance->fd, buffer, ETHERMTU);
-++                nread = read(pInstance->fd, buffer, ETH_DATA_LEN);
-+                 if (nread > 0)
-+                 {
-+                     DEBUG_LVL_VETH_TRACE("VETH:Read %d bytes from the tap interface\n", nread);
-+@@ -340,7 +339,7 @@ static void* vethRecvThread(void* pArg_p)
-+                     DEBUG_LVL_VETH_TRACE("DST MAC: %02X:%02X:%02x:%02X:%02X:%02x\n",
-+                                           buffer[0], buffer[1], buffer[2], buffer[3], buffer[4], buffer[5]);
-+                     // replace src MAC address with MAC address of virtual Ethernet interface
-+-                    OPLK_MEMCPY(&buffer[6], pInstance->macAdrs, ETHER_ADDR_LEN);
-++                    OPLK_MEMCPY(&buffer[6], pInstance->macAdrs, ETH_ALEN);
-+ 
-+                     frameInfo.pFrame = (tPlkFrame *)buffer;
-+                     frameInfo.frameSize = nread;
-+-- 
-+2.5.5
-+
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 40d2f88..b0f5178 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -143,7 +143,8 @@ endif
+ # nconfig, gconfig, xconfig).
+ # So we simply remove our PATH and PKG_CONFIG_* variables.
+ $(2)_CONFIGURATOR_MAKE_ENV = \
+-	$$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV))
++	$$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
++	PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
+ 
+ # Configuration editors (menuconfig, ...)
+ #
 -- 
-2.5.5
+2.8.0
