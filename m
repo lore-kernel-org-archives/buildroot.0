@@ -1,44 +1,43 @@
-From: Zakharov Vlad <Vladislav.Zakharov@synopsys.com>
-Date: Fri, 27 May 2016 20:51:41 +0300
-Subject: [Buildroot] [PATCH] uboot: Use "mdbtrick" target when building elf
-	for ARC
-Message-ID: <1464371501-24130-1-git-send-email-vzakhar@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 27 May 2016 21:44:55 +0200
+Subject: [Buildroot] [PATCH] libpjsip: disable parallel build
+In-Reply-To: <574833E0.8020709@lucaceresoli.net>
+References: <1463057293-2833-1-git-send-email-luca@lucaceresoli.net>
+ <20160512155024.7fe37f68@free-electrons.com>
+ <574833E0.8020709@lucaceresoli.net>
+Message-ID: <20160527214455.2b44c037@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default position independent executables (PIE) are generated
-when building U-Boot elf target. MetaWare debugger doesn't support
-PIE (position-independent executable).
+Hello,
 
-In order to allow MDB load and run U-Boot elf, we need to do a
-special trick, called "mdbtrick".
+On Fri, 27 May 2016 13:47:44 +0200, Luca Ceresoli wrote:
 
-This special build target is used to fake generated U-Boot elf by:
-    1. Reset PIE flag in ELF header
-    2. Strip all debug information from elf
+> > So, applied to master! Please monitor the autobuilders in the next
+> > hours/days to see if the issue is resolved or not.  
+> 
+> It's 15 days since this patch has been applied, and we had no more
+> autobuild failures on libpjsip-2.4.5 after that.
 
-Signed-off-by: Zakharov Vlad <vzakhar@synopsys.com>
----
- boot/uboot/uboot.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Yes, I also haven't seen any libpjsip failure since quite some time.
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index e739638..d8cdf5c 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -38,6 +38,10 @@ endif
- 
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
- UBOOT_BIN = u-boot
-+# To make elf usable for debuging on ARC use special target
-+ifeq ($(BR2_arc),y)
-+UBOOT_MAKE_TARGET = mdbtrick
-+endif
- else ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
- UBOOT_BIN = u-boot.kwb
- UBOOT_MAKE_TARGET = $(UBOOT_BIN)
+> The time frame between the previous patch to libpjsip (9db9a6d2b3c595)
+> and this one lasted ~45 days and produced 13 autobuild failures.
+> 
+> I'm starting being moderately optimistic about having solved the
+> problem. I'll wait a few more days, then unless we see new failures I'll
+> report to the upstream mailing list.
+
+I agree that disabling parallel build seems to have fixed the problem,
+so you can report the issue upstream.
+
+Thanks!
+
+Thomas
 -- 
-2.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
