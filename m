@@ -1,79 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 23:14:00 +0200
-Subject: [Buildroot] [git commit] gdb: enable simulator support for host
-	build
-Message-ID: <20160601161312.B05C0802A0@busybox.osuosl.org>
+Date: Fri, 27 May 2016 23:05:30 +0200
+Subject: [Buildroot] [git commit] weston: add support for X11 backend
+Message-ID: <20160601161311.37127802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86aa4d8d11cbe49d81ce0a054570d6e5d59f372e
+commit: https://git.buildroot.net/buildroot/commit/?id=e6af110aaba55f7b1fb9b746e4852649d3571f20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add an option to enable GDB simulator support, so
-it can be used to test some no-MMU systems.
-
-Newer GDB Blackfin Simulator need a workaround for in-tree compile.
-It doesn't break for older Buildroot supported GDB Blackfin
-Simulator.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gdb/Config.in.host |  5 +++++
- package/gdb/gdb.mk         | 17 +++++++++++++++--
- 2 files changed, 20 insertions(+), 2 deletions(-)
+ package/weston/Config.in | 10 ++++++++++
+ package/weston/weston.mk | 10 +++++++++-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 257d68a..dc149b6 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -23,6 +23,11 @@ config BR2_PACKAGE_HOST_GDB_PYTHON
- 	help
- 	  This option enables the Python support in the cross gdb.
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 8cefa41..44f954a 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -82,4 +82,14 @@ config BR2_PACKAGE_WESTON_RPI
+ 	depends on BR2_PACKAGE_RPI_USERLAND
+ 	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
  
-+config BR2_PACKAGE_HOST_GDB_SIM
-+	bool "Simulator support"
-+	help
-+	  This option enables the simulator support in the cross gdb.
++config BR2_PACKAGE_WESTON_X11
++	bool "X11 compositor"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_LIBXCB
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
 +
- choice
- 	prompt "GDB debugger Version"
- 	depends on !BR2_arc
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 0a7af1e..84f2029 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -163,8 +163,7 @@ HOST_GDB_CONF_OPTS = \
- 	--enable-threads \
- 	--disable-werror \
- 	--without-included-gettext \
--	$(GDB_DISABLE_BINUTILS_CONF_OPTS) \
--	--disable-sim
-+	$(GDB_DISABLE_BINUTILS_CONF_OPTS)
- 
- ifeq ($(BR2_PACKAGE_HOST_GDB_TUI),y)
- HOST_GDB_CONF_OPTS += --enable-tui
-@@ -179,6 +178,20 @@ else
- HOST_GDB_CONF_OPTS += --without-python
++comment "X11 compositor needs X.org enabled"
++	depends on !BR2_PACKAGE_XORG7
++
  endif
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 63c43a3..3a0189f 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -19,7 +19,6 @@ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
+ WESTON_CONF_OPTS = \
+ 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
+ 	--disable-xwayland \
+-	--disable-x11-compositor \
+ 	--disable-wayland-compositor \
+ 	--disable-headless-compositor \
+ 	--disable-colord \
+@@ -103,6 +102,15 @@ else
+ WESTON_CONF_OPTS += --disable-rpi-compositor
+ endif # BR2_PACKAGE_WESTON_RPI
  
-+# workaround a bug if in-tree build is used for bfin sim
-+define HOST_GDB_BFIN_SIM_WORKAROUND
-+	$(RM) $(@D)/sim/common/tconfig.h
-+endef
-+
-+ifeq ($(BR2_PACKAGE_HOST_GDB_SIM),y)
-+HOST_GDB_CONF_OPTS += --enable-sim
-+ifeq ($(BR2_bfin),y)
-+HOST_GDB_PRE_CONFIGURE_HOOKS += HOST_GDB_BFIN_SIM_WORKAROUND
-+endif
++ifeq ($(BR2_PACKAGE_WESTON_X11),y)
++WESTON_CONF_OPTS += \
++	--enable-x11-compositor \
++	WESTON_NATIVE_BACKEND=x11-backend.so
++WESTON_DEPENDENCIES += libxcb xlib_libX11
 +else
-+HOST_GDB_CONF_OPTS += --disable-sim
++WESTON_CONF_OPTS += --disable-x11-compositor
 +endif
 +
- # legacy $arch-linux-gdb symlink
- define HOST_GDB_ADD_SYMLINK
- 	cd $(HOST_DIR)/usr/bin && \
+ ifeq ($(BR2_PACKAGE_LIBVA),y)
+ WESTON_CONF_OPTS += --enable-vaapi-recorder
+ WESTON_DEPENDENIES += libva
