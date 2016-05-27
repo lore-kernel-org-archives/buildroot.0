@@ -1,44 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 27 May 2016 22:53:53 +0200
-Subject: [Buildroot] [PATCH] system: add help entry to "none" init system
-Message-ID: <1464382433-30794-1-git-send-email-yann.morin.1998@free.fr>
+Date: Fri, 27 May 2016 22:59:24 +0200
+Subject: [Buildroot] [PATCH] system: add comment about
+	busybox-show-others
+In-Reply-To: <20160527225012.2ed6e4e6@free-electrons.com>
+References: <1464381291-24985-1-git-send-email-yann.morin.1998@free.fr>
+ <20160527225012.2ed6e4e6@free-electrons.com>
+Message-ID: <20160527205924.GE3624@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It can be a little bit misleading to have no init system...
+Thomas, All,
 
-Add a comment that states the user has to provide his own init system,
-either via a package or a rootfs overlay.
+On 2016-05-27 22:50 +0200, Thomas Petazzoni spake thusly:
+> On Fri, 27 May 2016 22:34:51 +0200, Yann E. MORIN wrote:
+> 
+> >  config BR2_INIT_SYSV
+> >  	bool "systemV"
+> > +	# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS exists even when Busybox is not enabled
+> >  	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
+> 
+> Well, I don't really see the point. You can perfectly well have Busybox
+> enabled *and* systemV as your init system.
 
-It is expected that such a user will know what to provide, so we don't
-really need to specify that it should be /init or /sbin/init or any
-arbitrary executable pointed to by the kernel command line "init=..."
-or anything else...
+I'm not arguing that.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
- system/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+What was puzzling me is that BR2_PACKAGE_BUSYBOX_SHOW_OTHERS *appears*
+to be a Busybox option.
 
-diff --git a/system/Config.in b/system/Config.in
-index 1820029..608c18e 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -102,6 +102,10 @@ comment "systemd needs (e)glibc toolchain, headers >= 3.10"
- 
- config BR2_INIT_NONE
- 	bool "None"
-+	help
-+	  Buildroot will not install any init system. You will
-+	  have to provide your own, either with a new package
-+	  or with a rootfs-overlay.
- 
- endchoice
- 
+Package options should not be selected before ensurign that the package
+itself is enabled, so we have wither:
+
+    select BR2_PACKAGE_FOO
+    select BR2_PACKAGE_FOO_OPTION
+
+or:
+
+    depends on BR2_PACKAGE_FOO
+    select BR2_PACKAGE_FOO_OPTION
+
+or:
+
+    select BR2_PACKAGE_FOO_OPTION if BR2_PACKAGE_FOO
+
+However, for this specific option, it is *also* available when Busybox
+is *not* enabled: it is not a package option.
+
+So it is perfectly legit to select it without checking that Busybix
+itself is enabled.
+
+(Yes, I lost almost 10 minutes hunting that down...)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
