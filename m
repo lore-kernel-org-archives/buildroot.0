@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 May 2016 21:44:55 +0200
-Subject: [Buildroot] [PATCH] libpjsip: disable parallel build
-In-Reply-To: <574833E0.8020709@lucaceresoli.net>
-References: <1463057293-2833-1-git-send-email-luca@lucaceresoli.net>
- <20160512155024.7fe37f68@free-electrons.com>
- <574833E0.8020709@lucaceresoli.net>
-Message-ID: <20160527214455.2b44c037@free-electrons.com>
+Date: Fri, 27 May 2016 21:49:22 +0200
+Subject: [Buildroot] [PATCH v4 2/3] docker-containerd: new package
+In-Reply-To: <CA+h8R2pT_U2JUKbW-y+y5mHrCGM08=Qq7mA2SgU9Kpk-zTLJcA@mail.gmail.com>
+References: <1464324777-5364-1-git-send-email-christian@paral.in>
+ <1464324777-5364-3-git-send-email-christian@paral.in>
+ <20160527072720.4f3f9b21@free-electrons.com>
+ <CA+h8R2pT_U2JUKbW-y+y5mHrCGM08=Qq7mA2SgU9Kpk-zTLJcA@mail.gmail.com>
+Message-ID: <20160527214922.581fa744@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +15,57 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 27 May 2016 13:47:44 +0200, Luca Ceresoli wrote:
+On Fri, 27 May 2016 00:02:55 -0700, Christian Stewart wrote:
 
-> > So, applied to master! Please monitor the autobuilders in the next
-> > hours/days to see if the issue is resolved or not.  
+> > +     depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+> >  
 > 
-> It's 15 days since this patch has been applied, and we had no more
-> autobuild failures on libpjsip-2.4.5 after that.
-
-Yes, I also haven't seen any libpjsip failure since quite some time.
-
-> The time frame between the previous patch to libpjsip (9db9a6d2b3c595)
-> and this one lasted ~45 days and produced 13 autobuild failures.
+> > BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS dependency.
+> >  
 > 
-> I'm starting being moderately optimistic about having solved the
-> problem. I'll wait a few more days, then unless we see new failures I'll
-> report to the upstream mailing list.
+> Not sure what you're saying here
 
-I agree that disabling parallel build seems to have fixed the problem,
-so you can report the issue upstream.
+I explained it in the review of another patch from you.
 
-Thanks!
+When you have:
+
+comment "<foo> needs a toolchain w/ threads"
+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+
+you *must* also add:
+
+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+
+so that the comment doesn't show up on architectures for which there is
+no Go support.
+
+Otherwise, imagine a user creating a configuration for say the Blackfin
+architecture (which doesn't have Go support), and initially with thread
+disabled. They see the comment "<foo> needs a toolchain w/ threads". So
+the user goes in the Toolchain menu, and enables thread. And then, the
+comment has disappeared, but the option to enable the package has not
+appeared.
+
+Hence, we want to show the comment only when
+BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS=y.
+
+> In terms of all the versioning stuff. I'll try using the _VERSION variables
+> for this. As the variable specifically references a GitCommit, I included
+> the commits as it wants. But it's probably not too bad of a compromise to
+> use the version ID as the commit hash.
+
+If it works, it's much better.
+
+> For the host variable, a patch series recently applied changed what that
+> variable contained, and in particular, the changes to CGO caused the build
+> to completely fail unless I included the variables from there, so I now
+> include it and simply add a few things on top of it to build the full build
+> env for the package.
+> 
+> Will revise on all of the series and respin late tomorrow, in case anyone
+> else has suggestions :)
+
+ACK, thanks!
 
 Thomas
 -- 
