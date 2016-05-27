@@ -1,54 +1,134 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 27 May 2016 23:17:19 +0200
-Subject: [Buildroot] [PATCH] system: add comment about
-	busybox-show-others
-In-Reply-To: <20160527231000.56429fde@free-electrons.com>
-References: <1464381291-24985-1-git-send-email-yann.morin.1998@free.fr>
- <20160527225012.2ed6e4e6@free-electrons.com>
- <20160527205924.GE3624@free.fr>
- <20160527231000.56429fde@free-electrons.com>
-Message-ID: <20160527211719.GF3624@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 27 May 2016 23:48:46 +0200
+Subject: [Buildroot] [PATCH for-master] package/openpowerlink: avoid kernel
+	header issue with musl
+Message-ID: <1464385726-24744-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+The Virtual Ethernet driver doesn't build when the musl libc is used on the
+system. As stated in the musl wiki [1], the userspace and kernel headers are
+mixed leading to a "clash" with the definitions provided by musl.
 
-On 2016-05-27 23:10 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 27 May 2016 22:59:24 +0200, Yann E. MORIN wrote:
-> > What was puzzling me is that BR2_PACKAGE_BUSYBOX_SHOW_OTHERS *appears*
-> > to be a Busybox option.
-[--SNIP--]
-> > However, for this specific option, it is *also* available when Busybox
-> > is *not* enabled: it is not a package option.
-> > 
-> > So it is perfectly legit to select it without checking that Busybix
-> > itself is enabled.
-> 
-> Then change the code to:
-> 
-> 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS if BR2_PACKAGE_BUSYBOX
+Remove netinet/if_ether.h userspace header and replace ETHER_ADDR_LEN by
+ETH_ALEN [2] and ETHERMTU by ETH_DATA_LEN [3] in veth-linuxuser.c.
 
-That's what I initially did, but it looked weird to me.
+Fixes:
+http://autobuild.buildroot.org/results/2ca/2ca04bb046263e479e7597867b56469893d3c11d/
 
-But I'm fine with it if you prefer.
+Upsteam status: pending
+https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/120
 
-> Indeed, when BR2_PACKAGE_BUSYBOX is disabled,
-> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is *always* set to 'y'.
+[Rebase on v2.2.2]
+[1] http://wiki.musl-libc.org/wiki/FAQ#Q:_why_am_i_getting_.22error:_redefinition_of_struct_ethhdr.2Ftcphdr.2Fetc.22_.3F
+[2] https://git.musl-libc.org/cgit/musl/tree/include/net/ethernet.h?h=v1.1.14#n35
+[3] https://git.musl-libc.org/cgit/musl/tree/include/net/ethernet.h?h=v1.1.14#n48
 
-Yes, and thus there is no need to select it...
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ ...-veth-avoid-kernel-header-issue-with-musl.patch | 91 ++++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
+ create mode 100644 package/openpowerlink/0006-veth-avoid-kernel-header-issue-with-musl.patch
 
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/openpowerlink/0006-veth-avoid-kernel-header-issue-with-musl.patch b/package/openpowerlink/0006-veth-avoid-kernel-header-issue-with-musl.patch
+new file mode 100644
+index 0000000..383f047
+--- /dev/null
++++ b/package/openpowerlink/0006-veth-avoid-kernel-header-issue-with-musl.patch
+@@ -0,0 +1,91 @@
++From 42a95209c5650662b86d222678ec14e7edfae156 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Wed, 25 May 2016 13:26:49 +0200
++Subject: [PATCH] veth: avoid kernel header issue with musl
++
++The Virtual Ethernet driver doesn't build when the musl libc is used on the
++system. As stated in the musl wiki [1], the userspace and kernel headers are
++mixed leading to a "clash" with the definitions provided by musl.
++
++Remove netinet/if_ether.h userspace header and replace ETHER_ADDR_LEN by
++ETH_ALEN [2] and ETHERMTU by ETH_DATA_LEN [3] in veth-linuxuser.c.
++
++Fixes:
++http://autobuild.buildroot.org/results/2ca/2ca04bb046263e479e7597867b56469893d3c11d/build-end.log
++
++Upsteam status: pending
++https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/120
++
++[Rebase on v2.2.2]
++[1] http://wiki.musl-libc.org/wiki/FAQ#Q:_why_am_i_getting_.22error:_redefinition_of_struct_ethhdr.2Ftcphdr.2Fetc.22_.3F
++[2] https://git.musl-libc.org/cgit/musl/tree/include/net/ethernet.h?h=v1.1.14#n35
++[3] https://git.musl-libc.org/cgit/musl/tree/include/net/ethernet.h?h=v1.1.14#n48
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ stack/src/kernel/veth/veth-linuxuser.c | 13 ++++++-------
++ 1 file changed, 6 insertions(+), 7 deletions(-)
++
++diff --git a/stack/src/kernel/veth/veth-linuxuser.c b/stack/src/kernel/veth/veth-linuxuser.c
++index 2a0bdd0..2bfaa87 100644
++--- a/stack/src/kernel/veth/veth-linuxuser.c
+++++ b/stack/src/kernel/veth/veth-linuxuser.c
++@@ -61,7 +61,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ #include <arpa/inet.h>
++ #include <linux/if.h>
++ #include <linux/if_tun.h>
++-#include <netinet/if_ether.h>
++ 
++ //============================================================================//
++ //            G L O B A L   D E F I N I T I O N S                             //
++@@ -248,7 +247,7 @@ static void getMacAdrs(UINT8* pMac_p)
++ 
++     close(sock);
++ 
++-    OPLK_MEMCPY(pMac_p, &ifr.ifr_hwaddr.sa_data[0], ETHER_ADDR_LEN);
+++    OPLK_MEMCPY(pMac_p, &ifr.ifr_hwaddr.sa_data[0], ETH_ALEN);
++ }
++ 
++ //------------------------------------------------------------------------------
++@@ -272,9 +271,9 @@ static tOplkError veth_receiveFrame(tFrameInfo* pFrameInfo_p,
++ 
++     // replace the MAC address of the POWERLINK Ethernet interface with virtual
++     // Ethernet MAC address before forwarding it into the virtual Ethernet interface
++-    if (OPLK_MEMCMP(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.macAdrs, ETHER_ADDR_LEN) == 0)
+++    if (OPLK_MEMCMP(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.macAdrs, ETH_ALEN) == 0)
++     {
++-        OPLK_MEMCPY(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.tapMacAdrs, ETHER_ADDR_LEN);
+++        OPLK_MEMCPY(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.tapMacAdrs, ETH_ALEN);
++     }
++ 
++     nwrite = write(vethInstance_l.fd, pFrameInfo_p->pFrame, pFrameInfo_p->frameSize);
++@@ -302,7 +301,7 @@ to be used as a thread which does a blocking read in a while loop.
++ //------------------------------------------------------------------------------
++ static void* vethRecvThread(void* pArg_p)
++ {
++-    UINT8               buffer[ETHERMTU];
+++    UINT8               buffer[ETH_DATA_LEN];
++     UINT                nread;
++     tFrameInfo          frameInfo;
++     tOplkError          ret = kErrorOk;
++@@ -331,7 +330,7 @@ static void* vethRecvThread(void* pArg_p)
++                 break;
++ 
++             default:    // data from tun/tap ready for read
++-                nread = read(pInstance->fd, buffer, ETHERMTU);
+++                nread = read(pInstance->fd, buffer, ETH_DATA_LEN);
++                 if (nread > 0)
++                 {
++                     DEBUG_LVL_VETH_TRACE("VETH:Read %d bytes from the tap interface\n", nread);
++@@ -340,7 +339,7 @@ static void* vethRecvThread(void* pArg_p)
++                     DEBUG_LVL_VETH_TRACE("DST MAC: %02X:%02X:%02x:%02X:%02X:%02x\n",
++                                           buffer[0], buffer[1], buffer[2], buffer[3], buffer[4], buffer[5]);
++                     // replace src MAC address with MAC address of virtual Ethernet interface
++-                    OPLK_MEMCPY(&buffer[6], pInstance->macAdrs, ETHER_ADDR_LEN);
+++                    OPLK_MEMCPY(&buffer[6], pInstance->macAdrs, ETH_ALEN);
++ 
++                     frameInfo.pFrame = (tPlkFrame *)buffer;
++                     frameInfo.frameSize = nread;
++-- 
++2.5.5
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.5.5
