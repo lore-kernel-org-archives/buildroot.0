@@ -1,33 +1,32 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 27 May 2016 23:01:23 +0200
-Subject: [Buildroot] Analysis of build results for 2016-05-26
-In-Reply-To: <20160527224133.22b8cb60@free-electrons.com>
-References: <20160527063021.48E29101C97@stock.ovh.net>
- <20160527224133.22b8cb60@free-electrons.com>
-Message-ID: <20160527210123.GH22609@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 27 May 2016 23:04:50 +0200
+Subject: [Buildroot] [PATCH] Config.in: wrap to column width 72
+In-Reply-To: <1464298507-22817-1-git-send-email-martin@surround.io>
+References: <1464298507-22817-1-git-send-email-martin@surround.io>
+Message-ID: <20160527230450.10a646c2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Hello,
 
-> Hello,
-> 
-> Waldemar, Samuel, Gwenhael, Bernd, Gustavo, Vicente, some questions for you below.
-> 
-> On Fri, 27 May 2016 08:30:21 +0200 (CEST), Thomas Petazzoni wrote:
-> >        sparc |                 moarvm-2016.04 | NOK | http://autobuild.buildroot.net/results/0c3e8931b2d157764ed18c2a97f26c8e77ea426e/
-> 
-> Waldemar?
+Thanks for this patch. Looks good, except for one thing.
 
-Should be the same problem as for sparc64, some required atomic
-functions are not implemented in libatomic_ops used by moarvm. So even if we
-fix the issue that v9 assembly is used, it will not work.
+On Thu, 26 May 2016 14:35:07 -0700, Martin Kelly wrote:
 
-http://buildroot.uclibc.narkive.com/Gnhvpx9Y/patch-v3-moarvm-disable-for-sparc64
+> +	  Command to be used to extract a gzip'ed file to stdout.  zcat
 
-best regards
- Waldemar
+Why do you have two spaces after the . here ? Only one is enough.
+
+There are other occurrences of the same issue in the rest of the patch.
+Could you fix this and send an updated version?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
