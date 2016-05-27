@@ -1,67 +1,64 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 27 May 2016 00:02:55 -0700
-Subject: [Buildroot] [PATCH v4 2/3] docker-containerd: new package
-In-Reply-To: <20160527072720.4f3f9b21@free-electrons.com>
-References: <1464324777-5364-1-git-send-email-christian@paral.in>
- <1464324777-5364-3-git-send-email-christian@paral.in>
- <20160527072720.4f3f9b21@free-electrons.com>
-Message-ID: <CA+h8R2pT_U2JUKbW-y+y5mHrCGM08=Qq7mA2SgU9Kpk-zTLJcA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 27 May 2016 11:32:03 +0300
+Subject: [Buildroot] [PATCH] tinyalsa: fix musl build
+Message-ID: <6d0482c749131f39bcdfe130d4e8ec169fc25921.1464337923.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Add upstream patch adding missing header include.
 
+Fixes:
+http://autobuild.buildroot.net/results/042/04259ddbdf24afc507b0f21e1f5ba8738ec492b1/
+http://autobuild.buildroot.net/results/371/371a1eab885d1a6b5b06bdab6c2280b20593eed4/
+http://autobuild.buildroot.net/results/377/37743b3e73fcb0df9fd50113e082eac712c25e35/
 
-On Thu, May 26, 2016 at 10:27 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
->
-> Needs your Signed-off-by here.
->
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...clude-time.h-to-get-struct-timespec-proto.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/tinyalsa/0002-asound.h-include-time.h-to-get-struct-timespec-proto.patch
 
-Okay, will add.
-
-> +     depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
->
-
-
-> BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS dependency.
->
-
-Not sure what you're saying here
-
-Did you do a runtime test? Because this clearly cannot work: it means
-> that on the target you will have a link like:
->
->         /usr/bin/docker-runc ->
-> /home/christian/buildroot/output/target/usr/bin/runc
->
-> which obviously will not work. You instead want:
->
->         ln -s runc $(TARGET_DIR)/usr/bin/docker-runc
->
-
-I asked about this in another email, it makes sense that that wouldn't
-work, I'll fix it for the next revision.
-
-In terms of all the versioning stuff. I'll try using the _VERSION variables
-for this. As the variable specifically references a GitCommit, I included
-the commits as it wants. But it's probably not too bad of a compromise to
-use the version ID as the commit hash.
-
-For the host variable, a patch series recently applied changed what that
-variable contained, and in particular, the changes to CGO caused the build
-to completely fail unless I included the variables from there, so I now
-include it and simply add a few things on top of it to build the full build
-env for the package.
-
-Will revise on all of the series and respin late tomorrow, in case anyone
-else has suggestions :)
-
-Best,
-Christian
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160527/db44fd91/attachment.html>
+diff --git a/package/tinyalsa/0002-asound.h-include-time.h-to-get-struct-timespec-proto.patch b/package/tinyalsa/0002-asound.h-include-time.h-to-get-struct-timespec-proto.patch
+new file mode 100644
+index 000000000000..1b5d43cec543
+--- /dev/null
++++ b/package/tinyalsa/0002-asound.h-include-time.h-to-get-struct-timespec-proto.patch
+@@ -0,0 +1,33 @@
++From c8333f8c7a4e4b9549abeef7530b2cd20a18e537 Mon Sep 17 00:00:00 2001
++From: rofl0r <retnyg@gmx.net>
++Date: Mon, 12 Oct 2015 12:57:09 +0100
++Subject: [PATCH] asound.h: include <time.h> to get struct timespec prototype
++
++without including it, we get
++In file included from mixer.c:44:0:
++include/sound/asound.h:337:18: error: field 'trigger_tstamp' has incomplete type
++include/sound/asound.h:338:18: error: field 'tstamp' has incomplete type
++etc.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit c8333f8c7a4e
++
++ include/sound/asound.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/include/sound/asound.h b/include/sound/asound.h
++index a041628ec28e..7c6de81673f5 100644
++--- a/include/sound/asound.h
+++++ b/include/sound/asound.h
++@@ -12,6 +12,7 @@
++ #ifndef __SOUND_ASOUND_H
++ #define __SOUND_ASOUND_H
++ 
+++#include <time.h>
++ #include <linux/types.h>
++ 
++ #define SNDRV_PROTOCOL_VERSION(major, minor, subminor) (((major)<<16)|((minor)<<8)|(subminor))
++-- 
++2.8.1
++
+-- 
+2.8.1
