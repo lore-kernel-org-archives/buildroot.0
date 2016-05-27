@@ -1,15 +1,31 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Fri, 27 May 2016 18:11:46 +0200
-Subject: [Buildroot] gstreamer-1.0 and egl
-In-Reply-To: <57487050.4040309@zacarias.com.ar>
-References: <63233783-a7e5-8971-7403-4f52cb5af733@gmail.com>
- <57487050.4040309@zacarias.com.ar>
-Message-ID: <b35e550d-8cf4-5912-e700-b050ab498e0c@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 27 May 2016 18:15:41 +0200
+Subject: [Buildroot] [PATCH] olimex_a20_olinuxino_lime: bump u-boot to
+	2016.05
+Message-ID: <1464365741-13697-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160527/2f3f7825/attachment.html>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ configs/olimex_a20_olinuxino_lime_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index bfa95c4..389fdd6 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+-- 
+2.7.4
