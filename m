@@ -1,56 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 27 May 2016 19:49:32 +0200
-Subject: [Buildroot] [PATCH next 4/4] docs: add documentation for
- BR2_TOOLCHAIN_BINUTILS_AT_LEAST
-In-Reply-To: <1464351957-50031-4-git-send-email-Vincent.Riera@imgtec.com>
-References: <1464351957-50031-1-git-send-email-Vincent.Riera@imgtec.com>
- <1464351957-50031-4-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160527174932.GD3624@free.fr>
+From: Zakharov Vlad <Vladislav.Zakharov@synopsys.com>
+Date: Fri, 27 May 2016 20:51:41 +0300
+Subject: [Buildroot] [PATCH] uboot: Use "mdbtrick" target when building elf
+	for ARC
+Message-ID: <1464371501-24130-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente, All,
+By default position independent executables (PIE) are generated
+when building U-Boot elf target. MetaWare debugger doesn't support
+PIE (position-independent executable).
 
-On 2016-05-27 13:25 +0100, Vicente Olivert Riera spake thusly:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+In order to allow MDB load and run U-Boot elf, we need to do a
+special trick, called "mdbtrick".
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+This special build target is used to fake generated U-Boot elf by:
+    1. Reset PIE flag in ELF header
+    2. Strip all debug information from elf
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Zakharov Vlad <vzakhar@synopsys.com>
+---
+ boot/uboot/uboot.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> ---
->  docs/manual/adding-packages-directory.txt | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> index 5537032..f3baa9b 100644
-> --- a/docs/manual/adding-packages-directory.txt
-> +++ b/docs/manual/adding-packages-directory.txt
-> @@ -294,6 +294,12 @@ use in the comment.
->  ** Comment string: +headers >= X.Y+ and/or `headers <= X.Y` (replace
->     +X.Y+ with the proper version)
->  
-> +* Binutils version
-> +** Dependency symbol: +BR2_TOOLCHAIN_BINUTILS_AT_LEAST_X_Y+, (replace
-> +   +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
-> +** Comment string: +binutils >= X.Y+ and/or `binutils <= X.Y` (replace
-> +   +X.Y+ with the proper version)
-> +
->  * GCC version
->  ** Dependency symbol: +BR2_TOOLCHAIN_GCC_AT_LEAST_X_Y+, (replace
->     +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
-> -- 
-> 2.7.3
-> 
-
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index e739638..d8cdf5c 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -38,6 +38,10 @@ endif
+ 
+ ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
+ UBOOT_BIN = u-boot
++# To make elf usable for debuging on ARC use special target
++ifeq ($(BR2_arc),y)
++UBOOT_MAKE_TARGET = mdbtrick
++endif
+ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
+ UBOOT_BIN = u-boot.kwb
+ UBOOT_MAKE_TARGET = $(UBOOT_BIN)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.5.5
