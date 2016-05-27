@@ -1,197 +1,68 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 26 May 2016 21:52:57 -0700
-Subject: [Buildroot] [PATCH v4 3/3] docker-engine: new package
-In-Reply-To: <1464324777-5364-1-git-send-email-christian@paral.in>
-References: <1464324777-5364-1-git-send-email-christian@paral.in>
-Message-ID: <1464324777-5364-4-git-send-email-christian@paral.in>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 27 May 2016 07:23:32 +0200
+Subject: [Buildroot] [PATCH v3 1/3] runc: new package
+In-Reply-To: <1464294094194-a799811f-1fe2864f-ad38cf3d@mixmax.com>
+References: <1464219082-3818-1-git-send-email-christian@paral.in>
+ <1464219082-3818-2-git-send-email-christian@paral.in>
+ <20160526211207.06e27be6@free-electrons.com>
+ <1464294094194-a799811f-1fe2864f-ad38cf3d@mixmax.com>
+Message-ID: <20160527072332.615bee85@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Docker is a platform to build, ship, and run applications in portable
-containers.
+Hello,
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+On Thu, 26 May 2016 20:21:34 +0000, Christian Stewart wrote:
 
----
+> > Why is this thing needed? I see you use it below, but it seems weird.  
+> In the build scripts they use git commands to grab the commit ID. I replaced
+> this in this series with a hardcoded git commit reference since we're not using
+> git to fetch the source tree anymore, instead we're using tarballs. But
+> including the commit hash the code originated from allows checking the revision
+> properly down the line.
+> This value is included in version outputs on the actual device - i.e. ?runc -v?
 
-Changes since v1:
- - use call github to build source URL
-Changes since v3:
- - fix help indentation in Config.in
- - use HOST_GO_TARGET_ENV as a base for build env vars
- - cleanup build commands
- - cleanup GOPATH and vendor directory setup
- - Remove selections for graph drivers. Docker will gracefully degrade
-   at runtime to the best available graphdriver. It is unnecessary to
-   disable these at build time, or to pull in any other dependencies
-   like aufs-util or btrfs tools. The daemon will use whatever is
-   available at runtime.
+Then why not use the <pkg>_VERSION variable directly, like:
 
----
+    -X main.gitCommit=$(RUNC_VERSION)
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/Config.in                        |  1 +
- package/docker-engine/Config.in          | 36 ++++++++++++++
- package/docker-engine/docker-engine.hash |  2 +
- package/docker-engine/docker-engine.mk   | 82 ++++++++++++++++++++++++++++++++
- 4 files changed, 121 insertions(+)
- create mode 100644 package/docker-engine/Config.in
- create mode 100644 package/docker-engine/docker-engine.hash
- create mode 100644 package/docker-engine/docker-engine.mk
+> > I guess you should use HOST_GO_TARGET_ENV, as in http://patchwork.ozlabs.org/patch/626824/ .  
+> I looked at that and it didn't seem quite right, and that's liable to change
+> down the line, so I copied it here. Keeping the envs package specific seems to
+> me the most reliable solution.
 
-diff --git a/package/Config.in b/package/Config.in
-index c8365f8..b829075 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1632,6 +1632,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/debianutils/Config.in"
- endif
- 	source "package/docker-containerd/Config.in"
-+	source "package/docker-engine/Config.in"
- 	source "package/cgroupfs-mount/Config.in"
- 	source "package/dsp-tools/Config.in"
- 	source "package/emlog/Config.in"
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-new file mode 100644
-index 0000000..20507f0
---- /dev/null
-+++ b/package/docker-engine/Config.in
-@@ -0,0 +1,36 @@
-+config BR2_PACKAGE_DOCKER_ENGINE
-+	bool "docker-engine"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # util-linux
-+	depends on BR2_USE_WCHAR # util-linux
-+	select BR2_PACKAGE_DOCKER_CONTAINERD
-+	select BR2_PACKAGE_RUNC
-+	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_BINARIES
-+	select BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNT
-+	help
-+	  Docker is a platform to build, ship,
-+	  and run applications as lightweight containers.
-+
-+	  https://github.com/docker/docker
-+
-+if BR2_PACKAGE_DOCKER_ENGINE
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
-+	bool "docker daemon"
-+	default y
-+	help
-+	  Build the Docker system daemon.
-+	  If not selected, will build client only.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL
-+	bool "build experimental features"
-+
-+endif
-+
-+comment "docker-engine needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-new file mode 100644
-index 0000000..7b93669
---- /dev/null
-+++ b/package/docker-engine/docker-engine.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 04de3750738b6f888f03520fb67db22e95e8a8e016ae901428e6c5791c9841cc  docker-engine-v1.11.1.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-new file mode 100644
-index 0000000..9dd07f7
---- /dev/null
-+++ b/package/docker-engine/docker-engine.mk
-@@ -0,0 +1,82 @@
-+################################################################################
-+#
-+# docker-engine
-+#
-+################################################################################
-+
-+DOCKER_ENGINE_VERSION = v1.11.1
-+DOCKER_ENGINE_VERSION_COMMIT = 5604cbed50d51c4039b1abcb1cf87c4e01bce924
-+DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
-+
-+DOCKER_ENGINE_LICENSE = Apache-2.0
-+DOCKER_ENGINE_LICENSE_FILES = LICENSE
-+
-+DOCKER_ENGINE_DEPENDENCIES = host-go docker-containerd
-+
-+DOCKER_ENGINE_GOPATH = "$(@D)/vendor"
-+DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-+	CGO_ENABLED=1 \
-+	CGO_NO_EMULATION=1 \
-+	GOBIN="$(@D)/bin" \
-+	GOPATH="$(DOCKER_ENGINE_GOPATH)"
-+
-+DOCKER_ENGINE_GLDFLAGS = \
-+	-X main.GitCommit=$(DOCKER_ENGINE_VERSION_COMMIT) \
-+	-X main.Version=$(DOCKER_ENGINE_VERSION) \
-+	-extldflags '-static'
-+
-+DOCKER_ENGINE_BUILD_TAGS = cgo
-+
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+DOCKER_ENGINE_BUILD_TAGS += seccomp
-+DOCKER_ENGINE_DEPENDENCIES += libseccomp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
-+DOCKER_ENGINE_BUILD_TAGS += daemon
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
-+DOCKER_ENGINE_BUILD_TAGS += experimental
-+endif
-+
-+define DOCKER_ENGINE_CONFIGURE_CMDS
-+	$(SED) '/^clean$$/d' $(@D)/hack/vendor.sh
-+	cd $(@D) && bash ./hack/vendor.sh
-+	mkdir -p $(DOCKER_ENGINE_GOPATH)/src/github.com/docker
-+	ln -s $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
-+	ln -s $(DOCKER_CONTAINERD_SRCDIR) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/containerd
-+	mkdir -p $(DOCKER_ENGINE_GOPATH)/src/github.com/opencontainers
-+	ln -s $(RUNC_SRCDIR) $(DOCKER_ENGINE_GOPATH)/src/github.com/opencontainers/runc
-+endef
-+
-+define DOCKER_ENGINE_BUILD_CMDS
-+	cd $(@D); $(DOCKER_ENGINE_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/docker -tags "$(DOCKER_ENGINE_BUILD_TAGS)" -ldflags "$(DOCKER_ENGINE_GLDFLAGS)" ./docker
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/docker $(TARGET_DIR)/usr/bin/docker
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
-+	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/system/docker.socket
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
-+	ln -fs ../../../../usr/lib/systemd/system/docker.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/docker.service
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 $(@D)/contrib/init/sysvinit-redhat/docker \
-+		$(TARGET_DIR)/etc/init.d/S61docker
-+	$(INSTALL) -D -m 644 $(@D)/contrib/init/sysvinit-redhat/docker.sysconfig \
-+		$(TARGET_DIR)/etc/sysconfig/docker.sysconfig
-+endef
-+
-+define DOCKER_ENGINE_USERS
-+	- - docker -1 * - - - Docker Application Container Framework
-+endef
-+
-+$(eval $(generic-package))
+I'm sorry, I don't understand what you mean here. The go package
+conveniently provides a variable for packages to use, to avoid mistakes
+and duplications in packages. When such a variable exists, it should
+definitely be used, and packages should not duplicate similar
+information, as it's a big maintenance burden down the line.
+
+But when I look at your v3, I see that you are now using
+HOST_GO_TARGET_ENV. So I really don't understand what you said here.
+
+> > What is the export doing here?  
+> Setting up GOPATH and GOBIN, this is also why I use the && on the next lines,
+> otherwise we would have to write the env statement for all of those lines.
+> The purpose of those commands is to place the ?runc? sources at the proper
+> location within the gopath tree. Go requires a tree to locate code. So inside
+> runc, assuming there's ?pkg/foo?, the path would be
+> ?github.com/opencontainers/runc/pkg/foo?. The GOPATH filesystem tree must match
+> this.
+> To fix this problem, we build a ?vendor? tree with dependencies, and then
+> simlink ?runc? into the proper location within that tree. This allows Go to
+> resolve everything properly.
+> The same applies to the other patches in this series.
+> I will fix the formatting issues and other things mentioned above and respin in
+> a couple of days.
+
+OK, thanks for the explanation. I see you fixed the export as well,
+which is good.
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
