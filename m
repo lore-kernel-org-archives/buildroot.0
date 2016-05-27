@@ -1,75 +1,65 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 27 May 2016 13:25:54 +0100
-Subject: [Buildroot] [PATCH next 1/4] toolchain: add common binutils version
-	hidden config options
-Message-ID: <1464351957-50031-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Fri, 27 May 2016 13:25:56 +0100
+Subject: [Buildroot] [PATCH next 3/4] binutils: select the appropriate
+	BR2_TOOLCHAIN_BINUTILS_AT_LEAST_X_Y
+In-Reply-To: <1464351957-50031-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1464351957-50031-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1464351957-50031-3-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a number of hidden Config.in options, that will be used
-to handle dependencies on the binutils version. We mimic the model that
-was used for the kernel headers dependency mechanism.
-
-These hidden options will be selected by the internal and external
-toolchain backend logic respectively, in follow-up commits.
-
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- toolchain/toolchain-common.in | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ package/binutils/Config.in.host | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 1fe28a9..deede7b 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -327,6 +327,45 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST
- 	default "4.4"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
- 	default "4.3"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index efdc840..09d1602 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -2,25 +2,38 @@ comment "Binutils Options"
  
-+config BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_20
-+	bool
+ choice
+ 	prompt "Binutils Version"
+-	depends on !BR2_arc
+ 	default BR2_BINUTILS_VERSION_2_25_X
+ 	help
+ 	  Select the version of binutils you wish to use.
+ 
+ 	config BR2_BINUTILS_VERSION_2_24_X
++		bool "binutils 2.24"
++		# ARC support is not upstream yet
++		depends on !BR2_arc
+ 		# supported, but broken on Nios-II and powerpc64le
+ 		depends on !BR2_nios2 && !BR2_powerpc64le
+ 		# Unsupported for MIPS R6
+ 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 		# Unsupported ARM cores
+ 		depends on !BR2_cortex_a17
+-		bool "binutils 2.24"
++		select BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_24
+ 
+ 	config BR2_BINUTILS_VERSION_2_25_X
+ 		bool "binutils 2.25.1"
++		# ARC support is not upstream yet
++		depends on !BR2_arc
++		select BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_25
+ 
+ 	config BR2_BINUTILS_VERSION_2_26_X
+ 		bool "binutils 2.26"
++		# ARC support is not upstream yet
++		depends on !BR2_arc
++		select BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_26
 +
-+config BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_21
-+	bool
-+	select BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_20
-+
-+config BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_22
-+	bool
-+	select BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_21
-+
-+config BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_23
-+	bool
-+	select BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_22
-+
-+config BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_24
-+	bool
-+	select BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_23
-+
-+config BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_25
-+	bool
-+	select BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_24
-+
-+config BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_26
-+	bool
-+	select BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_25
-+
-+# This order guarantees that the highest version is set, as kconfig
-+# stops affecting a value on the first matching default.
-+config BR2_TOOLCHAIN_BINUTILS_AT_LEAST
-+	string
-+	default "2.26" if BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_26
-+	default "2.25" if BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_25
-+	default "2.24" if BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_24
-+	default "2.23" if BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_23
-+	default "2.22" if BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_22
-+	default "2.21" if BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_21
-+	default "2.20" if BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_20
-+
- config BR2_TOOLCHAIN_HAS_SYNC_1
- 	bool
- 	default y
++	config BR2_BINUTILS_VERSION_ARC
++		bool "arc-2016.03"
++		depends on BR2_arc
++		select BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_26
+ 
+ endchoice
+ 
 -- 
 2.7.3
