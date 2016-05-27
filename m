@@ -1,61 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 May 2016 22:07:23 +0200
-Subject: [Buildroot] [git commit] python-pyftpdlib: bump version to 1.5.1,
-	fixing Python 3 issue
-Message-ID: <20160601161311.0CD5D802A0@busybox.osuosl.org>
+Date: Fri, 27 May 2016 23:06:10 +0200
+Subject: [Buildroot] [git commit] weston: add support for XWayland
+Message-ID: <20160601161311.422AC802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cf16166c0fd14cafb89a8c2452fe1f21bca1d8c
+commit: https://git.buildroot.net/buildroot/commit/?id=36366add9754244730607a3397c9393c4fbe8f5a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit bumpds the version of python-pyftpdlib to fix a
-byte-compilation problem occuring with Python 3. The current version of
-pyftpdlib contained a file that had mistakenly been added to the
-release, and which wasn't Python 3 compliant. The new 1.5.1 version has
-been released specifically to address this problem, see:
-
-  https://github.com/giampaolo/pyftpdlib/issues/381
-
-Until now, this wasn't causing any problem as a byte-compilation problem
-was not a fatal failure. But upcoming commits will make it a fatal
-failure, so it needs to be fixed.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pyftpdlib/python-pyftpdlib.hash | 6 +++---
- package/python-pyftpdlib/python-pyftpdlib.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/weston/Config.in | 12 ++++++++++++
+ package/weston/weston.mk |  8 +++++++-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-pyftpdlib/python-pyftpdlib.hash b/package/python-pyftpdlib/python-pyftpdlib.hash
-index b6d0cca..9726f9f 100644
---- a/package/python-pyftpdlib/python-pyftpdlib.hash
-+++ b/package/python-pyftpdlib/python-pyftpdlib.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=0c6f7c447fb702af4d5ca0123003c9fd, sha256 locally computed
--md5     0c6f7c447fb702af4d5ca0123003c9fd  pyftpdlib-1.5.0.tar.gz
--sha256  0111127418e9012a8e9e6c05a0c64af1acef8c31128834805fb0f9a49c746261  pyftpdlib-1.5.0.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=61b23e2362df23d0dfa5fe76f6e2ab55, sha256 locally computed
-+md5  61b23e2362df23d0dfa5fe76f6e2ab55  pyftpdlib-1.5.1.tar.gz
-+sha256  7bcd7fc825123414a157718c6dcdcb0978208d3c865d4650564acef4acce3354  pyftpdlib-1.5.1.tar.gz
-diff --git a/package/python-pyftpdlib/python-pyftpdlib.mk b/package/python-pyftpdlib/python-pyftpdlib.mk
-index 11e24e2..85d0b56 100644
---- a/package/python-pyftpdlib/python-pyftpdlib.mk
-+++ b/package/python-pyftpdlib/python-pyftpdlib.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 44f954a..0812279 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -92,4 +92,16 @@ config BR2_PACKAGE_WESTON_X11
+ comment "X11 compositor needs X.org enabled"
+ 	depends on !BR2_PACKAGE_XORG7
  
--PYTHON_PYFTPDLIB_VERSION = 1.5.0
-+PYTHON_PYFTPDLIB_VERSION = 1.5.1
- PYTHON_PYFTPDLIB_SOURCE = pyftpdlib-$(PYTHON_PYFTPDLIB_VERSION).tar.gz
--PYTHON_PYFTPDLIB_SITE = https://pypi.python.org/packages/source/p/pyftpdlib
-+PYTHON_PYFTPDLIB_SITE = https://pypi.python.org/packages/a8/f8/0f6db156898616dbcbd7bf865660295c81479071ab0fcd1898fe1b3a4fc4
- PYTHON_PYFTPDLIB_SETUP_TYPE = setuptools
- PYTHON_PYFTPDLIB_LICENSE = MIT
- PYTHON_PYFTPDLIB_LICENSE_FILES = LICENSE
++config BR2_PACKAGE_WESTON_XWAYLAND
++	bool "XWayland support"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_LIBEPOXY
++	select BR2_PACKAGE_CAIRO
++	select BR2_PACKAGE_LIBXCB
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXCURSOR
++
++comment "XWayland support needs libepoxy and X.org enabled"
++	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
++
+ endif
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 3a0189f..38a0d37 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -18,7 +18,6 @@ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
+ 
+ WESTON_CONF_OPTS = \
+ 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
+-	--disable-xwayland \
+ 	--disable-wayland-compositor \
+ 	--disable-headless-compositor \
+ 	--disable-colord \
+@@ -111,6 +110,13 @@ else
+ WESTON_CONF_OPTS += --disable-x11-compositor
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WESTON_XWAYLAND),y)
++WESTON_CONF_OPTS += --enable-xwayland
++WESTON_DEPENDENCIES += cairo libepoxy libxcb xlib_libX11 xlib_libXcursor
++else
++WESTON_CONF_OPTS += --disable-xwayland
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBVA),y)
+ WESTON_CONF_OPTS += --enable-vaapi-recorder
+ WESTON_DEPENDENIES += libva
