@@ -1,65 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 27 May 2016 22:59:24 +0200
-Subject: [Buildroot] [PATCH] system: add comment about
-	busybox-show-others
-In-Reply-To: <20160527225012.2ed6e4e6@free-electrons.com>
-References: <1464381291-24985-1-git-send-email-yann.morin.1998@free.fr>
- <20160527225012.2ed6e4e6@free-electrons.com>
-Message-ID: <20160527205924.GE3624@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 27 May 2016 23:01:23 +0200
+Subject: [Buildroot] Analysis of build results for 2016-05-26
+In-Reply-To: <20160527224133.22b8cb60@free-electrons.com>
+References: <20160527063021.48E29101C97@stock.ovh.net>
+ <20160527224133.22b8cb60@free-electrons.com>
+Message-ID: <20160527210123.GH22609@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-On 2016-05-27 22:50 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 27 May 2016 22:34:51 +0200, Yann E. MORIN wrote:
+> Hello,
 > 
-> >  config BR2_INIT_SYSV
-> >  	bool "systemV"
-> > +	# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS exists even when Busybox is not enabled
-> >  	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
+> Waldemar, Samuel, Gwenhael, Bernd, Gustavo, Vicente, some questions for you below.
 > 
-> Well, I don't really see the point. You can perfectly well have Busybox
-> enabled *and* systemV as your init system.
+> On Fri, 27 May 2016 08:30:21 +0200 (CEST), Thomas Petazzoni wrote:
+> >        sparc |                 moarvm-2016.04 | NOK | http://autobuild.buildroot.net/results/0c3e8931b2d157764ed18c2a97f26c8e77ea426e/
+> 
+> Waldemar?
 
-I'm not arguing that.
+Should be the same problem as for sparc64, some required atomic
+functions are not implemented in libatomic_ops used by moarvm. So even if we
+fix the issue that v9 assembly is used, it will not work.
 
-What was puzzling me is that BR2_PACKAGE_BUSYBOX_SHOW_OTHERS *appears*
-to be a Busybox option.
+http://buildroot.uclibc.narkive.com/Gnhvpx9Y/patch-v3-moarvm-disable-for-sparc64
 
-Package options should not be selected before ensurign that the package
-itself is enabled, so we have wither:
-
-    select BR2_PACKAGE_FOO
-    select BR2_PACKAGE_FOO_OPTION
-
-or:
-
-    depends on BR2_PACKAGE_FOO
-    select BR2_PACKAGE_FOO_OPTION
-
-or:
-
-    select BR2_PACKAGE_FOO_OPTION if BR2_PACKAGE_FOO
-
-However, for this specific option, it is *also* available when Busybox
-is *not* enabled: it is not a package option.
-
-So it is perfectly legit to select it without checking that Busybix
-itself is enabled.
-
-(Yes, I lost almost 10 minutes hunting that down...)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+best regards
+ Waldemar
