@@ -1,84 +1,174 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 May 2016 11:27:24 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/mplayer: bump version to 1.3.0
-Message-ID: <1464427644-18229-1-git-send-email-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 28 May 2016 12:19:36 +0200
+Subject: [Buildroot] [PATCH v2] package/pulseview: fix build when
+ linking against libatomic is needed
+In-Reply-To: <20160526220044.13808-1-s.martin49@gmail.com>
+References: <20160526220044.13808-1-s.martin49@gmail.com>
+Message-ID: <da1f45c7-e463-8e31-e8f8-ce7ddfc3f0fe@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added upstream commit to fix compilation when zlib is missing.
+Hi Samuel, Thomas, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mplayer/0004-configure-zlib.patch | 30 ++++++++++++++++++++++++++++++
- package/mplayer/mplayer.hash              |  8 ++++----
- package/mplayer/mplayer.mk                |  2 +-
- 3 files changed, 35 insertions(+), 5 deletions(-)
- create mode 100644 package/mplayer/0004-configure-zlib.patch
+Le 27/05/2016 ? 00:00, Samuel Martin a ?crit :
+> With some toolchains, using atomics requires to explicitly add -latomic
+> to the linker flags.
+> 
+> This change adds a patch to pulseview adding this detection and updating
+> the LDFLAGS when appropriate.
+> 
+> This patch has be sent upstream:
+>   http://article.gmane.org/gmane.comp.debugging.sigrok.devel/2097
+> 
+> Fixes:
+>   http://autobuild.buildroot.org/results/1e3/1e3101261252d5f30fdf842cc99604e4f4c25eef/build-end.log
+> 
+> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> Cc: Romain Naour <romain.naour@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> 
+> ---
+> changes v1->v2:
+> - update/rework pulseview patch
+> ---
+>  ...heck-for-explicit-linking-against-libatom.patch | 117 +++++++++++++++++++++
+>  1 file changed, 117 insertions(+)
+>  create mode 100644 package/pulseview/0002-cmake-add-check-for-explicit-linking-against-libatom.patch
+> 
+> diff --git a/package/pulseview/0002-cmake-add-check-for-explicit-linking-against-libatom.patch b/package/pulseview/0002-cmake-add-check-for-explicit-linking-against-libatom.patch
+> new file mode 100644
+> index 0000000..70549e6
+> --- /dev/null
+> +++ b/package/pulseview/0002-cmake-add-check-for-explicit-linking-against-libatom.patch
+> @@ -0,0 +1,117 @@
+> +From 71830c804be76cf6abe913ac2fe584947b7a91ea Mon Sep 17 00:00:00 2001
+> +From: Samuel Martin <s.martin49@gmail.com>
+> +Date: Tue, 24 May 2016 23:08:40 +0200
+> +Subject: [PATCH] cmake: add check for explicit linking against libatomic
+> +
+> +To use atomics functions, some toolchains requires to explicitly add
+> +-latomic to the linker flags (because they are not provided by libc,
+> +but libatomic).
+> +
+> +This change adds a helper function trying to build/link a test program
+> +using atomics, then calls it to:
+> +* first check if atomics are directly available in the libc;
+> +* if not and libatomic has been found, then run the same test with
+> +  "-latomic" added to the linker flags.
+> +The pulseview link library list is updated according to the results of
+> +these tests.
+> +
+> +This issue was triggered by the Buildroot farms:
+> +  http://autobuild.buildroot.org/results/1e3/1e3101261252d5f30fdf842cc99604e4f4c25eef/build-end.log
+> +
+> +Notes:
+> +1- CMAKE_REQUIRED_* variables are only used in check functions. They
+> +   are not automatically forwarded to/handled by the target commands
+> +   (such as target_link_library), because the check functions are
+> +   implemented as macro in CMake code, whereas many target commands
+> +   are native.
+> +2- Because of note #1, CMAKE_REQUIRED_LIBRARIES (or its value) must be
+> +   explicitly passed to the target_link_library command when this is
+> +   needed.
+> +3- In this implementation, LIBATOMIC_LIBRARY is only set when it is
+> +   needed; so, unconditionally appending it to PULSEVIEW_LINK_LIBS
+> +   will produce the expected behavior.
+> +
+> +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> +
+> +---
+> +changes v1->v2:
+> +- use std::atomic_fetch_add_explicit function instead of
+> +  __atomic_fetch_add_4;
+> +- rework code using cmake_*_check_state and find_library helpers;
+> +- quiet-ize checks and clean outputs
+> +- extend the commit log
+> +---
+> + CMakeLists.txt | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
+> + 1 file changed, 50 insertions(+)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index 9dac69f..44f810e 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -107,6 +107,55 @@ endif()
+> + # This will set ${CMAKE_THREAD_LIBS_INIT} to the correct, OS-specific value.
+> + find_package(Threads REQUIRED)
+> + 
+> ++
 
-diff --git a/package/mplayer/0004-configure-zlib.patch b/package/mplayer/0004-configure-zlib.patch
-new file mode 100644
-index 0000000..7c1b2c8
---- /dev/null
-+++ b/package/mplayer/0004-configure-zlib.patch
-@@ -0,0 +1,30 @@
-+configure: Fix compilation when zlib is missing.
-+
-+Downloaded from upstream commit:
-+
-+$ LC_ALL=C svn log -r 37816
-+------------------------------------------------------------------------
-+r37816 | reimar | 2016-02-28 14:39:42 +0100 (Sun, 28 Feb 2016) | 3 lines
-+
-+configure: Fix compilation when zlib is missing.
-+
-+APNG and a few other decoders also cannot be enabled without it.
-+------------------------------------------------------------------------
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+Index: configure
-+===================================================================
-+--- a/configure	(revision 37795)
-++++ b/configure	(revision 37816)
-+@@ -6464,8 +6464,8 @@
-+   mplayer_encoders="$mplayer_encoders PNG_ENCODER"
-+ else
-+   def_zlib='#define CONFIG_ZLIB 0'
-+-  libavdecoders=$(filter_out_component decoder 'FLASHSV FLASHSV2 PNG ZMBV ZLIB DXA EXR G2M TSCC ZEROCODEC')
-+-  libavencoders=$(filter_out_component encoder 'FLASHSV FLASHSV2 PNG ZMBV ZLIB')
-++  libavdecoders=$(filter_out_component decoder 'APNG FLASHSV FLASHSV2 PNG ZMBV ZLIB DXA EXR G2M RSCC SCREENPRESSO TDSC TSCC ZEROCODEC')
-++  libavencoders=$(filter_out_component encoder 'APNG FLASHSV FLASHSV2 PNG ZMBV ZLIB')
-+ fi
-+ echores "$_zlib"
-+ 
-diff --git a/package/mplayer/mplayer.hash b/package/mplayer/mplayer.hash
-index 49c5631..e6b8842 100644
---- a/package/mplayer/mplayer.hash
-+++ b/package/mplayer/mplayer.hash
-@@ -1,4 +1,4 @@
--# From http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.2.tar.xz.md5
--md5 58409fccb8ef33013fb780405405491f  MPlayer-1.2.tar.xz
--# From http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.2.tar.xz.sha1
--sha1 64fad840dfae466ab5ef3be2b6c74058892cd981  MPlayer-1.2.tar.xz
-+# From http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.3.0.tar.xz.md5
-+md5 e8a4d77ad4f509e81dd5e13b51636c1d  MPlayer-1.3.0.tar.xz
-+# From http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.3.0.tar.xz.sha1
-+sha1 11db20434a4e1aabb9c52f7712241dae1b3730e3  MPlayer-1.3.0.tar.xz
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 33eba38..347ed5e 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPLAYER_VERSION = 1.2
-+MPLAYER_VERSION = 1.3.0
- MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.xz
- MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
- MPLAYER_DEPENDENCIES = host-pkgconf
--- 
-2.8.1
+Maybe an extra new line here :)
+
+Otherwise:
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+> ++# Check for explicit link against libatomic
+> ++#
+> ++# Depending on the toolchain, linking a program using atomic functions may need
+> ++# "-latomic" explicitly passed to the linker
+> ++#
+> ++# This check first tests if atomics are available in the C-library, if not and
+> ++# libatomic exists, then it runs the same test with -latomic added to the
+> ++# linker flags.
+> ++
+> ++# Helper for checking for atomics
+> ++function(check_working_cxx_atomics varname additional_lib)
+> ++  include(CheckCXXSourceCompiles)
+> ++  include(CMakePushCheckState)
+> ++  cmake_push_check_state()
+> ++  set(CMAKE_REQUIRED_FLAGS "-std=c++11")
+> ++  set(CMAKE_REQUIRED_LIBRARIES "${additional_lib}")
+> ++  set(CMAKE_REQUIRED_QUIET 1)
+> ++  CHECK_CXX_SOURCE_COMPILES("
+> ++#include <atomic>
+> ++std::atomic<int> x;
+> ++int main() {
+> ++  return std::atomic_fetch_add_explicit(&x, 1, std::memory_order_seq_cst);
+> ++}
+> ++" ${varname})
+> ++  cmake_pop_check_state()
+> ++endfunction(check_working_cxx_atomics)
+> ++
+> ++# First check if atomics work without the library.
+> ++# If not, check if the library exists, and atomics work with it.
+> ++check_working_cxx_atomics(HAVE_CXX_ATOMICS_WITHOUT_LIB "")
+> ++if(HAVE_CXX_ATOMICS_WITHOUT_LIB)
+> ++  message(STATUS "Atomics provided by the C-library - yes")
+> ++else()
+> ++  message(STATUS "Atomics provided by the C-library - no")
+> ++  find_library(LIBATOMIC_LIBRARY NAMES atomic PATH_SUFFIXES lib)
+> ++  if(LIBATOMIC_LIBRARY)
+> ++    check_working_cxx_atomics(HAVE_CXX_ATOMICS_WITH_LIB "${LIBATOMIC_LIBRARY}")
+> ++    if (HAVE_CXX_ATOMICS_WITH_LIB)
+> ++      message(STATUS "Atomics provided by libatomic - yes")
+> ++    else()
+> ++      message(STATUS "Atomics provided by libatomic - no")
+> ++      message(FATAL_ERROR "Compiler must support std::atomic!")
+> ++    endif()
+> ++  else()
+> ++    message(FATAL_ERROR "Compiler appears to require libatomic, but cannot find it.")
+> ++  endif()
+> ++endif()
+> ++
+> + #===============================================================================
+> + #= System Introspection
+> + #-------------------------------------------------------------------------------
+> +@@ -387,6 +436,7 @@ set(PULSEVIEW_LINK_LIBS
+> + 	${Boost_LIBRARIES}
+> + 	${QT_LIBRARIES}
+> + 	${CMAKE_THREAD_LIBS_INIT}
+> ++	${LIBATOMIC_LIBRARY}
+> + )
+> + 
+> + if(STATIC_PKGDEPS_LIBS)
+> +-- 
+> +2.8.3
+> +
+> 
