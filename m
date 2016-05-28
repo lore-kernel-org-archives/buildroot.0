@@ -1,33 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 May 2016 13:34:03 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/mplayer: bump version to
- 1.3.0
-In-Reply-To: <1464427644-18229-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1464427644-18229-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160528133403.14ec08ee@free-electrons.com>
+From: Roland Franke <fli4l@franke-prem.de>
+Date: Sat, 28 May 2016 13:40:33 +0200
+Subject: [Buildroot] [PATCH v2 2/2] rrdtool: bump version to 1.6.0
+In-Reply-To: <20160511231211.1a1bd0c2@free-electrons.com>
+References: <1462976617-24524-1-git-send-email-fli4l@franke-prem.de><1462976617-24524-2-git-send-email-fli4l@franke-prem.de>
+ <20160511231211.1a1bd0c2@free-electrons.com>
+Message-ID: <099152E77C184E7AA62887CAF1DE72FC@ROLANDAMD64>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hallo,
 
-On Sat, 28 May 2016 11:27:24 +0200, Bernd Kuhls wrote:
-> Added upstream commit to fix compilation when zlib is missing.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mplayer/0004-configure-zlib.patch | 30 ++++++++++++++++++++++++++++++
->  package/mplayer/mplayer.hash              |  8 ++++----
->  package/mplayer/mplayer.mk                |  2 +-
->  3 files changed, 35 insertions(+), 5 deletions(-)
->  create mode 100644 package/mplayer/0004-configure-zlib.patch
+>> -RRDTOOL_AUTORECONF = YES
+>> -RRDTOOL_GETTEXTIZE = YES
 
-Applied to next, thanks.
+> If anything, this should be done as part of the patch bumping to
+> version 1.6.0. I.e, your two patches should be merged into just one.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Sorry for my mistake. But as you reported the following error:
+
+> Also, this breaks the build for me, as I just reported on the v1 of
+> your patch:
+> /home/test/outputs/rrdtool/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.7.4/../../../../arm-buildroot-linux-
+> uclibcgnueabi/bin/ld: rrd_tool.o: undefined reference to symbol 
+> 'libintl_gettext'
+> /home/test/outputs/rrdtool/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libintl.so.8: 
+> error adding symbols: DSO missing
+> from command line
+
+But you have reported that you have for that fault also switch off the 
+variables
+RRDTOOL_AUTORECONF and RRDTOOL_GETTEXTIZE.
+
+So why cannot be used the first version or by the second version only
+part 1/2 of this patch?
+Same was asked already from Alexander Dahl?
+But there was no replay to him.
+
+Best regards,
+Roland Franke 
