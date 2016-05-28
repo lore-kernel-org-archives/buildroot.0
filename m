@@ -1,79 +1,56 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 28 May 2016 22:57:25 +0200
-Subject: [Buildroot] [PATCH v3] gdb: enable simulator support for host build
-Message-ID: <20160528205724.GA10651@waldemar-brodkorb.de>
+From: Christian Stewart <christian@paral.in>
+Date: Sat, 28 May 2016 15:46:15 -0700
+Subject: [Buildroot] [PATCH v6 0/3] Add docker engine support
+Message-ID: <1464475578-22239-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an option to enable simulator support, so
-it can be used to test some no-MMU systems.
+This series adds runc, docker-containerd, and docker-engine support.
 
-Newer GDB need a workaround for in-tree compile.
+The aufs graph driver is compiled for the docker-engine, but aufs and
+other optional graph drivers will work at runtime only if the
+corresponding kernel features and userspace tools are installed. This is
+left up to the user.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-v2 -> v3:
-  - add workaround for GDB bug when in-tree compile is used,
-    problem reported by Thomas Petazzoni
-  - tested with GDB 7.9, 7.10.1, 7.11
-v1 -> v2:
-  - no changes
----
- package/gdb/Config.in.host |  5 +++++
- package/gdb/gdb.mk         | 15 +++++++++++++--
- 2 files changed, 18 insertions(+), 2 deletions(-)
+Graph driver selection has been re-enabled as of v6 as btrfs and
+overlayfs both require build-time headers from the corresponding utility
+packages.
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 257d68a..dc149b6 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -23,6 +23,11 @@ config BR2_PACKAGE_HOST_GDB_PYTHON
- 	help
- 	  This option enables the Python support in the cross gdb.
- 
-+config BR2_PACKAGE_HOST_GDB_SIM
-+	bool "Simulator support"
-+	help
-+	  This option enables the simulator support in the cross gdb.
-+
- choice
- 	prompt "GDB debugger Version"
- 	depends on !BR2_arc
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 0a7af1e..83b1701 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -163,8 +163,7 @@ HOST_GDB_CONF_OPTS = \
- 	--enable-threads \
- 	--disable-werror \
- 	--without-included-gettext \
--	$(GDB_DISABLE_BINUTILS_CONF_OPTS) \
--	--disable-sim
-+	$(GDB_DISABLE_BINUTILS_CONF_OPTS)
- 
- ifeq ($(BR2_PACKAGE_HOST_GDB_TUI),y)
- HOST_GDB_CONF_OPTS += --enable-tui
-@@ -179,6 +178,18 @@ else
- HOST_GDB_CONF_OPTS += --without-python
- endif
- 
-+# workaround a bug if in-tree build is used
-+define GDB_SIM_WORKAROUND
-+	$(RM) $(@D)/sim/common/tconfig.h
-+endef
-+
-+ifeq ($(BR2_PACKAGE_HOST_GDB_SIM),y)
-+HOST_GDB_CONF_OPTS += --enable-sim
-+HOST_GDB_PRE_CONFIGURE_HOOKS += GDB_SIM_WORKAROUND
-+else
-+HOST_GDB_CONF_OPTS += --disable-sim
-+endif
-+
- # legacy $arch-linux-gdb symlink
- define HOST_GDB_ADD_SYMLINK
- 	cd $(HOST_DIR)/usr/bin && \
+Patch 1 adds runC, the new minimal CLI for running linux containers.
+Patch 2 adds docker-containerd, the daemon and API for runC.
+Patch 3 adds docker-engine, the cli and api for the Docker application
+engine.
+
+Christian Stewart (3):
+  runc: new package
+  docker-containerd: new package
+  docker-engine: new package
+
+ package/Config.in                                |   3 +
+ package/docker-containerd/0001-arm64-fixes.patch | 189 +++++++++++++++++++++++
+ package/docker-containerd/Config.in              |  13 ++
+ package/docker-containerd/docker-containerd.hash |   2 +
+ package/docker-containerd/docker-containerd.mk   |  44 ++++++
+ package/docker-engine/Config.in                  |  69 +++++++++
+ package/docker-engine/docker-engine.hash         |   2 +
+ package/docker-engine/docker-engine.mk           |  99 ++++++++++++
+ package/runc/Config.in                           |  13 ++
+ package/runc/runc.hash                           |   2 +
+ package/runc/runc.mk                             |  46 ++++++
+ 11 files changed, 482 insertions(+)
+ create mode 100644 package/docker-containerd/0001-arm64-fixes.patch
+ create mode 100644 package/docker-containerd/Config.in
+ create mode 100644 package/docker-containerd/docker-containerd.hash
+ create mode 100644 package/docker-containerd/docker-containerd.mk
+ create mode 100644 package/docker-engine/Config.in
+ create mode 100644 package/docker-engine/docker-engine.hash
+ create mode 100644 package/docker-engine/docker-engine.mk
+ create mode 100644 package/runc/Config.in
+ create mode 100644 package/runc/runc.hash
+ create mode 100644 package/runc/runc.mk
+
 -- 
-2.1.4
+2.7.3
