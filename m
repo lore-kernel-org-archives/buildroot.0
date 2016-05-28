@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 May 2016 10:59:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mplayer: fix aarch64 compilation
-Message-ID: <1464425964-12174-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 28 May 2016 11:03:12 +0200
+Subject: [Buildroot] [PATCH v2] package/mplayer: fix aarch64 compilation
+Message-ID: <1464426192-23925-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,6 +15,8 @@ http://autobuild.buildroot.net/results/5f8/5f85c32eb89aac48ae8da892d9800bd13274c
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+v2: adjusted patch for patched file
+
  package/mplayer/0003-configure-armv8.patch | 43 ++++++++++++++++++++++++++++++
  package/mplayer/mplayer.mk                 |  4 +++
  2 files changed, 47 insertions(+)
@@ -22,7 +24,7 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 diff --git a/package/mplayer/0003-configure-armv8.patch b/package/mplayer/0003-configure-armv8.patch
 new file mode 100644
-index 0000000..4188def
+index 0000000..9868643
 --- /dev/null
 +++ b/package/mplayer/0003-configure-armv8.patch
 @@ -0,0 +1,43 @@
@@ -41,8 +43,8 @@ index 0000000..4188def
 +
 +Index: configure
 +===================================================================
-+--- configure	(revision 37871)
-++++ configure	(working copy)
++--- a/configure	(revision 37871)
+++++ b/configure	(working copy)
 +@@ -1445,6 +1445,8 @@
 +   --disable-armv6) _armv6=no ;;
 +   --enable-armv6t2) _armv6t2=yes ;;
