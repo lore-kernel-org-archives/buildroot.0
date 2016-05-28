@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 May 2016 15:52:02 +0200
-Subject: [Buildroot] [PATCH] package/iptraf-ng: really add _GNU_SOURCE
- in CFLAGS
-In-Reply-To: <1464441352-24940-1-git-send-email-romain.naour@gmail.com>
-References: <1464441352-24940-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160528155202.77779355@free-electrons.com>
+Date: Sat, 28 May 2016 15:53:09 +0200
+Subject: [Buildroot] [PATCH] package/ipsec-tools: disable for musl
+ toolchains
+In-Reply-To: <1464439649-27918-1-git-send-email-romain.naour@gmail.com>
+References: <1464439649-27918-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160528155309.1f6ca34c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 28 May 2016 15:15:52 +0200, Romain Naour wrote:
-> When iptraf-ng is build with musl, it needs _GNU_SOURCE in CFLAGS to define
-> the content of "struct tcphdr".
+On Sat, 28 May 2016 14:47:29 +0200, Romain Naour wrote:
+> __P() is used for compatibility with old K&R C compilers. With
+> ANSI C this macro has no effect.
 > 
-> iptraf-ng.mk try to add _GNU_SOURCE in CFLAGS but it's not taken into account.
-> 
-> Add it using IPTRAF_NG_CONF_ENV instead of IPTRAF_NG_MAKE_ENV.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/a1b/a1b18f2e3d075d349c19536a7c5553f24b75a323
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/iptraf-ng/iptraf-ng.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> Unlike for util-linux and ipkg packages where it was easy to remove
+> each __P() macro, ipsec-tools use it all over the tree and require a
+> "big" patch to enable musl support.
 
-Applied to master, thanks.
+Well, instead of removing the __P usage, we could also add a patch that
+adds a dummy definition of __P.
+
+But OK, ipsec-tools has been broken on musl for a while and nobody
+proposed a proper fix, so let's mark it as not available on musl for
+now. If someone cares in the future, it will also be time to re-enable
+it on musl.
+
+Best regards,
 
 Thomas
 -- 
