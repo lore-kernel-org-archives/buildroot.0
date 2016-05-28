@@ -1,45 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 May 2016 19:52:49 +0200
-Subject: [Buildroot] [PATCH 1/1] core/pkg-kconfig: pass host
- PKG_CONFIG_PATH env var
-In-Reply-To: <1464386608-13165-1-git-send-email-bjorn.forsman@gmail.com>
-References: <1464386608-13165-1-git-send-email-bjorn.forsman@gmail.com>
-Message-ID: <20160528195249.256cd78d@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 28 May 2016 20:32:15 +0200
+Subject: [Buildroot] [PATCH] moarvm: disable for sparc
+Message-ID: <20160528183215.GA27371@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Disable for the same reason as sparc64.
+Fixes following autobuild failure:
+http://autobuild.buildroot.net/results/0c3e8931b2d157764ed18c2a97f26c8e77ea426e/
 
-On Sat, 28 May 2016 00:03:28 +0200, Bj?rn Forsman wrote:
-> This is basically the same change as in 0515fe45661b6d320f8d2071df2
-> ("Makefile: pass host PKG_CONFIG_PATH at "make menuconfig" time"). That
-> commit made sure to pass host PKG_CONFIG_PATH when invoking Buildroot's
-> own menuconfig program. This change ensures that the same is true for
-> third party menuconfig programs (i.e. Linux, uClibc and Busybox).
-> 
-> This unbreaks "make {linux,uclibc}-menuconfig" for host platforms which
-> rely on PKG_CONFIG_PATH to find .pc files (e.g. NixOS). (When Busybox
-> updates to a more recent Kconfig snapshot, one that uses pkg-config to
-> find ncurses, "make busybox-menuconfig" will also start working.)
-> 
-> Tested on Ubuntu and NixOS:
-> 
->   $ make qemu_arm_versatile_defconfig
->   $ make linux-menuconfig
->   $ make
-> 
-> Signed-off-by: Bj?rn Forsman <bjorn.forsman@gmail.com>
-> ---
->  package/pkg-kconfig.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/moarvm/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/moarvm/Config.in b/package/moarvm/Config.in
+index 82e4509..3e0a104 100644
+--- a/package/moarvm/Config.in
++++ b/package/moarvm/Config.in
+@@ -4,8 +4,8 @@ config BR2_PACKAGE_MOARVM
+ 	depends on !BR2_STATIC_LIBS # libuv
+ 	depends on BR2_USE_MMU # libuv
+ 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS # libatomic_ops
+-	# needs AO_fetch_compare_and_swap, not implemented for sparcv9
+-	depends on !BR2_sparc64
++	# needs AO_fetch_compare_and_swap, not implemented for sparcv8/sparcv9
++	depends on !BR2_sparc64 && !BR2_sparc
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_LIBTOMMATH
+ 	select BR2_PACKAGE_LIBATOMIC_OPS
+@@ -19,5 +19,5 @@ comment "moarvm needs a toolchain w/ threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
+-	depends on !BR2_sparc64
++	depends on !BR2_sparc64 && !BR2_sparc
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
