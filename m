@@ -1,53 +1,52 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 28 May 2016 21:14:54 +0200
-Subject: [Buildroot] [PATCH] package/net-tools: fix static linking issue
- with lintl
-In-Reply-To: <20160528193055.5aa2185a@free-electrons.com>
-References: <1464444171-12033-1-git-send-email-romain.naour@gmail.com>
- <20160528193055.5aa2185a@free-electrons.com>
-Message-ID: <c30f73c1-5513-a937-5d21-233818225bec@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Sat, 28 May 2016 12:42:30 -0700
+Subject: [Buildroot] [PATCH v5 0/3] Add docker engine support
+Message-ID: <1464464553-17764-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 28/05/2016 ? 19:30, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Sat, 28 May 2016 16:02:51 +0200, Romain Naour wrote:
->> When net-tools are build with uClibc-ng and statically linked,
->> some tools like hostname and route needs to link with -lintl.
->>
->> Adding -lintl in LDFLAGS place the library before object files:
->> arm-linux-gcc -O2 -g -Wall -fno-strict-aliasing   -static -lintl -Llib -o hostname hostname.o
->>
->> Move $(LDFLAGS) after object files in the Makefile.
-> 
-> Thanks. However, I believe a slightly better fix is to add a $(LIBS)
-> variable passed after object files, and keep $(LDFLAGS) where it is
-> today. This is what automake Makefiles are doing, so it seems like the
-> most "standard way". See for example
-> https://lists.gnu.org/archive/html/autoconf/2004-01/msg00182.html.
+This series adds runc, docker-containerd, and docker-engine support.
 
-Thanks for the link, fixed in v2.
+The aufs graph driver is compiled for the docker-engine, but aufs and
+other optional graph drivers will work at runtime only if the
+corresponding kernel features and userspace tools are installed. This is
+left up to the user.
 
-> 
-> And this way, maybe the patch can be submitted upstream? I see that
-> upstream has an active Git repository, so such patches could definitely
-> be upstreamed.
+Patch 1 adds runC, the new minimal CLI for running linux containers.
+Patch 2 adds docker-containerd, the daemon and API for runC.
+Patch 3 adds docker-engine, the cli and api for the Docker application
+engine.
 
-See the recent discussion on their ML [1], the same issue has already been
-reported and a similar patch has been submitted.
-I'll reply and send mine.
+Christian Stewart (3):
+  runc: new package
+  docker-containerd: new package
+  docker-engine: new package
 
-Best regards,
-Romain
+ package/Config.in                                |   3 +
+ package/docker-containerd/0001-arm64-fixes.patch | 189 +++++++++++++++++++++++
+ package/docker-containerd/Config.in              |  13 ++
+ package/docker-containerd/docker-containerd.hash |   2 +
+ package/docker-containerd/docker-containerd.mk   |  44 ++++++
+ package/docker-engine/Config.in                  |  36 +++++
+ package/docker-engine/docker-engine.hash         |   2 +
+ package/docker-engine/docker-engine.mk           |  81 ++++++++++
+ package/runc/Config.in                           |  13 ++
+ package/runc/runc.hash                           |   2 +
+ package/runc/runc.mk                             |  46 ++++++
+ 11 files changed, 431 insertions(+)
+ create mode 100644 package/docker-containerd/0001-arm64-fixes.patch
+ create mode 100644 package/docker-containerd/Config.in
+ create mode 100644 package/docker-containerd/docker-containerd.hash
+ create mode 100644 package/docker-containerd/docker-containerd.mk
+ create mode 100644 package/docker-engine/Config.in
+ create mode 100644 package/docker-engine/docker-engine.hash
+ create mode 100644 package/docker-engine/docker-engine.mk
+ create mode 100644 package/runc/Config.in
+ create mode 100644 package/runc/runc.hash
+ create mode 100644 package/runc/runc.mk
 
-[1]https://sourceforge.net/p/net-tools/mailman/message/34924345/
-
-> 
-> Thanks!
-> 
-> Thomas
-> 
+-- 
+2.7.3
