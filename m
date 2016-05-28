@@ -1,38 +1,26 @@
-From: Martin Kelly <martin@surround.io>
-Date: Fri, 27 May 2016 16:08:01 -0700
-Subject: [Buildroot] [PATCH] Config.in: wrap to column width 72
-In-Reply-To: <20160527230450.10a646c2@free-electrons.com>
-References: <1464298507-22817-1-git-send-email-martin@surround.io>
- <20160527230450.10a646c2@free-electrons.com>
-Message-ID: <5748D351.9060302@surround.io>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Sat, 28 May 2016 04:55:44 +0200
+Subject: [Buildroot] gstreamer-1.0 and egl
+In-Reply-To: <574874BE.7050300@zacarias.com.ar>
+References: <63233783-a7e5-8971-7403-4f52cb5af733@gmail.com>
+ <57487050.4040309@zacarias.com.ar>
+ <b35e550d-8cf4-5912-e700-b050ab498e0c@gmail.com>
+ <57487323.8090101@zacarias.com.ar>
+ <fed59547-54cb-ff07-5d54-8e9e0b263ca5@gmail.com>
+ <574874BE.7050300@zacarias.com.ar>
+Message-ID: <f78150b3-b1ff-3368-b777-2fba2d4a88ac@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/27/2016 02:04 PM, Thomas Petazzoni wrote:
-> Hello,
->
-> Thanks for this patch. Looks good, except for one thing.
->
-> On Thu, 26 May 2016 14:35:07 -0700, Martin Kelly wrote:
->
->> +	  Command to be used to extract a gzip'ed file to stdout.  zcat
->
-> Why do you have two spaces after the . here ? Only one is enough.
->
-> There are other occurrences of the same issue in the rest of the patch.
-> Could you fix this and send an updated version?
->
-
-Some of these cases are caused by my rewrapping accidentally adding a 
-space. Other cases were already present prior to wrapping. For example:
-
--   Have a look on the kernel.org site for a list of mirrors, then enter
--   the URL to the base directory.  Examples:
-+   Have a look on the kernel.org site for a list of mirrors, then
-+   enter the URL to the base directory.  Examples:
-
-Would you like me to fix up all ".  " --> ". " as well, or just fix the 
-newly introduced ".  " ? I'm happy to do either way.
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160528/3fefc94a/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/xml
+Size: 92943 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160528/3fefc94a/attachment-0001.wsdl>
