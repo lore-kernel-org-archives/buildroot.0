@@ -1,108 +1,135 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 May 2016 09:50:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mplayer: add x86-specific configure
-	options
-Message-ID: <1464421808-26484-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 May 2016 10:31:55 +0200
+Subject: [Buildroot] [git commit] package/openpowerlink: avoid kernel header
+	issue with musl
+Message-ID: <20160528085537.1824E81836@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The mplayer configure script tries to detect the capabilities of the CPU
-used by probing the host CPU. This leads to compilation failures if the
-target CPU has lesser features, like missing mmx support for
-BR2_x86_i686=y:
+commit: https://git.buildroot.net/buildroot/commit/?id=c12bd83a340a47b07e3f262c0aa14350e21b2a9a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Checking for CPU vendor ... GenuineIntel (6:58:9)
-Checking for CPU type ...  Intel(R) Core(TM) i7-3770S CPU @ 3.10GHz
-Checking for kernel support of sse ... yes
-Checking for kernel support of sse2 ... yes
-Checking for kernel support of sse3 ... yes
-Checking for kernel support of ssse3 ... yes
-Checking for kernel support of sse4_1 ... yes
-Checking for kernel support of sse4_2 ... yes
-Checking for kernel support of avx ... yes
+The Virtual Ethernet driver doesn't build when the musl libc is used on the
+system. As stated in the musl wiki [1], the userspace and kernel headers are
+mixed leading to a "clash" with the definitions provided by musl.
 
-For this patch I copied most of ffmpeg configure options for x86 CPUs
-because mplayer contains its own copy of ffmpeg.
+Remove netinet/if_ether.h userspace header and replace ETHER_ADDR_LEN by
+ETH_ALEN [2] and ETHERMTU by ETH_DATA_LEN [3] in veth-linuxuser.c.
 
-Fixes
-http://autobuild.buildroot.net/results/c5a/c5a722607ec9797c317b63b0fd3235608a340c98/
+Fixes:
+http://autobuild.buildroot.org/results/2ca/2ca04bb046263e479e7597867b56469893d3c11d/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Upsteam status: pending
+https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/120
+
+[Rebase on v2.2.2]
+[1] http://wiki.musl-libc.org/wiki/FAQ#Q:_why_am_i_getting_.22error:_redefinition_of_struct_ethhdr.2Ftcphdr.2Fetc.22_.3F
+[2] https://git.musl-libc.org/cgit/musl/tree/include/net/ethernet.h?h=v1.1.14#n35
+[3] https://git.musl-libc.org/cgit/musl/tree/include/net/ethernet.h?h=v1.1.14#n48
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mplayer/mplayer.mk | 56 ++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 54 insertions(+), 2 deletions(-)
+ ...-veth-avoid-kernel-header-issue-with-musl.patch | 91 ++++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index cbbd1e7..41a52b0 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -268,10 +268,62 @@ MPLAYER_CFLAGS += -fomit-frame-pointer
- endif
- 
- ifeq ($(BR2_X86_CPU_HAS_MMX),y)
--MPLAYER_CONF_OPTS += --yasm=$(HOST_DIR)/usr/bin/yasm
-+MPLAYER_CONF_OPTS += \
-+	--enable-mmx \
-+	--yasm=$(HOST_DIR)/usr/bin/yasm
- MPLAYER_DEPENDENCIES += host-yasm
- else
--MPLAYER_CONF_OPTS += --yasm=''
-+MPLAYER_CONF_OPTS += \
-+	--disable-mmx \
-+	--yasm=''
-+endif
+diff --git a/package/openpowerlink/0006-veth-avoid-kernel-header-issue-with-musl.patch b/package/openpowerlink/0006-veth-avoid-kernel-header-issue-with-musl.patch
+new file mode 100644
+index 0000000..383f047
+--- /dev/null
++++ b/package/openpowerlink/0006-veth-avoid-kernel-header-issue-with-musl.patch
+@@ -0,0 +1,91 @@
++From 42a95209c5650662b86d222678ec14e7edfae156 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Wed, 25 May 2016 13:26:49 +0200
++Subject: [PATCH] veth: avoid kernel header issue with musl
 +
-+ifeq ($(BR2_X86_CPU_HAS_SSE),y)
-+MPLAYER_CONF_OPTS += --enable-sse
-+else
-+MPLAYER_CONF_OPTS += --disable-sse
-+endif
++The Virtual Ethernet driver doesn't build when the musl libc is used on the
++system. As stated in the musl wiki [1], the userspace and kernel headers are
++mixed leading to a "clash" with the definitions provided by musl.
 +
-+ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
-+MPLAYER_CONF_OPTS += --enable-sse2
-+else
-+MPLAYER_CONF_OPTS += --disable-sse2
-+endif
++Remove netinet/if_ether.h userspace header and replace ETHER_ADDR_LEN by
++ETH_ALEN [2] and ETHERMTU by ETH_DATA_LEN [3] in veth-linuxuser.c.
 +
-+ifeq ($(BR2_X86_CPU_HAS_SSE3),y)
-+MPLAYER_CONF_OPTS += --enable-sse3
-+else
-+MPLAYER_CONF_OPTS += --disable-sse3
-+endif
++Fixes:
++http://autobuild.buildroot.org/results/2ca/2ca04bb046263e479e7597867b56469893d3c11d/build-end.log
 +
-+ifeq ($(BR2_X86_CPU_HAS_SSSE3),y)
-+MPLAYER_CONF_OPTS += --enable-ssse3
-+else
-+MPLAYER_CONF_OPTS += --disable-ssse3
-+endif
++Upsteam status: pending
++https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/120
 +
-+ifeq ($(BR2_X86_CPU_HAS_SSE4),y)
-+MPLAYER_CONF_OPTS += --enable-sse4
-+else
-+MPLAYER_CONF_OPTS += --disable-sse4
-+endif
++[Rebase on v2.2.2]
++[1] http://wiki.musl-libc.org/wiki/FAQ#Q:_why_am_i_getting_.22error:_redefinition_of_struct_ethhdr.2Ftcphdr.2Fetc.22_.3F
++[2] https://git.musl-libc.org/cgit/musl/tree/include/net/ethernet.h?h=v1.1.14#n35
++[3] https://git.musl-libc.org/cgit/musl/tree/include/net/ethernet.h?h=v1.1.14#n48
 +
-+ifeq ($(BR2_X86_CPU_HAS_SSE42),y)
-+MPLAYER_CONF_OPTS += --enable-sse42
-+else
-+MPLAYER_CONF_OPTS += --disable-sse42
-+endif
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ stack/src/kernel/veth/veth-linuxuser.c | 13 ++++++-------
++ 1 file changed, 6 insertions(+), 7 deletions(-)
 +
-+ifeq ($(BR2_X86_CPU_HAS_AVX),y)
-+MPLAYER_CONF_OPTS += --enable-avx
-+else
-+MPLAYER_CONF_OPTS += --disable-avx
-+endif
++diff --git a/stack/src/kernel/veth/veth-linuxuser.c b/stack/src/kernel/veth/veth-linuxuser.c
++index 2a0bdd0..2bfaa87 100644
++--- a/stack/src/kernel/veth/veth-linuxuser.c
+++++ b/stack/src/kernel/veth/veth-linuxuser.c
++@@ -61,7 +61,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ #include <arpa/inet.h>
++ #include <linux/if.h>
++ #include <linux/if_tun.h>
++-#include <netinet/if_ether.h>
++ 
++ //============================================================================//
++ //            G L O B A L   D E F I N I T I O N S                             //
++@@ -248,7 +247,7 @@ static void getMacAdrs(UINT8* pMac_p)
++ 
++     close(sock);
++ 
++-    OPLK_MEMCPY(pMac_p, &ifr.ifr_hwaddr.sa_data[0], ETHER_ADDR_LEN);
+++    OPLK_MEMCPY(pMac_p, &ifr.ifr_hwaddr.sa_data[0], ETH_ALEN);
++ }
++ 
++ //------------------------------------------------------------------------------
++@@ -272,9 +271,9 @@ static tOplkError veth_receiveFrame(tFrameInfo* pFrameInfo_p,
++ 
++     // replace the MAC address of the POWERLINK Ethernet interface with virtual
++     // Ethernet MAC address before forwarding it into the virtual Ethernet interface
++-    if (OPLK_MEMCMP(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.macAdrs, ETHER_ADDR_LEN) == 0)
+++    if (OPLK_MEMCMP(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.macAdrs, ETH_ALEN) == 0)
++     {
++-        OPLK_MEMCPY(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.tapMacAdrs, ETHER_ADDR_LEN);
+++        OPLK_MEMCPY(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.tapMacAdrs, ETH_ALEN);
++     }
++ 
++     nwrite = write(vethInstance_l.fd, pFrameInfo_p->pFrame, pFrameInfo_p->frameSize);
++@@ -302,7 +301,7 @@ to be used as a thread which does a blocking read in a while loop.
++ //------------------------------------------------------------------------------
++ static void* vethRecvThread(void* pArg_p)
++ {
++-    UINT8               buffer[ETHERMTU];
+++    UINT8               buffer[ETH_DATA_LEN];
++     UINT                nread;
++     tFrameInfo          frameInfo;
++     tOplkError          ret = kErrorOk;
++@@ -331,7 +330,7 @@ static void* vethRecvThread(void* pArg_p)
++                 break;
++ 
++             default:    // data from tun/tap ready for read
++-                nread = read(pInstance->fd, buffer, ETHERMTU);
+++                nread = read(pInstance->fd, buffer, ETH_DATA_LEN);
++                 if (nread > 0)
++                 {
++                     DEBUG_LVL_VETH_TRACE("VETH:Read %d bytes from the tap interface\n", nread);
++@@ -340,7 +339,7 @@ static void* vethRecvThread(void* pArg_p)
++                     DEBUG_LVL_VETH_TRACE("DST MAC: %02X:%02X:%02x:%02X:%02X:%02x\n",
++                                           buffer[0], buffer[1], buffer[2], buffer[3], buffer[4], buffer[5]);
++                     // replace src MAC address with MAC address of virtual Ethernet interface
++-                    OPLK_MEMCPY(&buffer[6], pInstance->macAdrs, ETHER_ADDR_LEN);
+++                    OPLK_MEMCPY(&buffer[6], pInstance->macAdrs, ETH_ALEN);
++ 
++                     frameInfo.pFrame = (tPlkFrame *)buffer;
++                     frameInfo.frameSize = nread;
++-- 
++2.5.5
 +
-+ifeq ($(BR2_X86_CPU_HAS_AVX2),y)
-+MPLAYER_CONF_OPTS += --enable-avx2
-+else
-+MPLAYER_CONF_OPTS += --disable-avx2
- endif
- 
- define MPLAYER_CONFIGURE_CMDS
--- 
-2.8.1
