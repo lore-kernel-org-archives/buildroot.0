@@ -1,41 +1,61 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 28 May 2016 16:47:22 +0200
-Subject: [Buildroot] [PATCH] package/grantlee: disable for nios2 and
-	microblaze
-Message-ID: <1464446842-15225-1-git-send-email-romain.naour@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 28 May 2016 17:42:29 +0200
+Subject: [Buildroot] [PATCH v2 2/4] toolchain: add bfin support
+In-Reply-To: <20160528153349.7a4e1cee@free-electrons.com>
+References: <20160513121557.GA30570@waldemar-brodkorb.de>
+ <20160528153349.7a4e1cee@free-electrons.com>
+Message-ID: <20160528154229.GI22609@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable grantlee due to a toolchain issue on nios2 and microblaze architecture [1].
-Issue reproduced with binutils 2.26 and GCC 6
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-Fixes (microblaze):
-http://autobuild.buildroot.net/results/091/091bf7df46d6057be44b8ca8653596bd84c38fbc
+> Hello,
+> 
+> On Fri, 13 May 2016 14:15:57 +0200, Waldemar Brodkorb wrote:
+> 
+> > -config BR2_GCC_TARGET_CPU
+> > +config BR2_TARGET_CPU
+> 
+> This seems wrong. Why are you doing this?
 
-Fixes (nios2):
-http://autobuild.buildroot.net/results/e05/e05280f1cc4f669b7e418161749290723179e987
+In the first patch I disabled --with-cpu for gcc and bfin, as gcc
+does not support --with-cpu on bfin. You could use
+-mcpu=$(BR2_TARGET_CPU) to optimize code for a specific Bfin CPU,
+that is the reason the second version of the patch renamed
+the config symbols for a later use.
+ 
+> > +	string "Target CPU"
+> 
+> And this?
+> 
+> >  	default bf606		if BR2_bf606
+> >  	default bf607		if BR2_bf607
+> >  	default bf608		if BR2_bf608
+> > @@ -98,7 +99,7 @@ config BR2_GCC_TARGET_CPU
+> >  	default bf549		if BR2_bf549
+> >  	default bf561		if BR2_bf561
+> >  
+> > -config BR2_GCC_TARGET_CPU_REVISION
+> > +config BR2_TARGET_CPU_REVISION
+> 
+> Ditto here.
+> 
+> At the very least, it needs to be explained in the commit log,
+> including the impact on the Blackfin external toolchain support.
 
-[1] https://sourceware.org/bugzilla/show_bug.cgi?id=20173
+I thought it has no impact on the external toolchain.
+Is BR2_GCC_TARGET_CPU used in any way for external toolchains?
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/grantlee/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+> So you essentially broke this code by renaming the options.
 
-diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
-index 97be721..af806b2 100644
---- a/package/grantlee/Config.in
-+++ b/package/grantlee/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_GRANTLEE
- 	depends on (BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT && BR2_PACKAGE_QT) || \
- 		(BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5)
- 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405 # Qt GUI module
-+	depends on !(BR2_microblaze || BR2_nios2) # https://sourceware.org/bugzilla/show_bug.cgi?id=20173
- 	select BR2_PACKAGE_QT_STL if BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT_SCRIPT if BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
--- 
-2.5.5
+Not broke, disabled it here my intention :=)
+ 
+So how we go further with the internal Bfin toolchain stuff?
+
+best regards
+ Waldemar
