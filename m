@@ -1,41 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 May 2016 19:30:55 +0200
-Subject: [Buildroot] [PATCH] package/net-tools: fix static linking issue
- with lintl
-In-Reply-To: <1464444171-12033-1-git-send-email-romain.naour@gmail.com>
-References: <1464444171-12033-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160528193055.5aa2185a@free-electrons.com>
+Date: Sat, 28 May 2016 19:32:55 +0200
+Subject: [Buildroot] [git commit] package/grantlee: disable for nios2 and
+	microblaze
+Message-ID: <20160528173343.3620781851@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2ef21bc8d4e893faa81f75ef5130fa47f4dde468
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 28 May 2016 16:02:51 +0200, Romain Naour wrote:
-> When net-tools are build with uClibc-ng and statically linked,
-> some tools like hostname and route needs to link with -lintl.
-> 
-> Adding -lintl in LDFLAGS place the library before object files:
-> arm-linux-gcc -O2 -g -Wall -fno-strict-aliasing   -static -lintl -Llib -o hostname hostname.o
-> 
-> Move $(LDFLAGS) after object files in the Makefile.
+Disable grantlee due to a toolchain issue on nios2 and microblaze architecture [1].
+Issue reproduced with binutils 2.26 and GCC 6
 
-Thanks. However, I believe a slightly better fix is to add a $(LIBS)
-variable passed after object files, and keep $(LDFLAGS) where it is
-today. This is what automake Makefiles are doing, so it seems like the
-most "standard way". See for example
-https://lists.gnu.org/archive/html/autoconf/2004-01/msg00182.html.
+Fixes (microblaze):
+http://autobuild.buildroot.net/results/091/091bf7df46d6057be44b8ca8653596bd84c38fbc
 
-And this way, maybe the patch can be submitted upstream? I see that
-upstream has an active Git repository, so such patches could definitely
-be upstreamed.
+Fixes (nios2):
+http://autobuild.buildroot.net/results/e05/e05280f1cc4f669b7e418161749290723179e987
 
-Thanks!
+[1] https://sourceware.org/bugzilla/show_bug.cgi?id=20173
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[Thomas:
+ - tweak how the dependency is expressed
+ - propagate the dependency to the comments.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/grantlee/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
+index 97be721..7895c7e 100644
+--- a/package/grantlee/Config.in
++++ b/package/grantlee/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_GRANTLEE
+ 	depends on (BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT && BR2_PACKAGE_QT) || \
+ 		(BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5)
+ 	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405 # Qt GUI module
++	# https://sourceware.org/bugzilla/show_bug.cgi?id=20173
++	depends on !BR2_microblaze && !BR2_nios2
+ 	select BR2_PACKAGE_QT_STL if BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_QT_SCRIPT if BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
+@@ -16,6 +18,7 @@ config BR2_PACKAGE_GRANTLEE
+ 
+ comment "grantlee needs a toolchain with NPTL not affected by Binutils bug 19405"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on !BR2_microblaze && !BR2_nios2
+ 	depends on (BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT && BR2_PACKAGE_QT) || \
+ 		(BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5) || \
+ 		BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405
