@@ -1,108 +1,106 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 May 2016 10:57:56 +0200
-Subject: [Buildroot] [git commit branch/next] package/kodi: add backported
-	patch to fix a bug when using taglib 1.11
-Message-ID: <20160528085809.573B18055B@busybox.osuosl.org>
+Date: Sat, 28 May 2016 10:58:02 +0200
+Subject: [Buildroot] [git commit branch/next] package/taglib: bump to
+	version 1.11
+Message-ID: <20160528085809.6DE2180046@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad70939c310848f5363be255d1e0f21c11e4b7ab
+commit: https://git.buildroot.net/buildroot/commit/?id=a1db78af758f702e87144fdc5c3c1d154a8f723f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Removed 0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch,
+a similar patch was committed upstream:
+
+https://github.com/taglib/taglib/commit/ea55c8b5c1e3b72789c302aa2560d9c87faedd40
+
+Also remove empty line from Config.in.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ding-issue-when-reading-certain-id3v1-tag.patch | 82 ++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
+ ...he-standard-CMake-flag-to-drive-the-share.patch | 40 ----------------------
+ package/taglib/Config.in                           |  1 -
+ package/taglib/taglib.hash                         |  2 +-
+ package/taglib/taglib.mk                           |  2 +-
+ 4 files changed, 2 insertions(+), 43 deletions(-)
 
-diff --git a/package/kodi/0008-Fix-nullpadding-issue-when-reading-certain-id3v1-tag.patch b/package/kodi/0008-Fix-nullpadding-issue-when-reading-certain-id3v1-tag.patch
-new file mode 100644
-index 0000000..dc428d6
---- /dev/null
-+++ b/package/kodi/0008-Fix-nullpadding-issue-when-reading-certain-id3v1-tag.patch
-@@ -0,0 +1,82 @@
-+From 78571ed421e3fd3d5244cd76670e4e1bab69132f Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Fri, 27 May 2016 17:30:28 +0200
-+Subject: [PATCH 1/1] Fix nullpadding issue when reading certain id3v1 tags
-+
-+backported from upstream commit to master branch:
-+
-+https://github.com/xbmc/xbmc/commit/cdabf9dd9e82f4b2d639fb769db08227a7c52046
-+
-+to fix problems with taglib-1.11:
-+
-+http://trac.kodi.tv/ticket/16454
-+https://github.com/taglib/taglib/issues/741#issuecomment-218059031
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ xbmc/music/tags/TagLoaderTagLib.cpp | 21 ---------------------
-+ xbmc/music/tags/TagLoaderTagLib.h   |  3 +++
-+ 2 files changed, 3 insertions(+), 21 deletions(-)
-+
-+diff --git a/xbmc/music/tags/TagLoaderTagLib.cpp b/xbmc/music/tags/TagLoaderTagLib.cpp
-+index b78a591..0fc346a 100644
-+--- a/xbmc/music/tags/TagLoaderTagLib.cpp
-++++ b/xbmc/music/tags/TagLoaderTagLib.cpp
-+@@ -46,31 +46,12 @@
-+ #include "utils/URIUtils.h"
-+ #include "utils/log.h"
-+ #include "utils/StringUtils.h"
-+-#include "utils/CharsetConverter.h"
-+ #include "utils/Base64.h"
-+ #include "settings/AdvancedSettings.h"
-+ 
-+ using namespace TagLib;
-+ using namespace MUSIC_INFO;
-+ 
-+-template<class T>
-+-class TagStringHandler : public T
-+-{
-+-public:
-+-  TagStringHandler() {}
-+-  virtual ~TagStringHandler() {}
-+-  virtual String parse(const ByteVector &data) const
-+-  {
-+-    std::string strSource(data.data(), data.size());
-+-    std::string strUTF8;
-+-    g_charsetConverter.unknownToUTF8(strSource, strUTF8);
-+-    return String(strUTF8, String::UTF8);
-+-  }
-+-};
-+-
-+-static const TagStringHandler<ID3v1::StringHandler> ID3v1StringHandler;
-+-static const TagStringHandler<ID3v2::Latin1StringHandler> ID3v2StringHandler;
-+-
-+ CTagLoaderTagLib::CTagLoaderTagLib()
-+ {
-+ }
-+@@ -824,8 +805,6 @@ bool CTagLoaderTagLib::Load(const std::string& strFileName, CMusicInfoTag& tag,
-+     return false;
-+   }
-+ 
-+-  ID3v1::Tag::setStringHandler(&ID3v1StringHandler);
-+-  ID3v2::Tag::setLatin1StringHandler(&ID3v2StringHandler);
-+   TagLib::File*              file = NULL;
-+   TagLib::APE::File*         apeFile = NULL;
-+   TagLib::ASF::File*         asfFile = NULL;
-+diff --git a/xbmc/music/tags/TagLoaderTagLib.h b/xbmc/music/tags/TagLoaderTagLib.h
-+index f83ea4f..0edb84f 100644
-+--- a/xbmc/music/tags/TagLoaderTagLib.h
-++++ b/xbmc/music/tags/TagLoaderTagLib.h
-+@@ -44,6 +44,9 @@
-+ #include <taglib/mp4tag.h>
-+ #include "ImusicInfoTagLoader.h"
-+ 
-++#include <string>
-++#include <vector>
-++
-+ namespace MUSIC_INFO
-+ {
-+   class CMusicInfoTag;
-+-- 
-+2.8.1
-+
+diff --git a/package/taglib/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch b/package/taglib/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
+deleted file mode 100644
+index 535ccb4..0000000
+--- a/package/taglib/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 4e6a75eed3602f10aff516f49c8088c6da8db9df Mon Sep 17 00:00:00 2001
+-From: Samuel Martin <s.martin49@gmail.com>
+-Date: Sun, 31 Aug 2014 12:11:57 +0200
+-Subject: [PATCH 1/1] cmake: use the standard CMake flag to drive the shared
+- object build
+-
+-If BUILD_SHARED_LIBS is set and ENABLE_STATIC undefined, then drive
+-ENABLE_STATIC with the BUILD_SHARED_LIBS value.
+-
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+----
+- CMakeLists.txt | 12 +++++++++++-
+- 1 file changed, 11 insertions(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 317ffa1..9931957 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -2,7 +2,17 @@ project(taglib)
+- 
+- cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
+- 
+--option(ENABLE_STATIC "Make static version of libtag"  OFF)
+-+# Use the standard CMake flag to drive the shared object build.
+-+if(DEFINED BUILD_SHARED_LIBS AND NOT DEFINED ENABLE_STATIC)
+-+  if(BUILD_SHARED_LIBS)
+-+    set(ENABLE_STATIC OFF)
+-+  else()
+-+    set(ENABLE_STATIC ON)
+-+  endif()
+-+else()
+-+  option(ENABLE_STATIC "Make static version of libtag"  OFF)
+-+endif()
+-+
+- if(ENABLE_STATIC)
+-   add_definitions(-DTAGLIB_STATIC)
+-   set(BUILD_SHARED_LIBS OFF)
+--- 
+-2.1.0
+-
+diff --git a/package/taglib/Config.in b/package/taglib/Config.in
+index 209837f..6521d48 100644
+--- a/package/taglib/Config.in
++++ b/package/taglib/Config.in
+@@ -1,4 +1,3 @@
+-
+ config BR2_PACKAGE_TAGLIB
+ 	bool "taglib"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+diff --git a/package/taglib/taglib.hash b/package/taglib/taglib.hash
+index 86ac6a4..a3cfc79 100644
+--- a/package/taglib/taglib.hash
++++ b/package/taglib/taglib.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	72d371cd1419a87ae200447a53bff2be219283071e80fd12337928cc967dc71a	taglib-1.9.1.tar.gz
++sha256	ed4cabb3d970ff9a30b2620071c2b054c4347f44fc63546dbe06f97980ece288	taglib-1.11.tar.gz
+diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
+index 2410650..0a2ca4d 100644
+--- a/package/taglib/taglib.mk
++++ b/package/taglib/taglib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TAGLIB_VERSION = 1.9.1
++TAGLIB_VERSION = 1.11
+ TAGLIB_SITE = http://taglib.github.io/releases
+ TAGLIB_INSTALL_STAGING = YES
+ TAGLIB_LICENSE = LGPLv2.1, MPL
