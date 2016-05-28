@@ -1,45 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 May 2016 15:51:00 +0200
-Subject: [Buildroot] [git commit] package/iptraf-ng: really add _GNU_SOURCE
-	in CFLAGS
-Message-ID: <20160528135107.D8BC880AE8@busybox.osuosl.org>
+Date: Sat, 28 May 2016 15:51:17 +0200
+Subject: [Buildroot] [git commit] package/ipsec-tools: disable for musl
+	toolchains
+Message-ID: <20160528135123.D7A517FF79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb384c24fd1b8604560dfeb6add7e698aab1e2c0
+commit: https://git.buildroot.net/buildroot/commit/?id=33499484e457018203023cdfdd5286478f2ae381
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When iptraf-ng is build with musl, it needs _GNU_SOURCE in CFLAGS to define
-the content of "struct tcphdr".
+__P() is used for compatibility with old K&R C compilers. With
+ANSI C this macro has no effect.
 
-iptraf-ng.mk try to add _GNU_SOURCE in CFLAGS but it's not taken into account.
+Unlike for util-linux and ipkg packages where it was easy to remove
+each __P() macro, ipsec-tools use it all over the tree and require a
+"big" patch to enable musl support.
 
-Add it using IPTRAF_NG_CONF_ENV instead of IPTRAF_NG_MAKE_ENV.
+Since upstream seems not verry active (last release 2014-02-27)
+
+So, disable ipsec-tools with musl based toolchains.
+
+This fixes a compilation error with musl libc because of undeclared
+__P.
 
 Fixes:
-http://autobuild.buildroot.net/results/a1b/a1b18f2e3d075d349c19536a7c5553f24b75a323
+http://autobuild.buildroot.net/results/42242e3f4485b9e77a916e6fe480c83f70e024e4
+
+While at it, reorder "depends on" and "select" lines in Config.in
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iptraf-ng/iptraf-ng.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/ipsec-tools/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/iptraf-ng/iptraf-ng.mk b/package/iptraf-ng/iptraf-ng.mk
-index ea64e1d..a36c708 100644
---- a/package/iptraf-ng/iptraf-ng.mk
-+++ b/package/iptraf-ng/iptraf-ng.mk
-@@ -11,7 +11,9 @@ IPTRAF_NG_LICENSE_FILES = LICENSE
- IPTRAF_NG_DEPENDENCIES = ncurses
+diff --git a/package/ipsec-tools/Config.in b/package/ipsec-tools/Config.in
+index 4af4095..36c5a65 100644
+--- a/package/ipsec-tools/Config.in
++++ b/package/ipsec-tools/Config.in
+@@ -1,8 +1,9 @@
+ config BR2_PACKAGE_IPSEC_TOOLS
+ 	bool "ipsec-tools"
++	depends on BR2_USE_MMU # fork()
++	depends on !BR2_TOOLCHAIN_USES_MUSL # Use __P() macro all over the tree
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_FLEX
+-	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  This package is required to support IPSec for Linux 2.6+
  
- IPTRAF_NG_MAKE_ENV = \
--	NCURSES_LDFLAGS="-lpanel -lncurses" \
-+	NCURSES_LDFLAGS="-lpanel -lncurses"
-+
-+IPTRAF_NG_CONF_ENV = \
- 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- $(eval $(autotools-package))
