@@ -1,48 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 May 2016 15:41:58 +0200
-Subject: [Buildroot] [PATCH v3 5/6] package/flannel: Add
- BR2_TOOLCHAIN_HAS_THREADS
-In-Reply-To: <627469f0b7b4e604da3a5ab3ef721f138a1c95a8.1464286518.git.geoff@infradead.org>
-References: <cover.1464286518.git.geoff@infradead.org>
- <627469f0b7b4e604da3a5ab3ef721f138a1c95a8.1464286518.git.geoff@infradead.org>
-Message-ID: <20160528154158.70f4f025@free-electrons.com>
+From: Masahiro Yamada <yamada.masahiro@socionext.com>
+Date: Sat, 28 May 2016 22:36:42 +0900
+Subject: [Buildroot] [PATCH] configs: zynq: revive BR2_LINUX_KERNEL_UIMAGE
+Message-ID: <1464442602-24726-1-git-send-email-yamada.masahiro@socionext.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Commit 5c67cb1d0445 ("linux: use zImage by default on ARM") changed
+the default kernel image, but missed to update Zynq defconfigs.
 
-On Thu, 26 May 2016 18:21:33 +0000, Geoff Levand wrote:
-> flannel uses the cgo package, so needs a toolchain with thread
-> support.
-> 
-> Signed-off-by: Geoff Levand <geoff@infradead.org>
-> ---
->  package/flannel/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
+U-Boot on Zynq boards still loads uImage, so BR2_LINUX_KERNEL_UIMAGE
+should be defined to generate uImage.
 
-There are still some issues with the flannel build:
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
+ configs/zynq_microzed_defconfig | 1 +
+ configs/zynq_zc706_defconfig    | 1 +
+ configs/zynq_zed_defconfig      | 1 +
+ 3 files changed, 3 insertions(+)
 
-  http://autobuild.buildroot.org/results/d98/d98e1857590738313a293b58f02230539bbaa405/build-end.log
-
-The error is:
-
-/home/buildroot/autobuild/run/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find Scrt1.o: No such file or directory
-
-My understanding is that this happens when trying to build PIE binaries
-that are statically linked. uClibc does not support that, or at least
-not with our current toolchain support. Would it be possible to not
-build PIE binaries with Go ? Or alternatively, investigate if it can be
-fixed in uClibc ?
-
-Waldemar, maybe you have some input about this problem ?
-
-Best regards,
-
-Thomas
+diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
+index c73fae5..3faa3b8 100644
+--- a/configs/zynq_microzed_defconfig
++++ b/configs/zynq_microzed_defconfig
+@@ -9,6 +9,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
++BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zed"
+diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
+index d1a46ca..fff49d3 100644
+--- a/configs/zynq_zc706_defconfig
++++ b/configs/zynq_zc706_defconfig
+@@ -10,6 +10,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2014.2.01"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
++BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zc706"
+diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
+index 1330be4..0e2c8ff 100644
+--- a/configs/zynq_zed_defconfig
++++ b/configs/zynq_zed_defconfig
+@@ -9,6 +9,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
++BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zed"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
