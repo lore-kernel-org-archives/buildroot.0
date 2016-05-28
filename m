@@ -1,203 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 May 2016 15:49:33 +0200
-Subject: [Buildroot] [PATCH v2 3/4] gdb: enable simulator support for
- host build
-In-Reply-To: <20160513121651.GA30939@waldemar-brodkorb.de>
-References: <20160513121651.GA30939@waldemar-brodkorb.de>
-Message-ID: <20160528154933.575c86c3@free-electrons.com>
+Date: Sat, 28 May 2016 15:50:31 +0200
+Subject: [Buildroot] [git commit] configs: zynq: revive
+	BR2_LINUX_KERNEL_UIMAGE
+Message-ID: <20160528135050.665DB803D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2277395172e62789cc6f8468baae569f1db47f7d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 13 May 2016 14:16:51 +0200, Waldemar Brodkorb wrote:
-> Add an option to enable simulator support, so
-> it can be used to test some no-MMU systems.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Commit 5c67cb1d0445 ("linux: use zImage by default on ARM") changed
+the default kernel image, but missed to update Zynq defconfigs.
 
-It doesn't seem to build on Blackfin for me. I'm not using the internal
-toolchain support that you've added in PATCH 2/4, I'm using the
-defconfig from your PATCH 4/4 with the Blackfin external toolchain. But
-host-gdb is a host package, so the cross-compilation toolchain used
-doesn't matter. And what I get is:
+U-Boot on Zynq boards still loads uImage, so BR2_LINUX_KERNEL_UIMAGE
+should be defined to generate uImage.
 
-./../common/sim-model.c: In function ?model_set?:
-./../common/sim-model.c:108:3: warning: implicit declaration of function ?CPU_MACH? [-Wimplicit-function-declaration]
-   CPU_MACH (cpu) = MODEL_MACH (model);
-   ^
-./../common/sim-model.c:108:18: error: lvalue required as left operand of assignment
-   CPU_MACH (cpu) = MODEL_MACH (model);
-                  ^
-./../common/sim-model.c:109:3: warning: implicit declaration of function ?CPU_MODEL? [-Wimplicit-function-declaration]
-   CPU_MODEL (cpu) = model;
-   ^
-./../common/sim-model.c:109:19: error: lvalue required as left operand of assignment
-   CPU_MODEL (cpu) = model;
-                   ^
-In file included from /usr/include/string.h:630:0,
-                 from ../common/sim-arange.c:32,
-                 from ../common/sim-arange.h:82,
-                 from ../common/sim-basics.h:141,
-                 from ./sim-main.h:24,
-                 from ./../common/sim-model.c:20:
-./../common/sim-model.c: In function ?sim_model_init?:
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:215:5: note: in expansion of macro ?MACH_BFD_NAME?
-     MACH_BFD_NAME (CPU_MACH (cpu))) != 0)
-     ^
-In file included from ./../common/sim-model.c:21:0:
-./../common/sim-model.h:112:27: error: invalid type argument of ?->? (have ?int?)
- #define MODEL_NAME(m) ((m)->name)
-                           ^
-./../common/sim-model.c:218:6: note: in expansion of macro ?MODEL_NAME?
-      MODEL_NAME (CPU_MODEL (cpu)),
-      ^
-./../common/sim-model.h:80:30: error: invalid type argument of ?->? (have ?int?)
- #define MACH_BFD_NAME(m) ((m)->bfd_name)
-                              ^
-./../common/sim-model.c:239:48: note: in expansion of macro ?MACH_BFD_NAME?
-       STATE_ARCHITECTURE (sd) = bfd_scan_arch (MACH_BFD_NAME (CPU_MACH (cpu)));
-                                                ^
-Makefile:542: recipe for target 'sim-model.o' failed
-make[5]: *** [sim-model.o] Error 1
-make[5]: *** Waiting for unfinished jobs....
-Makefile:129: recipe for target 'all' failed
-make[4]: *** [all] Error 1
-Makefile:8201: recipe for target 'all-sim' failed
-make[3]: *** [all-sim] Error 2
-Makefile:845: recipe for target 'all' failed
-make[2]: *** [all] Error 2
-package/pkg-generic.mk:195: recipe for target '/home/thomas/projets/buildroot/output/build/host-gdb-7.10.1/.stamp_built' failed
-make[1]: *** [/home/thomas/projets/buildroot/output/build/host-gdb-7.10.1/.stamp_built] Error 2
-Makefile:36: recipe for target '_all' failed
-make: *** [_all] Error 2
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/zynq_microzed_defconfig | 1 +
+ configs/zynq_zc706_defconfig    | 1 +
+ configs/zynq_zed_defconfig      | 1 +
+ 3 files changed, 3 insertions(+)
 
-Could you have a look?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
+index c73fae5..3faa3b8 100644
+--- a/configs/zynq_microzed_defconfig
++++ b/configs/zynq_microzed_defconfig
+@@ -9,6 +9,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
++BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zed"
+diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
+index d1a46ca..fff49d3 100644
+--- a/configs/zynq_zc706_defconfig
++++ b/configs/zynq_zc706_defconfig
+@@ -10,6 +10,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2014.2.01"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
++BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zc706"
+diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
+index 1330be4..0e2c8ff 100644
+--- a/configs/zynq_zed_defconfig
++++ b/configs/zynq_zed_defconfig
+@@ -9,6 +9,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
++BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zed"
