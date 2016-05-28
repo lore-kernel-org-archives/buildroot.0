@@ -1,10 +1,11 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 28 May 2016 17:42:29 +0200
-Subject: [Buildroot] [PATCH v2 2/4] toolchain: add bfin support
-In-Reply-To: <20160528153349.7a4e1cee@free-electrons.com>
-References: <20160513121557.GA30570@waldemar-brodkorb.de>
- <20160528153349.7a4e1cee@free-electrons.com>
-Message-ID: <20160528154229.GI22609@waldemar-brodkorb.de>
+Date: Sat, 28 May 2016 17:48:11 +0200
+Subject: [Buildroot] [PATCH v2 3/4] gdb: enable simulator support for
+ host build
+In-Reply-To: <20160528154933.575c86c3@free-electrons.com>
+References: <20160513121651.GA30939@waldemar-brodkorb.de>
+ <20160528154933.575c86c3@free-electrons.com>
+Message-ID: <20160528154811.GJ22609@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,46 +17,36 @@ Thomas Petazzoni wrote,
 
 > Hello,
 > 
-> On Fri, 13 May 2016 14:15:57 +0200, Waldemar Brodkorb wrote:
+> On Fri, 13 May 2016 14:16:51 +0200, Waldemar Brodkorb wrote:
+> > Add an option to enable simulator support, so
+> > it can be used to test some no-MMU systems.
+> > 
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > 
-> > -config BR2_GCC_TARGET_CPU
-> > +config BR2_TARGET_CPU
+> It doesn't seem to build on Blackfin for me. I'm not using the internal
+> toolchain support that you've added in PATCH 2/4, I'm using the
+> defconfig from your PATCH 4/4 with the Blackfin external toolchain. But
+> host-gdb is a host package, so the cross-compilation toolchain used
+> doesn't matter. And what I get is:
 > 
-> This seems wrong. Why are you doing this?
+> ./../common/sim-model.c: In function ?model_set?:
+> ./../common/sim-model.c:108:3: warning: implicit declaration of function ?CPU_MACH? [-Wimplicit-function-declaration]
+>    CPU_MACH (cpu) = MODEL_MACH (model);
+>       MODEL_NAME (CPU_MODEL (cpu)),
+> make[1]: *** [/home/thomas/projets/buildroot/output/build/host-gdb-7.10.1/.stamp_built] Error 2
+> Makefile:36: recipe for target '_all' failed
+> make: *** [_all] Error 2
+> 
+> Could you have a look?
 
-In the first patch I disabled --with-cpu for gcc and bfin, as gcc
-does not support --with-cpu on bfin. You could use
--mcpu=$(BR2_TARGET_CPU) to optimize code for a specific Bfin CPU,
-that is the reason the second version of the patch renamed
-the config symbols for a later use.
- 
-> > +	string "Target CPU"
-> 
-> And this?
-> 
-> >  	default bf606		if BR2_bf606
-> >  	default bf607		if BR2_bf607
-> >  	default bf608		if BR2_bf608
-> > @@ -98,7 +99,7 @@ config BR2_GCC_TARGET_CPU
-> >  	default bf549		if BR2_bf549
-> >  	default bf561		if BR2_bf561
-> >  
-> > -config BR2_GCC_TARGET_CPU_REVISION
-> > +config BR2_TARGET_CPU_REVISION
-> 
-> Ditto here.
-> 
-> At the very least, it needs to be explained in the commit log,
-> including the impact on the Blackfin external toolchain support.
+I totally forgot about it. See here:
+https://www.sourceware.org/ml/gdb/2015-12/msg00029.html
 
-I thought it has no impact on the external toolchain.
-Is BR2_GCC_TARGET_CPU used in any way for external toolchains?
+For newer GDB (7.10.1/7.11) we need to use out-of-tree builds. I
+only tested with 7.9, I think it was the default by the time I
+tested it or I changed it.
 
-> So you essentially broke this code by renaming the options.
-
-Not broke, disabled it here my intention :=)
- 
-So how we go further with the internal Bfin toolchain stuff?
+How would we change package/gdb to use out-of-tree building?
 
 best regards
  Waldemar
