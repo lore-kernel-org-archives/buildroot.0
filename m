@@ -1,55 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 May 2016 21:13:01 +0200
-Subject: [Buildroot] [git commit] configs: cubieboard2: use 4.6 kernel,
-	u-boot 2016.05
-Message-ID: <20160601161311.BA71D802A0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 May 2016 13:23:29 +0200
+Subject: [Buildroot] [git commit] package/mplayer: bump version to 1.3.0
+Message-ID: <20160601161311.702EB802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=216eca78a38c1f4d5c0f0a29cf742a12f987ebda
+commit: https://git.buildroot.net/buildroot/commit/?id=04658d5003353a84f120ed5ceb5d815f1a5b354d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated image was tested in a Cubieboard2.
+Added upstream commit to fix compilation when zlib is missing.
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/cubieboard2_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/mplayer/0004-configure-zlib.patch | 30 ++++++++++++++++++++++++++++++
+ package/mplayer/mplayer.hash              |  8 ++++----
+ package/mplayer/mplayer.mk                |  2 +-
+ 3 files changed, 35 insertions(+), 5 deletions(-)
 
-diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
-index a3b1b85..353aaa5 100644
---- a/configs/cubieboard2_defconfig
-+++ b/configs/cubieboard2_defconfig
-@@ -1,8 +1,8 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
--# Linux headers same as kernel, a 4.3 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_3=y
-+# Linux headers same as kernel, a 4.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
- BR2_TARGET_GENERIC_HOSTNAME="Cubieboard2"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Cubieboard2!"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/cubietech/cubieboard2/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/cubietech/cubieboard2/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.3.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-cubieboard2"
-@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_SPL=y
+diff --git a/package/mplayer/0004-configure-zlib.patch b/package/mplayer/0004-configure-zlib.patch
+new file mode 100644
+index 0000000..7c1b2c8
+--- /dev/null
++++ b/package/mplayer/0004-configure-zlib.patch
+@@ -0,0 +1,30 @@
++configure: Fix compilation when zlib is missing.
++
++Downloaded from upstream commit:
++
++$ LC_ALL=C svn log -r 37816
++------------------------------------------------------------------------
++r37816 | reimar | 2016-02-28 14:39:42 +0100 (Sun, 28 Feb 2016) | 3 lines
++
++configure: Fix compilation when zlib is missing.
++
++APNG and a few other decoders also cannot be enabled without it.
++------------------------------------------------------------------------
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++Index: configure
++===================================================================
++--- a/configure	(revision 37795)
+++++ b/configure	(revision 37816)
++@@ -6464,8 +6464,8 @@
++   mplayer_encoders="$mplayer_encoders PNG_ENCODER"
++ else
++   def_zlib='#define CONFIG_ZLIB 0'
++-  libavdecoders=$(filter_out_component decoder 'FLASHSV FLASHSV2 PNG ZMBV ZLIB DXA EXR G2M TSCC ZEROCODEC')
++-  libavencoders=$(filter_out_component encoder 'FLASHSV FLASHSV2 PNG ZMBV ZLIB')
+++  libavdecoders=$(filter_out_component decoder 'APNG FLASHSV FLASHSV2 PNG ZMBV ZLIB DXA EXR G2M RSCC SCREENPRESSO TDSC TSCC ZEROCODEC')
+++  libavencoders=$(filter_out_component encoder 'APNG FLASHSV FLASHSV2 PNG ZMBV ZLIB')
++ fi
++ echores "$_zlib"
++ 
+diff --git a/package/mplayer/mplayer.hash b/package/mplayer/mplayer.hash
+index 49c5631..e6b8842 100644
+--- a/package/mplayer/mplayer.hash
++++ b/package/mplayer/mplayer.hash
+@@ -1,4 +1,4 @@
+-# From http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.2.tar.xz.md5
+-md5 58409fccb8ef33013fb780405405491f  MPlayer-1.2.tar.xz
+-# From http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.2.tar.xz.sha1
+-sha1 64fad840dfae466ab5ef3be2b6c74058892cd981  MPlayer-1.2.tar.xz
++# From http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.3.0.tar.xz.md5
++md5 e8a4d77ad4f509e81dd5e13b51636c1d  MPlayer-1.3.0.tar.xz
++# From http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.3.0.tar.xz.sha1
++sha1 11db20434a4e1aabb9c52f7712241dae1b3730e3  MPlayer-1.3.0.tar.xz
+diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+index cbbd1e7..507fb5d 100644
+--- a/package/mplayer/mplayer.mk
++++ b/package/mplayer/mplayer.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MPLAYER_VERSION = 1.2
++MPLAYER_VERSION = 1.3.0
+ MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.xz
+ MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
+ MPLAYER_DEPENDENCIES = host-pkgconf
