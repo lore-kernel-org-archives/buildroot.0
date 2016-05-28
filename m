@@ -1,249 +1,332 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 28 May 2016 15:46:18 -0700
-Subject: [Buildroot] [PATCH v6 3/3] docker-engine: new package
+Date: Sat, 28 May 2016 15:46:17 -0700
+Subject: [Buildroot] [PATCH v6 2/3] docker-containerd: new package
 In-Reply-To: <1464475578-22239-1-git-send-email-christian@paral.in>
 References: <1464475578-22239-1-git-send-email-christian@paral.in>
-Message-ID: <1464475578-22239-4-git-send-email-christian@paral.in>
+Message-ID: <1464475578-22239-3-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Docker is a platform to build, ship, and run applications in portable
+docker-containerd is a daemon and API for controlling and managing runC
 containers.
+
+https://containerd.tools/
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 
 ---
 
-Changes since v1:
- - use call github to build source URL
 Changes since v3:
- - fix help indentation in Config.in
- - use HOST_GO_TARGET_ENV as a base for build env vars
- - cleanup build commands
- - cleanup GOPATH and vendor directory setup
- - Remove selections for graph drivers. Docker will gracefully degrade
-   at runtime to the best available graphdriver. It is unnecessary to
-   disable these at build time, or to pull in any other dependencies
-   like aufs-util or btrfs tools. The daemon will use whatever is
-   available at runtime.
+ - Don't depend on runc at compile-time
+ - Add threading dependency
+ - Use HOST_GO_TARGET_ENV, partially
+ - Cleanup compile commands
+ - Include patch to fix arm64 compilation
 Changes since v4:
- - remove commit hash from version scheme
-Changes since v5:
- - re-introduce graphdriver selections
- - these selections are required for btrfs and devicemapper
- - there are buildtime dependencies on headers.
- - add BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS dep to threading comment
+ - Bump to v0.2.2
+ - update hash for 0.2.2
+ - fix docker-runc simlink
+ - use CONTAINERD_VERSION for GitCommit const
+ - add go arch supports to config.in comment
+ - did runtime tests
+ - added signed-off-by to the patch series
 
 ---
- package/Config.in                        |  1 +
- package/docker-engine/Config.in          | 69 ++++++++++++++++++++++
- package/docker-engine/docker-engine.hash |  2 +
- package/docker-engine/docker-engine.mk   | 99 ++++++++++++++++++++++++++++++++
- 4 files changed, 171 insertions(+)
- create mode 100644 package/docker-engine/Config.in
- create mode 100644 package/docker-engine/docker-engine.hash
- create mode 100644 package/docker-engine/docker-engine.mk
+ package/Config.in                                |   1 +
+ package/docker-containerd/0001-arm64-fixes.patch | 189 +++++++++++++++++++++++
+ package/docker-containerd/Config.in              |  13 ++
+ package/docker-containerd/docker-containerd.hash |   2 +
+ package/docker-containerd/docker-containerd.mk   |  44 ++++++
+ 5 files changed, 249 insertions(+)
+ create mode 100644 package/docker-containerd/0001-arm64-fixes.patch
+ create mode 100644 package/docker-containerd/Config.in
+ create mode 100644 package/docker-containerd/docker-containerd.hash
+ create mode 100644 package/docker-containerd/docker-containerd.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c8365f8..b829075 100644
+index 6c513ba..c8365f8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1632,6 +1632,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+@@ -1631,6 +1631,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/dcron/Config.in"
  	source "package/debianutils/Config.in"
  endif
- 	source "package/docker-containerd/Config.in"
-+	source "package/docker-engine/Config.in"
++	source "package/docker-containerd/Config.in"
  	source "package/cgroupfs-mount/Config.in"
  	source "package/dsp-tools/Config.in"
  	source "package/emlog/Config.in"
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+diff --git a/package/docker-containerd/0001-arm64-fixes.patch b/package/docker-containerd/0001-arm64-fixes.patch
 new file mode 100644
-index 0000000..bbf56b1
+index 0000000..19df02c
 --- /dev/null
-+++ b/package/docker-engine/Config.in
-@@ -0,0 +1,69 @@
-+config BR2_PACKAGE_DOCKER_ENGINE
-+	bool "docker-engine"
++++ b/package/docker-containerd/0001-arm64-fixes.patch
+@@ -0,0 +1,189 @@
++From f6f54370d154b0ce5f35319d878048d7db8db89c Mon Sep 17 00:00:00 2001
++From: Lei Jitang <leijitang@huawei.com>
++Date: Tue, 5 Apr 2016 23:17:30 -0400
++Subject: [PATCH] arm64 fixes
++
++This commit is a combination of a few cherry-picked commits from the
++current master (0.3.0 candidate) of docker-containerd, which
++specifically address issues under arm64.
++
++move epoll syscall to arch specific to enable containerd run on arm64
++Rename epoll_amd64.go to epoll.go
++Signed-off-by: Lei Jitang <leijitang@huawei.com>
++
++archutils: epoll_aarch64: fix C formatting
++Signed-off-by: Aleksa Sarai <asarai@suse.de>
++
++archutils: fix build on aarch64
++Signed-off-by: Aleksa Sarai <asarai@suse.de>
++
++Use flag for aarch64 EpollCreate1
++Signed-off-by: Qiang Huang <h.huangqiang@huawei.com>
++
++Correct build flag for arm64
++Signed-off-by: Qiang Huang <h.huangqiang@huawei.com>
++
++Series signature:
++
++Signed-off-by: Christian Stewart <christian@paral.in>
++
++---
++ archutils/epoll.go          | 19 ++++++++++++
++ archutils/epoll_arm64.go    | 70 +++++++++++++++++++++++++++++++++++++++++++++
++ supervisor/monitor_linux.go |  9 +++---
++ 3 files changed, 94 insertions(+), 4 deletions(-)
++ create mode 100644 archutils/epoll.go
++ create mode 100644 archutils/epoll_arm64.go
++
++diff --git a/archutils/epoll.go b/archutils/epoll.go
++new file mode 100644
++index 0000000..c8ade64
++--- /dev/null
+++++ b/archutils/epoll.go
++@@ -0,0 +1,19 @@
+++// +build linux,!arm64
+++
+++package archutils
+++
+++import (
+++	"syscall"
+++)
+++
+++func EpollCreate1(flag int) (int, error) {
+++	return syscall.EpollCreate1(flag)
+++}
+++
+++func EpollCtl(epfd int, op int, fd int, event *syscall.EpollEvent) error {
+++	return syscall.EpollCtl(epfd, op, fd, event)
+++}
+++
+++func EpollWait(epfd int, events []syscall.EpollEvent, msec int) (int, error) {
+++	return syscall.EpollWait(epfd, events, msec)
+++}
++diff --git a/archutils/epoll_arm64.go b/archutils/epoll_arm64.go
++new file mode 100644
++index 0000000..00abc68
++--- /dev/null
+++++ b/archutils/epoll_arm64.go
++@@ -0,0 +1,70 @@
+++// +build linux,arm64
+++
+++package archutils
+++
+++// #include <sys/epoll.h>
+++/*
+++int EpollCreate1(int flag) {
+++	return epoll_create1(flag);
+++}
+++
+++int EpollCtl(int efd, int op,int sfd, int events, int fd) {
+++	struct epoll_event event;
+++	event.events = events;
+++	event.data.fd = fd;
+++
+++	return epoll_ctl(efd, op, sfd, &event);
+++}
+++
+++struct event_t {
+++	uint32_t events;
+++	int fd;
+++};
+++
+++struct epoll_event events[128];
+++int run_epoll_wait(int fd, struct event_t *event) {
+++	int n, i;
+++	n = epoll_wait(fd, events, 128, -1);
+++	for (i = 0; i < n; i++) {
+++		event[i].events = events[i].events;
+++		event[i].fd = events[i].data.fd;
+++	}
+++	return n;
+++}
+++*/
+++import "C"
+++
+++import (
+++	"fmt"
+++	"syscall"
+++	"unsafe"
+++)
+++
+++func EpollCreate1(flag int) (int, error) {
+++	fd := int(C.EpollCreate1(C.int(flag)))
+++	if fd < 0 {
+++		return fd, fmt.Errorf("failed to create epoll, errno is %d", fd)
+++	}
+++	return fd, nil
+++}
+++
+++func EpollCtl(epfd int, op int, fd int, event *syscall.EpollEvent) error {
+++	errno := C.EpollCtl(C.int(epfd), C.int(syscall.EPOLL_CTL_ADD), C.int(fd), C.int(event.Events), C.int(event.Fd))
+++	if errno < 0 {
+++		return fmt.Errorf("Failed to ctl epoll")
+++	}
+++	return nil
+++}
+++
+++func EpollWait(epfd int, events []syscall.EpollEvent, msec int) (int, error) {
+++	var c_events [128]C.struct_event_t
+++	n := int(C.run_epoll_wait(C.int(epfd), (*C.struct_event_t)(unsafe.Pointer(&c_events))))
+++	if n < 0 {
+++		return int(n), fmt.Errorf("Failed to wait epoll")
+++	}
+++	for i := 0; i < n; i++ {
+++		events[i].Fd = int32(c_events[i].fd)
+++		events[i].Events = uint32(c_events[i].events)
+++	}
+++	return int(n), nil
+++}
++diff --git a/supervisor/monitor_linux.go b/supervisor/monitor_linux.go
++index adf4ffd..b176585 100644
++--- a/supervisor/monitor_linux.go
+++++ b/supervisor/monitor_linux.go
++@@ -5,6 +5,7 @@ import (
++ 	"syscall"
++ 
++ 	"github.com/Sirupsen/logrus"
+++	"github.com/docker/containerd/archutils"
++ 	"github.com/docker/containerd/runtime"
++ )
++ 
++@@ -14,7 +15,7 @@ func NewMonitor() (*Monitor, error) {
++ 		exits:     make(chan runtime.Process, 1024),
++ 		ooms:      make(chan string, 1024),
++ 	}
++-	fd, err := syscall.EpollCreate1(0)
+++	fd, err := archutils.EpollCreate1(0)
++ 	if err != nil {
++ 		return nil, err
++ 	}
++@@ -47,7 +48,7 @@ func (m *Monitor) Monitor(p runtime.Process) error {
++ 		Fd:     int32(fd),
++ 		Events: syscall.EPOLLHUP,
++ 	}
++-	if err := syscall.EpollCtl(m.epollFd, syscall.EPOLL_CTL_ADD, fd, &event); err != nil {
+++	if err := archutils.EpollCtl(m.epollFd, syscall.EPOLL_CTL_ADD, fd, &event); err != nil {
++ 		return err
++ 	}
++ 	EpollFdCounter.Inc(1)
++@@ -67,7 +68,7 @@ func (m *Monitor) MonitorOOM(c runtime.Container) error {
++ 		Fd:     int32(fd),
++ 		Events: syscall.EPOLLHUP | syscall.EPOLLIN,
++ 	}
++-	if err := syscall.EpollCtl(m.epollFd, syscall.EPOLL_CTL_ADD, fd, &event); err != nil {
+++	if err := archutils.EpollCtl(m.epollFd, syscall.EPOLL_CTL_ADD, fd, &event); err != nil {
++ 		return err
++ 	}
++ 	EpollFdCounter.Inc(1)
++@@ -82,7 +83,7 @@ func (m *Monitor) Close() error {
++ func (m *Monitor) start() {
++ 	var events [128]syscall.EpollEvent
++ 	for {
++-		n, err := syscall.EpollWait(m.epollFd, events[:], -1)
+++		n, err := archutils.EpollWait(m.epollFd, events[:], -1)
++ 		if err != nil {
++ 			if err == syscall.EINTR {
++ 				continue
++-- 
++2.7.3
++
+diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
+new file mode 100644
+index 0000000..e76a6a2
+--- /dev/null
++++ b/package/docker-containerd/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_DOCKER_CONTAINERD
++	bool "docker-containerd"
 +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # util-linux
-+	depends on BR2_USE_WCHAR # util-linux
-+	select BR2_PACKAGE_DOCKER_CONTAINERD
 +	select BR2_PACKAGE_RUNC
-+	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_BINARIES
-+	select BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNT
 +	help
-+	  Docker is a platform to build, ship,
-+	  and run applications as lightweight containers.
++	  containerd is a daemon to control runC.
 +
-+	  https://github.com/docker/docker
++	  https://github.com/docker/containerd
 +
-+comment "docker-engine needs a toolchain w/ threads"
++comment "docker-containerd needs a toolchain w/ threads"
 +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+if BR2_PACKAGE_DOCKER_ENGINE
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
-+	bool "docker daemon"
-+	default y
-+	help
-+	  Build the Docker system daemon.
-+	  If not selected, will build client only.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL
-+	bool "build experimental features"
-+
-+if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
-+	bool "btrfs filesystem driver"
-+	depends on BR2_USE_WCHAR # btrfs-progs
-+	depends on BR2_USE_MMU # btrfs-progs
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
-+	select BR2_PACKAGE_BTRFS_PROGS
-+	help
-+	  Build the btrfs filesystem driver for Docker.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
-+	bool "devicemapper filesystem driver"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
-+	depends on BR2_USE_MMU # lvm2
-+	depends on !BR2_STATIC_LIBS # lvm2
-+	select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_LVM2_APP_LIBRARY
-+	help
-+	  Build the devicemapper filesystem driver for Docker.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
-+	bool "vfs filesystem driver"
-+	depends on BR2_USE_WCHAR # gvfs
-+	depends on BR2_USE_MMU # gvfs
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gvfs
-+	select BR2_PACKAGE_GVFS
-+	help
-+	  Build the vfs filesystem driver for Docker.
-+
-+endif
-+
-+endif
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
 new file mode 100644
-index 0000000..7b93669
+index 0000000..b98e651
 --- /dev/null
-+++ b/package/docker-engine/docker-engine.hash
++++ b/package/docker-containerd/docker-containerd.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 04de3750738b6f888f03520fb67db22e95e8a8e016ae901428e6c5791c9841cc  docker-engine-v1.11.1.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
++# Computed locally
++sha256 a21efc7ea4bb97306ae9807caadca6782358679f38d3afd606cb599b6853bc52  docker-containerd-v0.2.2.tar.gz
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
 new file mode 100644
-index 0000000..b7407b2
+index 0000000..902d63f
 --- /dev/null
-+++ b/package/docker-engine/docker-engine.mk
-@@ -0,0 +1,99 @@
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -0,0 +1,44 @@
 +################################################################################
 +#
-+# docker-engine
++# docker-containerd
 +#
 +################################################################################
 +
-+DOCKER_ENGINE_VERSION = v1.11.1
-+DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
++DOCKER_CONTAINERD_VERSION = v0.2.2
++DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
 +
-+DOCKER_ENGINE_LICENSE = Apache-2.0
-+DOCKER_ENGINE_LICENSE_FILES = LICENSE
++DOCKER_CONTAINERD_LICENSE = Apache-2.0
++DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
 +
-+DOCKER_ENGINE_DEPENDENCIES = host-go docker-containerd
++DOCKER_CONTAINERD_DEPENDENCIES = host-go
 +
-+DOCKER_ENGINE_GOPATH = "$(@D)/vendor"
-+DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
++DOCKER_CONTAINERD_GOPATH = "$(@D)/vendor"
++DOCKER_CONTAINERD_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
 +	CGO_ENABLED=1 \
-+	CGO_NO_EMULATION=1 \
 +	GOBIN="$(@D)/bin" \
-+	GOPATH="$(DOCKER_ENGINE_GOPATH)"
++	GOPATH="$(DOCKER_CONTAINERD_GOPATH)"
 +
-+DOCKER_ENGINE_GLDFLAGS = \
-+	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
-+	-X main.Version=$(DOCKER_ENGINE_VERSION) \
++DOCKER_CONTAINERD_GLDFLAGS = \
++	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION) \
 +	-extldflags '-static'
 +
-+DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs
-+
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+DOCKER_ENGINE_BUILD_TAGS += seccomp
-+DOCKER_ENGINE_DEPENDENCIES += libseccomp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
-+DOCKER_ENGINE_BUILD_TAGS += daemon
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
-+DOCKER_ENGINE_BUILD_TAGS += experimental
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS),y)
-+DOCKER_ENGINE_DEPENDENCIES += btrfs-progs
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_btrfs
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER),y)
-+DOCKER_ENGINE_DEPENDENCIES += lvm2
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_devicemapper
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS),y)
-+DOCKER_ENGINE_DEPENDENCIES += gvfs
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_vfs
-+endif
-+
-+define DOCKER_ENGINE_CONFIGURE_CMDS
-+	$(SED) '/^clean$$/d' $(@D)/hack/vendor.sh
-+	cd $(@D) && bash ./hack/vendor.sh
-+	mkdir -p $(DOCKER_ENGINE_GOPATH)/src/github.com/docker
-+	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
-+	ln -fs $(DOCKER_CONTAINERD_SRCDIR) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/containerd
-+	mkdir -p $(DOCKER_ENGINE_GOPATH)/src/github.com/opencontainers
-+	ln -fs $(RUNC_SRCDIR) $(DOCKER_ENGINE_GOPATH)/src/github.com/opencontainers/runc
++define DOCKER_CONTAINERD_CONFIGURE_CMDS
++	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
++	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
++	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
++	ln -s $(RUNC_SRCDIR) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
 +endef
 +
-+define DOCKER_ENGINE_BUILD_CMDS
-+	cd $(@D); $(DOCKER_ENGINE_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/docker -tags "$(DOCKER_ENGINE_BUILD_TAGS)" -ldflags "$(DOCKER_ENGINE_GLDFLAGS)" ./docker
++define DOCKER_CONTAINERD_BUILD_CMDS
++	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/ctr -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./ctr
++	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/containerd -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./containerd
++	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/containerd-shim -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./containerd-shim
 +endef
 +
-+define DOCKER_ENGINE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/docker $(TARGET_DIR)/usr/bin/docker
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
-+	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/system/docker.socket
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
-+	ln -fs ../../../../usr/lib/systemd/system/docker.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/docker.service
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 $(@D)/contrib/init/sysvinit-redhat/docker \
-+		$(TARGET_DIR)/etc/init.d/S61docker
-+	$(INSTALL) -D -m 644 $(@D)/contrib/init/sysvinit-redhat/docker.sysconfig \
-+		$(TARGET_DIR)/etc/sysconfig/docker.sysconfig
-+endef
-+
-+define DOCKER_ENGINE_USERS
-+	- - docker -1 * - - - Docker Application Container Framework
++define DOCKER_CONTAINERD_INSTALL_TARGET_CMDS
++	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
++	$(INSTALL) -D -m 0755 $(@D)/bin/containerd $(TARGET_DIR)/usr/bin/docker-containerd
++	$(INSTALL) -D -m 0755 $(@D)/bin/containerd-shim $(TARGET_DIR)/usr/bin/containerd-shim
 +endef
 +
 +$(eval $(generic-package))
