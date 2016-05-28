@@ -1,58 +1,36 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 May 2016 19:17:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-fbturbo:
-	needs dri2 for libump
-Message-ID: <1464455839-473-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 May 2016 19:17:59 +0200
+Subject: [Buildroot] [PATCH] configs: zynq: revive
+ BR2_LINUX_KERNEL_UIMAGE
+In-Reply-To: <1464442602-24726-1-git-send-email-yamada.masahiro@socionext.com>
+References: <1464442602-24726-1-git-send-email-yamada.masahiro@socionext.com>
+Message-ID: <20160528191759.7d830bd1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xdriver_xf86-video-fbturbo has an optional dependency to libump
-currently not handled by buildroot:
-https://github.com/ssvb/xf86-video-fbturbo/blob/master/configure.ac#L91
+Hello,
 
-If libump was compiled incidentally before xdriver_xf86-video-fbturbo
-sunxi_mali_ump_dri2.c is compiled which depends on dri2:
-https://github.com/ssvb/xf86-video-fbturbo/blob/master/src/Makefile.am#L59
+On Sat, 28 May 2016 22:36:42 +0900, Masahiro Yamada wrote:
+> Commit 5c67cb1d0445 ("linux: use zImage by default on ARM") changed
+> the default kernel image, but missed to update Zynq defconfigs.
+> 
+> U-Boot on Zynq boards still loads uImage, so BR2_LINUX_KERNEL_UIMAGE
+> should be defined to generate uImage.
+> 
+> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+> ---
+>  configs/zynq_microzed_defconfig | 1 +
+>  configs/zynq_zc706_defconfig    | 1 +
+>  configs/zynq_zed_defconfig      | 1 +
+>  3 files changed, 3 insertions(+)
 
-This patch adds a dependency for dri2proto to enable dri2 support in
-X.org and adds libump as dependency for a reproducable build to fix
-http://autobuild.buildroot.net/results/656/656520682a5ac6fe5e1e741e1a92b1eab4245f2d/
+Applied to master, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xdriver_xf86-video-fbturbo/Config.in                    | 1 +
- .../x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk    | 4 ++++
- 2 files changed, 5 insertions(+)
-
-diff --git a/package/x11r7/xdriver_xf86-video-fbturbo/Config.in b/package/x11r7/xdriver_xf86-video-fbturbo/Config.in
-index 8fec5c2..7825901 100644
---- a/package/x11r7/xdriver_xf86-video-fbturbo/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-fbturbo/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBTURBO
- 	bool "xf86-video-fbturbo"
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_PIXMAN
-+	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_LIBUMP
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_RENDERPROTO
-diff --git a/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk b/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk
-index b2053d3..b67630d 100644
---- a/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk
-+++ b/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk
-@@ -26,6 +26,10 @@ else
- XDRIVER_XF86_VIDEO_FBTURBO_CONF_OPTS += --disable-pciaccess
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBUMP),y)
-+XDRIVER_XF86_VIDEO_FBTURBO_DEPENDENCIES += libump
-+endif
-+
- define XDRIVER_XF86_VIDEO_FBTURBO_INSTALL_CONF_FILE
- 	$(INSTALL) -m 0644 -D $(@D)/xorg.conf $(TARGET_DIR)/etc/X11/xorg.conf
- endef
+Thomas
 -- 
-2.8.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
