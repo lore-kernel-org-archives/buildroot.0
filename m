@@ -1,136 +1,249 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 28 May 2016 15:46:16 -0700
-Subject: [Buildroot] [PATCH v6 1/3] runc: new package
+Date: Sat, 28 May 2016 15:46:18 -0700
+Subject: [Buildroot] [PATCH v6 3/3] docker-engine: new package
 In-Reply-To: <1464475578-22239-1-git-send-email-christian@paral.in>
 References: <1464475578-22239-1-git-send-email-christian@paral.in>
-Message-ID: <1464475578-22239-2-git-send-email-christian@paral.in>
+Message-ID: <1464475578-22239-4-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-runC is a CLI tool for spawning and running containers according to the
-OCP specification.
-
-runC is used by the latest Docker engine versions, however, runc itself
-is standalone and has no other dependencies.
-
-https://runc.io/
+Docker is a platform to build, ship, and run applications in portable
+containers.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 
 ---
 
 Changes since v1:
- - use call github to generate source url
+ - use call github to build source URL
 Changes since v3:
- - fix indentation in Config.in
- - add dep on threads in Config.in
- - break gopath into separate variable
- - use HOST_GO_TARGET_ENV
+ - fix help indentation in Config.in
+ - use HOST_GO_TARGET_ENV as a base for build env vars
+ - cleanup build commands
+ - cleanup GOPATH and vendor directory setup
+ - Remove selections for graph drivers. Docker will gracefully degrade
+   at runtime to the best available graphdriver. It is unnecessary to
+   disable these at build time, or to pull in any other dependencies
+   like aufs-util or btrfs tools. The daemon will use whatever is
+   available at runtime.
 Changes since v4:
- - use RUNC_VERSION instead of commit hash
- - only show comment when build is possible with threads enabled
+ - remove commit hash from version scheme
+Changes since v5:
+ - re-introduce graphdriver selections
+ - these selections are required for btrfs and devicemapper
+ - there are buildtime dependencies on headers.
+ - add BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS dep to threading comment
 
 ---
- package/Config.in      |  1 +
- package/runc/Config.in | 13 +++++++++++++
- package/runc/runc.hash |  2 ++
- package/runc/runc.mk   | 46 ++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 62 insertions(+)
- create mode 100644 package/runc/Config.in
- create mode 100644 package/runc/runc.hash
- create mode 100644 package/runc/runc.mk
+ package/Config.in                        |  1 +
+ package/docker-engine/Config.in          | 69 ++++++++++++++++++++++
+ package/docker-engine/docker-engine.hash |  2 +
+ package/docker-engine/docker-engine.mk   | 99 ++++++++++++++++++++++++++++++++
+ 4 files changed, 171 insertions(+)
+ create mode 100644 package/docker-engine/Config.in
+ create mode 100644 package/docker-engine/docker-engine.hash
+ create mode 100644 package/docker-engine/docker-engine.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9d668bf..6c513ba 100644
+index c8365f8..b829075 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1664,6 +1664,7 @@ endif
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/rsyslog/Config.in"
+@@ -1632,6 +1632,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/debianutils/Config.in"
  endif
-+	source "package/runc/Config.in"
- 	source "package/scrub/Config.in"
- 	source "package/scrypt/Config.in"
- 	source "package/smack/Config.in"
-diff --git a/package/runc/Config.in b/package/runc/Config.in
+ 	source "package/docker-containerd/Config.in"
++	source "package/docker-engine/Config.in"
+ 	source "package/cgroupfs-mount/Config.in"
+ 	source "package/dsp-tools/Config.in"
+ 	source "package/emlog/Config.in"
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
 new file mode 100644
-index 0000000..1802e59
+index 0000000..bbf56b1
 --- /dev/null
-+++ b/package/runc/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_RUNC
-+	bool "runc"
++++ b/package/docker-engine/Config.in
+@@ -0,0 +1,69 @@
++config BR2_PACKAGE_DOCKER_ENGINE
++	bool "docker-engine"
 +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # util-linux
++	depends on BR2_USE_WCHAR # util-linux
++	select BR2_PACKAGE_DOCKER_CONTAINERD
++	select BR2_PACKAGE_RUNC
++	select BR2_PACKAGE_SQLITE
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_BINARIES
++	select BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
++	select BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT
++	select BR2_PACKAGE_UTIL_LINUX_MOUNT
 +	help
-+	  runC is a CLI tool for spawning and running containers
-+	  according to the OCP specification.
++	  Docker is a platform to build, ship,
++	  and run applications as lightweight containers.
 +
-+	  https://github.com/opencontainers/runc
++	  https://github.com/docker/docker
 +
-+comment "runc needs a toolchain w/ threads"
++comment "docker-engine needs a toolchain w/ threads"
 +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-new file mode 100644
-index 0000000..c109c33
---- /dev/null
-+++ b/package/runc/runc.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 f9955daed1e73e842b2f28a258fba51f4e72a6b4b64cc3fc06415481d55ce000  runc-v0.1.1.tar.gz
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-new file mode 100644
-index 0000000..72b194d
---- /dev/null
-+++ b/package/runc/runc.mk
-@@ -0,0 +1,46 @@
-+################################################################################
-+#
-+# runc
-+#
-+################################################################################
 +
-+RUNC_VERSION = v0.1.1
-+RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
++if BR2_PACKAGE_DOCKER_ENGINE
 +
-+RUNC_LICENSE = Apache-2.0
-+RUNC_LICENSE_FILES = LICENSE
++config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
++	bool "docker daemon"
++	default y
++	help
++	  Build the Docker system daemon.
++	  If not selected, will build client only.
 +
-+RUNC_DEPENDENCIES = host-go
++config BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL
++	bool "build experimental features"
 +
-+RUNC_GOPATH = "$(@D)/Godeps/_workspace"
-+RUNC_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-+	CGO_ENABLED=1 \
-+	GOBIN="$(@D)/bin" \
-+	GOPATH="$(RUNC_GOPATH)"
++if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
 +
-+RUNC_GLDFLAGS = \
-+	-X main.gitCommit=$(RUNC_VERSION) \
-+	-extldflags '-static'
++config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
++	bool "btrfs filesystem driver"
++	depends on BR2_USE_WCHAR # btrfs-progs
++	depends on BR2_USE_MMU # btrfs-progs
++	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
++	select BR2_PACKAGE_BTRFS_PROGS
++	help
++	  Build the btrfs filesystem driver for Docker.
 +
-+RUNC_GOTAGS = cgo static_build
++config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
++	bool "devicemapper filesystem driver"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
++	depends on BR2_USE_MMU # lvm2
++	depends on !BR2_STATIC_LIBS # lvm2
++	select BR2_PACKAGE_LVM2
++	select BR2_PACKAGE_LVM2_APP_LIBRARY
++	help
++	  Build the devicemapper filesystem driver for Docker.
 +
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+RUNC_GOTAGS += seccomp
-+RUNC_DEPENDENCIES += libseccomp
++config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
++	bool "vfs filesystem driver"
++	depends on BR2_USE_WCHAR # gvfs
++	depends on BR2_USE_MMU # gvfs
++	depends on BR2_TOOLCHAIN_HAS_THREADS # gvfs
++	select BR2_PACKAGE_GVFS
++	help
++	  Build the vfs filesystem driver for Docker.
++
 +endif
 +
-+define RUNC_CONFIGURE_CMDS
-+	mkdir -p $(RUNC_GOPATH)/src/github.com/opencontainers
-+	ln -s $(@D) $(RUNC_GOPATH)/src/github.com/opencontainers/runc
++endif
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+new file mode 100644
+index 0000000..7b93669
+--- /dev/null
++++ b/package/docker-engine/docker-engine.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 04de3750738b6f888f03520fb67db22e95e8a8e016ae901428e6c5791c9841cc  docker-engine-v1.11.1.tar.gz
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+new file mode 100644
+index 0000000..b7407b2
+--- /dev/null
++++ b/package/docker-engine/docker-engine.mk
+@@ -0,0 +1,99 @@
++################################################################################
++#
++# docker-engine
++#
++################################################################################
++
++DOCKER_ENGINE_VERSION = v1.11.1
++DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
++
++DOCKER_ENGINE_LICENSE = Apache-2.0
++DOCKER_ENGINE_LICENSE_FILES = LICENSE
++
++DOCKER_ENGINE_DEPENDENCIES = host-go docker-containerd
++
++DOCKER_ENGINE_GOPATH = "$(@D)/vendor"
++DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
++	CGO_ENABLED=1 \
++	CGO_NO_EMULATION=1 \
++	GOBIN="$(@D)/bin" \
++	GOPATH="$(DOCKER_ENGINE_GOPATH)"
++
++DOCKER_ENGINE_GLDFLAGS = \
++	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
++	-X main.Version=$(DOCKER_ENGINE_VERSION) \
++	-extldflags '-static'
++
++DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs
++
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++DOCKER_ENGINE_BUILD_TAGS += seccomp
++DOCKER_ENGINE_DEPENDENCIES += libseccomp
++endif
++
++ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
++DOCKER_ENGINE_BUILD_TAGS += daemon
++endif
++
++ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
++DOCKER_ENGINE_BUILD_TAGS += experimental
++endif
++
++ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS),y)
++DOCKER_ENGINE_DEPENDENCIES += btrfs-progs
++else
++DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_btrfs
++endif
++
++ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER),y)
++DOCKER_ENGINE_DEPENDENCIES += lvm2
++else
++DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_devicemapper
++endif
++
++ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS),y)
++DOCKER_ENGINE_DEPENDENCIES += gvfs
++else
++DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_vfs
++endif
++
++define DOCKER_ENGINE_CONFIGURE_CMDS
++	$(SED) '/^clean$$/d' $(@D)/hack/vendor.sh
++	cd $(@D) && bash ./hack/vendor.sh
++	mkdir -p $(DOCKER_ENGINE_GOPATH)/src/github.com/docker
++	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
++	ln -fs $(DOCKER_CONTAINERD_SRCDIR) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/containerd
++	mkdir -p $(DOCKER_ENGINE_GOPATH)/src/github.com/opencontainers
++	ln -fs $(RUNC_SRCDIR) $(DOCKER_ENGINE_GOPATH)/src/github.com/opencontainers/runc
 +endef
 +
-+define RUNC_BUILD_CMDS
-+	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/usr/bin/go \
-+		build -v -o $(@D)/bin/runc -tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
++define DOCKER_ENGINE_BUILD_CMDS
++	cd $(@D); $(DOCKER_ENGINE_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/docker -tags "$(DOCKER_ENGINE_BUILD_TAGS)" -ldflags "$(DOCKER_ENGINE_GLDFLAGS)" ./docker
 +endef
 +
-+define RUNC_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/runc $(TARGET_DIR)/usr/bin/runc
++define DOCKER_ENGINE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/bin/docker $(TARGET_DIR)/usr/bin/docker
++endef
++
++define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
++	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.socket \
++		$(TARGET_DIR)/usr/lib/systemd/system/docker.socket
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
++	ln -fs ../../../../usr/lib/systemd/system/docker.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/docker.service
++endef
++
++define DOCKER_ENGINE_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 $(@D)/contrib/init/sysvinit-redhat/docker \
++		$(TARGET_DIR)/etc/init.d/S61docker
++	$(INSTALL) -D -m 644 $(@D)/contrib/init/sysvinit-redhat/docker.sysconfig \
++		$(TARGET_DIR)/etc/sysconfig/docker.sysconfig
++endef
++
++define DOCKER_ENGINE_USERS
++	- - docker -1 * - - - Docker Application Container Framework
 +endef
 +
 +$(eval $(generic-package))
