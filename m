@@ -1,99 +1,142 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 21:32:12 +0200
-Subject: [Buildroot] [git commit] php-memcached: re add package,
-	now compatible with PHP 7
-Message-ID: <20160601161312.4EBF8802A0@busybox.osuosl.org>
+Date: Sat, 28 May 2016 19:16:22 +0200
+Subject: [Buildroot] [git commit] batman-adv: new package
+Message-ID: <20160601161311.A0CC7802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96ad5fa0529b03f8a2aba0c7ec0d61fe2c8f3d18
+commit: https://git.buildroot.net/buildroot/commit/?id=d90f182b9142a1e2a1784c32022a6d726356207a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Related: https://bugs.php.net/bug.php?id=70751
+This package introduces batman-adv, a kernel module implementation of
+the B.A.T.M.A.N. IV and V mesh network routing protocols.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+While batman-adv exists in the mainline kernel tree, it can also be
+built as an external out-of-tree module. This package adds the
+flexibility to chose a more up to date version of the module than exists
+in the official tree, and also allows for compilation against kernels
+without batman-adv in-tree support.
+
+https://www.open-mesh.org/projects/batman-adv/
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+[Thomas:
+ - remove "default n", since it's the default
+ - fix indentation of Config.in help text
+ - license is GPLv2, not just GPL
+ - remove variable BATMAN_ADV_MAKE_OPTS, name it directly
+   BATMAN_ADV_MODULE_MAKE_OPTS as this is what is expected by the kernel
+   module infrastructure.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                        |  1 +
- package/php-memcached/Config.in          | 15 +++++++++++++++
- package/php-memcached/php-memcached.hash |  2 ++
- package/php-memcached/php-memcached.mk   | 27 +++++++++++++++++++++++++++
- 4 files changed, 45 insertions(+)
+ package/Config.in                  |  1 +
+ package/batman-adv/Config.in       | 35 +++++++++++++++++++++++++++++++++++
+ package/batman-adv/batman-adv.hash |  2 ++
+ package/batman-adv/batman-adv.mk   | 35 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 73 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 7421bc2..0eeb6c5 100644
+index 3328d19..1e4f5c7 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -616,6 +616,7 @@ menu "External php extensions"
- 	source "package/php-geoip/Config.in"
- 	source "package/php-gnupg/Config.in"
- 	source "package/php-imagick/Config.in"
-+	source "package/php-memcached/Config.in"
- 	source "package/php-zmq/Config.in"
- endmenu
- endif
-diff --git a/package/php-memcached/Config.in b/package/php-memcached/Config.in
+@@ -1107,6 +1107,7 @@ endmenu
+ 
+ menu "Networking"
+ 	source "package/agentpp/Config.in"
++	source "package/batman-adv/Config.in"
+ 	source "package/c-ares/Config.in"
+ 	source "package/canfestival/Config.in"
+ 	source "package/cgic/Config.in"
+diff --git a/package/batman-adv/Config.in b/package/batman-adv/Config.in
 new file mode 100644
-index 0000000..cd97c15
+index 0000000..fbef0d8
 --- /dev/null
-+++ b/package/php-memcached/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PHP_MEMCACHED
-+	bool "php-memcached"
-+	depends on BR2_INSTALL_LIBSTDCPP # libmemcached
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libmemcached
-+	select BR2_PACKAGE_PHP_EXT_SESSION
-+	select BR2_PACKAGE_LIBMEMCACHED
-+	select BR2_PACKAGE_ZLIB
++++ b/package/batman-adv/Config.in
+@@ -0,0 +1,35 @@
++comment "batman-adv needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
++
++config BR2_PACKAGE_BATMAN_ADV
++	bool "batman-adv"
++	depends on BR2_LINUX_KERNEL
 +	help
-+	  PHP extension for interfacing with memcached via
-+	  libmemcached library.
++	  batman-adv mesh networking kernel module
 +
-+	  http://pecl.php.net/package/memcached
++	  https://www.open-mesh.org/projects/batman-adv/
 +
-+comment "php-memcached needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/php-memcached/php-memcached.hash b/package/php-memcached/php-memcached.hash
++if BR2_PACKAGE_BATMAN_ADV
++
++config BR2_PACKAGE_BATMAN_ADV_DEBUG
++	bool "enable debugging"
++	help
++	  Enables B.A.T.M.A.N. debugging.
++
++config BR2_PACKAGE_BATMAN_ADV_NC
++	bool "enable network coding"
++	help
++	  Enables B.A.T.M.A.N. network coding.
++	  Note: this requires promiscuous mode on ALL nodes!
++
++	  https://www.open-mesh.org/projects/batman-adv/wiki/NetworkCoding
++
++config BR2_PACKAGE_BATMAN_ADV_BATMAN_V
++	bool "enable B.A.T.M.A.N. V protocol (experimental)"
++	help
++	  Enables B.A.T.M.A.N. V network protocol.
++	  This is the next-gen protocol and is experimental at this time.
++
++	  https://www.open-mesh.org/projects/batman-adv/wiki/BATMAN_V
++
++endif
+diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
 new file mode 100644
-index 0000000..f2a096f
+index 0000000..6c0e5ca
 --- /dev/null
-+++ b/package/php-memcached/php-memcached.hash
++++ b/package/batman-adv/batman-adv.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 73266212e791a4817da06be1daddf9ff7dd5b5b0b650b3fbd0f5fc6ccc18491b  php-memcached-6ee96cad7be5caa1f13a1f3e5a4d5f900b9c04ce.tar.gz
-diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
++# From https://downloads.open-mesh.org/batman/stable/sources/batman-adv/batman-adv-2016.1.tar.gz.sha1
++sha1 c9ca52c913fbf81aca266695a77359ecdbcc8bd8 batman-adv-2016.1.tar.gz
+diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
 new file mode 100644
-index 0000000..ea241b2
+index 0000000..0691773
 --- /dev/null
-+++ b/package/php-memcached/php-memcached.mk
-@@ -0,0 +1,27 @@
++++ b/package/batman-adv/batman-adv.mk
+@@ -0,0 +1,35 @@
 +################################################################################
 +#
-+# php-memcached
++# batman-adv
 +#
 +################################################################################
 +
-+PHP_MEMCACHED_VERSION = 6ee96cad7be5caa1f13a1f3e5a4d5f900b9c04ce
-+PHP_MEMCACHED_SITE = $(call github,php-memcached-dev,php-memcached,$(PHP_MEMCACHED_VERSION))
-+PHP_MEMCACHED_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
-+	--disable-memcached-sasl \
-+	--with-libmemcached-dir=$(STAGING_DIR)/usr \
-+	--with-zlib-dir=$(STAGING_DIR)/usr
-+# phpize does the autoconf magic
-+PHP_MEMCACHED_DEPENDENCIES = libmemcached php zlib host-autoconf host-pkgconf
-+PHP_MEMCACHED_LICENSE = MIT
-+PHP_MEMCACHED_LICENSE_FILES = LICENSE
++BATMAN_ADV_VERSION = 2016.1
++BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
++BATMAN_ADV_SOURCE = batman-adv-$(BATMAN_ADV_VERSION).tar.gz
++BATMAN_ADV_LICENSE = GPLv2
 +
-+define PHP_MEMCACHED_PHPIZE
-+	(cd $(@D); \
-+		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
-+		$(STAGING_DIR)/usr/bin/phpize)
++# Bridge Loop Avoidance, Distributed Arp Table are always enabled
++BATMAN_ADV_CFLAGS = \
++	-I$(@D)/compat-include/ \
++	-include $(@D)/compat.h \
++	-DBATADV_SOURCE_VERSION=\"\\\"$(BATMAN_ADV_VERSION)\\\"\"
++BATMAN_ADV_MODULE_MAKE_OPTS = \
++	KVER=$(LINUX_VERSION_PROBED) \
++	INSTALL_MOD_DIR=updates/net/batman-adv \
++	NOSTDINC_FLAGS="$(BATMAN_ADV_CFLAGS)" \
++	CONFIG_BATMAN_ADV=m \
++	CONFIG_BATMAN_ADV_BATMAN_V=$(BR2_PACKAGE_BATMAN_ADV_BATMAN_V) \
++	CONFIG_BATMAN_ADV_BLA=y \
++	CONFIG_BATMAN_ADV_DAT=y \
++	CONFIG_BATMAN_ADV_DEBUG=$(BR2_PACKAGE_BATMAN_ADV_DEBUG) \
++	CONFIG_BATMAN_ADV_MCAST=y \
++	CONFIG_BATMAN_ADV_NC=$(BR2_PACKAGE_BATMAN_ADV_NC)
++BATMAN_ADV_MODULE_SUBDIRS = net/batman-adv
++
++define BATMAN_ADV_CONFIGURE_CMDS
++	$(BATMAN_ADV_MODULE_MAKE_OPTS) $(@D)/gen-compat-autoconf.sh $(@D)/compat-autoconf.h
 +endef
 +
-+PHP_MEMCACHED_PRE_CONFIGURE_HOOKS += PHP_MEMCACHED_PHPIZE
-+
-+$(eval $(autotools-package))
++$(eval $(kernel-module))
++$(eval $(generic-package))
