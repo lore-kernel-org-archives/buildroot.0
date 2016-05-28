@@ -1,312 +1,176 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 May 2016 15:07:55 +0200
-Subject: [Buildroot] [PATCH v3] uboot-tools: fix FIT support and make it
- optional
-In-Reply-To: <1462736800-9552-2-git-send-email-casantos@datacom.ind.br>
-References: <1462535953-4427-1-git-send-email-casantos@datacom.ind.br>
- <1462736800-9552-1-git-send-email-casantos@datacom.ind.br>
- <1462736800-9552-2-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20160528150755.78888529@free-electrons.com>
+Date: Sat, 28 May 2016 15:15:44 +0200
+Subject: [Buildroot] [git commit branch/next] ficl: new package
+Message-ID: <20160528131634.14A7C81D5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=814911aecb6d49bb603c34dbfcc0d86614516b41
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun,  8 May 2016 16:46:40 -0300, Carlos Santos wrote:
-> Fix several issues regarding the support for Flat Image Trees (FIT).
-> 
-> - Add a dependence on the dtc utilities because mkimage needs it when
->   FIT is enabled; otherwise mkimage fails like this:
-> 
->     $ mkimage -f firmware.its firmware.im
->     sh: dtc: command not found
-> 
-> - Turn FIT support an independent switch for host and target controlled
->   by BR2_PACKAGE_{HOST_,}UBOOT_TOOLS_FIT_SUPPORT
-> 
-> - Dettach FIT signature support from mkimage installation by means of a
->   BR2_PACKAGE_{HOST_,}UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT, subordinated to
->   ...TOOLS_FIT_SUPPORT.
-> 
-> - Improve the descriptions of the knobs to install mkimage, mkenvimage,
->   dumpimage, fw_printenv and fw_setenv.
-> 
-> - Use $(TARGET_STRIP) to control stripping of the target utilities,
->   otherwise they are always stripped.
-> 
-> - Add a patch to really allow turning FIT support on/off, which was not
->   possible due to bugs in the code and in the tools Makefile.
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                    |  1 +
+ package/ficl/0001-fix-Makefile.patch | 47 ++++++++++++++++++++++++++++
+ package/ficl/Config.in               |  9 ++++++
+ package/ficl/ficl.hash               |  2 ++
+ package/ficl/ficl.mk                 | 59 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 118 insertions(+)
 
-I was about to apply this, but spotted a few minor issues. In addition,
-another concern is that this patch is doing many different things.
-Those things are related, but could be done in separate patches:
-
- 1/ Pass TARGET_STRIP should be one patch
-
- 2/ Improving the help text of existing options should be one patch
-
- 3/ Improving FIT support for the host variant
-
- 4/ Improving FIT support for the target variant
-
-
-> +From 1c0040aeed5d4dc17a549ad8a1a1c3e889f74e98 Mon Sep 17 00:00:00 2001
-> +From: Carlos Santos <casantos@datacom.ind.br>
-> +Date: Sun, 8 May 2016 11:11:39 -0300
-> +Subject: [PATCH 4/4] Make FIT support really optional
-
-Please generate the patch with "git format-patch -N" so that there is
-no "4/4" in the patch title.
-
-> +Due to some mistakes in the source code, it was not possible to really
-> +turn FIT support off. This commit fixes the problem by means of the
-> +following changes:
-> +
-> +- Enclose "bootm_host_load_image" and "bootm_host_load_images" between
-> +  checks for CONFIG_FIT_SIGNATURE, in common/bootm.c.
-> +
-> +- Enclose the declaration of "bootm_host_load_images" between checks for
-> +  CONFIG_FIT_SIGNATURE, in common/bootm.h.
-> +
-> +- Condition the compilation and linking of fit_common.o fit_image.o
-> +  image-host.o common/image-fit.o to CONFIG_FIT=y, in tools/Makefile.
-> +
-> +Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-
-Has this patch been submitted upstream?
-
-> diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-> index aca310b..eddc39f 100644
-> --- a/package/uboot-tools/Config.in
-> +++ b/package/uboot-tools/Config.in
-> @@ -7,15 +7,22 @@ config BR2_PACKAGE_UBOOT_TOOLS
->  
->  if BR2_PACKAGE_UBOOT_TOOLS
->  
-> -config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
-> -	bool "mkimage"
-> +config BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
-> +	bool "Flattened Image Tree (FIT) support"
-> +	select BR2_PACKAGE_DTC
-> +	select BR2_PACKAGE_DTC_PROGRAMS
->  	help
-> -	  The mkimage tool from Das U-Boot bootloader, which allows
-> -	  generation of U-Boot images in various formats.
-> +	  Enables support for Flattened Image Tree (FIT).
->  
-> -if BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
-> +	  This option allows to boot the new uImage structrure,
-> +	  Flattened Image Tree.  FIT is formally a FDT, which can include
-
-Please, only one space after "." (fix globally).
-
-> +	  images of various types (kernel, FDT blob, ramdisk, etc.)
-> +	  in a single blob.  To boot this new uImage structure,
-> +	  pass the address of the blob to the "bootm" command.
->  
-> -config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT
-
-So essentially, this option gets renamed from
-BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT to
-BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT. You therefore need to
-add BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT to the
-Config.in.legacy file.
-
-> +if BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
-> +
-> +config BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
->  	bool "FIT signature verification support"
->  	select BR2_PACKAGE_OPENSSL
->  	help
-> @@ -38,25 +45,39 @@ config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT
->  
->  endif
->  
-> +config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
-> +	bool "mkimage"
-> +	help
-> +	  Install the mkimage tool on the target system
-> +
-> +	  The mkimage tool from Das U-Boot bootloader, which allows
-> +	  generation of U-Boot images in various formats.
-> +
->  config BR2_PACKAGE_UBOOT_TOOLS_MKENVIMAGE
->  	bool "mkenvimage"
->  	help
-> +	  Install the mkenvimage tool on the target system
-> +
->  	  The mkenvimage tool from Das U-Boot bootloader, which allows
->  	  generation of a valid binary environment image from a text file
->  	  describing the key=value pairs of the environment.
->  
-> +config BR2_PACKAGE_UBOOT_TOOLS_DUMPIMAGE
-> +	bool "dumpimage"
-> +	help
-> +	  Install the dumpimage tool on the target system
-> +
-> +	  The dumpimage tool from Das U-Boot bootloader, which allows
-> +	  extraction of data from U-Boot images.
-
-It's not clear why this option is moved around. Any reason for this?
-
-> +
->  config BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
->  	bool "fw_printenv"
->  	default y
->  	help
-> -	  The fw_printenv / fw_setenv tools from Das U-Boot
-> +	  Install the fw_printenv / fw_setenv tools on the target system
-> +
-> +	  The fw_printenv and fw_setenv tools from Das U-Boot
->  	  bootloader, which allows access to the U-Boot environment
->  	  from Linux.
->  
-> -config BR2_PACKAGE_UBOOT_TOOLS_DUMPIMAGE
-> -	bool "dumpimage"
-> -	help
-> -	  The dumpimage tool from Das U-Boot bootloader, which allows
-> -	  extraction of data from U-Boot images.
-> -
->  endif
-> diff --git a/package/uboot-tools/Config.in.host b/package/uboot-tools/Config.in.host
-> index b5a42d9..292cc21 100644
-> --- a/package/uboot-tools/Config.in.host
-> +++ b/package/uboot-tools/Config.in.host
-> @@ -7,6 +7,20 @@ config BR2_PACKAGE_HOST_UBOOT_TOOLS
->  
->  if BR2_PACKAGE_HOST_UBOOT_TOOLS
->  
-> +config BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT
-> +	bool "Flattened Image Tree (FIT) support"
-> +	select BR2_PACKAGE_HOST_DTC
-> +	help
-> +	  Enables support for Flattened Image Tree (FIT).
-> +
-> +	  This option allows to boot the new uImage structrure,
-> +	  Flattened Image Tree.  FIT is formally a FDT, which can include
-> +	  images of various types (kernel, FDT blob, ramdisk, etc.)
-> +	  in a single blob.  To boot this new uImage structure,
-> +	  pass the address of the blob to the "bootm" command.
-> +
-> +if BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT
-> +
->  config BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
->  	bool "FIT signature verification support"
->  	help
-> @@ -24,3 +38,5 @@ config BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
->  	  be verified in this way.
->  
->  endif
-> +
-> +endif
-> diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-> index d1ebd6f..a21cda5 100644
-> --- a/package/uboot-tools/uboot-tools.mk
-> +++ b/package/uboot-tools/uboot-tools.mk
-> @@ -16,18 +16,30 @@ define UBOOT_TOOLS_CONFIGURE_CMDS
->  	touch $(@D)/include/config/auto.conf
->  endef
->  
-> +ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),y)
-> +UBOOT_TOOLS_CONFIG_FIT = CONFIG_FIT=$(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT)
-
-I think we should instead have a UBOOT_TOOLS_MAKE_OPTS, and replace
-this with:
-
-	UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT=y
-
-> +UBOOT_TOOLS_DEPENDENCIES += dtc
-> +ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
-> +UBOOT_TOOLS_CONFIG_FIT_SIGNATURE = CONFIG_FIT_SIGNATURE=$(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT)
-
-	UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y
-
-> +UBOOT_TOOLS_DEPENDENCIES += openssl host-pkgconf
-> +endif # BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
-> +endif # BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
-> +
->  define UBOOT_TOOLS_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) 	\
->  		CROSS_COMPILE="$(TARGET_CROSS)"	\
->  		CFLAGS="$(TARGET_CFLAGS)"	\
->  		LDFLAGS="$(TARGET_LDFLAGS)"	\
-> +		STRIP=$(TARGET_STRIP)		\
->  		CROSS_BUILD_TOOLS=y		\
-> -		CONFIG_FIT_SIGNATURE=$(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT) \
-> +		$(UBOOT_TOOLS_CONFIG_FIT)	\
-> +		$(UBOOT_TOOLS_CONFIG_FIT_SIGNATURE) \
-
-And here:
-
-		$(UBOOT_TOOLS_MAKE_OPTS)
-
-and you can probably move into UBOOT_TOOLS_MAKE_OPTS a few other
-variables.
-
->  		tools-only
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) 	\
->  		CROSS_COMPILE="$(TARGET_CROSS)"	\
->  		CFLAGS="$(TARGET_CFLAGS)"	\
->  		LDFLAGS="$(TARGET_LDFLAGS)"	\
-> +		STRIP=$(TARGET_STRIP)		\
->  		env no-dot-config-targets=env
->  endef
->  
-> @@ -35,10 +47,7 @@ ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE),y)
->  define UBOOT_TOOLS_INSTALL_MKIMAGE
->  	$(INSTALL) -m 0755 -D $(@D)/tools/mkimage $(TARGET_DIR)/usr/bin/mkimage
->  endef
-> -ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT),y)
-> -UBOOT_TOOLS_DEPENDENCIES += openssl host-pkgconf
-> -endif # BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT
-> -endif # BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
-> +endif
->  
->  ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKENVIMAGE),y)
->  define UBOOT_TOOLS_INSTALL_MKENVIMAGE
-> @@ -74,18 +83,24 @@ define UBOOT_TOOLS_INSTALL_TARGET_CMDS
->  	$(UBOOT_TOOLS_INSTALL_DUMPIMAGE)
->  endef
->  
-> -ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
-> -HOST_UBOOT_TOOLS_DEPENDENCIES += host-openssl
-> -endif
-> -
->  define HOST_UBOOT_TOOLS_CONFIGURE_CMDS
->  	mkdir -p $(@D)/include/config
->  	touch $(@D)/include/config/auto.conf
->  endef
->  
-> +ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT),y)
-> +HOST_UBOOT_TOOLS_CONFIG_FIT = CONFIG_FIT=$(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT)
-> +HOST_UBOOT_TOOLS_DEPENDENCIES += host-dtc
-> +ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
-> +HOST_UBOOT_TOOLS_CONFIG_FIT_SIGNATURE = CONFIG_FIT_SIGNATURE=$(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT)
-> +HOST_UBOOT_TOOLS_DEPENDENCIES += host-openssl
-> +endif # BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
-> +endif # BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT
-
-Ditto here.
-
-> +
->  define HOST_UBOOT_TOOLS_BUILD_CMDS
->  	$(MAKE1) -C $(@D) 			\
-> -		CONFIG_FIT_SIGNATURE=$(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT) \
-> +		$(HOST_UBOOT_TOOLS_CONFIG_FIT)	\
-> +		$(HOST_UBOOT_TOOLS_CONFIG_FIT_SIGNATURE) \
->  		HOSTCC="$(HOSTCC)"		\
->  		HOSTCFLAGS="$(HOST_CFLAGS)"	\
->  		HOSTLDFLAGS="$(HOST_LDFLAGS)"	\
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index e64e058..3328d19 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -494,6 +494,7 @@ menu "Erlang libraries/modules"
+ 	source "package/erlang-p1-zlib/Config.in"
+ endmenu
+ endif
++	source "package/ficl/Config.in"
+ 	source "package/gauche/Config.in"
+ 	source "package/guile/Config.in"
+ 	source "package/haserl/Config.in"
+diff --git a/package/ficl/0001-fix-Makefile.patch b/package/ficl/0001-fix-Makefile.patch
+new file mode 100644
+index 0000000..d5a25c4
+--- /dev/null
++++ b/package/ficl/0001-fix-Makefile.patch
+@@ -0,0 +1,47 @@
++fix dependency in Makefiles
++
++there is no longer a sysdep.h file.
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++diff --git a/Makefile b/Makefile
++index 976d00a..7f73c44 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
++ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
++ 
++-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
+++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
++ 	$(CC) $(CFLAGS) $(LDFLAGS) main.o -o main -L. -lficl -lm
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
++ 
++diff --git a/Makefile.ansi b/Makefile.ansi
++index e510fcd..170e6eb 100644
++--- a/Makefile.ansi
+++++ b/Makefile.ansi
++@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
++ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
++ 
++-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
+++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
++ 	$(CC) main.o -o main -L. -lficl -lm
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
++ 
++diff --git a/Makefile.linux b/Makefile.linux
++index d447e7e..7f2cdfe 100644
++--- a/Makefile.linux
+++++ b/Makefile.linux
++@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
++ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
++ 
++-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
+++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
++ 	$(CC) main.o -o main -L. -lficl -lm
++ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
++ 
++-- 
++
+diff --git a/package/ficl/Config.in b/package/ficl/Config.in
+new file mode 100644
+index 0000000..3445a64
+--- /dev/null
++++ b/package/ficl/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_FICL
++	bool "ficl"
++	help
++	  Ficl is a programming language interpreter designed to be embedded
++	  into other systems as a command, macro, and development
++	  prototyping language.
++	  Ficl is an acronym for "Forth Inspired Command Language".
++
++	  http://ficl.sourceforge.net
+diff --git a/package/ficl/ficl.hash b/package/ficl/ficl.hash
+new file mode 100644
+index 0000000..4bfbbd0
+--- /dev/null
++++ b/package/ficl/ficl.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  4daf74f3d3d6f8b86ea7cb47bc24931d50b4809b50ba34ca32e0ca1e972bd3a3  ficl-4.1.0.tar.gz
+diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
+new file mode 100644
+index 0000000..6c212a6
+--- /dev/null
++++ b/package/ficl/ficl.mk
+@@ -0,0 +1,59 @@
++################################################################################
++#
++# ficl
++#
++################################################################################
++
++FICL_VERSION_MAJOR = 4.1
++FICL_VERSION = $(FICL_VERSION_MAJOR).0
++FICL_SITE = http://downloads.sourceforge.net/project/ficl/ficl-all/ficl$(FICL_VERSION_MAJOR)
++FICL_LICENSE = BSD-2c
++FICL_LICENSE_FILES = ReadMe.txt
++FICL_INSTALL_STAGING = YES
++
++ifeq ($(BR2_STATIC_LIBS),y)
++FICL_BUILD_TARGETS += ficl
++define FICL_INSTALL_STATIC_BIN
++	$(INSTALL) -D -m 0755 $(@D)/ficl $(TARGET_DIR)/usr/bin/ficl
++endef
++endif
++
++ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++FICL_BUILD_TARGETS += libficl.a
++define FICL_INSTALL_STATIC_LIB
++	$(INSTALL) -D -m 0644 $(@D)/libficl.a $(STAGING_DIR)/usr/lib/libficl.a
++endef
++endif
++
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++FICL_BUILD_TARGETS += main libficl.so.$(FICL_VERSION)
++define FICL_INSTALL_SHARED_BIN
++	$(INSTALL) -D -m 0755 $(@D)/main $(TARGET_DIR)/usr/bin/ficl
++endef
++define FICL_INSTALL_SHARED_LIB
++	$(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so.$(FICL_VERSION)
++	ln -sf libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so.4
++	ln -sf libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so
++endef
++endif
++
++define FICL_BUILD_CMDS
++	$(MAKE) -C $(@D) -f Makefile.linux $(TARGET_CONFIGURE_OPTS) \
++		CPPFLAGS="$(TARGET_CPPFLAGS) -I. -Dlinux" $(FICL_BUILD_TARGETS)
++endef
++
++define FICL_INSTALL_STAGING_CMDS
++	$(FICL_INSTALL_STATIC_LIB)
++	$(call FICL_INSTALL_SHARED_LIB,$(STAGING_DIR))
++	$(INSTALL) -D -m 0644 $(@D)/ficl.h $(STAGING_DIR)/usr/include/ficl.h
++	$(INSTALL) -D -m 0644 $(@D)/ficllocal.h $(STAGING_DIR)/usr/include/ficllocal.h
++	$(INSTALL) -D -m 0644 $(@D)/ficlplatform/unix.h $(STAGING_DIR)/usr/include/ficlplatform/unix.h
++endef
++
++define FICL_INSTALL_TARGET_CMDS
++	$(FICL_INSTALL_STATIC_BIN)
++	$(FICL_INSTALL_SHARED_BIN)
++	$(call FICL_INSTALL_SHARED_LIB,$(TARGET_DIR))
++endef
++
++$(eval $(generic-package))
