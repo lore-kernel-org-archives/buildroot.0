@@ -1,112 +1,142 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 May 2016 19:10:44 +0200
-Subject: [Buildroot] [PATCH v2 2/4] toolchain: add bfin support
-In-Reply-To: <20160528154229.GI22609@waldemar-brodkorb.de>
-References: <20160513121557.GA30570@waldemar-brodkorb.de>
- <20160528153349.7a4e1cee@free-electrons.com>
- <20160528154229.GI22609@waldemar-brodkorb.de>
-Message-ID: <20160528191044.5d7919b7@free-electrons.com>
+Date: Sat, 28 May 2016 19:16:22 +0200
+Subject: [Buildroot] [git commit branch/next] batman-adv: new package
+Message-ID: <20160528171637.51B4280300@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d90f182b9142a1e2a1784c32022a6d726356207a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 28 May 2016 17:42:29 +0200, Waldemar Brodkorb wrote:
+This package introduces batman-adv, a kernel module implementation of
+the B.A.T.M.A.N. IV and V mesh network routing protocols.
 
-> > > -config BR2_GCC_TARGET_CPU
-> > > +config BR2_TARGET_CPU  
-> > 
-> > This seems wrong. Why are you doing this?  
-> 
-> In the first patch I disabled --with-cpu for gcc and bfin, as gcc
-> does not support --with-cpu on bfin. You could use
-> -mcpu=$(BR2_TARGET_CPU) to optimize code for a specific Bfin CPU,
-> that is the reason the second version of the patch renamed
-> the config symbols for a later use.
+While batman-adv exists in the mainline kernel tree, it can also be
+built as an external out-of-tree module. This package adds the
+flexibility to chose a more up to date version of the module than exists
+in the official tree, and also allows for compilation against kernels
+without batman-adv in-tree support.
 
-Hum, this is really annoying. All the internal toolchain backend of
-Buildroot is based on the assumption that the gcc configure options
---with-arch, --with-cpu, --with-float, --with-fpu and --with-abi allow
-to specify the default values for -march, -mcpu, -mfloat, -mfpu and
--mabi. For this reason, we pass the values at gcc configure time, but
-then afterwards we don't pass any mcpu/mfloat/march/... values when
-building packages, because gcc is supposed to generate by default code
-for the selected arch/cpu.
+https://www.open-mesh.org/projects/batman-adv/
 
-It seems like Blackfin violates this assumption, and it will require a
-bit more work than the patch you're submitting to make things working.
+Signed-off-by: Christian Stewart <christian@paral.in>
+[Thomas:
+ - remove "default n", since it's the default
+ - fix indentation of Config.in help text
+ - license is GPLv2, not just GPL
+ - remove variable BATMAN_ADV_MAKE_OPTS, name it directly
+   BATMAN_ADV_MODULE_MAKE_OPTS as this is what is expected by the kernel
+   module infrastructure.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                  |  1 +
+ package/batman-adv/Config.in       | 35 +++++++++++++++++++++++++++++++++++
+ package/batman-adv/batman-adv.hash |  2 ++
+ package/batman-adv/batman-adv.mk   | 35 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 73 insertions(+)
 
-It seems like we need to distinguish the cases where the arch/cpu/etc.
-can be defined at gcc configure time from the cases where it cannot.
-
-According to the gcc installation documentation
-(https://gcc.gnu.org/install/configure.html) :
-
-"""
---with-cpu=cpu
---with-cpu-32=cpu
---with-cpu-64=cpu
-
-  Specify which cpu variant the compiler should generate code for by
-  default. cpu will be used as the default value of the -mcpu= switch.
-  This option is only supported on some targets, including ARC, ARM,
-  i386, M68k, PowerPC, and SPARC. It is mandatory for ARC. The
-  --with-cpu-32 and --with-cpu-64 options specify separate default CPUs
-  for 32-bit and 64-bit modes; these options are only supported for
-  i386, x86-64 and PowerPC.
-"""
-
-So indeed, there is no guarantee that --with-cpu is supported on all
-architectures.
-
-
-> > At the very least, it needs to be explained in the commit log,
-> > including the impact on the Blackfin external toolchain support.  
-> 
-> I thought it has no impact on the external toolchain.
-> Is BR2_GCC_TARGET_CPU used in any way for external toolchains?
-
-It is, yes. See toolchain-external.mk:
-
-ifeq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
-CC_TARGET_CPU_ := $(call qstrip,$(BR2_GCC_TARGET_CPU))
-else
-CC_TARGET_CPU_ := $(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
-endif
-
-ifneq ($(CC_TARGET_CPU_),)
-TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(CC_TARGET_CPU_)
-TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
-endif
-
-And then in the toolchain wrapper:
-
-#ifdef BR_CPU
-                *cur++ = "-mcpu=" BR_CPU;
-#endif
-
-This logic ensures that the value of BR2_GCC_TARGET_CPU is always
-passed as -mcpu by the toolchain wrapper.
-
-Since the toolchain wrapper is also used for the internal toolchain, we
-can re-use the same strategy to hardcode the mcpu value.
-
-> So how we go further with the internal Bfin toolchain stuff?
-
-The easiest option by far is to have a per-architecture hidden
-Config.in boolean option that says whether the arch/mcpu/etc. options
-should be set at gcc configure time or not. If it's set to "y", then we
-do like we do today. If it's not set to "y", then the logic to build
-the toolchain wrapper for the internal toolchain case should be
-modified to pass -mcpu/-mabi/-mfloat/etc.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 3328d19..1e4f5c7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1107,6 +1107,7 @@ endmenu
+ 
+ menu "Networking"
+ 	source "package/agentpp/Config.in"
++	source "package/batman-adv/Config.in"
+ 	source "package/c-ares/Config.in"
+ 	source "package/canfestival/Config.in"
+ 	source "package/cgic/Config.in"
+diff --git a/package/batman-adv/Config.in b/package/batman-adv/Config.in
+new file mode 100644
+index 0000000..fbef0d8
+--- /dev/null
++++ b/package/batman-adv/Config.in
+@@ -0,0 +1,35 @@
++comment "batman-adv needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
++
++config BR2_PACKAGE_BATMAN_ADV
++	bool "batman-adv"
++	depends on BR2_LINUX_KERNEL
++	help
++	  batman-adv mesh networking kernel module
++
++	  https://www.open-mesh.org/projects/batman-adv/
++
++if BR2_PACKAGE_BATMAN_ADV
++
++config BR2_PACKAGE_BATMAN_ADV_DEBUG
++	bool "enable debugging"
++	help
++	  Enables B.A.T.M.A.N. debugging.
++
++config BR2_PACKAGE_BATMAN_ADV_NC
++	bool "enable network coding"
++	help
++	  Enables B.A.T.M.A.N. network coding.
++	  Note: this requires promiscuous mode on ALL nodes!
++
++	  https://www.open-mesh.org/projects/batman-adv/wiki/NetworkCoding
++
++config BR2_PACKAGE_BATMAN_ADV_BATMAN_V
++	bool "enable B.A.T.M.A.N. V protocol (experimental)"
++	help
++	  Enables B.A.T.M.A.N. V network protocol.
++	  This is the next-gen protocol and is experimental at this time.
++
++	  https://www.open-mesh.org/projects/batman-adv/wiki/BATMAN_V
++
++endif
+diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
+new file mode 100644
+index 0000000..6c0e5ca
+--- /dev/null
++++ b/package/batman-adv/batman-adv.hash
+@@ -0,0 +1,2 @@
++# From https://downloads.open-mesh.org/batman/stable/sources/batman-adv/batman-adv-2016.1.tar.gz.sha1
++sha1 c9ca52c913fbf81aca266695a77359ecdbcc8bd8 batman-adv-2016.1.tar.gz
+diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
+new file mode 100644
+index 0000000..0691773
+--- /dev/null
++++ b/package/batman-adv/batman-adv.mk
+@@ -0,0 +1,35 @@
++################################################################################
++#
++# batman-adv
++#
++################################################################################
++
++BATMAN_ADV_VERSION = 2016.1
++BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
++BATMAN_ADV_SOURCE = batman-adv-$(BATMAN_ADV_VERSION).tar.gz
++BATMAN_ADV_LICENSE = GPLv2
++
++# Bridge Loop Avoidance, Distributed Arp Table are always enabled
++BATMAN_ADV_CFLAGS = \
++	-I$(@D)/compat-include/ \
++	-include $(@D)/compat.h \
++	-DBATADV_SOURCE_VERSION=\"\\\"$(BATMAN_ADV_VERSION)\\\"\"
++BATMAN_ADV_MODULE_MAKE_OPTS = \
++	KVER=$(LINUX_VERSION_PROBED) \
++	INSTALL_MOD_DIR=updates/net/batman-adv \
++	NOSTDINC_FLAGS="$(BATMAN_ADV_CFLAGS)" \
++	CONFIG_BATMAN_ADV=m \
++	CONFIG_BATMAN_ADV_BATMAN_V=$(BR2_PACKAGE_BATMAN_ADV_BATMAN_V) \
++	CONFIG_BATMAN_ADV_BLA=y \
++	CONFIG_BATMAN_ADV_DAT=y \
++	CONFIG_BATMAN_ADV_DEBUG=$(BR2_PACKAGE_BATMAN_ADV_DEBUG) \
++	CONFIG_BATMAN_ADV_MCAST=y \
++	CONFIG_BATMAN_ADV_NC=$(BR2_PACKAGE_BATMAN_ADV_NC)
++BATMAN_ADV_MODULE_SUBDIRS = net/batman-adv
++
++define BATMAN_ADV_CONFIGURE_CMDS
++	$(BATMAN_ADV_MODULE_MAKE_OPTS) $(@D)/gen-compat-autoconf.sh $(@D)/compat-autoconf.h
++endef
++
++$(eval $(kernel-module))
++$(eval $(generic-package))
