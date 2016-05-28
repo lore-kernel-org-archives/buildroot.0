@@ -1,43 +1,35 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 28 May 2016 15:15:52 +0200
-Subject: [Buildroot] [PATCH] package/iptraf-ng: really add _GNU_SOURCE in
-	CFLAGS
-Message-ID: <1464441352-24940-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 May 2016 15:16:43 +0200
+Subject: [Buildroot] [V2] ficl: new package
+In-Reply-To: <1462295148-4335-1-git-send-email-francois.perrad@gadz.org>
+References: <1462295148-4335-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20160528151643.62f3cb0b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When iptraf-ng is build with musl, it needs _GNU_SOURCE in CFLAGS to define
-the content of "struct tcphdr".
+Hello,
 
-iptraf-ng.mk try to add _GNU_SOURCE in CFLAGS but it's not taken into account.
+On Tue,  3 May 2016 19:05:48 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/Config.in                    |  1 +
+>  package/ficl/0001-fix-Makefile.patch | 47 ++++++++++++++++++++++++++++
+>  package/ficl/Config.in               |  9 ++++++
+>  package/ficl/ficl.hash               |  2 ++
+>  package/ficl/ficl.mk                 | 59 ++++++++++++++++++++++++++++++++++++
+>  5 files changed, 118 insertions(+)
+>  create mode 100644 package/ficl/0001-fix-Makefile.patch
+>  create mode 100644 package/ficl/Config.in
+>  create mode 100644 package/ficl/ficl.hash
+>  create mode 100644 package/ficl/ficl.mk
 
-Add it using IPTRAF_NG_CONF_ENV instead of IPTRAF_NG_MAKE_ENV.
+Applied to next, thanks.
 
-Fixes:
-http://autobuild.buildroot.net/results/a1b/a1b18f2e3d075d349c19536a7c5553f24b75a323
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/iptraf-ng/iptraf-ng.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/package/iptraf-ng/iptraf-ng.mk b/package/iptraf-ng/iptraf-ng.mk
-index ea64e1d..a36c708 100644
---- a/package/iptraf-ng/iptraf-ng.mk
-+++ b/package/iptraf-ng/iptraf-ng.mk
-@@ -11,7 +11,9 @@ IPTRAF_NG_LICENSE_FILES = LICENSE
- IPTRAF_NG_DEPENDENCIES = ncurses
- 
- IPTRAF_NG_MAKE_ENV = \
--	NCURSES_LDFLAGS="-lpanel -lncurses" \
-+	NCURSES_LDFLAGS="-lpanel -lncurses"
-+
-+IPTRAF_NG_CONF_ENV = \
- 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- $(eval $(autotools-package))
+Thomas
 -- 
-2.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
