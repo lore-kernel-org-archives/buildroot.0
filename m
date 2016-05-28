@@ -1,52 +1,53 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 28 May 2016 17:48:11 +0200
-Subject: [Buildroot] [PATCH v2 3/4] gdb: enable simulator support for
- host build
-In-Reply-To: <20160528154933.575c86c3@free-electrons.com>
-References: <20160513121651.GA30939@waldemar-brodkorb.de>
- <20160528154933.575c86c3@free-electrons.com>
-Message-ID: <20160528154811.GJ22609@waldemar-brodkorb.de>
+Date: Sat, 28 May 2016 17:50:23 +0200
+Subject: [Buildroot] [PATCH v3 5/6] package/flannel: Add
+ BR2_TOOLCHAIN_HAS_THREADS
+In-Reply-To: <20160528154158.70f4f025@free-electrons.com>
+References: <cover.1464286518.git.geoff@infradead.org>
+ <627469f0b7b4e604da3a5ab3ef721f138a1c95a8.1464286518.git.geoff@infradead.org>
+ <20160528154158.70f4f025@free-electrons.com>
+Message-ID: <20160528155022.GK22609@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
 Thomas Petazzoni wrote,
 
 > Hello,
 > 
-> On Fri, 13 May 2016 14:16:51 +0200, Waldemar Brodkorb wrote:
-> > Add an option to enable simulator support, so
-> > it can be used to test some no-MMU systems.
+> On Thu, 26 May 2016 18:21:33 +0000, Geoff Levand wrote:
+> > flannel uses the cgo package, so needs a toolchain with thread
+> > support.
 > > 
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> > Signed-off-by: Geoff Levand <geoff@infradead.org>
+> > ---
+> >  package/flannel/Config.in | 4 ++++
+> >  1 file changed, 4 insertions(+)
 > 
-> It doesn't seem to build on Blackfin for me. I'm not using the internal
-> toolchain support that you've added in PATCH 2/4, I'm using the
-> defconfig from your PATCH 4/4 with the Blackfin external toolchain. But
-> host-gdb is a host package, so the cross-compilation toolchain used
-> doesn't matter. And what I get is:
+> There are still some issues with the flannel build:
 > 
-> ./../common/sim-model.c: In function ?model_set?:
-> ./../common/sim-model.c:108:3: warning: implicit declaration of function ?CPU_MACH? [-Wimplicit-function-declaration]
->    CPU_MACH (cpu) = MODEL_MACH (model);
->       MODEL_NAME (CPU_MODEL (cpu)),
-> make[1]: *** [/home/thomas/projets/buildroot/output/build/host-gdb-7.10.1/.stamp_built] Error 2
-> Makefile:36: recipe for target '_all' failed
-> make: *** [_all] Error 2
+>   http://autobuild.buildroot.org/results/d98/d98e1857590738313a293b58f02230539bbaa405/build-end.log
 > 
-> Could you have a look?
+> The error is:
+> 
+> /home/buildroot/autobuild/run/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find Scrt1.o: No such file or directory
+> 
+> My understanding is that this happens when trying to build PIE binaries
+> that are statically linked. uClibc does not support that, or at least
+> not with our current toolchain support. Would it be possible to not
+> build PIE binaries with Go ? Or alternatively, investigate if it can be
+> fixed in uClibc ?
+> 
+> Waldemar, maybe you have some input about this problem ?
 
-I totally forgot about it. See here:
-https://www.sourceware.org/ml/gdb/2015-12/msg00029.html
+Not more then you already told us.
+The rule of thumb is: uClibc-ng  + PIE + static = unsupported.
 
-For newer GDB (7.10.1/7.11) we need to use out-of-tree builds. I
-only tested with 7.9, I think it was the default by the time I
-tested it or I changed it.
-
-How would we change package/gdb to use out-of-tree building?
+If anyone wnt to work on this, I am happy to include any patches.
+But I think some GCC magic must be done for this, too.
 
 best regards
- Waldemar
+ Waldemar 
