@@ -1,64 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 May 2016 15:50:31 +0200
-Subject: [Buildroot] [git commit] configs: zynq: revive
-	BR2_LINUX_KERNEL_UIMAGE
-Message-ID: <20160528135050.665DB803D8@busybox.osuosl.org>
+Date: Sat, 28 May 2016 15:51:00 +0200
+Subject: [Buildroot] [git commit] package/iptraf-ng: really add _GNU_SOURCE
+	in CFLAGS
+Message-ID: <20160528135107.D8BC880AE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2277395172e62789cc6f8468baae569f1db47f7d
+commit: https://git.buildroot.net/buildroot/commit/?id=eb384c24fd1b8604560dfeb6add7e698aab1e2c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 5c67cb1d0445 ("linux: use zImage by default on ARM") changed
-the default kernel image, but missed to update Zynq defconfigs.
+When iptraf-ng is build with musl, it needs _GNU_SOURCE in CFLAGS to define
+the content of "struct tcphdr".
 
-U-Boot on Zynq boards still loads uImage, so BR2_LINUX_KERNEL_UIMAGE
-should be defined to generate uImage.
+iptraf-ng.mk try to add _GNU_SOURCE in CFLAGS but it's not taken into account.
 
-Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Add it using IPTRAF_NG_CONF_ENV instead of IPTRAF_NG_MAKE_ENV.
+
+Fixes:
+http://autobuild.buildroot.net/results/a1b/a1b18f2e3d075d349c19536a7c5553f24b75a323
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/zynq_microzed_defconfig | 1 +
- configs/zynq_zc706_defconfig    | 1 +
- configs/zynq_zed_defconfig      | 1 +
- 3 files changed, 3 insertions(+)
+ package/iptraf-ng/iptraf-ng.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index c73fae5..3faa3b8 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -9,6 +9,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
-+BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zed"
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index d1a46ca..fff49d3 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -10,6 +10,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2014.2.01"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
-+BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zc706"
-diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
-index 1330be4..0e2c8ff 100644
---- a/configs/zynq_zed_defconfig
-+++ b/configs/zynq_zed_defconfig
-@@ -9,6 +9,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
-+BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zed"
+diff --git a/package/iptraf-ng/iptraf-ng.mk b/package/iptraf-ng/iptraf-ng.mk
+index ea64e1d..a36c708 100644
+--- a/package/iptraf-ng/iptraf-ng.mk
++++ b/package/iptraf-ng/iptraf-ng.mk
+@@ -11,7 +11,9 @@ IPTRAF_NG_LICENSE_FILES = LICENSE
+ IPTRAF_NG_DEPENDENCIES = ncurses
+ 
+ IPTRAF_NG_MAKE_ENV = \
+-	NCURSES_LDFLAGS="-lpanel -lncurses" \
++	NCURSES_LDFLAGS="-lpanel -lncurses"
++
++IPTRAF_NG_CONF_ENV = \
+ 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ 
+ $(eval $(autotools-package))
