@@ -1,131 +1,59 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Sun, 29 May 2016 00:33:35 -0300
-Subject: [Buildroot] [PATCH 1/1] binutils: enable as target package for
-	aarch64
-Message-ID: <20160529033335.8886-1-nunes.erico@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 May 2016 08:30:16 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-05-28
+Message-ID: <20160529063016.1CA02102C09@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-binutils got disabled as a target package for aarch64 back in Buildroot
-2012.11 (commit 660d16f4).
-The default version 2.21.1 at the time didn't really support aarch64, as
-shown by the autobuilder error reference in that commit.
+Build statistics for 2016-05-28
+===============================
 
-binutils has now had support for aarch64 since 2.23, but was never
-re-enabled for aarch64.
+        success : 214
+       failures : 16 
+       timeouts : 0  
+          TOTAL : 230
 
-All of the binutils versions currently supported by Buildroot (oldest
-being 2.24) support aarch64, so we can now enable it without any
-restrictions.
+Classification of failures by reason
+====================================
 
-This same patch also touches the dropwatch, lightning and oprofile
-packages which all select binutils and had the 'depends on !aarch64' to
-keep Kconfig consistent. They are now re-enabled for aarch64 as well.
-They are changed in this same patch so that Kconfig is kept consistent
-and doesn't end up having them disabled in a commit which only has the
-binutils change applied.
-lightning has other explicit arch dependencies so it is not actually yet
-available in aarch64, but at least the dependency on !aarch64 because of
-binutils is not needed anymore.
+                  qemu-2.5.1.1 | 2 
+                grantlee-0.5.1 | 2 
+                wayland-1.10.0 | 1 
+             ipsec-tools-0.8.2 | 1 
+            gst-ffmpeg-0.10.13 | 1 
+        ltp-testsuite-20160126 | 1 
+net-tools-3f170bff115303e92... | 1 
+               iptraf-ng-1.1.4 | 1 
+               libsigsegv-2.10 | 1 
+                flannel-v0.5.5 | 1 
+xdriver_xf86-video-fbturbo-... | 1 
+                  apitrace-7.0 | 1 
+               libupnpp-0.14.1 | 1 
+                 igmpproxy-0.1 | 1 
 
-Everything has been build tested with Buildroot and external toolchains.
-binutils and dropwatch work fine in a qemu target. oprofile doesn't seem
-to be supported in the qemu aarch64 processor but builds fine and seems
-to have some level of aarch64 support in the source, so there doesn't
-seem to be a reason to keep it disabled in Kconfig.
+Detail of failures
+===================
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
----
- package/binutils/Config.in  | 4 ++--
- package/dropwatch/Config.in | 4 ++--
- package/lightning/Config.in | 4 ++--
- package/oprofile/Config.in  | 4 ++--
- 4 files changed, 8 insertions(+), 8 deletions(-)
+      x86_64 |                   apitrace-7.0 | NOK | http://autobuild.buildroot.net/results/d1b430ed179d1a39a5c143e156f819ad2c534375/
+         arm |                 flannel-v0.5.5 | NOK | http://autobuild.buildroot.net/results/d98e1857590738313a293b58f02230539bbaa405/
+       nios2 |                 grantlee-0.5.1 | NOK | http://autobuild.buildroot.net/results/9588bccce3aff03faeff08abf471db2d3c1b14b3/
+microblazeel |                 grantlee-0.5.1 | NOK | http://autobuild.buildroot.net/results/091bf7df46d6057be44b8ca8653596bd84c38fbc/
+         sh4 |             gst-ffmpeg-0.10.13 | NOK | http://autobuild.buildroot.net/results/939da0c7771ddd97c05cedc0a7afc0ad34a21312/
+         arm |                  igmpproxy-0.1 | NOK | http://autobuild.buildroot.net/results/c258ff3a7cb8cde1bf993ec30519a096544d76a9/
+      x86_64 |              ipsec-tools-0.8.2 | NOK | http://autobuild.buildroot.net/results/1dabc3f0e97564a7676527ad833cf4c945e46d3b/
+      x86_64 |                iptraf-ng-1.1.4 | NOK | http://autobuild.buildroot.net/results/a1b18f2e3d075d349c19536a7c5553f24b75a323/
+       sparc |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/d9113ed526404b8780dc5dd42413d0418d4dea1c/
+         arm |                libupnpp-0.14.1 | NOK | http://autobuild.buildroot.net/results/82067e1f9b296c63efaf052554a363bd3c65c6f5/
+     powerpc |         ltp-testsuite-20160126 | NOK | http://autobuild.buildroot.net/results/84a8774a2c17f18afd72aa3a08ed9916bb4969b2/
+         arm | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/1345b6d366125320b89512e7ce7f142f1a03acf8/
+         arm |                   qemu-2.5.1.1 | NOK | http://autobuild.buildroot.net/results/6f96838fcbba3a4885924c7c8f27f7e094b5f0f1/
+         arm |                   qemu-2.5.1.1 | NOK | http://autobuild.buildroot.net/results/644bf5b8c0525097917238b5645b2759fcca68c3/
+        bfin |                 wayland-1.10.0 | NOK | http://autobuild.buildroot.net/results/8ee8d571e29128ff85b3ea5c449797eb33c0f91e/
+         arm | xdriver_xf86-video-fbturbo-... | NOK | http://autobuild.buildroot.net/results/656520682a5ac6fe5e1e741e1a92b1eab4245f2d/
 
-diff --git a/package/binutils/Config.in b/package/binutils/Config.in
-index 64d0a09..fdfdfe9 100644
---- a/package/binutils/Config.in
-+++ b/package/binutils/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_BINUTILS
- 	bool "binutils"
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
--	depends on !BR2_aarch64 && !BR2_nios2
-+	depends on !BR2_nios2
- 	depends on BR2_USE_WCHAR
- 	help
- 	  Install binutils on the target
-@@ -22,5 +22,5 @@ config BR2_PACKAGE_BINUTILS_TARGET
- endif
- 
- comment "binutils needs a toolchain w/ wchar"
--	depends on !BR2_aarch64 && !BR2_nios2
-+	depends on !BR2_nios2
- 	depends on !BR2_USE_WCHAR
-diff --git a/package/dropwatch/Config.in b/package/dropwatch/Config.in
-index d331e5e..6f04c85 100644
---- a/package/dropwatch/Config.in
-+++ b/package/dropwatch/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_DROPWATCH
- 	bool "dropwatch"
- 	select BR2_PACKAGE_BINUTILS
--	depends on !BR2_aarch64 && !BR2_nios2 # binutils
-+	depends on !BR2_nios2 # binutils
- 	depends on BR2_USE_WCHAR # binutils
- 	select BR2_PACKAGE_READLINE
- 	select BR2_PACKAGE_LIBNL
-@@ -13,5 +13,5 @@ config BR2_PACKAGE_DROPWATCH
- 	  https://fedorahosted.org/dropwatch/
- 
- comment "dropwatch needs a toolchain w/ threads, wchar"
--	depends on !BR2_aarch64 && !BR2_nios2
-+	depends on !BR2_nios2
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-diff --git a/package/lightning/Config.in b/package/lightning/Config.in
-index 6750114..d85c964 100644
---- a/package/lightning/Config.in
-+++ b/package/lightning/Config.in
-@@ -20,13 +20,13 @@ config BR2_PACKAGE_LIGHTNING_DISASSEMBLER
- 	bool "enable disassembler"
- 	select BR2_PACKAGE_BINUTILS
- 	select BR2_PACKAGE_ZLIB
--	depends on !BR2_aarch64 && !BR2_nios2 # binutils
-+	depends on !BR2_nios2 # binutils
- 	depends on BR2_USE_WCHAR # binutils
- 	help
- 	  Enable the GNU lightning disassembler.
- 
- comment "lightning disassembler needs a toolchain w/ wchar"
--	depends on !BR2_aarch64 && !BR2_nios2
-+	depends on !BR2_nios2
- 	depends on !BR2_USE_WCHAR
- 
- endif
-diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
-index 9cf5693..c6fdeaf 100644
---- a/package/oprofile/Config.in
-+++ b/package/oprofile/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_OPROFILE
- 	select BR2_PACKAGE_BINUTILS
- 	select BR2_PACKAGE_LIBPFM4 if BR2_powerpc
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_aarch64 && !BR2_nios2 # binutils
-+	depends on !BR2_nios2 # binutils
- 	depends on BR2_USE_WCHAR # binutils
- 	depends on !BR2_xtensa
- 	# libpfm4 is needed on PowerPC, and requires thread support
-@@ -28,7 +28,7 @@ config BR2_PACKAGE_OPROFILE
- 
- comment "oprofile needs a toolchain w/ C++, wchar"
- 	depends on BR2_USE_MMU
--	depends on !BR2_aarch64 && !BR2_nios2 && !BR2_xtensa
-+	depends on !BR2_nios2 && !BR2_xtensa
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
- 
- comment "oprofile needs a toolchain w/ NPTL on PPC"
+
 -- 
-2.8.3
+http://autobuild.buildroot.net
