@@ -1,208 +1,139 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 May 2016 23:01:17 +0200
-Subject: [Buildroot] [git commit] libdrm: improve atomic handling,
-	fix SPARCv8 build
-Message-ID: <20160529210913.C6DB2818DB@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 29 May 2016 23:12:24 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain/helper: don't follow symlinks
+ when copying libs to target
+In-Reply-To: <CAAXf6LXQ0Ncmh71qb48dS3isFhePWkbpqyvH5ZjFX=isQLVvTg@mail.gmail.com>
+References: <cover.1464534979.git.yann.morin.1998@free.fr>
+ <16dd334fb29148489afa344c652208a4c512f445.1464534979.git.yann.morin.1998@free.fr>
+ <CAAXf6LXQ0Ncmh71qb48dS3isFhePWkbpqyvH5ZjFX=isQLVvTg@mail.gmail.com>
+Message-ID: <20160529211224.GC29556@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4d55d33737485d8055c2fe3453e29fee51a05d7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas DS, All,
 
-This commit improves the handling of the "atomic stuff" in the libdrm
-package. libdrm can either use the atomic intrinsics (4 byte variant)
-when available, or otherwise can use libatomic_ops. Note that the
-dependency on atomic operations is not from libdrm itself, but only
-from some specific DRM drivers only.
+On 2016-05-29 20:54 +0200, Thomas De Schampheleire spake thusly:
+> On Sun, May 29, 2016 at 5:17 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > In 2a87b64 (toolchain-external: align library locations in target and
+> > staging dir), copying the libraries from the sysroot to the target was
+> > changed to a simple find-based solution.
+> >
+> > To be sure that the staging directory was entered to find the libraries,
+> > in case the variable was pointing to a symlink, the -L clause to find
+> > was used.
+> >
+> > However, that causes extraneous libraries to be copied over.
+> >
+> > For example, a ct-ng toolchain would have this sysroot (e.g for an arm
+> > 32-bit toolchain):
+> >
+> >     .../sysroot/lib/
+> >     .../sysroot/lib32 -> lib
+> >     .../sysroot/lib64 -> lib
+> >     .../sysroot/usr/lib/
+> >     .../sysroot/usr/lib32 -> lib
+> >     .../sysroot/usr/lib64 -> lib
+> >
+> > Which we would carry as-is to our own sysroot.
+> >
+> > But then, in target, our skeleton creates the /lib/ and /usr/lib
+> > directories, with the necessary lib32 or lib64 symlink pointing to it.
+> > In this case, a lib32->lib symlink is created, but no lib64 symlink
+> > since this is a 32-bit architecture.
+> 
+> Until here, the explanation is clear to me.
+> 
+> >
+> > So, when we copy over the libraries from our staging to the target
+> > directory, we end creating a /usr/lib64/ directory.
+> 
+> But this could be expanded upon, I think, as this is the actual
+> problem statement.
 
-Amongst other things, it fixes the build of the libdrm package on
-SPARCv8, therefore fixing:
+OK, here's what happens:
 
-  http://autobuild.buildroot.org/results/74dd29b5ea146c320fde80a87a2fc910de9b7f60/
+    $ ls -lF /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot \
+             /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr
+    /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot:
+    total 8
+    lrwxrwxrwx 1 ymorin ymorin    7 May 29 23:03 bin -> usr/bin/
+    drwxr-xr-x 2 ymorin ymorin 4096 May 16 23:59 etc/
+    lrwxrwxrwx 1 ymorin ymorin    7 May 29 23:03 lib -> usr/lib/
+    lrwxrwxrwx 1 ymorin ymorin    3 May 29 23:03 lib32 -> lib/
+    lrwxrwxrwx 1 ymorin ymorin    8 May 29 23:03 sbin -> usr/sbin/
+    drwxr-xr-x 8 ymorin ymorin 4096 May 16 23:58 usr/
 
-This commit does a number of changes that are all related to each
-other:
+    /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr:
+    total 24
+    drwxr-xr-x  2 ymorin ymorin 4096 May 16 23:59 bin/
+    drwxr-xr-x 33 ymorin ymorin 4096 May 16 23:59 include/
+    drwxr-xr-x  5 ymorin ymorin 4096 May 17 00:02 lib/
+    lrwxrwxrwx  1 ymorin ymorin    3 May 16 23:39 lib32 -> lib/
+    lrwxrwxrwx  1 ymorin ymorin    3 May 16 23:39 lib64 -> lib/
+    drwxr-xr-x  3 ymorin ymorin 4096 May 16 23:58 libexec/
+    drwxr-xr-x  2 ymorin ymorin 4096 May 16 23:59 sbin/
+    drwxr-xr-x  4 ymorin ymorin 4096 May 17 00:11 share/
 
- - Removes the dependency of the Intel DRM driver on
-   libatomic_ops. The Intel DRM driver builds perfectly fine without
-   libatomic_ops, as long as 4-byte variant __sync operations are
-   available, which is always the case on x86 and x86_84 (which are
-   the only architectures on which the Intel DRM driver can be
-   enabled).
+    $ find -L /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot -name 'libatomic.so.*'
+    /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/lib/libatomic.so.1.1.0
+    /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/lib/libatomic.so.1
+    /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/lib32/libatomic.so.1.1.0
+    /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/lib32/libatomic.so.1
+    /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libatomic.so.1.1.0
+    /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libatomic.so.1
+    /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib32/libatomic.so.1.1.0
+    /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib32/libatomic.so.1
+    /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib64/libatomic.so.1.1.0
+    /home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib64/libatomic.so.1
 
- - Adds an hidden Config.in boolean option
-   BR2_PACKAGE_LIBDRM_HAS_ATOMIC that allows DRM driver that need
-   atomic operation to know whether atomic support is available
-   (either through intrinsics or through libatomic_ops).
+So, the 'find -L' follows symlinks to directories, and thus finds the
+required libraries in multiple locations.
 
- - Adds an hidden BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC Config.in option
-   that DRM drivers that need atomic operation should select to ensure
-   that the relevant dependencies are selected. It simply selects
-   libatomic_ops if 4-byte atomic intrinsics are not available. We
-   could let each DRM driver do this, but having an intermediate
-   option avoids a bit of duplication.
+I'll see to improve that part of the commit log.
 
- - Adds a patch that defines AO_REQUIRE_CAS before including
-   <atomic_ops.h>. This is needed because libdrm uses the
-   AO_compare_and_swap_full() which is only provided on all
-   architectures when AO_REQUIRE_CAS is defined. The exact same fix
-   was done in the erlang package in commit
-   4a9df2942470241d7a96f326f0e7012aacd36f2e.
+> > This was very difficult to observe, as no /lib64/ directory is created
+> > and this only happens with a merged /usr.
+> >
+> > Since the reason to use -L was to be sure to enter our staging
+> > directory, we just need to ensure that the path ends up with a slash, as
+> > was already talked about in this thread:
+> >     http://lists.busybox.net/pipermail/buildroot/2016-April/159737.html
+> 
+> While the trailing slash is indeed a fine solution, it is kind of dirty.
+> I wonder if -H would do the trick too:
+[--SNIP--]
+> It should make sure that only STAGING_DIR is resolved, not any other
+> symbolic link encountered.
 
- - Adds the dependency on libatomic_ops when the package is enabled,
-   and passes the necessary CFLAGS on SPARCv8 to make the thing build
-   properly. The same CFLAGS are passed in the nginx package and bdwgc
-   package.
+Well, appending a slash is a sure mean to make it sure the target of the
+symlink (if it is a symlink to start with) is entered. I don't see where
+it is dirty.
 
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...omic-require-CAS-support-in-libatomic_ops.patch | 32 ++++++++++++++++++++++
- package/libdrm/Config.in                           | 24 +++++++++++++++-
- package/libdrm/libdrm.mk                           |  9 +++++-
- 3 files changed, 63 insertions(+), 2 deletions(-)
+Yes, -H does the job, too. But I think it is better that we append a
+slash: it makes it explicit we want to treat it as a directory, not a
+potential symlink.
 
-diff --git a/package/libdrm/0003-xf86atomic-require-CAS-support-in-libatomic_ops.patch b/package/libdrm/0003-xf86atomic-require-CAS-support-in-libatomic_ops.patch
-new file mode 100644
-index 0000000..ff920fb
---- /dev/null
-+++ b/package/libdrm/0003-xf86atomic-require-CAS-support-in-libatomic_ops.patch
-@@ -0,0 +1,32 @@
-+From 7384f79f69fdb7b691cc5b0c28c301b3fe8b633e Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Thu, 26 May 2016 10:46:57 +0200
-+Subject: [PATCH] xf86atomic: require CAS support in libatomic_ops
-+
-+Since AO_compare_and_swap_full() is used by libdrm, AO_REQUIRE_CAS
-+must be defined before including <atomic_ops.h> so that we are sure
-+that CAS support will be provided. This is necessary to make sure that
-+the AO_compare_and_swap_full() function will be provided on all
-+architectures, including the ones that don't have built-in CAS support
-+such as SPARCv8.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ xf86atomic.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/xf86atomic.h b/xf86atomic.h
-+index 922b37d..d7017a5 100644
-+--- a/xf86atomic.h
-++++ b/xf86atomic.h
-+@@ -58,6 +58,7 @@ typedef struct {
-+ #endif
-+ 
-+ #if HAVE_LIB_ATOMIC_OPS
-++#define AO_REQUIRE_CAS
-+ #include <atomic_ops.h>
-+ 
-+ #define HAS_ATOMIC_OPS 1
-+-- 
-+2.7.4
-+
-diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
-index 343a2ed..7c2a828 100644
---- a/package/libdrm/Config.in
-+++ b/package/libdrm/Config.in
-@@ -9,6 +9,15 @@ config BR2_PACKAGE_LIBDRM
- 
- if BR2_PACKAGE_LIBDRM
- 
-+config BR2_PACKAGE_LIBDRM_HAS_ATOMIC
-+	bool
-+	default y if BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS || \
-+		BR2_TOOLCHAIN_HAS_SYNC_4
-+
-+config BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC
-+	bool
-+	select BR2_PACKAGE_LIBATOMIC_OPS if !BR2_TOOLCHAIN_HAS_SYNC_4
-+
- config BR2_PACKAGE_LIBDRM_INSTALL_TESTS
- 	bool "Install test programs"
- 	help
-@@ -18,24 +27,31 @@ menu "DRM Drivers"
- 
- config BR2_PACKAGE_LIBDRM_INTEL
- 	bool "intel"
--	select BR2_PACKAGE_LIBATOMIC_OPS
- 	select BR2_PACKAGE_LIBPCIACCESS
- 	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
-+	select BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC
- 	help
- 	  Install intel graphics driver.
- 
- config BR2_PACKAGE_LIBDRM_RADEON
- 	bool "radeon"
-+	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
-+	select BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC
- 	help
- 	  Install AMD/ATI graphics driver.
- 
- config BR2_PACKAGE_LIBDRM_AMDGPU
- 	bool "amdgpu"
-+	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
-+	select BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC
- 	help
- 	  Install AMD GPU driver.
- 
- config BR2_PACKAGE_LIBDRM_NOUVEAU
- 	bool "nouveau"
-+	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
-+	select BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC
- 	help
- 	  Install NVIDIA graphics driver.
- 
-@@ -48,6 +64,8 @@ config BR2_PACKAGE_LIBDRM_VMWGFX
- config BR2_PACKAGE_LIBDRM_OMAP
- 	bool "omap (experimental)"
- 	depends on BR2_arm
-+	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
-+	select BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC
- 	help
- 	  Install the TI OMAP driver using an experimental API.
- 
-@@ -60,12 +78,16 @@ config BR2_PACKAGE_LIBDRM_EXYNOS
- config BR2_PACKAGE_LIBDRM_FREEDRENO
- 	bool "freedreno"
- 	depends on BR2_arm || BR2_aarch64 || BR2_aarch64_be
-+	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
-+	select BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC
- 	help
- 	  Install Qualcomm Snapdragon driver.
- 
- config BR2_PACKAGE_LIBDRM_TEGRA
- 	bool "tegra (experimental)"
- 	depends on BR2_arm
-+	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
-+	select BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC
- 	help
- 	  Install NVIDIA Tegra driver using an experimental API.
- 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 1d41f05..50fa7ef 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -21,9 +21,16 @@ LIBDRM_CONF_OPTS = \
- 
- LIBDRM_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- 
-+ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
-+LIBDRM_DEPENDENCIES += libatomic_ops
-+ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
-+LIBDRM_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DAO_NO_SPARC_V9"
-+endif
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBDRM_INTEL),y)
- LIBDRM_CONF_OPTS += --enable-intel
--LIBDRM_DEPENDENCIES += libatomic_ops libpciaccess
-+LIBDRM_DEPENDENCIES += libpciaccess
- else
- LIBDRM_CONF_OPTS += --disable-intel
- endif
+However, why would we need to handle the symlink case, to begin with? We
+are controlling the variable passed in this case and it points to a copy
+of the sysroot we did make. I.e. that variable is not provided by the
+user; it is always filled by our infra.
+
+Surely, if we really, really, like really-really, want to make it
+explicit we want the directory pointed-to by the symlink, then, we
+should probably do:
+
+    find $$(readlink -f $(STAGING_DIR)) -name blabla
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
