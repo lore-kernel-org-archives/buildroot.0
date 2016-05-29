@@ -1,59 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 May 2016 08:30:16 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-05-28
-Message-ID: <20160529063016.1CA02102C09@stock.ovh.net>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 29 May 2016 12:26:15 +0200
+Subject: [Buildroot] [PATCH] uclibc: update to 1.0.15
+Message-ID: <20160529102615.GA6824@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2016-05-28
-===============================
+The Linuxthreads support got reorganized.
+LT.new is removed, LT.old is the default for
+Linuxthreads.
 
-        success : 214
-       failures : 16 
-       timeouts : 0  
-          TOTAL : 230
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/uclibc/Config.in   |  9 ++-------
+ package/uclibc/uclibc.hash |  2 +-
+ package/uclibc/uclibc.mk   | 18 ++++--------------
+ 3 files changed, 7 insertions(+), 22 deletions(-)
 
-Classification of failures by reason
-====================================
-
-                  qemu-2.5.1.1 | 2 
-                grantlee-0.5.1 | 2 
-                wayland-1.10.0 | 1 
-             ipsec-tools-0.8.2 | 1 
-            gst-ffmpeg-0.10.13 | 1 
-        ltp-testsuite-20160126 | 1 
-net-tools-3f170bff115303e92... | 1 
-               iptraf-ng-1.1.4 | 1 
-               libsigsegv-2.10 | 1 
-                flannel-v0.5.5 | 1 
-xdriver_xf86-video-fbturbo-... | 1 
-                  apitrace-7.0 | 1 
-               libupnpp-0.14.1 | 1 
-                 igmpproxy-0.1 | 1 
-
-Detail of failures
-===================
-
-      x86_64 |                   apitrace-7.0 | NOK | http://autobuild.buildroot.net/results/d1b430ed179d1a39a5c143e156f819ad2c534375/
-         arm |                 flannel-v0.5.5 | NOK | http://autobuild.buildroot.net/results/d98e1857590738313a293b58f02230539bbaa405/
-       nios2 |                 grantlee-0.5.1 | NOK | http://autobuild.buildroot.net/results/9588bccce3aff03faeff08abf471db2d3c1b14b3/
-microblazeel |                 grantlee-0.5.1 | NOK | http://autobuild.buildroot.net/results/091bf7df46d6057be44b8ca8653596bd84c38fbc/
-         sh4 |             gst-ffmpeg-0.10.13 | NOK | http://autobuild.buildroot.net/results/939da0c7771ddd97c05cedc0a7afc0ad34a21312/
-         arm |                  igmpproxy-0.1 | NOK | http://autobuild.buildroot.net/results/c258ff3a7cb8cde1bf993ec30519a096544d76a9/
-      x86_64 |              ipsec-tools-0.8.2 | NOK | http://autobuild.buildroot.net/results/1dabc3f0e97564a7676527ad833cf4c945e46d3b/
-      x86_64 |                iptraf-ng-1.1.4 | NOK | http://autobuild.buildroot.net/results/a1b18f2e3d075d349c19536a7c5553f24b75a323/
-       sparc |                libsigsegv-2.10 | NOK | http://autobuild.buildroot.net/results/d9113ed526404b8780dc5dd42413d0418d4dea1c/
-         arm |                libupnpp-0.14.1 | NOK | http://autobuild.buildroot.net/results/82067e1f9b296c63efaf052554a363bd3c65c6f5/
-     powerpc |         ltp-testsuite-20160126 | NOK | http://autobuild.buildroot.net/results/84a8774a2c17f18afd72aa3a08ed9916bb4969b2/
-         arm | net-tools-3f170bff115303e92... | NOK | http://autobuild.buildroot.net/results/1345b6d366125320b89512e7ce7f142f1a03acf8/
-         arm |                   qemu-2.5.1.1 | NOK | http://autobuild.buildroot.net/results/6f96838fcbba3a4885924c7c8f27f7e094b5f0f1/
-         arm |                   qemu-2.5.1.1 | NOK | http://autobuild.buildroot.net/results/644bf5b8c0525097917238b5645b2759fcca68c3/
-        bfin |                 wayland-1.10.0 | NOK | http://autobuild.buildroot.net/results/8ee8d571e29128ff85b3ea5c449797eb33c0f91e/
-         arm | xdriver_xf86-video-fbturbo-... | NOK | http://autobuild.buildroot.net/results/656520682a5ac6fe5e1e741e1a92b1eab4245f2d/
-
-
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index efa84e9..1aad9a0 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -48,7 +48,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
+ choice
+ 	prompt "Thread library implementation"
+ 	default BR2_PTHREADS_NATIVE
+-	default BR2_PTHREADS_OLD if !BR2_USE_MMU
++	default BR2_PTHREADS if !BR2_USE_MMU
+ 	help
+ 	  Use this option to select the thread library implementation
+ 	  that should be used in your toolchain.
+@@ -59,11 +59,6 @@ choice
+ 	config BR2_PTHREADS
+ 		bool "linuxthreads"
+ 		select BR2_TOOLCHAIN_HAS_THREADS
+-		depends on BR2_m68k
+-
+-	config BR2_PTHREADS_OLD
+-		bool "linuxthreads (stable/old)"
+-		select BR2_TOOLCHAIN_HAS_THREADS
+ 		depends on BR2_m68k || BR2_arm || BR2_armeb || BR2_xtensa
+ 
+ 	config BR2_PTHREADS_NATIVE
+@@ -76,7 +71,7 @@ endchoice
+ 
+ config BR2_PTHREAD_DEBUG
+ 	bool "Thread library debugging"
+-	depends on BR2_PTHREADS || BR2_PTHREADS_OLD || BR2_PTHREADS_NATIVE
++	depends on BR2_PTHREADS || BR2_PTHREADS_NATIVE
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	help
+ 	  Build the thread library with debugging enabled.
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index eccce34..01a6b80 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,2 +1,2 @@
+ # From http://www.uclibc-ng.org/
+-sha256  3c63d9f8c8b98b65fa5c4040d1c8ab1b36e99a16e1093810cedad51ac15c9a9e        uClibc-ng-1.0.14.tar.xz
++sha256  0f62f35217d9a0b5eb3810dd6de16ab3dd4323f3224c6b95423250ac1e19ee49        uClibc-ng-1.0.15.tar.xz
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 1e12896..cf343a4 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_VERSION = 1.0.14
++UCLIBC_VERSION = 1.0.15
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPLv2.1+
+@@ -328,29 +328,19 @@ endif
+ ifeq ($(BR2_PTHREADS_NONE),y)
+ define UCLIBC_THREAD_CONFIG
+ 	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_THREADS,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,LINUXTHREADS,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,LINUXTHREADS_OLD,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_LINUXTHREADS,$(@D)/.config)
+ 	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_THREADS_NATIVE,$(@D)/.config)
+ endef
+ else ifeq ($(BR2_PTHREADS),y)
+ define UCLIBC_THREAD_CONFIG
+ 	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_THREADS,$(@D)/.config)
+-	$(call KCONFIG_ENABLE_OPT,LINUXTHREADS_NEW,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,LINUXTHREADS_OLD,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_THREADS_NATIVE,$(@D)/.config)
+-endef
+-else ifeq ($(BR2_PTHREADS_OLD),y)
+-define UCLIBC_THREAD_CONFIG
+-	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_THREADS,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,LINUXTHREADS_NEW,$(@D)/.config)
+-	$(call KCONFIG_ENABLE_OPT,LINUXTHREADS_OLD,$(@D)/.config)
++	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_LINUXTHREADS,$(@D)/.config)
+ 	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_THREADS_NATIVE,$(@D)/.config)
+ endef
+ else ifeq ($(BR2_PTHREADS_NATIVE),y)
+ define UCLIBC_THREAD_CONFIG
+ 	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_THREADS,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,LINUXTHREADS_NEW,$(@D)/.config)
+-	$(call KCONFIG_DISABLE_OPT,LINUXTHREADS_OLD,$(@D)/.config)
++	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_LINUXTHREADS,$(@D)/.config)
+ 	$(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_THREADS_NATIVE,$(@D)/.config)
+ endef
+ endif
 -- 
-http://autobuild.buildroot.net
+2.1.4
