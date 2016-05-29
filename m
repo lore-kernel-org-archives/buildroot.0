@@ -1,75 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 May 2016 17:17:53 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain/helper: don't follow symlinks
-	when copying libs to target
-In-Reply-To: <cover.1464534979.git.yann.morin.1998@free.fr>
-References: <cover.1464534979.git.yann.morin.1998@free.fr>
-Message-ID: <16dd334fb29148489afa344c652208a4c512f445.1464534979.git.yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 29 May 2016 17:19:29 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/netplug: fix musl build errors
+Message-ID: <1464535169-32284-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In 2a87b64 (toolchain-external: align library locations in target and
-staging dir), copying the libraries from the sysroot to the target was
-changed to a simple find-based solution.
+Fixes
+http://autobuild.buildroot.net/results/02c/02c967a211cfb43dcb5119ea57a0cdef96e5880b/
 
-To be sure that the staging directory was entered to find the libraries,
-in case the variable was pointing to a symlink, the -L clause to find
-was used.
-
-However, that causes extraneous libraries to be copied over.
-
-For example, a ct-ng toolchain would have this sysroot (e.g for an arm
-32-bit toolchain):
-
-    .../sysroot/lib/
-    .../sysroot/lib32 -> lib
-    .../sysroot/lib64 -> lib
-    .../sysroot/usr/lib/
-    .../sysroot/usr/lib32 -> lib
-    .../sysroot/usr/lib64 -> lib
-
-Which we would carry as-is to our own sysroot.
-
-But then, in target, our skeleton creates the /lib/ and /usr/lib
-directories, with the necessary lib32 or lib64 symlink pointing to it.
-In this case, a lib32->lib symlink is created, but no lib64 symlink
-since this is a 32-bit architecture.
-
-So, when we copy over the libraries from our staging to the target
-directory, we end creating a /usr/lib64/ directory.
-
-This was very difficult to observe, as no /lib64/ directory is created
-and this only happens with a merged /usr.
-
-Since the reason to use -L was to be sure to enter our staging
-directory, we just need to ensure that the path ends up with a slash, as
-was already talked about in this thread:
-    http://lists.busybox.net/pipermail/buildroot/2016-April/159737.html
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- toolchain/helpers.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2: - simplified __assert_fail patch by adjusting the data types instead
+      of removing the function
+    - improved patch comment (Thomas)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 5512759..b3510b6 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -11,7 +11,7 @@
- copy_toolchain_lib_root = \
- 	LIB="$(strip $1)"; \
- \
--	LIBPATHS=`find -L $(STAGING_DIR) -name "$${LIB}" 2>/dev/null` ; \
-+	LIBPATHS=`find $(STAGING_DIR)/ -name "$${LIB}" 2>/dev/null` ; \
- 	for LIBPATH in $${LIBPATHS} ; do \
- 		DESTDIR=`echo $${LIBPATH} | sed "s,^$(STAGING_DIR)/,," | xargs dirname` ; \
- 		mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
+ package/netplug/0002-musl.patch | 44 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/netplug/0002-musl.patch
+
+diff --git a/package/netplug/0002-musl.patch b/package/netplug/0002-musl.patch
+new file mode 100644
+index 0000000..fd86a19
+--- /dev/null
++++ b/package/netplug/0002-musl.patch
+@@ -0,0 +1,44 @@
++Fix musl build
++
++Upstream usage of __assert_fail failed to compile:
++
++ib.c:204:1: error: conflicting types for ?__assert_fail?
++ __assert_fail(const char *assertion, const char *file,
++ ^
++In file included from lib.c:21:0:
++/home/buildroot/buildroot/output/host/usr/arm-buildroot-linux-musleabihf/sysroot/usr/include/assert.h:19:6: note: previous declaration of ?__assert_fail? was here
++ void __assert_fail (const char *, const char *, int, const char *);
++      ^
++
++Change from unsigned int to int according to musl define.
++
++Add time.h to netplug.h to fix compile error due to missing header:
++
++netplug.h:77:5: error: unknown type name ?time_t?
++     time_t      lastchange;     /* timestamp of last state change */
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr netplug-1.2.9.2.org/lib.c netplug-1.2.9.2/lib.c
++--- netplug-1.2.9.2.org/lib.c	2008-12-23 00:36:23.000000000 +0100
+++++ netplug-1.2.9.2/lib.c	2016-05-29 16:21:13.000000000 +0200
++@@ -202,7 +202,7 @@
++ 
++ void
++ __assert_fail(const char *assertion, const char *file,
++-              unsigned int line, const char *function)
+++              int line, const char *function)
++ {
++     do_log(LOG_CRIT, "%s:%u: %s%sAssertion `%s' failed",
++            file, line,
++diff -uNr netplug-1.2.9.2.org/netplug.h netplug-1.2.9.2/netplug.h
++--- netplug-1.2.9.2.org/netplug.h	2008-12-23 00:36:23.000000000 +0100
+++++ netplug-1.2.9.2/netplug.h	2016-05-29 16:22:01.000000000 +0200
++@@ -25,6 +25,7 @@
++ #include <sys/socket.h>
++ #include <linux/netlink.h>
++ #include <linux/rtnetlink.h>
+++#include <time.h>
++ 
++ #define NP_SCRIPT NP_SCRIPT_DIR "/netplug"
++ 
 -- 
-2.7.4
+2.8.1
