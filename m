@@ -1,63 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 30 May 2016 00:01:08 +0200
-Subject: [Buildroot] [PATCH] warpboard: README: Fix a few typos
-In-Reply-To: <1464559134-3411-1-git-send-email-festevam@gmail.com>
-References: <1464559134-3411-1-git-send-email-festevam@gmail.com>
-Message-ID: <20160529220108.GD29556@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 30 May 2016 00:33:12 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain/helper: don't follow symlinks
+ when copying libs to target
+In-Reply-To: <20160529211224.GC29556@free.fr>
+References: <cover.1464534979.git.yann.morin.1998@free.fr>
+ <16dd334fb29148489afa344c652208a4c512f445.1464534979.git.yann.morin.1998@free.fr>
+ <CAAXf6LXQ0Ncmh71qb48dS3isFhePWkbpqyvH5ZjFX=isQLVvTg@mail.gmail.com>
+ <20160529211224.GC29556@free.fr>
+Message-ID: <95e5afb7-0922-92cd-8ef7-7807f833b6f6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
-
-On 2016-05-29 18:58 -0300, Fabio Estevam spake thusly:
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  board/freescale/warpboard/README | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On 05/29/16 23:12, Yann E. MORIN wrote:
+> Thomas DS, All,
 > 
-> diff --git a/board/freescale/warpboard/README b/board/freescale/warpboard/README
-> index d826b2d..7e6bdc5 100644
-> --- a/board/freescale/warpboard/README
-> +++ b/board/freescale/warpboard/README
-> @@ -29,7 +29,7 @@ Update uboot
->   => env default -f -a
->   => saveenv
->  
-> -- Run the DFU toocommand in U-Boot:
-> +- Run the DFU command in U-Boot:
->   => dfu 0 mmc 0
->  
->  - Transfer U-Boot into flash by running this command in host side:
-> @@ -42,7 +42,7 @@ Update uboot
->  Update linux & rootfs
->  =====================
->  
-> -Run the 'ums' command from the u6Boot prompt to mount the eMMC as mass
-> +Run the 'ums' command from the U-Boot prompt to mount the eMMC as mass
->  storage and update zImage, device tree (imx6sl-warp.dtb) and rootfs
->  file (rootfs.tar) :
->  
-> -- 
-> 1.9.1
+> On 2016-05-29 20:54 +0200, Thomas De Schampheleire spake thusly:
+[snip]
+>> While the trailing slash is indeed a fine solution, it is kind of dirty.
+>> I wonder if -H would do the trick too:
+> [--SNIP--]
+>> It should make sure that only STAGING_DIR is resolved, not any other
+>> symbolic link encountered.
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Well, appending a slash is a sure mean to make it sure the target of the
+> symlink (if it is a symlink to start with) is entered. I don't see where
+> it is dirty.
+
+ I should have realized this before, but: when is $(STAGING_DIR) ever a symlink?
+It's defined as $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sysroot and it's explicitly
+mkdir'ed in the Makefile. It's not a symlink. $(O)/staging is a symlink, but
+that's not what's used here.
+
+ That makes me think there must have been a different reason why Thomas added
+the -L. Thomas originally wrote:
+
+  I used -follow just to make sure that STAGING_DIR is entered. It seems
+  to work without just because STAGING_DIR happens to be defined with a
+  trailing slash, in which case its contents are evaluated anyhow by
+  find. I considered this dependency too fragile and wanted it to work
+  even if someone optimizes away the trailing slash. Another solution
+  would be to add a trailing slash manually as $(STAGING_DIR)/ but -L is
+  much cleaner.
+
+Note that there never has been a trailing / in STAGING_DIR.
+
+ Thomas, any idea what is going on here?
+
+ I did a quick try with just removing -L and it seems to work fine.
+
+
+> 
+> Yes, -H does the job, too. But I think it is better that we append a
+> slash: it makes it explicit we want to treat it as a directory, not a
+> potential symlink.
+> 
+> However, why would we need to handle the symlink case, to begin with? We
+> are controlling the variable passed in this case and it points to a copy
+> of the sysroot we did make. I.e. that variable is not provided by the
+> user; it is always filled by our infra.
+
+ Yann, did you mean the same thing as I described above?
+
+
+ Regards,
+ Arnout
+
+> 
+> Surely, if we really, really, like really-really, want to make it
+> explicit we want the directory pointed-to by the symlink, then, we
+> should probably do:
+> 
+>     find $$(readlink -f $(STAGING_DIR)) -name blabla
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
