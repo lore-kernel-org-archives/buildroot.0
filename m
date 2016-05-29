@@ -1,45 +1,94 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Sun, 29 May 2016 15:01:59 +0200
-Subject: [Buildroot] [PATCH] fftw: Disable combined threads when
- building with OpenMP support
-In-Reply-To: <1464366101-637-1-git-send-email-nerv@dawncrow.de>
-References: <1464366101-637-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <574AE847.9020705@dawncrow.de>
+From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
+Date: Sun, 29 May 2016 16:33:00 +0200
+Subject: [Buildroot] [PATCH] p7zip: New package
+Message-ID: <1464532380-16560-1-git-send-email-nerv@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+ package/Config.in        |  1 +
+ package/p7zip/Config.in  | 13 +++++++++++++
+ package/p7zip/p7zip.hash |  3 +++
+ package/p7zip/p7zip.mk   | 25 +++++++++++++++++++++++++
+ 4 files changed, 42 insertions(+)
+ create mode 100644 package/p7zip/Config.in
+ create mode 100644 package/p7zip/p7zip.hash
+ create mode 100644 package/p7zip/p7zip.mk
 
-Some notes on my patch:
-Without it fftw fails to configure when the toolchain has threads and openmp
-checking for OpenMP flag of C compiler... -fopenmp
-configure: error: --with-combined-threads incompatible with --enable-openmp
-
-I'm not sure if my approach is what you would have in mind...
-should I rather use ifeq,else,endif as in the block above
-or do you have a good suggestion to make --with-combined-threads mutual exclusive between threads and openmp?
-
-
-Am 27.05.2016 um 18:21 schrieb Andr? Hentschel:
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
->  package/fftw/fftw.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-> index 5045ab6..f4b1794 100644
-> --- a/package/fftw/fftw.mk
-> +++ b/package/fftw/fftw.mk
-> @@ -35,7 +35,7 @@ FFTW_CONF_OPTS += --enable-threads --with-combined-threads
->  else
->  FFTW_CONF_OPTS += --disable-threads
->  endif
-> -FFTW_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
-> +FFTW_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--without-combined-threads --enable,--disable)-openmp
->  
->  FFTW_CONF_OPTS += CFLAGS="$(FFTW_CFLAGS)"
->  
-> 
+diff --git a/package/Config.in b/package/Config.in
+index 9d668bf..073b88e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -59,6 +59,7 @@ endif
+ 	source "package/lz4/Config.in"
+ 	source "package/lzip/Config.in"
+ 	source "package/lzop/Config.in"
++	source "package/p7zip/Config.in"
+ 	source "package/unrar/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/unzip/Config.in"
+diff --git a/package/p7zip/Config.in b/package/p7zip/Config.in
+new file mode 100644
+index 0000000..b5e565d
+--- /dev/null
++++ b/package/p7zip/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_P7ZIP
++	bool "p7zip"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  p7zip is a quick port of the command line version of 7-zip for Unix.
++	  (see http://www.7-zip.org)
++
++	  7-Zip is a file archiver with highest compression ratio.
++
++	  http://sourceforge.net/projects/p7zip
++
++comment "p7zip needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/p7zip/p7zip.hash b/package/p7zip/p7zip.hash
+new file mode 100644
+index 0000000..ead6d87
+--- /dev/null
++++ b/package/p7zip/p7zip.hash
+@@ -0,0 +1,3 @@
++# From https://sourceforge.net/projects/p7zip/files/p7zip/
++md5	92cca093312b5a71a7be7dc7d1d32509	p7zip_15.14.1_src_all.tar.bz2
++sha1	9b15a79f94230fab9b9d4f9f532c723117145c7a	p7zip_15.14.1_src_all.tar.bz2
+diff --git a/package/p7zip/p7zip.mk b/package/p7zip/p7zip.mk
+new file mode 100644
+index 0000000..59e451d
+--- /dev/null
++++ b/package/p7zip/p7zip.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# p7zip
++#
++################################################################################
++
++P7ZIP_VERSION = 15.14.1
++P7ZIP_SOURCE = p7zip_$(P7ZIP_VERSION)_src_all.tar.bz2
++P7ZIP_SITE = http://downloads.sourceforge.net/project/p7zip/p7zip/$(P7ZIP_VERSION)
++P7ZIP_LICENSE = LGPLv2.1+
++P7ZIP_LICENSE_FILES = DOC/License.txt
++
++define P7ZIP_BUILD_CMDS
++	# Note that the build system of p7zip is a mess, so we can't use TARGET_CONFIGURE_OPTS
++	$(MAKE) CC="$(TARGET_CC)" ALLFLAGS_C="$(TARGET_CFLAGS)" \
++		CXX="$(TARGET_CXX)" ALLFLAGS_CPP="$(TARGET_CXXFLAGS)" \
++		LDFLAGS="$(TARGET_LDFLAGS)" \
++		-C $(@D) 7zr
++endef
++
++define P7ZIP_INSTALL_TARGET_CMDS
++	cp -dpf $(@D)/bin/7zr $(TARGET_DIR)/usr/bin/
++endef
++
++$(eval $(generic-package))
+-- 
+1.9.1
