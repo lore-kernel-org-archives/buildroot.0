@@ -1,334 +1,131 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat, 28 May 2016 15:46:17 -0700
-Subject: [Buildroot] [PATCH v6 2/3] docker-containerd: new package
-In-Reply-To: <1464475578-22239-1-git-send-email-christian@paral.in>
-References: <1464475578-22239-1-git-send-email-christian@paral.in>
-Message-ID: <1464475578-22239-3-git-send-email-christian@paral.in>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Sun, 29 May 2016 00:33:35 -0300
+Subject: [Buildroot] [PATCH 1/1] binutils: enable as target package for
+	aarch64
+Message-ID: <20160529033335.8886-1-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-docker-containerd is a daemon and API for controlling and managing runC
-containers.
+binutils got disabled as a target package for aarch64 back in Buildroot
+2012.11 (commit 660d16f4).
+The default version 2.21.1 at the time didn't really support aarch64, as
+shown by the autobuilder error reference in that commit.
 
-https://containerd.tools/
+binutils has now had support for aarch64 since 2.23, but was never
+re-enabled for aarch64.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+All of the binutils versions currently supported by Buildroot (oldest
+being 2.24) support aarch64, so we can now enable it without any
+restrictions.
 
+This same patch also touches the dropwatch, lightning and oprofile
+packages which all select binutils and had the 'depends on !aarch64' to
+keep Kconfig consistent. They are now re-enabled for aarch64 as well.
+They are changed in this same patch so that Kconfig is kept consistent
+and doesn't end up having them disabled in a commit which only has the
+binutils change applied.
+lightning has other explicit arch dependencies so it is not actually yet
+available in aarch64, but at least the dependency on !aarch64 because of
+binutils is not needed anymore.
+
+Everything has been build tested with Buildroot and external toolchains.
+binutils and dropwatch work fine in a qemu target. oprofile doesn't seem
+to be supported in the qemu aarch64 processor but builds fine and seems
+to have some level of aarch64 support in the source, so there doesn't
+seem to be a reason to keep it disabled in Kconfig.
+
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 ---
+ package/binutils/Config.in  | 4 ++--
+ package/dropwatch/Config.in | 4 ++--
+ package/lightning/Config.in | 4 ++--
+ package/oprofile/Config.in  | 4 ++--
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-Changes since v3:
- - Don't depend on runc at compile-time
- - Add threading dependency
- - Use HOST_GO_TARGET_ENV, partially
- - Cleanup compile commands
- - Include patch to fix arm64 compilation
-Changes since v4:
- - Bump to v0.2.2
- - update hash for 0.2.2
- - fix docker-runc simlink
- - use CONTAINERD_VERSION for GitCommit const
- - add go arch supports to config.in comment
- - did runtime tests
- - added signed-off-by to the patch series
-
----
- package/Config.in                                |   1 +
- package/docker-containerd/0001-arm64-fixes.patch | 189 +++++++++++++++++++++++
- package/docker-containerd/Config.in              |  13 ++
- package/docker-containerd/docker-containerd.hash |   2 +
- package/docker-containerd/docker-containerd.mk   |  44 ++++++
- 5 files changed, 249 insertions(+)
- create mode 100644 package/docker-containerd/0001-arm64-fixes.patch
- create mode 100644 package/docker-containerd/Config.in
- create mode 100644 package/docker-containerd/docker-containerd.hash
- create mode 100644 package/docker-containerd/docker-containerd.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 6c513ba..c8365f8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1631,6 +1631,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/dcron/Config.in"
- 	source "package/debianutils/Config.in"
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+index 64d0a09..fdfdfe9 100644
+--- a/package/binutils/Config.in
++++ b/package/binutils/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_BINUTILS
+ 	bool "binutils"
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_nios2
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  Install binutils on the target
+@@ -22,5 +22,5 @@ config BR2_PACKAGE_BINUTILS_TARGET
  endif
-+	source "package/docker-containerd/Config.in"
- 	source "package/cgroupfs-mount/Config.in"
- 	source "package/dsp-tools/Config.in"
- 	source "package/emlog/Config.in"
-diff --git a/package/docker-containerd/0001-arm64-fixes.patch b/package/docker-containerd/0001-arm64-fixes.patch
-new file mode 100644
-index 0000000..19df02c
---- /dev/null
-+++ b/package/docker-containerd/0001-arm64-fixes.patch
-@@ -0,0 +1,189 @@
-+From f6f54370d154b0ce5f35319d878048d7db8db89c Mon Sep 17 00:00:00 2001
-+From: Lei Jitang <leijitang@huawei.com>
-+Date: Tue, 5 Apr 2016 23:17:30 -0400
-+Subject: [PATCH] arm64 fixes
-+
-+This commit is a combination of a few cherry-picked commits from the
-+current master (0.3.0 candidate) of docker-containerd, which
-+specifically address issues under arm64.
-+
-+move epoll syscall to arch specific to enable containerd run on arm64
-+Rename epoll_amd64.go to epoll.go
-+Signed-off-by: Lei Jitang <leijitang@huawei.com>
-+
-+archutils: epoll_aarch64: fix C formatting
-+Signed-off-by: Aleksa Sarai <asarai@suse.de>
-+
-+archutils: fix build on aarch64
-+Signed-off-by: Aleksa Sarai <asarai@suse.de>
-+
-+Use flag for aarch64 EpollCreate1
-+Signed-off-by: Qiang Huang <h.huangqiang@huawei.com>
-+
-+Correct build flag for arm64
-+Signed-off-by: Qiang Huang <h.huangqiang@huawei.com>
-+
-+Series signature:
-+
-+Signed-off-by: Christian Stewart <christian@paral.in>
-+
-+---
-+ archutils/epoll.go          | 19 ++++++++++++
-+ archutils/epoll_arm64.go    | 70 +++++++++++++++++++++++++++++++++++++++++++++
-+ supervisor/monitor_linux.go |  9 +++---
-+ 3 files changed, 94 insertions(+), 4 deletions(-)
-+ create mode 100644 archutils/epoll.go
-+ create mode 100644 archutils/epoll_arm64.go
-+
-+diff --git a/archutils/epoll.go b/archutils/epoll.go
-+new file mode 100644
-+index 0000000..c8ade64
-+--- /dev/null
-++++ b/archutils/epoll.go
-+@@ -0,0 +1,19 @@
-++// +build linux,!arm64
-++
-++package archutils
-++
-++import (
-++	"syscall"
-++)
-++
-++func EpollCreate1(flag int) (int, error) {
-++	return syscall.EpollCreate1(flag)
-++}
-++
-++func EpollCtl(epfd int, op int, fd int, event *syscall.EpollEvent) error {
-++	return syscall.EpollCtl(epfd, op, fd, event)
-++}
-++
-++func EpollWait(epfd int, events []syscall.EpollEvent, msec int) (int, error) {
-++	return syscall.EpollWait(epfd, events, msec)
-++}
-+diff --git a/archutils/epoll_arm64.go b/archutils/epoll_arm64.go
-+new file mode 100644
-+index 0000000..00abc68
-+--- /dev/null
-++++ b/archutils/epoll_arm64.go
-+@@ -0,0 +1,70 @@
-++// +build linux,arm64
-++
-++package archutils
-++
-++// #include <sys/epoll.h>
-++/*
-++int EpollCreate1(int flag) {
-++	return epoll_create1(flag);
-++}
-++
-++int EpollCtl(int efd, int op,int sfd, int events, int fd) {
-++	struct epoll_event event;
-++	event.events = events;
-++	event.data.fd = fd;
-++
-++	return epoll_ctl(efd, op, sfd, &event);
-++}
-++
-++struct event_t {
-++	uint32_t events;
-++	int fd;
-++};
-++
-++struct epoll_event events[128];
-++int run_epoll_wait(int fd, struct event_t *event) {
-++	int n, i;
-++	n = epoll_wait(fd, events, 128, -1);
-++	for (i = 0; i < n; i++) {
-++		event[i].events = events[i].events;
-++		event[i].fd = events[i].data.fd;
-++	}
-++	return n;
-++}
-++*/
-++import "C"
-++
-++import (
-++	"fmt"
-++	"syscall"
-++	"unsafe"
-++)
-++
-++func EpollCreate1(flag int) (int, error) {
-++	fd := int(C.EpollCreate1(C.int(flag)))
-++	if fd < 0 {
-++		return fd, fmt.Errorf("failed to create epoll, errno is %d", fd)
-++	}
-++	return fd, nil
-++}
-++
-++func EpollCtl(epfd int, op int, fd int, event *syscall.EpollEvent) error {
-++	errno := C.EpollCtl(C.int(epfd), C.int(syscall.EPOLL_CTL_ADD), C.int(fd), C.int(event.Events), C.int(event.Fd))
-++	if errno < 0 {
-++		return fmt.Errorf("Failed to ctl epoll")
-++	}
-++	return nil
-++}
-++
-++func EpollWait(epfd int, events []syscall.EpollEvent, msec int) (int, error) {
-++	var c_events [128]C.struct_event_t
-++	n := int(C.run_epoll_wait(C.int(epfd), (*C.struct_event_t)(unsafe.Pointer(&c_events))))
-++	if n < 0 {
-++		return int(n), fmt.Errorf("Failed to wait epoll")
-++	}
-++	for i := 0; i < n; i++ {
-++		events[i].Fd = int32(c_events[i].fd)
-++		events[i].Events = uint32(c_events[i].events)
-++	}
-++	return int(n), nil
-++}
-+diff --git a/supervisor/monitor_linux.go b/supervisor/monitor_linux.go
-+index adf4ffd..b176585 100644
-+--- a/supervisor/monitor_linux.go
-++++ b/supervisor/monitor_linux.go
-+@@ -5,6 +5,7 @@ import (
-+ 	"syscall"
-+ 
-+ 	"github.com/Sirupsen/logrus"
-++	"github.com/docker/containerd/archutils"
-+ 	"github.com/docker/containerd/runtime"
-+ )
-+ 
-+@@ -14,7 +15,7 @@ func NewMonitor() (*Monitor, error) {
-+ 		exits:     make(chan runtime.Process, 1024),
-+ 		ooms:      make(chan string, 1024),
-+ 	}
-+-	fd, err := syscall.EpollCreate1(0)
-++	fd, err := archutils.EpollCreate1(0)
-+ 	if err != nil {
-+ 		return nil, err
-+ 	}
-+@@ -47,7 +48,7 @@ func (m *Monitor) Monitor(p runtime.Process) error {
-+ 		Fd:     int32(fd),
-+ 		Events: syscall.EPOLLHUP,
-+ 	}
-+-	if err := syscall.EpollCtl(m.epollFd, syscall.EPOLL_CTL_ADD, fd, &event); err != nil {
-++	if err := archutils.EpollCtl(m.epollFd, syscall.EPOLL_CTL_ADD, fd, &event); err != nil {
-+ 		return err
-+ 	}
-+ 	EpollFdCounter.Inc(1)
-+@@ -67,7 +68,7 @@ func (m *Monitor) MonitorOOM(c runtime.Container) error {
-+ 		Fd:     int32(fd),
-+ 		Events: syscall.EPOLLHUP | syscall.EPOLLIN,
-+ 	}
-+-	if err := syscall.EpollCtl(m.epollFd, syscall.EPOLL_CTL_ADD, fd, &event); err != nil {
-++	if err := archutils.EpollCtl(m.epollFd, syscall.EPOLL_CTL_ADD, fd, &event); err != nil {
-+ 		return err
-+ 	}
-+ 	EpollFdCounter.Inc(1)
-+@@ -82,7 +83,7 @@ func (m *Monitor) Close() error {
-+ func (m *Monitor) start() {
-+ 	var events [128]syscall.EpollEvent
-+ 	for {
-+-		n, err := syscall.EpollWait(m.epollFd, events[:], -1)
-++		n, err := archutils.EpollWait(m.epollFd, events[:], -1)
-+ 		if err != nil {
-+ 			if err == syscall.EINTR {
-+ 				continue
-+-- 
-+2.7.3
-+
-diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
-new file mode 100644
-index 0000000..e76a6a2
---- /dev/null
-+++ b/package/docker-containerd/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_DOCKER_CONTAINERD
-+	bool "docker-containerd"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_RUNC
-+	help
-+	  containerd is a daemon to control runC.
-+
-+	  https://github.com/docker/containerd
-+
-+comment "docker-containerd needs a toolchain w/ threads"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-new file mode 100644
-index 0000000..b98e651
---- /dev/null
-+++ b/package/docker-containerd/docker-containerd.hash
-@@ -0,0 +1,2 @@
-+# Computed locally
-+sha256 a21efc7ea4bb97306ae9807caadca6782358679f38d3afd606cb599b6853bc52  docker-containerd-v0.2.2.tar.gz
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-new file mode 100644
-index 0000000..902d63f
---- /dev/null
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -0,0 +1,44 @@
-+################################################################################
-+#
-+# docker-containerd
-+#
-+################################################################################
-+
-+DOCKER_CONTAINERD_VERSION = v0.2.2
-+DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
-+
-+DOCKER_CONTAINERD_LICENSE = Apache-2.0
-+DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
-+
-+DOCKER_CONTAINERD_DEPENDENCIES = host-go
-+
-+DOCKER_CONTAINERD_GOPATH = "$(@D)/vendor"
-+DOCKER_CONTAINERD_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-+	CGO_ENABLED=1 \
-+	GOBIN="$(@D)/bin" \
-+	GOPATH="$(DOCKER_CONTAINERD_GOPATH)"
-+
-+DOCKER_CONTAINERD_GLDFLAGS = \
-+	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION) \
-+	-extldflags '-static'
-+
-+define DOCKER_CONTAINERD_CONFIGURE_CMDS
-+	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
-+	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
-+	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
-+	ln -s $(RUNC_SRCDIR) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
-+endef
-+
-+define DOCKER_CONTAINERD_BUILD_CMDS
-+	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/ctr -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./ctr
-+	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/containerd -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./containerd
-+	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/containerd-shim -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./containerd-shim
-+endef
-+
-+define DOCKER_CONTAINERD_INSTALL_TARGET_CMDS
-+	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
-+	$(INSTALL) -D -m 0755 $(@D)/bin/containerd $(TARGET_DIR)/usr/bin/docker-containerd
-+	$(INSTALL) -D -m 0755 $(@D)/bin/containerd-shim $(TARGET_DIR)/usr/bin/containerd-shim
-+endef
-+
-+$(eval $(generic-package))
+ 
+ comment "binutils needs a toolchain w/ wchar"
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_nios2
+ 	depends on !BR2_USE_WCHAR
+diff --git a/package/dropwatch/Config.in b/package/dropwatch/Config.in
+index d331e5e..6f04c85 100644
+--- a/package/dropwatch/Config.in
++++ b/package/dropwatch/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_DROPWATCH
+ 	bool "dropwatch"
+ 	select BR2_PACKAGE_BINUTILS
+-	depends on !BR2_aarch64 && !BR2_nios2 # binutils
++	depends on !BR2_nios2 # binutils
+ 	depends on BR2_USE_WCHAR # binutils
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_LIBNL
+@@ -13,5 +13,5 @@ config BR2_PACKAGE_DROPWATCH
+ 	  https://fedorahosted.org/dropwatch/
+ 
+ comment "dropwatch needs a toolchain w/ threads, wchar"
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_nios2
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/package/lightning/Config.in b/package/lightning/Config.in
+index 6750114..d85c964 100644
+--- a/package/lightning/Config.in
++++ b/package/lightning/Config.in
+@@ -20,13 +20,13 @@ config BR2_PACKAGE_LIGHTNING_DISASSEMBLER
+ 	bool "enable disassembler"
+ 	select BR2_PACKAGE_BINUTILS
+ 	select BR2_PACKAGE_ZLIB
+-	depends on !BR2_aarch64 && !BR2_nios2 # binutils
++	depends on !BR2_nios2 # binutils
+ 	depends on BR2_USE_WCHAR # binutils
+ 	help
+ 	  Enable the GNU lightning disassembler.
+ 
+ comment "lightning disassembler needs a toolchain w/ wchar"
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_nios2
+ 	depends on !BR2_USE_WCHAR
+ 
+ endif
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index 9cf5693..c6fdeaf 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_OPROFILE
+ 	select BR2_PACKAGE_BINUTILS
+ 	select BR2_PACKAGE_LIBPFM4 if BR2_powerpc
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_aarch64 && !BR2_nios2 # binutils
++	depends on !BR2_nios2 # binutils
+ 	depends on BR2_USE_WCHAR # binutils
+ 	depends on !BR2_xtensa
+ 	# libpfm4 is needed on PowerPC, and requires thread support
+@@ -28,7 +28,7 @@ config BR2_PACKAGE_OPROFILE
+ 
+ comment "oprofile needs a toolchain w/ C++, wchar"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_aarch64 && !BR2_nios2 && !BR2_xtensa
++	depends on !BR2_nios2 && !BR2_xtensa
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+ 
+ comment "oprofile needs a toolchain w/ NPTL on PPC"
 -- 
-2.7.3
+2.8.3
