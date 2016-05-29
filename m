@@ -1,33 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 May 2016 17:17:52 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain/external: fix arch-subdir
+Date: Sun, 29 May 2016 17:17:53 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain/helper: don't follow symlinks
+	when copying libs to target
 In-Reply-To: <cover.1464534979.git.yann.morin.1998@free.fr>
 References: <cover.1464534979.git.yann.morin.1998@free.fr>
-Message-ID: <4a3ee1a4c558263f5d64209bc6f74f8994b80921.1464534979.git.yann.morin.1998@free.fr>
+Message-ID: <16dd334fb29148489afa344c652208a4c512f445.1464534979.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When there is no architecture-specific sub-directory in the sysroot, we
-expect ARCGH_SUBDIR to be empty.
+In 2a87b64 (toolchain-external: align library locations in target and
+staging dir), copying the libraries from the sysroot to the target was
+changed to a simple find-based solution.
 
-However, with the current code, it is not (with an intrumented
-copy_toolchain_sysroot, when copying a ct-ng toolchain):
+To be sure that the staging directory was entered to find the libraries,
+in case the variable was pointing to a symlink, the -L clause to find
+was used.
 
-    >>> toolchain-external undefined Copying external toolchain sysroot to
-    >>> staging...
-    main sysroot: /home/ymorin/x-tools/armv6-unknown-linux-gnueabihf/armv6-unknown-linux-gnueabihf/sysroot/
-    arch sysroot: /home/ymorin/x-tools/armv6-unknown-linux-gnueabihf/armv6-unknown-linux-gnueabihf/sysroot/
-    arch subdir:  /home/ymorin/x-tools/armv6-unknown-linux-gnueabihf/armv6-unknown-linux-gnueabihf/sysroot/
-    lib dir:      lib
-    support dir:
+However, that causes extraneous libraries to be copied over.
 
-... when we would have expected 'arch subdir' to be empty.
+For example, a ct-ng toolchain would have this sysroot (e.g for an arm
+32-bit toolchain):
 
-Fix the matching pattern to correctly return an empty string if there is
-no arch subdir.
+    .../sysroot/lib/
+    .../sysroot/lib32 -> lib
+    .../sysroot/lib64 -> lib
+    .../sysroot/usr/lib/
+    .../sysroot/usr/lib32 -> lib
+    .../sysroot/usr/lib64 -> lib
+
+Which we would carry as-is to our own sysroot.
+
+But then, in target, our skeleton creates the /lib/ and /usr/lib
+directories, with the necessary lib32 or lib64 symlink pointing to it.
+In this case, a lib32->lib symlink is created, but no lib64 symlink
+since this is a 32-bit architecture.
+
+So, when we copy over the libraries from our staging to the target
+directory, we end creating a /usr/lib64/ directory.
+
+This was very difficult to observe, as no /lib64/ directory is created
+and this only happens with a merged /usr.
+
+Since the reason to use -L was to be sure to enter our staging
+directory, we just need to ensure that the path ends up with a slash, as
+was already talked about in this thread:
+    http://lists.busybox.net/pipermail/buildroot/2016-April/159737.html
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -35,21 +55,21 @@ Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 2 +-
+ toolchain/helpers.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 47b951d..3af56b8 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -662,7 +662,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
- 			SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
- 		fi ; \
- 	fi ; \
--	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
-+	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}((.*[^/])/?)?$$:\2:"` ; \
- 	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
- 	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
- endef
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 5512759..b3510b6 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -11,7 +11,7 @@
+ copy_toolchain_lib_root = \
+ 	LIB="$(strip $1)"; \
+ \
+-	LIBPATHS=`find -L $(STAGING_DIR) -name "$${LIB}" 2>/dev/null` ; \
++	LIBPATHS=`find $(STAGING_DIR)/ -name "$${LIB}" 2>/dev/null` ; \
+ 	for LIBPATH in $${LIBPATHS} ; do \
+ 		DESTDIR=`echo $${LIBPATH} | sed "s,^$(STAGING_DIR)/,," | xargs dirname` ; \
+ 		mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
 -- 
 2.7.4
