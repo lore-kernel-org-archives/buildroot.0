@@ -1,94 +1,31 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Sun, 29 May 2016 16:33:00 +0200
-Subject: [Buildroot] [PATCH] p7zip: New package
-Message-ID: <1464532380-16560-1-git-send-email-nerv@dawncrow.de>
+From: Gary Partis <gary@partis.co.uk>
+Date: Sun, 29 May 2016 16:08:01 +0100
+Subject: [Buildroot] wireless_tools and ifrename
+Message-ID: <BE7DD8D2CBE7B241971A69A3E62C11B70118903F@partis.dyndns.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/Config.in        |  1 +
- package/p7zip/Config.in  | 13 +++++++++++++
- package/p7zip/p7zip.hash |  3 +++
- package/p7zip/p7zip.mk   | 25 +++++++++++++++++++++++++
- 4 files changed, 42 insertions(+)
- create mode 100644 package/p7zip/Config.in
- create mode 100644 package/p7zip/p7zip.hash
- create mode 100644 package/p7zip/p7zip.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 9d668bf..073b88e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -59,6 +59,7 @@ endif
- 	source "package/lz4/Config.in"
- 	source "package/lzip/Config.in"
- 	source "package/lzop/Config.in"
-+	source "package/p7zip/Config.in"
- 	source "package/unrar/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/unzip/Config.in"
-diff --git a/package/p7zip/Config.in b/package/p7zip/Config.in
-new file mode 100644
-index 0000000..b5e565d
---- /dev/null
-+++ b/package/p7zip/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_P7ZIP
-+	bool "p7zip"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  p7zip is a quick port of the command line version of 7-zip for Unix.
-+	  (see http://www.7-zip.org)
-+
-+	  7-Zip is a file archiver with highest compression ratio.
-+
-+	  http://sourceforge.net/projects/p7zip
-+
-+comment "p7zip needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/p7zip/p7zip.hash b/package/p7zip/p7zip.hash
-new file mode 100644
-index 0000000..ead6d87
---- /dev/null
-+++ b/package/p7zip/p7zip.hash
-@@ -0,0 +1,3 @@
-+# From https://sourceforge.net/projects/p7zip/files/p7zip/
-+md5	92cca093312b5a71a7be7dc7d1d32509	p7zip_15.14.1_src_all.tar.bz2
-+sha1	9b15a79f94230fab9b9d4f9f532c723117145c7a	p7zip_15.14.1_src_all.tar.bz2
-diff --git a/package/p7zip/p7zip.mk b/package/p7zip/p7zip.mk
-new file mode 100644
-index 0000000..59e451d
---- /dev/null
-+++ b/package/p7zip/p7zip.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# p7zip
-+#
-+################################################################################
-+
-+P7ZIP_VERSION = 15.14.1
-+P7ZIP_SOURCE = p7zip_$(P7ZIP_VERSION)_src_all.tar.bz2
-+P7ZIP_SITE = http://downloads.sourceforge.net/project/p7zip/p7zip/$(P7ZIP_VERSION)
-+P7ZIP_LICENSE = LGPLv2.1+
-+P7ZIP_LICENSE_FILES = DOC/License.txt
-+
-+define P7ZIP_BUILD_CMDS
-+	# Note that the build system of p7zip is a mess, so we can't use TARGET_CONFIGURE_OPTS
-+	$(MAKE) CC="$(TARGET_CC)" ALLFLAGS_C="$(TARGET_CFLAGS)" \
-+		CXX="$(TARGET_CXX)" ALLFLAGS_CPP="$(TARGET_CXXFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
-+		-C $(@D) 7zr
-+endef
-+
-+define P7ZIP_INSTALL_TARGET_CMDS
-+	cp -dpf $(@D)/bin/7zr $(TARGET_DIR)/usr/bin/
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.9.1
+Hi all
+ 
+I am curently using buildroot-2016.02, targeting a PC-type system, and
+have wireless-tools (and associated "install shared library") enabled.
+ 
+The binaries such as iwconfig, iwspy etc etc are built and are present
+on the target.
+ 
+However, the binary "ifrename" is not built; and no warning or error is
+emitted. Why?
+ 
+Am I missing something really obvious? Is there a dependancy not set
+correctly?
+ 
+Thanks in advance,
+ 
+Gary
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160529/537337ea/attachment.html>
