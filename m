@@ -1,57 +1,47 @@
-From: Ilya A. Volynets-Evenbakh <iluxave@gmail.com>
-Date: Mon, 30 May 2016 19:33:15 +0300
-Subject: [Buildroot] [PATCH] package/network-manager: support WEXT drivers
-	which report mode AUTO
-Message-ID: <1464625995-566-1-git-send-email-iluxave@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 30 May 2016 18:39:33 +0200
+Subject: [Buildroot] [PATCH] package/lttng-babeltrace: fix static build
+In-Reply-To: <87vb1v1q8c.fsf@dell.be.48ers.dk>
+References: <20160529211418.4937-1-s.martin49@gmail.com>
+ <87vb1v1q8c.fsf@dell.be.48ers.dk>
+Message-ID: <CAHXCMMKVJknC2mC4X2DfQm9JWimAQsTb+pNGznX4__hwhxzH1g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Ilya A. Volynets-Evenbakh" <ilya@total-knowledge.com>
+On Mon, May 30, 2016 at 6:10 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+>
+>  > This change adds a patch fixing libuuid detection on static build.
+>  > Fixes:
+>  >   http://autobuild.buildroot.net/results/43b/43b98ddf9eb44152ed9ac4a98d887af14831d8da/
+>
+>  > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>
+>
+>> diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
+>  > index 5de77fb..c59dd19 100644
+>  > --- a/package/lttng-babeltrace/lttng-babeltrace.mk
+>  > +++ b/package/lttng-babeltrace/lttng-babeltrace.mk
+>  > @@ -10,7 +10,9 @@ LTTNG_BABELTRACE_SOURCE = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
+>  >  LTTNG_BABELTRACE_LICENSE = MIT, LGPLv2.1 (include/babeltrace/list.h), GPLv2 (test code)
+>  >  LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
+>
+>  > -LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
+>  > +LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2 host-pkgconf
+>  > +
+>  > +LTTNG_BABELTRACE_AUTORECONF = YES
+>
+> We normally add a comment why autoreconf is needed so we don't forget to
+> remove it when bumping the version / removing the patch, so I've added
+> one and committed, thanks.
 
-Some wireless drivers report IW_MODE_AUTO instead of IW_MODE_MANAGED.
-NetworkManager 1.0.12 introduced a change, which makes it skip such
-interfaces.
+Oops! my bad! :-s
+Thanks for taking care of it.
 
-This patch is a backport of a workaround for this problem from the
-NetworkManager upstream.
+Regards,
 
-Signed-off-by: Ilya A. Volynets-Evenbakh <ilya@total-knowledge.com>
----
- .../0002-accept-auto-mode-interfaces.patch         | 23 ++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
- create mode 100644 package/network-manager/0002-accept-auto-mode-interfaces.patch
-
-diff --git a/package/network-manager/0002-accept-auto-mode-interfaces.patch b/package/network-manager/0002-accept-auto-mode-interfaces.patch
-new file mode 100644
-index 0000000..3ea1de6
---- /dev/null
-+++ b/package/network-manager/0002-accept-auto-mode-interfaces.patch
-@@ -0,0 +1,23 @@
-+From 0f6febc6fbeafde62e6e0a8c12f57204d94166fb Mon Sep 17 00:00:00 2001
-+From: Francesco Giudici <fgiudici@redhat.com>
-+Date: Fri, 11 Mar 2016 09:55:39 +0100
-+Subject: wifi: hack for wext devices reporting IW_MODE_AUTO configuration
-+ mode.
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=763388
-+
-+diff --git a/src/platform/wifi/wifi-utils-wext.c b/src/platform/wifi/wifi-utils-wext.c
-+index 26f4ce4..af285b4 100644
-+--- a/src/platform/wifi/wifi-utils-wext.c
-++++ b/src/platform/wifi/wifi-utils-wext.c
-+@@ -118,6 +118,7 @@ wifi_wext_get_mode (WifiData *data)
-+ 	case IW_MODE_MASTER:
-+ 		return NM_802_11_MODE_AP;
-+ 	case IW_MODE_INFRA:
-++	case IW_MODE_AUTO: /* hack for WEXT devices reporting IW_MODE_AUTO */
-+ 		return NM_802_11_MODE_INFRA;
-+ 	default:
-+ 		break;
-+-- 
-+cgit v0.10.2
-+
 -- 
-2.7.3
+Samuel
