@@ -1,55 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 May 2016 21:13:01 +0200
-Subject: [Buildroot] [git commit branch/next] configs: cubieboard2: use 4.6
-	kernel, u-boot 2016.05
-Message-ID: <20160530191425.782477FEDE@busybox.osuosl.org>
+Date: Mon, 30 May 2016 21:25:21 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gstreamer/gst-ffmpeg: needs gcc
+	>= 5.x on SuperH
+In-Reply-To: <1464525538-27915-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sun, 29 May 2016 14:38:57 +0200")
+References: <1464525538-27915-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87lh2r1h7i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=216eca78a38c1f4d5c0f0a29cf742a12f987ebda
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Updated image was tested in a Cubieboard2.
+ > Compilation triggers an ICE in gcc with gcc <= 4.9 using this defconfig
+ > BR2_sh=y
+ > BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ > BR2_PACKAGE_GSTREAMER=y
+ > BR2_PACKAGE_GST_FFMPEG=y
+ > BR2_PACKAGE_GST_FFMPEG_GPL=y
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/cubieboard2_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ > The problem is known upstream, a fix was never committed to gcc <= 4.9:
+ > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=65151
 
-diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
-index a3b1b85..353aaa5 100644
---- a/configs/cubieboard2_defconfig
-+++ b/configs/cubieboard2_defconfig
-@@ -1,8 +1,8 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
--# Linux headers same as kernel, a 4.3 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_3=y
-+# Linux headers same as kernel, a 4.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
- BR2_TARGET_GENERIC_HOSTNAME="Cubieboard2"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Cubieboard2!"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/cubietech/cubieboard2/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/cubietech/cubieboard2/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.3.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-cubieboard2"
-@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_SPL=y
+ > Compiling gst-ffmpeg with gcc5 works fine using this defconfig:
+
+ > BR2_sh=y
+ > BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ > BR2_GCC_VERSION_5_X=y
+ > BR2_PACKAGE_GSTREAMER=y
+ > BR2_PACKAGE_GST_FFMPEG=y
+ > BR2_PACKAGE_GST_FFMPEG_GPL=y
+
+ > This patch adds a dependency to gcc >= 5.x to fix the problem as
+ > suggested by Thomas:
+ > http://lists.busybox.net/pipermail/buildroot/2016-February/152724.html
+
+I believe a better link is:
+
+http://lists.busybox.net/pipermail/buildroot/2016-February/152584.html
+
+ > Fixes
+ > http://autobuild.buildroot.net/results/939/939da0c7771ddd97c05cedc0a7afc0ad34a21312/
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/gstreamer/gst-ffmpeg/Config.in | 4 ++++
+ >  1 file changed, 4 insertions(+)
+
+ > diff --git a/package/gstreamer/gst-ffmpeg/Config.in b/package/gstreamer/gst-ffmpeg/Config.in
+ > index 004ec1c..15dc721 100644
+ > --- a/package/gstreamer/gst-ffmpeg/Config.in
+ > +++ b/package/gstreamer/gst-ffmpeg/Config.in
+ > @@ -4,6 +4,7 @@ config BR2_PACKAGE_GST_FFMPEG
+ >  	# doesn't have support for MIPS R6.
+ >  	depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ >  	select BR2_PACKAGE_GST_PLUGINS_BASE
+ > +	depends on !BR2_sh || (BR2_TOOLCHAIN_GCC_AT_LEAST_5 && BR2_sh)
+
+Depends lines should be listed together. I find it more readable to
+state it like:
+
+depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_sh
+
+And it should have a comment explaining why (E.G. a link to the gcc
+bugzilla).
+
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
