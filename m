@@ -1,110 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 May 2016 18:10:31 +0200
-Subject: [Buildroot] [git commit] package/lttng-babeltrace: fix static build
-Message-ID: <20160530161104.85E11818DB@busybox.osuosl.org>
+From: Ilya A. Volynets-Evenbakh <iluxave@gmail.com>
+Date: Mon, 30 May 2016 19:33:15 +0300
+Subject: [Buildroot] [PATCH] package/network-manager: support WEXT drivers
+	which report mode AUTO
+Message-ID: <1464625995-566-1-git-send-email-iluxave@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef18eedce6f8daef20de1531efffb7d429f40b9d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Ilya A. Volynets-Evenbakh" <ilya@total-knowledge.com>
 
-This change adds a patch fixing libuuid detection on static build.
+Some wireless drivers report IW_MODE_AUTO instead of IW_MODE_MANAGED.
+NetworkManager 1.0.12 introduced a change, which makes it skip such
+interfaces.
 
-Fixes:
-  http://autobuild.buildroot.net/results/43b/43b98ddf9eb44152ed9ac4a98d887af14831d8da/
+This patch is a backport of a workaround for this problem from the
+NetworkManager upstream.
 
-[Peter: add comment why autoreconf is needed]
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ilya A. Volynets-Evenbakh <ilya@total-knowledge.com>
 ---
- ...ix-uuid-support-detection-on-static-build.patch | 63 ++++++++++++++++++++++
- package/lttng-babeltrace/lttng-babeltrace.mk       |  4 +-
- 2 files changed, 66 insertions(+), 1 deletion(-)
+ .../0002-accept-auto-mode-interfaces.patch         | 23 ++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 package/network-manager/0002-accept-auto-mode-interfaces.patch
 
-diff --git a/package/lttng-babeltrace/0002-configure-fix-uuid-support-detection-on-static-build.patch b/package/lttng-babeltrace/0002-configure-fix-uuid-support-detection-on-static-build.patch
+diff --git a/package/network-manager/0002-accept-auto-mode-interfaces.patch b/package/network-manager/0002-accept-auto-mode-interfaces.patch
 new file mode 100644
-index 0000000..849c0a3
+index 0000000..3ea1de6
 --- /dev/null
-+++ b/package/lttng-babeltrace/0002-configure-fix-uuid-support-detection-on-static-build.patch
-@@ -0,0 +1,63 @@
-+From 670d0961a823df0db28f39a354430f3dc2519418 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Sat, 28 May 2016 12:53:33 +0200
-+Subject: [PATCH] configure: fix uuid support detection on static build
++++ b/package/network-manager/0002-accept-auto-mode-interfaces.patch
+@@ -0,0 +1,23 @@
++From 0f6febc6fbeafde62e6e0a8c12f57204d94166fb Mon Sep 17 00:00:00 2001
++From: Francesco Giudici <fgiudici@redhat.com>
++Date: Fri, 11 Mar 2016 09:55:39 +0100
++Subject: wifi: hack for wext devices reporting IW_MODE_AUTO configuration
++ mode.
 +
-+This change adds uuid support detection using pkg-config, before falling
-+back on default AC_CHECK_LIB calls.
++https://bugzilla.gnome.org/show_bug.cgi?id=763388
 +
-+Using flags from pkg-config is useful for static build, because they
-+also include dependency flags; whereas
-+
-+AC_CHECK_LIB function achieves its test by trying to link against the
-+requested library, without taking care of its dependency
-+requirements/flags. Therefore, in case of static build, it can fail on
-+the uuid detection like [1], because the uuid's dependency flags
-+(regarding gettext) are missing.
-+Instead, using pkg-config to do the check will take care of getting and
-+setting all required flags.
-+
-+This change adds uuid detection using pkg-config helper before falling
-+back on the standard AC_CHECK_LIB detection for platforms missing
-+pkg-config.
-+
-+This issue [1] has been triggered on Buildroot farms.
-+
-+[1] http://autobuild.buildroot.net/results/43b/43b98ddf9eb44152ed9ac4a98d887af14831d8da/build-end.log
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ configure.ac | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 632fe39..b344fa8 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -65,6 +65,15 @@ esac
-+ AM_CONDITIONAL([BABELTRACE_BUILD_WITH_MINGW], [test "x$MINGW32" = "xyes"])
-+ 
-+ # Check for libuuid
-++PKG_CHECK_MODULES([UUID], [uuid],
-++[
-++	LIBS="${UUID_LIBS} ${LIBS}"
-++	CFLAGS="${CFLAGS} ${UUID_CFLAGS}"
-++	AC_DEFINE_UNQUOTED([BABELTRACE_HAVE_LIBUUID], 1, [Has libuuid support.])
-++	have_libuuid=yes
-++],
-++[
-++# try detecting libuuid without pkg-config
-+ AC_CHECK_LIB([uuid], [uuid_generate],
-+ [
-+ 	AC_DEFINE_UNQUOTED([BABELTRACE_HAVE_LIBUUID], 1, [Has libuuid support.])
-+@@ -83,6 +92,7 @@ AC_CHECK_LIB([uuid], [uuid_generate],
-+ 			AC_MSG_ERROR([Cannot find libuuid uuid_generate nor libc uuid_create. Use [LDFLAGS]=-Ldir to specify their location.])
-+ 		fi
-+ 	])
-++])
-+ ]
-+ )
-+ AM_CONDITIONAL([BABELTRACE_BUILD_WITH_LIBUUID], [test "x$have_libuuid" = "xyes"])
++diff --git a/src/platform/wifi/wifi-utils-wext.c b/src/platform/wifi/wifi-utils-wext.c
++index 26f4ce4..af285b4 100644
++--- a/src/platform/wifi/wifi-utils-wext.c
+++++ b/src/platform/wifi/wifi-utils-wext.c
++@@ -118,6 +118,7 @@ wifi_wext_get_mode (WifiData *data)
++ 	case IW_MODE_MASTER:
++ 		return NM_802_11_MODE_AP;
++ 	case IW_MODE_INFRA:
+++	case IW_MODE_AUTO: /* hack for WEXT devices reporting IW_MODE_AUTO */
++ 		return NM_802_11_MODE_INFRA;
++ 	default:
++ 		break;
 +-- 
-+2.8.3
++cgit v0.10.2
 +
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
-index 5de77fb..fdc647e 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.mk
-+++ b/package/lttng-babeltrace/lttng-babeltrace.mk
-@@ -10,7 +10,9 @@ LTTNG_BABELTRACE_SOURCE = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
- LTTNG_BABELTRACE_LICENSE = MIT, LGPLv2.1 (include/babeltrace/list.h), GPLv2 (test code)
- LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
- 
--LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
-+LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2 host-pkgconf
-+# for 0002-configure-fix-uuid-support-detection-on-static-build.patch
-+LTTNG_BABELTRACE_AUTORECONF = YES
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-- 
+2.7.3
