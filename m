@@ -1,101 +1,50 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 30 May 2016 22:22:22 +0200
-Subject: [Buildroot] [PATCH] inputevent: add package
-In-Reply-To: <20160530063606.GB31737@airbook.vandijck-laurijssen.be>
-References: <20160530063606.GB31737@airbook.vandijck-laurijssen.be>
-Message-ID: <20160530222222.44172642@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 30 May 2016 22:53:45 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain/helper: don't follow symlinks
+	when copying libs to target
+In-Reply-To: <e0d2642f-231b-428a-1960-30910f53d2df@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 30 May 2016 22:06:11 +0200")
+References: <cover.1464534979.git.yann.morin.1998@free.fr>
+ <16dd334fb29148489afa344c652208a4c512f445.1464534979.git.yann.morin.1998@free.fr>
+ <CAAXf6LXQ0Ncmh71qb48dS3isFhePWkbpqyvH5ZjFX=isQLVvTg@mail.gmail.com>
+ <20160529211224.GC29556@free.fr>
+ <95e5afb7-0922-92cd-8ef7-7807f833b6f6@mind.be>
+ <CAAXf6LX3RRscc9VFy-5WGROHCD-qjG=hMzP2R5uXnJQX8JDwQA@mail.gmail.com>
+ <87vb1w2fjx.fsf@dell.be.48ers.dk>
+ <e0d2642f-231b-428a-1960-30910f53d2df@mind.be>
+Message-ID: <87d1o31d46.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Kurt,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On Mon, 30 May 2016 08:36:06 +0200, Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> wrote:
+ > On 05/30/16 09:03, Peter Korsgaard wrote:
+ >>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+ >> 
+ >> Hi,
+ >> 
+ >> > I'm baffled by the statement "It seems to work without just because
+ >> > STAGING_DIR happens to be defined with a trailing slash". This must
+ >> > have been derived from the observation that things worked without
+ >> > -L/-follow and making the assumption that it must have been due to a
+ >> > trailing slash without actually verifying that.
+ >> 
+ >> > Anyway, if it works with plain find, all the better.
+ >> > Sorry for all this confusion.
+ >> > Let's consider it a good lesson in not making assumptions :-)
+ >> 
+ >> Heh ;)
+ >> 
+ >> Ok, I'll commit a simplified version of the patch (just dropping -L)
+ >> with an updated description - Thanks all!
 
-> Inputevent is an input-device to ascii tranlator.
+ >  Did you forget to push? Or should Yann still send a v3?
 
-s/tranlator/translator/?
+Sorry, I was caught up with other stuff, I've pushed it now.
 
-Regards,
-Peter
-
-> Its output is of the format 'TIME CODE VALUE' and it's easy
-> to pipe it into a shell script.
-> 
-> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> ---
->  package/Config.in                |  1 +
->  package/inputevent/Config.in     |  6 ++++++
->  package/inputevent/inputevent.mk | 36 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 43 insertions(+)
->  create mode 100644 package/inputevent/Config.in
->  create mode 100644 package/inputevent/inputevent.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 529ad33..112e516 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -383,6 +383,7 @@ endif
->  	source "package/i2c-tools/Config.in"
->  	source "package/input-event-daemon/Config.in"
->  	source "package/input-tools/Config.in"
-> +	source "package/inputevent/Config.in"
->  	source "package/intel-microcode/Config.in"
->  	source "package/iostat/Config.in"
->  	source "package/ipmitool/Config.in"
-> diff --git a/package/inputevent/Config.in b/package/inputevent/Config.in
-> new file mode 100644
-> index 0000000..44422a3
-> --- /dev/null
-> +++ b/package/inputevent/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_INPUTEVENT
-> +	bool "inputevent"
-> +	help
-> +	  inputevent is a simple program that traces input events.
-> +	  When piped to a another program or script, you get similar
-> +	  functionality as input-event-daemon.
-> diff --git a/package/inputevent/inputevent.mk b/package/inputevent/inputevent.mk
-> new file mode 100644
-> index 0000000..14a8d31
-> --- /dev/null
-> +++ b/package/inputevent/inputevent.mk
-> @@ -0,0 +1,36 @@
-> +################################################################################
-> +#
-> +# inputevent
-> +#
-> +################################################################################
-> +
-> +INPUTEVENT_VERSION = r8
-> +INPUTEVENT_SITE = git://github.com/kurt-vd/inputevent.git
-> +INPUTEVENT_LICENSE = GPLv3
-> +INPUTEVENT_LICENSE_FILES = LICENSE
-> +
-> +define INPUTEVENT_CONFIGURE_CMDS
-> +	echo "PREFIX=/" > $(@D)/config.mk
-> +	echo "CFLAGS=$(TARGET_CFLAGS)" >> $(@D)/config.mk
-> +	echo "CPPFLAGS=-D_GNU_SOURCE $(TARGET_CPPFLAGS)" >> $(@D)/config.mk
-> +	echo "CXXFLAGS=$(TARGET_CXXFLAGS)" >> $(@D)/config.mk
-> +	echo "LDFLAGS=$(TARGET_LDFLAGS)" >> $(@D)/config.mk
-> +	echo "LDLIBS+=$(TARGET_LDLIBS)" >> $(@D)/config.mk
-> +	echo "CC=$(TARGET_CC)" >> $(@D)/config.mk
-> +	echo "CXX=$(TARGET_CXX)" >> $(@D)/config.mk
-> +	echo "LD=$(TARGET_LD)" >> $(@D)/config.mk
-> +	echo "AS=$(TARGET_AS)" >> $(@D)/config.mk
-> +
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) clean
-> +endef
-> +
-> +define INPUTEVENT_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-> +endef
-> +
-> +define INPUTEVENT_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR="$(TARGET_DIR)"
-> +endef
-> +
-> +$(eval $(generic-package))
-> +#$(eval $(configmk-package))
+-- 
+Venlig hilsen,
+Peter Korsgaard 
