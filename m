@@ -1,98 +1,125 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 May 2016 22:53:54 +0200
-Subject: [Buildroot] [git commit] toolchain/helper: don't follow symlinks
-	when copying libs to target
-Message-ID: <20160530205650.E576B81DD1@busybox.osuosl.org>
+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Date: Mon, 30 May 2016 22:57:08 +0200
+Subject: [Buildroot] [PATCH] inputevent: add package
+In-Reply-To: <8760tv3azo.fsf@dell.be.48ers.dk>
+References: <20160530063545.GA31737@airbook.vandijck-laurijssen.be>
+ <8760tv3azo.fsf@dell.be.48ers.dk>
+Message-ID: <20160530205708.GA17960@airbook.vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49648d4b01e8056c294001e80bf4bd487593a5a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+>  > Inputevent is an input-device to ascii tranlator.
+>  > Its output is of the format 'TIME CODE VALUE' and it's easy
+>  > to pipe it into a shell script.
+> 
+>  > Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+> 
+> I see you are the author of this tool, but does this tool provide
+> anything more than evtest (besides perhaps a bit easier to parse
+> output)?
 
-In 2a87b64 (toolchain-external: align library locations in target and
-staging dir), copying the libraries from the sysroot to the target was
-changed to a simple find-based solution.
+The easier to parse output is helps to pipe it in scripts like:
 
-To be sure that the staging directory was entered to find the libraries,
-in case the variable was pointing to a symlink, the -L clause to find
-was used.
+	while read TIME TYPE VALUE; do
+	case "$TYPE:$VALUE" in
+	KEY_PLAY:0)
+		mpc play
+		;;
+	esac
 
-However, that causes extraneous libraries to be copied over.
+second, it supports to control such script as child,
+making it easy to integrate in a service monitor that just
+monitors the inputevent program, without the need to monitor
+the child script.
 
-For example, a ct-ng toolchain would have this sysroot (e.g for an arm
-32-bit toolchain):
+So I combined evtest-like functionality with a focus on deployment,
+integrating the tool in a functional system.
 
-    .../sysroot/lib/
-    .../sysroot/lib32 -> lib
-    .../sysroot/lib64 -> lib
-    .../sysroot/usr/lib/
-    .../sysroot/usr/lib32 -> lib
-    .../sysroot/usr/lib64 -> lib
+evtest is meant as an interactive tool or query a state.
 
-Which we would carry as-is to our own sysroot.
+I evalutated input-event-daemon and found that it distracts focus from the
+overall functionality that I want. input-event-daemon is focused on
+desktop-like systems, I target embedded systems that perform tasks
+on GPIO inputs, who are delivered as input events.
 
-But then, in target, our skeleton creates the /lib/ and /usr/lib
-directories, with the necessary lib32 or lib64 symlink pointing to it.
-In this case, a lib32->lib symlink is created, but no lib64 symlink
-since this is a 32-bit architecture.
+Is it different enough?
+If you look at how it integrates, then yes.
+If you look at what it does, I agree that it appears very much alike.
 
-To copy the required libraries from staging into target, we scan the
-staging directory for all occurences of the required libraries, and copy
-them over to target, keeping the same directory layout relative to the
-sysroot.
+> 
+>  > +################################################################################
+>  > +#
+>  > +# inputevent
+>  > +#
+>  > +################################################################################
+>  > +
+>  > +INPUTEVENT_VERSION = r8
+>  > +INPUTEVENT_SITE = git://github.com/kurt-vd/inputevent.git
+> 
+> We have a github macro to handle this (see E.G. input-event-daemon.mk
+> for an example).
 
-For example:
-    .../sysroot/usr/lib/libfoo.so   -->  .../target/usr/lib/libfoo.so
-    .../sysroot/usr/lib32/libbar.so -->  .../target/usr/lib32/libbar.so
-    .../sysroot/usr/lib64/libbuz.so -->  .../target/usr/lib64/libbuz.so
+The first iterations of my patch didn't like the macro very well.
+I forgot the precise reason.
+I will re-evaluate now.
 
-So, when we copy over the libraries from our staging to the target
-directory, the "find -L .../sysroot -name libblabla.so.*" would find
-multiple instances of libblabla, each in the /usr/lib /usr/lib32 and
-/usr/lib64 locations (they are all the exact same file, though).
+> 
+> 
+> > +INPUTEVENT_LICENSE = GPLv3
+>  > +INPUTEVENT_LICENSE_FILES = LICENSE
+>  > +
+>  > +define INPUTEVENT_CONFIGURE_CMDS
+>  > +	echo "PREFIX=/" > $(@D)/config.mk
+>  > +	echo "CFLAGS=$(TARGET_CFLAGS)" >> $(@D)/config.mk
+>  > +	echo "CPPFLAGS=-D_GNU_SOURCE $(TARGET_CPPFLAGS)" >> $(@D)/config.mk
+>  > +	echo "CXXFLAGS=$(TARGET_CXXFLAGS)" >> $(@D)/config.mk
+>  > +	echo "LDFLAGS=$(TARGET_LDFLAGS)" >> $(@D)/config.mk
+>  > +	echo "LDLIBS+=$(TARGET_LDLIBS)" >> $(@D)/config.mk
+>  > +	echo "CC=$(TARGET_CC)" >> $(@D)/config.mk
+>  > +	echo "CXX=$(TARGET_CXX)" >> $(@D)/config.mk
+>  > +	echo "LD=$(TARGET_LD)" >> $(@D)/config.mk
+>  > +	echo "AS=$(TARGET_AS)" >> $(@D)/config.mk
+>  > +
+>  > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) clean
+> 
+> How about passing $(TARGET_CONFIGURE_OPTS) to make instead of writing
+> this config.mk?
 
-Since we do have the /usr/lib32->lib symlink, all is OK (but there are
-two copies going on, which could be avoided). However, since we do not
-have the /usr/lib64->lib symlink, the /usr/lib64/ directory is created.
+Building outside of toplevel make, although I admit it is a bad reason.
 
-This was very difficult to observe, as no /lib64/ directory is created,
-only the /usr/lib64/ one was. To top it off, this only happens with a
-merged /usr, which does not seem like not a common case without systemd.
+I dropped autoconf long time ago, and use such config.mk includes, where
+necessary. Is Target_CONFIGURE_OPTS available for non-autotools
+packages?
 
-Since the reason to use -L was to be sure to enter our staging
-directory, we just need to ensure that the path ends up with a slash, as
-was already talked about in this thread:
-    http://lists.busybox.net/pipermail/buildroot/2016-April/159737.html
+> 
+> Looking at the Makefile, I see it tries to figure out the version by
+> calling git. When this is built in a buildroot git checkout (and
+> inputevent is gotten from a github tarball) this will most likely use
+> version info from the Buildroot git repo which doesn't sound correct.
 
-After further discussion, it turns out that the original patch came along
-because of the confusion between output/staging (which is a symlink) and
-$(STAGING_DIR) which expands to output/host/usr/<tupple>/sysroot (which is
-never a symlink), so the symlink handling isn't really needed at all.
+Now that is a true problem.
+I'll rework.
 
-[Peter: drop description comment, extend description]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- toolchain/helpers.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> > +
+>  > +define INPUTEVENT_BUILD_CMDS
+>  > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+>  > +endef
+>  > +
+>  > +define INPUTEVENT_INSTALL_TARGET_CMDS
+>  > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR="$(TARGET_DIR)"
+>  > +endef
+>  > +
+>  > +$(eval $(generic-package))
+>  > +#$(eval $(configmk-package))
+> 
+> Please don't leave commented out code in the files.
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 5512759..b3510b6 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -11,7 +11,7 @@
- copy_toolchain_lib_root = \
- 	LIB="$(strip $1)"; \
- \
--	LIBPATHS=`find -L $(STAGING_DIR) -name "$${LIB}" 2>/dev/null` ; \
-+	LIBPATHS=`find $(STAGING_DIR)/ -name "$${LIB}" 2>/dev/null` ; \
- 	for LIBPATH in $${LIBPATHS} ; do \
- 		DESTDIR=`echo $${LIBPATH} | sed "s,^$(STAGING_DIR)/,," | xargs dirname` ; \
- 		mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
+Ack, I totally agree.
+
+Kind regards,
+Kurt
