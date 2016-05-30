@@ -1,7 +1,7 @@
 From: Joris Lijssens <joris.lijssens@gmail.com>
-Date: Mon, 30 May 2016 16:06:16 +0200
-Subject: [Buildroot]  [PATCH 1/1] libcoap: new package
-Message-ID: <1464617176-17657-1-git-send-email-joris.lijssens@gmail.com>
+Date: Mon, 30 May 2016 16:15:34 +0200
+Subject: [Buildroot]  [PATCH v2 1/1] libcoap: new package
+Message-ID: <1464617734-24139-1-git-send-email-joris.lijssens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,6 +10,9 @@ To: buildroot@busybox.net
 
 Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix typo in libcoap.mk
+
  package/Config.in            |  1 +
  package/libcoap/Config.in    | 10 ++++++++++
  package/libcoap/libcoap.hash |  2 ++
@@ -57,7 +60,7 @@ index 0000000..dce491b
 +sha256 f66e91742c2b027fcd7c575d8e7b53d79d3624aad1b3baba481dd88f6e2bc44d libcoap-c909bf802034b7762a2182848304b2530e58444f.tar.gz
 diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
 new file mode 100644
-index 0000000..8dc6eb8
+index 0000000..320582f
 --- /dev/null
 +++ b/package/libcoap/libcoap.mk
 @@ -0,0 +1,21 @@
@@ -79,7 +82,7 @@ index 0000000..8dc6eb8
 +define LIBCOAP_RUN_AUTOGEN
 +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
 +endef
-+LIBCOAP_PRE_CONFIGURE_HOOKS += FAIFA_RUN_AUTOGEN
++LIBCOAP_PRE_CONFIGURE_HOOKS += LIBCOAP_RUN_AUTOGEN
 +
 +$(eval $(autotools-package))
 -- 
