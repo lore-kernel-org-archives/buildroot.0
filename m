@@ -1,68 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 May 2016 21:25:27 +0200
-Subject: [Buildroot] [git commit] package/gstreamer/gst-ffmpeg: needs gcc >=
-	5.x on SuperH
-Message-ID: <20160530192959.B6C218010F@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 30 May 2016 22:06:11 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain/helper: don't follow symlinks
+ when copying libs to target
+In-Reply-To: <87vb1w2fjx.fsf@dell.be.48ers.dk>
+References: <cover.1464534979.git.yann.morin.1998@free.fr>
+ <16dd334fb29148489afa344c652208a4c512f445.1464534979.git.yann.morin.1998@free.fr>
+ <CAAXf6LXQ0Ncmh71qb48dS3isFhePWkbpqyvH5ZjFX=isQLVvTg@mail.gmail.com>
+ <20160529211224.GC29556@free.fr>
+ <95e5afb7-0922-92cd-8ef7-7807f833b6f6@mind.be>
+ <CAAXf6LX3RRscc9VFy-5WGROHCD-qjG=hMzP2R5uXnJQX8JDwQA@mail.gmail.com>
+ <87vb1w2fjx.fsf@dell.be.48ers.dk>
+Message-ID: <e0d2642f-231b-428a-1960-30910f53d2df@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89eeadfcfd2ecd92b43ecd4890ee5a067bd3b6c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 05/30/16 09:03, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+> 
+> Hi,
+> 
+>  > I'm baffled by the statement "It seems to work without just because
+>  > STAGING_DIR happens to be defined with a trailing slash". This must
+>  > have been derived from the observation that things worked without
+>  > -L/-follow and making the assumption that it must have been due to a
+>  > trailing slash without actually verifying that.
+> 
+>  > Anyway, if it works with plain find, all the better.
+>  > Sorry for all this confusion.
+>  > Let's consider it a good lesson in not making assumptions :-)
+> 
+> Heh ;)
+> 
+> Ok, I'll commit a simplified version of the patch (just dropping -L)
+> with an updated description - Thanks all!
 
-Compilation triggers an ICE in gcc with gcc <= 4.9 using this defconfig
+ Did you forget to push? Or should Yann still send a v3?
 
-BR2_sh=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PACKAGE_GSTREAMER=y
-BR2_PACKAGE_GST_FFMPEG=y
-BR2_PACKAGE_GST_FFMPEG_GPL=y
+ Regards,
+ Arnout
 
-The problem is known upstream, a fix was never committed to gcc <= 4.9:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=65151
 
-Compiling gst-ffmpeg with gcc5 works fine using this defconfig:
-
-BR2_sh=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_GCC_VERSION_5_X=y
-BR2_PACKAGE_GSTREAMER=y
-BR2_PACKAGE_GST_FFMPEG=y
-BR2_PACKAGE_GST_FFMPEG_GPL=y
-
-This patch adds a dependency to gcc >= 5.x to fix the problem as
-suggested by Thomas:
-http://lists.busybox.net/pipermail/buildroot/2016-February/152584.html
-
-Fixes
-http://autobuild.buildroot.net/results/939/939da0c7771ddd97c05cedc0a7afc0ad34a21312/
-
-[Peter: fix ML link, simplify kconfig, add comment explaining why]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gstreamer/gst-ffmpeg/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/gstreamer/gst-ffmpeg/Config.in b/package/gstreamer/gst-ffmpeg/Config.in
-index 004ec1c..f3d4b3e 100644
---- a/package/gstreamer/gst-ffmpeg/Config.in
-+++ b/package/gstreamer/gst-ffmpeg/Config.in
-@@ -3,6 +3,8 @@ config BR2_PACKAGE_GST_FFMPEG
- 	# Unsupported for MIPS R6. It bundles a version of libav which
- 	# doesn't have support for MIPS R6.
- 	depends on !BR2_mips_32r6 && !BR2_mips_64r6
-+	# triggers https://gcc.gnu.org/bugzilla/show_bug.cgi?id=65151 on sh
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_sh
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
- 	help
- 	  GStreamer plugin containing one plugin with a set of elements using
-@@ -23,3 +25,6 @@ config BR2_PACKAGE_GST_FFMPEG_GPL
- 	  be under GPL.
- 
- endif
-+
-+comment "gst-ffmpeg needs a toolchain w/ gcc >= 5"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5 && BR2_sh
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
