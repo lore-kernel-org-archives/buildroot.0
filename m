@@ -1,7 +1,7 @@
 From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Mon, 30 May 2016 08:36:06 +0200
+Date: Mon, 30 May 2016 08:35:45 +0200
 Subject: [Buildroot] [PATCH] inputevent: add package
-Message-ID: <20160530063606.GB31737@airbook.vandijck-laurijssen.be>
+Message-ID: <20160530063545.GA31737@airbook.vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
