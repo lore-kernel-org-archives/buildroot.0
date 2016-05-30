@@ -1,23 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 May 2016 21:13:47 +0200
-Subject: [Buildroot] [PATCH 1/1] configs: cubieboard2: use 4.6 kernel,
-	u-boot 2016.05
-In-Reply-To: <20160528204502.30885-1-nunes.erico@gmail.com> (Erico Nunes's
- message of "Sat, 28 May 2016 17:45:02 -0300")
-References: <20160528204502.30885-1-nunes.erico@gmail.com>
-Message-ID: <87pos31hqs.fsf@dell.be.48ers.dk>
+Date: Mon, 30 May 2016 21:13:01 +0200
+Subject: [Buildroot] [git commit branch/next] configs: cubieboard2: use 4.6
+	kernel, u-boot 2016.05
+Message-ID: <20160530191425.782477FEDE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Erico" == Erico Nunes <nunes.erico@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=216eca78a38c1f4d5c0f0a29cf742a12f987ebda
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Updated image was tested in a Cubieboard2.
- > Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Updated image was tested in a Cubieboard2.
 
-Committed to next, thanks.
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/cubieboard2_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
+index a3b1b85..353aaa5 100644
+--- a/configs/cubieboard2_defconfig
++++ b/configs/cubieboard2_defconfig
+@@ -1,8 +1,8 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+-# Linux headers same as kernel, a 4.3 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_3=y
++# Linux headers same as kernel, a 4.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
+ BR2_TARGET_GENERIC_HOSTNAME="Cubieboard2"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Cubieboard2!"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/cubietech/cubieboard2/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/cubietech/cubieboard2/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.3.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-cubieboard2"
+@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_SPL=y
