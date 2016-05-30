@@ -1,35 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 May 2016 11:59:29 +0200
-Subject: [Buildroot] [PATCH] build: fix umask test
-In-Reply-To: <20160530095319.GA5804@airbook.vandijck-laurijssen.be> (Kurt Van
- Dijck's message of "Mon, 30 May 2016 11:53:19 +0200")
-References: <20160530070635.GA27560@airbook.vandijck-laurijssen.be>
- <87mvn82d50.fsf@dell.be.48ers.dk> <87inxw2cnt.fsf@dell.be.48ers.dk>
- <20160530111740.14c24236@free-electrons.com>
- <20160530095319.GA5804@airbook.vandijck-laurijssen.be>
-Message-ID: <87a8j73lz2.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 May 2016 14:55:35 +0200
+Subject: [Buildroot] wireless_tools and ifrename
+In-Reply-To: <BE7DD8D2CBE7B241971A69A3E62C11B70118903F@partis.dyndns.org>
+References: <BE7DD8D2CBE7B241971A69A3E62C11B70118903F@partis.dyndns.org>
+Message-ID: <20160530145535.0bad0351@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Kurt" == Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> writes:
+Hello,
 
-Hi,
+On Sun, 29 May 2016 16:08:01 +0100, Gary Partis wrote:
 
- > I understand the zsh problem, on the other hand,
- > any number prefixed with a 0 is octal, isn't it?
+> I am curently using buildroot-2016.02, targeting a PC-type system, and
+> have wireless-tools (and associated "install shared library") enabled.
+>  
+> The binaries such as iwconfig, iwspy etc etc are built and are present
+> on the target.
+>  
+> However, the binary "ifrename" is not built; and no warning or error is
+> emitted. Why?
+>  
+> Am I missing something really obvious? Is there a dependancy not set
+> correctly?
 
-Apparently not to zsh. I haven't found any official notice about it, but
-googling around shows this (old!) patch:
+It seems to be a limitation of our wireless_tools package, which only
+builds the "iw multi call" binary. You can tweak wireless_toolks.mk so
+that it also builds ifrename. If that works for you, don't forgot to
+send a patch!
 
-http://www.zsh.org/mla/workers/1995/msg00518.html
-
- > Anyway, I'll re-think the patch too...
-
-Just moving up the SHELL= line above this check should be enough.
-
+Thomas
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
