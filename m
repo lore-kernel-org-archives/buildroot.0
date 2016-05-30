@@ -1,77 +1,130 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 May 2016 08:30:19 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-05-29
-Message-ID: <20160530063019.306A6102A2C@stock.ovh.net>
+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Date: Mon, 30 May 2016 08:42:06 +0200
+Subject: [Buildroot] [PATCH] mksh: add MirOS Korn Shell
+Message-ID: <20160530064206.GE31737@airbook.vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2016-05-29
-===============================
 
-        success : 187
-       failures : 26 
-       timeouts : 1  
-          TOTAL : 214
+The MirOS Korn Shell is, to my opinion, a quite complete posix shell
+implementation, is rather small and supports vi mode properly for me.
 
-Classification of failures by reason
-====================================
+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+---
+ package/Config.in      |  1 +
+ package/mksh/Config.in | 22 ++++++++++++++++++++++
+ package/mksh/mksh.mk   | 31 +++++++++++++++++++++++++++++++
+ system/Config.in       |  9 ++++++++-
+ 4 files changed, 62 insertions(+), 1 deletion(-)
+ create mode 100644 package/mksh/Config.in
+ create mode 100644 package/mksh/mksh.mk
 
-                 mesa3d-11.2.2 | 2 
-                    mpv-0.17.0 | 2 
-      kismet-Kismet-2014-02-R1 | 2 
-             qt5location-5.6.0 | 2 
-                wayland-1.10.0 | 2 
-                    cups-2.1.2 | 2 
-                   erlang-18.3 | 1 
-                     rpm-5.2.0 | 1 
-                     nut-2.7.2 | 1 
-                moarvm-2016.04 | 1 
-                   lite-0.8.10 | 1 
-     host-xproto_kbproto-1.0.7 | 1 
-host-gdb-6be65fb56ea6694a92... | 1 
-               netplug-1.2.9.2 | 1 
-                flannel-v0.5.5 | 1 
-                 jack2-v1.9.10 | 1 
-        lttng-babeltrace-1.2.4 | 1 
-                  connman-1.32 | 1 
-vpnc-70f1211f6f26e87e374d66... | 1 
-             netbsd-queue-1.70 | 1 
-                   systemd-229 | 1 
-
-Detail of failures
-===================
-
-      x86_64 |                   connman-1.32 | NOK | http://autobuild.buildroot.net/results/fe6a2f562b83c2d7c45e1bbf61c8bf9d88418920/
-         arm |                     cups-2.1.2 | NOK | http://autobuild.buildroot.net/results/70d147fcac588610521974b8f7384e710a9a6d41/
-         arm |                     cups-2.1.2 | NOK | http://autobuild.buildroot.net/results/a2e871403f02479f5c701849a3664fb11ba8b219/
-     aarch64 |                    erlang-18.3 | NOK | http://autobuild.buildroot.net/results/1c6423a47d282894a1c41a669aee215dfb916f4e/
-         arm |                 flannel-v0.5.5 | NOK | http://autobuild.buildroot.net/results/9b930b87cb244cd1a73c4347cbd1b927dc36676a/
-microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/5ee0fabac9698a68abd1e3ba328feab464f362d8/
-         arm |      host-xproto_kbproto-1.0.7 | TIM | http://autobuild.buildroot.net/results/8ce3f72dd896e5d0531e0b6504e8fe266ee96fdb/
-         arc |                  jack2-v1.9.10 | NOK | http://autobuild.buildroot.net/results/73a53d5313f280294fbba09c324ec4396582ceb3/
-         arm |       kismet-Kismet-2014-02-R1 | NOK | http://autobuild.buildroot.net/results/9713f1923a0bb2309d113e6db9dd9048a2a4bbd4/
-         arm |       kismet-Kismet-2014-02-R1 | NOK | http://autobuild.buildroot.net/results/02db363fe069f0a7882960faa69ce79882410a7f/
-      mipsel |                    lite-0.8.10 | NOK | http://autobuild.buildroot.net/results/433e666bc7b0b605142dd03c096ee30bcfa014ff/
-         arm |         lttng-babeltrace-1.2.4 | NOK | http://autobuild.buildroot.net/results/e747262b81d6e251f9e829071ebacb79e66838b2/
-        mips |                  mesa3d-11.2.2 | NOK | http://autobuild.buildroot.net/results/c70ee8bd0269f6edf5585ca3222c44260de1b524/
-         arc |                  mesa3d-11.2.2 | NOK | http://autobuild.buildroot.net/results/516507ae4fa189091ac1310139a4f622e17b67ef/
-       sparc |                 moarvm-2016.04 | NOK | http://autobuild.buildroot.net/results/54f927539abf5117d12ea338cc5d572eae7653c6/
-       sparc |                     mpv-0.17.0 | NOK | http://autobuild.buildroot.net/results/8e99161e4d3d70d91a96d1fe8237010e2006211b/
-       sparc |                     mpv-0.17.0 | NOK | http://autobuild.buildroot.net/results/ed85ddf91110d4003626292915da4e8c7a1ba2fd/
-      x86_64 |              netbsd-queue-1.70 | NOK | http://autobuild.buildroot.net/results/a97715a6785b03e57514369b025db4899d0c7c24/
-         arm |                netplug-1.2.9.2 | NOK | http://autobuild.buildroot.net/results/02c967a211cfb43dcb5119ea57a0cdef96e5880b/
-       nios2 |                      nut-2.7.2 | NOK | http://autobuild.buildroot.net/results/d723002d0206643350a881d5f7ea9624eeba0277/
-     powerpc |              qt5location-5.6.0 | NOK | http://autobuild.buildroot.net/results/ad412c321f29dfb0765313701e3156f11f75d7ae/
-     powerpc |              qt5location-5.6.0 | NOK | http://autobuild.buildroot.net/results/98c8c9c60b9e59eacca81d3955302f1b52a051cc/
-         sh4 |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/e4b7705e3e148755ae34d498c860a3b9b915e0b0/
-         arm |                    systemd-229 | NOK | http://autobuild.buildroot.net/results/26d29ceeb1745f28711f50305891b6bbd1f8441c/
-         arm | vpnc-70f1211f6f26e87e374d66... | NOK | http://autobuild.buildroot.net/results/68e5475899351c3e33e13e156e8daa238486ee73/
-        bfin |                 wayland-1.10.0 | NOK | http://autobuild.buildroot.net/results/4ecb1a6b10b71b3d1c3e129bad3fedc9ba8ac41e/
-        bfin |                 wayland-1.10.0 | NOK | http://autobuild.buildroot.net/results/c4f07f40ab8aaeb9c38b9606fde38de7e232f6ad/
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 629a7d0..17032f9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1530,6 +1530,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/dash/Config.in"
+ 	source "package/zsh/Config.in"
+ endif
++	source "package/mksh/Config.in"
+ comment "Utilities"
+ 	source "package/at/Config.in"
+ 	source "package/ccrypt/Config.in"
+diff --git a/package/mksh/Config.in b/package/mksh/Config.in
+new file mode 100644
+index 0000000..9e2030a
+--- /dev/null
++++ b/package/mksh/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_MKSH
++	bool "mksh"
++	depends on BR2_USE_MMU # fork()
++	help
++	  The MirBSD Korn Shell,
++
++	  mksh is a successor of pdksh but not affiliated with the pdksh
++	  developers or contributors. mksh is not affiliated with the
++	  AT&T Korn Shell, its past or present owners, other than that
++	  both attempt to implement the Korn Shell programming language.
++
++	  mksh targets users who desire a compact, fast, reliable,
++	  secure shell not cut off modern extensions; a shell with
++	  Unicode support; an actively developed, current, and portable
++	  product; one with developers that listen to their users? requests
++	  and implement them if they actually make sense.
++
++	  mksh aims to replace pdksh in all but very rare use cases
++	  (such as support for checking the Unix mbox) and in all operating
++	  environments (thus including patches from pdksh on e.g. Debian).
++
++	  http://mirbsd.de/mksh
+diff --git a/package/mksh/mksh.mk b/package/mksh/mksh.mk
+new file mode 100644
+index 0000000..c6c3e2f
+--- /dev/null
++++ b/package/mksh/mksh.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# mksh
++#
++################################################################################
++
++MKSH_VERSION = R52c
++MKSH_SOURCE = mksh-$(MKSH_VERSION).tgz
++MKSH_SITE = https://www.mirbsd.org/MirOS/dist/mir/mksh
++MKSH_LICENSE = MirOS, BSD-3c, ISC
++MKSH_LICENSE_FILES = COPYING
++
++define MKSH_CONFIGURE_CMDS
++	cd $(@D) && $(TARGET_MAKE_ENV) \
++		CPPFLAGS="-DMKSH_S_NOVI=0 $(TARGET_CPPFLAGS)" \
++		CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++		LD="$(TARGET_LD)" LDFLAGS="$(TARGET_LDFLAGS)" LDLIBS="$(TARGET_LDLIBS)" \
++		TARGET_OS=Linux \
++		sh ./Build.sh -M
++endef
++
++define MKSH_BUILD_CMDS
++	cd $(@D) && $(TARGET_MAKE_ENV) \
++		sh ./Rebuild.sh
++endef
++
++define MKSH_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/mksh $(TARGET_DIR)/bin/mksh
++endef
++
++$(eval $(generic-package))
+diff --git a/system/Config.in b/system/Config.in
+index 2e14971..205dba6 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -267,7 +267,13 @@ config BR2_SYSTEM_BIN_SH_ZSH
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	select BR2_PACKAGE_ZSH
+ 
+-comment "bash, dash, zsh need BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
++config BR2_SYSTEM_BIN_SH_MKSH
++	bool "mksh"
++	depends on BR2_USE_MMU # mksh
++	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	select BR2_PACKAGE_MKSH
++
++comment "bash, dash, zsh, mksh need BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
+ 	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS && BR2_PACKAGE_BUSYBOX
+ 
+ config BR2_SYSTEM_BIN_SH_NONE
+@@ -281,6 +287,7 @@ config BR2_SYSTEM_BIN_SH
+ 	default "bash"    if BR2_SYSTEM_BIN_SH_BASH
+ 	default "dash"    if BR2_SYSTEM_BIN_SH_DASH
+ 	default "zsh"     if BR2_SYSTEM_BIN_SH_ZSH
++	default "mksh"    if BR2_SYSTEM_BIN_SH_MKSH
+ 
+ menuconfig BR2_TARGET_GENERIC_GETTY
+ 	bool "Run a getty (login prompt) after boot"
 -- 
-http://autobuild.buildroot.net
+1.8.5.rc3
