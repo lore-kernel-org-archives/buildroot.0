@@ -1,131 +1,101 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 30 May 2016 22:16:25 +0200
-Subject: [Buildroot] gstreamer-1.0 and egl
-In-Reply-To: <63233783-a7e5-8971-7403-4f52cb5af733@gmail.com>
-References: <63233783-a7e5-8971-7403-4f52cb5af733@gmail.com>
-Message-ID: <20160530221625.35629e6b@gmx.net>
+Date: Mon, 30 May 2016 22:22:22 +0200
+Subject: [Buildroot] [PATCH] inputevent: add package
+In-Reply-To: <20160530063606.GB31737@airbook.vandijck-laurijssen.be>
+References: <20160530063606.GB31737@airbook.vandijck-laurijssen.be>
+Message-ID: <20160530222222.44172642@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marco,
+Hello Kurt,
 
-On Fri, 27 May 2016 17:49:18 +0200, Marco Trapanese <marcotrapanese@gmail.com> wrote:
+On Mon, 30 May 2016 08:36:06 +0200, Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> wrote:
 
-[...]
+> Inputevent is an input-device to ascii tranlator.
 
-> 
-> Another weird thing about gstreamer. The very first time I launch any gstreamer command I get this errors:
-> 
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_free': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_malloc': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'platform_memcpy': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_recv': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_write': can't resolve symbol
-> (gst-plugin-scanner:407): GStreamer-WARNING **: Failed to load plugin '/usr/lib/gstreamer-1.0/libgstopengl.so': unknown dl-error
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_free': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_malloc': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'platform_memcpy': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_recv': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_write': can't resolve symbol
-> (gst-plugin-scanner:407): GStreamer-WARNING **: Failed to load plugin '/usr/lib/gstreamer-1.0/libgstmpegtsdemux.so': unknown dl-error
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_free': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_malloc': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'platform_memcpy': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_recv': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_write': can't resolve symbol
-> (gst-plugin-scanner:407): GStreamer-WARNING **: Failed to load plugin '/usr/lib/gstreamer-1.0/libgstwaylandsink.so': unknown dl-error
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_free': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_malloc': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'platform_memcpy': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_recv': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_write': can't resolve symbol
-> (gst-plugin-scanner:407): GStreamer-WARNING **: Failed to load plugin '/usr/lib/gstreamer-1.0/libgstmpegtsmux.so': unknown dl-error
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_free': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_malloc': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'platform_memcpy': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_recv': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_write': can't resolve symbol
-> (gst-plugin-scanner:407): GStreamer-WARNING **: Failed to load plugin '/usr/lib/gstreamer-1.0/libgstmpegpsdemux.so': unknown dl-error
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_free': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_malloc': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'platform_memcpy': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_recv': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_write': can't resolve symbol
-> (gst-plugin-scanner:407): GStreamer-WARNING **: Failed to load plugin '/usr/lib/gstreamer-1.0/libgstrtmp.so': unknown dl-error
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_free': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_malloc': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'platform_memcpy': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_recv': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_write': can't resolve symbol
-> (gst-plugin-scanner:407): GStreamer-WARNING **: Failed to load plugin '/usr/lib/gstreamer-1.0/libgstautoconvert.so': unknown dl-error
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_free': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_malloc': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'platform_memcpy': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_recv': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_write': can't resolve symbol
-> (gst-plugin-scanner:407): GStreamer-WARNING **: Failed to load plugin '/usr/lib/gstreamer-1.0/libgstvoaacenc.so': unknown dl-error
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_free': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'khrn_platform_malloc': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'platform_memcpy': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_recv': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_begin': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_end': can't resolve symbol
-> /usr/libexec/gstreamer-1.0/gst-plugin-scanner: symbol 'rpc_send_ctrl_write': can't resolve symbol
-> (gst-plugin-scanner:407): GStreamer-WARNING **: Failed to load plugin '/usr/lib/gstreamer-1.0/libgstmpegpsmux.so': unknown dl-error
-> 
-> 
-> The second time it acts as expected.
-> Any idea?
-
-Gstreamer is building a binary registry the first time you start it (e.g. at
-~/.cache/gstreamer-1.0/registry.x86_64.bin), which gives
-the error messages (about some library mismatch (changed config and no rebuild?))
-and disables all failed plugins in the registry, so no more warnings on second
-invocation of a gstreamer command...
+s/tranlator/translator/?
 
 Regards,
 Peter
 
+> Its output is of the format 'TIME CODE VALUE' and it's easy
+> to pipe it into a shell script.
 > 
-> Thanks in advance
-> Marco
+> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+> ---
+>  package/Config.in                |  1 +
+>  package/inputevent/Config.in     |  6 ++++++
+>  package/inputevent/inputevent.mk | 36 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 43 insertions(+)
+>  create mode 100644 package/inputevent/Config.in
+>  create mode 100644 package/inputevent/inputevent.mk
 > 
-> 
-> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 529ad33..112e516 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -383,6 +383,7 @@ endif
+>  	source "package/i2c-tools/Config.in"
+>  	source "package/input-event-daemon/Config.in"
+>  	source "package/input-tools/Config.in"
+> +	source "package/inputevent/Config.in"
+>  	source "package/intel-microcode/Config.in"
+>  	source "package/iostat/Config.in"
+>  	source "package/ipmitool/Config.in"
+> diff --git a/package/inputevent/Config.in b/package/inputevent/Config.in
+> new file mode 100644
+> index 0000000..44422a3
+> --- /dev/null
+> +++ b/package/inputevent/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_INPUTEVENT
+> +	bool "inputevent"
+> +	help
+> +	  inputevent is a simple program that traces input events.
+> +	  When piped to a another program or script, you get similar
+> +	  functionality as input-event-daemon.
+> diff --git a/package/inputevent/inputevent.mk b/package/inputevent/inputevent.mk
+> new file mode 100644
+> index 0000000..14a8d31
+> --- /dev/null
+> +++ b/package/inputevent/inputevent.mk
+> @@ -0,0 +1,36 @@
+> +################################################################################
+> +#
+> +# inputevent
+> +#
+> +################################################################################
+> +
+> +INPUTEVENT_VERSION = r8
+> +INPUTEVENT_SITE = git://github.com/kurt-vd/inputevent.git
+> +INPUTEVENT_LICENSE = GPLv3
+> +INPUTEVENT_LICENSE_FILES = LICENSE
+> +
+> +define INPUTEVENT_CONFIGURE_CMDS
+> +	echo "PREFIX=/" > $(@D)/config.mk
+> +	echo "CFLAGS=$(TARGET_CFLAGS)" >> $(@D)/config.mk
+> +	echo "CPPFLAGS=-D_GNU_SOURCE $(TARGET_CPPFLAGS)" >> $(@D)/config.mk
+> +	echo "CXXFLAGS=$(TARGET_CXXFLAGS)" >> $(@D)/config.mk
+> +	echo "LDFLAGS=$(TARGET_LDFLAGS)" >> $(@D)/config.mk
+> +	echo "LDLIBS+=$(TARGET_LDLIBS)" >> $(@D)/config.mk
+> +	echo "CC=$(TARGET_CC)" >> $(@D)/config.mk
+> +	echo "CXX=$(TARGET_CXX)" >> $(@D)/config.mk
+> +	echo "LD=$(TARGET_LD)" >> $(@D)/config.mk
+> +	echo "AS=$(TARGET_AS)" >> $(@D)/config.mk
+> +
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) clean
+> +endef
+> +
+> +define INPUTEVENT_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define INPUTEVENT_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR="$(TARGET_DIR)"
+> +endef
+> +
+> +$(eval $(generic-package))
+> +#$(eval $(configmk-package))
