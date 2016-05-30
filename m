@@ -1,32 +1,21 @@
-From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Mon, 30 May 2016 09:06:35 +0200
-Subject: [Buildroot] [PATCH] build: fix umask test
-Message-ID: <20160530070635.GA27560@airbook.vandijck-laurijssen.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 30 May 2016 09:33:47 +0200
+Subject: [Buildroot] [PATCH] warpboard: README: Fix a few typos
+In-Reply-To: <1464559134-3411-1-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Sun, 29 May 2016 18:58:54 -0300")
+References: <1464559134-3411-1-git-send-email-festevam@gmail.com>
+Message-ID: <87r3ck2e5g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some shells' builtin umask does not print 2 leading 0's for the umask.
-Not doing so would break the comparison.
-This patch makes sure that the umask has (at least) 4 digits.
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
-Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-diff --git a/Makefile b/Makefile
-index 63502d0..9a36769 100644
---- a/Makefile
-+++ b/Makefile
-@@ -26,7 +26,7 @@
- 
- # Trick for always running with a fixed umask
- UMASK = 0022
--ifneq ($(shell umask),$(UMASK))
-+ifneq ($(shell printf "%04o\n" `umask`),$(UMASK))
- .PHONY: _all $(MAKECMDGOALS)
- 
- $(MAKECMDGOALS): _all
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
