@@ -1,176 +1,348 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 May 2016 15:15:44 +0200
-Subject: [Buildroot] [git commit] ficl: new package
-Message-ID: <20160601161311.7C2DA802A0@busybox.osuosl.org>
+Date: Tue, 31 May 2016 21:31:34 +0200
+Subject: [Buildroot] [git commit] php: bump version to 7.0.6
+Message-ID: <20160601161312.36F1881F97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=814911aecb6d49bb603c34dbfcc0d86614516b41
+commit: https://git.buildroot.net/buildroot/commit/?id=6f6b4dc16b07dcf901fc986b6aa22f67e4280f13
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Remove MySQL legacy extension.
+
+Remove incompatible external modules:
+ - php-gnupg
+ - php-memcached
+ - php-ssh2
+ - php-yaml
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                    |  1 +
- package/ficl/0001-fix-Makefile.patch | 47 ++++++++++++++++++++++++++++
- package/ficl/Config.in               |  9 ++++++
- package/ficl/ficl.hash               |  2 ++
- package/ficl/ficl.mk                 | 59 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 118 insertions(+)
+ package/Config.in                        |  4 ----
+ package/php-gnupg/Config.in              |  9 ---------
+ package/php-gnupg/php-gnupg.hash         |  2 --
+ package/php-gnupg/php-gnupg.mk           | 26 --------------------------
+ package/php-memcached/Config.in          | 15 ---------------
+ package/php-memcached/php-memcached.hash |  2 --
+ package/php-memcached/php-memcached.mk   | 29 -----------------------------
+ package/php-ssh2/Config.in               |  8 --------
+ package/php-ssh2/php-ssh2.hash           |  2 --
+ package/php-ssh2/php-ssh2.mk             | 27 ---------------------------
+ package/php-yaml/Config.in               |  8 --------
+ package/php-yaml/php-yaml.hash           |  2 --
+ package/php-yaml/php-yaml.mk             | 27 ---------------------------
+ package/php/Config.ext                   | 10 ----------
+ package/php/php.hash                     |  2 +-
+ package/php/php.mk                       |  8 ++------
+ 16 files changed, 3 insertions(+), 178 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index e64e058..3328d19 100644
+index ae74f17..f21d42e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -494,6 +494,7 @@ menu "Erlang libraries/modules"
- 	source "package/erlang-p1-zlib/Config.in"
+@@ -614,11 +614,7 @@ if BR2_PACKAGE_PHP
+ if !BR2_STATIC_LIBS
+ menu "External php extensions"
+ 	source "package/php-geoip/Config.in"
+-	source "package/php-gnupg/Config.in"
+ 	source "package/php-imagick/Config.in"
+-	source "package/php-memcached/Config.in"
+-	source "package/php-ssh2/Config.in"
+-	source "package/php-yaml/Config.in"
+ 	source "package/php-zmq/Config.in"
  endmenu
  endif
-+	source "package/ficl/Config.in"
- 	source "package/gauche/Config.in"
- 	source "package/guile/Config.in"
- 	source "package/haserl/Config.in"
-diff --git a/package/ficl/0001-fix-Makefile.patch b/package/ficl/0001-fix-Makefile.patch
-new file mode 100644
-index 0000000..d5a25c4
---- /dev/null
-+++ b/package/ficl/0001-fix-Makefile.patch
-@@ -0,0 +1,47 @@
-+fix dependency in Makefiles
-+
-+there is no longer a sysdep.h file.
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+diff --git a/Makefile b/Makefile
-+index 976d00a..7f73c44 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
-+ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
-+ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
-+ 
-+-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
-++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
-+ 	$(CC) $(CFLAGS) $(LDFLAGS) main.o -o main -L. -lficl -lm
-+ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
-+ 
-+diff --git a/Makefile.ansi b/Makefile.ansi
-+index e510fcd..170e6eb 100644
-+--- a/Makefile.ansi
-++++ b/Makefile.ansi
-+@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
-+ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
-+ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
-+ 
-+-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
-++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
-+ 	$(CC) main.o -o main -L. -lficl -lm
-+ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
-+ 
-+diff --git a/Makefile.linux b/Makefile.linux
-+index d447e7e..7f2cdfe 100644
-+--- a/Makefile.linux
-++++ b/Makefile.linux
-+@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
-+ 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
-+ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
-+ 
-+-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
-++main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
-+ 	$(CC) main.o -o main -L. -lficl -lm
-+ 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
-+ 
-+-- 
-+
-diff --git a/package/ficl/Config.in b/package/ficl/Config.in
-new file mode 100644
-index 0000000..3445a64
---- /dev/null
-+++ b/package/ficl/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_FICL
-+	bool "ficl"
-+	help
-+	  Ficl is a programming language interpreter designed to be embedded
-+	  into other systems as a command, macro, and development
-+	  prototyping language.
-+	  Ficl is an acronym for "Forth Inspired Command Language".
-+
-+	  http://ficl.sourceforge.net
-diff --git a/package/ficl/ficl.hash b/package/ficl/ficl.hash
-new file mode 100644
-index 0000000..4bfbbd0
---- /dev/null
-+++ b/package/ficl/ficl.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  4daf74f3d3d6f8b86ea7cb47bc24931d50b4809b50ba34ca32e0ca1e972bd3a3  ficl-4.1.0.tar.gz
-diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
-new file mode 100644
-index 0000000..6c212a6
---- /dev/null
-+++ b/package/ficl/ficl.mk
-@@ -0,0 +1,59 @@
-+################################################################################
-+#
-+# ficl
-+#
-+################################################################################
-+
-+FICL_VERSION_MAJOR = 4.1
-+FICL_VERSION = $(FICL_VERSION_MAJOR).0
-+FICL_SITE = http://downloads.sourceforge.net/project/ficl/ficl-all/ficl$(FICL_VERSION_MAJOR)
-+FICL_LICENSE = BSD-2c
-+FICL_LICENSE_FILES = ReadMe.txt
-+FICL_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+FICL_BUILD_TARGETS += ficl
-+define FICL_INSTALL_STATIC_BIN
-+	$(INSTALL) -D -m 0755 $(@D)/ficl $(TARGET_DIR)/usr/bin/ficl
-+endef
-+endif
-+
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+FICL_BUILD_TARGETS += libficl.a
-+define FICL_INSTALL_STATIC_LIB
-+	$(INSTALL) -D -m 0644 $(@D)/libficl.a $(STAGING_DIR)/usr/lib/libficl.a
-+endef
-+endif
-+
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+FICL_BUILD_TARGETS += main libficl.so.$(FICL_VERSION)
-+define FICL_INSTALL_SHARED_BIN
-+	$(INSTALL) -D -m 0755 $(@D)/main $(TARGET_DIR)/usr/bin/ficl
-+endef
-+define FICL_INSTALL_SHARED_LIB
-+	$(INSTALL) -D -m 0755 $(@D)/libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so.$(FICL_VERSION)
-+	ln -sf libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so.4
-+	ln -sf libficl.so.$(FICL_VERSION) $(1)/usr/lib/libficl.so
-+endef
-+endif
-+
-+define FICL_BUILD_CMDS
-+	$(MAKE) -C $(@D) -f Makefile.linux $(TARGET_CONFIGURE_OPTS) \
-+		CPPFLAGS="$(TARGET_CPPFLAGS) -I. -Dlinux" $(FICL_BUILD_TARGETS)
-+endef
-+
-+define FICL_INSTALL_STAGING_CMDS
-+	$(FICL_INSTALL_STATIC_LIB)
-+	$(call FICL_INSTALL_SHARED_LIB,$(STAGING_DIR))
-+	$(INSTALL) -D -m 0644 $(@D)/ficl.h $(STAGING_DIR)/usr/include/ficl.h
-+	$(INSTALL) -D -m 0644 $(@D)/ficllocal.h $(STAGING_DIR)/usr/include/ficllocal.h
-+	$(INSTALL) -D -m 0644 $(@D)/ficlplatform/unix.h $(STAGING_DIR)/usr/include/ficlplatform/unix.h
-+endef
-+
-+define FICL_INSTALL_TARGET_CMDS
-+	$(FICL_INSTALL_STATIC_BIN)
-+	$(FICL_INSTALL_SHARED_BIN)
-+	$(call FICL_INSTALL_SHARED_LIB,$(TARGET_DIR))
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/php-gnupg/Config.in b/package/php-gnupg/Config.in
+deleted file mode 100644
+index 49fb43b..0000000
+--- a/package/php-gnupg/Config.in
++++ /dev/null
+@@ -1,9 +0,0 @@
+-config BR2_PACKAGE_PHP_GNUPG
+-	bool "php-gnupg"
+-	depends on BR2_PACKAGE_PHP
+-	depends on BR2_USE_MMU # libassuan
+-	select BR2_PACKAGE_LIBGPGME
+-	help
+-	  PHP wrapper around the gpgme library.
+-
+-	  http://pecl.php.net/package/gnupg
+diff --git a/package/php-gnupg/php-gnupg.hash b/package/php-gnupg/php-gnupg.hash
+deleted file mode 100644
+index ef066a5..0000000
+--- a/package/php-gnupg/php-gnupg.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256	50065cb81f1ac3ec5fcd796e58c8433071ff24cc14900e6077682717f5239307	gnupg-1.3.6.tgz
+diff --git a/package/php-gnupg/php-gnupg.mk b/package/php-gnupg/php-gnupg.mk
+deleted file mode 100644
+index c5964c2..0000000
+--- a/package/php-gnupg/php-gnupg.mk
++++ /dev/null
+@@ -1,26 +0,0 @@
+-################################################################################
+-#
+-# php-gnupg
+-#
+-################################################################################
+-
+-PHP_GNUPG_VERSION = 1.3.6
+-PHP_GNUPG_SOURCE = gnupg-$(PHP_GNUPG_VERSION).tgz
+-PHP_GNUPG_SITE = http://pecl.php.net/get
+-# phpize does the autoconf magic
+-PHP_GNUPG_DEPENDENCIES = php libgpgme host-autoconf host-pkgconf
+-PHP_GNUPG_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-	--with-gnupg=$(STAGING_DIR)/usr/include --with-gpg=/usr/bin/gpg
+-PHP_GNUPG_LICENSE = BSD-2c
+-PHP_GNUPG_LICENSE_FILES = LICENSE
+-
+-define PHP_GNUPG_PHPIZE
+-	(cd $(@D); \
+-		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
+-		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
+-		$(STAGING_DIR)/usr/bin/phpize)
+-endef
+-
+-PHP_GNUPG_PRE_CONFIGURE_HOOKS += PHP_GNUPG_PHPIZE
+-
+-$(eval $(autotools-package))
+diff --git a/package/php-memcached/Config.in b/package/php-memcached/Config.in
+deleted file mode 100644
+index cd97c15..0000000
+--- a/package/php-memcached/Config.in
++++ /dev/null
+@@ -1,15 +0,0 @@
+-config BR2_PACKAGE_PHP_MEMCACHED
+-	bool "php-memcached"
+-	depends on BR2_INSTALL_LIBSTDCPP # libmemcached
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libmemcached
+-	select BR2_PACKAGE_PHP_EXT_SESSION
+-	select BR2_PACKAGE_LIBMEMCACHED
+-	select BR2_PACKAGE_ZLIB
+-	help
+-	  PHP extension for interfacing with memcached via
+-	  libmemcached library.
+-
+-	  http://pecl.php.net/package/memcached
+-
+-comment "php-memcached needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/php-memcached/php-memcached.hash b/package/php-memcached/php-memcached.hash
+deleted file mode 100644
+index bc2e97a..0000000
+--- a/package/php-memcached/php-memcached.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256	17b9600f6d4c807f23a3f5c45fcd8775ca2e61d6eda70370af2bef4c6e159f58	memcached-2.2.0.tgz
+diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
+deleted file mode 100644
+index 599e22e..0000000
+--- a/package/php-memcached/php-memcached.mk
++++ /dev/null
+@@ -1,29 +0,0 @@
+-################################################################################
+-#
+-# php-memcached
+-#
+-################################################################################
+-
+-PHP_MEMCACHED_VERSION = 2.2.0
+-PHP_MEMCACHED_SOURCE = memcached-$(PHP_MEMCACHED_VERSION).tgz
+-# pecl.php.net returns html with db connect failed
+-PHP_MEMCACHED_SITE = http://sources.buildroot.net
+-PHP_MEMCACHED_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-	--disable-memcached-sasl \
+-	--with-libmemcached-dir=$(STAGING_DIR)/usr \
+-	--with-zlib-dir=$(STAGING_DIR)/usr
+-# phpize does the autoconf magic
+-PHP_MEMCACHED_DEPENDENCIES = libmemcached php zlib host-autoconf host-pkgconf
+-PHP_MEMCACHED_LICENSE = MIT
+-PHP_MEMCACHED_LICENSE_FILES = LICENSE
+-
+-define PHP_MEMCACHED_PHPIZE
+-	(cd $(@D); \
+-		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
+-		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
+-		$(STAGING_DIR)/usr/bin/phpize)
+-endef
+-
+-PHP_MEMCACHED_PRE_CONFIGURE_HOOKS += PHP_MEMCACHED_PHPIZE
+-
+-$(eval $(autotools-package))
+diff --git a/package/php-ssh2/Config.in b/package/php-ssh2/Config.in
+deleted file mode 100644
+index b457900..0000000
+--- a/package/php-ssh2/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_PHP_SSH2
+-	bool "php-ssh2"
+-	depends on BR2_PACKAGE_PHP
+-	select BR2_PACKAGE_LIBSSH2
+-	help
+-	  PHP bindings for the libssh2 library.
+-
+-	  http://pecl.php.net/package/ssh2
+diff --git a/package/php-ssh2/php-ssh2.hash b/package/php-ssh2/php-ssh2.hash
+deleted file mode 100644
+index d599662..0000000
+--- a/package/php-ssh2/php-ssh2.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256	600c82d2393acf3642f19914f06a7afea57ee05cb8c10e8a5510b32188b97f99	ssh2-0.12.tgz
+diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
+deleted file mode 100644
+index ace68e0..0000000
+--- a/package/php-ssh2/php-ssh2.mk
++++ /dev/null
+@@ -1,27 +0,0 @@
+-################################################################################
+-#
+-# php-ssh2
+-#
+-################################################################################
+-
+-PHP_SSH2_VERSION = 0.12
+-PHP_SSH2_SOURCE = ssh2-$(PHP_SSH2_VERSION).tgz
+-# pecl.php.net returns html with db connect failed
+-PHP_SSH2_SITE = http://sources.buildroot.net
+-PHP_SSH2_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-	--with-ssh2=$(STAGING_DIR)/usr
+-# phpize does the autoconf magic
+-PHP_SSH2_DEPENDENCIES = libssh2 php host-autoconf
+-PHP_SSH2_LICENSE = PHP
+-PHP_SSH2_LICENSE_FILES = LICENSE
+-
+-define PHP_SSH2_PHPIZE
+-	(cd $(@D); \
+-		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
+-		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
+-		$(STAGING_DIR)/usr/bin/phpize)
+-endef
+-
+-PHP_SSH2_PRE_CONFIGURE_HOOKS += PHP_SSH2_PHPIZE
+-
+-$(eval $(autotools-package))
+diff --git a/package/php-yaml/Config.in b/package/php-yaml/Config.in
+deleted file mode 100644
+index 8d09ce2..0000000
+--- a/package/php-yaml/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_PHP_YAML
+-	bool "php-yaml"
+-	depends on BR2_PACKAGE_PHP
+-	select BR2_PACKAGE_LIBYAML
+-	help
+-	  PHP YAML-1.1 parser and emitter.
+-
+-	  http://pecl.php.net/package/yaml
+diff --git a/package/php-yaml/php-yaml.hash b/package/php-yaml/php-yaml.hash
+deleted file mode 100644
+index e4f22a6..0000000
+--- a/package/php-yaml/php-yaml.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256	762ec3d9eb163ac0d063118df8c5e2ee6746dbe8566d32055e7e066e590937c3	yaml-1.1.1.tgz
+diff --git a/package/php-yaml/php-yaml.mk b/package/php-yaml/php-yaml.mk
+deleted file mode 100644
+index b6f259d..0000000
+--- a/package/php-yaml/php-yaml.mk
++++ /dev/null
+@@ -1,27 +0,0 @@
+-################################################################################
+-#
+-# php-yaml
+-#
+-################################################################################
+-
+-PHP_YAML_VERSION = 1.1.1
+-PHP_YAML_SOURCE = yaml-$(PHP_YAML_VERSION).tgz
+-# pecl.php.net returns html with db connect failed
+-PHP_YAML_SITE = http://sources.buildroot.net
+-PHP_YAML_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+-	--with-yaml=$(STAGING_DIR)/usr
+-# phpize does the autoconf magic
+-PHP_YAML_DEPENDENCIES = libyaml php host-autoconf
+-PHP_YAML_LICENSE = MIT
+-PHP_YAML_LICENSE_FILES = LICENSE
+-
+-define PHP_YAML_PHPIZE
+-	(cd $(@D); \
+-		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
+-		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
+-		$(STAGING_DIR)/usr/bin/phpize)
+-endef
+-
+-PHP_YAML_PRE_CONFIGURE_HOOKS += PHP_YAML_PHPIZE
+-
+-$(eval $(autotools-package))
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index ee51030..82aaf41 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -111,22 +111,12 @@ config BR2_PACKAGE_PHP_EXT_DBA_INI
+ 
+ endif
+ 
+-config BR2_PACKAGE_PHP_EXT_MYSQL
+-	bool "Mysql"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_USE_MMU # mysql
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
+-	select BR2_PACKAGE_MYSQL
+-	help
+-	  MySQL support
+-
+ config BR2_PACKAGE_PHP_EXT_MYSQLI
+ 	bool "Mysqli"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # mysql
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
+ 	select BR2_PACKAGE_MYSQL
+-	select BR2_PACKAGE_PHP_EXT_MYSQL
+ 	help
+ 	  MySQL Improved extension support
+ 
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 4feb3ca..4bc0263 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-sha256	566ff1a486cb0485ed477a91ea292423f77a58671270ff73b74e67e3ce7084f9	php-5.6.21.tar.xz
++sha256 1b237a9455e5476a425dbb9d99966bad68107747c601958cb9558a7fb49ab419  php-7.0.6.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index d58c4fd..fbdb738 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 5.6.21
++PHP_VERSION = 7.0.6
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
+@@ -178,11 +178,7 @@ PHP_CONF_OPTS += --with-readline=$(STAGING_DIR)/usr
+ PHP_DEPENDENCIES += readline
+ endif
+ 
+-### Native MySQL extensions
+-ifeq ($(BR2_PACKAGE_PHP_EXT_MYSQL),y)
+-PHP_CONF_OPTS += --with-mysql=$(STAGING_DIR)/usr
+-PHP_DEPENDENCIES += mysql
+-endif
++### Native SQL extensions
+ ifeq ($(BR2_PACKAGE_PHP_EXT_MYSQLI),y)
+ PHP_CONF_OPTS += --with-mysqli=$(STAGING_DIR)/usr/bin/mysql_config
+ PHP_DEPENDENCIES += mysql
