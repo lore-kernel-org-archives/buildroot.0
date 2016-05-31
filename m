@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 22:16:50 +0200
-Subject: [Buildroot] [PATCH] configs: new configuration for i.MX6UL Pico
- board
-In-Reply-To: <1463601264-16293-1-git-send-email-festevam@gmail.com>
-References: <1463601264-16293-1-git-send-email-festevam@gmail.com>
-Message-ID: <20160531221650.385eccad@free-electrons.com>
+Date: Tue, 31 May 2016 22:30:59 +0200
+Subject: [Buildroot] [PATCH] odroid_xu4: new board
+In-Reply-To: <1446836886-27256-1-git-send-email-viktorin@rehivetech.com>
+References: <1446836886-27256-1-git-send-email-viktorin@rehivetech.com>
+Message-ID: <20160531223059.34d2c127@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +12,152 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 18 May 2016 16:54:24 -0300, Fabio Estevam wrote:
-> Add support for Technexion's i.MX6UL Pico board.
-> 
-> For information about this board, please visit:
-> http://www.wandboard.org/images/hobbit/hobbitboard-imx6ul-reva1.pdf
-> 
-> Currently two patches are needed, but in the future they can be removed
-> when we switch to kernel 4.7 and U-boot 2016.07 versions.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Sorry for the late review. It generally looks good, but I still have a
+number of comments which should be addressed in order for the patch to
+be applied.
 
-This generally looks good, but we generally like when a readme.txt is
-added to indicate how to quickly setup the board to use the Buildroot
-image.
+On Fri,  6 Nov 2015 20:08:06 +0100, Jan Viktorin wrote:
+> This patch provides support for the board Odroid XU4:
+> 
+>   http://odroid.com/dokuwiki/doku.php?id=en:odroid-xu4
+> 
+> The support utilizes the Linux Kernel 4.2 experimental from:
+> 
+>   https://github.com/tobetter/linux  odroidxu4-v4.2
+
+There is a v4.6 branch now, perhaps using it would be good (but it's
+definitely not mandatory).
+
+> 
+>   (currently: 5eb40d45b291ee129cbfac2073f1ca7aa32ff4c5)
+> 
+> and a customized linux defconfig which disables various (mostly)
+> useless drivers to minimalize the Buildroot initial system. It
+> compiles the r8152 driver into the kernel to have a working
+> Ethernet out-of-the-box.
+
+Please use odroidxu4_defconfig from the upstream tree. It is not
+necessary to have a strictly minimal kernel configuration, we very much
+prefer using an upstream defconfig.
+
+> diff --git a/board/hardkernel/linux-odroidxu4-v4.2.config b/board/hardkernel/linux-odroidxu4-v4.2.config
+
+Please use a subdirectory for the board:
+
+	board/<vendor>/<board>/
+
+So in your case:
+
+	board/hardkernel/odroid-xu4/
 
 
-> diff --git a/board/technexion/imx6ulpico/post-image.sh b/board/technexion/imx6ulpico/post-image.sh
-> new file mode 100755
-> index 0000000..b0917fc
+> diff --git a/board/hardkernel/readme.txt b/board/hardkernel/readme.txt
+> new file mode 100644
+> index 0000000..d7a77db
 > --- /dev/null
-> +++ b/board/technexion/imx6ulpico/post-image.sh
-> @@ -0,0 +1,15 @@
-> +#!/usr/bin/env bash
+> +++ b/board/hardkernel/readme.txt
+> @@ -0,0 +1,49 @@
+> +Odroid XU4
+> +==========
 > +
-> +GENIMAGE_CFG="board/technexion/imx6ulpico/genimage.cfg"
+> +http://www.hardkernel.com/main/products/prdt_info.php?g_code=G143452239825
+> +http://www.hardkernel.com/main/products/prdt_info.php?g_code=G143452239825
+> +
+> +The Buildroot odroid_xu4_defconfig configuration builds:
+> +
+> +  u-boot.bin -> u-boot.bin.hardkernel
+> +  zImage
+> +  exynos5422-odroidxu4.dtb
+> +  rootfs.ext3
+> +
+> +and prepares:
+> +
+> +  bl1.bin.hardkernel
+> +  bl2.bin.hardkernel
+> +  tzsw.bin.hardkernel
+> +  sd_fusing.sh
+> +  boot.ini
+> +
+> +As the board requires signed 1st bootloader, it is necessary to use
+> +the provided BLOBs.
+> +
+> +
+> +Installation:
+> +
+> + - suppose ${SD} points to eg. /dev/sdc (your SD card)
+> +
+> + 1) make odroid_xu4_defconfig
+> + 2) make
+> + 3) cd output/images
+> + 4) create 2 partitions (fdisk, cfdisk, ...):
+> +    FAT (~128 MB), ext3 (rest).
+> +
+> + 5) sudo ./sd_fusing ${SD}
+> +    Installs the bootloaders, trust zone and the built U-Boot.
+> +
+> + 6) sudo dd if=rootfs.ext3 of=${SD}2
+> +    Write to eg. /dev/sdc2.
+> +
+> + 7) sudo mount ${SD}1 /mnt
+> +    Mount the FAT partition (eg. /dev/sdc1).
+> +
+> + 8) sudo cp -v zImage boot.ini exynos5422-odroidxu4.dtb /mnt
+> + 9) sudo umount ${SD}1
 
-Maybe use the $(dirname $0) trick ?
+Please use the genimage mechanism to directly generate a bootable SD
+card. Look at the other boards supported in Buildroot, many of them are
+using genimage.
 
-Other than that, looks good to me.
+> diff --git a/configs/odroid_xu4_defconfig b/configs/odroid_xu4_defconfig
+> new file mode 100644
+> index 0000000..3790db7
+> --- /dev/null
+> +++ b/configs/odroid_xu4_defconfig
+> @@ -0,0 +1,27 @@
+> +BR2_arm=y
+> +BR2_cortex_a15=y
+> +BR2_ARM_FPU_NEON=y
 
-Thanks,
+Using NEON as the FPU is really not recommended. Please use the VFP
+unit for floating point by default.
+
+> +BR2_KERNEL_HEADERS_4_2=y
+
+This needs to be changed to:
+
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
+
+> +BR2_TARGET_GENERIC_HOSTNAME="odroid-xu4"
+> +BR2_TARGET_GENERIC_ISSUE="Welcome to Odroid XU4!"
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttySAC2"
+> +BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+
+Aren't the default setting (use the kernel console) working for yuo?
+
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroid-post.sh"
+
+We usually call it post-image.sh.
+
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_TARGET_UBOOT_VERSION)"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/tobetter/linux"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="odroidxu4-v4.2"
+> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/hardkernel/linux-odroidxu4-v4.2.config"
+> +BR2_LINUX_KERNEL_ZIMAGE=y
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="exynos5422-odroidxu4"
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_3=y
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BOARDNAME="odroid"
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/hardkernel/u-boot.git"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="odroidxu3-v2012.07"
+
+Thanks!
 
 Thomas
 -- 
