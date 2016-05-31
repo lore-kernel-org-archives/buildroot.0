@@ -1,56 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 22:56:42 +0200
-Subject: [Buildroot] [PATCH v3 5/6] package/flannel: Add
- BR2_TOOLCHAIN_HAS_THREADS
-In-Reply-To: <1464727672.12343.16.camel@infradead.org>
-References: <cover.1464286518.git.geoff@infradead.org>
- <627469f0b7b4e604da3a5ab3ef721f138a1c95a8.1464286518.git.geoff@infradead.org>
- <20160528154158.70f4f025@free-electrons.com>
- <1464727672.12343.16.camel@infradead.org>
-Message-ID: <20160531225642.3af186b6@free-electrons.com>
+Date: Tue, 31 May 2016 22:59:35 +0200
+Subject: [Buildroot] [git commit branch/next] uboot: Support multiple
+	environment source files
+Message-ID: <20160531205946.17049819C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0542bb79e823505a730b6a2c2f01b33b6293cf03
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 31 May 2016 13:47:52 -0700, Geoff Levand wrote:
+Allow multiple file names to be listed in
+BR2_TARGET_UBOOT_ENVIMAGE_SOURCE, concatenating them in the order
+listed.
 
-> Looking at the go sources, they force -pie when compiling cgo support
-> for ARM.  See line number 3188 in https://golang.org/src/cmd/go/build.go.
+This allows the bulk of the environment to be shared across multiple
+boards using a common environment file with board-specific values
+supplied in a secondary environment source file.
 
-Can you get more details than the "get accurate imported sym" the code
-has?
+Signed-off-by: Cam Hutchison <camh@xdna.net>
+[Thomas: adjust indentation in the .mk file.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/uboot/Config.in | 8 ++++++--
+ boot/uboot/uboot.mk  | 7 ++++---
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
-> I think the only solution is to not build go packages that use cgo
-> when BR2_arm && BR2_TOOLCHAIN_USES_UCLIBC, so something like this:
-> 
-> +# cgo on ARM requires PIE linkage, which is not compatable with uClibc.
-> +comment "flannel is not available with uClibc-based toolchain on ARM architecture"
-> +       depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on BR2_arm && BR2_TOOLCHAIN_USES_UCLIBC
-> +
->  config BR2_PACKAGE_FLANNEL
->         bool "flannel"
->         depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
->         depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on !(BR2_arm && BR2_TOOLCHAIN_USES_UCLIBC)
->         help
-> 
-> If this looks OK, I'll submit a patch.
-
-This is really annoying, as all Go packages that need cgo support will
-not work in what is probably Buildroot's most widely used
-configuration: ARM with uClibc.
-
-So I'd really like to push things a bit further, and either fix uClibc
-so that static+PIE works, or understand why Go wants PIE on ARM.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 21f9abd..9ffbb51 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -348,9 +348,13 @@ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
+ if BR2_TARGET_UBOOT_ENVIMAGE
+ 
+ config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
+-	string "Source file for environment"
++	string "Source files for environment"
+ 	help
+-	  Text file describing the environment.
++	  Text files describing the environment. Files should have
++	  lines of the form var=value, one per line. Blank lines and
++	  lines starting with a # are ignored.
++
++	  Multiple source files are concatenated in the order listed.
+ 
+ config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
+ 	string "Size of environment"
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index e071303..3b2a230 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -165,9 +165,10 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 	$(if $(BR2_TARGET_UBOOT_SPL),
+ 		cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
+ 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+-		$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+-		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+-		-o $(BINARIES_DIR)/uboot-env.bin $(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))
++		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
++			$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
++			$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
++			-o $(BINARIES_DIR)/uboot-env.bin -)
+ endef
+ 
+ define UBOOT_INSTALL_OMAP_IFT_IMAGE
