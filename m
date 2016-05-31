@@ -1,95 +1,119 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 21:23:46 +0200
-Subject: [Buildroot] [PATCH v3] gdb: enable simulator support for host
- build
-In-Reply-To: <20160528205724.GA10651@waldemar-brodkorb.de>
-References: <20160528205724.GA10651@waldemar-brodkorb.de>
-Message-ID: <20160531212346.58960194@free-electrons.com>
+Date: Tue, 31 May 2016 21:27:47 +0200
+Subject: [Buildroot] [git commit branch/next] configs: mx53loco: use
+	genimage to generate sdcard image
+Message-ID: <20160531192823.61EC181D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=dd2e328089c12685400bd124e70ff6a28cac025a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 28 May 2016 22:57:25 +0200, Waldemar Brodkorb wrote:
-> Add an option to enable simulator support, so
-> it can be used to test some no-MMU systems.
-> 
-> Newer GDB need a workaround for in-tree compile.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/freescale/imx53loco/create-boot-sd.sh |  1 -
+ board/freescale/imx53loco/genimage.cfg      | 42 +++++++++++++++++++++++++++++
+ board/freescale/imx53loco/post-image.sh     | 16 +++++++++++
+ configs/mx53loco_defconfig                  |  6 +++++
+ 4 files changed, 64 insertions(+), 1 deletion(-)
 
-This new version still doesn't build with gdb 7.10 (i.e the default).
-It fails with:
-
-In file included from ./../common/callback.c:24:0:
-./../common/cconfig.h:212:21: fatal error: tconfig.h: No such file or directory
-compilation terminated.
-Makefile:531: recipe for target 'callback.o' failed
-make[5]: *** [callback.o] Error 1
-make[5]: *** Waiting for unfinished jobs....
-In file included from ./../common/syscall.c:27:0:
-./../common/cconfig.h:212:21: fatal error: tconfig.h: No such file or directory
-compilation terminated.
-In file included from wrapper.c:23:0:
-config.h:161:21: fatal error: tconfig.h: No such file or directory
-compilation terminated.
-In file included from targ-map.c:4:0:
-config.h:161:21: fatal error: tconfig.h: No such file or directory
-Makefile:531: recipe for target 'syscall.o' failed
-compilation terminated.
-make[5]: *** [syscall.o] Error 1
-Makefile:531: recipe for target 'targ-map.o' failed
-make[5]: *** [targ-map.o] Error 1
-Makefile:531: recipe for target 'wrapper.o' failed
-make[5]: *** [wrapper.o] Error 1
-Makefile:129: recipe for target 'all' failed
-make[4]: *** [all] Error 1
-Makefile:8201: recipe for target 'all-sim' failed
-make[3]: *** [all-sim] Error 2
-Makefile:845: recipe for target 'all' failed
-make[2]: *** [all] Error 2
-package/pkg-generic.mk:195: recipe for target '/home/thomas/projets/buildroot/output/build/host-gdb-7.10.1/.stamp_built' failed
-make[1]: *** [/home/thomas/projets/buildroot/output/build/host-gdb-7.10.1/.stamp_built] Error 2
-Makefile:36: recipe for target '_all' failed
-make: *** [_all] Error 2
-
-Using the following defconfig:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2016.05-rc2-3-g011d4e2.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_PACKAGE_HOST_GDB=y
-BR2_PACKAGE_HOST_GDB_SIM=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-
-> +# workaround a bug if in-tree build is used
-
-If I understood correctly, it has been fixed in newer versions of gdb,
-right? If that's the case, please indicate here in which version it has
-been fixed, so that we can remove this workaround at some point in the future.
-
-> +define GDB_SIM_WORKAROUND
-
-It would be better named HOST_GDB_SIM_WORKAROUND.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/freescale/imx53loco/create-boot-sd.sh b/board/freescale/imx53loco/create-boot-sd.sh
+deleted file mode 120000
+index d45d639..0000000
+--- a/board/freescale/imx53loco/create-boot-sd.sh
++++ /dev/null
+@@ -1 +0,0 @@
+-../create-boot-sd.sh
+\ No newline at end of file
+diff --git a/board/freescale/imx53loco/genimage.cfg b/board/freescale/imx53loco/genimage.cfg
+new file mode 100644
+index 0000000..b56c168
+--- /dev/null
++++ b/board/freescale/imx53loco/genimage.cfg
+@@ -0,0 +1,42 @@
++# Minimal microSD card image for the Freescale's i.MX53 QSB board
++#
++# We mimic the .sdcard Freescale's image format for i.MX53:
++# * the microSD card must have 1 kB free space at the beginning,
++# * U-Boot is dumped as is,
++# * a FAT partition at offset 8 MB is containing zImage and dtbs,
++# * a single root filesystem partition is required (Ext4 in this case).
++#
++
++image boot.vfat {
++  vfat {
++    files = {
++      "imx53-qsb.dtb",
++      "imx53-qsrb.dtb",
++      "zImage"
++    }
++  }
++  size = 16M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition u-boot {
++    in-partition-table = "no"
++    image = "u-boot.imx"
++    offset = 1024
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++    offset = 8M
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++  }
++}
+diff --git a/board/freescale/imx53loco/post-image.sh b/board/freescale/imx53loco/post-image.sh
+new file mode 100644
+index 0000000..8757355
+--- /dev/null
++++ b/board/freescale/imx53loco/post-image.sh
+@@ -0,0 +1,16 @@
++#!/usr/bin/env bash
++
++BOARD_DIR="$(dirname $0)"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++  --rootpath "${TARGET_DIR}" \
++  --tmppath "${GENIMAGE_TMP}" \
++  --inputpath "${BINARIES_DIR}" \
++  --outputpath "${BINARIES_DIR}" \
++  --config "${GENIMAGE_CFG}"
++
++exit $?
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index e461f7a..b62172c 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -11,7 +11,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ # patches
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx53loco/patches/"
+ 
++# required tools to create the SD card image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
+ # Filesystem
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/imx53loco/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
