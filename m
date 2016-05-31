@@ -1,123 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 21:26:55 +0200
-Subject: [Buildroot] [git commit branch/next] configs: mx53loco: Update
-	bootloader and kernel versions
-Message-ID: <20160531192823.44B0981D43@busybox.osuosl.org>
+Date: Tue, 31 May 2016 21:27:01 +0200
+Subject: [Buildroot] [git commit branch/next] configs: mx53loco: Extend to
+	ext4 type
+Message-ID: <20160531192823.540D881D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88c514a56aa523e0357bb08ea59b8e334f22a622
+commit: https://git.buildroot.net/buildroot/commit/?id=97aed09d375b617dc9ba5990d6dd66b5498b8353
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Update U-boot to the 2016.05 version and the kernel to 4.6.
-
-U-boot 2016.05 needs the patch c510f2e436008 ("video: ipu_common: fix build
-error") that is already in mainline to fix an IPU build error.
-
-We can remove this patch in the future when we switch to U-boot 2016.07.
+Add support for EXT4 filesystem.
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-video-ipu_common-fix-build-error.patch    | 47 ++++++++++++++++++++++
- configs/mx53loco_defconfig                         | 20 +++++----
- 2 files changed, 59 insertions(+), 8 deletions(-)
+ configs/mx53loco_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/freescale/imx53loco/patches/uboot/0001-video-ipu_common-fix-build-error.patch b/board/freescale/imx53loco/patches/uboot/0001-video-ipu_common-fix-build-error.patch
-new file mode 100644
-index 0000000..356d0b0
---- /dev/null
-+++ b/board/freescale/imx53loco/patches/uboot/0001-video-ipu_common-fix-build-error.patch
-@@ -0,0 +1,47 @@
-+From c510f2e436008e55a50b063f2180cb1e63984224 Mon Sep 17 00:00:00 2001
-+From: Peng Fan <van.freenix@gmail.com>
-+Date: Thu, 28 Apr 2016 10:07:53 +0800
-+Subject: [PATCH] video: ipu_common: fix build error
-+
-+Some toolchains fail to build
-+"clk->rate = (u64)(clk->parent->rate * 16) / div;"
-+And the cast usage is wrong.
-+
-+Use the following code to fix the issue,
-+"
-+  do_div(parent_rate, div);
-+  clk->rate = parent_rate;
-+"
-+
-+Reported-by: Peter Robinson <pbrobinson@gmail.com>
-+Signed-off-by: Peng Fan <van.freenix@gmail.com>
-+Cc: Stefano Babic <sbabic@denx.de>
-+Cc: Fabio Estevam <fabio.estevam@nxp.com>
-+Cc: Tom Rini <trini@konsulko.com>
-+Cc: Anatolij Gustschin <agust@denx.de>
-+Cc: Peter Robinson <pbrobinson@gmail.com>
-+Reviewed-by: Tom Rini <trini@konsulko.com>
-+Tested-by: Peter Robinson <pbrobinson@gmail.com>
-+Signed-off-by: Fabio Estevam <festevam@gmail.com>
-+---
-+ drivers/video/ipu_common.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/drivers/video/ipu_common.c b/drivers/video/ipu_common.c
-+index 36d4b23..5676a0f 100644
-+--- a/drivers/video/ipu_common.c
-++++ b/drivers/video/ipu_common.c
-+@@ -352,7 +352,9 @@ static int ipu_pixel_clk_set_rate(struct clk *clk, unsigned long rate)
-+ 	 */
-+ 	__raw_writel((div / 16) << 16, DI_BS_CLKGEN1(clk->id));
-+ 
-+-	clk->rate = (u64)(clk->parent->rate * 16) / div;
-++	do_div(parent_rate, div);
-++
-++	clk->rate = parent_rate;
-+ 
-+ 	return 0;
-+ }
-+-- 
-+1.9.1
-+
 diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index 3cb1b74..06150c7 100644
+index 06150c7..e461f7a 100644
 --- a/configs/mx53loco_defconfig
 +++ b/configs/mx53loco_defconfig
-@@ -2,25 +2,29 @@
- BR2_arm=y
- BR2_cortex_a8=y
+@@ -13,6 +13,7 @@ BR2_GLOBAL_PATCH_DIR="board/freescale/imx53loco/patches/"
  
--# Linux headers same as kernel, a 2.6 series (so, no option selected)
-+# Linux headers same as kernel, a 4.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- 
-+# patches
-+BR2_GLOBAL_PATCH_DIR="board/freescale/imx53loco/patches/"
-+
  # Filesystem
  BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
  
  # Bootloader
  BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Freescale/u-boot-fslc.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="e36968af0a033e9d66535928886103370620cb4d"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="b3912bb8a4caf3ec50909135e88af959982c43ca"
--BR2_LINUX_KERNEL_DEFCONFIG="imx5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
