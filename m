@@ -1,54 +1,40 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 31 May 2016 11:15:55 +0100
-Subject: [Buildroot] [PATCH] mesa3d: use -mno-compact-eh for Code Sourcery
-	MIPS
-Message-ID: <1464689755-63804-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 31 May 2016 12:24:53 +0200
+Subject: [Buildroot] [PATCH v2] build: fix umask test
+In-Reply-To: <20160531095913.GA27305@airbook> (Kurt Van Dijck's message of
+ "Tue, 31 May 2016 11:59:13 +0200")
+References: <20160531074622.GB26685@airbook>
+ <20160531115326.5b360fcb@free-electrons.com>
+ <20160531095913.GA27305@airbook>
+Message-ID: <87pos2zfre.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mesa3d doesn't like the new compressed exception handling of the Code
-Sourcery MIPS toolchain and it fails to compile with an error like this
-one:
+>>>>> "Kurt" == Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> writes:
 
-/br/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.3.0/../../../../mips-linux-gnu/bin/ld:
-../../../../src/mesa/.libs/libmesagallium.a(ir_to_mesa.o):
-.eh_frame_entry not in order
-/br/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.3.0/../../../../mips-linux-gnu/bin/ld:
-final link failed: Nonrepresentable section on output
-collect2: error: ld returned 1 exit status
+ >> > --- a/Makefile
+ >> > +++ b/Makefile
+ >> > @@ -26,7 +26,7 @@
+ >> >  
+ >> >  # Trick for always running with a fixed umask
+ >> >  UMASK = 0022
+ >> > -ifneq ($(shell umask),$(UMASK))
+ >> > +ifneq (00$(shell umask | sed -e "s/^0*//g"),$(UMASK))
+ >> 
+ >> Doesn't this makes the assumption that "umask" will always return a
+ >> value that starts with two zeros ?
 
-Using -mno-compact-eh fixes the problem.
+ > No.
+ > the "umask | sed -e ..." strips leading 0's, when present.
+ > "00$(...)" glues 00 in front of the stripped umask, so it is compatible
+ > again.
 
-Fixes:
+True. I still think moving the SHELL= line to the very top of the file
+is a safer/cleaner approach, so the same shell is used everywhere in
+Buildroot.
 
-  http://autobuild.buildroot.net/results/3cd/3cd81c57c51c0963ee6f4d9b814989460bb35316/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/mesa3d/mesa3d.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 3c98f8d..b47fada 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -22,6 +22,14 @@ MESA3D_DEPENDENCIES = \
- 	expat \
- 	libdrm
- 
-+# mesa3d doesn't like the new compressed exception handling of the Code
-+# Sourcery MIPS toolchain and it fails to compile. Using -mno-compact-eh
-+# fixes the problem.
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS),y)
-+MESA3D_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mno-compact-eh"
-+MESA3D_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -mno-compact-eh"
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MESA3D_DEPENDENCIES += openssl
- MESA3D_CONF_OPTS += --with-sha1=libcrypto
 -- 
-2.7.3
+Bye, Peter Korsgaard
