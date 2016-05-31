@@ -1,43 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 31 May 2016 09:45:52 +0200
-Subject: [Buildroot] [git commit] ltris: correct audio configure options
-Message-ID: <20160531074724.8C3E881EE0@busybox.osuosl.org>
+Date: Tue, 31 May 2016 09:48:13 +0200
+Subject: [Buildroot] [PATCH] build: fix umask test
+In-Reply-To: <20160531074348.GA26685@airbook> (Kurt Van Dijck's message of
+ "Tue, 31 May 2016 09:43:48 +0200")
+References: <20160530070635.GA27560@airbook.vandijck-laurijssen.be>
+ <87mvn82d50.fsf@dell.be.48ers.dk> <87inxw2cnt.fsf@dell.be.48ers.dk>
+ <20160530111740.14c24236@free-electrons.com>
+ <20160530095319.GA5804@airbook.vandijck-laurijssen.be>
+ <87a8j73lz2.fsf@dell.be.48ers.dk>
+ <20160530210928.GA19307@airbook.vandijck-laurijssen.be>
+ <744ed421-d308-297d-a497-251a7756c0d2@mind.be>
+ <20160531074348.GA26685@airbook>
+Message-ID: <87wpmazn0i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=306878fa0291bc52ac5a835fb29670f50cbe868c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Kurt" == Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/555/555bfc97b39eb9b0f1e516ffb7ae375ca2c43d5f/
+ >> > 
+ >> > I see, but how would that help when bash is not on the system?
+ >> > Is bash a prerequisite?
+ >> 
+ >> Yes, bash is a prerequisite. Some of our own scripts are bash scripts.
+ >> Moreover, quite a few packages just assume that the shell is bash. Requiring
+ >> bash and setting is as SHELL is the simplest way to handle that.
 
-The configure options to enable/disable sound through sdl_mixer are called
---enable/--disable-sound, not --enable/--disable-audio.
+ > The Makefile only recommends /bin/bash, it falls back to 'sh' when bash
+ > is not present.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ltris/ltris.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Yes, but support/dependencies/dependencies.sh checks for bash and bails
+out if not available.
 
-diff --git a/package/ltris/ltris.mk b/package/ltris/ltris.mk
-index 530e11e..bbd270e 100644
---- a/package/ltris/ltris.mk
-+++ b/package/ltris/ltris.mk
-@@ -17,12 +17,12 @@ LTRIS_CONF_ENV = \
- 
- ifeq ($(BR2_PACKAGE_LTRIS_AUDIO),y)
- LTRIS_DEPENDENCIES += sdl_mixer host-pkgconf
--LTRIS_CONF_OPTS += --enable-audio=yes
-+LTRIS_CONF_OPTS += --enable-sound
- # configure script does NOT use pkg-config to figure out how to link
- # with sdl_mixer, breaking static linking as sdl_mixer can use libmad
- LTRIS_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs SDL_mixer`
- else
--LTRIS_CONF_OPTS += --disable-audio
-+LTRIS_CONF_OPTS += --disable-sound
- endif
- 
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+-- 
+Venlig hilsen,
+Peter Korsgaard 
