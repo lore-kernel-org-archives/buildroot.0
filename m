@@ -1,90 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 21:32:20 +0200
-Subject: [Buildroot] [git commit branch/next] php-ssh2: re add package,
+Date: Tue, 31 May 2016 21:32:12 +0200
+Subject: [Buildroot] [git commit branch/next] php-memcached: re add package,
 	now compatible with PHP 7
-Message-ID: <20160531194052.706DD80AE1@busybox.osuosl.org>
+Message-ID: <20160531194052.63D2B80AE1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08af64d6a5e7d6b37c954335e2b4c7e96e2e3647
+commit: https://git.buildroot.net/buildroot/commit/?id=96ad5fa0529b03f8a2aba0c7ec0d61fe2c8f3d18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Related: https://bugs.php.net/bug.php?id=71376
+Related: https://bugs.php.net/bug.php?id=70751
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in              |  1 +
- package/php-ssh2/Config.in     |  8 ++++++++
- package/php-ssh2/php-ssh2.hash |  2 ++
- package/php-ssh2/php-ssh2.mk   | 25 +++++++++++++++++++++++++
- 4 files changed, 36 insertions(+)
+ package/Config.in                        |  1 +
+ package/php-memcached/Config.in          | 15 +++++++++++++++
+ package/php-memcached/php-memcached.hash |  2 ++
+ package/php-memcached/php-memcached.mk   | 27 +++++++++++++++++++++++++++
+ 4 files changed, 45 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 0eeb6c5..4639587 100644
+index 7421bc2..0eeb6c5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -617,6 +617,7 @@ menu "External php extensions"
+@@ -616,6 +616,7 @@ menu "External php extensions"
+ 	source "package/php-geoip/Config.in"
  	source "package/php-gnupg/Config.in"
  	source "package/php-imagick/Config.in"
- 	source "package/php-memcached/Config.in"
-+	source "package/php-ssh2/Config.in"
++	source "package/php-memcached/Config.in"
  	source "package/php-zmq/Config.in"
  endmenu
  endif
-diff --git a/package/php-ssh2/Config.in b/package/php-ssh2/Config.in
+diff --git a/package/php-memcached/Config.in b/package/php-memcached/Config.in
 new file mode 100644
-index 0000000..b457900
+index 0000000..cd97c15
 --- /dev/null
-+++ b/package/php-ssh2/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PHP_SSH2
-+	bool "php-ssh2"
-+	depends on BR2_PACKAGE_PHP
-+	select BR2_PACKAGE_LIBSSH2
++++ b/package/php-memcached/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PHP_MEMCACHED
++	bool "php-memcached"
++	depends on BR2_INSTALL_LIBSTDCPP # libmemcached
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libmemcached
++	select BR2_PACKAGE_PHP_EXT_SESSION
++	select BR2_PACKAGE_LIBMEMCACHED
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  PHP bindings for the libssh2 library.
++	  PHP extension for interfacing with memcached via
++	  libmemcached library.
 +
-+	  http://pecl.php.net/package/ssh2
-diff --git a/package/php-ssh2/php-ssh2.hash b/package/php-ssh2/php-ssh2.hash
++	  http://pecl.php.net/package/memcached
++
++comment "php-memcached needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/php-memcached/php-memcached.hash b/package/php-memcached/php-memcached.hash
 new file mode 100644
-index 0000000..1e046df
+index 0000000..f2a096f
 --- /dev/null
-+++ b/package/php-ssh2/php-ssh2.hash
++++ b/package/php-memcached/php-memcached.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 877f2fa9a709aa2dd9567848fae7b45ecac359904296a0aedbf718e99d8568f5  php-ssh2-aa1739ac26c2177d33ab8d064021032bdc2c3a40.tar.gz
-diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
++sha256 73266212e791a4817da06be1daddf9ff7dd5b5b0b650b3fbd0f5fc6ccc18491b  php-memcached-6ee96cad7be5caa1f13a1f3e5a4d5f900b9c04ce.tar.gz
+diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
 new file mode 100644
-index 0000000..cfe6070
+index 0000000..ea241b2
 --- /dev/null
-+++ b/package/php-ssh2/php-ssh2.mk
-@@ -0,0 +1,25 @@
++++ b/package/php-memcached/php-memcached.mk
+@@ -0,0 +1,27 @@
 +################################################################################
 +#
-+# php-ssh2
++# php-memcached
 +#
 +################################################################################
 +
-+PHP_SSH2_VERSION = aa1739ac26c2177d33ab8d064021032bdc2c3a40
-+PHP_SSH2_SITE = $(call github,php,pecl-networking-ssh2,$(PHP_SSH2_VERSION))
-+PHP_SSH2_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
-+	--with-ssh2=$(STAGING_DIR)/usr
++PHP_MEMCACHED_VERSION = 6ee96cad7be5caa1f13a1f3e5a4d5f900b9c04ce
++PHP_MEMCACHED_SITE = $(call github,php-memcached-dev,php-memcached,$(PHP_MEMCACHED_VERSION))
++PHP_MEMCACHED_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
++	--disable-memcached-sasl \
++	--with-libmemcached-dir=$(STAGING_DIR)/usr \
++	--with-zlib-dir=$(STAGING_DIR)/usr
 +# phpize does the autoconf magic
-+PHP_SSH2_DEPENDENCIES = libssh2 php host-autoconf
-+PHP_SSH2_LICENSE = PHP
-+PHP_SSH2_LICENSE_FILES = LICENSE
++PHP_MEMCACHED_DEPENDENCIES = libmemcached php zlib host-autoconf host-pkgconf
++PHP_MEMCACHED_LICENSE = MIT
++PHP_MEMCACHED_LICENSE_FILES = LICENSE
 +
-+define PHP_SSH2_PHPIZE
++define PHP_MEMCACHED_PHPIZE
 +	(cd $(@D); \
 +		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
 +		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
 +		$(STAGING_DIR)/usr/bin/phpize)
 +endef
 +
-+PHP_SSH2_PRE_CONFIGURE_HOOKS += PHP_SSH2_PHPIZE
++PHP_MEMCACHED_PRE_CONFIGURE_HOOKS += PHP_MEMCACHED_PHPIZE
 +
 +$(eval $(autotools-package))
