@@ -1,49 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 31 May 2016 17:40:24 +0200
-Subject: [Buildroot] [git commit] libsigsegv: disable for sparc and uClibc
-	toolchain
-Message-ID: <20160531154337.EB6B0803C4@busybox.osuosl.org>
+Date: Tue, 31 May 2016 17:41:42 +0200
+Subject: [Buildroot] [git commit] gcc/libmudflap: also unavailable for gcc
+	6.x
+Message-ID: <20160531154338.042EF81EF8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=515b276973f88d01da0c37488e1603900f7594d9
+commit: https://git.buildroot.net/buildroot/commit/?id=019b22f8fa9742c80144b7d7970d319ae798c5ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The context function support is not available for uClibc and
-sparc. It will be introduced in uClibc-ng 1.0.15, and
-then the patch can be reverted.
+libmudflap was removed in gcc 4.9:
+https://gcc.gnu.org/wiki/Mudflap_Pointer_Debugging
 
-Fixes following autobuild failures:
-http://autobuild.buildroot.net/results/f1aa74992a77da325b3c6d74f9f88624bad094e9/
-http://autobuild.buildroot.net/results/69bf0dbb0be3d4e4783ee332b3e95ca31f18d3bf/
-http://autobuild.buildroot.net/results/f5bc9921c1b9f839e5536c19348efebd6826123d/
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsigsegv/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/gcc/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libsigsegv/Config.in b/package/libsigsegv/Config.in
-index e5224da..e96ba5f 100644
---- a/package/libsigsegv/Config.in
-+++ b/package/libsigsegv/Config.in
-@@ -3,12 +3,12 @@ config BR2_PACKAGE_LIBSIGSEGV
- 	depends on !BR2_xtensa
- 	depends on !BR2_arc # no ucontext_i.sym file
- 	depends on !BR2_microblaze
--	# No ucontext support in uclibc for powerpc and superh
--	depends on !((BR2_powerpc || BR2_sh) && BR2_TOOLCHAIN_USES_UCLIBC)
-+	# No ucontext support in uclibc for powerpc, sparc and superh
-+	depends on !((BR2_powerpc || BR2_sh || BR2_sparc ) && BR2_TOOLCHAIN_USES_UCLIBC)
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 8cf2d56..ee4d0eb 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -153,6 +153,7 @@ config BR2_GCC_ENABLE_LIBMUDFLAP
+ 	depends on !BR2_ARM_INSTRUCTIONS_THUMB && !BR2_powerpc_SPE
+ 	depends on !BR2_GCC_VERSION_4_9_X
+ 	depends on !BR2_GCC_VERSION_5_X
++	depends on !BR2_GCC_VERSION_6_X
  	help
- 	  Library for handling page faults in user mode.
- 
- 	  http://libsigsegv.sourceforge.net/
- 
- comment "libsigsegv needs an (e)glibc toolchain"
--	depends on (BR2_powerpc || BR2_sh) && BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on (BR2_powerpc || BR2_sh || BR2_sparc) && BR2_TOOLCHAIN_USES_UCLIBC
+ 	  libmudflap is a gcc library used for the mudflap pointer
+ 	  debugging functionality. It is only needed if you intend to
