@@ -1,68 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 22:59:35 +0200
-Subject: [Buildroot] [git commit branch/next] uboot: Support multiple
-	environment source files
-Message-ID: <20160531205946.17049819C0@busybox.osuosl.org>
+Date: Tue, 31 May 2016 23:00:51 +0200
+Subject: [Buildroot] [PATCH 1/1] uboot: Support multiple environment
+ source files
+In-Reply-To: <1454201313-17766-1-git-send-email-camh@xdna.net>
+References: <1454201313-17766-1-git-send-email-camh@xdna.net>
+Message-ID: <20160531230051.10cd0d50@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0542bb79e823505a730b6a2c2f01b33b6293cf03
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Allow multiple file names to be listed in
-BR2_TARGET_UBOOT_ENVIMAGE_SOURCE, concatenating them in the order
-listed.
+On Sun, 31 Jan 2016 11:48:33 +1100, Cam Hutchison wrote:
 
-This allows the bulk of the environment to be shared across multiple
-boards using a common environment file with board-specific values
-supplied in a secondary environment source file.
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index d539b31..515b1ea 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -171,9 +171,10 @@ define UBOOT_INSTALL_IMAGES_CMDS
+>  	$(if $(BR2_TARGET_UBOOT_SPL),
+>  		cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
+>  	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+> +		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
+>  		$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+>  		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+> -		-o $(BINARIES_DIR)/uboot-env.bin $(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))
+> +		-o $(BINARIES_DIR)/uboot-env.bin -)
 
-Signed-off-by: Cam Hutchison <camh@xdna.net>
-[Thomas: adjust indentation in the .mk file.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- boot/uboot/Config.in | 8 ++++++--
- boot/uboot/uboot.mk  | 7 ++++---
- 2 files changed, 10 insertions(+), 5 deletions(-)
+The lines following the pipe should have been indented by one more tab
+(but it admittedly wasn't done so far). I've fixed that up and applied
+your patch to our next branch.
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 21f9abd..9ffbb51 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -348,9 +348,13 @@ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
- if BR2_TARGET_UBOOT_ENVIMAGE
- 
- config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
--	string "Source file for environment"
-+	string "Source files for environment"
- 	help
--	  Text file describing the environment.
-+	  Text files describing the environment. Files should have
-+	  lines of the form var=value, one per line. Blank lines and
-+	  lines starting with a # are ignored.
-+
-+	  Multiple source files are concatenated in the order listed.
- 
- config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
- 	string "Size of environment"
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index e071303..3b2a230 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -165,9 +165,10 @@ define UBOOT_INSTALL_IMAGES_CMDS
- 	$(if $(BR2_TARGET_UBOOT_SPL),
- 		cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
- 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
--		$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
--		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
--		-o $(BINARIES_DIR)/uboot-env.bin $(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))
-+		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
-+			$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
-+			$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-+			-o $(BINARIES_DIR)/uboot-env.bin -)
- endef
- 
- define UBOOT_INSTALL_OMAP_IFT_IMAGE
+Thanks, and sorry for the long delay!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
