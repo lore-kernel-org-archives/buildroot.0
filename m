@@ -1,142 +1,129 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 May 2016 19:16:22 +0200
-Subject: [Buildroot] [git commit] batman-adv: new package
-Message-ID: <20160601161311.A0CC7802A0@busybox.osuosl.org>
+Date: Tue, 31 May 2016 21:56:29 +0200
+Subject: [Buildroot] [git commit] configs: remove trailing directory slashes
+Message-ID: <20160601161312.7FC55802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d90f182b9142a1e2a1784c32022a6d726356207a
+commit: https://git.buildroot.net/buildroot/commit/?id=fb1913210da91f26aeb5040b903f1a3c520e29fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package introduces batman-adv, a kernel module implementation of
-the B.A.T.M.A.N. IV and V mesh network routing protocols.
+They're not necessary and look bad.
 
-While batman-adv exists in the mainline kernel tree, it can also be
-built as an external out-of-tree module. This package adds the
-flexibility to chose a more up to date version of the module than exists
-in the official tree, and also allows for compilation against kernels
-without batman-adv in-tree support.
-
-https://www.open-mesh.org/projects/batman-adv/
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-[Thomas:
- - remove "default n", since it's the default
- - fix indentation of Config.in help text
- - license is GPLv2, not just GPL
- - remove variable BATMAN_ADV_MAKE_OPTS, name it directly
-   BATMAN_ADV_MODULE_MAKE_OPTS as this is what is expected by the kernel
-   module infrastructure.]
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                  |  1 +
- package/batman-adv/Config.in       | 35 +++++++++++++++++++++++++++++++++++
- package/batman-adv/batman-adv.hash |  2 ++
- package/batman-adv/batman-adv.mk   | 35 +++++++++++++++++++++++++++++++++++
- 4 files changed, 73 insertions(+)
+ configs/beaglebone_defconfig          | 2 +-
+ configs/calao_qil_a9260_defconfig     | 2 +-
+ configs/calao_tny_a9g20_lpw_defconfig | 2 +-
+ configs/calao_usb_a9263_defconfig     | 2 +-
+ configs/calao_usb_a9g20_lpw_defconfig | 2 +-
+ configs/stm32f429_disco_defconfig     | 2 +-
+ configs/stm32f469_disco_defconfig     | 2 +-
+ configs/warpboard_defconfig           | 2 +-
+ 8 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3328d19..1e4f5c7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1107,6 +1107,7 @@ endmenu
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 3e3281e..be803b9 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -31,7 +31,7 @@ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/ti-linux-kernel/ti-linux-kernel.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="7f280334068b7c875ade51f8f3921ab311f0c824"
+-BR2_LINUX_KERNEL_PATCH="board/beaglebone/patches/linux/"
++BR2_LINUX_KERNEL_PATCH="board/beaglebone/patches/linux"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.12.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/calao_qil_a9260_defconfig b/configs/calao_qil_a9260_defconfig
+index e59363a..8b76a87 100644
+--- a/configs/calao_qil_a9260_defconfig
++++ b/configs/calao_qil_a9260_defconfig
+@@ -1,6 +1,6 @@
+ BR2_arm=y
+ BR2_arm926t=y
+-BR2_GLOBAL_PATCH_DIR="board/calao/qil-a9260/patches/"
++BR2_GLOBAL_PATCH_DIR="board/calao/qil-a9260/patches"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
+ # Linux headers same as kernel, a 3.4 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_4=y
+diff --git a/configs/calao_tny_a9g20_lpw_defconfig b/configs/calao_tny_a9g20_lpw_defconfig
+index d9c6ba6..5c66d06 100644
+--- a/configs/calao_tny_a9g20_lpw_defconfig
++++ b/configs/calao_tny_a9g20_lpw_defconfig
+@@ -13,7 +13,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_9=y
  
- menu "Networking"
- 	source "package/agentpp/Config.in"
-+	source "package/batman-adv/Config.in"
- 	source "package/c-ares/Config.in"
- 	source "package/canfestival/Config.in"
- 	source "package/cgic/Config.in"
-diff --git a/package/batman-adv/Config.in b/package/batman-adv/Config.in
-new file mode 100644
-index 0000000..fbef0d8
---- /dev/null
-+++ b/package/batman-adv/Config.in
-@@ -0,0 +1,35 @@
-+comment "batman-adv needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_BATMAN_ADV
-+	bool "batman-adv"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  batman-adv mesh networking kernel module
-+
-+	  https://www.open-mesh.org/projects/batman-adv/
-+
-+if BR2_PACKAGE_BATMAN_ADV
-+
-+config BR2_PACKAGE_BATMAN_ADV_DEBUG
-+	bool "enable debugging"
-+	help
-+	  Enables B.A.T.M.A.N. debugging.
-+
-+config BR2_PACKAGE_BATMAN_ADV_NC
-+	bool "enable network coding"
-+	help
-+	  Enables B.A.T.M.A.N. network coding.
-+	  Note: this requires promiscuous mode on ALL nodes!
-+
-+	  https://www.open-mesh.org/projects/batman-adv/wiki/NetworkCoding
-+
-+config BR2_PACKAGE_BATMAN_ADV_BATMAN_V
-+	bool "enable B.A.T.M.A.N. V protocol (experimental)"
-+	help
-+	  Enables B.A.T.M.A.N. V network protocol.
-+	  This is the next-gen protocol and is experimental at this time.
-+
-+	  https://www.open-mesh.org/projects/batman-adv/wiki/BATMAN_V
-+
-+endif
-diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
-new file mode 100644
-index 0000000..6c0e5ca
---- /dev/null
-+++ b/package/batman-adv/batman-adv.hash
-@@ -0,0 +1,2 @@
-+# From https://downloads.open-mesh.org/batman/stable/sources/batman-adv/batman-adv-2016.1.tar.gz.sha1
-+sha1 c9ca52c913fbf81aca266695a77359ecdbcc8bd8 batman-adv-2016.1.tar.gz
-diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
-new file mode 100644
-index 0000000..0691773
---- /dev/null
-+++ b/package/batman-adv/batman-adv.mk
-@@ -0,0 +1,35 @@
-+################################################################################
-+#
-+# batman-adv
-+#
-+################################################################################
-+
-+BATMAN_ADV_VERSION = 2016.1
-+BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
-+BATMAN_ADV_SOURCE = batman-adv-$(BATMAN_ADV_VERSION).tar.gz
-+BATMAN_ADV_LICENSE = GPLv2
-+
-+# Bridge Loop Avoidance, Distributed Arp Table are always enabled
-+BATMAN_ADV_CFLAGS = \
-+	-I$(@D)/compat-include/ \
-+	-include $(@D)/compat.h \
-+	-DBATADV_SOURCE_VERSION=\"\\\"$(BATMAN_ADV_VERSION)\\\"\"
-+BATMAN_ADV_MODULE_MAKE_OPTS = \
-+	KVER=$(LINUX_VERSION_PROBED) \
-+	INSTALL_MOD_DIR=updates/net/batman-adv \
-+	NOSTDINC_FLAGS="$(BATMAN_ADV_CFLAGS)" \
-+	CONFIG_BATMAN_ADV=m \
-+	CONFIG_BATMAN_ADV_BATMAN_V=$(BR2_PACKAGE_BATMAN_ADV_BATMAN_V) \
-+	CONFIG_BATMAN_ADV_BLA=y \
-+	CONFIG_BATMAN_ADV_DAT=y \
-+	CONFIG_BATMAN_ADV_DEBUG=$(BR2_PACKAGE_BATMAN_ADV_DEBUG) \
-+	CONFIG_BATMAN_ADV_MCAST=y \
-+	CONFIG_BATMAN_ADV_NC=$(BR2_PACKAGE_BATMAN_ADV_NC)
-+BATMAN_ADV_MODULE_SUBDIRS = net/batman-adv
-+
-+define BATMAN_ADV_CONFIGURE_CMDS
-+	$(BATMAN_ADV_MODULE_MAKE_OPTS) $(@D)/gen-compat-autoconf.sh $(@D)/compat-autoconf.h
-+endef
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
+ # bootloaders
+ BR2_TARGET_AT91BOOTSTRAP=y
+-BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR="board/calao/tny-a9g20-lpw/"
++BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR="board/calao/tny-a9g20-lpw"
+ BR2_TARGET_AT91BOOTSTRAP_BOARD="tny_a9g20_lpw"
+ BR2_TARGET_AT91BOOTSTRAP_NANDFLASH=y
+ BR2_TARGET_BAREBOX=y
+diff --git a/configs/calao_usb_a9263_defconfig b/configs/calao_usb_a9263_defconfig
+index c87e960..ed6d3cb 100644
+--- a/configs/calao_usb_a9263_defconfig
++++ b/configs/calao_usb_a9263_defconfig
+@@ -5,7 +5,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+ BR2_PACKAGE_HOST_SAM_BA=y
+ BR2_TARGET_ROOTFS_UBIFS=y
+ BR2_TARGET_AT91BOOTSTRAP=y
+-BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR="board/calao/usb-a9263/"
++BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR="board/calao/usb-a9263"
+ BR2_TARGET_AT91BOOTSTRAP_BOARD="usb_a9263"
+ BR2_TARGET_AT91BOOTSTRAP_NANDFLASH=y
+ BR2_TARGET_BAREBOX=y
+diff --git a/configs/calao_usb_a9g20_lpw_defconfig b/configs/calao_usb_a9g20_lpw_defconfig
+index 956d007..8a56d06 100644
+--- a/configs/calao_usb_a9g20_lpw_defconfig
++++ b/configs/calao_usb_a9g20_lpw_defconfig
+@@ -2,7 +2,7 @@ BR2_arm=y
+ BR2_arm926t=y
+ # Linux headers same as kernel, a 3.10 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+-BR2_GLOBAL_PATCH_DIR="board/calao/usb-a9g20-lpw/patches/"
++BR2_GLOBAL_PATCH_DIR="board/calao/usb-a9g20-lpw/patches"
+ BR2_PACKAGE_HOST_SAM_BA=y
+ BR2_TARGET_ROOTFS_UBIFS=y
+ BR2_TARGET_AT91BOOTSTRAP=y
+diff --git a/configs/stm32f429_disco_defconfig b/configs/stm32f429_disco_defconfig
+index 987dcb8..3799794 100644
+--- a/configs/stm32f429_disco_defconfig
++++ b/configs/stm32f429_disco_defconfig
+@@ -1,6 +1,6 @@
+ BR2_arm=y
+ BR2_cortex_m4=y
+-BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f429-disco/patches/"
++BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f429-disco/patches"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
+ BR2_LINUX_KERNEL=y
+diff --git a/configs/stm32f469_disco_defconfig b/configs/stm32f469_disco_defconfig
+index dd14f56..327134d 100644
+--- a/configs/stm32f469_disco_defconfig
++++ b/configs/stm32f469_disco_defconfig
+@@ -1,6 +1,6 @@
+ BR2_arm=y
+ BR2_cortex_m4=y
+-BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches/"
++BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
+ BR2_LINUX_KERNEL=y
+diff --git a/configs/warpboard_defconfig b/configs/warpboard_defconfig
+index 798afed..d3cffb9 100644
+--- a/configs/warpboard_defconfig
++++ b/configs/warpboard_defconfig
+@@ -3,7 +3,7 @@ BR2_arm=y
+ BR2_cortex_a9=y
+ 
+ # patches
+-BR2_GLOBAL_PATCH_DIR="board/freescale/warpboard/patches/"
++BR2_GLOBAL_PATCH_DIR="board/freescale/warpboard/patches"
+ 
+ # Linux headers same as kernel, a 4.0 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
