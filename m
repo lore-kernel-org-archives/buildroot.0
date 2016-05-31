@@ -1,40 +1,46 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 31 May 2016 23:25:45 +0200
-Subject: [Buildroot] [PATCH] package/net-tools: use TARGET_CONFIGURE_OPTS to
-	provide AR, CC and LDFLAGS
-Message-ID: <1464729945-14374-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 31 May 2016 23:28:02 +0200
+Subject: [Buildroot] [PATCH] uclibc: update to 1.0.15
+In-Reply-To: <20160529102615.GA6824@waldemar-brodkorb.de>
+References: <20160529102615.GA6824@waldemar-brodkorb.de>
+Message-ID: <20160531232802.581b9f05@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As noticed by Peter [1], use TARGET_CONFIGURE_OPTS to provide AR, CC and LDFLAGS.
+Hello,
 
-Also remove TARGET_MAKE_ENV since it only contains PATH=$(BR_PATH) which is
-also provided by TARGET_CONFIGURE_OPTS.
+On Sun, 29 May 2016 12:26:15 +0200, Waldemar Brodkorb wrote:
+> The Linuxthreads support got reorganized.
+> LT.new is removed, LT.old is the default for
+> Linuxthreads.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2016-May/162418.html
+Cool! Finally some cleanup in this area.
 
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/net-tools/net-tools.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+> -	config BR2_PTHREADS_OLD
+> -		bool "linuxthreads (stable/old)"
+> -		select BR2_TOOLCHAIN_HAS_THREADS
 
-diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
-index 08d55bb..f0c61d5 100644
---- a/package/net-tools/net-tools.mk
-+++ b/package/net-tools/net-tools.mk
-@@ -34,8 +34,7 @@ endef
- NET_TOOLS_POST_CONFIGURE_HOOKS += NET_TOOLS_ENABLE_I18N NET_TOOLS_ENABLE_IPV6
- 
- define NET_TOOLS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) AR="$(TARGET_AR)" CC="$(TARGET_CC)" \
--		LDFLAGS="$(TARGET_LDFLAGS)" \
-+	$(TARGET_CONFIGURE_OPTS) \
- 		LIBS="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)" \
- 		$(MAKE) -C $(@D)
- endef
+Since you're removing this option, we need Config.in.legacy handling
+for it.
+
+In the long term, I believe we should probably remove this choice
+completely, and simply use NPTL on all platforms where it is available,
+and automatically use linuxthreads on platforms where NPTL is not
+available. I really don't see the point of not using NPTL when it's
+available.
+
+But that's for a separate patch.
+
+The rest of your patch looks good, so please resubmit with just the
+Config.in.legacy handling added.
+
+Thanks!
+
+Thomas
 -- 
-2.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
