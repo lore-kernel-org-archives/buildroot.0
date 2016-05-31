@@ -1,91 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 21:31:59 +0200
-Subject: [Buildroot] [git commit branch/next] php-gnupg: re add package,
+Date: Tue, 31 May 2016 21:32:20 +0200
+Subject: [Buildroot] [git commit branch/next] php-ssh2: re add package,
 	now compatible with PHP 7
-Message-ID: <20160531194052.545AE80790@busybox.osuosl.org>
+Message-ID: <20160531194052.706DD80AE1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e944a30a0d68594cc4e52451e8899258b979a3e
+commit: https://git.buildroot.net/buildroot/commit/?id=08af64d6a5e7d6b37c954335e2b4c7e96e2e3647
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Related: https://bugs.php.net/bug.php?id=71138
+Related: https://bugs.php.net/bug.php?id=71376
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                |  1 +
- package/php-gnupg/Config.in      |  9 +++++++++
- package/php-gnupg/php-gnupg.hash |  2 ++
- package/php-gnupg/php-gnupg.mk   | 25 +++++++++++++++++++++++++
- 4 files changed, 37 insertions(+)
+ package/Config.in              |  1 +
+ package/php-ssh2/Config.in     |  8 ++++++++
+ package/php-ssh2/php-ssh2.hash |  2 ++
+ package/php-ssh2/php-ssh2.mk   | 25 +++++++++++++++++++++++++
+ 4 files changed, 36 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index f21d42e..7421bc2 100644
+index 0eeb6c5..4639587 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -614,6 +614,7 @@ if BR2_PACKAGE_PHP
- if !BR2_STATIC_LIBS
- menu "External php extensions"
- 	source "package/php-geoip/Config.in"
-+	source "package/php-gnupg/Config.in"
+@@ -617,6 +617,7 @@ menu "External php extensions"
+ 	source "package/php-gnupg/Config.in"
  	source "package/php-imagick/Config.in"
+ 	source "package/php-memcached/Config.in"
++	source "package/php-ssh2/Config.in"
  	source "package/php-zmq/Config.in"
  endmenu
-diff --git a/package/php-gnupg/Config.in b/package/php-gnupg/Config.in
+ endif
+diff --git a/package/php-ssh2/Config.in b/package/php-ssh2/Config.in
 new file mode 100644
-index 0000000..49fb43b
+index 0000000..b457900
 --- /dev/null
-+++ b/package/php-gnupg/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PHP_GNUPG
-+	bool "php-gnupg"
++++ b/package/php-ssh2/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PHP_SSH2
++	bool "php-ssh2"
 +	depends on BR2_PACKAGE_PHP
-+	depends on BR2_USE_MMU # libassuan
-+	select BR2_PACKAGE_LIBGPGME
++	select BR2_PACKAGE_LIBSSH2
 +	help
-+	  PHP wrapper around the gpgme library.
++	  PHP bindings for the libssh2 library.
 +
-+	  http://pecl.php.net/package/gnupg
-diff --git a/package/php-gnupg/php-gnupg.hash b/package/php-gnupg/php-gnupg.hash
++	  http://pecl.php.net/package/ssh2
+diff --git a/package/php-ssh2/php-ssh2.hash b/package/php-ssh2/php-ssh2.hash
 new file mode 100644
-index 0000000..f0654b5
+index 0000000..1e046df
 --- /dev/null
-+++ b/package/php-gnupg/php-gnupg.hash
++++ b/package/php-ssh2/php-ssh2.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 6f1a4b5a95fe501519de76d66602e46290cc452fc48f3a5ec2eacaffe68d9a01  php-gnupg-30fab6eaf9eb61c65b3b46987442be058cbd7823.tar.gz
-diff --git a/package/php-gnupg/php-gnupg.mk b/package/php-gnupg/php-gnupg.mk
++sha256 877f2fa9a709aa2dd9567848fae7b45ecac359904296a0aedbf718e99d8568f5  php-ssh2-aa1739ac26c2177d33ab8d064021032bdc2c3a40.tar.gz
+diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
 new file mode 100644
-index 0000000..c1c6680
+index 0000000..cfe6070
 --- /dev/null
-+++ b/package/php-gnupg/php-gnupg.mk
++++ b/package/php-ssh2/php-ssh2.mk
 @@ -0,0 +1,25 @@
 +################################################################################
 +#
-+# php-gnupg
++# php-ssh2
 +#
 +################################################################################
 +
-+PHP_GNUPG_VERSION = 30fab6eaf9eb61c65b3b46987442be058cbd7823
-+PHP_GNUPG_SITE = $(call github,Sean-Der,pecl-encryption-gnupg,$(PHP_GNUPG_VERSION))
++PHP_SSH2_VERSION = aa1739ac26c2177d33ab8d064021032bdc2c3a40
++PHP_SSH2_SITE = $(call github,php,pecl-networking-ssh2,$(PHP_SSH2_VERSION))
++PHP_SSH2_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
++	--with-ssh2=$(STAGING_DIR)/usr
 +# phpize does the autoconf magic
-+PHP_GNUPG_DEPENDENCIES = php libgpgme host-autoconf host-pkgconf
-+PHP_GNUPG_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
-+	--with-gnupg=$(STAGING_DIR)/usr/include --with-gpg=/usr/bin/gpg
-+PHP_GNUPG_LICENSE = BSD-2c
-+PHP_GNUPG_LICENSE_FILES = LICENSE
++PHP_SSH2_DEPENDENCIES = libssh2 php host-autoconf
++PHP_SSH2_LICENSE = PHP
++PHP_SSH2_LICENSE_FILES = LICENSE
 +
-+define PHP_GNUPG_PHPIZE
++define PHP_SSH2_PHPIZE
 +	(cd $(@D); \
 +		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
 +		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
 +		$(STAGING_DIR)/usr/bin/phpize)
 +endef
 +
-+PHP_GNUPG_PRE_CONFIGURE_HOOKS += PHP_GNUPG_PHPIZE
++PHP_SSH2_PRE_CONFIGURE_HOOKS += PHP_SSH2_PHPIZE
 +
 +$(eval $(autotools-package))
