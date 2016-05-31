@@ -1,123 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 21:26:55 +0200
-Subject: [Buildroot] [git commit] configs: mx53loco: Update bootloader and
-	kernel versions
-Message-ID: <20160601161312.0E9FA802A0@busybox.osuosl.org>
+Date: Tue, 31 May 2016 21:32:12 +0200
+Subject: [Buildroot] [git commit] php-memcached: re add package,
+	now compatible with PHP 7
+Message-ID: <20160601161312.4EBF8802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88c514a56aa523e0357bb08ea59b8e334f22a622
+commit: https://git.buildroot.net/buildroot/commit/?id=96ad5fa0529b03f8a2aba0c7ec0d61fe2c8f3d18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update U-boot to the 2016.05 version and the kernel to 4.6.
+Related: https://bugs.php.net/bug.php?id=70751
 
-U-boot 2016.05 needs the patch c510f2e436008 ("video: ipu_common: fix build
-error") that is already in mainline to fix an IPU build error.
-
-We can remove this patch in the future when we switch to U-boot 2016.07.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-video-ipu_common-fix-build-error.patch    | 47 ++++++++++++++++++++++
- configs/mx53loco_defconfig                         | 20 +++++----
- 2 files changed, 59 insertions(+), 8 deletions(-)
+ package/Config.in                        |  1 +
+ package/php-memcached/Config.in          | 15 +++++++++++++++
+ package/php-memcached/php-memcached.hash |  2 ++
+ package/php-memcached/php-memcached.mk   | 27 +++++++++++++++++++++++++++
+ 4 files changed, 45 insertions(+)
 
-diff --git a/board/freescale/imx53loco/patches/uboot/0001-video-ipu_common-fix-build-error.patch b/board/freescale/imx53loco/patches/uboot/0001-video-ipu_common-fix-build-error.patch
+diff --git a/package/Config.in b/package/Config.in
+index 7421bc2..0eeb6c5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -616,6 +616,7 @@ menu "External php extensions"
+ 	source "package/php-geoip/Config.in"
+ 	source "package/php-gnupg/Config.in"
+ 	source "package/php-imagick/Config.in"
++	source "package/php-memcached/Config.in"
+ 	source "package/php-zmq/Config.in"
+ endmenu
+ endif
+diff --git a/package/php-memcached/Config.in b/package/php-memcached/Config.in
 new file mode 100644
-index 0000000..356d0b0
+index 0000000..cd97c15
 --- /dev/null
-+++ b/board/freescale/imx53loco/patches/uboot/0001-video-ipu_common-fix-build-error.patch
-@@ -0,0 +1,47 @@
-+From c510f2e436008e55a50b063f2180cb1e63984224 Mon Sep 17 00:00:00 2001
-+From: Peng Fan <van.freenix@gmail.com>
-+Date: Thu, 28 Apr 2016 10:07:53 +0800
-+Subject: [PATCH] video: ipu_common: fix build error
++++ b/package/php-memcached/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PHP_MEMCACHED
++	bool "php-memcached"
++	depends on BR2_INSTALL_LIBSTDCPP # libmemcached
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libmemcached
++	select BR2_PACKAGE_PHP_EXT_SESSION
++	select BR2_PACKAGE_LIBMEMCACHED
++	select BR2_PACKAGE_ZLIB
++	help
++	  PHP extension for interfacing with memcached via
++	  libmemcached library.
 +
-+Some toolchains fail to build
-+"clk->rate = (u64)(clk->parent->rate * 16) / div;"
-+And the cast usage is wrong.
++	  http://pecl.php.net/package/memcached
 +
-+Use the following code to fix the issue,
-+"
-+  do_div(parent_rate, div);
-+  clk->rate = parent_rate;
-+"
++comment "php-memcached needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/php-memcached/php-memcached.hash b/package/php-memcached/php-memcached.hash
+new file mode 100644
+index 0000000..f2a096f
+--- /dev/null
++++ b/package/php-memcached/php-memcached.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 73266212e791a4817da06be1daddf9ff7dd5b5b0b650b3fbd0f5fc6ccc18491b  php-memcached-6ee96cad7be5caa1f13a1f3e5a4d5f900b9c04ce.tar.gz
+diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
+new file mode 100644
+index 0000000..ea241b2
+--- /dev/null
++++ b/package/php-memcached/php-memcached.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# php-memcached
++#
++################################################################################
 +
-+Reported-by: Peter Robinson <pbrobinson@gmail.com>
-+Signed-off-by: Peng Fan <van.freenix@gmail.com>
-+Cc: Stefano Babic <sbabic@denx.de>
-+Cc: Fabio Estevam <fabio.estevam@nxp.com>
-+Cc: Tom Rini <trini@konsulko.com>
-+Cc: Anatolij Gustschin <agust@denx.de>
-+Cc: Peter Robinson <pbrobinson@gmail.com>
-+Reviewed-by: Tom Rini <trini@konsulko.com>
-+Tested-by: Peter Robinson <pbrobinson@gmail.com>
-+Signed-off-by: Fabio Estevam <festevam@gmail.com>
-+---
-+ drivers/video/ipu_common.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
++PHP_MEMCACHED_VERSION = 6ee96cad7be5caa1f13a1f3e5a4d5f900b9c04ce
++PHP_MEMCACHED_SITE = $(call github,php-memcached-dev,php-memcached,$(PHP_MEMCACHED_VERSION))
++PHP_MEMCACHED_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
++	--disable-memcached-sasl \
++	--with-libmemcached-dir=$(STAGING_DIR)/usr \
++	--with-zlib-dir=$(STAGING_DIR)/usr
++# phpize does the autoconf magic
++PHP_MEMCACHED_DEPENDENCIES = libmemcached php zlib host-autoconf host-pkgconf
++PHP_MEMCACHED_LICENSE = MIT
++PHP_MEMCACHED_LICENSE_FILES = LICENSE
 +
-+diff --git a/drivers/video/ipu_common.c b/drivers/video/ipu_common.c
-+index 36d4b23..5676a0f 100644
-+--- a/drivers/video/ipu_common.c
-++++ b/drivers/video/ipu_common.c
-+@@ -352,7 +352,9 @@ static int ipu_pixel_clk_set_rate(struct clk *clk, unsigned long rate)
-+ 	 */
-+ 	__raw_writel((div / 16) << 16, DI_BS_CLKGEN1(clk->id));
-+ 
-+-	clk->rate = (u64)(clk->parent->rate * 16) / div;
-++	do_div(parent_rate, div);
-++
-++	clk->rate = parent_rate;
-+ 
-+ 	return 0;
-+ }
-+-- 
-+1.9.1
++define PHP_MEMCACHED_PHPIZE
++	(cd $(@D); \
++		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
++		$(STAGING_DIR)/usr/bin/phpize)
++endef
 +
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index 3cb1b74..06150c7 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -2,25 +2,29 @@
- BR2_arm=y
- BR2_cortex_a8=y
- 
--# Linux headers same as kernel, a 2.6 series (so, no option selected)
-+# Linux headers same as kernel, a 4.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- 
-+# patches
-+BR2_GLOBAL_PATCH_DIR="board/freescale/imx53loco/patches/"
++PHP_MEMCACHED_PRE_CONFIGURE_HOOKS += PHP_MEMCACHED_PHPIZE
 +
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- 
- # Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Freescale/u-boot-fslc.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="e36968af0a033e9d66535928886103370620cb4d"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="b3912bb8a4caf3ec50909135e88af959982c43ca"
--BR2_LINUX_KERNEL_DEFCONFIG="imx5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
++$(eval $(autotools-package))
