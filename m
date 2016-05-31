@@ -1,47 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 23:24:32 +0200
-Subject: [Buildroot] [PATCH v4] gdb: enable simulator support for host
- build
-In-Reply-To: <20160531210136.GA17122@waldemar-brodkorb.de>
-References: <20160531210136.GA17122@waldemar-brodkorb.de>
-Message-ID: <20160531232432.5dcada77@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 31 May 2016 23:25:45 +0200
+Subject: [Buildroot] [PATCH] package/net-tools: use TARGET_CONFIGURE_OPTS to
+	provide AR, CC and LDFLAGS
+Message-ID: <1464729945-14374-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As noticed by Peter [1], use TARGET_CONFIGURE_OPTS to provide AR, CC and LDFLAGS.
 
-On Tue, 31 May 2016 23:01:36 +0200, Waldemar Brodkorb wrote:
-> Add an option to enable GDB simulator support, so
-> it can be used to test some no-MMU systems.
-> 
-> Newer GDB Blackfin Simulator need a workaround for in-tree compile.
-> It doesn't break for older Buildroot supported GDB Blackfin
-> Simulator.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> v3 -> v4:
->   - the workaround is Blackfin specific and is not fixed
->     upstream. Problem with ARM reported by Thomas Petazzoni
-> v2 -> v3:
->   - add workaround for GDB bug when in-tree compile is used,
->     problem reported by Thomas Petazzoni
->   - tested with GDB 7.9, 7.10.1, 7.11
-> v1 -> v2:
->   - no changes
-> ---
->  package/gdb/Config.in.host |  5 +++++
->  package/gdb/gdb.mk         | 17 +++++++++++++++--
->  2 files changed, 20 insertions(+), 2 deletions(-)
+Also remove TARGET_MAKE_ENV since it only contains PATH=$(BR_PATH) which is
+also provided by TARGET_CONFIGURE_OPTS.
 
-This one builds, tested for both ARM and Blackfin, so: applied to next.
-Thanks!
+[1] http://lists.busybox.net/pipermail/buildroot/2016-May/162418.html
 
-Thomas
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/net-tools/net-tools.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
+index 08d55bb..f0c61d5 100644
+--- a/package/net-tools/net-tools.mk
++++ b/package/net-tools/net-tools.mk
+@@ -34,8 +34,7 @@ endef
+ NET_TOOLS_POST_CONFIGURE_HOOKS += NET_TOOLS_ENABLE_I18N NET_TOOLS_ENABLE_IPV6
+ 
+ define NET_TOOLS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) AR="$(TARGET_AR)" CC="$(TARGET_CC)" \
+-		LDFLAGS="$(TARGET_LDFLAGS)" \
++	$(TARGET_CONFIGURE_OPTS) \
+ 		LIBS="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)" \
+ 		$(MAKE) -C $(@D)
+ endef
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.5
