@@ -1,166 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 22:30:59 +0200
-Subject: [Buildroot] [PATCH] odroid_xu4: new board
-In-Reply-To: <1446836886-27256-1-git-send-email-viktorin@rehivetech.com>
-References: <1446836886-27256-1-git-send-email-viktorin@rehivetech.com>
-Message-ID: <20160531223059.34d2c127@free-electrons.com>
+Date: Tue, 31 May 2016 22:33:35 +0200
+Subject: [Buildroot] [git commit branch/next]
+	package/x11r7/xdriver_xf86-video-mga: disable DRI support
+	when not available
+Message-ID: <20160531203434.AC0BA80D9B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=105c7c7573ee2c7771db49c3e0dc168bc0eee84b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Sorry for the late review. It generally looks good, but I still have a
-number of comments which should be addressed in order for the patch to
-be applied.
+configure.ac is not cross-compile aware, a patch fixing DRI detection
+was added in 2009
+http://git.buildroot.net/buildroot/commit/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga-1.4.9.patch?id=59b0aa7a7ee327688a77dd5d01d0b2032f6535a2
 
-On Fri,  6 Nov 2015 20:08:06 +0100, Jan Viktorin wrote:
-> This patch provides support for the board Odroid XU4:
-> 
->   http://odroid.com/dokuwiki/doku.php?id=en:odroid-xu4
-> 
-> The support utilizes the Linux Kernel 4.2 experimental from:
-> 
->   https://github.com/tobetter/linux  odroidxu4-v4.2
+assuming DRI support being present if DRI support was not disabled.
 
-There is a v4.6 branch now, perhaps using it would be good (but it's
-definitely not mandatory).
+By default configure.ac assumes "auto" which leads to DRI support being
+enabled even if DRI support is disabled in buildroot config. This patch
+adds --disable-dri to really disable DRI support, fixes:
 
-> 
->   (currently: 5eb40d45b291ee129cbfac2073f1ca7aa32ff4c5)
-> 
-> and a customized linux defconfig which disables various (mostly)
-> useless drivers to minimalize the Buildroot initial system. It
-> compiles the r8152 driver into the kernel to have a working
-> Ethernet out-of-the-box.
+http://autobuild.buildroot.net/results/5e5/5e5dbc30e1f30f7d2d614f4a9edb7fe439f73d61/
+http://autobuild.buildroot.net/results/a8f/a8fab920599e7dc77038f3d2a9a699d6823cf3ef/
+http://autobuild.buildroot.net/results/81d/81dbad489412cd28345de364624180cb082b3bb6/
+http://autobuild.buildroot.net/results/53f/53fc0031da2b65890223f3183c77eb66cf0b5273/
+http://autobuild.buildroot.net/results/544/54481a0f8d690e3878f4616ae1f331705e3c34be/
 
-Please use odroidxu4_defconfig from the upstream tree. It is not
-necessary to have a strictly minimal kernel configuration, we very much
-prefer using an upstream defconfig.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> diff --git a/board/hardkernel/linux-odroidxu4-v4.2.config b/board/hardkernel/linux-odroidxu4-v4.2.config
-
-Please use a subdirectory for the board:
-
-	board/<vendor>/<board>/
-
-So in your case:
-
-	board/hardkernel/odroid-xu4/
-
-
-> diff --git a/board/hardkernel/readme.txt b/board/hardkernel/readme.txt
-> new file mode 100644
-> index 0000000..d7a77db
-> --- /dev/null
-> +++ b/board/hardkernel/readme.txt
-> @@ -0,0 +1,49 @@
-> +Odroid XU4
-> +==========
-> +
-> +http://www.hardkernel.com/main/products/prdt_info.php?g_code=G143452239825
-> +http://www.hardkernel.com/main/products/prdt_info.php?g_code=G143452239825
-> +
-> +The Buildroot odroid_xu4_defconfig configuration builds:
-> +
-> +  u-boot.bin -> u-boot.bin.hardkernel
-> +  zImage
-> +  exynos5422-odroidxu4.dtb
-> +  rootfs.ext3
-> +
-> +and prepares:
-> +
-> +  bl1.bin.hardkernel
-> +  bl2.bin.hardkernel
-> +  tzsw.bin.hardkernel
-> +  sd_fusing.sh
-> +  boot.ini
-> +
-> +As the board requires signed 1st bootloader, it is necessary to use
-> +the provided BLOBs.
-> +
-> +
-> +Installation:
-> +
-> + - suppose ${SD} points to eg. /dev/sdc (your SD card)
-> +
-> + 1) make odroid_xu4_defconfig
-> + 2) make
-> + 3) cd output/images
-> + 4) create 2 partitions (fdisk, cfdisk, ...):
-> +    FAT (~128 MB), ext3 (rest).
-> +
-> + 5) sudo ./sd_fusing ${SD}
-> +    Installs the bootloaders, trust zone and the built U-Boot.
-> +
-> + 6) sudo dd if=rootfs.ext3 of=${SD}2
-> +    Write to eg. /dev/sdc2.
-> +
-> + 7) sudo mount ${SD}1 /mnt
-> +    Mount the FAT partition (eg. /dev/sdc1).
-> +
-> + 8) sudo cp -v zImage boot.ini exynos5422-odroidxu4.dtb /mnt
-> + 9) sudo umount ${SD}1
-
-Please use the genimage mechanism to directly generate a bootable SD
-card. Look at the other boards supported in Buildroot, many of them are
-using genimage.
-
-> diff --git a/configs/odroid_xu4_defconfig b/configs/odroid_xu4_defconfig
-> new file mode 100644
-> index 0000000..3790db7
-> --- /dev/null
-> +++ b/configs/odroid_xu4_defconfig
-> @@ -0,0 +1,27 @@
-> +BR2_arm=y
-> +BR2_cortex_a15=y
-> +BR2_ARM_FPU_NEON=y
-
-Using NEON as the FPU is really not recommended. Please use the VFP
-unit for floating point by default.
-
-> +BR2_KERNEL_HEADERS_4_2=y
-
-This needs to be changed to:
-
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
-
-> +BR2_TARGET_GENERIC_HOSTNAME="odroid-xu4"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to Odroid XU4!"
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttySAC2"
-> +BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-
-Aren't the default setting (use the kernel console) working for yuo?
-
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroid-post.sh"
-
-We usually call it post-image.sh.
-
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_TARGET_UBOOT_VERSION)"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/tobetter/linux"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="odroidxu4-v4.2"
-> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/hardkernel/linux-odroidxu4-v4.2.config"
-> +BR2_LINUX_KERNEL_ZIMAGE=y
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="exynos5422-odroidxu4"
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_3=y
-> +# BR2_TARGET_ROOTFS_TAR is not set
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BOARDNAME="odroid"
-> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/hardkernel/u-boot.git"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="odroidxu3-v2012.07"
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
+index dcf751c..771ec18 100644
+--- a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
++++ b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
+@@ -12,4 +12,8 @@ XDRIVER_XF86_VIDEO_MGA_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_MGA_AUTORECONF = YES
+ XDRIVER_XF86_VIDEO_MGA_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_glproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xproto
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
++XDRIVER_XF86_VIDEO_MGA_CONF_OPTS = --disable-dri
++endif
++
+ $(eval $(autotools-package))
