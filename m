@@ -1,54 +1,55 @@
-From: Geoff Levand <geoff@infradead.org>
-Date: Tue, 31 May 2016 13:47:52 -0700
-Subject: [Buildroot] [PATCH v3 5/6] package/flannel: Add
- BR2_TOOLCHAIN_HAS_THREADS
-In-Reply-To: <20160528154158.70f4f025@free-electrons.com>
-References: <cover.1464286518.git.geoff@infradead.org>
- <627469f0b7b4e604da3a5ab3ef721f138a1c95a8.1464286518.git.geoff@infradead.org>
- <20160528154158.70f4f025@free-electrons.com>
-Message-ID: <1464727672.12343.16.camel@infradead.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 31 May 2016 22:40:34 +0200
+Subject: [Buildroot] [git commit branch/next] linux: provide symlink
+	dtc->linux-dtc is there is no dtc yet
+Message-ID: <20160531204840.9529181E68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=690ed04845cbde378b3668316d5313d845f6862e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 2016-05-28 at 15:41 +0200, Thomas Petazzoni wrote:
-> There are still some issues with the flannel build:
-> 
->   http://autobuild.buildroot.org/results/d98/d98e1857590738313a293b58f02230539bbaa405/build-end.log
-> 
-> The error is:
-> 
-> /home/buildroot/autobuild/run/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find Scrt1.o: No such file or directory
-> 
-> My understanding is that this happens when trying to build PIE binaries
-> that are statically linked. uClibc does not support that, or at least
-> not with our current toolchain support. Would it be possible to not
-> build PIE binaries with Go ? Or alternatively, investigate if it can be
-> fixed in uClibc ?
+Commit ab74e09eb4e28dab8bed8d783c5f0464d39a32e7 renamed the dtc host tool
+provided by linux to linux-dtc to avoid clashes with the dtc host tool
+provided by host-dtc.
 
-Looking at the go sources, they force -pie when compiling cgo support
-for ARM.  See line number 3188 in https://golang.org/src/cmd/go/build.go.
+However, external scripting may well rely on the existence of a device tree
+compiler as $(HOST_DIR)/usr/bin/dtc, regardless of its source. Changing
+these external scripts to use linux-dtc means that the scripts need to be
+aware of the buildroot release they are working with, which is not very
+nice.
 
-I think the only solution is to not build go packages that use cgo
-when BR2_arm && BR2_TOOLCHAIN_USES_UCLIBC, so something like this:
+Add a symlink dtc->linux-dtc when no $(HOST_DIR)/usr/bin/dtc is present.
+When host-dtc is not enabled, the end result will be dtc and
+linux-dtc representing the same thing.
+When host-dtc is enabled, either it is build before linux and no symlink
+is created at any time, or it is build after linux, and the 'install'
+command in host-dtc will overwrite the symlink with a proper dtc. In both
+cases, the end result will be dtc and linux-dtc representing a different
+thing.
 
-+# cgo on ARM requires PIE linkage, which is not compatable with uClibc.
-+comment "flannel is not available with uClibc-based toolchain on ARM architecture"
-+       depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+       depends on BR2_TOOLCHAIN_HAS_THREADS
-+       depends on BR2_arm && BR2_TOOLCHAIN_USES_UCLIBC
-+
- config BR2_PACKAGE_FLANNEL
-        bool "flannel"
-        depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-        depends on BR2_TOOLCHAIN_HAS_THREADS
-+       depends on !(BR2_arm && BR2_TOOLCHAIN_USES_UCLIBC)
-        help
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/linux.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-If this looks OK, I'll submit a patch.
-
--Geoff
+diff --git a/linux/linux.mk b/linux/linux.mk
+index d88060e..4f4f802 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -351,6 +351,9 @@ define LINUX_INSTALL_HOST_TOOLS
+ 	# Installing dtc (device tree compiler) as host tool, if selected
+ 	if grep -q "CONFIG_DTC=y" $(@D)/.config; then 	\
+ 		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/linux-dtc ;	\
++		if [ ! -e $(HOST_DIR)/usr/bin/dtc ]; then	\
++			ln -sf linux-dtc $(HOST_DIR)/usr/bin/dtc ;	\
++		fi	\
+ 	fi
+ endef
+ 
