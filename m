@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 22:15:44 +0200
-Subject: [Buildroot] [PATCH] configs: remove trailing directory slashes
-In-Reply-To: <1463599570-21602-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1463599570-21602-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160531221544.2db755e7@free-electrons.com>
+Date: Tue, 31 May 2016 22:16:50 +0200
+Subject: [Buildroot] [PATCH] configs: new configuration for i.MX6UL Pico
+ board
+In-Reply-To: <1463601264-16293-1-git-send-email-festevam@gmail.com>
+References: <1463601264-16293-1-git-send-email-festevam@gmail.com>
+Message-ID: <20160531221650.385eccad@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +13,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 18 May 2016 16:26:10 -0300, Gustavo Zacarias wrote:
-> They're not necessary and look bad.
+On Wed, 18 May 2016 16:54:24 -0300, Fabio Estevam wrote:
+> Add support for Technexion's i.MX6UL Pico board.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  configs/beaglebone_defconfig          | 2 +-
->  configs/calao_qil_a9260_defconfig     | 2 +-
->  configs/calao_tny_a9g20_lpw_defconfig | 2 +-
->  configs/calao_usb_a9263_defconfig     | 2 +-
->  configs/calao_usb_a9g20_lpw_defconfig | 2 +-
->  configs/qemu_m68k_mcf5208_defconfig   | 2 +-
->  configs/stm32f429_disco_defconfig     | 2 +-
->  configs/stm32f469_disco_defconfig     | 2 +-
->  configs/warpboard_defconfig           | 2 +-
->  9 files changed, 9 insertions(+), 9 deletions(-)
+> For information about this board, please visit:
+> http://www.wandboard.org/images/hobbit/hobbitboard-imx6ul-reva1.pdf
+> 
+> Currently two patches are needed, but in the future they can be removed
+> when we switch to kernel 4.7 and U-boot 2016.07 versions.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-Applied to next, thanks.
+This generally looks good, but we generally like when a readme.txt is
+added to indicate how to quickly setup the board to use the Buildroot
+image.
+
+
+> diff --git a/board/technexion/imx6ulpico/post-image.sh b/board/technexion/imx6ulpico/post-image.sh
+> new file mode 100755
+> index 0000000..b0917fc
+> --- /dev/null
+> +++ b/board/technexion/imx6ulpico/post-image.sh
+> @@ -0,0 +1,15 @@
+> +#!/usr/bin/env bash
+> +
+> +GENIMAGE_CFG="board/technexion/imx6ulpico/genimage.cfg"
+
+Maybe use the $(dirname $0) trick ?
+
+Other than that, looks good to me.
+
+Thanks,
 
 Thomas
 -- 
