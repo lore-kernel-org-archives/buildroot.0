@@ -1,78 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 16:06:07 +0200
-Subject: [Buildroot] [PATCH v5] remmina: new package
-In-Reply-To: <1451750166-10049-1-git-send-email-fancp2007@gmail.com>
-References: <1441118174-9899-1-git-send-email-fancp2007@gmail.com>
- <1451750166-10049-1-git-send-email-fancp2007@gmail.com>
-Message-ID: <20160531160607.07fdfa74@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 31 May 2016 15:28:38 +0100
+Subject: [Buildroot] [PATCH] mesa3d: use -mno-compact-eh for Code
+ Sourcery MIPS
+In-Reply-To: <20160531135936.4f2c0691@free-electrons.com>
+References: <1464689755-63804-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20160531135936.4f2c0691@free-electrons.com>
+Message-ID: <574D9F96.7030908@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Scott,
+Hello Thomas,
 
-It's been a very long time since you posted this patch. It generally
-looks good, but there's one thing that I don't really like.
+On 31/05/16 12:59, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 31 May 2016 11:15:55 +0100, Vicente Olivert Riera wrote:
+> 
+>> +# mesa3d doesn't like the new compressed exception handling of the Code
+>> +# Sourcery MIPS toolchain and it fails to compile. Using -mno-compact-eh
+>> +# fixes the problem.
+>> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS),y)
+>> +MESA3D_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mno-compact-eh"
+>> +MESA3D_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -mno-compact-eh"
+>> +endif
+> 
+> Isn't an upstreamable fix to mesa3d configure script a better solution?
+> See package/libffi/0002-Fix-use-of-compact-eh-frames-on-MIPS.patch in
+> Buildroot.
 
-On Sat,  2 Jan 2016 23:56:06 +0800, Scott Fan wrote:
+-mcompact-eh is only supported in Mentor tools currently. My patch is a
+workaround for a broken toolchain feature. I'm not sure which
+place is best. I suggest Buildroot is appropriate here as the issue is
+specific to Mentor tools which are only used in cross compile
+environments like Buildroot.
 
-> diff --git a/package/remmina/remmina.mk b/package/remmina/remmina.mk
-> new file mode 100644
-> index 0000000..8f333ae
-> --- /dev/null
-> +++ b/package/remmina/remmina.mk
-> @@ -0,0 +1,36 @@
-> +################################################################################
-> +#
-> +# remmina
-> +#
-> +################################################################################
-> +
-> +REMMINA_VERSION = e7f665f2634939aaa9bed114569cbd13eac10b82
-> +REMMINA_SITE = $(call github,FreeRDP,Remmina,$(REMMINA_VERSION))
+> Do you know when code can be built with this "Compact EH" feature and
+> when code cannot? I.e how many packages are going to be potentially
+> affected by this?
 
-There has been new upstream releases since then, could you try to use a
-more recent version? Also, we now add hash files for packages sourced
-from Github, so it would be good to add one.
+No, I believe this will be a toolchain bug. However Mentor have stopped
+listing MIPS on their website so the chance of a fix seems low.
 
-> +REMMINA_LICENSE = GPLv2+ with OpenSSL exception
-> +REMMINA_LICENSE_FILES = COPYING LICENSE LICENSE.OpenSSL
-> +
-> +REMMINA_CONF_OPTS = \
-> +	-DWITH_AVAHI=OFF \
-> +	-DWITH_APPINDICATOR=OFF \
-> +	-DWITH_GNOMEKEYRING=OFF \
-> +	-DWITH_TELEPATHY=OFF \
-> +	-DWITH_GCRYPT=OFF \
-> +	-DWITH_LIBSSH=OFF \
-> +	-DWITH_VTE=OFF
-> +
-> +REMMINA_DEPENDENCIES = \
-> +	libgtk3 libvncserver freerdp \
-> +	xlib_libX11 xlib_libXext xlib_libxkbfile
-> +
-> +ifeq ($(BR2_NEEDS_GETTEXT),y)
-> +REMMINA_DEPENDENCIES += gettext
-> +
-> +define REMMINA_POST_PATCH_FIXINTL
-> +	$(SED) 's/$${GTK_LIBRARIES}/$${GTK_LIBRARIES} -lintl/' \
-> +		$(@D)/remmina/CMakeLists.txt
-> +endef
+Regards,
 
-The thing I dislike is this hook. Could you instead work on changing
-the CMakeLists.txt so that it links with -lintl when needed? This way,
-it would be a solution that we can contribute upstream to the Remmina
-developers.
+Vincent.
 
-I've added in Cc: to this e-mail Samuel Martin, who is our CMake expert
-in the Buildroot community. Hopefully he can help you achieve this.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Thanks,
+> 
+> Thomas
+> 
