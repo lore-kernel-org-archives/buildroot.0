@@ -1,48 +1,90 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 May 2016 11:38:33 +0200
-Subject: [Buildroot] [git commit] sysvinit: update the inittab to support
-	"single" from the kernel
-Message-ID: <20160601161310.A135E81F53@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 31 May 2016 21:32:20 +0200
+Subject: [Buildroot] [git commit] php-ssh2: re add package,
+	now compatible with PHP 7
+Message-ID: <20160601161312.5B1EC802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eda809cd052dea73bca02385c7a10a4d7795c912
+commit: https://git.buildroot.net/buildroot/commit/?id=08af64d6a5e7d6b37c954335e2b4c7e96e2e3647
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Closes #8911
+Related: https://bugs.php.net/bug.php?id=71376
 
-When the kernel passes single in the command line, this translates
-into an init -s option that is suppose to drop into a shell after
-the sysinit and before the runlevel.
-
-So, in busybox this is hardcoded - but, in sysvinit using the
-sysinit action for the rcS means that it will always be executed
-even when trying to get into single user mode for repair.
-
-This change should run rcS in all of the expected runlevels
-1-5 and should achieve the desired result compared to the busybox
-and still allow a single user shell to get started as expected
-before running rcS.
-
-Signed-off-by: Charles Hardin <ckhardin@exablox.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sysvinit/inittab | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/Config.in              |  1 +
+ package/php-ssh2/Config.in     |  8 ++++++++
+ package/php-ssh2/php-ssh2.hash |  2 ++
+ package/php-ssh2/php-ssh2.mk   | 25 +++++++++++++++++++++++++
+ 4 files changed, 36 insertions(+)
 
-diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
-index 27eb4a6..fad91ea 100644
---- a/package/sysvinit/inittab
-+++ b/package/sysvinit/inittab
-@@ -10,7 +10,7 @@ si2::sysinit:/bin/mkdir -p /dev/pts
- si3::sysinit:/bin/mkdir -p /dev/shm
- si4::sysinit:/bin/mount -a
- si5::sysinit:/bin/hostname -F /etc/hostname
--si6::sysinit:/etc/init.d/rcS
-+rcS:12345:wait:/etc/init.d/rcS
- 
- # S0:1:respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
- 
+diff --git a/package/Config.in b/package/Config.in
+index 0eeb6c5..4639587 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -617,6 +617,7 @@ menu "External php extensions"
+ 	source "package/php-gnupg/Config.in"
+ 	source "package/php-imagick/Config.in"
+ 	source "package/php-memcached/Config.in"
++	source "package/php-ssh2/Config.in"
+ 	source "package/php-zmq/Config.in"
+ endmenu
+ endif
+diff --git a/package/php-ssh2/Config.in b/package/php-ssh2/Config.in
+new file mode 100644
+index 0000000..b457900
+--- /dev/null
++++ b/package/php-ssh2/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PHP_SSH2
++	bool "php-ssh2"
++	depends on BR2_PACKAGE_PHP
++	select BR2_PACKAGE_LIBSSH2
++	help
++	  PHP bindings for the libssh2 library.
++
++	  http://pecl.php.net/package/ssh2
+diff --git a/package/php-ssh2/php-ssh2.hash b/package/php-ssh2/php-ssh2.hash
+new file mode 100644
+index 0000000..1e046df
+--- /dev/null
++++ b/package/php-ssh2/php-ssh2.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 877f2fa9a709aa2dd9567848fae7b45ecac359904296a0aedbf718e99d8568f5  php-ssh2-aa1739ac26c2177d33ab8d064021032bdc2c3a40.tar.gz
+diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
+new file mode 100644
+index 0000000..cfe6070
+--- /dev/null
++++ b/package/php-ssh2/php-ssh2.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# php-ssh2
++#
++################################################################################
++
++PHP_SSH2_VERSION = aa1739ac26c2177d33ab8d064021032bdc2c3a40
++PHP_SSH2_SITE = $(call github,php,pecl-networking-ssh2,$(PHP_SSH2_VERSION))
++PHP_SSH2_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
++	--with-ssh2=$(STAGING_DIR)/usr
++# phpize does the autoconf magic
++PHP_SSH2_DEPENDENCIES = libssh2 php host-autoconf
++PHP_SSH2_LICENSE = PHP
++PHP_SSH2_LICENSE_FILES = LICENSE
++
++define PHP_SSH2_PHPIZE
++	(cd $(@D); \
++		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
++		$(STAGING_DIR)/usr/bin/phpize)
++endef
++
++PHP_SSH2_PRE_CONFIGURE_HOOKS += PHP_SSH2_PHPIZE
++
++$(eval $(autotools-package))
