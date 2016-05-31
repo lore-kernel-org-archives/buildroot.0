@@ -1,105 +1,123 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 May 2016 10:58:02 +0200
-Subject: [Buildroot] [git commit] package/taglib: bump to version 1.11
-Message-ID: <20160601161311.6510E802A0@busybox.osuosl.org>
+Date: Tue, 31 May 2016 21:26:55 +0200
+Subject: [Buildroot] [git commit] configs: mx53loco: Update bootloader and
+	kernel versions
+Message-ID: <20160601161312.0E9FA802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1db78af758f702e87144fdc5c3c1d154a8f723f
+commit: https://git.buildroot.net/buildroot/commit/?id=88c514a56aa523e0357bb08ea59b8e334f22a622
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed 0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch,
-a similar patch was committed upstream:
+Update U-boot to the 2016.05 version and the kernel to 4.6.
 
-https://github.com/taglib/taglib/commit/ea55c8b5c1e3b72789c302aa2560d9c87faedd40
+U-boot 2016.05 needs the patch c510f2e436008 ("video: ipu_common: fix build
+error") that is already in mainline to fix an IPU build error.
 
-Also remove empty line from Config.in.
+We can remove this patch in the future when we switch to U-boot 2016.07.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...he-standard-CMake-flag-to-drive-the-share.patch | 40 ----------------------
- package/taglib/Config.in                           |  1 -
- package/taglib/taglib.hash                         |  2 +-
- package/taglib/taglib.mk                           |  2 +-
- 4 files changed, 2 insertions(+), 43 deletions(-)
+ .../0001-video-ipu_common-fix-build-error.patch    | 47 ++++++++++++++++++++++
+ configs/mx53loco_defconfig                         | 20 +++++----
+ 2 files changed, 59 insertions(+), 8 deletions(-)
 
-diff --git a/package/taglib/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch b/package/taglib/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-deleted file mode 100644
-index 535ccb4..0000000
---- a/package/taglib/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 4e6a75eed3602f10aff516f49c8088c6da8db9df Mon Sep 17 00:00:00 2001
--From: Samuel Martin <s.martin49@gmail.com>
--Date: Sun, 31 Aug 2014 12:11:57 +0200
--Subject: [PATCH 1/1] cmake: use the standard CMake flag to drive the shared
-- object build
--
--If BUILD_SHARED_LIBS is set and ENABLE_STATIC undefined, then drive
--ENABLE_STATIC with the BUILD_SHARED_LIBS value.
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-----
-- CMakeLists.txt | 12 +++++++++++-
-- 1 file changed, 11 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 317ffa1..9931957 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -2,7 +2,17 @@ project(taglib)
-- 
-- cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
-- 
---option(ENABLE_STATIC "Make static version of libtag"  OFF)
--+# Use the standard CMake flag to drive the shared object build.
--+if(DEFINED BUILD_SHARED_LIBS AND NOT DEFINED ENABLE_STATIC)
--+  if(BUILD_SHARED_LIBS)
--+    set(ENABLE_STATIC OFF)
--+  else()
--+    set(ENABLE_STATIC ON)
--+  endif()
--+else()
--+  option(ENABLE_STATIC "Make static version of libtag"  OFF)
--+endif()
--+
-- if(ENABLE_STATIC)
--   add_definitions(-DTAGLIB_STATIC)
--   set(BUILD_SHARED_LIBS OFF)
---- 
--2.1.0
--
-diff --git a/package/taglib/Config.in b/package/taglib/Config.in
-index 209837f..6521d48 100644
---- a/package/taglib/Config.in
-+++ b/package/taglib/Config.in
-@@ -1,4 +1,3 @@
--
- config BR2_PACKAGE_TAGLIB
- 	bool "taglib"
- 	depends on BR2_INSTALL_LIBSTDCPP
-diff --git a/package/taglib/taglib.hash b/package/taglib/taglib.hash
-index 86ac6a4..a3cfc79 100644
---- a/package/taglib/taglib.hash
-+++ b/package/taglib/taglib.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	72d371cd1419a87ae200447a53bff2be219283071e80fd12337928cc967dc71a	taglib-1.9.1.tar.gz
-+sha256	ed4cabb3d970ff9a30b2620071c2b054c4347f44fc63546dbe06f97980ece288	taglib-1.11.tar.gz
-diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
-index 2410650..0a2ca4d 100644
---- a/package/taglib/taglib.mk
-+++ b/package/taglib/taglib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/freescale/imx53loco/patches/uboot/0001-video-ipu_common-fix-build-error.patch b/board/freescale/imx53loco/patches/uboot/0001-video-ipu_common-fix-build-error.patch
+new file mode 100644
+index 0000000..356d0b0
+--- /dev/null
++++ b/board/freescale/imx53loco/patches/uboot/0001-video-ipu_common-fix-build-error.patch
+@@ -0,0 +1,47 @@
++From c510f2e436008e55a50b063f2180cb1e63984224 Mon Sep 17 00:00:00 2001
++From: Peng Fan <van.freenix@gmail.com>
++Date: Thu, 28 Apr 2016 10:07:53 +0800
++Subject: [PATCH] video: ipu_common: fix build error
++
++Some toolchains fail to build
++"clk->rate = (u64)(clk->parent->rate * 16) / div;"
++And the cast usage is wrong.
++
++Use the following code to fix the issue,
++"
++  do_div(parent_rate, div);
++  clk->rate = parent_rate;
++"
++
++Reported-by: Peter Robinson <pbrobinson@gmail.com>
++Signed-off-by: Peng Fan <van.freenix@gmail.com>
++Cc: Stefano Babic <sbabic@denx.de>
++Cc: Fabio Estevam <fabio.estevam@nxp.com>
++Cc: Tom Rini <trini@konsulko.com>
++Cc: Anatolij Gustschin <agust@denx.de>
++Cc: Peter Robinson <pbrobinson@gmail.com>
++Reviewed-by: Tom Rini <trini@konsulko.com>
++Tested-by: Peter Robinson <pbrobinson@gmail.com>
++Signed-off-by: Fabio Estevam <festevam@gmail.com>
++---
++ drivers/video/ipu_common.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/drivers/video/ipu_common.c b/drivers/video/ipu_common.c
++index 36d4b23..5676a0f 100644
++--- a/drivers/video/ipu_common.c
+++++ b/drivers/video/ipu_common.c
++@@ -352,7 +352,9 @@ static int ipu_pixel_clk_set_rate(struct clk *clk, unsigned long rate)
++ 	 */
++ 	__raw_writel((div / 16) << 16, DI_BS_CLKGEN1(clk->id));
++ 
++-	clk->rate = (u64)(clk->parent->rate * 16) / div;
+++	do_div(parent_rate, div);
+++
+++	clk->rate = parent_rate;
++ 
++ 	return 0;
++ }
++-- 
++1.9.1
++
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index 3cb1b74..06150c7 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -2,25 +2,29 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
  
--TAGLIB_VERSION = 1.9.1
-+TAGLIB_VERSION = 1.11
- TAGLIB_SITE = http://taglib.github.io/releases
- TAGLIB_INSTALL_STAGING = YES
- TAGLIB_LICENSE = LGPLv2.1, MPL
+-# Linux headers same as kernel, a 2.6 series (so, no option selected)
++# Linux headers same as kernel, a 4.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ 
++# patches
++BR2_GLOBAL_PATCH_DIR="board/freescale/imx53loco/patches/"
++
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # Bootloader
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Freescale/u-boot-fslc.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="e36968af0a033e9d66535928886103370620cb4d"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="b3912bb8a4caf3ec50909135e88af959982c43ca"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
