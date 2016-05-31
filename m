@@ -1,76 +1,119 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 21:16:59 +0200
-Subject: [Buildroot] [git commit] python-pathtools: new package
-Message-ID: <20160601161311.EAA8A802A0@busybox.osuosl.org>
+Date: Tue, 31 May 2016 21:27:47 +0200
+Subject: [Buildroot] [git commit] configs: mx53loco: use genimage to
+	generate sdcard image
+Message-ID: <20160601161312.2714881F97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15daa91333650c915884183b4608ece6e50d0e67
+commit: https://git.buildroot.net/buildroot/commit/?id=dd2e328089c12685400bd124e70ff6a28cac025a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                              |  1 +
- package/python-pathtools/Config.in             |  6 ++++++
- package/python-pathtools/python-pathtools.hash |  4 ++++
- package/python-pathtools/python-pathtools.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
+ board/freescale/imx53loco/create-boot-sd.sh |  1 -
+ board/freescale/imx53loco/genimage.cfg      | 42 +++++++++++++++++++++++++++++
+ board/freescale/imx53loco/post-image.sh     | 16 +++++++++++
+ configs/mx53loco_defconfig                  |  6 +++++
+ 4 files changed, 64 insertions(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3bee6f9..78dc3d7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -696,6 +696,7 @@ menu "External python modules"
- 	source "package/python-paho-mqtt/Config.in"
- 	source "package/python-pam/Config.in"
- 	source "package/python-paramiko/Config.in"
-+	source "package/python-pathtools/Config.in"
- 	source "package/python-pexpect/Config.in"
- 	source "package/python-posix-ipc/Config.in"
- 	source "package/python-protobuf/Config.in"
-diff --git a/package/python-pathtools/Config.in b/package/python-pathtools/Config.in
+diff --git a/board/freescale/imx53loco/create-boot-sd.sh b/board/freescale/imx53loco/create-boot-sd.sh
+deleted file mode 120000
+index d45d639..0000000
+--- a/board/freescale/imx53loco/create-boot-sd.sh
++++ /dev/null
+@@ -1 +0,0 @@
+-../create-boot-sd.sh
+\ No newline at end of file
+diff --git a/board/freescale/imx53loco/genimage.cfg b/board/freescale/imx53loco/genimage.cfg
 new file mode 100644
-index 0000000..63777bd
+index 0000000..b56c168
 --- /dev/null
-+++ b/package/python-pathtools/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_PATHTOOLS
-+	bool "python-pathtools"
-+	help
-+	  File system general utilities.
-+
-+	  http://github.com/gorakhargosh/pathtools
-diff --git a/package/python-pathtools/python-pathtools.hash b/package/python-pathtools/python-pathtools.hash
-new file mode 100644
-index 0000000..1fa624d
---- /dev/null
-+++ b/package/python-pathtools/python-pathtools.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/pathtools/json
-+md5	9a1af5c605768ea5804b03b734ff0f82  pathtools-0.1.2.tar.gz
-+# sha256 calculated by scanpypi
-+sha256	7c35c5421a39bb82e58018febd90e3b6e5db34c5443aaaf742b3f33d4655f1c0  pathtools-0.1.2.tar.gz
-diff --git a/package/python-pathtools/python-pathtools.mk b/package/python-pathtools/python-pathtools.mk
-new file mode 100644
-index 0000000..2b4a271
---- /dev/null
-+++ b/package/python-pathtools/python-pathtools.mk
-@@ -0,0 +1,14 @@
-+################################################################################
++++ b/board/freescale/imx53loco/genimage.cfg
+@@ -0,0 +1,42 @@
++# Minimal microSD card image for the Freescale's i.MX53 QSB board
 +#
-+# python-pathtools
++# We mimic the .sdcard Freescale's image format for i.MX53:
++# * the microSD card must have 1 kB free space at the beginning,
++# * U-Boot is dumped as is,
++# * a FAT partition at offset 8 MB is containing zImage and dtbs,
++# * a single root filesystem partition is required (Ext4 in this case).
 +#
-+################################################################################
 +
-+PYTHON_PATHTOOLS_VERSION = 0.1.2
-+PYTHON_PATHTOOLS_SOURCE = pathtools-$(PYTHON_PATHTOOLS_VERSION).tar.gz
-+PYTHON_PATHTOOLS_SITE = https://pypi.python.org/packages/e7/7f/470d6fcdf23f9f3518f6b0b76be9df16dcc8630ad409947f8be2eb0ed13a
-+PYTHON_PATHTOOLS_SETUP_TYPE = setuptools
-+PYTHON_PATHTOOLS_LICENSE = MIT
-+PYTHON_PATHTOOLS_LICENSE_FILES = LICENSE
++image boot.vfat {
++  vfat {
++    files = {
++      "imx53-qsb.dtb",
++      "imx53-qsrb.dtb",
++      "zImage"
++    }
++  }
++  size = 16M
++}
 +
-+$(eval $(python-package))
++image sdcard.img {
++  hdimage {
++  }
++
++  partition u-boot {
++    in-partition-table = "no"
++    image = "u-boot.imx"
++    offset = 1024
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++    offset = 8M
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++  }
++}
+diff --git a/board/freescale/imx53loco/post-image.sh b/board/freescale/imx53loco/post-image.sh
+new file mode 100644
+index 0000000..8757355
+--- /dev/null
++++ b/board/freescale/imx53loco/post-image.sh
+@@ -0,0 +1,16 @@
++#!/usr/bin/env bash
++
++BOARD_DIR="$(dirname $0)"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++  --rootpath "${TARGET_DIR}" \
++  --tmppath "${GENIMAGE_TMP}" \
++  --inputpath "${BINARIES_DIR}" \
++  --outputpath "${BINARIES_DIR}" \
++  --config "${GENIMAGE_CFG}"
++
++exit $?
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index e461f7a..b62172c 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -11,7 +11,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ # patches
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx53loco/patches/"
+ 
++# required tools to create the SD card image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
+ # Filesystem
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/imx53loco/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
