@@ -1,90 +1,250 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 21:32:20 +0200
-Subject: [Buildroot] [git commit] php-ssh2: re add package,
-	now compatible with PHP 7
-Message-ID: <20160601161312.5B1EC802A0@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 31 May 2016 13:21:25 +0200
+Subject: [Buildroot] [git commit] dosfstools: security bump to version 4.0
+Message-ID: <20160601161311.C4E00802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08af64d6a5e7d6b37c954335e2b4c7e96e2e3647
+commit: https://git.buildroot.net/buildroot/commit/?id=a0b0fcfe21ed95a1dbc15aec9de90c6906497f20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Related: https://bugs.php.net/bug.php?id=71376
+Fixes:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+CVE-2015-8872 - if the third to last entry was written on a FAT12
+filesystem with an odd number of clusters, the second to last entry
+would be corrupted. This corruption may also lead to invalid memory
+accesses when the corrupted entry becomes out of bounds and is used
+late.
+
+CVE-2016-4804 - the variable used for storing the FAT size (in bytes)
+was an unsigned int. Since the size in sectors read from the BPB was not
+sufficiently checked, this could end up being zero after multiplying it
+with the sector size while some offsets still stayed excessive.
+Ultimately it would cause segfaults when accessing FAT entries for which
+no memory was allocated.
+
+Converted package to autotools infra to match upstream.
+
+The install options are now removals, enabled compatibilty symlinks and
+exec-prefix set to / to match previous install names/locations.
+
+Accounted for optional udev usage.
+
+Dropped musl compatibility patch since it's upstream.
+
+Add upstream patch to keep sectors a multiple of sectors per track since
+it makes mtools cranky.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in              |  1 +
- package/php-ssh2/Config.in     |  8 ++++++++
- package/php-ssh2/php-ssh2.hash |  2 ++
- package/php-ssh2/php-ssh2.mk   | 25 +++++++++++++++++++++++++
- 4 files changed, 36 insertions(+)
+ ...to-64-32-heads-sectors-for-targets-smalle.patch | 42 ++++++++++++++
+ .../0001-mkfs.fat-fix-incorrect-int-type.patch     | 45 ---------------
+ package/dosfstools/dosfstools.hash                 |  2 +-
+ package/dosfstools/dosfstools.mk                   | 64 ++++++++--------------
+ 4 files changed, 67 insertions(+), 86 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 0eeb6c5..4639587 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -617,6 +617,7 @@ menu "External php extensions"
- 	source "package/php-gnupg/Config.in"
- 	source "package/php-imagick/Config.in"
- 	source "package/php-memcached/Config.in"
-+	source "package/php-ssh2/Config.in"
- 	source "package/php-zmq/Config.in"
- endmenu
+diff --git a/package/dosfstools/0001-mkfs-Default-to-64-32-heads-sectors-for-targets-smalle.patch b/package/dosfstools/0001-mkfs-Default-to-64-32-heads-sectors-for-targets-smalle.patch
+new file mode 100644
+index 0000000..ff3c3ff
+--- /dev/null
++++ b/package/dosfstools/0001-mkfs-Default-to-64-32-heads-sectors-for-targets-smalle.patch
+@@ -0,0 +1,42 @@
++From 1e76e5778a1885452939a79d9145b80634a5b023 Mon Sep 17 00:00:00 2001
++From: Andreas Bombe <aeb@debian.org>
++Date: Wed, 11 May 2016 03:44:58 +0200
++Subject: [PATCH] mkfs: Default to 64/32 heads/sectors for targets smaller than
++ 512 MB
++
++This may put defaults in certain use cases a little bit more in line
++with the old defaults in versions up to 3.0.28. It has mostly aesthetic
++value in most cases.
++
++Signed-off-by: Andreas Bombe <aeb@debian.org>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Patch status: upstream
++
++ src/mkfs.fat.c | 10 ++++++++++
++ 1 file changed, 10 insertions(+)
++
++diff --git a/src/mkfs.fat.c b/src/mkfs.fat.c
++index 8a320fd..bad492b 100644
++--- a/src/mkfs.fat.c
+++++ b/src/mkfs.fat.c
++@@ -519,6 +519,16 @@ static void establish_params(struct device_info *info)
++     unsigned int cluster_size = 4;  /* starting point for FAT12 and FAT16 */
++     int def_root_dir_entries = 512;
++ 
+++    if (info->size < 512 * 1024 * 1024) {
+++	/*
+++	 * These values are more or less meaningless, but we can@least
+++	 * use less extreme values for smaller filesystems where the large
+++	 * dummy values signifying LBA only access are not needed.
+++	 */
+++	sec_per_track = 32;
+++	heads = 64;
+++    }
+++
++     if (info->type != TYPE_FIXED) {
++ 	/* enter default parameters for floppy disks if the size matches */
++ 	switch (info->size / 1024) {
++-- 
++2.7.3
++
+diff --git a/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch b/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch
+deleted file mode 100644
+index 34ebc24..0000000
+--- a/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 7a589ef6dab52ad32a296939f0ed2acb4d76b2a7 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sun, 16 Aug 2015 15:55:43 +0200
+-Subject: [PATCH] mkfs.fat: fix incorrect int type
+-
+-u_int32_t is not a stanard type, while uint32_t is. This fixes builds
+-with the musl C library, which only defines so-called "clean" headers;
+-build failures are like (back-quotes and elision manually added for
+-readability):
+-
+-    http://autobuild.buildroot.org/results/a09/a0923d7f6d4dbae02eba4c5024bbdae3a52aa85a/build-end.log
+-
+-    /home/peko/autobuild/instance-1/output/host/usr/bin/x86_64-linux-gcc -D_LARGEFILE_SOURCE \
+-        -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -D_GNU_SOURCE -D_LARGEFILE_SOURCE \
+-        -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -c -o mkfs.fat.o src/mkfs.fat.c
+-    src/mkfs.fat.c: In function 'main':
+-    src/mkfs.fat.c:1415:18: error: 'u_int32_t' undeclared (first use in this function)
+-         volume_id = (u_int32_t) ((create_timeval.tv_sec << 20) | create_timeval.tv_usec); [...]
+-                      ^
+-    src/mkfs.fat.c:1415:18: note: each undeclared identifier is reported only once for each
+-    function it appears in
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+----
+-Upstream status: applied: https://github.com/dosfstools/dosfstools/pull/9
+----
+- src/mkfs.fat.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/mkfs.fat.c b/src/mkfs.fat.c
+-index b38d116..dddbe24 100644
+---- a/src/mkfs.fat.c
+-+++ b/src/mkfs.fat.c
+-@@ -1412,7 +1412,7 @@ int main(int argc, char **argv)
+- 
+-     gettimeofday(&create_timeval, NULL);
+-     create_time = create_timeval.tv_sec;
+--    volume_id = (u_int32_t) ((create_timeval.tv_sec << 20) | create_timeval.tv_usec);	/* Default volume ID = creation time, fudged for more uniqueness */
+-+    volume_id = (uint32_t) ((create_timeval.tv_sec << 20) | create_timeval.tv_usec);	/* Default volume ID = creation time, fudged for more uniqueness */
+-     check_atari();
+- 
+-     printf("mkfs.fat " VERSION " (" VERSION_DATE ")\n");
+--- 
+-1.9.1
+-
+diff --git a/package/dosfstools/dosfstools.hash b/package/dosfstools/dosfstools.hash
+index f852195..777b8d9 100644
+--- a/package/dosfstools/dosfstools.hash
++++ b/package/dosfstools/dosfstools.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	ee95913044ecf2719b63ea11212917649709a6e53209a72d622135aaa8517ee2	dosfstools-3.0.28.tar.xz
++sha256	9037738953559d1efe04fc5408b6846216cc0138f7f9d32de80b6ec3c35e7daf	dosfstools-4.0.tar.xz
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index b7f7d96..28a7b42 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -4,65 +4,49 @@
+ #
+ ################################################################################
+ 
+-DOSFSTOOLS_VERSION = 3.0.28
++DOSFSTOOLS_VERSION = 4.0
+ DOSFSTOOLS_SOURCE = dosfstools-$(DOSFSTOOLS_VERSION).tar.xz
+ DOSFSTOOLS_SITE = https://github.com/dosfstools/dosfstools/releases/download/v$(DOSFSTOOLS_VERSION)
+ DOSFSTOOLS_LICENSE = GPLv3+
+ DOSFSTOOLS_LICENSE_FILES = COPYING
++DOSFSTOOLS_CONF_OPTS = --enable-compat-symlinks --exec-prefix=/
++HOST_DOSFSTOOLS_CONF_OPTS = --enable-compat-symlinks
+ 
+ # Avoid target dosfstools dependencies, no host-libiconv
+ HOST_DOSFSTOOLS_DEPENDENCIES =
+ 
+-DOSFSTOOLS_CFLAGS = $(TARGET_CFLAGS) -D_GNU_SOURCE
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++DOSFSTOOLS_CONF_OPTS += --with-udev
++DOSFSTOOLS_DEPENDENCIES += udev
++else
++DOSFSTOOLS_CONF_OPTS += --without-udev
++endif
+ 
+ ifneq ($(BR2_ENABLE_LOCALE),y)
++DOSFSTOOLS_CONF_OPTS += LIBS="-liconv"
+ DOSFSTOOLS_DEPENDENCIES += libiconv
+-DOSFSTOOLS_LDLIBS += -liconv
  endif
-diff --git a/package/php-ssh2/Config.in b/package/php-ssh2/Config.in
-new file mode 100644
-index 0000000..b457900
---- /dev/null
-+++ b/package/php-ssh2/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PHP_SSH2
-+	bool "php-ssh2"
-+	depends on BR2_PACKAGE_PHP
-+	select BR2_PACKAGE_LIBSSH2
-+	help
-+	  PHP bindings for the libssh2 library.
-+
-+	  http://pecl.php.net/package/ssh2
-diff --git a/package/php-ssh2/php-ssh2.hash b/package/php-ssh2/php-ssh2.hash
-new file mode 100644
-index 0000000..1e046df
---- /dev/null
-+++ b/package/php-ssh2/php-ssh2.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 877f2fa9a709aa2dd9567848fae7b45ecac359904296a0aedbf718e99d8568f5  php-ssh2-aa1739ac26c2177d33ab8d064021032bdc2c3a40.tar.gz
-diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
-new file mode 100644
-index 0000000..cfe6070
---- /dev/null
-+++ b/package/php-ssh2/php-ssh2.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# php-ssh2
-+#
-+################################################################################
-+
-+PHP_SSH2_VERSION = aa1739ac26c2177d33ab8d064021032bdc2c3a40
-+PHP_SSH2_SITE = $(call github,php,pecl-networking-ssh2,$(PHP_SSH2_VERSION))
-+PHP_SSH2_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
-+	--with-ssh2=$(STAGING_DIR)/usr
-+# phpize does the autoconf magic
-+PHP_SSH2_DEPENDENCIES = libssh2 php host-autoconf
-+PHP_SSH2_LICENSE = PHP
-+PHP_SSH2_LICENSE_FILES = LICENSE
-+
-+define PHP_SSH2_PHPIZE
-+	(cd $(@D); \
-+		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
-+		$(STAGING_DIR)/usr/bin/phpize)
-+endef
-+
-+PHP_SSH2_PRE_CONFIGURE_HOOKS += PHP_SSH2_PHPIZE
-+
+ 
+-define DOSFSTOOLS_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(DOSFSTOOLS_CFLAGS)" LDLIBS="$(DOSFSTOOLS_LDLIBS)" -C $(@D)
+-endef
+-
+-ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),y)
+-define DOSFSTOOLS_INSTALL_FATLABEL
+-	$(INSTALL) -D -m 755 $(@D)/fatlabel $(TARGET_DIR)/sbin/fatlabel
+-	ln -sf fatlabel $(TARGET_DIR)/sbin/dosfslabel
++ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),)
++define DOSFSTOOLS_REMOVE_FATLABEL
++	rm -f $(addprefix $(TARGET_DIR)/sbin/,dosfslabel fatlabel)
+ endef
++DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FATLABEL
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT),y)
+-define DOSFSTOOLS_INSTALL_FSCK_FAT
+-	$(INSTALL) -D -m 755 $(@D)/fsck.fat $(TARGET_DIR)/sbin/fsck.fat
+-	ln -fs fsck.fat $(TARGET_DIR)/sbin/dosfsck
+-	ln -fs fsck.fat $(TARGET_DIR)/sbin/fsck.msdos
+-	ln -fs fsck.fat $(TARGET_DIR)/sbin/fsck.vfat
++ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT),)
++define DOSFSTOOLS_REMOVE_FSCK_FAT
++	rm -f $(addprefix $(TARGET_DIR)/sbin/,fsck.fat dosfsck fsck.msdos fsck.vfat)
+ endef
++DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FSCK_FAT
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT),y)
+-define DOSFSTOOLS_INSTALL_MKFS_FAT
+-	$(INSTALL) -D -m 755 $(@D)/mkfs.fat $(TARGET_DIR)/sbin/mkfs.fat
+-	ln -fs mkfs.fat $(TARGET_DIR)/sbin/mkdosfs
+-	ln -fs mkfs.fat $(TARGET_DIR)/sbin/mkfs.msdos
+-	ln -fs mkfs.fat $(TARGET_DIR)/sbin/mkfs.vfat
++ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT),)
++define DOSFSTOOLS_REMOVE_MKFS_FAT
++	rm -f $(addprefix $(TARGET_DIR)/sbin/,mkfs.fat mkdosfs mkfs.msdos mkfs.vfat)
+ endef
++DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_MKFS_FAT
+ endif
+ 
+-define DOSFSTOOLS_INSTALL_TARGET_CMDS
+-	$(DOSFSTOOLS_INSTALL_FATLABEL)
+-	$(DOSFSTOOLS_INSTALL_FSCK_FAT)
+-	$(DOSFSTOOLS_INSTALL_MKFS_FAT)
+-endef
+-
+-define HOST_DOSFSTOOLS_BUILD_CMDS
+-	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
+-endef
+-
+-define HOST_DOSFSTOOLS_INSTALL_CMDS
+-	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) PREFIX=$(HOST_DIR)/usr install
+-endef
+-
+-$(eval $(generic-package))
+-$(eval $(host-generic-package))
 +$(eval $(autotools-package))
++$(eval $(host-autotools-package))
