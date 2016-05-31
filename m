@@ -1,47 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 May 2016 16:27:05 +0200
-Subject: [Buildroot] [git commit] package/make: bump version to 4.2
-Message-ID: <20160601161309.BD24681922@busybox.osuosl.org>
+Date: Tue, 31 May 2016 22:40:34 +0200
+Subject: [Buildroot] [git commit] linux: provide symlink dtc->linux-dtc is
+	there is no dtc yet
+Message-ID: <20160601161312.96D82802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2da155d27649ae876b739637b728e7808f2ccb3
+commit: https://git.buildroot.net/buildroot/commit/?id=690ed04845cbde378b3668316d5313d845f6862e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Announcement URL:
+Commit ab74e09eb4e28dab8bed8d783c5f0464d39a32e7 renamed the dtc host tool
+provided by linux to linux-dtc to avoid clashes with the dtc host tool
+provided by host-dtc.
 
-  http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00013.html
+However, external scripting may well rely on the existence of a device tree
+compiler as $(HOST_DIR)/usr/bin/dtc, regardless of its source. Changing
+these external scripts to use linux-dtc means that the scripts need to be
+aware of the buildroot release they are working with, which is not very
+nice.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Add a symlink dtc->linux-dtc when no $(HOST_DIR)/usr/bin/dtc is present.
+When host-dtc is not enabled, the end result will be dtc and
+linux-dtc representing the same thing.
+When host-dtc is enabled, either it is build before linux and no symlink
+is created at any time, or it is build after linux, and the 'install'
+command in host-dtc will overwrite the symlink with a proper dtc. In both
+cases, the end result will be dtc and linux-dtc representing a different
+thing.
+
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/make/make.hash | 4 +++-
- package/make/make.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ linux/linux.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/make/make.hash b/package/make/make.hash
-index db95c60..528822f 100644
---- a/package/make/make.hash
-+++ b/package/make/make.hash
-@@ -1,2 +1,4 @@
-+# From http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00013.html
-+sha1 85ad14d08766201ffe71efa866f4fb91  make-4.2.tar.bz2
- # Locally calculated after checking signature
--sha256	0bc7613389650ee6a24554b52572a272f7356164fd2c4132b0bcf13123e4fca5	make-4.1.tar.bz2
-+sha256 4e5ce3b62fe5d75ff8db92b7f6df91e476d10c3aceebf1639796dc5bfece655f  make-4.2.tar.bz2
-diff --git a/package/make/make.mk b/package/make/make.mk
-index 20702dc..43f4f77 100644
---- a/package/make/make.mk
-+++ b/package/make/make.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/linux.mk b/linux/linux.mk
+index d88060e..4f4f802 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -351,6 +351,9 @@ define LINUX_INSTALL_HOST_TOOLS
+ 	# Installing dtc (device tree compiler) as host tool, if selected
+ 	if grep -q "CONFIG_DTC=y" $(@D)/.config; then 	\
+ 		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/linux-dtc ;	\
++		if [ ! -e $(HOST_DIR)/usr/bin/dtc ]; then	\
++			ln -sf linux-dtc $(HOST_DIR)/usr/bin/dtc ;	\
++		fi	\
+ 	fi
+ endef
  
--MAKE_VERSION = 4.1
-+MAKE_VERSION = 4.2
- MAKE_SOURCE = make-$(MAKE_VERSION).tar.bz2
- MAKE_SITE = $(BR2_GNU_MIRROR)/make
- MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
