@@ -1,38 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 21:41:24 +0200
-Subject: [Buildroot] [PATCH v3 next 1/5] php: bump version to 7.0.6
-In-Reply-To: <1464015096-48578-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1464015096-48578-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160531214124.4b760e0b@free-electrons.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Tue, 31 May 2016 16:40:16 -0300 (BRT)
+Subject: [Buildroot] [PATCH v3] uboot-tools: fix FIT support and make it
+ optional
+In-Reply-To: <20160531210122.39a50d97@free-electrons.com>
+References: <1462535953-4427-1-git-send-email-casantos@datacom.ind.br>
+ <1462736800-9552-1-git-send-email-casantos@datacom.ind.br>
+ <1462736800-9552-2-git-send-email-casantos@datacom.ind.br>
+ <20160528150755.78888529@free-electrons.com>
+ <468666808.273843.1464715989675.JavaMail.zimbra@datacom.ind.br>
+ <20160531210122.39a50d97@free-electrons.com>
+Message-ID: <1106718859.329816.1464723616437.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: buildroot at buildroot.org, "yann morin 1998" <yann.morin.1998@gmail.com>
+> Sent: Tuesday, May 31, 2016 4:01:22 PM
+> Subject: Re: [Buildroot] [PATCH v3] uboot-tools: fix FIT support and make it optional
 
-On Mon, 23 May 2016 15:51:32 +0100, Vicente Olivert Riera wrote:
-> Remove MySQL legacy extension.
+> Hello,
 > 
-> Remove incompatible external modules:
->  - php-gnupg
->  - php-memcached
->  - php-ssh2
->  - php-yaml
+> On Tue, 31 May 2016 14:33:09 -0300 (BRT), Carlos Santos wrote:
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
-> Changes v2 -> v3:
->  - Bump version from 7.0.5 to 7.0.6.
->  - Remove MySQL legacy extension. (Thanks Thomas Petazzoni)
-> Changes v1 -> v2:
->  - Split it in different patches.
+>> > 3/ Improving FIT support for the host variant
+>> > 
+>> > 4/ Improving FIT support for the target variant
+>> 
+>> Tasks 3 and 4 can not be separated because both depend on the new patch that
+>> makes FIT support really optional.
+> 
+> Of course they can be separated. Just include the patch that makes FIT
+> support really optional into patch (3) from my list.
 
-Entire series applied to next, thanks!
+Step 3 would make the ...MKIMAGE_FIT_SIGNATURE_SUPPORT option useless. Once the patch is applied, FIT support depends on passing CONFIG_FIT=y in the make command line, which would be made done only in step 4.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>> OK, I will make these changes. I'd like to emphasize, however, that
+>> currently uboot-tools is broken. FIT support is always compiled, so
+>> run-time dependence on "dtc" persists but dtc is not selected in
+>> Config.in{.host,}. This is the problem that my initial patch intended
+>> to fix.
+> 
+> Sure, that's why I reviewed your patch, and suggested a few
+> improvements that should be made to allow us to apply the patch. Once
+> the improvements are made, I believe we should be able to apply it
+> pretty quickly.
+
+Carlos Santos (Casantos)
+DATACOM, P&D
