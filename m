@@ -1,91 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 21:31:59 +0200
-Subject: [Buildroot] [git commit] php-gnupg: re add package,
-	now compatible with PHP 7
-Message-ID: <20160601161312.422FC802A0@busybox.osuosl.org>
+Date: Tue, 31 May 2016 21:11:48 +0200
+Subject: [Buildroot] [git commit] python-ubjson: new package
+Message-ID: <20160601161311.D091A802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e944a30a0d68594cc4e52451e8899258b979a3e
+commit: https://git.buildroot.net/buildroot/commit/?id=a7430139ffbfee1c941bc62a31256877c45457bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Related: https://bugs.php.net/bug.php?id=71138
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                |  1 +
- package/php-gnupg/Config.in      |  9 +++++++++
- package/php-gnupg/php-gnupg.hash |  2 ++
- package/php-gnupg/php-gnupg.mk   | 25 +++++++++++++++++++++++++
- 4 files changed, 37 insertions(+)
+ package/Config.in                        |  1 +
+ package/python-ubjson/Config.in          |  7 +++++++
+ package/python-ubjson/python-ubjson.hash |  3 +++
+ package/python-ubjson/python-ubjson.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index f21d42e..7421bc2 100644
+index 22aa881..359298b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -614,6 +614,7 @@ if BR2_PACKAGE_PHP
- if !BR2_STATIC_LIBS
- menu "External php extensions"
- 	source "package/php-geoip/Config.in"
-+	source "package/php-gnupg/Config.in"
- 	source "package/php-imagick/Config.in"
- 	source "package/php-zmq/Config.in"
- endmenu
-diff --git a/package/php-gnupg/Config.in b/package/php-gnupg/Config.in
+@@ -751,6 +751,7 @@ menu "External python modules"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
++	source "package/python-ubjson/Config.in"
+ 	source "package/python-ujson/Config.in"
+ 	source "package/python-urllib3/Config.in"
+ 	source "package/python-urwid/Config.in"
+diff --git a/package/python-ubjson/Config.in b/package/python-ubjson/Config.in
 new file mode 100644
-index 0000000..49fb43b
+index 0000000..86ed3b2
 --- /dev/null
-+++ b/package/php-gnupg/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PHP_GNUPG
-+	bool "php-gnupg"
-+	depends on BR2_PACKAGE_PHP
-+	depends on BR2_USE_MMU # libassuan
-+	select BR2_PACKAGE_LIBGPGME
++++ b/package/python-ubjson/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_UBJSON
++	bool "python-ubjson"
 +	help
-+	  PHP wrapper around the gpgme library.
++	  This is a Python v3.2+ (and 2.7+) Universal Binary JSON
++	  encoder/decoder based on the draft-12 specification.
 +
-+	  http://pecl.php.net/package/gnupg
-diff --git a/package/php-gnupg/php-gnupg.hash b/package/php-gnupg/php-gnupg.hash
++	  https://pypi.python.org/pypi/py-ubjson
+diff --git a/package/python-ubjson/python-ubjson.hash b/package/python-ubjson/python-ubjson.hash
 new file mode 100644
-index 0000000..f0654b5
+index 0000000..1995da6
 --- /dev/null
-+++ b/package/php-gnupg/php-gnupg.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 6f1a4b5a95fe501519de76d66602e46290cc452fc48f3a5ec2eacaffe68d9a01  php-gnupg-30fab6eaf9eb61c65b3b46987442be058cbd7823.tar.gz
-diff --git a/package/php-gnupg/php-gnupg.mk b/package/php-gnupg/php-gnupg.mk
++++ b/package/python-ubjson/python-ubjson.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=7d7e7b9b67acfb8c6b417dab78ac4639,sha256 locally computed.
++md5	7d7e7b9b67acfb8c6b417dab78ac4639  py-ubjson-0.8.4.tar.gz
++sha256	395c0cbbb097d88bb0db92fe1ac82d31b56f3be396946fe02d38f08e86a8efe9  py-ubjson-0.8.4.tar.gz
+diff --git a/package/python-ubjson/python-ubjson.mk b/package/python-ubjson/python-ubjson.mk
 new file mode 100644
-index 0000000..c1c6680
+index 0000000..a69efab
 --- /dev/null
-+++ b/package/php-gnupg/php-gnupg.mk
-@@ -0,0 +1,25 @@
++++ b/package/python-ubjson/python-ubjson.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# php-gnupg
++# python-ubjson
 +#
 +################################################################################
 +
-+PHP_GNUPG_VERSION = 30fab6eaf9eb61c65b3b46987442be058cbd7823
-+PHP_GNUPG_SITE = $(call github,Sean-Der,pecl-encryption-gnupg,$(PHP_GNUPG_VERSION))
-+# phpize does the autoconf magic
-+PHP_GNUPG_DEPENDENCIES = php libgpgme host-autoconf host-pkgconf
-+PHP_GNUPG_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
-+	--with-gnupg=$(STAGING_DIR)/usr/include --with-gpg=/usr/bin/gpg
-+PHP_GNUPG_LICENSE = BSD-2c
-+PHP_GNUPG_LICENSE_FILES = LICENSE
++PYTHON_UBJSON_VERSION = 0.8.4
++PYTHON_UBJSON_SOURCE = py-ubjson-$(PYTHON_UBJSON_VERSION).tar.gz
++PYTHON_UBJSON_SITE = https://pypi.python.org/packages/bf/a3/990c47fa0d2d244a3d493ae917d5cbf2a0632c1ac6aa53445f4e53ce3675
++PYTHON_UBJSON_LICENSE = Apache-2.0
++PYTHON_UBJSON_LICENSE_FILES = LICENSE
++PYTHON_UBJSON_SETUP_TYPE = setuptools
 +
-+define PHP_GNUPG_PHPIZE
-+	(cd $(@D); \
-+		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
-+		$(STAGING_DIR)/usr/bin/phpize)
-+endef
-+
-+PHP_GNUPG_PRE_CONFIGURE_HOOKS += PHP_GNUPG_PHPIZE
-+
-+$(eval $(autotools-package))
++$(eval $(python-package))
