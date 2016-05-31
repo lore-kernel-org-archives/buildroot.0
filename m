@@ -1,43 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 22:34:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-mga:
- disable DRI support when not available
-In-Reply-To: <1447004673-18164-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1447004673-18164-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160531223456.6f245cc9@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 31 May 2016 22:42:58 +0200
+Subject: [Buildroot] [PATCH 1/1]
+	package/x11r7/xdriver_xf86-video-fbturbo: needs dri2 for libump
+In-Reply-To: <1464455839-473-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
+ Kuhls's message of "Sat, 28 May 2016 19:17:19 +0200")
+References: <1464455839-473-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87y46quffx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On Sun,  8 Nov 2015 18:44:32 +0100, Bernd Kuhls wrote:
-> configure.ac is not cross-compile aware, a patch fixing DRI detection
-> was added in 2009
-> http://git.buildroot.net/buildroot/commit/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga-1.4.9.patch?id=59b0aa7a7ee327688a77dd5d01d0b2032f6535a2
-> 
-> assuming DRI support being present if DRI support was not disabled.
-> 
-> By default configure.ac assumes "auto" which leads to DRI support being
-> enabled even if DRI support is disabled in buildroot config. This patch
-> adds --disable-dri to really disable DRI support, fixes:
-> 
-> http://autobuild.buildroot.net/results/5e5/5e5dbc30e1f30f7d2d614f4a9edb7fe439f73d61/
-> http://autobuild.buildroot.net/results/a8f/a8fab920599e7dc77038f3d2a9a699d6823cf3ef/
-> http://autobuild.buildroot.net/results/81d/81dbad489412cd28345de364624180cb082b3bb6/
-> http://autobuild.buildroot.net/results/53f/53fc0031da2b65890223f3183c77eb66cf0b5273/
-> http://autobuild.buildroot.net/results/544/54481a0f8d690e3878f4616ae1f331705e3c34be/
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+ > xdriver_xf86-video-fbturbo has an optional dependency to libump
+ > currently not handled by buildroot:
+ > https://github.com/ssvb/xf86-video-fbturbo/blob/master/configure.ac#L91
 
-Applied to next, thanks.
+ > If libump was compiled incidentally before xdriver_xf86-video-fbturbo
+ > sunxi_mali_ump_dri2.c is compiled which depends on dri2:
+ > https://github.com/ssvb/xf86-video-fbturbo/blob/master/src/Makefile.am#L59
 
-Thomas
+ > This patch adds a dependency for dri2proto to enable dri2 support in
+ > X.org and adds libump as dependency for a reproducable build to fix
+ > http://autobuild.buildroot.net/results/656/656520682a5ac6fe5e1e741e1a92b1eab4245f2d/
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/x11r7/xdriver_xf86-video-fbturbo/Config.in                    | 1 +
+ >  .../x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk    | 4 ++++
+ >  2 files changed, 5 insertions(+)
+
+ > diff --git a/package/x11r7/xdriver_xf86-video-fbturbo/Config.in b/package/x11r7/xdriver_xf86-video-fbturbo/Config.in
+ > index 8fec5c2..7825901 100644
+ > --- a/package/x11r7/xdriver_xf86-video-fbturbo/Config.in
+ > +++ b/package/x11r7/xdriver_xf86-video-fbturbo/Config.in
+ > @@ -2,6 +2,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBTURBO
+ >  	bool "xf86-video-fbturbo"
+ >  	select BR2_PACKAGE_LIBDRM
+ >  	select BR2_PACKAGE_PIXMAN
+ > +	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_LIBUMP
+ >  	select BR2_PACKAGE_XPROTO_FONTSPROTO
+ >  	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ >  	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ > diff --git a/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk b/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk
+ > index b2053d3..b67630d 100644
+ > --- a/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk
+ > +++ b/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk
+ > @@ -26,6 +26,10 @@ else
+ >  XDRIVER_XF86_VIDEO_FBTURBO_CONF_OPTS += --disable-pciaccess
+ >  endif
+ 
+ > +ifeq ($(BR2_PACKAGE_LIBUMP),y)
+ > +XDRIVER_XF86_VIDEO_FBTURBO_DEPENDENCIES += libump
+ > +endif
+
+We should also ensure dri2proto gets built before fbturbo, so I've added
+it to _DEPENDENCIES as well and committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
