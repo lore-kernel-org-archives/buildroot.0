@@ -1,46 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 31 May 2016 09:13:28 +0200
-Subject: [Buildroot] [git commit] xserver_xorg-server: Fix typo in wayland
-	configure option
-Message-ID: <20160531071421.4F82F81E9C@busybox.osuosl.org>
+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Date: Tue, 31 May 2016 09:43:48 +0200
+Subject: [Buildroot] [PATCH] build: fix umask test
+In-Reply-To: <744ed421-d308-297d-a497-251a7756c0d2@mind.be>
+References: <20160530070635.GA27560@airbook.vandijck-laurijssen.be>
+ <87mvn82d50.fsf@dell.be.48ers.dk> <87inxw2cnt.fsf@dell.be.48ers.dk>
+ <20160530111740.14c24236@free-electrons.com>
+ <20160530095319.GA5804@airbook.vandijck-laurijssen.be>
+ <87a8j73lz2.fsf@dell.be.48ers.dk>
+ <20160530210928.GA19307@airbook.vandijck-laurijssen.be>
+ <744ed421-d308-297d-a497-251a7756c0d2@mind.be>
+Message-ID: <20160531074348.GA26685@airbook>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a229c52aa4c75f1008d629c91e61cf5f0a1c0569
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> > 
+> > I see, but how would that help when bash is not on the system?
+> > Is bash a prerequisite?
+> 
+>  Yes, bash is a prerequisite. Some of our own scripts are bash scripts.
+> Moreover, quite a few packages just assume that the shell is bash. Requiring
+> bash and setting is as SHELL is the simplest way to handle that.
 
-Bug was introduced in
-https://git.busybox.net/buildroot/commit/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk?id=1370fcaeb7c88e958a967594596769c71a4526f9
+The Makefile only recommends /bin/bash, it falls back to 'sh' when bash
+is not present.
 
-The configure option is called --en-/disable-xwayland:
-https://cgit.freedesktop.org/xorg/xserver/tree/configure.ac?id=9454cd51da9b38b974cff7c8b7125901f6403848#n630
+> 
+> > 
+> > I was thinking on using /bin/printf to avoid using the shell builtin.
+> 
+>  I don't have /bin/printf, only /usr/bin/printf...
 
-Fixes
-http://autobuild.buildroot.net/results/c32/c32a17509b070b1af497bfc54b85a944fa59ca30/
+Thanks for mentioning, I'll address the problem without printf.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 69e9151..85d7e98 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -82,10 +82,10 @@ endif
- 
- # Xwayland support needs libdrm, libepoxy, wayland and libxcomposite
- ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_LIBEPOXY)$(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),yyyy)
--XSERVER_XORG_SERVER_CONF_OPTS += --enable-wayland
-+XSERVER_XORG_SERVER_CONF_OPTS += --enable-xwayland
- XSERVER_XORG_SERVER_DEPENDENCIES += libdrm libepoxy wayland xlib_libXcomposite
- else
--XSERVER_XORG_SERVER_CONF_OPTS += --disable-wayland
-+XSERVER_XORG_SERVER_CONF_OPTS += --disable-xwayland
- endif
- 
- # Present protocol only required for xserver 1.15+, but does not matter if
+Kurt
