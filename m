@@ -1,119 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 21:27:47 +0200
-Subject: [Buildroot] [git commit] configs: mx53loco: use genimage to
-	generate sdcard image
-Message-ID: <20160601161312.2714881F97@busybox.osuosl.org>
+Date: Tue, 31 May 2016 21:31:59 +0200
+Subject: [Buildroot] [git commit] php-gnupg: re add package,
+	now compatible with PHP 7
+Message-ID: <20160601161312.422FC802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd2e328089c12685400bd124e70ff6a28cac025a
+commit: https://git.buildroot.net/buildroot/commit/?id=1e944a30a0d68594cc4e52451e8899258b979a3e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Related: https://bugs.php.net/bug.php?id=71138
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/freescale/imx53loco/create-boot-sd.sh |  1 -
- board/freescale/imx53loco/genimage.cfg      | 42 +++++++++++++++++++++++++++++
- board/freescale/imx53loco/post-image.sh     | 16 +++++++++++
- configs/mx53loco_defconfig                  |  6 +++++
- 4 files changed, 64 insertions(+), 1 deletion(-)
+ package/Config.in                |  1 +
+ package/php-gnupg/Config.in      |  9 +++++++++
+ package/php-gnupg/php-gnupg.hash |  2 ++
+ package/php-gnupg/php-gnupg.mk   | 25 +++++++++++++++++++++++++
+ 4 files changed, 37 insertions(+)
 
-diff --git a/board/freescale/imx53loco/create-boot-sd.sh b/board/freescale/imx53loco/create-boot-sd.sh
-deleted file mode 120000
-index d45d639..0000000
---- a/board/freescale/imx53loco/create-boot-sd.sh
-+++ /dev/null
-@@ -1 +0,0 @@
--../create-boot-sd.sh
-\ No newline at end of file
-diff --git a/board/freescale/imx53loco/genimage.cfg b/board/freescale/imx53loco/genimage.cfg
+diff --git a/package/Config.in b/package/Config.in
+index f21d42e..7421bc2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -614,6 +614,7 @@ if BR2_PACKAGE_PHP
+ if !BR2_STATIC_LIBS
+ menu "External php extensions"
+ 	source "package/php-geoip/Config.in"
++	source "package/php-gnupg/Config.in"
+ 	source "package/php-imagick/Config.in"
+ 	source "package/php-zmq/Config.in"
+ endmenu
+diff --git a/package/php-gnupg/Config.in b/package/php-gnupg/Config.in
 new file mode 100644
-index 0000000..b56c168
+index 0000000..49fb43b
 --- /dev/null
-+++ b/board/freescale/imx53loco/genimage.cfg
-@@ -0,0 +1,42 @@
-+# Minimal microSD card image for the Freescale's i.MX53 QSB board
-+#
-+# We mimic the .sdcard Freescale's image format for i.MX53:
-+# * the microSD card must have 1 kB free space at the beginning,
-+# * U-Boot is dumped as is,
-+# * a FAT partition at offset 8 MB is containing zImage and dtbs,
-+# * a single root filesystem partition is required (Ext4 in this case).
-+#
++++ b/package/php-gnupg/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PHP_GNUPG
++	bool "php-gnupg"
++	depends on BR2_PACKAGE_PHP
++	depends on BR2_USE_MMU # libassuan
++	select BR2_PACKAGE_LIBGPGME
++	help
++	  PHP wrapper around the gpgme library.
 +
-+image boot.vfat {
-+  vfat {
-+    files = {
-+      "imx53-qsb.dtb",
-+      "imx53-qsrb.dtb",
-+      "zImage"
-+    }
-+  }
-+  size = 16M
-+}
-+
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition u-boot {
-+    in-partition-table = "no"
-+    image = "u-boot.imx"
-+    offset = 1024
-+  }
-+
-+  partition boot {
-+    partition-type = 0xC
-+    bootable = "true"
-+    image = "boot.vfat"
-+    offset = 8M
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext4"
-+  }
-+}
-diff --git a/board/freescale/imx53loco/post-image.sh b/board/freescale/imx53loco/post-image.sh
++	  http://pecl.php.net/package/gnupg
+diff --git a/package/php-gnupg/php-gnupg.hash b/package/php-gnupg/php-gnupg.hash
 new file mode 100644
-index 0000000..8757355
+index 0000000..f0654b5
 --- /dev/null
-+++ b/board/freescale/imx53loco/post-image.sh
-@@ -0,0 +1,16 @@
-+#!/usr/bin/env bash
++++ b/package/php-gnupg/php-gnupg.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 6f1a4b5a95fe501519de76d66602e46290cc452fc48f3a5ec2eacaffe68d9a01  php-gnupg-30fab6eaf9eb61c65b3b46987442be058cbd7823.tar.gz
+diff --git a/package/php-gnupg/php-gnupg.mk b/package/php-gnupg/php-gnupg.mk
+new file mode 100644
+index 0000000..c1c6680
+--- /dev/null
++++ b/package/php-gnupg/php-gnupg.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# php-gnupg
++#
++################################################################################
 +
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++PHP_GNUPG_VERSION = 30fab6eaf9eb61c65b3b46987442be058cbd7823
++PHP_GNUPG_SITE = $(call github,Sean-Der,pecl-encryption-gnupg,$(PHP_GNUPG_VERSION))
++# phpize does the autoconf magic
++PHP_GNUPG_DEPENDENCIES = php libgpgme host-autoconf host-pkgconf
++PHP_GNUPG_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
++	--with-gnupg=$(STAGING_DIR)/usr/include --with-gpg=/usr/bin/gpg
++PHP_GNUPG_LICENSE = BSD-2c
++PHP_GNUPG_LICENSE_FILES = LICENSE
 +
-+rm -rf "${GENIMAGE_TMP}"
++define PHP_GNUPG_PHPIZE
++	(cd $(@D); \
++		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
++		$(STAGING_DIR)/usr/bin/phpize)
++endef
 +
-+genimage \
-+  --rootpath "${TARGET_DIR}" \
-+  --tmppath "${GENIMAGE_TMP}" \
-+  --inputpath "${BINARIES_DIR}" \
-+  --outputpath "${BINARIES_DIR}" \
-+  --config "${GENIMAGE_CFG}"
++PHP_GNUPG_PRE_CONFIGURE_HOOKS += PHP_GNUPG_PHPIZE
 +
-+exit $?
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index e461f7a..b62172c 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -11,7 +11,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- # patches
- BR2_GLOBAL_PATCH_DIR="board/freescale/imx53loco/patches/"
- 
-+# required tools to create the SD card image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+
- # Filesystem
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/imx53loco/post-image.sh"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- 
++$(eval $(autotools-package))
