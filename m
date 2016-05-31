@@ -1,54 +1,56 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 31 May 2016 15:28:38 +0100
-Subject: [Buildroot] [PATCH] mesa3d: use -mno-compact-eh for Code
- Sourcery MIPS
-In-Reply-To: <20160531135936.4f2c0691@free-electrons.com>
-References: <1464689755-63804-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160531135936.4f2c0691@free-electrons.com>
-Message-ID: <574D9F96.7030908@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 31 May 2016 16:39:46 +0200
+Subject: [Buildroot] [PATCH v3] dosfstools: security bump to version 4.0
+In-Reply-To: <1464125552-11702-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 24 May 2016 18:32:32 -0300")
+References: <1464125552-11702-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877feaz3yl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On 31/05/16 12:59, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 31 May 2016 11:15:55 +0100, Vicente Olivert Riera wrote:
-> 
->> +# mesa3d doesn't like the new compressed exception handling of the Code
->> +# Sourcery MIPS toolchain and it fails to compile. Using -mno-compact-eh
->> +# fixes the problem.
->> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS),y)
->> +MESA3D_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mno-compact-eh"
->> +MESA3D_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -mno-compact-eh"
->> +endif
-> 
-> Isn't an upstreamable fix to mesa3d configure script a better solution?
-> See package/libffi/0002-Fix-use-of-compact-eh-frames-on-MIPS.patch in
-> Buildroot.
+ > Fixes:
+ > CVE-2015-8872 - if the third to last entry was written on a FAT12
+ > filesystem with an odd number of clusters, the second to last entry
+ > would be corrupted. This corruption may also lead to invalid memory
+ > accesses when the corrupted entry becomes out of bounds and is used
+ > late.
 
--mcompact-eh is only supported in Mentor tools currently. My patch is a
-workaround for a broken toolchain feature. I'm not sure which
-place is best. I suggest Buildroot is appropriate here as the issue is
-specific to Mentor tools which are only used in cross compile
-environments like Buildroot.
+ > CVE-2016-4804 - the variable used for storing the FAT size (in bytes)
+ > was an unsigned int. Since the size in sectors read from the BPB was not
+ > sufficiently checked, this could end up being zero after multiplying it
+ > with the sector size while some offsets still stayed excessive.
+ > Ultimately it would cause segfaults when accessing FAT entries for which
+ > no memory was allocated.
 
-> Do you know when code can be built with this "Compact EH" feature and
-> when code cannot? I.e how many packages are going to be potentially
-> affected by this?
+ > Converted package to autotools infra to match upstream.
 
-No, I believe this will be a toolchain bug. However Mentor have stopped
-listing MIPS on their website so the chance of a fix seems low.
+ > The install options are now removals, enabled compatibilty symlinks and
+ > exec-prefix set to / to match previous install names/locations.
 
-Regards,
+ > Accounted for optional udev usage.
 
-Vincent.
+ > Dropped musl compatibility patch since it's upstream.
 
-> Thanks,
-> 
-> Thomas
-> 
+ > Add upstream patch to keep sectors a multiple of sectors per track since
+ > it makes mtools cranky.
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ > Changes for v3:
+ >  Enable compat symlinks for host variant for genimage (Jacmet)
+ >  Add patch to make total sectors a multiple of sectors/track (Jacmet)
+
+ > Changes for v2:
+ >  Drop double rm -f as pointed by Yann.
+
+As discussed on IRC, the ipact of these CVEs are quite low, and this is
+a fairly intrusive change this late in the release cycle, so I've
+instead applied it to next - Thanks.
+
+-- 
+Bye, Peter Korsgaard
