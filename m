@@ -1,53 +1,78 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 31 May 2016 15:50:27 +0200
-Subject: [Buildroot] [PATCH] Config.in: wrap to column width 72
-In-Reply-To: <5748D351.9060302@surround.io>
-References: <1464298507-22817-1-git-send-email-martin@surround.io>
- <20160527230450.10a646c2@free-electrons.com> <5748D351.9060302@surround.io>
-Message-ID: <443ebf98-5140-d57e-5636-7d4491589f7e@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 31 May 2016 16:06:07 +0200
+Subject: [Buildroot] [PATCH v5] remmina: new package
+In-Reply-To: <1451750166-10049-1-git-send-email-fancp2007@gmail.com>
+References: <1441118174-9899-1-git-send-email-fancp2007@gmail.com>
+ <1451750166-10049-1-git-send-email-fancp2007@gmail.com>
+Message-ID: <20160531160607.07fdfa74@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/28/16 01:08, Martin Kelly wrote:
-> On 05/27/2016 02:04 PM, Thomas Petazzoni wrote:
->> Hello,
->>
->> Thanks for this patch. Looks good, except for one thing.
->>
->> On Thu, 26 May 2016 14:35:07 -0700, Martin Kelly wrote:
->>
->>> +      Command to be used to extract a gzip'ed file to stdout.  zcat
->>
->> Why do you have two spaces after the . here ? Only one is enough.
->>
->> There are other occurrences of the same issue in the rest of the patch.
->> Could you fix this and send an updated version?
->>
-> 
-> Some of these cases are caused by my rewrapping accidentally adding a space.
-> Other cases were already present prior to wrapping. For example:
-> 
-> -   Have a look on the kernel.org site for a list of mirrors, then enter
-> -   the URL to the base directory.  Examples:
-> +   Have a look on the kernel.org site for a list of mirrors, then
-> +   enter the URL to the base directory.  Examples:
-> 
-> Would you like me to fix up all ".  " --> ". " as well, or just fix the newly
-> introduced ".  " ? I'm happy to do either way.
+Hello Scott,
 
- Either option is OK, but if you remove all double spaces it's even better.
+It's been a very long time since you posted this patch. It generally
+looks good, but there's one thing that I don't really like.
 
- Regards,
- Arnout
+On Sat,  2 Jan 2016 23:56:06 +0800, Scott Fan wrote:
 
+> diff --git a/package/remmina/remmina.mk b/package/remmina/remmina.mk
+> new file mode 100644
+> index 0000000..8f333ae
+> --- /dev/null
+> +++ b/package/remmina/remmina.mk
+> @@ -0,0 +1,36 @@
+> +################################################################################
+> +#
+> +# remmina
+> +#
+> +################################################################################
+> +
+> +REMMINA_VERSION = e7f665f2634939aaa9bed114569cbd13eac10b82
+> +REMMINA_SITE = $(call github,FreeRDP,Remmina,$(REMMINA_VERSION))
 
+There has been new upstream releases since then, could you try to use a
+more recent version? Also, we now add hash files for packages sourced
+from Github, so it would be good to add one.
+
+> +REMMINA_LICENSE = GPLv2+ with OpenSSL exception
+> +REMMINA_LICENSE_FILES = COPYING LICENSE LICENSE.OpenSSL
+> +
+> +REMMINA_CONF_OPTS = \
+> +	-DWITH_AVAHI=OFF \
+> +	-DWITH_APPINDICATOR=OFF \
+> +	-DWITH_GNOMEKEYRING=OFF \
+> +	-DWITH_TELEPATHY=OFF \
+> +	-DWITH_GCRYPT=OFF \
+> +	-DWITH_LIBSSH=OFF \
+> +	-DWITH_VTE=OFF
+> +
+> +REMMINA_DEPENDENCIES = \
+> +	libgtk3 libvncserver freerdp \
+> +	xlib_libX11 xlib_libXext xlib_libxkbfile
+> +
+> +ifeq ($(BR2_NEEDS_GETTEXT),y)
+> +REMMINA_DEPENDENCIES += gettext
+> +
+> +define REMMINA_POST_PATCH_FIXINTL
+> +	$(SED) 's/$${GTK_LIBRARIES}/$${GTK_LIBRARIES} -lintl/' \
+> +		$(@D)/remmina/CMakeLists.txt
+> +endef
+
+The thing I dislike is this hook. Could you instead work on changing
+the CMakeLists.txt so that it links with -lintl when needed? This way,
+it would be a solution that we can contribute upstream to the Remmina
+developers.
+
+I've added in Cc: to this e-mail Samuel Martin, who is our CMake expert
+in the Buildroot community. Hopefully he can help you achieve this.
+
+Thanks!
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
