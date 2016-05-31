@@ -1,16 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 May 2016 21:48:21 +0200
-Subject: [Buildroot] [PATCH v3] uboot-tools: fix FIT support and make it
- optional
-In-Reply-To: <1106718859.329816.1464723616437.JavaMail.zimbra@datacom.ind.br>
-References: <1462535953-4427-1-git-send-email-casantos@datacom.ind.br>
- <1462736800-9552-1-git-send-email-casantos@datacom.ind.br>
- <1462736800-9552-2-git-send-email-casantos@datacom.ind.br>
- <20160528150755.78888529@free-electrons.com>
- <468666808.273843.1464715989675.JavaMail.zimbra@datacom.ind.br>
- <20160531210122.39a50d97@free-electrons.com>
- <1106718859.329816.1464723616437.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20160531214821.2f870b8b@free-electrons.com>
+Date: Tue, 31 May 2016 21:55:05 +0200
+Subject: [Buildroot] [PATCH v3] Fix for GIT cross-compilation.
+In-Reply-To: <1463950732-28803-1-git-send-email-mc5686@mclink.it>
+References: <1463950732-28803-1-git-send-email-mc5686@mclink.it>
+Message-ID: <20160531215505.22b48955@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,20 +12,60 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 31 May 2016 16:40:16 -0300 (BRT), Carlos Santos wrote:
-
-> > Of course they can be separated. Just include the patch that makes
-> > FIT support really optional into patch (3) from my list.  
+On Sun, 22 May 2016 22:58:52 +0200, Mauro Condarelli wrote:
+> GIT configuration partially relies on system parameters retrieved
+> using 'uname -?' directlly at make time.
+> This does not mix well with cross compilation.
 > 
-> Step 3 would make the ...MKIMAGE_FIT_SIGNATURE_SUPPORT option
-> useless. Once the patch is applied, FIT support depends on passing
-> CONFIG_FIT=y in the make command line, which would be made done only
-> in step 4.
+> This patch allows to feed canned uname results directly from git.mk.
+> 
 
-Gaah, right, you're correct. Fair enough. Please split into separate
-patches what can be separated, and keep (3) and (4) in a single patch.
+Your Signed-off-by line should be here, and not after the "---",
+otherwise it gets stripped when applying your patch.
 
-Thanks!
+Also, the commit title should always follow this convention:
+
+	<package>: <description>
+
+So in your case, something like:
+
+	git: fix for build environment leak into the target
+
+or something similar.
+
+> Changes v2 -> v3
+>   - Use BR2_TOOLCHAIN_HEADERS_AT_LEAST instead of BR2_LINUX_KERNEL_VERSION
+>                                                 (suggested by T.Petazzoni)
+>   - Use $(call qstrip,...) to strip quotes      (suggested by T.Petazzoni)
+>   - Correctly spell "Buildroot"                 (suggested by T.Petazzoni)
+> 
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+> ---
+>  ...nfig.mak.uname-to-allow-cross-compilation.patch | 47 ++++++++++++++++++++++
+>  package/git/git.mk                                 | 10 +++++
+>  2 files changed, 57 insertions(+)
+>  create mode 100644 package/git/0001-Fix-config.mak.uname-to-allow-cross-compilation.patch
+
+Unfortunately, your change causes a rather annoying regression: git now
+gets built twice, once during the "build step" and once again during
+the "install target step". I've tested with your patch, and git is only
+build once, during the "build step".
+
+Without your patch:
+
+  http://code.bulix.org/h0xlwt-99879?raw
+
+With your patch:
+
+  http://code.bulix.org/msebii-99878?raw
+
+Maybe you need to pass all the uname_<XYZ> variables during the install
+step as well, so that it doesn't think it needs to rebuild the whole
+thing again?
+
+Could you have a look at this issue?
+
+Thanks,
 
 Thomas
 -- 
