@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  1 Jun 2016 08:37:14 -0300
-Subject: [Buildroot] [PATCH 1/4] wayland: bump to version 1.11.0
-Message-ID: <1464781037-26791-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  1 Jun 2016 08:37:15 -0300
+Subject: [Buildroot] [PATCH 2/4] wayland-protocols: bump to version 1.4
+In-Reply-To: <1464781037-26791-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1464781037-26791-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1464781037-26791-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/wayland/wayland.hash | 4 ++--
- package/wayland/wayland.mk   | 2 +-
+ package/wayland-protocols/wayland-protocols.hash | 4 ++--
+ package/wayland-protocols/wayland-protocols.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
-index c9d0721..be1b6b5 100644
---- a/package/wayland/wayland.hash
-+++ b/package/wayland/wayland.hash
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index f2d5b7f..380581b 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-February/027038.html
--sha256  4bf6e790aa6f50ab3825676282ecd75850ec9c4767af96ecb7127b1f3c3d60dc	wayland-1.10.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-June/029163.html
-+sha256  9540925f7928becfdf5e3b84c70757f6589bf1ceef09bea78784d8e4772c0db0	wayland-1.11.0.tar.xz
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index 215e70a..e219624 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
+-# From https://lists.freedesktop.org/archives/wayland-devel/2015-November/025759.html
+-sha256	a538a8e3f999f2722897eb60aa2e2b53d879381b413b630957d58a9acd226def	wayland-protocols-1.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2016-May/029014.html
++sha256	014a9a23c21ed14f49b1005b3e8efa66d6337d4ceafc97f7b0d6707e7e3df572	wayland-protocols-1.4.tar.xz
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index bb6d52f..51ee9ee 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAYLAND_VERSION = 1.10.0
-+WAYLAND_VERSION = 1.11.0
- WAYLAND_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
+-WAYLAND_PROTOCOLS_VERSION = 1.0
++WAYLAND_PROTOCOLS_VERSION = 1.4
+ WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
 -- 
 2.7.3
