@@ -1,43 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 Jun 2016 20:21:14 +0200
-Subject: [Buildroot] [git commit] package/giflib: bump version to 5.1.4
-Message-ID: <20160601182327.4510981DE4@busybox.osuosl.org>
+Date: Wed, 1 Jun 2016 20:22:40 +0200
+Subject: [Buildroot] [git commit] libiio: fix legal info
+Message-ID: <20160601182327.5194980250@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1411eca3fee58addee977cbd5580eb881461a08
+commit: https://git.buildroot.net/buildroot/commit/?id=86365cbe9f3d4d0d61bd8a1023f0c0a73683a36b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+http://autobuild.buildroot.org/results/778/7789da71553bb633cbea6db83faeee061155b9f8/
+
+The license file is now called COPYING.txt.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/giflib/giflib.hash | 4 ++--
- package/giflib/giflib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libiio/libiio.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/giflib/giflib.hash b/package/giflib/giflib.hash
-index 94bcb5d..cdd7bbd 100644
---- a/package/giflib/giflib.hash
-+++ b/package/giflib/giflib.hash
-@@ -1,3 +1,3 @@
- # From http://sourceforge.net/projects/giflib/files
--md5	323a9f11ab56c8a2d1715376410ce376	giflib-5.1.2.tar.bz2
--sha1	3f7bc86280db30a7120b2113f9f261301c515ad2	giflib-5.1.2.tar.bz2
-+md5	2c171ced93c0e83bb09e6ccad8e3ba2b	giflib-5.1.4.tar.bz2
-+sha1	5f1157cfc377916280849e247b8e34fa0446513f	giflib-5.1.4.tar.bz2
-diff --git a/package/giflib/giflib.mk b/package/giflib/giflib.mk
-index 6f67a99..799ae73 100644
---- a/package/giflib/giflib.mk
-+++ b/package/giflib/giflib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+index e5edb5c..6479e6f 100644
+--- a/package/libiio/libiio.mk
++++ b/package/libiio/libiio.mk
+@@ -8,7 +8,7 @@ LIBIIO_VERSION = 0.6
+ LIBIIO_SITE = $(call github,analogdevicesinc,libiio,v$(LIBIIO_VERSION))
+ LIBIIO_INSTALL_STAGING = YES
+ LIBIIO_LICENSE = LGPLv2.1+
+-LIBIIO_LICENSE_FILES = COPYING
++LIBIIO_LICENSE_FILES = COPYING.txt
  
--GIFLIB_VERSION = 5.1.2
-+GIFLIB_VERSION = 5.1.4
- GIFLIB_SOURCE = giflib-$(GIFLIB_VERSION).tar.bz2
- GIFLIB_SITE = http://downloads.sourceforge.net/project/giflib
- GIFLIB_INSTALL_STAGING = YES
+ LIBIIO_CONF_OPTS = -DENABLE_IPV6=ON \
+ 	-DWITH_LOCAL_BACKEND=$(if $(BR2_PACKAGE_LIBIIO_LOCAL_BACKEND),ON,OFF) \
