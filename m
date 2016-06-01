@@ -1,47 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 01 Jun 2016 16:13:10 -0000
-Subject: [Buildroot] [git commit] libevdev: bump version to 1.5.1
-Message-ID: <20160601161307.E4560802A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] core/legal-info: install source archives
+	in their own sub-dir
+Message-ID: <20160601161307.05DA9802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96665b3b13886a9f815bef8b0dc60bf5fe96c73c
+commit: https://git.buildroot.net/buildroot/commit/?id=de2f89edd389e655fd705ea7c9d367878a6719ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1] and [2].
+Currently, we put all source archives side-by-side in the same
+directory.
 
-[1] https://lists.freedesktop.org/archives/input-tools/2016-May/001296.html
-[2] https://lists.freedesktop.org/archives/input-tools/2016-May/001301.html
+Since we're about to also save individual patches that were applied
+on those sources, we don't want to make that directory a complete
+mess of unassorted files.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+So, we install each source archive in its own sub-directory, where
+we'll later store the patches too. Store that location in a variable,
+so it can be re-used later on (to install patches in a future commit).
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libevdev/libevdev.hash | 4 ++--
- package/libevdev/libevdev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-generic.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index 20ca4fb..a4fcd9b 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
-@@ -1,2 +1,2 @@
--# Hash from http://lists.freedesktop.org/archives/input-tools/2016-January/001240.html
--sha256 7b2ae1a0c7f9f7a96198ddc8fd167f090f233d6cbd8168b847e4f968445132d3 libevdev-1.4.6.tar.xz
-+# Hash from https://lists.freedesktop.org/archives/input-tools/2016-May/001301.html
-+sha256 17630821a57e6e3f02e01ade836f24068df9bd530067091152b0d468c3a86f40 libevdev-1.5.1.tar.xz
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index 5513191..b0832d8 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 688123c..b031879 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -482,6 +482,8 @@ endif
  
--LIBEVDEV_VERSION = 1.4.6
-+LIBEVDEV_VERSION = 1.5.1
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
+ $(2)_REDISTRIBUTE		?= YES
+ 
++$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAW_BASE_NAME)
++
+ # When a target package is a toolchain dependency set this variable to
+ # 'NO' so the 'toolchain' dependency is not added to prevent a circular
+ # dependency
+@@ -807,7 +809,7 @@ endif
+ # Save the source tarball
+ 	$$(Q)support/scripts/hardlink-or-copy \
+ 		$$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) \
+-		$$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
++		$$($(2)_REDIST_SOURCES_DIR)
+ endif # redistribute
+ 
+ endif # other packages
