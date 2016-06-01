@@ -1,41 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 01 Jun 2016 16:13:11 -0000
-Subject: [Buildroot] [git commit] file: bump to version 5.27
-Message-ID: <20160601161307.8B584802A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain: musl support is no longer
+	experimental
+Message-ID: <20160601161308.5592F802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f35c5daa6c3d63b50e78efe636b24f0f00f4c829
+commit: https://git.buildroot.net/buildroot/commit/?id=a8e6f52f0c567d2d001da98968eb64cd807526e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/file/file.hash | 2 +-
- package/file/file.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Our musl support has now been around for quite some time, numerous
+packages have been fixed (although admittedly not all). It's time to no
+longer call our musl support "experimental": things are now expected to
+be working with musl just like with the other two C libraries we
+support.
 
-diff --git a/package/file/file.hash b/package/file/file.hash
-index 2c53af1..d20fe46 100644
---- a/package/file/file.hash
-+++ b/package/file/file.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	2ef32b4ec936b0ff7b59a021dce56086a716663b6df1138c7ea597d396bf50cf	file-5.26.tar.gz
-+sha256	c2e7d509b1167c4915901ecd257ee924d229a348bf988df6d1934ef0fa34a1a7	file-5.27.tar.gz
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 282b2da..0154c10 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/toolchain-buildroot/Config.in | 2 +-
+ toolchain/toolchain-external/Config.in  | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index b046a61..2b0ebc1 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -67,7 +67,7 @@ comment "(e)glibc only available with shared lib support"
+ 	depends on BR2_STATIC_LIBS
  
--FILE_VERSION = 5.26
-+FILE_VERSION = 5.27
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
- FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+-	bool "musl (experimental)"
++	bool "musl"
+ 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
+ 		BR2_microblaze || BR2_mips || BR2_mipsel || BR2_powerpc || \
+ 		BR2_sh || BR2_x86_64
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index a037d67..0ba5d46 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -562,7 +562,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
+ 	  3.16.2.
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
+-	bool "Musl 1.1.12 toolchain (experimental)"
++	bool "Musl 1.1.12 toolchain"
+ 	depends on (BR2_arm && BR2_ARM_EABI) || \
+ 		(BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4) || \
+ 		(BR2_armeb && BR2_ARM_EABI) || BR2_i386 || \
+@@ -914,7 +914,7 @@ comment "(e)glibc only available with shared lib support"
+ 	depends on BR2_STATIC_LIBS
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL
+-	bool "musl (experimental)"
++	bool "musl"
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	help
+ 	  Select this option if your external toolchain uses the
