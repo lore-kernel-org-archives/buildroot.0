@@ -1,52 +1,145 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 01 Jun 2016 16:13:10 -0000
-Subject: [Buildroot] [git commit] core/pkg-generic: add variable to store
-	the package rawname-version
-Message-ID: <20160601161306.EB260802A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lft: new package
+Message-ID: <20160601161307.729D4802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed959089ee886293f470d2d23d7cc0716de2a017
+commit: https://git.buildroot.net/buildroot/commit/?id=d033022f593f297026a5babb19da79010d8c77f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Introduce a new per-package variable to store the 'rawname-version'
-tuple, instead of computing it every time we need it.
-
-Currently, it's only a single location, but follow-up patches will
-introduce more use of it.
-
-Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Thomas: use complete license name in <pkg>_LICENSE, i.e "VOSTROM Public
+License for Open Source".]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/Config.in                |  1 +
+ package/lft/0001-no-strip.patch  | 19 +++++++++++++++++++
+ package/lft/0002-no-incdir.patch | 27 +++++++++++++++++++++++++++
+ package/lft/Config.in            | 10 ++++++++++
+ package/lft/lft.hash             |  2 ++
+ package/lft/lft.mk               | 19 +++++++++++++++++++
+ 6 files changed, 78 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index f9c7cf8..688123c 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -393,6 +393,7 @@ ifdef $(3)_OVERRIDE_SRCDIR
- endif
- 
- $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
-+$(2)_RAW_BASE_NAME = $$($(2)_RAWNAME)-$$($(2)_VERSION)
- $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
- $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
- 
-@@ -423,7 +424,7 @@ ifndef $(2)_SOURCE
-  ifdef $(3)_SOURCE
-   $(2)_SOURCE = $$($(3)_SOURCE)
-  else
--  $(2)_SOURCE			?= $$($(2)_RAWNAME)-$$($(2)_VERSION).tar.gz
-+  $(2)_SOURCE			?= $$($(2)_RAW_BASE_NAME).tar.gz
-  endif
- endif
- 
+diff --git a/package/Config.in b/package/Config.in
+index 804df8b..8668612 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1426,6 +1426,7 @@ endif
+ 	source "package/kismet/Config.in"
+ 	source "package/knock/Config.in"
+ 	source "package/leafnode2/Config.in"
++	source "package/lft/Config.in"
+ 	source "package/lftp/Config.in"
+ 	source "package/lighttpd/Config.in"
+ 	source "package/linknx/Config.in"
+diff --git a/package/lft/0001-no-strip.patch b/package/lft/0001-no-strip.patch
+new file mode 100644
+index 0000000..f1bd700
+--- /dev/null
++++ b/package/lft/0001-no-strip.patch
+@@ -0,0 +1,19 @@
++Don't forcibly strip binaries, we do so on our own.
++Also using strip rather than $(STRIP) is bad when cross-compiling.
++
++Patch status: notified upstream.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura lft-3.74.orig/Makefile.in lft-3.74/Makefile.in
++--- lft-3.74.orig/Makefile.in	2016-05-03 14:11:30.965530923 -0300
+++++ lft-3.74/Makefile.in	2016-05-03 14:11:42.120918849 -0300
++@@ -50,8 +50,6 @@
++ 
++ install: lft lft.8 whob whob.8
++ 	@echo "LFT and WhoB"
++-	@echo "  \_Stripping binaries"
++-	@strip lft whob
++ 	@echo "  \_Copying files to their intended destinations"
++ 	@test -d $(DESTDIR)$(bindir)/. || $(MKDIR) $(DESTDIR)$(bindir)
++ 	$(INSTALL) lft $(DESTDIR)$(bindir)/lft
+diff --git a/package/lft/0002-no-incdir.patch b/package/lft/0002-no-incdir.patch
+new file mode 100644
+index 0000000..dbfaad5
+--- /dev/null
++++ b/package/lft/0002-no-incdir.patch
+@@ -0,0 +1,27 @@
++Don't pollute incdir with absolute directories, it's bad when
++cross-compiling.
++Patch configure directly since autoreconf isn't clean.
++
++Patch status: notified upstream.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura lft-3.74.orig/configure lft-3.74/configure
++--- lft-3.74.orig/configure	2016-05-03 14:11:30.964530888 -0300
+++++ lft-3.74/configure	2016-05-03 14:12:45.038106775 -0300
++@@ -5732,15 +5732,6 @@
++ 
++ 
++ 
++-for incdir in /usr/local/include /usr/include
++-do
++-  if test -d $incdir/pcap
++-  then
++-    CFLAGS="$CFLAGS -I$incdir/pcap"
++-    CPPFLAGS="$CFLAGS -I$incdir/pcap"
++-  fi
++-done
++-
++ cat >conftest.$ac_ext <<_ACEOF
++ /* confdefs.h.  */
++ _ACEOF
+diff --git a/package/lft/Config.in b/package/lft/Config.in
+new file mode 100644
+index 0000000..9ed7b8b
+--- /dev/null
++++ b/package/lft/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LFT
++	bool "lft"
++	select BR2_PACKAGE_LIBPCAP
++	help
++	  LFT, short for Layer Four Traceroute, is a sort of
++	  'traceroute' that often works much faster (than the
++	  commonly-used Van Jacobson method) and goes through many
++	  configurations of packet-filters (firewalls).
++
++	  http://pwhois.org/lft/
+diff --git a/package/lft/lft.hash b/package/lft/lft.hash
+new file mode 100644
+index 0000000..dc3945c
+--- /dev/null
++++ b/package/lft/lft.hash
+@@ -0,0 +1,2 @@
++# Locally calculated, matches download from fossies.org and pwhois.org
++sha256	d7f142b9198162a48dd41261f5982e5189b951e7746e171d6b2c5b9581f26000	lft-3.74.tar.gz
+diff --git a/package/lft/lft.mk b/package/lft/lft.mk
+new file mode 100644
+index 0000000..0779300
+--- /dev/null
++++ b/package/lft/lft.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# lft
++#
++################################################################################
++
++LFT_VERSION = 3.74
++# Download from pwhois.org is form-wrapped resulting in ugly filename
++LFT_SITE = https://fossies.org/linux/privat
++LFT_DEPENDENCIES = libpcap
++LFT_LICENSE = VOSTROM Public License for Open Source
++LFT_LICENSE_FILES = COPYING
++LFT_CONF_OPTS = --with-pcap=$(STAGING_DIR)/usr
++
++ifeq ($(BR2_STATIC_LIBS),y)
++LFT_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
++endif
++
++$(eval $(autotools-package))
