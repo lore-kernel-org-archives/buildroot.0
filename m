@@ -1,109 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 01 Jun 2016 16:13:09 -0000
-Subject: [Buildroot] [git commit] libinput: remove unneeded patch
-Message-ID: <20160601161307.3F06B802A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: bump default to version 4.6
+Message-ID: <20160601161307.C1BBE7FAB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=243647059e25d40a81523f4e409fa8b04545bfa9
+commit: https://git.buildroot.net/buildroot/commit/?id=8a917b12aadfcc758af6dba38c41fbfe50896908
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The log_msg symbol conflict was fixed in libevdev commit e4c315fc1603 (Rename
-symbols leaking from static library to avoid name clashes, 2014-08-18) that
-was included in version 1.3 of libevdev. Remove the patch that used to fix the
-issue of log_msg symbol conflict with libevedev, which is a direct dependency
-of libinput.
-
-Cc: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-rename-log_msg-to-libinput_log_msg.patch  | 77 ----------------------
- 1 file changed, 77 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libinput/0001-rename-log_msg-to-libinput_log_msg.patch b/package/libinput/0001-rename-log_msg-to-libinput_log_msg.patch
-deleted file mode 100644
-index e36862a..0000000
---- a/package/libinput/0001-rename-log_msg-to-libinput_log_msg.patch
-+++ /dev/null
-@@ -1,77 +0,0 @@
--From bf4a4a4e2b0479322fe16c9e1f15f146daa893ee Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@openwide.fr>
--Date: Thu, 21 Aug 2014 18:18:16 +0200
--Subject: [PATCH] rename log_msg to libinput_log_msg
--
--This fixes a conflict between libevdev and libinput on the definition
--of the log_msg() symbol.
--
--http://autobuild.buildroot.net/results/c13/c133b7c706ee31302125df8ca94f4d0f0152c6c6/build-end.log
--
--Signed-off-by: Romain Naour <romain.naour@openwide.fr>
--[yann.morin.1998 at free.fr: rebase on-top of 0.6.0]
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--[ps.report at gmx.net: rebase on top of 0.7.0]
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- src/libinput-private.h | 14 +++++++-------
-- src/libinput.c         |  2 +-
-- 2 files changed, 8 insertions(+), 8 deletions(-)
--
--diff --git a/src/libinput-private.h b/src/libinput-private.h
--index b36dc95..98f91b3 100644
----- a/src/libinput-private.h
--+++ b/src/libinput-private.h
--@@ -259,12 +259,12 @@
-- 
-- typedef void (*libinput_source_dispatch_t)(void *data);
-- 
---#define log_debug(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_DEBUG, __VA_ARGS__)
---#define log_info(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_INFO, __VA_ARGS__)
---#define log_error(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, __VA_ARGS__)
---#define log_bug_kernel(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "kernel bug: " __VA_ARGS__)
---#define log_bug_libinput(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "libinput bug: " __VA_ARGS__)
---#define log_bug_client(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "client bug: " __VA_ARGS__)
--+#define log_debug(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_DEBUG, __VA_ARGS__)
--+#define log_info(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_INFO, __VA_ARGS__)
--+#define log_error(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, __VA_ARGS__)
--+#define log_bug_kernel(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "kernel bug: " __VA_ARGS__)
--+#define log_bug_libinput(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "libinput bug: " __VA_ARGS__)
--+#define log_bug_client(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "client bug: " __VA_ARGS__)
-- 
-- #define log_debug_ratelimit(li_, r_, ...) log_msg_ratelimit((li_), (r_), LIBINPUT_LOG_PRIORITY_DEBUG, __VA_ARGS__)
-- #define log_info_ratelimit(li_, r_, ...) log_msg_ratelimit((li_), (r_), LIBINPUT_LOG_PRIORITY_INFO, __VA_ARGS__)
--@@ -281,7 +281,7 @@
-- 	LIBINPUT_ATTRIBUTE_PRINTF(4, 5);
-- 
-- void
---log_msg(struct libinput *libinput,
--+libinput_log_msg(struct libinput *libinput,
-- 	enum libinput_log_priority priority,
-- 	const char *format, ...)
-- 	LIBINPUT_ATTRIBUTE_PRINTF(3, 4);
--diff --git a/src/libinput.c b/src/libinput.c
--index 279cce0..5748e5e 100644
----- a/src/libinput.c
--+++ b/src/libinput.c
--@@ -155,7 +155,7 @@
-- }
-- 
-- void
---log_msg(struct libinput *libinput,
--+libinput_log_msg(struct libinput *libinput,
-- 	enum libinput_log_priority priority,
-- 	const char *format, ...)
-- {
--@@ -184,7 +184,7 @@
-- 	va_end(args);
-- 
-- 	if (state == RATELIMIT_THRESHOLD)
---		log_msg(libinput,
--+		libinput_log_msg(libinput,
-- 			priority,
-- 			"WARNING: log rate limit exceeded (%d msgs per %dms). Discarding future messages.\n",
-- 			ratelimit->burst,
---- 
--2.1.2
--
+diff --git a/linux/Config.in b/linux/Config.in
+index 306405b..45c7d3b 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -27,7 +27,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.5.3)"
++	bool "Latest version (4.6)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -110,7 +110,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.5.3" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.6" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
