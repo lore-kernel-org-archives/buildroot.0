@@ -1,60 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 01 Jun 2016 16:13:09 -0000
-Subject: [Buildroot] [git commit] linux-headers: add 4.6.x series
-Message-ID: <20160601161307.B6EE9802A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] sheevaplug: defconfig: use 4.6 kernel,
+	u-boot 2016.05
+Message-ID: <20160601161307.EFA0E802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d038cce505c1e45db482756cbc42d132fc8113c6
+commit: https://git.buildroot.net/buildroot/commit/?id=2a8b32febf0584d534efbb79c735888216983e8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ configs/sheevaplug_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 04d5890..cc0ab41 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ comment "Kernel Header Options"
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_4_5
-+	default BR2_KERNEL_HEADERS_4_6
- 	help
- 	  Select the version of kernel header files you wish to use.
- 	  You must select the correct set of header files to match
-@@ -78,6 +78,10 @@ choice
- 		bool "Linux 4.5.x kernel headers"
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
+index 3632ed0..9d62444 100644
+--- a/configs/sheevaplug_defconfig
++++ b/configs/sheevaplug_defconfig
+@@ -11,22 +11,22 @@ BR2_SYSTEM_DHCP="eth0"
+ BR2_TARGET_ROOTFS_JFFS2=y
+ BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_128K=y
  
-+	config BR2_KERNEL_HEADERS_4_6
-+		bool "Linux 4.6.x kernel headers"
-+		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
-+
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Manually specified Linux version"
- endchoice
-@@ -99,6 +103,10 @@ choice
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
+-# Linux headers same as kernel, a 4.5 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
++# Linux headers same as kernel, a 4.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
  
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6
-+	bool "4.6.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5
- 	bool "4.5.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
-@@ -223,4 +231,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
- 	default "4.4.9"		if BR2_KERNEL_HEADERS_4_4
- 	default "4.5.3"		if BR2_KERNEL_HEADERS_4_5
-+	default "4.6"		if BR2_KERNEL_HEADERS_4_6
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ # bootloader
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sheevaplug"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
+ BR2_TARGET_UBOOT_FORMAT_KWB=y
+ # BR2_TARGET_UBOOT_NETWORK is not set
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v5"
+ BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
