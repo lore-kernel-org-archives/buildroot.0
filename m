@@ -1,145 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 01 Jun 2016 16:13:10 -0000
-Subject: [Buildroot] [git commit] lft: new package
-Message-ID: <20160601161307.729D4802A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.154
+Message-ID: <20160601161307.CEED481F53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d033022f593f297026a5babb19da79010d8c77f2
+commit: https://git.buildroot.net/buildroot/commit/?id=4e1c1893b27ec308565b73d6e833d29c1150c569
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-[Thomas: use complete license name in <pkg>_LICENSE, i.e "VOSTROM Public
-License for Open Source".]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                |  1 +
- package/lft/0001-no-strip.patch  | 19 +++++++++++++++++++
- package/lft/0002-no-incdir.patch | 27 +++++++++++++++++++++++++++
- package/lft/Config.in            | 10 ++++++++++
- package/lft/lft.hash             |  2 ++
- package/lft/lft.mk               | 19 +++++++++++++++++++
- 6 files changed, 78 insertions(+)
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 804df8b..8668612 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1426,6 +1426,7 @@ endif
- 	source "package/kismet/Config.in"
- 	source "package/knock/Config.in"
- 	source "package/leafnode2/Config.in"
-+	source "package/lft/Config.in"
- 	source "package/lftp/Config.in"
- 	source "package/lighttpd/Config.in"
- 	source "package/linknx/Config.in"
-diff --git a/package/lft/0001-no-strip.patch b/package/lft/0001-no-strip.patch
-new file mode 100644
-index 0000000..f1bd700
---- /dev/null
-+++ b/package/lft/0001-no-strip.patch
-@@ -0,0 +1,19 @@
-+Don't forcibly strip binaries, we do so on our own.
-+Also using strip rather than $(STRIP) is bad when cross-compiling.
-+
-+Patch status: notified upstream.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura lft-3.74.orig/Makefile.in lft-3.74/Makefile.in
-+--- lft-3.74.orig/Makefile.in	2016-05-03 14:11:30.965530923 -0300
-++++ lft-3.74/Makefile.in	2016-05-03 14:11:42.120918849 -0300
-+@@ -50,8 +50,6 @@
-+ 
-+ install: lft lft.8 whob whob.8
-+ 	@echo "LFT and WhoB"
-+-	@echo "  \_Stripping binaries"
-+-	@strip lft whob
-+ 	@echo "  \_Copying files to their intended destinations"
-+ 	@test -d $(DESTDIR)$(bindir)/. || $(MKDIR) $(DESTDIR)$(bindir)
-+ 	$(INSTALL) lft $(DESTDIR)$(bindir)/lft
-diff --git a/package/lft/0002-no-incdir.patch b/package/lft/0002-no-incdir.patch
-new file mode 100644
-index 0000000..dbfaad5
---- /dev/null
-+++ b/package/lft/0002-no-incdir.patch
-@@ -0,0 +1,27 @@
-+Don't pollute incdir with absolute directories, it's bad when
-+cross-compiling.
-+Patch configure directly since autoreconf isn't clean.
-+
-+Patch status: notified upstream.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura lft-3.74.orig/configure lft-3.74/configure
-+--- lft-3.74.orig/configure	2016-05-03 14:11:30.964530888 -0300
-++++ lft-3.74/configure	2016-05-03 14:12:45.038106775 -0300
-+@@ -5732,15 +5732,6 @@
-+ 
-+ 
-+ 
-+-for incdir in /usr/local/include /usr/include
-+-do
-+-  if test -d $incdir/pcap
-+-  then
-+-    CFLAGS="$CFLAGS -I$incdir/pcap"
-+-    CPPFLAGS="$CFLAGS -I$incdir/pcap"
-+-  fi
-+-done
-+-
-+ cat >conftest.$ac_ext <<_ACEOF
-+ /* confdefs.h.  */
-+ _ACEOF
-diff --git a/package/lft/Config.in b/package/lft/Config.in
-new file mode 100644
-index 0000000..9ed7b8b
---- /dev/null
-+++ b/package/lft/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LFT
-+	bool "lft"
-+	select BR2_PACKAGE_LIBPCAP
-+	help
-+	  LFT, short for Layer Four Traceroute, is a sort of
-+	  'traceroute' that often works much faster (than the
-+	  commonly-used Van Jacobson method) and goes through many
-+	  configurations of packet-filters (firewalls).
-+
-+	  http://pwhois.org/lft/
-diff --git a/package/lft/lft.hash b/package/lft/lft.hash
-new file mode 100644
-index 0000000..dc3945c
---- /dev/null
-+++ b/package/lft/lft.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated, matches download from fossies.org and pwhois.org
-+sha256	d7f142b9198162a48dd41261f5982e5189b951e7746e171d6b2c5b9581f26000	lft-3.74.tar.gz
-diff --git a/package/lft/lft.mk b/package/lft/lft.mk
-new file mode 100644
-index 0000000..0779300
---- /dev/null
-+++ b/package/lft/lft.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# lft
-+#
-+################################################################################
-+
-+LFT_VERSION = 3.74
-+# Download from pwhois.org is form-wrapped resulting in ugly filename
-+LFT_SITE = https://fossies.org/linux/privat
-+LFT_DEPENDENCIES = libpcap
-+LFT_LICENSE = VOSTROM Public License for Open Source
-+LFT_LICENSE_FILES = COPYING
-+LFT_CONF_OPTS = --with-pcap=$(STAGING_DIR)/usr
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LFT_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
-+endif
-+
-+$(eval $(autotools-package))
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 2aa7d78..97b1b58 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 1c1c3f95ab76e23629ee54b87d36536f887d8a30976413206491a3a13101b717948b3ab4a7778cb1e74f258f429871076f0b9d098785835c4885eb61def793ca  LVM2.2.02.153.tgz
++sha512 aa0599d9c77099f750237ad230c91a35890b248130b81bfd81fc72f510b2b21f28a87491532f4ab1d040338fa6945af6391d032a574538f8672072ac8c185eef  LVM2.2.02.154.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index d45a108..1a3241d 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.153
++LVM2_VERSION = 2.02.154
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
