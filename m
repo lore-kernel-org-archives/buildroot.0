@@ -1,31 +1,32 @@
-From: gdbabu Krishnan <gdbabu.krishnan@gmail.com>
-Date: Wed, 1 Jun 2016 12:19:14 +0530
-Subject: [Buildroot] gpio chip not found
-Message-ID: <CAG7w3y=HqgN8bEnyZXy1we0SRx6HgUsN=FRUoZE-uyKP=0ROtQ@mail.gmail.com>
+From: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
+Date: Wed,  1 Jun 2016 15:56:55 +0900
+Subject: [Buildroot] [PATCH 1/1] mesa3d: Add drm to EGL platforms for VC4
+Message-ID: <20160601065655.9576-1-akihiko.odaki.4i@stu.hosei.ac.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+VC4 is a DRM driver.
 
+Signed-off-by: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
+---
+ package/mesa3d/mesa3d.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-i am working with buildroot for raspberry pi i have successfully build and
-got sdcard.img.
-
-my problem is when i "modprobe lirc_rpi.ko" it shows following message
-
-lirc_rpi:gpio chip not found
-
-modprobe: can't load module lirc_rpi
-(kernel/driver/staging/media/lirc/lir_rpi.ko): No such device
-
-i also include "dtoverlay=lirc-rpi" in config.txt under boot directory.
-
-kindly help me to resolve this problem,
-
-thank you,
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160601/688aab9b/attachment.html>
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 4e0d255..cc9e2f8 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -137,6 +137,8 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+ MESA3D_PROVIDES += libegl
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+ MESA3D_EGL_PLATFORMS = drm
++else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4),y)
++MESA3D_EGL_PLATFORMS = drm
+ else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
+ MESA3D_EGL_PLATFORMS = drm
+ endif
+-- 
+2.8.3
