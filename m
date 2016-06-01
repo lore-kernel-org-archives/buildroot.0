@@ -1,31 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 Jun 2016 09:25:05 +0200
-Subject: [Buildroot] [git commit] Kickoff 2016.08 cycle
-Message-ID: <20160601072520.EEBDF81F6E@busybox.osuosl.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 1 Jun 2016 08:17:21 +0000
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
+ results for 2016-05-31
+In-Reply-To: <20160601063019.5D553101D2D@stock.ovh.net>
+References: <20160601063019.5D553101D2D@stock.ovh.net>
+Message-ID: <1464769003.3171.25.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=206ce569269a4b0b7d3ae60f9162d40b290726d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 2016-06-01 at 08:30 +0200, Thomas Petazzoni wrote:
+> Those results are limited to the arc architecture.
+> 
+> Build statistics for 2016-05-31
+> ===============================
+> 
+> ????????success : 14?
+> ???????failures : 3??
+> ???????timeouts : 0??
+> ??????????TOTAL : 17?
+> 
+> Classification of failures by reason
+> ====================================
+> 
+> ?????????????????mesa3d-11.2.2 | 2?
+> ?????????????????jack2-v1.9.10 | 1?
+> 
+> Detail of failures
+> ===================
+> 
+> ?????????arc |??????????????????jack2-v1.9.10 | NOK |
+> http://autobuild.buildroot.net/results/c05e4a5280f34b2a1dff8a10adfd46f53344e13a/
 
-diff --git a/Makefile b/Makefile
-index f175965..21d63f6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -41,7 +41,7 @@ else # umask
- all:
- 
- # Set and export the version string
--export BR2_VERSION := 2016.05
-+export BR2_VERSION := 2016.08-git
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+So this one is almost fixed by Bernd but given he has no time for the real fix
+we'll take a look at proposed solution and hopefully will cook up a patch ourselves.
+
+> ?????????arc |??????????????????mesa3d-11.2.2 | NOK |
+> http://autobuild.buildroot.net/results/6b29d2dc46a60d7b6aa442d2b2bad2795368bc81/
+> ?????????arc |??????????????????mesa3d-11.2.2 | NOK | http://autobuild.buildroot.net/results/8212b9ca27ccd88004135feb2
+> a96130d5906fc92/
+
+This long-standing mesa3d problem is fixed with newer tools, so once "next" becomes
+a new "master" issue will go away.
+
+-Alexey
