@@ -1,64 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Jun 2016 16:53:29 +0200
-Subject: [Buildroot] [git commit branch/next] uboot-tools: improve the help
-	text of existing options
-Message-ID: <20160601150556.5B0687FFAA@busybox.osuosl.org>
+Date: Wed, 1 Jun 2016 16:53:33 +0200
+Subject: [Buildroot] [git commit branch/next] uboot-tools: re-generate
+	patches to match v2016.05
+Message-ID: <20160601150556.65BA07FFAA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fe84337485db5e556c962094019169ed9358bc1
+commit: https://git.buildroot.net/buildroot/commit/?id=6027e8d936e1e7b2b86a216fe580bc3f4dafd520
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Improve the descriptions of the knobs to install mkimage, mkenvimage,
-dumpimage, fw_printenv and fw_setenv.
+They were differences against Das U-Boot versions 2015.07 and 2015.04.
+Generating again helps to apply them with "git am".
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uboot-tools/Config.in | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ .../uboot-tools/0001-drop-configh-from-tools.patch    | 14 +++++++-------
+ .../0002-tools-only-in-no-dot-config-targets.patch    | 19 ++++++++++---------
+ 2 files changed, 17 insertions(+), 16 deletions(-)
 
-diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-index aca310b..76983f4 100644
---- a/package/uboot-tools/Config.in
-+++ b/package/uboot-tools/Config.in
-@@ -10,6 +10,8 @@ if BR2_PACKAGE_UBOOT_TOOLS
- config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
- 	bool "mkimage"
- 	help
-+	  Install the mkimage tool on the target system
-+
- 	  The mkimage tool from Das U-Boot bootloader, which allows
- 	  generation of U-Boot images in various formats.
+diff --git a/package/uboot-tools/0001-drop-configh-from-tools.patch b/package/uboot-tools/0001-drop-configh-from-tools.patch
+index e77a301..fbc9608 100644
+--- a/package/uboot-tools/0001-drop-configh-from-tools.patch
++++ b/package/uboot-tools/0001-drop-configh-from-tools.patch
+@@ -1,7 +1,7 @@
+-From 2e54434e4dd178773e8e11e48afc81299771f3e7 Mon Sep 17 00:00:00 2001
++From b742c7590ac6d9ac72dd227679ccff79433b3512 Mon Sep 17 00:00:00 2001
+ From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+ Date: Tue, 4 Aug 2015 22:13:20 +0200
+-Subject: [PATCH 1/1] drop configh from tools
++Subject: [PATCH] drop configh from tools
+ MIME-Version: 1.0
+ Content-Type: text/plain; charset=UTF-8
+ Content-Transfer-Encoding: 8bit
+@@ -18,12 +18,12 @@ Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+  1 file changed, 11 deletions(-)
  
-@@ -41,6 +43,8 @@ endif
- config BR2_PACKAGE_UBOOT_TOOLS_MKENVIMAGE
- 	bool "mkenvimage"
- 	help
-+	  Install the mkenvimage tool on the target system
-+
- 	  The mkenvimage tool from Das U-Boot bootloader, which allows
- 	  generation of a valid binary environment image from a text file
- 	  describing the key=value pairs of the environment.
-@@ -49,13 +53,17 @@ config BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
- 	bool "fw_printenv"
- 	default y
- 	help
--	  The fw_printenv / fw_setenv tools from Das U-Boot
-+	  Install the fw_printenv / fw_setenv tools on the target system
-+
-+	  The fw_printenv and fw_setenv tools from Das U-Boot
- 	  bootloader, which allows access to the U-Boot environment
- 	  from Linux.
+ diff --git a/tools/env/fw_env.h b/tools/env/fw_env.h
+-index 60c0517..1c5daaa 100644
++index 57149e7..50049fe 100644
+ --- a/tools/env/fw_env.h
+ +++ b/tools/env/fw_env.h
+-@@ -5,17 +5,6 @@
+-  * SPDX-License-Identifier:	GPL-2.0+
+-  */
++@@ -8,17 +8,6 @@
++ #include <aes.h>
++ #include <stdint.h>
+  
+ -/* Pull in the current config to define the default environment */
+ -#include <linux/kconfig.h>
+@@ -40,5 +40,5 @@ index 60c0517..1c5daaa 100644
+   * To build the utility with the static configuration
+   * comment out the next line.
+ -- 
+-2.5.0
++2.7.4
  
- config BR2_PACKAGE_UBOOT_TOOLS_DUMPIMAGE
- 	bool "dumpimage"
- 	help
-+	  Install the dumpimage tool on the target system
-+
- 	  The dumpimage tool from Das U-Boot bootloader, which allows
- 	  extraction of data from U-Boot images.
+diff --git a/package/uboot-tools/0002-tools-only-in-no-dot-config-targets.patch b/package/uboot-tools/0002-tools-only-in-no-dot-config-targets.patch
+index fedf9be..795466f 100644
+--- a/package/uboot-tools/0002-tools-only-in-no-dot-config-targets.patch
++++ b/package/uboot-tools/0002-tools-only-in-no-dot-config-targets.patch
+@@ -1,7 +1,7 @@
+-From 7d9bac7bf8d9ef39ab6b6e8d436e3dbdee5cd120 Mon Sep 17 00:00:00 2001
++From b8110293d70c4f43035dfd6a0904d342be6a08e0 Mon Sep 17 00:00:00 2001
+ From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+ Date: Sun, 1 Feb 2015 21:53:47 +0100
+-Subject: [PATCH 1/1] tools only in no dot config targets
++Subject: [PATCH] tools only in no dot config targets
+ MIME-Version: 1.0
+ Content-Type: text/plain; charset=UTF-8
+ Content-Transfer-Encoding: 8bit
+@@ -23,17 +23,18 @@ Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+  1 file changed, 1 insertion(+), 1 deletion(-)
  
+ diff --git a/Makefile b/Makefile
+-index 36a9a28..f85c194 100644
++index 954a865..3ab5958 100644
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -417,7 +417,7 @@ timestamp_h := include/generated/timestamp_autogenerated.h
+-
++@@ -424,7 +424,7 @@ timestamp_h := include/generated/timestamp_autogenerated.h
++ 
+  no-dot-config-targets := clean clobber mrproper distclean \
+-			 help %docs check% coccicheck \
++ 			 help %docs check% coccicheck \
+ -			 ubootversion backup
+ +			 ubootversion backup tools-only
+-
++ 
+  config-targets := 0
+  mixed-targets  := 0
+---
+-2.3.0
++-- 
++2.7.4
++
