@@ -1,32 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Jun 2016 23:41:29 +0200
-Subject: [Buildroot] [PATCH 2/3] package/go: Enable MIPS support
-In-Reply-To: <c138dede8cf5d38117bdbff2bc3dfa796d904671.1463696779.git.geoff@infradead.org>
-References: <cover.1463696779.git.geoff@infradead.org>
- <c138dede8cf5d38117bdbff2bc3dfa796d904671.1463696779.git.geoff@infradead.org>
-Message-ID: <20160601234129.7b5335c6@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 1 Jun 2016 23:53:54 +0200
+Subject: [Buildroot] Patchwork cleanup, week #22
+In-Reply-To: <20160601232654.07800a9b@free-electrons.com>
+References: <20160601232654.07800a9b@free-electrons.com>
+Message-ID: <20160601235354.1248a84e@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas,
 
-On Thu, 19 May 2016 22:33:25 +0000, Geoff Levand wrote:
-> Enable go language support for mips64 and mips64el (mips64le), which
-> were added in go-1.6.2.
+On Wed, 1 Jun 2016 23:26:54 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
+[...]
+>  6/ Makefile: Fix overlay overwriting everything
+>     http://patchwork.ozlabs.org/patch/581463/
 > 
-> Signed-off-by: Geoff Levand <geoff@infradead.org>
-> ---
->  package/go/Config.in.host | 2 +-
->  package/go/go.mk          | 4 ++++
->  2 files changed, 5 insertions(+), 1 deletion(-)
+>     A problem with the merged /usr option, and when the rootfs overlay
+>     contains specific directories. Discussion has happened, no decision.
+> 
+[...]
 
-Applied to master, thanks.
+Was not aware of this patch (and the discussion) but the same change is
+already committed with a slightly different reasoning ([1])...
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Peter
+
+[1] https://git.busybox.net/buildroot/commit/Makefile?id=0db34529f48a0ca76a4aadd08c9af57d37366d18
