@@ -1,52 +1,42 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 1 Jun 2016 09:54:04 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2016-05-31
-In-Reply-To: <20160601101953.54e9e80d@free-electrons.com>
-References: <20160601063019.5D553101D2D@stock.ovh.net>
- <1464769003.3171.25.camel@synopsys.com>
- <20160601101953.54e9e80d@free-electrons.com>
-Message-ID: <1464774805.3171.37.camel@synopsys.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 1 Jun 2016 11:21:36 +0100
+Subject: [Buildroot] [PATCH next] php: security bump version to 7.0.7
+Message-ID: <1464776496-55262-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes CVE-2013-7456 https://bugs.php.net/bug.php?id=72227
+Fixes CVE-2016-5093 https://bugs.php.net/bug.php?id=72241
 
-On Wed, 2016-06-01 at 10:19 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 1 Jun 2016 08:17:21 +0000, Alexey Brodkin wrote:
-> 
-> > 
-> > > 
-> > > ?????????arc |??????????????????jack2-v1.9.10 | NOK |
-> > > http://autobuild.buildroot.net/results/c05e4a5280f34b2a1dff8a10adfd46f53344e13a/??
-> > So this one is almost fixed by Bernd but given he has no time for the real fix
-> > we'll take a look at proposed solution and hopefully will cook up a patch ourselves.
-> Aah, good. I proposed a fix in a reply to Bernd, I believe it should
-> work, it just needs to be tested a little bit on platforms where NGREG
-> is really defined.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Hm I see that NGREG is defined in Linux kernel in "include/uapi/linux/elfcore.h" as:
------------------>8----------------
-#ifndef __KERNEL__
-...
-#define NGREG ELF_NGREG
-#endif
------------------>8----------------
-
-Then in its turn ELF_NGREG is defined for ARC in "arch/arc/include/uapi/asm/elf.h" as:
------------------>8----------------
-#define ELF_NGREG	(sizeof(struct user_regs_struct) / sizeof(elf_greg_t))
------------------>8----------------
-
-And since kernel's UAPI is meant to be exported to user-space I would expect NGREG to
-be available for ARC and all other users of UAPI.
-
-So might be a better solution would be to just include "elfcore.h" in jack's "dbus/sigsegv.c"?
-I'll give it a try locally and if that works I'll send a patch upstream.
-
--Alexey
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 4bc0263..ace5281 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-sha256 1b237a9455e5476a425dbb9d99966bad68107747c601958cb9558a7fb49ab419  php-7.0.6.tar.xz
++sha256 9cc64a7459242c79c10e79d74feaf5bae3541f604966ceb600c3d2e8f5fe4794  php-7.0.7.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index fbdb738..2997b1b 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.0.6
++PHP_VERSION = 7.0.7
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
+-- 
+2.7.3
