@@ -1,44 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 01 Jun 2016 16:13:10 -0000
-Subject: [Buildroot] [git commit] gdb: switch to 7.10 as the default version
-Message-ID: <20160601161308.1A4A7802A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] binutils: remove support for version 2.23
+Message-ID: <20160601161308.4C8AC802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23519d0753b32749b2409a4516be91a76298ada9
+commit: https://git.buildroot.net/buildroot/commit/?id=ae466a6041d06ac969694376d1bc3dec5ea517af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-7.11 is around, 7.10 has already seen a point release, so it's time to
-make 7.10 the default version for gdb.
+Now that we have added support for the lastest binutils version 2.26,
+it is time to remove the oldest version we currently support, 2.23, in
+order to keep only 3 versions: 2.24, 2.25 and 2.26.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Config.in.legacy                                   |  13 +-
+ package/binutils/2.23.2/120-sh-conf.patch          |  29 -
+ .../2.23.2/300-001_ld_makefile_patch.patch         |  24 -
+ .../2.23.2/300-012_check_ldrunpath_length.patch    |  21 -
+ package/binutils/2.23.2/500-sysroot.patch          |  37 -
+ .../2.23.2/600-poison-system-directories.patch     | 279 -------
+ .../binutils/2.23.2/900-xtensa-trampolines.patch   | 846 ---------------------
+ .../901-xtensa-gas-first-frag-alignment.patch      |  51 --
+ .../902-xtensa-gas-ld-diff-relocation-signed.patch | 133 ----
+ ...ix-ld-segfault-when-linking-linux-modules.patch |  47 --
+ ...-target-out-of-range-xtensa-ld-relaxation.patch |  79 --
+ ...ines-search-code-for-conditional-branches.patch |  90 ---
+ ...localized-symbol-refcounting-with-gc-sect.patch |  57 --
+ ...x-gas-segfault-with-text-section-literals.patch |  56 --
+ ...-xtensa-fix-signedness-of-gas-relocations.patch |  47 --
+ ...15-xtensa-fix-.init-.fini-literals-moving.patch |  70 --
+ package/binutils/Config.in.host                    |  10 -
+ package/binutils/binutils.hash                     |   1 -
+ 18 files changed, 9 insertions(+), 1881 deletions(-)
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 35eb418..46e00f6 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -27,7 +27,7 @@ choice
- 	prompt "GDB debugger Version"
- 	depends on !BR2_arc
- 	depends on !BR2_microblaze
--	default BR2_GDB_VERSION_7_9
-+	default BR2_GDB_VERSION_7_10
- 	help
- 	  Select the version of gdb you wish to use.
- 
-@@ -54,6 +54,6 @@ config BR2_GDB_VERSION
- 	default "arc-2016.03-rc2-gdb" if BR2_arc
- 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
- 	default "7.8.2"	   if BR2_GDB_VERSION_7_8
--	default "7.9.1"    if BR2_GDB_VERSION_7_9 || !BR2_PACKAGE_HOST_GDB
--	default "7.10.1"   if BR2_GDB_VERSION_7_10
-+	default "7.9.1"    if BR2_GDB_VERSION_7_9
-+	default "7.10.1"   if BR2_GDB_VERSION_7_10 || !BR2_PACKAGE_HOST_GDB
- 	default "7.11"	   if BR2_GDB_VERSION_7_11
+Patch is too large, so refusing to show it
