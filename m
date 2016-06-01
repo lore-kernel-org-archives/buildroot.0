@@ -1,86 +1,54 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 1 May 2016 01:04:30 +0200
-Subject: [Buildroot] [PATCH 2/4] package/efl: bump to 1.17.0
-In-Reply-To: <5724C7A2.7040704@gmail.com>
-References: <1461790014-17051-1-git-send-email-romain.naour@gmail.com>
- <1461790014-17051-2-git-send-email-romain.naour@gmail.com>
- <572355E6.4040400@zacarias.com.ar>
- <f6b845e4-97b0-a3f5-57c5-dfce944dcd6a@gmail.com>
- <5724A39E.8000308@zacarias.com.ar> <5724C7A2.7040704@gmail.com>
-Message-ID: <9c17ab05-1c5c-8c9d-66d8-9faa54f0578a@gmail.com>
+From: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
+Date: Wed,  1 Jun 2016 12:38:08 +0900
+Subject: [Buildroot] [PATCH 1/1] mesa3d: don't remove OpenGL pc when
+	installing Gallium
+Message-ID: <20160601033811.6031-1-akihiko.odaki.4i@stu.hosei.ac.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+Gallium driver also provides DRI-like infrastructure and OpenGL.
+This change prevents from removing pkg-configs of them also when
+installing the driver.
 
-Le 30/04/2016 ? 16:56, Romain Naour a ?crit :
-> Hi Gustavo,
-> 
-> Le 30/04/2016 14:22, Gustavo Zacarias a ?crit :
->> On 29/04/16 17:26, Romain Naour wrote:
->>
->>> Weird, I'm able to build host-efl here... let me retry again.
->>> Can you share your Buildroot config and the host-efl config.log ?
->>>
->>> Can you try to autoreconf the efl package ?
->>> EFL_AUTORECONF = YES
->>> EFL_GETTEXTIZE = YES
->>
->> Hi Romain.
->> It fails the same, so https://www.zacarias.com.ar/host-efl-config.log
->> and https://www.zacarias.com.ar/efl-defconfig.txt
-> 
-> I'm unable to reproduce your issue :-(
-> 
-> But probably the issue is here:
-> USE_EVAS_LIBS='  [...] -lfreetype -L/usr/lib -lluajit-5.1 '
-> 
-> It seems that it doesn't use the luajit library from host-luajit package...
-> Otherwise I don't know.
+Signed-off-by: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
+---
+ package/mesa3d/mesa3d.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-The .pc file is manually generated in the luajit Makefile, so it give a wrong
-path for host-luajit.
-
-$ host/usr/bin/pkgconf --cflags luajit
-/usr/include/luajit-2.0
-
-It should be:
-$ host/usr/bin/pkgconf --cflags luajit
-[...]output/host/usr/include/luajit-2.0
-
-Can you try with this patch ?
-
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 623bfcc..0aab04d 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -75,5 +75,11 @@ define HOST_LUAJIT_INSTALL_CMDS
-        $(MAKE) PREFIX="/usr" DESTDIR="$(HOST_DIR)" LDCONFIG=true -C $(@D) install
- endef
-
-+define HOST_LUAJIT_FIX_PC_FILE
-+       sed -i -e "s|^prefix=.*|prefix=$(HOST_DIR)/usr|"
-$(HOST_DIR)/usr/lib/pkgconfig/luajit.pc
-+endef
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 4e0d255..a4d84e4 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -94,7 +94,6 @@ endef
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+ MESA3D_CONF_OPTS += \
+ 	--without-dri-drivers --disable-dri3
+-MESA3D_POST_INSTALL_STAGING_HOOKS += MESA3D_REMOVE_OPENGL_PC
+ else
+ ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
+ MESA3D_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto xproto_presentproto
+@@ -115,6 +114,10 @@ MESA3D_CONF_OPTS += \
+ 	--with-dri-drivers=$(subst $(space),$(comma),$(MESA3D_DRI_DRIVERS-y))
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
++MESA3D_POST_INSTALL_STAGING_HOOKS += MESA3D_REMOVE_OPENGL_PC
++endif
 +
-+HOST_LUAJIT_POST_INSTALL_HOOKS = HOST_LUAJIT_FIX_PC_FILE
-+
- $(eval $(generic-package))
- $(eval $(host-generic-package))
-
-Best regards,
-Romain
-> 
-> Best regards,
-> Romain
-> 
->> Thanks!
->> Regards.
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+ # APIs
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
+@@ -137,6 +140,8 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+ MESA3D_PROVIDES += libegl
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+ MESA3D_EGL_PLATFORMS = drm
++else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4),y)
++MESA3D_EGL_PLATFORMS = drm
+ else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
+ MESA3D_EGL_PLATFORMS = drm
+ endif
+-- 
+2.8.3
