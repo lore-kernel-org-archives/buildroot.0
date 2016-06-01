@@ -1,47 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Jun 2016 08:47:29 +0200
-Subject: [Buildroot] [PATCH 1/1] mesa3d: don't remove OpenGL pc when
- installing Gallium
-In-Reply-To: <20160601033811.6031-1-akihiko.odaki.4i@stu.hosei.ac.jp>
-References: <20160601033811.6031-1-akihiko.odaki.4i@stu.hosei.ac.jp>
-Message-ID: <20160601084729.1e81ebd6@free-electrons.com>
+From: gdbabu Krishnan <gdbabu.krishnan@gmail.com>
+Date: Wed, 1 Jun 2016 12:19:14 +0530
+Subject: [Buildroot] gpio chip not found
+Message-ID: <CAG7w3y=HqgN8bEnyZXy1we0SRx6HgUsN=FRUoZE-uyKP=0ROtQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-Thanks for this patch! Bernd, Gustavo, could you comment on the part
-that changes in what condition the .pc files are removed?
 
-Also, rather than having this hack in Buildroot, what about fixing the
-issue upstream? mesa3d should not install the .pc file if it is not
-configured to build/install the corresponding libraries.
+i am working with buildroot for raspberry pi i have successfully build and
+got sdcard.img.
 
-Akihiko, I also have a comment for you below.
+my problem is when i "modprobe lirc_rpi.ko" it shows following message
 
-On Wed,  1 Jun 2016 12:38:08 +0900, Akihiko Odaki wrote:
+lirc_rpi:gpio chip not found
 
->  ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
-> @@ -137,6 +140,8 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
->  MESA3D_PROVIDES += libegl
->  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
->  MESA3D_EGL_PLATFORMS = drm
-> +else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4),y)
-> +MESA3D_EGL_PLATFORMS = drm
+modprobe: can't load module lirc_rpi
+(kernel/driver/staging/media/lirc/lir_rpi.ko): No such device
 
-This change is unrelated, so it should be part of a separate patch.
+i also include "dtoverlay=lirc-rpi" in config.txt under boot directory.
 
->  else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
->  MESA3D_EGL_PLATFORMS = drm
->  endif
+kindly help me to resolve this problem,
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+thank you,
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160601/688aab9b/attachment.html>
