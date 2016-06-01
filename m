@@ -1,83 +1,104 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 01 Jun 2016 16:13:10 -0000
-Subject: [Buildroot] [git commit] support/scripts: add helper to
-	hardlink-or-copy
-Message-ID: <20160601161306.D10C47FAB4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] tar: bump to version 1.29
+Message-ID: <20160601161308.5E360802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88bad8f462c31679106fe68b6c3b1bd4be68cc2f
+commit: https://git.buildroot.net/buildroot/commit/?id=d6966645da049bfb1582de3cfe3628dc70698b86
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When preparing the legal-info, the source archives are copied in the
-legal-info/ output directory. When the archives are big, it can take
-quite a bit of time and unnecessarily uses disk space. When the
-legal-info output directory is on the same filesystem as the BR2_DL_DIR,
-we can easily reduce copy time and disk usage by just using hardlins
-instead of copying. However, the BR2_DL_DIR may be on a different
-filesystem, so we must fallback to copying in this case
+Patch is upstream so remove it.
 
-Introduce a helper script that copies a source file into a destination
-directory, by first attempting to hard-link, and falling back to a
-plain copy in case the hardlink fails.
-
-In case the destination already exists, it is forcibly removed first, to
-avoid clobering any existing target file (and especially any hardlink to
-it), since cp -f does not remove the destination file, but clobbers it.
-
-In some situations, it will be necessary that the destination file is
-named differently than the source, so if a third argument is specified,
-it is treated as the basename of the destination file.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/hardlink-or-copy | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/tar/0001-fix-build-failure.patch | 52 --------------------------------
+ package/tar/tar.hash                     |  4 +--
+ package/tar/tar.mk                       |  2 +-
+ 3 files changed, 3 insertions(+), 55 deletions(-)
 
-diff --git a/support/scripts/hardlink-or-copy b/support/scripts/hardlink-or-copy
-new file mode 100755
-index 0000000..b046bdf
---- /dev/null
-+++ b/support/scripts/hardlink-or-copy
-@@ -0,0 +1,35 @@
-+#!/bin/bash
-+
-+# Try to hardlink a file into a directory, fallback to copy on failure.
-+#
-+# Hardlink-or-copy the source file in the first argument into the
-+# destination directory in the second argument, using the basename in
-+# the third argument as basename for the destination file. If the third
-+# argument is missing, use the basename of the source file as basename
-+# for the destination file.
-+#
-+# In either case, remove the destination prior to doing the
-+# hardlink-or-copy.
-+#
-+# Note that this is NOT an atomic operation.
-+
-+set -e
-+
-+main() {
-+    local src_file="${1}"
-+    local dst_dir="${2}"
-+    local dst_file="${3}"
-+
-+    if [ -n "${dst_file}" ]; then
-+        dst_file="${dst_dir}/${dst_file}"
-+    else
-+        dst_file="${dst_dir}/${src_file##*/}"
-+    fi
-+
-+    mkdir -p "${dst_dir}"
-+    rm -f "${dst_file}"
-+    ln -f "${src_file}" "${dst_file}" 2>/dev/null \
-+    || cp -f "${src_file}" "${dst_file}"
-+}
-+
-+main "${@}"
+diff --git a/package/tar/0001-fix-build-failure.patch b/package/tar/0001-fix-build-failure.patch
+deleted file mode 100644
+index 8550a3e..0000000
+--- a/package/tar/0001-fix-build-failure.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-Status: upstream
+-http://git.savannah.gnu.org/cgit/tar.git/commit/?id=e9ddc08da0982f36581ae5a8c7763453ff41cfe8
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-From e9ddc08da0982f36581ae5a8c7763453ff41cfe8 Mon Sep 17 00:00:00 2001
+-From: Sergey Poznyakoff <gray@gnu.org>
+-Date: Wed, 24 Sep 2014 21:22:16 +0000
+-Subject: Bugfixes.
+-
+-* doc/tar.1: Fix typo in font spec.
+-* src/tar.c (sort_mode_arg, sort_mode_flag): Protect "inode"
+-(SAVEDIR_SORT_INODE) with D_INO_IN_DIRENT
+----
+-diff --git a/doc/tar.1 b/doc/tar.1
+-index 9000627..b91de63 100644
+---- a/doc/tar.1
+-+++ b/doc/tar.1
+-@@ -879,7 +879,7 @@ Exclude files matching patterns listed in FILE.
+- \fB\-\-strip\-components\fR=\fINUMBER\fR
+- Strip \fINUMBER\fR leading components from file names on extraction.
+- .TP
+--\fB\-\-transform\fR=\fIEXPRESSION\dR, \fB\-\-xform\fR=\fIEXPRESSION\fR
+-+\fB\-\-transform\fR=\fIEXPRESSION\fR, \fB\-\-xform\fR=\fIEXPRESSION\fR
+- Use sed replace \fIEXPRESSION\fR to transform file names.
+- .SS File name matching options
+- These options affect both exclude and include patterns.
+-diff --git a/src/tar.c b/src/tar.c
+-index 225c624..f8102e0 100644
+---- a/src/tar.c
+-+++ b/src/tar.c
+-@@ -1341,14 +1341,18 @@ static char filename_terminator;
+- static char const *const sort_mode_arg[] = {
+-   "none",
+-   "name",
+-+#if D_INO_IN_DIRENT
+-   "inode",
+-+#endif
+-   NULL
+- };
+- 
+- static int sort_mode_flag[] = {
+-     SAVEDIR_SORT_NONE,
+-     SAVEDIR_SORT_NAME,
+-+#if D_INO_IN_DIRENT
+-     SAVEDIR_SORT_INODE
+-+#endif
+- };
+- 
+- ARGMATCH_VERIFY (sort_mode_arg, sort_mode_flag);
+---
+-cgit v0.9.0.2
+diff --git a/package/tar/tar.hash b/package/tar/tar.hash
+index 5d2f1db..e563456 100644
+--- a/package/tar/tar.hash
++++ b/package/tar/tar.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking signature
+-sha256	64ee8d88ec1b47a0961033493f919d27218c41b580138fd6802327462aff22f2	tar-1.28.tar.xz
+-sha256	a3906a862f83dac1dfaf0ed200c62bd21f6d00f184a7f42b91978593a8553104	tar-1.28.cpio.gz
++sha256	402dcfd0022fd7a1f2c5611f5c61af1cd84910a760a44a688e18ddbff4e9f024	tar-1.29.tar.xz
++sha256	9173f222464dd3676118408840da5990527062b5c7daf6487bed7c396c45bfb1	tar-1.29.cpio.gz
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index 2b47e33..767c02f 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TAR_VERSION = 1.28
++TAR_VERSION = 1.29
+ TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
+ TAR_SITE = $(BR2_GNU_MIRROR)/tar
+ # busybox installs in /bin, so we need tar to install as well in /bin
