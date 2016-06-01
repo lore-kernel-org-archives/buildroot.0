@@ -1,66 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 01 Jun 2016 16:13:07 -0000
-Subject: [Buildroot] [git commit] toolchain: bump ARC tools to
-	arc-2016.03-rc2
-Message-ID: <20160601161306.BEA8D7FAB4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/audit: Remove redundant mkdir
+Message-ID: <20160601161307.1F703802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=adbdc6e58f2b387dc4200f2acbf9cc307cbc8838
+commit: https://git.buildroot.net/buildroot/commit/?id=04f166d4b5b227b426272a2aabf1aad2b763df1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This change switches ARC tools to RC2 of the most recent arc-2016.03
-version.
+install -D creates the folder, so we don't need the mkdir command
 
-Essentially once final release is ready version will be bumped again.
-
-ARC GNU tools of version arc-2016.03 bring some quite significant
-changes like:
- * Binutils v2.26+ (upstream commit id 202ac19 with additional ARC patches)
- * GCC v4.8.5
- * GDB 7.10
-
-More about changes, improvements and fixes could be found here:
-https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2016.03-rc2
-
-Also in this change we realign custom Buildroot patches for binutils and
-gcc for ARC tools. Looks like earlier most of arch-independent patches
-for binutils and gcc were either unintentionally removed or not even
-added in patch folders for ARC's binutils and gcc. Now arch-independent
-patches for binutils-2.26 and gcc-4.8.5 were added in
-package/{binutils|gcc}/arc-2016.03-rc2 folders.
-
-Build and run-tested in nSIM for both ARC700 and ARC HS38.
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/binutils/Config.in.host                    |   2 +-
- .../binutils/arc-2015.12/0001-PR-other-56780.patch | 236 ---------------------
- .../arc-2016.03-rc2/0300-ld-makefile.patch         |  41 ++++
- .../0301-check-ldrunpath-length.patch              |  36 ++++
- .../0500-add-sysroot-fix-from-bug-3049.patch       |  52 +++++
- .../0600-poison-system-directories.patch}          | 217 ++++++++++---------
- package/binutils/binutils.hash                     |   2 +-
- package/binutils/binutils.mk                       |   2 +-
- package/gcc/Config.in.host                         |   2 +-
- ...900-UPDATE-Fix-handling-complex-PIC-moves.patch | 103 ---------
- ...01-UPDATE1-Fix-handling-complex-PIC-moves.patch |  83 --------
- ...950-Don-t-allow-mcompact-casesi-for-ARCv2.patch | 100 ---------
- package/gcc/arc-2016.03-rc2/130-pr43538.patch      |  25 +++
- .../arc-2016.03-rc2/301-missing-execinfo_h.patch   |  13 ++
- .../305-libmudflap-susv3-legacy.patch              |  49 +++++
- package/gcc/arc-2016.03-rc2/842-PR60155.patch      | 111 ++++++++++
- .../850-libstdcxx-uclibc-c99.patch}                |   4 +-
- .../851-PR-other-56780.patch                       |   0
- .../930-libgcc-disable-split-stack-nothreads.patch |  14 ++
- package/gcc/gcc.hash                               |   2 +-
- package/gdb/Config.in.host                         |   2 +-
- package/gdb/gdb.hash                               |   2 +-
- 22 files changed, 472 insertions(+), 626 deletions(-)
+ package/audit/audit.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 329f8c5..1fbc623 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -46,7 +46,6 @@ define AUDIT_INSTALL_INIT_SYSTEMD
+ 	ln -fs ../../../../usr/lib/systemd/system/auditd.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/auditd.service
+ 
+-	mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
+ 	$(INSTALL) -D -m 644 package/audit/audit_tmpfiles.conf \
+ 		$(TARGET_DIR)/usr/lib/tmpfiles.d/audit.conf
+ endef
