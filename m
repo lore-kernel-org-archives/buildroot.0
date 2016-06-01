@@ -1,39 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Jun 2016 22:14:23 +0200
-Subject: [Buildroot] [PATCH 0/8 RFC] Adding a Go package infrastructure
-In-Reply-To: <1454369465-4804-1-git-send-email-ludovic.guegan@gmail.com>
+Date: Wed, 1 Jun 2016 22:17:59 +0200
+Subject: [Buildroot] [PATCH 2/8 RFC] package/golang-gb: create gb
+ package to build and fetch go packages
+In-Reply-To: <1454369465-4804-3-git-send-email-ludovic.guegan@gmail.com>
 References: <1454369465-4804-1-git-send-email-ludovic.guegan@gmail.com>
-Message-ID: <20160601221423.01ab45ec@free-electrons.com>
+ <1454369465-4804-3-git-send-email-ludovic.guegan@gmail.com>
+Message-ID: <20160601221759.0578c1a2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ludovic,
+Hello,
 
-On Tue,  2 Feb 2016 00:30:57 +0100, Ludovic Guegan wrote:
+On Tue,  2 Feb 2016 00:30:59 +0100, Ludovic Guegan wrote:
+> Signed-off-by: Ludovic Guegan <ludovic.guegan@gmail.com>
+> ---
+>  package/Config.in.host           |  1 +
+>  package/golang-gb/Config.in.host |  8 ++++++++
+>  package/golang-gb/golang-gb.mk   | 30 ++++++++++++++++++++++++++++++
+>  3 files changed, 39 insertions(+)
+>  create mode 100644 package/golang-gb/Config.in.host
+>  create mode 100644 package/golang-gb/golang-gb.mk
+> 
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 0625bd0..2d99d37 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -13,6 +13,7 @@ menu "Host utilities"
+>  	source "package/genimage/Config.in.host"
+>  	source "package/genpart/Config.in.host"
+>  	source "package/golang/Config.in.host"
+> +	source "package/golang-gb/Config.in.host"
+>  	source "package/gptfdisk/Config.in.host"
+>  	source "package/imx-usb-loader/Config.in.host"
+>  	source "package/jq/Config.in.host"
+> diff --git a/package/golang-gb/Config.in.host b/package/golang-gb/Config.in.host
+> new file mode 100644
+> index 0000000..b84a83f
+> --- /dev/null
+> +++ b/package/golang-gb/Config.in.host
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_HOST_GOLANG_GB
+> +	bool "golang-gb"
+> +	depends on BR2_PACKAGE_HOST_GOLANG
+> +	help
+> +          gb is an alternative build tool for the Go programming language.
+> +
+> +	  https://getgb.io
 
-> Ludovic Guegan (8):
->   package/golang: create Go 1.5 host compiler package
->   package/golang-gb: create gb package to build and fetch go packages
->   package/pkg-generic.mk: allow custom extract directory
->   package/pkg-golang.mk: infrastructure for Go packages
->   docs/manual: documents the golang-package infrastructure
->   package/rtop: add rtop package in Go
->   package/embd: add embd package (embedded programming framework)
->   package/bolt: add bolt package (persistent key-value store)
+I'm completely ignorant about Go. Why do we need this alternative build
+tool? The flannel package contributed by Geoff, and the three packages
+contributed by Christian don't need this alternative build tool.
 
-Sorry for the slow feedback on this. We now have Go support in
-Buildroot. For the moment, we only have one package in the tree
-(flannel), but Christian Stewart has already submitted three more. And
-indeed, the build procedure for each of them look very similar, so a
-package infrastructure might very well be useful.
+What are the benefits of using this as opposed to what Geoff/Christian
+are doing in their Go packages?
 
-Would you be interested in respining your patch series against the
-latest master, so that we can move forward with this topic?
+> +define HOST_GOLANG_GB_EXTRACT_CMDS
+> +	mkdir -p $(@D)/src/github.com/constabulary
+> +	tar xvaf $(DL_DIR)/golang-gb-$(GOLANG_GB_VERSION).tar.gz -C $(@D)
+> +	mv $(@D)/gb-$(GOLANG_GB_VERSION) $(@D)/src/github.com/constabulary/gb
 
-Thanks!
+It is not clear why you are doing this here.
+
+> +endef
+> +
+> +define HOST_GOLANG_GB_BUILD_CMDS
+> +	env -i $(GOLANG_GB_ENV) $(GO_HOST_BINARY) install -v github.com/constabulary/gb/cmd/gb
+> +	env -i $(GOLANG_GB_ENV) $(GO_HOST_BINARY) install -v github.com/constabulary/gb/cmd/gb-vendor
+
+Why env -i ?
+
+> +endef
+> +
+> +define HOST_GOLANG_GB_INSTALL_CMDS
+> +	$(INSTALL) -m 755 $(@D)/bin/gb $(HOST_DIR)/usr/bin
+> +	$(INSTALL) -m 755 $(@D)/bin/gb-vendor $(HOST_DIR)/usr/bin
+
+We normally want:
+
+	$(INSTALL) -D -m 0755 $(@D)/bin/gb $(HOST_DIR)/usr/bin/gb
+
+Best regards,
 
 Thomas
 -- 
