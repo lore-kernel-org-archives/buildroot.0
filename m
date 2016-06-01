@@ -1,54 +1,47 @@
 From: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
-Date: Wed,  1 Jun 2016 12:38:08 +0900
-Subject: [Buildroot] [PATCH 1/1] mesa3d: don't remove OpenGL pc when
-	installing Gallium
-Message-ID: <20160601033811.6031-1-akihiko.odaki.4i@stu.hosei.ac.jp>
+Date: Wed,  1 Jun 2016 12:38:09 +0900
+Subject: [Buildroot] [PATCH 1/1] qt5base: Enable KMS and GBM if Mesa 3D
+	provides EGL
+In-Reply-To: <20160601033811.6031-1-akihiko.odaki.4i@stu.hosei.ac.jp>
+References: <20160601033811.6031-1-akihiko.odaki.4i@stu.hosei.ac.jp>
+Message-ID: <20160601033811.6031-2-akihiko.odaki.4i@stu.hosei.ac.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gallium driver also provides DRI-like infrastructure and OpenGL.
-This change prevents from removing pkg-configs of them also when
-installing the driver.
-
 Signed-off-by: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
 ---
- package/mesa3d/mesa3d.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/qt5/qt5base/qt5base.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 4e0d255..a4d84e4 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -94,7 +94,6 @@ endef
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
- MESA3D_CONF_OPTS += \
- 	--without-dri-drivers --disable-dri3
--MESA3D_POST_INSTALL_STAGING_HOOKS += MESA3D_REMOVE_OPENGL_PC
- else
- ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
- MESA3D_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto xproto_presentproto
-@@ -115,6 +114,10 @@ MESA3D_CONF_OPTS += \
- 	--with-dri-drivers=$(subst $(space),$(comma),$(MESA3D_DRI_DRIVERS-y))
- endif
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 9ff7af1..3378804 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -20,7 +20,6 @@ QT5BASE_INSTALL_STAGING = YES
+ #    want to use the one packaged in Buildroot
+ QT5BASE_CONFIGURE_OPTS += \
+ 	-optimized-qmake \
+-	-no-kms \
+ 	-no-cups \
+ 	-no-nis \
+ 	-no-iconv \
+@@ -29,6 +28,14 @@ QT5BASE_CONFIGURE_OPTS += \
+ 	-no-pch \
+ 	-shared
  
-+ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
-+MESA3D_POST_INSTALL_STAGING_HOOKS += MESA3D_REMOVE_OPENGL_PC
++# Uses libgbm from mesa3d
++ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
++QT5BASE_CONFIGURE_OPTS += -kms -gbm
++QT5BASE_DEPENDENCIES += mesa3d
++else
++QT5BASE_CONFIGURE_OPTS += -no-kms
 +endif
 +
- # APIs
- 
- ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
-@@ -137,6 +140,8 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
- MESA3D_PROVIDES += libegl
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
- MESA3D_EGL_PLATFORMS = drm
-+else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4),y)
-+MESA3D_EGL_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
- MESA3D_EGL_PLATFORMS = drm
- endif
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+ QT5BASE_CONFIGURE_OPTS += -debug
+ else
 -- 
 2.8.3
