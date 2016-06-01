@@ -1,50 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 01 Jun 2016 16:13:09 -0000
-Subject: [Buildroot] [git commit] sheevaplug: defconfig: use 4.6 kernel,
-	u-boot 2016.05
-Message-ID: <20160601161307.EFA0E802A0@busybox.osuosl.org>
+Date: Wed, 01 Jun 2016 16:13:10 -0000
+Subject: [Buildroot] [git commit] toolchain: add 4.6.x choice for headers
+Message-ID: <20160601161307.A654F802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a8b32febf0584d534efbb79c735888216983e8e
+commit: https://git.buildroot.net/buildroot/commit/?id=51800d20b98e69b7572e607093c548558a9cf493
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/sheevaplug_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ toolchain/toolchain-common.in          | 5 +++++
+ toolchain/toolchain-external/Config.in | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
-index 3632ed0..9d62444 100644
---- a/configs/sheevaplug_defconfig
-+++ b/configs/sheevaplug_defconfig
-@@ -11,22 +11,22 @@ BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_ROOTFS_JFFS2=y
- BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_128K=y
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index be02484..1fe28a9 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -241,10 +241,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
  
--# Linux headers same as kernel, a 4.5 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
-+# Linux headers same as kernel, a 4.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "4.6"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
+ 	default "4.5"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+ 	default "4.4"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+ 	default "4.3"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index b7f9241..a037d67 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -769,6 +769,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
  
- # bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sheevaplug"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
- BR2_TARGET_UBOOT_FORMAT_KWB=y
- # BR2_TARGET_UBOOT_NETWORK is not set
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
- BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v5"
- BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_6
++	bool "4.6.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_5
+ 	bool "4.5.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
