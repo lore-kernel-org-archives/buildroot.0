@@ -1,49 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 01 Jun 2016 16:13:10 -0000
-Subject: [Buildroot] [git commit] orangepipc: defconfig: use 4.6 kernel,
-	u-boot 2016.05
-Message-ID: <20160601161308.04893802A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libevdev: bump version to 1.5.1
+Message-ID: <20160601161307.E4560802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ba8bfa3ffa6d4bde3d18ea3751097572b9a9991
+commit: https://git.buildroot.net/buildroot/commit/?id=96665b3b13886a9f815bef8b0dc60bf5fe96c73c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+For details see [1] and [2].
+
+[1] https://lists.freedesktop.org/archives/input-tools/2016-May/001296.html
+[2] https://lists.freedesktop.org/archives/input-tools/2016-May/001301.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/orangepipc_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/libevdev/libevdev.hash | 4 ++--
+ package/libevdev/libevdev.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/orangepipc_defconfig b/configs/orangepipc_defconfig
-index cb04d74..3683ad4 100644
---- a/configs/orangepipc_defconfig
-+++ b/configs/orangepipc_defconfig
-@@ -1,14 +1,14 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepipc/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepipc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-plus"
-@@ -18,7 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 20ca4fb..a4fcd9b 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,2 +1,2 @@
+-# Hash from http://lists.freedesktop.org/archives/input-tools/2016-January/001240.html
+-sha256 7b2ae1a0c7f9f7a96198ddc8fd167f090f233d6cbd8168b847e4f968445132d3 libevdev-1.4.6.tar.xz
++# Hash from https://lists.freedesktop.org/archives/input-tools/2016-May/001301.html
++sha256 17630821a57e6e3f02e01ade836f24068df9bd530067091152b0d468c3a86f40 libevdev-1.5.1.tar.xz
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index 5513191..b0832d8 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEVDEV_VERSION = 1.4.6
++LIBEVDEV_VERSION = 1.5.1
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
