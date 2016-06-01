@@ -1,41 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 01 Jun 2016 16:13:10 -0000
-Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.154
-Message-ID: <20160601161307.CEED481F53@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 01 Jun 2016 16:13:11 -0000
+Subject: [Buildroot] [git commit] file: bump to version 5.27
+Message-ID: <20160601161307.8B584802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e1c1893b27ec308565b73d6e833d29c1150c569
+commit: https://git.buildroot.net/buildroot/commit/?id=f35c5daa6c3d63b50e78efe636b24f0f00f4c829
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
+ package/file/file.hash | 2 +-
+ package/file/file.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 2aa7d78..97b1b58 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
+diff --git a/package/file/file.hash b/package/file/file.hash
+index 2c53af1..d20fe46 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
 @@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 1c1c3f95ab76e23629ee54b87d36536f887d8a30976413206491a3a13101b717948b3ab4a7778cb1e74f258f429871076f0b9d098785835c4885eb61def793ca  LVM2.2.02.153.tgz
-+sha512 aa0599d9c77099f750237ad230c91a35890b248130b81bfd81fc72f510b2b21f28a87491532f4ab1d040338fa6945af6391d032a574538f8672072ac8c185eef  LVM2.2.02.154.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index d45a108..1a3241d 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
+ # Locally calculated
+-sha256	2ef32b4ec936b0ff7b59a021dce56086a716663b6df1138c7ea597d396bf50cf	file-5.26.tar.gz
++sha256	c2e7d509b1167c4915901ecd257ee924d229a348bf988df6d1934ef0fa34a1a7	file-5.27.tar.gz
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 282b2da..0154c10 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LVM2_VERSION = 2.02.153
-+LVM2_VERSION = 2.02.154
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+-FILE_VERSION = 5.26
++FILE_VERSION = 5.27
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
