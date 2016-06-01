@@ -1,145 +1,86 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 1 Jun 2016 11:40:21 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2016-05-31
-In-Reply-To: <1464774805.3171.37.camel@synopsys.com>
-References: <20160601063019.5D553101D2D@stock.ovh.net>
- <1464769003.3171.25.camel@synopsys.com>
- <20160601101953.54e9e80d@free-electrons.com>
- <1464774805.3171.37.camel@synopsys.com>
-Message-ID: <1464781182.3171.49.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Jun 2016 13:52:05 +0200
+Subject: [Buildroot] [PATCH] odroid_xu4: new board
+In-Reply-To: <20160601130317.5150dfe4@pcviktorin.fit.vutbr.cz>
+References: <1446836886-27256-1-git-send-email-viktorin@rehivetech.com>
+ <20160531223059.34d2c127@free-electrons.com>
+ <20160601130317.5150dfe4@pcviktorin.fit.vutbr.cz>
+Message-ID: <20160601135205.7bd9661a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Wed, 2016-06-01 at 12:53 +0300, Alexey Brodkin wrote:
-> Hi Thomas,
+On Wed, 1 Jun 2016 13:03:17 +0200, Jan Viktorin wrote:
+
+> > Sorry for the late review.   
 > 
-> On Wed, 2016-06-01 at 10:19 +0200, Thomas Petazzoni wrote:
-> > 
-> > Hello,
-> > 
-> > On Wed, 1 Jun 2016 08:17:21 +0000, Alexey Brodkin wrote:
-> > 
-> > > 
-> > > 
-> > > > 
-> > > > 
-> > > > ?????????arc |??????????????????jack2-v1.9.10 | NOK |
-> > > > http://autobuild.buildroot.net/results/c05e4a5280f34b2a1dff8a10adfd46f53344e13a/??
-> > > So this one is almost fixed by Bernd but given he has no time for the real fix
-> > > we'll take a look at proposed solution and hopefully will cook up a patch ourselves.
-> > Aah, good. I proposed a fix in a reply to Bernd, I believe it should
-> > work, it just needs to be tested a little bit on platforms where NGREG
-> > is really defined.
-> Hm I see that NGREG is defined in Linux kernel in "include/uapi/linux/elfcore.h" as:
-> ----------------->8----------------
-> #ifndef __KERNEL__
-> ...
-> #define NGREG ELF_NGREG
-> #endif
-> ----------------->8----------------
+> Half a year, cool :). Never mind, I am pretty sure there are many other
+> things to do around Buildroot...
+
+Well, you can see by yourself the list of pending patches at
+http://patchwork.ozlabs.org/project/buildroot/list/. The best thing you
+can do to get your patches integrated is to help review and test the
+patches from others.
+
+> Do you mean https://github.com/ioft/linux.git? It doesn't boot for me. I spent
+> about 2 days just on this (about 2 weeks ago). No idea why...
+
+No, I'm talking about
+https://github.com/tobetter/linux/tree/odroidxu4-v4.6. It is the same
+Github repository as the one you're using, just a different branch.
+
+> If there is somebody with a successful setup of v4.6, I'd be happy to see what
+> I did wrong.
+
+If 4.6 doesn't work for you, I'm fine with a defconfig using 4.2 for
+now. Using 4.6 is definitely not a requirement.
+
+> > Please use odroidxu4_defconfig from the upstream tree. It is not
+> > necessary to have a strictly minimal kernel configuration, we very much
+> > prefer using an upstream defconfig.  
 > 
-> Then in its turn ELF_NGREG is defined for ARC in "arch/arc/include/uapi/asm/elf.h" as:
-> ----------------->8----------------
-> #define ELF_NGREG	(sizeof(struct user_regs_struct) / sizeof(elf_greg_t))
-> ----------------->8----------------
+> Ok, I just didn't like the default configuration due to its size...
+
+Right, but the advantage of using upstream's defconfig is that it will
+be updated with new options as needed, and also removes stuff from
+Buildroot.
+
+> > > diff --git a/board/hardkernel/readme.txt b/board/hardkernel/readme.txt
+> > > new file mode 100644
+> > > index 0000000..d7a77db
+> > > --- /dev/null
+> > > +++ b/board/hardkernel/readme.txt
+> > > @@ -0,0 +1,49 @@
+> > > +Odroid XU4
+> > > +==========
+> > > +
+> > > +http://www.hardkernel.com/main/products/prdt_info.php?g_code=G143452239825  
 > 
-> And since kernel's UAPI is meant to be exported to user-space I would expect NGREG to
-> be available for ARC and all other users of UAPI.
+> This duplication is probably a mistake...
+
+Yeah, but no big deal. That's the type of minor issue I can fix when
+applying.
+
+> > Please use the genimage mechanism to directly generate a bootable SD
+> > card. Look at the other boards supported in Buildroot, many of them are
+> > using genimage.  
 > 
-> So might be a better solution would be to just include "elfcore.h" in jack's "dbus/sigsegv.c"?
-> I'll give it a try locally and if that works I'll send a patch upstream.
+> Ok, sorry, I have no clue how genimage works and what does it do...
+> I'll try to rework this.
 
-Ok apparently that didn't work.
-Once I made:
------------------------>8------------------------
-diff --git a/dbus/sigsegv.c b/dbus/sigsegv.c
-index ee12f91..d7bbe7e 100644
---- a/dbus/sigsegv.c
-+++ b/dbus/sigsegv.c
-@@ -27,6 +27,7 @@
-?#include <stdio.h>
-?#include <signal.h>
-?#include <dlfcn.h>
-+#include <linux/elfcore.h>
-?#include <execinfo.h>
-?#include <errno.h>
-?#ifndef NO_CPP_DEMANGLE
------------------------>8------------------------
+It allows to generate a complete hard disk or SD card image, with
+multiple partitions in it. Check for example
+board/raspberrypi/genimage-raspberrypi0.cfg and the post-image
+script board/raspberrypi/post-image.sh.
 
-I opened a can with worms:
------------------------>8------------------------
-[255/259] c: dbus/sigsegv.c -> build/dbus/sigsegv.c.17.o
-In file included from /home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/asm/signal.h:25:0,
-?????????????????from /home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/linux/signal.h:4,
-?????????????????from /home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/linux/elfcore.h:5,
-?????????????????from ../dbus/sigsegv.c:30:
-/home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/asm-
-generic/signal.h:91:3: error: conflicting types for ?sigset_t?
-?} sigset_t;
-???^
-In file included from /home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/sys/types.h:219:0,
-?????????????????from /home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/stdlib.h:198,
-?????????????????from ../dbus/sigsegv.c:26:
-/home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/sys/select.h:37:20: note: previous declaration of ?sigset_t? was here
-?typedef __sigset_t sigset_t;
-????????????????????^
-In file included from /home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/asm/signal.h:25:0,
-?????????????????from /home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/linux/signal.h:4,
-?????????????????from /home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/linux/elfcore.h:5,
-?????????????????from ../dbus/sigsegv.c:30:
-/home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/asm-
-generic/signal.h:102:8: error: redefinition of ?struct sigaction?
-?struct sigaction {
-????????^
-In file included from /home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/signal.h:251:0,
-?????????????????from ../dbus/sigsegv.c:28:
-/home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/bits/sigaction.h:28:8: note: originally defined here
-?struct sigaction {
-????????^
-/home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/asm-
-generic/signal.h:103:17: error: expected ?:?, ?,?, ?;?, ?}? or ?__attribute__? before ?.? token
-? __sighandler_t sa_handler;
-?????????????????^
-In file included from /home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/asm/signal.h:25:0,
-?????????????????from /home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/linux/signal.h:4,
-?????????????????from /home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/linux/elfcore.h:5,
-?????????????????from ../dbus/sigsegv.c:30:
-/home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/include/asm-
-generic/signal.h:111:16: error: redefinition of ?struct sigaltstack?
-?typedef struct sigaltstack {
-????????????????^
-In file included from /home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/signal.h:354:0,
-?????????????????from ../dbus/sigsegv.c:28:
-/home/abrodkin/Outputs/buildroot/archs38-jack2/host/usr/arc-buildroot-linux-
-uclibc/sysroot/usr/include/bits/sigstack.h:49:16: note: originally defined here
-?typedef struct sigaltstack
-????????????????^
------------------------>8------------------------
+Thanks a lot!
 
-Then I googled that?http://article.gmane.org/gmane.linux.kernel.api/14978
-So I'm not alone with my grief here.
-
-Which means probably your proposal is the only feasible way to go.
-
--Alexey
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
