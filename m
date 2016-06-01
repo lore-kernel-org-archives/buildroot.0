@@ -1,42 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 01 Jun 2016 16:13:09 -0000
-Subject: [Buildroot] [git commit] core/legal-info: use the helper to install
-	source archives
-Message-ID: <20160601161306.DD8E27FAB4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux-headers: add 4.6.x series
+Message-ID: <20160601161307.B6EE9802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0ca22215cfa27d5c3ac1e224e08e10b2e4025c1
+commit: https://git.buildroot.net/buildroot/commit/?id=d038cce505c1e45db482756cbc42d132fc8113c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-.. and use $(Q) instead of a hard-coded @.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/linux-headers/Config.in.host | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 3904c09..f9c7cf8 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -803,9 +803,10 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
- ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
- 	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
- endif
--# Copy the source tarball (just hardlink if possible)
--	@cp -l $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))) 2>/dev/null || \
--	    cp $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
-+# Save the source tarball
-+	$$(Q)support/scripts/hardlink-or-copy \
-+		$$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) \
-+		$$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
- endif # redistribute
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 04d5890..cc0ab41 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,7 @@ comment "Kernel Header Options"
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_4_5
++	default BR2_KERNEL_HEADERS_4_6
+ 	help
+ 	  Select the version of kernel header files you wish to use.
+ 	  You must select the correct set of header files to match
+@@ -78,6 +78,10 @@ choice
+ 		bool "Linux 4.5.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
  
- endif # other packages
++	config BR2_KERNEL_HEADERS_4_6
++		bool "Linux 4.6.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
++
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
+ endchoice
+@@ -99,6 +103,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6
++	bool "4.6.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5
+ 	bool "4.5.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+@@ -223,4 +231,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+ 	default "4.4.9"		if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.3"		if BR2_KERNEL_HEADERS_4_5
++	default "4.6"		if BR2_KERNEL_HEADERS_4_6
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
