@@ -1,39 +1,194 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 01 Jun 2016 16:13:09 -0000
-Subject: [Buildroot] [git commit] gdb: specify hashes for the ARC and
-	Microblaze versions
-Message-ID: <20160601161308.2D9097FAB4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs: new configuration for NXP i.MX7
+	SabreSD
+Message-ID: <20160601161307.4B26F802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6cfb56a420a4c1cd067ff65b3c5187213b652b3a
+commit: https://git.buildroot.net/buildroot/commit/?id=205f80b89491358e978700436b988c1e2b9a70ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On ARC and Microblaze, a special GDB version is used, fetched from
-Github in both cases. Now that we consider Github generated tarballs
-to be stable, we can specify hashes for those versions, rather than
-using the special "none" hash to skip the hash check.
-
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/gdb.hash | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ board/freescale/imx7dsdb/genimage.cfg    | 41 ++++++++++++++++++++++++
+ board/freescale/imx7dsdb/post-image.sh   | 16 ++++++++++
+ board/freescale/imx7dsdb/readme.txt      | 54 ++++++++++++++++++++++++++++++++
+ configs/freescale_imx7dsabresd_defconfig | 36 +++++++++++++++++++++
+ 4 files changed, 147 insertions(+)
 
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 0fec3d0..dd55189 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -3,6 +3,6 @@ sha512	eebdf88b24e52e792b8a4b89ea85790de72b462a7810b44975fdf4232c068f353b1550607
- sha512	17a5138277a31685a5c2a841cb47ed9bc4626ea617b8ca77750513b300299f4fbbffe504958b5372de610dcb952c679cf8fa9c1bdadd380294fbf59b6e366010	gdb-7.10.1.tar.xz
- sha512  eadd2a59a1e48b1484eb2bea85256d6b1912926bc8b690793d02babf2639608bd22a0f2de77d4f60092da3b1dafeaa6d75a7cff3e84bd4e22fc46364b68e5e9f	gdb-7.11.tar.xz
- 
--# No hash for the ARC & microblaze variants, comes from the github-helper:
--none	xxx	gdb-arc-2016.03-rc2-gdb.tar.gz
--none	xxx	gdb-6be65fb56ea6694a9260733a536a023a1e2d4d57.tar.gz
-+# Locally calculated (fetched from Github)
-+sha512  0a467091d4b01fbecabb4b8da1cb743025c70e7f4874a0b5c8fa2ec623569a39bde6762b91806de0be6e63711aeb6909715cfbe43860de73d8aec6159a9f10a7	gdb-6be65fb56ea6694a9260733a536a023a1e2d4d57.tar.gz
-+sha512  6026889c72baee2f57d3e706fdd07c19e9b0b27d9ab87d32da39cc3bc3afe911f0d30e3bbca6fd6281b7e94da66d475b17edadfd58bce4d8b419ee8d475660fa	gdb-arc-2016.03-rc2-gdb.tar.gz
+diff --git a/board/freescale/imx7dsdb/genimage.cfg b/board/freescale/imx7dsdb/genimage.cfg
+new file mode 100644
+index 0000000..aa6ae9e
+--- /dev/null
++++ b/board/freescale/imx7dsdb/genimage.cfg
+@@ -0,0 +1,41 @@
++# Minimal microSD card image for the Freescale's i.MX7D SDB board
++#
++# We mimic the .sdcard Freescale's image format for i.MX7D:
++# * the microSD card must have 1 kB free space at the beginning,
++# * U-Boot is dumped as is,
++# * a FAT partition at offset 8 MB is containing zImage and dtbs,
++# * a single root filesystem partition is required (Ext4 in this case).
++#
++
++image boot.vfat {
++  vfat {
++    files = {
++      "imx7d-sdb.dtb",
++      "zImage"
++    }
++  }
++  size = 16M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition u-boot {
++    in-partition-table = "no"
++    image = "u-boot.imx"
++    offset = 1024
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++    offset = 8M
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++  }
++}
+diff --git a/board/freescale/imx7dsdb/post-image.sh b/board/freescale/imx7dsdb/post-image.sh
+new file mode 100755
+index 0000000..8757355
+--- /dev/null
++++ b/board/freescale/imx7dsdb/post-image.sh
+@@ -0,0 +1,16 @@
++#!/usr/bin/env bash
++
++BOARD_DIR="$(dirname $0)"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++  --rootpath "${TARGET_DIR}" \
++  --tmppath "${GENIMAGE_TMP}" \
++  --inputpath "${BINARIES_DIR}" \
++  --outputpath "${BINARIES_DIR}" \
++  --config "${GENIMAGE_CFG}"
++
++exit $?
+diff --git a/board/freescale/imx7dsdb/readme.txt b/board/freescale/imx7dsdb/readme.txt
+new file mode 100644
+index 0000000..c72e9a9
+--- /dev/null
++++ b/board/freescale/imx7dsdb/readme.txt
+@@ -0,0 +1,54 @@
++***************************
++Freescale i.MX7D SDB board
++***************************
++
++This file documents the Buildroot support for the Freescale i.MX7D SDB board.
++
++Build
++=====
++
++First, configure Buildroot for your i.MX7D SDB board:
++
++  make freescale_imx7dsabresd_defconfig
++
++Build all components:
++
++  make
++
++You will find in output/images/ the following files:
++  - imx7d-sdb.dtb
++  - rootfs.ext4
++  - rootfs.tar
++  - sdcard.img
++  - u-boot.imx
++  - zImage
++
++Create a bootable SD card
++=========================
++
++To determine the device associated to the SD card have a look in the
++/proc/partitions file:
++
++  cat /proc/partitions
++
++Buildroot prepares a bootable "sdcard.img" image in the output/images/
++directory, ready to be dumped on a SD card. Launch the following
++command as root:
++
++  dd if=./output/images/sdcard.img of=/dev/<your-sd-device>
++
++*** WARNING! This will destroy all the card content. Use with care! ***
++
++For details about the medium image layout, see the definition in
++board/freescale/imx7dsdb/genimage.cfg.
++
++Boot the i.MX7D SDB board
++=========================
++
++To boot your newly created system:
++- insert the SD card in the SD slot of the board;
++- put a micro USB cable into the Debug USB Port and connect using a terminal
++  emulator at 115200 bps, 8n1;
++- power on the board.
++
++Enjoy!
+diff --git a/configs/freescale_imx7dsabresd_defconfig b/configs/freescale_imx7dsabresd_defconfig
+new file mode 100644
+index 0000000..6768041
+--- /dev/null
++++ b/configs/freescale_imx7dsabresd_defconfig
+@@ -0,0 +1,36 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a7=y
++
++# Linux headers same as kernel, a 4.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++
++# system
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.0.0_ga"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
++
++# filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.0.0_ga"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++
++# required tools to create the microSD image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/imx7dsdb/post-image.sh"
