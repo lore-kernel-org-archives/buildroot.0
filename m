@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Jun 2016 17:10:00 +0200
-Subject: [Buildroot] [git commit] wayland: bump to version 1.11.0
-Message-ID: <20160601161312.EBAA2802A0@busybox.osuosl.org>
+Date: Wed, 1 Jun 2016 17:08:48 +0200
+Subject: [Buildroot] [git commit] php: security bump version to 7.0.7
+Message-ID: <20160601161312.E0129802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6cedca2ec69f40668725018d36f017a1e52c39ed
+commit: https://git.buildroot.net/buildroot/commit/?id=b9a0903cfeec867b80bd646903af3f149eeefc4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes CVE-2013-7456 https://bugs.php.net/bug.php?id=72227
+Fixes CVE-2016-5093 https://bugs.php.net/bug.php?id=72241
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wayland/wayland.hash | 4 ++--
- package/wayland/wayland.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
-index c9d0721..be1b6b5 100644
---- a/package/wayland/wayland.hash
-+++ b/package/wayland/wayland.hash
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 4bc0263..ace5281 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-February/027038.html
--sha256  4bf6e790aa6f50ab3825676282ecd75850ec9c4767af96ecb7127b1f3c3d60dc	wayland-1.10.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-June/029163.html
-+sha256  9540925f7928becfdf5e3b84c70757f6589bf1ceef09bea78784d8e4772c0db0	wayland-1.11.0.tar.xz
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index 215e70a..e219624 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
+ # From http://php.net/downloads.php
+-sha256 1b237a9455e5476a425dbb9d99966bad68107747c601958cb9558a7fb49ab419  php-7.0.6.tar.xz
++sha256 9cc64a7459242c79c10e79d74feaf5bae3541f604966ceb600c3d2e8f5fe4794  php-7.0.7.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index fbdb738..2997b1b 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAYLAND_VERSION = 1.10.0
-+WAYLAND_VERSION = 1.11.0
- WAYLAND_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
+-PHP_VERSION = 7.0.6
++PHP_VERSION = 7.0.7
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
