@@ -1,58 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 01 Jun 2016 16:13:10 -0000
-Subject: [Buildroot] [git commit] core/legal-info: install source archives
-	in their own sub-dir
-Message-ID: <20160601161307.05DA9802A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts: add helper to
+	hardlink-or-copy
+Message-ID: <20160601161306.D10C47FAB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de2f89edd389e655fd705ea7c9d367878a6719ac
+commit: https://git.buildroot.net/buildroot/commit/?id=88bad8f462c31679106fe68b6c3b1bd4be68cc2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, we put all source archives side-by-side in the same
-directory.
+When preparing the legal-info, the source archives are copied in the
+legal-info/ output directory. When the archives are big, it can take
+quite a bit of time and unnecessarily uses disk space. When the
+legal-info output directory is on the same filesystem as the BR2_DL_DIR,
+we can easily reduce copy time and disk usage by just using hardlins
+instead of copying. However, the BR2_DL_DIR may be on a different
+filesystem, so we must fallback to copying in this case
 
-Since we're about to also save individual patches that were applied
-on those sources, we don't want to make that directory a complete
-mess of unassorted files.
+Introduce a helper script that copies a source file into a destination
+directory, by first attempting to hard-link, and falling back to a
+plain copy in case the hardlink fails.
 
-So, we install each source archive in its own sub-directory, where
-we'll later store the patches too. Store that location in a variable,
-so it can be re-used later on (to install patches in a future commit).
+In case the destination already exists, it is forcibly removed first, to
+avoid clobering any existing target file (and especially any hardlink to
+it), since cp -f does not remove the destination file, but clobbers it.
+
+In some situations, it will be necessary that the destination file is
+named differently than the source, so if a third argument is specified,
+it is treated as the basename of the destination file.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ support/scripts/hardlink-or-copy | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 688123c..b031879 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -482,6 +482,8 @@ endif
- 
- $(2)_REDISTRIBUTE		?= YES
- 
-+$(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAW_BASE_NAME)
+diff --git a/support/scripts/hardlink-or-copy b/support/scripts/hardlink-or-copy
+new file mode 100755
+index 0000000..b046bdf
+--- /dev/null
++++ b/support/scripts/hardlink-or-copy
+@@ -0,0 +1,35 @@
++#!/bin/bash
 +
- # When a target package is a toolchain dependency set this variable to
- # 'NO' so the 'toolchain' dependency is not added to prevent a circular
- # dependency
-@@ -807,7 +809,7 @@ endif
- # Save the source tarball
- 	$$(Q)support/scripts/hardlink-or-copy \
- 		$$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) \
--		$$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
-+		$$($(2)_REDIST_SOURCES_DIR)
- endif # redistribute
- 
- endif # other packages
++# Try to hardlink a file into a directory, fallback to copy on failure.
++#
++# Hardlink-or-copy the source file in the first argument into the
++# destination directory in the second argument, using the basename in
++# the third argument as basename for the destination file. If the third
++# argument is missing, use the basename of the source file as basename
++# for the destination file.
++#
++# In either case, remove the destination prior to doing the
++# hardlink-or-copy.
++#
++# Note that this is NOT an atomic operation.
++
++set -e
++
++main() {
++    local src_file="${1}"
++    local dst_dir="${2}"
++    local dst_file="${3}"
++
++    if [ -n "${dst_file}" ]; then
++        dst_file="${dst_dir}/${dst_file}"
++    else
++        dst_file="${dst_dir}/${src_file##*/}"
++    fi
++
++    mkdir -p "${dst_dir}"
++    rm -f "${dst_file}"
++    ln -f "${src_file}" "${dst_file}" 2>/dev/null \
++    || cp -f "${src_file}" "${dst_file}"
++}
++
++main "${@}"
