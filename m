@@ -1,82 +1,109 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 01 Jun 2016 16:13:09 -0000
-Subject: [Buildroot] [git commit] python-flask-jsonrpc: new package
-Message-ID: <20160601161307.58CBC802A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libinput: remove unneeded patch
+Message-ID: <20160601161307.3F06B802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7823ae38ec652ef240c6af9ecfd53cea77db89c
+commit: https://git.buildroot.net/buildroot/commit/?id=243647059e25d40a81523f4e409fa8b04545bfa9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Thomas:
- - make python-flask a runtime dependency only, as noticed by Yegor
-   Yefremov.
- - use setup.py as the license file.]
+The log_msg symbol conflict was fixed in libevdev commit e4c315fc1603 (Rename
+symbols leaking from static library to avoid name clashes, 2014-08-18) that
+was included in version 1.3 of libevdev. Remove the patch that used to fix the
+issue of log_msg symbol conflict with libevedev, which is a direct dependency
+of libinput.
+
+Cc: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                      |  1 +
- package/python-flask-jsonrpc/Config.in                 |  8 ++++++++
- package/python-flask-jsonrpc/python-flask-jsonrpc.hash |  3 +++
- package/python-flask-jsonrpc/python-flask-jsonrpc.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
+ .../0001-rename-log_msg-to-libinput_log_msg.patch  | 77 ----------------------
+ 1 file changed, 77 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9d668bf..804df8b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -658,6 +658,7 @@ menu "External python modules"
- 	source "package/python-enum/Config.in"
- 	source "package/python-enum34/Config.in"
- 	source "package/python-flask/Config.in"
-+	source "package/python-flask-jsonrpc/Config.in"
- 	source "package/python-flup/Config.in"
- 	source "package/python-gobject/Config.in"
- 	source "package/python-html5lib/Config.in"
-diff --git a/package/python-flask-jsonrpc/Config.in b/package/python-flask-jsonrpc/Config.in
-new file mode 100644
-index 0000000..c8ecd85
---- /dev/null
-+++ b/package/python-flask-jsonrpc/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_FLASK_JSONRPC
-+	bool "python-flask-jsonrpc"
-+	# runtime dependency
-+	select BR2_PACKAGE_PYTHON_FLASK
-+	help
-+	  A basic JSON-RPC implementation for your Flask-powered sites.
-+
-+	  https://github.com/cenobites/flask-jsonrpc
-diff --git a/package/python-flask-jsonrpc/python-flask-jsonrpc.hash b/package/python-flask-jsonrpc/python-flask-jsonrpc.hash
-new file mode 100644
-index 0000000..8b91af7
---- /dev/null
-+++ b/package/python-flask-jsonrpc/python-flask-jsonrpc.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/Flask-JSONRPC/0.3, sha256 locally computed:
-+md5    a5beca4c3a882315f9b81acb57e83c68                                 Flask-JSONRPC-0.3.tar.gz
-+sha256 5baf70bf9cf955e95c02316982026a122b89a5f4c78c5b26f9f476abdb3e13bc Flask-JSONRPC-0.3.tar.gz
-diff --git a/package/python-flask-jsonrpc/python-flask-jsonrpc.mk b/package/python-flask-jsonrpc/python-flask-jsonrpc.mk
-new file mode 100644
-index 0000000..624322e
---- /dev/null
-+++ b/package/python-flask-jsonrpc/python-flask-jsonrpc.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-flask-jsonrpc
-+#
-+################################################################################
-+
-+PYTHON_FLASK_JSONRPC_VERSION = 0.3
-+PYTHON_FLASK_JSONRPC_SOURCE = Flask-JSONRPC-$(PYTHON_FLASK_JSONRPC_VERSION).tar.gz
-+PYTHON_FLASK_JSONRPC_SITE = http://pypi.python.org/packages/source/F/Flask-JSONRPC
-+PYTHON_FLASK_JSONRPC_LICENSE = BSD-3c
-+PYTHON_FLASK_JSONRPC_LICENSE_FILES = setup.py
-+PYTHON_FLASK_JSONRPC_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+diff --git a/package/libinput/0001-rename-log_msg-to-libinput_log_msg.patch b/package/libinput/0001-rename-log_msg-to-libinput_log_msg.patch
+deleted file mode 100644
+index e36862a..0000000
+--- a/package/libinput/0001-rename-log_msg-to-libinput_log_msg.patch
++++ /dev/null
+@@ -1,77 +0,0 @@
+-From bf4a4a4e2b0479322fe16c9e1f15f146daa893ee Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Thu, 21 Aug 2014 18:18:16 +0200
+-Subject: [PATCH] rename log_msg to libinput_log_msg
+-
+-This fixes a conflict between libevdev and libinput on the definition
+-of the log_msg() symbol.
+-
+-http://autobuild.buildroot.net/results/c13/c133b7c706ee31302125df8ca94f4d0f0152c6c6/build-end.log
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+-[yann.morin.1998 at free.fr: rebase on-top of 0.6.0]
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-[ps.report at gmx.net: rebase on top of 0.7.0]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- src/libinput-private.h | 14 +++++++-------
+- src/libinput.c         |  2 +-
+- 2 files changed, 8 insertions(+), 8 deletions(-)
+-
+-diff --git a/src/libinput-private.h b/src/libinput-private.h
+-index b36dc95..98f91b3 100644
+---- a/src/libinput-private.h
+-+++ b/src/libinput-private.h
+-@@ -259,12 +259,12 @@
+- 
+- typedef void (*libinput_source_dispatch_t)(void *data);
+- 
+--#define log_debug(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_DEBUG, __VA_ARGS__)
+--#define log_info(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_INFO, __VA_ARGS__)
+--#define log_error(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, __VA_ARGS__)
+--#define log_bug_kernel(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "kernel bug: " __VA_ARGS__)
+--#define log_bug_libinput(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "libinput bug: " __VA_ARGS__)
+--#define log_bug_client(li_, ...) log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "client bug: " __VA_ARGS__)
+-+#define log_debug(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_DEBUG, __VA_ARGS__)
+-+#define log_info(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_INFO, __VA_ARGS__)
+-+#define log_error(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, __VA_ARGS__)
+-+#define log_bug_kernel(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "kernel bug: " __VA_ARGS__)
+-+#define log_bug_libinput(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "libinput bug: " __VA_ARGS__)
+-+#define log_bug_client(li_, ...) libinput_log_msg((li_), LIBINPUT_LOG_PRIORITY_ERROR, "client bug: " __VA_ARGS__)
+- 
+- #define log_debug_ratelimit(li_, r_, ...) log_msg_ratelimit((li_), (r_), LIBINPUT_LOG_PRIORITY_DEBUG, __VA_ARGS__)
+- #define log_info_ratelimit(li_, r_, ...) log_msg_ratelimit((li_), (r_), LIBINPUT_LOG_PRIORITY_INFO, __VA_ARGS__)
+-@@ -281,7 +281,7 @@
+- 	LIBINPUT_ATTRIBUTE_PRINTF(4, 5);
+- 
+- void
+--log_msg(struct libinput *libinput,
+-+libinput_log_msg(struct libinput *libinput,
+- 	enum libinput_log_priority priority,
+- 	const char *format, ...)
+- 	LIBINPUT_ATTRIBUTE_PRINTF(3, 4);
+-diff --git a/src/libinput.c b/src/libinput.c
+-index 279cce0..5748e5e 100644
+---- a/src/libinput.c
+-+++ b/src/libinput.c
+-@@ -155,7 +155,7 @@
+- }
+- 
+- void
+--log_msg(struct libinput *libinput,
+-+libinput_log_msg(struct libinput *libinput,
+- 	enum libinput_log_priority priority,
+- 	const char *format, ...)
+- {
+-@@ -184,7 +184,7 @@
+- 	va_end(args);
+- 
+- 	if (state == RATELIMIT_THRESHOLD)
+--		log_msg(libinput,
+-+		libinput_log_msg(libinput,
+- 			priority,
+- 			"WARNING: log rate limit exceeded (%d msgs per %dms). Discarding future messages.\n",
+- 			ratelimit->burst,
+--- 
+-2.1.2
+-
