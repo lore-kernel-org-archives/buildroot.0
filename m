@@ -1,31 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Jun 2016 17:09:04 +0200
-Subject: [Buildroot] [PATCH next] php: security bump version to 7.0.7
-In-Reply-To: <1464776496-55262-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1464776496-55262-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160601170904.1cc8a8a1@free-electrons.com>
+Date: Wed, 1 Jun 2016 17:10:01 +0200
+Subject: [Buildroot] [git commit branch/next] wayland-protocols: bump to
+	version 1.4
+Message-ID: <20160601151009.DF98581F70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=07fadf15b1eba8154d0fc53b7bae6b683c51322c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 1 Jun 2016 11:21:36 +0100, Vicente Olivert Riera wrote:
-> Fixes CVE-2013-7456 https://bugs.php.net/bug.php?id=72227
-> Fixes CVE-2016-5093 https://bugs.php.net/bug.php?id=72241
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/php/php.hash | 2 +-
->  package/php/php.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wayland-protocols/wayland-protocols.hash | 4 ++--
+ package/wayland-protocols/wayland-protocols.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index f2d5b7f..380581b 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2015-November/025759.html
+-sha256	a538a8e3f999f2722897eb60aa2e2b53d879381b413b630957d58a9acd226def	wayland-protocols-1.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2016-May/029014.html
++sha256	014a9a23c21ed14f49b1005b3e8efa66d6337d4ceafc97f7b0d6707e7e3df572	wayland-protocols-1.4.tar.xz
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index bb6d52f..51ee9ee 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAYLAND_PROTOCOLS_VERSION = 1.0
++WAYLAND_PROTOCOLS_VERSION = 1.4
+ WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
