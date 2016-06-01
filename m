@@ -1,32 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Jun 2016 16:49:26 +0200
-Subject: [Buildroot] [PATCH] linux: provide symlink dtc->linux-dtc is
- there is no dtc yet
-In-Reply-To: <f7954a6a-7dbf-847c-0512-48701527a91a@mind.be>
-References: <1452252619-13802-1-git-send-email-patrickdepinguin@gmail.com>
- <20160531225015.0f2039e5@free-electrons.com>
- <f7954a6a-7dbf-847c-0512-48701527a91a@mind.be>
-Message-ID: <20160601164926.4a8db42f@free-electrons.com>
+Date: Wed, 1 Jun 2016 16:53:25 +0200
+Subject: [Buildroot] [git commit branch/next] uboot-tools: use
+	$(TARGET_STRIP) for target utilities
+Message-ID: <20160601150556.3CC5981979@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6fcbb93180595d41be91433902063a73ad82b56e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Wed, 1 Jun 2016 16:41:51 +0200, Arnout Vandecappelle wrote:
+Otherwise BR2_STRIP_xxxx setup is ignored and they are always stripped.
 
->  I could be wrong, but don't we have situations where we really need linux-dtc
-> and not host-dtc because linux-dtc is patched for e.g. DT overlays?
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uboot-tools/uboot-tools.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-linux-dtc is not patched for DT overlays. You need to use patched DTC
-versions, which are available on numerous random Github repositories,
-but neither the DTC in the Linux kernel tree nor in its official
-upstream Git repository are overlay capable.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 987e89b..a6aadeb 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -21,6 +21,7 @@ define UBOOT_TOOLS_BUILD_CMDS
+ 		CROSS_COMPILE="$(TARGET_CROSS)"	\
+ 		CFLAGS="$(TARGET_CFLAGS)"	\
+ 		LDFLAGS="$(TARGET_LDFLAGS)"	\
++		STRIP=$(TARGET_STRIP)		\
+ 		CROSS_BUILD_TOOLS=y		\
+ 		CONFIG_FIT_SIGNATURE=$(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT) \
+ 		tools-only
+@@ -28,6 +29,7 @@ define UBOOT_TOOLS_BUILD_CMDS
+ 		CROSS_COMPILE="$(TARGET_CROSS)"	\
+ 		CFLAGS="$(TARGET_CFLAGS)"	\
+ 		LDFLAGS="$(TARGET_LDFLAGS)"	\
++		STRIP=$(TARGET_STRIP)		\
+ 		env no-dot-config-targets=env
+ endef
+ 
