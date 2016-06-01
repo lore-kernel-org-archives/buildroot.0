@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Jun 2016 13:52:05 +0200
-Subject: [Buildroot] [PATCH] odroid_xu4: new board
-In-Reply-To: <20160601130317.5150dfe4@pcviktorin.fit.vutbr.cz>
-References: <1446836886-27256-1-git-send-email-viktorin@rehivetech.com>
- <20160531223059.34d2c127@free-electrons.com>
- <20160601130317.5150dfe4@pcviktorin.fit.vutbr.cz>
-Message-ID: <20160601135205.7bd9661a@free-electrons.com>
+Date: Wed, 1 Jun 2016 14:16:55 +0200
+Subject: [Buildroot] [PATCH 1/3] libamcodec: new Package
+In-Reply-To: <20160601102720.3929-1-daggs@gmx.com>
+References: <20160601102720.3929-1-daggs@gmx.com>
+Message-ID: <20160601141655.5649aa21@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,70 +12,104 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 1 Jun 2016 13:03:17 +0200, Jan Viktorin wrote:
+Thanks for your contributions! It generally looks good, but I have a
+few comments, see below.
 
-> > Sorry for the late review.   
-> 
-> Half a year, cool :). Never mind, I am pretty sure there are many other
-> things to do around Buildroot...
+On Wed,  1 Jun 2016 13:27:18 +0300, Dagg wrote:
+> Signed-off-by: Dagg <daggs@gmx.com>
 
-Well, you can see by yourself the list of pending patches at
-http://patchwork.ozlabs.org/project/buildroot/list/. The best thing you
-can do to get your patches integrated is to help review and test the
-patches from others.
+Would it be possible to use your complete name for your contributions?
 
-> Do you mean https://github.com/ioft/linux.git? It doesn't boot for me. I spent
-> about 2 days just on this (about 2 weeks ago). No idea why...
+> diff --git a/package/Config.in b/package/Config.in
+> index 6c6a562..0a56070 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1074,6 +1074,7 @@ endmenu
+>  
+>  menu "Multimedia"
+>  	source "package/bitstream/Config.in"
+> +	source "package/libamcodec/Config.in"
+>  	source "package/libass/Config.in"
+>  	source "package/libbluray/Config.in"
+>  	source "package/libdcadec/Config.in"
+> diff --git a/package/libamcodec/Config.in b/package/libamcodec/Config.in
+> new file mode 100644
+> index 0000000..bb2d924
+> --- /dev/null
+> +++ b/package/libamcodec/Config.in
+> @@ -0,0 +1,5 @@
+> +config BR2_PACKAGE_LIBAMCODEC
+> +	bool "libamcodec"
+> +	depends on BR2_arm || BR2_aarch64
+> +	help
+> +	    Interface library for Amlogic media codecs
 
-No, I'm talking about
-https://github.com/tobetter/linux/tree/odroidxu4-v4.6. It is the same
-Github repository as the one you're using, just a different branch.
+Please add an empty line here, followed by the URL of the upstrealm
+project. It can be just a link to the homepage of the Github project.
 
-> If there is somebody with a successful setup of v4.6, I'd be happy to see what
-> I did wrong.
+> diff --git a/package/libamcodec/libamcodec.mk b/package/libamcodec/libamcodec.mk
+> new file mode 100644
+> index 0000000..e983192
+> --- /dev/null
+> +++ b/package/libamcodec/libamcodec.mk
+> @@ -0,0 +1,33 @@
+> +################################################################################
+> +#
+> +# libamcodec
+> +#
+> +################################################################################
+> +
+> +LIBAMCODEC_VERSION = ed1d8b8c54b05c1a02a8ee44c59744e4cbed3d8d
+> +LIBAMCODEC_SITE = https://github.com/mdrjr/c2_aml_libs.git
+> +LIBAMCODEC_SITE_METHOD = git
 
-If 4.6 doesn't work for you, I'm fine with a defconfig using 4.2 for
-now. Using 4.6 is definitely not a requirement.
+Please use the "github" function available in Buildroot. See the
+documentation and the numerous other examples in Buildroot (you can
+grep for "call,github").
 
-> > Please use odroidxu4_defconfig from the upstream tree. It is not
-> > necessary to have a strictly minimal kernel configuration, we very much
-> > prefer using an upstream defconfig.  
-> 
-> Ok, I just didn't like the default configuration due to its size...
+Also, please add a hash file for this package.
 
-Right, but the advantage of using upstream's defconfig is that it will
-be updated with new options as needed, and also removes stuff from
-Buildroot.
+> +LIBAMCODEC_LICENSE = GPL
 
-> > > diff --git a/board/hardkernel/readme.txt b/board/hardkernel/readme.txt
-> > > new file mode 100644
-> > > index 0000000..d7a77db
-> > > --- /dev/null
-> > > +++ b/board/hardkernel/readme.txt
-> > > @@ -0,0 +1,49 @@
-> > > +Odroid XU4
-> > > +==========
-> > > +
-> > > +http://www.hardkernel.com/main/products/prdt_info.php?g_code=G143452239825  
-> 
-> This duplication is probably a mistake...
+This should be more specific: GPLv2, GPLv2+, GPLv3, GPLv3+.
 
-Yeah, but no big deal. That's the type of minor issue I can fix when
-applying.
+Also, please add a value for <pkg>_LICENSE_FILES.
 
-> > Please use the genimage mechanism to directly generate a bootable SD
-> > card. Look at the other boards supported in Buildroot, many of them are
-> > using genimage.  
-> 
-> Ok, sorry, I have no clue how genimage works and what does it do...
-> I'll try to rework this.
+> +
+> +define LIBAMCODEC_BUILD_CMDS
+> +	$(MAKE) -C $(@D)/amavutils CC="$(TARGET_CC)" LD="$(TARGET_LD)" PREFIX="$(STAGING_DIR)/usr"
+> +	$(MAKE) -C $(@D)/amadec CC="$(TARGET_CC)" LD="$(TARGET_LD)" PREFIX="$(STAGING_DIR)/usr"
+> + 	$(MAKE) -C $(@D)/amcodec CC="$(TARGET_CC)" LD="$(TARGET_LD)" PREFIX="$(STAGING_DIR)/usr"
 
-It allows to generate a complete hard disk or SD card image, with
-multiple partitions in it. Check for example
-board/raspberrypi/genimage-raspberrypi0.cfg and the post-image
-script board/raspberrypi/post-image.sh.
+Can you use $(TARGET_CONFIGURE_OPTS) instead of CC=... LD=... ?
 
-Thanks a lot!
+PREFIX=$(STAGING_DIR)/usr is not correct, it should be PREFIX=/usr,
+because once on the target, things will be in /usr.
+
+Also, why is the PREFIX needed at build time?
+
+> +endef
+> +
+> +define LIBAMCODEC_INSTALL_STAGING_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/amavutils/libamavutils.so $(STAGING_DIR)/usr/lib
+> +	$(INSTALL) -D -m 0555 $(@D)/amadec/libamadec.so $(STAGING_DIR)/usr/lib
+> +	$(INSTALL) -D -m 0555 $(@D)/amcodec/libamcodec.so $(STAGING_DIR)/usr/lib
+> +
+> +	mkdir -p $(STAGING_DIR)/usr/include/amcodec
+> +	cp -rf $(@D)/amcodec/include/* $(STAGING_DIR)/usr/include/amcodec
+> +endef
+> +
+> +define LIBAMCODEC_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/amavutils/libamavutils.so $(TARGET_DIR)/usr/lib
+> +	$(INSTALL) -D -m 0555 $(@D)/amadec/libamadec.so $(TARGET_DIR)/usr/lib
+> +	$(INSTALL) -D -m 0555 $(@D)/amcodec/libamcodec.so $(TARGET_DIR)/usr/lib
+> +endef
+> +									    
+> +$(eval $(generic-package))
+
+Other than that, looks good.
+
+Thanks!
 
 Thomas
 -- 
