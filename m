@@ -1,45 +1,33 @@
-From: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
-Date: Wed,  1 Jun 2016 15:58:35 +0900
-Subject: [Buildroot] [PATCH 1/1] mesa3d: don't remove OpenGL pc when
-	installing Gallium
-Message-ID: <20160601065835.9754-1-akihiko.odaki.4i@stu.hosei.ac.jp>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 1 Jun 2016 09:23:56 +0200
+Subject: [Buildroot] [git commit] docs/website/news.html: add 2016.05
+	announcement link
+Message-ID: <20160601072432.A302E800D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gallium driver also provides DRI-like infrastructure and OpenGL.
-This change prevents from removing pkg-configs of them also when
-installing the driver.
+commit: https://git.buildroot.net/buildroot/commit/?id=e4d1d186677d442e6d86cd698d9fcaf13ed880b8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d/mesa3d.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ docs/website/news.html | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 4e0d255..9968541 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -94,7 +94,6 @@ endef
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
- MESA3D_CONF_OPTS += \
- 	--without-dri-drivers --disable-dri3
--MESA3D_POST_INSTALL_STAGING_HOOKS += MESA3D_REMOVE_OPENGL_PC
- else
- ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
- MESA3D_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto xproto_presentproto
-@@ -115,6 +114,10 @@ MESA3D_CONF_OPTS += \
- 	--with-dri-drivers=$(subst $(space),$(comma),$(MESA3D_DRI_DRIVERS-y))
- endif
- 
-+ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
-+MESA3D_POST_INSTALL_STAGING_HOOKS += MESA3D_REMOVE_OPENGL_PC
-+endif
-+
- # APIs
- 
- ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
--- 
-2.8.3
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 6bab9aa..bfc1a39 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -20,7 +20,8 @@
+ 	<p>The stable 2016.05 release is out - Thanks to everyone
+ 	  contributing and testing the release candidates. See the
+ 	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2016.05">CHANGES</a>
+-	  file for more details
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2016-May/162428.html">announcement<a>
+ 	  and go to the <a href="/downloads/">downloads page</a> to pick up the
+ 	  <a href="/downloads/buildroot-2016.05.tar.bz2">2016.05 release</a>.</p>
+       </div>
