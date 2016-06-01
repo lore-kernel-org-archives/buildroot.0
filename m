@@ -1,52 +1,82 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 01 Jun 2016 16:13:09 -0000
-Subject: [Buildroot] [git commit] python-setproctitle: bump to version 1.1.10
-Message-ID: <20160601161307.124EA802A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-flask-jsonrpc: new package
+Message-ID: <20160601161307.58CBC802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a669d683b37e7bcc23a82b5ef71d31511d752c0
+commit: https://git.buildroot.net/buildroot/commit/?id=e7823ae38ec652ef240c6af9ecfd53cea77db89c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Change download location.
-
-Fixes:
-http://autobuild.buildroot.net/results/dac/dac6e291dae9f42d71f1e9de6cf0362d613b2d5a
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Thomas:
+ - make python-flask a runtime dependency only, as noticed by Yegor
+   Yefremov.
+ - use setup.py as the license file.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-setproctitle/python-setproctitle.hash | 6 +++---
- package/python-setproctitle/python-setproctitle.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/Config.in                                      |  1 +
+ package/python-flask-jsonrpc/Config.in                 |  8 ++++++++
+ package/python-flask-jsonrpc/python-flask-jsonrpc.hash |  3 +++
+ package/python-flask-jsonrpc/python-flask-jsonrpc.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
 
-diff --git a/package/python-setproctitle/python-setproctitle.hash b/package/python-setproctitle/python-setproctitle.hash
-index 3b0fd71..bf4d960 100644
---- a/package/python-setproctitle/python-setproctitle.hash
-+++ b/package/python-setproctitle/python-setproctitle.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=95d9e56c69437246460a20804961d70d, sha256 locally computed.
--md5	95d9e56c69437246460a20804961d70d  setproctitle-1.1.9.tar.gz
--sha256	1c3414d18f9cacdab78b0ffd8e886d56ad45f22e55001a72aaa0b2aeb56a0ad7  setproctitle-1.1.9.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=2dcdd1b761700a5a13252fea3dfd1977, sha256 locally computed.
-+md5	2dcdd1b761700a5a13252fea3dfd1977  setproctitle-1.1.10.tar.gz
-+sha256	6283b7a58477dd8478fbb9e76defb37968ee4ba47b05ec1c053cb39638bd7398  setproctitle-1.1.10.tar.gz
-diff --git a/package/python-setproctitle/python-setproctitle.mk b/package/python-setproctitle/python-setproctitle.mk
-index 63dfad0..36cfec3 100644
---- a/package/python-setproctitle/python-setproctitle.mk
-+++ b/package/python-setproctitle/python-setproctitle.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SETPROCTITLE_VERSION = 1.1.9
-+PYTHON_SETPROCTITLE_VERSION = 1.1.10
- PYTHON_SETPROCTITLE_SOURCE = setproctitle-$(PYTHON_SETPROCTITLE_VERSION).tar.gz
--PYTHON_SETPROCTITLE_SITE = http://pypi.python.org/packages/source/s/setproctitle
-+PYTHON_SETPROCTITLE_SITE = https://pypi.python.org/packages/5a/0d/dc0d2234aacba6cf1a729964383e3452c52096dc695581248b548786f2b3
- PYTHON_SETPROCTITLE_LICENSE = BSD-3c
- PYTHON_SETPROCTITLE_LICENSE_FILES = COPYRIGHT
- PYTHON_SETPROCTITLE_SETUP_TYPE = distutils
+diff --git a/package/Config.in b/package/Config.in
+index 9d668bf..804df8b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -658,6 +658,7 @@ menu "External python modules"
+ 	source "package/python-enum/Config.in"
+ 	source "package/python-enum34/Config.in"
+ 	source "package/python-flask/Config.in"
++	source "package/python-flask-jsonrpc/Config.in"
+ 	source "package/python-flup/Config.in"
+ 	source "package/python-gobject/Config.in"
+ 	source "package/python-html5lib/Config.in"
+diff --git a/package/python-flask-jsonrpc/Config.in b/package/python-flask-jsonrpc/Config.in
+new file mode 100644
+index 0000000..c8ecd85
+--- /dev/null
++++ b/package/python-flask-jsonrpc/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_FLASK_JSONRPC
++	bool "python-flask-jsonrpc"
++	# runtime dependency
++	select BR2_PACKAGE_PYTHON_FLASK
++	help
++	  A basic JSON-RPC implementation for your Flask-powered sites.
++
++	  https://github.com/cenobites/flask-jsonrpc
+diff --git a/package/python-flask-jsonrpc/python-flask-jsonrpc.hash b/package/python-flask-jsonrpc/python-flask-jsonrpc.hash
+new file mode 100644
+index 0000000..8b91af7
+--- /dev/null
++++ b/package/python-flask-jsonrpc/python-flask-jsonrpc.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/Flask-JSONRPC/0.3, sha256 locally computed:
++md5    a5beca4c3a882315f9b81acb57e83c68                                 Flask-JSONRPC-0.3.tar.gz
++sha256 5baf70bf9cf955e95c02316982026a122b89a5f4c78c5b26f9f476abdb3e13bc Flask-JSONRPC-0.3.tar.gz
+diff --git a/package/python-flask-jsonrpc/python-flask-jsonrpc.mk b/package/python-flask-jsonrpc/python-flask-jsonrpc.mk
+new file mode 100644
+index 0000000..624322e
+--- /dev/null
++++ b/package/python-flask-jsonrpc/python-flask-jsonrpc.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-flask-jsonrpc
++#
++################################################################################
++
++PYTHON_FLASK_JSONRPC_VERSION = 0.3
++PYTHON_FLASK_JSONRPC_SOURCE = Flask-JSONRPC-$(PYTHON_FLASK_JSONRPC_VERSION).tar.gz
++PYTHON_FLASK_JSONRPC_SITE = http://pypi.python.org/packages/source/F/Flask-JSONRPC
++PYTHON_FLASK_JSONRPC_LICENSE = BSD-3c
++PYTHON_FLASK_JSONRPC_LICENSE_FILES = setup.py
++PYTHON_FLASK_JSONRPC_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
