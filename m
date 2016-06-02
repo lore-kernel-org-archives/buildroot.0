@@ -1,31 +1,44 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Thu, 2 Jun 2016 21:36:51 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-06-01
-In-Reply-To: <20160602063020.63CAE102A7B@stock.ovh.net>
-References: <20160602063020.63CAE102A7B@stock.ovh.net>
-Message-ID: <CAMo8BfJTrGzcWXMjjhEcc3abUUArDs8nej0qnHH0aA8nyOnaBg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 02 Jun 2016 21:47:19 +0200
+Subject: [Buildroot] Tossing coins on Beaglebone Black kernel version
+In-Reply-To: <CAAEAJfAnjZzOo2hZG4h=-_2mpZmqb3BUf=fkNLc08zdR9ePVWA@mail.gmail.com>
+ (Ezequiel Garcia's message of "Thu, 2 Jun 2016 12:54:26 -0300")
+References: <CAAEAJfAnjZzOo2hZG4h=-_2mpZmqb3BUf=fkNLc08zdR9ePVWA@mail.gmail.com>
+Message-ID: <87wpm7s794.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
 
-On Thu, Jun 2, 2016 at 9:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->     mips64el |                       make-4.2 | NOK | http://autobuild.buildroot.net/results/133cdeaa0644405568c3e8fc003d73c4570fbc82/
->      powerpc |                       make-4.2 | NOK | http://autobuild.buildroot.net/results/e162f46458f4948c75550d47710bee92f1602273/
->          arm |                       make-4.2 | NOK | http://autobuild.buildroot.net/results/7ca74c9ea36321e1940ee2707af5745b7d4498d2/
+ > As mentioned on IRC, beaglebone_defconfig U-Boot build is currently broken.
+ > I don't think the error matters much, given the selected U-Boot version
+ > is really old.
 
-> ERROR: make-4.2.tar.bz2 has wrong sha1 hash:
-> ERROR: expected: 85ad14d08766201ffe71efa866f4fb91
-> ERROR: got     : d78b84a219b4c16593544f541dff7eb765ce3d74
+Yeah, our beaglebone defconfig could really use some love. It looks like
+I will be getting a beaglebone green wireless so I was planning on
+looking into it as well, but thanks for working on it!
 
-85ad14d08766201ffe71efa866f4fb91 is MD5, not SHA1.
-Should be fixed by https://patchwork.ozlabs.org/patch/629406/
+ > We are currently using git://git.ti.com/ti-linux-kernel/ti-linux-kernel.git
+ > while TI kernel release [1] notes are pointing at
+ > git://git.ti.com/processor-sdk/processor-sdk-linux.git.
+
+ > Now, I'm not all that sure which kernel we want to use by default and that's
+ > why I'm asking here, to hear what the rest thinks.
+
+What are the beaglebone people using for their official images? Can't we
+use the same?
+
+
+ > FWIW, I commercially support a AM335x product and we've switched to
+ > linux mainline,
+ > long, long time ago, because the SDK was incredibly crappy at that time.
+
+Yeah, that would be my choice as well for a product. For getting started
+on a beaglebone I'm less sure as mainline doesn't have any support for
+the various capes.
 
 -- 
-Thanks.
--- Max
+Bye, Peter Korsgaard
