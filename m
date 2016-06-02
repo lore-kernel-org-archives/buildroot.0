@@ -1,59 +1,68 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Thu, 2 Jun 2016 17:49:32 -0300
-Subject: [Buildroot] Tossing coins on Beaglebone Black kernel version
-In-Reply-To: <87wpm7s794.fsf@dell.be.48ers.dk>
-References: <CAAEAJfAnjZzOo2hZG4h=-_2mpZmqb3BUf=fkNLc08zdR9ePVWA@mail.gmail.com>
- <87wpm7s794.fsf@dell.be.48ers.dk>
-Message-ID: <CAAEAJfARN6f0p-yh9TmEju8+FckF1cBgDg2z00Vho4dMTWjXnQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 2 Jun 2016 22:59:48 +0200
+Subject: [Buildroot] [PATCH] package/make: fix hash type (md5 instead of
+ sha1)
+In-Reply-To: <1464892503-32325-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1464892503-32325-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20160602205948.GA3714@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2 June 2016 at 16:47, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
->
->  > As mentioned on IRC, beaglebone_defconfig U-Boot build is currently broken.
->  > I don't think the error matters much, given the selected U-Boot version
->  > is really old.
->
-> Yeah, our beaglebone defconfig could really use some love. It looks like
-> I will be getting a beaglebone green wireless so I was planning on
-> looking into it as well, but thanks for working on it!
->
+Max, All,
 
-No problem. I wanted to submit the fix for the bootloader for now,
-but the git full clone stalled for ages here and drove me mad.
+On 2016-06-02 21:35 +0300, Max Filippov spake thusly:
+> Fixes:
+>   http://autobuild.buildroot.net/results/133cdeaa0644405568c3e8fc003d73c4570fbc82/
+>   http://autobuild.buildroot.net/results/e162f46458f4948c75550d47710bee92f1602273/
+>   http://autobuild.buildroot.net/results/7ca74c9ea36321e1940ee2707af5745b7d4498d2/
+> 
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+>  package/make/make.hash | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/make/make.hash b/package/make/make.hash
+> index 528822f..81f7044 100644
+> --- a/package/make/make.hash
+> +++ b/package/make/make.hash
+> @@ -1,4 +1,4 @@
+>  # From http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00013.html
+> -sha1 85ad14d08766201ffe71efa866f4fb91  make-4.2.tar.bz2
+> +md5 85ad14d08766201ffe71efa866f4fb91  make-4.2.tar.bz2
 
->  > We are currently using git://git.ti.com/ti-linux-kernel/ti-linux-kernel.git
->  > while TI kernel release [1] notes are pointing at
->  > git://git.ti.com/processor-sdk/processor-sdk-linux.git.
->
->  > Now, I'm not all that sure which kernel we want to use by default and that's
->  > why I'm asking here, to hear what the rest thinks.
->
-> What are the beaglebone people using for their official images? Can't we
-> use the same?
->
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-I believe they use this: https://github.com/beagleboard/linux.
-It's just a matter of finding what commit/branch/tag they use.
+Incidentally, we could probably check that the hash is properly formed
+according to its psecification before checking it...
 
-So it's yet another choice :-)
+Regards,
+Yann E. MORIN.
 
->
->  > FWIW, I commercially support a AM335x product and we've switched to
->  > linux mainline,
->  > long, long time ago, because the SDK was incredibly crappy at that time.
->
-> Yeah, that would be my choice as well for a product. For getting started
-> on a beaglebone I'm less sure as mainline doesn't have any support for
-> the various capes.
->
+>  # Locally calculated after checking signature
+>  sha256 4e5ce3b62fe5d75ff8db92b7f6df91e476d10c3aceebf1639796dc5bfece655f  make-4.2.tar.bz2
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-I'm not sure Buildroot would be the choice for a getting started beaglebone
-user, but yeah, it would make sense to support capes properly.
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160602/1b464e93/attachment.asc>
