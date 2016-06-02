@@ -1,76 +1,74 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu,  2 Jun 2016 16:05:30 +0200
-Subject: [Buildroot] [PATCH 5/5] python-flask: bump to version 0.11
-In-Reply-To: <1464876330-6890-1-git-send-email-yegorslists@googlemail.com>
-References: <1464876330-6890-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1464876330-6890-5-git-send-email-yegorslists@googlemail.com>
+From: daggs <daggs@gmx.com>
+Date: Thu, 2 Jun 2016 16:39:48 +0200
+Subject: [Buildroot] [PATCH v2] libamcodec: New Package
+In-Reply-To: <20160602092018.5bda1cf0@free-electrons.com>
+References: <20160601211607.31807-1-daggs@gmx.com>
+ <20160601233202.4b87a7d1@free-electrons.com>
+ <trinity-c4682c6f-5d4c-4b50-a55e-c13bce625378-1464844554036@3capp-mailcom-bs13>,
+ <20160602092018.5bda1cf0@free-electrons.com>
+Message-ID: <trinity-74a6aaf9-2569-4f66-ad89-8c795d3d1689-1464878388130@3capp-mailcom-bs05>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Greetings,
 
-Change download location and rework dependencies, i.e.
-select Python's zlib support and python-click package
-and remove unneeded build-time dependencies.
+> Hello,
+> 
+> On Thu, 2 Jun 2016 07:15:54 +0200, daggs wrote:
+> 
+> > > However, this also means that a number of other variables from your
+> > > package Makefile will be overridden, such as CFLAGS, CXXFLAGS, LDFLAGS,
+> > > etc. This sometimes causes some problems.  
+> > seems like I've encountered such an issue,
+> > using the format above resulted in missing includes error, e.g. local paths are not part of the flags.
+> > what is the proper way to fix it?
+> 
+> In the package Makefile, whenever there is:
+> 
+> CFLAGS = foo
+> LDFLAGS = foo
+> 
+> change it to:
+> 
+> override CFLAGS += foo
+> override LDFLAGS += foo
+thanks, it worked for amavutils and amadec.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-flask/Config.in         | 9 ++++++---
- package/python-flask/python-flask.hash | 6 +++---
- package/python-flask/python-flask.mk   | 5 ++---
- 3 files changed, 11 insertions(+), 9 deletions(-)
+the problem is with amcodec which doesn't seems to respect it.
+from what I can understand, the makefile do does this: include $(SRCTREE)/rules.mk
+and in rules.mk I see that it does this:  $(MAKE) -C ${1} -f ${SRCTREE}/depends.mk;\
+this seems to reverts the CFLAGS and LDFLAGS back to their default.
+have you encountered such issue before?
 
-diff --git a/package/python-flask/Config.in b/package/python-flask/Config.in
-index 4a955c4..763e9ce 100644
---- a/package/python-flask/Config.in
-+++ b/package/python-flask/Config.in
-@@ -1,8 +1,11 @@
- config BR2_PACKAGE_PYTHON_FLASK
- 	bool "python-flask"
--	select BR2_PACKAGE_PYTHON_WERKZEUG
--	select BR2_PACKAGE_PYTHON_JINJA2
--	select BR2_PACKAGE_PYTHON_ITSDANGEROUS
-+	select BR2_PACKAGE_PYTHON_CLICK # runtime
-+	select BR2_PACKAGE_PYTHON_JINJA2 # runtime
-+	select BR2_PACKAGE_PYTHON_WERKZEUG # runtime
-+	select BR2_PACKAGE_PYTHON_ITSDANGEROUS # runtime
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
- 	help
- 	  Flask is a microframework for Python based on Werkzeug,
- 	  Jinja 2 and good intentions.
-diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
-index 55d0a5c..1432c55 100644
---- a/package/python-flask/python-flask.hash
-+++ b/package/python-flask/python-flask.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=378670fe456957eb3c27ddaef60b2b24, sha256 locally computed
--md5	378670fe456957eb3c27ddaef60b2b24  Flask-0.10.1.tar.gz
--sha256	4c83829ff83d408b5e1d4995472265411d2c414112298f2eb4b359d9e4563373  Flask-0.10.1.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=89fbdcb04b7b96c5b24625ae299cf48b, sha256 locally computed
-+md5	89fbdcb04b7b96c5b24625ae299cf48b  Flask-0.11.tar.gz
-+sha256	29a7405a7f0de178232fe48cd9b2a2403083bf03bd34eabe12168863d4cdb493  Flask-0.11.tar.gz
-diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
-index 8aa675e..db4ba74 100644
---- a/package/python-flask/python-flask.mk
-+++ b/package/python-flask/python-flask.mk
-@@ -4,12 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_FLASK_VERSION = 0.10.1
-+PYTHON_FLASK_VERSION = 0.11
- PYTHON_FLASK_SOURCE = Flask-$(PYTHON_FLASK_VERSION).tar.gz
--PYTHON_FLASK_SITE = http://pypi.python.org/packages/source/F/Flask
-+PYTHON_FLASK_SITE = https://pypi.python.org/packages/dc/ca/c0ed9cc90c079085c698e284b672edbc1ffd6866b1830574095cbc5b7752
- PYTHON_FLASK_SETUP_TYPE = setuptools
- PYTHON_FLASK_LICENSE = BSD-3c
- PYTHON_FLASK_LICENSE_FILES = LICENSE
--PYTHON_FLASK_DEPENDENCIES = python-werkzeug python-jinja2 python-itsdangerous
- 
- $(eval $(python-package))
--- 
-2.8.1
+> 
+> > > > +	$(INSTALL) -D -m 0755 $(@D)/amavutils/libamavutils.so $(STAGING_DIR)/usr/lib
+> > > > +	$(INSTALL) -D -m 0555 $(@D)/amadec/libamadec.so $(STAGING_DIR)/usr/lib
+> > > > +	$(INSTALL) -D -m 0555 $(@D)/amcodec/libamcodec.so $(STAGING_DIR)/usr/lib  
+> > > 
+> > > Full destination path needed.
+> > >   
+> > not sure what you mean by Full destination path needed, can you elaborate please?
+> 
+>    $(STAGING_DIR)/usr/lib/libavmavutils.so
+> 
+> as opposed to
+> 
+>    $(STAGING_DIR)/usr/lib
+> 
+> as you're doing currently.
+> 
+> If you do:
+> 
+>    $(INSTALL) -D -m 0555 $(@D)/amcodec/libamcodec.so $(STAGING_DIR)/usr/lib
+> 
+> and $(STAGING_DIR)/usr/lib doesn't already exists as a directory, then
+> libamcodec.so will be copied as a file named "lib" under
+> $(STAGING_DIR)/usr.
+> 
+> Best regards,
+> 
+> Thomas
+done.
