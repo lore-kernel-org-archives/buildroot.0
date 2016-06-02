@@ -1,145 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 3 Jun 2016 00:05:21 +0200
-Subject: [Buildroot] [PATCH] RFC: adding customizable linux logo
-In-Reply-To: <20160601220300.5f38a5a2@free-electrons.com>
-References: <1454454342-27717-1-git-send-email-angelo.compagnucci@gmail.com>
- <20160601220300.5f38a5a2@free-electrons.com>
-Message-ID: <20160602220521.GB3714@free.fr>
+Date: Fri, 3 Jun 2016 00:20:58 +0200
+Subject: [Buildroot] [PATCH] Makefile: Fix overlay overwriting everything
+In-Reply-To: <1455119908-21976-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1455119908-21976-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20160602222058.GC3714@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo, Thomas, All,
+Maxime, All,
 
-On 2016-06-01 22:03 +0200, Thomas Petazzoni spake thusly:
-> Hello Angelo,
+On 2016-02-10 16:58 +0100, Maxime Hadjinlian spake thusly:
+> After bumping from a 2 years old Buildroot installation, I got the
+> following messages from the kernel at boot:
 > 
-> It's been a while since you sent this patch. I don't know if this
-> feature is important enough to be integrated, but I'll do some review
-> anyway.
+> Failed to execute /init (error -2)
 > 
-> On Wed,  3 Feb 2016 00:05:42 +0100, Angelo Compagnucci wrote:
+> It appears that the overlay mechanisms was causing my issues.
 > 
-> > diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-> > index 755c23b..b752c9c 100644
-> > --- a/linux/Config.ext.in
-> > +++ b/linux/Config.ext.in
-> > @@ -1,5 +1,13 @@
-> >  menu "Linux Kernel Extensions"
-> >  
-> > +# Custom logo
-> > +config BR2_LINUX_KERNEL_EXT_CUSTOMLOGO
-> > +	select BR2_PACKAGE_CUSTOMLOGO
+> Description:
+> The overlay mechanisms works by rsync'ing files from a folder specified
+> by the user into target.
+> Since c5bd8af65e50a51735eb112fed9cbe6337f14e06, /bin, /sbin and /lib are
+> symlinked into /usr.
 > 
-> I think this customlogo package is not needed.
-
-Agreed. Just make the logo path an option directly here:
-
-    config BR2_LINUX_KERNEL_EXT_CUSTOMLOGO
-        bool "Custom logo"
-
-    config BR2_LINUX_KERNEL_EXT_CUSTOMLOGO_DIR
-        bool "directory with logo file(s)"
-        help
-          Directory with all the logo files to copy. Logo files must be
-          named:
-            logo_linux_mono.pbm         for the B&W version
-            logo_linux_vga16.ppm        for the 16-color version
-            logo_linux_clut224.ppm      for the 224-color version
-
-And then, in the .mk file (see below)...
-
-> > +	bool "Custom logo"
-> > +	help
-> > +	  change linux boot logo with your own graphics. 
-> > +	  Can be used as an early bootsplash.
+> Problem:
+> If you have an overlay that contains the directory /bin, /sbin or /lib, rsync
+> will erase the symlink and create a directory in its place.
+> The directory, say .../target/lib, would *only* contains the overlay's content.
+> Obviously, this causes a lot of troubles, starting with the kernel
+> failing to start init (because of missing shared libraries).
 > 
-> This help text needs to be improved a bit.
-> 
-> > +
-> >  # Xenomai
-> >  config BR2_LINUX_KERNEL_EXT_XENOMAI
-> >  	bool "Adeos/Xenomai Real-time patch"
-> > diff --git a/linux/linux-ext-customlogo.mk b/linux/linux-ext-customlogo.mk
-> > new file mode 100644
-> > index 0000000..68c613a
-> > --- /dev/null
-> > +++ b/linux/linux-ext-customlogo.mk
-> > @@ -0,0 +1,11 @@
-> > +################################################################################
-> > +#
-> > +# Custom logo
-> > +#
-> > +################################################################################
-> > +
-> > +LINUX_EXTENSIONS += customlogo
-> > +
-> > +define CUSTOMLOGO_PREPARE_KERNEL
-> 
-> You can do the conversion from the original image format to .ppm here
-> directly, and therefore avoid the need for the customlogo package.
+> Solution:
+> Telling rsync to treat symlinked dir on the receiver side as directory
+> allow users to be blissfully ignorant of that problem.
 
-Or better yet, expect the user to provide pre-rendered images to start
-with (see at the end)...
+It seems that this has already been fixed by a patch by Peter Seiderer:
 
-> > +	cp $(CUSTOMLOGO_DIR)/logo_linux_clut224.ppm $(LINUX_DIR)/drivers/video/logo/logo_linux_clut224.ppm
+    0db3452 Makefile: fix rootfs overlay with BR2_ROOTFS_MERGED_USR
+            enabled
 
-... and in the .mk file, just copy all logo files:
+Can you confirm that this also fixes your issue? If so, care to mark
+your patch as superseded in Patchwork, please?
 
-    cp $(BR2_LINUX_KERNEL_EXT_CUSTOMLOGO_DIR)/logo_linux_*.p{p,b}m \
-       $(LINUX_DIR)/drivers/video/logo/
+If not, just chime in!
 
-> > +endef
-> > diff --git a/package/Config.in b/package/Config.in
-> > index 7ced9d4..1552f32 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -214,6 +214,7 @@ comment "Sounds"
-> >  
-> >  comment "Themes"
-> >  	source "package/gtk2-engines/Config.in"
-> > +	source "package/customlogo/Config.in"
-> >  
-> >  endmenu
-> >  
-> > diff --git a/package/customlogo/Config.in b/package/customlogo/Config.in
-> > new file mode 100644
-> > index 0000000..f8502da
-> > --- /dev/null
-> > +++ b/package/customlogo/Config.in
-> > @@ -0,0 +1,16 @@
-> > +config BR2_PACKAGE_CUSTOMLOGO
-> > +	bool "Custom logo"
-> > +	help
-> > +	  Change linux boot logo with your own graphics. 
-> > +	  Can be used as an early bootsplash.
-> > +
-> > +	  *REQUIRES* a pre installed imagemagick on the host system.
-> 
-> I don't think this is acceptable. You probably should add a
-> host-imagemagick package, and make the linux package depend on it when
-> a custom logo is selected.
-
-I don't think that adding host-imagemagick just for this is sane. Let
-the user provide a ppm image.
-
-> In addition, when a custom logo is selected, you probably want to tweak
-> the Linux kernel configuration to make sure it has the relevant options.
-
-Tweak or check? Or do we care?
+Thanks!
 
 Regards,
 Yann E. MORIN.
 
-> Thanks!
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Thomas
+> diff --git a/Makefile b/Makefile
+> index 71735b5..2f33ddf 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -655,7 +655,7 @@ endif
+>  
+>  	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+>  		$(call MESSAGE,"Copying overlay $(d)"); \
+> -		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+> +		rsync -a --keep-dirlinks --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+>  			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+>  			$(d)/ $(TARGET_DIR)$(sep))
+>  
 > -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+> 2.7.0
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
