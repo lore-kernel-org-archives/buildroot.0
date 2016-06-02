@@ -1,14 +1,10 @@
 From: daggs <daggs@gmx.com>
-Date: Thu, 2 Jun 2016 07:11:53 +0200
-Subject: [Buildroot] [PATCH 1/3] libamcodec: new Package
-In-Reply-To: <20160601232826.2aa6d899@free-electrons.com>
-References: <20160601102720.3929-1-daggs@gmx.com>
- <20160601141655.5649aa21@free-electrons.com>
- <trinity-d3b293e2-4a13-4cd4-95af-c77cc680aa35-1464814370051@3capp-mailcom-bs13>
- <20160601230533.04ca63d0@free-electrons.com>
- <trinity-ac3e1b6f-2b6f-4cd4-9758-1af9e8953da0-1464815796397@3capp-mailcom-bs13>,
- <20160601232826.2aa6d899@free-electrons.com>
-Message-ID: <trinity-d4bed891-c195-45ad-af5c-7e6a2da119ec-1464844313669@3capp-mailcom-bs13>
+Date: Thu, 2 Jun 2016 07:15:54 +0200
+Subject: [Buildroot] [PATCH v2] libamcodec: New Package
+In-Reply-To: <20160601233202.4b87a7d1@free-electrons.com>
+References: <20160601211607.31807-1-daggs@gmx.com>,
+ <20160601233202.4b87a7d1@free-electrons.com>
+Message-ID: <trinity-c4682c6f-5d4c-4b50-a55e-c13bce625378-1464844554036@3capp-mailcom-bs13>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,37 +12,101 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Greetings,
->
 > Hello,
 > 
-> On Wed, 1 Jun 2016 23:16:36 +0200, daggs wrote:
+> Thanks for this new iteration!
 > 
-> > I see, I'll keep posting patches, if they are rejected because I'm
-> > using only my first name, then let it be. I value my privacy more
-> > than I value my support for open-sourcing. I don't mind if someone
-> > comes along and resends them as his own, I want to contribute but
-> > there is a limitation to what I'm willing sacrifice.
+> On Thu,  2 Jun 2016 00:16:07 +0300, Dagg wrote:
 > 
-> I fully respect this choice. There are however some legal aspects to
-> take care of as well, so I guess it should be a decision of the
-> Buildroot community to accept or not patches that are submitted under a
-> pseudonym or anonymously.
-sorry for making this harder.
-is there another way to verify with without placing such info?
-what prevents me for example from sending patches under your name?
-isn't it just a text?
+> > +-CPP=g++
+> > +-AS=as
+> > +-AR=ar
+> > +-LD=ld
+> > +-NM=nm
+> > +-STRIP=strip
+> > +-OBJCOPY=objcopy
+> > ++CPP ?= g++
+> > ++AS ?= as
+> > ++AR ?= ar
+> > ++LD ?= ld
+> > ++NM ?= nm
+> > ++STRIP ?= strip
+> > ++OBJCOPY ?= objcopy
+> 
+> This patch would not be needed if $(TARGET_CONFIGURE_OPTS) was passed
+> as a make option instead of in the make environment. I.e
+> 
+> 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS)
+> 
+> instead of
+> 
+> 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE)
+> 
+> However, this also means that a number of other variables from your
+> package Makefile will be overridden, such as CFLAGS, CXXFLAGS, LDFLAGS,
+> etc. This sometimes causes some problems.
+seems like I've encountered such an issue,
+using the format above resulted in missing includes error, e.g. local paths are not part of the flags.
+what is the proper way to fix it?
 
 > 
-> > the previous source I used was gpl I think but wasn't of the correct
-> > origin. I'll send a question to the owner of the repo.
+> > +comment "libamcodec needs a toolchain w/ threads"
+> > +	depends on !BR2_TOOLCHAIN_HAS_THREADS
 > 
-> OK, thanks!
-got a replay from the maintainer, he will ask amlogic and will let me know.
+> You need to replicate the architecture dependency here, so that the
+> comment is not needlessly displayed on architectures for which the
+> libamcodec option will anyway not be available, regardless of the
+> availability of thread support.
+> 
+> > +LIBAMCODEC_VERSION = ed1d8b8c54b05c1a02a8ee44c59744e4cbed3d8d
+> > +LIBAMCODEC_SITE = $(call github,mdrjr,c2_aml_libs,$(LIBAMCODEC_VERSION))
+> > +LIBAMCODEC_DEPENDENCIES = alsa-lib
+> > +
+> > +# this pkg uses a non standard prefix vars, so we need to use them.
+> 
+> # This package uses the M_PREFIX variable to construct the header and
+> # library paths used when compiling.
+> 
+> is probably a slightly better explanation.
+> 
+correct, done.
 
+> > +define LIBAMCODEC_BUILD_CMDS
+> > +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/amavutils M_PREFIX="$(STAGING_DIR)/usr"
+> > +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/amadec M_PREFIX="$(STAGING_DIR)/usr"
+> > +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/amcodec PREFIX="$(STAGING_DIR)"
+> > +endef
+> > +
+> > +define LIBAMCODEC_INSTALL_STAGING_CMDS
+> > +	$(INSTALL) -D -m 0755 $(@D)/amavutils/libamavutils.so $(STAGING_DIR)/usr/lib
+> > +	$(INSTALL) -D -m 0555 $(@D)/amadec/libamadec.so $(STAGING_DIR)/usr/lib
+> > +	$(INSTALL) -D -m 0555 $(@D)/amcodec/libamcodec.so $(STAGING_DIR)/usr/lib
+> 
+> Full destination path needed.
+> 
+not sure what you mean by Full destination path needed, can you elaborate please?
+
+> > +
+> 
+> Unneeded empty line (already mentioned by Vicente)
+> 
+done.
+
+> > +	mkdir -p $(STAGING_DIR)/usr/include/amcodec
+> > +	cp -rf $(@D)/amcodec/include/* $(STAGING_DIR)/usr/include/amcodec
+> > +endef
+> > +
+> > +define LIBAMCODEC_INSTALL_TARGET_CMDS
+> > +	$(INSTALL) -D -m 0755 $(@D)/amavutils/libamavutils.so $(TARGET_DIR)/usr/lib
+> > +	$(INSTALL) -D -m 0555 $(@D)/amadec/libamadec.so $(TARGET_DIR)/usr/lib
+> > +	$(INSTALL) -D -m 0555 $(@D)/amcodec/libamcodec.so $(TARGET_DIR)/usr/lib
+> 
+> Full destination path needed.
+> 
+the same as above.
+
+> Thanks,
 > 
 > Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> 
+
+Dagg.
