@@ -1,40 +1,33 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 2 Jun 2016 19:12:49 +0200
-Subject: [Buildroot] [BUG 2016.05] uClibc-ng argp-standalone War
-In-Reply-To: <1902632.QltqilAAjO@laclwks004>
-References: <1902632.QltqilAAjO@laclwks004>
-Message-ID: <20160602171248.GN6825@waldemar-brodkorb.de>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu,  2 Jun 2016 21:35:03 +0300
+Subject: [Buildroot] [PATCH] package/make: fix hash type (md5 instead of
+	sha1)
+Message-ID: <1464892503-32325-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Brian Foster wrote,
+Fixes:
+  http://autobuild.buildroot.net/results/133cdeaa0644405568c3e8fc003d73c4570fbc82/
+  http://autobuild.buildroot.net/results/e162f46458f4948c75550d47710bee92f1602273/
+  http://autobuild.buildroot.net/results/7ca74c9ea36321e1940ee2707af5745b7d4498d2/
 
-> 
->  In 2016.05 there is a war between uClibc-ng and argp-standalone
->  (quoting from our bugs database):
-> 
->    ? If uClibc-ng v1.0.14 does not have argp support enabled,
->     then it removes any installed <argp.h> header file.  Hence,
->     if the BuildRoot 2016.05 package argp-standalone is enabled,
->     a subsequent re-build of uClibc will remove argp-standalone's
->     installed <argp.h> header, which can (later) cause very puzzling
->     build failures. ?
-> 
->   An example of a package which (forces, I think) the use of
->   argp-standalone is the rng-tools (but is not the only one!).
->   At the present time, I do not know if uClibc-ng's argp can
->   be used, or what the issue is(? was?) the uClibc(-ng?) argp.
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ package/make/make.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Maybe it would be good to just use uClibc-ng argp and block
-argp-standalone in case uClibc-ng is used. I have reports
-from other projects, which successfully replaced argp-standalone
-with the uClibc-ng included argp implementation.
-
-@Brian: Could you cook up a patch and do some testing?
-
-best regards
- Waldemar
+diff --git a/package/make/make.hash b/package/make/make.hash
+index 528822f..81f7044 100644
+--- a/package/make/make.hash
++++ b/package/make/make.hash
+@@ -1,4 +1,4 @@
+ # From http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00013.html
+-sha1 85ad14d08766201ffe71efa866f4fb91  make-4.2.tar.bz2
++md5 85ad14d08766201ffe71efa866f4fb91  make-4.2.tar.bz2
+ # Locally calculated after checking signature
+ sha256 4e5ce3b62fe5d75ff8db92b7f6df91e476d10c3aceebf1639796dc5bfece655f  make-4.2.tar.bz2
+-- 
+2.1.4
