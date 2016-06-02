@@ -1,39 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 2 Jun 2016 13:24:00 +0200
-Subject: [Buildroot] [git commit] qlibc: unbreak legal-info after version
-	bump
-Message-ID: <20160602112648.BC24A800DA@busybox.osuosl.org>
+Date: Thu, 02 Jun 2016 13:27:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qlibc: bump version to 2.4.1
+In-Reply-To: <20160601234021.10b0ee5a@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 1 Jun 2016 23:40:21 +0200")
+References: <1463818975-16680-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160601234021.10b0ee5a@free-electrons.com>
+Message-ID: <87a8j3u8yt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c12e1e9d01e1cd949a0d0d8ca0252f16b506ee30
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes:
-http://autobuild.buildroot.org/results/12f/12f89408935143050a27d92f4b6796d50da07da1/
+ > Hello,
+ > On Sat, 21 May 2016 10:22:55 +0200, Bernd Kuhls wrote:
+ >> This patch depends on http://patchwork.ozlabs.org/patch/624729/
+ >> 
+ >> Rebased 0002-obey-destdir.patch using upstream commit.
+ >> 
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> ---
+ >> package/qlibc/0002-obey-destdir.patch              | 154 ++++++++++++++-------
+ >> ...l-build-by-removing-usage-of-internal-gli.patch |  11 +-
+ >> package/qlibc/qlibc.mk                             |   2 +-
+ >> 3 files changed, 110 insertions(+), 57 deletions(-)
 
-The recent version bump to v2.4.1 forgot to update the name of the license
-file which has been renamed upstream (and reindented/copyright year updated,
-but is otherwise identical).
+ > Applied to next, thanks.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qlibc/qlibc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You forgot to update _LICENSE_FILES, as the license file has been
+renamed upstream. I've pushed a fix for this.
 
-diff --git a/package/qlibc/qlibc.mk b/package/qlibc/qlibc.mk
-index 5aee1f4..a146fa3 100644
---- a/package/qlibc/qlibc.mk
-+++ b/package/qlibc/qlibc.mk
-@@ -7,7 +7,7 @@
- QLIBC_VERSION = v2.4.1
- QLIBC_SITE = $(call github,wolkykim,qlibc,$(QLIBC_VERSION))
- QLIBC_LICENSE = BSD-2c
--QLIBC_LICENSE_FILES = COPYING
-+QLIBC_LICENSE_FILES = LICENSE
- 
- # We're patching configure.ac
- QLIBC_AUTORECONF = YES
+-- 
+Bye, Peter Korsgaard
