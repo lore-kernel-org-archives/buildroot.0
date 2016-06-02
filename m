@@ -1,79 +1,58 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Thu,  2 Jun 2016 17:05:53 +0200
-Subject: [Buildroot] [PATCH] package/argparse: new package
-Message-ID: <20160602150553.28323-1-m.niestroj@grinn-global.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Thu, 2 Jun 2016 12:54:26 -0300
+Subject: [Buildroot] Tossing coins on Beaglebone Black kernel version
+Message-ID: <CAAEAJfAnjZzOo2hZG4h=-_2mpZmqb3BUf=fkNLc08zdR9ePVWA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/Config.in              |  1 +
- package/argparse/Config.in     | 11 +++++++++++
- package/argparse/argparse.hash |  2 ++
- package/argparse/argparse.mk   | 13 +++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/argparse/Config.in
- create mode 100644 package/argparse/argparse.hash
- create mode 100644 package/argparse/argparse.mk
+As mentioned on IRC, beaglebone_defconfig U-Boot build is currently broken.
+I don't think the error matters much, given the selected U-Boot version
+is really old.
 
-diff --git a/package/Config.in b/package/Config.in
-index ae74f17..b7ad54a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -506,6 +506,7 @@ endif
- if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
- # lua modules are dynamically loaded, so not available on static builds
- menu "Lua libraries/modules"
-+	source "package/argparse/Config.in"
- 	source "package/cgilua/Config.in"
- 	source "package/copas/Config.in"
- 	source "package/cosmo/Config.in"
-diff --git a/package/argparse/Config.in b/package/argparse/Config.in
-new file mode 100644
-index 0000000..c7ed7ae
---- /dev/null
-+++ b/package/argparse/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_ARGPARSE
-+	bool "argparse"
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	help
-+	  Argparse is a feature-rich command line parser for Lua
-+	  inspired by argparse for Python. Argparse supports positional
-+	  arguments, options, flags, optional arguments, subcommands
-+	  and more. Argparse automatically generates usage, help and
-+	  error messages.
-+
-+	  https://github.com/mpeterv/argparse
-diff --git a/package/argparse/argparse.hash b/package/argparse/argparse.hash
-new file mode 100644
-index 0000000..a4746bc
---- /dev/null
-+++ b/package/argparse/argparse.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	e00e5637c937d7bfca96025f2c598ba4fffe9eb818d69952e77b4c08167a6be3  argparse-0.5.0-1.src.rock
-diff --git a/package/argparse/argparse.mk b/package/argparse/argparse.mk
-new file mode 100644
-index 0000000..095f0a3
---- /dev/null
-+++ b/package/argparse/argparse.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# argparse
-+#
-+################################################################################
-+
-+ARGPARSE_VERSION_UPSTREAM = 0.5.0
-+ARGPARSE_VERSION = $(ARGPARSE_VERSION_UPSTREAM)-1
-+ARGPARSE_SUBDIR = argparse
-+ARGPARSE_LICENSE = MIT
-+ARGPARSE_LICENSE_FILES = $(ARGPARSE_SUBDIR)/LICENSE
-+
-+$(eval $(luarocks-package))
+I'm working on fixing it and get a cleaner beaglebone_defconfig. While at it,
+I realized the kernel version points to some random commit in some random
+TI kernel tree.
+
+As per the commit log:
+""
+    beaglebone: update to TI 3.12 kernel
+
+    Git repo version is taken from meta-ti.
+    It's a 3.12.10 kernel with TI's own patches on top.
+
+    The defconfig has been kept rather close to our old defconfig.
+    The kernel has been boot-tested using an NFS-root.
+
+    Apart from the kernel change, the linux headers has also been
+    updated from 3.8.12 to 3.12.10.
+""
+
+This is highly annoying, as not using a branch or tag prevents a shallow
+clone, and so we need to retrieve the entire repo, even to get the
+headers for the toolchain.
+
+We are currently using git://git.ti.com/ti-linux-kernel/ti-linux-kernel.git
+while TI kernel release [1] notes are pointing at
+git://git.ti.com/processor-sdk/processor-sdk-linux.git.
+
+Now, I'm not all that sure which kernel we want to use by default and that's
+why I'm asking here, to hear what the rest thinks.
+
+FWIW, I commercially support a AM335x product and we've switched to
+linux mainline,
+long, long time ago, because the SDK was incredibly crappy at that time.
+
+Mainline lacks some important features such as 3D support, and platform
+suspend-to-RAM, but it's in my experience less buggy, so I'd vote to
+switch to it.
+
+Unless of course, someone knows better and can point at a proper git tag
+to use.
+
+[1] http://processors.wiki.ti.com/index.php/Processor_SDK_Linux_Kernel_Release_Notes
 -- 
-2.8.3
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
