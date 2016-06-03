@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jun 2016 20:05:11 +0200
-Subject: [Buildroot] [PATCH] configs/pc_x86_64_{bios,
- efi}_defconfig: new samples
-In-Reply-To: <1461954413-10854-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1461954413-10854-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160603200511.6dae3cad@free-electrons.com>
+Date: Fri, 3 Jun 2016 20:08:29 +0200
+Subject: [Buildroot] [PATCH] juno: adding CMA to linux-juno-defconfig
+In-Reply-To: <397c3db00cb2d5d6c3a57b5ba514e7180518e095.1464173670.git.jpinto@synopsys.com>
+References: <397c3db00cb2d5d6c3a57b5ba514e7180518e095.1464173670.git.jpinto@synopsys.com>
+Message-ID: <20160603200829.173f8b00@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 29 Apr 2016 15:26:53 -0300, Gustavo Zacarias wrote:
+On Wed, 25 May 2016 11:56:58 +0100, Joao Pinto wrote:
+> This patch adds CMA to the juno's default kernel config that is in 
+> board/arm/juno. This is critical if the user decides to config video resolution
+> to 1920x1080.
+> 
+> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+> ---
+>  board/arm/juno/linux-juno-defconfig | 2 ++
+>  1 file changed, 2 insertions(+)
 
-> +  First select the appropiate target you want.
-
-Minor typo: appropriate.
-
-I've fixed this and did some minor other tweaks in readme.txt, and then
-applied.
-
-Thanks a lot!
+Applied to master, thanks.
 
 Thomas
 -- 
