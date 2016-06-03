@@ -1,49 +1,115 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jun 2016 09:51:43 +0200
-Subject: [Buildroot] [git commit] python-serial: bump to version 3.1
-Message-ID: <20160603075313.2C3A2820ED@busybox.osuosl.org>
+Date: Fri, 3 Jun 2016 09:51:35 +0200
+Subject: [Buildroot] [git commit] ser2net: bump to version 2.10.1
+Message-ID: <20160603075313.208B281F33@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0397f8b8a396c459c565fe40e18507d5b4c4df9
+commit: https://git.buildroot.net/buildroot/commit/?id=946249ff02f2d67c1625267c18806bd6f32ac82b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Change download location.
+Remove upstreamed patch.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-serial/python-serial.hash | 6 +++---
- package/python-serial/python-serial.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../0001-Fix-TIOCSRS485-undeclared-error.patch     | 65 ----------------------
+ package/ser2net/ser2net.hash                       |  2 +-
+ package/ser2net/ser2net.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 67 deletions(-)
 
-diff --git a/package/python-serial/python-serial.hash b/package/python-serial/python-serial.hash
-index 7400624..f98a8b9 100644
---- a/package/python-serial/python-serial.hash
-+++ b/package/python-serial/python-serial.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f94bc6e141d60f17edc7bf8757c4d922, sha256 locally computed
--md5     f94bc6e141d60f17edc7bf8757c4d922  pyserial-3.0.tar.gz
--sha256  056c2d96c83c009d8d04aad43a90f91f10f6a97d42c0d9656c2655c63fb8ff07  pyserial-3.0.tar.gz
-+# md5 from http://pypi.python.org/pypi?:action=show_md5&digest=e849af7f8b7ec75cbc7a53da67c51a51, sha256 locally computed
-+md5     e849af7f8b7ec75cbc7a53da67c51a51  pyserial-3.1.tar.gz
-+sha256  c8ffdcbd8bfd308842409e558848c32aa3499a1bfe95a591e4210072b9520f1e  pyserial-3.1.tar.gz
-diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
-index ba871ea..696e207 100644
---- a/package/python-serial/python-serial.mk
-+++ b/package/python-serial/python-serial.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/ser2net/0001-Fix-TIOCSRS485-undeclared-error.patch b/package/ser2net/0001-Fix-TIOCSRS485-undeclared-error.patch
+deleted file mode 100644
+index 9c6d168..0000000
+--- a/package/ser2net/0001-Fix-TIOCSRS485-undeclared-error.patch
++++ /dev/null
+@@ -1,65 +0,0 @@
+-ser2net: Fix compilation failures due to missing TIOCSRS485 macro
+-
+-Patch sent upstream:
+-	https://sourceforge.net/p/ser2net/mailman/message/32905302/
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+-From: Yegor Yefremov <yegorslists@googlemail.com>
+-
+-include <asm-generic/ioctls.h> fixes compilations for systems,
+-where <asm-generic/ioctls.h> won't be included automatically.
+-
+-Move special Linux includes to dataxfer.h.
+-
+-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+----
+- dataxfer.h | 5 +++--
+- devcfg.c   | 2 --
+- 2 files changed, 3 insertions(+), 4 deletions(-)
+-
+-diff --git a/dataxfer.h b/dataxfer.h
+-index bd2665e..c3d7431 100644
+---- a/dataxfer.h
+-+++ b/dataxfer.h
+-@@ -20,8 +20,6 @@
+- #ifndef DATAXFER
+- #define DATAXFER
+- 
+--#include <linux/serial.h>
+--
+- #include "controller.h"
+- 
+- #ifdef USE_UUCP_LOCKING
+-@@ -30,6 +28,9 @@ extern int uucp_locking_enabled;
+- 
+- #ifdef linux
+- 
+-+#include <linux/serial.h>
+-+#include <asm-generic/ioctls.h>
+-+
+- #define USE_RS485_FEATURE
+- 
+- /* Check, if the toolchain provides serial_rs485 structure and macros */
+-diff --git a/devcfg.c b/devcfg.c
+-index ab819a6..1f84714 100644
+---- a/devcfg.c
+-+++ b/devcfg.c
+-@@ -18,7 +18,6 @@
+-  */
+- 
+- /* This code handles generating the configuration for the serial port. */
+--
+- #include <unistd.h>
+- #include <termios.h>
+- #include <sys/ioctl.h>
+-@@ -31,7 +30,6 @@
+- #include <signal.h>
+- #include <errno.h>
+- #include <syslog.h>
+--#include <linux/serial.h>
+- 
+- #include "ser2net.h"
+- #include "selector.h"
+--- 
+-1.9.1
+diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
+index 4675164..a02a981 100644
+--- a/package/ser2net/ser2net.hash
++++ b/package/ser2net/ser2net.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  98f6193225338e25f35302fef5e1f16688693ed43e7b3c3e9e09187eb54547ac  ser2net-2.10.0.tar.gz
++sha256  cee4ad8fb3531281e8761751694dfab39d681022b2363b1edeba764d397c3c99  ser2net-2.10.1.tar.gz
+diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
+index 414f1ed..ac64c3d 100644
+--- a/package/ser2net/ser2net.mk
++++ b/package/ser2net/ser2net.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_SERIAL_VERSION = 3.0
-+PYTHON_SERIAL_VERSION = 3.1
- PYTHON_SERIAL_SOURCE = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
--PYTHON_SERIAL_SITE = http://pypi.python.org/packages/source/p/pyserial
-+PYTHON_SERIAL_SITE = https://pypi.python.org/packages/ce/9c/694ce79a9d4a164e109aeba1a40fba23336f3b7554978553e22a5d41d54d
- PYTHON_SERIAL_LICENSE = Python Software Foundation License
- PYTHON_SERIAL_LICENSE_FILES = LICENSE.txt
- PYTHON_SERIAL_SETUP_TYPE = setuptools
+-SER2NET_VERSION = 2.10.0
++SER2NET_VERSION = 2.10.1
+ SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ SER2NET_LICENSE = GPLv2+
+ SER2NET_LICENSE_FILES = COPYING
