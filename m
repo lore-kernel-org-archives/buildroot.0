@@ -1,41 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jun 2016 16:14:12 +0200
-Subject: [Buildroot] [PATCH 4/4] vpnc: add patches to fix build with the
- musl C library
-In-Reply-To: <1455145392-2355-5-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1455145392-2355-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1455145392-2355-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160603161412.23540b86@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 3 Jun 2016 19:27:25 +0200
+Subject: [Buildroot] [PATCH v4] wiringpi: new package
+In-Reply-To: <20160603152604.0efc09fa@free-electrons.com>
+References: <1449259282-5663-1-git-send-email-ps.report@gmx.net>
+ <20160603152604.0efc09fa@free-electrons.com>
+Message-ID: <20160603192725.3a0beecd@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas,
 
-On Thu, 11 Feb 2016 00:03:12 +0100, Thomas Petazzoni wrote:
-> This commit adds hree patches that are needed to fix build issues on
-> musl:
+On Fri, 3 Jun 2016 15:26:04 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
+> Hello,
 > 
->  - <error.h> not available on musl
->  - structure redefinitions due to direct inclusion of kernel headers
->  - missing <sys/ttydefaults.h> inclusion
+> On Fri,  4 Dec 2015 21:01:22 +0100, Peter Seiderer wrote:
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  ...n-t-assume-error.h-is-available-on-all-Li.patch | 54 +++++++++++++++++++++
->  ...p.c-don-t-include-linux-if_tun.h-on-Linux.patch | 56 ++++++++++++++++++++++
->  ...g.c-add-missing-sys-ttydefaults.h-include.patch | 38 +++++++++++++++
->  3 files changed, 148 insertions(+)
->  create mode 100644 package/vpnc/0007-sysdep.h-don-t-assume-error.h-is-available-on-all-Li.patch
->  create mode 100644 package/vpnc/0008-sysdep.c-don-t-include-linux-if_tun.h-on-Linux.patch
->  create mode 100644 package/vpnc/0009-config.c-add-missing-sys-ttydefaults.h-include.patch
+> I wanted to finally apply this patch, but unfortunately, git.drogon.net
+> is dead, and so is www.wiringpi.com. I looked at
+> https://github.com/WiringPi/WiringPi but there are no tags/releases.
+> 
+> So, right now, this package cannot be integrated due to this. Can you
+> see if there is another download location available, and/or what is the
+> status of this project upstream?
+> 
 
-Applied to master, thanks.
+No idea what happened to wirinpi.com/drogon.net...
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+But revision 78b5c323b74de782df58ee558c249e4e4fadd25f 'Bumped Version to 2.31'
+from https://github.com/WiringPi/WiringPi [1] has the same content
+as my local copy of wiringpi-2.31.tar.gz
+
+Regards,
+Peter
+
+[1] https://github.com/WiringPi/WiringPi/commit/78b5c323b74de782df58ee558c249e4e4fadd25f
+
+> Thanks!
+> 
+> Thomas
