@@ -1,42 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jun 2016 14:47:44 +0200
-Subject: [Buildroot] [git commit] package/nodejs: add icu support
-Message-ID: <20160603124906.40CF1820F5@busybox.osuosl.org>
+Date: Fri, 3 Jun 2016 14:47:51 +0200
+Subject: [Buildroot] [git commit] package/nodejs: bump version to 6.2.1
+Message-ID: <20160603124906.4E35D820F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d0702a2bd5643d3fc1ca9500f8222aca1baa443
+commit: https://git.buildroot.net/buildroot/commit/?id=dc725e763c87dca541d0e48cd9c37140c62cf65f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+See https://nodejs.org/en/blog/release/v6.2.1/
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nodejs/nodejs.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../{6.1.0 => 6.2.1}/0001-gyp-force-link-command-to-use-CXX.patch     | 0
+ package/nodejs/Config.in                                              | 2 +-
+ package/nodejs/nodejs.hash                                            | 4 ++--
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index b0661ed..0329299 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -17,6 +17,10 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
- NODEJS_DEPENDENCIES += openssl
- endif
+diff --git a/package/nodejs/6.1.0/0001-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/6.2.1/0001-gyp-force-link-command-to-use-CXX.patch
+similarity index 100%
+rename from package/nodejs/6.1.0/0001-gyp-force-link-command-to-use-CXX.patch
+rename to package/nodejs/6.2.1/0001-gyp-force-link-command-to-use-CXX.patch
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 70dacc8..432792f 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
  
-+ifeq ($(BR2_PACKAGE_ICU),y)
-+NODEJS_DEPENDENCIES += icu
-+endif
-+
- # nodejs build system is based on python, but only support python-2.6 or
- # python-2.7. So, we have to enforce PYTHON interpreter to be python2.
- define HOST_NODEJS_CONFIGURE_CMDS
-@@ -96,6 +100,7 @@ define NODEJS_CONFIGURE_CMDS
- 		--without-snapshot \
- 		--shared-zlib \
- 		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
-+		$(if $(BR2_PACKAGE_ICU),--with-intl=system-icu,--with-intl=none) \
- 		$(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
- 		--without-dtrace \
- 		--without-etw \
+ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	string
+-	default "6.1.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
++	default "6.2.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 	default "0.10.45"
+ 
+ menu "Module Selection"
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index f417df2..9fce2f5 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+ # From upstream URL: http://nodejs.org/dist/v0.10.45/SHASUMS256.txt
+ sha256  a71070ea7aece9c94450b45102f2d1be42f0add168dd9c9701e9032d363bd4fa  node-v0.10.45.tar.xz
+ 
+-# From upstream URL: http://nodejs.org/dist/v6.1.0/SHASUMS256.txt
+-sha256  c7940301917232527490a166df78f9d3d58e70e10fd502f73889d936763cfe84  node-v6.1.0.tar.xz
++# From upstream URL: http://nodejs.org/dist/v6.2.1/SHASUMS256.txt
++sha256  dbaeb8fb68a599e5164b17c74f66d24f424ee4ab3a25d8de8a3c6808e5b42bfb  node-v6.2.1.tar.xz
