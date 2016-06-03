@@ -1,12 +1,12 @@
 From: maitysanchayan at gmail.com <maitysanchayan@gmail.com>
-Date: Fri, 3 Jun 2016 16:52:18 +0530
-Subject: [Buildroot] [PATCH v2 1/2] configs: Add support for Toradex
- Colibri Vybrid Modules
-In-Reply-To: <20160531231954.18455f2e@free-electrons.com>
+Date: Fri, 3 Jun 2016 16:55:36 +0530
+Subject: [Buildroot] [PATCH v2 2/2] board: Add a readme file for Toradex
+ Colibri Vybrid module
+In-Reply-To: <20160531232342.556583b8@free-electrons.com>
 References: <cover.1449902276.git.maitysanchayan@gmail.com>
- <57ea79a5678e14be13215ddc1be041c962b3be10.1449902276.git.maitysanchayan@gmail.com>
- <20160531231954.18455f2e@free-electrons.com>
-Message-ID: <20160603112218.GA1688@Sanchayan-Arch.localdomain>
+ <3aa77fd453222598bc4af73a2fed155f68459738.1449902276.git.maitysanchayan@gmail.com>
+ <20160531232342.556583b8@free-electrons.com>
+Message-ID: <20160603112536.GB1688@Sanchayan-Arch.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,102 +15,92 @@ To: buildroot@busybox.net
 
 Hello Thomas,
 
-On 16-05-31 23:19:54, Thomas Petazzoni wrote:
+On 16-05-31 23:23:42, Thomas Petazzoni wrote:
 > Hello,
 > 
-> Thanks for this new iteration, and sorry for the very slow response.
-> Are you still interested in getting this defconfig merged in Buildroot
-> upstream? If so, please see my comments below.
-
-Yes, I am still interested.
-
+> On Sat, 12 Dec 2015 12:36:58 +0530, Sanchayan Maity wrote:
+> > Add a readme file documenting how to use the build output images
+> > using and cross referencing the update procedure as used by Toradex.
 > 
-> On Sat, 12 Dec 2015 12:36:57 +0530, Sanchayan Maity wrote:
-> > Add a minimal default configuration for Colibri Vybrid modules.
-> > 
-> > Tested on Colibri VF50 and VF61 modules.
+> This patch should be squashed/merged into your previous patch. I.e, we
+> want a single patch adding the defconfig/readme for the Toradex Colibri
+> Vybrid module.
 > 
-> We need your Signed-off-by line here.
+> We also need your Signed-off-by here.
+
+Will fix it.
+
 > 
 > > ---
-> >  configs/colibri_vf_defconfig | 38 ++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 38 insertions(+)
-> >  create mode 100644 configs/colibri_vf_defconfig
+> >  board/toradex/colibri-vf/readme.txt | 23 +++++++++++++++++++++++
+> >  1 file changed, 23 insertions(+)
+> >  create mode 100644 board/toradex/colibri-vf/readme.txt
 > > 
-> > diff --git a/configs/colibri_vf_defconfig b/configs/colibri_vf_defconfig
+> > diff --git a/board/toradex/colibri-vf/readme.txt b/board/toradex/colibri-vf/readme.txt
 > > new file mode 100644
-> > index 0000000..19a3394
+> > index 0000000..a403c03
 > > --- /dev/null
-> > +++ b/configs/colibri_vf_defconfig
-> > @@ -0,0 +1,38 @@
-> > +BR2_arm=y
-> > +BR2_cortex_a5=y
-> > +BR2_ARM_EABIHF=y
-> > +BR2_ARM_ENABLE_NEON=y
-> > +BR2_ARM_FPU_NEON_VFPV4=y
+> > +++ b/board/toradex/colibri-vf/readme.txt
+> > @@ -0,0 +1,23 @@
 > 
-> Please add here:
-> 
-> # Linux headers same as kernel, a 4.5 series
-> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
-> 
-> Of course 4.5 should be adjusted to match the kernel version you're
-> using. This is needed to make sure that the toolchain is built with
-> kernel headers that are at least as old as the kernel running on the
-> target.
+> Please add a short introduction paragraph here that indicates which HW
+> platforms are supported, if possible with links to the official website
+> for the platform.
 
-Ok. I have this in a new version in my local branch.
+Ok.
 
 > 
-> > +BR2_TARGET_GENERIC_HOSTNAME="colibri-vf"
-> > +BR2_TARGET_GENERIC_ISSUE="Colibri VF 20151211"
-> > +BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
-> > +BR2_LINUX_KERNEL=y
-> > +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> > +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.toradex.com/linux-toradex.git"
-> > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a276a526ac8e0d255f4165221c5bece5940dbc95"
-> > +BR2_LINUX_KERNEL_DEFCONFIG="colibri_vf"
-> > +BR2_LINUX_KERNEL_ZIMAGE=y
-> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="vf610-colibri-eval-v3 vf500-colibri-eval-v3"
-> > +BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> > +BR2_TARGET_ROOTFS_UBIFS=y
-> > +BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
-> > +BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x800
-> > +BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=8112
-> > +BR2_TARGET_ROOTFS_UBIFS_RT_LZO=y
-> > +BR2_TARGET_ROOTFS_UBIFS_NONE=y
-> > +BR2_TARGET_ROOTFS_UBIFS_OPTS="--space-fixup -o ubifs.img"
+> > +Build instructions
+> > +------------------
+> > +
+> > +As a regular user configure and then build:
+> > +
+> > +$ make colibri_vf_defconfig
+> > +$ make
+> > +
+> > +This configuration will use a linux kernel and uboot from the git trees
+> > +maintained by Toradex and build a minimal root file system.
+> > +
+> > +Flashing the Vybrid module
+> > +--------------------------
+> > +
+> > +Details can be found at:
+> > +http://developer.toradex.com/knowledge-base/flashing-linux-on-vybrid-modules
+> > +
+> > +The above build configuration would result in building of rootfs.ubifs image
 > 
-> Remove the -o ubifs.img, it is anyway overridden by the ubifs.mk build
-> logic in Buildroot. If you really want to rename the file, do so in a
-> post-image script.
+> would result -> will result
+> 
+> > +and u-boot-nand.imx uboot binary. Prepare the SD card as per the instructions
+> > +on the above article. Replace the ubifs.img file in SD card with rootfs.ubifs
+> > +image file, rename it to ubifs.img and replace the u-boot-nand.imx uboot binary
+> > +on the SD card with the one generated by buildroot.
+> 
+> It is really not great that you have to prepare a complete SD card with
+> those weird instructions, and then replace some files with what
+> Buildroot has produced. What is so special about this SD card that
+> Buildroot cannot produce?
 
-Ah I see. I was wondering why it does not work as intended. Thanks for
-the tip. I will look into the post-image script part.
+Will work on including our update process within this.
+
+> 
+> > Then follow the updation
+> 
+> updation -> update
+> 
+> > +procedure on the above article.
+> 
+> Could you fix the above issues, and send an updated version?
+
+Yes, will try to address all the issues and send updated version.
+
+Thanks for your feedback.
 
 Regards,
 Sanchayan.
 
 > 
-> > +BR2_TARGET_ROOTFS_UBI=y
-> > +BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x20000
-> > +BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
-> > +BR2_TARGET_ROOTFS_UBI_OPTS=""
-> > +BR2_TARGET_UBOOT=y
-> > +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> > +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> > +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.toradex.com/u-boot-toradex.git"
-> > +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="1bb2de8875a385dd390678e8d46d3aab5a70445d"
-> > +BR2_TARGET_UBOOT_USE_DEFCONFIG=y
-> > +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="colibri_vf"
-> > +BR2_TARGET_UBOOT_FORMAT_IMX=y
-> > +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> > +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nand.imx"
-> 
-> I have some more comments on the second patch, which I'll do now.
-> 
-> Thanks!
+> Thanks a lot!
 > 
 > Thomas
 > -- 
