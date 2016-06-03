@@ -1,63 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jun 2016 14:51:37 +0200
-Subject: [Buildroot] [PATCH 1/2] package/nodejs: add icu support
-In-Reply-To: <1464950477-3122-1-git-send-email-martin@barkynet.com>
-References: <1464950477-3122-1-git-send-email-martin@barkynet.com>
-Message-ID: <20160603145137.38c3ca35@free-electrons.com>
+Date: Fri, 3 Jun 2016 15:04:12 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-good: Add support for V4L2
+	probed devices
+Message-ID: <20160603130427.A3E8E81EE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=88437f6feb15b4db53ba10215141477052361e79
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  3 Jun 2016 11:41:16 +0100, Martin Bark wrote:
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> ---
->  package/nodejs/nodejs.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> index b0661ed..0329299 100644
-> --- a/package/nodejs/nodejs.mk
-> +++ b/package/nodejs/nodejs.mk
-> @@ -17,6 +17,10 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
->  NODEJS_DEPENDENCIES += openssl
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_ICU),y)
-> +NODEJS_DEPENDENCIES += icu
-> +endif
-> +
->  # nodejs build system is based on python, but only support python-2.6 or
->  # python-2.7. So, we have to enforce PYTHON interpreter to be python2.
->  define HOST_NODEJS_CONFIGURE_CMDS
-> @@ -96,6 +100,7 @@ define NODEJS_CONFIGURE_CMDS
->  		--without-snapshot \
->  		--shared-zlib \
->  		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
-> +		$(if $(BR2_PACKAGE_ICU),--with-intl=system-icu,--with-intl=none) \
->  		$(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
->  		--without-dtrace \
->  		--without-etw \
+The V4L2 module of gst-plugins-good provides an extra option to allow
+probing for extra devices at plugin load time. This will enable features
+such as video conversion using the V4L2 M2M api
 
-I've applied, because it's already done this way for OpenSSL. But I
-prefer when the dependency and the configure option is added at the
-same place, i.e
+Signed-off-by: Kieran Bingham <kieran@bingham.xyz>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gstreamer1/gst1-plugins-good/Config.in            | 8 ++++++++
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 6 ++++++
+ 2 files changed, 14 insertions(+)
 
-ifeq ($(BR2_PACKAGE_ICU),y)
-NODEJS_DEPENDENCIES += icu
-NODEJS_CONF_OPTS += --with-intl=system-icu
-else
- NODEJS_CONF_OPTS += --with-intl=none
-endif
-
-If you want to improve this in nodejs.mk, don't hesitate to send a
-follow-up patch. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index a59033a..95318d9 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -279,6 +279,14 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
+ comment "v4l2 needs a toolchain w/ headers >= 3.0"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2_PROBE
++	bool "v4l2-probe (m2m)"
++	depends on BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
++	help
++	  Enables the V4L2 probe at plugin load time. This enables
++	  support for v4l2 transform devices, such as m2m
++	  devices. These plugins are registered as v4l2videoNconvert
++
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CAIRO
+ 	bool "cairo"
+ 	select BR2_PACKAGE_CAIRO
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 14bd4e8..969caa9 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -323,6 +323,12 @@ else
+ GST1_PLUGINS_GOOD_CONF_OPTS += --disable-gst_v4l2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2_PROBE),y)
++GST1_PLUGINS_GOOD_CONF_OPTS += --enable-v4l2-probe
++else
++GST1_PLUGINS_GOOD_CONF_OPTS += --disable-v4l2-probe
++endif
++
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ GST1_PLUGINS_GOOD_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXv
+ GST1_PLUGINS_GOOD_CONF_OPTS += \
