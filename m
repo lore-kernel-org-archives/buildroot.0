@@ -1,49 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jun 2016 09:51:47 +0200
-Subject: [Buildroot] [git commit] python-psutil: bump to version 4.2.0
-Message-ID: <20160603075313.3714281F33@busybox.osuosl.org>
+Date: Fri, 3 Jun 2016 09:54:27 +0200
+Subject: [Buildroot] [PATCH 1/5] ser2net: bump to version 2.10.1
+In-Reply-To: <1464876330-6890-1-git-send-email-yegorslists@googlemail.com>
+References: <1464876330-6890-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160603095427.30ad707b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84884cd5ae93944de8d70b51ee827b6687438283
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Change download location.
+On Thu,  2 Jun 2016 16:05:26 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Remove upstreamed patch.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  .../0001-Fix-TIOCSRS485-undeclared-error.patch     | 65 ----------------------
+>  package/ser2net/ser2net.hash                       |  2 +-
+>  package/ser2net/ser2net.mk                         |  2 +-
+>  3 files changed, 2 insertions(+), 67 deletions(-)
+>  delete mode 100644 package/ser2net/0001-Fix-TIOCSRS485-undeclared-error.patch
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-psutil/python-psutil.hash | 6 +++---
- package/python-psutil/python-psutil.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+All applied to master. I only did a minor change on PATCH 5/5, I'll
+reply to it directly.
 
-diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
-index 21de357..8e3a535 100644
---- a/package/python-psutil/python-psutil.hash
-+++ b/package/python-psutil/python-psutil.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=53d18a5a2aff970d5658c22921c2bbe6, sha256 locally computed
--md5	53d18a5a2aff970d5658c22921c2bbe6  psutil-3.4.2.tar.gz
--sha256  b17fa01aa766daa388362d0eda5c215d77e03a8d37676b68971f37bf3913b725  psutil-3.4.2.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=713f259f917a0c26acfbb7e6ae632ef7, sha256 locally computed
-+md5	713f259f917a0c26acfbb7e6ae632ef7  psutil-4.2.0.tar.gz
-+sha256  544f013a0aea7199e07e3efe5627f5d4165179a04c66050b234cc3be2eca1ace  psutil-4.2.0.tar.gz
-diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-index 3570ff4..a5a1de9 100644
---- a/package/python-psutil/python-psutil.mk
-+++ b/package/python-psutil/python-psutil.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PSUTIL_VERSION = 3.4.2
-+PYTHON_PSUTIL_VERSION = 4.2.0
- PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
--PYTHON_PSUTIL_SITE = http://pypi.python.org/packages/source/p/psutil
-+PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/a6/bf/5ce23dc9f50de662af3b4bf54812438c298634224924c4e18b7c3b57a2aa
- PYTHON_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_PSUTIL_LICENSE = BSD-3c
- PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
