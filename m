@@ -1,50 +1,40 @@
-From: Brian Foster <brian.foster@maximintegrated.com>
-Date: Fri, 3 Jun 2016 12:13:12 +0200
-Subject: [Buildroot] [BUG 2016.05] uClibc-ng argp-standalone War
-In-Reply-To: <20160602171248.GN6825@waldemar-brodkorb.de>
-References: <1902632.QltqilAAjO@laclwks004>
- <20160602171248.GN6825@waldemar-brodkorb.de>
-Message-ID: <4575130.y3oBZYB1YT@laclwks004>
+From: Martin Bark <martin@barkynet.com>
+Date: Fri,  3 Jun 2016 11:41:16 +0100
+Subject: [Buildroot] [PATCH 1/2] package/nodejs: add icu support
+Message-ID: <1464950477-3122-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 02-June-2016 19:12:49 Waldemar Brodkorb wrote:
-> Brian Foster wrote,
-> > In 2016.05 there is a war between uClibc-ng and argp-standalone [...]
-> 
-> Maybe it would be good to just use uClibc-ng argp and block
-> argp-standalone in case uClibc-ng is used.
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/nodejs/nodejs.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Hi Waldemar!
-
- Broadly speaking, I concur, but I have done nothing (to-date)
- to try and confirm, or to research the history of the issue.
-
- Actually, I am more inclined to the either-or approach, that is,
- if a package needs "argp" functionality, then either arp-standalone
- or (if using uClibc-ng) uClibc's arp functionality must be present.
- However, I'm uncertain how to do that...?  ;-\   (Any pointers?)
-
-> I have reports from other projects, which successfully replaced
-> argp-standalone with the uClibc-ng included argp implementation.
-
- That is good to know, thanks!
-
-> @Brian: Could you cook up a patch and do some testing?
-
- Maybe.  *Speculating*, I suspect all I will be able to do is cook
- up trial Patch(es?) with rng-tools as the Test case.
-
-cheers!
-	-blf-
-
-> best regards
->  Waldemar
-
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index b0661ed..0329299 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -17,6 +17,10 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ NODEJS_DEPENDENCIES += openssl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ICU),y)
++NODEJS_DEPENDENCIES += icu
++endif
++
+ # nodejs build system is based on python, but only support python-2.6 or
+ # python-2.7. So, we have to enforce PYTHON interpreter to be python2.
+ define HOST_NODEJS_CONFIGURE_CMDS
+@@ -96,6 +100,7 @@ define NODEJS_CONFIGURE_CMDS
+ 		--without-snapshot \
+ 		--shared-zlib \
+ 		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
++		$(if $(BR2_PACKAGE_ICU),--with-intl=system-icu,--with-intl=none) \
+ 		$(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
+ 		--without-dtrace \
+ 		--without-etw \
 -- 
-Brian Foster
-Principal MTS, Software        |  La Ciotat, France
-Maxim Integrated               |  http://www.maximintegrated.com/
+2.7.4
