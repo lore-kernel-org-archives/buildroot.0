@@ -1,32 +1,50 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri,  3 Jun 2016 11:32:31 +0200
-Subject: [Buildroot] [PATCH] ficl: add missing -fPIC
-Message-ID: <1464946351-5489-1-git-send-email-francois.perrad@gadz.org>
+From: Brian Foster <brian.foster@maximintegrated.com>
+Date: Fri, 3 Jun 2016 12:13:12 +0200
+Subject: [Buildroot] [BUG 2016.05] uClibc-ng argp-standalone War
+In-Reply-To: <20160602171248.GN6825@waldemar-brodkorb.de>
+References: <1902632.QltqilAAjO@laclwks004>
+ <20160602171248.GN6825@waldemar-brodkorb.de>
+Message-ID: <4575130.y3oBZYB1YT@laclwks004>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fix http://autobuild.buildroot.net/results/dec/dec926ad7d7880c385835ba7b380dd41fd7f3762/
+On Thursday 02-June-2016 19:12:49 Waldemar Brodkorb wrote:
+> Brian Foster wrote,
+> > In 2016.05 there is a war between uClibc-ng and argp-standalone [...]
+> 
+> Maybe it would be good to just use uClibc-ng argp and block
+> argp-standalone in case uClibc-ng is used.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/ficl/ficl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Waldemar!
 
-diff --git a/package/ficl/ficl.mk b/package/ficl/ficl.mk
-index 6c212a6..65df146 100644
---- a/package/ficl/ficl.mk
-+++ b/package/ficl/ficl.mk
-@@ -39,7 +39,7 @@ endif
- 
- define FICL_BUILD_CMDS
- 	$(MAKE) -C $(@D) -f Makefile.linux $(TARGET_CONFIGURE_OPTS) \
--		CPPFLAGS="$(TARGET_CPPFLAGS) -I. -Dlinux" $(FICL_BUILD_TARGETS)
-+		CFLAGS="$(TARGET_CFLAGS) -fPIC -I. -Dlinux" CPPFLAGS="" $(FICL_BUILD_TARGETS)
- endef
- 
- define FICL_INSTALL_STAGING_CMDS
+ Broadly speaking, I concur, but I have done nothing (to-date)
+ to try and confirm, or to research the history of the issue.
+
+ Actually, I am more inclined to the either-or approach, that is,
+ if a package needs "argp" functionality, then either arp-standalone
+ or (if using uClibc-ng) uClibc's arp functionality must be present.
+ However, I'm uncertain how to do that...?  ;-\   (Any pointers?)
+
+> I have reports from other projects, which successfully replaced
+> argp-standalone with the uClibc-ng included argp implementation.
+
+ That is good to know, thanks!
+
+> @Brian: Could you cook up a patch and do some testing?
+
+ Maybe.  *Speculating*, I suspect all I will be able to do is cook
+ up trial Patch(es?) with rng-tools as the Test case.
+
+cheers!
+	-blf-
+
+> best regards
+>  Waldemar
+
 -- 
-1.9.1
+Brian Foster
+Principal MTS, Software        |  La Ciotat, France
+Maxim Integrated               |  http://www.maximintegrated.com/
