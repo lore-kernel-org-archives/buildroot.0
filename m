@@ -1,45 +1,33 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 3 Jun 2016 05:16:45 +0200
-Subject: [Buildroot] [PATCH] zeromq: fix sparc32 compile
-Message-ID: <20160603031645.GA28308@waldemar-brodkorb.de>
+Date: Fri, 3 Jun 2016 05:17:20 +0200
+Subject: [Buildroot] [PATCH] mongrel2: allow to build for sparc
+Message-ID: <20160603031720.GA28367@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Code is otherwise compiled with sparcv9 optimization and
-cannot be run on sparc32 (sparcv8) machine.
+With uClibc-ng 1.0.15 sparc support got context functions.
+Tested with qemu-system-sparc.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/zeromq/0003-fix-sparc-compile.patch |   18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
- create mode 100644 package/zeromq/0003-fix-sparc-compile.patch
+ package/mongrel2/Config.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/zeromq/0003-fix-sparc-compile.patch b/package/zeromq/0003-fix-sparc-compile.patch
-new file mode 100644
-index 0000000..e4f1881
---- /dev/null
-+++ b/package/zeromq/0003-fix-sparc-compile.patch
-@@ -0,0 +1,18 @@
-+Fix sparcv8 compile
-+Suggested upstream:
-+https://github.com/zeromq/libzmq/issues/2021
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur zeromq-4.1.4.orig/configure.ac zeromq-4.1.4/configure.ac
-+--- zeromq-4.1.4.orig/configure.ac	2015-11-04 09:55:13.000000000 +0100
-++++ zeromq-4.1.4/configure.ac	2016-06-03 04:41:16.167033535 +0200
-+@@ -293,7 +293,7 @@
-+ 
-+ # CPU-specific optimizations
-+ case "${host_cpu}" in
-+-    *sparc*)
-++    *sparc64*)
-+         AC_LANG_PUSH([C++])
-+         LIBZMQ_CHECK_LANG_FLAG_PREPEND([-mcpu=v9])
-+         AC_LANG_POP([C++])
+diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
+index 49dd6fd..bc9b79b 100644
+--- a/package/mongrel2/Config.in
++++ b/package/mongrel2/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+ 	bool
+ 	default y if BR2_TOOLCHAIN_USES_GLIBC
+ 	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
+-		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_x86_64)
++		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_sparc || BR2_x86_64)
+ 
+ comment "mongrel2 needs a uClibc or glibc toolchain w/ C++, threads, wchar, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
 -- 
 1.7.10.4
