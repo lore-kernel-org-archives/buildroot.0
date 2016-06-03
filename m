@@ -1,40 +1,45 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 3 Jun 2016 05:15:53 +0200
-Subject: [Buildroot] [PATCH] libsigsegv: enable for sparc
-Message-ID: <20160603031553.GA28275@waldemar-brodkorb.de>
+Date: Fri, 3 Jun 2016 05:16:45 +0200
+Subject: [Buildroot] [PATCH] zeromq: fix sparc32 compile
+Message-ID: <20160603031645.GA28308@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that uClibc-ng 1.0.15 is in use, we can reenable
-this package as context functions are available.
+Code is otherwise compiled with sparcv9 optimization and
+cannot be run on sparc32 (sparcv8) machine.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/libsigsegv/Config.in |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/zeromq/0003-fix-sparc-compile.patch |   18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100644 package/zeromq/0003-fix-sparc-compile.patch
 
-diff --git a/package/libsigsegv/Config.in b/package/libsigsegv/Config.in
-index e96ba5f..e5224da 100644
---- a/package/libsigsegv/Config.in
-+++ b/package/libsigsegv/Config.in
-@@ -3,12 +3,12 @@ config BR2_PACKAGE_LIBSIGSEGV
- 	depends on !BR2_xtensa
- 	depends on !BR2_arc # no ucontext_i.sym file
- 	depends on !BR2_microblaze
--	# No ucontext support in uclibc for powerpc, sparc and superh
--	depends on !((BR2_powerpc || BR2_sh || BR2_sparc ) && BR2_TOOLCHAIN_USES_UCLIBC)
-+	# No ucontext support in uclibc for powerpc and superh
-+	depends on !((BR2_powerpc || BR2_sh) && BR2_TOOLCHAIN_USES_UCLIBC)
- 	help
- 	  Library for handling page faults in user mode.
- 
- 	  http://libsigsegv.sourceforge.net/
- 
- comment "libsigsegv needs an (e)glibc toolchain"
--	depends on (BR2_powerpc || BR2_sh || BR2_sparc) && BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on (BR2_powerpc || BR2_sh) && BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/package/zeromq/0003-fix-sparc-compile.patch b/package/zeromq/0003-fix-sparc-compile.patch
+new file mode 100644
+index 0000000..e4f1881
+--- /dev/null
++++ b/package/zeromq/0003-fix-sparc-compile.patch
+@@ -0,0 +1,18 @@
++Fix sparcv8 compile
++Suggested upstream:
++https://github.com/zeromq/libzmq/issues/2021
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur zeromq-4.1.4.orig/configure.ac zeromq-4.1.4/configure.ac
++--- zeromq-4.1.4.orig/configure.ac	2015-11-04 09:55:13.000000000 +0100
+++++ zeromq-4.1.4/configure.ac	2016-06-03 04:41:16.167033535 +0200
++@@ -293,7 +293,7 @@
++ 
++ # CPU-specific optimizations
++ case "${host_cpu}" in
++-    *sparc*)
+++    *sparc64*)
++         AC_LANG_PUSH([C++])
++         LIBZMQ_CHECK_LANG_FLAG_PREPEND([-mcpu=v9])
++         AC_LANG_POP([C++])
 -- 
 1.7.10.4
