@@ -1,150 +1,212 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 3 Jun 2016 06:05:31 +0200
-Subject: [Buildroot] [PATCH v3 2/3] toolchain: add bfin support
-Message-ID: <20160603040531.GA31560@waldemar-brodkorb.de>
+Date: Fri, 3 Jun 2016 06:07:50 +0200
+Subject: [Buildroot] [PATCH v3 3/3] board: add blackfin gdb simulator support
+Message-ID: <20160603040750.GA31665@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With gcc 6.1.0 and binutils 2.26 internal bfin toolchain
-can be used. A gcc patch is required, which was reported upstream.
+With this config you can bootup a Linux kernel
+in GDB simulator and test Blackfin kernel and
+userland.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
 v2 -> v3:
-  - keep BR2_GCC_TARGET_CPU
-v1 -> v2:                                                                                                                                              
-  - remove conditional patch requested by Thomas Petazzoni
-  - do not enable BR2_GCC_TARGET_CPU, may be we can use
-    BR2_TARGET_CPU later for passing -mcpu= via CFLAGS
+  - no changes
+v1 -> v2:
+  - do not use devtmpfs, as login via getty fails
 ---
- package/binutils/Config.in.host                |  6 ++++--
- package/gcc/6.1.0/892-disable-dwarf-bfin.patch | 24 ++++++++++++++++++++++++
- package/gcc/Config.in.host                     |  8 ++++----
- package/uclibc/Config.in                       |  1 +
- toolchain/Config.in                            |  1 -
- 5 files changed, 33 insertions(+), 7 deletions(-)
- create mode 100644 package/gcc/6.1.0/892-disable-dwarf-bfin.patch
+ board/gdb/bfin-bf512/linux-4.4.config | 87 +++++++++++++++++++++++++++++++++++
+ board/gdb/bfin-bf512/readme.txt       | 11 +++++
+ board/gdb/post-build.sh               |  4 ++
+ configs/gdb_bfin_bf512_defconfig      | 40 ++++++++++++++++
+ system/device_table_dev.txt           |  1 +
+ 5 files changed, 143 insertions(+)
+ create mode 100644 board/gdb/bfin-bf512/linux-4.4.config
+ create mode 100644 board/gdb/bfin-bf512/readme.txt
+ create mode 100755 board/gdb/post-build.sh
+ create mode 100644 configs/gdb_bfin_bf512_defconfig
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index efdc840..d96fab2 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -8,8 +8,8 @@ choice
- 	  Select the version of binutils you wish to use.
- 
- 	config BR2_BINUTILS_VERSION_2_24_X
--		# supported, but broken on Nios-II and powerpc64le
--		depends on !BR2_nios2 && !BR2_powerpc64le
-+		# supported, but broken on Nios-II, Blackfin and powerpc64le
-+		depends on !BR2_nios2 && !BR2_powerpc64le && !BR2_bfin
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
- 		# Unsupported ARM cores
-@@ -18,6 +18,8 @@ choice
- 
- 	config BR2_BINUTILS_VERSION_2_25_X
- 		bool "binutils 2.25.1"
-+		# supported but broken on Blackfin
-+		depends on !BR2_bfin
- 
- 	config BR2_BINUTILS_VERSION_2_26_X
- 		bool "binutils 2.26"
-diff --git a/package/gcc/6.1.0/892-disable-dwarf-bfin.patch b/package/gcc/6.1.0/892-disable-dwarf-bfin.patch
+diff --git a/board/gdb/bfin-bf512/linux-4.4.config b/board/gdb/bfin-bf512/linux-4.4.config
 new file mode 100644
-index 0000000..81acde7
+index 0000000..bc2a907
 --- /dev/null
-+++ b/package/gcc/6.1.0/892-disable-dwarf-bfin.patch
-@@ -0,0 +1,24 @@
-+Dwarf support does not compile
++++ b/board/gdb/bfin-bf512/linux-4.4.config
+@@ -0,0 +1,87 @@
++# CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_SYSVIPC=y
++CONFIG_BLK_DEV_INITRD=y
++# CONFIG_RD_GZIP is not set
++# CONFIG_RD_BZIP2 is not set
++# CONFIG_RD_LZMA is not set
++# CONFIG_RD_XZ is not set
++# CONFIG_RD_LZO is not set
++# CONFIG_RD_LZ4 is not set
++CONFIG_CC_OPTIMIZE_FOR_SIZE=y
++# CONFIG_UID16 is not set
++# CONFIG_SGETMASK_SYSCALL is not set
++# CONFIG_SYSFS_SYSCALL is not set
++# CONFIG_KALLSYMS is not set
++# CONFIG_BUG is not set
++# CONFIG_BASE_FULL is not set
++# CONFIG_ADVISE_SYSCALLS is not set
++# CONFIG_MEMBARRIER is not set
++CONFIG_EMBEDDED=y
++# CONFIG_VM_EVENT_COUNTERS is not set
++# CONFIG_SLUB_DEBUG is not set
++# CONFIG_COMPAT_BRK is not set
++CONFIG_MODULES=y
++# CONFIG_BLOCK is not set
++CONFIG_BF512=y
++# CONFIG_SET_GENERIC_CLOCKEVENTS is not set
++# CONFIG_I_ENTRY_L1 is not set
++# CONFIG_EXCPT_IRQ_SYSC_L1 is not set
++# CONFIG_DO_IRQ_L1 is not set
++# CONFIG_CORE_TIMER_IRQ_L1 is not set
++# CONFIG_IDLE_L1 is not set
++# CONFIG_SCHEDULE_L1 is not set
++# CONFIG_ARITHMETIC_OPS_L1 is not set
++# CONFIG_ACCESS_OK_L1 is not set
++# CONFIG_MEMSET_L1 is not set
++# CONFIG_MEMCPY_L1 is not set
++# CONFIG_STRCMP_L1 is not set
++# CONFIG_STRNCMP_L1 is not set
++# CONFIG_STRCPY_L1 is not set
++# CONFIG_STRNCPY_L1 is not set
++# CONFIG_SYS_BFIN_SPINLOCK_L1 is not set
++# CONFIG_CACHELINE_ALIGNED_L1 is not set
++# CONFIG_DCACHE_FLUSH_L1 is not set
++# CONFIG_APP_STACK_L1 is not set
++# CONFIG_BFIN_INS_LOWOVERHEAD is not set
++# CONFIG_BFIN_ICACHE is not set
++# CONFIG_BFIN_DCACHE is not set
++# CONFIG_C_AMCKEN is not set
++CONFIG_BINFMT_ELF_FDPIC=y
++CONFIG_BINFMT_FLAT=y
++# CONFIG_COREDUMP is not set
++# CONFIG_SUSPEND is not set
++# CONFIG_UEVENT_HELPER is not set
++# CONFIG_STANDALONE is not set
++# CONFIG_PREVENT_FIRMWARE_BUILD is not set
++# CONFIG_FW_LOADER is not set
++# CONFIG_ALLOW_DEV_COREDUMP is not set
++# CONFIG_INPUT is not set
++# CONFIG_SERIO is not set
++# CONFIG_VT is not set
++# CONFIG_LEGACY_PTYS is not set
++CONFIG_SERIAL_BFIN=y
++CONFIG_SERIAL_BFIN_CONSOLE=y
++CONFIG_SERIAL_BFIN_UART0=y
++CONFIG_SERIAL_BFIN_UART1=y
++# CONFIG_BFIN_OTP is not set
++# CONFIG_HW_RANDOM is not set
++# CONFIG_HWMON is not set
++# CONFIG_USB_SUPPORT is not set
++# CONFIG_MANDATORY_FILE_LOCKING is not set
++# CONFIG_DNOTIFY is not set
++# CONFIG_MISC_FILESYSTEMS is not set
++CONFIG_NLS=y
++CONFIG_NLS_DEFAULT="utf-8"
++CONFIG_PRINTK_TIME=y
++# CONFIG_ENABLE_WARN_DEPRECATED is not set
++# CONFIG_ENABLE_MUST_CHECK is not set
++# CONFIG_SECTION_MISMATCH_WARN_ONLY is not set
++CONFIG_MAGIC_SYSRQ=y
++# CONFIG_SCHED_DEBUG is not set
++# CONFIG_FTRACE is not set
++# CONFIG_DEBUG_VERBOSE is not set
++# CONFIG_DEBUG_HUNT_FOR_ZERO is not set
++# CONFIG_DEBUG_BFIN_HWTRACE_ON is not set
++CONFIG_EARLY_PRINTK=y
++# CONFIG_ACCESS_CHECK is not set
++# CONFIG_CRC32 is not set
+diff --git a/board/gdb/bfin-bf512/readme.txt b/board/gdb/bfin-bf512/readme.txt
+new file mode 100644
+index 0000000..a56b5bc
+--- /dev/null
++++ b/board/gdb/bfin-bf512/readme.txt
+@@ -0,0 +1,11 @@
++Run the simulation with GDB for FDPIC:
 +
-+Reported upstream:
-+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68468
++ ./output/host/usr/bin/bfin-buildroot-linux-uclibc-run --env operating --model bf512 output/images/vmlinux
 +
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Run the simulation with GDB for FLAT:
 +
-+diff -Nur gcc-6.1.0.orig/libgcc/config.host gcc-6.1.0/libgcc/config.host
-+--- gcc-6.1.0.orig/libgcc/config.host	2016-02-26 21:02:28.000000000 +0100
-++++ gcc-6.1.0/libgcc/config.host	2016-05-12 19:26:30.973350274 +0200
-+@@ -230,6 +230,13 @@
-+       ;;
-+   esac
-+   ;;
-++bfin-*-*linux*)
-++  tmake_file="$tmake_file t-crtstuff-pic t-libgcc-pic t-slibgcc t-slibgcc-gld t-slibgcc-elf-ver t-linux"
-++  extra_parts="crtbegin.o crtbeginS.o crtbeginT.o crtend.o crtendS.o"
-++  if test x$enable_vtable_verify = xyes; then
-++    extra_parts="$extra_parts vtv_start.o vtv_end.o vtv_start_preinit.o vtv_end_preinit.o"
-++  fi
-++  ;;
-+ *-*-linux* | frv-*-*linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu | *-*-gnu* | *-*-kopensolaris*-gnu)
-+   tmake_file="$tmake_file t-crtstuff-pic t-libgcc-pic t-eh-dw2-dip t-slibgcc t-slibgcc-gld t-slibgcc-elf-ver t-linux"
-+   extra_parts="crtbegin.o crtbeginS.o crtbeginT.o crtend.o crtendS.o"
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index cfb0958..b4e7a7b 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -18,7 +18,7 @@ choice
- 		depends on BR2_DEPRECATED_SINCE_2016_05
- 		# Broken or unsupported architectures
- 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
--			&& !BR2_powerpc64le && !BR2_nios2
-+			&& !BR2_powerpc64le && !BR2_nios2 && !BR2_bfin
- 		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a12 && !BR2_pj4 && !BR2_cortex_a17
- 		# Broken or unsupported PPC cores
-@@ -37,7 +37,7 @@ choice
- 		bool "gcc 4.8.x"
- 		# Broken or unsupported architectures
- 		depends on !BR2_microblaze && !BR2_arc \
--			&& !BR2_powerpc64le && !BR2_nios2
-+			&& !BR2_powerpc64le && !BR2_nios2 && !BR2_bfin
- 		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a12 && !BR2_cortex_a17
- 		# Broken or unsupported PPC cores
-@@ -61,7 +61,7 @@ choice
- 	config BR2_GCC_VERSION_4_9_X
- 		bool "gcc 4.9.x"
- 		# Broken or unsupported architectures
--		depends on !BR2_arc
-+		depends on !BR2_arc && !BR2_bfin
- 		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a17
- 		# Unsupported for MIPS R6
-@@ -74,7 +74,7 @@ choice
- 	config BR2_GCC_VERSION_5_X
- 		bool "gcc 5.x"
- 		# Broken or unsupported architectures
--		depends on !BR2_arc
-+		depends on !BR2_arc && !BR2_bfin
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
- 		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 1aad9a0..6e611db 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -120,6 +120,7 @@ config BR2_UCLIBC_TARGET_ARCH
- 	string
- 	default "arc"	   if BR2_arcle || BR2_arceb
- 	default "arm"	   if BR2_arm	|| BR2_armeb
-+	default "bfin"	   if BR2_bfin
- 	default "m68k"	   if BR2_m68k
- 	default "mips"	   if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	default "powerpc"  if BR2_powerpc
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index e0044c1..a725556 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -38,7 +38,6 @@ choice
- 
- config BR2_TOOLCHAIN_BUILDROOT
- 	bool "Buildroot toolchain"
--	depends on !BR2_bfin
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 
- config BR2_TOOLCHAIN_EXTERNAL
++ ./output/host/usr/bin/bfin-buildroot-uclinux-uclibc-run --env operating --model bf512 output/images/vmlinux
++
++The login prompt will appear in the terminal that started GDB.
++
++Tested with GDB 7.9
+diff --git a/board/gdb/post-build.sh b/board/gdb/post-build.sh
+new file mode 100755
+index 0000000..8933d50
+--- /dev/null
++++ b/board/gdb/post-build.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++# no simulated network devices at the moment
++rm -f ${TARGET_DIR}/etc/init.d/S40network
++rm -rf ${TARGET_DIR}/etc/network/
+diff --git a/configs/gdb_bfin_bf512_defconfig b/configs/gdb_bfin_bf512_defconfig
+new file mode 100644
+index 0000000..f9e3b87
+--- /dev/null
++++ b/configs/gdb_bfin_bf512_defconfig
+@@ -0,0 +1,40 @@
++# Architecture
++BR2_bfin=y
++BR2_bf512=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_INITRAMFS=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/gdb/post-build.sh"
++
++# Linux headers same as kernel, a 4.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.5"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/gdb/bfin-bf512/linux-4.4.config"
++BR2_LINUX_KERNEL_VMLINUX=y
++
++# Serial port config
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyBF0"
++
++# use minimal busybox with hush
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
++
++# use static device nodes, devtmpfs is problematic (login fails)
++BR2_ROOTFS_DEVICE_CREATION_STATIC=y
++
++# ldconfig does not build
++# BR2_UCLIBC_INSTALL_UTILS is not set
++
++# compile gdb sim
++BR2_PACKAGE_HOST_GDB=y
++# BR2_PACKAGE_HOST_GDB_TUI is not set
++# BR2_PACKAGE_HOST_GDB_PYTHON is not set
++BR2_PACKAGE_HOST_GDB_SIM=y
++
+diff --git a/system/device_table_dev.txt b/system/device_table_dev.txt
+index c4257a6..4f0b637 100644
+--- a/system/device_table_dev.txt
++++ b/system/device_table_dev.txt
+@@ -31,6 +31,7 @@
+ /dev/ttyAM	c	666	0	0	204	16	0	1	3
+ /dev/ttyCPM	c	666	0	0	204	46	0	1	4
+ /dev/ttyAMA	c	666	0	0	204	64	0	1	4
++/dev/ttyBF	c	666	0	0	204	64	0	1	2
+ /dev/ttySAC	c	666	0	0	204	64	0	1	4
+ /dev/ttySC	c	666	0	0	204	8	0	1	8
+ /dev/ttyPSC	c	666	0	0	204	148	0	1	4
 -- 
 2.1.4
