@@ -1,51 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jun 2016 12:39:39 +0200
-Subject: [Buildroot] [git commit] webp: allow to enable demux
-Message-ID: <20160603122100.5105F807F6@busybox.osuosl.org>
+Date: Fri, 3 Jun 2016 14:19:50 +0200
+Subject: [Buildroot] [git commit] e2fsprogs: fix build failure of subst.c
+Message-ID: <20160603122100.5BBFC820FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e47638f8dca29b0d9b729edbaeaa11a08f9957fa
+commit: https://git.buildroot.net/buildroot/commit/?id=4d1337e3abd935ae81f2ec7320213c75d7dd4b7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
+subst.c is built for the host, but uses defines calculated by the
+configure script using the cross-compiler. By passing BUILD_CFLAGS, we
+help subst.c include the proper header files, and therefore avoid the
+build failure.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/2a66280800b8aa16fee2701b3f345aa24bb13c35/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/webp/Config.in | 8 ++++++++
- package/webp/webp.mk   | 4 ++++
- 2 files changed, 12 insertions(+)
+ package/e2fsprogs/e2fsprogs.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/webp/Config.in b/package/webp/Config.in
-index e385b5e..7c4722f 100644
---- a/package/webp/Config.in
-+++ b/package/webp/Config.in
-@@ -5,3 +5,11 @@ config BR2_PACKAGE_WEBP
- 	  compression for images on the web
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index c1cbf71..63f5856 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -43,6 +43,12 @@ ifeq ($(BR2_nios2),y)
+ E2FSPROGS_CONF_ENV += ac_cv_func_fallocate=no
+ endif
  
- 	  https://developers.google.com/speed/webp/
++# Some programs are built for the host, but use definitions guessed by
++# the configure script (i.e with the cross-compiler). Help them by
++# saying that <sys/stat.h> is available on the host, which is needed
++# for util/subst.c to build properly.
++E2FSPROGS_CONF_ENV += BUILD_CFLAGS="-DHAVE_SYS_STAT_H"
 +
-+config BR2_PACKAGE_WEBP_DEMUX
-+	bool "webpdemux"
-+	depends on BR2_PACKAGE_WEBP
-+	help
-+	  "Demux" is a part of WebPMux for extraction and manipulation of an
-+	  extended format WebP file, which can have features like color profile,
-+	  metadata and animation.
-diff --git a/package/webp/webp.mk b/package/webp/webp.mk
-index 5f2cab7..b609024 100644
---- a/package/webp/webp.mk
-+++ b/package/webp/webp.mk
-@@ -17,6 +17,10 @@ WEBP_CONF_OPTS += \
- 	--with-tiffincludedir=$(STAGING_DIR)/usr/include \
- 	--with-tifflibdir=$(STAGING_DIR)/usr/lib
- 
-+ifeq ($(BR2_PACKAGE_WEBP_DEMUX),y)
-+WEBP_CONF_OPTS += --enable-libwebpdemux
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- WEBP_DEPENDENCIES += libpng
- WEBP_CONF_ENV += ac_cv_path_LIBPNG_CONFIG=$(STAGING_DIR)/usr/bin/libpng-config
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ # util-linux libuuid pulls in libintl if needed, so ensure we also
+ # link against it, otherwise static linking fails
