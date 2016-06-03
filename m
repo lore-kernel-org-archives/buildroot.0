@@ -1,37 +1,32 @@
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Fri, 3 Jun 2016 08:23:08 -0500
-Subject: [Buildroot] [PATCH] make: Correct hash type
-In-Reply-To: <20160603151922.3adb57af@free-electrons.com>
-References: <1464959760-65290-1-git-send-email-clayton.shotwell@rockwellcollins.com>
- <20160603151922.3adb57af@free-electrons.com>
-Message-ID: <CANn-YGRw+NRk6G=y+D33v2TRrTawsUuHS_KfWsGvVzrAOaBK7Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 3 Jun 2016 15:26:04 +0200
+Subject: [Buildroot] [PATCH v4] wiringpi: new package
+In-Reply-To: <1449259282-5663-1-git-send-email-ps.report@gmx.net>
+References: <1449259282-5663-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20160603152604.0efc09fa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello,
 
-On Fri, Jun 3, 2016 at 8:19 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri,  3 Jun 2016 08:16:00 -0500, Clayton Shotwell wrote:
->> The hash published in the make release emails is a md5sum, not a
->> sha1sum. Locally verified the downloaded file checks against the md5sum
->> after verifying the signature
->>
->> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
->> ---
->>  package/make/make.hash | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> Thanks, but this issue has already been fixed in
-> https://git.buildroot.net/buildroot/commit/?id=3aa3b892aba1169618075c9d55af3d57ad59092b.
+On Fri,  4 Dec 2015 21:01:22 +0100, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-My apologies. That's what I get for looking at my build results from
-last night and not pulling down the latest first.
+I wanted to finally apply this patch, but unfortunately, git.drogon.net
+is dead, and so is www.wiringpi.com. I looked at
+https://github.com/WiringPi/WiringPi but there are no tags/releases.
 
-Thanks,
-Clayton
+So, right now, this package cannot be integrated due to this. Can you
+see if there is another download location available, and/or what is the
+status of this project upstream?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
