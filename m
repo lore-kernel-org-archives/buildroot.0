@@ -1,77 +1,51 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 3 Jun 2016 11:50:54 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2016-06-02
-In-Reply-To: <20160603063024.061EE102E94@stock.ovh.net>
-References: <20160603063024.061EE102E94@stock.ovh.net>
-Message-ID: <1464954612.8682.36.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 3 Jun 2016 12:39:39 +0200
+Subject: [Buildroot] [git commit] webp: allow to enable demux
+Message-ID: <20160603122100.5105F807F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=e47638f8dca29b0d9b729edbaeaa11a08f9957fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 2016-06-03 at 08:30 +0200, Thomas Petazzoni wrote:
-> Those results are limited to the arc architecture.
-> 
-> Build statistics for 2016-06-02
-> ===============================
-> 
-> ????????success : 0??
-> ???????failures : 15?
-> ???????timeouts : 0??
-> ??????????TOTAL : 15?
-> 
-> Classification of failures by reason
-> ====================================
-> 
-> ?????host-binutils-arc-2016.03 | 8?
-> ??????????binutils-arc-2016.03 | 2?
+Signed-off-by: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/webp/Config.in | 8 ++++++++
+ package/webp/webp.mk   | 4 ++++
+ 2 files changed, 12 insertions(+)
 
-Here we're hitting what seems to be an upstream binutils
-issue. If there's no prebuilt documentation (which is the case for
-sources from git) binutils will fail to build documentation
-if there's no "makeinfo" installed on a build host.
-
-Note our previous binutils (from "arc-2015.12" release) even though being taken from
-git repo did have prebuilt docs in place.
-
-Now what happens with arc-2016.03 binutils or upstream sources from git...
-
-Script "missing" returns code "127" if "makeinfo" "command not found" for real,
-see?https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=missing#l207
-and its caller which is "bfd.info" in "bfd/doc/Makefile" exits with that same code,
-see?https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=blob;f=bfd/doc/Makefile.in#l487
-which "make" interprets as an error code, thus we see:
----------------------->8-------------------
-make[4]: *** [bfd.info] Error 127
----------------------->8-------------------
-
-On my machine I do have "makeinfo" installed as well as many real people have too that's why
-nobody had this problem before.
-
-So there're 2 solutions (one of which is a work-around which postpones the problem):
-?1. Install "makeinfo" on your build server. That's obviously just a work-around.
-?2. Fix bfd/doc/Makefile so it gracefully handles expected error codes returned by
-? ? "missing". That looks like a proper fix.
-
-Any thoughts are more than welcome. And indeed we'll try to fix this ASAP because nothing could
-be built for target if host-binutils fails to build itself.
-
-BTW our hack in BR when we set "ac_cv_prog_MAKEINFO=missing" to disable documentation building
-turned out to be a bit naive. That's because "missing" script will anyways try to run target
-tool (in our case "makeinfo").	
-
-
-> ?????????????bluez_utils-4.101 | 1?
-> ? ? ? ? ? ?libmemcached-1.0.18 | 1?
-
-That's binutils' segfault - we'll be looking at it.
-
-> ? ? ? ? ? ? ? ? e2fsprogs-1.43 | 3?
-
-This seems to be non-ARC specific problem.
-
--Alexey
+diff --git a/package/webp/Config.in b/package/webp/Config.in
+index e385b5e..7c4722f 100644
+--- a/package/webp/Config.in
++++ b/package/webp/Config.in
+@@ -5,3 +5,11 @@ config BR2_PACKAGE_WEBP
+ 	  compression for images on the web
+ 
+ 	  https://developers.google.com/speed/webp/
++
++config BR2_PACKAGE_WEBP_DEMUX
++	bool "webpdemux"
++	depends on BR2_PACKAGE_WEBP
++	help
++	  "Demux" is a part of WebPMux for extraction and manipulation of an
++	  extended format WebP file, which can have features like color profile,
++	  metadata and animation.
+diff --git a/package/webp/webp.mk b/package/webp/webp.mk
+index 5f2cab7..b609024 100644
+--- a/package/webp/webp.mk
++++ b/package/webp/webp.mk
+@@ -17,6 +17,10 @@ WEBP_CONF_OPTS += \
+ 	--with-tiffincludedir=$(STAGING_DIR)/usr/include \
+ 	--with-tifflibdir=$(STAGING_DIR)/usr/lib
+ 
++ifeq ($(BR2_PACKAGE_WEBP_DEMUX),y)
++WEBP_CONF_OPTS += --enable-libwebpdemux
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ WEBP_DEPENDENCIES += libpng
+ WEBP_CONF_ENV += ac_cv_path_LIBPNG_CONFIG=$(STAGING_DIR)/usr/bin/libpng-config
