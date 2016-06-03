@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 3 Jun 2016 09:55:42 +0200
-Subject: [Buildroot] [PATCH 5/5] python-flask: bump to version 0.11
-In-Reply-To: <1464876330-6890-5-git-send-email-yegorslists@googlemail.com>
-References: <1464876330-6890-1-git-send-email-yegorslists@googlemail.com>
- <1464876330-6890-5-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160603095542.1ee1cf73@free-electrons.com>
+Date: Fri, 3 Jun 2016 11:03:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/grantlee: upgrade to 5.1.0,
+ remove obsolote Qt4 build option
+In-Reply-To: <1464884168-24478-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+References: <1464884168-24478-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <20160603110333.78b5218a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +13,69 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  2 Jun 2016 16:05:30 +0200, yegorslists at googlemail.com wrote:
+On Thu,  2 Jun 2016 18:16:08 +0200, Zoltan Gyarmati wrote:
+> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 
-> +	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-> +	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+Thanks for this patch!
 
-The "runtime" comment here is not very relevant. Indeed, the
-python/python3 package is really a build dependency: it is built before
-any target python package.
+>  In upstream the Qt4 build is not supported since 2 releases, earlier we
+> built the latest Qt4 supporting version if Qt4 was built, but IMHO
+> if the upstream has stopped supporting Qt4 we also safe to do so.
+>  Hopefully this transition period was enough for the dependecies to migrate
+> to Qt5. If somebody still uses Grantlee with Qt4 though, pls let me know and
+> i'll post an other patch with keeping Qt4 support.
 
-So I've simply dropped the comment before applying.
+I think it is reasonable to drop the Qt4 support.
+
+> diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
+> index 7895c7e..77e50e6 100644
+> --- a/package/grantlee/Config.in
+> +++ b/package/grantlee/Config.in
+> @@ -1,16 +1,12 @@
+>  config BR2_PACKAGE_GRANTLEE
+>  	bool "grantlee"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # Qt Script
+
+This dependency was only related to Qt Script, so it can be dropped.
+
+> -	depends on (BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT && BR2_PACKAGE_QT) || \
+> -		(BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5)
+> +	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5
+>  	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405 # Qt GUI module
+
+Ditto.
+
+>  	# https://sourceware.org/bugzilla/show_bug.cgi?id=20173
+>  	depends on !BR2_microblaze && !BR2_nios2
+
+As a separate patch, it would be useful if you could re-test on
+microblaze and nios2, after removing the --fatal-warnings option, as
+suggested by Nick Clifton in this bug report?
+
+> -	select BR2_PACKAGE_QT_STL if BR2_PACKAGE_QT
+> -	select BR2_PACKAGE_QT_SCRIPT if BR2_PACKAGE_QT
+> -	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
+> -	select BR2_PACKAGE_QT5SCRIPT if BR2_PACKAGE_QT5
+> -	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
+> +	select BR2_PACKAGE_QT5SCRIPT
+> +	select BR2_PACKAGE_QT5BASE_GUI
+>  	help
+>  	  Qt implementation of the Django template framework
+>  
+> @@ -19,6 +15,5 @@ config BR2_PACKAGE_GRANTLEE
+>  comment "grantlee needs a toolchain with NPTL not affected by Binutils bug 19405"
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>  	depends on !BR2_microblaze && !BR2_nios2
+> -	depends on (BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT && BR2_PACKAGE_QT) || \
+> -		(BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5) || \
+> +	depends on (BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5) || \
+>  		BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405
+
+This comment is no longer needed.
+
+Could you rework your patch to fix those minor issues?
+
+Thanks a lot!
 
 Thomas
 -- 
