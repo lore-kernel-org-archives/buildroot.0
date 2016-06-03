@@ -1,44 +1,32 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  2 Jun 2016 20:11:06 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{18, 14, 12}.x and 4.{1, 4,
-	5}.x series
-Message-ID: <1464909066-1640-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu,  2 Jun 2016 21:57:44 -0300
+Subject: [Buildroot] [PATCH] weston: drop autoreconf
+Message-ID: <1464915464-28157-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+It's unnecessary as pointed by Thomas P.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/linux-headers/Config.in.host | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/weston/weston.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 6890c9e..d53766b 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -221,15 +221,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.80"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.59"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.70"	if BR2_KERNEL_HEADERS_3_14
--	default "3.18.33"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.12.60"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.14.71"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.18.34"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.24"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.25"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
--	default "4.4.11"	if BR2_KERNEL_HEADERS_4_4
--	default "4.5.5"		if BR2_KERNEL_HEADERS_4_5
-+	default "4.4.12"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.5.6"		if BR2_KERNEL_HEADERS_4_5
- 	default "4.6.1"		if BR2_KERNEL_HEADERS_4_6
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 6902658..dfcb9ac 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -9,8 +9,6 @@ WESTON_SITE = http://wayland.freedesktop.org/releases
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
+ WESTON_LICENSE_FILES = COPYING
+-# For 0002-build-add-check-for-clock_gettime-in-librt.patch
+-WESTON_AUTORECONF = YES
+ 
+ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
+ 	libxkbcommon pixman libpng jpeg mtdev udev cairo libinput \
 -- 
 2.7.3
