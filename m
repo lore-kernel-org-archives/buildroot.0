@@ -1,9 +1,9 @@
 From: Andrew Webster <awebster@arcx.com>
-Date: Fri, 3 Jun 2016 09:12:41 -0400
-Subject: [Buildroot] [PATCH 08/10] libimxvpuapi: bump version to 0.10.2
+Date: Fri, 3 Jun 2016 09:12:40 -0400
+Subject: [Buildroot] [PATCH 07/10] imx-gpu-viv: bump version to 5.0.11-p8.3
 In-Reply-To: <cover.1464958470.git.awebster@arcx.com>
 References: <cover.1464958470.git.awebster@arcx.com>
-Message-ID: <17186dba6267a09cda955857673d4198395a04c8.1464958470.git.awebster@arcx.com>
+Message-ID: <53987918b70ef751a691c842306f89cfa620d3bd.1464958470.git.awebster@arcx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,43 +11,81 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Changelog:
-- fix AUD NAL positioning in h.264 encoder output
-  (SPS/PPS/AUD were ordered incorrectly - AUD has to come first, not last)
-- fix build error with examples when --enable-static is used
-- pass quality factor in simplified JPEG encoder interface correctly
-- add functions for querying and setting header data
-  useful for modifying headers, like VUI data in the SPS RBSP
-- documentation updates
+Software floating point is no longer supported.
+
+For a detailed list of changes in this update, see the Graphics section of
+the i.MX Linux Release Notes contained in the i.MX Linux BSP documentation
+here:
+
+https://www.nxp.com/webapp/Download?colCode=L4.1.15_1.0.0_LINUX_DOCS&location=null&fpsp=1&WT_TYPE=Supporting%20Information&WT_VENDOR=FREESCALE&WT_FILE_FORMAT=gz&WT_ASSET=Documentation&fileExt=.gz&Parent_nodeId=1337637154535695831062&Parent_pageType=product
 
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/c999668
+https://github.com/Freescale/meta-fsl-arm/commit/b667ed4
 
 Signed-off-by: Andrew Webster <awebster@arcx.com>
 ---
- package/libimxvpuapi/libimxvpuapi.hash | 2 +-
- package/libimxvpuapi/libimxvpuapi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/imx-gpu-viv/Config.in        |  6 +++++-
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash |  4 +---
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 10 +++-------
+ 3 files changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/package/libimxvpuapi/libimxvpuapi.hash b/package/libimxvpuapi/libimxvpuapi.hash
-index fd90a20..c8cabcf 100644
---- a/package/libimxvpuapi/libimxvpuapi.hash
-+++ b/package/libimxvpuapi/libimxvpuapi.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256 8d7aeed88c06fda44318cef9565ae47b86461bd309908b1103a7974ed0822a8d  libimxvpuapi-0.10.1.tar.gz
-+sha256 8e6dc4105db6164c0de72fd60eb73f4ba1632f7ba5052b1abc834b462b566da2  libimxvpuapi-0.10.2.tar.gz
-diff --git a/package/libimxvpuapi/libimxvpuapi.mk b/package/libimxvpuapi/libimxvpuapi.mk
-index e0d8cc9..df84806 100644
---- a/package/libimxvpuapi/libimxvpuapi.mk
-+++ b/package/libimxvpuapi/libimxvpuapi.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index 20759b1..9a7cf56 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -2,12 +2,16 @@ comment "imx-gpu-viv needs an (e)glibc toolchain"
+ 	depends on BR2_arm
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC
+ 
++comment "imx-gpu-viv needs EABIhf"
++	depends on BR2_arm
++	depends on !BR2_ARM_EABIHF
++
+ config BR2_PACKAGE_IMX_GPU_VIV
+ 	bool "imx-gpu-viv"
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_HAS_LIBOPENVG
+-	depends on BR2_arm # Only relevant for i.MX6
++	depends on BR2_ARM_EABIHF # Only relevant for EABIhf i.MX6
+ 	# Library binaries are linked against libc.so.6
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+index 4119388..4fce3f8 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+@@ -1,3 +1 @@
+-# locally computed
+-sha256	3ea201f91ce9b56455e4983ab1055e8175415fbbf2800dc097d47e78ceefba34  imx-gpu-viv-5.0.11.p7.4-sfp.bin
+-sha256	b80838104f2f2e3b0baf2f1aacdca263c1c92589ce919b3be40aaad23f686b7f  imx-gpu-viv-5.0.11.p7.4-hfp.bin
++sha256	0400f19dce7223e046ca693cae8578201904c8e7bdcf0c444a6114afa14f09fe  imx-gpu-viv-5.0.11.p8.3-hfp.bin
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index b51a7af..513dcf0 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -4,19 +4,15 @@
  #
  ################################################################################
  
--LIBIMXVPUAPI_VERSION = 0.10.1
-+LIBIMXVPUAPI_VERSION = 0.10.2
- LIBIMXVPUAPI_SITE = $(call github,Freescale,libimxvpuapi,$(LIBIMXVPUAPI_VERSION))
- LIBIMXVPUAPI_LICENSE = LGPLv2.1+
- LIBIMXVPUAPI_LICENSE_FILES = LICENSE
+-IMX_GPU_VIV_BASE_VERSION = 5.0.11.p7.4
+-ifeq ($(BR2_ARM_EABIHF),y)
++IMX_GPU_VIV_BASE_VERSION = 5.0.11.p8.3
+ IMX_GPU_VIV_VERSION = $(IMX_GPU_VIV_BASE_VERSION)-hfp
+-else
+-IMX_GPU_VIV_VERSION = $(IMX_GPU_VIV_BASE_VERSION)-sfp
+-endif
+ IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
+ IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin
+ 
+ IMX_GPU_VIV_INSTALL_STAGING = YES
+ 
+-IMX_GPU_VIV_LICENSE = Freescale Semiconductor Software License Agreement
+-IMX_GPU_VIV_LICENSE_FILES = EULA
++IMX_GPU_VIV_LICENSE = NXP Semiconductor Software License Agreement
++IMX_GPU_VIV_LICENSE_FILES = EULA COPYING
+ IMX_GPU_VIV_REDISTRIBUTE = NO
+ 
+ IMX_GPU_VIV_PROVIDES = libegl libgles libopenvg
 -- 
 1.9.1
