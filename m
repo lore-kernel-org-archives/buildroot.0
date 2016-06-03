@@ -1,53 +1,119 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Fri,  3 Jun 2016 11:41:17 +0100
-Subject: [Buildroot] [PATCH 2/2] package/nodejs: bump version to 6.2.1
-In-Reply-To: <1464950477-3122-1-git-send-email-martin@barkynet.com>
-References: <1464950477-3122-1-git-send-email-martin@barkynet.com>
-Message-ID: <1464950477-3122-2-git-send-email-martin@barkynet.com>
+From: maitysanchayan at gmail.com <maitysanchayan@gmail.com>
+Date: Fri, 3 Jun 2016 16:52:18 +0530
+Subject: [Buildroot] [PATCH v2 1/2] configs: Add support for Toradex
+ Colibri Vybrid Modules
+In-Reply-To: <20160531231954.18455f2e@free-electrons.com>
+References: <cover.1449902276.git.maitysanchayan@gmail.com>
+ <57ea79a5678e14be13215ddc1be041c962b3be10.1449902276.git.maitysanchayan@gmail.com>
+ <20160531231954.18455f2e@free-electrons.com>
+Message-ID: <20160603112218.GA1688@Sanchayan-Arch.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://nodejs.org/en/blog/release/v6.2.1/
+Hello Thomas,
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- .../{6.1.0 => 6.2.1}/0001-gyp-force-link-command-to-use-CXX.patch     | 0
- package/nodejs/Config.in                                              | 2 +-
- package/nodejs/nodejs.hash                                            | 4 ++--
- 3 files changed, 3 insertions(+), 3 deletions(-)
- rename package/nodejs/{6.1.0 => 6.2.1}/0001-gyp-force-link-command-to-use-CXX.patch (100%)
+On 16-05-31 23:19:54, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Thanks for this new iteration, and sorry for the very slow response.
+> Are you still interested in getting this defconfig merged in Buildroot
+> upstream? If so, please see my comments below.
 
-diff --git a/package/nodejs/6.1.0/0001-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/6.2.1/0001-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/6.1.0/0001-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/6.2.1/0001-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 70dacc8..432792f 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "6.1.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "6.2.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	default "0.10.45"
- 
- menu "Module Selection"
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index f417df2..9fce2f5 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.45/SHASUMS256.txt
- sha256  a71070ea7aece9c94450b45102f2d1be42f0add168dd9c9701e9032d363bd4fa  node-v0.10.45.tar.xz
- 
--# From upstream URL: http://nodejs.org/dist/v6.1.0/SHASUMS256.txt
--sha256  c7940301917232527490a166df78f9d3d58e70e10fd502f73889d936763cfe84  node-v6.1.0.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v6.2.1/SHASUMS256.txt
-+sha256  dbaeb8fb68a599e5164b17c74f66d24f424ee4ab3a25d8de8a3c6808e5b42bfb  node-v6.2.1.tar.xz
--- 
-2.7.4
+Yes, I am still interested.
+
+> 
+> On Sat, 12 Dec 2015 12:36:57 +0530, Sanchayan Maity wrote:
+> > Add a minimal default configuration for Colibri Vybrid modules.
+> > 
+> > Tested on Colibri VF50 and VF61 modules.
+> 
+> We need your Signed-off-by line here.
+> 
+> > ---
+> >  configs/colibri_vf_defconfig | 38 ++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 38 insertions(+)
+> >  create mode 100644 configs/colibri_vf_defconfig
+> > 
+> > diff --git a/configs/colibri_vf_defconfig b/configs/colibri_vf_defconfig
+> > new file mode 100644
+> > index 0000000..19a3394
+> > --- /dev/null
+> > +++ b/configs/colibri_vf_defconfig
+> > @@ -0,0 +1,38 @@
+> > +BR2_arm=y
+> > +BR2_cortex_a5=y
+> > +BR2_ARM_EABIHF=y
+> > +BR2_ARM_ENABLE_NEON=y
+> > +BR2_ARM_FPU_NEON_VFPV4=y
+> 
+> Please add here:
+> 
+> # Linux headers same as kernel, a 4.5 series
+> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
+> 
+> Of course 4.5 should be adjusted to match the kernel version you're
+> using. This is needed to make sure that the toolchain is built with
+> kernel headers that are at least as old as the kernel running on the
+> target.
+
+Ok. I have this in a new version in my local branch.
+
+> 
+> > +BR2_TARGET_GENERIC_HOSTNAME="colibri-vf"
+> > +BR2_TARGET_GENERIC_ISSUE="Colibri VF 20151211"
+> > +BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
+> > +BR2_LINUX_KERNEL=y
+> > +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> > +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.toradex.com/linux-toradex.git"
+> > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a276a526ac8e0d255f4165221c5bece5940dbc95"
+> > +BR2_LINUX_KERNEL_DEFCONFIG="colibri_vf"
+> > +BR2_LINUX_KERNEL_ZIMAGE=y
+> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="vf610-colibri-eval-v3 vf500-colibri-eval-v3"
+> > +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> > +BR2_TARGET_ROOTFS_UBIFS=y
+> > +BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
+> > +BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x800
+> > +BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=8112
+> > +BR2_TARGET_ROOTFS_UBIFS_RT_LZO=y
+> > +BR2_TARGET_ROOTFS_UBIFS_NONE=y
+> > +BR2_TARGET_ROOTFS_UBIFS_OPTS="--space-fixup -o ubifs.img"
+> 
+> Remove the -o ubifs.img, it is anyway overridden by the ubifs.mk build
+> logic in Buildroot. If you really want to rename the file, do so in a
+> post-image script.
+
+Ah I see. I was wondering why it does not work as intended. Thanks for
+the tip. I will look into the post-image script part.
+
+Regards,
+Sanchayan.
+
+> 
+> > +BR2_TARGET_ROOTFS_UBI=y
+> > +BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x20000
+> > +BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+> > +BR2_TARGET_ROOTFS_UBI_OPTS=""
+> > +BR2_TARGET_UBOOT=y
+> > +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> > +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> > +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.toradex.com/u-boot-toradex.git"
+> > +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="1bb2de8875a385dd390678e8d46d3aab5a70445d"
+> > +BR2_TARGET_UBOOT_USE_DEFCONFIG=y
+> > +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="colibri_vf"
+> > +BR2_TARGET_UBOOT_FORMAT_IMX=y
+> > +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> > +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nand.imx"
+> 
+> I have some more comments on the second patch, which I'll do now.
+> 
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
