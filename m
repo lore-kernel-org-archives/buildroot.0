@@ -1,294 +1,150 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 3 Jun 2016 06:03:02 +0200
-Subject: [Buildroot] [PATCH v3 1/3] gcc: add hidden symbol for defaults
-Message-ID: <20160603040302.GA31489@waldemar-brodkorb.de>
+Date: Fri, 3 Jun 2016 06:05:31 +0200
+Subject: [Buildroot] [PATCH v3 2/3] toolchain: add bfin support
+Message-ID: <20160603040531.GA31560@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some architectures, f.e. Blackfin doesn't support to
-configure GCC with --with-cpu to set some CPU specific
-default CFLAGS (-mcpu=foo). Use a hidden config symbol
-to give a hint which architecture supports it, otherwise
-add defaults to toolchain wrapper for internal toolchains.
-
-Idea from Thomas Petazzoni.
+With gcc 6.1.0 and binutils 2.26 internal bfin toolchain
+can be used. A gcc patch is required, which was reported upstream.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
-v1 -> v3:
-  - new patch
+v2 -> v3:
+  - keep BR2_GCC_TARGET_CPU
+v1 -> v2:                                                                                                                                              
+  - remove conditional patch requested by Thomas Petazzoni
+  - do not enable BR2_GCC_TARGET_CPU, may be we can use
+    BR2_TARGET_CPU later for passing -mcpu= via CFLAGS
 ---
- arch/Config.in     | 29 +++++++++++++++++++++++++++++
- package/gcc/gcc.mk | 33 +++++++++++++++++++++++++++++++++
- 2 files changed, 62 insertions(+)
+ package/binutils/Config.in.host                |  6 ++++--
+ package/gcc/6.1.0/892-disable-dwarf-bfin.patch | 24 ++++++++++++++++++++++++
+ package/gcc/Config.in.host                     |  8 ++++----
+ package/uclibc/Config.in                       |  1 +
+ toolchain/Config.in                            |  1 -
+ 5 files changed, 33 insertions(+), 7 deletions(-)
+ create mode 100644 package/gcc/6.1.0/892-disable-dwarf-bfin.patch
 
-diff --git a/arch/Config.in b/arch/Config.in
-index be37481..1fdd36a 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -27,6 +27,7 @@ choice
- config BR2_arcle
- 	bool "ARC (little endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs
- 	  that can be used from deeply embedded to high performance host
-@@ -35,6 +36,7 @@ config BR2_arcle
- config BR2_arceb
- 	bool "ARC (big endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  Synopsys' DesignWare ARC Processor Cores are a family of 32-bit CPUs
- 	  that can be used from deeply embedded to high performance host
-@@ -42,6 +44,7 @@ config BR2_arceb
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index efdc840..d96fab2 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -8,8 +8,8 @@ choice
+ 	  Select the version of binutils you wish to use.
  
- config BR2_arm
- 	bool "ARM (little endian)"
-+	select BR2_GCC_TARGET_DEFAULTS
- 	# MMU support is set by the subarchitecture file, arch/Config.in.arm
- 	help
- 	  ARM is a 32-bit reduced instruction set computer (RISC) instruction
-@@ -51,6 +54,7 @@ config BR2_arm
+ 	config BR2_BINUTILS_VERSION_2_24_X
+-		# supported, but broken on Nios-II and powerpc64le
+-		depends on !BR2_nios2 && !BR2_powerpc64le
++		# supported, but broken on Nios-II, Blackfin and powerpc64le
++		depends on !BR2_nios2 && !BR2_powerpc64le && !BR2_bfin
+ 		# Unsupported for MIPS R6
+ 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 		# Unsupported ARM cores
+@@ -18,6 +18,8 @@ choice
  
- config BR2_armeb
- 	bool "ARM (big endian)"
-+	select BR2_GCC_TARGET_DEFAULTS
- 	# MMU support is set by the subarchitecture file, arch/Config.in.arm
- 	help
- 	  ARM is a 32-bit reduced instruction set computer (RISC) instruction
-@@ -62,6 +66,7 @@ config BR2_aarch64
- 	bool "AArch64 (little endian)"
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
- 	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
-@@ -71,6 +76,7 @@ config BR2_aarch64_be
- 	bool "AArch64 (big endian)"
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
- 	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
-@@ -88,12 +94,14 @@ config BR2_bfin
- config BR2_i386
- 	bool "i386"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  Intel i386 architecture compatible microprocessor
- 	  http://en.wikipedia.org/wiki/I386
+ 	config BR2_BINUTILS_VERSION_2_25_X
+ 		bool "binutils 2.25.1"
++		# supported but broken on Blackfin
++		depends on !BR2_bfin
  
- config BR2_m68k
- 	bool "m68k"
-+	select BR2_GCC_TARGET_DEFAULTS
- 	# MMU support is set by the subarchitecture file, arch/Config.in.m68k
- 	help
- 	  Motorola 68000 family microprocessor
-@@ -102,6 +110,7 @@ config BR2_m68k
- config BR2_microblazeel
- 	bool "Microblaze AXI (little endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  Soft processor core designed for Xilinx FPGAs from Xilinx. AXI bus
- 	  based architecture (little endian)
-@@ -111,6 +120,7 @@ config BR2_microblazeel
- config BR2_microblazebe
- 	bool "Microblaze non-AXI (big endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  Soft processor core designed for Xilinx FPGAs from Xilinx. PLB bus
- 	  based architecture (non-AXI, big endian)
-@@ -120,6 +130,7 @@ config BR2_microblazebe
- config BR2_mips
- 	bool "MIPS (big endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  MIPS is a RISC microprocessor from MIPS Technologies. Big endian.
- 	  http://www.mips.com/
-@@ -128,6 +139,7 @@ config BR2_mips
- config BR2_mipsel
- 	bool "MIPS (little endian)"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  MIPS is a RISC microprocessor from MIPS Technologies. Little endian.
- 	  http://www.mips.com/
-@@ -137,6 +149,7 @@ config BR2_mips64
- 	bool "MIPS64 (big endian)"
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  MIPS is a RISC microprocessor from MIPS Technologies. Big endian.
- 	  http://www.mips.com/
-@@ -146,6 +159,7 @@ config BR2_mips64el
- 	bool "MIPS64 (little endian)"
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  MIPS is a RISC microprocessor from MIPS Technologies. Little endian.
- 	  http://www.mips.com/
-@@ -154,6 +168,7 @@ config BR2_mips64el
- config BR2_nios2
- 	bool "Nios II"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  Nios II is a soft core processor from Altera Corporation.
- 	  http://www.altera.com/
-@@ -162,6 +177,7 @@ config BR2_nios2
- config BR2_powerpc
- 	bool "PowerPC"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
- 	  Big endian.
-@@ -172,6 +188,7 @@ config BR2_powerpc64
- 	bool "PowerPC64 (big endian)"
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
- 	  Big endian.
-@@ -182,6 +199,7 @@ config BR2_powerpc64le
- 	bool "PowerPC64 (little endian)"
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
- 	  Little endian.
-@@ -191,6 +209,7 @@ config BR2_powerpc64le
- config BR2_sh
- 	bool "SuperH"
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  SuperH (or SH) is a 32-bit reduced instruction set computer (RISC)
- 	  instruction set architecture (ISA) developed by Hitachi.
-@@ -201,6 +220,7 @@ config BR2_sh64
- 	bool "SuperH64"
- 	depends on BR2_DEPRECATED_SINCE_2015_05
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  SuperH64 (or SH) is a 64-bit reduced instruction set computer (RISC)
- 	  instruction set architecture (ISA) developed by Hitachi.
-@@ -210,6 +230,7 @@ config BR2_sh64
- config BR2_sparc
- 	bool "SPARC"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  SPARC (from Scalable Processor Architecture) is a RISC instruction
- 	  set architecture (ISA) developed by Sun Microsystems.
-@@ -220,6 +241,7 @@ config BR2_sparc64
- 	bool "SPARC64"
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  SPARC (from Scalable Processor Architecture) is a RISC instruction
- 	  set architecture (ISA) developed by Sun Microsystems.
-@@ -230,6 +252,7 @@ config BR2_x86_64
- 	bool "x86_64"
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_GCC_TARGET_DEFAULTS
- 	help
- 	  x86-64 is an extension of the x86 instruction set (Intel i386
- 	  architecture compatible microprocessor).
-@@ -237,6 +260,7 @@ config BR2_x86_64
- 
- config BR2_xtensa
- 	bool "Xtensa"
-+	select BR2_GCC_TARGET_DEFAULTS
- 	# MMU support is set by the subarchitecture file, arch/Config.in.xtensa
- 	help
- 	  Xtensa is a Tensilica processor IP architecture.
-@@ -283,6 +307,11 @@ config BR2_GCC_TARGET_FLOAT_ABI
- config BR2_GCC_TARGET_MODE
+ 	config BR2_BINUTILS_VERSION_2_26_X
+ 		bool "binutils 2.26"
+diff --git a/package/gcc/6.1.0/892-disable-dwarf-bfin.patch b/package/gcc/6.1.0/892-disable-dwarf-bfin.patch
+new file mode 100644
+index 0000000..81acde7
+--- /dev/null
++++ b/package/gcc/6.1.0/892-disable-dwarf-bfin.patch
+@@ -0,0 +1,24 @@
++Dwarf support does not compile
++
++Reported upstream:
++https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68468
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gcc-6.1.0.orig/libgcc/config.host gcc-6.1.0/libgcc/config.host
++--- gcc-6.1.0.orig/libgcc/config.host	2016-02-26 21:02:28.000000000 +0100
+++++ gcc-6.1.0/libgcc/config.host	2016-05-12 19:26:30.973350274 +0200
++@@ -230,6 +230,13 @@
++       ;;
++   esac
++   ;;
+++bfin-*-*linux*)
+++  tmake_file="$tmake_file t-crtstuff-pic t-libgcc-pic t-slibgcc t-slibgcc-gld t-slibgcc-elf-ver t-linux"
+++  extra_parts="crtbegin.o crtbeginS.o crtbeginT.o crtend.o crtendS.o"
+++  if test x$enable_vtable_verify = xyes; then
+++    extra_parts="$extra_parts vtv_start.o vtv_end.o vtv_start_preinit.o vtv_end_preinit.o"
+++  fi
+++  ;;
++ *-*-linux* | frv-*-*linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu | *-*-gnu* | *-*-kopensolaris*-gnu)
++   tmake_file="$tmake_file t-crtstuff-pic t-libgcc-pic t-eh-dw2-dip t-slibgcc t-slibgcc-gld t-slibgcc-elf-ver t-linux"
++   extra_parts="crtbegin.o crtbeginS.o crtbeginT.o crtend.o crtendS.o"
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index cfb0958..b4e7a7b 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -18,7 +18,7 @@ choice
+ 		depends on BR2_DEPRECATED_SINCE_2016_05
+ 		# Broken or unsupported architectures
+ 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
+-			&& !BR2_powerpc64le && !BR2_nios2
++			&& !BR2_powerpc64le && !BR2_nios2 && !BR2_bfin
+ 		# Broken or unsupported ARM cores
+ 		depends on !BR2_cortex_a12 && !BR2_pj4 && !BR2_cortex_a17
+ 		# Broken or unsupported PPC cores
+@@ -37,7 +37,7 @@ choice
+ 		bool "gcc 4.8.x"
+ 		# Broken or unsupported architectures
+ 		depends on !BR2_microblaze && !BR2_arc \
+-			&& !BR2_powerpc64le && !BR2_nios2
++			&& !BR2_powerpc64le && !BR2_nios2 && !BR2_bfin
+ 		# Broken or unsupported ARM cores
+ 		depends on !BR2_cortex_a12 && !BR2_cortex_a17
+ 		# Broken or unsupported PPC cores
+@@ -61,7 +61,7 @@ choice
+ 	config BR2_GCC_VERSION_4_9_X
+ 		bool "gcc 4.9.x"
+ 		# Broken or unsupported architectures
+-		depends on !BR2_arc
++		depends on !BR2_arc && !BR2_bfin
+ 		# Broken or unsupported ARM cores
+ 		depends on !BR2_cortex_a17
+ 		# Unsupported for MIPS R6
+@@ -74,7 +74,7 @@ choice
+ 	config BR2_GCC_VERSION_5_X
+ 		bool "gcc 5.x"
+ 		# Broken or unsupported architectures
+-		depends on !BR2_arc
++		depends on !BR2_arc && !BR2_bfin
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+ 		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 1aad9a0..6e611db 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -120,6 +120,7 @@ config BR2_UCLIBC_TARGET_ARCH
  	string
+ 	default "arc"	   if BR2_arcle || BR2_arceb
+ 	default "arm"	   if BR2_arm	|| BR2_armeb
++	default "bfin"	   if BR2_bfin
+ 	default "m68k"	   if BR2_m68k
+ 	default "mips"	   if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	default "powerpc"  if BR2_powerpc
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index e0044c1..a725556 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -38,7 +38,6 @@ choice
  
-+# Must be selected if GCC for architecture supports --with-{arch,cpu,..}
-+# to set default CFLAGS, otherwise values will be used by toolchain wrapper
-+config BR2_GCC_TARGET_DEFAULTS
-+	bool
-+
- # Must be selected by binary formats that support shared libraries.
- config BR2_BINFMT_SUPPORTS_SHARED
- 	bool
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 46f05ff..a956c0b 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -183,6 +183,7 @@ HOST_GCC_COMMON_CONF_OPTS += --disable-decimal-float
- endif
+ config BR2_TOOLCHAIN_BUILDROOT
+ 	bool "Buildroot toolchain"
+-	depends on !BR2_bfin
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
  
- # Determine arch/tune/abi/cpu options
-+ifeq ($(BR2_GCC_TARGET_DEFAULTS),y)
- ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
- HOST_GCC_COMMON_CONF_OPTS += --with-arch=$(BR2_GCC_TARGET_ARCH)
- endif
-@@ -211,6 +212,7 @@ GCC_TARGET_MODE = $(call qstrip,$(BR2_GCC_TARGET_MODE))
- ifneq ($(GCC_TARGET_MODE),)
- HOST_GCC_COMMON_CONF_OPTS += --with-mode=$(GCC_TARGET_MODE)
- endif
-+endif
- 
- # Enable proper double/long double for SPE ABI
- ifeq ($(BR2_powerpc_SPE),y)
-@@ -220,6 +222,37 @@ HOST_GCC_COMMON_CONF_OPTS += \
- endif
- 
- HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
-+ifneq ($(BR2_GCC_TARGET_DEFAULTS),y)
-+ifeq ($(call qstrip,$(BR2_GCC_TARGET_CPU_REVISION)),)
-+CC_TARGET_CPU_ := $(call qstrip,$(BR2_GCC_TARGET_CPU))
-+else
-+CC_TARGET_CPU_ := $(call qstrip,$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION))
-+endif
-+CC_TARGET_ARCH_ := $(call qstrip,$(BR2_GCC_TARGET_ARCH))
-+CC_TARGET_ABI_ := $(call qstrip,$(BR2_GCC_TARGET_ABI))
-+CC_TARGET_FPU_ := $(call qstrip,$(BR2_GCC_TARGET_FPU))
-+CC_TARGET_FLOAT_ABI_ := $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
-+CC_TARGET_MODE_ := $(call qstrip,$(BR2_GCC_TARGET_MODE))
-+
-+ifneq ($(CC_TARGET_ARCH_),)
-+HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
-+endif
-+ifneq ($(CC_TARGET_CPU_),)
-+HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
-+endif
-+ifneq ($(CC_TARGET_ABI_),)
-+HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
-+endif
-+ifneq ($(CC_TARGET_FPU_),)
-+HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_FPU='"$(CC_TARGET_FPU_)"'
-+endif
-+ifneq ($(CC_TARGET_FLOAT_ABI_),)
-+HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(CC_TARGET_FLOAT_ABI_)"'
-+endif
-+ifneq ($(CC_TARGET_MODE_),)
-+HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_MODE='"$(CC_TARGET_MODE_)"'
-+endif
-+endif
- 
- # For gcc-initial, we need to tell gcc that the C library will be
- # providing the ssp support, as it can't guess it since the C library
+ config BR2_TOOLCHAIN_EXTERNAL
 -- 
 2.1.4
