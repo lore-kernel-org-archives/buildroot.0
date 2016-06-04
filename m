@@ -1,74 +1,925 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Jun 2016 18:13:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/audiofile: fix compilation with gcc6
-Message-ID: <1465056832-24721-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  4 Jun 2016 18:29:49 +0200
+Subject: [Buildroot] [PATCH 1/1] support/gnuconfig: bump version to
+	2016-05-15
+Message-ID: <1465057789-14174-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-
-make[3]: Entering directory '/home/buildroot/br7_freeswitch/output/build/audiofile-0.3.6/libaudiofile/modules'
-/bin/bash ../../libtool  --tag=CXX   --mode=compile /home/buildroot/br7_freeswitch/output/host/usr/bin/i586-buildroot-linux-uclibc-g++ -DHAVE_CONFIG_H -I. -I../.. -I./..  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DNDEBUG -Wall -Wno-multichar    -fvisibility=hidden -fno-rtti -fno-exceptions -fvisibility-inlines-hidden -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -c -o ALAC.lo ALAC.cpp
-libtool: compile:  /home/buildroot/br7_freeswitch/output/host/usr/bin/i586-buildroot-linux-uclibc-g++ -DHAVE_CONFIG_H -I. -I../.. -I./.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DNDEBUG -Wall -Wno-multichar -fvisibility=hidden -fno-rtti -fno-exceptions -fvisibility-inlines-hidden -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -c ALAC.cpp  -fPIC -DPIC -o .libs/ALAC.o
-In file included from ALAC.cpp:29:0:
-SimpleModule.h: In instantiation of 'const int signConverter<(FormatCode)0>::kMinSignedValue':
-SimpleModule.h:130:52:   required from 'signConverter<Format>::UnsignedType signConverter<Format>::signedToUnsigned::operator()(signConverter<Format>::SignedType) [with FormatCode Format = (FormatCode)0; signConverter<Format>::UnsignedType = unsigned char; signConverter<Format>::SignedType = signed char]'
-/home/buildroot/br7_freeswitch/output/host/usr/i586-buildroot-linux-uclibc/include/c++/6.1.0/bits/stl_algo.h:4184:24:   required from '_OIter std::transform(_IIter, _IIter, _OIter, _UnaryOperation) [with _IIter = const signed char*; _OIter = unsigned char*; _UnaryOperation = signConverter<(FormatCode)0>::signedToUnsigned]'
-SimpleModule.h:104:16:   required from 'void transform(const void*, void*, size_t) [with UnaryFunction = signConverter<(FormatCode)0>::signedToUnsigned; size_t = unsigned int]'
-SimpleModule.h:176:62:   required from 'static void ConvertSign::convertSignedToUnsigned(const void*, void*, size_t) [with FormatCode Format = (FormatCode)0; size_t = unsigned int]'
-SimpleModule.h:183:51:   required from here
-SimpleModule.h:126:40: error: left operand of shift expression '(-1 << 7)' is negative [-fpermissive]
-  static const int kMinSignedValue = -1 << kScaleBits;
-                                     ~~~^~~~~~~~~~~~~
-
-To reproduce the build error use this defconfig:
-
-BR2_GCC_VERSION_6_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_AUDIOFILE=y
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/audiofile/0002-cast-to-unsigned-gcc6.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/audiofile/0002-cast-to-unsigned-gcc6.patch
+ support/gnuconfig/README.buildroot |   2 +-
+ support/gnuconfig/config.guess     | 350 +++++++++++++------------------------
+ support/gnuconfig/config.sub       |  66 ++++---
+ 3 files changed, 169 insertions(+), 249 deletions(-)
 
-diff --git a/package/audiofile/0002-cast-to-unsigned-gcc6.patch b/package/audiofile/0002-cast-to-unsigned-gcc6.patch
-new file mode 100644
-index 0000000..01baeb5
---- /dev/null
-+++ b/package/audiofile/0002-cast-to-unsigned-gcc6.patch
-@@ -0,0 +1,28 @@
-+From 28cfdbbcb96a69087c3d21faf69b5eae7bcf6d69 Mon Sep 17 00:00:00 2001
-+From: Hodorgasm <nsane457@gmail.com>
-+Date: Wed, 11 May 2016 21:42:07 -0400
-+Subject: [PATCH] Cast to unsigned while left bit-shifting
-+
-+GCC-6 now treats the left bitwise-shift of a negative integer as nonconformant so explicitly cast to an unsigned int while bit-shifting.
-+
-+Downloaded from upstream PR:
-+https://github.com/mpruett/audiofile/pull/28
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ libaudiofile/modules/SimpleModule.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libaudiofile/modules/SimpleModule.h b/libaudiofile/modules/SimpleModule.h
-+index 03c6c69..4014fb2 100644
-+--- a/libaudiofile/modules/SimpleModule.h
-++++ b/libaudiofile/modules/SimpleModule.h
-+@@ -123,7 +123,7 @@ struct signConverter
-+ 	typedef typename IntTypes<Format>::UnsignedType UnsignedType;
-+ 
-+ 	static const int kScaleBits = (Format + 1) * CHAR_BIT - 1;
-+-	static const int kMinSignedValue = -1 << kScaleBits;
-++	static const int kMinSignedValue = static_cast<signed>(static_cast<unsigned>(-1) << kScaleBits);;
-+ 
-+ 	struct signedToUnsigned : public std::unary_function<SignedType, UnsignedType>
-+ 	{
+diff --git a/support/gnuconfig/README.buildroot b/support/gnuconfig/README.buildroot
+index 0898cb5..a71ed93 100644
+--- a/support/gnuconfig/README.buildroot
++++ b/support/gnuconfig/README.buildroot
+@@ -24,4 +24,4 @@ Currently no patches are needed, but they may be needed again in the
+ future.
+ 
+ The current Buildroot version is based on the Git commit
+-5e4de70bb0064d974a848fbe3a445d5dafaf7b48 of the config.git repository.
++dafd8e767ec87b90aac62f0fcedd11944c84b50a of the config.git repository.
+diff --git a/support/gnuconfig/config.guess b/support/gnuconfig/config.guess
+index b79252d..c4bd827 100755
+--- a/support/gnuconfig/config.guess
++++ b/support/gnuconfig/config.guess
+@@ -1,8 +1,8 @@
+ #! /bin/sh
+ # Attempt to guess a canonical system name.
+-#   Copyright 1992-2013 Free Software Foundation, Inc.
++#   Copyright 1992-2016 Free Software Foundation, Inc.
+ 
+-timestamp='2013-06-10'
++timestamp='2016-05-15'
+ 
+ # This file is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+@@ -24,12 +24,12 @@ timestamp='2013-06-10'
+ # program.  This Exception is an additional permission under section 7
+ # of the GNU General Public License, version 3 ("GPLv3").
+ #
+-# Originally written by Per Bothner.
++# Originally written by Per Bothner; maintained since 2000 by Ben Elliston.
+ #
+ # You can get the latest version of this script from:
+-# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
++# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess
+ #
+-# Please send patches with a ChangeLog entry to config-patches at gnu.org.
++# Please send patches to <config-patches@gnu.org>.
+ 
+ 
+ me=`echo "$0" | sed -e 's,.*/,,'`
+@@ -50,7 +50,7 @@ version="\
+ GNU config.guess ($timestamp)
+ 
+ Originally written by Per Bothner.
+-Copyright 1992-2013 Free Software Foundation, Inc.
++Copyright 1992-2016 Free Software Foundation, Inc.
+ 
+ This is free software; see the source for copying conditions.  There is NO
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+@@ -149,7 +149,7 @@ Linux|GNU|GNU/*)
+ 	LIBC=gnu
+ 	#endif
+ 	EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^LIBC'`
++	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^LIBC' | sed 's, ,,g'`
+ 	;;
+ esac
+ 
+@@ -168,19 +168,29 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
+ 	# Note: NetBSD doesn't particularly care about the vendor
+ 	# portion of the name.  We always set it to "unknown".
+ 	sysctl="sysctl -n hw.machine_arch"
+-	UNAME_MACHINE_ARCH=`(/sbin/$sysctl 2>/dev/null || \
+-	    /usr/sbin/$sysctl 2>/dev/null || echo unknown)`
++	UNAME_MACHINE_ARCH=`(uname -p 2>/dev/null || \
++	    /sbin/$sysctl 2>/dev/null || \
++	    /usr/sbin/$sysctl 2>/dev/null || \
++	    echo unknown)`
+ 	case "${UNAME_MACHINE_ARCH}" in
+ 	    armeb) machine=armeb-unknown ;;
+ 	    arm*) machine=arm-unknown ;;
+ 	    sh3el) machine=shl-unknown ;;
+ 	    sh3eb) machine=sh-unknown ;;
+ 	    sh5el) machine=sh5le-unknown ;;
++	    earmv*)
++		arch=`echo ${UNAME_MACHINE_ARCH} | sed -e 's,^e\(armv[0-9]\).*$,\1,'`
++		endian=`echo ${UNAME_MACHINE_ARCH} | sed -ne 's,^.*\(eb\)$,\1,p'`
++		machine=${arch}${endian}-unknown
++		;;
+ 	    *) machine=${UNAME_MACHINE_ARCH}-unknown ;;
+ 	esac
+ 	# The Operating System including object format, if it has switched
+-	# to ELF recently, or will in the future.
++	# to ELF recently (or will in the future) and ABI.
+ 	case "${UNAME_MACHINE_ARCH}" in
++	    earm*)
++		os=netbsdelf
++		;;
+ 	    arm*|i386|m68k|ns32k|sh3*|sparc|vax)
+ 		eval $set_cc_for_build
+ 		if echo __ELF__ | $CC_FOR_BUILD -E - 2>/dev/null \
+@@ -197,6 +207,13 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
+ 		os=netbsd
+ 		;;
+ 	esac
++	# Determine ABI tags.
++	case "${UNAME_MACHINE_ARCH}" in
++	    earm*)
++		expr='s/^earmv[0-9]/-eabi/;s/eb$//'
++		abi=`echo ${UNAME_MACHINE_ARCH} | sed -e "$expr"`
++		;;
++	esac
+ 	# The OS release
+ 	# Debian GNU/NetBSD machines have a different userland, and
+ 	# thus, need a distinct triplet. However, they do not need
+@@ -207,13 +224,13 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
+ 		release='-gnu'
+ 		;;
+ 	    *)
+-		release=`echo ${UNAME_RELEASE}|sed -e 's/[-_].*/\./'`
++		release=`echo ${UNAME_RELEASE} | sed -e 's/[-_].*//' | cut -d. -f1,2`
+ 		;;
+ 	esac
+ 	# Since CPU_TYPE-MANUFACTURER-KERNEL-OPERATING_SYSTEM:
+ 	# contains redundant information, the shorter form:
+ 	# CPU_TYPE-MANUFACTURER-OPERATING_SYSTEM is used.
+-	echo "${machine}-${os}${release}"
++	echo "${machine}-${os}${release}${abi}"
+ 	exit ;;
+     *:Bitrig:*:*)
+ 	UNAME_MACHINE_ARCH=`arch | sed 's/Bitrig.//'`
+@@ -223,6 +240,10 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
+ 	UNAME_MACHINE_ARCH=`arch | sed 's/OpenBSD.//'`
+ 	echo ${UNAME_MACHINE_ARCH}-unknown-openbsd${UNAME_RELEASE}
+ 	exit ;;
++    *:LibertyBSD:*:*)
++	UNAME_MACHINE_ARCH=`arch | sed 's/^.*BSD\.//'`
++	echo ${UNAME_MACHINE_ARCH}-unknown-libertybsd${UNAME_RELEASE}
++	exit ;;
+     *:ekkoBSD:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-ekkobsd${UNAME_RELEASE}
+ 	exit ;;
+@@ -235,6 +256,9 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
+     *:MirBSD:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-mirbsd${UNAME_RELEASE}
+ 	exit ;;
++    *:Sortix:*:*)
++	echo ${UNAME_MACHINE}-unknown-sortix
++	exit ;;
+     alpha:OSF1:*:*)
+ 	case $UNAME_RELEASE in
+ 	*4.0)
+@@ -251,42 +275,42 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
+ 	ALPHA_CPU_TYPE=`/usr/sbin/psrinfo -v | sed -n -e 's/^  The alpha \(.*\) processor.*$/\1/p' | head -n 1`
+ 	case "$ALPHA_CPU_TYPE" in
+ 	    "EV4 (21064)")
+-		UNAME_MACHINE="alpha" ;;
++		UNAME_MACHINE=alpha ;;
+ 	    "EV4.5 (21064)")
+-		UNAME_MACHINE="alpha" ;;
++		UNAME_MACHINE=alpha ;;
+ 	    "LCA4 (21066/21068)")
+-		UNAME_MACHINE="alpha" ;;
++		UNAME_MACHINE=alpha ;;
+ 	    "EV5 (21164)")
+-		UNAME_MACHINE="alphaev5" ;;
++		UNAME_MACHINE=alphaev5 ;;
+ 	    "EV5.6 (21164A)")
+-		UNAME_MACHINE="alphaev56" ;;
++		UNAME_MACHINE=alphaev56 ;;
+ 	    "EV5.6 (21164PC)")
+-		UNAME_MACHINE="alphapca56" ;;
++		UNAME_MACHINE=alphapca56 ;;
+ 	    "EV5.7 (21164PC)")
+-		UNAME_MACHINE="alphapca57" ;;
++		UNAME_MACHINE=alphapca57 ;;
+ 	    "EV6 (21264)")
+-		UNAME_MACHINE="alphaev6" ;;
++		UNAME_MACHINE=alphaev6 ;;
+ 	    "EV6.7 (21264A)")
+-		UNAME_MACHINE="alphaev67" ;;
++		UNAME_MACHINE=alphaev67 ;;
+ 	    "EV6.8CB (21264C)")
+-		UNAME_MACHINE="alphaev68" ;;
++		UNAME_MACHINE=alphaev68 ;;
+ 	    "EV6.8AL (21264B)")
+-		UNAME_MACHINE="alphaev68" ;;
++		UNAME_MACHINE=alphaev68 ;;
+ 	    "EV6.8CX (21264D)")
+-		UNAME_MACHINE="alphaev68" ;;
++		UNAME_MACHINE=alphaev68 ;;
+ 	    "EV6.9A (21264/EV69A)")
+-		UNAME_MACHINE="alphaev69" ;;
++		UNAME_MACHINE=alphaev69 ;;
+ 	    "EV7 (21364)")
+-		UNAME_MACHINE="alphaev7" ;;
++		UNAME_MACHINE=alphaev7 ;;
+ 	    "EV7.9 (21364A)")
+-		UNAME_MACHINE="alphaev79" ;;
++		UNAME_MACHINE=alphaev79 ;;
+ 	esac
+ 	# A Pn.n version is a patched version.
+ 	# A Vn.n version is a released version.
+ 	# A Tn.n version is a released field test version.
+ 	# A Xn.n version is an unreleased experimental baselevel.
+ 	# 1.2 uses "1.2" for uname -r.
+-	echo ${UNAME_MACHINE}-dec-osf`echo ${UNAME_RELEASE} | sed -e 's/^[PVTX]//' | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz'`
++	echo ${UNAME_MACHINE}-dec-osf`echo ${UNAME_RELEASE} | sed -e 's/^[PVTX]//' | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz`
+ 	# Reset EXIT trap before exiting to avoid spurious non-zero exit code.
+ 	exitcode=$?
+ 	trap '' 0
+@@ -359,16 +383,16 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
+ 	exit ;;
+     i86pc:SunOS:5.*:* | i86xen:SunOS:5.*:*)
+ 	eval $set_cc_for_build
+-	SUN_ARCH="i386"
++	SUN_ARCH=i386
+ 	# If there is a compiler, see if it is configured for 64-bit objects.
+ 	# Note that the Sun cc does not turn __LP64__ into 1 like gcc does.
+ 	# This test works for both compilers.
+-	if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++	if [ "$CC_FOR_BUILD" != no_compiler_found ]; then
+ 	    if (echo '#ifdef __amd64'; echo IS_64BIT_ARCH; echo '#endif') | \
+-		(CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		(CCOPTS="" $CC_FOR_BUILD -E - 2>/dev/null) | \
+ 		grep IS_64BIT_ARCH >/dev/null
+ 	    then
+-		SUN_ARCH="x86_64"
++		SUN_ARCH=x86_64
+ 	    fi
+ 	fi
+ 	echo ${SUN_ARCH}-pc-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
+@@ -393,7 +417,7 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
+ 	exit ;;
+     sun*:*:4.2BSD:*)
+ 	UNAME_RELEASE=`(sed 1q /etc/motd | awk '{print substr($5,1,3)}') 2>/dev/null`
+-	test "x${UNAME_RELEASE}" = "x" && UNAME_RELEASE=3
++	test "x${UNAME_RELEASE}" = x && UNAME_RELEASE=3
+ 	case "`/bin/arch`" in
+ 	    sun3)
+ 		echo m68k-sun-sunos${UNAME_RELEASE}
+@@ -579,8 +603,9 @@ EOF
+ 	else
+ 		IBM_ARCH=powerpc
+ 	fi
+-	if [ -x /usr/bin/oslevel ] ; then
+-		IBM_REV=`/usr/bin/oslevel`
++	if [ -x /usr/bin/lslpp ] ; then
++		IBM_REV=`/usr/bin/lslpp -Lqc bos.rte.libc |
++			   awk -F: '{ print $3 }' | sed s/[0-9]*$/0/`
+ 	else
+ 		IBM_REV=${UNAME_VERSION}.${UNAME_RELEASE}
+ 	fi
+@@ -617,13 +642,13 @@ EOF
+ 		    sc_cpu_version=`/usr/bin/getconf SC_CPU_VERSION 2>/dev/null`
+ 		    sc_kernel_bits=`/usr/bin/getconf SC_KERNEL_BITS 2>/dev/null`
+ 		    case "${sc_cpu_version}" in
+-		      523) HP_ARCH="hppa1.0" ;; # CPU_PA_RISC1_0
+-		      528) HP_ARCH="hppa1.1" ;; # CPU_PA_RISC1_1
++		      523) HP_ARCH=hppa1.0 ;; # CPU_PA_RISC1_0
++		      528) HP_ARCH=hppa1.1 ;; # CPU_PA_RISC1_1
+ 		      532)                      # CPU_PA_RISC2_0
+ 			case "${sc_kernel_bits}" in
+-			  32) HP_ARCH="hppa2.0n" ;;
+-			  64) HP_ARCH="hppa2.0w" ;;
+-			  '') HP_ARCH="hppa2.0" ;;   # HP-UX 10.20
++			  32) HP_ARCH=hppa2.0n ;;
++			  64) HP_ARCH=hppa2.0w ;;
++			  '') HP_ARCH=hppa2.0 ;;   # HP-UX 10.20
+ 			esac ;;
+ 		    esac
+ 		fi
+@@ -662,11 +687,11 @@ EOF
+ 		    exit (0);
+ 		}
+ EOF
+-		    (CCOPTS= $CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null) && HP_ARCH=`$dummy`
++		    (CCOPTS="" $CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null) && HP_ARCH=`$dummy`
+ 		    test -z "$HP_ARCH" && HP_ARCH=hppa
+ 		fi ;;
+ 	esac
+-	if [ ${HP_ARCH} = "hppa2.0w" ]
++	if [ ${HP_ARCH} = hppa2.0w ]
+ 	then
+ 	    eval $set_cc_for_build
+ 
+@@ -679,12 +704,12 @@ EOF
+ 	    # $ CC_FOR_BUILD="cc +DA2.0w" ./config.guess
+ 	    # => hppa64-hp-hpux11.23
+ 
+-	    if echo __LP64__ | (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) |
++	    if echo __LP64__ | (CCOPTS="" $CC_FOR_BUILD -E - 2>/dev/null) |
+ 		grep -q __LP64__
+ 	    then
+-		HP_ARCH="hppa2.0w"
++		HP_ARCH=hppa2.0w
+ 	    else
+-		HP_ARCH="hppa64"
++		HP_ARCH=hppa64
+ 	    fi
+ 	fi
+ 	echo ${HP_ARCH}-hp-hpux${HPUX_REV}
+@@ -789,14 +814,14 @@ EOF
+ 	echo craynv-cray-unicosmp${UNAME_RELEASE} | sed -e 's/\.[^.]*$/.X/'
+ 	exit ;;
+     F30[01]:UNIX_System_V:*:* | F700:UNIX_System_V:*:*)
+-	FUJITSU_PROC=`uname -m | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz'`
+-	FUJITSU_SYS=`uname -p | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz' | sed -e 's/\///'`
++	FUJITSU_PROC=`uname -m | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz`
++	FUJITSU_SYS=`uname -p | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz | sed -e 's/\///'`
+ 	FUJITSU_REL=`echo ${UNAME_RELEASE} | sed -e 's/ /_/'`
+ 	echo "${FUJITSU_PROC}-fujitsu-${FUJITSU_SYS}${FUJITSU_REL}"
+ 	exit ;;
+     5000:UNIX_System_V:4.*:*)
+-	FUJITSU_SYS=`uname -p | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz' | sed -e 's/\///'`
+-	FUJITSU_REL=`echo ${UNAME_RELEASE} | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz' | sed -e 's/ /_/'`
++	FUJITSU_SYS=`uname -p | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz | sed -e 's/\///'`
++	FUJITSU_REL=`echo ${UNAME_RELEASE} | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz | sed -e 's/ /_/'`
+ 	echo "sparc-fujitsu-${FUJITSU_SYS}${FUJITSU_REL}"
+ 	exit ;;
+     i*86:BSD/386:*:* | i*86:BSD/OS:*:* | *:Ascend\ Embedded/OS:*:*)
+@@ -826,7 +851,7 @@ EOF
+     *:MINGW*:*)
+ 	echo ${UNAME_MACHINE}-pc-mingw32
+ 	exit ;;
+-    i*:MSYS*:*)
++    *:MSYS*:*)
+ 	echo ${UNAME_MACHINE}-pc-msys
+ 	exit ;;
+     i*:windows32*:*)
+@@ -878,7 +903,7 @@ EOF
+ 	exit ;;
+     *:GNU/*:*:*)
+ 	# other systems with GNU libc and userland
+-	echo ${UNAME_MACHINE}-unknown-`echo ${UNAME_SYSTEM} | sed 's,^[^/]*/,,' | tr '[A-Z]' '[a-z]'``echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'`-${LIBC}
++	echo ${UNAME_MACHINE}-unknown-`echo ${UNAME_SYSTEM} | sed 's,^[^/]*/,,' | tr "[:upper:]" "[:lower:]"``echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'`-${LIBC}
+ 	exit ;;
+     i*86:Minix:*:*)
+ 	echo ${UNAME_MACHINE}-pc-minix
+@@ -901,7 +926,7 @@ EOF
+ 	  EV68*) UNAME_MACHINE=alphaev68 ;;
+ 	esac
+ 	objdump --private-headers /bin/sh | grep -q ld.so.1
+-	if test "$?" = 0 ; then LIBC="gnulibc1" ; fi
++	if test "$?" = 0 ; then LIBC=gnulibc1 ; fi
+ 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+ 	exit ;;
+     arc:Linux:*:* | arceb:Linux:*:*)
+@@ -932,6 +957,9 @@ EOF
+     crisv32:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-axis-linux-${LIBC}
+ 	exit ;;
++    e2k:Linux:*:*)
++	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	exit ;;
+     frv:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+ 	exit ;;
+@@ -944,6 +972,9 @@ EOF
+     ia64:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+ 	exit ;;
++    k1om:Linux:*:*)
++	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	exit ;;
+     m32r*:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+ 	exit ;;
+@@ -969,10 +1000,10 @@ EOF
+ 	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^CPU'`
+ 	test x"${CPU}" != x && { echo "${CPU}-unknown-linux-${LIBC}"; exit; }
+ 	;;
+-    or1k:Linux:*:*)
+-	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++    openrisc*:Linux:*:*)
++	echo or1k-unknown-linux-${LIBC}
+ 	exit ;;
+-    or32:Linux:*:*)
++    or32:Linux:*:* | or1k*:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+ 	exit ;;
+     padre:Linux:*:*)
+@@ -1020,7 +1051,7 @@ EOF
+ 	echo ${UNAME_MACHINE}-dec-linux-${LIBC}
+ 	exit ;;
+     x86_64:Linux:*:*)
+-	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
++	echo ${UNAME_MACHINE}-pc-linux-${LIBC}
+ 	exit ;;
+     xtensa*:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
+@@ -1099,7 +1130,7 @@ EOF
+ 	# uname -m prints for DJGPP always 'pc', but it prints nothing about
+ 	# the processor, so we play safe by assuming i586.
+ 	# Note: whatever this is, it MUST be the same as what config.sub
+-	# prints for the "djgpp" host, or else GDB configury will decide that
++	# prints for the "djgpp" host, or else GDB configure will decide that
+ 	# this is a cross-build.
+ 	echo i586-pc-msdosdjgpp
+ 	exit ;;
+@@ -1248,6 +1279,9 @@ EOF
+     SX-8R:SUPER-UX:*:*)
+ 	echo sx8r-nec-superux${UNAME_RELEASE}
+ 	exit ;;
++    SX-ACE:SUPER-UX:*:*)
++	echo sxace-nec-superux${UNAME_RELEASE}
++	exit ;;
+     Power*:Rhapsody:*:*)
+ 	echo powerpc-apple-rhapsody${UNAME_RELEASE}
+ 	exit ;;
+@@ -1260,22 +1294,32 @@ EOF
+ 	if test "$UNAME_PROCESSOR" = unknown ; then
+ 	    UNAME_PROCESSOR=powerpc
+ 	fi
+-	if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
+-	    if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
+-		(CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
+-		grep IS_64BIT_ARCH >/dev/null
+-	    then
+-		case $UNAME_PROCESSOR in
+-		    i386) UNAME_PROCESSOR=x86_64 ;;
+-		    powerpc) UNAME_PROCESSOR=powerpc64 ;;
+-		esac
++	if test `echo "$UNAME_RELEASE" | sed -e 's/\..*//'` -le 10 ; then
++	    if [ "$CC_FOR_BUILD" != no_compiler_found ]; then
++		if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
++		    (CCOPTS="" $CC_FOR_BUILD -E - 2>/dev/null) | \
++		    grep IS_64BIT_ARCH >/dev/null
++		then
++		    case $UNAME_PROCESSOR in
++			i386) UNAME_PROCESSOR=x86_64 ;;
++			powerpc) UNAME_PROCESSOR=powerpc64 ;;
++		    esac
++		fi
+ 	    fi
++	elif test "$UNAME_PROCESSOR" = i386 ; then
++	    # Avoid executing cc on OS X 10.9, as it ships with a stub
++	    # that puts up a graphical alert prompting to install
++	    # developer tools.  Any system running Mac OS X 10.7 or
++	    # later (Darwin 11 and later) is required to have a 64-bit
++	    # processor. This is not true of the ARM version of Darwin
++	    # that Apple uses in portable devices.
++	    UNAME_PROCESSOR=x86_64
+ 	fi
+ 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
+ 	exit ;;
+     *:procnto*:*:* | *:QNX:[0123456789]*:*)
+ 	UNAME_PROCESSOR=`uname -p`
+-	if test "$UNAME_PROCESSOR" = "x86"; then
++	if test "$UNAME_PROCESSOR" = x86; then
+ 		UNAME_PROCESSOR=i386
+ 		UNAME_MACHINE=pc
+ 	fi
+@@ -1306,7 +1350,7 @@ EOF
+ 	# "uname -m" is not consistent, so use $cputype instead. 386
+ 	# is converted to i386 for consistency with other x86
+ 	# operating systems.
+-	if test "$cputype" = "386"; then
++	if test "$cputype" = 386; then
+ 	    UNAME_MACHINE=i386
+ 	else
+ 	    UNAME_MACHINE="$cputype"
+@@ -1348,7 +1392,7 @@ EOF
+ 	echo i386-pc-xenix
+ 	exit ;;
+     i*86:skyos:*:*)
+-	echo ${UNAME_MACHINE}-pc-skyos`echo ${UNAME_RELEASE}` | sed -e 's/ .*$//'
++	echo ${UNAME_MACHINE}-pc-skyos`echo ${UNAME_RELEASE} | sed -e 's/ .*$//'`
+ 	exit ;;
+     i*86:rdos:*:*)
+ 	echo ${UNAME_MACHINE}-pc-rdos
+@@ -1359,171 +1403,25 @@ EOF
+     x86_64:VMkernel:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-esx
+ 	exit ;;
+-esac
+-
+-eval $set_cc_for_build
+-cat >$dummy.c <<EOF
+-#ifdef _SEQUENT_
+-# include <sys/types.h>
+-# include <sys/utsname.h>
+-#endif
+-main ()
+-{
+-#if defined (sony)
+-#if defined (MIPSEB)
+-  /* BFD wants "bsd" instead of "newsos".  Perhaps BFD should be changed,
+-     I don't know....  */
+-  printf ("mips-sony-bsd\n"); exit (0);
+-#else
+-#include <sys/param.h>
+-  printf ("m68k-sony-newsos%s\n",
+-#ifdef NEWSOS4
+-	"4"
+-#else
+-	""
+-#endif
+-	); exit (0);
+-#endif
+-#endif
+-
+-#if defined (__arm) && defined (__acorn) && defined (__unix)
+-  printf ("arm-acorn-riscix\n"); exit (0);
+-#endif
+-
+-#if defined (hp300) && !defined (hpux)
+-  printf ("m68k-hp-bsd\n"); exit (0);
+-#endif
+-
+-#if defined (NeXT)
+-#if !defined (__ARCHITECTURE__)
+-#define __ARCHITECTURE__ "m68k"
+-#endif
+-  int version;
+-  version=`(hostinfo | sed -n 's/.*NeXT Mach \([0-9]*\).*/\1/p') 2>/dev/null`;
+-  if (version < 4)
+-    printf ("%s-next-nextstep%d\n", __ARCHITECTURE__, version);
+-  else
+-    printf ("%s-next-openstep%d\n", __ARCHITECTURE__, version);
+-  exit (0);
+-#endif
+-
+-#if defined (MULTIMAX) || defined (n16)
+-#if defined (UMAXV)
+-  printf ("ns32k-encore-sysv\n"); exit (0);
+-#else
+-#if defined (CMU)
+-  printf ("ns32k-encore-mach\n"); exit (0);
+-#else
+-  printf ("ns32k-encore-bsd\n"); exit (0);
+-#endif
+-#endif
+-#endif
+-
+-#if defined (__386BSD__)
+-  printf ("i386-pc-bsd\n"); exit (0);
+-#endif
+-
+-#if defined (sequent)
+-#if defined (i386)
+-  printf ("i386-sequent-dynix\n"); exit (0);
+-#endif
+-#if defined (ns32000)
+-  printf ("ns32k-sequent-dynix\n"); exit (0);
+-#endif
+-#endif
+-
+-#if defined (_SEQUENT_)
+-    struct utsname un;
+-
+-    uname(&un);
+-
+-    if (strncmp(un.version, "V2", 2) == 0) {
+-	printf ("i386-sequent-ptx2\n"); exit (0);
+-    }
+-    if (strncmp(un.version, "V1", 2) == 0) { /* XXX is V1 correct? */
+-	printf ("i386-sequent-ptx1\n"); exit (0);
+-    }
+-    printf ("i386-sequent-ptx\n"); exit (0);
+-
+-#endif
+-
+-#if defined (vax)
+-# if !defined (ultrix)
+-#  include <sys/param.h>
+-#  if defined (BSD)
+-#   if BSD == 43
+-      printf ("vax-dec-bsd4.3\n"); exit (0);
+-#   else
+-#    if BSD == 199006
+-      printf ("vax-dec-bsd4.3reno\n"); exit (0);
+-#    else
+-      printf ("vax-dec-bsd\n"); exit (0);
+-#    endif
+-#   endif
+-#  else
+-    printf ("vax-dec-bsd\n"); exit (0);
+-#  endif
+-# else
+-    printf ("vax-dec-ultrix\n"); exit (0);
+-# endif
+-#endif
+-
+-#if defined (alliant) && defined (i860)
+-  printf ("i860-alliant-bsd\n"); exit (0);
+-#endif
+-
+-  exit (1);
+-}
+-EOF
+-
+-$CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null && SYSTEM_NAME=`$dummy` &&
+-	{ echo "$SYSTEM_NAME"; exit; }
+-
+-# Apollos put the system type in the environment.
+-
+-test -d /usr/apollo && { echo ${ISP}-apollo-${SYSTYPE}; exit; }
+-
+-# Convex versions that predate uname can use getsysinfo(1)
+-
+-if [ -x /usr/convex/getsysinfo ]
+-then
+-    case `getsysinfo -f cpu_type` in
+-    c1*)
+-	echo c1-convex-bsd
++    amd64:Isilon\ OneFS:*:*)
++	echo x86_64-unknown-onefs
+ 	exit ;;
+-    c2*)
+-	if getsysinfo -f scalar_acc
+-	then echo c32-convex-bsd
+-	else echo c2-convex-bsd
+-	fi
+-	exit ;;
+-    c34*)
+-	echo c34-convex-bsd
+-	exit ;;
+-    c38*)
+-	echo c38-convex-bsd
+-	exit ;;
+-    c4*)
+-	echo c4-convex-bsd
+-	exit ;;
+-    esac
+-fi
++esac
+ 
+ cat >&2 <<EOF
+ $0: unable to guess system type
+ 
+-This script, last modified $timestamp, has failed to recognize
+-the operating system you are using. It is advised that you
+-download the most up to date version of the config scripts from
++This script (version $timestamp), has failed to recognize the
++operating system you are using. If your script is old, overwrite
++config.guess and config.sub with the latest versions from:
+ 
+-  http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
++  http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess
+ and
+-  http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD
++  http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub
+ 
+-If the version you run ($0) is already up to date, please
+-send the following data and any information you think might be
+-pertinent to <config-patches@gnu.org> in order to provide the needed
+-information to handle your system.
++If $0 has already been updated, send the following data and any
++information you think might be pertinent to config-patches at gnu.org to
++provide the necessary information to handle your system.
+ 
+ config.guess timestamp = $timestamp
+ 
+diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
+index 61cb4bc..6d86a1e 100755
+--- a/support/gnuconfig/config.sub
++++ b/support/gnuconfig/config.sub
+@@ -1,8 +1,8 @@
+ #! /bin/sh
+ # Configuration validation subroutine script.
+-#   Copyright 1992-2013 Free Software Foundation, Inc.
++#   Copyright 1992-2016 Free Software Foundation, Inc.
+ 
+-timestamp='2013-10-01'
++timestamp='2016-05-10'
+ 
+ # This file is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+@@ -25,7 +25,7 @@ timestamp='2013-10-01'
+ # of the GNU General Public License, version 3 ("GPLv3").
+ 
+ 
+-# Please send patches with a ChangeLog entry to config-patches at gnu.org.
++# Please send patches to <config-patches@gnu.org>.
+ #
+ # Configuration subroutine to validate and canonicalize a configuration type.
+ # Supply the specified configuration type as an argument.
+@@ -33,7 +33,7 @@ timestamp='2013-10-01'
+ # Otherwise, we print the canonical config type on stdout and succeed.
+ 
+ # You can get the latest version of this script from:
+-# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD
++# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub
+ 
+ # This file is supposed to be the same for all GNU packages
+ # and recognize all the CPU types, system types and aliases
+@@ -53,8 +53,7 @@ timestamp='2013-10-01'
+ me=`echo "$0" | sed -e 's,.*/,,'`
+ 
+ usage="\
+-Usage: $0 [OPTION] CPU-MFR-OPSYS
+-       $0 [OPTION] ALIAS
++Usage: $0 [OPTION] CPU-MFR-OPSYS or ALIAS
+ 
+ Canonicalize a configuration name.
+ 
+@@ -68,7 +67,7 @@ Report bugs and patches to <config-patches@gnu.org>."
+ version="\
+ GNU config.sub ($timestamp)
+ 
+-Copyright 1992-2013 Free Software Foundation, Inc.
++Copyright 1992-2016 Free Software Foundation, Inc.
+ 
+ This is free software; see the source for copying conditions.  There is NO
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+@@ -117,7 +116,7 @@ maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
+ case $maybe_os in
+   nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | \
+   linux-musl* | linux-uclibc* | uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | \
+-  knetbsd*-gnu* | netbsd*-gnu* | \
++  knetbsd*-gnu* | netbsd*-gnu* | netbsd*-eabi* | \
+   kopensolaris*-gnu* | \
+   storm-chaos* | os2-emx* | rtmk-nova*)
+     os=-$maybe_os
+@@ -255,12 +254,13 @@ case $basic_machine in
+ 	| arc | arceb \
+ 	| arm | arm[bl]e | arme[lb] | armv[2-8] | armv[3-8][lb] | armv7[arm] \
+ 	| avr | avr32 \
++	| ba \
+ 	| be32 | be64 \
+ 	| bfin \
+ 	| c4x | c8051 | clipper \
+ 	| d10v | d30v | dlx | dsp16xx \
+-	| epiphany \
+-	| fido | fr30 | frv \
++	| e2k | epiphany \
++	| fido | fr30 | frv | ft32 \
+ 	| h8300 | h8500 | hppa | hppa1.[01] | hppa2.0 | hppa2.0[nw] | hppa64 \
+ 	| hexagon \
+ 	| i370 | i860 | i960 | ia64 \
+@@ -283,8 +283,10 @@ case $basic_machine in
+ 	| mips64vr5900 | mips64vr5900el \
+ 	| mipsisa32 | mipsisa32el \
+ 	| mipsisa32r2 | mipsisa32r2el \
++	| mipsisa32r6 | mipsisa32r6el \
+ 	| mipsisa64 | mipsisa64el \
+ 	| mipsisa64r2 | mipsisa64r2el \
++	| mipsisa64r6 | mipsisa64r6el \
+ 	| mipsisa64sb1 | mipsisa64sb1el \
+ 	| mipsisa64sr71k | mipsisa64sr71kel \
+ 	| mipsr5900 | mipsr5900el \
+@@ -296,14 +298,14 @@ case $basic_machine in
+ 	| nds32 | nds32le | nds32be \
+ 	| nios | nios2 | nios2eb | nios2el \
+ 	| ns16k | ns32k \
+-	| open8 \
+-	| or1k | or32 \
++	| open8 | or1k | or1knd | or32 \
+ 	| pdp10 | pdp11 | pj | pjl \
+ 	| powerpc | powerpc64 | powerpc64le | powerpcle \
+ 	| pyramid \
++	| riscv32 | riscv64 \
+ 	| rl78 | rx \
+ 	| score \
+-	| sh | sh[1234] | sh[24]a | sh[24]aeb | sh[23]e | sh[34]eb | sheb | shbe | shle | sh[1234]le | sh3ele \
++	| sh | sh[1234] | sh[24]a | sh[24]aeb | sh[23]e | sh[234]eb | sheb | shbe | shle | sh[1234]le | sh3ele \
+ 	| sh64 | sh64le \
+ 	| sparc | sparc64 | sparc64b | sparc64v | sparc86x | sparclet | sparclite \
+ 	| sparcv8 | sparcv9 | sparcv9b | sparcv9v \
+@@ -311,6 +313,7 @@ case $basic_machine in
+ 	| tahoe | tic4x | tic54x | tic55x | tic6x | tic80 | tron \
+ 	| ubicom32 \
+ 	| v850 | v850e | v850e1 | v850e2 | v850es | v850e2v3 \
++	| visium \
+ 	| we32k \
+ 	| x86 | xc16x | xstormy16 | xtensa \
+ 	| z8k | z80)
+@@ -325,6 +328,9 @@ case $basic_machine in
+ 	c6x)
+ 		basic_machine=tic6x-unknown
+ 		;;
++	leon|leon[3-9])
++		basic_machine=sparc-$basic_machine
++		;;
+ 	m6811 | m68hc11 | m6812 | m68hc12 | m68hcs12x | nvptx | picochip)
+ 		basic_machine=$basic_machine-unknown
+ 		os=-none
+@@ -370,12 +376,13 @@ case $basic_machine in
+ 	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* | arceb-* \
+ 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
+ 	| avr-* | avr32-* \
++	| ba-* \
+ 	| be32-* | be64-* \
+ 	| bfin-* | bs2000-* \
+ 	| c[123]* | c30-* | [cjt]90-* | c4x-* \
+ 	| c8051-* | clipper-* | craynv-* | cydra-* \
+ 	| d10v-* | d30v-* | dlx-* \
+-	| elxsi-* \
++	| e2k-* | elxsi-* \
+ 	| f30[01]-* | f700-* | fido-* | fr30-* | frv-* | fx80-* \
+ 	| h8300-* | h8500-* \
+ 	| hppa-* | hppa1.[01]-* | hppa2.0-* | hppa2.0[nw]-* | hppa64-* \
+@@ -402,8 +409,10 @@ case $basic_machine in
+ 	| mips64vr5900-* | mips64vr5900el-* \
+ 	| mipsisa32-* | mipsisa32el-* \
+ 	| mipsisa32r2-* | mipsisa32r2el-* \
++	| mipsisa32r6-* | mipsisa32r6el-* \
+ 	| mipsisa64-* | mipsisa64el-* \
+ 	| mipsisa64r2-* | mipsisa64r2el-* \
++	| mipsisa64r6-* | mipsisa64r6el-* \
+ 	| mipsisa64sb1-* | mipsisa64sb1el-* \
+ 	| mipsisa64sr71k-* | mipsisa64sr71kel-* \
+ 	| mipsr5900-* | mipsr5900el-* \
+@@ -415,16 +424,18 @@ case $basic_machine in
+ 	| nios-* | nios2-* | nios2eb-* | nios2el-* \
+ 	| none-* | np1-* | ns16k-* | ns32k-* \
+ 	| open8-* \
++	| or1k*-* \
+ 	| orion-* \
+ 	| pdp10-* | pdp11-* | pj-* | pjl-* | pn-* | power-* \
+ 	| powerpc-* | powerpc64-* | powerpc64le-* | powerpcle-* \
+ 	| pyramid-* \
++	| riscv32-* | riscv64-* \
+ 	| rl78-* | romp-* | rs6000-* | rx-* \
+ 	| sh-* | sh[1234]-* | sh[24]a-* | sh[24]aeb-* | sh[23]e-* | sh[34]eb-* | sheb-* | shbe-* \
+ 	| shle-* | sh[1234]le-* | sh3ele-* | sh64-* | sh64le-* \
+ 	| sparc-* | sparc64-* | sparc64b-* | sparc64v-* | sparc86x-* | sparclet-* \
+ 	| sparclite-* \
+-	| sparcv8-* | sparcv9-* | sparcv9b-* | sparcv9v-* | sv1-* | sx?-* \
++	| sparcv8-* | sparcv9-* | sparcv9b-* | sparcv9v-* | sv1-* | sx*-* \
+ 	| tahoe-* \
+ 	| tic30-* | tic4x-* | tic54x-* | tic55x-* | tic6x-* | tic80-* \
+ 	| tile*-* \
+@@ -432,6 +443,7 @@ case $basic_machine in
+ 	| ubicom32-* \
+ 	| v850-* | v850e-* | v850e1-* | v850es-* | v850e2-* | v850e2v3-* \
+ 	| vax-* \
++	| visium-* \
+ 	| we32k-* \
+ 	| x86-* | x86_64-* | xc16x-* | xps100-* \
+ 	| xstormy16-* | xtensa*-* \
+@@ -508,6 +520,9 @@ case $basic_machine in
+ 		basic_machine=i386-pc
+ 		os=-aros
+ 		;;
++	asmjs)
++		basic_machine=asmjs-unknown
++		;;
+ 	aux)
+ 		basic_machine=m68k-apple
+ 		os=-aux
+@@ -769,6 +784,9 @@ case $basic_machine in
+ 		basic_machine=m68k-isi
+ 		os=-sysv
+ 		;;
++	leon-*|leon[3-9]-*)
++		basic_machine=sparc-`echo $basic_machine | sed 's/-.*//'`
++		;;
+ 	m68knommu)
+ 		basic_machine=m68k-unknown
+ 		os=-linux
+@@ -824,6 +842,10 @@ case $basic_machine in
+ 		basic_machine=powerpc-unknown
+ 		os=-morphos
+ 		;;
++	moxiebox)
++		basic_machine=moxie-unknown
++		os=-moxiebox
++		;;
+ 	msdos)
+ 		basic_machine=i386-pc
+ 		os=-msdos
+@@ -1356,11 +1378,11 @@ case $os in
+ 	      | -hpux* | -unos* | -osf* | -luna* | -dgux* | -auroraux* | -solaris* \
+ 	      | -sym* | -kopensolaris* | -plan9* \
+ 	      | -amigaos* | -amigados* | -msdos* | -newsos* | -unicos* | -aof* \
+-	      | -aos* | -aros* \
++	      | -aos* | -aros* | -cloudabi* | -sortix* \
+ 	      | -nindy* | -vxsim* | -vxworks* | -ebmon* | -hms* | -mvs* \
+ 	      | -clix* | -riscos* | -uniplus* | -iris* | -rtu* | -xenix* \
+ 	      | -hiux* | -386bsd* | -knetbsd* | -mirbsd* | -netbsd* \
+-	      | -bitrig* | -openbsd* | -solidbsd* \
++	      | -bitrig* | -openbsd* | -solidbsd* | -libertybsd* \
+ 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
+ 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
+ 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
+@@ -1369,14 +1391,15 @@ case $os in
+ 	      | -cygwin* | -msys* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+ 	      | -mingw32* | -mingw64* | -linux-gnu* | -linux-android* \
+ 	      | -linux-newlib* | -linux-musl* | -linux-uclibc* \
+-	      | -uxpv* | -beos* | -mpeix* | -udk* \
++	      | -uxpv* | -beos* | -mpeix* | -udk* | -moxiebox* \
+ 	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
+ 	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
+ 	      | -storm-chaos* | -tops10* | -tenex* | -tops20* | -its* \
+ 	      | -os2* | -vos* | -palmos* | -uclinux* | -nucleus* \
+ 	      | -morphos* | -superux* | -rtmk* | -rtmk-nova* | -windiss* \
+ 	      | -powermax* | -dnix* | -nx6 | -nx7 | -sei* | -dragonfly* \
+-	      | -skyos* | -haiku* | -rdos* | -toppers* | -drops* | -es*)
++	      | -skyos* | -haiku* | -rdos* | -toppers* | -drops* | -es* \
++	      | -onefs* | -tirtos* | -phoenix*)
+ 	# Remember, each alternative MUST END IN *, to match a version number.
+ 		;;
+ 	-qnx*)
+@@ -1508,6 +1531,8 @@ case $os in
+ 		;;
+ 	-nacl*)
+ 		;;
++	-ios)
++		;;
+ 	-none)
+ 		;;
+ 	*)
+@@ -1594,9 +1619,6 @@ case $basic_machine in
+ 	mips*-*)
+ 		os=-elf
+ 		;;
+-	or1k-*)
+-		os=-elf
+-		;;
+ 	or32-*)
+ 		os=-coff
+ 		;;
 -- 
 2.8.1
