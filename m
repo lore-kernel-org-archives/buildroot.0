@@ -1,33 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Jun 2016 14:19:52 +0200
-Subject: [Buildroot] [PATCH 2/5] python-serial: bump to version 3.1
-In-Reply-To: <CAGm1_kv5wjk7bceVM785UpAJSFAMcw_XEeur+QWh6+CHhXZq0w@mail.gmail.com>
-References: <1464876330-6890-1-git-send-email-yegorslists@googlemail.com>
- <1464876330-6890-2-git-send-email-yegorslists@googlemail.com>
- <20160603193823.509e6ab3@free-electrons.com>
- <CAGm1_kv5wjk7bceVM785UpAJSFAMcw_XEeur+QWh6+CHhXZq0w@mail.gmail.com>
-Message-ID: <20160604141952.42cbe9e4@free-electrons.com>
+Date: Sat, 4 Jun 2016 14:31:52 +0200
+Subject: [Buildroot] [git commit] package/nodejs: Update icu to use
+	NODEJS_CONF_OPTS
+Message-ID: <20160604123235.123C58079A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=be0d8ecc2762b3a2547b91cf8471c2a4c28cc942
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 3 Jun 2016 22:21:42 +0200, Yegor Yefremov wrote:
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nodejs/nodejs.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> Seems to be Python 2 related. I've submitted a bug:
-> https://github.com/pyserial/pyserial/issues/123
-> Will keep an eye on it.
-
-Seems like the developer replied that python-serial is Python 3 only.
-So the dependency should be adjust in Buildroot.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index d2c5be4..68adbff 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -26,6 +26,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_ICU),y)
+ NODEJS_DEPENDENCIES += icu
++NODEJS_CONF_OPTS += --with-intl=system-icu
++else
++NODEJS_CONF_OPTS += --with-intl=none
+ endif
+ 
+ # nodejs build system is based on python, but only support python-2.6 or
+@@ -105,7 +108,6 @@ define NODEJS_CONFIGURE_CMDS
+ 		$(HOST_DIR)/usr/bin/python2 ./configure \
+ 		--prefix=/usr \
+ 		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
+-		$(if $(BR2_PACKAGE_ICU),--with-intl=system-icu,--with-intl=none) \
+ 		$(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
+ 		--dest-cpu=$(NODEJS_CPU) \
+ 		$(if $(NODEJS_ARM_FP),--with-arm-float-abi=$(NODEJS_ARM_FP)) \
