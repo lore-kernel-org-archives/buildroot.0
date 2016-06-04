@@ -1,92 +1,79 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  4 Jun 2016 18:30:49 +0200
-Subject: [Buildroot] [PATCH 0/8 v3] core: add support for package help
-	(branch yem/help)
-Message-ID: <cover.1465056706.git.yann.morin.1998@free.fr>
+Date: Sat,  4 Jun 2016 18:30:47 +0200
+Subject: [Buildroot] [PATCH 1/8 v3] core/pkg-generic: add support for
+	package-defined help
+In-Reply-To: <cover.1465056706.git.yann.morin.1998@free.fr>
+References: <cover.1465056706.git.yann.morin.1998@free.fr>
+Message-ID: <fcca98ea0e54fd40f5e3fbe5dcaaf56e405bb525.1465056706.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Add a package-variable to store the package-specific make rules.
 
-This series introduces the ability for packages to declare help entries,
-that are added to the main help.
+Although this variable would be seldom used, we still document it.
+However, we make sure the documentation explicitly states that this
+variable should not be used (if it needs to be, the submitter of a
+package will be told so during reviews).
 
-This is done by allowing packages to define an additional set of
-commands, besides the existing configure/build/instal/... ones. Packages
-can provide whatever they want as their help text, it is completely
-free-form. However, to help packages present help that lines up well
-with the rest of the main help, we provide a new macro to do a nice
-formatting; its use is totally optional.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-This is used for our bundled packages to display their kconfig rules [0]:
-busybox, uClibc, linux and barebox, to replace the hard-coded entries in
-our main help.
-
-Finally, we also make use of the new macro to print our main help, to
-ensure consistency in the output.
-
-
-[0] we could very well move that to the kconfig infra, btw, but that can
-    be done in follow-up patches.
-
-
+---
 Changes v2 -> v3:
-  - don't force packages to only provide canned help text, allow them
-    to provide arbitrary commands.  (Thomas)
-  - make the macro a little bit simpler; only print a single line at
-    each call; use a awk script that is easier to grok than the sed
-    script. Enhance the commit log and comment in the code.
-  - add conversion of the main help over to using the help macro.
-  - drop the custom help target as it does not work (it was applied
-    and then reverted).
+  - package don't provide help text, they provide help commands
+---
+ Makefile                                | 1 +
+ docs/manual/adding-packages-generic.txt | 6 ++++++
+ package/pkg-generic.mk                  | 4 ++++
+ 3 files changed, 11 insertions(+)
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit a898d5de17f4b32ee29ff47734ff5717c6b40f03
-
-  package/nodejs: Update npm to use NODEJS_CONF_OPTS (2016-06-04 14:32:16 +0200)
-
-
-are available in the git repository at:
-
-  https://git.busybox.net/~ymorin/git/buildroot
-
-for you to fetch changes up to f6bb545ede1f4e8692e031f48393991b0303f835
-
-  core: use the print-help macro to print the main help (2016-06-04 18:06:01 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (8):
-      core/pkg-generic: add support for package-defined help
-      core: name the package before its help text
-      core/pkg-utils: add a macro to pretty-print a help entry
-      package/busybox: use the generic help rules
-      linux: use the generic help rules
-      package/uclibc: use the generic help rules
-      boot/barebox: use the generic help rules
-      core: use the print-help macro to print the main help
-
- Makefile                                | 129 ++++++++++++++++----------------
- boot/barebox/barebox/barebox.mk         |   5 ++
- docs/manual/adding-packages-generic.txt |  16 ++++
- linux/linux.mk                          |   7 ++
- package/busybox/busybox.mk              |   5 ++
- package/pkg-generic.mk                  |   4 +
- package/pkg-utils.mk                    |  27 +++++++
- package/uclibc/uclibc.mk                |   4 +
- 8 files changed, 134 insertions(+), 63 deletions(-)
-
+diff --git a/Makefile b/Makefile
+index 21d63f6..d77b539 100644
+--- a/Makefile
++++ b/Makefile
+@@ -937,6 +937,7 @@ help:
+ 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
+ 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
+ 	@echo '  <pkg>-rebuild          - Restart the build from the build step'
++	$(foreach p,$(HELP_PACKAGES),$($(p)_HELP_CMDS)$(sep))
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ 	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
+ endif
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 8ed7fe8..de8aca2 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -497,6 +497,12 @@ different steps of the build process.
+   systemd is selected as the init system in the configuration, only
+   +LIBFOO_INSTALL_INIT_SYSTEMD+ will be run).
+ 
++* +LIBFOO_HELP_CMDS+ lists the actions to print the package help, which
++  is included to the main +make help+ output. These commands can print
++  anything in any format.
++  This is seldom used, as packages rarely have custom rules. *Do not use
++  this variable*, unless you really know that you need to print help.
++
+ The preferred way to define these variables is:
+ 
+ ----------------------
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b031879..374d9d5 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -914,6 +914,10 @@ ifeq ($$(patsubst %/,ERROR,$$($(2)_SITE)),ERROR)
+ $$(error $(2)_SITE ($$($(2)_SITE)) cannot have a trailing slash)
+ endif
+ 
++ifneq ($$($(2)_HELP_CMDS),)
++HELP_PACKAGES += $(2)
++endif
++
+ endif # $(2)_KCONFIG_VAR
+ endef # inner-generic-package
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
