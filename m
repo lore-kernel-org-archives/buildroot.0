@@ -1,38 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Jun 2016 18:45:56 +0200
-Subject: [Buildroot] [PATCH 1/1] gcc/libmudflap: unavailable for gcc >= 4.9
-Message-ID: <1465058756-9612-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 04 Jun 2016 18:41:49 +0200
+Subject: [Buildroot] [PATCH 1/1]
+	package/x11r7/xdriver_xf86-video-fbturbo: needs dri2 for libump
+References: <1464455839-473-1-git-send-email-bernd.kuhls@t-online.de>
+ <87y46quffx.fsf@dell.be.48ers.dk>
+Message-ID: <XnsA61DBE325C7EEID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rework gcc dependency for mudflap as suggested by Arnout and Peter:
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/149813
+[posted and mailed]
 
-libmudflap was removed in gcc 4.9:
-https://gcc.gnu.org/wiki/Mudflap_Pointer_Debugging
+Hi Peter,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/gcc/Config.in.host | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Peter Korsgaard <peter@korsgaard.com> wrote in
+news:87y46quffx.fsf at dell.be.48ers.dk: 
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index cfb0958..529f8da 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -151,9 +151,7 @@ config BR2_GCC_ENABLE_LIBMUDFLAP
- 	# There are architectures, or specific configurations for
- 	# which mudflap is not supported.
- 	depends on !BR2_ARM_INSTRUCTIONS_THUMB && !BR2_powerpc_SPE
--	depends on !BR2_GCC_VERSION_4_9_X
--	depends on !BR2_GCC_VERSION_5_X
--	depends on !BR2_GCC_VERSION_6_X
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	help
- 	  libmudflap is a gcc library used for the mudflap pointer
- 	  debugging functionality. It is only needed if you intend to
--- 
-2.8.1
+> > +ifeq ($(BR2_PACKAGE_LIBUMP),y)
+> > +XDRIVER_XF86_VIDEO_FBTURBO_DEPENDENCIES += libump
+> > +endif
+> 
+> We should also ensure dri2proto gets built before fbturbo, so I've added
+> it to _DEPENDENCIES as well and committed, thanks.
+
+imho this was not necessary, xdriver_xf86-video-fbturbo depends on the
+modular xserver_xorg-server 
+
+https://git.busybox.net/buildroot/tree/package/x11r7/Config.in#n147
+https://git.busybox.net/buildroot/tree/package/x11r7/Config.in#n164
+
+which already takes care of dri2proto:
+
+https://git.busybox.net/buildroot/tree/package/x11r7/xserver_xorg-server/xs
+erver_xorg-server.mk#n207 
+
+ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR),y)
+ifeq ($(BR2_PACKAGE_XPROTO_DRI2PROTO),y)
+XSERVER_XORG_SERVER_DEPENDENCIES += xproto_dri2proto
+XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri2
+
+Regards, Bernd
