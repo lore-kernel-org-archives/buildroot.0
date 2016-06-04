@@ -1,55 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 04 Jun 2016 14:56:20 +0000
-Subject: [Buildroot] [Bug 8971] New: build for beaglebone fails
-Message-ID: <bug-8971-163@https.bugs.busybox.net/>
+From: daggs <daggs@gmx.com>
+Date: Sat, 4 Jun 2016 17:02:34 +0200
+Subject: [Buildroot] [PATCH 1/3] libamcodec: new Package
+In-Reply-To: <20160604150259.0fc51f8c@free-electrons.com>
+References: <20160601102720.3929-1-daggs@gmx.com>
+ <20160601141655.5649aa21@free-electrons.com>
+ <trinity-d3b293e2-4a13-4cd4-95af-c77cc680aa35-1464814370051@3capp-mailcom-bs13>
+ <20160601230533.04ca63d0@free-electrons.com>
+ <trinity-ac3e1b6f-2b6f-4cd4-9758-1af9e8953da0-1464815796397@3capp-mailcom-bs13>,
+ <20160604150259.0fc51f8c@free-electrons.com>
+Message-ID: <trinity-1a38b45d-8629-4b3c-abfb-9c7cb71ba76b-1465052554911@3capp-mailcom-bs13>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8971
 
-            Bug ID: 8971
-           Summary: build for beaglebone fails
-           Product: buildroot
-           Version: 2016.05
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: craigswank at fastmail.fm
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Greetings,
+> Hello,
+> 
+> On Wed, 1 Jun 2016 23:16:36 +0200, daggs wrote:
+> 
+> > I see, I'll keep posting patches, if they are rejected because I'm using only my first name, then let it be.
+> > I value my privacy more than I value my support for open-sourcing.
+> > I don't mind if someone comes along and resends them as his own, I want to contribute but there is a limitation to what I'm willing sacrifice.
+> 
+> On the other hand, a very simple Google/DuckDuckGo search shows up your
+> real name. If you really wanted to be anonymous, you should have never
+> used your real name, or alternatively change your e-mail address when
+> going anonymous.
+> 
+> See for example http://comments.gmane.org/gmane.linux.alsa.devel/114494.
+> 
+> Best regards,
+> 
+> Thomas
 
-Created attachment 6446
-  --> https://bugs.busybox.net/attachment.cgi?id=6446&action=edit
-build output
-
-The build fails when I do:
-
-  $ make beaglebone_defconfig
-  $ make
-
-I've attached the entire output of the make command.
-
-I'm building on ubuntu 
-
-?  buildroot git:(aa6fd11) ? uname -a
-Linux sigatoka 3.19.0-49-generic #55-Ubuntu SMP Fri Jan 22 02:10:24 UTC 2016
-x86_64 x86_64 x86_64 GNU/Linux
-?  buildroot git:(aa6fd11) ? lsb_release -a
-No LSB modules are available.
-Distributor ID: Ubuntu
-Description:    Ubuntu 15.04
-Release:        15.04
-Codename:       vivid
-
-If anyone needs more info please ask, I can't think of anything else right now.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+I didn't said I wanted to be anonymous, I just didn't wanted to share my full name.
+I'm well aware it can be found by searching the net. I cannot change the past. I'm however entitled to change the way I tick when I think it is needed.
+e.g. the fact I used to do something in the past, doesn't means I need to continue do it forever.
