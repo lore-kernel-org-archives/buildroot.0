@@ -1,183 +1,219 @@
-From: Dagg <daggs@gmx.com>
-Date: Sat,  4 Jun 2016 16:44:29 +0300
-Subject: [Buildroot] [PATCH v3] libamcodec: New Package
-Message-ID: <20160604134429.4980-1-daggs@gmx.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  4 Jun 2016 16:38:11 +0200
+Subject: [Buildroot] [PATCH 2/2] package/openpowerlink: enable openpowerlink
+	PCIe driver support
+In-Reply-To: <1465051091-6494-1-git-send-email-romain.naour@gmail.com>
+References: <1465051091-6494-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <1465051091-6494-2-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-v2 -> v3:
- - properly pass variables when possible.
- - use proper full destination path.
+Also, disable error=date-time for kernel >= 3.14 and fix musl build.
 
-Signed-off-by: Dagg <daggs@gmx.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/Config.in                                  |  1 +
- package/libamcodec/0001-fix_flags_in_makefile.patch    | 70 ++++++++++++++++++++++
- package/libamcodec/Config.in                       | 13 ++++
- package/libamcodec/libamcodec.hash                 |  2 +
- package/libamcodec/libamcodec.mk                   | 33 ++++++++++
- 5 files changed, 119 insertions(+)
- create mode 100644 package/libamcodec/0001-fix_flags_in_makefile.patch
- create mode 100644 package/libamcodec/Config.in
- create mode 100644 package/libamcodec/libamcodec.hash
- create mode 100644 package/libamcodec/libamcodec.mk
+ ...-Disable-Werror-date-time-for-kernel-3.14.patch | 35 +++++++++++++++
+ ...6-PCIe-Fix-name-of-sched_priority-element.patch | 52 ++++++++++++++++++++++
+ package/openpowerlink/Config.in                    | 16 +++++++
+ package/openpowerlink/openpowerlink.mk             | 25 ++++++++++-
+ 4 files changed, 126 insertions(+), 2 deletions(-)
+ create mode 100644 package/openpowerlink/0005-PCIe-Driver-Disable-Werror-date-time-for-kernel-3.14.patch
+ create mode 100644 package/openpowerlink/0006-PCIe-Fix-name-of-sched_priority-element.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 6c6a562..0a56070 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1074,6 +1074,7 @@ endmenu
+diff --git a/package/openpowerlink/0005-PCIe-Driver-Disable-Werror-date-time-for-kernel-3.14.patch b/package/openpowerlink/0005-PCIe-Driver-Disable-Werror-date-time-for-kernel-3.14.patch
+new file mode 100644
+index 0000000..eb61f93
+--- /dev/null
++++ b/package/openpowerlink/0005-PCIe-Driver-Disable-Werror-date-time-for-kernel-3.14.patch
+@@ -0,0 +1,35 @@
++From cfd85e15957305b461a3553afe1710590b9e01cd Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sat, 4 Jun 2016 01:14:24 +0200
++Subject: [PATCH] PCIe Driver: Disable Werror=date-time for kernel >= 3.14
++
++Avoid a build error due to __DATE__ and __TIME___ being used in
++oplk driver. Just disable the warning with -Wno-date-time.
++
++See da76c94059ed799689ad3283ddcb32d5ace175a0
++
++Upstream status: pending
++https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/123
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ drivers/linux/drv_kernelmod_pcie/CMakeLists.txt | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/drivers/linux/drv_kernelmod_pcie/CMakeLists.txt b/drivers/linux/drv_kernelmod_pcie/CMakeLists.txt
++index d16e2fb..9b119e7 100644
++--- a/drivers/linux/drv_kernelmod_pcie/CMakeLists.txt
+++++ b/drivers/linux/drv_kernelmod_pcie/CMakeLists.txt
++@@ -45,6 +45,9 @@ MESSAGE(STATUS "CMAKE_SYSTEM_PROCESSOR is ${CMAKE_SYSTEM_PROCESSOR}")
++ STRING(TOLOWER "${CMAKE_SYSTEM_NAME}" SYSTEM_NAME_DIR)
++ STRING(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" SYSTEM_PROCESSOR_DIR)
++ 
+++# Since 3.14 kernel Werror=date-time is automatically used if the compiler supports it.
+++SET(MODULE_DEFS "${MODULE_DEFS} -Wno-date-time")
+++
++ ################################################################################
++ # Configuration options
++ 
++-- 
++2.5.5
++
+diff --git a/package/openpowerlink/0006-PCIe-Fix-name-of-sched_priority-element.patch b/package/openpowerlink/0006-PCIe-Fix-name-of-sched_priority-element.patch
+new file mode 100644
+index 0000000..8e622b2
+--- /dev/null
++++ b/package/openpowerlink/0006-PCIe-Fix-name-of-sched_priority-element.patch
+@@ -0,0 +1,52 @@
++From 98a4d9b805300511ee87596803a02a5a9376b806 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sat, 4 Jun 2016 11:47:41 +0200
++Subject: [PATCH] PCIe: Fix name of sched_priority element
++
++commit 6212747994ff00c06d7285777ea194e725e62011 and
++3d18c96d3f3be40fc87effba1c982d9607f33712 already removed
++__sched_priority since it's non POSIX compliant.
++
++Upstream status: Pending
++https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/124
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ stack/src/user/event/eventucal-linuxpcie.c | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/stack/src/user/event/eventucal-linuxpcie.c b/stack/src/user/event/eventucal-linuxpcie.c
++index 1eceb8a..b287d5c 100644
++--- a/stack/src/user/event/eventucal-linuxpcie.c
+++++ b/stack/src/user/event/eventucal-linuxpcie.c
++@@ -162,11 +162,11 @@ tOplkError eventucal_init(void)
++     if (pthread_create(&instance_l.kernelEventThreadId, NULL, k2uEventFetchThread, NULL) != 0)
++         goto Exit;
++ 
++-    schedParam.__sched_priority = KERNEL_EVENT_FETCH_THREAD_PRIORITY;
+++    schedParam.sched_priority = KERNEL_EVENT_FETCH_THREAD_PRIORITY;
++     if (pthread_setschedparam(instance_l.kernelEventThreadId, SCHED_FIFO, &schedParam) != 0)
++     {
++         DEBUG_LVL_ERROR_TRACE("%s(): couldn't set K2U thread scheduling parameters! %d\n",
++-                              __func__, schedParam.__sched_priority);
+++                              __func__, schedParam.sched_priority);
++     }
++ 
++ #if (defined(__GLIBC__) && __GLIBC__ >= 2 && __GLIBC_MINOR__ >= 12)
++@@ -177,11 +177,11 @@ tOplkError eventucal_init(void)
++     if (pthread_create(&instance_l.processEventThreadId, NULL, eventProcessThread, NULL) != 0)
++         goto Exit;
++ 
++-    schedParam.__sched_priority = EVENT_PROCESS_THREAD_PRIORITY;
+++    schedParam.sched_priority = EVENT_PROCESS_THREAD_PRIORITY;
++     if (pthread_setschedparam(instance_l.processEventThreadId, SCHED_FIFO, &schedParam) != 0)
++     {
++         DEBUG_LVL_ERROR_TRACE("%s(): couldn't set event process thread scheduling parameters! %d\n",
++-                              __func__, schedParam.__sched_priority);
+++                              __func__, schedParam.sched_priority);
++     }
++ 
++ #if (defined(__GLIBC__) && __GLIBC__ >= 2 && __GLIBC_MINOR__ >= 12)
++-- 
++2.5.5
++
+diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
+index e6b41c3..0b68ca8 100644
+--- a/package/openpowerlink/Config.in
++++ b/package/openpowerlink/Config.in
+@@ -68,6 +68,18 @@ config BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB
+ 	  build and install a Linux kernel module openPOWERLINK
+ 	  driver.
  
- menu "Multimedia"
- 	source "package/bitstream/Config.in"
-+	source "package/libamcodec/Config.in"
- 	source "package/libass/Config.in"
- 	source "package/libbluray/Config.in"
- 	source "package/libdcadec/Config.in"
-diff --git a/package/libamcodec/0001-fix_flags_in_makefile.patch b/package/libamcodec/0001-fix_flags_in_makefile.patch
-new file mode 100644
-index 0000000..e64c4d7
---- /dev/null
-+++ b/package/libamcodec/0001-fix_flags_in_makefile.patch
-@@ -0,0 +1,70 @@
-+--- a/amcodec/Makefile	2016-06-02 12:06:53.000000000 +0300
-++++ b/amcodec/Makefile	2016-06-02 12:07:34.000000000 +0300
-+@@ -27,12 +27,12 @@ TARGET?=libamcodec.so
-+ 
-+ DIRS=audio_ctl/ codec/
-+ 
-+-LDFLAGS=  -O2  -L$(LIB_DIR)  -lm -lc  -shared -Wl,--shared -Wl,-soname,$(TARGET)$(LIB_VERSION)
-++override LDFLAGS+=  -O2  -L$(LIB_DIR)  -lm -lc  -shared -Wl,--shared -Wl,-soname,$(TARGET)$(LIB_VERSION)
-+ 
-+ #INCLUDE=$(DIRS:%/=-I$(SRC)/%/include)
-+ INCLUDE=${SRCTREE}/include/ 
-+ #CFLAGS=-O0  -gdwarf-2  -g
-+-CFLAGS=-O2 -g  -I$(SRC)/include  -I${SRCTREE}/audio_ctl -I${SRCTREE}/codec -I${SRCTREE}/../amadec/include -fPIC
-++override CFLAGS+=-O2 -g  -I$(SRC)/include  -I${SRCTREE}/audio_ctl -I${SRCTREE}/codec -I${SRCTREE}/../amadec/include -fPIC
-+ 
-+ 
-+ 
-+--- a/amavutils/Makefile	2016-06-02 11:48:11.000000000 +0300
-++++ b/amavutils/Makefile	2016-06-02 11:46:14.000000000 +0300
-+@@ -8,13 +8,13 @@ TARGET=libamavutils.so
-+ 
-+ INSTALL_DIR=${LIB_DIR}/aml_libs
-+ 
-+-LDFLAGS += -shared -lpthread -lm -lrt
-++override LDFLAGS += -shared -lpthread -lm -lrt
-+ 
-+ TOPDIR=$(shell pwd)
-+ SRC?=$(TOPDIR)
-+ 
-+-CFLAGS+=-O2 -fPIC -g
-+-CFLAGS+=-I$(SRC) -I$(SRC)/include -I$(SRC)/../amcodec/include -L${LIB_DIR} -I$(HEADERS_DIR)
-++override CFLAGS+=-O2 -fPIC -g
-++override CFLAGS+=-I$(SRC) -I$(SRC)/include -I$(SRC)/../amcodec/include -L${LIB_DIR} -I$(HEADERS_DIR)
-+ 
-+ 
-+ 
-+--- a/amadec/Makefile	2016-06-02 12:03:48.000000000 +0300
-++++ b/amadec/Makefile	2016-06-02 12:04:11.000000000 +0300
-+@@ -10,14 +10,14 @@ TARGET=libamadec.so
-+ 
-+ INSTALL_DIR=$(LIB_DIR)/aml_libs
-+ 
-+-LDFLAGS += -shared -lpthread -lm -lasound -lrt
-++override LDFLAGS += -shared -lpthread -lm -lasound -lrt
-+ 
-+ TOPDIR=$(shell pwd)
-+ SRC?=$(TOPDIR)
-+ 
-+-CFLAGS+=-O2 -fPIC -g
-+-CFLAGS+=-I$(SRC) -I$(SRC)/include -I$(SRC)/../amavutils/include -I$(SRC)/../amplayer/player/include -I${HEADERS_DIR} -L${LIB_DIR}
-+-CFLAGS+=-DALSA_OUT
-++override CFLAGS+=-O2 -fPIC -g
-++override CFLAGS+=-I$(SRC) -I$(SRC)/include -I$(SRC)/../amavutils/include -I$(SRC)/../amplayer/player/include -I${HEADERS_DIR} -L${LIB_DIR}
-++override CFLAGS+=-DALSA_OUT
-+ 
-+ ifdef DOLBY_UDC
-+     CFLAGS+=-DDOLBY_USE_ARMDEC
-+--- a/amcodec/rules.mk	2016-06-04 15:49:31.000000000 +0300
-++++ b/amcodec/rules.mk	2016-06-04 15:49:41.000000000 +0300
-+@@ -2,8 +2,8 @@
-+ 
-+ 
-+ dir_mk=$(Q)echo "MAKE $(1)";\
-+-	$(MAKE) -C ${1} -f ${SRCTREE}/depends.mk;\
-+-	$(MAKE) -C ${1} -f ${SRCTREE}/dir.mk
-++	$(MAKE) -C ${1} -f ${SRCTREE}/depends.mk CFLAGS="$(CFLAGS)";\
-++	$(MAKE) -C ${1} -f ${SRCTREE}/dir.mk CFLAGS="$(CFLAGS)"
-+ 
-+ c_mk=$(Q)echo "CC  $(1)";\
-+ 		$(CC) $(CFLAGS)  $(EXT_CFLAGS) -c  $(1) 
-diff --git a/package/libamcodec/Config.in b/package/libamcodec/Config.in
-new file mode 100644
-index 0000000..52778ba
---- /dev/null
-+++ b/package/libamcodec/Config.in
-@@ -0,0 +1,13 @@
-+comment "libamcodec needs a toolchain w/ threads"
-+	depends on BR2_arm || BR2_aarch64
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_LIBAMCODEC
-+	bool "libamcodec"
-+	depends on BR2_arm || BR2_aarch64
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
-+	select BR2_PACKAGE_ALSA_LIB
++config BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_PCIE_STACK_LIB
++	bool "kernel-space PCIe driver"
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_PACKAGE_OPENPOWERLINK_MN # MN support only
 +	help
-+	    Interface library for Amlogic media codecs
++	  Compile openPOWERLINK application library which contains the
++	  interface to a Linux kernel PCIe interface driver. The kernel
++	  part of the openPOWERLINK stack is located on an external PCIe
++	  device. The status/control and data exchange between the
++	  application and kernel stack is handled by the PCIe interface
++	  driver.
 +
-+	    https://github.com/mdrjr/c2_aml_libs.git
-diff --git a/package/libamcodec/libamcodec.hash b/package/libamcodec/libamcodec.hash
-new file mode 100644
-index 0000000..3a0055f
---- /dev/null
-+++ b/package/libamcodec/libamcodec.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 44580255c63bde1544b1376bc8d33f73ef0c634afda5065455a01b77f6e2729b  libamcodec-ed1d8b8c54b05c1a02a8ee44c59744e4cbed3d8d.tar.gz
-diff --git a/package/libamcodec/libamcodec.mk b/package/libamcodec/libamcodec.mk
-new file mode 100644
-index 0000000..1e0bcb6
---- /dev/null
-+++ b/package/libamcodec/libamcodec.mk
-@@ -0,0 +1,33 @@
-+################################################################################
-+#
-+# libamcodec
-+#
-+################################################################################
+ comment "openpowerlink kernel stack needs a Linux kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL
+ 
+@@ -97,6 +109,10 @@ endchoice
+ 
+ endif # BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB
+ 
++config BR2_PACKAGE_OPENPOWERLINK_KERNEL_PCIE_DRIVER
++	depends on BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_PCIE_STACK_LIB
++	bool "PCIe Powerlink Driver"
 +
-+LIBAMCODEC_VERSION = ed1d8b8c54b05c1a02a8ee44c59744e4cbed3d8d
-+LIBAMCODEC_SITE = $(call github,mdrjr,c2_aml_libs,$(LIBAMCODEC_VERSION))
-+LIBAMCODEC_DEPENDENCIES = alsa-lib
+ menu "demos"
+ 
+ config BR2_PACKAGE_OPENPOWERLINK_DEMO_MN_CONSOLE
+diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
+index 3ac4ccb..53c636c 100644
+--- a/package/openpowerlink/openpowerlink.mk
++++ b/package/openpowerlink/openpowerlink.mk
+@@ -59,6 +59,17 @@ OPENPOWERLINK_CONF_OPTS += \
+ 	-DCFG_COMPILE_LIB_CNAPP_USERINTF=OFF \
+ 	-DCFG_COMPILE_LIB_CNAPP_KERNELINTF=$(OPENPOWERLINK_CN_ONOFF) \
+ 	-DCFG_COMPILE_LIB_CNDRV_PCAP=OFF
++else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_PCIE_STACK_LIB),y)
++OPENPOWERLINK_CONF_OPTS += \
++	-DCFG_COMPILE_LIB_MN=OFF \
++	-DCFG_COMPILE_LIB_MNAPP_USERINTF=OFF \
++	-DCFG_COMPILE_LIB_MNAPP_KERNELINTF=OFF \
++	-DCFG_COMPILE_LIB_MNAPP_PCIEINTF=$(OPENPOWERLINK_MN_ONOFF) \
++	-DCFG_COMPILE_LIB_MNDRV_PCAP=OFF \
++	-DCFG_COMPILE_LIB_CN=OFF \
++	-DCFG_COMPILE_LIB_CNAPP_USERINTF=OFF \
++	-DCFG_COMPILE_LIB_CNAPP_KERNELINTF=OFF \
++	-DCFG_COMPILE_LIB_CNDRV_PCAP=OFF
+ endif
+ 
+ OPENPOWERLINK_CONF_OPTS += \
+@@ -66,17 +77,19 @@ OPENPOWERLINK_CONF_OPTS += \
+ 
+ #### OPLK KERNEL DRIVERS ####
+ 
+-ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB),y)
++ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB)$(BR2_PACKAGE_OPENPOWERLINK_KERNEL_PCIE_DRIVER),y)
+ OPENPOWERLINK_DEPENDENCIES += linux
+ 
+ OPENPOWERLINK_CONF_OPTS += \
+-	-DCFG_KERNEL_DRIVERS=ON \
+ 	-DCFG_KERNEL_DIR="$(LINUX_DIR)" \
+ 	-DCMAKE_SYSTEM_VERSION="$(LINUX_VERSION)" \
+ 	-DCFG_OPLK_MN="$(OPENPOWERLINK_MN_ONOFF)" \
+ 	-DMAKE_KERNEL_ARCH="$(KERNEL_ARCH)" \
+ 	-DMAKE_KERNEL_CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)"
++endif
+ 
++ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB),y)
++OPENPOWERLINK_CONF_OPTS += -DCFG_KERNEL_DRIVERS=ON
+ ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVER_82573),y)
+ OPENPOWERLINK_CONF_OPTS += -DCFG_POWERLINK_EDRV=82573
+ else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVER_8255x),y)
+@@ -88,6 +101,14 @@ OPENPOWERLINK_CONF_OPTS += -DCFG_POWERLINK_EDRV=8111
+ else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVER_RTL8139),y)
+ OPENPOWERLINK_CONF_OPTS += -DCFG_POWERLINK_EDRV=8139
+ endif
++else
++OPENPOWERLINK_CONF_OPTS += -DCFG_KERNEL_DRIVERS=OFF
++endif
 +
-+# This package uses the M_PREFIX variable to construct the header and
-+# # library paths used when compiling
-+define LIBAMCODEC_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/amavutils M_PREFIX="$(STAGING_DIR)/usr"
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/amadec M_PREFIX="$(STAGING_DIR)/usr"
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/amcodec PREFIX="$(STAGING_DIR)"
-+endef
-+
-+define LIBAMCODEC_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/amavutils/libamavutils.so $(STAGING_DIR)/usr/lib/libamavutils.so
-+	$(INSTALL) -D -m 0555 $(@D)/amadec/libamadec.so $(STAGING_DIR)/usr/lib/libamadec.so
-+	$(INSTALL) -D -m 0555 $(@D)/amcodec/libamcodec.so $(STAGING_DIR)/usr/lib/libamcodec.so
-+	mkdir -p $(STAGING_DIR)/usr/include/amcodec
-+	cp -rf $(@D)/amcodec/include/* $(STAGING_DIR)/usr/include/amcodec
-+endef
-+
-+define LIBAMCODEC_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/amavutils/libamavutils.so $(TARGET_DIR)/usr/lib/libamavutils.so
-+	$(INSTALL) -D -m 0555 $(@D)/amadec/libamadec.so $(TARGET_DIR)/usr/lib/libamadec.so
-+	$(INSTALL) -D -m 0555 $(@D)/amcodec/libamcodec.so $(TARGET_DIR)/usr/lib/libamcodec.so
-+endef
-+
-+$(eval $(generic-package))
++ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_PCIE_DRIVER),y)
++OPENPOWERLINK_CONF_OPTS += -DCFG_KERNEL_PCIE_DRIVERS=ON
++else
++OPENPOWERLINK_CONF_OPTS += -DCFG_KERNEL_PCIE_DRIVERS=OFF
+ endif
+ 
+ #### OPLK PCAP DAEMON ####
 -- 
-2.8.3
+2.5.5
