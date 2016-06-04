@@ -1,60 +1,33 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 4 Jun 2016 13:42:33 +0200
-Subject: [Buildroot] [PATCH v2] zeromq: fix sparc32 compile
-Message-ID: <20160604114232.GA11109@waldemar-brodkorb.de>
+From: Dagg <daggs@gmx.com>
+Date: Sat,  4 Jun 2016 14:46:30 +0300
+Subject: [Buildroot] [PATCH] odroid c2 linux: bump to revision
+	f4bf29710749c450005cc0e61d58b2fd335385a9
+Message-ID: <20160604114630.1817-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Code is otherwise compiled with sparcv9 optimization and
-cannot be run on sparc32 (sparcv8) machine.
+the odorid c2 kernel from hardkernel has advanced a bit, latest version seems to work ok.
 
-Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+Signed-off-by: Dagg <daggsi@gmx.com>
 ---
-v1 -> v2:
-  - add git formatted patch requested by Thomas Petazzoni
----
- .../zeromq/0003-allow-to-build-sparc-v8-leon.patch |   30 ++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/zeromq/0003-allow-to-build-sparc-v8-leon.patch
+ configs/odroidc2_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/zeromq/0003-allow-to-build-sparc-v8-leon.patch b/package/zeromq/0003-allow-to-build-sparc-v8-leon.patch
-new file mode 100644
-index 0000000..126a03b
---- /dev/null
-+++ b/package/zeromq/0003-allow-to-build-sparc-v8-leon.patch
-@@ -0,0 +1,30 @@
-+From d0b22397ebbef8e250c4cad25b8686018804aa15 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+Date: Sat, 4 Jun 2016 09:30:49 +0200
-+Subject: [PATCH] allow to build sparc (v8,leon)
-+
-+Only set sparcv9 optimization for sparc64 systems.
-+This allows to run for example application using zeromq
-+on sparc32 systems.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index af8293c..cabd734 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -291,7 +291,7 @@ fi
-+ 
-+ # CPU-specific optimizations
-+ case "${host_cpu}" in
-+-    *sparc*)
-++    *sparc64*)
-+         AC_LANG_PUSH([C++])
-+         LIBZMQ_CHECK_LANG_FLAG_PREPEND([-mcpu=v9])
-+         AC_LANG_POP([C++])
-+-- 
-+2.7.4 (Apple Git-66)
-+
+diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
+index e403f3e..e153882 100644
+--- a/configs/odroidc2_defconfig
++++ b/configs/odroidc2_defconfig
+@@ -14,7 +14,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/hardkernel/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="db9b5cfbd380d2316b7723599ee0c7e9d866db17"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f4bf29710749c450005cc0e61d58b2fd335385a9"
+ BR2_LINUX_KERNEL_DEFCONFIG="odroidc2"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_BUILD_DEFAULT_DTS=y
 -- 
-1.7.10.4
+2.8.3
