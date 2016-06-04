@@ -1,110 +1,83 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Sat,  4 Jun 2016 18:29:09 -0300
-Subject: [Buildroot] [PATCH 2/2] beaglebone: Use genimage to produce the SD
-	card image
-In-Reply-To: <1465075749-31837-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1465075749-31837-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <1465075749-31837-2-git-send-email-ezequiel@vanguardiasur.com.ar>
+From: Stanislas Bach <sbach@0g.re>
+Date: Sat, 4 Jun 2016 14:15:36 -0700
+Subject: [Buildroot] [PATCH] xserver_xorg-server: apply modesettings patch
+	for 1.18.3 only
+Message-ID: <575344F8.2030103@0g.re>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
----
- board/beaglebone/post-image.sh | 14 ++++++++++++++
- board/beaglebone/readme.txt    | 30 +-----------------------------
- configs/beaglebone_defconfig   |  5 +++++
- 3 files changed, 20 insertions(+), 29 deletions(-)
+We currently have two choices for the server's version (1.18.3, and 1.14.7)
+but the following patch will only apply for versions >= 1.17.2.
 
-diff --git a/board/beaglebone/post-image.sh b/board/beaglebone/post-image.sh
-index 7441d07a005c..ceeec6852092 100755
---- a/board/beaglebone/post-image.sh
-+++ b/board/beaglebone/post-image.sh
-@@ -2,5 +2,19 @@
- # post-image.sh for BeagleBone
- # 2014, Marcin Jabrzyk <marcin.jabrzyk@gmail.com>
- 
-+BOARD_DIR="$(dirname $0)"
+If 1.14.7 is selected the build will fail with the following error:
+
+Applying 0001-modesettings-needs-dri2.patch using patch:
+patching file configure.ac
+Hunk #1 FAILED at 2036
+
+So move this patch to an appropriate version folder in the package's
+directory. It should be good enough until this package provides more
+versions >= 1.17.2.
+
+Signed-off-by: Stanislas Bach <sbach@0g.re>
+
+diff --git 
+a/package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch 
+b/package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch
+deleted file mode 100644
+index 4ef95ef..0000000
+--- a/package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-Kernel modesettings support also depends on dri2, see
+-http://cgit.freedesktop.org/xorg/xserver/tree/hw/xfree86/drivers/modesetting/Makefile.am#n46
+-
+-Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=91584
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr xorg-server-1.17.2.org/configure.ac 
+xorg-server-1.17.2/configure.ac
+---- xorg-server-1.17.2.org/configure.ac	2015-06-16 17:42:40.000000000 +0200
+-+++ xorg-server-1.17.2/configure.ac	2015-08-08 10:44:59.702382624 +0200
+-@@ -2036,7 +2036,7 @@
+- 	        XORG_SYS_LIBS="$XORG_SYS_LIBS $XORG_MODULES_LIBS"
+- 	fi
+- --	if test "x$DRM" = xyes; then
+-+	if test "x$DRM" = xyes -a "x$DRI2" = xyes; then
+- 		dnl 2.4.46 is required for cursor hotspot support.
+- 		PKG_CHECK_EXISTS(libdrm >= 2.4.46)
+- 		XORG_DRIVER_MODESETTING=yes
+diff --git 
+a/package/x11r7/xserver_xorg-server/1.18.3/0001-modesettings-needs-dri2.patch 
+b/package/x11r7/xserver_xorg-server/1.18.3/0001-modesettings-needs-dri2.patch
+new file mode 100644
+index 0000000..4ef95ef
+--- /dev/null
++++ 
+b/package/x11r7/xserver_xorg-server/1.18.3/0001-modesettings-needs-dri2.patch
+@@ -0,0 +1,19 @@
++Kernel modesettings support also depends on dri2, see
++http://cgit.freedesktop.org/xorg/xserver/tree/hw/xfree86/drivers/modesetting/Makefile.am#n46
 +
- # copy the uEnv.txt to the output/images directory
- cp board/beaglebone/uEnv.txt $BINARIES_DIR/uEnv.txt
++Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=91584
 +
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage \
-+    --rootpath "${TARGET_DIR}" \
-+    --tmppath "${GENIMAGE_TMP}" \
-+    --inputpath "${BINARIES_DIR}" \
-+    --outputpath "${BINARIES_DIR}" \
-+    --config "${GENIMAGE_CFG}"
-diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
-index 089c49a8ef89..43ebe53aee14 100644
---- a/board/beaglebone/readme.txt
-+++ b/board/beaglebone/readme.txt
-@@ -28,35 +28,7 @@ After building, you should get a tree like this:
-   ??? am335x-bone.dtb
-   ??? MLO
-   ??? rootfs.ext2
-+  ??? sdcard.img
-   ??? u-boot.img
-   ??? uEnv.txt
-   ??? zImage
--
--
--Prepare your SDCard
--===================
--
--You need to prepare first partition in fat32 and marked as bootable,
--and second where you will write rootfs.
--
--Copy the files to boot partition
--
--  $ cp MLO u-boot.img zImage uEnv.txt *.dtb /media/zzzzz
--
--where /media/zzzzz is the mount point.
--Then you need to write the rootfs image onto SDCard:
--
--  # dd if=rootfs.ext2 of=/dev/xxxxx
--
--where /dev/xxxxx is the second partition. Use:
--
--  # fdisk -l
--
--to check for correct one.
--
--Finish
--======
--
--Unmount all mounted SDCard partitions and insert the card to BeagleBone.
--Hold the "BOOT" button and apply power. Then release the "BOOT" button.
--The output is available on the serial console.
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index b9d78a9fb25b..f68ee9106af4 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -12,6 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
- # filesystem
- BR2_PACKAGE_AM33X_CM3=y
- BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
- # Linux headers same as kernel, a 3.12 series
-@@ -24,6 +25,10 @@ BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="MLO"
- 
-+# host packages
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
++diff -uNr xorg-server-1.17.2.org/configure.ac 
+xorg-server-1.17.2/configure.ac
++--- xorg-server-1.17.2.org/configure.ac	2015-06-16 17:42:40.000000000 +0200
+++++ xorg-server-1.17.2/configure.ac	2015-08-08 10:44:59.702382624 +0200
++@@ -2036,7 +2036,7 @@
++ 	        XORG_SYS_LIBS="$XORG_SYS_LIBS $XORG_MODULES_LIBS"
++ 	fi
++ +-	if test "x$DRM" = xyes; then
+++	if test "x$DRM" = xyes -a "x$DRI2" = xyes; then
++ 		dnl 2.4.46 is required for cursor hotspot support.
++ 		PKG_CHECK_EXISTS(libdrm >= 2.4.46)
++ 		XORG_DRIVER_MODESETTING=yes
 -- 
-2.7.0
+2.1.4
