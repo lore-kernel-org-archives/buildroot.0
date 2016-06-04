@@ -1,39 +1,31 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Jun 2016 19:24:12 +0200
-Subject: [Buildroot] [PATCH 1/2] package/x11r7/xdriver_xf86-video-tdfx:
-	Re-wrap _DEPENDENCIES
-Message-ID: <1465061053-29517-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  4 Jun 2016 19:27:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wiringpi: uses fork(), needs mmu
+Message-ID: <1465061225-26087-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes
+http://autobuild.buildroot.net/results/c60/c6013c214674f9802309d8cd770d3da2f751674d/
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk  | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/wiringpi/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
-index 4d0ba60..156a46d 100644
---- a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
-+++ b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
-@@ -10,6 +10,15 @@ XDRIVER_XF86_VIDEO_TDFX_SOURCE = xf86-video-tdfx-$(XDRIVER_XF86_VIDEO_TDFX_VERSI
- XDRIVER_XF86_VIDEO_TDFX_LICENSE = MIT
- XDRIVER_XF86_VIDEO_TDFX_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_TDFX_AUTORECONF = YES
--XDRIVER_XF86_VIDEO_TDFX_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xproto
-+XDRIVER_XF86_VIDEO_TDFX_DEPENDENCIES = \
-+	libdrm \
-+	xproto_fontsproto \
-+	xproto_randrproto \
-+	xproto_renderproto \
-+	xproto_videoproto \
-+	xproto_xextproto \
-+	xproto_xf86driproto \
-+	xproto_xproto \
-+	xserver_xorg-server
+diff --git a/package/wiringpi/Config.in b/package/wiringpi/Config.in
+index 9275b82..a292b3f 100644
+--- a/package/wiringpi/Config.in
++++ b/package/wiringpi/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_WIRINGPI
+ 	bool "wiringpi"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  wiringPi libraries (and gpio command)
  
- $(eval $(autotools-package))
 -- 
 2.8.1
