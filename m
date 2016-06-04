@@ -1,69 +1,92 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Jun 2016 10:00:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mplayer: add optional support for
-	mpg123
-Message-ID: <1465027220-19359-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 4 Jun 2016 12:06:45 +0200
+Subject: [Buildroot] [PATCH 1/4] package/nodejs: Add NODEJS_CONF_OPTS
+In-Reply-To: <1464981346-11741-1-git-send-email-martin@barkynet.com>
+References: <1464981346-11741-1-git-send-email-martin@barkynet.com>
+Message-ID: <20160604100645.GA3852@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mplayer has optional support for mpg123, to get reproducable builds
-add mpg123 as optional dependency.
+Martin, All,
 
-Linked libraries without this patch:
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/mplayer | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libm.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+On 2016-06-03 20:15 +0100, Martin Bark spake thusly:
+> Most packages in buildroot pass a FOO_CONF_OPTS variable into the
+> configure script.  Transition nodejs to follow this convention.
+> 
+> Signed-off-by: Martin Bark <martin@barkynet.com>
+> ---
+>  package/nodejs/nodejs.mk | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+> index 0329299..b78ba79 100644
+> --- a/package/nodejs/nodejs.mk
+> +++ b/package/nodejs/nodejs.mk
+> @@ -13,6 +13,12 @@ HOST_NODEJS_DEPENDENCIES = host-python host-zlib
+>  NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
+>  NODEJS_LICENSE_FILES = LICENSE
+>  
+> +NODEJS_CONF_OPTS = --without-snapshot \
+> +	--shared-zlib \
+> +	--without-dtrace \
+> +	--without-etw \
+> +	--dest-os=linux
 
-Linked libraries after this patch:
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/mplayer | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libmpg123.so.0]
- 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libm.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+When we have multi-line variables, I prefer that we write all options on
+multi-line and none on the first line:
 
-Like with many other optional libraries detection of mpg123 is broken if
---enable-mpg123 is passed to configure leading to a build error:
+    NODEJS_CONF_OPTS = \
+        --without-snapshot \
+        --shared-zlib \
+        --without-dtrace \
+        --without-etw \
+        --dest-os=linux
 
-libmpcodecs/ad_mpg123.o: In function `set_format':
-ad_mpg123.c:(.text+0x63): undefined reference to `mpg123_getformat'
-libmpcodecs/ad_mpg123.o: In function `decode_a_bit':
-ad_mpg123.c:(.text+0x1b6): undefined reference to `mpg123_feed'
-ad_mpg123.c:(.text+0x20e): undefined reference to `mpg123_replace_buffer'
-ad_mpg123.c:(.text+0x223): undefined reference to `mpg123_decode_frame_64'
-ad_mpg123.c:(.text+0x275): undefined reference to `mpg123_strerror'
-[...]
+Otehrwise, looks good:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mplayer/mplayer.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 347ed5e..9ae7ca4 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -174,6 +174,14 @@ MPLAYER_DEPENDENCIES += libmpeg2
- MPLAYER_CONF_OPTS += --disable-libmpeg2-internal
- endif
- 
-+# We intentionally don't pass --enable-mpg123, to let the
-+# autodetection find which library to link with.
-+ifeq ($(BR2_PACKAGE_MPG123),y)
-+MPLAYER_DEPENDENCIES += mpg123
-+else
-+MPLAYER_CONF_OPTS += --disable-mpg123
-+endif
-+
- ifeq ($(BR2_PACKAGE_TREMOR),y)
- MPLAYER_DEPENDENCIES += tremor
- MPLAYER_CONF_OPTS += --enable-tremor
+Regards,
+Yann E. MORIN.
+
+>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
+>  NODEJS_DEPENDENCIES += openssl
+>  endif
+> @@ -97,18 +103,14 @@ define NODEJS_CONFIGURE_CMDS
+>  		PYTHON=$(HOST_DIR)/usr/bin/python2 \
+>  		$(HOST_DIR)/usr/bin/python2 ./configure \
+>  		--prefix=/usr \
+> -		--without-snapshot \
+> -		--shared-zlib \
+>  		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
+>  		$(if $(BR2_PACKAGE_ICU),--with-intl=system-icu,--with-intl=none) \
+>  		$(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
+> -		--without-dtrace \
+> -		--without-etw \
+>  		--dest-cpu=$(NODEJS_CPU) \
+>  		$(if $(NODEJS_ARM_FP),--with-arm-float-abi=$(NODEJS_ARM_FP)) \
+>  		$(if $(NODEJS_MIPS_ARCH_VARIANT),--with-mips-arch-variant=$(NODEJS_MIPS_ARCH_VARIANT)) \
+>  		$(if $(NODEJS_MIPS_FPU_MODE),--with-mips-fpu-mode=$(NODEJS_MIPS_FPU_MODE)) \
+> -		--dest-os=linux \
+> +		$(NODEJS_CONF_OPTS) \
+>  	)
+>  endef
+>  
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.8.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
