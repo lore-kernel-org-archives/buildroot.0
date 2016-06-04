@@ -1,31 +1,81 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 04 Jun 2016 17:50:34 +0200
-Subject: [Buildroot] [PATCH 1/2] ninja: new package
-References: <1465047243-1169-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1465047243-1169-2-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <av9b2dxral.ln2@ID-313208.user.individual.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 4 Jun 2016 17:53:01 +0200
+Subject: [Buildroot] [PATCH 1/3] libamcodec: new Package
+In-Reply-To: <trinity-1a38b45d-8629-4b3c-abfb-9c7cb71ba76b-1465052554911@3capp-mailcom-bs13>
+References: <20160601102720.3929-1-daggs@gmx.com>
+ <20160601141655.5649aa21@free-electrons.com>
+ <trinity-d3b293e2-4a13-4cd4-95af-c77cc680aa35-1464814370051@3capp-mailcom-bs13>
+ <20160601230533.04ca63d0@free-electrons.com>
+ <trinity-ac3e1b6f-2b6f-4cd4-9758-1af9e8953da0-1464815796397@3capp-mailcom-bs13>
+ <20160604150259.0fc51f8c@free-electrons.com>
+ <trinity-1a38b45d-8629-4b3c-abfb-9c7cb71ba76b-1465052554911@3capp-mailcom-bs13>
+Message-ID: <20160604155301.GE3852@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Daggs, All,
 
-please try to add support for python3:
+On 2016-06-04 17:02 +0200, daggs spake thusly:
+> > On Wed, 1 Jun 2016 23:16:36 +0200, daggs wrote:
+> > > I see, I'll keep posting patches, if they are rejected because I'm using only my first name, then let it be.
+> > > I value my privacy more than I value my support for open-sourcing.
+> > > I don't mind if someone comes along and resends them as his own, I want to contribute but there is a limitation to what I'm willing sacrifice.
+> > 
+> > On the other hand, a very simple Google/DuckDuckGo search shows up your
+> > real name. If you really wanted to be anonymous, you should have never
+> > used your real name, or alternatively change your e-mail address when
+> > going anonymous.
+> > 
+> > See for example http://comments.gmane.org/gmane.linux.alsa.devel/114494.
+> 
+> I didn't said I wanted to be anonymous, I just didn't wanted to share my full name.
+> I'm well aware it can be found by searching the net. I cannot change the past. I'm however entitled to change the way I tick when I think it is needed.
+> e.g. the fact I used to do something in the past, doesn't means I need to continue do it forever.
 
-> +HOST_NINJA_DEPENDENCIES = host-python
+The problem is that we can't take patches from anonymous or pseudonyms.
+We can't take patches from people that do not use their real name, or
+only use part of their name.
 
-HOST_NINJA_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
+The reason for the SoB lines are that we need to be able to identify
+who submits a patch. We need traceability.
 
-> +define HOST_NINJA_BUILD_CMDS
-> +	(cd $(@D); ./configure.py --bootstrap)
-> +endef
+For a brief (and incomplete) history about the SoB lines, remember the
+SCO vs. Linux dispute [0]. So, Linus proposed [1] that every author of
+a patch actually "signs off" the patch, to prove the origin of the code,
+by introducing the DCO.
 
-define HOST_NINJA_BUILD_CMDS
-	(cd $(@D); ./configure.py --bootstrap --verbose --with-python=$(HOST_DIR)/usr/bin/python)
-endef
+The goal of the DCO, and the SoB lines defined therein, is to ensure
+that the person that submits code is authorised to do so, accept that
+the code is contributed under the same license (or a compatible license)
+as that of the project.
 
-What is the purpose of having ninja on the target machine?
+[0] https://en.wikipedia.org/wiki/SCO/Linux_controversies
+[1] https://lwn.net/Articles/86436/
 
-Regards, Bernd
+Sp, please use your real name when you submit patches. Otherwise, we
+won't be able to apply them. And, as you said, "if someone comes along
+and resends them as his own" is not possible either.
+
+Note that I entirely understand your concern about the way you want to
+identify yourself. This is a totally understandable situation. I do not
+ask you to change the way you identify yourself.
+
+However, if the way you identify yourself is in contradiction with our
+requirements, either you change your identity, or we can't use your
+changes.
+
+In the meantime, I'll mark your patches as "Rejected" in our patchwork.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
