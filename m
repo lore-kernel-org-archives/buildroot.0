@@ -1,50 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  4 Jun 2016 15:17:37 +0200
-Subject: [Buildroot] [PATCH 2/2] package/boost: Add Kconfig option for new
-	module metaparse
-In-Reply-To: <1465046257-16270-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465046257-16270-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465046257-16270-2-git-send-email-bernd.kuhls@t-online.de>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 4 Jun 2016 15:25:26 +0200
+Subject: [Buildroot] [PATCH 2/5] python-serial: bump to version 3.1
+In-Reply-To: <20160604141952.42cbe9e4@free-electrons.com>
+References: <1464876330-6890-1-git-send-email-yegorslists@googlemail.com>
+ <1464876330-6890-2-git-send-email-yegorslists@googlemail.com>
+ <20160603193823.509e6ab3@free-electrons.com>
+ <CAGm1_kv5wjk7bceVM785UpAJSFAMcw_XEeur+QWh6+CHhXZq0w@mail.gmail.com>
+ <20160604141952.42cbe9e4@free-electrons.com>
+Message-ID: <CAGm1_kujvJMH=Jik5LuJ2xvxtt=9KnMe4U+OngsOPU4h+iXmSg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The module description can be found in the release notes of v1.61.0:
-http://www.boost.org/users/history/version_1_61_0.html
+On Sat, Jun 4, 2016 at 2:19 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Fri, 3 Jun 2016 22:21:42 +0200, Yegor Yefremov wrote:
+>
+>> Seems to be Python 2 related. I've submitted a bug:
+>> https://github.com/pyserial/pyserial/issues/123
+>> Will keep an eye on it.
+>
+> Seems like the developer replied that python-serial is Python 3 only.
+> So the dependency should be adjust in Buildroot.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/boost/Config.in | 3 +++
- package/boost/boost.mk  | 1 +
- 2 files changed, 4 insertions(+)
+No, he says, that aio.py is Python 3 only. I'd suggest just to remove
+this file from installation for Python 2.
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 4cfd44e..fae4b5f 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -114,6 +114,9 @@ comment "boost-log needs a toolchain w/ NPTL"
- config BR2_PACKAGE_BOOST_MATH
- 	bool "boost-math"
- 
-+config BR2_PACKAGE_BOOST_METAPARSE
-+	bool "boost-metaparse"
-+
- config BR2_PACKAGE_BOOST_MPI
- 	bool "boost-mpi"
- 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index e6459b9..fc89265 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -35,6 +35,7 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_IOSTREAMS),,iostreams)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_LOCALE),,locale)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_LOG),,log)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MATH),,math)
-+BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_METAPARSE),,metaparse)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MPI),,mpi)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PROGRAM_OPTIONS),,program_options)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PYTHON),,python)
--- 
-2.8.1
+Yegor
