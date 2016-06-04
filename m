@@ -1,81 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 4 Jun 2016 17:53:01 +0200
-Subject: [Buildroot] [PATCH 1/3] libamcodec: new Package
-In-Reply-To: <trinity-1a38b45d-8629-4b3c-abfb-9c7cb71ba76b-1465052554911@3capp-mailcom-bs13>
-References: <20160601102720.3929-1-daggs@gmx.com>
- <20160601141655.5649aa21@free-electrons.com>
- <trinity-d3b293e2-4a13-4cd4-95af-c77cc680aa35-1464814370051@3capp-mailcom-bs13>
- <20160601230533.04ca63d0@free-electrons.com>
- <trinity-ac3e1b6f-2b6f-4cd4-9758-1af9e8953da0-1464815796397@3capp-mailcom-bs13>
- <20160604150259.0fc51f8c@free-electrons.com>
- <trinity-1a38b45d-8629-4b3c-abfb-9c7cb71ba76b-1465052554911@3capp-mailcom-bs13>
-Message-ID: <20160604155301.GE3852@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  4 Jun 2016 18:13:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/audiofile: fix compilation with gcc6
+Message-ID: <1465056832-24721-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Daggs, All,
+Fixes
 
-On 2016-06-04 17:02 +0200, daggs spake thusly:
-> > On Wed, 1 Jun 2016 23:16:36 +0200, daggs wrote:
-> > > I see, I'll keep posting patches, if they are rejected because I'm using only my first name, then let it be.
-> > > I value my privacy more than I value my support for open-sourcing.
-> > > I don't mind if someone comes along and resends them as his own, I want to contribute but there is a limitation to what I'm willing sacrifice.
-> > 
-> > On the other hand, a very simple Google/DuckDuckGo search shows up your
-> > real name. If you really wanted to be anonymous, you should have never
-> > used your real name, or alternatively change your e-mail address when
-> > going anonymous.
-> > 
-> > See for example http://comments.gmane.org/gmane.linux.alsa.devel/114494.
-> 
-> I didn't said I wanted to be anonymous, I just didn't wanted to share my full name.
-> I'm well aware it can be found by searching the net. I cannot change the past. I'm however entitled to change the way I tick when I think it is needed.
-> e.g. the fact I used to do something in the past, doesn't means I need to continue do it forever.
+make[3]: Entering directory '/home/buildroot/br7_freeswitch/output/build/audiofile-0.3.6/libaudiofile/modules'
+/bin/bash ../../libtool  --tag=CXX   --mode=compile /home/buildroot/br7_freeswitch/output/host/usr/bin/i586-buildroot-linux-uclibc-g++ -DHAVE_CONFIG_H -I. -I../.. -I./..  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DNDEBUG -Wall -Wno-multichar    -fvisibility=hidden -fno-rtti -fno-exceptions -fvisibility-inlines-hidden -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -c -o ALAC.lo ALAC.cpp
+libtool: compile:  /home/buildroot/br7_freeswitch/output/host/usr/bin/i586-buildroot-linux-uclibc-g++ -DHAVE_CONFIG_H -I. -I../.. -I./.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DNDEBUG -Wall -Wno-multichar -fvisibility=hidden -fno-rtti -fno-exceptions -fvisibility-inlines-hidden -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -c ALAC.cpp  -fPIC -DPIC -o .libs/ALAC.o
+In file included from ALAC.cpp:29:0:
+SimpleModule.h: In instantiation of 'const int signConverter<(FormatCode)0>::kMinSignedValue':
+SimpleModule.h:130:52:   required from 'signConverter<Format>::UnsignedType signConverter<Format>::signedToUnsigned::operator()(signConverter<Format>::SignedType) [with FormatCode Format = (FormatCode)0; signConverter<Format>::UnsignedType = unsigned char; signConverter<Format>::SignedType = signed char]'
+/home/buildroot/br7_freeswitch/output/host/usr/i586-buildroot-linux-uclibc/include/c++/6.1.0/bits/stl_algo.h:4184:24:   required from '_OIter std::transform(_IIter, _IIter, _OIter, _UnaryOperation) [with _IIter = const signed char*; _OIter = unsigned char*; _UnaryOperation = signConverter<(FormatCode)0>::signedToUnsigned]'
+SimpleModule.h:104:16:   required from 'void transform(const void*, void*, size_t) [with UnaryFunction = signConverter<(FormatCode)0>::signedToUnsigned; size_t = unsigned int]'
+SimpleModule.h:176:62:   required from 'static void ConvertSign::convertSignedToUnsigned(const void*, void*, size_t) [with FormatCode Format = (FormatCode)0; size_t = unsigned int]'
+SimpleModule.h:183:51:   required from here
+SimpleModule.h:126:40: error: left operand of shift expression '(-1 << 7)' is negative [-fpermissive]
+  static const int kMinSignedValue = -1 << kScaleBits;
+                                     ~~~^~~~~~~~~~~~~
 
-The problem is that we can't take patches from anonymous or pseudonyms.
-We can't take patches from people that do not use their real name, or
-only use part of their name.
+To reproduce the build error use this defconfig:
 
-The reason for the SoB lines are that we need to be able to identify
-who submits a patch. We need traceability.
+BR2_GCC_VERSION_6_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_AUDIOFILE=y
 
-For a brief (and incomplete) history about the SoB lines, remember the
-SCO vs. Linux dispute [0]. So, Linus proposed [1] that every author of
-a patch actually "signs off" the patch, to prove the origin of the code,
-by introducing the DCO.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/audiofile/0002-cast-to-unsigned-gcc6.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/audiofile/0002-cast-to-unsigned-gcc6.patch
 
-The goal of the DCO, and the SoB lines defined therein, is to ensure
-that the person that submits code is authorised to do so, accept that
-the code is contributed under the same license (or a compatible license)
-as that of the project.
-
-[0] https://en.wikipedia.org/wiki/SCO/Linux_controversies
-[1] https://lwn.net/Articles/86436/
-
-Sp, please use your real name when you submit patches. Otherwise, we
-won't be able to apply them. And, as you said, "if someone comes along
-and resends them as his own" is not possible either.
-
-Note that I entirely understand your concern about the way you want to
-identify yourself. This is a totally understandable situation. I do not
-ask you to change the way you identify yourself.
-
-However, if the way you identify yourself is in contradiction with our
-requirements, either you change your identity, or we can't use your
-changes.
-
-In the meantime, I'll mark your patches as "Rejected" in our patchwork.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/audiofile/0002-cast-to-unsigned-gcc6.patch b/package/audiofile/0002-cast-to-unsigned-gcc6.patch
+new file mode 100644
+index 0000000..01baeb5
+--- /dev/null
++++ b/package/audiofile/0002-cast-to-unsigned-gcc6.patch
+@@ -0,0 +1,28 @@
++From 28cfdbbcb96a69087c3d21faf69b5eae7bcf6d69 Mon Sep 17 00:00:00 2001
++From: Hodorgasm <nsane457@gmail.com>
++Date: Wed, 11 May 2016 21:42:07 -0400
++Subject: [PATCH] Cast to unsigned while left bit-shifting
++
++GCC-6 now treats the left bitwise-shift of a negative integer as nonconformant so explicitly cast to an unsigned int while bit-shifting.
++
++Downloaded from upstream PR:
++https://github.com/mpruett/audiofile/pull/28
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ libaudiofile/modules/SimpleModule.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libaudiofile/modules/SimpleModule.h b/libaudiofile/modules/SimpleModule.h
++index 03c6c69..4014fb2 100644
++--- a/libaudiofile/modules/SimpleModule.h
+++++ b/libaudiofile/modules/SimpleModule.h
++@@ -123,7 +123,7 @@ struct signConverter
++ 	typedef typename IntTypes<Format>::UnsignedType UnsignedType;
++ 
++ 	static const int kScaleBits = (Format + 1) * CHAR_BIT - 1;
++-	static const int kMinSignedValue = -1 << kScaleBits;
+++	static const int kMinSignedValue = static_cast<signed>(static_cast<unsigned>(-1) << kScaleBits);;
++ 
++ 	struct signedToUnsigned : public std::unary_function<SignedType, UnsignedType>
++ 	{
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.8.1
