@@ -1,38 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Jun 2016 15:02:59 +0200
-Subject: [Buildroot] [PATCH 1/3] libamcodec: new Package
-In-Reply-To: <trinity-ac3e1b6f-2b6f-4cd4-9758-1af9e8953da0-1464815796397@3capp-mailcom-bs13>
-References: <20160601102720.3929-1-daggs@gmx.com>
- <20160601141655.5649aa21@free-electrons.com>
- <trinity-d3b293e2-4a13-4cd4-95af-c77cc680aa35-1464814370051@3capp-mailcom-bs13>
- <20160601230533.04ca63d0@free-electrons.com>
- <trinity-ac3e1b6f-2b6f-4cd4-9758-1af9e8953da0-1464815796397@3capp-mailcom-bs13>
-Message-ID: <20160604150259.0fc51f8c@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  4 Jun 2016 15:13:01 +0200
+Subject: [Buildroot] [PATCH 2/2] package/omxplayer: remove
+	BR2_PACKAGE_BOOST_ARCH_SUPPORTS option
+In-Reply-To: <1465045981-8529-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1465045981-8529-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1465045981-8529-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The option was globally removed with
+https://git.busybox.net/buildroot/commit/package/boost?id=668ce456448d671f30bf98c4d4819a88b0bf9f4e
 
-On Wed, 1 Jun 2016 23:16:36 +0200, daggs wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/omxplayer/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-> I see, I'll keep posting patches, if they are rejected because I'm using only my first name, then let it be.
-> I value my privacy more than I value my support for open-sourcing.
-> I don't mind if someone comes along and resends them as his own, I want to contribute but there is a limitation to what I'm willing sacrifice.
-
-On the other hand, a very simple Google/DuckDuckGo search shows up your
-real name. If you really wanted to be anonymous, you should have never
-used your real name, or alternatively change your e-mail address when
-going anonymous.
-
-See for example http://comments.gmane.org/gmane.linux.alsa.devel/114494.
-
-Best regards,
-
-Thomas
+diff --git a/package/omxplayer/Config.in b/package/omxplayer/Config.in
+index b8946e9..b417aa3 100644
+--- a/package/omxplayer/Config.in
++++ b/package/omxplayer/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_OMXPLAYER
+ 	bool "omxplayer"
+ 	depends on BR2_arm
+ 	depends on BR2_USE_MMU # dbus
+-	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS # ffmpeg
+ 	depends on BR2_INSTALL_LIBSTDCPP # boost
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libusb
+@@ -28,7 +27,6 @@ config BR2_PACKAGE_OMXPLAYER
+ comment "omxplayer needs rpi-userland and a toolchain w/ C++, threads, wchar, dynamic library"
+ 	depends on BR2_arm
+ 	depends on BR2_USE_MMU
+-	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on !BR2_PACKAGE_RPI_USERLAND
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
