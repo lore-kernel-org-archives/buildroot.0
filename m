@@ -1,29 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Jun 2016 09:52:11 +0200
-Subject: [Buildroot] [PATCH 1/2] beaglebone: Use default U-Boot version
-In-Reply-To: <1465075749-31837-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1465075749-31837-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <20160605095211.48d06937@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 5 Jun 2016 12:23:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wiringpi: uses fork(), needs mmu
+In-Reply-To: <1465061225-26087-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1465061225-26087-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160605122335.76c31e23@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Bernd,
 
-On Sat,  4 Jun 2016 18:29:08 -0300, Ezequiel Garcia wrote:
-> There's no reason to use a specific U-Boot version, given
-> we are using upstream. Leave the default version get selected.
+On Sat,  4 Jun 2016 19:27:05 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+
+> Fixes
+> http://autobuild.buildroot.net/results/c60/c6013c214674f9802309d8cd770d3da2f751674d/
 > 
-> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/wiringpi/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/wiringpi/Config.in b/package/wiringpi/Config.in
+> index 9275b82..a292b3f 100644
+> --- a/package/wiringpi/Config.in
+> +++ b/package/wiringpi/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_WIRINGPI
+>  	bool "wiringpi"
+> +	depends on BR2_USE_MMU # fork()
+>  	help
+>  	  wiringPi libraries (and gpio command)
+>  
 
-No, that's not our policy. Our policy is to use a fixed version (even
-if an upstream one) to make sure that people using the defconfig in the
-future will have a known-working version.
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks for spotting (and fixing) it...
+
+Regards,
+Peter
