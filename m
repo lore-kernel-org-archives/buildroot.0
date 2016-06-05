@@ -1,927 +1,672 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jun 2016 22:26:57 +0200
-Subject: [Buildroot] [git commit] support/gnuconfig: bump version to
-	2016-05-15
-Message-ID: <20160605202804.E2FEB819CF@busybox.osuosl.org>
+Date: Sun, 5 Jun 2016 22:19:19 +0200
+Subject: [Buildroot] [git commit] package/openpowerlink: bump to v2.4.0
+Message-ID: <20160605202804.A71177FEC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b571dbf3479b524d557d8c1394e4c25c32a706b2
+commit: https://git.buildroot.net/buildroot/commit/?id=9ad1dfc2f42a1ffd7e1763f3a5574cba60e50cd1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Remove upstream patches and rebase all remaining patches.
+
+Disable PCIe MN library by default, it will be added in a follow up patch.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/gnuconfig/README.buildroot |   2 +-
- support/gnuconfig/config.guess     | 350 +++++++++++++------------------------
- support/gnuconfig/config.sub       |  66 ++++---
- 3 files changed, 169 insertions(+), 249 deletions(-)
+ ...l-the-stack-libraries-to-lib-subdirectory.patch |  47 ++++---
+ .../0002-cmake-install-oplk-headers-files.patch    |  14 +-
+ ...tch => 0003-Add-top-level-CMakeLists.txt.patch} |  30 ++--
+ ...se-CMAKE_CURRENT_SOURCE_DIR-instead-of-CM.patch | 154 ---------------------
+ ...ROJECT_NAME-instead-of-CMAKE_PROJECT_NAME.patch | 125 -----------------
+ ...veth-avoid-kernel-header-issue-with-musl.patch} |  17 ++-
+ package/openpowerlink/openpowerlink.hash           |   8 +-
+ package/openpowerlink/openpowerlink.mk             |   5 +-
+ 8 files changed, 71 insertions(+), 329 deletions(-)
 
-diff --git a/support/gnuconfig/README.buildroot b/support/gnuconfig/README.buildroot
-index 0898cb5..a71ed93 100644
---- a/support/gnuconfig/README.buildroot
-+++ b/support/gnuconfig/README.buildroot
-@@ -24,4 +24,4 @@ Currently no patches are needed, but they may be needed again in the
- future.
+diff --git a/package/openpowerlink/0001-install-the-stack-libraries-to-lib-subdirectory.patch b/package/openpowerlink/0001-install-the-stack-libraries-to-lib-subdirectory.patch
+index e46cbf7..3c99409 100644
+--- a/package/openpowerlink/0001-install-the-stack-libraries-to-lib-subdirectory.patch
++++ b/package/openpowerlink/0001-install-the-stack-libraries-to-lib-subdirectory.patch
+@@ -1,6 +1,6 @@
+-From ebc5aeff65aeda610d9e23ecf4b26b79f9305a0e Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Fri, 1 May 2015 12:19:34 +0200
++From ded9f83ef3bcb4c688da80354c179543e4862e52 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Wed, 25 May 2016 15:57:10 +0200
+ Subject: [PATCH] install the stack libraries to "lib" subdirectory
  
- The current Buildroot version is based on the Git commit
--5e4de70bb0064d974a848fbe3a445d5dafaf7b48 of the config.git repository.
-+dafd8e767ec87b90aac62f0fcedd11944c84b50a of the config.git repository.
-diff --git a/support/gnuconfig/config.guess b/support/gnuconfig/config.guess
-index b79252d..c4bd827 100755
---- a/support/gnuconfig/config.guess
-+++ b/support/gnuconfig/config.guess
-@@ -1,8 +1,8 @@
- #! /bin/sh
- # Attempt to guess a canonical system name.
--#   Copyright 1992-2013 Free Software Foundation, Inc.
-+#   Copyright 1992-2016 Free Software Foundation, Inc.
+ Using '.' to install the stack libraries is not correct since
+@@ -36,7 +36,7 @@ refactoring is needed to fix this properly.
  
--timestamp='2013-06-10'
-+timestamp='2016-05-15'
+ [1] http://sourceforge.net/p/openpowerlink/discussion/newbie/thread/3f13af65/#8f80/a50a/4649/f07c
  
- # This file is free software; you can redistribute it and/or modify it
- # under the terms of the GNU General Public License as published by
-@@ -24,12 +24,12 @@ timestamp='2013-06-10'
- # program.  This Exception is an additional permission under section 7
- # of the GNU General Public License, version 3 ("GPLv3").
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ ---
+  stack/proj/linux/liboplkcn/CMakeLists.txt               | 2 +-
+  stack/proj/linux/liboplkcnapp-kernelintf/CMakeLists.txt | 2 +-
+@@ -44,35 +44,36 @@ Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+  stack/proj/linux/liboplkcndrv-pcap/CMakeLists.txt       | 2 +-
+  stack/proj/linux/liboplkmn/CMakeLists.txt               | 2 +-
+  stack/proj/linux/liboplkmnapp-kernelintf/CMakeLists.txt | 2 +-
++ stack/proj/linux/liboplkmnapp-kernelpcie/CMakeLists.txt | 2 +-
+  stack/proj/linux/liboplkmnapp-userintf/CMakeLists.txt   | 2 +-
+  stack/proj/linux/liboplkmndrv-pcap/CMakeLists.txt       | 2 +-
+- 8 files changed, 8 insertions(+), 8 deletions(-)
++ 9 files changed, 9 insertions(+), 9 deletions(-)
+ 
+ diff --git a/stack/proj/linux/liboplkcn/CMakeLists.txt b/stack/proj/linux/liboplkcn/CMakeLists.txt
+-index b7c73e6..23e3112 100644
++index c700d9d..b891553 100644
+ --- a/stack/proj/linux/liboplkcn/CMakeLists.txt
+ +++ b/stack/proj/linux/liboplkcn/CMakeLists.txt
+-@@ -88,4 +88,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
++@@ -94,4 +94,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
+  TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
+  SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
+  SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
+ -INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
+ +INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
+ diff --git a/stack/proj/linux/liboplkcnapp-kernelintf/CMakeLists.txt b/stack/proj/linux/liboplkcnapp-kernelintf/CMakeLists.txt
+-index 6c3bec6..a6f9271 100644
++index 03752df..7b1050c 100644
+ --- a/stack/proj/linux/liboplkcnapp-kernelintf/CMakeLists.txt
+ +++ b/stack/proj/linux/liboplkcnapp-kernelintf/CMakeLists.txt
+-@@ -81,4 +81,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
++@@ -87,4 +87,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
+  TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
+  SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
+  SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
+ -INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
+ +INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
+ diff --git a/stack/proj/linux/liboplkcnapp-userintf/CMakeLists.txt b/stack/proj/linux/liboplkcnapp-userintf/CMakeLists.txt
+-index fdf6fd4..6df8bb7 100644
++index bcc4273..8ca5b7e 100644
+ --- a/stack/proj/linux/liboplkcnapp-userintf/CMakeLists.txt
+ +++ b/stack/proj/linux/liboplkcnapp-userintf/CMakeLists.txt
+-@@ -81,4 +81,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
++@@ -87,4 +87,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
+  TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
+  SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
+  SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
+@@ -89,30 +90,40 @@ index 440f02c..6ffcbe9 100644
+ -INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
+ +INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
+ diff --git a/stack/proj/linux/liboplkmn/CMakeLists.txt b/stack/proj/linux/liboplkmn/CMakeLists.txt
+-index 8f97144..e29f795 100644
++index a8850b8..d762d4c 100644
+ --- a/stack/proj/linux/liboplkmn/CMakeLists.txt
+ +++ b/stack/proj/linux/liboplkmn/CMakeLists.txt
+-@@ -92,4 +92,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
++@@ -93,4 +93,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
+  TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
+  SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
+  SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
+ -INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
+ +INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
+ diff --git a/stack/proj/linux/liboplkmnapp-kernelintf/CMakeLists.txt b/stack/proj/linux/liboplkmnapp-kernelintf/CMakeLists.txt
+-index df74265..2ba1cd1 100644
++index f2606a3..f71b182 100644
+ --- a/stack/proj/linux/liboplkmnapp-kernelintf/CMakeLists.txt
+ +++ b/stack/proj/linux/liboplkmnapp-kernelintf/CMakeLists.txt
+-@@ -85,4 +85,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
++@@ -86,4 +86,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
++ TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
++ SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
++ SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
++-INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
+++INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
++diff --git a/stack/proj/linux/liboplkmnapp-kernelpcie/CMakeLists.txt b/stack/proj/linux/liboplkmnapp-kernelpcie/CMakeLists.txt
++index 9362ad8..1d5fb6d 100644
++--- a/stack/proj/linux/liboplkmnapp-kernelpcie/CMakeLists.txt
+++++ b/stack/proj/linux/liboplkmnapp-kernelpcie/CMakeLists.txt
++@@ -88,4 +88,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
+  TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
+  SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
+  SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
+ -INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
+ +INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
+ diff --git a/stack/proj/linux/liboplkmnapp-userintf/CMakeLists.txt b/stack/proj/linux/liboplkmnapp-userintf/CMakeLists.txt
+-index 98835c7..12b3dc6 100644
++index 6741eef..042cbcf 100644
+ --- a/stack/proj/linux/liboplkmnapp-userintf/CMakeLists.txt
+ +++ b/stack/proj/linux/liboplkmnapp-userintf/CMakeLists.txt
+-@@ -85,4 +85,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
++@@ -86,4 +86,4 @@ ADD_LIBRARY(${LIB_NAME} ${LIB_TYPE} ${LIB_SOURCES})
+  TARGET_LINK_LIBRARIES(${LIB_NAME} ${ARCH_LIBRARIES})
+  SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
+  SET_PROPERTY(TARGET ${LIB_NAME} PROPERTY DEBUG_POSTFIX "_d")
+@@ -129,5 +140,5 @@ index b4dd41b..cf875ca 100644
+ -INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION . LIBRARY DESTINATION .)
+ +INSTALL(TARGETS ${LIB_NAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
+ -- 
+-2.4.3
++2.5.5
+ 
+diff --git a/package/openpowerlink/0002-cmake-install-oplk-headers-files.patch b/package/openpowerlink/0002-cmake-install-oplk-headers-files.patch
+index 7553c30..4cfbb51 100644
+--- a/package/openpowerlink/0002-cmake-install-oplk-headers-files.patch
++++ b/package/openpowerlink/0002-cmake-install-oplk-headers-files.patch
+@@ -1,6 +1,6 @@
+-From c904fb6ce3c29e77d51d8bcbbbdd48b8d22c754b Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Mon, 4 May 2015 11:47:05 +0200
++From 535f50e30afaa4fc6389273d1a5b6c20cb7cf5a4 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Wed, 25 May 2016 15:57:29 +0200
+ Subject: [PATCH] cmake: install oplk headers files
+ 
+ In order to be able to link a third party application
+@@ -9,16 +9,16 @@ oplk headers files related to openpowerlink stack.
+ 
+ Install all headers file from STACK_INCLUDE_DIR/oplk.
+ 
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ ---
+  stack/CMakeLists.txt | 5 +++++
+  1 file changed, 5 insertions(+)
+ 
+ diff --git a/stack/CMakeLists.txt b/stack/CMakeLists.txt
+-index 9ff13f4..f4614cd 100644
++index c6cde8c..2652858 100644
+ --- a/stack/CMakeLists.txt
+ +++ b/stack/CMakeLists.txt
+-@@ -103,3 +103,8 @@ ELSEIF((CMAKE_SYSTEM_NAME STREQUAL "Generic") AND (CMAKE_SYSTEM_PROCESSOR STREQU
++@@ -104,3 +104,8 @@ ELSEIF((CMAKE_SYSTEM_NAME STREQUAL "Generic") AND (CMAKE_SYSTEM_PROCESSOR STREQU
+  ELSE()
+      MESSAGE(FATAL_ERROR "Unknown Platform and processor combination ${CMAKE_SYSTEM_NAME} and ${CMAKE_SYSTEM_PROCESSOR}!!")
+  ENDIF()
+@@ -28,5 +28,5 @@ index 9ff13f4..f4614cd 100644
+ +################################################################################
+ +INSTALL(DIRECTORY ${STACK_INCLUDE_DIR}/oplk DESTINATION "include")
+ -- 
+-2.4.3
++2.5.5
+ 
+diff --git a/package/openpowerlink/0005-Add-top-level-CMakeLists.txt.patch b/package/openpowerlink/0003-Add-top-level-CMakeLists.txt.patch
+similarity index 91%
+rename from package/openpowerlink/0005-Add-top-level-CMakeLists.txt.patch
+rename to package/openpowerlink/0003-Add-top-level-CMakeLists.txt.patch
+index 259a81a..267c807 100644
+--- a/package/openpowerlink/0005-Add-top-level-CMakeLists.txt.patch
++++ b/package/openpowerlink/0003-Add-top-level-CMakeLists.txt.patch
+@@ -1,6 +1,6 @@
+-From 6f4bcf829efe5ce31592003e049606ae1de05e90 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Wed, 12 Aug 2015 11:24:24 +0200
++From 1b92df6f8283e15b6877f7cd70063648727fc88b Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Wed, 25 May 2016 15:59:20 +0200
+ Subject: [PATCH] Add top level CMakeLists.txt
+ 
+ This CMakeLists.txt can be used to build openpowerlink
+@@ -23,21 +23,23 @@ http://autobuild.buildroot.net/results/da4/da445b65cb136d71577f04e3a17fdb2ef6302
+ This patch has not been accepted by upstream:
+ https://github.com/openPOWERLINK/openPOWERLINK_V2/pull/57
+ 
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++Add PCIe support (v2.3.2)
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ ---
+- CMakeLists.txt                               | 36 +++++++++++++++
++ CMakeLists.txt                               | 42 +++++++++++++++++
+  apps/common/cmake/findoplklib.cmake          | 68 +++++++++++++++-------------
+  apps/common/cmake/linkoplklib.cmake          |  2 +-
+  drivers/linux/drv_daemon_pcap/CMakeLists.txt | 12 +++--
+- 4 files changed, 83 insertions(+), 35 deletions(-)
++ 4 files changed, 89 insertions(+), 35 deletions(-)
+  create mode 100644 CMakeLists.txt
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+ new file mode 100644
+-index 0000000..96e3d0f
++index 0000000..28d4e7a
+ --- /dev/null
+ +++ b/CMakeLists.txt
+-@@ -0,0 +1,36 @@
++@@ -0,0 +1,42 @@
+ +
+ +CMAKE_MINIMUM_REQUIRED (VERSION 2.8.7)
+ +
+@@ -47,12 +49,18 @@ index 0000000..96e3d0f
+ +    ADD_SUBDIRECTORY("stack")
+ +ENDIF (CFG_OPLK_LIB)
+ +
+-+#### Linux kernel module  ####
+++#### Linux kernel Ethernet module  ####
+ +
+ +IF (CFG_KERNEL_DRIVERS)
+ +    ADD_SUBDIRECTORY("drivers/linux/drv_kernelmod_edrv")
+ +ENDIF (CFG_KERNEL_DRIVERS)
+ +
+++#### Linux kernel PCIe module  ####
+++
+++IF (CFG_KERNEL_PCIE_DRIVERS)
+++    ADD_SUBDIRECTORY("drivers/linux/drv_kernelmod_pcie")
+++ENDIF (CFG_KERNEL_PCIE_DRIVERS)
+++
+ +#### Pcap userspace driver  ####
+ +
+ +IF (CFG_PCAP_DAEMON)
+@@ -75,10 +83,10 @@ index 0000000..96e3d0f
+ +    ADD_SUBDIRECTORY("apps/demo_mn_qt")
+ +ENDIF (CFG_DEMO_MN_QT)
+ diff --git a/apps/common/cmake/findoplklib.cmake b/apps/common/cmake/findoplklib.cmake
+-index 1bf570e..79ea35b 100644
++index aa427a6..e6a802e 100644
+ --- a/apps/common/cmake/findoplklib.cmake
+ +++ b/apps/common/cmake/findoplklib.cmake
+-@@ -81,36 +81,42 @@ MACRO(FIND_OPLK_LIBRARY OPLK_NODE_TYPE)
++@@ -89,36 +89,42 @@ MACRO(FIND_OPLK_LIBRARY OPLK_NODE_TYPE)
+      # Set oplk library directory
+      SET(OPLKLIB_DIR ${OPLK_BASE_DIR}/stack/lib/${SYSTEM_NAME_DIR}/${SYSTEM_PROCESSOR_DIR})
+  
+diff --git a/package/openpowerlink/0003-cmake-use-CMAKE_CURRENT_SOURCE_DIR-instead-of-CM.patch b/package/openpowerlink/0003-cmake-use-CMAKE_CURRENT_SOURCE_DIR-instead-of-CM.patch
+deleted file mode 100644
+index 668c907..0000000
+--- a/package/openpowerlink/0003-cmake-use-CMAKE_CURRENT_SOURCE_DIR-instead-of-CM.patch
++++ /dev/null
+@@ -1,154 +0,0 @@
+-From c354e8d9599aa02566c8acc341f3a2c73281483b Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Wed, 17 Sep 2014 13:27:44 +0200
+-Subject: [PATCH] cmake: use CMAKE_CURRENT_SOURCE_DIR instead of
+- CMAKE_SOURCE_DIR
+-
+-The aim of this patch is to be able to call each subproject's CMakeLists.txt
+-from a top-level CMakeLists.txt.
+-
+-This will help to build automatically the epl libraries, epl driver, unittests
+-and demos.
+-
+-This patch has been submitted upstream:
+-https://github.com/openPOWERLINK/openPOWERLINK_V2/pull/57
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- drivers/linux/drv_daemon_pcap/CMakeLists.txt    | 6 +++---
+- drivers/linux/drv_kernelmod_edrv/CMakeLists.txt | 8 ++++----
+- hardware/CMakeLists.txt                         | 4 ++--
+- hardware/drivers/hostinterface/CMakeLists.txt   | 2 +-
+- hardware/drivers/openmac/CMakeLists.txt         | 4 ++--
+- unittests/CMakeLists.txt                        | 4 ++--
+- 6 files changed, 14 insertions(+), 14 deletions(-)
+-
+-diff --git a/drivers/linux/drv_daemon_pcap/CMakeLists.txt b/drivers/linux/drv_daemon_pcap/CMakeLists.txt
+-index 4c3f933..9041e4d 100644
+---- a/drivers/linux/drv_daemon_pcap/CMakeLists.txt
+-+++ b/drivers/linux/drv_daemon_pcap/CMakeLists.txt
+-@@ -57,8 +57,8 @@ MESSAGE(STATUS "Configuring ${EXE_NAME}")
+- ###############################################################################
+- # Set global directories
+- ###############################################################################
+--SET(OPLK_BASE_DIR ${CMAKE_SOURCE_DIR}/../../..)
+--SET(DRV_SOURCE_DIR ${CMAKE_SOURCE_DIR})
+-+SET(OPLK_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
+-+SET(DRV_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+- SET(CONTRIB_SOURCE_DIR ${OPLK_BASE_DIR}/contrib)
+- SET(OPLK_INCLUDE_DIR ${OPLK_BASE_DIR}/stack/include)
+- SET(TOOLS_DIR ${OPLK_BASE_DIR}/tools)
+-@@ -66,7 +66,7 @@ SET(TOOLS_DIR ${OPLK_BASE_DIR}/tools)
+- ###############################################################################
+- # Include CMake Modules
+- ###############################################################################
+--SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/../../cmake ${CMAKE_MODULE_PATH})
+-+SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake ${CMAKE_MODULE_PATH})
+- 
+- # include standard cmake modules
+- INCLUDE(CMakeDependentOption)
+-diff --git a/drivers/linux/drv_kernelmod_edrv/CMakeLists.txt b/drivers/linux/drv_kernelmod_edrv/CMakeLists.txt
+-index 2ad1a0d..af85f86 100644
+---- a/drivers/linux/drv_kernelmod_edrv/CMakeLists.txt
+-+++ b/drivers/linux/drv_kernelmod_edrv/CMakeLists.txt
+-@@ -75,7 +75,7 @@ SET_PROPERTY(CACHE CFG_POWERLINK_EDRV PROPERTY STRINGS 8139 82573 8255x i210 811
+- ################################################################################
+- # Set global directories
+- ################################################################################
+--SET(OPLK_BASE_DIR ${CMAKE_SOURCE_DIR}/../../..)
+-+SET(OPLK_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
+- SET(CONTRIB_SOURCE_DIR ${OPLK_BASE_DIR}/contrib)
+- SET(STACK_SOURCE_DIR ${OPLK_BASE_DIR}/stack/src)
+- SET(COMMON_SOURCE_DIR ${OPLK_BASE_DIR}/stack/src/common)
+-@@ -152,10 +152,10 @@ IF(CFG_OPLK_MN)
+-     ENDIF()
+-     SET(MODULE_DEFS "${MODULE_DEFS} -DCONFIG_MN")
+-     SET(MODULE_NAME "${MODULE_NAME}mn")
+--    INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/proj/mn)
+-+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/proj/mn)
+- ELSE()
+-     SET(MODULE_NAME "${MODULE_NAME}cn")
+--    INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/proj/cn)
+-+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/proj/cn)
+- ENDIF()
+- 
+- ###############################################################################
+-@@ -189,7 +189,7 @@ ENDFOREACH()
+- #
+- SET(MODULE_SOURCE_FILES
+-     ${MODULE_SOURCE_FILES}
+--    ${CMAKE_SOURCE_DIR}/main.c
+-+    ${CMAKE_CURRENT_SOURCE_DIR}/main.c
+-     ${CONTRIB_SOURCE_DIR}/trace/trace-printk.c
+-     ${EDRV_SOURCE_DIR}/edrvcyclic.c
+-     ${KERNEL_SOURCE_DIR}/ctrl/ctrlk.c
+-diff --git a/hardware/CMakeLists.txt b/hardware/CMakeLists.txt
+-index 218c4eb..3ba85ca 100644
+---- a/hardware/CMakeLists.txt
+-+++ b/hardware/CMakeLists.txt
+-@@ -40,7 +40,7 @@ INCLUDE(reduceboardname)
+- 
+- ################################################################################
+- # Set paths
+--SET(OPLK_BASE_DIR ${CMAKE_SOURCE_DIR}/..)
+-+SET(OPLK_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/..)
+- SET(OMETHLIB_BASE_DIR ${PROJECT_SOURCE_DIR}/drivers/openmac)
+- SET(OMETHLIB_BUILD_DIR ${PROJECT_BINARY_DIR}/drivers/openmac)
+- SET(HOSTIF_BASE_DIR ${PROJECT_SOURCE_DIR}/drivers/hostinterface)
+-@@ -56,7 +56,7 @@ STRING(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" SYSTEM_PROCESSOR_DIR)
+- 
+- IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+-   SET(CMAKE_INSTALL_PREFIX
+--    ${CMAKE_SOURCE_DIR}/lib/${SYSTEM_NAME_DIR}/${SYSTEM_PROCESSOR_DIR} CACHE PATH "openPOWERLINK hardware install prefix" FORCE
+-+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/${SYSTEM_NAME_DIR}/${SYSTEM_PROCESSOR_DIR} CACHE PATH "openPOWERLINK hardware install prefix" FORCE
+-     )
+- ENDIF()
+- 
+-diff --git a/hardware/drivers/hostinterface/CMakeLists.txt b/hardware/drivers/hostinterface/CMakeLists.txt
+-index 1a9d2aa..9c56c16 100644
+---- a/hardware/drivers/hostinterface/CMakeLists.txt
+-+++ b/hardware/drivers/hostinterface/CMakeLists.txt
+-@@ -71,7 +71,7 @@ ELSE()
+-     SET( HOSTIF_LIB_NAME "${HOSTIF_NAME}")
+- ENDIF()
+- 
+--SET(BOARDS_COMMON_DIR ${CMAKE_SOURCE_DIR}/boards/${BOARD_NAME}/common)
+-+SET(BOARDS_COMMON_DIR ${CMAKE_CURRENT_SOURCE_DIR}/boards/${BOARD_NAME}/common)
+- SET(EXAMPLE_BINARY_DIR ${CMAKE_BINARY_DIR}/boards/${BOARD_NAME}/${EXAMPLE_NAME})
+- 
+- ########################################################################
+-diff --git a/hardware/drivers/openmac/CMakeLists.txt b/hardware/drivers/openmac/CMakeLists.txt
+-index 560c0d9..d532996 100644
+---- a/hardware/drivers/openmac/CMakeLists.txt
+-+++ b/hardware/drivers/openmac/CMakeLists.txt
+-@@ -55,8 +55,8 @@ ELSE()
+-     SET(OMETH_LIB_NAME "${OMETH_NAME}")
+- ENDIF()
+- 
+--SET(BOARD_EXAMPLE_DIR ${CMAKE_SOURCE_DIR}/boards/${BOARD_NAME}/${EXAMPLE_NAME})
+--SET(BOARDS_COMMON_DIR ${CMAKE_SOURCE_DIR}/boards/${BOARD_NAME}/common)
+-+SET(BOARD_EXAMPLE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/boards/${BOARD_NAME}/${EXAMPLE_NAME})
+-+SET(BOARDS_COMMON_DIR ${CMAKE_CURRENT_SOURCE_DIR}/boards/${BOARD_NAME}/common)
+- SET(EXAMPLE_BINARY_DIR ${CMAKE_BINARY_DIR}/boards/${BOARD_NAME}/${EXAMPLE_NAME})
+- 
+- ########################################################################
+-diff --git a/unittests/CMakeLists.txt b/unittests/CMakeLists.txt
+-index 533d4e7..4460c2e 100644
+---- a/unittests/CMakeLists.txt
+-+++ b/unittests/CMakeLists.txt
+-@@ -55,10 +55,10 @@ ENDMACRO(ADD_UNIT_TEST)
+- 
+- ################################################################################
+- # Set general directories
+--SET(OPLK_BASE_DIR ${CMAKE_SOURCE_DIR}/..)
+-+SET(OPLK_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/..)
+- SET(OPLK_SOURCE_DIR ${OPLK_BASE_DIR}/stack/src)
+- SET(OPLK_INCLUDE_DIR ${OPLK_BASE_DIR}/stack/include)
+--SET(TEST_COMMON_SOURCE_DIR ${CMAKE_SOURCE_DIR}/common)
+-+SET(TEST_COMMON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/common)
+- 
+- # We need a oplkcfg.h file for compiling the sources
+- # We are using the project for the complete MN library
+--- 
+-2.4.3
+-
+diff --git a/package/openpowerlink/0004-Use-PROJECT_NAME-instead-of-CMAKE_PROJECT_NAME.patch b/package/openpowerlink/0004-Use-PROJECT_NAME-instead-of-CMAKE_PROJECT_NAME.patch
+deleted file mode 100644
+index 3957cd1..0000000
+--- a/package/openpowerlink/0004-Use-PROJECT_NAME-instead-of-CMAKE_PROJECT_NAME.patch
++++ /dev/null
+@@ -1,125 +0,0 @@
+-From 7aace6a9d28b02c4325610255dc8afe198f02c4d Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Wed, 12 Aug 2015 10:54:32 +0200
+-Subject: [PATCH] Use PROJECT_NAME instead of CMAKE_PROJECT_NAME
+-
+-In order to support a top level CMakeLists.txt, use the current project
+-name instead of the top level one.
+-
+-This patch has been submitted upstream:
+-https://github.com/openPOWERLINK/openPOWERLINK_V2/pull/57
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- apps/demo_cn_console/CMakeLists.txt             |  2 +-
+- apps/demo_cn_console/linux.cmake                |  2 +-
+- apps/demo_mn_console/CMakeLists.txt             |  4 ++--
+- apps/demo_mn_console/linux.cmake                |  2 +-
+- apps/demo_mn_qt/CMakeLists.txt                  |  4 ++--
+- apps/demo_mn_qt/linux.cmake                     |  2 +-
+- drivers/linux/drv_daemon_pcap/CMakeLists.txt    |  2 +-
+- drivers/linux/drv_kernelmod_edrv/CMakeLists.txt | 10 +++++-----
+- 8 files changed, 14 insertions(+), 14 deletions(-)
+-
+-diff --git a/apps/demo_cn_console/CMakeLists.txt b/apps/demo_cn_console/CMakeLists.txt
+-index cd3b418..c5a47a8 100644
+---- a/apps/demo_cn_console/CMakeLists.txt
+-+++ b/apps/demo_cn_console/CMakeLists.txt
+-@@ -112,6 +112,6 @@ TARGET_LINK_LIBRARIES(demo_cn_console ${ARCH_LIBRARIES})
+- ################################################################################
+- # Installation rules
+- 
+--INSTALL(TARGETS demo_cn_console RUNTIME DESTINATION ${CMAKE_PROJECT_NAME})
+-+INSTALL(TARGETS demo_cn_console RUNTIME DESTINATION ${PROJECT_NAME})
+- 
+- 
+-diff --git a/apps/demo_cn_console/linux.cmake b/apps/demo_cn_console/linux.cmake
+-index 409bf11..76e381d 100644
+---- a/apps/demo_cn_console/linux.cmake
+-+++ b/apps/demo_cn_console/linux.cmake
+-@@ -53,5 +53,5 @@ SET (ARCH_LIBRARIES ${ARCH_LIBRARIES} pthread rt)
+- ################################################################################
+- # Set architecture specific installation files
+- 
+--INSTALL(PROGRAMS ${TOOLS_DIR}/linux/set_prio DESTINATION ${CMAKE_PROJECT_NAME})
+-+INSTALL(PROGRAMS ${TOOLS_DIR}/linux/set_prio DESTINATION ${PROJECT_NAME})
+- 
+-diff --git a/apps/demo_mn_console/CMakeLists.txt b/apps/demo_mn_console/CMakeLists.txt
+-index 0c54a98..d8df68e 100644
+---- a/apps/demo_mn_console/CMakeLists.txt
+-+++ b/apps/demo_mn_console/CMakeLists.txt
+-@@ -120,6 +120,6 @@ TARGET_LINK_LIBRARIES(demo_mn_console ${ARCH_LIBRARIES})
+- ################################################################################
+- # Installation rules
+- 
+--INSTALL(TARGETS demo_mn_console RUNTIME DESTINATION ${CMAKE_PROJECT_NAME})
+--INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/mnobd.cdc DESTINATION ${CMAKE_PROJECT_NAME})
+-+INSTALL(TARGETS demo_mn_console RUNTIME DESTINATION ${PROJECT_NAME})
+-+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/mnobd.cdc DESTINATION ${PROJECT_NAME})
+- 
+-diff --git a/apps/demo_mn_console/linux.cmake b/apps/demo_mn_console/linux.cmake
+-index a9e9072..a994928 100644
+---- a/apps/demo_mn_console/linux.cmake
+-+++ b/apps/demo_mn_console/linux.cmake
+-@@ -53,5 +53,5 @@ SET (ARCH_LIBRARIES ${ARCH_LIBRARIES} pthread rt)
+- ################################################################################
+- # Set architecture specific installation files
+- 
+--INSTALL(PROGRAMS ${TOOLS_DIR}/linux/set_prio DESTINATION ${CMAKE_PROJECT_NAME})
+-+INSTALL(PROGRAMS ${TOOLS_DIR}/linux/set_prio DESTINATION ${PROJECT_NAME})
+- 
+-diff --git a/apps/demo_mn_qt/CMakeLists.txt b/apps/demo_mn_qt/CMakeLists.txt
+-index ff3a9aa..282a9d8 100644
+---- a/apps/demo_mn_qt/CMakeLists.txt
+-+++ b/apps/demo_mn_qt/CMakeLists.txt
+-@@ -161,5 +161,5 @@ TARGET_LINK_LIBRARIES(demo_mn_qt ${ARCH_LIBRARIES} ${QT_LIBRARIES})
+- ################################################################################
+- # Installation rules
+- 
+--INSTALL(TARGETS demo_mn_qt RUNTIME DESTINATION ${CMAKE_PROJECT_NAME})
+--INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/mnobd.cdc DESTINATION ${CMAKE_PROJECT_NAME})
+-+INSTALL(TARGETS demo_mn_qt RUNTIME DESTINATION ${PROJECT_NAME})
+-+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/mnobd.cdc DESTINATION ${PROJECT_NAME})
+-diff --git a/apps/demo_mn_qt/linux.cmake b/apps/demo_mn_qt/linux.cmake
+-index 6f19ff2..6ed75ee 100644
+---- a/apps/demo_mn_qt/linux.cmake
+-+++ b/apps/demo_mn_qt/linux.cmake
+-@@ -45,5 +45,5 @@ SET(ARCH_LIBRARIES ${ARCH_LIBRARIES} pthread rt)
+- ################################################################################
+- # Set architecture specific installation files
+- 
+--INSTALL(PROGRAMS ${TOOLS_DIR}/linux/set_prio DESTINATION ${CMAKE_PROJECT_NAME})
+-+INSTALL(PROGRAMS ${TOOLS_DIR}/linux/set_prio DESTINATION ${PROJECT_NAME})
+- 
+-diff --git a/drivers/linux/drv_daemon_pcap/CMakeLists.txt b/drivers/linux/drv_daemon_pcap/CMakeLists.txt
+-index 9041e4d..2702abd 100644
+---- a/drivers/linux/drv_daemon_pcap/CMakeLists.txt
+-+++ b/drivers/linux/drv_daemon_pcap/CMakeLists.txt
+-@@ -136,5 +136,5 @@ SET_PROPERTY(TARGET ${EXE_NAME} PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEB
+- TARGET_LINK_LIBRARIES(${EXE_NAME} ${OPLKLIB} ${ARCH_LIBRARIES})
+- 
+- # add installation rules
+--INSTALL(TARGETS ${EXE_NAME} RUNTIME DESTINATION ${CMAKE_PROJECT_NAME})
+-+INSTALL(TARGETS ${EXE_NAME} RUNTIME DESTINATION ${PROJECT_NAME})
+- 
+-diff --git a/drivers/linux/drv_kernelmod_edrv/CMakeLists.txt b/drivers/linux/drv_kernelmod_edrv/CMakeLists.txt
+-index af85f86..59400c0 100644
+---- a/drivers/linux/drv_kernelmod_edrv/CMakeLists.txt
+-+++ b/drivers/linux/drv_kernelmod_edrv/CMakeLists.txt
+-@@ -301,8 +301,8 @@ ADD_CUSTOM_TARGET(
+- ################################################################################
+- # add installation rules
+- 
+--INSTALL(FILES ${MODULE_OUTPUT_DIR}/${MODULE_NAME}.ko DESTINATION ${CMAKE_PROJECT_NAME})
+--INSTALL(FILES ${TOOLS_DIR}/linux/50-openPOWERLINK.rules DESTINATION ${CMAKE_PROJECT_NAME})
+--INSTALL(PROGRAMS ${TOOLS_DIR}/linux/plkload DESTINATION ${CMAKE_PROJECT_NAME})
+--INSTALL(PROGRAMS ${TOOLS_DIR}/linux/plkunload DESTINATION ${CMAKE_PROJECT_NAME})
+--INSTALL(PROGRAMS ${TOOLS_DIR}/linux/devices.txt DESTINATION ${CMAKE_PROJECT_NAME})
+-+INSTALL(FILES ${MODULE_OUTPUT_DIR}/${MODULE_NAME}.ko DESTINATION ${PROJECT_NAME})
+-+INSTALL(FILES ${TOOLS_DIR}/linux/50-openPOWERLINK.rules DESTINATION ${PROJECT_NAME})
+-+INSTALL(PROGRAMS ${TOOLS_DIR}/linux/plkload DESTINATION ${PROJECT_NAME})
+-+INSTALL(PROGRAMS ${TOOLS_DIR}/linux/plkunload DESTINATION ${PROJECT_NAME})
+-+INSTALL(PROGRAMS ${TOOLS_DIR}/linux/devices.txt DESTINATION ${PROJECT_NAME})
+--- 
+-2.4.3
+-
+diff --git a/package/openpowerlink/0006-veth-avoid-kernel-header-issue-with-musl.patch b/package/openpowerlink/0004-veth-avoid-kernel-header-issue-with-musl.patch
+similarity index 84%
+rename from package/openpowerlink/0006-veth-avoid-kernel-header-issue-with-musl.patch
+rename to package/openpowerlink/0004-veth-avoid-kernel-header-issue-with-musl.patch
+index 383f047..a85b94e 100644
+--- a/package/openpowerlink/0006-veth-avoid-kernel-header-issue-with-musl.patch
++++ b/package/openpowerlink/0004-veth-avoid-kernel-header-issue-with-musl.patch
+@@ -1,4 +1,4 @@
+-From 42a95209c5650662b86d222678ec14e7edfae156 Mon Sep 17 00:00:00 2001
++From 9cd93aeecbca62db278f2fe4a2c0a2f6fd04924b Mon Sep 17 00:00:00 2001
+ From: Romain Naour <romain.naour@gmail.com>
+ Date: Wed, 25 May 2016 13:26:49 +0200
+ Subject: [PATCH] veth: avoid kernel header issue with musl
+@@ -16,7 +16,6 @@ http://autobuild.buildroot.org/results/2ca/2ca04bb046263e479e7597867b56469893d3c
+ Upsteam status: pending
+ https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/120
+ 
+-[Rebase on v2.2.2]
+ [1] http://wiki.musl-libc.org/wiki/FAQ#Q:_why_am_i_getting_.22error:_redefinition_of_struct_ethhdr.2Ftcphdr.2Fetc.22_.3F
+ [2] https://git.musl-libc.org/cgit/musl/tree/include/net/ethernet.h?h=v1.1.14#n35
+ [3] https://git.musl-libc.org/cgit/musl/tree/include/net/ethernet.h?h=v1.1.14#n48
+@@ -27,7 +26,7 @@ Signed-off-by: Romain Naour <romain.naour@gmail.com>
+  1 file changed, 6 insertions(+), 7 deletions(-)
+ 
+ diff --git a/stack/src/kernel/veth/veth-linuxuser.c b/stack/src/kernel/veth/veth-linuxuser.c
+-index 2a0bdd0..2bfaa87 100644
++index d70566c..ddcf950 100644
+ --- a/stack/src/kernel/veth/veth-linuxuser.c
+ +++ b/stack/src/kernel/veth/veth-linuxuser.c
+ @@ -61,7 +61,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+@@ -51,14 +50,14 @@ index 2a0bdd0..2bfaa87 100644
+  
+      // replace the MAC address of the POWERLINK Ethernet interface with virtual
+      // Ethernet MAC address before forwarding it into the virtual Ethernet interface
+--    if (OPLK_MEMCMP(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.macAdrs, ETHER_ADDR_LEN) == 0)
+-+    if (OPLK_MEMCMP(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.macAdrs, ETH_ALEN) == 0)
++-    if (OPLK_MEMCMP(pFrameInfo_p->frame.pBuffer->aDstMac, vethInstance_l.macAdrs, ETHER_ADDR_LEN) == 0)
+++    if (OPLK_MEMCMP(pFrameInfo_p->frame.pBuffer->aDstMac, vethInstance_l.macAdrs, ETH_ALEN) == 0)
+      {
+--        OPLK_MEMCPY(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.tapMacAdrs, ETHER_ADDR_LEN);
+-+        OPLK_MEMCPY(pFrameInfo_p->pFrame->aDstMac, vethInstance_l.tapMacAdrs, ETH_ALEN);
++-        OPLK_MEMCPY(pFrameInfo_p->frame.pBuffer->aDstMac, vethInstance_l.tapMacAdrs, ETHER_ADDR_LEN);
+++        OPLK_MEMCPY(pFrameInfo_p->frame.pBuffer->aDstMac, vethInstance_l.tapMacAdrs, ETH_ALEN);
+      }
+  
+-     nwrite = write(vethInstance_l.fd, pFrameInfo_p->pFrame, pFrameInfo_p->frameSize);
++     nwrite = write(vethInstance_l.fd, pFrameInfo_p->frame.pBuffer, pFrameInfo_p->frameSize);
+ @@ -302,7 +301,7 @@ to be used as a thread which does a blocking read in a while loop.
+  //------------------------------------------------------------------------------
+  static void* vethRecvThread(void* pArg_p)
+@@ -84,7 +83,7 @@ index 2a0bdd0..2bfaa87 100644
+ -                    OPLK_MEMCPY(&buffer[6], pInstance->macAdrs, ETHER_ADDR_LEN);
+ +                    OPLK_MEMCPY(&buffer[6], pInstance->macAdrs, ETH_ALEN);
+  
+-                     frameInfo.pFrame = (tPlkFrame *)buffer;
++                     frameInfo.frame.pBuffer = (tPlkFrame *)buffer;
+                      frameInfo.frameSize = nread;
+ -- 
+ 2.5.5
+diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
+index 6b28be8..c879df1 100644
+--- a/package/openpowerlink/openpowerlink.hash
++++ b/package/openpowerlink/openpowerlink.hash
+@@ -1,5 +1,5 @@
+-# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.2.2/
+-md5	d7f2b08d332b36fed5427ebc5ec118f2	openPOWERLINK_V2.2.2.tar.gz
+-sha1	f565c6a8e10ba320325d120f6030158f4c4278f8	openPOWERLINK_V2.2.2.tar.gz
++# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.4.0/
++md5	a833ca76a162db04a28c36ccecfd8a05	openPOWERLINK_V2.4.0.tar.gz
++sha1	d2260f7d1b7f264dd7a0323509bec233d36aed11	openPOWERLINK_V2.4.0.tar.gz
+ # sha256 locally computed
+-sha256	4de00eaf8af1ff3877bfa2e878a59989873406845fc8031bd6fc58cb1f7cf7e7	openPOWERLINK_V2.2.2.tar.gz
++#sha256	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855	openPOWERLINK_V2.4.0.tar.gz
+diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
+index d9ceca4..3ac4ccb 100644
+--- a/package/openpowerlink/openpowerlink.mk
++++ b/package/openpowerlink/openpowerlink.mk
+@@ -4,7 +4,7 @@
  #
--# Originally written by Per Bothner.
-+# Originally written by Per Bothner; maintained since 2000 by Ben Elliston.
- #
- # You can get the latest version of this script from:
--# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
-+# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess
- #
--# Please send patches with a ChangeLog entry to config-patches at gnu.org.
-+# Please send patches to <config-patches@gnu.org>.
+ ################################################################################
  
- 
- me=`echo "$0" | sed -e 's,.*/,,'`
-@@ -50,7 +50,7 @@ version="\
- GNU config.guess ($timestamp)
- 
- Originally written by Per Bothner.
--Copyright 1992-2013 Free Software Foundation, Inc.
-+Copyright 1992-2016 Free Software Foundation, Inc.
- 
- This is free software; see the source for copying conditions.  There is NO
- warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
-@@ -149,7 +149,7 @@ Linux|GNU|GNU/*)
- 	LIBC=gnu
- 	#endif
- 	EOF
--	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^LIBC'`
-+	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^LIBC' | sed 's, ,,g'`
- 	;;
- esac
- 
-@@ -168,19 +168,29 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
- 	# Note: NetBSD doesn't particularly care about the vendor
- 	# portion of the name.  We always set it to "unknown".
- 	sysctl="sysctl -n hw.machine_arch"
--	UNAME_MACHINE_ARCH=`(/sbin/$sysctl 2>/dev/null || \
--	    /usr/sbin/$sysctl 2>/dev/null || echo unknown)`
-+	UNAME_MACHINE_ARCH=`(uname -p 2>/dev/null || \
-+	    /sbin/$sysctl 2>/dev/null || \
-+	    /usr/sbin/$sysctl 2>/dev/null || \
-+	    echo unknown)`
- 	case "${UNAME_MACHINE_ARCH}" in
- 	    armeb) machine=armeb-unknown ;;
- 	    arm*) machine=arm-unknown ;;
- 	    sh3el) machine=shl-unknown ;;
- 	    sh3eb) machine=sh-unknown ;;
- 	    sh5el) machine=sh5le-unknown ;;
-+	    earmv*)
-+		arch=`echo ${UNAME_MACHINE_ARCH} | sed -e 's,^e\(armv[0-9]\).*$,\1,'`
-+		endian=`echo ${UNAME_MACHINE_ARCH} | sed -ne 's,^.*\(eb\)$,\1,p'`
-+		machine=${arch}${endian}-unknown
-+		;;
- 	    *) machine=${UNAME_MACHINE_ARCH}-unknown ;;
- 	esac
- 	# The Operating System including object format, if it has switched
--	# to ELF recently, or will in the future.
-+	# to ELF recently (or will in the future) and ABI.
- 	case "${UNAME_MACHINE_ARCH}" in
-+	    earm*)
-+		os=netbsdelf
-+		;;
- 	    arm*|i386|m68k|ns32k|sh3*|sparc|vax)
- 		eval $set_cc_for_build
- 		if echo __ELF__ | $CC_FOR_BUILD -E - 2>/dev/null \
-@@ -197,6 +207,13 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
- 		os=netbsd
- 		;;
- 	esac
-+	# Determine ABI tags.
-+	case "${UNAME_MACHINE_ARCH}" in
-+	    earm*)
-+		expr='s/^earmv[0-9]/-eabi/;s/eb$//'
-+		abi=`echo ${UNAME_MACHINE_ARCH} | sed -e "$expr"`
-+		;;
-+	esac
- 	# The OS release
- 	# Debian GNU/NetBSD machines have a different userland, and
- 	# thus, need a distinct triplet. However, they do not need
-@@ -207,13 +224,13 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
- 		release='-gnu'
- 		;;
- 	    *)
--		release=`echo ${UNAME_RELEASE}|sed -e 's/[-_].*/\./'`
-+		release=`echo ${UNAME_RELEASE} | sed -e 's/[-_].*//' | cut -d. -f1,2`
- 		;;
- 	esac
- 	# Since CPU_TYPE-MANUFACTURER-KERNEL-OPERATING_SYSTEM:
- 	# contains redundant information, the shorter form:
- 	# CPU_TYPE-MANUFACTURER-OPERATING_SYSTEM is used.
--	echo "${machine}-${os}${release}"
-+	echo "${machine}-${os}${release}${abi}"
- 	exit ;;
-     *:Bitrig:*:*)
- 	UNAME_MACHINE_ARCH=`arch | sed 's/Bitrig.//'`
-@@ -223,6 +240,10 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
- 	UNAME_MACHINE_ARCH=`arch | sed 's/OpenBSD.//'`
- 	echo ${UNAME_MACHINE_ARCH}-unknown-openbsd${UNAME_RELEASE}
- 	exit ;;
-+    *:LibertyBSD:*:*)
-+	UNAME_MACHINE_ARCH=`arch | sed 's/^.*BSD\.//'`
-+	echo ${UNAME_MACHINE_ARCH}-unknown-libertybsd${UNAME_RELEASE}
-+	exit ;;
-     *:ekkoBSD:*:*)
- 	echo ${UNAME_MACHINE}-unknown-ekkobsd${UNAME_RELEASE}
- 	exit ;;
-@@ -235,6 +256,9 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
-     *:MirBSD:*:*)
- 	echo ${UNAME_MACHINE}-unknown-mirbsd${UNAME_RELEASE}
- 	exit ;;
-+    *:Sortix:*:*)
-+	echo ${UNAME_MACHINE}-unknown-sortix
-+	exit ;;
-     alpha:OSF1:*:*)
- 	case $UNAME_RELEASE in
- 	*4.0)
-@@ -251,42 +275,42 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
- 	ALPHA_CPU_TYPE=`/usr/sbin/psrinfo -v | sed -n -e 's/^  The alpha \(.*\) processor.*$/\1/p' | head -n 1`
- 	case "$ALPHA_CPU_TYPE" in
- 	    "EV4 (21064)")
--		UNAME_MACHINE="alpha" ;;
-+		UNAME_MACHINE=alpha ;;
- 	    "EV4.5 (21064)")
--		UNAME_MACHINE="alpha" ;;
-+		UNAME_MACHINE=alpha ;;
- 	    "LCA4 (21066/21068)")
--		UNAME_MACHINE="alpha" ;;
-+		UNAME_MACHINE=alpha ;;
- 	    "EV5 (21164)")
--		UNAME_MACHINE="alphaev5" ;;
-+		UNAME_MACHINE=alphaev5 ;;
- 	    "EV5.6 (21164A)")
--		UNAME_MACHINE="alphaev56" ;;
-+		UNAME_MACHINE=alphaev56 ;;
- 	    "EV5.6 (21164PC)")
--		UNAME_MACHINE="alphapca56" ;;
-+		UNAME_MACHINE=alphapca56 ;;
- 	    "EV5.7 (21164PC)")
--		UNAME_MACHINE="alphapca57" ;;
-+		UNAME_MACHINE=alphapca57 ;;
- 	    "EV6 (21264)")
--		UNAME_MACHINE="alphaev6" ;;
-+		UNAME_MACHINE=alphaev6 ;;
- 	    "EV6.7 (21264A)")
--		UNAME_MACHINE="alphaev67" ;;
-+		UNAME_MACHINE=alphaev67 ;;
- 	    "EV6.8CB (21264C)")
--		UNAME_MACHINE="alphaev68" ;;
-+		UNAME_MACHINE=alphaev68 ;;
- 	    "EV6.8AL (21264B)")
--		UNAME_MACHINE="alphaev68" ;;
-+		UNAME_MACHINE=alphaev68 ;;
- 	    "EV6.8CX (21264D)")
--		UNAME_MACHINE="alphaev68" ;;
-+		UNAME_MACHINE=alphaev68 ;;
- 	    "EV6.9A (21264/EV69A)")
--		UNAME_MACHINE="alphaev69" ;;
-+		UNAME_MACHINE=alphaev69 ;;
- 	    "EV7 (21364)")
--		UNAME_MACHINE="alphaev7" ;;
-+		UNAME_MACHINE=alphaev7 ;;
- 	    "EV7.9 (21364A)")
--		UNAME_MACHINE="alphaev79" ;;
-+		UNAME_MACHINE=alphaev79 ;;
- 	esac
- 	# A Pn.n version is a patched version.
- 	# A Vn.n version is a released version.
- 	# A Tn.n version is a released field test version.
- 	# A Xn.n version is an unreleased experimental baselevel.
- 	# 1.2 uses "1.2" for uname -r.
--	echo ${UNAME_MACHINE}-dec-osf`echo ${UNAME_RELEASE} | sed -e 's/^[PVTX]//' | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz'`
-+	echo ${UNAME_MACHINE}-dec-osf`echo ${UNAME_RELEASE} | sed -e 's/^[PVTX]//' | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz`
- 	# Reset EXIT trap before exiting to avoid spurious non-zero exit code.
- 	exitcode=$?
- 	trap '' 0
-@@ -359,16 +383,16 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
- 	exit ;;
-     i86pc:SunOS:5.*:* | i86xen:SunOS:5.*:*)
- 	eval $set_cc_for_build
--	SUN_ARCH="i386"
-+	SUN_ARCH=i386
- 	# If there is a compiler, see if it is configured for 64-bit objects.
- 	# Note that the Sun cc does not turn __LP64__ into 1 like gcc does.
- 	# This test works for both compilers.
--	if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
-+	if [ "$CC_FOR_BUILD" != no_compiler_found ]; then
- 	    if (echo '#ifdef __amd64'; echo IS_64BIT_ARCH; echo '#endif') | \
--		(CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
-+		(CCOPTS="" $CC_FOR_BUILD -E - 2>/dev/null) | \
- 		grep IS_64BIT_ARCH >/dev/null
- 	    then
--		SUN_ARCH="x86_64"
-+		SUN_ARCH=x86_64
- 	    fi
- 	fi
- 	echo ${SUN_ARCH}-pc-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
-@@ -393,7 +417,7 @@ case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
- 	exit ;;
-     sun*:*:4.2BSD:*)
- 	UNAME_RELEASE=`(sed 1q /etc/motd | awk '{print substr($5,1,3)}') 2>/dev/null`
--	test "x${UNAME_RELEASE}" = "x" && UNAME_RELEASE=3
-+	test "x${UNAME_RELEASE}" = x && UNAME_RELEASE=3
- 	case "`/bin/arch`" in
- 	    sun3)
- 		echo m68k-sun-sunos${UNAME_RELEASE}
-@@ -579,8 +603,9 @@ EOF
- 	else
- 		IBM_ARCH=powerpc
- 	fi
--	if [ -x /usr/bin/oslevel ] ; then
--		IBM_REV=`/usr/bin/oslevel`
-+	if [ -x /usr/bin/lslpp ] ; then
-+		IBM_REV=`/usr/bin/lslpp -Lqc bos.rte.libc |
-+			   awk -F: '{ print $3 }' | sed s/[0-9]*$/0/`
- 	else
- 		IBM_REV=${UNAME_VERSION}.${UNAME_RELEASE}
- 	fi
-@@ -617,13 +642,13 @@ EOF
- 		    sc_cpu_version=`/usr/bin/getconf SC_CPU_VERSION 2>/dev/null`
- 		    sc_kernel_bits=`/usr/bin/getconf SC_KERNEL_BITS 2>/dev/null`
- 		    case "${sc_cpu_version}" in
--		      523) HP_ARCH="hppa1.0" ;; # CPU_PA_RISC1_0
--		      528) HP_ARCH="hppa1.1" ;; # CPU_PA_RISC1_1
-+		      523) HP_ARCH=hppa1.0 ;; # CPU_PA_RISC1_0
-+		      528) HP_ARCH=hppa1.1 ;; # CPU_PA_RISC1_1
- 		      532)                      # CPU_PA_RISC2_0
- 			case "${sc_kernel_bits}" in
--			  32) HP_ARCH="hppa2.0n" ;;
--			  64) HP_ARCH="hppa2.0w" ;;
--			  '') HP_ARCH="hppa2.0" ;;   # HP-UX 10.20
-+			  32) HP_ARCH=hppa2.0n ;;
-+			  64) HP_ARCH=hppa2.0w ;;
-+			  '') HP_ARCH=hppa2.0 ;;   # HP-UX 10.20
- 			esac ;;
- 		    esac
- 		fi
-@@ -662,11 +687,11 @@ EOF
- 		    exit (0);
- 		}
- EOF
--		    (CCOPTS= $CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null) && HP_ARCH=`$dummy`
-+		    (CCOPTS="" $CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null) && HP_ARCH=`$dummy`
- 		    test -z "$HP_ARCH" && HP_ARCH=hppa
- 		fi ;;
- 	esac
--	if [ ${HP_ARCH} = "hppa2.0w" ]
-+	if [ ${HP_ARCH} = hppa2.0w ]
- 	then
- 	    eval $set_cc_for_build
- 
-@@ -679,12 +704,12 @@ EOF
- 	    # $ CC_FOR_BUILD="cc +DA2.0w" ./config.guess
- 	    # => hppa64-hp-hpux11.23
- 
--	    if echo __LP64__ | (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) |
-+	    if echo __LP64__ | (CCOPTS="" $CC_FOR_BUILD -E - 2>/dev/null) |
- 		grep -q __LP64__
- 	    then
--		HP_ARCH="hppa2.0w"
-+		HP_ARCH=hppa2.0w
- 	    else
--		HP_ARCH="hppa64"
-+		HP_ARCH=hppa64
- 	    fi
- 	fi
- 	echo ${HP_ARCH}-hp-hpux${HPUX_REV}
-@@ -789,14 +814,14 @@ EOF
- 	echo craynv-cray-unicosmp${UNAME_RELEASE} | sed -e 's/\.[^.]*$/.X/'
- 	exit ;;
-     F30[01]:UNIX_System_V:*:* | F700:UNIX_System_V:*:*)
--	FUJITSU_PROC=`uname -m | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz'`
--	FUJITSU_SYS=`uname -p | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz' | sed -e 's/\///'`
-+	FUJITSU_PROC=`uname -m | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz`
-+	FUJITSU_SYS=`uname -p | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz | sed -e 's/\///'`
- 	FUJITSU_REL=`echo ${UNAME_RELEASE} | sed -e 's/ /_/'`
- 	echo "${FUJITSU_PROC}-fujitsu-${FUJITSU_SYS}${FUJITSU_REL}"
- 	exit ;;
-     5000:UNIX_System_V:4.*:*)
--	FUJITSU_SYS=`uname -p | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz' | sed -e 's/\///'`
--	FUJITSU_REL=`echo ${UNAME_RELEASE} | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz' | sed -e 's/ /_/'`
-+	FUJITSU_SYS=`uname -p | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz | sed -e 's/\///'`
-+	FUJITSU_REL=`echo ${UNAME_RELEASE} | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz | sed -e 's/ /_/'`
- 	echo "sparc-fujitsu-${FUJITSU_SYS}${FUJITSU_REL}"
- 	exit ;;
-     i*86:BSD/386:*:* | i*86:BSD/OS:*:* | *:Ascend\ Embedded/OS:*:*)
-@@ -826,7 +851,7 @@ EOF
-     *:MINGW*:*)
- 	echo ${UNAME_MACHINE}-pc-mingw32
- 	exit ;;
--    i*:MSYS*:*)
-+    *:MSYS*:*)
- 	echo ${UNAME_MACHINE}-pc-msys
- 	exit ;;
-     i*:windows32*:*)
-@@ -878,7 +903,7 @@ EOF
- 	exit ;;
-     *:GNU/*:*:*)
- 	# other systems with GNU libc and userland
--	echo ${UNAME_MACHINE}-unknown-`echo ${UNAME_SYSTEM} | sed 's,^[^/]*/,,' | tr '[A-Z]' '[a-z]'``echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'`-${LIBC}
-+	echo ${UNAME_MACHINE}-unknown-`echo ${UNAME_SYSTEM} | sed 's,^[^/]*/,,' | tr "[:upper:]" "[:lower:]"``echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'`-${LIBC}
- 	exit ;;
-     i*86:Minix:*:*)
- 	echo ${UNAME_MACHINE}-pc-minix
-@@ -901,7 +926,7 @@ EOF
- 	  EV68*) UNAME_MACHINE=alphaev68 ;;
- 	esac
- 	objdump --private-headers /bin/sh | grep -q ld.so.1
--	if test "$?" = 0 ; then LIBC="gnulibc1" ; fi
-+	if test "$?" = 0 ; then LIBC=gnulibc1 ; fi
- 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
- 	exit ;;
-     arc:Linux:*:* | arceb:Linux:*:*)
-@@ -932,6 +957,9 @@ EOF
-     crisv32:Linux:*:*)
- 	echo ${UNAME_MACHINE}-axis-linux-${LIBC}
- 	exit ;;
-+    e2k:Linux:*:*)
-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
-+	exit ;;
-     frv:Linux:*:*)
- 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
- 	exit ;;
-@@ -944,6 +972,9 @@ EOF
-     ia64:Linux:*:*)
- 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
- 	exit ;;
-+    k1om:Linux:*:*)
-+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
-+	exit ;;
-     m32r*:Linux:*:*)
- 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
- 	exit ;;
-@@ -969,10 +1000,10 @@ EOF
- 	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^CPU'`
- 	test x"${CPU}" != x && { echo "${CPU}-unknown-linux-${LIBC}"; exit; }
- 	;;
--    or1k:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
-+    openrisc*:Linux:*:*)
-+	echo or1k-unknown-linux-${LIBC}
- 	exit ;;
--    or32:Linux:*:*)
-+    or32:Linux:*:* | or1k*:Linux:*:*)
- 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
- 	exit ;;
-     padre:Linux:*:*)
-@@ -1020,7 +1051,7 @@ EOF
- 	echo ${UNAME_MACHINE}-dec-linux-${LIBC}
- 	exit ;;
-     x86_64:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
-+	echo ${UNAME_MACHINE}-pc-linux-${LIBC}
- 	exit ;;
-     xtensa*:Linux:*:*)
- 	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
-@@ -1099,7 +1130,7 @@ EOF
- 	# uname -m prints for DJGPP always 'pc', but it prints nothing about
- 	# the processor, so we play safe by assuming i586.
- 	# Note: whatever this is, it MUST be the same as what config.sub
--	# prints for the "djgpp" host, or else GDB configury will decide that
-+	# prints for the "djgpp" host, or else GDB configure will decide that
- 	# this is a cross-build.
- 	echo i586-pc-msdosdjgpp
- 	exit ;;
-@@ -1248,6 +1279,9 @@ EOF
-     SX-8R:SUPER-UX:*:*)
- 	echo sx8r-nec-superux${UNAME_RELEASE}
- 	exit ;;
-+    SX-ACE:SUPER-UX:*:*)
-+	echo sxace-nec-superux${UNAME_RELEASE}
-+	exit ;;
-     Power*:Rhapsody:*:*)
- 	echo powerpc-apple-rhapsody${UNAME_RELEASE}
- 	exit ;;
-@@ -1260,22 +1294,32 @@ EOF
- 	if test "$UNAME_PROCESSOR" = unknown ; then
- 	    UNAME_PROCESSOR=powerpc
- 	fi
--	if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
--	    if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
--		(CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
--		grep IS_64BIT_ARCH >/dev/null
--	    then
--		case $UNAME_PROCESSOR in
--		    i386) UNAME_PROCESSOR=x86_64 ;;
--		    powerpc) UNAME_PROCESSOR=powerpc64 ;;
--		esac
-+	if test `echo "$UNAME_RELEASE" | sed -e 's/\..*//'` -le 10 ; then
-+	    if [ "$CC_FOR_BUILD" != no_compiler_found ]; then
-+		if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
-+		    (CCOPTS="" $CC_FOR_BUILD -E - 2>/dev/null) | \
-+		    grep IS_64BIT_ARCH >/dev/null
-+		then
-+		    case $UNAME_PROCESSOR in
-+			i386) UNAME_PROCESSOR=x86_64 ;;
-+			powerpc) UNAME_PROCESSOR=powerpc64 ;;
-+		    esac
-+		fi
- 	    fi
-+	elif test "$UNAME_PROCESSOR" = i386 ; then
-+	    # Avoid executing cc on OS X 10.9, as it ships with a stub
-+	    # that puts up a graphical alert prompting to install
-+	    # developer tools.  Any system running Mac OS X 10.7 or
-+	    # later (Darwin 11 and later) is required to have a 64-bit
-+	    # processor. This is not true of the ARM version of Darwin
-+	    # that Apple uses in portable devices.
-+	    UNAME_PROCESSOR=x86_64
- 	fi
- 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
- 	exit ;;
-     *:procnto*:*:* | *:QNX:[0123456789]*:*)
- 	UNAME_PROCESSOR=`uname -p`
--	if test "$UNAME_PROCESSOR" = "x86"; then
-+	if test "$UNAME_PROCESSOR" = x86; then
- 		UNAME_PROCESSOR=i386
- 		UNAME_MACHINE=pc
- 	fi
-@@ -1306,7 +1350,7 @@ EOF
- 	# "uname -m" is not consistent, so use $cputype instead. 386
- 	# is converted to i386 for consistency with other x86
- 	# operating systems.
--	if test "$cputype" = "386"; then
-+	if test "$cputype" = 386; then
- 	    UNAME_MACHINE=i386
- 	else
- 	    UNAME_MACHINE="$cputype"
-@@ -1348,7 +1392,7 @@ EOF
- 	echo i386-pc-xenix
- 	exit ;;
-     i*86:skyos:*:*)
--	echo ${UNAME_MACHINE}-pc-skyos`echo ${UNAME_RELEASE}` | sed -e 's/ .*$//'
-+	echo ${UNAME_MACHINE}-pc-skyos`echo ${UNAME_RELEASE} | sed -e 's/ .*$//'`
- 	exit ;;
-     i*86:rdos:*:*)
- 	echo ${UNAME_MACHINE}-pc-rdos
-@@ -1359,171 +1403,25 @@ EOF
-     x86_64:VMkernel:*:*)
- 	echo ${UNAME_MACHINE}-unknown-esx
- 	exit ;;
--esac
--
--eval $set_cc_for_build
--cat >$dummy.c <<EOF
--#ifdef _SEQUENT_
--# include <sys/types.h>
--# include <sys/utsname.h>
--#endif
--main ()
--{
--#if defined (sony)
--#if defined (MIPSEB)
--  /* BFD wants "bsd" instead of "newsos".  Perhaps BFD should be changed,
--     I don't know....  */
--  printf ("mips-sony-bsd\n"); exit (0);
--#else
--#include <sys/param.h>
--  printf ("m68k-sony-newsos%s\n",
--#ifdef NEWSOS4
--	"4"
--#else
--	""
--#endif
--	); exit (0);
--#endif
--#endif
--
--#if defined (__arm) && defined (__acorn) && defined (__unix)
--  printf ("arm-acorn-riscix\n"); exit (0);
--#endif
--
--#if defined (hp300) && !defined (hpux)
--  printf ("m68k-hp-bsd\n"); exit (0);
--#endif
--
--#if defined (NeXT)
--#if !defined (__ARCHITECTURE__)
--#define __ARCHITECTURE__ "m68k"
--#endif
--  int version;
--  version=`(hostinfo | sed -n 's/.*NeXT Mach \([0-9]*\).*/\1/p') 2>/dev/null`;
--  if (version < 4)
--    printf ("%s-next-nextstep%d\n", __ARCHITECTURE__, version);
--  else
--    printf ("%s-next-openstep%d\n", __ARCHITECTURE__, version);
--  exit (0);
--#endif
--
--#if defined (MULTIMAX) || defined (n16)
--#if defined (UMAXV)
--  printf ("ns32k-encore-sysv\n"); exit (0);
--#else
--#if defined (CMU)
--  printf ("ns32k-encore-mach\n"); exit (0);
--#else
--  printf ("ns32k-encore-bsd\n"); exit (0);
--#endif
--#endif
--#endif
--
--#if defined (__386BSD__)
--  printf ("i386-pc-bsd\n"); exit (0);
--#endif
--
--#if defined (sequent)
--#if defined (i386)
--  printf ("i386-sequent-dynix\n"); exit (0);
--#endif
--#if defined (ns32000)
--  printf ("ns32k-sequent-dynix\n"); exit (0);
--#endif
--#endif
--
--#if defined (_SEQUENT_)
--    struct utsname un;
--
--    uname(&un);
--
--    if (strncmp(un.version, "V2", 2) == 0) {
--	printf ("i386-sequent-ptx2\n"); exit (0);
--    }
--    if (strncmp(un.version, "V1", 2) == 0) { /* XXX is V1 correct? */
--	printf ("i386-sequent-ptx1\n"); exit (0);
--    }
--    printf ("i386-sequent-ptx\n"); exit (0);
--
--#endif
--
--#if defined (vax)
--# if !defined (ultrix)
--#  include <sys/param.h>
--#  if defined (BSD)
--#   if BSD == 43
--      printf ("vax-dec-bsd4.3\n"); exit (0);
--#   else
--#    if BSD == 199006
--      printf ("vax-dec-bsd4.3reno\n"); exit (0);
--#    else
--      printf ("vax-dec-bsd\n"); exit (0);
--#    endif
--#   endif
--#  else
--    printf ("vax-dec-bsd\n"); exit (0);
--#  endif
--# else
--    printf ("vax-dec-ultrix\n"); exit (0);
--# endif
--#endif
--
--#if defined (alliant) && defined (i860)
--  printf ("i860-alliant-bsd\n"); exit (0);
--#endif
--
--  exit (1);
--}
--EOF
--
--$CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null && SYSTEM_NAME=`$dummy` &&
--	{ echo "$SYSTEM_NAME"; exit; }
--
--# Apollos put the system type in the environment.
--
--test -d /usr/apollo && { echo ${ISP}-apollo-${SYSTYPE}; exit; }
--
--# Convex versions that predate uname can use getsysinfo(1)
--
--if [ -x /usr/convex/getsysinfo ]
--then
--    case `getsysinfo -f cpu_type` in
--    c1*)
--	echo c1-convex-bsd
-+    amd64:Isilon\ OneFS:*:*)
-+	echo x86_64-unknown-onefs
- 	exit ;;
--    c2*)
--	if getsysinfo -f scalar_acc
--	then echo c32-convex-bsd
--	else echo c2-convex-bsd
--	fi
--	exit ;;
--    c34*)
--	echo c34-convex-bsd
--	exit ;;
--    c38*)
--	echo c38-convex-bsd
--	exit ;;
--    c4*)
--	echo c4-convex-bsd
--	exit ;;
--    esac
--fi
-+esac
- 
- cat >&2 <<EOF
- $0: unable to guess system type
- 
--This script, last modified $timestamp, has failed to recognize
--the operating system you are using. It is advised that you
--download the most up to date version of the config scripts from
-+This script (version $timestamp), has failed to recognize the
-+operating system you are using. If your script is old, overwrite
-+config.guess and config.sub with the latest versions from:
- 
--  http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
-+  http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess
- and
--  http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD
-+  http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub
- 
--If the version you run ($0) is already up to date, please
--send the following data and any information you think might be
--pertinent to <config-patches@gnu.org> in order to provide the needed
--information to handle your system.
-+If $0 has already been updated, send the following data and any
-+information you think might be pertinent to config-patches at gnu.org to
-+provide the necessary information to handle your system.
- 
- config.guess timestamp = $timestamp
- 
-diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
-index 61cb4bc..6d86a1e 100755
---- a/support/gnuconfig/config.sub
-+++ b/support/gnuconfig/config.sub
-@@ -1,8 +1,8 @@
- #! /bin/sh
- # Configuration validation subroutine script.
--#   Copyright 1992-2013 Free Software Foundation, Inc.
-+#   Copyright 1992-2016 Free Software Foundation, Inc.
- 
--timestamp='2013-10-01'
-+timestamp='2016-05-10'
- 
- # This file is free software; you can redistribute it and/or modify it
- # under the terms of the GNU General Public License as published by
-@@ -25,7 +25,7 @@ timestamp='2013-10-01'
- # of the GNU General Public License, version 3 ("GPLv3").
- 
- 
--# Please send patches with a ChangeLog entry to config-patches at gnu.org.
-+# Please send patches to <config-patches@gnu.org>.
- #
- # Configuration subroutine to validate and canonicalize a configuration type.
- # Supply the specified configuration type as an argument.
-@@ -33,7 +33,7 @@ timestamp='2013-10-01'
- # Otherwise, we print the canonical config type on stdout and succeed.
- 
- # You can get the latest version of this script from:
--# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD
-+# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub
- 
- # This file is supposed to be the same for all GNU packages
- # and recognize all the CPU types, system types and aliases
-@@ -53,8 +53,7 @@ timestamp='2013-10-01'
- me=`echo "$0" | sed -e 's,.*/,,'`
- 
- usage="\
--Usage: $0 [OPTION] CPU-MFR-OPSYS
--       $0 [OPTION] ALIAS
-+Usage: $0 [OPTION] CPU-MFR-OPSYS or ALIAS
- 
- Canonicalize a configuration name.
- 
-@@ -68,7 +67,7 @@ Report bugs and patches to <config-patches@gnu.org>."
- version="\
- GNU config.sub ($timestamp)
- 
--Copyright 1992-2013 Free Software Foundation, Inc.
-+Copyright 1992-2016 Free Software Foundation, Inc.
- 
- This is free software; see the source for copying conditions.  There is NO
- warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
-@@ -117,7 +116,7 @@ maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
- case $maybe_os in
-   nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | \
-   linux-musl* | linux-uclibc* | uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | \
--  knetbsd*-gnu* | netbsd*-gnu* | \
-+  knetbsd*-gnu* | netbsd*-gnu* | netbsd*-eabi* | \
-   kopensolaris*-gnu* | \
-   storm-chaos* | os2-emx* | rtmk-nova*)
-     os=-$maybe_os
-@@ -255,12 +254,13 @@ case $basic_machine in
- 	| arc | arceb \
- 	| arm | arm[bl]e | arme[lb] | armv[2-8] | armv[3-8][lb] | armv7[arm] \
- 	| avr | avr32 \
-+	| ba \
- 	| be32 | be64 \
- 	| bfin \
- 	| c4x | c8051 | clipper \
- 	| d10v | d30v | dlx | dsp16xx \
--	| epiphany \
--	| fido | fr30 | frv \
-+	| e2k | epiphany \
-+	| fido | fr30 | frv | ft32 \
- 	| h8300 | h8500 | hppa | hppa1.[01] | hppa2.0 | hppa2.0[nw] | hppa64 \
- 	| hexagon \
- 	| i370 | i860 | i960 | ia64 \
-@@ -283,8 +283,10 @@ case $basic_machine in
- 	| mips64vr5900 | mips64vr5900el \
- 	| mipsisa32 | mipsisa32el \
- 	| mipsisa32r2 | mipsisa32r2el \
-+	| mipsisa32r6 | mipsisa32r6el \
- 	| mipsisa64 | mipsisa64el \
- 	| mipsisa64r2 | mipsisa64r2el \
-+	| mipsisa64r6 | mipsisa64r6el \
- 	| mipsisa64sb1 | mipsisa64sb1el \
- 	| mipsisa64sr71k | mipsisa64sr71kel \
- 	| mipsr5900 | mipsr5900el \
-@@ -296,14 +298,14 @@ case $basic_machine in
- 	| nds32 | nds32le | nds32be \
- 	| nios | nios2 | nios2eb | nios2el \
- 	| ns16k | ns32k \
--	| open8 \
--	| or1k | or32 \
-+	| open8 | or1k | or1knd | or32 \
- 	| pdp10 | pdp11 | pj | pjl \
- 	| powerpc | powerpc64 | powerpc64le | powerpcle \
- 	| pyramid \
-+	| riscv32 | riscv64 \
- 	| rl78 | rx \
- 	| score \
--	| sh | sh[1234] | sh[24]a | sh[24]aeb | sh[23]e | sh[34]eb | sheb | shbe | shle | sh[1234]le | sh3ele \
-+	| sh | sh[1234] | sh[24]a | sh[24]aeb | sh[23]e | sh[234]eb | sheb | shbe | shle | sh[1234]le | sh3ele \
- 	| sh64 | sh64le \
- 	| sparc | sparc64 | sparc64b | sparc64v | sparc86x | sparclet | sparclite \
- 	| sparcv8 | sparcv9 | sparcv9b | sparcv9v \
-@@ -311,6 +313,7 @@ case $basic_machine in
- 	| tahoe | tic4x | tic54x | tic55x | tic6x | tic80 | tron \
- 	| ubicom32 \
- 	| v850 | v850e | v850e1 | v850e2 | v850es | v850e2v3 \
-+	| visium \
- 	| we32k \
- 	| x86 | xc16x | xstormy16 | xtensa \
- 	| z8k | z80)
-@@ -325,6 +328,9 @@ case $basic_machine in
- 	c6x)
- 		basic_machine=tic6x-unknown
- 		;;
-+	leon|leon[3-9])
-+		basic_machine=sparc-$basic_machine
-+		;;
- 	m6811 | m68hc11 | m6812 | m68hc12 | m68hcs12x | nvptx | picochip)
- 		basic_machine=$basic_machine-unknown
- 		os=-none
-@@ -370,12 +376,13 @@ case $basic_machine in
- 	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* | arceb-* \
- 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
- 	| avr-* | avr32-* \
-+	| ba-* \
- 	| be32-* | be64-* \
- 	| bfin-* | bs2000-* \
- 	| c[123]* | c30-* | [cjt]90-* | c4x-* \
- 	| c8051-* | clipper-* | craynv-* | cydra-* \
- 	| d10v-* | d30v-* | dlx-* \
--	| elxsi-* \
-+	| e2k-* | elxsi-* \
- 	| f30[01]-* | f700-* | fido-* | fr30-* | frv-* | fx80-* \
- 	| h8300-* | h8500-* \
- 	| hppa-* | hppa1.[01]-* | hppa2.0-* | hppa2.0[nw]-* | hppa64-* \
-@@ -402,8 +409,10 @@ case $basic_machine in
- 	| mips64vr5900-* | mips64vr5900el-* \
- 	| mipsisa32-* | mipsisa32el-* \
- 	| mipsisa32r2-* | mipsisa32r2el-* \
-+	| mipsisa32r6-* | mipsisa32r6el-* \
- 	| mipsisa64-* | mipsisa64el-* \
- 	| mipsisa64r2-* | mipsisa64r2el-* \
-+	| mipsisa64r6-* | mipsisa64r6el-* \
- 	| mipsisa64sb1-* | mipsisa64sb1el-* \
- 	| mipsisa64sr71k-* | mipsisa64sr71kel-* \
- 	| mipsr5900-* | mipsr5900el-* \
-@@ -415,16 +424,18 @@ case $basic_machine in
- 	| nios-* | nios2-* | nios2eb-* | nios2el-* \
- 	| none-* | np1-* | ns16k-* | ns32k-* \
- 	| open8-* \
-+	| or1k*-* \
- 	| orion-* \
- 	| pdp10-* | pdp11-* | pj-* | pjl-* | pn-* | power-* \
- 	| powerpc-* | powerpc64-* | powerpc64le-* | powerpcle-* \
- 	| pyramid-* \
-+	| riscv32-* | riscv64-* \
- 	| rl78-* | romp-* | rs6000-* | rx-* \
- 	| sh-* | sh[1234]-* | sh[24]a-* | sh[24]aeb-* | sh[23]e-* | sh[34]eb-* | sheb-* | shbe-* \
- 	| shle-* | sh[1234]le-* | sh3ele-* | sh64-* | sh64le-* \
- 	| sparc-* | sparc64-* | sparc64b-* | sparc64v-* | sparc86x-* | sparclet-* \
- 	| sparclite-* \
--	| sparcv8-* | sparcv9-* | sparcv9b-* | sparcv9v-* | sv1-* | sx?-* \
-+	| sparcv8-* | sparcv9-* | sparcv9b-* | sparcv9v-* | sv1-* | sx*-* \
- 	| tahoe-* \
- 	| tic30-* | tic4x-* | tic54x-* | tic55x-* | tic6x-* | tic80-* \
- 	| tile*-* \
-@@ -432,6 +443,7 @@ case $basic_machine in
- 	| ubicom32-* \
- 	| v850-* | v850e-* | v850e1-* | v850es-* | v850e2-* | v850e2v3-* \
- 	| vax-* \
-+	| visium-* \
- 	| we32k-* \
- 	| x86-* | x86_64-* | xc16x-* | xps100-* \
- 	| xstormy16-* | xtensa*-* \
-@@ -508,6 +520,9 @@ case $basic_machine in
- 		basic_machine=i386-pc
- 		os=-aros
- 		;;
-+	asmjs)
-+		basic_machine=asmjs-unknown
-+		;;
- 	aux)
- 		basic_machine=m68k-apple
- 		os=-aux
-@@ -769,6 +784,9 @@ case $basic_machine in
- 		basic_machine=m68k-isi
- 		os=-sysv
- 		;;
-+	leon-*|leon[3-9]-*)
-+		basic_machine=sparc-`echo $basic_machine | sed 's/-.*//'`
-+		;;
- 	m68knommu)
- 		basic_machine=m68k-unknown
- 		os=-linux
-@@ -824,6 +842,10 @@ case $basic_machine in
- 		basic_machine=powerpc-unknown
- 		os=-morphos
- 		;;
-+	moxiebox)
-+		basic_machine=moxie-unknown
-+		os=-moxiebox
-+		;;
- 	msdos)
- 		basic_machine=i386-pc
- 		os=-msdos
-@@ -1356,11 +1378,11 @@ case $os in
- 	      | -hpux* | -unos* | -osf* | -luna* | -dgux* | -auroraux* | -solaris* \
- 	      | -sym* | -kopensolaris* | -plan9* \
- 	      | -amigaos* | -amigados* | -msdos* | -newsos* | -unicos* | -aof* \
--	      | -aos* | -aros* \
-+	      | -aos* | -aros* | -cloudabi* | -sortix* \
- 	      | -nindy* | -vxsim* | -vxworks* | -ebmon* | -hms* | -mvs* \
- 	      | -clix* | -riscos* | -uniplus* | -iris* | -rtu* | -xenix* \
- 	      | -hiux* | -386bsd* | -knetbsd* | -mirbsd* | -netbsd* \
--	      | -bitrig* | -openbsd* | -solidbsd* \
-+	      | -bitrig* | -openbsd* | -solidbsd* | -libertybsd* \
- 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
- 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
- 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
-@@ -1369,14 +1391,15 @@ case $os in
- 	      | -cygwin* | -msys* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
- 	      | -mingw32* | -mingw64* | -linux-gnu* | -linux-android* \
- 	      | -linux-newlib* | -linux-musl* | -linux-uclibc* \
--	      | -uxpv* | -beos* | -mpeix* | -udk* \
-+	      | -uxpv* | -beos* | -mpeix* | -udk* | -moxiebox* \
- 	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
- 	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
- 	      | -storm-chaos* | -tops10* | -tenex* | -tops20* | -its* \
- 	      | -os2* | -vos* | -palmos* | -uclinux* | -nucleus* \
- 	      | -morphos* | -superux* | -rtmk* | -rtmk-nova* | -windiss* \
- 	      | -powermax* | -dnix* | -nx6 | -nx7 | -sei* | -dragonfly* \
--	      | -skyos* | -haiku* | -rdos* | -toppers* | -drops* | -es*)
-+	      | -skyos* | -haiku* | -rdos* | -toppers* | -drops* | -es* \
-+	      | -onefs* | -tirtos* | -phoenix*)
- 	# Remember, each alternative MUST END IN *, to match a version number.
- 		;;
- 	-qnx*)
-@@ -1508,6 +1531,8 @@ case $os in
- 		;;
- 	-nacl*)
- 		;;
-+	-ios)
-+		;;
- 	-none)
- 		;;
- 	*)
-@@ -1594,9 +1619,6 @@ case $basic_machine in
- 	mips*-*)
- 		os=-elf
- 		;;
--	or1k-*)
--		os=-elf
--		;;
- 	or32-*)
- 		os=-coff
- 		;;
+-OPENPOWERLINK_VERSION = V2.2.2
++OPENPOWERLINK_VERSION = V2.4.0
+ OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_VERSION)
+ OPENPOWERLINK_SOURCE = openPOWERLINK_$(OPENPOWERLINK_VERSION).tar.gz
+ OPENPOWERLINK_LICENSE = BSD-2c, GPLv2
+@@ -30,6 +30,7 @@ OPENPOWERLINK_CONF_OPTS += \
+ 	-DCFG_COMPILE_LIB_MN=$(OPENPOWERLINK_MN_ONOFF) \
+ 	-DCFG_COMPILE_LIB_MNAPP_USERINTF=OFF \
+ 	-DCFG_COMPILE_LIB_MNAPP_KERNELINTF=OFF \
++	-DCFG_COMPILE_LIB_MNAPP_PCIEINTF=OFF \
+ 	-DCFG_COMPILE_LIB_MNDRV_PCAP=OFF \
+ 	-DCFG_COMPILE_LIB_CN=$(OPENPOWERLINK_CN_ONOFF) \
+ 	-DCFG_COMPILE_LIB_CNAPP_USERINTF=OFF \
+@@ -41,6 +42,7 @@ OPENPOWERLINK_CONF_OPTS += \
+ 	-DCFG_COMPILE_LIB_MN=OFF \
+ 	-DCFG_COMPILE_LIB_MNAPP_USERINTF=$(OPENPOWERLINK_MN_ONOFF) \
+ 	-DCFG_COMPILE_LIB_MNAPP_KERNELINTF=OFF \
++	-DCFG_COMPILE_LIB_MNAPP_PCIEINTF=OFF \
+ 	-DCFG_COMPILE_LIB_MNDRV_PCAP=$(OPENPOWERLINK_MN_ONOFF) \
+ 	-DCFG_COMPILE_LIB_CN=OFF \
+ 	-DCFG_COMPILE_LIB_CNAPP_USERINTF=$(OPENPOWERLINK_CN_ONOFF) \
+@@ -51,6 +53,7 @@ OPENPOWERLINK_CONF_OPTS += \
+ 	-DCFG_COMPILE_LIB_MN=OFF \
+ 	-DCFG_COMPILE_LIB_MNAPP_USERINTF=OFF \
+ 	-DCFG_COMPILE_LIB_MNAPP_KERNELINTF=$(OPENPOWERLINK_MN_ONOFF) \
++	-DCFG_COMPILE_LIB_MNAPP_PCIEINTF=OFF \
+ 	-DCFG_COMPILE_LIB_MNDRV_PCAP=OFF \
+ 	-DCFG_COMPILE_LIB_CN=OFF \
+ 	-DCFG_COMPILE_LIB_CNAPP_USERINTF=OFF \
