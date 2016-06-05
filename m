@@ -1,22 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Jun 2016 22:21:05 +0200
-Subject: [Buildroot] [PATCH 2/2] package/openpowerlink: enable
-	openpowerlink PCIe driver support
-In-Reply-To: <1465051091-6494-2-git-send-email-romain.naour@gmail.com> (Romain
- Naour's message of "Sat, 4 Jun 2016 16:38:11 +0200")
-References: <1465051091-6494-1-git-send-email-romain.naour@gmail.com>
- <1465051091-6494-2-git-send-email-romain.naour@gmail.com>
-Message-ID: <878tyjl74e.fsf@dell.be.48ers.dk>
+Date: Sun, 05 Jun 2016 22:21:56 +0200
+Subject: [Buildroot] [PATCH] nginx: security bump to version 1.10.1
+In-Reply-To: <1465046084-4776-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 4 Jun 2016 10:14:44 -0300")
+References: <1465046084-4776-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87k2i3jsij.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Also, disable error=date-time for kernel >= 3.14 and fix musl build.
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Fixes:
+ > CVE-2016-4450 - NULL pointer dereference while writing client request
+ > body.
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
