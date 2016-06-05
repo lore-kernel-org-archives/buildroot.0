@@ -1,32 +1,133 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jun 2016 19:52:10 +0200
-Subject: [Buildroot] [PATCH 17/28] package/zlog: bump version
+Date: Sun,  5 Jun 2016 19:52:08 +0200
+Subject: [Buildroot] [PATCH 15/28] package/socketcand: bump version
 In-Reply-To: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465149141-15774-17-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1465149141-15774-15-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Removed patch applied upstream:
+https://github.com/dschanoeh/socketcand/commit/bdb3cd081a694f8f6924e399d944e32c1578235c
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/zlog/zlog.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../socketcand/0001-Remove-inline-keyword.patch    | 90 ----------------------
+ package/socketcand/socketcand.mk                   |  2 +-
+ 2 files changed, 1 insertion(+), 91 deletions(-)
+ delete mode 100644 package/socketcand/0001-Remove-inline-keyword.patch
 
-diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
-index fb8762c..a60e1b0 100644
---- a/package/zlog/zlog.mk
-+++ b/package/zlog/zlog.mk
+diff --git a/package/socketcand/0001-Remove-inline-keyword.patch b/package/socketcand/0001-Remove-inline-keyword.patch
+deleted file mode 100644
+index 92e8737..0000000
+--- a/package/socketcand/0001-Remove-inline-keyword.patch
++++ /dev/null
+@@ -1,90 +0,0 @@
+-From bdb3cd081a694f8f6924e399d944e32c1578235c Mon Sep 17 00:00:00 2001
+-From: Yegor Yefremov <yegorslists@googlemail.com>
+-Date: Wed, 22 Jul 2015 11:03:27 +0200
+-Subject: [PATCH] Remove inline keyword
+-
+-Fixes GCC5.x compilation issues related to C99 inline semantics.
+-
+-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+----
+- socketcand.h    | 8 ++++----
+- state_bcm.c     | 2 +-
+- state_control.c | 2 +-
+- state_isotp.c   | 2 +-
+- state_raw.c     | 2 +-
+- 5 files changed, 8 insertions(+), 8 deletions(-)
+-
+-diff --git a/socketcand.h b/socketcand.h
+-index a287fe2..39eef83 100644
+---- a/socketcand.h
+-+++ b/socketcand.h
+-@@ -27,10 +27,10 @@
+- 
+- #undef DEBUG_RECEPTION
+- 
+--inline void state_bcm();
+--inline void state_raw();
+--inline void state_isotp();
+--inline void state_control();
+-+void state_bcm();
+-+void state_raw();
+-+void state_isotp();
+-+void state_control();
+- 
+- extern int client_socket;
+- extern char **interface_names;
+-diff --git a/state_bcm.c b/state_bcm.c
+-index c63a0a9..0c980fa 100644
+---- a/state_bcm.c
+-+++ b/state_bcm.c
+-@@ -28,7 +28,7 @@ int sc = -1;
+- fd_set readfds;
+- struct timeval tv;
+- 
+--inline void state_bcm() {
+-+void state_bcm() {
+- 	int i, ret;
+- 	struct sockaddr_can caddr;
+- 	socklen_t caddrlen = sizeof(caddr);
+-diff --git a/state_control.c b/state_control.c
+-index 5f62b74..baa9df6 100644
+---- a/state_control.c
+-+++ b/state_control.c
+-@@ -17,7 +17,7 @@
+- #include <netinet/in.h>
+- #include <arpa/inet.h>
+- 
+--inline void state_control() {
+-+void state_control() {
+- 	char buf[MAXLEN];
+- 	int i, items;
+- 
+-diff --git a/state_isotp.c b/state_isotp.c
+-index ae66035..4005f94 100644
+---- a/state_isotp.c
+-+++ b/state_isotp.c
+-@@ -24,7 +24,7 @@
+- int si = -1;
+- fd_set readfds;
+- 
+--inline void state_isotp() {
+-+void state_isotp() {
+- 	int i, items, ret;
+- 
+- 	struct sockaddr_can addr;
+-diff --git a/state_raw.c b/state_raw.c
+-index 1bd2ece..99111ae 100644
+---- a/state_raw.c
+-+++ b/state_raw.c
+-@@ -31,7 +31,7 @@ char ctrlmsg[CMSG_SPACE(sizeof(struct timeval)) + CMSG_SPACE(sizeof(__u32))];
+- struct timeval tv;
+- struct cmsghdr *cmsg;
+- 
+--inline void state_raw() {
+-+void state_raw() {
+- 	char buf[MAXLEN];
+- 	int i, ret, items;
+- 
+--- 
+-2.1.4
+-
+diff --git a/package/socketcand/socketcand.mk b/package/socketcand/socketcand.mk
+index 10b8b5b..0cc56ef 100644
+--- a/package/socketcand/socketcand.mk
++++ b/package/socketcand/socketcand.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZLOG_VERSION = ca6162be1608839e99c6388c28488c51ccf98e4a
-+ZLOG_VERSION = 6ddb9bbf3ff0123e701bf60996f351576ebe9c00
- ZLOG_SITE = $(call github,HardySimpson,zlog,$(ZLOG_VERSION))
- ZLOG_LICENSE = LGPLv2.1
- ZLOG_LICENSE_FILES = COPYING
+-SOCKETCAND_VERSION = 8339e62a6bf60be571672678fb1de544768cf40e
++SOCKETCAND_VERSION = df7fb4ff8a4439d7737fe2df3540e1ab7465721a
+ SOCKETCAND_SITE = $(call github,dschanoeh,socketcand,$(SOCKETCAND_VERSION))
+ SOCKETCAND_AUTORECONF = YES
+ SOCKETCAND_LICENSE = BSD-3c or GPLv2
 -- 
 2.8.1
