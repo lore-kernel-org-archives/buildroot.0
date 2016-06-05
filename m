@@ -1,66 +1,58 @@
-From: Doha Ehab <dohaehab@gmail.com>
-Date: Mon, 6 Jun 2016 00:06:43 +0200
-Subject: [Buildroot] Building opencv using buildroot
-Message-ID: <CAEjFr-bhO5DBoSsQ1R0Yzo=cKWThUjQRWoXCiaVF7W3pMX+PSQ@mail.gmail.com>
+From: Stanislas Bach <sbach@0g.re>
+Date: Sun, 5 Jun 2016 15:54:58 -0700
+Subject: [Buildroot] [PATCH] xserver_xorg-server: apply modesettings
+ patch for 1.18.3 only
+In-Reply-To: <87y46jl7ek.fsf@dell.be.48ers.dk>
+References: <575344F8.2030103@0g.re> <87y46jl7ek.fsf@dell.be.48ers.dk>
+Message-ID: <5754ADC2.4070209@0g.re>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I am using Buildroot 2016.05-rc1 to statically build openvc. so From the
-configurations menu  target packges -> libraries -> graphics-> opencv-2.4 I
-have selected all features for opencv(except v4l and qt backend support).
-After "make" I compiled a simple code that reads a jpg image using this
-command:
+Hello Peter,
 
-/buildroot-2Final/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-g++
-ocv.c -L/buildroot-2Final/output/build/opencv-2.4.12.3/ -lopencv_calib3d
--lopencv_contrib -lopencv_core -lopencv_features2d -lopencv_flann
--lopencv_highgui -lopencv_imgproc -lopencv_legacy -lopencv_ml
--lopencv_objdetect  -lopencv_photo -lopencv_stitching -lopencv_superres
--lopencv_ts -lopencv_video -lopencv_videostab -lz -lrt -lpthread -pthread
--lm   -o ocv
+To give more details about this patch, I found the error while trying to 
+configure/compile a root-filesystem for a Tegra2 platform:
+When enabling BR2_PACKAGE_NVIDIA_TEGRA23, one must select 
+BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14 causing the issue.
 
-I got this error  :
-buildroot-2Final/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libopencv_highgui.a(grfmt_jpeg.cpp.o):
-In function `cv::my_jpeg_load_dht(jpeg_decompress_struct*, unsigned char*,
-JHUFF_TBL**, JHUFF_TBL**) [clone .constprop.39]':
-grfmt_jpeg.cpp:(.text.unlikely._ZN2cvL16my_jpeg_load_dhtEP22jpeg_decompress_structPhPP9JHUFF_TBLS5_.constprop.39+0xec):
-undefined reference to `jpeg_alloc_huff_table'
-/buildroot-2Final/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libopencv_highgui.a(grfmt_jpeg.cpp.o):
-In function `cv::JpegEncoder::write(cv::Mat const&, std::vector<int,
-std::allocator<int> > const&)':
-grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0xb4):
-undefined reference to `jpeg_CreateCompress'
-grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0xbc):
-undefined reference to `jpeg_std_error'
-grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x170):
-undefined reference to `jpeg_destroy_compress'
-grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x270):
-undefined reference to `jpeg_set_defaults'
-grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x280):
-undefined reference to `jpeg_set_quality'
-grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x28c):
-undefined reference to `jpeg_start_compress'
-grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x308):
-undefined reference to `jpeg_write_scanlines'
-grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x320):
-undefined reference to `jpeg_finish_compress'
-grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x3a8):
-undefined reference to `jpeg_stdio_dest'
-grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x41c):
-undefined reference to `jpeg_write_scanlines'
-grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x4a8):
-undefined reference to `jpeg_write_scanlines'
+On 06/05/2016 01:14 PM, Peter Korsgaard wrote:
+>>>>>> "Stanislas" == Stanislas Bach <sbach@0g.re> writes:
+>
+>   > We currently have two choices for the server's version (1.18.3, and 1.14.7)
+>   > but the following patch will only apply for versions >= 1.17.2.
+>
+>   > If 1.14.7 is selected the build will fail with the following error:
+>
+>   > Applying 0001-modesettings-needs-dri2.patch using patch:
+>   > patching file configure.ac
+>   > Hunk #1 FAILED at 2036
+>
+>   > So move this patch to an appropriate version folder in the package's
+>   > directory. It should be good enough until this package provides more
+>   > versions >= 1.17.2.
+>
+>   > Signed-off-by: Stanislas Bach <sbach@0g.re>
+>
+>   > diff --git
+>   > a/package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch
+>   > b/package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch
+>
+> Thanks! Your mailer unfortunately corrupted the patch so I couldn't
+> apply this directly. It would also be helpful for reviews if you
+> configure git to detect renames (git config --global diff.renames copy -
+> Or simply upgrade your git version, as it is enabled by default
+> nowadays).
 
-I have select jpeg support also there is no liblibjpeg in
-/buildroot-2Final/output/build/opencv-2.4.12.3/3rdparty. I want to know
-what I am missing or doing wrong.
+Sorry, and thank you for the advice, I will be careful next time in 
+order to ease your work.
 
-Regards
-Doha
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160606/e1094a96/attachment.html>
+> Committed with the patch fixed, thanks.
+
+Thanks for accepting it!
+
+-- 
+Stanislas Bach
+GPG / D0B7 1846 5B5F 224F AF81
