@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jun 2016 19:52:04 +0200
-Subject: [Buildroot] [PATCH 11/28] package/janus-gateway: bump version to
-	v0.1.0
+Date: Sun,  5 Jun 2016 19:52:09 +0200
+Subject: [Buildroot] [PATCH 16/28] package/vim: bump version to v7.4.1902
 In-Reply-To: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465149141-15774-11-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1465149141-15774-16-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,75 +12,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/janus-gateway/0001-disable-ssp.patch                      | 6 ++++--
- .../0002-Add-test-for-Wunused-but-set-variable.patch              | 8 +++++---
- package/janus-gateway/janus-gateway.mk                            | 2 +-
- 3 files changed, 10 insertions(+), 6 deletions(-)
+ package/vim/vim.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/janus-gateway/0001-disable-ssp.patch b/package/janus-gateway/0001-disable-ssp.patch
-index 9ef184a..f03b585 100644
---- a/package/janus-gateway/0001-disable-ssp.patch
-+++ b/package/janus-gateway/0001-disable-ssp.patch
-@@ -5,6 +5,8 @@ the package user pass the appropriate CFLAGS to enable SSP if needed.
- 
- Signed-off-by: Gregory Dymarek <gregd72002@gmail.com>
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+(rebased against v0.1.0)
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- 
- diff -rupN janus-gateway-master.orig/Makefile.am janus-gateway-master/Makefile.am
- --- janus-gateway-master.orig/Makefile.am	2014-11-27 14:36:31.000000000 +0000
-@@ -13,8 +15,8 @@ diff -rupN janus-gateway-master.orig/Makefile.am janus-gateway-master/Makefile.a
-  # some fairly big refactoring though, which can wait.
-  # AM_CFLAGS += -Wshadow -Wstrict-aliasing=2
-  
---AM_CFLAGS += -fstack-protector-all -g -ggdb -fPIC -rdynamic
--+AM_CFLAGS += -g -ggdb -fPIC -rdynamic
-+-AM_CFLAGS += -fstack-protector-all -g -ggdb -fPIC -rdynamic -pthread
-++AM_CFLAGS += -g -ggdb -fPIC -rdynamic -pthread
-  
-  # FIXME: make docs work with distcheck
-  DISTCHECK_CONFIGURE_FLAGS = --disable-docs --enable-post-processing
-diff --git a/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch b/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
-index 14acae5..13bc21e 100644
---- a/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
-+++ b/package/janus-gateway/0002-Add-test-for-Wunused-but-set-variable.patch
-@@ -14,6 +14,8 @@ and uses it to detect if the -Wunused-but-set-variable option is
- supported, and only uses it in this case.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+(rebased against v0.1.0)
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  Makefile.am                 |  2 +-
-  configure.ac                |  3 ++
-@@ -29,11 +31,11 @@ index 5d23e0b..0f51f6a 100644
-  	-Wnested-externs -Wstrict-prototypes -Wunsafe-loop-optimizations \
-  	-Wwrite-strings -Wno-missing-field-initializers -Wno-unused-parameter \
-  	-Wcast-align -Wformat-nonliteral -Wformat-security -Wswitch-default \
---	-Wmissing-include-dirs -Waggregate-return -Wunused-but-set-variable \
--+	-Wmissing-include-dirs -Waggregate-return @GCC_WARN_UNUSED_BUT_SET@ \
-+-	-Wmissing-include-dirs -Wno-aggregate-return -Wunused-but-set-variable \
-++	-Wmissing-include-dirs -Wno-aggregate-return @GCC_WARN_UNUSED_BUT_SET@ \
-  	-Warray-bounds -Wold-style-definition -Wsign-compare -Wlarger-than=65537
-  AM_CFLAGS += -Wno-undef  # sophiasip is not -Wundef--safe
-- AM_CFLAGS += -Wredundant-decls  # sophiasip also contains redundant declarations
-+ AM_CFLAGS += -Wno-redundant-decls  # sophiasip also contains redundant declarations
- diff --git a/configure.ac b/configure.ac
- index 17870a7..f9bb1e4 100644
- --- a/configure.ac
-diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
-index e1361d3..206a855 100644
---- a/package/janus-gateway/janus-gateway.mk
-+++ b/package/janus-gateway/janus-gateway.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 6e05050..c2f6cac 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,8 +4,7 @@
  #
  ################################################################################
  
--JANUS_GATEWAY_VERSION = c632c1e9da5ffd8c34df6086a1aa5a8511a2a02d
-+JANUS_GATEWAY_VERSION = v0.1.0
- JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,$(JANUS_GATEWAY_VERSION))
- JANUS_GATEWAY_LICENSE = GPLv3
- JANUS_GATEWAY_LICENSE_FILES = COPYING
+-# 7.4 release patchlevel 889
+-VIM_VERSION = 74b738d414b2895b3365e26ae3b7792eb82ccf47
++VIM_VERSION = v7.4.1902
+ VIM_SITE = $(call github,vim,vim,$(VIM_VERSION))
+ # Win over busybox vi since vim is more feature-rich
+ VIM_DEPENDENCIES = \
 -- 
 2.8.1
