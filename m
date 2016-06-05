@@ -1,32 +1,54 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jun 2016 19:52:05 +0200
-Subject: [Buildroot] [PATCH 12/28] package/libshairplay: bump version
+Date: Sun,  5 Jun 2016 19:52:02 +0200
+Subject: [Buildroot] [PATCH 09/28] package/iputils: bump version
 In-Reply-To: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465149141-15774-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1465149141-15774-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+tracepath and tracepath6 were merged recently:
+https://github.com/iputils/iputils/pull/48
+
+Therefore we do not need to install tracepath6 anymore.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libshairplay/libshairplay.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/iputils/iputils.hash | 2 +-
+ package/iputils/iputils.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/libshairplay/libshairplay.mk b/package/libshairplay/libshairplay.mk
-index 35bbeac..4bdd1a0 100644
---- a/package/libshairplay/libshairplay.mk
-+++ b/package/libshairplay/libshairplay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
+index 42ea5fd..d7d3f5c 100644
+--- a/package/iputils/iputils.hash
++++ b/package/iputils/iputils.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	08b9f686fcc874f75b465f90f3e831aa9ac1f2e043f4bb61e6d99868e8869025	iputils-31d947cf7156cf78d3f57e0bd82b33e6f6ece6b4.tar.gz
++sha256	79e22e940b6f52c37810657c8f12e7ba85692b517d6cd6e90cbceac2d94fc5e8	iputils-55828d1fef3fed7f07abcbf7be9282a9662e78c7.tar.gz
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 18e48b4..d6398f7 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -11,7 +11,7 @@
+ # and IPv6 updates.
+ # http://www.spinics.net/lists/netdev/msg279881.html
  
--LIBSHAIRPLAY_VERSION = 64d59e3087f829006d091fa0d114efb50972a2bf
-+LIBSHAIRPLAY_VERSION = ce80e005908f41d0e6fde1c4a21e9cb8ee54007b
- LIBSHAIRPLAY_SITE = $(call github,juhovh,shairplay,$(LIBSHAIRPLAY_VERSION))
- LIBSHAIRPLAY_INSTALL_STAGING = YES
- LIBSHAIRPLAY_AUTORECONF = YES
+-IPUTILS_VERSION = 31d947cf7156cf78d3f57e0bd82b33e6f6ece6b4
++IPUTILS_VERSION = 55828d1fef3fed7f07abcbf7be9282a9662e78c7
+ IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
+ IPUTILS_LICENSE = GPLv2+, BSD-3c, BSD-4c
+ # Only includes a license file for BSD
+@@ -66,7 +66,6 @@ define IPUTILS_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 755 $(@D)/rdisc       $(TARGET_DIR)/sbin/rdisc
+ 	$(INSTALL) -D -m 755 $(@D)/tftpd       $(TARGET_DIR)/usr/sbin/in.tftpd
+ 	$(INSTALL) -D -m 755 $(@D)/tracepath   $(TARGET_DIR)/bin/tracepath
+-	$(INSTALL) -D -m 755 $(@D)/tracepath6  $(TARGET_DIR)/bin/tracepath6
+ 	$(INSTALL) -D -m 755 $(@D)/traceroute6 $(TARGET_DIR)/bin/traceroute6
+ endef
+ 
 -- 
 2.8.1
