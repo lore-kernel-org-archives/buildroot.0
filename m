@@ -1,24 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Jun 2016 22:25:14 +0200
-Subject: [Buildroot] [PATCH] odroid c2 linux: bump to revision
-	f4bf29710749c450005cc0e61d58b2fd335385a9
-In-Reply-To: <20160604114630.1817-1-daggs@gmx.com> (Dagg's message of "Sat, 4
- Jun 2016 14:46:30 +0300")
-References: <20160604114630.1817-1-daggs@gmx.com>
-Message-ID: <87bn3fjsd1.fsf@dell.be.48ers.dk>
+Date: Sun, 05 Jun 2016 22:27:01 +0200
+Subject: [Buildroot] [PATCH 1/1] support/gnuconfig: bump version to
+	2016-05-15
+In-Reply-To: <1465057789-14174-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sat, 4 Jun 2016 18:29:49 +0200")
+References: <1465057789-14174-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <877fe3jsa2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dagg" == Dagg  <daggs@gmx.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > the odorid c2 kernel from hardkernel has advanced a bit, latest version seems to work ok.
- > Signed-off-by: Dagg <daggsi@gmx.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Thanks. Please use your real / full name in from and signed-off-by so I
-can commit - Thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
