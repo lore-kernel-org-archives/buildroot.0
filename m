@@ -1,32 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jun 2016 21:35:08 +0200
-Subject: [Buildroot] [git commit] package/glmark2: bump version
-Message-ID: <20160605200530.237197FB44@busybox.osuosl.org>
+Date: Sun, 5 Jun 2016 21:59:32 +0200
+Subject: [Buildroot] [git commit] package/v4l2grab: bump version
+Message-ID: <20160605200530.AE8D27FB44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=878108c56034c77233e64e053756ad6a3daee57c
+commit: https://git.buildroot.net/buildroot/commit/?id=2da1a7ad753df5663697355deeb1dafa51d7a988
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glmark2/glmark2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/v4l2grab/v4l2grab.hash | 2 +-
+ package/v4l2grab/v4l2grab.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
-index bd5b51a..2f662fe 100644
---- a/package/glmark2/glmark2.mk
-+++ b/package/glmark2/glmark2.mk
+diff --git a/package/v4l2grab/v4l2grab.hash b/package/v4l2grab/v4l2grab.hash
+index 17beeec..a59c8af 100644
+--- a/package/v4l2grab/v4l2grab.hash
++++ b/package/v4l2grab/v4l2grab.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	ed5b9ca16c3b82d283df69c46aabd6c976b166b4e77b660288d86a147b68caf9	v4l2grab-6a52a234e227a30e16591d1a0e7afc52a2c5d964.tar.gz
++sha256 9a8d0d1ca5ac9fb9f66e00300bb3265d156cf1cb67eb30f6e6637c83b0b507a1 v4l2grab-f8d8844d52387b3db7b8736f5e86156d9374f781.tar.gz
+diff --git a/package/v4l2grab/v4l2grab.mk b/package/v4l2grab/v4l2grab.mk
+index b6f26c6..f3a8967 100644
+--- a/package/v4l2grab/v4l2grab.mk
++++ b/package/v4l2grab/v4l2grab.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GLMARK2_VERSION = 499aa81a68fb4c8aac1c80f0d6a4cce05941c4cc
-+GLMARK2_VERSION = fa71af2dfab711fac87b9504b6fc9862f44bf72a
- GLMARK2_SITE = $(call github,glmark2,glmark2,$(GLMARK2_VERSION))
- GLMARK2_LICENSE = GPLv3+ SGIv1
- GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
+-V4L2GRAB_VERSION = 6a52a234e227a30e16591d1a0e7afc52a2c5d964
++V4L2GRAB_VERSION = f8d8844d52387b3db7b8736f5e86156d9374f781
+ V4L2GRAB_SITE = $(call github,twam,v4l2grab,$(V4L2GRAB_VERSION))
+ V4L2GRAB_LICENSE = GPLv2+
+ V4L2GRAB_LICENSE_FILES = LICENSE.md
