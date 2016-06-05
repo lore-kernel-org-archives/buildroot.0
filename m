@@ -1,41 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jun 2016 22:03:49 +0200
-Subject: [Buildroot] [git commit] package/hidapi: bump version
-Message-ID: <20160605200531.0671581E84@busybox.osuosl.org>
+Date: Sun, 5 Jun 2016 22:01:29 +0200
+Subject: [Buildroot] [git commit] package/zyre: bump version
+Message-ID: <20160605200530.D068481E84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d442390512401cc65fc504117e5bc9f7ed90952
+commit: https://git.buildroot.net/buildroot/commit/?id=4fc6bf68d51428a9163137ef4a6ec7ce3a8b4d97
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/hidapi/hidapi.hash | 2 +-
- package/hidapi/hidapi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/zyre/zyre.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/hidapi/hidapi.hash b/package/hidapi/hidapi.hash
-index ba00df2..ed22c78 100644
---- a/package/hidapi/hidapi.hash
-+++ b/package/hidapi/hidapi.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 33e206f5e145fc1bc6aeb55084d71b55d686533d23ad5bb762746ceba81e728b  hidapi-d17db57b9d4354752e0af42f5f33007a42ef2906.tar.gz
-+sha256 f2ffe5dbba12dfa0a647ae71b1ec5612fed4c20322ef6f6fd46f6f9713ed1a8e  hidapi-b5b2e1779b6cd2edda3066bbbf0921a2d6b1c3c0.tar.gz
-diff --git a/package/hidapi/hidapi.mk b/package/hidapi/hidapi.mk
-index 270836c..9922efc 100644
---- a/package/hidapi/hidapi.mk
-+++ b/package/hidapi/hidapi.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/zyre/zyre.mk b/package/zyre/zyre.mk
+index b17dfd0..41c11a8 100644
+--- a/package/zyre/zyre.mk
++++ b/package/zyre/zyre.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Use master version as the current stable is very old and some bugs
- # have been fixed since then.
--HIDAPI_VERSION = d17db57b9d4354752e0af42f5f33007a42ef2906
-+HIDAPI_VERSION = b5b2e1779b6cd2edda3066bbbf0921a2d6b1c3c0
- HIDAPI_SITE = $(call github,signal11,hidapi,$(HIDAPI_VERSION))
- HIDAPI_INSTALL_STAGING = YES
- # No configure provided, so we need to autoreconf.
+-ZYRE_VERSION = a351468b7d313fc90c446668122365851a9c60e4
++ZYRE_VERSION = 1d949e4bf79b694ea883c325f5813e87ddc2a687
+ ZYRE_SITE = $(call github,zeromq,zyre,$(ZYRE_VERSION))
+ ZYRE_LICENSE = LGPLv3+
+ ZYRE_LICENSE_FILES = COPYING COPYING.LESSER
