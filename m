@@ -1,70 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Jun 2016 00:00:21 +0200
-Subject: [Buildroot] [PATCH] uclibc: the internal toolchain only uses
- uClibc-ng
-In-Reply-To: <20160604205347.GA13841@waldemar-brodkorb.de>
-References: <20160604205347.GA13841@waldemar-brodkorb.de>
-Message-ID: <20160605220021.GD3832@free.fr>
+From: Doha Ehab <dohaehab@gmail.com>
+Date: Mon, 6 Jun 2016 00:06:43 +0200
+Subject: [Buildroot] Building opencv using buildroot
+Message-ID: <CAEjFr-bhO5DBoSsQ1R0Yzo=cKWThUjQRWoXCiaVF7W3pMX+PSQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar, All,
+Hello,
+I am using Buildroot 2016.05-rc1 to statically build openvc. so From the
+configurations menu  target packges -> libraries -> graphics-> opencv-2.4 I
+have selected all features for opencv(except v4l and qt backend support).
+After "make" I compiled a simple code that reads a jpg image using this
+command:
 
-On 2016-06-04 22:53 +0200, Waldemar Brodkorb spake thusly:
-> Point to the right website and tell the user the right name.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+/buildroot-2Final/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-g++
+ocv.c -L/buildroot-2Final/output/build/opencv-2.4.12.3/ -lopencv_calib3d
+-lopencv_contrib -lopencv_core -lopencv_features2d -lopencv_flann
+-lopencv_highgui -lopencv_imgproc -lopencv_legacy -lopencv_ml
+-lopencv_objdetect  -lopencv_photo -lopencv_stitching -lopencv_superres
+-lopencv_ts -lopencv_video -lopencv_videostab -lz -lrt -lpthread -pthread
+-lm   -o ocv
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I got this error  :
+buildroot-2Final/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libopencv_highgui.a(grfmt_jpeg.cpp.o):
+In function `cv::my_jpeg_load_dht(jpeg_decompress_struct*, unsigned char*,
+JHUFF_TBL**, JHUFF_TBL**) [clone .constprop.39]':
+grfmt_jpeg.cpp:(.text.unlikely._ZN2cvL16my_jpeg_load_dhtEP22jpeg_decompress_structPhPP9JHUFF_TBLS5_.constprop.39+0xec):
+undefined reference to `jpeg_alloc_huff_table'
+/buildroot-2Final/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libopencv_highgui.a(grfmt_jpeg.cpp.o):
+In function `cv::JpegEncoder::write(cv::Mat const&, std::vector<int,
+std::allocator<int> > const&)':
+grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0xb4):
+undefined reference to `jpeg_CreateCompress'
+grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0xbc):
+undefined reference to `jpeg_std_error'
+grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x170):
+undefined reference to `jpeg_destroy_compress'
+grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x270):
+undefined reference to `jpeg_set_defaults'
+grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x280):
+undefined reference to `jpeg_set_quality'
+grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x28c):
+undefined reference to `jpeg_start_compress'
+grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x308):
+undefined reference to `jpeg_write_scanlines'
+grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x320):
+undefined reference to `jpeg_finish_compress'
+grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x3a8):
+undefined reference to `jpeg_stdio_dest'
+grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x41c):
+undefined reference to `jpeg_write_scanlines'
+grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x4a8):
+undefined reference to `jpeg_write_scanlines'
 
-Regards,
-Yann E. MORIN.
+I have select jpeg support also there is no liblibjpeg in
+/buildroot-2Final/output/build/opencv-2.4.12.3/3rdparty. I want to know
+what I am missing or doing wrong.
 
-> ---
->  toolchain/toolchain-buildroot/Config.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 2b0ebc1..0cf632f 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -27,7 +27,7 @@ choice
->  		|| BR2_microblaze || BR2_powerpc64
->  
->  config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
-> -	bool "uClibc"
-> +	bool "uClibc-ng"
->  	select BR2_TOOLCHAIN_USES_UCLIBC
->  	depends on BR2_arcle   || BR2_arceb  || BR2_arm    || BR2_armeb    || \
->  		   BR2_bfin    || BR2_i386   || BR2_m68k   || \
-> @@ -37,10 +37,10 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
->  	# Unsupported for MIPS R6
->  	depends on !BR2_mips_32r6 && !BR2_mips_64r6
->  	help
-> -	  This option selects uClibc as the C library for the
-> +	  This option selects uClibc-ng as the C library for the
->  	  cross-compilation toolchain.
->  
-> -	  http://uclibc.org
-> +	  http://uclibc-ng.org
->  
->  config BR2_TOOLCHAIN_BUILDROOT_GLIBC
->  	bool "glibc"
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Regards
+Doha
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160606/e1094a96/attachment.html>
