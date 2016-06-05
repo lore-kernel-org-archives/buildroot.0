@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Jun 2016 21:35:44 +0200
-Subject: [Buildroot] [PATCH 05/28] package/glmark2: bump version
-In-Reply-To: <1465149141-15774-5-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Sun, 5 Jun 2016 19:51:58 +0200")
+Date: Sun, 05 Jun 2016 21:36:50 +0200
+Subject: [Buildroot] [PATCH 06/28] package/gmrender-resurrect: bump
+	version
+In-Reply-To: <1465149141-15774-6-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sun, 5 Jun 2016 19:51:59 +0200")
 References: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
- <1465149141-15774-5-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <877fe3qvhr.fsf@dell.be.48ers.dk>
+ <1465149141-15774-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <8737orqvfx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,8 +17,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Committed, thanks. Please send a followup patch adding a .hash file,
-thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
