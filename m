@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jun 2016 23:39:55 +0200
-Subject: [Buildroot] [PATCH 02/12] package/can-utils: add hash
+Date: Sun,  5 Jun 2016 23:40:03 +0200
+Subject: [Buildroot] [PATCH 10/12] package/vim: add hash
 In-Reply-To: <1465162805-13367-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1465162805-13367-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465162805-13367-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1465162805-13367-10-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/can-utils/can-utils.hash | 2 ++
+ package/vim/vim.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/can-utils/can-utils.hash
+ create mode 100644 package/vim/vim.hash
 
-diff --git a/package/can-utils/can-utils.hash b/package/can-utils/can-utils.hash
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
 new file mode 100644
-index 0000000..09e3c4d
+index 0000000..bb2d013
 --- /dev/null
-+++ b/package/can-utils/can-utils.hash
++++ b/package/vim/vim.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 8db112e69fceef16617895fa9d4222221fdf44c19eef64912480336c59904765 can-utils-b70a76670dbe8925c2a7c75f90d36a28a8878d7a.tar.gz
++sha256 7c90f16e1d1547a864f4419cd7d066ca4ce822de285b2a718f9274e5241fe2fd vim-v7.4.1902.tar.gz
 -- 
 2.8.1
