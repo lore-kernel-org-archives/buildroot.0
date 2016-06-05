@@ -1,24 +1,22 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Jun 2016 23:58:52 +0200
-Subject: [Buildroot] [PATCH 2/2] package/omxplayer: remove
- BR2_PACKAGE_BOOST_ARCH_SUPPORTS option
-In-Reply-To: <1465045981-8529-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1465045981-8529-1-git-send-email-bernd.kuhls@t-online.de>
- <1465045981-8529-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160605215852.GC3832@free.fr>
+Date: Mon, 6 Jun 2016 00:00:21 +0200
+Subject: [Buildroot] [PATCH] uclibc: the internal toolchain only uses
+ uClibc-ng
+In-Reply-To: <20160604205347.GA13841@waldemar-brodkorb.de>
+References: <20160604205347.GA13841@waldemar-brodkorb.de>
+Message-ID: <20160605220021.GD3832@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Waldemar, All,
 
-On 2016-06-04 15:13 +0200, Bernd Kuhls spake thusly:
-> The option was globally removed with
-> https://git.busybox.net/buildroot/commit/package/boost?id=668ce456448d671f30bf98c4d4819a88b0bf9f4e
+On 2016-06-04 22:53 +0200, Waldemar Brodkorb spake thusly:
+> Point to the right website and tell the user the right name.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
@@ -26,31 +24,37 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/omxplayer/Config.in | 2 --
->  1 file changed, 2 deletions(-)
+>  toolchain/toolchain-buildroot/Config.in | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/omxplayer/Config.in b/package/omxplayer/Config.in
-> index b8946e9..b417aa3 100644
-> --- a/package/omxplayer/Config.in
-> +++ b/package/omxplayer/Config.in
-> @@ -2,7 +2,6 @@ config BR2_PACKAGE_OMXPLAYER
->  	bool "omxplayer"
->  	depends on BR2_arm
->  	depends on BR2_USE_MMU # dbus
-> -	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
->  	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS # ffmpeg
->  	depends on BR2_INSTALL_LIBSTDCPP # boost
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libusb
-> @@ -28,7 +27,6 @@ config BR2_PACKAGE_OMXPLAYER
->  comment "omxplayer needs rpi-userland and a toolchain w/ C++, threads, wchar, dynamic library"
->  	depends on BR2_arm
->  	depends on BR2_USE_MMU
-> -	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
->  	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
->  	depends on !BR2_PACKAGE_RPI_USERLAND
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index 2b0ebc1..0cf632f 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -27,7 +27,7 @@ choice
+>  		|| BR2_microblaze || BR2_powerpc64
+>  
+>  config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+> -	bool "uClibc"
+> +	bool "uClibc-ng"
+>  	select BR2_TOOLCHAIN_USES_UCLIBC
+>  	depends on BR2_arcle   || BR2_arceb  || BR2_arm    || BR2_armeb    || \
+>  		   BR2_bfin    || BR2_i386   || BR2_m68k   || \
+> @@ -37,10 +37,10 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+>  	# Unsupported for MIPS R6
+>  	depends on !BR2_mips_32r6 && !BR2_mips_64r6
+>  	help
+> -	  This option selects uClibc as the C library for the
+> +	  This option selects uClibc-ng as the C library for the
+>  	  cross-compilation toolchain.
+>  
+> -	  http://uclibc.org
+> +	  http://uclibc-ng.org
+>  
+>  config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+>  	bool "glibc"
 > -- 
-> 2.8.1
+> 2.1.4
 > 
 > _______________________________________________
 > buildroot mailing list
