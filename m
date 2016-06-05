@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jun 2016 21:59:32 +0200
-Subject: [Buildroot] [git commit] package/v4l2grab: bump version
-Message-ID: <20160605200530.AE8D27FB44@busybox.osuosl.org>
+Date: Sun, 5 Jun 2016 22:02:41 +0200
+Subject: [Buildroot] [git commit] package/php-ssh2: bump version
+Message-ID: <20160605200530.E7ECC81E84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2da1a7ad753df5663697355deeb1dafa51d7a988
+commit: https://git.buildroot.net/buildroot/commit/?id=57ade6f19075d4c55a49b85a92ef7ebf9cab8a84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/v4l2grab/v4l2grab.hash | 2 +-
- package/v4l2grab/v4l2grab.mk   | 2 +-
+ package/php-ssh2/php-ssh2.hash | 2 +-
+ package/php-ssh2/php-ssh2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/v4l2grab/v4l2grab.hash b/package/v4l2grab/v4l2grab.hash
-index 17beeec..a59c8af 100644
---- a/package/v4l2grab/v4l2grab.hash
-+++ b/package/v4l2grab/v4l2grab.hash
+diff --git a/package/php-ssh2/php-ssh2.hash b/package/php-ssh2/php-ssh2.hash
+index 1e046df..b514601 100644
+--- a/package/php-ssh2/php-ssh2.hash
++++ b/package/php-ssh2/php-ssh2.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	ed5b9ca16c3b82d283df69c46aabd6c976b166b4e77b660288d86a147b68caf9	v4l2grab-6a52a234e227a30e16591d1a0e7afc52a2c5d964.tar.gz
-+sha256 9a8d0d1ca5ac9fb9f66e00300bb3265d156cf1cb67eb30f6e6637c83b0b507a1 v4l2grab-f8d8844d52387b3db7b8736f5e86156d9374f781.tar.gz
-diff --git a/package/v4l2grab/v4l2grab.mk b/package/v4l2grab/v4l2grab.mk
-index b6f26c6..f3a8967 100644
---- a/package/v4l2grab/v4l2grab.mk
-+++ b/package/v4l2grab/v4l2grab.mk
+-sha256 877f2fa9a709aa2dd9567848fae7b45ecac359904296a0aedbf718e99d8568f5  php-ssh2-aa1739ac26c2177d33ab8d064021032bdc2c3a40.tar.gz
++sha256 3d79a6c9ffed3fd6ec16e834c0cc93cf125d9f5bdbb951b8b76a3507498548d5  php-ssh2-12dd52236c601577a63e33ee71e3ce6dad811e40.tar.gz
+diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
+index cfe6070..2b61632 100644
+--- a/package/php-ssh2/php-ssh2.mk
++++ b/package/php-ssh2/php-ssh2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--V4L2GRAB_VERSION = 6a52a234e227a30e16591d1a0e7afc52a2c5d964
-+V4L2GRAB_VERSION = f8d8844d52387b3db7b8736f5e86156d9374f781
- V4L2GRAB_SITE = $(call github,twam,v4l2grab,$(V4L2GRAB_VERSION))
- V4L2GRAB_LICENSE = GPLv2+
- V4L2GRAB_LICENSE_FILES = LICENSE.md
+-PHP_SSH2_VERSION = aa1739ac26c2177d33ab8d064021032bdc2c3a40
++PHP_SSH2_VERSION = 12dd52236c601577a63e33ee71e3ce6dad811e40
+ PHP_SSH2_SITE = $(call github,php,pecl-networking-ssh2,$(PHP_SSH2_VERSION))
+ PHP_SSH2_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+ 	--with-ssh2=$(STAGING_DIR)/usr
