@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jun 2016 19:52:09 +0200
-Subject: [Buildroot] [PATCH 16/28] package/vim: bump version to v7.4.1902
+Date: Sun,  5 Jun 2016 19:52:11 +0200
+Subject: [Buildroot] [PATCH 18/28] package/zxing-cpp: bump version
 In-Reply-To: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465149141-15774-16-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1465149141-15774-18-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/vim/vim.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/zxing-cpp/zxing-cpp.hash | 2 +-
+ package/zxing-cpp/zxing-cpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 6e05050..c2f6cac 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,8 +4,7 @@
+diff --git a/package/zxing-cpp/zxing-cpp.hash b/package/zxing-cpp/zxing-cpp.hash
+index e38a612..4625fbf 100644
+--- a/package/zxing-cpp/zxing-cpp.hash
++++ b/package/zxing-cpp/zxing-cpp.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 164c0bc9f1ce2ff5659fddce6da71f8cdda091751f3b71140c090b58451a2b04 zxing-cpp-fa34227d26e0b388e65b81936a2681952928f5be.tar.gz
++sha256 643c931a35c363109cd38c5a1526505b75f57c0634907cb7b6bc24f6f48eb32b zxing-cpp-0db7f855135222becff193671faae79c083424b6.tar.gz
+diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
+index 7344dc1..7113ae2 100644
+--- a/package/zxing-cpp/zxing-cpp.mk
++++ b/package/zxing-cpp/zxing-cpp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--# 7.4 release patchlevel 889
--VIM_VERSION = 74b738d414b2895b3365e26ae3b7792eb82ccf47
-+VIM_VERSION = v7.4.1902
- VIM_SITE = $(call github,vim,vim,$(VIM_VERSION))
- # Win over busybox vi since vim is more feature-rich
- VIM_DEPENDENCIES = \
+-ZXING_CPP_VERSION = fa34227d26e0b388e65b81936a2681952928f5be
++ZXING_CPP_VERSION = 0db7f855135222becff193671faae79c083424b6
+ ZXING_CPP_SITE = $(call github,glassechidna,zxing-cpp,$(ZXING_CPP_VERSION))
+ ZXING_CPP_LICENSE = Apache-2.0
+ ZXING_CPP_LICENSE_FILES = COPYING
 -- 
 2.8.1
