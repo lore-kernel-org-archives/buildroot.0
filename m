@@ -1,25 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Jun 2016 22:17:53 +0200
-Subject: [Buildroot] [PATCH] uclibc: add microblaze support
-In-Reply-To: <20160604202604.GA19400@waldemar-brodkorb.de> (Waldemar
- Brodkorb's message of "Sat, 4 Jun 2016 22:26:04 +0200")
-References: <20160604202604.GA19400@waldemar-brodkorb.de>
-Message-ID: <87lh2jl79q.fsf@dell.be.48ers.dk>
+Date: Sun, 5 Jun 2016 22:15:35 +0200
+Subject: [Buildroot] [git commit] cryptsetup: bump to version 1.7.2
+Message-ID: <20160605201808.A9BB4818B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8e1abc0bcd9852b30983cf94880aab7a0022361e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Latest uClibc-ng 1.0.15 release fixed open issues with
- > microblaze shared library and linuxthreads support.
- > gcc 4.9.3 and gcc 5.3.0 require a small patch.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 0928627..5972bf8 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/sha256sums.asc
+-sha256	73dc8a63cc984b56aa6a3c99f355262471bcfe78b3240b8b9d0caa8002911fec	cryptsetup-1.7.1.tar.xz
++sha256	dbb35dbf5f0c1749168c86c913fe98e872247bfc8425314b494c2423e7e43342	cryptsetup-1.7.2.tar.xz
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 4d37709..d7bd251 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CRYPTSETUP_VERSION_MAJOR = 1.7
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).1
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).2
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
