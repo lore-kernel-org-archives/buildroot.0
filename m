@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jun 2016 23:55:58 +0200
-Subject: [Buildroot] [PATCH 2/5] package/rtl8188eu: bump version, add hash
+Date: Sun,  5 Jun 2016 23:55:59 +0200
+Subject: [Buildroot] [PATCH 3/5] package/rpi-firmware: bump version, add hash
 In-Reply-To: <1465163761-2848-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1465163761-2848-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465163761-2848-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1465163761-2848-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/rtl8188eu/rtl8188eu.hash | 2 ++
- package/rtl8188eu/rtl8188eu.mk   | 2 +-
+ package/rpi-firmware/rpi-firmware.hash | 2 ++
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
  2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/rtl8188eu/rtl8188eu.hash
+ create mode 100644 package/rpi-firmware/rpi-firmware.hash
 
-diff --git a/package/rtl8188eu/rtl8188eu.hash b/package/rtl8188eu/rtl8188eu.hash
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
 new file mode 100644
-index 0000000..6f68f44
+index 0000000..e2e31c9
 --- /dev/null
-+++ b/package/rtl8188eu/rtl8188eu.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 9f16fab009bd7bc9e377cf7dcdf82be1b60e7f88e27f2833eea5b422d104e3fe rtl8188eu-ced2b64a1139dcaf86947e3a9f7617dffbd64239.tar.gz
-diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-index d1034c4..5da6bf3 100644
---- a/package/rtl8188eu/rtl8188eu.mk
-+++ b/package/rtl8188eu/rtl8188eu.mk
++sha256 b2ce949db3745354383ac0d66107cbbb8902ccbf5fc027be8824519c44d5a302 rpi-firmware-70143fe9d371cd6486a80d6765e93b5574212b64.tar.gz
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index bcb8641..e170780 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTL8188EU_VERSION = 3091828c8f4b4a01cbec6025128bf77e6e7b9f97
-+RTL8188EU_VERSION = ced2b64a1139dcaf86947e3a9f7617dffbd64239
- RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
- RTL8188EU_LICENSE = GPLv2, proprietary (rtl8188eufw.bin firmware blob)
- RTL8188EU_LICENSE_FILES = COPYING
+-RPI_FIRMWARE_VERSION = cc6d7bf8b4c03a2a660ff9fdf4083fc165620866
++RPI_FIRMWARE_VERSION = 70143fe9d371cd6486a80d6765e93b5574212b64
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
 2.8.1
