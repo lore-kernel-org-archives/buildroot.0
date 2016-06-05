@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jun 2016 19:52:07 +0200
-Subject: [Buildroot] [PATCH 14/28] package/softether: bump version
+Date: Sun,  5 Jun 2016 19:52:12 +0200
+Subject: [Buildroot] [PATCH 19/28] package/v4l2grab: bump version
 In-Reply-To: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465149141-15774-14-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1465149141-15774-19-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/softether/softether.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/v4l2grab/v4l2grab.hash | 2 +-
+ package/v4l2grab/v4l2grab.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/softether/softether.mk b/package/softether/softether.mk
-index 489341e..9f98774 100644
---- a/package/softether/softether.mk
-+++ b/package/softether/softether.mk
+diff --git a/package/v4l2grab/v4l2grab.hash b/package/v4l2grab/v4l2grab.hash
+index 17beeec..a59c8af 100644
+--- a/package/v4l2grab/v4l2grab.hash
++++ b/package/v4l2grab/v4l2grab.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	ed5b9ca16c3b82d283df69c46aabd6c976b166b4e77b660288d86a147b68caf9	v4l2grab-6a52a234e227a30e16591d1a0e7afc52a2c5d964.tar.gz
++sha256 9a8d0d1ca5ac9fb9f66e00300bb3265d156cf1cb67eb30f6e6637c83b0b507a1 v4l2grab-f8d8844d52387b3db7b8736f5e86156d9374f781.tar.gz
+diff --git a/package/v4l2grab/v4l2grab.mk b/package/v4l2grab/v4l2grab.mk
+index b6f26c6..f3a8967 100644
+--- a/package/v4l2grab/v4l2grab.mk
++++ b/package/v4l2grab/v4l2grab.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SOFTETHER_VERSION = 4b65e251f240d0b36c704acd598f4ceb07c41413
-+SOFTETHER_VERSION = 1e17c9bcfd7e7b31756aa5389bcbff76c2c9c88a
- SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN,$(SOFTETHER_VERSION))
- SOFTETHER_PATCH = \
- 	https://github.com/dajhorn/SoftEtherVPN/commit/c5e5d7e93c6f3302adf5821c29c4efdb7630e418.patch \
+-V4L2GRAB_VERSION = 6a52a234e227a30e16591d1a0e7afc52a2c5d964
++V4L2GRAB_VERSION = f8d8844d52387b3db7b8736f5e86156d9374f781
+ V4L2GRAB_SITE = $(call github,twam,v4l2grab,$(V4L2GRAB_VERSION))
+ V4L2GRAB_LICENSE = GPLv2+
+ V4L2GRAB_LICENSE_FILES = LICENSE.md
 -- 
 2.8.1
