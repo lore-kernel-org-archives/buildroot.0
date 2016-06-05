@@ -1,42 +1,26 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 5 Jun 2016 12:23:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wiringpi: uses fork(), needs mmu
-In-Reply-To: <1465061225-26087-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465061225-26087-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160605122335.76c31e23@gmx.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 5 Jun 2016 09:33:35 -0300
+Subject: [Buildroot] [PATCH] configs/qemu: bump to latest version
+In-Reply-To: <20160604221423.GC6825@waldemar-brodkorb.de>
+References: <1465072230-12316-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160604221423.GC6825@waldemar-brodkorb.de>
+Message-ID: <57541C1F.8090703@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+On 04/06/16 19:14, Waldemar Brodkorb wrote:
 
-On Sat,  4 Jun 2016 19:27:05 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> I have no issues with ethernet in 4.6.1 when using ml605 instead
+> of lx60 (tested with Qemu 2.6.0). Should we switch?
+>
+> best regards
+>   Waldemar
 
-> Fixes
-> http://autobuild.buildroot.net/results/c60/c6013c214674f9802309d8cd770d3da2f751674d/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/wiringpi/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/wiringpi/Config.in b/package/wiringpi/Config.in
-> index 9275b82..a292b3f 100644
-> --- a/package/wiringpi/Config.in
-> +++ b/package/wiringpi/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_WIRINGPI
->  	bool "wiringpi"
-> +	depends on BR2_USE_MMU # fork()
->  	help
->  	  wiringPi libraries (and gpio command)
->  
-
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-Thanks for spotting (and fixing) it...
-
-Regards,
-Peter
+Hi.
+Do you know if the machine switch fixes it or the latest qemu version does?
+If it's the machine switch that would be fine, however asking for latest 
+qemu might not be such a great idea since distributions lag quite a bit.
+Regards.
