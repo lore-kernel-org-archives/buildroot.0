@@ -1,41 +1,73 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jun 2016 19:52:21 +0200
-Subject: [Buildroot] [PATCH 28/28] package/hidapi: bump version
-In-Reply-To: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465149141-15774-28-git-send-email-bernd.kuhls@t-online.de>
+From: Martin Bark <martin@barkynet.com>
+Date: Sun, 5 Jun 2016 19:14:59 +0100
+Subject: [Buildroot] [PATCH 4/4] package/nodejs: Update npm to use
+	NODEJS_CONF_OPTS
+In-Reply-To: <20160604100848.GD3852@free.fr>
+References: <1464981346-11741-1-git-send-email-martin@barkynet.com>
+ <1464981346-11741-4-git-send-email-martin@barkynet.com>
+ <20160604100848.GD3852@free.fr>
+Message-ID: <CAFGQKxe2ov=tOHgMf_dfc5eBK9gJ_rZDk=cZ6PdhLG7cGPKDWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/hidapi/hidapi.hash | 2 +-
- package/hidapi/hidapi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Yann,
 
-diff --git a/package/hidapi/hidapi.hash b/package/hidapi/hidapi.hash
-index ba00df2..ed22c78 100644
---- a/package/hidapi/hidapi.hash
-+++ b/package/hidapi/hidapi.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 33e206f5e145fc1bc6aeb55084d71b55d686533d23ad5bb762746ceba81e728b  hidapi-d17db57b9d4354752e0af42f5f33007a42ef2906.tar.gz
-+sha256 f2ffe5dbba12dfa0a647ae71b1ec5612fed4c20322ef6f6fd46f6f9713ed1a8e  hidapi-b5b2e1779b6cd2edda3066bbbf0921a2d6b1c3c0.tar.gz
-diff --git a/package/hidapi/hidapi.mk b/package/hidapi/hidapi.mk
-index 270836c..9922efc 100644
---- a/package/hidapi/hidapi.mk
-+++ b/package/hidapi/hidapi.mk
-@@ -6,7 +6,7 @@
- 
- # Use master version as the current stable is very old and some bugs
- # have been fixed since then.
--HIDAPI_VERSION = d17db57b9d4354752e0af42f5f33007a42ef2906
-+HIDAPI_VERSION = b5b2e1779b6cd2edda3066bbbf0921a2d6b1c3c0
- HIDAPI_SITE = $(call github,signal11,hidapi,$(HIDAPI_VERSION))
- HIDAPI_INSTALL_STAGING = YES
- # No configure provided, so we need to autoreconf.
--- 
-2.8.1
+On 4 June 2016 at 11:08, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Martin, All,
+>
+> On 2016-06-03 20:15 +0100, Martin Bark spake thusly:
+>> Signed-off-by: Martin Bark <martin@barkynet.com>
+>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+>> ---
+>>  package/nodejs/nodejs.mk | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+>> index aff73e8..f8f819f 100644
+>> --- a/package/nodejs/nodejs.mk
+>> +++ b/package/nodejs/nodejs.mk
+>> @@ -33,6 +33,10 @@ else
+>>  NODEJS_CONF_OPTS += --with-intl=none
+>>  endif
+>>
+>> +ifneq ($(BR2_PACKAGE_NODEJS_NPM),y)
+>> +NODEJS_CONF_OPTS += --without-npm
+>> +endif
+>> +
+>>  # nodejs build system is based on python, but only support python-2.6 or
+>>  # python-2.7. So, we have to enforce PYTHON interpreter to be python2.
+>>  define HOST_NODEJS_CONFIGURE_CMDS
+>> @@ -109,7 +113,6 @@ define NODEJS_CONFIGURE_CMDS
+>>               PYTHON=$(HOST_DIR)/usr/bin/python2 \
+>>               $(HOST_DIR)/usr/bin/python2 ./configure \
+>>               --prefix=/usr \
+>> -             $(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
+>>               --dest-cpu=$(NODEJS_CPU) \
+>>               $(if $(NODEJS_ARM_FP),--with-arm-float-abi=$(NODEJS_ARM_FP)) \
+>>               $(if $(NODEJS_MIPS_ARCH_VARIANT),--with-mips-arch-variant=$(NODEJS_MIPS_ARCH_VARIANT)) \
+>
+> IMHO, it would have been good to also handle the remaining, arch options
+> with the _CONF_OPTS variable as well.
+
+yes i agree.  I will submit some other patches to handle them too.
+
+Thanks
+
+Martin
+
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
