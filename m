@@ -1,27 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 5 Jun 2016 10:32:44 -0300
-Subject: [Buildroot] [PATCH] configs/qemu: bump to latest version
-In-Reply-To: <20160605133148.GH6825@waldemar-brodkorb.de>
-References: <1465072230-12316-1-git-send-email-gustavo@zacarias.com.ar>
- <20160604221423.GC6825@waldemar-brodkorb.de>
- <57541C1F.8090703@zacarias.com.ar>
- <20160605133148.GH6825@waldemar-brodkorb.de>
-Message-ID: <575429FC.2090706@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  5 Jun 2016 19:51:57 +0200
+Subject: [Buildroot] [PATCH 04/28] package/filemq: bump version
+In-Reply-To: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1465149141-15774-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/06/16 10:31, Waldemar Brodkorb wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/filemq/filemq.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Okay, bad news. It is the latest qemu version fixing it.
->
-> Does any distribution have Qemu 2.5 included?
->
-> best regards
->   Waldemar
-
-Hi.
-Ubuntu 16.04 (LTS) has 2.5 which is my current testbed.
-Regards.
+diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
+index a79e8f4..0e73591 100644
+--- a/package/filemq/filemq.mk
++++ b/package/filemq/filemq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FILEMQ_VERSION = acf6c0e003fee938994ad803aa7b78245dca57ba
++FILEMQ_VERSION = e59951489045825d6fc5bdc6a5a5ecf1abf51943
+ FILEMQ_SITE = $(call github,zeromq,filemq,$(FILEMQ_VERSION))
+ 
+ FILEMQ_AUTORECONF = YES
+-- 
+2.8.1
