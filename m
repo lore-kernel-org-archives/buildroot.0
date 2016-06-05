@@ -1,41 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jun 2016 19:52:11 +0200
-Subject: [Buildroot] [PATCH 18/28] package/zxing-cpp: bump version
+Date: Sun,  5 Jun 2016 19:52:15 +0200
+Subject: [Buildroot] [PATCH 22/28] package/czmq: bump version
 In-Reply-To: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465149141-15774-18-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1465149141-15774-22-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Needed for zyre bump:
+https://github.com/zeromq/zyre/issues/442#issuecomment-189127583
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/zxing-cpp/zxing-cpp.hash | 2 +-
- package/zxing-cpp/zxing-cpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/czmq/czmq.hash | 3 +--
+ package/czmq/czmq.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/zxing-cpp/zxing-cpp.hash b/package/zxing-cpp/zxing-cpp.hash
-index e38a612..4625fbf 100644
---- a/package/zxing-cpp/zxing-cpp.hash
-+++ b/package/zxing-cpp/zxing-cpp.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/czmq/czmq.hash b/package/czmq/czmq.hash
+index 20ed7b6..526ea59 100644
+--- a/package/czmq/czmq.hash
++++ b/package/czmq/czmq.hash
+@@ -1,3 +1,2 @@
  # Locally calculated
--sha256 164c0bc9f1ce2ff5659fddce6da71f8cdda091751f3b71140c090b58451a2b04 zxing-cpp-fa34227d26e0b388e65b81936a2681952928f5be.tar.gz
-+sha256 643c931a35c363109cd38c5a1526505b75f57c0634907cb7b6bc24f6f48eb32b zxing-cpp-0db7f855135222becff193671faae79c083424b6.tar.gz
-diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
-index 7344dc1..7113ae2 100644
---- a/package/zxing-cpp/zxing-cpp.mk
-+++ b/package/zxing-cpp/zxing-cpp.mk
-@@ -4,7 +4,7 @@
+-sha256  e56f8498daf70310b31c42669b2f9b753c5e747eafaff6d4fdac26d72a474b27  czmq-v3.0.2.tar.gz
+-sha256  74e003c05ab1391502dff2eaad96a5361b19583cd1ee0ad681c929721c8e1e3a  bcf583633e8b27a9bfbed1e4a717b9373f7446be.patch
++sha256 5c76de41f736f0c059e0b26174ef99200f2aba2fa38333683dbe4944b2f80555 czmq-5205ec201e97c3a652c17eb86b18b70350b54512.tar.gz
+diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
+index 2b73b61..8c4de71 100644
+--- a/package/czmq/czmq.mk
++++ b/package/czmq/czmq.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--ZXING_CPP_VERSION = fa34227d26e0b388e65b81936a2681952928f5be
-+ZXING_CPP_VERSION = 0db7f855135222becff193671faae79c083424b6
- ZXING_CPP_SITE = $(call github,glassechidna,zxing-cpp,$(ZXING_CPP_VERSION))
- ZXING_CPP_LICENSE = Apache-2.0
- ZXING_CPP_LICENSE_FILES = COPYING
+-CZMQ_VERSION = v3.0.2
++CZMQ_VERSION = 5205ec201e97c3a652c17eb86b18b70350b54512
+ CZMQ_SITE = $(call github,zeromq,czmq,$(CZMQ_VERSION))
+-CZMQ_PATCH = https://github.com/zeromq/czmq/commit/bcf583633e8b27a9bfbed1e4a717b9373f7446be.patch
+ 
+ # Autoreconf required as we use the git tree
+ CZMQ_AUTORECONF = YES
 -- 
 2.8.1
