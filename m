@@ -1,32 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jun 2016 22:03:11 +0200
-Subject: [Buildroot] [git commit] package/open-plc-utils: bump version
-Message-ID: <20160605200530.F115881E84@busybox.osuosl.org>
+Date: Sun, 05 Jun 2016 22:14:59 +0200
+Subject: [Buildroot] [PATCH] xserver_xorg-server: apply modesettings
+	patch for 1.18.3 only
+In-Reply-To: <575344F8.2030103@0g.re> (Stanislas Bach's message of "Sat, 4 Jun
+ 2016 14:15:36 -0700")
+References: <575344F8.2030103@0g.re>
+Message-ID: <87y46jl7ek.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4dabee52da3e68f36950561da389cdfa5c32c247
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Stanislas" == Stanislas Bach <sbach@0g.re> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/open-plc-utils/open-plc-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > We currently have two choices for the server's version (1.18.3, and 1.14.7)
+ > but the following patch will only apply for versions >= 1.17.2.
 
-diff --git a/package/open-plc-utils/open-plc-utils.mk b/package/open-plc-utils/open-plc-utils.mk
-index a674372..67c8d7d 100644
---- a/package/open-plc-utils/open-plc-utils.mk
-+++ b/package/open-plc-utils/open-plc-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPEN_PLC_UTILS_VERSION = 05ef40c0a2949cfaf1c3230e10679fbcf912d174
-+OPEN_PLC_UTILS_VERSION = 1be781d1ea81827e5f6c1a35961c65dd4d15472c
- OPEN_PLC_UTILS_SITE = $(call github,qca,open-plc-utils,$(OPEN_PLC_UTILS_VERSION))
- OPEN_PLC_UTILS_LICENSE = BSD-3c
- OPEN_PLC_UTILS_LICENSE_FILES = LICENSE
+ > If 1.14.7 is selected the build will fail with the following error:
+
+ > Applying 0001-modesettings-needs-dri2.patch using patch:
+ > patching file configure.ac
+ > Hunk #1 FAILED at 2036
+
+ > So move this patch to an appropriate version folder in the package's
+ > directory. It should be good enough until this package provides more
+ > versions >= 1.17.2.
+
+ > Signed-off-by: Stanislas Bach <sbach@0g.re>
+
+ > diff --git
+ > a/package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch
+ > b/package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch
+
+Thanks! Your mailer unfortunately corrupted the patch so I couldn't
+apply this directly. It would also be helpful for reviews if you
+configure git to detect renames (git config --global diff.renames copy -
+Or simply upgrade your git version, as it is enabled by default
+nowadays).
+
+Committed with the patch fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
