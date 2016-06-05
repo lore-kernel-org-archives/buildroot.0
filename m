@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jun 2016 23:56:01 +0200
-Subject: [Buildroot] [PATCH 5/5] package/rtl8821au: bump version
+Date: Sun,  5 Jun 2016 23:56:00 +0200
+Subject: [Buildroot] [PATCH 4/5] package/rpi-userland: bump version, add hash
 In-Reply-To: <1465163761-2848-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1465163761-2848-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465163761-2848-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1465163761-2848-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/rtl8821au/rtl8821au.hash | 2 +-
- package/rtl8821au/rtl8821au.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/rpi-userland/rpi-userland.hash | 2 ++
+ package/rpi-userland/rpi-userland.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/rpi-userland/rpi-userland.hash
 
-diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
-index 2e3c56c..cac4ce2 100644
---- a/package/rtl8821au/rtl8821au.hash
-+++ b/package/rtl8821au/rtl8821au.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 26e1a72b553a044ec34b57d9264ae7616c008a598a9009faba51331b55285a5b rtl8821au-4c298b160253a7efa507c8ecdb868d1579ad02a7.tar.gz
-+sha256 64d068b92215f06f877629b2e6cd5da41329ac1222104ff9dc7ec504ca23af09 rtl8821au-116a3abe7783b023655e9917afe2d1eabe178028.tar.gz
-diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
-index 58a91da..cf8f4cd 100644
---- a/package/rtl8821au/rtl8821au.mk
-+++ b/package/rtl8821au/rtl8821au.mk
+diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
+new file mode 100644
+index 0000000..0c6f4fd
+--- /dev/null
++++ b/package/rpi-userland/rpi-userland.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 b83878c487814d7736de83dc3ede1c39fa1c84bc2da2bea00312544eff64f1dc rpi-userland-7c026fa7a4ded2c525916cc853a32731c072ed1e.tar.gz
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 2312fcf..2ebd95b 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTL8821AU_VERSION = 4c298b160253a7efa507c8ecdb868d1579ad02a7
-+RTL8821AU_VERSION = 116a3abe7783b023655e9917afe2d1eabe178028
- RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
- RTL8821AU_LICENSE = GPLv2, proprietary (rtl8821au.bin firmware)
- RTL8821AU_LICENSE_FILES = COPYING
+-RPI_USERLAND_VERSION = 52eca998aa43f278314579dba4798a3fe1da46c3
++RPI_USERLAND_VERSION = 7c026fa7a4ded2c525916cc853a32731c072ed1e
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
 -- 
 2.8.1
