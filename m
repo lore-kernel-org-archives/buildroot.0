@@ -1,41 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jun 2016 21:39:11 +0200
-Subject: [Buildroot] [git commit] package/minizip: bump version
-Message-ID: <20160605200530.5307381E84@busybox.osuosl.org>
+Date: Sun, 5 Jun 2016 21:38:11 +0200
+Subject: [Buildroot] [git commit] package/iputils: bump version
+Message-ID: <20160605200530.4A06F81E84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55c4abd0abc2ba4c12858c2f18cbcd3957b8d41e
+commit: https://git.buildroot.net/buildroot/commit/?id=8f5fcfc1914207321544a1d5465c06a1117dee41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+tracepath and tracepath6 were merged recently:
+https://github.com/iputils/iputils/pull/48
+
+Therefore we do not need to install tracepath6 anymore.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minizip/minizip.hash | 2 +-
- package/minizip/minizip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/iputils/iputils.hash | 2 +-
+ package/iputils/iputils.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
-index a303b2c..994ed60 100644
---- a/package/minizip/minizip.hash
-+++ b/package/minizip/minizip.hash
+diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
+index 42ea5fd..d7d3f5c 100644
+--- a/package/iputils/iputils.hash
++++ b/package/iputils/iputils.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256	b39158bdf3d8bf81d3a7412dc761851fda398bc93d8989d5e940ed4ae5bbb52c	minizip-977afb22966e6ab0ee401293a8e85fe808133f9a.tar.gz
-+sha256 ac361f40531d9fb7222d4befd10d160c647d5e85138f6bc9eda080ed8f937fb8 minizip-5f56dd81d94bd7028f7dc05d7d14112697c30241.tar.gz
-diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
-index 5b87786..3d61288 100644
---- a/package/minizip/minizip.mk
-+++ b/package/minizip/minizip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-sha256	08b9f686fcc874f75b465f90f3e831aa9ac1f2e043f4bb61e6d99868e8869025	iputils-31d947cf7156cf78d3f57e0bd82b33e6f6ece6b4.tar.gz
++sha256	79e22e940b6f52c37810657c8f12e7ba85692b517d6cd6e90cbceac2d94fc5e8	iputils-55828d1fef3fed7f07abcbf7be9282a9662e78c7.tar.gz
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 18e48b4..d6398f7 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -11,7 +11,7 @@
+ # and IPv6 updates.
+ # http://www.spinics.net/lists/netdev/msg279881.html
  
--MINIZIP_VERSION = 977afb22966e6ab0ee401293a8e85fe808133f9a
-+MINIZIP_VERSION = 5f56dd81d94bd7028f7dc05d7d14112697c30241
- MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
- MINIZIP_DEPENDENCIES = zlib
- MINIZIP_AUTORECONF = YES
+-IPUTILS_VERSION = 31d947cf7156cf78d3f57e0bd82b33e6f6ece6b4
++IPUTILS_VERSION = 55828d1fef3fed7f07abcbf7be9282a9662e78c7
+ IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
+ IPUTILS_LICENSE = GPLv2+, BSD-3c, BSD-4c
+ # Only includes a license file for BSD
+@@ -66,7 +66,6 @@ define IPUTILS_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 755 $(@D)/rdisc       $(TARGET_DIR)/sbin/rdisc
+ 	$(INSTALL) -D -m 755 $(@D)/tftpd       $(TARGET_DIR)/usr/sbin/in.tftpd
+ 	$(INSTALL) -D -m 755 $(@D)/tracepath   $(TARGET_DIR)/bin/tracepath
+-	$(INSTALL) -D -m 755 $(@D)/tracepath6  $(TARGET_DIR)/bin/tracepath6
+ 	$(INSTALL) -D -m 755 $(@D)/traceroute6 $(TARGET_DIR)/bin/traceroute6
+ endef
+ 
