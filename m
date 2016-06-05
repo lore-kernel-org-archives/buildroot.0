@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jun 2016 19:52:03 +0200
-Subject: [Buildroot] [PATCH 10/28] package/minizip: bump version
+Date: Sun,  5 Jun 2016 19:52:10 +0200
+Subject: [Buildroot] [PATCH 17/28] package/zlog: bump version
 In-Reply-To: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465149141-15774-10-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1465149141-15774-17-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/minizip/minizip.hash | 2 +-
- package/minizip/minizip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/zlog/zlog.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
-index a303b2c..994ed60 100644
---- a/package/minizip/minizip.hash
-+++ b/package/minizip/minizip.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	b39158bdf3d8bf81d3a7412dc761851fda398bc93d8989d5e940ed4ae5bbb52c	minizip-977afb22966e6ab0ee401293a8e85fe808133f9a.tar.gz
-+sha256 ac361f40531d9fb7222d4befd10d160c647d5e85138f6bc9eda080ed8f937fb8 minizip-5f56dd81d94bd7028f7dc05d7d14112697c30241.tar.gz
-diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
-index 5b87786..3d61288 100644
---- a/package/minizip/minizip.mk
-+++ b/package/minizip/minizip.mk
+diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
+index fb8762c..a60e1b0 100644
+--- a/package/zlog/zlog.mk
++++ b/package/zlog/zlog.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MINIZIP_VERSION = 977afb22966e6ab0ee401293a8e85fe808133f9a
-+MINIZIP_VERSION = 5f56dd81d94bd7028f7dc05d7d14112697c30241
- MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
- MINIZIP_DEPENDENCIES = zlib
- MINIZIP_AUTORECONF = YES
+-ZLOG_VERSION = ca6162be1608839e99c6388c28488c51ccf98e4a
++ZLOG_VERSION = 6ddb9bbf3ff0123e701bf60996f351576ebe9c00
+ ZLOG_SITE = $(call github,HardySimpson,zlog,$(ZLOG_VERSION))
+ ZLOG_LICENSE = LGPLv2.1
+ ZLOG_LICENSE_FILES = COPYING
 -- 
 2.8.1
