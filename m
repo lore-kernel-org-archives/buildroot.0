@@ -1,23 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 Jun 2016 21:33:53 +0200
-Subject: [Buildroot] [PATCH 03/28] package/can-utils: bump version
-In-Reply-To: <1465149141-15774-3-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Sun, 5 Jun 2016 19:51:56 +0200")
-References: <1465149141-15774-1-git-send-email-bernd.kuhls@t-online.de>
- <1465149141-15774-3-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87lh2jqvku.fsf@dell.be.48ers.dk>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Sun,  5 Jun 2016 12:34:33 -0700
+Subject: [Buildroot] [PATCH 1/1] omxplayer: remove
+	BR2_PACKAGE_BOOST_ARCH_SUPPORTS as it no longer exists
+Message-ID: <20160605193433.13519-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+---
+ package/omxplayer/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks. Please send a followup patch adding a .hash file,
-thanks.
-
+diff --git a/package/omxplayer/Config.in b/package/omxplayer/Config.in
+index b8946e9..b417aa3 100644
+--- a/package/omxplayer/Config.in
++++ b/package/omxplayer/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_OMXPLAYER
+ 	bool "omxplayer"
+ 	depends on BR2_arm
+ 	depends on BR2_USE_MMU # dbus
+-	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS # ffmpeg
+ 	depends on BR2_INSTALL_LIBSTDCPP # boost
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost, libusb
+@@ -28,7 +27,6 @@ config BR2_PACKAGE_OMXPLAYER
+ comment "omxplayer needs rpi-userland and a toolchain w/ C++, threads, wchar, dynamic library"
+ 	depends on BR2_arm
+ 	depends on BR2_USE_MMU
+-	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on !BR2_PACKAGE_RPI_USERLAND
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
 -- 
-Bye, Peter Korsgaard
+2.8.3
