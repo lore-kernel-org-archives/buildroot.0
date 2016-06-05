@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 Jun 2016 23:40:03 +0200
-Subject: [Buildroot] [PATCH 10/12] package/vim: add hash
+Date: Sun,  5 Jun 2016 23:39:59 +0200
+Subject: [Buildroot] [PATCH 06/12] package/libshairplay: add hash
 In-Reply-To: <1465162805-13367-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1465162805-13367-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465162805-13367-10-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1465162805-13367-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/vim/vim.hash | 2 ++
+ package/libshairplay/libshairplay.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/vim/vim.hash
+ create mode 100644 package/libshairplay/libshairplay.hash
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+diff --git a/package/libshairplay/libshairplay.hash b/package/libshairplay/libshairplay.hash
 new file mode 100644
-index 0000000..bb2d013
+index 0000000..19261f9
 --- /dev/null
-+++ b/package/vim/vim.hash
++++ b/package/libshairplay/libshairplay.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 7c90f16e1d1547a864f4419cd7d066ca4ce822de285b2a718f9274e5241fe2fd vim-v7.4.1902.tar.gz
++sha256 49ac0e0470ec6367f720c7b79a09165138f57b60f5949a2d9c38be5823d13294 libshairplay-ce80e005908f41d0e6fde1c4a21e9cb8ee54007b.tar.gz
 -- 
 2.8.1
