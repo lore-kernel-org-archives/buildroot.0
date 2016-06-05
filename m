@@ -1,41 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 Jun 2016 22:00:09 +0200
-Subject: [Buildroot] [git commit] package/odhcp6c: bump version
-Message-ID: <20160605200530.BEF6381E84@busybox.osuosl.org>
+Date: Sun, 5 Jun 2016 21:57:26 +0200
+Subject: [Buildroot] [git commit] package/zlog: bump version
+Message-ID: <20160605200530.939D881E84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca711c1b9e399be42ce9facdf51308f51b0899d7
+commit: https://git.buildroot.net/buildroot/commit/?id=90dc956e500017e6e4897d934e098f650f1b4c06
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/odhcp6c/odhcp6c.hash | 2 +-
- package/odhcp6c/odhcp6c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/zlog/zlog.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/odhcp6c/odhcp6c.hash b/package/odhcp6c/odhcp6c.hash
-index 00a0960..688d77d 100644
---- a/package/odhcp6c/odhcp6c.hash
-+++ b/package/odhcp6c/odhcp6c.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	b5f920ed300309d65e431a360cae5f3c2010eca09a4231c9ef907c730d3c0d09	odhcp6c-dc186d6d2b0dd4ad23ca5fc69c00e81f796ff6d9.tar.gz
-+sha256 d84a713010865215301b4186c7b5368c9f006e6d3b9b52b99bd25e2d9e7a1dfc odhcp6c-7533a6243dc3ac5a747cf6ccbc4d0539dafd3e07.tar.gz
-diff --git a/package/odhcp6c/odhcp6c.mk b/package/odhcp6c/odhcp6c.mk
-index c841cd3..0ec9657 100644
---- a/package/odhcp6c/odhcp6c.mk
-+++ b/package/odhcp6c/odhcp6c.mk
+diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
+index fb8762c..a60e1b0 100644
+--- a/package/zlog/zlog.mk
++++ b/package/zlog/zlog.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ODHCP6C_VERSION = dc186d6d2b0dd4ad23ca5fc69c00e81f796ff6d9
-+ODHCP6C_VERSION = 7533a6243dc3ac5a747cf6ccbc4d0539dafd3e07
- ODHCP6C_SITE = $(call github,sbyx,odhcp6c,$(ODHCP6C_VERSION))
- ODHCP6C_LICENSE = GPLv2
- ODHCP6C_LICENSE_FILES = COPYING
+-ZLOG_VERSION = ca6162be1608839e99c6388c28488c51ccf98e4a
++ZLOG_VERSION = 6ddb9bbf3ff0123e701bf60996f351576ebe9c00
+ ZLOG_SITE = $(call github,HardySimpson,zlog,$(ZLOG_VERSION))
+ ZLOG_LICENSE = LGPLv2.1
+ ZLOG_LICENSE_FILES = COPYING
