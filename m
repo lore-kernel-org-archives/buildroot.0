@@ -1,37 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  6 Jun 2016 22:43:40 +0200
-Subject: [Buildroot] [PATCH 3/7] fs/cloop: split long line
+Date: Mon,  6 Jun 2016 22:43:41 +0200
+Subject: [Buildroot] [PATCH 4/7] fs/jffs2: split commands
 In-Reply-To: <cover.1465245732.git.yann.morin.1998@free.fr>
 References: <cover.1465245732.git.yann.morin.1998@free.fr>
-Message-ID: <17f1e5dd2ddb461d2f78a3ea2549171b13d484dc.1465245732.git.yann.morin.1998@free.fr>
+Message-ID: <9f09e4f4d7338f4fdd0d0ad015b741adf41ead6c.1465245732.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-.. and add the missing newline-at-end-of-file.
+Now that we can properly printf a multi-line command, there is no need
+to use a single command to gnerate the jffs2 image.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- fs/cloop/cloop.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/jffs2/jffs2.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/cloop/cloop.mk b/fs/cloop/cloop.mk
-index f783ade..9e42a3a 100644
---- a/fs/cloop/cloop.mk
-+++ b/fs/cloop/cloop.mk
-@@ -7,7 +7,8 @@
- ROOTFS_CLOOP_DEPENDENCIES = host-cloop host-cdrkit
+diff --git a/fs/jffs2/jffs2.mk b/fs/jffs2/jffs2.mk
+index a9cd414..9a36a75 100644
+--- a/fs/jffs2/jffs2.mk
++++ b/fs/jffs2/jffs2.mk
+@@ -39,8 +39,8 @@ ROOTFS_JFFS2_DEPENDENCIES = host-mtd
  
- define ROOTFS_CLOOP_CMD
--	$(HOST_DIR)/usr/bin/genisoimage -r $(TARGET_DIR) | $(HOST_DIR)/usr/bin/create_compressed_fs - 65536 > $@
-+	$(HOST_DIR)/usr/bin/genisoimage -r $(TARGET_DIR) | \
-+		$(HOST_DIR)/usr/bin/create_compressed_fs - 65536 > $@
+ ifneq ($(BR2_TARGET_ROOTFS_JFFS2_SUMMARY),)
+ define ROOTFS_JFFS2_CMD
+-	$(MKFS_JFFS2) $(JFFS2_OPTS) -d $(TARGET_DIR) -o $@.nosummary && \
+-	$(SUMTOOL) $(SUMTOOL_OPTS) -i $@.nosummary -o $@ && \
++	$(MKFS_JFFS2) $(JFFS2_OPTS) -d $(TARGET_DIR) -o $@.nosummary
++	$(SUMTOOL) $(SUMTOOL_OPTS) -i $@.nosummary -o $@
+ 	rm $@.nosummary
  endef
- 
--$(eval $(call ROOTFS_TARGET,cloop))
-\ No newline at end of file
-+$(eval $(call ROOTFS_TARGET,cloop))
+ else
 -- 
 2.7.4
