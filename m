@@ -1,46 +1,107 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon,  6 Jun 2016 13:30:11 +0200
-Subject: [Buildroot] [PATCH] python-serial: fix Python 2.7.x related
-	compilation error
-Message-ID: <1465212611-2210-1-git-send-email-yegorslists@googlemail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 6 Jun 2016 14:05:59 +0200
+Subject: [Buildroot] Building opencv using buildroot
+In-Reply-To: <CAEjFr-bhO5DBoSsQ1R0Yzo=cKWThUjQRWoXCiaVF7W3pMX+PSQ@mail.gmail.com>
+References: <CAEjFr-bhO5DBoSsQ1R0Yzo=cKWThUjQRWoXCiaVF7W3pMX+PSQ@mail.gmail.com>
+Message-ID: <CAHXCMMKPJyGKzskNLs2Awxmxjftbqj6nigWiMhtdiORKC4t-yw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi Doha,
 
-aio.py is an experimental module, that is compatible with
-Python 3 only, so remove it for Python 2 environment or it
-will cause compilation errors.
+On Mon, Jun 6, 2016 at 12:06 AM, Doha Ehab <dohaehab@gmail.com> wrote:
+> Hello,
+> I am using Buildroot 2016.05-rc1 to statically build openvc. so From the
+> configurations menu  target packges -> libraries -> graphics-> opencv-2.4 I
+> have selected all features for opencv(except v4l and qt backend support).
+> After "make" I compiled a simple code that reads a jpg image using this
+> command:
 
-Fixes:
-http://autobuild.buildroot.org/results/f26/f26351da925d6ef3adea8053dc7fc24061554daf/
+I strongly recommend you use a build-system for your application,
+preferably CMake (since opencv already uses CMake and provides the
+*.cmake files making easier getting all needed dependency flags).
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-serial/python-serial.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Also, Buildroot generates the toolchain file, required to
+cross-compile with CMake (tihs file takes care of setting the
+cross-toolchain, the sysroot, and so on). It is located in:
+$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
 
-diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
-index 696e207..4b3ffad 100644
---- a/package/python-serial/python-serial.mk
-+++ b/package/python-serial/python-serial.mk
-@@ -11,4 +11,14 @@ PYTHON_SERIAL_LICENSE = Python Software Foundation License
- PYTHON_SERIAL_LICENSE_FILES = LICENSE.txt
- PYTHON_SERIAL_SETUP_TYPE = setuptools
- 
-+# aio.py is an experimental module, that is compatible only with
-+# Python 3, so remove it for Python 2 environment or it will
-+# cause compilation errors
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+define PYTHON_SERIAL_REMOVE_AIO_PY
-+	rm $(@D)/serial/aio.py
-+endef
-+PYTHON_SERIAL_POST_EXTRACT_HOOKS = PYTHON_SERIAL_REMOVE_AIO_PY
-+endif
-+
- $(eval $(python-package))
+>
+> /buildroot-2Final/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-g++
+ > ocv.c -L/buildroot-2Final/output/build/opencv-2.4.12.3/ -lopencv_calib3d
+> -lopencv_contrib -lopencv_core -lopencv_features2d -lopencv_flann
+> -lopencv_highgui -lopencv_imgproc -lopencv_legacy -lopencv_ml
+> -lopencv_objdetect  -lopencv_photo -lopencv_stitching -lopencv_superres
+> -lopencv_ts -lopencv_video -lopencv_videostab -lz -lrt -lpthread -pthread
+> -lm   -o ocv
+
+In your command, the -L option should not point the opencv build
+directory (I doubt there is any of the listed libraries in this
+directory) but to $(STAGING_DIR)/usr/lib (where most of/all the
+cross-compiled libs are installed for buildtime).
+
+>
+> I got this error  :
+> buildroot-2Final/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libopencv_highgui.a(grfmt_jpeg.cpp.o):
+> In function `cv::my_jpeg_load_dht(jpeg_decompress_struct*, unsigned char*,
+> JHUFF_TBL**, JHUFF_TBL**) [clone .constprop.39]':
+> grfmt_jpeg.cpp:(.text.unlikely._ZN2cvL16my_jpeg_load_dhtEP22jpeg_decompress_structPhPP9JHUFF_TBLS5_.constprop.39+0xec):
+> undefined reference to `jpeg_alloc_huff_table'
+> /buildroot-2Final/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libopencv_highgui.a(grfmt_jpeg.cpp.o):
+> In function `cv::JpegEncoder::write(cv::Mat const&, std::vector<int,
+> std::allocator<int> > const&)':
+> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0xb4):
+> undefined reference to `jpeg_CreateCompress'
+> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0xbc):
+> undefined reference to `jpeg_std_error'
+> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x170):
+> undefined reference to `jpeg_destroy_compress'
+> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x270):
+> undefined reference to `jpeg_set_defaults'
+> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x280):
+> undefined reference to `jpeg_set_quality'
+> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x28c):
+> undefined reference to `jpeg_start_compress'
+> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x308):
+> undefined reference to `jpeg_write_scanlines'
+> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x320):
+> undefined reference to `jpeg_finish_compress'
+> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x3a8):
+> undefined reference to `jpeg_stdio_dest'
+> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x41c):
+> undefined reference to `jpeg_write_scanlines'
+> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x4a8):
+> undefined reference to `jpeg_write_scanlines'
+>
+> I have select jpeg support also there is no liblibjpeg in
+> /buildroot-2Final/output/build/opencv-2.4.12.3/3rdparty. I want to know what
+> I am missing or doing wrong.
+
+Few things ;):
+- /buildroot-2Final/output/build/opencv-2.4.12.3/ is the opencv build
+directory, the dependency libs are installed/available in
+$(STAGING_DIR)/usr/lib;
+- /buildroot-2Final/output/build/opencv-2.4.12.3/3rdparty: Buildroot
+does not use bundled dependencies, so building opencv only build
+opencv, no 3rd parties (these 3rd parties are explicitly declared as
+dependencies, so Buildroot builds them in their own build directories)
+- the jpeg library is named libjpeg.so or libjpeg.a
+- -ljpeg is missing in the CXXFLAGS list
+
+I guess you followed [1] to get this command line.
+While invoking /buildroot-2Final/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-g++
+makes (and hides) most of the magics about the cross-compilation
+tricky thing, it does not solve the dependency problems nor missing
+{C,CPP,CXX,LD}FLAGS. It is still up to to end-user application
+developer to take care of this because it is application-specific.
+
+[1] http://nightly.buildroot.org/#_using_the_generated_toolchain_outside_buildroot
+
+Regards,
+
+
 -- 
-2.1.4
+Samuel
