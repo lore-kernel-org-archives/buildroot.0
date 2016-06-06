@@ -1,71 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Jun 2016 23:24:03 +0200
-Subject: [Buildroot] [git commit] package/mplayer: add optional support for
-	mpg123
-Message-ID: <20160606220801.57AC8818EE@busybox.osuosl.org>
+Date: Tue, 7 Jun 2016 00:08:36 +0200
+Subject: [Buildroot] [git commit] package/libplayer: switch to
+	BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
+Message-ID: <20160606220841.9F5D381841@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bc7d72c7a3626083ba4c6086ea1a7c6d2853bf7
+commit: https://git.buildroot.net/buildroot/commit/?id=211b3f8885004e897aacfa519941997798047b55
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-mplayer has optional support for mpg123, to get reproducable builds
-add mpg123 as optional dependency.
-
-Linked libraries without this patch:
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/mplayer | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libm.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
-
-Linked libraries after this patch:
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/mplayer | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libmpg123.so.0]
- 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libm.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
-
-Like with many other optional libraries detection of mpg123 is broken if
---enable-mpg123 is passed to configure leading to a build error:
-
-libmpcodecs/ad_mpg123.o: In function `set_format':
-ad_mpg123.c:(.text+0x63): undefined reference to `mpg123_getformat'
-libmpcodecs/ad_mpg123.o: In function `decode_a_bit':
-ad_mpg123.c:(.text+0x1b6): undefined reference to `mpg123_feed'
-ad_mpg123.c:(.text+0x20e): undefined reference to `mpg123_replace_buffer'
-ad_mpg123.c:(.text+0x223): undefined reference to `mpg123_decode_frame_64'
-ad_mpg123.c:(.text+0x275): undefined reference to `mpg123_strerror'
-[...]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mplayer/mplayer.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/libplayer/Config.in | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 347ed5e..9ae7ca4 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -174,6 +174,14 @@ MPLAYER_DEPENDENCIES += libmpeg2
- MPLAYER_CONF_OPTS += --disable-libmpeg2-internal
- endif
+diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
+index aa599ae..665b947 100644
+--- a/package/libplayer/Config.in
++++ b/package/libplayer/Config.in
+@@ -11,12 +11,7 @@ config BR2_PACKAGE_LIBPLAYER
+ if BR2_PACKAGE_LIBPLAYER
+ config BR2_PACKAGE_LIBPLAYER_MPLAYER
+ 	bool "mplayer backend"
+-	# mplayer
+-	depends on !(BR2_bfin || BR2_sh2a || BR2_sh4a || BR2_sh4aeb || \
+-		BR2_microblaze || BR2_aarch64 || BR2_nios2)
+-	# mplayer
+-	# Broken support for <ARMv5
+-	depends on !BR2_ARM_CPU_ARMV4
++	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_MPLAYER
  
-+# We intentionally don't pass --enable-mpg123, to let the
-+# autodetection find which library to link with.
-+ifeq ($(BR2_PACKAGE_MPG123),y)
-+MPLAYER_DEPENDENCIES += mpg123
-+else
-+MPLAYER_CONF_OPTS += --disable-mpg123
-+endif
-+
- ifeq ($(BR2_PACKAGE_TREMOR),y)
- MPLAYER_DEPENDENCIES += tremor
- MPLAYER_CONF_OPTS += --enable-tremor
+ config BR2_PACKAGE_LIBPLAYER_GSTREAMER
