@@ -1,27 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 Jun 2016 21:46:02 +0200
-Subject: [Buildroot] [git commit] package/open-plc-utils: add hash
-Message-ID: <20160606195009.53CE5818FB@busybox.osuosl.org>
+Date: Mon, 6 Jun 2016 21:44:06 +0200
+Subject: [Buildroot] [git commit] package/can-utils: add hash
+Message-ID: <20160606195009.24E82818FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fba5629686f1221b547711d776d67ed9ff43c510
+commit: https://git.buildroot.net/buildroot/commit/?id=bd65b10ae3a50dc1e6fbf5d9fbe20a25cb1361a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/open-plc-utils/open-plc-utils.hash | 2 ++
+ package/can-utils/can-utils.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/open-plc-utils/open-plc-utils.hash b/package/open-plc-utils/open-plc-utils.hash
+diff --git a/package/can-utils/can-utils.hash b/package/can-utils/can-utils.hash
 new file mode 100644
-index 0000000..a76630d
+index 0000000..09e3c4d
 --- /dev/null
-+++ b/package/open-plc-utils/open-plc-utils.hash
++++ b/package/can-utils/can-utils.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 00cd7f71e03849b1d6a96ec040351b819481e2f420cfb246f0b0f02cde73e098 open-plc-utils-1be781d1ea81827e5f6c1a35961c65dd4d15472c.tar.gz
++sha256 8db112e69fceef16617895fa9d4222221fdf44c19eef64912480336c59904765 can-utils-b70a76670dbe8925c2a7c75f90d36a28a8878d7a.tar.gz
