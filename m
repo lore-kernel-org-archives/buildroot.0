@@ -1,11 +1,11 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 6 Jun 2016 16:33:45 +0200
-Subject: [Buildroot] [PATCH 04/10] imx-codec: rename from libfslcodec
+Date: Mon, 6 Jun 2016 16:33:57 +0200
+Subject: [Buildroot] [PATCH 05/10] imx-parser: rename from libfslparser
  and bump version to 4.0.9
-In-Reply-To: <1c80fb18ed68a53b0eae32552132b91f5fc12469.1464958470.git.awebster@arcx.com>
+In-Reply-To: <0fe32c7569197b516c0f6cae32bafc5be5ba1031.1464958470.git.awebster@arcx.com>
 References: <cover.1464958470.git.awebster@arcx.com>
- <1c80fb18ed68a53b0eae32552132b91f5fc12469.1464958470.git.awebster@arcx.com>
-Message-ID: <CAAMH-yseZTKvF_jw8UKe8pkoMuYwD6R+eHMGvkE6c4YteQWt4g@mail.gmail.com>
+ <0fe32c7569197b516c0f6cae32bafc5be5ba1031.1464958470.git.awebster@arcx.com>
+Message-ID: <CAAMH-ysWFtMpkEGddhPV7QLe2KEPYb6SKfVRPSBcZFJOt7RxQQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,103 +14,97 @@ To: buildroot@busybox.net
 
 Andrew, All,
 
-On Fri, Jun 3, 2016 at 3:10 PM, Andrew Webster <awebster@arcx.com> wrote:
+On Fri, Jun 3, 2016 at 3:12 PM, Andrew Webster <awebster@arcx.com> wrote:
 > Changelog:
-> --[aac_dec] refine the code for pure c build
->   aac decoder c build need float point support, which use some
->   float point function.
+> --Add aac latm parser in parser_libs, support aac latm in mpeg2 parser
 >
 > This patch is based on the Yocto equivalent:
-> https://github.com/Freescale/meta-fsl-arm/commit/4b91194
+> https://github.com/Freescale/meta-fsl-arm/commit/e2c6f10
 >
 > Signed-off-by: Andrew Webster <awebster@arcx.com>
 > ---
 >  Config.in.legacy                                   |  7 +++++++
 >  package/Config.in                                  |  1 -
 >  package/freescale-imx/Config.in                    |  1 +
->  .../imx-codec}/Config.in                           |  6 +++---
->  package/freescale-imx/imx-codec/imx-codec.hash     |  2 ++
->  package/freescale-imx/imx-codec/imx-codec.mk       | 23 ++++++++++++++++++++++
->  package/gstreamer/gst-fsl-plugins/Config.in        |  4 ++--
+>  .../imx-parser}/Config.in                          |  4 ++--
+>  package/freescale-imx/imx-parser/imx-parser.hash   |  2 ++
+>  package/freescale-imx/imx-parser/imx-parser.mk     | 23 ++++++++++++++++++++++
+>  package/gstreamer/gst-fsl-plugins/Config.in        |  2 +-
 >  .../gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk   |  2 +-
->  package/gstreamer1/gst1-imx/Config.in              |  2 +-
->  package/gstreamer1/gst1-imx/gst1-imx.mk            |  4 ++--
->  package/libfslcodec/libfslcodec.hash               |  2 --
->  package/libfslcodec/libfslcodec.mk                 | 23 ----------------------
->  12 files changed, 42 insertions(+), 35 deletions(-)
->  rename package/{libfslcodec => freescale-imx/imx-codec}/Config.in (75%)
->  create mode 100644 package/freescale-imx/imx-codec/imx-codec.hash
->  create mode 100644 package/freescale-imx/imx-codec/imx-codec.mk
->  delete mode 100644 package/libfslcodec/libfslcodec.hash
->  delete mode 100644 package/libfslcodec/libfslcodec.mk
+>  package/libfslparser/libfslparser.hash             |  2 --
+>  package/libfslparser/libfslparser.mk               | 23 ----------------------
+>  10 files changed, 37 insertions(+), 30 deletions(-)
+>  rename package/{libfslparser => freescale-imx/imx-parser}/Config.in (78%)
+>  create mode 100644 package/freescale-imx/imx-parser/imx-parser.hash
+>  create mode 100644 package/freescale-imx/imx-parser/imx-parser.mk
+>  delete mode 100644 package/libfslparser/libfslparser.hash
+>  delete mode 100644 package/libfslparser/libfslparser.mk
 >
 > diff --git a/Config.in.legacy b/Config.in.legacy
-> index b73603b..54d43f1 100644
+> index 54d43f1..dab8505 100644
 > --- a/Config.in.legacy
 > +++ b/Config.in.legacy
 > @@ -142,6 +142,13 @@ comment "build, or run, in unpredictable ways.               "
 >  comment "----------------------------------------------------"
 >  endif
 >
-> +config BR2_PACKAGE_LIBFSLCODEC
-> +       bool "libfslcodec has been renamed to imx-codec"
+> +config BR2_PACKAGE_LIBFSLPARSER
+> +       bool "libfslparser has been renamed to imx-parser"
 > +       select BR2_LEGACY
-> +       select BR2_PACKAGE_IMX_CODEC
+> +       select BR2_PACKAGE_IMX_PARSER
 > +       help
-> +         The libfslcodec has been renamed to match the renamed package.
+> +         The libfslparser has been renamed to match the renamed package.
 > +
 
-This section should actually be under "Legacy options removed in 2016.08" below.
+Same as imx-codec, I believe this should be under the 2016.08 section.
 
->  ###############################################################################
->  comment "Legacy options removed in 2016.08"
->
+>  config BR2_PACKAGE_LIBFSLCODEC
+>         bool "libfslcodec has been renamed to imx-codec"
+>         select BR2_LEGACY
 > diff --git a/package/Config.in b/package/Config.in
-> index ae74f17..c41e4f6 100644
+> index c41e4f6..8c3c6b8 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
 > @@ -1089,7 +1089,6 @@ menu "Multimedia"
 >         source "package/libdvdnav/Config.in"
 >         source "package/libdvdread/Config.in"
 >         source "package/libebml/Config.in"
-> -       source "package/libfslcodec/Config.in"
->         source "package/libfslparser/Config.in"
+> -       source "package/libfslparser/Config.in"
 >         source "package/libfslvpuwrap/Config.in"
 >         source "package/libhdhomerun/Config.in"
+>         source "package/libimxvpuapi/Config.in"
 > diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-> index 8c03190..052de5a 100644
+> index 052de5a..868e51c 100644
 > --- a/package/freescale-imx/Config.in
 > +++ b/package/freescale-imx/Config.in
-> @@ -49,6 +49,7 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
->                 BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53 || \
->                 BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
->
-> +source "package/freescale-imx/imx-codec/Config.in"
+> @@ -52,6 +52,7 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+>  source "package/freescale-imx/imx-codec/Config.in"
 >  source "package/freescale-imx/imx-kobs/Config.in"
 >  source "package/freescale-imx/imx-lib/Config.in"
+> +source "package/freescale-imx/imx-parser/Config.in"
 >  source "package/freescale-imx/imx-uuc/Config.in"
-> diff --git a/package/libfslcodec/Config.in b/package/freescale-imx/imx-codec/Config.in
-> similarity index 75%
-> rename from package/libfslcodec/Config.in
-> rename to package/freescale-imx/imx-codec/Config.in
-> index d2007fe..e161699 100644
-> --- a/package/libfslcodec/Config.in
-> +++ b/package/freescale-imx/imx-codec/Config.in
+>  source "package/freescale-imx/imx-vpu/Config.in"
+>  source "package/freescale-imx/firmware-imx/Config.in"
+> diff --git a/package/libfslparser/Config.in b/package/freescale-imx/imx-parser/Config.in
+> similarity index 78%
+> rename from package/libfslparser/Config.in
+> rename to package/freescale-imx/imx-parser/Config.in
+> index e3ab980..d7048a7 100644
+> --- a/package/libfslparser/Config.in
+> +++ b/package/freescale-imx/imx-parser/Config.in
 > @@ -1,5 +1,5 @@
-> -config BR2_PACKAGE_LIBFSLCODEC
-> -       bool "libfslcodec"
-> +config BR2_PACKAGE_IMX_CODEC
-> +       bool "imx-codec"
+> -config BR2_PACKAGE_LIBFSLPARSER
+> -       bool "libfslparser"
+> +config BR2_PACKAGE_IMX_PARSER
+> +       bool "imx-parser"
 >         depends on BR2_arm # Only relevant for i.MX
->         depends on BR2_TOOLCHAIN_USES_GLIBC # prebuilt binaries
 >         help
-> @@ -8,6 +8,6 @@ config BR2_PACKAGE_LIBFSLCODEC
->           This library is provided by Freescale as-is and doesn't have
->           an upstream.
+>           Binary parser libraries for the Freescale i.MX SoCs.
 
-Although it isn't done in the Yocto patch I guess this renaming is a
-good time to remove the Freescale reference. This library is now
-provided by NXP as-is, targeting NXP i.MX SoCs.
+Same as imx-codec, I think we should get rid of those Freescale
+references right now for the packages that get renamed.
+
+Other than that it looks good.
 
 Regards,
 Gary
