@@ -1,67 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Jun 2016 23:16:58 +0200
-Subject: [Buildroot] [PATCH 7/7] fs/squashfs: remove useless chmod
-In-Reply-To: <20160606230615.2772541c@free-electrons.com>
-References: <cover.1465245732.git.yann.morin.1998@free.fr>
- <d4b5c7f0315f28e792a014983c78b1fe4958eb9f.1465245732.git.yann.morin.1998@free.fr>
- <20160606230615.2772541c@free-electrons.com>
-Message-ID: <20160606211658.GA3706@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Jun 2016 23:19:26 +0200
+Subject: [Buildroot] [git commit] fs/cloop: split long line
+Message-ID: <20160606211934.A0A3581E92@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3d515406c26e9de3580af5d89b92873a5ffdf24d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-06-06 23:06 +0200, Thomas Petazzoni spake thusly:
-> On Mon,  6 Jun 2016 22:43:44 +0200, Yann E. MORIN wrote:
-> > When that was added (in 975e30b, fs/squashfs: fix image file
-> 
-> There is no such commit as 975e30b:
+.. and add the missing newline-at-end-of-file.
 
-Right, the leading '3' got lost in a bad copy-paste...
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/cloop/cloop.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-    $ git show --no-patch 3975e30b
-    commit 3975e30b991d42d4cc153b738742f962d8fda757
-    Author: Peter Korsgaard <jacmet@sunsite.dk>
-    Date:   Tue Aug 31 21:53:40 2010 +0200
-
-        fs/squashfs: fix image file permissions
-    
-        Set image file permissions to 0644 like it was before the fs rework,
-        instead of the rather unhelpful 0700 (E.G. when image is used for tftp).
-    
-        Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-
-As already noticed by Peter.
-
-> ~/projets/buildroot (master)$ git show 975e30b
-> fatal: ambiguous argument '975e30b': unknown revision or path not in
-> the working tree. Use '--' to separate paths from revisions, like this:
-> 'git <command> [<revision>...] -- [<file>...]'
-> 
-> > permissions), the reasons were not quite explicit.
-> 
-> I very well remember that mksquashfs had the very annoying default
-> behavior of making its output file 0444. Like because it was a
-> read-only filesystem, the images should also be read-only, which is
-> obviously a bit silly.
-
-OK, that's good to know.
-
-> Maybe mksquashfs has changed its default behavior since then, but
-> clearly that's the reason why we were doing this.
-
-At least, that's not what I can see here...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/fs/cloop/cloop.mk b/fs/cloop/cloop.mk
+index f783ade..9e42a3a 100644
+--- a/fs/cloop/cloop.mk
++++ b/fs/cloop/cloop.mk
+@@ -7,7 +7,8 @@
+ ROOTFS_CLOOP_DEPENDENCIES = host-cloop host-cdrkit
+ 
+ define ROOTFS_CLOOP_CMD
+-	$(HOST_DIR)/usr/bin/genisoimage -r $(TARGET_DIR) | $(HOST_DIR)/usr/bin/create_compressed_fs - 65536 > $@
++	$(HOST_DIR)/usr/bin/genisoimage -r $(TARGET_DIR) | \
++		$(HOST_DIR)/usr/bin/create_compressed_fs - 65536 > $@
+ endef
+ 
+-$(eval $(call ROOTFS_TARGET,cloop))
+\ No newline at end of file
++$(eval $(call ROOTFS_TARGET,cloop))
