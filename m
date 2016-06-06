@@ -1,10 +1,10 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 6 Jun 2016 16:34:37 +0200
-Subject: [Buildroot] [PATCH 08/10] libimxvpuapi: bump version to 0.10.2
-In-Reply-To: <17186dba6267a09cda955857673d4198395a04c8.1464958470.git.awebster@arcx.com>
+Date: Mon, 6 Jun 2016 16:34:43 +0200
+Subject: [Buildroot] [PATCH 09/10] imx-lib: bump version to 5.4
+In-Reply-To: <7cd0c667d759ea496e55a9cfd2409dbf39e1772e.1464958470.git.awebster@arcx.com>
 References: <cover.1464958470.git.awebster@arcx.com>
- <17186dba6267a09cda955857673d4198395a04c8.1464958470.git.awebster@arcx.com>
-Message-ID: <CAAMH-yvmriGjCfKO40NctAVu4QzbPu25Q440aL1TFjLkm9+now@mail.gmail.com>
+ <7cd0c667d759ea496e55a9cfd2409dbf39e1772e.1464958470.git.awebster@arcx.com>
+Message-ID: <CAAMH-yu1k6S6rpRTrTemfgbRkzRCcS6YwO2qT6fUK6P3h=o3uQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +15,12 @@ Andrew, All,
 
 On Fri, Jun 3, 2016 at 3:12 PM, Andrew Webster <awebster@arcx.com> wrote:
 > Changelog:
-> - fix AUD NAL positioning in h.264 encoder output
->   (SPS/PPS/AUD were ordered incorrectly - AUD has to come first, not last)
-> - fix build error with examples when --enable-static is used
-> - pass quality factor in simplified JPEG encoder interface correctly
-> - add functions for querying and setting header data
->   useful for modifying headers, like VUI data in the SPS RBSP
-> - documentation updates
+> - Remove platform check in hdmi-cec and imx-lib - simplify to support builds
+> on multiple machines
+> - For ipu use the dummy defaul object to fix build issues on non-ipu hardware
 >
 > This patch is based on the Yocto equivalent:
-> https://github.com/Freescale/meta-fsl-arm/commit/c999668
+> https://github.com/Freescale/meta-fsl-arm/commit/7946533
 >
 > Signed-off-by: Andrew Webster <awebster@arcx.com>
 
