@@ -1,107 +1,81 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 6 Jun 2016 14:05:59 +0200
-Subject: [Buildroot] Building opencv using buildroot
-In-Reply-To: <CAEjFr-bhO5DBoSsQ1R0Yzo=cKWThUjQRWoXCiaVF7W3pMX+PSQ@mail.gmail.com>
-References: <CAEjFr-bhO5DBoSsQ1R0Yzo=cKWThUjQRWoXCiaVF7W3pMX+PSQ@mail.gmail.com>
-Message-ID: <CAHXCMMKPJyGKzskNLs2Awxmxjftbqj6nigWiMhtdiORKC4t-yw@mail.gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon,  6 Jun 2016 14:47:12 +0200
+Subject: [Buildroot] [PATCH] python-xlsxwriter: new package
+Message-ID: <1465217232-19536-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Doha,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Mon, Jun 6, 2016 at 12:06 AM, Doha Ehab <dohaehab@gmail.com> wrote:
-> Hello,
-> I am using Buildroot 2016.05-rc1 to statically build openvc. so From the
-> configurations menu  target packges -> libraries -> graphics-> opencv-2.4 I
-> have selected all features for opencv(except v4l and qt backend support).
-> After "make" I compiled a simple code that reads a jpg image using this
-> command:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                                |  1 +
+ package/python-xlsxwriter/Config.in              |  8 ++++++++
+ package/python-xlsxwriter/python-xlsxwriter.hash |  4 ++++
+ package/python-xlsxwriter/python-xlsxwriter.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-xlsxwriter/Config.in
+ create mode 100644 package/python-xlsxwriter/python-xlsxwriter.hash
+ create mode 100644 package/python-xlsxwriter/python-xlsxwriter.mk
 
-I strongly recommend you use a build-system for your application,
-preferably CMake (since opencv already uses CMake and provides the
-*.cmake files making easier getting all needed dependency flags).
-
-Also, Buildroot generates the toolchain file, required to
-cross-compile with CMake (tihs file takes care of setting the
-cross-toolchain, the sysroot, and so on). It is located in:
-$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
-
->
-> /buildroot-2Final/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-g++
- > ocv.c -L/buildroot-2Final/output/build/opencv-2.4.12.3/ -lopencv_calib3d
-> -lopencv_contrib -lopencv_core -lopencv_features2d -lopencv_flann
-> -lopencv_highgui -lopencv_imgproc -lopencv_legacy -lopencv_ml
-> -lopencv_objdetect  -lopencv_photo -lopencv_stitching -lopencv_superres
-> -lopencv_ts -lopencv_video -lopencv_videostab -lz -lrt -lpthread -pthread
-> -lm   -o ocv
-
-In your command, the -L option should not point the opencv build
-directory (I doubt there is any of the listed libraries in this
-directory) but to $(STAGING_DIR)/usr/lib (where most of/all the
-cross-compiled libs are installed for buildtime).
-
->
-> I got this error  :
-> buildroot-2Final/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libopencv_highgui.a(grfmt_jpeg.cpp.o):
-> In function `cv::my_jpeg_load_dht(jpeg_decompress_struct*, unsigned char*,
-> JHUFF_TBL**, JHUFF_TBL**) [clone .constprop.39]':
-> grfmt_jpeg.cpp:(.text.unlikely._ZN2cvL16my_jpeg_load_dhtEP22jpeg_decompress_structPhPP9JHUFF_TBLS5_.constprop.39+0xec):
-> undefined reference to `jpeg_alloc_huff_table'
-> /buildroot-2Final/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libopencv_highgui.a(grfmt_jpeg.cpp.o):
-> In function `cv::JpegEncoder::write(cv::Mat const&, std::vector<int,
-> std::allocator<int> > const&)':
-> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0xb4):
-> undefined reference to `jpeg_CreateCompress'
-> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0xbc):
-> undefined reference to `jpeg_std_error'
-> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x170):
-> undefined reference to `jpeg_destroy_compress'
-> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x270):
-> undefined reference to `jpeg_set_defaults'
-> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x280):
-> undefined reference to `jpeg_set_quality'
-> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x28c):
-> undefined reference to `jpeg_start_compress'
-> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x308):
-> undefined reference to `jpeg_write_scanlines'
-> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x320):
-> undefined reference to `jpeg_finish_compress'
-> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x3a8):
-> undefined reference to `jpeg_stdio_dest'
-> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x41c):
-> undefined reference to `jpeg_write_scanlines'
-> grfmt_jpeg.cpp:(.text._ZN2cv11JpegEncoder5writeERKNS_3MatERKSt6vectorIiSaIiEE+0x4a8):
-> undefined reference to `jpeg_write_scanlines'
->
-> I have select jpeg support also there is no liblibjpeg in
-> /buildroot-2Final/output/build/opencv-2.4.12.3/3rdparty. I want to know what
-> I am missing or doing wrong.
-
-Few things ;):
-- /buildroot-2Final/output/build/opencv-2.4.12.3/ is the opencv build
-directory, the dependency libs are installed/available in
-$(STAGING_DIR)/usr/lib;
-- /buildroot-2Final/output/build/opencv-2.4.12.3/3rdparty: Buildroot
-does not use bundled dependencies, so building opencv only build
-opencv, no 3rd parties (these 3rd parties are explicitly declared as
-dependencies, so Buildroot builds them in their own build directories)
-- the jpeg library is named libjpeg.so or libjpeg.a
-- -ljpeg is missing in the CXXFLAGS list
-
-I guess you followed [1] to get this command line.
-While invoking /buildroot-2Final/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-g++
-makes (and hides) most of the magics about the cross-compilation
-tricky thing, it does not solve the dependency problems nor missing
-{C,CPP,CXX,LD}FLAGS. It is still up to to end-user application
-developer to take care of this because it is application-specific.
-
-[1] http://nightly.buildroot.org/#_using_the_generated_toolchain_outside_buildroot
-
-Regards,
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 9f6e0d9..46d7977 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -765,6 +765,7 @@ menu "External python modules"
+ 	source "package/python-werkzeug/Config.in"
+ 	source "package/python-ws4py/Config.in"
+ 	source "package/python-wsaccel/Config.in"
++	source "package/python-xlsxwriter/Config.in"
+ 	source "package/python-zope-interface/Config.in"
+ endmenu
+ endif
+diff --git a/package/python-xlsxwriter/Config.in b/package/python-xlsxwriter/Config.in
+new file mode 100644
+index 0000000..3641bd0
+--- /dev/null
++++ b/package/python-xlsxwriter/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_XLSXWRITER
++	bool "python-xlsxwriter"
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
++	help
++	  A Python module for creating Excel XLSX files.
++
++	  https://github.com/jmcnamara/XlsxWriter
+diff --git a/package/python-xlsxwriter/python-xlsxwriter.hash b/package/python-xlsxwriter/python-xlsxwriter.hash
+new file mode 100644
+index 0000000..69bfc6f
+--- /dev/null
++++ b/package/python-xlsxwriter/python-xlsxwriter.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/XlsxWriter/json
++md5	545c938f279abcfd7f11e705012302fe  XlsxWriter-0.8.9.tar.gz
++# sha256 locally computed
++sha256	cb90c5283b88af72549adf82f203d15623a0f4faeae29b6a20733e187dfde882  XlsxWriter-0.8.9.tar.gz
+diff --git a/package/python-xlsxwriter/python-xlsxwriter.mk b/package/python-xlsxwriter/python-xlsxwriter.mk
+new file mode 100644
+index 0000000..af911cc
+--- /dev/null
++++ b/package/python-xlsxwriter/python-xlsxwriter.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-xlsxwriter
++#
++################################################################################
++
++PYTHON_XLSXWRITER_VERSION = 0.8.9
++PYTHON_XLSXWRITER_SOURCE = XlsxWriter-$(PYTHON_XLSXWRITER_VERSION).tar.gz
++PYTHON_XLSXWRITER_SITE = https://pypi.python.org/packages/2a/de/4ee20ac103417662865e0e3acde859b002c13f52af0d50a2664d3eca5897
++PYTHON_XLSXWRITER_SETUP_TYPE = setuptools
++PYTHON_XLSXWRITER_LICENSE = BSD-2c
++PYTHON_XLSXWRITER_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
 -- 
-Samuel
+2.1.4
