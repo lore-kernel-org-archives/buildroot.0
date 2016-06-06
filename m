@@ -1,24 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 06 Jun 2016 21:41:21 +0200
-Subject: [Buildroot] [PATCH 1/1] Config.in: add BR2_HOST_GCC_AT_LEAST_6
-In-Reply-To: <20160606101814.5777-1-martin@barkynet.com> (Martin Bark's
- message of "Mon, 6 Jun 2016 11:18:14 +0100")
-References: <20160606101814.5777-1-martin@barkynet.com>
-Message-ID: <87bn3ehzq6.fsf@dell.be.48ers.dk>
+Date: Mon, 06 Jun 2016 21:42:45 +0200
+Subject: [Buildroot] [PATCH] python-serial: fix Python 2.7.x related
+	compilation error
+In-Reply-To: <1465212611-2210-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Mon, 6 Jun 2016 13:30:11
+ +0200")
+References: <1465212611-2210-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <877fe2hznu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
- > Signed-off-by: Martin Bark <martin@barkynet.com>
- > ---
- > Note: i spotted this when trying to build nodejs on archlinux which
- > currently uses gcc 6.1.1
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > aio.py is an experimental module, that is compatible with
+ > Python 3 only, so remove it for Python 2 environment or it
+ > will cause compilation errors.
 
- > Signed-off-by: Martin Bark <martin@barkynet.com>
+ > Fixes:
+ > http://autobuild.buildroot.org/results/f26/f26351da925d6ef3adea8053dc7fc24061554daf/
+
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Committed, thanks.
 
