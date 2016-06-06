@@ -1,23 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 06 Jun 2016 21:49:12 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/softether: add hash
-In-Reply-To: <1465163003-19156-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Sun, 5 Jun 2016 23:43:23 +0200")
-References: <1465163003-19156-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87y46igksn.fsf@dell.be.48ers.dk>
+Date: Mon, 6 Jun 2016 21:41:08 +0200
+Subject: [Buildroot] [git commit] Config.in: add BR2_HOST_GCC_AT_LEAST_6
+Message-ID: <20160606195009.0AA5D818FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3d2175780d70a864836c75343fd969fba1109057
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- > v2: added hashes for patch files
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Config.in b/Config.in
+index 1dd2bb3..9fa7415 100644
+--- a/Config.in
++++ b/Config.in
+@@ -47,6 +47,11 @@ config BR2_HOST_GCC_AT_LEAST_5
+ 	default y if BR2_HOST_GCC_VERSION = "5"
+ 	select BR2_HOST_GCC_AT_LEAST_4_9
+ 
++config BR2_HOST_GCC_AT_LEAST_6
++	bool
++	default y if BR2_HOST_GCC_VERSION = "6"
++	select BR2_HOST_GCC_AT_LEAST_5
++
+ # Hidden boolean selected by packages in need of Java in order to build
+ # (example: xbmc)
+ config BR2_NEEDS_HOST_JAVA
