@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Jun 2016 23:23:48 +0200
-Subject: [Buildroot] [PATCH 00/10] Bump NXP package versions
-In-Reply-To: <cover.1464958470.git.awebster@arcx.com>
-References: <cover.1464958470.git.awebster@arcx.com>
-Message-ID: <20160606232348.3c0b21c2@free-electrons.com>
+Date: Mon, 6 Jun 2016 23:24:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mplayer: add optional support
+ for mpg123
+In-Reply-To: <1465027220-19359-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1465027220-19359-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160606232418.2e80ebb2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +13,45 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 3 Jun 2016 09:10:30 -0400, Andrew Webster wrote:
+On Sat,  4 Jun 2016 10:00:20 +0200, Bernd Kuhls wrote:
+> mplayer has optional support for mpg123, to get reproducable builds
+> add mpg123 as optional dependency.
+> 
+> Linked libraries without this patch:
+> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/mplayer | grep NEEDED
+>  0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libm.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+> 
+> Linked libraries after this patch:
+> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/mplayer | grep NEEDED
+>  0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libmpg123.so.0]
+>  0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libm.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+> 
+> Like with many other optional libraries detection of mpg123 is broken if
+> --enable-mpg123 is passed to configure leading to a build error:
+> 
+> libmpcodecs/ad_mpg123.o: In function `set_format':
+> ad_mpg123.c:(.text+0x63): undefined reference to `mpg123_getformat'
+> libmpcodecs/ad_mpg123.o: In function `decode_a_bit':
+> ad_mpg123.c:(.text+0x1b6): undefined reference to `mpg123_feed'
+> ad_mpg123.c:(.text+0x20e): undefined reference to `mpg123_replace_buffer'
+> ad_mpg123.c:(.text+0x223): undefined reference to `mpg123_decode_frame_64'
+> ad_mpg123.c:(.text+0x275): undefined reference to `mpg123_strerror'
+> [...]
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mplayer/mplayer.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
-> Andrew Webster (10):
->   firmware-imx: bump to version 5.4
->   gst1-imx: bump to version 0.12.1
->   imx-vpu: bump to version 5.4.33
->   imx-codec: rename from libfslcodec and bump version to 4.0.9
->   imx-parser: rename from libfslparser and bump version to 4.0.9
->   imx-vpuwrap: rename from libfslvpuwrap and bump version to 1.0.65
->   imx-gpu-viv: bump version to 5.0.11-p8.3
->   libimxvpuapi: bump version to 0.10.2
->   imx-lib: bump version to 5.4
->   xdriver_xf86-video-imx-viv: bump version to 5.0.11-p8.3
-
-Thanks a lot for this work! Since you've received several comments from
-Gary, I've marked your patch series as "Changes Requested" in our patch
-tracking system (which helps us to not lose and forget patches).
-
-Could you send an updated version of your patch series after reworking
-it to take into account Gary's comments?
-
-Thanks a lot!
+Applied to master, thanks.
 
 Thomas
 -- 
