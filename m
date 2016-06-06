@@ -1,81 +1,82 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon,  6 Jun 2016 14:47:12 +0200
-Subject: [Buildroot] [PATCH] python-xlsxwriter: new package
-Message-ID: <1465217232-19536-1-git-send-email-yegorslists@googlemail.com>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Mon,  6 Jun 2016 15:04:09 +0200
+Subject: [Buildroot] [PATCH] package/middleclass: new package
+Message-ID: <20160606130409.19533-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/Config.in                                |  1 +
- package/python-xlsxwriter/Config.in              |  8 ++++++++
- package/python-xlsxwriter/python-xlsxwriter.hash |  4 ++++
- package/python-xlsxwriter/python-xlsxwriter.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-xlsxwriter/Config.in
- create mode 100644 package/python-xlsxwriter/python-xlsxwriter.hash
- create mode 100644 package/python-xlsxwriter/python-xlsxwriter.mk
+ package/Config.in                    |  1 +
+ package/middleclass/Config.in        |  9 +++++++++
+ package/middleclass/middleclass.hash |  2 ++
+ package/middleclass/middleclass.mk   | 18 ++++++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/middleclass/Config.in
+ create mode 100644 package/middleclass/middleclass.hash
+ create mode 100644 package/middleclass/middleclass.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9f6e0d9..46d7977 100644
+index 9f6e0d9..b48948e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -765,6 +765,7 @@ menu "External python modules"
- 	source "package/python-werkzeug/Config.in"
- 	source "package/python-ws4py/Config.in"
- 	source "package/python-wsaccel/Config.in"
-+	source "package/python-xlsxwriter/Config.in"
- 	source "package/python-zope-interface/Config.in"
- endmenu
- endif
-diff --git a/package/python-xlsxwriter/Config.in b/package/python-xlsxwriter/Config.in
+@@ -544,6 +544,7 @@ menu "Lua libraries/modules"
+ 	source "package/luv/Config.in"
+ 	source "package/luvi/Config.in"
+ 	source "package/lzlib/Config.in"
++	source "package/middleclass/Config.in"
+ 	source "package/orbit/Config.in"
+ 	source "package/rings/Config.in"
+ 	source "package/turbolua/Config.in"
+diff --git a/package/middleclass/Config.in b/package/middleclass/Config.in
 new file mode 100644
-index 0000000..3641bd0
+index 0000000..712064a
 --- /dev/null
-+++ b/package/python-xlsxwriter/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_XLSXWRITER
-+	bool "python-xlsxwriter"
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
++++ b/package/middleclass/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_MIDDLECLASS
++	bool "middleclass"
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
 +	help
-+	  A Python module for creating Excel XLSX files.
++	  middleclass is a simple OOP library for Lua. It has
++	  inheritance, metamethods (operators), class variables
++	  and weak mixin support.
 +
-+	  https://github.com/jmcnamara/XlsxWriter
-diff --git a/package/python-xlsxwriter/python-xlsxwriter.hash b/package/python-xlsxwriter/python-xlsxwriter.hash
++	  https://github.com/kikito/middleclass
+diff --git a/package/middleclass/middleclass.hash b/package/middleclass/middleclass.hash
 new file mode 100644
-index 0000000..69bfc6f
+index 0000000..3fc794a
 --- /dev/null
-+++ b/package/python-xlsxwriter/python-xlsxwriter.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/XlsxWriter/json
-+md5	545c938f279abcfd7f11e705012302fe  XlsxWriter-0.8.9.tar.gz
-+# sha256 locally computed
-+sha256	cb90c5283b88af72549adf82f203d15623a0f4faeae29b6a20733e187dfde882  XlsxWriter-0.8.9.tar.gz
-diff --git a/package/python-xlsxwriter/python-xlsxwriter.mk b/package/python-xlsxwriter/python-xlsxwriter.mk
++++ b/package/middleclass/middleclass.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	fc7f3e79a77d4733fd80b2e310f7f34092bdb5888549f304a24efd624c56482e  middleclass-v4.0.0.tar.gz
+diff --git a/package/middleclass/middleclass.mk b/package/middleclass/middleclass.mk
 new file mode 100644
-index 0000000..af911cc
+index 0000000..3e21452
 --- /dev/null
-+++ b/package/python-xlsxwriter/python-xlsxwriter.mk
-@@ -0,0 +1,14 @@
++++ b/package/middleclass/middleclass.mk
+@@ -0,0 +1,18 @@
 +################################################################################
 +#
-+# python-xlsxwriter
++# middleclass
 +#
 +################################################################################
 +
-+PYTHON_XLSXWRITER_VERSION = 0.8.9
-+PYTHON_XLSXWRITER_SOURCE = XlsxWriter-$(PYTHON_XLSXWRITER_VERSION).tar.gz
-+PYTHON_XLSXWRITER_SITE = https://pypi.python.org/packages/2a/de/4ee20ac103417662865e0e3acde859b002c13f52af0d50a2664d3eca5897
-+PYTHON_XLSXWRITER_SETUP_TYPE = setuptools
-+PYTHON_XLSXWRITER_LICENSE = BSD-2c
-+PYTHON_XLSXWRITER_LICENSE_FILES = LICENSE.txt
++MIDDLECLASS_VERSION = v4.0.0
++MIDDLECLASS_SITE = $(call github,kikito,middleclass,$(MIDDLECLASS_VERSION))
++MIDDLECLASS_DEPENDENCIES = luainterpreter
++MIDDLECLASS_LICENSE = MIT
++MIDDLECLASS_LICENSE_FILES = MIT-LICENSE.txt
 +
-+$(eval $(python-package))
++define MIDDLECLASS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/middleclass.lua \
++		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/middleclass.lua
++endef
++
++$(eval $(generic-package))
 -- 
-2.1.4
+2.8.3
