@@ -1,43 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Jun 2016 23:25:55 +0200
-Subject: [Buildroot] [PATCH 1/7] core/pkg-utils: add macro to
- escape-and-printf
-In-Reply-To: <20160606230723.7ba46894@free-electrons.com>
+Date: Mon, 6 Jun 2016 23:28:58 +0200
+Subject: [Buildroot] [PATCH 7/7] fs/squashfs: remove useless chmod
+In-Reply-To: <87k2i2ghfq.fsf@dell.be.48ers.dk>
 References: <cover.1465245732.git.yann.morin.1998@free.fr>
- <11da03a97bde4e0332be6577a83e1476566d8e9f.1465245732.git.yann.morin.1998@free.fr>
- <20160606230723.7ba46894@free-electrons.com>
-Message-ID: <20160606212555.GB3706@free.fr>
+ <d4b5c7f0315f28e792a014983c78b1fe4958eb9f.1465245732.git.yann.morin.1998@free.fr>
+ <87k2i2ghfq.fsf@dell.be.48ers.dk>
+Message-ID: <20160606212858.GC3706@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Peter, All,
 
-On 2016-06-06 23:07 +0200, Thomas Petazzoni spake thusly:
-> On Mon,  6 Jun 2016 22:43:38 +0200, Yann E. MORIN wrote:
+On 2016-06-06 23:01 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 > 
-> > +define PRINTF
-> > +	printf '$(subst $(sep),\n,\
-> > +			$(subst $(PERCENT),$(PERCENT)$(PERCENT),\
-> > +				$(subst $(QUOTE),$(QUOTE)\$(QUOTE)$(QUOTE),\
-> > +					$(subst \,\\,$(1)))))\n'
-> > +endef
+>  > When that was added (in 975e30b, fs/squashfs: fix image file
+>  > permissions), the reasons were not quite explicit.
 > 
-> Do we expect this to be used outside of fs/common.mk? Since it's not
-> the case today, I would suggest to move it there.
+> The git hash is wrong, it was 3975e30b9.
 
-Indeed I don;t plan on using it outside of the fs infra for now (I have
-another series that will rely on it, but still in the fs infra).
-
-However, this is generic enough that it is not specific to the fs infra.
-Thus I believe it belong to pkg-utils.
-
-If you still prefer I move it to fs/common.mk, that's also OK for me.
+Good catch!
 
 Regards,
 Yann E. MORIN.
+
+>  > We are now forcing the umask, and various tests have shown that the mode
+>  > on the generated image file are correct without the chmod.
+> 
+>  > Remove it.
+> 
+>  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  > Cc: Peter Korsgaard <peter@korsgaard.com>
+> 
+> otherwise it looks good.
+> 
+> Acked-by: Peter Korsgaard <peter@korsgaard.com>
+> 
+> > ---
+>  >  fs/squashfs/squashfs.mk | 1 -
+>  >  1 file changed, 1 deletion(-)
+> 
+>  > diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
+>  > index eadbb8f..c4d9ca5 100644
+>  > --- a/fs/squashfs/squashfs.mk
+>  > +++ b/fs/squashfs/squashfs.mk
+>  > @@ -27,7 +27,6 @@ endif
+>  >  define ROOTFS_SQUASHFS_CMD
+>  >  	$(HOST_DIR)/usr/bin/mksquashfs $(TARGET_DIR) $@ -noappend \
+>  >  		$(ROOTFS_SQUASHFS_ARGS)
+>  > -	chmod 0644 $@
+>  >  endef
+>  
+>  >  $(eval $(call ROOTFS_TARGET,squashfs))
+>  > -- 
+>  > 2.7.4
+> 
+> 
+> 
+> -- 
+> Venlig hilsen,
+> Peter Korsgaard 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
