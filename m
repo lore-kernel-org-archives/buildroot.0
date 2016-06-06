@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  6 Jun 2016 20:09:12 -0300
-Subject: [Buildroot] [PATCH] msmtp: bump to version 1.6.5
-Message-ID: <1465254552-28684-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  6 Jun 2016 20:20:51 -0300
+Subject: [Buildroot] [PATCH] hiawatha: bump to version 10.3
+Message-ID: <1465255251-24256-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/msmtp/msmtp.hash | 6 +++---
- package/msmtp/msmtp.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/hiawatha/hiawatha.hash | 2 +-
+ package/hiawatha/hiawatha.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
-index fb03e05..d0de8e0 100644
---- a/package/msmtp/msmtp.hash
-+++ b/package/msmtp/msmtp.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.2/
--md5	3baca93c7e5f1aa9d36a2e5b38739ab9	msmtp-1.6.2.tar.xz
--sha1	2d2272d04851b9bc806a77f47344e61840185329	msmtp-1.6.2.tar.xz
-+# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.5/
-+md5	50a8c9bb72f8222779db6b4aae2965e0	msmtp-1.6.5.tar.xz
-+sha1	27d1fc609cd453a7e4c55c4ec55d455949bc53f1	msmtp-1.6.5.tar.xz
-diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-index 7c8261e..7ede66c 100644
---- a/package/msmtp/msmtp.mk
-+++ b/package/msmtp/msmtp.mk
+diff --git a/package/hiawatha/hiawatha.hash b/package/hiawatha/hiawatha.hash
+index 5709076..a5207a1 100644
+--- a/package/hiawatha/hiawatha.hash
++++ b/package/hiawatha/hiawatha.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	3892e0a1836661c8dcc649f9ae965289f701640a618baf2c2287da9b78e36cf1	hiawatha-10.1.tar.gz
++sha256	99d185fb16bb1ab706724494d3cac86464f1485ed4b0fff09a192eca6da5ff8e	hiawatha-10.3.tar.gz
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index d30b1a1..dc49216 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MSMTP_VERSION = 1.6.2
-+MSMTP_VERSION = 1.6.5
- MSMTP_SITE = http://downloads.sourceforge.net/project/msmtp/msmtp/$(MSMTP_VERSION)
- MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
- MSMTP_DEPENDENCIES = host-pkgconf
+-HIAWATHA_VERSION = 10.1
++HIAWATHA_VERSION = 10.3
+ HIAWATHA_SITE = http://www.hiawatha-webserver.org/files
+ HIAWATHA_DEPENDENCIES = zlib
+ HIAWATHA_LICENSE = GPLv2
 -- 
 2.7.3
