@@ -1,82 +1,56 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Mon,  6 Jun 2016 15:04:09 +0200
-Subject: [Buildroot] [PATCH] package/middleclass: new package
-Message-ID: <20160606130409.19533-1-m.niestroj@grinn-global.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 6 Jun 2016 16:32:28 +0200
+Subject: [Buildroot] [PATCH 00/10] Bump NXP package versions
+In-Reply-To: <cover.1464958470.git.awebster@arcx.com>
+References: <cover.1464958470.git.awebster@arcx.com>
+Message-ID: <CAAMH-ytGSshRJTZiqmQ4DeztuA5L_GtfnF8aTCUorx9vw87baA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/Config.in                    |  1 +
- package/middleclass/Config.in        |  9 +++++++++
- package/middleclass/middleclass.hash |  2 ++
- package/middleclass/middleclass.mk   | 18 ++++++++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/middleclass/Config.in
- create mode 100644 package/middleclass/middleclass.hash
- create mode 100644 package/middleclass/middleclass.mk
+Andrew, All,
 
-diff --git a/package/Config.in b/package/Config.in
-index 9f6e0d9..b48948e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -544,6 +544,7 @@ menu "Lua libraries/modules"
- 	source "package/luv/Config.in"
- 	source "package/luvi/Config.in"
- 	source "package/lzlib/Config.in"
-+	source "package/middleclass/Config.in"
- 	source "package/orbit/Config.in"
- 	source "package/rings/Config.in"
- 	source "package/turbolua/Config.in"
-diff --git a/package/middleclass/Config.in b/package/middleclass/Config.in
-new file mode 100644
-index 0000000..712064a
---- /dev/null
-+++ b/package/middleclass/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_MIDDLECLASS
-+	bool "middleclass"
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	help
-+	  middleclass is a simple OOP library for Lua. It has
-+	  inheritance, metamethods (operators), class variables
-+	  and weak mixin support.
-+
-+	  https://github.com/kikito/middleclass
-diff --git a/package/middleclass/middleclass.hash b/package/middleclass/middleclass.hash
-new file mode 100644
-index 0000000..3fc794a
---- /dev/null
-+++ b/package/middleclass/middleclass.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	fc7f3e79a77d4733fd80b2e310f7f34092bdb5888549f304a24efd624c56482e  middleclass-v4.0.0.tar.gz
-diff --git a/package/middleclass/middleclass.mk b/package/middleclass/middleclass.mk
-new file mode 100644
-index 0000000..3e21452
---- /dev/null
-+++ b/package/middleclass/middleclass.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# middleclass
-+#
-+################################################################################
-+
-+MIDDLECLASS_VERSION = v4.0.0
-+MIDDLECLASS_SITE = $(call github,kikito,middleclass,$(MIDDLECLASS_VERSION))
-+MIDDLECLASS_DEPENDENCIES = luainterpreter
-+MIDDLECLASS_LICENSE = MIT
-+MIDDLECLASS_LICENSE_FILES = MIT-LICENSE.txt
-+
-+define MIDDLECLASS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0644 -D $(@D)/middleclass.lua \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/middleclass.lua
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.8.3
+First of all, thank you for taking care of this update. It's good to
+have someone else looking at those ;-)
+
+On Fri, Jun 3, 2016 at 3:10 PM, Andrew Webster <awebster@arcx.com> wrote:
+> The following packages were renamed:
+>  libfslcodec -> imx-codec
+>  libfslparser -> imx-parser
+>  libfslvpuwrap -> imx-vpuwrap
+> In addition to renaming, I also moved them into the freescale-imx directory
+> which seems consistent with other similarily named packages (although that
+> directory may be due for a rename now too).  Not sure if this was appropriate
+> or not.
+
+I'm ok moving things to freescale-imx, I think it makes it easier for
+people looking at i.MX-specific packages instead of browsing through
+both hardware handling packages and multimedia libraries.
+However I guess Thomas and/or Peter will have ack this change.
+
+As for changing the 'freescale-imx' name, I agree this will need to
+happen but there's no rush in my opinion. Especially since the Yocto
+layer is still called meta-*fsl*-arm.
+
+> Andrew Webster (10):
+>   firmware-imx: bump to version 5.4
+>   gst1-imx: bump to version 0.12.1
+>   imx-vpu: bump to version 5.4.33
+>   imx-codec: rename from libfslcodec and bump version to 4.0.9
+>   imx-parser: rename from libfslparser and bump version to 4.0.9
+>   imx-vpuwrap: rename from libfslvpuwrap and bump version to 1.0.65
+>   imx-gpu-viv: bump version to 5.0.11-p8.3
+>   libimxvpuapi: bump version to 0.10.2
+>   imx-lib: bump version to 5.4
+>   xdriver_xf86-video-imx-viv: bump version to 5.0.11-p8.3
+
+I will comment on each individual patch above but I have a couple of questions:
+- Why isn't there the kernel-module-imx-gpu-viv update? It is very
+important to keep it in line with imx-gpu-viv.
+- What about imx-kobs?
+- Can you share your testing setup (platform name + defconfig)?
+
+Regards,
+Gary
