@@ -1,10 +1,11 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 6 Jun 2016 16:34:43 +0200
-Subject: [Buildroot] [PATCH 09/10] imx-lib: bump version to 5.4
-In-Reply-To: <7cd0c667d759ea496e55a9cfd2409dbf39e1772e.1464958470.git.awebster@arcx.com>
+Date: Mon, 6 Jun 2016 16:36:10 +0200
+Subject: [Buildroot] [PATCH 10/10] xdriver_xf86-video-imx-viv: bump
+ version to 5.0.11-p8.3
+In-Reply-To: <5d2d6204a5f725c8f04eaf93459b75717297ae51.1464958470.git.awebster@arcx.com>
 References: <cover.1464958470.git.awebster@arcx.com>
- <7cd0c667d759ea496e55a9cfd2409dbf39e1772e.1464958470.git.awebster@arcx.com>
-Message-ID: <CAAMH-yu1k6S6rpRTrTemfgbRkzRCcS6YwO2qT6fUK6P3h=o3uQ@mail.gmail.com>
+ <5d2d6204a5f725c8f04eaf93459b75717297ae51.1464958470.git.awebster@arcx.com>
+Message-ID: <CAAMH-yv+fVHWTu9w6t4ojx0V+GvVcz1_1W4mj-Y9-DGBvrBtCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +14,21 @@ To: buildroot@busybox.net
 
 Andrew, All,
 
-On Fri, Jun 3, 2016 at 3:12 PM, Andrew Webster <awebster@arcx.com> wrote:
-> Changelog:
-> - Remove platform check in hdmi-cec and imx-lib - simplify to support builds
-> on multiple machines
-> - For ipu use the dummy defaul object to fix build issues on non-ipu hardware
+On Fri, Jun 3, 2016 at 3:13 PM, Andrew Webster <awebster@arcx.com> wrote:
+> Remove upstreamed patch.
+> Add patch from Yocto to not use git for versioning.
 >
 > This patch is based on the Yocto equivalent:
-> https://github.com/Freescale/meta-fsl-arm/commit/7946533
->
-> Signed-off-by: Andrew Webster <awebster@arcx.com>
+> https://github.com/Freescale/meta-fsl-arm/commit/06a0574
 
-Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Same as imx-gpu-viv package, I think we should go straight to version
+p8.4. Also, can you re-order your patches to have this one after
+imx-gpu-viv, just trying to have multimedia updates on one side and
+then graphics update. Especially now that graphics can be updated
+separately.
+
+Finally, I forgot to mention it in my cover letter answer, please cc
+me to the v2 series.
 
 Regards,
 Gary
