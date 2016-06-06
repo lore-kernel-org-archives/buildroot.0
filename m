@@ -1,47 +1,56 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Mon,  6 Jun 2016 14:05:35 -0300
-Subject: [Buildroot] [PATCH v2] beaglebone: Bump U-Boot version
-In-Reply-To: <1465075749-31837-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1465075749-31837-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <1465232735-32705-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+From: Andrew Webster <Awebster@arcx.com>
+Date: Mon, 6 Jun 2016 17:12:47 +0000
+Subject: [Buildroot] [PATCH 01/10] firmware-imx: bump to version 5.4
+In-Reply-To: <CAAMH-ysqVQDCw1_OmC79tqOEKrTftaOJk=0gNrW7-j3fNMHURQ@mail.gmail.com>
+References: <cover.1464958470.git.awebster@arcx.com>
+ <642a0f54088507a92effa0f935950326f752d0c8.1464958470.git.awebster@arcx.com>
+ <CAAMH-ysqVQDCw1_OmC79tqOEKrTftaOJk=0gNrW7-j3fNMHURQ@mail.gmail.com>
+Message-ID: <282d0384157042e28d80a63646119b3b@WEBMAIL.arcx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently selected version of U-Boot fails to compile.
-Dying words are:
+> -----Original Message-----
+> From: Gary Bisson [mailto:gary.bisson at boundarydevices.com]
+> Sent: Monday, June 06, 2016 10:33 AM
+> To: Andrew Webster
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH 01/10] firmware-imx: bump to version 5.4
+> 
+> Andrew, All,
+> 
+> On Fri, Jun 3, 2016 at 3:10 PM, Andrew Webster <awebster@arcx.com>
+> wrote:
+> > Changelog:
+> > - Upgrade to FW v3.1.1_r46072
+> > - v3.1.1_r46070 plus 2 patches 391/392
+> > - FSLARIK-391 [Decoder/H.264] VPU is always busy when decoding an
+> > erroneous H264 bitstream
+> > - FSLARIK-392 [Decoder/VC1] VPU outputs only 1 picture
+> > - Change to the format of Linux coda driver firmware
+> 
+> Hmm, that's cool because it means the firmware can now be used by
+> mainline kernel seamlessly, but it also means that it won't work on any kernel
+> < 4.1.15. Do you confirm you've tried it on 4.1.15 kernel only?
 
-  gcc -g -O2 -I/home/zeta/buildroot/buildroot/output/host/usr/include -c -o env_embedded.o /home/zeta/buildroot/buildroot/output/build/uboot-2013.10/common/env_embedded.c
-  /home/zeta/buildroot/buildroot/output/build/uboot-2013.10/lib/crc32.c:14:20: fatal error: common.h: No such file or directory
-  compilation terminated.
-  Makefile:258: recipe for target 'crc32.o' failed
+Correct, tested against the 4.1.15 kernel only.
 
-Since it's quite old, instead of trying to fix it, let's
-just upgrade.
+> 
+> This means that updating defconfig should also be part of this series in my
+> opinion, at least for the NXP platforms.
 
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
----
-Changes from v1:
+What would be the verification plan for defconfig updates?  Build each one and check for build errors?
 
-  * Bump to a specific version instead of using the default.
+> 
+> > This patch is based on the Yocto equivalent:
+> > https://github.com/Freescale/meta-fsl-arm/commit/dbb8773
+> 
+> Please share how you've tested the VPU firmware for instance.
 
- configs/beaglebone_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I followed the same tests from your previous version bumps (e.g. gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! matroskademux ! imxvpudec ! imxipuvideosink).  I can add the test(s) performed to the commit messages if you like.
 
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index d44636173264..206417dc1cce 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -22,7 +22,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2013.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="MLO"
--- 
-2.7.0
+> 
+> Regards,
+> Gary
