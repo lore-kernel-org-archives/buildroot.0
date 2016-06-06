@@ -1,60 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Jun 2016 23:24:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mplayer: add optional support
- for mpg123
-In-Reply-To: <1465027220-19359-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465027220-19359-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160606232418.2e80ebb2@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 6 Jun 2016 23:25:55 +0200
+Subject: [Buildroot] [PATCH 1/7] core/pkg-utils: add macro to
+ escape-and-printf
+In-Reply-To: <20160606230723.7ba46894@free-electrons.com>
+References: <cover.1465245732.git.yann.morin.1998@free.fr>
+ <11da03a97bde4e0332be6577a83e1476566d8e9f.1465245732.git.yann.morin.1998@free.fr>
+ <20160606230723.7ba46894@free-electrons.com>
+Message-ID: <20160606212555.GB3706@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Sat,  4 Jun 2016 10:00:20 +0200, Bernd Kuhls wrote:
-> mplayer has optional support for mpg123, to get reproducable builds
-> add mpg123 as optional dependency.
+On 2016-06-06 23:07 +0200, Thomas Petazzoni spake thusly:
+> On Mon,  6 Jun 2016 22:43:38 +0200, Yann E. MORIN wrote:
 > 
-> Linked libraries without this patch:
-> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/mplayer | grep NEEDED
->  0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libm.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+> > +define PRINTF
+> > +	printf '$(subst $(sep),\n,\
+> > +			$(subst $(PERCENT),$(PERCENT)$(PERCENT),\
+> > +				$(subst $(QUOTE),$(QUOTE)\$(QUOTE)$(QUOTE),\
+> > +					$(subst \,\\,$(1)))))\n'
+> > +endef
 > 
-> Linked libraries after this patch:
-> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/mplayer | grep NEEDED
->  0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libmpg123.so.0]
->  0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libm.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
-> 
-> Like with many other optional libraries detection of mpg123 is broken if
-> --enable-mpg123 is passed to configure leading to a build error:
-> 
-> libmpcodecs/ad_mpg123.o: In function `set_format':
-> ad_mpg123.c:(.text+0x63): undefined reference to `mpg123_getformat'
-> libmpcodecs/ad_mpg123.o: In function `decode_a_bit':
-> ad_mpg123.c:(.text+0x1b6): undefined reference to `mpg123_feed'
-> ad_mpg123.c:(.text+0x20e): undefined reference to `mpg123_replace_buffer'
-> ad_mpg123.c:(.text+0x223): undefined reference to `mpg123_decode_frame_64'
-> ad_mpg123.c:(.text+0x275): undefined reference to `mpg123_strerror'
-> [...]
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mplayer/mplayer.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> Do we expect this to be used outside of fs/common.mk? Since it's not
+> the case today, I would suggest to move it there.
 
-Applied to master, thanks.
+Indeed I don;t plan on using it outside of the fs infra for now (I have
+another series that will rely on it, but still in the fs infra).
 
-Thomas
+However, this is generic enough that it is not specific to the fs infra.
+Thus I believe it belong to pkg-utils.
+
+If you still prefer I move it to fs/common.mk, that's also OK for me.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
