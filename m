@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  6 Jun 2016 20:08:15 -0300
-Subject: [Buildroot] [PATCH] openntpd: bump to version 6.0p1
-Message-ID: <1465254495-23323-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  6 Jun 2016 20:09:12 -0300
+Subject: [Buildroot] [PATCH] msmtp: bump to version 1.6.5
+Message-ID: <1465254552-28684-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/openntpd/openntpd.hash | 4 ++--
- package/openntpd/openntpd.mk   | 4 +++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/msmtp/msmtp.hash | 6 +++---
+ package/msmtp/msmtp.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openntpd/openntpd.hash b/package/openntpd/openntpd.hash
-index e066904..7f5d3e3 100644
---- a/package/openntpd/openntpd.hash
-+++ b/package/openntpd/openntpd.hash
-@@ -1,2 +1,2 @@
--# From ftp://ftp.openbsd.org/pub/OpenBSD/OpenNTPD/SHA256
--sha256	a993d95976e375acc0ab1a677fd268f55024477835633c8ae404895046bccb23	openntpd-5.7p4.tar.gz
-+# From http://www.openntpd.org/txt/release-6.0p1.txt
-+sha256	b1ab80094788912adb12b33cb1f251cc58db39294c1b5c6376972f5f7ba577e8	openntpd-6.0p1.tar.gz
-diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
-index 40bb1bf..9c98064 100644
---- a/package/openntpd/openntpd.mk
-+++ b/package/openntpd/openntpd.mk
-@@ -4,10 +4,12 @@
+diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
+index fb03e05..d0de8e0 100644
+--- a/package/msmtp/msmtp.hash
++++ b/package/msmtp/msmtp.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.2/
+-md5	3baca93c7e5f1aa9d36a2e5b38739ab9	msmtp-1.6.2.tar.xz
+-sha1	2d2272d04851b9bc806a77f47344e61840185329	msmtp-1.6.2.tar.xz
++# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.5/
++md5	50a8c9bb72f8222779db6b4aae2965e0	msmtp-1.6.5.tar.xz
++sha1	27d1fc609cd453a7e4c55c4ec55d455949bc53f1	msmtp-1.6.5.tar.xz
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index 7c8261e..7ede66c 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENNTPD_VERSION = 5.7p4
-+OPENNTPD_VERSION = 6.0p1
- OPENNTPD_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenNTPD
- OPENNTPD_LICENSE = MIT-like, BSD-2c, BSD-3c
- OPENNTPD_LICENSE_FILES = COPYING
-+# Ships a beta libtool version hence our patch doesn't apply.
-+OPENNTPD_AUTORECONF = YES
- 
- # openntpd uses pthread functions for arc4random emulation but forgets
- # to use -pthread
+-MSMTP_VERSION = 1.6.2
++MSMTP_VERSION = 1.6.5
+ MSMTP_SITE = http://downloads.sourceforge.net/project/msmtp/msmtp/$(MSMTP_VERSION)
+ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
+ MSMTP_DEPENDENCIES = host-pkgconf
 -- 
 2.7.3
