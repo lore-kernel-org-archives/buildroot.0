@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 23:45:06 +0200
-Subject: [Buildroot] [git commit] package/rpi-firmware: bump version,
-	add hash
-Message-ID: <20160607214727.D99D281DBC@busybox.osuosl.org>
+Date: Tue, 7 Jun 2016 23:44:56 +0200
+Subject: [Buildroot] [git commit] package/miraclecast: bump version
+Message-ID: <20160607214727.B814B81E61@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55768aff2ef7437248e91c351c3ea6f650a28584
+commit: https://git.buildroot.net/buildroot/commit/?id=ac19e6a014a71e9264e12c5534b816d388ae17d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rpi-firmware/rpi-firmware.hash | 2 ++
- package/rpi-firmware/rpi-firmware.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/miraclecast/miraclecast.hash | 2 +-
+ package/miraclecast/miraclecast.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-new file mode 100644
-index 0000000..e2e31c9
---- /dev/null
-+++ b/package/rpi-firmware/rpi-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 b2ce949db3745354383ac0d66107cbbb8902ccbf5fc027be8824519c44d5a302 rpi-firmware-70143fe9d371cd6486a80d6765e93b5574212b64.tar.gz
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index bcb8641..e170780 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
+diff --git a/package/miraclecast/miraclecast.hash b/package/miraclecast/miraclecast.hash
+index 2a92cbf..97c68d0 100644
+--- a/package/miraclecast/miraclecast.hash
++++ b/package/miraclecast/miraclecast.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 deef87155ed07bcf737260c29599e886bd248b573e72ba167369df93acb1fa61 miraclecast-8b61f733da124ccbfd1b85e188581fad1c41c1e1.tar.gz
++sha256 e11440f782519663db367285dd54b53eb5feb78682dac42bd90230222de9f0fd miraclecast-c94be167c85c6ec8badd7ac79e3dea2e0b73225c.tar.gz
+diff --git a/package/miraclecast/miraclecast.mk b/package/miraclecast/miraclecast.mk
+index 598dbd5..17e73f1 100644
+--- a/package/miraclecast/miraclecast.mk
++++ b/package/miraclecast/miraclecast.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_FIRMWARE_VERSION = cc6d7bf8b4c03a2a660ff9fdf4083fc165620866
-+RPI_FIRMWARE_VERSION = 70143fe9d371cd6486a80d6765e93b5574212b64
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+-MIRACLECAST_VERSION = 8b61f733da124ccbfd1b85e188581fad1c41c1e1
++MIRACLECAST_VERSION = c94be167c85c6ec8badd7ac79e3dea2e0b73225c
+ MIRACLECAST_SITE = $(call github,albfan,miraclecast,$(MIRACLECAST_VERSION))
+ MIRACLECAST_LICENSE = LGPLv2.1+, GPLv2 (gdhcp)
+ MIRACLECAST_LICENSE_FILES = COPYING LICENSE_gdhcp LICENSE_htable LICENSE_lgpl
