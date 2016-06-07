@@ -1,36 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 21:31:46 +0200
-Subject: [Buildroot] [PATCH] lua: bump to version 5.3.3
-In-Reply-To: <1465316955-26808-1-git-send-email-francois.perrad@gadz.org>
-References: <1465316955-26808-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20160607213146.65327430@free-electrons.com>
+Date: Tue, 7 Jun 2016 21:31:55 +0200
+Subject: [Buildroot] [git commit] wiringpi: needs threads
+Message-ID: <20160607193211.66DF0817D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cc1411d0b1b159e208d141fb4ba3c6f3508e1336
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  7 Jun 2016 18:29:15 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/lua/{5.3.2 => 5.3.3}/0001-root-path.patch           | 0
->  package/lua/{5.3.2 => 5.3.3}/0002-shared-libs-for-lua.patch | 0
->  package/lua/{5.3.2 => 5.3.3}/0004-lua-pc.patch              | 4 ++--
->  package/lua/{5.3.2 => 5.3.3}/0011-linenoise.patch           | 0
->  package/lua/lua.hash                                        | 4 ++--
->  package/lua/lua.mk                                          | 2 +-
->  6 files changed, 5 insertions(+), 5 deletions(-)
->  rename package/lua/{5.3.2 => 5.3.3}/0001-root-path.patch (100%)
->  rename package/lua/{5.3.2 => 5.3.3}/0002-shared-libs-for-lua.patch (100%)
->  rename package/lua/{5.3.2 => 5.3.3}/0004-lua-pc.patch (97%)
->  rename package/lua/{5.3.2 => 5.3.3}/0011-linenoise.patch (100%)
+Fixes [1]:
 
-Applied to master, thanks.
+  wiringPi.c:66:21: fatal error: pthread.h: No such file or directory
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+[1] http://autobuild.buildroot.net/results/4e1/4e17697c1116b418d8d9c07a202f3c89186e463f
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wiringpi/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/wiringpi/Config.in b/package/wiringpi/Config.in
+index a292b3f..2062a62 100644
+--- a/package/wiringpi/Config.in
++++ b/package/wiringpi/Config.in
+@@ -1,7 +1,12 @@
+ config BR2_PACKAGE_WIRINGPI
+ 	bool "wiringpi"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  wiringPi libraries (and gpio command)
+ 
+ 	  http://wiringpi.com/
++
++comment "wiringpi needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
