@@ -1,28 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 23:49:41 +0200
-Subject: [Buildroot] [PATCH 1/2] package/x11r7/xdriver_xf86-video-tdfx:
- Re-wrap _DEPENDENCIES
-In-Reply-To: <1465061053-29517-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465061053-29517-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160607234941.1d603611@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  7 Jun 2016 20:48:44 -0300
+Subject: [Buildroot] [PATCH] samba4: bump to version 4.4.4
+Message-ID: <1465343324-19626-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sat,  4 Jun 2016 19:24:12 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk  | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-
-Both patches applied to master, thanks.
-
-Thomas
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 042c7db..c2cac22 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	031e6ada6d15deae6850845eed41497af32207fb679d6c6c74f19acc99d437ba	samba-4.4.3.tar.gz
++sha256	262f9edabbd1c0112819b5063718588c22b0ee4c1a2f648f79f233fdfba25c8b	samba-4.4.4.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index e424861..9f2bb0d 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.4.3
++SAMBA4_VERSION = 4.4.4
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
