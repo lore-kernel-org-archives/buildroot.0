@@ -1,38 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 23:48:59 +0200
-Subject: [Buildroot] [PATCH v2] zeromq: fix sparc32 compile
-In-Reply-To: <20160604114232.GA11109@waldemar-brodkorb.de>
-References: <20160604114232.GA11109@waldemar-brodkorb.de>
-Message-ID: <20160607234859.40755b4e@free-electrons.com>
+Date: Tue, 7 Jun 2016 23:49:15 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-tdfx:
+	Re-wrap _DEPENDENCIES
+Message-ID: <20160607214925.C12827F9CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=81cb53296495b91a0f4e0e07143575cf12790b86
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 4 Jun 2016 13:42:33 +0200, Waldemar Brodkorb wrote:
-> Code is otherwise compiled with sparcv9 optimization and
-> cannot be run on sparc32 (sparcv8) machine.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-> ---
-> v1 -> v2:
->   - add git formatted patch requested by Thomas Petazzoni
-> ---
->  .../zeromq/0003-allow-to-build-sparc-v8-leon.patch |   30 ++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/zeromq/0003-allow-to-build-sparc-v8-leon.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk  | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-Applied to master, thanks. Please submit the patch upstream if not
-already done (IIRC the zeromq developers use Github, some submitting
-upstream is trivial).
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
+index 4d0ba60..156a46d 100644
+--- a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
++++ b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
+@@ -10,6 +10,15 @@ XDRIVER_XF86_VIDEO_TDFX_SOURCE = xf86-video-tdfx-$(XDRIVER_XF86_VIDEO_TDFX_VERSI
+ XDRIVER_XF86_VIDEO_TDFX_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_TDFX_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_TDFX_AUTORECONF = YES
+-XDRIVER_XF86_VIDEO_TDFX_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xproto
++XDRIVER_XF86_VIDEO_TDFX_DEPENDENCIES = \
++	libdrm \
++	xproto_fontsproto \
++	xproto_randrproto \
++	xproto_renderproto \
++	xproto_videoproto \
++	xproto_xextproto \
++	xproto_xf86driproto \
++	xproto_xproto \
++	xserver_xorg-server
+ 
+ $(eval $(autotools-package))
