@@ -1,58 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 22:10:20 +0200
-Subject: [Buildroot] [git commit] linux: use the generic help rules
-Message-ID: <20160607201335.A2CB78074E@busybox.osuosl.org>
+Date: Tue, 7 Jun 2016 21:36:16 +0200
+Subject: [Buildroot] [git commit] core: name the package before its help text
+Message-ID: <20160607201335.7BFD18074E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39bc106bf56d3960f29c8e6ea1e02246a99839bf
+commit: https://git.buildroot.net/buildroot/commit/?id=66a5fc74e7465c2bce2afba8b0d0618cf9ef200e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Currently, all our internal packages provide actions that are prefixed
+with their own names. This makes it obvious what package the action
+refer to.
+
+However, the help commands are really free-form. This means that
+packages (and especially packages from a br2-external tree) may provide
+completely arbitrary help text.
+
+As such, all that text can get pretty easily mixed up, and it will be
+very difficult to read.
+
+Prefix each package-specific help text with the name of the package it
+refers to. This generate a "make help" that looks like:
+
+    [...]
+    Package-specific:
+      <pkg>                  - Build and install <pkg> and all its dependencies
+      <pkg>-source           - Only download the source files for <pkg>
+      <pkg>-extract          - Extract <pkg> sources
+      <pkg>-patch            - Apply patches to <pkg>
+      <pkg>-depends          - Build <pkg>'s dependencies
+      <pkg>-configure        - Build <pkg> up to the configure step
+      <pkg>-build            - Build <pkg> up to the build step
+      <pkg>-graph-depends    - Generate a graph of <pkg>'s dependencies
+      <pkg>-dirclean         - Remove <pkg> build directory
+      <pkg>-reconfigure      - Restart the build from the configure step
+      <pkg>-rebuild          - Restart the build from the build step
+
+    busybox:
+      busybox-menuconfig     - Run BusyBox menuconfig
+      busybox-nconfig        - Run BusyBox nconfig
+
+    barebox:
+      barebox-menuconfig     - Run barebox menuconfig
+      barebox-savedefconfig  - Run barebox savedefconfig
+
+    linux:
+      linux-menuconfig       - Run Linux kernel menuconfig
+      linux-savedefconfig    - Run Linux kernel savedefconfig
+      linux-update-defconfig - Save the Linux configuration to the path specified
+                               by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
+
+    Documentation:
+      manual                 - build manual in all formats
+      manual-html            - build manual in HTML
+      [...]
+
+(Note: busybox, barebox, linux help will be converted in followup
+commits, they are represented here as an example of what this patch
+does look like.)
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[Thomas: don't use the helper.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile       | 6 ------
- linux/linux.mk | 7 +++++++
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ Makefile | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index f5ae613..bb3d588 100644
+index d77b539..65f5a65 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -941,12 +941,6 @@ help:
- 		@echo $(sep) \
- 		@echo '$($(p)_NAME):' $(sep) \
- 		$($(p)_HELP_CMDS)$(sep))
--ifeq ($(BR2_LINUX_KERNEL),y)
--	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
--	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
--	@echo '  linux-update-defconfig - Save the Linux configuration to the path specified'
--	@echo '                             by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE'
--endif
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- 	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
+@@ -937,7 +937,10 @@ help:
+ 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
+ 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
+ 	@echo '  <pkg>-rebuild          - Restart the build from the build step'
+-	$(foreach p,$(HELP_PACKAGES),$($(p)_HELP_CMDS)$(sep))
++	$(foreach p,$(HELP_PACKAGES), \
++		@echo $(sep) \
++		@echo '$($(p)_NAME):' $(sep) \
++		$($(p)_HELP_CMDS)$(sep))
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ 	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
  endif
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 4f4f802..fdd8421 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -8,6 +8,13 @@ LINUX_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
- LINUX_LICENSE = GPLv2
- LINUX_LICENSE_FILES = COPYING
- 
-+define LINUX_HELP_CMDS
-+	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
-+	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
-+	@echo '  linux-update-defconfig - Save the Linux configuration to the path specified'
-+	@echo '                             by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE'
-+endef
-+
- # Compute LINUX_SOURCE and LINUX_SITE from the configuration
- ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
- LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
