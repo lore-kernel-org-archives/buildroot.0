@@ -1,108 +1,143 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 13:25:50 +0200
-Subject: [Buildroot] [git commit] package/emlog: bump version
-Message-ID: <20160607112639.90CCF81F76@busybox.osuosl.org>
+Date: Tue, 7 Jun 2016 13:26:34 +0200
+Subject: [Buildroot] [git commit] package/liquid-dsp: bump version
+Message-ID: <20160607112639.D2BE2807D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8d56fb62173a6f6ffb97c005975d89a51f4f78b
+commit: https://git.buildroot.net/buildroot/commit/?id=054b75dfa577b239d374235131bacb69f727dff9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch applied upstream:
-https://github.com/nicupavel/emlog/commit/576a6c0fcf76dfeff48124b2f5fc0b4207d88ca1
+Removed patches applied upstream:
+https://github.com/jgaeddert/liquid-dsp/commit/c9d239490d47d5dd3d7d7b8b7d9007171c5f60ce
+https://github.com/jgaeddert/liquid-dsp/commit/3055eb3da9d0a202c1a975f7db0c8370a09a30bc
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/emlog/0001-Fix-access-to-the-dentry.patch | 57 -----------------------
- package/emlog/emlog.hash                          |  2 +-
- package/emlog/emlog.mk                            |  2 +-
- 3 files changed, 2 insertions(+), 59 deletions(-)
+ ...0001-configure.ac-use-AC_CONFIG_MACRO_DIR.patch | 45 ----------------------
+ ...rapping-isnan-in-T_ABS-to-help-compilatio.patch | 39 -------------------
+ package/liquid-dsp/liquid-dsp.hash                 |  2 +-
+ package/liquid-dsp/liquid-dsp.mk                   |  2 +-
+ 4 files changed, 2 insertions(+), 86 deletions(-)
 
-diff --git a/package/emlog/0001-Fix-access-to-the-dentry.patch b/package/emlog/0001-Fix-access-to-the-dentry.patch
+diff --git a/package/liquid-dsp/0001-configure.ac-use-AC_CONFIG_MACRO_DIR.patch b/package/liquid-dsp/0001-configure.ac-use-AC_CONFIG_MACRO_DIR.patch
 deleted file mode 100644
-index 07dd5ec..0000000
---- a/package/emlog/0001-Fix-access-to-the-dentry.patch
+index c51f587..0000000
+--- a/package/liquid-dsp/0001-configure.ac-use-AC_CONFIG_MACRO_DIR.patch
 +++ /dev/null
-@@ -1,57 +0,0 @@
--From 33d34a10fdc01c5716aebdb93c34fdfd7557adc0 Mon Sep 17 00:00:00 2001
+@@ -1,45 +0,0 @@
+-From c9d239490d47d5dd3d7d7b8b7d9007171c5f60ce Mon Sep 17 00:00:00 2001
 -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Tue, 22 Dec 2015 17:39:35 +0100
--Subject: [PATCH] Fix access to the dentry
+-Date: Sun, 11 Oct 2015 15:27:09 +0200
+-Subject: [PATCH] configure.ac: use AC_CONFIG_MACRO_DIR
 -
--Since Linux 2.6.20, the dentry pointer is no longer stored in
--file->f_dentry, but in file->f_path.dentry. Until Linux 3.19, there
--was a compatibility macro which made the change transparent, but this
--macro has now been removed.
+-Instead of having to explicitly pass -I./scripts when running aclocal,
+-use the AC_CONFIG_MACRO_DIR() macro in configure.ac. This allows to
+-use "autoreconf" normally, without any hacks.
 -
--Since we probably don't care about compatibility with kernels older
--than 2.6.20, this commit takes the simple approach of using
--file->f_path.dentry. This will work with any kernel >= 2.6.20.
--
--Submitted upstream at https://github.com/nicupavel/emlog/pull/3.
+-Submitted upstream at https://github.com/jgaeddert/liquid-dsp/pull/15.
 -
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
-- emlog.c | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
+- bootstrap.sh | 2 +-
+- configure.ac | 1 +
+- 2 files changed, 2 insertions(+), 1 deletion(-)
 -
--diff --git a/emlog.c b/emlog.c
--index 41a67e2..1ef3d80 100644
----- a/emlog.c
--+++ b/emlog.c
--@@ -292,8 +292,8 @@ static ssize_t emlog_read(struct file *file, char __user *buffer,      /* The bu
--     struct emlog_info *einfo;
+-diff --git a/bootstrap.sh b/bootstrap.sh
+-index 640e01d..eb4894e 100755
+---- a/bootstrap.sh
+-+++ b/bootstrap.sh
+-@@ -27,7 +27,7 @@
+- #
 - 
--     /* get the metadata about this emlog */
---    if ((einfo = get_einfo(file->f_dentry->d_inode)) == NULL) {
---        pr_err("can not fetch einfo for inode %ld.\n", (long)(file->f_dentry->d_inode->i_ino));
--+    if ((einfo = get_einfo(file->f_path.dentry->d_inode)) == NULL) {
--+        pr_err("can not fetch einfo for inode %ld.\n", (long)(file->f_path.dentry->d_inode->i_ino));
--         return -EIO;
--     }
+- rm -f config.cache aclocal.m4
+--aclocal -I./scripts
+-+aclocal
+- autoconf
+- autoheader
+- #automake --foreign --add-missing
+-diff --git a/configure.ac b/configure.ac
+-index a9ad1d7..3b1ba68 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -25,6 +25,7 @@
 - 
--@@ -368,7 +368,7 @@ static ssize_t emlog_write(struct file *file,
--     struct emlog_info *einfo;
+- AC_INIT([liquid-dsp],[1.2.0],[support at liquidsdr.org])
+- AC_CONFIG_SRCDIR([src/libliquid.c])
+-+AC_CONFIG_MACRO_DIR([scripts])
 - 
--     /* get the metadata about this emlog */
---    if ((einfo = get_einfo(file->f_dentry->d_inode)) == NULL)
--+    if ((einfo = get_einfo(file->f_path.dentry->d_inode)) == NULL)
--         return -EIO;
-- 
--     /* if the message is longer than the buffer, just take the beginning
--@@ -403,7 +403,7 @@ static unsigned int emlog_poll(struct file *file, struct poll_table_struct * wai
--     struct emlog_info *einfo;
-- 
--     /* get the metadata about this emlog */
---    if ((einfo = get_einfo(file->f_dentry->d_inode)) == NULL)
--+    if ((einfo = get_einfo(file->f_path.dentry->d_inode)) == NULL)
--         return -EIO;
-- 
--     poll_wait(file, EMLOG_READQ(einfo), wait);
+- # permit auxiliary scripts directory (e.g. config.sub, config.guess, install-sh)
+- AC_CONFIG_AUX_DIR(scripts/)
 --- 
--2.6.4
+-2.6.1
 -
-diff --git a/package/emlog/emlog.hash b/package/emlog/emlog.hash
-index 625fb01..e946917 100644
---- a/package/emlog/emlog.hash
-+++ b/package/emlog/emlog.hash
+diff --git a/package/liquid-dsp/0002-math-poly-wrapping-isnan-in-T_ABS-to-help-compilatio.patch b/package/liquid-dsp/0002-math-poly-wrapping-isnan-in-T_ABS-to-help-compilatio.patch
+deleted file mode 100644
+index f8dd602..0000000
+--- a/package/liquid-dsp/0002-math-poly-wrapping-isnan-in-T_ABS-to-help-compilatio.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 3055eb3da9d0a202c1a975f7db0c8370a09a30bc Mon Sep 17 00:00:00 2001
+-From: "Joseph D. Gaeddert" <joseph@liquidsdr.org>
+-Date: Thu, 25 Feb 2016 17:47:07 -0500
+-Subject: [PATCH] math/poly: wrapping isnan in T_ABS to help compilation w/
+- certain gcc versions
+-
+-This is an upstreamed patch backported from here:
+-
+-https://github.com/jgaeddert/liquid-dsp/commit/3055eb3da9d0a202c1a975f7db0c8370a09a30bc
+-
+-It fixes the following error:
+-
+-src/math/src/poly.findroots.c: In function
+-'polyc_findroots_bairstow_recursion':
+-src/math/src/poly.findroots.c:305:9: error: non-floating-point argument
+-in call to function '__builtin_isnan'
+-         if (isnan(du) || isnan(dv)) {
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+----
+- src/math/src/poly.findroots.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/math/src/poly.findroots.c b/src/math/src/poly.findroots.c
+-index 21b5756..e000ee8 100644
+---- a/src/math/src/poly.findroots.c
+-+++ b/src/math/src/poly.findroots.c
+-@@ -302,7 +302,7 @@ void POLY(_findroots_bairstow_recursion)(T *          _p,
+- #endif
+- 
+-         // adjust u, v
+--        if (isnan(du) || isnan(dv)) {
+-+        if (isnan(T_ABS(du)) || isnan(T_ABS(dv))) {
+-             u *= 0.5f;
+-             v *= 0.5f;
+-         } else {
+--- 
+-2.7.3
+-
+diff --git a/package/liquid-dsp/liquid-dsp.hash b/package/liquid-dsp/liquid-dsp.hash
+index 5c1c0a8..e32d829 100644
+--- a/package/liquid-dsp/liquid-dsp.hash
++++ b/package/liquid-dsp/liquid-dsp.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256 9bab81e75ef2a1b1b7024a397308356a52463d8ac4b42682ed5a134d46387d1f  emlog-bd32494ad757c3d37469877aaf99ced3ee6ca3f8.tar.gz
-+sha256 0d82f06301b8486c54e5e36f304d5a83c2347c23b93c1344eacb0b5b3044485a  emlog-576a6c0fcf76dfeff48124b2f5fc0b4207d88ca1.tar.gz
-diff --git a/package/emlog/emlog.mk b/package/emlog/emlog.mk
-index f79b1cf..bf0bcf7 100644
---- a/package/emlog/emlog.mk
-+++ b/package/emlog/emlog.mk
+-sha256 4b6dcb0846ed884c55984494adef721f910ac6f895174b31ec52138263842637 liquid-dsp-df5a459fa05dba4199c1299555891104cc1fdca7.tar.gz
++sha256 d0f050b9d5137c43ba45a35b6c82bc8222eba86f772f4e2e46c91427647bb847 liquid-dsp-1191179b786703b3af20abf7e1404d91099b335d.tar.gz
+diff --git a/package/liquid-dsp/liquid-dsp.mk b/package/liquid-dsp/liquid-dsp.mk
+index e7bb686..b5fb44c 100644
+--- a/package/liquid-dsp/liquid-dsp.mk
++++ b/package/liquid-dsp/liquid-dsp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EMLOG_VERSION = bd32494ad757c3d37469877aaf99ced3ee6ca3f8
-+EMLOG_VERSION = 576a6c0fcf76dfeff48124b2f5fc0b4207d88ca1
- EMLOG_SITE = $(call github,nicupavel,emlog,$(EMLOG_VERSION))
- EMLOG_LICENSE = GPLv2
- EMLOG_LICENSE_FILES = COPYING
+-LIQUID_DSP_VERSION = df5a459fa05dba4199c1299555891104cc1fdca7
++LIQUID_DSP_VERSION = 1191179b786703b3af20abf7e1404d91099b335d
+ LIQUID_DSP_SITE = $(call github,jgaeddert,liquid-dsp,$(LIQUID_DSP_VERSION))
+ LIQUID_DSP_LICENSE = MIT
+ LIQUID_DSP_LICENSE_FILES = LICENSE
