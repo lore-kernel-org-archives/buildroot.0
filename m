@@ -1,59 +1,33 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Tue,  7 Jun 2016 10:58:01 -0300
-Subject: [Buildroot] [PATCH] configs/beaglebone: Add missing genimage.cfg
-	file
-Message-ID: <1465307881-2101-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+From: gdbabu Krishnan <gdbabu.krishnan@gmail.com>
+Date: Tue, 7 Jun 2016 19:35:26 +0530
+Subject: [Buildroot] lirc event didn't forward
+Message-ID: <CAG7w3ynQvczcSRsKMwABLTv+zRcURmbNHUJR=Sy2TCwOnMg-VQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 7d0b7d3c27a6 ("configs/beaglebone: Use genimage
-to produce the SD card image") introduce genimage usage,
-but forgot to add the genimage config file. Fix it.
+Hi,
 
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
----
- board/beaglebone/genimage.cfg | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 board/beaglebone/genimage.cfg
+i am working with buildroot for raspberry pi, i have enable the LIRC-TOOL
+in build root.
 
-diff --git a/board/beaglebone/genimage.cfg b/board/beaglebone/genimage.cfg
-new file mode 100644
-index 000000000000..0c29a804d53b
---- /dev/null
-+++ b/board/beaglebone/genimage.cfg
-@@ -0,0 +1,30 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"MLO",
-+			"u-boot.img",
-+			"zImage",
-+			"uEnv.txt",
-+			"am335x-bone.dtb",
-+			"am335x-boneblack.dtb"
-+		}
-+	}
-+	size = 16M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+                image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
--- 
-2.7.0
+
+i did successfully build, when i working with "irw" command for LIRC
+working fine,
+
+then i enable "uinput= True" in "lirc_options.conf" file under the
+"/etc/lirc/" directory after this step i have restart the "S25lircd" service
+
+after that i gave "irw" and press button  on remote nothing happen.
+
+LIRCD does not forward the event to the "uinput" driver.
+
+i don't know how to solve this problem could you help me please.
+
+
+thank you
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160607/cb6e3738/attachment.html>
