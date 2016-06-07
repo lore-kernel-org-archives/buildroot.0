@@ -1,28 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 23:46:39 +0200
-Subject: [Buildroot] [PATCH 1/5] package/miraclecast: bump version
-In-Reply-To: <1465163761-2848-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465163761-2848-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160607234639.0955adef@free-electrons.com>
+Date: Tue, 7 Jun 2016 23:45:06 +0200
+Subject: [Buildroot] [git commit] package/rpi-firmware: bump version,
+	add hash
+Message-ID: <20160607214727.D99D281DBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=55768aff2ef7437248e91c351c3ea6f650a28584
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  5 Jun 2016 23:55:57 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/miraclecast/miraclecast.hash | 2 +-
->  package/miraclecast/miraclecast.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rpi-firmware/rpi-firmware.hash | 2 ++
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-Applied patches 1 to 4, patch 5 does not apply. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+new file mode 100644
+index 0000000..e2e31c9
+--- /dev/null
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 b2ce949db3745354383ac0d66107cbbb8902ccbf5fc027be8824519c44d5a302 rpi-firmware-70143fe9d371cd6486a80d6765e93b5574212b64.tar.gz
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index bcb8641..e170780 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = cc6d7bf8b4c03a2a660ff9fdf4083fc165620866
++RPI_FIRMWARE_VERSION = 70143fe9d371cd6486a80d6765e93b5574212b64
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
