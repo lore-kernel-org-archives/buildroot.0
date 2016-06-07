@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 13:27:33 +0200
-Subject: [Buildroot] [PATCH 3/4] package/lcdapi: bump version to v0.10
-In-Reply-To: <1465161963-32681-3-git-send-email-bernd.kuhls@t-online.de>
+Date: Tue, 7 Jun 2016 13:27:37 +0200
+Subject: [Buildroot] [PATCH 4/4] package/liquid-dsp: bump version
+In-Reply-To: <1465161963-32681-4-git-send-email-bernd.kuhls@t-online.de>
 References: <1465161963-32681-1-git-send-email-bernd.kuhls@t-online.de>
- <1465161963-32681-3-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160607132733.5e4deae4@free-electrons.com>
+ <1465161963-32681-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160607132737.34fa748c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  5 Jun 2016 23:26:02 +0200, Bernd Kuhls wrote:
-> Removed patch to fix docs install after upstream fixed the problem:
-> https://github.com/spdawson/lcdapi/commit/34e1d3b26055b02cecb7e738574b8fddcc2ab5eb
+On Sun,  5 Jun 2016 23:26:03 +0200, Bernd Kuhls wrote:
+> Removed patches applied upstream:
+> https://github.com/jgaeddert/liquid-dsp/commit/c9d239490d47d5dd3d7d7b8b7d9007171c5f60ce
+> https://github.com/jgaeddert/liquid-dsp/commit/3055eb3da9d0a202c1a975f7db0c8370a09a30bc
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...0001-Remove-installation-of-docs-examples.patch | 39 ----------------------
->  package/lcdapi/lcdapi.mk                           |  2 +-
->  2 files changed, 1 insertion(+), 40 deletions(-)
->  delete mode 100644 package/lcdapi/0001-Remove-installation-of-docs-examples.patch
+>  ...0001-configure.ac-use-AC_CONFIG_MACRO_DIR.patch | 45 ----------------------
+>  ...rapping-isnan-in-T_ABS-to-help-compilatio.patch | 39 -------------------
+>  package/liquid-dsp/liquid-dsp.hash                 |  2 +-
+>  package/liquid-dsp/liquid-dsp.mk                   |  2 +-
+>  4 files changed, 2 insertions(+), 86 deletions(-)
+>  delete mode 100644 package/liquid-dsp/0001-configure.ac-use-AC_CONFIG_MACRO_DIR.patch
+>  delete mode 100644 package/liquid-dsp/0002-math-poly-wrapping-isnan-in-T_ABS-to-help-compilatio.patch
 
-Applied to master, thanks. It would also be good to add a hash file to
-this package.
+Applied to master, thanks.
 
 Thomas
 -- 
