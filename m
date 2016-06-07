@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 09:12:33 +0200
-Subject: [Buildroot] [PATCHv2 1/2] toolchain: add coldfire support
-In-Reply-To: <20160607024408.GI6825@waldemar-brodkorb.de>
-References: <20160429175123.GA27368@waldemar-brodkorb.de>
- <20160606231448.3330032b@free-electrons.com>
- <20160607024408.GI6825@waldemar-brodkorb.de>
-Message-ID: <20160607091233.5174a96a@free-electrons.com>
+Date: Tue, 7 Jun 2016 09:23:54 +0200
+Subject: [Buildroot] [PATCH v1 1/1] babeld: new package
+In-Reply-To: <1465274839-27236-1-git-send-email-christian@paral.in>
+References: <1465274839-27236-1-git-send-email-christian@paral.in>
+Message-ID: <20160607092354.6057e99c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 7 Jun 2016 04:44:08 +0200, Waldemar Brodkorb wrote:
+On Mon,  6 Jun 2016 21:47:19 -0700, Christian Stewart wrote:
 
-> The change was added when we enabled coldfire support.
-> Unfortunately at this time, I didn't know the complete mechanism inside
-> buildroot. With the blackfin toolchain patches I learned the
-> external/internal stuff and how the wrapper is used.
+> +define BABELD_BUILD_CMDS
+> +	$(MAKE) -C $(@D)
+> +endef
 
-Right, it's the exact same thing :)
+Are you *sure* this is producing a binary built for the target? Since
+you are not passing any CC/LD/CXX/etc. variables, I doubt it.
 
-> --with-arch for cf/m68k is again a special thing in GCC to decide
-> which kind of multilibs for libgcc are build, either the m68k
-> variants or the coldfire variants. But the -march options are
-> different, so that BR2_GCC_TARGET_ARCH can't be used for the
-> wrapper.
-> 
-> But we have luck here, we can just remove the BR2_GCC_TARGET_ARCH
-> entries.
-
-I'm not sure to understand. You're saying above that
---with-arch=m68k/cf is important in order to tell gcc which kind of
-multilib for libgcc should be built. And then you say they are not
-needed.
-
-Could you clarify?
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
