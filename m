@@ -1,35 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 22:21:11 +0200
-Subject: [Buildroot] [git commit] fs/squashfs: split commands
-Message-ID: <20160607202530.3D53581F70@busybox.osuosl.org>
+Date: Tue, 7 Jun 2016 22:21:21 +0200
+Subject: [Buildroot] [git commit] fs/ubifs: fix the UBI commands
+Message-ID: <20160607202530.4D30181F70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=892c7fe833fdd8f972d9ea423a456a1e90e60249
+commit: https://git.buildroot.net/buildroot/commit/?id=9ad600466ce8c1928f87bceb779aa03c565c09eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that we can properly printf a multi-line command, there is no need
-to use a single command to gnerate the squashfs image.
+We can now properly use multi-line commands, so use that.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/squashfs/squashfs.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ubifs/ubi.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
-index a71d9cc..eadbb8f 100644
---- a/fs/squashfs/squashfs.mk
-+++ b/fs/squashfs/squashfs.mk
-@@ -26,7 +26,7 @@ endif
+diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
+index aba3bea..cda4bf4 100644
+--- a/fs/ubifs/ubi.mk
++++ b/fs/ubifs/ubi.mk
+@@ -21,9 +21,9 @@ UBINIZE_CONFIG_FILE_PATH = fs/ubifs/ubinize.cfg
+ endif
  
- define ROOTFS_SQUASHFS_CMD
- 	$(HOST_DIR)/usr/bin/mksquashfs $(TARGET_DIR) $@ -noappend \
--		$(ROOTFS_SQUASHFS_ARGS) && \
-+		$(ROOTFS_SQUASHFS_ARGS)
- 	chmod 0644 $@
+ define ROOTFS_UBI_CMD
+-	$(INSTALL) -m 0644 $(UBINIZE_CONFIG_FILE_PATH) $(BUILD_DIR)/ubinize.cfg ;\
+-	$(SED) 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' $(BUILD_DIR)/ubinize.cfg ;\
+-	$(HOST_DIR)/usr/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg ;\
++	$(INSTALL) -m 0644 $(UBINIZE_CONFIG_FILE_PATH) $(BUILD_DIR)/ubinize.cfg
++	$(SED) 's;BR2_ROOTFS_UBIFS_PATH;$@fs;' $(BUILD_DIR)/ubinize.cfg
++	$(HOST_DIR)/usr/sbin/ubinize -o $@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/ubinize.cfg
+ 	rm $(BUILD_DIR)/ubinize.cfg
  endef
  
