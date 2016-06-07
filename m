@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 22:27:18 +0200
-Subject: [Buildroot] [PATCH 0/7] fs: cleanups (branch yem/fs-fixes)
-In-Reply-To: <cover.1465245732.git.yann.morin.1998@free.fr>
-References: <cover.1465245732.git.yann.morin.1998@free.fr>
-Message-ID: <20160607222718.5646d4bc@free-electrons.com>
+Date: Tue, 7 Jun 2016 22:28:33 +0200
+Subject: [Buildroot] [v2] fs/aci: Add App Container Image (ACI) support
+ to filesystems
+In-Reply-To: <57431CB2.1040601@coreos.com>
+References: <57431CB2.1040601@coreos.com>
+Message-ID: <20160607222833.4aa55b78@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  6 Jun 2016 22:43:40 +0200, Yann E. MORIN wrote:
+On Mon, 23 May 2016 08:07:30 -0700, Brian 'redbeard' Harrington wrote:
 
-> Yann E. MORIN (7):
->       core/pkg-utils: add macro to escape-and-printf
->       fs: properly escape commands when generating fakeroot script
->       fs/cloop: split long line
->       fs/jffs2: split commands
->       fs/squashfs: split commands
->       fs/ubifs: fix the UBI commands
->       fs/squashfs: remove useless chmod
+> +# We then create the TAR archive of all components, making sure all paths are
+> +# represented correctly. Unfortunately as per fs/common.mk:8 the only a single
+> +# command is allowed.
 
-Entire series applied, thanks! I had already applied one patch, I've
-simply applied all remaining ones.
+FYI, as of a few minutes ago, this limitation has been lifted, thanks
+to commit
+https://git.busybox.net/buildroot/commit/?id=6dd7bbb59134799ed3d7343f238b3b02592faebf
+from Yann.
 
 Thomas
 -- 
