@@ -1,74 +1,109 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 7 Jun 2016 05:42:29 +0000
-Subject: [Buildroot] [PATCH] Binutils: ARC: Fix build failures if
-	makeinfo is missing
-In-Reply-To: <87fusqgfwi.fsf@dell.be.48ers.dk>
-References: <1465211659-23861-1-git-send-email-vzakhar@synopsys.com>
- <87twh6hzxl.fsf@dell.be.48ers.dk>
- <20160606215833.57396ae8@free-electrons.com>
- <87fusqgfwi.fsf@dell.be.48ers.dk>
-Message-ID: <1465278105.7088.20.camel@synopsys.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 7 Jun 2016 09:04:21 +0300
+Subject: [Buildroot] [PATCH v1 1/1] babeld: new package
+In-Reply-To: <1465274839-27236-1-git-send-email-christian@paral.in>
+References: <1465274839-27236-1-git-send-email-christian@paral.in>
+Message-ID: <20160607060421.GG2425@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, Thomas,
+Hi Christian,
 
-On Mon, 2016-06-06 at 23:34 +0200, Peter Korsgaard wrote:
-> > 
-> > > 
-> > > > 
-> > > > > 
-> > > > > > 
-> > > > > > "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> ?> Hello,
-> ?> On Mon, 06 Jun 2016 21:36:54 +0200, Peter Korsgaard wrote:
+On Mon, Jun 06, 2016 at 09:47:19PM -0700, Christian Stewart wrote:
+> Babel is a loop-avoiding distance-vector routing protocol for IPv6 and
+> IPv4 with fast convergence properties. It is based on the ideas in DSDV,
+> AODV and Cisco's EIGRP, but is designed to work well not only in wired
+> networks but also in wireless mesh networks, and has been extended with
+> support for overlay networks.
 > 
-> ?>> > Signed-off-by: Zakharov Vlad <vzakhar@synopsys.com>??
-> ?>>?
-> ?>> Committed, thanks.
+> https://www.irif.univ-paris-diderot.fr/~jch/software/babel/
 > 
-> ?> Why?
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  package/Config.in         |  1 +
+>  package/babeld/Config.in  |  6 ++++++
+>  package/babeld/babel.hash |  2 ++
+>  package/babeld/babel.mk   | 21 +++++++++++++++++++++
+>  4 files changed, 30 insertions(+)
+>  create mode 100644 package/babeld/Config.in
+>  create mode 100644 package/babeld/babel.hash
+>  create mode 100644 package/babeld/babel.mk
 > 
-> It was fixing autobuilder issues and seemed like a sensible fix that
-> could be upstreamed. Looking again, I do see that it patched Makefile.in
-> and not Makefile.am, so that's not too nice though.
+> diff --git a/package/Config.in b/package/Config.in
+> index 9f6e0d9..3a4a9b8 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1113,6 +1113,7 @@ endmenu
+>  
+>  menu "Networking"
+>  	source "package/agentpp/Config.in"
+> +	source "package/babeld/Config.in"
+>  	source "package/batman-adv/Config.in"
+>  	source "package/c-ares/Config.in"
+>  	source "package/canfestival/Config.in"
+> diff --git a/package/babeld/Config.in b/package/babeld/Config.in
+> new file mode 100644
+> index 0000000..d195fb2
+> --- /dev/null
+> +++ b/package/babeld/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_BABELD
+> +	bool "babeld"
+> +	help
+> +	  Babel routing daemon.
+> +
+> +	  https://github.com/jech/babeld
 
-Indeed our goal was to fix an issue that causes all autobuilder jobs for ARC
-to fail. The problem is host binutils couldn't be built any longer after we switched
-to arc-2016.03 tools. And now we're unblocked.
+The like you provide in the commit log looks more informative to me. The 
+commit log also fits here as help text IMO.
 
-As for patching Makefile.in vs Makefile.am again that's just to do a minimal fix
-in existing sources. Otherwise if we patch Makefile.am we'll need to regenerate
-Makefile.in.
+> diff --git a/package/babeld/babel.hash b/package/babeld/babel.hash
+> new file mode 100644
+> index 0000000..0ee64c4
+> --- /dev/null
+> +++ b/package/babeld/babel.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
 
-Even though Vlad has already sent the same patch to Binutils mailing list
-(https://sourceware.org/ml/binutils/2016-06/msg00053.html) that's indeed not
-the right fix - he'll need to fix Makefile.am but at least we're moving
-in upstreaming direction.
+Have you verified the gpg signature 
+(https://www.irif.univ-paris-diderot.fr/~jch/software/files/babeld-1.7.1.tar.gz.asc)?
 
-> ?> This problem also exists for other versions of binutils, and also for
-> ?> gdb. And we have a patch series from Romain Naour sitting in patchwork
-> ?> for several weeks.
+> +sha256 2c955e7d4ad971da1e860e5cedbaf1dd79903468ff6488b3f67102b2a8d087b6  babeld-1.7.1.tar.gz
+> diff --git a/package/babeld/babel.mk b/package/babeld/babel.mk
+> new file mode 100644
+> index 0000000..789aa9f
+> --- /dev/null
+> +++ b/package/babeld/babel.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# babeld
+> +#
+> +################################################################################
+> +
+> +BABELD_VERSION = 1.7.1
+> +BABELD_SITE = https://www.irif.univ-paris-diderot.fr/~jch/software/files
+> +BABELD_SOURCE = babeld-$(BABELD_VERSION).tar.gz
+> +BABELD_LICENSE = as-is
 
-Right so I would think as of now the same patch should be applied to other
-affected instances of binutils and gdb.
+Looks like the MIT license (https://opensource.org/licenses/MIT).
 
-> ?> I don't know if Zlad's version is better or not than Romain's version.
-> ?> But at least Romain's version was handling all binutils and gdb
-> ?> versions, without patching directly Makefile.in files. So at first
-> ?> sight, it looked a lot better than Zlad's version.
-> 
-> Ok, we can always revert if it isn't needed any more once Romain's
-> series is applied.
+> +BABELD_LICENSE_FILES = LICENSE
+> +
+> +define BABELD_BUILD_CMDS
+> +	$(MAKE) -C $(@D)
+> +endef
+> +
+> +define BABELD_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 755 $(@D)/babeld $(TARGET_DIR)/usr/bin/babeld
+> +endef
+> +
+> +$(eval $(generic-package))
 
-In opposite Romain's fix only makes sense for BR and I don't really like that
-approach. Why implement hacks on top of
-upstream sources that are not
-upstreamable at all. Why not try "to fix" generic "missing" script if we do think
-it behaves
-improperly?
-
--Alexey
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
