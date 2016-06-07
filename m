@@ -1,53 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 22:12:08 +0200
-Subject: [Buildroot] [git commit] boot/barebox: use the generic help rules
-Message-ID: <20160607201335.C8C2A8074E@busybox.osuosl.org>
+From: Andrew Webster <Awebster@arcx.com>
+Date: Tue, 7 Jun 2016 20:10:26 +0000
+Subject: [Buildroot] [PATCH v6 3/3] docker-engine: new package
+In-Reply-To: <20160607215439.76ad85ee@free-electrons.com>
+References: <1464475578-22239-1-git-send-email-christian@paral.in>
+ <1464475578-22239-4-git-send-email-christian@paral.in>
+ <f27fd228ed034bc499fe1c69ac9a3980@WEBMAIL.arcx.com>
+ <20160607215439.76ad85ee@free-electrons.com>
+Message-ID: <fd0a492f8e79400082191141e79f9ca0@WEBMAIL.arcx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77f4c205b9c2b6346b479c6ed29ead74fe9637cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[Thomas: don't use the helper.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile                        | 4 ----
- boot/barebox/barebox/barebox.mk | 5 +++++
- 2 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index f007db2..3f5c3d3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -941,10 +941,6 @@ help:
- 		@echo $(sep) \
- 		@echo '$($(p)_NAME):' $(sep) \
- 		$($(p)_HELP_CMDS)$(sep))
--ifeq ($(BR2_TARGET_BAREBOX),y)
--	@echo '  barebox-menuconfig     - Run barebox menuconfig'
--	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
--endif
- 	@echo
- 	@echo 'Documentation:'
- 	@echo '  manual                 - build manual in all formats'
-diff --git a/boot/barebox/barebox/barebox.mk b/boot/barebox/barebox/barebox.mk
-index 6a5a80d..39afb0f 100644
---- a/boot/barebox/barebox/barebox.mk
-+++ b/boot/barebox/barebox/barebox.mk
-@@ -4,5 +4,10 @@
- #
- ################################################################################
+> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
+> Sent: Tuesday, June 07, 2016 3:55 PM
  
-+define BAREBOX_HELP_CMDS
-+	@echo '  barebox-menuconfig     - Run barebox menuconfig'
-+	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
-+endef
-+
- # Instantiate the barebox package
- $(eval $(barebox-package))
+> Thanks for your feedback. However, it'd be nice if you could configure your e-mail client to wrap lines at a reasonable length.
+
+Sorry, I just noticed that.  It's also mangling some of the incoming text as well.  I'll try and figure that out.
+
+> > On a similar topic, docker expects a bunch of cgroup mounts to exist
+> > somewhere on the system.  Is this something that should be left up to
+> > the rootfs author (in which case maybe the help could be extended to
+> > explain this), or should the docker-engine recipe attempt to modify
+> > fstab somehow?  I'm not sure if there is a way to actually do that
+> > though.
+> 
+> The Buildroot philosophy is in general that things should work at least in a minimal way "out of the box". So if cgroup mounts are
+> needed for Docker, they should be done in Docker's init script.
+
+Ahh, right.  I missed that part when I made my custom init.  The debian/redhat versions do attempt to do this.
