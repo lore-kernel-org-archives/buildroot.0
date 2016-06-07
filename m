@@ -1,80 +1,47 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 7 Jun 2016 13:18:11 -0700
-Subject: [Buildroot] [PATCH v6 3/3] docker-engine: new package
-In-Reply-To: <20160607215439.76ad85ee@free-electrons.com>
-References: <1464475578-22239-1-git-send-email-christian@paral.in>
- <1464475578-22239-4-git-send-email-christian@paral.in>
- <f27fd228ed034bc499fe1c69ac9a3980@WEBMAIL.arcx.com>
- <20160607215439.76ad85ee@free-electrons.com>
-Message-ID: <CA+h8R2oZypDvm65RVp3fNX1MYCxSWqX95MxLW-q-K25d4tNccg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Jun 2016 22:18:44 +0200
+Subject: [Buildroot] [PATCH 0/8 v3] core: add support for package help
+ (branch yem/help)
+In-Reply-To: <cover.1465056706.git.yann.morin.1998@free.fr>
+References: <cover.1465056706.git.yann.morin.1998@free.fr>
+Message-ID: <20160607221844.45eb8b34@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Andrew,
+Hello,
 
-On Tue, Jun 7, 2016 at 12:54 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
->
-> > Does it makes sense to also add selects for BR2_PACKAGE_IPTABLES and
-> > BR2_PACKAGE_CA_CERTIFICATES here?  They are not build dependencies,
-> > but run-time dependencies.  It may be possible to do some things
-> > without the certificates, but I think iptables is always required.
->
+On Sat,  4 Jun 2016 18:30:49 +0200, Yann E. MORIN wrote:
 
-Not sure if these are actually required. The iptables calls are direct, not
-through calling a cli.
+> Yann E. MORIN (8):
+>       core/pkg-generic: add support for package-defined help
+>       core: name the package before its help text
+>       core/pkg-utils: add a macro to pretty-print a help entry
+>       package/busybox: use the generic help rules
+>       linux: use the generic help rules
+>       package/uclibc: use the generic help rules
+>       boot/barebox: use the generic help rules
+>       core: use the print-help macro to print the main help
 
-Certs are a different story but that might be out of the scope of the
-Docker package. It can run stuff locally without hitting the internet at
-all.
+This last commit made me realize that the helper is a bad idea:
 
-> On a similar topic, docker expects a bunch of cgroup mounts to exist
-> > somewhere on the system.  Is this something that should be left up to
-> > the rootfs author (in which case maybe the help could be extended to
-> > explain this), or should the docker-engine recipe attempt to modify
-> > fstab somehow?  I'm not sure if there is a way to actually do that
-> > though.
->
+ 1/ It makes the code longer in number of lines.
 
-This is unnecessary. On all of the systems I'm running, with NO fstab
-modifications or really anything but enabling the Docker package, it works
-fine. Docker might be doing the mounting automatically.
+ 2/ It makes it harder to read.
 
-> > +define DOCKER_ENGINE_INSTALL_INIT_SYSV
-> > > +   $(INSTALL) -D -m 755
-> > > $(@D)/contrib/init/sysvinit-redhat/docker \
-> > > +           $(TARGET_DIR)/etc/init.d/S61docker
-> >
-> > This init file didn't work for me.  I'm not sure if it can work on a
-> > buildroot filesystem, are you using systemd instead? I removed most
-> > of the checks to get it working (actually, I think I started editing
-> > the Ubuntu version).  Maybe a custom init script is required?  I can
-> > show you my hack if you like.
->
+So, as discussed on IRC, I've reworked your patches to drop the helper
+that pretty-print the help text, and simply used the @echo calls in the
+various packages.
 
-I didn't expect this to work, and was hoping someone who's not using
-systemd would contribute a better init script for it.
+So essentially, I've dropped patches 3/8 and 8/8, and I've reworked
+patches 4, 5, 6 and 7 to not use the helper.
 
-I'd appreciate seeing your script if you manage to get one that works well
-for you under Buildroot's shell based init sequence.
+Thanks a lot!
 
-So a custom init script is probably in order here, especially if you
-> report that the one provided by upstream doesn't quite work.
->
-
-+1
-
-For reference, here's my system setup:  http://github.com/paralin/SkiffOS
-
-It's actually a very extensible configuration generation platform, I'm
-hoping to expand its scope soon, if anyone would like to
-have a look and give me any comments, they would be greatly appreciated :)
-
-Thanks!
-Christian Stewart
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160607/e99897ea/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
