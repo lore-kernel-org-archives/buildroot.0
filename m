@@ -1,63 +1,47 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 7 Jun 2016 21:01:17 +0200
-Subject: [Buildroot] Resource Limits
-In-Reply-To: <CAF_dkJCCZcXdf=G8TJ1HUA1TiCAmbE56oA6KkWMyxcLrkxgo-w@mail.gmail.com>
-References: <CAF_dkJCCZcXdf=G8TJ1HUA1TiCAmbE56oA6KkWMyxcLrkxgo-w@mail.gmail.com>
-Message-ID: <CAHXCMMLEuPHKHp5uwvxmzJMMwDg4HSVesDe7utRauYpgphzxcA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 7 Jun 2016 21:12:52 +0200
+Subject: [Buildroot] [PATCH 7/7] fs/squashfs: remove useless chmod
+In-Reply-To: <87mvmxf9gk.fsf@dell.be.48ers.dk>
+References: <cover.1465245732.git.yann.morin.1998@free.fr>
+ <d4b5c7f0315f28e792a014983c78b1fe4958eb9f.1465245732.git.yann.morin.1998@free.fr>
+ <20160606230615.2772541c@free-electrons.com>
+ <20160606211658.GA3706@free.fr> <87mvmxf9gk.fsf@dell.be.48ers.dk>
+Message-ID: <20160607191252.GB3775@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Patrick,
+On 2016-06-07 14:51 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+> Hi,
+> 
+>  >> Maybe mksquashfs has changed its default behavior since then, but
+>  >> clearly that's the reason why we were doing this.
+> 
+>  > At least, that's not what I can see here...
+> 
+> No, it seems to use sensible permissions nowadays:
+> 
+> strace -e open mksquashfs /tmp/blah /tmp/test.squashfs
+> ..
+> open("/tmp/test.squashfs", O_RDWR|O_CREAT|O_TRUNC, 0644) = 3
+> open("/sys/devices/system/cpu/online", O_RDONLY|O_CLOEXEC) = 4
+> Parallel mksquashfs: Using 4 processors
+> Creating 4.0 filesystem on /tmp/test.squashfs, block size 131072.
 
-On Tue, Jun 7, 2016 at 7:44 PM, Patrick Doyle <wpdster@gmail.com> wrote:
-> Hi folks...
->
-> How are resource limits managed in buildroot generated systems?
->
-> Suppose I wanted to allow real-time priorities above zero.  How could
-> I enable that for an unprivledged user?
-AFAIK, the user running real-time programs needs to belong to the rt group [0].
-
->
-> Would I have to enable pam with pam_limits.so in order to use
-> /etc/security/limits.conf?
-AFAICS, the pam_limits module is always built.
-For the configuration files, Buildroot offers several ways [1], among
-these, the recommend ones are :
-- fs overlay;
-- post-build script.
-
->
-> Can I use sysctl?  Is that a package I can enable?
-According to [2] sysctl is provided by procps-ng.
-You can check whether this package is available in Buildroot on [3].
-
->
-> Most preferably, could I just compile the resource limits into the
-> kernel and not have to bother with any external packages?
-I guess you are using a preempt-RT linux kernel.
-AFAIK, to run a userspace program with rt priority, you need:
-- a preempt-RT kernel [e.g. via buildroot menuconfig]
-- /etc/security/limits.conf [e.g. via fs-overlay or post-build script]
-- correct user/group settings [e.g. via fs-overlay or post-build script]
-- and lastly, calling the right primitive (I don't remember which one)
-to get rt priority from the userspace program itself.  [e.g. directly
-in your application source code]
-
-There may be other ways to do this (e.g. using chrt), but I don't know
-much about them.
-
-
-[0] https://rt.wiki.kernel.org/index.php/Frequently_Asked_Questions#Do_I_need_root_privileges_to_start_a_realtime_application.3F
-[1] http://nightly.buildroot.org/manual.html#rootfs-custom
-[2] https://gitlab.com/procps-ng/procps
-[3] http://nightly.buildroot.org/manual.html#package-list
-
+Exactly what I meant: mksquashfs now behaves correctly. I don;t observe
+this fiddling with acces rights any more.
 
 Regards,
+Yann E. MORIN.
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
