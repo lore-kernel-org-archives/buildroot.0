@@ -1,78 +1,120 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Jun 2016 23:38:26 +0200
-Subject: [Buildroot] [PATCH v2 next 7/7] valgrind: disable for MIPS
- soft-float when using binutils >= 2.25
-In-Reply-To: <1464693198-16523-2-git-send-email-Vincent.Riera@imgtec.com>
-References: <1464693078-15767-1-git-send-email-Vincent.Riera@imgtec.com>
- <1464693198-16523-2-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160607213826.GH3775@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Jun 2016 23:27:10 +0200
+Subject: [Buildroot] [git commit] Revert "toolchain: allow side by side
+	sysroot directories"
+Message-ID: <20160607214208.4EAB680DB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=7b6cfca13066f67ba2f41e4c76d0179d1cf0b349
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-05-31 12:13 +0100, Vicente Olivert Riera spake thusly:
-> As stated here [1], recent changes on the MIPS binutils sources have
-> made it necessary for GCC to pass the -msoft-float to the assembler. Due
-> to that, valgrind fails to build for MIPS soft-float when using a
-> version of GCC >= 4.9 and binutils >= 2.25 because its using some
-> hard-float instructions. The combination of GCC-4.8.x and binutils >=
-> 2.25 is not possible as its disabled in package/gcc/Config.in.host.
-> 
-> 1: https://gcc.gnu.org/ml/gcc-patches/2014-08/msg00905.html
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/5f5/5f576c7f8d56058a19ed0e7ff4b1ec620bcafb65/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/valgrind/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
-> index 21b2608..3093809 100644
-> --- a/package/valgrind/Config.in
-> +++ b/package/valgrind/Config.in
-> @@ -8,6 +8,7 @@ config BR2_PACKAGE_VALGRIND
->  		   BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
->  		   BR2_x86_64
->  	depends on !BR2_STATIC_LIBS
-> +	depends on !(BR2_MIPS_SOFT_FLOAT && BR2_TOOLCHAIN_BINUTILS_AT_LEAST_2_25)
+This reverts commit 9a1e9efe2618ebbf12ed2567bcd6e8cca5619547.
 
-Your commit log talks about the combination of gcc >= 4.8 *with*
-binutils >= 2.25.
+Currently Codescape toolchains cannot be used to generate a big endian
+root file system because the support for side by side sysroots is not
+complete.
 
-However, here, you only hide for binutils >= 2.25.
+There is a patch [1] waiting in the queue which fixes the issue for the
+current version of Codescape toolchains we have, but it will not work
+for the next one that is coming. So, instead of messing more with the
+toolchain infra I think it's better to handle these specific Codescape
+toolchain's weirdness in hooks which won't affect others.
 
-And we still have gcc-4.7 (albeit deprecated). Is it known broken with
-the gcc-4.7 and binutils >= 2.25 combination too?
+[1]: http://patchwork.ozlabs.org/patch/571708/
 
-So, except for this deprecated gcc-4.7, what matters is only the
-binutils version. There is no need to talk about the gcc version in the
-commit log (except maybe to state taht we don't care about the
-deprecated gcc-4.7).
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/helpers.mk | 59 ++++++++++++++++------------------------------------
+ 1 file changed, 18 insertions(+), 41 deletions(-)
 
-Otherwise:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
->  	help
->  	  Tool for debugging and profiling Linux programs.
->  
-> -- 
-> 2.7.3
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index b3510b6..108fdaa 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -50,22 +50,10 @@ copy_toolchain_lib_root = \
+ # corresponding architecture variants), and we don't want to import
+ # them.
+ #
+-# Then, we need to support two types of multilib toolchains:
++# Then, if the selected architecture variant is not the default one
++# (i.e, if SYSROOT_DIR != ARCH_SYSROOT_DIR), then we :
+ #
+-#  - The toolchains that have nested sysroots: a main sysroot, and
+-#    then additional sysroots available as subdirectories of the main
+-#    one. This is for example used by Sourcery CodeBench toolchains.
+-#
+-#  - The toolchains that have side-by-side sysroots. Each sysroot is a
+-#    complete one, they simply leave one next to each other. This is
+-#    for example used by MIPS Codescape toolchains.
+-#
+-# So, we first detect if the selected architecture variant is not the
+-# default one (i.e, if SYSROOT_DIR != ARCH_SYSROOT_DIR).
+-#
+-# If we are in the situation of a nested sysroot, we:
+-#
+-#  * If needed, import the header files from the default architecture
++#  * Import the header files from the default architecture
+ #    variant. Header files are typically shared between the sysroots
+ #    for the different architecture variants. If we use the
+ #    non-default one, header files were not copied by the previous
+@@ -79,14 +67,10 @@ copy_toolchain_lib_root = \
+ #    non-default architecture variant is used. Without this, the
+ #    compiler fails to find libraries and headers.
+ #
+-# If we are in the situation of a side-by-side sysroot, we:
+-#
+-# * Create a symbolic link
+-#
+-# Finally, some toolchains (i.e Linaro binary toolchains) store
+-# support libraries (libstdc++, libgcc_s) outside of the sysroot, so
+-# we simply copy all the libraries from the "support lib directory"
+-# into our sysroot.
++# Some toolchains (i.e Linaro binary toolchains) store support
++# libraries (libstdc++, libgcc_s) outside of the sysroot, so we simply
++# copy all the libraries from the "support lib directory" into our
++# sysroot.
+ #
+ # Note that the 'locale' directories are not copied. They are huge
+ # (400+MB) in CodeSourcery toolchains, and they are not really useful.
+@@ -111,25 +95,18 @@ copy_toolchain_sysroot = \
+ 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
+ 		fi ; \
+ 	done ; \
+-	SYSROOT_DIR_CANON=`readlink -f $${SYSROOT_DIR}` ; \
+-	ARCH_SYSROOT_DIR_CANON=`readlink -f $${ARCH_SYSROOT_DIR}` ; \
+-	if [ $${SYSROOT_DIR_CANON} != $${ARCH_SYSROOT_DIR_CANON} ] ; then \
+-		relpath="./" ; \
+-		if [ $${ARCH_SYSROOT_DIR_CANON:0:$${\#SYSROOT_DIR_CANON}} == $${SYSROOT_DIR_CANON} ] ; then \
+-			if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+-				cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+-			fi ; \
+-			mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
+-			nbslashs=`printf $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
+-			for slash in `seq 1 $${nbslashs}` ; do \
+-				relpath=$${relpath}"../" ; \
+-			done ; \
+-			ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
+-			echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
+-		elif [ `dirname $${ARCH_SYSROOT_DIR_CANON}` == `dirname $${SYSROOT_DIR_CANON}` ] ; then \
+-			ln -snf $${relpath} $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` ; \
+-			echo "Symlinking $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` -> $${relpath}" ; \
++	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
++		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
++			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+ 		fi ; \
++		mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
++		relpath="./" ; \
++		nbslashs=`printf $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
++		for slash in `seq 1 $${nbslashs}` ; do \
++			relpath=$${relpath}"../" ; \
++		done ; \
++		ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
++		echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
+ 	fi ; \
+ 	if test -n "$${SUPPORT_LIB_DIR}" ; then \
+ 		cp -a $${SUPPORT_LIB_DIR}/* $(STAGING_DIR)/lib/ ; \
