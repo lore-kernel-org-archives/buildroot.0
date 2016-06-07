@@ -1,43 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  7 Jun 2016 15:10:31 +0200
-Subject: [Buildroot] [PATCH] chrony: bump to version 2.4
-Message-ID: <1465305031-30875-1-git-send-email-peter@korsgaard.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Tue,  7 Jun 2016 10:58:01 -0300
+Subject: [Buildroot] [PATCH] configs/beaglebone: Add missing genimage.cfg
+	file
+Message-ID: <1465307881-2101-1-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/chrony/chrony.hash | 7 ++++---
- package/chrony/chrony.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Commit 7d0b7d3c27a6 ("configs/beaglebone: Use genimage
+to produce the SD card image") introduce genimage usage,
+but forgot to add the genimage config file. Fix it.
 
-diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
-index f39d316..e2f6f81 100644
---- a/package/chrony/chrony.hash
-+++ b/package/chrony/chrony.hash
-@@ -1,3 +1,4 @@
--# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2016/02/msg00001.html
--md5  db6d46afea66f75dcc362f44623c1af4         chrony-2.3.tar.gz
--sha1 c5e2aac4e4ad904bf73663ed63964bec91482a8a chrony-2.3.tar.gz
-+# From http://thread.gmane.org/gmane.comp.time.chrony.announce/36
-+md5  d0598aa8a9be8faccef9386f6fc0d5f2  chrony-2.4.tar.gz
-+sha1 8c243c545f242f869c9965e675828878970da5db  chrony-2.4.tar.gz
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+---
+ board/beaglebone/genimage.cfg | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 board/beaglebone/genimage.cfg
+
+diff --git a/board/beaglebone/genimage.cfg b/board/beaglebone/genimage.cfg
+new file mode 100644
+index 000000000000..0c29a804d53b
+--- /dev/null
++++ b/board/beaglebone/genimage.cfg
+@@ -0,0 +1,30 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"MLO",
++			"u-boot.img",
++			"zImage",
++			"uEnv.txt",
++			"am335x-bone.dtb",
++			"am335x-boneblack.dtb"
++		}
++	}
++	size = 16M
++}
 +
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index 6416b83..adfbd36 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CHRONY_VERSION = 2.3
-+CHRONY_VERSION = 2.4
- CHRONY_SITE = http://download.tuxfamily.org/chrony
- CHRONY_LICENSE = GPLv2
- CHRONY_LICENSE_FILES = COPYING
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		partition-type = 0xC
++		bootable = "true"
++                image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
 -- 
 2.7.0
