@@ -1,86 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 13:10:21 +0200
-Subject: [Buildroot] [PATCH] gcc: bump 5.x series to version 5.4.0
-In-Reply-To: <1465262508-31816-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1465262508-31816-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160607131021.24ac4968@free-electrons.com>
+Date: Tue, 7 Jun 2016 13:10:43 +0200
+Subject: [Buildroot] [git commit] msmtp: bump to version 1.6.5
+Message-ID: <20160607111108.29BBC80120@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=df0cb7b5f5c9e7abf961905f2029db1610ccef4c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  6 Jun 2016 22:21:48 -0300, Gustavo Zacarias wrote:
-> 130-fix_build_with_gcc-6.patch is upstream so remove it.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gcc/5.3.0/130-fix_build_with_gcc-6.patch   | 153 ---------------------
->  package/gcc/{5.3.0 => 5.4.0}/100-uclibc-conf.patch |   0
->  ...gcc-fix-typo-for-powerpc-e6500-cpu_is_64b.patch |   0
->  .../{5.3.0 => 5.4.0}/301-missing-execinfo_h.patch  |   0
->  .../810-arm-softfloat-libgcc.patch                 |   0
->  .../{5.3.0 => 5.4.0}/830-arm_unbreak_armv4t.patch  |   0
->  .../840-microblaze-enable-dwarf-eh-support.patch   |   0
->  .../850-libstdcxx-uclibc-c99.patch                 |   0
->  package/gcc/{5.3.0 => 5.4.0}/860-cilk-wchar.patch  |   0
->  .../870-xtensa-add-mauto-litpools-option.patch     |   0
->  .../871-xtensa-reimplement-register-spilling.patch |   0
->  ...unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch |   0
->  .../873-xtensa-fix-_Unwind_GetCFA.patch            |   0
->  .../874-xtensa-add-uclinux-support.patch           |   0
->  .../{5.3.0 => 5.4.0}/890-fix-m68k-compile.patch    |   0
->  .../{5.3.0 => 5.4.0}/891-fix-m68k-uclinux.patch    |   0
->  .../{5.3.0 => 5.4.0}/892-microblaze-uclibc.patch   |   0
->  .../900-libitm-fixes-for-musl-support.patch        |   0
->  .../901-fixincludes-update-for-musl-support.patch  |   0
->  .../{5.3.0 => 5.4.0}/902-unwind-fix-for-musl.patch |   0
->  ...dc++-libgfortran-gthr-workaround-for-musl.patch |   0
->  .../{5.3.0 => 5.4.0}/904-musl-libc-config.patch    |   0
->  .../905-add-musl-support-to-gcc.patch              |   0
->  .../{5.3.0 => 5.4.0}/906-mips-musl-support.patch   |   0
->  .../{5.3.0 => 5.4.0}/907-x86-musl-support.patch    |   0
->  .../{5.3.0 => 5.4.0}/908-arm-musl-support.patch    |   0
->  .../909-aarch64-musl-support.patch                 |   0
->  .../930-libgcc-disable-split-stack-nothreads.patch |   0
->  package/gcc/Config.in.host                         |   2 +-
->  package/gcc/gcc.hash                               |   4 +-
->  30 files changed, 3 insertions(+), 156 deletions(-)
->  delete mode 100644 package/gcc/5.3.0/130-fix_build_with_gcc-6.patch
->  rename package/gcc/{5.3.0 => 5.4.0}/100-uclibc-conf.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/120-gcc-config.gcc-fix-typo-for-powerpc-e6500-cpu_is_64b.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/301-missing-execinfo_h.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/810-arm-softfloat-libgcc.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/830-arm_unbreak_armv4t.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/840-microblaze-enable-dwarf-eh-support.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/850-libstdcxx-uclibc-c99.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/860-cilk-wchar.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/870-xtensa-add-mauto-litpools-option.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/871-xtensa-reimplement-register-spilling.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/872-xtensa-use-unwind-dw2-fde-dip-instead-of-unwind-dw2-.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/873-xtensa-fix-_Unwind_GetCFA.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/874-xtensa-add-uclinux-support.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/890-fix-m68k-compile.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/891-fix-m68k-uclinux.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/892-microblaze-uclibc.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/900-libitm-fixes-for-musl-support.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/901-fixincludes-update-for-musl-support.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/902-unwind-fix-for-musl.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/903-libstdc++-libgfortran-gthr-workaround-for-musl.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/904-musl-libc-config.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/905-add-musl-support-to-gcc.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/906-mips-musl-support.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/907-x86-musl-support.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/908-arm-musl-support.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/909-aarch64-musl-support.patch (100%)
->  rename package/gcc/{5.3.0 => 5.4.0}/930-libgcc-disable-split-stack-nothreads.patch (100%)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/msmtp/msmtp.hash | 6 +++---
+ package/msmtp/msmtp.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
+index fb03e05..d0de8e0 100644
+--- a/package/msmtp/msmtp.hash
++++ b/package/msmtp/msmtp.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.2/
+-md5	3baca93c7e5f1aa9d36a2e5b38739ab9	msmtp-1.6.2.tar.xz
+-sha1	2d2272d04851b9bc806a77f47344e61840185329	msmtp-1.6.2.tar.xz
++# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.5/
++md5	50a8c9bb72f8222779db6b4aae2965e0	msmtp-1.6.5.tar.xz
++sha1	27d1fc609cd453a7e4c55c4ec55d455949bc53f1	msmtp-1.6.5.tar.xz
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index 7c8261e..7ede66c 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MSMTP_VERSION = 1.6.2
++MSMTP_VERSION = 1.6.5
+ MSMTP_SITE = http://downloads.sourceforge.net/project/msmtp/msmtp/$(MSMTP_VERSION)
+ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
+ MSMTP_DEPENDENCIES = host-pkgconf
