@@ -1,37 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 22:21:08 +0200
-Subject: [Buildroot] [git commit] fs/jffs2: split commands
-Message-ID: <20160607202530.2C43781F70@busybox.osuosl.org>
+Date: Tue, 7 Jun 2016 22:20:57 +0200
+Subject: [Buildroot] [git commit] fs: properly escape commands when
+	generating fakeroot script
+Message-ID: <20160607202530.1DE2D817EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e725848c3b33e6b2045b96b1088c0ea41cbd4bf
+commit: https://git.buildroot.net/buildroot/commit/?id=6dd7bbb59134799ed3d7343f238b3b02592faebf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that we can properly printf a multi-line command, there is no need
-to use a single command to gnerate the jffs2 image.
+Use the newly-introduced PRINTF macro to generate printf formats
+that do "The Right Thing (TM)".
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/jffs2/jffs2.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/common.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/fs/jffs2/jffs2.mk b/fs/jffs2/jffs2.mk
-index a9cd414..9a36a75 100644
---- a/fs/jffs2/jffs2.mk
-+++ b/fs/jffs2/jffs2.mk
-@@ -39,8 +39,8 @@ ROOTFS_JFFS2_DEPENDENCIES = host-mtd
- 
- ifneq ($(BR2_TARGET_ROOTFS_JFFS2_SUMMARY),)
- define ROOTFS_JFFS2_CMD
--	$(MKFS_JFFS2) $(JFFS2_OPTS) -d $(TARGET_DIR) -o $@.nosummary && \
--	$(SUMTOOL) $(SUMTOOL_OPTS) -i $@.nosummary -o $@ && \
-+	$(MKFS_JFFS2) $(JFFS2_OPTS) -d $(TARGET_DIR) -o $@.nosummary
-+	$(SUMTOOL) $(SUMTOOL_OPTS) -i $@.nosummary -o $@
- 	rm $@.nosummary
- endef
- else
+diff --git a/fs/common.mk b/fs/common.mk
+index 46e097b..f7a73bb 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -81,17 +81,17 @@ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
+ ifneq ($$(ROOTFS_USERS_TABLES),)
+ 	cat $$(ROOTFS_USERS_TABLES) >> $$(USERS_TABLE)
+ endif
+-	printf '$$(subst $$(sep),\n,$$(PACKAGES_USERS))' >> $$(USERS_TABLE)
++	$$(call PRINTF,$$(PACKAGES_USERS)) >> $$(USERS_TABLE)
+ 	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
+ ifneq ($$(ROOTFS_DEVICE_TABLES),)
+ 	cat $$(ROOTFS_DEVICE_TABLES) > $$(FULL_DEVICE_TABLE)
+ ifeq ($$(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+-	printf '$$(subst $$(sep),\n,$$(PACKAGES_DEVICES_TABLE))' >> $$(FULL_DEVICE_TABLE)
++	$$(call PRINTF,$$(PACKAGES_DEVICES_TABLE)) >> $$(FULL_DEVICE_TABLE)
+ endif
+-	printf '$$(subst $$(sep),\n,$$(PACKAGES_PERMISSIONS_TABLE))' >> $$(FULL_DEVICE_TABLE)
++	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(FULL_DEVICE_TABLE)
+ 	echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+ endif
+-	echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
++	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+ 	chmod a+x $$(FAKEROOT_SCRIPT)
+ 	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+ 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
