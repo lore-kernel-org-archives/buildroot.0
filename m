@@ -1,36 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 23:43:09 +0200
-Subject: [Buildroot] [PATCH 1/2] Revert "toolchain: allow side by side
- sysroot directories"
-In-Reply-To: <20160607234246.5a92358d@free-electrons.com>
-References: <1462543017-42054-1-git-send-email-Vincent.Riera@imgtec.com>
- <1462543017-42054-2-git-send-email-Vincent.Riera@imgtec.com>
- <20160607234246.5a92358d@free-electrons.com>
-Message-ID: <20160607234309.40ce6e2d@free-electrons.com>
+Date: Tue, 7 Jun 2016 23:43:47 +0200
+Subject: [Buildroot] [git commit] gcc/libmudflap: unavailable for gcc >= 4.9
+Message-ID: <20160607214408.B2AE481D71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4a692aefee10088c385d30e829abf80af1616d1b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 7 Jun 2016 23:42:46 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 6 May 2016 14:56:56 +0100, Vicente Olivert Riera wrote:
-> > This reverts commit 9a1e9efe2618ebbf12ed2567bcd6e8cca5619547.
-> > ---
-> >  toolchain/helpers.mk | 59 ++++++++++++++++------------------------------------
-> >  1 file changed, 18 insertions(+), 41 deletions(-)  
-> 
-> Both applied, thanks!
+Rework gcc dependency for mudflap as suggested by Arnout and Peter:
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/149813
 
-Gah, sorry. Of course, I applied the v2 of your patches, not that older
-version.
+libmudflap was removed in gcc 4.9:
+https://gcc.gnu.org/wiki/Mudflap_Pointer_Debugging
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/Config.in.host | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 17de65c..3180071 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -151,9 +151,7 @@ config BR2_GCC_ENABLE_LIBMUDFLAP
+ 	# There are architectures, or specific configurations for
+ 	# which mudflap is not supported.
+ 	depends on !BR2_ARM_INSTRUCTIONS_THUMB && !BR2_powerpc_SPE
+-	depends on !BR2_GCC_VERSION_4_9_X
+-	depends on !BR2_GCC_VERSION_5_X
+-	depends on !BR2_GCC_VERSION_6_X
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	help
+ 	  libmudflap is a gcc library used for the mudflap pointer
+ 	  debugging functionality. It is only needed if you intend to
