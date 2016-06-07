@@ -1,28 +1,27 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Tue, 7 Jun 2016 13:44:55 -0400
-Subject: [Buildroot] Resource Limits
-Message-ID: <CAF_dkJCCZcXdf=G8TJ1HUA1TiCAmbE56oA6KkWMyxcLrkxgo-w@mail.gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 07 Jun 2016 18:33:03 +0000
+Subject: [Buildroot] [PATCH v1 1/1] babeld: new package
+In-Reply-To: <20160607092354.6057e99c@free-electrons.com>
+References: <1465274839-27236-1-git-send-email-christian@paral.in>
+ <20160607092354.6057e99c@free-electrons.com>
+Message-ID: <CA+h8R2o0guuzf8PT2dhbMTr5v+PGc7oX5YcJbRirxTZtzeANvQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi folks...
+Thomas,
 
-How are resource limits managed in buildroot generated systems?
+On Tue, Jun 7, 2016, 12:24 AM Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-Suppose I wanted to allow real-time priorities above zero.  How could
-I enable that for an unprivledged user?
+ > Are you *sure* this is producing a binary built for the target? Since you
+are not passing any CC/LD/CXX/etc. variables, I doubt it.
 
-Would I have to enable pam with pam_limits.so in order to use
-/etc/security/limits.conf?
+Whoops, that makes some sense. Will fix.
 
-Can I use sysctl?  Is that a package I can enable?
-
-Most preferably, could I just compile the resource limits into the
-kernel and not have to bother with any external packages?
-
-Any thoughts?
-
---wpd
+Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160607/7107212e/attachment.html>
