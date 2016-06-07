@@ -1,53 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 Jun 2016 22:22:45 +0200
-Subject: [Buildroot] [PATCH 0/8 v3] core: add support for package help
- (branch yem/help)
-In-Reply-To: <20160607221844.45eb8b34@free-electrons.com>
-References: <cover.1465056706.git.yann.morin.1998@free.fr>
- <20160607221844.45eb8b34@free-electrons.com>
-Message-ID: <20160607202245.GD3775@free.fr>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 7 Jun 2016 13:24:30 -0700
+Subject: [Buildroot] [PATCH v6 2/3] docker-containerd: new package
+In-Reply-To: <c77de68d3e294523a2079b68deffed57@WEBMAIL.arcx.com>
+References: <1464475578-22239-1-git-send-email-christian@paral.in>
+ <1464475578-22239-3-git-send-email-christian@paral.in>
+ <c77de68d3e294523a2079b68deffed57@WEBMAIL.arcx.com>
+Message-ID: <CA+h8R2p6wRRWrxZRiiRhzoa9BsmAi3HpHskKBaUsnZfJPLyX4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2016-06-07 22:18 +0200, Thomas Petazzoni spake thusly:
-> On Sat,  4 Jun 2016 18:30:49 +0200, Yann E. MORIN wrote:
-> > Yann E. MORIN (8):
-> >       core/pkg-generic: add support for package-defined help
-> >       core: name the package before its help text
-> >       core/pkg-utils: add a macro to pretty-print a help entry
-> >       package/busybox: use the generic help rules
-> >       linux: use the generic help rules
-> >       package/uclibc: use the generic help rules
-> >       boot/barebox: use the generic help rules
-> >       core: use the print-help macro to print the main help
-> 
-> This last commit made me realize that the helper is a bad idea:
-> 
->  1/ It makes the code longer in number of lines.
-> 
->  2/ It makes it harder to read.
-> 
-> So, as discussed on IRC, I've reworked your patches to drop the helper
-> that pretty-print the help text, and simply used the @echo calls in the
-> various packages.
-> 
-> So essentially, I've dropped patches 3/8 and 8/8, and I've reworked
-> patches 4, 5, 6 and 7 to not use the helper.
+On Tue, Jun 7, 2016 at 1:15 PM, Andrew Webster <Awebster@arcx.com> wrote:
+>
+> > +define DOCKER_CONTAINERD_INSTALL_TARGET_CMDS
+> > +     ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
+> > +     $(INSTALL) -D -m 0755 $(@D)/bin/containerd
+> $(TARGET_DIR)/usr/bin/docker-containerd
+> > +     $(INSTALL) -D -m 0755 $(@D)/bin/containerd-shim
+> $(TARGET_DIR)/usr/bin/containerd-shim
+> > +endef
+>
+> Should this target be $(TARGET_DIR)/usr/bin/docker-containerd-shim instead?
+>
 
-Thanks! :-)
+Yes, and this is fixed for the next revision, see:
 
-Regards,
-Yann E. MORIN.
+https://github.com/paralin/buildroot/commit/39ca2e6f7ce4e23c2a9ff0016ff3680299b4f91b
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+~ Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160607/6d5541c7/attachment.html>
