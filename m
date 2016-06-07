@@ -1,21 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Jun 2016 22:10:56 +0200
-Subject: [Buildroot] [git commit] package/uclibc: use the generic help rules
-Message-ID: <20160607201335.B3C7A8074E@busybox.osuosl.org>
+Date: Tue, 7 Jun 2016 22:12:08 +0200
+Subject: [Buildroot] [git commit] boot/barebox: use the generic help rules
+Message-ID: <20160607201335.C8C2A8074E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72122c50af477015e950f24167e140f946efb6b6
+commit: https://git.buildroot.net/buildroot/commit/?id=77f4c205b9c2b6346b479c6ed29ead74fe9637cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Note that the uclibc-menuconfig rule was guarded behind
-BR2_TOOLCHAIN_BUILDROOT, which is wrong since we can build
-glibc or musl toolchains too...
-
-This is de facto fixed by moving the help text to the uClibc package.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Arnout Vandecappelle <arnout@mind.be>
@@ -23,36 +17,37 @@ Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 [Thomas: don't use the helper.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile                 | 3 ---
- package/uclibc/uclibc.mk | 4 ++++
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ Makefile                        | 4 ----
+ boot/barebox/barebox/barebox.mk | 5 +++++
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index bb3d588..f007db2 100644
+index f007db2..3f5c3d3 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -941,9 +941,6 @@ help:
+@@ -941,10 +941,6 @@ help:
  		@echo $(sep) \
  		@echo '$($(p)_NAME):' $(sep) \
  		$($(p)_HELP_CMDS)$(sep))
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
+-ifeq ($(BR2_TARGET_BAREBOX),y)
+-	@echo '  barebox-menuconfig     - Run barebox menuconfig'
+-	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
 -endif
- ifeq ($(BR2_TARGET_BAREBOX),y)
- 	@echo '  barebox-menuconfig     - Run barebox menuconfig'
- 	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index e20e8a8..6bc5f41 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -11,6 +11,10 @@ UCLIBC_LICENSE = LGPLv2.1+
- UCLIBC_LICENSE_FILES = COPYING.LIB
- UCLIBC_INSTALL_STAGING = YES
+ 	@echo
+ 	@echo 'Documentation:'
+ 	@echo '  manual                 - build manual in all formats'
+diff --git a/boot/barebox/barebox/barebox.mk b/boot/barebox/barebox/barebox.mk
+index 6a5a80d..39afb0f 100644
+--- a/boot/barebox/barebox/barebox.mk
++++ b/boot/barebox/barebox/barebox.mk
+@@ -4,5 +4,10 @@
+ #
+ ################################################################################
  
-+define UCLIBC_HELP_CMDS
-+	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
++define BAREBOX_HELP_CMDS
++	@echo '  barebox-menuconfig     - Run barebox menuconfig'
++	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
 +endef
 +
- # uclibc is part of the toolchain so disable the toolchain dependency
- UCLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
+ # Instantiate the barebox package
+ $(eval $(barebox-package))
