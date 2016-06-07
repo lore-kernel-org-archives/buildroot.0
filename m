@@ -1,27 +1,40 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 07 Jun 2016 18:33:03 +0000
-Subject: [Buildroot] [PATCH v1 1/1] babeld: new package
-In-Reply-To: <20160607092354.6057e99c@free-electrons.com>
-References: <1465274839-27236-1-git-send-email-christian@paral.in>
- <20160607092354.6057e99c@free-electrons.com>
-Message-ID: <CA+h8R2o0guuzf8PT2dhbMTr5v+PGc7oX5YcJbRirxTZtzeANvQ@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue,  7 Jun 2016 20:43:01 +0200
+Subject: [Buildroot] [PATCH v1] wiringpi: needs threads
+Message-ID: <1465324981-7012-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Fixes [1]:
 
-On Tue, Jun 7, 2016, 12:24 AM Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+  wiringPi.c:66:21: fatal error: pthread.h: No such file or directory
 
- > Are you *sure* this is producing a binary built for the target? Since you
-are not passing any CC/LD/CXX/etc. variables, I doubt it.
+[1] http://autobuild.buildroot.net/results/4e1/4e17697c1116b418d8d9c07a202f3c89186e463f
 
-Whoops, that makes some sense. Will fix.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/wiringpi/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Christian
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160607/7107212e/attachment.html>
+diff --git a/package/wiringpi/Config.in b/package/wiringpi/Config.in
+index a292b3f..2062a62 100644
+--- a/package/wiringpi/Config.in
++++ b/package/wiringpi/Config.in
+@@ -1,7 +1,12 @@
+ config BR2_PACKAGE_WIRINGPI
+ 	bool "wiringpi"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  wiringPi libraries (and gpio command)
+ 
+ 	  http://wiringpi.com/
++
++comment "wiringpi needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+2.8.1
