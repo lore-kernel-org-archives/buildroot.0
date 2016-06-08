@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jun 2016 14:04:54 +0200
-Subject: [Buildroot] [git commit] libftdi1: bump to version 1.3
-Message-ID: <20160608120510.0758C80469@busybox.osuosl.org>
+Date: Wed, 8 Jun 2016 14:05:05 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.6.2
+Message-ID: <20160608120510.25AF081FAA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56e7b7d814ffc60b4001bcea508c21ac5c5127cb
+commit: https://git.buildroot.net/buildroot/commit/?id=0cbc5401d4381f86700e37c480b263ff82a7a404
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libftdi1/libftdi1.hash | 2 +-
- package/libftdi1/libftdi1.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libftdi1/libftdi1.hash b/package/libftdi1/libftdi1.hash
-index e53bc8f..0a89182 100644
---- a/package/libftdi1/libftdi1.hash
-+++ b/package/libftdi1/libftdi1.hash
-@@ -1,2 +1,2 @@
- # Locally computed (after checking the signature from http://www.intra2net.com/en/developer/libftdi/download.php)
--sha256  a6ea795c829219015eb372b03008351cee3fb39f684bff3bf8a4620b558488d6  libftdi1-1.2.tar.bz2
-+sha256  9a8c95c94bfbcf36584a0a58a6e2003d9b133213d9202b76aec76302ffaa81f4  libftdi1-1.3.tar.bz2
-diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
-index e77f37b..26aa293 100644
---- a/package/libftdi1/libftdi1.mk
-+++ b/package/libftdi1/libftdi1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index f3c6ebe..ce55271 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -27,7 +27,7 @@ choice
+ 	prompt "Kernel version"
  
--LIBFTDI1_VERSION = 1.2
-+LIBFTDI1_VERSION = 1.3
- LIBFTDI1_SOURCE = libftdi1-$(LIBFTDI1_VERSION).tar.bz2
- LIBFTDI1_SITE = http://www.intra2net.com/en/developer/libftdi/download
- LIBFTDI1_INSTALL_STAGING = YES
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.6.1)"
++	bool "Latest version (4.6.2)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -110,7 +110,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.6.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.6.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
