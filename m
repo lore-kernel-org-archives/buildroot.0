@@ -1,37 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jun 2016 23:27:03 +0200
-Subject: [Buildroot] [PATCH]  configs: new configuration for i.MX25 PDK
-In-Reply-To: <1465229654-5575-1-git-send-email-fabio.estevam@nxp.com>
-References: <1465229654-5575-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <20160608232703.58b8d89d@free-electrons.com>
+Date: Wed, 8 Jun 2016 23:27:59 +0200
+Subject: [Buildroot] [git commit] package/net-tools: use
+	TARGET_CONFIGURE_OPTS to provide AR, CC and LDFLAGS
+Message-ID: <20160608212803.1A83681E8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6d2cb12d5f544a5fd24b14326e85901dfeaf3d31
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 6 Jun 2016 13:14:14 -0300, Fabio Estevam wrote:
-> Add support for i.MX25 PDK board using U-boot 2016.05 and
-> kernel 4.6.1.
-> 
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-> ---
->  board/freescale/imx25pdk/genimage.cfg  | 41 ++++++++++++++++++++++++++
->  board/freescale/imx25pdk/post-image.sh | 16 ++++++++++
->  board/freescale/imx25pdk/readme.txt    | 54 ++++++++++++++++++++++++++++++++++
->  configs/mx25pdk_defconfig              | 34 +++++++++++++++++++++
->  4 files changed, 145 insertions(+)
->  create mode 100644 board/freescale/imx25pdk/genimage.cfg
->  create mode 100755 board/freescale/imx25pdk/post-image.sh
->  create mode 100644 board/freescale/imx25pdk/readme.txt
->  create mode 100644 configs/mx25pdk_defconfig
+As noticed by Peter [1], use TARGET_CONFIGURE_OPTS to provide AR, CC and LDFLAGS.
 
-Applied to master, thanks.
+Also remove TARGET_MAKE_ENV since it only contains PATH=$(BR_PATH) which is
+also provided by TARGET_CONFIGURE_OPTS.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+[1] http://lists.busybox.net/pipermail/buildroot/2016-May/162418.html
+
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/net-tools/net-tools.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
+index 08d55bb..f0c61d5 100644
+--- a/package/net-tools/net-tools.mk
++++ b/package/net-tools/net-tools.mk
+@@ -34,8 +34,7 @@ endef
+ NET_TOOLS_POST_CONFIGURE_HOOKS += NET_TOOLS_ENABLE_I18N NET_TOOLS_ENABLE_IPV6
+ 
+ define NET_TOOLS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) AR="$(TARGET_AR)" CC="$(TARGET_CC)" \
+-		LDFLAGS="$(TARGET_LDFLAGS)" \
++	$(TARGET_CONFIGURE_OPTS) \
+ 		LIBS="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)" \
+ 		$(MAKE) -C $(@D)
+ endef
