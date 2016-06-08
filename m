@@ -1,33 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jun 2016 22:58:17 +0200
-Subject: [Buildroot] [PATCH v4] scanpypi: new utility
-In-Reply-To: <1464707021-20070-1-git-send-email-yegorslists@googlemail.com>
-References: <1464707021-20070-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160608225817.30f96d70@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed,  8 Jun 2016 23:06:38 +0200
+Subject: [Buildroot] [PATCH v2] package/fetchmail: fix *.pyc compilation
+	with python-3
+Message-ID: <20160608210638.21263-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This change removes the fetchmailconf.py python module when the python
+interpreter is python-3, because this module is not yet python-3
+compliant.
 
-On Tue, 31 May 2016 17:03:41 +0200, yegorslists at googlemail.com wrote:
-> From: Denis THULIN <denis.thulin@openwide.fr>
-> 
-> A utility for creating python package from the python package index.
-> It fetches packages info from http://pypi.python.org and generates
-> corresponding packages files.
-> 
-> Signed-off-by: Denis THULIN <denis.thulin@openwide.fr>
-> Tested-by: Carlos Santos <casantos@datacom.ind.br>
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Fixes:
+  http://autobuild.buildroot.org/results/700/7009445dd116a1c02db82a351d38db44db8dad16/
+  ...
 
-Thanks Yegor for this new version. If nobody complains or reviews it,
-I'll apply it in the next few days.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Thomas
+---
+changes v1->v2:
+- remove the *.py instead of adding patches fixing it
+---
+ package/fetchmail/fetchmail.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index a198dc5..5cae0e2 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -23,4 +23,14 @@ FETCHMAIL_DEPENDENCIES = \
+ 	openssl \
+ 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ 
++# fetchmailconf.py script is not (yet) python3-compliant.
++# Prevent the pyc-compilation with python-3 from failing by removing this
++# non-critical script.
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++define FETCHMAIL_REMOVE_FETCHMAILCONF_PY
++	$(RM) -f $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/fetchmailconf.py
++endef
++FETCHMAIL_POST_TARGET_INSTALL_HOOKS += FETCHMAIL_REMOVE_FETCHMAILCONF_PY
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.3
