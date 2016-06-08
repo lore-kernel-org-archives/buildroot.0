@@ -1,35 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jun 2016 22:52:29 +0200
-Subject: [Buildroot] [PATCH 1/2] python-pytz: new package
-In-Reply-To: <1465392330-13320-1-git-send-email-yegorslists@googlemail.com>
-References: <1465392330-13320-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160608225229.60ff0d2b@free-electrons.com>
+Date: Wed, 8 Jun 2016 22:52:50 +0200
+Subject: [Buildroot] [git commit] python-dateutil: new package
+Message-ID: <20160608205334.7C16B80404@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=246f6d8380e087937cd660441279798d196738a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  8 Jun 2016 15:25:29 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/Config.in                    |  1 +
->  package/python-pytz/Config.in        |  6 ++++++
->  package/python-pytz/python-pytz.hash |  4 ++++
->  package/python-pytz/python-pytz.mk   | 14 ++++++++++++++
->  4 files changed, 25 insertions(+)
->  create mode 100644 package/python-pytz/Config.in
->  create mode 100644 package/python-pytz/python-pytz.hash
->  create mode 100644 package/python-pytz/python-pytz.mk
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                            |  1 +
+ package/python-dateutil/Config.in            |  7 +++++++
+ package/python-dateutil/python-dateutil.hash |  4 ++++
+ package/python-dateutil/python-dateutil.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 1337dbc..0cb2e7e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -654,6 +654,7 @@ menu "External python modules"
+ 	source "package/python-cryptography/Config.in"
+ 	source "package/python-cssselect/Config.in"
+ 	source "package/python-daemon/Config.in"
++	source "package/python-dateutil/Config.in"
+ 	source "package/python-dialog/Config.in"
+ 	source "package/python-django/Config.in"
+ 	source "package/python-docopt/Config.in"
+diff --git a/package/python-dateutil/Config.in b/package/python-dateutil/Config.in
+new file mode 100644
+index 0000000..56a1d83
+--- /dev/null
++++ b/package/python-dateutil/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_DATEUTIL
++	bool "python-dateutil"
++	select BR2_PACKAGE_PYTHON_SIX
++	help
++	  Extensions to the standard Python datetime module.
++
++	  https://dateutil.readthedocs.org
+diff --git a/package/python-dateutil/python-dateutil.hash b/package/python-dateutil/python-dateutil.hash
+new file mode 100644
+index 0000000..9eff016
+--- /dev/null
++++ b/package/python-dateutil/python-dateutil.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/python-dateutil/json
++md5	05ffc6d2cc85a7fd93bb245807f715ef  python-dateutil-2.5.3.tar.gz
++# sha256 calculated by scanpypi
++sha256	1408fdb07c6a1fa9997567ce3fcee6a337b39a503d80699e0f213de4aa4b32ed  python-dateutil-2.5.3.tar.gz
+diff --git a/package/python-dateutil/python-dateutil.mk b/package/python-dateutil/python-dateutil.mk
+new file mode 100644
+index 0000000..371788c
+--- /dev/null
++++ b/package/python-dateutil/python-dateutil.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-dateutil
++#
++################################################################################
++
++PYTHON_DATEUTIL_VERSION = 2.5.3
++PYTHON_DATEUTIL_SOURCE = python-dateutil-$(PYTHON_DATEUTIL_VERSION).tar.gz
++PYTHON_DATEUTIL_SITE = https://pypi.python.org/packages/3e/f5/aad82824b369332a676a90a8c0d1e608b17e740bbb6aeeebca726f17b902
++PYTHON_DATEUTIL_SETUP_TYPE = setuptools
++PYTHON_DATEUTIL_LICENSE = BSD-3c
++PYTHON_DATEUTIL_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
