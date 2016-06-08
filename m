@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jun 2016 14:07:35 +0200
-Subject: [Buildroot] [PATCH v4] p7zip: New package
-In-Reply-To: <1464731871-12355-1-git-send-email-nerv@dawncrow.de>
-References: <1464731871-12355-1-git-send-email-nerv@dawncrow.de>
-Message-ID: <20160608140735.6869fc77@free-electrons.com>
+Date: Wed, 8 Jun 2016 14:07:42 +0200
+Subject: [Buildroot] [PATCH] libftdi1: bump to version 1.3
+In-Reply-To: <1465380912-25163-1-git-send-email-yegorslists@googlemail.com>
+References: <1465380912-25163-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160608140742.02f1fa91@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 31 May 2016 23:57:51 +0200, Andr? Hentschel wrote:
-> Only enabled on a subset of known-working architectures.
-> It fails to build on some archs, like blackfin.
+On Wed,  8 Jun 2016 12:15:12 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/Config.in        |  1 +
->  package/p7zip/Config.in  | 16 ++++++++++++++++
->  package/p7zip/p7zip.hash |  3 +++
->  package/p7zip/p7zip.mk   | 27 +++++++++++++++++++++++++++
->  4 files changed, 47 insertions(+)
->  create mode 100644 package/p7zip/Config.in
->  create mode 100644 package/p7zip/p7zip.hash
->  create mode 100644 package/p7zip/p7zip.mk
+>  package/libftdi1/libftdi1.hash | 2 +-
+>  package/libftdi1/libftdi1.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master with the following changes:
-
-    [Thomas:
-     - Add comment about the Blackfin exception.
-     - Propagate the Blackfin exception to the Config.in comment.
-     - Fix the license, it is the LGPLv2.1+ *with* the unRAR restriction.
-     - Use $(INSTALL) -D -m 0755 to install the binary instead of cp.]
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
