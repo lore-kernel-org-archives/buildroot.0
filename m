@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jun 2016 22:42:14 +0200
-Subject: [Buildroot] [PATCH 1/2] package/am335x-pru-package: add hash
-In-Reply-To: <1465408811-23153-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465408811-23153-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160608224214.086c7481@free-electrons.com>
+Date: Wed, 8 Jun 2016 23:50:50 +0200
+Subject: [Buildroot] [PATCH RESEND] libiio: Bump version to 0.6
+In-Reply-To: <1463765791-308-1-git-send-email-mfornero@mathworks.com>
+References: <1460655035-24870-1-git-send-email-mfornero@mathworks.com>
+ <1463765791-308-1-git-send-email-mfornero@mathworks.com>
+Message-ID: <20160608235050.74fe60e9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  8 Jun 2016 20:00:10 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/am335x-pru-package/am335x-pru-package.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/am335x-pru-package/am335x-pru-package.hash
+On Fri, 20 May 2016 13:36:31 -0400, Matthew Fornero wrote:
+> v0.6 API offers some major additions, including:
+> * iio_device_set_kernel_buffers_counts
+> * iio_buffer_get_poll_fd
+> * iio_bufer_set_blocking_mode
+> * iio_buffer_push_partial
+> 
+> Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
 
-Both applied, thanks!
+This update is causing some failures, such as:
+
+   http://autobuild.buildroot.net/results/ffe/ffec14aa79833a6f0889a87b31dae464d083e6a8/build-end.log
+
+Could you have a look at what's going on? This happens in many
+configurations:
+
+   http://autobuild.buildroot.net/?reason=libiio-0.6
+
+Thanks for your help!
 
 Thomas
 -- 
