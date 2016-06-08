@@ -1,42 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jun 2016 23:27:59 +0200
-Subject: [Buildroot] [git commit] package/net-tools: use
-	TARGET_CONFIGURE_OPTS to provide AR, CC and LDFLAGS
-Message-ID: <20160608212803.1A83681E8B@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 8 Jun 2016 23:29:02 +0200
+Subject: [Buildroot] [PATCH 1/3] pckage/openpowerlink: fix sha256 hash
+In-Reply-To: <20160608232510.78ab03df@free-electrons.com>
+References: <1465420919-3920-1-git-send-email-romain.naour@gmail.com>
+ <20160608232510.78ab03df@free-electrons.com>
+Message-ID: <a0e1efad-93f2-0d08-8afc-18deb9d02d3e@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d2cb12d5f544a5fd24b14326e85901dfeaf3d31
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-As noticed by Peter [1], use TARGET_CONFIGURE_OPTS to provide AR, CC and LDFLAGS.
+Le 08/06/2016 ? 23:25, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> On Wed,  8 Jun 2016 23:21:57 +0200, Romain Naour wrote:
+>> While bumping to v2.4.0, the sha256 was commented by mistake
+>> and the hash was for v2.3.2 archive.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> ---
+>>  package/openpowerlink/openpowerlink.hash | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> All three patches applied, thanks! There was a typo in the title of
+> this patch, which I fixed when applying.
 
-Also remove TARGET_MAKE_ENV since it only contains PATH=$(BR_PATH) which is
-also provided by TARGET_CONFIGURE_OPTS.
+Thanks, I'm working with upstream for the next bug fix release (2.4.1) to
+upstream most of the patches.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2016-May/162418.html
+Patch 5 and 6 are already upstream.
 
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/net-tools/net-tools.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Best regards,
+Romain
 
-diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
-index 08d55bb..f0c61d5 100644
---- a/package/net-tools/net-tools.mk
-+++ b/package/net-tools/net-tools.mk
-@@ -34,8 +34,7 @@ endef
- NET_TOOLS_POST_CONFIGURE_HOOKS += NET_TOOLS_ENABLE_I18N NET_TOOLS_ENABLE_IPV6
- 
- define NET_TOOLS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) AR="$(TARGET_AR)" CC="$(TARGET_CC)" \
--		LDFLAGS="$(TARGET_LDFLAGS)" \
-+	$(TARGET_CONFIGURE_OPTS) \
- 		LIBS="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)" \
- 		$(MAKE) -C $(@D)
- endef
+> 
+> Thomas
+> 
