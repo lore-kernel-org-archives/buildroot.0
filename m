@@ -1,76 +1,80 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 8 Jun 2016 20:20:38 +0200
-Subject: [Buildroot] [PATCH 01/10] firmware-imx: bump to version 5.4
-In-Reply-To: <8ef1df9a47e640e7b013c25300844747@WEBMAIL.arcx.com>
-References: <cover.1464958470.git.awebster@arcx.com>
- <642a0f54088507a92effa0f935950326f752d0c8.1464958470.git.awebster@arcx.com>
- <CAAMH-ysqVQDCw1_OmC79tqOEKrTftaOJk=0gNrW7-j3fNMHURQ@mail.gmail.com>
- <282d0384157042e28d80a63646119b3b@WEBMAIL.arcx.com>
- <CAAMH-ysUdKhcab9-F6CjhYJQVFsq__jQ__pOQUU7+Hf03ipofg@mail.gmail.com>
- <8ef1df9a47e640e7b013c25300844747@WEBMAIL.arcx.com>
-Message-ID: <CAAMH-yt_t3dTuy2jkBmsP1iUg+Jf6xewSQfq5HCdsWeO9TWi=w@mail.gmail.com>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Wed, 8 Jun 2016 21:04:24 +0200
+Subject: [Buildroot] [PATCH v2] kmsxx: new package
+In-Reply-To: <CAGm1_kumQKFSzh5qGdBn18J1TgvipGFU6=51hCLdFrCF85p4xg@mail.gmail.com>
+References: <1462783135-16131-1-git-send-email-maxime.ripard@free-electrons.com>
+ <91587869.72Lxhe2Mek@avalon>
+ <CAGm1_ksFR80bBVtQDE_wiQ4mvky311-iHzZjWKJegWz=u23Z+Q@mail.gmail.com>
+ <146541087.IVqEMkkuFm@avalon>
+ <CAGm1_ksQWFgbVDdsJpnYV4F8cOJ9Prw5efUt0wbFNR6o41AxCw@mail.gmail.com>
+ <CAGm1_kumQKFSzh5qGdBn18J1TgvipGFU6=51hCLdFrCF85p4xg@mail.gmail.com>
+Message-ID: <20160608190424.GK14179@lukather>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andrew, All,
-
-Le 8 juin 2016 7:33 PM, "Andrew Webster" <Awebster@arcx.com> a ?crit :
->
-> Gary,
->
-> >From: Gary Bisson [mailto:gary.bisson at boundarydevices.com]
-> >Sent: Tuesday, June 07, 2016 3:37 AM
-> >
-> >>> Hmm, that's cool because it means the firmware can now be used by
-> >>> mainline kernel seamlessly, but it also means that it won't work on
-> >>> any kernel < 4.1.15. Do you confirm you've tried it on 4.1.15 kernel
-only?
+On Wed, Jun 08, 2016 at 04:34:10PM +0200, Yegor Yefremov wrote:
+> On Wed, Jun 8, 2016 at 4:19 PM, Yegor Yefremov
+> <yegorslists@googlemail.com> wrote:
+> > On Wed, Jun 8, 2016 at 4:16 PM, Laurent Pinchart
+> > <laurent.pinchart@ideasonboard.com> wrote:
+> >> Hi Yegor,
 > >>
-> >> Correct, tested against the 4.1.15 kernel only.
+> >> On Wednesday 08 Jun 2016 12:27:21 Yegor Yefremov wrote:
+> >>> On Wed, Jun 8, 2016 at 12:18 PM, Laurent Pinchart wrote:
+> >>> > On Wednesday 08 Jun 2016 12:11:10 Yegor Yefremov wrote:
+> >>> >> On Thu, Jun 2, 2016 at 9:17 AM, Maxime Ripard wrote:
+> >>> >>> On Mon, May 09, 2016 at 10:38:55AM +0200, Maxime Ripard wrote:
+> >>> >>>> KMS++ is a suite of library and test tools to interact with KMS
+> >>> >>>> drivers in the linux kernel.
+> >>> >>>>
+> >>> >>>> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+> >>> >>>
+> >>> >>> Ping?
+> >>> >>
+> >>> >> What about removing Python bindings config option and just check if
+> >>> >> Python 3 is activated in *.mk file? See package/libcec/libcec.mk for
+> >>> >> reference.
+> >>> >>
+> >>> >> Though libdrm already requires host-pkgconf, should this dependency
+> >>> >> appear in kms.mk?
+> >>> >>
+> >>> >> I've looked at CMakeLIsts.txt in master branch of the project and I
+> >>> >> cannot see swig invocation. They just seem to compile some cpp files
+> >>> >> in py folder.
+> >>> >
+> >>> > The dependency on swig got removed recently, they now use pybind11.
+> >>>
+> >>> In other words we need https://pypi.python.org/pypi/pybind11 as a host
+> >>> package?
+> >>
+> >> I don't think so, kmsxx includes pybind11 as a submodule.
 > >
-> >I'll try but I'm pretty sure this won't work on 3.14.52.
->
-> There will be a similar problem with the imx-gpu-viv package.  I believe
-that the kernel version and the gpu library need to match (correct me if
-I'm wrong).  This would mean that if either the kernel or imx-gpu-viv are
-updated without the other, things may not work properly at run-time.  I
-expect that the X-windows driver also needs to match the others.  So, no
-matter the order of the patches, run-time will be broken between some
-patches until others have been applied.
+> > I mean for the future. And if pybind11 would also supply pybin11.pc,
+> > then CMake could even automatically find it.
+> 
+> As to pkg-config support it won't happen any time soon :-(
+> 
+> https://github.com/pybind/pybind11/issues/230
 
-The difference is that there is nothing you can do about the VPU whereas
-the graphics libraries always match the kernel module which can be built
-against any kernel >= 3.10.53.
+Honestly, I don't care at all about the python bindings.
 
-Also I don't mind the order that much, it is just that it makes more sense
-to have graphics patches together and multimedia one on their own as they
-are not dependent on each other.
+I'll remove support for that in the v3, and if anyone is ever
+interested in adding support for it, he'll work on it (and things will
+have settled down hopefully)
 
-> I am thinking to re-order the patches as follows:
->
->  1. defconfig kernel version bump [NEW]
->  2. kernel-module-imx-gpu-viv [NEW]
->  3. imx-gpu-viv bump
->  4. xdriver_xf86-video-viv bump
->  5. firmware-imx bump
->  6. gst1-imx bump
->  7. imx-vpu bump
->  8. imx-codec bump/rename
->  9. imx-parser bump/rename
->  10. imx-vpuwrap bump/rename
->  11. libimxvpuapi bump
->  12. imx-lib bump
->  13. imx-kobs bump [NEW]
->
-> Does this make sense to you?
+Maxime
 
-Yes that looks good to me.
-
-Regards,
-Gary
+-- 
+Maxime Ripard, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160608/c253546c/attachment.html>
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160608/dec3d75f/attachment.asc>
