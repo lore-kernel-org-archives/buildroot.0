@@ -1,39 +1,41 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 8 Jun 2016 12:11:10 +0200
-Subject: [Buildroot] [PATCH v2] kmsxx: new package
-In-Reply-To: <20160602071719.GE4908@lukather>
-References: <1462783135-16131-1-git-send-email-maxime.ripard@free-electrons.com>
- <20160602071719.GE4908@lukather>
-Message-ID: <CAGm1_ktObtf0w4buOSYcfrYe4nmTzdcXSfTR2Q99KWvA=cV7Rg@mail.gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed,  8 Jun 2016 12:15:12 +0200
+Subject: [Buildroot] [PATCH] libftdi1: bump to version 1.3
+Message-ID: <1465380912-25163-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime ,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Thu, Jun 2, 2016 at 9:17 AM, Maxime Ripard
-<maxime.ripard@free-electrons.com> wrote:
-> On Mon, May 09, 2016 at 10:38:55AM +0200, Maxime Ripard wrote:
->> KMS++ is a suite of library and test tools to interact with KMS drivers in
->> the linux kernel.
->>
->> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
->
-> Ping?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/libftdi1/libftdi1.hash | 2 +-
+ package/libftdi1/libftdi1.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-What about removing Python bindings config option and just check if
-Python 3 is activated in *.mk file? See package/libcec/libcec.mk for
-reference.
-
-Though libdrm already requires host-pkgconf, should this dependency
-appear in kms.mk?
-
-I've looked at CMakeLIsts.txt in master branch of the project and I
-cannot see swig invocation. They just seem to compile some cpp files
-in py folder.
-
-Could also ask project maintainers to add some cpack stuff?
-
-Yegor
+diff --git a/package/libftdi1/libftdi1.hash b/package/libftdi1/libftdi1.hash
+index e53bc8f..0a89182 100644
+--- a/package/libftdi1/libftdi1.hash
++++ b/package/libftdi1/libftdi1.hash
+@@ -1,2 +1,2 @@
+ # Locally computed (after checking the signature from http://www.intra2net.com/en/developer/libftdi/download.php)
+-sha256  a6ea795c829219015eb372b03008351cee3fb39f684bff3bf8a4620b558488d6  libftdi1-1.2.tar.bz2
++sha256  9a8c95c94bfbcf36584a0a58a6e2003d9b133213d9202b76aec76302ffaa81f4  libftdi1-1.3.tar.bz2
+diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
+index e77f37b..26aa293 100644
+--- a/package/libftdi1/libftdi1.mk
++++ b/package/libftdi1/libftdi1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFTDI1_VERSION = 1.2
++LIBFTDI1_VERSION = 1.3
+ LIBFTDI1_SOURCE = libftdi1-$(LIBFTDI1_VERSION).tar.bz2
+ LIBFTDI1_SITE = http://www.intra2net.com/en/developer/libftdi/download
+ LIBFTDI1_INSTALL_STAGING = YES
+-- 
+2.1.4
