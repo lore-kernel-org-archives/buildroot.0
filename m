@@ -1,17 +1,19 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  8 Jun 2016 06:17:52 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/rtl8821au: bump version
-Message-ID: <1465359472-2834-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Jun 2016 07:55:30 +0200
+Subject: [Buildroot] [git commit] package/rtl8821au: bump version
+Message-ID: <20160608055536.7E6F07FD44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: rebased without changes on master branch (Thomas)
+commit: https://git.buildroot.net/buildroot/commit/?id=945ef10e4a9e71d811cee913d32aacdcf381a555
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
  package/rtl8821au/rtl8821au.hash | 2 +-
  package/rtl8821au/rtl8821au.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
@@ -37,5 +39,3 @@ index 58a91da..cf8f4cd 100644
  RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
  RTL8821AU_LICENSE = GPLv2, proprietary (rtl8821au.bin firmware)
  RTL8821AU_LICENSE_FILES = COPYING
--- 
-2.8.1
