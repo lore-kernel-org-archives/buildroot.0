@@ -1,51 +1,68 @@
-From: Andrew Webster <Awebster@arcx.com>
-Date: Wed, 8 Jun 2016 17:26:27 +0000
-Subject: [Buildroot] [PATCH 01/10] firmware-imx: bump to version 5.4
-In-Reply-To: <CAAMH-ysUdKhcab9-F6CjhYJQVFsq__jQ__pOQUU7+Hf03ipofg@mail.gmail.com>
-References: <cover.1464958470.git.awebster@arcx.com>
- <642a0f54088507a92effa0f935950326f752d0c8.1464958470.git.awebster@arcx.com>
- <CAAMH-ysqVQDCw1_OmC79tqOEKrTftaOJk=0gNrW7-j3fNMHURQ@mail.gmail.com>
- <282d0384157042e28d80a63646119b3b@WEBMAIL.arcx.com>
- <CAAMH-ysUdKhcab9-F6CjhYJQVFsq__jQ__pOQUU7+Hf03ipofg@mail.gmail.com>
-Message-ID: <8ef1df9a47e640e7b013c25300844747@WEBMAIL.arcx.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  8 Jun 2016 19:54:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/p7zip: add support for blackfin
+Message-ID: <1465408487-22960-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gary,
+Tested using this defconfig:
 
->From: Gary Bisson [mailto:gary.bisson at boundarydevices.com] 
->Sent: Tuesday, June 07, 2016 3:37 AM
->
->>> Hmm, that's cool because it means the firmware can now be used by 
->>> mainline kernel seamlessly, but it also means that it won't work on 
->>> any kernel < 4.1.15. Do you confirm you've tried it on 4.1.15 kernel only?
->>
->> Correct, tested against the 4.1.15 kernel only.
->
->I'll try but I'm pretty sure this won't work on 3.14.52.
+BR2_bfin=y
+BR2_PACKAGE_P7ZIP=y
 
-There will be a similar problem with the imx-gpu-viv package.  I believe that the kernel version and the gpu library need to match (correct me if I'm wrong).  This would mean that if either the kernel or imx-gpu-viv are updated without the other, things may not work properly at run-time.  I expect that the X-windows driver also needs to match the others.  So, no matter the order of the patches, run-time will be broken between some patches until others have been applied.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/p7zip/0001-bfin.patch | 19 +++++++++++++++++++
+ package/p7zip/Config.in       |  3 ---
+ 2 files changed, 19 insertions(+), 3 deletions(-)
+ create mode 100644 package/p7zip/0001-bfin.patch
 
-I am thinking to re-order the patches as follows:
-
- 1. defconfig kernel version bump [NEW]
- 2. kernel-module-imx-gpu-viv [NEW]
- 3. imx-gpu-viv bump
- 4. xdriver_xf86-video-viv bump
- 5. firmware-imx bump
- 6. gst1-imx bump
- 7. imx-vpu bump
- 8. imx-codec bump/rename
- 9. imx-parser bump/rename
- 10. imx-vpuwrap bump/rename
- 11. libimxvpuapi bump
- 12. imx-lib bump
- 13. imx-kobs bump [NEW]
-
-Does this make sense to you?
-
-Thanks,
-Andrew
+diff --git a/package/p7zip/0001-bfin.patch b/package/p7zip/0001-bfin.patch
+new file mode 100644
+index 0000000..76addb6
+--- /dev/null
++++ b/package/p7zip/0001-bfin.patch
+@@ -0,0 +1,19 @@
++Add support for blackfin arch.
++
++Fixes compilation error:
++../../../../CPP/myWindows/mySplitCommandLine.cpp:99:8: error: #error ENDIANNESS
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(Patch sent upstream: https://sourceforge.net/p/p7zip/patches/33/
++
++diff -uNr p7zip_15.14.1.org/C/CpuArch.h p7zip_15.14.1/C/CpuArch.h
++--- p7zip_15.14.1.org/C/CpuArch.h	2016-02-17 07:27:16.000000000 +0100
+++++ p7zip_15.14.1/C/CpuArch.h	2016-06-08 19:47:49.000000000 +0200
++@@ -66,6 +66,7 @@
++     || defined(__MIPSEL__) \
++     || defined(__MIPSEL) \
++     || defined(_MIPSEL) \
+++    || defined(__BFIN__) \
++     || (defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__))
++   #define MY_CPU_LE
++ #endif
+diff --git a/package/p7zip/Config.in b/package/p7zip/Config.in
+index cd9de7e..840949c 100644
+--- a/package/p7zip/Config.in
++++ b/package/p7zip/Config.in
+@@ -3,8 +3,6 @@ config BR2_PACKAGE_P7ZIP
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
+-	# missing endianness definitions
+-	depends on !BR2_bfin
+ 	help
+ 	  p7zip is a quick port of the command line version of 7-zip for Unix.
+ 	  (see http://www.7-zip.org)
+@@ -14,5 +12,4 @@ config BR2_PACKAGE_P7ZIP
+ 	  http://sourceforge.net/projects/p7zip
+ 
+ comment "p7zip needs a toolchain w/ threads, wchar, C++"
+-	depends on !BR2_bfin
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
+-- 
+2.8.1
