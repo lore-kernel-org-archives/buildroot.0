@@ -1,41 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  8 Jun 2016 07:29:21 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.6.2
-In-Reply-To: <1465381761-26435-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1465381761-26435-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1465381761-26435-2-git-send-email-gustavo@zacarias.com.ar>
+From: gdbabu Krishnan <gdbabu.krishnan@gmail.com>
+Date: Wed, 8 Jun 2016 17:23:49 +0530
+Subject: [Buildroot] lirc event didn't forward
+Message-ID: <CAG7w3y=pnuWQK7NsxqCYAhSeKFvE=J50X5hKyE-U=JsBh5Xa2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f3c6ebe..ce55271 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -27,7 +27,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (4.6.1)"
-+	bool "Latest version (4.6.2)"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -110,7 +110,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.6.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.6.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
--- 
-2.7.3
+i have working with buildroot for raspberry pi, lircd did not forward event
+to uinput, "uinput" present in /dev/ directory
+
+lircd version is  "lircd 0.9.3a" i am using
+
+after startup finish log message from /var/log/message , i did gave irw
+command
+
+Jan  1 00:03:15 buildroot lircd: Info: Initial device: /dev/lirc0
+Jan  1 00:03:15 buildroot lircd: Info: Initial device: /dev/lirc0
+Jan  1 00:03:15 buildroot lircd: Warning: Running as root
+Jan  1 00:03:15 buildroot lircd: Info: Using remote: /home/pi/llircd.conf.
+Jan  1 00:03:15 buildroot lircd: Notice: lircd(default) ready, using
+/var/run/lirc/lircd
+
+
+after i have given irw command the log message output
+
+Jan  1 00:03:15 buildroot lircd: Info: Initial device: /dev/lirc0
+Jan  1 00:03:15 buildroot lircd: Info: Initial device: /dev/lirc0
+Jan  1 00:03:15 buildroot lircd: Warning: Running as root
+Jan  1 00:03:15 buildroot lircd: Info: Using remote: /home/pi/llircd.conf.
+Jan  1 00:03:15 buildroot lircd: Notice: lircd(default) ready, using
+/var/run/lirc/lircd
+Jan  1 00:04:02 buildroot lircd: Notice: accepted new client on
+/var/run/lirc/lircd
+Jan  1 00:04:07 buildroot lircd: Info: removed client
+
+is there any problem or i need any other configuration.
+
+thank you,
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160608/e8bab082/attachment.html>
