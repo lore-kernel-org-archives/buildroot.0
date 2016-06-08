@@ -1,109 +1,118 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 Jun 2016 22:19:10 +0200
-Subject: [Buildroot] [PATCH] package/systemd: Optionally disable hwdb
-In-Reply-To: <1460717190-29291-1-git-send-email-m.niestroj@grinn-global.com>
-References: <1460717190-29291-1-git-send-email-m.niestroj@grinn-global.com>
-Message-ID: <20160608201910.GA3694@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Jun 2016 22:22:50 +0200
+Subject: [Buildroot] [PATCH 2/2] python-meson: new package
+In-Reply-To: <1465047243-1169-3-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1465047243-1169-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1465047243-1169-3-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20160608222250.6d493138@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marcin, All,
+Hello,
 
-On 2016-04-15 12:46 +0200, Marcin Niestroj spake thusly:
-> By default hwdb files are installed in /usr/lib/udev/hwdb.d
-> Currently they take about ~5MB. After first boot, systemd-hwdb tool
-> parses them and creates a binary in /etc/udev/hwdb.bin, which takes
-> another ~6.5MB.
+On Sat,  4 Jun 2016 15:34:03 +0200, Eric Le Bihan wrote:
+> This new package provides the Meson Build System, an open source build
+> system meant to be both extremely fast, and as user friendly as
+> possible.
 > 
-> In case of initramfs images, hwdb parsing is done every boot. This adds
-> about 2-3 seconds to boot time in case of rootfs on SDHC class 10
-> card (benchmarked with am335x board). NAND boot takes even longer.
-
-So that's where my boot time goes! ;-)
-
-> Add config option to disable hwdb in systemd, for smaller images and
-> better boot performance.
+> More precisely, Meson creates configuration files for the Ninja build
+> system.
 > 
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-
-I'm looking at all systemd-related pending patches, since I'm working on
-cleaning up our systemd handling...
-
-I have had a look at the systemd code to update the hwdb, and it is not
-trivially replaced, so we would indeed need a host-systemd if we wanted
-to generate the hwdb at build time.
-
-I don't think this warrants the complexity of a host-systemd, however...
-
-Yet, I'd like to know what would be the impact of not having hwdb
-support at runtime. Care to shed some light, please?
-
-Otherwise:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/systemd/Config.in  | 11 +++++++++++
->  package/systemd/systemd.mk |  6 ++++++
->  2 files changed, 17 insertions(+)
+> The host variant is also provided, which, besides building Meson,
+> generates a cross-compilation configuration file:
+> '$(HOST_DIR)/etc/meson/cross-compilation.conf'.
 > 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index 97d48c4..324e884 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -84,6 +84,17 @@ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
->  
->  	  http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
->  
-> +config BR2_PACKAGE_SYSTEMD_HWDB
-> +	bool "enable hwdb installation"
-> +	default y
-> +	help
-> +	  Enables hardware database installation to /usr/lib/udev/hwdb.d
-> +
-> +	  Disabling this option improves first boot time (or every boot
-> +	  time in case of initramfs images) and saves several MB space.
-> +
-> +	  https://www.freedesktop.org/software/systemd/man/hwdb.html
-> +
->  config BR2_PACKAGE_SYSTEMD_BINFMT
->  	bool "enable binfmt tool"
->  	help
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 79e657e..29b62c0 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -127,6 +127,12 @@ else
->  SYSTEMD_CONF_OPTS += --disable-microhttpd
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_HWDB),y)
-> +SYSTEMD_CONF_OPTS += --enable-hwdb
-> +else
-> +SYSTEMD_CONF_OPTS += --disable-hwdb
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_SYSTEMD_BINFMT),y)
->  SYSTEMD_CONF_OPTS += --enable-binfmt
->  else
-> -- 
-> 2.8.0
+> To be able to perform checks when cross-compiling, the host variant
+> depends on host-qemu.
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> To cross-compile a Meson-based project for the target, its package
+> should:
+> 
+>  - depend on host-python-meson
+>  - invoke the host variant of Meson with the
+>    *--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf* option.
+>  - invoke host variant of Ninja to perform the actual build.
 
+It would probably be good to write this somewhere, as it is quite
+important to know for users of this build system. But I'm not sure
+where: you're going to have only a host package, so no Config.in file,
+and therefore no help text. And I'm not sure where this could be added
+in the Buildroot manual.
+
+>  package/Config.in                              |  1 +
+>  package/python-meson/Config.in                 |  9 +++++
+
+As discussed, if it's a build system, please add only a host package.
+
+
+> diff --git a/package/python-meson/python-meson.hash b/package/python-meson/python-meson.hash
+> new file mode 100644
+> index 0000000..7af56c5
+> --- /dev/null
+> +++ b/package/python-meson/python-meson.hash
+> @@ -0,0 +1 @@
+> +none xxx python-meson-0.31.0.tar.gz
+
+Since you're fetching from Github, please add a real hash.
+
+
+> +HOST_PYTHON_MESON_DEPENDENCIES = host-qemu
+> +HOST_PYTHON_MESON_NEEDS_HOST_PYTHON = python3
+> +
+> +HOST_PYTHON_MESON_TARGET_ARCH = $(call qstrip,$(BR2_ARCH))
+
+You can directly use the $(ARCH) variable, which is defined in the main
+Makefile.
+
+> +HOST_PYTHON_MESON_TARGET_ENDIAN = $(shell echo $(BR2_ENDIAN) | tr 'A-Z' 'a-z')
+
+$(call LOWERCASE,$(call qstrip,$(BR2_ENDIAN))
+
+> +
+> +define HOST_PYTHON_MESON_REMOVE_GUI_TOOL
+> +	rm -f $(HOST_DIR)/usr/bin/mesongui.py
+> +endef
+
+Not sure removing stuff from the host variant is really useful.
+
+> +
+> +define HOST_PYTHON_MESON_INSTALL_CROSS_CONF
+> +	$(INSTALL) -D -m 0644 package/python-meson/cross-compilation.conf.in \
+> +		$(HOST_DIR)/etc/meson/cross-compilation.conf
+> +	$(SED) 's;@TARGET_CROSS@;$(TARGET_CROSS);g' \
+> +		-e 's;@TARGET_ARCH@;$(HOST_PYTHON_MESON_TARGET_ARCH);g' \
+> +		-e 's;@TARGET_ENDIAN@;$(HOST_PYTHON_MESON_TARGET_ENDIAN);g' \
+> +		-e 's;@HOST_DIR@;$(HOST_DIR);g' \
+> +		$(HOST_DIR)/etc/meson/cross-compilation.conf
+> +endef
+> +
+> +define HOST_PYTHON_MESON_INSTALL_EXE_WRAPPER
+> +	$(INSTALL) -D -m 0755 package/python-meson/meson-exe-wrapper.in \
+> +		$(HOST_DIR)/usr/bin/meson-exe-wrapper
+> +	$(SED) 's;@TARGET_ARCH@;$(HOST_PYTHON_MESON_TARGET_ARCH);g' \
+> +		-e 's;@HOST_DIR@;$(HOST_DIR);g' \
+> +		-e 's;@TARGET_DIR@;$(TARGET_DIR);g' \
+> +		$(HOST_DIR)/usr/bin/meson-exe-wrapper
+> +endef
+> +
+> +HOST_PYTHON_MESON_POST_INSTALL_HOOKS += \
+> +	HOST_PYTHON_MESON_REMOVE_GUI_TOOL \
+> +	HOST_PYTHON_MESON_INSTALL_CROSS_CONF \
+> +	HOST_PYTHON_MESON_INSTALL_EXE_WRAPPER
+> +
+> +
+> +$(eval $(python-package))
+> +$(eval $(host-python-package))
+
+Other than that, looks good!
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
