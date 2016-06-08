@@ -1,36 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jun 2016 23:29:30 +0200
-Subject: [Buildroot] [git commit] glibc: remove eglibc hashes
-Message-ID: <20160608213020.2083481FCC@busybox.osuosl.org>
+Date: Wed,  8 Jun 2016 23:40:55 +0200
+Subject: [Buildroot] [PATCH 2/6] docs/manual: don't mention eglibc,
+	mention musl
+In-Reply-To: <1465422059-22254-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1465422059-22254-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1465422059-22254-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34ba9eedd46e692d579573b8d360033bacb1841c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Following the removal of eglibc, it no longer makes sense to talk about
+it in the Buildroot manual as one of the supported C libraries. However,
+it does make sense to indicate that we support musl.
 
-In commit 500de2598a4902a0e9ec53f7b475046ff17c6681, support for eglibc
-was removed, but forgot to remove the corresponding hashes from the hash
-file. This commit fixes this mistake.
-
-Reported-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/glibc/glibc.hash | 5 -----
- 1 file changed, 5 deletions(-)
+ docs/manual/configure.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index b04f214..052f281 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,8 +1,3 @@
- # Locally calculated after checking pgp signature (glibc)
--# http://downloads.yoctoproject.org/releases/eglibc/*.{md5,sha1} (eglibc)
--md5	b395b021422a027d89884992e91734fc	eglibc-2.18-svnr23787.tar.bz2
--sha1	224d9e655e8f0ad04ffde47b97a11c64e2255b56	eglibc-2.18-svnr23787.tar.bz2
--md5	197836c2ba42fb146e971222647198dd	eglibc-2.19-svnr25243.tar.bz2
--sha1	8013c1935b46fd50d2d1fbfad3b0af362b75fb28	eglibc-2.19-svnr25243.tar.bz2
- sha256	eb731406903befef1d8f878a46be75ef862b9056ab0cde1626d08a7a05328948	glibc-2.22.tar.xz
- sha256	94efeb00e4603c8546209cefb3e1a50a5315c86fa9b078b6fad758e187ce13e9	glibc-2.23.tar.xz
+diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+index 44f5d24..8491b17 100644
+--- a/docs/manual/configure.txt
++++ b/docs/manual/configure.txt
+@@ -83,7 +83,7 @@ applications and libraries for your target embedded system.
+ This backend supports several C libraries:
+ http://www.uclibc.org[uClibc], the
+ http://www.gnu.org/software/libc/libc.html[glibc] and
+-http://www.eglibc.org[eglibc].
++http://www.musl-libc.org[musl].
+ 
+ Once you have selected this backend, a number of options appear. The
+ most important ones allow to:
+-- 
+2.7.4
