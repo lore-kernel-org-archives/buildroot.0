@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jun 2016 22:42:54 +0200
-Subject: [Buildroot] [PATCH] package/fetchmail: fix *.pyc compilation
-In-Reply-To: <CAHXCMMLRjRmNFEp_a-BU+xRgK22Qh14ty3XKNzNXpspd80w-+Q@mail.gmail.com>
-References: <20160608200851.7108-1-s.martin49@gmail.com>
- <20160608222517.2e1a61ea@free-electrons.com>
- <CAHXCMMLRjRmNFEp_a-BU+xRgK22Qh14ty3XKNzNXpspd80w-+Q@mail.gmail.com>
-Message-ID: <20160608224254.4dea62ac@free-electrons.com>
+Date: Wed, 8 Jun 2016 22:43:04 +0200
+Subject: [Buildroot] [PATCH v2] configs/qemu: bump to latest version
+In-Reply-To: <1465301581-1991-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1465301581-1991-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160608224304.74ed2b99@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +12,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 8 Jun 2016 22:35:02 +0200, Samuel Martin wrote:
+On Tue,  7 Jun 2016 09:13:01 -0300, Gustavo Zacarias wrote:
+> Also bump the pc samples since they're tied to the (base) qemu config.
+> 
+> Results table:
+> 
+> Defconfig               Kernel  Qemu            Network Status
+> --------------------------------------------------------------
+> aarch64_virt            4.5.6   2.5.0           YES     OK (4)
+> arm_versatile           4.6.1   2.5.0           YES     OK
+> arm_vexpress            4.6.1   2.5.0           YES     OK
+> m68k_mcf5208            4.6.1   2.5.0           YES     OK
+> m68k_q800               4.6.1   q800-v2.4.0     NO (3)  OK
+> microblazebe            4.6.1   2.5.0           YES     OK
+> microblazeel            4.6.1   2.5.0           YES     OK
+> mips64el_malta          4.6.1   2.5.0           YES     OK
+> mips64_malta            4.6.1   2.5.0           YES     OK
+> mipsel_malta            4.6.1   2.5.0           YES     OK
+> mips_malta              4.6.1   2.5.0           YES     OK
+> ppc_g3beige             4.6.1   2.5.0           YES     OK
+> ppc_mpc8544ds           4.6.1   2.5.0           YES     OK
+> ppc_virtex_ml507        4.6.1   2.5.0           NO      OK
+> ppc64_pseries           4.6.1   2.5.0           YES     OK
+> sh4                     4.6.1   2.5.0           YES     OK
+> sh4eb                   4.6.1   2.5.0           NO (1)  OK
+> sparc_ss10              4.6.1   2.5.0           YES     OK
+> sparc64_sun4u           4.6.1   2.5.0           YES     OK
+> sparc_sun4u             4.6.1   2.5.0           YES     OK
+> x86                     4.6.1   2.5.0           YES     OK
+> x86_64                  4.6.1   2.5.0           YES     OK
+> xtensa_lx60             4.6.1   2.6.0           YES     OK (2)
+> xtensa_lx60_nommu       4.6.1   2.6.0           YES     OK (2)
 
-> I hesitated to do so, but since I did the fix, I posted it...
-
-I think it is very good that you did the fix and submitted it upstream,
-because it means that we can potentially remove the hook in the future.
-
-> I'll do the hook.
-
-Awesome, thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
