@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jun 2016 23:50:50 +0200
-Subject: [Buildroot] [PATCH RESEND] libiio: Bump version to 0.6
-In-Reply-To: <1463765791-308-1-git-send-email-mfornero@mathworks.com>
-References: <1460655035-24870-1-git-send-email-mfornero@mathworks.com>
- <1463765791-308-1-git-send-email-mfornero@mathworks.com>
-Message-ID: <20160608235050.74fe60e9@free-electrons.com>
+Date: Wed, 8 Jun 2016 23:52:02 +0200
+Subject: [Buildroot] [PATCH] e2fsprogs: bump to version 1.43
+In-Reply-To: <1463598503-13738-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1463598503-13738-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160608235202.7af6e7d7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 20 May 2016 13:36:31 -0400, Matthew Fornero wrote:
-> v0.6 API offers some major additions, including:
-> * iio_device_set_kernel_buffers_counts
-> * iio_buffer_get_poll_fd
-> * iio_bufer_set_blocking_mode
-> * iio_buffer_push_partial
+On Wed, 18 May 2016 16:08:23 -0300, Gustavo Zacarias wrote:
+> Add new fuse2fs option and disable it for host-e2fsprogs to avoid
+> carrying over unused/unnecessary distro/host dependencies.
 > 
-> Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
+> Move E2FSPROGS_DEPENDENCIES to the top to avoid nasty mistakes (like
+> resetting a previous conditional addition).
+> 
+> License file renamed from COPYING to NOTICE.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-This update is causing some failures, such as:
+This update is causing some build failures, it would be good if you
+could have a look:
 
-   http://autobuild.buildroot.net/results/ffe/ffec14aa79833a6f0889a87b31dae464d083e6a8/build-end.log
-
-Could you have a look at what's going on? This happens in many
-configurations:
-
-   http://autobuild.buildroot.net/?reason=libiio-0.6
+http://autobuild.buildroot.net/results/25c/25c042d2862affebf552ed24bc2a58e0c484226f/build-end.log
+(missing link against -lrt)
 
 Thanks for your help!
 
