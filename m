@@ -1,40 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  8 Jun 2016 16:10:58 +0200
-Subject: [Buildroot] [PATCH] mosquitto: bump to version 1.4.9
-Message-ID: <1465395058-17906-1-git-send-email-peter@korsgaard.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 8 Jun 2016 16:19:02 +0200
+Subject: [Buildroot] [PATCH v2] kmsxx: new package
+In-Reply-To: <146541087.IVqEMkkuFm@avalon>
+References: <1462783135-16131-1-git-send-email-maxime.ripard@free-electrons.com>
+ <91587869.72Lxhe2Mek@avalon>
+ <CAGm1_ksFR80bBVtQDE_wiQ4mvky311-iHzZjWKJegWz=u23Z+Q@mail.gmail.com>
+ <146541087.IVqEMkkuFm@avalon>
+Message-ID: <CAGm1_ksQWFgbVDdsJpnYV4F8cOJ9Prw5efUt0wbFNR6o41AxCw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Wed, Jun 8, 2016 at 4:16 PM, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+> Hi Yegor,
+>
+> On Wednesday 08 Jun 2016 12:27:21 Yegor Yefremov wrote:
+>> On Wed, Jun 8, 2016 at 12:18 PM, Laurent Pinchart wrote:
+>> > On Wednesday 08 Jun 2016 12:11:10 Yegor Yefremov wrote:
+>> >> On Thu, Jun 2, 2016 at 9:17 AM, Maxime Ripard wrote:
+>> >>> On Mon, May 09, 2016 at 10:38:55AM +0200, Maxime Ripard wrote:
+>> >>>> KMS++ is a suite of library and test tools to interact with KMS
+>> >>>> drivers in the linux kernel.
+>> >>>>
+>> >>>> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+>> >>>
+>> >>> Ping?
+>> >>
+>> >> What about removing Python bindings config option and just check if
+>> >> Python 3 is activated in *.mk file? See package/libcec/libcec.mk for
+>> >> reference.
+>> >>
+>> >> Though libdrm already requires host-pkgconf, should this dependency
+>> >> appear in kms.mk?
+>> >>
+>> >> I've looked at CMakeLIsts.txt in master branch of the project and I
+>> >> cannot see swig invocation. They just seem to compile some cpp files
+>> >> in py folder.
+>> >
+>> > The dependency on swig got removed recently, they now use pybind11.
+>>
+>> In other words we need https://pypi.python.org/pypi/pybind11 as a host
+>> package?
+>
+> I don't think so, kmsxx includes pybind11 as a submodule.
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 861136b..68dac00 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256  d96eb5610e57cc3e273f4527d3f54358ab7711459941a9e64bc4d0a85c2acfda  mosquitto-1.4.8.tar.gz
-+# From https://www.eclipse.org/downloads/download.php?file=/mosquitto/source/mosquitto-1.4.9.tar.gz
-+sha512  5994159d9a8da248a877f3032f36ca9a865d9b4efaafac329620864049992a77d414e02252cbbfef89ea2c37dc761b1885a89e19fc8e82b2a42d38f31e761d4d  mosquitto-1.4.9.tar.gz
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index dfef6e5..f2ede6c 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.4.8
-+MOSQUITTO_VERSION = 1.4.9
- MOSQUITTO_SITE = http://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
--- 
-2.7.0
+I mean for the future. And if pybind11 would also supply pybin11.pc,
+then CMake could even automatically find it.
