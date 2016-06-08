@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jun 2016 07:55:43 +0200
-Subject: [Buildroot] [PATCH] samba4: bump to version 4.4.4
-In-Reply-To: <1465343324-19626-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1465343324-19626-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160608075543.58016a09@free-electrons.com>
+Date: Wed, 8 Jun 2016 07:55:46 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/rtl8821au: bump version
+In-Reply-To: <1465359472-2834-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1465359472-2834-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160608075546.4a6c9222@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,10 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  7 Jun 2016 20:48:44 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Wed,  8 Jun 2016 06:17:52 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/samba4/samba4.hash | 2 +-
->  package/samba4/samba4.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> v2: rebased without changes on master branch (Thomas)
 
 Applied to master, thanks.
 
