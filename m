@@ -1,95 +1,47 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed,  8 Jun 2016 23:21:59 +0200
-Subject: [Buildroot] [PATCH 3/3] package/openpowerlink: fix uClibc build
-In-Reply-To: <1465420919-3920-1-git-send-email-romain.naour@gmail.com>
-References: <1465420919-3920-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1465420919-3920-3-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 8 Jun 2016 23:22:21 +0200
+Subject: [Buildroot] [git commit] package/fetchmail: fix *.pyc compilation
+	with python-3
+Message-ID: <20160608212232.1798381F6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the demo application code, va_list type is used in eventlogstring.h
-so stdarg.h must be included to define it.
+commit: https://git.buildroot.net/buildroot/commit/?id=a890032596aa5e6afbfdbcccc01fcb07c9a4ef8c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This problem occurs with a uClibc-ng based toolchain.
+This change removes the fetchmailconf.py python module when the python
+interpreter is python-3, because this module is not yet python-3
+compliant.
 
 Fixes:
-http://autobuild.buildroot.net/results/a9e/a9e7615a19922706039bf97ccb94bcf5b99330b2
+  http://autobuild.buildroot.org/results/700/7009445dd116a1c02db82a351d38db44db8dad16/
+  ...
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...apps-include-stdarg.h-in-eventlogstring.h.patch | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/openpowerlink/0007-apps-include-stdarg.h-in-eventlogstring.h.patch
+ package/fetchmail/fetchmail.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/openpowerlink/0007-apps-include-stdarg.h-in-eventlogstring.h.patch b/package/openpowerlink/0007-apps-include-stdarg.h-in-eventlogstring.h.patch
-new file mode 100644
-index 0000000..70e44c2
---- /dev/null
-+++ b/package/openpowerlink/0007-apps-include-stdarg.h-in-eventlogstring.h.patch
-@@ -0,0 +1,61 @@
-+From 533f40e097b8d08e1dfeb03e2484a4369fad778f Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Wed, 8 Jun 2016 13:13:36 +0200
-+Subject: [PATCH] [FIX] apps: include stdarg.h in eventlogstring.h
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index a198dc5..5cae0e2 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -23,4 +23,14 @@ FETCHMAIL_DEPENDENCIES = \
+ 	openssl \
+ 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ 
++# fetchmailconf.py script is not (yet) python3-compliant.
++# Prevent the pyc-compilation with python-3 from failing by removing this
++# non-critical script.
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++define FETCHMAIL_REMOVE_FETCHMAILCONF_PY
++	$(RM) -f $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/fetchmailconf.py
++endef
++FETCHMAIL_POST_TARGET_INSTALL_HOOKS += FETCHMAIL_REMOVE_FETCHMAILCONF_PY
++endif
 +
-+va_list type is used in eventlogstring.h so it must include stdarg.h to define
-+it.
-+
-+Upstream status: Pending
-+https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/127
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/a9e/a9e7615a19922706039bf97ccb94bcf5b99330b2/build-end.log
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ apps/common/src/eventlog/eventlog.c       | 1 -
-+ apps/common/src/eventlog/eventlogstring.c | 1 -
-+ apps/common/src/eventlog/eventlogstring.h | 2 ++
-+ 3 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/apps/common/src/eventlog/eventlog.c b/apps/common/src/eventlog/eventlog.c
-+index f2193e2..eba1101 100644
-+--- a/apps/common/src/eventlog/eventlog.c
-++++ b/apps/common/src/eventlog/eventlog.c
-+@@ -47,7 +47,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-+ //------------------------------------------------------------------------------
-+ 
-+ #include <stdio.h>
-+-#include <stdarg.h>
-+ #include <time.h>
-+ 
-+ #include <oplk/debugstr.h>
-+diff --git a/apps/common/src/eventlog/eventlogstring.c b/apps/common/src/eventlog/eventlogstring.c
-+index 9fb677b..a55a1a4 100644
-+--- a/apps/common/src/eventlog/eventlogstring.c
-++++ b/apps/common/src/eventlog/eventlogstring.c
-+@@ -47,7 +47,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-+ #include "eventlogstring.h"
-+ 
-+ #include <stdio.h>
-+-#include <stdarg.h>
-+ #include <time.h>
-+ 
-+ #include <oplk/debugstr.h>
-+diff --git a/apps/common/src/eventlog/eventlogstring.h b/apps/common/src/eventlog/eventlogstring.h
-+index 2c291a6..3a5f2fa 100644
-+--- a/apps/common/src/eventlog/eventlogstring.h
-++++ b/apps/common/src/eventlog/eventlogstring.h
-+@@ -41,6 +41,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-+ //------------------------------------------------------------------------------
-+ // includes
-+ //------------------------------------------------------------------------------
-++#include <stdarg.h>
-++
-+ #include <oplk/oplk.h>
-+ #include <oplk/nmt.h>
-+ 
-+-- 
-+2.5.5
-+
--- 
-2.5.5
+ $(eval $(autotools-package))
