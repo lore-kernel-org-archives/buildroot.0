@@ -1,49 +1,45 @@
-From: Brian Foster <brian.foster@maximintegrated.com>
-Date: Wed, 8 Jun 2016 12:08:17 +0200
-Subject: [Buildroot] Why fakeroot works without #! (basically, RTFM)
-Message-ID: <2951546.bZKNuKFtLY@laclwks004>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 8 Jun 2016 12:27:21 +0200
+Subject: [Buildroot] [PATCH v2] kmsxx: new package
+In-Reply-To: <91587869.72Lxhe2Mek@avalon>
+References: <1462783135-16131-1-git-send-email-maxime.ripard@free-electrons.com>
+ <20160602071719.GE4908@lukather>
+ <CAGm1_ktObtf0w4buOSYcfrYe4nmTzdcXSfTR2Q99KWvA=cV7Rg@mail.gmail.com>
+ <91587869.72Lxhe2Mek@avalon>
+Message-ID: <CAGm1_ksFR80bBVtQDE_wiQ4mvky311-iHzZjWKJegWz=u23Z+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Jun 8, 2016 at 12:18 PM, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+> Hi Yegor,
+>
+> On Wednesday 08 Jun 2016 12:11:10 Yegor Yefremov wrote:
+>> On Thu, Jun 2, 2016 at 9:17 AM, Maxime Ripard wrote:
+>> > On Mon, May 09, 2016 at 10:38:55AM +0200, Maxime Ripard wrote:
+>> >> KMS++ is a suite of library and test tools to interact with KMS drivers
+>> >> in the linux kernel.
+>> >>
+>> >> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+>> >
+>> > Ping?
+>>
+>> What about removing Python bindings config option and just check if
+>> Python 3 is activated in *.mk file? See package/libcec/libcec.mk for
+>> reference.
+>>
+>> Though libdrm already requires host-pkgconf, should this dependency
+>> appear in kms.mk?
+>>
+>> I've looked at CMakeLIsts.txt in master branch of the project and I
+>> cannot see swig invocation. They just seem to compile some cpp files
+>> in py folder.
+>
+> The dependency on swig got removed recently, they now use pybind11.
 
-Hi!
+In other words we need https://pypi.python.org/pypi/pybind11 as a host package?
 
-  I happened to notice in very recent commit 974e83a8f9a1
-  ("fs: add sha-bang to fakeroot script") the comment:
-    
-    ? We [are] directly running this script, so it should start
-     with a sha-bang (not sure why/how it works today...). ?
-
-  What is running the (generated) fakeroot script being talked
-  about is the the Host script .../usr/bin/fakeroot, which is a
-  GNU bash script.  The answer then is in ??COMMAND EXECUTION'
-  of the bash(1) manual page:
-
-    ? If [the exec()] fails because the file is not in executable
-     format, and  the file is not a directory, it is assumed to be
-     a shell script, a file containing shell commands.  A subshell
-     is spawned to execute it. [...] ?
-
-  Or in other words, the traditional Unix shell behaviour of:
-  If exec() failed with errno ENOEXEC on a plain file, Then
-  assume it is a script written in the language of the shell
-  trying to run the script, and run it in a subshell.
-
-  As an aside, that means the commit 974e83a8f9a1 has changed the
-  semantics.  The generated fakeroot script used to always be run
-  by the GNU bash shell, but now it is run by `/bin/sh' which may
-  not be bash (e.g., on my system, it is dash(1)).  However, this
-  _probably_ does not matter, since, as I recall, POSIX(?) requires
-  `/bin/sh' to implement the Bourne shell language, which is what
-  the generated script uses, and what both dash and bash provide.
-
-cheers!
-	-blf-
-
--- 
-Brian Foster
-Principal MTS, Software        |  La Ciotat, France
-Maxim Integrated               |  http://www.maximintegrated.com/
+Yegor
