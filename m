@@ -1,40 +1,95 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Wed,  8 Jun 2016 23:21:58 +0200
-Subject: [Buildroot] [PATCH 2/3] package/openpowerlink: link demos
-	applications with PCIe library interface
+Date: Wed,  8 Jun 2016 23:21:59 +0200
+Subject: [Buildroot] [PATCH 3/3] package/openpowerlink: fix uClibc build
 In-Reply-To: <1465420919-3920-1-git-send-email-romain.naour@gmail.com>
 References: <1465420919-3920-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1465420919-3920-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <1465420919-3920-3-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit f1bc98f396778c9fd8c884527787eb538212f398 the CFG_BUILD_KERNEL_STACK
-option wasn't set when the PCIe library interface is selected.
+In the demo application code, va_list type is used in eventlogstring.h
+so stdarg.h must be included to define it.
 
-The build fail since the default choice "Link to Application" (which require
-libpcap) is used.
+This problem occurs with a uClibc-ng based toolchain.
+
+Fixes:
+http://autobuild.buildroot.net/results/a9e/a9e7615a19922706039bf97ccb94bcf5b99330b2
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/openpowerlink/openpowerlink.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ ...apps-include-stdarg.h-in-eventlogstring.h.patch | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 package/openpowerlink/0007-apps-include-stdarg.h-in-eventlogstring.h.patch
 
-diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
-index 53c636c..4d27d5a 100644
---- a/package/openpowerlink/openpowerlink.mk
-+++ b/package/openpowerlink/openpowerlink.mk
-@@ -131,6 +131,9 @@ OPENPOWERLINK_CONF_OPTS += \
- else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB),y)
- OPENPOWERLINK_CONF_OPTS += \
- 	-DCFG_BUILD_KERNEL_STACK="Linux Kernel Module"
-+else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_PCIE_STACK_LIB),y)
-+OPENPOWERLINK_CONF_OPTS += \
-+	-DCFG_BUILD_KERNEL_STACK="Kernel stack on PCIe card"
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENPOWERLINK_DEMO_MN_CONSOLE),y)
+diff --git a/package/openpowerlink/0007-apps-include-stdarg.h-in-eventlogstring.h.patch b/package/openpowerlink/0007-apps-include-stdarg.h-in-eventlogstring.h.patch
+new file mode 100644
+index 0000000..70e44c2
+--- /dev/null
++++ b/package/openpowerlink/0007-apps-include-stdarg.h-in-eventlogstring.h.patch
+@@ -0,0 +1,61 @@
++From 533f40e097b8d08e1dfeb03e2484a4369fad778f Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Wed, 8 Jun 2016 13:13:36 +0200
++Subject: [PATCH] [FIX] apps: include stdarg.h in eventlogstring.h
++
++va_list type is used in eventlogstring.h so it must include stdarg.h to define
++it.
++
++Upstream status: Pending
++https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/127
++
++Fixes:
++http://autobuild.buildroot.net/results/a9e/a9e7615a19922706039bf97ccb94bcf5b99330b2/build-end.log
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ apps/common/src/eventlog/eventlog.c       | 1 -
++ apps/common/src/eventlog/eventlogstring.c | 1 -
++ apps/common/src/eventlog/eventlogstring.h | 2 ++
++ 3 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/apps/common/src/eventlog/eventlog.c b/apps/common/src/eventlog/eventlog.c
++index f2193e2..eba1101 100644
++--- a/apps/common/src/eventlog/eventlog.c
+++++ b/apps/common/src/eventlog/eventlog.c
++@@ -47,7 +47,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ //------------------------------------------------------------------------------
++ 
++ #include <stdio.h>
++-#include <stdarg.h>
++ #include <time.h>
++ 
++ #include <oplk/debugstr.h>
++diff --git a/apps/common/src/eventlog/eventlogstring.c b/apps/common/src/eventlog/eventlogstring.c
++index 9fb677b..a55a1a4 100644
++--- a/apps/common/src/eventlog/eventlogstring.c
+++++ b/apps/common/src/eventlog/eventlogstring.c
++@@ -47,7 +47,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ #include "eventlogstring.h"
++ 
++ #include <stdio.h>
++-#include <stdarg.h>
++ #include <time.h>
++ 
++ #include <oplk/debugstr.h>
++diff --git a/apps/common/src/eventlog/eventlogstring.h b/apps/common/src/eventlog/eventlogstring.h
++index 2c291a6..3a5f2fa 100644
++--- a/apps/common/src/eventlog/eventlogstring.h
+++++ b/apps/common/src/eventlog/eventlogstring.h
++@@ -41,6 +41,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ //------------------------------------------------------------------------------
++ // includes
++ //------------------------------------------------------------------------------
+++#include <stdarg.h>
+++
++ #include <oplk/oplk.h>
++ #include <oplk/nmt.h>
++ 
++-- 
++2.5.5
++
 -- 
 2.5.5
