@@ -1,41 +1,49 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed,  8 Jun 2016 12:15:12 +0200
-Subject: [Buildroot] [PATCH] libftdi1: bump to version 1.3
-Message-ID: <1465380912-25163-1-git-send-email-yegorslists@googlemail.com>
+From: Brian Foster <brian.foster@maximintegrated.com>
+Date: Wed, 8 Jun 2016 12:08:17 +0200
+Subject: [Buildroot] Why fakeroot works without #! (basically, RTFM)
+Message-ID: <2951546.bZKNuKFtLY@laclwks004>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/libftdi1/libftdi1.hash | 2 +-
- package/libftdi1/libftdi1.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi!
 
-diff --git a/package/libftdi1/libftdi1.hash b/package/libftdi1/libftdi1.hash
-index e53bc8f..0a89182 100644
---- a/package/libftdi1/libftdi1.hash
-+++ b/package/libftdi1/libftdi1.hash
-@@ -1,2 +1,2 @@
- # Locally computed (after checking the signature from http://www.intra2net.com/en/developer/libftdi/download.php)
--sha256  a6ea795c829219015eb372b03008351cee3fb39f684bff3bf8a4620b558488d6  libftdi1-1.2.tar.bz2
-+sha256  9a8c95c94bfbcf36584a0a58a6e2003d9b133213d9202b76aec76302ffaa81f4  libftdi1-1.3.tar.bz2
-diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
-index e77f37b..26aa293 100644
---- a/package/libftdi1/libftdi1.mk
-+++ b/package/libftdi1/libftdi1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBFTDI1_VERSION = 1.2
-+LIBFTDI1_VERSION = 1.3
- LIBFTDI1_SOURCE = libftdi1-$(LIBFTDI1_VERSION).tar.bz2
- LIBFTDI1_SITE = http://www.intra2net.com/en/developer/libftdi/download
- LIBFTDI1_INSTALL_STAGING = YES
+  I happened to notice in very recent commit 974e83a8f9a1
+  ("fs: add sha-bang to fakeroot script") the comment:
+    
+    ? We [are] directly running this script, so it should start
+     with a sha-bang (not sure why/how it works today...). ?
+
+  What is running the (generated) fakeroot script being talked
+  about is the the Host script .../usr/bin/fakeroot, which is a
+  GNU bash script.  The answer then is in ??COMMAND EXECUTION'
+  of the bash(1) manual page:
+
+    ? If [the exec()] fails because the file is not in executable
+     format, and  the file is not a directory, it is assumed to be
+     a shell script, a file containing shell commands.  A subshell
+     is spawned to execute it. [...] ?
+
+  Or in other words, the traditional Unix shell behaviour of:
+  If exec() failed with errno ENOEXEC on a plain file, Then
+  assume it is a script written in the language of the shell
+  trying to run the script, and run it in a subshell.
+
+  As an aside, that means the commit 974e83a8f9a1 has changed the
+  semantics.  The generated fakeroot script used to always be run
+  by the GNU bash shell, but now it is run by `/bin/sh' which may
+  not be bash (e.g., on my system, it is dash(1)).  However, this
+  _probably_ does not matter, since, as I recall, POSIX(?) requires
+  `/bin/sh' to implement the Bourne shell language, which is what
+  the generated script uses, and what both dash and bash provide.
+
+cheers!
+	-blf-
+
 -- 
-2.1.4
+Brian Foster
+Principal MTS, Software        |  La Ciotat, France
+Maxim Integrated               |  http://www.maximintegrated.com/
