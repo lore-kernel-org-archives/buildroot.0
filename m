@@ -1,40 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jun 2016 23:22:36 +0200
-Subject: [Buildroot] [PATCH v2] package/fetchmail: fix *.pyc compilation
- with python-3
-In-Reply-To: <20160608210638.21263-1-s.martin49@gmail.com>
-References: <20160608210638.21263-1-s.martin49@gmail.com>
-Message-ID: <20160608232236.1a9dbb5a@free-electrons.com>
+Date: Wed, 8 Jun 2016 23:23:02 +0200
+Subject: [Buildroot] [git commit] package/openpowerlink: fix sha256 hash
+Message-ID: <20160608212346.531468005C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2e0de09b7ca0b04787f4539d9aa52713818b97d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  8 Jun 2016 23:06:38 +0200, Samuel Martin wrote:
-> This change removes the fetchmailconf.py python module when the python
-> interpreter is python-3, because this module is not yet python-3
-> compliant.
-> 
-> Fixes:
->   http://autobuild.buildroot.org/results/700/7009445dd116a1c02db82a351d38db44db8dad16/
->   ...
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v1->v2:
-> - remove the *.py instead of adding patches fixing it
-> ---
->  package/fetchmail/fetchmail.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+While bumping to v2.4.0, the sha256 was commented by mistake
+and the hash was for v2.3.2 archive.
 
-Applied to master, thanks.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openpowerlink/openpowerlink.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
+index c879df1..d112947 100644
+--- a/package/openpowerlink/openpowerlink.hash
++++ b/package/openpowerlink/openpowerlink.hash
+@@ -2,4 +2,4 @@
+ md5	a833ca76a162db04a28c36ccecfd8a05	openPOWERLINK_V2.4.0.tar.gz
+ sha1	d2260f7d1b7f264dd7a0323509bec233d36aed11	openPOWERLINK_V2.4.0.tar.gz
+ # sha256 locally computed
+-#sha256	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855	openPOWERLINK_V2.4.0.tar.gz
++sha256	7296556e621adfeeb643c6541747433ecf86176923d736ea909e9ff6dcf1650b	openPOWERLINK_V2.4.0.tar.gz
