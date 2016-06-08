@@ -1,15 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Jun 2016 21:57:45 +0200
-Subject: [Buildroot] [PATCH v2] kmsxx: new package
-In-Reply-To: <20160608190424.GK14179@lukather>
-References: <1462783135-16131-1-git-send-email-maxime.ripard@free-electrons.com>
- <91587869.72Lxhe2Mek@avalon>
- <CAGm1_ksFR80bBVtQDE_wiQ4mvky311-iHzZjWKJegWz=u23Z+Q@mail.gmail.com>
- <146541087.IVqEMkkuFm@avalon>
- <CAGm1_ksQWFgbVDdsJpnYV4F8cOJ9Prw5efUt0wbFNR6o41AxCw@mail.gmail.com>
- <CAGm1_kumQKFSzh5qGdBn18J1TgvipGFU6=51hCLdFrCF85p4xg@mail.gmail.com>
- <20160608190424.GK14179@lukather>
-Message-ID: <20160608215745.0994dd60@free-electrons.com>
+Date: Wed, 8 Jun 2016 22:01:52 +0200
+Subject: [Buildroot] Update of Buildroot toolchains on autobuild.b.o
+Message-ID: <20160608220152.5b54ea7d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,22 +10,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 8 Jun 2016 21:04:24 +0200, Maxime Ripard wrote:
+For information, I have updated the toolchains on autobuild.b.o. Here
+are the changes:
 
-> Honestly, I don't care at all about the python bindings.
-> 
-> I'll remove support for that in the v3, and if anyone is ever
-> interested in adding support for it, he'll work on it (and things will
-> have settled down hopefully)
+ * All existing Buildroot pre-build toolchains have been rebuilt with
+   Buildroot 2016.05.
 
-FWIW: I discussed this topic with Maxime today. I very much prefer
-having a basic kmsxx package merged, with the features that Maxime
-uses/needs, rather than waiting endlessly to resolve all the Python
-bindings issues. So let's merge a simpler version of kmsxx that doesn't
-have the Python bindings, and when someone is interested enough to have
-the Python bindings, this someone can submit follow-up patches.
+ * Addition of a ARM Cortex-M4 noMMU toolchain.
 
-So, yes, Maxime: please send a simpler version of the patch.
+ * Addition of a m68k 5208 noMMU toolchain.
+
+ * Addition of a m68k 68040 toolchain.
+
+Due to the addition of those new toolchains, for fairly specific
+architecture, I'm expecting to see a pretty significant increase in
+build failures.
+
+Let me know if there are other toolchain combinations that you would
+like to see tested on autobuild.b.o.
+
+Best regards,
 
 Thomas
 -- 
