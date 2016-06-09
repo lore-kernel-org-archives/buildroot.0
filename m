@@ -1,43 +1,42 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  9 Jun 2016 19:04:14 -0300
-Subject: [Buildroot] [PATCH] wget: security bump to version 1.18
-Message-ID: <1465509854-25984-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu,  9 Jun 2016 19:04:29 -0300
+Subject: [Buildroot] [PATCH] gettext: bump to version 0.19.8
+Message-ID: <1465509869-26031-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2016-4971 - By default, on server redirects to a FTP resource, use
-the original URL to get the local file name.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/wget/wget.hash | 2 +-
- package/wget/wget.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gettext/gettext.hash | 6 +++---
+ package/gettext/gettext.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wget/wget.hash b/package/wget/wget.hash
-index 159cd51..6d26723 100644
---- a/package/wget/wget.hash
-+++ b/package/wget/wget.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  fe559b61eb9cc01635ac6206a14e02cb51591838c35fa83c7a4aacae0bdd97c9  wget-1.17.1.tar.xz
-+sha256  b5b55b75726c04c06fe253daec9329a6f1a3c0c1878e3ea76ebfebc139ea9cc1  wget-1.18.tar.xz
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 2c6ccf2..9cda76b 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
+diff --git a/package/gettext/gettext.hash b/package/gettext/gettext.hash
+index 3236fda..adaeb3eb 100644
+--- a/package/gettext/gettext.hash
++++ b/package/gettext/gettext.hash
+@@ -1,3 +1,3 @@
+-# From http://lists.gnu.org/archive/html/bug-gettext/2015-12/msg00019.html
+-md5	f81e50556da41b44c1d59ac93474dca5	gettext-0.19.7.tar.xz
+-sha1	4b2574b76d14c98270bf607a2a62f033524d8e8c	gettext-0.19.7.tar.xz
++# From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00002.html
++md5	3e7ed1ac886b9b1a4e23e71113da6358	gettext-0.19.8.tar.xz
++sha1	dc551d4783edf691c1f0095ca927d3128b5093e8	gettext-0.19.8.tar.xz
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index 0b4e5dd..fa43f7b 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WGET_VERSION = 1.17.1
-+WGET_VERSION = 1.18
- WGET_SOURCE = wget-$(WGET_VERSION).tar.xz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- WGET_DEPENDENCIES = host-pkgconf
+-GETTEXT_VERSION = 0.19.7
++GETTEXT_VERSION = 0.19.8
+ GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
+ GETTEXT_SOURCE = gettext-$(GETTEXT_VERSION).tar.xz
+ GETTEXT_INSTALL_STAGING = YES
 -- 
 2.7.3
