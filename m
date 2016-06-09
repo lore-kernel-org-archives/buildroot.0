@@ -1,64 +1,38 @@
-From: Matt Fornero <Matt.Fornero@mathworks.com>
-Date: Thu, 9 Jun 2016 15:18:32 +0000
-Subject: [Buildroot] [PATCH] libiio: Fix pthread linking for iiod
-In-Reply-To: <20160609103624.2e4db9fb@free-electrons.com>
-References: <20160608235050.74fe60e9@free-electrons.com>
- <1465434176-548-1-git-send-email-mfornero@mathworks.com>
- <20160609103624.2e4db9fb@free-electrons.com>
-Message-ID: <74f79e0057b844cfb73be5127b56accf@ex13amer-00-ah.ad.mathworks.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Jun 2016 16:59:02 +0200
+Subject: [Buildroot] [git commit] fetchmail: fix post install target hook
+Message-ID: <20160609153406.9144581DF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Merged into upstream:
-https://github.com/analogdevicesinc/libiio/pull/30
+commit: https://git.buildroot.net/buildroot/commit/?id=a2b66b348afe777384da74b5152668e72436c39d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Sorry for the double mail Thomas-- first message was bounced from the
-list due to using the wrong email address]
+Due to a typo in commit
+a890032596aa5e6afbfdbcccc01fcb07c9a4ef8c ("package/fetchmail: fix *.pyc
+compilation with python-3"), the post install target hook was in fact
+not registered, and the build failure kept showing up.
 
--Matt
+This commit fixes the typo.
 
-> -----Original Message-----
-> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
-> Sent: Thursday, June 09, 2016 1:36 AM
-> To: Matt Fornero <Matt.Fornero@mathworks.com>
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH] libiio: Fix pthread linking for iiod
-> 
-> Hello,
-> 
-> On Wed,  8 Jun 2016 21:02:56 -0400, Matthew Fornero wrote:
-> > Update the iiod CMake configuration to resolve pthread linking issues
-> > introduced with commit:
-> >
-> > 17ee15da70d23c314a3264c87a785101cbd9d85d
-> > ("libiio: Bump version to 0.6")
-> >
-> > Fixes:
-> >
-> http://autobuild.buildroot.net/results/ffe/ffec14aa79833a6f0889a87b31
-> d
-> > ae464d083e6a8/
-> >
-> http://autobuild.buildroot.net/results/49f/49f249632ed021ebe73ee7fab
-> 1b
-> > 55fb3bb4c08f8/
-> >
-> > Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
-> > ---
-> >  ...IIOD-Link-pthread-with-no-network-backend.patch |   30
-> ++++++++++++++++++++
-> >  1 file changed, 30 insertions(+)
-> >  create mode 100644
-> > package/libiio/0002-IIOD-Link-pthread-with-no-network-
-> backend.patch
-> 
-> Applied to master, thanks. Please submit upstream if not already done!
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering http://free-
-> electrons.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/fetchmail/fetchmail.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 5cae0e2..6aa0a2c 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -30,7 +30,7 @@ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ define FETCHMAIL_REMOVE_FETCHMAILCONF_PY
+ 	$(RM) -f $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/fetchmailconf.py
+ endef
+-FETCHMAIL_POST_TARGET_INSTALL_HOOKS += FETCHMAIL_REMOVE_FETCHMAILCONF_PY
++FETCHMAIL_POST_INSTALL_TARGET_HOOKS += FETCHMAIL_REMOVE_FETCHMAILCONF_PY
+ endif
+ 
+ $(eval $(autotools-package))
