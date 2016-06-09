@@ -1,36 +1,79 @@
-From: daggs <daggs@gmx.com>
-Date: Thu, 9 Jun 2016 10:39:16 +0200
-Subject: [Buildroot] [PATCH 2/2] enable amcodec if it is set in the
- config. based on the libreelec implementation.
-In-Reply-To: <20160609101936.17ff1ed5@free-electrons.com>
-References: <20160609074644.4976-1-daggs@gmx.com>
- <20160609074644.4976-2-daggs@gmx.com>,
- <20160609101936.17ff1ed5@free-electrons.com>
-Message-ID: <trinity-54c68a8f-4470-4d0f-8370-da38f3b4753f-1465461556007@3capp-mailcom-bs11>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Jun 2016 10:37:07 +0200
+Subject: [Buildroot] [git commit] python-dataproperty: new package
+Message-ID: <20160609083947.CAA6A81D5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
-> 
-> On Thu,  9 Jun 2016 10:46:44 +0300, Dagg Stompler wrote:
-> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> 
-> The commit log should rather look like:
-> 
-> 	kodi: enable optional dependency on libamcodec
-> 
-> 	This is based on what LibreELEC is doing.
-> 
-> Indeed, the commit title should always have the form:
-> 
-> 	<package>: <description>.
-> 
-> Thanks!
-> 
+commit: https://git.buildroot.net/buildroot/commit/?id=a0ff433b77691a5d7fde3d42b244571e0f55ff1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-will resend.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                    |  1 +
+ package/python-dataproperty/Config.in                |  9 +++++++++
+ package/python-dataproperty/python-dataproperty.hash |  4 ++++
+ package/python-dataproperty/python-dataproperty.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
 
-Dagg.
+diff --git a/package/Config.in b/package/Config.in
+index 0cb2e7e..d4662f6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -654,6 +654,7 @@ menu "External python modules"
+ 	source "package/python-cryptography/Config.in"
+ 	source "package/python-cssselect/Config.in"
+ 	source "package/python-daemon/Config.in"
++	source "package/python-dataproperty/Config.in"
+ 	source "package/python-dateutil/Config.in"
+ 	source "package/python-dialog/Config.in"
+ 	source "package/python-django/Config.in"
+diff --git a/package/python-dataproperty/Config.in b/package/python-dataproperty/Config.in
+new file mode 100644
+index 0000000..a490b98
+--- /dev/null
++++ b/package/python-dataproperty/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_DATAPROPERTY
++	bool "python-dataproperty"
++	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
++	select BR2_PACKAGE_PYTHON_PYTZ # runtime
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	help
++	  Python library for extract property from data.
++
++	  https://github.com/thombashi/DataProperty
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+new file mode 100644
+index 0000000..bed956b
+--- /dev/null
++++ b/package/python-dataproperty/python-dataproperty.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/dataproperty/json
++md5	2c513428b63d7988631c2e6f6c067cb6  DataProperty-0.3.0.tar.gz
++# sha256 calculated by scanpypi
++sha256	566a5e693ed51582df36a066d40673167095ce22187348038b07b7ac1ef9bc64  DataProperty-0.3.0.tar.gz
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+new file mode 100644
+index 0000000..0bbe680
+--- /dev/null
++++ b/package/python-dataproperty/python-dataproperty.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-dataproperty
++#
++################################################################################
++
++PYTHON_DATAPROPERTY_VERSION = 0.3.0
++PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
++PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/05/07/2eb3d18d3efd4d90ac8d532255da04d0c10359eb3bc65d5690579b8bd7b0
++PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
++PYTHON_DATAPROPERTY_LICENSE = MIT
++PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
