@@ -1,77 +1,65 @@
-From: daggs <daggs@gmx.com>
-Date: Thu, 9 Jun 2016 10:35:36 +0200
-Subject: [Buildroot] [PATCH] odroid-mali: New Package
-In-Reply-To: <20160609101626.6239350e@free-electrons.com>
-References: <20160609074119.4288-1-daggs@gmx.com>,
- <20160609101626.6239350e@free-electrons.com>
-Message-ID: <trinity-3a2b0e05-6fcc-4c6b-a7aa-5c8648bb6777-1465461336732@3capp-mailcom-bs11>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Jun 2016 10:35:44 +0200
+Subject: [Buildroot] [git commit] libiio: Fix pthread linking for iiod
+Message-ID: <20160609083554.EE8837FFF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
-> Hello,
-> 
-> Thanks for re-submitting with your full name, we can now merge your
-> patches! \o/
->
-I've found out that patches which I've sent to my distros were merged as is to their repo so oking it there and not here is illogical.
- 
-> On Thu,  9 Jun 2016 10:41:19 +0300, Dagg Stompler wrote:
-> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> > ---
-> >  package/Config.in                        |   1 +
-> >  package/odroid-mali/10-odroidc2_fb.rules |   8 ++
-> >  package/odroid-mali/Config.in            |  20 +++++
-> >  package/odroid-mali/S50odroidc2_fb       |  20 +++++
-> >  package/odroid-mali/odroid-mali.hash     |   3 +
-> >  package/odroid-mali/odroid-mali.mk       |  56 ++++++++++++++
-> >  package/odroid-mali/odroidc2_fb.service  |  14 ++++
-> >  package/odroid-mali/odroidc2_init_fb.sh  | 125 +++++++++++++++++++++++++++++++
-> >  8 files changed, 247 insertions(+)
-> 
-> There is one thing I'm not really happy with however: this package is
-> mixing installing the OpenGL implementation (for the GPU) with the
-> initialization of the display.
-> 
-I've modeled the code after the sunxi-mali driver.
-I assumed that if it was good enough to get into buildroot, I can use it as tamplate.
+commit: https://git.buildroot.net/buildroot/commit/?id=db0663e44ea6f1003c6e5895eba3a7c593dcf3d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Wouldn't it make more sense to have one package for the OpenGL
-> implementation, and one package installing all the init scripts and
-> udev rules related to the display? (Attention: some udev rules are
-> needed for the GPU).
-> 
-is there such package I can use as tamplate?
+Update the iiod CMake configuration to resolve pthread linking issues
+introduced with commit:
 
-> Another thing that bothers me is that it's called "odroid-mali", where
-> "odroid" is the name of the board. I really find it weird that an
-> OpenGL implementation is board specific. It should be SoC specific for
-> sure, but not board-specific. If there are other Amlogic S905 SoC
-> boards added in Buildroot, wouldn't they be able to use the same OpenGL
-> implementation ?
-> 
-afaik, the implementation is vendor specific, e.g. we don't have the code, the vendor (hardkernel) provides the lib file and headers.
-odroid is the name of the product line, there are odroid c{0,1,1+ and 2}. also there are u and x models I think.
-this implementation is specific to the c2 boards I assume it can retrofitted for other boards.
-the main change it will need is the files url change as.
+17ee15da70d23c314a3264c87a785101cbd9d85d
+("libiio: Bump version to 0.6")
 
-> That being said, we already have rpi-userland for RPi, but well, RPi is
-> the only board that will ever be made with this funky Broadcom SoC.
-> 
-> But in the Allwinner land, we have the sunxi-mali package, which works
-> with various boards.
-> 
-> But maybe I'm being too annoying with this aspect: this OpenGL stuff
-> is usually a big mess, so it's probably fine if we have a odroid-mali
-> package.
-> 
-> But I would nonetheless like to have the thing split in two packages.
-> 
-one of my previous patches added all the scripts in the overlay root fs but Eric said it isn't a good idea.
+Fixes:
+http://autobuild.buildroot.net/results/ffe/ffec14aa79833a6f0889a87b31dae464d083e6a8/
+http://autobuild.buildroot.net/results/49f/49f249632ed021ebe73ee7fab1b55fb3bb4c08f8/
 
-I think that the scripts beside the udev rule configures the fb and aren't directly tied to the opengl
+Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...IIOD-Link-pthread-with-no-network-backend.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-Dagg.
+diff --git a/package/libiio/0002-IIOD-Link-pthread-with-no-network-backend.patch b/package/libiio/0002-IIOD-Link-pthread-with-no-network-backend.patch
+new file mode 100644
+index 0000000..df11a49
+--- /dev/null
++++ b/package/libiio/0002-IIOD-Link-pthread-with-no-network-backend.patch
+@@ -0,0 +1,30 @@
++From 8dcb6c3f60123511d77b9fc7e4e22ae710e7d2f4 Mon Sep 17 00:00:00 2001
++From: Matthew Fornero <mfornero@mathworks.com>
++Date: Wed, 8 Jun 2016 20:03:56 -0400
++Subject: [PATCH] IIOD: Link pthread with no network backend
++
++If iiod is built without the network backend, CMake will not link in
++pthreads. Update the CMake configuration to accomodate this case.
++
++Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
++---
++ CMakeLists.txt |    3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 70f61f0..20fa9f1 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -56,6 +56,9 @@ IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
++ 	if (WITH_IIOD AND NOT WITH_LOCAL_BACKEND)
++ 		message(SEND_ERROR "IIOD can only be enabled if the local backend is enabled")
++ 	endif()
+++	if (WITH_IIOD)
+++		set(NEED_THREADS 1)
+++	endif()
++ endif()
++ 
++ option(ENABLE_IPV6 "Define if you want to enable IPv6 support" ON)
++-- 
++1.7.10.4
++
