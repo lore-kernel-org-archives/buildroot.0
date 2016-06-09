@@ -1,14 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 23:50:11 +0200
-Subject: [Buildroot] [PATCH 1/1] kodi: fix build when
- BR2_PACKAGE_LIBFSLVPUWRAP=y
-In-Reply-To: <20160609214806.GE3826@free.fr>
-References: <1463500440-25200-1-git-send-email-sebastien.szymanski@armadeus.com>
- <20160609224203.599c50c1@free-electrons.com>
- <20160609211911.GC3826@free.fr>
- <20160609233816.1a494a7a@free-electrons.com>
- <20160609214806.GE3826@free.fr>
-Message-ID: <20160609235011.3bd057ea@free-electrons.com>
+Date: Thu, 9 Jun 2016 23:57:06 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/tripwire: new package
+In-Reply-To: <1461705192-15282-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1461705192-15282-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160609235706.2a697076@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,26 +12,59 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 9 Jun 2016 23:48:06 +0200, Yann E. MORIN wrote:
+On Tue, 26 Apr 2016 23:13:12 +0200, Bernd Kuhls wrote:
 
-> > However, since there has been apparently no movement on that side
-> > upstream, then let's just add the dependency that you suggested.  
-> 
-> OK, I guess you meant have Kodi depends on .py files to be presetn (not
-> the other proposal to require .py files), right?
+> + install-data-hook:
+> +-	prefix="$(prefix)" sysconfdir="$(sysconfdir)" \
+> +-        path_to_vi="$(path_to_vi)" path_to_sendmail="$(path_to_sendmail)" \
+> +-        ./install/install.sh
+> ++	$(mkdir_p) $(DESTDIR)$(sbindir)
+> ++	$(install_sh_SCRIPT) install/install.sh $(DESTDIR)$(sbindir)
 
-Correct:
+Why are you changing the logic that runs install.sh on the build
+machine to a logic that installs install.sh to the target? How can
+installing install.sh on the target be useful?
 
-	depends on BR2_PACKAGE_PYTHON_PY_ONLY || BR2_PACKAGE_PYTHON_PY_PYC
+> ++#	prefix="$(prefix)" sysconfdir="$(sysconfdir)" \
+> ++#        path_to_vi="$(path_to_vi)" path_to_sendmail="$(path_to_sendmail)" \
+> ++#        ./install/install.sh
 
-or
+Please don't commend the code, just remove it.
 
-	depends on !BR2_PACKAGE_PYTHON_PYC_ONLY
+Could you submit a bug upstream (they use Github, so it's trivial) to
+ask them to make install.sh non-interactive ?
 
-not sure which one is best.
+Also, isn't this install.sh script doing this that are also useful
+(other than stupidly asking the user to explicitly accept the license).
 
-I am not sure what other way around is possible, but I'm probably
-missing something.
+> diff --git a/package/tripwire/Config.in b/package/tripwire/Config.in
+> new file mode 100644
+> index 0000000..1373bb6
+> --- /dev/null
+> +++ b/package/tripwire/Config.in
+> @@ -0,0 +1,21 @@
+> +config BR2_PACKAGE_TRIPWIRE
+> +	bool "tripwire"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_USE_MMU # fork()
+> +	depends on BR2_USE_WCHAR
+> +	select BR2_PACKAGE_OPENSSL
+
+OpenSSL is not mandatory. Use --enable-openssl / --disable-openssl to
+make it optional in the .mk file.
+
+> +TRIPWIRE_VERSION = 2.4.3.1
+> +TRIPWIRE_SITE = $(call github,Tripwire,tripwire-open-source,$(TRIPWIRE_VERSION))
+> +TRIPWIRE_LICENSE = GPLv2+
+
+This license is a bit of an issue when OpenSSL support is enabled: the
+GPL license and the OpenSSL license are incompatible, so you cannot
+distribute a tripwire binary with OpenSSL support. They need to use a
+GPL license with OpenSSL exception for the binary to be
+redistributable. See
+https://people.gnome.org/~markmc/openssl-and-the-gpl.html for details.
+
+Thanks!
 
 Thomas
 -- 
