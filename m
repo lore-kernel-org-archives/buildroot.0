@@ -1,38 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 16:59:02 +0200
-Subject: [Buildroot] [git commit] fetchmail: fix post install target hook
-Message-ID: <20160609153406.9144581DF4@busybox.osuosl.org>
+Date: Thu, 9 Jun 2016 17:40:13 +0200
+Subject: [Buildroot] Python standard library files missing from rootfs
+In-Reply-To: <575986FC.9040307@etictelecom.com>
+References: <575970BA.7080407@etictelecom.com>
+ <575986FC.9040307@etictelecom.com>
+Message-ID: <20160609174013.7dc5f2ce@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2b66b348afe777384da74b5152668e72436c39d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Due to a typo in commit
-a890032596aa5e6afbfdbcccc01fcb07c9a4ef8c ("package/fetchmail: fix *.pyc
-compilation with python-3"), the post install target hook was in fact
-not registered, and the build failure kept showing up.
+On Thu, 9 Jun 2016 17:10:52 +0200, Mickael Chazaux wrote:
+> On 09/06/2016 15:35, Mickael Chazaux wrote:
+> > Hi,
+> >
+> >
+> > all the standard library files are missing, including site.py.  
+> 
+> Sorry for the noise ^^ One of my packages does that in its makefile :
+>          find $(DESTDIR) -name *.py -exec rm {} \;
+>          find $(DESTDIR) -name *.pyc -exec rm {} \;
+>          find $(DESTDIR) -name *.pyo -exec chmod +x {} \;
+> 
+> In OpenEmbedded it causes no harm, but in buildroot, it causes every .py{c} to disappear
 
-This commit fixes the typo.
+It would be good if you had provided a bit more context here.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/fetchmail/fetchmail.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+But I guess the reason is because we remove *.pyo files in Buildroot,
+so if you remove *.py, *.pyc in your package, and Buildroot removes
+*.pyo, there's nothing left.
 
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index 5cae0e2..6aa0a2c 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -30,7 +30,7 @@ ifeq ($(BR2_PACKAGE_PYTHON3),y)
- define FETCHMAIL_REMOVE_FETCHMAILCONF_PY
- 	$(RM) -f $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/fetchmailconf.py
- endef
--FETCHMAIL_POST_TARGET_INSTALL_HOOKS += FETCHMAIL_REMOVE_FETCHMAILCONF_PY
-+FETCHMAIL_POST_INSTALL_TARGET_HOOKS += FETCHMAIL_REMOVE_FETCHMAILCONF_PY
- endif
- 
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
