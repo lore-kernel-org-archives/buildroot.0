@@ -1,84 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 9 Jun 2016 23:36:46 +0200
-Subject: [Buildroot] Why fakeroot works without #! (basically, RTFM)
-In-Reply-To: <2951546.bZKNuKFtLY@laclwks004>
-References: <2951546.bZKNuKFtLY@laclwks004>
-Message-ID: <20160609213646.GD3826@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Jun 2016 23:38:16 +0200
+Subject: [Buildroot] [PATCH 1/1] kodi: fix build when
+ BR2_PACKAGE_LIBFSLVPUWRAP=y
+In-Reply-To: <20160609211911.GC3826@free.fr>
+References: <1463500440-25200-1-git-send-email-sebastien.szymanski@armadeus.com>
+ <20160609224203.599c50c1@free-electrons.com>
+ <20160609211911.GC3826@free.fr>
+Message-ID: <20160609233816.1a494a7a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brian, All,
+Hello,
 
-On 2016-06-08 12:08 +0200, Brian Foster spake thusly:
->   I happened to notice in very recent commit 974e83a8f9a1
->   ("fs: add sha-bang to fakeroot script") the comment:
->     
->     ? We [are] directly running this script, so it should start
->      with a sha-bang (not sure why/how it works today...). ?
+On Thu, 9 Jun 2016 23:19:11 +0200, Yann E. MORIN wrote:
 
-Oh, someone does read commit logs! :-)
-
->   What is running the (generated) fakeroot script being talked
->   about is the the Host script .../usr/bin/fakeroot, which is a
->   GNU bash script.  The answer then is in ??COMMAND EXECUTION'
->   of the bash(1) manual page:
+> > This is a known bug in Kodi, which nobody has investigated so far.  
 > 
->     ? If [the exec()] fails because the file is not in executable
->      format, and  the file is not a directory, it is assumed to be
->      a shell script, a file containing shell commands.  A subshell
->      is spawned to execute it. [...] ?
+> Saying that "nobody has investigated" is wrong. Both Bernd and I have
+> done some research on the topic [0].
 
-Well, this was a part of the bash manpage I was not familiar with.
-Thanks!
+True.
 
->   Or in other words, the traditional Unix shell behaviour of:
->   If exec() failed with errno ENOEXEC on a plain file, Then
->   assume it is a script written in the language of the shell
->   trying to run the script, and run it in a subshell.
+> And we concluded that upstream is unwilling to take patches that will
+> accept only .pyc or .pyo to be present. Upstream *wants* to have the .py
+> files present. Period.
 
-Meh, that's so dangerous...
+Another upstream project also rejected the idea of working just
+with .pyc files, until I showed the filesystem size difference between
+having .py+.pyc and having just .pyc. Have you tried this approach with
+the Kodi people?
 
->   As an aside, that means the commit 974e83a8f9a1 has changed the
->   semantics.  The generated fakeroot script used to always be run
->   by the GNU bash shell, but now it is run by `/bin/sh' which may
->   not be bash (e.g., on my system, it is dash(1)).  However, this
->   _probably_ does not matter, since, as I recall, POSIX(?) requires
->   `/bin/sh' to implement the Bourne shell language, which is what
->   the generated script uses, and what both dash and bash provide.
+(Though I admit it might be less impressive than what the case I had,
+due to the massive size of Kodi and its dependencies.)
 
-Yes, POSIX mandates that /bin/sh be a bourne shell.
-
-And the script we generate is expected to be POSIX-compliant, i.e. it
-should not be using bashisms. So /bin/sh is the correct shell to use.
-
-If we were to use bahsisms in the future, we'd have to change that to
-bash, yes.
-
-Thanks for the explanations!
-
-Regards,
-Yann E. MORIN.
-
-> cheers!
-> 	-blf-
+> So indeed, noone has tried to fix it, because the fix has *zero* chance
+> of getting upstream.
 > 
-> -- 
-> Brian Foster
-> Principal MTS, Software        |  La Ciotat, France
-> Maxim Integrated               |  http://www.maximintegrated.com/
+> I however submitted two proposals that would make it impossible to have
+> that situation, but you did not like them (FTR: one was to hide Kodi
+> away when .py files were not present, the other was to add options for
+> packages to require .py files to be kept).
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> So, unless we revise our position, the bug will stay. And it is a
+> Buildroot bug, not an upstream one.
 
+It is and remains an upstream bug, there is absolutely no reason to
+not work with just .pyc/.pyo files.
+
+However, since there has been apparently no movement on that side
+upstream, then let's just add the dependency that you suggested. It's a
+crappy solution, but our motto is to follow upstream, so when upstream
+is crappy, so we are :)
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
