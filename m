@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 10:16:26 +0200
-Subject: [Buildroot] [PATCH] odroid-mali: New Package
-In-Reply-To: <20160609074119.4288-1-daggs@gmx.com>
-References: <20160609074119.4288-1-daggs@gmx.com>
-Message-ID: <20160609101626.6239350e@free-electrons.com>
+Date: Thu, 9 Jun 2016 10:18:39 +0200
+Subject: [Buildroot] [PATCH 1/2] libamcodec: New Package
+In-Reply-To: <20160609074644.4976-1-daggs@gmx.com>
+References: <20160609074644.4976-1-daggs@gmx.com>
+Message-ID: <20160609101839.381a8a56@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,51 +12,47 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for re-submitting with your full name, we can now merge your
-patches! \o/
+On Thu,  9 Jun 2016 10:46:43 +0300, Dagg Stompler wrote:
 
-On Thu,  9 Jun 2016 10:41:19 +0300, Dagg Stompler wrote:
-> Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> ---
->  package/Config.in                        |   1 +
->  package/odroid-mali/10-odroidc2_fb.rules |   8 ++
->  package/odroid-mali/Config.in            |  20 +++++
->  package/odroid-mali/S50odroidc2_fb       |  20 +++++
->  package/odroid-mali/odroid-mali.hash     |   3 +
->  package/odroid-mali/odroid-mali.mk       |  56 ++++++++++++++
->  package/odroid-mali/odroidc2_fb.service  |  14 ++++
->  package/odroid-mali/odroidc2_init_fb.sh  | 125 +++++++++++++++++++++++++++++++
->  8 files changed, 247 insertions(+)
+> diff --git a/package/libamcodec/0001-fix_flags_in_makefile.patch b/package/libamcodec/0001-fix_flags_in_makefile.patch
+> new file mode 100644
+> index 0000000..e64c4d7
+> --- /dev/null
+> +++ b/package/libamcodec/0001-fix_flags_in_makefile.patch
 
-There is one thing I'm not really happy with however: this package is
-mixing installing the OpenGL implementation (for the GPU) with the
-initialization of the display.
+Patches need a description + Signed-off-by. Since the package is
+fetched from Git, please make it a Git formatted patch (i.e make a Git
+commit, and run "git format-patch HEAD^").
 
-Wouldn't it make more sense to have one package for the OpenGL
-implementation, and one package installing all the init scripts and
-udev rules related to the display? (Attention: some udev rules are
-needed for the GPU).
+> diff --git a/package/libamcodec/libamcodec.mk b/package/libamcodec/libamcodec.mk
+> new file mode 100644
+> index 0000000..1e0bcb6
+> --- /dev/null
+> +++ b/package/libamcodec/libamcodec.mk
+> @@ -0,0 +1,33 @@
+> +################################################################################
+> +#
+> +# libamcodec
+> +#
+> +################################################################################
+> +
+> +LIBAMCODEC_VERSION = ed1d8b8c54b05c1a02a8ee44c59744e4cbed3d8d
+> +LIBAMCODEC_SITE = $(call github,mdrjr,c2_aml_libs,$(LIBAMCODEC_VERSION))
+> +LIBAMCODEC_DEPENDENCIES = alsa-lib
 
-Another thing that bothers me is that it's called "odroid-mali", where
-"odroid" is the name of the board. I really find it weird that an
-OpenGL implementation is board specific. It should be SoC specific for
-sure, but not board-specific. If there are other Amlogic S905 SoC
-boards added in Buildroot, wouldn't they be able to use the same OpenGL
-implementation ?
+Has the license situation been resolved? I know you contacted upstream
+about his. Any feedback?
 
-That being said, we already have rpi-userland for RPi, but well, RPi is
-the only board that will ever be made with this funky Broadcom SoC.
+> +
+> +# This package uses the M_PREFIX variable to construct the header and
 
-But in the Allwinner land, we have the sunxi-mali package, which works
-with various boards.
+M_PREFIX or PREFIX
 
-But maybe I'm being too annoying with this aspect: this OpenGL stuff
-is usually a big mess, so it's probably fine if we have a odroid-mali
-package.
+(you use PREFIX when building in the amcodec subdirectory)
 
-But I would nonetheless like to have the thing split in two packages.
+> +# # library paths used when compiling
 
-Thanks!
+duplicate # sign.
 
 Thomas
 -- 
