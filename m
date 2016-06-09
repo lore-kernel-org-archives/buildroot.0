@@ -1,42 +1,58 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  9 Jun 2016 19:04:29 -0300
-Subject: [Buildroot] [PATCH] gettext: bump to version 0.19.8
-Message-ID: <1465509869-26031-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Jun 2016 00:11:55 +0200
+Subject: [Buildroot] [PATCH v4] igmpproxy: bump version to
+ a731683d1a65956fa05024b0597b105fe6a3a122
+In-Reply-To: <1463685189.2081.13.camel@embedded.rocks>
+References: <1463668693-1367-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1463685189.2081.13.camel@embedded.rocks>
+Message-ID: <20160610001155.4296260a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gettext/gettext.hash | 6 +++---
- package/gettext/gettext.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hello,
 
-diff --git a/package/gettext/gettext.hash b/package/gettext/gettext.hash
-index 3236fda..adaeb3eb 100644
---- a/package/gettext/gettext.hash
-+++ b/package/gettext/gettext.hash
-@@ -1,3 +1,3 @@
--# From http://lists.gnu.org/archive/html/bug-gettext/2015-12/msg00019.html
--md5	f81e50556da41b44c1d59ac93474dca5	gettext-0.19.7.tar.xz
--sha1	4b2574b76d14c98270bf607a2a62f033524d8e8c	gettext-0.19.7.tar.xz
-+# From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00002.html
-+md5	3e7ed1ac886b9b1a4e23e71113da6358	gettext-0.19.8.tar.xz
-+sha1	dc551d4783edf691c1f0095ca927d3128b5093e8	gettext-0.19.8.tar.xz
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index 0b4e5dd..fa43f7b 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GETTEXT_VERSION = 0.19.7
-+GETTEXT_VERSION = 0.19.8
- GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
- GETTEXT_SOURCE = gettext-$(GETTEXT_VERSION).tar.xz
- GETTEXT_INSTALL_STAGING = YES
+On Thu, 19 May 2016 21:13:09 +0200, J?rg Krause wrote:
+
+> # Use standard unsigned integer types for fixing musl build
+> IGMPPROXY_PATCH =?https://github.com/pali/igmpproxy/commit/33a69727c936
+> e81aff312d1f92ab5681a77b095d.patch
+> # Fix ucLinux support
+> IGMPPROXY_PATCH +=?https://github.com/pali/igmpproxy/commit/0e3af272c87
+> d77cc81740436fcf6bc69e0c3c215.patch
+
+Unfortunately, this doesn't work, because
+33a69727c936e81aff312d1f92ab5681a77b095d.patch fails to apply, most
+likely because it depends on other commits:
+
+>>> igmpproxy 0.1 Patching
+support/scripts/apply-patches.sh  /home/thomas/projets/buildroot/output/build/igmpproxy-0.1 /home/thomas/dl 33a69727c936e81aff312d1f92ab5681a77b095d.patch
+
+Applying 33a69727c936e81aff312d1f92ab5681a77b095d.patch using patch: 
+patching file src/igmp.c
+Hunk #1 FAILED at 79.
+Hunk #2 FAILED at 230.
+2 out of 2 hunks FAILED -- saving rejects to file src/igmp.c.rej
+patching file src/kern.c
+patching file src/lib.c
+patching file src/os-dragonfly.h
+patching file src/os-freebsd.h
+patching file src/os-linux.h
+patching file src/os-netbsd.h
+patching file src/os-openbsd.h
+Patch failed!  Please fix 33a69727c936e81aff312d1f92ab5681a77b095d.patch!
+package/pkg-generic.mk:159: recipe for target '/home/thomas/projets/buildroot/output/build/igmpproxy-0.1/.stamp_patched' failed
+
+We could also integrate those commits in IGMPPROXY_PATCH, or we could
+adjust the patch and keep it in package/igmpproxy/. All in all, I think
+Matt's original solution is good enough, so I applied his patch.
+
+Thanks,
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
