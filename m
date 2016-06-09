@@ -1,59 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 23:38:16 +0200
-Subject: [Buildroot] [PATCH 1/1] kodi: fix build when
- BR2_PACKAGE_LIBFSLVPUWRAP=y
-In-Reply-To: <20160609211911.GC3826@free.fr>
-References: <1463500440-25200-1-git-send-email-sebastien.szymanski@armadeus.com>
- <20160609224203.599c50c1@free-electrons.com>
- <20160609211911.GC3826@free.fr>
-Message-ID: <20160609233816.1a494a7a@free-electrons.com>
+Date: Thu, 9 Jun 2016 23:42:56 +0200
+Subject: [Buildroot] patch for sdl2_gfx, sdl2_image, sdl2_ttf
+In-Reply-To: <CAGrGpJAcPA=Uif1YkULLTyMpqE28fX-2sqRV6Oa5Lj4yC8jNHw@mail.gmail.com>
+References: <CAGrGpJAcPA=Uif1YkULLTyMpqE28fX-2sqRV6Oa5Lj4yC8jNHw@mail.gmail.com>
+Message-ID: <20160609234256.1a004f8a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Peter,
 
-On Thu, 9 Jun 2016 23:19:11 +0200, Yann E. MORIN wrote:
+On Thu, 9 Jun 2016 15:18:34 -0600, Peter Thompson wrote:
 
-> > This is a known bug in Kodi, which nobody has investigated so far.  
+> Attached is a patch which adds sdl2_gfx, sdl2_image and sdl2_ttf to
+> Buildroot-2016.05.   The patch has been tested by running some of my SDL2
+> applications on a rootfs created by Buildroot-2016.05 with the attached
+> patch applied. The test was on igepv2 board using linux-omap-2.6.37-6.
 > 
-> Saying that "nobody has investigated" is wrong. Both Bernd and I have
-> done some research on the topic [0].
+> If the patch is useful, and you would like me to submit/publish it more
+> formally, (eg via git commit) please let me know.  This is my first time
+> submitting a patch anywhere - hence my hesitancy.
 
-True.
+Thanks for this contribution. Yes we are interested, so please make
+this patch three Git commits (one per package), and then use git
+format-patch + git send-email to send the patches. See the Buildroot
+manual, it has all the details on how to create and send patches.
 
-> And we concluded that upstream is unwilling to take patches that will
-> accept only .pyc or .pyo to be present. Upstream *wants* to have the .py
-> files present. Period.
-
-Another upstream project also rejected the idea of working just
-with .pyc files, until I showed the filesystem size difference between
-having .py+.pyc and having just .pyc. Have you tried this approach with
-the Kodi people?
-
-(Though I admit it might be less impressive than what the case I had,
-due to the massive size of Kodi and its dependencies.)
-
-> So indeed, noone has tried to fix it, because the fix has *zero* chance
-> of getting upstream.
-> 
-> I however submitted two proposals that would make it impossible to have
-> that situation, but you did not like them (FTR: one was to hide Kodi
-> away when .py files were not present, the other was to add options for
-> packages to require .py files to be kept).
-> 
-> So, unless we revise our position, the bug will stay. And it is a
-> Buildroot bug, not an upstream one.
-
-It is and remains an upstream bug, there is absolutely no reason to
-not work with just .pyc/.pyo files.
-
-However, since there has been apparently no movement on that side
-upstream, then let's just add the dependency that you suggested. It's a
-crappy solution, but our motto is to follow upstream, so when upstream
-is crappy, so we are :)
+Thanks!
 
 Thomas
 -- 
