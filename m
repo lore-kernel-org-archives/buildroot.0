@@ -1,36 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 09 Jun 2016 22:01:20 +0200
-Subject: [Buildroot] Update of Buildroot toolchains on autobuild.b.o
-References: <20160608220152.5b54ea7d@free-electrons.com>
-Message-ID: <XnsA622E005D5C4EID313208userindividu@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Jun 2016 22:03:52 +0200
+Subject: [Buildroot] [PATCH 1/2] juno: Adding support for Juno r2
+In-Reply-To: <01f8f69ba500ed01970fb600c6c5ae168669c88d.1465468621.git.jpinto@synopsys.com>
+References: <cover.1465468621.git.jpinto@synopsys.com>
+ <01f8f69ba500ed01970fb600c6c5ae168669c88d.1465468621.git.jpinto@synopsys.com>
+Message-ID: <20160609220352.5586fe0b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni-
-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8@public.gmane.org> wrote in 
-news:20160608220152.5b54ea7d at free-electrons.com:
+The title should have been:
 
-> Let me know if there are other toolchain combinations that you would
-> like to see tested on autobuild.b.o.
+	configs/arm_juno: add support for Juno r2
 
-Hi Thomas,
+On Thu,  9 Jun 2016 11:40:30 +0100, Joao Pinto wrote:
+> Add support for Juno r2.
 
-a lot of multimedia packages (ffmpeg, mplayer & co.) contain support not only 
-for mmx but also for sse*/avx*. Some of them fail in a mmx-only configuration 
-so I would like to propose a toolchain based on this defconfig:
+This part is not needed, as it only repeats the commit title with no
+other additional information.
 
-BR2_x86_pentium_mmx=y
+>  Preparing your rootfs
+> @@ -89,6 +91,19 @@ NOR3LOAD: 00000000               ;Image Load Address
+>  NOR3ENTRY: 00000000              ;Image Entry Point
+>  ......
+>  
+> +Configure *.dtb in the boot configuration for Juno r1
 
-We already have a p4 defconfig
+I guess you meant r2 here.
 
-http://autobuild.buildroot.net/toolchains/configs/br-i386-pentium4-
-full.config
+Applied with those issues fixed.
 
-and defconfigs for x86_64 but none for older Intel cpu's.
+Thanks!
 
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
