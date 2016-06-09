@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 22:00:00 +0200
-Subject: [Buildroot] [PATCH v1] wiringpi: fix musl compile
-In-Reply-To: <1465499125-28312-1-git-send-email-ps.report@gmx.net>
-References: <1465499125-28312-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20160609220000.27215c1d@free-electrons.com>
+Date: Thu, 9 Jun 2016 22:00:32 +0200
+Subject: [Buildroot] [PATCH] package/mpd: fetch upstream patch to fix
+ GCC 6 issue
+In-Reply-To: <20160609094108.9446-1-joerg.krause@embedded.rocks>
+References: <20160609094108.9446-1-joerg.krause@embedded.rocks>
+Message-ID: <20160609220032.5858f2dd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +13,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  9 Jun 2016 21:05:25 +0200, Peter Seiderer wrote:
-> Fixes [1]:
+On Thu,  9 Jun 2016 11:41:08 +0200, J?rg Krause wrote:
+> Fetch a patch from upstream to fix a build issue with GCC 6:
 > 
->   wiringPiSPI.c:89:35: error: '_IOC_SIZEBITS' undeclared (first use in this function)
+> '''
+> In file included from /home/joerg/Development/git/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/include/c++/6.1.0/bits/stl_algo.h:59:0,
+>                  from /home/joerg/Development/git/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/include/c++/6.1.0/algorithm:62,
+>                  from ./src/queue/IdTable.hxx:25,
+>                  from ./src/queue/Queue.hxx:24,
+>                  from src/queue/Playlist.hxx:23,
+>                  from src/Partition.hxx:23,
+>                  from src/Instance.cxx:22:
+> /home/joerg/Development/git/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/include/c++/6.1.0/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
+>  #include_next <stdlib.h>
+> '''
 > 
-> Patch from yocto meta-raspberrypi [2] adding include of asm/ioctl.h.
+> Bug report: https://bugs.musicpd.org/view.php?id=4524
+> Fetch from: aa5d05eaa4d482aa8f8df954335d0aba151eeff9
 > 
-> [1] http://autobuild.buildroot.net/results/e9d/e9d680af7eea6d6c68c8e48248b5cc5b29389baa
-> [2] https://github.com/agherzan/meta-raspberrypi/blob/master/recipes-devtools/wiringPi/wiringpi/0001-include-asm-ioctl.h-directly-for-_IOC_SIZEBITS.patch
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
->  ...de-asm-ioctl.h-directly-for-_IOC_SIZEBITS.patch | 60 ++++++++++++++++++++++
->  1 file changed, 60 insertions(+)
->  create mode 100644 package/wiringpi/0002-include-asm-ioctl.h-directly-for-_IOC_SIZEBITS.patch
+>  package/mpd/mpd.hash | 1 +
+>  package/mpd/mpd.mk   | 3 +++
+>  2 files changed, 4 insertions(+)
 
-Applied to master, thanks. Please submit the patch upstream as well,
-thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
