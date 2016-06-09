@@ -1,36 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 10:19:36 +0200
-Subject: [Buildroot] [PATCH 2/2] enable amcodec if it is set in the
- config. based on the libreelec implementation.
-In-Reply-To: <20160609074644.4976-2-daggs@gmx.com>
-References: <20160609074644.4976-1-daggs@gmx.com>
- <20160609074644.4976-2-daggs@gmx.com>
-Message-ID: <20160609101936.17ff1ed5@free-electrons.com>
+From: Danijel Tudek <danijel.tudek@bylapis.com>
+Date: Thu, 9 Jun 2016 10:34:16 +0200
+Subject: [Buildroot] sources.buildroot.net is down
+Message-ID: <CAAcXeumnVj86aZAanbxp65Hvn9fdmABOORMhYcXmksHKZcvJHQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
+I just got stuck in the middle of full rebuild because sources.buildroot.net
+is down.
 
-On Thu,  9 Jun 2016 10:46:44 +0300, Dagg Stompler wrote:
-> Signed-off-by: Dagg Stompler <daggs@gmx.com>
+This is the error I get on util-linux:
 
-The commit log should rather look like:
+Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109
+Connecting to sources.buildroot.net (sources.buildroot.net)|176.9.16.109|:80...
+failed: Connection refused.
 
-	kodi: enable optional dependency on libamcodec
-
-	This is based on what LibreELEC is doing.
-
-Indeed, the commit title should always have the form:
-
-	<package>: <description>.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Ping also fails.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160609/703b8a99/attachment.html>
