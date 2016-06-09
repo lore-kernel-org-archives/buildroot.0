@@ -1,135 +1,77 @@
-From: Dagg Stompler <daggs@gmx.com>
-Date: Thu,  9 Jun 2016 20:59:08 +0300
-Subject: [Buildroot] [PATCH 1/2] odroid-scripts: New Package
-Message-ID: <20160609175909.12605-1-daggs@gmx.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 9 Jun 2016 19:59:54 +0200
+Subject: [Buildroot] [PATCH 2/2] python-meson: new package
+In-Reply-To: <20160608222250.6d493138@free-electrons.com>
+References: <1465047243-1169-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1465047243-1169-3-git-send-email-eric.le.bihan.dev@free.fr>
+ <20160608222250.6d493138@free-electrons.com>
+Message-ID: <20160609195954.52b9a527@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
----
- configs/odroidc2_defconfig                 |  1 +
- package/Config.in                          |  1 +
- package/odroid-scripts/Config.in           |  7 +++++++
- package/odroid-scripts/S50odroidc2_fb      | 20 +++++++++++++++++++
- package/odroid-scripts/odroid-scripts.hash |  2 ++
- package/odroid-scripts/odroid-scripts.mk   | 32 ++++++++++++++++++++++++++++++
- 6 files changed, 63 insertions(+)
- create mode 100644 package/odroid-scripts/Config.in
- create mode 100644 package/odroid-scripts/S50odroidc2_fb
- create mode 100644 package/odroid-scripts/odroid-scripts.hash
- create mode 100644 package/odroid-scripts/odroid-scripts.mk
+Hi!
 
-diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
-index 1945983..74b475c 100644
---- a/configs/odroidc2_defconfig
-+++ b/configs/odroidc2_defconfig
-@@ -6,6 +6,7 @@ BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image.sh"
-+BR2_PACKAGE_ODROID_SCRIPTS=y
+Le Wed, 8 Jun 2016 22:22:50 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+
+> > To cross-compile a Meson-based project for the target, its package
+> > should:
+> > 
+> >  - depend on host-python-meson
+> >  - invoke the host variant of Meson with the
+> >    *--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf*
+> > option.
+> >  - invoke host variant of Ninja to perform the actual build.  
+> 
+> It would probably be good to write this somewhere, as it is quite
+> important to know for users of this build system. But I'm not sure
+> where: you're going to have only a host package, so no Config.in file,
+> and therefore no help text. And I'm not sure where this could be added
+> in the Buildroot manual.
+
+It is true that all the "docs/manual/adding-packages*.txt" files refer
+to a dedicated infrastructure, whereas what is needed here is an
+example of Makefile using the generic-package infrastructure. There is
+an exception to the rule, though: docs/manual/adding-packages-gettext.txt.
+
+So, IMHO, a new document named "docs/manual/adding-packages-meson.txt" should 
+fit.
+
+However, I could provide a real package infrastructure named "meson-package",
+but as stated in the discussion about adding support for Cargo [1] (the Rust
+package manager), to provide such infrastructure, at least one package using
+it should also be provided (it is sensible to have a working example of 
+the infrastructure).
  
- # Kernel
- BR2_KERNEL_HEADERS_VERSION=y
-diff --git a/package/Config.in b/package/Config.in
-index 9f6e0d9..9bd7e7d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1661,6 +1661,7 @@ endif
- 	source "package/ncdu/Config.in"
- 	source "package/numactl/Config.in"
- 	source "package/nut/Config.in"
-+	source "package/odroid-scripts/Config.in"
- 	source "package/openvmtools/Config.in"
- 	source "package/polkit/Config.in"
- 	source "package/powerpc-utils/Config.in"
-diff --git a/package/odroid-scripts/Config.in b/package/odroid-scripts/Config.in
-new file mode 100644
-index 0000000..48544b6
---- /dev/null
-+++ b/package/odroid-scripts/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_ODROID_SCRIPTS
-+	bool "odroid-scripts"
-+	depends on BR2_aarch64 || BR2_arm
-+	help
-+	  Install the scripts for the odroidc2 based systems.
-+
-+	  https://github.com/mdrjr/c2_bootini
-diff --git a/package/odroid-scripts/S50odroidc2_fb b/package/odroid-scripts/S50odroidc2_fb
-new file mode 100644
-index 0000000..2aae59d
---- /dev/null
-+++ b/package/odroid-scripts/S50odroidc2_fb
-@@ -0,0 +1,20 @@
-+#!/bin/sh
-+#
-+# Set up frame buffer
-+#
-+
-+case "$1" in
-+    start)
-+        echo "Setting up display..."
-+        /usr/sbin/odroidc2_init_fb.sh
-+        ;;
-+    stop)
-+        ;;
-+    restart|reload)
-+        ;;
-+    *)
-+        echo "Usage: $0 {start|stop|restart}"
-+        exit 1
-+esac
-+
-+exit $?
-diff --git a/package/odroid-scripts/odroid-scripts.hash b/package/odroid-scripts/odroid-scripts.hash
-new file mode 100644
-index 0000000..f78603b
---- /dev/null
-+++ b/package/odroid-scripts/odroid-scripts.hash
-@@ -0,0 +1,2 @@
-+#  Locally computed hash
-+sha256sum bf34de357180126cb99885e8e131ae3ebb2562a98187da297c8ee10e56e29f65 odroid-scripts-17c88b9c48ad89a78c68392ccaa41b3cd42a622b.tar.gz
-diff --git a/package/odroid-scripts/odroid-scripts.mk b/package/odroid-scripts/odroid-scripts.mk
-new file mode 100644
-index 0000000..993b53b
---- /dev/null
-+++ b/package/odroid-scripts/odroid-scripts.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# odroid-scripts
-+#
-+################################################################################
-+
-+ODROID_SCRIPTS_VERSION = 17c88b9c48ad89a78c68392ccaa41b3cd42a622b
-+ODROID_SCRIPTS_SITE = $(call github,mdrjr,c2_bootini,$(ODROID_SCRIPTS_VERSION))
-+ODROID_SCRIPTS_LICENSE = unclear
-+
-+ifeq ($(BR2_PACKAGE_EUDEV),y)
-+	ODROID_SCRIPTS_INSTALL_UDEV_RULES = $(INSTALL) -D -m 0644 $(@D)/10-odroid.rules $(TARGET_DIR)/etc/udev/rules.d/10-odroid.rules
-+else
-+	ODROID_SCRIPTS_INSTALL_UDEV_RULES =
-+endif
-+
-+define ODROID_SCRIPTS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/c2_init.sh $(TARGET_DIR)/usr/sbin/odroidc2_init_fb.sh
-+	$(ODROID_SCRIPTS_INSTALL_UDEV_RULES)
-+endef
-+
-+define ODROID_SCRIPTS_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 $(@D)/amlogic.service $(TARGET_DIR)/usr/lib/systemd/system/odroidc2_fb.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -fs ../../../../usr/lib/systemd/system/odroidc2_fb.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/odroidc2_fb.service
-+endef
-+
-+define ODROID_SCRIPTS_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/odroid-scripts/S50odroidc2_fb $(TARGET_DIR)/etc/init.d/S50odroidc2_fb
-+endef
-+
-+$(eval $(generic-package))
+> >  package/Config.in                              |  1 +
+> >  package/python-meson/Config.in                 |  9 +++++  
+> 
+> As discussed, if it's a build system, please add only a host package.
+
+OK. I'll do the same for Ninja.
+
+> > +
+> > +define HOST_PYTHON_MESON_REMOVE_GUI_TOOL
+> > +	rm -f $(HOST_DIR)/usr/bin/mesongui.py
+> > +endef  
+> 
+> Not sure removing stuff from the host variant is really useful.
+
+This program needs PyQt5, which may not be installed by default by the
+most popular GNU/Linux distributions. The user may be tempted to use
+it: the execution will fail and this may result in an unnecessary
+Buildroot bug report. To avoid this, I chose to remove it.
+
+> Other than that, looks good!
+
+Thanks for the review.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2016-April/158333.html
+
+Regards,
+
 -- 
-2.8.4
+ELB
