@@ -1,79 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 22:04:35 +0200
-Subject: [Buildroot] [git commit] configs/arm_juno: add support for Juno r2
-Message-ID: <20160609200443.10DE27FA96@busybox.osuosl.org>
+Date: Thu, 9 Jun 2016 22:00:27 +0200
+Subject: [Buildroot] [git commit] package/mpd: fetch upstream patch to fix
+	GCC 6 issue
+Message-ID: <20160609200442.F365D802F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=234d81bf333b7eef52d009b3ecc25cfd7b484b29
+commit: https://git.buildroot.net/buildroot/commit/?id=725ff29fb7290de6467f9df462b48378552410a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+Fetch a patch from upstream to fix a build issue with GCC 6:
+
+'''
+In file included from /home/joerg/Development/git/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/include/c++/6.1.0/bits/stl_algo.h:59:0,
+                 from /home/joerg/Development/git/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/include/c++/6.1.0/algorithm:62,
+                 from ./src/queue/IdTable.hxx:25,
+                 from ./src/queue/Queue.hxx:24,
+                 from src/queue/Playlist.hxx:23,
+                 from src/Partition.hxx:23,
+                 from src/Instance.cxx:22:
+/home/joerg/Development/git/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/include/c++/6.1.0/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
+ #include_next <stdlib.h>
+'''
+
+Bug report: https://bugs.musicpd.org/view.php?id=4524
+Fetch from: aa5d05eaa4d482aa8f8df954335d0aba151eeff9
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/arm/juno/readme.txt  | 17 ++++++++++++++++-
- configs/arm_juno_defconfig |  2 +-
- 2 files changed, 17 insertions(+), 2 deletions(-)
+ package/mpd/mpd.hash | 1 +
+ package/mpd/mpd.mk   | 3 +++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/board/arm/juno/readme.txt b/board/arm/juno/readme.txt
-index 52fabf9..9314bb0 100644
---- a/board/arm/juno/readme.txt
-+++ b/board/arm/juno/readme.txt
-@@ -6,6 +6,7 @@ Intro
- These instructions apply to all models of the ARM Juno:
-   - Juno r0 (does not support PCIe)
-   - Juno r1 (supports PCIe)
-+  - Juno r2 (Big Cluster with A72)
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 2d35aae..f817a3a 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated after checking pgp signature
+ sha256  0cb9a223894b038ce966ce6d651d9b3ea3bdc7d7b9bec8d1e9e7e091cbc29b8b  mpd-0.19.15.tar.xz
++sha256  cb9a31889a3d01f373ad154dc4c0d13ca866d69bc02b3acd9f18727a756e78cb  aa5d05eaa4d482aa8f8df954335d0aba151eeff9.patch
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 6247d15..9b054ff 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -13,6 +13,9 @@ MPD_LICENSE = GPLv2+
+ MPD_LICENSE_FILES = COPYING
+ MPD_AUTORECONF = YES
  
- Buildroot will generate the kernel image, device tree blob and a
- minimal root filesystem.
-@@ -41,6 +42,7 @@ After building, you should obtain this tree:
-     +-- rootfs.tar
-     +-- juno.dtb (if Juno r0 is used)
-     +-- juno-r1.dtb (if Juno r1 is used)
-+    +-- juno-r2.dtb (if Juno r2 is used)
-     +-- Image
- 
- Preparing your rootfs
-@@ -89,6 +91,19 @@ NOR3LOAD: 00000000               ;Image Load Address
- NOR3ENTRY: 00000000              ;Image Entry Point
- ......
- 
-+Configure *.dtb in the boot configuration for Juno r2
-+=====================================================
++# Fix GCC 6 issue (https://bugs.musicpd.org/view.php?id=4524)
++MPD_PATCH = https://github.com/MaxKellermann/MPD/commit/aa5d05eaa4d482aa8f8df954335d0aba151eeff9.patch
 +
-+SITE1/HBI0262D/images.txt
-+......
-+NOR3UPDATE: AUTO                 ;Image Update:NONE/AUTO/FORCE
-+NOR3ADDRESS: 0x02000000          ;Image Flash Address
-+NOR3FILE: \SOFTWARE\juno-r2.dtb  ;Image File Name
-+NOR3NAME: board.dtb              ;Specify target filename to preserve file extension
-+NOR3LOAD: 00000000               ;Image Load Address
-+NOR3ENTRY: 00000000              ;Image Entry Point
-+......
-+
- Installing kernel image and DTB
- ===============================
+ # Some options need an explicit --disable or --enable
  
-@@ -97,7 +112,7 @@ Installing kernel image and DTB
-    A mass storage device should appear in your desktop.
- 3. Open the software/ folder
- 4. Copy the 'Image' file to software/
--5. Copy the 'juno-r1.dtb' (r1) or the 'juno.dtb' (r0) file to software/
-+5. Copy the 'juno-r1.dtb' (r1), 'juno.dtb' (r0) or juno-r2.dtb (r2) file to software/
- 6. Press the red button in the front pannel of ARM Juno
- 
- At this time, the board will erase the Flash entry for each new item and
-diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
-index 87b6374..5ce882c 100644
---- a/configs/arm_juno_defconfig
-+++ b/configs/arm_juno_defconfig
-@@ -11,4 +11,4 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-4.3-2015.11"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arm/juno/linux-juno-defconfig"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1 arm/juno-r2"
+ # Zeroconf support depends on libdns_sd from avahi.
