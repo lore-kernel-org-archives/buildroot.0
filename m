@@ -1,52 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 9 Jun 2016 23:48:06 +0200
-Subject: [Buildroot] [PATCH 1/1] kodi: fix build when
- BR2_PACKAGE_LIBFSLVPUWRAP=y
-In-Reply-To: <20160609233816.1a494a7a@free-electrons.com>
-References: <1463500440-25200-1-git-send-email-sebastien.szymanski@armadeus.com>
- <20160609224203.599c50c1@free-electrons.com>
- <20160609211911.GC3826@free.fr>
- <20160609233816.1a494a7a@free-electrons.com>
-Message-ID: <20160609214806.GE3826@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  9 Jun 2016 18:49:15 -0300
+Subject: [Buildroot] [PATCH 1/7] gstreamer1: bump to version 1.8.2
+Message-ID: <1465508961-19204-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2016-06-09 23:38 +0200, Thomas Petazzoni spake thusly:
-> On Thu, 9 Jun 2016 23:19:11 +0200, Yann E. MORIN wrote:
-> > > This is a known bug in Kodi, which nobody has investigated so far.  
-[--SNIP--]
-> > So, unless we revise our position, the bug will stay. And it is a
-> > Buildroot bug, not an upstream one.
-> 
-> It is and remains an upstream bug, there is absolutely no reason to
-> not work with just .pyc/.pyo files.
-
-What I meant was: given upstream position, the failure we observe at
-runtime can be considered a Buildroot bug (although it technically is an
-upstream bug, it is politicaly a Buildroot bug) ;-)
-
-> However, since there has been apparently no movement on that side
-> upstream, then let's just add the dependency that you suggested.
-
-OK, I guess you meant have Kodi depends on .py files to be presetn (not
-the other proposal to require .py files), right?
-
-I'll cook up a patch.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 49a609d..b32fcfe 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.8.1.tar.xz.sha256sum
+-sha256	5a3722fb9302dd977c17ced4240293dc777cb716dc98c8cca63d75c27e5e3107  gstreamer-1.8.1.tar.xz
++# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.8.2.tar.xz.sha256sum
++sha256	9dbebe079c2ab2004ef7f2649fa317cabea1feb4fb5605c24d40744b90918341  gstreamer-1.8.2.tar.xz
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index 3a6dd0b..beea3b7 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GSTREAMER1_VERSION = 1.8.1
++GSTREAMER1_VERSION = 1.8.2
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = http://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.3
