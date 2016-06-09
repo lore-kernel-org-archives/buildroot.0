@@ -1,57 +1,58 @@
-From: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
-Date: Thu, 9 Jun 2016 15:12:04 -0400 (EDT)
-Subject: [Buildroot] [PATCH v4 0/2] ARM: ts4800: add basic board support
-In-Reply-To: <1465498542-7333-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
-References: <1465498542-7333-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
-Message-ID: <1983896334.306157.1465499524883.JavaMail.zimbra@savoirfairelinux.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Jun 2016 21:28:20 +0200
+Subject: [Buildroot] [PATCH 2/2] python-meson: new package
+In-Reply-To: <20160609195954.52b9a527@itchy>
+References: <1465047243-1169-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1465047243-1169-3-git-send-email-eric.le.bihan.dev@free.fr>
+ <20160608222250.6d493138@free-electrons.com>
+ <20160609195954.52b9a527@itchy>
+Message-ID: <20160609212820.6816f3db@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hello Eric,
 
-v3 included 2 patches that were integrated in u-boot-imx recently.
-In v4, this fork is selected as a custom U-boot until it's merge
-into mainline U-boot and the patches were removed from 
-board/technologic/ts4800/.
+On Thu, 9 Jun 2016 19:59:54 +0200, Eric Le Bihan wrote:
 
-Thanks,
-
-Patrick
-
------ On Jun 9, 2016, at 2:55 PM, Patrick Keroulas patrick.keroulas at savoirfairelinux.com wrote:
-
-> This patchset adds support for the TS-4800 SoM manufactured by
-> Technologic Systems based on the Freescale i.MX515 SoC.
+> It is true that all the "docs/manual/adding-packages*.txt" files refer
+> to a dedicated infrastructure, whereas what is needed here is an
+> example of Makefile using the generic-package infrastructure. There is
+> an exception to the rule, though: docs/manual/adding-packages-gettext.txt.
 > 
-> Patrick Keroulas (2):
-> ts4800-mbrboot: new package
-> configs: add defconfig for TS-4800
+> So, IMHO, a new document named "docs/manual/adding-packages-meson.txt" should 
+> fit.
+
+Sounds good.
+
+> However, I could provide a real package infrastructure named "meson-package",
+> but as stated in the discussion about adding support for Cargo [1] (the Rust
+> package manager), to provide such infrastructure, at least one package using
+> it should also be provided (it is sensible to have a working example of 
+> the infrastructure).
+
+I would not say one, but at least 4-5 packages, with a pretty good
+confidence that more packages would be added later on.
+
+> > > +
+> > > +define HOST_PYTHON_MESON_REMOVE_GUI_TOOL
+> > > +	rm -f $(HOST_DIR)/usr/bin/mesongui.py
+> > > +endef    
+> > 
+> > Not sure removing stuff from the host variant is really useful.  
 > 
-> board/technologic/ts4800/genimage.cfg | 37 ++++++++++++++++
-> board/technologic/ts4800/linux.fragment | 3 ++
-> board/technologic/ts4800/post-image.sh | 23 ++++++++++
-> configs/ts4800_defconfig | 30 +++++++++++++
-> package/Config.in | 1 +
-> package/ts4800-mbrboot/Config.in | 5 +++
-> package/ts4800-mbrboot/src/LICENSE | 25 +++++++++++
-> package/ts4800-mbrboot/src/Makefile | 21 ++++++++++
-> package/ts4800-mbrboot/src/mbrboot.c | 72 ++++++++++++++++++++++++++++++++
-> package/ts4800-mbrboot/src/mbrboot.ld | 56 +++++++++++++++++++++++++
-> package/ts4800-mbrboot/ts4800-mbrboot.mk | 22 ++++++++++
-> 11 files changed, 295 insertions(+)
-> create mode 100644 board/technologic/ts4800/genimage.cfg
-> create mode 100644 board/technologic/ts4800/linux.fragment
-> create mode 100755 board/technologic/ts4800/post-image.sh
-> create mode 100644 configs/ts4800_defconfig
-> create mode 100644 package/ts4800-mbrboot/Config.in
-> create mode 100644 package/ts4800-mbrboot/src/LICENSE
-> create mode 100644 package/ts4800-mbrboot/src/Makefile
-> create mode 100644 package/ts4800-mbrboot/src/mbrboot.c
-> create mode 100644 package/ts4800-mbrboot/src/mbrboot.ld
-> create mode 100644 package/ts4800-mbrboot/ts4800-mbrboot.mk
-> 
-> --
-> 1.9.1
+> This program needs PyQt5, which may not be installed by default by the
+> most popular GNU/Linux distributions. The user may be tempted to use
+> it: the execution will fail and this may result in an unnecessary
+> Buildroot bug report. To avoid this, I chose to remove it.
+
+We don't bother doing such cleanup steps for host packages, I really
+don't think it's worth it.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
