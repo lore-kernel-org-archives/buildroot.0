@@ -1,77 +1,75 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 9 Jun 2016 19:59:54 +0200
-Subject: [Buildroot] [PATCH 2/2] python-meson: new package
-In-Reply-To: <20160608222250.6d493138@free-electrons.com>
-References: <1465047243-1169-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1465047243-1169-3-git-send-email-eric.le.bihan.dev@free.fr>
- <20160608222250.6d493138@free-electrons.com>
-Message-ID: <20160609195954.52b9a527@itchy>
+From: daggs <daggs@gmx.com>
+Date: Thu, 9 Jun 2016 20:07:16 +0200
+Subject: [Buildroot] [PATCH] odroid-mali: New Package
+In-Reply-To: <20160609192539.01cf0a0e@itchy>
+References: <20160609074119.4288-1-daggs@gmx.com>
+ <20160609101626.6239350e@free-electrons.com>
+ <trinity-3a2b0e05-6fcc-4c6b-a7aa-5c8648bb6777-1465461336732@3capp-mailcom-bs11>,
+ <20160609192539.01cf0a0e@itchy>
+Message-ID: <trinity-d5eb958d-8ea9-4151-93a5-2cbc75d80c83-1465495636759@3capp-mailcom-bs03>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
-
-Le Wed, 8 Jun 2016 22:22:50 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
-
-> > To cross-compile a Meson-based project for the target, its package
-> > should:
-> > 
-> >  - depend on host-python-meson
-> >  - invoke the host variant of Meson with the
-> >    *--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf*
-> > option.
-> >  - invoke host variant of Ninja to perform the actual build.  
+Greetings,
+>
+> Hi all!
 > 
-> It would probably be good to write this somewhere, as it is quite
-> important to know for users of this build system. But I'm not sure
-> where: you're going to have only a host package, so no Config.in file,
-> and therefore no help text. And I'm not sure where this could be added
-> in the Buildroot manual.
-
-It is true that all the "docs/manual/adding-packages*.txt" files refer
-to a dedicated infrastructure, whereas what is needed here is an
-example of Makefile using the generic-package infrastructure. There is
-an exception to the rule, though: docs/manual/adding-packages-gettext.txt.
-
-So, IMHO, a new document named "docs/manual/adding-packages-meson.txt" should 
-fit.
-
-However, I could provide a real package infrastructure named "meson-package",
-but as stated in the discussion about adding support for Cargo [1] (the Rust
-package manager), to provide such infrastructure, at least one package using
-it should also be provided (it is sensible to have a working example of 
-the infrastructure).
- 
-> >  package/Config.in                              |  1 +
-> >  package/python-meson/Config.in                 |  9 +++++  
+> Le Thu, 9 Jun 2016 10:35:36 +0200,
+> daggs <daggs@gmx.com> a ?crit :
 > 
-> As discussed, if it's a build system, please add only a host package.
-
-OK. I'll do the same for Ninja.
-
-> > +
-> > +define HOST_PYTHON_MESON_REMOVE_GUI_TOOL
-> > +	rm -f $(HOST_DIR)/usr/bin/mesongui.py
-> > +endef  
+> > > Another thing that bothers me is that it's called "odroid-mali",
+> > > where "odroid" is the name of the board. I really find it weird
+> > > that an OpenGL implementation is board specific. It should be SoC
+> > > specific for sure, but not board-specific. If there are other
+> > > Amlogic S905 SoC boards added in Buildroot, wouldn't they be able
+> > > to use the same OpenGL implementation ?
+> > >   
+> > afaik, the implementation is vendor specific, e.g. we don't have the
+> > code, the vendor (hardkernel) provides the lib file and headers.
+> > odroid is the name of the product line, there are odroid c{0,1,1+ and
+> > 2}. also there are u and x models I think. this implementation is
+> > specific to the c2 boards I assume it can retrofitted for other
+> > boards. the main change it will need is the files url change as.
 > 
-> Not sure removing stuff from the host variant is really useful.
+> From the vendor website, we can see that odroid-c1+ and odroid-c2 have
+> the same GPU (MALI 450). So maybe the "odroidc2_fb*" files could be
+> renamed to "odroid_fb*" (if needed, tweaking according to the
+> machine could be performed in the helper script).
+I'd rather not guess something that I cannot be tested.
 
-This program needs PyQt5, which may not be installed by default by the
-most popular GNU/Linux distributions. The user may be tempted to use
-it: the execution will fail and this may result in an unnecessary
-Buildroot bug report. To avoid this, I chose to remove it.
+> 
+> > > That being said, we already have rpi-userland for RPi, but well,
+> > > RPi is the only board that will ever be made with this funky
+> > > Broadcom SoC.
+> > > 
+> > > But in the Allwinner land, we have the sunxi-mali package, which
+> > > works with various boards.
+> > > 
+> > > But maybe I'm being too annoying with this aspect: this OpenGL stuff
+> > > is usually a big mess, so it's probably fine if we have a
+> > > odroid-mali package.
+> > > 
+> > > But I would nonetheless like to have the thing split in two
+> > > packages. 
+> > one of my previous patches added all the scripts in the overlay root
+> > fs but Eric said it isn't a good idea.
+> 
+> As the display is to be set up via a service managed by the init system,
+> it seemed logical to me to provide the script and the service files in
+> a package to benefit from the helper for service installation (when
+> using an overlay, a plain copy is performed, so you will end up with a
+> systemd service file on a SysV-based system and vice-versa).
+> 
+> The sunxi-mali package does provide a service file for SysV: S80mali.
+> 
+> But maybe it will be better to provide the script, services
+> files and rules in a package named "odroid-board" or
+> "odroid-userspace" (as there is "sunix-board" and "rpi-userland").
+> 
+just did that (different name).
+I think "odroid-userspace" is a better name than all of the possibilities.
 
-> Other than that, looks good!
-
-Thanks for the review.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2016-April/158333.html
-
-Regards,
-
--- 
-ELB
+Dagg.
