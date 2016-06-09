@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 21:59:46 +0200
-Subject: [Buildroot] [PATCH v2 2/2] e2fsprogs: fix build failure with
- old glibc versions
-In-Reply-To: <1465481593-2614-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1465481593-2614-1-git-send-email-gustavo@zacarias.com.ar>
- <1465481593-2614-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160609215946.6263af25@free-electrons.com>
+Date: Thu, 9 Jun 2016 22:00:00 +0200
+Subject: [Buildroot] [PATCH v1] wiringpi: fix musl compile
+In-Reply-To: <1465499125-28312-1-git-send-email-ps.report@gmx.net>
+References: <1465499125-28312-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20160609220000.27215c1d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +12,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  9 Jun 2016 11:13:13 -0300, Gustavo Zacarias wrote:
-> In old (< 2.17) glibc versions clock_gettime() resides in librt, however
-> there's no check for this, so add a patch to fix it. Fixes:
-> http://autobuild.buildroot.net/results/25c/25c042d2862affebf552ed24bc2a58e0c484226f/
+On Thu,  9 Jun 2016 21:05:25 +0200, Peter Seiderer wrote:
+> Fixes [1]:
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>   wiringPiSPI.c:89:35: error: '_IOC_SIZEBITS' undeclared (first use in this function)
+> 
+> Patch from yocto meta-raspberrypi [2] adding include of asm/ioctl.h.
+> 
+> [1] http://autobuild.buildroot.net/results/e9d/e9d680af7eea6d6c68c8e48248b5cc5b29389baa
+> [2] https://github.com/agherzan/meta-raspberrypi/blob/master/recipes-devtools/wiringPi/wiringpi/0001-include-asm-ioctl.h-directly-for-_IOC_SIZEBITS.patch
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
-> Changes for v2: host-gettext is also required for host-e2fsprogs
+>  ...de-asm-ioctl.h-directly-for-_IOC_SIZEBITS.patch | 60 ++++++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>  create mode 100644 package/wiringpi/0002-include-asm-ioctl.h-directly-for-_IOC_SIZEBITS.patch
 
-Please submit the patch upstream. Thanks!
+Applied to master, thanks. Please submit the patch upstream as well,
+thanks!
 
 Thomas
 -- 
