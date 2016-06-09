@@ -1,7 +1,7 @@
 From: Dagg Stompler <daggs@gmx.com>
-Date: Thu,  9 Jun 2016 10:41:19 +0300
-Subject: [Buildroot] [PATCH] odroid-mali: New Package
-Message-ID: <20160609074119.4288-1-daggs@gmx.com>
+Date: Thu,  9 Jun 2016 10:46:43 +0300
+Subject: [Buildroot] [PATCH 1/2] libamcodec: New Package
+Message-ID: <20160609074644.4976-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,322 +10,170 @@ To: buildroot@busybox.net
 
 Signed-off-by: Dagg Stompler <daggs@gmx.com>
 ---
- package/Config.in                        |   1 +
- package/odroid-mali/10-odroidc2_fb.rules |   8 ++
- package/odroid-mali/Config.in            |  20 +++++
- package/odroid-mali/S50odroidc2_fb       |  20 +++++
- package/odroid-mali/odroid-mali.hash     |   3 +
- package/odroid-mali/odroid-mali.mk       |  56 ++++++++++++++
- package/odroid-mali/odroidc2_fb.service  |  14 ++++
- package/odroid-mali/odroidc2_init_fb.sh  | 125 +++++++++++++++++++++++++++++++
- 8 files changed, 247 insertions(+)
- create mode 100644 package/odroid-mali/10-odroidc2_fb.rules
- create mode 100644 package/odroid-mali/Config.in
- create mode 100644 package/odroid-mali/S50odroidc2_fb
- create mode 100644 package/odroid-mali/odroid-mali.hash
- create mode 100644 package/odroid-mali/odroid-mali.mk
- create mode 100644 package/odroid-mali/odroidc2_fb.service
- create mode 100644 package/odroid-mali/odroidc2_init_fb.sh
+ package/Config.in                                  |  1 +
+ .../libamcodec/0001-fix_flags_in_makefile.patch    | 70 ++++++++++++++++++++++
+ package/libamcodec/Config.in                       | 13 ++++
+ package/libamcodec/libamcodec.hash                 |  2 +
+ package/libamcodec/libamcodec.mk                   | 33 ++++++++++
+ 5 files changed, 119 insertions(+)
+ create mode 100644 package/libamcodec/0001-fix_flags_in_makefile.patch
+ create mode 100644 package/libamcodec/Config.in
+ create mode 100644 package/libamcodec/libamcodec.hash
+ create mode 100644 package/libamcodec/libamcodec.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 0cb2e7e..de9573e 100644
+index de9573e..1af5d6e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -420,6 +420,7 @@ endif
- 	source "package/nvidia-driver/Config.in"
- 	source "package/nvidia-tegra23/Config.in"
- 	source "package/nvme/Config.in"
-+	source "package/odroid-mali/Config.in"
- 	source "package/ofono/Config.in"
- 	source "package/ola/Config.in"
- 	source "package/on2-8170-modules/Config.in"
-diff --git a/package/odroid-mali/10-odroidc2_fb.rules b/package/odroid-mali/10-odroidc2_fb.rules
+@@ -1087,6 +1087,7 @@ endmenu
+ 
+ menu "Multimedia"
+ 	source "package/bitstream/Config.in"
++	source "package/libamcodec/Config.in"
+ 	source "package/libass/Config.in"
+ 	source "package/libbluray/Config.in"
+ 	source "package/libdcadec/Config.in"
+diff --git a/package/libamcodec/0001-fix_flags_in_makefile.patch b/package/libamcodec/0001-fix_flags_in_makefile.patch
 new file mode 100644
-index 0000000..e0374af
+index 0000000..e64c4d7
 --- /dev/null
-+++ b/package/odroid-mali/10-odroidc2_fb.rules
-@@ -0,0 +1,8 @@
-+# Mali Rules
-+KERNEL=="mali",SUBSYSTEM=="misc",MODE="0777"
-+KERNEL=="ump",SUBSYSTEM=="ump",MODE="0777"
++++ b/package/libamcodec/0001-fix_flags_in_makefile.patch
+@@ -0,0 +1,70 @@
++--- a/amcodec/Makefile	2016-06-02 12:06:53.000000000 +0300
+++++ b/amcodec/Makefile	2016-06-02 12:07:34.000000000 +0300
++@@ -27,12 +27,12 @@ TARGET?=libamcodec.so
++ 
++ DIRS=audio_ctl/ codec/
++ 
++-LDFLAGS=  -O2  -L$(LIB_DIR)  -lm -lc  -shared -Wl,--shared -Wl,-soname,$(TARGET)$(LIB_VERSION)
+++override LDFLAGS+=  -O2  -L$(LIB_DIR)  -lm -lc  -shared -Wl,--shared -Wl,-soname,$(TARGET)$(LIB_VERSION)
++ 
++ #INCLUDE=$(DIRS:%/=-I$(SRC)/%/include)
++ INCLUDE=${SRCTREE}/include/ 
++ #CFLAGS=-O0  -gdwarf-2  -g
++-CFLAGS=-O2 -g  -I$(SRC)/include  -I${SRCTREE}/audio_ctl -I${SRCTREE}/codec -I${SRCTREE}/../amadec/include -fPIC
+++override CFLAGS+=-O2 -g  -I$(SRC)/include  -I${SRCTREE}/audio_ctl -I${SRCTREE}/codec -I${SRCTREE}/../amadec/include -fPIC
++ 
++ 
++ 
++--- a/amavutils/Makefile	2016-06-02 11:48:11.000000000 +0300
+++++ b/amavutils/Makefile	2016-06-02 11:46:14.000000000 +0300
++@@ -8,13 +8,13 @@ TARGET=libamavutils.so
++ 
++ INSTALL_DIR=${LIB_DIR}/aml_libs
++ 
++-LDFLAGS += -shared -lpthread -lm -lrt
+++override LDFLAGS += -shared -lpthread -lm -lrt
++ 
++ TOPDIR=$(shell pwd)
++ SRC?=$(TOPDIR)
++ 
++-CFLAGS+=-O2 -fPIC -g
++-CFLAGS+=-I$(SRC) -I$(SRC)/include -I$(SRC)/../amcodec/include -L${LIB_DIR} -I$(HEADERS_DIR)
+++override CFLAGS+=-O2 -fPIC -g
+++override CFLAGS+=-I$(SRC) -I$(SRC)/include -I$(SRC)/../amcodec/include -L${LIB_DIR} -I$(HEADERS_DIR)
++ 
++ 
++ 
++--- a/amadec/Makefile	2016-06-02 12:03:48.000000000 +0300
+++++ b/amadec/Makefile	2016-06-02 12:04:11.000000000 +0300
++@@ -10,14 +10,14 @@ TARGET=libamadec.so
++ 
++ INSTALL_DIR=$(LIB_DIR)/aml_libs
++ 
++-LDFLAGS += -shared -lpthread -lm -lasound -lrt
+++override LDFLAGS += -shared -lpthread -lm -lasound -lrt
++ 
++ TOPDIR=$(shell pwd)
++ SRC?=$(TOPDIR)
++ 
++-CFLAGS+=-O2 -fPIC -g
++-CFLAGS+=-I$(SRC) -I$(SRC)/include -I$(SRC)/../amavutils/include -I$(SRC)/../amplayer/player/include -I${HEADERS_DIR} -L${LIB_DIR}
++-CFLAGS+=-DALSA_OUT
+++override CFLAGS+=-O2 -fPIC -g
+++override CFLAGS+=-I$(SRC) -I$(SRC)/include -I$(SRC)/../amavutils/include -I$(SRC)/../amplayer/player/include -I${HEADERS_DIR} -L${LIB_DIR}
+++override CFLAGS+=-DALSA_OUT
++ 
++ ifdef DOLBY_UDC
++     CFLAGS+=-DDOLBY_USE_ARMDEC
++--- a/amcodec/rules.mk	2016-06-04 15:49:31.000000000 +0300
+++++ b/amcodec/rules.mk	2016-06-04 15:49:41.000000000 +0300
++@@ -2,8 +2,8 @@
++ 
++ 
++ dir_mk=$(Q)echo "MAKE $(1)";\
++-	$(MAKE) -C ${1} -f ${SRCTREE}/depends.mk;\
++-	$(MAKE) -C ${1} -f ${SRCTREE}/dir.mk
+++	$(MAKE) -C ${1} -f ${SRCTREE}/depends.mk CFLAGS="$(CFLAGS)";\
+++	$(MAKE) -C ${1} -f ${SRCTREE}/dir.mk CFLAGS="$(CFLAGS)"
++ 
++ c_mk=$(Q)echo "CC  $(1)";\
++ 		$(CC) $(CFLAGS)  $(EXT_CFLAGS) -c  $(1) 
+diff --git a/package/libamcodec/Config.in b/package/libamcodec/Config.in
+new file mode 100644
+index 0000000..52778ba
+--- /dev/null
++++ b/package/libamcodec/Config.in
+@@ -0,0 +1,13 @@
++comment "libamcodec needs a toolchain w/ threads"
++	depends on BR2_arm || BR2_aarch64
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 +
-+# Misc video rules
-+KERNEL=="event*", SUBSYSTEM=="input", MODE="0777"
-+KERNEL=="CEC", MODE="0777"
-+KERNEL=="am*", MODE="0666"
-diff --git a/package/odroid-mali/Config.in b/package/odroid-mali/Config.in
-new file mode 100644
-index 0000000..ea93159
---- /dev/null
-+++ b/package/odroid-mali/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_ODROID_MALI
-+	bool "odroid-mali"
-+	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	select BR2_PACKAGE_FBSET
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_aarch64 || BR2_arm
++config BR2_PACKAGE_LIBAMCODEC
++	bool "libamcodec"
++	depends on BR2_arm || BR2_aarch64
++	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
++	select BR2_PACKAGE_ALSA_LIB
 +	help
-+	  Install the ARM Mali drivers for odroidc2 based systems.
++	    Interface library for Amlogic media codecs
 +
-+	  https://github.com/mdrjr/c2_mali
-+
-+if BR2_PACKAGE_ODROID_MALI
-+config BR2_PACKAGE_PROVIDES_LIBEGL
-+	default "odroid-mali"
-+
-+config BR2_PACKAGE_PROVIDES_LIBGLES
-+	default "odroid-mali"
-+endif
-diff --git a/package/odroid-mali/S50odroidc2_fb b/package/odroid-mali/S50odroidc2_fb
++	    https://github.com/mdrjr/c2_aml_libs.git
+diff --git a/package/libamcodec/libamcodec.hash b/package/libamcodec/libamcodec.hash
 new file mode 100644
-index 0000000..2aae59d
+index 0000000..3a0055f
 --- /dev/null
-+++ b/package/odroid-mali/S50odroidc2_fb
-@@ -0,0 +1,20 @@
-+#!/bin/sh
-+#
-+# Set up frame buffer
-+#
-+
-+case "$1" in
-+    start)
-+        echo "Setting up display..."
-+        /usr/sbin/odroidc2_init_fb.sh
-+        ;;
-+    stop)
-+        ;;
-+    restart|reload)
-+        ;;
-+    *)
-+        echo "Usage: $0 {start|stop|restart}"
-+        exit 1
-+esac
-+
-+exit $?
-diff --git a/package/odroid-mali/odroid-mali.hash b/package/odroid-mali/odroid-mali.hash
++++ b/package/libamcodec/libamcodec.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 44580255c63bde1544b1376bc8d33f73ef0c634afda5065455a01b77f6e2729b  libamcodec-ed1d8b8c54b05c1a02a8ee44c59744e4cbed3d8d.tar.gz
+diff --git a/package/libamcodec/libamcodec.mk b/package/libamcodec/libamcodec.mk
 new file mode 100644
-index 0000000..7e6859a
+index 0000000..1e0bcb6
 --- /dev/null
-+++ b/package/odroid-mali/odroid-mali.hash
-@@ -0,0 +1,3 @@
-+# locally computed hash
-+sha256 122fe75fc105fc2f7c00b7f075deca567f6a3e56b5c128b00cf3096073b96e66  odroid-mali-4a34d59cd6120db67dc11023344e382afbaf28da.tar.gz
-+sha256 29d98ed4b8694b860d9289787c416faa847b0de26d36580a53add1752b4c2e9a  odroid-mali-46fe49f37e3506c6205ad8c50980eca9bfff11e3.tar.gz
-diff --git a/package/odroid-mali/odroid-mali.mk b/package/odroid-mali/odroid-mali.mk
-new file mode 100644
-index 0000000..4ee546a
---- /dev/null
-+++ b/package/odroid-mali/odroid-mali.mk
-@@ -0,0 +1,56 @@
++++ b/package/libamcodec/libamcodec.mk
+@@ -0,0 +1,33 @@
 +################################################################################
 +#
-+# odroid-mali
++# libamcodec
 +#
 +################################################################################
 +
-+ifeq ($(BR2_aarch64),y)
-+ODROID_MALI_VERSION = 4a34d59cd6120db67dc11023344e382afbaf28da
-+ODROID_MALI_LIBS_INSTALL_ARCH=mali_libs
-+else
-+ODROID_MALI_VERSION = 46fe49f37e3506c6205ad8c50980eca9bfff11e3
-+ODROID_MALI_LIBS_INSTALL_ARCH=32bit_libs
-+endif
++LIBAMCODEC_VERSION = ed1d8b8c54b05c1a02a8ee44c59744e4cbed3d8d
++LIBAMCODEC_SITE = $(call github,mdrjr,c2_aml_libs,$(LIBAMCODEC_VERSION))
++LIBAMCODEC_DEPENDENCIES = alsa-lib
 +
-+ODROID_MALI_SITE = $(call github,mdrjr,c2_mali,$(ODROID_MALI_VERSION))
-+ODROID_MALI_LICENSE = hardkernel
-+ODROID_MALI_LICENSE_FILES = README.md
-+
-+ODROID_MALI_INSTALL_STAGING = YES
-+ODROID_MALI_PROVIDES = libegl libgles
-+
-+ifeq ($(BR2_PACKAGE_EUDEV),y)
-+	ODROID_MALI_INSTALL_UDEV_RULES = $(INSTALL) -D -m 0644 package/odroid-mali/10-odroidc2_fb.rules $(TARGET_DIR)/etc/udev/rules.d/10-odroidc2_fb.rules
-+else
-+	ODROID_MALI_INSTALL_UDEV_RULES =
-+endif
-+
-+define ODROID_MALI_INSTALL_LIBS
-+	mkdir -p $(1)/lib/
-+	cp -aRP $(@D)/fbdev/$(ODROID_MALI_LIBS_INSTALL_ARCH)/*.so* $(1)/lib/
++# This package uses the M_PREFIX variable to construct the header and
++# # library paths used when compiling
++define LIBAMCODEC_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/amavutils M_PREFIX="$(STAGING_DIR)/usr"
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/amadec M_PREFIX="$(STAGING_DIR)/usr"
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/amcodec PREFIX="$(STAGING_DIR)"
 +endef
 +
-+define ODROID_MALI_INSTALL_STAGING_CMDS
-+	$(call ODROID_MALI_INSTALL_LIBS,$(STAGING_DIR)/usr)
-+	mkdir -p $(@D)/usr/include $(@D)/usr/lib/pkgconfig
-+	cp -aRP $(@D)/fbdev/mali_headers/* $(STAGING_DIR)/usr/include
-+	cp -aRP $(@D)/pkgconfig/* $(STAGING_DIR)/usr/lib/pkgconfig
++define LIBAMCODEC_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/amavutils/libamavutils.so $(STAGING_DIR)/usr/lib/libamavutils.so
++	$(INSTALL) -D -m 0555 $(@D)/amadec/libamadec.so $(STAGING_DIR)/usr/lib/libamadec.so
++	$(INSTALL) -D -m 0555 $(@D)/amcodec/libamcodec.so $(STAGING_DIR)/usr/lib/libamcodec.so
++	mkdir -p $(STAGING_DIR)/usr/include/amcodec
++	cp -rf $(@D)/amcodec/include/* $(STAGING_DIR)/usr/include/amcodec
 +endef
 +
-+define ODROID_MALI_INSTALL_TARGET_CMDS
-+	$(call ODROID_MALI_INSTALL_LIBS,$(TARGET_DIR)/usr)
-+	$(INSTALL) -D -m 0755 package/odroid-mali/odroidc2_init_fb.sh $(TARGET_DIR)/usr/sbin/odroidc2_init_fb.sh
-+	$(ODROID_MALI_INSTALL_UDEV_RULES)
++define LIBAMCODEC_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/amavutils/libamavutils.so $(TARGET_DIR)/usr/lib/libamavutils.so
++	$(INSTALL) -D -m 0555 $(@D)/amadec/libamadec.so $(TARGET_DIR)/usr/lib/libamadec.so
++	$(INSTALL) -D -m 0555 $(@D)/amcodec/libamcodec.so $(TARGET_DIR)/usr/lib/libamcodec.so
 +endef
-+
-+define ODROID_MALI_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 package/odroid-mali/odroidc2_fb.service $(TARGET_DIR)/usr/lib/systemd/system/odroidc2_fb.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -fs ../../../../usr/lib/systemd/system/odroidc2_fb.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/odroidc2_fb.service
-+endef
-+
-+define ODROID_MALI_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/odroid-mali/S50odroidc2_fb $(TARGET_DIR)/etc/init.d/S50odroidc2_fb
-+endef
-+
++									    
 +$(eval $(generic-package))
-diff --git a/package/odroid-mali/odroidc2_fb.service b/package/odroid-mali/odroidc2_fb.service
-new file mode 100644
-index 0000000..5a0b508
---- /dev/null
-+++ b/package/odroid-mali/odroidc2_fb.service
-@@ -0,0 +1,14 @@
-+[Unit]
-+Description="ODROID-C2 Amlogic Display Configuration"
-+
-+DefaultDependencies=no
-+Requires=sysinit.target
-+After=sysinit.target
-+
-+[Service]
-+Type=oneshot
-+ExecStart=/usr/bin/odroidc2_init_fb.sh
-+
-+[Install]
-+WantedBy=basic.target
-+WantedBy=sysinit.target
-diff --git a/package/odroid-mali/odroidc2_init_fb.sh b/package/odroid-mali/odroidc2_init_fb.sh
-new file mode 100644
-index 0000000..c4a4c81
---- /dev/null
-+++ b/package/odroid-mali/odroidc2_init_fb.sh
-@@ -0,0 +1,125 @@
-+#!/bin/sh
-+
-+for x in $(cat /proc/cmdline); do
-+        case ${x} in
-+                m_bpp=*) export bpp=${x#*=} ;;
-+                hdmimode=*) export mode=${x#*=} ;;
-+        esac
-+done
-+
-+HPD_STATE=/sys/class/amhdmitx/amhdmitx0/hpd_state
-+DISP_CAP=/sys/class/amhdmitx/amhdmitx0/disp_cap
-+DISP_MODE=/sys/class/display/mode
-+
-+echo $mode > $DISP_MODE
-+
-+common_display_setup() {
-+        M="0 0 $(($X - 1)) $(($Y - 1))"
-+        Y_VIRT=$(($Y * 2))
-+        fbset -fb /dev/fb0 -g $X $Y $X $Y_VIRT $bpp
-+        echo $mode > /sys/class/display/mode
-+        echo 0 > /sys/class/graphics/fb0/free_scale
-+        echo 1 > /sys/class/graphics/fb0/freescale_mode
-+        echo $M > /sys/class/graphics/fb0/free_scale_axis
-+        echo $M > /sys/class/graphics/fb0/window_axis
-+
-+        echo 0 > /sys/class/graphics/fb1/free_scale
-+        echo 1 > /sys/class/graphics/fb1/freescale_mode
-+        if [ "$bpp" = "32" ]; then
-+            echo d01068b4 0x7fc0 > /sys/kernel/debug/aml_reg/paddr
-+        fi
-+}
-+
-+case $mode in
-+		480*)
-+			export X=720
-+			export Y=480
-+			;;
-+		576*)
-+			export X=720
-+			export Y=576
-+			;;
-+		720p*)
-+			export X=1280
-+			export Y=720
-+			;;
-+		1080*)
-+			export X=1920
-+			export Y=1080
-+			;;
-+		2160p*)
-+			export X=3840
-+			export Y=2160
-+			;;
-+		smpte24hz*)
-+			export X=3840
-+			export Y=2160
-+			;;
-+		640x480p60hz*)
-+			export X=640
-+			export Y=480
-+			;;
-+		800x480p60hz*)
-+			export X=800
-+			export Y=480
-+			;;
-+		800x600p60hz*)
-+			export X=800
-+			export Y=600
-+			;;
-+		1024x600p60hz*)
-+			export X=1024
-+			export Y=600
-+			;;
-+		1024x768p60hz*)
-+			export X=1024
-+			export Y=768
-+			;;
-+		1280x800p60hz*)
-+			export X=1280
-+			export Y=800
-+			;;
-+		1280x1024p60hz*)
-+			export X=1280
-+			export Y=1024
-+			;;
-+		1360x768p60hz*)
-+			export X=1360
-+			export Y=768
-+			;;
-+		1440x900p60hz*)
-+			export X=1440
-+			export Y=900
-+			;;
-+		1600x900p60hz*)
-+			export X=1600
-+			export Y=900
-+			;;
-+		1680x1050p60hz*)
-+			export X=1680
-+			export Y=1050
-+			;;
-+		1920x1200p60hz*)
-+			export X=1920
-+			export Y=1200
-+			;;
-+		2560x1080p60hz*)
-+			export X=2560
-+			export Y=1080
-+			;;
-+		2560x1440p60hz*)
-+			export X=2560
-+			export Y=1440
-+			;;
-+		2560x1600p60hz*)
-+			export X=2560
-+			export Y=1600
-+			;;
-+esac
-+
-+common_display_setup
-+
-+# Console unblack
-+echo 0 > /sys/class/graphics/fb0/blank
-+echo 0 > /sys/class/graphics/fb1/blank
-+
 -- 
 2.8.3
