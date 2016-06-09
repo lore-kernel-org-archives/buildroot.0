@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 10:44:25 +0200
-Subject: [Buildroot] [PATCH] python-u-msgpack: new package
-In-Reply-To: <1462520243-1315-1-git-send-email-yegorslists@googlemail.com>
-References: <1462520243-1315-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160609104425.5a9ccb3d@free-electrons.com>
+Date: Thu, 9 Jun 2016 10:47:40 +0200
+Subject: [Buildroot] [PATCH 1/2] libamcodec: New Package
+In-Reply-To: <trinity-f61c5da6-a1c0-4fa7-83f2-52b0c53d0a9c-1465461483817@3capp-mailcom-bs11>
+References: <20160609074644.4976-1-daggs@gmx.com>
+ <20160609101839.381a8a56@free-electrons.com>
+ <trinity-f61c5da6-a1c0-4fa7-83f2-52b0c53d0a9c-1465461483817@3capp-mailcom-bs11>
+Message-ID: <20160609104740.58f55e49@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +14,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  6 May 2016 09:37:23 +0200, yegorslists at googlemail.com wrote:
+On Thu, 9 Jun 2016 10:38:03 +0200, daggs wrote:
 
-> +PYTHON_U_MSGPACK_VERSION = 2.1
-> +PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
-> +PYTHON_U_MSGPACK_SITE = https://pypi.python.org/packages/b7/8d/791f037a0954f98a8eceb09c7c14babb97db0a81c985108bb21939b801eb
-> +PYTHON_U_MSGPACK_SETUP_TYPE = distutils
-> +PYTHON_U_MSGPACK_LICENSE = MIT
+> > Has the license situation been resolved? I know you contacted upstream
+> > about his. Any feedback?
+> >   
+> not yet, I can try to contact the dev in charge again.
 
-I've added umsgpack.py as a license file. Yes it's a bit annoying to
-have basically the entire source as a license file, but it's better
-than nothing. If you could suggest upstream to add a LICENSE file, it
-would be even better.
+Maybe add a:
 
-Patch applied with this change.
+LIBAMCODEC_LICENSE = Unclear
 
-Thanks!
+for the moment ?
+
+> > > +# This package uses the M_PREFIX variable to construct the header and  
+> > 
+> > M_PREFIX or PREFIX
+> > 
+> > (you use PREFIX when building in the amcodec subdirectory)
+> >   
+> update the comment you mean?
+
+Yes.
+
+Thanks,
 
 Thomas
 -- 
