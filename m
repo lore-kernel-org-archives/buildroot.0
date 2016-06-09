@@ -1,178 +1,79 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 9 Jun 2016 22:03:14 +0200
-Subject: [Buildroot] [PATCH] RFC: adding customizable linux logo
-In-Reply-To: <20160602220521.GB3714@free.fr>
-References: <1454454342-27717-1-git-send-email-angelo.compagnucci@gmail.com>
- <20160601220300.5f38a5a2@free-electrons.com> <20160602220521.GB3714@free.fr>
-Message-ID: <CA+TH9V=vZLn=0ubRy7YZrXnakN_=wG2X0PfTqHEGss87ocxLFw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Jun 2016 22:04:35 +0200
+Subject: [Buildroot] [git commit] configs/arm_juno: add support for Juno r2
+Message-ID: <20160609200443.10DE27FA96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=234d81bf333b7eef52d009b3ecc25cfd7b484b29
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-2016-06-03 0:05 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
-> Angelo, Thomas, All,
->
-> On 2016-06-01 22:03 +0200, Thomas Petazzoni spake thusly:
->> Hello Angelo,
->>
->> It's been a while since you sent this patch. I don't know if this
->> feature is important enough to be integrated, but I'll do some review
->> anyway.
->>
->> On Wed,  3 Feb 2016 00:05:42 +0100, Angelo Compagnucci wrote:
->>
->> > diff --git a/linux/Config.ext.in b/linux/Config.ext.in
->> > index 755c23b..b752c9c 100644
->> > --- a/linux/Config.ext.in
->> > +++ b/linux/Config.ext.in
->> > @@ -1,5 +1,13 @@
->> >  menu "Linux Kernel Extensions"
->> >
->> > +# Custom logo
->> > +config BR2_LINUX_KERNEL_EXT_CUSTOMLOGO
->> > +   select BR2_PACKAGE_CUSTOMLOGO
->>
->> I think this customlogo package is not needed.
->
-> Agreed. Just make the logo path an option directly here:
->
->     config BR2_LINUX_KERNEL_EXT_CUSTOMLOGO
->         bool "Custom logo"
->
->     config BR2_LINUX_KERNEL_EXT_CUSTOMLOGO_DIR
->         bool "directory with logo file(s)"
->         help
->           Directory with all the logo files to copy. Logo files must be
->           named:
->             logo_linux_mono.pbm         for the B&W version
->             logo_linux_vga16.ppm        for the 16-color version
->             logo_linux_clut224.ppm      for the 224-color version
->
-> And then, in the .mk file (see below)...
->
->> > +   bool "Custom logo"
->> > +   help
->> > +     change linux boot logo with your own graphics.
->> > +     Can be used as an early bootsplash.
->>
->> This help text needs to be improved a bit.
->>
->> > +
->> >  # Xenomai
->> >  config BR2_LINUX_KERNEL_EXT_XENOMAI
->> >     bool "Adeos/Xenomai Real-time patch"
->> > diff --git a/linux/linux-ext-customlogo.mk b/linux/linux-ext-customlogo.mk
->> > new file mode 100644
->> > index 0000000..68c613a
->> > --- /dev/null
->> > +++ b/linux/linux-ext-customlogo.mk
->> > @@ -0,0 +1,11 @@
->> > +################################################################################
->> > +#
->> > +# Custom logo
->> > +#
->> > +################################################################################
->> > +
->> > +LINUX_EXTENSIONS += customlogo
->> > +
->> > +define CUSTOMLOGO_PREPARE_KERNEL
->>
->> You can do the conversion from the original image format to .ppm here
->> directly, and therefore avoid the need for the customlogo package.
->
-> Or better yet, expect the user to provide pre-rendered images to start
-> with (see at the end)...
->
->> > +   cp $(CUSTOMLOGO_DIR)/logo_linux_clut224.ppm $(LINUX_DIR)/drivers/video/logo/logo_linux_clut224.ppm
->
-> ... and in the .mk file, just copy all logo files:
->
->     cp $(BR2_LINUX_KERNEL_EXT_CUSTOMLOGO_DIR)/logo_linux_*.p{p,b}m \
->        $(LINUX_DIR)/drivers/video/logo/
->
->> > +endef
->> > diff --git a/package/Config.in b/package/Config.in
->> > index 7ced9d4..1552f32 100644
->> > --- a/package/Config.in
->> > +++ b/package/Config.in
->> > @@ -214,6 +214,7 @@ comment "Sounds"
->> >
->> >  comment "Themes"
->> >     source "package/gtk2-engines/Config.in"
->> > +   source "package/customlogo/Config.in"
->> >
->> >  endmenu
->> >
->> > diff --git a/package/customlogo/Config.in b/package/customlogo/Config.in
->> > new file mode 100644
->> > index 0000000..f8502da
->> > --- /dev/null
->> > +++ b/package/customlogo/Config.in
->> > @@ -0,0 +1,16 @@
->> > +config BR2_PACKAGE_CUSTOMLOGO
->> > +   bool "Custom logo"
->> > +   help
->> > +     Change linux boot logo with your own graphics.
->> > +     Can be used as an early bootsplash.
->> > +
->> > +     *REQUIRES* a pre installed imagemagick on the host system.
->>
->> I don't think this is acceptable. You probably should add a
->> host-imagemagick package, and make the linux package depend on it when
->> a custom logo is selected.
->
-> I don't think that adding host-imagemagick just for this is sane. Let
-> the user provide a ppm image.
->
->> In addition, when a custom logo is selected, you probably want to tweak
->> the Linux kernel configuration to make sure it has the relevant options.
->
-> Tweak or check? Or do we care?
+Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/arm/juno/readme.txt  | 17 ++++++++++++++++-
+ configs/arm_juno_defconfig |  2 +-
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-A little recap:
-
-a) I should rework the custom logo package and logic, no problem here.
-b) Relaying on user pre-installed imagemagick it's not allowed by
-buildroot policies but I don't want to build the complete
-host-imagemagick only for converting a ppm.
-c) IMHO, the complex part here is to convert correctly an image to a
-kernel suitable ppm (not so trivial): let a user preparing his own ppm
-it's not advisable and prone to errors.
-
-So if b) and c) are not acceptable for buildroot policies, please
-discard this patch.
-
-Sincerely, Angelo
-
->
-> Regards,
-> Yann E. MORIN.
->
->> Thanks!
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Free Electrons
->> Embedded Linux, Kernel and Android engineering
->> http://free-electrons.com
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+diff --git a/board/arm/juno/readme.txt b/board/arm/juno/readme.txt
+index 52fabf9..9314bb0 100644
+--- a/board/arm/juno/readme.txt
++++ b/board/arm/juno/readme.txt
+@@ -6,6 +6,7 @@ Intro
+ These instructions apply to all models of the ARM Juno:
+   - Juno r0 (does not support PCIe)
+   - Juno r1 (supports PCIe)
++  - Juno r2 (Big Cluster with A72)
+ 
+ Buildroot will generate the kernel image, device tree blob and a
+ minimal root filesystem.
+@@ -41,6 +42,7 @@ After building, you should obtain this tree:
+     +-- rootfs.tar
+     +-- juno.dtb (if Juno r0 is used)
+     +-- juno-r1.dtb (if Juno r1 is used)
++    +-- juno-r2.dtb (if Juno r2 is used)
+     +-- Image
+ 
+ Preparing your rootfs
+@@ -89,6 +91,19 @@ NOR3LOAD: 00000000               ;Image Load Address
+ NOR3ENTRY: 00000000              ;Image Entry Point
+ ......
+ 
++Configure *.dtb in the boot configuration for Juno r2
++=====================================================
++
++SITE1/HBI0262D/images.txt
++......
++NOR3UPDATE: AUTO                 ;Image Update:NONE/AUTO/FORCE
++NOR3ADDRESS: 0x02000000          ;Image Flash Address
++NOR3FILE: \SOFTWARE\juno-r2.dtb  ;Image File Name
++NOR3NAME: board.dtb              ;Specify target filename to preserve file extension
++NOR3LOAD: 00000000               ;Image Load Address
++NOR3ENTRY: 00000000              ;Image Entry Point
++......
++
+ Installing kernel image and DTB
+ ===============================
+ 
+@@ -97,7 +112,7 @@ Installing kernel image and DTB
+    A mass storage device should appear in your desktop.
+ 3. Open the software/ folder
+ 4. Copy the 'Image' file to software/
+-5. Copy the 'juno-r1.dtb' (r1) or the 'juno.dtb' (r0) file to software/
++5. Copy the 'juno-r1.dtb' (r1), 'juno.dtb' (r0) or juno-r2.dtb (r2) file to software/
+ 6. Press the red button in the front pannel of ARM Juno
+ 
+ At this time, the board will erase the Flash entry for each new item and
+diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
+index 87b6374..5ce882c 100644
+--- a/configs/arm_juno_defconfig
++++ b/configs/arm_juno_defconfig
+@@ -11,4 +11,4 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-4.3-2015.11"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arm/juno/linux-juno-defconfig"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1 arm/juno-r2"
