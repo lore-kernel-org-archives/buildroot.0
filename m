@@ -1,60 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 22:00:27 +0200
-Subject: [Buildroot] [git commit] package/mpd: fetch upstream patch to fix
-	GCC 6 issue
-Message-ID: <20160609200442.F365D802F8@busybox.osuosl.org>
+Date: Thu, 9 Jun 2016 22:05:28 +0200
+Subject: [Buildroot] [git commit] configs/arm_juno: use 4.6 mainline kernel
+Message-ID: <20160609200553.7D9FA820FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=725ff29fb7290de6467f9df462b48378552410a6
+commit: https://git.buildroot.net/buildroot/commit/?id=0924208839336f1a1bb29eb1a627005ba6b9065d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fetch a patch from upstream to fix a build issue with GCC 6:
-
-'''
-In file included from /home/joerg/Development/git/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/include/c++/6.1.0/bits/stl_algo.h:59:0,
-                 from /home/joerg/Development/git/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/include/c++/6.1.0/algorithm:62,
-                 from ./src/queue/IdTable.hxx:25,
-                 from ./src/queue/Queue.hxx:24,
-                 from src/queue/Playlist.hxx:23,
-                 from src/Partition.hxx:23,
-                 from src/Instance.cxx:22:
-/home/joerg/Development/git/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/include/c++/6.1.0/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
- #include_next <stdlib.h>
-'''
-
-Bug report: https://bugs.musicpd.org/view.php?id=4524
-Fetch from: aa5d05eaa4d482aa8f8df954335d0aba151eeff9
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+[Thomas: use BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mpd/mpd.hash | 1 +
- package/mpd/mpd.mk   | 3 +++
- 2 files changed, 4 insertions(+)
+ configs/arm_juno_defconfig | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 2d35aae..f817a3a 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,2 +1,3 @@
- # Locally calculated after checking pgp signature
- sha256  0cb9a223894b038ce966ce6d651d9b3ea3bdc7d7b9bec8d1e9e7e091cbc29b8b  mpd-0.19.15.tar.xz
-+sha256  cb9a31889a3d01f373ad154dc4c0d13ca866d69bc02b3acd9f18727a756e78cb  aa5d05eaa4d482aa8f8df954335d0aba151eeff9.patch
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 6247d15..9b054ff 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -13,6 +13,9 @@ MPD_LICENSE = GPLv2+
- MPD_LICENSE_FILES = COPYING
- MPD_AUTORECONF = YES
- 
-+# Fix GCC 6 issue (https://bugs.musicpd.org/view.php?id=4524)
-+MPD_PATCH = https://github.com/MaxKellermann/MPD/commit/aa5d05eaa4d482aa8f8df954335d0aba151eeff9.patch
-+
- # Some options need an explicit --disable or --enable
- 
- # Zeroconf support depends on libdns_sd from avahi.
+diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
+index 5ce882c..75ed63c 100644
+--- a/configs/arm_juno_defconfig
++++ b/configs/arm_juno_defconfig
+@@ -1,13 +1,11 @@
+ BR2_aarch64=y
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.2.2"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
+ BR2_TARGET_GENERIC_HOSTNAME="juno-buildroot"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS Juno by Buildroot"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="http://git.linaro.org/kernel/linux-linaro-tracking.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-4.3-2015.11"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v4.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arm/juno/linux-juno-defconfig"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
