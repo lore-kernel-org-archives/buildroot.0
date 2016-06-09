@@ -1,47 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jun 2016 00:15:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: select libvpx/x264
- for transcoding support
-In-Reply-To: <1463505862-3783-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1463505862-3783-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160610001520.62c9432e@free-electrons.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Thu, 9 Jun 2016 17:59:35 -0400
+Subject: [Buildroot] [PATCH] RFC: adding customizable linux logo
+In-Reply-To: <CA+TH9V=vZLn=0ubRy7YZrXnakN_=wG2X0PfTqHEGss87ocxLFw@mail.gmail.com>
+References: <1454454342-27717-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20160601220300.5f38a5a2@free-electrons.com> <20160602220521.GB3714@free.fr>
+ <CA+TH9V=vZLn=0ubRy7YZrXnakN_=wG2X0PfTqHEGss87ocxLFw@mail.gmail.com>
+Message-ID: <CA+-urNQLEivZ6Qm6wzKYA3GNE9eEu_5aHC25Yuf9M_B1Fqfy4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Angelo and all
 
-On Tue, 17 May 2016 19:24:22 +0200, Bernd Kuhls wrote:
-> ffmpeg needs libvpx and x264 to support transcoding.
-> 
-> Fixes this error message from tvheadend log:
-> 2016-05-14 22:52:21.962 [  ERROR]:transcode: 0006: Unable to find libx264 encoder
-> 2016-05-14 22:52:21.962 [   INFO]:transcode: 0006: 1:H264 ==> Passthrough
-> 2016-05-14 22:52:21.963 [   INFO]:transcode: 0006: 2:MPEG2AUDIO ==> AAC (aac)
-> 
-> or
-> 
-> 2016-05-14 22:58:01.529 [  ERROR]:transcode: 0009: Unable to find libvpx encoder
-> 2016-05-14 22:58:01.529 [   INFO]:transcode: 0009: 1:H264 ==> Passthrough
-> 2016-05-14 22:58:01.529 [   INFO]:transcode: 0009: 2:MPEG2AUDIO ==> VORBIS (libvorbis)
-> 
-> With this patch transcoding is logged like this:
-> 
-> 2016-05-16 20:14:56.515 [   INFO]:transcode: 0004: 1:TELETEXT ==> Filtered
-> 2016-05-16 20:14:56.516 [   INFO]:transcode: 0004: 2:MPEG2VIDEO 720x576 ==> H264 640x512 (libx264)
-> 2016-05-16 20:14:56.516 [   INFO]:transcode: 0004: 3:MPEG2AUDIO ==> AAC (aac)
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/tvheadend/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+On Thu, Jun 9, 2016 at 4:03 PM, Angelo Compagnucci
+<angelo.compagnucci@gmail.com> wrote:
+> A little recap:
+>
+> a) I should rework the custom logo package and logic, no problem here.
+> b) Relaying on user pre-installed imagemagick it's not allowed by
+> buildroot policies but I don't want to build the complete
+> host-imagemagick only for converting a ppm.
+> c) IMHO, the complex part here is to convert correctly an image to a
+> kernel suitable ppm (not so trivial): let a user preparing his own ppm
+> it's not advisable and prone to errors.
+>
+> So if b) and c) are not acceptable for buildroot policies, please
+> discard this patch.
 
-Applied to master, thanks.
+I realize this is late feedback, but I actually found your patch
+useful, so I'd lobby to not abandon it.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+In my use, I had to remove the imagemagick call since it wasn't right
+for my image (a pbm), but the rest was convenient. It beat what I
+previously was doing which was turning the pbm into a kernel patch.
+
+Regards,
+Frank
