@@ -1,46 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 17:50:17 +0200
-Subject: [Buildroot] Numerous ARC related toolchain issues
-Message-ID: <20160609175017.0d9fae13@free-electrons.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 9 Jun 2016 19:25:39 +0200
+Subject: [Buildroot] [PATCH] odroid-mali: New Package
+In-Reply-To: <trinity-3a2b0e05-6fcc-4c6b-a7aa-5c8648bb6777-1465461336732@3capp-mailcom-bs11>
+References: <20160609074119.4288-1-daggs@gmx.com>
+ <20160609101626.6239350e@free-electrons.com>
+ <trinity-3a2b0e05-6fcc-4c6b-a7aa-5c8648bb6777-1465461336732@3capp-mailcom-bs11>
+Message-ID: <20160609192539.01cf0a0e@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alexey,
+Hi all!
 
-It seems like since the latest update of the ARC tools, we're seeing
-quite a few build failures caused by the toolchain:
+Le Thu, 9 Jun 2016 10:35:36 +0200,
+daggs <daggs@gmx.com> a ?crit :
 
-http://autobuild.buildroot.net/results/d73/d732127d136bacc6bc17b742028691437df7f5f9/build-end.log
-BFD (GNU Binutils) 2.26.51.20160308 assertion fail elf32-arc.c:1566
+> > Another thing that bothers me is that it's called "odroid-mali",
+> > where "odroid" is the name of the board. I really find it weird
+> > that an OpenGL implementation is board specific. It should be SoC
+> > specific for sure, but not board-specific. If there are other
+> > Amlogic S905 SoC boards added in Buildroot, wouldn't they be able
+> > to use the same OpenGL implementation ?
+> >   
+> afaik, the implementation is vendor specific, e.g. we don't have the
+> code, the vendor (hardkernel) provides the lib file and headers.
+> odroid is the name of the product line, there are odroid c{0,1,1+ and
+> 2}. also there are u and x models I think. this implementation is
+> specific to the c2 boards I assume it can retrofitted for other
+> boards. the main change it will need is the files url change as.
 
-http://autobuild.buildroot.net/results/cb8/cb8bd3a01c7a6fadb20f18c1a3cbfabc52f3a6ff/build-end.log
-/tmp/ccKi33Rl.s: Assembler messages:
-/tmp/ccKi33Rl.s:578: Error: @dtpoff is not a complex relocation.
-/tmp/ccKi33Rl.s:578: Error: extra comma
-/tmp/ccKi33Rl.s:578: Error: syntax error
-/tmp/ccKi33Rl.s:588: Error: @dtpoff is not a complex relocation.
-/tmp/ccKi33Rl.s:588: Error: extra comma
-/tmp/ccKi33Rl.s:588: Error: syntax error
+From the vendor website, we can see that odroid-c1+ and odroid-c2 have
+the same GPU (MALI 450). So maybe the "odroidc2_fb*" files could be
+renamed to "odroid_fb*" (if needed, tweaking according to the
+machine could be performed in the helper script).
 
-http://autobuild.buildroot.net/results/37a/37a57f29c6632fcdb18670a18328679dee925240/build-end.log
-BFD (GNU Binutils) 2.26.51.20160308 assertion fail elf32-arc.c:1566
+> > That being said, we already have rpi-userland for RPi, but well,
+> > RPi is the only board that will ever be made with this funky
+> > Broadcom SoC.
+> > 
+> > But in the Allwinner land, we have the sunxi-mali package, which
+> > works with various boards.
+> > 
+> > But maybe I'm being too annoying with this aspect: this OpenGL stuff
+> > is usually a big mess, so it's probably fine if we have a
+> > odroid-mali package.
+> > 
+> > But I would nonetheless like to have the thing split in two
+> > packages. 
+> one of my previous patches added all the scripts in the overlay root
+> fs but Eric said it isn't a good idea.
 
-http://autobuild.buildroot.net/results/1c1/1c14a7cbda1dce8867275ba2f2c70054fdbfbbbc/build-end.log
-(same, but on wireshark)
+As the display is to be set up via a service managed by the init system,
+it seemed logical to me to provide the script and the service files in
+a package to benefit from the helper for service installation (when
+using an overlay, a plain copy is performed, so you will end up with a
+systemd service file on a SysV-based system and vice-versa).
 
-These are all with the internal toolchain backend, so we're building
-with the latest ARC toolchain components.
+The sunxi-mali package does provide a service file for SysV: S80mali.
 
-Are these problems already known? They seem to be new, I don't think
-they were appearing with the previous release of ARC tools.
+But maybe it will be better to provide the script, services
+files and rules in a package named "odroid-board" or
+"odroid-userspace" (as there is "sunix-board" and "rpi-userland").
 
-Thanks!
+Regards,
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ELB
