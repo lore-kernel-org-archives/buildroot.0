@@ -1,48 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 22:09:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xfsprogs: install in the same
- location as e2fsprogs
-In-Reply-To: <20160525231110.648f963a@free-electrons.com>
-References: <1464096676-41655-1-git-send-email-ckhardin@exablox.com>
- <20160525231110.648f963a@free-electrons.com>
-Message-ID: <20160609220905.41f050b5@free-electrons.com>
+Date: Thu, 9 Jun 2016 22:28:11 +0200
+Subject: [Buildroot] [git commit] openmpi: new package
+Message-ID: <20160609202842.2ABA4820E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f3935440e956f2adc89fbe4977ffdcb3c518e60e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 25 May 2016 23:11:10 +0200, Thomas Petazzoni wrote:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+[Thomas:
+ - disable the tracing mechanism using --disable-vt, since it was
+   causing the build failure. Avoids the need for a patch.
+ - remove the option to pass arbitrary config options.
+ - specify the license as being BSD-3c instead of just BSD.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in            |  1 +
+ package/openmpi/Config.in    | 16 ++++++++++++++++
+ package/openmpi/openmpi.hash |  3 +++
+ package/openmpi/openmpi.mk   | 20 ++++++++++++++++++++
+ 4 files changed, 40 insertions(+)
 
-> On Tue, 24 May 2016 06:31:16 -0700, Charles Hardin wrote:
-> > The configure script hard codes "/sbin" for installation which
-> > installs the XFS tools in a different location then the e2fsprogs.
-> > 
-> > This is just a cosmetic patch so all the tools end up in "/usr/sbin"
-> > for consistency.
-> > 
-> > Signed-off-by: Charles Hardin <ckhardin@exablox.com>  
-> 
-> What is the motivation for this change? If the upstream xfsprogs
-> developers think it should be installed in /sbin, why should we change
-> it?
-> 
-> In any case, the patch itself needs a description + your Signed-off-by
-> line. Also, it should be submitted to the upstream xfsprogs developers
-> to see if they might accept it. Otherwise I think we would prefer to
-> keep the existing behavior.
-
-Since there was no reply to my questions, I've marked this patch as
-"Rejected" in our patch tracking system. Do not hesitate to resend an
-updated version that takes into account the comments and that provides
-a more detailed justification.
-
-Thanks for your contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index bc114aa..f9afbc0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1194,6 +1194,7 @@ menu "Networking"
+ 	source "package/nss-pam-ldapd/Config.in"
+ 	source "package/omniorb/Config.in"
+ 	source "package/openldap/Config.in"
++	source "package/openmpi/Config.in"
+ 	source "package/openpgm/Config.in"
+ 	source "package/openzwave/Config.in"
+ 	source "package/ortp/Config.in"
+diff --git a/package/openmpi/Config.in b/package/openmpi/Config.in
+new file mode 100644
+index 0000000..9638040
+--- /dev/null
++++ b/package/openmpi/Config.in
+@@ -0,0 +1,16 @@
++comment "openmpi needs a toolchain w/ dynamic library, NPTL, wchar, C++"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
++		|| !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
++
++config BR2_PACKAGE_OPENMPI
++	bool "openmpi"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	help
++	  A High Performance Message Passing Library.
++
++	  https://www.open-mpi.org/
+diff --git a/package/openmpi/openmpi.hash b/package/openmpi/openmpi.hash
+new file mode 100644
+index 0000000..92152a2
+--- /dev/null
++++ b/package/openmpi/openmpi.hash
+@@ -0,0 +1,3 @@
++# From: https://www.open-mpi.org/software/ompi/v1.10/
++md5 b2f43d9635d2d52826e5ef9feb97fd4c  openmpi-1.10.2.tar.bz2
++sha1 03934fc0a2dd0d0d2d0459d714a976eabca938fb  openmpi-1.10.2.tar.bz2
+diff --git a/package/openmpi/openmpi.mk b/package/openmpi/openmpi.mk
+new file mode 100644
+index 0000000..8871eaf
+--- /dev/null
++++ b/package/openmpi/openmpi.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# openmpi
++#
++################################################################################
++
++OPENMPI_VERSION_MAJOR = 1.10
++OPENMPI_VERSION = $(OPENMPI_VERSION_MAJOR).2
++OPENMPI_SITE = https://www.open-mpi.org/software/ompi/v$(OPENMPI_VERSION_MAJOR)/downloads
++OPENMPI_SOURCE = openmpi-$(OPENMPI_VERSION).tar.bz2
++OPENMPI_LICENSE = BSD-3c
++OPENMPI_LICENSE_FILES = LICENSE
++OPENMPI_INSTALL_STAGING = YES
++OPENMPI_CONF_OPTS = --disable-vt
++
++# Disable fortran by default until we add BR2_TOOLCHAIN_HAS_FORTRAN
++# hidden symbol to our toolchain infrastructure
++OPENMPI_CONF_OPTS += --enable-mpi-fortran=no
++
++$(eval $(autotools-package))
