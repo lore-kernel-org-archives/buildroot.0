@@ -1,10 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 22:42:03 +0200
-Subject: [Buildroot] [PATCH 1/1] kodi: fix build when
- BR2_PACKAGE_LIBFSLVPUWRAP=y
-In-Reply-To: <1463500440-25200-1-git-send-email-sebastien.szymanski@armadeus.com>
-References: <1463500440-25200-1-git-send-email-sebastien.szymanski@armadeus.com>
-Message-ID: <20160609224203.599c50c1@free-electrons.com>
+Date: Thu, 9 Jun 2016 22:46:13 +0200
+Subject: [Buildroot] [PATCH v2] raspberrypi3: fix serial console (load
+ pi3-miniuart-bt overlay)
+In-Reply-To: <20160503210200.12d685a7@gmx.net>
+References: <1462220744-6368-1-git-send-email-ps.report@gmx.net>
+ <CALtfCQZowiGZUJ0HV4oTyRMfMY02TherviK_ZE6D4wgfUcQ3gg@mail.gmail.com>
+ <871t5jr7e6.fsf@dell.be.48ers.dk>
+ <CAFGQKxeRKWNCOH2YV0FYA17tdfyeemv3Xau2Bkrzmrxh5Rm-4g@mail.gmail.com>
+ <20160503210200.12d685a7@gmx.net>
+Message-ID: <20160609224613.20512846@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,85 +17,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 17 May 2016 17:54:00 +0200, S?bastien Szymanski wrote:
-> Kodi now needs the following headers to sucessfully build on some i.MX
-> platforms:
+On Tue, 3 May 2016 21:02:00 +0200, Peter Seiderer wrote:
+
+> This works too, not sure whats the better solution, explicit via device tree overlay
+> or some firmware magic....
 > 
-> * ipu.h and mxcfb.h from the kernel
-> * g2d.h from the imx-gpu-viv package
+> - pi3-miniuart-bt 'dmesg | grep tty':
+> [    0.000000] Kernel command line: 8250.nr_uarts=1 dma.dmachans=0x7f35 bcm2708_fb.fbwidth=1920 bcm2708_fb.fbheight=1200 bcm2709.boardrev=0xa02082 bcm2709.serial=0xa60340 smsc95xx.macaddr=B8:27:EB:A6:03:40 bcm2708_fb.fbswap=1 bcm2709.uart_clock=48000000 vc_mem.mem_base=0x3dc00000 vc_mem.mem_size=0x3f000000  root=/dev/mmcblk0p2 rootwait console=tty1 console=ttyAMA0,115200
+> [    0.001320] console [tty1] enabled
+> [    0.318181] 3f215040.uart: ttyS0 at MMIO 0x3f215040 (irq = 59, base_baud = 50000000) is a 16550
+> [    2.008162] 3f201000.uart: ttyAMA0 at MMIO 0x3f201000 (irq = 87, base_baud = 0) is a PL011 rev2
+> [    3.296233] console [ttyAMA0] enabled
 > 
-> Add the missing dependencies.
-> 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> ---
-> Note: I had to install .py files to test Kodi on my target (APF6D) with 
-> BR2_PACKAGE_PYTHON_PY_PYC otherwise Kodi complained that it couldn't find 
-> site.py and crashed at startup.
+> - enable-uart=1, serial0 dmesg | grep tty':
+> [    0.000000] Kernel command line: 8250.nr_uarts=1 dma.dmachans=0x7f35 bcm2708_fb.fbwidth=1920 bcm2708_fb.fbheight=1200 bcm2709.boardrev=0xa02082 bcm2709.serial=0xa60340 smsc95xx.macaddr=B8:27:EB:A6:03:40 bcm2708_fb.fbswap=1 bcm2709.uart_clock=48000000 vc_mem.mem_base=0x3dc00000 vc_mem.mem_size=0x3f000000  root=/dev/mmcblk0p2 rootwait console=tty1 console=ttyS0,115200
+> [    0.001318] console [tty1] enabled
+> [    0.318270] console [ttyS0] disabled
+> [    0.318389] 3f215040.uart: ttyS0 at MMIO 0x3f215040 (irq = 59, base_baud = 31250000) is a 16550
+> [    1.042714] console [ttyS0] enabled
+> [    3.020277] 3f201000.uart: ttyAMA0 at MMIO 0x3f201000 (irq = 87, base_baud = 0) is a PL011 rev2
 
-This is a known bug in Kodi, which nobody has investigated so far.
+For the Buildroot defconfig, I believe passing enable-uart=1 in
+config.txt would be the easiest solution. Could you send a patch that
+does this instead of messing with the overlays ?
 
-> 
->  package/kodi/Config.in | 1 +
->  package/kodi/kodi.mk   | 4 +++-
->  2 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-> index ff2e75c..f27f6ed 100644
-> --- a/package/kodi/Config.in
-> +++ b/package/kodi/Config.in
-> @@ -58,6 +58,7 @@ menuconfig BR2_PACKAGE_KODI
->  	select BR2_PACKAGE_FONTCONFIG
->  	select BR2_PACKAGE_FREETYPE
->  	select BR2_PACKAGE_GIFLIB
-> +	select BR2_PACKAGE_IMX_GPU_VIV_G2D if BR2_PACKAGE_LIBFSLVPUWRAP
-
-I would prefer this to be:
-
-	select BR2_PACKAGE_IMX_GPU_VIV_G2D if BR2_PACKAGE_IMX_GPU_VIV
-
->  	select BR2_PACKAGE_JASPER
->  	select BR2_PACKAGE_JPEG
->  	select BR2_PACKAGE_LIBASS
-> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> index e163c24..394b174 100644
-> --- a/package/kodi/kodi.mk
-> +++ b/package/kodi/kodi.mk
-> @@ -54,8 +54,10 @@ KODI_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LIBFSLVPUWRAP),y)
-
-Change this to:
-
-ifeq ($(BR2_PACKAGE_IMX_GPU_VIV)$(BR2_PACKAGE_LIBFSLVPUWRAP),y)
-
-> -KODI_DEPENDENCIES += libfslvpuwrap
-> +# imx-lib needs access to imx-specific kernel headers
-
-You're talking about imx-lib here, but it doesn't appear anywhere, so
-this comment is confusing, and can be removed IMO.
-
-> +KODI_DEPENDENCIES += imx-gpu-viv libfslvpuwrap linux
-
-Remove linux from this line. libfslvpuwrap already depends on it, so
-it's not really useful to have it.
-
->  KODI_CONF_OPTS += --enable-codec=imxvpu
-> +KODI_CONF_ENV += INCLUDES="-idirafter $(LINUX_DIR)/include/uapi"
-
-Maybe above this line:
-
-# Kodi needs access to some specific kernel headers, which are
-# Freescale specific and therefore not part of the toolchain, so we have
-# to access directly the headers from the kernel sources
-
-I think this way your patch would be a bit easier to understand.
-Basically the logic is that as soon as libfslvpuwrap *and*  the
-imx-gpu-viv packages are enabled, i.MX6 support in Kodi will be enabled.
-
-Could you rework this, test that it works fine for you, and resubmit?
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
