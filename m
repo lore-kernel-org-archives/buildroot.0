@@ -1,46 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 22:00:32 +0200
-Subject: [Buildroot] [PATCH] package/mpd: fetch upstream patch to fix
- GCC 6 issue
-In-Reply-To: <20160609094108.9446-1-joerg.krause@embedded.rocks>
-References: <20160609094108.9446-1-joerg.krause@embedded.rocks>
-Message-ID: <20160609220032.5858f2dd@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 09 Jun 2016 22:01:20 +0200
+Subject: [Buildroot] Update of Buildroot toolchains on autobuild.b.o
+References: <20160608220152.5b54ea7d@free-electrons.com>
+Message-ID: <XnsA622E005D5C4EID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+[posted and mailed]
 
-On Thu,  9 Jun 2016 11:41:08 +0200, J?rg Krause wrote:
-> Fetch a patch from upstream to fix a build issue with GCC 6:
-> 
-> '''
-> In file included from /home/joerg/Development/git/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/include/c++/6.1.0/bits/stl_algo.h:59:0,
->                  from /home/joerg/Development/git/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/include/c++/6.1.0/algorithm:62,
->                  from ./src/queue/IdTable.hxx:25,
->                  from ./src/queue/Queue.hxx:24,
->                  from src/queue/Playlist.hxx:23,
->                  from src/Partition.hxx:23,
->                  from src/Instance.cxx:22:
-> /home/joerg/Development/git/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/include/c++/6.1.0/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
->  #include_next <stdlib.h>
-> '''
-> 
-> Bug report: https://bugs.musicpd.org/view.php?id=4524
-> Fetch from: aa5d05eaa4d482aa8f8df954335d0aba151eeff9
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/mpd/mpd.hash | 1 +
->  package/mpd/mpd.mk   | 3 +++
->  2 files changed, 4 insertions(+)
+Thomas Petazzoni <thomas.petazzoni-
+wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8@public.gmane.org> wrote in 
+news:20160608220152.5b54ea7d at free-electrons.com:
 
-Applied to master, thanks.
+> Let me know if there are other toolchain combinations that you would
+> like to see tested on autobuild.b.o.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Hi Thomas,
+
+a lot of multimedia packages (ffmpeg, mplayer & co.) contain support not only 
+for mmx but also for sse*/avx*. Some of them fail in a mmx-only configuration 
+so I would like to propose a toolchain based on this defconfig:
+
+BR2_x86_pentium_mmx=y
+
+We already have a p4 defconfig
+
+http://autobuild.buildroot.net/toolchains/configs/br-i386-pentium4-
+full.config
+
+and defconfigs for x86_64 but none for older Intel cpu's.
+
+Regards, Bernd
