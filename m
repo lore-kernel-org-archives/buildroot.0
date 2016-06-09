@@ -1,60 +1,155 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 22:31:38 +0200
-Subject: [Buildroot] [PATCH v2 next 1/2] openmpi: new package
-In-Reply-To: <1463742061-56758-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Thu, 9 Jun 2016 22:32:40 +0200
+Subject: [Buildroot] [PATCH v4 next 2/2] openblas: new package
+In-Reply-To: <1463742061-56758-2-git-send-email-Vincent.Riera@imgtec.com>
 References: <1463742061-56758-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160609223138.3dfb4b8f@free-electrons.com>
+ <1463742061-56758-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160609223240.287d63ce@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vicente,
+Hello,
 
-On Fri, 20 May 2016 12:01:00 +0100, Vicente Olivert Riera wrote:
+On Fri, 20 May 2016 12:01:01 +0100, Vicente Olivert Riera wrote:
 
-> diff --git a/package/openmpi/0001-vt_iowrap.c-check-if-fgetc-and-fputc-have-been-alrea.patch b/package/openmpi/0001-vt_iowrap.c-check-if-fgetc-and-fputc-have-been-alrea.patch
-> new file mode 100644
-> index 0000000..00562d0
-> --- /dev/null
-> +++ b/package/openmpi/0001-vt_iowrap.c-check-if-fgetc-and-fputc-have-been-alrea.patch
-> @@ -0,0 +1,48 @@
-> +From 56a27e5dce8fc78941f26ccb0e688f331fb0641e Mon Sep 17 00:00:00 2001
-> +From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> +Date: Tue, 17 May 2016 20:46:11 +0100
-> +Subject: [PATCH] vt_iowrap.c: check if fgetc and fputc have been already
-> + defined
+> +config BR2_PACKAGE_OPENBLAS_TARGET_P2
+> +	bool "P2"
+> +	depends on BR2_x86_pentium2
+> +config BR2_PACKAGE_OPENBLAS_TARGET_KATMAI
+> +	bool "KATMAI"
+> +	depends on BR2_x86_pentium3
+> +config BR2_PACKAGE_OPENBLAS_TARGET_COPPERMINE
+> +	bool "COPPERMINE"
+> +	depends on BR2_x86_pentium3
+> +config BR2_PACKAGE_OPENBLAS_TARGET_NORTHWOOD
+> +	bool "NORTHWOOD"
+> +	depends on BR2_x86_pentium4
+> +config BR2_PACKAGE_OPENBLAS_TARGET_PRESCOTT
+> +	bool "PRESCOTT"
+> +	depends on BR2_x86_prescott
+> +config BR2_PACKAGE_OPENBLAS_TARGET_BANIAS
+> +	bool "BANIAS"
+> +	depends on BR2_x86_pentium_m
+> +config BR2_PACKAGE_OPENBLAS_TARGET_YONAH
+> +	bool "YONAH"
+> +	depends on BR2_x86_pentium_m
+> +config BR2_PACKAGE_OPENBLAS_TARGET_CORE2
+> +	bool "CORE2"
+> +	depends on BR2_x86_core2
+> +config BR2_PACKAGE_OPENBLAS_TARGET_PENRYN
+> +	bool "PENRYN"
+> +	depends on BR2_x86_core2
+> +config BR2_PACKAGE_OPENBLAS_TARGET_DUNNINGTON
+> +	bool "DUNNINGTON"
+> +	depends on BR2_x86_core2
+> +config BR2_PACKAGE_OPENBLAS_TARGET_NEHALEM
+> +	bool "NEHALEM"
+> +	depends on BR2_x86_corei7
+> +config BR2_PACKAGE_OPENBLAS_TARGET_SANDYBRIDGE
+> +	bool "SANDYBRIDGE"
+> +	depends on BR2_x86_corei7_avx
+> +config BR2_PACKAGE_OPENBLAS_TARGET_HASWELL
+> +	bool "HASWELL"
+> +	depends on BR2_x86_core_avx2
+> +config BR2_PACKAGE_OPENBLAS_TARGET_ATOM
+> +	bool "ATOM"
+> +	depends on BR2_x86_atom
+> +config BR2_PACKAGE_OPENBLAS_TARGET_ATHLON
+> +	bool "ATHLON"
+> +	depends on BR2_x86_athlon || BR2_x86_athlon_4
+> +config BR2_PACKAGE_OPENBLAS_TARGET_OPTERON
+> +	bool "OPTERON"
+> +	depends on BR2_x86_opteron
+> +config BR2_PACKAGE_OPENBLAS_TARGET_OPTERON_SSE3
+> +	bool "OPTERON_SSE3"
+> +	depends on BR2_x86_opteron_sse3
+> +config BR2_PACKAGE_OPENBLAS_TARGET_BARCELONA
+> +	bool "BARCELONA"
+> +	depends on BR2_x86_barcelona
+> +config BR2_PACKAGE_OPENBLAS_TARGET_STEAMROLLER
+> +	bool "STEAMROLLER"
+> +	depends on BR2_x86_steamroller
+> +config BR2_PACKAGE_OPENBLAS_TARGET_SSE_GENERIC
+> +	bool "SSE_GENERIC"
+> +	depends on BR2_i386 || BR2_x86_64
+> +config BR2_PACKAGE_OPENBLAS_TARGET_VIAC3
+> +	bool "VIAC3"
+> +	depends on BR2_x86_c3 || BR2_x86_c32
+> +config BR2_PACKAGE_OPENBLAS_TARGET_POWER4
+> +	bool "POWER4"
+> +	depends on BR2_powerpc_power4
+> +config BR2_PACKAGE_OPENBLAS_TARGET_POWER5
+> +	bool "POWER5"
+> +	depends on BR2_powerpc_power5
+> +config BR2_PACKAGE_OPENBLAS_TARGET_POWER6
+> +	bool "POWER6"
+> +	depends on BR2_powerpc_power6
+> +config BR2_PACKAGE_OPENBLAS_TARGET_POWER7
+> +	bool "POWER7"
+> +	depends on BR2_powerpc_power7
+> +config BR2_PACKAGE_OPENBLAS_TARGET_POWER8
+> +	bool "POWER8"
+> +	depends on BR2_powerpc_power8
+> +config BR2_PACKAGE_OPENBLAS_TARGET_PPCG4
+> +	bool "PPCG4"
+> +	depends on BR2_powerpc_7400 || BR2_powerpc_7450
+> +config BR2_PACKAGE_OPENBLAS_TARGET_PPC970
+> +	bool "PPC970"
+> +	depends on BR2_powerpc_970
+> +config BR2_PACKAGE_OPENBLAS_TARGET_PPC440
+> +	bool "PPC440"
+> +	depends on BR2_powerpc_440
+> +config BR2_PACKAGE_OPENBLAS_TARGET_PPC440FP2
+> +	bool "PPC440FP2"
+> +	depends on BR2_powerpc_440fp
+> +config BR2_PACKAGE_OPENBLAS_TARGET_P5600
+> +	bool "P5600"
+> +	depends on BR2_mips_32r2
+> +config BR2_PACKAGE_OPENBLAS_TARGET_SICORTEX
+> +	bool "SICORTEX"
+> +	depends on BR2_mips_64
+> +config BR2_PACKAGE_OPENBLAS_TARGET_LOONGSON3A
+> +	bool "LOONGSON3A"
+> +	depends on BR2_mips_64
+> +config BR2_PACKAGE_OPENBLAS_TARGET_LOONGSON3B
+> +	bool "LOONGSON3B"
+> +	depends on BR2_mips_64
+> +config BR2_PACKAGE_OPENBLAS_TARGET_I6400
+> +	bool "I6400"
+> +	depends on BR2_mips_64r6
+> +config BR2_PACKAGE_OPENBLAS_TARGET_SPARC
+> +	bool "SPARC"
+> +	depends on BR2_sparc
+> +config BR2_PACKAGE_OPENBLAS_TARGET_SPARCV7
+> +	bool "SPARCV7"
+> +	depends on BR2_sparc
+> +config BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA15
+> +	bool "CORTEXA15"
+> +	depends on BR2_cortex_a15
+> +config BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA9
+> +	bool "CORTEXA9"
+> +	depends on BR2_cortex_a9
+> +config BR2_PACKAGE_OPENBLAS_TARGET_ARMV7
+> +	bool "ARMV7"
+> +	depends on BR2_cortex_a5 || BR2_cortex_a7 || BR2_cortex_a8 || \
+> +		BR2_cortex_a9 || BR2_cortex_a12 || BR2_cortex_a15 || \
+> +		BR2_cortex_a17
+> +config BR2_PACKAGE_OPENBLAS_TARGET_ARMV8
+> +	bool "ARMV8"
+> +	depends on BR2_aarch64 || BR2_aarch64_be
+> +config BR2_PACKAGE_OPENBLAS_TARGET_CORTEXA57
+> +	bool "CORTEXA57"
+> +	depends on BR2_aarch64 || BR2_aarch64_be
 
-This patch is only needed to make the "Vampirtrace" stuff build, and
-this is just in the "contrib" part of OpenMPI. So instead of adding a
-patch, I've disabled VampirTrace by passing --disable-vt. Let me know
-if you really needed VampirTrace. In the mean time, feel free to submit
-your patch upstream so that we can re-enable the feature later on.
+As discussed on IRC with Yann, we really don't want this additional
+choice. Just use the existing options in arch/Config.in* instead. When
+there is no direct match, just don't support the platform, or use a
+lower common denominator.
 
-> +config BR2_PACKAGE_OPENMPI_EXTRACONF
-> +	string "Additional parameters for ./configure"
-> +	default ""
-> +	help
-> +	  Extra parameters that will be appended to openmpi's
-> +	  ./configure commandline.
-
-I really don't like this thing, since many of the configure options
-imply a dependency on another package, which needs to be expressed in
-the .mk file. So I've dropped this option, and I prefer to see
-additional options being added gradually, depending on the needs. There
-are indeed lots of options, but I am not sure we will actually have a
-sub-option for each of them in Buildroot.
-
-> +OPENMPI_VERSION_MAJOR = 1.10
-> +OPENMPI_VERSION = $(OPENMPI_VERSION_MAJOR).2
-> +OPENMPI_SITE = https://www.open-mpi.org/software/ompi/v$(OPENMPI_VERSION_MAJOR)/downloads
-> +OPENMPI_SOURCE = openmpi-$(OPENMPI_VERSION).tar.bz2
-> +OPENMPI_LICENSE = BSD
-
-BSD is never a correct value. The right value here was BSD-3c.
-
-Applied with those changes, thanks!
+Thanks!
 
 Thomas
 -- 
