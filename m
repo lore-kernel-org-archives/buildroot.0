@@ -1,43 +1,40 @@
-From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Thu,  9 Jun 2016 11:40:31 +0100
-Subject: [Buildroot] [PATCH 2/2] configs/arm_juno: Point to 4.6 mainline
-	kernel
-In-Reply-To: <cover.1465468621.git.jpinto@synopsys.com>
-References: <cover.1465468621.git.jpinto@synopsys.com>
-Message-ID: <ab333dc1e75fd0650ecea52f62495b4a245425d8.1465468621.git.jpinto@synopsys.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  9 Jun 2016 08:03:06 -0300
+Subject: [Buildroot] [PATCH 1/2] e2fsprogs: bump to version 1.43.1
+Message-ID: <1465470187-2185-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change the kernel version to v4.6 mainline.
-
-Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- configs/arm_juno_defconfig | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/e2fsprogs/e2fsprogs.hash | 4 ++--
+ package/e2fsprogs/e2fsprogs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
-index 5ce882c..153060a 100644
---- a/configs/arm_juno_defconfig
-+++ b/configs/arm_juno_defconfig
-@@ -1,13 +1,12 @@
- BR2_aarch64=y
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="4.2.2"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
-+BR2_DEFAULT_KERNEL_VERSION="4.6"
- BR2_TARGET_GENERIC_HOSTNAME="juno-buildroot"
- BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS Juno by Buildroot"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="http://git.linaro.org/kernel/linux-linaro-tracking.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-4.3-2015.11"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v4.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arm/juno/linux-juno-defconfig"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index 3cc90fd..ec75573 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
+@@ -1,2 +1,2 @@
+-# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43/sha256sums.asc
+-sha256	d027eec0282e169eb55229beefca258c425c9d96f65292e2c004012d5353cd38	e2fsprogs-1.43.tar.xz
++# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.1/sha256sums.asc
++sha256	97e36a029224e2606baa6e9ea693b04a4d192ccd714572a1b50a2df9c687b23d	e2fsprogs-1.43.1.tar.xz
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 63f5856..17ac011 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-E2FSPROGS_VERSION = 1.43
++E2FSPROGS_VERSION = 1.43.1
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
 -- 
-1.8.1.5
+2.7.3
