@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 21:59:30 +0200
-Subject: [Buildroot] [PATCH v2 1/1] libcoap: new package
-In-Reply-To: <1464617734-24139-1-git-send-email-joris.lijssens@gmail.com>
-References: <1464617734-24139-1-git-send-email-joris.lijssens@gmail.com>
-Message-ID: <20160609215930.32aa26c7@free-electrons.com>
+Date: Thu, 9 Jun 2016 21:59:38 +0200
+Subject: [Buildroot] [PATCH v2 1/2] e2fsprogs: bump to version 1.43.1
+In-Reply-To: <1465481593-2614-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1465481593-2614-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160609215938.7de0ad8b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 30 May 2016 16:15:34 +0200, Joris Lijssens wrote:
-> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+On Thu,  9 Jun 2016 11:13:12 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
-> Changes v1 -> v2:
->  - Fix typo in libcoap.mk
+> Changes for v2: none.
 
-I've applied the patch, after doing quite a few changes:
-
-    [Thomas:
-     - Adjust license: it is "GPLv2+ or BSD-2c" and not "GPLv2, BSD-2c"
-     - Add the COPYING file to the license files, since it indicates
-       explictly that the license is GPLv2+ or BSD-2c.
-     - Remove the --with-shared configure options, which doesn't exist.
-     - Use LIBCOAP_AUTORECONF = YES instead of calling the autogen.sh script
-       manually.
-     - Add patch to fix build with old gcc versions.]
-
-Thanks for your contribution!
+Applied to master, thanks.
 
 Thomas
 -- 
