@@ -1,41 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 16:34:12 +0200
-Subject: [Buildroot] [PATCH 1/2] python-dataproperty: new package
-In-Reply-To: <1465457873-15204-1-git-send-email-yegorslists@googlemail.com>
-References: <1465457873-15204-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160609163412.5c3d7257@free-electrons.com>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Thu,  9 Jun 2016 16:46:14 +0200
+Subject: [Buildroot] [RFC/PATCH next 2/2] couchdb: New package.
+In-Reply-To: <20160520162929.04ca1b1b@free-electrons.com>
+References: <20160520162929.04ca1b1b@free-electrons.com>
+Message-ID: <1465483576-28267-1-git-send-email-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> Do we want to package couchdb ? :-)
 
-On Thu,  9 Jun 2016 09:37:52 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/Config.in                                    |  1 +
->  package/python-dataproperty/Config.in                |  9 +++++++++
->  package/python-dataproperty/python-dataproperty.hash |  4 ++++
->  package/python-dataproperty/python-dataproperty.mk   | 14 ++++++++++++++
->  4 files changed, 28 insertions(+)
->  create mode 100644 package/python-dataproperty/Config.in
->  create mode 100644 package/python-dataproperty/python-dataproperty.hash
->  create mode 100644 package/python-dataproperty/python-dataproperty.mk
+In case you still do, here's an updated version of the patches.
 
-Causes a new build failure:
+Couchdb 2.0 is way to immature to attempt to package it now: --prefix
+does not work and is hardwired to '.', there is no "make install",
+it depends on unreleased libraries...  So even with a self-built tarball,
+it's still not ready for being packaged.
 
-   http://autobuild.buildroot.net/results/85e/85e5086401a314a2d3d24efa887ac0188add85fc/build-end.log
-
-Could you have a look?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I've somewhat test compiled spidermonkey on several architectures where
+debian's patches implied there would be problem and fixed them by taking
+patches from upstream.  I also addressed the minor nits on Couchdb 1.6.1.
