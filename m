@@ -1,42 +1,110 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  9 Jun 2016 11:13:12 -0300
-Subject: [Buildroot] [PATCH v2 1/2] e2fsprogs: bump to version 1.43.1
-Message-ID: <1465481593-2614-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu,  9 Jun 2016 11:13:13 -0300
+Subject: [Buildroot] [PATCH v2 2/2] e2fsprogs: fix build failure with old
+	glibc versions
+In-Reply-To: <1465481593-2614-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1465481593-2614-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1465481593-2614-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+In old (< 2.17) glibc versions clock_gettime() resides in librt, however
+there's no check for this, so add a patch to fix it. Fixes:
+http://autobuild.buildroot.net/results/25c/25c042d2862affebf552ed24bc2a58e0c484226f/
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Changes for v2: none.
+Changes for v2: host-gettext is also required for host-e2fsprogs
 
- package/e2fsprogs/e2fsprogs.hash | 4 ++--
- package/e2fsprogs/e2fsprogs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../e2fsprogs/0002-fuse2fs-might-need-librt.patch  | 48 ++++++++++++++++++++++
+ package/e2fsprogs/e2fsprogs.mk                     | 10 ++++-
+ 2 files changed, 56 insertions(+), 2 deletions(-)
+ create mode 100644 package/e2fsprogs/0002-fuse2fs-might-need-librt.patch
 
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index 3cc90fd..ec75573 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -1,2 +1,2 @@
--# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43/sha256sums.asc
--sha256	d027eec0282e169eb55229beefca258c425c9d96f65292e2c004012d5353cd38	e2fsprogs-1.43.tar.xz
-+# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.43.1/sha256sums.asc
-+sha256	97e36a029224e2606baa6e9ea693b04a4d192ccd714572a1b50a2df9c687b23d	e2fsprogs-1.43.1.tar.xz
+diff --git a/package/e2fsprogs/0002-fuse2fs-might-need-librt.patch b/package/e2fsprogs/0002-fuse2fs-might-need-librt.patch
+new file mode 100644
+index 0000000..42a7fbd
+--- /dev/null
++++ b/package/e2fsprogs/0002-fuse2fs-might-need-librt.patch
+@@ -0,0 +1,48 @@
++From 14d9e94315cd8144ac72d368c45e70869a66799c Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Thu, 9 Jun 2016 07:47:03 -0300
++Subject: [PATCH] fuse2fs: might need librt
++
++It uses clock_gettime() which in older glibc versions is in librt.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Patch status: sent to linux-ext4 ML
++
++ configure.ac     | 5 +++++
++ misc/Makefile.in | 3 ++-
++ 2 files changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 67d7231..a387dfd 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1162,6 +1162,11 @@ if test "$ac_cv_func_dlopen" = yes ; then
++ fi
++ AC_SUBST(MAGIC_LIB)
++ dnl
+++dnl Check to see if librt is required for clock_gettime() (glibc < 2.17)
+++dnl
+++AC_CHECK_LIB(rt, clock_gettime, [CLOCK_GETTIME_LIB=-lrt])
+++AC_SUBST(CLOCK_GETTIME_LIB)
+++dnl
++ dnl Check to see if the FUSE library is -lfuse or -losxfuse
++ dnl
++ FUSE_CMT=
++diff --git a/misc/Makefile.in b/misc/Makefile.in
++index 43e3c7e..070a6e3 100644
++--- a/misc/Makefile.in
+++++ b/misc/Makefile.in
++@@ -387,7 +387,8 @@ fuse2fs: $(FUSE2FS_OBJS) $(DEPLIBS) $(DEPLIBBLKID) $(DEPLIBUUID) \
++ 		$(LIBEXT2FS)
++ 	$(E) "	LD $@"
++ 	$(Q) $(CC) $(ALL_LDFLAGS) -o fuse2fs $(FUSE2FS_OBJS) $(LIBS) \
++-		$(LIBFUSE) $(LIBBLKID) $(LIBUUID) $(LIBEXT2FS) $(LIBINTL)
+++		$(LIBFUSE) $(LIBBLKID) $(LIBUUID) $(LIBEXT2FS) $(LIBINTL) \
+++		$(CLOCK_GETTIME_LIB)
++ 
++ journal.o: $(srcdir)/../debugfs/journal.c
++ 	$(E) "	CC $@"
++-- 
++2.7.3
++
 diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 63f5856..17ac011 100644
+index 17ac011..5ba9278 100644
 --- a/package/e2fsprogs/e2fsprogs.mk
 +++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -12,6 +12,14 @@ E2FSPROGS_LICENSE_FILES = NOTICE lib/uuid/COPYING lib/ss/mit-sipb-copyright.h li
+ E2FSPROGS_INSTALL_STAGING = YES
+ E2FSPROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-libs
+ E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
++# we don't have a host-util-linux
++HOST_E2FSPROGS_DEPENDENCIES = host-pkgconf
++
++# For 0002-fuse2fs-might-need-librt.patch
++# host-gettext for the gettext macro file needed@autoreconf time
++E2FSPROGS_AUTORECONF = YES
++E2FSPROGS_DEPENDENCIES += host-gettext
++HOST_E2FSPROGS_DEPENDENCIES += host-gettext
  
--E2FSPROGS_VERSION = 1.43
-+E2FSPROGS_VERSION = 1.43.1
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
+ # e4defrag doesn't build on older systems like RHEL5.x, and we don't
+ # need it on the host anyway.
+@@ -61,8 +69,6 @@ E2FSPROGS_MAKE_OPTS = \
+ define HOST_E2FSPROGS_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install install-libs
+ endef
+-# we don't have a host-util-linux
+-HOST_E2FSPROGS_DEPENDENCIES = host-pkgconf
+ 
+ # binaries to keep or remove
+ E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_BADBLOCKS) += usr/sbin/badblocks
 -- 
 2.7.3
