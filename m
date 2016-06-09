@@ -1,70 +1,121 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 9 Jun 2016 19:25:39 +0200
-Subject: [Buildroot] [PATCH] odroid-mali: New Package
-In-Reply-To: <trinity-3a2b0e05-6fcc-4c6b-a7aa-5c8648bb6777-1465461336732@3capp-mailcom-bs11>
-References: <20160609074119.4288-1-daggs@gmx.com>
- <20160609101626.6239350e@free-electrons.com>
- <trinity-3a2b0e05-6fcc-4c6b-a7aa-5c8648bb6777-1465461336732@3capp-mailcom-bs11>
-Message-ID: <20160609192539.01cf0a0e@itchy>
+From: Dagg Stompler <daggs@gmx.com>
+Date: Thu,  9 Jun 2016 20:59:09 +0300
+Subject: [Buildroot] [PATCH 2/2 v2] odroid-mali: New Package
+In-Reply-To: <20160609175909.12605-1-daggs@gmx.com>
+References: <20160609175909.12605-1-daggs@gmx.com>
+Message-ID: <20160609175909.12605-2-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all!
+v1 -> v2:
+ - splited the scripts to odroid-scripts package.
+ - odroid-mali depends on odroid-scripts.
 
-Le Thu, 9 Jun 2016 10:35:36 +0200,
-daggs <daggs@gmx.com> a ?crit :
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+---
+ package/Config.in                    |  1 +
+ package/odroid-mali/Config.in        | 21 ++++++++++++++++++++
+ package/odroid-mali/odroid-mali.hash |  3 +++
+ package/odroid-mali/odroid-mali.mk   | 38 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 63 insertions(+)
+ create mode 100644 package/odroid-mali/Config.in
+ create mode 100644 package/odroid-mali/odroid-mali.hash
+ create mode 100644 package/odroid-mali/odroid-mali.mk
 
-> > Another thing that bothers me is that it's called "odroid-mali",
-> > where "odroid" is the name of the board. I really find it weird
-> > that an OpenGL implementation is board specific. It should be SoC
-> > specific for sure, but not board-specific. If there are other
-> > Amlogic S905 SoC boards added in Buildroot, wouldn't they be able
-> > to use the same OpenGL implementation ?
-> >   
-> afaik, the implementation is vendor specific, e.g. we don't have the
-> code, the vendor (hardkernel) provides the lib file and headers.
-> odroid is the name of the product line, there are odroid c{0,1,1+ and
-> 2}. also there are u and x models I think. this implementation is
-> specific to the c2 boards I assume it can retrofitted for other
-> boards. the main change it will need is the files url change as.
-
-From the vendor website, we can see that odroid-c1+ and odroid-c2 have
-the same GPU (MALI 450). So maybe the "odroidc2_fb*" files could be
-renamed to "odroid_fb*" (if needed, tweaking according to the
-machine could be performed in the helper script).
-
-> > That being said, we already have rpi-userland for RPi, but well,
-> > RPi is the only board that will ever be made with this funky
-> > Broadcom SoC.
-> > 
-> > But in the Allwinner land, we have the sunxi-mali package, which
-> > works with various boards.
-> > 
-> > But maybe I'm being too annoying with this aspect: this OpenGL stuff
-> > is usually a big mess, so it's probably fine if we have a
-> > odroid-mali package.
-> > 
-> > But I would nonetheless like to have the thing split in two
-> > packages. 
-> one of my previous patches added all the scripts in the overlay root
-> fs but Eric said it isn't a good idea.
-
-As the display is to be set up via a service managed by the init system,
-it seemed logical to me to provide the script and the service files in
-a package to benefit from the helper for service installation (when
-using an overlay, a plain copy is performed, so you will end up with a
-systemd service file on a SysV-based system and vice-versa).
-
-The sunxi-mali package does provide a service file for SysV: S80mali.
-
-But maybe it will be better to provide the script, services
-files and rules in a package named "odroid-board" or
-"odroid-userspace" (as there is "sunix-board" and "rpi-userland").
-
-Regards,
-
+diff --git a/package/Config.in b/package/Config.in
+index 9bd7e7d..888fbc3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -419,6 +419,7 @@ endif
+ 	source "package/nvidia-driver/Config.in"
+ 	source "package/nvidia-tegra23/Config.in"
+ 	source "package/nvme/Config.in"
++	source "package/odroid-mali/Config.in"
+ 	source "package/ofono/Config.in"
+ 	source "package/ola/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+diff --git a/package/odroid-mali/Config.in b/package/odroid-mali/Config.in
+new file mode 100644
+index 0000000..02c6ca0
+--- /dev/null
++++ b/package/odroid-mali/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_ODROID_MALI
++	bool "odroid-mali"
++	select BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_HAS_LIBGLES
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	select BR2_PACKAGE_FBSET
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_aarch64 || BR2_arm
++	depends on BR2_PACKAGE_ODROID_SCRIPTS
++	help
++	  Install the ARM Mali drivers for odroidc2 based systems.
++
++	  https://github.com/mdrjr/c2_mali
++
++if BR2_PACKAGE_ODROID_MALI
++config BR2_PACKAGE_PROVIDES_LIBEGL
++	default "odroid-mali"
++
++config BR2_PACKAGE_PROVIDES_LIBGLES
++	default "odroid-mali"
++endif
+diff --git a/package/odroid-mali/odroid-mali.hash b/package/odroid-mali/odroid-mali.hash
+new file mode 100644
+index 0000000..de3edc1
+--- /dev/null
++++ b/package/odroid-mali/odroid-mali.hash
+@@ -0,0 +1,3 @@
++# Locally computed hash
++sha256 122fe75fc105fc2f7c00b7f075deca567f6a3e56b5c128b00cf3096073b96e66  odroid-mali-4a34d59cd6120db67dc11023344e382afbaf28da.tar.gz
++sha256 29d98ed4b8694b860d9289787c416faa847b0de26d36580a53add1752b4c2e9a  odroid-mali-46fe49f37e3506c6205ad8c50980eca9bfff11e3.tar.gz
+diff --git a/package/odroid-mali/odroid-mali.mk b/package/odroid-mali/odroid-mali.mk
+new file mode 100644
+index 0000000..b3fc1a6
+--- /dev/null
++++ b/package/odroid-mali/odroid-mali.mk
+@@ -0,0 +1,38 @@
++################################################################################
++#
++# odroid-mali
++#
++################################################################################
++
++ifeq ($(BR2_aarch64),y)
++ODROID_MALI_VERSION = 4a34d59cd6120db67dc11023344e382afbaf28da
++ODROID_MALI_LIBS_INSTALL_ARCH=mali_libs
++else
++ODROID_MALI_VERSION = 46fe49f37e3506c6205ad8c50980eca9bfff11e3
++ODROID_MALI_LIBS_INSTALL_ARCH=32bit_libs
++endif
++
++ODROID_MALI_SITE = $(call github,mdrjr,c2_mali,$(ODROID_MALI_VERSION))
++ODROID_MALI_LICENSE = hardkernel
++ODROID_MALI_LICENSE_FILES = README.md
++
++ODROID_MALI_INSTALL_STAGING = YES
++ODROID_MALI_PROVIDES = libegl libgles
++
++define ODROID_MALI_INSTALL_LIBS
++	mkdir -p $(1)/lib/
++	cp -aRP $(@D)/fbdev/$(ODROID_MALI_LIBS_INSTALL_ARCH)/*.so* $(1)/lib/
++endef
++
++define ODROID_MALI_INSTALL_STAGING_CMDS
++	$(call ODROID_MALI_INSTALL_LIBS,$(STAGING_DIR)/usr)
++	mkdir -p $(@D)/usr/include $(@D)/usr/lib/pkgconfig
++	cp -aRP $(@D)/fbdev/mali_headers/* $(STAGING_DIR)/usr/include
++	cp -aRP $(@D)/pkgconfig/* $(STAGING_DIR)/usr/lib/pkgconfig
++endef
++
++define ODROID_MALI_INSTALL_TARGET_CMDS
++	$(call ODROID_MALI_INSTALL_LIBS,$(TARGET_DIR)/usr)
++endef
++			    
++$(eval $(generic-package))
 -- 
-ELB
+2.8.4
