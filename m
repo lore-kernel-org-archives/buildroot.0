@@ -1,53 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jun 2016 00:27:40 +0200
-Subject: [Buildroot] [git commit] iperf3: security bump to version 3.1.3
-Message-ID: <20160609222756.76625819B7@busybox.osuosl.org>
+Date: Fri, 10 Jun 2016 00:35:03 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/freeswitch: enable video
+ support
+In-Reply-To: <1461445358-32052-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1461445358-32052-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160610003503.7ebe8f20@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=678db6ba60a3dc6665d99383e4e6ba2efd2ca2b7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-ESNET-SECADV-2016-0001 - A malicious process can connect to an iperf3
-server and, by sending a malformed message on the control channel,
-corrupt the server process's heap area.  This can lead to a crash (and a
-denial of service), or theoretically a remote code execution as the user
-running the iperf3 server. A malicious iperf3 server could potentially
-mount a similar attack on an iperf3 client.
+On Sat, 23 Apr 2016 23:02:38 +0200, Bernd Kuhls wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/iperf3/iperf3.hash | 4 ++--
- package/iperf3/iperf3.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+> +# needed in addition for patch 0003 for cross-compiling libs/libvpx
+> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+> +# host/opt/ext-toolchain/bin/ is not part of $PATH, instead of passing
 
-diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
-index 48a2b2a..1accccd 100644
---- a/package/iperf3/iperf3.hash
-+++ b/package/iperf3/iperf3.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256  48b5c783bb4a9c44f2bdcfe52c5d45b77ab1e1c82de3d0131f692457950811f9  iperf3-3.1.2.tar.gz
-+# From http://software.es.net/iperf/news.html#security-issue-iperf-3-1-3-iperf-3-0-12-released
-+sha256  60d8db69b1d74a64d78566c2317c373a85fef691b8d277737ee5d29f448595bf  iperf-3.1.3.tar.gz
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index 2438955..3d2a708 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--IPERF3_VERSION = 3.1.2
--IPERF3_SITE = $(call github,esnet,iperf,$(IPERF3_VERSION))
-+IPERF3_VERSION = 3.1.3
-+IPERF3_SITE = http://downloads.es.net/pub/iperf
-+IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
- IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
- IPERF3_LICENSE_FILES = LICENSE
- 
+And this is intentional, because you should never call binaries in
+host/opt/ext-toolchain/bin/.
+
+> +# GNU_TARGET_NAME we need to pass TOOLCHAIN_EXTERNAL_CROSS which stores
+> +# the full path, needed to avoid build error with external toolchains,
+> +# quote from compile log:
+> +#    [AR] libvpx_g.a
+> +# make[3]: x86_64-buildroot-linux-musl-ar: Command not found
+> +# or
+> +# make[3]: sparc64-buildroot-linux-gnu-ar: Command not found
+> +FREESWITCH_MAKE_ENV += CROSS=$(TOOLCHAIN_EXTERNAL_CROSS)
+> +else
+> +FREESWITCH_MAKE_ENV += CROSS=$(GNU_TARGET_NAME)-
+> +endif
+
+Have you tried replacing this complicated stuff with just:
+
+   FREESWITCH_MAKE_ENV += CROSS=$(TARGET_CROSS)
+
+$(TARGET_CROSS) is already defined properly depending on
+internal/external.
+
+Could you check if that works and submit an updated version?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
