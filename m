@@ -1,107 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Jun 2016 21:57:25 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: fix build failure with old
-	glibc versions
-Message-ID: <20160609195744.65D1D81E4E@busybox.osuosl.org>
+Date: Thu, 9 Jun 2016 21:59:30 +0200
+Subject: [Buildroot] [PATCH v2 1/1] libcoap: new package
+In-Reply-To: <1464617734-24139-1-git-send-email-joris.lijssens@gmail.com>
+References: <1464617734-24139-1-git-send-email-joris.lijssens@gmail.com>
+Message-ID: <20160609215930.32aa26c7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd48a7e572a659b57d711d982582dc7d36ab5052
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-In old (< 2.17) glibc versions clock_gettime() resides in librt, however
-there's no check for this, so add a patch to fix it. Fixes:
-http://autobuild.buildroot.net/results/25c/25c042d2862affebf552ed24bc2a58e0c484226f/
+On Mon, 30 May 2016 16:15:34 +0200, Joris Lijssens wrote:
+> Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+> ---
+> Changes v1 -> v2:
+>  - Fix typo in libcoap.mk
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../e2fsprogs/0002-fuse2fs-might-need-librt.patch  | 48 ++++++++++++++++++++++
- package/e2fsprogs/e2fsprogs.mk                     | 10 ++++-
- 2 files changed, 56 insertions(+), 2 deletions(-)
+I've applied the patch, after doing quite a few changes:
 
-diff --git a/package/e2fsprogs/0002-fuse2fs-might-need-librt.patch b/package/e2fsprogs/0002-fuse2fs-might-need-librt.patch
-new file mode 100644
-index 0000000..42a7fbd
---- /dev/null
-+++ b/package/e2fsprogs/0002-fuse2fs-might-need-librt.patch
-@@ -0,0 +1,48 @@
-+From 14d9e94315cd8144ac72d368c45e70869a66799c Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Thu, 9 Jun 2016 07:47:03 -0300
-+Subject: [PATCH] fuse2fs: might need librt
-+
-+It uses clock_gettime() which in older glibc versions is in librt.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+Patch status: sent to linux-ext4 ML
-+
-+ configure.ac     | 5 +++++
-+ misc/Makefile.in | 3 ++-
-+ 2 files changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 67d7231..a387dfd 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1162,6 +1162,11 @@ if test "$ac_cv_func_dlopen" = yes ; then
-+ fi
-+ AC_SUBST(MAGIC_LIB)
-+ dnl
-++dnl Check to see if librt is required for clock_gettime() (glibc < 2.17)
-++dnl
-++AC_CHECK_LIB(rt, clock_gettime, [CLOCK_GETTIME_LIB=-lrt])
-++AC_SUBST(CLOCK_GETTIME_LIB)
-++dnl
-+ dnl Check to see if the FUSE library is -lfuse or -losxfuse
-+ dnl
-+ FUSE_CMT=
-+diff --git a/misc/Makefile.in b/misc/Makefile.in
-+index 43e3c7e..070a6e3 100644
-+--- a/misc/Makefile.in
-++++ b/misc/Makefile.in
-+@@ -387,7 +387,8 @@ fuse2fs: $(FUSE2FS_OBJS) $(DEPLIBS) $(DEPLIBBLKID) $(DEPLIBUUID) \
-+ 		$(LIBEXT2FS)
-+ 	$(E) "	LD $@"
-+ 	$(Q) $(CC) $(ALL_LDFLAGS) -o fuse2fs $(FUSE2FS_OBJS) $(LIBS) \
-+-		$(LIBFUSE) $(LIBBLKID) $(LIBUUID) $(LIBEXT2FS) $(LIBINTL)
-++		$(LIBFUSE) $(LIBBLKID) $(LIBUUID) $(LIBEXT2FS) $(LIBINTL) \
-++		$(CLOCK_GETTIME_LIB)
-+ 
-+ journal.o: $(srcdir)/../debugfs/journal.c
-+ 	$(E) "	CC $@"
-+-- 
-+2.7.3
-+
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 17ac011..5ba9278 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -12,6 +12,14 @@ E2FSPROGS_LICENSE_FILES = NOTICE lib/uuid/COPYING lib/ss/mit-sipb-copyright.h li
- E2FSPROGS_INSTALL_STAGING = YES
- E2FSPROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-libs
- E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
-+# we don't have a host-util-linux
-+HOST_E2FSPROGS_DEPENDENCIES = host-pkgconf
-+
-+# For 0002-fuse2fs-might-need-librt.patch
-+# host-gettext for the gettext macro file needed@autoreconf time
-+E2FSPROGS_AUTORECONF = YES
-+E2FSPROGS_DEPENDENCIES += host-gettext
-+HOST_E2FSPROGS_DEPENDENCIES += host-gettext
- 
- # e4defrag doesn't build on older systems like RHEL5.x, and we don't
- # need it on the host anyway.
-@@ -61,8 +69,6 @@ E2FSPROGS_MAKE_OPTS = \
- define HOST_E2FSPROGS_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install install-libs
- endef
--# we don't have a host-util-linux
--HOST_E2FSPROGS_DEPENDENCIES = host-pkgconf
- 
- # binaries to keep or remove
- E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_BADBLOCKS) += usr/sbin/badblocks
+    [Thomas:
+     - Adjust license: it is "GPLv2+ or BSD-2c" and not "GPLv2, BSD-2c"
+     - Add the COPYING file to the license files, since it indicates
+       explictly that the license is GPLv2+ or BSD-2c.
+     - Remove the --with-shared configure options, which doesn't exist.
+     - Use LIBCOAP_AUTORECONF = YES instead of calling the autogen.sh script
+       manually.
+     - Add patch to fix build with old gcc versions.]
+
+Thanks for your contribution!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
