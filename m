@@ -1,51 +1,76 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  9 Jun 2016 19:17:05 -0300
-Subject: [Buildroot] [PATCH] iperf3: security bump to version 3.1.3
-Message-ID: <1465510625-10777-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Jun 2016 00:27:14 +0200
+Subject: [Buildroot] [PATCH 1/1] eja: new package (revised)
+In-Reply-To: <1462185476-18775-1-git-send-email-ubaldo@eja.it>
+References: <1462185476-18775-1-git-send-email-ubaldo@eja.it>
+Message-ID: <20160610002714.0705f36d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-ESNET-SECADV-2016-0001 - A malicious process can connect to an iperf3
-server and, by sending a malformed message on the control channel,
-corrupt the server process's heap area.  This can lead to a crash (and a
-denial of service), or theoretically a remote code execution as the user
-running the iperf3 server. A malicious iperf3 server could potentially
-mount a similar attack on an iperf3 client.
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/iperf3/iperf3.hash | 4 ++--
- package/iperf3/iperf3.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Thanks for this new iteration. However, I did not realize that eja was
+your own creation. How widely is it used? Looking at the Github page,
+it really looks like a personal project that isn't that widely used, so
+I am not sure to which point a Buildroot package makes sense.
 
-diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
-index 48a2b2a..1accccd 100644
---- a/package/iperf3/iperf3.hash
-+++ b/package/iperf3/iperf3.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256  48b5c783bb4a9c44f2bdcfe52c5d45b77ab1e1c82de3d0131f692457950811f9  iperf3-3.1.2.tar.gz
-+# From http://software.es.net/iperf/news.html#security-issue-iperf-3-1-3-iperf-3-0-12-released
-+sha256  60d8db69b1d74a64d78566c2317c373a85fef691b8d277737ee5d29f448595bf  iperf-3.1.3.tar.gz
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index 2438955..3d2a708 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--IPERF3_VERSION = 3.1.2
--IPERF3_SITE = $(call github,esnet,iperf,$(IPERF3_VERSION))
-+IPERF3_VERSION = 3.1.3
-+IPERF3_SITE = http://downloads.es.net/pub/iperf
-+IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
- IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
- IPERF3_LICENSE_FILES = LICENSE
- 
+I also have some other comments.
+
+First, your commit title should not contain "(revised)" otherwise this
+will be kept forever in the Git history. See the Buildroot manual for
+details on how to send new iterations of a patch: adding a version and
+a changelog.
+
+On Mon,  2 May 2016 10:37:56 +0000, Ubaldo Porcheddu wrote:
+
+>  menu "Interpreter languages and scripting"
+> +	source "package/eja/Config.in"
+
+Does it quality as a Language interpreter, or as a web-server? I
+couldn't really understand.
+
+
+> +EJA_VERSION = 9.4.22
+> +EJA_SOURCE = $(EJA_VERSION).tar.gz
+> +EJA_SITE = https://github.com/ubaldus/eja/archive
+> +
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +EJA_CFLAGS = -DLUA_USE_POSIX -DLUA_COMPAT_ALL
+> +EJA_MYLIBS = -static -w
+> +else
+> +EJA_CFLAGS = -DLUA_USE_POSIX -DLUA_COMPAT_ALL -DLUA_USE_DLOPEN
+> +EJA_MYLIBS = -ldl
+> +endif
+> +
+> +define EJA_BUILD_CMDS
+> +	$(MAKE) \
+> +        CC="$(TARGET_CC)" RANLIB="$(TARGET_RANLIB)" \
+> +        CFLAGS="$(TARGET_CFLAGS) $(EJA_CFLAGS)" \
+> +        MYLIBS="$(EJA_MYLIBS)" AR="$(TARGET_CROSS)ar rcu" -C $(@D)
+> +endef
+
+Instead of duplicating the Lua interpreter source code into the Eja
+project, why don't you link with the Lua interpreter library instead?
+This makes sure that when the Lua interpreter is updated (to fix bugs,
+etc.), Eja also gets fixed.
+
+Finally, if it's a server, shouldn't it have an initscript? I see that
+you've added one in your ejabox project, why isn't it part of this
+package?
+
+But again, overall, I'm questioning the value of packaging a piece of
+software that seems to be very confidential, but I admit that my
+position may be controversial, and other people in the Buildroot
+community may prefer that we accept patches for all packages,
+regardless of their "popularity".
+
+Best regards,
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
