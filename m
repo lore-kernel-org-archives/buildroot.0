@@ -1,34 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jun 2016 11:35:47 +0200
-Subject: [Buildroot] [PATCH 1/2] configs: mx53loco: Bump kernel version
- to 4.6.2
-In-Reply-To: <1465524865-13105-1-git-send-email-festevam@gmail.com>
-References: <1465524865-13105-1-git-send-email-festevam@gmail.com>
-Message-ID: <20160610113547.3e8a0cfe@free-electrons.com>
+From: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Date: Fri, 10 Jun 2016 11:34:38 +0200
+Subject: [Buildroot] [PATCH] gst1-plugins-good: cleanup of configure options
+Message-ID: <1465551278-19411-1-git-send-email-marcin.nowakowski@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+taglib support has been added in 8299f30a, but the '--disable-taglib'
+option has not been removed from conf opts at the top of the .mk file
 
-On Thu,  9 Jun 2016 23:14:24 -0300, Fabio Estevam wrote:
-> From: Fabio Estevam <fabio.estevam@nxp.com>
-> 
-> Kernel 4.6.2 contains commit 63d0430f991314 ("drm/imx: Match
-> imx-ipuv3-crtc components using device node in platform data")
-> that fixes IPUv3 probing, so bump to this kernel version.
-> 
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-> ---
->  configs/mx53loco_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+---
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Both applied to master, thanks.
-
-Thomas
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 6dc322b..8d7ff29 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -30,8 +30,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS += \
+ 	--disable-jack \
+ 	--disable-libdv \
+ 	--disable-dv1394 \
+-	--disable-shout2 \
+-	--disable-taglib
++	--disable-shout2
+ 
+ GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.2
