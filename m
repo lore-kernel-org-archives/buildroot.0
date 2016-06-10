@@ -1,47 +1,47 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 10 Jun 2016 07:45:32 +0000
-Subject: [Buildroot] Numerous ARC related toolchain issues
-In-Reply-To: <20160610093722.714b0240@free-electrons.com>
-References: <20160609175017.0d9fae13@free-electrons.com>
- <1465543337.2942.15.camel@synopsys.com>
- <20160610093722.714b0240@free-electrons.com>
-Message-ID: <1465544685.2942.24.camel@synopsys.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 10 Jun 2016 09:59:23 +0200
+Subject: [Buildroot] [PATCH] python-dataproperty: fix package build
+Message-ID: <1465545563-20130-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Fri, 2016-06-10 at 09:37 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 10 Jun 2016 07:23:04 +0000, Alexey Brodkin wrote:
-> 
-> > 
-> > > 
-> > > http://autobuild.buildroot.net/results/d73/d732127d136bacc6bc17b742028691437df7f5f9/build-end.log
-> > > BFD (GNU Binutils) 2.26.51.20160308 assertion fail elf32-arc.c:1566??
-> > This is yet another manifestation of PIE invocation on ARC.
-> > We'll need to disable usage of PIE in linuxpam.
->
-> Ah, OK. Shouldn't gcc be modified on ARC to either ignore the pie flag,
-> or alternatively bail out immediately with a clear error? At least it
-> would be much more easy to analyze the error than a weird assertion
-> failure down the road in the linker.
+DataProperty's setup.py requires test environment. So just comment this
+line as test environment is not required for normal installation
 
-See PIE is a real requirement for U-Boot (because it relocates itself on early boot)
-and for some reason U-Boot gets built with -PIE flag perfectly fine.
+Fixes:
+http://autobuild.buildroot.net/results/0c8/0c8e0ceccc2d5f48138ec4f95e57729e33108f59
+http://autobuild.buildroot.net/results/eab/eab2d2bf78ac943156a0b8698e63bdf6e63865bf
+http://autobuild.buildroot.net/results/4d6/4d60c711e9c1da6dd5bb809bbe328e6252d2d747
+http://autobuild.buildroot.net/results/ed1/ed1982367fa1531d772d29b35e333b34e5889cec
+http://autobuild.buildroot.net/results/a0e/a0ebb6b155fa11c5886080f993c9aa9d596ac1c3
+http://autobuild.buildroot.net/results/85e/85e5086401a314a2d3d24efa887ac0188add85fc
+http://autobuild.buildroot.net/results/99e/99ea243303ae12aceb2fac3a5df5e3b552712eda
 
-So we cannot just disable PIE support at least until U-Boot for ARC gets
-auto-relocated. But for user-space apps indeed we don't support PIE still and
-so existing code in toolchain fails here and there.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-dataproperty/python-dataproperty.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Funny enough that's better to see a failure during compilation compared to
-silent segfault on attempt to run already built app. BTW now I can recall that exactly
-this hit me with older toolchain - I needed wireshark so I built it flawlessly but
-on execution dumpcap was segfaulting right on start. But being lazy enough I never
-sent a patch to disable PIE in Wireshark :(
-
--Alexey
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index 0bbe680..6d0c659 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
+@@ -11,4 +11,11 @@ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
+ 
++# DataProperty's setup.py requires test environment. So just comment this
++# line as it is not required for normal installation
++define PYTHON_DATAPROPERTY_COMMENT_SETUP_REQUIRES
++	$(SED) '/setup_requires/ s/^#*/#/' $(@D)/setup.py
++endef
++PYTHON_DATAPROPERTY_POST_EXTRACT_HOOKS = PYTHON_DATAPROPERTY_COMMENT_SETUP_REQUIRES
++
+ $(eval $(python-package))
+-- 
+2.1.4
