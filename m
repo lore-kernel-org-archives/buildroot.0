@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jun 2016 20:16:49 +0200
-Subject: [Buildroot] [PATCH] build: cleanup remaining references to
- BR2_STRIP_sstrip
-In-Reply-To: <1465558082-3941-1-git-send-email-julien.floret@6wind.com>
-References: <1465558082-3941-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160610201649.79d0ea1e@free-electrons.com>
+Date: Fri, 10 Jun 2016 20:17:59 +0200
+Subject: [Buildroot] [PATCH RESEND] Bump linux kernel and u-boot versions
+In-Reply-To: <1465566116-28333-1-git-send-email-Eugeniy.Paltsev@synopsys.com>
+References: <1465566116-28333-1-git-send-email-Eugeniy.Paltsev@synopsys.com>
+Message-ID: <20160610201759.0907abc5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 10 Jun 2016 13:28:02 +0200, Julien Floret wrote:
-> sstrip option has been removed in commit
-> 106f5b8c5093 ("build: remove deprecated sstrip option").
+On Fri, 10 Jun 2016 16:41:56 +0300, Eugeniy Paltsev wrote:
+> Update kernel version to the most recent stable as of today 4.6.2
+> with back-ported ARC PGU support from 4.7-rc2.
 > 
-> Signed-off-by: Julien Floret <julien.floret@6wind.com>
-> ---
->  package/Makefile.in                  | 8 --------
->  support/dependencies/dependencies.mk | 4 ----
->  2 files changed, 12 deletions(-)
+> Bump u-boot to 2016.05 release.
+> Add 1 u-boot patch to disable IOC.
+> 
+> Signed-off-by: Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
 
-Applied to master, thanks. I think package/sstrip/sstrip.mk could also
-be simplified to get rid of the host variant, since it's not used
-anywhere anymore.
-
-It would be me, I would also remove the target variant, or at least
-mark it as deprecated.
+This version does not use 4.7-rc2, and still have zillions have patches
+due to this. And the commit log therefore doesn't match what the patch
+is doing.
 
 Thomas
 -- 
