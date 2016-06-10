@@ -1,39 +1,37 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu,  9 Jun 2016 23:14:25 -0300
-Subject: [Buildroot] [PATCH 2/2] configs: mx51evk: Bump kernel version to
-	4.6.2
-In-Reply-To: <1465524865-13105-1-git-send-email-festevam@gmail.com>
-References: <1465524865-13105-1-git-send-email-festevam@gmail.com>
-Message-ID: <1465524865-13105-2-git-send-email-festevam@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 10 Jun 2016 06:32:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/igmpproxy: uses fork, needs mmu
+Message-ID: <1465533178-28513-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+Fixes
+http://autobuild.buildroot.net/results/4ee/4ee081212614d86a3b2b74274f38825f7a5b3f6f/
 
-Kernel 4.6.2 contains commit 63d0430f991314 ("drm/imx: Match
-imx-ipuv3-crtc components using device node in platform data")
-that fixes IPUv3 probing, so bump to this kernel version.
-
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- configs/mx51evk_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/igmpproxy/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/configs/mx51evk_defconfig b/configs/mx51evk_defconfig
-index 413f966..0e2682a 100644
---- a/configs/mx51evk_defconfig
-+++ b/configs/mx51evk_defconfig
-@@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.2"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx51-babbage"
+diff --git a/package/igmpproxy/Config.in b/package/igmpproxy/Config.in
+index a9e4c1c..37f39b2 100644
+--- a/package/igmpproxy/Config.in
++++ b/package/igmpproxy/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_IGMPPROXY
+ 	bool "igmpproxy"
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  A simple dynamic Multicast Routing Daemon
+@@ -10,4 +11,5 @@ config BR2_PACKAGE_IGMPPROXY
+ 	  http://sourceforge.net/projects/igmpproxy/
+ 
+ comment "igmpproxy needs a toolchain w/ wchar"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR
 -- 
-1.9.1
+2.8.1
