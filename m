@@ -1,34 +1,30 @@
-From: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-Date: Fri, 10 Jun 2016 11:34:38 +0200
-Subject: [Buildroot] [PATCH] gst1-plugins-good: cleanup of configure options
-Message-ID: <1465551278-19411-1-git-send-email-marcin.nowakowski@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 10 Jun 2016 11:35:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/igmpproxy: uses fork, needs mmu
+In-Reply-To: <1465533178-28513-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1465533178-28513-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160610113552.5c3e8f37@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-taglib support has been added in 8299f30a, but the '--disable-taglib'
-option has not been removed from conf opts at the top of the .mk file
+Hello,
 
-Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
----
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On Fri, 10 Jun 2016 06:32:58 +0200, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/4ee/4ee081212614d86a3b2b74274f38825f7a5b3f6f/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/igmpproxy/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index 6dc322b..8d7ff29 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -30,8 +30,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS += \
- 	--disable-jack \
- 	--disable-libdv \
- 	--disable-dv1394 \
--	--disable-shout2 \
--	--disable-taglib
-+	--disable-shout2
- 
- GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
- 
+Applied to master, thanks.
+
+Thomas
 -- 
-2.8.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
