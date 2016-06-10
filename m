@@ -1,11 +1,11 @@
 From: Andrew Webster <awebster@arcx.com>
-Date: Fri, 10 Jun 2016 14:13:05 -0400
-Subject: [Buildroot] [PATCH v2 09/14] imx-codec: rename from libfslcodec and
-	bump version to 4.0.9
+Date: Fri, 10 Jun 2016 14:13:18 -0400
+Subject: [Buildroot] [PATCH v2 10/14] imx-parser: rename from libfslparser
+	and bump version to 4.0.9
 In-Reply-To: <cover.1465578220.git.awebster@arcx.com>
 References: <cover.1464958470.git.awebster@arcx.com>
  <cover.1465578220.git.awebster@arcx.com>
-Message-ID: <40cfade361025d1493e33a1679ac1c028383a519.1465578220.git.awebster@arcx.com>
+Message-ID: <605423330d42aee494d4b1addf05e08df982ad49.1465578220.git.awebster@arcx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,10 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Changelog:
---[aac_dec] refine the code for pure c build
-  aac decoder c build need float point support, which use some
-  float point function.
+--Add aac latm parser in parser_libs, support aac latm in mpeg2 parser
 
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/4b91194
+https://github.com/Freescale/meta-fsl-arm/commit/e2c6f10
 
 Implicitly tested through gstreamer as the 0.10 plugin relies on it:
  # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
@@ -33,233 +31,188 @@ Changes v1 -> v2:
  Config.in.legacy                                   |  7 +++++++
  package/Config.in                                  |  1 -
  package/freescale-imx/Config.in                    |  1 +
- .../imx-codec}/Config.in                           |  6 +++---
- package/freescale-imx/imx-codec/imx-codec.hash     |  2 ++
- package/freescale-imx/imx-codec/imx-codec.mk       | 23 ++++++++++++++++++++++
- package/gstreamer/gst-fsl-plugins/Config.in        |  4 ++--
+ .../imx-parser}/Config.in                          |  4 ++--
+ package/freescale-imx/imx-parser/imx-parser.hash   |  2 ++
+ package/freescale-imx/imx-parser/imx-parser.mk     | 23 ++++++++++++++++++++++
+ package/gstreamer/gst-fsl-plugins/Config.in        |  2 +-
  .../gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk   |  2 +-
- package/gstreamer1/gst1-imx/Config.in              |  2 +-
- package/gstreamer1/gst1-imx/gst1-imx.mk            |  4 ++--
- package/libfslcodec/libfslcodec.hash               |  2 --
- package/libfslcodec/libfslcodec.mk                 | 23 ----------------------
- 12 files changed, 42 insertions(+), 35 deletions(-)
- rename package/{libfslcodec => freescale-imx/imx-codec}/Config.in (75%)
- create mode 100644 package/freescale-imx/imx-codec/imx-codec.hash
- create mode 100644 package/freescale-imx/imx-codec/imx-codec.mk
- delete mode 100644 package/libfslcodec/libfslcodec.hash
- delete mode 100644 package/libfslcodec/libfslcodec.mk
+ package/libfslparser/libfslparser.hash             |  2 --
+ package/libfslparser/libfslparser.mk               | 23 ----------------------
+ 10 files changed, 37 insertions(+), 30 deletions(-)
+ rename package/{libfslparser => freescale-imx/imx-parser}/Config.in (78%)
+ create mode 100644 package/freescale-imx/imx-parser/imx-parser.hash
+ create mode 100644 package/freescale-imx/imx-parser/imx-parser.mk
+ delete mode 100644 package/libfslparser/libfslparser.hash
+ delete mode 100644 package/libfslparser/libfslparser.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 434aa5f..e5a568d 100644
+index e5a568d..12426c9 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -145,6 +145,13 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2016.08"
  
-+config BR2_PACKAGE_LIBFSLCODEC
-+	bool "libfslcodec has been renamed to imx-codec"
++config BR2_PACKAGE_LIBFSLPARSER
++	bool "libfslparser has been renamed to imx-parser"
 +	select BR2_LEGACY
-+	select BR2_PACKAGE_IMX_CODEC
++	select BR2_PACKAGE_IMX_PARSER
 +	help
-+	  The libfslcodec has been renamed to match the renamed package.
++	  The libfslparser has been renamed to match the renamed package.
 +
- config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT
- 	bool "FIT support in uboot-tools has been refactored"
+ config BR2_PACKAGE_LIBFSLCODEC
+ 	bool "libfslcodec has been renamed to imx-codec"
  	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index 38c8527..1cdbaa0 100644
+index 1cdbaa0..6760af0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -1098,7 +1098,6 @@ menu "Multimedia"
  	source "package/libdvdnav/Config.in"
  	source "package/libdvdread/Config.in"
  	source "package/libebml/Config.in"
--	source "package/libfslcodec/Config.in"
- 	source "package/libfslparser/Config.in"
+-	source "package/libfslparser/Config.in"
  	source "package/libfslvpuwrap/Config.in"
  	source "package/libhdhomerun/Config.in"
+ 	source "package/libimxvpuapi/Config.in"
 diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 8c03190..052de5a 100644
+index 052de5a..868e51c 100644
 --- a/package/freescale-imx/Config.in
 +++ b/package/freescale-imx/Config.in
-@@ -49,6 +49,7 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53 || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
- 
-+source "package/freescale-imx/imx-codec/Config.in"
+@@ -52,6 +52,7 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+ source "package/freescale-imx/imx-codec/Config.in"
  source "package/freescale-imx/imx-kobs/Config.in"
  source "package/freescale-imx/imx-lib/Config.in"
++source "package/freescale-imx/imx-parser/Config.in"
  source "package/freescale-imx/imx-uuc/Config.in"
-diff --git a/package/freescale-imx/imx-codec/Config.in b/package/freescale-imx/imx-codec/Config.in
+ source "package/freescale-imx/imx-vpu/Config.in"
+ source "package/freescale-imx/firmware-imx/Config.in"
+diff --git a/package/freescale-imx/imx-parser/Config.in b/package/freescale-imx/imx-parser/Config.in
 new file mode 100644
-index 0000000..70d340a
+index 0000000..526f066
 --- /dev/null
-+++ b/package/freescale-imx/imx-codec/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_IMX_CODEC
-+	bool "imx-codec"
++++ b/package/freescale-imx/imx-parser/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_IMX_PARSER
++	bool "imx-parser"
 +	depends on BR2_arm # Only relevant for i.MX
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # prebuilt binaries
 +	help
-+	  Binary codec libraries for the NXP i.MX SoCs.
++	  Binary parser libraries for the NXP i.MX SoCs.
 +
 +	  This library is provided by NXP as-is and doesn't have
 +	  an upstream.
-+
-+comment "imx-codec needs an (e)glibc toolchain"
-+	depends on BR2_arm
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/freescale-imx/imx-codec/imx-codec.hash b/package/freescale-imx/imx-codec/imx-codec.hash
+diff --git a/package/freescale-imx/imx-parser/imx-parser.hash b/package/freescale-imx/imx-parser/imx-parser.hash
 new file mode 100644
-index 0000000..39bddc1
+index 0000000..2193c66
 --- /dev/null
-+++ b/package/freescale-imx/imx-codec/imx-codec.hash
++++ b/package/freescale-imx/imx-parser/imx-parser.hash
 @@ -0,0 +1,2 @@
 +# locally computed
-+sha256	62bda182143cde9743cba0eb2a1c315a53cb434294605742f9fc364219958888  imx-codec-4.0.9.bin
-diff --git a/package/freescale-imx/imx-codec/imx-codec.mk b/package/freescale-imx/imx-codec/imx-codec.mk
++sha256	1bec0101843db2e95d61e3dbe9e35172d874e54be19cc5d8bf72a735d5e3236f  imx-parser-4.0.9.bin
+diff --git a/package/freescale-imx/imx-parser/imx-parser.mk b/package/freescale-imx/imx-parser/imx-parser.mk
 new file mode 100644
-index 0000000..67d3390
+index 0000000..a207d6e
 --- /dev/null
-+++ b/package/freescale-imx/imx-codec/imx-codec.mk
++++ b/package/freescale-imx/imx-parser/imx-parser.mk
 @@ -0,0 +1,23 @@
 +################################################################################
 +#
-+# imx-codec
++# imx-parser
 +#
 +################################################################################
 +
-+IMX_CODEC_VERSION = 4.0.9
-+IMX_CODEC_SITE = $(FREESCALE_IMX_SITE)
-+IMX_CODEC_SOURCE = imx-codec-$(IMX_CODEC_VERSION).bin
-+IMX_CODEC_INSTALL_STAGING = YES
++IMX_PARSER_VERSION = 4.0.9
++IMX_PARSER_SITE = $(FREESCALE_IMX_SITE)
++IMX_PARSER_SOURCE = imx-parser-$(IMX_PARSER_VERSION).bin
++IMX_PARSER_INSTALL_STAGING = YES
 +
-+IMX_CODEC_LICENSE = NXP Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
-+IMX_CODEC_LICENSE_FILES = EULA COPYING
-+IMX_CODEC_REDISTRIBUTE = NO
++IMX_PARSER_LICENSE = NXP Semiconductor Software License Agreement
++IMX_PARSER_LICENSE_FILES = EULA COPYING
++IMX_PARSER_REDISTRIBUTE = NO
 +
-+define IMX_CODEC_EXTRACT_CMDS
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_CODEC_SOURCE))
++define IMX_PARSER_EXTRACT_CMDS
++	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_PARSER_SOURCE))
 +endef
 +
-+# FIXME The Makefile installs both the arm9 and arm11 versions of the
-+# libraries, but we only need one of them.
++# The Makefile installs several versions of the libraries, but we only
++# need one of them, depending on the platform.
 +
 +$(eval $(autotools-package))
 diff --git a/package/gstreamer/gst-fsl-plugins/Config.in b/package/gstreamer/gst-fsl-plugins/Config.in
-index 0407dc5..8c82a4a 100644
+index 8c82a4a..38c8a47 100644
 --- a/package/gstreamer/gst-fsl-plugins/Config.in
 +++ b/package/gstreamer/gst-fsl-plugins/Config.in
-@@ -9,12 +9,12 @@ config BR2_PACKAGE_GST_FSL_PLUGINS
- 	bool "gst-fsl-plugins"
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_arm # Only relevant for i.MX
--	depends on BR2_TOOLCHAIN_USES_GLIBC # libfslcodec
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # imx-codec
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_GST_FSL_PLUGINS
  	select BR2_PACKAGE_GST_PLUGINS_BASE
  	select BR2_PACKAGE_LIBFSLVPUWRAP if BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
  	select BR2_PACKAGE_IMX_LIB
- 	select BR2_PACKAGE_LIBFSLPARSER
--	select BR2_PACKAGE_LIBFSLCODEC
-+	select BR2_PACKAGE_IMX_CODEC
+-	select BR2_PACKAGE_LIBFSLPARSER
++	select BR2_PACKAGE_IMX_PARSER
+ 	select BR2_PACKAGE_IMX_CODEC
  	select BR2_PACKAGE_FREESCALE_IMX
  	help
- 	  GStreamer plugins for hardware-accelerated audio and video
 diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-index fa0e093..50732bf 100644
+index 50732bf..8db8d1b 100644
 --- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
 +++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
 @@ -16,7 +16,7 @@ GST_FSL_PLUGINS_INSTALL_STAGING = YES
  GST_FSL_PLUGINS_AUTORECONF = YES
  
  GST_FSL_PLUGINS_DEPENDENCIES += host-pkgconf gstreamer gst-plugins-base \
--	imx-lib libfslparser libfslcodec
-+	imx-lib libfslparser imx-codec
+-	imx-lib libfslparser imx-codec
++	imx-lib imx-parser imx-codec
  
  ifeq ($(BR2_PACKAGE_FREESCALE_IMX_HAS_VPU),y)
  GST_FSL_PLUGINS_DEPENDENCIES += libfslvpuwrap
-diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-index 0084483..3512666 100644
---- a/package/gstreamer1/gst1-imx/Config.in
-+++ b/package/gstreamer1/gst1-imx/Config.in
-@@ -18,6 +18,6 @@ config BR2_PACKAGE_GST1_IMX
- 	  The VPU plugin is built when BR2_PACKAGE_LIBIMXVPUAPI is enabled.
- 	  The EGL plugin is built when BR2_PACKAGE_IMX_GPU_VIV is enabled.
- 	  The G2D plugin is built when BR2_PACKAGE_IMX_GPU_VIV_G2D is enabled.
--	  The MP3 plugin is built when BR2_PACKAGE_LIBFSLCODEC is enabled.
-+	  The MP3 plugin is built when BR2_PACKAGE_IMX_CODEC is enabled.
- 
- 	  https://github.com/Freescale/gstreamer-imx
-diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
-index 8838110..f81d8c9 100644
---- a/package/gstreamer1/gst1-imx/gst1-imx.mk
-+++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
-@@ -27,8 +27,8 @@ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD),y)
- GST1_IMX_DEPENDENCIES += gst1-plugins-bad
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBFSLCODEC),y)
--GST1_IMX_DEPENDENCIES += libfslcodec
-+ifeq ($(BR2_PACKAGE_IMX_CODEC),y)
-+GST1_IMX_DEPENDENCIES += imx-codec
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBIMXVPUAPI),y)
-diff --git a/package/libfslcodec/Config.in b/package/libfslcodec/Config.in
+diff --git a/package/libfslparser/Config.in b/package/libfslparser/Config.in
 deleted file mode 100644
-index d2007fe..0000000
---- a/package/libfslcodec/Config.in
+index e3ab980..0000000
+--- a/package/libfslparser/Config.in
 +++ /dev/null
-@@ -1,13 +0,0 @@
--config BR2_PACKAGE_LIBFSLCODEC
--	bool "libfslcodec"
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_LIBFSLPARSER
+-	bool "libfslparser"
 -	depends on BR2_arm # Only relevant for i.MX
--	depends on BR2_TOOLCHAIN_USES_GLIBC # prebuilt binaries
 -	help
--	  Binary codec libraries for the Freescale i.MX SoCs.
+-	  Binary parser libraries for the Freescale i.MX SoCs.
 -
 -	  This library is provided by Freescale as-is and doesn't have
 -	  an upstream.
--
--comment "libfslcodec needs an (e)glibc toolchain"
--	depends on BR2_arm
--	depends on !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/libfslcodec/libfslcodec.hash b/package/libfslcodec/libfslcodec.hash
+diff --git a/package/libfslparser/libfslparser.hash b/package/libfslparser/libfslparser.hash
 deleted file mode 100644
-index fd934f7..0000000
---- a/package/libfslcodec/libfslcodec.hash
+index c49345f..0000000
+--- a/package/libfslparser/libfslparser.hash
 +++ /dev/null
 @@ -1,2 +0,0 @@
 -# locally computed
--sha256	544ffc5989bce18ca50c7a826cc03370b1cf8455335e4291ef0c0779b4c33de0  libfslcodec-4.0.8.bin
-diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
+-sha256	a04621783c84a9776216caff9563c7f840fddd584b0b2d27738d6ca6d2c77f32  libfslparser-4.0.8.bin
+diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
 deleted file mode 100644
-index 502390f..0000000
---- a/package/libfslcodec/libfslcodec.mk
+index 44e6039..0000000
+--- a/package/libfslparser/libfslparser.mk
 +++ /dev/null
 @@ -1,23 +0,0 @@
 -################################################################################
 -#
--# libfslcodec
+-# libfslparser
 -#
 -################################################################################
 -
--LIBFSLCODEC_VERSION = 4.0.8
--LIBFSLCODEC_SITE = $(FREESCALE_IMX_SITE)
--LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
--LIBFSLCODEC_INSTALL_STAGING = YES
+-LIBFSLPARSER_VERSION = 4.0.8
+-LIBFSLPARSER_SITE = $(FREESCALE_IMX_SITE)
+-LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
+-LIBFSLPARSER_INSTALL_STAGING = YES
 -
--LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
--LIBFSLCODEC_LICENSE_FILES = EULA COPYING
--LIBFSLCODEC_REDISTRIBUTE = NO
+-LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
+-LIBFSLPARSER_LICENSE_FILES = EULA COPYING
+-LIBFSLPARSER_REDISTRIBUTE = NO
 -
--define LIBFSLCODEC_EXTRACT_CMDS
--	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(LIBFSLCODEC_SOURCE))
+-define LIBFSLPARSER_EXTRACT_CMDS
+-	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(LIBFSLPARSER_SOURCE))
 -endef
 -
--# FIXME The Makefile installs both the arm9 and arm11 versions of the
--# libraries, but we only need one of them.
+-# The Makefile installs several versions of the libraries, but we only
+-# need one of them, depending on the platform.
 -
 -$(eval $(autotools-package))
 -- 
