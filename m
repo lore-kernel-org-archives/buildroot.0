@@ -1,39 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 10 Jun 2016 11:34:31 +0200
-Subject: [Buildroot] [git commit] package/igmpproxy: uses fork, needs mmu
-Message-ID: <20160610093526.25DCA82115@busybox.osuosl.org>
+Date: Fri, 10 Jun 2016 11:34:25 +0200
+Subject: [Buildroot] [git commit] configs: mx51evk: Bump kernel version to
+	4.6.2
+Message-ID: <20160610093526.1534B8182E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc0f88e5eafee7c77e6809e9d1bfe4f91d518f03
+commit: https://git.buildroot.net/buildroot/commit/?id=e1ecf941145efb7e6ef51c89024286ada95a34f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/4ee/4ee081212614d86a3b2b74274f38825f7a5b3f6f/
+Kernel 4.6.2 contains commit 63d0430f991314 ("drm/imx: Match
+imx-ipuv3-crtc components using device node in platform data")
+that fixes IPUv3 probing, so bump to this kernel version.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/igmpproxy/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ configs/mx51evk_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/igmpproxy/Config.in b/package/igmpproxy/Config.in
-index a9e4c1c..37f39b2 100644
---- a/package/igmpproxy/Config.in
-+++ b/package/igmpproxy/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_IGMPPROXY
- 	bool "igmpproxy"
-+	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
- 	help
- 	  A simple dynamic Multicast Routing Daemon
-@@ -10,4 +11,5 @@ config BR2_PACKAGE_IGMPPROXY
- 	  http://sourceforge.net/projects/igmpproxy/
- 
- comment "igmpproxy needs a toolchain w/ wchar"
-+	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR
+diff --git a/configs/mx51evk_defconfig b/configs/mx51evk_defconfig
+index 413f966..0e2682a 100644
+--- a/configs/mx51evk_defconfig
++++ b/configs/mx51evk_defconfig
+@@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx51-babbage"
