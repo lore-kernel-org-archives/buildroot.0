@@ -1,10 +1,10 @@
 From: Andrew Webster <awebster@arcx.com>
-Date: Fri, 10 Jun 2016 14:12:02 -0400
-Subject: [Buildroot] [PATCH v2 07/14] gst1-imx: bump to version 0.12.1
+Date: Fri, 10 Jun 2016 14:12:14 -0400
+Subject: [Buildroot] [PATCH v2 08/14] imx-vpu: bump to version 5.4.33
 In-Reply-To: <cover.1465578220.git.awebster@arcx.com>
 References: <cover.1464958470.git.awebster@arcx.com>
  <cover.1465578220.git.awebster@arcx.com>
-Message-ID: <5f3b9b87a008e8341a180e1c90f081453099769f.1465578220.git.awebster@arcx.com>
+Message-ID: <6c346c15852f06257f0f42601439319ec247f258.1465578220.git.awebster@arcx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,75 +12,56 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Changelog:
-* compositor: Rename ImxCompositor(Pad) to ImxVideoCompositor(Pad)
-  This prevents conflicts if both the NXP plugins and the gstreamer-imx
-  are installed in the same rootfs
-
-* Add switches to wscript configuration to enable/disable plugins
-  Until now, all plugins were built (unless their dependencies were
-  missing). On some i.MX machines, some features are missing. For
-  example, the i.MX7 has no VPU. To ensure deterministic builds, it is
-  useful to selectively disable plugins in the build.
-
-* ipu+pxp: : Fix deadlocks and incorrect logging in case of init error
-  This was causing a freeze if for example one tries to use PxP elements
-  on an i.MX6 Dual/Quad
-
-* imxv4l2videosrc fixes and enhancements:
-  * fixes to interlacing support (incl. workarounds for analog TV input)
-  * remove format restriction in get_caps function
-    this removes the limitation on I420 formats
-  * simplified determination of fps (necessary due to driver limitations)
-
-* eglvivsink: wayland: Do not commit before buffers are swapped
-  This fixes eglSwapBuffer swaps with damaged frames
-
-* Documentation additions
-  Adds GPU memory leak notess to the FAQ
-
-* vpu: encoder: Expose motion estimation range as property
-
-* vpu: decoder: Drop output frame if its buffer cannot be allocated
+VPU firmware has been changed to the format of Linux codec driver firmware.
+Change VPU library to adapt to firmware format change.
 
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/cec4c47
+https://github.com/Freescale/meta-fsl-arm/commit/f5e1056
 
-Tested with the following commands on i.MX6Q (IPU):
+Implicitly tested through gstreamer as the plugins rely on it:
+ # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
  # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
  # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
    matroskademux ! imxvpudec ! imxipuvideosink
- # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
-   matroskademux ! imxvpudec ! imxeglvivsink
 
 Signed-off-by: Andrew Webster <awebster@arcx.com>
 ---
 Changes v1 -> v2:
   - added test procedure to comment
 
- package/gstreamer1/gst1-imx/gst1-imx.hash | 2 +-
- package/gstreamer1/gst1-imx/gst1-imx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/imx-vpu/imx-vpu.hash | 2 +-
+ package/freescale-imx/imx-vpu/imx-vpu.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-imx/gst1-imx.hash b/package/gstreamer1/gst1-imx/gst1-imx.hash
-index 03e1729..ca47776 100644
---- a/package/gstreamer1/gst1-imx/gst1-imx.hash
-+++ b/package/gstreamer1/gst1-imx/gst1-imx.hash
+diff --git a/package/freescale-imx/imx-vpu/imx-vpu.hash b/package/freescale-imx/imx-vpu/imx-vpu.hash
+index c828c2b..67ebaf2 100644
+--- a/package/freescale-imx/imx-vpu/imx-vpu.hash
++++ b/package/freescale-imx/imx-vpu/imx-vpu.hash
 @@ -1,2 +1,2 @@
- # locally computed hash
--sha256 df34f080e24ac8f1619780aa5ad4e6ab1333f822cd2bf5fcb380b28c97248810  gst1-imx-0.12.0.tar.gz
-+sha256 d8a7357bc575e22d0d19d6d7cf547bd69cad5fc47adb93f09ead41b0124353fa  gst1-imx-0.12.1.tar.gz
-diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
-index 650e097..8838110 100644
---- a/package/gstreamer1/gst1-imx/gst1-imx.mk
-+++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
+ # Locally computed
+-sha256	f11b91dcdb84bfefd3c88f10a9c1c1bc3420e4bbaadc38b9280fb52f7769eca8  imx-vpu-5.4.32.bin
++sha256	2e670ef2337a5dbe6c32fa07128ad9aad32afdbf472c23d44133245ec6a66d46  imx-vpu-5.4.33.bin
+diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
+index 949fefa..09ff5a8 100644
+--- a/package/freescale-imx/imx-vpu/imx-vpu.mk
++++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_IMX_VERSION = 0.12.0
-+GST1_IMX_VERSION = 0.12.1
- GST1_IMX_SITE = $(call github,Freescale,gstreamer-imx,$(GST1_IMX_VERSION))
+-IMX_VPU_VERSION = 5.4.32
++IMX_VPU_VERSION = 5.4.33
+ IMX_VPU_SITE = $(FREESCALE_IMX_SITE)
+ IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
  
- GST1_IMX_LICENSE = LGPLv2+
+@@ -16,7 +16,7 @@ IMX_VPU_MAKE_ENV = \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM)
+ 
+-IMX_VPU_LICENSE = Freescale Semiconductor Software License Agreement
++IMX_VPU_LICENSE = NXP Semiconductor Software License Agreement
+ IMX_VPU_LICENSE_FILES = EULA COPYING
+ IMX_VPU_REDISTRIBUTE = NO
+ 
 -- 
 1.9.1
