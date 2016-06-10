@@ -1,110 +1,104 @@
 From: Andrew Webster <awebster@arcx.com>
-Date: Fri, 10 Jun 2016 14:09:04 -0400
-Subject: [Buildroot] [PATCH v2 00/14] Bump NXP package versions
-In-Reply-To: <cover.1464958470.git.awebster@arcx.com>
+Date: Fri, 10 Jun 2016 14:09:05 -0400
+Subject: [Buildroot] [PATCH v2 01/14] nxp defconfigs: bump u-boot version to
+	4.1.15_1.1.0_ga
+In-Reply-To: <cover.1465578220.git.awebster@arcx.com>
 References: <cover.1464958470.git.awebster@arcx.com>
-Message-ID: <cover.1465578220.git.awebster@arcx.com>
+ <cover.1465578220.git.awebster@arcx.com>
+Message-ID: <40be5b9c7ef66e185db687fb8bac5746f3b97039.1465578220.git.awebster@arcx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The two patches for nxp defconfigs and the patch for imx-kobs have been build
-tested but not run-time tested.
-
+Signed-off-by: Andrew Webster <awebster@arcx.com>
+---
 Changes v1 -> v2:
-  - Reordered patches to keep gpu related patches together and multimedia
-  patches together.
-  - Added patches for bumping the kernel/u-boot versions of NXP defconfigs
-  - Added patch to bump version of imx-kobs
-  - Added patch to bump version of kernel-module-imx-gpu-viv
+  - added to patch set
 
-Andrew Webster (14):
-  nxp defconfigs: bump u-boot version to 4.1.15_1.1.0_ga
-  nxp defconfigs: bump kernel version to 4.1.15
-  kernel-module-imx-gpu-viv: bump version to that of the 5.0.11.p8.4
-    release
-  imx-gpu-viv: bump version to 5.0.11-p8.4
-  xdriver_xf86-video-imx-viv: bump version to 5.0.11-p8.4
-  firmware-imx: bump to version 5.4
-  gst1-imx: bump to version 0.12.1
-  imx-vpu: bump to version 5.4.33
-  imx-codec: rename from libfslcodec and bump version to 4.0.9
-  imx-parser: rename from libfslparser and bump version to 4.0.9
-  imx-vpuwrap: rename from libfslvpuwrap and bump version to 1.0.65
-  libimxvpuapi: bump version to 0.10.2
-  imx-lib: bump version to 5.4
-  imx-kobs: bump version to 5.4
+ configs/freescale_imx6dlsabreauto_defconfig | 2 +-
+ configs/freescale_imx6dlsabresd_defconfig   | 2 +-
+ configs/freescale_imx6qsabreauto_defconfig  | 2 +-
+ configs/freescale_imx6qsabresd_defconfig    | 2 +-
+ configs/freescale_imx6sololiteevk_defconfig | 2 +-
+ configs/freescale_imx6sxsabresd_defconfig   | 2 +-
+ configs/freescale_imx6ulevk_defconfig       | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
 
- Config.in.legacy                                   | 21 ++++++
- configs/freescale_imx6dlsabreauto_defconfig        |  8 +-
- configs/freescale_imx6dlsabresd_defconfig          |  8 +-
- configs/freescale_imx6qsabreauto_defconfig         |  8 +-
- configs/freescale_imx6qsabresd_defconfig           |  8 +-
- configs/freescale_imx6sololiteevk_defconfig        |  8 +-
- configs/freescale_imx6sxsabresd_defconfig          |  8 +-
- configs/freescale_imx6ulevk_defconfig              |  8 +-
- package/Config.in                                  |  3 -
- package/freescale-imx/Config.in                    |  3 +
- .../freescale-imx/firmware-imx/firmware-imx.hash   |  2 +-
- package/freescale-imx/firmware-imx/firmware-imx.mk |  5 +-
- .../imx-codec}/Config.in                           |  6 +-
- package/freescale-imx/imx-codec/imx-codec.hash     |  2 +
- package/freescale-imx/imx-codec/imx-codec.mk       | 23 ++++++
- package/freescale-imx/imx-gpu-viv/Config.in        |  6 +-
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash |  4 +-
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 10 +--
- package/freescale-imx/imx-kobs/imx-kobs.hash       |  3 +-
- package/freescale-imx/imx-kobs/imx-kobs.mk         |  2 +-
- package/freescale-imx/imx-lib/imx-lib.hash         |  2 +-
- package/freescale-imx/imx-lib/imx-lib.mk           |  2 +-
- .../imx-parser}/Config.in                          |  4 +-
- package/freescale-imx/imx-parser/imx-parser.hash   |  2 +
- package/freescale-imx/imx-parser/imx-parser.mk     | 23 ++++++
- package/freescale-imx/imx-vpu/imx-vpu.hash         |  2 +-
- package/freescale-imx/imx-vpu/imx-vpu.mk           |  4 +-
- .../imx-vpuwrap}/Config.in                         |  8 +-
- package/freescale-imx/imx-vpuwrap/imx-vpuwrap.hash |  2 +
- package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk   | 21 ++++++
- .../kernel-module-imx-gpu-viv.hash                 |  2 +-
- .../kernel-module-imx-gpu-viv.mk                   |  2 +-
- package/gstreamer/gst-fsl-plugins/Config.in        |  8 +-
- .../gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk   |  4 +-
- package/gstreamer1/gst1-imx/Config.in              |  2 +-
- package/gstreamer1/gst1-imx/gst1-imx.hash          |  2 +-
- package/gstreamer1/gst1-imx/gst1-imx.mk            |  6 +-
- package/kodi/kodi.mk                               |  4 +-
- package/libfslcodec/libfslcodec.hash               |  2 -
- package/libfslcodec/libfslcodec.mk                 | 23 ------
- package/libfslparser/libfslparser.hash             |  2 -
- package/libfslparser/libfslparser.mk               | 23 ------
- package/libfslvpuwrap/libfslvpuwrap.hash           |  2 -
- package/libfslvpuwrap/libfslvpuwrap.mk             | 21 ------
- package/libimxvpuapi/libimxvpuapi.hash             |  2 +-
- package/libimxvpuapi/libimxvpuapi.mk               |  2 +-
- .../0001-Remove-dix-internal-header-usage.patch    | 31 --------
- ...001-Stop-using-Git-to-write-local-version.patch | 87 ++++++++++++++++++++++
- .../xdriver_xf86-video-imx-viv.hash                |  3 +-
- .../xdriver_xf86-video-imx-viv.mk                  |  2 +-
- 50 files changed, 259 insertions(+), 187 deletions(-)
- rename package/{libfslcodec => freescale-imx/imx-codec}/Config.in (75%)
- create mode 100644 package/freescale-imx/imx-codec/imx-codec.hash
- create mode 100644 package/freescale-imx/imx-codec/imx-codec.mk
- rename package/{libfslparser => freescale-imx/imx-parser}/Config.in (78%)
- create mode 100644 package/freescale-imx/imx-parser/imx-parser.hash
- create mode 100644 package/freescale-imx/imx-parser/imx-parser.mk
- rename package/{libfslvpuwrap => freescale-imx/imx-vpuwrap}/Config.in (69%)
- create mode 100644 package/freescale-imx/imx-vpuwrap/imx-vpuwrap.hash
- create mode 100644 package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
- delete mode 100644 package/libfslcodec/libfslcodec.hash
- delete mode 100644 package/libfslcodec/libfslcodec.mk
- delete mode 100644 package/libfslparser/libfslparser.hash
- delete mode 100644 package/libfslparser/libfslparser.mk
- delete mode 100644 package/libfslvpuwrap/libfslvpuwrap.hash
- delete mode 100644 package/libfslvpuwrap/libfslvpuwrap.mk
- delete mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/0001-Remove-dix-internal-header-usage.patch
- create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/0001-Stop-using-Git-to-write-local-version.patch
-
+diff --git a/configs/freescale_imx6dlsabreauto_defconfig b/configs/freescale_imx6dlsabreauto_defconfig
+index 699e684..f55d4fa 100644
+--- a/configs/freescale_imx6dlsabreauto_defconfig
++++ b/configs/freescale_imx6dlsabreauto_defconfig
+@@ -31,4 +31,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabreauto"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
+diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
+index b6d31e0..bec80b5 100644
+--- a/configs/freescale_imx6dlsabresd_defconfig
++++ b/configs/freescale_imx6dlsabresd_defconfig
+@@ -31,4 +31,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabresd"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
+diff --git a/configs/freescale_imx6qsabreauto_defconfig b/configs/freescale_imx6qsabreauto_defconfig
+index 23ca2dc..2b89541 100644
+--- a/configs/freescale_imx6qsabreauto_defconfig
++++ b/configs/freescale_imx6qsabreauto_defconfig
+@@ -31,4 +31,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
+diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
+index bf446a3..ec8f265 100644
+--- a/configs/freescale_imx6qsabresd_defconfig
++++ b/configs/freescale_imx6qsabresd_defconfig
+@@ -31,4 +31,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
+diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
+index 72a1e2d..db68d79 100644
+--- a/configs/freescale_imx6sololiteevk_defconfig
++++ b/configs/freescale_imx6sololiteevk_defconfig
+@@ -28,4 +28,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6slevk"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
+diff --git a/configs/freescale_imx6sxsabresd_defconfig b/configs/freescale_imx6sxsabresd_defconfig
+index 943528b..7437b63 100644
+--- a/configs/freescale_imx6sxsabresd_defconfig
++++ b/configs/freescale_imx6sxsabresd_defconfig
+@@ -28,5 +28,5 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sxsabresd"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
+index fbb420e..cd27335 100644
+--- a/configs/freescale_imx6ulevk_defconfig
++++ b/configs/freescale_imx6ulevk_defconfig
+@@ -22,7 +22,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6ul_14x14_evk"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # required tools to create the microSD image
 -- 
 1.9.1
