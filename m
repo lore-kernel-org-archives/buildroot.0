@@ -1,78 +1,154 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jun 2016 16:46:38 +0200
-Subject: [Buildroot] [git commit] package/argparse: new package
-Message-ID: <20160611144714.25D1A805EE@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 11 Jun 2016 16:47:40 +0200
+Subject: [Buildroot] [PATCH 1/4] package/efl: switch to luajit support
+Message-ID: <1465656463-8556-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=169d1632d59bc0ddf32e5e5b538c8f5099467064
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+In efl 1.15.x, Lua "old" support is broken with Lua 5.2+ [1].
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-[Thomas: remove unnecessary BR2_PACKAGE_HAS_LUAINTERPRETER dependency.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+With the patch added in efl 1.16 to fixes this issue, libevas fail to link with
+the following error:
+
+CCLD bin/ecore_evas/ecore_evas_convert
+host-efl-1.16.1/src/lib/evas/.libs/libevas.so: undefined reference to `luaL_openlib'
+collect2: error: ld returned 1 exit status
+Makefile:19021: recipe for target 'bin/ecore_evas/ecore_evas_convert' failed
+
+Since 9ba8d1cce4ab00307827083bae234d87b37fb967, the luajit support can be
+enabled in efl package.
+In order to update the efl stack to 1.17, switch to luajit support and remove
+Lua "old" support since it's not fixed upstream yet. But the drawback is the
+efl stack depends implicitely on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS.
+
+[1] https://phab.enlightenment.org/T2728
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/Config.in              |  1 +
- package/argparse/Config.in     | 10 ++++++++++
- package/argparse/argparse.hash |  2 ++
- package/argparse/argparse.mk   | 13 +++++++++++++
- 4 files changed, 26 insertions(+)
+v2: select BR2_PACKAGE_LUAJIT (ThomasP)
+---
+ package/efl/Config.in | 10 ++++------
+ package/efl/efl.mk    | 17 +++++++++--------
+ 2 files changed, 13 insertions(+), 14 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f1bc86d..3d99d72 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -508,6 +508,7 @@ endif
- if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
- # lua modules are dynamically loaded, so not available on static builds
- menu "Lua libraries/modules"
-+	source "package/argparse/Config.in"
- 	source "package/cgilua/Config.in"
- 	source "package/copas/Config.in"
- 	source "package/cosmo/Config.in"
-diff --git a/package/argparse/Config.in b/package/argparse/Config.in
-new file mode 100644
-index 0000000..d207b04
---- /dev/null
-+++ b/package/argparse/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_ARGPARSE
-+	bool "argparse"
-+	help
-+	  Argparse is a feature-rich command line parser for Lua
-+	  inspired by argparse for Python. Argparse supports
-+	  positional arguments, options, flags, optional arguments,
-+	  subcommands and more. Argparse automatically generates
-+	  usage, help and error messages.
-+
-+	  https://github.com/mpeterv/argparse
-diff --git a/package/argparse/argparse.hash b/package/argparse/argparse.hash
-new file mode 100644
-index 0000000..a4746bc
---- /dev/null
-+++ b/package/argparse/argparse.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	e00e5637c937d7bfca96025f2c598ba4fffe9eb818d69952e77b4c08167a6be3  argparse-0.5.0-1.src.rock
-diff --git a/package/argparse/argparse.mk b/package/argparse/argparse.mk
-new file mode 100644
-index 0000000..095f0a3
---- /dev/null
-+++ b/package/argparse/argparse.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# argparse
-+#
-+################################################################################
-+
-+ARGPARSE_VERSION_UPSTREAM = 0.5.0
-+ARGPARSE_VERSION = $(ARGPARSE_VERSION_UPSTREAM)-1
-+ARGPARSE_SUBDIR = argparse
-+ARGPARSE_LICENSE = MIT
-+ARGPARSE_LICENSE_FILES = $(ARGPARSE_SUBDIR)/LICENSE
-+
-+$(eval $(luarocks-package))
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 88e2c36..4e37850 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -2,8 +2,7 @@ config BR2_PACKAGE_EFL
+ 	bool "efl"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_HAS_UDEV # libudev
+-	# https://phab.enlightenment.org/T2728
+-	depends on BR2_PACKAGE_LUA_5_1 # needs lua 5.1, broken with 5.2+
++	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_USE_WCHAR # use wchar_t
+@@ -13,6 +12,8 @@ config BR2_PACKAGE_EFL
+ 	select BR2_PACKAGE_JPEG # Emile needs libjpeg
+ 	select BR2_PACKAGE_LIBCURL # Ecore_con_url, runtime dependency
+ 	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
++	# https://phab.enlightenment.org/T2728
++	select BR2_PACKAGE_LUAJIT # Lua support broken with 5.2+
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	# libblkid is part of required tools, see EFL's README.
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+@@ -184,8 +185,5 @@ endif # BR2_PACKAGE_EFL
+ comment "efl needs udev /dev management and a toolchain w/ C++, dynamic library, threads, wchar"
+ 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP \
+ 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+-	depends on BR2_USE_MMU
+-
+-comment "efl needs lua 5.1"
+-	depends on !BR2_PACKAGE_LUA_5_1
++	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 2ea2592..916999d 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -19,8 +19,8 @@ EFL_LICENSE_FILES = \
+ 
+ EFL_INSTALL_STAGING = YES
+ 
+-EFL_DEPENDENCIES = host-pkgconf host-efl dbus freetype jpeg lua udev \
+-	util-linux zlib
++EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
++	jpeg luajit udev util-linux zlib
+ 
+ # Regenerate the autotools:
+ #  - to fix an issue in eldbus-codegen: https://phab.enlightenment.org/T2718
+@@ -29,19 +29,20 @@ EFL_GETTEXTIZE = YES
+ 
+ # Configure options:
+ # --disable-cxx-bindings: disable C++11 bindings.
++# --disable-lua-old: build elua for the target.
+ # --disable-sdl: disable sdl2 support.
+ # --disable-systemd: disable systemd support.
+ # --disable-xinput22: disable X11 XInput v2.2+ support.
+-# --enable-lua-old: disable Elua and remove luajit dependency.
+ # --with-opengl=none: disable opengl support.
+ EFL_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
++	--with-elua=$(HOST_DIR)/usr/bin/elua \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+ 	--disable-cxx-bindings \
++	--disable-lua-old \
+ 	--disable-sdl \
+ 	--disable-systemd \
+ 	--disable-xinput22 \
+-	--enable-lua-old \
+ 	--with-opengl=none
+ 
+ # Disable untested configuration warning.
+@@ -227,7 +228,7 @@ $(eval $(autotools-package))
+ # * host-freetype: for libevas
+ # * host-libglib2: for libecore
+ # * host-libjpeg, host-libpng: for libevas image loader
+-# * host-lua: disable luajit dependency
++# * host-luajit for Elua tool for the host
+ HOST_EFL_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-dbus \
+@@ -235,7 +236,7 @@ HOST_EFL_DEPENDENCIES = \
+ 	host-libglib2 \
+ 	host-libjpeg \
+ 	host-libpng \
+-	host-lua \
++	host-luajit \
+ 	host-zlib
+ 
+ # Configure options:
+@@ -246,10 +247,10 @@ HOST_EFL_DEPENDENCIES = \
+ # --disable-gstreamer1: remove dependency on gtreamer 1.0.
+ # --disable-libeeze: remove libudev dependency.
+ # --disable-libmount: remove dependency on host-util-linux libmount.
++# --disable-lua-old: build elua for the host.
+ # --disable-physics: remove Bullet dependency.
+ # --enable-image-loader-gif=no: disable Gif dependency.
+ # --enable-image-loader-tiff=no: disable Tiff dependency.
+-# --enable-lua-old: disable Elua and remove luajit dependency.
+ # --with-crypto=none: remove dependencies on openssl or gnutls.
+ # --with-x11=none: remove dependency on X.org.
+ #   Yes I really know what I am doing.
+@@ -261,13 +262,13 @@ HOST_EFL_CONF_OPTS += \
+ 	--disable-gstreamer1 \
+ 	--disable-libeeze \
+ 	--disable-libmount \
++	--disable-lua-old \
+ 	--disable-multisense \
+ 	--disable-physics \
+ 	--enable-image-loader-gif=no \
+ 	--enable-image-loader-jpeg=yes \
+ 	--enable-image-loader-png=yes \
+ 	--enable-image-loader-tiff=no \
+-	--enable-lua-old \
+ 	--with-crypto=none \
+ 	--with-glib=yes \
+ 	--with-opengl=none \
+-- 
+2.5.5
