@@ -1,33 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jun 2016 16:41:50 +0200
-Subject: [Buildroot] [PATCH v6] domoticz: new package
-In-Reply-To: <6849_1463657718_573DA4F6_6849_12052_1_3ce00ece-243f-4019-b40a-3f70debf34ba@OPEXCLILM5F.corporate.adroot.infra.ftgroup>
-References: <6849_1463657718_573DA4F6_6849_12052_1_3ce00ece-243f-4019-b40a-3f70debf34ba@OPEXCLILM5F.corporate.adroot.infra.ftgroup>
-Message-ID: <20160611164150.17a91f7b@free-electrons.com>
+Date: Sat, 11 Jun 2016 16:42:45 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xkeyboard-config: bump
+	version to 2.18
+Message-ID: <20160611144303.3D17581D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d6ca79df92b27ec91504b1d178513b8f7b5362d4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 19 May 2016 13:35:10 +0200, fabrice.fontaine at orange.com wrote:
-> Domoticz is a Home Automation System that lets you monitor and
-> configure various devices like: Lights, Switches, various
-> sensors/meters like Temperature, Rain, Wind, UV, Electra, Gas, Water
-> and much more. Notifications/Alerts can be sent to any mobile device.
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> ---
-> Changes v5 -> v6 (after review of Julien Boibessot):
->  - Fix typo andi -> and in Config.in
->  - Fix port number from 18080 -> 8080 in S99domoticz
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xkeyboard-config/xkeyboard-config.hash | 4 ++--
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master with a few minor tweaks. Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index fad76ed..7c2b64d 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2016-January/002671.html
+-sha256	dec6be44bd31775cdc1ab95bfd75d5f2c0055613eeca8b4e9c6480b183430701	xkeyboard-config-2.17.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-June/002698.html
++sha256	c41d917d6c8a59feb7ccbda51c40a6ada824fdd1e9684b52dd48c9530617ddd0	xkeyboard-config-2.18.tar.bz2
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index 352c55d..e96d1d7 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XKEYBOARD_CONFIG_VERSION = 2.17
++XKEYBOARD_CONFIG_VERSION = 2.18
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
+ XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
+ XKEYBOARD_CONFIG_LICENSE = MIT
