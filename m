@@ -1,51 +1,39 @@
-From: Charles Hardin <ckhardin@exablox.com>
-Date: Sat, 11 Jun 2016 10:32:56 -0700
-Subject: [Buildroot] [PATCH 1/1] package/cmake: with BR2_ENABLE_DEBUG
-	use RelWithDebInfo
-In-Reply-To: <CAHXCMMKAs1E4F6MCZCjtgoPp7NTY-JwMpGmK7Jn2v54MtnMjGw@mail.gmail.com>
-References: <1463861314-15547-1-git-send-email-ckhardin@exablox.com>
- <20160611161913.5ad9765f@free-electrons.com>
- <CAHXCMMJrKaCxTSh1psSfDHF6_S2XtHwLA32SBbQGWs2HVGTToA@mail.gmail.com>
- <20160611190604.020d7531@free-electrons.com>
- <CAHXCMMKAs1E4F6MCZCjtgoPp7NTY-JwMpGmK7Jn2v54MtnMjGw@mail.gmail.com>
-Message-ID: <64543A02-21A9-4E16-B25B-D67F23AFA551@exablox.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 11 Jun 2016 20:06:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: bump version to 2.2.4
+Message-ID: <1465668365-29201-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We hit the size and the NDEBUG issue as well.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/vlc/vlc.hash | 2 +-
+ package/vlc/vlc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Sent from my iPhone
-
-> On Jun 11, 2016, at 10:22 AM, Samuel Martin <s.martin49@gmail.com> wrote:
-> 
-> On Sat, Jun 11, 2016 at 7:06 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
->> 
->>> On Sat, 11 Jun 2016 17:22:24 +0200, Samuel Martin wrote:
->>> 
->>> By default CMake sets the CFLAGS like this:
->>> CMAKE_C_FLAGS_DEBUG=-g
->>> CMAKE_C_FLAGS_RELWITHDEBINFO=-O2 -g -DNDEBUG
->> 
->> Is -O2 -g really what we want for debugging? Optimized code very often
->> doesn't play well with debugging.
-> 
-> To be honest, I don't have a strong opinion about it.
-> 
-> Note that this is the default flags CMake sets; if you add to the
-> configure opts:
->  -DCMAKE_C_FLAGS_RELWITHDEBINFO=-g -O1 -UNDEBUG
-> then these flags are taken into account, not the default ones.
-> 
-> OTOH, applying no optimization at all in debug build may lead to some
-> size issues for (very) tiny targets... Who knows? though I don't
-> remember any bug report/complaint about such a situation.
-> 
-> Regards,
-> 
-> -- 
-> Samuel
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index 04632e0..e86fafe 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,2 +1,2 @@
+ # From http://download.videolan.org/pub/videolan/vlc/2.2.3/vlc-2.2.3.tar.xz.sha256
+-sha256 b9d7587d35f13c3c981964c8cc8b03f1c7c8edf528be476b3ca1d2efedd5bf5b  vlc-2.2.3.tar.xz
++sha256 1632e91d2a0087e0ef4c3fb4c95c3c2890f7715a9d1d43ffd46329f428cf53be  vlc-2.2.4.tar.xz
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 4dc8dfe..8efbecb 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VLC_VERSION = 2.2.3
++VLC_VERSION = 2.2.4
+ VLC_SITE = http://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPLv2+ LGPLv2.1+
+-- 
+2.8.1
