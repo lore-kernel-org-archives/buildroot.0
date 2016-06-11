@@ -1,37 +1,28 @@
-From: Jaap Crezee <jaap@jcz.nl>
-Date: Sat, 11 Jun 2016 12:40:36 +0200
-Subject: [Buildroot] host-lzop failing when host is using gcc-6
-In-Reply-To: <87twhn9pqx.fsf@dell.be.48ers.dk>
-References: <ba2ba1aa-3774-89b9-f8bf-270bc3ebac78@jcz.nl>
- <87twhn9pqx.fsf@dell.be.48ers.dk>
-Message-ID: <0430753f-9aaf-fcef-90ee-35088009b670@jcz.nl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Jun 2016 15:06:05 +0200
+Subject: [Buildroot] [PATCH] librsvg: bump to version 2.40.16
+In-Reply-To: <1465607121-28587-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1465607121-28587-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160611150605.71c0735e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello,
 
+On Fri, 10 Jun 2016 22:05:21 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/librsvg/librsvg.hash | 4 ++--
+>  package/librsvg/librsvg.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 05/24/16 22:15, Peter Korsgaard wrote:
->>>>>> "Jaap" == Jaap Crezee <jaap@jcz.nl> writes:
-> 
->  > Hi all,
->  > host-lzop seems to be failing when Archlinux switched to gcc-6.x
->  > recently. One can see the attached logfile. Anybody willing to
->  > investigate? I don't have time at the moment.
->  > HOSTCC=gcc-4.8 bypasses the issue for me...
->
-> This sounds like this:
-> 
-> http://patchwork.openembedded.org/patch/122249/
-> https://build.opensuse.org/package/view_file/Archiving/lzop/lzop-1.03-gcc6.patch?expand=1
+Applied to master, thanks.
 
-I used that patch and tweaked it a little to allow patching from buildroot.
-It works flawlessley on my Archlinux gcc-6.1.1 box.
-
-regards,
-
-
-Jaap
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
