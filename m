@@ -1,46 +1,88 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Sat, 11 Jun 2016 17:15:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: fix fsck when using
-	systemd
-Message-ID: <1465661756-11389-1-git-send-email-martin@barkynet.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 11 Jun 2016 18:30:19 +0200
+Subject: [Buildroot] [PATCH/RFC 1/1] package/qt: Avoid X11 header collision
+	with OpenGL/EGL
+Message-ID: <1465662619-9279-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit a93fc34 modified e2fsprogs to symlink /usr/sbin/fsck to /sbin/fsck
-to keep systemd happy.  However, later on commit c5bd8af6 has forced
-/usr/sbin to be a symlink to /sbin when using systemd.  This means fsck
-gets destroyed as a symlink to itself when using systemd or when setting
-BR2_ROOTFS_MERGED_USR.
-
-Since commit c5bd8af6 obsoletes commit a93fc34 revert the changes from
-commit a93fc34 to solve the issue.
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/e2fsprogs/e2fsprogs.mk | 9 ---------
- 1 file changed, 9 deletions(-)
+I am unsure whether this patch could break with other defconfigs,
+therefore I regard this patch as RFC.
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 5ba9278..7aa0285 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -155,14 +155,5 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_TUNE2FS),y)
- E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_TUNE2FS_SYMLINK
- endif
- 
--# systemd really wants to have fsck in /sbin
--define E2FSPROGS_TARGET_FSCK_SYMLINK
--	ln -sf ../usr/sbin/fsck $(TARGET_DIR)/sbin/fsck
--endef
--
--ifeq ($(BR2_PACKAGE_E2FSPROGS_FSCK),y)
--E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_FSCK_SYMLINK
--endif
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ ...012-OpenGL-EGL-Avoid-X11-header-collision.patch | 60 ++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+ create mode 100644 package/qt/0012-OpenGL-EGL-Avoid-X11-header-collision.patch
+
+diff --git a/package/qt/0012-OpenGL-EGL-Avoid-X11-header-collision.patch b/package/qt/0012-OpenGL-EGL-Avoid-X11-header-collision.patch
+new file mode 100644
+index 0000000..8c65d1d
+--- /dev/null
++++ b/package/qt/0012-OpenGL-EGL-Avoid-X11-header-collision.patch
+@@ -0,0 +1,60 @@
++From 87c9c18fad02744238336a6cf1ce70d3ec2c89c2 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 11 Jun 2016 17:03:07 +0200
++Subject: [PATCH 1/1] OpenGL/EGL: Avoid X11 header collision
++
++Including X11 headers via EGL/egl.h leads to a collision of defines
++between Qt and X11. To fix this qt5 added
++  DEFINES += MESA_EGL_NO_X11_HEADERS
++in various files:
++
++https://github.com/qtproject/qtbase/blob/dev/src/platformsupport/eglconvenience/eglconvenience.pri#L19
++https://github.com/qtproject/qtbase/blob/dev/src/plugins/platforms/minimalegl/minimalegl.pro#L10
++https://github.com/qtproject/qtbase/blob/dev/src/plugins/platforms/eglfs/deviceintegration/eglfs_x11/eglfs_x11.pro#L6
++[...]
++
++This patch fixes a similar compile error in qt4:
++http://autobuild.buildroot.net/results/9b0/9b0ed92984eead89d148eaa71aff6e2f1e117837/
++http://autobuild.buildroot.org/results/4fd/4fd57553336d36439fab32a7221fc8639758e887/
++http://autobuild.buildroot.org/results/5cb/5cb8072f8220f7203fa79936eedcc43eab53ec66/
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(patch not sent upstream because qt4 branch is closed:
++ http://blog.qt.io/blog/2015/05/26/qt-4-8-7-released/)
++---
++
++ src/gui/egl/egl.pri   | 3 +++
++ src/opengl/opengl.pro | 3 +++
++ 2 files changed, 6 insertions(+)
++
++diff --git a/src/gui/egl/egl.pri b/src/gui/egl/egl.pri
++index 8e8664c..715ffd7 100644
++--- a/src/gui/egl/egl.pri
+++++ b/src/gui/egl/egl.pri
++@@ -22,6 +22,9 @@ contains(QT_CONFIG, egl): {
++             !isEmpty(QMAKE_LIBS_EGL): LIBS += $$QMAKE_LIBS_EGL
++         }
++ 
+++	# Avoid X11 header collision
+++	DEFINES += MESA_EGL_NO_X11_HEADERS
+++
++ 	wince*: SOURCES += egl/qegl_wince.cpp
++ 
++ 	unix {
++diff --git a/src/opengl/opengl.pro b/src/opengl/opengl.pro
++index ce1a5d2..65b1031 100644
++--- a/src/opengl/opengl.pro
+++++ b/src/opengl/opengl.pro
++@@ -149,6 +149,9 @@ embedded {
++                qglwindowsurface_qws_p.h \
++                qgl_egl_p.h
++ 
+++    # Avoid X11 header collision
+++    DEFINES += MESA_EGL_NO_X11_HEADERS
+++
++     contains(QT_CONFIG, fontconfig) {
++         include($$QT_SOURCE_TREE/config.tests/unix/freetype/freetype.pri)
++     } else {
++-- 
++2.8.1
++
 -- 
-2.7.4
+2.8.1
