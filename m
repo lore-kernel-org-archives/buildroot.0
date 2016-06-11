@@ -1,43 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 11 Jun 2016 16:56:27 -0300
-Subject: [Buildroot] [PATCH] make: bump to version 4.2.1
-Message-ID: <1465674987-27761-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Jun 2016 23:52:39 +0200
+Subject: [Buildroot] [git commit] package/log4cpp: fix legal-info
+Message-ID: <20160611215244.A21D7819A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/make/make.hash | 6 +++---
- package/make/make.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=6e58dc74d7f804e2ca17003c5ded9d62e5f18419
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/make/make.hash b/package/make/make.hash
-index 81f7044..ea2e860 100644
---- a/package/make/make.hash
-+++ b/package/make/make.hash
-@@ -1,4 +1,4 @@
--# From http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00013.html
--md5 85ad14d08766201ffe71efa866f4fb91  make-4.2.tar.bz2
-+# From http://lists.gnu.org/archive/html/info-gnu/2016-06/msg00005.html
-+md5 15b012617e7c44c0ed482721629577ac  make-4.2.1.tar.bz2
- # Locally calculated after checking signature
--sha256 4e5ce3b62fe5d75ff8db92b7f6df91e476d10c3aceebf1639796dc5bfece655f  make-4.2.tar.bz2
-+sha256 d6e262bf3601b42d2b1e4ef8310029e1dcf20083c5446b4b7aa67081fdffc589  make-4.2.1.tar.bz2
-diff --git a/package/make/make.mk b/package/make/make.mk
-index 43f4f77..c51ce3b 100644
---- a/package/make/make.mk
-+++ b/package/make/make.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+The source code files are stored in log4cpp/.
+Apparently LOG4CPP_LICENSE_FILES does not take LOG4CPP_SUBDIR into
+account so we need to fix LOG4CPP_LICENSE_FILES itself.
+
+Fixes
+http://autobuild.buildroot.net/results/a80/a80e83ca58b22afedb8f2573513d373913c6a488/
+http://autobuild.buildroot.net/results/9eb/9ebb2ed5171d5a1be2db06497a210e552bfad078/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/log4cpp/log4cpp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/log4cpp/log4cpp.mk b/package/log4cpp/log4cpp.mk
+index 18cc6c8..24f9a0d 100755
+--- a/package/log4cpp/log4cpp.mk
++++ b/package/log4cpp/log4cpp.mk
+@@ -11,7 +11,7 @@ LOG4CPP_SITE = http://downloads.sourceforge.net/project/log4cpp/log4cpp-1.1.x%20
+ LOG4CPP_SUBDIR = log4cpp
+ # The "or later" is indicated in the HTML documentation
+ LOG4CPP_LICENSE = LGPLv2.1+
+-LOG4CPP_LICENSE_FILES = COPYING
++LOG4CPP_LICENSE_FILES = log4cpp/COPYING
+ LOG4CPP_INSTALL_STAGING = YES
  
--MAKE_VERSION = 4.2
-+MAKE_VERSION = 4.2.1
- MAKE_SOURCE = make-$(MAKE_VERSION).tar.bz2
- MAKE_SITE = $(BR2_GNU_MIRROR)/make
- MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
--- 
-2.7.3
+ # The default <pkg>_CONFIG_SCRIPTS handling does not apply
