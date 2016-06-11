@@ -1,43 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jun 2016 16:42:47 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-evdev:
-	bump version to 2.10.3
-Message-ID: <20160611144303.5A5CA81D65@busybox.osuosl.org>
+Date: Sat, 11 Jun 2016 16:42:49 +0200
+Subject: [Buildroot] [git commit] package/eudev: bump version to 3.2
+Message-ID: <20160611144303.9000081D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a7b2883ec797677776421a19199906c28b27999
+commit: https://git.buildroot.net/buildroot/commit/?id=3240f59e96f515d3dbec173fbc796aa1ae30d027
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash | 4 ++--
- package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk   | 2 +-
+ package/eudev/eudev.hash | 4 ++--
+ package/eudev/eudev.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-index 3314934..91937f2 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2016-January/002669.html
--sha256	af9c2b47f5b272ae56b45da6bd84610fc9a3d80a4b32c8215842a39d862de017	xf86-input-evdev-2.10.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-June/002696.html
-+sha256	5aa21ba4be8df927e5676a99c7f4f0343abc089f5451b7e73e39536f29b332a2	xf86-input-evdev-2.10.3.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index 4a2ed36..c801323 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
+index e7c331c..44ed169 100644
+--- a/package/eudev/eudev.hash
++++ b/package/eudev/eudev.hash
+@@ -1,4 +1,4 @@
+ # From http://dev.gentoo.org/~blueness/eudev/
+-md5	c4dace42deecede102b6c01904042acc	eudev-3.1.5.tar.gz
++md5	7e42d9b9ed8162021665139520676367	eudev-3.2.tar.gz
+ # Locally calculated
+-sha256	f75885a430cd50fe4b31732f808ba7f9b2adf0f26b53b8ba2957b0c1d84b6f2a	eudev-3.1.5.tar.gz
++sha256	d84a5f7942393a009afc6af0bf31e98841147a0521b91ffbed161dccac303c25	eudev-3.2.tar.gz
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index 942770c..4818ea5 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.10.1
-+XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.10.3
- XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
+-EUDEV_VERSION = 3.1.5
++EUDEV_VERSION = 3.2
+ EUDEV_SOURCE = eudev-$(EUDEV_VERSION).tar.gz
+ EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
+ EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
