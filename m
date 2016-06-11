@@ -1,29 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jun 2016 16:43:24 +0200
-Subject: [Buildroot] [PATCH 1/9] package/x11r7/xproto_xproto: bump
- version to 7.0.29
-In-Reply-To: <1465634252-30741-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465634252-30741-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160611164324.6865eced@free-electrons.com>
+Date: Sat, 11 Jun 2016 16:46:38 +0200
+Subject: [Buildroot] [git commit] package/argparse: new package
+Message-ID: <20160611144714.25D1A805EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=169d1632d59bc0ddf32e5e5b538c8f5099467064
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 11 Jun 2016 10:37:24 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/x11r7/xproto_xproto/xproto_xproto.hash | 4 ++--
->  package/x11r7/xproto_xproto/xproto_xproto.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+[Thomas: remove unnecessary BR2_PACKAGE_HAS_LUAINTERPRETER dependency.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in              |  1 +
+ package/argparse/Config.in     | 10 ++++++++++
+ package/argparse/argparse.hash |  2 ++
+ package/argparse/argparse.mk   | 13 +++++++++++++
+ 4 files changed, 26 insertions(+)
 
-Series applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index f1bc86d..3d99d72 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -508,6 +508,7 @@ endif
+ if BR2_PACKAGE_HAS_LUAINTERPRETER && !BR2_STATIC_LIBS
+ # lua modules are dynamically loaded, so not available on static builds
+ menu "Lua libraries/modules"
++	source "package/argparse/Config.in"
+ 	source "package/cgilua/Config.in"
+ 	source "package/copas/Config.in"
+ 	source "package/cosmo/Config.in"
+diff --git a/package/argparse/Config.in b/package/argparse/Config.in
+new file mode 100644
+index 0000000..d207b04
+--- /dev/null
++++ b/package/argparse/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_ARGPARSE
++	bool "argparse"
++	help
++	  Argparse is a feature-rich command line parser for Lua
++	  inspired by argparse for Python. Argparse supports
++	  positional arguments, options, flags, optional arguments,
++	  subcommands and more. Argparse automatically generates
++	  usage, help and error messages.
++
++	  https://github.com/mpeterv/argparse
+diff --git a/package/argparse/argparse.hash b/package/argparse/argparse.hash
+new file mode 100644
+index 0000000..a4746bc
+--- /dev/null
++++ b/package/argparse/argparse.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	e00e5637c937d7bfca96025f2c598ba4fffe9eb818d69952e77b4c08167a6be3  argparse-0.5.0-1.src.rock
+diff --git a/package/argparse/argparse.mk b/package/argparse/argparse.mk
+new file mode 100644
+index 0000000..095f0a3
+--- /dev/null
++++ b/package/argparse/argparse.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# argparse
++#
++################################################################################
++
++ARGPARSE_VERSION_UPSTREAM = 0.5.0
++ARGPARSE_VERSION = $(ARGPARSE_VERSION_UPSTREAM)-1
++ARGPARSE_SUBDIR = argparse
++ARGPARSE_LICENSE = MIT
++ARGPARSE_LICENSE_FILES = $(ARGPARSE_SUBDIR)/LICENSE
++
++$(eval $(luarocks-package))
