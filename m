@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jun 2016 23:56:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: bump version to 2.2.4
-In-Reply-To: <1465668365-29201-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465668365-29201-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160611235610.49ce6ab1@free-electrons.com>
+Date: Sat, 11 Jun 2016 23:56:13 +0200
+Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2016.06.10
+In-Reply-To: <1465673983-27652-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1465673983-27652-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160611235613.7c2b0040@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 11 Jun 2016 20:06:04 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Sat, 11 Jun 2016 16:39:43 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/vlc/vlc.hash | 2 +-
->  package/vlc/vlc.mk   | 2 +-
+>  package/wireless-regdb/wireless-regdb.hash | 2 +-
+>  package/wireless-regdb/wireless-regdb.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
