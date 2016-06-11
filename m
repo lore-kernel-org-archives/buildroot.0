@@ -1,50 +1,37 @@
 From: Jaap Crezee <jaap@jcz.nl>
-Date: Sat, 11 Jun 2016 12:38:59 +0200
-Subject: [Buildroot] [PATCH 1/1] host-lzop host-gcc 6 fix
-Message-ID: <20160611103859.31752-1-jaap@jcz.nl>
+Date: Sat, 11 Jun 2016 12:40:36 +0200
+Subject: [Buildroot] host-lzop failing when host is using gcc-6
+In-Reply-To: <87twhn9pqx.fsf@dell.be.48ers.dk>
+References: <ba2ba1aa-3774-89b9-f8bf-270bc3ebac78@jcz.nl>
+ <87twhn9pqx.fsf@dell.be.48ers.dk>
+Message-ID: <0430753f-9aaf-fcef-90ee-35088009b670@jcz.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jaap Crezee <jaap@jcz.nl>
----
- package/lzop/001-host-gcc-6.patch | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/lzop/001-host-gcc-6.patch
+Hi Peter,
 
-diff --git a/package/lzop/001-host-gcc-6.patch b/package/lzop/001-host-gcc-6.patch
-new file mode 100644
-index 0000000..852debe
---- /dev/null
-+++ b/package/lzop/001-host-gcc-6.patch
-@@ -0,0 +1,26 @@
-+--- a/src/miniacc.h.orig   2016-02-10 16:09:23.247315866 +0100
-++++ b/src/miniacc.h   2016-02-10 16:12:14.973297054 +0100
-+@@ -4469,12 +4469,12 @@
-+ #if defined(__MSDOS__) && defined(__TURBOC__) && (__TURBOC__ < 0x0150)
-+ #elif 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
-+ #else
-+-    ACCCHK_ASSERT((1   << (8*SIZEOF_INT-1)) < 0)
-++    ACCCHK_ASSERT((int)(1u   << (8*SIZEOF_INT-1)) < 0)
-+ #endif
-+     ACCCHK_ASSERT((1u  << (8*SIZEOF_INT-1)) > 0)
-+ #if 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
-+ #else
-+-    ACCCHK_ASSERT((1l  << (8*SIZEOF_LONG-1)) < 0)
-++    ACCCHK_ASSERT((long)(1ul  << (8*SIZEOF_LONG-1)) < 0)
-+ #endif
-+     ACCCHK_ASSERT((1ul << (8*SIZEOF_LONG-1)) > 0)
-+ #if defined(acc_int16e_t)
-+@@ -4703,7 +4703,7 @@
-+ #elif 1 && (ACC_CC_LCC || ACC_CC_LCCWIN32) && !defined(ACCCHK_CFG_PEDANTIC)
-+ #elif 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
-+ #elif !(ACC_BROKEN_INTEGRAL_PROMOTION) && (SIZEOF_INT > 1)
-+-    ACCCHK_ASSERT( (((unsigned char)128) << (int)(8*sizeof(int)-8)) < 0)
-++    ACCCHK_ASSERT( (int)((unsigned int)((unsigned char)128) << (int)(8*sizeof(int)-8)) < 0)
-+ #endif
-+ #if (ACC_CC_BORLANDC && (__BORLANDC__ >= 0x0530) && (__BORLANDC__ < 0x0560))
-+ #  pragma option pop
--- 
-2.8.3
+
+On 05/24/16 22:15, Peter Korsgaard wrote:
+>>>>>> "Jaap" == Jaap Crezee <jaap@jcz.nl> writes:
+> 
+>  > Hi all,
+>  > host-lzop seems to be failing when Archlinux switched to gcc-6.x
+>  > recently. One can see the attached logfile. Anybody willing to
+>  > investigate? I don't have time at the moment.
+>  > HOSTCC=gcc-4.8 bypasses the issue for me...
+>
+> This sounds like this:
+> 
+> http://patchwork.openembedded.org/patch/122249/
+> https://build.opensuse.org/package/view_file/Archiving/lzop/lzop-1.03-gcc6.patch?expand=1
+
+I used that patch and tweaked it a little to allow patching from buildroot.
+It works flawlessley on my Archlinux gcc-6.1.1 box.
+
+regards,
+
+
+Jaap
