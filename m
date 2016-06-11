@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 11 Jun 2016 16:39:43 -0300
-Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2016.06.10
-Message-ID: <1465673983-27652-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 11 Jun 2016 16:39:58 -0300
+Subject: [Buildroot] [PATCH] gettext: bump to version 0.19.8.1
+Message-ID: <1465673998-27699-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gettext/gettext.hash | 6 +++---
+ package/gettext/gettext.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index 44b2e41..b8ca2e7 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	c9674c988a944105148091b74c05c6fa6bd9611b9bbab6b81abfb5e5387bc61e	wireless-regdb-2016.05.02.tar.xz
-+sha256	cfedf1c3521b3c8f32602f25ed796e96e687c3441a00e7c050fedf7fd4f1b8b7	wireless-regdb-2016.06.10.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 49bcb32..6ad4258 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
+diff --git a/package/gettext/gettext.hash b/package/gettext/gettext.hash
+index adaeb3eb..cff6eb1 100644
+--- a/package/gettext/gettext.hash
++++ b/package/gettext/gettext.hash
+@@ -1,3 +1,3 @@
+-# From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00002.html
+-md5	3e7ed1ac886b9b1a4e23e71113da6358	gettext-0.19.8.tar.xz
+-sha1	dc551d4783edf691c1f0095ca927d3128b5093e8	gettext-0.19.8.tar.xz
++# From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
++md5	df3f5690eaa30fd228537b00cb7b7590	gettext-0.19.8.1.tar.xz
++sha1	e0fe90ede22f7f16bbde7bdea791a835f2773fc9	gettext-0.19.8.1.tar.xz
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index fa43f7b..71fcb00 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRELESS_REGDB_VERSION = 2016.05.02
-+WIRELESS_REGDB_VERSION = 2016.06.10
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-GETTEXT_VERSION = 0.19.8
++GETTEXT_VERSION = 0.19.8.1
+ GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
+ GETTEXT_SOURCE = gettext-$(GETTEXT_VERSION).tar.xz
+ GETTEXT_INSTALL_STAGING = YES
 -- 
 2.7.3
