@@ -1,45 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jun 2016 23:57:19 +0200
-Subject: [Buildroot] [git commit] make: bump to version 4.2.1
-Message-ID: <20160611215726.CF7B2802D8@busybox.osuosl.org>
+Date: Sat, 11 Jun 2016 23:55:42 +0200
+Subject: [Buildroot] [git commit] gettext: bump to version 0.19.8.1
+Message-ID: <20160611215726.B6DB1802D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a907562d7d3cc6056231baab79d78f8f342c455d
+commit: https://git.buildroot.net/buildroot/commit/?id=79411223f846d78f913e5da62fa2528a08b72287
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/make/make.hash | 6 +++---
- package/make/make.mk   | 2 +-
+ package/gettext/gettext.hash | 6 +++---
+ package/gettext/gettext.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/make/make.hash b/package/make/make.hash
-index 81f7044..ea2e860 100644
---- a/package/make/make.hash
-+++ b/package/make/make.hash
-@@ -1,4 +1,4 @@
--# From http://lists.gnu.org/archive/html/info-gnu/2016-05/msg00013.html
--md5 85ad14d08766201ffe71efa866f4fb91  make-4.2.tar.bz2
-+# From http://lists.gnu.org/archive/html/info-gnu/2016-06/msg00005.html
-+md5 15b012617e7c44c0ed482721629577ac  make-4.2.1.tar.bz2
- # Locally calculated after checking signature
--sha256 4e5ce3b62fe5d75ff8db92b7f6df91e476d10c3aceebf1639796dc5bfece655f  make-4.2.tar.bz2
-+sha256 d6e262bf3601b42d2b1e4ef8310029e1dcf20083c5446b4b7aa67081fdffc589  make-4.2.1.tar.bz2
-diff --git a/package/make/make.mk b/package/make/make.mk
-index 43f4f77..c51ce3b 100644
---- a/package/make/make.mk
-+++ b/package/make/make.mk
+diff --git a/package/gettext/gettext.hash b/package/gettext/gettext.hash
+index adaeb3eb..cff6eb1 100644
+--- a/package/gettext/gettext.hash
++++ b/package/gettext/gettext.hash
+@@ -1,3 +1,3 @@
+-# From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00002.html
+-md5	3e7ed1ac886b9b1a4e23e71113da6358	gettext-0.19.8.tar.xz
+-sha1	dc551d4783edf691c1f0095ca927d3128b5093e8	gettext-0.19.8.tar.xz
++# From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
++md5	df3f5690eaa30fd228537b00cb7b7590	gettext-0.19.8.1.tar.xz
++sha1	e0fe90ede22f7f16bbde7bdea791a835f2773fc9	gettext-0.19.8.1.tar.xz
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index fa43f7b..71fcb00 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MAKE_VERSION = 4.2
-+MAKE_VERSION = 4.2.1
- MAKE_SOURCE = make-$(MAKE_VERSION).tar.bz2
- MAKE_SITE = $(BR2_GNU_MIRROR)/make
- MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+-GETTEXT_VERSION = 0.19.8
++GETTEXT_VERSION = 0.19.8.1
+ GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
+ GETTEXT_SOURCE = gettext-$(GETTEXT_VERSION).tar.xz
+ GETTEXT_INSTALL_STAGING = YES
