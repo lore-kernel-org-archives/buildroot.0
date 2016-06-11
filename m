@@ -1,43 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 11 Jun 2016 11:41:40 +0200
-Subject: [Buildroot] change lirc to new version
-In-Reply-To: <CAG7w3y=cPNCEgkWrhLZtzbQOwXbUesBanmq1JDeJ9XA9t4g8Fw@mail.gmail.com>
-References: <CAG7w3y=cPNCEgkWrhLZtzbQOwXbUesBanmq1JDeJ9XA9t4g8Fw@mail.gmail.com>
-Message-ID: <20160611094140.GA3696@free.fr>
+From: Jaap Crezee <jaap@jcz.nl>
+Date: Sat, 11 Jun 2016 12:38:59 +0200
+Subject: [Buildroot] [PATCH 1/1] host-lzop host-gcc 6 fix
+Message-ID: <20160611103859.31752-1-jaap@jcz.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gdbabu, All,
+Signed-off-by: Jaap Crezee <jaap@jcz.nl>
+---
+ package/lzop/001-host-gcc-6.patch | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/lzop/001-host-gcc-6.patch
 
-On 2016-06-11 12:58 +0530, gdbabu Krishnan spake thusly:
-> i am currently using buildroot for raspberry pi, i am using lircd version
-> 0.9.3a it does not forward KEY event to UINPUT.
-> 
-> so i want to use latest version of lircd, could you tell me how to change
-> lirc package in buildroot.
-
-See in package/lirc-tools/lirc-tools.mk
-
-Note that you'll have to check a few things, besides bumping the
-version:
-  - is our patch still needed?
-  - if so, does it still apply?
-  - are there new depednencies?
-  - are there new options?
-
-and so on... You may have to investigate a bit to do the bump.
-
-Regards,
-Yann E. MORIN.
-
-
+diff --git a/package/lzop/001-host-gcc-6.patch b/package/lzop/001-host-gcc-6.patch
+new file mode 100644
+index 0000000..852debe
+--- /dev/null
++++ b/package/lzop/001-host-gcc-6.patch
+@@ -0,0 +1,26 @@
++--- a/src/miniacc.h.orig   2016-02-10 16:09:23.247315866 +0100
+++++ b/src/miniacc.h   2016-02-10 16:12:14.973297054 +0100
++@@ -4469,12 +4469,12 @@
++ #if defined(__MSDOS__) && defined(__TURBOC__) && (__TURBOC__ < 0x0150)
++ #elif 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
++ #else
++-    ACCCHK_ASSERT((1   << (8*SIZEOF_INT-1)) < 0)
+++    ACCCHK_ASSERT((int)(1u   << (8*SIZEOF_INT-1)) < 0)
++ #endif
++     ACCCHK_ASSERT((1u  << (8*SIZEOF_INT-1)) > 0)
++ #if 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
++ #else
++-    ACCCHK_ASSERT((1l  << (8*SIZEOF_LONG-1)) < 0)
+++    ACCCHK_ASSERT((long)(1ul  << (8*SIZEOF_LONG-1)) < 0)
++ #endif
++     ACCCHK_ASSERT((1ul << (8*SIZEOF_LONG-1)) > 0)
++ #if defined(acc_int16e_t)
++@@ -4703,7 +4703,7 @@
++ #elif 1 && (ACC_CC_LCC || ACC_CC_LCCWIN32) && !defined(ACCCHK_CFG_PEDANTIC)
++ #elif 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
++ #elif !(ACC_BROKEN_INTEGRAL_PROMOTION) && (SIZEOF_INT > 1)
++-    ACCCHK_ASSERT( (((unsigned char)128) << (int)(8*sizeof(int)-8)) < 0)
+++    ACCCHK_ASSERT( (int)((unsigned int)((unsigned char)128) << (int)(8*sizeof(int)-8)) < 0)
++ #endif
++ #if (ACC_CC_BORLANDC && (__BORLANDC__ >= 0x0530) && (__BORLANDC__ < 0x0560))
++ #  pragma option pop
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.8.3
