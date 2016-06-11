@@ -1,42 +1,61 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 11 Jun 2016 16:39:58 -0300
-Subject: [Buildroot] [PATCH] gettext: bump to version 0.19.8.1
-Message-ID: <1465673998-27699-1-git-send-email-gustavo@zacarias.com.ar>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sat, 11 Jun 2016 21:47:36 +0200
+Subject: [Buildroot] [Patch v2 1/3] ninja: new package
+In-Reply-To: <1465674458-31928-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1465674458-31928-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1465674458-31928-2-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gettext/gettext.hash | 6 +++---
- package/gettext/gettext.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+This new package provides the host variant of Ninja, a small build
+system with a focus on speed.
 
-diff --git a/package/gettext/gettext.hash b/package/gettext/gettext.hash
-index adaeb3eb..cff6eb1 100644
---- a/package/gettext/gettext.hash
-+++ b/package/gettext/gettext.hash
-@@ -1,3 +1,3 @@
--# From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00002.html
--md5	3e7ed1ac886b9b1a4e23e71113da6358	gettext-0.19.8.tar.xz
--sha1	dc551d4783edf691c1f0095ca927d3128b5093e8	gettext-0.19.8.tar.xz
-+# From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
-+md5	df3f5690eaa30fd228537b00cb7b7590	gettext-0.19.8.1.tar.xz
-+sha1	e0fe90ede22f7f16bbde7bdea791a835f2773fc9	gettext-0.19.8.1.tar.xz
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index fa43f7b..71fcb00 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GETTEXT_VERSION = 0.19.8
-+GETTEXT_VERSION = 0.19.8.1
- GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
- GETTEXT_SOURCE = gettext-$(GETTEXT_VERSION).tar.xz
- GETTEXT_INSTALL_STAGING = YES
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/ninja/ninja.hash |  2 ++
+ package/ninja/ninja.mk   | 22 ++++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 package/ninja/ninja.hash
+ create mode 100644 package/ninja/ninja.mk
+
+diff --git a/package/ninja/ninja.hash b/package/ninja/ninja.hash
+new file mode 100644
+index 0000000..47ec822
+--- /dev/null
++++ b/package/ninja/ninja.hash
+@@ -0,0 +1,2 @@
++# Locally generated
++sha256 51581de53cf4705b89eb6b14a85baa73288ad08bff256e7d30d529155813be19  ninja-v1.7.1.tar.gz
+diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
+new file mode 100644
+index 0000000..f8cada4
+--- /dev/null
++++ b/package/ninja/ninja.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# ninja
++#
++################################################################################
++
++NINJA_VERSION = v1.7.1
++NINJA_SITE = $(call github,ninja-build,ninja,$(NINJA_VERSION))
++NINJA_LICENSE = Apache-2.0
++NINJA_LICENSE_FILES = COPYING
++
++HOST_NINJA_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
++
++define HOST_NINJA_BUILD_CMDS
++	(cd $(@D); ./configure.py --bootstrap)
++endef
++
++define HOST_NINJA_INSTALL_CMDS
++	$(INSTALL) -m 0755 $(@D)/ninja $(HOST_DIR)/usr/bin/ninja
++endef
++
++$(eval $(host-generic-package))
 -- 
-2.7.3
+2.4.11
