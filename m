@@ -1,10 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Jun 2016 10:37:25 +0200
-Subject: [Buildroot] [PATCH 2/9] package/x11r7/xcb-proto: bump version to
-	1.12
-In-Reply-To: <1465634252-30741-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465634252-30741-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465634252-30741-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 11 Jun 2016 10:37:24 +0200
+Subject: [Buildroot] [PATCH 1/9] package/x11r7/xproto_xproto: bump version
+	to 7.0.29
+Message-ID: <1465634252-30741-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +11,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xcb-proto/xcb-proto.hash | 4 ++--
- package/x11r7/xcb-proto/xcb-proto.mk   | 2 +-
+ package/x11r7/xproto_xproto/xproto_xproto.hash | 4 ++--
+ package/x11r7/xproto_xproto/xproto_xproto.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xcb-proto/xcb-proto.hash b/package/x11r7/xcb-proto/xcb-proto.hash
-index c9a9108..3f43485 100644
---- a/package/x11r7/xcb-proto/xcb-proto.hash
-+++ b/package/x11r7/xcb-proto/xcb-proto.hash
+diff --git a/package/x11r7/xproto_xproto/xproto_xproto.hash b/package/x11r7/xproto_xproto/xproto_xproto.hash
+index 333ac6d..8441bae 100644
+--- a/package/x11r7/xproto_xproto/xproto_xproto.hash
++++ b/package/x11r7/xproto_xproto/xproto_xproto.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/xcb/2014-August/009614.html
--sha256	b4aceee6502a0ce45fc39b33c541a2df4715d00b72e660ebe8c5bb444771e32e	xcb-proto-1.11.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-May/002693.html
-+sha256	5922aba4c664ab7899a29d92ea91a87aa4c1fc7eb5ee550325c3216c480a4906	xcb-proto-1.12.tar.bz2
-diff --git a/package/x11r7/xcb-proto/xcb-proto.mk b/package/x11r7/xcb-proto/xcb-proto.mk
-index 931573a..1c847eb 100644
---- a/package/x11r7/xcb-proto/xcb-proto.mk
-+++ b/package/x11r7/xcb-proto/xcb-proto.mk
+-# From http://lists.x.org/archives/xorg-announce/2015-July/002618.html
+-sha256	29e85568d1f68ceef8a2c081dad9bc0e5500a53cfffde24b564dc43d46ddf6ca	xproto-7.0.28.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-May/002692.html
++sha256	6c1a477092ca73233902b8d5f33012635c4b0208f17e7833cc7efe5c93ba9f8a	xproto-7.0.29.tar.bz2
+diff --git a/package/x11r7/xproto_xproto/xproto_xproto.mk b/package/x11r7/xproto_xproto/xproto_xproto.mk
+index 7357b8c..e76adf8 100644
+--- a/package/x11r7/xproto_xproto/xproto_xproto.mk
++++ b/package/x11r7/xproto_xproto/xproto_xproto.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XCB_PROTO_VERSION = 1.11
-+XCB_PROTO_VERSION = 1.12
- XCB_PROTO_SOURCE = xcb-proto-$(XCB_PROTO_VERSION).tar.bz2
- XCB_PROTO_SITE = http://xcb.freedesktop.org/dist
- XCB_PROTO_LICENSE = MIT
+-XPROTO_XPROTO_VERSION = 7.0.28
++XPROTO_XPROTO_VERSION = 7.0.29
+ XPROTO_XPROTO_SOURCE = xproto-$(XPROTO_XPROTO_VERSION).tar.bz2
+ XPROTO_XPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
+ XPROTO_XPROTO_LICENSE = MIT
 -- 
 2.8.1
