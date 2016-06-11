@@ -1,42 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jun 2016 16:42:43 +0200
-Subject: [Buildroot] [git commit] package/x11r7/libxcb: bump version to 1.12
-Message-ID: <20160611144303.0755981D65@busybox.osuosl.org>
+Date: Sat, 11 Jun 2016 16:42:47 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-input-evdev:
+	bump version to 2.10.3
+Message-ID: <20160611144303.5A5CA81D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa5a050911ae82f1e6e7edda51188255984ee19a
+commit: https://git.buildroot.net/buildroot/commit/?id=4a7b2883ec797677776421a19199906c28b27999
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/libxcb/libxcb.hash | 4 ++--
- package/x11r7/libxcb/libxcb.mk   | 2 +-
+ package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash | 4 ++--
+ package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/libxcb/libxcb.hash b/package/x11r7/libxcb/libxcb.hash
-index 62060ee..6df7d01 100644
---- a/package/x11r7/libxcb/libxcb.hash
-+++ b/package/x11r7/libxcb/libxcb.hash
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
+index 3314934..91937f2 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-September/002633.html
--sha256	b720fd6c7d200e5371affdb3f049cc8f88cff9aed942ff1b824d95eedbf69d30	libxcb-1.11.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-May/002694.html
-+sha256	4adfb1b7c67e99bc9c2ccb110b2f175686576d2f792c8a71b9c8b19014057b5b	libxcb-1.12.tar.bz2
-diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
-index c46ee26..a740638 100644
---- a/package/x11r7/libxcb/libxcb.mk
-+++ b/package/x11r7/libxcb/libxcb.mk
+-# From http://lists.x.org/archives/xorg-announce/2016-January/002669.html
+-sha256	af9c2b47f5b272ae56b45da6bd84610fc9a3d80a4b32c8215842a39d862de017	xf86-input-evdev-2.10.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-June/002696.html
++sha256	5aa21ba4be8df927e5676a99c7f4f0343abc089f5451b7e73e39536f29b332a2	xf86-input-evdev-2.10.3.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+index 4a2ed36..c801323 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBXCB_VERSION = 1.11.1
-+LIBXCB_VERSION = 1.12
- LIBXCB_SOURCE = libxcb-$(LIBXCB_VERSION).tar.bz2
- LIBXCB_SITE = http://xcb.freedesktop.org/dist
- LIBXCB_LICENSE = MIT
+-XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.10.1
++XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.10.3
+ XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
