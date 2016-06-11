@@ -1,70 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jun 2016 15:54:02 +0200
-Subject: [Buildroot] [git commit] gnuradio: add qtgui support
-Message-ID: <20160611135436.4D50B81D5C@busybox.osuosl.org>
+Date: Sat, 11 Jun 2016 15:57:53 +0200
+Subject: [Buildroot] [PATCH 1/4] package/efl: switch to luajit support
+In-Reply-To: <20160609234420.47a3588d@free-electrons.com>
+References: <1461790014-17051-1-git-send-email-romain.naour@gmail.com>
+ <20160609234420.47a3588d@free-electrons.com>
+Message-ID: <20160611155753.48833a20@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06321645a3383ec32ac3e518157c9b7eee20d06c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-gr-qtgui provides a set of module to display time/frequency/waterfall.
+On Thu, 9 Jun 2016 23:44:20 +0200, Thomas Petazzoni wrote:
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gnuradio/Config.in   | 12 +++++++++++-
- package/gnuradio/gnuradio.mk |  7 +++++++
- 2 files changed, 18 insertions(+), 1 deletion(-)
+>   CC       lib/ector/gl/lib_ector_libector_la-ector_gl_shader.lo
+> In file included from ../src/lib/ector/ector_private.h:6,
+>                  from lib/ector/gl/ector_renderer_gl_gradient_radial.c:9:
+> ../src/lib/ector/ector_gl_internal.h:778: error: redefinition of typedef 'GLshort'
+> ../src/lib/ector/gl/Ector_GL.h:16: note: previous declaration of 'GLshort' was here
+> ../src/lib/ector/ector_gl_internal.h:783: error: redefinition of typedef 'GLuint'
+> ../src/lib/ector/gl/Ector_GL.h:15: note: previous declaration of 'GLuint' was here
+> make[5]: *** [lib/ector/gl/lib_ector_libector_la-ector_renderer_gl_gradient_radial.lo] Error 1
+> make[5]: *** Waiting for unfinished jobs....
+> In file included from ../src/lib/ector/ector_private.h:6,
+>                  from lib/ector/gl/ector_renderer_gl_gradient_linear.c:9:
+> ../src/lib/ector/ector_gl_internal.h:778: error: redefinition of typedef 'GLshort'
+> ../src/lib/ector/gl/Ector_GL.h:16: note: previous declaration of 'GLshort' was here
+> ../src/lib/ector/ector_gl_internal.h:783: error: redefinition of typedef 'GLuint'
+> ../src/lib/ector/gl/Ector_GL.h:15: note: previous declaration of 'GLuint' was here
+> make[5]: *** [lib/ector/gl/lib_ector_libector_la-ector_renderer_gl_gradient_linear.lo] Error 1
+> [...]
+> make[4]: *** [all-recursive] Error 1
+> make[3]: *** [all] Error 2
+> make[2]: *** [all-recursive] Error 1
+> make[1]: *** [all] Error 2
+> make[1]: Leaving directory `/home/test/buildroot/output/build/host-efl-1.17.0'
+> make: *** [/home/test/buildroot/output/build/host-efl-1.17.0/.stamp_built] Error 2
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index f51b9b2..50f5e7f 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -67,7 +67,7 @@ config BR2_PACKAGE_GNURADIO_UTILS
- 	help
- 	  Misc python utilities
- 
--comment "gr-fft, -filter, -analog, -channels, -digital, -trellis, -pager depends fftw's single precision"
-+comment "gr-fft, -filter, -analog, -channels, -digital, -trellis, -pager, -qtgui depends fftw's single precision"
- 	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
- 
- if BR2_PACKAGE_FFTW_PRECISION_SINGLE
-@@ -108,6 +108,16 @@ config BR2_PACKAGE_GNURADIO_PAGER
- 	help
- 	  FLEX pager decoder implementation blocks
- 
-+config BR2_PACKAGE_GNURADIO_QTGUI
-+	bool "gr-qtgui"
-+	depends on BR2_PACKAGE_PYTHON_PYQT
-+	depends on BR2_PACKAGE_QWT
-+	depends on BR2_PACKAGE_QT_STL
-+	select BR2_PACKAGE_GNURADIO_FFT
-+	select BR2_PACKAGE_GNURADIO_FILTER
-+	help
-+	  GNU Radio Qt scopes
-+
- config BR2_PACKAGE_GNURADIO_TRELLIS
- 	bool "gr-trellis support"
- 	select BR2_PACKAGE_GNURADIO_DIGITAL
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index b193569..972f7a4 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -120,6 +120,13 @@ else
- GNURADIO_CONF_OPTS += -DENABLE_PAGER=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_GNURADIO_QTGUI),y)
-+GNURADIO_DEPENDENCIES += python-pyqt qwt
-+GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=ON
-+else
-+GNURADIO_CONF_OPTS += -DENABLE_GR_QTGUI=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_GNURADIO_TRELLIS),y)
- GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=ON
- else
+As you requested on IRC, here is the host-efl config.log file:
+
+  http://code.bulix.org/3yukrd-101034
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
