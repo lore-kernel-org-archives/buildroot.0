@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jun 2016 15:51:37 +0200
-Subject: [Buildroot] [PATCH 1/1] log4cpp: new package
-In-Reply-To: <1465393621-21251-1-git-send-email-damien@kal-host.com>
-References: <1465393621-21251-1-git-send-email-damien@kal-host.com>
-Message-ID: <20160611155137.723310d3@free-electrons.com>
+Date: Sat, 11 Jun 2016 15:54:29 +0200
+Subject: [Buildroot] [PATCH 1/3] gnuradio: add gr-audio support
+In-Reply-To: <1461917534-27882-1-git-send-email-gwenj@trabucayre.com>
+References: <1461917534-27882-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20160611155429.0fe665a9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  8 Jun 2016 15:47:01 +0200, Damien Lanson wrote:
-> Signed-off-by: Damien Lanson <damien@kal-host.com>
+On Fri, 29 Apr 2016 10:12:12 +0200, Gwenhael Goavec-Merou wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> gr-audio is a gnuradio module to use audio card as sink or source.
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> ---
+>  package/gnuradio/Config.in   |  6 ++++++
+>  package/gnuradio/gnuradio.mk | 12 ++++++++++++
+>  2 files changed, 18 insertions(+)
 
-Thanks for your contribution! I've applied, after doing the following
-changes:
-
-    [Thomas:
-     - Rewrap Config.in help text.
-     - Add missing new line at the end of the Config.in help text.
-     - Use 80 # signs for the .mk file header.
-     - Use <pkg>_SUBDIR = log4cpp instead of moving things around during the
-       extract step.
-     - Fix typo in the license (it's LGPL, not GLPL), and make it LGPLv2.1+,
-       since it's what the HTML documentation says.
-     - In addition to removing the log4cpp-config script from the target,
-       tweak the variant installed in staging so that it behaves properly
-       for cross-compilation. Unfortunately, the <pkg>_CONFIG_SCRIPTS
-       generic mechanism doesn't work for this config script.]
-
-Best regards,
+All three patches applied, thanks!
 
 Thomas
 -- 
