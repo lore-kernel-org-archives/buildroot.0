@@ -1,61 +1,42 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat, 11 Jun 2016 21:47:36 +0200
-Subject: [Buildroot] [Patch v2 1/3] ninja: new package
-In-Reply-To: <1465674458-31928-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1465674458-31928-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1465674458-31928-2-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Sat, 11 Jun 2016 21:47:35 +0200
+Subject: [Buildroot] [Patch v2 0/3] Ninja, Meson: new build systems
+Message-ID: <1465674458-31928-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new package provides the host variant of Ninja, a small build
-system with a focus on speed.
+This small patch series provides two new build systems: Ninja and Meson.
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- package/ninja/ninja.hash |  2 ++
- package/ninja/ninja.mk   | 22 ++++++++++++++++++++++
- 2 files changed, 24 insertions(+)
+v1 -> v2:
+
+ - only provide host variants of ninja and python-meson.
+ - document integration of meson-based packages.
+ - drop removal of mesongui.py.
+
+Eric Le Bihan (3):
+  ninja: new package
+  python-meson: new package
+  docs/manual: document meson-based packages
+
+ docs/manual/adding-packages-meson.txt          | 84 ++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt                |  2 +
+ package/ninja/ninja.hash                       |  2 +
+ package/ninja/ninja.mk                         | 22 +++++++
+ package/python-meson/cross-compilation.conf.in | 19 ++++++
+ package/python-meson/meson-exe-wrapper.in      |  3 +
+ package/python-meson/python-meson.hash         |  2 +
+ package/python-meson/python-meson.mk           | 41 +++++++++++++
+ 8 files changed, 175 insertions(+)
+ create mode 100644 docs/manual/adding-packages-meson.txt
  create mode 100644 package/ninja/ninja.hash
  create mode 100644 package/ninja/ninja.mk
+ create mode 100644 package/python-meson/cross-compilation.conf.in
+ create mode 100755 package/python-meson/meson-exe-wrapper.in
+ create mode 100644 package/python-meson/python-meson.hash
+ create mode 100644 package/python-meson/python-meson.mk
 
-diff --git a/package/ninja/ninja.hash b/package/ninja/ninja.hash
-new file mode 100644
-index 0000000..47ec822
---- /dev/null
-+++ b/package/ninja/ninja.hash
-@@ -0,0 +1,2 @@
-+# Locally generated
-+sha256 51581de53cf4705b89eb6b14a85baa73288ad08bff256e7d30d529155813be19  ninja-v1.7.1.tar.gz
-diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
-new file mode 100644
-index 0000000..f8cada4
---- /dev/null
-+++ b/package/ninja/ninja.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# ninja
-+#
-+################################################################################
-+
-+NINJA_VERSION = v1.7.1
-+NINJA_SITE = $(call github,ninja-build,ninja,$(NINJA_VERSION))
-+NINJA_LICENSE = Apache-2.0
-+NINJA_LICENSE_FILES = COPYING
-+
-+HOST_NINJA_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
-+
-+define HOST_NINJA_BUILD_CMDS
-+	(cd $(@D); ./configure.py --bootstrap)
-+endef
-+
-+define HOST_NINJA_INSTALL_CMDS
-+	$(INSTALL) -m 0755 $(@D)/ninja $(HOST_DIR)/usr/bin/ninja
-+endef
-+
-+$(eval $(host-generic-package))
--- 
+--
 2.4.11
