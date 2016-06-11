@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jun 2016 23:55:37 +0200
-Subject: [Buildroot] [git commit] wireless-regdb: bump to version 2016.06.10
-Message-ID: <20160611215726.A51FD802D8@busybox.osuosl.org>
+Date: Sat, 11 Jun 2016 23:55:33 +0200
+Subject: [Buildroot] [git commit] package/vlc: bump version to 2.2.4
+Message-ID: <20160611215726.8DD52802E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f23064afb39d75b681ae292ab56bf6e99bae6900
+commit: https://git.buildroot.net/buildroot/commit/?id=bf586c6b6c2de018f28e6c2a676f001648d2b327
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ package/vlc/vlc.hash | 2 +-
+ package/vlc/vlc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index 44b2e41..b8ca2e7 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index 04632e0..efd4e27 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	c9674c988a944105148091b74c05c6fa6bd9611b9bbab6b81abfb5e5387bc61e	wireless-regdb-2016.05.02.tar.xz
-+sha256	cfedf1c3521b3c8f32602f25ed796e96e687c3441a00e7c050fedf7fd4f1b8b7	wireless-regdb-2016.06.10.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 49bcb32..6ad4258 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
+ # From http://download.videolan.org/pub/videolan/vlc/2.2.3/vlc-2.2.3.tar.xz.sha256
+-sha256 b9d7587d35f13c3c981964c8cc8b03f1c7c8edf528be476b3ca1d2efedd5bf5b  vlc-2.2.3.tar.xz
++sha256 1632e91d2a0087e0ef4c3fb4c95c3c2890f7715a9d1d43ffd46329f428cf53be  vlc-2.2.4.tar.xz
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 4dc8dfe..8efbecb 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRELESS_REGDB_VERSION = 2016.05.02
-+WIRELESS_REGDB_VERSION = 2016.06.10
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-VLC_VERSION = 2.2.3
++VLC_VERSION = 2.2.4
+ VLC_SITE = http://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPLv2+ LGPLv2.1+
