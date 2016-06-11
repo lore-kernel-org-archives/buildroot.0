@@ -1,44 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Jun 2016 16:42:49 +0200
-Subject: [Buildroot] [git commit] package/eudev: bump version to 3.2
-Message-ID: <20160611144303.9000081D65@busybox.osuosl.org>
+Date: Sat, 11 Jun 2016 16:42:42 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xcb-util-cursor: bump
+	version to 0.1.3
+Message-ID: <20160611144302.E580281D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3240f59e96f515d3dbec173fbc796aa1ae30d027
+commit: https://git.buildroot.net/buildroot/commit/?id=d6390c439b657a25ae7f7acd8f1f20aeb77564b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/eudev/eudev.hash | 4 ++--
- package/eudev/eudev.mk   | 2 +-
+ package/x11r7/xcb-util-cursor/xcb-util-cursor.hash | 4 ++--
+ package/x11r7/xcb-util-cursor/xcb-util-cursor.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
-index e7c331c..44ed169 100644
---- a/package/eudev/eudev.hash
-+++ b/package/eudev/eudev.hash
-@@ -1,4 +1,4 @@
- # From http://dev.gentoo.org/~blueness/eudev/
--md5	c4dace42deecede102b6c01904042acc	eudev-3.1.5.tar.gz
-+md5	7e42d9b9ed8162021665139520676367	eudev-3.2.tar.gz
- # Locally calculated
--sha256	f75885a430cd50fe4b31732f808ba7f9b2adf0f26b53b8ba2957b0c1d84b6f2a	eudev-3.1.5.tar.gz
-+sha256	d84a5f7942393a009afc6af0bf31e98841147a0521b91ffbed161dccac303c25	eudev-3.2.tar.gz
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 942770c..4818ea5 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
+diff --git a/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash b/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
+index e5c47ca..36f2258 100644
+--- a/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
++++ b/package/x11r7/xcb-util-cursor/xcb-util-cursor.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-March/002555.html
+-sha1	b55a92cd96c3ec1be9a26963df6d5f16e68fffea	xcb-util-cursor-0.1.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-May/002691.html
++sha1	26562eb6d4151307f7b6a53453d360ecfc0563ac	xcb-util-cursor-0.1.3.tar.bz2
+diff --git a/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk b/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
+index 65704a1..07b37c5 100644
+--- a/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
++++ b/package/x11r7/xcb-util-cursor/xcb-util-cursor.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EUDEV_VERSION = 3.1.5
-+EUDEV_VERSION = 3.2
- EUDEV_SOURCE = eudev-$(EUDEV_VERSION).tar.gz
- EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
- EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
+-XCB_UTIL_CURSOR_VERSION = 0.1.2
++XCB_UTIL_CURSOR_VERSION = 0.1.3
+ XCB_UTIL_CURSOR_SITE = http://xcb.freedesktop.org/dist
+ XCB_UTIL_CURSOR_SOURCE = xcb-util-cursor-$(XCB_UTIL_CURSOR_VERSION).tar.bz2
+ XCB_UTIL_CURSOR_LICENSE = MIT
