@@ -1,48 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jun 2016 23:10:38 +0200
-Subject: [Buildroot] [git commit] libarchive: add host variant
-Message-ID: <20160612212023.AB01481D5A@busybox.osuosl.org>
+Date: Sun, 12 Jun 2016 23:11:31 +0200
+Subject: [Buildroot] [git commit] libsodium: add host variant
+Message-ID: <20160612212023.C195F7FDF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02b93c2136e6cfecdff19785036bcf68aa99f51e
+commit: https://git.buildroot.net/buildroot/commit/?id=333531f9fd1cf7148ab63d5f02fdec46d8b6fee7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This will be needed for the host variant of the fwup package. We enable
-zlib support since host-fwup needs it. All other features are explicitly
-disabled.
-
+Signed-off-by: Wojciech Nizi??ski <niziak@spox.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libarchive/libarchive.mk | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ package/libsodium/libsodium.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 726142b..e20a737 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -99,4 +99,21 @@ else
- LIBARCHIVE_CONF_OPTS += --without-lzma
+diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
+index bd6f58d..13dba8d 100644
+--- a/package/libsodium/libsodium.mk
++++ b/package/libsodium/libsodium.mk
+@@ -15,3 +15,4 @@ LIBSODIUM_CONF_OPTS += --disable-pie
  endif
  
-+# The only user of host-libarchive needs zlib support
-+HOST_LIBARCHIVE_DEPENDENCIES = host-zlib
-+HOST_LIBARCHIVE_CONF_OPTS = \
-+	--disable-bsdtar \
-+	--disable-bsdcpio \
-+	--disable-acl \
-+	--disable-xattr \
-+	--without-bz2lib \
-+	--without-expat \
-+	--without-libiconv-prefix \
-+	--without-xml2 \
-+	--without-lzo2 \
-+	--without-nettle \
-+	--without-openssl \
-+	--without-lzma
-+
  $(eval $(autotools-package))
 +$(eval $(host-autotools-package))
