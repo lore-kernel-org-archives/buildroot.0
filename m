@@ -1,98 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jun 2016 23:55:13 +0200
-Subject: [Buildroot] [PATCH 08/24] system: move the rootfs skeleton choice
+Date: Sun, 12 Jun 2016 23:55:15 +0200
+Subject: [Buildroot] [PATCH 10/24] package/perl: use dummy hostname
 In-Reply-To: <cover.1465766789.git.yann.morin.1998@free.fr>
 References: <cover.1465766789.git.yann.morin.1998@free.fr>
-Message-ID: <054f949b5176b69419fc32096f32afaf11463784.1465766789.git.yann.morin.1998@free.fr>
+Message-ID: <40f340fc6443b43a4e53445083a5591fda009f7b.1465766789.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the following commits, we'll be switching more options to be
-conditional on the default or custom skeleton.
+The hostname does not look like it serves any useful purpose, except
+maybe to set set perladmin email.
 
-So, it makes sense that those options come after the choice of a
-skeleton.
+Which is undoubtfully useless on the target.
+
+A followup commit will make the hostname depend on the default skeleton,
+so it won't always be available. We can not rely on it to be set.
+
+Use a dummy hostname.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- system/Config.in | 56 ++++++++++++++++++++++++++++----------------------------
- 1 file changed, 28 insertions(+), 28 deletions(-)
+ package/perl/perl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index 04b886b..662443b 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -1,5 +1,33 @@
- menu "System configuration"
- 
-+choice
-+	prompt "Root FS skeleton"
-+
-+config BR2_ROOTFS_SKELETON_DEFAULT
-+	bool "default target skeleton"
-+	help
-+	  Use default target skeleton
-+
-+config BR2_ROOTFS_SKELETON_CUSTOM
-+	bool "custom target skeleton"
-+	help
-+	  Use custom target skeleton.
-+
-+endchoice
-+
-+if BR2_ROOTFS_SKELETON_CUSTOM
-+
-+config BR2_ROOTFS_SKELETON_CUSTOM_PATH
-+	string "custom target skeleton path"
-+	help
-+	  Path to custom target skeleton.
-+
-+# dummy config so merged /usr workarounds can also be activated for
-+# custom rootfs skeleton
-+config BR2_ROOTFS_MERGED_USR
-+
-+endif
-+
- config BR2_TARGET_GENERIC_HOSTNAME
- 	string "System hostname"
- 	default "buildroot"
-@@ -163,34 +191,6 @@ config BR2_ROOTFS_STATIC_DEVICE_TABLE
- 	  See package/makedevs/README for details on the usage and
- 	  syntax of these files.
- 
--choice
--	prompt "Root FS skeleton"
--
--config BR2_ROOTFS_SKELETON_DEFAULT
--	bool "default target skeleton"
--	help
--	  Use default target skeleton
--
--config BR2_ROOTFS_SKELETON_CUSTOM
--	bool "custom target skeleton"
--	help
--	  Use custom target skeleton.
--
--endchoice
--
--if BR2_ROOTFS_SKELETON_CUSTOM
--
--config BR2_ROOTFS_SKELETON_CUSTOM_PATH
--	string "custom target skeleton path"
--	help
--	  Path to custom target skeleton.
--
--# dummy config so merged /usr workarounds can also be activated for
--# custom rootfs skeleton
--config BR2_ROOTFS_MERGED_USR
--
--endif
--
- if BR2_ROOTFS_SKELETON_DEFAULT
- 
- config BR2_ROOTFS_MERGED_USR
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 11b10ff..29af7a4 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -54,7 +54,7 @@ PERL_CONF_OPTS = \
+ 	-Dccflags="$(TARGET_CFLAGS)" \
+ 	-Dldflags="$(TARGET_LDFLAGS) -lm" \
+ 	-Dmydomain="" \
+-	-Dmyhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
++	-Dmyhostname="noname" \
+ 	-Dmyuname="Buildroot $(BR2_VERSION_FULL)" \
+ 	-Dosname=linux \
+ 	-Dosvers=$(LINUX_VERSION) \
 -- 
 2.7.4
