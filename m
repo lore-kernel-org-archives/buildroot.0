@@ -1,133 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jun 2016 21:39:24 +0200
-Subject: [Buildroot] [git commit] configs: atmel: add sd card development
-	image for sama5d4 xplained
-Message-ID: <20160612193951.2098E81D71@busybox.osuosl.org>
+Date: Sun, 12 Jun 2016 21:39:38 +0200
+Subject: [Buildroot] [git commit] board/atmel: update documentation with
+	development defconfigs
+Message-ID: <20160612193951.5B575817E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d74b67c66be06877e94bd9afd61b80fc47d3f7e2
+commit: https://git.buildroot.net/buildroot/commit/?id=f075afcbd6445b470b7556574a06ed712232807e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This development defconfig provides tools to test features of the SoC.
+Add a description of the development defconfig files.
 
 Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 105 +++++++++++++++++++++++
- 1 file changed, 105 insertions(+)
+ board/atmel/readme.txt | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-new file mode 100644
-index 0000000..9e11efa
---- /dev/null
-+++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-@@ -0,0 +1,105 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a5=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_INSTRUCTIONS_THUMB2=y
+diff --git a/board/atmel/readme.txt b/board/atmel/readme.txt
+index ea83d17..3a79e57 100644
+--- a/board/atmel/readme.txt
++++ b/board/atmel/readme.txt
+@@ -10,15 +10,30 @@ This guide covers the following configurations:
+  - atmel_sama5d3xek_defconfig (sama5d31, sama5d33, sama5d34, sama5d35,
+    sama5d36)
+  - atmel_sama5d3_xplained_defconfig
++ - atmel_sama5d3_xplained_dev_defconfig
+  - atmel_sama5d3_xplained_mmc_defconfig
++ - atmel_sama5d3_xplained_mmc_dev_defconfig
+  - atmel_sama5d4ek_defconfig
+  - atmel_sama5d4_xplained_defconfig
++ - atmel_sama5d4_xplained_dev_defconfig
+  - atmel_sama5d4_xplained_mmc_defconfig
++ - atmel_sama5d4_xplained_mmc_dev_defconfig
+  - atmel_sama5d2_xplained_mmc_defconfig
++ - atmel_sama5d2_xplained_mmc_dev_defconfig
+ 
+ These configurations will use AT91Bootstrap, u-boot and a linux kernel from
+ the git trees maintained by Atmel.
+ 
++The configurations labeled as 'dev' provide a development rootfs with tools to
++tests the features of the SoC:
++- ALSA tools to test audio
++- FFMPEG to record video from the ISI/ISC
++- I2C, SPI, CAN, etc. tools
++- modetest for LCD screens, HDMI
++- Wilc1000 firmware for the Atmel Wireless sdio module
++- SSH for convenience
++- GDB/GDB server for debug
 +
-+# Toolchain
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+# Needed for some packages
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+# Needed for gdb
-+BR2_PTHREAD_DEBUG=y
-+# Needed for some packages
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+# System Configuration
-+# Needed for usb-utils
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+# Creation of the SD card image
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d4_xplained_mmc/post-image.sh"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_LINUX_KERNEL_DEFCONFIG="sama5"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained at91-sama5d4_xplained_hdmi at91-sama5d4_xplained_pda4 at91-sama5d4_xplained_pda7 at91-sama5d4_xplained_pda7b"
-+
-+# Packages
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_ALSA_UTILS=y
-+BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
-+BR2_PACKAGE_ALSA_UTILS_APLAY=y
-+BR2_PACKAGE_FFMPEG=y
-+BR2_PACKAGE_FFMPEG_GPL=y
-+BR2_PACKAGE_FFMPEG_SWSCALE=y
-+BR2_PACKAGE_MPG123=y
-+BR2_PACKAGE_BZIP2=y
-+BR2_PACKAGE_GZIP=y
-+BR2_PACKAGE_UNZIP=y
-+BR2_PACKAGE_XZ=y
-+BR2_PACKAGE_ZIP=y
-+BR2_PACKAGE_GDB=y
-+BR2_PACKAGE_LMBENCH=y
-+BR2_PACKAGE_DOSFSTOOLS=y
-+BR2_PACKAGE_DOSFSTOOLS_FATLABEL=y
-+BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
-+BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
-+BR2_PACKAGE_MMC_UTILS=y
-+BR2_PACKAGE_MTD=y
-+BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_DEVMEM2=y
-+BR2_PACKAGE_EVTEST=y
-+BR2_PACKAGE_I2C_TOOLS=y
-+BR2_PACKAGE_SETSERIAL=y
-+BR2_PACKAGE_SPI_TOOLS=y
-+BR2_PACKAGE_USBUTILS=y
-+BR2_PACKAGE_LIBDRM=y
-+BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
-+BR2_PACKAGE_DTC=y
-+BR2_PACKAGE_DTC_PROGRAMS=y
-+BR2_PACKAGE_BLUEZ_UTILS=y
-+BR2_PACKAGE_BRIDGE_UTILS=y
-+BR2_PACKAGE_CAN_UTILS=y
-+BR2_PACKAGE_DROPBEAR=y
-+BR2_PACKAGE_ETHTOOL=y
-+BR2_PACKAGE_IPERF=y
-+BR2_PACKAGE_IPROUTE2=y
-+BR2_PACKAGE_IPTABLES=y
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_LRZSZ=y
-+BR2_PACKAGE_MII_DIAG=y
-+BR2_PACKAGE_OPENSSH=y
-+BR2_PACKAGE_WGET=y
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_BASH=y
-+BR2_PACKAGE_HTOP=y
-+BR2_PACKAGE_VIM=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Bootloaders
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
-+
-+# Host packages
-+# Needed to generate the SD card image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+ Configuring and building Buildroot
+ ==================================
+ 
