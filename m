@@ -1,35 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jun 2016 23:55:10 +0200
-Subject: [Buildroot] [PATCH 05/24] system: systemd only really supports a
-	R/W rootfs
+Date: Sun, 12 Jun 2016 23:55:09 +0200
+Subject: [Buildroot] [PATCH 04/24] system/skeleton: update etc/mtab with a
+	more sensible link
 In-Reply-To: <cover.1465766789.git.yann.morin.1998@free.fr>
 References: <cover.1465766789.git.yann.morin.1998@free.fr>
-Message-ID: <6b97ab1e3d3e894a4289da9c7954ad0dbfb363f5.1465766789.git.yann.morin.1998@free.fr>
+Message-ID: <2063e38d7e8c06efd33d2f0716e71730b47f118d.1465766789.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Supporting a R/O rootfs needs a bit more love to be fully operational.
-This will come in later patches...
+Currently, our /etc/mtab points to /proc/mounts. This was all neat so
+far, and was good for a sysv-like init system.
+
+However, the way to day is to point it at /proc/self/mounts, the
+per-process mount tab.
+
+Additionnally, that's what systemd expects. If /etc/mtab is not a
+symlink to ../proc/self/mounts and the rootfs is readonly, systemd would
+whine loudly (and a service unit is marked failed).
+
+Since it works well for sysv-like init systems too, just use that.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- system/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ system/skeleton/etc/mtab | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index 2d20230..4f9f270 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -94,6 +94,7 @@ config BR2_INIT_SYSTEMD
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- 	select BR2_ROOTFS_MERGED_USR
- 	select BR2_PACKAGE_SYSTEMD
-+	select BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
- 
- comment "systemd needs (e)glibc toolchain, headers >= 3.10"
- 	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
+diff --git a/system/skeleton/etc/mtab b/system/skeleton/etc/mtab
+index 4c0a094..5c4677a 120000
+--- a/system/skeleton/etc/mtab
++++ b/system/skeleton/etc/mtab
+@@ -1 +1 @@
+-/proc/mounts
+\ No newline at end of file
++../proc/self/mounts
+\ No newline at end of file
 -- 
 2.7.4
