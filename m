@@ -1,36 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Jun 2016 11:30:20 +0200
-Subject: [Buildroot] [PATCH 2/5] package/libv4l: qt4 support depends on
-	OpenGL
-In-Reply-To: <1465723823-6113-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465723823-6113-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465723823-6113-2-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Jun 2016 12:48:24 +0200
+Subject: [Buildroot] [PATCH] package/php: fix date.timezone
+Message-ID: <1465728504-17997-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/8fc/8fc8cbc85dacebce5cb6ab13f5ff3b0764117471/
+In 5f37843a (php.ini: set date.timezone), the configured timezone was
+used as the default for PHP.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+However, BR2_TARGET_LOCALTIME is a string, so is quoted, so it is never
+empty, so the check for emptynessnever matches.
+
+Fix that by q-stripping the value before testing it. Note however that
+we do not q-strip it before storing it in the php.ini file, because it
+has to be q-stripped in there.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Floris Bos <bos@je-eigen-domein.nl>
 ---
- package/libv4l/libv4l.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/php/php.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index bdd28bf..d0a0369 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -54,7 +54,7 @@ LIBV4L_CONF_ENV += \
- 	ac_cv_prog_MOC=$(HOST_DIR)/usr/bin/moc \
- 	ac_cv_prog_RCC=$(HOST_DIR)/usr/bin/rcc \
- 	ac_cv_prog_UIC=$(HOST_DIR)/usr/bin/uic
--else ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
-+else ifeq ($(BR2_PACKAGE_QT_OPENGL_GL_DESKTOP),y)
- LIBV4L_CONF_OPTS += --enable-qv4l2
- LIBV4L_DEPENDENCIES += qt
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 2997b1b..8dc70f0 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -32,9 +32,10 @@ ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+ PHP_STATIC_LIBS += -lpthread
+ endif
+ 
+-ifeq ($(BR2_TARGET_LOCALTIME),)
++ifeq ($(call qstrip,$(BR2_TARGET_LOCALTIME)),)
+ PHP_LOCALTIME = UTC
  else
++# Not q-stripping this value, as we need quotes in the php.ini file
+ PHP_LOCALTIME = $(BR2_TARGET_LOCALTIME)
+ endif
+ 
 -- 
-2.8.1
+2.7.4
