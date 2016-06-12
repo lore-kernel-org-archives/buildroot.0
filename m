@@ -1,41 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jun 2016 23:55:09 +0200
-Subject: [Buildroot] [PATCH 04/24] system/skeleton: update etc/mtab with a
-	more sensible link
+Date: Sun, 12 Jun 2016 23:55:12 +0200
+Subject: [Buildroot] [PATCH 07/24] system: provide no default for custom
+	skeleton path
 In-Reply-To: <cover.1465766789.git.yann.morin.1998@free.fr>
 References: <cover.1465766789.git.yann.morin.1998@free.fr>
-Message-ID: <2063e38d7e8c06efd33d2f0716e71730b47f118d.1465766789.git.yann.morin.1998@free.fr>
+Message-ID: <e7319daaf1b5432b4dd7d5861692eaad50679d1e.1465766789.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, our /etc/mtab points to /proc/mounts. This was all neat so
-far, and was good for a sysv-like init system.
+Being custom means that our default one is not suitable to start with.
 
-However, the way to day is to point it at /proc/self/mounts, the
-per-process mount tab.
+So there is no reson to offer it as the default path.
 
-Additionnally, that's what systemd expects. If /etc/mtab is not a
-symlink to ../proc/self/mounts and the rootfs is readonly, systemd would
-whine loudly (and a service unit is marked failed).
-
-Since it works well for sysv-like init systems too, just use that.
+Add a separating empty line, for good measure, too.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- system/skeleton/etc/mtab | 2 +-
+ system/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/system/skeleton/etc/mtab b/system/skeleton/etc/mtab
-index 4c0a094..5c4677a 120000
---- a/system/skeleton/etc/mtab
-+++ b/system/skeleton/etc/mtab
-@@ -1 +1 @@
--/proc/mounts
-\ No newline at end of file
-+../proc/self/mounts
-\ No newline at end of file
+diff --git a/system/Config.in b/system/Config.in
+index 4f9f270..04b886b 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -179,9 +179,9 @@ config BR2_ROOTFS_SKELETON_CUSTOM
+ endchoice
+ 
+ if BR2_ROOTFS_SKELETON_CUSTOM
++
+ config BR2_ROOTFS_SKELETON_CUSTOM_PATH
+ 	string "custom target skeleton path"
+-	default "system/skeleton"
+ 	help
+ 	  Path to custom target skeleton.
+ 
 -- 
 2.7.4
