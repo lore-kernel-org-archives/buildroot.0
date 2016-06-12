@@ -1,37 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jun 2016 22:26:01 +0200
-Subject: [Buildroot] [git commit] package/libv4l: qt4 support depends on
-	OpenGL
-Message-ID: <20160612202630.D113E8050F@busybox.osuosl.org>
+Date: Sun, 12 Jun 2016 22:26:02 +0200
+Subject: [Buildroot] [git commit] package/libv4l: add optional support for
+	alsa-lib
+Message-ID: <20160612202630.E2E7F8050F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f16737c322971521bc8fede1e091d6a32654a78a
+commit: https://git.buildroot.net/buildroot/commit/?id=a6af4471f081a2a40f41c644cb0d54eceee3dd1f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/8fc/8fc8cbc85dacebce5cb6ab13f5ff3b0764117471/
+Add alsa-lib as optional dependency to get a reproducable build.
+Without this patch configure logs:
+
+checking for ALSA... no
+configure: WARNING: ALSA library not available
+
+After this patch alsa-lib was built before libv4l:
+checking for ALSA... yes
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libv4l/libv4l.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libv4l/libv4l.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index bdd28bf..d0a0369 100644
+index d0a0369..e7a57f0 100644
 --- a/package/libv4l/libv4l.mk
 +++ b/package/libv4l/libv4l.mk
-@@ -54,7 +54,7 @@ LIBV4L_CONF_ENV += \
- 	ac_cv_prog_MOC=$(HOST_DIR)/usr/bin/moc \
- 	ac_cv_prog_RCC=$(HOST_DIR)/usr/bin/rcc \
- 	ac_cv_prog_UIC=$(HOST_DIR)/usr/bin/uic
--else ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
-+else ifeq ($(BR2_PACKAGE_QT_OPENGL_GL_DESKTOP),y)
- LIBV4L_CONF_OPTS += --enable-qv4l2
- LIBV4L_DEPENDENCIES += qt
- else
+@@ -18,6 +18,10 @@ LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ LIBV4L_LICENSE = GPLv2+ (utilities), LGPLv2.1+ (libraries)
+ LIBV4L_LICENSE_FILES = COPYING COPYING.libv4l lib/libv4l1/libv4l1-kernelcode-license.txt
+ 
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++LIBV4L_DEPENDENCIES += alsa-lib
++endif
++
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+ LIBV4L_DEPENDENCIES += argp-standalone
+ LIBV4L_LIBS += -largp
