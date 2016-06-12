@@ -1,100 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jun 2016 21:53:36 +0200
-Subject: [Buildroot] [PATCH] mpdstate: add package
-In-Reply-To: <20160530063656.GC31737@airbook.vandijck-laurijssen.be>
-References: <20160530063656.GC31737@airbook.vandijck-laurijssen.be>
-Message-ID: <20160612215336.06191b9e@free-electrons.com>
+Date: Sun, 12 Jun 2016 22:05:03 +0200
+Subject: [Buildroot] [git commit] package/cups: add _PRE_CONFIGURE_HOOKS for
+	proper autoconf
+Message-ID: <20160612200624.5C3B381DD1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4fba2da4e63e4c36f168219bce247977c3592f5f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 30 May 2016 08:36:56 +0200, Kurt Van Dijck wrote:
-> Mpdstate listens for MPD state changes and outputs them
-> on stdout. It is easy to write a script that receives mpdstate's output
-> on stdin an act upon some of the events.
-> 
-> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+cups uses only autoconf, also using autoheader is broken:
+https://github.com/apple/cups/issues/4667#issuecomment-197689571
 
-Isn't the same thing achievable with the "mpc idle" feature, which
-allows you to listen for events from mpd ?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...01-Remove-man-from-BUILDDIRS-in-configure.patch | 25 ++++++++++------------
+ package/cups/cups.mk                               |  7 ++++++
+ 2 files changed, 18 insertions(+), 14 deletions(-)
 
-Like your other package, I'd prefer to have some evidence of even some
-limited adoption/usage of a software package before adding it to
-Buildroot.
-
-Nonetheless, here is a review below.
-
-> diff --git a/package/mpdstate/Config.in b/package/mpdstate/Config.in
-> new file mode 100644
-> index 0000000..e3a5688
-> --- /dev/null
-> +++ b/package/mpdstate/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_MPDSTATE
-> +	bool "mpdstate"
-> +	help
-> +	  mpdstate is a small C-program which outputs the state of an MPD
-> +	  (Music Player Daemon). The program keeps waiting for changes and
-> +	  outputs immediately the state changes that I found important.
-
-Please avoid first person sentences. This strengthen the feeling of
-"this is a personal project and nobody else but the original author is
-using it".
-
-> +	  The output is easily parsed with shell scripting,
-> +	  and that is how I automate my MPD boxes to:
-> +	  - enable a LED when MPD is playing
-> +	  - activate the power amplifier's power when MPD is playing
-
-Please add an empty line here, followed by the URL of the upstream
-project homepage.
-
-> diff --git a/package/mpdstate/mpdstate.mk b/package/mpdstate/mpdstate.mk
-> new file mode 100644
-> index 0000000..82436d4
-> --- /dev/null
-> +++ b/package/mpdstate/mpdstate.mk
-> @@ -0,0 +1,35 @@
-> +################################################################################
-> +#
-> +# mpdstate
-> +#
-> +################################################################################
-> +
-> +MPDSTATE_VERSION = r3
-> +MPDSTATE_SITE = git://github.com/kurt-vd/mpdstate.git
-
-Please use the Github helper, and add a hash file.
-
-> +MPDSTATE_LICENSE = GPLv3
-> +MPDSTATE_LICENSE_FILES = LICENSE
-> +
-> +define MPDSTATE_CONFIGURE_CMDS
-> +	echo "PREFIX=/" > $(@D)/config.mk
-
-We normally use /usr as the prefix, not /.
-
-> +	echo "CFLAGS=$(TARGET_CFLAGS)" >> $(@D)/config.mk
-> +	echo "CPPFLAGS=$(TARGET_CPPFLAGS)" >> $(@D)/config.mk
-> +	echo "CXXFLAGS=$(TARGET_CXXFLAGS)" >> $(@D)/config.mk
-> +	echo "LDFLAGS=$(TARGET_LDFLAGS)" >> $(@D)/config.mk
-> +	echo "LDLIBS+=$(TARGET_LDLIBS)" >> $(@D)/config.mk
-> +	echo "CC=$(TARGET_CC)" >> $(@D)/config.mk
-> +	echo "CXX=$(TARGET_CXX)" >> $(@D)/config.mk
-> +	echo "LD=$(TARGET_LD)" >> $(@D)/config.mk
-> +	echo "AS=$(TARGET_AS)" >> $(@D)/config.mk
-
-You can pass all those variables on the make command line, and
-therefore use $(TARGET_CONFIGURE_OPTS) instead.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
+index c0e87a4..30002d3 100644
+--- a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
++++ b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
+@@ -1,21 +1,18 @@
+-From a77bb18a5584bb23687ed3c522dbd91a9987d5a7 Mon Sep 17 00:00:00 2001
+-From: Olivier Schonken <olivier.schonken@gmail.com>
+-Date: Wed, 20 Jan 2016 22:13:11 +0200
++From 6bc1d15250841cf17d307cfb4f35c960c23d8797 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 29 May 2016 19:31:50 +0200
+ Subject: [PATCH] Remove man from BUILDDIRS in configure
+ 
+-Since cups doesn't autoreconf properly, we directly patch the
+-configure script.
+-
+-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+- configure | 2 +-
++ config-scripts/cups-common.m4 | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+-diff --git a/configure b/configure
+-index 4170ff3..3879a75 100755
+---- a/configure
+-+++ b/configure
+-@@ -5921,7 +5921,7 @@ fi
++diff --git a/config-scripts/cups-common.m4 b/config-scripts/cups-common.m4
++index fbba715..77d0f5c 100644
++--- a/config-scripts/cups-common.m4
+++++ b/config-scripts/cups-common.m4
++@@ -446,7 +446,7 @@ AC_ARG_WITH(components, [  --with-components       set components to build:
+  
+  case "$COMPONENTS" in
+  	all)
+@@ -25,5 +22,5 @@ index 4170ff3..3879a75 100755
+  
+  	core)
+ -- 
+-2.5.0
++2.8.1
+ 
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index c07dcb4..797d31a 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -13,6 +13,12 @@ CUPS_INSTALL_STAGING = YES
+ CUPS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) DSTROOT=$(STAGING_DIR) install
+ CUPS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) DSTROOT=$(TARGET_DIR) install
+ 
++# Using autoconf, not autoheader, so we cannot use AUTORECONF = YES.
++define CUPS_RUN_AUTOCONF
++	cd $(@D); $(HOST_DIR)/usr/bin/autoconf -f
++endef
++CUPS_PRE_CONFIGURE_HOOKS += CUPS_RUN_AUTOCONF
++
+ CUPS_CONF_OPTS = \
+ 	--without-perl \
+ 	--without-java \
+@@ -21,6 +27,7 @@ CUPS_CONF_OPTS = \
+ 	--libdir=/usr/lib
+ CUPS_CONFIG_SCRIPTS = cups-config
+ CUPS_DEPENDENCIES = \
++	host-autoconf \
+ 	$(if $(BR2_PACKAGE_ZLIB),zlib)
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
