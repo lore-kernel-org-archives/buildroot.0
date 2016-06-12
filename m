@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jun 2016 21:39:27 +0200
-Subject: [Buildroot] [git commit] configs: atmel: add development rootfs for
-	sama5d4 xplained
-Message-ID: <20160612193951.34171817E3@busybox.osuosl.org>
+Date: Sun, 12 Jun 2016 21:39:24 +0200
+Subject: [Buildroot] [git commit] configs: atmel: add sd card development
+	image for sama5d4 xplained
+Message-ID: <20160612193951.2098E81D71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b92a34569c89d57982eeb98e2e845dc757101e1
+commit: https://git.buildroot.net/buildroot/commit/?id=d74b67c66be06877e94bd9afd61b80fc47d3f7e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This development defconfig provides tools to test features of the SoC.
@@ -17,14 +17,14 @@ This development defconfig provides tools to test features of the SoC.
 Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/atmel_sama5d4_xplained_dev_defconfig | 105 +++++++++++++++++++++++++++
+ configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 105 +++++++++++++++++++++++
  1 file changed, 105 insertions(+)
 
-diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
+diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
 new file mode 100644
-index 0000000..0cd8e36
+index 0000000..9e11efa
 --- /dev/null
-+++ b/configs/atmel_sama5d4_xplained_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
 @@ -0,0 +1,105 @@
 +# Architecture
 +BR2_arm=y
@@ -45,6 +45,8 @@ index 0000000..0cd8e36
 +# System Configuration
 +# Needed for usb-utils
 +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++# Creation of the SD card image
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d4_xplained_mmc/post-image.sh"
 +
 +# Kernel
 +BR2_LINUX_KERNEL=y
@@ -108,26 +110,24 @@ index 0000000..0cd8e36
 +BR2_PACKAGE_VIM=y
 +
 +# Filesystem
-+BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x3e000
-+BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1000
-+BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2082
-+BR2_TARGET_ROOTFS_UBI=y
-+BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
-+BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
 +
 +# Bootloaders
 +BR2_TARGET_AT91BOOTSTRAP3=y
 +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
 +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
 +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsnf_uboot_secure"
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
 +BR2_TARGET_UBOOT=y
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_GIT=y
 +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
 +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
 +
 +# Host packages
-+BR2_PACKAGE_HOST_SAM_BA=y
++# Needed to generate the SD card image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
