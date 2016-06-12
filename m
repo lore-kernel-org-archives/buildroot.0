@@ -1,55 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jun 2016 22:21:36 +0200
-Subject: [Buildroot] [PATCH v2 2/2] fmlib: add powerpc e6500 support
-In-Reply-To: <1463578886-43470-2-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1463578886-43470-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1463578886-43470-2-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20160612222136.4403ea28@free-electrons.com>
+Date: Sun, 12 Jun 2016 22:21:57 +0200
+Subject: [Buildroot] [git commit] fmlib: use RM macro
+Message-ID: <20160612202229.DC95181E3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c0db6f93ef07cea7a57e3c15f51b7863173b9b20
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 May 2016 08:41:26 -0500, Matt Weber wrote:
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Ronak Desai <ronak.desai@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/fmlib/fmlib.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Why is this patch 2/2, when it is in fact a dependency of patch 1/2 ?
-Patch 1/2 uses FMLIB_PLATFORM, which doesn't exist until patch 2/2 is
-merged.
-
-
-> +if BR2_PACKAGE_FMLIB
-> +choice
-> +	prompt "QORIQ Target Family"
-
-The correct spelling is QorIQ according to Freescale's website.
-
-
-> diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
-> index 978810b..5655608 100644
-> --- a/package/fmlib/fmlib.mk
-> +++ b/package/fmlib/fmlib.mk
-> @@ -25,11 +25,17 @@ ifeq ($(BR2_powerpc_e500mc),y)
->  FMLIB_ARCHTYPE = ppce500mc
-
-So you're keeping the old definition of FMLIB_ARCHTYPE...
-
->  endif
->  
-> +FMLIB_ARCHTYPE = $(call qstrip,$(BR2_PACKAGE_FMLIB_ARCHTYPE))
-
-... and defining it again.
-
-I've merged, after fixing those issues.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
+index ede4415..405ee14 100644
+--- a/package/fmlib/fmlib.mk
++++ b/package/fmlib/fmlib.mk
+@@ -30,7 +30,7 @@ define FMLIB_BUILD_CMDS
+ endef
+ 
+ define FMLIB_INSTALL_STAGING_CMDS
+-	rm $(STAGING_DIR)/usr/lib/libfm.a -f
++	$(RM) $(STAGING_DIR)/usr/lib/libfm.a
+ 	$(FMLIB_MAKE_ENV) $(MAKE) $(FMLIB_MAKE_OPTS) -C $(@D) install-libfm-$(FMLIB_ARCHTYPE)
+ endef
+ 
