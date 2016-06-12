@@ -1,149 +1,103 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jun 2016 22:12:28 +0200
-Subject: [Buildroot] [PATCH] Add support for Digilent Zybo (Xilinx
- Zynq-7000)
-In-Reply-To: <2a3f44ad-9013-6af8-08f7-bec58222b43d@gmail.com>
-References: <2a3f44ad-9013-6af8-08f7-bec58222b43d@gmail.com>
-Message-ID: <20160612221228.6ae1379a@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 12 Jun 2016 22:14:34 +0200
+Subject: [Buildroot] [PATCH v2 1/5] package/qt: Add optional support for
+ OpenGL
+In-Reply-To: <1465762042-18942-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1465762042-18942-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160612201434.GD3711@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Bernd, All,
 
-Thanks a lot for this contribution! See below for a number of comments.
+On 2016-06-12 22:07 +0200, Bernd Kuhls spake thusly:
+> OpenGL support is only available for the desktop variant of Qt4 and not
+> the embedded one: http://code.qt.io/cgit/qt/qt.git/tree/configure#n6612
+> 
+> This patch is needed to fix a compile error with libv4l which depends
+> on OpenGL support if qt4 is used by libv4l as optional dependency.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-On Sun, 22 May 2016 17:50:56 +0200, Sebastien Van Cauwenberghe wrote:
-> [PATCH] Add support for Digilent Zybo (Xilinx Zynq-7000)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Not need to repeat the title of the commit in the commit log. Also, the
-commit title should rather be:
+Regards,
+Yann E. MORIN.
 
-	configs: add defconfig for Digilent Zybo
-
-> diff --git a/board/digilent/zybo/readme.txt b/board/digilent/zybo/readme.txt
-> new file mode 100644
-> index 0000000..f9ff939
-> --- /dev/null
-> +++ b/board/digilent/zybo/readme.txt
-> @@ -0,0 +1,75 @@
-> +This is the buildroot board support for the Digilent Zybo. The Zybo is
-> +a development board based on the Xilinx Zynq-7000 based All-Programmable
-> +System-On-Chip.
+> ---
+> v2: Added "none" option (Yann)
+> 
+>  package/qt/Config.in | 20 ++++++++++++++++++++
+>  package/qt/qt.mk     |  3 +++
+>  2 files changed, 23 insertions(+)
+> 
+> diff --git a/package/qt/Config.in b/package/qt/Config.in
+> index 0ab8417..14b13ce 100644
+> --- a/package/qt/Config.in
+> +++ b/package/qt/Config.in
+> @@ -350,6 +350,24 @@ config BR2_PACKAGE_QT_PHONON_BACKEND
+>  	  Build the platform Phonon plugin.
+>  	  If unsure, say n.
+>  
+> +choice
+> +	prompt "OpenGL API"
+> +	help
+> +	  Select OpenGL API.
 > +
-> +Zybo information including schematics, reference designs, and manuals are
-> +available from http://store.digilentinc.com/zybo-zynq-7000-arm-fpga-soc-trainer-board/ .
+> +config BR2_PACKAGE_QT_OPENGL_NONE
+> +	bool "No OpenGL support"
 > +
-> +Steps to create a working system for Zybo:
+> +comment "Desktop OpenGL not available (needs Qt standard (X11))"
+> +	depends on !BR2_PACKAGE_QT_X11
 > +
-> +1) make zynq_zybo_defconfig
-> +2) make
-> +3) copy files BOOT.BIN, u-boot-dtb.img, rootfs.cpio.uboot,
-> +	uImage, zynq-zybo.dtb into your SD card
-
-Please use genimage to generate a ready-to-use SD card image. You can
-check many of the other board configurations in Buildroot that are
-doing this.
-
-Also, why do you use an initramfs for the rootfs rather than the more
-traditional ext4 partition next to the FAT partition? This would be the
-preferred method for the defconfig in Buildroot.
-
-> +Resulting system
-> +----------------
-> +A FAT32 partition should be created at the beginning of the SD Card
-> +and the following files should be installed:
-> +	/BOOT.BIN
-> +	/zynq-zybo.dtb
-> +	/uImage
-> +	/rootfs-cpio.uboot
-> +	/u-boot-dtb.img
+> +config BR2_PACKAGE_QT_OPENGL_GL_DESKTOP
+> +	bool "Desktop OpenGL"
+> +	depends on BR2_PACKAGE_HAS_LIBGL
+> +	depends on BR2_PACKAGE_QT_X11
+> +	help
+> +	  Use desktop OpenGL.
 > +
+>  config BR2_PACKAGE_QT_OPENGL_ES
+>  	bool "OpenGL ES v2.x support"
+>  	depends on BR2_PACKAGE_HAS_LIBGLES
+> @@ -357,6 +375,8 @@ config BR2_PACKAGE_QT_OPENGL_ES
+>  	help
+>  	  Enable the OpenGL ES v2.x support.
+>  
+> +endchoice
 > +
-> +All needed files can be taken from output/images/
-> +
-> +BOOT.BIN, uImage and u-boot-dtb.img are direct copies of the same files
-> +available on output/images/
+>  endif
+>  
+>  config BR2_PACKAGE_QT_DBUS
+> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+> index f29a671..d56fe7e 100644
+> --- a/package/qt/qt.mk
+> +++ b/package/qt/qt.mk
+> @@ -336,6 +336,9 @@ QT_DEPENDENCIES += libgles libegl
+>  QT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
+>  QT_CXXFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
+>  QT_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --libs egl`
+> +else ifeq ($(BR2_PACKAGE_QT_OPENGL_GL_DESKTOP),y)
+> +QT_CONFIGURE_OPTS += -opengl desktop
+> +QT_DEPENDENCIES += libgl
+>  else
+>  QT_CONFIGURE_OPTS += -no-opengl
+>  endif
+> -- 
+> 2.8.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-All of this can be simplified once you generate a complete SD card
-image with genimage.
-
-> +There is a patch attached that redefines the U-Boot's environment
-> +to work with Buildroot out-of-the-box.
-
-Why do you patch the U-Boot built-in environment instead of providing
-an uEnv.txt file?
-
-> +The serial console is accessible on the host on /dev/ttyUSB1 at 115200 bauds.
-
-Saying it's on /dev/ttyUSB1 on the host is wrong. It might be on your
-machine, but it might be on ttyUSB0 on mine, or on ttyUSB2. There is no
-point in giving this information, since you don't know.
-
-> diff --git a/configs/zynq_zybo_defconfig b/configs/zynq_zybo_defconfig
-> new file mode 100644
-> index 0000000..e2c8841
-> --- /dev/null
-> +++ b/configs/zynq_zybo_defconfig
-> @@ -0,0 +1,25 @@
-> +BR2_arm=y
-> +BR2_cortex_a9=y
-> +BR2_ARM_ENABLE_NEON=y
-> +# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
-
-Please leave this option to the default.
-
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
-> +BR2_BINUTILS_VERSION_2_26_X=y
-
-Please leave this to the default.
-
-> +BR2_GCC_VERSION_5_X=y
-
-Ditto.
-
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
-> +BR2_LINUX_KERNEL=y
-
-Please use a fixed kernel version.
-
-> +BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
-> +BR2_LINUX_KERNEL_UIMAGE=y
-> +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
-
-Can you try to use zImage instead, which is now the standard format on
-ARM?
-
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zybo"
-> +BR2_TARGET_ROOTFS_CPIO=y
-> +BR2_TARGET_ROOTFS_CPIO_GZIP=y
-> +BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
-
-As suggested above, what about using an ext4 filesystem instead?
-
-> +BR2_TARGET_UBOOT=y
-
-Please used a fixed version of U-Boot.
-
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_PATCH="$(TOPDIR)/board/digilent/zybo/uboot"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zybo"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_TARGET_UBOOT_ZYNQ_IMAGE=y
-
-Could you rework your patch according to the above suggestions? With
-those suggestions taken into account, your patch could be merged in
-Buildroot.
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
