@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jun 2016 22:07:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cups: add _PRE_CONFIGURE_HOOKS
- for proper autoconf
-In-Reply-To: <1464543503-9057-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1464543503-9057-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160612220737.69a84129@free-electrons.com>
+Date: Sun, 12 Jun 2016 22:12:28 +0200
+Subject: [Buildroot] [PATCH] Add support for Digilent Zybo (Xilinx
+ Zynq-7000)
+In-Reply-To: <2a3f44ad-9013-6af8-08f7-bec58222b43d@gmail.com>
+References: <2a3f44ad-9013-6af8-08f7-bec58222b43d@gmail.com>
+Message-ID: <20160612221228.6ae1379a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,42 +13,134 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 29 May 2016 19:38:23 +0200, Bernd Kuhls wrote:
-> cups uses only autoconf, also using autoheader is broken:
-> https://github.com/apple/cups/issues/4667#issuecomment-197689571
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> I wrote this patch while trying to fix
-> http://autobuild.buildroot.net/results/70d/70d147fcac588610521974b8f7384e710a9a6d41/
-> which would end up in a major rewrite of the build system, so I
-> cancelled my attempt. Nonetheless I think we should have this patch
-> so future patches to configure.in will be easier.
-> 
->  ...01-Remove-man-from-BUILDDIRS-in-configure.patch | 27 ++++++++++------------
->  package/cups/cups.mk                               |  7 ++++++
->  2 files changed, 19 insertions(+), 15 deletions(-)
-> 
-> diff --git a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
-> index c0e87a4..af85ca8 100644
-> --- a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
-> +++ b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
-> @@ -1,21 +1,18 @@
-> -From a77bb18a5584bb23687ed3c522dbd91a9987d5a7 Mon Sep 17 00:00:00 2001
-> -From: Olivier Schonken <olivier.schonken@gmail.com>
-> -Date: Wed, 20 Jan 2016 22:13:11 +0200
-> -Subject: [PATCH] Remove man from BUILDDIRS in configure
-> +From 6bc1d15250841cf17d307cfb4f35c960c23d8797 Mon Sep 17 00:00:00 2001
-> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +Date: Sun, 29 May 2016 19:31:50 +0200
-> +Subject: [PATCH 1/1] Remove man from BUILDDIRS in configure
+Thanks a lot for this contribution! See below for a number of comments.
 
-The 1/1 is not needed here, please generate patches using "git
-format-patch -N".
+On Sun, 22 May 2016 17:50:56 +0200, Sebastien Van Cauwenberghe wrote:
+> [PATCH] Add support for Digilent Zybo (Xilinx Zynq-7000)
 
-Applied with this fixed!
+Not need to repeat the title of the commit in the commit log. Also, the
+commit title should rather be:
 
-Thanks!
+	configs: add defconfig for Digilent Zybo
+
+> diff --git a/board/digilent/zybo/readme.txt b/board/digilent/zybo/readme.txt
+> new file mode 100644
+> index 0000000..f9ff939
+> --- /dev/null
+> +++ b/board/digilent/zybo/readme.txt
+> @@ -0,0 +1,75 @@
+> +This is the buildroot board support for the Digilent Zybo. The Zybo is
+> +a development board based on the Xilinx Zynq-7000 based All-Programmable
+> +System-On-Chip.
+> +
+> +Zybo information including schematics, reference designs, and manuals are
+> +available from http://store.digilentinc.com/zybo-zynq-7000-arm-fpga-soc-trainer-board/ .
+> +
+> +Steps to create a working system for Zybo:
+> +
+> +1) make zynq_zybo_defconfig
+> +2) make
+> +3) copy files BOOT.BIN, u-boot-dtb.img, rootfs.cpio.uboot,
+> +	uImage, zynq-zybo.dtb into your SD card
+
+Please use genimage to generate a ready-to-use SD card image. You can
+check many of the other board configurations in Buildroot that are
+doing this.
+
+Also, why do you use an initramfs for the rootfs rather than the more
+traditional ext4 partition next to the FAT partition? This would be the
+preferred method for the defconfig in Buildroot.
+
+> +Resulting system
+> +----------------
+> +A FAT32 partition should be created at the beginning of the SD Card
+> +and the following files should be installed:
+> +	/BOOT.BIN
+> +	/zynq-zybo.dtb
+> +	/uImage
+> +	/rootfs-cpio.uboot
+> +	/u-boot-dtb.img
+> +
+> +
+> +All needed files can be taken from output/images/
+> +
+> +BOOT.BIN, uImage and u-boot-dtb.img are direct copies of the same files
+> +available on output/images/
+
+All of this can be simplified once you generate a complete SD card
+image with genimage.
+
+> +There is a patch attached that redefines the U-Boot's environment
+> +to work with Buildroot out-of-the-box.
+
+Why do you patch the U-Boot built-in environment instead of providing
+an uEnv.txt file?
+
+> +The serial console is accessible on the host on /dev/ttyUSB1 at 115200 bauds.
+
+Saying it's on /dev/ttyUSB1 on the host is wrong. It might be on your
+machine, but it might be on ttyUSB0 on mine, or on ttyUSB2. There is no
+point in giving this information, since you don't know.
+
+> diff --git a/configs/zynq_zybo_defconfig b/configs/zynq_zybo_defconfig
+> new file mode 100644
+> index 0000000..e2c8841
+> --- /dev/null
+> +++ b/configs/zynq_zybo_defconfig
+> @@ -0,0 +1,25 @@
+> +BR2_arm=y
+> +BR2_cortex_a9=y
+> +BR2_ARM_ENABLE_NEON=y
+> +# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
+
+Please leave this option to the default.
+
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
+> +BR2_BINUTILS_VERSION_2_26_X=y
+
+Please leave this to the default.
+
+> +BR2_GCC_VERSION_5_X=y
+
+Ditto.
+
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
+> +BR2_LINUX_KERNEL=y
+
+Please use a fixed kernel version.
+
+> +BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+> +BR2_LINUX_KERNEL_UIMAGE=y
+> +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+
+Can you try to use zImage instead, which is now the standard format on
+ARM?
+
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zybo"
+> +BR2_TARGET_ROOTFS_CPIO=y
+> +BR2_TARGET_ROOTFS_CPIO_GZIP=y
+> +BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
+
+As suggested above, what about using an ext4 filesystem instead?
+
+> +BR2_TARGET_UBOOT=y
+
+Please used a fixed version of U-Boot.
+
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_PATCH="$(TOPDIR)/board/digilent/zybo/uboot"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zybo"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+> +BR2_TARGET_UBOOT_SPL=y
+> +BR2_TARGET_UBOOT_ZYNQ_IMAGE=y
+
+Could you rework your patch according to the above suggestions? With
+those suggestions taken into account, your patch could be merged in
+Buildroot.
+
+Thanks a lot!
 
 Thomas
 -- 
