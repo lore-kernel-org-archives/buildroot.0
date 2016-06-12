@@ -1,74 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jun 2016 23:55:29 +0200
-Subject: [Buildroot] [PATCH 24/24] system: allow DHCP interface with
-	systemd-networkd
+Date: Sun, 12 Jun 2016 23:55:18 +0200
+Subject: [Buildroot] [PATCH 13/24] package/skeleton: add macro to rsync
+	skeleton directory
 In-Reply-To: <cover.1465766789.git.yann.morin.1998@free.fr>
 References: <cover.1465766789.git.yann.morin.1998@free.fr>
-Message-ID: <4bfd9509ba59300ae2fa25be5cebfd6786ca7f7c.1465766789.git.yann.morin.1998@free.fr>
+Message-ID: <174817d7ac2784b29de4f67f4f51ff7e16b76ccd.1465766789.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It is prett trivial to enable a DHCP interface with systemd-networkd, we
-just need to provide a .network config file with just the name of the
-interface to bring up and activate DHCP on it.
+The rsync command is currently called from a single location. In
+follow-up patches, it will be called from various places now.
+
+It will be easier to update and fix this command if it is defined in a
+single location, rather than if duplicated in many places.
+
+Define a macro that skeleton packages can call to install their skeleton
+directories. Since at least one occurence of it wants to install in
+staging, the macro must accept a destination path, rather than hard-code
+target as the destination.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/skeleton-systemd/skeleton-systemd.mk | 11 ++++++++++-
- system/Config.in                             |  9 +++------
- 2 files changed, 13 insertions(+), 7 deletions(-)
+ package/skeleton/skeleton.mk | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/package/skeleton-systemd/skeleton-systemd.mk b/package/skeleton-systemd/skeleton-systemd.mk
-index c7c2e26..1ad1470 100644
---- a/package/skeleton-systemd/skeleton-systemd.mk
-+++ b/package/skeleton-systemd/skeleton-systemd.mk
-@@ -15,7 +15,16 @@ SKELETON_SYSTEMD_ADD_SKELETON_DEPENDENCY = NO
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 072d217..e3ae694 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -62,6 +62,14 @@ SKELETON_PATH = system/skeleton
  
- # In case we're not using systemd-networkd, use the sysv-like network infra;
- # otherwise, the necessary bits are installed by the systemd package.
--ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),)
-+ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
-+
-+define SKELETON_SYSTEMD_SET_NETWORK
-+	printf '[Match]\nName=%s\n[Network]\nDHCP=yes\n' \
-+		$(SKELETON_NETWORK_DHCP_IFACE) \
-+		>$(TARGET_DIR)/etc/systemd/network/$(SKELETON_NETWORK_DHCP_IFACE).network
+ endif # ! custom skeleton
+ 
++# This function rsyncs the skeleton directory in $(1) to the destination
++# in $(2), which should be either $(TARTGET_DIR) or $(STAGING_DIR)
++define SKELETON_RSYNC
++	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
++		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
++		$(1)/ $(2)/
 +endef
-+SKELETON_SYSTEMD_TARGET_FINALIZE_HOOKS += SKELETON_SYSTEMD_SET_NETWORK
 +
-+else # BR2_PACKAGE_SYSTEMD_NETWORKD is not set
+ # This function handles the merged or non-merged /usr cases
+ ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+ define SKELETON_USR_SYMLINKS_OR_DIRS
+@@ -86,9 +94,7 @@ SKELETON_LIB_SYMLINK = lib32
+ endif
  
- define SKELETON_SYSTEMD_RSYNC_NETWORK
- 	 $(call SKELETON_RSYNC,system/skeleton-net,$(TARGET_DIR))
-diff --git a/system/Config.in b/system/Config.in
-index 32d6542..c90866c 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -362,7 +362,7 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
- config BR2_SYSTEM_DHCP
- 	string "Network interface to configure through DHCP"
- 	default ""
--	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD && (BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN)
-+	depends on BR2_PACKAGE_SYSTEMD_NETWORKD || BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN
- 	help
- 	  Enter here the name of the network interface (E.G. eth0) to
- 	  automatically configure through DHCP at bootup.
-@@ -372,11 +372,8 @@ config BR2_SYSTEM_DHCP
- 	  For more complicated network setups use an overlay to overwrite
- 	  /etc/network/interfaces or add a networkd configuration file.
- 
--comment "automatic network configuration via DHCP is not compatible with networkd"
--	depends on BR2_PACKAGE_SYSTEMD_NETWORKD
--
--comment "automatic network configuration via DHCP needs ifupdown or busybox"
--	depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN)
-+comment "automatic network configuration via DHCP needs systemd, busybox or ifupdown"
-+	depends on !(BR2_PACKAGE_SYSTEMD_NETWORKD || BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN)
- 
- endif # BR2_ROOTFS_SKELETON_DEFAULT
- 
+ define SKELETON_INSTALL_TARGET_CMDS
+-	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+-		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+-		$(SKELETON_PATH)/ $(TARGET_DIR)/
++	$(call SKELETON_RSYNC,$(SKELETON_PATH),$(TARGET_DIR))
+ 	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
+ 	ln -snf lib $(TARGET_DIR)/$(SKELETON_LIB_SYMLINK)
+ 	ln -snf lib $(TARGET_DIR)/usr/$(SKELETON_LIB_SYMLINK)
 -- 
 2.7.4
