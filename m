@@ -1,78 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jun 2016 23:55:19 +0200
-Subject: [Buildroot] [PATCH 14/24] core/pkg-generic: allow packages to
-	declare target-finalize hooks
+Date: Sun, 12 Jun 2016 23:55:11 +0200
+Subject: [Buildroot] [PATCH 06/24] package/systemd: disabling tty1 getty is
+	a post-install hook
 In-Reply-To: <cover.1465766789.git.yann.morin.1998@free.fr>
 References: <cover.1465766789.git.yann.morin.1998@free.fr>
-Message-ID: <ccddad9de67016c3f3f81cf154f46b83e15ef864.1465766789.git.yann.morin.1998@free.fr>
+Message-ID: <64064534aa212013e2ba963f117eeec51e3383e4.1465766789.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, our skeleton declares target-finalize hooks, and does so
-unconditionally.
-
-That's fine since we have a single skeleton package, and thus the hooks
-it declares need not be conditional.
-
-However, we're going to be adding more skeleton packages, one for the
-custom skeleton, one for the sysv-like init systems and, eventually, one
-for the systemd init system.
-
-In that case, we will not want the sysv-like target-finalize hooks to be
-applied when the init system is systemd. And the other way around, of
-course. And so on for each type of skeleton...
-
-The only soltuion we have so far is to enclose all target-finalize hooks
-declarations between an ifeq-block to check that the package is enabled.
-This is cumbersome to do, even more so when the hooks are themselves
-conditional.
-
-Add support in the core infra for packages to register such hooks, like
-is done to register users, device tables and whatnots.
+Currently, we disable the getty on tty1 as a "init" step. It looks
+better like it is a post-install hook.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- docs/manual/adding-packages-hooks.txt | 7 +++++++
- package/pkg-generic.mk                | 2 ++
- 2 files changed, 9 insertions(+)
+ package/systemd/systemd.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/docs/manual/adding-packages-hooks.txt b/docs/manual/adding-packages-hooks.txt
-index 5b5bf6a..d25092a 100644
---- a/docs/manual/adding-packages-hooks.txt
-+++ b/docs/manual/adding-packages-hooks.txt
-@@ -77,3 +77,10 @@ others, use the following variables:
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index b525397..193f221 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -205,10 +205,15 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
+ 	touch $(TARGET_DIR)/etc/machine-id
+ endef
  
- * +$(SRCDIR)+: the path to the overridden source directory
- * +$(@D)+: the path to the build directory
++define SYSTEMD_DISABLE_SERVICE_TTY1_HOOK
++	rm -f $(TARGET_DIR)/etc/systemd/system/getty.target.wants/getty at tty1.service
++endef
 +
-+==== Target-finalize hook
-+
-+Packages may also register hooks in +LIBFOO_TARGET_FINALIZE_HOOKS+.
-+These hooks are run after all packages are built, but before the
-+filesystem images are generated. They are seldom used, and your
-+package probably do not need them.
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 3281374..4415342 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -558,6 +558,7 @@ $(2)_PRE_INSTALL_IMAGES_HOOKS   ?=
- $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
- $(2)_PRE_LEGAL_INFO_HOOKS       ?=
- $(2)_POST_LEGAL_INFO_HOOKS      ?=
-+$(2)_TARGET_FINALIZE_HOOKS      ?=
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ 	SYSTEMD_INSTALL_INIT_HOOK \
+ 	SYSTEMD_INSTALL_MACHINEID_HOOK \
+-	SYSTEMD_INSTALL_RESOLVCONF_HOOK
++	SYSTEMD_INSTALL_RESOLVCONF_HOOK \
++	SYSTEMD_DISABLE_SERVICE_TTY1_HOOK
  
- # human-friendly targets and target sequencing
- $(1):			$(1)-install
-@@ -858,6 +859,7 @@ endif
- ifneq ($$($(2)_USERS),)
- PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+ define SYSTEMD_USERS
+ 	systemd-journal -1 systemd-journal -1 * /var/log/journal - - Journal
+@@ -222,10 +227,6 @@ define SYSTEMD_USERS
+ 	- - input -1 * - - - Input device group
+ endef
+ 
+-define SYSTEMD_DISABLE_SERVICE_TTY1
+-	rm -f $(TARGET_DIR)/etc/systemd/system/getty.target.wants/getty at tty1.service
+-endef
+-
+ ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
+ # systemd needs getty.service for VTs and serial-getty.service for serial ttys
+ # also patch the file to use the correct baud-rate, the default baudrate is 115200 so look for that
+@@ -246,7 +247,6 @@ endef
  endif
-+TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
  
- ifeq ($$($(2)_SITE_METHOD),svn)
- DL_TOOLS_DEPENDENCIES += svn
+ define SYSTEMD_INSTALL_INIT_SYSTEMD
+-	$(SYSTEMD_DISABLE_SERVICE_TTY1)
+ 	$(SYSTEMD_INSTALL_SERVICE_TTY)
+ 	$(SYSTEMD_INSTALL_SERVICE_NETWORK)
+ 	$(SYSTEMD_INSTALL_SERVICE_TIMESYNC)
 -- 
 2.7.4
