@@ -1,77 +1,145 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jun 2016 23:55:27 +0200
-Subject: [Buildroot] [PATCH 22/24] fs: add pre- and post-command hooks
+Date: Sun, 12 Jun 2016 23:55:28 +0200
+Subject: [Buildroot] [PATCH 23/24] system: make systemd work on a read-only
+	rootfs
 In-Reply-To: <cover.1465766789.git.yann.morin.1998@free.fr>
 References: <cover.1465766789.git.yann.morin.1998@free.fr>
-Message-ID: <4085d577b752f7898ddaef790202c1411c406ac8.1465766789.git.yann.morin.1998@free.fr>
+Message-ID: <b289fbbb01cea3946b8677a24a4683a6e490f959.1465766789.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In some cases, the directory structure we want in the filesystem is not
-exactly what we have in target/
+When the rootfs is readonly, systemd will expect /var to be writable.
+Because we do not really have a R/W filesystem to mount on /var, we make
+it a tmpfs, and use the systemd-tmpfiles feautre to populate it with
+"factory" defaults.
 
-For example, when systemd is used on a read-only rootfs, /var must be a
-tmpfs. However, we may have packages that install stuff in there, and
-set important rights (via the permission-table). So, at build time, we
-need /var to be a symlink to the remanent location (/usr/share/factory)
-while at runtime we need /var to be a directory.
+We obtain those factory defaults by redirecting /var to that location at
+build time, usign a symlink /var -> /usr/share/factory which is the
+location in which systemd-tmpfiles will look for when instructed to
+"recursively copy" a directory.
 
-Doing the tweaks in target-finalise is not possible, as there is no way
-to undo the tweak (i.e. we'd need to restore the /var symlink so that
-subsequent builds continue to work).
+With a line like:
 
-Add two pre- and post-hooks that packages can set, that are called right
-before and after the rootfs commands are executed.
+    C /var/something - - - -
 
-Those hooks are not documented on-purpose; they are probably going to be
-used only by systemd.
+it will look for /usr/share/factory/something and copy it to
+/var/something, but only if it does not already exist.
+
+We also mark this copy with the exclamation mark, as it is only safe to
+copy on boot, not when changing targets.
+
+To be noted: the real format for such lines are:
+
+    C /var/something - - - - /from/where/to/copy/soemthing
+
+But if the source is not given, then it is implicitly tken from
+/usr/share/factory (which in our case is as-good a location as whatever
+else, so we use it, and thus we need not specify the source of the
+copy).
+
+Note that we tree symlinks a little bit specially, by creating symlinks
+to the factory defaults rather than copying them.
+
+Finally, /var at build time is a symlink, but at runtime, it must be a
+directory (so we can mount the tmpfs over there). We can't change that
+as a target-finalize hook, or /var would be a directory on sub-sequent
+builds (until the next "make clean").
+
+Instead, we use the newly-introduce pre- and post-rootfs command hooks,
+to turn /var into a dorectory before assembing the image, and back to a
+symlink after assembling the image.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- fs/common.mk           | 4 ++++
- package/pkg-generic.mk | 4 ++++
- 2 files changed, 8 insertions(+)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index b7202c3..8feb172 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -92,7 +92,11 @@ endif
- 	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(FULL_DEVICE_TABLE)
- 	echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+---
+Note: I haven't seen any symlinks installed in the factory so far, but I
+haven't build a lot of packages yet... So, I'm not sure what to do with
+the symlinks, especially when a package install relative symlinks...
+---
+ package/skeleton-systemd/skeleton-systemd.mk | 51 ++++++++++++++++++++++++++--
+ system/Config.in                             |  1 -
+ 2 files changed, 49 insertions(+), 3 deletions(-)
+
+diff --git a/package/skeleton-systemd/skeleton-systemd.mk b/package/skeleton-systemd/skeleton-systemd.mk
+index b45bbde..c7c2e26 100644
+--- a/package/skeleton-systemd/skeleton-systemd.mk
++++ b/package/skeleton-systemd/skeleton-systemd.mk
+@@ -36,12 +36,59 @@ ifeq ($(SKELETON_SYSTEM_LOCALTIME),)
+ SKELETON_SYSTEM_LOCALTIME = Etc/UTC
  endif
-+	$$(foreach hook,$$(FS_INIT_PRE_CMD_HOOKS),\
-+		$$(call PRINTF,$$($$(hook))) >>$$(FAKEROOT_SCRIPT))
- 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
-+	$$(foreach hook,$$(FS_INIT_POST_CMD_HOOKS),\
-+		$$(call PRINTF,$$($$(hook))) >>$$(FAKEROOT_SCRIPT))
- 	chmod a+x $$(FAKEROOT_SCRIPT)
- 	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
- 	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 4415342..2f80392 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -559,6 +559,8 @@ $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
- $(2)_PRE_LEGAL_INFO_HOOKS       ?=
- $(2)_POST_LEGAL_INFO_HOOKS      ?=
- $(2)_TARGET_FINALIZE_HOOKS      ?=
-+$(2)_FS_PRE_CMD_HOOKS           ?=
-+$(2)_FS_POST_CMD_HOOKS          ?=
  
- # human-friendly targets and target sequencing
- $(1):			$(1)-install
-@@ -860,6 +862,8 @@ ifneq ($$($(2)_USERS),)
- PACKAGES_USERS += $$($(2)_USERS)$$(sep)
- endif
- TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
-+FS_INIT_PRE_CMD_HOOKS += $$($(2)_FS_PRE_CMD_HOOKS)
-+FS_INIT_POST_CMD_HOOKS += $$($(2)_FS_POST_CMD_HOOKS)
++ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
++
++define SKELETON_SYSTEMD_ROOT_RW
++	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
++	mkdir -p $(TARGET_DIR)/var
++endef
++
++else
++
++# On a R/O rootfs, /var is a tmpfs filesystem. So, at build time, we
++# redirect /var to the "factory settings" location. Just before the
++# filesystem gets created, the /var symlink will be replaced with
++# a real (but empty) directory, and the "factory files" will be copied
++# back there by the tmpfiles.d mechanism.
++define SKELETON_SYSTEMD_ROOT_RO
++	mkdir -p $(TARGET_DIR)/etc/systemd/tmpfiles.d
++	mkdir -p $(TARGET_DIR)/usr/share/factory
++	ln -s usr/share/factory $(TARGET_DIR)/var
++	echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab
++	echo "tmpfs /var tmpfs mode=1777 0 0" >>$(TARGET_DIR)/etc/fstab
++endef
++
++define SKELETON_SYSTEMD_VAR_PRE_FS
++	rm -f $(TARGET_DIR)/var
++	mkdir $(TARGET_DIR)/var
++	for i in $(TARGET_DIR)/usr/share/factory/*; do \
++		j="$${i##*/}"; \
++		if [ -L "$${i}" ]; then \
++			printf "L+! /var/%s - - - - %s\n" \
++				"$${j}" "../usr/share/factory/$${j}" \
++			|| exit 1; \
++		else \
++			printf "C! /var/%s - - - -\n" "$${j}" \
++			|| exit 1; \
++		fi; \
++	done >$(TARGET_DIR)/etc/systemd/tmpfiles.d/var-factory.conf
++endef
++SKELETON_SYSTEMD_FS_PRE_CMD_HOOKS += SKELETON_SYSTEMD_VAR_PRE_FS
++
++define SKELETON_SYSTEMD_VAR_POST_FS
++	rm -rf $(TARGET_DIR)/var
++	ln -s usr/share/factory $(TARGET_DIR)/var
++endef
++SKELETON_SYSTEMD_FS_POST_CMD_HOOKS += SKELETON_SYSTEMD_VAR_POST_FS
++
++endif
++
+ define SKELETON_SYSTEMD_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/etc
+ 	mkdir -p $(TARGET_DIR)/home
+ 	mkdir -p $(TARGET_DIR)/srv
+-	mkdir -p $(TARGET_DIR)/var
+-	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
++	$(SKELETON_SYSTEMD_ROOT_RO)
++	$(SKELETON_SYSTEMD_ROOT_RW)
+ 	ln -sf ../usr/share/zoneinfo/$(SKELETON_SYSTEMD_LOCALTIME) \
+ 		$(TARGET_DIR)/etc/localtime
+ 	$(SKELETON_SYSTEMD_RSYNC_NETWORK)
+diff --git a/system/Config.in b/system/Config.in
+index 07af2e0..32d6542 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -129,7 +129,6 @@ config BR2_INIT_SYSTEMD
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 	select BR2_ROOTFS_MERGED_USR
+ 	select BR2_PACKAGE_SYSTEMD
+-	select BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+ 	select BR2_TARGET_TZ_INFO
  
- ifeq ($$($(2)_SITE_METHOD),svn)
- DL_TOOLS_DEPENDENCIES += svn
+ comment "systemd needs (e)glibc toolchain, headers >= 3.10"
 -- 
 2.7.4
