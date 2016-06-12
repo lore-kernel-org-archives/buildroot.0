@@ -1,69 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Jun 2016 17:28:19 +0200
-Subject: [Buildroot] Update of Buildroot toolchains on autobuild.b.o
-References: <20160608220152.5b54ea7d@free-electrons.com>
-Message-ID: <XnsA625B1BC8388EID313208userindividu@bernd-kuhls.de>
+Date: Sun, 12 Jun 2016 17:30:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libmicrohttpd: bump version to
+	0.9.50
+Message-ID: <1465745454-24363-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libmicrohttpd/libmicrohttpd.hash | 4 ++--
+ package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas Petazzoni <thomas.petazzoni-
-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8@public.gmane.org> wrote in 
-news:20160608220152.5b54ea7d at free-electrons.com:
-
->  * Addition of a ARM Cortex-M4 noMMU toolchain.
-
-Hi Thomas,
-
-afaics something is weird with this toolchain.
-
-According to its defconfig it supports threads, but not NPTL however:
-
-$ wget http://autobuild.buildroot.net/toolchains/configs/br-arm-cortex-m4-
-full.conf
-$ make defconfig BR2_DEFCONFIG=br-arm-cortex-m4-full.config
-
-$ grep -i has_threads .config
-BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL is not set
-BR2_TOOLCHAIN_HAS_THREADS=y
-
-But according to the output of gcc is does not support threads although it 
-was compiled with --enable-threads
-
-$ make toolchain
-$ output/host/opt/ext-toolchain/bin/arm-buildroot-uclinux-uclibcgnueabi-gcc 
--v
-
-Configured with: ./configure --prefix=/opt/br-arm-cortex-m4-full-2016.05-2-
-g5dabb45/usr --sysconfdir=/opt/br-arm-cortex-m4-full-2016.05-2-g5dabb45/etc 
---enable-static --target=arm-buildroot-uclinux-uclibcgnueabi --with-
-sysroot=/opt/br-arm-cortex-m4-full-2016.05-2-g5dabb45/usr/arm-buildroot-
-uclinux-uclibcgnueabi/sysroot --disable-__cxa_atexit --with-gnu-ld --
-disable-libssp --disable-multilib --with-gmp=/opt/br-arm-cortex-m4-full-
-2016.05-2-g5dabb45/usr --with-mpfr=/opt/br-arm-cortex-m4-full-2016.05-2-
-g5dabb45/usr --with-pkgversion='Buildroot 2016.05-00002-g5dabb45' --with-
-bugurl=http://bugs.buildroot.net/ --disable-libsanitizer --disable-tls --
-disable-libmudflap 
-
-    	    	--enable-threads
-
- --with-mpc=/opt/br-arm-cortex-m4-full-2016.05-2-g5dabb45/usr --without-isl 
---without-cloog --with-float=soft --disable-decimal-float --with-abi=aapcs-
-linux --with-cpu=cortex-m4 --with-float=soft --with-mode=thumb --enable-
-languages=c,c++ --with-build-time-tools=/opt/br-arm-cortex-m4-full-2016.05-
-2-g5dabb45/usr/arm-buildroot-uclinux-uclibcgnueabi/bin --disable-shared --
-disable-libgomp
-
-    	    	Thread model: single
-
-gcc version 4.9.3 (Buildroot 2016.05-00002-g5dabb45) 
-
-I noticed this while trying to fix some boost build errors.
-
-Regards, Bernd
+diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
+index f0f1501..b228716 100644
+--- a/package/libmicrohttpd/libmicrohttpd.hash
++++ b/package/libmicrohttpd/libmicrohttpd.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking pgp signature
+-sha256	87667e158f2bf8c691a002e256ffe30885d4121a9ee4143af0320c47cdf8a2a4	libmicrohttpd-0.9.48.tar.gz
++# Locally calculated
++sha256	d1b6385068abded29b6470e383287aa7705de05ae3c08ad0bf5747ac4dc6ebd7	libmicrohttpd-0.9.50.tar.gz
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index 9c41b89..84bb6b1 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMICROHTTPD_VERSION = 0.9.48
++LIBMICROHTTPD_VERSION = 0.9.50
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
+-- 
+2.8.1
