@@ -1,70 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jun 2016 23:09:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: fix fsck when using
- systemd
-In-Reply-To: <1465661756-11389-1-git-send-email-martin@barkynet.com>
-References: <1465661756-11389-1-git-send-email-martin@barkynet.com>
-Message-ID: <20160612210901.GI3711@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Jun 2016 23:10:38 +0200
+Subject: [Buildroot] [git commit] libarchive: add host variant
+Message-ID: <20160612212023.AB01481D5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin, All
+commit: https://git.buildroot.net/buildroot/commit/?id=02b93c2136e6cfecdff19785036bcf68aa99f51e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-06-11 17:15 +0100, Martin Bark spake thusly:
-> Commit a93fc34 modified e2fsprogs to symlink /usr/sbin/fsck to /sbin/fsck
-> to keep systemd happy.  However, later on commit c5bd8af6 has forced
-> /usr/sbin to be a symlink to /sbin when using systemd.  This means fsck
-> gets destroyed as a symlink to itself when using systemd or when setting
-> BR2_ROOTFS_MERGED_USR.
-> 
-> Since commit c5bd8af6 obsoletes commit a93fc34 revert the changes from
-> commit a93fc34 to solve the issue.
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+This will be needed for the host variant of the fwup package. We enable
+zlib support since host-fwup needs it. All other features are explicitly
+disabled.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libarchive/libarchive.mk | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/e2fsprogs/e2fsprogs.mk | 9 ---------
->  1 file changed, 9 deletions(-)
-> 
-> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-> index 5ba9278..7aa0285 100644
-> --- a/package/e2fsprogs/e2fsprogs.mk
-> +++ b/package/e2fsprogs/e2fsprogs.mk
-> @@ -155,14 +155,5 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_TUNE2FS),y)
->  E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_TUNE2FS_SYMLINK
->  endif
->  
-> -# systemd really wants to have fsck in /sbin
-> -define E2FSPROGS_TARGET_FSCK_SYMLINK
-> -	ln -sf ../usr/sbin/fsck $(TARGET_DIR)/sbin/fsck
-> -endef
-> -
-> -ifeq ($(BR2_PACKAGE_E2FSPROGS_FSCK),y)
-> -E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_FSCK_SYMLINK
-> -endif
-> -
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 726142b..e20a737 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -99,4 +99,21 @@ else
+ LIBARCHIVE_CONF_OPTS += --without-lzma
+ endif
+ 
++# The only user of host-libarchive needs zlib support
++HOST_LIBARCHIVE_DEPENDENCIES = host-zlib
++HOST_LIBARCHIVE_CONF_OPTS = \
++	--disable-bsdtar \
++	--disable-bsdcpio \
++	--disable-acl \
++	--disable-xattr \
++	--without-bz2lib \
++	--without-expat \
++	--without-libiconv-prefix \
++	--without-xml2 \
++	--without-lzo2 \
++	--without-nettle \
++	--without-openssl \
++	--without-lzma
++
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
