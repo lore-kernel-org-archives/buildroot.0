@@ -1,163 +1,149 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Jun 2016 18:57:25 +0200
-Subject: [Buildroot] [git commit] xen: new package
-Message-ID: <20160612165932.F14E4818CC@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 12 Jun 2016 18:09:56 +0000
+Subject: [Buildroot] [Bug 8986] New: qt5imageformats fails to build on
+ aarch64_be-buildroot-linux-gnu
+Message-ID: <bug-8986-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a95f85fc72a6b10c56ea3341b6007deabc3f9e09
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=8986
 
-Add support to compile Xen 4.6 and Xen tools for arm32 and arm64
-targets.
+            Bug ID: 8986
+           Summary: qt5imageformats fails to build on
+                    aarch64_be-buildroot-linux-gnu
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: uwe at hermann-uwe.de
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
-[Thomas:
- - Remove all "select" from the main Xen option, since the hypervisor
-   can build fine without any additional library. The dependencies have
-   been moved to the "tools" sub-option.
- - Make sure that at least one of the sub-option is enabled by selecting
-   the hypervisor sub-option if the tools sub-option is not enabled.
- - Add a Config.in comment about the dependencies of the Xen tools.
- - Add missing dependency on argp-standalone in the .mk file.
- - Simplify the handling of XEN_INSTALL_TARGET_OPTS.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in     |  1 +
- package/xen/Config.in | 44 ++++++++++++++++++++++++++++++++++++++++++
- package/xen/xen.hash  |  2 ++
- package/xen/xen.mk    | 53 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 100 insertions(+)
+How to reproduce: Fresh buildroot clone as of today, make menuconfig, select
+the aarch64 big-endian target with glibc (default), select qt5 and qtgui,
+qtwidgets, qtsvg, imageformats components (.config attached).
 
-diff --git a/package/Config.in b/package/Config.in
-index 03c67ce..2f42038 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1711,6 +1711,7 @@ endif
- 	source "package/tpm-tools/Config.in"
- 	source "package/unscd/Config.in"
- 	source "package/util-linux/Config.in"
-+	source "package/xen/Config.in"
- endmenu
- 
- menu "Text editors and viewers"
-diff --git a/package/xen/Config.in b/package/xen/Config.in
-new file mode 100644
-index 0000000..7254a07
---- /dev/null
-+++ b/package/xen/Config.in
-@@ -0,0 +1,44 @@
-+config BR2_PACKAGE_XEN
-+	bool "xen"
-+	# needs "dmb" on ARM, so ARM >= v7
-+	depends on BR2_ARM_CPU_ARMV7A || BR2_aarch64
-+	select BR2_PACKAGE_XEN_HYPERVISOR if !BR2_PACKAGE_XEN_TOOLS
-+	help
-+	  This package builds the Xen hypervisor and toolstack.
-+
-+	  http://www.xenproject.org/
-+
-+if BR2_PACKAGE_XEN
-+
-+config BR2_PACKAGE_XEN_HYPERVISOR
-+	bool "Xen hypervisor"
-+	help
-+	  The Xen binaries are avaliable in /usr/lib/xen/
-+	  See http://wiki.xenproject.org/wiki/Getting_Started for using the
-+	  Xen hypervisor.
-+
-+config BR2_PACKAGE_XEN_TOOLS
-+	bool "Xen tools"
-+	depends on !BR2_STATIC_LIBS # dtc (libfdt)
-+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_WCHAR # libglib2, util-linux
-+	select BR2_PACKAGE_DTC
-+	select BR2_PACKAGE_LIBAIO
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_PIXMAN
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_YAJL
-+	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
-+	help
-+	  The Xen tools can be accessed by the xl command.
-+
-+comment "xen tools need a toolchain w/ wchar, threads, dynamic library"
-+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
-+
-+endif
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-new file mode 100644
-index 0000000..c124b3a
---- /dev/null
-+++ b/package/xen/xen.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 6fa1c2431df55aa5950d248e6093b8c8c0f11c357a0adbd348a2186478e80909 xen-4.6.0.tar.gz
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-new file mode 100644
-index 0000000..759667a
---- /dev/null
-+++ b/package/xen/xen.mk
-@@ -0,0 +1,53 @@
-+################################################################################
-+#
-+# Xen
-+#
-+################################################################################
-+
-+XEN_VERSION = 4.6.0
-+XEN_SITE = http://bits.xensource.com/oss-xen/release/$(XEN_VERSION)
-+XEN_LICENSE = GPLv2
-+XEN_LICENSE_FILES = COPYING
-+
-+# Calculate XEN_ARCH
-+ifeq ($(ARCH),aarch64)
-+XEN_ARCH = arm64
-+else ifeq ($(ARCH),arm)
-+XEN_ARCH = arm32
-+endif
-+
-+XEN_CONF_OPTS = --disable-ocamltools
-+XEN_MAKE_ENV = \
-+	XEN_TARGET_ARCH=$(XEN_ARCH) \
-+	CROSS_COMPILE=$(TARGET_CROSS) \
-+	$(TARGET_CONFIGURE_OPTS)
-+
-+ifeq ($(BR2_PACKAGE_XEN_HYPERVISOR),y)
-+XEN_MAKE_OPTS += dist-xen
-+XEN_INSTALL_IMAGES = YES
-+define XEN_INSTALL_IMAGES_CMDS
-+	cp $(@D)/xen/xen $(BINARIES_DIR)
-+endef
-+else
-+XEN_CONF_OPTS += --disable-xen
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XEN_TOOLS),y)
-+XEN_DEPENDENCIES += dtc libaio libglib2 ncurses openssl pixman util-linux yajl
-+ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
-+XEN_DEPENDENCIES += argp-standalone
-+endif
-+XEN_INSTALL_TARGET_OPTS += DESTDIR=$(TARGET_DIR) install-tools
-+XEN_MAKE_OPTS += dist-tools
-+
-+define XEN_INSTALL_INIT_SYSV
-+	mv $(TARGET_DIR)/etc/init.d/xencommons $(TARGET_DIR)/etc/init.d/S50xencommons
-+	mv $(TARGET_DIR)/etc/init.d/xen-watchdog $(TARGET_DIR)/etc/init.d/S50xen-watchdog
-+	mv $(TARGET_DIR)/etc/init.d/xendomains $(TARGET_DIR)/etc/init.d/S60xendomains
-+endef
-+else
-+XEN_INSTALL_TARGET = NO
-+XEN_CONF_OPTS += --disable-tools
-+endif
-+
-+$(eval $(autotools-package))
+The qtimageformats components fails to build like this:
+
+/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/host/usr/bin/aarch64_be-buildroot-linux-gnu-g++
+--sysroot=/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/host/usr/aarch64_be-buildroot-linux-gnu/sysroot
+-Wl,--no-undefined -Wl,-O1 -Wl,--enable-new-dtags -shared -o libqwebp.so
+.obj/main.o .obj/qwebphandler.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dec/alpha.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dec/buffer.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dec/frame.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dec/idec.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dec/io.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dec/quant.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dec/tree.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dec/vp8.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dec/vp8l.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dec/webp.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/demux/demux.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/cpu.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/dec.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/dec_sse2.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/enc.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/enc_sse2.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/lossless.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/upsampling.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/upsampling_sse2.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/yuv.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/alpha_processing.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/alpha_processing_sse2.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/dec_clip_tables.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/dec_mips32.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/enc_avx2.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/enc_mips32.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/lossless_mips32.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/lossless_sse2.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/yuv_mips32.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/yuv_sse2.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/alpha.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/analysis.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/backward_references.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/config.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/cost.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/filter.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/frame.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/histogram.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/iterator.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/picture.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/quant.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/syntax.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/token.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/tree.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/vp8l.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/webpenc.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/picture_csp.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/picture_psnr.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/picture_rescale.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/enc/picture_tools.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/mux/muxedit.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/mux/muxinternal.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/mux/muxread.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/utils/bit_reader.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/utils/bit_writer.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/utils/color_cache.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/utils/filters.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/utils/huffman.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/utils/huffman_encode.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/utils/quant_levels.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/utils/quant_levels_dec.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/utils/random.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/utils/rescaler.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/utils/thread.o
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/utils/utils.o
+ -lQt5Gui -lQt5Core -lrt -ldl -lpthread  
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/dec.o:
+In function `VP8DspInit':
+dec.c:(.text+0x2bbc): undefined reference to `VP8DspInitNEON'
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/enc.o:
+In function `VP8EncDspInit':
+enc.c:(.text+0x19d0): undefined reference to `VP8EncDspInitNEON'
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/lossless.o:
+In function `VP8LDspInit':
+lossless.c:(.text+0x2ac4): undefined reference to `VP8LDspInitNEON'
+.obj/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/3rdparty/libwebp/src/dsp/upsampling.o:
+In function `WebPInitUpsamplers':
+upsampling.c:(.text+0x3ebc): undefined reference to `WebPInitUpsamplersNEON'
+collect2: error: ld returned 1 exit status
+Makefile:276: recipe for target '../../../../plugins/imageformats/libqwebp.so'
+failed
+make[5]: *** [../../../../plugins/imageformats/libqwebp.so] Error 1
+make[5]: Leaving directory
+'/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/plugins/imageformats/webp'
+Makefile:172: recipe for target 'sub-webp-make_first' failed
+make[4]: *** [sub-webp-make_first] Error 2
+make[4]: Leaving directory
+'/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/plugins/imageformats'
+Makefile:42: recipe for target 'sub-imageformats-make_first' failed
+make[3]: *** [sub-imageformats-make_first] Error 2
+make[3]: Leaving directory
+'/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src/plugins'
+Makefile:43: recipe for target 'sub-plugins-make_first' failed
+make[2]: *** [sub-plugins-make_first] Error 2
+make[2]: Leaving directory
+'/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/src'
+Makefile:43: recipe for target 'sub-src-make_first' failed
+make[1]: *** [sub-src-make_first] Error 2
+make[1]: Leaving directory
+'/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0'
+package/pkg-generic.mk:195: recipe for target
+'/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/.stamp_built'
+failed
+make: ***
+[/home/jenkins_slave/a/buildroot-aarch64_be-buildroot-linux-gnu/output/build/qt5imageformats-5.6.0/.stamp_built]
+Error 2
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
