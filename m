@@ -1,100 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Jun 2016 21:46:57 +0200
-Subject: [Buildroot] [PATCH 1/5] package/qt: Add optional support for
- OpenGL
-In-Reply-To: <1465723823-6113-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465723823-6113-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160612194657.GC3711@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Jun 2016 21:53:36 +0200
+Subject: [Buildroot] [PATCH] mpdstate: add package
+In-Reply-To: <20160530063656.GC31737@airbook.vandijck-laurijssen.be>
+References: <20160530063656.GC31737@airbook.vandijck-laurijssen.be>
+Message-ID: <20160612215336.06191b9e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Hello,
 
-[sorry for the dupe, I forgot to Cc the list initially...]
+On Mon, 30 May 2016 08:36:56 +0200, Kurt Van Dijck wrote:
+> Mpdstate listens for MPD state changes and outputs them
+> on stdout. It is easy to write a script that receives mpdstate's output
+> on stdin an act upon some of the events.
+> 
+> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 
-On 2016-06-12 11:30 +0200, Bernd Kuhls spake thusly:
-> OpenGL support is only available for the desktop variant of Qt4 and not
-> the embedded one: http://code.qt.io/cgit/qt/qt.git/tree/configure#n6612
-> 
-> This patch is needed to fix a compile error with libv4l which depends
-> on OpenGL support if qt4 is used by libv4l as optional dependency.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/qt/Config.in | 17 +++++++++++++++++
->  package/qt/qt.mk     |  3 +++
->  2 files changed, 20 insertions(+)
-> 
-> diff --git a/package/qt/Config.in b/package/qt/Config.in
-> index 0ab8417..4aa5324 100644
-> --- a/package/qt/Config.in
-> +++ b/package/qt/Config.in
-> @@ -350,6 +350,21 @@ config BR2_PACKAGE_QT_PHONON_BACKEND
->  	  Build the platform Phonon plugin.
->  	  If unsure, say n.
->  
-> +choice
-> +	prompt "OpenGL API"
+Isn't the same thing achievable with the "mpc idle" feature, which
+allows you to listen for events from mpd ?
+
+Like your other package, I'd prefer to have some evidence of even some
+limited adoption/usage of a software package before adding it to
+Buildroot.
+
+Nonetheless, here is a review below.
+
+> diff --git a/package/mpdstate/Config.in b/package/mpdstate/Config.in
+> new file mode 100644
+> index 0000000..e3a5688
+> --- /dev/null
+> +++ b/package/mpdstate/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_MPDSTATE
+> +	bool "mpdstate"
 > +	help
-> +	  Select OpenGL API.
+> +	  mpdstate is a small C-program which outputs the state of an MPD
+> +	  (Music Player Daemon). The program keeps waiting for changes and
+> +	  outputs immediately the state changes that I found important.
+
+Please avoid first person sentences. This strengthen the feeling of
+"this is a personal project and nobody else but the original author is
+using it".
+
+> +	  The output is easily parsed with shell scripting,
+> +	  and that is how I automate my MPD boxes to:
+> +	  - enable a LED when MPD is playing
+> +	  - activate the power amplifier's power when MPD is playing
+
+Please add an empty line here, followed by the URL of the upstream
+project homepage.
+
+> diff --git a/package/mpdstate/mpdstate.mk b/package/mpdstate/mpdstate.mk
+> new file mode 100644
+> index 0000000..82436d4
+> --- /dev/null
+> +++ b/package/mpdstate/mpdstate.mk
+> @@ -0,0 +1,35 @@
+> +################################################################################
+> +#
+> +# mpdstate
+> +#
+> +################################################################################
 > +
-> +comment "Desktop OpenGL not available (needs Qt standard (X11))"
-> +	depends on !BR2_PACKAGE_QT_X11
+> +MPDSTATE_VERSION = r3
+> +MPDSTATE_SITE = git://github.com/kurt-vd/mpdstate.git
+
+Please use the Github helper, and add a hash file.
+
+> +MPDSTATE_LICENSE = GPLv3
+> +MPDSTATE_LICENSE_FILES = LICENSE
 > +
-> +config BR2_PACKAGE_QT_OPENGL_GL_DESKTOP
-> +	bool "Desktop OpenGL"
-> +	depends on BR2_PACKAGE_HAS_LIBGL
-> +	depends on BR2_PACKAGE_QT_X11
-> +	help
-> +	  Use desktop OpenGL.
-> +
->  config BR2_PACKAGE_QT_OPENGL_ES
->  	bool "OpenGL ES v2.x support"
->  	depends on BR2_PACKAGE_HAS_LIBGLES
-> @@ -357,6 +372,8 @@ config BR2_PACKAGE_QT_OPENGL_ES
->  	help
->  	  Enable the OpenGL ES v2.x support.
->  
-> +endchoice
+> +define MPDSTATE_CONFIGURE_CMDS
+> +	echo "PREFIX=/" > $(@D)/config.mk
 
-Since there is no "none" entry in that choice, it means we can no longer
-build with no GL support, right?
+We normally use /usr as the prefix, not /.
 
-Regards,
-Yann E. MORIN.
+> +	echo "CFLAGS=$(TARGET_CFLAGS)" >> $(@D)/config.mk
+> +	echo "CPPFLAGS=$(TARGET_CPPFLAGS)" >> $(@D)/config.mk
+> +	echo "CXXFLAGS=$(TARGET_CXXFLAGS)" >> $(@D)/config.mk
+> +	echo "LDFLAGS=$(TARGET_LDFLAGS)" >> $(@D)/config.mk
+> +	echo "LDLIBS+=$(TARGET_LDLIBS)" >> $(@D)/config.mk
+> +	echo "CC=$(TARGET_CC)" >> $(@D)/config.mk
+> +	echo "CXX=$(TARGET_CXX)" >> $(@D)/config.mk
+> +	echo "LD=$(TARGET_LD)" >> $(@D)/config.mk
+> +	echo "AS=$(TARGET_AS)" >> $(@D)/config.mk
 
->  endif
->  
->  config BR2_PACKAGE_QT_DBUS
-> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-> index f29a671..d56fe7e 100644
-> --- a/package/qt/qt.mk
-> +++ b/package/qt/qt.mk
-> @@ -336,6 +336,9 @@ QT_DEPENDENCIES += libgles libegl
->  QT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
->  QT_CXXFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
->  QT_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --libs egl`
-> +else ifeq ($(BR2_PACKAGE_QT_OPENGL_GL_DESKTOP),y)
-> +QT_CONFIGURE_OPTS += -opengl desktop
-> +QT_DEPENDENCIES += libgl
->  else
->  QT_CONFIGURE_OPTS += -no-opengl
->  endif
-> -- 
-> 2.8.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+You can pass all those variables on the make command line, and
+therefore use $(TARGET_CONFIGURE_OPTS) instead.
 
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
