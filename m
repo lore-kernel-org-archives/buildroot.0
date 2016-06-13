@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Jun 2016 22:28:09 +0200
-Subject: [Buildroot] [PATCH 2/3] package/qwt: Fix selecting OpenGL
-	support in qt4
-In-Reply-To: <1465842195-21158-2-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Mon, 13 Jun 2016 20:23:14 +0200")
+Date: Mon, 13 Jun 2016 22:29:38 +0200
+Subject: [Buildroot] [PATCH 3/3] package/qwt: bump version to 6.1.3
+In-Reply-To: <1465842195-21158-3-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Mon, 13 Jun 2016 20:23:15 +0200")
 References: <1465842195-21158-1-git-send-email-bernd.kuhls@t-online.de>
- <1465842195-21158-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <874m8wygti.fsf@dell.be.48ers.dk>
+ <1465842195-21158-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87ziqox26l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +14,9 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > A Kconfig option being part of a choice can not be selected directly,
- > so we use the new option BR2_PACKAGE_QT_OPENGL.
-
- > Fixes
- > http://autobuild.buildroot.net/results/2a8/2a8edb18ab7f8a9e324966282858014e9b5bbea0/
-
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- >  package/qwt/Config.in | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
-
- > diff --git a/package/qwt/Config.in b/package/qwt/Config.in
- > index 810bd75..dabbda2 100644
- > --- a/package/qwt/Config.in
- > +++ b/package/qwt/Config.in
- > @@ -29,7 +29,7 @@ config BR2_PACKAGE_QWT_OPENGL
- >  	bool "OpenGL support"
- >  	depends on (BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_QT) || \
- >  		(BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_PACKAGE_QT5)
- > -	select BR2_PACKAGE_QT_OPENGL_ES if BR2_PACKAGE_QT
- > +	select BR2_PACKAGE_QT_OPENGL if BR2_PACKAGE_QT
 
 Committed, thanks.
-
-Could qwt work with desktop GL as well? If so, it would be nice if it
-could be selected.
 
 -- 
 Bye, Peter Korsgaard
