@@ -1,36 +1,36 @@
 From: Jordan Yelloz <jordan@yelloz.me>
-Date: Sun, 12 Jun 2016 20:11:01 -0700
-Subject: [Buildroot] [PATCH v2 1/1] fwup: blanked out MANS to avoid running
-	help2man
+Date: Sun, 12 Jun 2016 20:13:40 -0700
+Subject: [Buildroot] [PATCH v2 1/1] iptables: exported AR=$(TARGET_AR) to
+	make
 In-Reply-To: <20160613023826.6329-1-jordan@yelloz.me>
 References: <20160613023826.6329-1-jordan@yelloz.me>
-Message-ID: <20160613031101.27646-1-jordan@yelloz.me>
+Message-ID: <20160613031340.30120-1-jordan@yelloz.me>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If you have help2man installed, the build system will try to run
-help2man on the target fwup binary which should not be expected to work.
+This ensures the correct AR is used for some of the iptables build
+process. This is the same fix as
+<https://bugs.gentoo.org/show_bug.cgi?id=444282>
 
 Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
 ---
- package/fwup/fwup.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/iptables/iptables.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
-index 0f857fc..f960e36 100644
---- a/package/fwup/fwup.mk
-+++ b/package/fwup/fwup.mk
-@@ -10,6 +10,8 @@ FWUP_LICENSE = Apache-2.0
- FWUP_LICENSE_FILES = LICENSE
- FWUP_DEPENDENCIES = libconfuse libarchive libsodium
- FWUP_AUTORECONF = YES
-+FWUP_MAKE_OPTS = MANS=
-+FWUP_INSTALL_TARGET_OPTS = MANS=
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 12e00f2..b9feaf5 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -17,6 +17,7 @@ IPTABLES_CONF_OPTS = --libexecdir=/usr/lib --with-kernel=$(STAGING_DIR)/usr \
+ 	$(if $(BR2_STATIC_LIBS),,--disable-static)
+ # For 0002-iptables-add-xtables-config-parser.h-to-BUILT_SOURCES.patch
+ IPTABLES_AUTORECONF = YES
++IPTABLES_MAKE_ENV = AR=$(TARGET_AR)
  
- define FWUP_ADD_M4_DIR
- 	mkdir -p $(@D)/m4
+ # For connlabel match
+ ifeq ($(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),y)
 -- 
 2.8.4
