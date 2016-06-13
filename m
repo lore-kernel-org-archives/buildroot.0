@@ -1,33 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Jun 2016 09:45:20 +0200
-Subject: [Buildroot] sources.buildroot.net is down
-In-Reply-To: <CAAcXeumnVj86aZAanbxp65Hvn9fdmABOORMhYcXmksHKZcvJHQ@mail.gmail.com>
- (Danijel Tudek's message of "Thu, 9 Jun 2016 10:34:16 +0200")
-References: <CAAcXeumnVj86aZAanbxp65Hvn9fdmABOORMhYcXmksHKZcvJHQ@mail.gmail.com>
-Message-ID: <874m8x1qi7.fsf@dell.be.48ers.dk>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 13 Jun 2016 09:46:01 +0200
+Subject: [Buildroot] [PATCH 0/2] pulseview: fix build failures
+In-Reply-To: <CAMpxmJVFdMoC5bfd2hWNyyCKGGCAA9t62wQ_84ySpFFY-EmOPQ@mail.gmail.com>
+References: <1435660874-14116-1-git-send-email-bgolaszewski@baylibre.com>
+ <20160524221001.2a2fce00@free-electrons.com>
+ <CAMpxmJVFdMoC5bfd2hWNyyCKGGCAA9t62wQ_84ySpFFY-EmOPQ@mail.gmail.com>
+Message-ID: <CAHXCMM+hThJWE53K6HMga1tpT4R+rkv-62qJ54jS3r_D9xTy-Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danijel" == Danijel Tudek <danijel.tudek@bylapis.com> writes:
+Hi all,
 
- > Hi,
- > I just got stuck in the middle of full rebuild because sources.buildroot.net
- > is down.
+On Mon, Jun 13, 2016 at 9:19 AM, Bartosz Golaszewski
+<bgolaszewski@baylibre.com> wrote:
+[...]
+> Hello Thomas,
+>
+> I'm sorry for not responding before, but I was busy and lost this
+> e-mail somehow. I see it's fixed now with commit b385d13 by Samuel.
+> Let me know if there are still some issues with PulseView or any
+> sigrok packages.
 
- > This is the error I get on util-linux:
+FYI, the patch got merged upstream:
+https://sourceforge.net/p/sigrok/mailman/message/35154129/
 
- > Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109
- > Connecting to sources.buildroot.net (sources.buildroot.net)|176.9.16.109|:80...
- > failed: Connection refused.
-
- > Ping also fails.
-
-Sorry, I forgot to reply to this mail. The machine was down for a little
-while because of a dist upgrade, but (as you probably alredy noticed) is
-up and running again.
+Regards,
 
 -- 
-Bye, Peter Korsgaard
+Samuel
