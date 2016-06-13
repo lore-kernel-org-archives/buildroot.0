@@ -1,38 +1,24 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 13 Jun 2016 15:18:17 +0200
-Subject: [Buildroot] [PATCH v2 00/14] Bump NXP package versions
-In-Reply-To: <20160611152015.089defa3@free-electrons.com>
+Date: Mon, 13 Jun 2016 15:18:26 +0200
+Subject: [Buildroot] [PATCH v2 01/14] nxp defconfigs: bump u-boot
+	version to 4.1.15_1.1.0_ga
+In-Reply-To: <40be5b9c7ef66e185db687fb8bac5746f3b97039.1465578220.git.awebster@arcx.com>
 References: <cover.1464958470.git.awebster@arcx.com>
  <cover.1465578220.git.awebster@arcx.com>
- <20160611152015.089defa3@free-electrons.com>
-Message-ID: <CAAMH-yvuu3p=wSE7-iOLoRgNdiwjN4ONaC+cxh69skcVkZ0qFw@mail.gmail.com>
+ <40be5b9c7ef66e185db687fb8bac5746f3b97039.1465578220.git.awebster@arcx.com>
+Message-ID: <CAAMH-yubrQ3N_rpjpKcXXJu1A7NqK4kqbZ9MWyh3twk2JWVc8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Andrew, All,
+Andrew, All,
 
-On Sat, Jun 11, 2016 at 3:20 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Fri, 10 Jun 2016 14:09:04 -0400, Andrew Webster wrote:
->
->> Changes v1 -> v2:
->>   - Reordered patches to keep gpu related patches together and multimedia
->>   patches together.
->>   - Added patches for bumping the kernel/u-boot versions of NXP defconfigs
->>   - Added patch to bump version of imx-kobs
->>   - Added patch to bump version of kernel-module-imx-gpu-viv
->
-> Thanks Andrew for this new version! I'll wait for Gary's feedback on
-> the series.
+On Fri, Jun 10, 2016 at 8:09 PM, Andrew Webster <awebster@arcx.com> wrote:
+> Signed-off-by: Andrew Webster <awebster@arcx.com>
 
-I'm going to reply to each patch but overall I'm very happy with the series.
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
-I've tested most of them using a Nitrogen6x + 3.14.52 kernel.
-
-Thanks,
+Regards,
 Gary
