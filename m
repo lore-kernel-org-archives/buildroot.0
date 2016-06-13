@@ -1,67 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 13 Jun 2016 21:45:31 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/linknx: make it build with the
-	musl C library
-Message-ID: <1465847131-23796-1-git-send-email-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 13 Jun 2016 21:47:04 +0200
+Subject: [Buildroot] [PATCH 1/6] Replace (e)glibc by glibc
+In-Reply-To: <1465422059-22254-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1465422059-22254-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <9cdb244c-a242-adae-969b-7f09133bff59@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/c0f/c0f59d3f9eb115072d410ef199f4773f2c380d6d/
+Hi Thomas,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: added better patch description and sent patch upstream
+Le 08/06/2016 ? 23:40, Thomas Petazzoni a ?crit :
+> Following the removal of eglibc support, this commit replaces all
+> occurences of "(e)glibc" by just "glibc". Most of the occurences are in
+> package Config.in comments.
+> 
+> In addition, when the form "an (e)glibc ..." was used, it is replaced by
+> "a glibc ...".
 
- package/linknx/0002-musl-cdefs.patch | 37 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/linknx/0002-musl-cdefs.patch
+This patch must also include efibootmgr and efivar packages.
 
-diff --git a/package/linknx/0002-musl-cdefs.patch b/package/linknx/0002-musl-cdefs.patch
-new file mode 100644
-index 0000000..59e28ca
---- /dev/null
-+++ b/package/linknx/0002-musl-cdefs.patch
-@@ -0,0 +1,37 @@
-+Do not use the non-standard <sys/cdefs.h> header
-+
-+<sys/cdefs.h> is glibc-specific, and should be used only internally by
-+glibc, not by external libraries/programs. It is not available in all
-+standard C libraries.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+(Patch sent upstream: https://sourceforge.net/p/linknx/patches/21/)
-+
-+diff -uNr linknx-0.0.1.32.org/include/eibclient.h linknx-0.0.1.32/include/eibclient.h
-+--- linknx-0.0.1.32.org/include/eibclient.h	2007-10-11 01:55:33.000000000 +0200
-++++ linknx-0.0.1.32/include/eibclient.h	2016-01-23 23:21:17.315006629 +0100
-+@@ -27,11 +27,12 @@
-+ #ifndef EIBCLIENT_H
-+ #define EIBCLIENT_H
-+ 
-+-#include "sys/cdefs.h"
-+ #include "stdint.h"
-+ #include <pthsem.h>
-+ 
-+-__BEGIN_DECLS;
-++#ifdef __cplusplus
-++extern "C" {
-++#endif
-+ 
-+ #include "eibloadresult.h"
-+ 
-+@@ -705,5 +706,8 @@
-+  */
-+ int EIB_LoadImage_async (EIBConnection * con, const uint8_t * image, int len);
-+ 
-+-__END_DECLS
-++#ifdef __cplusplus
-++}
-++#endif
-++
-+ #endif
--- 
-2.8.1
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+
+[snip]
+
+> diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
+> index ff4d7bd..8802860 100644
+> --- a/package/ltrace/Config.in
+> +++ b/package/ltrace/Config.in
+> @@ -18,6 +18,6 @@ config BR2_PACKAGE_LTRACE
+>  
+>  	  http://ltrace.org
+>  
+> -comment "ltrace needs a uclibc or (e)glibc toolchain w/ wchar, dynamic library"
+> +comment "ltrace needs a uclibc or glibc toolchain w/ wchar, dynamic library"
+                            ^^
+Not related to this patch but we prefer uClibc instead of uclibc.
+
+Otherwise:
+
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
