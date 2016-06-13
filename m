@@ -1,39 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Jun 2016 21:34:07 +0200
-Subject: [Buildroot] [git commit] package/libmicrohttpd: Fix build with !C99
-	compilers
-Message-ID: <20160613193926.22C8581898@busybox.osuosl.org>
+From: Viacheslav Volkov <sv99@inbox.ru>
+Date: Mon, 13 Jun 2016 22:40:57 +0300
+Subject: [Buildroot] [PATCH] scanpan: downgrade needed host perl version
+Message-ID: <20160613194057.46504-1-sv99@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c65b074bc42eca7c1d968508d7dee683d532b9b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+support/scripts/scancpan - require host perl 5.022
 
-The code assumes C99 mode for loop variables, so ensure it is used.
+on the Ubuntu 14.04 - perl version v5.18.2
 
-Fixes
-http://autobuild.buildroot.net/results/734/734652bbdd7b6b18a8d67a30fe03bed62cd644e7/
-http://autobuild.buildroot.net/results/d03/d03d36bfd4a97ff8091a815a45b4670bff992233/
-
-[Peter: fixup/extend commit message]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Viacheslav Volkov <sv99@inbox.ru>
 ---
- package/libmicrohttpd/libmicrohttpd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ support/scripts/scancpan | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 84bb6b1..c53676f 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -9,6 +9,7 @@ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
- LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-examples
-+LIBMICROHTTPD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index 6c70cfb..fb445cf 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -471,7 +471,7 @@ unshift @INC, sub {
+ } # END OF FATPACK CODE
  
- ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
- LIBMICROHTTPD_LICENSE = LGPLv2.1+
+ 
+-use 5.022;      # same major version as target perl
++use 5.018;      # same major version as target perl
+ use strict;
+ use warnings;
+ use Fatal qw(open close);
+-- 
+2.8.3
