@@ -1,11 +1,10 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 13 Jun 2016 22:04:33 +0200
-Subject: [Buildroot] [PATCH 5/6] docs/manual/known-issues: remove
- occurrences of eglibc
-In-Reply-To: <1465422059-22254-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jun 2016 22:06:24 +0200
+Subject: [Buildroot] [PATCH 6/6] rt-tests: remove occurrence of eglibc
+In-Reply-To: <1465422059-22254-6-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1465422059-22254-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1465422059-22254-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <ee7ada2e-a706-9128-d83a-ea628a7a591e@gmail.com>
+ <1465422059-22254-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <e1bc5223-9ac4-830f-8e95-5d5f1083aba1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,38 +16,26 @@ Hi Thomas,
 Le 08/06/2016 ? 23:40, Thomas Petazzoni a ?crit :
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  docs/manual/known-issues.txt | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+>  package/rt-tests/Config.in | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
-> index 38ba941..acfe4ff 100644
-> --- a/docs/manual/known-issues.txt
-> +++ b/docs/manual/known-issues.txt
-> @@ -14,18 +14,18 @@
->    DO_XSI_MATH, UCLIBC_HAS_OBSOLETE_BSD_SIGNAL and
->    UCLIBC_SV4_DEPRECATED are needed if one wants to build the
->    +ltp-testsuite+ package with uClibc. You need to either use a glibc
-> -  or eglibc based toolchain, or enable the appropriate options in the
-> -  uClibc configuration.
-> +  based toolchain, or enable the appropriate options in the uClibc
-> +  configuration.
+> diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+> index 4c57c0f..96e0bad 100644
+> --- a/package/rt-tests/Config.in
+> +++ b/package/rt-tests/Config.in
+> @@ -15,9 +15,9 @@ config BR2_PACKAGE_RT_TESTS
 >  
->  * The +xfsprogs+ package does not build with the default uClibc
->    configuration used by the Buildroot toolchain backend. You need to
-> -  either use a glibc or eglibc based toolchain, or enable the
-> -  appropriate options in the uClibc configuration.
-> +  either use a glibc based toolchain, or enable the appropriate
-> +  options in the uClibc configuration.
+>  	  Note that this package requires a toolchain built with the
+>  	  NPTL implementation of the pthread API (this is always the
+> -	  case with glibc/eglibc toolchains, but may not necessarily
+> -	  be the case with uClibc toolchains, since the thread
+> -	  implementation is configurable).
+> +	  case with glibc toolchains, but may not necessarily be the
+> +	  case with uClibc toolchains, since the thread implementation
+> +	  is configurable).
 >  
->  * The +mrouted+ package does not build with the default uClibc
->    configuration used by the Buildroot toolchain backend. You need to
-> -  either use a glibc or eglibc based toolchain, or enable the
-> -  appropriate options in the uClibc configuration.
-> +  either use a glibc based toolchain, or enable the appropriate
-> +  options in the uClibc configuration.
+>  	  http://rt.wiki.kernel.org
 >  
->  * The +libffi+ package is not supported on the SuperH 2 and ARC
->    architectures.
 > 
 
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
