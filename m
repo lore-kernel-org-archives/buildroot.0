@@ -1,25 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 13 Jun 2016 21:36:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libmicrohttpd: Fix build with
-	c99 compilers
-In-Reply-To: <1465843047-30583-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Mon, 13 Jun 2016 20:37:27 +0200")
-References: <1465843047-30583-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87oa74yj84.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 13 Jun 2016 21:36:21 +0200
+Subject: [Buildroot] Resource Limits
+In-Reply-To: <CAF_dkJC4Ds34F_BYcD=SfJAKhHvwspTAK0m_Y9y2Q7-p=T5nxA@mail.gmail.com>
+References: <CAF_dkJCCZcXdf=G8TJ1HUA1TiCAmbE56oA6KkWMyxcLrkxgo-w@mail.gmail.com>
+ <CAHXCMMLEuPHKHp5uwvxmzJMMwDg4HSVesDe7utRauYpgphzxcA@mail.gmail.com>
+ <CAF_dkJC4Ds34F_BYcD=SfJAKhHvwspTAK0m_Y9y2Q7-p=T5nxA@mail.gmail.com>
+Message-ID: <9dfae25a-4fe0-cf60-34e0-ae3eba5426fe@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+On 07-06-16 21:53, Patrick Doyle wrote:
+> Hello Samuel,
+> Thank you for your response.
+> 
+> I should have been a little more specific and given more details (so
+> as to reveal more of my ignorance :-))...
+> 
+> I am not using a preempt-RT kernel, although that might be a
+> possibility in the future.  I am using POSIX threads, with SCHED_FIFO
+> and desire to set threads with priorities higher than zero.  This
+> works perfectly fine when I run my multithreaded application as root.
+> But I want to run my application as an unprivileged user.  Once I do
+> that, I think I need some way to set RLIMIT_RTPRIO for my user
+> application.  From what I have read, I can set that via PAM or via
+> sysctl, or, perhaps via some other mechanism.
+> 
+> For my embedded application, I would prefer that the "via some other
+> mechanism" be "compile the kernel such that user applications can set
+> their priorities to be greater than zero".  I would prefer this
+> because it has zero imprint upon the size of my severely
+> size-constrained rootfs.
 
- > Fixes
- > http://autobuild.buildroot.net/results/734/734652bbdd7b6b18a8d67a30fe03bed62cd644e7/
- > http://autobuild.buildroot.net/results/d03/d03d36bfd4a97ff8091a815a45b4670bff992233/
+ The 'ulimit' shell builtin of busybox ash should have the -r option to set the
+maximum real-time priority. So, from the init script that is starting your
+application (and which runs as root), call ulimit -r 5 to set maximum RT
+priority to 5.
 
-You mean NOT c99 compilers. Committed with the commit message fixed /
-extended, thanks.
+ Alternatively, create a setuid wrapper that calls setrlimit() before dropping
+privileges.
+
+ Regards,
+ Arnout
+
+> 
+> I guess I forgot to mention that I have a severly size-constrained
+> rootfs and would prefer not to include PAM or sysctl unless I really
+> needed to (or perhaps got it for nearly free in busybox).
+> 
+> That's the backstory behind my question.
+> 
+> --wpd
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
