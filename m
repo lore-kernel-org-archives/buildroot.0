@@ -1,39 +1,64 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 13 Jun 2016 20:23:14 +0200
-Subject: [Buildroot] [PATCH 2/3] package/qwt: Fix selecting OpenGL support
-	in qt4
-In-Reply-To: <1465842195-21158-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465842195-21158-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1465842195-21158-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 13 Jun 2016 20:23:13 +0200
+Subject: [Buildroot] [PATCH 1/3] package/qt: Fix Kconfig for OpenGL support
+Message-ID: <1465842195-21158-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A Kconfig option being part of a choice can not be selected directly,
-so we use the new option BR2_PACKAGE_QT_OPENGL.
+BR2_PACKAGE_QT_OPENGL_ES was moved to a choice option. This option kind
+can apparently not be selected by other packages. Therefore this patch
+introduces a new Kconfig option BR2_PACKAGE_QT_OPENGL which takes care
+of OpenGL support as such, BR2_PACKAGE_QT_OPENGL_NONE is not needed
+anymore now. The choice options are now only used to determine the
+type of OpenGL support.
 
-Fixes
-http://autobuild.buildroot.net/results/2a8/2a8edb18ab7f8a9e324966282858014e9b5bbea0/
+This patch contains the necessary preparation to fix a build error in
+the qwt package.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/qwt/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/qt/Config.in | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/package/qwt/Config.in b/package/qwt/Config.in
-index 810bd75..dabbda2 100644
---- a/package/qwt/Config.in
-+++ b/package/qwt/Config.in
-@@ -29,7 +29,7 @@ config BR2_PACKAGE_QWT_OPENGL
- 	bool "OpenGL support"
- 	depends on (BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_QT) || \
- 		(BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_PACKAGE_QT5)
--	select BR2_PACKAGE_QT_OPENGL_ES if BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT_OPENGL if BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 14b13ce..2ca0cb5 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -350,14 +350,20 @@ config BR2_PACKAGE_QT_PHONON_BACKEND
+ 	  Build the platform Phonon plugin.
+ 	  If unsure, say n.
  
++config BR2_PACKAGE_QT_OPENGL
++	bool "OpenGL support"
++	depends on BR2_PACKAGE_HAS_LIBGL || \
++	(BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES)
++	help
++	  This option enables OpenGL support.
++
++if BR2_PACKAGE_QT_OPENGL
++
+ choice
+ 	prompt "OpenGL API"
+ 	help
+ 	  Select OpenGL API.
+ 
+-config BR2_PACKAGE_QT_OPENGL_NONE
+-	bool "No OpenGL support"
+-
+ comment "Desktop OpenGL not available (needs Qt standard (X11))"
+ 	depends on !BR2_PACKAGE_QT_X11
+ 
+@@ -377,6 +383,8 @@ config BR2_PACKAGE_QT_OPENGL_ES
+ 
+ endchoice
+ 
++endif # BR2_PACKAGE_QT_OPENGL
++
  endif
+ 
+ config BR2_PACKAGE_QT_DBUS
 -- 
 2.8.1
