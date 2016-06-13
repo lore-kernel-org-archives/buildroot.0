@@ -1,40 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Jun 2016 11:50:46 +0200
-Subject: [Buildroot] [git commit] gmp: disable ASM for m68k coldfire
-Message-ID: <20160613095059.6CEA381DE4@busybox.osuosl.org>
+Date: Mon, 13 Jun 2016 11:56:29 +0200
+Subject: [Buildroot] [PATCH] gmp: disable ASM for m68k coldfire
+In-Reply-To: <20160613060405.GA7971@waldemar-brodkorb.de>
+References: <20160613060405.GA7971@waldemar-brodkorb.de>
+Message-ID: <20160613115629.2f6b967f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7f20b40273b70e2cc03821f33412fd71b9f398e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Some m68k assembly is used inside gmp, so disable it for
-coldfire.
+On Mon, 13 Jun 2016 08:04:05 +0200, Waldemar Brodkorb wrote:
+> Some m68k assembly is used inside gmp, so disable it for
+> coldfire.
+> 
+> Fixes following autobuild error:
+> http://autobuild.buildroot.net/results/30ac7b7fdaa51c0fe4fcafbbb558d60cb3d9fe51/
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/gmp/gmp.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Fixes following autobuild error:
-http://autobuild.buildroot.net/results/30ac7b7fdaa51c0fe4fcafbbb558d60cb3d9fe51/
+Applied to master, thanks.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gmp/gmp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index af6958d..e1d75dc 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -12,8 +12,8 @@ GMP_LICENSE = LGPLv3+
- GMP_LICENSE_FILES = COPYING.LESSERv3
- GMP_DEPENDENCIES = host-m4
- 
--# GMP doesn't support assembly for r6 ISA yet
--ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
-+# GMP doesn't support assembly for coldfire or mips r6 ISA yet
-+ifeq ($(BR2_m68k_cf)$(BR2_mips_32r6)$(BR2_mips_64r6),y)
- GMP_CONF_OPTS += --disable-assembly
- endif
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
