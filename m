@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jun 2016 22:46:53 +0200
-Subject: [Buildroot] [PATCH 5/6] docs/manual/known-issues: remove
- occurrences of eglibc
-In-Reply-To: <1465422059-22254-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jun 2016 22:50:22 +0200
+Subject: [Buildroot] [PATCH 6/6] rt-tests: remove occurrence of eglibc
+In-Reply-To: <1465422059-22254-6-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1465422059-22254-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1465422059-22254-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160613204653.GG3786@free.fr>
+ <1465422059-22254-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160613205022.GH3786@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,51 +18,30 @@ On 2016-06-08 23:40 +0200, Thomas Petazzoni spake thusly:
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-However, see an unrelated comment below...
-
-> ---
->  docs/manual/known-issues.txt | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
-> index 38ba941..acfe4ff 100644
-> --- a/docs/manual/known-issues.txt
-> +++ b/docs/manual/known-issues.txt
-> @@ -14,18 +14,18 @@
->    DO_XSI_MATH, UCLIBC_HAS_OBSOLETE_BSD_SIGNAL and
->    UCLIBC_SV4_DEPRECATED are needed if one wants to build the
->    +ltp-testsuite+ package with uClibc. You need to either use a glibc
-> -  or eglibc based toolchain, or enable the appropriate options in the
-> -  uClibc configuration.
-> +  based toolchain, or enable the appropriate options in the uClibc
-> +  configuration.
->  
->  * The +xfsprogs+ package does not build with the default uClibc
->    configuration used by the Buildroot toolchain backend. You need to
-> -  either use a glibc or eglibc based toolchain, or enable the
-> -  appropriate options in the uClibc configuration.
-> +  either use a glibc based toolchain, or enable the appropriate
-> +  options in the uClibc configuration.
->  
->  * The +mrouted+ package does not build with the default uClibc
->    configuration used by the Buildroot toolchain backend. You need to
-> -  either use a glibc or eglibc based toolchain, or enable the
-> -  appropriate options in the uClibc configuration.
-> +  either use a glibc based toolchain, or enable the appropriate
-> +  options in the uClibc configuration.
-
-I just discovered we had a konwn-problems section in the manual... That
-worries me somewhat: it will be hard to ensure this stays current with
-the new versions of those packages...
-
-Are we sure those are still valid? For example. mrouted has been updated
-once since the known-issue was added; xfsprogs has been updated twice.
-
 Regards,
 Yann E. MORIN.
 
->  * The +libffi+ package is not supported on the SuperH 2 and ARC
->    architectures.
+> ---
+>  package/rt-tests/Config.in | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+> index 4c57c0f..96e0bad 100644
+> --- a/package/rt-tests/Config.in
+> +++ b/package/rt-tests/Config.in
+> @@ -15,9 +15,9 @@ config BR2_PACKAGE_RT_TESTS
+>  
+>  	  Note that this package requires a toolchain built with the
+>  	  NPTL implementation of the pthread API (this is always the
+> -	  case with glibc/eglibc toolchains, but may not necessarily
+> -	  be the case with uClibc toolchains, since the thread
+> -	  implementation is configurable).
+> +	  case with glibc toolchains, but may not necessarily be the
+> +	  case with uClibc toolchains, since the thread implementation
+> +	  is configurable).
+>  
+>  	  http://rt.wiki.kernel.org
+>  
 > -- 
 > 2.7.4
 > 
