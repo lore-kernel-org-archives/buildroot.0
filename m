@@ -1,12 +1,11 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 13 Jun 2016 15:20:11 +0200
-Subject: [Buildroot] [PATCH v2 05/14] xdriver_xf86-video-imx-viv: bump
-	version to 5.0.11-p8.4
-In-Reply-To: <acc40a04b76b5069de297330cc9207d20f69a9a1.1465578220.git.awebster@arcx.com>
+Date: Mon, 13 Jun 2016 15:20:33 +0200
+Subject: [Buildroot] [PATCH v2 06/14] firmware-imx: bump to version 5.4
+In-Reply-To: <f4fd172e147d310d140c323f77083d5a35c04f54.1465578220.git.awebster@arcx.com>
 References: <cover.1464958470.git.awebster@arcx.com>
  <cover.1465578220.git.awebster@arcx.com>
- <acc40a04b76b5069de297330cc9207d20f69a9a1.1465578220.git.awebster@arcx.com>
-Message-ID: <CAAMH-yvnwAdtfHfaMez7CZOnYd-SNQAd6ey7XnbLrF0bg21UPg@mail.gmail.com>
+ <f4fd172e147d310d140c323f77083d5a35c04f54.1465578220.git.awebster@arcx.com>
+Message-ID: <CAAMH-yvJH28CuzWFU7o-UHXH+VOz1RwS1vN=AKn3hfj+wBj0rw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,71 +15,30 @@ To: buildroot@busybox.net
 Andrew, All,
 
 On Fri, Jun 10, 2016 at 8:11 PM, Andrew Webster <awebster@arcx.com> wrote:
-> Remove upstreamed patch.
-> Add patch from Yocto to not use git for versioning.
+> Changelog:
+> - Upgrade to FW v3.1.1_r46072
+> - v3.1.1_r46070 plus 2 patches 391/392
+> - FSLARIK-391 [Decoder/H.264] VPU is always busy when decoding an
+> erroneous H264 bitstream
+> - FSLARIK-392 [Decoder/VC1] VPU outputs only 1 picture
+> - Change to the format of Linux coda driver firmware
 >
 > This patch is based on the Yocto equivalent:
-> https://github.com/Freescale/meta-fsl-arm/commit/06a0574
-> https://github.com/Freescale/meta-fsl-arm/commit/076df90
+> https://github.com/Freescale/meta-fsl-arm/commit/dbb8773
 >
-> The following xorg.conf was used in order to force the use of the
-> vivante module:
-> https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
->
-> Note that the X server must be started with the "noreset" option to
-> avoid crashes when closing X apps.
-> Tested with:
->  # X -noreset &
->  # cd /usr/share/examples/viv_samples/vdk/
->  # DISPLAY=:0 ./tutorial7
+> Implicitly tested through gstreamer as the plugin relies on it:
+>  # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+>    matroskademux ! imxvpudec ! imxipuvideosink
 >
 > Signed-off-by: Andrew Webster <awebster@arcx.com>
-> ---
-> Changes v1 -> v2:
->   - added test procedure to comment
->   - updated from p8.3 to p8.4
->
->  .../0001-Remove-dix-internal-header-usage.patch    | 31 --------
->  ...001-Stop-using-Git-to-write-local-version.patch | 87 ++++++++++++++++++++++
->  .../xdriver_xf86-video-imx-viv.hash                |  3 +-
->  .../xdriver_xf86-video-imx-viv.mk                  |  2 +-
->  4 files changed, 89 insertions(+), 34 deletions(-)
->  delete mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/0001-Remove-dix-internal-header-usage.patch
->  create mode 100644 package/x11r7/xdriver_xf86-video-imx-viv/0001-Stop-using-Git-to-write-local-version.patch
->
-> diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/0001-Remove-dix-internal-header-usage.patch b/package/x11r7/xdriver_xf86-video-imx-viv/0001-Remove-dix-internal-header-usage.patch
-> deleted file mode 100644
-> index f146ba3..0000000
-> --- a/package/x11r7/xdriver_xf86-video-imx-viv/0001-Remove-dix-internal-header-usage.patch
-> +++ /dev/null
-> @@ -1,31 +0,0 @@
-> -From 80c419dddf6483873503d90694c4b4ae34ffa5e4 Mon Sep 17 00:00:00 2001
-> -From: Otavio Salvador <otavio@ossystems.com.br>
-> -Date: Wed, 2 Dec 2015 13:50:57 +0000
-> -Subject: [PATCH] Remove 'dix' internal header usage
-> -Organization: O.S. Systems Software LTDA.
-> -
-> -The 'swaprep.h' is an internal Xorg header and is not being installed
-> -anymore. The swap features are provided by the 'misc.h' header now.
-> -
-> -Upstream-Status: Pending
-> -
-> -Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
 
-I think you need to add your SOB in the patch like:
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
-sob: Otavio
-
-Downloaded from:
-<url from yocto>
-
-sob: Andrew
-
----
-
-Also, should we add a dependency on ARM_EABIHF since it depends on
-imx-gpu-viv? I'm never a 100% sure when you need to propagate those
-dependencies.
+Note that I've tested the VPU firmware on a 3.14.52 kernel just fine.
+The reason is that this firmware is actually loaded by the user space
+imx-vpu component, so as long as firmware-imx and imx-vpu are aligned,
+the endianness of the fw file doesn't matter.
 
 Regards,
 Gary
