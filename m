@@ -1,59 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jun 2016 22:50:22 +0200
-Subject: [Buildroot] [PATCH 6/6] rt-tests: remove occurrence of eglibc
-In-Reply-To: <1465422059-22254-6-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1465422059-22254-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1465422059-22254-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160613205022.GH3786@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Jun 2016 23:33:48 +0200
+Subject: [Buildroot] [git commit] opus: drop unneeded autoreconf
+Message-ID: <20160613213535.DEF6B81D3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2024d9a62024ba90b83306e568feb55d113f94b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-06-08 23:40 +0200, Thomas Petazzoni spake thusly:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+This was forgotten when the patch to configure.ac was removed in 218938e470
+(opus: bump version to 1.1.1).
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/opus/opus.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/rt-tests/Config.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-> index 4c57c0f..96e0bad 100644
-> --- a/package/rt-tests/Config.in
-> +++ b/package/rt-tests/Config.in
-> @@ -15,9 +15,9 @@ config BR2_PACKAGE_RT_TESTS
->  
->  	  Note that this package requires a toolchain built with the
->  	  NPTL implementation of the pthread API (this is always the
-> -	  case with glibc/eglibc toolchains, but may not necessarily
-> -	  be the case with uClibc toolchains, since the thread
-> -	  implementation is configurable).
-> +	  case with glibc toolchains, but may not necessarily be the
-> +	  case with uClibc toolchains, since the thread implementation
-> +	  is configurable).
->  
->  	  http://rt.wiki.kernel.org
->  
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/opus/opus.mk b/package/opus/opus.mk
+index eb082e3..f746a2f 100644
+--- a/package/opus/opus.mk
++++ b/package/opus/opus.mk
+@@ -9,7 +9,6 @@ OPUS_SITE = http://downloads.xiph.org/releases/opus
+ OPUS_LICENSE = BSD-3c
+ OPUS_LICENSE_FILES = COPYING
+ OPUS_INSTALL_STAGING = YES
+-OPUS_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_OPUS_FIXED_POINT),y)
+ OPUS_CONF_OPTS += --enable-fixed-point
