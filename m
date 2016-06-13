@@ -1,12 +1,11 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 13 Jun 2016 15:21:30 +0200
-Subject: [Buildroot] [PATCH v2 12/14] libimxvpuapi: bump version to
-	0.10.2
-In-Reply-To: <df0c4f0fd9b4e441e3eef3ef4af55dce72302ce6.1465578220.git.awebster@arcx.com>
+Date: Mon, 13 Jun 2016 15:21:35 +0200
+Subject: [Buildroot] [PATCH v2 13/14] imx-lib: bump version to 5.4
+In-Reply-To: <c15929189545aca13e272e5a2feae1cc32553d24.1465578220.git.awebster@arcx.com>
 References: <cover.1464958470.git.awebster@arcx.com>
  <cover.1465578220.git.awebster@arcx.com>
- <df0c4f0fd9b4e441e3eef3ef4af55dce72302ce6.1465578220.git.awebster@arcx.com>
-Message-ID: <CAAMH-ytLzBG0Ld-Ofw1NN48m_TVAvYwt6FyS4T+sjzQs3c4dPg@mail.gmail.com>
+ <c15929189545aca13e272e5a2feae1cc32553d24.1465578220.git.awebster@arcx.com>
+Message-ID: <CAAMH-ys9u6oZETBrBiTMhKsRAVMnd35nVKR0UnkejjzsX2AuwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,19 +16,19 @@ Andrew, All,
 
 On Fri, Jun 10, 2016 at 8:13 PM, Andrew Webster <awebster@arcx.com> wrote:
 > Changelog:
-> - fix AUD NAL positioning in h.264 encoder output
->   (SPS/PPS/AUD were ordered incorrectly - AUD has to come first, not last)
-> - fix build error with examples when --enable-static is used
-> - pass quality factor in simplified JPEG encoder interface correctly
-> - add functions for querying and setting header data
->   useful for modifying headers, like VUI data in the SPS RBSP
-> - documentation updates
+> - Remove platform check in hdmi-cec and imx-lib - simplify to support builds
+> on multiple machines
+> - For ipu use the dummy defaul object to fix build issues on non-ipu hardware
 >
 > This patch is based on the Yocto equivalent:
-> https://github.com/Freescale/meta-fsl-arm/commit/c999668
+> https://github.com/Freescale/meta-fsl-arm/commit/7946533
 >
-> Implicitly tested through gstreamer as the plugin relies on it:
+> Implicitly tested through gstreamer as the
+> plugins rely on them for vpu decoding, e.g.:
+>  # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
 >  # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
+>  # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+>    matroskademux ! imxvpudec ! imxipuvideosink
 >
 > Signed-off-by: Andrew Webster <awebster@arcx.com>
 
