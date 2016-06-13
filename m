@@ -1,65 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Jun 2016 22:29:51 +0200
-Subject: [Buildroot] [PATCH 1/6] Replace (e)glibc by glibc
-In-Reply-To: <1465422059-22254-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1465422059-22254-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160613202951.GB3786@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 13 Jun 2016 22:24:44 +0200
+Subject: [Buildroot] [git commit] package/qt: Fix Kconfig for OpenGL support
+Message-ID: <20160613203323.3C7B881E8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=fc377f233870e52466104db992414ca32873cc0a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Besides the nit-pick by Romain, I have my owns to point out... ;-)
+BR2_PACKAGE_QT_OPENGL_ES was moved to a choice option. This option kind
+can apparently not be selected by other packages. Therefore this patch
+introduces a new Kconfig option BR2_PACKAGE_QT_OPENGL which takes care
+of OpenGL support as such, BR2_PACKAGE_QT_OPENGL_NONE is not needed
+anymore now. The choice options are now only used to determine the
+type of OpenGL support.
 
-On 2016-06-08 23:40 +0200, Thomas Petazzoni spake thusly:
-> Following the removal of eglibc support, this commit replaces all
-> occurences of "(e)glibc" by just "glibc". Most of the occurences are in
-> package Config.in comments.
-> 
-> In addition, when the form "an (e)glibc ..." was used, it is replaced by
-> "a glibc ...".
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[--SNIP--]
-> diff --git a/package/liquid-dsp/Config.in b/package/liquid-dsp/Config.in
-> index a2cd21c..4b94eda 100644
-> --- a/package/liquid-dsp/Config.in
-> +++ b/package/liquid-dsp/Config.in
-> @@ -1,4 +1,4 @@
-> -comment "liquid-dsp requires a (e)glibc/musl toolchain w/ dynamic library"
-> +comment "liquid-dsp requires a glibc/musl toolchain w/ dynamic library"
+This patch contains the necessary preparation to fix a build error in
+the qwt package.
 
-Not related to this patch, but we don;t ususaly use "glibc/musl" but
-"glibc or musl".
+[Peter: fix QT_OPENGL dependencies to match options]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt/Config.in | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-[--SNIP--]
-> diff --git a/system/Config.in b/system/Config.in
-> index 9441467..5a90b11 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -95,7 +95,7 @@ config BR2_INIT_SYSTEMD
->  	select BR2_ROOTFS_MERGED_USR
->  	select BR2_PACKAGE_SYSTEMD
->  
-> -comment "systemd needs (e)glibc toolchain, headers >= 3.10"
-> +comment "systemd needs glibc toolchain, headers >= 3.10"
-
-... needs *a* glibc ...
-
-Otherwise:
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 14b13ce..91eb208 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -350,14 +350,20 @@ config BR2_PACKAGE_QT_PHONON_BACKEND
+ 	  Build the platform Phonon plugin.
+ 	  If unsure, say n.
+ 
++config BR2_PACKAGE_QT_OPENGL
++	bool "OpenGL support"
++	depends on (BR2_PACKAGE_HAS_LIBGL && BR2_PACKAGE_QT_X11) || \
++		   (BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES)
++	help
++	  This option enables OpenGL support.
++
++if BR2_PACKAGE_QT_OPENGL
++
+ choice
+ 	prompt "OpenGL API"
+ 	help
+ 	  Select OpenGL API.
+ 
+-config BR2_PACKAGE_QT_OPENGL_NONE
+-	bool "No OpenGL support"
+-
+ comment "Desktop OpenGL not available (needs Qt standard (X11))"
+ 	depends on !BR2_PACKAGE_QT_X11
+ 
+@@ -377,6 +383,8 @@ config BR2_PACKAGE_QT_OPENGL_ES
+ 
+ endchoice
+ 
++endif # BR2_PACKAGE_QT_OPENGL
++
+ endif
+ 
+ config BR2_PACKAGE_QT_DBUS
