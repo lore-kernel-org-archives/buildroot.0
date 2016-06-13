@@ -1,121 +1,58 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Mon, 13 Jun 2016 11:20:35 +0200
-Subject: [Buildroot] [PATCH] package/systemd: Optionally disable hwdb
-In-Reply-To: <20160608201910.GA3694@free.fr>
-References: <1460717190-29291-1-git-send-email-m.niestroj@grinn-global.com>
- <20160608201910.GA3694@free.fr>
-Message-ID: <b8499799-7f77-e90f-65aa-29cae92d53d5@grinn-global.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 13 Jun 2016 11:50:50 +0200
+Subject: [Buildroot] [git commit] python-dataproperty: bump to version 0.3.1
+Message-ID: <20160613095059.7F0C17FDD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=756fc17374389370a0eda6bf51bea8878a1052d3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 08.06.2016 22:19, Yann E. MORIN wrote:
-> Marcin, All,
->
-> On 2016-04-15 12:46 +0200, Marcin Niestroj spake thusly:
->> By default hwdb files are installed in /usr/lib/udev/hwdb.d
->> Currently they take about ~5MB. After first boot, systemd-hwdb tool
->> parses them and creates a binary in /etc/udev/hwdb.bin, which takes
->> another ~6.5MB.
->>
->> In case of initramfs images, hwdb parsing is done every boot. This adds
->> about 2-3 seconds to boot time in case of rootfs on SDHC class 10
->> card (benchmarked with am335x board). NAND boot takes even longer.
->
-> So that's where my boot time goes! ;-)
->
->> Add config option to disable hwdb in systemd, for smaller images and
->> better boot performance.
->>
->> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
->
-> I'm looking at all systemd-related pending patches, since I'm working on
-> cleaning up our systemd handling...
->
-> I have had a look at the systemd code to update the hwdb, and it is not
-> trivially replaced, so we would indeed need a host-systemd if we wanted
-> to generate the hwdb at build time.
->
-> I don't think this warrants the complexity of a host-systemd, however...
->
-> Yet, I'd like to know what would be the impact of not having hwdb
-> support at runtime. Care to shed some light, please?
+Version 0.3.1 makes pytest-runner dependency optional.
 
-HWDB is mainly a database of device classes and vendors (for PCI, SDIO,
-USB). This is helpfull during development, because tools like lsusb are
-able to show vendor and usb class for each device. However we don't
-need this in production most of the time.
-Additionally there are some files for input devices, like mouse,
-keyboard and pointstick. In keyboard files for example there are
-defined some special keys, like play/pause, volumeup etc.
+Fixes:
+http://autobuild.buildroot.net/results/0c8/0c8e0ceccc2d5f48138ec4f95e57729e33108f59
+http://autobuild.buildroot.net/results/eab/eab2d2bf78ac943156a0b8698e63bdf6e63865bf
+http://autobuild.buildroot.net/results/4d6/4d60c711e9c1da6dd5bb809bbe328e6252d2d747
+http://autobuild.buildroot.net/results/ed1/ed1982367fa1531d772d29b35e333b34e5889cec
+http://autobuild.buildroot.net/results/a0e/a0ebb6b155fa11c5886080f993c9aa9d596ac1c3
+http://autobuild.buildroot.net/results/85e/85e5086401a314a2d3d24efa887ac0188add85fc
+http://autobuild.buildroot.net/results/99e/99ea243303ae12aceb2fac3a5df5e3b552712eda
 
-Regards,
-Marcin
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-dataproperty/python-dataproperty.hash | 4 ++--
+ package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
->
-> Otherwise:
->
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Regards,
-> Yann E. MORIN.
->
->> ---
->>  package/systemd/Config.in  | 11 +++++++++++
->>  package/systemd/systemd.mk |  6 ++++++
->>  2 files changed, 17 insertions(+)
->>
->> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
->> index 97d48c4..324e884 100644
->> --- a/package/systemd/Config.in
->> +++ b/package/systemd/Config.in
->> @@ -84,6 +84,17 @@ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
->>
->>  	  http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
->>
->> +config BR2_PACKAGE_SYSTEMD_HWDB
->> +	bool "enable hwdb installation"
->> +	default y
->> +	help
->> +	  Enables hardware database installation to /usr/lib/udev/hwdb.d
->> +
->> +	  Disabling this option improves first boot time (or every boot
->> +	  time in case of initramfs images) and saves several MB space.
->> +
->> +	  https://www.freedesktop.org/software/systemd/man/hwdb.html
->> +
->>  config BR2_PACKAGE_SYSTEMD_BINFMT
->>  	bool "enable binfmt tool"
->>  	help
->> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
->> index 79e657e..29b62c0 100644
->> --- a/package/systemd/systemd.mk
->> +++ b/package/systemd/systemd.mk
->> @@ -127,6 +127,12 @@ else
->>  SYSTEMD_CONF_OPTS += --disable-microhttpd
->>  endif
->>
->> +ifeq ($(BR2_PACKAGE_SYSTEMD_HWDB),y)
->> +SYSTEMD_CONF_OPTS += --enable-hwdb
->> +else
->> +SYSTEMD_CONF_OPTS += --disable-hwdb
->> +endif
->> +
->>  ifeq ($(BR2_PACKAGE_SYSTEMD_BINFMT),y)
->>  SYSTEMD_CONF_OPTS += --enable-binfmt
->>  else
->> --
->> 2.8.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
--- 
-Marcin Niestroj
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+index bed956b..dd1b84c 100644
+--- a/package/python-dataproperty/python-dataproperty.hash
++++ b/package/python-dataproperty/python-dataproperty.hash
+@@ -1,4 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/dataproperty/json
+-md5	2c513428b63d7988631c2e6f6c067cb6  DataProperty-0.3.0.tar.gz
++md5	b0dfde2908e26585db24ef51d2153ca5  DataProperty-0.3.1.tar.gz
+ # sha256 calculated by scanpypi
+-sha256	566a5e693ed51582df36a066d40673167095ce22187348038b07b7ac1ef9bc64  DataProperty-0.3.0.tar.gz
++sha256	12a5e97a7fba5a938ecadf24f8e9c0ed4f3fd045b84ec107d5fa5ce15c03f9ad  DataProperty-0.3.1.tar.gz
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index 0bbe680..06b8caf 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DATAPROPERTY_VERSION = 0.3.0
++PYTHON_DATAPROPERTY_VERSION = 0.3.1
+ PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
+-PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/05/07/2eb3d18d3efd4d90ac8d532255da04d0c10359eb3bc65d5690579b8bd7b0
++PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/94/84/a78a208b4fe3001e8fa1dc553122e3f27a807f26fee097f20714d6def70b
+ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
