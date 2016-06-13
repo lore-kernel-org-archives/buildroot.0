@@ -1,35 +1,75 @@
-From: Jordan Yelloz <jordan@yelloz.me>
-Date: Mon, 13 Jun 2016 15:15:07 -0700
-Subject: [Buildroot] [PATCH v4 1/1] fwup: blanked out HELP2MAN_PATH autoconf
-	value
-In-Reply-To: <20160613052640.6977-1-jordan@yelloz.me>
-References: <20160613052640.6977-1-jordan@yelloz.me>
-Message-ID: <20160613221507.29556-1-jordan@yelloz.me>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 14 Jun 2016 00:42:23 +0200
+Subject: [Buildroot] [PATCH] package/php: fix date.timezone
+In-Reply-To: <1465728504-17997-1-git-send-email-yann.morin.1998@free.fr>
+References: <1465728504-17997-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <03dc8593-c3d7-3dbc-924c-81b58937e099@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If you have help2man installed, the build system will try to run
-help2man on the target fwup binary which should not be expected to work.
+On 12-06-16 12:48, Yann E. MORIN wrote:
+> In 5f37843a (php.ini: set date.timezone), the configured timezone was
+> used as the default for PHP.
+> 
+> However, BR2_TARGET_LOCALTIME is a string, so is quoted, so it is never
+> empty, so the check for emptynessnever matches.
+> 
+> Fix that by q-stripping the value before testing it. Note however that
+> we do not q-strip it before storing it in the php.ini file, because it
+> has to be q-stripped in there.
 
-Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
----
- package/fwup/fwup.mk | 1 +
- 1 file changed, 1 insertion(+)
+ That's actually not correct. The idea is that it should be possible to run:
 
-diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
-index 0f857fc..814ca00 100644
---- a/package/fwup/fwup.mk
-+++ b/package/fwup/fwup.mk
-@@ -10,6 +10,7 @@ FWUP_LICENSE = Apache-2.0
- FWUP_LICENSE_FILES = LICENSE
- FWUP_DEPENDENCIES = libconfuse libarchive libsodium
- FWUP_AUTORECONF = YES
-+FWUP_CONF_ENV = ac_cv_path_HELP2MAN=
- 
- define FWUP_ADD_M4_DIR
- 	mkdir -p $(@D)/m4
+make BR2_TARGET_LOCALTIME="UTC"
+
+in which case the variable will _not_ have quotes. Therefore, everywhere in
+Buildroot, we do something like:
+
+PHP_LOCALTIME = "$(call qstrip,$(BR2_TARGET_LOCALTIME))"
+
+ Note BTW that we already have
+
+TZ_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
+TZDATA_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
+
+so perhaps it would make sense to move this qstripping to global scope...
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Floris Bos <bos@je-eigen-domein.nl>
+> ---
+>  package/php/php.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index 2997b1b..8dc70f0 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -32,9 +32,10 @@ ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+>  PHP_STATIC_LIBS += -lpthread
+>  endif
+>  
+> -ifeq ($(BR2_TARGET_LOCALTIME),)
+> +ifeq ($(call qstrip,$(BR2_TARGET_LOCALTIME)),)
+>  PHP_LOCALTIME = UTC
+>  else
+> +# Not q-stripping this value, as we need quotes in the php.ini file
+>  PHP_LOCALTIME = $(BR2_TARGET_LOCALTIME)
+>  endif
+>  
+> 
+
+
 -- 
-2.8.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
