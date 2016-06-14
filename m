@@ -1,49 +1,30 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 14 Jun 2016 23:00:27 +0200
-Subject: [Buildroot] [PATCH 1/2] package/kodi: Add suboption to control
-	MySQL support
-Message-ID: <1465938028-8149-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 14 Jun 2016 20:39:00 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.10.x series
+Message-ID: <1465947540-5885-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/kodi/Config.in | 6 ++++++
- package/kodi/kodi.mk   | 2 +-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index a44ef5a..281de24 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -173,6 +173,12 @@ config BR2_PACKAGE_KODI_LIBNFS
- comment "nfs support needs a toolchain w/ threads support"
- 	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
- 
-+config BR2_PACKAGE_KODI_MYSQL
-+	bool "mysql"
-+	select BR2_PACKAGE_MYSQL
-+	help
-+	  Enable MySQL support
-+
- config BR2_PACKAGE_KODI_RTMPDUMP
- 	bool "rtmp"
- 	select BR2_PACKAGE_RTMPDUMP
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index e163c24..17d20a9 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -37,7 +37,7 @@ KODI_CONF_OPTS +=  \
- 	--disable-vtbdecoder \
- 	--enable-optimizations
- 
--ifeq ($(BR2_PACKAGE_MYSQL),y)
-+ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
- KODI_CONF_OPTS += --enable-mysql
- KODI_CONF_ENV += ac_cv_path_MYSQL_CONFIG="$(STAGING_DIR)/usr/bin/mysql_config"
- KODI_DEPENDENCIES += mysql
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index eed8d6a..bafe575 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -220,7 +220,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.80"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.60"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.72"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.18.35"	if BR2_KERNEL_HEADERS_3_18
 -- 
-2.8.1
+2.7.3
