@@ -1,37 +1,43 @@
 From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Date: Tue, 14 Jun 2016 17:11:15 +0200
-Subject: [Buildroot] [PATCH 1/5] wireshark: remove documentation
-In-Reply-To: <20160614151017.GG3060@hermes.click-hack.org>
+Date: Tue, 14 Jun 2016 17:11:16 +0200
+Subject: [Buildroot] [PATCH 2/5] readline: fix installed libraries permission
+In-Reply-To: <1465917079-30473-1-git-send-email-gilles.chanteperdrix@xenomai.org>
 References: <20160614151017.GG3060@hermes.click-hack.org>
-Message-ID: <1465917079-30473-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <1465917079-30473-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <1465917079-30473-2-git-send-email-gilles.chanteperdrix@xenomai.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove html and txt documentation from the rootfs as they unlikely to be
-needed.
+In order to avoid strip failing to strip the library.
 
 Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
 ---
- package/wireshark/wireshark.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/readline/0009-avoid-strip-perm-issue.patch | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+ create mode 100644 package/readline/0009-avoid-strip-perm-issue.patch
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index c7bf6c2..23996a3 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -99,4 +99,10 @@ else
- WIRESHARK_CONF_OPTS += --with-sbc=no
- endif
- 
-+define WIRESHARK_REMOVE_DOCS
-+	find $(TARGET_DIR)/usr/share/wireshark -\( -name '*.txt' -o -name '*.html' -\) -delete
-+endef
+diff --git a/package/readline/0009-avoid-strip-perm-issue.patch b/package/readline/0009-avoid-strip-perm-issue.patch
+new file mode 100644
+index 0000000..55d5166
+--- /dev/null
++++ b/package/readline/0009-avoid-strip-perm-issue.patch
+@@ -0,0 +1,14 @@
++Avoid libreadline to be installed read-only, as it makes stripping fail.
 +
-+WIRESHARK_POST_INSTALL_TARGET_HOOKS += WIRESHARK_REMOVE_DOCS
-+
- $(eval $(autotools-package))
++Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
++--- readline-6.3/support/shlib-install~	2012-07-10 21:58:08.000000000 +0200
+++++ readline-6.3/support/shlib-install	2016-02-27 01:19:09.878310797 +0100
++@@ -73,7 +73,7 @@ fi
++ case "$host_os" in
++ hpux*|darwin*|macosx*|linux*|solaris2*)
++ 	if [ -z "$uninstall" ]; then
++-		chmod 555 ${INSTALLDIR}/${LIBNAME}
+++		chmod 755 ${INSTALLDIR}/${LIBNAME}
++ 	fi ;;
++ cygwin*|mingw*)
++ 	IMPLIBNAME=`echo ${LIBNAME} \
 -- 
 2.8.2
