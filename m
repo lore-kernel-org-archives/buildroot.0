@@ -1,75 +1,78 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Tue, 14 Jun 2016 16:58:36 -0300
-Subject: [Buildroot] [PATCH v2 1/2] efivar: new package
-In-Reply-To: <20160613092527.708dab22@free-electrons.com>
-References: <1461201836-6558-1-git-send-email-nunes.erico@gmail.com>
- <20160613092527.708dab22@free-electrons.com>
-Message-ID: <CAK4VdL1mm3oNwOvY=k+8R145WBD3R427cDMCRKD5PT_wjWJ=JA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 14 Jun 2016 22:04:28 +0200
+Subject: [Buildroot] [PATCH 2/5] readline: fix installed libraries
+ permission
+In-Reply-To: <1465917079-30473-2-git-send-email-gilles.chanteperdrix@xenomai.org>
+References: <20160614151017.GG3060@hermes.click-hack.org>
+ <1465917079-30473-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <1465917079-30473-2-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <20160614200427.GE3759@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello, Thomas.
+Gilles, All,
 
-On Sun, Jun 12, 2016 at 11:03 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->> diff --git a/package/efivar/0002-Make.rules-fix-build-with-make-3.81.patch b/package/efivar/0002-Make.rules-fix-build-with-make-3.81.patch
->> new file mode 100644
->> index 0000000..e4e5a2c
->> --- /dev/null
->> +++ b/package/efivar/0002-Make.rules-fix-build-with-make-3.81.patch
->> @@ -0,0 +1,45 @@
->> +From 00376f4dec71d4abb591ba07bc8164ba29e5955e Mon Sep 17 00:00:00 2001
->> +From: Erico Nunes <nunes.erico@gmail.com>
->> +Date: Tue, 22 Mar 2016 21:43:44 -0300
->> +Subject: [PATCH] Make.rules: fix build with make <= 3.81
->> +
->> +Building with host make 3.81 resulted in an issue where src/efivar.pc
->> +was never generated.
->> +Even by running 'make efivar.pc' inside the src directory, make always
->> +returned that there was nothing to do.
->> +This was not observed when using make 3.82 or 4.x.
->> +It is apparently caused by the assignment operators in the multi-line
->> +defines in Make.rules, which do not seem to be supported by make 3.81.
->> +By omitting the assignment operators, the rule works with both versions
->> +of make.
->> +
->> +Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
->
-> Please make sure to send this patch upstream.
+On 2016-06-14 17:11 +0200, Gilles Chanteperdrix spake thusly:
+> In order to avoid strip failing to strip the library.
 
-The patch had been submitted to efivar upstream since this package was
-submitted to Buildroot, but had not been applied yet at the time. It
-has been applied to upstream efivar since then, however we still don't
-have a 0.24 release which includes it. There's a pending github Issue
-to tag a 0.24 release and when it happens, we will be able to drop the
-two patches included here.
+I just tried to build readline, and the two libraries that are installed
+are already 755:
 
-> This package breaks the build on hosts where the host gcc is old:
->
-> /usr/bin/gcc -O2 -I/home/peko/autobuild/instance-2/output/host/usr/include -std=c99 -I/home/peko/autobuild/instance-2/output/build/efivar-0.23/src/include/efivar/  -specs=/home/peko/autobuild/instance-2/output/build/efivar-0.23/gcc.specs  -L.  -L/home/peko/autobuild/instance-2/output/host/lib -L/home/peko/autobuild/instance-2/output/host/usr/lib -Wl,-rpath,/home/peko/autobuild/instance-2/output/host/usr/lib    -I/home/peko/autobuild/instance-2/output/host/usr/include -DEFIVAR_BUILD_ENVIRONMENT -o makeguids makeguids.c guid.c -ldl
-> cc1: error: unrecognized command line option "-std=gnu11"
-> cc1: error: unrecognized command line option "-Wmaybe-uninitialized"
-> cc1: error: unrecognized command line option "-flto"
-> cc1: error: unrecognized command line option "-std=gnu11"
-> cc1: error: unrecognized command line option "-Wmaybe-uninitialized"
-> cc1: error: unrecognized command line option "-flto"
->
-> This happens when you build the makeguids tool for the host: you're
-> passing cflags that are not supported by old versions of gcc.
->
-> Could you have a look at fixing this? Most likely, you don't need all
-> those cflags just to build makeguids.
+    -rwxr-xr-x 1 ymorin ymorin  33K Jun 14 21:59 target/usr/lib/libhistory.so.6.3*
+    -rwxr-xr-x 1 ymorin ymorin 261K Jun 14 21:59 target/usr/lib/libreadline.so.6.3*
 
-The parameters are added internally by efivar.
-I'm not sure there is an easy way to solve this though, at a first
-look it seems that the listed parameters are used both by host and
-target builds. So maybe one cleaner way to solve this would be to
-restrict the host gcc version as is done for some packages (kodi,
-nodejs).
-I'll have a closer look though to confirm whether the arguments are
-really needed anyway and submit a patch.
+And after some inspection, we already fix that in our readline.mk:
 
-Erico
+    # libraries get installed read only, so strip fails
+    define READLINE_INSTALL_FIXUPS_SHARED
+        chmod +w $(addprefix $(TARGET_DIR)/usr/lib/,libhistory.so.* libreadline.so.*)
+    endef
+    READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_INSTALL_FIXUPS_SHARED
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+> ---
+>  package/readline/0009-avoid-strip-perm-issue.patch | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>  create mode 100644 package/readline/0009-avoid-strip-perm-issue.patch
+> 
+> diff --git a/package/readline/0009-avoid-strip-perm-issue.patch b/package/readline/0009-avoid-strip-perm-issue.patch
+> new file mode 100644
+> index 0000000..55d5166
+> --- /dev/null
+> +++ b/package/readline/0009-avoid-strip-perm-issue.patch
+> @@ -0,0 +1,14 @@
+> +Avoid libreadline to be installed read-only, as it makes stripping fail.
+> +
+> +Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+> +--- readline-6.3/support/shlib-install~	2012-07-10 21:58:08.000000000 +0200
+> ++++ readline-6.3/support/shlib-install	2016-02-27 01:19:09.878310797 +0100
+> +@@ -73,7 +73,7 @@ fi
+> + case "$host_os" in
+> + hpux*|darwin*|macosx*|linux*|solaris2*)
+> + 	if [ -z "$uninstall" ]; then
+> +-		chmod 555 ${INSTALLDIR}/${LIBNAME}
+> ++		chmod 755 ${INSTALLDIR}/${LIBNAME}
+> + 	fi ;;
+> + cygwin*|mingw*)
+> + 	IMPLIBNAME=`echo ${LIBNAME} \
+> -- 
+> 2.8.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
