@@ -1,59 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Jun 2016 21:37:04 +0200
-Subject: [Buildroot] [PATCH 1/5] wireshark: remove documentation
-In-Reply-To: <20160614193321.GA3759@free.fr>
-References: <20160614151017.GG3060@hermes.click-hack.org>
- <1465917079-30473-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <20160614193321.GA3759@free.fr>
-Message-ID: <20160614193704.GB3759@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 14 Jun 2016 21:38:44 +0200
+Subject: [Buildroot] [PATCH] log4cpp: disable documentation build and
+	install
+In-Reply-To: <a8fa28266364ca94adf000601bbe310a11f52910.1465923840.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 14 Jun 2016 20:04:00 +0300")
+References: <a8fa28266364ca94adf000601bbe310a11f52910.1465923840.git.baruch@tkos.co.il>
+Message-ID: <87wplrv9vf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gilles, All,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On 2016-06-14 21:33 +0200, Yann E. MORIN spake thusly:
-> On 2016-06-14 17:11 +0200, Gilles Chanteperdrix spake thusly:
-> > Remove html and txt documentation from the rootfs as they unlikely to be
-> > needed.
-> > 
-> > Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-> > ---
-> >  package/wireshark/wireshark.mk | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-> > index c7bf6c2..23996a3 100644
-> > --- a/package/wireshark/wireshark.mk
-> > +++ b/package/wireshark/wireshark.mk
-> > @@ -99,4 +99,10 @@ else
-> >  WIRESHARK_CONF_OPTS += --with-sbc=no
-> >  endif
-> >  
-> > +define WIRESHARK_REMOVE_DOCS
-> > +	find $(TARGET_DIR)/usr/share/wireshark -\( -name '*.txt' -o -name '*.html' -\) -delete
-> 
-> My busybox' find does not like:
-> 
->   - '-(' ')-' : it is not POSIX, is not even talked about in the find
->     manpage. It's a GNUism.
-> 
->   - -delete : it is disabled in our default busybox configuration
+ > We don't need the documentation on target.
+ > Also fixes:
+ > http://autobuild.buildroot.net/results/402/402587fe3ba9d537195ba470cf6f19f25ac246bf/
+ > http://autobuild.buildroot.net/results/ea2/ea257496f51665b0a6b03f31e50744761c5d43da/
+ > http://autobuild.buildroot.net/results/353/3533a32a7de7dae288558f43eb2b068081939e4d/
 
-Grr.. Forget it; this is done at build-time...
+ > and many more.
 
-Sorry for the noise  (I should not do two things in parallel in two
-terminals)...
+ > Cc: Damien Lanson <damien@kal-host.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Regards,
-Yann E. MORIN.
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
