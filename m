@@ -1,33 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Jun 2016 13:52:46 +0200
-Subject: [Buildroot] Clean and rebuild rootfs.ext2 and rootfs.tar
-In-Reply-To: <20160614103400.GH2749@tarshish>
-References: <CALtfCQYcXvZLsVhNAzZ_wdR=R9-rw72cw7BvNvDM2nSEwAcM1A@mail.gmail.com>
- <20160614103400.GH2749@tarshish>
-Message-ID: <20160614135246.1b62f776@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 14 Jun 2016 11:54:59 +0000
+Subject: [Buildroot] [Bug 8991] New: grub2 fails to compile
+Message-ID: <bug-8991-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=8991
 
-On Tue, 14 Jun 2016 13:34:00 +0300, Baruch Siach wrote:
+            Bug ID: 8991
+           Summary: grub2 fails to compile
+           Product: buildroot
+           Version: 2016.05
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: ian_ormshaw at waters.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> On Tue, Jun 14, 2016 at 11:32:32AM +0200, Oscar Gomez Fuente wrote:
-> > Is there any way to clean the files: rootfs.ext2 and rootfs.tar and rebuild
-> > them again? I only want to guarantee that my rootfs.ext2 and rootfs.tar are
-> > updated. Up to know I was using: make clean && make, but I spend a lot of
-> > time.  
-> 
-> Just deleting these files and running 'make' should do the trick.
+Created attachment 6461
+  --> https://bugs.busybox.net/attachment.cgi?id=6461&action=edit
+patch to fix compilation error
 
-You don't even need to delete these files. Just run "make", and all
-filesystem images are re-generated at every "make" invocation.
+grub2 fails to compile with the following error:
 
-Thomas
+gettext/gettext.c:37:36: error: storage size of 'main_context' isn't known
+ static struct grub_gettext_context main_context, secondary_context;
+
+file grub2-2.00/grub-core/gettext/gettext.c
+
+the structure grub_gettext_context is not defined until line 62 line
+
+The attached patch contains the changes I made to fix the issue
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
