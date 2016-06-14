@@ -1,56 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Jun 2016 21:42:16 +0200
-Subject: [Buildroot] [PATCH 1/5] wireshark: remove documentation
-In-Reply-To: <1465917079-30473-1-git-send-email-gilles.chanteperdrix@xenomai.org>
-References: <20160614151017.GG3060@hermes.click-hack.org>
- <1465917079-30473-1-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <20160614194216.GC3759@free.fr>
+Date: Tue, 14 Jun 2016 21:58:10 +0200
+Subject: [Buildroot] [PATCH] scancpan: fix doc
+In-Reply-To: <1465930064-19189-1-git-send-email-francois.perrad@gadz.org>
+References: <1465930064-19189-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20160614195810.GD3759@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gilles, All,
+Fran?ois, All,
 
-On 2016-06-14 17:11 +0200, Gilles Chanteperdrix spake thusly:
-> Remove html and txt documentation from the rootfs as they unlikely to be
-> needed.
+On 2016-06-14 20:47 +0200, Francois Perrad spake thusly:
+> we need to install a host perl with the same version as our target perl
 > 
-> Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/wireshark/wireshark.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  support/scripts/scancpan | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-> index c7bf6c2..23996a3 100644
-> --- a/package/wireshark/wireshark.mk
-> +++ b/package/wireshark/wireshark.mk
-> @@ -99,4 +99,10 @@ else
->  WIRESHARK_CONF_OPTS += --with-sbc=no
->  endif
+> diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+> index 6c70cfb..c2aa2e9 100755
+> --- a/support/scripts/scancpan
+> +++ b/support/scripts/scancpan
+> @@ -748,7 +748,7 @@ support/scripts/scancpan Try-Tiny Moo
 >  
-> +define WIRESHARK_REMOVE_DOCS
-> +	find $(TARGET_DIR)/usr/share/wireshark -\( -name '*.txt' -o -name '*.html' -\) -delete
+>  curl -kL http://install.perlbrew.pl | bash
+>  
+> -perlbrew install perl-5.18.2
+> +perlbrew install perl-5.22.2
 
-The slight change that I'd suggest (not request!) is to not add a dash
-in front of the commas, since it is not even talked about in find's
-manpage.
+Would it be possible that, if this requirement is not met, it exits
+with an informative message instead of just bailing out?
 
-Otherwise:
+That information message could possibly state something like:
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+    The same version of perl (5.022) as used by Buildroot is not
+    available on your machine.
+
+    You may install a local one by running:
+        perlbrew install perl-5.22.2
+
+Note however that my installtion (Ubuntu 16.04) is missing perlbrew; it
+is not installed by default.
+
+I am not sure where to go from here. On one side, I thing people dealing
+with perl would already have such things installed (or be willing to
+install them) on their machine.
+
+On the other hand, we've always tried to keep Buildroot's requirement on
+the host as minimal as possible, and perlbrew would be adding yet
+another dependency.
+
+I'm undecided. But I'd really like the error message, above! ;-)
 
 Regards,
 Yann E. MORIN.
 
-> +endef
-> +
-> +WIRESHARK_POST_INSTALL_TARGET_HOOKS += WIRESHARK_REMOVE_DOCS
-> +
->  $(eval $(autotools-package))
+>  supports/scripts/scancpan [options] [distname ...]
+>  
 > -- 
-> 2.8.2
+> 1.9.1
 > 
 > _______________________________________________
 > buildroot mailing list
