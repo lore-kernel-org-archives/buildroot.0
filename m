@@ -1,23 +1,25 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Tue, 14 Jun 2016 11:32:32 +0200
-Subject: [Buildroot] Clean and rebuild rootfs.ext2 and rootfs.tar
-Message-ID: <CALtfCQYcXvZLsVhNAzZ_wdR=R9-rw72cw7BvNvDM2nSEwAcM1A@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 14 Jun 2016 12:02:12 +0200
+Subject: [Buildroot] [PATCH] package/mpd: bump to version 0.19.16
+In-Reply-To: <20160614071143.2466-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Tue, 14 Jun 2016 09:11:43 +0200")
+References: <20160614071143.2466-1-joerg.krause@embedded.rocks>
+Message-ID: <87eg80w0kb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-Is there any way to clean the files: rootfs.ext2 and rootfs.tar and rebuild
-them again? I only want to guarantee that my rootfs.ext2 and rootfs.tar are
-updated. Up to know I was using: make clean && make, but I spend a lot of
-time.
+ > Remove fetching upstream patch to fix build with GCC 6 - it's included in the
+ > update.
 
-Best regards.
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-Oscar Gomez Fuente.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160614/07da6d47/attachment.html>
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
