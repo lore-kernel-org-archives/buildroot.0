@@ -1,82 +1,26 @@
-From: Kinsella, Ray <ray.kinsella@intel.com>
-Date: Tue, 14 Jun 2016 15:20:15 +0100
-Subject: [Buildroot] [PATCH v5] package/radlib: new package
-In-Reply-To: <a4b92b7c-5ef9-f00b-48fe-8253afd71c4f@mind.be>
-References: <1460563603-3748-1-git-send-email-ray.kinsella@intel.com>
- <1460563603-3748-2-git-send-email-ray.kinsella@intel.com>
- <57195C19.3070307@mind.be> <1461510916.5247.21.camel@intel.com>
- <a4b92b7c-5ef9-f00b-48fe-8253afd71c4f@mind.be>
-Message-ID: <0372e83c-b405-18bc-cf52-ed7841a3fb21@intel.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 14 Jun 2016 16:48:45 +0200
+Subject: [Buildroot] [PATCH] dhcpcd: security bump to version 6.11.0
+In-Reply-To: <08707bcba18646793e382a354c2cfed2b98a6689.1465911207.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 14 Jun 2016 16:33:27 +0300")
+References: <08707bcba18646793e382a354c2cfed2b98a6689.1465911207.git.baruch@tkos.co.il>
+Message-ID: <87a8inx1v6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-apologies for the delay in replying.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On 02/05/2016 21:44, Arnout Vandecappelle wrote:
-> On 04/24/16 17:15, Kinsella, Ray wrote:
->> Thanks Arnout,
->>
->> See inline.
->>
->> On Fri, 2016-04-22 at 01:02 +0200, Arnout Vandecappelle wrote:
-> [snip]
->>>   I think this should be the first patch; our autoreconf will not be
->>> happy
->>> without subdir-objects.
->
->  Actually, this was a silly argument: our build will only work with all
-> patches applied, of course.
+ > Fixes CVE-2014-7913: The print_option function in dhcp-common.c in dhcpcd
+ > through 6.10.2 misinterprets the return value of the snprintf function, which
+ > allows remote DHCP servers to execute arbitrary code or cause a denial of
+ > service (memory corruption) via a crafted message.
 
-understood.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
->
->>
->> autoreconf does complain without the subdir-objects. The removal of the
->> CROSS_COMPILE in the same patch is important as the linker breaks
->> without it. It won't even get to linking stage if it can't find the
->> various database libraries fixed in the two previous patches.
->>
->> Suggest a new first patch to fix sudir-objects (patch number 4.), but
->> then leave the other patches as they are. So the flow would be.
->>
->> 1. Fix subdir-objects
->> 2. Fix sqlite + postgresql
->> 3. Fix mysql
->> 4. Fix the linker (CROSS_COMPILE).
->>
->> What do you think?
->
->  That sounds good. Perhaps 2+3 could be combined, it doesn't matter that
-> much.
->
->
-> [snip]
->>>   I'm not really happy with this choice, I'd prefer an automatic
->>> selection. But
->>> it's true, if both mysql and postgresql are selected it's hard to
->>> decide which
->>> one should be used...
->>
->> sent a seperate email on this.
->> mysql and postgresql are mutually exclusive.
->> sqlite lite can be safely enabled/disable depending on
->> BR2_PACKAGE_SQLITE.
->
->  Still, I'd prefer an automatic selection. E.g. if mysql is selected,
-> build mysql support, else if pgsql is selected, build pgsql support,
-> else disable both.
+Committed, thanks.
 
-ok - that will mean there is always an implicit bias for mysql.
-I am fine with that being the case.
-
->
->
-> [snip]
->
->
->  Regards,
->  Arnout
->
+-- 
+Bye, Peter Korsgaard
