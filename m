@@ -1,53 +1,44 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 14 Jun 2016 09:11:43 +0200
-Subject: [Buildroot] [PATCH] package/mpd: bump to version 0.19.16
-Message-ID: <20160614071143.2466-1-joerg.krause@embedded.rocks>
+From: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Date: Tue, 14 Jun 2016 10:45:27 +0200
+Subject: [Buildroot] [PATCH] gst1-plugins-bad: remove obsolete gettext patch
+Message-ID: <1465893927-8430-1-git-send-email-marcin.nowakowski@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove fetching upstream patch to fix build with GCC 6 - it's included in the
-update.
+The patch to update gettext version is unnecessary, as gettexttize is
+enabled and therefore an always up-to-date version is used.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
 ---
- package/mpd/mpd.hash | 3 +--
- package/mpd/mpd.mk   | 5 +----
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ .../gst1-plugins-bad/0001-use-gettext-0.18.patch        | 17 -----------------
+ 1 file changed, 17 deletions(-)
+ delete mode 100644 package/gstreamer1/gst1-plugins-bad/0001-use-gettext-0.18.patch
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index f817a3a..cc2cebc 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  0cb9a223894b038ce966ce6d651d9b3ea3bdc7d7b9bec8d1e9e7e091cbc29b8b  mpd-0.19.15.tar.xz
--sha256  cb9a31889a3d01f373ad154dc4c0d13ca866d69bc02b3acd9f18727a756e78cb  aa5d05eaa4d482aa8f8df954335d0aba151eeff9.patch
-+sha256  58ecbff4b07ec42a6f31bdbbb3c3eb51317978e4a0ea3071f6ae6127848a03d6  mpd-0.19.16.tar.xz
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 9b054ff..75f8bb4 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.19
--MPD_VERSION = $(MPD_VERSION_MAJOR).15
-+MPD_VERSION = $(MPD_VERSION_MAJOR).16
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost libglib2
-@@ -13,9 +13,6 @@ MPD_LICENSE = GPLv2+
- MPD_LICENSE_FILES = COPYING
- MPD_AUTORECONF = YES
- 
--# Fix GCC 6 issue (https://bugs.musicpd.org/view.php?id=4524)
--MPD_PATCH = https://github.com/MaxKellermann/MPD/commit/aa5d05eaa4d482aa8f8df954335d0aba151eeff9.patch
+diff --git a/package/gstreamer1/gst1-plugins-bad/0001-use-gettext-0.18.patch b/package/gstreamer1/gst1-plugins-bad/0001-use-gettext-0.18.patch
+deleted file mode 100644
+index ebf4567..0000000
+--- a/package/gstreamer1/gst1-plugins-bad/0001-use-gettext-0.18.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Use newer version of gettext to match current buildroot gettext.
 -
- # Some options need an explicit --disable or --enable
- 
- # Zeroconf support depends on libdns_sd from avahi.
+-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+-----
+-Index: gst1-plugins-bad-1.1.1/po/Makefile.in.in
+-===================================================================
+---- gst1-plugins-bad-1.1.1.orig/po/Makefile.in.in
+-+++ gst1-plugins-bad-1.1.1/po/Makefile.in.in
+-@@ -9,7 +9,7 @@
+- # General Public License and is *not* in the public domain.
+- #
+- # Origin: gettext-0.17
+--GETTEXT_MACRO_VERSION = 0.17
+-+GETTEXT_MACRO_VERSION = 0.18
+- 
+- PACKAGE = @PACKAGE@
+- VERSION = @VERSION@
 -- 
-2.8.3
+2.8.2
