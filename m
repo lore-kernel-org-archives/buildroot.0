@@ -1,59 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Jun 2016 22:38:29 +0200
-Subject: [Buildroot] [PATCH 4/5] grub2: really disable liblzma
-In-Reply-To: <1465917079-30473-4-git-send-email-gilles.chanteperdrix@xenomai.org>
-References: <20160614151017.GG3060@hermes.click-hack.org>
- <1465917079-30473-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1465917079-30473-4-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <20160614203829.GA32391@free.fr>
+Date: Tue, 14 Jun 2016 22:48:54 +0200
+Subject: [Buildroot] any comments on my patches?
+In-Reply-To: <trinity-5af46213-62f9-4fb3-93a8-efdb5a368fa2-1465882967915@3capp-mailcom-bs10>
+References: <trinity-5af46213-62f9-4fb3-93a8-efdb5a368fa2-1465882967915@3capp-mailcom-bs10>
+Message-ID: <20160614204854.GB32391@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gilles, All,
+Dagg, All,
 
-Replying to the correct version now. Next time, can you set the version
-of the series when sending, please? See:
-    https://buildroot.org/downloads/manual/manual.html#_patch_revision_changelog
-
-On 2016-06-14 17:11 +0200, Gilles Chanteperdrix spake thusly:
-> Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-> ---
->  boot/grub2/grub2.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On 2016-06-14 07:42 +0200, daggs spake thusly:
+> Greetings,
 > 
-> diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-> index 88a46f4..112a401 100644
-> --- a/boot/grub2/grub2.mk
-> +++ b/boot/grub2/grub2.mk
-> @@ -62,7 +62,7 @@ GRUB2_CONF_OPTS = \
->  	--with-platform=$(GRUB2_PLATFORM) \
->  	--disable-grub-mkfont \
->  	--enable-efiemu=no \
-> -	--enable-liblzma=no \
-> +	ac_cv_lib_lzma_lzma_code=no \
+> I've not received any comments on the following patches:
+> https://patchwork.ozlabs.org/patch/633705/
+> https://patchwork.ozlabs.org/patch/633092/
+> https://patchwork.ozlabs.org/patch/633093/
+> 
+> I did received comments on https://patchwork.ozlabs.org/patch/633704/ which I've answered but didn't got any replay.
+> 
+> are there any more comments? if not, can they be committed to the repo?
 
-It would have been nice to say that --enale-liblzma is not a supported
-option to grub2's configure.
+https://patchwork.ozlabs.org/project/buildroot/list/
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+As you may have seen on Patchwork, we have a *lot* of patches (currently
+234) that are not yet applied, the older being from June 2015...
+
+So, we'll eventually come to your patches. Sorry it takes time.
 
 Regards,
 Yann E. MORIN.
-
->  	--enable-device-mapper=no \
->  	--enable-libzfs=no \
->  	--disable-werror
-> -- 
-> 2.8.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
