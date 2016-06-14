@@ -1,47 +1,66 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Tue, 14 Jun 2016 09:45:51 -0400
-Subject: [Buildroot] [PATCH v4 1/1] fwup: blanked out HELP2MAN_PATH
- autoconf value
-In-Reply-To: <20160613221507.29556-1-jordan@yelloz.me>
-References: <20160613052640.6977-1-jordan@yelloz.me>
- <20160613221507.29556-1-jordan@yelloz.me>
-Message-ID: <CA+-urNQZ-Z_UfCx9xXeT0MFApQWgce0owVKrPYEE_akrXVq7Ug@mail.gmail.com>
+From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+Date: Tue, 14 Jun 2016 15:53:56 +0200
+Subject: [Buildroot] [PATCH 02/34] reproducibility: override locale and
+ timezone
+In-Reply-To: <20160507151550.48e49913@free-electrons.com>
+References: <20160430074358.GE1781@hermes.click-hack.org>
+ <1462002570-14706-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <1462002570-14706-2-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <20160507151550.48e49913@free-electrons.com>
+Message-ID: <20160614135356.GD3060@hermes.click-hack.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 13, 2016 at 6:15 PM, Jordan Yelloz <jordan@yelloz.me> wrote:
-> If you have help2man installed, the build system will try to run
-> help2man on the target fwup binary which should not be expected to work.
->
-> Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
-> ---
->  package/fwup/fwup.mk | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
-> index 0f857fc..814ca00 100644
-> --- a/package/fwup/fwup.mk
-> +++ b/package/fwup/fwup.mk
-> @@ -10,6 +10,7 @@ FWUP_LICENSE = Apache-2.0
->  FWUP_LICENSE_FILES = LICENSE
->  FWUP_DEPENDENCIES = libconfuse libarchive libsodium
->  FWUP_AUTORECONF = YES
-> +FWUP_CONF_ENV = ac_cv_path_HELP2MAN=
+On Sat, May 07, 2016 at 03:15:50PM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sat, 30 Apr 2016 09:48:58 +0200, Gilles Chanteperdrix wrote:
+> > ---
+> >  Makefile | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> 
+> Missing SoB.
+> 
+> > diff --git a/Makefile b/Makefile
+> > index ec7dccb..86b2ed2 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -218,6 +218,13 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+> >  -include $(BR2_CONFIG)
+> >  endif
+> >  
+> > +export BR2_REPRODUCIBLE
+> 
+> Why ?
 
-This change fixes the issue with help2man being installed on the host for me.
+So that it can be used in scripts. Like wrappers script. In order to
+know if we should take special actions because we are targeting a
+reproducible build.
 
-Tested-by: Frank Hunleth <fhunleth@troodon-software.com>
+> 
+> > +ifeq ($(BR2_REPRODUCIBLE),y)
+> > +export TZ=UTC
+> > +export LANG=C
+> > +export LC_ALL=C
+> > +endif
+> 
+> Regarding overriding TZ, LANG and LC_ALL, I'm wondering if we shouldn't
+> do it unconditionally, regardless of the value of BR2_REPRODUCIBLE.
+> What is the benefit of leaving those variable to their value from the
+> build environment?
 
->
->  define FWUP_ADD_M4_DIR
->         mkdir -p $(@D)/m4
-> --
-> 2.8.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Obviously:
+- having dates printed for your local timezone (like build timestamps
+if you do not want a reproducible build). I do not know about you,
+but I would hate to have to convert a build timestamp from UTC to
+local timezone in order to see if I am running the binary I think I
+am running.
+- having compiler messages printed in your locale, if you set the
+locale, it is probably what you want.
+
+-- 
+					    Gilles.
+https://click-hack.org
