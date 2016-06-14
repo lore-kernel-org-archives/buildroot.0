@@ -1,172 +1,91 @@
 From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Date: Tue, 14 Jun 2016 17:32:15 +0200
-Subject: [Buildroot] [PATCH 10/12] cdrkit: add patch allowing to set
-	creation date
-In-Reply-To: <20160614152928.GH3060@hermes.click-hack.org>
+Date: Tue, 14 Jun 2016 17:32:16 +0200
+Subject: [Buildroot] [PATCH 11/12] reproducibility/fs/iso9660: reproducible
+	iso images
+In-Reply-To: <1465918337-30732-1-git-send-email-gilles.chanteperdrix@xenomai.org>
 References: <20160614152928.GH3060@hermes.click-hack.org>
-Message-ID: <1465918337-30732-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <1465918337-30732-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <1465918337-30732-2-git-send-email-gilles.chanteperdrix@xenomai.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch was posted here:
-https://lists.gnu.org/archive/html/bug-cpio/2014-08/msg00000.html
-
-And allows generating reproducible iso images with genisoimage.
+When reproducibility is required, we:
+- run genisoimage with the -creation-date option to avoid using the
+  build date for files in the iso image automatically created by
+  genisoimage (such as the catalog)
+- disable the rockridge extension, as it stores each file "ctime", which
+  can not be changed easily on the host filesystem
+- force using an initrd, as a trying and booting an iso image without
+  the rockridge extensions will not work
+- use isohybrid -i option to avoid embedding a random number in the
+  generated iso.
 
 Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
 ---
- ...-reproducible-allow-setting-creation-date.patch | 140 +++++++++++++++++++++
- 1 file changed, 140 insertions(+)
- create mode 100644 package/cdrkit/0003-reproducible-allow-setting-creation-date.patch
+ fs/iso9660/Config.in  |  9 +++++++++
+ fs/iso9660/iso9660.mk | 20 ++++++++++++++++++--
+ 2 files changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/package/cdrkit/0003-reproducible-allow-setting-creation-date.patch b/package/cdrkit/0003-reproducible-allow-setting-creation-date.patch
-new file mode 100644
-index 0000000..f5ed465
---- /dev/null
-+++ b/package/cdrkit/0003-reproducible-allow-setting-creation-date.patch
-@@ -0,0 +1,140 @@
-+diff --git a/genisoimage/.eltorito.c.swp b/genisoimage/.eltorito.c.swp
-+new file mode 100644
-+index 0000000..a49fcbd
-+Binary files /dev/null and b/genisoimage/.eltorito.c.swp differ
-+diff --git a/genisoimage/genisoimage.1 b/genisoimage/genisoimage.1
-+index d05b24a..d69a1d4 100644
-+--- a/genisoimage/genisoimage.1
-++++ b/genisoimage/genisoimage.1
-+@@ -976,6 +976,12 @@ in the
-+ .I .genisoimagerc
-+ file.
-+ .TP
-++.BI \-creation-date " epoch"
-++Specifies the date to be used as creation, modification and effective
-++date in the volume descriptor and for files and relocations created
-++on the fly. Specified as a number of second since
-++1970-01-01 00:00:00 +0000 (UTC); if 0, the current time is used.
-++.TP
-+ .B \-print\-size
-+ Print estimated filesystem size in multiples of the sector size (2048 bytes)
-+ and exit. This option is needed for
-+diff --git a/genisoimage/genisoimage.c b/genisoimage/genisoimage.c
-+index cfd079a..58397e9 100644
-+--- a/genisoimage/genisoimage.c
-++++ b/genisoimage/genisoimage.c
-+@@ -169,6 +169,7 @@ char	*abstract = ABSTRACT_DEFAULT;
-+ char	*volset_id = VOLSET_ID_DEFAULT;
-+ char	*volume_id = VOLUME_ID_DEFAULT;
-+ char	*system_id = SYSTEM_ID_DEFAULT;
-++time_t  creation_date = 0;
-+ char	*boot_catalog = BOOT_CATALOG_DEFAULT;
-+ char	*boot_image = BOOT_IMAGE_DEFAULT;
-+ char	*genboot_image = BOOT_IMAGE_DEFAULT;
-+@@ -405,6 +406,8 @@ struct ld_option {
-+ #define	OPTION_ALLOW_LEADING_DOTS	1070
-+ #define	OPTION_PUBLISHER		1071
-+ 
-++#define OPTION_CREATION_DATE            1072
-++
-+ #ifdef		JIGDO_TEMPLATE
-+ #define	OPTION_JTT_OUTPUT		1101
-+ #define	OPTION_JTJ_OUTPUT		1102
-+@@ -522,6 +525,8 @@ static const struct ld_option ld_options[] =
-+ 	'\0', "FILE", "Check all ISO9660 names from previous session", ONE_DASH},
-+ 	{{"copyright", required_argument, NULL, OPTION_COPYRIGHT},
-+ 	'\0', "FILE", "Set Copyright filename", ONE_DASH},
-++	{{"creation-date", required_argument, NULL, OPTION_CREATION_DATE},
-++	'\0', NULL, "Set volume creation date", ONE_DASH},
-+ 	{{"debug", no_argument, NULL, OPTION_DEBUG},
-+ 	'\0', NULL, "Set debug flag", ONE_DASH},
-+ 	{{"eltorito-boot", required_argument, NULL, 'b'},
-+@@ -1721,6 +1726,22 @@ int main(int argc, char *argv[])
-+ #endif
-+ 			}
-+ 			break;
-++		case OPTION_CREATION_DATE:
-++		{
-++			char	*end = 0;
-++
-++			creation_date = strtol(optarg, &end, 10);
-++			if (!end || *end != 0) {
-++#ifdef	USE_LIBSCHILY
-++				comerrno(EX_BAD, "Bad epoch for -creation-date\n");
-++#else
-++				fprintf(stderr, "Bad epoch for -creation-date\n");
-++				exit(1);
-++#endif
-++			}
-++			break;
-++		}
-++
-+ 		case OPTION_DEBUG:
-+ 			debug++;
-+ 			break;
-+diff --git a/genisoimage/genisoimage.h b/genisoimage/genisoimage.h
-+index bbedfb0..c49576c 100644
-+--- a/genisoimage/genisoimage.h
-++++ b/genisoimage/genisoimage.h
-+@@ -650,6 +650,7 @@ extern char	*appid;
-+ extern char	*volset_id;
-+ extern char	*system_id;
-+ extern char	*volume_id;
-++extern time_t	creation_date;
-+ extern char	*boot_catalog;
-+ extern char	*boot_image;
-+ extern char	*genboot_image;
-+diff --git a/genisoimage/tree.c b/genisoimage/tree.c
-+index 7805888..f17a662 100644
-+--- a/genisoimage/tree.c
-++++ b/genisoimage/tree.c
-+@@ -783,7 +783,11 @@ generate_reloc_directory()
-+ 	struct directory_entry *s_entry;
-+ 
-+ 	/* Create an  entry for our internal tree */
-+-	time(&current_time);
-++	if (creation_date == 0) {
-++		time(&current_time);
-++	} else {
-++		current_time = creation_date;
-++	}
-+ 	reloc_dir = (struct directory *)
-+ 		e_malloc(sizeof (struct directory));
-+ 	memset(reloc_dir, 0, sizeof (struct directory));
-+@@ -2680,7 +2684,11 @@ init_fstatbuf()
-+ 	time_t	current_time;
-+ 
-+ 	if (fstatbuf.st_ctime == 0) {
-+-		time(&current_time);
-++		if (creation_date == 0) {
-++			time(&current_time);
-++		} else {
-++			current_time = creation_date;
-++		}
-+ 		if (rationalize_uid)
-+ 			fstatbuf.st_uid = uid_to_use;
-+ 		else
-+diff --git a/genisoimage/write.c b/genisoimage/write.c
-+index a423ab1..f63507c 100644
-+--- a/genisoimage/write.c
-++++ b/genisoimage/write.c
-+@@ -1885,12 +1885,17 @@ pvd_write(FILE *outfile)
-+ 	int		should_write;
-+ 	struct tm	local;
-+ 	struct tm	gmt;
-++	time_t		pvd_date;
-+ 
-+ 
-+ 	time(&begun);
-+ 
-+-	local = *localtime(&begun);
-+-	gmt = *gmtime(&begun);
-++	if (creation_date == 0) {
-++		creation_date = begun;
-++	}
-++
-++	local = *localtime(&creation_date);
-++	gmt = *gmtime(&creation_date);
-+ 
-+ 	/*
-+ 	 * There was a comment here about breaking in the year 2000.
+diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+index 2482e44..bb82d03 100644
+--- a/fs/iso9660/Config.in
++++ b/fs/iso9660/Config.in
+@@ -71,6 +71,15 @@ config BR2_TARGET_ROOTFS_ISO9660_INITRD
+ 	  contain a kernel image, an initrd image (unless an initramfs
+ 	  linked into the kernel is used) and the bootloader.
+ 
++config BR2_TARGET_ROOTFS_ISO9660_REPRODUCIBLE
++       def_bool BR2_REPRODUCIBLE
++       select BR2_TARGET_ROOTFS_ISO9660_INITRD
++
++if BR2_REPRODUCIBLE
++comment "A reproducible build requires disabling the RockRidge extensions"
++comment "Which makes using an initrd the only sane solution"
++endif
++
+ config BR2_TARGET_ROOTFS_ISO9660_HYBRID
+ 	bool "Build hybrid image"
+ 	depends on BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 32d79d7..f97a9d7 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -143,15 +143,31 @@ ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_DISABLE_EXTERNAL_INITRD
+ endif # ROOTFS_ISO9660_USE_INITRD
+ 
+ 
++ifneq ($(BR2_REPRODUCIBLE),y)
++define ROOTFS_ISO9660_GENISOIMAGE
++	$(HOST_DIR)/usr/bin/genisoimage -R
++endef
++define ROOTFS_ISO9660_ISOHYBRID
++	$(HOST_DIR)/usr/bin/isohybrid
++endef
++else
++define ROOTFS_ISO9660_GENISOIMAGE
++	$(HOST_DIR)/usr/bin/genisoimage -creation-date $(SOURCE_DATE_EPOCH)
++endef
++define ROOTFS_ISO9660_ISOHYBRID
++	$(HOST_DIR)/usr/bin/isohybrid -i $(SOURCE_DATE_EPOCH)
++endef
++endif
++
+ define ROOTFS_ISO9660_CMD
+-	$(HOST_DIR)/usr/bin/genisoimage -J -R -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
++	$(ROOTFS_ISO9660_GENISOIMAGE) -J -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
+ 		-no-emul-boot -boot-load-size 4 -boot-info-table \
+ 		-o $@ $(ROOTFS_ISO9660_TARGET_DIR)
+ endef
+ 
+ ifeq ($(BR2_TARGET_ROOTFS_ISO9660_HYBRID),y)
+ define ROOTFS_ISO9660_GEN_HYBRID
+-	$(HOST_DIR)/usr/bin/isohybrid -t 0x96 $@
++	$(ROOTFS_ISO9660_ISOHYBRID) -t 0x96 $@
+ endef
+ 
+ ROOTFS_ISO9660_POST_GEN_HOOKS += ROOTFS_ISO9660_GEN_HYBRID
 -- 
 2.8.2
