@@ -1,75 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Jun 2016 00:42:23 +0200
-Subject: [Buildroot] [PATCH] package/php: fix date.timezone
-In-Reply-To: <1465728504-17997-1-git-send-email-yann.morin.1998@free.fr>
-References: <1465728504-17997-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <03dc8593-c3d7-3dbc-924c-81b58937e099@mind.be>
+From: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Date: Tue, 14 Jun 2016 12:23:44 +1000
+Subject: [Buildroot] Cross-compiling gobject-introspection
+Message-ID: <20160614022344.GA2656@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12-06-16 12:48, Yann E. MORIN wrote:
-> In 5f37843a (php.ini: set date.timezone), the configured timezone was
-> used as the default for PHP.
-> 
-> However, BR2_TARGET_LOCALTIME is a string, so is quoted, so it is never
-> empty, so the check for emptynessnever matches.
-> 
-> Fix that by q-stripping the value before testing it. Note however that
-> we do not q-strip it before storing it in the php.ini file, because it
-> has to be q-stripped in there.
+Hi Buildroot people,
 
- That's actually not correct. The idea is that it should be possible to run:
+Just for fun(*) I've been attempting to cross-compile a package called
+gobject-introspection under buildroot, as it would be nice if buildroot
+included some packages that depend on it. (It seems to be used to automatically
+build cross-language bindings but it does it in a way that's hard to cross
+compile as it requires dynamically loading or executing target binaries at
+build time.) It's used by a few packages already in buildroot but it's
+optional and always disabled (by always configuring them with
+--disable-introspection).
 
-make BR2_TARGET_LOCALTIME="UTC"
+I ended up having to patch gobject-introspection slightly and shim qemu-host
+(conveniently already provided by buildroot) into the build process (!) but it
+did eventually seem to work and I can now build target packages that use it
+(without modification to their build steps). I can successfully remove
+"--disable-introspection" from (at least some) existing buildroot packages
+(e.g. python-gobject).
 
-in which case the variable will _not_ have quotes. Therefore, everywhere in
-Buildroot, we do something like:
+There are some loose ends but the patches aren't *that* terrible, although
+there is no escaping the fact that it would require qemu-host, which seems
+rather heavyweight (or maybe just a bad idea for some reason I haven't thought
+of).
 
-PHP_LOCALTIME = "$(call qstrip,$(BR2_TARGET_LOCALTIME))"
+I was wondering, if this were cleaned up, would it belong in buildroot or is it
+just too much of a hack? (Just specifying the dependencies correctly does seem
+to work, but as a user I would be surprised by qemu being dragged in due to a
+target package!)
 
- Note BTW that we already have
+Cheers,
+Sam.
 
-TZ_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
-TZDATA_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
-
-so perhaps it would make sense to move this qstripping to global scope...
-
- Regards,
- Arnout
-
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Floris Bos <bos@je-eigen-domein.nl>
-> ---
->  package/php/php.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index 2997b1b..8dc70f0 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -32,9 +32,10 @@ ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
->  PHP_STATIC_LIBS += -lpthread
->  endif
->  
-> -ifeq ($(BR2_TARGET_LOCALTIME),)
-> +ifeq ($(call qstrip,$(BR2_TARGET_LOCALTIME)),)
->  PHP_LOCALTIME = UTC
->  else
-> +# Not q-stripping this value, as we need quotes in the php.ini file
->  PHP_LOCALTIME = $(BR2_TARGET_LOCALTIME)
->  endif
->  
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+(*) Not really.
