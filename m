@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jun 2016 23:08:08 +0200
-Subject: [Buildroot] [PATCH 3/5] pkg-download: allow ssh URLs
-In-Reply-To: <1465917079-30473-3-git-send-email-gilles.chanteperdrix@xenomai.org>
-References: <20160614151017.GG3060@hermes.click-hack.org>
- <1465917079-30473-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1465917079-30473-3-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <20160615230808.4c1e063b@free-electrons.com>
+Date: Wed, 15 Jun 2016 23:10:59 +0200
+Subject: [Buildroot] [PATCH] host-gdb: Forbid simulator for ARC
+In-Reply-To: <1465986501-16710-1-git-send-email-vzakhar@synopsys.com>
+References: <1465986501-16710-1-git-send-email-vzakhar@synopsys.com>
+Message-ID: <20160615231059.14931588@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +12,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 14 Jun 2016 17:11:17 +0200, Gilles Chanteperdrix wrote:
+The title should have been more like:
 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index a0f694d..5f7a155 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -225,7 +225,7 @@ define DOWNLOAD_INNER
->  	fi ; \
->  	if test -n "$(1)" ; then \
->  		case "$($(PKG)_SITE_METHOD)" in \
-> -			git) $($(3)_GIT) && exit ;; \
-> +			git|ssh) $($(3)_GIT) && exit ;; \
+	gdb: do not allow selecting the simulator on ARC
 
-There has already been a question from Yann on a previous iteration of
-this patch, which hasn't been answered:
+On Wed, 15 Jun 2016 13:28:21 +0300, Vlad Zakharov wrote:
+> Forbid BR2_PACKAGE_HOST_GDB_SIM selection for ARC architectures.
+> Simulator isn't supported by ARC.
+> 
+> Fixes: http://autobuild.buildroot.net/results/4a1/4a1cd9a0beaff34830fd0f0ec47c30eda0a42d54//
+> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+> ---
+>  package/gdb/Config.in.host | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+> index 7b319f5..004c53c 100644
+> --- a/package/gdb/Config.in.host
+> +++ b/package/gdb/Config.in.host
+> @@ -25,6 +25,7 @@ config BR2_PACKAGE_HOST_GDB_PYTHON
+>  
+>  config BR2_PACKAGE_HOST_GDB_SIM
+>  	bool "Simulator support"
+> +  	depends on !BR2_arc
 
-"""
-What about Hg URLs that can also start with 'ssh://' ?
-"""
+Indentation should be done with one tab, not with spaces.
 
-Indeed, I don't see why a ssh:// URL should necessarily reference a Git
-repository. And there's no explanation about this decision in the
-commit log.
+I've applied after fixing those minor issues.
 
-Thanks,
+Thanks a lot!
 
 Thomas
 -- 
