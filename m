@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jun 2016 09:45:08 +0200
-Subject: [Buildroot] [PATCH] ifupdown: bump to version 0.8.13
-In-Reply-To: <1465951975-20723-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 14 Jun 2016 21:52:55 -0300")
-References: <1465951975-20723-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874m8uuc8r.fsf@dell.be.48ers.dk>
+Date: Wed, 15 Jun 2016 09:46:00 +0200
+Subject: [Buildroot] [PATCH] start-stop-daemon: bump to version 1.18.7
+In-Reply-To: <1465951984-20767-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 14 Jun 2016 21:53:04 -0300")
+References: <1465951984-20767-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ziqmsxmv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
