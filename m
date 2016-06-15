@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jun 2016 23:18:50 +0200
-Subject: [Buildroot] [PATCH 1/2] zic: bump to version 2016e
-In-Reply-To: <1466015309-1958-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1466015309-1958-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160615231850.1e9abb2a@free-electrons.com>
+Date: Wed, 15 Jun 2016 23:19:56 +0200
+Subject: [Buildroot] [PATCH] package/systemd: Optionally disable hwdb
+In-Reply-To: <1460717190-29291-1-git-send-email-m.niestroj@grinn-global.com>
+References: <1460717190-29291-1-git-send-email-m.niestroj@grinn-global.com>
+Message-ID: <20160615231956.1459c4e6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 15 Jun 2016 15:28:28 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Fri, 15 Apr 2016 12:46:30 +0200, Marcin Niestroj wrote:
+> By default hwdb files are installed in /usr/lib/udev/hwdb.d
+> Currently they take about ~5MB. After first boot, systemd-hwdb tool
+> parses them and creates a binary in /etc/udev/hwdb.bin, which takes
+> another ~6.5MB.
+> 
+> In case of initramfs images, hwdb parsing is done every boot. This adds
+> about 2-3 seconds to boot time in case of rootfs on SDHC class 10
+> card (benchmarked with am335x board). NAND boot takes even longer.
+> 
+> Add config option to disable hwdb in systemd, for smaller images and
+> better boot performance.
+> 
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
->  package/zic/zic.hash | 4 ++--
->  package/zic/zic.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/systemd/Config.in  | 11 +++++++++++
+>  package/systemd/systemd.mk |  6 ++++++
+>  2 files changed, 17 insertions(+)
 
-Both patches applied to master, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
