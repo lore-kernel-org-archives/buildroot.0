@@ -1,49 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jun 2016 23:10:59 +0200
-Subject: [Buildroot] [PATCH] host-gdb: Forbid simulator for ARC
-In-Reply-To: <1465986501-16710-1-git-send-email-vzakhar@synopsys.com>
-References: <1465986501-16710-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <20160615231059.14931588@free-electrons.com>
+Date: Wed, 15 Jun 2016 23:10:31 +0200
+Subject: [Buildroot] [git commit] gdb: do not allow selecting the simulator
+	on ARC
+Message-ID: <20160615211115.901E380D9B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1e03b0e1e6f7577c4c7a2310f0034eed9c5203ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The title should have been more like:
+Forbid BR2_PACKAGE_HOST_GDB_SIM selection for the ARC architecture,
+since the simulator is not supported on ARC.
 
-	gdb: do not allow selecting the simulator on ARC
+Fixes:
 
-On Wed, 15 Jun 2016 13:28:21 +0300, Vlad Zakharov wrote:
-> Forbid BR2_PACKAGE_HOST_GDB_SIM selection for ARC architectures.
-> Simulator isn't supported by ARC.
-> 
-> Fixes: http://autobuild.buildroot.net/results/4a1/4a1cd9a0beaff34830fd0f0ec47c30eda0a42d54//
-> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-> ---
->  package/gdb/Config.in.host | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-> index 7b319f5..004c53c 100644
-> --- a/package/gdb/Config.in.host
-> +++ b/package/gdb/Config.in.host
-> @@ -25,6 +25,7 @@ config BR2_PACKAGE_HOST_GDB_PYTHON
->  
->  config BR2_PACKAGE_HOST_GDB_SIM
->  	bool "Simulator support"
-> +  	depends on !BR2_arc
+ http://autobuild.buildroot.net/results/4a1cd9a0beaff34830fd0f0ec47c30eda0a42d54/
 
-Indentation should be done with one tab, not with spaces.
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+[Thomas: tweak commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gdb/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-I've applied after fixing those minor issues.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 7b319f5..081073b 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -25,6 +25,7 @@ config BR2_PACKAGE_HOST_GDB_PYTHON
+ 
+ config BR2_PACKAGE_HOST_GDB_SIM
+ 	bool "Simulator support"
++	depends on !BR2_arc
+ 	help
+ 	  This option enables the simulator support in the cross gdb.
+ 
