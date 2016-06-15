@@ -1,44 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jun 2016 09:43:50 +0200
-Subject: [Buildroot] [git commit] libpng: bump to version 1.6.23
-Message-ID: <20160615074639.A1C3881FD3@busybox.osuosl.org>
+Date: Wed, 15 Jun 2016 09:44:44 +0200
+Subject: [Buildroot] [git commit] ifupdown: bump to version 0.8.13
+Message-ID: <20160615074639.EF9A981FC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d988e8f54373a6e3376f5057111b43730112943
+commit: https://git.buildroot.net/buildroot/commit/?id=1a2be1e89d5003f694baefa5ec47d2a5467eee1b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpng/libpng.hash | 6 +++---
- package/libpng/libpng.mk   | 2 +-
+ package/ifupdown/ifupdown.hash | 4 ++--
+ package/ifupdown/ifupdown.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index e9d3674..04e8e40 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.22/
--md5	f4ca54a3d945b8678fafed168c503f3b	libpng-1.6.22.tar.xz
--sha1	e82ec5ba0e05698c221c78f70b4c5513eb40e199	libpng-1.6.22.tar.xz
-+# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.23/
-+md5	9b320a05ed4db1f3f0865c8a951fd9aa	libpng-1.6.23.tar.xz
-+sha1	4857fb8dbd5ca7ddacc40c183e340b9ffa34a097	libpng-1.6.23.tar.xz
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index df2cbcd..5f469af 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/ifupdown/ifupdown.hash b/package/ifupdown/ifupdown.hash
+index cd180ad..5f59d28 100644
+--- a/package/ifupdown/ifupdown.hash
++++ b/package/ifupdown/ifupdown.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.10.dsc
+-sha256	d4730441b9234e5dcaab7dd688ad48ec17e130d1534a357b1c4fff13cf741b0c	ifupdown_0.8.10.tar.xz
++# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.13.dsc
++sha256	90938bf6a2bb31b0ed4d8b2be71beb909c334af64c9284b3f50820cbaeff49b6	ifupdown_0.8.13.tar.xz
+diff --git a/package/ifupdown/ifupdown.mk b/package/ifupdown/ifupdown.mk
+index 1421a67..156496b 100644
+--- a/package/ifupdown/ifupdown.mk
++++ b/package/ifupdown/ifupdown.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBPNG_VERSION = 1.6.22
-+LIBPNG_VERSION = 1.6.23
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
+-IFUPDOWN_VERSION = 0.8.10
++IFUPDOWN_VERSION = 0.8.13
+ IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
+-IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20160122T224509Z/pool/main/i/ifupdown
++IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20160604T232714Z/pool/main/i/ifupdown
+ IFUPDOWN_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ IFUPDOWN_LICENSE = GPLv2+
+ IFUPDOWN_LICENSE_FILES = COPYING
