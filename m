@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 15 Jun 2016 12:09:14 +0200
-Subject: [Buildroot] [PATCH 1/5] python-sdnotify: new package
-Message-ID: <1465985358-12555-1-git-send-email-yegorslists@googlemail.com>
+Date: Wed, 15 Jun 2016 12:09:15 +0200
+Subject: [Buildroot] [PATCH 2/5] python-txaio: bump to version 2.5.1
+In-Reply-To: <1465985358-12555-1-git-send-email-yegorslists@googlemail.com>
+References: <1465985358-12555-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1465985358-12555-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,68 +14,36 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                            |  1 +
- package/python-sdnotify/Config.in            |  7 +++++++
- package/python-sdnotify/python-sdnotify.hash |  4 ++++
- package/python-sdnotify/python-sdnotify.mk   | 13 +++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-sdnotify/Config.in
- create mode 100644 package/python-sdnotify/python-sdnotify.hash
- create mode 100644 package/python-sdnotify/python-sdnotify.mk
+ package/python-txaio/python-txaio.hash | 6 +++---
+ package/python-txaio/python-txaio.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index ff08f27..753f5aa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -745,6 +745,7 @@ menu "External python modules"
- 	source "package/python-requests/Config.in"
- 	source "package/python-rpi-gpio/Config.in"
- 	source "package/python-rtslib-fb/Config.in"
-+	source "package/python-sdnotify/Config.in"
- 	source "package/python-serial/Config.in"
- 	source "package/python-service-identity/Config.in"
- 	source "package/python-setproctitle/Config.in"
-diff --git a/package/python-sdnotify/Config.in b/package/python-sdnotify/Config.in
-new file mode 100644
-index 0000000..bc77a06
---- /dev/null
-+++ b/package/python-sdnotify/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_SDNOTIFY
-+	bool "python-sdnotify"
-+	help
-+	  A pure Python implementation of systemd's service notification
-+	  protocol (sd_notify).
-+
-+	  https://github.com/bb4242/sdnotify
-diff --git a/package/python-sdnotify/python-sdnotify.hash b/package/python-sdnotify/python-sdnotify.hash
-new file mode 100644
-index 0000000..4339c8f
---- /dev/null
-+++ b/package/python-sdnotify/python-sdnotify.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/sdnotify/json
-+md5	8e6a6e25560162c113fa54fc3fad98f5  sdnotify-0.3.0.tar.gz
-+# sha256 calculated by scanpypi
-+sha256	55fcaffb239f392ecf5b2211ef65f858b8fbbc857be8ca2b6f27b011db9c2ce6  sdnotify-0.3.0.tar.gz
-diff --git a/package/python-sdnotify/python-sdnotify.mk b/package/python-sdnotify/python-sdnotify.mk
-new file mode 100644
-index 0000000..aeeefd7
---- /dev/null
-+++ b/package/python-sdnotify/python-sdnotify.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-sdnotify
-+#
-+################################################################################
-+
-+PYTHON_SDNOTIFY_VERSION = 0.3.0
-+PYTHON_SDNOTIFY_SOURCE = sdnotify-$(PYTHON_SDNOTIFY_VERSION).tar.gz
-+PYTHON_SDNOTIFY_SITE = https://pypi.python.org/packages/6f/ef/d57f930ba403b2e6440bd7ab14dbdd7ce1a1bfb5617bba62a950d04bfa34
-+PYTHON_SDNOTIFY_SETUP_TYPE = distutils
-+PYTHON_SDNOTIFY_LICENSE = MIT
-+
-+$(eval $(python-package))
+diff --git a/package/python-txaio/python-txaio.hash b/package/python-txaio/python-txaio.hash
+index 5d9e6cf..37da82b 100644
+--- a/package/python-txaio/python-txaio.hash
++++ b/package/python-txaio/python-txaio.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=c2a7e6ebfdf8987c3938e40e39a3c5e7, sha256 locally computed
+-md5	c2a7e6ebfdf8987c3938e40e39a3c5e7  txaio-2.2.1.tar.gz
+-sha256	6eee00c397d8193d15313dfc36da3eac8d64edf0b92fe3b67cd5a735ffc3074b  txaio-2.2.1.tar.gz
++# md5 from https://pypi.python.org/pypi/txaio/json, sha256 locally computed.
++md5	7b0f5321515d380ad5d32f01666b6ee7  txaio-2.5.1.tar.gz
++sha256	625076477182e2dde78b79d0b2b0d6b3cecb0e24fe0ea7eaf2abd26a4c0dd1de  txaio-2.5.1.tar.gz
+diff --git a/package/python-txaio/python-txaio.mk b/package/python-txaio/python-txaio.mk
+index 127bc62..34c6e99 100644
+--- a/package/python-txaio/python-txaio.mk
++++ b/package/python-txaio/python-txaio.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TXAIO_VERSION = 2.2.1
++PYTHON_TXAIO_VERSION = 2.5.1
+ PYTHON_TXAIO_SOURCE = txaio-$(PYTHON_TXAIO_VERSION).tar.gz
+-PYTHON_TXAIO_SITE = http://pypi.python.org/packages/source/t/txaio
++PYTHON_TXAIO_SITE = https://pypi.python.org/packages/45/e1/f7d88767d65dbfc20d4b4aa0dad657dbbe8ca629ead2bef24da04630a12a
+ PYTHON_TXAIO_LICENSE = MIT
+ PYTHON_TXAIO_LICENSE_FILES = LICENSE
+ PYTHON_TXAIO_SETUP_TYPE = setuptools
 -- 
 2.8.1
