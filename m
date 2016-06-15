@@ -1,58 +1,80 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 15 Jun 2016 19:11:10 +0200
-Subject: [Buildroot] [V2] scancpan: improve message when bad host perl
-	version
-Message-ID: <1466010670-22639-1-git-send-email-francois.perrad@gadz.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 15 Jun 2016 17:18:45 +0000
+Subject: [Buildroot] [PATCH] Binutils: ARC: Fix build failures if
+	makeinfo is missing
+In-Reply-To: <1465278105.7088.20.camel@synopsys.com>
+References: <1465211659-23861-1-git-send-email-vzakhar@synopsys.com>
+ <87twh6hzxl.fsf@dell.be.48ers.dk>
+ <20160606215833.57396ae8@free-electrons.com>
+ <87fusqgfwi.fsf@dell.be.48ers.dk> <1465278105.7088.20.camel@synopsys.com>
+Message-ID: <1466011073.11148.25.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- support/scripts/scancpan | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+Hi Peter, Thomas,
 
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index 6c70cfb..6d7b774 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -471,7 +471,7 @@ unshift @INC, sub {
- } # END OF FATPACK CODE
- 
- 
--use 5.022;      # same major version as target perl
-+use 5.010;
- use strict;
- use warnings;
- use Fatal qw(open close);
-@@ -484,6 +484,17 @@ use HTTP::Tiny;
- use Safe;
- use MetaCPAN::API::Tiny;
- 
-+die <<"MSG" if $] < 5.022;
-+This script needs a host perl with the same major version as Buildroot target perl.
-+
-+Your current host perl is:
-+    $^X
-+    version $]
-+
-+You may install a local one by running:
-+    perlbrew install perl-5.22.2
-+MSG
-+
- my ($help, $man, $quiet, $force, $recommend, $test, $host);
- my $target = 1;
- GetOptions( 'help|?' => \$help,
-@@ -748,7 +759,7 @@ support/scripts/scancpan Try-Tiny Moo
- 
- curl -kL http://install.perlbrew.pl | bash
- 
--perlbrew install perl-5.18.2
-+perlbrew install perl-5.22.2
- 
- supports/scripts/scancpan [options] [distname ...]
- 
--- 
-1.9.1
+On Tue, 2016-06-07 at 05:42 +0000, Alexey Brodkin wrote:
+> Hi Peter, Thomas,
+> 
+> On Mon, 2016-06-06 at 23:34 +0200, Peter Korsgaard wrote:
+> > 
+> > > > > > > 
+> > > > > > > "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> > ?> Hello,
+> > ?> On Mon, 06 Jun 2016 21:36:54 +0200, Peter Korsgaard wrote:
+> > 
+> > ?>> > Signed-off-by: Zakharov Vlad <vzakhar@synopsys.com>??
+> > ?>>?
+> > ?>> Committed, thanks.
+> > 
+> > ?> Why?
+> > 
+> > It was fixing autobuilder issues and seemed like a sensible fix that
+> > could be upstreamed. Looking again, I do see that it patched Makefile.in
+> > and not Makefile.am, so that's not too nice though.
+> Indeed our goal was to fix an issue that causes all autobuilder jobs for ARC
+> to fail. The problem is host binutils couldn't be built any longer after we switched
+> to arc-2016.03 tools. And now we're unblocked.
+> 
+> As for patching Makefile.in vs Makefile.am again that's just to do a minimal fix
+> in existing sources. Otherwise if we patch Makefile.am we'll need to regenerate
+> Makefile.in.
+> 
+> Even though Vlad has already sent the same patch to Binutils mailing list
+> (https://sourceware.org/ml/binutils/2016-06/msg00053.html) that's indeed not
+> the right fix - he'll need to fix Makefile.am but at least we're moving
+> in upstreaming direction.
+> 
+> > 
+> > ?> This problem also exists for other versions of binutils, and also for
+> > ?> gdb. And we have a patch series from Romain Naour sitting in patchwork
+> > ?> for several weeks.
+> Right so I would think as of now the same patch should be applied to other
+> affected instances of binutils and gdb.
+> 
+> > 
+> > ?> I don't know if Zlad's version is better or not than Romain's version.
+> > ?> But at least Romain's version was handling all binutils and gdb
+> > ?> versions, without patching directly Makefile.in files. So at first
+> > ?> sight, it looked a lot better than Zlad's version.
+> > 
+> > Ok, we can always revert if it isn't needed any more once Romain's
+> > series is applied.
+> 
+>
+> In opposite Romain's fix only makes sense for BR and I don't really like that
+> approach. Why implement hacks on top of
+> upstream sources that are not
+> upstreamable at all. Why not try "to fix" generic "missing" script if we do think
+> it behaves improperly?
+
+So it looks like "makeinfo" is really required when building binutils/gdb from
+git sources, see that response in binutils mailing list:
+https://sourceware.org/ml/binutils/2016-06/msg00200.html
+
+So shall we just require "makeinfo" installed on build hosts?
+
+-Alexey
