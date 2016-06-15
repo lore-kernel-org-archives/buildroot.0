@@ -1,26 +1,78 @@
-From: Marcin Nowakowski <Marcin.Nowakowski@imgtec.com>
-Date: Wed, 15 Jun 2016 12:21:49 +0000
-Subject: [Buildroot] [PATCH] gst1-plugins-bad: remove obsolete gettext
-	patch
-In-Reply-To: <877fdrv6hu.fsf@dell.be.48ers.dk>
-References: <1465893927-8430-1-git-send-email-marcin.nowakowski@imgtec.com>
- <877fdrv6hu.fsf@dell.be.48ers.dk>
-Message-ID: <6AAECB0035080A468CD3789966C9E87499A9D000@WRMAIL01.wr.imgtec.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 15 Jun 2016 09:34:21 -0300
+Subject: [Buildroot] [PATCH 1/3] imagemagick: bump to version 7.0.2-0
+Message-ID: <1465994063-17292-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: Peter Korsgaard
-> 
-> Hmm, but why are we patching this + autoreconf/gettextize in the first
-> place when we don't do it for the other gstreamer1 packages?
-> 
-> Looking back in the history, I see Yann added GETTEXTIZE in 368eab1833
-> to work around an issue doing autoreconf, but now we don't seem to have
-> any reason to autoreconf in the first place any more.
+Add new disables for libraries that aren't supported in buildroot and
+sort them for ease of maintenance.
 
-It does indeed look like it's unnecessary now - in that case I'll post a new patch that removes the patch file as well as removes autoreconf and gettextize steps.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/imagemagick/imagemagick.hash |  2 +-
+ package/imagemagick/imagemagick.mk   | 21 ++++++++++++---------
+ 2 files changed, 13 insertions(+), 10 deletions(-)
 
-Marcin
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 8a51047..e34f15a 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 c028642af5f4cbae864b4afd6ea96878191be64103ca9c7cc67612ec3cbb9dec ImageMagick-6.9.4-6.tar.xz
++sha256	cd3076a573a815ff828c75d231eef8660f2f6c5eaf848c2f4e8c4dcc955671ea	ImageMagick-7.0.2-0.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 74ac5a4..065f33d 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 6.9.4-6
++IMAGEMAGICK_VERSION = 7.0.2-0
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
+@@ -12,7 +12,7 @@ IMAGEMAGICK_LICENSE_FILES = LICENSE
+ 
+ IMAGEMAGICK_INSTALL_STAGING = YES
+ IMAGEMAGICK_CONFIG_SCRIPTS = \
+-	$(addsuffix -config,Magick MagickCore MagickWand Wand)
++	$(addsuffix -config,MagickCore MagickWand)
+ 
+ ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
+ IMAGEMAGICK_CONFIG_SCRIPTS += Magick++-config
+@@ -23,16 +23,19 @@ IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=64
+ IMAGEMAGICK_CONF_OPTS = \
+ 	--program-transform-name='s,,,' \
+ 	--disable-openmp \
+-	--without-perl \
+-	--without-wmf \
+-	--without-openexr \
+-	--without-jp2 \
+-	--without-jbig \
+-	--without-gvc \
+ 	--without-djvu \
+ 	--without-dps \
+-	--without-gslib \
++	--without-flif \
+ 	--without-fpx \
++	--without-gslib \
++	--without-gvc \
++	--without-jbig \
++	--without-jp2 \
++	--without-lqr \
++	--without-openexr \
++	--without-perl \
++	--without-raqm \
++	--without-wmf \
+ 	--without-x
+ 
+ IMAGEMAGICK_DEPENDENCIES = host-pkgconf
+-- 
+2.7.3
