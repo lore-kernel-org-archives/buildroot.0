@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 15 Jun 2016 12:09:15 +0200
-Subject: [Buildroot] [PATCH 2/5] python-txaio: bump to version 2.5.1
+Date: Wed, 15 Jun 2016 12:09:16 +0200
+Subject: [Buildroot] [PATCH 3/5] python-autobahn: bump to version 0.14.1
 In-Reply-To: <1465985358-12555-1-git-send-email-yegorslists@googlemail.com>
 References: <1465985358-12555-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1465985358-12555-2-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1465985358-12555-3-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +14,36 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-txaio/python-txaio.hash | 6 +++---
- package/python-txaio/python-txaio.mk   | 4 ++--
+ package/python-autobahn/python-autobahn.hash | 6 +++---
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-txaio/python-txaio.hash b/package/python-txaio/python-txaio.hash
-index 5d9e6cf..37da82b 100644
---- a/package/python-txaio/python-txaio.hash
-+++ b/package/python-txaio/python-txaio.hash
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index 8f55ac1..1ee1e0e 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=c2a7e6ebfdf8987c3938e40e39a3c5e7, sha256 locally computed
--md5	c2a7e6ebfdf8987c3938e40e39a3c5e7  txaio-2.2.1.tar.gz
--sha256	6eee00c397d8193d15313dfc36da3eac8d64edf0b92fe3b67cd5a735ffc3074b  txaio-2.2.1.tar.gz
-+# md5 from https://pypi.python.org/pypi/txaio/json, sha256 locally computed.
-+md5	7b0f5321515d380ad5d32f01666b6ee7  txaio-2.5.1.tar.gz
-+sha256	625076477182e2dde78b79d0b2b0d6b3cecb0e24fe0ea7eaf2abd26a4c0dd1de  txaio-2.5.1.tar.gz
-diff --git a/package/python-txaio/python-txaio.mk b/package/python-txaio/python-txaio.mk
-index 127bc62..34c6e99 100644
---- a/package/python-txaio/python-txaio.mk
-+++ b/package/python-txaio/python-txaio.mk
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b4b5445050749c1033b9b58f694f0c64, sha256 locally computed.
+-md5	b4b5445050749c1033b9b58f694f0c64  autobahn-0.12.1.tar.gz
+-sha256	664223879e159c88221f42d8d1ac6b8c4268d8b9316d8ab69a02761c5744cd79  autobahn-0.12.1.tar.gz
++# md5 from https://pypi.python.org/pypi/autobahn/json, sha256 locally computed.
++md5	576b63ce7fa7846f64650263842b712b  autobahn-0.14.1.tar.gz
++sha256	c1695e139e36daeaad9cb788dd3f9b907a3fd83b67884424e59b3e07032956e0  autobahn-0.14.1.tar.gz
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index 1d02867..2cc2e5d 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TXAIO_VERSION = 2.2.1
-+PYTHON_TXAIO_VERSION = 2.5.1
- PYTHON_TXAIO_SOURCE = txaio-$(PYTHON_TXAIO_VERSION).tar.gz
--PYTHON_TXAIO_SITE = http://pypi.python.org/packages/source/t/txaio
-+PYTHON_TXAIO_SITE = https://pypi.python.org/packages/45/e1/f7d88767d65dbfc20d4b4aa0dad657dbbe8ca629ead2bef24da04630a12a
- PYTHON_TXAIO_LICENSE = MIT
- PYTHON_TXAIO_LICENSE_FILES = LICENSE
- PYTHON_TXAIO_SETUP_TYPE = setuptools
+-PYTHON_AUTOBAHN_VERSION = 0.12.1
++PYTHON_AUTOBAHN_VERSION = 0.14.1
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = http://pypi.python.org/packages/source/a/autobahn
++PYTHON_AUTOBAHN_SITE = https://pypi.python.org/packages/e3/37/1297551d3066ec9b013dd3a1a7e2cca85900d3fe95194779370e8e7a7af7
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
 -- 
 2.8.1
