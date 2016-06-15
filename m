@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 15 Jun 2016 09:34:22 -0300
-Subject: [Buildroot] [PATCH 2/3] imagemagick: add explicit pango support
+Date: Wed, 15 Jun 2016 09:34:23 -0300
+Subject: [Buildroot] [PATCH 3/3] imagemagick: add explicit lzma (xz) support
 In-Reply-To: <1465994063-17292-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1465994063-17292-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1465994063-17292-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1465994063-17292-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,22 +16,22 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 065f33d..641eafb 100644
+index 641eafb..5ec9174 100644
 --- a/package/imagemagick/imagemagick.mk
 +++ b/package/imagemagick/imagemagick.mk
-@@ -92,6 +92,13 @@ else
- IMAGEMAGICK_CONF_OPTS += --without-xml
+@@ -106,6 +106,13 @@ else
+ IMAGEMAGICK_CONF_OPTS += --without-tiff
  endif
  
-+ifeq ($(BR2_PACKAGE_PANGO),y)
-+IMAGEMAGICK_CONF_OPTS += --with-pango
-+IMAGEMAGICK_DEPENDENCIES += pango
++ifeq ($(BR2_PACKAGE_XZ),y)
++IMAGEMAGICK_CONF_OPTS += --with-lzma
++IMAGEMAGICK_DEPENDENCIES += xz
 +else
-+IMAGEMAGICK_CONF_OPTS += --without-pango
++IMAGEMAGICK_CONF_OPTS += --without-lzma
 +endif
 +
- ifeq ($(BR2_PACKAGE_TIFF),y)
- IMAGEMAGICK_CONF_OPTS += --with-tiff
- IMAGEMAGICK_DEPENDENCIES += tiff
+ ifeq ($(BR2_PACKAGE_FFTW),y)
+ # configure script misdetects these leading to build errors
+ IMAGEMAGICK_CONF_ENV += ac_cv_func_creal=yes ac_cv_func_cimag=yes
 -- 
 2.7.3
