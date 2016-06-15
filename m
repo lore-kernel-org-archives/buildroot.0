@@ -1,101 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 15 Jun 2016 22:48:40 +0200
-Subject: [Buildroot] [git commit] nxp defconfigs: bump u-boot version to
-	4.1.15_1.1.0_ga
-Message-ID: <20160615204846.BDE5F81EAF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] kernel-module-imx-gpu-viv: bump version to
+	that of the 5.0.11.p8.4 release
+Message-ID: <20160615204847.DFD3E82033@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4386ce0bcd80f9a3bf0a8ade60e107ebfdeab323
+commit: https://git.buildroot.net/buildroot/commit/?id=7eb5f3ecf4115de1280ef10771c839d04e38f946
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-fsl-arm/commit/c9c30c5
+
+This package has been tested with the following commands with the
+matching imx-gpu-viv library:
+ # modprobe galcore
+ # cd /usr/share/examples/viv_samples/vdk/
+ # ./tutorial7
 
 Signed-off-by: Andrew Webster <awebster@arcx.com>
 Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/freescale_imx6dlsabreauto_defconfig | 2 +-
- configs/freescale_imx6dlsabresd_defconfig   | 2 +-
- configs/freescale_imx6qsabreauto_defconfig  | 2 +-
- configs/freescale_imx6qsabresd_defconfig    | 2 +-
- configs/freescale_imx6sololiteevk_defconfig | 2 +-
- configs/freescale_imx6sxsabresd_defconfig   | 2 +-
- configs/freescale_imx6ulevk_defconfig       | 2 +-
- 7 files changed, 7 insertions(+), 7 deletions(-)
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash            | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/freescale_imx6dlsabreauto_defconfig b/configs/freescale_imx6dlsabreauto_defconfig
-index 699e684..f55d4fa 100644
---- a/configs/freescale_imx6dlsabreauto_defconfig
-+++ b/configs/freescale_imx6dlsabreauto_defconfig
-@@ -31,4 +31,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabreauto"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
-index b6d31e0..bec80b5 100644
---- a/configs/freescale_imx6dlsabresd_defconfig
-+++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -31,4 +31,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabresd"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-diff --git a/configs/freescale_imx6qsabreauto_defconfig b/configs/freescale_imx6qsabreauto_defconfig
-index 23ca2dc..2b89541 100644
---- a/configs/freescale_imx6qsabreauto_defconfig
-+++ b/configs/freescale_imx6qsabreauto_defconfig
-@@ -31,4 +31,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
-index bf446a3..ec8f265 100644
---- a/configs/freescale_imx6qsabresd_defconfig
-+++ b/configs/freescale_imx6qsabresd_defconfig
-@@ -31,4 +31,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
-index 72a1e2d..db68d79 100644
---- a/configs/freescale_imx6sololiteevk_defconfig
-+++ b/configs/freescale_imx6sololiteevk_defconfig
-@@ -28,4 +28,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6slevk"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
-diff --git a/configs/freescale_imx6sxsabresd_defconfig b/configs/freescale_imx6sxsabresd_defconfig
-index 943528b..7437b63 100644
---- a/configs/freescale_imx6sxsabresd_defconfig
-+++ b/configs/freescale_imx6sxsabresd_defconfig
-@@ -28,5 +28,5 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sxsabresd"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
-diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
-index fbb420e..cd27335 100644
---- a/configs/freescale_imx6ulevk_defconfig
-+++ b/configs/freescale_imx6ulevk_defconfig
-@@ -22,7 +22,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6ul_14x14_evk"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index 0842c7a..6d810ea 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256	971254d204f6c8f739d0a2094055cd0b8001dc7d366345f996b14a495f92459e  kernel-module-imx-gpu-viv-2b3290d1c1ce383e860a0fd6b53074848a848e65.tar.gz
++sha256	6618b36baefd591e94a41167fa50d325c3df473918bceef027ca5a067aa1cffd  kernel-module-imx-gpu-viv-aa83874b916cf5655cb90498b1ea5691537fdbc8.tar.gz
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index aad8e40..11c6768 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # required tools to create the microSD image
+-KERNEL_MODULE_IMX_GPU_VIV_VERSION = 2b3290d1c1ce383e860a0fd6b53074848a848e65
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = aa83874b916cf5655cb90498b1ea5691537fdbc8
+ KERNEL_MODULE_IMX_GPU_VIV_SITE = \
+ 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
+ KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPLv2
