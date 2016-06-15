@@ -1,63 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 15 Jun 2016 23:37:11 +0200
-Subject: [Buildroot] [PATCH 3/5] pkg-download: allow ssh URLs
-In-Reply-To: <20160615212947.GZ23680@hermes.click-hack.org>
-References: <20160614150412.GF3060@hermes.click-hack.org>
- <1465916712-29684-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1465916712-29684-3-git-send-email-gilles.chanteperdrix@xenomai.org>
- <20160614201426.GF3759@free.fr>
- <20160615212947.GZ23680@hermes.click-hack.org>
-Message-ID: <20160615213711.GA3823@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Jun 2016 23:42:32 +0200
+Subject: [Buildroot] [git commit] json-c: add .hash file
+Message-ID: <20160615214351.1186881F98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gilles, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2a4563f13fe526b58808f1cd32c28e69f679d45e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-06-15 23:29 +0200, Gilles Chanteperdrix spake thusly:
-> On Tue, Jun 14, 2016 at 10:14:26PM +0200, Yann E. MORIN wrote:
-> > Gilles, All,
-> > 
-> > On 2016-06-14 17:05 +0200, Gilles Chanteperdrix spake thusly:
-> > > Use git when such an URL is met.
-> > 
-> > What about Hg URLs that can also start with 'ssh://' ?
-> > 
-> > I guess we should not try to be smart here, and let users specify the
-> > method with the _SITE_METHOD variable.
-> 
-> Yeah, well, my initial patch proposed git+ssh:// and I was told that
-> this was deprecated. The conversation lead to a dead-end with nobody
-> giving me a clear indication of what I should propose.
-> 
-> So, let us go back to my initial need: have a package compiled based
-> on a git over ssh URL. Now if you tell me that there is a way to do
-> this without patching pkg-download.mk, I am all ears. I did not find
-> any help on that in the documentation, do you have some pointers?
+Fixes:
+http://autobuild.buildroot.org/results/38f/38fd47a81cc2a6fc515158692af4e2b62f4a965f/
+http://autobuild.buildroot.org/results/ecc/ecc4ca7fdda173faf042dfe991073d8c5e9af4d6/
 
-As far as I understand your requirements, you want to be able to write
-either of:
+Similar to jquery-keyboard, it seems the json-c tarball on the autobuilder
+is corrupt.  Fix it by adding a .hash file so it falls back to our s.b.o
+mirror.
 
-    FOO_SITE = user at machine:path/to/repo.git
-or
-    FOO_SITE = ssh://user at machine/path/to/rpo.git
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/json-c/json-c.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-You just have to add:
-
-    FOO_SITE_METHOD = git
-
-See the manual, search for _SITE_METHOD: ;-)
-    https://buildroot.org/downloads/manual/manual.html#generic-package-reference
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
+new file mode 100644
+index 0000000..6550895
+--- /dev/null
++++ b/package/json-c/json-c.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 99304a4a633f1ee281d6a521155a182824dd995139d5ed6ee5c93093c281092b  json-c-json-c-0.12-20140410.tar.gz
