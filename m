@@ -1,41 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jun 2016 15:29:18 +0200
-Subject: [Buildroot] [git commit] autofs: bump to version 5.1.2
-Message-ID: <20160615132944.739F08182E@busybox.osuosl.org>
+Date: Wed, 15 Jun 2016 16:02:43 +0200
+Subject: [Buildroot] [PATCH] gst1-plugins-bad: remove obsolete gettext
+	patch
+In-Reply-To: <6AAECB0035080A468CD3789966C9E87499A9D000@WRMAIL01.wr.imgtec.org>
+ (Marcin Nowakowski's message of "Wed, 15 Jun 2016 12:21:49 +0000")
+References: <1465893927-8430-1-git-send-email-marcin.nowakowski@imgtec.com>
+ <877fdrv6hu.fsf@dell.be.48ers.dk>
+ <6AAECB0035080A468CD3789966C9E87499A9D000@WRMAIL01.wr.imgtec.org>
+Message-ID: <87eg7ysg70.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fa3a819c8a9b8f9fdd4cd3aeeec6f96a79c867d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Marcin" == Marcin Nowakowski <Marcin.Nowakowski@imgtec.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/autofs/autofs.hash | 2 +-
- package/autofs/autofs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ >> From: Peter Korsgaard
+ >> 
+ >> Hmm, but why are we patching this + autoreconf/gettextize in the first
+ >> place when we don't do it for the other gstreamer1 packages?
+ >> 
+ >> Looking back in the history, I see Yann added GETTEXTIZE in 368eab1833
+ >> to work around an issue doing autoreconf, but now we don't seem to have
+ >> any reason to autoreconf in the first place any more.
 
-diff --git a/package/autofs/autofs.hash b/package/autofs/autofs.hash
-index 2d98375..72b1378 100644
---- a/package/autofs/autofs.hash
-+++ b/package/autofs/autofs.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/daemons/autofs/v5/sha256sums.asc
--sha256 e08ff0ef9ff365d87b6c33dca136d20e4e07675197a324f2816894cb437021c3  autofs-5.1.1.tar.xz
-+sha256 88b7de39088aead983e02072a7b753d5ee52ce419c8913f7a3d4ff5521313f0c  autofs-5.1.2.tar.xz
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-index a98e5eb..622bbe0 100644
---- a/package/autofs/autofs.mk
-+++ b/package/autofs/autofs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AUTOFS_VERSION = 5.1.1
-+AUTOFS_VERSION = 5.1.2
- AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
- AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
- AUTOFS_LICENSE = GPLv2+
+ > It does indeed look like it's unnecessary now - in that case I'll post
+ > a new patch that removes the patch file as well as removes autoreconf
+ > and gettextize steps.
+
+Great, thanks!
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
