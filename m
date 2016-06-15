@@ -1,37 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jun 2016 23:11:54 +0200
-Subject: [Buildroot] [git commit] imagemagick: add explicit lzma (xz) support
-Message-ID: <20160615211205.3207E802E2@busybox.osuosl.org>
+Date: Wed, 15 Jun 2016 23:12:15 +0200
+Subject: [Buildroot] [PATCH 1/3] imagemagick: bump to version 7.0.2-0
+In-Reply-To: <1465994063-17292-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1465994063-17292-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160615231215.491582b3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa693c37dce81a00b8e1f3aef855ee5d05489602
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/imagemagick/imagemagick.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+On Wed, 15 Jun 2016 09:34:21 -0300, Gustavo Zacarias wrote:
+> Add new disables for libraries that aren't supported in buildroot and
+> sort them for ease of maintenance.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/imagemagick/imagemagick.hash |  2 +-
+>  package/imagemagick/imagemagick.mk   | 21 ++++++++++++---------
+>  2 files changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 641eafb..5ec9174 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -106,6 +106,13 @@ else
- IMAGEMAGICK_CONF_OPTS += --without-tiff
- endif
- 
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+IMAGEMAGICK_CONF_OPTS += --with-lzma
-+IMAGEMAGICK_DEPENDENCIES += xz
-+else
-+IMAGEMAGICK_CONF_OPTS += --without-lzma
-+endif
-+
- ifeq ($(BR2_PACKAGE_FFTW),y)
- # configure script misdetects these leading to build errors
- IMAGEMAGICK_CONF_ENV += ac_cv_func_creal=yes ac_cv_func_cimag=yes
+Entire series applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
