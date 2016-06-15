@@ -1,104 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jun 2016 22:06:34 +0200
-Subject: [Buildroot] Patchwork cleanup week #24
-Message-ID: <20160615220634.67eb8fa9@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Jun 2016 22:05:59 +0200
+Subject: [Buildroot] [git commit] lpc3250loader: add .hash file
+Message-ID: <20160615200802.A70B981F5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f47f721151825bc6aa1fda04e11b8320e680013d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The previous patchwork cleanup period being over, it's time to start
-the second period, with 10 other patches. We're on June 15th, so I'll
-give people until June 30th to react on the following patches. If
-there's no reaction, like no interest from either the original
-submitter nor any other Buildroot developer, the patch will be marked
-Rejected on June 30th.
+Fixes:
+http://autobuild.buildroot.org/results/a60/a601f30d7100821ad0e303c6338348751d7aa99b/
+http://autobuild.buildroot.org/results/56f/56f4e5f864da7e2176c78426d1d180c37966b181/
 
-If you are in To: of this e-mail, then one or several of the patches
-below have been authored by you, so you should be interested :-)
+Similar to jquery-keyboard, it seems the lpc3250loader tarball on the
+autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
+our s.b.o mirror.
 
-Thanks,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lpc3250loader/lpc3250loader.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thomas
-
- 1. board: add support for Chromebook Snow
-    http://patchwork.ozlabs.org/patch/563197/
-
-    This one has not been reviewed. It would be sad not to merge it,
-    because we have merged some specific packages that are needed for
-    this defconfig (host-vboot-utils).
-
- 2. pyqtgraph: new package
-    http://patchwork.ozlabs.org/patch/529864/
-
-    It seems to be a pretty straightforward package, but nobody
-    reviewed it.
-
- 3. toolchain-wrapper: prevent use of unsupported -fstack-protector*
-    http://patchwork.ozlabs.org/patch/545315/
-
-    This patch proposes to make the toolchain wrapper fail immediately
-    when -fstack-protector is passed to gcc, but SSP support is not
-    available. This helps with some packages that assume that compiling
-    with -fstack-protector is enough to determine if SSP support is
-    available, while in several cases, doing a link test is necessary.
-
-    I personally don't really like this change, as I believe it's
-    adding even more sorcery to our toolchain wrapper. Instead, the
-    problematic upstream packages should be fixed. Plus, at the time,
-    we had a few packages in this situation, but nowadays, I don't
-    think we have build failures due to this.
-
-    So, my proposal would be to reject this patch.
-
- 4. uboot: install multiple spl images
-    http://patchwork.ozlabs.org/patch/595980/
-
- 5. Fix for the makeinfo / missing issue, proposal from Romain
-    http://patchwork.ozlabs.org/patch/595041/
-    http://patchwork.ozlabs.org/patch/595042/
-    http://patchwork.ozlabs.org/patch/595043/
-
-    We need to take a decision on this one. The problem also occurs for
-    gdb and binutils on ARC, for which we've added a custom hack
-    recently.
-
-    I tried to play with timestamps by touch'ing the .info files before
-    the build, it worked with one of gdb or binutils, but failed for
-    the other.
-
-    So either we take Romain's approach, or we bite the bullet and add
-    a host-makeinfo package on which we depend when gdb/binutils are
-    fetched from Git.
-
- 6. wget download: 'scheme missing' results in empty output file
-    http://patchwork.ozlabs.org/patch/599387/
-
- 7. Fortran support
-    http://patchwork.ozlabs.org/patch/599678/
-    http://patchwork.ozlabs.org/patch/599679/
-    http://patchwork.ozlabs.org/patch/599680/
-
-    Nobody reviewed this.
-
- 8. new package: alsacap
-    http://patchwork.ozlabs.org/patch/607045/
-
-    Isn't there already a tool in alsa-utils that does the same thing
-    more or less?
-
- 9. overlay: Add archive-based (tar) rootfs overlays
-    http://patchwork.ozlabs.org/patch/610752/
-
-10. Improvements to kernel headers version selection
-    http://patchwork.ozlabs.org/patch/612316/
-    http://patchwork.ozlabs.org/patch/612315/
-    http://patchwork.ozlabs.org/patch/612313/
-
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lpc3250loader/lpc3250loader.hash b/package/lpc3250loader/lpc3250loader.hash
+new file mode 100644
+index 0000000..4f9dbc4
+--- /dev/null
++++ b/package/lpc3250loader/lpc3250loader.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 267de7541c92e5b007b93c660a41188976d531a3757f4ffd9b7142d3994da7d1  lpc3250loader-1.0.tar.gz
