@@ -1,41 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jun 2016 15:17:48 +0200
-Subject: [Buildroot] [PATCH 3/3] rsyslog: add optional gnutls support
-In-Reply-To: <1465996668-6444-1-git-send-email-peter@korsgaard.com>
-References: <1465996668-6444-1-git-send-email-peter@korsgaard.com>
-Message-ID: <1465996668-6444-3-git-send-email-peter@korsgaard.com>
+Date: Wed, 15 Jun 2016 15:20:42 +0200
+Subject: [Buildroot] [PATCH] rsyslog: add possibility to enable TLS
+	support in rsyslog
+In-Reply-To: <CAOtFK_VVR-K-uypY1Ng9QDLfpvRNeaxYTxCspJqFLrujLbyK6g@mail.gmail.com>
+ (Adrien Decostre's message of "Thu, 26 May 2016 08:13:40 +0200")
+References: <CAOtFK_XCa9jean8MZg8LZteyW+YmibBQFfHO8M-Jd44XuKgEwA@mail.gmail.com>
+ <CAOtFK_VVR-K-uypY1Ng9QDLfpvRNeaxYTxCspJqFLrujLbyK6g@mail.gmail.com>
+Message-ID: <87mvmmsi51.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adrien Decostre <ad.decostre@gmail.com>
+>>>>> "Adrien" == Adrien Decostre <ad.decostre@gmail.com> writes:
 
-[Peter: drop explicit option and handle like other dependencies]
-Signed-off-by: Adrien Decostre <ad.decostre@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rsyslog/rsyslog.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ > Dear all,
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 40e3b33..18a5737 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -22,6 +22,13 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- RSYSLOG_DEPENDENCIES += busybox
- endif
- 
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+RSYSLOG_DEPENDENCIES += gnutls
-+RSYSLOG_CONF_OPTS += --enable-gnutls
-+else
-+RSYSLOG_CONF_OPTS += --disable-gnutls
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBEE),y)
- RSYSLOG_DEPENDENCIES += libee
- endif
+ > This patch enables TLS support in the rsyslog package.
+
+Thanks. We use implicit/automatic handling for the other optional
+dependencies, so I prefer to do this for gnutls as well.
+
+The patch as it stands unfortunately doesn't work as our rsyslog version
+isn't compatible with our gnutls version after the recent version bump,
+so I've sent a patch series updating rsyslog and adding gnutls support:
+
+http://lists.busybox.net/pipermail/buildroot/2016-June/163990.html
+
+It would be good if you could give it a try.
+
 -- 
-2.7.0
+Bye, Peter Korsgaard
