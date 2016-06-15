@@ -1,33 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jun 2016 23:52:39 +0200
-Subject: [Buildroot] [git commit] cppzmq: add .hash file
-Message-ID: <20160615215547.9A56C82037@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 16 Jun 2016 00:01:31 +0200
+Subject: [Buildroot] [PATCH 1/2] python: enable bzip2 in host variant
+In-Reply-To: <1461508789-17644-2-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1461508789-17644-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1461508789-17644-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20160616000131.7f09d903@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ea289857e84af6341e5229dd467803033ef7949
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-http://autobuild.buildroot.org/results/425/425ce97de58c53c4f56d43654c0ec8a7cd7c6430/
+On Sun, 24 Apr 2016 16:39:48 +0200, Eric Le Bihan wrote:
+> Enable support for bzip2 in Python host variant, so the tarfile module
+> works properly.
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-Similar to jquery-keyboard, it seems the cppzmq tarball on the autobuilder
-is corrupt.  Fix it by adding a .hash file so it falls back to our s.b.o
-mirror.
+Could you give some more details about this? The tarfile module seems
+to only import the bz2 module when a bzip2-compressed file is handled.
+Is this actually the case with rust?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cppzmq/cppzmq.hash | 2 ++
- 1 file changed, 2 insertions(+)
+I am hesitant between applying your patch (and therefore removing
+package/nodejs/0.10.45/0001-remove-python-bz2-dependency.patch), or
+adding an hidden BR2_HOST_PACKAGE_PYTHON_BZIP2 that the rust package
+could select to make sure bzip2 support is built into host-python.
 
-diff --git a/package/cppzmq/cppzmq.hash b/package/cppzmq/cppzmq.hash
-new file mode 100644
-index 0000000..792fb17
---- /dev/null
-+++ b/package/cppzmq/cppzmq.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 812b47f76c609e194b2607a186ff0d1b03b6a0c8ea13b20faa47570ddf38ef2c  cppzmq-68a7b09cfce01c4c279fba2cf91686fcfc566848.tar.gz
+Indeed, host-python is used by numerous packages, and we're trying to
+not add too many dependencies to host-python. On the other hand,
+building bzip2 is pretty fast, so maybe it's reasonable to add it as a
+mandatory dependency of host-python.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
