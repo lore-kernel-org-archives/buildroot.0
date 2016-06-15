@@ -1,45 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jun 2016 22:44:07 +0200
-Subject: [Buildroot] [PATCH v2 00/14] Bump NXP package versions
-In-Reply-To: <cover.1465578220.git.awebster@arcx.com>
-References: <cover.1464958470.git.awebster@arcx.com>
- <cover.1465578220.git.awebster@arcx.com>
-Message-ID: <20160615224407.6f9307b3@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Jun 2016 22:43:04 +0200
+Subject: [Buildroot] [git commit] python-itsdangerous: add .hash file
+Message-ID: <20160615204512.111337FBDC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=54b9786ee0605c494cdbdac834b2da4a2d76bf67
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 10 Jun 2016 14:09:04 -0400, Andrew Webster wrote:
+Fixes:
+http://autobuild.buildroot.org/results/596/596f5d6eee03ce94adaca34a6f5b61aed7f929ce/
+http://autobuild.buildroot.org/results/a4d/a4d836ab3a0b571b6eab232dc66b5b6ff238d440/
 
-> Andrew Webster (14):
->   nxp defconfigs: bump u-boot version to 4.1.15_1.1.0_ga
->   nxp defconfigs: bump kernel version to 4.1.15
->   kernel-module-imx-gpu-viv: bump version to that of the 5.0.11.p8.4
->     release
->   imx-gpu-viv: bump version to 5.0.11-p8.4
->   xdriver_xf86-video-imx-viv: bump version to 5.0.11-p8.4
->   firmware-imx: bump to version 5.4
->   gst1-imx: bump to version 0.12.1
->   imx-vpu: bump to version 5.4.33
->   imx-codec: rename from libfslcodec and bump version to 4.0.9
->   imx-parser: rename from libfslparser and bump version to 4.0.9
->   imx-vpuwrap: rename from libfslvpuwrap and bump version to 1.0.65
->   libimxvpuapi: bump version to 0.10.2
->   imx-lib: bump version to 5.4
->   imx-kobs: bump version to 5.4
+Similar to jquery-keyboard, it seems the python-itsdangerous tarball on the
+autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
+our s.b.o mirror.
 
-I've applied all 14 patches, some with a few changes (mainly after
-comments from Gary). I'll reply individually to the patches for which I
-made some changes, or for which I have some questions.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-itsdangerous/python-itsdangerous.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-itsdangerous/python-itsdangerous.hash b/package/python-itsdangerous/python-itsdangerous.hash
+new file mode 100644
+index 0000000..a927b8b
+--- /dev/null
++++ b/package/python-itsdangerous/python-itsdangerous.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 b035b2da1d493b00a5ee7a5b750f96929de87b610643939fbe382902774626fc  python-itsdangerous-0.24.tar.gz
