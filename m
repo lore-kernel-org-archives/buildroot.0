@@ -1,34 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jun 2016 23:05:44 +0200
-Subject: [Buildroot] [git commit] e2tools: add .hash file
-Message-ID: <20160615210635.E086781898@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Jun 2016 23:08:08 +0200
+Subject: [Buildroot] [PATCH 3/5] pkg-download: allow ssh URLs
+In-Reply-To: <1465917079-30473-3-git-send-email-gilles.chanteperdrix@xenomai.org>
+References: <20160614151017.GG3060@hermes.click-hack.org>
+ <1465917079-30473-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <1465917079-30473-3-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <20160615230808.4c1e063b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c51b20755bdf7a49a176aa50aa88fcb7af698c25
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-http://autobuild.buildroot.org/results/008/008df073bfa99f93e27d977ef1b64b79ef8b34c4/
-http://autobuild.buildroot.org/results/28f/28f0e730768bfaf9577069e4ab18b5a3f3e595a8/
+On Tue, 14 Jun 2016 17:11:17 +0200, Gilles Chanteperdrix wrote:
 
-Similar to jquery-keyboard, it seems the e2tools tarball on the autobuilder
-is corrupt.  Fix it by adding a .hash file so it falls back to our s.b.o
-mirror.
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index a0f694d..5f7a155 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -225,7 +225,7 @@ define DOWNLOAD_INNER
+>  	fi ; \
+>  	if test -n "$(1)" ; then \
+>  		case "$($(PKG)_SITE_METHOD)" in \
+> -			git) $($(3)_GIT) && exit ;; \
+> +			git|ssh) $($(3)_GIT) && exit ;; \
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/e2tools/e2tools.hash | 2 ++
- 1 file changed, 2 insertions(+)
+There has already been a question from Yann on a previous iteration of
+this patch, which hasn't been answered:
 
-diff --git a/package/e2tools/e2tools.hash b/package/e2tools/e2tools.hash
-new file mode 100644
-index 0000000..4cec81e
---- /dev/null
-+++ b/package/e2tools/e2tools.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 37bbd705170dff80720d68916f8d90803d71987e1b60f7149a285a7fcd539214  e2tools-3158ef18a903ca4a98b8fa220c9fc5c133d8bdf6.tar.gz
+"""
+What about Hg URLs that can also start with 'ssh://' ?
+"""
+
+Indeed, I don't see why a ssh:// URL should necessarily reference a Git
+repository. And there's no explanation about this decision in the
+commit log.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
