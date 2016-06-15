@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jun 2016 23:18:10 +0200
-Subject: [Buildroot] Patchwork cleanup week #24
-In-Reply-To: <CAJsd3zJkzAUJhvBPJ9hdQ60YmjSjuB7sahptmLFx6-1V70fLAg@mail.gmail.com>
-References: <20160615220634.67eb8fa9@free-electrons.com>
- <CAJsd3zJkzAUJhvBPJ9hdQ60YmjSjuB7sahptmLFx6-1V70fLAg@mail.gmail.com>
-Message-ID: <20160615231810.44fca8a1@free-electrons.com>
+Date: Wed, 15 Jun 2016 23:18:50 +0200
+Subject: [Buildroot] [PATCH 1/2] zic: bump to version 2016e
+In-Reply-To: <1466015309-1958-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1466015309-1958-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160615231850.1e9abb2a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-(Re-adding the Buildroot mailing list in Cc)
+On Wed, 15 Jun 2016 15:28:28 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/zic/zic.hash | 4 ++--
+>  package/zic/zic.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Wed, 15 Jun 2016 13:59:03 -0700, Benjamin Kamath wrote:
-> We needed the fortran / lapack patches for a project at work and I suppose
-> there isn't too much interest in them in general, so feel free to mark as
-> rejected.
-
-Actually, there is some interest. We recently merged a package for
-openmpi, in which we could not enable the Fortran support due to your
-series not being applied.
-
-> I'm personally much more interested in Samuel Martin's patches related to
-> creating relocatable host-tools / toolchains, which I think could allow
-> buildroot to much more easily create/distribute SDKs to go along with
-> images.
-
-Then, don't hesitate to review, or at least test Samuel's patches. Your
-feedback is very valuable to help his series move forward. Samuel's
-work is pretty complicated, so it will necessarily take some time to
-get merged. But at least, it's good to know there is some interest in
-this feature.
-
-Thanks for your feedback!
+Both patches applied to master, thanks.
 
 Thomas
 -- 
