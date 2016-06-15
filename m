@@ -1,39 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 15 Jun 2016 07:21:40 -0300
-Subject: [Buildroot] [PATCH] autofs: bump to version 5.1.2
-Message-ID: <1465986100-12473-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Wed, 15 Jun 2016 13:28:21 +0300
+Subject: [Buildroot] [PATCH] host-gdb: Forbid simulator for ARC
+Message-ID: <1465986501-16710-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/autofs/autofs.hash | 2 +-
- package/autofs/autofs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Forbid BR2_PACKAGE_HOST_GDB_SIM selection for ARC architectures.
+Simulator isn't supported by ARC.
 
-diff --git a/package/autofs/autofs.hash b/package/autofs/autofs.hash
-index 2d98375..72b1378 100644
---- a/package/autofs/autofs.hash
-+++ b/package/autofs/autofs.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/daemons/autofs/v5/sha256sums.asc
--sha256 e08ff0ef9ff365d87b6c33dca136d20e4e07675197a324f2816894cb437021c3  autofs-5.1.1.tar.xz
-+sha256 88b7de39088aead983e02072a7b753d5ee52ce419c8913f7a3d4ff5521313f0c  autofs-5.1.2.tar.xz
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-index a98e5eb..622bbe0 100644
---- a/package/autofs/autofs.mk
-+++ b/package/autofs/autofs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Fixes: http://autobuild.buildroot.net/results/4a1/4a1cd9a0beaff34830fd0f0ec47c30eda0a42d54//
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+---
+ package/gdb/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 7b319f5..004c53c 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -25,6 +25,7 @@ config BR2_PACKAGE_HOST_GDB_PYTHON
  
--AUTOFS_VERSION = 5.1.1
-+AUTOFS_VERSION = 5.1.2
- AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
- AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
- AUTOFS_LICENSE = GPLv2+
+ config BR2_PACKAGE_HOST_GDB_SIM
+ 	bool "Simulator support"
++  	depends on !BR2_arc
+ 	help
+ 	  This option enables the simulator support in the cross gdb.
+ 
 -- 
-2.7.3
+2.5.5
