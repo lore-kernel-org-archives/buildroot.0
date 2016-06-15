@@ -1,36 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jun 2016 16:02:43 +0200
-Subject: [Buildroot] [PATCH] gst1-plugins-bad: remove obsolete gettext
-	patch
-In-Reply-To: <6AAECB0035080A468CD3789966C9E87499A9D000@WRMAIL01.wr.imgtec.org>
- (Marcin Nowakowski's message of "Wed, 15 Jun 2016 12:21:49 +0000")
-References: <1465893927-8430-1-git-send-email-marcin.nowakowski@imgtec.com>
- <877fdrv6hu.fsf@dell.be.48ers.dk>
- <6AAECB0035080A468CD3789966C9E87499A9D000@WRMAIL01.wr.imgtec.org>
-Message-ID: <87eg7ysg70.fsf@dell.be.48ers.dk>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 15 Jun 2016 19:11:10 +0200
+Subject: [Buildroot] [V2] scancpan: improve message when bad host perl
+	version
+Message-ID: <1466010670-22639-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marcin" == Marcin Nowakowski <Marcin.Nowakowski@imgtec.com> writes:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ support/scripts/scancpan | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
- >> From: Peter Korsgaard
- >> 
- >> Hmm, but why are we patching this + autoreconf/gettextize in the first
- >> place when we don't do it for the other gstreamer1 packages?
- >> 
- >> Looking back in the history, I see Yann added GETTEXTIZE in 368eab1833
- >> to work around an issue doing autoreconf, but now we don't seem to have
- >> any reason to autoreconf in the first place any more.
-
- > It does indeed look like it's unnecessary now - in that case I'll post
- > a new patch that removes the patch file as well as removes autoreconf
- > and gettextize steps.
-
-Great, thanks!
-
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index 6c70cfb..6d7b774 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -471,7 +471,7 @@ unshift @INC, sub {
+ } # END OF FATPACK CODE
+ 
+ 
+-use 5.022;      # same major version as target perl
++use 5.010;
+ use strict;
+ use warnings;
+ use Fatal qw(open close);
+@@ -484,6 +484,17 @@ use HTTP::Tiny;
+ use Safe;
+ use MetaCPAN::API::Tiny;
+ 
++die <<"MSG" if $] < 5.022;
++This script needs a host perl with the same major version as Buildroot target perl.
++
++Your current host perl is:
++    $^X
++    version $]
++
++You may install a local one by running:
++    perlbrew install perl-5.22.2
++MSG
++
+ my ($help, $man, $quiet, $force, $recommend, $test, $host);
+ my $target = 1;
+ GetOptions( 'help|?' => \$help,
+@@ -748,7 +759,7 @@ support/scripts/scancpan Try-Tiny Moo
+ 
+ curl -kL http://install.perlbrew.pl | bash
+ 
+-perlbrew install perl-5.18.2
++perlbrew install perl-5.22.2
+ 
+ supports/scripts/scancpan [options] [distname ...]
+ 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+1.9.1
