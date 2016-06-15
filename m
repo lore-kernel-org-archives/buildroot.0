@@ -1,34 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jun 2016 22:05:59 +0200
-Subject: [Buildroot] [git commit] lpc3250loader: add .hash file
-Message-ID: <20160615200802.A70B981F5D@busybox.osuosl.org>
+Date: Wed, 15 Jun 2016 22:17:22 +0200
+Subject: [Buildroot] [git commit] cpuload: add .hash file
+Message-ID: <20160615201733.EC6F781E96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f47f721151825bc6aa1fda04e11b8320e680013d
+commit: https://git.buildroot.net/buildroot/commit/?id=2b1460e6100813d691f9b974af201110fd9e2b94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-http://autobuild.buildroot.org/results/a60/a601f30d7100821ad0e303c6338348751d7aa99b/
-http://autobuild.buildroot.org/results/56f/56f4e5f864da7e2176c78426d1d180c37966b181/
+http://autobuild.buildroot.org/results/e59/e595a49833bf3046af6fd6ef4ddb7443d40771b9/
 
-Similar to jquery-keyboard, it seems the lpc3250loader tarball on the
-autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
-our s.b.o mirror.
+Similar to jquery-keyboard, it seems the cpuload tarball on the autobuilder
+is corrupt.  Fix it by adding a .hash file so it falls back to our s.b.o
+mirror.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lpc3250loader/lpc3250loader.hash | 2 ++
+ package/cpuload/cpuload.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/lpc3250loader/lpc3250loader.hash b/package/lpc3250loader/lpc3250loader.hash
+diff --git a/package/cpuload/cpuload.hash b/package/cpuload/cpuload.hash
 new file mode 100644
-index 0000000..4f9dbc4
+index 0000000..02861ff
 --- /dev/null
-+++ b/package/lpc3250loader/lpc3250loader.hash
++++ b/package/cpuload/cpuload.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 267de7541c92e5b007b93c660a41188976d531a3757f4ffd9b7142d3994da7d1  lpc3250loader-1.0.tar.gz
++sha256 1d61f4776dc3e2746343d68b2ea2faf138e54666b630a6060df4f3945badbcae  cpuload-v0.3.tar.gz
