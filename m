@@ -1,24 +1,21 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 15 Jun 2016 07:35:16 +0000
-Subject: [Buildroot] [Bug 9001] Nodejs option not available
-In-Reply-To: <bug-9001-163@https.bugs.busybox.net/>
-References: <bug-9001-163@https.bugs.busybox.net/>
-Message-ID: <bug-9001-163-2N7NCvZecm@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Jun 2016 09:42:32 +0200
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.10.x series
+In-Reply-To: <1465947540-5885-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 14 Jun 2016 20:39:00 -0300")
+References: <1465947540-5885-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87twguucd3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9001
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
---- Comment #1 from Dr I J Ormshaw <ian_ormshaw@waters.com> ---
-Created attachment 6486
-  --> https://bugs.busybox.net/attachment.cgi?id=6486&action=edit
-Nodejs Config.in
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-removing the BR2_HOST_GCC_AT_LEAST_4_8 tests displays the nodejs option
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
