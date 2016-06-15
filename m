@@ -1,34 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jun 2016 22:49:02 +0200
-Subject: [Buildroot] [git commit] jsmin: add .hash file
-Message-ID: <20160615204906.029D281FC6@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Jun 2016 22:50:06 +0200
+Subject: [Buildroot] [PATCH v2 10/14] imx-parser: rename from
+ libfslparser and bump version to 4.0.9
+In-Reply-To: <605423330d42aee494d4b1addf05e08df982ad49.1465578220.git.awebster@arcx.com>
+References: <cover.1464958470.git.awebster@arcx.com>
+ <cover.1465578220.git.awebster@arcx.com>
+ <605423330d42aee494d4b1addf05e08df982ad49.1465578220.git.awebster@arcx.com>
+Message-ID: <20160615225006.7a12bd7a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b735b704d169b558a599f40404fce99d95c0219a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-http://autobuild.buildroot.org/results/c05/c05a9da77c4d8ad1e64e029c9e2fd65ebf35772d/
-http://autobuild.buildroot.org/results/6ac/6acb5d5c56ece6cefdd135bdb90be035a3200e0a/
+On Fri, 10 Jun 2016 14:13:18 -0400, Andrew Webster wrote:
 
-Similar to jquery-keyboard, it seems the jsmin tarball on the autobuilder is
-corrupt.  Fix it by adding a .hash file so it falls back to our s.b.o
-mirror.
+> +IMX_PARSER_VERSION = 4.0.9
+> +IMX_PARSER_SITE = $(FREESCALE_IMX_SITE)
+> +IMX_PARSER_SOURCE = imx-parser-$(IMX_PARSER_VERSION).bin
+> +IMX_PARSER_INSTALL_STAGING = YES
+> +
+> +IMX_PARSER_LICENSE = NXP Semiconductor Software License Agreement
+> +IMX_PARSER_LICENSE_FILES = EULA COPYING
+> +IMX_PARSER_REDISTRIBUTE = NO
+> +
+> +define IMX_PARSER_EXTRACT_CMDS
+> +	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_PARSER_SOURCE))
+> +endef
+> +
+> +# The Makefile installs several versions of the libraries, but we only
+> +# need one of them, depending on the platform.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/jsmin/jsmin.hash | 2 ++
- 1 file changed, 2 insertions(+)
+This package seems to have several variants of the libraries, including
+some that are enabled/disabled with --enable-fsw / --enable-fhw. It
+would be good to understand what those variants are, and if they are
+related to ARM EABIhf or not.
 
-diff --git a/package/jsmin/jsmin.hash b/package/jsmin/jsmin.hash
-new file mode 100644
-index 0000000..6080f10
---- /dev/null
-+++ b/package/jsmin/jsmin.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 aae127bf7291a7b2592f36599e5ed6c6423eac7abe0cd5992f82d6d46fe9ed2d  jsmin-1bf6ce5f74a9f8752ac7f5d115b8d7ccb31cfe1b.tar.gz
+Indeed, it is a bit strange that some parts of the i.MX6 blobs are
+EABIhf only (imx-gpu-viv), while some other parts don't see to be
+EABIhf. Or maybe imx-parser has both EABI and EABIhf variants ?
+
+In any case, a clarification would be good. I've nonetheless applied,
+since it was already something that wasn't clear in the pre-existing
+libfslparser package.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
