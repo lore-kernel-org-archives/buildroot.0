@@ -1,13 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jun 2016 22:45:46 +0200
-Subject: [Buildroot] [PATCH v2 04/14] imx-gpu-viv: bump version to
- 5.0.11-p8.4
-In-Reply-To: <CAAMH-yvfRCmYnFfWNc92bs3v0ceARaqdUuMrcsb_fe440ggUeQ@mail.gmail.com>
+Date: Wed, 15 Jun 2016 22:47:51 +0200
+Subject: [Buildroot] [PATCH v2 05/14] xdriver_xf86-video-imx-viv: bump
+ version to 5.0.11-p8.4
+In-Reply-To: <CAAMH-yvnwAdtfHfaMez7CZOnYd-SNQAd6ey7XnbLrF0bg21UPg@mail.gmail.com>
 References: <cover.1464958470.git.awebster@arcx.com>
  <cover.1465578220.git.awebster@arcx.com>
- <dabb46035a5df04fd47c23e690f24ed07a2204a8.1465578220.git.awebster@arcx.com>
- <CAAMH-yvfRCmYnFfWNc92bs3v0ceARaqdUuMrcsb_fe440ggUeQ@mail.gmail.com>
-Message-ID: <20160615224546.4fcf23cd@free-electrons.com>
+ <acc40a04b76b5069de297330cc9207d20f69a9a1.1465578220.git.awebster@arcx.com>
+ <CAAMH-yvnwAdtfHfaMez7CZOnYd-SNQAd6ey7XnbLrF0bg21UPg@mail.gmail.com>
+Message-ID: <20160615224751.230faf38@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,62 +16,48 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 13 Jun 2016 15:00:07 +0200, Gary Bisson wrote:
+On Mon, 13 Jun 2016 15:20:11 +0200, Gary Bisson wrote:
 
-> > diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-> > index 20759b1..9a7cf56 100644
-> > --- a/package/freescale-imx/imx-gpu-viv/Config.in
-> > +++ b/package/freescale-imx/imx-gpu-viv/Config.in
-> > @@ -2,12 +2,16 @@ comment "imx-gpu-viv needs an (e)glibc toolchain"
-> >         depends on BR2_arm
-> >         depends on !BR2_TOOLCHAIN_USES_GLIBC
-> >
-> > +comment "imx-gpu-viv needs EABIhf"
-> > +       depends on BR2_arm
-> > +       depends on !BR2_ARM_EABIHF
-
-The mali-t76x had a similar situation, but uses a single comment for
-the glibc and ARM EABIhf dependency, so I've changed it to do the same:
-
-comment "mali-t76x needs an (e)glibc toolchain with armhf enabled"
-        depends on BR2_arm
-        depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_ARM_EABIHF
-
-> >  config BR2_PACKAGE_IMX_GPU_VIV
-> >         bool "imx-gpu-viv"
-> >         select BR2_PACKAGE_HAS_LIBEGL
-> >         select BR2_PACKAGE_HAS_LIBGLES
-> >         select BR2_PACKAGE_HAS_LIBOPENVG
-> > -       depends on BR2_arm # Only relevant for i.MX6
-> > +       depends on BR2_ARM_EABIHF # Only relevant for EABIhf i.MX6  
+> > @@ -1,31 +0,0 @@
+> > -From 80c419dddf6483873503d90694c4b4ae34ffa5e4 Mon Sep 17 00:00:00 2001
+> > -From: Otavio Salvador <otavio@ossystems.com.br>
+> > -Date: Wed, 2 Dec 2015 13:50:57 +0000
+> > -Subject: [PATCH] Remove 'dix' internal header usage
+> > -Organization: O.S. Systems Software LTDA.
+> > -
+> > -The 'swaprep.h' is an internal Xorg header and is not being installed
+> > -anymore. The swap features are provided by the 'misc.h' header now.
+> > -
+> > -Upstream-Status: Pending
+> > -
+> > -Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>  
 > 
-> I'm not fond of this comment since "EABIhf i.MX6" are two terms that
-> don't go together IMO. I'd either just keep the previous comment or
-> something like "Only relevant for i.MX6 + EABIhf toolchain".
-> 
-> Thomas, what do you think?
+> I think you need to add your SOB in the patch like:
 
-Correct, I've changed this to:
+You're commenting on the patch that is *removed* so it's not really
+where a change should be done. However, I've added the reference to the
+upstream commit in the patch added by Andrew, indeed.
 
-        # Pre-built binaries only available for ARM EABIhf
-        depends on BR2_ARM_EABIHF
+> Also, should we add a dependency on ARM_EABIHF since it depends on
+> imx-gpu-viv? I'm never a 100% sure when you need to propagate those
+> dependencies.
 
-> > -IMX_GPU_VIV_BASE_VERSION = 5.0.11.p7.4
-> > -ifeq ($(BR2_ARM_EABIHF),y)
-> > +IMX_GPU_VIV_BASE_VERSION = 5.0.11.p8.4
-> >  IMX_GPU_VIV_VERSION = $(IMX_GPU_VIV_BASE_VERSION)-hfp
-> > -else
-> > -IMX_GPU_VIV_VERSION = $(IMX_GPU_VIV_BASE_VERSION)-sfp
-> > -endif
-> >  IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
-> >  IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin  
-> 
-> I think it is ok to keep the version naming like you did but m
+You need to propagate the dependencies when you're doing a select, i.e:
 
-I've removed IMX_GPU_VIV_BASE_VERSION entirely, and use directly
-IMX_GPU_VIV_VERSION.
+config BR2_PACKAGE_FOO
+	depends on BR2_ARM_EABIHF
 
-Thanks!
+config BR2_PACKAGE_BAR
+	select BR2_PACKAGE_FOO
+
+is wrong, because BR2_PACKAGE_BAR should replicate the "depends on
+BR2_ARM_EABIHF".
+
+However, in the case here, xdriver_xf86-video-imx-viv does:
+
+	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+
+so we're good (i.e it doesn't "select" the imx-gpu-viv package).
 
 Thomas
 -- 
