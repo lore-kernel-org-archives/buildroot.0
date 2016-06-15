@@ -1,47 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Jun 2016 22:18:59 +0200
-Subject: [Buildroot] [git commit] python-twisted: bump to version 16.2.0
-Message-ID: <20160615201934.5C1C681796@busybox.osuosl.org>
+Date: Wed, 15 Jun 2016 22:18:49 +0200
+Subject: [Buildroot] [git commit] python-txaio: bump to version 2.5.1
+Message-ID: <20160615201934.278E981796@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c163e0098c758fd0ebe78806fa5496a1ad999886
+commit: https://git.buildroot.net/buildroot/commit/?id=4d9a4f9e1099127b33504c91d06b9c3f4607655c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-twisted/python-twisted.hash | 6 +++---
- package/python-twisted/python-twisted.mk   | 4 ++--
+ package/python-txaio/python-txaio.hash | 6 +++---
+ package/python-txaio/python-txaio.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
-index 275cea8..8836a10 100644
---- a/package/python-twisted/python-twisted.hash
-+++ b/package/python-twisted/python-twisted.hash
+diff --git a/package/python-txaio/python-txaio.hash b/package/python-txaio/python-txaio.hash
+index 5d9e6cf..37da82b 100644
+--- a/package/python-txaio/python-txaio.hash
++++ b/package/python-txaio/python-txaio.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=266a085f5ce3fbc060818bd00bd6a888, sha256 locally computed
--md5     266a085f5ce3fbc060818bd00bd6a888 Twisted-16.1.1.tar.bz2
--sha256  fe7d001d9a803ed26cd0fd2f69fa4212ff025f3af6ef1a559d905fe551ab04e9  Twisted-16.1.1.tar.bz2
-+# md5 from https://pypi.python.org/pypi/Twisted/json, sha256 locally computed.
-+md5     8b35a88d5f1a4bfd762a008968fddabf  Twisted-16.2.0.tar.bz2
-+sha256  a090e8dc675e97fb20c3bb5f8114ae94169f4e29fd3b3cbede35705fd3cdbd79  Twisted-16.2.0.tar.bz2
-diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
-index e98e03f..3c45d01 100644
---- a/package/python-twisted/python-twisted.mk
-+++ b/package/python-twisted/python-twisted.mk
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=c2a7e6ebfdf8987c3938e40e39a3c5e7, sha256 locally computed
+-md5	c2a7e6ebfdf8987c3938e40e39a3c5e7  txaio-2.2.1.tar.gz
+-sha256	6eee00c397d8193d15313dfc36da3eac8d64edf0b92fe3b67cd5a735ffc3074b  txaio-2.2.1.tar.gz
++# md5 from https://pypi.python.org/pypi/txaio/json, sha256 locally computed.
++md5	7b0f5321515d380ad5d32f01666b6ee7  txaio-2.5.1.tar.gz
++sha256	625076477182e2dde78b79d0b2b0d6b3cecb0e24fe0ea7eaf2abd26a4c0dd1de  txaio-2.5.1.tar.gz
+diff --git a/package/python-txaio/python-txaio.mk b/package/python-txaio/python-txaio.mk
+index 127bc62..34c6e99 100644
+--- a/package/python-txaio/python-txaio.mk
++++ b/package/python-txaio/python-txaio.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TWISTED_VERSION = 16.1.1
-+PYTHON_TWISTED_VERSION = 16.2.0
- PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.bz2
--PYTHON_TWISTED_SITE = https://pypi.python.org/packages/source/T/Twisted
-+PYTHON_TWISTED_SITE = https://pypi.python.org/packages/18/85/eb7af503356e933061bf1220033c3a85bad0dbc5035dfd9a97f1e900dfcb
- PYTHON_TWISTED_SETUP_TYPE = setuptools
- PYTHON_TWISTED_LICENSE = MIT
- PYTHON_TWISTED_LICENSE_FILES = LICENSE
+-PYTHON_TXAIO_VERSION = 2.2.1
++PYTHON_TXAIO_VERSION = 2.5.1
+ PYTHON_TXAIO_SOURCE = txaio-$(PYTHON_TXAIO_VERSION).tar.gz
+-PYTHON_TXAIO_SITE = http://pypi.python.org/packages/source/t/txaio
++PYTHON_TXAIO_SITE = https://pypi.python.org/packages/45/e1/f7d88767d65dbfc20d4b4aa0dad657dbbe8ca629ead2bef24da04630a12a
+ PYTHON_TXAIO_LICENSE = MIT
+ PYTHON_TXAIO_LICENSE_FILES = LICENSE
+ PYTHON_TXAIO_SETUP_TYPE = setuptools
