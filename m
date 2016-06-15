@@ -1,46 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Jun 2016 23:48:43 +0200
-Subject: [Buildroot] [PATCH 2/5] readline: fix installed libraries
-	permission
-In-Reply-To: <20160615213211.GB23680@hermes.click-hack.org> (Gilles
- Chanteperdrix's message of "Wed, 15 Jun 2016 23:32:11 +0200")
-References: <20160614151017.GG3060@hermes.click-hack.org>
- <1465917079-30473-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1465917079-30473-2-git-send-email-gilles.chanteperdrix@xenomai.org>
- <87oa73v7wc.fsf@dell.be.48ers.dk>
- <20160615213211.GB23680@hermes.click-hack.org>
-Message-ID: <87twgu9l8k.fsf@dell.be.48ers.dk>
+Date: Wed, 15 Jun 2016 23:55:14 +0200
+Subject: [Buildroot] [git commit] fb-test-app: add .hash file
+Message-ID: <20160615215547.ACBD781E81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b4797798e06ebc8ff71c63550feac7d922092391
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Fixes:
+http://autobuild.buildroot.org/results/9aa/9aa6818d67d9cfd0bfdf14945476c7783cc05aad/
 
- > On Tue, Jun 14, 2016 at 10:21:23PM +0200, Peter Korsgaard wrote:
- >> >>>>> "Gilles" == Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org> writes:
- >> 
- >> > In order to avoid strip failing to strip the library.
- >> > Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
- >> 
- >> Thanks, but we already have logic in readline.mk to fix this:
+Similar to jquery-keyboard, it seems the fb-test-app tarball on the
+autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
+our s.b.o mirror.
 
- > Ok, I guess I made the original patch before you included that patch
- > in readline.mk.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/fb-test-app/fb-test-app.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-This patch was added in January. Please base your patches on recent
-versions to ensure they still apply / are needed.
-
- >> So why this patch instead? It would be good if we could get rid of both,
- >> have you tried sending it upstream?
-
- > No, and I will not.
-
-:/
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/fb-test-app/fb-test-app.hash b/package/fb-test-app/fb-test-app.hash
+new file mode 100644
+index 0000000..7f73753
+--- /dev/null
++++ b/package/fb-test-app/fb-test-app.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 6baf6b45968d0bb9a5527c6c4bf18661e9f9eb9be973a6d1952c38168c90d58f  fb-test-app-rosetta-1.1.0.tar.gz
