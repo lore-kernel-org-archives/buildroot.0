@@ -1,80 +1,45 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 15 Jun 2016 17:18:45 +0000
-Subject: [Buildroot] [PATCH] Binutils: ARC: Fix build failures if
-	makeinfo is missing
-In-Reply-To: <1465278105.7088.20.camel@synopsys.com>
-References: <1465211659-23861-1-git-send-email-vzakhar@synopsys.com>
- <87twh6hzxl.fsf@dell.be.48ers.dk>
- <20160606215833.57396ae8@free-electrons.com>
- <87fusqgfwi.fsf@dell.be.48ers.dk> <1465278105.7088.20.camel@synopsys.com>
-Message-ID: <1466011073.11148.25.camel@synopsys.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Jun 2016 20:20:39 +0200
+Subject: [Buildroot] [git commit] jquery-keyboard: add .hash file
+Message-ID: <20160615182522.C54847FE28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=d3af1257fc068b68be32fa3faf3a4258570c3db6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 2016-06-07 at 05:42 +0000, Alexey Brodkin wrote:
-> Hi Peter, Thomas,
-> 
-> On Mon, 2016-06-06 at 23:34 +0200, Peter Korsgaard wrote:
-> > 
-> > > > > > > 
-> > > > > > > "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> > ?> Hello,
-> > ?> On Mon, 06 Jun 2016 21:36:54 +0200, Peter Korsgaard wrote:
-> > 
-> > ?>> > Signed-off-by: Zakharov Vlad <vzakhar@synopsys.com>??
-> > ?>>?
-> > ?>> Committed, thanks.
-> > 
-> > ?> Why?
-> > 
-> > It was fixing autobuilder issues and seemed like a sensible fix that
-> > could be upstreamed. Looking again, I do see that it patched Makefile.in
-> > and not Makefile.am, so that's not too nice though.
-> Indeed our goal was to fix an issue that causes all autobuilder jobs for ARC
-> to fail. The problem is host binutils couldn't be built any longer after we switched
-> to arc-2016.03 tools. And now we're unblocked.
-> 
-> As for patching Makefile.in vs Makefile.am again that's just to do a minimal fix
-> in existing sources. Otherwise if we patch Makefile.am we'll need to regenerate
-> Makefile.in.
-> 
-> Even though Vlad has already sent the same patch to Binutils mailing list
-> (https://sourceware.org/ml/binutils/2016-06/msg00053.html) that's indeed not
-> the right fix - he'll need to fix Makefile.am but at least we're moving
-> in upstreaming direction.
-> 
-> > 
-> > ?> This problem also exists for other versions of binutils, and also for
-> > ?> gdb. And we have a patch series from Romain Naour sitting in patchwork
-> > ?> for several weeks.
-> Right so I would think as of now the same patch should be applied to other
-> affected instances of binutils and gdb.
-> 
-> > 
-> > ?> I don't know if Zlad's version is better or not than Romain's version.
-> > ?> But at least Romain's version was handling all binutils and gdb
-> > ?> versions, without patching directly Makefile.in files. So at first
-> > ?> sight, it looked a lot better than Zlad's version.
-> > 
-> > Ok, we can always revert if it isn't needed any more once Romain's
-> > series is applied.
-> 
->
-> In opposite Romain's fix only makes sense for BR and I don't really like that
-> approach. Why implement hacks on top of
-> upstream sources that are not
-> upstreamable at all. Why not try "to fix" generic "missing" script if we do think
-> it behaves improperly?
+Fixes:
+http://autobuild.buildroot.org/results/d75/d7500f7e063b94e9991bacfd1df9fa5aa1967db0/
+http://autobuild.buildroot.org/results/f48/f485ee75ec4c9b87f17b8b8dc1898590045474b4/
 
-So it looks like "makeinfo" is really required when building binutils/gdb from
-git sources, see that response in binutils mailing list:
-https://sourceware.org/ml/binutils/2016-06/msg00200.html
+For some odd reason, the file on the autobuilder ended up getting prefixed
+by these 7 bytes:
 
-So shall we just require "makeinfo" installed on build hosts?
+00000000  31 62 30 31 61 0d 0a 1f  8b 08 00 00 00 00 00 00  |1b01a...........|
 
--Alexey
+And suffixed by these 7 bytes:
+
+0001b020  00 0d 0a 30 0d 0a 0d 0a
+
+Which then caused gzip to fail to extract it. It is not clear to me how this
+could happen (Github glitz?  It looks suspiciously like HTTP/1.1 chunked
+encoding going wrong, E.G.  0x1b01a = 110618 = tarball size) - but adding a
+.hash file fixes it as the corruption gets detected and we fall back to our
+s.b.o mirror.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jquery-keyboard/jquery-keyboard.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/jquery-keyboard/jquery-keyboard.hash b/package/jquery-keyboard/jquery-keyboard.hash
+new file mode 100644
+index 0000000..7502867
+--- /dev/null
++++ b/package/jquery-keyboard/jquery-keyboard.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 6a20a1cdc9367c218048125eeb6f78d775175a964b3b9b781a931b63c0f98c66  jquery-keyboard-v1.18.12.tar.gz
