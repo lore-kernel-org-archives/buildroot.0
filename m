@@ -1,12 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 16 Jun 2016 19:23:23 +0200
+Date: Thu, 16 Jun 2016 19:30:16 +0200
 Subject: [Buildroot] Patchwork cleanup week #24
-In-Reply-To: <CAAXf6LWhMinzCm-oBqROt1ddxtdawHO+fLz61Bhwkqdy4mXkzA@mail.gmail.com>
+In-Reply-To: <20160616115627.6760c0dd@free-electrons.com>
 References: <20160615220634.67eb8fa9@free-electrons.com>
  <CAAXf6LVu1+p1mQrWvrUFyPzbDJeZGyFZLNeTCYQ-XrQR1SsjCw@mail.gmail.com>
  <20160616093209.739fbc03@free-electrons.com>
  <CAAXf6LWhMinzCm-oBqROt1ddxtdawHO+fLz61Bhwkqdy4mXkzA@mail.gmail.com>
-Message-ID: <20160616172323.GC3665@free.fr>
+ <20160616115627.6760c0dd@free-electrons.com>
+Message-ID: <20160616173016.GD3665@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,70 +16,62 @@ To: buildroot@busybox.net
 
 Thomas?, All,
 
-On 2016-06-16 11:52 +0200, Thomas De Schampheleire spake thusly:
-> On Thu, Jun 16, 2016 at 9:32 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Thomas,
-> >
-> > Thanks for giving some feedback!
-> >
-> > On Thu, 16 Jun 2016 09:18:37 +0200, Thomas De Schampheleire wrote:
-> >
-> >> [..]
-> >> >  6. wget download: 'scheme missing' results in empty output file
-> >> >     http://patchwork.ozlabs.org/patch/599387/
-> >> >
-> >>
-> >> The mail thread where this patch originated from is at:
-> >> http://lists.busybox.net/pipermail/buildroot/2016-February/153953.html
-> >>
-> >> There was no further response on this patch, but as far as I'm
-> >> concerned the issue is still present and could use a fix.
-> >>
-> >> What do you think about the proposed solution?
-> >
-> > I am not sure what is the best solution between:
-> >
-> >  - Defining <foo>_SITE to undefined when no value is specified by the
-> >    package (which is your proposal)
-> >
-> >  - Do not add to <pkg>_ALL_DOWNLOADS the files for which there is
-> >    no :// in the URL, and <pkg>_SITE is empty. This was the proposal
-> >    made by Yann in
-> >    http://lists.busybox.net/pipermail/buildroot/2016-February/153999.html.
+On 2016-06-16 11:56 +0200, Thomas Petazzoni spake thusly:
+> On Thu, 16 Jun 2016 11:52:29 +0200, Thomas De Schampheleire wrote:
+> > > I am not sure what is the best solution between:
+> > >
+> > >  - Defining <foo>_SITE to undefined when no value is specified by the
+> > >    package (which is your proposal)
+> > >
+> > >  - Do not add to <pkg>_ALL_DOWNLOADS the files for which there is
+> > >    no :// in the URL, and <pkg>_SITE is empty. This was the proposal
+> > >    made by Yann in
+> > >    http://lists.busybox.net/pipermail/buildroot/2016-February/153999.html.  
+> > 
+> > This does not give the intended result. It was in the thread but in
+> > March, so mailman fails to link it (meh...)
+> > http://lists.busybox.net/pipermail/buildroot/2016-March/156416.html
 > 
-> This does not give the intended result. It was in the thread but in
-> March, so mailman fails to link it (meh...)
-> http://lists.busybox.net/pipermail/buildroot/2016-March/156416.html
+> Ah, yes. Stupid mailman.
+> 
+> In any case, for such situations, it is good if a new patch gets sent,
+> which summarizes the problem, the different approaches, and why the
+> proposed approach was chosen.
+> 
+> It is really hard to remember all the details of this discussion that
+> happened months ago.
+> 
+> > >  - Error out when both <pkg>_SITE is empty and <pkg>_SOURCE is
+> > >    non-empty.  
+> > 
+> > I guess this could also work. If you prefer this I can cook up a real patch.
+> > Input from others is welcome too, of course.
+> 
+> Let's wait a bit for others to speak up.
 
-OK, now I remember this thread.
+Well, I prefer Thomas P. proposal: bail out if <pkg>_SITE is empty and
+<pkg>_SOURCE is not.
 
-I just tried:
+> What I find a bit with with the "undefined" idea, is that people will
+> get download failure due to http://undefined/foo not being available.
+> To me, it seems to make more sense to error out when _SITE is empty, we
+> will provide an even clearer error than a weird download failure on
+> http://undefined/foo.
 
-    $ wget /foo/bar
-    /foo/bart: Scheme missing.
-    $ echo $?
-    1
+Yes, this is definitely not user-friendly. Maybe:
 
-So, what? My wget does exit in error...
+    http://you-forgot-to-set-<pkg>_SITE/pkg-version-blabla
 
-    $ wget --version
-    GNU Wget 1.17.1 built on linux-gnu.
-
-What's yours?
+Just kidding. ;-]
 
 Regards,
 Yann E. MORIN.
 
-> >
-> >  - Error out when both <pkg>_SITE is empty and <pkg>_SOURCE is
-> >    non-empty.
-> 
-> I guess this could also work. If you prefer this I can cook up a real patch.
-> Input from others is welcome too, of course.
-> 
-> Thanks,
 > Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
