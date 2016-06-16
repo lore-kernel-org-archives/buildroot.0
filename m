@@ -1,54 +1,44 @@
-From: Jaap Crezee <jaap@jcz.nl>
-Date: Thu, 16 Jun 2016 07:47:44 +0200
-Subject: [Buildroot] [PATCH 1/1] lzop: fix for compiling host-lzop using
-	gcc-6
-Message-ID: <20160616054744.4092-1-jaap@jcz.nl>
+From: James Knight <james.d.knight@live.com>
+Date: Thu, 16 Jun 2016 02:06:08 -0400
+Subject: [Buildroot] [PATCH 1/1] logrotate: bump to version 3.9.2
+Message-ID: <BLU436-SMTP1791396907EF5364CDBA2A7A0560@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-src/miniacc.h: some changes (found upstream, but tweaked) to get gcc-6 to
-compile lzop in the form of host-lzop with a gcc-6 based host system.
+Aside from the version number increase, the package has now moved to
+GitHub.
 
-Signed-off-by: Jaap Crezee <jaap@jcz.nl>
+Signed-off-by: James Knight <james.d.knight@live.com>
 ---
- package/lzop/001-host-gcc-6.patch | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/lzop/001-host-gcc-6.patch
+ package/logrotate/logrotate.hash | 2 +-
+ package/logrotate/logrotate.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lzop/001-host-gcc-6.patch b/package/lzop/001-host-gcc-6.patch
-new file mode 100644
-index 0000000..852debe
---- /dev/null
-+++ b/package/lzop/001-host-gcc-6.patch
-@@ -0,0 +1,26 @@
-+--- a/src/miniacc.h.orig   2016-02-10 16:09:23.247315866 +0100
-++++ b/src/miniacc.h   2016-02-10 16:12:14.973297054 +0100
-+@@ -4469,12 +4469,12 @@
-+ #if defined(__MSDOS__) && defined(__TURBOC__) && (__TURBOC__ < 0x0150)
-+ #elif 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
-+ #else
-+-    ACCCHK_ASSERT((1   << (8*SIZEOF_INT-1)) < 0)
-++    ACCCHK_ASSERT((int)(1u   << (8*SIZEOF_INT-1)) < 0)
-+ #endif
-+     ACCCHK_ASSERT((1u  << (8*SIZEOF_INT-1)) > 0)
-+ #if 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
-+ #else
-+-    ACCCHK_ASSERT((1l  << (8*SIZEOF_LONG-1)) < 0)
-++    ACCCHK_ASSERT((long)(1ul  << (8*SIZEOF_LONG-1)) < 0)
-+ #endif
-+     ACCCHK_ASSERT((1ul << (8*SIZEOF_LONG-1)) > 0)
-+ #if defined(acc_int16e_t)
-+@@ -4703,7 +4703,7 @@
-+ #elif 1 && (ACC_CC_LCC || ACC_CC_LCCWIN32) && !defined(ACCCHK_CFG_PEDANTIC)
-+ #elif 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
-+ #elif !(ACC_BROKEN_INTEGRAL_PROMOTION) && (SIZEOF_INT > 1)
-+-    ACCCHK_ASSERT( (((unsigned char)128) << (int)(8*sizeof(int)-8)) < 0)
-++    ACCCHK_ASSERT( (int)((unsigned int)((unsigned char)128) << (int)(8*sizeof(int)-8)) < 0)
-+ #endif
-+ #if (ACC_CC_BORLANDC && (__BORLANDC__ >= 0x0530) && (__BORLANDC__ < 0x0560))
-+ #  pragma option pop
+diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
+index ef537a9..77d4dc8 100644
+--- a/package/logrotate/logrotate.hash
++++ b/package/logrotate/logrotate.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 700ed7ce9072a1cca324779a74797dfaefdae37ac50a817134b947c4ded1dfa7 logrotate-3.8.9.tar.gz
++sha256 2de00c65e23fa9d7909cae6594e550b9abe9a7eb1553669ddeaca92d30f97009 logrotate-3.9.2.tar.gz
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index 4a70040..de4d837 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LOGROTATE_VERSION = 3.8.9
+-LOGROTATE_SITE = https://www.fedorahosted.org/releases/l/o/logrotate
++LOGROTATE_VERSION = 3.9.2
++LOGROTATE_SITE = $(call github,logrotate,logrotate,$(LOGROTATE_VERSION))
+ LOGROTATE_LICENSE = GPLv2+
+ LOGROTATE_LICENSE_FILES = COPYING
+ LOGROTATE_DEPENDENCIES = popt host-pkgconf
 -- 
-2.8.3
+2.8.1.windows.1
