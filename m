@@ -1,33 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jun 2016 15:51:38 +0200
-Subject: [Buildroot] [PATCH v2] python-crossbar: bump to version 0.14.0
-In-Reply-To: <1466062517-15428-1-git-send-email-yegorslists@googlemail.com>
-References: <1466062517-15428-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160616155138.31cdc7b4@free-electrons.com>
+Date: Thu, 16 Jun 2016 15:52:20 +0200
+Subject: [Buildroot] [git commit] package/freeswitch: Disable mod_imagick,
+	broken with imagemagick7
+Message-ID: <20160616135227.B46C1804EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4c8046cf7a1e4a0508e01cdd38e61bc83fe6717b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 16 Jun 2016 09:35:17 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> As python-msgpack dependency was replaced with python-u-msgpack,
-> that is a pure Python implementation, BR2_TOOLCHAIN_HAS_SYNC_4
-> was removed. BR2_INSTALL_LIBSTDCPP remains because of python-pyasn.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes:
-> 	v2: remove BR2_TOOLCHAIN_HAS_SYNC_4 dependency (Thomas Petazzoni)
+Problem sent upstream: https://freeswitch.org/jira/browse/FS-9272
 
-Applied to master, thanks.
+Fixes
+http://autobuild.buildroot.net/results/e20/e20c0b9a32f6bef5d43369437895058d44d0df58/
+http://autobuild.buildroot.net/results/aa4/aa4d681de85497c2cdd2b0488d9b4569160b5f02/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freeswitch/freeswitch.mk | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 043102c..e7e9ece 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -173,11 +173,6 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ FREESWITCH_DEPENDENCIES += freetype
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_IMAGEMAGICK),y)
+-FREESWITCH_DEPENDENCIES += imagemagick
+-FREESWITCH_ENABLED_MODULES += formats/mod_imagick
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBBROADVOICE),y)
+ FREESWITCH_DEPENDENCIES += libbroadvoice
+ FREESWITCH_ENABLED_MODULES += codecs/mod_bv
