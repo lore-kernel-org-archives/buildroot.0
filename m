@@ -1,40 +1,31 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 16 Jun 2016 08:26:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: Disable mod_imagick,
-	broken with imagemagick7
-Message-ID: <1466058413-4945-1-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 16 Jun 2016 08:34:22 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2016-06-15
+In-Reply-To: <20160616063030.E179F101D31@stock.ovh.net> (Thomas Petazzoni's
+ message of "Thu, 16 Jun 2016 08:30:30 +0200 (CEST)")
+References: <20160616063030.E179F101D31@stock.ovh.net>
+Message-ID: <87porhabgx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Problem sent upstream: https://freeswitch.org/jira/browse/FS-9272
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes
-http://autobuild.buildroot.net/results/e20/e20c0b9a32f6bef5d43369437895058d44d0df58/
-http://autobuild.buildroot.net/results/aa4/aa4d681de85497c2cdd2b0488d9b4569160b5f02/
+ > Build statistics for 2016-06-15
+ > ===============================
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/freeswitch/freeswitch.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ >         success : 184
+ >        failures : 152
+ >        timeouts : 1  
 
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index a05b293..414f297 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -178,11 +178,6 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
- FREESWITCH_DEPENDENCIES += freetype
- endif
- 
--ifeq ($(BR2_PACKAGE_IMAGEMAGICK),y)
--FREESWITCH_DEPENDENCIES += imagemagick
--FREESWITCH_ENABLED_MODULES += formats/mod_imagick
--endif
--
- ifeq ($(BR2_PACKAGE_LIBBROADVOICE),y)
- FREESWITCH_DEPENDENCIES += libbroadvoice
- FREESWITCH_ENABLED_MODULES += codecs/mod_bv
+Notice that a lot of these failures are from github issue yesterday
+corrupting tarballs. I've pushed a number of .hash file additions, but
+there's still more to go.
+
+If somebody feels like helping, please send patches.
+
 -- 
-2.8.1
+Bye, Peter Korsgaard
