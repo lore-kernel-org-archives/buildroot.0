@@ -1,104 +1,84 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 16 Jun 2016 19:19:25 +0200
-Subject: [Buildroot] [PATCH] package/php: fix date.timezone
-In-Reply-To: <03dc8593-c3d7-3dbc-924c-81b58937e099@mind.be>
-References: <1465728504-17997-1-git-send-email-yann.morin.1998@free.fr>
- <03dc8593-c3d7-3dbc-924c-81b58937e099@mind.be>
-Message-ID: <20160616171925.GB3665@free.fr>
+Date: Thu, 16 Jun 2016 19:23:23 +0200
+Subject: [Buildroot] Patchwork cleanup week #24
+In-Reply-To: <CAAXf6LWhMinzCm-oBqROt1ddxtdawHO+fLz61Bhwkqdy4mXkzA@mail.gmail.com>
+References: <20160615220634.67eb8fa9@free-electrons.com>
+ <CAAXf6LVu1+p1mQrWvrUFyPzbDJeZGyFZLNeTCYQ-XrQR1SsjCw@mail.gmail.com>
+ <20160616093209.739fbc03@free-electrons.com>
+ <CAAXf6LWhMinzCm-oBqROt1ddxtdawHO+fLz61Bhwkqdy4mXkzA@mail.gmail.com>
+Message-ID: <20160616172323.GC3665@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Thomas?, All,
 
-On 2016-06-14 00:42 +0200, Arnout Vandecappelle spake thusly:
-> On 12-06-16 12:48, Yann E. MORIN wrote:
-> > In 5f37843a (php.ini: set date.timezone), the configured timezone was
-> > used as the default for PHP.
-> > 
-> > However, BR2_TARGET_LOCALTIME is a string, so is quoted, so it is never
-> > empty, so the check for emptynessnever matches.
-> > 
-> > Fix that by q-stripping the value before testing it. Note however that
-> > we do not q-strip it before storing it in the php.ini file, because it
-> > has to be q-stripped in there.
+On 2016-06-16 11:52 +0200, Thomas De Schampheleire spake thusly:
+> On Thu, Jun 16, 2016 at 9:32 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Thomas,
+> >
+> > Thanks for giving some feedback!
+> >
+> > On Thu, 16 Jun 2016 09:18:37 +0200, Thomas De Schampheleire wrote:
+> >
+> >> [..]
+> >> >  6. wget download: 'scheme missing' results in empty output file
+> >> >     http://patchwork.ozlabs.org/patch/599387/
+> >> >
+> >>
+> >> The mail thread where this patch originated from is at:
+> >> http://lists.busybox.net/pipermail/buildroot/2016-February/153953.html
+> >>
+> >> There was no further response on this patch, but as far as I'm
+> >> concerned the issue is still present and could use a fix.
+> >>
+> >> What do you think about the proposed solution?
+> >
+> > I am not sure what is the best solution between:
+> >
+> >  - Defining <foo>_SITE to undefined when no value is specified by the
+> >    package (which is your proposal)
+> >
+> >  - Do not add to <pkg>_ALL_DOWNLOADS the files for which there is
+> >    no :// in the URL, and <pkg>_SITE is empty. This was the proposal
+> >    made by Yann in
+> >    http://lists.busybox.net/pipermail/buildroot/2016-February/153999.html.
 > 
->  That's actually not correct. The idea is that it should be possible to run:
-> 
-> make BR2_TARGET_LOCALTIME="UTC"
+> This does not give the intended result. It was in the thread but in
+> March, so mailman fails to link it (meh...)
+> http://lists.busybox.net/pipermail/buildroot/2016-March/156416.html
 
-No, please no...I am absolutely against allowing this.
+OK, now I remember this thread.
 
-It is OK for things like BR2_DL_DIR or BR2_DEFCONFIG, for which we have
-explicit handling and does not "leak" into the target filesystem.
+I just tried:
 
-However, for configuration variables that affect the target filesystem,
-I think we should not allow specifying them on the command line at all.
-Or what, we could pass any-and-all options on the command line? Noooo...
+    $ wget /foo/bar
+    /foo/bart: Scheme missing.
+    $ echo $?
+    1
 
-Configuration variables that affect the content of the target filesystem
-should all be confined to the .config file.
+So, what? My wget does exit in error...
 
-However, there is a remaining bug lurking around (see below).
+    $ wget --version
+    GNU Wget 1.17.1 built on linux-gnu.
 
-> in which case the variable will _not_ have quotes. Therefore, everywhere in
-> Buildroot, we do something like:
-> 
-> PHP_LOCALTIME = "$(call qstrip,$(BR2_TARGET_LOCALTIME))"
-> 
->  Note BTW that we already have
-> 
-> TZ_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
-> TZDATA_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
-> 
-> so perhaps it would make sense to move this qstripping to global scope...
-
-Yes, maybe... I'll see to it.
-
->  Regards,
->  Arnout
-> 
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Floris Bos <bos@je-eigen-domein.nl>
-> > ---
-> >  package/php/php.mk | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/package/php/php.mk b/package/php/php.mk
-> > index 2997b1b..8dc70f0 100644
-> > --- a/package/php/php.mk
-> > +++ b/package/php/php.mk
-> > @@ -32,9 +32,10 @@ ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-> >  PHP_STATIC_LIBS += -lpthread
-> >  endif
-> >  
-> > -ifeq ($(BR2_TARGET_LOCALTIME),)
-> > +ifeq ($(call qstrip,$(BR2_TARGET_LOCALTIME)),)
-> >  PHP_LOCALTIME = UTC
-
-Here, UTC is not quoted... I'll fix that.
+What's yours?
 
 Regards,
 Yann E. MORIN.
 
-> >  else
-> > +# Not q-stripping this value, as we need quotes in the php.ini file
-> >  PHP_LOCALTIME = $(BR2_TARGET_LOCALTIME)
-> >  endif
-> >  
-> > 
+> >
+> >  - Error out when both <pkg>_SITE is empty and <pkg>_SOURCE is
+> >    non-empty.
 > 
+> I guess this could also work. If you prefer this I can cook up a real patch.
+> Input from others is welcome too, of course.
 > 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> Thanks,
+> Thomas
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
