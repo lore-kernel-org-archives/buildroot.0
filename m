@@ -1,217 +1,96 @@
-From: fabrice.fontaine at orange.com <fabrice.fontaine@orange.com>
-Date: Thu, 16 Jun 2016 09:33:37 +0200
-Subject: [Buildroot] [PATCH 2/2] alljoyn-base: new package
-Message-ID: <10863_1466062435_57625663_10863_288_1_15d7af9e-545f-4da3-9fe7-ec91bc1eb8ab@OPEXCLILM5F.corporate.adroot.infra.ftgroup>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu, 16 Jun 2016 09:35:17 +0200
+Subject: [Buildroot] [PATCH v2] python-crossbar: bump to version 0.14.0
+Message-ID: <1466062517-15428-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-AllJoyn Base Services are common services used by many devices,
-providing a set of interfaces for different devices to interact and
-interoperate with one another.
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-https://allseenalliance.org
+As python-msgpack dependency was replaced with python-u-msgpack,
+that is a pure Python implementation, BR2_TOOLCHAIN_HAS_SYNC_4
+was removed. BR2_INSTALL_LIBSTDCPP remains because of python-pyasn.
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                      |   1 +
- package/alljoyn-base/Config.in         |  40 +++++++++++++
- package/alljoyn-base/alljoyn-base.hash |   2 +
- package/alljoyn-base/alljoyn-base.mk   | 102 +++++++++++++++++++++++++++++++++
- 4 files changed, 145 insertions(+)
- create mode 100644 package/alljoyn-base/Config.in
- create mode 100644 package/alljoyn-base/alljoyn-base.hash
- create mode 100644 package/alljoyn-base/alljoyn-base.mk
+Changes:
+	v2: remove BR2_TOOLCHAIN_HAS_SYNC_4 dependency (Thomas Petazzoni)
 
-diff --git a/package/Config.in b/package/Config.in
-index f0106da..5cde173 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1124,6 +1124,7 @@ endmenu
- menu "Networking"
- 	source "package/agentpp/Config.in"
- 	source "package/alljoyn/Config.in"
-+	source "package/alljoyn-base/Config.in"
- 	source "package/batman-adv/Config.in"
- 	source "package/c-ares/Config.in"
- 	source "package/canfestival/Config.in"
-diff --git a/package/alljoyn-base/Config.in b/package/alljoyn-base/Config.in
-new file mode 100644
-index 0000000..94424a9
---- /dev/null
-+++ b/package/alljoyn-base/Config.in
-@@ -0,0 +1,40 @@
-+config BR2_PACKAGE_ALLJOYN_BASE
-+	bool "alljoyn-base"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_ALLJOYN
-+	select BR2_PACKAGE_LIBCAP
-+	help
-+	  AllJoyn Base Services are common services used by many devices,
-+	  providing a set of interfaces for different devices to interact and
-+	  interoperate with one another.
-+
-+	  https://allseenalliance.org
-+
-+comment "alljoyn-base needs a toolchain w/ C++, threads and wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR
-+
-+if BR2_PACKAGE_ALLJOYN_BASE
-+
-+config BR2_PACKAGE_ALLJOYN_BASE_CONTROLPANEL
-+	bool "alljoyn-controlpanel"
-+	help
-+	  Enable AllJoyn Control Panel base service which allows devices to
-+	  advertise a virtual control panel to be controlled remotely.
-+
-+config BR2_PACKAGE_ALLJOYN_BASE_NOTIFICATION
-+	bool "alljoyn-notification"
-+	help
-+	  Enable AllJoyn Notification base service which allows text-based
-+	  notifications to be sent and received by devices on the AllJoyn
-+	  network. Also supports audio and images via URLs.
-+
-+config BR2_PACKAGE_ALLJOYN_BASE_ONBOARDING
-+	bool "alljoyn-onboarding"
-+	help
-+	  Enable AllJoyn Onboarding base service which provides a consistent way
-+	  to bring a new device onto the Wi-Fi network.
-+
-+endif # BR2_PACKAGE_ALLJOYN_BASE
-diff --git a/package/alljoyn-base/alljoyn-base.hash b/package/alljoyn-base/alljoyn-base.hash
-new file mode 100644
-index 0000000..dbec3a3
---- /dev/null
-+++ b/package/alljoyn-base/alljoyn-base.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	742f724b3a06c8fc4039591dba24871755728221ca5dc4afb78ebd9a7e3beb44	alljoyn-base-16.04.00.tar.gz
-diff --git a/package/alljoyn-base/alljoyn-base.mk b/package/alljoyn-base/alljoyn-base.mk
-new file mode 100644
-index 0000000..acfcb95
---- /dev/null
-+++ b/package/alljoyn-base/alljoyn-base.mk
-@@ -0,0 +1,102 @@
-+################################################################################
-+#
-+# alljoyn-base
-+#
-+################################################################################
-+
-+ALLJOYN_BASE_REV = 16.04
-+ALLJOYN_BASE_VERSION = $(ALLJOYN_BASE_REV).00
-+ALLJOYN_BASE_SOURCE = alljoyn-base-$(ALLJOYN_BASE_VERSION).tar.gz
-+ALLJOYN_BASE_SITE = \
-+	https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_BASE_REV)
-+# See https://allseenalliance.org/alliance/ip-policy
-+ALLJOYN_BASE_LICENSE = ISC
-+# AllJoyn does not provide any license files with source code
-+# ALLJOYN_BASE_LICENSE_FILES = 
-+
-+ALLJOYN_BASE_DEPENDENCIES = host-scons libcap alljoyn
-+ALLJOYN_BASE_INSTALL_STAGING = YES
-+
-+# If BR2_PACKAGE_OPENSSL is set, use openssl otherwise use builtin crypto
-+ifeq ($(BR2_PACKAGE_OPENSSL), y)
-+ALLJOYN_BASE_DEPENDENCIES += openssl
-+ALLJOYN_BASE_CRYPTO = openssl
-+else
-+ALLJOYN_BASE_CRYPTO = builtin
-+endif
-+
-+# AllJoyn can be compiled in debug or release mode. By default, AllJoyn is built
-+# in debug mode.
-+ALLJOYN_BASE_VARIANT = release
-+
-+ALLJOYN_BASE_BINDINGS = c,cpp
-+
-+# By setting openwrt for OS and CPU, AllJoyn cross-compilation can be finely
-+# tuned through TARGET_xxx options. All TARGET_xxx variables must be defined
-+# otherwise compilation will fail.
-+# CROSS_COMPILE option should not be used as it works only for linux/ARM.
-+ALLJOYN_BASE_OS = openwrt
-+ALLJOYN_BASE_CPU = openwrt
-+
-+# AllJoyn install everything in this relative path
-+ALLJOYN_BASE_DISTDIR = \
-+	/build/$(ALLJOYN_OS)/$(ALLJOYN_CPU)/$(ALLJOYN_VARIANT)/dist/
-+
-+ALLJOYN_BASE_SCONS_OPTS = \
-+	-j$(PARALLEL_JOBS) \
-+	V=1 \
-+	OS=$(ALLJOYN_BASE_OS) \
-+	CPU=$(ALLJOYN_BASE_CPU) \
-+	VARIANT=$(ALLJOYN_BASE_VARIANT) \
-+	BR=off \
-+	CRYPTO=$(ALLJOYN_BASE_CRYPTO) \
-+	BINDINGS=$(ALLJOYN_BASE_BINDINGS) \
-+	ALLJOYN_DISTDIR="$(STAGING_DIR)"\
-+	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-+	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
-+	TARGET_LINKFLAGS="$(TARGET_LINKFLAGS)" \
-+	TARGET_CC="$(TARGET_CC)" \
-+	TARGET_CXX="$(TARGET_CXX)" \
-+	TARGET_LD="$(TARGET_LD)" \
-+	TARGET_LINK="$(TARGET_CXX)" \
-+	TARGET_AR="$(TARGET_AR)" \
-+	TARGET_RANLIB="$(TARGET_RANLIB)" \
-+	TARGET_PATH="$(BR_PATH)"
-+
-+ifeq ($(BR2_PACKAGE_ALLJOYN_BASE_CONTROLPANEL), y)
-+ALLJOYN_BASE_BUILD_CONTROLPANEL = \
-+	cd $(@D)/controlpanel; $(SCONS) $(ALLJOYN_BASE_SCONS_OPTS)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ALLJOYN_BASE_NOTIFICATION), y)
-+ALLJOYN_BASE_BUILD_NOTIFICATION = \
-+	cd $(@D)/notification; $(SCONS) $(ALLJOYN_BASE_SCONS_OPTS)
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ALLJOYN_BASE_ONBOARDING), y)
-+ALLJOYN_BASE_BUILD_ONBOARDING = \
-+	cd $(@D)/onboarding; $(SCONS) $(ALLJOYN_BASE_SCONS_OPTS)
-+endif
-+
-+define ALLJOYN_BASE_BUILD_CMDS
-+	$(ALLJOYN_BASE_BUILD_CONTROLPANEL)
-+	$(ALLJOYN_BASE_BUILD_NOTIFICATION)
-+	$(ALLJOYN_BASE_BUILD_ONBOARDING)
-+endef
-+
-+# Suppress error code and error message as those directories could be missing if
-+# BR2_PACKAGE_ALLJOYN_BASE_xxx variables are all unset
-+define ALLJOYN_BASE_INSTALL_STAGING_CMDS
-+	cp -a $(@D)/*/$(ALLJOYN_BASE_DISTDIR)/*/lib/lib* \
-+		$(STAGING_DIR)/usr/lib/ 2>/dev/null || :
-+	cp -a $(@D)/*/$(ALLJOYN_BASE_DISTDIR)/*/inc/* \
-+		$(STAGING_DIR)/usr/include/ 2>/dev/null || :
-+endef
-+
-+# Only install alljoyn dynamic libraries into target directory
-+define ALLJOYN_BASE_INSTALL_TARGET_CMDS
-+	cp -a $(@D)/*/$(ALLJOYN_BASE_DISTDIR)/*/lib/lib*.so* \
-+		$(TARGET_DIR)/usr/lib/ 2>/dev/null || :
-+endef
-+
-+$(eval $(generic-package))
+ package/python-crossbar/Config.in            | 10 +++++-----
+ package/python-crossbar/python-crossbar.hash |  6 +++---
+ package/python-crossbar/python-crossbar.mk   |  4 ++--
+ 3 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
+index 4e613db..be83325 100644
+--- a/package/python-crossbar/Config.in
++++ b/package/python-crossbar/Config.in
+@@ -9,7 +9,6 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	select BR2_PACKAGE_PYTHON_JINJA2
+ 	select BR2_PACKAGE_PYTHON_LMDB
+ 	select BR2_PACKAGE_PYTHON_MISTUNE
+-	select BR2_PACKAGE_PYTHON_MSGPACK
+ 	select BR2_PACKAGE_PYTHON_NETADDR
+ 	select BR2_PACKAGE_PYTHON_PSUTIL
+ 	select BR2_PACKAGE_PYTHON_PYASN
+@@ -20,6 +19,7 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	select BR2_PACKAGE_PYTHON_PYOPENSSL
+ 	select BR2_PACKAGE_PYTHON_PYTRIE
+ 	select BR2_PACKAGE_PYTHON_PYYAML
++	select BR2_PACKAGE_PYTHON_SDNOTIFY
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS
+ 	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
+ 	select BR2_PACKAGE_PYTHON_SETPROCTITLE
+@@ -27,10 +27,11 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	select BR2_PACKAGE_PYTHON_SHUTILWHICH if BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_PYTHON_TREQ
+ 	select BR2_PACKAGE_PYTHON_TWISTED
+-	select BR2_PACKAGE_PYTHON_UJSON
++	select BR2_PACKAGE_PYTHON_U_MSGPACK
++	select BR2_PACKAGE_PYTHON_UBJSON
++	select BR2_PACKAGE_PYTHON_WATCHDOG
+ 	select BR2_PACKAGE_PYTHON_WSACCEL
+-	depends on BR2_INSTALL_LIBSTDCPP # python-msgpack -> msgpack
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # python-msgpack -> msgpack
++	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
+ 	help
+ 	  Crossbar.io is an open-source WAMP application router that
+ 	  allows to build advanced applications from loosely-coupled
+@@ -39,5 +40,4 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	  https://pypi.python.org/pypi/crossbar
+ 
+ comment "python-crossbar needs a toolchain w/ C++"
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
+index 0690e56..a500bcf 100644
+--- a/package/python-crossbar/python-crossbar.hash
++++ b/package/python-crossbar/python-crossbar.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=cbe9b62a1ec2eebbc0cd0cef887a4993, sha256 locally computed.
+-md5	cbe9b62a1ec2eebbc0cd0cef887a4993  crossbar-0.12.1.tar.gz
+-sha256	4919e683bcfa3c633da8207f24189fd196ef8412b647f0365cf74c0bff8b4ada  crossbar-0.12.1.tar.gz
++# md5 from https://pypi.python.org/pypi/crossbar/json, sha256 locally computed.
++md5	516478cc368503a0a0babc1dc28c5085  crossbar-0.14.0.tar.gz
++sha256	6242ef34c56061850743d750d042993590ca7ec8ebe7b28c21ed05bb0904d71b  crossbar-0.14.0.tar.gz
+diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
+index 96bc254..3d82d77 100644
+--- a/package/python-crossbar/python-crossbar.mk
++++ b/package/python-crossbar/python-crossbar.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CROSSBAR_VERSION = 0.12.1
++PYTHON_CROSSBAR_VERSION = 0.14.0
+ PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
+-PYTHON_CROSSBAR_SITE = http://pypi.python.org/packages/source/c/crossbar
++PYTHON_CROSSBAR_SITE = https://pypi.python.org/packages/f0/9a/e0b77e15698c47b6293655bc0e1996dd8e87bd8af7bc7434a5c8281a024e
+ PYTHON_CROSSBAR_LICENSE = AGPLv3
+ PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
+ PYTHON_CROSSBAR_SETUP_TYPE = setuptools
 -- 
-2.7.4
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.8.1
