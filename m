@@ -1,33 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jun 2016 22:46:31 +0200
-Subject: [Buildroot] [git commit] pps-tools: add .hash file
-Message-ID: <20160616204727.C4131817E3@busybox.osuosl.org>
+Date: Thu, 16 Jun 2016 22:50:10 +0200
+Subject: [Buildroot] [git commit] freerdp: add .hash file
+Message-ID: <20160616205110.265117FEA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e398c23b4cb7552ef7dcbcaa4eee4b3178dc3589
+commit: https://git.buildroot.net/buildroot/commit/?id=d8eeeb98523fd7d1ec5a9575cec80c6d6e9444bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-http://autobuild.buildroot.org/results/006/00648b4ca73116933a44cccef3dbefbd16766246/
+http://autobuild.buildroot.org/results/118/1188a06b389072e101061f163f1b7f9fc3ecd092/
+http://autobuild.buildroot.org/results/62b/62b2dbeadcb93f821a27d0ff6078b38bdbc44970/
 
-Similar to jquery-keyboard, it seems the pps-tools tarball on the
-autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
-our s.b.o mirror.
+Similar to jquery-keyboard, it seems the freerdp tarball on the autobuilder
+is corrupt.  Fix it by adding a .hash file so it falls back to our s.b.o
+mirror.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pps-tools/pps-tools.hash | 2 ++
+ package/freerdp/freerdp.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/pps-tools/pps-tools.hash b/package/pps-tools/pps-tools.hash
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
 new file mode 100644
-index 0000000..9fa62cb
+index 0000000..2ced373
 --- /dev/null
-+++ b/package/pps-tools/pps-tools.hash
++++ b/package/freerdp/freerdp.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 28d4e5aa845f659a6ab4174bbf579e22e2d2c87dc72fd6d07306a6a249c27c76  pps-tools-0deb9c7e135e9380a6d09e9d2e938a146bb698c8.tar.gz
++sha256 1db496cca391f76382ef284db2d0306d5c15bf515ee2c964319c22272d969a32  freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16.tar.gz
