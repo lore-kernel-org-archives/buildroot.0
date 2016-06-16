@@ -1,74 +1,59 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Thu, 16 Jun 2016 12:19:46 +0000
-Subject: [Buildroot] [PATCH 1/1] package/libmicrohttpd: Fix pthread
- detection on bfin and arc
-In-Reply-To: <1465846126-19316-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465846126-19316-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1466079586.18286.17.camel@synopsys.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 16 Jun 2016 15:12:06 +0200 (CEST)
+Subject: [Buildroot] Allowing user to run ldconfig in post-build script
+In-Reply-To: <1722059483.342813959.1466082436418.JavaMail.root@zimbra32-e6.priv.proxad.net>
+Message-ID: <1720572432.342833812.1466082726731.JavaMail.root@zimbra32-e6.priv.proxad.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi!
 
-On Mon, 2016-06-13 at 21:28 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/593/593b5050473a83a9ddcada9de39f8f14ab38d554/
-> http://autobuild.buildroot.net/results/ff0/ff058a378b91740b5b399f32a6b375fbc3c8df06/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> ?package/libmicrohttpd/0001-pthread-reentrant.patch | 31 ++++++++++++++++++++++
-> ?1 file changed, 31 insertions(+)
-> ?create mode 100644 package/libmicrohttpd/0001-pthread-reentrant.patch
-> 
-> diff --git a/package/libmicrohttpd/0001-pthread-reentrant.patch b/package/libmicrohttpd/0001-pthread-reentrant.patch
-> new file mode 100644
-> index 0000000..4f576fa
-> --- /dev/null
-> +++ b/package/libmicrohttpd/0001-pthread-reentrant.patch
-> @@ -0,0 +1,31 @@
-> +Fix pthread detection
-> +
-> +The latest version bump included an update to m4/ax_pthread.m4 from
-> +GNU autoconf which changed the way configure looks for pthread support.
-> +
-> +On Linux the macro _REENTRANT is now being searched for:
-> +https://github.com/peti/autoconf-archive/commit/39683064bbccb4008f239262cb681a970bf53603#diff-851a07ee321dc42003ac94cf4a9628faR211
-> +which fails at least on arc and blackfin.
-> +
-> +Before the autoconf update _REENTRANT was not searched on Linux:
-> +https://github.com/peti/autoconf-archive/commit/39683064bbccb4008f239262cb681a970bf53603#diff-851a07ee321dc42003ac94cf4a9628faL273
-> +
-> +This patch removes the check for the Linux platform by patching the
-> +configure script directly to avoid an autoreconf run.
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +(Problem reported upstream:
-> + https://savannah.gnu.org/patch/?8186#comment24)
-> +
-> +diff -uNr libmicrohttpd-0.9.50.org/configure libmicrohttpd-0.9.50/configure
-> +--- libmicrohttpd-0.9.50.org/configure	2016-06-02 10:03:29.000000000 +0200
-> ++++ libmicrohttpd-0.9.50/configure	2016-06-13 21:11:36.688144929 +0200
-> +@@ -13761,7 +13761,7 @@
-> + # correctly enabled
-> +?
-> + case $host_os in
-> +-????????darwin* | hpux* | linux* | osf* | solaris*)
-> ++????????darwin* | hpux* | osf* | solaris*)
-> +?????????ax_pthread_check_macro="_REENTRANT"
-> +?????????;;
-> +?
+Since commit 9c40723, handling of ldconfig in the main Makefile as been dropped,
+and if /etc/ld.so.conf is found in the target root filesystem, the build fails.
 
-I applied this patch on upstream master (git-id: 55bf6034d440ccc91c7d7c914dbc040c8264b6bf). The problem with libmicrohttpd build is fixed by
-this patch.
+Not being able to run ldconfig and generate the ld.so cache has two drawbacks:
 
-Are there any comments or remarks about the patch??
-If not, then please consider to apply it.
+ - it prevents the user from installing some libraries in other locations than
+   /lib and /usr/lib (e.g. /opt/foo/lib). This can be solved with symlinks,
+   though.
+ - when running a program, ld.so has to explore all the library paths to find
+   the correct location of the required libraries. This results in zillions of
+   failed calls to open(), i.e. wasted time.
 
-Tested-by: Vlad Zakharov <vzakhar@synopsys.com>
--- 
-Best regards,
-Vlad Zakharov <vzakhar@synopsys.com>
+So, it would be better to add an entry in the system configuration menu so that
+the user can explicitly disable the sanity check introduced by 9c40723. Hence
+he/she will be able to run the cross-compiled version of ldconfig (found in
+${STAGING_DIR}/sbin/ldconfig) via the version of QEMU matching the target.
+
+Attached are:
+
+ - a patch to add the aforementioned configuration entry, named
+   BR2_TARGET_LDCONFIG.
+ - an example of post-build script to run ldconfig via QEMU.
+
+However, instead of using a post-build script, the operations could be performed
+in a Buildroot Makefile. Which one should be updated? The main Makefile or the
+Makefile of the skeleton package? In any cases, a dependency to host-qemu will
+be introduced.
+
+Regards,
+
+--
+ELB
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-system-allow-running-ldconfig.patch
+Type: text/x-patch
+Size: 1665 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160616/ccf701b6/attachment.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: post-build.sh
+Type: application/x-shellscript
+Size: 1185 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160616/ccf701b6/attachment-0001.bin>
