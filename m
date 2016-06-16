@@ -1,34 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jun 2016 15:52:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: Disable mod_imagick,
- broken with imagemagick7
-In-Reply-To: <1466058413-4945-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1466058413-4945-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160616155237.72f77406@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 16 Jun 2016 16:54:44 +0300
+Subject: [Buildroot] [PATCH] faketime: add .hash file
+Message-ID: <ea4680cc719cff7c1e5a3b680ed4a681a4d0635c.1466085284.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+http://autobuild.buildroot.net/results/872/8724d7335a699e162aee5f25d8eb2e71310b5c55/
+http://autobuild.buildroot.net/results/cdb/cdb6a55efa0a3d86e213aba55ddaeb52d24cf1c6/
+http://autobuild.buildroot.net/results/a5f/a5f12f44a2b5d758aed5e4666897cb6eedfc1444/
+---
+ package/faketime/faketime.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/faketime/faketime.hash
 
-On Thu, 16 Jun 2016 08:26:53 +0200, Bernd Kuhls wrote:
-> Problem sent upstream: https://freeswitch.org/jira/browse/FS-9272
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/e20/e20c0b9a32f6bef5d43369437895058d44d0df58/
-> http://autobuild.buildroot.net/results/aa4/aa4d681de85497c2cdd2b0488d9b4569160b5f02/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/freeswitch/freeswitch.mk | 5 -----
->  1 file changed, 5 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/faketime/faketime.hash b/package/faketime/faketime.hash
+new file mode 100644
+index 000000000000..a17ef8526bd0
+--- /dev/null
++++ b/package/faketime/faketime.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 56bc32006f4c5b021ff648cc1fd458c5316f40aadfd2031879229a234189b031 faketime-v0.9.6.tar.gz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
