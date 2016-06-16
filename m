@@ -1,53 +1,217 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jun 2016 09:32:09 +0200
-Subject: [Buildroot] Patchwork cleanup week #24
-In-Reply-To: <CAAXf6LVu1+p1mQrWvrUFyPzbDJeZGyFZLNeTCYQ-XrQR1SsjCw@mail.gmail.com>
-References: <20160615220634.67eb8fa9@free-electrons.com>
- <CAAXf6LVu1+p1mQrWvrUFyPzbDJeZGyFZLNeTCYQ-XrQR1SsjCw@mail.gmail.com>
-Message-ID: <20160616093209.739fbc03@free-electrons.com>
+From: fabrice.fontaine at orange.com <fabrice.fontaine@orange.com>
+Date: Thu, 16 Jun 2016 09:33:37 +0200
+Subject: [Buildroot] [PATCH 2/2] alljoyn-base: new package
+Message-ID: <10863_1466062435_57625663_10863_288_1_15d7af9e-545f-4da3-9fe7-ec91bc1eb8ab@OPEXCLILM5F.corporate.adroot.infra.ftgroup>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+AllJoyn Base Services are common services used by many devices,
+providing a set of interfaces for different devices to interact and
+interoperate with one another.
 
-Thanks for giving some feedback!
+https://allseenalliance.org
 
-On Thu, 16 Jun 2016 09:18:37 +0200, Thomas De Schampheleire wrote:
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+ package/Config.in                      |   1 +
+ package/alljoyn-base/Config.in         |  40 +++++++++++++
+ package/alljoyn-base/alljoyn-base.hash |   2 +
+ package/alljoyn-base/alljoyn-base.mk   | 102 +++++++++++++++++++++++++++++++++
+ 4 files changed, 145 insertions(+)
+ create mode 100644 package/alljoyn-base/Config.in
+ create mode 100644 package/alljoyn-base/alljoyn-base.hash
+ create mode 100644 package/alljoyn-base/alljoyn-base.mk
 
-> [..]
-> >  6. wget download: 'scheme missing' results in empty output file
-> >     http://patchwork.ozlabs.org/patch/599387/
-> >  
-> 
-> The mail thread where this patch originated from is at:
-> http://lists.busybox.net/pipermail/buildroot/2016-February/153953.html
-> 
-> There was no further response on this patch, but as far as I'm
-> concerned the issue is still present and could use a fix.
-> 
-> What do you think about the proposed solution?
-
-I am not sure what is the best solution between:
-
- - Defining <foo>_SITE to undefined when no value is specified by the
-   package (which is your proposal)
-
- - Do not add to <pkg>_ALL_DOWNLOADS the files for which there is
-   no :// in the URL, and <pkg>_SITE is empty. This was the proposal
-   made by Yann in
-   http://lists.busybox.net/pipermail/buildroot/2016-February/153999.html.
-
- - Error out when both <pkg>_SITE is empty and <pkg>_SOURCE is
-   non-empty.
-
-In any case, the patch in patchwork is not applicable as-is, as it
-doesn't contain a proper description + SoB line.
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index f0106da..5cde173 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1124,6 +1124,7 @@ endmenu
+ menu "Networking"
+ 	source "package/agentpp/Config.in"
+ 	source "package/alljoyn/Config.in"
++	source "package/alljoyn-base/Config.in"
+ 	source "package/batman-adv/Config.in"
+ 	source "package/c-ares/Config.in"
+ 	source "package/canfestival/Config.in"
+diff --git a/package/alljoyn-base/Config.in b/package/alljoyn-base/Config.in
+new file mode 100644
+index 0000000..94424a9
+--- /dev/null
++++ b/package/alljoyn-base/Config.in
+@@ -0,0 +1,40 @@
++config BR2_PACKAGE_ALLJOYN_BASE
++	bool "alljoyn-base"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_ALLJOYN
++	select BR2_PACKAGE_LIBCAP
++	help
++	  AllJoyn Base Services are common services used by many devices,
++	  providing a set of interfaces for different devices to interact and
++	  interoperate with one another.
++
++	  https://allseenalliance.org
++
++comment "alljoyn-base needs a toolchain w/ C++, threads and wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR
++
++if BR2_PACKAGE_ALLJOYN_BASE
++
++config BR2_PACKAGE_ALLJOYN_BASE_CONTROLPANEL
++	bool "alljoyn-controlpanel"
++	help
++	  Enable AllJoyn Control Panel base service which allows devices to
++	  advertise a virtual control panel to be controlled remotely.
++
++config BR2_PACKAGE_ALLJOYN_BASE_NOTIFICATION
++	bool "alljoyn-notification"
++	help
++	  Enable AllJoyn Notification base service which allows text-based
++	  notifications to be sent and received by devices on the AllJoyn
++	  network. Also supports audio and images via URLs.
++
++config BR2_PACKAGE_ALLJOYN_BASE_ONBOARDING
++	bool "alljoyn-onboarding"
++	help
++	  Enable AllJoyn Onboarding base service which provides a consistent way
++	  to bring a new device onto the Wi-Fi network.
++
++endif # BR2_PACKAGE_ALLJOYN_BASE
+diff --git a/package/alljoyn-base/alljoyn-base.hash b/package/alljoyn-base/alljoyn-base.hash
+new file mode 100644
+index 0000000..dbec3a3
+--- /dev/null
++++ b/package/alljoyn-base/alljoyn-base.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	742f724b3a06c8fc4039591dba24871755728221ca5dc4afb78ebd9a7e3beb44	alljoyn-base-16.04.00.tar.gz
+diff --git a/package/alljoyn-base/alljoyn-base.mk b/package/alljoyn-base/alljoyn-base.mk
+new file mode 100644
+index 0000000..acfcb95
+--- /dev/null
++++ b/package/alljoyn-base/alljoyn-base.mk
+@@ -0,0 +1,102 @@
++################################################################################
++#
++# alljoyn-base
++#
++################################################################################
++
++ALLJOYN_BASE_REV = 16.04
++ALLJOYN_BASE_VERSION = $(ALLJOYN_BASE_REV).00
++ALLJOYN_BASE_SOURCE = alljoyn-base-$(ALLJOYN_BASE_VERSION).tar.gz
++ALLJOYN_BASE_SITE = \
++	https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_BASE_REV)
++# See https://allseenalliance.org/alliance/ip-policy
++ALLJOYN_BASE_LICENSE = ISC
++# AllJoyn does not provide any license files with source code
++# ALLJOYN_BASE_LICENSE_FILES = 
++
++ALLJOYN_BASE_DEPENDENCIES = host-scons libcap alljoyn
++ALLJOYN_BASE_INSTALL_STAGING = YES
++
++# If BR2_PACKAGE_OPENSSL is set, use openssl otherwise use builtin crypto
++ifeq ($(BR2_PACKAGE_OPENSSL), y)
++ALLJOYN_BASE_DEPENDENCIES += openssl
++ALLJOYN_BASE_CRYPTO = openssl
++else
++ALLJOYN_BASE_CRYPTO = builtin
++endif
++
++# AllJoyn can be compiled in debug or release mode. By default, AllJoyn is built
++# in debug mode.
++ALLJOYN_BASE_VARIANT = release
++
++ALLJOYN_BASE_BINDINGS = c,cpp
++
++# By setting openwrt for OS and CPU, AllJoyn cross-compilation can be finely
++# tuned through TARGET_xxx options. All TARGET_xxx variables must be defined
++# otherwise compilation will fail.
++# CROSS_COMPILE option should not be used as it works only for linux/ARM.
++ALLJOYN_BASE_OS = openwrt
++ALLJOYN_BASE_CPU = openwrt
++
++# AllJoyn install everything in this relative path
++ALLJOYN_BASE_DISTDIR = \
++	/build/$(ALLJOYN_OS)/$(ALLJOYN_CPU)/$(ALLJOYN_VARIANT)/dist/
++
++ALLJOYN_BASE_SCONS_OPTS = \
++	-j$(PARALLEL_JOBS) \
++	V=1 \
++	OS=$(ALLJOYN_BASE_OS) \
++	CPU=$(ALLJOYN_BASE_CPU) \
++	VARIANT=$(ALLJOYN_BASE_VARIANT) \
++	BR=off \
++	CRYPTO=$(ALLJOYN_BASE_CRYPTO) \
++	BINDINGS=$(ALLJOYN_BASE_BINDINGS) \
++	ALLJOYN_DISTDIR="$(STAGING_DIR)"\
++	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
++	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
++	TARGET_LINKFLAGS="$(TARGET_LINKFLAGS)" \
++	TARGET_CC="$(TARGET_CC)" \
++	TARGET_CXX="$(TARGET_CXX)" \
++	TARGET_LD="$(TARGET_LD)" \
++	TARGET_LINK="$(TARGET_CXX)" \
++	TARGET_AR="$(TARGET_AR)" \
++	TARGET_RANLIB="$(TARGET_RANLIB)" \
++	TARGET_PATH="$(BR_PATH)"
++
++ifeq ($(BR2_PACKAGE_ALLJOYN_BASE_CONTROLPANEL), y)
++ALLJOYN_BASE_BUILD_CONTROLPANEL = \
++	cd $(@D)/controlpanel; $(SCONS) $(ALLJOYN_BASE_SCONS_OPTS)
++endif
++
++ifeq ($(BR2_PACKAGE_ALLJOYN_BASE_NOTIFICATION), y)
++ALLJOYN_BASE_BUILD_NOTIFICATION = \
++	cd $(@D)/notification; $(SCONS) $(ALLJOYN_BASE_SCONS_OPTS)
++endif
++
++ifeq ($(BR2_PACKAGE_ALLJOYN_BASE_ONBOARDING), y)
++ALLJOYN_BASE_BUILD_ONBOARDING = \
++	cd $(@D)/onboarding; $(SCONS) $(ALLJOYN_BASE_SCONS_OPTS)
++endif
++
++define ALLJOYN_BASE_BUILD_CMDS
++	$(ALLJOYN_BASE_BUILD_CONTROLPANEL)
++	$(ALLJOYN_BASE_BUILD_NOTIFICATION)
++	$(ALLJOYN_BASE_BUILD_ONBOARDING)
++endef
++
++# Suppress error code and error message as those directories could be missing if
++# BR2_PACKAGE_ALLJOYN_BASE_xxx variables are all unset
++define ALLJOYN_BASE_INSTALL_STAGING_CMDS
++	cp -a $(@D)/*/$(ALLJOYN_BASE_DISTDIR)/*/lib/lib* \
++		$(STAGING_DIR)/usr/lib/ 2>/dev/null || :
++	cp -a $(@D)/*/$(ALLJOYN_BASE_DISTDIR)/*/inc/* \
++		$(STAGING_DIR)/usr/include/ 2>/dev/null || :
++endef
++
++# Only install alljoyn dynamic libraries into target directory
++define ALLJOYN_BASE_INSTALL_TARGET_CMDS
++	cp -a $(@D)/*/$(ALLJOYN_BASE_DISTDIR)/*/lib/lib*.so* \
++		$(TARGET_DIR)/usr/lib/ 2>/dev/null || :
++endef
++
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
