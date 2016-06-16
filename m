@@ -1,100 +1,81 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 16 Jun 2016 22:08:27 +0200
-Subject: [Buildroot] [V3] scancpan: improve message when bad host perl
- version
-In-Reply-To: <1466094384-24610-1-git-send-email-francois.perrad@gadz.org>
-References: <1466094384-24610-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20160616200827.GG3665@free.fr>
+Date: Thu, 16 Jun 2016 22:14:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: correct systemd
+ service install
+In-Reply-To: <1466097338-19149-1-git-send-email-martin@barkynet.com>
+References: <1466097338-19149-1-git-send-email-martin@barkynet.com>
+Message-ID: <20160616201425.GH3665@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+Martin, All,
 
-Thank you for this proposal! :-)
-
-On 2016-06-16 18:26 +0200, Francois Perrad spake thusly:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  support/scripts/scancpan | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
+On 2016-06-16 18:15 +0100, Martin Bark spake thusly:
+> Commit d732fa4 add the BLUEZ5_UTILS_INSTALL_INIT_SYSTEMD rule, however,
+> it is not correct.  The [Install] section of bluetooth.service is as
+> follows:
 > 
-> diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-> index 6c70cfb..617ee71 100755
-> --- a/support/scripts/scancpan
-> +++ b/support/scripts/scancpan
-> @@ -471,7 +471,7 @@ unshift @INC, sub {
->  } # END OF FATPACK CODE
->  
->  
-> -use 5.022;      # same major version as target perl
-> +use 5.010;
+>  [Install]
+>  WantedBy=bluetooth.target
+>  Alias=dbus-org.bluez.service
+> 
+> hence there are currently two mistakes:
+>  1) bluetooth.service is wanted by bluetooth.target not multi-user.target
+>  2) dbus-org.bluez.service is a missing alias to bluetooth.service
+> 
+> This commit fixes both these issues.
+> 
+> Signed-off-by: Martin Bark <martin@barkynet.com>
 
-So, we now require perl >= 5.10 to run this script, right? (well, to at
-least get the error message sanely!)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-How old is this?
-Can we be sure that viurtually everyone has a perl >= 5.010?
+However, the way we handle the systemd units is not tenable in the long
+run. If the next version of bluez changes this unit, we'd have to keep
+in sync. And so on for *all* packages.
 
-Can't we just drop the requirement?
+I'd pretty much prefer we get something that automatically installs the
+units in their correct location.
 
-Care to expand the commit log to explain this, please?
+So, maybe we'd need a kind of cross systemctl helper, to provide us with
+the means to install/remove units in $(O)/target/ instead of duplicating
+the effort in all our packages...
 
->  use strict;
->  use warnings;
->  use Fatal qw(open close);
-> @@ -484,6 +484,17 @@ use HTTP::Tiny;
->  use Safe;
->  use MetaCPAN::API::Tiny;
->  
+I think a simple parser that interprets WantedBy, Alias and the likes
+would be relatively easy to write...
 
-Maybe add a comment here:
-
-   # PERL_VERSION #
-   # Below, 5.022 should be aligned with the version of
-   # perl actually bundled in Buildroot:
-> +die <<"MSG" if $] < 5.022;
-> +This script needs a host perl with the same major version as Buildroot target perl.
-> +
-> +Your current host perl is:
-> +    $^X
-> +    version $]
-> +
-> +You may install a local one by running:
-> +    perlbrew install perl-5.22.2
-> +MSG
-
-Maybe you should also add a comment in package/perl/perl.mk, just above
-the version string:
-
-    # When updating the version here, also update
-    # support/scripts/scancpan (search for "PERL_VERSION")
-    PERL_VERSION_MAJOR = 22
-    PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
-
-This will make it more difficult to get out of sync between the two. ;-)
+Brought to you by the same "Famous Last Words (TM)" company that brought
+you the cross ldconfig earlier!  ;-] )
 
 Regards,
 Yann E. MORIN.
 
->  my ($help, $man, $quiet, $force, $recommend, $test, $host);
->  my $target = 1;
->  GetOptions( 'help|?' => \$help,
-> @@ -746,10 +757,6 @@ support/scripts/scancpan Try-Tiny Moo
+> ---
+>  package/bluez5_utils/bluez5_utils.mk | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+> index ddc8c45..49cc7c2 100644
+> --- a/package/bluez5_utils/bluez5_utils.mk
+> +++ b/package/bluez5_utils/bluez5_utils.mk
+> @@ -77,9 +77,11 @@ BLUEZ5_UTILS_CONF_OPTS += --disable-systemd
+>  endif
 >  
->  =head1 SYNOPSIS
+>  define BLUEZ5_UTILS_INSTALL_INIT_SYSTEMD
+> -	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
+> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/bluetooth.target.wants
+>  	ln -fs ../../../../usr/lib/systemd/system/bluetooth.service \
+> -		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/bluetooth.service
+> +		$(TARGET_DIR)/etc/systemd/system/bluetooth.target.wants/bluetooth.service
+> +	ln -fs ../../../../usr/lib/systemd/system/bluetooth.service \
+> +		$(TARGET_DIR)/etc/systemd/system/dbus-org.bluez.service
+>  endef
 >  
-> -curl -kL http://install.perlbrew.pl | bash
-> -
-> -perlbrew install perl-5.18.2
-> -
->  supports/scripts/scancpan [options] [distname ...]
->  
->   Options:
+>  $(eval $(autotools-package))
 > -- 
-> 1.9.1
+> 2.7.4
 > 
 > _______________________________________________
 > buildroot mailing list
