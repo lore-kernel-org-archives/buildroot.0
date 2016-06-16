@@ -1,33 +1,28 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 16 Jun 2016 16:56:55 +0300
-Subject: [Buildroot] [PATCH v2] faketime: add .hash file
-Message-ID: <2b93c8b6cf5b55c743e826fe760e4fece9d78f29.1466085415.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 16 Jun 2016 15:52:46 +0200
+Subject: [Buildroot] [git commit] package/smack: add .hash file
+Message-ID: <20160616140202.E630E82114@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/872/8724d7335a699e162aee5f25d8eb2e71310b5c55/
-http://autobuild.buildroot.net/results/cdb/cdb6a55efa0a3d86e213aba55ddaeb52d24cf1c6/
-http://autobuild.buildroot.net/results/a5f/a5f12f44a2b5d758aed5e4666897cb6eedfc1444/
+commit: https://git.buildroot.net/buildroot/commit/?id=d463c3d12203596ece409144c0026eabf940bd2d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2: add SoB
----
- package/faketime/faketime.hash | 2 ++
+ package/smack/smack.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/faketime/faketime.hash
 
-diff --git a/package/faketime/faketime.hash b/package/faketime/faketime.hash
+diff --git a/package/smack/smack.hash b/package/smack/smack.hash
 new file mode 100644
-index 000000000000..a17ef8526bd0
+index 0000000..fd51249
 --- /dev/null
-+++ b/package/faketime/faketime.hash
++++ b/package/smack/smack.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 56bc32006f4c5b021ff648cc1fd458c5316f40aadfd2031879229a234189b031 faketime-v0.9.6.tar.gz
--- 
-2.8.1
++# Locally computed
++sha256  94dc21b4a5e570af0eb44debf57491170cccdbf60e03b5a3210f2a14d6448390  smack-v1.1.0.tar.gz
