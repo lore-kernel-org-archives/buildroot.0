@@ -1,49 +1,36 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Thu, 16 Jun 2016 16:41:13 +0200
-Subject: [Buildroot] [PATCH 1/3] sstrip: get rid of host variant
+Date: Thu, 16 Jun 2016 16:41:14 +0200
+Subject: [Buildroot] [PATCH 2/3] Config.in: Add BR2_DEPRECATED_SINCE_2016_08
 In-Reply-To: <1466088075-7635-1-git-send-email-julien.floret@6wind.com>
 References: <1466088075-7635-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1466088075-7635-2-git-send-email-julien.floret@6wind.com>
+Message-ID: <1466088075-7635-3-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Host sstrip is not used anymore.
+In preparation for new deprecated features/symbols.
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/sstrip/sstrip.mk | 12 ------------
- 1 file changed, 12 deletions(-)
+ Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/sstrip/sstrip.mk b/package/sstrip/sstrip.mk
-index fe57b3c19b21..685ea09fbd77 100644
---- a/package/sstrip/sstrip.mk
-+++ b/package/sstrip/sstrip.mk
-@@ -6,7 +6,6 @@
+diff --git a/Config.in b/Config.in
+index 9fa74157a4be..820b1f0945db 100644
+--- a/Config.in
++++ b/Config.in
+@@ -385,6 +385,10 @@ config BR2_DEPRECATED_SINCE_2016_05
+ 	bool
+ 	default y
  
- SSTRIP_SITE = svn://svn.openwrt.org/openwrt/trunk/tools/sstrip
- SSTRIP_VERSION = 20154
--HOST_SSTRIP_BINARY = $(GNU_TARGET_NAME)-sstrip
++config BR2_DEPRECATED_SINCE_2016_08
++	bool
++	default y
++
+ endif
  
- define SSTRIP_BUILD_CMDS
- 	cd $(@D) ; \
-@@ -18,15 +17,4 @@ define SSTRIP_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(@D)/sstrip $(TARGET_DIR)/usr/bin/sstrip
- endef
- 
--define HOST_SSTRIP_BUILD_CMDS
--	cd $(@D) ; \
--	$(HOSTCC) $(HOST_CFLAGS) -include endian.h -include byteswap.h \
--		-o sstrip src/sstrip.c
--endef
--
--define HOST_SSTRIP_INSTALL_CMDS
--	$(INSTALL) -D $(@D)/sstrip $(HOST_DIR)/usr/bin/$(HOST_SSTRIP_BINARY)
--endef
--
- $(eval $(generic-package))
--$(eval $(host-generic-package))
+ config BR2_ENABLE_DEBUG
 -- 
 2.1.0
