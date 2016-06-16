@@ -1,46 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jun 2016 08:35:53 +0200
-Subject: [Buildroot] [git commit] logrotate: bump to version 3.9.2
-Message-ID: <20160616064127.1EC6C807A8@busybox.osuosl.org>
+Date: Thu, 16 Jun 2016 08:44:23 +0200
+Subject: [Buildroot] [git commit] jack2: add .hash file
+Message-ID: <20160616064526.9BB1F81D34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec63736f2c62bebe63087ee4a203c14824fc040a
+commit: https://git.buildroot.net/buildroot/commit/?id=e57bdcaf0b71a382896b641ab7d8219b3c181e2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Aside from the version number increase, the package has now moved to
-GitHub.
+Fixes:
+http://autobuild.buildroot.org/results/cc3/cc3590d9c602b38701398786741fceb612445b92/
+http://autobuild.buildroot.org/results/2a6/2a691d01d8c91aa1058960f5176ad611b3549f36/
 
-Signed-off-by: James Knight <james.d.knight@live.com>
+Similar to jquery-keyboard, it seems the jack2 tarball on the autobuilder
+is corrupt.  Fix it by adding a .hash file so it falls back to our s.b.o
+mirror.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/logrotate/logrotate.hash | 2 +-
- package/logrotate/logrotate.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/jack2/jack2.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
-index ef537a9..77d4dc8 100644
---- a/package/logrotate/logrotate.hash
-+++ b/package/logrotate/logrotate.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 700ed7ce9072a1cca324779a74797dfaefdae37ac50a817134b947c4ded1dfa7 logrotate-3.8.9.tar.gz
-+sha256 2de00c65e23fa9d7909cae6594e550b9abe9a7eb1553669ddeaca92d30f97009 logrotate-3.9.2.tar.gz
-diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
-index 4a70040..de4d837 100644
---- a/package/logrotate/logrotate.mk
-+++ b/package/logrotate/logrotate.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LOGROTATE_VERSION = 3.8.9
--LOGROTATE_SITE = https://www.fedorahosted.org/releases/l/o/logrotate
-+LOGROTATE_VERSION = 3.9.2
-+LOGROTATE_SITE = $(call github,logrotate,logrotate,$(LOGROTATE_VERSION))
- LOGROTATE_LICENSE = GPLv2+
- LOGROTATE_LICENSE_FILES = COPYING
- LOGROTATE_DEPENDENCIES = popt host-pkgconf
+diff --git a/package/jack2/jack2.hash b/package/jack2/jack2.hash
+new file mode 100644
+index 0000000..ab031b9
+--- /dev/null
++++ b/package/jack2/jack2.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 88f1b6601b7c8950e6a2d5940b423a33ee628ae5583da40bdce3d9317d8c600d  jack2-v1.9.10.tar.gz
