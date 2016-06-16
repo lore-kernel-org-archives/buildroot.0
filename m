@@ -1,45 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jun 2016 22:15:03 +0200
-Subject: [Buildroot] [git commit] gst1-imx: needs shared libraries
-Message-ID: <20160616201633.46728820DE@busybox.osuosl.org>
+Date: Thu, 16 Jun 2016 22:20:40 +0200
+Subject: [Buildroot] [git commit] libsha1: add .hash file
+Message-ID: <20160616202131.EC6528210B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69f616099b05754cae202e8d7669b7046bb21803
+commit: https://git.buildroot.net/buildroot/commit/?id=572c58bdec623b1b338d8b18f312c7126d345411
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-http://autobuild.buildroot.org/results/2d1/2d1b5077a7551cebe4b961d6ce1cf844ad83fb8c/
+http://autobuild.buildroot.org/results/e6d/e6d539a2c47428d1af2529069297af1279c8345f/
 
-Otherwise waf configure fails with:
-Checking for library dl                                      : not found
-The configuration failed
+Similar to jquery-keyboard, it seems the libsha1 tarball on the autobuilder
+is corrupt.  Fix it by adding a .hash file so it falls back to our s.b.o
+mirror.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-imx/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libsha1/libsha1.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-index 2b0360f..efd5086 100644
---- a/package/gstreamer1/gst1-imx/Config.in
-+++ b/package/gstreamer1/gst1-imx/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_GST1_IMX
- 	bool "gst1-imx"
- 	depends on BR2_arm # Only relevant for i.MX
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	help
- 	  This is a set of GStreamer 1.0 plugins for plugins for Freescale's
-@@ -17,3 +18,7 @@ config BR2_PACKAGE_GST1_IMX
- 	  The MP3 plugin is built when BR2_PACKAGE_IMX_CODEC is enabled.
- 
- 	  https://github.com/Freescale/gstreamer-imx
-+
-+comment "gst1-imx needs a toolchain w/ dynamic library"
-+	depends on BR2_arm
-+	depends on BR2_STATIC_LIBS
+diff --git a/package/libsha1/libsha1.hash b/package/libsha1/libsha1.hash
+new file mode 100644
+index 0000000..6d597ab
+--- /dev/null
++++ b/package/libsha1/libsha1.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 ef4c75007ac41c3dc09e0225943c789ba2b9c632a6cd7b548e0519477ac2f768  libsha1-0.3.tar.gz
