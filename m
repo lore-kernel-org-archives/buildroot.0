@@ -1,41 +1,60 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Thu, 16 Jun 2016 19:33:46 +0200
-Subject: [Buildroot] [PATCH] wine: Bump to version 1.8.3
-Message-ID: <1466098426-1325-1-git-send-email-nerv@dawncrow.de>
+From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+Date: Thu, 16 Jun 2016 21:36:36 +0200
+Subject: [Buildroot] [PATCH 3/5] pkg-download: allow ssh URLs
+In-Reply-To: <20160615213711.GA3823@free.fr>
+References: <20160614150412.GF3060@hermes.click-hack.org>
+ <1465916712-29684-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <1465916712-29684-3-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <20160614201426.GF3759@free.fr>
+ <20160615212947.GZ23680@hermes.click-hack.org>
+ <20160615213711.GA3823@free.fr>
+Message-ID: <20160616193635.GE32532@hermes.click-hack.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bumping to stable version 1.8.3
+On Wed, Jun 15, 2016 at 11:37:11PM +0200, Yann E. MORIN wrote:
+> Gilles, All,
+> 
+> On 2016-06-15 23:29 +0200, Gilles Chanteperdrix spake thusly:
+> > On Tue, Jun 14, 2016 at 10:14:26PM +0200, Yann E. MORIN wrote:
+> > > Gilles, All,
+> > > 
+> > > On 2016-06-14 17:05 +0200, Gilles Chanteperdrix spake thusly:
+> > > > Use git when such an URL is met.
+> > > 
+> > > What about Hg URLs that can also start with 'ssh://' ?
+> > > 
+> > > I guess we should not try to be smart here, and let users specify the
+> > > method with the _SITE_METHOD variable.
+> > 
+> > Yeah, well, my initial patch proposed git+ssh:// and I was told that
+> > this was deprecated. The conversation lead to a dead-end with nobody
+> > giving me a clear indication of what I should propose.
+> > 
+> > So, let us go back to my initial need: have a package compiled based
+> > on a git over ssh URL. Now if you tell me that there is a way to do
+> > this without patching pkg-download.mk, I am all ears. I did not find
+> > any help on that in the documentation, do you have some pointers?
+> 
+> As far as I understand your requirements, you want to be able to write
+> either of:
+> 
+>     FOO_SITE = user at machine:path/to/repo.git
+> or
+>     FOO_SITE = ssh://user at machine/path/to/rpo.git
+> 
+> You just have to add:
+> 
+>     FOO_SITE_METHOD = git
+> 
+> See the manual, search for _SITE_METHOD: ;-)
+>     https://buildroot.org/downloads/manual/manual.html#generic-package-reference
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/wine/wine.hash | 2 +-
- package/wine/wine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Ok, thanks.
 
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index b4eec49..3f856ba 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 51624fadf0145e87f0c01e7ce8524ea1e8d9d360c3e8a86e78cd26a52ce55a6f wine-1.8.2.tar.bz2
-+sha256 d7cecdf7aab93bfe950e6f83ec526681b8770788c7b2a802bfe50ff97fc17a6c wine-1.8.3.tar.bz2
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 7587cb0..632eed3 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WINE_VERSION = 1.8.2
-+WINE_VERSION = 1.8.3
- WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
- WINE_SITE = https://dl.winehq.org/wine/source/1.8
- WINE_LICENSE = LGPLv2.1+
 -- 
-1.9.1
+					    Gilles.
+https://click-hack.org
