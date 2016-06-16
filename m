@@ -1,35 +1,60 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu, 16 Jun 2016 17:05:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/upx: fix build with host gcc 6.x
-Message-ID: <20160616160554.21393-1-martin@barkynet.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 16 Jun 2016 18:26:24 +0200
+Subject: [Buildroot] [V3] scancpan: improve message when bad host perl
+	version
+Message-ID: <1466094384-24610-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable the -Werror gcc option because is causes the following error
-when using gcc 6.x on the host.
-
- p_vmlinx.cpp:100:5: error: this ?if? clause does not guard...
-  [-Werror=misleading-indentation] if (a->p_paddr > b->p_paddr) return  1;
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/upx/upx.mk | 1 +
- 1 file changed, 1 insertion(+)
+ support/scripts/scancpan | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/package/upx/upx.mk b/package/upx/upx.mk
-index 400d283..eaef275 100644
---- a/package/upx/upx.mk
-+++ b/package/upx/upx.mk
-@@ -17,6 +17,7 @@ HOST_UPX_DEPENDENCIES = host-ucl host-zlib
- define HOST_UPX_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) CPPFLAGS="$(HOST_CPPFLAGS)" \
- 		LDFLAGS="$(HOST_LDFLAGS)" UPX_UCLDIR=$(HOST_DIR)/usr \
-+		CXXFLAGS_WERROR= \
- 		-C $(@D) all
- endef
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index 6c70cfb..617ee71 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -471,7 +471,7 @@ unshift @INC, sub {
+ } # END OF FATPACK CODE
  
+ 
+-use 5.022;      # same major version as target perl
++use 5.010;
+ use strict;
+ use warnings;
+ use Fatal qw(open close);
+@@ -484,6 +484,17 @@ use HTTP::Tiny;
+ use Safe;
+ use MetaCPAN::API::Tiny;
+ 
++die <<"MSG" if $] < 5.022;
++This script needs a host perl with the same major version as Buildroot target perl.
++
++Your current host perl is:
++    $^X
++    version $]
++
++You may install a local one by running:
++    perlbrew install perl-5.22.2
++MSG
++
+ my ($help, $man, $quiet, $force, $recommend, $test, $host);
+ my $target = 1;
+ GetOptions( 'help|?' => \$help,
+@@ -746,10 +757,6 @@ support/scripts/scancpan Try-Tiny Moo
+ 
+ =head1 SYNOPSIS
+ 
+-curl -kL http://install.perlbrew.pl | bash
+-
+-perlbrew install perl-5.18.2
+-
+ supports/scripts/scancpan [options] [distname ...]
+ 
+  Options:
 -- 
-2.8.3
+1.9.1
