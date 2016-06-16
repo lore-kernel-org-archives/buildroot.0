@@ -1,47 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jun 2016 22:55:57 +0200
-Subject: [Buildroot] [PATCH 1/2] python: enable bzip2 in host variant
-In-Reply-To: <20160616224340.08157027@itchy>
-References: <1461508789-17644-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1461508789-17644-2-git-send-email-eric.le.bihan.dev@free.fr>
- <20160616000131.7f09d903@free-electrons.com>
- <20160616224340.08157027@itchy>
-Message-ID: <20160616225557.07174b4d@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 16 Jun 2016 22:57:11 +0200
+Subject: [Buildroot] [git commit] assimp: add .hash file
+Message-ID: <20160616205816.4DDD281D35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7f2b01e10c9467f269e7430040034a46f67441e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 16 Jun 2016 22:43:40 +0200, Eric Le Bihan wrote:
+Fixes:
+http://autobuild.buildroot.org/results/f64/f6452c4b0a237219b6ae28c8bb3cf665ad40139f/
+http://autobuild.buildroot.org/results/e9a/e9aed367394c6a4ac7b834139b5601e844ba4648/
 
-> > Could you give some more details about this? The tarfile module seems
-> > to only import the bz2 module when a bzip2-compressed file is handled.
-> > Is this actually the case with rust?  
-> 
-> This was required because my initial take on Rust let the build process
-> download the rust-stage0 bzip2 tarball and uncompress it on its own. As
-> the bootstrap binary will now be provided by the rust-bootstrap
-> package, this is not needed anymore.
+Similar to jquery-keyboard, it seems the assimp tarball on the autobuilder
+is corrupt.  Fix it by adding a .hash file so it falls back to our s.b.o
+mirror.
 
-OK, great!
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/assimp/assimp.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> > Indeed, host-python is used by numerous packages, and we're trying to
-> > not add too many dependencies to host-python. On the other hand,
-> > building bzip2 is pretty fast, so maybe it's reasonable to add it as a
-> > mandatory dependency of host-python.  
-> 
-> bz2 tarballs are widespread. So having support for this format in
-> host-python, regardless of Rust, will benefit the user.
-
-host-python is only meant to be used as a dependency to build other
-things in Buildroot. As long as these "other things" don't need bz2
-support in Python, there's no reason to enable it.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/assimp/assimp.hash b/package/assimp/assimp.hash
+new file mode 100644
+index 0000000..bee26fb
+--- /dev/null
++++ b/package/assimp/assimp.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 187f825c563e84b1b17527a4da0351aa3d575dfd696a9d204ae4bb19ee7df94a  assimp-v3.2.tar.gz
