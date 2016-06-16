@@ -1,91 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 16 Jun 2016 22:14:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: correct systemd
- service install
-In-Reply-To: <1466097338-19149-1-git-send-email-martin@barkynet.com>
-References: <1466097338-19149-1-git-send-email-martin@barkynet.com>
-Message-ID: <20160616201425.GH3665@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 16 Jun 2016 22:15:03 +0200
+Subject: [Buildroot] [git commit] gst1-imx: needs shared libraries
+Message-ID: <20160616201633.46728820DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=69f616099b05754cae202e8d7669b7046bb21803
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-06-16 18:15 +0100, Martin Bark spake thusly:
-> Commit d732fa4 add the BLUEZ5_UTILS_INSTALL_INIT_SYSTEMD rule, however,
-> it is not correct.  The [Install] section of bluetooth.service is as
-> follows:
-> 
->  [Install]
->  WantedBy=bluetooth.target
->  Alias=dbus-org.bluez.service
-> 
-> hence there are currently two mistakes:
->  1) bluetooth.service is wanted by bluetooth.target not multi-user.target
->  2) dbus-org.bluez.service is a missing alias to bluetooth.service
-> 
-> This commit fixes both these issues.
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+Fixes:
+http://autobuild.buildroot.org/results/2d1/2d1b5077a7551cebe4b961d6ce1cf844ad83fb8c/
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Otherwise waf configure fails with:
+Checking for library dl                                      : not found
+The configuration failed
 
-However, the way we handle the systemd units is not tenable in the long
-run. If the next version of bluez changes this unit, we'd have to keep
-in sync. And so on for *all* packages.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer1/gst1-imx/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-I'd pretty much prefer we get something that automatically installs the
-units in their correct location.
-
-So, maybe we'd need a kind of cross systemctl helper, to provide us with
-the means to install/remove units in $(O)/target/ instead of duplicating
-the effort in all our packages...
-
-I think a simple parser that interprets WantedBy, Alias and the likes
-would be relatively easy to write...
-
-Brought to you by the same "Famous Last Words (TM)" company that brought
-you the cross ldconfig earlier!  ;-] )
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/bluez5_utils/bluez5_utils.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-> index ddc8c45..49cc7c2 100644
-> --- a/package/bluez5_utils/bluez5_utils.mk
-> +++ b/package/bluez5_utils/bluez5_utils.mk
-> @@ -77,9 +77,11 @@ BLUEZ5_UTILS_CONF_OPTS += --disable-systemd
->  endif
->  
->  define BLUEZ5_UTILS_INSTALL_INIT_SYSTEMD
-> -	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
-> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/bluetooth.target.wants
->  	ln -fs ../../../../usr/lib/systemd/system/bluetooth.service \
-> -		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/bluetooth.service
-> +		$(TARGET_DIR)/etc/systemd/system/bluetooth.target.wants/bluetooth.service
-> +	ln -fs ../../../../usr/lib/systemd/system/bluetooth.service \
-> +		$(TARGET_DIR)/etc/systemd/system/dbus-org.bluez.service
->  endef
->  
->  $(eval $(autotools-package))
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
+index 2b0360f..efd5086 100644
+--- a/package/gstreamer1/gst1-imx/Config.in
++++ b/package/gstreamer1/gst1-imx/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_GST1_IMX
+ 	bool "gst1-imx"
+ 	depends on BR2_arm # Only relevant for i.MX
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	help
+ 	  This is a set of GStreamer 1.0 plugins for plugins for Freescale's
+@@ -17,3 +18,7 @@ config BR2_PACKAGE_GST1_IMX
+ 	  The MP3 plugin is built when BR2_PACKAGE_IMX_CODEC is enabled.
+ 
+ 	  https://github.com/Freescale/gstreamer-imx
++
++comment "gst1-imx needs a toolchain w/ dynamic library"
++	depends on BR2_arm
++	depends on BR2_STATIC_LIBS
