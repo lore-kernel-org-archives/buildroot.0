@@ -1,43 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Jun 2016 22:21:56 +0200
-Subject: [Buildroot] [PATCH 3/5] pkg-download: allow ssh URLs
-In-Reply-To: <20160616194024.GF32532@hermes.click-hack.org>
-References: <20160614151017.GG3060@hermes.click-hack.org>
- <1465917079-30473-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1465917079-30473-3-git-send-email-gilles.chanteperdrix@xenomai.org>
- <20160615230808.4c1e063b@free-electrons.com>
- <20160616194024.GF32532@hermes.click-hack.org>
-Message-ID: <20160616222156.6067dd6c@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 16 Jun 2016 22:22:43 +0200
+Subject: [Buildroot] [PATCH 1/3] imagemagick: bump to version 7.0.2-0
+In-Reply-To: <1465994063-17292-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1465994063-17292-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160616202243.GI3665@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Gustavo, All,
 
-On Thu, 16 Jun 2016 21:40:24 +0200, Gilles Chanteperdrix wrote:
-
-> > """
-> > What about Hg URLs that can also start with 'ssh://' ?
-> > """
-> > 
-> > Indeed, I don't see why a ssh:// URL should necessarily reference a Git
-> > repository. And there's no explanation about this decision in the
-> > commit log.  
+On 2016-06-15 09:34 -0300, Gustavo Zacarias spake thusly:
+> Add new disables for libraries that aren't supported in buildroot and
+> sort them for ease of maintenance.
 > 
-> See the discussion here:
-> http://lists.busybox.net/pipermail/buildroot/2016-May/160670.html
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+[--SNIP--]
+> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+> index 74ac5a4..065f33d 100644
+> --- a/package/imagemagick/imagemagick.mk
+> +++ b/package/imagemagick/imagemagick.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -IMAGEMAGICK_VERSION = 6.9.4-6
+> +IMAGEMAGICK_VERSION = 7.0.2-0
 
-I might be missing something, but I don't see anything in this
-discussion that gives a justification as to why ssh:// in Buildroot
-should always mean "git over ssh" and not potentially "mercurial over
-ssh" or "subversion over ssh".
+Our oldest bug is about imagemagick not finding ghostscript fonts:
+    https://patchwork.ozlabs.org/patch/484767/
 
-Thanks,
+Since you just bumped imagemagick, did you have a look if it still
+applies?
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
