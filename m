@@ -1,96 +1,40 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 16 Jun 2016 09:35:17 +0200
-Subject: [Buildroot] [PATCH v2] python-crossbar: bump to version 0.14.0
-Message-ID: <1466062517-15428-1-git-send-email-yegorslists@googlemail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 16 Jun 2016 10:37:58 +0300
+Subject: [Buildroot] [PATCH] log4cpp: needs threads
+Message-ID: <8fb36864db8c572ca0d74de960eddaf4fa652eba.1466062678.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Fixes:
+http://autobuild.buildroot.net/results/cf9/cf942e4b8a5259414a4dcea6fa4b75183435394a/
 
-As python-msgpack dependency was replaced with python-u-msgpack,
-that is a pure Python implementation, BR2_TOOLCHAIN_HAS_SYNC_4
-was removed. BR2_INSTALL_LIBSTDCPP remains because of python-pyasn.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Changes:
-	v2: remove BR2_TOOLCHAIN_HAS_SYNC_4 dependency (Thomas Petazzoni)
+ package/log4cpp/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
- package/python-crossbar/Config.in            | 10 +++++-----
- package/python-crossbar/python-crossbar.hash |  6 +++---
- package/python-crossbar/python-crossbar.mk   |  4 ++--
- 3 files changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
-index 4e613db..be83325 100644
---- a/package/python-crossbar/Config.in
-+++ b/package/python-crossbar/Config.in
-@@ -9,7 +9,6 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
- 	select BR2_PACKAGE_PYTHON_JINJA2
- 	select BR2_PACKAGE_PYTHON_LMDB
- 	select BR2_PACKAGE_PYTHON_MISTUNE
--	select BR2_PACKAGE_PYTHON_MSGPACK
- 	select BR2_PACKAGE_PYTHON_NETADDR
- 	select BR2_PACKAGE_PYTHON_PSUTIL
- 	select BR2_PACKAGE_PYTHON_PYASN
-@@ -20,6 +19,7 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
- 	select BR2_PACKAGE_PYTHON_PYOPENSSL
- 	select BR2_PACKAGE_PYTHON_PYTRIE
- 	select BR2_PACKAGE_PYTHON_PYYAML
-+	select BR2_PACKAGE_PYTHON_SDNOTIFY
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS
- 	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
- 	select BR2_PACKAGE_PYTHON_SETPROCTITLE
-@@ -27,10 +27,11 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
- 	select BR2_PACKAGE_PYTHON_SHUTILWHICH if BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_PYTHON_TREQ
- 	select BR2_PACKAGE_PYTHON_TWISTED
--	select BR2_PACKAGE_PYTHON_UJSON
-+	select BR2_PACKAGE_PYTHON_U_MSGPACK
-+	select BR2_PACKAGE_PYTHON_UBJSON
-+	select BR2_PACKAGE_PYTHON_WATCHDOG
- 	select BR2_PACKAGE_PYTHON_WSACCEL
--	depends on BR2_INSTALL_LIBSTDCPP # python-msgpack -> msgpack
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # python-msgpack -> msgpack
-+	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
+diff --git a/package/log4cpp/Config.in b/package/log4cpp/Config.in
+index 8bae7a5e8c50..090bf565f4ac 100755
+--- a/package/log4cpp/Config.in
++++ b/package/log4cpp/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LOG4CPP
+ 	bool "log4cpp"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
  	help
- 	  Crossbar.io is an open-source WAMP application router that
- 	  allows to build advanced applications from loosely-coupled
-@@ -39,5 +40,4 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
- 	  https://pypi.python.org/pypi/crossbar
+ 	  Log4cpp is library of C++ classes for flexible logging to
+ 	  files, syslog, IDSA and other destinations.  It is modeled
+@@ -9,5 +10,5 @@ config BR2_PACKAGE_LOG4CPP
  
- comment "python-crossbar needs a toolchain w/ C++"
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
-index 0690e56..a500bcf 100644
---- a/package/python-crossbar/python-crossbar.hash
-+++ b/package/python-crossbar/python-crossbar.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=cbe9b62a1ec2eebbc0cd0cef887a4993, sha256 locally computed.
--md5	cbe9b62a1ec2eebbc0cd0cef887a4993  crossbar-0.12.1.tar.gz
--sha256	4919e683bcfa3c633da8207f24189fd196ef8412b647f0365cf74c0bff8b4ada  crossbar-0.12.1.tar.gz
-+# md5 from https://pypi.python.org/pypi/crossbar/json, sha256 locally computed.
-+md5	516478cc368503a0a0babc1dc28c5085  crossbar-0.14.0.tar.gz
-+sha256	6242ef34c56061850743d750d042993590ca7ec8ebe7b28c21ed05bb0904d71b  crossbar-0.14.0.tar.gz
-diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
-index 96bc254..3d82d77 100644
---- a/package/python-crossbar/python-crossbar.mk
-+++ b/package/python-crossbar/python-crossbar.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+ 	  http://log4cpp.sourceforge.net/
  
--PYTHON_CROSSBAR_VERSION = 0.12.1
-+PYTHON_CROSSBAR_VERSION = 0.14.0
- PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
--PYTHON_CROSSBAR_SITE = http://pypi.python.org/packages/source/c/crossbar
-+PYTHON_CROSSBAR_SITE = https://pypi.python.org/packages/f0/9a/e0b77e15698c47b6293655bc0e1996dd8e87bd8af7bc7434a5c8281a024e
- PYTHON_CROSSBAR_LICENSE = AGPLv3
- PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
- PYTHON_CROSSBAR_SETUP_TYPE = setuptools
+-comment "log4cpp needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "log4cpp needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.8.1
