@@ -1,34 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jun 2016 22:42:32 +0200
-Subject: [Buildroot] [git commit] package/bullet: add .hash file
-Message-ID: <20160616204324.BB2EA81D49@busybox.osuosl.org>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 16 Jun 2016 22:43:40 +0200
+Subject: [Buildroot] [PATCH 1/2] python: enable bzip2 in host variant
+In-Reply-To: <20160616000131.7f09d903@free-electrons.com>
+References: <1461508789-17644-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1461508789-17644-2-git-send-email-eric.le.bihan.dev@free.fr>
+ <20160616000131.7f09d903@free-electrons.com>
+Message-ID: <20160616224340.08157027@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2a53e7bb1fad6be6964687b4d704e85c180b1d2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Thu, 16 Jun 2016 00:01:31 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-Similar to jquery-keyboard, it seems the bullet tarball on the autobuilder
-is corrupt.  Fix it by adding a .hash file so it falls back to our s.b.o
-mirror.
+> On Sun, 24 Apr 2016 16:39:48 +0200, Eric Le Bihan wrote:
+> > Enable support for bzip2 in Python host variant, so the tarfile
+> > module works properly.
+> > 
+> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>  
+> 
+> Could you give some more details about this? The tarfile module seems
+> to only import the bz2 module when a bzip2-compressed file is handled.
+> Is this actually the case with rust?
 
-Fixes:
-http://autobuild.buildroot.net/results/39b/39bb344e3631e5f8872336cef981db5c6ec382c1
+This was required because my initial take on Rust let the build process
+download the rust-stage0 bzip2 tarball and uncompress it on its own. As
+the bootstrap binary will now be provided by the rust-bootstrap
+package, this is not needed anymore.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bullet/bullet.hash | 2 ++
- 1 file changed, 2 insertions(+)
+> Indeed, host-python is used by numerous packages, and we're trying to
+> not add too many dependencies to host-python. On the other hand,
+> building bzip2 is pretty fast, so maybe it's reasonable to add it as a
+> mandatory dependency of host-python.
 
-diff --git a/package/bullet/bullet.hash b/package/bullet/bullet.hash
-new file mode 100644
-index 0000000..5b5360c
---- /dev/null
-+++ b/package/bullet/bullet.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 c26ac96b487d7e44136ff4406dbbfe5a4d7d254ed1a2c09122c464803e7d1314  bullet-19f999ac087e68ffc2551ffb73e35e60271a0d27.tar.gz
+bz2 tarballs are widespread. So having support for this format in
+host-python, regardless of Rust, will benefit the user.
+
+Regards,
+
+-- 
+ELB
