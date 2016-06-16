@@ -1,31 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jun 2016 08:34:22 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-06-15
-In-Reply-To: <20160616063030.E179F101D31@stock.ovh.net> (Thomas Petazzoni's
- message of "Thu, 16 Jun 2016 08:30:30 +0200 (CEST)")
-References: <20160616063030.E179F101D31@stock.ovh.net>
-Message-ID: <87porhabgx.fsf@dell.be.48ers.dk>
+Date: Thu, 16 Jun 2016 08:35:41 +0200
+Subject: [Buildroot] [PATCH 1/1] google-material-design-icons: bump to
+	version 2.2.3
+In-Reply-To: <BLU436-SMTP1070923830570CD7BC8E305A0560@phx.gbl> (James Knight's
+ message of "Thu, 16 Jun 2016 01:13:53 -0400")
+References: <BLU436-SMTP1070923830570CD7BC8E305A0560@phx.gbl>
+Message-ID: <87lh25abeq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "James" == James Knight <james.d.knight@live.com> writes:
 
- > Build statistics for 2016-06-15
- > ===============================
+ > Aside from the version number increase, a newly added category `places`
+ > is available; appending to the current icon list.
 
- >         success : 184
- >        failures : 152
- >        timeouts : 1  
+ > Signed-off-by: James Knight <james.d.knight@live.com>
 
-Notice that a lot of these failures are from github issue yesterday
-corrupting tarballs. I've pushed a number of .hash file additions, but
-there's still more to go.
-
-If somebody feels like helping, please send patches.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
