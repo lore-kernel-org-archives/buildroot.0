@@ -1,43 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jun 2016 23:03:50 +0200
-Subject: [Buildroot] [git commit] wine: Bump to version 1.8.3
-Message-ID: <20160616210401.7EDAA81D77@busybox.osuosl.org>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 16 Jun 2016 23:15:51 +0200
+Subject: [Buildroot] Allowing user to run ldconfig in post-build script
+In-Reply-To: <20160616222854.6b20890a@free-electrons.com>
+References: <1722059483.342813959.1466082436418.JavaMail.root@zimbra32-e6.priv.proxad.net>
+ <1720572432.342833812.1466082726731.JavaMail.root@zimbra32-e6.priv.proxad.net>
+ <20160616153710.12ef9233@free-electrons.com>
+ <20160616214522.70ca9152@itchy>
+ <20160616222854.6b20890a@free-electrons.com>
+Message-ID: <20160616231551.6dec189b@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78eda27f898c01adee9d219238bca315b4aa3ea5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Thu, 16 Jun 2016 22:28:54 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-Bumping to stable version 1.8.3
+> On Thu, 16 Jun 2016 21:45:22 +0200, Eric Le Bihan wrote:
+> 
+> > > > Not being able to run ldconfig and generate the ld.so cache has
+> > > > two drawbacks:
+> > > > 
+> > > >  - it prevents the user from installing some libraries in other
+> > > > locations than /lib and /usr/lib (e.g. /opt/foo/lib). This can
+> > > > be solved with symlinks, though.      
+> > > 
+> > > Does the dynamic linker uses /etc/ld.so.conf at runtime to find
+> > > other libraries, even if there is no /etc/ld.so.cache? If that's
+> > > the case, then our check for ld.so.conf being absent is somewhat
+> > > wrong, as it would be valid to have, independently of whether
+> > > ldconfig has created ld.so.cache or not.    
+> > 
+> > Inspecting the glibc source code shows that:
+> > 
+> >  - /etc/ld.so.conf is only read by ldconfig (see elf/ldconfig.c). 
+> >  - /etc/ld.so.cache is only read by the dynamic loader (see
+> > elf/dl-cache.c).  
+> 
+> OK.
+> 
+> > This is confirmed when using strace. So, IMHO, this sanity check is
+> > of no use.  
+> 
+> If what you say above is true, then your conclusion is completely
+> wrong: the sanity check is *absolutely* mandatory.
+> 
+> Since Buildroot does *NOT* generate ld.so.cache, and ld.so.conf is not
+> read by the dynamic loader, having a ld.so.conf in a Buildroot
+> filesystem is a mistake, as the user might thing that the dynamic
+> linker will search in the directories listed in ld.so.conf, but it is
+> not true: the dynamic linker only searches in the libraries referenced
+> in ld.so.cache, and ignores ld.so.conf.
 
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wine/wine.hash | 2 +-
- package/wine/wine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+OK. So the check is needed to get a clean target root file system,
+devoid of files which may mislead the user. However, it makes sense to
+provide a configuration entry to disable it, for the ld.so-savvy users
+who want to create the cache on their own, no?
 
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index b4eec49..3f856ba 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 51624fadf0145e87f0c01e7ce8524ea1e8d9d360c3e8a86e78cd26a52ce55a6f wine-1.8.2.tar.bz2
-+sha256 d7cecdf7aab93bfe950e6f83ec526681b8770788c7b2a802bfe50ff97fc17a6c wine-1.8.3.tar.bz2
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 7587cb0..632eed3 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WINE_VERSION = 1.8.2
-+WINE_VERSION = 1.8.3
- WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
- WINE_SITE = https://dl.winehq.org/wine/source/1.8
- WINE_LICENSE = LGPLv2.1+
+-- 
+ELB
