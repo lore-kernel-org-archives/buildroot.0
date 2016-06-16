@@ -1,54 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jun 2016 08:34:53 +0200
-Subject: [Buildroot] [git commit] google-material-design-icons: bump to
-	version 2.2.3
-Message-ID: <20160616064127.105EE81FBB@busybox.osuosl.org>
+Date: Thu, 16 Jun 2016 08:40:35 +0200
+Subject: [Buildroot] [git commit] libseccomp: add .hash file
+Message-ID: <20160616064127.3B3B582114@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9cf13c909a3048bf8b9b7614f122e59e1aaf850
+commit: https://git.buildroot.net/buildroot/commit/?id=303e07bf5ef9c183dfd0f4d11bf75259699fe1a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Aside from the version number increase, a newly added category `places`
-is available; appending to the current icon list.
+Fixes:
+http://autobuild.buildroot.org/results/07f/07fecbce8ca4b0a69e86b93021df80dbc2c45497/
 
-Signed-off-by: James Knight <james.d.knight@live.com>
+Similar to jquery-keyboard, it seems the libseccomp tarball on the
+autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
+our s.b.o mirror.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../google-material-design-icons/google-material-design-icons.hash    | 2 +-
- package/google-material-design-icons/google-material-design-icons.mk  | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libseccomp/libseccomp.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/google-material-design-icons/google-material-design-icons.hash b/package/google-material-design-icons/google-material-design-icons.hash
-index 7bcfcb5..9a66336 100644
---- a/package/google-material-design-icons/google-material-design-icons.hash
-+++ b/package/google-material-design-icons/google-material-design-icons.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  87d7c8515207edecd3438a96bdf5129df91e0b29261d5f8c52f672957c11af65  2.0.0.tar.gz
-+sha256  769547061a51f81623bf5174767c08fc587fd6946339592fbd6cd0dd45f56b4c  2.2.3.tar.gz
-diff --git a/package/google-material-design-icons/google-material-design-icons.mk b/package/google-material-design-icons/google-material-design-icons.mk
-index 3228d13..d410a45 100644
---- a/package/google-material-design-icons/google-material-design-icons.mk
-+++ b/package/google-material-design-icons/google-material-design-icons.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GOOGLE_MATERIAL_DESIGN_ICONS_VERSION = 2.0.0
-+GOOGLE_MATERIAL_DESIGN_ICONS_VERSION = 2.2.3
- GOOGLE_MATERIAL_DESIGN_ICONS_SOURCE = \
- 	$(GOOGLE_MATERIAL_DESIGN_ICONS_VERSION).tar.gz
- GOOGLE_MATERIAL_DESIGN_ICONS_SITE = \
-@@ -14,7 +14,7 @@ GOOGLE_MATERIAL_DESIGN_ICONS_LICENSE_FILES = LICENSE
- 
- GOOGLE_MATERIAL_DESIGN_ICONS_LIST = \
- 	action alert av communication content device editor file \
--	hardware image maps navigation notification social toggle
-+	hardware image maps navigation notification places social toggle
- 
- ifneq ($(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_PNG)$(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_SVG),)
- define GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_ICONS_IMAGES
+diff --git a/package/libseccomp/libseccomp.hash b/package/libseccomp/libseccomp.hash
+new file mode 100644
+index 0000000..b0e145f
+--- /dev/null
++++ b/package/libseccomp/libseccomp.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 fee0a6671f160481dcd07760ea0df8b6d954bdd8b4ab20a423ac9ade5e4feced  libseccomp-v2.2.3.tar.gz
