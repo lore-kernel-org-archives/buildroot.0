@@ -1,33 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jun 2016 09:02:14 +0200
-Subject: [Buildroot] [git commit] libllcp: add .hash file
-Message-ID: <20160616070304.8AD5F818D9@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 16 Jun 2016 09:18:37 +0200
+Subject: [Buildroot] Patchwork cleanup week #24
+In-Reply-To: <20160615220634.67eb8fa9@free-electrons.com>
+References: <20160615220634.67eb8fa9@free-electrons.com>
+Message-ID: <CAAXf6LVu1+p1mQrWvrUFyPzbDJeZGyFZLNeTCYQ-XrQR1SsjCw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55bf6034d440ccc91c7d7c914dbc040c8264b6bf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Fixes:
-http://autobuild.buildroot.org/results/d15/d157e77cf948d036a9e36e67534f7b442c0e8bf4/
+On Wed, Jun 15, 2016 at 10:06 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> The previous patchwork cleanup period being over, it's time to start
+> the second period, with 10 other patches. We're on June 15th, so I'll
+> give people until June 30th to react on the following patches. If
+> there's no reaction, like no interest from either the original
+> submitter nor any other Buildroot developer, the patch will be marked
+> Rejected on June 30th.
+>
+> If you are in To: of this e-mail, then one or several of the patches
+> below have been authored by you, so you should be interested :-)
 
-Similar to jquery-keyboard, it seems the libllcp tarball on the autobuilder
-is corrupt.  Fix it by adding a .hash file so it falls back to our s.b.o
-mirror.
+>
+[..]
+>  6. wget download: 'scheme missing' results in empty output file
+>     http://patchwork.ozlabs.org/patch/599387/
+>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libllcp/libllcp.hash | 2 ++
- 1 file changed, 2 insertions(+)
+The mail thread where this patch originated from is at:
+http://lists.busybox.net/pipermail/buildroot/2016-February/153953.html
 
-diff --git a/package/libllcp/libllcp.hash b/package/libllcp/libllcp.hash
-new file mode 100644
-index 0000000..47c909f
---- /dev/null
-+++ b/package/libllcp/libllcp.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 4336533304a11ecb3041d211ccecd7759b7c7aad4f44037721803e2da1094d22  libllcp-05dfa8003433a7070bfd8ae02efdb0203bbf34aa.tar.gz
+There was no further response on this patch, but as far as I'm
+concerned the issue is still present and could use a fix.
+
+What do you think about the proposed solution?
+
+/Thomas
