@@ -1,48 +1,389 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 16 Jun 2016 22:22:43 +0200
-Subject: [Buildroot] [PATCH 1/3] imagemagick: bump to version 7.0.2-0
-In-Reply-To: <1465994063-17292-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1465994063-17292-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160616202243.GI3665@free.fr>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 16 Jun 2016 22:25:17 +0200
+Subject: [Buildroot] [PATCH 2/2] rust: new package
+In-Reply-To: <20160616000933.19d72bed@free-electrons.com>
+References: <1461508789-17644-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1461508789-17644-3-git-send-email-eric.le.bihan.dev@free.fr>
+ <20160616000933.19d72bed@free-electrons.com>
+Message-ID: <20160616222517.1984823b@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+Le Thu, 16 Jun 2016 00:09:33 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-On 2016-06-15 09:34 -0300, Gustavo Zacarias spake thusly:
-> Add new disables for libraries that aren't supported in buildroot and
-> sort them for ease of maintenance.
+> On Sun, 24 Apr 2016 16:39:49 +0200, Eric Le Bihan wrote:
+> > This new package provides the compiler for the Rust programming
+> > language.
+> > 
+> > Currently, only the host variant is built.
+> > 
+> > The build process is as follows:
+> > 
+> > 1. a snapshot of the Rust compiler matching the host architecture is
+> >    downloaded. This is rustc-stage0.  
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
-[--SNIP--]
-> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-> index 74ac5a4..065f33d 100644
-> --- a/package/imagemagick/imagemagick.mk
-> +++ b/package/imagemagick/imagemagick.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -IMAGEMAGICK_VERSION = 6.9.4-6
-> +IMAGEMAGICK_VERSION = 7.0.2-0
+> OK, this one is downloaded pre-compiled. So your package should have a
+> dependency on the host architecture, since the pre-compiled rust
+> compilers are only available on x86 and x86_64 it seems. So you
+> probably want something like:
+> 
+> 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
 
-Our oldest bug is about imagemagick not finding ghostscript fonts:
-    https://patchwork.ozlabs.org/patch/484767/
+OK. I will add it to rust/Config.in.host.
 
-Since you just bumped imagemagick, did you have a look if it still
-applies?
+> > 2. rustc-stage0 is used to build rustc-stage1, which will build the
+> >    final Rust compiler (rust-stage2) and the standard library for
+> > the host architecture.  
+> 
+> Is this all happening inside the rust build process? Because from what
+> I can see in your package, you're downloading and extracting
+> rustc-stage0, and then directly building rust.
+
+Yes it is. I will reword the commit message to clarify.
+
+> > 3. the standard library for the target architecture is build.
+> > 
+> > The Rust compiler uses LLVM as its backend, compiled with support
+> > for x86, ARM, PowerPC and MIPS architectures.
+> > 
+> > To properly build the standard library for the target, two files are
+> > needed:
+> > 
+> > - the target configuration: a Makefile fragment telling the build
+> > system about the cross-compiler and such.
+> > - the target specification: a JSON file describing the target
+> >   architecture to the LLVM backend.
+> > 
+> > These files are generated with a Python script which takes info
+> > from the Buildroot configuration: `rust-target-gen`.  
+> 
+> It is not entirely clear to me if a separate Python script is needed,
+> or if they could be generated from rust.mk directly.
+
+Though it may be possible, it will make the Makefile more difficult to
+read. Besides, Python provides more flexibility.
+
+> > When compiling Rust code with this compiler, the generated program
+> > only depends on the target C library, as it is statically linked to
+> > the Rust standard library.  
+> 
+> So where does the glibc dependency comes from?
+
+I will remove it. It is useless.
+
+> > diff --git
+> > a/package/rust/0001-Harmonize-use-of-CROSS_PREFIX_-in-mk-cfg-.mk.patch
+> > b/package/rust/0001-Harmonize-use-of-CROSS_PREFIX_-in-mk-cfg-.mk.patch
+> > new file mode 100644 index 0000000..a8dc151 --- /dev/null
+> > +++
+> > b/package/rust/0001-Harmonize-use-of-CROSS_PREFIX_-in-mk-cfg-.mk.patch
+> > @@ -0,0 +1,53 @@ +From 23d9dbfb3ad4a8d5d5997738e8b1436d076898e9 Mon
+> > Sep 17 00:00:00 2001 +From: Eric Le Bihan
+> > <eric.le.bihan.dev@free.fr> +Date: Tue, 19 Apr 2016 10:49:20 +0200
+> > +Subject: [PATCH 1/3] Harmonize use of CROSS_PREFIX_* in mk/cfg/*.mk
+> > +
+> > +Use CROSS_PREFIX_ in Makefile fragments for cross-compiling on
+> > Linux +wherever possible.
+> > +
+> > +Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> > +---
+> > + mk/cfg/mips-unknown-linux-gnu.mk   | 9 +++++----
+> > + mk/cfg/mipsel-unknown-linux-gnu.mk | 9 +++++----
+> > + 2 files changed, 10 insertions(+), 8 deletions(-)  
+> 
+> Aren't those files generated by your Python script? If so, why are you
+> patching the existing ones?
+
+When invoked in target configuration generation mode, the Python script
+looks for a configuration file in mk/cfg which matches the input target
+(e.g. "mips-unknown-linux-gnu" for "mips-buildroot-linux-gnu"). Then it
+will copy this file and update its contents. Unfortunately, all
+mk/cfg/*.mk files do not follow the same template. My patches solves
+this by harmonizing them, thus making the code of the Python script
+simpler. I will try to upstream them.
+
+> > diff --git a/package/rust/Config.in.host
+> > b/package/rust/Config.in.host new file mode 100644
+> > index 0000000..b9bbe0b
+> > --- /dev/null
+> > +++ b/package/rust/Config.in.host
+> > @@ -0,0 +1,24 @@
+> > +config BR2_PACKAGE_RUST_ARCH_SUPPORTS
+> > +	bool
+> > +	default y
+> > +	depends on BR2_arm  || BR2_aarch64 || BR2_i386 \
+> > +		|| BR2_mips || BR2_mipsel  || BR2_x86_64
+> > +	depends on !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
+> > +
+> > +config BR2_PACKAGE_HOST_RUST
+> > +	bool "host rust"  
+> 
+> Normally, we wouldn't add visible Config.in options for such host
+> packages, they should just be used as dependencies of target packages.
+> Like we did for the host-go package recently.
+
+OK.
+
+> > diff --git a/package/rust/rust.hash b/package/rust/rust.hash
+> > new file mode 100644
+> > index 0000000..552a5fc
+> > --- /dev/null
+> > +++ b/package/rust/rust.hash
+> > @@ -0,0 +1,5 @@
+> > +# Locally calculated
+> > +sha256
+> > af4466147e8d4db4de2a46e07494d2dc2d96313c5b37da34237f511c905f7449
+> > rustc-1.8.0-src.tar.gz +sha1
+> > d29b7607d13d64078b6324aec82926fb493f59ba
+> > rust-stage0-2016-02-17-4d3eebf-linux-x86_64-d29b7607d13d64078b6324aec82926fb493f59ba.tar.bz2
+> > +sha1 5f194aa7628c0703f0fd48adc4ec7f3cc64b98c7
+> > rust-stage0-2016-02-17-4d3eebf-linux-i386-5f194aa7628c0703f0fd48adc4ec7f3cc64b98c7.tar.bz2
+> > +  
+> 
+> Unneeded empty line. If you're locally calculating the hashes, why not
+> use sha256 for all of them?
+
+Out of laziness, I copied the sha1, which are included in the file
+names. I will use sha256 sums.
+
+> > diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+> > new file mode 100644
+> > index 0000000..90c9e2b
+> > --- /dev/null
+> > +++ b/package/rust/rust.mk
+> > @@ -0,0 +1,90 @@
+> > +################################################################################
+> > +#
+> > +# rust
+> > +#
+> > +################################################################################
+> > +
+> > +RUST_VERSION = 1.8.0
+> > +RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.gz
+> > +RUST_SITE = https://static.rust-lang.org/dist
+> > +RUST_LICENSE = Apache-2.0, MIT
+> > +RUST_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+> > +
+> > +HOST_RUST_DEPENDENCIES = host-python
+> > +
+> > +# Taken from src/snapshots.txt
+> > +HOST_RUST_SNAP_SITE = https://static.rust-lang.org/stage0-snapshots
+> > +HOST_RUST_SNAP_DATE = 2016-02-17
+> > +HOST_RUST_SNAP_REV = 4d3eebf
+> > +
+> > +ifeq ($(HOSTARCH),x86_64)
+> > +HOST_RUST_SNAP_HASH = d29b7607d13d64078b6324aec82926fb493f59ba
+> > +else
+> > +HOST_RUST_SNAP_HASH = 5f194aa7628c0703f0fd48adc4ec7f3cc64b98c7
+> > +endif
+> > +
+> > +HOST_RUST_SNAP_SOURCE = \
+> > +
+> > rust-stage0-$(HOST_RUST_SNAP_DATE)-$(HOST_RUST_SNAP_REV)-linux-$(HOSTARCH)-$(HOST_RUST_SNAP_HASH).tar.bz2
+> > + +HOST_RUST_EXTRA_DOWNLOADS = \
+> > +	$(HOST_RUST_SNAP_SITE)/$(HOST_RUST_SNAP_SOURCE)
+> > +
+> > +define HOST_RUST_SNAP_EXTRACT
+> > +	$(call suitable-extractor,$(HOST_RUST_SNAP_SOURCE))
+> > $(DL_DIR)/$(HOST_RUST_SNAP_SOURCE) | \
+> > +	$(TAR) -C $(@D) $(TAR_OPTIONS) -
+> > +endef
+> > +
+> > +HOST_RUST_POST_EXTRACT_HOOKS += HOST_RUST_SNAP_EXTRACT  
+> 
+> Alternatively, downloading and installing the rustc-stage0 compiler
+> could be done in a separate package, perhaps?
+
+For Cargo, the Rust package manager, I introduced cargo-bootstrap. I
+will do the same for rust, with rust-bootstrap.
+
+> > +
+> > +define HOST_RUST_GEN_CONF
+> > +	package/rust/rust-target-gen \
+> > +		--mode conf \
+> > +		--prefix=$(notdir $(TARGET_CROSS)) \
+> > +		--input $(@D) \
+> > +		--output $(@D)/mk/cfg/$(GNU_TARGET_NAME).mk \
+> > +		$(GNU_TARGET_NAME)
+> > +endef
+> > +
+> > +define HOST_RUST_GEN_SPEC
+> > +	package/rust/rust-target-gen \
+> > +		--mode spec \
+> > +		--input $(@D) \
+> > +		--output
+> > $(HOST_DIR)/etc/rustc/$(GNU_TARGET_NAME).json \
+> > +		$(GNU_TARGET_NAME)
+> > +endef
+> > +
+> > +HOST_RUST_PRE_CONFIGURE_HOOKS += \
+> > +	HOST_RUST_GEN_CONF \
+> > +	HOST_RUST_GEN_SPEC
+> > +
+> > +HOST_RUST_MAKE_ENV = RUST_TARGET_PATH=$(HOST_DIR)/etc/rustc
+> > +HOST_RUST_MAKE_OPTS = VERBOSE=1
+> > +
+> > +define HOST_RUST_CONFIGURE_CMDS
+> > +	(cd $(@D); $(HOST_CONFIGURE_OPTS)               \
+> > +		./configure                             \
+> > +		--host=$(GNU_HOST_NAME)                 \
+> > +		--build=$(GNU_HOST_NAME)                \
+> > +		--target=$(GNU_TARGET_NAME)             \
+> > +		--prefix="$(HOST_DIR)/usr"              \
+> > +		--enable-local-rust                     \
+> > +		--local-rust-root="$(@D)/rust-stage0"   \
+> > +		--disable-docs                          \
+> > +		--disable-manage-submodules             \
+> > +		--sysconfdir="$(HOST_DIR)/etc"          \
+> > +		--localstatedir="$(HOST_DIR)/var/lib"   \
+> > +		--datadir="$(HOST_DIR)/usr/share"       \
+> > +		--infodir="$(HOST_DIR)/usr/share/info")  
+> 
+> It's probably good to explain somewhere that the configure script is
+> not an autoconf-generated configure script.
+
+OK.
+
+> In any case, I applied your patches, and tried to build the following
+> defconfig:
+> 
+> BR2_arm=y
+> BR2_cortex_a8=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> # BR2_TARGET_ROOTFS_TAR is not set
+> BR2_PACKAGE_HOST_RUST=y
+> 
+> and it fails to build with:
+> 
+> >>> host-rust 1.8.0 Configuring  
+> package/rust/rust-target-gen --mode conf
+> --prefix=arm-linux-gnueabihf-
+> --input /home/thomas/projets/buildroot/output/build/host-rust-1.8.0
+> --output /home/thomas/projets/buildroot/output/build/host-rust-1.8.0/mk/cfg/arm-buildroot-linux-gnueabihf.mk
+> arm-buildroot-linux-gnueabihf package/rust/rust-target-gen --mode
+> spec
+> --input /home/thomas/projets/buildroot/output/build/host-rust-1.8.0
+> --output /home/thomas/projets/buildroot/output/host/etc/rustc/arm-buildroot-linux-gnueabihf.json
+> arm-buildroot-linux-gnueabihf
+> (cd /home/thomas/projets/buildroot/output/build/host-rust-1.8.0;
+> PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/home/thomas/projets/buildroot/output/host/usr/bin:/home/thomas/projets/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin"
+> AR="/usr/bin/ar" AS="/usr/bin/as" LD="/usr/bin/ld" NM="/usr/bin/nm"
+> CC="/usr/bin/gcc" GCC="/usr/bin/gcc" CXX="/usr/bin/g++"
+> CPP="/usr/bin/cpp" OBJCOPY="/usr/bin/objcopy"
+> RANLIB="/usr/bin/ranlib"
+> CPPFLAGS="-I/home/thomas/projets/buildroot/output/host/usr/include"
+> CFLAGS="-O2 -I/home/thomas/projets/buildroot/output/host/usr/include"
+> CXXFLAGS="-O2
+> -I/home/thomas/projets/buildroot/output/host/usr/include"
+> LDFLAGS="-L/home/thomas/projets/buildroot/output/host/lib
+> -L/home/thomas/projets/buildroot/output/host/usr/lib
+> -Wl,-rpath,/home/thomas/projets/buildroot/output/ho st/usr/l ib"
+> PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
+> PKG_CONFIG="/home/thomas/projets/buildroot/output/host/usr/bin/pkg-config"
+> PKG_CONFIG_SYSROOT_DIR="/"
+> PKG_CONFIG_LIBDIR="/home/thomas/projets/buildroot/output/host/usr/lib/pkgconfig:/home/thomas/projets/buildroot/output/host/usr/share/pkgconfig"
+> INTLTOOL_PERL=/usr/bin/perl ./configure --host=x86_64-pc-linux-gnu
+> --build=x86_64-pc-linux-gnu --target=arm-buildroot-linux-gnueabihf
+> --prefix="/home/thomas/projets/buildroot/output/host/usr"
+> --enable-local-rust
+> --local-rust-root="/home/thomas/projets/buildroot/output/build/host-rust-1.8.0/rust-stage0"
+> --disable-docs --disable-manage-submodules
+> --sysconfdir="/home/thomas/projets/buildroot/output/host/etc"
+> --localstatedir="/home/thomas/projets/buildroot/output/host/var/lib"
+> --datadir="/home/thomas/projets/buildroot/output/host/usr/share"
+> --infodir="/home/thomas/projets/buildroot/output/host/usr/share/info")
+> configure: looking for configure programs configure: found program
+> 'cmp' configure: found program 'mkdir' configure: found program
+> 'printf' configure: found program 'cut' configure: found program
+> 'head' configure: found program 'grep' configure: found program
+> 'xargs' configure: found program 'cp' configure: found program 'find'
+> configure: found program 'uname' configure: found program 'date'
+> configure: found program 'tr' configure: found program 'sed'
+> configure: found program 'file' configure: found program 'make'
+> configure: inspecting environment configure: recreating config.tmp
+> configure: configure: processing ./configure args configure:
+> configure: CFG_DISABLE_DOCS     := 1 configure:
+> CFG_ENABLE_LOCAL_RUST := 1 configure:
+> CFG_LOCALSTATEDIR    := /home/thomas/projets/buildroot/outp ...
+> configure:
+> CFG_SYSCONFDIR       := /home/thomas/projets/buildroot/outp ...
+> configure:
+> CFG_DATADIR          := /home/thomas/projets/buildroot/outp ...
+> configure:
+> CFG_INFODIR          := /home/thomas/projets/buildroot/outp ...
+> configure: CFG_LLVM_ROOT        := configure: CFG_PYTHON           :=
+> configure: CFG_JEMALLOC_ROOT    := configure: CFG_BUILD            :=
+> x86_64-pc-linux-gnu configure: CFG_ANDROID_CROSS_PATH := configure:
+> CFG_I686_LINUX_ANDROID_NDK := configure:
+> CFG_ARM_LINUX_ANDROIDEABI_NDK := configure:
+> CFG_AARCH64_LINUX_ANDROID_NDK := configure: CFG_NACL_CROSS_PATH  :=
+> configure: CFG_RELEASE_CHANNEL  := dev configure:
+> CFG_MUSL_ROOT        := /usr/local configure: CFG_EXTRA_FILENAME   :=
+> configure: CFG_DEFAULT_LINKER   := cc configure:
+> CFG_DEFAULT_AR       := ar configure:
+> CFG_LIBDIR           := /home/thomas/projets/buildroot/outp ...
+> configure: configure: validating ./configure args configure:
+> configure: CFG_BOOTSTRAP_KEY    := 23:44:24 configure: configure:
+> looking for build programs configure: configure:
+> CFG_CURLORWGET       := /usr/bin/curl (7.47.0) configure:
+> CFG_PYTHON           := /home/thomas/projets/buildroot/outp ...
+> configure: CFG_GIT              := /usr/bin/git (2.7.4) configure:
+> git: no git directory. disabling submodules configure:
+> CFG_MD5              := configure:
+> CFG_MD5SUM           := /usr/bin/md5sum (8.25) configure:
+> CFG_HASH_COMMAND     := /usr/bin/md5sum | cut -c 1-8 configure:
+> CFG_CLANG            := configure: CFG_CCACHE           := configure:
+> CFG_GCC              := /usr/bin/gcc (5.3.1-14ubuntu2.1) configure:
+> CFG_LD               := /usr/bin/ld (2.26) configure:
+> CFG_VALGRIND         := configure: CFG_PERF             := configure:
+> CFG_ISCC             := configure: CFG_ANTLR4           := configure:
+> CFG_GRUN             := configure:
+> CFG_FLEX             := /usr/bin/flex (2.6.0) configure:
+> CFG_BISON            := /usr/bin/bison (3.0.4) configure:
+> CFG_GDB              := /usr/bin/gdb (7.11-0ubuntu1) configure:
+> CFG_LLDB             := configure: CFG_DISABLE_VALGRIND_RPASS := 1
+> configure: CFG_GDB_VERSION      := GNU gdb (Ubuntu 7.11-0ubuntu1)
+> 7.11 configure: configure: looking for target specific programs
+> configure: configure: CFG_ADB              := /usr/bin/adb configure:
+> configure: using rustc
+> at: /home/thomas/projets/buildroot/output/build/host-rust-1.8.0/rust-stage0
+> with version: rustc 1.8.0-dev (4d3eebff9 2016-02-17) configure:
+> configure:
+> CFG_LOCAL_RUST_ROOT  := /home/thomas/projets/buildroot/outp ...
+> configure: skipping compiler inference steps; using provided
+> CC=/usr/bin/gcc configure: CFG_CC               := /usr/bin/gcc
+> configure: CFG_CXX              := /usr/bin/g++ configure:
+> CFG_CPP              := /usr/bin/cpp configure:
+> CFG_CFLAGS           := -O2 -I/home/thomas/projets/buildroo ...
+> configure: CFG_CXXFLAGS         := -O2
+> -I/home/thomas/projets/buildroo ... configure:
+> CFG_LDFLAGS          := -L/home/thomas/projets/buildroot/ou ...
+> configure: CFG_STDCPP_NAME      := stdc++ configure: error:
+> unsupported target triples "x86_64-pc-linux-gnu" found
+> package/pkg-generic.mk:185: recipe for target
+> '/home/thomas/projets/buildroot/output/build/host-rust-1.8.0/.stamp_configured'
+> failed make[1]: ***
+> [/home/thomas/projets/buildroot/output/build/host-rust-1.8.0/.stamp_configured]
+> Error 1 Makefile:36: recipe for target '_all' failed make: *** [_all]
+> Error 2
+> 
+> Is this expected?
+
+Of course, not! The commit b571dbf introduced a new version of
+support/gnuconfig/config.guess which outputs "x86_64-pc-linux-gnu" as
+$(GNU_HOST_NAME). The ./configure script only supports
+"*-unknown-linux-*". Removing the --host=$(GNU_HOST_NAME) and
+--build=$(GNU_HOST_NAME) options in the Makefile solves the issue,
+as the ./configure will compute the values on its own.
 
 Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ELB
