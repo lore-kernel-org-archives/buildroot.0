@@ -1,34 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jun 2016 22:52:56 +0200
-Subject: [Buildroot] [git commit] python-pyinotify: add .hash file
-Message-ID: <20160616205426.CBEB981EDD@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 16 Jun 2016 22:55:57 +0200
+Subject: [Buildroot] [PATCH 1/2] python: enable bzip2 in host variant
+In-Reply-To: <20160616224340.08157027@itchy>
+References: <1461508789-17644-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1461508789-17644-2-git-send-email-eric.le.bihan.dev@free.fr>
+ <20160616000131.7f09d903@free-electrons.com>
+ <20160616224340.08157027@itchy>
+Message-ID: <20160616225557.07174b4d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f72da5cef9d57e70cfc02c174723b8a6a2880c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-http://autobuild.buildroot.org/results/35f/35f4c094a3d58b95ed990b57d91dd75f63245cc6/
-http://autobuild.buildroot.org/results/0f7/0f7d666e307fc4f665bbe61cdce6c3d6838e73fa/
+On Thu, 16 Jun 2016 22:43:40 +0200, Eric Le Bihan wrote:
 
-Similar to jquery-keyboard, it seems the python-pyinotify tarball on the
-autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
-our s.b.o mirror.
+> > Could you give some more details about this? The tarfile module seems
+> > to only import the bz2 module when a bzip2-compressed file is handled.
+> > Is this actually the case with rust?  
+> 
+> This was required because my initial take on Rust let the build process
+> download the rust-stage0 bzip2 tarball and uncompress it on its own. As
+> the bootstrap binary will now be provided by the rust-bootstrap
+> package, this is not needed anymore.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-pyinotify/python-pyinotify.hash | 2 ++
- 1 file changed, 2 insertions(+)
+OK, great!
 
-diff --git a/package/python-pyinotify/python-pyinotify.hash b/package/python-pyinotify/python-pyinotify.hash
-new file mode 100644
-index 0000000..2bcf054
---- /dev/null
-+++ b/package/python-pyinotify/python-pyinotify.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 7943f198c5cef2bdc121d847937fbe565daaa7d4daaf1b8de8ef5689812f481c  python-pyinotify-0.9.6.tar.gz
+> > Indeed, host-python is used by numerous packages, and we're trying to
+> > not add too many dependencies to host-python. On the other hand,
+> > building bzip2 is pretty fast, so maybe it's reasonable to add it as a
+> > mandatory dependency of host-python.  
+> 
+> bz2 tarballs are widespread. So having support for this format in
+> host-python, regardless of Rust, will benefit the user.
+
+host-python is only meant to be used as a dependency to build other
+things in Buildroot. As long as these "other things" don't need bz2
+support in Python, there's no reason to enable it.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
