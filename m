@@ -1,33 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jun 2016 08:40:35 +0200
-Subject: [Buildroot] [git commit] libseccomp: add .hash file
-Message-ID: <20160616064127.3B3B582114@busybox.osuosl.org>
+Date: Thu, 16 Jun 2016 08:37:49 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-bad: disable autoreconf
+Message-ID: <20160616064127.2C9A6807A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=303e07bf5ef9c183dfd0f4d11bf75259699fe1a0
+commit: https://git.buildroot.net/buildroot/commit/?id=ed2d54727234f39edcc1d191ece9b9c6f53c4823
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.org/results/07f/07fecbce8ca4b0a69e86b93021df80dbc2c45497/
+Autoreconf is no longer required in gst1-plugins-bad and it is not
+done for any other gst package either. With autoreconf disabled,
+gettextize and a gettext makefile patch are no longer required
+and can be safely removed.
 
-Similar to jquery-keyboard, it seems the libseccomp tarball on the
-autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
-our s.b.o mirror.
-
+Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libseccomp/libseccomp.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ .../gst1-plugins-bad/0001-use-gettext-0.18.patch        | 17 -----------------
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk |  4 ----
+ 2 files changed, 21 deletions(-)
 
-diff --git a/package/libseccomp/libseccomp.hash b/package/libseccomp/libseccomp.hash
-new file mode 100644
-index 0000000..b0e145f
---- /dev/null
-+++ b/package/libseccomp/libseccomp.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 fee0a6671f160481dcd07760ea0df8b6d954bdd8b4ab20a423ac9ade5e4feced  libseccomp-v2.2.3.tar.gz
+diff --git a/package/gstreamer1/gst1-plugins-bad/0001-use-gettext-0.18.patch b/package/gstreamer1/gst1-plugins-bad/0001-use-gettext-0.18.patch
+deleted file mode 100644
+index ebf4567..0000000
+--- a/package/gstreamer1/gst1-plugins-bad/0001-use-gettext-0.18.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Use newer version of gettext to match current buildroot gettext.
+-
+-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+-----
+-Index: gst1-plugins-bad-1.1.1/po/Makefile.in.in
+-===================================================================
+---- gst1-plugins-bad-1.1.1.orig/po/Makefile.in.in
+-+++ gst1-plugins-bad-1.1.1/po/Makefile.in.in
+-@@ -9,7 +9,7 @@
+- # General Public License and is *not* in the public domain.
+- #
+- # Origin: gettext-0.17
+--GETTEXT_MACRO_VERSION = 0.17
+-+GETTEXT_MACRO_VERSION = 0.18
+- 
+- PACKAGE = @PACKAGE@
+- VERSION = @VERSION@
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 0896929..271569e 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -13,10 +13,6 @@ GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
+ # enabled.
+ GST1_PLUGINS_BAD_LICENSE = LGPLv2+ LGPLv2.1+
+ 
+-GST1_PLUGINS_BAD_AUTORECONF = YES
+-GST1_PLUGINS_BAD_AUTORECONF_OPTS = -I $(@D)/common/m4
+-GST1_PLUGINS_BAD_GETTEXTIZE = YES
+-
+ GST1_PLUGINS_BAD_CONF_OPTS = \
+ 	--disable-examples \
+ 	--disable-valgrind \
