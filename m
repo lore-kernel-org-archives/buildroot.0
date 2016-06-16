@@ -1,26 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Jun 2016 08:38:13 +0200
-Subject: [Buildroot] [PATCH] gst1-plugins-bad: disable autoreconf
-In-Reply-To: <1466058038-15340-1-git-send-email-marcin.nowakowski@imgtec.com>
- (Marcin Nowakowski's message of "Thu, 16 Jun 2016 08:20:38 +0200")
-References: <1466058038-15340-1-git-send-email-marcin.nowakowski@imgtec.com>
-Message-ID: <87d1nhabai.fsf@dell.be.48ers.dk>
+Date: Thu, 16 Jun 2016 08:34:53 +0200
+Subject: [Buildroot] [git commit] google-material-design-icons: bump to
+	version 2.2.3
+Message-ID: <20160616064127.105EE81FBB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marcin" == Marcin Nowakowski <marcin.nowakowski@imgtec.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e9cf13c909a3048bf8b9b7614f122e59e1aaf850
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Autoreconf is no longer required in gst1-plugins-bad and it is not
- > done for any other gst package either. With autoreconf disabled,
- > gettextize and a gettext makefile patch are no longer required
- > and can be safely removed.
+Aside from the version number increase, a newly added category `places`
+is available; appending to the current icon list.
 
- > Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Signed-off-by: James Knight <james.d.knight@live.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../google-material-design-icons/google-material-design-icons.hash    | 2 +-
+ package/google-material-design-icons/google-material-design-icons.mk  | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/google-material-design-icons/google-material-design-icons.hash b/package/google-material-design-icons/google-material-design-icons.hash
+index 7bcfcb5..9a66336 100644
+--- a/package/google-material-design-icons/google-material-design-icons.hash
++++ b/package/google-material-design-icons/google-material-design-icons.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  87d7c8515207edecd3438a96bdf5129df91e0b29261d5f8c52f672957c11af65  2.0.0.tar.gz
++sha256  769547061a51f81623bf5174767c08fc587fd6946339592fbd6cd0dd45f56b4c  2.2.3.tar.gz
+diff --git a/package/google-material-design-icons/google-material-design-icons.mk b/package/google-material-design-icons/google-material-design-icons.mk
+index 3228d13..d410a45 100644
+--- a/package/google-material-design-icons/google-material-design-icons.mk
++++ b/package/google-material-design-icons/google-material-design-icons.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GOOGLE_MATERIAL_DESIGN_ICONS_VERSION = 2.0.0
++GOOGLE_MATERIAL_DESIGN_ICONS_VERSION = 2.2.3
+ GOOGLE_MATERIAL_DESIGN_ICONS_SOURCE = \
+ 	$(GOOGLE_MATERIAL_DESIGN_ICONS_VERSION).tar.gz
+ GOOGLE_MATERIAL_DESIGN_ICONS_SITE = \
+@@ -14,7 +14,7 @@ GOOGLE_MATERIAL_DESIGN_ICONS_LICENSE_FILES = LICENSE
+ 
+ GOOGLE_MATERIAL_DESIGN_ICONS_LIST = \
+ 	action alert av communication content device editor file \
+-	hardware image maps navigation notification social toggle
++	hardware image maps navigation notification places social toggle
+ 
+ ifneq ($(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_PNG)$(BR2_PACKAGE_GOOGLE_MATERIAL_DESIGN_ICONS_TYPE_SVG),)
+ define GOOGLE_MATERIAL_DESIGN_ICONS_INSTALL_ICONS_IMAGES
