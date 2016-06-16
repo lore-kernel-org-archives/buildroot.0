@@ -1,44 +1,33 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 16 Jun 2016 22:43:40 +0200
-Subject: [Buildroot] [PATCH 1/2] python: enable bzip2 in host variant
-In-Reply-To: <20160616000131.7f09d903@free-electrons.com>
-References: <1461508789-17644-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1461508789-17644-2-git-send-email-eric.le.bihan.dev@free.fr>
- <20160616000131.7f09d903@free-electrons.com>
-Message-ID: <20160616224340.08157027@itchy>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 16 Jun 2016 22:46:31 +0200
+Subject: [Buildroot] [git commit] pps-tools: add .hash file
+Message-ID: <20160616204727.C4131817E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 16 Jun 2016 00:01:31 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+commit: https://git.buildroot.net/buildroot/commit/?id=e398c23b4cb7552ef7dcbcaa4eee4b3178dc3589
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> On Sun, 24 Apr 2016 16:39:48 +0200, Eric Le Bihan wrote:
-> > Enable support for bzip2 in Python host variant, so the tarfile
-> > module works properly.
-> > 
-> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>  
-> 
-> Could you give some more details about this? The tarfile module seems
-> to only import the bz2 module when a bzip2-compressed file is handled.
-> Is this actually the case with rust?
+Fixes:
+http://autobuild.buildroot.org/results/006/00648b4ca73116933a44cccef3dbefbd16766246/
 
-This was required because my initial take on Rust let the build process
-download the rust-stage0 bzip2 tarball and uncompress it on its own. As
-the bootstrap binary will now be provided by the rust-bootstrap
-package, this is not needed anymore.
+Similar to jquery-keyboard, it seems the pps-tools tarball on the
+autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
+our s.b.o mirror.
 
-> Indeed, host-python is used by numerous packages, and we're trying to
-> not add too many dependencies to host-python. On the other hand,
-> building bzip2 is pretty fast, so maybe it's reasonable to add it as a
-> mandatory dependency of host-python.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pps-tools/pps-tools.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-bz2 tarballs are widespread. So having support for this format in
-host-python, regardless of Rust, will benefit the user.
-
-Regards,
-
--- 
-ELB
+diff --git a/package/pps-tools/pps-tools.hash b/package/pps-tools/pps-tools.hash
+new file mode 100644
+index 0000000..9fa62cb
+--- /dev/null
++++ b/package/pps-tools/pps-tools.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 28d4e5aa845f659a6ab4174bbf579e22e2d2c87dc72fd6d07306a6a249c27c76  pps-tools-0deb9c7e135e9380a6d09e9d2e938a146bb698c8.tar.gz
