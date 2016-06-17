@@ -1,99 +1,348 @@
-From: Joris Lijssens <joris.lijssens@gmail.com>
-Date: Fri, 17 Jun 2016 18:56:14 +0200
-Subject: [Buildroot] [PATCH v3 1/1] libuio: new package
-Message-ID: <1466182574-28722-1-git-send-email-joris.lijssens@gmail.com>
+From: Philippe Reynes <philippe.reynes@sagemcom.com>
+Date: Fri, 17 Jun 2016 19:01:08 +0200
+Subject: [Buildroot] [PATCH v2] makedevs: add capability support
+In-Reply-To: <20160616171037.GA3665@free.fr>
+References: <3d2f3fc0-cfff-4862-9507-1fd3630254cc@EXDRUEARSGC002.eq1sgc.local>
+ <20160616171037.GA3665@free.fr>
+Message-ID: <57642CD4.5090202@sagemcom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
----
-Changes v2 -> v3:
-- libuio comes before libump in Config.in
+Hi Yann, All,
 
-Changes v1 -> v2:
-- Add dependency on host-automake
-- Add dependency on host-libtool
-- Add dependency on host-autoconf
+On 06/16/2016 07:10 PM, Yann E. MORIN wrote:
+> Philippe, All,
+>
+> On 2016-06-16 12:59 +0200, Philippe Reynes spake thusly:
+>> Add the support of capability to makedevs as extended attribute.
+>> Now, it's possible to add a  line "|xattr <capability>" after a
+>> file description to also add a capability to this file. It's
+>> possible to add severals capabilities with severals lines.
+>>
+>> Signed-off-by: Philippe Reynes <philippe.reynes@sagemcom.com>
+>> ---
+>> Changelog:
+>> v2:
+>> - add an option to enable (or not) xattr support in makedevs
+>> - update makedevs code to handle |xattr on the first line
+>> - add documentation about xattr support in makedevs
+> Thanks for this new version. See below for a few comments...
+>
+>>   docs/manual/makedev-syntax.txt |   28 ++++++++++++++
+>>   package/makedevs/makedevs.c    |   80 +++++++++++++++++++++++++++++++++++++++-
+>>   package/makedevs/makedevs.mk   |   10 ++++-
+>>   system/Config.in               |    5 +++
+>>   4 files changed, 119 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
+>> index e4dffc9..dd7bfdb 100644
+>> --- a/docs/manual/makedev-syntax.txt
+>> +++ b/docs/manual/makedev-syntax.txt
+>> @@ -71,3 +71,31 @@ and then for device files corresponding to the partitions of
+>>   /dev/hda b 640 root root 3 1 1 1 15
+>>   ----
+>>   
+>> +The tool makedevs supports extended attributes for a file.
+>> +This is done by adding a line starting with +|xattr+ after
+>> +the line describing the file. Right now, only capability
+>> +is supported as extended attribute.
+>> +
+>> +|=====================
+>> +| \|xattr | capability
+>> +|=====================
+>> +
+>> +- +|xattr+ is a "flag" that indicate an extended attribute
+>> +- +capability+ is a capability to add to the previous file
+>> +
+>> +If you want to add the capability cap_sys_admin to the binary foo, you will write :
+>> +
+>> +----
+>> +/usr/bin/foo f 755 root root - - - - -
+>> +|xattr cap_sys_admin+eip
+>> +----
+>> +
+>> +You can add severals capabilities to a file by using severals +|xattr+ lines.
+>> +If you want to add the capability cap_sys_admin and cap_net_admin to the binary foo,
+>> +you will write :
+>> +
+>> +----
+>> +/usr/bin/foo f 755 root root - - - - -
+>> +|xattr cap_sys_admin+eip
+>> +|xattr cap_net_admin+eip
+>> +----
+> Good, thanks! :-)
+>
+> Note: have you considered if it be possible that one could write multiple
+> xattrs on the same line, like:
+>
+>      /usr/bin/foo f 755 root root - - - - -
+>      |xattr cap_sys_admin+eip cap_net_admin+eip
+>
+> Note: I am *not* askign that you do that for a respin.
 
- package/Config.in          |  1 +
- package/libuio/Config.in   |  8 ++++++++
- package/libuio/libuio.hash |  2 ++
- package/libuio/libuio.mk   | 28 ++++++++++++++++++++++++++++
- 4 files changed, 39 insertions(+)
- create mode 100644 package/libuio/Config.in
- create mode 100644 package/libuio/libuio.hash
- create mode 100644 package/libuio/libuio.mk
+I haven't considered this, but the code should support such synthax :
 
-diff --git a/package/Config.in b/package/Config.in
-index 3d93951..20b48eb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -403,6 +403,7 @@ endif
- 	source "package/iucode-tool/Config.in"
- 	source "package/kbd/Config.in"
- 	source "package/lcdproc/Config.in"
-+	source "package/libuio/Config.in"
- 	source "package/libump/Config.in"
- 	source "package/linux-backports/Config.in"
- 	source "package/lirc-tools/Config.in"
-diff --git a/package/libuio/Config.in b/package/libuio/Config.in
-new file mode 100644
-index 0000000..97be1e3
---- /dev/null
-+++ b/package/libuio/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBUIO
-+	bool "libuio"
-+	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-+	help
-+	  libuio is a light-weight C programming library to handle UIO
-+	  (Userspace I/O) device discovery and binding task.
-+
-+	  http://github.com/Linutronix/libuio
-diff --git a/package/libuio/libuio.hash b/package/libuio/libuio.hash
-new file mode 100644
-index 0000000..6afe7de
---- /dev/null
-+++ b/package/libuio/libuio.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 57f9617f75d20f7912b270568cffdf098fe9d0c1ca690c002e949be8424aa4e6 libuio-940861de278cb794bf9d775b76a4d1d4f9108607.tar.gz
-diff --git a/package/libuio/libuio.mk b/package/libuio/libuio.mk
-new file mode 100644
-index 0000000..c5c5d25
---- /dev/null
-+++ b/package/libuio/libuio.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# libuio
-+#
-+################################################################################
-+
-+LIBUIO_VERSION = 940861de278cb794bf9d775b76a4d1d4f9108607# v0.2.7
-+LIBUIO_SITE = $(call github,Linutronix,libuio,$(LIBUIO_VERSION))
-+LIBUIO_LICENSE = LGPLv2.1
-+LIBUIO_LICENSE_FILES = COPYING
-+LIBUIO_CONF_OPTS = --with-glib=no 
-+LIBUIO_INSTALL_STAGING = YES
-+# AUTORECONF doesn't seem to work
-+LIBUIO_DEPENDENCIES = host-pkgconf host-gettext host-libtool \
-+		      host-automake host-autoconf
-+
-+ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
-+LIBUIO_DEPENDENCIES += argp-standalone
-+LIBUIO_CONF_ENV += LIBS="-largp"
-+endif
-+
-+define LIBUIO_RUN_AUTOGEN
-+	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-+endef
-+
-+LIBUIO_PRE_CONFIGURE_HOOKS += LIBUIO_RUN_AUTOGEN
-+
-+$(eval $(autotools-package))
--- 
-1.8.3.1
+     /usr/bin/foo f 755 root root - - - - -
+     |xattr cap_sys_admin,cap_net_admin+eip
+
+
+>> diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
+>> index e5ef164..e2d084f 100644
+>> --- a/package/makedevs/makedevs.c
+>> +++ b/package/makedevs/makedevs.c
+>> @@ -35,6 +35,7 @@
+>>   #include <sys/sysmacros.h>     /* major() and minor() */
+>>   #endif
+>>   #include <ftw.h>
+>> +#include <sys/capability.h>
+> Minor comment is here: this include line should also be guarded with
+> #ifdef EXTENDED_ATTRIBUTES
+>
+>>   const char *bb_applet_name;
+>>   uid_t recursive_uid;
+>> @@ -349,6 +350,57 @@ char *concat_path_file(const char *path, const char *filename)
+>>   	return outbuf;
+>>   }
+>>   
+>> +#ifdef EXTENDED_ATTRIBUTES
+>> +int bb_set_xattr(const char *fpath, const char *xattr)
+>> +{
+>> +	cap_t cap, cap_file, cap_new;
+>> +	char *cap_file_text, *cap_new_text;
+>> +	ssize_t length;
+>> +
+>> +	cap = cap_from_text(xattr);
+>> +	if (cap == NULL) {
+>> +		bb_perror_msg("cap_from_text failed for %s", xattr);
+>> +		return -1;
+>> +	}
+>> +
+>> +	cap_file = cap_get_file(fpath);
+>> +	if (cap_file == NULL) {
+>> +		/* if no capability was set before, we initialize cap_file */
+>> +		if (errno == ENODATA) {
+> My man page for cap_get_file() does not document ENODATA.
+
+Yes, in my man page, the function cap_get_file should never return ENODATA.
+But when I've tested this code, this function return ENODATA on the 
+first occurency
+of a file.
+
+I've investigated a bit, and looked at the code in libcap to see how 
+they use this
+function. I've looked the code of getcap, and I've found this :
+
+
+     cap_d = cap_get_file(fname);
+     if (cap_d == NULL) {
+     if (errno != ENODATA) {
+         fprintf(stderr, "Failed to get capabilities of file `%s' (%s)\n",
+             fname, strerror(errno));
+     } else if (verbose) {
+         printf("%s\n", fname);
+     }
+     return 0;
+     }
+
+So I think that cap_get_file may return ENODATA, and I suppose that the
+documentation wasn't updated.
+
+>> +			cap_file = cap_init();
+> What if cap_init() fails (it can return NULL on error)?
+>
+>> +		} else {
+>> +			bb_perror_msg("cap_get_file failed on %s", fpath);
+>> +			return -1;
+>> +		}
+>> +	}
+>> +
+>> +	if ((cap_file_text = cap_to_text(cap_file, &length)) == NULL) {
+>> +		bb_perror_msg("cap_to_name failed on %s", fpath);
+>> +		return -1;
+>> +	}
+>> +
+>> +	bb_xasprintf(&cap_new_text, "%s %s", cap_file_text, xattr);
+>> +
+>> +	if ((cap_new = cap_from_text(cap_new_text)) == NULL) {
+>> +		bb_perror_msg("cap_from_text failed on %s", cap_new_text);
+>> +		return -1;
+>> +	}
+>> +
+>> +	if (cap_set_file(fpath, cap_new) == -1) {
+>> +		bb_perror_msg("cap_set_file failed for %s (xattr = %s)", fpath, xattr);
+>> +		return -1;
+>> +	}
+>> +
+>> +	cap_free(cap);
+>> +	cap_free(cap_file);
+>> +	cap_free(cap_file_text);
+>> +	cap_free(cap_new);
+>> +	cap_free(cap_new_text);
+> Well, instead of all those "return -1" I think it would be much simpler
+> to just exit(1) right away.
+>
+> Otherwise, none of the allocations done by the various cap_XXX()
+> functions would be freed. Granted, makedevs is not long-lived, but on a
+> very large target/ directory, with failures on a lot of files, this
+> could leak quite some memory in the end.
+>
+> So, really, just exit(1) on error. We can't do much, so there's no point
+> in trying to continue: we won't be able to recover or fallback to
+> anything.
+>
+>> +	return 0;
+>> +}
+>> +#endif /* EXTENDED_ATTRIBUTES */
+>> +
+>>   void bb_show_usage(void)
+>>   {
+>>   	fprintf(stderr, "%s: [-d device_table] rootdir\n\n", bb_applet_name);
+>> @@ -413,6 +465,7 @@ int main(int argc, char **argv)
+>>   	int opt;
+>>   	FILE *table = stdin;
+>>   	char *rootdir = NULL;
+>> +	char *full_name = NULL;
+>>   	char *line = NULL;
+>>   	int linenum = 0;
+>>   	int ret = EXIT_SUCCESS;
+>> @@ -454,15 +507,32 @@ int main(int argc, char **argv)
+>>   		unsigned int count = 0;
+>>   		unsigned int increment = 0;
+>>   		unsigned int start = 0;
+>> +		char xattr[255];
+>>   		char name[4096];
+>>   		char user[41];
+>>   		char group[41];
+>> -		char *full_name;
+>>   		uid_t uid;
+>>   		gid_t gid;
+>>   
+>>   		linenum++;
+>>   
+>> +		if (1 == sscanf(line, "|xattr %254s", xattr))
+>> +		{
+>> +#ifdef EXTENDED_ATTRIBUTES
+>> +			if (!full_name) {
+>> +				bb_error_msg("line %d should be after a file\n", linenum);
+>> +				ret = EXIT_FAILURE;
+> Ditto, just exit().
+>
+>> +			} else {
+>> +				if (bb_set_xattr(full_name, xattr) < 0)
+>> +					ret = EXIT_FAILURE;
+> Ditto.
+>
+>> +			}
+>> +#else
+>> +			bb_error_msg("line %d not supported: '%s'\n", linenum, line);
+>> +			ret = EXIT_FAILURE;
+> Ditto.
+>
+> Thanks! :-)
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> +#endif /* EXTENDED_ATTRIBUTES */
+>> +			continue;
+>> +		}
+>> +
+>>   		if ((2 > sscanf(line, "%4095s %c %o %40s %40s %u %u %u %u %u", name,
+>>   						&type, &mode, user, group, &major,
+>>   						&minor, &start, &increment, &count)) ||
+>> @@ -487,6 +557,13 @@ int main(int argc, char **argv)
+>>   		} else {
+>>   			uid = getuid();
+>>   		}
+>> +
+>> +		/*
+>> +		 * free previous full name
+>> +		 * we don't de-allocate full_name at the end of the parsing,
+>> +		 * because we may need it if the next line is an xattr.
+>> +		 */
+>> +		free(full_name);
+>>   		full_name = concat_path_file(rootdir, name);
+>>   
+>>   		if (type == 'd') {
+>> @@ -585,7 +662,6 @@ int main(int argc, char **argv)
+>>   		}
+>>   loop:
+>>   		free(line);
+>> -		free(full_name);
+>>   	}
+>>   	fclose(table);
+>>   
+>> diff --git a/package/makedevs/makedevs.mk b/package/makedevs/makedevs.mk
+>> index fa8e753..b2efda9 100644
+>> --- a/package/makedevs/makedevs.mk
+>> +++ b/package/makedevs/makedevs.mk
+>> @@ -11,6 +11,12 @@ HOST_MAKEDEVS_SOURCE =
+>>   MAKEDEVS_VERSION = buildroot-$(BR2_VERSION)
+>>   MAKEDEVS_LICENSE = GPLv2
+>>   
+>> +ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
+>> +HOST_MAKEDEVS_DEPENDENCIES += host-libcap
+>> +HOST_MAKEDEVS_CFLAGS = -DEXTENDED_ATTRIBUTES
+>> +HOST_MAKEDEVS_LDFLAGS = -lcap
+>> +endif
+>> +
+>>   define MAKEDEVS_BUILD_CMDS
+>>   	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
+>>   		package/makedevs/makedevs.c -o $(@D)/makedevs
+>> @@ -21,8 +27,8 @@ define MAKEDEVS_INSTALL_TARGET_CMDS
+>>   endef
+>>   
+>>   define HOST_MAKEDEVS_BUILD_CMDS
+>> -	$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
+>> -		package/makedevs/makedevs.c -o $(@D)/makedevs
+>> +	$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) $(HOST_MAKEDEVS_CFLAGS) \
+>> +		package/makedevs/makedevs.c -o $(@D)/makedevs $(HOST_MAKEDEVS_LDFLAGS)
+>>   endef
+>>   
+>>   define HOST_MAKEDEVS_INSTALL_CMDS
+>> diff --git a/system/Config.in b/system/Config.in
+>> index 9441467..a0ccc77 100644
+>> --- a/system/Config.in
+>> +++ b/system/Config.in
+>> @@ -162,6 +162,11 @@ config BR2_ROOTFS_STATIC_DEVICE_TABLE
+>>   	  See package/makedevs/README for details on the usage and
+>>   	  syntax of these files.
+>>   
+>> +config BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
+>> +	bool "device table supports extended attributes"
+>> +	help
+>> +	  Add the support of extended attributes to device table
+>> +
+>>   choice
+>>   	prompt "Root FS skeleton"
+>>   
+>> -- 
+>> 1.7.9.5
+>>
+>>
+
+Regards,
+Philippe
+
+
+" Ce courriel et les documents qui lui sont joints peuvent contenir des
+informations confidentielles ou ayant un caract?re priv?. 
+S'ils ne vous sont pas destin?s nous vous signalons qu'il est strictement interdit de les
+divulguer, de les reproduire ou d'en utiliser de quelque mani?re que ce
+soit le contenu. Si ce message vous a ?t? transmis par erreur, merci d'en
+informer l'exp?diteur et de supprimer imm?diatement de votre syst?me
+informatique ce courriel ainsi que tous les documents qui y sont attach?s"
+
+                               ******
+
+" This e-mail and any attached documents may contain confidential or
+proprietary information. If you are not the intended recipient, you are
+notified that any dissemination, copying of this e-mail and any attachments
+thereto or use of their contents by any means whatsoever is strictly
+prohibited. If you have received this e-mail in error, please advise the
+sender immediately and delete this e-mail and all attached documents
+from your computer system."
+#
