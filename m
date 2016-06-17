@@ -1,67 +1,39 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 17 Jun 2016 07:38:22 +0000
-Subject: [Buildroot] Emails being substituted when reading via Gmane NNTP
-Message-ID: <1466149048.31770.11.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Jun 2016 09:54:28 +0200
+Subject: [Buildroot] Buildroot training course updated to Buildroot 2016.05
+Message-ID: <20160617095428.6195e234@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Peter,
+Hello,
 
-I'm wondering if that's an expected behavior or my NNTP reader is broken
-(even though both Evolution's built-in reader and stand-alone Pan reader
-behave exactly the same so probably it's not a client who's guilty).
+FYI, we (Free Electrons) have recently updated our Buildroot
+system development training course to Buildroot 2016.05, which was
+released end of May:
 
-So when reading Buildroot mailing list via NNTP client connected to Gmane
-I see this kind of information in message source in Evolution's NNTP reader:
-------------------------->8---------------------
-Path: news.gmane.org!not-for-mail
-From: Romain Naour <romain.naour-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-Newsgroups: gmane.comp.lib.uclibc.buildroot
-Subject: [PATCH] package/luaposix: add .hash file
-Date: Thu, 16 Jun 2016 23:39:40 +0200
-Lines: 22
-Approved: news at gmane.org
-Message-ID: <1466113180-20892-1-git-send-email-romain.naour@gmail.com>
-NNTP-Posting-Host: plane.gmane.org
-Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-------------------------->8---------------------
+  http://free-electrons.com/blog/buildroot-training-2016-05-update/
 
-That's what Pan reader shows as an "Information" about the same article:
-------------------------->8---------------------
-Subject: [PATCH] package/luaposix: add .hash file
-From: Romain Naour <romain.naour-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-Date: Thu 11:39 PM
-Message-ID: <1466113180-20892-1-git-send-email-romain.naour@gmail.com>
-Lines: 22
-Size: 6.50195 KB (6658 Bytes)
+The training materials are publicly available:
 
-This article is complete with 1 part.
-------------------------->8---------------------
+ - Agenda,
+   http://free-electrons.com/doc/training/buildroot/buildroot-agenda.pdf
 
-But interesting enough in Buildroot's mailing list
-(http://lists.busybox.net/pipermail/buildroot/2016-June/164199.html)
-the header is:
-------------------------->8---------------------
-[Buildroot] [PATCH] package/luaposix: add .hash file
+ - Slides,
+   http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf
 
-Romain Naour romain.naour at gmail.com?
-Thu Jun 16 21:39:40 UTC 2016
-------------------------->8---------------------
+ - Practical labs,
+   http://free-electrons.com/doc/training/buildroot/buildroot-labs.pdf
 
-Similar behavior I notice in recently added uClibc-ng on Gmane but
-for example eneric LKML has normal emails in NNTP readers, the same is true for
-linux-snps, u-boot, lede/openwrt and many other lists.
+Hopefully this training course and the corresponding materials are
+useful to the Buildroot community.
 
-Probably that's a matter of some configuration somewhere?
-Otherwise with those wierd emails it's quite inconvenient to answer to
-messages which were not sent to me directly - I have to specify all
-email manually...
+Best regards,
 
-Any thoughts are much appreciated.
-
--Alexey
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
