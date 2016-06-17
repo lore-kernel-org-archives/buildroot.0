@@ -1,30 +1,39 @@
-From: Gary Partis <gary@partis.co.uk>
-Date: Fri, 17 Jun 2016 17:07:53 +0100
-Subject: [Buildroot] network-manager man pages - buildroot-2016.05
-Message-ID: <BE7DD8D2CBE7B241971A69A3E62C11B70118915D@partis.dyndns.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 17 Jun 2016 17:54:24 +0100
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.156
+Message-ID: <1466182464-10796-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index fb72358..22c507e 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 f2c7bad06d443aa96961f70951b55de764a882c67e94fdeec2eba83f8a9c9b736971a58bbb01ae7c35d43b39ad2a69128369c6bd74ab81f3c5770c4b67e753f8  LVM2.2.02.155.tgz
++sha512 b69736b189a9f458aa942aeb0e5770b7661fc345827d82b58bda13e6e5667869664194ee5f4c9a7f9a1c6a9bc3bcbd88a6e0b79a47ef6c27fcce35f8e1975a7f  LVM2.2.02.156.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 65860b5..b36b521 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-Has anyone experienced the man pages for network-manager appearing in
-the target /home directory, as :
- 
-/home/gary/buildroot/buildroot-2016.05/output/host/usr/i686-buildroot-li
-nux-gnu/sysroot/usr/man/man/man1
- 
-It appears to be taking the full path of the host directory and placing
-it into the target home directory.
- 
-Anyone else seen this, or is it just me?
- 
-Cheers
- 
-Gary Partis
- 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160617/10a3fc9e/attachment.html>
+-LVM2_VERSION = 2.02.155
++LVM2_VERSION = 2.02.156
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
+-- 
+2.7.3
