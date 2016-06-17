@@ -1,10 +1,10 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 17 Jun 2016 15:48:31 +0100
-Subject: [Buildroot] [PATCH 3/3] elfutils: put all the "lfs mode" stuff
-	together
+Date: Fri, 17 Jun 2016 15:48:30 +0100
+Subject: [Buildroot] [PATCH 2/3] elfutils: specify the real reason for
+	needing autoreconf
 In-Reply-To: <1466174911-13566-1-git-send-email-Vincent.Riera@imgtec.com>
 References: <1466174911-13566-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1466174911-13566-3-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1466174911-13566-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/elfutils/elfutils.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/elfutils/elfutils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 074ca02..a2012d6 100644
+index 76b36bc..074ca02 100644
 --- a/package/elfutils/elfutils.mk
 +++ b/package/elfutils/elfutils.mk
-@@ -16,17 +16,18 @@ ELFUTILS_DEPENDENCIES = zlib
+@@ -12,7 +12,7 @@ ELFUTILS_LICENSE = GPLv3, GPLv2, LGPLv3
+ ELFUTILS_LICENSE_FILES = COPYING COPYING-GPLV2 COPYING-LGPLV3
+ ELFUTILS_DEPENDENCIES = zlib
+ 
+-# The tarball does not have a generated configure script
++# We patch configure.ac
  ELFUTILS_AUTORECONF = YES
  ELFUTILS_CONF_OPTS += --disable-werror
- 
--ELFUTILS_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
--
- # sparc64 needs -fPIC instead of -fpic
- ifeq ($(BR2_sparc64),y)
- ELFUTILS_CFLAGS += -fPIC
- endif
- 
- # elfutils gets confused when lfs mode is forced, so don't
-+ELFUTILS_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
-+ELFUTILS_CPPFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
-+
- ELFUTILS_CONF_ENV += \
- 	CFLAGS="$(ELFUTILS_CFLAGS)" \
--	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
-+	CPPFLAGS="$(ELFUTILS_CPPFLAGS)"
- 
- ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS)
  
 -- 
 2.7.3
