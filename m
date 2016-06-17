@@ -1,33 +1,30 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 17 Jun 2016 07:32:49 +0300
-Subject: [Buildroot] [PATCH 1/1] taskd: support linking against static
- gnutls and uuid
-In-Reply-To: <20160617042418.GA26117@bronto-burt.dev.benboeckel.net>
-References: <20160617020836.9765-1-mathstuf@gmail.com>
- <20160617032230.GR2749@tarshish>
- <20160617042418.GA26117@bronto-burt.dev.benboeckel.net>
-Message-ID: <20160617043249.GS2749@tarshish>
+From: James Knight <james.d.knight@live.com>
+Date: Fri, 17 Jun 2016 00:33:01 -0400
+Subject: [Buildroot] [PATCH 1/1] lzop: fix for compiling host-lzop using
+	gcc-6
+In-Reply-To: <20160616094753.1a8d0ed8@free-electrons.com>
+References: <20160616054744.4092-1-jaap@jcz.nl>
+ <20160616094753.1a8d0ed8@free-electrons.com>
+Message-ID: <CALAjcgXYfXN24wHCSvQpca7Kev4kvMsgi+q9HCS0gVSoCHOY8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ben,
+On Thu, Jun 16, 2016 at 1:47 AM, Jaap Crezee <jaap@jcz.nl> wrote:
+>
+> src/miniacc.h: some changes (found upstream, but tweaked) to get gcc-6 to
+> compile lzop in the form of host-lzop with a gcc-6 based host system.
 
-On Fri, Jun 17, 2016 at 12:24:18AM -0400, Ben Boeckel wrote:
-> On Fri, Jun 17, 2016 at 06:22:30 +0300, Baruch Siach wrote:
-> > But you do need to sign-off if you want Buildroot to apply this patch.
-> 
-> Is the signoff on the buildroot-level patch not sufficient? The patch in
-> question here does not modify buildroot code, but taskwarrior code.
+Functionally works for me (i686); thanks.
 
-Yes. See 
-http://nightly.buildroot.org/manual.html#_format_and_licensing_of_the_package_patches.
+On Thu, Jun 16, 2016 at 3:47 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> Thanks for this new version, but there is still no description and
+> Signed-off-by in the patch itself.
 
-baruch
+Yea, with a description/sign-off in the patch itself:
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Acked-by: James Knight <james.d.knight@live.com>
