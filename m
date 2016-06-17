@@ -1,84 +1,350 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 17 Jun 2016 12:54:34 +0100
-Subject: [Buildroot] [PATCH v2 next 1/7] toolchain: add common binutils
- version hidden config options
-In-Reply-To: <20160608232106.2c24920e@free-electrons.com>
-References: <1464693078-15767-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160608232106.2c24920e@free-electrons.com>
-Message-ID: <5763E4FA.3070207@imgtec.com>
+From: yoma sophian <sophian.yoma@gmail.com>
+Date: Fri, 17 Jun 2016 21:46:31 +0800
+Subject: [Buildroot] why enable arm soft-float toolchain configuration
+ but still get hard float instruction
+In-Reply-To: <20160616141508.08a16eb6@free-electrons.com>
+References: <CADUS3onZeBbpKf7BRiD7-bV2hL0FANnOsjkia2vKv_EOsQdKaw@mail.gmail.com>
+ <20160616141508.08a16eb6@free-electrons.com>
+Message-ID: <CADUS3o=qtkM9oZhJNiT1TAqzhTrVALj+uG72wO=6jmH9ksyhYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+hi Thomas:
 
-On 08/06/16 22:21, Thomas Petazzoni wrote:
+2016-06-16 20:15 GMT+08:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
 > Hello,
-> 
-> On Tue, 31 May 2016 12:11:12 +0100, Vicente Olivert Riera wrote:
->> This commit adds a number of hidden Config.in options, that will be used
->> to handle dependencies on the binutils version. We mimic the model that
->> was used for the kernel headers dependency mechanism.
->>
->> These hidden options will be selected by the internal and external
->> toolchain backend logic respectively, in follow-up commits.
->>
->> These options will be helpful when we need to make packages depend on
->> certain version of binutils. Further patches will do this for gcc and
->> valgrind packages.
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> I was about to apply this series, but in fact, I'm going to reject it,
-> as I believe the annoyance / benefit ratio is not good.
-> 
-> You are introducing those binutils version selectors to solve two
-> problems:
-> 
->  * The fact that gcc 4.8 does not work on MIPS with binutils >= 2.25.
->    binutils 2.25 is already our default, and as soon as binutils 2.27
->    is released, 2.26 will be the default, and 2.24 will be removed,
->    leaving in fact no way to select gcc 4.8 on MIPS.
-> 
->    So I would prefer that we simply disallow gcc 4.8 on MIPS completely.
-> 
->  * The fact that Valgrind doesn't work on MIPS soft-float with binutils
->    >= 2.25. Same comment here: just disable Valgrind on MIPS soft-float
->    and that's it.
+>
+> On Thu, 16 Jun 2016 15:55:03 +0800, yoma sophian wrote:
+>
+>> 0000ad30 <__sigsetjmp>:
+>>     ad30:       e59fc058        ldr     ip, [pc, #88]   ; ad90
+>> <__sigsetjmp+0x60>
+>>     ad34:       e79f200c        ldr     r2, [pc, ip]
+>>     ad38:       e1a0c000        mov     ip, r0
+>>     ad3c:       e1a0300d        mov     r3, sp
+>>     ad40:       e0233002        eor     r3, r3, r2
+>>     ad44:       e48c3004        str     r3, [ip], #4
+>>     ad48:       e02e3002        eor     r3, lr, r2
+>>     ad4c:       e48c3004        str     r3, [ip], #4
+>>     ad50:       e8ac0ff0        stmia   ip!, {r4, r5, r6, r7, r8, r9, sl, fp}
+>>     ad54:       e59f2030        ldr     r2, [pc, #48]   ; ad8c
+>> <__sigsetjmp+0x5c>
+>>     ad58:       e5922000        ldr     r2, [r2]
+>>     ad5c:       e3120040        tst     r2, #64 ; 0x40
+>>     ad60:       0a000000        beq     ad68 <__sigsetjmp+0x38>
+>>     ad64:       ecac8b10        vstmia  ip!, {d8-d15}
+>>     ad68:       e3120c02        tst     r2, #512        ; 0x200
+>>     ad6c:       0a000005        beq     ad88 <__sigsetjmp+0x58>
+>
+> These two instructions test if your processor has iWMMXT extensions. If
+> it does, then it saves the iWMMXT registers, and if not, the following
+> instructions are skipped.
+>
+>>     ad70:       ececa102        stfp    f2, [ip], #8
+>>     ad74:       ececb102        stfp    f3, [ip], #8
+>>     ad78:       ececc102        stfp    f4, [ip], #8
+>>     ad7c:       ececd102        stfp    f5, [ip], #8
+>
+> You can read the corresponding source code from ./sysdeps/arm/setjmp.S
+> in the glibc C library:
+>
+> #ifndef ARM_ASSUME_NO_IWMMXT
+>         tst     a3, #HWCAP_ARM_IWMMXT
+>         beq     .Lno_iwmmxt
+>
+>         /* Save the call-preserved iWMMXt registers.  */
+>         /* Following instructions are wstrd wr10, [ip], #8 (etc.)  */
+>         sfi_breg r12, \
+>         stcl    p1, cr10, [\B], #8
+>         sfi_breg r12, \
+>         stcl    p1, cr11, [\B], #8
+>         sfi_breg r12, \
+>         stcl    p1, cr12, [\B], #8
+>         sfi_breg r12, \
+>         stcl    p1, cr13, [\B], #8
+>         sfi_breg r12, \
+>         stcl    p1, cr14, [\B], #8
+>         sfi_breg r12, \
+>         stcl    p1, cr15, [\B], #8
+> .Lno_iwmmxt:
+> #endif
+thanks for your such detail explaination ^^
 
-not only that. I think it's useful to know which gcc version a toolchain
-has. That's why we have GCC_AT_LEAST options.
-Also, I think it's useful to know which linux headers a toolchain has.
-That's why we have HEADERS_AT_LEAST options.
+>
+> In other words: I believe what you see is correct. You indeed have a
+> few instructions using the FPU when building in soft-float mode, but
+> they are not executed, unless you actually have a FPU.
 
-And I also think it would be good to know which binutils version a
-toolchain has, with BINUTILS_AT_LEAST options. And probably it would be
-good to know which C library version as well, with GLIBC_AT_LEAST,
-UCLIBC_AT_LEAST and MUSL_AT_LEAST.
+in my environment, there is no FPU support.
+No matter cpu feature or kernel configuration, there are no fup.
 
-Regards,
+I also attach the kernel dump message for reference.
+what make me confusing is
+"if I already make buildroot as softfloat toolchain and also add
+CFLAGS, "-msoft-float -mfloat-abi=soft" when compile my user mode
+program, why we still get the FUP instructions?"
 
-Vincent.
+or is it necessary to link __sigsetjmp even I make buildroot as
+softfloat toolchain and also add CFLAGS, "-msoft-float
+-mfloat-abi=soft" ?
+(Ps: I compile the program with static link)
 
-
-> Normally, the version option are used to indicate that something
-> *works* only after a certain version (like kernel headers >= 3.10, or
-> gcc >= 4.9).
-> 
-> But here, you're using the options in the opposite way: to say that
-> anything after binutils 2.25 (included) is broken. With 2.24 going away
-> in the near future, I rather prefer the above solutions that to add
-> those additional binutils version options.
-> 
-> So could you instead submit patches that:
-> 
->  1/ Disallow gcc 4.8 on MIPS
->  2/ Disallow valgrind on MIPS soft-float
-> 
-> Thanks!
-> 
-> Thomas
-> 
+appreciate your kind help,
+-------------- next part --------------
+[   98.110729] busybox_unstrip (60): undefined instruction: pc=00012a38
+[   98.124300] CPU: 2 PID: 60 Comm: busybox_unstrip Not tainted 4.1.10 #28
+[   98.137990] Hardware name: Platform ca53 v7
+[   98.147308] task: c7b5a100 ti: c6cd8000 task.ti: c6cd8000
+[   98.158615] PC is at 0x12a38
+[   98.164794] LR is at 0x22d37
+[   98.170944] pc : [<00012a38>]    lr : [<00022d37>]    psr: 600f0030
+[   98.170944] sp : beb5fd50  ip : beb5fd90  fp : 00000000
+[   98.194580] r10: 00000000  r9 : 00000000  r8 : 00090310
+[   98.205497] r7 : 00010138  r6 : 0008f344  r5 : 00023075  r4 : 00010138
+[   98.219022] r3 : ea4c025c  r2 : 00368096  r1 : 00000000  r0 : beb5fd68
+[   98.232625] Flags: nZCv  IRQs on  FIQs on  Mode USER_32  ISA Thumb  Segment user
+[   98.247895] Control: 10c0383d  Table: 0957806a  DAC: 00000015
+[   98.259923] Code: 0ff0 f8df 202a 6812 (ecac) 8b10 
+[   98.328411] --------------------------------------------------------------------------------------
+[   98.346781] PC, LR MEMINFO
+[   98.352653] --------------------------------------------------------------------------------------
+[   98.371053] PC:12a38, LR:22d37
+[   98.377506] --------------------------------------------------------------------------------------
+[   98.395916] PC meminfo (0x00012638 to 0x00012e38)
+[   98.405783] 2620:                                                       8000f3af 8000f3af
+[   98.422714] 2640: 4f04b480 bc80df00 5f80f510 4770bf38 b9cef000 0000000c 8000f3af 8000f3af
+[   98.439637] 2660: 4f04b480 bc80df00 5f80f510 4770bf38 b9bef000 00000009 8000f3af 8000f3af
+[   98.456618] 2680: 4f04b480 bc80df00 5f80f510 4770bf38 b9aef000 00000053 8000f3af 8000f3af
+[   98.473538] 26a0: 4f04b480 bc80df00 5f80f510 4770bf38 b99ef000 00000055 8000f3af 8000f3af
+[   98.490455] 26c0: 4f04b480 bc80df00 5f80f510 4770bf38 b98ef000 0000000a 8000f3af 8000f3af
+[   98.507375] 26e0: 4f04b480 bc80df00 5f80f510 4770bf38 b97ef000 000000ef 8000f3af 8000f3af
+[   98.524354] 2700: 4f04b480 bc80df00 5f80f510 4770bf38 b96ef000 000000bf 8000f3af 8000f3af
+[   98.541275] 2720: 4f04b480 bc80df00 5f80f510 4770bf38 b95ef000 00000036 8000f3af 8000f3af
+[   98.558323] 2740: 4f04b480 bc80df00 5f80f510 4770bf38 b94ef000 0000003d 8000f3af 8000f3af
+[   98.575306] 2760: 4f1bb480 bc80df00 5f80f510 4770bf38 b93ef000 8000f3af 8000f3af 8000f3af
+[   98.592304] 2780: c050f8df f8dc44fc f09cc000 b4800f00 4f0fd108 bc80df00 5f80f510 4770bf38
+[   98.609361] 27a0: b926f000 f02ab503 4684ff71 0b08f85d df004f07 46604607 ffaef02a f85d4638
+[   98.626304] 27c0: bc80eb04 5f80f510 4770bf38 b910f000 00000076 00080d60 8000f3af 8000f3af
+[   98.643251] 27e0: 4f04b480 bc80df00 5f80f510 4770bf38 b8fef000 00000024 8000f3af 8000f3af
+[   98.660263] 2800: 9d02b420 9c02b410 5c05ea5f ea4fd10d b4803515 df004f06 bc10bc80 f510bc20
+[   98.677201] 2820: bf385f80 f0004770 f06fb8e3 e7f40015 000000c0 8000f3af 8000f3af 8000f3af
+[   98.694133] 2840: c008f8dd 9d04b420 ea5fb410 ea4f540c bf083c1c 3415ea5f 9c02d10d 5505ea4c
+[   98.711073] 2860: 4f07b480 bc80df00 5f80f510 bf38bc30 f0004770 f06fb8bd bc300015 b8b8f000
+[   98.728005] 2880: 000000c0 8000f3af 8000f3af 8000f3af 4f04b480 bc80df00 5f80f510 4770bf38
+[   98.745071] 28a0: b8a6f000 0000005b 8000f3af 8000f3af 4f04b480 bc80df00 5f80f510 4770bf38
+[   98.762013] 28c0: b896f000 0000007d 8000f3af 8000f3af 4f04b480 bc80df00 5f80f510 4770bf38
+[   98.778944] 28e0: b886f000 000000dc 8000f3af 8000f3af 9c02b490 df004f04 f510bc90 bf385f80
+[   98.795881] 2900: f0004770 0000b875 000000a3 8000f3af 4f04b480 bc80df00 5f80f510 4770bf38
+[   98.812880] 2920: b866f000 0000011a 8000f3af 8000f3af 4f04b480 bc80df00 5f80f510 4770bf38
+[   98.829821] 2940: b856f000 0000011c 8000f3af 8000f3af b4b046ec 0030e89c df004f1a f510bcb0
+[   98.846759] 2960: bf385f80 f0004770 bf00b843 8000f3af c054f8df f8dc44fc f09cc000 46ec0f00
+[   98.863688] 2980: e89cb4b0 d1080030 df004f0e f510bcb0 bf385f80 f0004770 b50fb82b fe76f02a
+[   98.880821] 29a0: bc0f4684 df004f07 46604607 feb4f02a f85d4638 bcb0eb04 5f80f510 4770bf38
+[   98.897765] 29c0: b816f000 00000122 00080b70 8000f3af 4f04b480 bc80df00 5f80f510 4770bf38
+[   98.914706] 29e0: b806f000 00000119 8000f3af 8000f3af 0000f1c0 ee1d4601 4a030f70 6812447a
+[   98.931643] 2a00: f06f5081 47700000 0007c958 8000f3af c04ef8df f8dc44fc 46842000 ea83466b
+[   98.948662] 2a20: f84c0302 ea8e3b04 f84c0302 e8ac3b04 f8df0ff0 6812202a 8b10ecac 7f00f412
+[   98.965596] 2a40: ececd00b ececa102 ececb102 ececc102 ececd102 ecece102 f035f102 0310be19
+[   98.982527] 2a60: c8b00009 bf000007 8000f3af 8000f3af 4f04b480 bc80df00 5f80f510 4770bf38
+[   98.999462] 2a80: bfb6f7ff 00000027 8000f3af 8000f3af 4f04b480 bc80df00 5f80f510 4770bf38
+[   99.016484] 2aa0: bfa6f7ff 00000013 8000f3af 8000f3af 4f04b480 bc80df00 5f80f510 4770bf38
+[   99.033417] 2ac0: bf96f7ff 00000021 8000f3af 8000f3af 4f1bb480 bc80df00 5f80f510 4770bf38
+[   99.050353] 2ae0: bf86f7ff 8000f3af 8000f3af 8000f3af c050f8df f8dc44fc f09cc000 b4800f00
+[   99.067287] 2b00: 4f0fd108 bc80df00 5f80f510 4770bf38 bf6ef7ff f02ab50f 4684fdb9 4f08bc0f
+[   99.084288] 2b20: 4607df00 f02a4660 4638fdf7 eb04f85d f510bc80 bf385f80 f7ff4770 0000bf59
+[   99.101227] 2b40: 000000a8 000809f0 8000f3af 8000f3af 4f1bb480 bc80df00 5f80f510 4770bf38
+[   99.118160] 2b60: bf46f7ff 8000f3af 8000f3af 8000f3af c050f8df f8dc44fc f09cc000 b4800f00
+[   99.135097] 2b80: 4f0fd108 bc80df00 5f80f510 4770bf38 bf2ef7ff f02ab50f 4684fd79 4f08bc0f
+[   99.152275] 2ba0: 4607df00 f02a4660 4638fdb7 eb04f85d f510bc80 bf385f80 f7ff4770 0000bf19
+[   99.169220] 2bc0: 0000011b 00080970 8000f3af 8000f3af 4f1bb480 bc80df00 5f80f510 4770bf38
+[   99.186159] 2be0: bf06f7ff 8000f3af 8000f3af 8000f3af c050f8df f8dc44fc f09cc000 b4800f00
+[   99.203093] 2c00: 4f0fd108 bc80df00 5f80f510 4770bf38 beeef7ff f02ab50f 4684fd39 4f08bc0f
+[   99.220030] 2c20: 4607df00 f02a4660 4638fd77 eb04f85d f510bc80 bf385f80 f7ff4770 0000bed9
+[   99.237106] 2c40: 00000129 000808f0 8000f3af 8000f3af 4f1bb480 bc80df00 5f80f510 4770bf38
+[   99.254040] 2c60: bec6f7ff 8000f3af 8000f3af 8000f3af c050f8df f8dc44fc f09cc000 b4800f00
+[   99.270970] 2c80: 4f0fd108 bc80df00 5f80f510 4770bf38 beaef7ff f02ab50f 4684fcf9 4f08bc0f
+[   99.287910] 2ca0: 4607df00 f02a4660 4638fd37 eb04f85d f510bc80 bf385f80 f7ff4770 0000be99
+[   99.304911] 2cc0: 00000121 00080870 8000f3af 8000f3af 45f0e92d 0f00f110 0f01f013 0e83eb01
+[   99.321844] 2ce0: f851d009 f8524b04 416c5b04 0f0eea91 4b04f840 f013d019 d0070f02 cac0c930
+[   99.338783] 2d00: 417d4174 0f0eea91 d00ec030 04a8e8b1 1150e8b2 41754163 0708eb57 0a0ceb5a
+[   99.355715] 2d20: 0f0eea91 04a8e8a0 f04fd1f0 eb400000 e8bd0000 bf0085f0 8000f3af 8000f3af
+[   99.372730] 2d40: 45f0e92d f0134280 eb010f01 d0090e83 4b04f851 5b04f852 ea9141ac f8400f0e
+[   99.389670] 2d60: d0194b04 0f02f013 c930d007 41b4cac0 ea9141bd c0300f0e e8b1d00e e8b204a8
+[   99.406714] 2d80: 41a31150 eb7741b5 eb7a0708 ea910a0c e8a00f0e d1f004a8 0000eb60 0000f1c0
+[   99.423653] 2da0: 85f0e8bd 8000f3af 8000f3af 8000f3af f851b4f0 68076b04 0400f04f f851e00a
+[   99.440676] 2dc0: 192d6b04 0400f14c 68471b7d 3401bf38 5b04f840 5c03fba6 d1f03a01 f14c192d
+[   99.457618] 2de0: 1b7d0400 5b04f840 3401bf38 bcf04620 bf004770 8000f3af 8000f3af 8000f3af
+[   99.474553] 2e00: f851b4f0 68056b04 0400f04f f851e007 19676b04 f14c6845 f8400400 f04f7b04
+[   99.491468] 2e20: fbe60c00 3a015c03 1964d1f1 f14c6004 bcf00000 bf004770 8000f3af
+[   99.506723] --------------------------------------------------------------------------------------
+[   99.525200] LR meminfo (0x00022537 to 0x00023137)
+[   99.535005] 2520:                                                       ea4f01e2 ea4f0131
+[   99.551947] 2540: bf1f7002 437ff012 4f7ff093 5160f081 f0924770 bf140f00 4f7ff093 b5304770
+[   99.568951] 2560: 7460f44f 4500f001 4100f021 bf00e720 0201ea50 4770bf08 f04fb530 e00a0500
+[   99.585889] 2580: 0201ea50 4770bf08 f011b530 d5024500 eb614240 f44f0141 f1046480 ea5f0432
+[   99.602815] 25a0: f43f5c91 f04faedc ea5f0203 bf180cdc ea5f3203 bf180cdc eb023203 f1c202dc
+[   99.619753] 25c0: fa000320 fa20fc03 fa01f002 ea40fe03 fa21000e 4414f102 bf00e6c1 f04fb570
+[   99.636762] 25e0: f44c0cff ea1c6ce0 bf1d5411 5513ea1c 0f0cea94 0f0cea95 f8def000 ea81442c
+[   99.653695] 2600: ea210603 ea23514c ea50534c bf183501 3503ea52 1180f441 1380f443 fba0d038
+[   99.670735] 2620: f04fce02 fbe10500 f006e502 fbe04200 f04fe503 fbe10600 f09c5603 bf180f00
+[   99.687675] 2640: 0e01f04e 04fff1a4 7f00f5b6 7440f564 ea5fd204 416d0e4e 0606eb46 21c6ea42
+[   99.704703] 2660: 5155ea41 20c5ea4f 505eea40 2eceea4f 0cfdf1b4 f5bcbf88 d81e6fe0 4f00f1be
+[   99.721649] 2680: ea5fbf08 f1500e50 eb410000 bd705104 4600f006 0101ea46 0002ea40 0103ea81
+[   99.738596] 26a0: 045cebb4 ebd4bfc2 ea41050c bd705104 1180f441 0e00f04f f3003c01 f11480ab
+[   99.755530] 26c0: bfde0f36 f0012000 bd704100 0400f1c4 da353c20 dc1b340c 0414f104 0520f1c4
+[   99.772543] 26e0: f305fa00 f004fa20 f205fa01 0002ea40 4200f001 4100f021 70d3eb10 f604fa21
+[   99.789483] 2700: 0106eb42 0e43ea5e ea20bf08 bd7070d3 040cf1c4 0520f1c4 f304fa00 f005fa20
+[   99.806420] 2720: f204fa01 0002ea40 4100f001 70d3eb10 0100f141 0e43ea5e ea20bf08 bd7070d3
+[   99.823354] 2740: 0520f1c4 f205fa00 0e02ea4e f304fa20 f205fa01 0302ea43 f004fa21 4100f001
+[   99.840356] 2760: f204fa21 0002ea20 70d3eb00 0e43ea5e ea20bf08 bd7070d3 0f00f094 f001d10f
+[   99.857290] 2780: 00404600 0101eb41 1f80f411 3c01bf08 ea41d0f7 f0950106 bf180f00 f0034770
+[   99.874225] 27a0: 00524600 0303eb43 1f80f413 3d01bf08 ea43d0f7 47700306 0f0cea94 5513ea0c
+[   99.891162] 27c0: ea95bf18 d00c0f0c 0641ea50 ea52bf18 d1d10643 0103ea81 4100f001 0000f04f
+[   99.908232] 27e0: ea50bd70 bf060641 46194610 0643ea52 ea94d019 d1020f0c 3601ea50 ea95d113
+[   99.925283] 2800: d1050f0c 3603ea52 4610bf1c d10a4619 0103ea81 4100f001 41fef041 0170f441
+[   99.942235] 2820: 0000f04f f041bd70 f44141fe bd700178 f04fb570 f44c0cff ea1c6ce0 bf1d5411
+[   99.959180] 2840: 5513ea1c 0f0cea94 0f0cea95 f8a7f000 0405eba4 0e03ea81 3503ea52 3101ea4f
+[   99.976243] 2860: 8088f000 3303ea4f 5580f04f 1313ea45 6312ea43 2202ea4f 1511ea45 6510ea45
+[   99.993184] 2880: 2600ea4f 4100f00e bf08429d f1444296 f50404fd d2027440 ea4f085b 1ab60232
+[  100.010115] 28a0: 0503eb65 ea4f085b f44f0232 f44f1080 ebb62c00 eb750e02 bf220e03 46751ab6
+[  100.027054] 28c0: 000cea40 ea4f085b ebb60232 eb750e02 bf220e03 46751ab6 005cea40 ea4f085b
+[  100.043989] 28e0: ebb60232 eb750e02 bf220e03 46751ab6 009cea40 ea4f085b ebb60232 eb750e02
+[  100.061058] 2900: bf220e03 46751ab6 00dcea40 0e06ea55 ea4fd018 ea451505 ea4f7516 ea4f1606
+[  100.077998] 2920: ea4303c3 ea4f7352 ea5f02c2 d1c01c1c 1f80f411 ea41d10b f04f0100 f04f0000
+[  100.094932] 2940: e7b64c00 1f80f411 4301bf04 f1b42000 bf880cfd 6fe0f5bc aeaff63f 0c03ebb5
+[  100.111866] 2960: ebb6bf04 ea5f0c02 f1500c50 eb410000 bd705104 4e00f00e 3111ea4e 045ceb14
+[  100.128875] 2980: ebd4bfc2 ea41050c bd705104 1180f441 0e00f04f e6903c01 0e06ea45 ea0ce68d
+[  100.145813] 29a0: ea945513 bf080f0c 0f0cea95 af3bf43f 0f0cea94 ea50d10a f47f3401 ea95af34
+[  100.162757] 29c0: f47f0f0c 4610af25 e72c4619 0f0cea95 ea52d106 f43f3503 4610aefd e7224619
+[  100.179693] 29e0: 0641ea50 ea52bf18 f47f0643 ea50aec5 f47f0441 ea52af0d f47f0543 e712aeeb
+[  100.196818] 2a00: b94ab953 bf082900 bf1c2800 31fff04f 30fff04f b80cf000 0c08f1ad ce04e96d
+[  100.213761] 2a20: f80cf000 e004f8dd 2302e9dd 4770b004 f04fb502 f0030008 bd02fcc7 43f0e92d
+[  100.230709] 2a40: 429d460d 46104604 bf084619 9a074284 2000bf3c d36a2100 f681fab1 d06f2900
+[  100.247653] 2a60: f385fab5 d0672d00 f1a31af3 fa010c20 fa00f703 f1c3fe0c fa200820 fa00f108
+[  100.264670] 2a80: ea47f603 469e070e 42bd430f 42b4bf08 2000bf3c d30c2100 0901f04f fa291ba4
+[  100.281623] 2aa0: fa09f808 fa09f10c ea41f003 eb650108 2b000507 087fd03b 0636ea4f 1ba4e009
+[  100.298570] 2ac0: 0507eb65 416d1924 f1453401 3b010500 42bdd007 42b4bf08 1924d2f1 3b01416d
+[  100.315520] 2ae0: f1ced1f7 fa240720 fa05f60e f1aef707 fa250320 fa25f303 1900fc0e 0607ea46
+[  100.332541] 2b00: 0403ea46 46654169 0c20f1ae f70efa05 fc0cfa04 f60efa04 0320f1ce f303fa24
+[  100.349471] 2b20: 070cea47 ea471b80 eb610703 b10a0107 4500e9c2 83f0e8bd f384fab4 e7933320
+[  100.366412] 2b40: f380fab0 0620f103 f385fab5 d18b2d00 bf00e7f2 41f0e92d 0400f240 0400f2c0
+[  100.383362] 2b60: 461db0cc 91019003 9b549202 6824b11c f484fab4 9a010964 1c509902 22acf640
+[  100.400366] 2b80: 0209f2c0 0080eb01 0194f240 0109f2c0 f24f6010 f2c03210 600c0208 f8506013
+[  100.417296] 2ba0: 2b003b04 f01cd1fb f243fd77 f2405354 f2c00200 f2c00309 681b0201 0101f04f
+[  100.434238] 2bc0: f383fab3 2a00095b 80cdf000 d022420b 0300f240 0301f2c0 2a208d5a f246d00e
+[  100.451165] 2be0: f24603b4 f246010c f2c0001c f2c00306 f2c00106 22af0006 fb1ef000 f24369dc
+[  100.468417] 2c00: 8d985154 5274f243 0109f2c0 0209f2c0 600b4423 f2406010 f2c00394 681b0309
+[  100.485422] 2c20: f240b34b f2401438 f2c01340 f2c00401 429c0301 7922d23c 2aa06826 43e7d115
+[  100.502365] 2c40: 3810f240 f2c0441f f0270809 44270707 f8d86833 47980000 603042bc 4623d028
+[  100.519303] 2c60: 6f08f854 2ba07b1b f246d0f2 f2c0008c f0080006 f01df829 2800fb75 809bf2c0
+[  100.536305] 2c80: 5384f243 0309f2c0 2b00681b f243d16d f2c05384 60180309 631ff240 0302f2c0
+[  100.553244] 2ca0: dcbe4298 004cf246 0006f2c0 f80cf008 f9d4f000 22ccf24f 23c4f24f 0208f2c0
+[  100.570172] 2cc0: 0308f2c0 f8526812 f0211b04 601901ff 90066810 605a9a06 b1239b53 98532200
+[  100.587113] 2ce0: f0044611 f640fb4b 990223ac 0309f2c0 681a9801 fb8af01d b1239b52 98522200
+[  100.604175] 2d00: f0044611 f24ffb3b f2c03314 681b0308 f000b10b b13df89b 23acf640 f2c09902
+[  100.621116] 2d20: 98010309 47a8681a 46082100 fc80f01c f7eea806 b9d8fe4d 3f70ee1d 22acf640
+[  100.638052] 2d40: 6398f5a3 f8d3ac06 f2c06080 6fdd0209 4080f8c3 98019902 9b036812 95499648
+[  100.654988] 2d60: f0044798 4611fa51 4283e730 e78ed994 8000f3af 0300f240 0300f2c0 1e51681a
+[  100.671922] 2d80: e8539205 42900f00 e843d105 2c001400 f3bfd1f7 bf0c8f5f 21002101 9005b901
+[  100.688926] 2da0: d0eb2900 d00c2a01 23012200 469c4610 fe06f7ee f246e7fa f2c00064 f0070006
+[  100.705861] 2dc0: 2000ff83 bf00e7cd 460cb5f0 2101b09b f0194605 3001f87b b01bd001 4b1abdf0
+[  100.722796] 2de0: 2f70ee1d 681b447b 2b0958d3 f004d1f5 46210303 f04f2b01 bf150200 00d4f246
+[  100.739846] 2e00: 00c8f246 0006f2c0 0006f2c0 f240bf19 27001603 1607f240 f7ef2700 4285faf1
+[  100.756867] 2e20: 4629d111 2003466a ff2af018 9b04b958 4370f403 5f00f5b3 e9ddd105 42bb2308
+[  100.773814] 2e40: 42b2bf08 deffd0c9 0006c594 f248b508 20000101 ffb8f7ff 4100f44f f7ff2001
+[  100.790739] 2e60: f44fffb3 20024100 4008e8bd bf00e7ac 5354f243 4ff0e92d 0309f2c0 460fb085
+[  100.807682] 2e80: b32c681c 5374f243 0309f2c0 eb04681a 42a21242 e01ad803 42a23420 6823d917
+[  100.824703] 2ea0: d1f92b07 f8d46963 9301801c 45476923 4647bf38 930268a4 0f00f1b8 f108d00a
+[  100.841634] 2ec0: 464133ff 46c14418 f836f7f0 2400e006 94019402 0800f04f 0901f04f 3a0cf64f
+[  100.858570] 2ee0: f900fb09 0a08f2c0 f8da427e f2433000 f2c02510 f04f0509 35080b01 6098f503
+[  100.875504] 2f00: 44189b01 44484438 fd70f019 2398f64f f2c04438 f2000308 681b40bf eb064006
+[  100.892535] 2f20: f04f0109 60a90e3e f8454608 4621ec08 b00cf885 f8c39a02 9303923c e908f7ed
+[  100.909480] 2f40: 0c05f04f 46306035 0c0ff2c0 fd38f7ee 5f80f510 d9059b03 00e0f246 0006f2c0
+[  100.926407] 2f60: feb2f007 f2409901 f2c032fc f2430209 f8c34010 f2c08234 f8c30009 99021230
+[  100.943346] 2f80: 4228f8c3 b240f8c3 122cf8c3 210cf243 0109f2c0 23406153 60136002 b000f8c1
+[  100.960348] 2fa0: 0f00f1b8 9b01d026 44434641 f7ef1e58 fb08ffc3 f8da9000 2f103000 030ff103
+[  100.977287] 2fc0: 2404f243 f2434403 f2432108 bf384218 f2c02710 f0230409 f2c0030f f2c00109
+[  100.994327] 2fe0: 25010209 f8ca6020 600f3000 b0056015 8ff0e8bd 46d89801 bf00e7db 310cf64f
+[  101.011286] 3000: f2c0b4f0 f2400108 f24332fc f2c04710 680b0209 0709f2c0 200cf243 4618f243
+[  101.028296] 3020: 2504f243 2408f243 f2c0330f f0230009 f2c0030f 600b0609 f2c02340 f2c00509
+[  101.045326] 3040: 21010409 603a6013 22102300 60316001 602b4618 bcf06022 bf004770 20082110
+[  101.062273] 3060: bf06f7ff 3f70ee1d 681b6842 44106898 bf004770 43f8e92d 29b4f24f 25b4f24f
+[  101.079211] 3080: 0908f2c0 0508f2c0 ebc54606 460f0909 09a9ea5f bf184690 d0082400 f8553401
+[  101.096275] 30a0: 46423b04 46304639 454c4798 f24fd1f6 f24f29b8 f2c025b4 f2c00908 ebc50508
+[  101.113203] 30c0: f7ed0909 ea5fe83e bf1809a9 d00a2400 f8553401 46423b04 46304639 454c4798
+[  101.130142] 30e0: e8bdd1f6 e8bd83f8 bf0083f8 f24fb538 f24f25c0 f2c023b8 f2c00508 1aed0308
+[  101.147086] 3100: bf1810ac d00418ed 3d04f855 3c014798 e8bdd1fa f0414038 bf00bf6b ee1d4b03
+[  101.163991] 3120: 447b0f70 4418681b bf004770 0006c256 f240b580 b0880e00
+[  101.177748] --------------------------------------------------------------------------------------
+[  101.196193] 
+[  101.199378] CPU: 2 PID: 60 Comm: busybox_unstrip Not tainted 4.1.10 #28
+[  101.213081] Hardware name: Novatek-Cortex CA53
+[  101.222356] task: c7b5a100 ti: c6cd8000 task.ti: c6cd8000
+[  101.233593] PC is at 0x12a38
+[  101.239653] LR is at 0x22d37
+[  101.245836] pc : [<00012a38>]    lr : [<00022d37>]    psr: 600f0030
+[  101.245836] sp : beb5fd50  ip : beb5fd90  fp : 00000000
+[  101.269562] r10: 00000000  r9 : 00000000  r8 : 00090310
+[  101.280464] r7 : 00010138  r6 : 0008f344  r5 : 00023075  r4 : 00010138
+[  101.293954] r3 : ea4c025c  r2 : 00368096  r1 : 00000000  r0 : beb5fd68
+[  101.307446] Flags: nZCv  IRQs on  FIQs on  Mode USER_32  ISA Thumb  Segment user
+[  101.322746] Control: 10c0383d  Table: 0957806a  DAC: 00000015
+[  101.334697] CPU: 2 PID: 60 Comm: busybox_unstrip Not tainted 4.1.10 #28
+[  101.348426] Hardware name: Novatek-Cortex CA53
+[  101.357658] Backtrace: 
+[  101.363195] [<c000e524>] (dump_backtrace) from [<c000f4cc>] (show_stack+0x20/0x28)
+[  101.378845]  r7:00000000 r6:c6cd9fb0 r5:c0c78608 r4:00000000
+[  101.391328] [<c000f4ac>] (show_stack) from [<c043602c>] (dump_stack+0x98/0xd8)
+[  101.406377] [<c0435f94>] (dump_stack) from [<c000b584>] (show_regs+0x1c/0x24)
+[  101.421137]  r5:c7b5a100 r4:c0c50a00
+[  101.429030] [<c000b568>] (show_regs) from [<c000f398>] (dump_info+0x64/0xd4)
+[  101.443688] [<c000f334>] (dump_info) from [<c000f83c>] (arm_notify_die+0x90/0xbc)
+[  101.459130]  r9:c0010564 r8:00000000 r7:c0c4bd60 r6:00012a38 r5:c6cd9fb0 r4:c6cd9f08
+[  101.475942] [<c000f7ac>] (arm_notify_die) from [<c00090b0>] (do_undefinstr+0xb0/0x204)
+[  101.492340]  r5:c6cd9fb0 r4:ecac8b10
+[  101.500099] [<c0009000>] (do_undefinstr) from [<c0010564>] (ret_from_exception+0x0/0x1c)
+[  101.516922] Exception stack(0xc6cd9fb0 to 0xc6cd9ff8)
+[  101.527556] 9fa0:                                     beb5fd68 00000000 00368096 ea4c025c
+[  101.544598] 9fc0: 00010138 00023075 0008f344 00010138 00090310 00000000 00000000 00000000
+[  101.561530] 9fe0: beb5fd90 beb5fd50 00022d37 00012a38 600f0030 ffffffff 00000000
+[  101.576808]  r8:00000b00 r7:00000001 r6:c6cd804c r5:0000ecac r4:00012a38
+[  101.591317] -----------------------------------------------------------
+[  101.605036] * dump maps on pid (60 - busybox_unstrip)
+[  101.615465] -----------------------------------------------------------
+[  101.629251] 00010000-00080000 r-xp 00000000 00:02 3758       /busybox_unstrippted_ca9
+[  101.645727] 0008f000-00091000 rw-p 0006f000 00:02 3758       /busybox_unstrippted_ca9
+[  101.662185] 00091000-000b6000 rw-p 00000000 00:00 0          [heap]
+[  101.675362] beb3e000-beb60000 rw-p 00000000 00:00 0          [stack]
+[  101.688861] bee11000-bee12000 r-xp 00000000 00:00 0          
+[  101.700945] ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]
+[  101.714615] -----------------------------------------------------------
+[  101.714615] 
+[  101.731356] task stack info : pid(60) stack area (0xbeb3e000 ~ 0xbeb60000)
+[  101.745568] -----------------------------------------------------------
+[  101.759182] * dump user stack
+[  101.765467] -----------------------------------------------------------
+[  101.779136] pid(60) stack vma (0xbeb3e000 ~ 0xbeb60000)
+[  101.790133] User Stack: (0xbeb5fd50 to 0xbeb5fea0)
+[  101.800247] fd40:                                     00000000 00000001 beb5fea4 0001cfc9
+[  101.817191] fd60: 00000000 00000000 54fbd23b ea4c025c 00010138 00023075 0008f344 00010138
+[  101.834123] fd80: 00090310 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[  101.851047] fda0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[  101.867975] fdc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[  101.885032] fde0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[  101.901953] fe00: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[  101.918869] fe20: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[  101.935788] fe40: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[  101.952773] fe60: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[  101.969691] fe80: 00000000 00000000 00000000 00000000 00000000 0001c831 000230ed 00000000
+[  101.986501] -----------------------------------------------------------
+[  101.986501] 
+[  102.003193] --------------------------------------------------------
+[  102.016413] * dump all user stack of pid(60) thread group
+[  102.027545] --------------------------------------------------------
+[  102.040841] --------------------------------------------------------
+[  102.040841] 
+[  102.057590] ##### send signal from KERNEL, SIG : 4, busybox_unstrip, PID:60, force_sig_info
