@@ -1,73 +1,54 @@
-From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Date: Fri, 17 Jun 2016 10:35:50 +0200
-Subject: [Buildroot] [PATCH 3/5] pkg-download: allow ssh URLs
-In-Reply-To: <20160616194125.GE3665@free.fr>
-References: <20160614150412.GF3060@hermes.click-hack.org>
- <1465916712-29684-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1465916712-29684-3-git-send-email-gilles.chanteperdrix@xenomai.org>
- <20160614201426.GF3759@free.fr>
- <20160615212947.GZ23680@hermes.click-hack.org>
- <20160615213711.GA3823@free.fr>
- <20160616193635.GE32532@hermes.click-hack.org>
- <20160616194125.GE3665@free.fr>
-Message-ID: <20160617083550.GI32532@hermes.click-hack.org>
+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Date: Fri, 17 Jun 2016 10:36:00 +0200
+Subject: [Buildroot] [PATCH] mpdstate: add package
+In-Reply-To: <20160612215336.06191b9e@free-electrons.com>
+References: <20160530063656.GC31737@airbook.vandijck-laurijssen.be>
+ <20160612215336.06191b9e@free-electrons.com>
+Message-ID: <20160617083600.GA6429@airbook.newtec.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 16, 2016 at 09:41:25PM +0200, Yann E. MORIN wrote:
-> Gilles, All,
+> Hello,
 > 
-> On 2016-06-16 21:36 +0200, Gilles Chanteperdrix spake thusly:
-> > On Wed, Jun 15, 2016 at 11:37:11PM +0200, Yann E. MORIN wrote:
-> > > Gilles, All,
-> > > 
-> > > On 2016-06-15 23:29 +0200, Gilles Chanteperdrix spake thusly:
-> > > > On Tue, Jun 14, 2016 at 10:14:26PM +0200, Yann E. MORIN wrote:
-> > > > > Gilles, All,
-> > > > > 
-> > > > > On 2016-06-14 17:05 +0200, Gilles Chanteperdrix spake thusly:
-> > > > > > Use git when such an URL is met.
-> > > > > 
-> > > > > What about Hg URLs that can also start with 'ssh://' ?
-> > > > > 
-> > > > > I guess we should not try to be smart here, and let users specify the
-> > > > > method with the _SITE_METHOD variable.
-> > > > 
-> > > > Yeah, well, my initial patch proposed git+ssh:// and I was told that
-> > > > this was deprecated. The conversation lead to a dead-end with nobody
-> > > > giving me a clear indication of what I should propose.
-> > > > 
-> > > > So, let us go back to my initial need: have a package compiled based
-> > > > on a git over ssh URL. Now if you tell me that there is a way to do
-> > > > this without patching pkg-download.mk, I am all ears. I did not find
-> > > > any help on that in the documentation, do you have some pointers?
-> > > 
-> > > As far as I understand your requirements, you want to be able to write
-> > > either of:
-> > > 
-> > >     FOO_SITE = user at machine:path/to/repo.git
-> > > or
-> > >     FOO_SITE = ssh://user at machine/path/to/rpo.git
-> > > 
-> > > You just have to add:
-> > > 
-> > >     FOO_SITE_METHOD = git
-> > > 
-> > > See the manual, search for _SITE_METHOD: ;-)
-> > >     https://buildroot.org/downloads/manual/manual.html#generic-package-reference
+> On Mon, 30 May 2016 08:36:56 +0200, Kurt Van Dijck wrote:
+> > Mpdstate listens for MPD state changes and outputs them
+> > on stdout. It is easy to write a script that receives mpdstate's output
+> > on stdin an act upon some of the events.
 > > 
-> > Ok, thanks.
+> > Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 > 
-> So, that fits your requirements? Should your patch be dropped, then?
+> Isn't the same thing achievable with the "mpc idle" feature, which
+> allows you to listen for events from mpd ?
 
-I guess so. I have not tried, but I will take your word for it. Yes,
-you can drop the patch.
+'mpc idleloop' prints the category of events, certainly not the real
+changes. 
 
-Regards.
+> 
+> Like your other package, I'd prefer to have some evidence of even some
+> limited adoption/usage of a software package before adding it to
+> Buildroot.
 
--- 
-					    Gilles.
-https://click-hack.org
+Like my other package, mpc is ideal for interactive use, but not for
+small automation stuff.
+I created a raspberry pi box that engages the audio amplifier whenever
+mpd plays, and standby when mpd pauses/stops.
+
+It's hard to build stable scripts around 'mpc' for that regards,
+as you need several calls, and the state may change in between.
+
+mpdstate fixes that flow.
+
+Like my other package, I may need to add that kind of comments, I
+learned that, and you're right in pointing me to that.
+
+I'm yet puzzled by the version info that I take from the git repository,
+that does not work in buildroot since it's buildroot's git repo there.
+I haven't found a solution yet, and that's keeping me from updating my
+patches :-)
+
+Thanks for the review, I'll take that into account.
+
+Kurt
