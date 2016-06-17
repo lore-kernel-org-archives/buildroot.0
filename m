@@ -1,20 +1,37 @@
 From: Ben Boeckel <mathstuf@gmail.com>
-Date: Fri, 17 Jun 2016 01:02:14 +0000 (UTC)
-Subject: [Buildroot] [git commit] taskd: add patch to fix musl build
-	issue
-References: <20160507071838.BB2F8817CA@busybox.osuosl.org>
- <njsp80$bbh$1@ger.gmane.org>
-Message-ID: <njvi6l$23r$1@ger.gmane.org>
+Date: Fri, 17 Jun 2016 01:21:23 +0000 (UTC)
+Subject: [Buildroot] Analysis of build results for 2016-05-16
+References: <20160517063022.7001A10142D@stock.ovh.net>
+ <20160517153611.2a3b4199@free-electrons.com>
+Message-ID: <njvjaj$gnv$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 15 Jun, 2016 at 23:44:00 GMT, Ben Boeckel wrote:
->     https://groups.google.com/forum/#!topic/taskwarrior-dev/bxIftgz-hBI
+Sorry for the delay; had been on vacation and am catching up on things.
 
-Upstream has applied the patch. The next release should be 1.2.0, but I
-don't know of a timeline.
+On Tue, 17 May, 2016 at 13:36:11 GMT, Thomas Petazzoni wrote:
+>>          arc |                    taskd-1.1.0 | NOK | http://autobuild.buildroot.net/results/67f574af0cc4348ffe2bce026c44766e49c29124/
+>
+> Forgets to link with pthread. Ben, since you added this package, can
+> you have a look?
+
+So I took the config file pointed there and built taskd with it using
+git master as of yesterday. It looks like a problem with how taskd is
+linking to gnutls:
+
+    gnutls_compress.c:(.text+0x480): undefined reference to `inflate'
+
+and lots of other missing symbols from libgnutls.a (looks to be similar
+for libuuid.a).
+
+Since everything is static, taskd needs to link to gnutls' transitive
+dependencies, but CMake's FindGnuTLS module only finds the library
+itself, so the final executable ends up with missing symbols.
+
+I'll look into improving CMake's FindGnuTLS for this. The code for
+linking to libuuid in taskd seems to have similar problems.
 
 --Ben
