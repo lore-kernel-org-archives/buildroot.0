@@ -1,54 +1,40 @@
-From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date: Fri, 17 Jun 2016 10:36:00 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Jun 2016 10:41:31 +0200
 Subject: [Buildroot] [PATCH] mpdstate: add package
-In-Reply-To: <20160612215336.06191b9e@free-electrons.com>
+In-Reply-To: <20160617083600.GA6429@airbook.newtec.eu>
 References: <20160530063656.GC31737@airbook.vandijck-laurijssen.be>
  <20160612215336.06191b9e@free-electrons.com>
-Message-ID: <20160617083600.GA6429@airbook.newtec.eu>
+ <20160617083600.GA6429@airbook.newtec.eu>
+Message-ID: <20160617104131.0f27432f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Hello,
-> 
-> On Mon, 30 May 2016 08:36:56 +0200, Kurt Van Dijck wrote:
-> > Mpdstate listens for MPD state changes and outputs them
-> > on stdout. It is easy to write a script that receives mpdstate's output
-> > on stdin an act upon some of the events.
-> > 
-> > Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> 
-> Isn't the same thing achievable with the "mpc idle" feature, which
-> allows you to listen for events from mpd ?
+Hello,
 
-'mpc idleloop' prints the category of events, certainly not the real
-changes. 
+On Fri, 17 Jun 2016 10:36:00 +0200, Kurt Van Dijck wrote:
 
-> 
-> Like your other package, I'd prefer to have some evidence of even some
-> limited adoption/usage of a software package before adding it to
-> Buildroot.
+> I'm yet puzzled by the version info that I take from the git repository,
+> that does not work in buildroot since it's buildroot's git repo there.
+> I haven't found a solution yet, and that's keeping me from updating my
+> patches :-)
 
-Like my other package, mpc is ideal for interactive use, but not for
-small automation stuff.
-I created a raspberry pi box that engages the audio amplifier whenever
-mpd plays, and standby when mpd pauses/stops.
+Your package build system should not call "git describe" or call git to
+get the version. Or at least it should provide a way to override that.
 
-It's hard to build stable scripts around 'mpc' for that regards,
-as you need several calls, and the state may change in between.
+Buildroot extracts the source code of packages in
+output/build/<name>-<version>/, and those directories do *not* contain
+the Git metadata (i.e the .git/ directory is not present). Due to this,
+when you run "git" in output/build/<name>-<version>/, it searches in
+the parent directory, up to the point where it finds the .git/
+directory of Buildroot.
 
-mpdstate fixes that flow.
+Best regards,
 
-Like my other package, I may need to add that kind of comments, I
-learned that, and you're right in pointing me to that.
-
-I'm yet puzzled by the version info that I take from the git repository,
-that does not work in buildroot since it's buildroot's git repo there.
-I haven't found a solution yet, and that's keeping me from updating my
-patches :-)
-
-Thanks for the review, I'll take that into account.
-
-Kurt
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
