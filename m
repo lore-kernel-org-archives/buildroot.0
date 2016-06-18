@@ -1,31 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Jun 2016 22:54:27 +0200
-Subject: [Buildroot] [git commit] package/snappy: add .hash file
-Message-ID: <20160618205843.662B47FCE9@busybox.osuosl.org>
+Date: Sat, 18 Jun 2016 22:56:34 +0200
+Subject: [Buildroot] [git commit] package/libucl: add .hash file
+Message-ID: <20160618205843.B99BF7FCE9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f928ec3f76561f4fa6abdc50f8c45c39d7ecc1cb
+commit: https://git.buildroot.net/buildroot/commit/?id=4f6e927ce3d99e6919f40bb9bb62fdb819756d54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Similar to jquery-keyboard, it seems the snappy tarball on the
+Similar to jquery-keyboard, it seems the libucl tarball on the
 autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
 our s.b.o mirror.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/snappy/snappy.hash | 2 ++
+ package/libucl/libucl.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/snappy/snappy.hash b/package/snappy/snappy.hash
+diff --git a/package/libucl/libucl.hash b/package/libucl/libucl.hash
 new file mode 100644
-index 0000000..fc979ae
+index 0000000..bd2ca13
 --- /dev/null
-+++ b/package/snappy/snappy.hash
++++ b/package/libucl/libucl.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 d64e434e2ddfe9ae942708747003d489e27f2bfddaa5e9e070da98cb00f660f2  snappy-1ff9be9b8fafc8528ca9e055646f5932aa5db9c4.tar.gz
++sha256 2f69995c7f8320350f56c1183c395cc4a2a958331f22d60b7839a117c9c601e1  libucl-0.7.3.tar.gz
