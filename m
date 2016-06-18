@@ -1,112 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 18 Jun 2016 11:39:48 +0200
-Subject: [Buildroot] [PATCH] linux: allow the selection of the
- architecture's default configuration
-In-Reply-To: <1465899598-2855-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1465899598-2855-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160618093948.GB3573@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 18 Jun 2016 12:06:41 +0200
+Subject: [Buildroot] [git commit] libstrophe: add .hash file
+Message-ID: <20160618100654.C2F3981D3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Naresh, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=037563d5c90f1b623e182e8384eed920ddd104f3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-06-14 12:19 +0200, Thomas Petazzoni spake thusly:
-> To configure the Linux kernel, we currently provide two options:
-> 
->  1. Passing a defconfig name (for example "multi_v7"), to which we append
->     "_defconfig" to run "make multi_v7_defconfig".
-> 
->  2. Passing a path to a custom configuration file.
-> 
-> Unfortunately, those two possibilities do not allow to configure the
-> kernel when you want to use the default configuration built into the
-> kernel for a given architecture. For example, on ARM64, there is a
-> single defconfig simply called "defconfig", which you can load by
-> running "make defconfig".
-> 
-> Using the mechanism (1) above doesn't work because we append
-> "_defconfig" automatically.
-> 
-> One solution would be to change (1) and require the user to enter the
-> full defconfig named (i.e "multi_v7_defconfig" instead of "multi_v7"),
-> but we would break all existing Buildroot configurations.
-> 
-> So instead, we add a third option, which simply tells Buildroot to use
-> the default configuration for the selected architecture. In this case,
-> Buildroot will configure the kernel by running "make defconfig".
-> 
-> Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fixes:
+http://autobuild.buildroot.org/results/847/847813211e29bdf8b986696ba5fd5d561e66ca2c/
+http://autobuild.buildroot.org/results/b42/b420d52c49ab228f9599f9e03bb55ad3e4dd0fda/
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Similar to jquery-keyboard, it seems the libstrophe tarball on the
+autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
+our s.b.o mirror.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libstrophe/libstrophe.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> ---
-> This proposal aims at replacing:
-> 
->   https://patchwork.ozlabs.org/patch/616638/
->   https://patchwork.ozlabs.org/patch/612216/
-> 
-> with a solution that 1/ doesn't break existing Buildroot
-> configuration (which proposal 616638 was doing), and 2/ works fine even
-> if the architecture also provides non-default defconfigs (which was an
-> issue with proposal 612216).
-> 
-> I've marked both of these patches as Superdeded in patchwork.
-> ---
->  linux/Config.in | 8 ++++++++
->  linux/linux.mk  | 2 ++
->  2 files changed, 10 insertions(+)
-> 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index ce55271..be6d0cc 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -142,6 +142,14 @@ choice
->  config BR2_LINUX_KERNEL_USE_DEFCONFIG
->  	bool "Using an in-tree defconfig file"
->  
-> +config BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
-> +	bool "Use the architecture default configuration"
-> +	help
-> +	  This option will use the default configuration for the
-> +	  selected architecture. I.e, it is equivalent to running
-> +	  "make ARCH=<foo> defconfig". This is useful on architectures
-> +	  that have a single defconfig file, such as ARM64.
-> +
->  config BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG
->  	bool "Using a custom (def)config file"
->  
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index a751da9..fb844ef 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -206,6 +206,8 @@ LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
->  
->  ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
->  LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
-> +else ifeq ($(BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG),y)
-> +LINUX_KCONFIG_DEFCONFIG = defconfig
->  else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
->  LINUX_KCONFIG_FILE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
->  endif
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
+new file mode 100644
+index 0000000..d840303
+--- /dev/null
++++ b/package/libstrophe/libstrophe.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 08f4a85ef419a8bdf08b6afa8f7b2a0e5e180fdc9c16cede81af672ec10e21e7  libstrophe-0.8.8.tar.gz
++sha256 00936397cbb75ef168992868ae559b141b505d3a06f08163012b240390efa553  b08766c8e46956daba010044b00c97f78b598780.patch
