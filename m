@@ -1,74 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Jun 2016 16:31:23 +0200
-Subject: [Buildroot] [git commit] elfutils: put all the "lfs mode" stuff
- together
-In-Reply-To: <20160618130411.BC15980794@busybox.osuosl.org>
-References: <20160618130411.BC15980794@busybox.osuosl.org>
-Message-ID: <addd091c-1d12-e259-4742-41296acc653f@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 18 Jun 2016 18:24:00 +0200
+Subject: [Buildroot] [git commit] linenoise: add .hash file
+Message-ID: <20160618162823.044F481D35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- This can't be right...
+commit: https://git.buildroot.net/buildroot/commit/?id=f82be80467543b4d13713410c935c95210329cbf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 18-06-16 14:59, Thomas Petazzoni wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=bcc8d367140d00f76aba6ef4387a12469fa0c024
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/elfutils/elfutils.mk | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-> index 074ca02..a2012d6 100644
-> --- a/package/elfutils/elfutils.mk
-> +++ b/package/elfutils/elfutils.mk
-> @@ -16,17 +16,18 @@ ELFUTILS_DEPENDENCIES = zlib
->  ELFUTILS_AUTORECONF = YES
->  ELFUTILS_CONF_OPTS += --disable-werror
->  
-> -ELFUTILS_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
-> -
->  # sparc64 needs -fPIC instead of -fpic
->  ifeq ($(BR2_sparc64),y)
->  ELFUTILS_CFLAGS += -fPIC
+Fixes:
+http://autobuild.buildroot.org/results/b02/b02f03e8d0f8e5bb3dcbb3b28819268389ad1dfe/
+http://autobuild.buildroot.org/results/7ba/7bae05e74af886867285d40d61eee73a2fd8dbdf/
 
- Setting ELFUTILS_CFLAGS...
+Similar to jquery-keyboard, it seems the linenoise tarball on the
+autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
+our s.b.o mirror.
 
->  endif
->  
->  # elfutils gets confused when lfs mode is forced, so don't
-> +ELFUTILS_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linenoise/linenoise.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
- ... and overriding it here...
-
- Regards,
- Arnout
-
-> +ELFUTILS_CPPFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
-> +
->  ELFUTILS_CONF_ENV += \
->  	CFLAGS="$(ELFUTILS_CFLAGS)" \
-> -	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
-> +	CPPFLAGS="$(ELFUTILS_CPPFLAGS)"
->  
->  ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS)
->  
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/linenoise/linenoise.hash b/package/linenoise/linenoise.hash
+new file mode 100644
+index 0000000..7837bc6
+--- /dev/null
++++ b/package/linenoise/linenoise.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 f5054a4fe120d43d85427cf58af93e56b9bb80389d507a9bec9b75531a340014  linenoise-1.0.tar.gz
