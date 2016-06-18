@@ -1,70 +1,74 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 18 Jun 2016 16:14:15 +0200
-Subject: [Buildroot] Patchwork cleanup week #24
-In-Reply-To: <20160615220634.67eb8fa9@free-electrons.com>
-References: <20160615220634.67eb8fa9@free-electrons.com>
-Message-ID: <85363762-ca68-9ed3-f962-34f20352b9e3@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 18 Jun 2016 16:31:23 +0200
+Subject: [Buildroot] [git commit] elfutils: put all the "lfs mode" stuff
+ together
+In-Reply-To: <20160618130411.BC15980794@busybox.osuosl.org>
+References: <20160618130411.BC15980794@busybox.osuosl.org>
+Message-ID: <addd091c-1d12-e259-4742-41296acc653f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Alexey, Vlad, All,
+ This can't be right...
 
-Le 15/06/2016 ? 22:06, Thomas Petazzoni a ?crit :
-> Hello,
+On 18-06-16 14:59, Thomas Petazzoni wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=bcc8d367140d00f76aba6ef4387a12469fa0c024
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> The previous patchwork cleanup period being over, it's time to start
-> the second period, with 10 other patches. We're on June 15th, so I'll
-> give people until June 30th to react on the following patches. If
-> there's no reaction, like no interest from either the original
-> submitter nor any other Buildroot developer, the patch will be marked
-> Rejected on June 30th.
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/elfutils/elfutils.mk | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> If you are in To: of this e-mail, then one or several of the patches
-> below have been authored by you, so you should be interested :-)
-> 
-> Thanks,
-> 
-> Thomas
-> 
->  5. Fix for the makeinfo / missing issue, proposal from Romain
->     http://patchwork.ozlabs.org/patch/595041/
->     http://patchwork.ozlabs.org/patch/595042/
->     http://patchwork.ozlabs.org/patch/595043/
-> 
->     We need to take a decision on this one. The problem also occurs for
->     gdb and binutils on ARC, for which we've added a custom hack
->     recently.
-> 
->     I tried to play with timestamps by touch'ing the .info files before
->     the build, it worked with one of gdb or binutils, but failed for
->     the other.
-> 
->     So either we take Romain's approach, or we bite the bullet and add
->     a host-makeinfo package on which we depend when gdb/binutils are
->     fetched from Git.
+> diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+> index 074ca02..a2012d6 100644
+> --- a/package/elfutils/elfutils.mk
+> +++ b/package/elfutils/elfutils.mk
+> @@ -16,17 +16,18 @@ ELFUTILS_DEPENDENCIES = zlib
+>  ELFUTILS_AUTORECONF = YES
+>  ELFUTILS_CONF_OPTS += --disable-werror
+>  
+> -ELFUTILS_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
+> -
+>  # sparc64 needs -fPIC instead of -fpic
+>  ifeq ($(BR2_sparc64),y)
+>  ELFUTILS_CFLAGS += -fPIC
+
+ Setting ELFUTILS_CFLAGS...
+
+>  endif
+>  
+>  # elfutils gets confused when lfs mode is forced, so don't
+> +ELFUTILS_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
+
+ ... and overriding it here...
+
+ Regards,
+ Arnout
+
+> +ELFUTILS_CPPFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
+> +
+>  ELFUTILS_CONF_ENV += \
+>  	CFLAGS="$(ELFUTILS_CFLAGS)" \
+> -	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
+> +	CPPFLAGS="$(ELFUTILS_CPPFLAGS)"
+>  
+>  ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS)
+>  
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
-IHMO the real problem is that binutils/gdb doesn't support --disable-docs
-option. When present on the command line, this option must completely disable
-the documentation (man, info, pdf etc) and let the build continue.
 
-It seems that this issue was already discussed back in 2007 [1].
-Last year I submitted a patch upstream to do that but it was not complete and
-not tested due to autoconf version mismatch [2].
-
-If we want to autoreconf binutils/gdb in Buildroot we must downgrade autoconf to
-2.64 and automake to 1.12.6.
-
-Alexey, Vlad, I would suggest to rework your patch [3] and add --disable-docs
-option instead of testing missing 127 return value.
-If you succeed, we can reject my proposal from patchwork :)
-
-Best regards,
-Romain
-
-[1] https://sourceware.org/ml/gdb-patches/2007-11/msg00102.html
-[2] https://sourceware.org/ml/gdb-patches/2015-09/msg00073.html
-[3] http://lists.busybox.net/pipermail/buildroot/2016-June/163037.html
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
