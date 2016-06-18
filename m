@@ -1,52 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jun 2016 15:05:45 +0200
-Subject: [Buildroot] [PATCH] linux: allow the selection of the
- architecture's default configuration
-In-Reply-To: <1465899598-2855-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1465899598-2855-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160618150545.0f4b1131@free-electrons.com>
+Date: Sat, 18 Jun 2016 15:06:25 +0200
+Subject: [Buildroot] [git commit] package/erlang-lager: add .hash file
+Message-ID: <20160618131027.60E36817FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6e249bd18482052aac685427c648a73daba774aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Jun 2016 12:19:58 +0200, Thomas Petazzoni wrote:
-> To configure the Linux kernel, we currently provide two options:
-> 
->  1. Passing a defconfig name (for example "multi_v7"), to which we append
->     "_defconfig" to run "make multi_v7_defconfig".
-> 
->  2. Passing a path to a custom configuration file.
-> 
-> Unfortunately, those two possibilities do not allow to configure the
-> kernel when you want to use the default configuration built into the
-> kernel for a given architecture. For example, on ARM64, there is a
-> single defconfig simply called "defconfig", which you can load by
-> running "make defconfig".
-> 
-> Using the mechanism (1) above doesn't work because we append
-> "_defconfig" automatically.
-> 
-> One solution would be to change (1) and require the user to enter the
-> full defconfig named (i.e "multi_v7_defconfig" instead of "multi_v7"),
-> but we would break all existing Buildroot configurations.
-> 
-> So instead, we add a third option, which simply tells Buildroot to use
-> the default configuration for the selected architecture. In this case,
-> Buildroot will configure the kernel by running "make defconfig".
-> 
-> Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> This proposal aims at replacing:
+Similar to jquery-keyboard, it seems the erlang-lager tarball on the
+autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to our
+s.b.o mirror.
 
-Applied to master. Thanks Yann for the review!
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/erlang-lager/erlang-lager.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/erlang-lager/erlang-lager.hash b/package/erlang-lager/erlang-lager.hash
+new file mode 100644
+index 0000000..e436fdc
+--- /dev/null
++++ b/package/erlang-lager/erlang-lager.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 168a8e48646b04bcee1ab0c97c1ff63563bd7fd25638f1504b8d8f674d2ddd1b erlang-lager-2.2.0.tar.gz
