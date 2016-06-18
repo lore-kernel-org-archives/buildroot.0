@@ -1,59 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jun 2016 15:05:04 +0200
-Subject: [Buildroot] [PATCH 1/3] elfutils: bump version to 0.166
-In-Reply-To: <1466174911-13566-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1466174911-13566-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160618150504.55d48396@free-electrons.com>
+Date: Sat, 18 Jun 2016 15:05:15 +0200
+Subject: [Buildroot] [git commit] linux: allow the selection of the
+	architecture's default configuration
+Message-ID: <20160618130526.2EABF818C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=53ced1f6d3da6b037d45a70ed0d8a25f5ab15142
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 17 Jun 2016 15:48:29 +0100, Vicente Olivert Riera wrote:
-> - Remove 0001-argp-support.patch since it's already included upstream:
->   https://git.fedorahosted.org/cgit/elfutils.git/commit/?id=1ab3c2befeedf5bd891cfbe17cfef79c06e5079a
-> 
-> - Tweak patches for this new version:
->   - 0002-disable-progs.patch
->   - 0003-fts.patch
->   - 0004-disable-po.patch
->   - 0005-really-make-werror-conditional-to-build-werror.patch
-> 
-> - Remove 0007-Allow-disabling-symbol-versioning-at-configure-t since
->   it's already included upstream:
->   https://git.fedorahosted.org/cgit/elfutils.git/commit/?id=bafacacaf7659a4933604662daba26a480b29a8d
-> 
-> - Remove portability patch since it's no longer needed. I have asked
->   Mark Wielaard regarding this topic given the portability patch looks
->   been discontinued since 0.163 and he replied the following:
->   - "I believe it is no longer needed. At least not on any platform I
->      am actively maintaining. See also this discussion from last year:
->      https://lists.fedorahosted.org/pipermail/elfutils-devel/2015-May/004825.html"
-> 
-> - Add zlib dependency since it's now mandatory:
->   configure: error: zlib not found but is required
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/elfutils/0001-argp-support.patch           |  93 --------------
->  package/elfutils/0002-disable-progs.patch          |  22 ++--
->  package/elfutils/0003-fts.patch                    |  26 ++--
->  ...y-make-werror-conditional-to-build-werror.patch |  18 +--
->  ...bling-symbol-versioning-at-configure-time.patch | 139 ---------------------
->  package/elfutils/Config.in                         |   1 +
->  package/elfutils/elfutils.hash                     |   3 +-
->  package/elfutils/elfutils.mk                       |  11 +-
->  8 files changed, 40 insertions(+), 273 deletions(-)
->  delete mode 100644 package/elfutils/0001-argp-support.patch
->  delete mode 100644 package/elfutils/0007-Allow-disabling-symbol-versioning-at-configure-time.patch
+To configure the Linux kernel, we currently provide two options:
 
-All three patches applied, thanks!
+ 1. Passing a defconfig name (for example "multi_v7"), to which we append
+    "_defconfig" to run "make multi_v7_defconfig".
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ 2. Passing a path to a custom configuration file.
+
+Unfortunately, those two possibilities do not allow to configure the
+kernel when you want to use the default configuration built into the
+kernel for a given architecture. For example, on ARM64, there is a
+single defconfig simply called "defconfig", which you can load by
+running "make defconfig".
+
+Using the mechanism (1) above doesn't work because we append
+"_defconfig" automatically.
+
+One solution would be to change (1) and require the user to enter the
+full defconfig named (i.e "multi_v7_defconfig" instead of "multi_v7"),
+but we would break all existing Buildroot configurations.
+
+So instead, we add a third option, which simply tells Buildroot to use
+the default configuration for the selected architecture. In this case,
+Buildroot will configure the kernel by running "make defconfig".
+
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in | 8 ++++++++
+ linux/linux.mk  | 2 ++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index ce55271..be6d0cc 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -142,6 +142,14 @@ choice
+ config BR2_LINUX_KERNEL_USE_DEFCONFIG
+ 	bool "Using an in-tree defconfig file"
+ 
++config BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
++	bool "Use the architecture default configuration"
++	help
++	  This option will use the default configuration for the
++	  selected architecture. I.e, it is equivalent to running
++	  "make ARCH=<foo> defconfig". This is useful on architectures
++	  that have a single defconfig file, such as ARM64.
++
+ config BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG
+ 	bool "Using a custom (def)config file"
+ 
+diff --git a/linux/linux.mk b/linux/linux.mk
+index a751da9..fb844ef 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -206,6 +206,8 @@ LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
+ 
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
++else ifeq ($(BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG),y)
++LINUX_KCONFIG_DEFCONFIG = defconfig
+ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+ LINUX_KCONFIG_FILE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
+ endif
