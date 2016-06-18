@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jun 2016 15:36:20 +0200
-Subject: [Buildroot] [git commit] sstrip: mark as deprecated
-Message-ID: <20160618133629.9EC0381A1D@busybox.osuosl.org>
+Date: Sat, 18 Jun 2016 15:37:04 +0200
+Subject: [Buildroot] [PATCH 0/3] sstrip: drop host variant and deprecate
+ target variant
+In-Reply-To: <1466088075-7635-1-git-send-email-julien.floret@6wind.com>
+References: <1466088075-7635-1-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160618153704.674599d2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80899ff982b5645839e6f00021276c69c531f9df
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-sstrip is unmaintained and potentially harmful, as Yann explained in
-commit 6a6962fd82ca ("build/sstrip: deprecate for 2014.05").
+On Thu, 16 Jun 2016 16:41:12 +0200, Julien Floret wrote:
+> Host sstrip is not used anymore.
+> What's more, sstrip is not maintained and potentially harmful.
+> 
+> Julien Floret (3):
+>   sstrip: get rid of host variant
+>   Config.in: Add BR2_DEPRECATED_SINCE_2016_08
+>   sstrip: mark as deprecated
 
-Signed-off-by: Julien Floret <julien.floret@6wind.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/sstrip/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Series applied, thanks!
 
-diff --git a/package/sstrip/Config.in b/package/sstrip/Config.in
-index 12a5941..c458f8e 100644
---- a/package/sstrip/Config.in
-+++ b/package/sstrip/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SSTRIP
- 	bool "sstrip"
-+	depends on BR2_DEPRECATED_SINCE_2016_08
- 	help
- 	  Small utility that removes a few bytes from an executable that
- 	  strip leaves behind.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
