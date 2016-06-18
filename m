@@ -1,34 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Jun 2016 12:25:03 +0200
-Subject: [Buildroot] [git commit] liblog4c-localtime: add .hash file
-Message-ID: <20160618102656.82DAC81D43@busybox.osuosl.org>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 18 Jun 2016 13:26:11 +0200
+Subject: [Buildroot] [PATCH] beecrypt: fix compile for coldfire
+Message-ID: <20160618112610.GA25838@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c98bd962d337f1fade141cb604d311a9eed88bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Package uses m68k optimization, which doesn't work with coldfire.
+These optimizations are disabled with --enable-debug.
 
-Fixes:
-http://autobuild.buildroot.org/results/e54/e54afe2f5d27540d69e2b9c3b963e23fac5bb4f7/
-http://autobuild.buildroot.org/results/e57/e57da53c15f4844b34353154720820aacc9e437a/
+Fixes following autobuild failure:
+http://autobuild.buildroot.net/results/bbe57a096de207b78e069591e21ac5a79eab069e/
+http://autobuild.buildroot.net/results/ab702e6db382b1975d0cd61feaba9812830e81e8/
 
-Similar to jquery-keyboard, it seems the liblog4c-localtime tarball on the
-autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
-our s.b.o mirror.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/liblog4c-localtime/liblog4c-localtime.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ package/beecrypt/beecrypt.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/liblog4c-localtime/liblog4c-localtime.hash b/package/liblog4c-localtime/liblog4c-localtime.hash
-new file mode 100644
-index 0000000..2e4e641
---- /dev/null
-+++ b/package/liblog4c-localtime/liblog4c-localtime.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 a1f68d8251509c0171f8bfea42f9e2a5255a4185f7dcbe67f584aa09709b2496  liblog4c-localtime-v1.0.tar.gz
+diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
+index e66cec1..c5721ea 100644
+--- a/package/beecrypt/beecrypt.mk
++++ b/package/beecrypt/beecrypt.mk
+@@ -17,6 +17,11 @@ BEECRYPT_CONF_OPTS = \
+ 	--without-python \
+ 	--disable-openmp
+ 
++# disable optmized m68k assembly as it doesn't compile for coldfire
++ifeq ($(BR2_m68k_cf),y)
++BEECRYPT_CONF_OPTS += --enable-debug
++endif
++
+ ifeq ($(BR2_PACKAGE_BEECRYPT_CPP),y)
+ BEECRYPT_DEPENDENCIES += icu
+ BEECRYPT_CONF_OPTS += --with-cplusplus
+-- 
+2.1.4
