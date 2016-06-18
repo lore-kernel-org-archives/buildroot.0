@@ -1,36 +1,32 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 18 Jun 2016 17:43:26 +0100
-Subject: [Buildroot] [PATCH] elfutils: do not override ELFUTILS_CFLAGS
-	variable
-Message-ID: <1466268206-62239-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 18 Jun 2016 18:43:06 +0200
+Subject: [Buildroot] [PATCH 06/19] package/irqbalance: add .hash file
+In-Reply-To: <1466268199-5417-1-git-send-email-romain.naour@gmail.com>
+References: <1466268199-5417-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <1466268199-5417-6-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/elfutils/elfutils.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Similar to jquery-keyboard, it seems the irqbalance tarball on the
+autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
+our s.b.o mirror.
 
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index a2012d6..88837fb 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -18,11 +18,11 @@ ELFUTILS_CONF_OPTS += --disable-werror
- 
- # sparc64 needs -fPIC instead of -fpic
- ifeq ($(BR2_sparc64),y)
--ELFUTILS_CFLAGS += -fPIC
-+ELFUTILS_CFLAGS = -fPIC
- endif
- 
- # elfutils gets confused when lfs mode is forced, so don't
--ELFUTILS_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
-+ELFUTILS_CFLAGS += $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
- ELFUTILS_CPPFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
- 
- ELFUTILS_CONF_ENV += \
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/irqbalance/irqbalance.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/irqbalance/irqbalance.hash
+
+diff --git a/package/irqbalance/irqbalance.hash b/package/irqbalance/irqbalance.hash
+new file mode 100644
+index 0000000..032c491
+--- /dev/null
++++ b/package/irqbalance/irqbalance.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 f1b8115948bb9f0bc36b9d7143ee8be751a294bc189d311408e753acc37169c3  irqbalance-v1.0.9.tar.gz
 -- 
-2.7.3
+2.5.5
