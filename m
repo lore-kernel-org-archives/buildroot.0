@@ -1,34 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Jun 2016 18:26:54 +0200
-Subject: [Buildroot] [git commit] libepoxy: add .hash file
-Message-ID: <20160618162823.13A1081D35@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 18 Jun 2016 18:43:01 +0200
+Subject: [Buildroot] [PATCH 01/19] package/apitrace: add .hash file
+Message-ID: <1466268199-5417-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82f0f0829efc01c453082c3f0dc37ea81989b79c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Similar to jquery-keyboard, it seems the apitrace tarball on the
+autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
+our s.b.o mirror.
 
-Fixes:
-http://autobuild.buildroot.org/results/e19/e199c6a0764f9c1314795c2d4699cbae3a98a8b0/
-http://autobuild.buildroot.org/results/4c0/4c096be10febb4db332e3eca3438e7b4aab40000/
-
-Similar to jquery-keyboard, it seems the libepoxy tarball on the autobuilder
-is corrupt.  Fix it by adding a .hash file so it falls back to our s.b.o
-mirror.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/libepoxy/libepoxy.hash | 2 ++
+ package/apitrace/apitrace.hash | 2 ++
  1 file changed, 2 insertions(+)
+ create mode 100644 package/apitrace/apitrace.hash
 
-diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
+diff --git a/package/apitrace/apitrace.hash b/package/apitrace/apitrace.hash
 new file mode 100644
-index 0000000..cb35cd4
+index 0000000..eac470b
 --- /dev/null
-+++ b/package/libepoxy/libepoxy.hash
++++ b/package/apitrace/apitrace.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 6700ddedffb827b42c72cce1e0be6fba67b678b19bf256e1b5efd3ea38cc2bb4  libepoxy-v1.3.1.tar.gz
++sha256 21d0cc765b84e537c5a3a117073818942653b85685b9633d364836ccfe0b9fd5  apitrace-7.0.tar.gz
+-- 
+2.5.5
