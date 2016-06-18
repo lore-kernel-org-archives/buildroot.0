@@ -1,41 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jun 2016 14:56:49 +0200
-Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.156
-Message-ID: <20160618125704.D3F5181963@busybox.osuosl.org>
+Date: Sat, 18 Jun 2016 14:57:23 +0200
+Subject: [Buildroot] [git commit] libevdev: bump version to 1.5.2
+Message-ID: <20160618125731.C49E17FF3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=673eff15a8a68bcf1000548282ce0f6a2b78cd99
+commit: https://git.buildroot.net/buildroot/commit/?id=a97dc46d7e7fcdf83020371d4ae3fe8d886d8aee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+For details see [1].
+
+[1] https://lists.freedesktop.org/archives/input-tools/2016-June/001307.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libevdev/libevdev.hash | 4 ++--
+ package/libevdev/libevdev.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index fb72358..22c507e 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index a4fcd9b..a2074f8 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
 @@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 f2c7bad06d443aa96961f70951b55de764a882c67e94fdeec2eba83f8a9c9b736971a58bbb01ae7c35d43b39ad2a69128369c6bd74ab81f3c5770c4b67e753f8  LVM2.2.02.155.tgz
-+sha512 b69736b189a9f458aa942aeb0e5770b7661fc345827d82b58bda13e6e5667869664194ee5f4c9a7f9a1c6a9bc3bcbd88a6e0b79a47ef6c27fcce35f8e1975a7f  LVM2.2.02.156.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 65860b5..b36b521 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
+-# Hash from https://lists.freedesktop.org/archives/input-tools/2016-May/001301.html
+-sha256 17630821a57e6e3f02e01ade836f24068df9bd530067091152b0d468c3a86f40 libevdev-1.5.1.tar.xz
++# Hash from https://lists.freedesktop.org/archives/input-tools/2016-June/001307.html
++sha256 5ee2163656a61f5703cb5c08a05c9471ffb7b640bfbe2c55194ea50d908f629b libevdev-1.5.2.tar.xz
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index b0832d8..3f2bbd4 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LVM2_VERSION = 2.02.155
-+LVM2_VERSION = 2.02.156
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+-LIBEVDEV_VERSION = 1.5.1
++LIBEVDEV_VERSION = 1.5.2
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
