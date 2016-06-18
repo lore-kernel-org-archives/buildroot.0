@@ -1,41 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Jun 2016 23:18:02 +0200
-Subject: [Buildroot] [git commit] package/swig: bump version to 3.0.10
-Message-ID: <20160618211846.A0B7381D36@busybox.osuosl.org>
+Date: Sat, 18 Jun 2016 23:18:09 +0200
+Subject: [Buildroot] [git commit] package/xmlstarlet: bump version to 1.6.1
+Message-ID: <20160618211846.B1C5E81D36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9701b861cbfb435e03492ee2d661ff7f397d6cd2
+commit: https://git.buildroot.net/buildroot/commit/?id=2f885bded731bb51c73bee1f84776c0687de6f12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/swig/swig.hash | 2 +-
- package/swig/swig.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/xmlstarlet/xmlstarlet.hash | 5 +++--
+ package/xmlstarlet/xmlstarlet.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/swig/swig.hash b/package/swig/swig.hash
-index 62e3d20..92ddc11 100644
---- a/package/swig/swig.hash
-+++ b/package/swig/swig.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	06dc8816a225667ce1eee545af3caf87e1bbaa379c32838d4cea53152514348d	swig-3.0.7.tar.gz
-+sha256	2939aae39dec06095462f1b95ce1c958ac80d07b926e48871046d17c0094f44c	swig-3.0.10.tar.gz
-diff --git a/package/swig/swig.mk b/package/swig/swig.mk
-index e4bd64c..5329d1b 100644
---- a/package/swig/swig.mk
-+++ b/package/swig/swig.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/xmlstarlet/xmlstarlet.hash b/package/xmlstarlet/xmlstarlet.hash
+index 2d6558f..ca9aecf 100644
+--- a/package/xmlstarlet/xmlstarlet.hash
++++ b/package/xmlstarlet/xmlstarlet.hash
+@@ -1,2 +1,3 @@
+-# Locally computed:
+-sha256  47b4ed042ea2909257f2a386001af49fceb303f84da7214779ccf99fffc6bbba  xmlstarlet-1.5.0.tar.gz
++# From https://sourceforge.net/projects/xmlstar/files/xmlstarlet/1.6.1/
++sha1	87bb104f546caca71b9540807c5b2738944cb219	xmlstarlet-1.6.1.tar.gz
++md5	f3c5dfa3b1a2ee06cd57c255cc8b70a0		xmlstarlet-1.6.1.tar.gz
+diff --git a/package/xmlstarlet/xmlstarlet.mk b/package/xmlstarlet/xmlstarlet.mk
+index e0abf04..7039d77 100644
+--- a/package/xmlstarlet/xmlstarlet.mk
++++ b/package/xmlstarlet/xmlstarlet.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- SWIG_VERSION_MAJOR = 3.0
--SWIG_VERSION = $(SWIG_VERSION_MAJOR).7
-+SWIG_VERSION = $(SWIG_VERSION_MAJOR).10
- SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
- SWIG_DEPENDENCIES = host-bison
- HOST_SWIG_CONF_OPTS = \
+-XMLSTARLET_VERSION = 1.5.0
++XMLSTARLET_VERSION = 1.6.1
+ XMLSTARLET_SITE = http://downloads.sourceforge.net/project/xmlstar/xmlstarlet/$(XMLSTARLET_VERSION)
+ XMLSTARLET_LICENSE = MIT
+ XMLSTARLET_LICENSE_FILES = COPYING
