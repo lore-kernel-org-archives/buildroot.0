@@ -1,40 +1,55 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 18 Jun 2016 13:26:11 +0200
-Subject: [Buildroot] [PATCH] beecrypt: fix compile for coldfire
-Message-ID: <20160618112610.GA25838@waldemar-brodkorb.de>
+From: Jaap Crezee <jaap@jcz.nl>
+Date: Sat, 18 Jun 2016 13:43:01 +0200
+Subject: [Buildroot] [PATCH 1/1] fixed host-lzop compiling with gcc-6
+Message-ID: <20160618114301.22775-1-jaap@jcz.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Package uses m68k optimization, which doesn't work with coldfire.
-These optimizations are disabled with --enable-debug.
-
-Fixes following autobuild failure:
-http://autobuild.buildroot.net/results/bbe57a096de207b78e069591e21ac5a79eab069e/
-http://autobuild.buildroot.net/results/ab702e6db382b1975d0cd61feaba9812830e81e8/
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Jaap Crezee <jaap@jcz.nl>
 ---
- package/beecrypt/beecrypt.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/lzop/001-host-gcc-6.patch | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/lzop/001-host-gcc-6.patch
 
-diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
-index e66cec1..c5721ea 100644
---- a/package/beecrypt/beecrypt.mk
-+++ b/package/beecrypt/beecrypt.mk
-@@ -17,6 +17,11 @@ BEECRYPT_CONF_OPTS = \
- 	--without-python \
- 	--disable-openmp
- 
-+# disable optmized m68k assembly as it doesn't compile for coldfire
-+ifeq ($(BR2_m68k_cf),y)
-+BEECRYPT_CONF_OPTS += --enable-debug
-+endif
+diff --git a/package/lzop/001-host-gcc-6.patch b/package/lzop/001-host-gcc-6.patch
+new file mode 100644
+index 0000000..41af2ff
+--- /dev/null
++++ b/package/lzop/001-host-gcc-6.patch
+@@ -0,0 +1,31 @@
++Signed-off-by: Jaap Crezee <jaap@jcz.nl>
++Acked-by: James Knight <james.d.knight@live.com>
 +
- ifeq ($(BR2_PACKAGE_BEECRYPT_CPP),y)
- BEECRYPT_DEPENDENCIES += icu
- BEECRYPT_CONF_OPTS += --with-cplusplus
++This patch allows host-lzop compiled with gcc-6.
++
++--- a/src/miniacc.h.orig   2016-02-10 16:09:23.247315866 +0100
+++++ b/src/miniacc.h   2016-02-10 16:12:14.973297054 +0100
++@@ -4469,12 +4469,12 @@
++ #if defined(__MSDOS__) && defined(__TURBOC__) && (__TURBOC__ < 0x0150)
++ #elif 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
++ #else
++-    ACCCHK_ASSERT((1   << (8*SIZEOF_INT-1)) < 0)
+++    ACCCHK_ASSERT((int)(1u   << (8*SIZEOF_INT-1)) < 0)
++ #endif
++     ACCCHK_ASSERT((1u  << (8*SIZEOF_INT-1)) > 0)
++ #if 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
++ #else
++-    ACCCHK_ASSERT((1l  << (8*SIZEOF_LONG-1)) < 0)
+++    ACCCHK_ASSERT((long)(1ul  << (8*SIZEOF_LONG-1)) < 0)
++ #endif
++     ACCCHK_ASSERT((1ul << (8*SIZEOF_LONG-1)) > 0)
++ #if defined(acc_int16e_t)
++@@ -4703,7 +4703,7 @@
++ #elif 1 && (ACC_CC_LCC || ACC_CC_LCCWIN32) && !defined(ACCCHK_CFG_PEDANTIC)
++ #elif 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
++ #elif !(ACC_BROKEN_INTEGRAL_PROMOTION) && (SIZEOF_INT > 1)
++-    ACCCHK_ASSERT( (((unsigned char)128) << (int)(8*sizeof(int)-8)) < 0)
+++    ACCCHK_ASSERT( (int)((unsigned int)((unsigned char)128) << (int)(8*sizeof(int)-8)) < 0)
++ #endif
++ #if (ACC_CC_BORLANDC && (__BORLANDC__ >= 0x0530) && (__BORLANDC__ < 0x0560))
++ #  pragma option pop
 -- 
-2.1.4
+2.8.3
