@@ -1,31 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Jun 2016 23:13:45 +0200
-Subject: [Buildroot] [git commit] package/opencv3: add .hash file
-Message-ID: <20160618211721.87A1C805E5@busybox.osuosl.org>
+Date: Sat, 18 Jun 2016 23:15:43 +0200
+Subject: [Buildroot] [git commit] package/rapidjson: add .hash file
+Message-ID: <20160618211721.EAF3981963@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76acaafd41135ba8b051548d643d290834cb1383
+commit: https://git.buildroot.net/buildroot/commit/?id=0c5484cb1e93326777985e1eb494f2f99891cfce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Similar to jquery-keyboard, it seems the opencv3 tarball on the
+Similar to jquery-keyboard, it seems the rapidjson tarball on the
 autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
 our s.b.o mirror.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opencv3/opencv3.hash | 2 ++
+ package/rapidjson/rapidjson.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
+diff --git a/package/rapidjson/rapidjson.hash b/package/rapidjson/rapidjson.hash
 new file mode 100644
-index 0000000..20859ea
+index 0000000..baaced9
 --- /dev/null
-+++ b/package/opencv3/opencv3.hash
++++ b/package/rapidjson/rapidjson.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 f00b3c4f42acda07d89031a2ebb5ebe390764a133502c03a511f67b78bbd4fbf  opencv3-3.1.0.tar.gz
++sha256 c3711ed2b3c76a5565ee9f0128bb4ec6753dbcc23450b713842df8f236d08666  rapidjson-v1.0.2.tar.gz
