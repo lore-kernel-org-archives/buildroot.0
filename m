@@ -1,32 +1,32 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 18 Jun 2016 19:32:28 +0200
-Subject: [Buildroot] [PATCH 06/11] package/neardal: add .hash file
+Date: Sat, 18 Jun 2016 19:32:30 +0200
+Subject: [Buildroot] [PATCH 08/11] package/pifmrds: add .hash file
 In-Reply-To: <1466271153-18961-1-git-send-email-romain.naour@gmail.com>
 References: <1466271153-18961-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1466271153-18961-6-git-send-email-romain.naour@gmail.com>
+Message-ID: <1466271153-18961-8-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Similar to jquery-keyboard, it seems the neardal tarball on the
+Similar to jquery-keyboard, it seems the pifmrds tarball on the
 autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
 our s.b.o mirror.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/neardal/neardal.hash | 2 ++
+ package/pifmrds/pifmrds.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/neardal/neardal.hash
+ create mode 100644 package/pifmrds/pifmrds.hash
 
-diff --git a/package/neardal/neardal.hash b/package/neardal/neardal.hash
+diff --git a/package/pifmrds/pifmrds.hash b/package/pifmrds/pifmrds.hash
 new file mode 100644
-index 0000000..c767a74
+index 0000000..0c91d3d
 --- /dev/null
-+++ b/package/neardal/neardal.hash
++++ b/package/pifmrds/pifmrds.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 9955753759a2604fa47562a4bbccd3b787d625e70311bb6662936d89d26715b7  neardal-33b54a55032b047fd885a5eb3592c169c0056c49.tar.gz
++sha256 2afc9f3c9fc206ba32865d7dd77f3a97d7d86dcfc9b44eeb5665e8fddaafcf44  pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.tar.gz
 -- 
 2.5.5
