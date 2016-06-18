@@ -1,31 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Jun 2016 22:47:30 +0200
-Subject: [Buildroot] [git commit] package/apitrace: add .hash file
-Message-ID: <20160618205842.3B90A81976@busybox.osuosl.org>
+Date: Sat, 18 Jun 2016 22:50:12 +0200
+Subject: [Buildroot] [git commit] package/filemq: add .hash file
+Message-ID: <20160618205842.E737681976@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7b188cf6de1be845bc1b5ca7809b2b3cc0a7d6c
+commit: https://git.buildroot.net/buildroot/commit/?id=c4df2a8b597bf7225da9cd161993d0382415b482
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Similar to jquery-keyboard, it seems the apitrace tarball on the
+Similar to jquery-keyboard, it seems the filemq tarball on the
 autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
 our s.b.o mirror.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apitrace/apitrace.hash | 2 ++
+ package/filemq/filemq.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/apitrace/apitrace.hash b/package/apitrace/apitrace.hash
+diff --git a/package/filemq/filemq.hash b/package/filemq/filemq.hash
 new file mode 100644
-index 0000000..eac470b
+index 0000000..1a7997e
 --- /dev/null
-+++ b/package/apitrace/apitrace.hash
++++ b/package/filemq/filemq.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 21d0cc765b84e537c5a3a117073818942653b85685b9633d364836ccfe0b9fd5  apitrace-7.0.tar.gz
++sha256 c373eddd5154cfe63f6cc6b3255ec20dca1f70c1f1881b611930931df47babad  filemq-e59951489045825d6fc5bdc6a5a5ecf1abf51943.tar.gz
