@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jun 2016 14:57:55 +0200
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.156
-In-Reply-To: <1466182464-10796-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1466182464-10796-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160618145755.01447ad7@free-electrons.com>
+Date: Sat, 18 Jun 2016 14:57:59 +0200
+Subject: [Buildroot] [PATCH v1] libevdev: bump version to 1.5.2
+In-Reply-To: <1466201604-25254-1-git-send-email-ps.report@gmx.net>
+References: <1466201604-25254-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20160618145759.5ef4220f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 17 Jun 2016 17:54:24 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Sat, 18 Jun 2016 00:13:24 +0200, Peter Seiderer wrote:
+> For details see [1].
+> 
+> [1] https://lists.freedesktop.org/archives/input-tools/2016-June/001307.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/lvm2/lvm2.hash | 2 +-
->  package/lvm2/lvm2.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/libevdev/libevdev.hash | 4 ++--
+>  package/libevdev/libevdev.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
