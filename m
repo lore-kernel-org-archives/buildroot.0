@@ -1,39 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 18 Jun 2016 15:11:59 +0200
-Subject: [Buildroot] [git commit] rsyslog: add optional gnutls support
-Message-ID: <20160618131931.1B7CC819B7@busybox.osuosl.org>
+Date: Sat, 18 Jun 2016 15:19:48 +0200
+Subject: [Buildroot] [PATCH 1/3] libfastjson: new package
+In-Reply-To: <1465996668-6444-1-git-send-email-peter@korsgaard.com>
+References: <1465996668-6444-1-git-send-email-peter@korsgaard.com>
+Message-ID: <20160618151948.0822983d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3984a4e306acdeeba9bc2c326003852eeb1ed295
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-[Peter: drop explicit option and handle like other dependencies]
-Signed-off-by: Adrien Decostre <ad.decostre@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rsyslog/rsyslog.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+On Wed, 15 Jun 2016 15:17:46 +0200, Peter Korsgaard wrote:
+> Libfastjson is a fork of json-c, and a dependency of newer versions of
+> rsyslog.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/Config.in                    |  1 +
+>  package/libfastjson/Config.in        | 16 ++++++++++++++++
+>  package/libfastjson/libfastjson.hash |  2 ++
+>  package/libfastjson/libfastjson.mk   | 15 +++++++++++++++
+>  4 files changed, 34 insertions(+)
+>  create mode 100644 package/libfastjson/Config.in
+>  create mode 100644 package/libfastjson/libfastjson.hash
+>  create mode 100644 package/libfastjson/libfastjson.mk
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 40e3b33..18a5737 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -22,6 +22,13 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- RSYSLOG_DEPENDENCIES += busybox
- endif
- 
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+RSYSLOG_DEPENDENCIES += gnutls
-+RSYSLOG_CONF_OPTS += --enable-gnutls
-+else
-+RSYSLOG_CONF_OPTS += --disable-gnutls
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBEE),y)
- RSYSLOG_DEPENDENCIES += libee
- endif
+Series applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
