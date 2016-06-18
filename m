@@ -1,31 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 18 Jun 2016 23:07:37 +0200
-Subject: [Buildroot] [git commit] package/mtdev2tuio: add .hash file
-Message-ID: <20160618211721.546F281963@busybox.osuosl.org>
+Date: Sat, 18 Jun 2016 23:13:45 +0200
+Subject: [Buildroot] [git commit] package/opencv3: add .hash file
+Message-ID: <20160618211721.87A1C805E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9aa977a9aad330f4687c5fc71113923f0d9a2208
+commit: https://git.buildroot.net/buildroot/commit/?id=76acaafd41135ba8b051548d643d290834cb1383
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Similar to jquery-keyboard, it seems the mtdev2tuio tarball on the
+Similar to jquery-keyboard, it seems the opencv3 tarball on the
 autobuilder is corrupt.  Fix it by adding a .hash file so it falls back to
 our s.b.o mirror.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mtdev2tuio/mtdev2tuio.hash | 2 ++
+ package/opencv3/opencv3.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/mtdev2tuio/mtdev2tuio.hash b/package/mtdev2tuio/mtdev2tuio.hash
+diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
 new file mode 100644
-index 0000000..b0d159c
+index 0000000..20859ea
 --- /dev/null
-+++ b/package/mtdev2tuio/mtdev2tuio.hash
++++ b/package/opencv3/opencv3.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 4a6aa319c44478dceaf01a24603690767e56c029a1f0380da0f31eac5a02e10f  mtdev2tuio-e1e7378d86abe751158e743586133022f32fa4d1.tar.gz
++sha256 f00b3c4f42acda07d89031a2ebb5ebe390764a133502c03a511f67b78bbd4fbf  opencv3-3.1.0.tar.gz
