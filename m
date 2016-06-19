@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Jun 2016 10:45:26 +0200
-Subject: [Buildroot] [PATCH 1/3] imagemagick: bump to version 7.0.2-0
-In-Reply-To: <57661211.1010403@zacarias.com.ar>
-References: <1465994063-17292-1-git-send-email-gustavo@zacarias.com.ar>
- <20160616202243.GI3665@free.fr> <57661211.1010403@zacarias.com.ar>
-Message-ID: <20160619104526.71cbfe65@free-electrons.com>
+Date: Sun, 19 Jun 2016 10:52:59 +0200
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.2.x series
+In-Reply-To: <1466303803-6469-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1466303803-6469-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160619105259.684ecae5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +12,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 19 Jun 2016 00:31:29 -0300, Gustavo Zacarias wrote:
+On Sat, 18 Jun 2016 23:36:43 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/linux-headers/Config.in.host | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> The 'default' gs font logic in configure.ac probes for the existance of 
-> some random font in the standard directories, so i'd bet it's still 
-> required unless we're building with such fonts being present in the 
-> build machine.
-
-So can we have your Acked-by and/or Reviewed-by on this oldest patch?
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
