@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 13:09:49 +0200
-Subject: [Buildroot] [PATCH 062/121] package/qtuio: add hash file
+Date: Sun, 19 Jun 2016 13:09:52 +0200
+Subject: [Buildroot] [PATCH 065/121] package/sqlcipher: add hash file
 In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <6b9dda6f4d259212f0e764ccbb92d1fb9d898aa1.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <d229ba21d7f3af86cf1ed8a6510dcd5f21c752a1.1466334225.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,22 +11,18 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
 ---
-Peter, can you remove this from s.b.o, please?
-    qtuio-abe4973ff60654aad9df7037c4ca15c45f811d24.tar.gz
----
- package/qtuio/qtuio.hash | 2 ++
+ package/sqlcipher/sqlcipher.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/qtuio/qtuio.hash
+ create mode 100644 package/sqlcipher/sqlcipher.hash
 
-diff --git a/package/qtuio/qtuio.hash b/package/qtuio/qtuio.hash
+diff --git a/package/sqlcipher/sqlcipher.hash b/package/sqlcipher/sqlcipher.hash
 new file mode 100644
-index 0000000..669ce65
+index 0000000..b350085
 --- /dev/null
-+++ b/package/qtuio/qtuio.hash
++++ b/package/sqlcipher/sqlcipher.hash
 @@ -0,0 +1,2 @@
 +# localy computed
-+sha256  65308adb59e910d552d4885772c7f99c7d19dec5e924d852a5a39a1972f8d223  qtuio-abe4973ff60654aad9df7037c4ca15c45f811d24.tar.gz
++sha256  25fa4f4cb38dcf9e52e4d1f46be8fee9c7aaef35b6df96912a216b289e22c2af  sqlcipher-v3.2.0.tar.gz
 -- 
 2.7.4
