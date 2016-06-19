@@ -1,30 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 19 Jun 2016 00:31:29 -0300
-Subject: [Buildroot] [PATCH 1/3] imagemagick: bump to version 7.0.2-0
-In-Reply-To: <20160616202243.GI3665@free.fr>
-References: <1465994063-17292-1-git-send-email-gustavo@zacarias.com.ar>
- <20160616202243.GI3665@free.fr>
-Message-ID: <57661211.1010403@zacarias.com.ar>
+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Date: Sun, 19 Jun 2016 06:12:06 +0200
+Subject: [Buildroot] [PATCH v2] build: fix umask test
+Message-ID: <1466309526-31230-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/06/16 17:22, Yann E. MORIN wrote:
+Some shells' builtin umask does not print 2 leading 0's for the umask.
+Switching to bash is done anyway.
+This patch switches to bash before the umask test.
 
-> Our oldest bug is about imagemagick not finding ghostscript fonts:
->      https://patchwork.ozlabs.org/patch/484767/
->
-> Since you just bumped imagemagick, did you have a look if it still
-> applies?
->
-> Regards,
-> Yann E. MORIN.
+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+---
+ Makefile | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Hi Yann.
-The 'default' gs font logic in configure.ac probes for the existance of 
-some random font in the standard directories, so i'd bet it's still 
-required unless we're building with such fonts being present in the 
-build machine.
-Regards.
+diff --git a/Makefile b/Makefile
+index 3f5c3d3..78b44c5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,6 +24,11 @@
+ # You shouldn't need to mess with anything beyond this point...
+ #--------------------------------------------------------------
+ 
++# we want bash as shell
++SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
++	 else if [ -x /bin/bash ]; then echo /bin/bash; \
++	 else echo sh; fi; fi)
++
+ # Trick for always running with a fixed umask
+ UMASK = 0022
+ ifneq ($(shell umask),$(UMASK))
+@@ -227,11 +232,6 @@ else
+   Q = @
+ endif
+ 
+-# we want bash as shell
+-SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
+-	 else if [ -x /bin/bash ]; then echo /bin/bash; \
+-	 else echo sh; fi; fi)
+-
+ # kconfig uses CONFIG_SHELL
+ CONFIG_SHELL := $(SHELL)
+ 
+-- 
+1.8.5.rc3
