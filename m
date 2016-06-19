@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 13:09:11 +0200
-Subject: [Buildroot] [PATCH 024/121] package/linux-headers: add hash file
+Date: Sun, 19 Jun 2016 13:09:12 +0200
+Subject: [Buildroot] [PATCH 025/121] package/lua-msgpack-native: add hash
+	file
 In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <0c039620c4db52e3f0b2223e7b2a2b7a806b0018.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <53787e56bf7d2b45e34536df146c8f4de93013fb.1466334225.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +13,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/linux-headers/linux-headers.hash | 2 ++
+ package/lua-msgpack-native/lua-msgpack-native.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/linux-headers/linux-headers.hash
+ create mode 100644 package/lua-msgpack-native/lua-msgpack-native.hash
 
-diff --git a/package/linux-headers/linux-headers.hash b/package/linux-headers/linux-headers.hash
+diff --git a/package/lua-msgpack-native/lua-msgpack-native.hash b/package/lua-msgpack-native/lua-msgpack-native.hash
 new file mode 100644
-index 0000000..2b9d183
+index 0000000..922cdb3
 --- /dev/null
-+++ b/package/linux-headers/linux-headers.hash
++++ b/package/lua-msgpack-native/lua-msgpack-native.hash
 @@ -0,0 +1,2 @@
 +# localy computed
-+sha256  e158f3c69da87c2ec28d0f194dbe18b05e0d0b9e1142566615cea3390bab1c6a  linux-4.6.2.tar.xz
++sha256  025cf91d509fa3985869d18ef9b8eaeb875ff3c9fcf6467beeed6eab3bb35c93  lua-msgpack-native-41a91b994c70389dc9daa1a15678741d8ec41749.tar.gz
 -- 
 2.7.4
