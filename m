@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 13:09:24 +0200
-Subject: [Buildroot] [PATCH 037/121] package/python-dpkt: add hash file
+Date: Sun, 19 Jun 2016 13:09:25 +0200
+Subject: [Buildroot] [PATCH 038/121] package/python-ipy: add hash file
 In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <0f36a77ab1b1005651226e115db4790e980def86.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <546ab312a9fba5b74bccba6b28104591c2cd5883.1466334225.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/python-dpkt/python-dpkt.hash | 2 ++
+ package/python-ipy/python-ipy.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/python-dpkt/python-dpkt.hash
+ create mode 100644 package/python-ipy/python-ipy.hash
 
-diff --git a/package/python-dpkt/python-dpkt.hash b/package/python-dpkt/python-dpkt.hash
+diff --git a/package/python-ipy/python-ipy.hash b/package/python-ipy/python-ipy.hash
 new file mode 100644
-index 0000000..0a4914a
+index 0000000..8b230ca
 --- /dev/null
-+++ b/package/python-dpkt/python-dpkt.hash
++++ b/package/python-ipy/python-ipy.hash
 @@ -0,0 +1,2 @@
 +# localy computed
-+sha256  33a98fd44eb0b6dfa6790c0fcef4d7e73a5cc12a664ea3c30f4d3c2b95f5efc4  python-dpkt-1.8.r98.tar.gz
++sha256  edaaa5344893437aa6c1eb9c4ca966eb4b8c071761793839c7b4fc2a837fbeec  python-ipy-IPy-0.82a.tar.gz
 -- 
 2.7.4
