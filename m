@@ -1,27 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jun 2016 21:45:31 +0200
-Subject: [Buildroot] [git commit] package/libump: add hash file
-Message-ID: <20160619194719.3F05180153@busybox.osuosl.org>
+Date: Sun, 19 Jun 2016 21:13:02 +0200
+Subject: [Buildroot] [git commit] package/faifa: add hash file
+Message-ID: <20160619194718.0D5AA81DCC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=202aa4ebc57cab8475da3bb377c8ea14dbf5a11c
+commit: https://git.buildroot.net/buildroot/commit/?id=eb3775249230e092e1049092db0513762999c6e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libump/libump.hash | 2 ++
+ package/faifa/faifa.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/libump/libump.hash b/package/libump/libump.hash
+diff --git a/package/faifa/faifa.hash b/package/faifa/faifa.hash
 new file mode 100644
-index 0000000..5d2ad2e
+index 0000000..b4c2741
 --- /dev/null
-+++ b/package/libump/libump.hash
++++ b/package/faifa/faifa.hash
 @@ -0,0 +1,2 @@
 +# locally computed
-+sha256  745bbb3e6a6b2b1d8caec75d2f2e884691ceefa5c2be0480baed31dba66cf450  libump-ec0680628744f30b8fac35e41a7bd8e23e59c39f.tar.gz
++sha256  6eada81f3d21f80b5848338b627784981064d728f8e377e5cf973d31640d4489  faifa-v0.1.tar.gz
