@@ -1,29 +1,23 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jun 2016 18:20:24 +0200
-Subject: [Buildroot] [PATCH 2/7] package/libdvdnav: bump version to 5.0.3
-In-Reply-To: <1466353229-12798-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1466353229-12798-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1466353229-12798-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 19 Jun 2016 18:20:23 +0200
+Subject: [Buildroot] [PATCH 1/7] package/libdvdread: bump version to 5.0.3
+Message-ID: <1466353229-12798-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed 0001-fix-os2-support.patch, not needed anymore after the
-version bump according to Thomas' note in the patch file.
+Removed 0001-fix-os2-support.patch, applied upstream:
+https://code.videolan.org/videolan/libdvdread/commit/75f8601ee3b19d8914528860f7e1d2906df4a411
 
 Removed autoreconf, a configure script is now part of the upstream
 tarball.
 
-The script dvdnav-config was removed:
-https://code.videolan.org/videolan/libdvdnav/commit/1de99510f507e4d84a658411605dd6424466d7b5
+The script dvdread-config was removed:
+https://code.videolan.org/videolan/libdvdread/commit/9991d1720b824902628573abce89916700933c38
 
-libdvdnav uses pkg-config to find libdvdread, therefore remove
---with-dvdread-config:
-https://code.videolan.org/videolan/libdvdnav/commit/5254b5d7ad9c10b48c97ce72a1b8bf7aef54b12c
-
-Changed LIBDVDNAV_SITE according to the news post dating 13 Feb 2014
+Changed LIBDVDREAD_SITE according to the news post dating 13 Feb 2014
 from http://dvdnav.mplayerhq.hu/
 
 Enabled static build, tested using this defconfig:
@@ -31,26 +25,26 @@ http://autobuild.buildroot.net/toolchains/configs/br-arm-full-static.config
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libdvdnav/0001-fix-os2-support.patch | 32 ----------------------------
- package/libdvdnav/Config.in                  |  5 ++---
- package/libdvdnav/libdvdnav.hash             |  4 ++--
- package/libdvdnav/libdvdnav.mk               | 13 +++--------
- 4 files changed, 7 insertions(+), 47 deletions(-)
- delete mode 100644 package/libdvdnav/0001-fix-os2-support.patch
+ package/libdvdread/0001-fix-os2-support.patch | 31 ---------------------------
+ package/libdvdread/Config.in                  |  4 ----
+ package/libdvdread/libdvdread.hash            |  4 ++--
+ package/libdvdread/libdvdread.mk              |  9 +++-----
+ 4 files changed, 5 insertions(+), 43 deletions(-)
+ delete mode 100644 package/libdvdread/0001-fix-os2-support.patch
 
-diff --git a/package/libdvdnav/0001-fix-os2-support.patch b/package/libdvdnav/0001-fix-os2-support.patch
+diff --git a/package/libdvdread/0001-fix-os2-support.patch b/package/libdvdread/0001-fix-os2-support.patch
 deleted file mode 100644
-index 0f75f2f..0000000
---- a/package/libdvdnav/0001-fix-os2-support.patch
+index 755bfaf..0000000
+--- a/package/libdvdread/0001-fix-os2-support.patch
 +++ /dev/null
-@@ -1,32 +0,0 @@
+@@ -1,31 +0,0 @@
 -configure: fix build on NIOS II platform
 -
 -NIOS II is a CPU architecture from Altera, which uses 'nios2' as the
 -architecture part of the tuple. Unfortunately, 'nios2' matches the
--current '*os2*' test done by libdvdnav's configure script to detect
+-current '*os2*' test done by libdvdread's configure script to detect
 -the OS/2 operating system. This leads to build issues as the build
--process of libdvdnav then tries to use OS/2 specific compiler
+-process of libdvdread then tries to use OS/2 specific compiler
 -options, that do not exist in the gcc used for Linux/NIOS2.
 -
 -To fix this, this patch makes the test for OS/2 a little bit more
@@ -59,15 +53,14 @@ index 0f75f2f..0000000
 -config.sub in the gnuconfig project). So using '*-os2-*' will properly
 -match the OS/2 operating system but not the NIOS II architecture.
 -
--Upstream-status: not needed, newer upstream versions no longer have
--		 this test
+-Upstream-status: submitted
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -
 -Index: b/configure.ac
 -===================================================================
 ---- a/configure.ac
 -+++ b/configure.ac
--@@ -166,7 +166,7 @@
+-@@ -146,7 +146,7 @@
 -   *cygwin*)
 -     LDFLAGS="-no-undefined $LDFLAGS"
 -     ;;
@@ -76,61 +69,51 @@ index 0f75f2f..0000000
 -     LDFLAGS="-no-undefined -Zbin-files $LDFLAGS"
 -     ;;
 -   *)
-diff --git a/package/libdvdnav/Config.in b/package/libdvdnav/Config.in
-index fb13bc0..8cfcb4a 100644
---- a/package/libdvdnav/Config.in
-+++ b/package/libdvdnav/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_LIBDVDNAV
- 	bool "libdvdnav"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_STATIC_LIBS # libdvdread
- 	select BR2_PACKAGE_LIBDVDREAD
+diff --git a/package/libdvdread/Config.in b/package/libdvdread/Config.in
+index 1326709..dea59eb 100644
+--- a/package/libdvdread/Config.in
++++ b/package/libdvdread/Config.in
+@@ -1,11 +1,7 @@
+ config BR2_PACKAGE_LIBDVDREAD
+ 	bool "libdvdread"
+-	depends on !BR2_STATIC_LIBS
  	help
- 	  libdvdnav is a library that allows easy use of sophisticated
-@@ -10,5 +9,5 @@ config BR2_PACKAGE_LIBDVDNAV
+ 	  libdvdread provides a simple foundation for reading
+ 	  DVD-Video images.
  
- 	  http://www.mplayerhq.hu
- 
--comment "libdvdnav needs a toolchain w/ dynamic library, threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+comment "libdvdnav needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libdvdnav/libdvdnav.hash b/package/libdvdnav/libdvdnav.hash
-index 4a0d851..d3b6fdb 100644
---- a/package/libdvdnav/libdvdnav.hash
-+++ b/package/libdvdnav/libdvdnav.hash
+ 	  http://www.mplayerhq.hu/MPlayer/releases/dvdnav/
+-
+-comment "libdvdread needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
+diff --git a/package/libdvdread/libdvdread.hash b/package/libdvdread/libdvdread.hash
+index 11cc1ce..bef93fc 100644
+--- a/package/libdvdread/libdvdread.hash
++++ b/package/libdvdread/libdvdread.hash
 @@ -1,2 +1,2 @@
 -# Locally calculated
--sha256	7fca272ecc3241b6de41bbbf7ac9a303ba25cb9e0c82aa23901d3104887f2372	libdvdnav-4.2.1.tar.xz
-+# From http://download.videolan.org/pub/videolan/libdvdnav/5.0.3/libdvdnav-5.0.3.tar.bz2.sha256
-+sha256	5097023e3d2b36944c763f1df707ee06b19dc639b2b68fb30113a5f2cbf60b6d	libdvdnav-5.0.3.tar.bz2
-diff --git a/package/libdvdnav/libdvdnav.mk b/package/libdvdnav/libdvdnav.mk
-index 2ff2ce9..ff5ae09 100644
---- a/package/libdvdnav/libdvdnav.mk
-+++ b/package/libdvdnav/libdvdnav.mk
-@@ -4,19 +4,12 @@
+-sha256	af9b98f049580a6521d56c978b736d3d609562dd12955e11d50e26d97542dcd4	libdvdread-4.2.1.tar.xz
++# From http://download.videolan.org/pub/videolan/libdvdread/5.0.0/libdvdread-5.0.3.tar.bz2.sha256
++sha256	321cdf2dbdc83c96572bc583cd27d8c660ddb540ff16672ecb28607d018ed82b	libdvdread-5.0.3.tar.bz2
+diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
+index 6658460..78ea292 100644
+--- a/package/libdvdread/libdvdread.mk
++++ b/package/libdvdread/libdvdread.mk
+@@ -4,13 +4,10 @@
  #
  ################################################################################
  
--LIBDVDNAV_VERSION = 4.2.1
--LIBDVDNAV_SOURCE = libdvdnav-$(LIBDVDNAV_VERSION).tar.xz
--LIBDVDNAV_SITE = http://dvdnav.mplayerhq.hu/releases
+-LIBDVDREAD_VERSION = 4.2.1
+-LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.xz
+-LIBDVDREAD_SITE = http://dvdnav.mplayerhq.hu/releases
 -# configure not shipped
--LIBDVDNAV_AUTORECONF = YES
-+LIBDVDNAV_VERSION = 5.0.3
-+LIBDVDNAV_SOURCE = libdvdnav-$(LIBDVDNAV_VERSION).tar.bz2
-+LIBDVDNAV_SITE = http://www.videolan.org/pub/videolan/libdvdnav/$(LIBDVDNAV_VERSION)
- LIBDVDNAV_INSTALL_STAGING = YES
--LIBDVDNAV_CONFIG_SCRIPTS = dvdnav-config
- LIBDVDNAV_DEPENDENCIES = libdvdread host-pkgconf
- LIBDVDNAV_LICENSE = GPLv2+
- LIBDVDNAV_LICENSE_FILES = COPYING
+-LIBDVDREAD_AUTORECONF = YES
++LIBDVDREAD_VERSION = 5.0.3
++LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.bz2
++LIBDVDREAD_SITE = http://www.videolan.org/pub/videolan/libdvdread/$(LIBDVDREAD_VERSION)
+ LIBDVDREAD_INSTALL_STAGING = YES
+-LIBDVDREAD_CONFIG_SCRIPTS = dvdread-config
+ LIBDVDREAD_LICENSE = GPLv2+
+ LIBDVDREAD_LICENSE_FILES = COPYING
  
--# By default libdvdnav tries to find dvdread-config in $PATH. Because
--# of cross compilation, we prefer using pkg-config.
--LIBDVDNAV_CONF_OPTS = --with-dvdread-config="$(PKG_CONFIG_HOST_BINARY) dvdread"
--
- $(eval $(autotools-package))
 -- 
 2.8.1
