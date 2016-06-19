@@ -1,27 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jun 2016 22:15:15 +0200
-Subject: [Buildroot] [git commit] package/xapp_xsetpointer: add hash file
-Message-ID: <20160619202359.D504180153@busybox.osuosl.org>
+Date: Sun, 19 Jun 2016 22:33:49 +0200
+Subject: [Buildroot] [PATCH 000/121] packages: bulk-add missing hashes
+	(branch yem/more-hashes-novcs)
+In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 19 Jun 2016 13:10:43 +0200")
+References: <cover.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <87twgo3olu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7935edaca0a4de80bb07fdd4b4b7b9b6c841eb57
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xapp_xsetpointer/xapp_xsetpointer.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ > Hello All!
+ > This series bulk-adds hashes to package that miss them.
 
-diff --git a/package/x11r7/xapp_xsetpointer/xapp_xsetpointer.hash b/package/x11r7/xapp_xsetpointer/xapp_xsetpointer.hash
-new file mode 100644
-index 0000000..6e6a37e
---- /dev/null
-+++ b/package/x11r7/xapp_xsetpointer/xapp_xsetpointer.hash
-@@ -0,0 +1,2 @@
-+# locally computed
-+sha256  7d65f450420b4f764dcf38e4ccee9d608b5a5874706e716cb861bfe2586b7d4a  xsetpointer-1.0.0.tar.bz2
+ > The missing hashes were all computed locally without looking at whether
+ > upstream provides hashes or not.
+
+ > The corresponding archives were also downloaded from s.b.o. and the
+ > hashes compared. When there was a mismatch, the commit log contains a
+ > hint for Peter to remove them from s.b.o. Jsut grep for "Peter" in the
+ > commit logs. ;-)
+
+Thanks! Committed all except for linux-headers.
+
+-- 
+Bye, Peter Korsgaard
