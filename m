@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jun 2016 23:08:18 +0200
-Subject: [Buildroot] [git commit] package/dvdauthor: libdvdread can now be
-	linked statically
-Message-ID: <20160619213724.4627980489@busybox.osuosl.org>
+Date: Sun, 19 Jun 2016 23:09:04 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-ugly:
+	libdvdread can now be linked statically
+Message-ID: <20160619213724.5422B80489@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf5c4641823e3e4c4669348a547b540a276ece67
+commit: https://git.buildroot.net/buildroot/commit/?id=58ef923059f6f861022bb2b4f25b951800dc7f03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 After libdvdread bump to version 5.0.3 static linking works, tested
@@ -19,40 +19,41 @@ http://autobuild.buildroot.net/toolchains/configs/br-arm-full-static.config
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dvdauthor/Config.in    | 5 -----
- package/dvdauthor/dvdauthor.mk | 4 ++++
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/gstreamer1/gst1-plugins-ugly/Config.in            | 4 ----
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk | 4 ++++
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dvdauthor/Config.in b/package/dvdauthor/Config.in
-index 6f8e2e4..8b2bcb3 100644
---- a/package/dvdauthor/Config.in
-+++ b/package/dvdauthor/Config.in
-@@ -17,13 +17,8 @@ if BR2_PACKAGE_DVDAUTHOR
- config BR2_PACKAGE_DVDAUTHOR_DVDUNAUTHOR
- 	bool "dvdunauthor"
- 	select BR2_PACKAGE_LIBDVDREAD
--	depends on !BR2_STATIC_LIBS # libdvdread
- 	help
- 	  This option enables the dvdunauthor program, which requires
- 	  libdvdread.
+diff --git a/package/gstreamer1/gst1-plugins-ugly/Config.in b/package/gstreamer1/gst1-plugins-ugly/Config.in
+index 995835e..f30163a 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/Config.in
++++ b/package/gstreamer1/gst1-plugins-ugly/Config.in
+@@ -40,14 +40,10 @@ comment "plugins with external dependencies (there may be more available)"
  
--comment "dvdunauthor needs a toolchain w/ dynamic library"
+ config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD
+ 	bool "dvdread"
+-	depends on !BR2_STATIC_LIBS # libdvdread
+ 	select BR2_PACKAGE_LIBDVDREAD
+ 	help
+ 	  Access a DVD with dvdread
+ 
+-comment "dvdread needs a toolchain w/ dynamic library"
 -	depends on BR2_STATIC_LIBS
 -
+ config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_LAME
+ 	bool "lame (*.mp3 audio encoder)"
+ 	select BR2_PACKAGE_LAME
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index d37908c..8864b04 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+@@ -59,6 +59,10 @@ GST1_PLUGINS_UGLY_CONF_OPTS += --disable-realmedia
  endif
--
-diff --git a/package/dvdauthor/dvdauthor.mk b/package/dvdauthor/dvdauthor.mk
-index 6b90c43..e982a40 100644
---- a/package/dvdauthor/dvdauthor.mk
-+++ b/package/dvdauthor/dvdauthor.mk
-@@ -40,6 +40,10 @@ endif
  
- ifeq ($(BR2_PACKAGE_DVDAUTHOR_DVDUNAUTHOR),y)
- DVDAUTHOR_DEPENDENCIES += libdvdread
-+# dvdauthor configure does not use pkg-config to detect libdvdread
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD),y)
++# configure does not use pkg-config to detect libdvdread
 +ifeq ($(BR2_PACKAGE_LIBDVDCSS)$(BR2_STATIC_LIBS),yy)
-+DVDAUTHOR_CONF_ENV += LIBS="-ldvdcss"
++GST1_PLUGINS_UGLY_CONF_ENV += LIBS="-ldvdcss"
 +endif
- DVDAUTHOR_CONF_OPTS += --enable-dvdunauthor
- else
- DVDAUTHOR_CONF_OPTS += --disable-dvdunauthor
+ GST1_PLUGINS_UGLY_CONF_OPTS += --enable-dvdread
+ GST1_PLUGINS_UGLY_DEPENDENCIES += libdvdread
+ GST1_PLUGINS_UGLY_HAS_GPL_LICENSE = y
