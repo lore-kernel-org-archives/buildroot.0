@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 13:09:07 +0200
-Subject: [Buildroot] [PATCH 020/121] package/libhid: add hash file
+Date: Sun, 19 Jun 2016 13:09:08 +0200
+Subject: [Buildroot] [PATCH 021/121] package/libphidget: add hash file
 In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <842f6c2063a9b98503c444f456b27ce64df02a4c.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <9a6118a2c52b3f5ffdab169ef0318a2fbc03fd72.1466334225.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libhid/libhid.hash | 2 ++
+ package/libphidget/libphidget.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/libhid/libhid.hash
+ create mode 100644 package/libphidget/libphidget.hash
 
-diff --git a/package/libhid/libhid.hash b/package/libhid/libhid.hash
+diff --git a/package/libphidget/libphidget.hash b/package/libphidget/libphidget.hash
 new file mode 100644
-index 0000000..67a31ec
+index 0000000..5da89df
 --- /dev/null
-+++ b/package/libhid/libhid.hash
++++ b/package/libphidget/libphidget.hash
 @@ -0,0 +1,2 @@
 +# localy computed
-+sha256  f6809ab3b9c907cbb05ceba9ee6ca23a705f85fd71588518e14b3a7d9f2550e5  libhid-0.2.16.tar.gz
++sha256  2d496828a085ada8ff139da9306bd2b8cb987798fee93caf0089dc399195e238  libphidget_2.1.8.20140319.tar.gz
 -- 
 2.7.4
