@@ -1,41 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jun 2016 11:22:49 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/boost: boost-metaparse depends
-	on boost-test
-Message-ID: <1466328169-12236-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 19 Jun 2016 12:38:11 +0200
+Subject: [Buildroot] [PATCH 1/2] package/kodi: Add suboption to control
+	MySQL support
+References: <1465938028-8149-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160615150946.7bef4659@free-electrons.com>
+Message-ID: <XnsA62C808B614B1ID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The boost metaparse library depends on the test library:
-https://github.com/boostorg/metaparse/blob/master/build/Jamfile.v2
+[posted and mailed]
 
-The test library itself depends on MMU, therefore we need to propagate
-the dependency, fixes
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20160615150946.7bef4659 at free-electrons.com: 
 
-http://autobuild.buildroot.net/results/02f/02f98a50340ecae01f723ad48c2d54d9e28388f8/
+> Hello,
+> 
+> On Tue, 14 Jun 2016 23:00:27 +0200, Bernd Kuhls wrote:
+>> Signed-off-by: Bernd Kuhls
+>> <bernd.kuhls@t-online.de> ---
+>>  package/kodi/Config.in | 6 ++++++
+>>  package/kodi/kodi.mk   | 2 +-
+>>  2 files changed, 7 insertions(+), 1 deletion(-)
+> 
+> What is the motivation for switching from an "automatic" enabling to an
+> explicit sub-option ?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: added blank line above s-o-b
+Hi Thomas,
 
- package/boost/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+in a buildroot defconfig with mysql enabled I would like to be able to
+build Kodi without mysql support because I do not need it during runtime. 
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index fae4b5f..0cc9a58 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -115,6 +115,8 @@ config BR2_PACKAGE_BOOST_MATH
- 	bool "boost-math"
- 
- config BR2_PACKAGE_BOOST_METAPARSE
-+	depends on BR2_USE_MMU # boost-test
-+	select BR2_PACKAGE_BOOST_TEST
- 	bool "boost-metaparse"
- 
- config BR2_PACKAGE_BOOST_MPI
--- 
-2.8.1
+Kodi can store its internal databases not only localy using sqlite but also 
+on a mysql server, this allows several local Kodi machines to use the same 
+databases. Because I do only use one Kodi instance I do not need mysql 
+support and would like to reduce build time when testing/installing Kodi 
+while not touching other packages.
+
+Regards, Bernd
