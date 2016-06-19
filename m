@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 13:08:51 +0200
-Subject: [Buildroot] [PATCH 004/121] package/evtest: add hash file
+Date: Sun, 19 Jun 2016 13:08:52 +0200
+Subject: [Buildroot] [PATCH 005/121] package/faifa: add hash file
 In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <026fccdec126483fa77abbe75f0f73a055d5df92.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <c3606c0f648ee6cd06e3338b3f49ce7b32a77c4d.1466334225.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/evtest/evtest.hash | 2 ++
+ package/faifa/faifa.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/evtest/evtest.hash
+ create mode 100644 package/faifa/faifa.hash
 
-diff --git a/package/evtest/evtest.hash b/package/evtest/evtest.hash
+diff --git a/package/faifa/faifa.hash b/package/faifa/faifa.hash
 new file mode 100644
-index 0000000..1604d1b
+index 0000000..5f65fcf
 --- /dev/null
-+++ b/package/evtest/evtest.hash
++++ b/package/faifa/faifa.hash
 @@ -0,0 +1,2 @@
 +# localy computed
-+sha256  9fb68236a6871c163e52433ba8f2cce142c0f4208163a2962768c13f262d549f  evtest-1.33.tar.gz
++sha256  6eada81f3d21f80b5848338b627784981064d728f8e377e5cf973d31640d4489  faifa-v0.1.tar.gz
 -- 
 2.7.4
