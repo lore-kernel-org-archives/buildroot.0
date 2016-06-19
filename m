@@ -1,40 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 19 Jun 2016 09:50:19 -0300
-Subject: [Buildroot] [PATCH] libinput: bump to version 1.3.2
-Message-ID: <1466340619-16714-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Jun 2016 15:26:38 +0200
+Subject: [Buildroot] [PATCH 3/5] package/lirc-tools: add optional support
+	for udev
+In-Reply-To: <1466342800-4980-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1466342800-4980-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1466342800-4980-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libinput/libinput.hash | 4 ++--
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+lirc-tools has optional support for udev, see configure.ac, line 303+.
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index faf95c3..1bb0973 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2016-May/029126.html
--sha256	cdff653d93395c718f367af61fee866914bc45de75ac94abe7dc1b720462aca9	libinput-1.3.1.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-June/029485.html
-+sha256	0701230781b59c0f1510ae86da15a7b15655e723ace366ad479ccb09fe92a183	libinput-1.3.2.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 2ff0de3..66a494b 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/lirc-tools/lirc-tools.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
+index 20d0912..59d9f69 100644
+--- a/package/lirc-tools/lirc-tools.mk
++++ b/package/lirc-tools/lirc-tools.mk
+@@ -17,6 +17,10 @@ LIRC_TOOLS_AUTORECONF = YES
+ LIRC_TOOLS_CONF_ENV = XSLTPROC=yes
+ LIRC_TOOLS_CONF_OPTS = --without-x
  
--LIBINPUT_VERSION = 1.3.1
-+LIBINPUT_VERSION = 1.3.2
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++LIRC_TOOLS_DEPENDENCIES += udev
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
+ LIRC_TOOLS_DEPENDENCIES += libusb-compat
+ endif
 -- 
-2.7.3
+2.8.1
