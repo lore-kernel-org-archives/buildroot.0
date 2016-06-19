@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 13:09:36 +0200
-Subject: [Buildroot] [PATCH 049/121] package/python-pydal: add hash file
+Date: Sun, 19 Jun 2016 13:09:37 +0200
+Subject: [Buildroot] [PATCH 050/121] package/python-pypcap: add hash file
 In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <2a6919b015aa5243679129066b96ddfc2ebb4a73.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <01b9485c32b8dfc91f050bfb3e78db58cfaa6fa5.1466334225.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/python-pydal/python-pydal.hash | 2 ++
+ package/python-pypcap/python-pypcap.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/python-pydal/python-pydal.hash
+ create mode 100644 package/python-pypcap/python-pypcap.hash
 
-diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
+diff --git a/package/python-pypcap/python-pypcap.hash b/package/python-pypcap/python-pypcap.hash
 new file mode 100644
-index 0000000..5a7aab2
+index 0000000..2190edc
 --- /dev/null
-+++ b/package/python-pydal/python-pydal.hash
++++ b/package/python-pypcap/python-pypcap.hash
 @@ -0,0 +1,2 @@
 +# localy computed
-+sha256  e59c050c4b7656c36351707dfbbae187645d46327e67e42415e15b3bc32d48b3  python-pydal-v15.07.tar.gz
++sha256  5716d97b39d40b79daf7b0c6a8c8c514f5f1de8f20561c8621ee62a90b93fb03  python-pypcap-6f46e7bf29a648256ddc732a7d0ec83d3ffca390.tar.gz
 -- 
 2.7.4
