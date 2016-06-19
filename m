@@ -1,27 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jun 2016 21:57:00 +0200
-Subject: [Buildroot] [git commit] package/owl-linux: add hash file
-Message-ID: <20160619200325.B3BCC81794@busybox.osuosl.org>
+Date: Sun, 19 Jun 2016 22:02:01 +0200
+Subject: [Buildroot] [git commit] package/python-posix-ipc: add hash file
+Message-ID: <20160619200327.3804981794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e3284dc27312e8b1e63faa7e219cf4721bb92a8
+commit: https://git.buildroot.net/buildroot/commit/?id=04bd390dc0ef5e773ebb7d30e6d009082a3698e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/owl-linux/owl-linux.hash | 2 ++
+ package/python-posix-ipc/python-posix-ipc.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/owl-linux/owl-linux.hash b/package/owl-linux/owl-linux.hash
+diff --git a/package/python-posix-ipc/python-posix-ipc.hash b/package/python-posix-ipc/python-posix-ipc.hash
 new file mode 100644
-index 0000000..4a5133d
+index 0000000..95ef4da
 --- /dev/null
-+++ b/package/owl-linux/owl-linux.hash
++++ b/package/python-posix-ipc/python-posix-ipc.hash
 @@ -0,0 +1,2 @@
 +# locally computed
-+sha256  a6b1bc6b3900954438a0f1a316bac5f74171125a88c80c35e137f4ca512dedc6  owl-linux-1.0.7.tar.gz
++sha256  24e092ba995122869a2fca46a2579b1b2824cfdcb2ecc6938e2923a120460646  posix_ipc-0.9.6.tar.gz
