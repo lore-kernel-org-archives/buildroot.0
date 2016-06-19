@@ -1,59 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Jun 2016 18:20:29 +0200
-Subject: [Buildroot] [PATCH 7/7] package/gstreamer1/gst1-plugins-ugly:
-	libdvdread can now be linked statically
-In-Reply-To: <1466353229-12798-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1466353229-12798-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1466353229-12798-7-git-send-email-bernd.kuhls@t-online.de>
+From: Ben Boeckel <mathstuf@gmail.com>
+Date: Sun, 19 Jun 2016 16:43:57 +0000 (UTC)
+Subject: [Buildroot] [PATCH] mpdstate: add package
+References: <20160530063656.GC31737@airbook.vandijck-laurijssen.be>
+ <20160612215336.06191b9e@free-electrons.com>
+ <20160617083600.GA6429@airbook.newtec.eu>
+ <20160617104131.0f27432f@free-electrons.com>
+Message-ID: <nk6i4d$8hm$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After libdvdread bump to version 5.0.3 static linking works, tested
-using this defconfig:
-http://autobuild.buildroot.net/toolchains/configs/br-arm-full-static.config
+On Fri, 17 Jun, 2016 at 08:41:31 GMT, Thomas Petazzoni wrote:
+> On Fri, 17 Jun 2016 10:36:00 +0200, Kurt Van Dijck wrote:
+>> I'm yet puzzled by the version info that I take from the git repository,
+>> that does not work in buildroot since it's buildroot's git repo there.
+>> I haven't found a solution yet, and that's keeping me from updating my
+>> patches :-)
+>
+> Your package build system should not call "git describe" or call git to
+> get the version. Or at least it should provide a way to override that.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/gstreamer1/gst1-plugins-ugly/Config.in            | 4 ----
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk | 4 ++++
- 2 files changed, 4 insertions(+), 4 deletions(-)
+The way to do this properly is to add to .gitattributes:
 
-diff --git a/package/gstreamer1/gst1-plugins-ugly/Config.in b/package/gstreamer1/gst1-plugins-ugly/Config.in
-index 995835e..f30163a 100644
---- a/package/gstreamer1/gst1-plugins-ugly/Config.in
-+++ b/package/gstreamer1/gst1-plugins-ugly/Config.in
-@@ -40,14 +40,10 @@ comment "plugins with external dependencies (there may be more available)"
- 
- config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD
- 	bool "dvdread"
--	depends on !BR2_STATIC_LIBS # libdvdread
- 	select BR2_PACKAGE_LIBDVDREAD
- 	help
- 	  Access a DVD with dvdread
- 
--comment "dvdread needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
--
- config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_LAME
- 	bool "lame (*.mp3 audio encoder)"
- 	select BR2_PACKAGE_LAME
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index d37908c..8864b04 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-@@ -59,6 +59,10 @@ GST1_PLUGINS_UGLY_CONF_OPTS += --disable-realmedia
- endif
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD),y)
-+# configure does not use pkg-config to detect libdvdread
-+ifeq ($(BR2_PACKAGE_LIBDVDCSS)$(BR2_STATIC_LIBS),yy)
-+GST1_PLUGINS_UGLY_CONF_ENV += LIBS="-ldvdcss"
-+endif
- GST1_PLUGINS_UGLY_CONF_OPTS += --enable-dvdread
- GST1_PLUGINS_UGLY_DEPENDENCIES += libdvdread
- GST1_PLUGINS_UGLY_HAS_GPL_LICENSE = y
--- 
-2.8.1
+    <filespec> export-subst
+
+and in <filespec>, any strings in the form of $Format:$ will be
+expanded, the right side being a format string (see git-log(1)). I
+usually do logic like:
+
+    if ("$Format:$" == "") {
+        // git archive tarball
+        commit_short = "$Format:%h"
+        commit = "$Format:%H"
+    } else if (isdir(".git"))
+        // Run "git describe"
+    } else {
+        commit_short = "<unknown>"
+        commit = "<unknown>"
+    }
+
+--Ben
