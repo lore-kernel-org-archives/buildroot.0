@@ -1,27 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jun 2016 22:32:52 +0200
-Subject: [Buildroot] [git commit] package/ympd: add hash file
-Message-ID: <20160619203406.5AC3481F80@busybox.osuosl.org>
+Date: Sun, 19 Jun 2016 22:32:15 +0200
+Subject: [Buildroot] [git commit] package/yaffs2utils: add hash file
+Message-ID: <20160619203406.3F6A681F80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd321b9bf930507c6263b5e173a21e3356db8fd3
+commit: https://git.buildroot.net/buildroot/commit/?id=f687c2aff66ae3dfcb58b49269dd7b64f281287f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ympd/ympd.hash | 2 ++
+ package/yaffs2utils/yaffs2utils.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/ympd/ympd.hash b/package/ympd/ympd.hash
+diff --git a/package/yaffs2utils/yaffs2utils.hash b/package/yaffs2utils/yaffs2utils.hash
 new file mode 100644
-index 0000000..7483083
+index 0000000..4e5846e
 --- /dev/null
-+++ b/package/ympd/ympd.hash
++++ b/package/yaffs2utils/yaffs2utils.hash
 @@ -0,0 +1,2 @@
 +# locally computed
-+sha256  092c26c51166d1d1f025cd06742981783dea7e42bfe4f73f10c4418fc003de94  ympd-v1.2.3.tar.gz
++sha256  9b0912bf683eb839b6e57c9255c83894c3b700d16489a49d319c54c1abf8f6d7  0.2.9.tar.gz
