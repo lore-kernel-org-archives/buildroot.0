@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 16:33:03 +0200
-Subject: [Buildroot] [PATCH 085/121] package/xdriver_xf86-video-fbturbo: add
+Date: Sun, 19 Jun 2016 16:33:04 +0200
+Subject: [Buildroot] [PATCH 086/121] package/xdriver_xf86-video-imx: add
 	hash file
 In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <7437c6ccca9211a35eb8144fef128b2c38ba479e.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <32efb7ef5ce2386c4edd79d9f642cc8f665282ee.1466334225.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- .../x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.hash    | 2 ++
+ package/x11r7/xdriver_xf86-video-imx/xdriver_xf86-video-imx.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.hash
+ create mode 100644 package/x11r7/xdriver_xf86-video-imx/xdriver_xf86-video-imx.hash
 
-diff --git a/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.hash b/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.hash
+diff --git a/package/x11r7/xdriver_xf86-video-imx/xdriver_xf86-video-imx.hash b/package/x11r7/xdriver_xf86-video-imx/xdriver_xf86-video-imx.hash
 new file mode 100644
-index 0000000..007c4ac
+index 0000000..f4b98fe
 --- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.hash
++++ b/package/x11r7/xdriver_xf86-video-imx/xdriver_xf86-video-imx.hash
 @@ -0,0 +1,2 @@
 +# localy computed
-+sha256  10411686de0a9d8b2cde300b0d68e9f1d22e3611470d357ef3afc337f123ca0f  xdriver_xf86-video-fbturbo-0.4.0.tar.gz
++sha256  d7d85e9f13c6dd58addab89847f3a8a67f6382a54135c7978c9a95368af024d4  xserver-xorg-video-imx-11.09.01.tar.gz
 -- 
 2.7.4
