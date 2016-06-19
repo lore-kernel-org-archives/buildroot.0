@@ -1,150 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Jun 2016 10:53:23 +0200
-Subject: [Buildroot] [git commit] memcached: bump to version 1.4.26
-Message-ID: <20160619085340.0620381DF6@busybox.osuosl.org>
+Date: Sun, 19 Jun 2016 10:53:42 +0200
+Subject: [Buildroot] [PATCH] dhcpcd: bump to version 6.11.1
+In-Reply-To: <1466305102-29164-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1466305102-29164-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160619105342.0562be7f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d69514e76f61a20370af3430aa35de55737a104
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Drop upstream patch, and now uses 64 bit sync built-ins for atomics.
+On Sat, 18 Jun 2016 23:58:22 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/dhcpcd/dhcpcd.hash | 2 +-
+>  package/dhcpcd/dhcpcd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../memcached/0001-fix-build-with-musl-libc.patch  | 78 ----------------------
- package/memcached/Config.in                        |  2 +
- package/memcached/memcached.hash                   |  6 +-
- package/memcached/memcached.mk                     |  2 +-
- 4 files changed, 6 insertions(+), 82 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/memcached/0001-fix-build-with-musl-libc.patch b/package/memcached/0001-fix-build-with-musl-libc.patch
-deleted file mode 100644
-index 0683820..0000000
---- a/package/memcached/0001-fix-build-with-musl-libc.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--From 2137a608c77c467200d73469f723ba97ff6b3511 Mon Sep 17 00:00:00 2001
--From: Natanael Copa <ncopa@alpinelinux.org>
--Date: Mon, 18 Jan 2016 12:11:48 +0100
--Subject: [PATCH] fix build with musl libc
--
--musl libc will warn if you include sys/signal.h instead of signal.h as
--specified by posix. Build will fail due to -Werror explicitly beeing
--set.
--
--Fix it by use the posix location.
--
--fixes #138
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: pending (https://github.com/memcached/memcached/pull/139)
--
-- assoc.c | 2 +-
-- items.c | 2 +-
-- slabs.c | 2 +-
-- 3 files changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/assoc.c b/assoc.c
--index e6cf09b64e8c..9fff38fe01d6 100644
----- a/assoc.c
--+++ b/assoc.c
--@@ -14,8 +14,8 @@
-- #include "memcached.h"
-- #include <sys/stat.h>
-- #include <sys/socket.h>
---#include <sys/signal.h>
-- #include <sys/resource.h>
--+#include <signal.h>
-- #include <fcntl.h>
-- #include <netinet/in.h>
-- #include <errno.h>
--diff --git a/items.c b/items.c
--index 199dc9fa6e6b..7040777ab0fb 100644
----- a/items.c
--+++ b/items.c
--@@ -2,13 +2,13 @@
-- #include "memcached.h"
-- #include <sys/stat.h>
-- #include <sys/socket.h>
---#include <sys/signal.h>
-- #include <sys/resource.h>
-- #include <fcntl.h>
-- #include <netinet/in.h>
-- #include <errno.h>
-- #include <stdlib.h>
-- #include <stdio.h>
--+#include <signal.h>
-- #include <string.h>
-- #include <time.h>
-- #include <assert.h>
--diff --git a/slabs.c b/slabs.c
--index 31e85f6ec21d..bfafe5d0fdde 100644
----- a/slabs.c
--+++ b/slabs.c
--@@ -10,7 +10,6 @@
-- #include "memcached.h"
-- #include <sys/stat.h>
-- #include <sys/socket.h>
---#include <sys/signal.h>
-- #include <sys/resource.h>
-- #include <fcntl.h>
-- #include <netinet/in.h>
--@@ -18,6 +17,7 @@
-- #include <stdlib.h>
-- #include <stdio.h>
-- #include <string.h>
--+#include <signal.h>
-- #include <assert.h>
-- #include <pthread.h>
-- 
---- 
--2.8.0.rc3
--
-diff --git a/package/memcached/Config.in b/package/memcached/Config.in
-index e011d08..901ecf2 100644
---- a/package/memcached/Config.in
-+++ b/package/memcached/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_MEMCACHED
- 	bool "memcached"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_8
- 	select BR2_PACKAGE_LIBEVENT
- 	help
- 	  Memcached is an in-memory key-value store for small chunks
-@@ -13,3 +14,4 @@ config BR2_PACKAGE_MEMCACHED
- comment "memcached needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_8
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index ed330cf..096431c 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,4 +1,4 @@
--# From http://www.memcached.org/files/memcached-1.4.25.tar.gz.sha1
--sha1	7fd0ba9283c61204f196638ecf2e9295688b2314	memcached-1.4.25.tar.gz
-+# From http://www.memcached.org/files/memcached-1.4.26.tar.gz.sha1
-+sha1	f0d4f89ead2ac48c6b9e8070178279c0a3d45559	memcached-1.4.26.tar.gz
- # Calculated based on the hash above
--sha256	f058437b3c224d321919a9a6bb4e3eedb2312ed718c0caf087ff2f04ab795dda	memcached-1.4.25.tar.gz
-+sha256	4a67800277eec2e523c51d5f620c416e7d0acfde90beacaa26d8e4f6976b43f6	memcached-1.4.26.tar.gz
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index b0753e4..bab5a84 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMCACHED_VERSION = 1.4.25
-+MEMCACHED_VERSION = 1.4.26
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
