@@ -1,27 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jun 2016 21:26:57 +0200
-Subject: [Buildroot] [git commit] package/imx-usb-loader: add hash file
-Message-ID: <20160619194718.6E7BD81DCC@busybox.osuosl.org>
+Date: Sun, 19 Jun 2016 21:45:07 +0200
+Subject: [Buildroot] [git commit] package/libphidget: add hash file
+Message-ID: <20160619194719.290DD80153@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3a737089159c95c4776e2eb8d238e25a6564c61
+commit: https://git.buildroot.net/buildroot/commit/?id=036bb5d4743ad912c9f27deed295a336a9407bf4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imx-usb-loader/imx-usb-loader.hash | 2 ++
+ package/libphidget/libphidget.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/imx-usb-loader/imx-usb-loader.hash b/package/imx-usb-loader/imx-usb-loader.hash
+diff --git a/package/libphidget/libphidget.hash b/package/libphidget/libphidget.hash
 new file mode 100644
-index 0000000..aa8ff49
+index 0000000..a89ba36
 --- /dev/null
-+++ b/package/imx-usb-loader/imx-usb-loader.hash
++++ b/package/libphidget/libphidget.hash
 @@ -0,0 +1,2 @@
 +# locally computed
-+sha256  1e7ee8af34e7d0a3b9761c25a4edfc7140d23132129818d288c74fc0d58796e5  imx-usb-loader-f96aee286ea17c832b7ec922dd76842deb5ce299.tar.gz
++sha256  2d496828a085ada8ff139da9306bd2b8cb987798fee93caf0089dc399195e238  libphidget_2.1.8.20140319.tar.gz
