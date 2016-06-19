@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 23:22:57 +0200
-Subject: [Buildroot] [PATCH 006/121] package/fbtft: add hash file
-In-Reply-To: <87d1nd3s3q.fsf@dell.be.48ers.dk>
+Date: Sun, 19 Jun 2016 23:26:25 +0200
+Subject: [Buildroot] [PATCH 009/121] package/gstreamer: add hash file
+In-Reply-To: <8760t53rsd.fsf@dell.be.48ers.dk>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
- <59cf452d312d4c92cd1bb948637c9538abd8206e.1466334225.git.yann.morin.1998@free.fr>
- <87d1nd3s3q.fsf@dell.be.48ers.dk>
-Message-ID: <20160619212257.GB3673@free.fr>
+ <26ab2309f8d9c962e70b2f080f362aa03f64f8b1.1466334225.git.yann.morin.1998@free.fr>
+ <8760t53rsd.fsf@dell.be.48ers.dk>
+Message-ID: <20160619212625.GC3673@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,34 +14,51 @@ To: buildroot@busybox.net
 
 Peter, All,
 
-On 2016-06-19 21:18 +0200, Peter Korsgaard spake thusly:
+On 2016-06-19 21:25 +0200, Peter Korsgaard spake thusly:
 > >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 > 
 >  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >  > ---
->  >  package/fbtft/fbtft.hash | 2 ++
->  >  1 file changed, 2 insertions(+)
->  >  create mode 100644 package/fbtft/fbtft.hash
+>  >  package/gstreamer/gstreamer/gstreamer.hash | 4 ++--
+>  >  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->  > diff --git a/package/fbtft/fbtft.hash b/package/fbtft/fbtft.hash
->  > new file mode 100644
->  > index 0000000..d294a54
->  > --- /dev/null
->  > +++ b/package/fbtft/fbtft.hash
->  > @@ -0,0 +1,2 @@
+>  > diff --git a/package/gstreamer/gstreamer/gstreamer.hash b/package/gstreamer/gstreamer/gstreamer.hash
+>  > index e652eae..2feb6be 100644
+>  > --- a/package/gstreamer/gstreamer/gstreamer.hash
+>  > +++ b/package/gstreamer/gstreamer/gstreamer.hash
+>  > @@ -1,2 +1,2 @@
+>  > -# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-0.10.36.tar.xz.md5
+>  > -md5	15389c73e091b1dda915279c388b9cb2	gstreamer-0.10.36.tar.xz
 >  > +# localy computed
->  > +sha256
->  > 0e81de89fdd7ab810716fc0549e767527f342e829309dee5c2cca1e9d1728770
->  > fbtft-274035404701245e7491c0c6471c5b72ade4d491.tar.gz
+>  > +sha256  9151aa108c177054387885763fa0e433e76780f7c5655c70a5390f2a6c6871da  gstreamer-0.10.36.tar.xz
 > 
-> I'm not sure where this went wrong, but this one got word wrapped
-> somewhere so git am ends up adding a line with just 'sha256'.
+> I don't think it makes sense to remove the upstream hash even if it is a
+> weak md5sum,
 
-Weird, the file is OK here. And so is the patch on the list... :-/
+Indeed no.
 
-> Fixed that up while committing (don't resend).
+> so I've instead just added the locally calculated sha256 to
+> it.
 
-Thanks! :-)
+Well, I know what hapenned. I did a supposedly-smart find to look for
+packages without a .hash file, but gstreamer.mw exists in two locations:
+
+    package/gstreamer/gstreamer.mk
+    package/gstreamer/gstreamer/gstreamer.mk
+
+And of course, only the second is a package and already has a .hash.
+
+However, the first matches those two conditions:
+
+  - it is in a directory named after the same as the basename of the .mk
+
+  - there is no corresponding .hash
+
+And thus it decided to add a hash for it. And somewhere later, the
+script found the correct location of the package, thus overwriting the
+existing hash...
+
+Sorry for the mishap; thanks for fixing it! :-)
 
 Regards,
 Yann E. MORIN.
