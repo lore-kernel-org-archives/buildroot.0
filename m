@@ -1,35 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Jun 2016 10:55:34 +0200
-Subject: [Buildroot] [PATCH 2/2] autofs: fix build for old glibc
- toolchains
-In-Reply-To: <1466306712-11768-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1466306712-11768-1-git-send-email-gustavo@zacarias.com.ar>
- <1466306712-11768-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160619105534.47c4dcc8@free-electrons.com>
+Date: Sun, 19 Jun 2016 10:56:25 +0200
+Subject: [Buildroot] [git commit] elfutils: do not override ELFUTILS_CFLAGS
+	variable
+Message-ID: <20160619085649.6BE1581DCC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=78448744f2ea14a89179032a1ae9561f61933277
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 19 Jun 2016 00:25:12 -0300, Gustavo Zacarias wrote:
-> Autofs 5.1.2 switched to clock_gettime() unconditionally but didn't
-> check for the need of librt (glibc < 2.17) for it. Fixes:
-> http://autobuild.buildroot.net/results/0ab/0abd5476b39a6bd192b5e610006ed585ffb2e139/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  ...fs-build-check-for-clock_gettime-in-librt.patch | 62 ++++++++++++++++++++++
->  package/autofs/autofs.mk                           |  2 +
->  2 files changed, 64 insertions(+)
->  create mode 100644 package/autofs/0002-autofs-build-check-for-clock_gettime-in-librt.patch
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+[Thomas: fixup ordering of assignments.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/elfutils/elfutils.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index a2012d6..b999d0f 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -16,15 +16,15 @@ ELFUTILS_DEPENDENCIES = zlib
+ ELFUTILS_AUTORECONF = YES
+ ELFUTILS_CONF_OPTS += --disable-werror
+ 
++# elfutils gets confused when lfs mode is forced, so don't
++ELFUTILS_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
++ELFUTILS_CPPFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
++
+ # sparc64 needs -fPIC instead of -fpic
+ ifeq ($(BR2_sparc64),y)
+ ELFUTILS_CFLAGS += -fPIC
+ endif
+ 
+-# elfutils gets confused when lfs mode is forced, so don't
+-ELFUTILS_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
+-ELFUTILS_CPPFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
+-
+ ELFUTILS_CONF_ENV += \
+ 	CFLAGS="$(ELFUTILS_CFLAGS)" \
+ 	CPPFLAGS="$(ELFUTILS_CPPFLAGS)"
