@@ -1,30 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 19 Jun 2016 10:57:17 +0200
-Subject: [Buildroot] [PATCH] elfutils: do not override ELFUTILS_CFLAGS
- variable
-In-Reply-To: <1466268206-62239-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1466268206-62239-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160619105717.305ff59d@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Jun 2016 11:05:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/boost: boost-metaparse depends on
+	boost-test
+Message-ID: <1466327154-8665-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The boost metaparse library depends on the test library:
+https://github.com/boostorg/metaparse/blob/master/build/Jamfile.v2
 
-On Sat, 18 Jun 2016 17:43:26 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/elfutils/elfutils.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+The test library itself depends on MMU, therefore we need to propagate
+the dependency, fixes
 
-Applied to master after re-ordering the assignments.
+http://autobuild.buildroot.net/results/02f/02f98a50340ecae01f723ad48c2d54d9e28388f8/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/boost/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks,
-
-Thomas
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index fae4b5f..0cc9a58 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -115,6 +115,8 @@ config BR2_PACKAGE_BOOST_MATH
+ 	bool "boost-math"
+ 
+ config BR2_PACKAGE_BOOST_METAPARSE
++	depends on BR2_USE_MMU # boost-test
++	select BR2_PACKAGE_BOOST_TEST
+ 	bool "boost-metaparse"
+ 
+ config BR2_PACKAGE_BOOST_MPI
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
