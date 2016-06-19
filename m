@@ -1,27 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jun 2016 22:08:29 +0200
-Subject: [Buildroot] [git commit] package/snowball-hdmiservice: add hash file
-Message-ID: <20160619202358.2B23181E74@busybox.osuosl.org>
+Date: Sun, 19 Jun 2016 22:07:27 +0200
+Subject: [Buildroot] [git commit] package/qtuio: add hash file
+Message-ID: <20160619202357.F1A3181E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0800253a8ed8aaa024faac9362891b5fce3be992
+commit: https://git.buildroot.net/buildroot/commit/?id=f715ef6ef617fad2b9b99b6db9e4bc6976f252a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/snowball-hdmiservice/snowball-hdmiservice.hash | 2 ++
+ package/qtuio/qtuio.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/snowball-hdmiservice/snowball-hdmiservice.hash b/package/snowball-hdmiservice/snowball-hdmiservice.hash
+diff --git a/package/qtuio/qtuio.hash b/package/qtuio/qtuio.hash
 new file mode 100644
-index 0000000..e9fffd7
+index 0000000..bb9bdb1
 --- /dev/null
-+++ b/package/snowball-hdmiservice/snowball-hdmiservice.hash
++++ b/package/qtuio/qtuio.hash
 @@ -0,0 +1,2 @@
 +# locally computed
-+sha256  dd2d8362a66178be082affa7cc238aebf3d671be184356bc23d13789db638b9d  snowball-hdmiservice-f75c99d1c52707240a78b4ba78e41d20d3aa3b08.tar.gz
++sha256  65308adb59e910d552d4885772c7f99c7d19dec5e924d852a5a39a1972f8d223  qtuio-abe4973ff60654aad9df7037c4ca15c45f811d24.tar.gz
