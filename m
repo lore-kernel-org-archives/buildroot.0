@@ -1,28 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jun 2016 22:22:25 +0200
-Subject: [Buildroot] [git commit]
-	package/xfont_font-bh-lucidatypewriter-100dpi: add hash file
-Message-ID: <20160619202401.191F580153@busybox.osuosl.org>
+Date: Sun, 19 Jun 2016 22:17:43 +0200
+Subject: [Buildroot] [git commit] package/xcursor-transparent-theme: add
+	hash file
+Message-ID: <20160619202400.0B8FA818B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20aa962d44b4dbafc2b8ddfb932078fc7125cea5
+commit: https://git.buildroot.net/buildroot/commit/?id=976dd38d67eddf52b6ab13eaffd1b2f09a41a3bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../xfont_font-bh-lucidatypewriter-100dpi.hash                          | 2 ++
+ package/x11r7/xcursor-transparent-theme/xcursor-transparent-theme.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.hash b/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.hash
+diff --git a/package/x11r7/xcursor-transparent-theme/xcursor-transparent-theme.hash b/package/x11r7/xcursor-transparent-theme/xcursor-transparent-theme.hash
 new file mode 100644
-index 0000000..6e9c7e3
+index 0000000..19f0de2
 --- /dev/null
-+++ b/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.hash
++++ b/package/x11r7/xcursor-transparent-theme/xcursor-transparent-theme.hash
 @@ -0,0 +1,2 @@
 +# locally computed
-+sha256  62a83363c2536095fda49d260d21e0847675676e4e3415054064cbdffa641fbb  font-bh-lucidatypewriter-100dpi-1.0.3.tar.bz2
++sha256  b26adf2d503d01299718390ae39dab4691a67220de09423be0364e9a060bf7e4  xcursor-transparent-theme-0.1.1.tar.gz
