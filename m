@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 13:09:27 +0200
-Subject: [Buildroot] [PATCH 040/121] package/python-json-schema-validator:
-	add hash file
+Date: Sun, 19 Jun 2016 13:09:28 +0200
+Subject: [Buildroot] [PATCH 041/121] package/python-keyring: add hash file
 In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <5609315c9e5b8f938c9275c97ca4d1fda7f23551.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <34fadc1b33b88c08b05c154e08092e72a1bbd079.1466334225.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/python-json-schema-validator/python-json-schema-validator.hash | 2 ++
+ package/python-keyring/python-keyring.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/python-json-schema-validator/python-json-schema-validator.hash
+ create mode 100644 package/python-keyring/python-keyring.hash
 
-diff --git a/package/python-json-schema-validator/python-json-schema-validator.hash b/package/python-json-schema-validator/python-json-schema-validator.hash
+diff --git a/package/python-keyring/python-keyring.hash b/package/python-keyring/python-keyring.hash
 new file mode 100644
-index 0000000..2598936
+index 0000000..83be118
 --- /dev/null
-+++ b/package/python-json-schema-validator/python-json-schema-validator.hash
++++ b/package/python-keyring/python-keyring.hash
 @@ -0,0 +1,2 @@
 +# localy computed
-+sha256  316befb9a6d981dff465f5243e423a3027b27775f7649510ce23fde300dde9b7  json-schema-validator-2.3.tar.gz
++sha256  c3f0665ee2d969170dcd6b9e83e76cc7fca2be5a40943700ce2624a0a02f9658  keyring-3.0.5.zip
 -- 
 2.7.4
