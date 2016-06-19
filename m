@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jun 2016 21:25:06 +0200
-Subject: [Buildroot] [PATCH 009/121] package/gstreamer: add hash file
-In-Reply-To: <26ab2309f8d9c962e70b2f080f362aa03f64f8b1.1466334225.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 19 Jun 2016 13:08:56 +0200")
+Date: Sun, 19 Jun 2016 21:26:10 +0200
+Subject: [Buildroot] [PATCH 010/121] package/gstreamer1: add hash file
+In-Reply-To: <4d192a07160d9c41e9abe7e1aaa73a6f7f28c435.1466334225.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 19 Jun 2016 13:08:57 +0200")
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
- <26ab2309f8d9c962e70b2f080f362aa03f64f8b1.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <8760t53rsd.fsf@dell.be.48ers.dk>
+ <4d192a07160d9c41e9abe7e1aaa73a6f7f28c435.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <87y4612d65.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,22 +16,20 @@ To: buildroot@busybox.net
 
  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  > ---
- >  package/gstreamer/gstreamer/gstreamer.hash | 4 ++--
+ >  package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
  >  1 file changed, 2 insertions(+), 2 deletions(-)
 
- > diff --git a/package/gstreamer/gstreamer/gstreamer.hash b/package/gstreamer/gstreamer/gstreamer.hash
- > index e652eae..2feb6be 100644
- > --- a/package/gstreamer/gstreamer/gstreamer.hash
- > +++ b/package/gstreamer/gstreamer/gstreamer.hash
+ > diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+ > index b32fcfe..a3a33cb 100644
+ > --- a/package/gstreamer1/gstreamer1/gstreamer1.hash
+ > +++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
  > @@ -1,2 +1,2 @@
- > -# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-0.10.36.tar.xz.md5
- > -md5	15389c73e091b1dda915279c388b9cb2	gstreamer-0.10.36.tar.xz
+ > -# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.8.2.tar.xz.sha256sum
+ > -sha256	9dbebe079c2ab2004ef7f2649fa317cabea1feb4fb5605c24d40744b90918341  gstreamer-1.8.2.tar.xz
  > +# localy computed
- > +sha256  9151aa108c177054387885763fa0e433e76780f7c5655c70a5390f2a6c6871da  gstreamer-0.10.36.tar.xz
+ > +sha256  9dbebe079c2ab2004ef7f2649fa317cabea1feb4fb5605c24d40744b90918341  gstreamer-1.8.2.tar.xz
 
-I don't think it makes sense to remove the upstream hash even if it is a
-weak md5sum, so I've instead just added the locally calculated sha256 to
-it.
+Just as for gstreamer, I've appended the sha256 to the file.
 
 -- 
 Bye, Peter Korsgaard
