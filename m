@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 13:09:08 +0200
-Subject: [Buildroot] [PATCH 021/121] package/libphidget: add hash file
+Date: Sun, 19 Jun 2016 13:09:09 +0200
+Subject: [Buildroot] [PATCH 022/121] package/libump: add hash file
 In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <9a6118a2c52b3f5ffdab169ef0318a2fbc03fd72.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <8c16e73b8939d0893666f70d7e3d6c0841bd6545.1466334225.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libphidget/libphidget.hash | 2 ++
+ package/libump/libump.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/libphidget/libphidget.hash
+ create mode 100644 package/libump/libump.hash
 
-diff --git a/package/libphidget/libphidget.hash b/package/libphidget/libphidget.hash
+diff --git a/package/libump/libump.hash b/package/libump/libump.hash
 new file mode 100644
-index 0000000..5da89df
+index 0000000..4244e20
 --- /dev/null
-+++ b/package/libphidget/libphidget.hash
++++ b/package/libump/libump.hash
 @@ -0,0 +1,2 @@
 +# localy computed
-+sha256  2d496828a085ada8ff139da9306bd2b8cb987798fee93caf0089dc399195e238  libphidget_2.1.8.20140319.tar.gz
++sha256  745bbb3e6a6b2b1d8caec75d2f2e884691ceefa5c2be0480baed31dba66cf450  libump-ec0680628744f30b8fac35e41a7bd8e23e59c39f.tar.gz
 -- 
 2.7.4
