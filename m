@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 13:09:19 +0200
-Subject: [Buildroot] [PATCH 032/121] package/phidgetwebservice: add hash file
+Date: Sun, 19 Jun 2016 13:09:20 +0200
+Subject: [Buildroot] [PATCH 033/121] package/python-configshell-fb: add hash
+	file
 In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <9b4590468aecf0ddc9ec116d553cc17d999f998b.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <8532b7b6990e2df998d2f7b71cf7a186c5537dcc.1466334225.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +13,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/phidgetwebservice/phidgetwebservice.hash | 2 ++
+ package/python-configshell-fb/python-configshell-fb.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/phidgetwebservice/phidgetwebservice.hash
+ create mode 100644 package/python-configshell-fb/python-configshell-fb.hash
 
-diff --git a/package/phidgetwebservice/phidgetwebservice.hash b/package/phidgetwebservice/phidgetwebservice.hash
+diff --git a/package/python-configshell-fb/python-configshell-fb.hash b/package/python-configshell-fb/python-configshell-fb.hash
 new file mode 100644
-index 0000000..eaa3684
+index 0000000..ae65ae8
 --- /dev/null
-+++ b/package/phidgetwebservice/phidgetwebservice.hash
++++ b/package/python-configshell-fb/python-configshell-fb.hash
 @@ -0,0 +1,2 @@
 +# localy computed
-+sha256  e8add82fd41d9cb274b88ee369a1f7366e35f85abcfcabb9e2a383574bb779c5  phidgetwebservice_2.1.8.20140319.tar.gz
++sha256  3685446d6ee02881930bb2fdc5fdd254938da66ce9843a5b3676c4246b058e4b  python-configshell-fb-v1.1.fb18.tar.gz
 -- 
 2.7.4
