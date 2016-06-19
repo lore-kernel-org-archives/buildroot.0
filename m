@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 13:09:12 +0200
-Subject: [Buildroot] [PATCH 025/121] package/lua-msgpack-native: add hash
-	file
+Date: Sun, 19 Jun 2016 13:09:13 +0200
+Subject: [Buildroot] [PATCH 026/121] package/mxs-bootlets: add hash file
 In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <53787e56bf7d2b45e34536df146c8f4de93013fb.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <7e2a4b8328be7b5a7c9a073f5b16cc9d92fba5ee.1466334225.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/lua-msgpack-native/lua-msgpack-native.hash | 2 ++
+ boot/mxs-bootlets/mxs-bootlets.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/lua-msgpack-native/lua-msgpack-native.hash
+ create mode 100644 boot/mxs-bootlets/mxs-bootlets.hash
 
-diff --git a/package/lua-msgpack-native/lua-msgpack-native.hash b/package/lua-msgpack-native/lua-msgpack-native.hash
+diff --git a/boot/mxs-bootlets/mxs-bootlets.hash b/boot/mxs-bootlets/mxs-bootlets.hash
 new file mode 100644
-index 0000000..922cdb3
+index 0000000..57aec81
 --- /dev/null
-+++ b/package/lua-msgpack-native/lua-msgpack-native.hash
++++ b/boot/mxs-bootlets/mxs-bootlets.hash
 @@ -0,0 +1,2 @@
 +# localy computed
-+sha256  025cf91d509fa3985869d18ef9b8eaeb875ff3c9fcf6467beeed6eab3bb35c93  lua-msgpack-native-41a91b994c70389dc9daa1a15678741d8ec41749.tar.gz
++sha256  63f6068ae36884adef4259bbb1fe2591755718f22c46d0a59d854883dfab1ffc  imx-bootlets-src-10.12.01.tar.gz
 -- 
 2.7.4
