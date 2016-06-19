@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 13:09:30 +0200
-Subject: [Buildroot] [PATCH 043/121] package/python-mad: add hash file
+Date: Sun, 19 Jun 2016 13:09:31 +0200
+Subject: [Buildroot] [PATCH 044/121] package/python-markdown: add hash file
 In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <08513de8543642c232e1b85e435967046beee0a5.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <522b3eb2438ea6c0becc33afb05c5d5d3a2be52f.1466334225.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/python-mad/python-mad.hash | 2 ++
+ package/python-markdown/python-markdown.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/python-mad/python-mad.hash
+ create mode 100644 package/python-markdown/python-markdown.hash
 
-diff --git a/package/python-mad/python-mad.hash b/package/python-mad/python-mad.hash
+diff --git a/package/python-markdown/python-markdown.hash b/package/python-markdown/python-markdown.hash
 new file mode 100644
-index 0000000..d9868d8
+index 0000000..dd65e6a
 --- /dev/null
-+++ b/package/python-mad/python-mad.hash
++++ b/package/python-markdown/python-markdown.hash
 @@ -0,0 +1,2 @@
 +# localy computed
-+sha256  1c9fc529b78de7d26e9e47cf182c9f8bf43838d8f62a9c1773540d57f5ebc522  pymad-0.6.tar.gz
++sha256  284e97e56db9ada03ede9c0ed2870ca6590ce7869f3119104d53510debf1533d  Markdown-2.5.2.tar.gz
 -- 
 2.7.4
