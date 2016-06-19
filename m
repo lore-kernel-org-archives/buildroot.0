@@ -1,28 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jun 2016 22:18:08 +0200
-Subject: [Buildroot] [git commit] package/xdriver_xf86-video-fbturbo: add
-	hash file
-Message-ID: <20160619202400.22246818B3@busybox.osuosl.org>
+Date: Sun, 19 Jun 2016 22:08:29 +0200
+Subject: [Buildroot] [git commit] package/snowball-hdmiservice: add hash file
+Message-ID: <20160619202358.2B23181E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a9ebd273da0c3af0167a7ba646adc5a169abb5b
+commit: https://git.buildroot.net/buildroot/commit/?id=0800253a8ed8aaa024faac9362891b5fce3be992
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.hash    | 2 ++
+ package/snowball-hdmiservice/snowball-hdmiservice.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.hash b/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.hash
+diff --git a/package/snowball-hdmiservice/snowball-hdmiservice.hash b/package/snowball-hdmiservice/snowball-hdmiservice.hash
 new file mode 100644
-index 0000000..0370216
+index 0000000..e9fffd7
 --- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.hash
++++ b/package/snowball-hdmiservice/snowball-hdmiservice.hash
 @@ -0,0 +1,2 @@
 +# locally computed
-+sha256  10411686de0a9d8b2cde300b0d68e9f1d22e3611470d357ef3afc337f123ca0f  xdriver_xf86-video-fbturbo-0.4.0.tar.gz
++sha256  dd2d8362a66178be082affa7cc238aebf3d671be184356bc23d13789db638b9d  snowball-hdmiservice-f75c99d1c52707240a78b4ba78e41d20d3aa3b08.tar.gz
