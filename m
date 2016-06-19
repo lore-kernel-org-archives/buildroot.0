@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 13:08:53 +0200
-Subject: [Buildroot] [PATCH 006/121] package/fbtft: add hash file
+Date: Sun, 19 Jun 2016 13:08:54 +0200
+Subject: [Buildroot] [PATCH 007/121] package/gpu-amd-bin-mx51: add hash file
 In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <59cf452d312d4c92cd1bb948637c9538abd8206e.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <89b78457017cabb01e37b4dc44574517d15d5826.1466334225.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/fbtft/fbtft.hash | 2 ++
+ package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/fbtft/fbtft.hash
+ create mode 100644 package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.hash
 
-diff --git a/package/fbtft/fbtft.hash b/package/fbtft/fbtft.hash
+diff --git a/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.hash b/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.hash
 new file mode 100644
-index 0000000..d294a54
+index 0000000..e3162a7
 --- /dev/null
-+++ b/package/fbtft/fbtft.hash
++++ b/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.hash
 @@ -0,0 +1,2 @@
 +# localy computed
-+sha256  0e81de89fdd7ab810716fc0549e767527f342e829309dee5c2cca1e9d1728770  fbtft-274035404701245e7491c0c6471c5b72ade4d491.tar.gz
++sha256  c7a6fa03b7aa2a375556c59908876554ba720c1e744baba2debb84a408f790db  amd-gpu-x11-bin-mx51-11.09.01.bin
 -- 
 2.7.4
