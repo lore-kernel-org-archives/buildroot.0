@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Jun 2016 13:09:05 +0200
-Subject: [Buildroot] [PATCH 018/121] package/libcofi: add hash file
+Date: Sun, 19 Jun 2016 13:09:06 +0200
+Subject: [Buildroot] [PATCH 019/121] package/libglu: add hash file
 In-Reply-To: <cover.1466334225.git.yann.morin.1998@free.fr>
 References: <cover.1466334225.git.yann.morin.1998@free.fr>
-Message-ID: <7ecf59060165d753d031fc3a2d7be98cc5d3f571.1466334225.git.yann.morin.1998@free.fr>
+Message-ID: <c1fa0c521fc9a4498bae7e9044268b670191013a.1466334225.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +14,19 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
 Peter, can you remove this from s.b.o, please?
-    libcofi-7313fbe12b0593034d0a1b606bf33c7cf4ababce.tar.gz
+    glu-9.0.0.tar.gz
 ---
- package/libcofi/libcofi.hash | 2 ++
+ package/libglu/libglu.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/libcofi/libcofi.hash
+ create mode 100644 package/libglu/libglu.hash
 
-diff --git a/package/libcofi/libcofi.hash b/package/libcofi/libcofi.hash
+diff --git a/package/libglu/libglu.hash b/package/libglu/libglu.hash
 new file mode 100644
-index 0000000..485b7bd
+index 0000000..5a1e8b0
 --- /dev/null
-+++ b/package/libcofi/libcofi.hash
++++ b/package/libglu/libglu.hash
 @@ -0,0 +1,2 @@
 +# localy computed
-+sha256  72ec89c19267612b316ec9c5835c07212b8f0a377c5b4c20b6e46e69a6e4a5e5  libcofi-7313fbe12b0593034d0a1b606bf33c7cf4ababce.tar.gz
++sha256  3d19cca9b26ec4048dd22e3d294acd43e080a3205a29ff47765bd514571ea8f9  glu-9.0.0.tar.gz
 -- 
 2.7.4
