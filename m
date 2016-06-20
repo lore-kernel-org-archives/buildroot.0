@@ -1,120 +1,130 @@
 From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Mon, 20 Jun 2016 15:47:39 -0400
-Subject: [Buildroot] [PATCH 1/1] libarchive: bump to version 3.2.0
-Message-ID: <1466452059-24280-1-git-send-email-fhunleth@troodon-software.com>
+Date: Mon, 20 Jun 2016 16:04:08 -0400
+Subject: [Buildroot] [PATCH 1/1] fwup: bump to version 0.8.0
+Message-ID: <1466453048-3894-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The CVE patch is now included in this release.
+This version removes the need for the patch and the autoreconf
+workaround. It also fixes autobuilder errors for static build
+configurations:
+
+http://autobuild.buildroot.net/results/30ad12bf0fe451aefb21cf59a76b059758746c2e/
+http://autobuild.buildroot.net/results/a1503e0a053bfd724f9085908d2df51db798d068/
 
 Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- package/libarchive/0001-fix-CVE-2016-1541.patch | 71 -------------------------
- package/libarchive/libarchive.hash              |  2 +-
- package/libarchive/libarchive.mk                |  2 +-
+ .../0001-Add-missing-sys-types.h-includes.patch    | 64 ----------------------
+ package/fwup/fwup.hash                             |  2 +-
+ package/fwup/fwup.mk                               |  9 +--
  3 files changed, 2 insertions(+), 73 deletions(-)
- delete mode 100644 package/libarchive/0001-fix-CVE-2016-1541.patch
+ delete mode 100644 package/fwup/0001-Add-missing-sys-types.h-includes.patch
 
-diff --git a/package/libarchive/0001-fix-CVE-2016-1541.patch b/package/libarchive/0001-fix-CVE-2016-1541.patch
+diff --git a/package/fwup/0001-Add-missing-sys-types.h-includes.patch b/package/fwup/0001-Add-missing-sys-types.h-includes.patch
 deleted file mode 100644
-index ef2448c..0000000
---- a/package/libarchive/0001-fix-CVE-2016-1541.patch
+index aa22348..0000000
+--- a/package/fwup/0001-Add-missing-sys-types.h-includes.patch
 +++ /dev/null
-@@ -1,71 +0,0 @@
--From d0331e8e5b05b475f20b1f3101fe1ad772d7e7e7 Mon Sep 17 00:00:00 2001
--From: Tim Kientzle <kientzle@acm.org>
--Date: Sun, 24 Apr 2016 17:13:45 -0700
--Subject: [PATCH] Issue #656:  Fix CVE-2016-1541, VU#862384
+@@ -1,64 +0,0 @@
+-From 782ffa564236b79d49a88e63da65ac01b6f2cfc1 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sun, 12 Jun 2016 22:57:02 +0200
+-Subject: [PATCH] Add missing <sys/types.h> includes
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
 -
--When reading OS X metadata entries in Zip archives that were stored
--without compression, libarchive would use the uncompressed entry size
--to allocate a buffer but would use the compressed entry size to limit
--the amount of data copied into that buffer.  Since the compressed
--and uncompressed sizes are provided by data in the archive itself,
--an attacker could manipulate these values to write data beyond
--the end of the allocated buffer.
+-<sys/types.h> is needed for the definition of off_t, otherwise building
+-with uClibc fails with:
 -
--This fix provides three new checks to guard against such
--manipulation and to make libarchive generally more robust when
--handling this type of entry:
-- 1. If an OS X metadata entry is stored without compression,
--    abort the entire archive if the compressed and uncompressed
--    data sizes do not match.
-- 2. When sanity-checking the size of an OS X metadata entry,
--    abort this entry if either the compressed or uncompressed
--    size is larger than 4MB.
-- 3. When copying data into the allocated buffer, check the copy
--    size against both the compressed entry size and uncompressed
--    entry size.
+-In file included from cfgfile.c:17:0:
+-cfgfile.h:25:87: error: unknown type name ?off_t?
+- int archive_read_all_data(struct archive *a, struct archive_entry *ae, char **buffer, off_t max_size, off_t *size_read);
+-                                                                                       ^
+-cfgfile.h:25:103: error: unknown type name ?off_t?
+- int archive_read_all_data(struct archive *a, struct archive_entry *ae, char **buffer, off_t max_size, off_t *size_read);
 -
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
--Status: from upstream https://github.com/libarchive/libarchive/issues/656
+- src/cfgfile.h | 1 +
+- src/mmc.h     | 1 +
+- src/util.h    | 1 +
+- 3 files changed, 3 insertions(+)
 -
-- libarchive/archive_read_support_format_zip.c | 13 +++++++++++++
-- 1 file changed, 13 insertions(+)
+-diff --git a/src/cfgfile.h b/src/cfgfile.h
+-index 1a6ffbb..8982b1d 100644
+---- a/src/cfgfile.h
+-+++ b/src/cfgfile.h
+-@@ -17,6 +17,7 @@
+- #ifndef CFGFILE_H
+- #define CFGFILE_H
+- 
+-+#include <sys/types.h>
+- #include <confuse.h>
+- 
+- struct archive;
+-diff --git a/src/mmc.h b/src/mmc.h
+-index 56f85eb..626570a 100644
+---- a/src/mmc.h
+-+++ b/src/mmc.h
+-@@ -20,6 +20,7 @@
+- #include <stddef.h>
+- #include <stdio.h>
+- #include <stdint.h>
+-+#include <sys/types.h>
+- 
+- #define MMC_DEVICE_PATH_LEN 32
+- 
+-diff --git a/src/util.h b/src/util.h
+-index 83f82ec..23359c1 100644
+---- a/src/util.h
+-+++ b/src/util.h
+-@@ -20,6 +20,7 @@
+- #include <stdbool.h>
+- #include <stdio.h>
+- #include <stdint.h>
+-+#include <sys/types.h>
+- 
+- struct tm;
+- 
+--- 
+-2.7.4
 -
--diff --git a/libarchive/archive_read_support_format_zip.c b/libarchive/archive_read_support_format_zip.c
--index 0f8262c..0a0be96 100644
----- a/libarchive/archive_read_support_format_zip.c
--+++ b/libarchive/archive_read_support_format_zip.c
--@@ -2778,6 +2778,11 @@ zip_read_mac_metadata(struct archive_read *a, struct archive_entry *entry,
-- 
-- 	switch(rsrc->compression) {
-- 	case 0:  /* No compression. */
--+		if (rsrc->uncompressed_size != rsrc->compressed_size) {
--+			archive_set_error(&a->archive, ARCHIVE_ERRNO_FILE_FORMAT,
--+			    "Malformed OS X metadata entry: inconsistent size");
--+			return (ARCHIVE_FATAL);
--+		}
-- #ifdef HAVE_ZLIB_H
-- 	case 8: /* Deflate compression. */
-- #endif
--@@ -2798,6 +2803,12 @@ zip_read_mac_metadata(struct archive_read *a, struct archive_entry *entry,
-- 		    (intmax_t)rsrc->uncompressed_size);
-- 		return (ARCHIVE_WARN);
-- 	}
--+	if (rsrc->compressed_size > (4 * 1024 * 1024)) {
--+		archive_set_error(&a->archive, ARCHIVE_ERRNO_FILE_FORMAT,
--+		    "Mac metadata is too large: %jd > 4M bytes",
--+		    (intmax_t)rsrc->compressed_size);
--+		return (ARCHIVE_WARN);
--+	}
-- 
-- 	metadata = malloc((size_t)rsrc->uncompressed_size);
-- 	if (metadata == NULL) {
--@@ -2836,6 +2847,8 @@ zip_read_mac_metadata(struct archive_read *a, struct archive_entry *entry,
-- 			bytes_avail = remaining_bytes;
-- 		switch(rsrc->compression) {
-- 		case 0:  /* No compression. */
--+			if ((size_t)bytes_avail > metadata_bytes)
--+				bytes_avail = metadata_bytes;
-- 			memcpy(mp, p, bytes_avail);
-- 			bytes_used = (size_t)bytes_avail;
-- 			metadata_bytes -= bytes_used;
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index 5f96211..6a782c6 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
+diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
+index 298c5db..6d9a1ea 100644
+--- a/package/fwup/fwup.hash
++++ b/package/fwup/fwup.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256  eb87eacd8fe49e8d90c8fdc189813023ccc319c5e752b01fb6ad0cc7b2c53d5e  libarchive-3.1.2.tar.gz
-+sha256  7bce45fd71ff01dc20d19edd78322d4965583d81b8bed8e26cacb65d6f5baa87  libarchive-3.2.0.tar.gz
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index e20a737..0e1e517 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256	  b318875d42cf2a643da99f03ac91662ec91625d9a84a3a9bb53ac419d1cb0dc3	fwup-v0.7.0.tar.gz
++sha256	  56d30f4ddf7929d693c022455978aebef1f6adb5896437a199bde43d5459da68	fwup-v0.8.0.tar.gz
+diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
+index 0f857fc..7b007e1 100644
+--- a/package/fwup/fwup.mk
++++ b/package/fwup/fwup.mk
+@@ -4,19 +4,12 @@
  #
- ################################################################################
+ #############################################################
  
--LIBARCHIVE_VERSION = 3.1.2
-+LIBARCHIVE_VERSION = 3.2.0
- LIBARCHIVE_SITE = http://www.libarchive.org/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2c, BSD-3c
+-FWUP_VERSION = v0.7.0
++FWUP_VERSION = v0.8.0
+ FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
+ FWUP_LICENSE = Apache-2.0
+ FWUP_LICENSE_FILES = LICENSE
+ FWUP_DEPENDENCIES = libconfuse libarchive libsodium
+ FWUP_AUTORECONF = YES
+ 
+-define FWUP_ADD_M4_DIR
+-	mkdir -p $(@D)/m4
+-endef
+-
+-FWUP_POST_PATCH_HOOKS += FWUP_ADD_M4_DIR
+-HOST_FWUP_POST_PATCH_HOOKS += FWUP_ADD_M4_DIR
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.5.0
