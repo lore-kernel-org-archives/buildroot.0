@@ -1,71 +1,193 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Jun 2016 18:02:55 +0200
-Subject: [Buildroot] [PATCH 010/121] package/gstreamer1: add hash file
-In-Reply-To: <5767E69A.4030606@zacarias.com.ar>
-References: <cover.1466334225.git.yann.morin.1998@free.fr>
- <4d192a07160d9c41e9abe7e1aaa73a6f7f28c435.1466334225.git.yann.morin.1998@free.fr>
- <87y4612d65.fsf@dell.be.48ers.dk>
- <5767E69A.4030606@zacarias.com.ar>
-Message-ID: <20160620160255.GA3502@free.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 20 Jun 2016 17:45:42 +0100
+Subject: [Buildroot] [PATCH v6] openblas: new package
+Message-ID: <1466441142-52096-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v5 -> v6:
+ - Add BR2_PACKAGE_OPENBLAS_ARCH_SUPPORT
+ - Put openblas targets that depend on "Target Architecture" at bottom.
+   We want the ones depeding on "Target Architecture Variant" first as
+   they are more specific and Buildroot will use the one that matches
+   first.
+Changes v4 -> v5:
+ - Do not use a huge choice with new Buildroot options for every
+   OpenBLAS target. Instead, use a string option with a default value
+   depending on the existing options in arch/Config.in*.
 
-On 2016-06-20 09:50 -0300, Gustavo Zacarias spake thusly:
-> On 19/06/16 16:26, Peter Korsgaard wrote:
-> 
-> >>>>>>"Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> >
-> >  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >  > ---
-> >  >  package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
-> >  >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> >  > diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
-> >  > index b32fcfe..a3a33cb 100644
-> >  > --- a/package/gstreamer1/gstreamer1/gstreamer1.hash
-> >  > +++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
-> >  > @@ -1,2 +1,2 @@
-> >  > -# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.8.2.tar.xz.sha256sum
-> >  > -sha256	9dbebe079c2ab2004ef7f2649fa317cabea1feb4fb5605c24d40744b90918341  gstreamer-1.8.2.tar.xz
-> >  > +# localy computed
-> >  > +sha256  9dbebe079c2ab2004ef7f2649fa317cabea1feb4fb5605c24d40744b90918341  gstreamer-1.8.2.tar.xz
-> >
-> >Just as for gstreamer, I've appended the sha256 to the file.
-> 
-> Hi.
-> Why on earth do we need duplicate hashes (upstream + locally computed which
-> are based on the same algo)?
+Changes v3 -> v4:
+ - Disable Fortran by default. It can be added back in the future when
+   we have a BR2_TOOLCHAIN_HAS_FORTRAN hidden symbol.
+ - Bump version so we can get rid of the patch.
+ - Match OpenBLAS target cores with Buildroot target cores as much as
+   possible, and drop the ones unsupported in Buildroot.
+ - Drop the OpenMP bits in the openblas.mk file. It can be added back
+   in the future when we have a BR2_TOOLCHAIN_HAS_OPENMP hidden symbol.
 
-Well, at least, it was the same hash! ;-)
+Changes v2 -> v3:
+ - Switch version to HEAD of develop branch as it contains support for
+   MIPS32.
+ - Add a patch to fix build failure of P5600 and I6400 targets.
+ - Add support for OpenMP when toolchain has NPTL threads.
 
-> And what's the reason massive hashes are suddenly required? I've seen the
-> autobuilders getting corrupted downloads, but why is it happening?
+Changes v1 -> v2:
+ - Multi-threading is not available for static-only since it uses
+   dlfcn.h, so modify the "ifeq" statement accordingly.
 
-s Peter explained, that's because Github started acting silly a few days
-ago... So we decided to take this opportunity to add as much hashes as
-possible.
+ package/Config.in              |  1 +
+ package/openblas/Config.in     | 62 ++++++++++++++++++++++++++++++++++++++++++
+ package/openblas/openblas.hash |  2 ++
+ package/openblas/openblas.mk   | 46 +++++++++++++++++++++++++++++++
+ 4 files changed, 111 insertions(+)
+ create mode 100644 package/openblas/Config.in
+ create mode 100644 package/openblas/openblas.hash
+ create mode 100644 package/openblas/openblas.mk
 
-I did a script that would look for packages without hashes, and it
-turned out that this script had a flaw: when a package was in a
-sub-sub-directory like gstreamer and gstreamer1, the script would
-mistakenly conclude that a hash was missing for that package, which was
-wrong of course.
-
-Fortunately, Peter noticed, but he was not careful enough (not that I
-would blame him, drowned in the ~120 patches I sent!).
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/Config.in b/package/Config.in
+index 02cc3bd..e7aa6fd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1291,6 +1291,7 @@ endif
+ 	source "package/msgpack/Config.in"
+ 	source "package/mtdev2tuio/Config.in"
+ 	source "package/netbsd-queue/Config.in"
++	source "package/openblas/Config.in"
+ 	source "package/orc/Config.in"
+ 	source "package/p11-kit/Config.in"
+ 	source "package/poco/Config.in"
+diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+new file mode 100644
+index 0000000..08389e2
+--- /dev/null
++++ b/package/openblas/Config.in
+@@ -0,0 +1,62 @@
++config BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
++	bool
++	default y if BR2_i386 || BR2_x86_64
++	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
++	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	default y if BR2_sparc || BR2_sparc64
++	default y if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be
++
++config BR2_PACKAGE_OPENBLAS
++	bool "openblas"
++	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
++	help
++	  An optimized BLAS library based on GotoBLAS2 1.13 BSD version.
++
++	  https://www.openblas.net/
++
++if BR2_PACKAGE_OPENBLAS
++
++config BR2_PACKAGE_OPENBLAS_TARGET
++	string "OpenBLAS target CPU"
++	# "Target Architecture Variant" matches
++	default "P2"           if BR2_x86_pentium2
++	default "KATMAI"       if BR2_x86_pentium3
++	default "NORTHWOOD"    if BR2_x86_pentium4
++	default "PRESCOTT"     if BR2_x86_prescott
++	default "BANIAS"       if BR2_x86_pentium_m
++	default "CORE2"        if BR2_x86_core2
++	default "NEHALEM"      if BR2_x86_corei7
++	default "SANDYBRIDGE"  if BR2_x86_corei7_avx
++	default "HASWELL"      if BR2_x86_core_avx2
++	default "ATOM"         if BR2_x86_atom
++	default "ATHLON"       if BR2_x86_athlon || BR2_x86_athlon_4
++	default "OPTERON"      if BR2_x86_opteron
++	default "OPTERON_SSE3" if BR2_x86_opteron_sse3
++	default "BARCELONA"    if BR2_x86_barcelona
++	default "STEAMROLLER"  if BR2_x86_steamroller
++	default "VIAC3"        if BR2_x86_c3 || BR2_x86_c32
++	default "POWER4"       if BR2_powerpc_power4
++	default "POWER5"       if BR2_powerpc_power5
++	default "POWER6"       if BR2_powerpc_power6
++	default "POWER7"       if BR2_powerpc_power7
++	default "POWER8"       if BR2_powerpc_power8
++	default "PPCG4"        if BR2_powerpc_7400 || BR2_powerpc_7450
++	default "PPC970"       if BR2_powerpc_970
++	default "PPC440"       if BR2_powerpc_440
++	default "PPC440FP2"    if BR2_powerpc_440fp
++	default "P5600"        if BR2_mips_32r2
++	default "SICORTEX"     if BR2_mips_64
++	default "I6400"        if BR2_mips_64r6
++	default "CORTEXA15"    if BR2_cortex_a15
++	default "CORTEXA9"     if BR2_cortex_a9
++	default "ARMV7"        if BR2_cortex_a5 || BR2_cortex_a7 || \
++	                          BR2_cortex_a8 || BR2_cortex_a9 || \
++				  BR2_cortex_a12 || BR2_cortex_a17
++	# "Target Architecture" matches
++	default "SSE_GENERIC"  if BR2_i386 || BR2_x86_64
++	default "SPARC"        if BR2_sparc
++	default "ARMV8"        if BR2_aarch64 || BR2_aarch64_be
++	help
++	  OpenBLAS target CPU
++
++endif
+diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
+new file mode 100644
+index 0000000..1fdb0ba
+--- /dev/null
++++ b/package/openblas/openblas.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 fa32d00dfca6b7e7580dbc8696daa5bf8fee4ad7771f52450ab9dc1e9c87fe73  openblas-a8fcd89d6d1666185c8c27ea46672b9897630f21.tar.gz
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+new file mode 100644
+index 0000000..02dc361
+--- /dev/null
++++ b/package/openblas/openblas.mk
+@@ -0,0 +1,46 @@
++################################################################################
++#
++# openblas
++#
++################################################################################
++
++OPENBLAS_VERSION = a8fcd89d6d1666185c8c27ea46672b9897630f21
++OPENBLAS_SITE = $(call github,xianyi,OpenBLAS,$(OPENBLAS_VERSION))
++OPENBLAS_LICENSE = BSD-3
++OPENBLAS_LICENSE_FILES = LICENSE
++OPENBLAS_INSTALL_STAGING = YES
++
++# Disable fortran by default until we add BR2_TOOLCHAIN_HAS_FORTRAN
++# hidden symbol to our toolchain infrastructure
++OPENBLAS_MAKE_OPTS += ONLY_CBLAS=1
++
++# Enable/Disable multi-threading (not for static-only since it uses dlfcn.h)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)x$(BR2_STATIC_LIBS),yx)
++OPENBLAS_MAKE_OPTS += USE_THREAD=1
++else
++OPENBLAS_MAKE_OPTS += USE_THREAD=0
++endif
++
++# Static-only/Shared-only toggle
++ifeq ($(BR2_STATIC_LIBS),y)
++OPENBLAS_MAKE_OPTS += NO_SHARED=1
++else ifeq ($(BR2_SHARED_LIBS),y)
++OPENBLAS_MAKE_OPTS += NO_STATIC=1
++endif
++
++define OPENBLAS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) $(OPENBLAS_MAKE_OPTS) \
++		CROSS=1 TARGET=$(BR2_PACKAGE_OPENBLAS_TARGET) -C $(@D)
++endef
++
++define OPENBLAS_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(OPENBLAS_MAKE_OPTS) \
++		-C $(@D) install PREFIX=$(STAGING_DIR)/usr
++endef
++
++define OPENBLAS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(OPENBLAS_MAKE_OPTS) \
++		-C $(@D) install PREFIX=$(TARGET_DIR)/usr
++endef
++
++$(eval $(generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.3
