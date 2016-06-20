@@ -1,59 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jun 2016 13:41:32 +0200
-Subject: [Buildroot] [git commit] python-pathvalidate: bump to version 0.4.2
-Message-ID: <20160620114257.0C68480365@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 20 Jun 2016 09:50:34 -0300
+Subject: [Buildroot] [PATCH 010/121] package/gstreamer1: add hash file
+In-Reply-To: <87y4612d65.fsf@dell.be.48ers.dk>
+References: <cover.1466334225.git.yann.morin.1998@free.fr>
+ <4d192a07160d9c41e9abe7e1aaa73a6f7f28c435.1466334225.git.yann.morin.1998@free.fr>
+ <87y4612d65.fsf@dell.be.48ers.dk>
+Message-ID: <5767E69A.4030606@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f001607f35b782fc5fc3979a522e56617f62e39a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19/06/16 16:26, Peter Korsgaard wrote:
 
-This version makes pytest-runner dependency optional.
+>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>
+>   > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>   > ---
+>   >  package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+>   >  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+>   > diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+>   > index b32fcfe..a3a33cb 100644
+>   > --- a/package/gstreamer1/gstreamer1/gstreamer1.hash
+>   > +++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+>   > @@ -1,2 +1,2 @@
+>   > -# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.8.2.tar.xz.sha256sum
+>   > -sha256	9dbebe079c2ab2004ef7f2649fa317cabea1feb4fb5605c24d40744b90918341  gstreamer-1.8.2.tar.xz
+>   > +# localy computed
+>   > +sha256  9dbebe079c2ab2004ef7f2649fa317cabea1feb4fb5605c24d40744b90918341  gstreamer-1.8.2.tar.xz
+>
+> Just as for gstreamer, I've appended the sha256 to the file.
 
-Fixes:
-http://autobuild.buildroot.net/results/0b6/0b6984c84cb10856a0cf8b063d61782da8895ca8
-http://autobuild.buildroot.net/results/892/8927f8ce3aaea5f88da09c4541241901e7867584
-http://autobuild.buildroot.net/results/6b2/6b218ed9c12ed5f90a1488f9649dd796177cad0d
-http://autobuild.buildroot.net/results/5ef/5efb8d392c13901a46288590e73070d45e4e13bf
-http://autobuild.buildroot.net/results/e51/e5195b96a7be915034c755469ec273c1f7d9e4d1
-http://autobuild.buildroot.net/results/f81/f81a39dd2bae6b30766109f020cb4e3f1b1996ea
-http://autobuild.buildroot.net/results/712/71248379935dbd17c94f5e1cdc8f043f366992a7
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-pathvalidate/python-pathvalidate.hash | 6 +++---
- package/python-pathvalidate/python-pathvalidate.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
-index e1395ac..90208f4 100644
---- a/package/python-pathvalidate/python-pathvalidate.hash
-+++ b/package/python-pathvalidate/python-pathvalidate.hash
-@@ -1,4 +1,4 @@
- # md5 from https://pypi.python.org/pypi/pathvalidate/json
--md5	e53ca2293a6602e003e11bcf88baecad  pathvalidate-0.4.1.tar.gz
--# sha256 calculated by scanpypi
--sha256	0d7b60327ee49a7d5cc3f7d7f8e3b6b6fe6cd3e2bde5e13e2c6ecabcc5022fa4  pathvalidate-0.4.1.tar.gz
-+md5	d3d89abc6c053b4182be29c23beccf26  pathvalidate-0.4.2.tar.gz
-+# sha256 calculated locally
-+sha256	4316cf5f862b70efd7792b98f46871592b80924840da69a28df1921d7702fcf9  pathvalidate-0.4.2.tar.gz
-diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
-index de47455..0c7cc76 100644
---- a/package/python-pathvalidate/python-pathvalidate.mk
-+++ b/package/python-pathvalidate/python-pathvalidate.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PATHVALIDATE_VERSION = 0.4.1
-+PYTHON_PATHVALIDATE_VERSION = 0.4.2
- PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
--PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/e4/68/831a61ad8c7f7b8340fe651aa189591a7ebbcda1456782d4c37d40f229c1
-+PYTHON_PATHVALIDATE_SITE = https://pypi.python.org/packages/fd/b9/726269557d5846f253f7ecec483d801582a27b77852a76e2dc9c61dba2b6
- PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
- PYTHON_PATHVALIDATE_LICENSE = MIT
- PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
+Hi.
+Why on earth do we need duplicate hashes (upstream + locally computed 
+which are based on the same algo)?
+And what's the reason massive hashes are suddenly required? I've seen 
+the autobuilders getting corrupted downloads, but why is it happening?
+Regards.
