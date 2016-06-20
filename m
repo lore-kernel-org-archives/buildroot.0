@@ -1,48 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jun 2016 15:17:48 +0200
-Subject: [Buildroot] [PATCH 010/121] package/gstreamer1: add hash file
-In-Reply-To: <5767E69A.4030606@zacarias.com.ar> (Gustavo Zacarias's message of
- "Mon, 20 Jun 2016 09:50:34 -0300")
-References: <cover.1466334225.git.yann.morin.1998@free.fr>
- <4d192a07160d9c41e9abe7e1aaa73a6f7f28c435.1466334225.git.yann.morin.1998@free.fr>
- <87y4612d65.fsf@dell.be.48ers.dk> <5767E69A.4030606@zacarias.com.ar>
-Message-ID: <87vb140zk3.fsf@dell.be.48ers.dk>
+Date: Mon, 20 Jun 2016 15:07:39 +0200
+Subject: [Buildroot] [git commit] Revert "package/gstreamer1: add hash file"
+Message-ID: <20160620131803.0D20682103@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=04b687cbe2f6201b831876c2e5762e64aef35311
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+This reverts commit 048e97ebde04e822b50352baddc4278788ef737e.
 
- >> > -# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.8.2.tar.xz.sha256sum
- >> > -sha256	9dbebe079c2ab2004ef7f2649fa317cabea1feb4fb5605c24d40744b90918341  gstreamer-1.8.2.tar.xz
- >> > +# localy computed
- >> > +sha256  9dbebe079c2ab2004ef7f2649fa317cabea1feb4fb5605c24d40744b90918341  gstreamer-1.8.2.tar.xz
- >> 
- >> Just as for gstreamer, I've appended the sha256 to the file.
+As noticed by Gustavo, we already had a sha256 hash from upstream, so adding
+one more doesn't make any sense.
 
- > Hi.
- > Why on earth do we need duplicate hashes (upstream + locally computed
- > which are based on the same algo)?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 2 --
+ 1 file changed, 2 deletions(-)
 
-Heh, you are naturally right. I missed that in the pile of commits
-(the upstream hash was md5 for gstreamer 0.10x) - I'll revert.
-
- > And what's the reason massive hashes are suddenly required? I've seen
- > the autobuilders getting corrupted downloads, but why is it happening?
-
-There has been a desire to add hashes for all packages for some
-time. Recently there apparently was some temporary hickup at github,
-which made it painfully clear that we aren't there yet and that was
-(IMHO) a good motivation to work on it.
-
-The Github issue was fixed quite fast upstream (a few hours). I haven't
-contacted Github to hear what went wrong (and not seen any official
-statement), but nevertheless, adding hashes is a good thing to me.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 094c6d0..b32fcfe 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,4 +1,2 @@
+ # From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.8.2.tar.xz.sha256sum
+ sha256	9dbebe079c2ab2004ef7f2649fa317cabea1feb4fb5605c24d40744b90918341  gstreamer-1.8.2.tar.xz
+-# locally computed
+-sha256  9dbebe079c2ab2004ef7f2649fa317cabea1feb4fb5605c24d40744b90918341  gstreamer-1.8.2.tar.xz
