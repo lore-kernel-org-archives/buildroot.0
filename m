@@ -1,154 +1,229 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Mon, 20 Jun 2016 10:37:06 -0400
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-06-19
-In-Reply-To: <20160620063029.9F891102C76@stock.ovh.net>
-References: <20160620063029.9F891102C76@stock.ovh.net>
-Message-ID: <CA+-urNS=53BUamK5Gy_y=vh9R2Lh=hcqSWMUW0qQaJK_W73RnQ@mail.gmail.com>
+From: Damien Lanson <damien@kal-host.com>
+Date: Mon, 20 Jun 2016 17:00:27 +0200
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_v2_1/1=5D_libvdpau=3A_new_package?=
+Message-ID: <1466434827-17088-1-git-send-email-damien@kal-host.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Damien Lanson <damien@kal-host.com>
+---
+ package/Config.in                                  |    1 +
+ .../libvdpau/0001-missing-configh-include.patch    |   29 +++++++++++++
+ package/libvdpau/0002-link-with-libx11.patch       |   30 +++++++++++++
+ .../libvdpau/0003-vdpau-module-searchpath.patch    |   45 ++++++++++++++++++++
+ package/libvdpau/Config.in                         |   15 +++++++
+ package/libvdpau/libvdpau.hash                     |    4 ++
+ package/libvdpau/libvdpau.mk                       |   27 ++++++++++++
+ 7 files changed, 151 insertions(+)
+ create mode 100755 package/libvdpau/0001-missing-configh-include.patch
+ create mode 100755 package/libvdpau/0002-link-with-libx11.patch
+ create mode 100755 package/libvdpau/0003-vdpau-module-searchpath.patch
+ create mode 100755 package/libvdpau/Config.in
+ create mode 100755 package/libvdpau/libvdpau.hash
+ create mode 100755 package/libvdpau/libvdpau.mk
 
-On Mon, Jun 20, 2016 at 2:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Build statistics for 2016-06-19
-> ===============================
->
->         success : 169
->        failures : 148
->        timeouts : 0
->           TOTAL : 317
->
-> Classification of failures by reason
-> ====================================
->
->                    efivar-0.23 | 13
->                   boost-1.61.0 | 10
->               e2fsprogs-1.43.1 | 7
->      python-pathvalidate-0.4.1 | 7
->               host-libxcb-1.12 | 6
->              bluez_utils-4.101 | 5
->                  gflags-v2.1.2 | 5
->           libmicrohttpd-0.9.50 | 4
->                     xxhash-r40 | 4
->                    libxcb-1.12 | 4
-> ti-utils-06dbdb2727354b5f3a... | 4
-> python-libconfig-b271c3d9da... | 3
->                     gdb-7.10.1 | 3
->                 flannel-v0.5.5 | 3
-> snowball-hdmiservice-f75c99... | 3
->                   autofs-5.1.2 | 3
->           xinetd-xinetd-2-3-15 | 3
->                 blktrace-1.1.0 | 3
-> host-gdb-6be65fb56ea6694a92... | 2
->             python-crc16-0.1.1 | 2
->                  lvm2-2.02.156 | 2
->                libsigsegv-2.10 | 2
->                  jack2-v1.9.10 | 2
->                 mono-4.4.0.182 | 2
-> qjson-ba273682a9d33a7b3090e... | 2
->                    fwup-v0.7.0 | 2
->            python-dpkt-1.8.r98 | 2
-> host-omap-u-boot-utils-3f07... | 1
-> sunxi-mali-prop-1c5063f43cd... | 1
->                     cups-2.1.2 | 1
->                      xen-4.6.0 | 1
->       kismet-Kismet-2014-02-R1 | 1
->               sqlcipher-v3.2.0 | 1
->                  mesa3d-11.2.2 | 1
-> tinyalsa-f2a7b6d3d81bd337a5... | 1
->                openipmi-2.0.21 | 1
-> python-configshell-fb-v1.1.... | 1
->                 beecrypt-4.2.1 | 1
->                libcap-ng-0.7.7 | 1
->              iprutils-2.4.10.1 | 1
->     python-rtslib-fb-v2.1.fb57 | 1
->                 pinentry-0.9.4 | 1
->                trousers-0.3.13 | 1
-> host-imx-usb-loader-f96aee2... | 1
->                     mpv-0.17.0 | 1
->      openvmtools-stable-9.10.2 | 1
->                libupnpp-0.14.1 | 1
->            libfastjson-v0.99.2 | 1
->                linux-pam-1.2.1 | 1
-> android-tools-4.2.2+git2013... | 1
->           sane-backends-1.0.25 | 1
->            linux-zigbee-v0.3.1 | 1
-> tvheadend-8e637f9f903f6d820... | 1
->                  mplayer-1.3.0 | 1
->            python-docopt-0.6.2 | 1
->           python-pyusb-1.0.0b2 | 1
-> sunxi-cedarx-b8f52d913f7372... | 1
->              rabbitmq-c-v0.8.0 | 1
-> libump-ec0680628744f30b8fac... | 1
->            host-heimdal-1.6rc2 | 1
->               micropython-v1.6 | 1
->                 mongrel2-1.9.2 | 1
->            python-pydal-v15.07 | 1
->                 directfb-1.7.7 | 1
->                   openjpeg-2.1 | 1
-> iputils-55828d1fef3fed7f07a... | 1
->                   xl2tp-v1.3.6 | 1
->
-> Detail of failures
-> ===================
->
->     mips64el | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/481735017cd0dee755257ecf94400f9ce3943bf8/
->         sh4a |                   autofs-5.1.2 | NOK | http://autobuild.buildroot.net/results/eae1112991b02da68a0e4ec5b50b2214cc2fbc6a/
->         m68k |                   autofs-5.1.2 | NOK | http://autobuild.buildroot.net/results/04aefb489ce49c131d19f6b315c11ae9df20a808/
->         m68k |                   autofs-5.1.2 | NOK | http://autobuild.buildroot.net/results/cfcbdc53bc8970d3da968612753076c8aec3f5e2/
->          arm |                 beecrypt-4.2.1 | NOK | http://autobuild.buildroot.net/results/8cb64b60835d9765b4e30da0dabb777152389183/
->      powerpc |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/6679315208b2794cb11279f1f6bd28472f34db42/
->      powerpc |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/16846044b3b91336a2bc822d643bee2b87b5314e/
->      powerpc |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/9f2d54fa29a0589a1443b552409053bf417db7bb/
->         m68k |              bluez_utils-4.101 | NOK | http://autobuild.buildroot.net/results/73ad34d4ef1202fca1558322a52fa1996a0e16f9/
->          arc |              bluez_utils-4.101 | NOK | http://autobuild.buildroot.net/results/936ef6ca9e42e6bcb9eb816b04d37107e929ada9/
->         m68k |              bluez_utils-4.101 | NOK | http://autobuild.buildroot.net/results/b49f29b2c8eef67b5a88297a0fae609dd84defa0/
->          arc |              bluez_utils-4.101 | NOK | http://autobuild.buildroot.net/results/0ece599c60b2c488e3140d2a61459dba31b03cbd/
->          arc |              bluez_utils-4.101 | NOK | http://autobuild.buildroot.net/results/7b2e2657c64c85843774cd1938093f2997d0fbfa/
->         m68k |                   boost-1.61.0 | NOK | http://autobuild.buildroot.net/results/2b3baf6a8e7f8b9dd22fde4c45ab2f3f951fdb26/
->         bfin |                   boost-1.61.0 | NOK | http://autobuild.buildroot.net/results/037f2fea371ff5bc87753fbe7eaa6421a99ca8c2/
->         m68k |                   boost-1.61.0 | NOK | http://autobuild.buildroot.net/results/3e9ea7f6b9f796d40f46cd3e2e9d4e9841e1e907/
->          arm |                   boost-1.61.0 | NOK | http://autobuild.buildroot.net/results/f7103292892d8d35e8ef2ba61a1b8a6479d761fa/
->         m68k |                   boost-1.61.0 | NOK | http://autobuild.buildroot.net/results/73cd2b21c2a44151cffe2d938fa8558ba05d3ec1/
->          arm |                   boost-1.61.0 | NOK | http://autobuild.buildroot.net/results/38bd9d53c637713f97899fda5809b7075abd46e9/
->          arm |                   boost-1.61.0 | NOK | http://autobuild.buildroot.net/results/11080cac84d54308d0756f0bf775489d2fcb4981/
->         m68k |                   boost-1.61.0 | NOK | http://autobuild.buildroot.net/results/db21789b1f242a20614c70ff3c27e59469a23223/
->         bfin |                   boost-1.61.0 | NOK | http://autobuild.buildroot.net/results/508c439b632f0f9c167cff140d271cb3c47bab16/
->         bfin |                   boost-1.61.0 | NOK | http://autobuild.buildroot.net/results/02f98a50340ecae01f723ad48c2d54d9e28388f8/
->          arm |                     cups-2.1.2 | NOK | http://autobuild.buildroot.net/results/5914bf6f7dc3e0cd5cedf0f3ccfb5e50b1e76278/
->         m68k |                 directfb-1.7.7 | NOK | http://autobuild.buildroot.net/results/db7dfdfdc66495d19e27bb34e74d617dc7737a68/
->       x86_64 |               e2fsprogs-1.43.1 | NOK | http://autobuild.buildroot.net/results/8402b47493282b5ded5c57874125b6c06a7ab6b2/
->          arc |               e2fsprogs-1.43.1 | NOK | http://autobuild.buildroot.net/results/92a175988c4d278ee570911f1bb94dbef1caec16/
->       xtensa |               e2fsprogs-1.43.1 | NOK | http://autobuild.buildroot.net/results/64d36e6a31e58155e6989cc07ac10cdc4541818d/
->       x86_64 |               e2fsprogs-1.43.1 | NOK | http://autobuild.buildroot.net/results/6f629ed0fbcf040358b3d11c1b39628eec2d031d/
->       xtensa |               e2fsprogs-1.43.1 | NOK | http://autobuild.buildroot.net/results/d5a416a6a91c1e0919f6620d0ed7eae6bb0e8921/
->       mipsel |               e2fsprogs-1.43.1 | NOK | http://autobuild.buildroot.net/results/41e6d4a6d8be9e5eb744c42b996732448b4d1121/
->       xtensa |               e2fsprogs-1.43.1 | NOK | http://autobuild.buildroot.net/results/9de914ef4fdce44bed45f977cb840c2aecc8367c/
->      aarch64 |                    efivar-0.23 | NOK | http://autobuild.buildroot.net/results/40595c148f026f7d076bc6c0dc4fe642c2e59a3f/
->       mipsel |                    efivar-0.23 | NOK | http://autobuild.buildroot.net/results/c7719c196be41d36d52279410fe7d3593168c23f/
->        nios2 |                    efivar-0.23 | NOK | http://autobuild.buildroot.net/results/0b606389b8f8e15df94b1590d2cadb4129ec26be/
->          arm |                    efivar-0.23 | NOK | http://autobuild.buildroot.net/results/6687294e6a810bfceab507ab006acf821da8c730/
->     mips64el |                    efivar-0.23 | NOK | http://autobuild.buildroot.net/results/4edfd5541f0f3825dad61882b9c0694eb1c4717c/
->      aarch64 |                    efivar-0.23 | NOK | http://autobuild.buildroot.net/results/81e4a65b027eb973c53cc9af8053731ed5128c11/
->        nios2 |                    efivar-0.23 | NOK | http://autobuild.buildroot.net/results/23c675f2dac3f8cbcd4204c2cc7e35f2316eccc9/
->        nios2 |                    efivar-0.23 | NOK | http://autobuild.buildroot.net/results/97876f8d1fd01ac3e3711009a6ff56bc74b262a2/
->        nios2 |                    efivar-0.23 | NOK | http://autobuild.buildroot.net/results/65482edf8f72d8975eaeffd0756edc9ff733e592/
->          arm |                    efivar-0.23 | NOK | http://autobuild.buildroot.net/results/b82581b8030fa15442c0d44771103e27c04f7ca8/
->     mips64el |                    efivar-0.23 | NOK | http://autobuild.buildroot.net/results/c7aaf1599f7dd3a5e932bbdd4fe220964792af3d/
->      aarch64 |                    efivar-0.23 | NOK | http://autobuild.buildroot.net/results/421e03b9573a1971e0da080c8d42dd39b8f9400c/
->        nios2 |                    efivar-0.23 | NOK | http://autobuild.buildroot.net/results/283b501091890b77adcf6f030fb4955244a187df/
->     mips64el |                 flannel-v0.5.5 | NOK | http://autobuild.buildroot.net/results/d0b2452fa211ac5528dbd3357d50a6c66a99aa4a/
->     mips64el |                 flannel-v0.5.5 | NOK | http://autobuild.buildroot.net/results/083f679f65c31aae80d65684f4c39e517eaec234/
->     mips64el |                 flannel-v0.5.5 | NOK | http://autobuild.buildroot.net/results/dbe7777b8e70feec6102b74f30e215e8479ff710/
->          arm |                    fwup-v0.7.0 | NOK | http://autobuild.buildroot.net/results/30ad12bf0fe451aefb21cf59a76b059758746c2e/
->          arm |                    fwup-v0.7.0 | NOK | http://autobuild.buildroot.net/results/a1503e0a053bfd724f9085908d2df51db798d068/
-
-I fixed the fwup build issues upstream. The next release, which is
-imminent, will include them.
-
-Frank
+diff --git a/package/Config.in b/package/Config.in
+index 02cc3bd..65a11bc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -957,6 +957,7 @@ menu "Graphics"
+ 	source "package/libsvgtiny/Config.in"
+ 	source "package/libva/Config.in"
+ 	source "package/libva-intel-driver/Config.in"
++	source "package/libvdpau/Config.in"
+ 	source "package/libvips/Config.in"
+ 	source "package/menu-cache/Config.in"
+ 	source "package/opencv/Config.in"
+diff --git a/package/libvdpau/0001-missing-configh-include.patch b/package/libvdpau/0001-missing-configh-include.patch
+new file mode 100755
+index 0000000..f96c6fa
+--- /dev/null
++++ b/package/libvdpau/0001-missing-configh-include.patch
+@@ -0,0 +1,29 @@
++From: Rico Tzschichholz <ricotz@ubuntu.com>
++Date: Tue, 1 Sep 2015 10:45:11 +0200
++Subject: mesa_dri2: Add missing include of config.h to define _GNU_SOURCE
++
++Fix build with -Wimplicit-function-declaration while secure_getenv() is
++guarded by __USE_GNU.
++
++Reviewed-by: Aaron Plattner <aplattner@nvidia.com>
++Tested-by: Stefan Dirsch <sndirsch@suse.de>
++(cherry picked from commit 1cda354bdfd0c9ca107293b84b52f4464fdbedcc)
++Signed-off-by: Damien Lanson <damien@kal-host.com>
++---
++ src/mesa_dri2.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/src/mesa_dri2.c b/src/mesa_dri2.c
++index 51e8794..420ccee 100644
++--- a/src/mesa_dri2.c
+++++ b/src/mesa_dri2.c
++@@ -33,6 +33,9 @@
++  *   and Jos? Hiram Soltren (jsoltren at nvidia.com)
++  */
++ 
+++#ifdef HAVE_CONFIG_H
+++#include "config.h"
+++#endif
++ 
++ #define NEED_REPLIES
++ #include <X11/Xlibint.h>
+diff --git a/package/libvdpau/0002-link-with-libx11.patch b/package/libvdpau/0002-link-with-libx11.patch
+new file mode 100755
+index 0000000..4dd82e6
+--- /dev/null
++++ b/package/libvdpau/0002-link-with-libx11.patch
+@@ -0,0 +1,30 @@
++Subject: Link libvdpao with libX11 since it uses symbols from it
++Author: Russ Allbery <rra@debian.org>
++Forwarded: no
++
++libvdpau uses the symbols:
++
++    _XEatData
++    _XReply
++    _XFlush
++    _XReadPad
++    XFree
++
++which are provided by libX11, but wasn't linking with it directly, resulting
++in warnings during the package build (and possibly errors later with better
++linkers).
++
++Signed-off-by: Damien Lanson <damien@kal-host.com>
++
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -22,7 +22,8 @@ endif
++ libvdpau_la_LIBADD = \
++     $(DLOPEN_LIBS) \
++     $(PTHREAD_LIBS) \
++-    $(XEXT_LIBS)
+++    $(XEXT_LIBS) \
+++    $(X11_LIBS)
++ 
++ libvdpau_la_LDFLAGS = -version-info 1:0:0 -no-undefined
++ 
+diff --git a/package/libvdpau/0003-vdpau-module-searchpath.patch b/package/libvdpau/0003-vdpau-module-searchpath.patch
+new file mode 100755
+index 0000000..aecda74
+--- /dev/null
++++ b/package/libvdpau/0003-vdpau-module-searchpath.patch
+@@ -0,0 +1,45 @@
++From: Andreas Beckmann <debian@abeckmann.de>
++Subject: search the vdpau module in multiple directories
++ start searching the vdpau module in ${ORIGIN}/vdpau, then the MODULEDIR and
++ finally fall back to /usr/lib/vdpau
++
++Signed-off-by: Damien Lanson <damien@kal-host.com>
++
++--- a/src/vdpau_wrapper.c
+++++ b/src/vdpau_wrapper.c
++@@ -103,6 +103,13 @@ static char * _vdp_get_driver_name_from_
++     return driver_name;
++ }
++ 
+++static char const * _vdpau_module_search_paths[] = {
+++    "${ORIGIN}/vdpau",
+++    VDPAU_MODULEDIR,
+++    "/usr/lib/vdpau",
+++    NULL
+++};
+++
++ static VdpStatus _vdp_open_driver(
++     Display *             display,
++     int                   screen)
++@@ -117,6 +127,7 @@ static VdpStatus _vdp_open_driver(
++     char         vdpau_driver_lib[PATH_MAX];
++     char const * vdpau_trace;
++     char const * func_name;
+++    char const ** module_path;
++ 
++     vdpau_driver = secure_getenv("VDPAU_DRIVER");
++     if (vdpau_driver) {
++@@ -138,9 +146,11 @@ static VdpStatus _vdp_open_driver(
++ 
++     /* Fallback to VDPAU_MODULEDIR when VDPAU_DRIVER_PATH is not set,
++      * or if we fail to create the driver path/dlopen the library. */
++-    if (!_vdp_driver_dll) {
+++    for (module_path = _vdpau_module_search_paths;
+++         !_vdp_driver_dll && *module_path;
+++         ++module_path) {
++         if (snprintf(vdpau_driver_lib, sizeof(vdpau_driver_lib),
++-                     DRIVER_LIB_FORMAT, VDPAU_MODULEDIR, vdpau_driver) >=
+++                     DRIVER_LIB_FORMAT, *module_path, vdpau_driver) >=
++                 sizeof(vdpau_driver_lib)) {
++             fprintf(stderr, "Failed to construct driver path: path too long\n");
++         }
+diff --git a/package/libvdpau/Config.in b/package/libvdpau/Config.in
+new file mode 100755
+index 0000000..288bd1f
+--- /dev/null
++++ b/package/libvdpau/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_LIBVDPAU
++	bool "libvdpau"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	help
++          VDPAU is the Video Decode and Presentation API for UNIX.
++          It provides an interface to video decode acceleration and
++          presentation hardware present in modern GPUs.
++
++	  http://freedesktop.org/wiki/Software/VDPAU
++
++comment "libvdpau needs a toolchain w/ threads, C++"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+\ No newline at end of file
+diff --git a/package/libvdpau/libvdpau.hash b/package/libvdpau/libvdpau.hash
+new file mode 100755
+index 0000000..55dc6a7
+--- /dev/null
++++ b/package/libvdpau/libvdpau.hash
+@@ -0,0 +1,4 @@
++# From https://lists.freedesktop.org/archives/xorg-announce/2015-August/002630.html
++md5	2fa0b05a4f4d06791eec83bc9c854d14	libvdpau-1.1.1.tar.bz2
++sha1	86516e2a962fd34f65d49115d6ddf15fd912f579	libvdpau-1.1.1.tar.bz2
++sha256	857a01932609225b9a3a5bf222b85e39b55c08787d0ad427dbd9ec033d58d736	libvdpau-1.1.1.tar.bz2
+diff --git a/package/libvdpau/libvdpau.mk b/package/libvdpau/libvdpau.mk
+new file mode 100755
+index 0000000..917d153
+--- /dev/null
++++ b/package/libvdpau/libvdpau.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# libvdpau
++#
++################################################################################
++LIBVDPAU_VERSION = 1.1.1
++LIBVDPAU_SOURCE = libvdpau-$(LIBVDPAU_VERSION).tar.bz2
++LIBVDPAU_SITE = http://people.freedesktop.org/~aplattner/vdpau
++LIBVDPAU_LICENSE = MIT
++LIBVDPAU_LICENSE_FILES = COPYING
++LIBVDPAU_INSTALL_STAGING = YES
++
++#Autoreconf for patch 0002-link-with-libx11.patch
++LIBVDPAU_AUTORECONF = YES
++
++LIBVDPAU_DEPENDENCIES = xlib_libX11 xlib_libXext
++
++LIBVDPAU_CONF_OPTS = --with-module-dir=/usr/lib/vdpau
++
++ifeq ($(BR2_PACKAGE_XPROTO_DRI2PROTO),y)
++LIBVDPAU_DEPENDENCIES += xproto_dri2proto
++LIBVDPAU_CONF_OPTS += --enable-dri2
++else
++LIBVDPAU_CONF_OPTS += --disable-dri2
++endif
++
++$(eval $(autotools-package))
+\ No newline at end of file
+-- 
+1.7.10.4
