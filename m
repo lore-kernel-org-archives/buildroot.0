@@ -1,41 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Jun 2016 22:47:12 +0200
-Subject: [Buildroot] [git commit] package/boost: boost-metaparse depends on
-	boost-test
-Message-ID: <20160620205603.09C3881D8B@busybox.osuosl.org>
+Date: Mon, 20 Jun 2016 22:48:42 +0200
+Subject: [Buildroot] [git commit] build: fix umask test
+Message-ID: <20160620205603.1F3747FDBD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=052b46c6dcd689e8dc2e7dbe6e334a62c53e1bd1
+commit: https://git.buildroot.net/buildroot/commit/?id=3f4c72c60793ca6ada24ae85c3211b2ab178eb3b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The boost metaparse library depends on the test library:
-https://github.com/boostorg/metaparse/blob/master/build/Jamfile.v2
+Some shells' builtin umask does not print 2 leading 0's for the umask.
+Switching to bash is done anyway.
+This patch switches to bash before the umask test.
 
-The test library itself depends on MMU, therefore we need to propagate
-the dependency, fixes
-
-http://autobuild.buildroot.net/results/02f/02f98a50340ecae01f723ad48c2d54d9e28388f8/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boost/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ Makefile | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index fae4b5f..0cc9a58 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -115,6 +115,8 @@ config BR2_PACKAGE_BOOST_MATH
- 	bool "boost-math"
+diff --git a/Makefile b/Makefile
+index 3f5c3d3..78b44c5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,6 +24,11 @@
+ # You shouldn't need to mess with anything beyond this point...
+ #--------------------------------------------------------------
  
- config BR2_PACKAGE_BOOST_METAPARSE
-+	depends on BR2_USE_MMU # boost-test
-+	select BR2_PACKAGE_BOOST_TEST
- 	bool "boost-metaparse"
++# we want bash as shell
++SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
++	 else if [ -x /bin/bash ]; then echo /bin/bash; \
++	 else echo sh; fi; fi)
++
+ # Trick for always running with a fixed umask
+ UMASK = 0022
+ ifneq ($(shell umask),$(UMASK))
+@@ -227,11 +232,6 @@ else
+   Q = @
+ endif
  
- config BR2_PACKAGE_BOOST_MPI
+-# we want bash as shell
+-SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
+-	 else if [ -x /bin/bash ]; then echo /bin/bash; \
+-	 else echo sh; fi; fi)
+-
+ # kconfig uses CONFIG_SHELL
+ CONFIG_SHELL := $(SHELL)
+ 
