@@ -1,120 +1,128 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Jun 2016 23:01:59 +0200
-Subject: [Buildroot] [git commit] package/libdvdread: bump version to 5.0.3
-Message-ID: <20160619213724.08F6980489@busybox.osuosl.org>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 20 Jun 2016 01:46:11 -0300
+Subject: [Buildroot] [PATCH] tmux: bump to version 2.2
+Message-ID: <20160620044611.14225-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd816b77510326898b241e240a3c0ed3c0c9d628
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- remove patch already upstream 0001-remove-use-of-sys-cdefs.h.patch
+https://github.com/tmux/tmux/commit/7b085136a7291cbcdfcc53182fbd13aaca70306e
+- add new dependency on BR2_USE_WCHAR (version 2.2 uses mbtowc())
+- add new dependency on locale support
+- add note to help text about the need of a working UTF-8 locale
+- also rewrap help text to 72 characters
 
-Removed 0001-fix-os2-support.patch, applied upstream:
-https://code.videolan.org/videolan/libdvdread/commit/75f8601ee3b19d8914528860f7e1d2906df4a411
-
-Removed autoreconf, a configure script is now part of the upstream
-tarball.
-
-The script dvdread-config was removed:
-https://code.videolan.org/videolan/libdvdread/commit/9991d1720b824902628573abce89916700933c38
-
-Changed LIBDVDREAD_SITE according to the news post dating 13 Feb 2014
-from http://dvdnav.mplayerhq.hu/
-
-Enabled static build, tested using this defconfig:
-http://autobuild.buildroot.net/toolchains/configs/br-arm-full-static.config
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- package/libdvdread/0001-fix-os2-support.patch | 31 ---------------------------
- package/libdvdread/Config.in                  |  4 ----
- package/libdvdread/libdvdread.hash            |  4 ++--
- package/libdvdread/libdvdread.mk              |  9 +++-----
- 4 files changed, 5 insertions(+), 43 deletions(-)
+Some references about the UTF-8 thing:
+https://github.com/tmux/tmux/commit/0d6de44a37755f0e5046c04e19e4506a6d59e750
+https://github.com/tmux/tmux/commit/1f0b317088aaeb230d69f13f43ed63b7406c6fd1
+https://groups.google.com/forum/#!topic/tmux-users/BnMK0ijLSIE
+---
+ package/tmux/0001-remove-use-of-sys-cdefs.h.patch | 42 -----------------------
+ package/tmux/Config.in                            | 13 +++++--
+ package/tmux/tmux.hash                            |  2 +-
+ package/tmux/tmux.mk                              |  2 +-
+ 4 files changed, 13 insertions(+), 46 deletions(-)
+ delete mode 100644 package/tmux/0001-remove-use-of-sys-cdefs.h.patch
 
-diff --git a/package/libdvdread/0001-fix-os2-support.patch b/package/libdvdread/0001-fix-os2-support.patch
+diff --git a/package/tmux/0001-remove-use-of-sys-cdefs.h.patch b/package/tmux/0001-remove-use-of-sys-cdefs.h.patch
 deleted file mode 100644
-index 755bfaf..0000000
---- a/package/libdvdread/0001-fix-os2-support.patch
+index 929953f..0000000
+--- a/package/tmux/0001-remove-use-of-sys-cdefs.h.patch
 +++ /dev/null
-@@ -1,31 +0,0 @@
--configure: fix build on NIOS II platform
+@@ -1,42 +0,0 @@
+-From 29e4794ca396a8db8a468ec74559922d2af5a987 Mon Sep 17 00:00:00 2001
+-From: Nicholas Marriott <nicholas.marriott@gmail.com>
+-Date: Tue, 24 Nov 2015 18:46:50 +0000
+-Subject: [PATCH] -sys/queue.h in proc.c, and nuke the unnecessary C++ header
+- guards stuff and sys/cdefs.h in vis.h (it causes problems on some platforms).
+- Reported by someone on GitHub, issue 212.
 -
--NIOS II is a CPU architecture from Altera, which uses 'nios2' as the
--architecture part of the tuple. Unfortunately, 'nios2' matches the
--current '*os2*' test done by libdvdread's configure script to detect
--the OS/2 operating system. This leads to build issues as the build
--process of libdvdread then tries to use OS/2 specific compiler
--options, that do not exist in the gcc used for Linux/NIOS2.
+----
+-Backported from master upstream to fix musl build
+-https://github.com/tmux/tmux/commit/7b085136a7291cbcdfcc53182fbd13aaca70306e
 -
--To fix this, this patch makes the test for OS/2 a little bit more
--specific: in the case of the OS/2 operating system, the OS part of the
--tuple contains just 'os2' (confirmed by looking at config.guess and
--config.sub in the gnuconfig project). So using '*-os2-*' will properly
--match the OS/2 operating system but not the NIOS II architecture.
+-proc.c does not exist on version 2.1
 -
--Upstream-status: submitted
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+----
+- compat/vis.h | 5 -----
+- 1 file changed, 5 deletions(-)
 -
--Index: b/configure.ac
--===================================================================
----- a/configure.ac
--+++ b/configure.ac
--@@ -146,7 +146,7 @@
--   *cygwin*)
--     LDFLAGS="-no-undefined $LDFLAGS"
--     ;;
---  *os2*)
--+  *-os2-*)
--     LDFLAGS="-no-undefined -Zbin-files $LDFLAGS"
--     ;;
--   *)
-diff --git a/package/libdvdread/Config.in b/package/libdvdread/Config.in
-index 1326709..dea59eb 100644
---- a/package/libdvdread/Config.in
-+++ b/package/libdvdread/Config.in
-@@ -1,11 +1,7 @@
- config BR2_PACKAGE_LIBDVDREAD
- 	bool "libdvdread"
--	depends on !BR2_STATIC_LIBS
+-diff --git a/compat/vis.h b/compat/vis.h
+-index 6795139..9f12d23 100644
+---- a/compat/vis.h
+-+++ b/compat/vis.h
+-@@ -73,9 +73,6 @@
+-  */
+- #define	UNVIS_END	1	/* no more characters */
+- 
+--#include <sys/cdefs.h>
+--
+--__BEGIN_DECLS
+- char	*vis(char *, int, int, int);
+- int	strvis(char *, const char *, int);
+- int	stravis(char **, const char *, int);
+-@@ -85,6 +82,4 @@ int	strunvis(char *, const char *);
+- int	unvis(char *, char, int *, int);
+- ssize_t strnunvis(char *, const char *, size_t);
+- 
+--__END_DECLS
+--
+- #endif /* !_VIS_H_ */
+--- 
+-1.9.1
+-
+diff --git a/package/tmux/Config.in b/package/tmux/Config.in
+index 61719e4..756f38a 100644
+--- a/package/tmux/Config.in
++++ b/package/tmux/Config.in
+@@ -1,10 +1,19 @@
+ config BR2_PACKAGE_TMUX
+ 	bool "tmux"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_WCHAR # mbtowc()
++	depends on BR2_ENABLE_LOCALE # runtime
+ 	select BR2_PACKAGE_LIBEVENT
+ 	select BR2_PACKAGE_NCURSES
  	help
- 	  libdvdread provides a simple foundation for reading
- 	  DVD-Video images.
+-	  tmux is a terminal multiplexer, it enables a number of terminals
+-	  (or windows) to be accessed and controlled from a single terminal.
++	  tmux is a terminal multiplexer, it enables a number of
++	  terminals (or windows) to be accessed and controlled from a
++	  single terminal.
++
++	  NOTE: tmux needs a working UTF-8 locale (BR2_GENERATE_LOCALE)
  
- 	  http://www.mplayerhq.hu/MPlayer/releases/dvdnav/
--
--comment "libdvdread needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-diff --git a/package/libdvdread/libdvdread.hash b/package/libdvdread/libdvdread.hash
-index 11cc1ce..bef93fc 100644
---- a/package/libdvdread/libdvdread.hash
-+++ b/package/libdvdread/libdvdread.hash
+ 	  https://tmux.github.io/
++
++comment "tmux needs a toolchain w/ wchar, locale"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_ENABLE_LOCALE
+diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
+index e732aa2..f3cbe74 100644
+--- a/package/tmux/tmux.hash
++++ b/package/tmux/tmux.hash
 @@ -1,2 +1,2 @@
--# Locally calculated
--sha256	af9b98f049580a6521d56c978b736d3d609562dd12955e11d50e26d97542dcd4	libdvdread-4.2.1.tar.xz
-+# From http://download.videolan.org/pub/videolan/libdvdread/5.0.0/libdvdread-5.0.3.tar.bz2.sha256
-+sha256	321cdf2dbdc83c96572bc583cd27d8c660ddb540ff16672ecb28607d018ed82b	libdvdread-5.0.3.tar.bz2
-diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
-index 6658460..78ea292 100644
---- a/package/libdvdread/libdvdread.mk
-+++ b/package/libdvdread/libdvdread.mk
-@@ -4,13 +4,10 @@
+ # Locally computed:
+-sha256  31564e7bf4bcef2defb3cb34b9e596bd43a3937cad9e5438701a81a5a9af6176  tmux-2.1.tar.gz
++sha256  bc28541b64f99929fe8e3ae7a02291263f3c97730781201824c0f05d7c8e19e4  tmux-2.2.tar.gz
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index 40f1a13..1e1b2b7 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDVDREAD_VERSION = 4.2.1
--LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.xz
--LIBDVDREAD_SITE = http://dvdnav.mplayerhq.hu/releases
--# configure not shipped
--LIBDVDREAD_AUTORECONF = YES
-+LIBDVDREAD_VERSION = 5.0.3
-+LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.bz2
-+LIBDVDREAD_SITE = http://www.videolan.org/pub/videolan/libdvdread/$(LIBDVDREAD_VERSION)
- LIBDVDREAD_INSTALL_STAGING = YES
--LIBDVDREAD_CONFIG_SCRIPTS = dvdread-config
- LIBDVDREAD_LICENSE = GPLv2+
- LIBDVDREAD_LICENSE_FILES = COPYING
- 
+-TMUX_VERSION = 2.1
++TMUX_VERSION = 2.2
+ TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
+ TMUX_LICENSE = ISC
+ TMUX_LICENSE_FILES = README
+-- 
+2.9.0
