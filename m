@@ -1,58 +1,46 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Tue, 21 Jun 2016 08:37:17 -0400
-Subject: [Buildroot] [PATCH] fwup: disable documentation build
-In-Reply-To: <dcd45c085506be96cfcec71a7357ddeba84c2df3.1466511361.git.baruch@tkos.co.il>
-References: <dcd45c085506be96cfcec71a7357ddeba84c2df3.1466511361.git.baruch@tkos.co.il>
-Message-ID: <CA+-urNSj1yLeKcvY5Zpk5h+AfYP5J78k8k3crH_+ybk1=MQzWA@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 21 Jun 2016 15:28:51 +0100
+Subject: [Buildroot] [PATCH] efivar: disable for MIPS Sourcery CodeBench
+	toolchain
+Message-ID: <1466519331-42289-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+linux/nvme.h has been renamed to linux/nvme_ioctl.h since 4.4, and we
+have a patch to handle that situation. However, MIPS Sourcery CodeBench
+toolchain uses 4.4 kernel headers but doesn't have that header file
+renamed, and that is causing a build failure. So, prevent this package
+to be built using that toolchain.
 
-On Tue, Jun 21, 2016 at 8:16 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Documentation build with help2man relies on the output of running 'fwup
-> --help'. That obviously can't work with cross compilation.
+Fixes:
 
-Fwiw, there was a nearly identical patch a while ago that hasn't been
-merged yet:
+  http://autobuild.buildroot.net/results/66c/66cf68261fa73c2366610f8d14bd02180ba7cd2d/
 
-http://patchwork.ozlabs.org/patch/634937/
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/efivar/Config.in | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-I prefer your commit comment, but I'm fine with whichever one gets
-merged first. So,
-
-Tested-by: Frank Hunleth <fhunleth@troodon-software.com>
-
-Thanks,
-Frank
-
->
-> Fixes:
-> http://autobuild.buildroot.net/results/bdd/bdd8137973c37824f6aa9261ee307f6ed21b9166/
-> http://autobuild.buildroot.net/results/96a/96a53b3ec666bd09f09c8a3e5b31eff73e3dd0fa/
-> http://autobuild.buildroot.net/results/e0b/e0bcfaf9dd36d4992e507d18afeb1cec56048987/
->
-> Cc: Frank Hunleth <fhunleth@troodon-software.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/fwup/fwup.mk | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
-> index 7b007e1a9c8a..0a23856048b3 100644
-> --- a/package/fwup/fwup.mk
-> +++ b/package/fwup/fwup.mk
-> @@ -10,6 +10,7 @@ FWUP_LICENSE = Apache-2.0
->  FWUP_LICENSE_FILES = LICENSE
->  FWUP_DEPENDENCIES = libconfuse libarchive libsodium
->  FWUP_AUTORECONF = YES
-> +FWUP_CONF_ENV = ac_cv_path_HELP2MAN=""
->
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> --
-> 2.8.1
->
+diff --git a/package/efivar/Config.in b/package/efivar/Config.in
+index c507584..7cf2c14 100644
+--- a/package/efivar/Config.in
++++ b/package/efivar/Config.in
+@@ -1,6 +1,13 @@
+ config BR2_PACKAGE_EFIVAR
+ 	bool "efivar"
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # linux/nvme.h
++	# linux/nvme.h has been renamed to linux/nvme_ioctl.h since 4.4,
++	# and we have a patch to handle that situation. However, MIPS
++	# Sourcery CodeBench toolchain uses 4.4 kernel headers but
++	# doesn't have that header file renamed, and that is causing a
++	# build failure. So, prevent this package to be built using that
++	# toolchain.
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS
+ 	# doesn't build with uclibc due to lack of uchar.h
+ 	# doesn't build with musl due to lack of __bswap_constant_16
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+-- 
+2.7.3
