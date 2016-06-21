@@ -1,26 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 Jun 2016 13:48:05 +0200
-Subject: [Buildroot] [PATCH 2/2] gettext: install ABOUT-NLS for the host
-In-Reply-To: <CACt6We1majKpaUA3SB0CuVYKXsVFB_miM0PfbBwD2TqceOYN6w@mail.gmail.com>
- (Joris Lijssens's message of "Tue, 21 Jun 2016 13:27:19 +0200")
-References: <1466495278-30897-1-git-send-email-peter@korsgaard.com>
- <1466495278-30897-3-git-send-email-peter@korsgaard.com>
- <CACt6We1majKpaUA3SB0CuVYKXsVFB_miM0PfbBwD2TqceOYN6w@mail.gmail.com>
-Message-ID: <8737o6zrt6.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Jun 2016 13:51:37 +0200
+Subject: [Buildroot] [PATCH v6] openblas: new package
+In-Reply-To: <1466441142-52096-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1466441142-52096-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160621135137.45246fb7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joris" == Joris Lijssens <joris.lijssens@gmail.com> writes:
+Hello,
 
- > Hello Peter,
- > Will this patch fix the libuio <foo>_AUTORECONF=YES issue?
+On Mon, 20 Jun 2016 17:45:42 +0100, Vicente Olivert Riera wrote:
 
-Yes (almost). There's still a minor problem in configure.ac, but I'll
-reply to the patch with details later today.
+> +	default "ARMV7"        if BR2_cortex_a5 || BR2_cortex_a7 || \
+> +	                          BR2_cortex_a8 || BR2_cortex_a9 || \
+> +				  BR2_cortex_a12 || BR2_cortex_a17
 
+You can use BR2_ARM_CPU_ARMV7A instead here.
+
+Thomas
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
