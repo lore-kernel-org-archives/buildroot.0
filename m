@@ -1,77 +1,39 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Wed, 22 Jun 2016 09:19:31 +1000
-Subject: [Buildroot] [PATCH v2 2/5] Makefile: Generate %_defconfig
- recipes from macro.
-In-Reply-To: <67d0f049-0493-d915-80e0-603b5382bdf4@gmail.com>
-References: <cover.1466484997.git.sam.bobroff@au1.ibm.com>
- <469f863632a69c04b8522ad2a49c4efc50704ca6.1466484997.git.sam.bobroff@au1.ibm.com>
- <67d0f049-0493-d915-80e0-603b5382bdf4@gmail.com>
-Message-ID: <20160621231931.GB2392@tungsten.ozlabs.ibm.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 21 Jun 2016 20:20:49 -0300
+Subject: [Buildroot] [PATCH] gmp: bump to version 6.1.1
+Message-ID: <1466551249-9215-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 22, 2016 at 12:12:02AM +0200, Romain Naour wrote:
-> Hi Sam, All
-> 
-> Le 21/06/2016 ? 06:56, Sam Bobroff a ?crit :
-> > From: Patrick Williams <patrick@stwcx.xyz>
-> > 
-> > To reduce duplication in the %_defconfig recipes with $(TOPDIR) and
-> > $(BR2_EXTERNAL) versions, generate these from a macro.  The macro is
-> > now called on a list of directories containing the appropriate ones.
-> > 
-> > Signed-off-by: Patrick Williams <patrick@stwcx.xyz>
-> 
-> Your Sob is missing here and for the following patches, see
-> http://nightly.buildroot.org/manual.html#submitting-patches
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gmp/gmp.hash | 2 +-
+ package/gmp/gmp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Ah, thanks. I'll fix that for the next version.
-
-Cheers,
-Sam.
-
-> Best regards,
-> Romain
-> 
-> > ---
-> >  Makefile | 15 ++++++++-------
-> >  1 file changed, 8 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/Makefile b/Makefile
-> > index 9f3fc92..e78b9e2 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -842,13 +842,14 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> >  	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
-> >  
-> >  # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
-> > -%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
-> > -	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(TOPDIR)/configs/$@ \
-> > -		$< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
-> > +define CREATE_DEFCONFIG_RECIPES
-> > +%_defconfig: $$(BUILD_DIR)/buildroot-config/conf $1/%_defconfig outputmakefile
-> > +	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$$(TOPDIR)/configs/$$@ \
-> > +		$$< --defconfig=$1/$$@ $$(CONFIG_CONFIG_IN)
-> > +endef
-> >  
-> > -%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
-> > -	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
-> > -		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
-> > +BR2_DEFCONFIG_PATHS=$(TOPDIR)/configs $(BR2_EXTERNAL)/configs
-> > +$(foreach path,$(BR2_DEFCONFIG_PATHS),$(eval $(call CREATE_DEFCONFIG_RECIPES,$(path))))
-> >  
-> >  savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-> >  	@$(COMMON_CONFIG_ENV) $< \
-> > @@ -894,7 +895,7 @@ $(1): $$(BUILD_DIR)/buildroot-config/conf $(call CONFIG_FILE_LIST,$2 $3) outputm
-> >  	@rm -rf $$(CONFIG_DIR)/.merge_config
-> >  endef
-> >  
-> > -$(foreach d,$(TOPDIR)/configs $(BR2_EXTERNAL)/configs,$(eval -include $(d)/*.mk))
-> > +$(foreach d,$(BR2_DEFCONFIG_PATHS),$(eval -include $(d)/*.mk))
-> >  
-> >  ################################################################################
-> >  #
-> > 
+diff --git a/package/gmp/gmp.hash b/package/gmp/gmp.hash
+index e803623..9ea42e5 100644
+--- a/package/gmp/gmp.hash
++++ b/package/gmp/gmp.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	68dadacce515b0f8a54f510edf07c1b636492bcdb8e8d54c56eb216225d16989	gmp-6.1.0.tar.xz
++sha256	d36e9c05df488ad630fff17edb50051d6432357f9ce04e34a09b3d818825e831	gmp-6.1.1.tar.xz
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index 6a91a27..e74debf 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GMP_VERSION = 6.1.0
++GMP_VERSION = 6.1.1
+ GMP_SITE = $(BR2_GNU_MIRROR)/gmp
+ GMP_SOURCE = gmp-$(GMP_VERSION).tar.xz
+ GMP_INSTALL_STAGING = YES
+-- 
+2.7.3
