@@ -1,47 +1,37 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 21 Jun 2016 17:02:19 +0100
-Subject: [Buildroot] [git commit] efivar: new package
-In-Reply-To: <20160621175128.2db7e559@free-electrons.com>
-References: <20160612140155.BE24D8041E@busybox.osuosl.org>
- <57696022.2060308@imgtec.com> <20160621175128.2db7e559@free-electrons.com>
-Message-ID: <5769650B.6080604@imgtec.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Tue, 21 Jun 2016 12:46:53 -0400
+Subject: [Buildroot] [PATCH] erlang: enable compilation on mipsel
+Message-ID: <1466527613-31459-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/06/16 16:51, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 21 Jun 2016 16:41:22 +0100, Vicente Olivert Riera wrote:
-> 
->>> +comment "efivar requires an (e)glibc toolchain w/ headers >= 3.12"
->>> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
->>> +		!BR2_TOOLCHAIN_USES_GLIBC  
->>
->> shouldn't be
->>
->> comment "efivar requires an (e)glibc toolchain w/ headers >= 3.12"
->> 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
->> 		BR2_TOOLCHAIN_USES_GLIBC
->>
->> ...?
->>
->> The package is only compatible with glibc, so it depends on it. The
->> comment should depend on it as well.
-> 
-> No, we precisely want to display the comment when the user is *NOT*
-> using glibc, to inform him that the package is not available because he
-> is not using glibc.
+Erlang works fine on mipsel platforms so add it to the supported list.
 
-<facepalm>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
 
-of course, sorry for the noise.
+As a side note, one would hope that Erlang would work fine on mips, mips64
+and mipsel64, but I haven't found documentation of this yet and I can't
+verify it myself on real hw.
 
-Regards,
+ package/erlang/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Vincent.
+diff --git a/package/erlang/Config.in b/package/erlang/Config.in
+index 56cee54..11407db 100644
+--- a/package/erlang/Config.in
++++ b/package/erlang/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
+ 	# see HOWTO/INSTALL.md for Erlang's supported platforms
+ 	# when using its native atomic ops implementation
+ 	default y if BR2_i386 || BR2_x86_64 || BR2_powerpc || \
+-		BR2_sparc_v9 || BR2_arm || BR2_aarch64
++		BR2_sparc_v9 || BR2_arm || BR2_aarch64 || BR2_mipsel
 
-> Thomas
-> 
+ comment "erlang needs a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU # fork()
+--
+2.5.0
