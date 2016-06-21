@@ -1,70 +1,39 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 22 Jun 2016 00:12:02 +0200
-Subject: [Buildroot] [PATCH v2 2/5] Makefile: Generate %_defconfig
- recipes from macro.
-In-Reply-To: <469f863632a69c04b8522ad2a49c4efc50704ca6.1466484997.git.sam.bobroff@au1.ibm.com>
-References: <cover.1466484997.git.sam.bobroff@au1.ibm.com>
- <469f863632a69c04b8522ad2a49c4efc50704ca6.1466484997.git.sam.bobroff@au1.ibm.com>
-Message-ID: <67d0f049-0493-d915-80e0-603b5382bdf4@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 21 Jun 2016 20:09:03 -0300
+Subject: [Buildroot] [PATCH] libfuse: bump to version 2.9.7
+Message-ID: <1466550543-8385-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sam, All
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libfuse/libfuse.hash | 2 +-
+ package/libfuse/libfuse.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Le 21/06/2016 ? 06:56, Sam Bobroff a ?crit :
-> From: Patrick Williams <patrick@stwcx.xyz>
-> 
-> To reduce duplication in the %_defconfig recipes with $(TOPDIR) and
-> $(BR2_EXTERNAL) versions, generate these from a macro.  The macro is
-> now called on a list of directories containing the appropriate ones.
-> 
-> Signed-off-by: Patrick Williams <patrick@stwcx.xyz>
-
-Your Sob is missing here and for the following patches, see
-http://nightly.buildroot.org/manual.html#submitting-patches
-
-Best regards,
-Romain
-
-> ---
->  Makefile | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 9f3fc92..e78b9e2 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -842,13 +842,14 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->  	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
->  
->  # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
-> -%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
-> -	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(TOPDIR)/configs/$@ \
-> -		$< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
-> +define CREATE_DEFCONFIG_RECIPES
-> +%_defconfig: $$(BUILD_DIR)/buildroot-config/conf $1/%_defconfig outputmakefile
-> +	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$$(TOPDIR)/configs/$$@ \
-> +		$$< --defconfig=$1/$$@ $$(CONFIG_CONFIG_IN)
-> +endef
->  
-> -%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
-> -	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
-> -		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
-> +BR2_DEFCONFIG_PATHS=$(TOPDIR)/configs $(BR2_EXTERNAL)/configs
-> +$(foreach path,$(BR2_DEFCONFIG_PATHS),$(eval $(call CREATE_DEFCONFIG_RECIPES,$(path))))
->  
->  savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->  	@$(COMMON_CONFIG_ENV) $< \
-> @@ -894,7 +895,7 @@ $(1): $$(BUILD_DIR)/buildroot-config/conf $(call CONFIG_FILE_LIST,$2 $3) outputm
->  	@rm -rf $$(CONFIG_DIR)/.merge_config
->  endef
->  
-> -$(foreach d,$(TOPDIR)/configs $(BR2_EXTERNAL)/configs,$(eval -include $(d)/*.mk))
-> +$(foreach d,$(BR2_DEFCONFIG_PATHS),$(eval -include $(d)/*.mk))
->  
->  ################################################################################
->  #
-> 
+diff --git a/package/libfuse/libfuse.hash b/package/libfuse/libfuse.hash
+index d00d723..60bdf63 100644
+--- a/package/libfuse/libfuse.hash
++++ b/package/libfuse/libfuse.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	0cb48bbc7106632d15a0c6bb582496c9884b869e329428891fe075a9e916f16b	fuse-2.9.6.tar.gz
++sha256	832432d1ad4f833c20e13b57cf40ce5277a9d33e483205fc63c78111b3358874	fuse-2.9.7.tar.gz
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index 1709b56..57aabcd 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFUSE_VERSION = 2.9.6
++LIBFUSE_VERSION = 2.9.7
+ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
+ LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse-$(LIBFUSE_VERSION)
+ LIBFUSE_LICENSE = GPLv2, LGPLv2.1
+-- 
+2.7.3
