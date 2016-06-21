@@ -1,37 +1,20 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Tue, 21 Jun 2016 12:46:53 -0400
-Subject: [Buildroot] [PATCH] erlang: enable compilation on mipsel
-Message-ID: <1466527613-31459-1-git-send-email-fhunleth@troodon-software.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 21 Jun 2016 13:28:39 -0400
+Subject: [Buildroot] ptpd vs ptpd2
+Message-ID: <CANxTyt5W=FBwe6WkNKZ-+4g1oyC2h9=8m-hyECyi37hfOmbq3A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Erlang works fine on mipsel platforms so add it to the supported list.
+All,
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
+The ptpd Config.in cites: http://ptpd.sourceforge.net/ .  But when I
+go there, I get redirected to https://github.com/ptpd/ptpd .
 
-As a side note, one would hope that Erlang would work fine on mips, mips64
-and mipsel64, but I haven't found documentation of this yet and I can't
-verify it myself on real hw.
+The ptpd2 Config.in cites https://github.com/ptpd/ptpd directly.
 
- package/erlang/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Do we have two recipes for the same package?
 
-diff --git a/package/erlang/Config.in b/package/erlang/Config.in
-index 56cee54..11407db 100644
---- a/package/erlang/Config.in
-+++ b/package/erlang/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
- 	# see HOWTO/INSTALL.md for Erlang's supported platforms
- 	# when using its native atomic ops implementation
- 	default y if BR2_i386 || BR2_x86_64 || BR2_powerpc || \
--		BR2_sparc_v9 || BR2_arm || BR2_aarch64
-+		BR2_sparc_v9 || BR2_arm || BR2_aarch64 || BR2_mipsel
-
- comment "erlang needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU # fork()
---
-2.5.0
+Danomi -
