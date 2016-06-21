@@ -1,60 +1,43 @@
 From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Tue, 21 Jun 2016 14:56:42 +1000
-Subject: [Buildroot] [PATCH v2 2/5] Makefile: Generate %_defconfig recipes
-	from macro.
+Date: Tue, 21 Jun 2016 14:56:43 +1000
+Subject: [Buildroot] [PATCH v2 3/5] Makefile: Support nested config
+	directories
 In-Reply-To: <cover.1466484997.git.sam.bobroff@au1.ibm.com>
 References: <cover.1466484997.git.sam.bobroff@au1.ibm.com>
-Message-ID: <469f863632a69c04b8522ad2a49c4efc50704ca6.1466484997.git.sam.bobroff@au1.ibm.com>
+Message-ID: <0cb5b869db1fcf2c87e98ad5762dea488ca5a37e.1466484997.git.sam.bobroff@au1.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Patrick Williams <patrick@stwcx.xyz>
+From: Elizabeth Liner <eliner@us.ibm.com>
 
-To reduce duplication in the %_defconfig recipes with $(TOPDIR) and
-$(BR2_EXTERNAL) versions, generate these from a macro.  The macro is
-now called on a list of directories containing the appropriate ones.
+Extend the BR2_DEFCONFIG_PATH to support nested config directories.
+This allows us to place config files in both .../config and
+.../config/<arch>.
 
+Both $(TOPDIR) and $(BR2_EXTERNAL) are supported.
+
+Signed-off-by: Elizabeth Liner <eliner@us.ibm.com>
 Signed-off-by: Patrick Williams <patrick@stwcx.xyz>
 ---
- Makefile | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index 9f3fc92..e78b9e2 100644
+index e78b9e2..fd07f8c 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -842,13 +842,14 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
- 
- # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
--%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
--	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(TOPDIR)/configs/$@ \
--		$< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
-+define CREATE_DEFCONFIG_RECIPES
-+%_defconfig: $$(BUILD_DIR)/buildroot-config/conf $1/%_defconfig outputmakefile
-+	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$$(TOPDIR)/configs/$$@ \
-+		$$< --defconfig=$1/$$@ $$(CONFIG_CONFIG_IN)
-+endef
- 
--%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
--	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
--		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
-+BR2_DEFCONFIG_PATHS=$(TOPDIR)/configs $(BR2_EXTERNAL)/configs
-+$(foreach path,$(BR2_DEFCONFIG_PATHS),$(eval $(call CREATE_DEFCONFIG_RECIPES,$(path))))
- 
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< \
-@@ -894,7 +895,7 @@ $(1): $$(BUILD_DIR)/buildroot-config/conf $(call CONFIG_FILE_LIST,$2 $3) outputm
- 	@rm -rf $$(CONFIG_DIR)/.merge_config
+@@ -848,7 +848,8 @@ define CREATE_DEFCONFIG_RECIPES
+ 		$$< --defconfig=$1/$$@ $$(CONFIG_CONFIG_IN)
  endef
  
--$(foreach d,$(TOPDIR)/configs $(BR2_EXTERNAL)/configs,$(eval -include $(d)/*.mk))
-+$(foreach d,$(BR2_DEFCONFIG_PATHS),$(eval -include $(d)/*.mk))
+-BR2_DEFCONFIG_PATHS=$(TOPDIR)/configs $(BR2_EXTERNAL)/configs
++BR2_DEFCONFIG_PATHS=$(sort $(dir $(wildcard $(TOPDIR)/configs/*/))) \
++		$(sort $(dir $(wildcard $(BR2_EXTERNAL)/configs/*/)))
+ $(foreach path,$(BR2_DEFCONFIG_PATHS),$(eval $(call CREATE_DEFCONFIG_RECIPES,$(path))))
  
- ################################################################################
- #
+ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
 -- 
 2.1.0
