@@ -1,116 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Jun 2016 21:07:42 +0200
-Subject: [Buildroot] [PATCH 20/24 v2] package/skeleton-systemd: new package
+Date: Wed, 22 Jun 2016 21:07:34 +0200
+Subject: [Buildroot] [PATCH 12/24 v2] core/pkg-generic: add variable to skip
+	skeleton dependency
 In-Reply-To: <cover.1466622379.git.yann.morin.1998@free.fr>
 References: <cover.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <5869f5146ba204a0688058af4779ea4a1f7da13c.1466622379.git.yann.morin.1998@free.fr>
+Message-ID: <0d8ab7f21c35de1bb1a07ac839e84bdfc525e628.1466622379.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Given the very few things to create in the skeleton, there is no real
-need in having a pre-populated skeleton that we rsync. We can very well
-just create the directory structure with simple mkdir commands.
+We currently skip the skeleton dependency by checking if the current
+package is the skeleton.
+
+We are going to introduce more skeleton-related packages, so we
+need a way to exclude the skeleton dependency for those, or we'd
+get a circular dependency, for the same reason we need to skip
+the toolchain dependency.
+
+Instead of checking for all the skeleton-providing packages in the core
+infra, add a new package options so that packages can express they do
+not need the dependency on the skeleton, like we have an option to avoid
+the depednency on the toolchain. The only packages that will use that
+option are probably the skeletons, so we need not document this
+variable, like we did not document the option to exclude the dependency
+on the toolchain.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Config.in                            |  1 +
- package/skeleton-systemd/Config.in           |  7 +++++
- package/skeleton-systemd/skeleton-systemd.mk | 43 ++++++++++++++++++++++++++++
- system/Config.in                             |  3 +-
- 4 files changed, 53 insertions(+), 1 deletion(-)
- create mode 100644 package/skeleton-systemd/Config.in
- create mode 100644 package/skeleton-systemd/skeleton-systemd.mk
+ package/pkg-generic.mk       | 7 +++++--
+ package/skeleton/skeleton.mk | 1 +
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9db6332..17356fe 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -4,6 +4,7 @@ menu "Target packages"
- 	source "package/skeleton/Config.in"
- 	source "package/skeleton-common/Config.in"
- 	source "package/skeleton-custom/Config.in"
-+	source "package/skeleton-systemd/Config.in"
- 	source "package/skeleton-sysv/Config.in"
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 374d9d5..3281374 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -486,15 +486,18 @@ $(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)
  
- menu "Audio and video applications"
-diff --git a/package/skeleton-systemd/Config.in b/package/skeleton-systemd/Config.in
-new file mode 100644
-index 0000000..c507264
---- /dev/null
-+++ b/package/skeleton-systemd/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_SKELETON_SYSTEMD
-+	bool
-+	select BR2_PACKAGE_HAS_SKELETON
-+	select BR2_PACKAGE_SKELETON_COMMON
+ # When a target package is a toolchain dependency set this variable to
+ # 'NO' so the 'toolchain' dependency is not added to prevent a circular
+-# dependency
++# dependency.
++# Similarly for the skeleton.
+ $(2)_ADD_TOOLCHAIN_DEPENDENCY	?= YES
++$(2)_ADD_SKELETON_DEPENDENCY	?= YES
 +
-+config BR2_PACKAGE_PROVIDES_SKELETON
-+	default "skeleton-systemd" if BR2_PACKAGE_SKELETON_SYSTEMD
-diff --git a/package/skeleton-systemd/skeleton-systemd.mk b/package/skeleton-systemd/skeleton-systemd.mk
-new file mode 100644
-index 0000000..e781ce9
---- /dev/null
-+++ b/package/skeleton-systemd/skeleton-systemd.mk
-@@ -0,0 +1,43 @@
-+################################################################################
-+#
-+# skeleton-systemd
-+#
-+################################################################################
-+
-+SKELETON_SYSTEMD_SOURCE =
-+
-+SKELETON_SYSTEMD_PROVIDES = skeleton
-+
-+SKELETON_SYSTEMD_DEPENDENCIES = skeleton-common
-+
-+SKELETON_SYSTEMD_ADD_TOOLCHAIN_DEPENDENCY = NO
-+SKELETON_SYSTEMD_ADD_SKELETON_DEPENDENCY = NO
-+
-+# In case we're not using systemd-networkd, use the sysv-like network infra;
-+# otherwise, the necessary bits are installed by the systemd package.
-+ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),)
-+
-+define SKELETON_SYSTEMD_RSYNC_NETWORK
-+	 $(call SKELETON_RSYNC,system/skeleton-net,$(TARGET_DIR))
-+endef
-+
-+define SKELETON_SYSTEMD_SET_NETWORK
-+	ln -fs ../tmp/resolv.conf $(TARGET_DIR)/etc/resolv.conf
-+	mkdir -p $(TARGET_DIR)/etc/network/
-+	$(SKELETON_SET_NETWORK_IFUPDOWN_LOOPBACK)
-+	$(SKELETON_SET_NETWORK_IFUPDOWN_DHCP)
-+endef
-+SKELETON_SYSTEMD_TARGET_FINALIZE_HOOKS += SKELETON_SYSTEMD_SET_NETWORK
-+
-+endif # BR2_PACKAGE_SYSTEMD_NETWORKD not set
-+
-+define SKELETON_SYSTEMD_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/etc
-+	mkdir -p $(TARGET_DIR)/home
-+	mkdir -p $(TARGET_DIR)/srv
-+	mkdir -p $(TARGET_DIR)/var
-+	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
-+	$(SKELETON_SYSTEMD_RSYNC_NETWORK)
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/system/Config.in b/system/Config.in
-index 3792be2..17ce832 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -5,7 +5,8 @@ choice
  
- config BR2_ROOTFS_SKELETON_DEFAULT
- 	bool "default target skeleton"
--	select BR2_PACKAGE_SKELETON_SYSV
-+	select BR2_PACKAGE_SKELETON_SYSV    if !BR2_INIT_SYSTEMD
-+	select BR2_PACKAGE_SKELETON_SYSTEMD if BR2_INIT_SYSTEMD
- 	help
- 	  Use default target skeleton
+ ifeq ($(4),host)
+ $(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
+ 	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
+ endif
+ ifeq ($(4),target)
+-ifneq ($(1),skeleton)
++ifeq ($$($(2)_ADD_SKELETON_DEPENDENCY),YES)
+ $(2)_DEPENDENCIES += skeleton
+ endif
+ ifeq ($$($(2)_ADD_TOOLCHAIN_DEPENDENCY),YES)
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index e67a477..072d217 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -12,6 +12,7 @@ SKELETON_SOURCE =
+ # Hence, skeleton would depends on the toolchain and the toolchain would depend
+ # on skeleton.
+ SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
++SKELETON_ADD_SKELETON_DEPENDENCY = NO
  
+ # The skeleton also handles the merged /usr case in the sysroot
+ SKELETON_INSTALL_STAGING = YES
 -- 
 2.7.4
