@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jun 2016 10:32:28 +0200
-Subject: [Buildroot] [git commit] gmp: bump to version 6.1.1
-Message-ID: <20160622083404.996B28213A@busybox.osuosl.org>
+Date: Wed, 22 Jun 2016 10:31:35 +0200
+Subject: [Buildroot] [git commit] libfuse: bump to version 2.9.7
+Message-ID: <20160622083404.652608213A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc2c74d636828836f12086fad9737b553005e235
+commit: https://git.buildroot.net/buildroot/commit/?id=88841c5633ff331fb303893eca6dfd9f717c0276
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gmp/gmp.hash | 2 +-
- package/gmp/gmp.mk   | 2 +-
+ package/libfuse/libfuse.hash | 2 +-
+ package/libfuse/libfuse.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gmp/gmp.hash b/package/gmp/gmp.hash
-index e803623..9ea42e5 100644
---- a/package/gmp/gmp.hash
-+++ b/package/gmp/gmp.hash
+diff --git a/package/libfuse/libfuse.hash b/package/libfuse/libfuse.hash
+index d00d723..60bdf63 100644
+--- a/package/libfuse/libfuse.hash
++++ b/package/libfuse/libfuse.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256	68dadacce515b0f8a54f510edf07c1b636492bcdb8e8d54c56eb216225d16989	gmp-6.1.0.tar.xz
-+sha256	d36e9c05df488ad630fff17edb50051d6432357f9ce04e34a09b3d818825e831	gmp-6.1.1.tar.xz
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index e1d75dc..09753a0 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
+-sha256	0cb48bbc7106632d15a0c6bb582496c9884b869e329428891fe075a9e916f16b	fuse-2.9.6.tar.gz
++sha256	832432d1ad4f833c20e13b57cf40ce5277a9d33e483205fc63c78111b3358874	fuse-2.9.7.tar.gz
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index 1709b56..57aabcd 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GMP_VERSION = 6.1.0
-+GMP_VERSION = 6.1.1
- GMP_SITE = $(BR2_GNU_MIRROR)/gmp
- GMP_SOURCE = gmp-$(GMP_VERSION).tar.xz
- GMP_INSTALL_STAGING = YES
+-LIBFUSE_VERSION = 2.9.6
++LIBFUSE_VERSION = 2.9.7
+ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
+ LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse-$(LIBFUSE_VERSION)
+ LIBFUSE_LICENSE = GPLv2, LGPLv2.1
