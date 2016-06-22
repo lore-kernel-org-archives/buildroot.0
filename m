@@ -1,44 +1,36 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 22 Jun 2016 23:27:46 +0200
-Subject: [Buildroot] [PATCH v3 5/5] package/enlightenment: bump to 0.20.9
-In-Reply-To: <1466630866-28779-1-git-send-email-romain.naour@gmail.com>
-References: <1466630866-28779-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1466630866-28779-5-git-send-email-romain.naour@gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 22 Jun 2016 17:38:58 -0400
+Subject: [Buildroot] [PATCH 1/1] fs/tar: support passing long options to
+	tar
+In-Reply-To: <189e4068-b3b3-3152-b99b-9727f2f9485e@mind.be>
+References: <1466464689-29532-1-git-send-email-fhunleth@troodon-software.com>
+ <189e4068-b3b3-3152-b99b-9727f2f9485e@mind.be>
+Message-ID: <CA+-urNQVggor83ZSWLq2zAUtd2i88=TaLYMsKSQ2TMFED+j8GA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-v2: bump to 0.20.9
----
- package/enlightenment/enlightenment.hash | 4 ++--
- package/enlightenment/enlightenment.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Arnout,
 
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-index 66bdb49..fad14b7 100644
---- a/package/enlightenment/enlightenment.hash
-+++ b/package/enlightenment/enlightenment.hash
-@@ -1,2 +1,2 @@
--# From https://phab.enlightenment.org/phame/live/3/post/e19_14_release/
--sha256	8906e762f0d953752bfe002663280a855da9bb74acf613424c517b78a8dde407	enlightenment-0.19.14.tar.xz
-+# From https://www.enlightenment.org/news/e-0.20.9-release
-+sha256	db792ad4d97b2523ff0bfc2c911bb3fea4b1eda60400871f4b78bc3ae2f1d1be 	enlightenment-0.20.9.tar.xz
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index a756361..6fe8f45 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ENLIGHTENMENT_VERSION = 0.19.14
-+ENLIGHTENMENT_VERSION = 0.20.9
- ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
- ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2c
--- 
-2.5.5
+On Wed, Jun 22, 2016 at 5:20 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 21-06-16 01:18, Frank Hunleth wrote:
+>> This change modifies how options are passed to tar to support long
+>> options. Unfortunately, it breaks configurations that previously used
+>> this feature. Before the change, options were passed using the
+>> single-letter without a '-' form. E.g., if the user wanted to turn on
+>> verbose output, they would have to specify 'v'. With this change, the
+>> user would need to pass '-v'. The help text is updated to make the
+>> requirement more clear.
+>
+>  I may be mistaken, but wouldn't we conserve full backward compatibility by using
+>
+>         tar $(TAR_OPTS) -cf ...
+
+I got confused since tar's man page looks like it wants the "operation
+mode" parameter first. Your proposal works for the options that I want
+to use, though. I'll update my patch.
+
+Thanks,
+Frank
