@@ -1,37 +1,128 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jun 2016 16:59:23 +0200
-Subject: [Buildroot] [git commit] openssl: disable assembly for ARMv7M
-Message-ID: <20160622150205.369C281EB2@busybox.osuosl.org>
+Date: Wed, 22 Jun 2016 17:01:07 +0200
+Subject: [Buildroot] [git commit] strace: fix build with kernel headers
+	before v3.11
+Message-ID: <20160622150205.4D0CB81EB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc89c4c5b0c9540d1935cd6a945b3a0908946db3
+commit: https://git.buildroot.net/buildroot/commit/?id=aed1ac36ecfc834618a0210e70bfbbff68c02e51
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It requires interwork and v7M is thumb-only. Fixes:
-http://autobuild.buildroot.net/results/55d/55dc9d6826defd2c9048c2991019d4d573d34af4/
+Add upstream patch with fixes for missing btrfs ioctl macros.
 
-[Peter: use R2_ARM_CPU_HAS_ARM for logic]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+http://autobuild.buildroot.net/results/fd6/fd6e8b6386c3d3170168608c49a0efde7b7fa269/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssl/openssl.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ ...de-fallback-definitions-for-BTRFS_IOC_QUO.patch | 97 ++++++++++++++++++++++
+ 1 file changed, 97 insertions(+)
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 2368aa9..e34868e 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -34,7 +34,8 @@ OPENSSL_DEPENDENCIES += ocf-linux
- endif
- 
- # Some architectures are optimized in OpenSSL
--ifeq ($(ARCH),arm)
-+# Doesn't work for thumb-only (Cortex-M?)
-+ifeq ($(BR2_ARM_CPU_HAS_ARM),y)
- OPENSSL_TARGET_ARCH = armv4
- endif
- ifeq ($(ARCH),aarch64)
+diff --git a/package/strace/0001-btrfs-provide-fallback-definitions-for-BTRFS_IOC_QUO.patch b/package/strace/0001-btrfs-provide-fallback-definitions-for-BTRFS_IOC_QUO.patch
+new file mode 100644
+index 0000000..e526661
+--- /dev/null
++++ b/package/strace/0001-btrfs-provide-fallback-definitions-for-BTRFS_IOC_QUO.patch
+@@ -0,0 +1,97 @@
++From fe7a451e5accf78c16ac9e65381d257924b266ed Mon Sep 17 00:00:00 2001
++From: "Dmitry V. Levin" <ldv@altlinux.org>
++Date: Fri, 17 Jun 2016 03:02:46 +0300
++Subject: [PATCH] btrfs: provide fallback definitions for
++ BTRFS_IOC_QUOTA_RESCAN*
++
++<linux/btrfs.h> was introduced in linux v3.9-rc1 while some
++of btrfs ioctls were added later, e.g. BTRFS_IOC_QUOTA_RESCAN
++and BTRFS_IOC_QUOTA_RESCAN_STATUS in v3.10-rc2,
++or BTRFS_IOC_QUOTA_RESCAN_WAIT in v3.11-rc1.
++
++* btrfs.c [!BTRFS_IOC_QUOTA_RESCAN]
++(struct btrfs_ioctl_quota_rescan_args): New structure.
++(BTRFS_IOC_QUOTA_RESCAN, BTRFS_IOC_QUOTA_RESCAN_STATUS): New macros.
++[!BTRFS_IOC_QUOTA_RESCAN_WAIT] (BTRFS_IOC_QUOTA_RESCAN_WAIT): New macro.
++* tests/btrfs.c: Likewise.
++
++Reported-by: Li Er <phoooyb@gmail.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Patch status: upstream commit fe7a451e5accf78c16ac9e65381d257924b266ed
++
++ btrfs.c       | 18 ++++++++++++++++--
++ tests/btrfs.c | 14 ++++++++++++++
++ 2 files changed, 30 insertions(+), 2 deletions(-)
++
++diff --git a/btrfs.c b/btrfs.c
++index 04c71fc3480d..f94565bc4e6b 100644
++--- a/btrfs.c
+++++ b/btrfs.c
++@@ -83,6 +83,20 @@ struct btrfs_ioctl_defrag_range_args {
++ # define BTRFS_FIRST_FREE_OBJECTID 256ULL
++ #endif
++ 
+++#ifndef BTRFS_IOC_QUOTA_RESCAN
+++struct btrfs_ioctl_quota_rescan_args {
+++	uint64_t flags, progress, reserved[6];
+++};
+++# define BTRFS_IOC_QUOTA_RESCAN _IOW(BTRFS_IOCTL_MAGIC, 44, \
+++					struct btrfs_ioctl_quota_rescan_args)
+++# define BTRFS_IOC_QUOTA_RESCAN_STATUS _IOR(BTRFS_IOCTL_MAGIC, 45, \
+++					struct btrfs_ioctl_quota_rescan_args)
+++#endif
+++
+++#ifndef BTRFS_IOC_QUOTA_RESCAN_WAIT
+++# define BTRFS_IOC_QUOTA_RESCAN_WAIT _IO(BTRFS_IOCTL_MAGIC, 46)
+++#endif
+++
++ #ifndef BTRFS_IOC_GET_FEATURES
++ # define BTRFS_IOC_GET_FEATURES _IOR(BTRFS_IOCTL_MAGIC, 57, \
++ 					struct btrfs_ioctl_feature_flags)
++@@ -1024,7 +1038,7 @@ MPERS_PRINTER_DECL(int, btrfs_ioctl,
++ 		if (umove_or_printaddr(tcp, arg, &args))
++ 			break;
++ 
++-		tprintf("{flags=%" PRI__u64 "}", args.flags);
+++		tprintf("{flags=%" PRIu64 "}", (uint64_t) args.flags);
++ 		break;
++ 	}
++ 
++@@ -1038,7 +1052,7 @@ MPERS_PRINTER_DECL(int, btrfs_ioctl,
++ 		if (umove_or_printaddr(tcp, arg, &args))
++ 			break;
++ 
++-		tprintf("{flags=%" PRI__u64 ", progress=", args.flags);
+++		tprintf("{flags=%" PRIu64 ", progress=", (uint64_t) args.flags);
++ 		btrfs_print_objectid(args.progress);
++ 		tprints("}");
++ 		break;
++diff --git a/tests/btrfs.c b/tests/btrfs.c
++index 4014c883c301..45aa08fc4e44 100644
++--- a/tests/btrfs.c
+++++ b/tests/btrfs.c
++@@ -72,6 +72,20 @@ const unsigned char uuid_reference[BTRFS_UUID_SIZE] = {
++ 
++ const char uuid_reference_string[] = "01234567-89ab-cdef-fedc-ba9876543210";
++ 
+++#ifndef BTRFS_IOC_QUOTA_RESCAN
+++struct btrfs_ioctl_quota_rescan_args {
+++	uint64_t flags, progress, reserved[6];
+++};
+++# define BTRFS_IOC_QUOTA_RESCAN _IOW(BTRFS_IOCTL_MAGIC, 44, \
+++					struct btrfs_ioctl_quota_rescan_args)
+++# define BTRFS_IOC_QUOTA_RESCAN_STATUS _IOR(BTRFS_IOCTL_MAGIC, 45, \
+++					struct btrfs_ioctl_quota_rescan_args)
+++#endif
+++
+++#ifndef BTRFS_IOC_QUOTA_RESCAN_WAIT
+++# define BTRFS_IOC_QUOTA_RESCAN_WAIT _IO(BTRFS_IOCTL_MAGIC, 46)
+++#endif
+++
++ #ifndef BTRFS_IOC_GET_FEATURES
++ # define BTRFS_IOC_GET_FEATURES _IOR(BTRFS_IOCTL_MAGIC, 57, \
++                                    struct btrfs_ioctl_feature_flags)
++-- 
++2.8.1
++
