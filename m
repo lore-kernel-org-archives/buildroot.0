@@ -1,20 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jun 2016 10:33:20 +0200
-Subject: [Buildroot] [PATCH] busybox: bump to version 1.25.0
-In-Reply-To: <1466555160-19844-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 21 Jun 2016 21:26:00 -0300")
-References: <1466555160-19844-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <878txxy65r.fsf@dell.be.48ers.dk>
+Date: Wed, 22 Jun 2016 10:33:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/Config.in: fix alphabetical
+	order
+In-Reply-To: <1466575624-4876-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ (Jerzy Grzegorek's message of "Wed, 22 Jun 2016 08:07:04 +0200")
+References: <1466575624-4876-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <874m8ly655.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
 
- > Also drop upstream patches.
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 
 Committed, thanks.
 
