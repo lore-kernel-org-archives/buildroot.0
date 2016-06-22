@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jun 2016 10:31:56 +0200
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.12.x series
-In-Reply-To: <1466550581-25013-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 21 Jun 2016 20:09:41 -0300")
-References: <1466550581-25013-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87h9cly683.fsf@dell.be.48ers.dk>
+Date: Wed, 22 Jun 2016 10:32:01 +0200
+Subject: [Buildroot] [PATCH] gmp: bump to version 6.1.1
+In-Reply-To: <1466551249-9215-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 21 Jun 2016 20:20:49 -0300")
+References: <1466551249-9215-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d1n9y67y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
