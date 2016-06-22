@@ -1,31 +1,49 @@
 From: Jordan Yelloz <jordan@yelloz.me>
-Date: Wed, 22 Jun 2016 14:01:23 -0700
-Subject: [Buildroot] [PATCH 0/2] swupdate: customization of default website
-	path
-Message-ID: <20160622210125.18930-1-jordan@yelloz.me>
+Date: Wed, 22 Jun 2016 14:01:25 -0700
+Subject: [Buildroot] [PATCH 2/2] swupdate: updated help of INSTALL_WEBSITE
+	config
+In-Reply-To: <20160622210125.18930-1-jordan@yelloz.me>
+References: <20160622210125.18930-1-jordan@yelloz.me>
+Message-ID: <20160622210125.18930-3-jordan@yelloz.me>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch allows for customization of the destination directory of the
-swupdate default webserver static files. Some configurations use a read-only
-rootfs and have a tmpfs mounted on /var so /var/www/swupdate is not an option
-for those systems. The newly added option allows users to install the website
-files in somewhere more stable like a subdirectory of /usr/share/swupdate or
-/usr/share/factory in the case of a volatile /var.
+Some explanation was added about how to use the new configuration option
+and how to properly run the swupdate website using the package-installed
+website data.
 
-The previous fixed value of /var/www/swupdate is preserved as the default so
-this change shouldn't disturb any existing configurations.
+Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
+---
+ package/swupdate/Config.in | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-Jordan Yelloz (2):
-  swupdate: allowed website install path
-  swupdate: updated help of INSTALL_WEBSITE config
-
- package/swupdate/Config.in   | 22 ++++++++++++++++++----
- package/swupdate/swupdate.mk | 11 ++++++++---
- 2 files changed, 26 insertions(+), 7 deletions(-)
-
+diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
+index bc90a2f..7896b84 100644
+--- a/package/swupdate/Config.in
++++ b/package/swupdate/Config.in
+@@ -46,11 +46,16 @@ config BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE
+ 	bool "install default website"
+ 	default y
+ 	help
+-	  Install the provided website to /var/www/swupdate.
++	  Install the provided website.
+ 
+-	  This is necessary if you want to run swupdate with the embedded
+-	  webserver and do not provide an own website to be installed to
+-	  /var/www/swupdate.
++	  This is necessary if you want to run swupdate with the embedded webserver
++	  and do not provide a custom website to be installed in your rootfs.
++
++	  You can customize the installation path of the static website data with
++	  the symbol BR2_PACKAGE_SWUPDATE_WEBSITE_PATH and add that as an option to
++	  the mongoose server when running swupdate using an invocation similar to:
++
++	  swupdate -w '-document_root /var/www/swupdate'
+ 
+ if BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE
+ 
 -- 
 2.9.0
