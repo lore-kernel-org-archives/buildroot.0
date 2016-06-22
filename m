@@ -1,67 +1,50 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 22 Jun 2016 22:38:38 +0200
-Subject: [Buildroot] [PATCH] glibc: bump default to version 2.23
-In-Reply-To: <877fdhw8ek.fsf@dell.be.48ers.dk>
-References: <1466590187-21862-1-git-send-email-gustavo@zacarias.com.ar>
- <87r3bpwa02.fsf@dell.be.48ers.dk>
- <42d8119e5e64c7a67018770b3f029146@zacarias.com.ar>
- <20160622171317.79fbea7e@free-electrons.com>
- <312f3b85fab01ed234da9ff79ac982d0@zacarias.com.ar>
- <877fdhw8ek.fsf@dell.be.48ers.dk>
-Message-ID: <57d9d2a6-9bcc-c512-4e09-6eb8f8958c76@mind.be>
+Date: Wed, 22 Jun 2016 22:57:38 +0200
+Subject: [Buildroot] Patchwork cleanup week #24
+In-Reply-To: <20160615220634.67eb8fa9@free-electrons.com>
+References: <20160615220634.67eb8fa9@free-electrons.com>
+Message-ID: <f767a47d-6908-ba5c-5884-60b572503a27@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22-06-16 17:27, Peter Korsgaard wrote:
->>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+On 15-06-16 22:06, Thomas Petazzoni wrote:
+>  3. toolchain-wrapper: prevent use of unsupported -fstack-protector*
+>     http://patchwork.ozlabs.org/patch/545315/
 > 
->  > On 2016-06-22 12:13, Thomas Petazzoni wrote:
->  >> Default to n-1 has been our tradition for gcc/binutils/glibc for ages.
->  >> 
->  >>> We're using latest uclibc-ng if it's suitable/for example.
->  >> 
->  >> Cause uclibc-ng doesn't evolve much beyond bug fixes at the moment, so
->  >> there's not really a good reason to not use the latest version.
->  >> 
->  >> Thomas
+>     This patch proposes to make the toolchain wrapper fail immediately
+>     when -fstack-protector is passed to gcc, but SSP support is not
+>     available. This helps with some packages that assume that compiling
+>     with -fstack-protector is enough to determine if SSP support is
+>     available, while in several cases, doing a link test is necessary.
 > 
->  > Hi.
->  > There are outstanding security bugs that haven't been patched in
->  > buildroot for 22/23 yet which are fixed in the upcoming 24 release,
->  > and 22 has fixes on top of 23 already.
->  > And these patches need rebasing between 22 and 23, so i'd rather keep
->  > moving forward with them than backward.
->  > By introducing 23 as stable sooner in the development cycle rather
->  > than later we can spot issues quicker while also avoiding unnecessary
->  > work in backporting security patches across a broader spectrum.
->  > Regards.
+>     I personally don't really like this change, as I believe it's
+>     adding even more sorcery to our toolchain wrapper. Instead, the
+>     problematic upstream packages should be fixed. Plus, at the time,
+>     we had a few packages in this situation, but nowadays, I don't
+>     think we have build failures due to this.
 > 
-> I don't have an issue as such with us more aggressively following glibc
-> development if we decide to do so, but this kind of information should
-> be included in the commit message.
+>     So, my proposal would be to reject this patch.
 
- My take on this: we should follow the stable branch of upstream. Since glibc
-has no concept of stable branches (in fact, none of the libc's do), we really
-should follow upstream releases aggressively.
+ I originally advocated for this patch (see
+https://patchwork.ozlabs.org/patch/543115/ ). My reasoning was that it's very
+hard to write a reliable test for stackprotector, because optimisations can
+easily elide so much from the test that the stackprotector disappears.
+Therefore, a test that works fine for the current compiler may break down with
+future gcc releases.
 
- In fact, I think it's quite unreasonable that we don't have stable updates for
-glibc (or any other libc). As a distro, it's our responsibility to make sure our
-users get stable updates, particularly for something as important as glibc.
-Since we (currently) don't have the bandwidth to do that, and since there simply
-is no viable upstream to rely on [*], we should probably consider dropping the
-multi-version glibc... Topic for discussion at the next BR developer meeting.
+ Also, I prefer to be able to resolve entire classes of build problems rather
+than patching individual packages. The toolchain wrapper is a clear example of
+this: it only exists because packages don't reliable handle CFLAGS, otherwise we
+could just pass --sysroot etc. in CFLAGS.
 
+ On the other hand, for this particular case, autobuilder errors will appear for
+failing packages, so at least it's not a hidden issue.
 
  Regards,
  Arnout
-
- [*] I've checked if we could use another distro, but most are on glibc 2.19...
-Debian would be an option for glibc 2.22, but for 2.23 and 2.24 there will
-probably no viable distro.
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
