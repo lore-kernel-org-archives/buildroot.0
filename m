@@ -1,35 +1,33 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Wed, 22 Jun 2016 19:00:16 +0200
-Subject: [Buildroot] [PATCH v2] fftw: Disable combined threads when building
-	with OpenMP support
-Message-ID: <1466614816-24785-1-git-send-email-nerv@dawncrow.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 22 Jun 2016 20:40:40 +0300
+Subject: [Buildroot] [PATCH] gflags: put hash in .hash file
+Message-ID: <667566b6818e789a6a47731019ad964a9c887c48.1466617240.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Otherwise fftw fails to configure:
-configure: error: --with-combined-threads incompatible with --enable-openmp
+github archives should be stable now.
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+Fixes:
+http://autobuild.buildroot.net/results/ac9/ac92ec88c9e26df579a5e44f58c34a3e4dd5b2b0/
+http://autobuild.buildroot.net/results/79c/79cecd4fa98bdad5b5bdc57725d8cb8118b1cf2e/
+http://autobuild.buildroot.net/results/bb2/bb2e04a643784beb78f38c016a1c621786b575fe/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/fftw/fftw.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/gflags/gflags.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-index 5045ab6..e89671f 100644
---- a/package/fftw/fftw.mk
-+++ b/package/fftw/fftw.mk
-@@ -31,7 +31,8 @@ FFTW_CFLAGS += $(if $(BR2_PACKAGE_FFTW_USE_NEON),-mfpu=neon)
- 
- # Generic optimisations
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--FFTW_CONF_OPTS += --enable-threads --with-combined-threads
-+FFTW_CONF_OPTS += --enable-threads
-+FFTW_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--without,--with)-combined-threads
- else
- FFTW_CONF_OPTS += --disable-threads
- endif
+diff --git a/package/gflags/gflags.hash b/package/gflags/gflags.hash
+index 9c8b27a4b529..5b224113d981 100644
+--- a/package/gflags/gflags.hash
++++ b/package/gflags/gflags.hash
+@@ -1,2 +1,2 @@
+-# No hash for v2.1.2, comes from the github-helper:
+-none	xxx	gflags-v2.1.2.tar.gz
++# Locally computed
++sha256	d8331bd0f7367c8afd5fcb5f5e85e96868a00fd24b7276fa5fcee1e5575c2662	gflags-v2.1.2.tar.gz
 -- 
-2.7.4
+2.8.1
