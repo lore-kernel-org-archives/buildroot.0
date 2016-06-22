@@ -1,12 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Jun 2016 23:01:57 +0200
-Subject: [Buildroot] [PATCH 07/13 v7] support/apply-patches: bail-out on
- duplicate patch basenames
-In-Reply-To: <e2fdd776-d144-a0e5-61a6-89c5217e1013@mind.be>
+Date: Wed, 22 Jun 2016 23:03:37 +0200
+Subject: [Buildroot] [PATCH 08/13 v7] core/legal-info: also save patches
+In-Reply-To: <ccdce217-9f73-d90a-933d-f0eeddd5eb5a@mind.be>
 References: <cover.1462637351.git.yann.morin.1998@free.fr>
- <648b1696ba75005d025780eb2ff64e8b9731a266.1462637351.git.yann.morin.1998@free.fr>
- <e2fdd776-d144-a0e5-61a6-89c5217e1013@mind.be>
-Message-ID: <20160622210157.GB3691@free.fr>
+ <d280d1c64b43031e31feef82091e5bb59ba43d86.1462637351.git.yann.morin.1998@free.fr>
+ <ccdce217-9f73-d90a-933d-f0eeddd5eb5a@mind.be>
+Message-ID: <20160622210337.GC3691@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,94 +14,139 @@ To: buildroot@busybox.net
 
 Arnout, All,
 
-On 2016-05-07 22:16 +0200, Arnout Vandecappelle spake thusly:
+On 2016-05-07 22:36 +0200, Arnout Vandecappelle spake thusly:
 > On 05/07/16 18:14, Yann E. MORIN wrote:
-> >Patches we save can come from various locations;
-> >  - bundled with Buildroot
-> >  - downloaded
-> >  - from one or more global-patch-dir
+> >Currently, the legal-info infra only saves the source archive of a
+> >package. However, that's not enough as we may apply some patches on
+> >packages sources.
 > >
-> >It is possible that two patches lying into different locations have the
-> >same basename, like so (first is bundled, second is from an hypothetical
-> >global-patch-dir):
-> >    package/foo/0001-fix-Makefile.patch
-> >    /path/to/my/patches/foo/0001-fix-Makefile.patch
+> >We do suggest users to also redistribute the Buildroot sources as part
+> >of their compliance distribution, so the patches bundled in Buildroot
+> >would indeed be included in the compliance distribution.
 > >
-> >In that case, when running legal-info, we'd save only the second patch,
-> >overwriting the first. That would be oproblematic, because:
+> >However, that's still not enough, since we may download some patches, or
+> >the user may use a global patch directory. Patches in there might not
+> >end up in the compliance distribution, and there are risks of
+> >non-conformity.
 > >
-> >  - either the second patch depends on the first, and thus would no longer
-> >    apply (this is easy to detect, though),
+> >So, always include patches alongside the source archive.
 > >
-> >  - or the second patch does not dpend on the first, and the compliance
-> >    delivery will not be complete (this is much arder to detect).
+> >To ensure reproducibility, we also generate a series file, so patches
+> >can be re-applied in the correct order.
 > >
-> >We fix that by checking that no two patches have the same same basename.
-> >If we find that the basename of the patch to be applied collides with
-> >that of a previously applied patch, we error out and report the duplicate.
+> >We get the list of patches to include from the list of patches that were
+> >applied by the package infrastructure (via the apply-patches support
+> >script). So, we need to get packages properly extracted and patched
+> >before we can save their legal-info, not just in the case they define
+> >_LICENSE_FILES.
 > >
-> >The unfortunate side-effect is that existing setups will now break in
-> >that situation, but that's a minor, corner-case issue that is easily
-> >fixed.
+> >Update the legal-info header accordingly.
+> >
+> >Note: this means that, when a package is not patched and defines no
+> >LICENSE_FILES, we will extract and patch it for nothing. There is no
+> >easy way to know whether we have to patch a package or not. We can only
+> >either duplicate the logic to detect patches (bad) or rely on the infra
+> >actually patching the package. Also, a vast majority of packages are
+> >either patched, or define _LICENSE_FILES, so it is best and easiest to
+> >always extract and patch them prior to legal-info.
 > >
 > >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > >Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> >Cc: Arnout Vandecappelle <arnout@mind.be>
-> >Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> >Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+> >Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 > 
 > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > 
+>  But...
 > 
->  Regards,
->  Arnout
+> >
+> >---
+> >Changes v6 -> v7:
+> >  - directly call the helper
+> >
+> >Changes v3 -> v4:
+> >  - typo  (Luca)
+> >
+> >Changes v2 -> v3:
+> >  - also mention that patches have been saved  (Luca)
+> >
+> >Changes v1 -> v2:
+> >  - don't recompute rawname-version needlessly  (Luca)
+> >---
+> > package/pkg-generic.mk           | 15 ++++++++++-----
+> > support/legal-info/README.header |  9 +++++----
+> > 2 files changed, 15 insertions(+), 9 deletions(-)
+> >
+> >diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> >index 7a86355..13455d1 100644
+> >--- a/package/pkg-generic.mk
+> >+++ b/package/pkg-generic.mk
+> >@@ -749,12 +749,10 @@ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
+> > endif
+> > $(2)_MANIFEST_LICENSE_FILES ?= not saved
+> >
+> >-# If the package declares _LICENSE_FILES, we need to extract it,
+> >-# for overriden, local or normal remote packages alike, whether
+> >-# we want to redistribute it or not.
+> >-ifneq ($$($(2)_LICENSE_FILES),)
+> >+# We need to extract and patch a package to be able to retrieve its
+> >+# license files (if any) and the list of patches applied to it (if
+> >+# any).
+> > $(1)-legal-info: $(1)-patch
+> >-endif
+> >
+> > # We only save the sources of packages we want to redistribute, that are
+> > # non-overriden (local or true override).
+> >@@ -810,6 +808,13 @@ endif
+> > 	$$(Q)support/scripts/hardlink-or-copy \
+> > 		$$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) \
+> > 		$$($(2)_REDIST_SOURCES_DIR)
+> >+# Save patches and generate the series file
+> >+	$$(Q)while read f; do \
+> >+		support/scripts/hardlink-or-copy \
+> >+			$$$${f} \
+> >+			$$($(2)_REDIST_SOURCES_DIR) || exit 1; \
 > 
->  PS When I wrote earlier that this patch was "controversial", I actually
-> meant "a patch that is not strictly needed to fix the
-> stuff-missing-from-legal-info issue, and which could be skipped".
+>  Instead of explicit exits, a set -e in the beginning would have been more compact.
 
-That's not my position: this patch (or the alternate proposal) is
-required.
-
-Without it, we could end up saving two patches with the sqame basename,
-the second (e.g. from a global patch dir) overwriting the first (e.g. a
-bundled patch), thus rendering the legal-info moot.
-
-I thought I had that properly explained in the commit log. Did I miss
-something, or was it not clear enough?
+Except that's the construct we're using everywhere else in the code. I'd
+prefer not to diverge too much from our habits, bad or ogood! ;-)
 
 Regards,
 Yann E. MORIN.
 
-> >---
-> >Changes v6 -> v7:
-> >  - reword error message
+>  I hate the $$$$, but not much can be done about it. Move the whole legal
+> info thing to a script, but that would require exporting a sh*tload of
+> variables to that script...
+> 
+>  Regards,
+>  Arnout
+> 
+> >+		printf "%s\n" "$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
+> >+	done <$$($(2)_DIR)/.applied_patches_list
+> > endif # redistribute
 > >
-> >Changes v5 -> v6:
-> >  - don't renumber, detect collision and error out  (Luca, Arnout,
-> >    Thomas)
-> >---
-> > support/scripts/apply-patches.sh | 8 ++++++++
-> > 1 file changed, 8 insertions(+)
-> >
-> >diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-> >index 20a1552..f8b6ca3 100755
-> >--- a/support/scripts/apply-patches.sh
-> >+++ b/support/scripts/apply-patches.sh
-> >@@ -103,6 +103,14 @@ function apply_patch {
-> >         echo "Error: missing patch file ${path}/$patch"
-> >         exit 1
-> >     fi
-> >+    existing="$( grep -E "/${patch}\$" ${builddir}/.applied_patches_list )"
-> >+    if [ -n "${existing}" ]; then
-> >+        echo "Error: duplicate filename '${patch}'"
-> >+        echo "Conflicting files are:"
-> >+        echo "  already applied: ${existing}"
-> >+        echo "  to be applied  : ${path}/${patch}"
-> >+        exit 1
-> >+    fi
-> >     echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
-> >     ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
-> >     if [ $? != 0 ] ; then
+> > endif # other packages
+> >diff --git a/support/legal-info/README.header b/support/legal-info/README.header
+> >index d07c45d..418de14 100644
+> >--- a/support/legal-info/README.header
+> >+++ b/support/legal-info/README.header
+> >@@ -14,10 +14,11 @@ This material is composed of the following items.
+> >    compiled programs.
+> >    Note: this may have not been saved due to technical limitations, you may
+> >    need to collect it manually.
+> >- * The source code for all packages; this has been saved in the sources/
+> >-   subdirectory (except for the non-redistributable packages, which have not
+> >-   been saved); patches applied to some packages by Buildroot are included in
+> >-   the Buildroot sources and were not duplicated in the sources/ subdirectory.
+> >+ * The original source code for all packages; this has been saved in the
+> >+   sources/ subdirectory (except for the non-redistributable packages, which
+> >+   have not been saved). Patches that were applied are also saved, along
+> >+   with a file named 'series' that lists the patches in the order they were
+> >+   applied.
+> >  * A manifest file listing the configured packages and related information.
+> >  * The license text of the packages; they have been saved in the licenses/
+> >    subdirectory.
 > >
 > 
 > 
