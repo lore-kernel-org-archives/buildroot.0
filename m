@@ -1,44 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 22 Jun 2016 23:58:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/quagga: Add systemd.service
- file and helper script
-In-Reply-To: <1466269320-23938-1-git-send-email-nroach44@gmail.com>
-References: <1466269320-23938-1-git-send-email-nroach44@gmail.com>
-Message-ID: <61af7059-9ada-1f88-e03b-a6586d499d18@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 22 Jun 2016 19:58:23 -0300
+Subject: [Buildroot] [PATCH] glibc: bump default to version 2.23
+In-Reply-To: <57d9d2a6-9bcc-c512-4e09-6eb8f8958c76@mind.be>
+References: <1466590187-21862-1-git-send-email-gustavo@zacarias.com.ar>
+ <87r3bpwa02.fsf@dell.be.48ers.dk>
+ <42d8119e5e64c7a67018770b3f029146@zacarias.com.ar>
+ <20160622171317.79fbea7e@free-electrons.com>
+ <312f3b85fab01ed234da9ff79ac982d0@zacarias.com.ar>
+ <877fdhw8ek.fsf@dell.be.48ers.dk>
+ <57d9d2a6-9bcc-c512-4e09-6eb8f8958c76@mind.be>
+Message-ID: <576B180F.70309@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Two more things...
+On 22/06/16 17:38, Arnout Vandecappelle wrote:
 
-On 18-06-16 19:02, Nathaniel Roach wrote:
-> +	$(INSTALL) -D -m 644 package/quagga/quagga at .service \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/bandwidthd.service
+>   My take on this: we should follow the stable branch of upstream. Since glibc
+> has no concept of stable branches (in fact, none of the libc's do), we really
+> should follow upstream releases aggressively.
+>
+>   In fact, I think it's quite unreasonable that we don't have stable updates for
+> glibc (or any other libc). As a distro, it's our responsibility to make sure our
+> users get stable updates, particularly for something as important as glibc.
+> Since we (currently) don't have the bandwidth to do that, and since there simply
+> is no viable upstream to rely on [*], we should probably consider dropping the
+> multi-version glibc... Topic for discussion at the next BR developer meeting.
+>
+>
+>   Regards,
+>   Arnout
+>
+>   [*] I've checked if we could use another distro, but most are on glibc 2.19...
+> Debian would be an option for glibc 2.22, but for 2.23 and 2.24 there will
+> probably no viable distro.
 
- I believe it should actually be installed as quagga at .service, and then
-symlinked from /etc.
-
- I'm not so sure of this, but wouldn't it actually make sense to install all
-services that are selected in the config? Like
-
-QUAGGA_SERVICES_$(BR2_PACKAGE_QUAGGA_ZEBRA) += zebra
-QUAGGA_SERVICES_$(BR2_PACKAGE_QUAGGA_BGPD) += bgpd
-...
-
-	$(foreach service,$(QUAGGA_SERVICES_y),\
-		ln -sf ../../../../usr/lib/systemd/system/quagga at .service \
-		
-$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/$(service).service$(sep))
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Hi.
+My $.02: Ubuntu 16.04 LTS is on 2.23.
+In general we haven't seen big regressions with glibc upgrades compared 
+to binutils/gcc.
+Also, and don't take this as cockyness, i'm like the only one (except 
+for Bernd one time) putting out security patches for glibc.
+Currently my spare time is pretty thin, and backporting patches for two 
+versions of glibc and testing them is much more work than a single version.
+If we default to n-1 this means carrying on more patches since generally 
+n-1 has more vulnerabilities than n when talking about glibc.
+If in consequence i only post patches for n and we default to n-1, well, 
+that sucks plain and simple, since we would be shipping known-vulnerable 
+by default, and how many users will bother to switch to latest glibc?
+Regards.
