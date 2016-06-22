@@ -1,61 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Jun 2016 21:07:35 +0200
-Subject: [Buildroot] [PATCH 13/24 v2] package/skeleton: add macro to rsync
-	skeleton directory
+Date: Wed, 22 Jun 2016 21:07:36 +0200
+Subject: [Buildroot] [PATCH 14/24 v2] core/pkg-generic: allow packages to
+	declare target-finalize hooks
 In-Reply-To: <cover.1466622379.git.yann.morin.1998@free.fr>
 References: <cover.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <0002da14343e3283c557ef0a796dee4e6d9a91e4.1466622379.git.yann.morin.1998@free.fr>
+Message-ID: <464b6d13a2edac4d3fabbb9b712194c53987f1be.1466622379.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The rsync command is currently called from a single location. In
-follow-up patches, it will be called from various places now.
+Currently, our skeleton declares target-finalize hooks, and does so
+unconditionally.
 
-It will be easier to update and fix this command if it is defined in a
-single location, rather than if duplicated in many places.
+That's fine since we have a single skeleton package, and thus the hooks
+it declares need not be conditional.
 
-Define a macro that skeleton packages can call to install their skeleton
-directories. Since at least one occurence of it will want to install in
-staging, the macro must accept a destination path, rather than hard-code
-target as the destination.
+However, we're going to be adding more skeleton packages, one for the
+custom skeleton, one for the sysv-like init systems and, eventually, one
+for the systemd init system.
+
+In that case, we will not want the sysv-like target-finalize hooks to be
+applied when the init system is systemd. And the other way around, of
+course. And so on for each type of skeleton...
+
+The only solution we have so far is to enclose all target-finalize hooks
+declarations between an ifeq-block to check that the package is enabled.
+This is cumbersome to do, even more so when the hooks are themselves
+conditional.
+
+Add support in the core infra for packages to register such hooks, like
+is done to register users, device tables and whatnots.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/skeleton/skeleton.mk | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ docs/manual/adding-packages-hooks.txt | 7 +++++++
+ package/pkg-generic.mk                | 2 ++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 072d217..e3ae694 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -62,6 +62,14 @@ SKELETON_PATH = system/skeleton
+diff --git a/docs/manual/adding-packages-hooks.txt b/docs/manual/adding-packages-hooks.txt
+index 5b5bf6a..d25092a 100644
+--- a/docs/manual/adding-packages-hooks.txt
++++ b/docs/manual/adding-packages-hooks.txt
+@@ -77,3 +77,10 @@ others, use the following variables:
  
- endif # ! custom skeleton
- 
-+# This function rsyncs the skeleton directory in $(1) to the destination
-+# in $(2), which should be either $(TARTGET_DIR) or $(STAGING_DIR)
-+define SKELETON_RSYNC
-+	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-+		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
-+		$(1)/ $(2)/
-+endef
+ * +$(SRCDIR)+: the path to the overridden source directory
+ * +$(@D)+: the path to the build directory
 +
- # This function handles the merged or non-merged /usr cases
- ifeq ($(BR2_ROOTFS_MERGED_USR),y)
- define SKELETON_USR_SYMLINKS_OR_DIRS
-@@ -86,9 +94,7 @@ SKELETON_LIB_SYMLINK = lib32
- endif
++==== Target-finalize hook
++
++Packages may also register hooks in +LIBFOO_TARGET_FINALIZE_HOOKS+.
++These hooks are run after all packages are built, but before the
++filesystem images are generated. They are seldom used, and your
++package probably do not need them.
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 3281374..4415342 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -558,6 +558,7 @@ $(2)_PRE_INSTALL_IMAGES_HOOKS   ?=
+ $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
+ $(2)_PRE_LEGAL_INFO_HOOKS       ?=
+ $(2)_POST_LEGAL_INFO_HOOKS      ?=
++$(2)_TARGET_FINALIZE_HOOKS      ?=
  
- define SKELETON_INSTALL_TARGET_CMDS
--	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
--		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
--		$(SKELETON_PATH)/ $(TARGET_DIR)/
-+	$(call SKELETON_RSYNC,$(SKELETON_PATH),$(TARGET_DIR))
- 	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
- 	ln -snf lib $(TARGET_DIR)/$(SKELETON_LIB_SYMLINK)
- 	ln -snf lib $(TARGET_DIR)/usr/$(SKELETON_LIB_SYMLINK)
+ # human-friendly targets and target sequencing
+ $(1):			$(1)-install
+@@ -858,6 +859,7 @@ endif
+ ifneq ($$($(2)_USERS),)
+ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+ endif
++TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
+ 
+ ifeq ($$($(2)_SITE_METHOD),svn)
+ DL_TOOLS_DEPENDENCIES += svn
 -- 
 2.7.4
