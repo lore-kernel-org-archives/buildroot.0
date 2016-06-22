@@ -1,78 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Jun 2016 21:07:36 +0200
-Subject: [Buildroot] [PATCH 14/24 v2] core/pkg-generic: allow packages to
-	declare target-finalize hooks
+Date: Wed, 22 Jun 2016 21:07:32 +0200
+Subject: [Buildroot] [PATCH 10/24 v2] package/perl: use dummy hostname
 In-Reply-To: <cover.1466622379.git.yann.morin.1998@free.fr>
 References: <cover.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <464b6d13a2edac4d3fabbb9b712194c53987f1be.1466622379.git.yann.morin.1998@free.fr>
+Message-ID: <9303aacab6fc99c113c9ca742beae73abbab47c6.1466622379.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, our skeleton declares target-finalize hooks, and does so
-unconditionally.
+The hostname does not look like it serves any useful purpose, except
+maybe to set set perladmin email.
 
-That's fine since we have a single skeleton package, and thus the hooks
-it declares need not be conditional.
+Which is undoubtfully useless on the target.
 
-However, we're going to be adding more skeleton packages, one for the
-custom skeleton, one for the sysv-like init systems and, eventually, one
-for the systemd init system.
+A followup commit will make the hostname depend on the default skeleton,
+so it won't always be available. We can not rely on it to be set.
 
-In that case, we will not want the sysv-like target-finalize hooks to be
-applied when the init system is systemd. And the other way around, of
-course. And so on for each type of skeleton...
+Besides, even today it is not guaranteed to be set; a user may well
+leave it empty.
 
-The only solution we have so far is to enclose all target-finalize hooks
-declarations between an ifeq-block to check that the package is enabled.
-This is cumbersome to do, even more so when the hooks are themselves
-conditional.
-
-Add support in the core infra for packages to register such hooks, like
-is done to register users, device tables and whatnots.
+Use a dummy hostname.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- docs/manual/adding-packages-hooks.txt | 7 +++++++
- package/pkg-generic.mk                | 2 ++
- 2 files changed, 9 insertions(+)
+ package/perl/perl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/adding-packages-hooks.txt b/docs/manual/adding-packages-hooks.txt
-index 5b5bf6a..d25092a 100644
---- a/docs/manual/adding-packages-hooks.txt
-+++ b/docs/manual/adding-packages-hooks.txt
-@@ -77,3 +77,10 @@ others, use the following variables:
- 
- * +$(SRCDIR)+: the path to the overridden source directory
- * +$(@D)+: the path to the build directory
-+
-+==== Target-finalize hook
-+
-+Packages may also register hooks in +LIBFOO_TARGET_FINALIZE_HOOKS+.
-+These hooks are run after all packages are built, but before the
-+filesystem images are generated. They are seldom used, and your
-+package probably do not need them.
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 3281374..4415342 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -558,6 +558,7 @@ $(2)_PRE_INSTALL_IMAGES_HOOKS   ?=
- $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
- $(2)_PRE_LEGAL_INFO_HOOKS       ?=
- $(2)_POST_LEGAL_INFO_HOOKS      ?=
-+$(2)_TARGET_FINALIZE_HOOKS      ?=
- 
- # human-friendly targets and target sequencing
- $(1):			$(1)-install
-@@ -858,6 +859,7 @@ endif
- ifneq ($$($(2)_USERS),)
- PACKAGES_USERS += $$($(2)_USERS)$$(sep)
- endif
-+TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
- 
- ifeq ($$($(2)_SITE_METHOD),svn)
- DL_TOOLS_DEPENDENCIES += svn
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 11b10ff..29af7a4 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -54,7 +54,7 @@ PERL_CONF_OPTS = \
+ 	-Dccflags="$(TARGET_CFLAGS)" \
+ 	-Dldflags="$(TARGET_LDFLAGS) -lm" \
+ 	-Dmydomain="" \
+-	-Dmyhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
++	-Dmyhostname="noname" \
+ 	-Dmyuname="Buildroot $(BR2_VERSION_FULL)" \
+ 	-Dosname=linux \
+ 	-Dosvers=$(LINUX_VERSION) \
 -- 
 2.7.4
