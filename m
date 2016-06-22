@@ -1,48 +1,46 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 22 Jun 2016 23:27:44 +0200
-Subject: [Buildroot] [PATCH v3 3/5] package/elementary: bump to 1.17.1
+Date: Wed, 22 Jun 2016 23:27:45 +0200
+Subject: [Buildroot] [PATCH v3 4/5] package/libevas-generic-loaders: bump to
+	1.17.0
 In-Reply-To: <1466630866-28779-1-git-send-email-romain.naour@gmail.com>
 References: <1466630866-28779-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1466630866-28779-3-git-send-email-romain.naour@gmail.com>
+Message-ID: <1466630866-28779-4-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no elementary 1.17.2 release since there was no patch to
-backport from upstream.
-
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
-Note: elementary has been merged within efl tree for 1.18 release,
-this package will be removed with the next efl update.
+Note: libevas-generic-loaders has been merged within efl tree for 1.18
+release, this package will be removed with the next efl update.
 ---
- package/elementary/elementary.hash | 4 ++--
- package/elementary/elementary.mk   | 2 +-
+ package/libevas-generic-loaders/libevas-generic-loaders.hash | 4 ++--
+ package/libevas-generic-loaders/libevas-generic-loaders.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/elementary/elementary.hash b/package/elementary/elementary.hash
-index ecdbc8e..f173752 100644
---- a/package/elementary/elementary.hash
-+++ b/package/elementary/elementary.hash
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.hash b/package/libevas-generic-loaders/libevas-generic-loaders.hash
+index 32723ba..ee2ae9b 100644
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.hash
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.hash
 @@ -1,2 +1,2 @@
--# From https://download.enlightenment.org/rel/libs/elementary/elementary-1.15.3.tar.xz.sha256
--sha256	474a9175061021ce8cbcfdbde6162316fc0d927b21118d1ab549377ebc802a93	elementary-1.15.3.tar.xz
-+# From https://download.enlightenment.org/rel/libs/elementary/elementary-1.17.1.tar.xz.sha256
-+sha256	85e116a453a8ac23da878670534c6292832756d2f3a33603278486f309963d91	elementary-1.17.1.tar.xz
-diff --git a/package/elementary/elementary.mk b/package/elementary/elementary.mk
-index 7de0c7b..33d4034 100644
---- a/package/elementary/elementary.mk
-+++ b/package/elementary/elementary.mk
+-# From https://download.enlightenment.org/rel/libs/evas_generic_loaders/evas_generic_loaders-1.15.0.tar.xz.sha256
+-sha256	1e539e4d4d4e1590345caeb7fdd84f47ec7cd63bb76b6b7107a87420a401fd7f	evas_generic_loaders-1.15.0.tar.xz
++# From https://download.enlightenment.org/rel/libs/evas_generic_loaders/evas_generic_loaders-1.17.0.tar.xz.sha256
++sha256	c2f5193a9326532d3ab3ff76f547b9d17b33ae7221ce4d6e0aefb905ba0dd87a	evas_generic_loaders-1.17.0.tar.xz
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+index ff8ea37..abc436b 100644
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ELEMENTARY_VERSION = 1.15.3
-+ELEMENTARY_VERSION = 1.17.1
- ELEMENTARY_SOURCE = elementary-$(ELEMENTARY_VERSION).tar.xz
- ELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
- ELEMENTARY_LICENSE = LGPLv2.1
+-LIBEVAS_GENERIC_LOADERS_VERSION = 1.15.0
++LIBEVAS_GENERIC_LOADERS_VERSION = 1.17.0
+ LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.xz
+ LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/rel/libs/evas_generic_loaders
+ LIBEVAS_GENERIC_LOADERS_LICENSE = GPLv2
 -- 
 2.5.5
