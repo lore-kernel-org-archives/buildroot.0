@@ -1,63 +1,98 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Jun 2016 21:07:28 +0200
-Subject: [Buildroot] [PATCH 06/24 v2] package/systemd: disabling tty1 getty
-	is a post-install hook
+Date: Wed, 22 Jun 2016 21:07:30 +0200
+Subject: [Buildroot] [PATCH 08/24 v2] system: move the rootfs skeleton choice
 In-Reply-To: <cover.1466622379.git.yann.morin.1998@free.fr>
 References: <cover.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <fe81b5c13c44ebd66ef69fd8bc76e6e8acb14725.1466622379.git.yann.morin.1998@free.fr>
+Message-ID: <4ab3e1017436a1f608eb37300087551f05f42740.1466622379.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we disable the getty on tty1 as a "init" step. It looks
-better like it is a post-install hook.
+In the following commits, we'll be switching more options to be
+conditional on the default or custom skeleton.
+
+So, it makes sense that those options come after the choice of a
+skeleton.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/systemd/systemd.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ system/Config.in | 56 ++++++++++++++++++++++++++++----------------------------
+ 1 file changed, 28 insertions(+), 28 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index c0503ae..7e8fc0b 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -211,10 +211,15 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
- 	touch $(TARGET_DIR)/etc/machine-id
- endef
+diff --git a/system/Config.in b/system/Config.in
+index 04b886b..662443b 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -1,5 +1,33 @@
+ menu "System configuration"
  
-+define SYSTEMD_DISABLE_SERVICE_TTY1_HOOK
-+	rm -f $(TARGET_DIR)/etc/systemd/system/getty.target.wants/getty at tty1.service
-+endef
++choice
++	prompt "Root FS skeleton"
 +
- SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
- 	SYSTEMD_INSTALL_INIT_HOOK \
- 	SYSTEMD_INSTALL_MACHINEID_HOOK \
--	SYSTEMD_INSTALL_RESOLVCONF_HOOK
-+	SYSTEMD_INSTALL_RESOLVCONF_HOOK \
-+	SYSTEMD_DISABLE_SERVICE_TTY1_HOOK
++config BR2_ROOTFS_SKELETON_DEFAULT
++	bool "default target skeleton"
++	help
++	  Use default target skeleton
++
++config BR2_ROOTFS_SKELETON_CUSTOM
++	bool "custom target skeleton"
++	help
++	  Use custom target skeleton.
++
++endchoice
++
++if BR2_ROOTFS_SKELETON_CUSTOM
++
++config BR2_ROOTFS_SKELETON_CUSTOM_PATH
++	string "custom target skeleton path"
++	help
++	  Path to custom target skeleton.
++
++# dummy config so merged /usr workarounds can also be activated for
++# custom rootfs skeleton
++config BR2_ROOTFS_MERGED_USR
++
++endif
++
+ config BR2_TARGET_GENERIC_HOSTNAME
+ 	string "System hostname"
+ 	default "buildroot"
+@@ -163,34 +191,6 @@ config BR2_ROOTFS_STATIC_DEVICE_TABLE
+ 	  See package/makedevs/README for details on the usage and
+ 	  syntax of these files.
  
- define SYSTEMD_USERS
- 	systemd-journal -1 systemd-journal -1 * /var/log/journal - - Journal
-@@ -228,10 +233,6 @@ define SYSTEMD_USERS
- 	- - input -1 * - - - Input device group
- endef
- 
--define SYSTEMD_DISABLE_SERVICE_TTY1
--	rm -f $(TARGET_DIR)/etc/systemd/system/getty.target.wants/getty at tty1.service
--endef
+-choice
+-	prompt "Root FS skeleton"
 -
- ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
- # systemd needs getty.service for VTs and serial-getty.service for serial ttys
- # also patch the file to use the correct baud-rate, the default baudrate is 115200 so look for that
-@@ -252,7 +253,6 @@ endef
- endif
+-config BR2_ROOTFS_SKELETON_DEFAULT
+-	bool "default target skeleton"
+-	help
+-	  Use default target skeleton
+-
+-config BR2_ROOTFS_SKELETON_CUSTOM
+-	bool "custom target skeleton"
+-	help
+-	  Use custom target skeleton.
+-
+-endchoice
+-
+-if BR2_ROOTFS_SKELETON_CUSTOM
+-
+-config BR2_ROOTFS_SKELETON_CUSTOM_PATH
+-	string "custom target skeleton path"
+-	help
+-	  Path to custom target skeleton.
+-
+-# dummy config so merged /usr workarounds can also be activated for
+-# custom rootfs skeleton
+-config BR2_ROOTFS_MERGED_USR
+-
+-endif
+-
+ if BR2_ROOTFS_SKELETON_DEFAULT
  
- define SYSTEMD_INSTALL_INIT_SYSTEMD
--	$(SYSTEMD_DISABLE_SERVICE_TTY1)
- 	$(SYSTEMD_INSTALL_SERVICE_TTY)
- 	$(SYSTEMD_INSTALL_SERVICE_NETWORK)
- 	$(SYSTEMD_INSTALL_SERVICE_TIMESYNC)
+ config BR2_ROOTFS_MERGED_USR
 -- 
 2.7.4
