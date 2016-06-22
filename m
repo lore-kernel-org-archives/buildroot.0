@@ -1,51 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Jun 2016 14:44:03 +0200
-Subject: [Buildroot] [PATCH] package/qt5base: add optional dependency on udev
-Message-ID: <1466599443-31665-1-git-send-email-yann.morin@orange.com>
+Date: Wed, 22 Jun 2016 14:45:54 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gmock: install .pc file
+Message-ID: <1466599555-2775-1-git-send-email-yann.morin@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt5 can optionally enable udev support, especially to enumerate input
-devices dynamically. Without udev, devices are not properly enumerated,
-and any device that is not present at launch time is never seen (there
-is no support for hotplug, that is).
-
-Currently, Qt5base has no explicit dependency on udev, so it will all
-depend on the build order. Sometimes, a package that requires udev will
-be built before qt5base and Qt5 will have support for udev, sometime no
-such package is built before qt5base and Qt5 will not have support for
-udev.
-
-Add an explicit dependency on udev, but only if it is enabled.
-
-Note: this only really requires libudev, but we do not yet have a
-separate libudev; we still only have a udev provider (be it eudev or
-systemd).
-
 Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
-Cc: Cedric Chedaleux <cedric.chedaleux@orange.com>
+Signed-off-by: Cedric Chedaleux <cedric.chedaleux@orange.com>
 ---
- package/qt5/qt5base/qt5base.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/gmock/gmock.mk |  2 ++
+ package/gmock/gmock.pc | 11 +++++++++++
+ 2 files changed, 13 insertions(+)
+ create mode 100644 package/gmock/gmock.pc
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index c4b9a54..248abb9 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -53,6 +53,11 @@ ifneq ($(QT5BASE_CONFIG_FILE),)
- QT5BASE_CONFIGURE_OPTS += -qconfig buildroot
- endif
+diff --git a/package/gmock/gmock.mk b/package/gmock/gmock.mk
+index a0351d0..4f04422 100644
+--- a/package/gmock/gmock.mk
++++ b/package/gmock/gmock.mk
+@@ -39,6 +39,8 @@ define GMOCK_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgmock_main.a $(STAGING_DIR)/usr/lib/libgmock_main.a
+ 	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gmock/
+ 	cp -rp $(@D)/include/gmock/* $(STAGING_DIR)/usr/include/gmock/
++	$(INSTALL) -D -m 0755 package/gmock/gmock.pc \
++		$(STAGING_DIR)/usr/lib/pkgconfig/gmock.pc
+ endef
  
-+# For libudev
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-+QT5BASE_DEPENDENCIES += udev
-+endif
+ # Unzipping inside $(@D) and moving everything from the created subdirectory is
+diff --git a/package/gmock/gmock.pc b/package/gmock/gmock.pc
+new file mode 100644
+index 0000000..2f90068
+--- /dev/null
++++ b/package/gmock/gmock.pc
+@@ -0,0 +1,11 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=${prefix}/lib/
++includedir=${prefix}/include
 +
- # Qt5 SQL Plugins
- ifeq ($(BR2_PACKAGE_QT5BASE_SQL),y)
- ifeq ($(BR2_PACKAGE_QT5BASE_MYSQL),y)
++Name: gmock
++Description: Google C++ Mocking Framework
++Version: 1.7.0
++Libs: -L${libdir} -lgmock
++Libs.private: -lpthread
++Cflags: -I${includedir}
 -- 
 1.9.1
