@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 22 Jun 2016 10:31:50 +0200
-Subject: [Buildroot] [PATCH] libfuse: bump to version 2.9.7
-In-Reply-To: <1466550543-8385-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 21 Jun 2016 20:09:03 -0300")
-References: <1466550543-8385-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87lh1xy689.fsf@dell.be.48ers.dk>
+Date: Wed, 22 Jun 2016 10:31:56 +0200
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.12.x series
+In-Reply-To: <1466550581-25013-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 21 Jun 2016 20:09:41 -0300")
+References: <1466550581-25013-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87h9cly683.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
