@@ -1,30 +1,27 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 23 Jun 2016 11:59:38 +0300
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 23 Jun 2016 11:04:24 +0200
 Subject: [Buildroot] [PATCH 2/3] python-xlwt: new package
-In-Reply-To: <1466672194-8423-2-git-send-email-yegorslists@googlemail.com>
+In-Reply-To: <20160623085938.GA1971@tarshish>
 References: <1466672194-8423-1-git-send-email-yegorslists@googlemail.com>
  <1466672194-8423-2-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160623085938.GA1971@tarshish>
+ <20160623085938.GA1971@tarshish>
+Message-ID: <CAGm1_ksYvg5OUpzw+fP_+KvzaCzJBvfOBcOLoB98L=avE6z4wg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+On Thu, Jun 23, 2016 at 10:59 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Yegor,
+>
+> On Thu, Jun 23, 2016 at 10:56:33AM +0200, yegorslists at googlemail.com wrote:
+>> +     help
+>> +       Library to create spreadsheet files compatible with MS Excel
+>> +       97/2000/XP/2003 XLS files, on any platform, with Python 2.6, 2.6,
+>
+> Most likely: 2.6, 2.7,
 
-On Thu, Jun 23, 2016 at 10:56:33AM +0200, yegorslists at googlemail.com wrote:
-> +	help
-> +	  Library to create spreadsheet files compatible with MS Excel
-> +	  97/2000/XP/2003 XLS files, on any platform, with Python 2.6, 2.6,
+Good catch! Will fix in v2.
 
-Most likely: 2.6, 2.7,
-
-> +	  3.3+.
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Yegor
