@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 23 Jun 2016 10:56:32 +0200
-Subject: [Buildroot] [PATCH 1/3] python-xlrd: new package
-Message-ID: <1466672194-8423-1-git-send-email-yegorslists@googlemail.com>
+Date: Thu, 23 Jun 2016 10:56:33 +0200
+Subject: [Buildroot] [PATCH 2/3] python-xlwt: new package
+In-Reply-To: <1466672194-8423-1-git-send-email-yegorslists@googlemail.com>
+References: <1466672194-8423-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1466672194-8423-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,71 +15,68 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
  package/Config.in                    |  1 +
- package/python-xlrd/Config.in        | 11 +++++++++++
- package/python-xlrd/python-xlrd.hash |  4 ++++
- package/python-xlrd/python-xlrd.mk   | 14 ++++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/python-xlrd/Config.in
- create mode 100644 package/python-xlrd/python-xlrd.hash
- create mode 100644 package/python-xlrd/python-xlrd.mk
+ package/python-xlwt/Config.in        |  8 ++++++++
+ package/python-xlwt/python-xlwt.hash |  4 ++++
+ package/python-xlwt/python-xlwt.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-xlwt/Config.in
+ create mode 100644 package/python-xlwt/python-xlwt.hash
+ create mode 100644 package/python-xlwt/python-xlwt.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index a2a02a8..e5ddc3e 100644
+index e5ddc3e..61d1d26 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -776,6 +776,7 @@ menu "External python modules"
- 	source "package/python-werkzeug/Config.in"
- 	source "package/python-ws4py/Config.in"
+@@ -778,6 +778,7 @@ menu "External python modules"
  	source "package/python-wsaccel/Config.in"
-+	source "package/python-xlrd/Config.in"
+ 	source "package/python-xlrd/Config.in"
  	source "package/python-xlsxwriter/Config.in"
++	source "package/python-xlwt/Config.in"
  	source "package/python-zope-interface/Config.in"
  endmenu
-diff --git a/package/python-xlrd/Config.in b/package/python-xlrd/Config.in
+ endif
+diff --git a/package/python-xlwt/Config.in b/package/python-xlwt/Config.in
 new file mode 100644
-index 0000000..81331f9
+index 0000000..f5dfbc5
 --- /dev/null
-+++ b/package/python-xlrd/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_XLRD
-+	bool "python-xlrd"
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
++++ b/package/python-xlwt/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_XLWT
++	bool "python-xlwt"
 +	help
-+	  Library for developers to extract data from Microsoft Excel (tm)
-+	  spreadsheet files.
++	  Library to create spreadsheet files compatible with MS Excel
++	  97/2000/XP/2003 XLS files, on any platform, with Python 2.6, 2.6,
++	  3.3+.
 +
 +	  http://www.python-excel.org/
-diff --git a/package/python-xlrd/python-xlrd.hash b/package/python-xlrd/python-xlrd.hash
+diff --git a/package/python-xlwt/python-xlwt.hash b/package/python-xlwt/python-xlwt.hash
 new file mode 100644
-index 0000000..8075605
+index 0000000..4cacf2b
 --- /dev/null
-+++ b/package/python-xlrd/python-xlrd.hash
++++ b/package/python-xlwt/python-xlwt.hash
 @@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/xlrd/json
-+md5	9a91b688cd4945477ac28187a54f9a3b  xlrd-1.0.0.tar.gz
++# md5 from https://pypi.python.org/pypi/xlwt/json
++md5	fadf8d1be8c5f071561c4145ed5f5b89  xlwt-1.1.2.tar.gz
 +# sha256 calculated by scanpypi
-+sha256	0ff87dd5d50425084f7219cb6f86bb3eb5aa29063f53d50bf270ed007e941069  xlrd-1.0.0.tar.gz
-diff --git a/package/python-xlrd/python-xlrd.mk b/package/python-xlrd/python-xlrd.mk
++sha256	aed648c17731f40f84550dd2a1aaa53569f0cbcaf5610ba895cd2632587b723c  xlwt-1.1.2.tar.gz
+diff --git a/package/python-xlwt/python-xlwt.mk b/package/python-xlwt/python-xlwt.mk
 new file mode 100644
-index 0000000..a31657a
+index 0000000..1b1a716
 --- /dev/null
-+++ b/package/python-xlrd/python-xlrd.mk
++++ b/package/python-xlwt/python-xlwt.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-xlrd
++# python-xlwt
 +#
 +################################################################################
 +
-+PYTHON_XLRD_VERSION = 1.0.0
-+PYTHON_XLRD_SOURCE = xlrd-$(PYTHON_XLRD_VERSION).tar.gz
-+PYTHON_XLRD_SITE = https://pypi.python.org/packages/42/85/25caf967c2d496067489e0bb32df069a8361e1fd96a7e9f35408e56b3aab
-+PYTHON_XLRD_SETUP_TYPE = setuptools
-+PYTHON_XLRD_LICENSE = BSD-3c, BSD-4c
-+PYTHON_XLRD_LICENSE_FILES = xlrd/licences.py
++PYTHON_XLWT_VERSION = 1.1.2
++PYTHON_XLWT_SOURCE = xlwt-$(PYTHON_XLWT_VERSION).tar.gz
++PYTHON_XLWT_SITE = https://pypi.python.org/packages/0b/69/644313df86e6375ec2c6b34ec8ac544b9cc7803b7d943223d32811860f3d
++PYTHON_XLWT_SETUP_TYPE = setuptools
++PYTHON_XLWT_LICENSE = BSD-3c, BSD-4c, LGPLv2.1+
++PYTHON_XLWT_LICENSE_FILES = docs/licenses.rst
 +
 +$(eval $(python-package))
 -- 
