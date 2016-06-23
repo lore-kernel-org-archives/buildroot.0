@@ -1,109 +1,69 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 23 Jun 2016 23:29:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/quagga: Add systemd.service
- file and helper script
-In-Reply-To: <a8b926ed-8d9a-ea4e-c268-dd7255ff31f9@gmail.com>
-References: <1466269320-23938-1-git-send-email-nroach44@gmail.com>
- <61af7059-9ada-1f88-e03b-a6586d499d18@mind.be>
- <a8b926ed-8d9a-ea4e-c268-dd7255ff31f9@gmail.com>
-Message-ID: <551c52e5-fe79-b31d-824f-177ba051575b@mind.be>
+Date: Fri, 24 Jun 2016 00:22:08 +0200
+Subject: [Buildroot] Allowing user to run ldconfig in post-build script
+In-Reply-To: <20160616231551.6dec189b@itchy>
+References: <1722059483.342813959.1466082436418.JavaMail.root@zimbra32-e6.priv.proxad.net>
+ <1720572432.342833812.1466082726731.JavaMail.root@zimbra32-e6.priv.proxad.net>
+ <20160616153710.12ef9233@free-electrons.com> <20160616214522.70ca9152@itchy>
+ <20160616222854.6b20890a@free-electrons.com> <20160616231551.6dec189b@itchy>
+Message-ID: <25334f8c-2107-6af1-1e16-a2365c5e5e05@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23-06-16 05:40, Nathaniel Roach wrote:
-> [snip]
->>  So I'd skip the entire case, and instead go straight to ...
->>
->> [snip]
->>> +# Check the binary exists
->>> +if [ -e "$QUAGGA_PATH/$BINARY" ]; then
->>
->>  And this check is redundant as well. Just call it, it will error out
->> automaticaly if the binary doesn't exist.
->>
->>> +  shift # Remove the first argument (binary name)
->>> +  "$QUAGGA_PATH/$BINARY" "$@" # Run the daemon with the remaining
->> arguments
->>
->>  Is there any reason to keep the shim around? I.e., why not exec?
->> Also, the comment is quite redundant.
->>
-> How about in the .service file simply ExecStart=/bin/sh -c "/usr/sbin/%i
-> ..."?
-
- Yeah, even better. But add an exec, so
-
-ExecStart=/bin/sh -c "exec /usr/sbin/%i ..."
-
-Alternatively, you may be able to use
-
-ExecStart=/usr/bin/env /usr/sbin/%i ...
-
-BTW I would add a comment above it saying that systemd doesn't allow % to be
-used in the command name, only in the arguments.
-
-[snip]
->>> +ExecStart=/usr/sbin/quagga-shim %i --daemon $OPTS -f
-> /etc/quagga/%i.conf -i /var/run/quagga/%i.pid
->>
->>  systemd prefers non-forking daemons because then it has better
-> control over it.
->> Since you give a --daemon option here, I assume that they are
-> perfectly capable
->> of running as a simple service. Can you give that a try?
+On 16-06-16 23:15, Eric Le Bihan wrote:
+> Le Thu, 16 Jun 2016 22:28:54 +0200,
+> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 > 
-> Sure, but would systemd's preference still apply with sh/bash in between
-> them?
-
- With exec or env, there is no intermediate (only temporarily).
-
+>> On Thu, 16 Jun 2016 21:45:22 +0200, Eric Le Bihan wrote:
+>>
+>>>>> Not being able to run ldconfig and generate the ld.so cache has
+>>>>> two drawbacks:
+>>>>>
+>>>>>  - it prevents the user from installing some libraries in other
+>>>>> locations than /lib and /usr/lib (e.g. /opt/foo/lib). This can
+>>>>> be solved with symlinks, though.      
+>>>>
+>>>> Does the dynamic linker uses /etc/ld.so.conf at runtime to find
+>>>> other libraries, even if there is no /etc/ld.so.cache? If that's
+>>>> the case, then our check for ld.so.conf being absent is somewhat
+>>>> wrong, as it would be valid to have, independently of whether
+>>>> ldconfig has created ld.so.cache or not.    
+>>>
+>>> Inspecting the glibc source code shows that:
+>>>
+>>>  - /etc/ld.so.conf is only read by ldconfig (see elf/ldconfig.c). 
+>>>  - /etc/ld.so.cache is only read by the dynamic loader (see
+>>> elf/dl-cache.c).  
+>>
+>> OK.
+>>
+>>> This is confirmed when using strace. So, IMHO, this sanity check is
+>>> of no use.  
+>>
+>> If what you say above is true, then your conclusion is completely
+>> wrong: the sanity check is *absolutely* mandatory.
+>>
+>> Since Buildroot does *NOT* generate ld.so.cache, and ld.so.conf is not
+>> read by the dynamic loader, having a ld.so.conf in a Buildroot
+>> filesystem is a mistake, as the user might thing that the dynamic
+>> linker will search in the directories listed in ld.so.conf, but it is
+>> not true: the dynamic linker only searches in the libraries referenced
+>> in ld.so.cache, and ignores ld.so.conf.
 > 
->>  Two more things...
->>
->> On 18-06-16 19:02, Nathaniel Roach wrote:
->>> +	$(INSTALL) -D -m 644 package/quagga/quagga at .service \
->>> +		$(TARGET_DIR)/usr/lib/systemd/system/bandwidthd.service
->>
->>  I believe it should actually be installed as quagga at .service, and then
->> symlinked from /etc.
->>
->>  I'm not so sure of this, but wouldn't it actually make sense to install all
->> services that are selected in the config? Like
->>
->> QUAGGA_SERVICES_$(BR2_PACKAGE_QUAGGA_ZEBRA) += zebra
->> QUAGGA_SERVICES_$(BR2_PACKAGE_QUAGGA_BGPD) += bgpd
->> ...
->>
->> 	$(foreach service,$(QUAGGA_SERVICES_y),\
->> 		ln -sf ../../../../usr/lib/systemd/system/quagga at .service \
->> 		
->> $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/$(service).service$(sep))
-> You're right on how the service is used, except that the symlink would
-> be quagga at zebra.service.
+> OK. So the check is needed to get a clean target root file system,
+> devoid of files which may mislead the user. However, it makes sense to
+> provide a configuration entry to disable it, for the ld.so-savvy users
+> who want to create the cache on their own, no?
 
- Yes of course.
-
-> I deliberately did not "install" the service file. If we are to do that,
-> we'll also need to create environment files and empty configuration
-> files for all of the selected daemons.
-
- OK. Perhaps mention that in the commit message.
+ No, the check is there to be able to detect packages that create an ld.so.conf
+(and run ldconfig) because they install libraries in non-default paths. This
+will cause runtime errors, and we want to detect them at build time.
 
  Regards,
  Arnout
-
->>
->>  Regards,
->>  Arnout
->>
-> 
-> Thanks,
-> 
-> Nathaniel
-> 
 
 
 -- 
