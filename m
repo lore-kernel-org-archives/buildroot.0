@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Jun 2016 21:08:37 +0200
-Subject: [Buildroot] [PATCH] sshfs: bump to version 2.8
-In-Reply-To: <1466676703-14991-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 23 Jun 2016 07:11:43 -0300")
-References: <1466676703-14991-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mvmbvi2y.fsf@dell.be.48ers.dk>
+Date: Thu, 23 Jun 2016 21:09:35 +0200
+Subject: [Buildroot] [PATCH] busybox: disable nsenter/unshare in default
+	config
+In-Reply-To: <1466637199-16264-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 22 Jun 2016 20:13:19 -0300")
+References: <1466637199-16264-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87inwzvi1c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +14,11 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
+ > These require newer toolchain components. Since they didn't exist in
+ > previous versions no functionality is lost. Fixes:
+ > http://autobuild.buildroot.net/results/b63/b6312626b3938555c4e5a68ad42f6951b02d7760/
+
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > ---
- >  package/sshfs/sshfs.hash | 4 ++--
- >  package/sshfs/sshfs.mk   | 4 ++--
- >  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Committed, thanks.
 
