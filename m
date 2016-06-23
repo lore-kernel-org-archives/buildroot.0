@@ -1,25 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Jun 2016 21:13:25 +0200
-Subject: [Buildroot] [PATCH] libarchive: security bump to version 3.2.1
-In-Reply-To: <1466643375-12911-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 22 Jun 2016 21:56:15 -0300")
-References: <1466643375-12911-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8760szvhuy.fsf@dell.be.48ers.dk>
+Date: Thu, 23 Jun 2016 21:16:03 +0200
+Subject: [Buildroot] [PATCH v2] libsoc: bump to version 0.8.2
+In-Reply-To: <1466660516-6038-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Thu, 23 Jun 2016 07:41:56
+ +0200")
+References: <1466660516-6038-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <871t3nvhqk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
- > Fixes:
- > CVE-2016-4302 - Libarchive Rar RestartModel Code Execution Vulnerability
- > CVE-2016-4300 - Libarchive 7zip read_SubStreamsInfo Code Execution
- > Vulnerability
- > CVE-2016-4809 - Memory allocate error in corrupted cpio archives
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > License file changed from COPYING to LICENCE.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > ---
+ > Changes:
+ > 	v2: change license filename (Peter Korsgaard)
+
 
 Committed, thanks.
 
