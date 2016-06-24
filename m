@@ -1,82 +1,62 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Fri, 24 Jun 2016 21:46:30 +0200
-Subject: [Buildroot] [Patch v2 1/3] jemalloc: new package
-In-Reply-To: <1466797592-5565-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1466797592-5565-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1466797592-5565-2-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Fri, 24 Jun 2016 21:46:29 +0200
+Subject: [Buildroot] [Patch v2 0/3] Add support for the Rust programming
+	language
+Message-ID: <1466797592-5565-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new package provides jemalloc, a malloc(3) implementation that
-emphasizes fragmentation avoidance and scalable concurrency support.
+This series adds support for the Rust programming language by providing a
+package for the host variant of the Rust compiler, able to cross-compile code
+for ARM, MIPS and x86_64 architectures.
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- package/Config.in              |  1 +
- package/jemalloc/Config.in     |  7 +++++++
- package/jemalloc/jemalloc.hash |  2 ++
- package/jemalloc/jemalloc.mk   | 15 +++++++++++++++
- 4 files changed, 25 insertions(+)
+v1 -> v2:
+
+ - bump rust to version 1.9.0.
+ - drop patch for bzip2 support in host-python.
+ - add package for jemalloc.
+ - add dependency on host being a x86 machine.
+ - add dependency on toolchain.
+ - use dedicated package to provide bootstrapping binary: rust-bootstrap.
+ - let ./configure find out host/build on its own.
+ - remove entry from configuration menu.
+ - clarify some comments.
+
+Eric Le Bihan (3):
+  jemalloc: new package
+  rust-bootstrap: new package
+  rust: new package
+
+ package/Config.in                                  |   1 +
+ package/Config.in.host                             |   1 +
+ package/jemalloc/Config.in                         |   7 +
+ package/jemalloc/jemalloc.hash                     |   2 +
+ package/jemalloc/jemalloc.mk                       |  15 +
+ package/rust-bootstrap/rust-bootstrap.hash         |   3 +
+ package/rust-bootstrap/rust-bootstrap.mk           |  24 ++
+ ...monize-use-of-CROSS_PREFIX_-in-mk-cfg-.mk.patch |  53 ++++
+ .../0002-Expand-CC-to-gcc-in-x86-mk-cfg-.cfg.patch |  71 +++++
+ ...eclaration-in-mipsel-unknown-linux-gnu.mk.patch |  26 ++
+ package/rust/Config.in.host                        |   7 +
+ package/rust/rust-target-gen                       | 315 +++++++++++++++++++++
+ package/rust/rust.hash                             |   2 +
+ package/rust/rust.mk                               |  67 +++++
+ 14 files changed, 594 insertions(+)
  create mode 100644 package/jemalloc/Config.in
  create mode 100644 package/jemalloc/jemalloc.hash
  create mode 100644 package/jemalloc/jemalloc.mk
+ create mode 100644 package/rust-bootstrap/rust-bootstrap.hash
+ create mode 100644 package/rust-bootstrap/rust-bootstrap.mk
+ create mode 100644 package/rust/0001-Harmonize-use-of-CROSS_PREFIX_-in-mk-cfg-.mk.patch
+ create mode 100644 package/rust/0002-Expand-CC-to-gcc-in-x86-mk-cfg-.cfg.patch
+ create mode 100644 package/rust/0003-Fix-CPP-declaration-in-mipsel-unknown-linux-gnu.mk.patch
+ create mode 100644 package/rust/Config.in.host
+ create mode 100755 package/rust/rust-target-gen
+ create mode 100644 package/rust/rust.hash
+ create mode 100644 package/rust/rust.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index a2a02a8..38734f3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1242,6 +1242,7 @@ menu "Other"
- 	source "package/gmp/Config.in"
- 	source "package/gsl/Config.in"
- 	source "package/gtest/Config.in"
-+	source "package/jemalloc/Config.in"
- 	source "package/libargtable2/Config.in"
- 	source "package/libatomic_ops/Config.in"
- 	source "package/libbsd/Config.in"
-diff --git a/package/jemalloc/Config.in b/package/jemalloc/Config.in
-new file mode 100644
-index 0000000..86bafbf
---- /dev/null
-+++ b/package/jemalloc/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_JEMALLOC
-+	bool "jemalloc"
-+	help
-+	 This library providing a malloc(3) implementation that emphasizes
-+	 fragmentation avoidance and scalable concurrency support.
-+
-+	 http://www.canonware.com/jemalloc/
-diff --git a/package/jemalloc/jemalloc.hash b/package/jemalloc/jemalloc.hash
-new file mode 100644
-index 0000000..c24a273
---- /dev/null
-+++ b/package/jemalloc/jemalloc.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 b216ddaeb901697fe38bd30ea02d7505a4b60e8979092009f95cfda860d46acb jemalloc-4.2.0.tar.bz2
-diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
-new file mode 100644
-index 0000000..4c76a21
---- /dev/null
-+++ b/package/jemalloc/jemalloc.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# jemalloc
-+#
-+################################################################################
-+
-+JEMALLOC_VERSION = 4.2.0
-+JEMALLOC_SOURCE = jemalloc-$(JEMALLOC_VERSION).tar.bz2
-+JEMALLOC_SITE = http://www.canonware.com/download/jemalloc/
-+JEMALLOC_LICENSE = BSD-2c
-+JEMALLOC_LICENSE_FILES = COPYING
-+JEMALLOC_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
--- 
+--
 2.4.11
