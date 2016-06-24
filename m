@@ -1,127 +1,82 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Fri, 24 Jun 2016 21:22:29 +0200
-Subject: [Buildroot] [Patch v3 3/3] docs/manual: document meson-based
-	packages
-In-Reply-To: <1466796149-25218-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1466796149-25218-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1466796149-25218-4-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Fri, 24 Jun 2016 21:46:30 +0200
+Subject: [Buildroot] [Patch v2 1/3] jemalloc: new package
+In-Reply-To: <1466797592-5565-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1466797592-5565-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1466797592-5565-2-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add instructions for adding a package which uses the Meson build system.
+This new package provides jemalloc, a malloc(3) implementation that
+emphasizes fragmentation avoidance and scalable concurrency support.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- docs/manual/adding-packages-meson.txt | 84 +++++++++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt       |  2 +
- 2 files changed, 86 insertions(+)
- create mode 100644 docs/manual/adding-packages-meson.txt
+ package/Config.in              |  1 +
+ package/jemalloc/Config.in     |  7 +++++++
+ package/jemalloc/jemalloc.hash |  2 ++
+ package/jemalloc/jemalloc.mk   | 15 +++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/jemalloc/Config.in
+ create mode 100644 package/jemalloc/jemalloc.hash
+ create mode 100644 package/jemalloc/jemalloc.mk
 
-diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
+diff --git a/package/Config.in b/package/Config.in
+index a2a02a8..38734f3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1242,6 +1242,7 @@ menu "Other"
+ 	source "package/gmp/Config.in"
+ 	source "package/gsl/Config.in"
+ 	source "package/gtest/Config.in"
++	source "package/jemalloc/Config.in"
+ 	source "package/libargtable2/Config.in"
+ 	source "package/libatomic_ops/Config.in"
+ 	source "package/libbsd/Config.in"
+diff --git a/package/jemalloc/Config.in b/package/jemalloc/Config.in
 new file mode 100644
-index 0000000..b8202ed
+index 0000000..86bafbf
 --- /dev/null
-+++ b/docs/manual/adding-packages-meson.txt
-@@ -0,0 +1,84 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
++++ b/package/jemalloc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_JEMALLOC
++	bool "jemalloc"
++	help
++	 This library providing a malloc(3) implementation that emphasizes
++	 fragmentation avoidance and scalable concurrency support.
 +
-+=== Integration of Meson-based packages
++	 http://www.canonware.com/jemalloc/
+diff --git a/package/jemalloc/jemalloc.hash b/package/jemalloc/jemalloc.hash
+new file mode 100644
+index 0000000..c24a273
+--- /dev/null
++++ b/package/jemalloc/jemalloc.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 b216ddaeb901697fe38bd30ea02d7505a4b60e8979092009f95cfda860d46acb jemalloc-4.2.0.tar.bz2
+diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
+new file mode 100644
+index 0000000..4c76a21
+--- /dev/null
++++ b/package/jemalloc/jemalloc.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# jemalloc
++#
++################################################################################
 +
-+[[meson-package-tutorial]]
++JEMALLOC_VERSION = 4.2.0
++JEMALLOC_SOURCE = jemalloc-$(JEMALLOC_VERSION).tar.bz2
++JEMALLOC_SITE = http://www.canonware.com/download/jemalloc/
++JEMALLOC_LICENSE = BSD-2c
++JEMALLOC_LICENSE_FILES = COPYING
++JEMALLOC_INSTALL_STAGING = YES
 +
-+==== +meson-package+ tutorial
-+
-+http://mesonbuild.com[Meson] is an open source build system meant to be both
-+extremely fast, and, even more importantly, as user friendly as possible.
-+
-+Buildroot does not (yet) provide a dedicated package infrastructure for
-+meson-based packages. So, we will explain how to write a +.mk+ file for such a
-+package. Let's start with an example:
-+
-+------------------------------
-+01: ################################################################################
-+02: #
-+03: # foo
-+04: #
-+05: ################################################################################
-+06:
-+07: FOO_VERSION = 1.0
-+08: FOO_SOURCE = foo-$(FOO_VERSION).tar.gz
-+09: FOO_SITE = http://www.foosoftware.org/download
-+10: FOO_LICENSE = GPLv3+
-+11: FOO_LICENSE_FILES = COPYING
-+12:
-+13: FOO_DEPENDENCIES = host-python-meson host-pkgconf bar
-+14:
-+15: ifeq ($(BR2_ENABLE_DEBUG),y)
-+16: FOO_MESON_MODE = debug
-+17: else
-+18: FOO_MESON_MODE = release
-+19: endif
-+20:
-+21: FOO_MESON_OPTS += \
-+22: 	--prefix=/usr \
-+23: 	--buildtype $(FOO_MESON_MODE) \
-+24: 	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
-+25:
-+26: define FOO_CONFIGURE_CMDS
-+27: 	rm -rf $(@D)/build
-+28: 	mkdir -p $(@D)/build
-+29: 	$(TARGET_MAKE_ENV) meson.py $(FOO_MESON_OPTS) $(@D) $(@D)/build
-+30: endef
-+31:
-+32: define FOO_BUILD_CMDS
-+33: 	$(TARGET_MAKE_ENV) ninja -C $(@D)/build
-+34: endef
-+35:
-+36: define FOO_INSTALL_TARGET_CMDS
-+37: 	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja -C $(@D)/build install
-+38: endef
-+39:
-+40: $(eval $(generic-package))
-+--------------------------------
-+
-+The Makefile starts with the definition of the standard variables for package
-+declaration (lines 7 to 11).
-+
-+As seen in line 40, it is based on the
-+xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
-+the variables required by this particular infrastructure, where Meson and its
-+companion tool, Ninja, are invoked:
-+
-+* +FOO_CONFIGURE_CMDS+: the build directory required by Meson is created, and
-+  Meson is invoked to generate the Ninja build file. The options required to
-+  configure the cross-compilation of the package are passed via +FOO_MESON_OPTS+.
-+
-+* +FOO_BUILD_CMDS+: Ninja is invoked to perform the build.
-+
-+* +FOO_INSTALL_TARGET_CMDS+: Ninja is invoked to install the files generated
-+  during the build step.
-+
-+In order to have Meson available for the build, +FOO_DEPENDENCIES+ needs to
-+contain +host-python-meson+. In the example, +host-pkgconf+ and +bar+ are also
-+declared as dependencies because the Meson build file of +foo+ uses `pkg-config`
-+to determine the compilation flags and libraries of package +bar+.
-+
-+To sum it up, to add a new meson-based package, the Makefile example can be
-+copied verbatim then edited to replace all occurences of +FOO+ with the uppercase
-+name of the new package and update the values of the standard variables.
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index 76f90c9..8b80a63 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -29,6 +29,8 @@ include::adding-packages-kconfig.txt[]
- 
- include::adding-packages-rebar.txt[]
- 
-+include::adding-packages-meson.txt[]
-+
- include::adding-packages-kernel-module.txt[]
- 
- include::adding-packages-asciidoc.txt[]
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.4.11
