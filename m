@@ -1,60 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Jun 2016 15:47:17 +0200
-Subject: [Buildroot] [PATCH] efivar: fix build with old gcc versions
-Message-ID: <1466776037-12037-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 24 Jun 2016 15:49:38 +0200
+Subject: [Buildroot] [git commit] core/legal-info: add package version to
+	license directory
+Message-ID: <20160624134944.75E3A8213C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The efivar build process starts by building one tool for the host,
-which is needed for the rest of the build. This tool currently fails
-to build with old gcc versions because the gcc.specs used by efivar
-specifies -std=gnu11. To address this, this patch:
+commit: https://git.buildroot.net/buildroot/commit/?id=4ebd6ffbd691ec08021fee89dc55df5e377d8513
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- - passes 'gcc_flags=' to the host build, so that the custom gcc specs
-   are not passed. They are in practice not needed for the build of
-   the simple makeguids host utility.
+Now that we save the source archives in a directory named after the
+package and its version, do the same for the license files, for
+consistency.
 
- - passes -std=gnu99 instead of -std=c99 in the build of host
-   makeguids, because the source code uses anonymous structs and
-   unions, which requires std=gnu99 and not just std=c99
+It has a not-so-bad side-effect of also saving the version string in
+the all-licenses list.
 
-In addition, the build by default assumes that the target toolchain is
-LTO capable, and that therefore you can call gcc-ar, gcc-nm and
-gcc-ranlib. This fails short when the target toolchain is for example
-gcc 4.7. To address this, we explicitly specify AR, NM and RANLIB to
-be used, but pass them as make options instead of in the environment,
-in order to override the values specified in the package Makefile.
+The only (small) side-effect, is that the warnings about undefined
+_LICENSE_FILES now contains the version string, too. That's unavoidable,
+since that's what is stored in the legal report.
 
-Fixes:
-
-   http://autobuild.buildroot.net/results/fe40c1d139ba8ddeef3dafd5c1818a946f014d7c/
-
-Cc: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efivar/efivar.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/pkg-generic.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/efivar/efivar.mk b/package/efivar/efivar.mk
-index 3d37916..de48bc9 100644
---- a/package/efivar/efivar.mk
-+++ b/package/efivar/efivar.mk
-@@ -31,10 +31,11 @@ define EFIVAR_BUILD_CMDS
- 	# makeguids is an internal host tool and must be built separately with
- 	# $(HOST_CC), otherwise it gets cross-built.
- 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) \
--		CFLAGS="$(HOST_CFLAGS) -std=c99" \
--		$(MAKE) -C $(@D)/src makeguids
-+		CFLAGS="$(HOST_CFLAGS) -std=gnu99" \
-+		$(MAKE) -C $(@D)/src gcc_cflags=  makeguids
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 374d9d5..fa68f14 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -786,10 +786,10 @@ ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ # is that the license still applies to the files distributed as part
+ # of the rootfs, even if the sources are not themselves redistributed.
+ ifeq ($$(call qstrip,$$($(2)_LICENSE_FILES)),)
+-	@$$(call legal-license-nofiles,$$($(2)_RAWNAME),$$(call UPPERCASE,$(4)))
+-	@$$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
++	@$$(call legal-license-nofiles,$$($(2)_RAW_BASE_NAME),$$(call UPPERCASE,$(4)))
++	@$$(call legal-warning-pkg,$$($(2)_RAW_BASE_NAME),cannot save license ($(2)_LICENSE_FILES not defined))
+ else
+-	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
++	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAW_BASE_NAME),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
+ endif # license files
  
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) \
-+		AR=$(TARGET_AR) NM=$(TARGET_NM) RANLIB=$(TARGET_RANLIB) \
- 		$(EFIVAR_MAKE_OPTS) \
- 		all
- endef
--- 
-2.7.4
+ ifeq ($$($(2)_SITE_METHOD),local)
