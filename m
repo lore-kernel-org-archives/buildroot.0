@@ -1,66 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Jun 2016 16:22:01 +0200
-Subject: [Buildroot] [PATCH 08/13 v7] core/legal-info: also save patches
-In-Reply-To: <d280d1c64b43031e31feef82091e5bb59ba43d86.1462637351.git.yann.morin.1998@free.fr>
-References: <cover.1462637351.git.yann.morin.1998@free.fr>
- <d280d1c64b43031e31feef82091e5bb59ba43d86.1462637351.git.yann.morin.1998@free.fr>
-Message-ID: <20160624162201.5e10d065@free-electrons.com>
+Date: Fri, 24 Jun 2016 16:22:36 +0200
+Subject: [Buildroot] [git commit] core/legal-info: also save extra downloads
+Message-ID: <20160624142240.CDAB581861@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1686c58e63032cacd3cb05bc255f87b44a5f12c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  7 May 2016 18:14:33 +0200, Yann E. MORIN wrote:
-> Currently, the legal-info infra only saves the source archive of a
-> package. However, that's not enough as we may apply some patches on
-> packages sources.
-> 
-> We do suggest users to also redistribute the Buildroot sources as part
-> of their compliance distribution, so the patches bundled in Buildroot
-> would indeed be included in the compliance distribution.
-> 
-> However, that's still not enough, since we may download some patches, or
-> the user may use a global patch directory. Patches in there might not
-> end up in the compliance distribution, and there are risks of
-> non-conformity.
-> 
-> So, always include patches alongside the source archive.
-> 
-> To ensure reproducibility, we also generate a series file, so patches
-> can be re-applied in the correct order.
-> 
-> We get the list of patches to include from the list of patches that were
-> applied by the package infrastructure (via the apply-patches support
-> script). So, we need to get packages properly extracted and patched
-> before we can save their legal-info, not just in the case they define
-> _LICENSE_FILES.
-> 
-> Update the legal-info header accordingly.
-> 
-> Note: this means that, when a package is not patched and defines no
-> LICENSE_FILES, we will extract and patch it for nothing. There is no
-> easy way to know whether we have to patch a package or not. We can only
-> either duplicate the logic to detect patches (bad) or rely on the infra
-> actually patching the package. Also, a vast majority of packages are
-> either patched, or define _LICENSE_FILES, so it is best and easiest to
-> always extract and patch them prior to legal-info.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-> 
-> ---
-> Changes v6 -> v7:
->   - directly call the helper
+Some packages, like perl, download extra files that end up as part of
+the source that Buildroot builds. Up until now, those files were not
+saved in the legal-info output.
 
-Applied to master, thanks.
+Add those files to the legal-info output.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+The unfortunate side-effect is that we will also save the secondary
+archive for the external blackfin toolchains; however, we already do
+save the binary release of some external toolchains when they do not
+provide actual source archives.
+
+This is inherently bad, as those are not source archives, but solving
+this is a bigger concern, for another series...
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-generic.mk | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 2508d75..8674770 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -804,10 +804,12 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
+ 	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
+ endif
+-# Save the source tarball
+-	$$(Q)support/scripts/hardlink-or-copy \
+-		$$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) \
+-		$$($(2)_REDIST_SOURCES_DIR)
++# Save the source tarball and any extra downloads, but not
++# patches, as they are handled specially afterwards.
++	$$(foreach e,$$($(2)_ACTUAL_SOURCE_TARBALL) $$(notdir $$($(2)_EXTRA_DOWNLOADS)),\
++		$$(Q)support/scripts/hardlink-or-copy \
++			$$(DL_DIR)/$$(e) \
++			$$($(2)_REDIST_SOURCES_DIR)$$(sep))
+ # Save patches and generate the series file
+ 	$$(Q)while read f; do \
+ 		support/scripts/hardlink-or-copy \
