@@ -1,55 +1,53 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 24 Jun 2016 15:35:32 +0100
-Subject: [Buildroot] [PATCH] flannel: disable for MIPS64
-Message-ID: <1466778932-8908-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 24 Jun 2016 16:56:50 +0200
+Subject: [Buildroot] [git commit] core/legal-info: generate a hash of all
+	saved files
+Message-ID: <20160624150626.9709C8057D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-flannel performs a CGO linking which is not currently supported on
-MIPS64 platforms. The failure looks like this:
+commit: https://git.buildroot.net/buildroot/commit/?id=7bfce06a4c6b4c2badeb52065c2184096031df9f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-/tmp/go-build396590679/runtime/cgo/_obj/gcc_util.o: In function
-`x_cgo_thread_start':
-../../host/usr/lib/go/src/runtime/cgo/gcc_util.c:48: undefined reference
-to `_cgo_sys_thread_start'
+Having a hash of the saved files can be interesting for the recipient to
+verify the integrity of the files.
 
-Relevant GitHub issue: https://github.com/karalabe/xgo/issues/46
+We remove the warning file earlier, to exclude it from the hash
+list.
 
-This has been already fixed in go1.7beta2, so we can revert this commit
-after the next version bump of the go package.
+We generate the hash list in a temporary file that will not be matched
+by the "find" expression, and once the file is generated, we remain it
+to its final name.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/c92a2e142ad66b765577a62fd69fffc0c301b88d/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Thomas: adjust indentation, improve commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/flannel/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ Makefile | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/flannel/Config.in b/package/flannel/Config.in
-index cfdb909..3e871b5 100644
---- a/package/flannel/Config.in
-+++ b/package/flannel/Config.in
-@@ -1,11 +1,16 @@
- comment "flannel needs a toolchain w/ threads"
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_mips64 && !BR2_mips64el
+diff --git a/Makefile b/Makefile
+index 78b44c5..41f0274 100644
+--- a/Makefile
++++ b/Makefile
+@@ -701,8 +701,12 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
+ 		cat support/legal-info/README.warnings-header \
+ 			$(LEGAL_WARNINGS) >>$(LEGAL_REPORT); \
+ 		cat $(LEGAL_WARNINGS); fi
+-	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
+ 	@rm -f $(LEGAL_WARNINGS)
++	@(cd $(LEGAL_INFO_DIR); \
++		find * -type f -exec sha256sum {} + | LC_ALL=C sort -k2 \
++			>.legal-info.sha256; \
++		mv .legal-info.sha256 legal-info.sha256)
++	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
  
- config BR2_PACKAGE_FLANNEL
- 	bool "flannel"
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# flannel performs a CGO linking which is not currently
-+	# supported on MIPS64 platforms. See:
-+	# https://github.com/karalabe/xgo/issues/46
-+	depends on !BR2_mips64 && !BR2_mips64el
- 	help
- 	  Flannel is a virtual network that gives a subnet to each
- 	  host for use with container runtimes.
--- 
-2.7.3
+ show-targets:
+ 	@echo $(PACKAGES) $(TARGETS_ROOTFS)
