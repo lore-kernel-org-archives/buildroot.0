@@ -1,40 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Jun 2016 16:25:07 +0200
-Subject: [Buildroot] [PATCH 10/13 v7] legal-info: explicitly state how
- patches are licensed
-In-Reply-To: <06715b41139076b878ea474bfad7afde1fe0bd83.1462637351.git.yann.morin.1998@free.fr>
-References: <cover.1462637351.git.yann.morin.1998@free.fr>
- <06715b41139076b878ea474bfad7afde1fe0bd83.1462637351.git.yann.morin.1998@free.fr>
-Message-ID: <20160624162507.040875b4@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 24 Jun 2016 15:35:32 +0100
+Subject: [Buildroot] [PATCH] flannel: disable for MIPS64
+Message-ID: <1466778932-8908-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+flannel performs a CGO linking which is not currently supported on
+MIPS64 platforms. The failure looks like this:
 
-On Sat,  7 May 2016 18:14:35 +0200, Yann E. MORIN wrote:
-> From: Luca Ceresoli <luca@lucaceresoli.net>
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> [yann.morin.1998 at free.fr: slightly tweak after Arnout's review]
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
-> ---
-> Changes v5 -> v6:
->   - slightly tweak the phrasing  (Arnout)
-> ---
->  support/legal-info/README.header | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+/tmp/go-build396590679/runtime/cgo/_obj/gcc_util.o: In function
+`x_cgo_thread_start':
+../../host/usr/lib/go/src/runtime/cgo/gcc_util.c:48: undefined reference
+to `_cgo_sys_thread_start'
 
-Applied to master, thanks.
+Relevant GitHub issue: https://github.com/karalabe/xgo/issues/46
 
-Thomas
+This has been already fixed in go1.7beta2, so we can revert this commit
+after the next version bump of the go package.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/c92a2e142ad66b765577a62fd69fffc0c301b88d/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/flannel/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/flannel/Config.in b/package/flannel/Config.in
+index cfdb909..3e871b5 100644
+--- a/package/flannel/Config.in
++++ b/package/flannel/Config.in
+@@ -1,11 +1,16 @@
+ comment "flannel needs a toolchain w/ threads"
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_mips64 && !BR2_mips64el
+ 
+ config BR2_PACKAGE_FLANNEL
+ 	bool "flannel"
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# flannel performs a CGO linking which is not currently
++	# supported on MIPS64 platforms. See:
++	# https://github.com/karalabe/xgo/issues/46
++	depends on !BR2_mips64 && !BR2_mips64el
+ 	help
+ 	  Flannel is a virtual network that gives a subnet to each
+ 	  host for use with container runtimes.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
