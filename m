@@ -1,67 +1,106 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 24 Jun 2016 04:34:55 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2016-06-19
-In-Reply-To: <20160620063029.16331102969@stock.ovh.net>
-References: <20160620063029.16331102969@stock.ovh.net>
-Message-ID: <1466742836.3244.20.camel@synopsys.com>
+From: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Date: Fri, 24 Jun 2016 08:12:21 +0200
+Subject: [Buildroot] [PATCH] gst1-plugins-bad: cleanup of build options
+Message-ID: <1466748741-6725-1-git-send-email-marcin.nowakowski@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+remove invalid options:
+--disable-wsap
+--disable-direct3d
+--disable-gsettings
 
-On Mon, 2016-06-20 at 08:30 +0200, Thomas Petazzoni wrote:
-> Those results are limited to the arc architecture.
-> 
-> Build statistics for 2016-06-19
-> ===============================
-> 
-> ????????success : 2??
-> ???????failures : 14?
-> ???????timeouts : 0??
-> ??????????TOTAL : 16?
-> 
-> Classification of failures by reason
-> ====================================
-> 
-> ?????????????bluez_utils-4.101 | 3?
-> ??????????????e2fsprogs-1.43.1 | 1?
-> ?????????????????gflags-v2.1.2 | 1?
-> ???????????????????libxcb-1.12 | 1?
-> ???????????????libcap-ng-0.7.7 | 1?
-> tinyalsa-f2a7b6d3d81bd337a5... | 1?
-> ????????????????????mpv-0.17.0 | 1?
-> ??????????libmicrohttpd-0.9.50 | 1?
-> ?????????????????jack2-v1.9.10 | 1?
-> ?????????????????mesa3d-11.2.2 | 1?
-> ???????????????linux-pam-1.2.1 | 1?
-> tvheadend-8e637f9f903f6d820... | 1?
+remove duplicate options:
+--disable-rtmp
+--disable-hls
+--disable-dash
 
-With arc-2016.03 toolchain we're seeing quite a lot of failures here and there.
-That's sort of expected because we switched to binutils rewritten from scratch.
-So we're still ramping up with these new binutils. What is also important these
-new rewritten binutils are in upstream already. I.e. upcoming binutils 2.27 will
-have everything ARC-specific from arc-2016.03 plus some more fixes and
-enhancements that we made since March.
+rename disable->strp -> disable-srtp (that was probably the
+original intention, but the spelling has always been incorrect)
 
-And what we may do in Buildroot we may either wait for 2.27 binutils to be released
-and then apply [backported from mainline master] patches on top of it to fix still
-existing issues or alternatively we may start using so-called "engineering builds"
-of binutils for ARC.
+remove liveadder plugin - no longer a separate built option, it's
+been merged into audiomixer
 
-These "engineering builds" are basically snapshots [that pass internal review and
-testing] made from our dev branch (arc-2016.09) on GitHub like the most recent
-"arc-2016.09-eng004":?https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/releases/tag/arc-2016.09-eng0
-04
+Signed-off-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in           |  5 -----
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 14 +-------------
+ 2 files changed, 1 insertion(+), 18 deletions(-)
 
-We'd prefer to go with "engineering builds" simply because we foresee still a lot
-of changes in ARC port of binutils (remember our port is in its childhood currently)
-while upstream binutils see release about once a year. Which means adding fixes and
-enhancements on top of 2.27 release at some point will become a support nightmare.
-
-What do you guys think about all that?
-
--Alexey
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 046c2aa..0f9fb15 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -312,11 +312,6 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIBRFB
+ 	help
+ 	  Connects to a VNC server and decodes RFB stream
+ 
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIVEADDER
+-	bool "liveadder"
+-	help
+-	  Adds multiple live discontinuous streams
+-
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MIDI
+ 	bool "midi"
+ 	help
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 271569e..8f739ec 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -17,9 +17,7 @@ GST1_PLUGINS_BAD_CONF_OPTS = \
+ 	--disable-examples \
+ 	--disable-valgrind \
+ 	--disable-directsound \
+-	--disable-wsapi \
+ 	--disable-direct3d \
+-	--disable-direct3d9 \
+ 	--disable-winks \
+ 	--disable-android_media \
+ 	--disable-apple_media \
+@@ -35,7 +33,6 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
+ 	--disable-voamrwbenc \
+ 	--disable-bs2b \
+ 	--disable-chromaprint \
+-	--disable-dash \
+ 	--disable-dc1394 \
+ 	--disable-dts \
+ 	--disable-resindvd \
+@@ -47,7 +44,7 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
+ 	--disable-ladspa \
+ 	--disable-lv2 \
+ 	--disable-libde265 \
+-	--disable-strp \
++	--disable-srtp \
+ 	--disable-linsys \
+ 	--disable-modplug \
+ 	--disable-mimic \
+@@ -69,11 +66,8 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
+ 	--disable-vdpau \
+ 	--disable-schro \
+ 	--disable-zbar \
+-	--disable-rtmp \
+ 	--disable-spandsp \
+-	--disable-gsettings \
+ 	--disable-sndio \
+-	--disable-hls \
+ 	--disable-gtk3 \
+ 	--disable-qt
+ 
+@@ -376,12 +370,6 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-librfb
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIVEADDER),y)
+-GST1_PLUGINS_BAD_CONF_OPTS += --enable-liveadder
+-else
+-GST1_PLUGINS_BAD_CONF_OPTS += --disable-liveadder
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MIDI),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-midi
+ else
+-- 
+2.8.2
