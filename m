@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Jun 2016 17:11:43 +0200
-Subject: [Buildroot] [PATCH 00/13 v7] legal-info improvements and
- completeness (branch yem/legal-4)
-In-Reply-To: <cover.1462637351.git.yann.morin.1998@free.fr>
-References: <cover.1462637351.git.yann.morin.1998@free.fr>
-Message-ID: <20160624171143.18b1f32a@free-electrons.com>
+Date: Fri, 24 Jun 2016 17:12:31 +0200
+Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.2-1
+In-Reply-To: <1466764523-40003-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1466764523-40003-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160624171231.6415d938@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  7 May 2016 18:14:33 +0200, Yann E. MORIN wrote:
+On Fri, 24 Jun 2016 11:35:23 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/imagemagick/imagemagick.hash | 2 +-
+>  package/imagemagick/imagemagick.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-> This series brings improvements to the legal-info infrastructure, so
-> that we provide the most complete and correct content in the output of
-> legal-info.
-
-The series is now fully applied. Thanks a lot!
+Applied to master, thanks.
 
 Thomas
 -- 
