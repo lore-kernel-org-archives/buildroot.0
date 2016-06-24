@@ -1,28 +1,34 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Fri, 24 Jun 2016 16:14:39 -0400
-Subject: [Buildroot] USB network gadget
-Message-ID: <CAF_dkJCHdmQxuzTR=V9NGXU8VoATRchDQOogub5ahDauR4MDqQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 24 Jun 2016 22:16:14 +0200
+Subject: [Buildroot] Emails being substituted when reading via Gmane NNTP
+In-Reply-To: <1466787406.2872.17.camel@synopsys.com> (Alexey Brodkin's message
+ of "Fri, 24 Jun 2016 16:57:46 +0000")
+References: <1466149048.31770.11.camel@synopsys.com>
+ <87ziqk6vu2.fsf@dell.be.48ers.dk>
+ <1466178031.23608.9.camel@synopsys.com>
+ <87vb167ukd.fsf@dell.be.48ers.dk>
+ <1466787406.2872.17.camel@synopsys.com>
+Message-ID: <87oa6qtka9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I know this is the wrong list, but folks who might know the answer to
-this like to hang out here, so I'll ask.
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-I have an Edison board which has been configured to use the usb0 network gadget.
+Hi,
 
-The problem is, I want to use this board as a USB host, and connect to
-it from my (buildroot generated rootfs based -- there, now you see the
-connection!) device.  And I want my device to show up as a usb0
-network device on the Edison board, the same way it does when I plug
-it into my Linux desktop.
+ >> Notice that the obfuscated email addresses DO work. They simply get
+ >> forwarded through gmane's spam filter.
+ >> 
+ >> But yeah, it probably doesn't help much in combating spam.
 
-Does anybody know how to change the usb0 network device from a USB
-"device" type of device to a USB "host" type of device?  Where should
-I start looking?
+ > So any plan to disable that for BR on Gmane if it barely adds
+ > anything meaningful :)
 
-Thanks for any tips you can provide...
+I can take a look at disabling it. What is the problem about it?
 
---wpd
+-- 
+Venlig hilsen,
+Peter Korsgaard 
