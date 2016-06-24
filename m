@@ -1,30 +1,39 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat, 25 Jun 2016 00:27:07 +0200
-Subject: [Buildroot] [PATCH 1/4] libssh2: add host variant
+Date: Sat, 25 Jun 2016 00:27:08 +0200
+Subject: [Buildroot] [PATCH 2/4] libhttpparser: add host variant
 In-Reply-To: <1466807230-9052-1-git-send-email-eric.le.bihan.dev@free.fr>
 References: <1466807230-9052-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1466807230-9052-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1466807230-9052-3-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow build of host variant of libssh2.
+Allow build of host variant of libhttpparser.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/libssh2/libssh2.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libhttpparser/libhttpparser.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index 221fac4..17882d5 100644
---- a/package/libssh2/libssh2.mk
-+++ b/package/libssh2/libssh2.mk
-@@ -38,3 +38,4 @@ LIBSSH2_CONF_OPTS += --without-libz
- endif
+diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
+index 015efc0..475dfde 100644
+--- a/package/libhttpparser/libhttpparser.mk
++++ b/package/libhttpparser/libhttpparser.mk
+@@ -23,4 +23,13 @@ define LIBHTTPPARSER_INSTALL_TARGET_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) PREFIX=$(TARGET_DIR)/usr install
+ endef
  
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++define HOST_LIBHTTPPARSER_BUILD_CMDS
++	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) library package
++endef
++
++define HOST_LIBHTTPPARSER_INSTALL_CMDS
++	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) PREFIX=$(HOST_DIR)/usr install
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
 2.4.11
