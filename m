@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Jun 2016 09:36:01 +0200
-Subject: [Buildroot] [PATCH 4/6] libsepol: bump to version 2.5
-In-Reply-To: <1466736201-17310-4-git-send-email-Aduskett@gmail.com>
+Date: Fri, 24 Jun 2016 09:38:05 +0200
+Subject: [Buildroot] [PATCH 5/6] libselinux: bump to version 2.5
+In-Reply-To: <1466736201-17310-5-git-send-email-Aduskett@gmail.com>
 References: <1466736201-17310-1-git-send-email-Aduskett@gmail.com>
- <1466736201-17310-4-git-send-email-Aduskett@gmail.com>
-Message-ID: <20160624093601.1b6a9b3e@free-electrons.com>
+ <1466736201-17310-5-git-send-email-Aduskett@gmail.com>
+Message-ID: <20160624093805.6793ed48@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,53 @@ To: buildroot@busybox.net
 
 Hello,
 
-Glad to see that there are some people interested by SELinux support!
-We still have lots of pending patches about SELinux, especially the
-one adding the refpolicy package. See
-http://patchwork.ozlabs.org/project/buildroot/list/?submitter=&state=&q=selinux&archive=&delegate=.
+On Thu, 23 Jun 2016 22:43:20 -0400, Adam Duskett wrote:
 
-Some comments below though.
+> diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
+> index bc8298d..af4d759 100644
+> --- a/package/libselinux/Config.in
+> +++ b/package/libselinux/Config.in
+> @@ -6,6 +6,8 @@ config BR2_PACKAGE_LIBSELINUX
+>  	depends on !BR2_STATIC_LIBS
+>  	# Toolchain issue: "fixup not contained within frag"
+>  	depends on !BR2_arc
+> +   # Newer versions of libselinux won't compile against glibc 2.22.
 
-On Thu, 23 Jun 2016 22:43:19 -0400, Adam Duskett wrote:
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/libsepol/0001-support-static-only.patch    | 17 +++++++++--------
->  .../libsepol/0002-workaround-blackfin-issue.patch  | 22 ++++++----------------
+Indentation must be done with one tab here.
 
-It would be good if you could indicate in the commit log what is
-changed in the patches. Indeed, there are some strange changes that
-you're doing.
+> +	depends on !BR2_GLIBC_VERSION_2_22
 
->  package/libsepol/libsepol.hash                     |  2 +-
->  package/libsepol/libsepol.mk                       |  4 ++--
->  4 files changed, 18 insertions(+), 27 deletions(-)
-> 
-> diff --git a/package/libsepol/0001-support-static-only.patch b/package/libsepol/0001-support-static-only.patch
-> index b974680..6d30454 100644
-> --- a/package/libsepol/0001-support-static-only.patch
-> +++ b/package/libsepol/0001-support-static-only.patch
-> @@ -6,15 +6,16 @@ when defined to some non-empty value, will disable the build of shared
->  libraries. It allows to support cases where the target architecture
->  does not have support for shared libraries.
+What is the issue you're facing with glibc 2.22 ?
+
+Adding a depends on !BR2_GLIBC_VERSION_2_22 is not possible, because
+this symbol only makes sense when you're using the internal toolchain
+mechanism (i.e when Buildroot builds the toolchain for you). When
+you're using an external toolchain, this symbol has no meaning, so you
+might very well have BR2_GLIBC_VERSION_2_22 disabled, but still have a
+glibc 2.22 based external toolchain.
+
+So I'd rather understand what is the build failure, and see if it can
+be fixed.
+
+>  	help
+>  	  libselinux is the runtime SELinux library that provides
+>  	  interfaces (e.g. library functions for the SELinux kernel
+> @@ -17,6 +19,9 @@ config BR2_PACKAGE_LIBSELINUX
 >  
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -
+>  	  http://selinuxproject.org/page/Main_Page
+>  
+> -comment "libselinux needs a toolchain w/ threads, dynamic library"
+> +comment "libselinux needs a toolchain w/ threads, dynamic library, glibc version != 2.22"
+>  	depends on !BR2_arc
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || BR2_GLIBC_VERSION_2_22
+> +
+> +
+> +
 
-Why are you removing this?
+Unnecessary line additions.
 
-> diff --git a/package/libsepol/0002-workaround-blackfin-issue.patch b/package/libsepol/0002-workaround-blackfin-issue.patch
-> index 5d00c69..237c06a 100644
-> --- a/package/libsepol/0002-workaround-blackfin-issue.patch
-> +++ b/package/libsepol/0002-workaround-blackfin-issue.patch
-> @@ -1,24 +1,14 @@
-> -Do not make symbols hidden on Blackfin
-> -
-> -The libselinux logic to hide internal symbols from the DSO doesn't
-> -work properly on Blackfin due to the USER_LABEL_PREFIX not being
-> -handled properly. A real fix is not that simple, so this patch simply
-> -disables the internal symbol hiding mechanism. This means that those
-> -symbols are visible in the final DSO, which is not a problem for
-> -proper execution, it just isn't as clean.
-> -
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -
-
-And why are you removing this ?
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
