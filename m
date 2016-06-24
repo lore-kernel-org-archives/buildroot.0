@@ -1,45 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Jun 2016 13:11:21 +0200
-Subject: [Buildroot] [git commit] webrtc-audio-processing: bump to version
-	0.3
-Message-ID: <20160624111141.C39A581D7B@busybox.osuosl.org>
+Date: Fri, 24 Jun 2016 13:11:40 +0200
+Subject: [Buildroot] [PATCH v2] pulseaudio: bump version to 9.0
+In-Reply-To: <1466677037-9608-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Thu, 23 Jun 2016 11:17:17 +0100")
+References: <1466677037-9608-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87wpleu9hv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27797d9d278fd76a3f55fcdbcd450130f8f19d61
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Needed by the recent pulseaudio version bump:
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > ---
+ > Changes v1 -> v2:
+ >  - hash source link updated (Thanks to Baruch Siach)
+
+I just noticed the pulseaudio release note on lwn where it clearly
+states that 9.0 needs webrtc-audio-processing >= 0.2:
 
 https://lwn.net/Articles/692424/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/webrtc-audio-processing/webrtc-audio-processing.hash | 2 +-
- package/webrtc-audio-processing/webrtc-audio-processing.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+So I've bumped our webrtc-audio-processing package, but please take care
+of such issues in the future.
 
-diff --git a/package/webrtc-audio-processing/webrtc-audio-processing.hash b/package/webrtc-audio-processing/webrtc-audio-processing.hash
-index afba5a9..fe07119 100644
---- a/package/webrtc-audio-processing/webrtc-audio-processing.hash
-+++ b/package/webrtc-audio-processing/webrtc-audio-processing.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	ed4b52f9c2688b97628035a5565377d74704d7c04de4254a768df3342c7afedc	webrtc-audio-processing-0.1.tar.xz
-+sha256	756e291d4f557d88cd50c4fe3b8454ec238362d22cedb3e6173240d90f0a80fa  webrtc-audio-processing-0.3.tar.xz
-diff --git a/package/webrtc-audio-processing/webrtc-audio-processing.mk b/package/webrtc-audio-processing/webrtc-audio-processing.mk
-index 92fcba9..587f1aa 100644
---- a/package/webrtc-audio-processing/webrtc-audio-processing.mk
-+++ b/package/webrtc-audio-processing/webrtc-audio-processing.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBRTC_AUDIO_PROCESSING_VERSION = 0.1
-+WEBRTC_AUDIO_PROCESSING_VERSION = 0.3
- WEBRTC_AUDIO_PROCESSING_SOURCE = webrtc-audio-processing-$(WEBRTC_AUDIO_PROCESSING_VERSION).tar.xz
- WEBRTC_AUDIO_PROCESSING_SITE = http://freedesktop.org/software/pulseaudio/webrtc-audio-processing
- WEBRTC_AUDIO_PROCESSING_INSTALL_STAGING = YES
+-- 
+Bye, Peter Korsgaard
