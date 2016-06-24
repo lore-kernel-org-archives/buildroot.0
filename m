@@ -1,50 +1,34 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Sat, 25 Jun 2016 00:39:07 +0200
-Subject: [Buildroot] [PATCH] efivar: fix build with old gcc versions
-In-Reply-To: <1466776037-12037-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1466776037-12037-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAK4VdL106m63WDsxVL5nZnTa0eosFxc4chosxqUd+u5RwCx6LA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 25 Jun 2016 00:40:24 +0200
+Subject: [Buildroot] [PATCH v2 1/3] python-xlrd: new package
+In-Reply-To: <CAGm1_ktr3AHMEdaOkvi1suWThga1_SWUEU64aBGMgMqHVYreMg@mail.gmail.com>
+References: <1466673311-15845-1-git-send-email-yegorslists@googlemail.com>
+ <66d1d741-7ea9-d671-3163-701f6a0448de@mind.be>
+ <CAGm1_ktr3AHMEdaOkvi1suWThga1_SWUEU64aBGMgMqHVYreMg@mail.gmail.com>
+Message-ID: <0423e445-79c3-12f5-bd12-81323490d5a3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello, Thomas.
+On 24-06-16 08:27, Yegor Yefremov wrote:
+> >  Even though licenses.py specifies BSD-4c, the actual source code doesn't. In
+> > fact, several files explicitly mention that they are not derived from Giffin's
+> > code. So I would say: just keep BSD-3c. licenses.py still contains the -4c so an
+> > attentive legal department will still do vetting on their own.
+> Should I also reduce license types in xlwt too?
 
-Thank you for further investigating this.
+ I haven't looked at xlwt, but probably yes. Just look at the headers in each
+file to see if there is any with a BSD-4c or copyright Giffin.
 
-On Fri, Jun 24, 2016 at 3:47 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> diff --git a/package/efivar/efivar.mk b/package/efivar/efivar.mk
-> index 3d37916..de48bc9 100644
-> --- a/package/efivar/efivar.mk
-> +++ b/package/efivar/efivar.mk
-> @@ -31,10 +31,11 @@ define EFIVAR_BUILD_CMDS
->         # makeguids is an internal host tool and must be built separately with
->         # $(HOST_CC), otherwise it gets cross-built.
->         $(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) \
-> -               CFLAGS="$(HOST_CFLAGS) -std=c99" \
-> -               $(MAKE) -C $(@D)/src makeguids
-> +               CFLAGS="$(HOST_CFLAGS) -std=gnu99" \
-> +               $(MAKE) -C $(@D)/src gcc_cflags=  makeguids
+ Regards,
+ Arnout
 
-I have tested the patch and it fixes the build break even in an
-environment with host gcc 4.6.
-
-I had prepared a patch adding depends on BR2_HOST_GCC_AT_LEAST_4_7 to
-the efivar Config.in file as an alternative solution, but I think that
-it would be needed to add BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 as well.
-Didn't finish testing that as I didn't have any target gcc 4.6
-toolchain at hand.
-The flags -std=gnu11 , -Wmaybe-uninitialized , -flto are only present
-in gcc 4.7 and up and are also used by the target build. Buildroot
-doesn't support building its own toolchains with target gcc 4.6
-anymore but it's still possible to select it when using an external
-toolchain. It would probably still break for that case.
-If that is a problem that we don't care much now, then I can add my
-Tested-by on this patch. To cover all cases, the patch to add the
-'depends on' on both host and target gcc 4.7 would probably also fix
-it.
-
-Erico
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
