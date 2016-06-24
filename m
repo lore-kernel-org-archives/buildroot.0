@@ -1,44 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Jun 2016 13:41:30 +0200
-Subject: [Buildroot] [PATCH v2] pulseaudio: bump version to 9.0
-In-Reply-To: <576D1B38.6020101@imgtec.com> (Vicente Olivert Riera's message of
- "Fri, 24 Jun 2016 12:36:24 +0100")
-References: <1466677037-9608-1-git-send-email-Vincent.Riera@imgtec.com>
- <87wpleu9hv.fsf@dell.be.48ers.dk> <576D1B38.6020101@imgtec.com>
-Message-ID: <87shw2u845.fsf@dell.be.48ers.dk>
+Date: Fri, 24 Jun 2016 13:41:20 +0200
+Subject: [Buildroot] [git commit] pulseaudio: fix udev configure option
+Message-ID: <20160624114152.17FF282136@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9d5087b0d7cf37437964eaa47bfa95d8a76a7cf0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi Peter,
- > On 24/06/16 12:11, Peter Korsgaard wrote:
- >>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
- >> 
- >> > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- >> > ---
- >> > Changes v1 -> v2:
- >> >  - hash source link updated (Thanks to Baruch Siach)
- >> 
- >> I just noticed the pulseaudio release note on lwn where it clearly
- >> states that 9.0 needs webrtc-audio-processing >= 0.2:
- >> 
- >> https://lwn.net/Articles/692424/
- >> 
- >> So I've bumped our webrtc-audio-processing package, but please take care
- >> of such issues in the future.
+enable-libudev doesn't exist as a configure option. The right one is
+enable-udev.
 
- > Ok, thanks.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pulseaudio/pulseaudio.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > By the way, care to apply this one as well?
-
- > http://patchwork.ozlabs.org/patch/639565/
-
-Yes - Committed, thanks.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index 024b168..f50ea67 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -79,10 +79,10 @@ PULSEAUDIO_CONF_OPTS += --without-soxr
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+-PULSEAUDIO_CONF_OPTS += --enable-libudev
++PULSEAUDIO_CONF_OPTS += --enable-udev
+ PULSEAUDIO_DEPENDENCIES += udev
+ else
+-PULSEAUDIO_CONF_OPTS += --disable-libudev
++PULSEAUDIO_CONF_OPTS += --disable-udev
+ endif
+ 
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
