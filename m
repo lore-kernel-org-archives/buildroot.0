@@ -1,57 +1,36 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 24 Jun 2016 16:57:46 +0000
-Subject: [Buildroot] Emails being substituted when reading via Gmane NNTP
-In-Reply-To: <87vb167ukd.fsf@dell.be.48ers.dk>
-References: <1466149048.31770.11.camel@synopsys.com>
- <87ziqk6vu2.fsf@dell.be.48ers.dk> <1466178031.23608.9.camel@synopsys.com>
- <87vb167ukd.fsf@dell.be.48ers.dk>
-Message-ID: <1466787406.2872.17.camel@synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 24 Jun 2016 19:20:32 +0200
+Subject: [Buildroot] [PATCH 00/13 v7] legal-info improvements and
+ completeness (branch yem/legal-4)
+In-Reply-To: <20160624171143.18b1f32a@free-electrons.com>
+References: <cover.1462637351.git.yann.morin.1998@free.fr>
+ <20160624171143.18b1f32a@free-electrons.com>
+Message-ID: <20160624172032.GB4157@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Thomas, All,
 
-On Sat, 2016-06-18 at 10:46 +0200, Peter Korsgaard wrote:
-> > 
-> > > 
-> > > > 
-> > > > > 
-> > > > > > 
-> > > > > > "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
-> Hi,
+On 2016-06-24 17:11 +0200, Thomas Petazzoni spake thusly:
+> On Sat,  7 May 2016 18:14:33 +0200, Yann E. MORIN wrote:
+> > This series brings improvements to the legal-info infrastructure, so
+> > that we provide the most complete and correct content in the output of
+> > legal-info.
 > 
-> ?>> I believe that is an intentional feature of gmane to make it more
-> ?>> difficult to harvest email addresses:
-> ?>>?
-> ?>> http://gmane.org/tmda.php
-> ?>>?
-> ?>> According to that page, this is something you as a list maintainer can
-> ?>> control (but users can enforce it for their mails).
-> 
-> ?> So for Buildroot your guys intentionally enabled that feature?
-> 
-> I think it is on by default - I at least don't recall explicitly
-> enabling it.
-> 
-> ?> Even though idea is nice still in the "original" Buildroot list
-> ?> all emails are displayed as they are, see
-> ?> http://lists.busybox.net/pipermail/buildroot/2016-June/164199.html:
-> ?-------------------------> 8-----------------------
-> ?> Romain Naour romain.naour at gmail.com?
-> ?-------------------------> 8-----------------------
-> 
-> ?> Given that probably that's not much sense in doing email obfuscation
-> ?> in Gmane? IMHO it adds more trouble for good people than adds problems
-> ?> to bad guys.
-> 
-> Notice that the obfuscated email addresses DO work. They simply get
-> forwarded through gmane's spam filter.
-> 
-> But yeah, it probably doesn't help much in combating spam.
+> The series is now fully applied. Thanks a lot!
 
-So any plan to disable that for BR on Gmane if it barely adds anything meaningful :)
+Thanks! :-)
 
--Alexey
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
