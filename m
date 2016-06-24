@@ -1,117 +1,136 @@
 From: Dagg Stompler <daggs@gmx.com>
-Date: Fri, 24 Jun 2016 21:22:54 +0300
-Subject: [Buildroot] [PATCH 2/4 v3] odroid-mali: New Package
-In-Reply-To: <20160624182256.11909-1-daggs@gmx.com>
-References: <20160624182256.11909-1-daggs@gmx.com>
-Message-ID: <20160624182256.11909-2-daggs@gmx.com>
+Date: Fri, 24 Jun 2016 21:22:53 +0300
+Subject: [Buildroot] [PATCH 1/4 v2] odroid-scripts: New Package.
+Message-ID: <20160624182256.11909-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-v2 -> v3:
- - fix pkgconfig installation.
+v1 -> v2:
+ - fix hash type in hash file.
 
 Signed-off-by: Dagg Stompler <daggs@gmx.com>
 ---
- package/Config.in                    |  1 +
- package/odroid-mali/Config.in        | 21 ++++++++++++++++++++
- package/odroid-mali/odroid-mali.hash |  3 +++
- package/odroid-mali/odroid-mali.mk   | 37 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 62 insertions(+)
- create mode 100644 package/odroid-mali/Config.in
- create mode 100644 package/odroid-mali/odroid-mali.hash
- create mode 100644 package/odroid-mali/odroid-mali.mk
+ configs/odroidc2_defconfig                 |  1 +
+ package/Config.in                          |  1 +
+ package/odroid-scripts/Config.in           |  7 +++++++
+ package/odroid-scripts/S50odroidc2_fb      | 20 +++++++++++++++++++
+ package/odroid-scripts/odroid-scripts.hash |  2 ++
+ package/odroid-scripts/odroid-scripts.mk   | 32 ++++++++++++++++++++++++++++++
+ 6 files changed, 63 insertions(+)
+ create mode 100644 package/odroid-scripts/Config.in
+ create mode 100644 package/odroid-scripts/S50odroidc2_fb
+ create mode 100644 package/odroid-scripts/odroid-scripts.hash
+ create mode 100644 package/odroid-scripts/odroid-scripts.mk
 
+diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
+index 1945983..74b475c 100644
+--- a/configs/odroidc2_defconfig
++++ b/configs/odroidc2_defconfig
+@@ -6,6 +6,7 @@ BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image.sh"
++BR2_PACKAGE_ODROID_SCRIPTS=y
+ 
+ # Kernel
+ BR2_KERNEL_HEADERS_VERSION=y
 diff --git a/package/Config.in b/package/Config.in
-index 143a304..4b8ff60 100644
+index a2a02a8..143a304 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -421,6 +421,7 @@ endif
- 	source "package/nvidia-driver/Config.in"
- 	source "package/nvidia-tegra23/Config.in"
- 	source "package/nvme/Config.in"
-+	source "package/odroid-mali/Config.in"
- 	source "package/ofono/Config.in"
- 	source "package/ola/Config.in"
- 	source "package/on2-8170-modules/Config.in"
-diff --git a/package/odroid-mali/Config.in b/package/odroid-mali/Config.in
+@@ -1679,6 +1679,7 @@ endif
+ 	source "package/ncdu/Config.in"
+ 	source "package/numactl/Config.in"
+ 	source "package/nut/Config.in"
++	source "package/odroid-scripts/Config.in"
+ 	source "package/openvmtools/Config.in"
+ 	source "package/polkit/Config.in"
+ 	source "package/powerpc-utils/Config.in"
+diff --git a/package/odroid-scripts/Config.in b/package/odroid-scripts/Config.in
 new file mode 100644
-index 0000000..02c6ca0
+index 0000000..48544b6
 --- /dev/null
-+++ b/package/odroid-mali/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_ODROID_MALI
-+	bool "odroid-mali"
-+	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	select BR2_PACKAGE_FBSET
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
++++ b/package/odroid-scripts/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ODROID_SCRIPTS
++	bool "odroid-scripts"
 +	depends on BR2_aarch64 || BR2_arm
-+	depends on BR2_PACKAGE_ODROID_SCRIPTS
 +	help
-+	  Install the ARM Mali drivers for odroidc2 based systems.
++	  Install the scripts for the odroidc2 based systems.
 +
-+	  https://github.com/mdrjr/c2_mali
-+
-+if BR2_PACKAGE_ODROID_MALI
-+config BR2_PACKAGE_PROVIDES_LIBEGL
-+	default "odroid-mali"
-+
-+config BR2_PACKAGE_PROVIDES_LIBGLES
-+	default "odroid-mali"
-+endif
-diff --git a/package/odroid-mali/odroid-mali.hash b/package/odroid-mali/odroid-mali.hash
++	  https://github.com/mdrjr/c2_bootini
+diff --git a/package/odroid-scripts/S50odroidc2_fb b/package/odroid-scripts/S50odroidc2_fb
 new file mode 100644
-index 0000000..de3edc1
+index 0000000..2aae59d
 --- /dev/null
-+++ b/package/odroid-mali/odroid-mali.hash
-@@ -0,0 +1,3 @@
-+# Locally computed hash
-+sha256 122fe75fc105fc2f7c00b7f075deca567f6a3e56b5c128b00cf3096073b96e66  odroid-mali-4a34d59cd6120db67dc11023344e382afbaf28da.tar.gz
-+sha256 29d98ed4b8694b860d9289787c416faa847b0de26d36580a53add1752b4c2e9a  odroid-mali-46fe49f37e3506c6205ad8c50980eca9bfff11e3.tar.gz
-diff --git a/package/odroid-mali/odroid-mali.mk b/package/odroid-mali/odroid-mali.mk
++++ b/package/odroid-scripts/S50odroidc2_fb
+@@ -0,0 +1,20 @@
++#!/bin/sh
++#
++# Set up frame buffer
++#
++
++case "$1" in
++    start)
++        echo "Setting up display..."
++        /usr/sbin/odroidc2_init_fb.sh
++        ;;
++    stop)
++        ;;
++    restart|reload)
++        ;;
++    *)
++        echo "Usage: $0 {start|stop|restart}"
++        exit 1
++esac
++
++exit $?
+diff --git a/package/odroid-scripts/odroid-scripts.hash b/package/odroid-scripts/odroid-scripts.hash
 new file mode 100644
-index 0000000..ffd682c
+index 0000000..1b05947
 --- /dev/null
-+++ b/package/odroid-mali/odroid-mali.mk
-@@ -0,0 +1,37 @@
++++ b/package/odroid-scripts/odroid-scripts.hash
+@@ -0,0 +1,2 @@
++#  Locally computed hash
++sha256 bf34de357180126cb99885e8e131ae3ebb2562a98187da297c8ee10e56e29f65 odroid-scripts-17c88b9c48ad89a78c68392ccaa41b3cd42a622b.tar.gz
+diff --git a/package/odroid-scripts/odroid-scripts.mk b/package/odroid-scripts/odroid-scripts.mk
+new file mode 100644
+index 0000000..993b53b
+--- /dev/null
++++ b/package/odroid-scripts/odroid-scripts.mk
+@@ -0,0 +1,32 @@
 +################################################################################
 +#
-+# odroid-mali
++# odroid-scripts
 +#
 +################################################################################
 +
-+ifeq ($(BR2_aarch64),y)
-+ODROID_MALI_VERSION = 4a34d59cd6120db67dc11023344e382afbaf28da
-+ODROID_MALI_LIBS_INSTALL_ARCH=mali_libs
++ODROID_SCRIPTS_VERSION = 17c88b9c48ad89a78c68392ccaa41b3cd42a622b
++ODROID_SCRIPTS_SITE = $(call github,mdrjr,c2_bootini,$(ODROID_SCRIPTS_VERSION))
++ODROID_SCRIPTS_LICENSE = unclear
++
++ifeq ($(BR2_PACKAGE_EUDEV),y)
++	ODROID_SCRIPTS_INSTALL_UDEV_RULES = $(INSTALL) -D -m 0644 $(@D)/10-odroid.rules $(TARGET_DIR)/etc/udev/rules.d/10-odroid.rules
 +else
-+ODROID_MALI_VERSION = 46fe49f37e3506c6205ad8c50980eca9bfff11e3
-+ODROID_MALI_LIBS_INSTALL_ARCH=32bit_libs
++	ODROID_SCRIPTS_INSTALL_UDEV_RULES =
 +endif
 +
-+ODROID_MALI_SITE = $(call github,mdrjr,c2_mali,$(ODROID_MALI_VERSION))
-+ODROID_MALI_LICENSE = hardkernel
-+ODROID_MALI_LICENSE_FILES = README.md
-+
-+ODROID_MALI_INSTALL_STAGING = YES
-+ODROID_MALI_PROVIDES = libegl libgles
-+
-+define ODROID_MALI_INSTALL_LIBS
-+	cp -aRP $(@D)/fbdev/$(ODROID_MALI_LIBS_INSTALL_ARCH)/lib* $(1)/lib/
++define ODROID_SCRIPTS_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/c2_init.sh $(TARGET_DIR)/usr/sbin/odroidc2_init_fb.sh
++	$(ODROID_SCRIPTS_INSTALL_UDEV_RULES)
 +endef
 +
-+define ODROID_MALI_INSTALL_STAGING_CMDS
-+	$(call ODROID_MALI_INSTALL_LIBS,$(STAGING_DIR)/usr)
-+	$(INSTALL) -d $(STAGING_DIR)/usr/lib/pkgconfig
-+	$(INSTALL) -m 644 $(@D)/pkgconfig/*.pc $(STAGING_DIR)/usr/lib/pkgconfig/
-+	cp -aRP $(@D)/fbdev/mali_headers/* $(STAGING_DIR)/usr/include
++define ODROID_SCRIPTS_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 $(@D)/amlogic.service $(TARGET_DIR)/usr/lib/systemd/system/odroidc2_fb.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib/systemd/system/odroidc2_fb.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/odroidc2_fb.service
 +endef
 +
-+define ODROID_MALI_INSTALL_TARGET_CMDS
-+	$(call ODROID_MALI_INSTALL_LIBS,$(TARGET_DIR)/usr)
++define ODROID_SCRIPTS_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/odroid-scripts/S50odroidc2_fb $(TARGET_DIR)/etc/init.d/S50odroidc2_fb
 +endef
 +
 +$(eval $(generic-package))
