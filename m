@@ -1,68 +1,99 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 24 Jun 2016 07:18:26 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2016-06-19
-In-Reply-To: <20160624091442.6a4f342f@free-electrons.com>
-References: <20160620063029.16331102969@stock.ovh.net>
- <1466742836.3244.20.camel@synopsys.com>
- <20160624091442.6a4f342f@free-electrons.com>
-Message-ID: <1466752647.3244.40.camel@synopsys.com>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Fri, 24 Jun 2016 07:24:37 +0000
+Subject: [Buildroot] Patchwork cleanup week #24
+In-Reply-To: <1466574249.3622.15.camel@synopsys.com>
+References: <20160615220634.67eb8fa9@free-electrons.com>
+ <4209f432-0fbd-8d44-7194-c99829f66e2e@smile.fr>
+ <1466574249.3622.15.camel@synopsys.com>
+Message-ID: <1466753076.30418.15.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,?
 
-On Fri, 2016-06-24 at 09:14 +0200, Thomas Petazzoni wrote:
-> Hello,
+On Wed, 2016-06-22 at 05:45 +0000, Alexey Brodkin wrote:
+> Hi Romain,
 > 
-> On Fri, 24 Jun 2016 04:34:55 +0000, Alexey Brodkin wrote:
+> On Sat, 2016-06-18 at 16:07 +0200, Romain Naour wrote:
+> > 
+> > Hi Thomas, Alexey, Vlad, All,
+> > 
+> > Le 15/06/2016 ? 22:06, Thomas Petazzoni a ?crit :
+> > > 
+> > > 
+> > > Hello,
+> > > 
+> > > The previous patchwork cleanup period being over, it's time to start
+> > > the second period, with 10 other patches. We're on June 15th, so I'll
+> > > give people until June 30th to react on the following patches. If
+> > > there's no reaction, like no interest from either the original
+> > > submitter nor any other Buildroot developer, the patch will be marked
+> > > Rejected on June 30th.
+> > > 
+> > > If you are in To: of this e-mail, then one or several of the patches
+> > > below have been authored by you, so you should be interested :-)
+> > > 
+> > > Thanks,
+> > > 
+> > > Thomas
+> > > 
+> > > ?5. Fix for the makeinfo / missing issue, proposal from Romain
+> > > ????http://patchwork.ozlabs.org/patch/595041/
+> > > ????http://patchwork.ozlabs.org/patch/595042/
+> > > ????http://patchwork.ozlabs.org/patch/595043/
+> > > 
+> > > ????We need to take a decision on this one. The problem also occurs for
+> > > ????gdb and binutils on ARC, for which we've added a custom hack
+> > > ????recently.
+> > > 
+> > > ????I tried to play with timestamps by touch'ing the .info files before
+> > > ????the build, it worked with one of gdb or binutils, but failed for
+> > > ????the other.
+> > > 
+> > > ????So either we take Romain's approach, or we bite the bullet and add
+> > > ????a host-makeinfo package on which we depend when gdb/binutils are
+> > > ????fetched from Git.
+> > > 
+> > IHMO the real problem is that binutils/gdb doesn't support --disable-docs
+> > option. When present on the command line, this option must completely disable
+> > the documentation (man, info, pdf etc) and let the build continue.
+> > 
+> > It seems that this issue was already discussed back in 2007 [1].
+> > Last year I submitted a patch upstream to do that but it was not complete and
+> > not tested due to autoconf version mismatch [2].
+> > 
+> > If we want to autoreconf binutils/gdb in Buildroot we must downgrade autoconf to
+> > 2.64 and automake to 1.12.6.
+> > 
+> > Alexey, Vlad, I would suggest to rework your patch [3] and add --disable-docs
+> > option instead of testing missing 127 return value.
+> > If you succeed, we can reject my proposal from patchwork :)
+> Right, that's what we're looking at now.
+> Stay tuned and patch(es) will follow :)
 > 
-> > 
-> > With arc-2016.03 toolchain we're seeing quite a lot of failures here and there.
-> > That's sort of expected because we switched to binutils rewritten from scratch.
-> > So we're still ramping up with these new binutils. What is also important these
-> > new rewritten binutils are in upstream already. I.e. upcoming binutils 2.27 will
-> > have everything ARC-specific from arc-2016.03 plus some more fixes and
-> > enhancements that we made since March.
-> OK, thanks for explaining the situation.
-> 
-> > 
-> > And what we may do in Buildroot we may either wait for 2.27 binutils to be released
-> > and then apply [backported from mainline master] patches on top of it to fix still
-> > existing issues or alternatively we may start using so-called "engineering builds"
-> > of binutils for ARC.
-> > 
-> > These "engineering builds" are basically snapshots [that pass internal review and
-> > testing] made from our dev branch (arc-2016.09) on GitHub like the most recent
-> > "arc-2016.09-eng004":?https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/releases/tag/arc-2016.09-
-> > eng0
-> > 04
-> > 
-> > We'd prefer to go with "engineering builds" simply because we foresee still a lot
-> > of changes in ARC port of binutils (remember our port is in its childhood currently)
-> > while upstream binutils see release about once a year. Which means adding fixes and
-> > enhancements on top of 2.27 release at some point will become a support nightmare.
-> > 
-> > What do you guys think about all that?
-> I think at some point we will want to use the upstream version of
-> binutils if there is ARC support upstream. However, I definitely
-> understand that the upstream support may not be fully ready overnight,
-> so I'm fine with using those engineering builds for now, and then move
-> to using the upstream binutils version for binutils 2.28 for example
-> (or 2.29 if 2.28 is still not good enough).
+> -Alexey
 
-Ok cool!
+I looked around adding --disable-docs option and faced some difficulties.
+Configuration process is rather difficult in binutils.
+?* "configure" scripts are generated for each package from corresponding template file.
+?* "configure" script is generated from "configure.ac",?
+?* "configure" script generates Makefiles from "Makefile.in" files, also it runs "configure" scripts in sub-directories, etc.
+?* Build is recursive.?
+?* Doc targets for some packages are added to separate directory, for other the are not.
 
-Then let's get the party started.
+Also I don't have required versions of autoconf (v. 2.64) and automake (v.1.11.6).
+It is required to use particular versions to avoid introducing subtle bugs in configure and/or Makefile.in.
+For example:
+https://sourceware.org/ml/binutils/2013-04/msg00210.html
 
-Vlad will send a patch which bump ARC tools to arc-2016.09-eng004 shortly.
-Since other components like gcc and gdb are also not fully upstream we'll be
-bumping all 3 components at once:
-?1. Binutils
-?2. Gcc
-?3. Gdb
+So implementing this option doesn't seem to be a low-hanging fruit after all.
 
--Alexey
+Returning to the problem. Real issue is that build fails when "makeinfo" is missing on build host.
+So a nice and much easier idea is to add "makeinfo" package and make binutils and gdb dependent on the "host-makeinfo" package.
+
+--?
+Best regards,
+Vlad Zakharov <vzakhar@synopsys.com>
