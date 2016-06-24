@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jun 2016 00:11:14 +0200
-Subject: [Buildroot] [PATCH 2/7] checkpolicy: bump to version 2.5
-In-Reply-To: <1466803929-5513-2-git-send-email-Aduskett@gmail.com>
+Date: Sat, 25 Jun 2016 00:13:18 +0200
+Subject: [Buildroot] [PATCH 3/7] Add host-libcap-ng capabilities.
+In-Reply-To: <1466803929-5513-3-git-send-email-Aduskett@gmail.com>
 References: <1466803929-5513-1-git-send-email-Aduskett@gmail.com>
- <1466803929-5513-2-git-send-email-Aduskett@gmail.com>
-Message-ID: <20160624221114.GD4157@free.fr>
+ <1466803929-5513-3-git-send-email-Aduskett@gmail.com>
+Message-ID: <20160624221318.GE4157@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,43 +14,43 @@ To: buildroot@busybox.net
 Adam, All,
 
 On 2016-06-24 17:32 -0400, Adam Duskett spake thusly:
+> host-libcap-ng can be a requirement for host-audit.  This allows libcap-ng to be compiled as a host package.
+
+Too long line. Please wrap at <80 chars.
+
 > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-Hash checked to be OK.
-
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+However, as discussed on IRC: this patch should come before you
+introduce the host variant for the audit package.
+
+So, probably in this order:
+
+  - add host-libcap-ng
+  - bump audit to 2.5
+  - add host-audit
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/checkpolicy/checkpolicy.hash | 2 +-
->  package/checkpolicy/checkpolicy.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/libcap-ng/libcap-ng.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/package/checkpolicy/checkpolicy.hash b/package/checkpolicy/checkpolicy.hash
-> index 32b5ff6..bc5199c 100644
-> --- a/package/checkpolicy/checkpolicy.hash
-> +++ b/package/checkpolicy/checkpolicy.hash
-> @@ -1,2 +1,2 @@
->  # https://github.com/SELinuxProject/selinux/wiki/Releases
-> -sha256 e6a0ac539b74859b4262b317eb90d9914deb15e7aa509659f47724d50fe2ecc6  checkpolicy-2.1.12.tar.gz
-> +sha256 33af9f3eb19135a7e6536ecd3fbb9686323000016cd51eb88346346ed7546001  checkpolicy-2.5.tar.gz
-> diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
-> index 4b7b2f3..f1b76d0 100644
-> --- a/package/checkpolicy/checkpolicy.mk
-> +++ b/package/checkpolicy/checkpolicy.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
+> diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
+> index d78f5dc..543cbe6 100644
+> --- a/package/libcap-ng/libcap-ng.mk
+> +++ b/package/libcap-ng/libcap-ng.mk
+> @@ -13,4 +13,8 @@ LIBCAP_NG_INSTALL_STAGING = YES
+>  LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
+>  LIBCAP_NG_CONF_OPTS = --without-python
 >  
-> -CHECKPOLICY_VERSION = 2.1.12
-> -CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-> +CHECKPOLICY_VERSION = 2.5
-> +CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
->  CHECKPOLICY_LICENSE = GPLv2
->  CHECKPOLICY_LICENSE_FILES = COPYING
->  
+> +HOST_LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
+> +HOST_LIBCAP_NG_CONF_OPTS = --without-python
+> +
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
 > -- 
 > 2.7.4
 > 
