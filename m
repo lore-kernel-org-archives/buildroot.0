@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Jun 2016 17:41:41 +0200
-Subject: [Buildroot] [PATCH 1/2] nano: switch to official site
-In-Reply-To: <1466760062-31676-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1466760062-31676-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160624174141.7349ac2d@free-electrons.com>
+Date: Fri, 24 Jun 2016 17:58:01 +0200
+Subject: [Buildroot] [PATCH] package/rrdtool: add support for perl
+ bindings
+In-Reply-To: <1466665963-5543-1-git-send-email-yann.morin@orange.com>
+References: <1466665963-5543-1-git-send-email-yann.morin@orange.com>
+Message-ID: <20160624175801.569ad7c9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 24 Jun 2016 10:21:01 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/nano/nano.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+On Thu, 23 Jun 2016 09:12:43 +0200, Yann E. MORIN wrote:
 
-Applied to master, thanks.
+> +ifeq ($(BR2_PACKAGE_PERL),y)
+> +RRDTOOL_DEPENDENCIES += host-perl
+
+It is somewhat weird, one would expect to see a dependency on "perl"
+here, not "host-perl".
+
+However, maybe you simply need host-perl at *build* time to build the
+bindings, and the target perl is only needed at *runtime*. If that's
+the case, then a comment above this dependency would be good to have.
+
+If you confirm my understanding, I can also just add the comment when
+applying.
+
+Best regards,
 
 Thomas
 -- 
