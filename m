@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Jun 2016 17:12:25 +0200
-Subject: [Buildroot] [git commit] imagemagick: bump version to 7.0.2-1
-Message-ID: <20160624151228.D07127FD33@busybox.osuosl.org>
+Date: Fri, 24 Jun 2016 17:12:56 +0200
+Subject: [Buildroot] [git commit] nano: bump version to 2.6.0
+Message-ID: <20160624153732.AD41B81D71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf5e7bc63be2be87d1e15e57c3c52ebd8d1b072a
+commit: https://git.buildroot.net/buildroot/commit/?id=bac3f17470a89aa64e554be44ea56375ee7741ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index e34f15a..ef73b24 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index eb6a9fc..7152f52 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
 @@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256	cd3076a573a815ff828c75d231eef8660f2f6c5eaf848c2f4e8c4dcc955671ea	ImageMagick-7.0.2-0.tar.xz
-+sha256 a4420a125609d6cac2fbc141a291bbf143d71bd15e21c09946fdf98f90247225  ImageMagick-7.0.2-1.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 5ec9174..94c9647 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated after checking pgp signature
+-sha256  b2b060129b9feff2d4870d803a441178c96531de9aed144ec0b83bd63ccb12ee  nano-2.5.3.tar.gz
++sha256 d517a5fcaa9fa6ceda8a63e22be1d83dd7f4af13703c73b10a48e95a6e1178d3  nano-2.6.0.tar.gz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 0ed35b9..d8e19bc 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.0.2-0
-+IMAGEMAGICK_VERSION = 7.0.2-1
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+-NANO_VERSION_MAJOR = 2.5
+-NANO_VERSION = $(NANO_VERSION_MAJOR).3
++NANO_VERSION_MAJOR = 2.6
++NANO_VERSION = $(NANO_VERSION_MAJOR).0
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_LICENSE = GPLv3+
+ NANO_LICENSE_FILES = COPYING
