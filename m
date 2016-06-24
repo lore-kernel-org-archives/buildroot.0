@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Jun 2016 09:32:05 +0200
-Subject: [Buildroot] Patchwork cleanup week #24
-In-Reply-To: <1466753076.30418.15.camel@synopsys.com>
-References: <20160615220634.67eb8fa9@free-electrons.com>
- <4209f432-0fbd-8d44-7194-c99829f66e2e@smile.fr>
- <1466574249.3622.15.camel@synopsys.com>
- <1466753076.30418.15.camel@synopsys.com>
-Message-ID: <20160624093205.722fc199@free-electrons.com>
+Date: Fri, 24 Jun 2016 09:36:01 +0200
+Subject: [Buildroot] [PATCH 4/6] libsepol: bump to version 2.5
+In-Reply-To: <1466736201-17310-4-git-send-email-Aduskett@gmail.com>
+References: <1466736201-17310-1-git-send-email-Aduskett@gmail.com>
+ <1466736201-17310-4-git-send-email-Aduskett@gmail.com>
+Message-ID: <20160624093601.1b6a9b3e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,24 +13,60 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 24 Jun 2016 07:24:37 +0000, Vlad Zakharov wrote:
+Glad to see that there are some people interested by SELinux support!
+We still have lots of pending patches about SELinux, especially the
+one adding the refpolicy package. See
+http://patchwork.ozlabs.org/project/buildroot/list/?submitter=&state=&q=selinux&archive=&delegate=.
 
-> Returning to the problem. Real issue is that build fails when "makeinfo" is missing on build host.
-> So a nice and much easier idea is to add "makeinfo" package and make
-> binutils and gdb dependent on the "host-makeinfo" package.
+Some comments below though.
 
-I indeed start to think that it's the only reasonable solution. The
-only thing I would like to see is this dependency being added only for
-binutils/gdb version that want to re-generate their documentation.
-Normally, binutils/gdb versions from release tarballs are fine and
-don't try to regenerate their documentation.
+On Thu, 23 Jun 2016 22:43:19 -0400, Adam Duskett wrote:
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/libsepol/0001-support-static-only.patch    | 17 +++++++++--------
+>  .../libsepol/0002-workaround-blackfin-issue.patch  | 22 ++++++----------------
 
-As I said earlier, I tried to touch the relevant .info files to have
-their timestamp to be later than the source files. It worked fine for
-one of binutils or gdb (don't remember which one), but wasn't working
-for the other one.
+It would be good if you could indicate in the commit log what is
+changed in the patches. Indeed, there are some strange changes that
+you're doing.
 
-Best regards,
+>  package/libsepol/libsepol.hash                     |  2 +-
+>  package/libsepol/libsepol.mk                       |  4 ++--
+>  4 files changed, 18 insertions(+), 27 deletions(-)
+> 
+> diff --git a/package/libsepol/0001-support-static-only.patch b/package/libsepol/0001-support-static-only.patch
+> index b974680..6d30454 100644
+> --- a/package/libsepol/0001-support-static-only.patch
+> +++ b/package/libsepol/0001-support-static-only.patch
+> @@ -6,15 +6,16 @@ when defined to some non-empty value, will disable the build of shared
+>  libraries. It allows to support cases where the target architecture
+>  does not have support for shared libraries.
+>  
+> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> -
+
+Why are you removing this?
+
+> diff --git a/package/libsepol/0002-workaround-blackfin-issue.patch b/package/libsepol/0002-workaround-blackfin-issue.patch
+> index 5d00c69..237c06a 100644
+> --- a/package/libsepol/0002-workaround-blackfin-issue.patch
+> +++ b/package/libsepol/0002-workaround-blackfin-issue.patch
+> @@ -1,24 +1,14 @@
+> -Do not make symbols hidden on Blackfin
+> -
+> -The libselinux logic to hide internal symbols from the DSO doesn't
+> -work properly on Blackfin due to the USER_LABEL_PREFIX not being
+> -handled properly. A real fix is not that simple, so this patch simply
+> -disables the internal symbol hiding mechanism. This means that those
+> -symbols are visible in the final DSO, which is not a problem for
+> -proper execution, it just isn't as clean.
+> -
+> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> -
+
+And why are you removing this ?
+
+Thanks!
 
 Thomas
 -- 
