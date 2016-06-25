@@ -1,28 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Jun 2016 15:29:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linux-headers: bump 3.{18,
- 14}.x and 4.{1, 4, 6}.x series
-In-Reply-To: <1466842001-11118-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1466842001-11118-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160625152912.2be8afdd@free-electrons.com>
+Date: Sat, 25 Jun 2016 15:29:19 +0200
+Subject: [Buildroot] [git commit] package/libva: bump version to 1.7.1
+Message-ID: <20160625132932.2445D7FF72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c7f8161a35f24b6b0b6c54d211ba5f9c9691448d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 25 Jun 2016 10:06:41 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/linux-headers/Config.in.host | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libva/libva.hash | 4 ++--
+ package/libva/libva.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 0211365..8e8d348 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/libva/2016-March/003885.html
+-sha1	e1e440da60b11986afb54fc130c7707f11827298	libva-1.7.0.tar.bz2
++# From https://lists.freedesktop.org/archives/libva/2016-June/004034.html
++sha1	6405ce9adcad2bc31122d766f2a99250657f9f8a	libva-1.7.1.tar.bz2
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index e11bed3..b6a7ca5 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBVA_VERSION = 1.7.0
++LIBVA_VERSION = 1.7.1
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
+ LIBVA_LICENSE = MIT
