@@ -1,94 +1,38 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 26 Jun 2016 00:24:58 +0200
-Subject: [Buildroot] [PATCH v2] qt5: bump version to 5.6.1-1
-In-Reply-To: <20160625154206.6b576d3e@free-electrons.com>
-References: <1466801021-32264-1-git-send-email-ps.report@gmx.net>
- <20160625154206.6b576d3e@free-electrons.com>
-Message-ID: <20160626002458.286ad9b8@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 26 Jun 2016 00:43:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/libxcb: force the use of
+	python2
+Message-ID: <1466894615-14358-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+libxcb in its current state is not python3-compatible:
+https://bugs.freedesktop.org/show_bug.cgi?id=96395
 
-On Sat, 25 Jun 2016 15:42:06 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Fixes
+http://autobuild.buildroot.net/results/c74/c74fa243bf319472dca66982323df6c2a983642b/
 
-> Hello,
-> 
-> On Fri, 24 Jun 2016 22:43:41 +0200, Peter Seiderer wrote:
-> > Removed obsolete patches:
-> > 
-> >   - qt5base/0001-Disable-c-standard-compiler-flags-for-the-host-build.patch (upstream committed [1])
-> >   - qt5base: https://github.com/qtproject/qtbase/commit/b8f98d956501dfa4ce03a137f15d404930a56066.patch (upstream committed)
-> >   - qt5/qt5base/0007-build-with-explicitlib-after-all.patch (upstream committed [2])
-> >   - qt5tools/0001-Disable-qdoc-needs-qtdeclarative.patch (fixed upstream by [3])
-> >   - qt5webkit/0004-Fix-linking-with-libpthread.patch (upstream committed [4])
-> > 
-> > [1] http://code.qt.io/cgit/qt/qtbase.git/commit/?id=e69e69519661954716d59bfa5bbd0626515cfda9
-> > [2] http://code.qt.io/cgit/qt/qtbase.git/commit/?id=523c7e3fd55c853dd424d57f28e225d57439cf89
-> > [3] http://code.qt.io/cgit/qt/qttools.git/commit/?id=2b262fad86ef38a5fa692b4c73e6ec26a5d45a5f
-> > [4] http://code.qt.io/cgit/qt/qtwebkit.git/commit/?id=5f359baacdf92fabcece83f0a2b30f74c7c02a3c
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Changes v1 --> v2:
-> >   - add obsolete patch entry for qt5base.mk downloaded patch
-> >   - fix qt5enginio version (is 1.6.1 for qt5.6.1-1)
-> > ---
-> >  package/qt5/qt5.mk                                 |  2 +-
-> >  package/qt5/qt53d/qt53d.hash                       |  4 +-
-> >  ...tandard-compiler-flags-for-the-host-build.patch | 44 -------------------
-> >  .../0007-build-with-explicitlib-after-all.patch    | 51 ----------------------
-> >  package/qt5/qt5base/qt5base.hash                   |  5 +--
-> >  package/qt5/qt5base/qt5base.mk                     |  1 -
-> >  package/qt5/qt5canvas3d/qt5canvas3d.hash           |  4 +-
-> >  package/qt5/qt5connectivity/qt5connectivity.hash   |  4 +-
-> >  package/qt5/qt5declarative/qt5declarative.hash     |  4 +-
-> >  package/qt5/qt5enginio/qt5enginio.hash             |  4 +-
-> >  package/qt5/qt5enginio/qt5enginio.mk               |  2 +-
-> >  .../qt5graphicaleffects/qt5graphicaleffects.hash   |  4 +-
-> >  package/qt5/qt5imageformats/qt5imageformats.hash   |  4 +-
-> >  package/qt5/qt5location/qt5location.hash           |  4 +-
-> >  package/qt5/qt5multimedia/qt5multimedia.hash       |  4 +-
-> >  package/qt5/qt5quickcontrols/qt5quickcontrols.hash |  4 +-
-> >  .../qt5/qt5quickcontrols2/qt5quickcontrols2.hash   |  4 +-
-> >  package/qt5/qt5script/qt5script.hash               |  4 +-
-> >  package/qt5/qt5sensors/qt5sensors.hash             |  4 +-
-> >  package/qt5/qt5serialbus/qt5serialbus.hash         |  4 +-
-> >  package/qt5/qt5serialport/qt5serialport.hash       |  4 +-
-> >  package/qt5/qt5svg/qt5svg.hash                     |  4 +-
-> >  .../0001-Disable-qdoc-needs-qtdeclarative.patch    | 30 -------------
-> >  package/qt5/qt5tools/qt5tools.hash                 |  4 +-
-> >  package/qt5/qt5webchannel/qt5webchannel.hash       |  4 +-
-> >  .../0004-Fix-linking-with-libpthread.patch         | 34 ---------------
-> >  package/qt5/qt5webkit/qt5webkit.hash               |  2 +-
-> >  package/qt5/qt5webkit/qt5webkit.mk                 |  2 +-
-> >  package/qt5/qt5websockets/qt5websockets.hash       |  4 +-
-> >  package/qt5/qt5x11extras/qt5x11extras.hash         |  4 +-
-> >  package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |  4 +-
-> >  31 files changed, 48 insertions(+), 209 deletions(-)
-> >  delete mode 100644 package/qt5/qt5base/0001-Disable-c-standard-compiler-flags-for-the-host-build.patch
-> >  delete mode 100644 package/qt5/qt5base/0007-build-with-explicitlib-after-all.patch
-> >  delete mode 100644 package/qt5/qt5tools/0001-Disable-qdoc-needs-qtdeclarative.patch
-> >  delete mode 100644 package/qt5/qt5webkit/0004-Fix-linking-with-libpthread.patch
-> 
-> Applied to master, thanks.
-> 
-> Thomas
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/libxcb/libxcb.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks for committing, but something went wrong, your committed Patch v1 instead of Patch v2...
-The difference was the following line in the commit message:
-
->   - qt5base: https://github.com/qtproject/qtbase/commit/b8f98d956501dfa4ce03a137f15d404930a56066.patch (upstream committed)
-
-and the fix for qt5enginio version:
-
- -QT5ENGINIO_VERSION = 1.6.0
- +QT5ENGINIO_VERSION = 1.6.1
-
-Should I send a follow up patch fixing qt5enginio?
-
-Regards,
-Peter
+diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
+index a740638..7f7823b 100644
+--- a/package/x11r7/libxcb/libxcb.mk
++++ b/package/x11r7/libxcb/libxcb.mk
+@@ -19,5 +19,9 @@ LIBXCB_DEPENDENCIES = \
+ LIBXCB_CONF_OPTS = --with-doxygen=no
+ HOST_LIBXCB_CONF_OPTS = --with-doxygen=no
+ 
++# libxcb is not python3 friendly, so force the python interpreter
++HOST_LIBXCB_CONF_OPTS += ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
++LIBXCB_CONF_OPTS += ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+2.8.1
