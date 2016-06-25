@@ -1,39 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 25 Jun 2016 10:47:05 -0300
-Subject: [Buildroot] [PATCH] e2fsprogs: add fuse2fs libintl fix patch
-In-Reply-To: <20160625154447.21f20855@free-electrons.com>
-References: <1466640574-12773-1-git-send-email-gustavo@zacarias.com.ar>
- <20160625154447.21f20855@free-electrons.com>
-Message-ID: <576E8B59.8050802@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 25 Jun 2016 15:53:45 +0200
+Subject: [Buildroot] [PATCH 3/4 v3] libamcodec: New Package
+References: <20160624182256.11909-1-daggs@gmx.com>
+ <20160624182256.11909-3-daggs@gmx.com>
+Message-ID: <90f24dxqbs.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/06/16 10:44, Thomas Petazzoni wrote:
+Am Fri, 24 Jun 2016 21:22:55 +0300 schrieb Dagg Stompler:
 
-> Hello,
->
-> On Wed, 22 Jun 2016 21:09:34 -0300, Gustavo Zacarias wrote:
->
->> +diff --git a/misc/Makefile.in b/misc/Makefile.in
->> +index f67c9c7..e487692 100644
->> +--- a/misc/Makefile.in
->> ++++ b/misc/Makefile.in
->> +@@ -389,7 +389,7 @@ fuse2fs: $(FUSE2FS_OBJS) $(DEPLIBS) $(DEPLIBBLKID) $(DEPLIBUUID) \
->> + 	$(E) "	LD $@"
->> + 	$(Q) $(CC) $(ALL_LDFLAGS) -o fuse2fs $(FUSE2FS_OBJS) $(LIBS) \
->> + 		$(LIBFUSE) $(LIBBLKID) $(LIBUUID) $(LIBEXT2FS) $(LIBINTL) \
->
-> Isn't $(LIBINTL) supposed to contain -lintl ?
->
->> +-		$(CLOCK_GETTIME_LIB)
->> ++		$(CLOCK_GETTIME_LIB) $(SYSLIBS)
->
-> Why would -lintl be in $(SYSLIBS) instead of in $(LIBINTL) ?
+> +define LIBAMCODEC_INSTALL_STAGING_CMDS
 
-Hi.
-Apparently $(LIBINTL) is for bundled libintl support (internal dep), if 
-it's external (normally out case) then it's in $(SYSLIBS).
-Regards.
+Hi,
+
+you define LIBAMCODEC_INSTALL_STAGING_CMDS but forgot to add
+
+LIBAMCODEC_INSTALL_STAGING = YES
+
+leading to
+
+checking for amcodec/codec_error.h... no
+configure: error: Could not find some required headers. Please see the README for your platform.
+
+during Kodi configure.
+After adding the missing line Kodi configure passes.
+
+Regards, Bernd
