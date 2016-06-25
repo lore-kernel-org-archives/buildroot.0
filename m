@@ -1,8 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Jun 2016 10:06:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linux-headers: bump 3.{18,
-	14}.x and 4.{1, 4, 6}.x series
-Message-ID: <1466842001-11118-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 25 Jun 2016 10:51:26 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libva-intel-driver: bump version to
+	1.7.1
+In-Reply-To: <1466844686-12576-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1466844686-12576-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1466844686-12576-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,32 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/linux-headers/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/libva-intel-driver/libva-intel-driver.hash | 4 ++--
+ package/libva-intel-driver/libva-intel-driver.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7162e21..af29676 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -222,14 +222,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.61"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.72"	if BR2_KERNEL_HEADERS_3_14
--	default "3.18.35"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.14.73"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.18.36"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.26"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.27"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
--	default "4.4.13"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.14"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
--	default "4.6.2"		if BR2_KERNEL_HEADERS_4_6
-+	default "4.6.3"		if BR2_KERNEL_HEADERS_4_6
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
+index 9d77aed..a480c2c 100644
+--- a/package/libva-intel-driver/libva-intel-driver.hash
++++ b/package/libva-intel-driver/libva-intel-driver.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/libva/2016-March/003886.html
+-sha1	6766ff2e8134e09e9204ec9ccd3b8d550890d5d2	libva-intel-driver-1.7.0.tar.bz2
++# From https://lists.freedesktop.org/archives/libva/2016-June/004035.html
++sha1	eb3660197ce4781af4db4d97b0d7965900e7b06e	libva-intel-driver-1.7.1.tar.bz2
+diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
+index e930ade..dadd67b 100644
+--- a/package/libva-intel-driver/libva-intel-driver.mk
++++ b/package/libva-intel-driver/libva-intel-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBVA_INTEL_DRIVER_VERSION = 1.7.0
++LIBVA_INTEL_DRIVER_VERSION = 1.7.1
+ LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
+ LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
+ LIBVA_INTEL_DRIVER_LICENSE = MIT
 -- 
 2.8.1
