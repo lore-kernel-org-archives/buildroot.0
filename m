@@ -1,28 +1,29 @@
 From: James Knight <james.d.knight@live.com>
-Date: Sat, 25 Jun 2016 00:29:10 -0400
-Subject: [Buildroot] [PATCH 2/2 v2] kodi: enable optional dependency on
-	libamcodec
-In-Reply-To: <trinity-c3fda4ab-7b95-4635-ad06-89c4b3e15c13-1465620413342@3capp-mailcom-bs07>
-References: <20160610115151.19226-1-daggs@gmx.com>
- <20160610115151.19226-2-daggs@gmx.com>
- <5o6r2dxrp2.ln2@ID-313208.user.individual.net>
- <trinity-c3fda4ab-7b95-4635-ad06-89c4b3e15c13-1465620413342@3capp-mailcom-bs07>
-Message-ID: <CALAjcgVM8DLkoSEZcusOusXC52dEQfbin-=gHG0iGdaU03Xv=Q@mail.gmail.com>
+Date: Sat, 25 Jun 2016 00:40:57 -0400
+Subject: [Buildroot] any comments on my patches?
+In-Reply-To: <CALAjcgUWr89YDYS+tFOotbMLD=TOe5piSfRJ=uihA2zqg5EYog@mail.gmail.com>
+References: <trinity-5af46213-62f9-4fb3-93a8-efdb5a368fa2-1465882967915@3capp-mailcom-bs10>
+ <20160614204854.GB32391@free.fr>
+ <trinity-8d22a9c9-d2d7-439c-a981-e1a50502e63c-1465972203408@3capp-mailcom-bs05>
+ <CALAjcgUWr89YDYS+tFOotbMLD=TOe5piSfRJ=uihA2zqg5EYog@mail.gmail.com>
+Message-ID: <CALAjcgV3ZT0+g0rEPo9b20d7yvL_BPa5uUA-Ld_2ZosdGbsJqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Daggs, Bernd;
+Dagg,
 
-On Sat, Jun 11, 2016 at 12:46 AM, daggs <daggs@gmx.com> wrote:
-> the change described here is regarding andorid.
-> unless I'm mistaken
+On Fri, Jun 24, 2016 at 11:41 PM, James Knight <james.d.knight@live.com> wrote:
+> (if you weren't aware or just forgot to adjust after submitting your
+> v4 series).
 
-I believe you are correct. Examining the commit [1] shows that the
-change is really Android specific (whether or not the merge's
-description [2] doesn't indicate so).
+Oops; I meant to indicate v3.
 
-[1]: https://github.com/xbmc/xbmc/pull/9688/commits/1015c480966d786eb050ce3d3701cdbf5231d1f5
-[2]: https://github.com/xbmc/xbmc/pull/9688
+---
+
+Also, I would advise that you do not mix your odroid patches along
+with your libamcodec/kodi patches (for your v3 series). Keeping them
+as separate patch series might make it easier to get some patches in
+before others (instead of blocking your entire patch series).
