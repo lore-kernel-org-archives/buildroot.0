@@ -1,39 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Jun 2016 15:44:47 +0200
-Subject: [Buildroot] [PATCH] e2fsprogs: add fuse2fs libintl fix patch
-In-Reply-To: <1466640574-12773-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1466640574-12773-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160625154447.21f20855@free-electrons.com>
+Date: Sat, 25 Jun 2016 15:46:02 +0200
+Subject: [Buildroot] [git commit] bluez_utils: disable PIE for m68k
+Message-ID: <20160625134611.9481A819E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ffa407869947b9ac011f20432f595f76bc88c5d3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Jun 2016 21:09:34 -0300, Gustavo Zacarias wrote:
+PIE for m68k seems broken even for non-static case.
+Fixes following kind of autobuild failures:
+http://autobuild.buildroot.net/results/5bb524a58575d57de1006ffa70be17ca713e7730/
 
-> +diff --git a/misc/Makefile.in b/misc/Makefile.in
-> +index f67c9c7..e487692 100644
-> +--- a/misc/Makefile.in
-> ++++ b/misc/Makefile.in
-> +@@ -389,7 +389,7 @@ fuse2fs: $(FUSE2FS_OBJS) $(DEPLIBS) $(DEPLIBBLKID) $(DEPLIBUUID) \
-> + 	$(E) "	LD $@"
-> + 	$(Q) $(CC) $(ALL_LDFLAGS) -o fuse2fs $(FUSE2FS_OBJS) $(LIBS) \
-> + 		$(LIBFUSE) $(LIBBLKID) $(LIBUUID) $(LIBEXT2FS) $(LIBINTL) \
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bluez_utils/bluez_utils.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Isn't $(LIBINTL) supposed to contain -lintl ?
-
-> +-		$(CLOCK_GETTIME_LIB)
-> ++		$(CLOCK_GETTIME_LIB) $(SYSLIBS)
-
-Why would -lintl be in $(SYSLIBS) instead of in $(LIBINTL) ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/bluez_utils/bluez_utils.mk b/package/bluez_utils/bluez_utils.mk
+index c2e8295..91c2905 100644
+--- a/package/bluez_utils/bluez_utils.mk
++++ b/package/bluez_utils/bluez_utils.mk
+@@ -54,4 +54,9 @@ BLUEZ_UTILS_CONF_OPTS +=	\
+ 	--disable-usb
+ endif
+ 
++# PIE is broken for m68k
++ifeq ($(BR2_m68k),y)
++BLUEZ_UTILS_CONF_OPTS += --disable-pie
++endif
++
+ $(eval $(autotools-package))
