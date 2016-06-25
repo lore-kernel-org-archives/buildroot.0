@@ -1,67 +1,33 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 24 Jun 2016 20:21:12 -0400
-Subject: [Buildroot] [PATCH 6/8 v3] libselinux: bump to version 2.5
-In-Reply-To: <1466814074-4557-1-git-send-email-Aduskett@gmail.com>
-References: <1466814074-4557-1-git-send-email-Aduskett@gmail.com>
-Message-ID: <1466814074-4557-6-git-send-email-Aduskett@gmail.com>
+Date: Fri, 24 Jun 2016 20:21:07 -0400
+Subject: [Buildroot] [PATCH 1/8 v2] libcap-ng: Allow host compilation.
+Message-ID: <1466814074-4557-1-git-send-email-Aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In addition, if a user is using glibc 2.22, the default CFLAG
-D_FILE_OFFSET_BITS=64 will cause a compile error.  This flag is now
-removed from the CFLAGS in the make file to ensure that toolchains
-compiled against glibc 2.22 will build the new version of the package
-properly.
-
-Changes v2 -> v3:
- - Changed logic to use filter-out instead of specifying cflags manually.
-
 Changes v1 -> v2:
- - Reverted depends on in the config file.
- - Added manual cflags.
+ - Re-ordered patch set.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/libselinux/libselinux.hash | 2 +-
- package/libselinux/libselinux.mk   | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/libcap-ng/libcap-ng.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
-index 861c327..a4c3440 100644
---- a/package/libselinux/libselinux.hash
-+++ b/package/libselinux/libselinux.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 57aad47c06b7ec18a76e8d9870539277a84cb40109cfdcf70ed3260bdb04447a libselinux-2.1.13.tar.gz
-+sha256 94c9e97706280bedcc288f784f67f2b9d3d6136c192b2c9f812115edba58514f libselinux-2.5.tar.gz
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index d4b96c4..928c5e0 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
+index d78f5dc..543cbe6 100644
+--- a/package/libcap-ng/libcap-ng.mk
++++ b/package/libcap-ng/libcap-ng.mk
+@@ -13,4 +13,8 @@ LIBCAP_NG_INSTALL_STAGING = YES
+ LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
+ LIBCAP_NG_CONF_OPTS = --without-python
  
--LIBSELINUX_VERSION = 2.1.13
--LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-+LIBSELINUX_VERSION = 2.5
-+LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
- LIBSELINUX_LICENSE = Public Domain
- LIBSELINUX_LICENSE_FILES = LICENSE
- 
-@@ -13,8 +13,10 @@ LIBSELINUX_DEPENDENCIES = libsepol pcre
- 
- LIBSELINUX_INSTALL_STAGING = YES
- 
-+# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc 2.22.
- LIBSELINUX_MAKE_OPTS = \
- 	$(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
- 	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread" \
- 	ARCH=$(KERNEL_ARCH)
- 
++HOST_LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
++HOST_LIBCAP_NG_CONF_OPTS = --without-python
++
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.7.4
