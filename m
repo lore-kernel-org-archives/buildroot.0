@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jun 2016 23:08:43 +0200
-Subject: [Buildroot] [PATCH] e2fsprogs: add fuse2fs libintl fix patch
-In-Reply-To: <1466640574-12773-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1466640574-12773-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160626230843.288df5bc@free-electrons.com>
+Date: Sun, 26 Jun 2016 23:10:01 +0200
+Subject: [Buildroot] [PATCH] glog: put hash in .hash file
+In-Reply-To: <2e64c7bc9e4f2773c7ce1dd47f48f32da4929aea.1466618617.git.baruch@tkos.co.il>
+References: <2e64c7bc9e4f2773c7ce1dd47f48f32da4929aea.1466618617.git.baruch@tkos.co.il>
+Message-ID: <20160626231001.32919f96@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 22 Jun 2016 21:09:34 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/ab5/ab5c5b0e234f3d9db78c968334a61a7aef206b7a/
+On Wed, 22 Jun 2016 21:03:37 +0300, Baruch Siach wrote:
+> github archives should be stable now.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/e2fsprogs/0003-fuse2fs-needs-SYSLIBS.patch | 30 ++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/e2fsprogs/0003-fuse2fs-needs-SYSLIBS.patch
+>  package/glog/glog.hash | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
