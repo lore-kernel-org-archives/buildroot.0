@@ -1,70 +1,132 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 26 Jun 2016 16:03:19 -0400
-Subject: [Buildroot] [6/8 v5] libselinux: bump to version 2.5
+Date: Sun, 26 Jun 2016 16:03:17 -0400
+Subject: [Buildroot] [4/8 v5] libsemanage: bump to version 2.5
 In-Reply-To: <1466971401-29360-1-git-send-email-Aduskett@gmail.com>
 References: <1466971401-29360-1-git-send-email-Aduskett@gmail.com>
-Message-ID: <1466971401-29360-7-git-send-email-Aduskett@gmail.com>
+Message-ID: <1466971401-29360-5-git-send-email-Aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In addition, if a user is using glibc 2.22, the default CFLAG
-D_FILE_OFFSET_BITS=64 will cause a compile error.  This flag is now
-removed from the CFLAGS in the make file to ensure that toolchains
-compiled against glibc 2.22 will build the new version of the package
-properly.
+In addition to bumping the version to 2.5, added a check in the make
+file to see if BR2_PACKAGE_POLICYCOREUTILS is selected. If it is
+host-audit is added as a dependency.
+
+(Note that policycoreutils is not yet available, but is being worked on
+by another contributor.)
+
+The 0001-execption-lib-path-fix.patch is also no longer needed, as the
+new version of libsemanage includes the fix provided by the patch.
+As such, the patch was removed, and 0002 was renamed to 0001.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-Changes v3 - v5:
+Changes v3 -> v5:
  - Patch series version bump.
 
 Changes v2 -> v3:
- - Changed logic to use filter-out instead of specifying cflags manually.
+ - Added better explination as to why host-audit is added.
 
 Changes v1 -> v2:
- - Reverted depends on in the config file.
- - Added manual cflags.
+ - Reverted changes to the select.
+ - Added explination as to why a patch was removed.
 
- package/libselinux/libselinux.hash | 2 +-
- package/libselinux/libselinux.mk   | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/libsemanage/0001-execption-lib-path-fix.patch      | 14 --------------
+ ...in-issue.patch => 0001-workaround-blackfin-issue.patch} |  5 +++--
+ package/libsemanage/libsemanage.hash                       |  2 +-
+ package/libsemanage/libsemanage.mk                         | 13 +++++++++----
+ 4 files changed, 13 insertions(+), 21 deletions(-)
+ delete mode 100644 package/libsemanage/0001-execption-lib-path-fix.patch
+ rename package/libsemanage/{0002-workaround-blackfin-issue.patch => 0001-workaround-blackfin-issue.patch} (89%)
 
-diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
-index 861c327..a4c3440 100644
---- a/package/libselinux/libselinux.hash
-+++ b/package/libselinux/libselinux.hash
+diff --git a/package/libsemanage/0001-execption-lib-path-fix.patch b/package/libsemanage/0001-execption-lib-path-fix.patch
+deleted file mode 100644
+index cbcbea5..0000000
+--- a/package/libsemanage/0001-execption-lib-path-fix.patch
++++ /dev/null
+@@ -1,14 +0,0 @@
+-Patch to correct a missing header file issue.
+-
+-Signed-off-by Clayton Shotwell <clshotwe@rockwellcollins.com>
+-
+---- a/src/exception.sh	2011-12-21 11:46:04.000000000 -0600
+-+++ b/src/exception.sh	2012-08-27 11:29:58.000000000 -0500
+-@@ -9,6 +9,6 @@
+- }
+- "
+- }
+--gcc -x c -c - -aux-info temp.aux < ../include/semanage/semanage.h
+-+gcc -x c -c - -aux-info temp.aux -I../include < ../include/semanage/semanage.h
+- for i in `awk '/extern int/ { print $6 }' temp.aux`; do except $i ; done
+- rm -f -- temp.aux -.o
+diff --git a/package/libsemanage/0002-workaround-blackfin-issue.patch b/package/libsemanage/0001-workaround-blackfin-issue.patch
+similarity index 89%
+rename from package/libsemanage/0002-workaround-blackfin-issue.patch
+rename to package/libsemanage/0001-workaround-blackfin-issue.patch
+index 5d00c69..7ce9606 100644
+--- a/package/libsemanage/0002-workaround-blackfin-issue.patch
++++ b/package/libsemanage/0001-workaround-blackfin-issue.patch
+@@ -8,14 +8,15 @@ symbols are visible in the final DSO, which is not a problem for
+ proper execution, it just isn't as clean.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+ 
+ Index: b/src/dso.h
+ ===================================================================
+ --- a/src/dso.h
+ +++ b/src/dso.h
+ @@ -1,7 +1,7 @@
+- #ifndef _SELINUX_DSO_H
+- #define _SELINUX_DSO_H	1
++ #ifndef _SEPOL_DSO_H
++ #define _SEPOL_DSO_H	1
+  
+ -#ifdef SHARED
+ +#if defined(SHARED) && !defined(__bfin__)
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index d4204d1..69f7c8d 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 57aad47c06b7ec18a76e8d9870539277a84cb40109cfdcf70ed3260bdb04447a libselinux-2.1.13.tar.gz
-+sha256 94c9e97706280bedcc288f784f67f2b9d3d6136c192b2c9f812115edba58514f libselinux-2.5.tar.gz
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index d4b96c4..928c5e0 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -4,8 +4,8 @@
+-sha256 de2e8077245581e94576276f54e80a53c23c28d6961d2dfbe2f004eaba452e91 libsemanage-2.1.10.tar.gz
++sha256 46e2f36254369b6e91d1eea0460c262b139361b055a3a67d3ceea2d8ef72e006 libsemanage-2.5.tar.gz
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index 197c14e..562ae1a 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--LIBSELINUX_VERSION = 2.1.13
--LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-+LIBSELINUX_VERSION = 2.5
-+LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
- LIBSELINUX_LICENSE = Public Domain
- LIBSELINUX_LICENSE_FILES = LICENSE
+-LIBSEMANAGE_VERSION = 2.1.10
+-LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
++LIBSEMANAGE_VERSION = 2.5
++LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
+ LIBSEMANAGE_LICENSE = LGPLv2.1+
+ LIBSEMANAGE_LICENSE_FILES = COPYING
+-LIBSEMANAGE_DEPENDENCIES = host-bison host-flex libselinux ustr bzip2
++LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
+ LIBSEMANAGE_INSTALL_STAGING = YES
  
-@@ -13,8 +13,10 @@ LIBSELINUX_DEPENDENCIES = libsepol pcre
+ LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
+@@ -27,8 +27,13 @@ define LIBSEMANAGE_INSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+ endef
  
- LIBSELINUX_INSTALL_STAGING = YES
- 
-+# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc 2.22.
- LIBSELINUX_MAKE_OPTS = \
- 	$(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
- 	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread" \
- 	ARCH=$(KERNEL_ARCH)
+-HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-libsepol host-libselinux \
++HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-audit host-libsepol host-libselinux \
+ 				host-ustr host-bzip2 host-swig
++
++ifeq ($(BR2_PACKAGE_POLICYCOREUTILS),y)
++HOST_LIBSEMANAGE_DEPENDENCIES += host-audit
++endif
++
+ HOST_LIBSEMANAGE_MAKE_OPTS += $(HOST_CONFIGURE_OPTS) \
+ 	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
  
 -- 
 2.7.4
