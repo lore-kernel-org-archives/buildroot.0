@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jun 2016 23:04:42 +0200
-Subject: [Buildroot] [4/8 v5] libsemanage: bump to version 2.5
-In-Reply-To: <1466971401-29360-5-git-send-email-Aduskett@gmail.com>
+Date: Sun, 26 Jun 2016 23:07:41 +0200
+Subject: [Buildroot] [8/8 v5] setools: fix build with latest selinux
+ libraries.
+In-Reply-To: <1466971401-29360-9-git-send-email-Aduskett@gmail.com>
 References: <1466971401-29360-1-git-send-email-Aduskett@gmail.com>
- <1466971401-29360-5-git-send-email-Aduskett@gmail.com>
-Message-ID: <20160626230442.109e7b5c@free-electrons.com>
+ <1466971401-29360-9-git-send-email-Aduskett@gmail.com>
+Message-ID: <20160626230741.1655c107@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 26 Jun 2016 16:03:17 -0400, Adam Duskett wrote:
-> In addition to bumping the version to 2.5, added a check in the make
-> file to see if BR2_PACKAGE_POLICYCOREUTILS is selected. If it is
-> host-audit is added as a dependency.
+On Sun, 26 Jun 2016 16:03:21 -0400, Adam Duskett wrote:
 
-Please don't do this. The policycoreutils package doesn't exist in
-Buildroot, so BR2_PACKAGE_POLICYCOREUTILS doesn't exist. For this
-reason, your patch cannot be merged.
-
-> (Note that policycoreutils is not yet available, but is being worked on
-> by another contributor.)
-
-Please either take over the submission of the policycoreutils package
-(I doubt the other contributor will continue to work on it), or drop
-the policycoreutils-related part of this patch.
-
-> -LIBSEMANAGE_VERSION = 2.1.10
-> -LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-> +LIBSEMANAGE_VERSION = 2.5
-> +LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
->  LIBSEMANAGE_LICENSE = LGPLv2.1+
->  LIBSEMANAGE_LICENSE_FILES = COPYING
-> -LIBSEMANAGE_DEPENDENCIES = host-bison host-flex libselinux ustr bzip2
-> +LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
-
-So audit is now a mandatory dependency ?
-
->  LIBSEMANAGE_INSTALL_STAGING = YES
->  
->  LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
-> @@ -27,8 +27,13 @@ define LIBSEMANAGE_INSTALL_TARGET_CMDS
->  	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
->  endef
->  
-> -HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-libsepol host-libselinux \
-> +HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-audit host-libsepol host-libselinux \
->  				host-ustr host-bzip2 host-swig
+> diff --git a/package/setools/0003-fix-build-with-latest-selinux-libs.patch b/package/setools/0003-fix-build-with-latest-selinux-libs.patch
+> new file mode 100644
+> index 0000000..78203c8
+> --- /dev/null
+> +++ b/package/setools/0003-fix-build-with-latest-selinux-libs.patch
+> @@ -0,0 +1,89 @@
+> +Fix compile errors against newer versions of selinux libraries.
+> +Credit to: Joe MacDonald <joe_macdonald@mentor.com>
+> +URL: https://github.com/flihp/meta-selinux/commit/e09eaef7a9acb552a4a5e1f90117154ae06b6fda
 > +
-> +ifeq ($(BR2_PACKAGE_POLICYCOREUTILS),y)
-> +HOST_LIBSEMANAGE_DEPENDENCIES += host-audit
+> +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-This is useless. You are already adding host-audit as a mandatory
-dependency of host-libsemanage two lines before.
+It would be nicer to copy the
+setools-Update-for-2015-02-02-Userspace-release.patch file as-is
+(especially its description and the fact that it's a Git-formatted
+patch) and just add your SoB line at the end of the patch description.
 
 Thomas
 -- 
