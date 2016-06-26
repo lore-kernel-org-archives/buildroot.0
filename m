@@ -1,137 +1,70 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 26 Jun 2016 16:03:20 -0400
-Subject: [Buildroot] [7/8 v5] libsepol: bump to version 2.5
-In-Reply-To: <1466971401-29360-1-git-send-email-Aduskett@gmail.com>
-References: <1466971401-29360-1-git-send-email-Aduskett@gmail.com>
-Message-ID: <1466971401-29360-8-git-send-email-Aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Jun 2016 22:10:48 +0200
+Subject: [Buildroot] [PATCH 1/2] package: add Odroid BL bootloader
+ binaries
+In-Reply-To: <1466950062-31783-2-git-send-email-andi@etezian.org>
+References: <1466950062-31783-1-git-send-email-andi@etezian.org>
+ <1466950062-31783-2-git-send-email-andi@etezian.org>
+Message-ID: <20160626221048.02818b93@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
-Changes v3 - v5:
- - Patch series version bump.
+Hello,
 
-Changes v2 - v3:
- - Added SOB to included patch files.
+On Sun, 26 Jun 2016 17:07:41 +0300, Andi Shyti wrote:
 
-Changes v1 - v2:
- - Fixed broken (by me) support static-only patch that caused build
-errors
+> The above files are provided by the hardkernel u-boot from
+> 
+>  https://github.com/hardkernel/u-boot/tree/odroidxu3-v2012.07
 
- package/libsepol/0001-support-static-only.patch    | 26 +++++++++++-----------
- .../libsepol/0002-workaround-blackfin-issue.patch  |  8 ++++---
- package/libsepol/libsepol.hash                     |  2 +-
- package/libsepol/libsepol.mk                       |  4 ++--
- 4 files changed, 21 insertions(+), 19 deletions(-)
+So the source code for those binary files is not available at all?
 
-diff --git a/package/libsepol/0001-support-static-only.patch b/package/libsepol/0001-support-static-only.patch
-index b974680..3e9a84f 100644
---- a/package/libsepol/0001-support-static-only.patch
-+++ b/package/libsepol/0001-support-static-only.patch
-@@ -7,37 +7,37 @@ libraries. It allows to support cases where the target architecture
- does not have support for shared libraries.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
- 
- Index: b/src/Makefile
- ===================================================================
-+
-+diff --git a/src/Makefile b/src/Makefile
-+index db6c2ba..0006285 100644
- --- a/src/Makefile
- +++ b/src/Makefile
--@@ -17,7 +17,12 @@
-- CFLAGS ?= -Werror -Wall -W -Wundef -Wshadow -Wmissing-noreturn -Wmissing-format-attribute
-- override CFLAGS += -I. -I../include -D_GNU_SOURCE
-+@@ -30,8 +30,12 @@ LOBJS += $(sort $(patsubst %.c,%.lo,$(wildcard $(CILDIR)/src/*.c) $(CIL_GENERATE
-+ override CFLAGS += -I$(CILDIR)/include
-+ endif
-  
---all: $(LIBA) $(LIBSO) $(LIBPC)
- +ALL_TARGETS = $(LIBA) $(LIBPC)
- +ifeq ($(STATIC),)
- +ALL_TARGETS += $(LIBSO)
- +endif
--+
-+
-+-all: $(LIBA) $(LIBSO) $(LIBPC)
- +all: $(ALL_TARGETS)
-  
-+
-  $(LIBA):  $(OBJS)
-- 	$(AR) rcs $@ $^
--@@ -39,11 +44,13 @@
-- install: all
-- 	test -d $(LIBDIR) || install -m 755 -d $(LIBDIR)
-- 	install -m 644 $(LIBA) $(LIBDIR)
---	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
---	install -m 755 $(LIBSO) $(SHLIBDIR)
-+@@ -70,7 +74,11 @@ install: all
-+ 	install -m 755 $(LIBSO) $(SHLIBDIR)
-  	test -d $(LIBDIR)/pkgconfig || install -m 755 -d $(LIBDIR)/pkgconfig
-  	install -m 644 $(LIBPC) $(LIBDIR)/pkgconfig
- +ifeq ($(STATIC),)
- +	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
- +	install -m 755 $(LIBSO) $(SHLIBDIR)
-- 	cd $(LIBDIR) && ln -sf ../../`basename $(SHLIBDIR)`/$(LIBSO) $(TARGET)
-+ 	ln -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
- +endif
-  
-  relabel:
-diff --git a/package/libsepol/0002-workaround-blackfin-issue.patch b/package/libsepol/0002-workaround-blackfin-issue.patch
-index 5d00c69..3c3bd48 100644
---- a/package/libsepol/0002-workaround-blackfin-issue.patch
-+++ b/package/libsepol/0002-workaround-blackfin-issue.patch
-@@ -8,17 +8,19 @@ symbols are visible in the final DSO, which is not a problem for
- proper execution, it just isn't as clean.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
- 
- Index: b/src/dso.h
- ===================================================================
- --- a/src/dso.h
- +++ b/src/dso.h
--@@ -1,7 +1,7 @@
-- #ifndef _SELINUX_DSO_H
-- #define _SELINUX_DSO_H	1
-+@@ -5,7 +5,7 @@
-+     #define DISABLE_SYMVER 1
-+ #endif
-  
- -#ifdef SHARED
- +#if defined(SHARED) && !defined(__bfin__)
-  # define hidden __attribute__ ((visibility ("hidden")))
-  # define hidden_proto(fct) __hidden_proto (fct, fct##_internal)
-  # define __hidden_proto(fct, internal)	\
-+
-diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
-index df5dabd..266ce43 100644
---- a/package/libsepol/libsepol.hash
-+++ b/package/libsepol/libsepol.hash
-@@ -1,2 +1,2 @@
- # From https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256	290d17f583635a4a5d8a2141511272adf0571c4205cdea38b5a68df20d58a70b  libsepol-2.1.9.tar.gz
-+sha256 2bdeec56d0a08b082b93b40703b4b3329cc5562152f7254d8f6ef6b56afe850a  libsepol-2.5.tar.gz
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index 1e709c6..93896cf 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBSEPOL_VERSION = 2.1.9
--LIBSEPOL_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-+LIBSEPOL_VERSION = 2.5
-+LIBSEPOL_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
- LIBSEPOL_LICENSE = LGPLv2.1+
- LIBSEPOL_LICENSE_FILES = COPYING
- 
+
+> +config BR2_PACKAGE_ODROID_XU_BL
+> +	bool "odroid-xu-bl"
+
+	depends on BR2_arm
+
+would be good to have here
+
+Also, I think this package should be included in the Bootloaders menu
+rather than the firmware menu. Maybe we should name it
+odroid-xu-bootloader or odroid-xu-boot so that it is clear what it does.
+
+> +++ b/package/odroid-xu-bl/odroid-xu-bl.mk
+> @@ -0,0 +1,18 @@
+> +################################################################################
+> +#
+> +# odroid-xu-bl
+> +#
+> +################################################################################
+> +
+> +ODROID_XU_BL_VERSION = odroidxu3-v2012.07
+> +ODROID_XU_BL_SITE = $(call github,hardkernel,u-boot,$(ODROID_XU_BL_VERSION))
+
+It's a bit annoying that we end up downloading an entire U-Boot source
+tree, and in fact not use it except for those 3 files.
+
+In fact, why don't you simply build this U-Boot version with the U-Boot
+package that already exists in Buildroot, and then use:
+
+BR2_TARGET_UBOOT_SPL=y
+BR2_TARGET_UBOOT_SPL_NAME="sd_fuse/hardkernel_1mb_uboot/bl1.bin.hardkernel sd_fuse/hardkernel_1mb_uboot/bl2.bin.hardkernel.1mb_uboot sd_fuse/hardkernel_1mb_uboot/tzsw.bin.hardkernel"
+
+To ask Buildroot to install the pre-built binaries as if they were SPL
+images. The only issue is that BR2_TARGET_UBOOT_SPL_NAME currently only
+installs a single image, but it can easily be changed. And it was
+actually already proposed in https://patchwork.ozlabs.org/patch/595980/.
+
+Can you investigate such a solution?
+
+Thanks,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
