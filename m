@@ -1,56 +1,48 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 26 Jun 2016 16:03:15 -0400
-Subject: [Buildroot] [2/8,v5] audit: bump to version 2.6
+Date: Sun, 26 Jun 2016 16:03:18 -0400
+Subject: [Buildroot] [5/8 v5] checkpolicy: bump to version 2.5
 In-Reply-To: <1466971401-29360-1-git-send-email-Aduskett@gmail.com>
 References: <1466971401-29360-1-git-send-email-Aduskett@gmail.com>
-Message-ID: <1466971401-29360-3-git-send-email-Aduskett@gmail.com>
+Message-ID: <1466971401-29360-6-git-send-email-Aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-Changes v4 -> v5:
+Changes v1 - v5:
  - Patch series version bump.
 
-Changes v3 -> v4:
- - Updated to 2.6 instead of 2.5.2
 
-Changes v2 -> v3:
- - Split patch into two patches.  One for a version bump, the second for
- the ability to build as a host package.
+ package/checkpolicy/checkpolicy.hash | 2 +-
+ package/checkpolicy/checkpolicy.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Changes v1 -> v2:
- - Version bump and the ability to build as a host package as a
-   single patch.
- 
-
- package/audit/audit.hash | 2 +-
- package/audit/audit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/audit/audit.hash b/package/audit/audit.hash
-index f234fdb..3712f43 100644
---- a/package/audit/audit.hash
-+++ b/package/audit/audit.hash
+diff --git a/package/checkpolicy/checkpolicy.hash b/package/checkpolicy/checkpolicy.hash
+index 32b5ff6..bc5199c 100644
+--- a/package/checkpolicy/checkpolicy.hash
++++ b/package/checkpolicy/checkpolicy.hash
 @@ -1,2 +1,2 @@
- #Locally computed
--sha256	25f57f465f3230d7b1166b615ffd6748818a3dc225d0e8b396c5b2e951674e23	audit-2.4.4.tar.gz
-+sha256	b04dbc16dd877c32c3a05a512ed825abfbd5fabd5d3ecca6b4fcbd6bbac5f94e	audit-2.6.tar.gz
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index 1fbc623..937244d 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -4,7 +4,7 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 e6a0ac539b74859b4262b317eb90d9914deb15e7aa509659f47724d50fe2ecc6  checkpolicy-2.1.12.tar.gz
++sha256 33af9f3eb19135a7e6536ecd3fbb9686323000016cd51eb88346346ed7546001  checkpolicy-2.5.tar.gz
+diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
+index 4b7b2f3..f1b76d0 100644
+--- a/package/checkpolicy/checkpolicy.mk
++++ b/package/checkpolicy/checkpolicy.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--AUDIT_VERSION = 2.4.4
-+AUDIT_VERSION = 2.6
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
- AUDIT_LICENSE = GPLv2
- AUDIT_LICENSE_FILES = COPYING
+-CHECKPOLICY_VERSION = 2.1.12
+-CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
++CHECKPOLICY_VERSION = 2.5
++CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
+ CHECKPOLICY_LICENSE = GPLv2
+ CHECKPOLICY_LICENSE_FILES = COPYING
+ 
 -- 
 2.7.4
