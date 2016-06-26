@@ -1,73 +1,77 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 26 Jun 2016 15:12:05 -0300
-Subject: [Buildroot] [PATCH] mpv: bump to version 0.18.0
-Message-ID: <1466964725-31287-1-git-send-email-gustavo@zacarias.com.ar>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 26 Jun 2016 20:39:10 +0200
+Subject: [Buildroot] [PATCH v3 5/5] package/enlightenment: bump to 0.20.9
+In-Reply-To: <1466630866-28779-5-git-send-email-romain.naour@gmail.com>
+References: <1466630866-28779-1-git-send-email-romain.naour@gmail.com>
+ <1466630866-28779-5-git-send-email-romain.naour@gmail.com>
+Message-ID: <dfd39299-57a5-2b62-1f71-5f9fa7326c53@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gpl3 option removed so drop it otherwise it results in build failure.
+Hi Gustavo,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/mpv/Config.in | 6 ++++--
- package/mpv/mpv.hash  | 2 +-
- package/mpv/mpv.mk    | 3 +--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+I tried to build enlightenment 0.20.9 with Wayland support only but there are
+several issues which should be fixed with the next version (0.21)
 
-diff --git a/package/mpv/Config.in b/package/mpv/Config.in
-index 1cef6c5..25288a4 100644
---- a/package/mpv/Config.in
-+++ b/package/mpv/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_MPV
- 	bool "mpv"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
-@@ -14,6 +15,7 @@ config BR2_PACKAGE_MPV
- 
- 	  https://mpv.io/
- 
--comment "mpv needs a toolchain w/ threads"
-+comment "mpv needs a toolchain w/ threads, gcc >= 4.5"
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
-index da51f3a..8d9c9d1 100644
---- a/package/mpv/mpv.hash
-+++ b/package/mpv/mpv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	602cd2b0f5fc7e43473234fbb96e3f7bbb6418f15eb8fa720d9433cce31eba6e	v0.17.0.tar.gz
-+sha256	b656638d4f6bce2621baaacb60d8be384aa492fcd86dfd43996aaa2c16fee02b	v0.18.0.tar.gz
- sha256	01bf2beab2106d1558800c8709bc2c8e496d3da4a2ca343fe091f22fca60c98b	waf-1.8.12
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index cd8c31b..7ecac9e 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPV_VERSION = 0.17.0
-+MPV_VERSION = 0.18.0
- MPV_WAF_VERSION = 1.8.12
- MPV_SITE = https://github.com/mpv-player/mpv/archive
- MPV_SOURCE = v$(MPV_VERSION).tar.gz
-@@ -23,7 +23,6 @@ MPV_CONF_OPTS = \
- 	--disable-cdda \
- 	--disable-cocoa \
- 	--disable-coreaudio \
--	--disable-gpl3 \
- 	--disable-libguess \
- 	--disable-libv4l2 \
- 	--disable-opensles \
--- 
-2.7.3
+First we need [1] since configure always check for ecore-x (X11).
+
+Then, there is another issue with Wayland EGL cflags not forwarded correctly
+(MESA_EGL_NO_X11_HEADERS not set when EGL/eglplatform.h is included)...
+
+sysroot/usr/include/EGL/eglplatform.h:119:22: fatal error: X11/Xlib.h: No such
+file or directory
+
+So, I don't think Wayland support is ready for this version. Instead we should
+wait for E 0.21 (rc1 currently).
+
+Also, I have another series (needed for Wayland) adding OpenGL/OpenGLES support,
+libdrm for DRM, and DRM + GL support. To finish, I need to add systemd support
+in EFL and E.
+But this bump series must be commited before sending it ;)
+
+Did you already tested Wayland/Weston with systemd?
+Have you a working Buildroot configuration?
+
+Thanks,
+Best regards,
+Romain
+
+[1]
+https://git.enlightenment.org/core/enlightenment.git/commit/?id=a5a27dee14839ed38b078126557cf4c20f1e6b98
+
+
+Le 22/06/2016 ? 23:27, Romain Naour a ?crit :
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> v2: bump to 0.20.9
+> ---
+>  package/enlightenment/enlightenment.hash | 4 ++--
+>  package/enlightenment/enlightenment.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+> index 66bdb49..fad14b7 100644
+> --- a/package/enlightenment/enlightenment.hash
+> +++ b/package/enlightenment/enlightenment.hash
+> @@ -1,2 +1,2 @@
+> -# From https://phab.enlightenment.org/phame/live/3/post/e19_14_release/
+> -sha256	8906e762f0d953752bfe002663280a855da9bb74acf613424c517b78a8dde407	enlightenment-0.19.14.tar.xz
+> +# From https://www.enlightenment.org/news/e-0.20.9-release
+> +sha256	db792ad4d97b2523ff0bfc2c911bb3fea4b1eda60400871f4b78bc3ae2f1d1be 	enlightenment-0.20.9.tar.xz
+> diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+> index a756361..6fe8f45 100644
+> --- a/package/enlightenment/enlightenment.mk
+> +++ b/package/enlightenment/enlightenment.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -ENLIGHTENMENT_VERSION = 0.19.14
+> +ENLIGHTENMENT_VERSION = 0.20.9
+>  ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+>  ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+>  ENLIGHTENMENT_LICENSE = BSD-2c
+> 
