@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jun 2016 14:36:12 +0200
-Subject: [Buildroot] [PATCH v2] qt5: bump version to 5.6.1-1
-In-Reply-To: <20160626002458.286ad9b8@gmx.net>
-References: <1466801021-32264-1-git-send-email-ps.report@gmx.net>
- <20160625154206.6b576d3e@free-electrons.com>
- <20160626002458.286ad9b8@gmx.net>
-Message-ID: <20160626143612.327ef099@free-electrons.com>
+Date: Sun, 26 Jun 2016 14:47:27 +0200
+Subject: [Buildroot] 3 patches to buildroot via git send-email
+In-Reply-To: <20160626033643.GB2319@tarshish>
+References: <CAGrGpJD9MX_aNzwu357LziPAOMYLbHeQt=sKAukPCav2-anbog@mail.gmail.com>
+ <20160626033643.GB2319@tarshish>
+Message-ID: <20160626144727.31268a98@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 26 Jun 2016 00:24:58 +0200, Peter Seiderer wrote:
+On Sun, 26 Jun 2016 06:36:43 +0300, Baruch Siach wrote:
 
-> Thanks for committing, but something went wrong, your committed Patch v1 instead of Patch v2...
+> On Sat, Jun 25, 2016 at 09:20:04PM -0600, Peter Thompson wrote:
+> > I submitted 3 patches to buildroot via git send-email got sdl2_ttf,
+> > sdl2_image, sdl2_gfx.    I hope they arrived properly.    If not, please
+> > let me know.    Below are my personal notes I used to make the submission.  
+> 
+> They all arrived. You can see them in the list archive at:
+> 
+> http://lists.busybox.net/pipermail/buildroot/2016-June/165082.html
+> http://lists.busybox.net/pipermail/buildroot/2016-June/165083.html
+> http://lists.busybox.net/pipermail/buildroot/2016-June/165084.html
 
-Gaah sorry.
-
-> The difference was the following line in the commit message:
-> 
-> >   - qt5base: https://github.com/qtproject/qtbase/commit/b8f98d956501dfa4ce03a137f15d404930a56066.patch (upstream committed)  
-> 
-> and the fix for qt5enginio version:
-> 
->  -QT5ENGINIO_VERSION = 1.6.0
->  +QT5ENGINIO_VERSION = 1.6.1
-> 
-> Should I send a follow up patch fixing qt5enginio?
-
-Yes, please send a follow-up patch. Thanks!
+Well, they did not really arrive properly, since we received three
+times patches for sdl2_ttf, and not patches for sdl2_image and sdl2_gfx.
 
 Thomas
 -- 
