@@ -1,40 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 26 Jun 2016 16:47:08 -0300
-Subject: [Buildroot] [PATCH] feh: bump to version 2.16.1
-Message-ID: <1466970428-26669-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Jun 2016 21:47:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/opencv: bump to version 2.4.13
+In-Reply-To: <1466961520-13428-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1466961520-13428-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160626214719.5e0e641a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/feh/feh.hash | 4 ++--
- package/feh/feh.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/feh/feh.hash b/package/feh/feh.hash
-index 76d6248..9d158e2 100644
---- a/package/feh/feh.hash
-+++ b/package/feh/feh.hash
-@@ -1,2 +1,2 @@
--# Locally computed:
--sha256  c80f3d3297b3b6ee4898572d19692f5e19eb3066a9ca078c3099d39004a7e0cf  feh-2.14.2.tar.bz2
-+# Locally calculated after checking pgp signature
-+sha256  6e55289a3be4495a437a0b037c7b5e86edf64ec74ab63d2d26fa50df1b62b6b3  feh-2.16.1.tar.bz2
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index f650938..f5cc97f 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FEH_VERSION = 2.14.2
-+FEH_VERSION = 2.16.1
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org
- FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
+On Sun, 26 Jun 2016 19:18:40 +0200, Bernd Kuhls wrote:
+> Removed 0001-ffmpeg30.patch after being applied upstream.
+> Renumbered remaining patches.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../{0002-atomic.patch => 0001-atomic.patch}       |   0
+>  package/opencv/0001-ffmpeg30.patch                 | 638 ---------------------
+>  ...id-sysctl_h.patch => 0002-avoid-sysctl_h.patch} |   0
+>  package/opencv/opencv.hash                         |   2 +-
+>  package/opencv/opencv.mk                           |   2 +-
+>  5 files changed, 2 insertions(+), 640 deletions(-)
+>  rename package/opencv/{0002-atomic.patch => 0001-atomic.patch} (100%)
+>  delete mode 100644 package/opencv/0001-ffmpeg30.patch
+>  rename package/opencv/{0003-avoid-sysctl_h.patch => 0002-avoid-sysctl_h.patch} (100%)
+
+Applied to master, thanks.
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
