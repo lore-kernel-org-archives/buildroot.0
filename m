@@ -1,8 +1,8 @@
 From: Peter Thompson <peter.macleod.thompson@gmail.com>
-Date: Sat, 25 Jun 2016 21:02:24 -0600
+Date: Sat, 25 Jun 2016 21:03:49 -0600
 Subject: [Buildroot] [PATCH 1/1] Signed-off-by: PeterThompson
 	<peter.macleod.thompson@gmail.com>
-Message-ID: <1466910144-17919-1-git-send-email-peter.macleod.thompson@gmail.com>
+Message-ID: <1466910229-17965-1-git-send-email-peter.macleod.thompson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
