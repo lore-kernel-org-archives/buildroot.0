@@ -1,57 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 26 Jun 2016 06:53:17 +0300
-Subject: [Buildroot] [Patch v3 2/3] python-meson: new package
-In-Reply-To: <1466796149-25218-3-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1466796149-25218-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1466796149-25218-3-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20160626035317.GC2319@tarshish>
+From: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
+Date: Sun, 26 Jun 2016 14:54:46 +0900
+Subject: [Buildroot] python-sip: bump to version 4.18
+Message-ID: <20160626055446.3213-1-akihiko.odaki.4i@stu.hosei.ac.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eric,
+Signed-off-by: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
 
-On Fri, Jun 24, 2016 at 09:22:28PM +0200, Eric Le Bihan wrote: 
-> diff --git a/package/python-meson/cross-compilation.conf.in b/package/python-meson/cross-compilation.conf.in
-> new file mode 100644
-> index 0000000..fc9f1dd
-> --- /dev/null
-> +++ b/package/python-meson/cross-compilation.conf.in
-> @@ -0,0 +1,20 @@
-> +# Generated file - do not edit
-
-This is not correct for this file. This is the source file that you sed to 
-generate the generated one. Though I understand it's convenient to have this 
-comment in the source file, it is also misleading.
-
-Also, as there are many other generated files under $(HOST_DIR), I'm not sure 
-this comment is helpful.
-
-baruch
-
-> +#
-> +# Note that, in Meson terminology, what Buildroot calls the "host" system is the
-> +# "build" system and the "target" system is called the "host" system.
-> +
-> +[host_machine]
-> +system = 'linux'
-> +cpu_family ='@TARGET_ARCH@'
-> +cpu = 'generic'
-> +endian = '@TARGET_ENDIAN@'
-> +
-> +[properties]
-> +
-> +[binaries]
-> +c = '@TARGET_CROSS at gcc'
-> +cpp = '@TARGET_CROSS at g++'
-> +ar = '@TARGET_CROSS at ar'
-> +strip = '@TARGET_CROSS at strip'
-> +exe_wrapper = '@HOST_DIR@/usr/bin/meson-exe-wrapper'
-> +pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/python-sip/python-sip.hash b/package/python-sip/python-sip.hash
+index aba5470..2f7d430 100644
+--- a/package/python-sip/python-sip.hash
++++ b/package/python-sip/python-sip.hash
+@@ -1,4 +1,4 @@
+-# From http://sourceforge.net/projects/pyqt/files/sip/sip-4.16.7/
+-md5 32abc003980599d33ffd789734de4c36	sip-4.16.7.tar.gz
++# From https://sourceforge.net/projects/pyqt/files/sip/sip-4.18/
++md5 78724bf2a79878201c3bc81a1d8248ea	sip-4.18.tar.gz
+ # Locally calculated:
+-sha256 4caa8d52e4403bae5c4c64f44de03a2cfd0bb10b6d96c5fb771133516df9abbd	sip-4.16.7.tar.gz
++sha256 f1dc5c81c07a9ad97edcd4a0af964a41e420024ba7ca165afd2b351efd249cb6	sip-4.18.tar.gz
+diff --git a/package/python-sip/python-sip.mk b/package/python-sip/python-sip.mk
+index 4651186..d13801f 100644
+--- a/package/python-sip/python-sip.mk
++++ b/package/python-sip/python-sip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SIP_VERSION = 4.16.7
++PYTHON_SIP_VERSION = 4.18
+ PYTHON_SIP_SOURCE = sip-$(PYTHON_SIP_VERSION).tar.gz
+ PYTHON_SIP_SITE = http://downloads.sourceforge.net/project/pyqt/sip/sip-$(PYTHON_SIP_VERSION)
+ PYTHON_SIP_LICENSE = SIP license or GPLv2 or GPLv3
