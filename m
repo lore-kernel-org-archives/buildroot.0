@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jun 2016 22:59:53 +0200
-Subject: [Buildroot] [PATCH] gd: security bump to version 2.2.2
-In-Reply-To: <1466974451-29583-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1466974451-29583-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160626225953.55e4e1d8@free-electrons.com>
+Date: Sun, 26 Jun 2016 23:02:14 +0200
+Subject: [Buildroot] [3/8 v5] audit: Add the ability to compile as a
+ host package.
+In-Reply-To: <1466971401-29360-4-git-send-email-Aduskett@gmail.com>
+References: <1466971401-29360-1-git-send-email-Aduskett@gmail.com>
+ <1466971401-29360-4-git-send-email-Aduskett@gmail.com>
+Message-ID: <20160626230214.5c69c324@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +14,49 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 26 Jun 2016 17:54:11 -0300, Gustavo Zacarias wrote:
-> Drop upstreamed patches.
-> Drop autoreconf since it's no longer required.
-> Patch 0002-no-zlib.patch is no longer required, and is in fact harmful.
-> Update homepage URL.
-> 
-> Fixes:
-> CVE-2015-8874 - #215 Stack overflow with gdImageFillToBorder
-> CVE-2016-3074 - gd2: handle corrupt images better
-> CVE-2016-5767 - Integer Overflow in gdImagePaletteToTrueColor()
-> resulting in heap overflow
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  ...tch => 0002-gd_bmp-fix-build-with-uClibc.patch} |   0
->  package/gd/0002-no-zlib.patch                      |  51 ---
->  package/gd/0004-webp-pre.patch                     |  37 --
->  package/gd/0005-webp.patch                         | 418 ---------------------
->  package/gd/Config.in                               |   2 +-
->  package/gd/gd.hash                                 |   2 +-
->  package/gd/gd.mk                                   |   5 +-
->  7 files changed, 4 insertions(+), 511 deletions(-)
->  rename package/gd/{0003-gd_bmp-fix-build-with-uClibc.patch => 0002-gd_bmp-fix-build-with-uClibc.patch} (100%)
->  delete mode 100644 package/gd/0002-no-zlib.patch
->  delete mode 100644 package/gd/0004-webp-pre.patch
->  delete mode 100644 package/gd/0005-webp.patch
+On Sun, 26 Jun 2016 16:03:16 -0400, Adam Duskett wrote:
 
-Applied to master, thanks.
+> +HOST_AUDIT_CONF_OPTS = --without-python --without-python3 --disable-zos-remote
+> +ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
+> +HOST_AUDIT_DEPENDENCIES += host-libcap-ng
+
+This is not good. BR2_PACKAGE_LIBCAP_NG indicates whether the *target*
+version of libcap-ng is enabled or not. It should *not* have any
+implication on whether libcap-ng is used in *host* packages.
+
+For host packages, it's pretty simple: include a dependency if it's
+needed, do not include the dependency if it's not needed.
+
+> +HOST_AUDIT_CONF_OPTS += --with-libcap-ng=yes
+> +else
+> +HOST_AUDIT_CONF_OPTS += --with-libcap-ng=no
+> +endif
+> +
+> +ifeq ($(BR2_INIT_SYSTEMD),y)
+
+Same here. The fact that systemd is used on the target (which is what
+BR2_INIT_SYSTEMD indicates) has nothing to do with using systemd for
+the host variant of audit.
+
+> +define AUDIT_INSTALL_CLEANUP
+> +	$(RM) -rf $(HOST_DIR)/etc/rc.d
+> +	$(RM) -rf $(HOST_DIR)/etc/sysconfig
+> +endef
+
+This block is a piece of dead code, as it is never used anywhere.
+Moreover, it is not useful: we generally don't bother cleaning up
+things installed in $(HOST_DIR) since disk space on the build machine
+is not a scarce resource.
+
+> +
+> +
+
+Only one empty line before the autotools-package macro call.
+
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+
+Thanks,
 
 Thomas
 -- 
