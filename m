@@ -1,46 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 26 Jun 2016 22:22:14 +0200
-Subject: [Buildroot] 3 patches to buildroot via git send-email
-In-Reply-To: <20160626144849.4b5ab2fa@free-electrons.com>
-References: <CAGrGpJD9MX_aNzwu357LziPAOMYLbHeQt=sKAukPCav2-anbog@mail.gmail.com>
- <20160626144849.4b5ab2fa@free-electrons.com>
-Message-ID: <0b6fc661-dd89-4bb0-458a-c6a14c9c37d0@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Jun 2016 22:22:32 +0200
+Subject: [Buildroot] [git commit] qt5enginio: fix version for qt5 5.6.1-1
+	update
+Message-ID: <20160626202250.5E8C8817B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26-06-16 14:48, Thomas Petazzoni wrote:
-> Hello,
-> 
-> As I mentioned, we received 3 times the same patch, for sdl2_ttf. And
-> as Baruch noted, the commit title was wrong.
-> 
-> On Sat, 25 Jun 2016 21:20:04 -0600, Peter Thompson wrote:
-> 
->> > Step 2 - create 3 branches (1 per patch)
-> Don't do this. Create one branch only, with one commit per package.
-> 
->> > submit via
->> > https://buildroot.org/downloads/manual/manual.html#submitting-patches
->> > $ git fetch --all --tags    # update with latest buildroot version
->> > $ git rebase origin/master    # redo my commits on latest buildroot version
->> > $ git format-patch -M -n -s -o outgoing origin/master #format and send it
->> > $ git send-email --to buildroot at buildroot.org outgoing/*
-> Please send the patches to you first, in order to check that they look
-> good.
+commit: https://git.buildroot.net/buildroot/commit/?id=43e0f2ed1a8eba321a519b7646d23ccd35015361
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- The sending is clearly no problem. It is a good idea however to review the
-patches in outgoing/* before sending out.
+Fix qt5enginio version, is 1.6.1 for qt5.6.1-1 (hash
+is already updated by previous qt5 bump version patch).
 
- Regards,
- Arnout
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5enginio/qt5enginio.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/qt5/qt5enginio/qt5enginio.mk b/package/qt5/qt5enginio/qt5enginio.mk
+index b858d1c..51cc5b4 100644
+--- a/package/qt5/qt5enginio/qt5enginio.mk
++++ b/package/qt5/qt5enginio/qt5enginio.mk
+@@ -6,7 +6,7 @@
+ 
+ # Qt5Enginio does not follow Qt versionning
+ # see https://bugreports.qt.io/browse/QTBUG-50111
+-QT5ENGINIO_VERSION = 1.6.0
++QT5ENGINIO_VERSION = 1.6.1
+ QT5ENGINIO_SITE = $(QT5_SITE)
+ QT5ENGINIO_SOURCE = qtenginio-opensource-src-$(QT5ENGINIO_VERSION).tar.xz
+ QT5ENGINIO_DEPENDENCIES = openssl qt5base
