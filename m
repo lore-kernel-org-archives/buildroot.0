@@ -1,92 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Jun 2016 00:27:50 +0200
-Subject: [Buildroot] [PATCH v9 01/11] core: split variables definition
- related to in/out-of-tree build from O itself
-In-Reply-To: <1461358223-18312-2-git-send-email-s.martin49@gmail.com>
-References: <1461358223-18312-1-git-send-email-s.martin49@gmail.com>
- <1461358223-18312-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <e0557e8c-354e-6f56-a1e6-bfc28ae3abc2@mind.be>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sun, 26 Jun 2016 18:39:08 -0400
+Subject: [Buildroot] [PATCH v6 1/6] audit: bump to version 2.6
+In-Reply-To: <1466980753-667-1-git-send-email-Aduskett@gmail.com>
+References: <1466980753-667-1-git-send-email-Aduskett@gmail.com>
+Message-ID: <1466980753-667-2-git-send-email-Aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22-04-16 22:50, Samuel Martin wrote:
-> This change uncorrolates the CONFIG_DIR and NEED_WRAPPER definition from
-> the presence of the O variable in the command line.
-> 
-> Now, the condition used to set these variables is the value of O itself.
-> 
-> This change is a preparatory work since the O definition will need to
-> be moved around when we will make Buildroot run with absolute canonical
-> paths for both its root directory and the output location.
-> This will be addressed in a follow-up patch.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+Changes v4 -> v6:
+ - Patch series version bump.
 
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Changes v3 -> v4:
+ - Updated to 2.6 instead of 2.5.2
 
- (finally :-) but don't count on me being able to finish the series tonight)
+Changes v2 -> v3:
+ - Split patch into two patches.  One for a version bump, the second for
+ the ability to build as a host package.
 
- Regards,
- Arnout
+Changes v1 -> v2:
+ - Version bump and the ability to build as a host package as a
+   single patch.
 
-> 
-> ---
-> changes v8->v9:
-> - none
-> 
-> changes v7->v8:
-> - new patch
-> ---
->  Makefile | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 0e4beb2..3d86c9b 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -110,10 +110,11 @@ comma := ,
->  empty :=
->  space := $(empty) $(empty)
->  
-> +# Set O variable if not already done on the command line;
-> +# or avoid confusing packages that can use the O=<dir> syntax for out-of-tree
-> +# build by preventing it from being forwarded to sub-make calls.
->  ifneq ("$(origin O)", "command line")
->  O := output
-> -CONFIG_DIR := $(TOPDIR)
-> -NEED_WRAPPER =
->  else
->  # other packages might also support Linux-style out of tree builds
->  # with the O=<dir> syntax (E.G. BusyBox does). As make automatically
-> @@ -126,9 +127,16 @@ MAKEOVERRIDES =
->  # Unfortunately some packages don't look at origin (E.G. uClibc 0.9.31+)
->  # To really make O go away, we have to override it.
->  override O := $(O)
-> -CONFIG_DIR := $(O)
->  # we need to pass O= everywhere we call back into the toplevel makefile
->  EXTRAMAKEARGS = O=$(O)
-> +endif
-> +
-> +# Set variables related to in-tree or out-of-tree build.
-> +ifeq ($(O),output)
-> +CONFIG_DIR := $(TOPDIR)
-> +NEED_WRAPPER =
-> +else
-> +CONFIG_DIR := $(O)
->  NEED_WRAPPER = y
->  endif
->  
-> 
+ package/audit/audit.hash | 2 +-
+ package/audit/audit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
+diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+index f234fdb..3712f43 100644
+--- a/package/audit/audit.hash
++++ b/package/audit/audit.hash
+@@ -1,2 +1,2 @@
+ #Locally computed
+-sha256	25f57f465f3230d7b1166b615ffd6748818a3dc225d0e8b396c5b2e951674e23	audit-2.4.4.tar.gz
++sha256	b04dbc16dd877c32c3a05a512ed825abfbd5fabd5d3ecca6b4fcbd6bbac5f94e	audit-2.6.tar.gz
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 1fbc623..937244d 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUDIT_VERSION = 2.4.4
++AUDIT_VERSION = 2.6
+ AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+ AUDIT_LICENSE = GPLv2
+ AUDIT_LICENSE_FILES = COPYING
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
