@@ -1,37 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jun 2016 22:30:13 +0200
-Subject: [Buildroot] [git commit] package/lirc-tools: add optional support
-	for udev
-Message-ID: <20160626203108.B721C802D8@busybox.osuosl.org>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Sun, 26 Jun 2016 22:54:24 +0200
+Subject: [Buildroot] [PATCH 1/1] efivar: depends on target gcc >= 4.7
+Message-ID: <20160626205424.6082-1-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c104e3df2c9f11e496736786c4f8bbc5c2abe72f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The efivar internal build system uses flags such as -std=gnu11 ,
+-Wmaybe-uninitialized , -flto which are available in gcc >= 4.7 only.
+These flags are passed both to target build and to build a host tool.
+For the host part, this has been worked around by overriding
+'gcc_flags', but doing that for the target would remove all flags that
+upstream intended for the target build.
 
-lirc-tools has optional support for udev, see configure.ac, line 303+.
+Buildroot doesn't support building gcc 4.6 in its own toolchain anymore
+but it's possible to use an external toolchain with gcc 4.6 which would
+be unable to build this package.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+This patch adds a limitation on toolchains with target gcc >= 4.7 to
+make sure that the flags are available in the chosen toolchain.
+
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 ---
- package/lirc-tools/lirc-tools.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/efivar/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
-index 2fd6643..0c9eaa3 100644
---- a/package/lirc-tools/lirc-tools.mk
-+++ b/package/lirc-tools/lirc-tools.mk
-@@ -18,6 +18,10 @@ LIRC_TOOLS_AUTORECONF = YES
- LIRC_TOOLS_CONF_ENV = XSLTPROC=yes
- LIRC_TOOLS_CONF_OPTS = --without-x
+diff --git a/package/efivar/Config.in b/package/efivar/Config.in
+index c507584..5342fa4 100644
+--- a/package/efivar/Config.in
++++ b/package/efivar/Config.in
+@@ -4,12 +4,14 @@ config BR2_PACKAGE_EFIVAR
+ 	# doesn't build with uclibc due to lack of uchar.h
+ 	# doesn't build with musl due to lack of __bswap_constant_16
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	select BR2_PACKAGE_POPT
+ 	help
+ 	  Tools and libraries to manipulate EFI variables
  
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-+LIRC_TOOLS_DEPENDENCIES += udev
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
- LIRC_TOOLS_DEPENDENCIES += libusb-compat
- endif
+ 	  https://github.com/rhinstaller/efivar
+ 
+-comment "efivar requires an (e)glibc toolchain w/ headers >= 3.12"
++comment "efivar requires a glibc toolchain w/ headers >= 3.12, gcc >= 4.7"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
+-		!BR2_TOOLCHAIN_USES_GLIBC
++		!BR2_TOOLCHAIN_USES_GLIBC || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+-- 
+2.9.0
