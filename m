@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jun 2016 23:02:14 +0200
-Subject: [Buildroot] [3/8 v5] audit: Add the ability to compile as a
- host package.
-In-Reply-To: <1466971401-29360-4-git-send-email-Aduskett@gmail.com>
+Date: Sun, 26 Jun 2016 23:04:42 +0200
+Subject: [Buildroot] [4/8 v5] libsemanage: bump to version 2.5
+In-Reply-To: <1466971401-29360-5-git-send-email-Aduskett@gmail.com>
 References: <1466971401-29360-1-git-send-email-Aduskett@gmail.com>
- <1466971401-29360-4-git-send-email-Aduskett@gmail.com>
-Message-ID: <20160626230214.5c69c324@free-electrons.com>
+ <1466971401-29360-5-git-send-email-Aduskett@gmail.com>
+Message-ID: <20160626230442.109e7b5c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,49 +13,49 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 26 Jun 2016 16:03:16 -0400, Adam Duskett wrote:
+On Sun, 26 Jun 2016 16:03:17 -0400, Adam Duskett wrote:
+> In addition to bumping the version to 2.5, added a check in the make
+> file to see if BR2_PACKAGE_POLICYCOREUTILS is selected. If it is
+> host-audit is added as a dependency.
 
-> +HOST_AUDIT_CONF_OPTS = --without-python --without-python3 --disable-zos-remote
-> +ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
-> +HOST_AUDIT_DEPENDENCIES += host-libcap-ng
+Please don't do this. The policycoreutils package doesn't exist in
+Buildroot, so BR2_PACKAGE_POLICYCOREUTILS doesn't exist. For this
+reason, your patch cannot be merged.
 
-This is not good. BR2_PACKAGE_LIBCAP_NG indicates whether the *target*
-version of libcap-ng is enabled or not. It should *not* have any
-implication on whether libcap-ng is used in *host* packages.
+> (Note that policycoreutils is not yet available, but is being worked on
+> by another contributor.)
 
-For host packages, it's pretty simple: include a dependency if it's
-needed, do not include the dependency if it's not needed.
+Please either take over the submission of the policycoreutils package
+(I doubt the other contributor will continue to work on it), or drop
+the policycoreutils-related part of this patch.
 
-> +HOST_AUDIT_CONF_OPTS += --with-libcap-ng=yes
-> +else
-> +HOST_AUDIT_CONF_OPTS += --with-libcap-ng=no
-> +endif
+> -LIBSEMANAGE_VERSION = 2.1.10
+> -LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
+> +LIBSEMANAGE_VERSION = 2.5
+> +LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
+>  LIBSEMANAGE_LICENSE = LGPLv2.1+
+>  LIBSEMANAGE_LICENSE_FILES = COPYING
+> -LIBSEMANAGE_DEPENDENCIES = host-bison host-flex libselinux ustr bzip2
+> +LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
+
+So audit is now a mandatory dependency ?
+
+>  LIBSEMANAGE_INSTALL_STAGING = YES
+>  
+>  LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
+> @@ -27,8 +27,13 @@ define LIBSEMANAGE_INSTALL_TARGET_CMDS
+>  	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+>  endef
+>  
+> -HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-libsepol host-libselinux \
+> +HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-audit host-libsepol host-libselinux \
+>  				host-ustr host-bzip2 host-swig
 > +
-> +ifeq ($(BR2_INIT_SYSTEMD),y)
+> +ifeq ($(BR2_PACKAGE_POLICYCOREUTILS),y)
+> +HOST_LIBSEMANAGE_DEPENDENCIES += host-audit
 
-Same here. The fact that systemd is used on the target (which is what
-BR2_INIT_SYSTEMD indicates) has nothing to do with using systemd for
-the host variant of audit.
-
-> +define AUDIT_INSTALL_CLEANUP
-> +	$(RM) -rf $(HOST_DIR)/etc/rc.d
-> +	$(RM) -rf $(HOST_DIR)/etc/sysconfig
-> +endef
-
-This block is a piece of dead code, as it is never used anywhere.
-Moreover, it is not useful: we generally don't bother cleaning up
-things installed in $(HOST_DIR) since disk space on the build machine
-is not a scarce resource.
-
-> +
-> +
-
-Only one empty line before the autotools-package macro call.
-
->  $(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-
-Thanks,
+This is useless. You are already adding host-audit as a mandatory
+dependency of host-libsemanage two lines before.
 
 Thomas
 -- 
