@@ -1,34 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jun 2016 23:10:06 +0200
-Subject: [Buildroot] [PATCH] gflags: put hash in .hash file
-In-Reply-To: <667566b6818e789a6a47731019ad964a9c887c48.1466617240.git.baruch@tkos.co.il>
-References: <667566b6818e789a6a47731019ad964a9c887c48.1466617240.git.baruch@tkos.co.il>
-Message-ID: <20160626231006.317a76a5@free-electrons.com>
+Date: Sun, 26 Jun 2016 23:09:42 +0200
+Subject: [Buildroot] [git commit] glog: put hash in .hash file
+Message-ID: <20160626211011.B1D0981E94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=14207adc5046208b081edc4f09f728153256b96b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Jun 2016 20:40:40 +0300, Baruch Siach wrote:
-> github archives should be stable now.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/ac9/ac92ec88c9e26df579a5e44f58c34a3e4dd5b2b0/
-> http://autobuild.buildroot.net/results/79c/79cecd4fa98bdad5b5bdc57725d8cb8118b1cf2e/
-> http://autobuild.buildroot.net/results/bb2/bb2e04a643784beb78f38c016a1c621786b575fe/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/gflags/gflags.hash | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+github archives should be stable now.
 
-Applied to master, thanks.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/glog/glog.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/glog/glog.hash b/package/glog/glog.hash
+index dad1543..4548eba 100644
+--- a/package/glog/glog.hash
++++ b/package/glog/glog.hash
+@@ -1,2 +1,2 @@
+-# No hash for v0.3.4, comes from the github-helper:
+-none	xxx	glog-v0.3.4.tar.gz
++# Locally computed
++sha256	ce99d58dce74458f7656a68935d7a0c048fa7b4626566a71b7f4e545920ceb10	glog-v0.3.4.tar.gz
