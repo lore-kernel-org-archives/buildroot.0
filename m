@@ -1,104 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 26 Jun 2016 16:48:17 -0300
-Subject: [Buildroot] [PATCH] mpg123: bump to version 1.23.5
-Message-ID: <1466970497-30351-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Jun 2016 21:48:43 +0200
+Subject: [Buildroot] [git commit] ethtool: bump to version 4.6
+Message-ID: <20160626194847.2022481D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstreamed patch and related autoreconf.
+commit: https://git.buildroot.net/buildroot/commit/?id=8f22c4080777b89617f96b52ad462e390437dc06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-Makefile.am-don-t-override-LIBS.patch     | 46 ----------------------
- package/mpg123/mpg123.hash                         |  2 +-
- package/mpg123/mpg123.mk                           |  4 +-
- 3 files changed, 2 insertions(+), 50 deletions(-)
- delete mode 100644 package/mpg123/0001-Makefile.am-don-t-override-LIBS.patch
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpg123/0001-Makefile.am-don-t-override-LIBS.patch b/package/mpg123/0001-Makefile.am-don-t-override-LIBS.patch
-deleted file mode 100644
-index a5bfe80..0000000
---- a/package/mpg123/0001-Makefile.am-don-t-override-LIBS.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 25c2e71c9ce762561eeacd35bf432c6692c0fb44 Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <peter@korsgaard.com>
--Date: Tue, 24 May 2016 17:34:32 +0200
--Subject: [PATCH] Makefile.am: don't override LIBS
--
--Patch status: posted upstream
--https://sourceforge.net/p/mpg123/mailman/message/35111696/
--
--The recent build system change broke custom LIBS handling. As opposed to the
--other internal variables, LIBS can be provided by the user when running
--configure, E.G.:
--
--LIBS="-lfoo -lbar" ./configure ..
--
--This is correctly used by the configure checks, but doesn't end up in the
--Makefile any more because of this override - Breaking static builds where
--the configure script needs a bit of help to link with -lpthread when
--alsa/portaudio is used (as those use pthreads internally).
--
--Fixes the following build issues from the Buildroot autobuilders:
--
--http://autobuild.buildroot.net/?reason=mpg123-1.23.3
--
--(see https://git.buildroot.net/buildroot/tree/package/mpg123/mpg123.mk for
--the build logic)
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- Makefile.am | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index d695a3b..863f59f 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -9,7 +9,6 @@
-- ACLOCAL_AMFLAGS = -I m4
-- bin_PROGRAMS =
-- EXTRA_PROGRAMS =
---LIBS =
-- EXTRA_DIST =
-- pkglib_LTLIBRARIES =
-- lib_LTLIBRARIES =
---- 
--2.7.0
--
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index 6732206..6429baa 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 04022a5..73a25ed 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	3495e678dec9a60f29cbcd4fc698abc4c811ec60d1276e744f7a10ac35023b48	mpg123-1.23.4.tar.bz2
-+sha256	b658df672813511ff9b68a1553917220b675067204cdb58dbb59a2b8179350b2	mpg123-1.23.5.tar.bz2
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index d943b08..37f207e 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256	bb2834332c5ac7f5bbe1c9f78f4fa851e4a3fe6397b124d58467c9ccee9fca3b	ethtool-4.5.tar.xz
++sha256	e90589a9349d008cce8c0510ac4e8878efdc0ddb1b732a9a4cc333b101313415	ethtool-4.6.tar.xz
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index f6f4263..fb751a4 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPG123_VERSION = 1.23.4
-+MPG123_VERSION = 1.23.5
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
-@@ -12,8 +12,6 @@ MPG123_INSTALL_STAGING = YES
- MPG123_LICENSE = LGPLv2.1
- MPG123_LICENSE_FILES = COPYING
- MPG123_DEPENDENCIES = host-pkgconf
--# 0001-Makefile.am-don-t-override-LIBS.patch patches Makefile.am
--MPG123_AUTORECONF = YES
- 
- MPG123_CPU = $(if $(BR2_SOFT_FLOAT),generic_nofpu,generic_fpu)
- 
--- 
-2.7.3
+-ETHTOOL_VERSION = 4.5
++ETHTOOL_VERSION = 4.6
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPLv2
