@@ -1,41 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jun 2016 21:48:43 +0200
-Subject: [Buildroot] [git commit] ethtool: bump to version 4.6
-Message-ID: <20160626194847.2022481D65@busybox.osuosl.org>
+Date: Sun, 26 Jun 2016 21:51:27 +0200
+Subject: [Buildroot] [PATCH 0/2] Odroid XU4 support
+In-Reply-To: <1466950062-31783-1-git-send-email-andi@etezian.org>
+References: <1466950062-31783-1-git-send-email-andi@etezian.org>
+Message-ID: <20160626215127.053ba7b0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f22c4080777b89617f96b52ad462e390437dc06
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Andi!
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun, 26 Jun 2016 17:07:40 +0300, Andi Shyti wrote:
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 04022a5..73a25ed 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256	bb2834332c5ac7f5bbe1c9f78f4fa851e4a3fe6397b124d58467c9ccee9fca3b	ethtool-4.5.tar.xz
-+sha256	e90589a9349d008cce8c0510ac4e8878efdc0ddb1b732a9a4cc333b101313415	ethtool-4.6.tar.xz
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index f6f4263..fb751a4 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ETHTOOL_VERSION = 4.5
-+ETHTOOL_VERSION = 4.6
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPLv2
+> this patchset adds support for the Odroid XU4 board.
+> 
+> The first patch adds the first two stages of boot firmare and the
+> trust zone, necessary to boot the device.
+> 
+> While the second patch adds the actual support of the board.
+
+Thanks for this contribution, it's very useful to have support for
+such platforms. I have some comments though, so I'll reply to the
+individual patches.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
