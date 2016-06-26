@@ -1,84 +1,55 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 26 Jun 2016 06:36:43 +0300
-Subject: [Buildroot] 3 patches to buildroot via git send-email
-In-Reply-To: <CAGrGpJD9MX_aNzwu357LziPAOMYLbHeQt=sKAukPCav2-anbog@mail.gmail.com>
-References: <CAGrGpJD9MX_aNzwu357LziPAOMYLbHeQt=sKAukPCav2-anbog@mail.gmail.com>
-Message-ID: <20160626033643.GB2319@tarshish>
+Date: Sun, 26 Jun 2016 06:53:17 +0300
+Subject: [Buildroot] [Patch v3 2/3] python-meson: new package
+In-Reply-To: <1466796149-25218-3-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1466796149-25218-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1466796149-25218-3-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20160626035317.GC2319@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Eric,
 
-On Sat, Jun 25, 2016 at 09:20:04PM -0600, Peter Thompson wrote:
-> I submitted 3 patches to buildroot via git send-email got sdl2_ttf,
-> sdl2_image, sdl2_gfx.    I hope they arrived properly.    If not, please
-> let me know.    Below are my personal notes I used to make the submission.
+On Fri, Jun 24, 2016 at 09:22:28PM +0200, Eric Le Bihan wrote: 
+> diff --git a/package/python-meson/cross-compilation.conf.in b/package/python-meson/cross-compilation.conf.in
+> new file mode 100644
+> index 0000000..fc9f1dd
+> --- /dev/null
+> +++ b/package/python-meson/cross-compilation.conf.in
+> @@ -0,0 +1,20 @@
+> +# Generated file - do not edit
 
-They all arrived. You can see them in the list archive at:
+This is not correct for this file. This is the source file that you sed to 
+generate the generated one. Though I understand it's convenient to have this 
+comment in the source file, it is also misleading.
 
-http://lists.busybox.net/pipermail/buildroot/2016-June/165082.html
-http://lists.busybox.net/pipermail/buildroot/2016-June/165083.html
-http://lists.busybox.net/pipermail/buildroot/2016-June/165084.html
+Also, as there are many other generated files under $(HOST_DIR), I'm not sure 
+this comment is helpful.
 
-The subject line for all these patches is wrong, though. It should be e.g.:
-
-  sdl2_ttf: new package
-
-The first line of your git commit log becomes the subject line when you 
-generate an email with 'git format-patch'.
-
-Hope this helps,
 baruch
 
-> -------------------  submit patch to Buildroot --------------
-> see https://buildroot.org/downloads/manual/manual.html#submitting-patches
-> see http://free-electrons.com/~thomas/buildroot/manual/html/ch02.html
-> 
-> Step 1 - Git buildroot from github
-> ----------------------------------
-> mkdir ~/Documents/git/buildroot/
-> cd ~/Documents/git/buildroot/
-> git clone git://git.buildroot.net/buildroot
-> 
-> cd ~/Documents/git/buildroot/buildroot/
-> git status
-> git branch -a
-> git remote -v
-> git remote show origin
-> 
-> 
-> Step 2 - create 3 branches (1 per patch)
-> -----------------------------------------
-> git checkout master     # recheck original
-> git branch sdl2_gfx
-> git branch sdl2_image
-> git branch sdl2_ttf
-> git branch -a            #
-> 
-> 
-> Step 3 - create patch, test, submit
-> -----------------------------------------
-> git checkout sdl2_image     #make changes see 09xpeterBuildrootPatchREADME
-> git add package/sdl2_image/Config.in        # p17-19 git pro book
-> git add package/sdl2_image/sdl2_image.mk
-> git add package/Config.in
-> git add -A                 # adds all files - don't use here...
-> git status                # make sure you know what you are commiting
-> git commit -as            # -as=all modified files with signoff
-> rm *~                     # get rid of junk
-> 
-> 
-> submit via
-> https://buildroot.org/downloads/manual/manual.html#submitting-patches
-> $ git fetch --all --tags    # update with latest buildroot version
-> $ git rebase origin/master    # redo my commits on latest buildroot version
-> $ git format-patch -M -n -s -o outgoing origin/master #format and send it
-> $ git send-email --to buildroot at buildroot.org outgoing/*
-> 
-> repeat Step 3 for all sdl2-gfx, sdl2_image, sdl2_ttf
+> +#
+> +# Note that, in Meson terminology, what Buildroot calls the "host" system is the
+> +# "build" system and the "target" system is called the "host" system.
+> +
+> +[host_machine]
+> +system = 'linux'
+> +cpu_family ='@TARGET_ARCH@'
+> +cpu = 'generic'
+> +endian = '@TARGET_ENDIAN@'
+> +
+> +[properties]
+> +
+> +[binaries]
+> +c = '@TARGET_CROSS at gcc'
+> +cpp = '@TARGET_CROSS at g++'
+> +ar = '@TARGET_CROSS at ar'
+> +strip = '@TARGET_CROSS at strip'
+> +exe_wrapper = '@HOST_DIR@/usr/bin/meson-exe-wrapper'
+> +pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
