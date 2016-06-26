@@ -1,40 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jun 2016 23:07:41 +0200
-Subject: [Buildroot] [8/8 v5] setools: fix build with latest selinux
- libraries.
-In-Reply-To: <1466971401-29360-9-git-send-email-Aduskett@gmail.com>
-References: <1466971401-29360-1-git-send-email-Aduskett@gmail.com>
- <1466971401-29360-9-git-send-email-Aduskett@gmail.com>
-Message-ID: <20160626230741.1655c107@free-electrons.com>
+Date: Sun, 26 Jun 2016 23:08:28 +0200
+Subject: [Buildroot] [git commit] e2fsprogs: add fuse2fs libintl fix patch
+Message-ID: <20160626210833.DC937801D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fedaff21305dfc35a75914670cc81ebae3668eca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 26 Jun 2016 16:03:21 -0400, Adam Duskett wrote:
+Fixes:
+http://autobuild.buildroot.net/results/ab5/ab5c5b0e234f3d9db78c968334a61a7aef206b7a/
 
-> diff --git a/package/setools/0003-fix-build-with-latest-selinux-libs.patch b/package/setools/0003-fix-build-with-latest-selinux-libs.patch
-> new file mode 100644
-> index 0000000..78203c8
-> --- /dev/null
-> +++ b/package/setools/0003-fix-build-with-latest-selinux-libs.patch
-> @@ -0,0 +1,89 @@
-> +Fix compile errors against newer versions of selinux libraries.
-> +Credit to: Joe MacDonald <joe_macdonald@mentor.com>
-> +URL: https://github.com/flihp/meta-selinux/commit/e09eaef7a9acb552a4a5e1f90117154ae06b6fda
-> +
-> +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/e2fsprogs/0003-fuse2fs-needs-SYSLIBS.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-It would be nicer to copy the
-setools-Update-for-2015-02-02-Userspace-release.patch file as-is
-(especially its description and the fact that it's a Git-formatted
-patch) and just add your SoB line at the end of the patch description.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/e2fsprogs/0003-fuse2fs-needs-SYSLIBS.patch b/package/e2fsprogs/0003-fuse2fs-needs-SYSLIBS.patch
+new file mode 100644
+index 0000000..61c6965
+--- /dev/null
++++ b/package/e2fsprogs/0003-fuse2fs-needs-SYSLIBS.patch
+@@ -0,0 +1,30 @@
++From ff6147dd7197519e561e796d56545c4e11eb43fa Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Wed, 22 Jun 2016 20:55:35 -0300
++Subject: [PATCH e2fsprogs] fuse2fs: needs SYSLIBS
++
++It otherwise leads to build failure when using an unbundled libintl.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Status: sent to ML http://marc.info/?l=linux-ext4&m=146664003825136&w=2
++
++ misc/Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/misc/Makefile.in b/misc/Makefile.in
++index f67c9c7..e487692 100644
++--- a/misc/Makefile.in
+++++ b/misc/Makefile.in
++@@ -389,7 +389,7 @@ fuse2fs: $(FUSE2FS_OBJS) $(DEPLIBS) $(DEPLIBBLKID) $(DEPLIBUUID) \
++ 	$(E) "	LD $@"
++ 	$(Q) $(CC) $(ALL_LDFLAGS) -o fuse2fs $(FUSE2FS_OBJS) $(LIBS) \
++ 		$(LIBFUSE) $(LIBBLKID) $(LIBUUID) $(LIBEXT2FS) $(LIBINTL) \
++-		$(CLOCK_GETTIME_LIB)
+++		$(CLOCK_GETTIME_LIB) $(SYSLIBS)
++ 
++ journal.o: $(srcdir)/../debugfs/journal.c
++ 	$(E) "	CC $@"
++-- 
++2.7.3
++
