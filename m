@@ -1,79 +1,84 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Sun, 26 Jun 2016 23:36:27 +0200
-Subject: [Buildroot] [PATCH v2 1/1] efivar: depends on target gcc >= 4.7
-Message-ID: <20160626213627.14298-1-nunes.erico@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 27 Jun 2016 00:07:20 +0200
+Subject: [Buildroot] [PATCH v7] openblas: new package
+In-Reply-To: <1466764011-10998-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1466764011-10998-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <12aeb9fe-c292-b386-1b1b-fddf6f195e73@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The efivar internal build system uses flags such as -std=gnu11 ,
--Wmaybe-uninitialized , -flto which are available in gcc >= 4.7 only.
-These flags are passed both to target build and to build a host tool.
-For the host part, this has been worked around by overriding
-'gcc_flags', but doing that for the target would remove all flags that
-upstream intended for the target build.
+On 24-06-16 12:26, Vicente Olivert Riera wrote:
+> OpenBLAS is optimised for specific CPU models, which don't fully match
+> with the GCC code generation options. Therefore, we can't automatically
+> select BR2_PACKAGE_OPENBLAS_TARGET based on the CPU choice. Instead, let
+> the user select the TARGET name, but offer a sensible default. Other
+> possible solutions were deemed too complicated: adding choice options in
+> the ambiguous cases, or only making the option user-visible when there
+> is ambiguity.
 
-Buildroot doesn't support building gcc 4.6 in its own toolchain anymore
-but it's possible to use an external toolchain with gcc 4.6 which would
-be unable to build this package.
+ Unfortunately, the arch dependencies are not going enough, they're going to
+lead to build failures. E.g. br-arm-basic.config and
+br-mips32r6-el-hf-glibc.config don't have a corresponding TARGET. So we will
+need something better after all...
 
-This patch adds a limitation on toolchains with target gcc >= 4.7 to
-make sure that the flags are available in the chosen toolchain.
+ So, I think the easiest is to do the following. Make the option with all the
+defaults a blind option, move it out of the condition, call it
+BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET. Then do
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
----
-Changes v1 -> v2:
-  - propagated gcc >= 4.7 dependency to efibootmgr (pointed out by
-  Thomas Petazzoni)
----
- package/efibootmgr/Config.in | 6 ++++--
- package/efivar/Config.in     | 6 ++++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+config BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
+	bool
+	default y if BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET != ""
 
-diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
-index cb1b18e..9e501f6 100644
---- a/package/efibootmgr/Config.in
-+++ b/package/efibootmgr/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_EFIBOOTMGR
- 	bool "efibootmgr"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # efivar
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # efivar
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # efivar
- 	select BR2_PACKAGE_EFIVAR
- 	help
- 	  A Linux user-space application to modify the Intel Extensible
-@@ -11,6 +12,7 @@ config BR2_PACKAGE_EFIBOOTMGR
- 
- 	  https://github.com/rhinstaller/efibootmgr
- 
--comment "efibootmgr requires an (e)glibc toolchain w/ headers >= 3.12"
-+comment "efibootmgr requires a glibc toolchain w/ headers >= 3.12, gcc >= 4.7"
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
--		!BR2_TOOLCHAIN_USES_GLIBC
-+		!BR2_TOOLCHAIN_USES_GLIBC || \\
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/efivar/Config.in b/package/efivar/Config.in
-index c507584..5342fa4 100644
---- a/package/efivar/Config.in
-+++ b/package/efivar/Config.in
-@@ -4,12 +4,14 @@ config BR2_PACKAGE_EFIVAR
- 	# doesn't build with uclibc due to lack of uchar.h
- 	# doesn't build with musl due to lack of __bswap_constant_16
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 	select BR2_PACKAGE_POPT
- 	help
- 	  Tools and libraries to manipulate EFI variables
- 
- 	  https://github.com/rhinstaller/efivar
- 
--comment "efivar requires an (e)glibc toolchain w/ headers >= 3.12"
-+comment "efivar requires a glibc toolchain w/ headers >= 3.12, gcc >= 4.7"
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 || \
--		!BR2_TOOLCHAIN_USES_GLIBC
-+		!BR2_TOOLCHAIN_USES_GLIBC || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ And finally, inside the condition:
+
+config BR2_PACKAGE_OPENBLAS_TARGET
+	string "OpenBLAS target CPU"
+	default BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+
+ Can you try that?
+
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+[snip]
+
+> +define OPENBLAS_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) $(OPENBLAS_MAKE_OPTS) \
+> +		-C $(@D)
+> +endef
+> +
+> +define OPENBLAS_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(OPENBLAS_MAKE_OPTS) \
+
+ Minor nit: I prefer to repeat the same options here as for the build, i.e.
+include TARGET_CONFIGURE_OPTS.
+
+ Actually, maybe you should just initialize
+
+OPENBLAS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
+
+
+ Regards,
+ Arnout
+
+> +		-C $(@D) install PREFIX=$(STAGING_DIR)/usr
+> +endef
+> +
+> +define OPENBLAS_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(OPENBLAS_MAKE_OPTS) \
+> +		-C $(@D) install PREFIX=$(TARGET_DIR)/usr
+> +endef
+> +
+> +$(eval $(generic-package))
+> 
+
+
 -- 
-2.9.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
