@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jun 2016 22:25:40 +0200
-Subject: [Buildroot] [PATCH] feh: bump to version 2.16.1
-In-Reply-To: <1466970428-26669-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1466970428-26669-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160626222540.3e548bea@free-electrons.com>
+Date: Sun, 26 Jun 2016 22:25:43 +0200
+Subject: [Buildroot] [PATCH] mpg123: bump to version 1.23.5
+In-Reply-To: <1466970497-30351-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1466970497-30351-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160626222543.0e662804@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 26 Jun 2016 16:47:08 -0300, Gustavo Zacarias wrote:
+On Sun, 26 Jun 2016 16:48:17 -0300, Gustavo Zacarias wrote:
+> Drop upstreamed patch and related autoreconf.
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/feh/feh.hash | 4 ++--
->  package/feh/feh.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  .../0001-Makefile.am-don-t-override-LIBS.patch     | 46 ----------------------
+>  package/mpg123/mpg123.hash                         |  2 +-
+>  package/mpg123/mpg123.mk                           |  4 +-
+>  3 files changed, 2 insertions(+), 50 deletions(-)
+>  delete mode 100644 package/mpg123/0001-Makefile.am-don-t-override-LIBS.patch
 
 Applied to master, thanks.
 
