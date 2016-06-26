@@ -1,31 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jun 2016 21:51:27 +0200
-Subject: [Buildroot] [PATCH 0/2] Odroid XU4 support
-In-Reply-To: <1466950062-31783-1-git-send-email-andi@etezian.org>
-References: <1466950062-31783-1-git-send-email-andi@etezian.org>
-Message-ID: <20160626215127.053ba7b0@free-electrons.com>
+Date: Sun, 26 Jun 2016 21:51:36 +0200
+Subject: [Buildroot] [PATCH] ethtool: bump to version 4.6
+In-Reply-To: <1466969804-14201-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1466969804-14201-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160626215136.30f594ff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andi!
+Hello,
 
-On Sun, 26 Jun 2016 17:07:40 +0300, Andi Shyti wrote:
+On Sun, 26 Jun 2016 16:36:44 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/ethtool/ethtool.hash | 2 +-
+>  package/ethtool/ethtool.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-> this patchset adds support for the Odroid XU4 board.
-> 
-> The first patch adds the first two stages of boot firmare and the
-> trust zone, necessary to boot the device.
-> 
-> While the second patch adds the actual support of the board.
-
-Thanks for this contribution, it's very useful to have support for
-such platforms. I have some comments though, so I'll reply to the
-individual patches.
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
