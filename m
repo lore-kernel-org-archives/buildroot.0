@@ -1,12 +1,12 @@
 From: Andi Shyti <andi.shyti@gmail.com>
-Date: Tue, 28 Jun 2016 03:03:03 +0900
-Subject: [Buildroot] [PATCH 1/2] package: add Odroid BL bootloader
- binaries
-In-Reply-To: <20160626221048.02818b93@free-electrons.com>
+Date: Tue, 28 Jun 2016 03:04:26 +0900
+Subject: [Buildroot] [PATCH 2/2] board: add support for the Odroid XU4
+ board
+In-Reply-To: <20160626222201.35c7cb53@free-electrons.com>
 References: <1466950062-31783-1-git-send-email-andi@etezian.org>
- <1466950062-31783-2-git-send-email-andi@etezian.org>
- <20160626221048.02818b93@free-electrons.com>
-Message-ID: <20160627180303.GL424@jack.zhora.eu>
+ <1466950062-31783-3-git-send-email-andi@etezian.org>
+ <20160626222201.35c7cb53@free-electrons.com>
+Message-ID: <20160627180426.GM424@jack.zhora.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,52 +15,102 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-> > The above files are provided by the hardkernel u-boot from
-> > 
-> >  https://github.com/hardkernel/u-boot/tree/odroidxu3-v2012.07
+> > +Finalize the SD card
+> > +--------------------
+> > +
+> > +Now it's time to move Kernel and File System to the SD card. We will start from
+> > +the Kernel partition.
+> > +
+> > +First mount it:
+> > +
+> > + # mount /dev/sdb1/ /mnt/
+> > +
+> > +and copy kernel and dtb
+> > +
+> > + # cp <buildroot>/output/images/zImage /mnt/
+> > + # cp <buildroot>/output/images/exynos5422-odroidxu4.dtb /mnt/
+> > +
+> > +umount the partition
+> > +
+> > + # sync
+> > + # umount /dev/sdb1
+> > +
+> > +Mount the rootfs partition:
+> > +
+> > + # mount /dev/sdb2 /mnt/
+> > + # tar
+> > + # cp <buildroot>/output/images/rootfs.tar -C /mnt/
+> > +
+> > +Umount the partition
+> > +
+> > + # sync
+> > + # umount /dev/sdb2
+> > +
+> > +The SD card is ready, you can boot now your Odroid XU-4.
 > 
-> So the source code for those binary files is not available at all?
+> Please replace all this with a genimage script. It allows you to easily
+> describe a FAT and an ext4 partition, and also allows you to place your
+> bootloader images at arbitrary offsets.
+> 
+> See board/freescale/imx6ulevk/genimage.cfg for an example.
 
-Unfortunately not, it is not even available to me :(
+sure! It's indeed better!
 
-> > +config BR2_PACKAGE_ODROID_XU_BL
-> > +	bool "odroid-xu-bl"
+> > +Automate u-boot commands
+> > +------------------------
+> > +
+> > +In order to avoid customizing u-boot from the u-boot system at boot time, you
+> > +can use the boot.cmd file in board/odroid-xu4.
+> > +
+> > +Jut run
+> > +
+> > + $ mkimage -A arm -T script -C none -d boot.cmd boot.scr
 > 
-> 	depends on BR2_arm
+> Please do this in a post-image script, do that boot.scr is directly
+> produced in output/images, and added to the FAT partition by the
+> genimage script.
 > 
-> would be good to have here
+> See board/orangepi/orangepipc/post-build.sh for an example.
+
+I will, thanks!
+
+> > +BR2_arm=y
+> > +BR2_cortex_a7=y
+> > +BR2_KERNEL_HEADERS_4_6=y
+> 
+> Please use:
+> 
+> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
+> 
+> which tells Buildroot to use the sources of the kernel being built for
+> the kernel headers.
 
 OK.
 
-> Also, I think this package should be included in the Bootloaders menu
-> rather than the firmware menu. Maybe we should name it
-> odroid-xu-bootloader or odroid-xu-boot so that it is clear what it does.
+> > +BR2_LINUX_KERNEL=y
+> 
+> You need to specify the exact kernel version that you want to build.
 
 OK.
 
-> > +ODROID_XU_BL_VERSION = odroidxu3-v2012.07
-> > +ODROID_XU_BL_SITE = $(call github,hardkernel,u-boot,$(ODROID_XU_BL_VERSION))
+> > +BR2_LINUX_KERNEL_DEFCONFIG="exynos"
+> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="exynos5422-odroidxu4"
+> > +BR2_PACKAGE_ODROID_XU_BL=y
+> > +BR2_TARGET_UBOOT=y
 > 
-> It's a bit annoying that we end up downloading an entire U-Boot source
-> tree, and in fact not use it except for those 3 files.
+> You need to specify the exact U-Boot version that you want to build.
+> So, as per my reply on PATCH 1/2, it should probably point to the
+> vendor-specific U-Boot version, so that you can use the pre-built
+> binaries for the first stage bootloaders.
+
+OK.
+
+> > +BR2_TARGET_UBOOT_BOARDNAME="odroid-xu3"
 > 
-> In fact, why don't you simply build this U-Boot version with the U-Boot
-> package that already exists in Buildroot, and then use:
+> Thanks,
 
-It is indeed annoying: I don't like the idea of
+Thank you, I will fix the above in the second version of the
+patchset.
 
- 1. downloading two u-boot
- 2. download u-boot for just two files.
-
-But, on the other hand, I don't like the hardkernel u-boot
-either. I think it's old, ugly and too hacky; as a buildroot
-user, I would like as much as I can to use mainline software.
-Besides, the cool thing of this board is that it is well
-supported both from the Linux Kernel and u-boot.
-
-How about creating a new repository with just these three files?
-If it sounds good, I will check with the licensing, even though I
-don't thing it will be a problem.
-
-Thanks a lot,
 Andi
