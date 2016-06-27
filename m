@@ -1,148 +1,64 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Mon, 27 Jun 2016 19:03:00 +0000
-Subject: [Buildroot] [PATCH] Reiserfsprogs
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C6EE83116F@ex-mb1.corp.adtran.com>
-References: <F9C551623D2CBB4C9488801D14F864C6EE83116F@ex-mb1.corp.adtran.com>
-Message-ID: <F9C551623D2CBB4C9488801D14F864C6EE8311A1@ex-mb1.corp.adtran.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Jun 2016 21:27:06 +0200
+Subject: [Buildroot] [PATCH] glibc: bump default to version 2.23
+In-Reply-To: <57d9d2a6-9bcc-c512-4e09-6eb8f8958c76@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 22 Jun 2016 22:38:38 +0200")
+References: <1466590187-21862-1-git-send-email-gustavo@zacarias.com.ar>
+ <87r3bpwa02.fsf@dell.be.48ers.dk>
+ <42d8119e5e64c7a67018770b3f029146@zacarias.com.ar>
+ <20160622171317.79fbea7e@free-electrons.com>
+ <312f3b85fab01ed234da9ff79ac982d0@zacarias.com.ar>
+ <877fdhw8ek.fsf@dell.be.48ers.dk>
+ <57d9d2a6-9bcc-c512-4e09-6eb8f8958c76@mind.be>
+Message-ID: <8737nyqvp1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hate it when I leave my ruler across the top.
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-If you want me to resubmit, no problem there.
+Hi,
 
-I really hate using M$ LookOut!
+ >> I don't have an issue as such with us more aggressively following glibc
+ >> development if we decide to do so, but this kind of information should
+ >> be included in the commit message.
 
-Andy
+ >  My take on this: we should follow the stable branch of upstream. Since glibc
+ > has no concept of stable branches (in fact, none of the libc's do), we really
+ > should follow upstream releases aggressively.
 
-> -----Original Message-----
-> From: buildroot [mailto:buildroot-bounces at busybox.net] On Behalf Of ANDY KENNEDY
-> Sent: Monday, June 27, 2016 1:46 PM
-> To: 'buildroot at busybox.net'
-> Subject: [Buildroot] [PATCH] Reiserfsprogs
-> 
-> 1234567890123456789012345678901234567890123456789012345678901234567890
-> This patch was attempted earlier by Rod Boyce:
-> 
-> All,
-> 
-> Attached is a patch that adds reiserfsprogs to build root.
-> 
-> Regards,
-> Rod Boyce
-> Index: package/Config.in
-> 
-> I have tweaked it to make it fit into the latest git repo.
-> 
-> This patch adds support for reiserfsprogs.
-> 
-> Signed-off-by:  Andy Kennedy <andy.kennedy@adtran.com>
-> ---
-> diff -Naur a/package/Config.in b/package/Config.in
-> --- a/package/Config.in	2016-03-01 14:47:30.000000000 -0600
-> +++ b/package/Config.in	2016-06-27 13:26:49.889497184 -0500
-> @@ -180,6 +180,7 @@
->  	source "package/mtools/Config.in"
->  	source "package/nfs-utils/Config.in"
->  	source "package/ntfs-3g/Config.in"
-> +	source "package/reiserfsprogs/Config.in"
->  	source "package/simicsfs/Config.in"
->  	source "package/sp-oops-extract/Config.in"
->  	source "package/squashfs/Config.in"
-> diff -Naur a/package/reiserfsprogs/Config.in b/package/reiserfsprogs/Config.in
-> --- a/package/reiserfsprogs/Config.in	1969-12-31 18:00:00.000000000 -0600
-> +++ b/package/reiserfsprogs/Config.in	2016-06-24 14:03:06.000000000 -0500
-> @@ -0,0 +1,36 @@
-> +
-> +config BR2_PACKAGE_REISERFSPROGS
-> +	bool "reiserfsprogs"
-> +	select BR2_PACKAGE_ACL
-> +	select BR2_PACKAGE_UTIL_LINUX
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-> +	select BR2_PACKAGE_E2FSPROGS
-> +	help
-> +	  The reiserfs file system utilities.
-> +
-> +	  https://reiser4.wiki.kernel.org/index.php/Main_Page
-> +
-> +if BR2_PACKAGE_REISERFSPROGS
-> +
-> +config BR2_PACKAGE_REISERFSPROGS_MKREISERFS
-> +	bool "mkreiserfs"
-> +	default y
-> +
-> +config BR2_PACKAGE_REISERFSPROGS_REISERFSCK
-> +	bool "reiserfsck"
-> +	default y
-> +
-> +config BR2_PACKAGE_REISERFSPROGS_RESIZE_REISERFS
-> +	bool "resize_reiserfs"
-> +	default y
-> +
-> +config BR2_PACKAGE_REISERFSPROGS_REISERFSTUNE
-> +	bool "reiserfstune"
-> +	default y
-> +
-> +config BR2_PACKAGE_REISERFSPROGS_DEBUGREISERFS
-> +	bool "debugreiserfs"
-> +	default y
-> +
-> +endif
-> diff -Naur a/package/reiserfsprogs/Config.in.host b/package/reiserfsprogs/Config.in.host
-> --- a/package/reiserfsprogs/Config.in.host	1969-12-31 18:00:00.000000000 -0600
-> +++ b/package/reiserfsprogs/Config.in.host	2016-06-24 14:04:44.000000000 -0500
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_HOST_REISERFSPROGS
-> +	bool "host reiserfsprogs"
-> +	help
-> +	  The reiserfs file system utilities.
-> +
-> +	  https://reiser4.wiki.kernel.org/index.php/Main_Page
-> diff -Naur a/package/reiserfsprogs/reiserfsprogs.mk b/package/reiserfsprogs/reiserfsprogs.mk
-> --- a/package/reiserfsprogs/reiserfsprogs.mk	1969-12-31 18:00:00.000000000 -0600
-> +++ b/package/reiserfsprogs/reiserfsprogs.mk	2016-06-24 14:04:20.000000000 -0500
-> @@ -0,0 +1,32 @@
-> +################################################################################
-> +#
-> +# reiserfsprogs
-> +#
-> +################################################################################
-> +
-> +REISERFSPROGS_VERSION = 3.6.25
-> +REISERFSPROGS_SITE =
-> ftp://www.kernel.org/pub/linux/kernel/people/jeffm/reiserfsprogs/v$(REISERFSPROGS_VERSION)
-> +REISERFSPROGS_LICENSE = GPLv2
-> +REISERFSPROGS_LICENSE_FILES = COPYING README
-> +REISERFSPROGS_CONF_ENV = LIBS='-lcom_err -luuid -lpthread -lrt'
-> +REISERFSPROGS_DEPENDENCIES = util-linux e2fsprogs acl
-> +
-> +# binaries to keep or remove
-> +REISERFSPROGS_BINTARGETS_$(BR2_PACKAGE_REISERFSPROGS_MKREISERFS) += usr/local/sbin/mkreiserfs
-> +REISERFSPROGS_BINTARGETS_$(BR2_PACKAGE_REISERFSPROGS_MKREISERFS) += usr/local/sbin/mkfs.reiserfs
-> +REISERFSPROGS_BINTARGETS_$(BR2_PACKAGE_REISERFSPROGS_REISERFSCK) += usr/local/sbin/reiserfsck
-> +REISERFSPROGS_BINTARGETS_$(BR2_PACKAGE_REISERFSPROGS_REISERFSCK) += usr/local/sbin/fsck.reiserfs
-> +REISERFSPROGS_BINTARGETS_$(BR2_PACKAGE_REISERFSPROGS_RESIZE_REISERFS) +=
-> usr/local/sbin/resize_reiserfs
-> +REISERFSPROGS_BINTARGETS_$(BR2_PACKAGE_REISERFSPROGS_REISERFSTUNE) += usr/local/sbin/reiserfstune
-> +REISERFSPROGS_BINTARGETS_$(BR2_PACKAGE_REISERFSPROGS_REISERFSTUNE) +=
-> usr/local/sbin/tunefs.reiserfs
-> +REISERFSPROGS_BINTARGETS_$(BR2_PACKAGE_REISERFSPROGS_DEBUGREISERFS) += usr/local/sbin/debugreiserfs
-> +REISERFSPROGS_BINTARGETS_$(BR2_PACKAGE_REISERFSPROGS_DEBUGREISERFS) +=
-> usr/local/sbin/debugfs.reiserfs
-> +
-> +define REISERFSPROGS_TARGET_REMOVE_UNNEEDED
-> +	rm -f $(addprefix $(TARGET_DIR)/, $(REISERFSPROGS_BINTARGETS_))
-> +endef
-> +
-> +REISERFSPROGS_POST_INSTALL_TARGET_HOOKS += REISERFSPROGS_TARGET_REMOVE_UNNEEDED
-> +
-> +$(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Yes, I generally agree (unless there's typically issues with using the
+absolutely latest version, like there is for gcc).
+
+ > In fact, I think it's quite unreasonable that we don't have stable updates for
+ > glibc (or any other libc). As a distro, it's our responsibility to make sure our
+ > users get stable updates, particularly for something as important as glibc.
+
+I wouldn't call Buildroot a distro, but yeah - Bugfix releases would be
+nice.
+
+ > Since we (currently) don't have the bandwidth to do that, and since
+ > there simply is no viable upstream to rely on [*], we should probably
+ > consider dropping the multi-version glibc... Topic for discussion at
+ > the next BR developer meeting.
+
+In general I think we should only do version selection for tools where
+it is needed (E.G. hardware dependent stuff like kernel/bootloaders, or
+"unstable" projects where going with the latest version isn't trivial
+for api/regression reasons).
+
+I don't know if glibc belongs to that group or not.
+
+
+ >  [*] I've checked if we could use another distro, but most are on glibc 2.19...
+ > Debian would be an option for glibc 2.22, but for 2.23 and 2.24 there will
+ > probably no viable distro.
+
+Do you have any idea why these other distributions stick to those older
+versions?
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
