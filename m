@@ -1,40 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 27 Jun 2016 16:10:20 +0300
-Subject: [Buildroot] Help in enabling large file support
-In-Reply-To: <OF4EEEEFB0.32E05D87-ONC1257FDF.004683FE-C1257FDF.0046C4AF@eu.omron.com>
-References: <OFEC3F3C04.179E3A42-ONC1257FDF.00434B2F-C1257FDF.00437E69@eu.omron.com>
- <20160627123212.GS2319@tarshish>
- <OF4EEEEFB0.32E05D87-ONC1257FDF.004683FE-C1257FDF.0046C4AF@eu.omron.com>
-Message-ID: <20160627131020.GT2319@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Jun 2016 16:33:07 +0200
+Subject: [Buildroot] [git commit] beecrypt: arm assembly optimizations needs
+	ARM instructions support
+Message-ID: <20160627143608.6B1DE7FEA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Davit,
+commit: https://git.buildroot.net/buildroot/commit/?id=ee525dc3892c1efd3d69af3401e4908d3217d286
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Jun 27, 2016 at 02:52:55PM +0200, Davit Mirzoyan wrote:
-> Thank you for your reply. I see. Is it normal then that I do not find "
-> BR2_LARGEFILE " variable defined anywhere. 
-> 
-> I am adding a package that requires largefile support and I add a line in 
-> the config file of the package as shown below
-> 
-> comment "partclone requires a toolchain with LARGEFILE+WCHAR support"
-> 
->         depends on !(BR2_LARGEFILE && BR2_USE_WCHAR) 
-> 
-> Shall I just remove the BR2_LARGEFILE variable?
+Fixes:
+http://autobuild.buildroot.net/results/980/98034ebb086987fb8fc004672164f609f5a69543/
+http://autobuild.buildroot.net/results/3bd/3bdba5cf7e901f8600e567b1b0eb0866d6dfc523/
 
-Yes.
+So disable it for thumb(2)-only configurations (armv7m), similar to how we
+do it for m68k coldfire.
 
-Also please spell wchar in lowercase, and drop the word 'support'. That's the 
-current convention.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/beecrypt/beecrypt.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
+index 4fcdf43..bd29b3b 100644
+--- a/package/beecrypt/beecrypt.mk
++++ b/package/beecrypt/beecrypt.mk
+@@ -22,6 +22,11 @@ ifeq ($(BR2_m68k_cf),y)
+ BEECRYPT_CONF_OPTS += --enable-debug
+ endif
+ 
++# arm asm optimization doesn't work for thumb-only
++ifeq ($(BR2_arm):$(BR2_ARM_CPU_HAS_ARM),y:)
++BEECRYPT_CONF_OPTS += --enable-debug
++endif
++
+ ifeq ($(BR2_PACKAGE_BEECRYPT_CPP),y)
+ BEECRYPT_DEPENDENCIES += icu
+ BEECRYPT_CONF_OPTS += --with-cplusplus
