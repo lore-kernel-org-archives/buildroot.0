@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 27 Jun 2016 07:29:12 +0200
-Subject: [Buildroot] [PATCH v2 4/4] package/kodi: Add suboption to control
-	unrar support
+Date: Mon, 27 Jun 2016 07:29:11 +0200
+Subject: [Buildroot] [PATCH v2 3/4] package/kodi: Add suboption to control
+	UPnP support
 In-Reply-To: <1467005352-14070-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1467005352-14070-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1467005352-14070-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1467005352-14070-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,47 +13,44 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: new patch
+v2: rebased series, no changes to this patch
 
- package/kodi/Config.in | 6 ++++++
- package/kodi/kodi.mk   | 8 ++++++++
- 2 files changed, 14 insertions(+)
+ package/kodi/Config.in | 5 +++++
+ package/kodi/kodi.mk   | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 984f7bb..fc19b55 100644
+index 281de24..984f7bb 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -179,6 +179,12 @@ config BR2_PACKAGE_KODI_MYSQL
+@@ -232,6 +232,11 @@ config BR2_PACKAGE_KODI_LIBVA
  	help
- 	  Enable MySQL support
+ 	  Enable libva support.
  
-+config BR2_PACKAGE_KODI_NONFREE
-+	bool "nonfree"
++config BR2_PACKAGE_KODI_UPNP
++	bool "upnp"
 +	help
-+	  Enable components with non-compliant licenses.
-+	  This option currently only controls support for RAR archives.
++	  Enable UPnP support
 +
- config BR2_PACKAGE_KODI_RTMPDUMP
- 	bool "rtmp"
- 	select BR2_PACKAGE_RTMPDUMP
+ config BR2_PACKAGE_KODI_OPTICALDRIVE
+ 	bool
+ 
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 0d98180..4960f72 100644
+index 9d6b966..0d98180 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -86,6 +86,14 @@ else
- KODI_CONF_OPTS += --disable-mysql
+@@ -228,6 +228,12 @@ else
+ KODI_CONF_OPTS += --disable-vaapi
  endif
  
-+ifeq ($(BR2_PACKAGE_KODI_NONFREE),y)
-+KODI_CONF_OPTS += --enable-non-free
-+KODI_LICENSE := $(KODI_LICENSE), unrar
-+KODI_LICENSE_FILES += lib/UnrarXLib/license.txt
++ifeq ($(BR2_PACKAGE_KODI_UPNP),y)
++KODI_CONF_OPTS += --enable-upnp
 +else
-+KODI_CONF_OPTS += --disable-non-free
++KODI_CONF_OPTS += --disable-upnp
 +endif
 +
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- KODI_DEPENDENCIES += rpi-userland
- KODI_CONF_OPTS += --with-platform=raspberry-pi --enable-player=omxplayer
+ ifeq ($(BR2_PACKAGE_KODI_OPTICALDRIVE),y)
+ KODI_CONF_OPTS += --enable-optical-drive --enable-dvdcss
+ else
 -- 
 2.8.1
