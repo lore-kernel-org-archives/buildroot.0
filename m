@@ -1,42 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Jun 2016 16:33:07 +0200
-Subject: [Buildroot] [git commit] beecrypt: arm assembly optimizations needs
-	ARM instructions support
-Message-ID: <20160627143608.6B1DE7FEA8@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 27 Jun 2016 16:07:27 +0100
+Subject: [Buildroot] [PATCH 01/13] package/gcc: fix fortran support
+Message-ID: <1467040059-38085-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee525dc3892c1efd3d69af3401e4908d3217d286
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Samuel Martin <s.martin49@gmail.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/980/98034ebb086987fb8fc004672164f609f5a69543/
-http://autobuild.buildroot.net/results/3bd/3bdba5cf7e901f8600e567b1b0eb0866d6dfc523/
+Fortran depends on libquadmath, which requires a toolchain with wchar
+support.
 
-So disable it for thumb(2)-only configurations (armv7m), similar to how we
-do it for m68k coldfire.
+So:
+- make sure libquadmath is enable and installed when fortran is enabled;
+- propagate the wchar dependency (from libquadmath) to fortran, and add
+  a comment when fortran is not available.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Vincent: only do "HOST_GCC_FINAL_USR_LIBS += libquadmath" for i386 and
+x86_64, otherwise it will fail saying "libquadmath.a: file not found"]
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/beecrypt/beecrypt.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/gcc/Config.in.host         | 4 ++++
+ package/gcc/gcc-final/gcc-final.mk | 4 ++++
+ package/gcc/gcc.mk                 | 5 +++++
+ 3 files changed, 13 insertions(+)
 
-diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
-index 4fcdf43..bd29b3b 100644
---- a/package/beecrypt/beecrypt.mk
-+++ b/package/beecrypt/beecrypt.mk
-@@ -22,6 +22,11 @@ ifeq ($(BR2_m68k_cf),y)
- BEECRYPT_CONF_OPTS += --enable-debug
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 3180071..54f7e1f 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -120,11 +120,15 @@ config BR2_TOOLCHAIN_BUILDROOT_CXX
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_FORTRAN
+ 	bool "Enable Fortran support"
++	depends on BR2_USE_WCHAR # libquadmath
+ 	help
+ 	  Enable this option if you want your toolchain to support the
+ 	  Fortran language and you want Fortran libraries to be
+ 	  installed on your target system.
+ 
++comment "Fortran support needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
++
+ config BR2_GCC_ENABLE_TLS
+ 	bool "Enable compiler tls support" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 	default y
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 1d1d72e..e418f51 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -163,6 +163,10 @@ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT_FORTRAN),y)
+ HOST_GCC_FINAL_USR_LIBS += libgfortran
++# fortran needs quadmath on x86 and x86_64
++ifeq ($(BR2_I386)$(BR2_x86_64),y)
++HOST_GCC_FINAL_USR_LIBS += libquadmath
++endif
  endif
  
-+# arm asm optimization doesn't work for thumb-only
-+ifeq ($(BR2_arm):$(BR2_ARM_CPU_HAS_ARM),y:)
-+BEECRYPT_CONF_OPTS += --enable-debug
+ ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 88d2bc2..cffdb19 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -109,6 +109,11 @@ endif
+ # gcc 4.6.x quadmath requires wchar
+ ifneq ($(BR2_USE_WCHAR),y)
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libquadmath
++else
++# fortran needs quadmath on x86 and x86_64
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_FORTRAN)$(BR2_I386)$(BR2_x86_64),yy)
++HOST_GCC_COMMON_CONF_OPTS += --enable-libquadmath
 +endif
-+
- ifeq ($(BR2_PACKAGE_BEECRYPT_CPP),y)
- BEECRYPT_DEPENDENCIES += icu
- BEECRYPT_CONF_OPTS += --with-cplusplus
+ endif
+ 
+ # libsanitizer requires wordexp, not in default uClibc config. Also
+-- 
+2.7.3
