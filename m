@@ -1,9 +1,10 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 27 Jun 2016 16:12:29 +0100
-Subject: [Buildroot] [PATCH 08/13] toolchain/helpers: add fortran check
+Date: Mon, 27 Jun 2016 16:12:30 +0100
+Subject: [Buildroot] [PATCH 09/13] toolchain/toolchain-external: enable
+	fortran check when it is selected
 In-Reply-To: <1467040354-39816-1-git-send-email-Vincent.Riera@imgtec.com>
 References: <1467040354-39816-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1467040354-39816-3-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1467040354-39816-4-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,34 +16,31 @@ From: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- toolchain/helpers.mk | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ toolchain/toolchain-external/toolchain-external.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 108fdaa..3288c90 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -311,6 +311,21 @@ check_cplusplus = \
- 	fi
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 7f46234..53a7c7a 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -160,6 +160,7 @@ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += \
+ TOOLCHAIN_EXTERNAL_CROSS = $(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
+ TOOLCHAIN_EXTERNAL_CC = $(TOOLCHAIN_EXTERNAL_CROSS)gcc$(TOOLCHAIN_EXTERNAL_SUFFIX)
+ TOOLCHAIN_EXTERNAL_CXX = $(TOOLCHAIN_EXTERNAL_CROSS)g++$(TOOLCHAIN_EXTERNAL_SUFFIX)
++TOOLCHAIN_EXTERNAL_FC = $(TOOLCHAIN_EXTERNAL_CROSS)gfortran$(TOOLCHAIN_EXTERNAL_SUFFIX)
+ TOOLCHAIN_EXTERNAL_READELF = $(TOOLCHAIN_EXTERNAL_CROSS)readelf$(TOOLCHAIN_EXTERNAL_SUFFIX)
  
- #
-+#
-+# Check that the external toolchain supports Fortran
-+#
-+# $1: cross-gfortran path
-+#
-+check_fortran = \
-+	__CROSS_FC=$(strip $1) ; \
-+	printf 'program hello\n\tprint *, "Hello Fortran!\\n"\nend program hello\n' | \
-+		$${__CROSS_FC} -x f95 -o /dev/null - ; \
-+	if test $$? -ne 0 ; then \
-+		echo "Fortran support is selected but is not available in external toolchain" ; \
-+		exit 1 ; \
-+	fi
-+
-+#
- # Check that the cross-compiler given in the configuration exists
- #
- # $1: cross-gcc path
+ ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
+@@ -529,6 +530,10 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
+ 	if test "$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
+ 		$(call check_cplusplus,$(TOOLCHAIN_EXTERNAL_CXX)) ; \
+ 	fi ; \
++	if test "$(BR2_TOOLCHAIN_HAS_FORTRAN)" = "y" ; then \
++		$(call check_fortran,\
++			"$(TOOLCHAIN_EXTERNAL_FC) $(TOOLCHAIN_EXTERNAL_CFLAGS)") ; \
++	fi ; \
+ 	if test "$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
+ 		$(call check_uclibc,$${SYSROOT_DIR}) ; \
+ 	elif test "$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
 -- 
 2.7.3
