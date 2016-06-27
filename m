@@ -1,43 +1,63 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 27 Jun 2016 06:33:21 +0200
-Subject: [Buildroot] [PATCH v9 01/11] core: split variables definition
- related to in/out-of-tree build from O itself
-In-Reply-To: <e0557e8c-354e-6f56-a1e6-bfc28ae3abc2@mind.be>
-References: <1461358223-18312-1-git-send-email-s.martin49@gmail.com>
- <1461358223-18312-2-git-send-email-s.martin49@gmail.com>
- <e0557e8c-354e-6f56-a1e6-bfc28ae3abc2@mind.be>
-Message-ID: <CAHXCMMLJ+iMf1asHQzffXE=OPw5PtS57v8qNaTsnOLYkC-PYdg@mail.gmail.com>
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
+Date: Sun, 26 Jun 2016 22:42:26 -0600
+Subject: [Buildroot] 3 patches to buildroot via git send-email
+In-Reply-To: <0b6fc661-dd89-4bb0-458a-c6a14c9c37d0@mind.be>
+References: <CAGrGpJD9MX_aNzwu357LziPAOMYLbHeQt=sKAukPCav2-anbog@mail.gmail.com>
+ <20160626144849.4b5ab2fa@free-electrons.com>
+ <0b6fc661-dd89-4bb0-458a-c6a14c9c37d0@mind.be>
+Message-ID: <CAGrGpJDNUNSm=2-hyimQf_qtOi1Nkc3ckpzLM2P_04OwnzmroA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 27, 2016 at 12:27 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 22-04-16 22:50, Samuel Martin wrote:
->> This change uncorrolates the CONFIG_DIR and NEED_WRAPPER definition from
->> the presence of the O variable in the command line.
->>
->> Now, the condition used to set these variables is the value of O itself.
->>
->> This change is a preparatory work since the O definition will need to
->> be moved around when we will make Buildroot run with absolute canonical
->> paths for both its root directory and the output location.
->> This will be addressed in a follow-up patch.
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Thanks to all of you for all your help and feedback.   It is appreciated.
+   I will fix them and re-submit.   My apologies for submitting
+prematurely.
+
+Peter
+
+
+On Sun, Jun 26, 2016 at 2:22 PM, Arnout Vandecappelle <arnout@mind.be>
+wrote:
+
+> On 26-06-16 14:48, Thomas Petazzoni wrote:
+> > Hello,
+> >
+> > As I mentioned, we received 3 times the same patch, for sdl2_ttf. And
+> > as Baruch noted, the commit title was wrong.
+> >
+> > On Sat, 25 Jun 2016 21:20:04 -0600, Peter Thompson wrote:
+> >
+> >> > Step 2 - create 3 branches (1 per patch)
+> > Don't do this. Create one branch only, with one commit per package.
+> >
+> >> > submit via
+> >> > https://buildroot.org/downloads/manual/manual.html#submitting-patches
+> >> > $ git fetch --all --tags    # update with latest buildroot version
+> >> > $ git rebase origin/master    # redo my commits on latest buildroot
+> version
+> >> > $ git format-patch -M -n -s -o outgoing origin/master #format and
+> send it
+> >> > $ git send-email --to buildroot at buildroot.org outgoing/*
+> > Please send the patches to you first, in order to check that they look
+> > good.
 >
-> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>  The sending is clearly no problem. It is a good idea however to review the
+> patches in outgoing/* before sending out.
 >
->  (finally :-) but don't count on me being able to finish the series tonight)
-Thanks, it's ok :)
-Anyway, I think I'll have to resend this series after rebasing on top
-of master (potential conflicts on Makefile due to some recent
-patches).
-
-Regards,
-
-
--- 
-Samuel
+>  Regards,
+>  Arnout
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160626/5abd7b1e/attachment.html>
