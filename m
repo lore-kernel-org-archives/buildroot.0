@@ -1,97 +1,54 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 27 Jun 2016 08:53:47 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2016-06-19
-In-Reply-To: <f4d27bb8-4174-e864-50ff-c5021bf8f711@mind.be>
-References: <20160620063029.16331102969@stock.ovh.net>
- <1466742836.3244.20.camel@synopsys.com>
- <20160624091442.6a4f342f@free-electrons.com>
- <1466752647.3244.40.camel@synopsys.com>
- <f4d27bb8-4174-e864-50ff-c5021bf8f711@mind.be>
-Message-ID: <1467017565.3628.24.camel@synopsys.com>
+Date: Mon, 27 Jun 2016 09:01:16 +0000
+Subject: [Buildroot] Emails being substituted when reading via Gmane NNTP
+In-Reply-To: <87oa6qtka9.fsf@dell.be.48ers.dk>
+References: <1466149048.31770.11.camel@synopsys.com>
+ <87ziqk6vu2.fsf@dell.be.48ers.dk> <1466178031.23608.9.camel@synopsys.com>
+ <87vb167ukd.fsf@dell.be.48ers.dk> <1466787406.2872.17.camel@synopsys.com>
+ <87oa6qtka9.fsf@dell.be.48ers.dk>
+Message-ID: <1467018015.3628.31.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi?Arnout,
+Hi Peter,
 
-On Sat, 2016-06-25 at 00:46 +0200, Arnout Vandecappelle wrote:
-> On 24-06-16 09:18, Alexey Brodkin wrote:
+On Fri, 2016-06-24 at 22:16 +0200, Peter Korsgaard wrote:
 > > 
-> > Hi Thomas,
-> > 
-> > On Fri, 2016-06-24 at 09:14 +0200, Thomas Petazzoni wrote:
-> > > 
-> > > Hello,
-> > > 
-> > > On Fri, 24 Jun 2016 04:34:55 +0000, Alexey Brodkin wrote:
 > > > 
 > > > > 
-> > > > 
-> > > > With arc-2016.03 toolchain we're seeing quite a lot of failures here and there.
-> > > > That's sort of expected because we switched to binutils rewritten from scratch.
-> > > > So we're still ramping up with these new binutils. What is also important these
-> > > > new rewritten binutils are in upstream already. I.e. upcoming binutils 2.27 will
-> > > > have everything ARC-specific from arc-2016.03 plus some more fixes and
-> > > > enhancements that we made since March.
-> > > OK, thanks for explaining the situation.
-> > > 
-> > > > 
-> > > > 
-> > > > And what we may do in Buildroot we may either wait for 2.27 binutils to be released
-> > > > and then apply [backported from mainline master] patches on top of it to fix still
-> > > > existing issues or alternatively we may start using so-called "engineering builds"
-> > > > of binutils for ARC.
-> > > > 
-> > > > These "engineering builds" are basically snapshots [that pass internal review and
-> > > > testing] made from our dev branch (arc-2016.09) on GitHub like the most recent
-> > > > "arc-2016.09-eng004": https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/releases/tag/arc-2016
-> > > > .09-
-> > > > eng0
-> > > > 04
-> > > > 
-> > > > We'd prefer to go with "engineering builds" simply because we foresee still a lot
-> > > > of changes in ARC port of binutils (remember our port is in its childhood currently)
-> > > > while upstream binutils see release about once a year. Which means adding fixes and
-> > > > enhancements on top of 2.27 release at some point will become a support nightmare.
-> > > > 
-> > > > What do you guys think about all that?
-> > > I think at some point we will want to use the upstream version of
-> > > binutils if there is ARC support upstream. However, I definitely
-> > > understand that the upstream support may not be fully ready overnight,
-> > > so I'm fine with using those engineering builds for now, and then move
-> > > to using the upstream binutils version for binutils 2.28 for example
-> > > (or 2.29 if 2.28 is still not good enough).
-> > Ok cool!
-> > 
-> > Then let's get the party started.
-> > 
-> > Vlad will send a patch which bump ARC tools to arc-2016.09-eng004 shortly.
-> > Since other components like gcc and gdb are also not fully upstream we'll be
-> > bumping all 3 components at once:
-> > ?1. Binutils
-> > ?2. Gcc
-> > ?3. Gdb
-> ?I guess all of these will be updated regularly, right? That means Thomas also
-> has to respin the autobuilder toolchains with every update. If Synopsys anyway
-> produces toolchain binaries already, it could be interesting to add these as
-> external toolchains.
+> > > > > 
+> > > > > > 
+> > > > > > "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+> Hi,
+> 
+> ?>> Notice that the obfuscated email addresses DO work. They simply get
+> ?>> forwarded through gmane's spam filter.
+> ?>>?
+> ?>> But yeah, it probably doesn't help much in combating spam.
+> 
+> ?> So any plan to disable that for BR on Gmane if it barely adds
+> ?> anything meaningful :)
+> 
+> I can take a look at disabling it. What is the problem about it?
 
-Good point.
+It's not a problem really but inconvenience when using NNTP messages for
+answering to the list.
 
-Actually we didn't plan to put prebuilt tools in the same location as released versions
-https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases?simply to not confuse
-real users (otherwise people may think it's ok to use those engineering builds for production).
+IMHO it's nice and convenient to have in Sent folder of my mailer uniform emails
+of addressees like "Peter Korsgaard <peter@korsgaard.com>" instead of
+"Peter Korsgaard <peter-+2lRwdCCLRT2eFz/2MeuCQ@public.gmane.org>".
 
-Moreover I remember we discussed that topic of ARC prebuilt tools in Buildroot and conclusion was
-to disable our prebuilt tools from autobuilder tests because our uClibc configuration had some missing
-options if compared to Buildroot.
+Plus as it is said here?http://gmane.org/tmda.php:
+--------------------->8-------------------
+While it's difficult for me to promise that your encrypted address
+will work forever, I have no plans for limiting the use of these addresses.
+--------------------->8-------------------
 
-As the simplest solution (but probably not the best from performance standpoint) could be
-to disable use of prebuilt tools for ARC before we have something more or less stable.
-
-But let's discuss all options what we have first.
+So at some point there's a chance these obfuscated emails may stop to work.
+It's unlikely to happen but still I prefer to have more control on what I'm sending
+and where.
 
 -Alexey
