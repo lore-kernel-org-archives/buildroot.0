@@ -1,89 +1,43 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 26 Jun 2016 22:25:56 -0400
-Subject: [Buildroot] [v1 1/1] uboot: Add local directory option to menuconfig
-Message-ID: <1466994356-15411-1-git-send-email-Aduskett@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 27 Jun 2016 06:33:21 +0200
+Subject: [Buildroot] [PATCH v9 01/11] core: split variables definition
+ related to in/out-of-tree build from O itself
+In-Reply-To: <e0557e8c-354e-6f56-a1e6-bfc28ae3abc2@mind.be>
+References: <1461358223-18312-1-git-send-email-s.martin49@gmail.com>
+ <1461358223-18312-2-git-send-email-s.martin49@gmail.com>
+ <e0557e8c-354e-6f56-a1e6-bfc28ae3abc2@mind.be>
+Message-ID: <CAHXCMMLJ+iMf1asHQzffXE=OPw5PtS57v8qNaTsnOLYkC-PYdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Just like the kernel menuconfig, this allows for a user to
-specify a local directory for the uboot source code.
+On Mon, Jun 27, 2016 at 12:27 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 22-04-16 22:50, Samuel Martin wrote:
+>> This change uncorrolates the CONFIG_DIR and NEED_WRAPPER definition from
+>> the presence of the O variable in the command line.
+>>
+>> Now, the condition used to set these variables is the value of O itself.
+>>
+>> This change is a preparatory work since the O definition will need to
+>> be moved around when we will make Buildroot run with absolute canonical
+>> paths for both its root directory and the output location.
+>> This will be addressed in a follow-up patch.
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>
+> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+>  (finally :-) but don't count on me being able to finish the series tonight)
+Thanks, it's ok :)
+Anyway, I think I'll have to resend this series after rebasing on top
+of master (potential conflicts on Makefile due to some recent
+patches).
 
-Also had to change ifeq ($(UBOOT_VERSION),custom) to
-ifeq ($(BR2_TARGET_UBOOT_CUSTOM_TARBALL),y) in uboot.mk,
-this is also just like the kernel's make file as well.
+Regards,
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- boot/uboot/Config.in | 15 +++++++++++++++
- boot/uboot/uboot.mk  |  5 ++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 9ffbb51..5a91461 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -57,6 +57,12 @@ config BR2_TARGET_UBOOT_CUSTOM_HG
- config BR2_TARGET_UBOOT_CUSTOM_SVN
- 	bool "Custom Subversion repository"
- 
-+config BR2_TARGET_UBOOT_CUSTOM_LOCAL
-+	bool "Local directory"
-+	help
-+	  This option allows Buildroot to get the Linux kernel source
-+	  code from a local directory.
-+
- endchoice
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE
-@@ -84,6 +90,13 @@ config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
- 
- endif
- 
-+config BR2_TARGET_UBOOT_CUSTOM_LOCAL_PATH
-+	string "Path to the local directory"
-+	depends on BR2_TARGET_UBOOT_CUSTOM_LOCAL
-+	help
-+	  Path to the local directory with the uboot source code.
-+
-+
- config BR2_TARGET_UBOOT_VERSION
- 	string
- 	default "2016.05"	if BR2_TARGET_UBOOT_LATEST_VERSION
-@@ -92,9 +105,11 @@ config BR2_TARGET_UBOOT_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
- 	default BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION \
- 		if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG || BR2_TARGET_UBOOT_CUSTOM_SVN
-+	default "custom" if BR2_TARGET_UBOOT_CUSTOM_LOCAL
- 
- config BR2_TARGET_UBOOT_PATCH
- 	string "Custom U-Boot patches"
-+	depends on !BR2_TARGET_UBOOT_CUSTOM_LOCAL
- 	help
- 	  A space-separated list of patches to apply to U-Boot.
- 	  Each patch can be described as an URL, a local file path,
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index a2274ee..86671bd 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -12,12 +12,15 @@ UBOOT_LICENSE_FILES = Licenses/gpl-2.0.txt
- 
- UBOOT_INSTALL_IMAGES = YES
- 
--ifeq ($(UBOOT_VERSION),custom)
-+ifeq ($(BR2_TARGET_UBOOT_CUSTOM_TARBALL),y)
- # Handle custom U-Boot tarballs as specified by the configuration
- UBOOT_TARBALL = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION))
- UBOOT_SITE = $(patsubst %/,%,$(dir $(UBOOT_TARBALL)))
- UBOOT_SOURCE = $(notdir $(UBOOT_TARBALL))
- BR_NO_CHECK_HASH_FOR += $(UBOOT_SOURCE)
-+else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_LOCAL),y)
-+UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_LOCAL_PATH))
-+UBOOT_SITE_METHOD = local
- else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_GIT),y)
- UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
- UBOOT_SITE_METHOD = git
 -- 
-2.7.4
+Samuel
