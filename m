@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Jun 2016 10:22:35 +0200
-Subject: [Buildroot] [PATCH] linux: bump default to version 4.6.3
-In-Reply-To: <1467014868-8129-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Mon, 27 Jun 2016 09:07:48 +0100")
-References: <1467014868-8129-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <874m8frqgk.fsf@dell.be.48ers.dk>
+Date: Mon, 27 Jun 2016 10:22:54 +0200
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.158
+In-Reply-To: <1467015073-30018-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Mon, 27 Jun 2016 09:11:13 +0100")
+References: <1467015073-30018-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87ziq7qbvl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
