@@ -1,173 +1,66 @@
-From: fabrice.fontaine at orange.com <fabrice.fontaine@orange.com>
-Date: Mon, 27 Jun 2016 17:12:29 +0000
-Subject: [Buildroot] [PATCH 3/4] ajtcl: new package
-In-Reply-To: <20160627184912.39f7d06c@free-electrons.com>
-References: <20390_1467040718_577143CE_20390_5576_1_9bcd6009-a0eb-41a1-a31a-dd6fd4a34e7d@OPEXCLILM5F.corporate.adroot.infra.ftgroup>,
- <20160627184912.39f7d06c@free-electrons.com>
-Message-ID: <713_1467047551_57715E7F_713_11955_1_EEB3FED4859B6C488DDDEC4B2D3DE92B0FC95F88@OPEXCLILM23.corporate.adroot.infra.ftgroup>
+From: Andi Shyti <andi.shyti@gmail.com>
+Date: Tue, 28 Jun 2016 03:03:03 +0900
+Subject: [Buildroot] [PATCH 1/2] package: add Odroid BL bootloader
+ binaries
+In-Reply-To: <20160626221048.02818b93@free-electrons.com>
+References: <1466950062-31783-1-git-send-email-andi@etezian.org>
+ <1466950062-31783-2-git-send-email-andi@etezian.org>
+ <20160626221048.02818b93@free-electrons.com>
+Message-ID: <20160627180303.GL424@jack.zhora.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Hi Thomas,
 
-No, this is an error on my side. This is the third patch on alljoyn but alljoyn thin core library (ajtcl) can be added independently of other patches. I can send it again if needed.
+> > The above files are provided by the hardkernel u-boot from
+> > 
+> >  https://github.com/hardkernel/u-boot/tree/odroidxu3-v2012.07
+> 
+> So the source code for those binary files is not available at all?
 
-Best Regards,
+Unfortunately not, it is not even available to me :(
 
-Fabrice
+> > +config BR2_PACKAGE_ODROID_XU_BL
+> > +	bool "odroid-xu-bl"
+> 
+> 	depends on BR2_arm
+> 
+> would be good to have here
 
-Le 27 juin 2016 18:49, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
-Hello,
+OK.
 
-This patch appears as PATCH 3/4, but I have not received patches 1, 2
-and 4 of this series. Is this intended?
+> Also, I think this package should be included in the Bootloaders menu
+> rather than the firmware menu. Maybe we should name it
+> odroid-xu-bootloader or odroid-xu-boot so that it is clear what it does.
 
-Thanks,
+OK.
 
-Thomas
+> > +ODROID_XU_BL_VERSION = odroidxu3-v2012.07
+> > +ODROID_XU_BL_SITE = $(call github,hardkernel,u-boot,$(ODROID_XU_BL_VERSION))
+> 
+> It's a bit annoying that we end up downloading an entire U-Boot source
+> tree, and in fact not use it except for those 3 files.
+> 
+> In fact, why don't you simply build this U-Boot version with the U-Boot
+> package that already exists in Buildroot, and then use:
 
-On Mon, 27 Jun 2016 17:18:28 +0200, fabrice.fontaine at orange.com wrote:
-> The AllJoyn framework defines a common way for devices and apps to
-> communicate with one another regardless of brands, categories,
-> transports, and OSes. Developers write applications that discover
-> nearby devices, and communicate with each other directly and through
-> the cloud, unleashing new possibilities in the Internet of Things.
->
-> AllJoyn Thin Core Library (AJTCL) is designed to bring the benefits
-> of the AllJoyn distributed programming environment to embedded
-> systems.
->
-> https://allseenalliance.org
->
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> ---
->  package/Config.in        |  1 +
->  package/ajtcl/Config.in  | 18 ++++++++++++++++++
->  package/ajtcl/ajtcl.hash |  2 ++
->  package/ajtcl/ajtcl.mk   | 44 ++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 65 insertions(+)
->  create mode 100644 package/ajtcl/Config.in
->  create mode 100644 package/ajtcl/ajtcl.hash
->  create mode 100644 package/ajtcl/ajtcl.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 5cde173..d262ff7 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1123,6 +1123,7 @@ endmenu
->
->  menu "Networking"
->        source "package/agentpp/Config.in"
-> +     source "package/ajtcl/Config.in"
->        source "package/alljoyn/Config.in"
->        source "package/alljoyn-base/Config.in"
->        source "package/batman-adv/Config.in"
-> diff --git a/package/ajtcl/Config.in b/package/ajtcl/Config.in
-> new file mode 100644
-> index 0000000..3f2e573
-> --- /dev/null
-> +++ b/package/ajtcl/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_AJTCL
-> +     bool "alljoyn-thin-core"
-> +     depends on BR2_TOOLCHAIN_HAS_THREADS
-> +     help
-> +       The AllJoyn framework defines a common way for devices and apps to
-> +       communicate with one another regardless of brands, categories,
-> +       transports, and OSes. Developers write applications that discover
-> +       nearby devices, and communicate with each other directly and through
-> +       the cloud, unleashing new possibilities in the Internet of Things.
-> +
-> +       AllJoyn Thin Core Library (AJTCL) is designed to bring the benefits
-> +       of the AllJoyn distributed programming environment to embedded
-> +       systems.
-> +
-> +       https://allseenalliance.org
-> +
-> +comment "alljoyn-thin-core needs a toolchain w/ threads"
-> +     depends on !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/ajtcl/ajtcl.hash b/package/ajtcl/ajtcl.hash
-> new file mode 100644
-> index 0000000..a1cdf16
-> --- /dev/null
-> +++ b/package/ajtcl/ajtcl.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256       ce6a05a67ff405ba6274e85fe750d98f40cbe7ab2c968218c7741a10bd86e21a        ajtcl-16.04.00-src.tar.gz
-> diff --git a/package/ajtcl/ajtcl.mk b/package/ajtcl/ajtcl.mk
-> new file mode 100644
-> index 0000000..d74be97
-> --- /dev/null
-> +++ b/package/ajtcl/ajtcl.mk
-> @@ -0,0 +1,44 @@
-> +################################################################################
-> +#
-> +# ajtcl
-> +#
-> +################################################################################
-> +
-> +AJTCL_REV = 16.04
-> +AJTCL_VERSION = $(AJTCL_REV).00
-> +AJTCL_SOURCE = ajtcl-$(AJTCL_VERSION)-src.tar.gz
-> +AJTCL_SITE = https://mirrors.kernel.org/allseenalliance/alljoyn/$(AJTCL_REV)
-> +# See https://allseenalliance.org/alliance/ip-policy
-> +AJTCL_LICENSE = ISC
-> +# AllJoyn Thin Core does not provide any license files with source code
-> +# AJTCL_LICENSE_FILES =
-> +
-> +AJTCL_DEPENDENCIES = host-scons
-> +AJTCL_INSTALL_STAGING = YES
-> +
-> +# AllJoyn Thin Core can be compiled in debug or release mode. By default,
-> +# AllJoyn Thin Core is built in debug mode.
-> +AJTCL_VARIANT = release
-> +
-> +AJTCL_SCONS_OPTS = \
-> +     -j$(PARALLEL_JOBS) \
-> +     V=1 \
-> +     VARIANT=$(AJTCL_VARIANT) \
-> +     CC="$(TARGET_CC)" \
-> +     CXX="$(TARGET_CXX)"
-> +
-> +define AJTCL_BUILD_CMDS
-> +     cd $(@D); $(SCONS) $(AJTCL_SCONS_OPTS)
-> +endef
-> +
-> +define AJTCL_INSTALL_STAGING_CMDS
-> +     cp -a $(@D)/dist/lib/lib* $(STAGING_DIR)/usr/lib/
-> +     cp -a $(@D)/dist/include/* $(STAGING_DIR)/usr/include/
-> +endef
-> +
-> +# Only install AllJoyn Thin Core dynamic libraries into target directory
-> +define AJTCL_INSTALL_TARGET_CMDS
-> +     cp -a $(@D)/dist/lib/lib*.so* $(TARGET_DIR)/usr/lib/
-> +endef
-> +
-> +$(eval $(generic-package))
+It is indeed annoying: I don't like the idea of
 
+ 1. downloading two u-boot
+ 2. download u-boot for just two files.
 
+But, on the other hand, I don't like the hardkernel u-boot
+either. I think it's old, ugly and too hacky; as a buildroot
+user, I would like as much as I can to use mainline software.
+Besides, the cool thing of this board is that it is well
+supported both from the Linux Kernel and u-boot.
 
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+How about creating a new repository with just these three files?
+If it sounds good, I will check with the licensing, even though I
+don't thing it will be a problem.
 
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160627/3f78db77/attachment.html>
+Thanks a lot,
+Andi
