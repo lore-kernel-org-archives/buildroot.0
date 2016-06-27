@@ -1,45 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Jun 2016 15:06:25 +0200
-Subject: [Buildroot] [git commit] m68k: gcc coldfire does not provide _sync
-	atomics
-Message-ID: <20160627130723.566B87FFD2@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 27 Jun 2016 16:10:20 +0300
+Subject: [Buildroot] Help in enabling large file support
+In-Reply-To: <OF4EEEEFB0.32E05D87-ONC1257FDF.004683FE-C1257FDF.0046C4AF@eu.omron.com>
+References: <OFEC3F3C04.179E3A42-ONC1257FDF.00434B2F-C1257FDF.00437E69@eu.omron.com>
+ <20160627123212.GS2319@tarshish>
+ <OF4EEEEFB0.32E05D87-ONC1257FDF.004683FE-C1257FDF.0046C4AF@eu.omron.com>
+Message-ID: <20160627131020.GT2319@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df00b174f6c965be52d58a7911cec74de1426f8d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Davit,
 
-Trying to use __sync_fetch_and_add ends with a gcc ICE.
-This fixes following autobuild failure, by actually disabling
-the package for coldfire:
-http://autobuild.buildroot.net/results/d719db11210d42501332586b4485ab0cc1e125dd/
+On Mon, Jun 27, 2016 at 02:52:55PM +0200, Davit Mirzoyan wrote:
+> Thank you for your reply. I see. Is it normal then that I do not find "
+> BR2_LARGEFILE " variable defined anywhere. 
+> 
+> I am adding a package that requires largefile support and I add a line in 
+> the config file of the package as shown below
+> 
+> comment "partclone requires a toolchain with LARGEFILE+WCHAR support"
+> 
+>         depends on !(BR2_LARGEFILE && BR2_USE_WCHAR) 
+> 
+> Shall I just remove the BR2_LARGEFILE variable?
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- toolchain/toolchain-common.in | 2 ++
- 1 file changed, 2 insertions(+)
+Yes.
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 1fe28a9..847c905 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -331,6 +331,7 @@ config BR2_TOOLCHAIN_HAS_SYNC_1
- 	bool
- 	default y
- 	depends on !BR2_bfin
-+	depends on !BR2_m68k_cf
- 	depends on !BR2_microblaze
- 	depends on !BR2_sparc
- 	depends on !(BR2_arc && !BR2_ARC_ATOMIC_EXT)
-@@ -342,6 +343,7 @@ config BR2_TOOLCHAIN_HAS_SYNC_2
- config BR2_TOOLCHAIN_HAS_SYNC_4
- 	bool
- 	default y
-+	depends on !BR2_m68k_cf
- 	depends on !BR2_sparc
- 	depends on !(BR2_arc && !BR2_ARC_ATOMIC_EXT)
- 
+Also please spell wchar in lowercase, and drop the word 'support'. That's the 
+current convention.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
