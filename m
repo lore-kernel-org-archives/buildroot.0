@@ -1,10 +1,10 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 27 Jun 2016 16:11:19 +0100
-Subject: [Buildroot] [PATCH 05/13] toolchain: add hidden symbol for fortran
-	support in the toolchain
+Date: Mon, 27 Jun 2016 16:11:18 +0100
+Subject: [Buildroot] [PATCH 04/13] pkg-cmake.mk: export the fortran compiler
+	path in the CMake toolchain file
 In-Reply-To: <1467040287-39390-1-git-send-email-Vincent.Riera@imgtec.com>
 References: <1467040287-39390-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1467040287-39390-5-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1467040287-39390-4-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,38 @@ To: buildroot@busybox.net
 
 From: Samuel Martin <s.martin49@gmail.com>
 
-This symbol should be used in all packages requiring/testing for fortran
-support.
+Since the fortran support is conditional, only enable it when needed.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- toolchain/toolchain-common.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/pkg-cmake.mk                | 2 ++
+ support/misc/toolchainfile.cmake.in | 3 +++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 1fe28a9..232377f 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -21,6 +21,9 @@ config BR2_ENABLE_LOCALE
- config BR2_INSTALL_LIBSTDCPP
- 	bool
- 
-+config BR2_TOOLCHAIN_HAS_FORTRAN
-+	bool
-+
- config BR2_TOOLCHAIN_HAS_THREADS
- 	bool
- 
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 81dcfcc..d30b66b 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -246,6 +246,8 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+ 		-e 's#@@TARGET_LDFLAGS@@#$(call qstrip,$(TARGET_LDFLAGS))#' \
+ 		-e 's#@@TARGET_CC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC)))#' \
+ 		-e 's#@@TARGET_CXX@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX)))#' \
++		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
+ 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
++		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
+ 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+ 		> $@
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index 5cf381e..ac81e9a 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -29,3 +29,6 @@ set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+ # This toolchain file can be used both inside and outside Buildroot.
+ set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
+ set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
++if(@@TOOLCHAIN_HAS_FORTRAN@@)
++  set(CMAKE_Fortran_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_FC@@")
++endif()
 -- 
 2.7.3
