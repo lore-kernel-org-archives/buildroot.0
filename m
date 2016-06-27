@@ -1,10 +1,10 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 27 Jun 2016 16:12:30 +0100
-Subject: [Buildroot] [PATCH 09/13] toolchain/toolchain-external: enable
-	fortran check when it is selected
+Date: Mon, 27 Jun 2016 16:12:31 +0100
+Subject: [Buildroot] [PATCH 10/13] toolchain/toolchain-external: add
+	libgfortran and libquadmath to the USR_LIB_EXTERNAL_LIBS list
 In-Reply-To: <1467040354-39816-1-git-send-email-Vincent.Riera@imgtec.com>
 References: <1467040354-39816-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1467040354-39816-4-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1467040354-39816-5-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,31 +16,23 @@ From: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ toolchain/toolchain-external/toolchain-external.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 7f46234..53a7c7a 100644
+index 53a7c7a..3dbcc3a 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -160,6 +160,7 @@ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += \
- TOOLCHAIN_EXTERNAL_CROSS = $(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
- TOOLCHAIN_EXTERNAL_CC = $(TOOLCHAIN_EXTERNAL_CROSS)gcc$(TOOLCHAIN_EXTERNAL_SUFFIX)
- TOOLCHAIN_EXTERNAL_CXX = $(TOOLCHAIN_EXTERNAL_CROSS)g++$(TOOLCHAIN_EXTERNAL_SUFFIX)
-+TOOLCHAIN_EXTERNAL_FC = $(TOOLCHAIN_EXTERNAL_CROSS)gfortran$(TOOLCHAIN_EXTERNAL_SUFFIX)
- TOOLCHAIN_EXTERNAL_READELF = $(TOOLCHAIN_EXTERNAL_CROSS)readelf$(TOOLCHAIN_EXTERNAL_SUFFIX)
+@@ -90,6 +90,10 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ TOOLCHAIN_EXTERNAL_LIBS += libstdc++.so.*
+ endif
  
- ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
-@@ -529,6 +530,10 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
- 	if test "$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
- 		$(call check_cplusplus,$(TOOLCHAIN_EXTERNAL_CXX)) ; \
- 	fi ; \
-+	if test "$(BR2_TOOLCHAIN_HAS_FORTRAN)" = "y" ; then \
-+		$(call check_fortran,\
-+			"$(TOOLCHAIN_EXTERNAL_FC) $(TOOLCHAIN_EXTERNAL_CFLAGS)") ; \
-+	fi ; \
- 	if test "$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
- 		$(call check_uclibc,$${SYSROOT_DIR}) ; \
- 	elif test "$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
++ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
++USR_LIB_EXTERNAL_LIBS += libgfortran.so.* libquadmath.so*
++endif
++
+ TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
+ 
+ # Details about sysroot directory selection.
 -- 
 2.7.3
