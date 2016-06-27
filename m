@@ -1,67 +1,106 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Jun 2016 00:27:04 +0200
-Subject: [Buildroot] [v1 1/1] uboot: Add local directory option to
- menuconfig
-In-Reply-To: <20160627205746.GC3714@free.fr>
-References: <1466994356-15411-1-git-send-email-Aduskett@gmail.com>
- <20160627205746.GC3714@free.fr>
-Message-ID: <045f11b5-1c4c-5082-d138-406559792a72@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 28 Jun 2016 00:34:04 +0200
+Subject: [Buildroot] [PATCH RFC] Revert "Added local directory as source of
+	kernel code"
+Message-ID: <1467066844-28355-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This reverts commit 73da2ff6f718f2889e3c5024d899f8d58f502863.
 
+The reason for adding support for a local location was to be able to do
+development on the Linux kernel source tree on a local direrctory rather
+than have to clone it for every build.
 
-On 27-06-16 22:57, Yann E. MORIN wrote:
-[snip]
-> And looking at the commit that introduced it for linux, it is exactly
-> the case that would have been covered by an override-srcdir:
-> 
->     commit 73da2ff6f718f2889e3c5024d899f8d58f502863
->     Author: Rafal Fabich <rafal.fabich@gmail.com>
->     Date:   Sat Feb 23 19:03:30 2013 +0100
-> 
->         Added local directory as source of kernel code
->     
->         Add the option to use a local directory as the source for
->         building the Linux kernel, which can be useful during
->         kernel development.
->     
->         Signed-off-by: Rafal Fabich <rafal.fabich@gmail.com>
->         Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->         Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->         Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> 
-> Peter, any reason that you applied this patch at the time?
-> Arnout, anything you remember for giving your ACK?
+We already have a mechanism for that, it's called override-srcdir. It's
+been available since September 2011, more than a year before this patch
+was committed.
 
- I think at the time I considered using _OVERRIDE_SRCDIR for something like this
-too clunky. However, now I'm more convinced that every realistic project should
-have an automatic _OVERRIDE_SRCDIR for everything in $(BR2_EXTERNAL)/src. So
-then indeed this option is not so relevant anymore.
+Otherwise, we're going to be adding support for local sources in other
+packages. First was U-Boot as submitted by Adam. But what next? We can't
+have such support for all packages, especially since override-srcdir
+does the job.
 
- It's still a bit clunky, though, that your (def)config has to specify
-_something_ for the kernel version, but that it will never be used in practice.
+Besides, using a local source tree makes the build non-reproducible, so
+we don't really want to have this in a .config (or defconfig).
 
- I propose to reject this patch but keep the existing LINUX_CUSTOM_LOCAL around
-for a bit still.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Rafal Fabich <rafal.fabich@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Adam Duskett <aduskett@gmail.com>
 
- Regards,
- Arnout
+---
+Rafal, if your use-case was just to use a local tree for development
+purposes, please see to using the override-srcdir mechanism instead.
+If you had another use-case that requires using a local source tree,
+could you explain it, please? Thanks!
+---
+ linux/Config.in | 13 -------------
+ linux/linux.mk  |  5 +----
+ 2 files changed, 1 insertion(+), 17 deletions(-)
 
-> 
-> So, I would think that:
->   1- we don't want this for U-Boot;
->   2- we should drop it for Linux.
-> 
-> Peter, Thomas, Arnout: what do you think?
-[snip]
+diff --git a/linux/Config.in b/linux/Config.in
+index a4ff8bc..a06fed2 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -69,12 +69,6 @@ config BR2_LINUX_KERNEL_CUSTOM_SVN
+ 	  This option allows Buildroot to get the Linux kernel source
+ 	  code from a Subversion repository.
+ 
+-config BR2_LINUX_KERNEL_CUSTOM_LOCAL
+-	bool "Local directory"
+-	help
+-	  This option allows Buildroot to get the Linux kernel source
+-	  code from a local directory.
+-
+ endchoice
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+@@ -102,12 +96,6 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
+ 
+ endif
+ 
+-config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+-	string "Path to the local directory"
+-	depends on BR2_LINUX_KERNEL_CUSTOM_LOCAL
+-	help
+-	  Path to the local directory with the Linux kernel source code.
+-
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "4.6.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+@@ -116,7 +104,6 @@ config BR2_LINUX_KERNEL_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 	default BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION \
+ 		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
+-	default "custom" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
+ 
+ #
+ # Patch selection
+diff --git a/linux/linux.mk b/linux/linux.mk
+index fb844ef..19a3a6d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -16,14 +16,11 @@ define LINUX_HELP_CMDS
+ endef
+ 
+ # Compute LINUX_SOURCE and LINUX_SITE from the configuration
+-ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
++ifeq ($(LINUX_VERSION),custom)
+ LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
+ LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
+ LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
+ BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
+-else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
+-LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
+-LINUX_SITE_METHOD = local
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_SITE_METHOD = git
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
