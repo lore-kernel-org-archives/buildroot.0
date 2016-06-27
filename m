@@ -1,88 +1,59 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 27 Jun 2016 07:29:09 +0200
-Subject: [Buildroot] [PATCH v2 1/4] package/kodi: re-structure dependencies
-Message-ID: <1467005352-14070-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 27 Jun 2016 07:29:12 +0200
+Subject: [Buildroot] [PATCH v2 4/4] package/kodi: Add suboption to control
+	unrar support
+In-Reply-To: <1467005352-14070-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1467005352-14070-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1467005352-14070-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use one package per line to ease review of Kodi 17 version bump, where
-10+ packages will be removed. This patch contains no code changes.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: rebased series, no changes to this patch
+v2: new patch
 
- package/kodi/kodi.mk | 55 +++++++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 48 insertions(+), 7 deletions(-)
+ package/kodi/Config.in | 6 ++++++
+ package/kodi/kodi.mk   | 8 ++++++++
+ 2 files changed, 14 insertions(+)
 
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 984f7bb..fc19b55 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -179,6 +179,12 @@ config BR2_PACKAGE_KODI_MYSQL
+ 	help
+ 	  Enable MySQL support
+ 
++config BR2_PACKAGE_KODI_NONFREE
++	bool "nonfree"
++	help
++	  Enable components with non-compliant licenses.
++	  This option currently only controls support for RAR archives.
++
+ config BR2_PACKAGE_KODI_RTMPDUMP
+ 	bool "rtmp"
+ 	select BR2_PACKAGE_RTMPDUMP
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 90c50c3..8a3b0bf 100644
+index 0d98180..4960f72 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -10,13 +10,54 @@ KODI_LICENSE = GPLv2
- KODI_LICENSE_FILES = LICENSE.GPL
- # needed for binary addons
- KODI_INSTALL_STAGING = YES
--KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-zip host-giflib \
--	host-libjpeg host-lzo host-nasm host-libpng host-swig
--KODI_DEPENDENCIES += boost bzip2 expat ffmpeg fontconfig freetype giflib jasper jpeg \
--	libass libcdio libcrossguid libcurl libdcadec libfribidi libgcrypt libmpeg2 \
--	libogg libplist libpng libsamplerate libsquish libvorbis libxml2 \
--	libxslt lzo ncurses openssl pcre python readline sqlite taglib tiff \
--	tinyxml yajl zlib
-+KODI_DEPENDENCIES = \
-+	boost \
-+	bzip2 \
-+	expat \
-+	ffmpeg \
-+	fontconfig \
-+	freetype \
-+	giflib \
-+	host-gawk \
-+	host-gettext \
-+	host-giflib \
-+	host-gperf \
-+	host-libjpeg \
-+	host-libpng \
-+	host-lzo \
-+	host-nasm \
-+	host-swig \
-+	host-zip \
-+	jasper \
-+	jpeg \
-+	libass \
-+	libcdio \
-+	libcrossguid \
-+	libcurl \
-+	libdcadec \
-+	libfribidi \
-+	libgcrypt \
-+	libmpeg2 \
-+	libogg \
-+	libplist \
-+	libpng \
-+	libsamplerate \
-+	libsquish \
-+	libvorbis \
-+	libxml2 \
-+	libxslt \
-+	lzo \
-+	ncurses \
-+	openssl \
-+	pcre \
-+	python \
-+	readline \
-+	sqlite \
-+	taglib \
-+	tiff \
-+	tinyxml \
-+	yajl \
-+	zlib
+@@ -86,6 +86,14 @@ else
+ KODI_CONF_OPTS += --disable-mysql
+ endif
  
- KODI_CONF_ENV = \
- 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
++ifeq ($(BR2_PACKAGE_KODI_NONFREE),y)
++KODI_CONF_OPTS += --enable-non-free
++KODI_LICENSE := $(KODI_LICENSE), unrar
++KODI_LICENSE_FILES += lib/UnrarXLib/license.txt
++else
++KODI_CONF_OPTS += --disable-non-free
++endif
++
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+ KODI_DEPENDENCIES += rpi-userland
+ KODI_CONF_OPTS += --with-platform=raspberry-pi --enable-player=omxplayer
 -- 
 2.8.1
