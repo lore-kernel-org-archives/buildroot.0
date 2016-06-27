@@ -1,43 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 27 Jun 2016 19:59:26 -0300
-Subject: [Buildroot] [PATCH] nano: bump to version 2.6.1
-Message-ID: <1467068366-28090-1-git-send-email-gustavo@zacarias.com.ar>
+From: Christian Stewart <christian@paral.in>
+Date: Mon, 27 Jun 2016 23:02:06 +0000
+Subject: [Buildroot] [PATCH v6 3/3] docker-engine: new package
+In-Reply-To: <6f608608c76e4ebd82e22c93ea6add8d@WEBMAIL.arcx.com>
+References: <1464475578-22239-1-git-send-email-christian@paral.in>
+ <1464475578-22239-4-git-send-email-christian@paral.in>
+ <f27fd228ed034bc499fe1c69ac9a3980@WEBMAIL.arcx.com>
+ <20160607215439.76ad85ee@free-electrons.com>
+ <CA+h8R2oZypDvm65RVp3fNX1MYCxSWqX95MxLW-q-K25d4tNccg@mail.gmail.com>
+ <59dc9de3a6b14bf5be1c61368dc0cbde@WEBMAIL.arcx.com>
+ <20160607224744.5ed22c32@free-electrons.com>
+ <6f608608c76e4ebd82e22c93ea6add8d@WEBMAIL.arcx.com>
+Message-ID: <1467068526449-c5b1aab4-841d852a-e8d99e85@mixmax.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And since we switched to non-gnu mirror better use the small xz tarball.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 7152f52..a07a969 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 d517a5fcaa9fa6ceda8a63e22be1d83dd7f4af13703c73b10a48e95a6e1178d3  nano-2.6.0.tar.gz
-+sha256 45721fa6d6128068895ad71a6967ff7398d11b064b3f888e5073c97a2b6e9a81  nano-2.6.1.tar.xz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index d8e19bc..f01745d 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,8 +5,9 @@
- ################################################################################
- 
- NANO_VERSION_MAJOR = 2.6
--NANO_VERSION = $(NANO_VERSION_MAJOR).0
-+NANO_VERSION = $(NANO_VERSION_MAJOR).1
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
-+NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
- NANO_CONF_OPTS = \
--- 
-2.7.3
+Andrew,
+On Tue, Jun 7, 2016 at 1:18 PM Andrew Webster <Awebster@arcx.com> wrote:
+> Here is a patch with the init file I used. I copied the
+contrib/init/sysvinit-debian/docker file and modified it slightly.
+Thank you again for this patch. It doesn't apply to my latest version of
+docker-engine, though. Could you have a look at my master branch at:
+http://github.com/paralin/buildroot
+And rebase?
+I've updated Docker to the latest v1.12-rc2 which has a lot of breaking changes,
+so it might require some additional work from your end (sorry!)
+Best, Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160627/b542d912/attachment.html>
