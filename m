@@ -1,73 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Jun 2016 23:38:27 +0200
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2016-06-19
-In-Reply-To: <1467017565.3628.24.camel@synopsys.com>
-References: <20160620063029.16331102969@stock.ovh.net>
- <1466742836.3244.20.camel@synopsys.com>
- <20160624091442.6a4f342f@free-electrons.com>
- <1466752647.3244.40.camel@synopsys.com>
- <f4d27bb8-4174-e864-50ff-c5021bf8f711@mind.be>
- <1467017565.3628.24.camel@synopsys.com>
-Message-ID: <1ec2ade6-853f-cad0-b03d-e37c14c7b2d8@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Jun 2016 23:44:22 +0200
+Subject: [Buildroot] [v1 1/1] uboot: Add local directory option to
+	menuconfig
+In-Reply-To: <20160627205746.GC3714@free.fr> (Yann E. MORIN's message of "Mon, 
+ 27 Jun 2016 22:57:46 +0200")
+References: <1466994356-15411-1-git-send-email-Aduskett@gmail.com>
+ <20160627205746.GC3714@free.fr>
+Message-ID: <87twgepart.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
+ > Adam, All,
+ > (Peter, Thomas, Arnout: questions for you, below.)
 
-On 27-06-16 10:53, Alexey Brodkin wrote:
-> Hi Arnout,
-> 
-> On Sat, 2016-06-25 at 00:46 +0200, Arnout Vandecappelle wrote:
->> On 24-06-16 09:18, Alexey Brodkin wrote:
->>>
->>> Hi Thomas,
->>>
->>> On Fri, 2016-06-24 at 09:14 +0200, Thomas Petazzoni wrote:
-[snip]
->>> Vlad will send a patch which bump ARC tools to arc-2016.09-eng004 shortly.
->>> Since other components like gcc and gdb are also not fully upstream we'll be
->>> bumping all 3 components at once:
->>>  1. Binutils
->>>  2. Gcc
->>>  3. Gdb
->>  I guess all of these will be updated regularly, right? That means Thomas also
->> has to respin the autobuilder toolchains with every update. If Synopsys anyway
->> produces toolchain binaries already, it could be interesting to add these as
->> external toolchains.
-> 
-> Good point.
-> 
-> Actually we didn't plan to put prebuilt tools in the same location as released versions
-> https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases simply to not confuse
-> real users (otherwise people may think it's ok to use those engineering builds for production).
-> 
-> Moreover I remember we discussed that topic of ARC prebuilt tools in Buildroot and conclusion was
-> to disable our prebuilt tools from autobuilder tests because our uClibc configuration had some missing
-> options if compared to Buildroot.
-> 
-> As the simplest solution (but probably not the best from performance standpoint) could be
-> to disable use of prebuilt tools for ARC before we have something more or less stable.
+ > On 2016-06-26 22:25 -0400, Adam Duskett spake thusly:
+ >> Just like the kernel menuconfig, this allows for a user to
+ >> specify a local directory for the uboot source code.
 
- That would result in less ARC builds so less build failures. I think Thomas
-will probably just respin the toolchains then.
+ > I'm not sure this is a great idea... I'm not sure it was a great idea to
+ > allow it for the Linux kernel either, mind you.
 
- Regards,
- Arnout
+ > The problem with local sources is that they make the build
+ > non-reproducible.
 
-> 
-> But let's discuss all options what we have first.
-> 
-> -Alexey
-> 
+Indeed.
+
+ >     commit 73da2ff6f718f2889e3c5024d899f8d58f502863
+ >     Author: Rafal Fabich <rafal.fabich@gmail.com>
+ >     Date:   Sat Feb 23 19:03:30 2013 +0100
+
+ >         Added local directory as source of kernel code
+    
+ >         Add the option to use a local directory as the source for
+ >         building the Linux kernel, which can be useful during
+ >         kernel development.
+    
+ >         Signed-off-by: Rafal Fabich <rafal.fabich@gmail.com>
+ >         Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ >         Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ >         Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+ > Peter, any reason that you applied this patch at the time?
+ > Arnout, anything you remember for giving your ACK?
+
+Sorry, I don't remember. Most likely because Arnout acked it. I have
+never personally used this feature.
+
+ > So, I would think that:
+ >   1- we don't want this for U-Boot;
+ >   2- we should drop it for Linux.
+
+ > Peter, Thomas, Arnout: what do you think?
+
+Ok from me unless somebody can explain a use case for it.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Venlig hilsen,
+Peter Korsgaard 
