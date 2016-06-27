@@ -1,63 +1,88 @@
-From: Peter Thompson <peter.macleod.thompson@gmail.com>
-Date: Sun, 26 Jun 2016 22:42:26 -0600
-Subject: [Buildroot] 3 patches to buildroot via git send-email
-In-Reply-To: <0b6fc661-dd89-4bb0-458a-c6a14c9c37d0@mind.be>
-References: <CAGrGpJD9MX_aNzwu357LziPAOMYLbHeQt=sKAukPCav2-anbog@mail.gmail.com>
- <20160626144849.4b5ab2fa@free-electrons.com>
- <0b6fc661-dd89-4bb0-458a-c6a14c9c37d0@mind.be>
-Message-ID: <CAGrGpJDNUNSm=2-hyimQf_qtOi1Nkc3ckpzLM2P_04OwnzmroA@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 27 Jun 2016 07:29:09 +0200
+Subject: [Buildroot] [PATCH v2 1/4] package/kodi: re-structure dependencies
+Message-ID: <1467005352-14070-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks to all of you for all your help and feedback.   It is appreciated.
-   I will fix them and re-submit.   My apologies for submitting
-prematurely.
+Use one package per line to ease review of Kodi 17 version bump, where
+10+ packages will be removed. This patch contains no code changes.
 
-Peter
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: rebased series, no changes to this patch
 
+ package/kodi/kodi.mk | 55 +++++++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 48 insertions(+), 7 deletions(-)
 
-On Sun, Jun 26, 2016 at 2:22 PM, Arnout Vandecappelle <arnout@mind.be>
-wrote:
-
-> On 26-06-16 14:48, Thomas Petazzoni wrote:
-> > Hello,
-> >
-> > As I mentioned, we received 3 times the same patch, for sdl2_ttf. And
-> > as Baruch noted, the commit title was wrong.
-> >
-> > On Sat, 25 Jun 2016 21:20:04 -0600, Peter Thompson wrote:
-> >
-> >> > Step 2 - create 3 branches (1 per patch)
-> > Don't do this. Create one branch only, with one commit per package.
-> >
-> >> > submit via
-> >> > https://buildroot.org/downloads/manual/manual.html#submitting-patches
-> >> > $ git fetch --all --tags    # update with latest buildroot version
-> >> > $ git rebase origin/master    # redo my commits on latest buildroot
-> version
-> >> > $ git format-patch -M -n -s -o outgoing origin/master #format and
-> send it
-> >> > $ git send-email --to buildroot at buildroot.org outgoing/*
-> > Please send the patches to you first, in order to check that they look
-> > good.
->
->  The sending is clearly no problem. It is a good idea however to review the
-> patches in outgoing/* before sending out.
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160626/5abd7b1e/attachment.html>
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 90c50c3..8a3b0bf 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -10,13 +10,54 @@ KODI_LICENSE = GPLv2
+ KODI_LICENSE_FILES = LICENSE.GPL
+ # needed for binary addons
+ KODI_INSTALL_STAGING = YES
+-KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-zip host-giflib \
+-	host-libjpeg host-lzo host-nasm host-libpng host-swig
+-KODI_DEPENDENCIES += boost bzip2 expat ffmpeg fontconfig freetype giflib jasper jpeg \
+-	libass libcdio libcrossguid libcurl libdcadec libfribidi libgcrypt libmpeg2 \
+-	libogg libplist libpng libsamplerate libsquish libvorbis libxml2 \
+-	libxslt lzo ncurses openssl pcre python readline sqlite taglib tiff \
+-	tinyxml yajl zlib
++KODI_DEPENDENCIES = \
++	boost \
++	bzip2 \
++	expat \
++	ffmpeg \
++	fontconfig \
++	freetype \
++	giflib \
++	host-gawk \
++	host-gettext \
++	host-giflib \
++	host-gperf \
++	host-libjpeg \
++	host-libpng \
++	host-lzo \
++	host-nasm \
++	host-swig \
++	host-zip \
++	jasper \
++	jpeg \
++	libass \
++	libcdio \
++	libcrossguid \
++	libcurl \
++	libdcadec \
++	libfribidi \
++	libgcrypt \
++	libmpeg2 \
++	libogg \
++	libplist \
++	libpng \
++	libsamplerate \
++	libsquish \
++	libvorbis \
++	libxml2 \
++	libxslt \
++	lzo \
++	ncurses \
++	openssl \
++	pcre \
++	python \
++	readline \
++	sqlite \
++	taglib \
++	tiff \
++	tinyxml \
++	yajl \
++	zlib
+ 
+ KODI_CONF_ENV = \
+ 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
+-- 
+2.8.1
