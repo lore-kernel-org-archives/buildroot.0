@@ -1,66 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jun 2016 16:24:17 +0200
-Subject: [Buildroot] [v1 1/1] uboot: Add local directory option to
-	menuconfig
-In-Reply-To: <87por1q1ps.fsf@dell.be.48ers.dk>
-References: <1466994356-15411-1-git-send-email-Aduskett@gmail.com>
- <20160627205746.GC3714@free.fr>
- <CAFSsvmq4=Rjj=E8Bbvfj4AThYW7iG0fhSxcyAU4umpqO-4p8GA@mail.gmail.com>
- <87por1q1ps.fsf@dell.be.48ers.dk>
-Message-ID: <20160628162417.421cc3cb@free-electrons.com>
+From: Andrew Webster <Awebster@arcx.com>
+Date: Tue, 28 Jun 2016 15:21:30 +0000
+Subject: [Buildroot] [PATCH v6 3/3] docker-engine: new package
+In-Reply-To: <1467068526449-c5b1aab4-841d852a-e8d99e85@mixmax.com>
+References: <1464475578-22239-1-git-send-email-christian@paral.in>
+ <1464475578-22239-4-git-send-email-christian@paral.in>
+ <f27fd228ed034bc499fe1c69ac9a3980@WEBMAIL.arcx.com>
+ <20160607215439.76ad85ee@free-electrons.com>
+ <CA+h8R2oZypDvm65RVp3fNX1MYCxSWqX95MxLW-q-K25d4tNccg@mail.gmail.com>
+ <59dc9de3a6b14bf5be1c61368dc0cbde@WEBMAIL.arcx.com>
+ <20160607224744.5ed22c32@free-electrons.com>
+ <6f608608c76e4ebd82e22c93ea6add8d@WEBMAIL.arcx.com>
+ <1467068526449-c5b1aab4-841d852a-e8d99e85@mixmax.com>
+Message-ID: <c99d8392e79c4a339cd1c4fdd1e21eca@WEBMAIL.arcx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: Christian Stewart [mailto:christian at paral.in] 
+> Sent: Monday, June 27, 2016 7:02 PM
 
-On Tue, 28 Jun 2016 08:14:39 +0200, Peter Korsgaard wrote:
+> On Tue, Jun 7, 2016 at 1:18 PM Andrew Webster <Awebster@arcx.com> wrote:
+> >?Here is a patch with the init file I used.? I copied the contrib/init/sysvinit-debian/docker file and modified it slightly.
 
->  >> If your concern is to be able to use a local source during development,
->  >> we have the override-srcdir mechanism just for that. See in the
->  >> menuconfig, in the "Build options" sub-menu:
->  >> 
->  >> ($(CONFIG_DIR)/local.mk) location of a package override file
->  >>   
->  > Interesting!  However I was not aware of this feature and I would suspect
->  > most users won't know about it because it's not in menuconfig.  For local
->  > development why would this be a bad thing?  
-> 
-> I agree that it isn't an obvious feature and that it is easy to miss. As
-> Yann said, systems like Buildroot are really about reproducability, so
-> referring to something local on the developers machine doesn't match
-> very well.
+> Thank you again for this patch. It doesn't apply to my latest version of docker-engine, though. Could you have a look at my master branch at:
+> http://github.com/paralin/buildroot
+> And rebase?
 
-This is only if you use Buildroot solely as a "final integration" tool.
-But lots of people use Buildroot even during active development on a
-given software component. In such a situation, people are ready to
-trade "reproducibility" against "ease of building/testing a new
-change". You certainly don't want to push to your kernel tree a new
-commit, change your Buildroot configuration, pay the price of a
-completely new kernel clone + build, to test each and every change you
-make to your kernel.
+Patch applied cleanly to your master branch.  I also have an additional patch to clean up the "restart".  It may be better if I send the patches using send-email, but I don't want to CC buildroot or they will end up in patchwork.
+I can send directly to you instead.
 
-The kernel, U-Boot and other bootloaders are somewhat special
-components, as you often need HW-specific versions of those. This is
-why we have the possibility of specifying custom Git versions, custom
-tarballs, etc. From that perspective, having a way to specify a local
-directory is also not a bad idea.
+> I've updated Docker to the latest v1.12-rc2 which has a lot of breaking changes, so it might require some additional work from your end (sorry!)
 
-To me the _OVERRIDE_SRCDIR / local.mk thing is meant to be _local_ to
-the developer machine. It's meant to only be used while hacking on a
-given package, and at the end, produce a patch, or commit your changes.
-I am not a big fan of suggesting people to version control their
-local.mk, but maybe it's just a matter of taste (and improper name for
-this local.mk).
+I haven't yet tried to build/run yet, and may not have a chance for a few days.  Would you rather wait until I try it out before I send you patches?
 
-So in the end, I am not as clear cut as you and Yann are about
-rejecting the U-Boot "local directory" patch and removing the similar
-functionality from Linux.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Andrew
