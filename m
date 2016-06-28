@@ -1,51 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 29 Jun 2016 01:03:18 +0200
-Subject: [Buildroot] [PATCH 5/6] docs/manual/known-issues: remove
- occurrences of eglibc
-In-Reply-To: <87d1n1jbvs.fsf@dell.be.48ers.dk>
-References: <1465422059-22254-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1465422059-22254-5-git-send-email-thomas.petazzoni@free-electrons.com>
- <20160613204653.GG3786@free.fr> <87d1n1jbvs.fsf@dell.be.48ers.dk>
-Message-ID: <ef5036d6-a366-ba13-bcbb-8b3b2357a93c@mind.be>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Tue, 28 Jun 2016 20:07:15 -0300
+Subject: [Buildroot] [PATCH] minnowboard-max: Enable serial and HDMI
+	consoles
+In-Reply-To: <87por1msrf.fsf@dell.be.48ers.dk>
+References: <1466487301-7585-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <87por1msrf.fsf@dell.be.48ers.dk>
+Message-ID: <CAAEAJfBLALg3eKtQ1-7mBKHDZmp3rDKiVYNnqqYUPhuptqdn6A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28-06-16 22:29, Peter Korsgaard wrote:
->>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
-> Hi,
-> 
->  > I just discovered we had a konwn-problems section in the manual... That
->  > worries me somewhat: it will be hard to ensure this stays current with
->  > the new versions of those packages...
-> 
-> Yeah, me too!
-> 
->  > Are we sure those are still valid? For example. mrouted has been updated
->  > once since the known-issue was added; xfsprogs has been updated twice.
-> 
-> I don't know. Perhaps it would be better to have these notes closer to
-> the package? Perhaps as comment lines in the Config.in or part of the
-> help text?
+On 28 June 2016 at 08:56, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
+>
+>  > Following what's done in Raspberry Pi's defconfigs, let's
+>  > unify the consoles in Minnowboard Max defconfigs, providing
+>  > consoles on HDMI and serial port.
+>
+>  > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+>  > ---
+>  >  board/minnowboard/post-build.sh             | 5 +++++
+>  >  board/minnowboard/readme.txt                | 3 +++
+>  >  configs/minnowboard_max-graphical_defconfig | 1 -
+>  >  configs/minnowboard_max_defconfig           | 1 -
+>  >  4 files changed, 8 insertions(+), 2 deletions(-)
+>
+>  > diff --git a/board/minnowboard/post-build.sh b/board/minnowboard/post-build.sh
+>  > index f3a11e99f0f5..f03a607b9b4d 100755
+>  > --- a/board/minnowboard/post-build.sh
+>  > +++ b/board/minnowboard/post-build.sh
+>  > @@ -3,3 +3,8 @@
+>  >  # $2    board name
+>
+>  >  cp -v board/minnowboard/grub-${2}.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
+>  > +
+>  > +# Add a console on tty1
+>  > +grep -qE '^tty0::' ${TARGET_DIR}/etc/inittab || \
+>  > +sed -i '/GENERIC_SERIAL/a\
+>  > +tty0::respawn:/sbin/getty -L  tty0 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
+>
+> The comment says tty1 but you are using tty0. tty0 is afaik the
+> currently active console, and tty1 the one on alt-f1. Rpi uses tty1, so
+> I changed it here as well for consistency.
+>
 
- I'm in favour of the help text. It doesn't hurt to have relatively long help text.
+I like to be able to log right into the active console.
+On the other side, consistency is good.
 
- It's still not ideal because people will only consult help text for packages
-they actively select, not for automatically selected packages. But there isn't
-much we can do better than that. Or we'd have to add infra to print some "known
-issue" text in case of build failure :-P
+> Committed with that fixed, thanks.
+>
 
- Regards,
- Arnout
-
-
+Cool, thanks for the fixes.
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
