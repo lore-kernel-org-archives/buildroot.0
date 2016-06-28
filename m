@@ -1,74 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jun 2016 13:03:43 +0200
-Subject: [Buildroot] [git commit] package/mono: fix sigcontext incorrect
-	include
-Message-ID: <20160628110724.3C07E8212B@busybox.osuosl.org>
+Date: Tue, 28 Jun 2016 13:02:14 +0200
+Subject: [Buildroot] [git commit] nano: bump to version 2.6.1
+Message-ID: <20160628110724.2D64B82037@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d3f27172d190834e27b0a373797ab5c12aa9899
+commit: https://git.buildroot.net/buildroot/commit/?id=75a05d00161d6cc5735634da35c418d46f579a7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch solves incorrect inclusion of sigcontext.h on musl.
-The patch was submitted upstream.
+And since we switched to non-gnu mirror better use the small xz tarball.
 
-Fixes: http://autobuild.buildroot.net/results/bec/beced92f3ef81f201c0dc9178c7ff6fad0bc45e7/
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...009-fix-musl-incorrect-sigcontext-include.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/mono/0009-fix-musl-incorrect-sigcontext-include.patch b/package/mono/0009-fix-musl-incorrect-sigcontext-include.patch
-new file mode 100644
-index 0000000..3d932b6
---- /dev/null
-+++ b/package/mono/0009-fix-musl-incorrect-sigcontext-include.patch
-@@ -0,0 +1,44 @@
-+From 63f0b0246b8125ae48b15bd182bb5831be02e6c9 Mon Sep 17 00:00:00 2001
-+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+Date: Mon, 27 Jun 2016 21:32:11 +0200
-+Subject: [PATCH] fix musl incorrect sigcontext include
-+
-+On musl __GLIBC__ is not defined, so the conditional logic will
-+not produce correct result. Add a specific case to handle when
-+__GLIBC__ is not defined.
-+
-+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+---
-+ libgc/os_dep.c             | 2 +-
-+ mono/mini/exceptions-arm.c | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/libgc/os_dep.c b/libgc/os_dep.c
-+index 8c8e098..34859c1 100644
-+--- a/libgc/os_dep.c
-++++ b/libgc/os_dep.c
-+@@ -32,7 +32,7 @@
-+       /* prototypes, so we have to include the top-level sigcontext.h to    */
-+       /* make sure the former gets defined to be the latter if appropriate. */
-+ #     include <features.h>
-+-#     if 2 <= __GLIBC__
-++#     if 2 <= __GLIBC__ || !defined(__GLIBC__)
-+ #       if 2 == __GLIBC__ && 0 == __GLIBC_MINOR__
-+ 	  /* glibc 2.1 no longer has sigcontext.h.  But signal.h	*/
-+ 	  /* has the right declaration for glibc 2.1.			*/
-+diff --git a/mono/mini/exceptions-arm.c b/mono/mini/exceptions-arm.c
-+index b036aa7..a3e2164 100644
-+--- a/mono/mini/exceptions-arm.c
-++++ b/mono/mini/exceptions-arm.c
-+@@ -14,7 +14,7 @@
-+ #include <string.h>
-+ 
-+ #ifndef MONO_CROSS_COMPILE
-+-#ifdef HAVE_ASM_SIGCONTEXT_H
-++#if defined(HAVE_ASM_SIGCONTEXT_H) && defined(__GLIBC__)
-+ #include <asm/sigcontext.h>
-+ #endif  /* def HAVE_ASM_SIGCONTEXT_H */
-+ #endif
-+-- 
-+1.9.1
-+
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 7152f52..a07a969 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 d517a5fcaa9fa6ceda8a63e22be1d83dd7f4af13703c73b10a48e95a6e1178d3  nano-2.6.0.tar.gz
++sha256 45721fa6d6128068895ad71a6967ff7398d11b064b3f888e5073c97a2b6e9a81  nano-2.6.1.tar.xz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index d8e19bc..f01745d 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,8 +5,9 @@
+ ################################################################################
+ 
+ NANO_VERSION_MAJOR = 2.6
+-NANO_VERSION = $(NANO_VERSION_MAJOR).0
++NANO_VERSION = $(NANO_VERSION_MAJOR).1
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
++NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPLv3+
+ NANO_LICENSE_FILES = COPYING
+ NANO_CONF_OPTS = \
