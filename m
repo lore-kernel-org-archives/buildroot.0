@@ -1,57 +1,75 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 28 Jun 2016 17:20:15 +0000
-Subject: [Buildroot] [PATCH v6 3/3] docker-engine: new package
-In-Reply-To: <c99d8392e79c4a339cd1c4fdd1e21eca@WEBMAIL.arcx.com>
-References: <1464475578-22239-1-git-send-email-christian@paral.in>
- <1464475578-22239-4-git-send-email-christian@paral.in>
- <f27fd228ed034bc499fe1c69ac9a3980@WEBMAIL.arcx.com>
- <20160607215439.76ad85ee@free-electrons.com>
- <CA+h8R2oZypDvm65RVp3fNX1MYCxSWqX95MxLW-q-K25d4tNccg@mail.gmail.com>
- <59dc9de3a6b14bf5be1c61368dc0cbde@WEBMAIL.arcx.com>
- <20160607224744.5ed22c32@free-electrons.com>
- <6f608608c76e4ebd82e22c93ea6add8d@WEBMAIL.arcx.com>
- <1467068526449-c5b1aab4-841d852a-e8d99e85@mixmax.com>
- <c99d8392e79c4a339cd1c4fdd1e21eca@WEBMAIL.arcx.com>
-Message-ID: <1467134415442-40b6aea4-c24e1afe-e35154b2@mixmax.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 28 Jun 2016 19:32:24 +0200
+Subject: [Buildroot] [v1 1/1] uboot: Add local directory option to
+	menuconfig
+In-Reply-To: <20160628162417.421cc3cb@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 28 Jun 2016 16:24:17 +0200")
+References: <1466994356-15411-1-git-send-email-Aduskett@gmail.com>
+ <20160627205746.GC3714@free.fr>
+ <CAFSsvmq4=Rjj=E8Bbvfj4AThYW7iG0fhSxcyAU4umpqO-4p8GA@mail.gmail.com>
+ <87por1q1ps.fsf@dell.be.48ers.dk>
+ <20160628162417.421cc3cb@free-electrons.com>
+Message-ID: <87lh1pmd7b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Andrew,
-On Tue, Jun 28, 2016 8:21 AM, Andrew Webster Awebster at arcx.com wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Patch applied cleanly to your master branch. I also have an additional patch to
-clean up the ?restart?. It may be better if I send the patches using send-email,
-but I don't want to CC buildroot or they will end up in patchwork.
+Hi,
+
+ >> I agree that it isn't an obvious feature and that it is easy to miss. As
+ >> Yann said, systems like Buildroot are really about reproducability, so
+ >> referring to something local on the developers machine doesn't match
+ >> very well.
+
+ > This is only if you use Buildroot solely as a "final integration" tool.
+ > But lots of people use Buildroot even during active development on a
+ > given software component. In such a situation, people are ready to
+ > trade "reproducibility" against "ease of building/testing a new
+ > change". You certainly don't want to push to your kernel tree a new
+ > commit, change your Buildroot configuration, pay the price of a
+ > completely new kernel clone + build, to test each and every change you
+ > make to your kernel.
+
+You as a local developer might not, but for integration purposes
+(E.G. driven through a continous integration tool like
+Jenkins/buildbot/..) it becomes very important, especially as teams grow
+in size. The fact that we don't track reverse dependencies means that
+clean rebuilds are very important, and I would very much argue that this
+is a daily thing rather than "final" integration.
+
+People might do their development outside Buildroot (E.G. build by hand)
+or use override if they prefer to let Buildroot build it, but finally
+the tested changes need to get committed and the buildroot config
+adjusted to use the new version.
 
 
-I can send directly to you instead.
+ > The kernel, U-Boot and other bootloaders are somewhat special
+ > components, as you often need HW-specific versions of those. This is
+ > why we have the possibility of specifying custom Git versions, custom
+ > tarballs, etc. From that perspective, having a way to specify a local
+ > directory is also not a bad idea.
 
-Sounds good to me. Awaiting your patch.
-
-
-> I've updated Docker to the latest v1.12-rc2 which has a lot of breaking
-changes, so it might require some additional work from your end (sorry!)
-
-
-
-
+But the only advantage of local directory over override (besides
+documentation / ease of discovery) is that the change is "permanent"
+(E.G. listed in .config). That to me seems like a big disadvantage.
 
 
-I haven't yet tried to build/run yet, and may not have a chance for a few days.
-Would you rather wait until I try it out before I send you patches?
+ > To me the _OVERRIDE_SRCDIR / local.mk thing is meant to be _local_ to
+ > the developer machine. It's meant to only be used while hacking on a
+ > given package, and at the end, produce a patch, or commit your changes.
 
+Indeed, isn't that the use case you describe above?
 
+ > I am not a big fan of suggesting people to version control their
+ > local.mk, but maybe it's just a matter of taste (and improper name for
+ > this local.mk).
 
+But why would you want to make the development setup override permanent?
 
-1.12 is working great now on my end. I think the only change you will need is to
-add a ?d? to docker because they've renamed the daemon from ?docker daemon? to
-just ?dockerd? by splitting it into a separate executable.
-Also, they've added a lot of journald integrations and such, might be
-interesting to see if we can get those working.
-best, Christian
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160628/d5548558/attachment.html>
+-- 
+Venlig hilsen,
+Peter Korsgaard 
