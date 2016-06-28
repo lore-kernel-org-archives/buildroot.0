@@ -1,27 +1,22 @@
-From: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
-Date: Tue, 28 Jun 2016 18:16:44 +0900
-Subject: [Buildroot] qt5: QT5_QMAKE spec bug
-Message-ID: <5f3cc15c-6a24-e41a-993b-7c00d35e5a26@stu.hosei.ac.jp>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 28 Jun 2016 13:01:57 +0200
+Subject: [Buildroot] [PATCH] nano: bump to version 2.6.1
+In-Reply-To: <1467068366-28090-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 27 Jun 2016 19:59:26 -0300")
+References: <1467068366-28090-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87shvxo9ui.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-I was trying to use QT5_QMAKE variable for a new package.
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/152724
+ > And since we switched to non-gnu mirror better use the small xz tarball.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-However, it failed to build. I found that it failed because -spec option 
-for cross compiling was applied for host_build. It can be fixed by 
-setting the value to QMAKE_XSPEC in qmake configuration instead of using 
-the option.
+Committed, thanks.
 
-I'm making a patch to apply the change, but I have a question. Now 
-QT5_QMAKE variable has the path to qmake, but there are no variables to 
-indicate the path for other commands such as python. Should I remove 
-QT5_QMAKE variable or keep as it is?
-
-Regards,
-Akihiko
+-- 
+Bye, Peter Korsgaard
