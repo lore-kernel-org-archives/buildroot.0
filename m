@@ -1,30 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jun 2016 10:57:27 +0200
-Subject: [Buildroot] [PATCH] wandboard: Use HTTP for accessing Linux
-	kernel and U-Boot git repos
-In-Reply-To: <1467102471.3231.17.camel@synopsys.com> (Alexey Brodkin's message
- of "Tue, 28 Jun 2016 08:28:53 +0000")
-References: <1467099927-32036-1-git-send-email-abrodkin@synopsys.com>
- <87eg7hpvm7.fsf@dell.be.48ers.dk>
- <1467102471.3231.17.camel@synopsys.com>
-Message-ID: <87wpl9ofm0.fsf@dell.be.48ers.dk>
+From: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
+Date: Tue, 28 Jun 2016 18:16:44 +0900
+Subject: [Buildroot] qt5: QT5_QMAKE spec bug
+Message-ID: <5f3cc15c-6a24-e41a-993b-7c00d35e5a26@stu.hosei.ac.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+Hi,
 
- >> So I've changed it to use the release tarball instead.
+I was trying to use QT5_QMAKE variable for a new package.
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/152724
 
- > Thanks for that.
+However, it failed to build. I found that it failed because -spec option 
+for cross compiling was applied for host_build. It can be fixed by 
+setting the value to QMAKE_XSPEC in qmake configuration instead of using 
+the option.
 
- > Now I'm trying to get Wandboard working from the most recent upstream
- > kernel and U-Boot. If it all works I'll update that defconfig again :)
+I'm making a patch to apply the change, but I have a question. Now 
+QT5_QMAKE variable has the path to qmake, but there are no variables to 
+indicate the path for other commands such as python. Should I remove 
+QT5_QMAKE variable or keep as it is?
 
-Great, thanks!
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Regards,
+Akihiko
