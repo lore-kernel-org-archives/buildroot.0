@@ -1,106 +1,43 @@
-From: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
-Date: Tue, 28 Jun 2016 16:18:02 -0300
-Subject: [Buildroot] [PATCH 1/1] protobuf-lua: new package
-Message-ID: <1467141482-28706-1-git-send-email-tiago.brusamarello@datacom.ind.br>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Tue, 28 Jun 2016 21:25:20 +0200
+Subject: [Buildroot] [PATCH v2 1/1] efivar: force shared libgcc for Nios II
+Message-ID: <20160628192520.3831-1-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Google's Protocol Buffers support to Lua.
+efivar for Nios II also has to be linked with shared libgcc to avoid an
+error due to FDE encoding in static libgcc when linking libefiboot.so.
 
-This package adds support to compile and use Google's
-Protocol buffers using Lua scripts. It also includes
-the plugin for compiling the message types (.proto files)
-to the Lua language.
+Fixes:
+http://autobuild.buildroot.net/results/0c9/0c90e3e7ad41d21dd832f6f266af35fc19185170/
 
-The original package from GitHub supports deployment as
-a LuaRocks package, but the module name as set to 'protobuf'
-and not 'protobuf-lua' which causes naming problems when
-building it in Buildroot so the 'generick-package' method
-was used instead.
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 
-Change-Id: I50c2b0da9dedb2d8ed2dbd9635194e64402355f3
-Signed-off-by: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
 ---
- package/Config.in                    |  1 +
- package/protobuf-lua/Config.in       |  8 ++++++++
- package/protobuf-lua/protobuf-lua.mk | 39 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 48 insertions(+)
- create mode 100644 package/protobuf-lua/Config.in
- create mode 100644 package/protobuf-lua/protobuf-lua.mk
+Changes v1 -> v2:
+  - simplified ifeq muliple arch logic (suggested by Thomas Petazzoni)
+---
+ package/efivar/efivar.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index a2a02a8..362dbf9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1298,6 +1298,7 @@ endif
- 	source "package/poco/Config.in"
- 	source "package/protobuf/Config.in"
- 	source "package/protobuf-c/Config.in"
-+	source "package/protobuf-lua/Config.in"
- 	source "package/qhull/Config.in"
- 	source "package/qlibc/Config.in"
- 	source "package/startup-notification/Config.in"
-diff --git a/package/protobuf-lua/Config.in b/package/protobuf-lua/Config.in
-new file mode 100644
-index 0000000..e2a94cb
---- /dev/null
-+++ b/package/protobuf-lua/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PROTOBUF_LUA
-+    bool "protobuf-lua"
-+    depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+    help
-+      Code generator and runtime libraries to use Protocol Buffers
-+      from Lua scripts.
-+
-+      https://github.com/djungelorm/protobuf-lua
-diff --git a/package/protobuf-lua/protobuf-lua.mk b/package/protobuf-lua/protobuf-lua.mk
-new file mode 100644
-index 0000000..0ca8c70
---- /dev/null
-+++ b/package/protobuf-lua/protobuf-lua.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# protobuf-lua
-+#
-+################################################################################
-+
-+PROTOBUF_LUA_VERSION = v1.1.1
-+PROTOBUF_LUA_SITE = $(call github,djungelorm,protobuf-lua,$(PROTOBUF_LUA_VERSION))
-+PROTOBUF_LUA_DEPENDENCIES = luainterpreter host-python python
-+PROTOBUF_LUA_LICENSE = BSD-3c
-+PROTOBUF_LUA_LICENSE_FILES = LICENSE
-+
-+define PROTOBUF_LUA_BUILD_CMDS
-+	# build Lua Protobuf shared lib
-+	$(TARGET_CC) -Os -shared -std=gnu99 -fPIC $(@D)/protobuf/pb.c -o $(@D)/protobuf/pb.so
-+endef
-+
-+define PROTOBUF_LUA_INSTALL_TARGET_CMDS
-+	# install Lua Protobuf support
-+	mkdir -p $(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+	$(INSTALL) -m 0755 $(@D)/protobuf/pb.so \
-+		$(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+	mkdir -p $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+	$(INSTALL) -m 0755 $(@D)/protobuf/*.lua \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+
-+	# install protoc Lua plugin
-+	$(INSTALL) -m 0755 $(@D)/protoc-plugin/plugin_pb2.py $(TARGET_DIR)/usr/bin
-+	$(INSTALL) -m 0755 $(@D)/protoc-plugin/protoc-gen-lua $(TARGET_DIR)/usr/bin
-+endef
-+
-+define HOST_PROTOBUF_LUA_INSTALL_CMDS
-+	# install protoc Lua plugin
-+	$(INSTALL) -m 0755 $(@D)/protoc-plugin/plugin_pb2.py $(HOST_DIR)/usr/bin
-+	$(INSTALL) -m 0755 $(@D)/protoc-plugin/protoc-gen-lua $(HOST_DIR)/usr/bin
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
+diff --git a/package/efivar/efivar.mk b/package/efivar/efivar.mk
+index de48bc9..d3ca79b 100644
+--- a/package/efivar/efivar.mk
++++ b/package/efivar/efivar.mk
+@@ -21,9 +21,9 @@ EFIVAR_MAKE_OPTS = \
+ 	BINTARGETS=efivar \
+ 	LDFLAGS="$(TARGET_LDFLAGS) -fPIC"
+ 
+-# Explicitly linking with shared libgcc is required on MicroBlaze,
++# Explicitly linking with shared libgcc is required on MicroBlaze and Nios II,
+ # otherwise it fails due to FDE encoding in static libgcc.
+-ifeq ($(BR2_microblaze),y)
++ifeq ($(BR2_microblaze)$(BR2_nios2),y)
+ EFIVAR_MAKE_OPTS += SOFLAGS="-shared -shared-libgcc"
+ endif
+ 
 -- 
-1.9.1
+2.9.0
