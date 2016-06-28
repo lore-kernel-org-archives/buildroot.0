@@ -1,75 +1,106 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jun 2016 19:32:24 +0200
-Subject: [Buildroot] [v1 1/1] uboot: Add local directory option to
-	menuconfig
-In-Reply-To: <20160628162417.421cc3cb@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 28 Jun 2016 16:24:17 +0200")
-References: <1466994356-15411-1-git-send-email-Aduskett@gmail.com>
- <20160627205746.GC3714@free.fr>
- <CAFSsvmq4=Rjj=E8Bbvfj4AThYW7iG0fhSxcyAU4umpqO-4p8GA@mail.gmail.com>
- <87por1q1ps.fsf@dell.be.48ers.dk>
- <20160628162417.421cc3cb@free-electrons.com>
-Message-ID: <87lh1pmd7b.fsf@dell.be.48ers.dk>
+From: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+Date: Tue, 28 Jun 2016 16:18:02 -0300
+Subject: [Buildroot] [PATCH 1/1] protobuf-lua: new package
+Message-ID: <1467141482-28706-1-git-send-email-tiago.brusamarello@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Google's Protocol Buffers support to Lua.
 
-Hi,
+This package adds support to compile and use Google's
+Protocol buffers using Lua scripts. It also includes
+the plugin for compiling the message types (.proto files)
+to the Lua language.
 
- >> I agree that it isn't an obvious feature and that it is easy to miss. As
- >> Yann said, systems like Buildroot are really about reproducability, so
- >> referring to something local on the developers machine doesn't match
- >> very well.
+The original package from GitHub supports deployment as
+a LuaRocks package, but the module name as set to 'protobuf'
+and not 'protobuf-lua' which causes naming problems when
+building it in Buildroot so the 'generick-package' method
+was used instead.
 
- > This is only if you use Buildroot solely as a "final integration" tool.
- > But lots of people use Buildroot even during active development on a
- > given software component. In such a situation, people are ready to
- > trade "reproducibility" against "ease of building/testing a new
- > change". You certainly don't want to push to your kernel tree a new
- > commit, change your Buildroot configuration, pay the price of a
- > completely new kernel clone + build, to test each and every change you
- > make to your kernel.
+Change-Id: I50c2b0da9dedb2d8ed2dbd9635194e64402355f3
+Signed-off-by: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+---
+ package/Config.in                    |  1 +
+ package/protobuf-lua/Config.in       |  8 ++++++++
+ package/protobuf-lua/protobuf-lua.mk | 39 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 48 insertions(+)
+ create mode 100644 package/protobuf-lua/Config.in
+ create mode 100644 package/protobuf-lua/protobuf-lua.mk
 
-You as a local developer might not, but for integration purposes
-(E.G. driven through a continous integration tool like
-Jenkins/buildbot/..) it becomes very important, especially as teams grow
-in size. The fact that we don't track reverse dependencies means that
-clean rebuilds are very important, and I would very much argue that this
-is a daily thing rather than "final" integration.
-
-People might do their development outside Buildroot (E.G. build by hand)
-or use override if they prefer to let Buildroot build it, but finally
-the tested changes need to get committed and the buildroot config
-adjusted to use the new version.
-
-
- > The kernel, U-Boot and other bootloaders are somewhat special
- > components, as you often need HW-specific versions of those. This is
- > why we have the possibility of specifying custom Git versions, custom
- > tarballs, etc. From that perspective, having a way to specify a local
- > directory is also not a bad idea.
-
-But the only advantage of local directory over override (besides
-documentation / ease of discovery) is that the change is "permanent"
-(E.G. listed in .config). That to me seems like a big disadvantage.
-
-
- > To me the _OVERRIDE_SRCDIR / local.mk thing is meant to be _local_ to
- > the developer machine. It's meant to only be used while hacking on a
- > given package, and at the end, produce a patch, or commit your changes.
-
-Indeed, isn't that the use case you describe above?
-
- > I am not a big fan of suggesting people to version control their
- > local.mk, but maybe it's just a matter of taste (and improper name for
- > this local.mk).
-
-But why would you want to make the development setup override permanent?
-
+diff --git a/package/Config.in b/package/Config.in
+index a2a02a8..362dbf9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1298,6 +1298,7 @@ endif
+ 	source "package/poco/Config.in"
+ 	source "package/protobuf/Config.in"
+ 	source "package/protobuf-c/Config.in"
++	source "package/protobuf-lua/Config.in"
+ 	source "package/qhull/Config.in"
+ 	source "package/qlibc/Config.in"
+ 	source "package/startup-notification/Config.in"
+diff --git a/package/protobuf-lua/Config.in b/package/protobuf-lua/Config.in
+new file mode 100644
+index 0000000..e2a94cb
+--- /dev/null
++++ b/package/protobuf-lua/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PROTOBUF_LUA
++    bool "protobuf-lua"
++    depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++    help
++      Code generator and runtime libraries to use Protocol Buffers
++      from Lua scripts.
++
++      https://github.com/djungelorm/protobuf-lua
+diff --git a/package/protobuf-lua/protobuf-lua.mk b/package/protobuf-lua/protobuf-lua.mk
+new file mode 100644
+index 0000000..0ca8c70
+--- /dev/null
++++ b/package/protobuf-lua/protobuf-lua.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# protobuf-lua
++#
++################################################################################
++
++PROTOBUF_LUA_VERSION = v1.1.1
++PROTOBUF_LUA_SITE = $(call github,djungelorm,protobuf-lua,$(PROTOBUF_LUA_VERSION))
++PROTOBUF_LUA_DEPENDENCIES = luainterpreter host-python python
++PROTOBUF_LUA_LICENSE = BSD-3c
++PROTOBUF_LUA_LICENSE_FILES = LICENSE
++
++define PROTOBUF_LUA_BUILD_CMDS
++	# build Lua Protobuf shared lib
++	$(TARGET_CC) -Os -shared -std=gnu99 -fPIC $(@D)/protobuf/pb.c -o $(@D)/protobuf/pb.so
++endef
++
++define PROTOBUF_LUA_INSTALL_TARGET_CMDS
++	# install Lua Protobuf support
++	mkdir -p $(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/protobuf
++	$(INSTALL) -m 0755 $(@D)/protobuf/pb.so \
++		$(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/protobuf
++	mkdir -p $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
++	$(INSTALL) -m 0755 $(@D)/protobuf/*.lua \
++		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
++
++	# install protoc Lua plugin
++	$(INSTALL) -m 0755 $(@D)/protoc-plugin/plugin_pb2.py $(TARGET_DIR)/usr/bin
++	$(INSTALL) -m 0755 $(@D)/protoc-plugin/protoc-gen-lua $(TARGET_DIR)/usr/bin
++endef
++
++define HOST_PROTOBUF_LUA_INSTALL_CMDS
++	# install protoc Lua plugin
++	$(INSTALL) -m 0755 $(@D)/protoc-plugin/plugin_pb2.py $(HOST_DIR)/usr/bin
++	$(INSTALL) -m 0755 $(@D)/protoc-plugin/protoc-gen-lua $(HOST_DIR)/usr/bin
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+1.9.1
