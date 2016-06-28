@@ -1,40 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jun 2016 13:24:16 +0200
-Subject: [Buildroot] [PATCH 1/3] libamcodec: new Package
-In-Reply-To: <trinity-d4bed891-c195-45ad-af5c-7e6a2da119ec-1464844313669@3capp-mailcom-bs13>
- (daggs@gmx.com's message of "Thu, 2 Jun 2016 07:11:53 +0200")
-References: <20160601102720.3929-1-daggs@gmx.com>
- <20160601141655.5649aa21@free-electrons.com>
- <trinity-d3b293e2-4a13-4cd4-95af-c77cc680aa35-1464814370051@3capp-mailcom-bs13>
- <20160601230533.04ca63d0@free-electrons.com>
- <trinity-ac3e1b6f-2b6f-4cd4-9758-1af9e8953da0-1464815796397@3capp-mailcom-bs13>
- <20160601232826.2aa6d899@free-electrons.com>
- <trinity-d4bed891-c195-45ad-af5c-7e6a2da119ec-1464844313669@3capp-mailcom-bs13>
-Message-ID: <877fd9o8tb.fsf@dell.be.48ers.dk>
+From: pborut123 <pborut123@gmail.com>
+Date: Tue, 28 Jun 2016 13:25:09 +0200
+Subject: [Buildroot] Buildroot package for psycopg module for Beaglebone
+	black
+Message-ID: <57725E95.3040107@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "daggs" == daggs  <daggs@gmx.com> writes:
+Hello,
 
-Hi,
+I'm new to this mailing list, quite new to buildroot, too.
+I'm trying to build distribution for Beaglebone black with Python 3.5.1 
+and postgresql 9.5.2.
+I want to have also psycopg2 module that is not present in current 
+package list.
+I've tried to make my own package but I'm not successful.
 
->> I fully respect this choice. There are however some legal aspects to
- >> take care of as well, so I guess it should be a decision of the
- >> Buildroot community to accept or not patches that are submitted under a
- >> pseudonym or anonymously.
- > sorry for making this harder.
- > is there another way to verify with without placing such info?
- > what prevents me for example from sending patches under your name?
- > isn't it just a text?
+Last error, I've received from build is at installation step:
+ >>> python-psycopg 2.6.1 Installing to target
+...
+error: option --executable not recognized
+make: *** 
+[..buildroot/output/build/python-psycopg-2.6.1/.stamp_target_installed] 
+Error 1
 
-It is "just text", just like a signature.
+My question is if can anybody help me with this, pointing me on what 
+I've done wrong.
 
-What is the problem with using your full name? I see you did so in your
-From on the v2 patches any way and there's plenty of google hits on your
-email address.
+Here is my package code:
 
--- 
-Bye, Peter Korsgaard
+PYTHON_PSYCOPG_VERSION = 2.6.1
+PYTHON_PSYCOPG_SOURCE = psycopg2-$(PYTHON_PSYCOPG_VERSION).tar.gz
+PYTHON_PSYCOPG_SITE = http://initd.org/psycopg/tarballs/PSYCOPG-2-6
+PYTHON_PSYCOPG_LICENSE = GPLv2
+PYTHON_PSYCOPG_LICENSE_FILES = LICENSE
+PYTHON_PSYCOPG_SETUP_TYPE = setuptools
+PYTHON_PSYCOPG_BUILD_OPTS = build_ext --pg-config 
+$(STAGING_DIR)/usr/bin/pg_config build
+
+define PYTHON_PSYCOPG_INSTALL_CUSTOM_PG_CONFIG
+     $(INSTALL) -m 0755 -D package/python-psycopg/pg_config \
+         $(STAGING_DIR)/usr/bin/pg_config
+endef
+PYTHON_PSYCOPG_PRE_BUILD_HOOKS += PYTHON_PSYCOPG_INSTALL_CUSTOM_PG_CONFIG
+$(eval $(python-package))
+
+and here is missing host pg_config file, I've inserted to setup.py:
+
+#!/bin/sh
+# I've pointed to already cross-build posgresql base directory in build
+prefix=buildroot/output/build/postgresql-9.5.2/src
+
+case "$1" in
+   --includedir)
+     echo "$prefix/include"
+     ;;
+   --libdir)
+     echo "$prefix/lib"
+     ;;
+   --version)
+       echo "PostgreSQL 9.5.2"
+     ;;
+
+   *)
+     echo "Usage: $0 {--includedir|--libdir}"
+esac
+
+Thank you and best regards,
+Borut.
