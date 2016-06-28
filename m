@@ -1,43 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jun 2016 22:24:10 +0200
-Subject: [Buildroot] [git commit] docs/manual: don't mention eglibc,
-	mention musl
-Message-ID: <20160628203005.5684282037@busybox.osuosl.org>
+Date: Tue, 28 Jun 2016 22:27:27 +0200
+Subject: [Buildroot] [git commit] docs/manual/known-issues: remove
+	occurrences of eglibc
+Message-ID: <20160628203005.A2DD182037@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff1743ee6d579f8916a46b101b2221917b1343e0
+commit: https://git.buildroot.net/buildroot/commit/?id=95ed42c96c53a6750ac19c87f5228adf321445a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Following the removal of eglibc, it no longer makes sense to talk about
-it in the Buildroot manual as one of the supported C libraries. However,
-it does make sense to indicate that we support musl.
-
-[Peter: remove extra 'the' as suggested by Yann]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/configure.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/known-issues.txt | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
-index 44f5d24..0cd9f82 100644
---- a/docs/manual/configure.txt
-+++ b/docs/manual/configure.txt
-@@ -81,9 +81,9 @@ by itself a cross-compilation toolchain, before building the userspace
- applications and libraries for your target embedded system.
+diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
+index 38ba941..acfe4ff 100644
+--- a/docs/manual/known-issues.txt
++++ b/docs/manual/known-issues.txt
+@@ -14,18 +14,18 @@
+   DO_XSI_MATH, UCLIBC_HAS_OBSOLETE_BSD_SIGNAL and
+   UCLIBC_SV4_DEPRECATED are needed if one wants to build the
+   +ltp-testsuite+ package with uClibc. You need to either use a glibc
+-  or eglibc based toolchain, or enable the appropriate options in the
+-  uClibc configuration.
++  based toolchain, or enable the appropriate options in the uClibc
++  configuration.
  
- This backend supports several C libraries:
--http://www.uclibc.org[uClibc], the
-+http://www.uclibc.org[uClibc],
- http://www.gnu.org/software/libc/libc.html[glibc] and
--http://www.eglibc.org[eglibc].
-+http://www.musl-libc.org[musl].
+ * The +xfsprogs+ package does not build with the default uClibc
+   configuration used by the Buildroot toolchain backend. You need to
+-  either use a glibc or eglibc based toolchain, or enable the
+-  appropriate options in the uClibc configuration.
++  either use a glibc based toolchain, or enable the appropriate
++  options in the uClibc configuration.
  
- Once you have selected this backend, a number of options appear. The
- most important ones allow to:
+ * The +mrouted+ package does not build with the default uClibc
+   configuration used by the Buildroot toolchain backend. You need to
+-  either use a glibc or eglibc based toolchain, or enable the
+-  appropriate options in the uClibc configuration.
++  either use a glibc based toolchain, or enable the appropriate
++  options in the uClibc configuration.
+ 
+ * The +libffi+ package is not supported on the SuperH 2 and ARC
+   architectures.
