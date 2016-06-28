@@ -1,22 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jun 2016 22:29:28 +0200
-Subject: [Buildroot] [PATCH 6/6] rt-tests: remove occurrence of eglibc
-In-Reply-To: <1465422059-22254-6-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 8 Jun 2016 23:40:59 +0200")
-References: <1465422059-22254-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1465422059-22254-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <878txpjbvb.fsf@dell.be.48ers.dk>
+Date: Tue, 28 Jun 2016 22:24:10 +0200
+Subject: [Buildroot] [git commit] docs/manual: don't mention eglibc,
+	mention musl
+Message-ID: <20160628203005.5684282037@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ff1743ee6d579f8916a46b101b2221917b1343e0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Following the removal of eglibc, it no longer makes sense to talk about
+it in the Buildroot manual as one of the supported C libraries. However,
+it does make sense to indicate that we support musl.
 
-Committed, thanks.
+[Peter: remove extra 'the' as suggested by Yann]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/configure.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+index 44f5d24..0cd9f82 100644
+--- a/docs/manual/configure.txt
++++ b/docs/manual/configure.txt
+@@ -81,9 +81,9 @@ by itself a cross-compilation toolchain, before building the userspace
+ applications and libraries for your target embedded system.
+ 
+ This backend supports several C libraries:
+-http://www.uclibc.org[uClibc], the
++http://www.uclibc.org[uClibc],
+ http://www.gnu.org/software/libc/libc.html[glibc] and
+-http://www.eglibc.org[eglibc].
++http://www.musl-libc.org[musl].
+ 
+ Once you have selected this backend, a number of options appear. The
+ most important ones allow to:
