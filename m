@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Jun 2016 22:26:02 +0200
-Subject: [Buildroot] [PATCH 3/6] glibc: remove additional occurrences of
-	eglibc
-In-Reply-To: <1465422059-22254-3-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 8 Jun 2016 23:40:56 +0200")
+Date: Tue, 28 Jun 2016 22:26:50 +0200
+Subject: [Buildroot] [PATCH 4/6] gcc: remove occurrence of eglibc
+In-Reply-To: <1465422059-22254-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 8 Jun 2016 23:40:57 +0200")
 References: <1465422059-22254-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1465422059-22254-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87por1jc11.fsf@dell.be.48ers.dk>
+ <1465422059-22254-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87lh1pjbzp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
