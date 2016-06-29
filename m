@@ -1,55 +1,93 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Wed, 29 Jun 2016 20:02:47 +0800
-Subject: [Buildroot] [PATCH] package/quagga: Add systemd.service file
-In-Reply-To: <49651e9d-0a96-c7de-fb8b-1ec4e21324f8@mind.be>
-References: <1466874128-22828-1-git-send-email-nroach44@gmail.com>
- <91c2c2b3-7715-2ab6-31ab-144aa346c54b@mind.be>
- <76555fc3-8603-91d7-ad8f-ecdef822df16@gmail.com>
- <49651e9d-0a96-c7de-fb8b-1ec4e21324f8@mind.be>
-Message-ID: <1a81eea6-95a9-7bc1-aee2-8780caecba8a@gmail.com>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Wed, 29 Jun 2016 14:33:40 +0200
+Subject: [Buildroot] [PATCH v1] package/grantlee: upgrade to 5.1.0,
+	remove obsolote Qt4 build option
+Message-ID: <1467203620-11767-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/06/16 17:53, Arnout Vandecappelle wrote:
-> (Mainly improving my systemd knowledge here :-)
->
-> On 29-06-16 09:06, Nathaniel Roach wrote:
->> On 27/06/16 05:09, Arnout Vandecappelle wrote:
->>> On 25-06-16 19:02, Nathaniel Roach wrote:
-> [snip]
->>>    However, since the Wants= is added for zebra, it would make sense to create the
->>> zebra symlink, no?
->> No, systemd will automatically start zebra when it's needed. It's not needed
->> until one of the other daemons start (which systemd will start zebra beforehand
->> if the daemon is local). If they are remote, the user can enable zebra themselves.
->   So, if there is a Wants=quagga at zebra.service line, then systemd will look for
-> quagga at zebra.service in /usr/lib/systemd/services, and failing that it will
-> automatically try quagga at .service? Nice!
-Pretty much! 
-/etc/systemd/system/multi-user.target.wants/quagga at zebra.service is 
-installed on systemctl enable [...] and it's just a symlink to
-quagga at .service
-> [snip]
->>>> +Wants=quagga at zebra.service
->>>    I just realize now: this line should probably be removed when
->>> BR2_PACKAGE_QUAGGA_ZEBRA is not set.
->> Also true, however that's why I said Wants= and not Requires= so systemd handles
->> the lack of zebra fine.
->   So in case zebra doesn't exist, systemd will still try to execute the service
-> file, but the ExecStart command will fail because /usr/sbin/zebra doesn't exist,
-> right? But in that case, won't it retry every second (Restart=on-failure) and
-> spam the journal horribly?
->
->   Maybe there should be a ConditionFileIsExecutable in the [Unit] section?
-That was a good condition that I didn't think of. In that case the unit 
-will fail and restart until it hits the start limit. I've since added in 
-the Condition stanza and everything works as intended.
->
->
->   Regards,
->   Arnout
->
->
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+---
+Changes -> v1:
+    * remove constraints related to binutils bug 19405
+    * remove constraints related to archs microblaze and nios2 as they are
+      already implicitly present via QT5_JSCORE_AVAILABLE
+
+ package/grantlee/Config.in     | 21 +++------------------
+ package/grantlee/grantlee.hash |  3 +--
+ package/grantlee/grantlee.mk   | 11 +----------
+ 3 files changed, 5 insertions(+), 30 deletions(-)
+
+diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
+index 7895c7e..779306b 100644
+--- a/package/grantlee/Config.in
++++ b/package/grantlee/Config.in
+@@ -1,24 +1,9 @@
+ config BR2_PACKAGE_GRANTLEE
+ 	bool "grantlee"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # Qt Script
+-	depends on (BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT && BR2_PACKAGE_QT) || \
+-		(BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5)
+-	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405 # Qt GUI module
+-	# https://sourceware.org/bugzilla/show_bug.cgi?id=20173
+-	depends on !BR2_microblaze && !BR2_nios2
+-	select BR2_PACKAGE_QT_STL if BR2_PACKAGE_QT
+-	select BR2_PACKAGE_QT_SCRIPT if BR2_PACKAGE_QT
+-	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
+-	select BR2_PACKAGE_QT5SCRIPT if BR2_PACKAGE_QT5
+-	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
++	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5SCRIPT
++	select BR2_PACKAGE_QT5BASE_GUI
+ 	help
+ 	  Qt implementation of the Django template framework
+ 
+ 	  http://www.grantlee.org
+-
+-comment "grantlee needs a toolchain with NPTL not affected by Binutils bug 19405"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on !BR2_microblaze && !BR2_nios2
+-	depends on (BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT && BR2_PACKAGE_QT) || \
+-		(BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5) || \
+-		BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19405
+diff --git a/package/grantlee/grantlee.hash b/package/grantlee/grantlee.hash
+index 7f02bb3..cdff778 100644
+--- a/package/grantlee/grantlee.hash
++++ b/package/grantlee/grantlee.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	191809bf4c9b7ef877af0fd29345061c2372edfb4506aa7d5df5c71a570fa0ac	grantlee-0.5.1.tar.gz
+-sha256	eaf22ba92e53b8eb5dd8bca045fe81b734d3445445ed9e0c1af2a0a7c375b161	grantlee-5.0.0.tar.gz
++sha256  ea2e402466c74bb533eee2c7252209ec61cd93a5d236fecd625b4a0eb13a1478    grantlee-5.1.0.tar.gz
+diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
+index a300106..f8d9f8d 100644
+--- a/package/grantlee/grantlee.mk
++++ b/package/grantlee/grantlee.mk
+@@ -3,21 +3,12 @@
+ # grantlee
+ #
+ ################################################################################
+-# qt4 support dropped after 0.5.1, so we use the older version for qt4
+-ifeq ($(BR2_PACKAGE_QT),y)
+-GRANTLEE_VERSION = 0.5.1
+-else ifeq ($(BR2_PACKAGE_QT5),y)
+-GRANTLEE_VERSION = 5.0.0
+-endif
++GRANTLEE_VERSION = 5.1.0
+ GRANTLEE_SITE = http://downloads.grantlee.org
+ GRANTLEE_INSTALL_STAGING = YES
+ GRANTLEE_LICENSE = LGPLv2.1+
+ GRANTLEE_LICENSE_FILES = COPYING.LIB
+ 
+-ifeq ($(BR2_PACKAGE_QT),y)
+-GRANTLEE_DEPENDENCIES = qt
+-else ifeq ($(BR2_PACKAGE_QT5),y)
+ GRANTLEE_DEPENDENCIES += qt5base qt5script
+-endif
+ 
+ $(eval $(cmake-package))
+-- 
+2.7.4
