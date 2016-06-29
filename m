@@ -1,148 +1,55 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 29 Jun 2016 12:05:37 +0100
-Subject: [Buildroot] [PATCH 8/8] Add qemu_mipsel_64r6_malta_defconfig
-In-Reply-To: <1467198337-47064-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1467198337-47064-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1467198337-47064-4-git-send-email-Vincent.Riera@imgtec.com>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Wed, 29 Jun 2016 20:02:47 +0800
+Subject: [Buildroot] [PATCH] package/quagga: Add systemd.service file
+In-Reply-To: <49651e9d-0a96-c7de-fb8b-1ec4e21324f8@mind.be>
+References: <1466874128-22828-1-git-send-email-nroach44@gmail.com>
+ <91c2c2b3-7715-2ab6-31ab-144aa346c54b@mind.be>
+ <76555fc3-8603-91d7-ad8f-ecdef822df16@gmail.com>
+ <49651e9d-0a96-c7de-fb8b-1ec4e21324f8@mind.be>
+Message-ID: <1a81eea6-95a9-7bc1-aee2-8780caecba8a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- board/qemu/mipsel-64r6-malta/linux-4.6.config      | 34 ++++++++++++++++++++++
- board/qemu/mipsel-64r6-malta/readme.txt            |  7 +++++
- ...oration-of-MSA-context-in-non-MSA-kernels.patch | 25 ++++++++++++++++
- configs/qemu_mipsel_64r6_malta_defconfig           | 32 ++++++++++++++++++++
- 4 files changed, 98 insertions(+)
- create mode 100644 board/qemu/mipsel-64r6-malta/linux-4.6.config
- create mode 100644 board/qemu/mipsel-64r6-malta/readme.txt
- create mode 100644 board/qemu/mipsel-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch
- create mode 100644 configs/qemu_mipsel_64r6_malta_defconfig
-
-diff --git a/board/qemu/mipsel-64r6-malta/linux-4.6.config b/board/qemu/mipsel-64r6-malta/linux-4.6.config
-new file mode 100644
-index 0000000..0ebfdbd
---- /dev/null
-+++ b/board/qemu/mipsel-64r6-malta/linux-4.6.config
-@@ -0,0 +1,34 @@
-+CONFIG_MIPS_MALTA=y
-+CONFIG_CPU_MIPS64_R6=y
-+CONFIG_64BIT=y
-+CONFIG_MIPS_MT_SMP=y
-+CONFIG_NR_CPUS=2
-+CONFIG_SYSVIPC=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_PCI=y
-+CONFIG_MIPS32_COMPAT=y
-+CONFIG_MIPS32_O32=y
-+CONFIG_MIPS32_N32=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IDE=y
-+CONFIG_BLK_DEV_IDECD=y
-+CONFIG_IDE_GENERIC=y
-+CONFIG_BLK_DEV_GENERIC=y
-+CONFIG_BLK_DEV_PIIX=y
-+CONFIG_NETDEVICES=y
-+CONFIG_PCNET32=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_FB=y
-+CONFIG_FB_CIRRUS=y
-+CONFIG_USB=y
-+CONFIG_USB_UHCI_HCD=y
-+CONFIG_EXT4_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-diff --git a/board/qemu/mipsel-64r6-malta/readme.txt b/board/qemu/mipsel-64r6-malta/readme.txt
-new file mode 100644
-index 0000000..3459a87
---- /dev/null
-+++ b/board/qemu/mipsel-64r6-malta/readme.txt
-@@ -0,0 +1,7 @@
-+Run the emulation with:
-+
-+ qemu-system-mips64el -M malta -cpu MIPS64R6-generic -kernel output/images/vmlinux -drive file=output/images/rootfs.ext2,format=raw -append "root=/dev/hda" -nographic
-+
-+The login prompt will appear in the terminal that started Qemu.
-+
-+Tested with QEMU 2.6.0
-diff --git a/board/qemu/mipsel-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch b/board/qemu/mipsel-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch
-new file mode 100644
-index 0000000..6741b7f
---- /dev/null
-+++ b/board/qemu/mipsel-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch
-@@ -0,0 +1,25 @@
-+diff --git a/arch/mips/kernel/signal.c b/arch/mips/kernel/signal.c
-+index bf792e2..fc7c1f0 100644
-+--- a/arch/mips/kernel/signal.c
-++++ b/arch/mips/kernel/signal.c
-+@@ -195,6 +195,9 @@ static int restore_msa_extcontext(void __user *buf, unsigned int size)
-+ 	unsigned int csr;
-+ 	int i, err;
-+ 
-++	if (!config_enabled(CONFIG_CPU_HAS_MSA))
-++		return SIGSYS;
-++
-+ 	if (size != sizeof(*msa))
-+ 		return -EINVAL;
-+ 
-+@@ -398,8 +401,8 @@ int protected_restore_fp_context(void __user *sc)
-+ 	}
-+ 
-+ fp_done:
-+-	if (used & USED_EXTCONTEXT)
-+-		err |= restore_extcontext(sc_to_extcontext(sc));
-++	if (!err && (used & USED_EXTCONTEXT))
-++		err = restore_extcontext(sc_to_extcontext(sc));
-+ 
-+ 	return err ?: sig;
-+ }
-diff --git a/configs/qemu_mipsel_64r6_malta_defconfig b/configs/qemu_mipsel_64r6_malta_defconfig
-new file mode 100644
-index 0000000..8ff1548
---- /dev/null
-+++ b/configs/qemu_mipsel_64r6_malta_defconfig
-@@ -0,0 +1,32 @@
-+# Architecture
-+BR2_mips64el=y
-+BR2_mips_64r6=y
-+BR2_MIPS_NABI64=y
-+
-+# System
-+BR2_SYSTEM_DHCP="eth0"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Linux headers same as kernel, a 4.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.1"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-64r6-malta/linux-4.6.config"
-+BR2_LINUX_KERNEL_VMLINUX=y
-+# kernel patch needed to compile with GCC 6.x
-+BR2_LINUX_KERNEL_PATCH="board/qemu/mipsel-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch"
-+
-+# Compiler
-+# linux >= 4.4 uses -mcompact-branches which is only available since gcc-6
-+BR2_GCC_VERSION_6_X=y
-+
-+# Serial port config
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--- 
-2.7.3
+On 29/06/16 17:53, Arnout Vandecappelle wrote:
+> (Mainly improving my systemd knowledge here :-)
+>
+> On 29-06-16 09:06, Nathaniel Roach wrote:
+>> On 27/06/16 05:09, Arnout Vandecappelle wrote:
+>>> On 25-06-16 19:02, Nathaniel Roach wrote:
+> [snip]
+>>>    However, since the Wants= is added for zebra, it would make sense to create the
+>>> zebra symlink, no?
+>> No, systemd will automatically start zebra when it's needed. It's not needed
+>> until one of the other daemons start (which systemd will start zebra beforehand
+>> if the daemon is local). If they are remote, the user can enable zebra themselves.
+>   So, if there is a Wants=quagga at zebra.service line, then systemd will look for
+> quagga at zebra.service in /usr/lib/systemd/services, and failing that it will
+> automatically try quagga at .service? Nice!
+Pretty much! 
+/etc/systemd/system/multi-user.target.wants/quagga at zebra.service is 
+installed on systemctl enable [...] and it's just a symlink to
+quagga at .service
+> [snip]
+>>>> +Wants=quagga at zebra.service
+>>>    I just realize now: this line should probably be removed when
+>>> BR2_PACKAGE_QUAGGA_ZEBRA is not set.
+>> Also true, however that's why I said Wants= and not Requires= so systemd handles
+>> the lack of zebra fine.
+>   So in case zebra doesn't exist, systemd will still try to execute the service
+> file, but the ExecStart command will fail because /usr/sbin/zebra doesn't exist,
+> right? But in that case, won't it retry every second (Restart=on-failure) and
+> spam the journal horribly?
+>
+>   Maybe there should be a ConditionFileIsExecutable in the [Unit] section?
+That was a good condition that I didn't think of. In that case the unit 
+will fail and restart until it hits the start limit. I've since added in 
+the Condition stanza and everything works as intended.
+>
+>
+>   Regards,
+>   Arnout
+>
+>
