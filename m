@@ -1,95 +1,171 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 29 Jun 2016 10:01:25 +0200
-Subject: [Buildroot] [PATCH 2/2] python-circus: new package
-In-Reply-To: <1467187285-13848-1-git-send-email-yegorslists@googlemail.com>
-References: <1467187285-13848-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1467187285-13848-2-git-send-email-yegorslists@googlemail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 29 Jun 2016 10:09:16 +0200
+Subject: [Buildroot] Buildroot package for psycopg module for Beaglebone
+	black
+In-Reply-To: <57737D1C.7050407@gmail.com>
+References: <57725E95.3040107@gmail.com>
+ <2c149f23-5762-32d8-f298-5f0af402c480@mind.be>
+ <57737D1C.7050407@gmail.com>
+Message-ID: <CAGm1_ktjXHNA8j-0VYOsn9qUhbr2xaeFMTh+RGr1qu6g2-fWow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Wed, Jun 29, 2016 at 9:47 AM, pborut123 <pborut123@gmail.com> wrote:
+> Hello Arnout,
+>
+> Thank you for your answer.
+> In the mean time, I've managed to solve problem by myself.
+>
+> message 'error: option --executable not recognized' was issued from
+> python setup.py install ...options...
+> One of options was --executable=/usr/bin/python that came from buildroot's
+> main python package makefile
+> pkg-python.mk, see here excerpt:
+>
+> PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
+>     --prefix=$(TARGET_DIR)/usr \
+>     --executable=/usr/bin/python \
+>     --single-version-externally-managed \
+>     --root=/
+>
+> I have removed line '--executable=/usr/bin/python' and package built
+> correctly.
+> I'm not deeply familiar with python setup system, but I guess that here must
+> be
+> some difference in installation of pure python modules and modules that use
+> cython, which is the case of psycopg2.
+> I have added several other python packages that were pure python ones
+> without problem and using original script.
+>
+> I have rebuilt whole system, having many python modules, with above change
+> without problems
+> I haven't commited that change back, so that I don't break anything else.
+> Since I've changed pkg-python.mk which is used by many python modules that I
+> didn't try, I haven't commited that change back, so that I don't break
+> anything else.
+>
+> I can do it of course.
+> Do you perhaps know, are here some rules on commits of this sort?
+>
+> Thank you and best regards,
+> Borut.
+>
+> On 29.6.2016 1:27, Arnout Vandecappelle wrote:
+>>
+>> On 28-06-16 13:25, pborut123 wrote:
+>>>
+>>> Hello,
+>>>
+>>> I'm new to this mailing list, quite new to buildroot, too.
+>>> I'm trying to build distribution for Beaglebone black with Python 3.5.1
+>>> and
+>>> postgresql 9.5.2.
+>>> I want to have also psycopg2 module that is not present in current
+>>> package list.
+>>> I've tried to make my own package but I'm not successful.
+>>>
+>>> Last error, I've received from build is at installation step:
+>>>>>>
+>>>>>> python-psycopg 2.6.1 Installing to target
+>>>
+>>> ...
+>>> error: option --executable not recognized
+>>
+>>   We're missing some context here: which command issued this error? It
+>> should be
+>> written a few lines above.
+>>
+>>> make: ***
+>>> [..buildroot/output/build/python-psycopg-2.6.1/.stamp_target_installed]
+>>> Error 1
+>>>
+>>> My question is if can anybody help me with this, pointing me on what I've
+>>> done
+>>> wrong.
+>>>
+>>> Here is my package code:
+>>>
+>>> PYTHON_PSYCOPG_VERSION = 2.6.1
+>>> PYTHON_PSYCOPG_SOURCE = psycopg2-$(PYTHON_PSYCOPG_VERSION).tar.gz
+>>> PYTHON_PSYCOPG_SITE = http://initd.org/psycopg/tarballs/PSYCOPG-2-6
+>>> PYTHON_PSYCOPG_LICENSE = GPLv2
+>>> PYTHON_PSYCOPG_LICENSE_FILES = LICENSE
+>>> PYTHON_PSYCOPG_SETUP_TYPE = setuptools
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                        |  1 +
- package/python-circus/Config.in          | 20 ++++++++++++++++++++
- package/python-circus/python-circus.hash |  4 ++++
- package/python-circus/python-circus.mk   | 14 ++++++++++++++
- 4 files changed, 39 insertions(+)
- create mode 100644 package/python-circus/Config.in
- create mode 100644 package/python-circus/python-circus.hash
- create mode 100644 package/python-circus/python-circus.mk
+psycopg needs distutils and not setuptools.
 
-diff --git a/package/Config.in b/package/Config.in
-index e5ddc3e..413ba26 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -647,6 +647,7 @@ menu "External python modules"
- 	source "package/python-characteristic/Config.in"
- 	source "package/python-cheetah/Config.in"
- 	source "package/python-cherrypy/Config.in"
-+	source "package/python-circus/Config.in"
- 	source "package/python-click/Config.in"
- 	source "package/python-coherence/Config.in"
- 	source "package/python-configobj/Config.in"
-diff --git a/package/python-circus/Config.in b/package/python-circus/Config.in
-new file mode 100644
-index 0000000..ba4da5c
---- /dev/null
-+++ b/package/python-circus/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_PYTHON_CIRCUS
-+	bool "python-circus"
-+	depends on BR2_USE_WCHAR # zeromq
-+	depends on BR2_INSTALL_LIBSTDCPP # zeromq
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-+	select BR2_PACKAGE_PYTHON_IOWAIT # runtime
-+	select BR2_PACKAGE_PYTHON_PSUTIL # runtime
-+	select BR2_PACKAGE_PYTHON_PYZMQ # runtime
-+	select BR2_PACKAGE_PYTHON_TORNADO # runtime
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	help
-+	  Circus is a program that will let you run and watch multiple
-+	  processes and sockets.
-+
-+	  https://circus.readthedocs.org/en/latest/
-+
-+comment "python-circus needs a toolchain w/ C++, wchar, threads"
-+	depends on BR2_PACKAGE_PYTHON
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
-+		BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/python-circus/python-circus.hash b/package/python-circus/python-circus.hash
-new file mode 100644
-index 0000000..01994f4
---- /dev/null
-+++ b/package/python-circus/python-circus.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/circus/json
-+md5	cddd4a8844907d8b6b402ca9c713d176  circus-0.13.0.tar.gz
-+# sha256 calculated by scanpypi
-+sha256	6201800a5fb05144b5e6c5ac9eb901b914305e8beaeb01f8edf54ab6ab1a295a  circus-0.13.0.tar.gz
-diff --git a/package/python-circus/python-circus.mk b/package/python-circus/python-circus.mk
-new file mode 100644
-index 0000000..9e5391e
---- /dev/null
-+++ b/package/python-circus/python-circus.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-circus
-+#
-+################################################################################
-+
-+PYTHON_CIRCUS_VERSION = 0.13.0
-+PYTHON_CIRCUS_SOURCE = circus-$(PYTHON_CIRCUS_VERSION).tar.gz
-+PYTHON_CIRCUS_SITE = https://pypi.python.org/packages/source/c/circus
-+PYTHON_CIRCUS_SETUP_TYPE = setuptools
-+PYTHON_CIRCUS_LICENSE = Apache-2.0
-+PYTHON_CIRCUS_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
--- 
-2.8.1
+You can automatically create recipes for PyPi packages. Just invoke
+
+./support/scripts/scanpypi psycopg2
+
+and then add psycong entry into package/Config.in and fix dependencies.
+
+See http://nightly.buildroot.org/manual.html#_infrastructure_for_python_packages
+and "17.8.3. Generating a python-package from a PyPI repository" for
+details.
+
+>>> PYTHON_PSYCOPG_BUILD_OPTS = build_ext --pg-config
+>>> $(STAGING_DIR)/usr/bin/pg_config build
+>>>
+>>   You will certainly need
+>>
+>> PYTHON_PSYCOPG_DEPENDENCIES = postgresql
+>>
+>>> define PYTHON_PSYCOPG_INSTALL_CUSTOM_PG_CONFIG
+>>>      $(INSTALL) -m 0755 -D package/python-psycopg/pg_config \
+>>>          $(STAGING_DIR)/usr/bin/pg_config
+>>
+>>   Eek? Why would you want to do this? You should use the pg_config
+>> provided by
+>> postgresql, otherwise things will probably go wrong.
+>>
+>>   Regards,
+>>   Arnout
+>>
+>>
+>>> endef
+>>> PYTHON_PSYCOPG_PRE_BUILD_HOOKS += PYTHON_PSYCOPG_INSTALL_CUSTOM_PG_CONFIG
+>>> $(eval $(python-package))
+>>>
+>>> and here is missing host pg_config file, I've inserted to setup.py:
+>>>
+>>> #!/bin/sh
+>>> # I've pointed to already cross-build posgresql base directory in build
+>>> prefix=buildroot/output/build/postgresql-9.5.2/src
+>>>
+>>> case "$1" in
+>>>    --includedir)
+>>>      echo "$prefix/include"
+>>>      ;;
+>>>    --libdir)
+>>>      echo "$prefix/lib"
+>>>      ;;
+>>>    --version)
+>>>        echo "PostgreSQL 9.5.2"
+>>>      ;;
+>>>
+>>>    *)
+>>>      echo "Usage: $0 {--includedir|--libdir}"
+>>> esac
+>>>
+>>> Thank you and best regards,
+>>> Borut.
+>>>
+>>>
+>>>
+>>>
+>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+>>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
