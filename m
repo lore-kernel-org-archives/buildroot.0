@@ -1,104 +1,71 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 29 Jun 2016 22:53:54 +0200
-Subject: [Buildroot] [PATCH v5] package/python-pillow: new package
-In-Reply-To: <CA+TH9Vnac3eFJQnoGMYz_dF-nFhAC_sF8fN-ZDm2e-v1Ht2TJg@mail.gmail.com>
-References: <1465850289-11760-1-git-send-email-angelo.compagnucci@gmail.com>
- <iund4dxdb3.ln2@ID-313208.user.individual.net>
- <CA+TH9Vnac3eFJQnoGMYz_dF-nFhAC_sF8fN-ZDm2e-v1Ht2TJg@mail.gmail.com>
-Message-ID: <CA+TH9Vn1u62ES8j39HvJV6qP3bv+ak-+i3tDRvtyNgk4sc-tkA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Jun 2016 23:05:17 +0200
+Subject: [Buildroot] [PATCH] Reiserfsprogs
+In-Reply-To: <F9C551623D2CBB4C9488801D14F864C6EE83277A@ex-mb1.corp.adtran.com>
+References: <F9C551623D2CBB4C9488801D14F864C6EE83116F@ex-mb1.corp.adtran.com>
+ <20160628181846.25cc7912@free-electrons.com>
+ <F9C551623D2CBB4C9488801D14F864C6EE831CFF@ex-mb1.corp.adtran.com>
+ <20160629120422.5d17355b@free-electrons.com>
+ <F9C551623D2CBB4C9488801D14F864C6EE83277A@ex-mb1.corp.adtran.com>
+Message-ID: <20160629230517.611d0821@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls
+Hello,
 
-2016-06-29 22:41 GMT+02:00 Angelo Compagnucci <angelo.compagnucci@gmail.com>:
-> Dear Bernd Kuhls
->
-> 2016-06-29 22:33 GMT+02:00 Bernd Kuhls <bernd.kuhls@t-online.de>:
->> Hi,
->>
->> like you I was surprised that this package is not yet part of buildroot,
->
-> Yes! Finally someone interested!
->
->> so let's get things moving ;) I need it because the OpenWeather addon for
->> Kodi needs it:
->>
->> File "//.kodi/addons/script.openweathermap.maps/default.py", line 4, in
->> <module>
->> from PIL import Image
->> ImportError: No module named PIL
->>
->> Am Mon, 13 Jun 2016 22:38:09 +0200 schrieb Angelo Compagnucci:
->>
->>> +From 3344eff32427f1d10f3ca82ca4344c501a1a2055 Mon Sep 17 00:00:00 2001
->>> +From: Angelo Compagnucci
->>> <angelo.compagnucci@gmail.com>
->>> +Date: Sun, 12 Jun 2016 12:06:59 +0200 +Subject: [PATCH] setup.py: add
->>> option to disable platform guessing +
->>> +When cross-compiling (ex on Buildroot) platform guessing is not needed
->>> +cause the environment is correctly built externally.
->>> +This patch adds an option to disable platform guessing on Linux.
->>> +---
->>
->> s-o-b missing.
->
-> Ops!
->
->> Also apparently you send a patch fixing cross-compilation upstream:
->> https://github.com/python-pillow/Pillow/pull/1861
->>
->> The patch you included here seems to be a smaller version of your
->> original patch which itself got extended by upstream:
->> https://github.com/python-pillow/Pillow/pull/1875
->>
->> Could you please check if the patch from PR 1875 could be included in
->> buildroot instead of the current patch? This will make bumping the
->> package easier if PR 1875 gets merged some time in the future.
->
-> The patch attached here is a backport of the original patch I
-> submitted. Unfortunately the patch applied on master branch cannot be
-> backported tout court into the previous release. When the new major
-> release will be out, I'll remove this patch.
->
->> Besides these cosmetical things the package compiles.
->>
->> Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->>
->> Compile-tested using these defconfigs:
->>
->> BR2_PACKAGE_PYTHON3=y
->> BR2_PACKAGE_PYTHON_PILLOW=y
->>
->> and
->>
->> BR2_PACKAGE_PYTHON=y
->> BR2_PACKAGE_PYTHON_PILLOW=y
->>
->> Both defconfigs were based on http://autobuild.buildroot.net/toolchains/
->> configs/br-x86-64-core2-full.config
+On Wed, 29 Jun 2016 18:20:08 +0000, ANDY KENNEDY wrote:
 
-Could you try version 6 and give your tested/acked by?
+> Yup, I should. However, with four kids, TKD, Cub Scouts, Boy Scouts,
+> Girl Scouts, etc, I cannot find the time for _anything_ (though, this
+> is not a complaint, just a reason).
+
+Ah, ah real life issues :-)
+
+> My company blocks SMTP north-bound traffic.  And, as you know,
+> LookOut! is HORRIBLE for plain text e-mails.  I just wanted to 
+> make sure that it wasn't missing tabs (as I manually have to put
+> those into the patch when I paste it into my e-mail since the
+> M$ clipboard "helps me" by replacing those EVIL tabs with more
+> friendly spaces).
+
+The time you lose fighting with those stupid tools most likely largely
+outweighs the time needed to set up once for all a working SMTP system.
+
+> Okay, I'll figure out how to construct that so that on -static
+> builds, it does the "right thing" and attempt to push it back
+> to Jeff.  I was hoping to side step that issue since the
+> LIBS=... didn't really hurt anything for dynamic builds as the
+> dynamic linker ignores most of those anyway.
+
+This was really just a preference. Mention that it's needed for static
+builds, because for dynamic builds, it wasn't needed.
+
+> Another question:  Having been dinged in the past for
+> resubmission errors, is the current proper way to construct
+> the resubmit:
+> 
+> ------------------------------------------------------------
+> Subject:  [PATCH V2] Reiserfsprogs
+
+No, this should be:
+
+[PATCH v2] reiserfsprogs: new package
+
+git format-patch automatically takes the first line of the commit log
+as the e-mail subject.
+
+> and should this be a reply to the original thread or
+> a new thread?
+
+A new thread.
 
 Thanks!
 
->>
->> Regards, Bernd
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
->
-> --
-> Profile: http://it.linkedin.com/in/compagnucciangelo
-
-
-
+Thomas
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
