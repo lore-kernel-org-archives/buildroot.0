@@ -1,70 +1,73 @@
 From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Wed, 29 Jun 2016 15:06:37 +1000
-Subject: [Buildroot] [PATCH v3 0/6] Makefile: Support merged and nested
-	defconfigs.
-Message-ID: <cover.1467176798.git.sam.bobroff@au1.ibm.com>
+Date: Wed, 29 Jun 2016 15:06:38 +1000
+Subject: [Buildroot] [PATCH v3 1/6] Add support for merged defconfigs
+In-Reply-To: <cover.1467176798.git.sam.bobroff@au1.ibm.com>
+References: <cover.1467176798.git.sam.bobroff@au1.ibm.com>
+Message-ID: <0fddd32d7ed356b943e1372df20a0d9948ab29ed.1467176798.git.sam.bobroff@au1.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+---
+v3:
 
-This is a combination and cleanup of the previous efforts by
-Sam Bobroff and Elizabeth Liner to introduce merged defconfigs
-and nested defconfig directories respectively.
+* Documentation moved to separate patch.
+* Fixed "make savedefconfig".
 
-Merged defconfigs allow us to create defconfig snippets for aspects
-that are common across multiple machines and create a combined defconfig
-from the snippets.  The support scripts for merged kernel defconfigs is reused.
+ Makefile | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-Nested defconfig directories allow us to organize the defconfig
-directory into sub-directories.  A likely use for this is to place
-defconfigs into architecture-specific subdirectories.
-
-
-Changes v2 -> v3:
-
-* Added missing Signed-off-bys.
-* Split documentation into separate patch.
-
-Patch 4/6: Makefile: Add nested config dirs to list-defconfigs
-
-* Removed unnecessary "/" ("wildcard" adds a trailing "/" to directories).
-
-
-Changes v1 -> v2:
-
-This is a complete rework of the config merging system, discarding the .merge
-files and instead using Makefile fragments included from the configuration
-directories that invoke a Make function. This allows much better error handling
-as well as a cleaner looking system (somewhat similar to the package .mk
-files).
-
-I've also added some documentation to explain what is supported and an example
-to show how it's used.  I haven't touched the documentation before and I'm not
-familiar with the formatting so I hope I've done it the right way and that it's
-useful (feedback would be great). "make manual-html" seems to work at least.
-
-
-Elizabeth Liner (1):
-  Makefile: Support nested config directories
-
-Patrick Williams (3):
-  Makefile: Generate %_defconfig recipes from macro.
-  Makefile: Add nested config dirs to list-defconfigs
-  Makefile: Add merged defconfigs to list-defconfigs.
-
-Sam Bobroff (2):
-  Add support for merged defconfigs
-  Add documentation for merged defconfigs
-
- Makefile                             | 58 +++++++++++++++++++++++++++++-----
- docs/manual/adding-board-support.txt |  3 ++
- docs/manual/appendix.txt             |  1 +
- docs/manual/merged-defconfigs.txt    | 60 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 114 insertions(+), 8 deletions(-)
- create mode 100644 docs/manual/merged-defconfigs.txt
-
+diff --git a/Makefile b/Makefile
+index 78b44c5..9f3fc92 100644
+--- a/Makefile
++++ b/Makefile
+@@ -858,6 +858,44 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 
+ .PHONY: defconfig savedefconfig
+ 
++# Find the path of a config file that may be either in TOPDIR or BR2_EXTERNAL.
++# Missing or duplicate matches must be checked for elsewhere.
++define FIND_CONFIG_FILE =
++$(foreach d,$(TOPDIR)/configs $(BR2_EXTERNAL)/configs,$(wildcard $(d)/$(1)))
++endef
++
++define CONFIG_FILE_LIST =
++$(foreach f,$1,$(call FIND_CONFIG_FILE,$f))
++endef
++
++# Check that each config file is found once and only once.
++define CHECK_CONFIG_FILE_LIST =
++$(foreach f,$(1),
++ifeq "$(words $(call FIND_CONFIG_FILE,$(f)))" "0"
++$$(error ERROR: Missing input file: $(f))
++else
++ifneq "$(words $(call FIND_CONFIG_FILE,$(f)))" "1"
++$$(error ERROR: Duplicate input file: $(f))
++endif
++endif
++)
++endef
++
++# To be called by configuration fragments (*.mk) to set up defconfigs built
++# by merge_config.sh, via the include that follows:
++define merge_config =
++$(call CHECK_CONFIG_FILE_LIST,$2 $3)
++$(1): $$(BUILD_DIR)/buildroot-config/conf $(call CONFIG_FILE_LIST,$2 $3) outputmakefile
++	@mkdir $$(CONFIG_DIR)/.merge_config
++	@$$(TOPDIR)/support/kconfig/merge_config.sh -m -O $$(CONFIG_DIR)/.merge_config \
++		$(call CONFIG_FILE_LIST,$2 $3)
++	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$$(CONFIG_DIR)/.merge_config/.config \
++		$$< --defconfig=$$(CONFIG_DIR)/.merge_config/.config $$(CONFIG_CONFIG_IN)
++	@rm -rf $$(CONFIG_DIR)/.merge_config
++endef
++
++$(foreach d,$(TOPDIR)/configs $(BR2_EXTERNAL)/configs,$(eval -include $(d)/*.mk))
++
+ ################################################################################
+ #
+ # Cleanup and misc junk
 -- 
 2.1.0
