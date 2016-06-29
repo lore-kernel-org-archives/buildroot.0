@@ -1,70 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Jun 2016 22:12:47 +0200
-Subject: [Buildroot] [git commit] toolchain: Bump ARC tools to
-	arc-2016.09-eng005
-Message-ID: <20160629201352.F089582162@busybox.osuosl.org>
+Date: Wed, 29 Jun 2016 22:09:51 +0200
+Subject: [Buildroot] [git commit] package/python: bump version to 2.7.12
+Message-ID: <20160629201352.B87C0802C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4520524ba055706236db9f00dd79f1b2e2e87fde
+commit: https://git.buildroot.net/buildroot/commit/?id=d779e82840e3c9d58d86957d412fa6098e2a7157
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With this commit we're starting a series of updates of ARC tools.
-Significantly rewritten arc-2016.03 tools introduced way too many
-problems highlighted by Buildroot autobuilder. Now in attempt to
-resolve as many issues as possible by the time final release of
-arc-2016.09 tools is cut we'll be executing arc-2016.09 series
-with engineering snapshots like this one.
+Rebased 011-remove-python-symlink.patch
 
-We decided to go this way instead of applying separate patches here
-and there because ongoing development introduces quite a lot of
-changes and separate patches are not practical in Buildroot.
-
-Moreover this will give us very clean visibility of number of
-issues we see (hopefully it will decrease over time).
-
-One of the important changes introduced in this engineering build
-is initial set of changes for proper support of PIE on ARC in terms
-of both building on host and running on ARC target. I expect some
-PIE-related build breakages to go away and new ones will be treated
-as the high-priority issues to be fixed ASAP.
-
-For now we only update Binutils and GCC while keeping GDB
-as it is of arc-2016.03 release because there're some issues
-we'd like to resolve before releasing it to wider audience.
-
-So again note this is one of the first engineering builds of
-arc-2016.09 series and it might have all kinds of breakages,
-please don't use it for production builds.
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: arc-buildroot at synopsys.com
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+[Peter: correct .hash file comment as pointed out by Baruch]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/binutils/Config.in.host                    |  2 +-
- ...ith-dynamic-relocs-not-being-generated-wi.patch | 34 ----------------------
- .../0300-ld-makefile.patch                         |  0
- .../0301-check-ldrunpath-length.patch              |  0
- .../0500-add-sysroot-fix-from-bug-3049.patch       |  0
- .../0600-poison-system-directories.patch           |  0
- ...t-build-failures-when-makeinfo-is-missing.patch |  0
- package/binutils/binutils.hash                     |  2 +-
- package/binutils/binutils.mk                       |  2 +-
- package/gcc/Config.in.host                         |  2 +-
- .../130-fix_build_with_gcc-6.patch                 |  0
- .../130-pr43538.patch                              |  0
- .../301-missing-execinfo_h.patch                   |  0
- .../305-libmudflap-susv3-legacy.patch              |  0
- .../842-PR60155.patch                              |  0
- .../850-libstdcxx-uclibc-c99.patch                 |  0
- .../851-PR-other-56780.patch                       |  0
- .../930-libgcc-disable-split-stack-nothreads.patch |  0
- package/gcc/gcc.hash                               |  2 +-
- 19 files changed, 5 insertions(+), 39 deletions(-)
+ package/python/011-remove-python-symlink.patch | 12 +++++++-----
+ package/python/python.hash                     |  6 +++---
+ package/python/python.mk                       |  2 +-
+ 3 files changed, 11 insertions(+), 9 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/python/011-remove-python-symlink.patch b/package/python/011-remove-python-symlink.patch
+index b0548c3..fed46f0 100644
+--- a/package/python/011-remove-python-symlink.patch
++++ b/package/python/011-remove-python-symlink.patch
+@@ -5,20 +5,22 @@ Buildroot needs to control to what python interpreter (python2 or python3) the
+ python symlink points to.
+ 
+ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(rebased against version 2.7.12)
+ 
+ Index: b/Makefile.pre.in
+ ===================================================================
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -890,17 +890,10 @@
+- #  $(PYTHON) -> python2 -> python$(VERSION))
+- # Also create equivalent chains for other installed files
+- bininstall:	altbininstall
++@@ -974,17 +974,11 @@
++ 		echo "Creating directory $(LIBPC)"; \
++ 		$(INSTALL) -d -m $(DIRMODE) $(DESTDIR)$(LIBPC); \
++ 	fi
+ -	-if test -f $(DESTDIR)$(BINDIR)/$(PYTHON) -o -h $(DESTDIR)$(BINDIR)/$(PYTHON); \
+ -	then rm -f $(DESTDIR)$(BINDIR)/$(PYTHON); \
+ -	else true; \
+ -	fi
+--	(cd $(DESTDIR)$(BINDIR); $(LN) -s python2$(EXE) $(PYTHON))
++ 	(cd $(DESTDIR)$(BINDIR); $(LN) -s python2$(EXE) $(PYTHON))
+  	-rm -f $(DESTDIR)$(BINDIR)/python2$(EXE)
+  	(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)$(EXE) python2$(EXE))
+  	-rm -f $(DESTDIR)$(BINDIR)/python2-config
+diff --git a/package/python/python.hash b/package/python/python.hash
+index d1cf1ba..b7d0036 100644
+--- a/package/python/python.hash
++++ b/package/python/python.hash
+@@ -1,4 +1,4 @@
+-# From https://www.python.org/downloads/release/python-2711/
+-md5	1dbcc848b4cd8399a8199d000f9f823c	Python-2.7.11.tar.xz
++# From https://www.python.org/downloads/release/python-2712/
++md5	57dffcee9cee8bb2ab5f82af1d8e9a69	Python-2.7.12.tar.xz
+ # Locally calculated
+-sha256	962b4c45af50124ea61f11a30deb4342fc0bc21126790fa1d7f6c79809413f46  Python-2.7.11.tar.xz
++sha256 d7837121dd5652a05fef807c361909d255d173280c4e1a4ded94d73d80a1f978  Python-2.7.12.tar.xz
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 913dc2c..6117a6d 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PYTHON_VERSION_MAJOR = 2.7
+-PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).11
++PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).12
+ PYTHON_SOURCE = Python-$(PYTHON_VERSION).tar.xz
+ PYTHON_SITE = http://python.org/ftp/python/$(PYTHON_VERSION)
+ PYTHON_LICENSE = Python software foundation license v2, others
