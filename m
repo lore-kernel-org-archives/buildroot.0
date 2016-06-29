@@ -1,11 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jun 2016 12:04:22 +0200
-Subject: [Buildroot] [PATCH] Reiserfsprogs
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C6EE831CFF@ex-mb1.corp.adtran.com>
-References: <F9C551623D2CBB4C9488801D14F864C6EE83116F@ex-mb1.corp.adtran.com>
- <20160628181846.25cc7912@free-electrons.com>
- <F9C551623D2CBB4C9488801D14F864C6EE831CFF@ex-mb1.corp.adtran.com>
-Message-ID: <20160629120422.5d17355b@free-electrons.com>
+Date: Wed, 29 Jun 2016 12:05:22 +0200
+Subject: [Buildroot] [PATCH 3/4] ajtcl: new package
+In-Reply-To: <14979_1467185231_5773784F_14979_8763_1_EEB3FED4859B6C488DDDEC4B2D3DE92B0FC9640E@OPEXCLILM23.corporate.adroot.infra.ftgroup>
+References: <20390_1467040718_577143CE_20390_5576_1_9bcd6009-a0eb-41a1-a31a-dd6fd4a34e7d@OPEXCLILM5F.corporate.adroot.infra.ftgroup>
+ <20160627184912.39f7d06c@free-electrons.com>
+ <713_1467047551_57715E7F_713_11955_1_EEB3FED4859B6C488DDDEC4B2D3DE92B0FC95F88@OPEXCLILM23.corporate.adroot.infra.ftgroup>
+ <20160628173457.1885f5cb@free-electrons.com>
+ <14979_1467185231_5773784F_14979_8763_1_EEB3FED4859B6C488DDDEC4B2D3DE92B0FC9640E@OPEXCLILM23.corporate.adroot.infra.ftgroup>
+Message-ID: <20160629120522.6ac3869a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +16,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 28 Jun 2016 19:49:22 +0000, ANDY KENNEDY wrote:
+On Wed, 29 Jun 2016 07:27:10 +0000, fabrice.fontaine at orange.com wrote:
 
-> What was the formatting problem?  I'm not using git to do the formatting,
-> but a side-by-side diff of the directories.  Also, doesn't git send-email
-> require direct access to SMTP from the workstation?  I don't have that.
-> 
-> And, if you want the absolute truth of the matter, I'm not a git user
-> and struggle with using it (so, pointers for the "right way" would
-> not be taken as patronizing -- I'm okay with spoon feeding).
+> It seems that most of the Orange email servers are blocked by zen.spamhaus.rbldns.
 
-It just didn't appear as a Git formatted patch. You should really spend
-a little bit of time learning git format-patch / send-email, you'll
-save a lot of time down the road if you use the proper workflow.
+Interesting. So an Internet Service Providers is not capable of having
+its own SMTP servers kept out of the spam blacklists ? :-)
 
-Yes, "git send-email" requires a SMTP server, but if you have a GMail
-account, then you have a SMTP server available.
+> So, it's nearly impossible to make a patch series because I have to
+> send my email 10 times to find a proxy which is not blocked. I will
+> try to find a solution.
 
-> > > +REISERFSPROGS_LICENSE_FILES = COPYING README
-> > > +REISERFSPROGS_CONF_ENV = LIBS='-lcom_err -luuid -lpthread -lrt'  
-> > 
-> > This line is not needed.  
-> 
-> What is the preferred way to make those LDFLAGS go through?
-> I have tried it multiple ways and could only make it work
-> using the LIBS=... for the configure env.  Without this
-> line, reiserfsprogs doesn't build.
-
-It build fine for me without it, as far as I remember.
-
-If it really doesn't build, then we would ideally prefer a patch (which
-gets submitted upstream).
-
-Thanks!
+Either fix your SMTP servers, or use some other SMTP servers, like the
+ones provided by GMail, if you have a GMail account.
 
 Thomas
 -- 
