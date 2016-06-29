@@ -1,265 +1,139 @@
-From: Philippe Reynes <philippe.reynes@sagemcom.com>
-Date: Wed, 29 Jun 2016 14:37:43 +0200
-Subject: [Buildroot] [PATCH v5] makedevs: add capability support
-Message-ID: <159a6e71-a8dd-40cb-a3da-1cf86cc422d7@EXDCVYARSGC003.eq1sgc.local>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 29 Jun 2016 14:49:30 +0200
+Subject: [Buildroot] [PATCH v2] nodm: new package
+In-Reply-To: <20160628231600.21907-1-ezequiel@vanguardiasur.com.ar> (Ezequiel
+ Garcia's message of "Tue, 28 Jun 2016 20:16:00 -0300")
+References: <1466487119-7267-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <20160628231600.21907-1-ezequiel@vanguardiasur.com.ar>
+Message-ID: <8760ssi2hx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the support of capability to makedevs as extended attribute.
-Now, it's possible to add a  line "|xattr <capability>" after a
-file description to also add a capability to this file. It's
-possible to add severals capabilities with severals lines.
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
 
-Signed-off-by: Philippe Reynes <philippe.reynes@sagemcom.com>
----
-Changelog:
-v5:
-- remove footer in the mail sent to the ml
-v4:
-- use use bb_perror_msg_and_die in makedevs code
-- fix typo in makedevs documentation
-v3:
-- update makedevs code to manage more error case
-- use exit instead of return in makedevs
-v2:
-- add an option to enable (or not) xattr support in makedevs
-- update makedevs code to handle |xattr on the first line
-- add documentation about xattr support in makedevs
+ > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+ > --
+ > Changes from v1:
+ >   * Add missing select BR2_PACKAGE_XLIB_LIBX11
+ >   * Add upstream URL to Config.in
+ >   * Use upstream instead of debian to get the sources.
+ >   * Get rid of deprecated NODM_XINIT
+ >   * Use /etc/default/nodm.conf
+ >   * Cosmetic changes
 
- docs/manual/makedev-syntax.txt |   29 ++++++++++++++++
- package/makedevs/makedevs.c    |   71 ++++++++++++++++++++++++++++++++++++++--
- package/makedevs/makedevs.mk   |   10 ++++--
- system/Config.in               |    5 +++
- 4 files changed, 111 insertions(+), 4 deletions(-)
+ >  package/Config.in      |  1 +
+ >  package/nodm/Config.in | 15 +++++++++++++++
+ >  package/nodm/S90nodm   | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ >  package/nodm/nodm.hash |  2 ++
+ >  package/nodm/nodm.mk   | 28 ++++++++++++++++++++++++++++
+ >  package/nodm/nodm.pam  | 14 ++++++++++++++
+ >  6 files changed, 109 insertions(+)
+ >  create mode 100644 package/nodm/Config.in
+ >  create mode 100644 package/nodm/S90nodm
+ >  create mode 100644 package/nodm/nodm.hash
+ >  create mode 100644 package/nodm/nodm.mk
+ >  create mode 100644 package/nodm/nodm.pam
 
-diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
-index e4dffc9..9d73b8b 100644
---- a/docs/manual/makedev-syntax.txt
-+++ b/docs/manual/makedev-syntax.txt
-@@ -71,3 +71,32 @@ and then for device files corresponding to the partitions of
- /dev/hda b 640 root root 3 1 1 1 15
- ----
- 
-+The tool makedevs supports extended attributes for a file.
-+This is done by adding a line starting with +|xattr+ after
-+the line describing the file. Right now, only capability
-+is supported as extended attribute.
-+
-+|=====================
-+| \|xattr | capability
-+|=====================
-+
-+- +|xattr+ is a "flag" that indicate an extended attribute
-+- +capability+ is a capability to add to the previous file
-+
-+If you want to add the capability cap_sys_admin to the binary foo,
-+you will write :
-+
-+----
-+/usr/bin/foo f 755 root root - - - - -
-+|xattr cap_sys_admin+eip
-+----
-+
-+You can add several capabilities to a file by using several +|xattr+ lines.
-+If you want to add the capability cap_sys_admin and cap_net_admin to the
-+binary foo, you will write :
-+
-+----
-+/usr/bin/foo f 755 root root - - - - -
-+|xattr cap_sys_admin+eip
-+|xattr cap_net_admin+eip
-+----
-diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
-index e5ef164..1a2c837 100644
---- a/package/makedevs/makedevs.c
-+++ b/package/makedevs/makedevs.c
-@@ -35,6 +35,9 @@
- #include <sys/sysmacros.h>     /* major() and minor() */
- #endif
- #include <ftw.h>
-+#ifdef EXTENDED_ATTRIBUTES
-+#include <sys/capability.h>
-+#endif /* EXTENDED_ATTRIBUTES */
- 
- const char *bb_applet_name;
- uid_t recursive_uid;
-@@ -349,6 +352,49 @@ char *concat_path_file(const char *path, const char *filename)
- 	return outbuf;
- }
- 
-+#ifdef EXTENDED_ATTRIBUTES
-+int bb_set_xattr(const char *fpath, const char *xattr)
-+{
-+	cap_t cap, cap_file, cap_new;
-+	char *cap_file_text, *cap_new_text;
-+	ssize_t length;
-+
-+	cap = cap_from_text(xattr);
-+	if (cap == NULL)
-+		bb_perror_msg_and_die("cap_from_text failed for %s", xattr);
-+
-+	cap_file = cap_get_file(fpath);
-+	if (cap_file == NULL) {
-+		/* if no capability was set before, we initialize cap_file */
-+		if (errno != ENODATA)
-+			bb_perror_msg_and_die("cap_get_file failed on %s", fpath);
-+
-+		cap_file = cap_init();
-+		if (!cap_file)
-+			bb_perror_msg_and_die("cap_init failed");
-+	}
-+
-+	if ((cap_file_text = cap_to_text(cap_file, &length)) == NULL)
-+		bb_perror_msg_and_die("cap_to_name failed on %s", fpath);
-+
-+	bb_xasprintf(&cap_new_text, "%s %s", cap_file_text, xattr);
-+
-+	if ((cap_new = cap_from_text(cap_new_text)) == NULL)
-+		bb_perror_msg_and_die("cap_from_text failed on %s", cap_new_text);
-+
-+	if (cap_set_file(fpath, cap_new) == -1)
-+		bb_perror_msg_and_die("cap_set_file failed for %s (xattr = %s)", fpath, xattr);
-+
-+	cap_free(cap);
-+	cap_free(cap_file);
-+	cap_free(cap_file_text);
-+	cap_free(cap_new);
-+	cap_free(cap_new_text);
-+
-+	return 0;
-+}
-+#endif /* EXTENDED_ATTRIBUTES */
-+
- void bb_show_usage(void)
- {
- 	fprintf(stderr, "%s: [-d device_table] rootdir\n\n", bb_applet_name);
-@@ -413,6 +459,7 @@ int main(int argc, char **argv)
- 	int opt;
- 	FILE *table = stdin;
- 	char *rootdir = NULL;
-+	char *full_name = NULL;
- 	char *line = NULL;
- 	int linenum = 0;
- 	int ret = EXIT_SUCCESS;
-@@ -454,15 +501,29 @@ int main(int argc, char **argv)
- 		unsigned int count = 0;
- 		unsigned int increment = 0;
- 		unsigned int start = 0;
-+		char xattr[255];
- 		char name[4096];
- 		char user[41];
- 		char group[41];
--		char *full_name;
- 		uid_t uid;
- 		gid_t gid;
- 
- 		linenum++;
- 
-+		if (1 == sscanf(line, "|xattr %254s", xattr))
-+		{
-+#ifdef EXTENDED_ATTRIBUTES
-+			if (!full_name)
-+				bb_error_msg_and_die("line %d should be after a file\n", linenum);
-+
-+			if (bb_set_xattr(full_name, xattr) < 0)
-+				bb_error_msg_and_die("can't set cap %s on file %s\n", xattr, full_name);
-+#else
-+			bb_error_msg_and_die("line %d not supported: '%s'\n", linenum, line);
-+#endif /* EXTENDED_ATTRIBUTES */
-+			continue;
-+		}
-+
- 		if ((2 > sscanf(line, "%4095s %c %o %40s %40s %u %u %u %u %u", name,
- 						&type, &mode, user, group, &major,
- 						&minor, &start, &increment, &count)) ||
-@@ -487,6 +548,13 @@ int main(int argc, char **argv)
- 		} else {
- 			uid = getuid();
- 		}
-+
-+		/*
-+		 * free previous full name
-+		 * we don't de-allocate full_name at the end of the parsing,
-+		 * because we may need it if the next line is an xattr.
-+		 */
-+		free(full_name);
- 		full_name = concat_path_file(rootdir, name);
- 
- 		if (type == 'd') {
-@@ -585,7 +653,6 @@ int main(int argc, char **argv)
- 		}
- loop:
- 		free(line);
--		free(full_name);
- 	}
- 	fclose(table);
- 
-diff --git a/package/makedevs/makedevs.mk b/package/makedevs/makedevs.mk
-index fa8e753..b2efda9 100644
---- a/package/makedevs/makedevs.mk
-+++ b/package/makedevs/makedevs.mk
-@@ -11,6 +11,12 @@ HOST_MAKEDEVS_SOURCE =
- MAKEDEVS_VERSION = buildroot-$(BR2_VERSION)
- MAKEDEVS_LICENSE = GPLv2
- 
-+ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
-+HOST_MAKEDEVS_DEPENDENCIES += host-libcap
-+HOST_MAKEDEVS_CFLAGS = -DEXTENDED_ATTRIBUTES
-+HOST_MAKEDEVS_LDFLAGS = -lcap
-+endif
-+
- define MAKEDEVS_BUILD_CMDS
- 	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
- 		package/makedevs/makedevs.c -o $(@D)/makedevs
-@@ -21,8 +27,8 @@ define MAKEDEVS_INSTALL_TARGET_CMDS
- endef
- 
- define HOST_MAKEDEVS_BUILD_CMDS
--	$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
--		package/makedevs/makedevs.c -o $(@D)/makedevs
-+	$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) $(HOST_MAKEDEVS_CFLAGS) \
-+		package/makedevs/makedevs.c -o $(@D)/makedevs $(HOST_MAKEDEVS_LDFLAGS)
- endef
- 
- define HOST_MAKEDEVS_INSTALL_CMDS
-diff --git a/system/Config.in b/system/Config.in
-index 3018b0a..caa8d4b 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -162,6 +162,11 @@ config BR2_ROOTFS_STATIC_DEVICE_TABLE
- 	  See package/makedevs/README for details on the usage and
- 	  syntax of these files.
- 
-+config BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
-+	bool "device table supports extended attributes"
-+	help
-+	  Add the support of extended attributes to device table
-+
- choice
- 	prompt "Root FS skeleton"
- 
+ > diff --git a/package/Config.in b/package/Config.in
+ > index a2a02a8c5e35..1d28efff7f52 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -307,6 +307,7 @@ comment "X applications"
+ >  	source "package/gtkperf/Config.in"
+ >  	source "package/leafpad/Config.in"
+ >  	source "package/midori/Config.in"
+ > +	source "package/nodm/Config.in"
+ >  	source "package/pcmanfm/Config.in"
+ >  	source "package/qt-webkit-kiosk/Config.in"
+ >  	source "package/rdesktop/Config.in"
+ > diff --git a/package/nodm/Config.in b/package/nodm/Config.in
+ > new file mode 100644
+ > index 000000000000..3e71f2dd603d
+ > --- /dev/null
+ > +++ b/package/nodm/Config.in
+ > @@ -0,0 +1,15 @@
+ > +config BR2_PACKAGE_NODM
+ > +	bool "nodm"
+ > +	depends on BR2_PACKAGE_XORG7
+ > +	select BR2_PACKAGE_XLIB_LIBX11
+ > +	select BR2_PACKAGE_LINUX_PAM
+
+You forgot to propagate the dependencies of linux-pam and the comment
+when not available.
+
+There is also an #include <wordexp.h>, and our uClibc config doesn't
+support that so it also needs to be disabled for uClibc.
+
+
+ > +	help
+ > +	  nodm is a minimal display manager that simply logs in
+ > +	  as a given user and starts an X session, without asking
+ > +	  for username or password.
+ > +
+ > +	  For those cases where automatic login is needed (and
+ > +	  does not imply a security issue), nodm is simple to setup,
+ > +	  lightweight, and it should do exactly the right thing.
+ > +
+ > +	  https://github.com/spanezz/nodm/
+ > diff --git a/package/nodm/S90nodm b/package/nodm/S90nodm
+ > new file mode 100644
+ > index 000000000000..a546b3e5d3cf
+ > --- /dev/null
+ > +++ b/package/nodm/S90nodm
+ > @@ -0,0 +1,49 @@
+ > +#!/bin/sh
+ > +#
+ > +# Starts nodm
+ > +#
+ > +
+ > +NODM_FIRST_VT=7
+ > +NODM_XSESSION=/etc/X11/Xsession
+ > +NODM_OPTIONS=
+ > +NODM_X_OPTIONS="-nolisten tcp"
+ > +NODM_USER=root
+ > +NODM_MIN_SESSION_TIME=60
+ > +NODM_X_TIMEOUT=300
+ > +
+ > +[ -r /etc/default/nodm.conf ] && . /etc/default/nodm.conf
+
+The other /etc/default files don't use the .conf suffix, so I've removed
+it here as well.
+
+> +# locally calculated
+ > +sha256  840939d27d3d9b02ad09e1cffce24729bcdeee6cea6b3f0037d8ae76b49feecd  0.12-1.tar.gz
+ > diff --git a/package/nodm/nodm.mk b/package/nodm/nodm.mk
+ > new file mode 100644
+ > index 000000000000..246c73e104a8
+ > --- /dev/null
+ > +++ b/package/nodm/nodm.mk
+ > @@ -0,0 +1,28 @@
+ > +################################################################################
+ > +#
+ > +# nodm
+ > +#
+ > +################################################################################
+ > +
+ > +NODM_VERSION = 0.12
+ > +NODM_SITE = $(call github,spanezz,nodm,debian)
+ > +NODM_SOURCE = $(NODM_VERSION)-1.tar.gz
+
+That is not how I suggested on IRC, so I've changed it to:
+
+NODM_VERSION = 0.12-1
+NODM_SITE = $(call github,spanezz,nodm,debian/$(NODM_VERSION))
+(and no _SOURCE)
+
+That way we don't end up with an anonymous 0.12-1.tar.gz in the
+downloads dir / sources mirror.
+
+When building it is hardcoded to use help2man to generate a man page,
+which isn't good (people might not have help2man, and it doesn't work
+when cross compiling), so I've added a post-patch hook to disable it.
+
+Committed with these fixes, thanks.
+
 -- 
-1.7.9.5
-
-
-" Ce courriel et les documents qui lui sont joints peuvent contenir des
-informations confidentielles ou ayant un caract?re priv?. 
-S'ils ne vous sont pas destin?s nous vous signalons qu'il est strictement interdit de les
-divulguer, de les reproduire ou d'en utiliser de quelque mani?re que ce
-soit le contenu. Si ce message vous a ?t? transmis par erreur, merci d'en
-informer l'exp?diteur et de supprimer imm?diatement de votre syst?me
-informatique ce courriel ainsi que tous les documents qui y sont attach?s"
-
-                               ******
-
-" This e-mail and any attached documents may contain confidential or
-proprietary information. If you are not the intended recipient, you are
-notified that any dissemination, copying of this e-mail and any attachments
-thereto or use of their contents by any means whatsoever is strictly
-prohibited. If you have received this e-mail in error, please advise the
-sender immediately and delete this e-mail and all attached documents
-from your computer system."
-#
+Bye, Peter Korsgaard
