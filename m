@@ -1,71 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 29 Jun 2016 22:34:39 +0200
-Subject: [Buildroot] [PATCH v6 3/6] checkpolicy: bump to version 2.5
-In-Reply-To: <1466980753-667-4-git-send-email-Aduskett@gmail.com>
-References: <1466980753-667-1-git-send-email-Aduskett@gmail.com>
- <1466980753-667-4-git-send-email-Aduskett@gmail.com>
-Message-ID: <20160629203439.GF3728@free.fr>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 29 Jun 2016 22:41:17 +0200
+Subject: [Buildroot] [PATCH v5] package/python-pillow: new package
+In-Reply-To: <iund4dxdb3.ln2@ID-313208.user.individual.net>
+References: <1465850289-11760-1-git-send-email-angelo.compagnucci@gmail.com>
+ <iund4dxdb3.ln2@ID-313208.user.individual.net>
+Message-ID: <CA+TH9Vnac3eFJQnoGMYz_dF-nFhAC_sF8fN-ZDm2e-v1Ht2TJg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Dear Bernd Kuhls
 
-On 2016-06-26 18:39 -0400, Adam Duskett spake thusly:
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+2016-06-29 22:33 GMT+02:00 Bernd Kuhls <bernd.kuhls@t-online.de>:
+> Hi,
+>
+> like you I was surprised that this package is not yet part of buildroot,
 
-Hash successfulyl checked OK here.
+Yes! Finally someone interested!
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> so let's get things moving ;) I need it because the OpenWeather addon for
+> Kodi needs it:
+>
+> File "//.kodi/addons/script.openweathermap.maps/default.py", line 4, in
+> <module>
+> from PIL import Image
+> ImportError: No module named PIL
+>
+> Am Mon, 13 Jun 2016 22:38:09 +0200 schrieb Angelo Compagnucci:
+>
+>> +From 3344eff32427f1d10f3ca82ca4344c501a1a2055 Mon Sep 17 00:00:00 2001
+>> +From: Angelo Compagnucci
+>> <angelo.compagnucci@gmail.com>
+>> +Date: Sun, 12 Jun 2016 12:06:59 +0200 +Subject: [PATCH] setup.py: add
+>> option to disable platform guessing +
+>> +When cross-compiling (ex on Buildroot) platform guessing is not needed
+>> +cause the environment is correctly built externally.
+>> +This patch adds an option to disable platform guessing on Linux.
+>> +---
+>
+> s-o-b missing.
 
-Regards,
-Yann E. MORIN.
+Ops!
 
-> ---
-> Changes v1 - v6:
->  - Patch series version bump.
-> 
->  package/checkpolicy/checkpolicy.hash | 2 +-
->  package/checkpolicy/checkpolicy.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/checkpolicy/checkpolicy.hash b/package/checkpolicy/checkpolicy.hash
-> index 32b5ff6..bc5199c 100644
-> --- a/package/checkpolicy/checkpolicy.hash
-> +++ b/package/checkpolicy/checkpolicy.hash
-> @@ -1,2 +1,2 @@
->  # https://github.com/SELinuxProject/selinux/wiki/Releases
-> -sha256 e6a0ac539b74859b4262b317eb90d9914deb15e7aa509659f47724d50fe2ecc6  checkpolicy-2.1.12.tar.gz
-> +sha256 33af9f3eb19135a7e6536ecd3fbb9686323000016cd51eb88346346ed7546001  checkpolicy-2.5.tar.gz
-> diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
-> index 4b7b2f3..f1b76d0 100644
-> --- a/package/checkpolicy/checkpolicy.mk
-> +++ b/package/checkpolicy/checkpolicy.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -CHECKPOLICY_VERSION = 2.1.12
-> -CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-> +CHECKPOLICY_VERSION = 2.5
-> +CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
->  CHECKPOLICY_LICENSE = GPLv2
->  CHECKPOLICY_LICENSE_FILES = COPYING
->  
-> -- 
-> 2.7.4
-> 
+> Also apparently you send a patch fixing cross-compilation upstream:
+> https://github.com/python-pillow/Pillow/pull/1861
+>
+> The patch you included here seems to be a smaller version of your
+> original patch which itself got extended by upstream:
+> https://github.com/python-pillow/Pillow/pull/1875
+>
+> Could you please check if the patch from PR 1875 could be included in
+> buildroot instead of the current patch? This will make bumping the
+> package easier if PR 1875 gets merged some time in the future.
+
+The patch attached here is a backport of the original patch I
+submitted. Unfortunately the patch applied on master branch cannot be
+backported tout court into the previous release. When the new major
+release will be out, I'll remove this patch.
+
+> Besides these cosmetical things the package compiles.
+>
+> Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>
+> Compile-tested using these defconfigs:
+>
+> BR2_PACKAGE_PYTHON3=y
+> BR2_PACKAGE_PYTHON_PILLOW=y
+>
+> and
+>
+> BR2_PACKAGE_PYTHON=y
+> BR2_PACKAGE_PYTHON_PILLOW=y
+>
+> Both defconfigs were based on http://autobuild.buildroot.net/toolchains/
+> configs/br-x86-64-core2-full.config
+>
+> Regards, Bernd
+>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
 
+
+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Profile: http://it.linkedin.com/in/compagnucciangelo
