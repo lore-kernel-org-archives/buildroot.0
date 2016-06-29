@@ -1,45 +1,77 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 29 Jun 2016 20:48:32 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python3: bump to version 3.5.2
-In-Reply-To: <1467226112-17465-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1467226112-17465-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1467226112-17465-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 29 Jun 2016 20:48:31 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python: bump version to 2.7.12
+Message-ID: <1467226112-17465-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Rebased 011-remove-python-symlink.patch
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python/011-remove-python-symlink.patch | 12 +++++++-----
+ package/python/python.hash                     |  4 ++--
+ package/python/python.mk                       |  2 +-
+ 3 files changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 2894003..f6f70a2 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
+diff --git a/package/python/011-remove-python-symlink.patch b/package/python/011-remove-python-symlink.patch
+index b0548c3..fed46f0 100644
+--- a/package/python/011-remove-python-symlink.patch
++++ b/package/python/011-remove-python-symlink.patch
+@@ -5,20 +5,22 @@ Buildroot needs to control to what python interpreter (python2 or python3) the
+ python symlink points to.
+ 
+ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(rebased against version 2.7.12)
+ 
+ Index: b/Makefile.pre.in
+ ===================================================================
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -890,17 +890,10 @@
+- #  $(PYTHON) -> python2 -> python$(VERSION))
+- # Also create equivalent chains for other installed files
+- bininstall:	altbininstall
++@@ -974,17 +974,11 @@
++ 		echo "Creating directory $(LIBPC)"; \
++ 		$(INSTALL) -d -m $(DIRMODE) $(DESTDIR)$(LIBPC); \
++ 	fi
+ -	-if test -f $(DESTDIR)$(BINDIR)/$(PYTHON) -o -h $(DESTDIR)$(BINDIR)/$(PYTHON); \
+ -	then rm -f $(DESTDIR)$(BINDIR)/$(PYTHON); \
+ -	else true; \
+ -	fi
+--	(cd $(DESTDIR)$(BINDIR); $(LN) -s python2$(EXE) $(PYTHON))
++ 	(cd $(DESTDIR)$(BINDIR); $(LN) -s python2$(EXE) $(PYTHON))
+  	-rm -f $(DESTDIR)$(BINDIR)/python2$(EXE)
+  	(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)$(EXE) python2$(EXE))
+  	-rm -f $(DESTDIR)$(BINDIR)/python2-config
+diff --git a/package/python/python.hash b/package/python/python.hash
+index d1cf1ba..b1d4061 100644
+--- a/package/python/python.hash
++++ b/package/python/python.hash
 @@ -1,4 +1,4 @@
--# From https://www.python.org/downloads/release/python-351/
--md5 e9ea6f2623fffcdd871b7b19113fde80 Python-3.5.1.tar.xz
-+# From https://www.python.org/downloads/release/python-352/
-+md5 8906efbacfcdc7c3c9198aeefafd159e Python-3.5.2.tar.xz
- # Locally computed
--sha256 c6d57c0c366d9060ab6c0cdf889ebf3d92711d466cc0119c441dbf2746f725c9 Python-3.5.1.tar.xz
-+sha256 0010f56100b9b74259ebcd5d4b295a32324b58b517403a10d1a2aa7cb22bca40 Python-3.5.2.tar.xz
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 8459b11..f33b337 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
+ # From https://www.python.org/downloads/release/python-2711/
+-md5	1dbcc848b4cd8399a8199d000f9f823c	Python-2.7.11.tar.xz
++md5	57dffcee9cee8bb2ab5f82af1d8e9a69	Python-2.7.12.tar.xz
+ # Locally calculated
+-sha256	962b4c45af50124ea61f11a30deb4342fc0bc21126790fa1d7f6c79809413f46  Python-2.7.11.tar.xz
++sha256 d7837121dd5652a05fef807c361909d255d173280c4e1a4ded94d73d80a1f978  Python-2.7.12.tar.xz
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 913dc2c..6117a6d 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- PYTHON3_VERSION_MAJOR = 3.5
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).1
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).2
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = http://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python software foundation license v2, others
+ PYTHON_VERSION_MAJOR = 2.7
+-PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).11
++PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).12
+ PYTHON_SOURCE = Python-$(PYTHON_VERSION).tar.xz
+ PYTHON_SITE = http://python.org/ftp/python/$(PYTHON_VERSION)
+ PYTHON_LICENSE = Python software foundation license v2, others
 -- 
 2.8.1
