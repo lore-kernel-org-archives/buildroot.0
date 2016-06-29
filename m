@@ -1,81 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Jun 2016 22:09:51 +0200
-Subject: [Buildroot] [git commit] package/python: bump version to 2.7.12
-Message-ID: <20160629201352.B87C0802C9@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 29 Jun 2016 22:32:52 +0200
+Subject: [Buildroot] [PATCH v6 2/6] libsemanage: bump to version 2.5
+In-Reply-To: <1466980753-667-3-git-send-email-Aduskett@gmail.com>
+References: <1466980753-667-1-git-send-email-Aduskett@gmail.com>
+ <1466980753-667-3-git-send-email-Aduskett@gmail.com>
+Message-ID: <20160629203252.GE3728@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d779e82840e3c9d58d86957d412fa6098e2a7157
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Adam, All,
 
-Rebased 011-remove-python-symlink.patch
+On 2016-06-26 18:39 -0400, Adam Duskett spake thusly:
+> The 0001-execption-lib-path-fix.patch is also no longer needed, as the
+> new version of libsemanage includes the fix provided by the patch.
+> As such, the patch was removed, and 0002 was renamed to 0001.
+> 
+> Audit was added as a dependency as the new version of libsemanage
+> will fail to compile searching for audit.h
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+[--SNIP--]
+> diff --git a/package/libsemanage/0001-workaround-blackfin-issue.patch b/package/libsemanage/0001-workaround-blackfin-issue.patch
+> new file mode 100644
+> index 0000000..7ce9606
+> --- /dev/null
+> +++ b/package/libsemanage/0001-workaround-blackfin-issue.patch
+[--SNIP--]
+> diff --git a/package/libsemanage/0002-workaround-blackfin-issue.patch b/package/libsemanage/0002-workaround-blackfin-issue.patch
+> deleted file mode 100644
+> index 5d00c69..0000000
+> --- a/package/libsemanage/0002-workaround-blackfin-issue.patch
+> +++ /dev/null
+[--SNIP--]
 
-[Peter: correct .hash file comment as pointed out by Baruch]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python/011-remove-python-symlink.patch | 12 +++++++-----
- package/python/python.hash                     |  6 +++---
- package/python/python.mk                       |  2 +-
- 3 files changed, 11 insertions(+), 9 deletions(-)
+So 0002 was renamed to 0001. Next time, please use the -M and -C options
+so that git detects renames and copies. This makes it easier to review.
 
-diff --git a/package/python/011-remove-python-symlink.patch b/package/python/011-remove-python-symlink.patch
-index b0548c3..fed46f0 100644
---- a/package/python/011-remove-python-symlink.patch
-+++ b/package/python/011-remove-python-symlink.patch
-@@ -5,20 +5,22 @@ Buildroot needs to control to what python interpreter (python2 or python3) the
- python symlink points to.
- 
- Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+(rebased against version 2.7.12)
- 
- Index: b/Makefile.pre.in
- ===================================================================
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -890,17 +890,10 @@
-- #  $(PYTHON) -> python2 -> python$(VERSION))
-- # Also create equivalent chains for other installed files
-- bininstall:	altbininstall
-+@@ -974,17 +974,11 @@
-+ 		echo "Creating directory $(LIBPC)"; \
-+ 		$(INSTALL) -d -m $(DIRMODE) $(DESTDIR)$(LIBPC); \
-+ 	fi
- -	-if test -f $(DESTDIR)$(BINDIR)/$(PYTHON) -o -h $(DESTDIR)$(BINDIR)/$(PYTHON); \
- -	then rm -f $(DESTDIR)$(BINDIR)/$(PYTHON); \
- -	else true; \
- -	fi
---	(cd $(DESTDIR)$(BINDIR); $(LN) -s python2$(EXE) $(PYTHON))
-+ 	(cd $(DESTDIR)$(BINDIR); $(LN) -s python2$(EXE) $(PYTHON))
-  	-rm -f $(DESTDIR)$(BINDIR)/python2$(EXE)
-  	(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)$(EXE) python2$(EXE))
-  	-rm -f $(DESTDIR)$(BINDIR)/python2-config
-diff --git a/package/python/python.hash b/package/python/python.hash
-index d1cf1ba..b7d0036 100644
---- a/package/python/python.hash
-+++ b/package/python/python.hash
-@@ -1,4 +1,4 @@
--# From https://www.python.org/downloads/release/python-2711/
--md5	1dbcc848b4cd8399a8199d000f9f823c	Python-2.7.11.tar.xz
-+# From https://www.python.org/downloads/release/python-2712/
-+md5	57dffcee9cee8bb2ab5f82af1d8e9a69	Python-2.7.12.tar.xz
- # Locally calculated
--sha256	962b4c45af50124ea61f11a30deb4342fc0bc21126790fa1d7f6c79809413f46  Python-2.7.11.tar.xz
-+sha256 d7837121dd5652a05fef807c361909d255d173280c4e1a4ded94d73d80a1f978  Python-2.7.12.tar.xz
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 913dc2c..6117a6d 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PYTHON_VERSION_MAJOR = 2.7
--PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).11
-+PYTHON_VERSION = $(PYTHON_VERSION_MAJOR).12
- PYTHON_SOURCE = Python-$(PYTHON_VERSION).tar.xz
- PYTHON_SITE = http://python.org/ftp/python/$(PYTHON_VERSION)
- PYTHON_LICENSE = Python software foundation license v2, others
+No need to resend just for that.
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+> index d4204d1..69f7c8d 100644
+> --- a/package/libsemanage/libsemanage.hash
+> +++ b/package/libsemanage/libsemanage.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed
+> -sha256 de2e8077245581e94576276f54e80a53c23c28d6961d2dfbe2f004eaba452e91 libsemanage-2.1.10.tar.gz
+> +sha256 46e2f36254369b6e91d1eea0460c262b139361b055a3a67d3ceea2d8ef72e006 libsemanage-2.5.tar.gz
+> diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+> index 197c14e..a60d018 100644
+> --- a/package/libsemanage/libsemanage.mk
+> +++ b/package/libsemanage/libsemanage.mk
+> @@ -4,11 +4,11 @@
+>  #
+>  ################################################################################
+>  
+> -LIBSEMANAGE_VERSION = 2.1.10
+> -LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
+> +LIBSEMANAGE_VERSION = 2.5
+> +LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
+>  LIBSEMANAGE_LICENSE = LGPLv2.1+
+>  LIBSEMANAGE_LICENSE_FILES = COPYING
+> -LIBSEMANAGE_DEPENDENCIES = host-bison host-flex libselinux ustr bzip2
+> +LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
+>  LIBSEMANAGE_INSTALL_STAGING = YES
+>  
+>  LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
