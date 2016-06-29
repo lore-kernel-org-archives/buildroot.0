@@ -1,9 +1,9 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 29 Jun 2016 12:05:36 +0100
-Subject: [Buildroot] [PATCH 7/8] Add qemu_mips_64r6_malta_defconfig
+Date: Wed, 29 Jun 2016 12:05:37 +0100
+Subject: [Buildroot] [PATCH 8/8] Add qemu_mipsel_64r6_malta_defconfig
 In-Reply-To: <1467198337-47064-1-git-send-email-Vincent.Riera@imgtec.com>
 References: <1467198337-47064-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1467198337-47064-3-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1467198337-47064-4-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- board/qemu/mips-64r6-malta/linux-4.6.config        | 34 ++++++++++++++++++++++
- board/qemu/mips-64r6-malta/readme.txt              |  7 +++++
+ board/qemu/mipsel-64r6-malta/linux-4.6.config      | 34 ++++++++++++++++++++++
+ board/qemu/mipsel-64r6-malta/readme.txt            |  7 +++++
  ...oration-of-MSA-context-in-non-MSA-kernels.patch | 25 ++++++++++++++++
- configs/qemu_mips_64r6_malta_defconfig             | 32 ++++++++++++++++++++
+ configs/qemu_mipsel_64r6_malta_defconfig           | 32 ++++++++++++++++++++
  4 files changed, 98 insertions(+)
- create mode 100644 board/qemu/mips-64r6-malta/linux-4.6.config
- create mode 100644 board/qemu/mips-64r6-malta/readme.txt
- create mode 100644 board/qemu/mips-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch
- create mode 100644 configs/qemu_mips_64r6_malta_defconfig
+ create mode 100644 board/qemu/mipsel-64r6-malta/linux-4.6.config
+ create mode 100644 board/qemu/mipsel-64r6-malta/readme.txt
+ create mode 100644 board/qemu/mipsel-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch
+ create mode 100644 configs/qemu_mipsel_64r6_malta_defconfig
 
-diff --git a/board/qemu/mips-64r6-malta/linux-4.6.config b/board/qemu/mips-64r6-malta/linux-4.6.config
+diff --git a/board/qemu/mipsel-64r6-malta/linux-4.6.config b/board/qemu/mipsel-64r6-malta/linux-4.6.config
 new file mode 100644
 index 0000000..0ebfdbd
 --- /dev/null
-+++ b/board/qemu/mips-64r6-malta/linux-4.6.config
++++ b/board/qemu/mipsel-64r6-malta/linux-4.6.config
 @@ -0,0 +1,34 @@
 +CONFIG_MIPS_MALTA=y
 +CONFIG_CPU_MIPS64_R6=y
@@ -62,24 +62,24 @@ index 0000000..0ebfdbd
 +CONFIG_EXT4_FS=y
 +CONFIG_TMPFS=y
 +CONFIG_TMPFS_POSIX_ACL=y
-diff --git a/board/qemu/mips-64r6-malta/readme.txt b/board/qemu/mips-64r6-malta/readme.txt
+diff --git a/board/qemu/mipsel-64r6-malta/readme.txt b/board/qemu/mipsel-64r6-malta/readme.txt
 new file mode 100644
-index 0000000..8f792a0
+index 0000000..3459a87
 --- /dev/null
-+++ b/board/qemu/mips-64r6-malta/readme.txt
++++ b/board/qemu/mipsel-64r6-malta/readme.txt
 @@ -0,0 +1,7 @@
 +Run the emulation with:
 +
-+ qemu-system-mips64 -M malta -cpu MIPS64R6-generic -kernel output/images/vmlinux -drive file=output/images/rootfs.ext2,format=raw -append "root=/dev/hda" -nographic
++ qemu-system-mips64el -M malta -cpu MIPS64R6-generic -kernel output/images/vmlinux -drive file=output/images/rootfs.ext2,format=raw -append "root=/dev/hda" -nographic
 +
 +The login prompt will appear in the terminal that started Qemu.
 +
 +Tested with QEMU 2.6.0
-diff --git a/board/qemu/mips-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch b/board/qemu/mips-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch
+diff --git a/board/qemu/mipsel-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch b/board/qemu/mipsel-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch
 new file mode 100644
 index 0000000..6741b7f
 --- /dev/null
-+++ b/board/qemu/mips-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch
++++ b/board/qemu/mipsel-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch
 @@ -0,0 +1,25 @@
 +diff --git a/arch/mips/kernel/signal.c b/arch/mips/kernel/signal.c
 +index bf792e2..fc7c1f0 100644
@@ -106,14 +106,14 @@ index 0000000..6741b7f
 + 
 + 	return err ?: sig;
 + }
-diff --git a/configs/qemu_mips_64r6_malta_defconfig b/configs/qemu_mips_64r6_malta_defconfig
+diff --git a/configs/qemu_mipsel_64r6_malta_defconfig b/configs/qemu_mipsel_64r6_malta_defconfig
 new file mode 100644
-index 0000000..175b241
+index 0000000..8ff1548
 --- /dev/null
-+++ b/configs/qemu_mips_64r6_malta_defconfig
++++ b/configs/qemu_mipsel_64r6_malta_defconfig
 @@ -0,0 +1,32 @@
 +# Architecture
-+BR2_mips64=y
++BR2_mips64el=y
 +BR2_mips_64r6=y
 +BR2_MIPS_NABI64=y
 +
@@ -132,10 +132,10 @@ index 0000000..175b241
 +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.1"
 +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-64r6-malta/linux-4.6.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-64r6-malta/linux-4.6.config"
 +BR2_LINUX_KERNEL_VMLINUX=y
 +# kernel patch needed to compile with GCC 6.x
-+BR2_LINUX_KERNEL_PATCH="board/qemu/mips-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch"
++BR2_LINUX_KERNEL_PATCH="board/qemu/mipsel-64r6-malta/v2-MIPS-Prevent-restoration-of-MSA-context-in-non-MSA-kernels.patch"
 +
 +# Compiler
 +# linux >= 4.4 uses -mcompact-branches which is only available since gcc-6
