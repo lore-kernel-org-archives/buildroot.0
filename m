@@ -1,9 +1,9 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Wed, 29 Jun 2016 15:46:20 +0200
-Subject: [Buildroot] [PATCH 13/24] pax-utils: drop unused host variant
+Date: Wed, 29 Jun 2016 15:46:22 +0200
+Subject: [Buildroot] [PATCH 15/24] python-jinja2: drop unused host variant
 In-Reply-To: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
 References: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467207991-4905-14-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467207991-4905-16-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/pax-utils/pax-utils.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/python-jinja2/python-jinja2.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/pax-utils/pax-utils.mk b/package/pax-utils/pax-utils.mk
-index 747c2bb1145b..5c3238281dc0 100644
---- a/package/pax-utils/pax-utils.mk
-+++ b/package/pax-utils/pax-utils.mk
-@@ -27,9 +27,6 @@ else
- PAX_UTILS_CONF_OPTS += --without-seccomp
- endif
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index ce6e2b9c5fc8..40cee81210d8 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -10,8 +10,5 @@ PYTHON_JINJA2_SITE = http://pypi.python.org/packages/source/J/Jinja2
+ PYTHON_JINJA2_SETUP_TYPE = setuptools
+ PYTHON_JINJA2_LICENSE = BSD-3c
+ PYTHON_JINJA2_LICENSE_FILES = LICENSE
+-# In host build, setup.py tries to download markupsafe if it is not installed
+-HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
  
--# libcap is only useful for pspax (a running system)
--HOST_PAX_UTILS_DEPENDENCIES =
--
- # lddtree and symtree need bash
- ifeq ($(BR2_PACKAGE_BASH),)
- define PAX_UTILS_REMOVE_BASH_TOOLS
-@@ -39,4 +36,3 @@ endif
- PAX_UTILS_POST_INSTALL_TARGET_HOOKS += PAX_UTILS_REMOVE_BASH_TOOLS
- 
- $(eval $(autotools-package))
--$(eval $(host-autotools-package))
+ $(eval $(python-package))
+-$(eval $(host-python-package))
 -- 
 2.1.0
