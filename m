@@ -1,90 +1,191 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 29 Jun 2016 22:41:17 +0200
-Subject: [Buildroot] [PATCH v5] package/python-pillow: new package
-In-Reply-To: <iund4dxdb3.ln2@ID-313208.user.individual.net>
-References: <1465850289-11760-1-git-send-email-angelo.compagnucci@gmail.com>
- <iund4dxdb3.ln2@ID-313208.user.individual.net>
-Message-ID: <CA+TH9Vnac3eFJQnoGMYz_dF-nFhAC_sF8fN-ZDm2e-v1Ht2TJg@mail.gmail.com>
+Date: Wed, 29 Jun 2016 22:50:56 +0200
+Subject: [Buildroot] [PATCH v6] package/python-pillow: new package
+Message-ID: <1467233456-17500-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls
+This patch adds python pillow, the friendly python image library fork, it
+includes a backported patch to disable configuration platfom guessing.
 
-2016-06-29 22:33 GMT+02:00 Bernd Kuhls <bernd.kuhls@t-online.de>:
-> Hi,
->
-> like you I was surprised that this package is not yet part of buildroot,
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+Changes
 
-Yes! Finally someone interested!
+v5 -> v6:
 
-> so let's get things moving ;) I need it because the OpenWeather addon for
-> Kodi needs it:
->
-> File "//.kodi/addons/script.openweathermap.maps/default.py", line 4, in
-> <module>
-> from PIL import Image
-> ImportError: No module named PIL
->
-> Am Mon, 13 Jun 2016 22:38:09 +0200 schrieb Angelo Compagnucci:
->
->> +From 3344eff32427f1d10f3ca82ca4344c501a1a2055 Mon Sep 17 00:00:00 2001
->> +From: Angelo Compagnucci
->> <angelo.compagnucci@gmail.com>
->> +Date: Sun, 12 Jun 2016 12:06:59 +0200 +Subject: [PATCH] setup.py: add
->> option to disable platform guessing +
->> +When cross-compiling (ex on Buildroot) platform guessing is not needed
->> +cause the environment is correctly built externally.
->> +This patch adds an option to disable platform guessing on Linux.
->> +---
->
-> s-o-b missing.
+* Fixed sob in patch (Bernd Kuhls)
 
-Ops!
+v4 -> v5:
 
-> Also apparently you send a patch fixing cross-compilation upstream:
-> https://github.com/python-pillow/Pillow/pull/1861
->
-> The patch you included here seems to be a smaller version of your
-> original patch which itself got extended by upstream:
-> https://github.com/python-pillow/Pillow/pull/1875
->
-> Could you please check if the patch from PR 1875 could be included in
-> buildroot instead of the current patch? This will make bumping the
-> package easier if PR 1875 gets merged some time in the future.
+* Better build and install opts handling (Peter Korsgaard)
+* Strong sha256 hash
+* Simplified INSTALL_TARGET_CMDS
+* Better commit message
 
-The patch attached here is a backport of the original patch I
-submitted. Unfortunately the patch applied on master branch cannot be
-backported tout court into the previous release. When the new major
-release will be out, I'll remove this patch.
+ package/Config.in                                  |  1 +
+ ...y-add-option-to-disable-platform-guessing.patch | 65 ++++++++++++++++++++++
+ package/python-pillow/Config.in                    | 12 ++++
+ package/python-pillow/python-pillow.hash           |  4 ++
+ package/python-pillow/python-pillow.mk             | 33 +++++++++++
+ 5 files changed, 115 insertions(+)
+ create mode 100644 package/python-pillow/0001-setup.py-add-option-to-disable-platform-guessing.patch
+ create mode 100644 package/python-pillow/Config.in
+ create mode 100644 package/python-pillow/python-pillow.hash
+ create mode 100644 package/python-pillow/python-pillow.mk
 
-> Besides these cosmetical things the package compiles.
->
-> Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->
-> Compile-tested using these defconfigs:
->
-> BR2_PACKAGE_PYTHON3=y
-> BR2_PACKAGE_PYTHON_PILLOW=y
->
-> and
->
-> BR2_PACKAGE_PYTHON=y
-> BR2_PACKAGE_PYTHON_PILLOW=y
->
-> Both defconfigs were based on http://autobuild.buildroot.net/toolchains/
-> configs/br-x86-64-core2-full.config
->
-> Regards, Bernd
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 4c39b12..15a266b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -707,6 +707,7 @@ menu "External python modules"
+ 	source "package/python-pathtools/Config.in"
+ 	source "package/python-pathvalidate/Config.in"
+ 	source "package/python-pexpect/Config.in"
++	source "package/python-pillow/Config.in"
+ 	source "package/python-posix-ipc/Config.in"
+ 	source "package/python-protobuf/Config.in"
+ 	source "package/python-psutil/Config.in"
+diff --git a/package/python-pillow/0001-setup.py-add-option-to-disable-platform-guessing.patch b/package/python-pillow/0001-setup.py-add-option-to-disable-platform-guessing.patch
+new file mode 100644
+index 0000000..616a6ee
+--- /dev/null
++++ b/package/python-pillow/0001-setup.py-add-option-to-disable-platform-guessing.patch
+@@ -0,0 +1,65 @@
++From 3344eff32427f1d10f3ca82ca4344c501a1a2055 Mon Sep 17 00:00:00 2001
++From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++Date: Sun, 12 Jun 2016 12:06:59 +0200
++Subject: [PATCH] setup.py: add option to disable platform guessing
++
++When cross-compiling (ex on Buildroot) platform guessing is not needed
++cause the environment is correctly built externally.
++This patch adds an option to disable platform guessing on Linux.
++
++Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++---
++ setup.py | 19 ++++++++++++++-----
++ 1 file changed, 14 insertions(+), 5 deletions(-)
++
++diff --git a/setup.py b/setup.py
++index 0f74a40..f1eac1e 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -121,9 +121,13 @@ class pil_build_ext(build_ext):
++         ('disable-%s' % x, None, 'Disable support for %s' % x) for x in feature
++     ] + [
++         ('enable-%s' % x, None, 'Enable support for %s' % x) for x in feature
+++    ] + [
+++        ('disable-platform-guessing', None, 'Disable platform guessing on Linux'),
+++        ('debug', None, 'Debug logging')
++     ]
++ 
++     def initialize_options(self):
+++        self.disable_platform_guessing = None
++         build_ext.initialize_options(self)
++         for x in self.feature:
++             setattr(self, 'disable_%s' % x, None)
++@@ -190,7 +194,10 @@ class pil_build_ext(build_ext):
++         #
++         # add platform directories
++ 
++-        if sys.platform == "cygwin":
+++        if self.disable_platform_guessing:
+++            pass
+++        
+++        elif sys.platform == "cygwin":
++             # pythonX.Y.dll.a is in the /usr/lib/pythonX.Y/config directory
++             _add_directory(library_dirs,
++                            os.path.join("/usr/lib", "python%s" %
++@@ -352,11 +359,13 @@ class pil_build_ext(build_ext):
++                 _add_directory(include_dirs, tcl_dir)
++ 
++         # standard locations
++-        _add_directory(library_dirs, "/usr/local/lib")
++-        _add_directory(include_dirs, "/usr/local/include")
+++        if not self.disable_platform_guessing:
+++            _add_directory(library_dirs, "/usr/local/lib")
+++            _add_directory(include_dirs, "/usr/local/include")
+++
+++            _add_directory(library_dirs, "/usr/lib")
+++            _add_directory(include_dirs, "/usr/include")
++ 
++-        _add_directory(library_dirs, "/usr/lib")
++-        _add_directory(include_dirs, "/usr/include")
++ 
++         # on Windows, look for the OpenJPEG libraries in the location that
++         # the official installer puts them
++-- 
++1.9.1
++
+diff --git a/package/python-pillow/Config.in b/package/python-pillow/Config.in
+new file mode 100644
+index 0000000..d5c3809
+--- /dev/null
++++ b/package/python-pillow/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PYTHON_PILLOW
++	bool "python-pillow"
++	help
++	  Pillow is the "friendly" PIL fork by Alex Clark and Contributors. PIL is
++	  the Python Imaging Library by Fredrik Lundh and Contributors.
++
++	  Pillow relies on external libraries to provide support various
++	  image formats. Select the corresponding package(s) to get this
++	  support. Pillow can use jpeg, zlib (for PNG), tiff, freetype, webp,
++	  and openjpeg (JPEG-2000).
++
++	  https://pypi.python.org/pypi/Pillow/
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+new file mode 100644
+index 0000000..6de9606
+--- /dev/null
++++ b/package/python-pillow/python-pillow.hash
+@@ -0,0 +1,4 @@
++# https://pypi.python.org/pypi?:action=show_md5&digest=7cfd093c11205d9e2ebe3c51dfcad510
++md5 7cfd093c11205d9e2ebe3c51dfcad510  Pillow-3.2.0.tar.gz
++# sha256 locally computed
++sha256 64b0a057210c480aea99406c9391180cd866fc0fd8f0b53367e3af21b195784a  Pillow-3.2.0.tar.gz
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+new file mode 100644
+index 0000000..2926886
+--- /dev/null
++++ b/package/python-pillow/python-pillow.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# python-pillow
++#
++################################################################################
++
++PYTHON_PILLOW_VERSION = 3.2.0
++PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
++PYTHON_PILLOW_SITE = https://pypi.python.org/packages/source/P/Pillow
++PYTHON_PILLOW_SETUP_TYPE = setuptools
++PYTHON_PILLOW_DEPENDENCIES = $(if $(BR2_PACKAGE_JPEG),jpeg) \
++      $(if $(BR2_PACKAGE_ZLIB),zlib) \
++      $(if $(BR2_PACKAGE_TIFF),tiff) \
++      $(if $(BR2_PACKAGE_FREETYPE),freetype) \
++      $(if $(BR2_PACKAGE_WEBP),webp) \
++      $(if $(BR2_PACKAGE_OPENJPEG),openjpeg)
++
++PYTHON_PILLOW_BUILD_OPTS = --disable-platform-guessing
++PYTHON_PILLOW_BUILD_OPTS += $(if $(BR2_PACKAGE_JPEG),--enable-jpeg,--disable-jpeg)
++PYTHON_PILLOW_BUILD_OPTS += $(if $(BR2_PACKAGE_ZLIB),--enable-zlib,--disable-zlib)
++PYTHON_PILLOW_BUILD_OPTS += $(if $(BR2_PACKAGE_TIFF),--enable-tiff,--disable-tiff)
++PYTHON_PILLOW_BUILD_OPTS += $(if $(BR2_PACKAGE_FREETYPE),--enable-freetype,--disable-freetype)
++PYTHON_PILLOW_BUILD_OPTS += $(if $(BR2_PACKAGE_WEBP),--enable-webp,--disable-webp)
++PYTHON_PILLOW_BUILD_OPTS += $(if $(BR2_PACKAGE_OPENJPEG),--enable-jpeg2000,--disable-jpeg2000)
++
++PYTHON_PILLOW_BUILD_CMDS = cd $(PYTHON_PILLOW_BUILDDIR); \
++		$(PYTHON_PILLOW_BASE_ENV) $(PYTHON_PILLOW_ENV) \
++		$(PYTHON_PILLOW_PYTHON_INTERPRETER) setup.py build_ext \
++		$(PYTHON_PILLOW_BASE_BUILD_OPTS) $(PYTHON_PILLOW_BUILD_OPTS)
++
++PYTHON_PILLOW_INSTALL_TARGET_CMDS = $(PYTHON_PILLOW_BUILD_CMDS) install
++
++$(eval $(python-package))
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+1.9.1
