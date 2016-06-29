@@ -1,56 +1,189 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 29 Jun 2016 11:53:37 +0200
-Subject: [Buildroot] [PATCH] package/quagga: Add systemd.service file
-In-Reply-To: <76555fc3-8603-91d7-ad8f-ecdef822df16@gmail.com>
-References: <1466874128-22828-1-git-send-email-nroach44@gmail.com>
- <91c2c2b3-7715-2ab6-31ab-144aa346c54b@mind.be>
- <76555fc3-8603-91d7-ad8f-ecdef822df16@gmail.com>
-Message-ID: <49651e9d-0a96-c7de-fb8b-1ec4e21324f8@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Jun 2016 11:58:30 +0200
+Subject: [Buildroot] [PATCH 1/1] protobuf-lua: new package
+In-Reply-To: <1467141482-28706-1-git-send-email-tiago.brusamarello@datacom.ind.br>
+References: <1467141482-28706-1-git-send-email-tiago.brusamarello@datacom.ind.br>
+Message-ID: <20160629115830.2f9aaa6b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(Mainly improving my systemd knowledge here :-)
+Hello,
 
-On 29-06-16 09:06, Nathaniel Roach wrote:
-> On 27/06/16 05:09, Arnout Vandecappelle wrote:
->> On 25-06-16 19:02, Nathaniel Roach wrote:
-[snip]
->>   However, since the Wants= is added for zebra, it would make sense to create the
->> zebra symlink, no?
-> No, systemd will automatically start zebra when it's needed. It's not needed
-> until one of the other daemons start (which systemd will start zebra beforehand
-> if the daemon is local). If they are remote, the user can enable zebra themselves.
+Thanks for this contribution!
 
- So, if there is a Wants=quagga at zebra.service line, then systemd will look for
-quagga at zebra.service in /usr/lib/systemd/services, and failing that it will
-automatically try quagga at .service? Nice!
+On Tue, 28 Jun 2016 16:18:02 -0300, Tiago Brusamarello wrote:
+> Google's Protocol Buffers support to Lua.
+> 
+> This package adds support to compile and use Google's
+> Protocol buffers using Lua scripts. It also includes
+> the plugin for compiling the message types (.proto files)
+> to the Lua language.
+> 
+> The original package from GitHub supports deployment as
+> a LuaRocks package, but the module name as set to 'protobuf'
+> and not 'protobuf-lua' which causes naming problems when
+> building it in Buildroot so the 'generick-package' method
+> was used instead.
 
-[snip]
->>> +Wants=quagga at zebra.service
->>   I just realize now: this line should probably be removed when
->> BR2_PACKAGE_QUAGGA_ZEBRA is not set.
-> Also true, however that's why I said Wants= and not Requires= so systemd handles
-> the lack of zebra fine.
+This is annoying. We can fix this with a small improvement to the
+luarocks package infrastructure:
 
- So in case zebra doesn't exist, systemd will still try to execute the service
-file, but the ExecStart command will fail because /usr/sbin/zebra doesn't exist,
-right? But in that case, won't it retry every second (Restart=on-failure) and
-spam the journal horribly?
+diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
+index da5c912..b88957b 100644
+--- a/package/pkg-luarocks.mk
++++ b/package/pkg-luarocks.mk
+@@ -34,9 +34,14 @@
+ define inner-luarocks-package
+ 
+ $(2)_BUILD_OPTS                ?=
++
++ifndef $(2)_LUAROCKS_NAME
++ $(2)_LUAROCKS_NAME := $(1)
++endif
++
+ $(2)_SUBDIR            ?= $(1)-$$(shell echo "$$($(3)_VERSION)" | sed -e "s/-[0-9]$$$$//")
+-$(2)_ROCKSPEC          ?= $(1)-$$($(3)_VERSION).rockspec
+-$(2)_SOURCE            ?= $(1)-$$($(3)_VERSION).src.rock
++$(2)_ROCKSPEC          ?= $$($(2)_LUAROCKS_NAME)-$$($(3)_VERSION).rockspec
++$(2)_SOURCE            ?= $$($(2)_LUAROCKS_NAME)-$$($(3)_VERSION).src.rock
+ $(2)_SITE              ?= $$(call qstrip,$$(BR2_LUAROCKS_MIRROR))
+ 
+ # Since we do not support host-luarocks-package, we know this is
 
- Maybe there should be a ConditionFileIsExecutable in the [Unit] section?
+Then you can define "PROTOBUF_LUA_LUAROCKS_NAME = protobuf" to override
+it (by default it would be protobuf-lua).
 
+However, this doesn't work because the file:
 
- Regards,
- Arnout
+  http://rocks.moonscript.org/protobuf-1.1.1-0.src.rock
 
+doesn't exist. I'm not sure why it doesn't work, since
+https://luarocks.org/modules/djungelorm/protobuf/1.1.1-0 exists.
 
+Fran?ois ?
+
+> Change-Id: I50c2b0da9dedb2d8ed2dbd9635194e64402355f3
+
+This line is unneeded.
+
+> Signed-off-by: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+> ---
+>  package/Config.in                    |  1 +
+>  package/protobuf-lua/Config.in       |  8 ++++++++
+>  package/protobuf-lua/protobuf-lua.mk | 39 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 48 insertions(+)
+>  create mode 100644 package/protobuf-lua/Config.in
+>  create mode 100644 package/protobuf-lua/protobuf-lua.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index a2a02a8..362dbf9 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1298,6 +1298,7 @@ endif
+>  	source "package/poco/Config.in"
+>  	source "package/protobuf/Config.in"
+>  	source "package/protobuf-c/Config.in"
+> +	source "package/protobuf-lua/Config.in"
+
+It should probably with all the other Lua packages instead.
+
+>  	source "package/qhull/Config.in"
+>  	source "package/qlibc/Config.in"
+>  	source "package/startup-notification/Config.in"
+> diff --git a/package/protobuf-lua/Config.in b/package/protobuf-lua/Config.in
+> new file mode 100644
+> index 0000000..e2a94cb
+> --- /dev/null
+> +++ b/package/protobuf-lua/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PROTOBUF_LUA
+> +    bool "protobuf-lua"
+
+Please use tabs for indentation in the Config.in file.
+
+> +    depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+
+This would be unnecessary if the inclusion of the Config.in file is
+moved with the other Lua packages.
+
+However, https://luarocks.org/modules/djungelorm/protobuf indicates
+that lua >= 5.1, < 5.3 is needed. So perhaps this package should be
+disabled if Lua 5.3 is selected? What about LuaJIT ?
+
+> +    help
+> +      Code generator and runtime libraries to use Protocol Buffers
+> +      from Lua scripts.
+> +
+> +      https://github.com/djungelorm/protobuf-lua
+> diff --git a/package/protobuf-lua/protobuf-lua.mk b/package/protobuf-lua/protobuf-lua.mk
+> new file mode 100644
+> index 0000000..0ca8c70
+> --- /dev/null
+> +++ b/package/protobuf-lua/protobuf-lua.mk
+> @@ -0,0 +1,39 @@
+> +################################################################################
+> +#
+> +# protobuf-lua
+> +#
+> +################################################################################
+> +
+> +PROTOBUF_LUA_VERSION = v1.1.1
+> +PROTOBUF_LUA_SITE = $(call github,djungelorm,protobuf-lua,$(PROTOBUF_LUA_VERSION))
+> +PROTOBUF_LUA_DEPENDENCIES = luainterpreter host-python python
+
+Why do you need python and host-python ?
+
+> +PROTOBUF_LUA_LICENSE = BSD-3c
+
+According to https://luarocks.org/modules/djungelorm/protobuf, the
+license is MIT, but this is indeed wrong, and your BSD-3c is correct.
+
+> +PROTOBUF_LUA_LICENSE_FILES = LICENSE
+> +
+> +define PROTOBUF_LUA_BUILD_CMDS
+> +	# build Lua Protobuf shared lib
+> +	$(TARGET_CC) -Os -shared -std=gnu99 -fPIC $(@D)/protobuf/pb.c -o $(@D)/protobuf/pb.so
+> +endef
+> +
+> +define PROTOBUF_LUA_INSTALL_TARGET_CMDS
+> +	# install Lua Protobuf support
+> +	mkdir -p $(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +	$(INSTALL) -m 0755 $(@D)/protobuf/pb.so \
+> +		$(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +	mkdir -p $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +	$(INSTALL) -m 0755 $(@D)/protobuf/*.lua \
+> +		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +
+> +	# install protoc Lua plugin
+> +	$(INSTALL) -m 0755 $(@D)/protoc-plugin/plugin_pb2.py $(TARGET_DIR)/usr/bin
+> +	$(INSTALL) -m 0755 $(@D)/protoc-plugin/protoc-gen-lua $(TARGET_DIR)/usr/bin
+
+Please use full destination paths when using $(INSTALL) with a single
+file.
+
+However, is this protoc-gen-lua script really needed on the target?
+
+> +endef
+> +
+> +define HOST_PROTOBUF_LUA_INSTALL_CMDS
+> +	# install protoc Lua plugin
+> +	$(INSTALL) -m 0755 $(@D)/protoc-plugin/plugin_pb2.py $(HOST_DIR)/usr/bin
+> +	$(INSTALL) -m 0755 $(@D)/protoc-plugin/protoc-gen-lua $(HOST_DIR)/usr/bin
+> +endef
+> +
+> +$(eval $(generic-package))
+> +$(eval $(host-generic-package))
+
+This host package is not used anywhere. I understand it allows to
+install the scripts that generate some Lua code according to the
+protobuf descriptions, but it should be used by another package
+otherwise it's an orphan package.
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
