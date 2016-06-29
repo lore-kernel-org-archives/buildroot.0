@@ -1,61 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jun 2016 16:43:36 +0200
-Subject: [Buildroot] [PATCH 00/24] Drop unused host packages
-In-Reply-To: <CAHfJR7iZpPnpVB0NqQPCEvYU7myCsdW2x=m5aoi1KGZk0p_MTg@mail.gmail.com>
-References: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
- <20160629155233.510c456e@free-electrons.com>
- <CAHfJR7h01DTkHetP0W196NbmeHCNZZjw6Ju-D9uP3pA6+A1gNw@mail.gmail.com>
- <20160629161137.5b5a13b3@free-electrons.com>
- <CAHfJR7iZpPnpVB0NqQPCEvYU7myCsdW2x=m5aoi1KGZk0p_MTg@mail.gmail.com>
-Message-ID: <20160629164336.67a86168@free-electrons.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 29 Jun 2016 10:45:32 -0400
+Subject: [Buildroot] [PATCH 1/1] toolchain: allow crosstool-ng musl
+	toolchains
+In-Reply-To: <20160628182415.42ef8e25@free-electrons.com>
+References: <1466530603-6041-1-git-send-email-fhunleth@troodon-software.com>
+ <20160628182415.42ef8e25@free-electrons.com>
+Message-ID: <CA+-urNSsOA8bDca-JyW7fZrLcAKWvkVpQaSqobrzD=CqOD2t_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Wed, 29 Jun 2016 16:30:34 +0200, Julien Floret wrote:
+On Tue, Jun 28, 2016 at 12:24 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Tue, 21 Jun 2016 13:36:43 -0400, Frank Hunleth wrote:
+>
+>> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+>> index 108fdaa..9a41bd6 100644
+>> --- a/toolchain/helpers.mk
+>> +++ b/toolchain/helpers.mk
+>> @@ -210,7 +210,7 @@ check_glibc = \
+>>  # $1: sysroot directory
+>>  check_musl = \
+>>       SYSROOT_DIR="$(strip $1)"; \
+>> -     if test ! -f $${SYSROOT_DIR}/lib/libc.so -o -e $${SYSROOT_DIR}/lib/libm.so ; then \
+>> +     if test ! \( -f $${SYSROOT_DIR}/lib/libc.so -o -f $${SYSROOT_DIR}/usr/lib/libc.so \) -o -e $${SYSROOT_DIR}/lib/libm.so ; then \
+>>               echo "Incorrect selection of the C library" ; \
+>
+> Thanks for this patch. However, I dislike a bit this test: the test
+> that libm exists is not super great, and we're really looking at
+> consequences of having musl, and not whether we're using musl or not.
 
-> It surely needs some rework, sorry for the noise!
+I completely agree. The original test didn't seem like the best test
+for musl, and I like your idea of verifying the linkage of a short C
+program.
 
-No problem, this cleanup effort is definitely welcome.
-
-> From your comments, I also understand some host packages should be kept
-> even if they are unused in buildroot upstream (e.g. jsmin), so I guess it's not
-> trivial for me to know which packages could be removed.
-
-Yes, there are some tricky cases. Normally the rule should indeed be
-that a host package should either:
-
- 1/ Be described in a Config.in.host file and therefore visible in
-    menuconfig ;
-
- 2/ Be a dependency of another package.
-
-However, there are other situations:
-
- */ Host packages that we merge, even if they are not *yet* used by
-    target packages. We sometimes do this to help people reduce the
-    size of their patch series by merging some initial patches, while
-    the remaining patches are still under discussion/review. Normally
-    this is only a temporary situation (but for sepolgen, it's a
-    temporary situation that lasts since many months).
-
- */ Host packages that are not used by other packages in Buildroot, but
-    might be used by private, company/project-specific packages. I
-    don't like this situation, because there is really no way these
-    host packages will ever be built/tested. But I'm not sure what to
-    do about these: adding an entry in menuconfig is a bit weird since
-    they are not really needed for anything else but a build dependency.
-
-What do others think?
+I'm quite busy at the moment, but as soon as I free up, I'll play
+around with it and post a revision.
 
 Thanks,
+Frank
 
-Thomas
+>
+> What about instead changing to:
+>
+>  1/ Building a minimal C program "int main(void) { return 0; }"
+>
+>  2/ Check if the program interpreter contains /lib/ld-musl or not ?
+>
+> I.e:
+>
+> thomas at skate:~/nerves-mipsel-unknown-linux-musl-linux-x86_64-v0.6.3$ cat foo.c
+> int main(void) { return 0; }
+> thomas at skate:~/nerves-mipsel-unknown-linux-musl-linux-x86_64-v0.6.3$ ./bin/mipsel-unknown-linux-musl-gcc -o foo foo.c
+> thomas at skate:~/nerves-mipsel-unknown-linux-musl-linux-x86_64-v0.6.3$ ./bin/mipsel-unknown-linux-musl-readelf -a foo | grep "program interpreter"
+>       [Requesting program interpreter: /lib/ld-musl-mipsel.so.1]
+>
+> This would, IMO, be a much better solution. What do you think?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Frank Hunleth
+Troodon Software LLC
+Embedded Software Development
+http://troodon-software.com/
