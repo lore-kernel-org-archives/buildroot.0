@@ -1,9 +1,9 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Wed, 29 Jun 2016 15:46:15 +0200
-Subject: [Buildroot] [PATCH 08/24] libconfuse: drop unused host variant
+Date: Wed, 29 Jun 2016 15:46:14 +0200
+Subject: [Buildroot] [PATCH 07/24] libatomic_ops: drop unused host variant
 In-Reply-To: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
 References: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467207991-4905-9-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467207991-4905-8-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,15 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/libconfuse/libconfuse.mk | 1 -
+ package/libatomic_ops/libatomic_ops.mk | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
-index 089e12cdb52c..f9cecbcd17c2 100644
---- a/package/libconfuse/libconfuse.mk
-+++ b/package/libconfuse/libconfuse.mk
-@@ -14,4 +14,3 @@ LIBCONFUSE_LICENSE = ISC
- LIBCONFUSE_LICENSE_FILES = LICENSE
+diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+index fd457267502b..01e9e9c9a261 100644
+--- a/package/libatomic_ops/libatomic_ops.mk
++++ b/package/libatomic_ops/libatomic_ops.mk
+@@ -24,4 +24,3 @@ LIBATOMIC_OPS_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DAO_NO_SPARC_V9"
+ endif
  
  $(eval $(autotools-package))
 -$(eval $(host-autotools-package))
