@@ -1,91 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 29 Jun 2016 22:32:52 +0200
-Subject: [Buildroot] [PATCH v6 2/6] libsemanage: bump to version 2.5
-In-Reply-To: <1466980753-667-3-git-send-email-Aduskett@gmail.com>
-References: <1466980753-667-1-git-send-email-Aduskett@gmail.com>
- <1466980753-667-3-git-send-email-Aduskett@gmail.com>
-Message-ID: <20160629203252.GE3728@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 29 Jun 2016 22:33:54 +0200
+Subject: [Buildroot] [PATCH v5] package/python-pillow: new package
+References: <1465850289-11760-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <iund4dxdb3.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+Hi,
 
-On 2016-06-26 18:39 -0400, Adam Duskett spake thusly:
-> The 0001-execption-lib-path-fix.patch is also no longer needed, as the
-> new version of libsemanage includes the fix provided by the patch.
-> As such, the patch was removed, and 0002 was renamed to 0001.
-> 
-> Audit was added as a dependency as the new version of libsemanage
-> will fail to compile searching for audit.h
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
-[--SNIP--]
-> diff --git a/package/libsemanage/0001-workaround-blackfin-issue.patch b/package/libsemanage/0001-workaround-blackfin-issue.patch
-> new file mode 100644
-> index 0000000..7ce9606
-> --- /dev/null
-> +++ b/package/libsemanage/0001-workaround-blackfin-issue.patch
-[--SNIP--]
-> diff --git a/package/libsemanage/0002-workaround-blackfin-issue.patch b/package/libsemanage/0002-workaround-blackfin-issue.patch
-> deleted file mode 100644
-> index 5d00c69..0000000
-> --- a/package/libsemanage/0002-workaround-blackfin-issue.patch
-> +++ /dev/null
-[--SNIP--]
+like you I was surprised that this package is not yet part of buildroot, 
+so let's get things moving ;) I need it because the OpenWeather addon for 
+Kodi needs it:
 
-So 0002 was renamed to 0001. Next time, please use the -M and -C options
-so that git detects renames and copies. This makes it easier to review.
+File "//.kodi/addons/script.openweathermap.maps/default.py", line 4, in 
+<module>
+from PIL import Image
+ImportError: No module named PIL
 
-No need to resend just for that.
+Am Mon, 13 Jun 2016 22:38:09 +0200 schrieb Angelo Compagnucci:
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +From 3344eff32427f1d10f3ca82ca4344c501a1a2055 Mon Sep 17 00:00:00 2001
+> +From: Angelo Compagnucci
+> <angelo.compagnucci@gmail.com>
+> +Date: Sun, 12 Jun 2016 12:06:59 +0200 +Subject: [PATCH] setup.py: add
+> option to disable platform guessing +
+> +When cross-compiling (ex on Buildroot) platform guessing is not needed
+> +cause the environment is correctly built externally.
+> +This patch adds an option to disable platform guessing on Linux.
+> +---
 
-Regards,
-Yann E. MORIN.
+s-o-b missing.
 
-> diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
-> index d4204d1..69f7c8d 100644
-> --- a/package/libsemanage/libsemanage.hash
-> +++ b/package/libsemanage/libsemanage.hash
-> @@ -1,2 +1,2 @@
->  # Locally computed
-> -sha256 de2e8077245581e94576276f54e80a53c23c28d6961d2dfbe2f004eaba452e91 libsemanage-2.1.10.tar.gz
-> +sha256 46e2f36254369b6e91d1eea0460c262b139361b055a3a67d3ceea2d8ef72e006 libsemanage-2.5.tar.gz
-> diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-> index 197c14e..a60d018 100644
-> --- a/package/libsemanage/libsemanage.mk
-> +++ b/package/libsemanage/libsemanage.mk
-> @@ -4,11 +4,11 @@
->  #
->  ################################################################################
->  
-> -LIBSEMANAGE_VERSION = 2.1.10
-> -LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-> +LIBSEMANAGE_VERSION = 2.5
-> +LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
->  LIBSEMANAGE_LICENSE = LGPLv2.1+
->  LIBSEMANAGE_LICENSE_FILES = COPYING
-> -LIBSEMANAGE_DEPENDENCIES = host-bison host-flex libselinux ustr bzip2
-> +LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
->  LIBSEMANAGE_INSTALL_STAGING = YES
->  
->  LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Also apparently you send a patch fixing cross-compilation upstream:
+https://github.com/python-pillow/Pillow/pull/1861
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+The patch you included here seems to be a smaller version of your 
+original patch which itself got extended by upstream:
+https://github.com/python-pillow/Pillow/pull/1875
+
+Could you please check if the patch from PR 1875 could be included in 
+buildroot instead of the current patch? This will make bumping the 
+package easier if PR 1875 gets merged some time in the future.
+
+Besides these cosmetical things the package compiles.
+
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Compile-tested using these defconfigs:
+
+BR2_PACKAGE_PYTHON3=y
+BR2_PACKAGE_PYTHON_PILLOW=y
+
+and
+
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_PYTHON_PILLOW=y
+
+Both defconfigs were based on http://autobuild.buildroot.net/toolchains/
+configs/br-x86-64-core2-full.config
+
+Regards, Bernd
