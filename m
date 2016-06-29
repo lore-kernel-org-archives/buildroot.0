@@ -1,9 +1,9 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Wed, 29 Jun 2016 15:46:13 +0200
-Subject: [Buildroot] [PATCH 06/24] jsmin: drop unused host variant
+Date: Wed, 29 Jun 2016 15:46:15 +0200
+Subject: [Buildroot] [PATCH 08/24] libconfuse: drop unused host variant
 In-Reply-To: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
 References: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467207991-4905-7-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467207991-4905-9-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/jsmin/jsmin.mk | 9 ---------
- 1 file changed, 9 deletions(-)
+ package/libconfuse/libconfuse.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/jsmin/jsmin.mk b/package/jsmin/jsmin.mk
-index a66ba7158245..42344c9c8674 100644
---- a/package/jsmin/jsmin.mk
-+++ b/package/jsmin/jsmin.mk
-@@ -17,13 +17,4 @@ define JSMIN_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/jsmin $(TARGET_DIR)/usr/bin/jsmin
- endef
+diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+index 089e12cdb52c..f9cecbcd17c2 100644
+--- a/package/libconfuse/libconfuse.mk
++++ b/package/libconfuse/libconfuse.mk
+@@ -14,4 +14,3 @@ LIBCONFUSE_LICENSE = ISC
+ LIBCONFUSE_LICENSE_FILES = LICENSE
  
--define HOST_JSMIN_BUILD_CMDS
--	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) jsmin
--endef
--
--define HOST_JSMIN_INSTALL_CMDS
--	$(INSTALL) -m 0755 -D $(@D)/jsmin $(HOST_DIR)/usr/bin/jsmin
--endef
--
- $(eval $(generic-package))
--$(eval $(host-generic-package))
+ $(eval $(autotools-package))
+-$(eval $(host-autotools-package))
 -- 
 2.1.0
