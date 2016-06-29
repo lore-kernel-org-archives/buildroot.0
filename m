@@ -1,139 +1,93 @@
-From: pborut123 <pborut123@gmail.com>
-Date: Wed, 29 Jun 2016 09:47:40 +0200
-Subject: [Buildroot] Buildroot package for psycopg module for Beaglebone
- black
-In-Reply-To: <2c149f23-5762-32d8-f298-5f0af402c480@mind.be>
-References: <57725E95.3040107@gmail.com>
- <2c149f23-5762-32d8-f298-5f0af402c480@mind.be>
-Message-ID: <57737D1C.7050407@gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 29 Jun 2016 10:01:24 +0200
+Subject: [Buildroot] [PATCH 1/2] python-tornado: fix runtime dependencies
+Message-ID: <1467187285-13848-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Thank you for your answer.
-In the mean time, I've managed to solve problem by myself.
+According to setup.py tornado requires backports.ssl_match_hostname
+for Python < 3.2 and certifi for Python < 3.4.
 
-message 'error: option --executable not recognized' was issued from
-python setup.py install ...options...
-One of options was --executable=/usr/bin/python that came from 
-buildroot's main python package makefile
-pkg-python.mk, see here excerpt:
+Actually both requirements are optional and tornado alone can work
+without them, but Python packages like python-circus check requirements
+at runtime and though they don't use this funtionality, they insist on
+having these packages installed.
 
-PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
-     --prefix=$(TARGET_DIR)/usr \
-     --executable=/usr/bin/python \
-     --single-version-externally-managed \
-     --root=/
+An upstream patch fixes backports.ssl_match_hostname dependency and
+selecting python-certifi for Python 2 fixes certifi dependency till
+this is fixed upstream.
 
-I have removed line '--executable=/usr/bin/python' and package built 
-correctly.
-I'm not deeply familiar with python setup system, but I guess that here 
-must be
-some difference in installation of pure python modules and modules that 
-use cython, which is the case of psycopg2.
-I have added several other python packages that were pure python ones 
-without problem and using original script.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ ...re-backports.ssl_match_hostname-on-Python.patch | 37 ++++++++++++++++++++++
+ package/python-tornado/Config.in                   |  5 +--
+ 2 files changed, 40 insertions(+), 2 deletions(-)
+ create mode 100644 package/python-tornado/0001-Don-t-require-backports.ssl_match_hostname-on-Python.patch
 
-I have rebuilt whole system, having many python modules, with above 
-change without problems
-I haven't commited that change back, so that I don't break anything else.
-Since I've changed pkg-python.mk which is used by many python modules 
-that I didn't try, I haven't commited that change back, so that I don't 
-break anything else.
-
-I can do it of course.
-Do you perhaps know, are here some rules on commits of this sort?
-
-Thank you and best regards,
-Borut.
-
-On 29.6.2016 1:27, Arnout Vandecappelle wrote:
-> On 28-06-16 13:25, pborut123 wrote:
->> Hello,
->>
->> I'm new to this mailing list, quite new to buildroot, too.
->> I'm trying to build distribution for Beaglebone black with Python 3.5.1 and
->> postgresql 9.5.2.
->> I want to have also psycopg2 module that is not present in current package list.
->> I've tried to make my own package but I'm not successful.
->>
->> Last error, I've received from build is at installation step:
->>>>> python-psycopg 2.6.1 Installing to target
->> ...
->> error: option --executable not recognized
->   We're missing some context here: which command issued this error? It should be
-> written a few lines above.
->
->> make: ***
->> [..buildroot/output/build/python-psycopg-2.6.1/.stamp_target_installed] Error 1
->>
->> My question is if can anybody help me with this, pointing me on what I've done
->> wrong.
->>
->> Here is my package code:
->>
->> PYTHON_PSYCOPG_VERSION = 2.6.1
->> PYTHON_PSYCOPG_SOURCE = psycopg2-$(PYTHON_PSYCOPG_VERSION).tar.gz
->> PYTHON_PSYCOPG_SITE = http://initd.org/psycopg/tarballs/PSYCOPG-2-6
->> PYTHON_PSYCOPG_LICENSE = GPLv2
->> PYTHON_PSYCOPG_LICENSE_FILES = LICENSE
->> PYTHON_PSYCOPG_SETUP_TYPE = setuptools
->> PYTHON_PSYCOPG_BUILD_OPTS = build_ext --pg-config
->> $(STAGING_DIR)/usr/bin/pg_config build
->>
->   You will certainly need
->
-> PYTHON_PSYCOPG_DEPENDENCIES = postgresql
->
->> define PYTHON_PSYCOPG_INSTALL_CUSTOM_PG_CONFIG
->>      $(INSTALL) -m 0755 -D package/python-psycopg/pg_config \
->>          $(STAGING_DIR)/usr/bin/pg_config
->   Eek? Why would you want to do this? You should use the pg_config provided by
-> postgresql, otherwise things will probably go wrong.
->
->   Regards,
->   Arnout
->
->
->> endef
->> PYTHON_PSYCOPG_PRE_BUILD_HOOKS += PYTHON_PSYCOPG_INSTALL_CUSTOM_PG_CONFIG
->> $(eval $(python-package))
->>
->> and here is missing host pg_config file, I've inserted to setup.py:
->>
->> #!/bin/sh
->> # I've pointed to already cross-build posgresql base directory in build
->> prefix=buildroot/output/build/postgresql-9.5.2/src
->>
->> case "$1" in
->>    --includedir)
->>      echo "$prefix/include"
->>      ;;
->>    --libdir)
->>      echo "$prefix/lib"
->>      ;;
->>    --version)
->>        echo "PostgreSQL 9.5.2"
->>      ;;
->>
->>    *)
->>      echo "Usage: $0 {--includedir|--libdir}"
->> esac
->>
->> Thank you and best regards,
->> Borut.
->>
->>
->>
->>
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->
+diff --git a/package/python-tornado/0001-Don-t-require-backports.ssl_match_hostname-on-Python.patch b/package/python-tornado/0001-Don-t-require-backports.ssl_match_hostname-on-Python.patch
+new file mode 100644
+index 0000000..d5702e8
+--- /dev/null
++++ b/package/python-tornado/0001-Don-t-require-backports.ssl_match_hostname-on-Python.patch
+@@ -0,0 +1,37 @@
++From 785fe675d5602e51a559b06861d543c7d37a380c Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Wed, 4 May 2016 09:26:22 +0200
++Subject: [PATCH] Don't require backports.ssl_match_hostname on Python 2.7.9
++ and newer
++
++As Python 3.2 support was dropped one can check 2.7.x dependency only.
++
++Tornado running on Python 2.7.9+ doesn't need this backported package,
++but some Python packages like circus check package dependencies at
++runtime and insist on having backports.ssl_match_hostname installed,
++though they don't even use this particular feature.
++
++So checking for exact version makes life of package maintainer easier
++especially on embedded Linux distributions like Buildroot.
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ setup.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/setup.py b/setup.py
++index c13eeed..0c24e70 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -129,7 +129,7 @@ if setuptools is not None:
++     if sys.version_info < (2, 7):
++         # Only needed indirectly, for singledispatch.
++         install_requires.append('ordereddict')
++-    if sys.version_info < (3, 2):
+++    if sys.version_info < (2, 7, 9):
++         install_requires.append('backports.ssl_match_hostname')
++     if sys.version_info < (3, 4):
++         install_requires.append('singledispatch')
++-- 
++2.8.1
++
+diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
+index 3ead2af..a0ee78f 100644
+--- a/package/python-tornado/Config.in
++++ b/package/python-tornado/Config.in
+@@ -1,9 +1,10 @@
+ config BR2_PACKAGE_PYTHON_TORNADO
+ 	bool "python-tornado"
+-	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_CERTIFI if BR2_PACKAGE_PYTHON # runtime
+ 	help
+ 	  Tornado is a Python web framework and asynchronous networking
+ 	  library, originally developed@FriendFeed.
+-- 
+2.8.1
