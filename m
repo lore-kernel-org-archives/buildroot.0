@@ -1,9 +1,9 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Wed, 29 Jun 2016 15:46:11 +0200
-Subject: [Buildroot] [PATCH 04/24] directfb: drop unused host variant
+Date: Wed, 29 Jun 2016 15:46:12 +0200
+Subject: [Buildroot] [PATCH 05/24] erlang-goldrush: drop unused host variant
 In-Reply-To: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
 References: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467207991-4905-5-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467207991-4905-6-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/directfb/directfb.mk | 17 -----------------
- 1 file changed, 17 deletions(-)
+ package/erlang-goldrush/erlang-goldrush.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index d51094f850cb..773c9e2416b5 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -153,21 +153,4 @@ ifeq ($(BR2_PACKAGE_DIRECTFB_TESTS),y)
- DIRECTFB_CONF_OPTS += --with-tests
- endif
+diff --git a/package/erlang-goldrush/erlang-goldrush.mk b/package/erlang-goldrush/erlang-goldrush.mk
+index 2fa88107e18f..91165cae57a7 100644
+--- a/package/erlang-goldrush/erlang-goldrush.mk
++++ b/package/erlang-goldrush/erlang-goldrush.mk
+@@ -11,4 +11,3 @@ ERLANG_GOLDRUSH_LICENSE_FILES = LICENSE
+ ERLANG_GOLDRUSH_INSTALL_STAGING = YES
  
--HOST_DIRECTFB_DEPENDENCIES = host-pkgconf host-libpng
--HOST_DIRECTFB_CONF_OPTS = \
--	--disable-multi \
--	--enable-png \
--	--with-gfxdrivers=none \
--	--with-inputdrivers=none
--
--HOST_DIRECTFB_BUILD_CMDS = \
--	$(MAKE) -C $(@D)/tools directfb-csource
--
--HOST_DIRECTFB_INSTALL_CMDS = \
--	$(INSTALL) -m 0755 $(@D)/tools/directfb-csource $(HOST_DIR)/usr/bin
--
- $(eval $(autotools-package))
--$(eval $(host-autotools-package))
--
--# directfb-csource for the host
--DIRECTFB_HOST_BINARY = $(HOST_DIR)/usr/bin/directfb-csource
+ $(eval $(rebar-package))
+-$(eval $(host-rebar-package))
 -- 
 2.1.0
