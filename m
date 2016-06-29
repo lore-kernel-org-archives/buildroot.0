@@ -1,47 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 29 Jun 2016 22:11:21 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/python3: bump to version 3.5.2
-In-Reply-To: <1467231081-11051-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1467231081-11051-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1467231081-11051-2-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 29 Jun 2016 22:13:32 +0200
+Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to
+	arc-2016.09-eng005
+In-Reply-To: <1467217375-20555-1-git-send-email-abrodkin@synopsys.com> (Alexey
+ Brodkin's message of "Wed, 29 Jun 2016 19:22:55 +0300")
+References: <1467217375-20555-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <87lh1ng3df.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: no changes
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > With this commit we're starting a series of updates of ARC tools.
+ > Significantly rewritten arc-2016.03 tools introduced way too many
+ > problems highlighted by Buildroot autobuilder. Now in attempt to
+ > resolve as many issues as possible by the time final release of
+ > arc-2016.09 tools is cut we'll be executing arc-2016.09 series
+ > with engineering snapshots like this one.
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 2894003..f6f70a2 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,4 +1,4 @@
--# From https://www.python.org/downloads/release/python-351/
--md5 e9ea6f2623fffcdd871b7b19113fde80 Python-3.5.1.tar.xz
-+# From https://www.python.org/downloads/release/python-352/
-+md5 8906efbacfcdc7c3c9198aeefafd159e Python-3.5.2.tar.xz
- # Locally computed
--sha256 c6d57c0c366d9060ab6c0cdf889ebf3d92711d466cc0119c441dbf2746f725c9 Python-3.5.1.tar.xz
-+sha256 0010f56100b9b74259ebcd5d4b295a32324b58b517403a10d1a2aa7cb22bca40 Python-3.5.2.tar.xz
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 8459b11..f33b337 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PYTHON3_VERSION_MAJOR = 3.5
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).1
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).2
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = http://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python software foundation license v2, others
+ > We decided to go this way instead of applying separate patches here
+ > and there because ongoing development introduces quite a lot of
+ > changes and separate patches are not practical in Buildroot.
+
+ > Moreover this will give us very clean visibility of number of
+ > issues we see (hopefully it will decrease over time).
+
+ > One of the important changes introduced in this engineering build
+ > is initial set of changes for proper support of PIE on ARC in terms
+ > of both building on host and running on ARC target. I expect some
+ > PIE-related build breakages to go away and new ones will be treated
+ > as the high-priority issues to be fixed ASAP.
+
+ > For now we only update Binutils and GCC while keeping GDB
+ > as it is of arc-2016.03 release because there're some issues
+ > we'd like to resolve before releasing it to wider audience.
+
+ > So again note this is one of the first engineering builds of
+ > arc-2016.09 series and it might have all kinds of breakages,
+ > please don't use it for production builds.
+
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > Cc: arc-buildroot at synopsys.com
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks. Lets see how this goes ..
+
 -- 
-2.8.1
+Venlig hilsen,
+Peter Korsgaard 
