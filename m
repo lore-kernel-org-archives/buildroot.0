@@ -1,60 +1,139 @@
-From: fabrice.fontaine at orange.com <fabrice.fontaine@orange.com>
-Date: Wed, 29 Jun 2016 07:27:10 +0000
-Subject: [Buildroot] [PATCH 3/4] ajtcl: new package
-In-Reply-To: <20160628173457.1885f5cb@free-electrons.com>
-References: <20390_1467040718_577143CE_20390_5576_1_9bcd6009-a0eb-41a1-a31a-dd6fd4a34e7d@OPEXCLILM5F.corporate.adroot.infra.ftgroup>
- <20160627184912.39f7d06c@free-electrons.com>
- <713_1467047551_57715E7F_713_11955_1_EEB3FED4859B6C488DDDEC4B2D3DE92B0FC95F88@OPEXCLILM23.corporate.adroot.infra.ftgroup>
- <20160628173457.1885f5cb@free-electrons.com>
-Message-ID: <14979_1467185231_5773784F_14979_8763_1_EEB3FED4859B6C488DDDEC4B2D3DE92B0FC9640E@OPEXCLILM23.corporate.adroot.infra.ftgroup>
+From: pborut123 <pborut123@gmail.com>
+Date: Wed, 29 Jun 2016 09:47:40 +0200
+Subject: [Buildroot] Buildroot package for psycopg module for Beaglebone
+ black
+In-Reply-To: <2c149f23-5762-32d8-f298-5f0af402c480@mind.be>
+References: <57725E95.3040107@gmail.com>
+ <2c149f23-5762-32d8-f298-5f0af402c480@mind.be>
+Message-ID: <57737D1C.7050407@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Hello Arnout,
 
-It seems that most of the Orange email servers are blocked by zen.spamhaus.rbldns.
-So, it's nearly impossible to make a patch series because I have to send my email 10 times to find a proxy which is not blocked. I will try to find a solution.
+Thank you for your answer.
+In the mean time, I've managed to solve problem by myself.
 
-Best Regards,
+message 'error: option --executable not recognized' was issued from
+python setup.py install ...options...
+One of options was --executable=/usr/bin/python that came from 
+buildroot's main python package makefile
+pkg-python.mk, see here excerpt:
 
-Fabrice
+PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS = \
+     --prefix=$(TARGET_DIR)/usr \
+     --executable=/usr/bin/python \
+     --single-version-externally-managed \
+     --root=/
 
------Message d'origine-----
-De?: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
-Envoy??: mardi 28 juin 2016 17:35
-??: FONTAINE Fabrice IMT/OLPS
-Cc?: buildroot at buildroot.org
-Objet?: Re: [Buildroot] [PATCH 3/4] ajtcl: new package
+I have removed line '--executable=/usr/bin/python' and package built 
+correctly.
+I'm not deeply familiar with python setup system, but I guess that here 
+must be
+some difference in installation of pure python modules and modules that 
+use cython, which is the case of psycopg2.
+I have added several other python packages that were pure python ones 
+without problem and using original script.
 
-Hello,
+I have rebuilt whole system, having many python modules, with above 
+change without problems
+I haven't commited that change back, so that I don't break anything else.
+Since I've changed pkg-python.mk which is used by many python modules 
+that I didn't try, I haven't commited that change back, so that I don't 
+break anything else.
 
-On Mon, 27 Jun 2016 17:12:29 +0000, fabrice.fontaine at orange.com wrote:
+I can do it of course.
+Do you perhaps know, are here some rules on commits of this sort?
 
-> No, this is an error on my side. This is the third patch on alljoyn 
-> but alljoyn thin core library (ajtcl) can be added independently of 
-> other patches. I can send it again if needed.
+Thank you and best regards,
+Borut.
 
-Since those packages seem to be related, I think it would be clearer if you sent a patch series that includes all these packages (of course, in separate patches, but in the same series).
-
-Thanks,
-
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering http://free-electrons.com
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+On 29.6.2016 1:27, Arnout Vandecappelle wrote:
+> On 28-06-16 13:25, pborut123 wrote:
+>> Hello,
+>>
+>> I'm new to this mailing list, quite new to buildroot, too.
+>> I'm trying to build distribution for Beaglebone black with Python 3.5.1 and
+>> postgresql 9.5.2.
+>> I want to have also psycopg2 module that is not present in current package list.
+>> I've tried to make my own package but I'm not successful.
+>>
+>> Last error, I've received from build is at installation step:
+>>>>> python-psycopg 2.6.1 Installing to target
+>> ...
+>> error: option --executable not recognized
+>   We're missing some context here: which command issued this error? It should be
+> written a few lines above.
+>
+>> make: ***
+>> [..buildroot/output/build/python-psycopg-2.6.1/.stamp_target_installed] Error 1
+>>
+>> My question is if can anybody help me with this, pointing me on what I've done
+>> wrong.
+>>
+>> Here is my package code:
+>>
+>> PYTHON_PSYCOPG_VERSION = 2.6.1
+>> PYTHON_PSYCOPG_SOURCE = psycopg2-$(PYTHON_PSYCOPG_VERSION).tar.gz
+>> PYTHON_PSYCOPG_SITE = http://initd.org/psycopg/tarballs/PSYCOPG-2-6
+>> PYTHON_PSYCOPG_LICENSE = GPLv2
+>> PYTHON_PSYCOPG_LICENSE_FILES = LICENSE
+>> PYTHON_PSYCOPG_SETUP_TYPE = setuptools
+>> PYTHON_PSYCOPG_BUILD_OPTS = build_ext --pg-config
+>> $(STAGING_DIR)/usr/bin/pg_config build
+>>
+>   You will certainly need
+>
+> PYTHON_PSYCOPG_DEPENDENCIES = postgresql
+>
+>> define PYTHON_PSYCOPG_INSTALL_CUSTOM_PG_CONFIG
+>>      $(INSTALL) -m 0755 -D package/python-psycopg/pg_config \
+>>          $(STAGING_DIR)/usr/bin/pg_config
+>   Eek? Why would you want to do this? You should use the pg_config provided by
+> postgresql, otherwise things will probably go wrong.
+>
+>   Regards,
+>   Arnout
+>
+>
+>> endef
+>> PYTHON_PSYCOPG_PRE_BUILD_HOOKS += PYTHON_PSYCOPG_INSTALL_CUSTOM_PG_CONFIG
+>> $(eval $(python-package))
+>>
+>> and here is missing host pg_config file, I've inserted to setup.py:
+>>
+>> #!/bin/sh
+>> # I've pointed to already cross-build posgresql base directory in build
+>> prefix=buildroot/output/build/postgresql-9.5.2/src
+>>
+>> case "$1" in
+>>    --includedir)
+>>      echo "$prefix/include"
+>>      ;;
+>>    --libdir)
+>>      echo "$prefix/lib"
+>>      ;;
+>>    --version)
+>>        echo "PostgreSQL 9.5.2"
+>>      ;;
+>>
+>>    *)
+>>      echo "Usage: $0 {--includedir|--libdir}"
+>> esac
+>>
+>> Thank you and best regards,
+>> Borut.
+>>
+>>
+>>
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
