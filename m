@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 00:44:19 +0200
-Subject: [Buildroot] [PATCH v1] package/grantlee: upgrade to 5.1.0,
- remove obsolote Qt4 build option
-In-Reply-To: <1467203620-11767-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1467203620-11767-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <20160701004419.3939f072@free-electrons.com>
+Date: Fri, 1 Jul 2016 00:44:36 +0200
+Subject: [Buildroot] [git commit] erlang: enable compilation on mipsel
+Message-ID: <20160630224446.2C71180AD1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a542d0fd55e961e3c5805f12bba490d3dcc15d33
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In the title: obsolote -> obsolete
+Erlang works fine on mipsel platforms so add it to the supported list.
 
-On Wed, 29 Jun 2016 14:33:40 +0200, Zoltan Gyarmati wrote:
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/erlang/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> -ifeq ($(BR2_PACKAGE_QT),y)
-> -GRANTLEE_DEPENDENCIES = qt
-> -else ifeq ($(BR2_PACKAGE_QT5),y)
->  GRANTLEE_DEPENDENCIES += qt5base qt5script
-
-I've changed this from += to =.
-
-And then applied to master.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/erlang/Config.in b/package/erlang/Config.in
+index 56cee54..11407db 100644
+--- a/package/erlang/Config.in
++++ b/package/erlang/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
+ 	# see HOWTO/INSTALL.md for Erlang's supported platforms
+ 	# when using its native atomic ops implementation
+ 	default y if BR2_i386 || BR2_x86_64 || BR2_powerpc || \
+-		BR2_sparc_v9 || BR2_arm || BR2_aarch64
++		BR2_sparc_v9 || BR2_arm || BR2_aarch64 || BR2_mipsel
+ 
+ comment "erlang needs a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU # fork()
