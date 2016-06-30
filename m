@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 30 Jun 2016 15:42:56 +0200
-Subject: [Buildroot] [PATCH 2/3] python-pysocks: bump to version 1.5.7
+Date: Thu, 30 Jun 2016 15:42:57 +0200
+Subject: [Buildroot] [PATCH 3/3] python-psutil: bump to version 4.3.0
 In-Reply-To: <1467294177-23836-1-git-send-email-yegorslists@googlemail.com>
 References: <1467294177-23836-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1467294177-23836-2-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1467294177-23836-3-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +14,36 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-pysocks/python-pysocks.hash | 6 +++---
- package/python-pysocks/python-pysocks.mk   | 4 ++--
+ package/python-psutil/python-psutil.hash | 6 +++---
+ package/python-psutil/python-psutil.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pysocks/python-pysocks.hash b/package/python-pysocks/python-pysocks.hash
-index 9388c42..556996a 100644
---- a/package/python-pysocks/python-pysocks.hash
-+++ b/package/python-pysocks/python-pysocks.hash
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index 8e3a535..007b7c5 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=c825c7c52b2c79dde73cac8d04bd25cb, sha256 locally computed
--md5     c825c7c52b2c79dde73cac8d04bd25cb  PySocks-1.5.6.tar.gz
--sha256  a62b35b13968ba3642a973d115ae6a11be886b5f5ae0841a3ecad4b4f1d7deb1  PySocks-1.5.6.tar.gz
-+# md5 from https://pypi.python.org/pypi/PySocks/json, sha256 locally computed
-+md5     68f4ad7a8d4fa725656ae3e9dd142d29  PySocks-1.5.7.tar.gz
-+sha256  e51c7694b10288e6fd9a28e15c0bcce9aca0327e7b32ebcd9af05fcd56f38b88  PySocks-1.5.7.tar.gz
-diff --git a/package/python-pysocks/python-pysocks.mk b/package/python-pysocks/python-pysocks.mk
-index a556ced..a99a399 100644
---- a/package/python-pysocks/python-pysocks.mk
-+++ b/package/python-pysocks/python-pysocks.mk
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=713f259f917a0c26acfbb7e6ae632ef7, sha256 locally computed
+-md5	713f259f917a0c26acfbb7e6ae632ef7  psutil-4.2.0.tar.gz
+-sha256  544f013a0aea7199e07e3efe5627f5d4165179a04c66050b234cc3be2eca1ace  psutil-4.2.0.tar.gz
++# md5 from https://pypi.python.org/pypi/psutil/json, sha256 locally computed
++md5	ca97cf5f09c07b075a12a68b9d44a67d  psutil-4.3.0.tar.gz
++sha256  86197ae5978f216d33bfff4383d5cc0b80f079d09cf45a2a406d1abb5d0299f0  psutil-4.3.0.tar.gz
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index a5a1de9..85882ad 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYSOCKS_VERSION = 1.5.6
-+PYTHON_PYSOCKS_VERSION = 1.5.7
- PYTHON_PYSOCKS_SOURCE = PySocks-$(PYTHON_PYSOCKS_VERSION).tar.gz
--PYTHON_PYSOCKS_SITE = https://pypi.python.org/packages/source/P/PySocks
-+PYTHON_PYSOCKS_SITE = https://pypi.python.org/packages/16/56/9b3513078f837fa8cb88ee01ec1cd805ed8104a37bc02ca8c2588ae8fe5a
- PYTHON_PYSOCKS_LICENSE = BSD-3c
- PYTHON_PYSOCKS_LICENSE_FILES = socks.py
- PYTHON_PYSOCKS_SETUP_TYPE = distutils
+-PYTHON_PSUTIL_VERSION = 4.2.0
++PYTHON_PSUTIL_VERSION = 4.3.0
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/a6/bf/5ce23dc9f50de662af3b4bf54812438c298634224924c4e18b7c3b57a2aa
++PYTHON_PSUTIL_SITE = https://pypi.python.org/packages/22/a8/6ab3f0b3b74a36104785808ec874d24203c6a511ffd2732dd215cf32d689
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3c
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
 -- 
 2.8.1
