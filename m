@@ -1,13 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jun 2016 09:58:00 +0200
-Subject: [Buildroot] [PATCH 1/2] package: add Odroid BL bootloader
- binaries
-In-Reply-To: <20160627155236.GI424@jack.zhora.eu>
-References: <1466950062-31783-1-git-send-email-andi@etezian.org>
- <1466950062-31783-2-git-send-email-andi@etezian.org>
- <20160626221048.02818b93@free-electrons.com>
- <20160627155236.GI424@jack.zhora.eu>
-Message-ID: <20160630095800.7288a44b@free-electrons.com>
+Date: Thu, 30 Jun 2016 10:12:27 +0200
+Subject: [Buildroot] [PATCH 05/24] erlang-goldrush: drop unused host
+ variant
+In-Reply-To: <1467207991-4905-6-git-send-email-julien.floret@6wind.com>
+References: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
+ <1467207991-4905-6-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160630101227.593f5752@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,32 +14,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 28 Jun 2016 00:52:36 +0900, Andi Shyti wrote:
+On Wed, 29 Jun 2016 15:46:12 +0200, Julien Floret wrote:
+> Signed-off-by: Julien Floret <julien.floret@6wind.com>
 
-> It is indeed annoying: I don't like the idea of
-> 
->  1. downloading two u-boot
->  2. download u-boot for just two files.
-> 
-> But, on the other hand, I don't like the hardkernel u-boot
-> either. I think it's old, ugly and too hacky; as a buildroot
-> user, I would like as much as I can to use mainline software.
-> Besides, the cool thing of this board is that it is well
-> supported both from the Linux Kernel and u-boot.
+This one is a good example of what I said yesterday. You have the
+following dependency chain:
 
-OK. Indeed, I can understand the value of using a mainline U-Boot, even
-if you have to use the binary blobs for the first stage bootloader.
+ ejabberd -> host-erlang-lager -> host-erlang-goldrush
 
-> How about creating a new repository with just these three files?
-> If it sounds good, I will check with the licensing, even though I
-> don't thing it will be a problem.
+The host-erlang-lager -> host-erlang-goldrush dependency is not visible
+by grepping for host-erlang-goldrush because the erlang-lager package
+only does:
 
-No, we generally don't like to create repositories just for Buildroot.
-So please keep your new package, possibly with an explanation in the
-Config.in help text as to why it exists (kind of summarizing the
-discussion we had).
+ERLANG_LAGER_VERSION = 2.2.0
+ERLANG_LAGER_SITE = $(call github,basho,lager,$(ERLANG_LAGER_VERSION))
+ERLANG_LAGER_LICENSE = Apache-2.0
+ERLANG_LAGER_LICENSE_FILES = LICENSE
+ERLANG_LAGER_DEPENDENCIES = erlang-goldrush
 
-Thanks a lot!
+$(eval $(rebar-package))
+$(eval $(host-rebar-package))
+
+And the line:
+
+ERLANG_LAGER_DEPENDENCIES = erlang-goldrush
+
+implies:
+
+HOST_ERLANG_LAGER_DEPENDENCIES = host-erlang-goldrush
+
+Best regards,
 
 Thomas
 -- 
