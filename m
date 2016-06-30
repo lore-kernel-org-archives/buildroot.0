@@ -1,40 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 30 Jun 2016 17:26:12 +0200
-Subject: [Buildroot] Buildroot package for psycopg module for Beaglebone
- black
-In-Reply-To: <5773DC07.8070709@gmail.com>
-References: <57725E95.3040107@gmail.com>
- <2c149f23-5762-32d8-f298-5f0af402c480@mind.be> <57737D1C.7050407@gmail.com>
- <CAGm1_ktjXHNA8j-0VYOsn9qUhbr2xaeFMTh+RGr1qu6g2-fWow@mail.gmail.com>
- <577394C0.5050006@gmail.com>
- <CAGm1_ku9J9pG=2fQDeRqOp3NnMD2BfzAtQ3iYkOMjHOKyAVjCQ@mail.gmail.com>
- <5773DC07.8070709@gmail.com>
-Message-ID: <bfd8b168-8e03-02f6-6b98-f0d9a39725ad@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 30 Jun 2016 12:53:44 -0300
+Subject: [Buildroot] [PATCH] libinput: bump to version 1.3.3
+Message-ID: <1467302024-32350-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libinput/libinput.hash | 4 ++--
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-
-On 29-06-16 16:32, pborut123 wrote:
-> I had to modify generated solution only to add (fake) host side pg_config
-> script, that is missing from postgresql package.
-
- What you should do instead is to update package/postgresql/pg_config and add
-the required version option. And that should be a separate patch, of course. The
-commit log of that patch should mention that psycopg needs it.
-
- Regards,
- Arnout
-
-> I think that here pg_config is needed only to get postgresql version.
-
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 1bb0973..764cf71 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2016-June/029485.html
+-sha256	0701230781b59c0f1510ae86da15a7b15655e723ace366ad479ccb09fe92a183	libinput-1.3.2.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2016-June/029680.html
++sha256	30c8edfe47654a38c235ac6b0541d79fd593d010bc18cdda8bd1f6cc6ad8b1ce	libinput-1.3.3.tar.xz
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 66a494b..b1b4f61 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.3.2
++LIBINPUT_VERSION = 1.3.3
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.3
