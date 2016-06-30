@@ -1,43 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jul 2016 23:36:15 +0200
-Subject: [Buildroot] [git commit] warpboard: README: Improve instructions
-	about using wifi
-Message-ID: <20160801082747.B696B81F71@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Jul 2016 00:00:27 +0200
+Subject: [Buildroot] [PATCH] python-meld3: bump to version 1.0.2
+In-Reply-To: <1467297538-31952-1-git-send-email-yegorslists@googlemail.com>
+References: <1467297538-31952-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160701000027.50cbb908@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc8472fb8ab08ed24d03f42cac62a209d87f30a9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Provide a more complete set of instructions on how to get Wifi
-working on the warpboard.
+On Thu, 30 Jun 2016 16:38:58 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> meld3 1.0.2 supports Python 3, so drop Python 2 only dependency.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/python-meld3/Config.in         | 4 ++--
+>  package/python-meld3/python-meld3.hash | 5 +++--
+>  package/python-meld3/python-meld3.mk   | 4 ++--
+>  3 files changed, 7 insertions(+), 6 deletions(-)
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/freescale/warpboard/README | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/board/freescale/warpboard/README b/board/freescale/warpboard/README
-index 871d5cd..d900c6d 100644
---- a/board/freescale/warpboard/README
-+++ b/board/freescale/warpboard/README
-@@ -66,4 +66,14 @@ $ hciconfig hci0 up
- Using Wifi
- ==========
- 
--$ ifconfig wlan0 up
-+Enable the wireless_utils and wpa_suplicant packages, and then run:
-+
-+# modprobe brcmfmac
-+# iwconfig wlan0 essid ACCESSPOINTNAME
-+# wpa_passphrase ACCESSPOINTNAME > /etc/wpa.conf
-+(enter the wifi password and press enter)
-+# wpa_supplicant -Dwext -iwlan0 -c /etc/wpa.conf &
-+# udhcpc -i wlan0
-+# ping buildroot.org
-+
-+Enjoy!
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
