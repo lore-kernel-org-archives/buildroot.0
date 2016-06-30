@@ -1,48 +1,48 @@
-From: Julien Floret <julien.floret@6wind.com>
-Date: Thu, 30 Jun 2016 15:01:04 +0200
-Subject: [Buildroot] [PATCH 00/24] Drop unused host packages
-In-Reply-To: <CAAEAJfAjU1Rgz1hzbyOjDErsQ3L38suBKxh74n6+eNNPUThqdw@mail.gmail.com>
-References: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
- <20160629155233.510c456e@free-electrons.com>
- <CAHfJR7h01DTkHetP0W196NbmeHCNZZjw6Ju-D9uP3pA6+A1gNw@mail.gmail.com>
- <20160629161137.5b5a13b3@free-electrons.com>
- <CAHfJR7iZpPnpVB0NqQPCEvYU7myCsdW2x=m5aoi1KGZk0p_MTg@mail.gmail.com>
- <20160629164336.67a86168@free-electrons.com>
- <CAAEAJfAjU1Rgz1hzbyOjDErsQ3L38suBKxh74n6+eNNPUThqdw@mail.gmail.com>
-Message-ID: <CAHfJR7hEoGKgCjiY-5FP2PsyGPTwj=-EBNbk5Fc_E8kHg7Fn5A@mail.gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu, 30 Jun 2016 15:42:55 +0200
+Subject: [Buildroot] [PATCH 1/3] python-cssselect: bump to version 0.9.2
+Message-ID: <1467294177-23836-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2016-06-29 23:53 GMT+02:00 Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>:
-> On 29 June 2016 at 11:43, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> [..]
->>
->>  */ Host packages that are not used by other packages in Buildroot, but
->>     might be used by private, company/project-specific packages. I
->>     don't like this situation, because there is really no way these
->>     host packages will ever be built/tested. But I'm not sure what to
->>     do about these: adding an entry in menuconfig is a bit weird since
->>     they are not really needed for anything else but a build dependency.
->>
->
-> I guess we could argue that if company/project is willing to maintain some
-> private package(s), then they are willing to maintain its dependencies,
-> incluing host package(s) and carry the whole bunch out of tree.
-> --
-> Ezequiel Garc?a, VanguardiaSur
-> www.vanguardiasur.com.ar
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Then maybe the best approach would be to add Kconfig options for
-all host packages, similarly to target packages - blind options for build
-dependencies that get selected automatically by other packages, and
-explicit options for host packages that are unreachable in upstream
-buildroot - to allow testing their build and keep track of them?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-cssselect/python-cssselect.hash | 6 +++---
+ package/python-cssselect/python-cssselect.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Besides, having Kconfig options for all host packages would open the way
-to including only the .mk files of selected packages, to speed up the
-makefile parsing.
-Maybe it could be handy for other things, too?
+diff --git a/package/python-cssselect/python-cssselect.hash b/package/python-cssselect/python-cssselect.hash
+index 08c81e5..d3ee055 100644
+--- a/package/python-cssselect/python-cssselect.hash
++++ b/package/python-cssselect/python-cssselect.hash
+@@ -1,4 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/cssselect/json
+-md5	c74f45966277dc7a0f768b9b0f3522ac  cssselect-0.9.1.tar.gz
+-# sha256 calculated by scanpypi
+-sha256	0535a7e27014874b27ae3a4d33e8749e345bdfa62766195208b7996bf1100682  cssselect-0.9.1.tar.gz
++md5	4c5931d8456dfe72fa4662f9c0509bfa  cssselect-0.9.2.tar.gz
++# sha256 locally computed
++sha256	713b5b99ef08022257b3409c7ae1b18b2c6536b3f155e6237c5cfba0f67ae6f5  cssselect-0.9.2.tar.gz
+diff --git a/package/python-cssselect/python-cssselect.mk b/package/python-cssselect/python-cssselect.mk
+index c6b476b..0db69b9 100644
+--- a/package/python-cssselect/python-cssselect.mk
++++ b/package/python-cssselect/python-cssselect.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CSSSELECT_VERSION = 0.9.1
++PYTHON_CSSSELECT_VERSION = 0.9.2
+ PYTHON_CSSSELECT_SOURCE = cssselect-$(PYTHON_CSSSELECT_VERSION).tar.gz
+-PYTHON_CSSSELECT_SITE = https://pypi.python.org/packages/source/c/cssselect
++PYTHON_CSSSELECT_SITE = https://pypi.python.org/packages/11/21/47b5d2696a945da177d2344b6e330b7b0d1c52404063cb387d2261517ccb
+ PYTHON_CSSSELECT_SETUP_TYPE = setuptools
+ PYTHON_CSSSELECT_LICENSE = BSD-3c
+ PYTHON_CSSSELECT_LICENSE_FILES = LICENSE
+-- 
+2.8.1
