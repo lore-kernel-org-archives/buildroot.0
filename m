@@ -1,126 +1,48 @@
-From: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
-Date: Thu, 30 Jun 2016 09:53:38 -0300
-Subject: [Buildroot] [PATCH 3/3] package/protobuf-lua: new package
-In-Reply-To: <1467291218-7710-1-git-send-email-tiago.brusamarello@datacom.ind.br>
-References: <1467291218-7710-1-git-send-email-tiago.brusamarello@datacom.ind.br>
-Message-ID: <1467291218-7710-3-git-send-email-tiago.brusamarello@datacom.ind.br>
+From: Julien Floret <julien.floret@6wind.com>
+Date: Thu, 30 Jun 2016 15:01:04 +0200
+Subject: [Buildroot] [PATCH 00/24] Drop unused host packages
+In-Reply-To: <CAAEAJfAjU1Rgz1hzbyOjDErsQ3L38suBKxh74n6+eNNPUThqdw@mail.gmail.com>
+References: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
+ <20160629155233.510c456e@free-electrons.com>
+ <CAHfJR7h01DTkHetP0W196NbmeHCNZZjw6Ju-D9uP3pA6+A1gNw@mail.gmail.com>
+ <20160629161137.5b5a13b3@free-electrons.com>
+ <CAHfJR7iZpPnpVB0NqQPCEvYU7myCsdW2x=m5aoi1KGZk0p_MTg@mail.gmail.com>
+ <20160629164336.67a86168@free-electrons.com>
+ <CAAEAJfAjU1Rgz1hzbyOjDErsQ3L38suBKxh74n6+eNNPUThqdw@mail.gmail.com>
+Message-ID: <CAHfJR7hEoGKgCjiY-5FP2PsyGPTwj=-EBNbk5Fc_E8kHg7Fn5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package adds support to use Google's Protocol buffers
-from Lua scripts.
+2016-06-29 23:53 GMT+02:00 Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>:
+> On 29 June 2016 at 11:43, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> [..]
+>>
+>>  */ Host packages that are not used by other packages in Buildroot, but
+>>     might be used by private, company/project-specific packages. I
+>>     don't like this situation, because there is really no way these
+>>     host packages will ever be built/tested. But I'm not sure what to
+>>     do about these: adding an entry in menuconfig is a bit weird since
+>>     they are not really needed for anything else but a build dependency.
+>>
+>
+> I guess we could argue that if company/project is willing to maintain some
+> private package(s), then they are willing to maintain its dependencies,
+> incluing host package(s) and carry the whole bunch out of tree.
+> --
+> Ezequiel Garc?a, VanguardiaSur
+> www.vanguardiasur.com.ar
 
-The original package from GitHub supports deployment as
-a LuaRocks package, but the module name as set to 'protobuf'
-and not 'protobuf-lua' which causes naming problems when
-building it in Buildroot so the 'generick-package' method
-was used instead.
+Then maybe the best approach would be to add Kconfig options for
+all host packages, similarly to target packages - blind options for build
+dependencies that get selected automatically by other packages, and
+explicit options for host packages that are unreachable in upstream
+buildroot - to allow testing their build and keep track of them?
 
-This package depends on the 'protoc-gen-lua' plugin package
-for generation of Protobuf messages types in Lua format.
-
-Signed-off-by: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
----
- package/Config.in                    |  1 +
- package/protobuf-lua/Config.in       |  7 +++++
- package/protobuf-lua/protobuf-lua.mk | 60 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 68 insertions(+)
- create mode 100644 package/protobuf-lua/Config.in
- create mode 100644 package/protobuf-lua/protobuf-lua.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 715f8ab..dc32465 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -548,6 +548,7 @@ menu "Lua libraries/modules"
- 	source "package/luvi/Config.in"
- 	source "package/lzlib/Config.in"
- 	source "package/orbit/Config.in"
-+	source "package/protobuf-lua/Config.in"
- 	source "package/rings/Config.in"
- 	source "package/turbolua/Config.in"
- 	source "package/wsapi/Config.in"
-diff --git a/package/protobuf-lua/Config.in b/package/protobuf-lua/Config.in
-new file mode 100644
-index 0000000..e602111
---- /dev/null
-+++ b/package/protobuf-lua/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PROTOBUF_LUA
-+	bool "protobuf-lua"
-+	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUA_5_2
-+	help
-+		Runtime libraries to use Protocol Buffers from Lua scripts.
-+
-+		https://github.com/djungelorm/protobuf-lua
-diff --git a/package/protobuf-lua/protobuf-lua.mk b/package/protobuf-lua/protobuf-lua.mk
-new file mode 100644
-index 0000000..1a6c693
---- /dev/null
-+++ b/package/protobuf-lua/protobuf-lua.mk
-@@ -0,0 +1,60 @@
-+################################################################################
-+#
-+# protobuf-lua
-+#
-+################################################################################
-+
-+
-+PROTOBUF_LUA_VERSION = v1.1.1
-+PROTOBUF_LUA_SITE = $(call github,djungelorm,protobuf-lua,$(PROTOBUF_LUA_VERSION))
-+PROTOBUF_LUA_DEPENDENCIES = luainterpreter host-protoc-gen-lua
-+PROTOBUF_LUA_LICENSE = BSD-3c
-+PROTOBUF_LUA_LICENSE_FILES = LICENSE
-+
-+define PROTOBUF_LUA_BUILD_CMDS
-+	# build Lua Protobuf shared lib
-+	$(TARGET_CC) -Os -shared -std=gnu99 -fPIC $(@D)/protobuf/pb.c -o $(@D)/protobuf/pb.so
-+
-+	# build Protobuf examples
-+	PATH=$(BR_PATH) $(HOST_DIR)/usr/bin/protoc --lua_out=$(@D)/example --proto_path=$(@D)/example \
-+		$(@D)/example/person.proto
-+endef
-+
-+define PROTOBUF_LUA_INSTALL_TARGET_CMDS
-+	# install Lua Protobuf support
-+	mkdir -p $(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+	$(INSTALL) -m 0755 $(@D)/protobuf/pb.so \
-+		$(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/protobuf/pb.so
-+	mkdir -p $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+	$(INSTALL) -m 0755 $(@D)/protobuf/containers.lua \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+	$(INSTALL) -m 0755 $(@D)/protobuf/decoder.lua \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+	$(INSTALL) -m 0755 $(@D)/protobuf/descriptor.lua \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+	$(INSTALL) -m 0755 $(@D)/protobuf/encoder.lua \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+	$(INSTALL) -m 0755 $(@D)/protobuf/init.lua \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+	$(INSTALL) -m 0755 $(@D)/protobuf/listener.lua \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+	$(INSTALL) -m 0755 $(@D)/protobuf/text_format.lua \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+	$(INSTALL) -m 0755 $(@D)/protobuf/type_checkers.lua \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+	$(INSTALL) -m 0755 $(@D)/protobuf/type_checkers.lua \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+	$(INSTALL) -m 0755 $(@D)/protobuf/wire_format.lua \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
-+
-+	# install example files
-+	mkdir -p $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf/example
-+	$(INSTALL) -m 0755 $(@D)/example/person_pb.lua \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf/example
-+	$(INSTALL) -m 0755 $(@D)/example/person.proto \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf/example
-+	$(INSTALL) -m 0755 $(@D)/example/test.lua \
-+		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf/example
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.9.1
+Besides, having Kconfig options for all host packages would open the way
+to including only the .mk files of selected packages, to speed up the
+makefile parsing.
+Maybe it could be handy for other things, too?
