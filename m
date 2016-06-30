@@ -1,63 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jun 2016 23:57:05 +0200
-Subject: [Buildroot] [git commit] python-meld3: bump to version 1.0.2
-Message-ID: <20160630220000.C54BF81794@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 30 Jun 2016 19:47:21 -0300
+Subject: [Buildroot] [PATCH 0/8] Re-organize Qemu MIPS defconfigs
+In-Reply-To: <1467198275-46657-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1467198275-46657-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <5775A179.4050607@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d7aa870a162b7b4cbb840f79a56e1f2c0e6d89c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 29/06/16 08:04, Vicente Olivert Riera wrote:
 
-meld3 1.0.2 supports Python 3, so drop Python 2 only dependency.
+> This patch renames the existing Qemu MIPS defconfigs in order to have a
+> name format that allows a better organization if more defconfigs are
+> added for different MIPS variants.
+>
+> After that it adds Qemu MIPS defconfigs for mips-32r6 and mips-64r6,
+> both big and little endian.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-meld3/Config.in         | 4 ++--
- package/python-meld3/python-meld3.hash | 5 +++--
- package/python-meld3/python-meld3.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/package/python-meld3/Config.in b/package/python-meld3/Config.in
-index 8dee723..9366b3c 100644
---- a/package/python-meld3/Config.in
-+++ b/package/python-meld3/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PYTHON_MELD3
- 	bool "python-meld3"
--	depends on BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON_PYEXPAT
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
- 	help
- 	  A HTML/XML templating system.
- 
-diff --git a/package/python-meld3/python-meld3.hash b/package/python-meld3/python-meld3.hash
-index 1525aca..c7d9025 100644
---- a/package/python-meld3/python-meld3.hash
-+++ b/package/python-meld3/python-meld3.hash
-@@ -1,2 +1,3 @@
--# locally computed
--sha256  a425e9a9e0d9e3d69a2f5c1451d582f1222a7be94a957ca1e5301fd4045b5dbe  meld3-0.6.8.tar.gz
-+# md5 from https://pypi.python.org/pypi/meld3/json, sha256 locally computed
-+md5     3ccc78cd79cffd63a751ad7684c02c91  meld3-1.0.2.tar.gz
-+sha256  f7b754a0fde7a4429b2ebe49409db240b5699385a572501bb0d5627d299f9558  meld3-1.0.2.tar.gz
-diff --git a/package/python-meld3/python-meld3.mk b/package/python-meld3/python-meld3.mk
-index 3c8acbc..268263d 100644
---- a/package/python-meld3/python-meld3.mk
-+++ b/package/python-meld3/python-meld3.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MELD3_VERSION = 0.6.8
-+PYTHON_MELD3_VERSION = 1.0.2
- PYTHON_MELD3_SOURCE = meld3-$(PYTHON_MELD3_VERSION).tar.gz
--PYTHON_MELD3_SITE = http://pypi.python.org/packages/source/m/meld3
-+PYTHON_MELD3_SITE = https://pypi.python.org/packages/45/a0/317c6422b26c12fe0161e936fc35f36552069ba8e6f7ecbd99bbffe32a5f
- PYTHON_MELD3_LICENSE = ZPLv2.1
- PYTHON_MELD3_LICENSE_FILES = COPYRIGHT.txt LICENSE.txt
- PYTHON_MELD3_SETUP_TYPE = distutils
+Hi Vicente.
+Wouldn't it be better to compose the arch + cpu combo without the 
+underscore? Otherwise it looks a bit noisy.
+Something like qemu_mipsel64r6_malta_defconfig for example instead of 
+qemu_mipsel_64r6_malta_defconfig.
+Also the MSA patches can be dropped if you use kernel 4.6.2+ since it's 
+upstream (hence use 4.6.3).
+Other than that it looks great.
+Regards.
