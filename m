@@ -1,240 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Jun 2016 12:13:38 +0200
-Subject: [Buildroot] [git commit] makedevs: add capability support
-Message-ID: <20160630102354.D80BF820FE@busybox.osuosl.org>
+Date: Thu, 30 Jun 2016 12:16:05 +0200
+Subject: [Buildroot] [git commit] binutils: bump 2.26.x series to 2.26.1
+Message-ID: <20160630102354.F0DE9820FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=688059ebb23227fb13aad319df6e78686ea6e14a
+commit: https://git.buildroot.net/buildroot/commit/?id=1f5d176ebf65bfd433100f9324db699abc91956c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add the support of capability to makedevs as extended attribute.
-Now, it's possible to add a  line "|xattr <capability>" after a
-file description to also add a capability to this file. It's
-possible to add severals capabilities with severals lines.
-
-[Peter: extend doc, reword Config.in, extend error message,
-	use HOST_MAKEDEVS_CFLAGS/LDFLAGS for all flags]
-Signed-off-by: Philippe Reynes <philippe.reynes@sagemcom.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/makedev-syntax.txt | 30 ++++++++++++++++++
- package/makedevs/makedevs.c    | 72 ++++++++++++++++++++++++++++++++++++++++--
- package/makedevs/makedevs.mk   | 13 ++++++--
- system/Config.in               |  5 +++
- 4 files changed, 116 insertions(+), 4 deletions(-)
+ package/binutils/{2.26 => 2.26.1}/0120-sh-conf.patch                  | 0
+ package/binutils/{2.26 => 2.26.1}/0300-ld-makefile.patch              | 0
+ package/binutils/{2.26 => 2.26.1}/0301-check-ldrunpath-length.patch   | 0
+ .../{2.26 => 2.26.1}/0500-add-sysroot-fix-from-bug-3049.patch         | 0
+ .../binutils/{2.26 => 2.26.1}/0600-poison-system-directories.patch    | 0
+ .../{2.26 => 2.26.1}/0900-Correct-nios2-_gp-address-computation.patch | 0
+ .../0901-Fix-assertion-reduce-number-of-messages-about-FDE-en.patch   | 0
+ .../0902-xtensa-fix-signedness-of-gas-relocations.patch               | 0
+ .../0903-xtensa-fix-.init-.fini-literals-moving.patch                 | 0
+ package/binutils/Config.in.host                                       | 4 ++--
+ package/binutils/binutils.hash                                        | 2 +-
+ 11 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
-index e4dffc9..d6efb31 100644
---- a/docs/manual/makedev-syntax.txt
-+++ b/docs/manual/makedev-syntax.txt
-@@ -71,3 +71,33 @@ and then for device files corresponding to the partitions of
- /dev/hda b 640 root root 3 1 1 1 15
- ----
+diff --git a/package/binutils/2.26/0120-sh-conf.patch b/package/binutils/2.26.1/0120-sh-conf.patch
+similarity index 100%
+rename from package/binutils/2.26/0120-sh-conf.patch
+rename to package/binutils/2.26.1/0120-sh-conf.patch
+diff --git a/package/binutils/2.26/0300-ld-makefile.patch b/package/binutils/2.26.1/0300-ld-makefile.patch
+similarity index 100%
+rename from package/binutils/2.26/0300-ld-makefile.patch
+rename to package/binutils/2.26.1/0300-ld-makefile.patch
+diff --git a/package/binutils/2.26/0301-check-ldrunpath-length.patch b/package/binutils/2.26.1/0301-check-ldrunpath-length.patch
+similarity index 100%
+rename from package/binutils/2.26/0301-check-ldrunpath-length.patch
+rename to package/binutils/2.26.1/0301-check-ldrunpath-length.patch
+diff --git a/package/binutils/2.26/0500-add-sysroot-fix-from-bug-3049.patch b/package/binutils/2.26.1/0500-add-sysroot-fix-from-bug-3049.patch
+similarity index 100%
+rename from package/binutils/2.26/0500-add-sysroot-fix-from-bug-3049.patch
+rename to package/binutils/2.26.1/0500-add-sysroot-fix-from-bug-3049.patch
+diff --git a/package/binutils/2.26/0600-poison-system-directories.patch b/package/binutils/2.26.1/0600-poison-system-directories.patch
+similarity index 100%
+rename from package/binutils/2.26/0600-poison-system-directories.patch
+rename to package/binutils/2.26.1/0600-poison-system-directories.patch
+diff --git a/package/binutils/2.26/0900-Correct-nios2-_gp-address-computation.patch b/package/binutils/2.26.1/0900-Correct-nios2-_gp-address-computation.patch
+similarity index 100%
+rename from package/binutils/2.26/0900-Correct-nios2-_gp-address-computation.patch
+rename to package/binutils/2.26.1/0900-Correct-nios2-_gp-address-computation.patch
+diff --git a/package/binutils/2.26/0901-Fix-assertion-reduce-number-of-messages-about-FDE-en.patch b/package/binutils/2.26.1/0901-Fix-assertion-reduce-number-of-messages-about-FDE-en.patch
+similarity index 100%
+rename from package/binutils/2.26/0901-Fix-assertion-reduce-number-of-messages-about-FDE-en.patch
+rename to package/binutils/2.26.1/0901-Fix-assertion-reduce-number-of-messages-about-FDE-en.patch
+diff --git a/package/binutils/2.26/0902-xtensa-fix-signedness-of-gas-relocations.patch b/package/binutils/2.26.1/0902-xtensa-fix-signedness-of-gas-relocations.patch
+similarity index 100%
+rename from package/binutils/2.26/0902-xtensa-fix-signedness-of-gas-relocations.patch
+rename to package/binutils/2.26.1/0902-xtensa-fix-signedness-of-gas-relocations.patch
+diff --git a/package/binutils/2.26/0903-xtensa-fix-.init-.fini-literals-moving.patch b/package/binutils/2.26.1/0903-xtensa-fix-.init-.fini-literals-moving.patch
+similarity index 100%
+rename from package/binutils/2.26/0903-xtensa-fix-.init-.fini-literals-moving.patch
+rename to package/binutils/2.26.1/0903-xtensa-fix-.init-.fini-literals-moving.patch
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 0d90e3e..583aaad 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -20,7 +20,7 @@ choice
+ 		bool "binutils 2.25.1"
  
-+Extended attributes are supported if
-++BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES+ is enabled.
-+This is done by adding a line starting with +|xattr+ after
-+the line describing the file. Right now, only capability
-+is supported as extended attribute.
-+
-+|=====================
-+| \|xattr | capability
-+|=====================
-+
-+- +|xattr+ is a "flag" that indicate an extended attribute
-+- +capability+ is a capability to add to the previous file
-+
-+If you want to add the capability cap_sys_admin to the binary foo,
-+you will write :
-+
-+----
-+/usr/bin/foo f 755 root root - - - - -
-+|xattr cap_sys_admin+eip
-+----
-+
-+You can add several capabilities to a file by using several +|xattr+ lines.
-+If you want to add the capability cap_sys_admin and cap_net_admin to the
-+binary foo, you will write :
-+
-+----
-+/usr/bin/foo f 755 root root - - - - -
-+|xattr cap_sys_admin+eip
-+|xattr cap_net_admin+eip
-+----
-diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
-index e5ef164..cacb144 100644
---- a/package/makedevs/makedevs.c
-+++ b/package/makedevs/makedevs.c
-@@ -35,6 +35,9 @@
- #include <sys/sysmacros.h>     /* major() and minor() */
- #endif
- #include <ftw.h>
-+#ifdef EXTENDED_ATTRIBUTES
-+#include <sys/capability.h>
-+#endif /* EXTENDED_ATTRIBUTES */
+ 	config BR2_BINUTILS_VERSION_2_26_X
+-		bool "binutils 2.26"
++		bool "binutils 2.26.1"
  
- const char *bb_applet_name;
- uid_t recursive_uid;
-@@ -349,6 +352,49 @@ char *concat_path_file(const char *path, const char *filename)
- 	return outbuf;
- }
+ endchoice
  
-+#ifdef EXTENDED_ATTRIBUTES
-+int bb_set_xattr(const char *fpath, const char *xattr)
-+{
-+	cap_t cap, cap_file, cap_new;
-+	char *cap_file_text, *cap_new_text;
-+	ssize_t length;
-+
-+	cap = cap_from_text(xattr);
-+	if (cap == NULL)
-+		bb_perror_msg_and_die("cap_from_text failed for %s", xattr);
-+
-+	cap_file = cap_get_file(fpath);
-+	if (cap_file == NULL) {
-+		/* if no capability was set before, we initialize cap_file */
-+		if (errno != ENODATA)
-+			bb_perror_msg_and_die("cap_get_file failed on %s", fpath);
-+
-+		cap_file = cap_init();
-+		if (!cap_file)
-+			bb_perror_msg_and_die("cap_init failed");
-+	}
-+
-+	if ((cap_file_text = cap_to_text(cap_file, &length)) == NULL)
-+		bb_perror_msg_and_die("cap_to_name failed on %s", fpath);
-+
-+	bb_xasprintf(&cap_new_text, "%s %s", cap_file_text, xattr);
-+
-+	if ((cap_new = cap_from_text(cap_new_text)) == NULL)
-+		bb_perror_msg_and_die("cap_from_text failed on %s", cap_new_text);
-+
-+	if (cap_set_file(fpath, cap_new) == -1)
-+		bb_perror_msg_and_die("cap_set_file failed for %s (xattr = %s)", fpath, xattr);
-+
-+	cap_free(cap);
-+	cap_free(cap_file);
-+	cap_free(cap_file_text);
-+	cap_free(cap_new);
-+	cap_free(cap_new_text);
-+
-+	return 0;
-+}
-+#endif /* EXTENDED_ATTRIBUTES */
-+
- void bb_show_usage(void)
- {
- 	fprintf(stderr, "%s: [-d device_table] rootdir\n\n", bb_applet_name);
-@@ -413,6 +459,7 @@ int main(int argc, char **argv)
- 	int opt;
- 	FILE *table = stdin;
- 	char *rootdir = NULL;
-+	char *full_name = NULL;
- 	char *line = NULL;
- 	int linenum = 0;
- 	int ret = EXIT_SUCCESS;
-@@ -454,15 +501,30 @@ int main(int argc, char **argv)
- 		unsigned int count = 0;
- 		unsigned int increment = 0;
- 		unsigned int start = 0;
-+		char xattr[255];
- 		char name[4096];
- 		char user[41];
- 		char group[41];
--		char *full_name;
- 		uid_t uid;
- 		gid_t gid;
+@@ -29,7 +29,7 @@ config BR2_BINUTILS_VERSION
+ 	default "arc-2016.09-eng005"	if BR2_arc
+ 	default "2.24"		if BR2_BINUTILS_VERSION_2_24_X
+ 	default "2.25.1"	if BR2_BINUTILS_VERSION_2_25_X
+-	default "2.26"		if BR2_BINUTILS_VERSION_2_26_X
++	default "2.26.1"	if BR2_BINUTILS_VERSION_2_26_X
  
- 		linenum++;
+ config BR2_BINUTILS_ENABLE_LTO
+ 	bool
+diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
+index b313702..412dc11 100644
+--- a/package/binutils/binutils.hash
++++ b/package/binutils/binutils.hash
+@@ -1,7 +1,7 @@
+ # From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
+ sha512  5ec95ad47d49b12c4558a8db0ca2109d3ee1955e3776057f3330c4506f8f4d1cf5e505fbf8a16b98403a0fcdeaaf986fe0a22be6456247dbdace63ce1f776b12  binutils-2.24.tar.bz2
+ sha512  0b36dda0e6d32cd25613c0e64b56b28312515c54d6a159efd3db9a86717f114ab0a0a1f69d08975084d55713ebaeab64e4085c9b3d1c3fa86712869f80eb954d  binutils-2.25.1.tar.bz2
+-sha512  e77e1b8dbbcbaf9ac2fae95c4403615808af3be03b2e1d32448cd3a7d32c43273f8bcace3f2de84ec120a982879295673029da306e2885dbf5f990584932cfc7  binutils-2.26.tar.bz2
++sha512  9d9165609fd3b0f20d616f9891fc8e2b466eb13e2bfce40125e12427f8f201d20e2b8322bb6cb2b45e8df812f0e8ac059149f8a1f69ba3ed9d86a35c6a540b67  binutils-2.26.1.tar.bz2
  
-+		if (1 == sscanf(line, "|xattr %254s", xattr)) {
-+#ifdef EXTENDED_ATTRIBUTES
-+			if (!full_name)
-+				bb_error_msg_and_die("line %d should be after a file\n", linenum);
-+
-+			if (bb_set_xattr(full_name, xattr) < 0)
-+				bb_error_msg_and_die("can't set cap %s on file %s\n", xattr, full_name);
-+#else
-+			bb_error_msg_and_die("line %d not supported: '%s'\nDid you forget to enable "
-+					     "BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES?\n",
-+					     linenum, line);
-+#endif /* EXTENDED_ATTRIBUTES */
-+			continue;
-+		}
-+
- 		if ((2 > sscanf(line, "%4095s %c %o %40s %40s %u %u %u %u %u", name,
- 						&type, &mode, user, group, &major,
- 						&minor, &start, &increment, &count)) ||
-@@ -487,6 +549,13 @@ int main(int argc, char **argv)
- 		} else {
- 			uid = getuid();
- 		}
-+
-+		/*
-+		 * free previous full name
-+		 * we don't de-allocate full_name at the end of the parsing,
-+		 * because we may need it if the next line is an xattr.
-+		 */
-+		free(full_name);
- 		full_name = concat_path_file(rootdir, name);
- 
- 		if (type == 'd') {
-@@ -585,7 +654,6 @@ int main(int argc, char **argv)
- 		}
- loop:
- 		free(line);
--		free(full_name);
- 	}
- 	fclose(table);
- 
-diff --git a/package/makedevs/makedevs.mk b/package/makedevs/makedevs.mk
-index fa8e753..130f5bc 100644
---- a/package/makedevs/makedevs.mk
-+++ b/package/makedevs/makedevs.mk
-@@ -11,6 +11,15 @@ HOST_MAKEDEVS_SOURCE =
- MAKEDEVS_VERSION = buildroot-$(BR2_VERSION)
- MAKEDEVS_LICENSE = GPLv2
- 
-+HOST_MAKEDEVS_CFLAGS = $(HOST_CFLAGS)
-+HOST_MAKEDEVS_LDFLAGS = $(HOST_LDFLAGS)
-+
-+ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
-+HOST_MAKEDEVS_DEPENDENCIES += host-libcap
-+HOST_MAKEDEVS_CFLAGS += -DEXTENDED_ATTRIBUTES
-+HOST_MAKEDEVS_LDFLAGS += -lcap
-+endif
-+
- define MAKEDEVS_BUILD_CMDS
- 	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
- 		package/makedevs/makedevs.c -o $(@D)/makedevs
-@@ -21,8 +30,8 @@ define MAKEDEVS_INSTALL_TARGET_CMDS
- endef
- 
- define HOST_MAKEDEVS_BUILD_CMDS
--	$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
--		package/makedevs/makedevs.c -o $(@D)/makedevs
-+	$(HOSTCC) $(HOST_MAKEDEVS_CFLAGS) package/makedevs/makedevs.c \
-+		-o $(@D)/makedevs $(HOST_MAKEDEVS_LDFLAGS)
- endef
- 
- define HOST_MAKEDEVS_INSTALL_CMDS
-diff --git a/system/Config.in b/system/Config.in
-index 3018b0a..15d5b55 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -162,6 +162,11 @@ config BR2_ROOTFS_STATIC_DEVICE_TABLE
- 	  See package/makedevs/README for details on the usage and
- 	  syntax of these files.
- 
-+config BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
-+	bool "support extended attributes in device tables"
-+	help
-+	  Support extended attributes handling in device tables
-+
- choice
- 	prompt "Root FS skeleton"
- 
+ # Locally calculated (fetched from Github)
+ sha512  a0e2974990d6087aef94fec958b9f14458e847308d59dfb6f5dd8e9d1a246c4c4885a240ba43f15a7a20aff43bccba5a664daadf7fae54415bb8298620b46c23  binutils-arc-2016.09-eng005.tar.gz
