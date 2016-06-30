@@ -1,45 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Jun 2016 12:22:38 +0200
-Subject: [Buildroot] [git commit] package/python: Fix rebased patch
-	011-remove-python-symlink.patch
-Message-ID: <20160630102355.16737820FE@busybox.osuosl.org>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Thu, 30 Jun 2016 12:33:09 +0200
+Subject: [Buildroot] Python distutils.sysconfig values
+Message-ID: <5774F565.1070603@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e1b3235c2fc480414c4a2ad59d9db1cafd9d2ae
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear All,
 
-While rebasing one line was accidently not removed, this patch fixes
+i'm trying to enable the gpsd python module in Buildroot (currently it's
+disabled, see package/gpsd/gpsd.mk line #25). The gpsd build system uses
+scons, which in turn uses distutils.sysconfig to get the value of
+various paramaters (like the compiler to use, etc) like this:
 
-http://autobuild.buildroot.net/results/018/018303a5d551aaa6c91013ab0352437e9a2c28bc/
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python/011-remove-python-symlink.patch | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> vars = sysconfig.get_config_vars('CC', 'CXX', 'OPT', 'BASECFLAGS', 'CCSHARED', 'LDSHARED', 'SO', 'INCLUDEPY', 'LDFLAGS')
 
-diff --git a/package/python/011-remove-python-symlink.patch b/package/python/011-remove-python-symlink.patch
-index fed46f0..e021d83 100644
---- a/package/python/011-remove-python-symlink.patch
-+++ b/package/python/011-remove-python-symlink.patch
-@@ -12,7 +12,7 @@ Index: b/Makefile.pre.in
- ===================================================================
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -974,17 +974,11 @@
-+@@ -974,17 +974,10 @@
-  		echo "Creating directory $(LIBPC)"; \
-  		$(INSTALL) -d -m $(DIRMODE) $(DESTDIR)$(LIBPC); \
-  	fi
-@@ -20,7 +20,7 @@ Index: b/Makefile.pre.in
- -	then rm -f $(DESTDIR)$(BINDIR)/$(PYTHON); \
- -	else true; \
- -	fi
-- 	(cd $(DESTDIR)$(BINDIR); $(LN) -s python2$(EXE) $(PYTHON))
-+-	(cd $(DESTDIR)$(BINDIR); $(LN) -s python2$(EXE) $(PYTHON))
-  	-rm -f $(DESTDIR)$(BINDIR)/python2$(EXE)
-  	(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)$(EXE) python2$(EXE))
-  	-rm -f $(DESTDIR)$(BINDIR)/python2-config
+which apparently yields the following values:
+
+> ['/usr/bin/gcc -pthread', '/usr/bin/g++ -pthread', '-DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes', '-fno-strict-aliasing', '-fPIC', '/usr/bin/gcc -pthread -shared -L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/lib -L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,-rpath,/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,--enable-new-dtags', '.so', '/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/include/python2.7', '-L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/lib -L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,-rpath,/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,--enable-new-dtags']
+
+
+ Note that some of the variables related to the BR environment (like the
+python include dir), while others (most importantly CC) are coming from
+the host environment.
+ Does anybody could offer a hint where to look to get
+distutils.sysconfig to set all of these values correctly?
+
+Thanks in advance,
+
+-- 
+Zoltan Gyarmati
+https://zgyarmati.de
