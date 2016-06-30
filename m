@@ -1,38 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 00:04:33 +0200
-Subject: [Buildroot] [PATCH] scanpypi: rework runtime dependency handling
-In-Reply-To: <1467271504-929-1-git-send-email-yegorslists@googlemail.com>
-References: <1467271504-929-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160701000433.1e389b0f@free-electrons.com>
+Date: Fri, 1 Jul 2016 00:05:49 +0200
+Subject: [Buildroot] [git commit] package/domoticz: indentation cleanup
+Message-ID: <20160630220646.D876081E5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=13cfedf5fbc7f02fc8c9c9b34ca0f0368cee96bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 30 Jun 2016 09:25:04 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> In most cases Python's package dependencies found in setup.py are
-> runtime dependencies and hence don't need to be mentioned in *.mk
-> file.
-> 
-> Also add '# runtime' tag to select statements in Config.in.
-> 
-> __create_mk_requirements() itself is left for future uses (cffi backend
-> handling etc.).
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  support/scripts/scanpypi | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/domoticz/domoticz.mk | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index f39c075..adcf061 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
+@@ -8,8 +8,15 @@ DOMOTICZ_VERSION = 3.4834
+ DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
+ DOMOTICZ_LICENSE = GPLv3
+ DOMOTICZ_LICENSE_FILES = License.txt
+-DOMOTICZ_DEPENDENCIES = boost host-pkgconf libcurl lua mosquitto openssl \
+-        sqlite zlib
++DOMOTICZ_DEPENDENCIES = \
++	boost \
++	host-pkgconf \
++	libcurl \
++	lua \
++	mosquitto \
++	openssl \
++	sqlite \
++	zlib
+ 
+ # Due to the dependency on mosquitto, domoticz depends on
+ # !BR2_STATIC_LIBS so set USE_STATIC_BOOST to OFF
