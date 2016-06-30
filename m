@@ -1,35 +1,24 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Thu, 30 Jun 2016 12:33:09 +0200
-Subject: [Buildroot] Python distutils.sysconfig values
-Message-ID: <5774F565.1070603@gmail.com>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Thu, 30 Jun 2016 13:09:17 +0200
+Subject: [Buildroot] [PATCH 1/1] efivar: force shared libgcc for Nios II
+In-Reply-To: <20160628173114.216a3d58@free-electrons.com>
+References: <20160628111817.1237-1-nunes.erico@gmail.com>
+ <20160628173114.216a3d58@free-electrons.com>
+Message-ID: <CAK4VdL2ek8SRyH=TH7HcijAg7tbqYogRY+x94piQquoeoPbB5w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear All,
+Hi Thomas.
 
-i'm trying to enable the gpsd python module in Buildroot (currently it's
-disabled, see package/gpsd/gpsd.mk line #25). The gpsd build system uses
-scons, which in turn uses distutils.sysconfig to get the value of
-various paramaters (like the compiler to use, etc) like this:
+On Tue, Jun 28, 2016 at 5:31 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> ifeq ($(BR2_microblaze)$(BR2_nios2),y)
 
-> vars = sysconfig.get_config_vars('CC', 'CXX', 'OPT', 'BASECFLAGS', 'CCSHARED', 'LDSHARED', 'SO', 'INCLUDEPY', 'LDFLAGS')
+I have submitted a v2 and marked this one as superseded.
 
-which apparently yields the following values:
+Thank you for the review.
 
-> ['/usr/bin/gcc -pthread', '/usr/bin/g++ -pthread', '-DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes', '-fno-strict-aliasing', '-fPIC', '/usr/bin/gcc -pthread -shared -L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/lib -L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,-rpath,/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,--enable-new-dtags', '.so', '/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/include/python2.7', '-L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/lib -L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,-rpath,/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,--enable-new-dtags']
-
-
- Note that some of the variables related to the BR environment (like the
-python include dir), while others (most importantly CC) are coming from
-the host environment.
- Does anybody could offer a hint where to look to get
-distutils.sysconfig to set all of these values correctly?
-
-Thanks in advance,
-
--- 
-Zoltan Gyarmati
-https://zgyarmati.de
+?rico
