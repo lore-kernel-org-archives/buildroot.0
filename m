@@ -1,56 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Jun 2016 13:14:25 +0200
-Subject: [Buildroot] [git commit] package/Config.in: hide X.org subsections
-	if XORG7 isn't enabled
-Message-ID: <20160630112034.D7DB781F84@busybox.osuosl.org>
+Date: Thu, 30 Jun 2016 13:18:35 +0200
+Subject: [Buildroot] [git commit] pcmanfm: don't show comment about missing
+	X.org
+Message-ID: <20160630112034.EE69381F84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c8b4f846e991773085394fc3dd566dae11a8c4c
+commit: https://git.buildroot.net/buildroot/commit/?id=beddc22a7dbb91fc782759067372f711227d054c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-(most of) the individual packages depends on BR2_PACKAGE_XORG7, but the
-subsection comments do not, so we end up displaying them when Xorg isn't
-enabled which isn't very useful:
-
-[ ] X.org X Window System  ----
-    *** X applications ***
-    *** X libraries and helper libraries ***
-    *** X window managers ***
+The comments are meant for toolchain dependencies, not packages. Adjust the
+logic to match what we do for other X11 applications.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/pcmanfm/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 4c39b12..1bf7b1c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -297,6 +297,8 @@ endif
- 	source "package/x11r7/Config.in"
+diff --git a/package/pcmanfm/Config.in b/package/pcmanfm/Config.in
+index 149a595..ac68188 100644
+--- a/package/pcmanfm/Config.in
++++ b/package/pcmanfm/Config.in
+@@ -17,8 +17,9 @@ config BR2_PACKAGE_PCMANFM
  
- comment "X applications"
-+	depends on BR2_PACKAGE_XORG7
-+
- 	source "package/alsamixergui/Config.in"
- 	source "package/apitrace/Config.in"
- 	source "package/dillo/Config.in"
-@@ -322,10 +324,14 @@ comment "X applications"
- 	source "package/yad/Config.in"
+ 	  http://wiki.lxde.org/en/PCManFM
  
- comment "X libraries and helper libraries"
+-comment "pcmanfm needs X.org and a toolchain w/ wchar, threads, C++"
++comment "pcmanfm needs a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_USE_MMU
 +	depends on BR2_PACKAGE_XORG7
-+
- 	source "package/libsexy/Config.in"
- 	source "package/x11r7/xkeyboard-config/Config.in"
- 
- comment "X window managers"
-+	depends on BR2_PACKAGE_XORG7
-+
- 	source "package/enlightenment/Config.in"
- 	source "package/fluxbox/Config.in"
- 	source "package/matchbox/Config.in"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_XORG7
++		!BR2_TOOLCHAIN_HAS_THREADS
