@@ -1,81 +1,50 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 30 Jun 2016 09:55:04 +0200
-Subject: [Buildroot] [PATCH] python-tomako: new package
-Message-ID: <1467273304-2848-1-git-send-email-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 Jun 2016 09:58:00 +0200
+Subject: [Buildroot] [PATCH 1/2] package: add Odroid BL bootloader
+ binaries
+In-Reply-To: <20160627155236.GI424@jack.zhora.eu>
+References: <1466950062-31783-1-git-send-email-andi@etezian.org>
+ <1466950062-31783-2-git-send-email-andi@etezian.org>
+ <20160626221048.02818b93@free-electrons.com>
+ <20160627155236.GI424@jack.zhora.eu>
+Message-ID: <20160630095800.7288a44b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                        |  1 +
- package/python-tomako/Config.in          |  9 +++++++++
- package/python-tomako/python-tomako.hash |  4 ++++
- package/python-tomako/python-tomako.mk   | 13 +++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-tomako/Config.in
- create mode 100644 package/python-tomako/python-tomako.hash
- create mode 100644 package/python-tomako/python-tomako.mk
+On Tue, 28 Jun 2016 00:52:36 +0900, Andi Shyti wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index 60020e2..af2f8fb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -761,6 +761,7 @@ menu "External python modules"
- 	source "package/python-smbus-cffi/Config.in"
- 	source "package/python-spidev/Config.in"
- 	source "package/python-thrift/Config.in"
-+	source "package/python-tomako/Config.in"
- 	source "package/python-tornado/Config.in"
- 	source "package/python-treq/Config.in"
- 	source "package/python-twisted/Config.in"
-diff --git a/package/python-tomako/Config.in b/package/python-tomako/Config.in
-new file mode 100644
-index 0000000..bd6d299
---- /dev/null
-+++ b/package/python-tomako/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_TOMAKO
-+	bool "python-tomako"
-+	select BR2_PACKAGE_PYTHON_TORNADO # runtime
-+	select BR2_PACKAGE_PYTHON_MAKO # runtime
-+	help
-+	  Tomako is the easiest way to use Mako as a template engine for
-+	  Tornado.
-+
-+	  https://github.com/rcmachado/tomako
-diff --git a/package/python-tomako/python-tomako.hash b/package/python-tomako/python-tomako.hash
-new file mode 100644
-index 0000000..678944a
---- /dev/null
-+++ b/package/python-tomako/python-tomako.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/tomako/json
-+md5	74597762d156f52b8716aced94d51f2a  tomako-0.1.0.tar.gz
-+# sha256 calculated by scanpypi
-+sha256	e541e6bad009d3f61956b135757d491bf42c97cb441e7c11ef7a0ef6e9460a9f  tomako-0.1.0.tar.gz
-diff --git a/package/python-tomako/python-tomako.mk b/package/python-tomako/python-tomako.mk
-new file mode 100644
-index 0000000..a9eef64
---- /dev/null
-+++ b/package/python-tomako/python-tomako.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-tomako
-+#
-+################################################################################
-+
-+PYTHON_TOMAKO_VERSION = 0.1.0
-+PYTHON_TOMAKO_SOURCE = tomako-$(PYTHON_TOMAKO_VERSION).tar.gz
-+PYTHON_TOMAKO_SITE = https://pypi.python.org/packages/66/6f/de5449d401ca6953691c765d7465941e772cf99a3547646edc58cdca452d
-+PYTHON_TOMAKO_SETUP_TYPE = setuptools
-+PYTHON_TOMAKO_LICENSE = MIT
-+
-+$(eval $(python-package))
+> It is indeed annoying: I don't like the idea of
+> 
+>  1. downloading two u-boot
+>  2. download u-boot for just two files.
+> 
+> But, on the other hand, I don't like the hardkernel u-boot
+> either. I think it's old, ugly and too hacky; as a buildroot
+> user, I would like as much as I can to use mainline software.
+> Besides, the cool thing of this board is that it is well
+> supported both from the Linux Kernel and u-boot.
+
+OK. Indeed, I can understand the value of using a mainline U-Boot, even
+if you have to use the binary blobs for the first stage bootloader.
+
+> How about creating a new repository with just these three files?
+> If it sounds good, I will check with the licensing, even though I
+> don't thing it will be a problem.
+
+No, we generally don't like to create repositories just for Buildroot.
+So please keep your new package, possibly with an explanation in the
+Config.in help text as to why it exists (kind of summarizing the
+discussion we had).
+
+Thanks a lot!
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
