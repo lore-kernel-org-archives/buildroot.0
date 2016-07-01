@@ -1,10 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 01 Jul 2016 09:40:50 -0300
-Subject: [Buildroot] [PATCH v2 3/6] Add qemu_mips32r6_malta_defconfig
-In-Reply-To: <1467365245-24123-3-git-send-email-Vincent.Riera@imgtec.com>
+Date: Fri, 01 Jul 2016 09:41:19 -0300
+Subject: [Buildroot] [PATCH v2 4/6] Add qemu_mips32r6el_malta_defconfig
+In-Reply-To: <1467365245-24123-4-git-send-email-Vincent.Riera@imgtec.com>
 References: <1467365245-24123-1-git-send-email-Vincent.Riera@imgtec.com>
- <1467365245-24123-3-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <282e5a55e41e049fca8df1948ff2f87f@zacarias.com.ar>
+ <1467365245-24123-4-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <a36053f23606555911ac2a2b1310fa26@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
