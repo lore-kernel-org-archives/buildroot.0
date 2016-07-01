@@ -1,35 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 00:24:55 +0200
-Subject: [Buildroot] [git commit] libsepol: add missing dependency on
-	host-flex
-Message-ID: <20160701222541.4615A8212B@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat,  2 Jul 2016 00:27:17 +0200
+Subject: [Buildroot] [v2 1/3] package/systemd: Remove SYSTEMD_COMPAT option
+Message-ID: <1467412039-16528-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13b81dee2aae3678673560d68140eeffd07fa41d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Since v230 of systemd, the compat libraries have been fully removed.
+https://github.com/systemd/systemd/commit/4de282cf9324ab13d17ac334244d0d7cae2df37d
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/580037bd376188e18a4a58927c929d21e9b2b03c/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/libsepol/libsepol.mk | 1 +
- 1 file changed, 1 insertion(+)
+v1 -> v2:
+    - Fix indent
+---
+ Config.in.legacy             |  7 +++++++
+ package/dbus/Config.in       |  1 -
+ package/liblogging/Config.in |  1 -
+ package/systemd/Config.in    | 13 -------------
+ package/systemd/systemd.mk   |  6 ------
+ 5 files changed, 7 insertions(+), 21 deletions(-)
 
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index 93896cf..c53707a 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
-@@ -10,6 +10,7 @@ LIBSEPOL_LICENSE = LGPLv2.1+
- LIBSEPOL_LICENSE_FILES = COPYING
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 34bdaf0..70f6e0a 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -369,6 +369,13 @@ config BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
+ 	  removed. To get the same features, the libgcrypt and xz
+ 	  package should now be enabled.
  
- LIBSEPOL_INSTALL_STAGING = YES
-+LIBSEPOL_DEPENDENCIES = host-flex
++config BR2_PACKAGE_SYSTEMD_COMPAT
++	bool "systemd compatibility libraries has been removed"
++	help
++	  The systemd option te enable the compatibility libraries has been
++	  removed. Theses libraries have been useless since a few version, and
++	  have been fully dropped from the source since v230.
++
+ config BR2_GCC_VERSION_4_5_X
+ 	bool "gcc 4.5.x has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/dbus/Config.in b/package/dbus/Config.in
+index 7d49ce5..653f748 100644
+--- a/package/dbus/Config.in
++++ b/package/dbus/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_DBUS
+ 	# uses fork()
+ 	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_EXPAT
+-	select BR2_PACKAGE_SYSTEMD_COMPAT if BR2_INIT_SYSTEMD
+ 	help
+ 	  The D-Bus message bus system.
  
- LIBSEPOL_MAKE_FLAGS = $(TARGET_CONFIGURE_OPTS)
+diff --git a/package/liblogging/Config.in b/package/liblogging/Config.in
+index 12ee950..23c3c1a 100644
+--- a/package/liblogging/Config.in
++++ b/package/liblogging/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LIBLOGGING
+ 	bool "liblogging"
+-	select BR2_PACKAGE_SYSTEMD_COMPAT if BR2_INIT_SYSTEMD
+ 	help
+ 	  Liblogging is an easy to use library for
+ 	  logging. It offers an enhanced replacement
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 324e884..896a1ef 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -154,19 +154,6 @@ config BR2_PACKAGE_SYSTEMD_TIMESYNCD
  
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-timesyncd.html
+ 
+-config BR2_PACKAGE_SYSTEMD_COMPAT
+-	bool "enable compatibility libraries"
+-	help
+-	  Since systemd 209, the following libraries have been merged into
+-	  libsystemd.so:
+-
+-	  - libsystemd-daemon
+-	  - libsystemd-id128
+-	  - libsystemd-journal
+-	  - libsystemd-login
+-
+-	  This option enables the installation of compatibility *.pc files.
+-
+ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
+ 	bool "enable SMACK support"
+ 	select BR2_PACKAGE_ATTR
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index c0503ae..75e832c 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -51,12 +51,6 @@ define SYSTEMD_RUN_INTLTOOLIZE
+ endef
+ SYSTEMD_PRE_CONFIGURE_HOOKS += SYSTEMD_RUN_INTLTOOLIZE
+ 
+-ifeq ($(BR2_PACKAGE_SYSTEMD_COMPAT),y)
+-SYSTEMD_CONF_OPTS += --enable-compat-libs
+-else
+-SYSTEMD_CONF_OPTS += --disable-compat-libs
+-endif
+-
+ ifeq ($(BR2_PACKAGE_ACL),y)
+ SYSTEMD_CONF_OPTS += --enable-acl
+ SYSTEMD_DEPENDENCIES += acl
+-- 
+2.8.1
