@@ -1,180 +1,133 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 11:06:05 +0200
-Subject: [Buildroot] [git commit] libselinux: bump to version 2.5
-Message-ID: <20160701091149.28CA58183A@busybox.osuosl.org>
+Date: Fri, 1 Jul 2016 11:06:23 +0200
+Subject: [Buildroot] [git commit] libsemanage: bump to version 2.5
+Message-ID: <20160701091149.3C50C82193@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebcca24c953d8df4b16bc52c5ba31feae4ed8ad0
+commit: https://git.buildroot.net/buildroot/commit/?id=d6d6a9d2b3051d4381496cc107942e6bf36267fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In addition, if a user is using glibc 2.22, the default CFLAG
-D_FILE_OFFSET_BITS=64 will cause a compile error.  This flag is now
-removed from the CFLAGS in the make file to ensure that toolchains
-compiled against glibc 2.22 will build the new version of the package
-properly.
+The 0001-execption-lib-path-fix.patch is also no longer needed, as the
+new version of libsemanage includes the fix provided by the patch.
+As such, the patch was removed, and 0002 was renamed to 0001.
 
-In addition, libselinux now uses fts(), which is not available on musl,
-and not provided by our default uClibc configuration. Therefore,
-libselinux now depends on glibc, as well as all its reverse
-dependencies.
+Audit was added as a dependency as the new version of libsemanage
+will fail to compile searching for audit.h
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Thomas: add glibc dependency for fts().]
+[Thomas: add the select on audit + propagate the dependencies.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/android-tools/Config.in    |  6 ++++--
- package/busybox/Config.in          |  1 +
- package/libselinux/Config.in       |  7 +++++--
- package/libselinux/libselinux.hash |  2 +-
- package/libselinux/libselinux.mk   |  6 ++++--
- package/libsemanage/Config.in      | 10 ++++++----
- package/setools/Config.in          |  6 ++++--
- 7 files changed, 25 insertions(+), 13 deletions(-)
+ package/libsemanage/0001-execption-lib-path-fix.patch      | 14 --------------
+ ...in-issue.patch => 0001-workaround-blackfin-issue.patch} |  5 +++--
+ package/libsemanage/Config.in                              |  8 ++++++--
+ package/libsemanage/libsemanage.hash                       |  2 +-
+ package/libsemanage/libsemanage.mk                         |  6 +++---
+ 5 files changed, 13 insertions(+), 22 deletions(-)
 
-diff --git a/package/android-tools/Config.in b/package/android-tools/Config.in
-index 35bb8af..2503a28 100644
---- a/package/android-tools/Config.in
-+++ b/package/android-tools/Config.in
-@@ -23,15 +23,17 @@ config BR2_PACKAGE_ANDROID_TOOLS_FASTBOOT
- 	select BR2_PACKAGE_ZLIB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libselinux
- 	depends on !BR2_STATIC_LIBS # libselinux
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # libselinux
- 	depends on !BR2_arc # libselinux
- 	help
- 	  This option will build and install the fastboot utility for
- 	  the target, which can be used to reflash other target devices
- 	  implementing the fastboot protocol.
+diff --git a/package/libsemanage/0001-execption-lib-path-fix.patch b/package/libsemanage/0001-execption-lib-path-fix.patch
+deleted file mode 100644
+index cbcbea5..0000000
+--- a/package/libsemanage/0001-execption-lib-path-fix.patch
++++ /dev/null
+@@ -1,14 +0,0 @@
+-Patch to correct a missing header file issue.
+-
+-Signed-off-by Clayton Shotwell <clshotwe@rockwellcollins.com>
+-
+---- a/src/exception.sh	2011-12-21 11:46:04.000000000 -0600
+-+++ b/src/exception.sh	2012-08-27 11:29:58.000000000 -0500
+-@@ -9,6 +9,6 @@
+- }
+- "
+- }
+--gcc -x c -c - -aux-info temp.aux < ../include/semanage/semanage.h
+-+gcc -x c -c - -aux-info temp.aux -I../include < ../include/semanage/semanage.h
+- for i in `awk '/extern int/ { print $6 }' temp.aux`; do except $i ; done
+- rm -f -- temp.aux -.o
+diff --git a/package/libsemanage/0002-workaround-blackfin-issue.patch b/package/libsemanage/0001-workaround-blackfin-issue.patch
+similarity index 89%
+rename from package/libsemanage/0002-workaround-blackfin-issue.patch
+rename to package/libsemanage/0001-workaround-blackfin-issue.patch
+index 5d00c69..7ce9606 100644
+--- a/package/libsemanage/0002-workaround-blackfin-issue.patch
++++ b/package/libsemanage/0001-workaround-blackfin-issue.patch
+@@ -8,14 +8,15 @@ symbols are visible in the final DSO, which is not a problem for
+ proper execution, it just isn't as clean.
  
--comment "fastboot needs a toolchain w/ threads, dynamic library"
-+comment "fastboot needs a glibc toolchain w/ threads, dynamic library"
- 	depends on !BR2_arc
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_USES_GLIBC
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Adam Duskett <Aduskett@gmail.com>
  
- config BR2_PACKAGE_ANDROID_TOOLS_ADB
- 	bool "adb"
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index a3a328d..91c5d9e 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -36,6 +36,7 @@ config BR2_PACKAGE_BUSYBOX_SELINUX
+ Index: b/src/dso.h
+ ===================================================================
+ --- a/src/dso.h
+ +++ b/src/dso.h
+ @@ -1,7 +1,7 @@
+- #ifndef _SELINUX_DSO_H
+- #define _SELINUX_DSO_H	1
++ #ifndef _SEPOL_DSO_H
++ #define _SEPOL_DSO_H	1
+  
+ -#ifdef SHARED
+ +#if defined(SHARED) && !defined(__bfin__)
+diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
+index 4465ef4..4318dbf 100644
+--- a/package/libsemanage/Config.in
++++ b/package/libsemanage/Config.in
+@@ -1,12 +1,15 @@
+ config BR2_PACKAGE_LIBSEMANAGE
+ 	bool "libsemanage"
++	select BR2_PACKAGE_AUDIT
  	select BR2_PACKAGE_LIBSELINUX
+ 	select BR2_PACKAGE_USTR
+ 	select BR2_PACKAGE_BZIP2
++	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
  	depends on BR2_TOOLCHAIN_HAS_THREADS
  	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on !BR2_arc
- 	bool "Enable SELinux support"
- 	help
-diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
-index bc8298d..c88669b 100644
---- a/package/libselinux/Config.in
-+++ b/package/libselinux/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_LIBSELINUX
- 	select BR2_PACKAGE_PCRE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
-+	# Uses <fts.h>, not available in musl or uClibc
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	# Toolchain issue: "fixup not contained within frag"
+-	# libselinux needs fts.h (not available in uClibc/musl) and
+-	# libsemanage itself needs getpwent_r() not available in musl
++	# - libselinux needs fts.h (not available in uClibc/musl)
++	# - libsemanage itself needs getpwent_r() not available in musl
++	# - audit is not available on musl
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
  	depends on !BR2_arc
  	help
-@@ -17,6 +19,7 @@ config BR2_PACKAGE_LIBSELINUX
+@@ -22,5 +25,6 @@ config BR2_PACKAGE_LIBSEMANAGE
  
- 	  http://selinuxproject.org/page/Main_Page
- 
--comment "libselinux needs a toolchain w/ threads, dynamic library"
-+comment "libselinux needs a glibc toolchain w/ threads, dynamic library"
+ comment "libsemanage needs a glibc toolchain w/ threads, dynamic library"
  	depends on !BR2_arc
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
-index 861c327..a4c3440 100644
---- a/package/libselinux/libselinux.hash
-+++ b/package/libselinux/libselinux.hash
++	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index d4204d1..69f7c8d 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 57aad47c06b7ec18a76e8d9870539277a84cb40109cfdcf70ed3260bdb04447a libselinux-2.1.13.tar.gz
-+sha256 94c9e97706280bedcc288f784f67f2b9d3d6136c192b2c9f812115edba58514f libselinux-2.5.tar.gz
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index d4b96c4..6f94173 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -4,8 +4,8 @@
+-sha256 de2e8077245581e94576276f54e80a53c23c28d6961d2dfbe2f004eaba452e91 libsemanage-2.1.10.tar.gz
++sha256 46e2f36254369b6e91d1eea0460c262b139361b055a3a67d3ceea2d8ef72e006 libsemanage-2.5.tar.gz
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index 197c14e..a60d018 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--LIBSELINUX_VERSION = 2.1.13
--LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-+LIBSELINUX_VERSION = 2.5
-+LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
- LIBSELINUX_LICENSE = Public Domain
- LIBSELINUX_LICENSE_FILES = LICENSE
+-LIBSEMANAGE_VERSION = 2.1.10
+-LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
++LIBSEMANAGE_VERSION = 2.5
++LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
+ LIBSEMANAGE_LICENSE = LGPLv2.1+
+ LIBSEMANAGE_LICENSE_FILES = COPYING
+-LIBSEMANAGE_DEPENDENCIES = host-bison host-flex libselinux ustr bzip2
++LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
+ LIBSEMANAGE_INSTALL_STAGING = YES
  
-@@ -13,8 +13,10 @@ LIBSELINUX_DEPENDENCIES = libsepol pcre
- 
- LIBSELINUX_INSTALL_STAGING = YES
- 
-+# Filter out D_FILE_OFFSET_BITS=64. This fixes errors caused by glibc 2.22.
- LIBSELINUX_MAKE_OPTS = \
- 	$(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
- 	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread" \
- 	ARCH=$(KERNEL_ARCH)
- 
-diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
-index 5e9ad8f..4465ef4 100644
---- a/package/libsemanage/Config.in
-+++ b/package/libsemanage/Config.in
-@@ -5,7 +5,9 @@ config BR2_PACKAGE_LIBSEMANAGE
- 	select BR2_PACKAGE_BZIP2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
--	depends on !BR2_TOOLCHAIN_USES_MUSL # getpwent_r()
-+	# libselinux needs fts.h (not available in uClibc/musl) and
-+	# libsemanage itself needs getpwent_r() not available in musl
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on !BR2_arc
- 	help
- 	  libsemanage is the policy management library. It uses
-@@ -18,7 +20,7 @@ config BR2_PACKAGE_LIBSEMANAGE
- 
- 	  http://selinuxproject.org/page/Main_Page
- 
--comment "libsemanage needs a toolchain w/ threads, dynamic library"
-+comment "libsemanage needs a glibc toolchain w/ threads, dynamic library"
- 	depends on !BR2_arc
--	depends on !BR2_TOOLCHAIN_USES_MUSL
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/setools/Config.in b/package/setools/Config.in
-index c291b21..5e7f39d 100644
---- a/package/setools/Config.in
-+++ b/package/setools/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_SETOOLS
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # libselinux
- 	# bfin: infamous _ symbol prefix issue
- 	# nios2: triggers some toolchain issue "No symbol version
- 	# section for versioned symbol"
-@@ -28,7 +29,8 @@ config BR2_PACKAGE_SETOOLS
- 
- 	  https://github.com/TresysTechnology/setools3/wiki
- 
--comment "setools needs a toolchain w/ threads, C++, wchar, dynamic library"
-+comment "setools needs a glibc toolchain w/ threads, C++, wchar, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
--		|| !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-+		|| !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_USES_GLIBC
- 	depends on !BR2_nios2 && !BR2_bfin && !BR2_arc
+ LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
