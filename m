@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 23:34:16 +0200
-Subject: [Buildroot] [PATCH 0/2] swupdate: customization of default
- website path
-In-Reply-To: <20160622210125.18930-1-jordan@yelloz.me>
-References: <20160622210125.18930-1-jordan@yelloz.me>
-Message-ID: <20160701233416.7156f824@free-electrons.com>
+Date: Fri, 1 Jul 2016 23:36:16 +0200
+Subject: [Buildroot] [git commit] package/cmake: with BR2_ENABLE_DEBUG use
+	RelWithDebInfo
+Message-ID: <20160701213621.E4A1B80190@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4b0120183404913f7f7788ef4f0f6b51498ef363
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Jun 2016 14:01:23 -0700, Jordan Yelloz wrote:
-> This patch allows for customization of the destination directory of the
-> swupdate default webserver static files. Some configurations use a read-only
-> rootfs and have a tmpfs mounted on /var so /var/www/swupdate is not an option
-> for those systems. The newly added option allows users to install the website
-> files in somewhere more stable like a subdirectory of /usr/share/swupdate or
-> /usr/share/factory in the case of a volatile /var.
-> 
-> The previous fixed value of /var/www/swupdate is preserved as the default so
-> this change shouldn't disturb any existing configurations.
+From the documentation on BR2_ENABLE_DEBUG, the intention is to get
+a build with debug symbols and not a "debug build" since that can have
+the unintended consequence of being a different code path then a
+release build type definition.
 
-Thanks for your proposal. However, it's Buildroot's policy to install
-all the web-related stuff in /var/www. Nothing prevents you from moving
-things around in a post-build script, and I think that's what we would
-recommend in your situation.
+Switch the "Debug" to "RelWithDebInfo" in the cmake package support
+to accomodate getting the debug symbols and still be a release
+build.
 
-Look at all the jquery* packages, the bootstrap package, and many more
-packages. We can't add an option for all of them, so we prefer to
-install in a default location that is somewhat sane, and leave it to
-post-build scripts to move things around if needed.
+Signed-off-by: Charles Hardin <ckhardin@exablox.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-cmake.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 81dcfcc..bca3603 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -87,7 +87,7 @@ define $(2)_CONFIGURE_CMDS
+ 	PATH=$$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+-		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
++		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),RelWithDebInfo,Release) \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
+ 		-DBUILD_DOC=OFF \
