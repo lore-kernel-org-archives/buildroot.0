@@ -1,9 +1,7 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat,  2 Jul 2016 00:27:19 +0200
-Subject: [Buildroot] [v2 3/3] systemd-bootchart: New package
-In-Reply-To: <1467412039-16528-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1467412039-16528-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1467412039-16528-3-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Sat,  2 Jul 2016 00:31:48 +0200
+Subject: [Buildroot] [PATCH] leaktracer: New package
+Message-ID: <1467412308-17545-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,88 +10,71 @@ To: buildroot@busybox.net
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
-v1 -> v2:
-    - Remove depends that were copied from systemd
-    - Remove empty line in hash file
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/Config.in                               |  1 +
- package/systemd-bootchart/Config.in             | 21 +++++++++++++++++++++
- package/systemd-bootchart/system-bootchart.hash |  2 ++
- package/systemd-bootchart/systemd-bootchart.mk  | 15 +++++++++++++++
- 4 files changed, 39 insertions(+)
- create mode 100644 package/systemd-bootchart/Config.in
- create mode 100644 package/systemd-bootchart/system-bootchart.hash
- create mode 100644 package/systemd-bootchart/systemd-bootchart.mk
+ package/Config.in                |  1 +
+ package/leaktracer/Config.in     |  8 ++++++++
+ package/leaktracer/leaktracer.mk | 27 +++++++++++++++++++++++++++
+ 3 files changed, 36 insertions(+)
+ create mode 100644 package/leaktracer/Config.in
+ create mode 100644 package/leaktracer/leaktracer.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 1bf7b1c..27519f7 100644
+index 5779d04..b465fe9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1715,6 +1715,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/syslog-ng/Config.in"
- endif
- 	source "package/systemd/Config.in"
-+	source "package/systemd-bootchart/Config.in"
+@@ -88,6 +88,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/ktap/Config.in"
+ 	source "package/kyua/Config.in"
+ 	source "package/latencytop/Config.in"
++	source "package/leaktracer/Config.in"
+ 	source "package/lmbench/Config.in"
  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/sysvinit/Config.in"
- 	source "package/tar/Config.in"
-diff --git a/package/systemd-bootchart/Config.in b/package/systemd-bootchart/Config.in
+ 	source "package/lsof/Config.in"
+diff --git a/package/leaktracer/Config.in b/package/leaktracer/Config.in
 new file mode 100644
-index 0000000..58fcfbb
+index 0000000..18c07a7
 --- /dev/null
-+++ b/package/systemd-bootchart/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_SYSTEMD_BOOTCHART
-+	bool "systemd-bootchart"
-+	depends on BR2_INIT_SYSTEMD
++++ b/package/leaktracer/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LEAKTRACER
++	bool "leaktracer"
 +	help
-+	  systemd-bootchart is a tool, usually run at system startup,
-+	  that collects the CPU load, disk load, memory usage, as well
-+	  as per-process information from a running system. Collected
-+	  results are output as an SVG graph.
++	  LeakTracer is a small tool written to check a C++ program for memory
++	  leaks. Ideal if valgrind is not ported to your platform or if you
++	  can't use libduma.
 +
-+	  systemd-bootchart requires a Linux kernel >= 3.0 with the following
-+	  options enabled:
-+
-+	  - CONFIG_SCHEDSTATS
-+	  - CONFIG_SCHED_DEBUG
-+
-+	  These options will be automatically enabled by Buildroot if
-+	  it is responsible for building the kernel. Otherwise, if you
-+	  are building your kernel outside of Buildroot, make sure
-+	  these options are enabled.
-+
-+	  http://www.freedesktop.org/software/systemd/man/systemd-bootchart.html
-diff --git a/package/systemd-bootchart/system-bootchart.hash b/package/systemd-bootchart/system-bootchart.hash
++	  https://github.com/fredericgermain/LeakTracer
+diff --git a/package/leaktracer/leaktracer.mk b/package/leaktracer/leaktracer.mk
 new file mode 100644
-index 0000000..c347ef5
+index 0000000..73dd0fc
 --- /dev/null
-+++ b/package/systemd-bootchart/system-bootchart.hash
-@@ -0,0 +1,2 @@
-+# sha256 locally computed
-+sha256 8cfea4f604c00289394a4429f934e19f80dceafbe0ae1846e00997f70d81a20f systemd-bootchart-230.tar.xz
-diff --git a/package/systemd-bootchart/systemd-bootchart.mk b/package/systemd-bootchart/systemd-bootchart.mk
-new file mode 100644
-index 0000000..c371b9f
---- /dev/null
-+++ b/package/systemd-bootchart/systemd-bootchart.mk
-@@ -0,0 +1,15 @@
++++ b/package/leaktracer/leaktracer.mk
+@@ -0,0 +1,27 @@
 +################################################################################
 +#
-+# systemd-bootchart
++# leaktracer
 +#
 +################################################################################
 +
-+SYSTEMD_BOOTCHART_VERSION = 230
-+SYSTEMD_BOOTCHART_SOURCE = systemd-bootchart-$(SYSTEMD_BOOTCHART_VERSION).tar.xz
-+# Do not use the github helper here, the generated tarball is *NOT* the same
-+# as the one uploaded by upstream for the release.
-+SYSTEMD_BOOTCHART_SITE = https://github.com/systemd/systemd-bootchart/releases/download/v$(SYSTEMD_BOOTCHART_VERSION)
-+SYSTEMD_BOOTCHART_LICENSE = LGPLv2.1+
-+SYSTEMD_BOOTCHART_DEPENDENCIES = systemd
++LEAKTRACER_VERSION = b1b6c44762669de4fa6b48a02a813bfd3eb53a23
++LEAKTRACER_SITE = $(call github,fredericgermain,leaktracer,$(LEAKTRACER_VERSION))
++LEAKTRACER_LICENSE = LGPLv2.1+ (Library) GPLv2+ (manual and tools)
++LEAKTRACER_LICENSE_FILES = COPYING COPYING.LIB
++LEAKTRACER_INSTALL_STAGING = YES
 +
-+$(eval $(autotools-package))
++define LEAKTRACER_BUILD_CMDS
++	$(MAKE) CROSS_COMPILE="$(TARGET_CROSS)" OBJDIR="$(@D)/build" -C $(@D)
++endef
++
++define LEAKTRACER_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) install \
++		DESTDIR="$(STAGING_DIR)" PREFIX=/usr OBJDIR="$(@D)/build"
++endef
++
++define LEAKTRACER_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) install \
++		DESTDIR="$(TARGET_DIR)" PREFIX=/usr OBJDIR="$(@D)/build"
++endef
++
++$(eval $(generic-package))
 -- 
 2.8.1
