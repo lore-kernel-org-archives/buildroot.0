@@ -1,63 +1,18 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Jul 2016 14:36:44 +0200
-Subject: [Buildroot] [PATCH 4/4] Package netsnmp: Added OK/FAIL output
-In-Reply-To: <1456435484-4723-4-git-send-email-universeII@gmx.de>
-References: <1456435484-4723-1-git-send-email-universeII@gmx.de>
- <1456435484-4723-4-git-send-email-universeII@gmx.de>
-Message-ID: <20160701123644.GB25487@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 01 Jul 2016 09:39:13 -0300
+Subject: [Buildroot] [PATCH v2 1/6] qemu_mips_malta_defconfig: move to
+ qemu_mips32r2_malta_defconfig
+In-Reply-To: <1467365245-24123-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1467365245-24123-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <d1bd920474527d3a1c35b67f357f8ea1@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andreas, All,
+On 2016-07-01 06:27, Vicente Olivert Riera wrote:
 
-On 2016-02-25 22:24 +0100, Andreas Ehmanns spake thusly:
-> Reworked output of start(), stop() and reload() functions.
-> Return values of start-stop-daemon are now checked and
-> a OK or FAIL message is printed out.
-> 
-> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
-> ---
->  package/netsnmp/S59snmpd | 35 +++++++++++++++++++++--------------
->  1 file changed, 21 insertions(+), 14 deletions(-)
-> 
-> diff --git a/package/netsnmp/S59snmpd b/package/netsnmp/S59snmpd
-> index 2d076e0..94773db 100755
-> --- a/package/netsnmp/S59snmpd
-> +++ b/package/netsnmp/S59snmpd
-[--SNIP--]
-> @@ -92,6 +98,7 @@ case "$1" in
->      reload|force-reload)
->          reload
->          ;;
-> +
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Spurious empty line.
-
-Otherwise:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
->      *)
->          echo "Usage: $0 {start|stop|restart|reload|force-reload}"
->          exit 1
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
