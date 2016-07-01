@@ -1,78 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 15:27:26 +0200
-Subject: [Buildroot] [git commit] python-tomako: new package
-Message-ID: <20160701132941.A5E4B81D8C@busybox.osuosl.org>
+Date: Fri, 1 Jul 2016 15:26:21 +0200
+Subject: [Buildroot] [git commit] python-tornado: fix runtime dependencies
+Message-ID: <20160701132941.90ACE81D8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a4f44802baf4cbb34c674e167dda6029df9282f
+commit: https://git.buildroot.net/buildroot/commit/?id=c37648bac43344750bdff130cb3cda97fa9152f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+According to setup.py tornado requires backports.ssl_match_hostname
+for Python < 3.2 and certifi for Python < 3.4.
+
+Actually both requirements are optional and tornado alone can work
+without them, but Python packages like python-circus check requirements
+at runtime and though they don't use this funtionality, they insist on
+having these packages installed.
+
+An upstream patch fixes backports.ssl_match_hostname dependency and
+selecting python-certifi for Python 2 fixes certifi dependency till
+this is fixed upstream.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                        |  1 +
- package/python-tomako/Config.in          |  9 +++++++++
- package/python-tomako/python-tomako.hash |  4 ++++
- package/python-tomako/python-tomako.mk   | 13 +++++++++++++
- 4 files changed, 27 insertions(+)
+ ...re-backports.ssl_match_hostname-on-Python.patch | 37 ++++++++++++++++++++++
+ package/python-tornado/Config.in                   |  5 +--
+ 2 files changed, 40 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 8eeca31..ead675b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -769,6 +769,7 @@ menu "External python modules"
- 	source "package/python-socketio/Config.in"
- 	source "package/python-spidev/Config.in"
- 	source "package/python-thrift/Config.in"
-+	source "package/python-tomako/Config.in"
- 	source "package/python-tornado/Config.in"
- 	source "package/python-treq/Config.in"
- 	source "package/python-twisted/Config.in"
-diff --git a/package/python-tomako/Config.in b/package/python-tomako/Config.in
+diff --git a/package/python-tornado/0001-Don-t-require-backports.ssl_match_hostname-on-Python.patch b/package/python-tornado/0001-Don-t-require-backports.ssl_match_hostname-on-Python.patch
 new file mode 100644
-index 0000000..bd6d299
+index 0000000..d5702e8
 --- /dev/null
-+++ b/package/python-tomako/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_TOMAKO
-+	bool "python-tomako"
-+	select BR2_PACKAGE_PYTHON_TORNADO # runtime
-+	select BR2_PACKAGE_PYTHON_MAKO # runtime
-+	help
-+	  Tomako is the easiest way to use Mako as a template engine for
-+	  Tornado.
++++ b/package/python-tornado/0001-Don-t-require-backports.ssl_match_hostname-on-Python.patch
+@@ -0,0 +1,37 @@
++From 785fe675d5602e51a559b06861d543c7d37a380c Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Wed, 4 May 2016 09:26:22 +0200
++Subject: [PATCH] Don't require backports.ssl_match_hostname on Python 2.7.9
++ and newer
 +
-+	  https://github.com/rcmachado/tomako
-diff --git a/package/python-tomako/python-tomako.hash b/package/python-tomako/python-tomako.hash
-new file mode 100644
-index 0000000..678944a
---- /dev/null
-+++ b/package/python-tomako/python-tomako.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/tomako/json
-+md5	74597762d156f52b8716aced94d51f2a  tomako-0.1.0.tar.gz
-+# sha256 calculated by scanpypi
-+sha256	e541e6bad009d3f61956b135757d491bf42c97cb441e7c11ef7a0ef6e9460a9f  tomako-0.1.0.tar.gz
-diff --git a/package/python-tomako/python-tomako.mk b/package/python-tomako/python-tomako.mk
-new file mode 100644
-index 0000000..a9eef64
---- /dev/null
-+++ b/package/python-tomako/python-tomako.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-tomako
-+#
-+################################################################################
++As Python 3.2 support was dropped one can check 2.7.x dependency only.
 +
-+PYTHON_TOMAKO_VERSION = 0.1.0
-+PYTHON_TOMAKO_SOURCE = tomako-$(PYTHON_TOMAKO_VERSION).tar.gz
-+PYTHON_TOMAKO_SITE = https://pypi.python.org/packages/66/6f/de5449d401ca6953691c765d7465941e772cf99a3547646edc58cdca452d
-+PYTHON_TOMAKO_SETUP_TYPE = setuptools
-+PYTHON_TOMAKO_LICENSE = MIT
++Tornado running on Python 2.7.9+ doesn't need this backported package,
++but some Python packages like circus check package dependencies at
++runtime and insist on having backports.ssl_match_hostname installed,
++though they don't even use this particular feature.
 +
-+$(eval $(python-package))
++So checking for exact version makes life of package maintainer easier
++especially on embedded Linux distributions like Buildroot.
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ setup.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/setup.py b/setup.py
++index c13eeed..0c24e70 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -129,7 +129,7 @@ if setuptools is not None:
++     if sys.version_info < (2, 7):
++         # Only needed indirectly, for singledispatch.
++         install_requires.append('ordereddict')
++-    if sys.version_info < (3, 2):
+++    if sys.version_info < (2, 7, 9):
++         install_requires.append('backports.ssl_match_hostname')
++     if sys.version_info < (3, 4):
++         install_requires.append('singledispatch')
++-- 
++2.8.1
++
+diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
+index 3ead2af..a0ee78f 100644
+--- a/package/python-tornado/Config.in
++++ b/package/python-tornado/Config.in
+@@ -1,9 +1,10 @@
+ config BR2_PACKAGE_PYTHON_TORNADO
+ 	bool "python-tornado"
+-	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_CERTIFI if BR2_PACKAGE_PYTHON # runtime
+ 	help
+ 	  Tornado is a Python web framework and asynchronous networking
+ 	  library, originally developed@FriendFeed.
