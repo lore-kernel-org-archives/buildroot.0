@@ -1,46 +1,139 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 16:33:52 +0200
-Subject: [Buildroot] [PATCH v2 1/1] efivar: depends on target gcc >= 4.7
-In-Reply-To: <20160626213627.14298-1-nunes.erico@gmail.com>
-References: <20160626213627.14298-1-nunes.erico@gmail.com>
-Message-ID: <20160701163352.27bdb1e5@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 1 Jul 2016 16:34:14 +0200
+Subject: [Buildroot] [PATCH 3/4] linux-headers: rename _AS_KERNEL to
+	_FROM_KERNEL
+In-Reply-To: <1461099155-30702-4-git-send-email-vivien.didelot@savoirfairelinux.com>
+References: <1461099155-30702-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+ <1461099155-30702-4-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <20160701143414.GA17666@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Vivien, All,
 
-On Sun, 26 Jun 2016 23:36:27 +0200, Erico Nunes wrote:
-> The efivar internal build system uses flags such as -std=gnu11 ,
-> -Wmaybe-uninitialized , -flto which are available in gcc >= 4.7 only.
-> These flags are passed both to target build and to build a host tool.
-> For the host part, this has been worked around by overriding
-> 'gcc_flags', but doing that for the target would remove all flags that
-> upstream intended for the target build.
+On 2016-04-19 16:52 -0400, Vivien Didelot spake thusly:
+> BR2_KERNEL_HEADERS_AS_KERNEL is confusing when making the choice between
+> downloading the headers from an independent kernel source, and using the
+> headers found in the kernel built by Buildroot.
 > 
-> Buildroot doesn't support building gcc 4.6 in its own toolchain anymore
-> but it's possible to use an external toolchain with gcc 4.6 which would
-> be unable to build this package.
+> Rename it to BR2_KERNEL_HEADERS_FROM_KERNEL.
 > 
-> This patch adds a limitation on toolchains with target gcc >= 4.7 to
-> make sure that the flags are available in the chosen toolchain.
-> 
-> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+> In the meantime, document this distinction between the two choices.
+
+We'v ediscussed this during the Buildroot summer-camp, and we've come to
+the conclusion that:
+  - the naming of the variable might indeed not be the best;
+  - however, it's been part of a release now, and handling legacy for a
+    symbol in a choice is not easy;
+  - we can improve the prompt and the help text.
+
+So, I'll take this and rework the help and prompts.
+
+In the meantime, I've marked this patch as "changes request4ed" in
+patchwork.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 > ---
-> Changes v1 -> v2:
->   - propagated gcc >= 4.7 dependency to efibootmgr (pointed out by
->   Thomas Petazzoni)
-> ---
->  package/efibootmgr/Config.in | 6 ++++--
->  package/efivar/Config.in     | 6 ++++--
->  2 files changed, 8 insertions(+), 4 deletions(-)
+>  package/linux-headers/Config.in.host   | 19 ++++++++++++-------
+>  package/linux-headers/linux-headers.mk |  8 ++++----
+>  2 files changed, 16 insertions(+), 11 deletions(-)
+> 
+> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+> index 6d86113..baadb2e 100644
+> --- a/package/linux-headers/Config.in.host
+> +++ b/package/linux-headers/Config.in.host
+> @@ -5,15 +5,20 @@ comment "Kernel Header Options"
+>  
+>  choice
+>  	prompt "Kernel Headers"
+> -	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+> +	default BR2_KERNEL_HEADERS_FROM_KERNEL if BR2_LINUX_KERNEL
+>  	default BR2_KERNEL_HEADERS_4_5
+>  	help
+> -	  Select the version of kernel header files you wish to use.
+> -	  You must select the correct set of header files to match
+> -	  the kernel you intend to use on your target system.
+> +	  Select the source of kernel header files which matches the kernel
+> +	  version you intend to use on your target system.
+>  
+> -	config BR2_KERNEL_HEADERS_AS_KERNEL
+> -		bool "Same as kernel"
+> +	  Select BR2_KERNEL_HEADERS_FROM_KERNEL to use the header files from
+> +	  the kernel source you are building for your target.
+> +
+> +	  Select any other choices to download and use an independent kernel
+> +	  version for its headers. Useful when you are not building the kernel.
+> +
+> +	config BR2_KERNEL_HEADERS_FROM_KERNEL
+> +		bool "From the kernel source"
+>  		depends on BR2_LINUX_KERNEL
+>  
+>  	config BR2_KERNEL_HEADERS_3_2
+> @@ -91,7 +96,7 @@ config BR2_DEFAULT_KERNEL_VERSION
+>  
+>  choice
+>  	bool "Custom kernel headers series"
+> -	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL
+> +	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_FROM_KERNEL
+>  	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
+>  	help
+>  	  Set to the kernel headers series you manually set above.
+> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+> index 0900778..9afe5dc 100644
+> --- a/package/linux-headers/linux-headers.mk
+> +++ b/package/linux-headers/linux-headers.mk
+> @@ -7,7 +7,7 @@
+>  # This package is used to provide Linux kernel headers for the
+>  # internal toolchain backend.
+>  
+> -ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
+> +ifeq ($(BR2_KERNEL_HEADERS_FROM_KERNEL),y)
+>  
+>  LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+>  
+> @@ -71,7 +71,7 @@ endef
+>  
+>  LINUX_HEADERS_POST_PATCH_HOOKS += LINUX_HEADERS_APPLY_LOCAL_PATCHES
+>  
+> -else # ! BR2_KERNEL_HEADERS_AS_KERNEL
+> +else # ! BR2_KERNEL_HEADERS_FROM_KERNEL
+>  
+>  LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
+>  ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
+> @@ -83,7 +83,7 @@ LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
+>  endif
+>  LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
+>  
+> -endif # ! BR2_KERNEL_HEADERS_AS_KERNEL
+> +endif # ! BR2_KERNEL_HEADERS_FROM_KERNEL
+>  
+>  LINUX_HEADERS_LICENSE = GPLv2
+>  LINUX_HEADERS_LICENSE_FILES = COPYING
+> @@ -125,7 +125,7 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
+>  			headers_install)
+>  endef
+>  
+> -ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL),y)
+> +ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_FROM_KERNEL),y)
+>  define LINUX_HEADERS_CHECK_VERSION
+>  	$(call check_kernel_headers_version,\
+>  		$(STAGING_DIR),\
+> -- 
+> 2.8.0
+> 
 
-Applied to master, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
