@@ -1,33 +1,32 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Fri,  1 Jul 2016 21:57:30 +0300
-Subject: [Buildroot] [PATCH v1 1/1] package/busybox: enable ttyUSB[0-9] when
-	using mdev
-Message-ID: <1467399450-1005-1-git-send-email-andriy.shevchenko@linux.intel.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri, 1 Jul 2016 16:44:42 -0300 (BRT)
+Subject: [Buildroot] Unable to compile uboot v2012.10 on Buildroot
+ 2016.05
+In-Reply-To: <7524b7ea-7075-0058-8167-3fbc0051f2da@talktalk.net>
+References: <7524b7ea-7075-0058-8167-3fbc0051f2da@talktalk.net>
+Message-ID: <1666337934.7640332.1467402282012.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some of our systems are using ttyUSB0 devices as a serial console.
-Add them to mdev.
+> From: "Stephen Agate" <stephen.agate@talktalk.net>
+> To: buildroot at busybox.net, casantos at datacom.ind.br
+> Sent: Friday, July 1, 2016 12:57:36 PM
+> Subject: [Buildroot] Unable to compile uboot v2012.10 on Buildroot 2016.05
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- package/busybox/mdev.conf | 1 +
- 1 file changed, 1 insertion(+)
+> Carlos,
+> 
+> You are probably missing "include/linux/compiler-gcc5.h".
+> 
+> This one may work for you:
+> 
+> https://github.com/altera-opensource/u-boot-socfpga/commit/d3c9a256d6445129d01d1ea779d2587523190427
+> 
+> S.
 
-diff --git a/package/busybox/mdev.conf b/package/busybox/mdev.conf
-index 4fafe63..241c1c2 100644
---- a/package/busybox/mdev.conf
-+++ b/package/busybox/mdev.conf
-@@ -20,6 +20,7 @@ tty		root:tty 666
- tty[0-9]*	root:tty 660
- vcsa*[0-9]*	root:tty 660
- ttyS[0-9]*	root:root 660
-+ttyUSB[0-9]*	root:root 660
- 
- # alsa sound devices
- pcm.*		root:audio 660 =snd/
--- 
-2.8.1
+Unfortunately that patch does not solve the problem. Thanks, anyway.
+
+Carlos Santos (Casantos)
+DATACOM, P&D
