@@ -1,52 +1,54 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri,  1 Jul 2016 23:01:57 +0300
-Subject: [Buildroot] [PATCH] cubieboard2: Accommodate U-Boot environment on
-	SD-card
-Message-ID: <1467403317-16425-1-git-send-email-abrodkin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Jul 2016 22:41:23 +0200
+Subject: [Buildroot] [git commit] package/linux-headers: do not default to
+	any version for custom headers
+Message-ID: <20160701204214.D9EA4821AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to current "include/configs/sunxi-common.h"
-U-Boot environment is stored on SD-card with offset 544 kB
-and its size is limited as 128 kB.
+commit: https://git.buildroot.net/buildroot/commit/?id=4014b58760c0f518f5968e74e4673a01b2f25b22
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Given memory layout of sunxi boards:
-  1. SPL
-  2. U-Boot
-  3. U-Boot environment
-  4. Partitions
-we need to make sure the first real partition starts at least
-with 544+128 kB offset. Adding a small safety gap let's put
-the first partition with offset 1Mb from the beginning of SD-card.
+Currently, for a custom headers version, or for the same headers as the
+kernel, wedefault to a "very old" version (i.e. 2.6.x in practice).
 
-Otherwise current setup gets broken as soon as one saves U-Boot
-environment with "saveenv" which basically overwrites FAT partition with
-zImage and board no longer boots into Linux kernel.
+However, as Vivien explained, when using the same headers as the kernel,
+and the kernel is set to use the default version (aka latest version
+known to Buildroot) of the kernel, one would expect the headers are
+automatically tracking the latest version. Off course, that expectation
+is broken because of the above.
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Erico Nunes <nunes.erico@gmail.com>
+However, whatever version we default to, it will probably not be
+correct, whether we default to the latest version or to the "very old"
+version.
+
+So, simply drop the specific default version, so the default is now the
+latest version.
+
+Note: that has the potential to break existing defconfig files that
+relied on the "very old" version to be the default. Well, whatever,
+they'll get a build failre quite early, and it is easy to fix.
+
+Reported-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Carlos Quijano <carlos@crqgestion.es>
-Cc: Andi Shyti <andi@etezian.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/cubietech/cubieboard2/genimage.cfg | 1 +
- 1 file changed, 1 insertion(+)
+ package/linux-headers/Config.in.host | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/board/cubietech/cubieboard2/genimage.cfg b/board/cubietech/cubieboard2/genimage.cfg
-index 8929a72..cde78e1 100644
---- a/board/cubietech/cubieboard2/genimage.cfg
-+++ b/board/cubietech/cubieboard2/genimage.cfg
-@@ -26,6 +26,7 @@ image sdcard.img {
- 		partition-type = 0xC
- 		bootable = "true"
- 		image = "boot.vfat"
-+		offset = 1048576
- 	}
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1def30c..930acc1 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -106,7 +106,6 @@ config BR2_DEFAULT_KERNEL_VERSION
+ choice
+ 	bool "Custom kernel headers series"
+ 	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL
+-	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
+ 	help
+ 	  Specify the kernel headers series you manually selected, above.
  
- 	partition rootfs {
--- 
-2.5.5
