@@ -1,41 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 00:23:31 +0200
-Subject: [Buildroot] [PATCH 2/2] audacious-plugins: new package
-In-Reply-To: <1466590084-21798-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1466590084-21798-1-git-send-email-gustavo@zacarias.com.ar>
- <1466590084-21798-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160702002331.35695d91@free-electrons.com>
+Date: Sat, 2 Jul 2016 00:24:55 +0200
+Subject: [Buildroot] [git commit] libsepol: add missing dependency on
+	host-flex
+Message-ID: <20160701222541.4615A8212B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=13b81dee2aae3678673560d68140eeffd07fa41d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Jun 2016 07:08:04 -0300, Gustavo Zacarias wrote:
+Fixes:
 
-> +AUDACIOUS_PLUGINS_LICENSE = BSD-2c
+  http://autobuild.buildroot.net/results/580037bd376188e18a4a58927c929d21e9b2b03c/
 
-Unfortunately, the reality is much, much more complicated. The COPYING
-file says:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libsepol/libsepol.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-"""
-The build system and framework for installing and managing plugins is:
-
-[.... here the BSD-2c license text ....]
-
-The plugins themselves are distributed under their own distribution
-terms. Read the source code for individual copyright holders and
-licensing details.
-"""
-
-And indeed, each plugin has its own license.
-
-How should we handle that? Enumerate the licenses of all plugins?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index 93896cf..c53707a 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -10,6 +10,7 @@ LIBSEPOL_LICENSE = LGPLv2.1+
+ LIBSEPOL_LICENSE_FILES = COPYING
+ 
+ LIBSEPOL_INSTALL_STAGING = YES
++LIBSEPOL_DEPENDENCIES = host-flex
+ 
+ LIBSEPOL_MAKE_FLAGS = $(TARGET_CONFIGURE_OPTS)
+ 
