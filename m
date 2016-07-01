@@ -1,10 +1,10 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri,  1 Jul 2016 23:51:26 +0200
-Subject: [Buildroot] [PATCH 26/31] package/systemd: Add optional support for
-	resolved
+Date: Fri,  1 Jul 2016 23:51:27 +0200
+Subject: [Buildroot] [PATCH 27/31] package/systemd: Add optional
+	libxkbcommon support
 In-Reply-To: <1467409891-9458-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1467409891-9458-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1467409891-9458-26-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1467409891-9458-27-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,47 +13,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/systemd/Config.in  | 10 ++++++++++
- package/systemd/systemd.mk |  6 ++++++
- 2 files changed, 16 insertions(+)
+ package/systemd/systemd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 8e72526..f91684e 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -258,6 +258,16 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
- 
- 	  http://www.freedesktop.org/software/systemd/man/systemd-random-seed.service.html
- 
-+config BR2_PACKAGE_SYSTEMD_RESOLVED
-+	bool "enable resolve daemon"
-+	default y
-+	help
-+	  systemd-resolved is a system service that provides network name
-+	  resolution to local applications. It implements a caching and validating
-+	  DNS/DNSSEC stub resolver, as well as an LLMNR resolver and responder.
-+
-+	  http://www.freedesktop.org/software/systemd/man/systemd-resolved.html
-+
- config BR2_PACKAGE_SYSTEMD_RFKILL
- 	bool "enable rfkill tools"
- 	help
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1be2b53..d63d1cc 100644
+index d63d1cc..08c60df 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -247,6 +247,12 @@ else
- SYSTEMD_CONF_OPTS += --disable-hostnamed
+@@ -87,6 +87,13 @@ else
+ SYSTEMD_CONF_OPTS += --disable-seccomp
  endif
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD_RESOLVED),y)
-+SYSTEMD_CONF_OPTS += --enable-resolved
++ifeq ($(BR2_PACKAGE_LIBXKBCOMMON),y)
++SYSTEMD_CONF_OPTS += --enable-xkbcommon
++SYSTEMD_DEPENDENCIES += libxkbcommon
 +else
-+SYSTEMD_CONF_OPTS += --disable-resolved
++SYSTEMD_CONF_OPTS += --disable-xkbcommon
 +endif
 +
- ifeq ($(BR2_PACKAGE_SYSTEMD_TIMEDATED),y)
- SYSTEMD_CONF_OPTS += --enable-timedated
+ ifeq ($(BR2_PACKAGE_SYSTEMD_KDBUS),y)
+ SYSTEMD_CONF_OPTS += --enable-kdbus
  else
 -- 
 2.8.1
