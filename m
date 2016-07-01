@@ -1,85 +1,80 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Fri, 1 Jul 2016 10:47:30 +0200
-Subject: [Buildroot] [PATCH v3 1/6] Add support for merged defconfigs
-In-Reply-To: <0fddd32d7ed356b943e1372df20a0d9948ab29ed.1467176798.git.sam.bobroff@au1.ibm.com>
-References: <cover.1467176798.git.sam.bobroff@au1.ibm.com>
- <0fddd32d7ed356b943e1372df20a0d9948ab29ed.1467176798.git.sam.bobroff@au1.ibm.com>
-Message-ID: <c0854a4a-9e03-0a90-b78d-9d7eebd67cfa@smile.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri,  1 Jul 2016 11:01:16 +0200
+Subject: [Buildroot] [PATCH 0/4 v3] core/download: add support for git
+	sub-modules (branch yem/git)
+Message-ID: <cover.1467363623.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sam,
+Hello All!
 
-Le 29/06/2016 ? 07:06, Sam Bobroff a ?crit :
-> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-> ---
-> v3:
-> 
-> * Documentation moved to separate patch.
-> * Fixed "make savedefconfig".
+This little series adds support for packages coming from a git clone,
+with git sub-modules.
 
-Sorry, I don't see how "make savedefconfig" has been fixed in this patch.
-The patch seems the same as v2.
+The commit logs are pretty detailed, but roughly, it goes as thus:
 
-With the series applied I get the same error.
+  - we can't get sub-modules in a bare clone, so we no longer use bare
+    clones, but use full clones (with a working copy);
 
-Best regards,
-Romain
+  - git-archive does not support submodules, so we generate archives
+    manually;
 
-> 
->  Makefile | 38 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index 78b44c5..9f3fc92 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -858,6 +858,44 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->  
->  .PHONY: defconfig savedefconfig
->  
-> +# Find the path of a config file that may be either in TOPDIR or BR2_EXTERNAL.
-> +# Missing or duplicate matches must be checked for elsewhere.
-> +define FIND_CONFIG_FILE =
-> +$(foreach d,$(TOPDIR)/configs $(BR2_EXTERNAL)/configs,$(wildcard $(d)/$(1)))
-> +endef
-> +
-> +define CONFIG_FILE_LIST =
-> +$(foreach f,$1,$(call FIND_CONFIG_FILE,$f))
-> +endef
-> +
-> +# Check that each config file is found once and only once.
-> +define CHECK_CONFIG_FILE_LIST =
-> +$(foreach f,$(1),
-> +ifeq "$(words $(call FIND_CONFIG_FILE,$(f)))" "0"
-> +$$(error ERROR: Missing input file: $(f))
-> +else
-> +ifneq "$(words $(call FIND_CONFIG_FILE,$(f)))" "1"
-> +$$(error ERROR: Duplicate input file: $(f))
-> +endif
-> +endif
-> +)
-> +endef
-> +
-> +# To be called by configuration fragments (*.mk) to set up defconfigs built
-> +# by merge_config.sh, via the include that follows:
-> +define merge_config =
-> +$(call CHECK_CONFIG_FILE_LIST,$2 $3)
-> +$(1): $$(BUILD_DIR)/buildroot-config/conf $(call CONFIG_FILE_LIST,$2 $3) outputmakefile
-> +	@mkdir $$(CONFIG_DIR)/.merge_config
-> +	@$$(TOPDIR)/support/kconfig/merge_config.sh -m -O $$(CONFIG_DIR)/.merge_config \
-> +		$(call CONFIG_FILE_LIST,$2 $3)
-> +	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$$(CONFIG_DIR)/.merge_config/.config \
-> +		$$< --defconfig=$$(CONFIG_DIR)/.merge_config/.config $$(CONFIG_CONFIG_IN)
-> +	@rm -rf $$(CONFIG_DIR)/.merge_config
-> +endef
-> +
-> +$(foreach d,$(TOPDIR)/configs $(BR2_EXTERNAL)/configs,$(eval -include $(d)/*.mk))
-> +
->  ################################################################################
->  #
->  # Cleanup and misc junk
-> 
+  - we check out the working copy to the correct cset, then we retrieve
+    the submodules;
+
+  - we expose a new package variable to request sub-modules.
+
+
+Changes v2 -> v3:
+  - added reviewd-by and tested-by tags
+  - typoes fixed
+  - rebased
+
+Changes v1 -> v2:
+  - properly accept -r in the download wrapper  (Aleksandar)
+  - split the non-bare-git and manual-archive changes in two separate
+    patches, as they are not semantically related
+  - some of my usual typoes fixed...
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit a542d0fd55e961e3c5805f12bba490d3dcc15d33
+
+  erlang: enable compilation on mipsel (2016-07-01 00:44:36 +0200)
+
+
+are available in the git repository at:
+
+  https://git.buildroot.org/~ymorin/git/buildroot
+
+for you to fetch changes up to b9061693f4d7a2c7030190efd686c988c1278e43
+
+  core/pkg-infra: download git submodules if the package wants them (2016-07-01 10:53:32 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      support/download/git: do not use bare clones
+      support/download/git: do not use git archive, handle it manually
+      support/download/git: add support for submodules
+      core/pkg-infra: download git submodules if the package wants them
+
+ package/pkg-download.mk     |  1 +
+ package/pkg-generic.mk      |  8 +++++++
+ support/download/dl-wrapper |  7 ++++---
+ support/download/git        | 51 ++++++++++++++++++++++++++++++++++++++-------
+ 4 files changed, 57 insertions(+), 10 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
