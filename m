@@ -1,10 +1,10 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri,  1 Jul 2016 23:51:04 +0200
-Subject: [Buildroot] [PATCH 04/31] package/systemd: add optional support for
-	random-seed
+Date: Fri,  1 Jul 2016 23:51:05 +0200
+Subject: [Buildroot] [PATCH 05/31] package/systemd: add optional support for
+	backlight
 In-Reply-To: <1467409891-9458-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1467409891-9458-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1467409891-9458-4-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1467409891-9458-5-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,42 +15,41 @@ From: Gabe Evans <gabe@hashrabbit.co>
 
 Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
 ---
- package/systemd/Config.in  | 9 +++++++++
+ package/systemd/Config.in  | 8 ++++++++
  package/systemd/systemd.mk | 6 ++++++
- 2 files changed, 15 insertions(+)
+ 2 files changed, 14 insertions(+)
 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index f028d4e..c08ddf1 100644
+index c08ddf1..5e17209 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -158,6 +158,15 @@ config BR2_PACKAGE_SYSTEMD_FIRSTBOOT
+@@ -167,6 +167,14 @@ config BR2_PACKAGE_SYSTEMD_RANDOMSEED
  
- 	  http://www.freedesktop.org/software/systemd/man/systemd-firstboot.html
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-random-seed.service.html
  
-+config BR2_PACKAGE_SYSTEMD_RANDOMSEED
-+	bool "enable random-seed support"
++config BR2_PACKAGE_SYSTEMD_BACKLIGHT
++	bool "enable backlight support"
 +	help
-+	  systemd-random-seed is a service that restores the random seed of the system
-+	  at early boot and saves it at shutdown. Saving/restoring the random seed
-+	  across boots increases the amount of available entropy early at boot.
++	  systemd-backlight is a service that restores the display backlight
++	  brightness at early boot and saves it at shutdown.
 +
-+	  http://www.freedesktop.org/software/systemd/man/systemd-random-seed.service.html
++	  http://www.freedesktop.org/software/systemd/man/systemd-backlight at .service.html
 +
  config BR2_PACKAGE_SYSTEMD_NETWORKD
  	bool "enable network manager"
  	help
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index c5d6478..5672f00 100644
+index 5672f00..98c97c3 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -177,6 +177,12 @@ else
- SYSTEMD_CONF_OPTS += --disable-firstboot
+@@ -183,6 +183,12 @@ else
+ SYSTEMD_CONF_OPTS += --disable-randomseed
  endif
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD_RANDOMSEED),y)
-+SYSTEMD_CONF_OPTS += --enable-randomseed
++ifeq ($(BR2_PACKAGE_SYSTEMD_BACKLIGHT),y)
++SYSTEMD_CONF_OPTS += --enable-backlight
 +else
-+SYSTEMD_CONF_OPTS += --disable-randomseed
++SYSTEMD_CONF_OPTS += --disable-backlight
 +endif
 +
  ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
