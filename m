@@ -1,64 +1,63 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Fri, 1 Jul 2016 16:38:39 +0200
-Subject: [Buildroot] [PATCH v2] efivar: disable for some incompatible
- Sourcery CodeBench toolchains
-In-Reply-To: <1466523966-5343-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1466523966-5343-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <d5ecb893-5af6-a342-8c9d-7e06c7997c5a@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Jul 2016 16:36:35 +0200
+Subject: [Buildroot] [git commit] lzop: fix build of host variant with gcc6
+Message-ID: <20160701144044.9BCB67FD4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincente,
+commit: https://git.buildroot.net/buildroot/commit/?id=040c9e14edeab0c6173f72c0a1e765fc5a3a58ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi Vicente,
+Signed-off-by: Jaap Crezee <jaap@jcz.nl>
+[Thomas: minor tweaks in commit log and patch.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lzop/0001-build-with-gcc6.patch | 37 +++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-Le 21/06/2016 ? 17:46, Vicente Olivert Riera a ?crit :
-> linux/nvme.h has been renamed to linux/nvme_ioctl.h since 4.4, and we
-> have a patch to handle that situation. However, some Sourcery CodeBench
-> toolchains use 4.4 kernel headers but don't have that header file
-> renamed, and that is causing build failures. So, prevent this package
-> to be built using those toolchains.
-
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-
-Best regards,
-Romain
-
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/66c/66cf68261fa73c2366610f8d14bd02180ba7cd2d/
->   http://autobuild.buildroot.net/results/54c/54cc7d4e3b284b35931e08f9c7f0f902df96a989/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
-> Changes v1 -> v2:
->  - also disable for BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
->  - amend the commit log and the comment in Config.in accordingly
-> 
->  package/efivar/Config.in | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/package/efivar/Config.in b/package/efivar/Config.in
-> index c507584..e9c1e95 100644
-> --- a/package/efivar/Config.in
-> +++ b/package/efivar/Config.in
-> @@ -1,6 +1,14 @@
->  config BR2_PACKAGE_EFIVAR
->  	bool "efivar"
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12 # linux/nvme.h
-> +	# linux/nvme.h has been renamed to linux/nvme_ioctl.h since 4.4,
-> +	# and we have a patch to handle that situation. However, some
-> +	# Sourcery CodeBench toolchains use 4.4 kernel headers but they
-> +	# don't have that header file renamed, and that is causing build
-> +	# failures. So, prevent this package to be built using those
-> +	# toolchains.
-> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS &&
-> +		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
->  	# doesn't build with uclibc due to lack of uchar.h
->  	# doesn't build with musl due to lack of __bswap_constant_16
->  	depends on BR2_TOOLCHAIN_USES_GLIBC
-> 
+diff --git a/package/lzop/0001-build-with-gcc6.patch b/package/lzop/0001-build-with-gcc6.patch
+new file mode 100644
+index 0000000..774ee54
+--- /dev/null
++++ b/package/lzop/0001-build-with-gcc6.patch
+@@ -0,0 +1,37 @@
++From: Jaap Crezee <jaap@jcz.nl>
++Date: Sat, 25 june 2016 13:13:00 +0200
++Subject: [PATCH 1/1] fix compilation host-lzop with gcc-6
++
++This patch allows host-lzop to be compiled with host systems containing gcc-6
++
++Upstream patch found here:
++https://build.opensuse.org/package/view_file/Archiving/lzop/lzop-1.03-gcc6.patch?expand=1
++
++Signed-off-by: Jaap Crezee <jaap@jcz.nl>
++
++--- a/src/miniacc.h.orig   2016-02-10 16:09:23.247315866 +0100
+++++ b/src/miniacc.h   2016-02-10 16:12:14.973297054 +0100
++@@ -4469,12 +4469,12 @@
++ #if defined(__MSDOS__) && defined(__TURBOC__) && (__TURBOC__ < 0x0150)
++ #elif 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
++ #else
++-    ACCCHK_ASSERT((1   << (8*SIZEOF_INT-1)) < 0)
+++    ACCCHK_ASSERT((int)(1u   << (8*SIZEOF_INT-1)) < 0)
++ #endif
++     ACCCHK_ASSERT((1u  << (8*SIZEOF_INT-1)) > 0)
++ #if 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
++ #else
++-    ACCCHK_ASSERT((1l  << (8*SIZEOF_LONG-1)) < 0)
+++    ACCCHK_ASSERT((long)(1ul  << (8*SIZEOF_LONG-1)) < 0)
++ #endif
++     ACCCHK_ASSERT((1ul << (8*SIZEOF_LONG-1)) > 0)
++ #if defined(acc_int16e_t)
++@@ -4703,7 +4703,7 @@
++ #elif 1 && (ACC_CC_LCC || ACC_CC_LCCWIN32) && !defined(ACCCHK_CFG_PEDANTIC)
++ #elif 1 && (ACC_CC_SUNPROC) && !defined(ACCCHK_CFG_PEDANTIC)
++ #elif !(ACC_BROKEN_INTEGRAL_PROMOTION) && (SIZEOF_INT > 1)
++-    ACCCHK_ASSERT( (((unsigned char)128) << (int)(8*sizeof(int)-8)) < 0)
+++    ACCCHK_ASSERT( (int)((unsigned int)((unsigned char)128) << (int)(8*sizeof(int)-8)) < 0)
++ #endif
++ #if (ACC_CC_BORLANDC && (__BORLANDC__ >= 0x0530) && (__BORLANDC__ < 0x0560))
++ #  pragma option pop
