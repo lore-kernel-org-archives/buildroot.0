@@ -1,10 +1,10 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri,  1 Jul 2016 23:51:13 +0200
-Subject: [Buildroot] [PATCH 13/31] package/systemd: add optional support for
-	coredump
+Date: Fri,  1 Jul 2016 23:51:15 +0200
+Subject: [Buildroot] [PATCH 15/31] package/systemd: add optional support for
+	hibernation
 In-Reply-To: <1467409891-9458-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1467409891-9458-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1467409891-9458-13-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1467409891-9458-15-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,53 +15,44 @@ From: Gabe Evans <gabe@hashrabbit.co>
 
 Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
 ---
- package/systemd/Config.in  | 8 ++++++++
- package/systemd/systemd.mk | 7 +++++++
- 2 files changed, 15 insertions(+)
+ package/systemd/Config.in  | 10 +++++++++-
+ package/systemd/systemd.mk |  6 ++++++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 22355d0..b0cc672 100644
+index a857a95..3fcb74d 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -240,6 +240,14 @@ config BR2_PACKAGE_SYSTEMD_LOCALED
+@@ -308,4 +308,12 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
+ 	  When this feature is enabled, Systemd mounts smackfs and manages
+ 	  security labels for sockets.
  
- 	  http://www.freedesktop.org/software/systemd/man/systemd-localed.service.html
- 
-+config BR2_PACKAGE_SYSTEMD_COREDUMP
-+	bool "enable coredump hook"
+-endif
++config BR2_PACKAGE_SYSTEMD_HIBERNATE
++	bool "enable hibernation support"
 +	help
-+	  systemd-coredump can be used as a helper binary by the kernel when a user
-+	  space program receives a fatal signal and dumps core.
++	  When this features is enabled, additional tools and services are built to
++	  support suspending and resuming the system.
 +
-+	  http://www.freedesktop.org/software/systemd/man/systemd-coredump.html
++	  http://www.freedesktop.org/software/systemd/man/systemd-sleep.html
 +
- config BR2_PACKAGE_SYSTEMD_NETWORKD
- 	bool "enable network manager"
- 	help
++endif # BR2_PACKAGE_SYSTEMD
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index ee7f74d..4a2654c 100644
+index 5b0aa01..96c34a4 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -231,6 +231,12 @@ else
- SYSTEMD_CONF_OPTS += --disable-localed
+@@ -277,6 +277,12 @@ else
+ SYSTEMD_CONF_OPTS += --disable-smack
  endif
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD_COREDUMP),y)
-+SYSTEMD_CONF_OPTS += --enable-coredump
++ifeq ($(BR2_PACKAGE_SYSTEMD_HIBERNATE),y)
++SYSTEMD_CONF_OPTS += --enable-hibernate
 +else
-+SYSTEMD_CONF_OPTS += --disable-coredump
++SYSTEMD_CONF_OPTS += --disable-hibernate
 +endif
 +
- ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
- SYSTEMD_CONF_OPTS += --enable-networkd
- define SYSTEMD_INSTALL_RESOLVCONF_HOOK
-@@ -289,6 +295,7 @@ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
- 	SYSTEMD_INSTALL_RESOLVCONF_HOOK
- 
- define SYSTEMD_USERS
-+	systemd-coredump -1 systemd-coredump -1 * /var/lib/systemd/coredump - - Core Dumper
- 	systemd-journal -1 systemd-journal -1 * /var/log/journal - - Journal
- 	systemd-journal-gateway -1 systemd-journal-gateway -1 * /var/log/journal - - Journal Gateway
- 	systemd-journal-remote -1 systemd-journal-remote -1 * /var/log/journal/remote - - Journal Remote
+ # mq_getattr needs -lrt
+ SYSTEMD_MAKE_OPTS += LIBS=-lrt
+ SYSTEMD_MAKE_OPTS += LDFLAGS+=-ldl
 -- 
 2.8.1
