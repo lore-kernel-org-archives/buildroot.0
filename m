@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 15:00:51 +0200
-Subject: [Buildroot] [PATCH v2 1/6] qemu_mips_malta_defconfig: move to
- qemu_mips32r2_malta_defconfig
-In-Reply-To: <1467365245-24123-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1467365245-24123-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160701150051.478b11f0@free-electrons.com>
+Date: Fri, 1 Jul 2016 15:01:21 +0200
+Subject: [Buildroot] [PATCH 1/4] Package netsnmp: Created start(), stop(),
+ reload().
+In-Reply-To: <1456435484-4723-1-git-send-email-universeII@gmx.de>
+References: <1456435484-4723-1-git-send-email-universeII@gmx.de>
+Message-ID: <20160701150121.7eebcb5e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 1 Jul 2016 10:27:20 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Thu, 25 Feb 2016 22:24:41 +0100, Andreas Ehmanns wrote:
+> Changed init script to get rid of double code.
+> Start, stop and reload code has been put into
+> separate functions and 'restart' will just call
+> stop() and start() with a delay in between.
+> 
+> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
 > ---
-> Changes v1 -> v2:
->  - Use mips32r2 instead of mips_32r2 in the defconfig name.
->  - Use mips32r2 instead of mips-32r2 in the board dir name.
+>  package/netsnmp/S59snmpd | 71 +++++++++++++++++++++++++-----------------------
+>  1 file changed, 37 insertions(+), 34 deletions(-)
 
-Entire series applied to master, after tweaking the commit titles.
+Entire series applied, after tweaking the commit titles and in some
+cases the commit log.
 
-Note that I hesitated a bit, since I'm not sure how worth it it is to
-have 8 different Qemu configuration for MIPS. It starts to be quite a
-lot.
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
