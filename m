@@ -1,43 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Jul 2016 19:56:56 +0200
-Subject: [Buildroot] [PATCH 3/4] linux-headers: rename _AS_KERNEL to
- _FROM_KERNEL
-In-Reply-To: <CAJJ6jxsbNd-wA8pe+NE=Fw3-=RNzrivBEq5mKeumR3Ayd_Pw9Q@mail.gmail.com>
-References: <1461099155-30702-1-git-send-email-vivien.didelot@savoirfairelinux.com>
- <1461099155-30702-4-git-send-email-vivien.didelot@savoirfairelinux.com>
- <20160701143414.GA17666@free.fr>
- <CAJJ6jxsbNd-wA8pe+NE=Fw3-=RNzrivBEq5mKeumR3Ayd_Pw9Q@mail.gmail.com>
-Message-ID: <20160701175656.GD17666@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Jul 2016 20:19:12 +0200
+Subject: [Buildroot] [PATCH v2 01/15] package/gcc: fix fortran support
+In-Reply-To: <20160701162920.19632-2-s.martin49@gmail.com>
+References: <20160701162920.19632-1-s.martin49@gmail.com>
+ <20160701162920.19632-2-s.martin49@gmail.com>
+Message-ID: <20160701201912.6fd165cb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Steve, All,
+Hello,
 
-On 2016-07-01 10:51 -0700, Steve Calfee spake thusly:
-> On Fri, Jul 1, 2016 at 7:34 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Vivien, All,
-> >
-> <snip>
-> 
-> >   - however, it's been part of a release now, and handling legacy for a
-> >     symbol in a choice is not easy;
-> 
-> I think breaking user's configurations by changing config names is
-> very serious and should be done for a very good reason, not just to
-> get a slightly clearer name.
+On Fri,  1 Jul 2016 18:29:06 +0200, Samuel Martin wrote:
+> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+> index 78ceeba..f13bc36 100644
+> --- a/package/gcc/gcc-final/gcc-final.mk
+> +++ b/package/gcc/gcc-final/gcc-final.mk
+> @@ -163,6 +163,10 @@ endif
+>  
+>  ifeq ($(BR2_TOOLCHAIN_BUILDROOT_FORTRAN),y)
+>  HOST_GCC_FINAL_USR_LIBS += libgfortran
+> +# fortran needs quadmath on x86 and x86_64
+> +ifeq ($(BR2_I386)$(BR2_x86_64),y)
 
-That's why we did not rename the option.
+BR2_I386 doesn't exist, you probably meant BR2_i386.
 
-Regards,
-Yann E. MORIN.
+> +HOST_GCC_FINAL_USR_LIBS += libquadmath
+> +endif
+>  endif
+>  
+>  ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index 6e1c02d..e981940 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -109,6 +109,11 @@ endif
+>  # quadmath support requires wchar
+>  ifeq ($(BR2_USE_WCHAR),)
+>  HOST_GCC_COMMON_CONF_OPTS += --disable-libquadmath
+> +else
+> +# fortran needs quadmath on x86 and x86_64
+> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_FORTRAN)$(BR2_I386)$(BR2_x86_64),yy)
 
+Same here.
+
+> +HOST_GCC_COMMON_CONF_OPTS += --enable-libquadmath
+> +endif
+>  endif
+
+I'm not a big fan of this condition, it looks a bit clunky and
+complicated. Why don't we simply enable libquadmath as soon as wchar is
+available? With your condition, there are cases where libquadmath is
+forced enabled, some cases where libquadmath is forced disabled, and
+lots of other cases where we neither disable nor enable it. Doesn't
+look pretty.
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
