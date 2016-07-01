@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 00:22:20 +0200
-Subject: [Buildroot] [PATCH 1/2] audacious: new package
-In-Reply-To: <1466590084-21798-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 2 Jul 2016 00:23:31 +0200
+Subject: [Buildroot] [PATCH 2/2] audacious-plugins: new package
+In-Reply-To: <1466590084-21798-2-git-send-email-gustavo@zacarias.com.ar>
 References: <1466590084-21798-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160702002220.483d6c32@free-electrons.com>
+ <1466590084-21798-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160702002331.35695d91@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 22 Jun 2016 07:08:03 -0300, Gustavo Zacarias wrote:
+On Wed, 22 Jun 2016 07:08:04 -0300, Gustavo Zacarias wrote:
 
-> +AUDACIOUS_VERSION = 3.7.2
-> +AUDACIOUS_SITE = http://distfiles.audacious-media-player.org
-> +AUDACIOUS_SOURCE = audacious-$(AUDACIOUS_VERSION)-gtk3.tar.bz2
-> +AUDACIOUS_DEPENDENCIES = dbus libglib2 libgtk3 host-pkgconf
-> +AUDACIOUS_INSTALL_STAGING = YES
-> +AUDACIOUS_LICENSE = BSD-2c
+> +AUDACIOUS_PLUGINS_LICENSE = BSD-2c
 
-True, but the license file also says there is an exception for the
-icons (Public Domain) and for libguess, under BSD-3c. This should be
-noted here.
+Unfortunately, the reality is much, much more complicated. The COPYING
+file says:
 
-(I would have fixed this myself, but the licensing issue is more
-serious for the plugins package, to which I'll reply separately).
+"""
+The build system and framework for installing and managing plugins is:
+
+[.... here the BSD-2c license text ....]
+
+The plugins themselves are distributed under their own distribution
+terms. Read the source code for individual copyright holders and
+licensing details.
+"""
+
+And indeed, each plugin has its own license.
+
+How should we handle that? Enumerate the licenses of all plugins?
 
 Thomas
 -- 
