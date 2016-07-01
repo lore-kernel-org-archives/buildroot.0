@@ -1,10 +1,10 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Fri,  1 Jul 2016 23:51:15 +0200
-Subject: [Buildroot] [PATCH 15/31] package/systemd: add optional support for
-	hibernation
+Date: Fri,  1 Jul 2016 23:51:11 +0200
+Subject: [Buildroot] [PATCH 11/31] package/systemd: add optional support for
+	timedated
 In-Reply-To: <1467409891-9458-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1467409891-9458-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1467409891-9458-15-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1467409891-9458-11-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,45 +14,50 @@ To: buildroot@busybox.net
 From: Gabe Evans <gabe@hashrabbit.co>
 
 Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+[Maxime: Add default y]
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/systemd/Config.in  | 10 +++++++++-
+ package/systemd/Config.in  | 10 ++++++++++
  package/systemd/systemd.mk |  6 ++++++
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ 2 files changed, 16 insertions(+)
 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index a857a95..3fcb74d 100644
+index 68f410d..bd282ea 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -308,4 +308,12 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
- 	  When this feature is enabled, Systemd mounts smackfs and manages
- 	  security labels for sockets.
+@@ -221,6 +221,16 @@ config BR2_PACKAGE_SYSTEMD_HOSTNAMED
  
--endif
-+config BR2_PACKAGE_SYSTEMD_HIBERNATE
-+	bool "enable hibernation support"
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-hostnamed.service.html
+ 
++config BR2_PACKAGE_SYSTEMD_TIMEDATED
++	bool "enable timedate daemon"
++	default y
 +	help
-+	  When this features is enabled, additional tools and services are built to
-+	  support suspending and resuming the system.
++	  systemd-timedated is a system service that may be used as a mechanism to
++	  change the system clock and timezone, as well as to enable/disable NTP
++	  time synchronization.
 +
-+	  http://www.freedesktop.org/software/systemd/man/systemd-sleep.html
++	  http://www.freedesktop.org/software/systemd/man/systemd-timedated.service.html
 +
-+endif # BR2_PACKAGE_SYSTEMD
+ config BR2_PACKAGE_SYSTEMD_NETWORKD
+ 	bool "enable network manager"
+ 	help
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 5b0aa01..96c34a4 100644
+index 5e58017..ad75315 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -277,6 +277,12 @@ else
- SYSTEMD_CONF_OPTS += --disable-smack
+@@ -219,6 +219,12 @@ else
+ SYSTEMD_CONF_OPTS += --disable-hostnamed
  endif
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD_HIBERNATE),y)
-+SYSTEMD_CONF_OPTS += --enable-hibernate
++ifeq ($(BR2_PACKAGE_SYSTEMD_TIMEDATED),y)
++SYSTEMD_CONF_OPTS += --enable-timedated
 +else
-+SYSTEMD_CONF_OPTS += --disable-hibernate
++SYSTEMD_CONF_OPTS += --disable-timedated
 +endif
 +
- # mq_getattr needs -lrt
- SYSTEMD_MAKE_OPTS += LIBS=-lrt
- SYSTEMD_MAKE_OPTS += LDFLAGS+=-ldl
+ ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
+ SYSTEMD_CONF_OPTS += --enable-networkd
+ define SYSTEMD_INSTALL_RESOLVCONF_HOOK
 -- 
 2.8.1
