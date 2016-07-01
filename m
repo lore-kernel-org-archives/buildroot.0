@@ -1,10 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri,  1 Jul 2016 18:29:17 +0200
-Subject: [Buildroot] [PATCH v2 12/15] toolchain/toolchain-external: add knob
-	for fortran support
+Date: Fri,  1 Jul 2016 18:29:19 +0200
+Subject: [Buildroot] [PATCH v2 14/15] package/fftw: add fortran support
 In-Reply-To: <20160701162920.19632-1-s.martin49@gmail.com>
 References: <20160701162920.19632-1-s.martin49@gmail.com>
-Message-ID: <20160701162920.19632-13-s.martin49@gmail.com>
+Message-ID: <20160701162920.19632-15-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,33 +15,24 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 ---
 changes v1->v2:
-- none
+- add comment about fortran
 ---
- toolchain/toolchain-external/Config.in | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/fftw/fftw.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 552536e..253aeb1 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -1020,6 +1020,18 @@ config BR2_TOOLCHAIN_EXTERNAL_CXX
- 	  support. If you don't know, leave the default value,
- 	  Buildroot will tell you if it's correct or not.
+diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+index 5045ab6..9e2b2cc 100644
+--- a/package/fftw/fftw.mk
++++ b/package/fftw/fftw.mk
+@@ -10,7 +10,8 @@ FFTW_INSTALL_STAGING = YES
+ FFTW_LICENSE = GPLv2+
+ FFTW_LICENSE_FILES = COPYING
  
-+config BR2_TOOLCHAIN_EXTERNAL_FORTRAN
-+	bool "Toolchain has Fortran support?"
-+	depends on BR2_USE_WCHAR # libquadmath
-+	select BR2_TOOLCHAIN_HAS_FORTRAN
-+	help
-+	  Select this option if your external toolchain has fortran
-+	  support. If you don't know, leave the default value,
-+	  Buildroot will tell you if it's correct or not.
-+
-+comment "Fortran support needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
-+
- config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
- 	string "Extra toolchain libraries to be copied to target"
- 	help
+-FFTW_CONF_OPTS = --disable-fortran
++# fortran support only enables generation and installation of fortran sources
++FFTW_CONF_OPTS = $(if $(BR2_TOOLCHAIN_HAS_FORTRAN),--enable,--disable)-fortran
+ 
+ FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),--enable,--disable)-single
+ FFTW_CONF_OPTS += $(if $(BR2_PACKAGE_FFTW_PRECISION_LONG_DOUBLE),--enable,--disable)-long-double
 -- 
 2.9.0
