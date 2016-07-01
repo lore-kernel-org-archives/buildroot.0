@@ -1,36 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 22:55:43 +0200
-Subject: [Buildroot] [PATCH v2 02/15] package/gcc: wrap gfortran
-In-Reply-To: <20160701162920.19632-3-s.martin49@gmail.com>
-References: <20160701162920.19632-1-s.martin49@gmail.com>
- <20160701162920.19632-3-s.martin49@gmail.com>
-Message-ID: <20160701225543.7efaacbe@free-electrons.com>
+Date: Fri, 1 Jul 2016 22:56:55 +0200
+Subject: [Buildroot] [git commit] package/Makefile.in: set TARGET_FCFLAGS
+	variables
+Message-ID: <20160701205849.4911081D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=43e257d86d74eafc82919994a8f55e9254108620
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  1 Jul 2016 18:29:07 +0200, Samuel Martin wrote:
-> gfortran supports all options supported by gcc, so it can and should be called
-> via the toolchain wrapper.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> 
-> ---
-> changes v1->v2:
-> - none
-> ---
->  package/gcc/gcc.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+TARGET_FCFLAGS is already added to TARGET_CONFIGURE_OPTS, but was not
+defined so far. This change fixes this.
 
-Applied to master, thanks.
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Benjamin Kamath <bkamath@spaceflight.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Makefile.in | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Makefile.in b/package/Makefile.in
+index f6d1e67..471f687 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -141,6 +141,7 @@ endif
+ TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
++TARGET_FCFLAGS = $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+ TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+ 
+ ifeq ($(BR2_BINFMT_FLAT),y)
+@@ -148,29 +149,36 @@ TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FL
+ 	-Wl$(comma)-elf2flt)
+ TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
+ 	-Wl$(comma)-elf2flt)
++TARGET_FCFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
++	-Wl$(comma)-elf2flt)
+ TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt)
+ endif
+ 
+ ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
+ TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
+ TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
++TARGET_FCFLAGS += -mid-shared-library -mshared-library-id=0
+ TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
+ endif
+ ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
+ TARGET_LDFLAGS += -msep-data
+ TARGET_CFLAGS += -msep-data
++TARGET_FCFLAGS += -msep-data
+ TARGET_CXXFLAGS += -msep-data
+ endif
+ 
+ ifeq ($(BR2_SSP_REGULAR),y)
+ TARGET_CFLAGS += -fstack-protector
+ TARGET_CXXFLAGS += -fstack-protector
++TARGET_FCFLAGS += -fstack-protector
+ else ifeq ($(BR2_SSP_STRONG),y)
+ TARGET_CFLAGS += -fstack-protector-strong
+ TARGET_CXXFLAGS += -fstack-protector-strong
++TARGET_FCFLAGS += -fstack-protector-strong
+ else ifeq ($(BR2_SSP_ALL),y)
+ TARGET_CFLAGS += -fstack-protector-all
+ TARGET_CXXFLAGS += -fstack-protector-all
++TARGET_FCFLAGS += -fstack-protector-all
+ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+@@ -373,6 +381,7 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ SHARED_STATIC_LIBS_OPTS = --enable-static --disable-shared
+ TARGET_CFLAGS += -static
+ TARGET_CXXFLAGS += -static
++TARGET_FCFLAGS += -static
+ TARGET_LDFLAGS += -static
+ else ifeq ($(BR2_SHARED_LIBS),y)
+ SHARED_STATIC_LIBS_OPTS = --disable-static --enable-shared
