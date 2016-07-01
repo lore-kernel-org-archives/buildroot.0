@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 14:59:29 +0200
-Subject: [Buildroot] [git commit] configs/qemu_mips64r6el_malta_defconfig:
+Date: Fri, 1 Jul 2016 14:59:20 +0200
+Subject: [Buildroot] [git commit] configs/qemu_mips32r6el_malta_defconfig:
 	new configuration
-Message-ID: <20160701130003.D29B3817A6@busybox.osuosl.org>
+Message-ID: <20160701130003.ACDBD817A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1452c5d4f32d6ddf58bb8aea5cf23d4d77b5462
+commit: https://git.buildroot.net/buildroot/commit/?id=9f2d1a9ed4aa858076cb4afaa3064dc2b6e8f3c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/qemu/mips64r6el-malta/linux-4.6.config | 34 ++++++++++++++++++++++++++++
- board/qemu/mips64r6el-malta/readme.txt       |  7 ++++++
- configs/qemu_mips64r6el_malta_defconfig      | 30 ++++++++++++++++++++++++
- 3 files changed, 71 insertions(+)
+ board/qemu/mips32r6el-malta/linux-4.6.config | 30 ++++++++++++++++++++++++++++
+ board/qemu/mips32r6el-malta/readme.txt       |  7 +++++++
+ configs/qemu_mips32r6el_malta_defconfig      | 29 +++++++++++++++++++++++++++
+ 3 files changed, 66 insertions(+)
 
-diff --git a/board/qemu/mips64r6el-malta/linux-4.6.config b/board/qemu/mips64r6el-malta/linux-4.6.config
+diff --git a/board/qemu/mips32r6el-malta/linux-4.6.config b/board/qemu/mips32r6el-malta/linux-4.6.config
 new file mode 100644
-index 0000000..0ebfdbd
+index 0000000..d559676
 --- /dev/null
-+++ b/board/qemu/mips64r6el-malta/linux-4.6.config
-@@ -0,0 +1,34 @@
++++ b/board/qemu/mips32r6el-malta/linux-4.6.config
+@@ -0,0 +1,30 @@
 +CONFIG_MIPS_MALTA=y
-+CONFIG_CPU_MIPS64_R6=y
-+CONFIG_64BIT=y
++CONFIG_CPU_MIPS32_R6=y
 +CONFIG_MIPS_MT_SMP=y
 +CONFIG_NR_CPUS=2
 +CONFIG_SYSVIPC=y
@@ -37,9 +36,6 @@ index 0000000..0ebfdbd
 +CONFIG_MODULES=y
 +CONFIG_MODULE_UNLOAD=y
 +CONFIG_PCI=y
-+CONFIG_MIPS32_COMPAT=y
-+CONFIG_MIPS32_O32=y
-+CONFIG_MIPS32_N32=y
 +CONFIG_NET=y
 +CONFIG_PACKET=y
 +CONFIG_UNIX=y
@@ -61,29 +57,28 @@ index 0000000..0ebfdbd
 +CONFIG_EXT4_FS=y
 +CONFIG_TMPFS=y
 +CONFIG_TMPFS_POSIX_ACL=y
-diff --git a/board/qemu/mips64r6el-malta/readme.txt b/board/qemu/mips64r6el-malta/readme.txt
+diff --git a/board/qemu/mips32r6el-malta/readme.txt b/board/qemu/mips32r6el-malta/readme.txt
 new file mode 100644
-index 0000000..3459a87
+index 0000000..e29115f
 --- /dev/null
-+++ b/board/qemu/mips64r6el-malta/readme.txt
++++ b/board/qemu/mips32r6el-malta/readme.txt
 @@ -0,0 +1,7 @@
 +Run the emulation with:
 +
-+ qemu-system-mips64el -M malta -cpu MIPS64R6-generic -kernel output/images/vmlinux -drive file=output/images/rootfs.ext2,format=raw -append "root=/dev/hda" -nographic
++qemu-system-mipsel -M malta -cpu mips32r6-generic -kernel output/images/vmlinux -drive file=output/images/rootfs.ext2,format=raw -append "root=/dev/hda" -net nic,model=pcnet -net user -nographic
 +
 +The login prompt will appear in the terminal that started Qemu.
 +
 +Tested with QEMU 2.6.0
-diff --git a/configs/qemu_mips64r6el_malta_defconfig b/configs/qemu_mips64r6el_malta_defconfig
+diff --git a/configs/qemu_mips32r6el_malta_defconfig b/configs/qemu_mips32r6el_malta_defconfig
 new file mode 100644
-index 0000000..c7803a5
+index 0000000..7d0fb89
 --- /dev/null
-+++ b/configs/qemu_mips64r6el_malta_defconfig
-@@ -0,0 +1,30 @@
++++ b/configs/qemu_mips32r6el_malta_defconfig
+@@ -0,0 +1,29 @@
 +# Architecture
-+BR2_mips64el=y
-+BR2_mips_64r6=y
-+BR2_MIPS_NABI64=y
++BR2_mipsel=y
++BR2_mips_32r6=y
 +
 +# System
 +BR2_SYSTEM_DHCP="eth0"
@@ -100,11 +95,11 @@ index 0000000..c7803a5
 +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.3"
 +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6el-malta/linux-4.6.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6el-malta/linux-4.6.config"
 +BR2_LINUX_KERNEL_VMLINUX=y
 +
 +# Compiler
-+# linux >= 4.4 uses -mcompact-branches which is only available since gcc-6
++# linux >= 4.4 uses -mcompact-branches which is only available since GCC 6.x
 +BR2_GCC_VERSION_6_X=y
 +
 +# Serial port config
