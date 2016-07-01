@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  1 Jul 2016 12:06:18 +0200
-Subject: [Buildroot] [PATCH 1/2] python-engineio: new package
-Message-ID: <1467367579-32207-1-git-send-email-yegorslists@googlemail.com>
+Date: Fri,  1 Jul 2016 12:06:19 +0200
+Subject: [Buildroot] [PATCH 2/2] python-socketio: new package
+In-Reply-To: <1467367579-32207-1-git-send-email-yegorslists@googlemail.com>
+References: <1467367579-32207-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1467367579-32207-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,69 +15,68 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
  package/Config.in                            |  1 +
- package/python-engineio/Config.in            |  9 +++++++++
- package/python-engineio/python-engineio.hash |  4 ++++
- package/python-engineio/python-engineio.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-engineio/Config.in
- create mode 100644 package/python-engineio/python-engineio.hash
- create mode 100644 package/python-engineio/python-engineio.mk
+ package/python-socketio/Config.in            |  8 ++++++++
+ package/python-socketio/python-socketio.hash |  4 ++++
+ package/python-socketio/python-socketio.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-socketio/Config.in
+ create mode 100644 package/python-socketio/python-socketio.hash
+ create mode 100644 package/python-socketio/python-socketio.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 7cae745..a5eabca 100644
+index a5eabca..7b48fc9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -672,6 +672,7 @@ menu "External python modules"
- 	source "package/python-dominate/Config.in"
- 	source "package/python-dpkt/Config.in"
- 	source "package/python-ecdsa/Config.in"
-+	source "package/python-engineio/Config.in"
- 	source "package/python-enum/Config.in"
- 	source "package/python-enum34/Config.in"
- 	source "package/python-flask/Config.in"
-diff --git a/package/python-engineio/Config.in b/package/python-engineio/Config.in
+@@ -767,6 +767,7 @@ menu "External python modules"
+ 	source "package/python-sip/Config.in"
+ 	source "package/python-six/Config.in"
+ 	source "package/python-smbus-cffi/Config.in"
++	source "package/python-socketio/Config.in"
+ 	source "package/python-spidev/Config.in"
+ 	source "package/python-thrift/Config.in"
+ 	source "package/python-tornado/Config.in"
+diff --git a/package/python-socketio/Config.in b/package/python-socketio/Config.in
 new file mode 100644
-index 0000000..b12db92
+index 0000000..af0f6f3
 --- /dev/null
-+++ b/package/python-engineio/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_ENGINEIO
-+	bool "python-engineio"
++++ b/package/python-socketio/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_SOCKETIO
++	bool "python-socketio"
 +	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_ENGINEIO # runtime
 +	help
-+	  Engine.IO server.
++	  Socket.IO server.
 +
-+	  http://github.com/miguelgrinberg/python-engineio/
-diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
++	  http://github.com/miguelgrinberg/python-socketio/
+diff --git a/package/python-socketio/python-socketio.hash b/package/python-socketio/python-socketio.hash
 new file mode 100644
-index 0000000..b2c0669
+index 0000000..659d4d5
 --- /dev/null
-+++ b/package/python-engineio/python-engineio.hash
++++ b/package/python-socketio/python-socketio.hash
 @@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/python-engineio/json
-+md5	9b0075dbbb25d7a302eba99dd9ba4af8  python-engineio-0.9.2.tar.gz
++# md5 from https://pypi.python.org/pypi/python-socketio/json
++md5	44fd24e839dc3102920765f345740646  python-socketio-1.4.1.tar.gz
 +# sha256 calculated by scanpypi
-+sha256	c53282415ed9bc3cb4e7beafb2a1ce5c369af95dcf8f968061e5bc7572b60867  python-engineio-0.9.2.tar.gz
-diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
++sha256	ebd0984d831d602c8ec6d586ecde4466972cc7ed37dbbfe613192864e8263779  python-socketio-1.4.1.tar.gz
+diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
 new file mode 100644
-index 0000000..700b638
+index 0000000..3bcfed1
 --- /dev/null
-+++ b/package/python-engineio/python-engineio.mk
++++ b/package/python-socketio/python-socketio.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-engineio
++# python-socketio
 +#
 +################################################################################
 +
-+PYTHON_ENGINEIO_VERSION = 0.9.2
-+PYTHON_ENGINEIO_SOURCE = python-engineio-$(PYTHON_ENGINEIO_VERSION).tar.gz
-+PYTHON_ENGINEIO_SITE = https://pypi.python.org/packages/c3/8f/0e066fc7a7029893b96b1d68a0cd5e75f6410f154fa4079b2be4991f5ae0
-+PYTHON_ENGINEIO_SETUP_TYPE = setuptools
-+PYTHON_ENGINEIO_LICENSE = MIT
-+PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
++PYTHON_SOCKETIO_VERSION = 1.4.1
++PYTHON_SOCKETIO_SOURCE = python-socketio-$(PYTHON_SOCKETIO_VERSION).tar.gz
++PYTHON_SOCKETIO_SITE = https://pypi.python.org/packages/da/00/66103df6a116a2ce3ea662a9c8c80f337d43d7f138caf04e9af6dec24ba7
++PYTHON_SOCKETIO_SETUP_TYPE = setuptools
++PYTHON_SOCKETIO_LICENSE = MIT
++PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
