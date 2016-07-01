@@ -1,130 +1,78 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Fri, 1 Jul 2016 15:18:58 +0200
-Subject: [Buildroot] [PATCH v3 2/6] Add documentation for merged
- defconfigs
-In-Reply-To: <fb148ddadbc12c9a9437192761ba342237a27325.1467176798.git.sam.bobroff@au1.ibm.com>
-References: <cover.1467176798.git.sam.bobroff@au1.ibm.com>
- <fb148ddadbc12c9a9437192761ba342237a27325.1467176798.git.sam.bobroff@au1.ibm.com>
-Message-ID: <489e6359-291e-5920-87d6-da23fe8c5d0a@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Jul 2016 15:27:26 +0200
+Subject: [Buildroot] [git commit] python-tomako: new package
+Message-ID: <20160701132941.A5E4B81D8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sam,
+commit: https://git.buildroot.net/buildroot/commit/?id=1a4f44802baf4cbb34c674e167dda6029df9282f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 29/06/2016 ? 07:06, Sam Bobroff a ?crit :
-> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-> ---
->  docs/manual/adding-board-support.txt |  3 ++
->  docs/manual/appendix.txt             |  1 +
->  docs/manual/merged-defconfigs.txt    | 60 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 64 insertions(+)
->  create mode 100644 docs/manual/merged-defconfigs.txt
-> 
-> diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
-> index f6d74ae..086a67e 100644
-> --- a/docs/manual/adding-board-support.txt
-> +++ b/docs/manual/adding-board-support.txt
-> @@ -24,6 +24,9 @@ savedefconfig+. This will generate a minimal +defconfig+ file at the
->  root of the Buildroot source tree. Move this file into the +configs/+
->  directory, and rename it +<boardname>_defconfig+.
->  
-> +It is also possible to create configurations by specifying differences from
-> +an existing configuration. See xref:merged-defconfigs[].
-> +
->  It is recommended to use as much as possible upstream versions of the
->  Linux kernel and bootloaders, and to use as much as possible default
->  kernel and bootloader configurations. If they are incorrect for your
-> diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
-> index 87a20bd..9abc37e 100644
-> --- a/docs/manual/appendix.txt
-> +++ b/docs/manual/appendix.txt
-> @@ -3,6 +3,7 @@
->  
->  include::makedev-syntax.txt[]
->  include::makeusers-syntax.txt[]
-> +include::merged-defconfigs.txt[]
->  
->  
->  // Automatically generated lists:
-> diff --git a/docs/manual/merged-defconfigs.txt b/docs/manual/merged-defconfigs.txt
-> new file mode 100644
-> index 0000000..e1f50fd
-> --- /dev/null
-> +++ b/docs/manual/merged-defconfigs.txt
-> @@ -0,0 +1,60 @@
-> +// -*- mode:doc -*- ;
-> +// vim: set syntax=asciidoc:
-> +
-> +[[merged-defconfigs]]
-> +== Merged configurations
-> +
-> +Buildroot supports the use of the Linux kernel's +merge_config.sh+ script to
-> +create configurations by merging a set of partial configurations (or overlays)
-> +on top of a base configuration. This may be useful when there are several
-> +configurations that are specializations of a single generic configuration.
-> +
-> +Files in the +configs/+ directory with the extension
-> ++.mk+ will be read by the top level Makefile and the Make function
-> ++merge_config+ can be used within them to define new merged configurations.
-> +
-> +The merge_config function takes three parameters: the first is the name of the
-> +new configuration (which should end with +_defconfig+), the second is the name
-> +of the base configuration file and the third is a space separated list of the
-> +partial configuration files to merge from the +configs/+ directory. All files
-> +should be specified relative to the +configs/+ directory and the name of the
-> +Make fragment file should match the name of the configuration it creates.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                        |  1 +
+ package/python-tomako/Config.in          |  9 +++++++++
+ package/python-tomako/python-tomako.hash |  4 ++++
+ package/python-tomako/python-tomako.mk   | 13 +++++++++++++
+ 4 files changed, 27 insertions(+)
 
-This series has been discussed with other developers and we concluded that this
-feature is not the responsibility of Buildroot to generate a defconfig from
-partial configuration files.
-
-Instead we recommend to use merge_config.sh from outside of Buildroot to
-generate the merged defconfig before calling make. Maybe we should add some
-documentation in the manual to explain how to use it.
-
-Best regards,
-Romain
-
-> +
-> +The new configuration can be selected as if it were a normal configuration, i.e. with
-> ++make foo_defconfig+.
-> +
-> +Partial configurations have the same format as full configuration
-> +files except that they contain only a subset of values. They can be created by
-> +starting with a normal configuration file and deleting lines as appropriate.
-> +
-> +External configuration files from the +$(BR2_EXTERNAL)/configs+ directory are fully
-> +supported, and merge configurations may freely refer to files from either
-> +location.
-> +
-> +Example:
-> +
-> +If configs/foo_defconfig contains:
-> +-----
-> +BR2_TARGET_GENERIC_HOSTNAME="buildroot"
-> +-----
-> +
-> +And configs/bar_defconfig.mk contains:
-> +-----
-> +$(eval $(call merge_config,bar_defconfig,foo_defconfig,b.config))
-> +-----
-> +
-> +And configs/b.config contains:
-> +-----
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to BAR"
-> +-----
-> +
-> +After running the command:
-> +-----
-> +make bar_defconfig
-> +-----
-> +
-> +The resulting .config file would contain:
-> +-----
-> +BR2_TARGET_GENERIC_HOSTNAME="buildroot"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to BAR"
-> +-----
-> 
+diff --git a/package/Config.in b/package/Config.in
+index 8eeca31..ead675b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -769,6 +769,7 @@ menu "External python modules"
+ 	source "package/python-socketio/Config.in"
+ 	source "package/python-spidev/Config.in"
+ 	source "package/python-thrift/Config.in"
++	source "package/python-tomako/Config.in"
+ 	source "package/python-tornado/Config.in"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-twisted/Config.in"
+diff --git a/package/python-tomako/Config.in b/package/python-tomako/Config.in
+new file mode 100644
+index 0000000..bd6d299
+--- /dev/null
++++ b/package/python-tomako/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_TOMAKO
++	bool "python-tomako"
++	select BR2_PACKAGE_PYTHON_TORNADO # runtime
++	select BR2_PACKAGE_PYTHON_MAKO # runtime
++	help
++	  Tomako is the easiest way to use Mako as a template engine for
++	  Tornado.
++
++	  https://github.com/rcmachado/tomako
+diff --git a/package/python-tomako/python-tomako.hash b/package/python-tomako/python-tomako.hash
+new file mode 100644
+index 0000000..678944a
+--- /dev/null
++++ b/package/python-tomako/python-tomako.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/tomako/json
++md5	74597762d156f52b8716aced94d51f2a  tomako-0.1.0.tar.gz
++# sha256 calculated by scanpypi
++sha256	e541e6bad009d3f61956b135757d491bf42c97cb441e7c11ef7a0ef6e9460a9f  tomako-0.1.0.tar.gz
+diff --git a/package/python-tomako/python-tomako.mk b/package/python-tomako/python-tomako.mk
+new file mode 100644
+index 0000000..a9eef64
+--- /dev/null
++++ b/package/python-tomako/python-tomako.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-tomako
++#
++################################################################################
++
++PYTHON_TOMAKO_VERSION = 0.1.0
++PYTHON_TOMAKO_SOURCE = tomako-$(PYTHON_TOMAKO_VERSION).tar.gz
++PYTHON_TOMAKO_SITE = https://pypi.python.org/packages/66/6f/de5449d401ca6953691c765d7465941e772cf99a3547646edc58cdca452d
++PYTHON_TOMAKO_SETUP_TYPE = setuptools
++PYTHON_TOMAKO_LICENSE = MIT
++
++$(eval $(python-package))
