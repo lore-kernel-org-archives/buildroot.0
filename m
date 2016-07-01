@@ -1,61 +1,59 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Fri, 1 Jul 2016 12:28:42 -0300 (BRT)
-Subject: [Buildroot] Unable to compile uboot v2012.10 on Buildroot
- 2016.05
-In-Reply-To: <20160701161556.5e65b3df@free-electrons.com>
-References: <1249010753.7483898.1467378648497.JavaMail.zimbra@datacom.ind.br>
- <20160701151804.61f389e9@free-electrons.com>
- <1572014322.7513168.1467381657827.JavaMail.zimbra@datacom.ind.br>
- <20160701161556.5e65b3df@free-electrons.com>
-Message-ID: <1533419985.7541395.1467386922132.JavaMail.zimbra@datacom.ind.br>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Jul 2016 17:30:33 +0200
+Subject: [Buildroot] [PATCH 01/13] package/gcc: use BR2_USE_WCHAR to set
+ gcc libquadmath option
+In-Reply-To: <1467040287-39390-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1467040287-39390-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160701173033.40f03bf4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: "buildroot" <buildroot@buildroot.org>, "Julien Boibessot" <julien.boibessot@armadeus.com>
-> Sent: Friday, July 1, 2016 11:15:56 AM
-> Subject: Re: [Buildroot] Unable to compile uboot v2012.10 on Buildroot 2016.05
+Hello,
 
-> Hello,
+On Mon, 27 Jun 2016 16:11:15 +0100, Vicente Olivert Riera wrote:
+> From: Samuel Martin <s.martin49@gmail.com>
 > 
-> On Fri, 1 Jul 2016 11:00:57 -0300 (BRT), Carlos Santos wrote:
+> BR2_TOOLCHAIN_BUILDROOT_WCHAR is only defined when uclibc is selected, whereas
+> BR2_USE_WCHAR is always defined.
 > 
->> > What is your host gcc version ? This failure smells like building an
->> > old U-Boot, with gcc 5.x as the host gcc version.
->> 
->> The problem happens on CentOS 7 (GCC 4.8.3) and Ubuntu 16.04 (GCC 5.3.1).
+> So, use BR2_USE_WCHAR to drive the gcc libquadmath option.
 > 
-> I think the failure with GCC 5.3.x is normal, but I don't understand
-> why it would fail with gcc 4.8.
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+I've applied, after doing some tweaks, see below.
+
+> ---
+>  package/gcc/gcc.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->> >>  UBOOT_MAKE_OPTS += \
->> >>  	CROSS_COMPILE="$(TARGET_CROSS)" \
->> >> -	ARCH=$(UBOOT_ARCH) \
->> >> -	HOSTCFLAGS="$(HOST_CFLAGS)" \
->> >> -	HOSTLDFLAGS="$(HOST_LDFLAGS)"
->> > 
->> > I'm not sure to see why this would fix the problem you're reporting.
->> 
->> It prevents overriding HOSTCFLAGS and HOSTLDFLAGS on targets that don't need
->> OpenSSL, so older versions of U-Boot will compile successfully.
-> 
-> Yes, but I don't understand why not setting HOSTCFLAGS/HOSTLDFLAGS
-> fixes the build issue you mentioned.
-> 
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index 46f05ff..88d2bc2 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -107,7 +107,7 @@ HOST_GCC_COMMON_CONF_OPTS += --disable-libitm
+>  endif
+>  
+>  # gcc 4.6.x quadmath requires wchar
 
-Without setting HOSTCFLAGS/HOSTLDFLAGS the command line is this
+I've updated this commit, because the requirement on wchar doesn't
+apply just to gcc 4.6. It applies *since* 4.6, because that's when
+libquadmath was introduced.
 
-gcc -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -idirafter /work/bcm95615x/build/uboot-2012.10/include -idirafter /work/bcm95615x/build/uboot-2012.10/include2 -idirafter /work/bcm95615x/build/uboot-2012.10/include -I /work/bcm95615x/build/uboot-2012.10/lib/libfdt -I /work/bcm95615x/build/uboot-2012.10/tools -DCONFIG_SYS_TEXT_BASE=0x80800000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -pedantic   -o img2srec.o img2srec.c -c
+> -ifneq ($(BR2_TOOLCHAIN_BUILDROOT_WCHAR),y)
+> +ifneq ($(BR2_USE_WCHAR),y)
 
-Setting HOSTCFLAGS/HOSTLDFLAGS the command line becomes
+And I've inverted the condition to use positive logic:
 
-gcc -O2 -I/work/bcm95615x/host/usr/include   -o img2srec.o img2srec.c -c
+ifeq ($(BR2_USE_WCHAR),)
 
-Because the value of HOSTCFLAGS set in U-Boot's config.mk is overwritten. 
+Thanks!
 
-Carlos Santos (Casantos)
-DATACOM, P&D
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
