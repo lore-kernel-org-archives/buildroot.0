@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 00:11:58 +0200
-Subject: [Buildroot] [PATCH 15/31] package/systemd: add optional support
- for hibernation
-In-Reply-To: <1467409891-9458-15-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1467409891-9458-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1467409891-9458-15-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20160702001158.5f43c1e7@free-electrons.com>
+Date: Sat, 2 Jul 2016 00:17:39 +0200
+Subject: [Buildroot] [PATCH 3/3] package/systemd: Remove SYSTEMD_COMPAT
+ option
+In-Reply-To: <1467409950-9628-3-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1467409950-9628-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1467409950-9628-3-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20160702001739.458e8c96@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +14,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  1 Jul 2016 23:51:15 +0200, Maxime Hadjinlian wrote:
-> From: Gabe Evans <gabe@hashrabbit.co>
+On Fri,  1 Jul 2016 23:52:30 +0200, Maxime Hadjinlian wrote:
+> Since v230 of systemd, the compat libraries have been fully removed.
+> https://github.com/systemd/systemd/commit/4de282cf9324ab13d17ac334244d0d7cae2df37d
 > 
-> Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
->  package/systemd/Config.in  | 10 +++++++++-
->  package/systemd/systemd.mk |  6 ++++++
->  2 files changed, 15 insertions(+), 1 deletion(-)
+>  Config.in.legacy             |  7 +++++++
+>  package/dbus/Config.in       |  1 -
+>  package/liblogging/Config.in |  1 -
+>  package/systemd/Config.in    | 13 -------------
+>  package/systemd/systemd.mk   |  6 ------
+>  5 files changed, 7 insertions(+), 21 deletions(-)
 > 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index a857a95..3fcb74d 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -308,4 +308,12 @@ config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
->  	  When this feature is enabled, Systemd mounts smackfs and manages
->  	  security labels for sockets.
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 34bdaf0..ff4deb2 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -369,6 +369,13 @@ config BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
+>  	  removed. To get the same features, the libgcrypt and xz
+>  	  package should now be enabled.
 >  
-> -endif
-> +config BR2_PACKAGE_SYSTEMD_HIBERNATE
-> +	bool "enable hibernation support"
+> +config BR2_PACKAGE_SYSTEMD_COMPAT
+> +	bool "systemd compatibility libraries has been removed"
 > +	help
-> +	  When this features is enabled, additional tools and services are built to
-> +	  support suspending and resuming the system.
-> +
-> +	  http://www.freedesktop.org/software/systemd/man/systemd-sleep.html
-> +
-> +endif # BR2_PACKAGE_SYSTEMD
+> +		The systemd option te enable the compatibility libraries has been
+> +		removed. Theses libraries have been useless since a few version, and
+> +		have been fully dropped from the source since v230.
 
-The addition of the comment here has nothing to do with the patch being
-done.
+Indentation is not good here.
+
+Thanks,
 
 Thomas
 -- 
