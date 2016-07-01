@@ -1,97 +1,123 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Jul 2016 14:46:25 +0200
-Subject: [Buildroot] [PATCH 2/2] Package nfs-utils: Start/stop daemons
- consistently
-In-Reply-To: <1456485374-5356-2-git-send-email-universeII@gmx.de>
-References: <1456485374-5356-1-git-send-email-universeII@gmx.de>
- <1456485374-5356-2-git-send-email-universeII@gmx.de>
-Message-ID: <20160701124625.GD25487@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Jul 2016 14:47:02 +0200
+Subject: [Buildroot] [git commit] netsnmp: adjust init script by creating
+	start(), stop(), reload()
+Message-ID: <20160701124731.2ECC580335@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andreas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=291f3f948dbf3fdcbbd1f9d6fb00d1bac0bd92c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-02-26 12:16 +0100, Andreas Ehmanns spake thusly:
-> Changed init script to start and stop all nfs daemons
-> in a consistent way. Using the same kill command,
-> start/stop the daemon, printout OK or FAIL and touch
-> or deleted necessary files.
-> 
-> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
-> ---
->  package/nfs-utils/S60nfs | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
-> index 0b78c9b..c9368b4 100755
-> --- a/package/nfs-utils/S60nfs
-> +++ b/package/nfs-utils/S60nfs
-> @@ -27,7 +27,7 @@ start() {
->  	rpc.statd
->  	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  	touch /var/lock/subsys/nfslock
-> -	
-> +
+Change the init script to get rid of double code. Start, stop and reload
+code has been put into separate functions and 'restart' will just call
+stop() and start() with a delay in between.
 
-Hmm... I missed that spurious change in your previous patch... :-/
+Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/netsnmp/S59snmpd | 71 +++++++++++++++++++++++++-----------------------
+ 1 file changed, 37 insertions(+), 34 deletions(-)
 
->  	printf "Starting NFS services: "
->  	/usr/sbin/exportfs -r
->  	[ $? = 0 ] && echo "OK" || echo "FAIL"
-> @@ -49,18 +49,18 @@ stop() {
->  	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  
->  	printf "Shutting down NFS daemon: "
-> -	kill -9 `pidof nfsd` 2>/dev/null
-> +	killall -q -9 nfsd 2>/dev/null
-
-Since you said "stop all nfs daemons in a consistent way", why do we
-need to killall -9 here, when we're not using it for the other two
-daemons?
-
-Regards,
-Yann E. MORIN.
-
->  	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  
->  	printf "Shutting down NFS services: "
->  	/usr/sbin/exportfs -au
-> -	rm -f /var/lock/subsys/nfs
-> -	killall -q rpc.statd
->  	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  
->  	printf "Stopping NFS statd: "
->  	killall -q rpc.statd
->  	[ $? = 0 ] && echo "OK" || echo "FAIL"
-> +	rm -f /var/lock/subsys/nfs
-> +	rm -f /var/run/rpc.statd.pid
->  	rm -f /var/lock/subsys/nfslock
->  }
->  
-> @@ -81,7 +81,7 @@ case "$1" in
->  	touch /var/lock/subsys/nfs
->  	;;
->    *)
-> -	echo "Usage: nfs {start|stop|reload}"
-> +	echo "Usage: $0 {start|stop|restart|reload}"
->  	exit 1
->  esac
->  
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/netsnmp/S59snmpd b/package/netsnmp/S59snmpd
+index 4eea512..cfda625 100755
+--- a/package/netsnmp/S59snmpd
++++ b/package/netsnmp/S59snmpd
+@@ -38,56 +38,59 @@ if [ "$SNMPDCOMPAT" = "yes" ]; then
+   ln -sf /var/agentx/master /var/run/agentx
+ fi
+ 
+-case "$1" in
+-  start)
++start() {
+     printf "Starting network management services:"
+     if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+-      start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
+-      printf " snmpd"
++        start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
++        printf " snmpd"
+     fi
+     if [ "$TRAPDRUN" = "yes" -a -f /etc/snmp/snmptrapd.conf ]; then
+-      start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- $TRAPDOPTS
+-      printf " snmptrapd"
++        start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- $TRAPDOPTS
++        printf " snmptrapd"
+     fi
+     echo "."
+-    ;;
+-  stop)
++}
++
++stop() {
+     printf "Stopping network management services:"
+     start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmpd
+     printf " snmpd"
+     start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmptrapd
+     printf " snmptrapd"
+     echo "."
+-    ;;
+-  restart)
+-    printf "Restarting network management services:"
+-    start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmpd
+-    start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmptrapd
+-    # Allow the daemons time to exit completely.
+-    sleep 2
+-    if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+-      start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
+-      printf " snmpd"
+-    fi
+-    if [ "$TRAPDRUN" = "yes" -a -f /etc/snmp/snmptrapd.conf ]; then
+-      # Allow snmpd time to start up.
+-      sleep 1
+-      start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- $TRAPDOPTS
+-      printf " snmptrapd"
+-    fi
+-    echo "."
+-    ;;
+-  reload|force-reload)
++}
++
++reload() {
+     printf "Reloading network management services:"
+     if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+-      start-stop-daemon -q -K -s 1 -p /var/run/snmpd.pid -x /usr/sbin/snmpd
+-      printf " snmpd"
++        start-stop-daemon -q -K -s 1 -p /var/run/snmpd.pid -x /usr/sbin/snmpd
++        printf " snmpd"
+     fi
+     echo "."
+-    ;;
+-  *)
+-    echo "Usage: /etc/init.d/snmpd {start|stop|restart|reload|force-reload}"
+-    exit 1
++}
++
++case "$1" in
++    start)
++        start
++        ;;
++
++    stop)
++        stop
++        ;;
++
++    restart)
++        stop
++        # Allow the daemons time to exit completely.
++        sleep 2
++        start
++        ;;
++
++    reload|force-reload)
++        reload
++        ;;
++    *)
++        echo "Usage: $0 {start|stop|restart|reload|force-reload}"
++        exit 1
+ esac
+ 
+ exit 0
