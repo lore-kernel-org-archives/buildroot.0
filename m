@@ -1,13 +1,16 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  1 Jul 2016 17:14:39 +0200
-Subject: [Buildroot] [PATCH] package/linux-headers: improve help text and
-	prompt
-Message-ID: <1467386079-26051-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Jul 2016 17:16:37 +0200
+Subject: [Buildroot] [git commit] package/linux-headers: improve help text
+	and prompt
+Message-ID: <20160701151645.368FC81E64@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e7fc2404f05256bc16f8b1d8bd9b06cae6fd72a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The way the help text and prompt for the kernel header version choice is
 written can be misleading to some users.
@@ -17,6 +20,7 @@ Rewite them so it is more explicit.
 Reported-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/linux-headers/Config.in.host | 20 +++++++++++++++-----
  1 file changed, 15 insertions(+), 5 deletions(-)
@@ -61,5 +65,3 @@ index af29676..1def30c 100644
  
  	  This is used to hide/show some packages that have strict
  	  requirements on the version of kernel headers.
--- 
-2.7.4
