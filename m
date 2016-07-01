@@ -1,44 +1,155 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 11:06:36 +0200
-Subject: [Buildroot] [git commit] checkpolicy: bump to version 2.5
-Message-ID: <20160701091149.52BBE821AD@busybox.osuosl.org>
+Date: Fri, 1 Jul 2016 11:06:37 +0200
+Subject: [Buildroot] [git commit] libsepol: bump to version 2.5
+Message-ID: <20160701091149.6B1D88183A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6b803f84674c56324358096b3052cafe7286c09
+commit: https://git.buildroot.net/buildroot/commit/?id=a3ebe45dcb3ef19e48e99b5a51829ed901a29f08
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+An additional patch is needed to fix the build with uClibc.
+
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Thomas: add patch to fix build with uClibc.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/checkpolicy/checkpolicy.hash | 2 +-
- package/checkpolicy/checkpolicy.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libsepol/0001-support-static-only.patch    | 26 +++++++++++-----------
+ .../libsepol/0002-workaround-blackfin-issue.patch  |  8 ++++---
+ package/libsepol/0003-add-stdarg-include.patch     | 18 +++++++++++++++
+ package/libsepol/libsepol.hash                     |  2 +-
+ package/libsepol/libsepol.mk                       |  4 ++--
+ 5 files changed, 39 insertions(+), 19 deletions(-)
 
-diff --git a/package/checkpolicy/checkpolicy.hash b/package/checkpolicy/checkpolicy.hash
-index 32b5ff6..bc5199c 100644
---- a/package/checkpolicy/checkpolicy.hash
-+++ b/package/checkpolicy/checkpolicy.hash
+diff --git a/package/libsepol/0001-support-static-only.patch b/package/libsepol/0001-support-static-only.patch
+index b974680..3e9a84f 100644
+--- a/package/libsepol/0001-support-static-only.patch
++++ b/package/libsepol/0001-support-static-only.patch
+@@ -7,37 +7,37 @@ libraries. It allows to support cases where the target architecture
+ does not have support for shared libraries.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+ 
+ Index: b/src/Makefile
+ ===================================================================
++
++diff --git a/src/Makefile b/src/Makefile
++index db6c2ba..0006285 100644
+ --- a/src/Makefile
+ +++ b/src/Makefile
+-@@ -17,7 +17,12 @@
+- CFLAGS ?= -Werror -Wall -W -Wundef -Wshadow -Wmissing-noreturn -Wmissing-format-attribute
+- override CFLAGS += -I. -I../include -D_GNU_SOURCE
++@@ -30,8 +30,12 @@ LOBJS += $(sort $(patsubst %.c,%.lo,$(wildcard $(CILDIR)/src/*.c) $(CIL_GENERATE
++ override CFLAGS += -I$(CILDIR)/include
++ endif
+  
+--all: $(LIBA) $(LIBSO) $(LIBPC)
+ +ALL_TARGETS = $(LIBA) $(LIBPC)
+ +ifeq ($(STATIC),)
+ +ALL_TARGETS += $(LIBSO)
+ +endif
+-+
++
++-all: $(LIBA) $(LIBSO) $(LIBPC)
+ +all: $(ALL_TARGETS)
+  
++
+  $(LIBA):  $(OBJS)
+- 	$(AR) rcs $@ $^
+-@@ -39,11 +44,13 @@
+- install: all
+- 	test -d $(LIBDIR) || install -m 755 -d $(LIBDIR)
+- 	install -m 644 $(LIBA) $(LIBDIR)
+--	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
+--	install -m 755 $(LIBSO) $(SHLIBDIR)
++@@ -70,7 +74,11 @@ install: all
++ 	install -m 755 $(LIBSO) $(SHLIBDIR)
+  	test -d $(LIBDIR)/pkgconfig || install -m 755 -d $(LIBDIR)/pkgconfig
+  	install -m 644 $(LIBPC) $(LIBDIR)/pkgconfig
+ +ifeq ($(STATIC),)
+ +	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
+ +	install -m 755 $(LIBSO) $(SHLIBDIR)
+- 	cd $(LIBDIR) && ln -sf ../../`basename $(SHLIBDIR)`/$(LIBSO) $(TARGET)
++ 	ln -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
+ +endif
+  
+  relabel:
+diff --git a/package/libsepol/0002-workaround-blackfin-issue.patch b/package/libsepol/0002-workaround-blackfin-issue.patch
+index 5d00c69..3c3bd48 100644
+--- a/package/libsepol/0002-workaround-blackfin-issue.patch
++++ b/package/libsepol/0002-workaround-blackfin-issue.patch
+@@ -8,17 +8,19 @@ symbols are visible in the final DSO, which is not a problem for
+ proper execution, it just isn't as clean.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+ 
+ Index: b/src/dso.h
+ ===================================================================
+ --- a/src/dso.h
+ +++ b/src/dso.h
+-@@ -1,7 +1,7 @@
+- #ifndef _SELINUX_DSO_H
+- #define _SELINUX_DSO_H	1
++@@ -5,7 +5,7 @@
++     #define DISABLE_SYMVER 1
++ #endif
+  
+ -#ifdef SHARED
+ +#if defined(SHARED) && !defined(__bfin__)
+  # define hidden __attribute__ ((visibility ("hidden")))
+  # define hidden_proto(fct) __hidden_proto (fct, fct##_internal)
+  # define __hidden_proto(fct, internal)	\
++
+diff --git a/package/libsepol/0003-add-stdarg-include.patch b/package/libsepol/0003-add-stdarg-include.patch
+new file mode 100644
+index 0000000..246c965
+--- /dev/null
++++ b/package/libsepol/0003-add-stdarg-include.patch
+@@ -0,0 +1,18 @@
++Add missing <stdarg.h> include
++
++This is needed to fix the build on uClibc, due to the usage of
++va_list.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Index: b/cil/src/cil_log.h
++===================================================================
++--- a/cil/src/cil_log.h
+++++ b/cil/src/cil_log.h
++@@ -30,6 +30,7 @@
++ #define CIL_LOG_H_
++ 
++ #include <stdlib.h>
+++#include <stdarg.h>
++ #include <cil/cil.h>
++ 
++ #define MAX_LOG_SIZE 512
+diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
+index df5dabd..266ce43 100644
+--- a/package/libsepol/libsepol.hash
++++ b/package/libsepol/libsepol.hash
 @@ -1,2 +1,2 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256 e6a0ac539b74859b4262b317eb90d9914deb15e7aa509659f47724d50fe2ecc6  checkpolicy-2.1.12.tar.gz
-+sha256 33af9f3eb19135a7e6536ecd3fbb9686323000016cd51eb88346346ed7546001  checkpolicy-2.5.tar.gz
-diff --git a/package/checkpolicy/checkpolicy.mk b/package/checkpolicy/checkpolicy.mk
-index 4b7b2f3..f1b76d0 100644
---- a/package/checkpolicy/checkpolicy.mk
-+++ b/package/checkpolicy/checkpolicy.mk
+ # From https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256	290d17f583635a4a5d8a2141511272adf0571c4205cdea38b5a68df20d58a70b  libsepol-2.1.9.tar.gz
++sha256 2bdeec56d0a08b082b93b40703b4b3329cc5562152f7254d8f6ef6b56afe850a  libsepol-2.5.tar.gz
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index 1e709c6..93896cf 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--CHECKPOLICY_VERSION = 2.1.12
--CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-+CHECKPOLICY_VERSION = 2.5
-+CHECKPOLICY_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
- CHECKPOLICY_LICENSE = GPLv2
- CHECKPOLICY_LICENSE_FILES = COPYING
+-LIBSEPOL_VERSION = 2.1.9
+-LIBSEPOL_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
++LIBSEPOL_VERSION = 2.5
++LIBSEPOL_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
+ LIBSEPOL_LICENSE = LGPLv2.1+
+ LIBSEPOL_LICENSE_FILES = COPYING
  
