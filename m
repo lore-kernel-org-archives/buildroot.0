@@ -1,36 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 15:01:21 +0200
-Subject: [Buildroot] [PATCH 1/4] Package netsnmp: Created start(), stop(),
- reload().
-In-Reply-To: <1456435484-4723-1-git-send-email-universeII@gmx.de>
-References: <1456435484-4723-1-git-send-email-universeII@gmx.de>
-Message-ID: <20160701150121.7eebcb5e@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 01 Jul 2016 10:03:28 -0300
+Subject: [Buildroot] [PATCH v2 1/6] qemu_mips_malta_defconfig: move to
+ qemu_mips32r2_malta_defconfig
+In-Reply-To: <20160701150051.478b11f0@free-electrons.com>
+References: <1467365245-24123-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20160701150051.478b11f0@free-electrons.com>
+Message-ID: <9dc07ea69f205b7bd1b4244361fbfdcf@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 2016-07-01 10:00, Thomas Petazzoni wrote:
 
-On Thu, 25 Feb 2016 22:24:41 +0100, Andreas Ehmanns wrote:
-> Changed init script to get rid of double code.
-> Start, stop and reload code has been put into
-> separate functions and 'restart' will just call
-> stop() and start() with a delay in between.
+> Hello,
 > 
-> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
-> ---
->  package/netsnmp/S59snmpd | 71 +++++++++++++++++++++++++-----------------------
->  1 file changed, 37 insertions(+), 34 deletions(-)
+> On Fri, 1 Jul 2016 10:27:20 +0100, Vicente Olivert Riera wrote:
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> ---
+>> Changes v1 -> v2:
+>>  - Use mips32r2 instead of mips_32r2 in the defconfig name.
+>>  - Use mips32r2 instead of mips-32r2 in the board dir name.
+> 
+> Entire series applied to master, after tweaking the commit titles.
+> 
+> Note that I hesitated a bit, since I'm not sure how worth it it is to
+> have 8 different Qemu configuration for MIPS. It starts to be quite a
+> lot.
+> 
+> Thanks,
+> 
+> Thomas
 
-Entire series applied, after tweaking the commit titles and in some
-cases the commit log.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Hi.
+I've hesitated a bit as well, but then r2 and r6 cores are quite a bit 
+different and it's good to have some way of testing toolchain output.
+Regards.
