@@ -1,44 +1,130 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 15:18:04 +0200
-Subject: [Buildroot] Unable to compile uboot v2012.10 on Buildroot
- 2016.05
-In-Reply-To: <1249010753.7483898.1467378648497.JavaMail.zimbra@datacom.ind.br>
-References: <1249010753.7483898.1467378648497.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20160701151804.61f389e9@free-electrons.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Fri, 1 Jul 2016 15:18:58 +0200
+Subject: [Buildroot] [PATCH v3 2/6] Add documentation for merged
+ defconfigs
+In-Reply-To: <fb148ddadbc12c9a9437192761ba342237a27325.1467176798.git.sam.bobroff@au1.ibm.com>
+References: <cover.1467176798.git.sam.bobroff@au1.ibm.com>
+ <fb148ddadbc12c9a9437192761ba342237a27325.1467176798.git.sam.bobroff@au1.ibm.com>
+Message-ID: <489e6359-291e-5920-87d6-da23fe8c5d0a@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Sam,
 
-On Fri, 1 Jul 2016 10:10:48 -0300 (BRT), Carlos Santos wrote:
-
-> /usr/bin/make -C tools all
-> gcc -O2 -I/work/bcm95615x/host/usr/include   -o img2srec.o img2srec.c -c
-> In file included from img2srec.c:55:0:
-> os_support.h:22:22: fatal error: compiler.h: No such file or directory
-
-What is your host gcc version ? This failure smells like building an
-old U-Boot, with gcc 5.x as the host gcc version.
-
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index a2274ee..5d171dd 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -92,9 +92,7 @@ endif
+Le 29/06/2016 ? 07:06, Sam Bobroff a ?crit :
+> Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> ---
+>  docs/manual/adding-board-support.txt |  3 ++
+>  docs/manual/appendix.txt             |  1 +
+>  docs/manual/merged-defconfigs.txt    | 60 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 64 insertions(+)
+>  create mode 100644 docs/manual/merged-defconfigs.txt
+> 
+> diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
+> index f6d74ae..086a67e 100644
+> --- a/docs/manual/adding-board-support.txt
+> +++ b/docs/manual/adding-board-support.txt
+> @@ -24,6 +24,9 @@ savedefconfig+. This will generate a minimal +defconfig+ file at the
+>  root of the Buildroot source tree. Move this file into the +configs/+
+>  directory, and rename it +<boardname>_defconfig+.
 >  
->  UBOOT_MAKE_OPTS += \
->  	CROSS_COMPILE="$(TARGET_CROSS)" \
-> -	ARCH=$(UBOOT_ARCH) \
-> -	HOSTCFLAGS="$(HOST_CFLAGS)" \
-> -	HOSTLDFLAGS="$(HOST_LDFLAGS)"
+> +It is also possible to create configurations by specifying differences from
+> +an existing configuration. See xref:merged-defconfigs[].
+> +
+>  It is recommended to use as much as possible upstream versions of the
+>  Linux kernel and bootloaders, and to use as much as possible default
+>  kernel and bootloader configurations. If they are incorrect for your
+> diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
+> index 87a20bd..9abc37e 100644
+> --- a/docs/manual/appendix.txt
+> +++ b/docs/manual/appendix.txt
+> @@ -3,6 +3,7 @@
+>  
+>  include::makedev-syntax.txt[]
+>  include::makeusers-syntax.txt[]
+> +include::merged-defconfigs.txt[]
+>  
+>  
+>  // Automatically generated lists:
+> diff --git a/docs/manual/merged-defconfigs.txt b/docs/manual/merged-defconfigs.txt
+> new file mode 100644
+> index 0000000..e1f50fd
+> --- /dev/null
+> +++ b/docs/manual/merged-defconfigs.txt
+> @@ -0,0 +1,60 @@
+> +// -*- mode:doc -*- ;
+> +// vim: set syntax=asciidoc:
+> +
+> +[[merged-defconfigs]]
+> +== Merged configurations
+> +
+> +Buildroot supports the use of the Linux kernel's +merge_config.sh+ script to
+> +create configurations by merging a set of partial configurations (or overlays)
+> +on top of a base configuration. This may be useful when there are several
+> +configurations that are specializations of a single generic configuration.
+> +
+> +Files in the +configs/+ directory with the extension
+> ++.mk+ will be read by the top level Makefile and the Make function
+> ++merge_config+ can be used within them to define new merged configurations.
+> +
+> +The merge_config function takes three parameters: the first is the name of the
+> +new configuration (which should end with +_defconfig+), the second is the name
+> +of the base configuration file and the third is a space separated list of the
+> +partial configuration files to merge from the +configs/+ directory. All files
+> +should be specified relative to the +configs/+ directory and the name of the
+> +Make fragment file should match the name of the configuration it creates.
 
-I'm not sure to see why this would fix the problem you're reporting.
+This series has been discussed with other developers and we concluded that this
+feature is not the responsibility of Buildroot to generate a defconfig from
+partial configuration files.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Instead we recommend to use merge_config.sh from outside of Buildroot to
+generate the merged defconfig before calling make. Maybe we should add some
+documentation in the manual to explain how to use it.
+
+Best regards,
+Romain
+
+> +
+> +The new configuration can be selected as if it were a normal configuration, i.e. with
+> ++make foo_defconfig+.
+> +
+> +Partial configurations have the same format as full configuration
+> +files except that they contain only a subset of values. They can be created by
+> +starting with a normal configuration file and deleting lines as appropriate.
+> +
+> +External configuration files from the +$(BR2_EXTERNAL)/configs+ directory are fully
+> +supported, and merge configurations may freely refer to files from either
+> +location.
+> +
+> +Example:
+> +
+> +If configs/foo_defconfig contains:
+> +-----
+> +BR2_TARGET_GENERIC_HOSTNAME="buildroot"
+> +-----
+> +
+> +And configs/bar_defconfig.mk contains:
+> +-----
+> +$(eval $(call merge_config,bar_defconfig,foo_defconfig,b.config))
+> +-----
+> +
+> +And configs/b.config contains:
+> +-----
+> +BR2_TARGET_GENERIC_ISSUE="Welcome to BAR"
+> +-----
+> +
+> +After running the command:
+> +-----
+> +make bar_defconfig
+> +-----
+> +
+> +The resulting .config file would contain:
+> +-----
+> +BR2_TARGET_GENERIC_HOSTNAME="buildroot"
+> +BR2_TARGET_GENERIC_ISSUE="Welcome to BAR"
+> +-----
+> 
