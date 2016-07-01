@@ -1,42 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 14:47:58 +0200
-Subject: [Buildroot] [git commit] netsnmp: remove 'set -e' from init script
-Message-ID: <20160701124910.A844E81D5D@busybox.osuosl.org>
+Date: Fri, 1 Jul 2016 14:49:24 +0200
+Subject: [Buildroot] [git commit] netsnmp: add missing reload of snmptrapd
+	in init script
+Message-ID: <20160701124940.974BB80504@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11d99e7257094606d36e86429f08ae4fdd6471c5
+commit: https://git.buildroot.net/buildroot/commit/?id=6eba255b716865fcb688afe627eb1568718bc09b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch removes 'set -e' from the netsnmp init script since it causes
-the init script to terminate if an error occurs. This prevents the
-script to create an "FAIL" printout in case of an error.
+In case of a reload command the snmpdtrapd wasn't restarted.
 
 Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netsnmp/S59snmpd | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/netsnmp/S59snmpd | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/netsnmp/S59snmpd b/package/netsnmp/S59snmpd
-index cfda625..2762082 100755
+index 2762082..2d076e0 100755
 --- a/package/netsnmp/S59snmpd
 +++ b/package/netsnmp/S59snmpd
-@@ -1,4 +1,4 @@
--#! /bin/sh -e
-+#! /bin/sh
- ### BEGIN INIT INFO
- # Provides:           snmpd snmptrapd
- # Required-Start:     $network $local_fs
-@@ -11,7 +11,6 @@
- #
- # Author:    Jochen Friedrich <jochen@scram.de>
- #
--set -e
- 
- export PATH=/sbin:/usr/sbin:/bin:/usr/bin
+@@ -65,6 +65,11 @@ reload() {
+         start-stop-daemon -q -K -s 1 -p /var/run/snmpd.pid -x /usr/sbin/snmpd
+         printf " snmpd"
+     fi
++
++    if [ "$TRAPDRUN" = "yes" -a -f /etc/snmp/snmptrapd.conf ]; then
++        start-stop-daemon -q -K -s 1 -p /var/run/snmptrapd.pid -x /usr/sbin/snmptrapd
++        printf " snmptrapd"
++    fi
+     echo "."
+ }
  
