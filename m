@@ -1,97 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Jul 2016 18:06:56 +0200
-Subject: [Buildroot] [PATCH 4/4] linux-headers: match headers for the
-	latest kernel
-In-Reply-To: <1461099155-30702-5-git-send-email-vivien.didelot@savoirfairelinux.com>
-References: <1461099155-30702-1-git-send-email-vivien.didelot@savoirfairelinux.com>
- <1461099155-30702-5-git-send-email-vivien.didelot@savoirfairelinux.com>
-Message-ID: <20160701160656.GC17666@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri,  1 Jul 2016 18:29:05 +0200
+Subject: [Buildroot] [PATCH v2 00/15] Fortran support for all toolchain
+Message-ID: <20160701162920.19632-1-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vivien, All,
+Hi all,
 
-On 2016-04-19 16:52 -0400, Vivien Didelot spake thusly:
-> The point of choosing BR2_LINUX_KERNEL_LATEST_VERSION alongside
-> BR2_KERNEL_HEADERS_FROM_KERNEL is not to care about bumping the kernel
-> and its headers used in the toolchain in later Buildroot releases.
-> 
-> When using the latest kernel and its headers, automatically set the
-> headers version to at least BR2_LINUX_KERNEL_VERSION.
-> 
-> A similar change can be done for BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE,
-> but this is less trivial since it requires parsing the free form string.
-
-We've also discussed this patch today, and we've come to a simpler
-solution: default to the latest kernel version for the custom headers.
-I've sent the patch:
-    https://patchwork.ozlabs.org/patch/643102/
-
-So, I've marked this patch as superseded in patchwork.
-
-Thanks!
+This second round of the series integrate the work (and fixes ;-])
+from Benjamin, plus few others fixes.
 
 Regards,
-Yann E. MORIN.
 
-> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-> ---
->  package/linux-headers/Config.in.host | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-> index baadb2e..15136df 100644
-> --- a/package/linux-headers/Config.in.host
-> +++ b/package/linux-headers/Config.in.host
-> @@ -12,7 +12,9 @@ choice
->  	  version you intend to use on your target system.
->  
->  	  Select BR2_KERNEL_HEADERS_FROM_KERNEL to use the header files from
-> -	  the kernel source you are building for your target.
-> +	  the kernel source you are building for your target. Unless you chose
-> +	  BR2_LINUX_KERNEL_LATEST_VERSION, you must specify the custom kernel
-> +	  headers series below.
->  
->  	  Select any other choices to download and use an independent kernel
->  	  version for its headers. Useful when you are not building the kernel.
-> @@ -20,6 +22,8 @@ choice
->  	config BR2_KERNEL_HEADERS_FROM_KERNEL
->  		bool "From the kernel source"
->  		depends on BR2_LINUX_KERNEL
-> +		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 if \
-> +			BR2_LINUX_KERNEL_LATEST_VERSION
->  
->  	config BR2_KERNEL_HEADERS_3_2
->  		bool "Linux 3.2.x kernel headers"
-> @@ -96,7 +100,9 @@ config BR2_DEFAULT_KERNEL_VERSION
->  
->  choice
->  	bool "Custom kernel headers series"
-> -	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_FROM_KERNEL
-> +	depends on BR2_KERNEL_HEADERS_VERSION || \
-> +		(BR2_KERNEL_HEADERS_FROM_KERNEL && \
-> +		 !BR2_LINUX_KERNEL_LATEST_VERSION)
->  	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
->  	help
->  	  Set to the kernel headers series you manually set above.
-> @@ -228,4 +234,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
->  	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
->  	default "4.4.7"		if BR2_KERNEL_HEADERS_4_4
->  	default "4.5.1"		if BR2_KERNEL_HEADERS_4_5
-> +	default BR2_LINUX_KERNEL_VERSION if BR2_KERNEL_HEADERS_FROM_KERNEL && \
-> +		BR2_LINUX_KERNEL_LATEST_VERSION
->  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-> -- 
-> 2.8.0
-> 
+Benjamin Kamath (2):
+  package/Makefile.in: set TARGET_FCFLAGS variables
+  package/lapack: new package
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel Martin (13):
+  package/gcc: fix fortran support
+  package/gcc: wrap gfortran
+  package/Makefile.in: set variables for legacy f77 checks
+  pkg-cmake.mk: export the fortran compiler path in the CMake toolchain
+    file
+  toolchain: add hidden symbol for fortran support in the toolchain
+  package/gcc: select BR2_TOOLCHAIN_HAS_FORTRAN when appropriated
+  package/gcc: used BR2_TOOLCHAIN_HAS_FORTRAN instead of
+    BR2_TOOLCHAIN_BUILDROOT_FORTRAN
+  toolchain/helpers: add fortran check
+  toolchain/toolchain-external: enable fortran check when it is selected
+  toolchain/toolchain-external: add libgfortran and libquadmath to the
+    TOOLCHAIN_EXTERNAL_LIBS list
+  toolchain/toolchain-external: add knob for fortran support
+  toolchain/toolchain-external: update external toolchain configuration
+    with BR2_TOOLCHAIN_HAS_FORTRAN
+  package/fftw: add fortran support
+
+ package/Config.in                                  |  1 +
+ package/Makefile.in                                | 11 ++++++++++
+ package/fftw/fftw.mk                               |  3 ++-
+ package/gcc/Config.in.host                         |  5 +++++
+ package/gcc/gcc-final/gcc-final.mk                 |  8 +++++--
+ package/gcc/gcc.mk                                 |  9 +++++++-
+ package/lapack/0001-case-sensitive-paths.patch     | 22 +++++++++++++++++++
+ package/lapack/Config.in                           | 17 +++++++++++++++
+ package/lapack/lapack.hash                         |  2 ++
+ package/lapack/lapack.mk                           | 25 ++++++++++++++++++++++
+ package/pkg-cmake.mk                               |  3 +++
+ support/misc/toolchainfile.cmake.in                |  4 ++++
+ toolchain/helpers.mk                               | 15 +++++++++++++
+ toolchain/toolchain-common.in                      |  3 +++
+ toolchain/toolchain-external/Config.in             | 17 +++++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk | 13 +++++++++++
+ 16 files changed, 154 insertions(+), 4 deletions(-)
+ create mode 100644 package/lapack/0001-case-sensitive-paths.patch
+ create mode 100644 package/lapack/Config.in
+ create mode 100644 package/lapack/lapack.hash
+ create mode 100644 package/lapack/lapack.mk
+
+--
+2.9.0
