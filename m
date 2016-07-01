@@ -1,43 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 11:20:39 +0200
-Subject: [Buildroot] [PATCH] tmux: bump to version 2.2
-In-Reply-To: <20160620044611.14225-1-ricardo.martincoski@gmail.com>
-References: <20160620044611.14225-1-ricardo.martincoski@gmail.com>
-Message-ID: <20160701112039.27c1c6a8@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 1 Jul 2016 10:27:20 +0100
+Subject: [Buildroot] [PATCH v2 1/6] qemu_mips_malta_defconfig: move to
+	qemu_mips32r2_malta_defconfig
+Message-ID: <1467365245-24123-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v1 -> v2:
+ - Use mips32r2 instead of mips_32r2 in the defconfig name.
+ - Use mips32r2 instead of mips-32r2 in the board dir name.
 
-On Mon, 20 Jun 2016 01:46:11 -0300, Ricardo Martincoski wrote:
-> - remove patch already upstream 0001-remove-use-of-sys-cdefs.h.patch
-> https://github.com/tmux/tmux/commit/7b085136a7291cbcdfcc53182fbd13aaca70306e
-> - add new dependency on BR2_USE_WCHAR (version 2.2 uses mbtowc())
-> - add new dependency on locale support
-> - add note to help text about the need of a working UTF-8 locale
-> - also rewrap help text to 72 characters
-> 
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> ---
-> Some references about the UTF-8 thing:
-> https://github.com/tmux/tmux/commit/0d6de44a37755f0e5046c04e19e4506a6d59e750
-> https://github.com/tmux/tmux/commit/1f0b317088aaeb230d69f13f43ed63b7406c6fd1
-> https://groups.google.com/forum/#!topic/tmux-users/BnMK0ijLSIE
-> ---
->  package/tmux/0001-remove-use-of-sys-cdefs.h.patch | 42 -----------------------
->  package/tmux/Config.in                            | 13 +++++--
->  package/tmux/tmux.hash                            |  2 +-
->  package/tmux/tmux.mk                              |  2 +-
->  4 files changed, 13 insertions(+), 46 deletions(-)
->  delete mode 100644 package/tmux/0001-remove-use-of-sys-cdefs.h.patch
+ board/qemu/{mips-malta => mips32r2-malta}/linux-4.6.config           | 0
+ board/qemu/{mips-malta => mips32r2-malta}/readme.txt                 | 0
+ configs/{qemu_mips_malta_defconfig => qemu_mips32r2_malta_defconfig} | 2 +-
+ 3 files changed, 1 insertion(+), 1 deletion(-)
+ rename board/qemu/{mips-malta => mips32r2-malta}/linux-4.6.config (100%)
+ rename board/qemu/{mips-malta => mips32r2-malta}/readme.txt (100%)
+ rename configs/{qemu_mips_malta_defconfig => qemu_mips32r2_malta_defconfig} (86%)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/board/qemu/mips-malta/linux-4.6.config b/board/qemu/mips32r2-malta/linux-4.6.config
+similarity index 100%
+rename from board/qemu/mips-malta/linux-4.6.config
+rename to board/qemu/mips32r2-malta/linux-4.6.config
+diff --git a/board/qemu/mips-malta/readme.txt b/board/qemu/mips32r2-malta/readme.txt
+similarity index 100%
+rename from board/qemu/mips-malta/readme.txt
+rename to board/qemu/mips32r2-malta/readme.txt
+diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips32r2_malta_defconfig
+similarity index 86%
+rename from configs/qemu_mips_malta_defconfig
+rename to configs/qemu_mips32r2_malta_defconfig
+index 66b67a5..ed19982 100644
+--- a/configs/qemu_mips_malta_defconfig
++++ b/configs/qemu_mips32r2_malta_defconfig
+@@ -17,7 +17,7 @@ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-4.6.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2-malta/linux-4.6.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
