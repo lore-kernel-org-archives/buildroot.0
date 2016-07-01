@@ -1,96 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 14:53:11 +0200
-Subject: [Buildroot] [git commit] netsnmp: add OK/FAIL output in init script
-Message-ID: <20160701125326.E1521818D9@busybox.osuosl.org>
+Date: Fri, 1 Jul 2016 14:59:07 +0200
+Subject: [Buildroot] [git commit] configs/qemu_mipsel_malta_defconfig:
+	rename to qemu_mips32r2el_malta_defconfig
+Message-ID: <20160701130003.66FA8817A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45136f30973f2767a9db6293f081024140f086d0
+commit: https://git.buildroot.net/buildroot/commit/?id=5e0f466a2743b50c71de0355c61f5798bab4a161
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit reworks the output of the start(), stop() and reload()
-functions. The return values of start-stop-daemon are now checked and a
-OK or FAIL message is printed out.
-
-Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netsnmp/S59snmpd | 35 +++++++++++++++++++++--------------
- 1 file changed, 21 insertions(+), 14 deletions(-)
+ board/qemu/{mipsel-malta => mips32r2el-malta}/linux-4.6.config          | 0
+ board/qemu/{mipsel-malta => mips32r2el-malta}/readme.txt                | 0
+ .../{qemu_mipsel_malta_defconfig => qemu_mips32r2el_malta_defconfig}    | 2 +-
+ 3 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/netsnmp/S59snmpd b/package/netsnmp/S59snmpd
-index 2d076e0..4ff844e 100755
---- a/package/netsnmp/S59snmpd
-+++ b/package/netsnmp/S59snmpd
-@@ -38,39 +38,45 @@ if [ "$SNMPDCOMPAT" = "yes" ]; then
- fi
+diff --git a/board/qemu/mipsel-malta/linux-4.6.config b/board/qemu/mips32r2el-malta/linux-4.6.config
+similarity index 100%
+rename from board/qemu/mipsel-malta/linux-4.6.config
+rename to board/qemu/mips32r2el-malta/linux-4.6.config
+diff --git a/board/qemu/mipsel-malta/readme.txt b/board/qemu/mips32r2el-malta/readme.txt
+similarity index 100%
+rename from board/qemu/mipsel-malta/readme.txt
+rename to board/qemu/mips32r2el-malta/readme.txt
+diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mips32r2el_malta_defconfig
+similarity index 85%
+rename from configs/qemu_mipsel_malta_defconfig
+rename to configs/qemu_mips32r2el_malta_defconfig
+index 4e4f838..c103d9a 100644
+--- a/configs/qemu_mipsel_malta_defconfig
++++ b/configs/qemu_mips32r2el_malta_defconfig
+@@ -17,7 +17,7 @@ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-4.6.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2el-malta/linux-4.6.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
  
- start() {
--    printf "Starting network management services:"
-     if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
-+        printf "Starting SNMP daemon: "
-         start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
--        printf " snmpd"
-+        [ $? = 0 ] && echo "OK" || echo "FAIL"
-     fi
-+
-     if [ "$TRAPDRUN" = "yes" -a -f /etc/snmp/snmptrapd.conf ]; then
-+        printf "Starting SNMP trap daemon: "
-         start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- $TRAPDOPTS
--        printf " snmptrapd"
-+        [ $? = 0 ] && echo "OK" || echo "FAIL"
-     fi
--    echo "."
- }
- 
- stop() {
--    printf "Stopping network management services:"
--    start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmpd
--    printf " snmpd"
--    start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmptrapd
--    printf " snmptrapd"
--    echo "."
-+    if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
-+        printf "Stopping SNMP daemon: "
-+        start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmpd
-+        [ $? = 0 ] && echo "OK" || echo "FAIL"
-+    fi
-+
-+    if [ "$TRAPDRUN" = "yes" -a -f /etc/snmp/snmptrapd.conf ]; then
-+        printf "Stopping SNMP trap daemon: "
-+        start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmptrapd
-+        [ $? = 0 ] && echo "OK" || echo "FAIL"
-+    fi
- }
- 
- reload() {
--    printf "Reloading network management services:"
-     if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
-+        printf "Reloading SNMP daemon: "
-         start-stop-daemon -q -K -s 1 -p /var/run/snmpd.pid -x /usr/sbin/snmpd
--        printf " snmpd"
-+        [ $? = 0 ] && echo "OK" || echo "FAIL"
-     fi
- 
-     if [ "$TRAPDRUN" = "yes" -a -f /etc/snmp/snmptrapd.conf ]; then
-+        printf "Reloading SNMP trap daemon: "
-         start-stop-daemon -q -K -s 1 -p /var/run/snmptrapd.pid -x /usr/sbin/snmptrapd
--        printf " snmptrapd"
-+        [ $? = 0 ] && echo "OK" || echo "FAIL"
-     fi
--    echo "."
- }
- 
- case "$1" in
-@@ -92,6 +98,7 @@ case "$1" in
-     reload|force-reload)
-         reload
-         ;;
-+
-     *)
-         echo "Usage: $0 {start|stop|restart|reload|force-reload}"
-         exit 1
+ # Serial port config
