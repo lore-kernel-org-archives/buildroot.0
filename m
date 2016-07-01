@@ -1,87 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  1 Jul 2016 11:01:16 +0200
-Subject: [Buildroot] [PATCH 1/4 v3] support/download/git: do not use bare
-	clones
+Date: Fri,  1 Jul 2016 11:01:17 +0200
+Subject: [Buildroot] [PATCH 2/4 v3] support/download/git: do not use git
+	archive, handle it manually
 In-Reply-To: <cover.1467363623.git.yann.morin.1998@free.fr>
 References: <cover.1467363623.git.yann.morin.1998@free.fr>
-Message-ID: <da17e97529b50cc248af7cebae706909eac19532.1467363623.git.yann.morin.1998@free.fr>
+Message-ID: <dabe52d4bc6a665abc37b40cfd2585ba759d0e45.1467363623.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we are using bare clones, so as to minimise the disk usage,
-most notably for largeish repositories such as the one for the Linux
-kernel, which can go beyond the 1GiB barrier.
+We currently use git-archive to generate the tarball. This is all handy
+and dandy, but git-archive does not support submodules. In the follow-up
+patch, we're going to handle submodules, so we would not be able to use
+git-archive.
 
-However, this precludes updating (and thus using) the submodules, if
-any, of the repositories, as a working copy is required to use
-submodules (becaue we need to know the list of submodules, where to find
-them, where to clone them, what cset to checkout, and all those is
-dependent upon the checked out cset of the father repository).
+Instead, we manually generate the archive:
+  - extract the tree to the requested cset,
+  - get the date of the commit to store in the archive,
+  - store only numeric owners,
+  - store owner and group as 0 (zero, although any arbitrary value would
+    have been fine, as long as it's a constant),
+  - sort the files to store in the archive.
 
-Switch to using /plain/ clones with a working copy.
-
-This means that the extra refs used by some forges (like pull-requests
-for Github, or changes for gerrit...) are no longer fetched as part of
-the clone, because git does not offer to do a mirror clone when there is
-a working copy.
-
-Instead, we have to fetch those special refs by hand. Since there is no
-easy solution to know whether the cset the user asked for is such a
-special ref or not, we just try to always fetch the cset requested by
-the user; if this fails, we assume that this is not a special ref (most
-probably, it is a sha1) and we defer the check to the archive creation,
-which would fail if the requested cset is missing anyway.
+We also get rid of the .git directory, because there is no reason to
+keep it in the context of Buildroot. Some people would love to keep it
+so as to speed up later downloads when updating a package, but that is
+not really doable. For example:
+  - use current Buildroot
+  - it would need foo-12345, so do a clone and keep the .git in the
+    generated tarball
+  - update Buildroot
+  - it would need foo-98765
+For that second clone, how could we know we would have to first extract
+foo-12345 ? So, the .git in the archive is pretty much useless for
+Buildroot.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Tested-by: Matt Weber <matt@thewebers.ws>
 Reviewed-by: Matt Weber <matt@thewebers.ws>
 ---
- support/download/git | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+ support/download/git | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
 diff --git a/support/download/git b/support/download/git
-index 314b388..2d98923 100755
+index 2d98923..54dd2c7 100755
 --- a/support/download/git
 +++ b/support/download/git
-@@ -41,7 +41,7 @@ _git() {
- git_done=0
- if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
-     printf "Doing shallow clone\n"
--    if _git clone ${verbose} --depth 1 -b "'${cset}'" --bare "'${repo}'" "'${basename}'"; then
-+    if _git clone ${verbose} --depth 1 -b "'${cset}'" "'${repo}'" "'${basename}'"; then
-         git_done=1
-     else
-         printf "Shallow clone failed, falling back to doing a full clone\n"
-@@ -49,10 +49,25 @@ if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
- fi
- if [ ${git_done} -eq 0 ]; then
-     printf "Doing full clone\n"
--    _git clone ${verbose} --mirror "'${repo}'" "'${basename}'"
-+    _git clone ${verbose} "'${repo}'" "'${basename}'"
-+fi
-+
-+pushd "${basename}" >/dev/null
-+
-+# Try to get the special refs exposed by some forges (pull-requests for
-+# github, changes for gerrit...). There is no easy way to know whether
-+# the cset the user passed us is such a special ref or a tag or a sha1
-+# or whatever else. We'll eventually fail at checking out that cset,
-+# below, if there is an issue anyway. Since most of the cset we're gonna
-+# have to clone are not such special refs, consign the output to oblivion
-+# so as not to alarm unsuspecting users, but still trace it as a warning.
-+if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
-+    printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
+@@ -65,9 +65,20 @@ if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
+     printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
  fi
  
--GIT_DIR="${basename}" \
- _git archive --prefix="'${basename}/'" -o "'${output}.tmp'" --format=tar "'${cset}'"
- 
-+# Not really required, but here for consistency
-+popd >/dev/null
+-_git archive --prefix="'${basename}/'" -o "'${output}.tmp'" --format=tar "'${cset}'"
++# Checkout the required changeset.
++_git checkout -q "'${cset}'"
 +
- gzip -n <"${output}.tmp" >"${output}"
++# Get date of commit to generate a reproducible archive.
++# %cD is RFC2822, so it's fully qualified, with TZ and all.
++date="$( _git show --no-patch --pretty=format:%cD )"
++
++# We do not need the .git dir and other gitfiles to generate the tarball
++find . \( -name .git -o -name .gitmodules -o -name .gitignore \) \
++       -exec rm -rf {} +
+ 
+-# Not really required, but here for consistency
+ popd >/dev/null
+ 
+-gzip -n <"${output}.tmp" >"${output}"
++# Generate the archive, sort with the C locale so that it is reproducible.
++tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" \
++         -T <(find "${basename}" -not -type d |LC_ALL=C sort) \
++|gzip -n >"${output}"
 -- 
 2.7.4
