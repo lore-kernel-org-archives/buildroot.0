@@ -1,102 +1,18 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Jul 2016 14:41:30 +0200
-Subject: [Buildroot] [PATCH 1/2] Package nfs-utils: Added check for
- OK/FAIL
-In-Reply-To: <1456485374-5356-1-git-send-email-universeII@gmx.de>
-References: <1456485374-5356-1-git-send-email-universeII@gmx.de>
-Message-ID: <20160701124130.GC25487@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 01 Jul 2016 09:41:58 -0300
+Subject: [Buildroot] [PATCH v2 5/6] Add qemu_mips64r6_malta_defconfig
+In-Reply-To: <1467365245-24123-5-git-send-email-Vincent.Riera@imgtec.com>
+References: <1467365245-24123-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1467365245-24123-5-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <0166af4b25c9bee222816a7cd0b58b16@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andreas, All,
+On 2016-07-01 06:27, Vicente Olivert Riera wrote:
 
-On 2016-02-26 12:16 +0100, Andreas Ehmanns spake thusly:
-> Removed unconditional 'done' output when starting
-> and stopping the daemons. Instead check return value
-> of daemon and print out OK or FAIL.
-> 
-> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/nfs-utils/S60nfs | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
-> index 5639b8f..0b78c9b 100755
-> --- a/package/nfs-utils/S60nfs
-> +++ b/package/nfs-utils/S60nfs
-> @@ -25,20 +25,20 @@ start() {
->  	# Start daemons.
->  	printf "Starting NFS statd: "
->  	rpc.statd
-> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  	touch /var/lock/subsys/nfslock
-> -	echo "done"
-> -
-> +	
->  	printf "Starting NFS services: "
->  	/usr/sbin/exportfs -r
-> -	echo "done"
-> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  
->  	printf "Starting NFS daemon: "
->  	rpc.nfsd ${NR_THREADS}
-> -	echo "done"
-> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  
->  	printf "Starting NFS mountd: "
->  	rpc.mountd
-> -	echo "done"
-> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  	touch /var/lock/subsys/nfs
->  }
->  
-> @@ -46,21 +46,21 @@ stop() {
->  	# Stop daemons.
->  	printf "Shutting down NFS mountd: "
->  	killall -q rpc.mountd
-> -	echo "done"
-> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  
->  	printf "Shutting down NFS daemon: "
->  	kill -9 `pidof nfsd` 2>/dev/null
-> -	echo "done"
-> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  
->  	printf "Shutting down NFS services: "
->  	/usr/sbin/exportfs -au
->  	rm -f /var/lock/subsys/nfs
->  	killall -q rpc.statd
-> -	echo "done"
-> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  
->  	printf "Stopping NFS statd: "
->  	killall -q rpc.statd
-> -	echo "done"
-> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
->  	rm -f /var/lock/subsys/nfslock
->  }
->  
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
