@@ -1,53 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 22:59:54 +0200
-Subject: [Buildroot] [PATCH v2 03/15] package/Makefile.in: set
- TARGET_FCFLAGS variables
-In-Reply-To: <20160701162920.19632-4-s.martin49@gmail.com>
-References: <20160701162920.19632-1-s.martin49@gmail.com>
- <20160701162920.19632-4-s.martin49@gmail.com>
-Message-ID: <20160701225954.65130be1@free-electrons.com>
+Date: Fri, 1 Jul 2016 23:01:25 +0200
+Subject: [Buildroot] [git commit] package/Makefile.in: set variables for
+	legacy f77 checks
+Message-ID: <20160701210135.344EC821A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=35e980f324096b291203f26399e58269b0dda092
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  1 Jul 2016 18:29:08 +0200, Samuel Martin wrote:
-> From: Benjamin Kamath <bkamath@spaceflight.com>
-> 
-> TARGET_FCFLAGS is already added to TARGET_CONFIGURE_OPTS, but was not
-> defined so for.
+For fortran detection, some projects check for fortran availability
+using the FC/FCFLAGS variables, and others for the legacy F77/FFLAGS
+ones.
+So, make sure the legacy fortran F77 and FFLAGS variables are set in
+TARGET_CONFIGURE_OPTS.
 
-so for -> so far.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Makefile.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
->  ifeq ($(BR2_BINFMT_FLAT),y)
-> @@ -148,29 +149,36 @@ TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FL
->  	-Wl$(comma)-elf2flt)
->  TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
->  	-Wl$(comma)-elf2flt)
-> +TARGET_FCFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
-> +	-Wl$(comma)-elf2flt)
->  TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt)
->  endif
->  
->  ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
->  TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
->  TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
-> +TARGET_FCFLAGS += -mid-shared-library -mshared-library-id=0
->  TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
-
-[...]
-
-There's really a lot of duplication between all those definitions, so
-maybe one day we should clean this up. I'm also not a big fan of the
-TARGET_ABI variable, but that's really unrelated to this patch.
-
-So: applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 471f687..afd5d3a 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -250,6 +250,7 @@ TARGET_CONFIGURE_OPTS = \
+ 	CPP="$(TARGET_CPP)" \
+ 	CXX="$(TARGET_CXX)" \
+ 	FC="$(TARGET_FC)" \
++	F77="$(TARGET_FC)" \
+ 	RANLIB="$(TARGET_RANLIB)" \
+ 	READELF="$(TARGET_READELF)" \
+ 	STRIP="$(TARGET_STRIP)" \
+@@ -273,6 +274,7 @@ TARGET_CONFIGURE_OPTS = \
+ 	CXXFLAGS="$(TARGET_CXXFLAGS)" \
+ 	LDFLAGS="$(TARGET_LDFLAGS)" \
+ 	FCFLAGS="$(TARGET_FCFLAGS)" \
++	FFLAGS="$(TARGET_FCFLAGS)" \
+ 	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 	STAGING_DIR="$(STAGING_DIR)" \
+ 	INTLTOOL_PERL=$(PERL)
