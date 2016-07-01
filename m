@@ -1,45 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 16:15:56 +0200
-Subject: [Buildroot] Unable to compile uboot v2012.10 on Buildroot
- 2016.05
-In-Reply-To: <1572014322.7513168.1467381657827.JavaMail.zimbra@datacom.ind.br>
-References: <1249010753.7483898.1467378648497.JavaMail.zimbra@datacom.ind.br>
- <20160701151804.61f389e9@free-electrons.com>
- <1572014322.7513168.1467381657827.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20160701161556.5e65b3df@free-electrons.com>
+Date: Fri, 1 Jul 2016 16:16:45 +0200
+Subject: [Buildroot] [git commit] package/ucl: fix build with host gcc 6.x
+Message-ID: <20160701141707.2EB7D82161@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1474b369638e84090d3f6c2b51a5269076d00be5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 1 Jul 2016 11:00:57 -0300 (BRT), Carlos Santos wrote:
+ucl fails with the following error when using gcc 6.x on the host:
 
-> > What is your host gcc version ? This failure smells like building an
-> > old U-Boot, with gcc 5.x as the host gcc version.  
-> 
-> The problem happens on CentOS 7 (GCC 4.8.3) and Ubuntu 16.04 (GCC 5.3.1).
+ checking whether your compiler passes the ACC conformance test... FAILED
+ configure:
+ configure: Your compiler failed the ACC conformance test - for details see
+ configure: `config.log'. Please check that log file and consider sending
+ configure: a patch or bug-report to <markus@oberhumer.com>.
+ configure: Thanks for your support.
+ configure:
+ configure: error: ACC conformance test failed. Stop.
 
-I think the failure with GCC 5.3.x is normal, but I don't understand
-why it would fail with gcc 4.8.
+Fix the issue by using the ISO C90 standard.
 
-> >>  UBOOT_MAKE_OPTS += \
-> >>  	CROSS_COMPILE="$(TARGET_CROSS)" \
-> >> -	ARCH=$(UBOOT_ARCH) \
-> >> -	HOSTCFLAGS="$(HOST_CFLAGS)" \
-> >> -	HOSTLDFLAGS="$(HOST_LDFLAGS)"  
-> > 
-> > I'm not sure to see why this would fix the problem you're reporting.  
-> 
-> It prevents overriding HOSTCFLAGS and HOSTLDFLAGS on targets that don't need OpenSSL, so older versions of U-Boot will compile successfully.
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ucl/ucl.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Yes, but I don't understand why not setting HOSTCFLAGS/HOSTLDFLAGS
-fixes the build issue you mentioned.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ucl/ucl.mk b/package/ucl/ucl.mk
+index 2654a5a..e4dc1b3 100644
+--- a/package/ucl/ucl.mk
++++ b/package/ucl/ucl.mk
+@@ -9,4 +9,7 @@ UCL_SITE = http://www.oberhumer.com/opensource/ucl/download
+ UCL_LICENSE = GPLv2+
+ UCL_LICENSE_FILES = COPYING
+ 
++# Fix ACC conformance test failure for host gcc 6.x
++HOST_UCL_CONF_ENV += CPPFLAGS="$(HOST_CPPFLAGS) -std=c90"
++
+ $(eval $(host-autotools-package))
