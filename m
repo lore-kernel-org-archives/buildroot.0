@@ -1,119 +1,124 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 11:06:37 +0200
-Subject: [Buildroot] [git commit] setools: fix build with latest selinux
-	libraries
-Message-ID: <20160701091149.84EEF8183A@busybox.osuosl.org>
+Date: Fri, 1 Jul 2016 11:12:49 +0200
+Subject: [Buildroot] [git commit] tmux: bump to version 2.2
+Message-ID: <20160701091927.2227482133@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8072d5f288bdaf39700e323c1c41ccf475a5cff8
+commit: https://git.buildroot.net/buildroot/commit/?id=1ce1d924f5aa48176179eeb85baedb07a11c8ec1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Setools 3.3.8 won't cleanly compile against newer versions
-of the new selinux libraries. This patch fixes these errors.
+- remove patch already upstream 0001-remove-use-of-sys-cdefs.h.patch
+https://github.com/tmux/tmux/commit/7b085136a7291cbcdfcc53182fbd13aaca70306e
+- add new dependency on BR2_USE_WCHAR (version 2.2 uses mbtowc())
+- add new dependency on locale support
+- add note to help text about the need of a working UTF-8 locale
+- also rewrap help text to 72 characters
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...s-Update-for-2015-02-02-Userspace-release.patch | 90 ++++++++++++++++++++++
- 1 file changed, 90 insertions(+)
+ package/tmux/0001-remove-use-of-sys-cdefs.h.patch | 42 -----------------------
+ package/tmux/Config.in                            | 13 +++++--
+ package/tmux/tmux.hash                            |  2 +-
+ package/tmux/tmux.mk                              |  2 +-
+ 4 files changed, 13 insertions(+), 46 deletions(-)
 
-diff --git a/package/setools/0003-setools-Update-for-2015-02-02-Userspace-release.patch b/package/setools/0003-setools-Update-for-2015-02-02-Userspace-release.patch
-new file mode 100644
-index 0000000..b0842d9
---- /dev/null
-+++ b/package/setools/0003-setools-Update-for-2015-02-02-Userspace-release.patch
-@@ -0,0 +1,90 @@
-+setools: Add patch to support 2.4 toolstack.
-+Signed-off-by: Philip Tricca <flihp@twobit.us>
-+Signed-off-by: Joe MacDonald <joe_macdonald@mentor.com>
-+URL: https://github.com/flihp/meta-selinux/commit/e09eaef7a9acb552a4a5e1f90117154ae06b6fda
+diff --git a/package/tmux/0001-remove-use-of-sys-cdefs.h.patch b/package/tmux/0001-remove-use-of-sys-cdefs.h.patch
+deleted file mode 100644
+index 929953f..0000000
+--- a/package/tmux/0001-remove-use-of-sys-cdefs.h.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 29e4794ca396a8db8a468ec74559922d2af5a987 Mon Sep 17 00:00:00 2001
+-From: Nicholas Marriott <nicholas.marriott@gmail.com>
+-Date: Tue, 24 Nov 2015 18:46:50 +0000
+-Subject: [PATCH] -sys/queue.h in proc.c, and nuke the unnecessary C++ header
+- guards stuff and sys/cdefs.h in vis.h (it causes problems on some platforms).
+- Reported by someone on GitHub, issue 212.
+-
+----
+-Backported from master upstream to fix musl build
+-https://github.com/tmux/tmux/commit/7b085136a7291cbcdfcc53182fbd13aaca70306e
+-
+-proc.c does not exist on version 2.1
+-
+-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+----
+- compat/vis.h | 5 -----
+- 1 file changed, 5 deletions(-)
+-
+-diff --git a/compat/vis.h b/compat/vis.h
+-index 6795139..9f12d23 100644
+---- a/compat/vis.h
+-+++ b/compat/vis.h
+-@@ -73,9 +73,6 @@
+-  */
+- #define	UNVIS_END	1	/* no more characters */
+- 
+--#include <sys/cdefs.h>
+--
+--__BEGIN_DECLS
+- char	*vis(char *, int, int, int);
+- int	strvis(char *, const char *, int);
+- int	stravis(char **, const char *, int);
+-@@ -85,6 +82,4 @@ int	strunvis(char *, const char *);
+- int	unvis(char *, char, int *, int);
+- ssize_t strnunvis(char *, const char *, size_t);
+- 
+--__END_DECLS
+--
+- #endif /* !_VIS_H_ */
+--- 
+-1.9.1
+-
+diff --git a/package/tmux/Config.in b/package/tmux/Config.in
+index 61719e4..756f38a 100644
+--- a/package/tmux/Config.in
++++ b/package/tmux/Config.in
+@@ -1,10 +1,19 @@
+ config BR2_PACKAGE_TMUX
+ 	bool "tmux"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_WCHAR # mbtowc()
++	depends on BR2_ENABLE_LOCALE # runtime
+ 	select BR2_PACKAGE_LIBEVENT
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+-	  tmux is a terminal multiplexer, it enables a number of terminals
+-	  (or windows) to be accessed and controlled from a single terminal.
++	  tmux is a terminal multiplexer, it enables a number of
++	  terminals (or windows) to be accessed and controlled from a
++	  single terminal.
 +
-+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
++	  NOTE: tmux needs a working UTF-8 locale (BR2_GENERATE_LOCALE)
+ 
+ 	  https://tmux.github.io/
 +
-+diff --git a/libqpol/src/policy_define.c b/libqpol/src/policy_define.c
-+index fad6b60..231962f 100644
-+--- a/libqpol/src/policy_define.c
-++++ b/libqpol/src/policy_define.c
-+@@ -1449,7 +1449,7 @@ int define_compute_type_helper(int which, avrule_t ** rule)
-+ 				return -1;
-+ 			}
-+ 			class_perm_node_init(perm);
-+-			perm->class = i + 1;
-++			perm->tclass = i + 1;
-+ 			perm->data = datum->s.value;
-+ 			perm->next = avrule->perms;
-+ 			avrule->perms = perm;
-+@@ -1699,7 +1699,7 @@ int define_te_avtab_helper(int which, avrule_t ** rule)
-+ 			goto out;
-+ 		}
-+ 		class_perm_node_init(cur_perms);
-+-		cur_perms->class = i + 1;
-++		cur_perms->tclass = i + 1;
-+ 		if (!perms)
-+ 			perms = cur_perms;
-+ 		if (tail)
-+diff --git a/libqpol/src/policy_extend.c b/libqpol/src/policy_extend.c
-+index 5325a87..1417271 100644
-+--- a/libqpol/src/policy_extend.c
-++++ b/libqpol/src/policy_extend.c
-+@@ -843,7 +843,7 @@ static int qpol_syn_rule_table_insert_sepol_avrule(qpol_policy_t * policy, qpol_
-+ 			for (class_node = rule->perms; class_node; class_node = class_node->next) {
-+ 				key.rule_type = rule->specified;
-+ 				key.source_val = key.target_val = i + 1;
-+-				key.class_val = class_node->class;
-++				key.class_val = class_node->tclass;
-+ 				key.cond = cond;
-+ 				if (qpol_syn_rule_table_insert_entry(policy, table, &key, new_rule))
-+ 					goto err;
-+@@ -856,7 +856,7 @@ static int qpol_syn_rule_table_insert_sepol_avrule(qpol_policy_t * policy, qpol_
-+ 				key.rule_type = rule->specified;
-+ 				key.source_val = i + 1;
-+ 				key.target_val = j + 1;
-+-				key.class_val = class_node->class;
-++				key.class_val = class_node->tclass;
-+ 				key.cond = cond;
-+ 				if (qpol_syn_rule_table_insert_entry(policy, table, &key, new_rule))
-+ 					goto err;
-+diff --git a/libqpol/src/syn_rule_query.c b/libqpol/src/syn_rule_query.c
-+index 3e63204..d7578f1 100644
-+--- a/libqpol/src/syn_rule_query.c
-++++ b/libqpol/src/syn_rule_query.c
-+@@ -67,7 +67,7 @@ static void *syn_rule_class_state_get_cur(const qpol_iterator_t * iter)
-+ 		return NULL;
-+ 	}
-+
-+-	return db->class_val_to_struct[srcs->cur->class - 1];
-++	return db->class_val_to_struct[srcs->cur->tclass - 1];
-+ }
-+
-+ static int syn_rule_class_state_next(qpol_iterator_t * iter)
-+@@ -465,10 +465,10 @@ int qpol_syn_avrule_get_perm_iter(const qpol_policy_t * policy, const qpol_syn_a
-+ 	}
-+
-+ 	for (node = internal_rule->perms; node; node = node->next) {
-+-		for (i = 0; i < db->class_val_to_struct[node->class - 1]->permissions.nprim; i++) {
-++		for (i = 0; i < db->class_val_to_struct[node->tclass - 1]->permissions.nprim; i++) {
-+ 			if (!(node->data & (1 << i)))
-+ 				continue;
-+-			tmp = sepol_av_to_string(db, node->class, (sepol_access_vector_t) (1 << i));
-++			tmp = sepol_av_to_string(db, node->tclass, (sepol_access_vector_t) (1 << i));
-+ 			if (tmp) {
-+ 				tmp++; /* remove prepended space */
-+ 				for (cur = 0; cur < perm_list_sz; cur++)
-+diff --git a/secmds/replcon.cc b/secmds/replcon.cc
-+index 34f7c1a..307c39f 100644
-+--- a/secmds/replcon.cc
-++++ b/secmds/replcon.cc
-+@@ -60,7 +60,7 @@ static struct option const longopts[] = {
-+ 	{NULL, 0, NULL, 0}
-+ };
-+
-+-extern int lsetfilecon_raw(const char *, security_context_t) __attribute__ ((weak));
-++extern int lsetfilecon_raw(const char *, const char *) __attribute__ ((weak));
-+
-+ /**
-+  * As that setools must work with older libselinux versions that may
++comment "tmux needs a toolchain w/ wchar, locale"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_ENABLE_LOCALE
+diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
+index e732aa2..f3cbe74 100644
+--- a/package/tmux/tmux.hash
++++ b/package/tmux/tmux.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  31564e7bf4bcef2defb3cb34b9e596bd43a3937cad9e5438701a81a5a9af6176  tmux-2.1.tar.gz
++sha256  bc28541b64f99929fe8e3ae7a02291263f3c97730781201824c0f05d7c8e19e4  tmux-2.2.tar.gz
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index 40f1a13..1e1b2b7 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TMUX_VERSION = 2.1
++TMUX_VERSION = 2.2
+ TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
+ TMUX_LICENSE = ISC
+ TMUX_LICENSE_FILES = README
