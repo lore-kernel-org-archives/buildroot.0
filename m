@@ -1,69 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Jul 2016 12:10:42 +0200
-Subject: [Buildroot] [PATCH 2/4] Package netsnmp: Removed 'set -e'
-In-Reply-To: <1456435484-4723-2-git-send-email-universeII@gmx.de>
-References: <1456435484-4723-1-git-send-email-universeII@gmx.de>
- <1456435484-4723-2-git-send-email-universeII@gmx.de>
-Message-ID: <20160701101042.GC3659@free.fr>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri, 1 Jul 2016 07:43:00 -0300 (BRT)
+Subject: [Buildroot] [PATCH v2 4/4] gtest,
+ gmock: Move download link away from Google Code
+In-Reply-To: <20160701094926.GA3659@free.fr>
+References: <444859483-2268-1-git-send-email-alan@softiron.co.uk>
+ <1456143807-3350-5-git-send-email-casantos@datacom.ind.br>
+ <20160701094926.GA3659@free.fr>
+Message-ID: <1537894575.7432607.1467369780476.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andreas, All,
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: buildroot at buildroot.org, alan at softiron.co.uk
+> Sent: Friday, July 1, 2016 6:49:26 AM
+> Subject: Re: [Buildroot] [PATCH v2 4/4] gtest, gmock: Move download link away from Google Code
 
-On 2016-02-25 22:24 +0100, Andreas Ehmanns spake thusly:
-> set -e has been removed from init script since
-> it causes the init script to terminate if an
-> error occurs. This prevents the script to create
-> an "FAIL" printout in case of an error.
-
-And we're not doing it consistently either. I've looked at the startup
-script for busybox (mdev, watchdog, telnet, logging) and none uses
-'set -e'.
-
-> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/netsnmp/S59snmpd | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> Carlos, Alan, All,
 > 
-> diff --git a/package/netsnmp/S59snmpd b/package/netsnmp/S59snmpd
-> index cfda625..2762082 100755
-> --- a/package/netsnmp/S59snmpd
-> +++ b/package/netsnmp/S59snmpd
-> @@ -1,4 +1,4 @@
-> -#! /bin/sh -e
-> +#! /bin/sh
->  ### BEGIN INIT INFO
->  # Provides:           snmpd snmptrapd
->  # Required-Start:     $network $local_fs
-> @@ -11,7 +11,6 @@
->  #
->  # Author:    Jochen Friedrich <jochen@scram.de>
->  #
-> -set -e
->  
->  export PATH=/sbin:/usr/sbin:/bin:/usr/bin
->  
-> -- 
-> 2.1.4
+> Coming back to this old patch of yours. Sorry for the delay...
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> On 2016-02-22 09:23 -0300, Carlos Santos spake thusly:
+>> Google Code is being shut down. The google code site which hosts the
+>> source .zip for gtest and gmock references github.com/google/googletest,
+>> now.
+>> 
+>> Change the GTEST_SITE and GMOCK_SITE to this new github repo, fix the
+>> version, fix the paths, and remove the custom extraction commands.
+>> 
+>> GitHub contains a combination of the former gtest and gmock repos, moved
+>> to the sibling directories "googletest" and "googlemock", respectively.
+>> 
+>> The repo is a bit funky, however:
+>> 
+>> 1) The code underneath the "release-1.7.0" tag has gtest as in the
+>>    google code repo, with minor changes (mostly support script and
+>>    Microsoft C++ Builder project files, not relevant for buildroot
+>>    purposes).
+>> 
+>> 2) There is no tag corresponding to gmock 1.7.0. We circumvent this by
+>>    refering to the commit id corresponding to gmock 1.7.0.
+>> 
+>> 3) The "gtest" subdir was removed from the gmock code. We solve this by
+>>    adding a patch to provide a copy of acx_pthread.m4 from gtest; then
+>>    we configure refering to the gtest installed under $(STAGING_DIR).
+>> 
+>> These changes are required to ensure that gtest and gmock builds don't
+>> fail if/when Google Code disappears. Forthcoming patches will replace
+>> gtest and gmock by a "googletest" package and upgrade to the current
+>> HEAD, which is laid out as described above.
+> 
+> As I understand it, gtest and gmock are being phased out as separate
+> packages, and are to be replaced with the googletest package.
+> 
+> So why don't we directly add "googletest" and get rid of gtest and
+> gmock, rather than fix them to eventually get rid of them?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Because we (DATACOM) have have a hundred packages in our BR2_EXTERNAL that depend on GMock and GTest as separate packages. It will take some time migrate them.
+
+> I've marked this patch as rejected in our patchwork now, while waiting
+> for the patches that add googletest and then removes gtest/gmock as
+> separate packages.
+
+OK, I will keep it as a local change while working on the new package.
+
+> Regards,
+> Yann E. MORIN.
+
+Carlos Santos (Casantos)
+DATACOM, P&D
