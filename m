@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 23:02:53 +0200
-Subject: [Buildroot] [PATCH v2 05/15] pkg-cmake.mk: export the fortran
- compiler path in the CMake toolchain file
-In-Reply-To: <20160701162920.19632-6-s.martin49@gmail.com>
+Date: Fri, 1 Jul 2016 23:03:27 +0200
+Subject: [Buildroot] [PATCH v2 06/15] toolchain: add hidden symbol for
+ fortran support in the toolchain
+In-Reply-To: <20160701162920.19632-7-s.martin49@gmail.com>
 References: <20160701162920.19632-1-s.martin49@gmail.com>
- <20160701162920.19632-6-s.martin49@gmail.com>
-Message-ID: <20160701230253.323b8cde@free-electrons.com>
+ <20160701162920.19632-7-s.martin49@gmail.com>
+Message-ID: <20160701230327.3def2527@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +14,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  1 Jul 2016 18:29:10 +0200, Samuel Martin wrote:
+On Fri,  1 Jul 2016 18:29:11 +0200, Samuel Martin wrote:
+> This symbol should be used in all packages requiring/testing for fortran
+> support.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-> +		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
-
-The BR2_TOOLCHAIN_HAS_FORTRAN variable doesn't exist at this point in
-the patch series, so shouldn't this patch come later?
-
-Or did you assume that because it doesn't exist, it's always false for
-the moment, and that this patch should be considered a "preparation"
-patch ?
-
-Thanks,
-
-Thomas
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
