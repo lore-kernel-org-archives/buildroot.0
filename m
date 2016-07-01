@@ -1,133 +1,119 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 11:06:23 +0200
-Subject: [Buildroot] [git commit] libsemanage: bump to version 2.5
-Message-ID: <20160701091149.3C50C82193@busybox.osuosl.org>
+Date: Fri, 1 Jul 2016 11:06:37 +0200
+Subject: [Buildroot] [git commit] setools: fix build with latest selinux
+	libraries
+Message-ID: <20160701091149.84EEF8183A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6d6a9d2b3051d4381496cc107942e6bf36267fb
+commit: https://git.buildroot.net/buildroot/commit/?id=8072d5f288bdaf39700e323c1c41ccf475a5cff8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The 0001-execption-lib-path-fix.patch is also no longer needed, as the
-new version of libsemanage includes the fix provided by the patch.
-As such, the patch was removed, and 0002 was renamed to 0001.
-
-Audit was added as a dependency as the new version of libsemanage
-will fail to compile searching for audit.h
+Setools 3.3.8 won't cleanly compile against newer versions
+of the new selinux libraries. This patch fixes these errors.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Thomas: add the select on audit + propagate the dependencies.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsemanage/0001-execption-lib-path-fix.patch      | 14 --------------
- ...in-issue.patch => 0001-workaround-blackfin-issue.patch} |  5 +++--
- package/libsemanage/Config.in                              |  8 ++++++--
- package/libsemanage/libsemanage.hash                       |  2 +-
- package/libsemanage/libsemanage.mk                         |  6 +++---
- 5 files changed, 13 insertions(+), 22 deletions(-)
+ ...s-Update-for-2015-02-02-Userspace-release.patch | 90 ++++++++++++++++++++++
+ 1 file changed, 90 insertions(+)
 
-diff --git a/package/libsemanage/0001-execption-lib-path-fix.patch b/package/libsemanage/0001-execption-lib-path-fix.patch
-deleted file mode 100644
-index cbcbea5..0000000
---- a/package/libsemanage/0001-execption-lib-path-fix.patch
-+++ /dev/null
-@@ -1,14 +0,0 @@
--Patch to correct a missing header file issue.
--
--Signed-off-by Clayton Shotwell <clshotwe@rockwellcollins.com>
--
----- a/src/exception.sh	2011-12-21 11:46:04.000000000 -0600
--+++ b/src/exception.sh	2012-08-27 11:29:58.000000000 -0500
--@@ -9,6 +9,6 @@
-- }
-- "
-- }
---gcc -x c -c - -aux-info temp.aux < ../include/semanage/semanage.h
--+gcc -x c -c - -aux-info temp.aux -I../include < ../include/semanage/semanage.h
-- for i in `awk '/extern int/ { print $6 }' temp.aux`; do except $i ; done
-- rm -f -- temp.aux -.o
-diff --git a/package/libsemanage/0002-workaround-blackfin-issue.patch b/package/libsemanage/0001-workaround-blackfin-issue.patch
-similarity index 89%
-rename from package/libsemanage/0002-workaround-blackfin-issue.patch
-rename to package/libsemanage/0001-workaround-blackfin-issue.patch
-index 5d00c69..7ce9606 100644
---- a/package/libsemanage/0002-workaround-blackfin-issue.patch
-+++ b/package/libsemanage/0001-workaround-blackfin-issue.patch
-@@ -8,14 +8,15 @@ symbols are visible in the final DSO, which is not a problem for
- proper execution, it just isn't as clean.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+diff --git a/package/setools/0003-setools-Update-for-2015-02-02-Userspace-release.patch b/package/setools/0003-setools-Update-for-2015-02-02-Userspace-release.patch
+new file mode 100644
+index 0000000..b0842d9
+--- /dev/null
++++ b/package/setools/0003-setools-Update-for-2015-02-02-Userspace-release.patch
+@@ -0,0 +1,90 @@
++setools: Add patch to support 2.4 toolstack.
++Signed-off-by: Philip Tricca <flihp@twobit.us>
++Signed-off-by: Joe MacDonald <joe_macdonald@mentor.com>
++URL: https://github.com/flihp/meta-selinux/commit/e09eaef7a9acb552a4a5e1f90117154ae06b6fda
++
 +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
- 
- Index: b/src/dso.h
- ===================================================================
- --- a/src/dso.h
- +++ b/src/dso.h
- @@ -1,7 +1,7 @@
-- #ifndef _SELINUX_DSO_H
-- #define _SELINUX_DSO_H	1
-+ #ifndef _SEPOL_DSO_H
-+ #define _SEPOL_DSO_H	1
-  
- -#ifdef SHARED
- +#if defined(SHARED) && !defined(__bfin__)
-diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
-index 4465ef4..4318dbf 100644
---- a/package/libsemanage/Config.in
-+++ b/package/libsemanage/Config.in
-@@ -1,12 +1,15 @@
- config BR2_PACKAGE_LIBSEMANAGE
- 	bool "libsemanage"
-+	select BR2_PACKAGE_AUDIT
- 	select BR2_PACKAGE_LIBSELINUX
- 	select BR2_PACKAGE_USTR
- 	select BR2_PACKAGE_BZIP2
-+	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
--	# libselinux needs fts.h (not available in uClibc/musl) and
--	# libsemanage itself needs getpwent_r() not available in musl
-+	# - libselinux needs fts.h (not available in uClibc/musl)
-+	# - libsemanage itself needs getpwent_r() not available in musl
-+	# - audit is not available on musl
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on !BR2_arc
- 	help
-@@ -22,5 +25,6 @@ config BR2_PACKAGE_LIBSEMANAGE
- 
- comment "libsemanage needs a glibc toolchain w/ threads, dynamic library"
- 	depends on !BR2_arc
-+	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
-index d4204d1..69f7c8d 100644
---- a/package/libsemanage/libsemanage.hash
-+++ b/package/libsemanage/libsemanage.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 de2e8077245581e94576276f54e80a53c23c28d6961d2dfbe2f004eaba452e91 libsemanage-2.1.10.tar.gz
-+sha256 46e2f36254369b6e91d1eea0460c262b139361b055a3a67d3ceea2d8ef72e006 libsemanage-2.5.tar.gz
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index 197c14e..a60d018 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--LIBSEMANAGE_VERSION = 2.1.10
--LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-+LIBSEMANAGE_VERSION = 2.5
-+LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20160223
- LIBSEMANAGE_LICENSE = LGPLv2.1+
- LIBSEMANAGE_LICENSE_FILES = COPYING
--LIBSEMANAGE_DEPENDENCIES = host-bison host-flex libselinux ustr bzip2
-+LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
- LIBSEMANAGE_INSTALL_STAGING = YES
- 
- LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
++
++diff --git a/libqpol/src/policy_define.c b/libqpol/src/policy_define.c
++index fad6b60..231962f 100644
++--- a/libqpol/src/policy_define.c
+++++ b/libqpol/src/policy_define.c
++@@ -1449,7 +1449,7 @@ int define_compute_type_helper(int which, avrule_t ** rule)
++ 				return -1;
++ 			}
++ 			class_perm_node_init(perm);
++-			perm->class = i + 1;
+++			perm->tclass = i + 1;
++ 			perm->data = datum->s.value;
++ 			perm->next = avrule->perms;
++ 			avrule->perms = perm;
++@@ -1699,7 +1699,7 @@ int define_te_avtab_helper(int which, avrule_t ** rule)
++ 			goto out;
++ 		}
++ 		class_perm_node_init(cur_perms);
++-		cur_perms->class = i + 1;
+++		cur_perms->tclass = i + 1;
++ 		if (!perms)
++ 			perms = cur_perms;
++ 		if (tail)
++diff --git a/libqpol/src/policy_extend.c b/libqpol/src/policy_extend.c
++index 5325a87..1417271 100644
++--- a/libqpol/src/policy_extend.c
+++++ b/libqpol/src/policy_extend.c
++@@ -843,7 +843,7 @@ static int qpol_syn_rule_table_insert_sepol_avrule(qpol_policy_t * policy, qpol_
++ 			for (class_node = rule->perms; class_node; class_node = class_node->next) {
++ 				key.rule_type = rule->specified;
++ 				key.source_val = key.target_val = i + 1;
++-				key.class_val = class_node->class;
+++				key.class_val = class_node->tclass;
++ 				key.cond = cond;
++ 				if (qpol_syn_rule_table_insert_entry(policy, table, &key, new_rule))
++ 					goto err;
++@@ -856,7 +856,7 @@ static int qpol_syn_rule_table_insert_sepol_avrule(qpol_policy_t * policy, qpol_
++ 				key.rule_type = rule->specified;
++ 				key.source_val = i + 1;
++ 				key.target_val = j + 1;
++-				key.class_val = class_node->class;
+++				key.class_val = class_node->tclass;
++ 				key.cond = cond;
++ 				if (qpol_syn_rule_table_insert_entry(policy, table, &key, new_rule))
++ 					goto err;
++diff --git a/libqpol/src/syn_rule_query.c b/libqpol/src/syn_rule_query.c
++index 3e63204..d7578f1 100644
++--- a/libqpol/src/syn_rule_query.c
+++++ b/libqpol/src/syn_rule_query.c
++@@ -67,7 +67,7 @@ static void *syn_rule_class_state_get_cur(const qpol_iterator_t * iter)
++ 		return NULL;
++ 	}
++
++-	return db->class_val_to_struct[srcs->cur->class - 1];
+++	return db->class_val_to_struct[srcs->cur->tclass - 1];
++ }
++
++ static int syn_rule_class_state_next(qpol_iterator_t * iter)
++@@ -465,10 +465,10 @@ int qpol_syn_avrule_get_perm_iter(const qpol_policy_t * policy, const qpol_syn_a
++ 	}
++
++ 	for (node = internal_rule->perms; node; node = node->next) {
++-		for (i = 0; i < db->class_val_to_struct[node->class - 1]->permissions.nprim; i++) {
+++		for (i = 0; i < db->class_val_to_struct[node->tclass - 1]->permissions.nprim; i++) {
++ 			if (!(node->data & (1 << i)))
++ 				continue;
++-			tmp = sepol_av_to_string(db, node->class, (sepol_access_vector_t) (1 << i));
+++			tmp = sepol_av_to_string(db, node->tclass, (sepol_access_vector_t) (1 << i));
++ 			if (tmp) {
++ 				tmp++; /* remove prepended space */
++ 				for (cur = 0; cur < perm_list_sz; cur++)
++diff --git a/secmds/replcon.cc b/secmds/replcon.cc
++index 34f7c1a..307c39f 100644
++--- a/secmds/replcon.cc
+++++ b/secmds/replcon.cc
++@@ -60,7 +60,7 @@ static struct option const longopts[] = {
++ 	{NULL, 0, NULL, 0}
++ };
++
++-extern int lsetfilecon_raw(const char *, security_context_t) __attribute__ ((weak));
+++extern int lsetfilecon_raw(const char *, const char *) __attribute__ ((weak));
++
++ /**
++  * As that setools must work with older libselinux versions that may
