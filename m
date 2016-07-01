@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jul 2016 23:01:37 +0200
-Subject: [Buildroot] [PATCH v2 04/15] package/Makefile.in: set variables
- for legacy f77 checks
-In-Reply-To: <20160701162920.19632-5-s.martin49@gmail.com>
+Date: Fri, 1 Jul 2016 23:02:53 +0200
+Subject: [Buildroot] [PATCH v2 05/15] pkg-cmake.mk: export the fortran
+ compiler path in the CMake toolchain file
+In-Reply-To: <20160701162920.19632-6-s.martin49@gmail.com>
 References: <20160701162920.19632-1-s.martin49@gmail.com>
- <20160701162920.19632-5-s.martin49@gmail.com>
-Message-ID: <20160701230137.407b68d1@free-electrons.com>
+ <20160701162920.19632-6-s.martin49@gmail.com>
+Message-ID: <20160701230253.323b8cde@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +14,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  1 Jul 2016 18:29:09 +0200, Samuel Martin wrote:
-> For fortran detection, some projects check for fortran availability
-> using the FC/FCFLAGS variables, and others for the legacy F77/FFLAGS
-> ones.
-> So, make sure the legacy fortran F77 and FFLAGS variables are set in
-> TARGET_CONFIGURE_OPTS.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v1->v2:
-> - new patch
-> ---
->  package/Makefile.in | 2 ++
->  1 file changed, 2 insertions(+)
+On Fri,  1 Jul 2016 18:29:10 +0200, Samuel Martin wrote:
 
-Applied to master, thanks.
+> +		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
+
+The BR2_TOOLCHAIN_HAS_FORTRAN variable doesn't exist at this point in
+the patch series, so shouldn't this patch come later?
+
+Or did you assume that because it doesn't exist, it's always false for
+the moment, and that this patch should be considered a "preparation"
+patch ?
+
+Thanks,
 
 Thomas
 -- 
