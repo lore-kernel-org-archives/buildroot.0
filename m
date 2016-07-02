@@ -1,59 +1,75 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 02 Jul 2016 19:47:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mplayer: needs
-	BR2_TOOLCHAIN_HAS_SYNC_4
-References: <1467477991-13051-1-git-send-email-bernd.kuhls@t-online.de>
- <20160702185004.34235606@free-electrons.com>
-Message-ID: <XnsA639C964540A5ID313208userindividu@bernd-kuhls.de>
+From: daggs <daggs@gmx.com>
+Date: Sat, 2 Jul 2016 19:58:21 +0200
+Subject: [Buildroot]
+	=?utf-8?q?=5BPATCH_4/4_v3=5D_kodi=3A_allow_enablement?=
+	=?utf-8?q?_of_libamcodec_as=09codec_if_selected?=
+In-Reply-To: <trinity-6552df3a-288c-4396-95fb-c56acc32c4d5-1467371097197@3capp-mailcom-bs11>
+References: <20160624182256.11909-1-daggs@gmx.com>
+ <20160624182256.11909-4-daggs@gmx.com>,
+ <37g24dxqbs.ln2@ID-313208.user.individual.net>,
+ <trinity-6552df3a-288c-4396-95fb-c56acc32c4d5-1467371097197@3capp-mailcom-bs11>
+Message-ID: <trinity-90b29fc0-247c-47a2-9a96-f80d2a588ee3-1467482301230@3capp-mailcom-bs01>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-[posted and mailed]
-
-Thomas Petazzoni <thomas.petazzoni-
-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8@public.gmane.org> wrote in 
-news:20160702185004.34235606 at free-electrons.com:
-
-> So it's the internal copy of ffmpeg that mplayer carries that uses
-> those atomic operations.
+Greetings Bernd,
+>
+> Greetings,
+> > 
+> > > +else ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
+> > > +KODI_DEPENDENCIES += libamcodec
+> > > +KODI_CONF_OPTS += --enable-codec=amcodec
+> > 
+> > Hi,
+> > 
+> > using this defconfig
+> > 
+> > BR2_arm=y
+> > BR2_cortex_a15=y
+> > BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> > BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> > BR2_PACKAGE_KODI=y
+> > BR2_PACKAGE_MESA3D=y
+> > BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+> > BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+> > BR2_PACKAGE_MESA3D_OPENGL_ES=y
+> > BR2_PACKAGE_XORG7=y
+> > BR2_PACKAGE_LIBAMCODEC=y
+> > 
+> > $ grep -i unsafe .config
+> > BR2_COMPILER_PARANOID_UNSAFE_PATH=y
+> > 
+> > compiling Kodi fails:
+> > 
+> > CPP     xbmc/cores/dvdplayer/DVDCodecs/Video/AMLCodec.o
+> > arm-buildroot-linux-uclibcgnueabihf-g++: ERROR: unsafe header/library path used in cross-compilation: '/usr/include/amcodec'
+> > 
+> > due to not compile-safe code used here:
+> > https://github.com/xbmc/xbmc/blob/Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/Makefile.in#L29
+> > 
+> > Regards, Bernd
+> > 
+> will take a look on this, thanks.
 > 
-> In this case, why doesn't the standalone ffmpeg package also use atomic
-> operations ? Is the ffmpeg code base different ?
+> Dagg.
 
-no, but the build system is different. While ffmpeg uses its own configure 
-script to determine the capabilities of the arch target used for 
-compilation mplayer provides a hard-coded config.h file...
+I've looked into this issue, the root of the issue can be found at output/build/kodi-16.1-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/Makefile.in
+where we see the following:
+ifeq (@USE_LIBAMCODEC@,1)
+SRCS += AMLCodec.cpp
+SRCS += DVDVideoCodecAmlogic.cpp
+INCLUDES += -I$(prefix)/include/amcodec
+INCLUDES += -I$(prefix)/include/amplayer
+endif
 
-The difference on sparc, the arch I am trying to fix, looks like this:
+as prefix is set to /usr (see output/build/kodi-16.1-Jarvis/config.log), I'm not sure fixing prefix is the answer.
+in general, replacing the include lines with the follows:
+INCLUDES += -I$(shell $(CC) --print-sysroot)/$(prefix)/include/amcodec
+INCLUDES += -I$(shell $(CC) --print-sysroot)/$(prefix)/include/amplayer
 
-ffmpeg-2.8.7$ grep "ATOMIC\|_SYNC" config.h
-#define HAVE_ATOMICS_GCC 0
-#define HAVE_ATOMICS_SUNCC 0
-#define HAVE_ATOMICS_WIN32 0
-#define HAVE_ATOMIC_CAS_PTR 0
-#define HAVE_ATOMIC_COMPARE_EXCHANGE 0
-#define HAVE_SYNC_VAL_COMPARE_AND_SWAP 0
-#define HAVE_ATOMICS_NATIVE 0
+but I'm not this is the right way to fix this, thoughts?
 
-mplayer-1.3.0$ grep "ATOMIC\|_SYNC" config.h
-#define HAVE_ATOMICS_GCC 1
-#define HAVE_SYNC_VAL_COMPARE_AND_SWAP 1
-#define HAVE_ATOMICS_NATIVE 1
-#define HAVE_SYNC_SYNCHRONIZE 1
-
-Have a look at mplayer configure script at line 9260 for details.
-
-Of course we could try to use sed to change config.h in a 
-_POST_CONFIGURE_HOOK, but getting the details right could result in a pita, 
-I tried already and gave up after ~30 minutes.
-
-Unless someone comes up with a better solution my patch should be applied 
-as obviously the mplayer build system has no support for archs lacking 
-_sync4.
-
-Regards, Bernd
+Dagg.
