@@ -1,63 +1,104 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 2 Jul 2016 22:27:31 +0200
-Subject: [Buildroot] [RFC 1/3] zip: add explicit dependencies for host
-	variant
-In-Reply-To: <CAHfJR7g8+JRGQG=e-=PAbvuNE-HtCPUgw8kKLeiasiSU2yr9nQ@mail.gmail.com>
-References: <1467485315-28264-1-git-send-email-julien.floret@6wind.com>
- <1467485315-28264-2-git-send-email-julien.floret@6wind.com>
- <a87cf40d-7deb-254a-ff4f-b5167abca4e8@mind.be>
- <CAHfJR7g8+JRGQG=e-=PAbvuNE-HtCPUgw8kKLeiasiSU2yr9nQ@mail.gmail.com>
-Message-ID: <262623f6-0a4e-7d2d-9d71-b3c8828b3018@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  3 Jul 2016 00:18:12 +0200
+Subject: [Buildroot] [PATCH 2/3] libnatpmp: New package
+In-Reply-To: <1467497893-16126-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1467497893-16126-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1467497893-16126-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/Config.in                |  1 +
+ package/libnatpmp/Config.in      | 16 ++++++++++++++++
+ package/libnatpmp/libnatpmp.hash |  2 ++
+ package/libnatpmp/libnatpmp.mk   | 31 +++++++++++++++++++++++++++++++
+ 4 files changed, 50 insertions(+)
+ create mode 100644 package/libnatpmp/Config.in
+ create mode 100644 package/libnatpmp/libnatpmp.hash
+ create mode 100644 package/libnatpmp/libnatpmp.mk
 
-
-On 02-07-16 22:11, Julien Floret wrote:
-> 2016-07-02 22:04 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->> On 02-07-16 20:48, Julien Floret wrote:
->>> Signed-off-by: Julien Floret <julien.floret@6wind.com>
->>> ---
->>>  package/zip/zip.mk | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/package/zip/zip.mk b/package/zip/zip.mk
->>> index 5338f881663d..f56ac5a4804d 100644
->>> --- a/package/zip/zip.mk
->>> +++ b/package/zip/zip.mk
->>> @@ -12,6 +12,7 @@ ZIP_LICENSE_FILES = LICENSE
->>>
->>>  ifeq ($(BR2_PACKAGE_BZIP2),y)
->>>  ZIP_DEPENDENCIES += bzip2
->>> +HOST_ZIP_DEPENDENCIES += host-bzip2
->>
->>  Nack. This is another example why the automatic derivation is not good.
->> host-zip should either depend on host-bzip2 unconditionally, or never depend on
->> it, or depend on it based on BR2_PACKAGE_HOST_BZIP2.
->>
->>  In this specific case, it should not depend on host-bzip2 IMHO. So the correct
->> thing to do with the automatic derivation would be
->>
->> HOST_ZIP_DEPENDENCIES =
-> 
-> I agree, but the idea of this example was to be isofunctional - to keep the same
-> dependencies as with auto derivation.
-> The fix should be done in another patch IMO, probably before this patch.
-
- No, the fix shouldn't be done at all. Since we're anyway going to remove the
-auto-derivation, the current situation is perfectly fine once the automatic
-derivation is removed.
-
- Regards,
- Arnout
-
+diff --git a/package/Config.in b/package/Config.in
+index cfa26ee..9b062c4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1182,6 +1182,7 @@ menu "Networking"
+ 	source "package/libminiupnpc/Config.in"
+ 	source "package/libmnl/Config.in"
+ 	source "package/libmodbus/Config.in"
++	source "package/libnatpmp/Config.in"
+ 	source "package/libndp/Config.in"
+ 	source "package/libnet/Config.in"
+ 	source "package/libnetfilter_acct/Config.in"
+diff --git a/package/libnatpmp/Config.in b/package/libnatpmp/Config.in
+new file mode 100644
+index 0000000..9de0b74
+--- /dev/null
++++ b/package/libnatpmp/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_LIBNATPMP
++	bool "libnatpmp"
++	depends on !BR2_BINFMT_FLAT
++	depends on !BR2_STATIC_LIBS
++	help
++	  libnatpmp is an attempt to make a portable and fully compliant
++	  implementation of the NAT-PMP protocol for the client side. It
++	  is based on non blocking sockets and all calls of the API are
++	  asynchronous. It is therefore very easy to integrate the
++	  NAT-PMP code to any event driven code.
++
++	  http://miniupnp.free.fr/libnatpmp.html
++
++comment "libnatpmp needs a toolchain dynamic library"
++	depends on BR2_STATIC_LIBS
++	depends on !BR2_BINFMT_FLAT
+diff --git a/package/libnatpmp/libnatpmp.hash b/package/libnatpmp/libnatpmp.hash
+new file mode 100644
+index 0000000..a5cab3c
+--- /dev/null
++++ b/package/libnatpmp/libnatpmp.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 e1aa9c4c4219bc06943d6b2130f664daee213fb262fcb94dd355815b8f4536b0  libnatpmp-20150609.tar.gz
+diff --git a/package/libnatpmp/libnatpmp.mk b/package/libnatpmp/libnatpmp.mk
+new file mode 100644
+index 0000000..cdd65e9
+--- /dev/null
++++ b/package/libnatpmp/libnatpmp.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# libnatpmp
++#
++################################################################################
++
++LIBNATPMP_VERSION = 20150609
++LIBNATPMP_SITE = http://miniupnp.free.fr/files
++LIBNATPMP_INSTALL_STAGING = YES
++LIBNATPMP_LICENSE = BSD-3c
++LIBNATPMP_LICENSE_FILES = LICENSE
++
++define LIBNATPMP_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		CC="$(TARGET_CC)"
++endef
++
++define LIBNATPMP_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		PREFIX=$(STAGING_DIR) \
++		HEADERS='declspec.h natpmp.h' \
++		$(TARGET_CONFIGURE_OPTS) install
++endef
++
++define LIBNATPMP_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		PREFIX=$(TARGET_DIR) \
++		$(TARGET_CONFIGURE_OPTS) install
++endef
++
++$(eval $(generic-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.8.1
