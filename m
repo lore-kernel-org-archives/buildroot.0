@@ -1,87 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 2 Jul 2016 19:11:14 +0200
-Subject: [Buildroot] [git commit] support/download/git: do not use bare
-	clones
-Message-ID: <20160702235622.D3F7E7F9AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/download/git: add support for
+	submodules
+Message-ID: <20160702235623.80E3781D49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13c89c2f897258bfe389d953018ec99854a1dd53
+commit: https://git.buildroot.net/buildroot/commit/?id=f109e7eeb53ecfa084f80899646b68fb6dff021d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, we are using bare clones, so as to minimise the disk usage,
-most notably for largeish repositories such as the one for the Linux
-kernel, which can go beyond the 1GiB barrier.
+Some git repositories may be split into a master repository and
+submodules. Up until now, we did not have support for submodules,
+because we were using bare clones, in which it is not possible to
+update the list of submodules.
 
-However, this precludes updating (and thus using) the submodules, if
-any, of the repositories, as a working copy is required to use
-submodules (becaue we need to know the list of submodules, where to find
-them, where to clone them, what cset to checkout, and all those is
-dependent upon the checked out cset of the father repository).
+Now that we are using plain clones with a working copy, we can retrieve
+the submdoules.
 
-Switch to using /plain/ clones with a working copy.
+Add an option to the git download helper to kick the update of
+submodules, so that they are only fetched for those packages that
+require them. Also document the existing -q option at the same time.
 
-This means that the extra refs used by some forges (like pull-requests
-for Github, or changes for gerrit...) are no longer fetched as part of
-the clone, because git does not offer to do a mirror clone when there is
-a working copy.
+Submodules have a .git file at their root, which contains the path to
+the real .git directory of the master repository. Since we remove it,
+there is no point in keeping those .git files either.
 
-Instead, we have to fetch those special refs by hand. Since there is no
-easy solution to know whether the cset the user asked for is such a
-special ref or not, we just try to always fetch the cset requested by
-the user; if this fails, we assume that this is not a special ref (most
-probably, it is a sha1) and we defer the check to the archive creation,
-which would fail if the requested cset is missing anyway.
+Note: this is currently unused, but will be enabled with the follow-up
+patch that adds the necessary parts in the pkg-generic and pkg-download
+infrastructures.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Tested-by: Matt Weber <matt@thewebers.ws>
 Reviewed-by: Matt Weber <matt@thewebers.ws>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/download/git | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+ support/download/git | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
 diff --git a/support/download/git b/support/download/git
-index 314b388..2d98923 100755
+index d8094d2..45802d3 100755
 --- a/support/download/git
 +++ b/support/download/git
-@@ -41,7 +41,7 @@ _git() {
- git_done=0
- if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
-     printf "Doing shallow clone\n"
--    if _git clone ${verbose} --depth 1 -b "'${cset}'" --bare "'${repo}'" "'${basename}'"; then
-+    if _git clone ${verbose} --depth 1 -b "'${cset}'" "'${repo}'" "'${basename}'"; then
-         git_done=1
-     else
-         printf "Shallow clone failed, falling back to doing a full clone\n"
-@@ -49,10 +49,25 @@ if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
+@@ -6,15 +6,20 @@ set -e
+ # Download helper for git, to be called from the download wrapper script
+ #
+ # Call it as:
+-#   .../git [-q] OUT_FILE REPO_URL CSET BASENAME
++#   .../git [-q] [-r] OUT_FILE REPO_URL CSET BASENAME
++#
++#   -q  Be quiet.
++#   -r  Clone and archive sub-modules.
+ #
+ # Environment:
+ #   GIT      : the git command to call
+ 
+ verbose=
+-while getopts :q OPT; do
++recurse=0
++while getopts :qr OPT; do
+     case "${OPT}" in
+     q)  verbose=-q; exec >/dev/null;;
++    r)  recurse=1;;
+     \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
+     esac
+ done
+@@ -65,13 +70,19 @@ if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
+     printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
  fi
- if [ ${git_done} -eq 0 ]; then
-     printf "Doing full clone\n"
--    _git clone ${verbose} --mirror "'${repo}'" "'${basename}'"
-+    _git clone ${verbose} "'${repo}'" "'${basename}'"
+ 
+-# Checkout the required changeset.
++# Checkout the required changeset, so that we can update the required
++# submodules.
+ _git checkout -q "'${cset}'"
+ 
+ # Get date of commit to generate a reproducible archive.
+ # %cD is RFC2822, so it's fully qualified, with TZ and all.
+ date="$( _git show --no-patch --pretty=format:%cD )"
+ 
++# There might be submodules, so fetch them.
++if [ ${recurse} -eq 1 ]; then
++    _git submodule update --init --recursive
 +fi
 +
-+pushd "${basename}" >/dev/null
-+
-+# Try to get the special refs exposed by some forges (pull-requests for
-+# github, changes for gerrit...). There is no easy way to know whether
-+# the cset the user passed us is such a special ref or a tag or a sha1
-+# or whatever else. We'll eventually fail at checking out that cset,
-+# below, if there is an issue anyway. Since most of the cset we're gonna
-+# have to clone are not such special refs, consign the output to oblivion
-+# so as not to alarm unsuspecting users, but still trace it as a warning.
-+if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
-+    printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
- fi
- 
--GIT_DIR="${basename}" \
- _git archive --prefix="'${basename}/'" -o "'${output}.tmp'" --format=tar "'${cset}'"
- 
-+# Not really required, but here for consistency
-+popd >/dev/null
-+
- gzip -n <"${output}.tmp" >"${output}"
+ # We do not need the .git dir and other gitfiles to generate the tarball
+ find . \( -name .git -o -name .gitmodules -o -name .gitignore \) \
+        -exec rm -rf {} +
