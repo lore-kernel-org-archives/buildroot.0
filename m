@@ -1,10 +1,10 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Sun,  3 Jul 2016 00:21:20 +0200
-Subject: [Buildroot] [PATCH 51/69] xlib_libXrender: add explicit
+Date: Sun,  3 Jul 2016 00:21:21 +0200
+Subject: [Buildroot] [PATCH 52/69] xlib_libfontenc: add explicit
 	dependencies for host variant
 In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467498098-23731-52-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467498098-23731-53-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/x11r7/xlib_libXrender/xlib_libXrender.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/x11r7/xlib_libfontenc/xlib_libfontenc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/x11r7/xlib_libXrender/xlib_libXrender.mk b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
-index 949dea3f146c..72626cf98dd8 100644
---- a/package/x11r7/xlib_libXrender/xlib_libXrender.mk
-+++ b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
-@@ -11,6 +11,9 @@ XLIB_LIBXRENDER_LICENSE = MIT
- XLIB_LIBXRENDER_LICENSE_FILES = COPYING
- XLIB_LIBXRENDER_INSTALL_STAGING = YES
- XLIB_LIBXRENDER_DEPENDENCIES = xlib_libX11 xproto_renderproto xproto_xproto
-+HOST_XLIB_LIBXRENDER_DEPENDENCIES = \
-+	host-xlib_libX11 host-xproto_renderproto host-xproto_xproto
-+
- XLIB_LIBXRENDER_CONF_OPTS = --disable-malloc0returnsnull
+diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
+index aff1f1a5d954..e2c4c6e8d901 100644
+--- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
++++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
+@@ -11,6 +11,7 @@ XLIB_LIBFONTENC_LICENSE = MIT
+ XLIB_LIBFONTENC_LICENSE_FILES = COPYING
+ XLIB_LIBFONTENC_INSTALL_STAGING = YES
+ XLIB_LIBFONTENC_DEPENDENCIES = zlib xproto_xproto
++HOST_XLIB_LIBFONTENC_DEPENDENCIES = host-zlib host-xproto_xproto
  
  $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.1.0
