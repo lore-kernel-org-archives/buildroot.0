@@ -1,34 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 02 Jul 2016 16:41:07 +0200
-Subject: [Buildroot] [PATCH v4 2/7] package/ffmpeg: bump to version 3.1.1
-References: <1467466339-19422-1-git-send-email-bernd.kuhls@t-online.de>
- <1467466339-19422-2-git-send-email-bernd.kuhls@t-online.de>
- <20160702153815.58f45f35@free-electrons.com>
-Message-ID: <XnsA639A9BBC6883ID313208userindividu@bernd-kuhls.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 2 Jul 2016 16:43:01 +0200
+Subject: [Buildroot] [PATCH 00/24] Drop unused host packages
+In-Reply-To: <CAHfJR7heFn1QsWoVSJB4kostyz9QTHVCKRNhgeerDBEx4tjVwQ@mail.gmail.com>
+References: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
+ <20160629155233.510c456e@free-electrons.com>
+ <77293ee3-6e4c-7342-214d-adffdde679f8@mind.be>
+ <20160702123305.6bfbbc81@free-electrons.com>
+ <87poqw8ege.fsf@dell.be.48ers.dk>
+ <CAHfJR7heFn1QsWoVSJB4kostyz9QTHVCKRNhgeerDBEx4tjVwQ@mail.gmail.com>
+Message-ID: <a950cc3d-5aef-1591-e014-b786a5eb6fa1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+On 02-07-16 16:08, Julien Floret wrote:
+> 2016-07-02 13:30 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
+>>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>
+>> Hi,
+>>
+>>  >> So, as the person who introduced this mis-feature, I'm the first one to vote
+>>  >> for removing it again.
+>>
+>>  > I agree that this automatic derivation has caused quite a few issues in
+>>  > the past and in many cases, we need different dependencies for the host
+>>  > and the target variants. So maybe we should think of removing this
+>>  > functionality.
+>>
+>> +1 from here as well.
+> 
+> Sounds good to me, I can take a look at this.
 
-Hi Thomas,
+ Since that will be 64 patches, it may be a good idea to already submit just a
+subset.
 
-Thomas Petazzoni <thomas.petazzoni-
-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8@public.gmane.org> wrote in 
-news:20160702153815.58f45f35 at free-electrons.com:
+ Regards,
+ Arnout
 
-> We're still a bit reluctant to upgrade ffmpeg to 3.x if there is no
-> released version of VLC that is ffmpeg 3.x compatible. What are the
-> main benefits of upgrading to ffmpeg 3.x ? Are there some other
-> packages you want to add that absolutely need ffmpeg in version 3.x ?
 
-the next Kodi bump will require ffmpeg 3, but this will be several months 
-away. As usual I am posting parts of my Kodi patch series which can be used 
-today to reduce the amount of patches for review.
-
-For details please read
-http://lists.busybox.net/pipermail/buildroot/2016-July/165924.html
-
-Regards, Bernd
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
