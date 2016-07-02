@@ -1,77 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Jul 2016 12:18:42 +0200
-Subject: [Buildroot] [PATCH 09/12] reproducibility/fs/cpio: generate
- archive with host-cpio
-In-Reply-To: <1465918277-30675-9-git-send-email-gilles.chanteperdrix@xenomai.org>
-References: <20160614152928.GH3060@hermes.click-hack.org>
- <1465918277-30675-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1465918277-30675-9-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <20160702101842.GI22343@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 02 Jul 2016 12:25:50 +0200
+Subject: [Buildroot] [PATCH 1/4] Package netsnmp: Created start(), stop(),
+	reload().
+In-Reply-To: <20160701150121.7eebcb5e@free-electrons.com> (Thomas Petazzoni's
+ message of "Fri, 1 Jul 2016 15:01:21 +0200")
+References: <1456435484-4723-1-git-send-email-universeII@gmx.de>
+ <20160701150121.7eebcb5e@free-electrons.com>
+Message-ID: <87bn2g9w0h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gilles, All,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On 2016-06-14 17:31 +0200, Gilles Chanteperdrix spake thusly:
-> Using the --reproducible option to generate a reproducible archive.
-> 
-> Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-> ---
->  fs/cpio/cpio.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-> index e82167e..4da6648 100644
-> --- a/fs/cpio/cpio.mk
-> +++ b/fs/cpio/cpio.mk
-> @@ -27,9 +27,17 @@ endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
->  
->  ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
->  
-> +ifneq ($(BR2_REPRODUCIBLE),y)
->  define ROOTFS_CPIO_CMD
->  	cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $@
->  endef
-> +else
-> +ROOTFS_CPIO_DEPENDENCIES += host-cpio
-> +
-> +define ROOTFS_CPIO_CMD
-> +	cd $(TARGET_DIR) && find . | $(CPIO_REPRODUCIBLE) --quiet -o -H newc > $@
-> +endef
-> +endif
+ > Hello,
+ > On Thu, 25 Feb 2016 22:24:41 +0100, Andreas Ehmanns wrote:
+ >> Changed init script to get rid of double code.
+ >> Start, stop and reload code has been put into
+ >> separate functions and 'restart' will just call
+ >> stop() and start() with a delay in between.
+ >> 
+ >> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
+ >> ---
+ >> package/netsnmp/S59snmpd | 71 +++++++++++++++++++++++++-----------------------
+ >> 1 file changed, 37 insertions(+), 34 deletions(-)
 
-Rather than duplicate the commands, why not something like:
+ > Entire series applied, after tweaking the commit titles and in some
+ > cases the commit log.
 
-    ifeq ($(BR2_REPDUCIBLE),y)
-    ROOTFS_CPIO_CPIO = $(CPIO)
-    else
-    ROOTFS_CPIO_CPIO = $(CPIO_REPRODUCIBLE)
-    endif
+For the future, please use your full name in the From: as well (git
+commit user.name "Andreas Ehmanns"). Now these commits are listed as
+being from "universe II".
 
-    define ROOTFS_CPIO_CMD
-        cd $(TARGET_DIR) && find . | $(ROOTFS_CPIO_CPIO) --quiet -o -H newc > $@
-    endef
-
-Regards,
-Yann E. MORIN.
-
->  $(BINARIES_DIR)/rootfs.cpio.uboot: $(BINARIES_DIR)/rootfs.cpio host-uboot-tools
->  	$(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
-> -- 
-> 2.8.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
