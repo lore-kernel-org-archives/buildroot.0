@@ -1,10 +1,10 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Sun,  3 Jul 2016 00:20:48 +0200
-Subject: [Buildroot] [PATCH 19/69] isl: add explicit dependencies for host
-	variant
+Date: Sun,  3 Jul 2016 00:20:50 +0200
+Subject: [Buildroot] [PATCH 21/69] libcroco: add explicit dependencies for
+	host variant
 In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467498098-23731-20-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467498098-23731-22-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/isl/isl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcroco/libcroco.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/isl/isl.mk b/package/isl/isl.mk
-index bb79039e883a..74de125b609a 100644
---- a/package/isl/isl.mk
-+++ b/package/isl/isl.mk
-@@ -12,7 +12,7 @@ ISL_SOURCE = isl-$(ISL_VERSION).tar.xz
- ISL_SITE = http://isl.gforge.inria.fr
- ISL_LICENSE = MIT
- ISL_LICENSE_FILES = LICENSE
--ISL_DEPENDENCIES = gmp
-+HOST_ISL_DEPENDENCIES = host-gmp
- 
- # Our libtool patch doesn't apply, and since this package is only
- # built for the host, we don't really care about it.
+diff --git a/package/libcroco/libcroco.mk b/package/libcroco/libcroco.mk
+index c4cb6762d83c..39dd52795e32 100644
+--- a/package/libcroco/libcroco.mk
++++ b/package/libcroco/libcroco.mk
+@@ -10,6 +10,7 @@ LIBCROCO_SITE = http://ftp.gnome.org/pub/gnome/sources/libcroco/$(LIBCROCO_VERSI
+ LIBCROCO_SOURCE = libcroco-$(LIBCROCO_VERSION).tar.xz
+ LIBCROCO_INSTALL_STAGING = YES
+ LIBCROCO_DEPENDENCIES = host-pkgconf libglib2 libxml2
++HOST_LIBCROCO_DEPENDENCIES = host-pkgconf host-libglib2 host-libxml2
+ LIBCROCO_CONFIG_SCRIPTS = croco-$(LIBCROCO_VERSION_MAJOR)-config
+ # NEWS states that it's only LGPL
+ # Source code says v2.1+ even though COPYING.LIB is v2
 -- 
 2.1.0
