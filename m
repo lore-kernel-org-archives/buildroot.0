@@ -1,10 +1,10 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Sun,  3 Jul 2016 00:21:03 +0200
-Subject: [Buildroot] [PATCH 34/69] swig: add explicit dependencies for host
-	variant
+Date: Sun,  3 Jul 2016 00:21:04 +0200
+Subject: [Buildroot] [PATCH 35/69] wayland: add explicit dependencies for
+	host variant
 In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467498098-23731-35-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467498098-23731-36-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/swig/swig.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/wayland/wayland.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/swig/swig.mk b/package/swig/swig.mk
-index 5329d1bb7149..8fed8dabc4fc 100644
---- a/package/swig/swig.mk
-+++ b/package/swig/swig.mk
-@@ -7,7 +7,7 @@
- SWIG_VERSION_MAJOR = 3.0
- SWIG_VERSION = $(SWIG_VERSION_MAJOR).10
- SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
--SWIG_DEPENDENCIES = host-bison
-+HOST_SWIG_DEPENDENCIES = host-bison
- HOST_SWIG_CONF_OPTS = \
- 	--without-pcre \
- 	--disable-ccache \
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index e219624687be..d4b4664ff861 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
+@@ -11,6 +11,7 @@ WAYLAND_LICENSE = MIT
+ WAYLAND_LICENSE_FILES = COPYING
+ WAYLAND_INSTALL_STAGING = YES
+ WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
++HOST_WAYLAND_DEPENDENCIES = host-pkgconf host-expat host-libffi host-libxml2
+ 
+ # wayland-scanner is only needed for building, not on the target
+ WAYLAND_CONF_OPTS = --disable-scanner --with-host-scanner
 -- 
 2.1.0
