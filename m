@@ -1,10 +1,10 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Sun,  3 Jul 2016 00:20:41 +0200
-Subject: [Buildroot] [PATCH 12/69] file: add explicit dependencies for host
+Date: Sun,  3 Jul 2016 00:20:43 +0200
+Subject: [Buildroot] [PATCH 14/69] fwup: add explicit dependencies for host
 	variant
 In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467498098-23731-13-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467498098-23731-15-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/file/file.mk | 1 +
+ package/fwup/fwup.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 5fb3e9c6e8e4..16c8ca42180b 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -7,6 +7,7 @@
- FILE_VERSION = 5.28
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
-+HOST_FILE_DEPENDENCIES = host-file host-zlib
- FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- FILE_INSTALL_STAGING = YES
- FILE_LICENSE = BSD-2c, one file BSD-4c, one file BSD-3c
+diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
+index 0a23856048b3..ae8571690d9b 100644
+--- a/package/fwup/fwup.mk
++++ b/package/fwup/fwup.mk
+@@ -9,6 +9,7 @@ FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
+ FWUP_LICENSE = Apache-2.0
+ FWUP_LICENSE_FILES = LICENSE
+ FWUP_DEPENDENCIES = libconfuse libarchive libsodium
++HOST_FWUP_DEPENDENCIES = host-libconfuse host-libarchive host-libsodium
+ FWUP_AUTORECONF = YES
+ FWUP_CONF_ENV = ac_cv_path_HELP2MAN=""
+ 
 -- 
 2.1.0
