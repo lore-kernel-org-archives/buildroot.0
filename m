@@ -1,10 +1,10 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Sun,  3 Jul 2016 00:21:15 +0200
-Subject: [Buildroot] [PATCH 46/69] xlib_libXau: add explicit dependencies
-	for host variant
+Date: Sun,  3 Jul 2016 00:21:22 +0200
+Subject: [Buildroot] [PATCH 53/69] xlib_libxkbfile: add explicit
+	dependencies for host variant
 In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467498098-23731-47-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467498098-23731-54-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +13,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/x11r7/xlib_libXau/xlib_libXau.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/x11r7/xlib_libXau/xlib_libXau.mk b/package/x11r7/xlib_libXau/xlib_libXau.mk
-index 8ef48e4a7b30..1c50cb2e4e56 100644
---- a/package/x11r7/xlib_libXau/xlib_libXau.mk
-+++ b/package/x11r7/xlib_libXau/xlib_libXau.mk
-@@ -11,6 +11,8 @@ XLIB_LIBXAU_LICENSE = MIT
- XLIB_LIBXAU_LICENSE_FILES = COPYING
- XLIB_LIBXAU_INSTALL_STAGING = YES
- XLIB_LIBXAU_DEPENDENCIES = host-pkgconf xutil_util-macros xproto_xproto
-+HOST_XLIB_LIBXAU_DEPENDENCIES = \
-+	host-pkgconf host-xutil_util-macros host-xproto_xproto
+diff --git a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
+index 51c58c04a0da..c69d73118fe4 100644
+--- a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
++++ b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
+@@ -11,6 +11,7 @@ XLIB_LIBXKBFILE_LICENSE = MIT
+ XLIB_LIBXKBFILE_LICENSE_FILES = COPYING
+ XLIB_LIBXKBFILE_INSTALL_STAGING = YES
+ XLIB_LIBXKBFILE_DEPENDENCIES = xlib_libX11 xproto_kbproto
++HOST_XLIB_LIBXKBFILE_DEPENDENCIES = host-xlib_libX11 host-xproto_kbproto
  
  $(eval $(autotools-package))
  $(eval $(host-autotools-package))
