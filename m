@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 15:32:50 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package: Add hid-replay package
-In-Reply-To: <1467462242-35261-1-git-send-email-andriy.shevchenko@linux.intel.com>
-References: <1467462242-35261-1-git-send-email-andriy.shevchenko@linux.intel.com>
-Message-ID: <20160702153250.63050235@free-electrons.com>
+Date: Sat, 2 Jul 2016 15:38:15 +0200
+Subject: [Buildroot] [PATCH v4 2/7] package/ffmpeg: bump to version 3.1.1
+In-Reply-To: <1467466339-19422-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1467466339-19422-1-git-send-email-bernd.kuhls@t-online.de>
+ <1467466339-19422-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160702153815.58f45f35@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +13,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  2 Jul 2016 15:24:02 +0300, Andy Shevchenko wrote:
+On Sat,  2 Jul 2016 15:32:14 +0200, Bernd Kuhls wrote:
+> From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> 
+> - Remove non-existing configure options:
+>   - --disable-mips32r2
+>   - --disable-libvo-aacenc
+>   - --enable-libdcadec
+>     (https://github.com/FFmpeg/FFmpeg/commit/e259dc86a80398d56d1aabcf6203f80616a4d04d)
+> 
+> - Amend renamed configure options:
+>   - --disable-mipsdspr1 has been renamed to --disable-mipsdsp
+> 
+> Remove all Kodi-related patches according to upstream repo:
+> https://github.com/xbmc/FFmpeg/commits/release/3.1-xbmc
+> 
+> Kodi now uses an unpatched ffmpeg.
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-> diff --git a/package/hid-replay/hid-replay.mk b/package/hid-replay/hid-replay.mk
-> new file mode 100644
-> index 0000000..0e021de
-> --- /dev/null
-> +++ b/package/hid-replay/hid-replay.mk
-> @@ -0,0 +1,12 @@
-> +################################################################################
-> +#
-> +# hid-replay
-> +#
-> +################################################################################
-> +
-> +HID_REPLAY_VERSION = master
+We're still a bit reluctant to upgrade ffmpeg to 3.x if there is no
+released version of VLC that is ffmpeg 3.x compatible. What are the
+main benefits of upgrading to ffmpeg 3.x ? Are there some other
+packages you want to add that absolutely need ffmpeg in version 3.x ?
 
-This is not good as it leads to non-reproducible builds: depending on
-when a user starts the build, he will get a different result because
-master might have evolved. Please use either a tag, or a full commit id.
+Of course, the removal of the ffmpeg patches is very nice, so we
+definitely want to upgrade to ffmpeg 3.x at some point, but I'm not
+sure we want to do that until VLC releases a compatible version. Do you
+have an idea when VLC plans on making its 3.x release ?
 
-> +HID_REPLAY_SITE = https://github.com/bentiss/hid-replay.git
-
-Please use the github macro.
-
-Also, please add a hash file, since the tarballs provided by github,
-and used by our github macro.
-
-Could you take those comments into account and send an updated version?
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
