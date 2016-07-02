@@ -1,51 +1,79 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 2 Jul 2016 13:14:58 +0200
-Subject: [Buildroot] [PATCH v2 03/15] package/Makefile.in: set
- TARGET_FCFLAGS variables
-In-Reply-To: <20160701225954.65130be1@free-electrons.com>
-References: <20160701162920.19632-1-s.martin49@gmail.com>
- <20160701162920.19632-4-s.martin49@gmail.com>
- <20160701225954.65130be1@free-electrons.com>
-Message-ID: <c87329b9-a931-5abb-2616-c2c27fa05bdb@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 Jul 2016 13:15:25 +0200
+Subject: [Buildroot] [PATCH] package/wpa_supplicant: Add optional
+ autoscan support
+In-Reply-To: <1467449764-4157-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1467449764-4157-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20160702111525.GM22343@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01-07-16 22:59, Thomas Petazzoni wrote:
->>  ifeq ($(BR2_BINFMT_FLAT),y)
->> @@ -148,29 +149,36 @@ TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FL
->>  	-Wl$(comma)-elf2flt)
->>  TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
->>  	-Wl$(comma)-elf2flt)
->> +TARGET_FCFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
->> +	-Wl$(comma)-elf2flt)
->>  TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt)
->>  endif
->>  
->>  ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
->>  TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
->>  TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
->> +TARGET_FCFLAGS += -mid-shared-library -mshared-library-id=0
->>  TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
+Maxime, all,
+
+On 2016-07-02 10:56 +0200, Maxime Hadjinlian spake thusly:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+
+As seen IRL, it would have been a nice addition to explain that it does
+not conflict with the recently added bgscan.
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/wpa_supplicant/Config.in         | 5 +++++
+>  package/wpa_supplicant/wpa_supplicant.mk | 6 ++++++
+>  2 files changed, 11 insertions(+)
 > 
-> [...]
+> diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+> index f4c4167..1920774 100644
+> --- a/package/wpa_supplicant/Config.in
+> +++ b/package/wpa_supplicant/Config.in
+> @@ -38,6 +38,11 @@ config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
+>  	  making it bigger but dispensing the need for a separate hostapd
+>  	  binary in some applications hence being smaller overall.
+>  
+> +config BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN
+> +	bool "Enable autoscan"
+> +	help
+> +	  Enable support for the autoscan feature (allow periodic scan)
+> +
+>  config BR2_PACKAGE_WPA_SUPPLICANT_EAP
+>  	bool "Enable EAP"
+>  	help
+> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+> index 21bbd3e..d1d59f7 100644
+> --- a/package/wpa_supplicant/wpa_supplicant.mk
+> +++ b/package/wpa_supplicant/wpa_supplicant.mk
+> @@ -68,6 +68,12 @@ WPA_SUPPLICANT_CONFIG_ENABLE += \
+>  	CONFIG_P2P
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN),y)
+> +WPA_SUPPLICANT_CONFIG_ENABLE += \
+> +	CONFIG_AUTOSCAN_EXPONENTIAL \
+> +	CONFIG_AUTOSCAN_PERIODIC
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),y)
+>  WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WPS
+>  endif
+> -- 
+> 2.8.1
 > 
-> There's really a lot of duplication between all those definitions, so
-> maybe one day we should clean this up. I'm also not a big fan of the
-> TARGET_ABI variable, but that's really unrelated to this patch.
-
- IMHO this stuff should go into the toolchain wrapper.
-
- Regards,
- Arnout
-
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
