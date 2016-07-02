@@ -1,63 +1,77 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 2 Jul 2016 12:18:30 +0200
-Subject: [Buildroot] [PATCH 00/24] Drop unused host packages
-In-Reply-To: <20160629155233.510c456e@free-electrons.com>
-References: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
- <20160629155233.510c456e@free-electrons.com>
-Message-ID: <77293ee3-6e4c-7342-214d-adffdde679f8@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 Jul 2016 12:18:42 +0200
+Subject: [Buildroot] [PATCH 09/12] reproducibility/fs/cpio: generate
+ archive with host-cpio
+In-Reply-To: <1465918277-30675-9-git-send-email-gilles.chanteperdrix@xenomai.org>
+References: <20160614152928.GH3060@hermes.click-hack.org>
+ <1465918277-30675-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <1465918277-30675-9-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <20160702101842.GI22343@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29-06-16 15:52, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 29 Jun 2016 15:46:07 +0200, Julien Floret wrote:
->> A lot of host packages are never built, because they don't have a
->> Config.in option, and are never referenced in other packages'
->> dependencies.
->>
->> This series removes them to avoid maintaining unneeded code; they
->> will still be in git history if some are needed again in the future.
->>
->> The other motivation behind this cleanup is that I'm starting to think
->> about a new proposal for speeding up the Makefile parsing, similar to
->> what Thomas proposed here:
->> http://lists.busybox.net/pipermail/buildroot/2014-March/092548.html
->>
->> As Thomas explained, this change would imply adding blind Config.in
->> options for all host packages. It's quite a big change, so a little
->> preliminary cleanup could help.
-> 
-> I haven't looked at the series, but did you take into account that just
-> grepping for "host-foo" is not sufficient to know if the host-foo
-> package is used or not?
-> 
-> Indeed, if a package has:
-> 
-> BAR_DEPENDENCIES = foo
-> 
-> then host-bar automatically has a dependency on host-foo, without
-> host-foo being written anywhere.
+Gilles, All,
 
- That automatic derivation of dependencies of host packages sounded like a good
-idea at the time, but it can really bite you. Of the 200 host packages that we
-have at the moment, there are just 64 that use the inheritance - and many of
-them are in Julien's list here (possibly incorrectly).
+On 2016-06-14 17:31 +0200, Gilles Chanteperdrix spake thusly:
+> Using the --reproducible option to generate a reproducible archive.
+> 
+> Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+> ---
+>  fs/cpio/cpio.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+> index e82167e..4da6648 100644
+> --- a/fs/cpio/cpio.mk
+> +++ b/fs/cpio/cpio.mk
+> @@ -27,9 +27,17 @@ endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
+>  
+>  ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
+>  
+> +ifneq ($(BR2_REPRODUCIBLE),y)
+>  define ROOTFS_CPIO_CMD
+>  	cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $@
+>  endef
+> +else
+> +ROOTFS_CPIO_DEPENDENCIES += host-cpio
+> +
+> +define ROOTFS_CPIO_CMD
+> +	cd $(TARGET_DIR) && find . | $(CPIO_REPRODUCIBLE) --quiet -o -H newc > $@
+> +endef
+> +endif
 
- So, as the person who introduced this mis-feature, I'm the first one to vote
-for removing it again.
+Rather than duplicate the commands, why not something like:
 
- Regards,
- Arnout
+    ifeq ($(BR2_REPDUCIBLE),y)
+    ROOTFS_CPIO_CPIO = $(CPIO)
+    else
+    ROOTFS_CPIO_CPIO = $(CPIO_REPRODUCIBLE)
+    endif
 
+    define ROOTFS_CPIO_CMD
+        cd $(TARGET_DIR) && find . | $(ROOTFS_CPIO_CPIO) --quiet -o -H newc > $@
+    endef
+
+Regards,
+Yann E. MORIN.
+
+>  $(BINARIES_DIR)/rootfs.cpio.uboot: $(BINARIES_DIR)/rootfs.cpio host-uboot-tools
+>  	$(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
+> -- 
+> 2.8.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
