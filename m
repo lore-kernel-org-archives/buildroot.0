@@ -1,29 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 16:53:06 +0200
-Subject: [Buildroot] [PATCH 9/9] package/systemd: Sort menuconfig
- alphabetically
-In-Reply-To: <1467467955-14609-9-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1467467955-14609-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1467467955-14609-9-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20160702165306.42137433@free-electrons.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Sat,  2 Jul 2016 17:06:18 +0200
+Subject: [Buildroot] [PATCH 1/1] Config.in: indentation cleanup
+Message-ID: <1467471978-18813-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ Config.in | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-On Sat,  2 Jul 2016 15:59:15 +0200, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/systemd/Config.in | 262 +++++++++++++++++++++++-----------------------
->  1 file changed, 131 insertions(+), 131 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/Config.in b/Config.in
+index bbe2bc3..7bb2a01 100644
+--- a/Config.in
++++ b/Config.in
+@@ -730,14 +730,14 @@ endmenu
+ 
+ config BR2_REPRODUCIBLE
+ 	bool "Make the build reproducible (experimental)"
+-        help
+-          This option will remove all sources of non-reproducibility
+-          from the build process. For a given Buildroot configuration,
+-          this allows to generate exactly identical binaries from one
+-          build to the other, including on different machines.
+-
+-          This is labeled as an experimental feature, as not all
+-          packages behave properly to ensure reproducibility.
++	help
++	  This option will remove all sources of non-reproducibility
++	  from the build process. For a given Buildroot configuration,
++	  this allows to generate exactly identical binaries from one
++	  build to the other, including on different machines.
++
++	  This is labeled as an experimental feature, as not all
++	  packages behave properly to ensure reproducibility.
+ 
+ endmenu
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
