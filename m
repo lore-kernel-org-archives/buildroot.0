@@ -1,96 +1,94 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Jul 2016 11:20:59 +0200
-Subject: [Buildroot] [PATCH 03/12] reproducibility: generate
- SOURCE_DATE_EPOCH
-In-Reply-To: <1465918277-30675-3-git-send-email-gilles.chanteperdrix@xenomai.org>
-References: <20160614152928.GH3060@hermes.click-hack.org>
- <1465918277-30675-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1465918277-30675-3-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <20160702092059.GC22343@free.fr>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 2 Jul 2016 11:22:16 +0200
+Subject: [Buildroot] [PATCH 1/2] acpitool: new package
+In-Reply-To: <1459016777-27952-1-git-send-email-nunes.erico@gmail.com>
+References: <1459016777-27952-1-git-send-email-nunes.erico@gmail.com>
+Message-ID: <a3225e38-9aef-e9fb-f507-bb6a27eecee2@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gilles, All,
+Hi Erico,
 
-On 2016-06-14 17:31 +0200, Gilles Chanteperdrix spake thusly:
-> When reproducibility is requested, generate a global SOURCE_DATE_EPOCH
-> environment variable which contains either the date of buildroot last
-> commit if running from a git repository, or the latest release date.
+Le 26/03/2016 ? 19:26, Erico Nunes a ?crit :
+> acpitool is a small, convenient command-line ACPI client.
+
+Checked the license and license file.
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+
+Build tested with musl, uclibc and static build.
+Tested-by: Romain Naour <romain.naour@smile.fr>
+
+Best regards,
+Romain Naour
 > 
-> This means that all packages embedding build dates will appear to
-> have the same build date, so in case of new commit or release, all
-> packages will appear to have been change, even though some of them
-> may not have changed in fact.
-> 
-> The meaning of SOURCE_DATE_EPOCH is specified by the following
-> specification:
-> https://reproducible-builds.org/specs/source-date-epoch/
-> 
-> Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 > ---
->  Makefile | 5 +++++
->  1 file changed, 5 insertions(+)
+>  package/Config.in              |  1 +
+>  package/acpitool/Config.in     | 11 +++++++++++
+>  package/acpitool/acpitool.hash |  2 ++
+>  package/acpitool/acpitool.mk   | 13 +++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/acpitool/Config.in
+>  create mode 100644 package/acpitool/acpitool.hash
+>  create mode 100644 package/acpitool/acpitool.mk
 > 
-> diff --git a/Makefile b/Makefile
-> index 0217ff0..bba7f25 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -213,6 +213,11 @@ ifeq ($(BR2_REPRODUCIBLE),y)
->  export TZ=UTC
->  export LANG=C
->  export LC_ALL=C
-> +SOURCE_DATE_GIT = $(shell GIT_DIR=$(TOPDIR)/.git $(GIT) log -1 --format=%at)
-> +SOURCE_DATE_CHANGES = $(shell head -n 1 $(TOPDIR)/CHANGES | \
-> +	sed 's/^.*Released \(.*\)$$/\1/;s/\(st\|nd\|rd\|th\),//' | \
-> +	LANG=C LC_ALL=C TZ=UTC xargs -i date -d \{\} +%s)
-
-Why do you need to set TZ, LANG and LC_ALL here, since they are exported
-just the lines above?
-
-However, we've just discussed that during the summer camp, and we've
-come to the conlusion that parsing the CHANGES file is not the best
-solution.
-
-After all, what we need is a reproducible value. The one extracted from
-CHANGES is not absolutely right (e.g. in case one grabs a tarball from a
-random cset), but is close-enough to the real value that it is OK.
-
-Yet, we think that we could just use the last second of the last minute
-of the last hour of the first day of the mont of the last release. (wee!)
-So we suggest we use the release version, which is already YYYY-MM (e.g.
-in my local tree):
-
-    $ make print-version
-    2016.08-git-00009-g5173895
-
-And it is then trivial to get it to look more like YYYY-MM-01T23:59:59
-
-and the rest is easy to go by... ;-)
-
-What's your opinion on this?
-
-Regards,
-Yann E. MORIN.
-
-> +export SOURCE_DATE_EPOCH = $(if $(wildcard $(TOPDIR)/.git),$(SOURCE_DATE_GIT),$(SOURCE_DATE_CHANGES))
->  endif
->  
->  # To put more focus on warnings, be less verbose as default
-> -- 
-> 2.8.2
+> diff --git a/package/Config.in b/package/Config.in
+> index 1467f33..cca553c 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -340,6 +340,7 @@ menu "Firmware"
+>  endmenu
+>  	source "package/a10disp/Config.in"
+>  	source "package/acpid/Config.in"
+> +	source "package/acpitool/Config.in"
+>  	source "package/am335x-pru-package/Config.in"
+>  	source "package/avrdude/Config.in"
+>  	source "package/bcache-tools/Config.in"
+> diff --git a/package/acpitool/Config.in b/package/acpitool/Config.in
+> new file mode 100644
+> index 0000000..7992e0f
+> --- /dev/null
+> +++ b/package/acpitool/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_ACPITOOL
+> +	bool "acpitool"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	help
+> +	  A small, convenient command-line ACPI client with a lot of
+> +	  features for Linux
+> +
+> +	  http://acpitool.sourceforge.net
+> +
+> +comment "acpitool needs a toolchain w/ C++"
+> +	depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/acpitool/acpitool.hash b/package/acpitool/acpitool.hash
+> new file mode 100644
+> index 0000000..e25dc54
+> --- /dev/null
+> +++ b/package/acpitool/acpitool.hash
+> @@ -0,0 +1,2 @@
+> +# locally computed hash
+> +sha256 004fb6cd43102918b6302cf537a2db7ceadda04aef2e0906ddf230f820dad34f acpitool-0.5.1.tar.bz2
+> diff --git a/package/acpitool/acpitool.mk b/package/acpitool/acpitool.mk
+> new file mode 100644
+> index 0000000..f663fbb
+> --- /dev/null
+> +++ b/package/acpitool/acpitool.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# acpitool
+> +#
+> +################################################################################
+> +
+> +ACPITOOL_VERSION = 0.5.1
+> +ACPITOOL_SOURCE = acpitool-$(ACPITOOL_VERSION).tar.bz2
+> +ACPITOOL_SITE = http://downloads.sourceforge.net/sourceforge/acpitool
+> +ACPITOOL_LICENSE = GPLv2+
+> +ACPITOOL_LICENSE_FILES = COPYING
+> +
+> +$(eval $(autotools-package))
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
