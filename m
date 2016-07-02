@@ -1,46 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 18:54:06 +0200
-Subject: [Buildroot] [git commit] Config.in: indentation cleanup
-Message-ID: <20160702165424.B03B381D64@busybox.osuosl.org>
+Date: Sat, 2 Jul 2016 18:54:26 +0200
+Subject: [Buildroot] [PATCH 1/1] Config.in: indentation cleanup
+In-Reply-To: <1467471978-18813-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1467471978-18813-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20160702185426.3af4a564@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a446ab74493dff57b1151ccb99a30424bdf36884
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Config.in | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+On Sat,  2 Jul 2016 17:06:18 +0200, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+>  Config.in | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index bbe2bc3..7bb2a01 100644
---- a/Config.in
-+++ b/Config.in
-@@ -730,14 +730,14 @@ endmenu
- 
- config BR2_REPRODUCIBLE
- 	bool "Make the build reproducible (experimental)"
--        help
--          This option will remove all sources of non-reproducibility
--          from the build process. For a given Buildroot configuration,
--          this allows to generate exactly identical binaries from one
--          build to the other, including on different machines.
--
--          This is labeled as an experimental feature, as not all
--          packages behave properly to ensure reproducibility.
-+	help
-+	  This option will remove all sources of non-reproducibility
-+	  from the build process. For a given Buildroot configuration,
-+	  this allows to generate exactly identical binaries from one
-+	  build to the other, including on different machines.
-+
-+	  This is labeled as an experimental feature, as not all
-+	  packages behave properly to ensure reproducibility.
- 
- endmenu
- 
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
