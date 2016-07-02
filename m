@@ -1,36 +1,75 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Sat, 2 Jul 2016 12:45:21 +0200
-Subject: [Buildroot] [PATCH 2/2] acpica: new package
-In-Reply-To: <a3fe6cc6-15ac-b2e4-d995-9fbd25ce034c@smile.fr>
-References: <1459016777-27952-1-git-send-email-nunes.erico@gmail.com>
- <1459016777-27952-2-git-send-email-nunes.erico@gmail.com>
- <a3fe6cc6-15ac-b2e4-d995-9fbd25ce034c@smile.fr>
-Message-ID: <CAK4VdL15DMSXe-y5vzAffjRA6JV2XLUqUwbwmL4rGPd5m8U9gg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 2 Jul 2016 12:47:14 +0200
+Subject: [Buildroot] Unable to compile uboot v2012.10 on Buildroot
+	2016.05
+In-Reply-To: <1533419985.7541395.1467386922132.JavaMail.zimbra@datacom.ind.br>
+References: <1249010753.7483898.1467378648497.JavaMail.zimbra@datacom.ind.br>
+ <20160701151804.61f389e9@free-electrons.com>
+ <1572014322.7513168.1467381657827.JavaMail.zimbra@datacom.ind.br>
+ <20160701161556.5e65b3df@free-electrons.com>
+ <1533419985.7541395.1467386922132.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <e3405ae6-8f0b-0e40-e2e4-efafe77bf717@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+On 01-07-16 17:28, Carlos Santos wrote:
+>> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+>> To: "Carlos Santos" <casantos@datacom.ind.br>
+>> Cc: "buildroot" <buildroot@buildroot.org>, "Julien Boibessot" <julien.boibessot@armadeus.com>
+>> Sent: Friday, July 1, 2016 11:15:56 AM
+>> Subject: Re: [Buildroot] Unable to compile uboot v2012.10 on Buildroot 2016.05
+> 
+>> Hello,
+>>
+>> On Fri, 1 Jul 2016 11:00:57 -0300 (BRT), Carlos Santos wrote:
+>>
+>>>> What is your host gcc version ? This failure smells like building an
+>>>> old U-Boot, with gcc 5.x as the host gcc version.
+>>>
+>>> The problem happens on CentOS 7 (GCC 4.8.3) and Ubuntu 16.04 (GCC 5.3.1).
+>>
+>> I think the failure with GCC 5.3.x is normal, but I don't understand
+>> why it would fail with gcc 4.8.
+>>
+>>>>>  UBOOT_MAKE_OPTS += \
+>>>>>  	CROSS_COMPILE="$(TARGET_CROSS)" \
+>>>>> -	ARCH=$(UBOOT_ARCH) \
+>>>>> -	HOSTCFLAGS="$(HOST_CFLAGS)" \
+>>>>> -	HOSTLDFLAGS="$(HOST_LDFLAGS)"
+>>>>
+>>>> I'm not sure to see why this would fix the problem you're reporting.
+>>>
+>>> It prevents overriding HOSTCFLAGS and HOSTLDFLAGS on targets that don't need
+>>> OpenSSL, so older versions of U-Boot will compile successfully.
+>>
+>> Yes, but I don't understand why not setting HOSTCFLAGS/HOSTLDFLAGS
+>> fixes the build issue you mentioned.
+>>
+> 
+> Without setting HOSTCFLAGS/HOSTLDFLAGS the command line is this
+> 
+> gcc -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer -idirafter /work/bcm95615x/build/uboot-2012.10/include -idirafter /work/bcm95615x/build/uboot-2012.10/include2 -idirafter /work/bcm95615x/build/uboot-2012.10/include -I /work/bcm95615x/build/uboot-2012.10/lib/libfdt -I /work/bcm95615x/build/uboot-2012.10/tools -DCONFIG_SYS_TEXT_BASE=0x80800000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES -pedantic   -o img2srec.o img2srec.c -c
+> 
+> Setting HOSTCFLAGS/HOSTLDFLAGS the command line becomes
+> 
+> gcc -O2 -I/work/bcm95615x/host/usr/include   -o img2srec.o img2srec.c -c
+> 
+> Because the value of HOSTCFLAGS set in U-Boot's config.mk is overwritten. 
 
-thank you very much for your review and testing.
+ How about leaving HOSTCFLAGS alone, and instead setting
+HOSTCC="$(HOSTCC) $(HOST_CFLAGS)". HOSTLDFLAGS can probably be overridden.
 
-On Sat, Jul 2, 2016 at 11:54 AM, Romain Naour <romain.naour@smile.fr> wrote:
-> The license seems to be a BSD like or GPLv2
+ Regards,
+ Arnout
 
-I've look again and indeed it looks like a dual license, I'll update
-accordingly.
 
-> Maybe you can use TARGET_CONFIGURE_OPTS like as Peter suggested in [1]
-
-Ok. By the way, during some more testing after your comment, I've
-found that it builds without errors but fails to install on non-x86_64
-architectures due to the use of "install -s" (install fails attempting
-to use 'strip' from the host on other architectures).
-
-I'll have that fixed too in a v2.
-
-Thank you
-
-Erico
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
