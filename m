@@ -1,57 +1,59 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  2 Jul 2016 19:35:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mplayer: Fix static linking with
-	tremor & libogg
-Message-ID: <1467480913-29319-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 02 Jul 2016 19:47:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mplayer: needs
+	BR2_TOOLCHAIN_HAS_SYNC_4
+References: <1467477991-13051-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160702185004.34235606@free-electrons.com>
+Message-ID: <XnsA639C964540A5ID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/bc9/bc98fa585399b53ea181dbaf392b93424145911d/
+Hi Thomas,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mplayer/0005-tremor-ogg.patch | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/mplayer/0005-tremor-ogg.patch
+[posted and mailed]
 
-diff --git a/package/mplayer/0005-tremor-ogg.patch b/package/mplayer/0005-tremor-ogg.patch
-new file mode 100644
-index 0000000..b4d6505
---- /dev/null
-+++ b/package/mplayer/0005-tremor-ogg.patch
-@@ -0,0 +1,29 @@
-+Fix static linking with tremor & libogg
-+
-+The order of the libraries needs to be changed to fix a bug during
-+static linking caught by buildroot autobuilders:
-+
-+http://autobuild.buildroot.net/results/bc9/bc98fa585399b53ea181dbaf392b93424145911d/
-+
-+/home/test/autobuild/instance-3/output/host/usr/powerpc-buildroot-linux-uclibc/sysroot/usr/lib/libvorbisidec.a(synthesis.o): In function `_vorbis_synthesis1':
-+synthesis.c:(.text+0x90): undefined reference to `oggpack_readinit'
-+synthesis.c:(.text+0x9c): undefined reference to `oggpack_read'
-+[...]
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+(patch sent upstream:
-+ http://lists.mplayerhq.hu/pipermail/mplayer-dev-eng/2016-July/073501.html)
-+
-+Index: configure
-+===================================================================
-+--- a/configure	(revision 37873)
-++++ b/configure	(working copy)
-+@@ -6629,7 +6629,7 @@
-+   def_tremor='#define CONFIG_TREMOR 1'
-+   codecmodules="tremor $codecmodules"
-+   res_comment="integer libvorbis"
-+-  extra_ldflags="$extra_ldflags -logg -lvorbisidec"
-++  extra_ldflags="$extra_ldflags -lvorbisidec -logg"
-+ elif test "$_libvorbis" = yes ; then
-+   _vorbis=yes
-+   def_vorbis='#define CONFIG_OGGVORBIS 1'
--- 
-2.8.1
+Thomas Petazzoni <thomas.petazzoni-
+wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8@public.gmane.org> wrote in 
+news:20160702185004.34235606 at free-electrons.com:
+
+> So it's the internal copy of ffmpeg that mplayer carries that uses
+> those atomic operations.
+> 
+> In this case, why doesn't the standalone ffmpeg package also use atomic
+> operations ? Is the ffmpeg code base different ?
+
+no, but the build system is different. While ffmpeg uses its own configure 
+script to determine the capabilities of the arch target used for 
+compilation mplayer provides a hard-coded config.h file...
+
+The difference on sparc, the arch I am trying to fix, looks like this:
+
+ffmpeg-2.8.7$ grep "ATOMIC\|_SYNC" config.h
+#define HAVE_ATOMICS_GCC 0
+#define HAVE_ATOMICS_SUNCC 0
+#define HAVE_ATOMICS_WIN32 0
+#define HAVE_ATOMIC_CAS_PTR 0
+#define HAVE_ATOMIC_COMPARE_EXCHANGE 0
+#define HAVE_SYNC_VAL_COMPARE_AND_SWAP 0
+#define HAVE_ATOMICS_NATIVE 0
+
+mplayer-1.3.0$ grep "ATOMIC\|_SYNC" config.h
+#define HAVE_ATOMICS_GCC 1
+#define HAVE_SYNC_VAL_COMPARE_AND_SWAP 1
+#define HAVE_ATOMICS_NATIVE 1
+#define HAVE_SYNC_SYNCHRONIZE 1
+
+Have a look at mplayer configure script at line 9260 for details.
+
+Of course we could try to use sed to change config.h in a 
+_POST_CONFIGURE_HOOK, but getting the details right could result in a pita, 
+I tried already and gave up after ~30 minutes.
+
+Unless someone comes up with a better solution my patch should be applied 
+as obviously the mplayer build system has no support for archs lacking 
+_sync4.
+
+Regards, Bernd
