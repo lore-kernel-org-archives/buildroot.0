@@ -1,73 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 10:37:01 +0200
-Subject: [Buildroot] [git commit] audit: add patch to fix EHWPOISON build
-	issue
-Message-ID: <20160702083723.EB83781794@busybox.osuosl.org>
+Date: Sat, 2 Jul 2016 10:37:41 +0200
+Subject: [Buildroot] [git commit] package/{libsepol,
+	libselinux}: fix build on ancient distros
+Message-ID: <20160702083809.3143480AEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b483c2ad1025ac1bc08033781c190af5baef9c0
+commit: https://git.buildroot.net/buildroot/commit/?id=4e2d1e43cf0dea2a20076566db30188cf0283599
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+Ancient distros (especially enterprise-grade still in use) do not accept
+ln --relative.
 
-  http://autobuild.buildroot.net/results/2e147b60481cfb8960749a8e012ff8fa05568a2c/
+Revert the upstream commit, since the problem it was trying to fix is
+not applicable in the context of Buildroot (even with a merged /usr).
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Adam Duskett <Aduskett@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...les.c-define-EHWPOISON-when-not-available.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ package/libselinux/0003-revert-ln-relative.patch | 24 ++++++++++++++++++++++++
+ package/libsepol/0004-revert-ln-relative.patch   | 24 ++++++++++++++++++++++++
+ 2 files changed, 48 insertions(+)
 
-diff --git a/package/audit/0001-lib-gen_tables.c-define-EHWPOISON-when-not-available.patch b/package/audit/0001-lib-gen_tables.c-define-EHWPOISON-when-not-available.patch
+diff --git a/package/libselinux/0003-revert-ln-relative.patch b/package/libselinux/0003-revert-ln-relative.patch
 new file mode 100644
-index 0000000..8880d6c
+index 0000000..b8ad070
 --- /dev/null
-+++ b/package/audit/0001-lib-gen_tables.c-define-EHWPOISON-when-not-available.patch
-@@ -0,0 +1,44 @@
-+From ac10cdedd136689028223088ffca80b98c7bbaff Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 2 Jul 2016 10:33:34 +0200
-+Subject: [PATCH] lib/gen_tables.c: define EHWPOISON when not available
++++ b/package/libselinux/0003-revert-ln-relative.patch
+@@ -0,0 +1,24 @@
++Makefile: revert libselinux: use ln --relative to create .so symlinks
 +
-+When building on some old system with old kernel headers, the
-+gen_tables.c program (built natively) doesn't build due to missing
-+EHWPOISON. This commit defines EHWPOISON to the value found in
-+asm-generic kernel headers, which is correct for most (but not all
-+architectures).
++This reverts 71393a181d63c9baae5fe8dcaeb9411d1f253998
 +
-+Anyway, the whole concept of building a program on the host to generate
-+a table with errno values, then built into a target program is
-+inherently broken, so our fix is not more broken than the rest of the
-+mechanism used by audit.
++ln --relative is too recent to be available in all distributions,
++especially enterprise-grade distros that can stick around as long as
++they are maintained (up to 10 years in some cases?).
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ lib/gen_tables.c | 9 +++++++++
-+ 1 file changed, 9 insertions(+)
++For the sake of Buildroot, revert the upstream patch.
 +
-+diff --git a/lib/gen_tables.c b/lib/gen_tables.c
-+index 98f576c..d0bb7f5 100644
-+--- a/lib/gen_tables.c
-++++ b/lib/gen_tables.c
-+@@ -55,6 +55,15 @@
-+ #define SHMGET          23
-+ #define SHMCTL          24
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN a/src/Makefile b/src/Makefile
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -151,7 +151,7 @@
++ 	install -m 755 $(LIBSO) $(SHLIBDIR)
++ 	test -d $(LIBDIR)/pkgconfig || install -m 755 -d $(LIBDIR)/pkgconfig
++ 	install -m 644 $(LIBPC) $(LIBDIR)/pkgconfig
++-	ln -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
+++	cd $(LIBDIR) && ln -sf ../../`basename $(SHLIBDIR)`/$(LIBSO) $(TARGET)
 + 
-++/*
-++ * Values from asm-generic, might be different on other architectures,
-++ * but anyway the concept of building a program on the host to
-++ * generate errno related tables used on another architecture is
-++ * broken.
-++ */
-++#ifndef EHWPOISON
-++#define EHWPOISON	133
-++#endif
-+ 
-+ /* The ratio of table size to number of non-empty elements allowed for a
-+    "direct" s2i table; if the ratio would be bigger, bsearch tables are used
-+-- 
-+2.7.4
++ install-pywrap: pywrap
++ 	test -d $(PYLIBDIR)/site-packages/selinux || install -m 755 -d $(PYLIBDIR)/site-packages/selinux
+diff --git a/package/libsepol/0004-revert-ln-relative.patch b/package/libsepol/0004-revert-ln-relative.patch
+new file mode 100644
+index 0000000..0902d8d
+--- /dev/null
++++ b/package/libsepol/0004-revert-ln-relative.patch
+@@ -0,0 +1,24 @@
++Makefile: revert libsepol: use ln --relative to create .so symlinks
 +
++This reverts 71393a181d63c9baae5fe8dcaeb9411d1f253998
++
++ln --relative is too recent to be available in all distributions,
++especially enterprise-grade distros that can stick around as long as
++they are maintained (up to 10 years in some cases?).
++
++For the sake of Buildroot, revert the upstream patch.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN a/src/Makefile b/src/Makefile
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -77,7 +77,7 @@
++ ifeq ($(STATIC),)
++ 	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
++ 	install -m 755 $(LIBSO) $(SHLIBDIR)
++-	ln -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
+++	cd $(LIBDIR) && ln -sf ../../`basename $(SHLIBDIR)`/$(LIBSO) $(TARGET)
++ endif
++ 
++ relabel:
