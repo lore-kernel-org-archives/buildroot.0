@@ -1,79 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Jul 2016 13:15:25 +0200
-Subject: [Buildroot] [PATCH] package/wpa_supplicant: Add optional
- autoscan support
-In-Reply-To: <1467449764-4157-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1467449764-4157-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20160702111525.GM22343@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 Jul 2016 13:15:50 +0200
+Subject: [Buildroot] [git commit] package/busybox: support spaces in module
+	aliases in mdev
+Message-ID: <20160702111607.1697F818B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, all,
+commit: https://git.buildroot.net/buildroot/commit/?id=b4fc5a180c81689a982d5c595844331684c14f51
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-07-02 10:56 +0200, Maxime Hadjinlian spake thusly:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+The new change which enabled automatic module loading on boot does not handle
+the cases when module alias includes spaces. It prevents modules to be loaded
+since script fails:
 
-As seen IRL, it would have been a nice addition to explain that it does
-not conflict with the recently added bgscan.
+  % find /sys/ -name modalias | xargs sort -u
+  sort: /sys/devices/platform/Fixed: No such file or directory
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+First alias in question is "platform:Fixed MDIO bus".
 
-Regards,
-Yann E. MORIN.
+Amend the script to support above like cases.
 
-> ---
->  package/wpa_supplicant/Config.in         | 5 +++++
->  package/wpa_supplicant/wpa_supplicant.mk | 6 ++++++
->  2 files changed, 11 insertions(+)
-> 
-> diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-> index f4c4167..1920774 100644
-> --- a/package/wpa_supplicant/Config.in
-> +++ b/package/wpa_supplicant/Config.in
-> @@ -38,6 +38,11 @@ config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
->  	  making it bigger but dispensing the need for a separate hostapd
->  	  binary in some applications hence being smaller overall.
->  
-> +config BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN
-> +	bool "Enable autoscan"
-> +	help
-> +	  Enable support for the autoscan feature (allow periodic scan)
-> +
->  config BR2_PACKAGE_WPA_SUPPLICANT_EAP
->  	bool "Enable EAP"
->  	help
-> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-> index 21bbd3e..d1d59f7 100644
-> --- a/package/wpa_supplicant/wpa_supplicant.mk
-> +++ b/package/wpa_supplicant/wpa_supplicant.mk
-> @@ -68,6 +68,12 @@ WPA_SUPPLICANT_CONFIG_ENABLE += \
->  	CONFIG_P2P
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN),y)
-> +WPA_SUPPLICANT_CONFIG_ENABLE += \
-> +	CONFIG_AUTOSCAN_EXPONENTIAL \
-> +	CONFIG_AUTOSCAN_PERIODIC
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),y)
->  WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WPS
->  endif
-> -- 
-> 2.8.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fixes: 07f46c2b6dae ("package/busybox: support automatic module loading with mdev")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/busybox/S10mdev | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
+index 4cb31de..63ca955 100644
+--- a/package/busybox/S10mdev
++++ b/package/busybox/S10mdev
+@@ -9,7 +9,7 @@ case "$1" in
+ 	echo /sbin/mdev >/proc/sys/kernel/hotplug
+ 	/sbin/mdev -s
+ 	# coldplug modules
+-	find /sys/ -name modalias | xargs sort -u | xargs modprobe -abq
++	find /sys/ -name modalias -print0 | xargs -0 sort -u -z | xargs -0 modprobe -abq
+ 	;;
+   stop)
+ 	;;
