@@ -1,39 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 16:47:38 +0200
-Subject: [Buildroot] [PATCH v4 2/7] package/ffmpeg: bump to version 3.1.1
-In-Reply-To: <E1bJM6V-0004mv-DY@fli4l.lan.fli4l>
-References: <1467466339-19422-1-git-send-email-bernd.kuhls@t-online.de>
- <1467466339-19422-2-git-send-email-bernd.kuhls@t-online.de>
- <20160702153815.58f45f35@free-electrons.com>
- <E1bJM6V-0004mv-DY@fli4l.lan.fli4l>
-Message-ID: <20160702164738.069ebb30@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 Jul 2016 16:48:08 +0200
+Subject: [Buildroot] [PATCH 2/3] cmake: add documentation about how it
+ is built
+In-Reply-To: <1467388410-28135-3-git-send-email-luca@lucaceresoli.net>
+References: <1467388410-28135-1-git-send-email-luca@lucaceresoli.net>
+ <1467388410-28135-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20160702144807.GO22343@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Luca, All,
 
-On Sat, 02 Jul 2016 16:41:07 +0200, Bernd Kuhls wrote:
-
-> the next Kodi bump will require ffmpeg 3, but this will be several months 
-> away. As usual I am posting parts of my Kodi patch series which can be used 
-> today to reduce the amount of patches for review.
+On 2016-07-01 17:53 +0200, Luca Ceresoli spake thusly:
+> Commit 7b17bafc5d7948aff3059e058ada80ad1fc50500 by Davide Viti has a
+> detailed explanation of some unusual techniques used for building
+> host-cmake and (target-)cmake. This is useful information for whoever
+> starts hacking on it, so copy it in the makefile, where it will be
+> easily noticed.
 > 
-> For details please read
-> http://lists.busybox.net/pipermail/buildroot/2016-July/165924.html
+> Also remove the sentence about host-cmake having a runtime dependency
+> on host-pkgconfig (not true anymore: it's the specific cmake-packages
+> that depend on it) and fix typos.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Cc: Davide Viti <zinosat@tiscali.it>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-OK. Since Kodi 17 will not be released before several months, I would
-suggest for now to keep the ffmpeg 3.x bump on the side, and see if the
-VLC people finally release their 3.x version. If they don't and we see
-the Kodi 17 release date approaching, then we will take your bump, and
-use a Git version for VLC.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-How does that sound?
+Regards,
+Yann E. MORIN.
 
-Thomas
+> ---
+>  package/cmake/cmake.mk | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+> index 33fb4aa..d734e03 100644
+> --- a/package/cmake/cmake.mk
+> +++ b/package/cmake/cmake.mk
+> @@ -10,6 +10,18 @@ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+>  CMAKE_LICENSE = BSD-3c
+>  CMAKE_LICENSE_FILES = Copyright.txt
+>  
+> +# CMake is a particular package:
+> +# * CMake can be built using the generic infrastructure or the cmake one.
+> +#   Since Buildroot has no requirement regarding the host system cmake
+> +#   program presence, it uses the generic infrastructure to build the
+> +#   host-cmake package, then the (target-)cmake package can be built
+> +#   using the cmake infrastructure;
+> +# * CMake bundles its dependencies within its sources. This is the
+> +#   reason why the host-cmake package has no dependencies:, whereas
+> +#   the (target-)cmake package has a lot of dependencies, using only
+> +#   the system-wide libraries instead of rebuilding and statically
+> +#   linking with the ones bundled into the CMake sources.
+> +
+>  HOST_CMAKE_DEPENDENCIES =
+>  CMAKE_DEPENDENCIES = zlib jsoncpp libcurl libarchive expat bzip2 xz
+>  
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
