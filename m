@@ -1,10 +1,10 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Sun,  3 Jul 2016 00:20:53 +0200
-Subject: [Buildroot] [PATCH 24/69] libsepol: add explicit dependencies for
-	host variant
+Date: Sun,  3 Jul 2016 00:20:55 +0200
+Subject: [Buildroot] [PATCH 26/69] libusb-compat: add explicit dependencies
+	for host variant
 In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467498098-23731-25-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467498098-23731-27-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/libsepol/libsepol.mk | 1 +
+ package/libusb-compat/libusb-compat.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index c53707a161cc..3b02175f7905 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
-@@ -11,6 +11,7 @@ LIBSEPOL_LICENSE_FILES = COPYING
- 
- LIBSEPOL_INSTALL_STAGING = YES
- LIBSEPOL_DEPENDENCIES = host-flex
-+HOST_LIBSEPOL_DEPENDENCIES = host-flex
- 
- LIBSEPOL_MAKE_FLAGS = $(TARGET_CONFIGURE_OPTS)
- 
+diff --git a/package/libusb-compat/libusb-compat.mk b/package/libusb-compat/libusb-compat.mk
+index a98eb0924f72..26107be86192 100644
+--- a/package/libusb-compat/libusb-compat.mk
++++ b/package/libusb-compat/libusb-compat.mk
+@@ -9,6 +9,7 @@ LIBUSB_COMPAT_VERSION = $(LIBUSB_COMPAT_VERSION_MAJOR).5
+ LIBUSB_COMPAT_SOURCE = libusb-compat-$(LIBUSB_COMPAT_VERSION).tar.bz2
+ LIBUSB_COMPAT_SITE = http://downloads.sourceforge.net/project/libusb/libusb-compat-$(LIBUSB_COMPAT_VERSION_MAJOR)/libusb-compat-$(LIBUSB_COMPAT_VERSION)
+ LIBUSB_COMPAT_DEPENDENCIES = host-pkgconf libusb
++HOST_LIBUSB_COMPAT_DEPENDENCIES = host-pkgconf host-libusb
+ LIBUSB_COMPAT_INSTALL_STAGING = YES
+ LIBUSB_COMPAT_CONFIG_SCRIPTS = libusb-config
+ LIBUSB_COMPAT_LICENSE = LGPLv2.1+
 -- 
 2.1.0
