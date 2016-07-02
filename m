@@ -1,67 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 16:04:25 +0200
-Subject: [Buildroot] [PATCH] dmalloc: fix static build
-In-Reply-To: <20160613060717.GA8502@waldemar-brodkorb.de>
-References: <20160613060717.GA8502@waldemar-brodkorb.de>
-Message-ID: <20160702160425.58b463bf@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 02 Jul 2016 16:08:01 +0200
+Subject: [Buildroot] [PATCH v4 4/7] package/ffmpeg: default to
+	--cpu=generic for MIPS architecture
+In-Reply-To: <1467466339-19422-4-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sat, 2 Jul 2016 15:32:16 +0200")
+References: <1467466339-19422-1-git-send-email-bernd.kuhls@t-online.de>
+ <1467466339-19422-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87furs6sla.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On Mon, 13 Jun 2016 08:07:17 +0200, Waldemar Brodkorb wrote:
-> For example coldfire uses FLAT binaries, which are statically
-> build. Fixes following autobuild failure:
-> http://autobuild.buildroot.net/results/cc4233a4c3f92275a4071c172330c920c35219ca/
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/dmalloc/dmalloc.mk | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
-> index 6eb87c6..18a6fa0 100644
-> --- a/package/dmalloc/dmalloc.mk
-> +++ b/package/dmalloc/dmalloc.mk
-> @@ -58,11 +58,15 @@ define DMALLOC_INSTALL_STAGING_CMDS
->  		-C $(@D) install
->  endef
->  
-> -define DMALLOC_INSTALL_TARGET_CMDS
->  ifeq ($(BR2_STATIC_LIBS),)
-> +define DMALLOC_INSTALL_TARGET_CMDS
->  	cp -dpf $(STAGING_DIR)/usr/lib/libdmalloc*.so $(TARGET_DIR)/usr/lib
-> -endif
->  	cp -dpf $(STAGING_DIR)/usr/bin/dmalloc $(TARGET_DIR)/usr/bin/dmalloc
->  endef
-> +else
-> +define DMALLOC_INSTALL_TARGET_CMDS
-> +	cp -dpf $(STAGING_DIR)/usr/bin/dmalloc $(TARGET_DIR)/usr/bin/dmalloc
-> +endef
-> +endif
+ > From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > This option is needed to prevent this message from configure:
 
-Instead of duplicating the code that installs the program, I've created
-a temporary variable that does the library installation, and which only
-gets defined if BR2_STATIC_LIBS is empty:
+ > WARNING: unknown CPU. Disabling all MIPS optimizations.
 
-ifeq ($(BR2_STATIC_LIBS),)
-define DMALLOC_INSTALL_SHARED_LIB
-        cp -dpf $(STAGING_DIR)/usr/lib/libdmalloc*.so $(TARGET_DIR)/usr/lib
-endef
-endif
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ > v4: no changes
+ > v3: no changes
+ > v2: no changes
 
-define DMALLOC_INSTALL_TARGET_CMDS
-        $(DMALLOC_INSTALL_SHARED_LIB)
-        cp -dpf $(STAGING_DIR)/usr/bin/dmalloc $(TARGET_DIR)/usr/bin/dmalloc
-endef
+ >  package/ffmpeg/ffmpeg.mk | 5 +++++
+ >  1 file changed, 5 insertions(+)
 
-Applied with this modification. Thanks!
+ > diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+ > index 08914b8..418893f 100644
+ > --- a/package/ffmpeg/ffmpeg.mk
+ > +++ b/package/ffmpeg/ffmpeg.mk
+ > @@ -445,6 +445,11 @@ else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
+ >  FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
+ >  endif
+ 
+ > +# Default to --cpu=generic for MIPS architecture
+ > +ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
+ > +FFMPEG_CONF_OPTS += --cpu=generic
+ > +endif
 
-Thomas
+This is not really about "defaulting" to it, as the logic really
+enforces it. From looking at the upstream configure script passing this
+means that we explicitly need to pass --enable/--disable for the MIPS
+sub options:
+
+https://github.com/FFmpeg/FFmpeg/blob/master/configure#L4406
+
+> +
+ >  FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+ 
+ >  # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
+ > -- 
+ > 2.8.1
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
