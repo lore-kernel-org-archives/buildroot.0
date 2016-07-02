@@ -1,89 +1,85 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  3 Jul 2016 00:18:11 +0200
-Subject: [Buildroot] [PATCH 1/3] libminiupnpc: New package
-Message-ID: <1467497893-16126-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun,  3 Jul 2016 00:18:13 +0200
+Subject: [Buildroot] [PATCH 3/3] package/transmission: add optional support
+	for libminiupnpc/libnatpmp
+In-Reply-To: <1467497893-16126-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1467497893-16126-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1467497893-16126-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Transmission bundles copies of both libraries and uses them if they are
+not provided by the system. This patch allows transmission to use the
+system libraries of libminiupnpc/libnatpmp.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                      |  1 +
- package/libminiupnpc/Config.in         | 20 ++++++++++++++++++++
- package/libminiupnpc/libminiupnpc.hash |  2 ++
- package/libminiupnpc/libminiupnpc.mk   | 14 ++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/libminiupnpc/Config.in
- create mode 100644 package/libminiupnpc/libminiupnpc.hash
- create mode 100644 package/libminiupnpc/libminiupnpc.mk
+ package/transmission/0003-miniupnpc-cross.patch | 31 +++++++++++++++++++++++++
+ package/transmission/transmission.mk            | 11 +++++++++
+ 2 files changed, 42 insertions(+)
+ create mode 100644 package/transmission/0003-miniupnpc-cross.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index d55fa69..cfa26ee 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1179,6 +1179,7 @@ menu "Networking"
- 	source "package/libmbus/Config.in"
- 	source "package/libmemcached/Config.in"
- 	source "package/libmicrohttpd/Config.in"
-+	source "package/libminiupnpc/Config.in"
- 	source "package/libmnl/Config.in"
- 	source "package/libmodbus/Config.in"
- 	source "package/libndp/Config.in"
-diff --git a/package/libminiupnpc/Config.in b/package/libminiupnpc/Config.in
+diff --git a/package/transmission/0003-miniupnpc-cross.patch b/package/transmission/0003-miniupnpc-cross.patch
 new file mode 100644
-index 0000000..9c6459c
+index 0000000..5037c2e
 --- /dev/null
-+++ b/package/libminiupnpc/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_LIBMINIUPNPC
-+	bool "libminiupnpc"
-+	depends on !BR2_BINFMT_FLAT
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  The UPnP protocol is supported by most home adsl/cable routers
-+	  and Microsoft Windows 2K/XP. The aim of the MiniUPnP project is
-+	  to bring a free software solution to support the "Internet
-+	  Gateway Device" part of the protocol.
++++ b/package/transmission/0003-miniupnpc-cross.patch
+@@ -0,0 +1,31 @@
++Fix libminiupnpc version detection
 +
-+	  Miniupnpc aims at the simplest library possible, with the
-+	  smallest footprint and no dependencies to other libraries such
-+	  as XML parsers or HTTP implementations. All the code is pure
-+	  ANSI C.
++Problem is known upstream: https://trac.transmissionbt.com/ticket/6140
 +
-+	  http://miniupnp.free.fr
++For buildroot we know the libminiupnpc version so we hard-code 2.0.
 +
-+comment "libminiupnpc needs a toolchain dynamic library"
-+	depends on BR2_STATIC_LIBS
-+	depends on !BR2_BINFMT_FLAT
-diff --git a/package/libminiupnpc/libminiupnpc.hash b/package/libminiupnpc/libminiupnpc.hash
-new file mode 100644
-index 0000000..985d69d
---- /dev/null
-+++ b/package/libminiupnpc/libminiupnpc.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 d434ceb8986efbe199c5ca53f90ed53eab290b1e6d0530b717eb6fa49d61f93b  miniupnpc-2.0.tar.gz
-diff --git a/package/libminiupnpc/libminiupnpc.mk b/package/libminiupnpc/libminiupnpc.mk
-new file mode 100644
-index 0000000..0eb7cf6
---- /dev/null
-+++ b/package/libminiupnpc/libminiupnpc.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# libminiupnpc
-+#
-+################################################################################
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+LIBMINIUPNPC_VERSION = 2.0
-+LIBMINIUPNPC_SOURCE = miniupnpc-$(LIBMINIUPNPC_VERSION).tar.gz
-+LIBMINIUPNPC_SITE = http://miniupnp.free.fr/files
-+LIBMINIUPNPC_INSTALL_STAGING = YES
-+LIBMINIUPNPC_LICENSE = BSD-3c
-+LIBMINIUPNPC_LICENSE_FILES = LICENSE
++diff -uNr transmission-2.92.org/configure.ac transmission-2.92/configure.ac
++--- transmission-2.92.org/configure.ac	2016-03-06 21:23:45.336198393 +0100
+++++ transmission-2.92/configure.ac	2016-07-02 21:48:13.452385686 +0200
++@@ -386,18 +386,7 @@
++ dnl MINIUPNPC_API_VERSION and we won't have to figure
++ dnl it out on our own
++ if test "x$upnp_version" = "xunknown" ; then
++-  AC_RUN_IFELSE(
++-    [AC_LANG_PROGRAM(
++-      [#include <stdlib.h>
++-       #include <miniupnpc/miniupnpc.h>],
++-      [#ifdef MINIUPNPC_API_VERSION
++-       return EXIT_SUCCESS;
++-       #else
++-       return EXIT_FAILURE;
++-       #endif]
++-    )],
++-    [upnp_version=">= 1.7"]
++-  )
+++  upnp_version="2.0"
++ fi
++ 
++ dnl Or maybe it's miniupnp 1.6
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index c8d3773..e0cfc2d 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -21,6 +21,17 @@ TRANSMISSION_CONF_OPTS = \
+ TRANSMISSION_LICENSE = GPLv2 or GPLv3 with OpenSSL exception
+ TRANSMISSION_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_LIBMINIUPNPC),y)
++TRANSMISSION_DEPENDENCIES += libminiupnpc
++endif
 +
-+$(eval $(cmake-package))
++ifeq ($(BR2_PACKAGE_LIBNATPMP),y)
++TRANSMISSION_DEPENDENCIES += libnatpmp
++TRANSMISSION_CONF_OPTS += --enable-external-natpmp
++else
++TRANSMISSION_CONF_OPTS += --disable-external-natpmp
++endif
++
+ ifeq ($(BR2_PACKAGE_TRANSMISSION_UTP),y)
+ TRANSMISSION_CONF_OPTS += --enable-utp
+ else
 -- 
 2.8.1
