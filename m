@@ -1,7 +1,7 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat,  2 Jul 2016 10:47:58 +0200
-Subject: [Buildroot] [PATCH] dante: New package
-Message-ID: <1467449278-3166-1-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Sat,  2 Jul 2016 10:51:13 +0200
+Subject: [Buildroot] [PATCH] qt_eventdispatcher_libevent: New package
+Message-ID: <1467449473-3454-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,158 +10,116 @@ To: buildroot@busybox.net
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/Config.in           |  1 +
- package/dante/Config.in     |  9 +++++++++
- package/dante/S50dante      | 40 ++++++++++++++++++++++++++++++++++++++++
- package/dante/dante.hash    |  2 ++
- package/dante/dante.mk      | 32 ++++++++++++++++++++++++++++++++
- package/dante/dante.service | 15 +++++++++++++++
- 6 files changed, 99 insertions(+)
- create mode 100644 package/dante/Config.in
- create mode 100644 package/dante/S50dante
- create mode 100644 package/dante/dante.hash
- create mode 100644 package/dante/dante.mk
- create mode 100644 package/dante/dante.service
+ package/Config.in                                  |  1 +
+ .../0001-build.pro-Remove-tests.patch              | 26 +++++++++++++++
+ package/qt_eventdispatcher_libevent/Config.in      |  7 ++++
+ .../qt_eventdispatcher_libevent.mk                 | 39 ++++++++++++++++++++++
+ 4 files changed, 73 insertions(+)
+ create mode 100644 package/qt_eventdispatcher_libevent/0001-build.pro-Remove-tests.patch
+ create mode 100644 package/qt_eventdispatcher_libevent/Config.in
+ create mode 100644 package/qt_eventdispatcher_libevent/qt_eventdispatcher_libevent.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 5779d04..0840ef2 100644
+index 5779d04..99a4370 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1416,6 +1416,7 @@ menu "Networking applications"
- 	source "package/crda/Config.in"
- 	source "package/ctorrent/Config.in"
- 	source "package/cups/Config.in"
-+	source "package/dante/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/dhcp/Config.in"
- endif
-diff --git a/package/dante/Config.in b/package/dante/Config.in
+@@ -289,6 +289,7 @@ comment "QT libraries and helper libraries"
+ 	source "package/grantlee/Config.in"
+ 	source "package/qextserialport/Config.in"
+ 	source "package/qjson/Config.in"
++	source "package/qt_eventdispatcher_libevent/Config.in"
+ 	source "package/qtuio/Config.in"
+ 	source "package/quazip/Config.in"
+ 	source "package/qwt/Config.in"
+diff --git a/package/qt_eventdispatcher_libevent/0001-build.pro-Remove-tests.patch b/package/qt_eventdispatcher_libevent/0001-build.pro-Remove-tests.patch
 new file mode 100644
-index 0000000..4aa30bc
+index 0000000..20875f2
 --- /dev/null
-+++ b/package/dante/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_DANTE
-+	bool "dante"
++++ b/package/qt_eventdispatcher_libevent/0001-build.pro-Remove-tests.patch
+@@ -0,0 +1,26 @@
++From d9d861e4685d9822cafb68e512b57d1e43403f82 Mon Sep 17 00:00:00 2001
++From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
++Date: Wed, 18 Nov 2015 19:51:00 +0100
++Subject: [PATCH] build.pro: Remove tests
++
++The tests are in a git submodules which we won't clone, so don't try to
++build them.
++---
++ build.pro | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/build.pro b/build.pro
++index f5f0400..685617f 100644
++--- a/build.pro
+++++ b/build.pro
++@@ -1,7 +1,6 @@
++ TEMPLATE = subdirs
++ CONFIG  += ordered
++
++-SUBDIRS = src tests
+++SUBDIRS = src
++
++ src.file   = src/eventdispatcher_libevent.pro
++-tests.file = tests/qt_eventdispatcher_tests/build.pro
++--
++2.6.2
+diff --git a/package/qt_eventdispatcher_libevent/Config.in b/package/qt_eventdispatcher_libevent/Config.in
+new file mode 100644
+index 0000000..a30f061
+--- /dev/null
++++ b/package/qt_eventdispatcher_libevent/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_QT_EVENTDISPATCHER_LIBEVENT
++	bool "qt_eventdispatcher_libevent"
++	select BR2_PACKAGE_LIBEVENT
 +	help
-+	  Dante is a product developed by Inferno Nettverk A/S. It consists of a
-+	  SOCKS server and a SOCKS client, implementing RFC 1928 and related
-+	  standards. It is a flexible product that can be used to provide
-+	  convenient and secure network connectivity.
++	  libevent-based event dispatcher for Qt
 +
-+	  http://www.inet.no/dante/
-diff --git a/package/dante/S50dante b/package/dante/S50dante
++	  https://github.com/sjinks/qt_eventdispatcher_libevent
+diff --git a/package/qt_eventdispatcher_libevent/qt_eventdispatcher_libevent.mk b/package/qt_eventdispatcher_libevent/qt_eventdispatcher_libevent.mk
 new file mode 100644
-index 0000000..3613991
+index 0000000..fda0bc0
 --- /dev/null
-+++ b/package/dante/S50dante
-@@ -0,0 +1,40 @@
-+#!/bin/sh
-+#
-+# Starts dante
-+#
-+
-+# Allow a few customizations from a config file
-+test -r /etc/default/dante && . /etc/default/dante
-+
-+start() {
-+	printf "Starting dante: "
-+	start-stop-daemon -S -q -p /run/dante.pid \
-+		--exec /usr/sbin/dante -- $DAEMON_ARGS
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+stop() {
-+	printf "Stopping dante: "
-+	start-stop-daemon -K -q -p /run/dante.pid
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+  start)
-+	start
-+	;;
-+  stop)
-+	stop
-+	;;
-+  restart|reload)
-+	restart
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/dante/dante.hash b/package/dante/dante.hash
-new file mode 100644
-index 0000000..38dea61
---- /dev/null
-+++ b/package/dante/dante.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	b6d232bd6fefc87d14bf97e447e4fcdeef4b28b16b048d804b50b48f261c4f53	dante-1.4.1.tar.gz
-diff --git a/package/dante/dante.mk b/package/dante/dante.mk
-new file mode 100644
-index 0000000..3aa04b4
---- /dev/null
-+++ b/package/dante/dante.mk
-@@ -0,0 +1,32 @@
++++ b/package/qt_eventdispatcher_libevent/qt_eventdispatcher_libevent.mk
+@@ -0,0 +1,39 @@
 +################################################################################
 +#
-+# dante
++# qt_eventdispatcher_libevent
 +#
 +################################################################################
 +
-+DANTE_VERSION = 1.4.1
-+DANTE_SITE = http://www.inet.no/dante/files
-+DANTE_LICENSE = BSD-3c
-+DANTE_LICENSE_FILES = LICENSE
++QT_EVENTDISPATCHER_LIBEVENT_VERSION = 8798b269654730fa179132ad9a44deedd81bb6b6
++QT_EVENTDISPATCHER_LIBEVENT_SITE = $(call github,sjinks,qt_eventdispatcher_libevent,$(QT_EVENTDISPATCHER_LIBEVENT_VERSION))
++QT_EVENTDISPATCHER_LIBEVENT_INSTALL_STAGING = YES
++QT_EVENTDISPATCHER_LIBEVENT_LICENSE = MIT
++QT_EVENTDISPATCHER_LIBEVENT_LICENSE_FILES = LICENSE
++QT_EVENTDISPATCHER_LIBEVENT_DEPENDENCIES = \
++	libevent \
++	$(if $(BR2_PACKAGE_QT),qt) \
++	$(if $(BR2_PACKAGE_QT5),qt5base)
 +
-+# Dante uses a *VERY* old configure.ac
-+DANTE_LIBTOOL_PATCH = NO
-+DANTE_INSTALL_STAGING = YES
-+
-+DANTE_CONF_OPTS += --disable-client --disable-preload
-+
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+	DANTE_CONF_OPTS += --enable-debug
++ifeq ($(BR2_PACKAGE_QT5),y)
++QT_EVENTDISPATCHER_LIBEVENT_QMAKE = $(QT5_QMAKE)
++else
++QT_EVENTDISPATCHER_LIBEVENT_QMAKE = $(QT_QMAKE)
 +endif
 +
-+define DANTE_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/dante/dante.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/dante.service
++define QT_EVENTDISPATCHER_LIBEVENT_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(QT_EVENTDISPATCHER_LIBEVENT_QMAKE) PREFIX=/usr)
 +endef
 +
-+define DANTE_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/dante/S50dante \
-+		$(TARGET_DIR)/etc/init.d/S50dante
++define QT_EVENTDISPATCHER_LIBEVENT_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 +endef
 +
-+$(eval $(autotools-package))
-diff --git a/package/dante/dante.service b/package/dante/dante.service
-new file mode 100644
-index 0000000..b783cee
---- /dev/null
-+++ b/package/dante/dante.service
-@@ -0,0 +1,15 @@
-+[Unit]
-+Description=SOCKS v4 and v5 compatible proxy server and client
-+Requires=network.target
-+After=network.target
++define QT_EVENTDISPATCHER_LIBEVENT_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)
++endef
 +
-+[Service]
-+Type=forking
-+EnvironmentFile=-/etc/default/dante
-+PIDFile=/run/dante.pid
-+ExecStart=/usr/sbin/sockd -D -p /run/dante.pid $DAEMON_ARGS
-+ExecReload=/bin/kill -HUP $MAINPID
-+Restart=always
++define QT_EVENTDISPATCHER_LIBEVENT_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
++endef
 +
-+[Install]
-+WantedBy=multi-user.target
++$(eval $(generic-package))
 -- 
 2.8.1
