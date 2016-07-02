@@ -1,62 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 15:42:00 +0200
-Subject: [Buildroot] [git commit] package/libdvdread: fix static compile by
-	adding libdvdcss as dependency
-Message-ID: <20160702134212.BB51E81999@busybox.osuosl.org>
+Date: Sat, 2 Jul 2016 15:42:16 +0200
+Subject: [Buildroot] [git commit] fftw: Disable combined threads when
+	building with OpenMP support
+Message-ID: <20160702134336.3D9CA81999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7dd1b8ad113b56cac164df50f521e0684263624
+commit: https://git.buildroot.net/buildroot/commit/?id=0f163c819c4d8ee76c317ce45e71c9267bae28c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If libdvdcss support was not found during configure libdvdread tries
-to open libdvdcss.so nonetheless:
-https://code.videolan.org/videolan/libdvdread/blob/master/src/dvd_input.c#L275
+Otherwise fftw fails to configure:
+configure: error: --with-combined-threads incompatible with --enable-openmp
 
-This will obviously fail in a static-only configuration. To fix the
-problem add libdvdcss as hard dependency to this package.
-
-Fixes
-http://autobuild.buildroot.net/results/415/41534b70a66c6297652f0944f9ecc7e780b26c45/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: replace += by =.]
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libdvdread/Config.in     | 1 +
- package/libdvdread/libdvdread.mk | 9 ++-------
- 2 files changed, 3 insertions(+), 7 deletions(-)
+ package/fftw/fftw.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libdvdread/Config.in b/package/libdvdread/Config.in
-index dea59eb..91bec83 100644
---- a/package/libdvdread/Config.in
-+++ b/package/libdvdread/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBDVDREAD
- 	bool "libdvdread"
-+	select BR2_PACKAGE_LIBDVDCSS
- 	help
- 	  libdvdread provides a simple foundation for reading
- 	  DVD-Video images.
-diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
-index b8541fa..c92eca5 100644
---- a/package/libdvdread/libdvdread.mk
-+++ b/package/libdvdread/libdvdread.mk
-@@ -10,12 +10,7 @@ LIBDVDREAD_SITE = http://www.videolan.org/pub/videolan/libdvdread/$(LIBDVDREAD_V
- LIBDVDREAD_INSTALL_STAGING = YES
- LIBDVDREAD_LICENSE = GPLv2+
- LIBDVDREAD_LICENSE_FILES = COPYING
--
--ifeq ($(BR2_PACKAGE_LIBDVDCSS),y)
--LIBDVDREAD_CONF_OPTS += --with-libdvdcss
--LIBDVDREAD_DEPENDENCIES += libdvdcss
--else
--LIBDVDREAD_CONF_OPTS += --without-libdvdcss
--endif
-+LIBDVDREAD_CONF_OPTS = --with-libdvdcss
-+LIBDVDREAD_DEPENDENCIES = libdvdcss
+diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+index 5045ab6..e89671f 100644
+--- a/package/fftw/fftw.mk
++++ b/package/fftw/fftw.mk
+@@ -31,7 +31,8 @@ FFTW_CFLAGS += $(if $(BR2_PACKAGE_FFTW_USE_NEON),-mfpu=neon)
  
- $(eval $(autotools-package))
+ # Generic optimisations
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-FFTW_CONF_OPTS += --enable-threads --with-combined-threads
++FFTW_CONF_OPTS += --enable-threads
++FFTW_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--without,--with)-combined-threads
+ else
+ FFTW_CONF_OPTS += --disable-threads
+ endif
