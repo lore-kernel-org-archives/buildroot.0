@@ -1,36 +1,73 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  2 Jul 2016 12:05:08 +0200
-Subject: [Buildroot] [autobuild-script] autobuild-run: remove the CS SH4
-	toolchain exception
-Message-ID: <1467453908-27165-1-git-send-email-romain.naour@smile.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 2 Jul 2016 12:05:03 +0200
+Subject: [Buildroot] [PATCH 00/24] Drop unused host packages
+In-Reply-To: <CAHfJR7hEoGKgCjiY-5FP2PsyGPTwj=-EBNbk5Fc_E8kHg7Fn5A@mail.gmail.com>
+References: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
+ <20160629155233.510c456e@free-electrons.com>
+ <CAHfJR7h01DTkHetP0W196NbmeHCNZZjw6Ju-D9uP3pA6+A1gNw@mail.gmail.com>
+ <20160629161137.5b5a13b3@free-electrons.com>
+ <CAHfJR7iZpPnpVB0NqQPCEvYU7myCsdW2x=m5aoi1KGZk0p_MTg@mail.gmail.com>
+ <20160629164336.67a86168@free-electrons.com>
+ <CAAEAJfAjU1Rgz1hzbyOjDErsQ3L38suBKxh74n6+eNNPUThqdw@mail.gmail.com>
+ <CAHfJR7hEoGKgCjiY-5FP2PsyGPTwj=-EBNbk5Fc_E8kHg7Fn5A@mail.gmail.com>
+Message-ID: <1d89f164-4eb7-c4a3-d933-7c795a0e05e2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209 has been renamed
-in Buildroot and PRBOOM has been disabled for this toolchain.
-The exception can be safely be removed.
+On 30-06-16 15:01, Julien Floret wrote:
+> 2016-06-29 23:53 GMT+02:00 Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>:
+>> On 29 June 2016 at 11:43, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>> [..]
+>>>
+>>>  */ Host packages that are not used by other packages in Buildroot, but
+>>>     might be used by private, company/project-specific packages. I
+>>>     don't like this situation, because there is really no way these
+>>>     host packages will ever be built/tested. But I'm not sure what to
+>>>     do about these: adding an entry in menuconfig is a bit weird since
+>>>     they are not really needed for anything else but a build dependency.
+>>>
+>>
+>> I guess we could argue that if company/project is willing to maintain some
+>> private package(s), then they are willing to maintain its dependencies,
+>> incluing host package(s) and carry the whole bunch out of tree.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- scripts/autobuild-run | 3 ---
- 1 file changed, 3 deletions(-)
+ I would agree with this.
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 1fbf482..7f90eb2 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -448,9 +448,6 @@ def fixup_config(**kwargs):
-     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
-        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
-         return False
--    if 'BR2_PACKAGE_PRBOOM=y\n' in configlines and \
--            'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209=y\n' in configlines:
--        return False
-     if 'BR2_sh2a=y\n' in configlines and  'BR2_PACKAGE_LIBFFI=y\n' in configlines:
-         return False
-     if 'BR2_PACKAGE_SUNXI_BOARDS=y\n' in configlines:
+>> --
+>> Ezequiel Garc?a, VanguardiaSur
+>> www.vanguardiasur.com.ar
+> 
+> Then maybe the best approach would be to add Kconfig options for
+> all host packages, similarly to target packages - blind options for build
+> dependencies that get selected automatically by other packages, and
+> explicit options for host packages that are unreachable in upstream
+> buildroot - to allow testing their build and keep track of them?
+
+ And I agree with this as well.
+
+ That said, I'm less opposed to adding Config.in.host options for random
+packages than some other people here.
+
+
+> 
+> Besides, having Kconfig options for all host packages would open the way
+> to including only the .mk files of selected packages, to speed up the
+> makefile parsing.
+> Maybe it could be handy for other things, too?
+
+ IIRC it was also needed to get per-package staging completely correct. And it
+would allow to simplify the construction of the list of packages. Things like
+ALL_DEPENDENCIES wouldn't be needed anymore.
+
+
 -- 
-2.5.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
