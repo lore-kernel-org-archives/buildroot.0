@@ -1,89 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  2 Jul 2016 09:47:15 +0200
-Subject: [Buildroot] [PATCH] package/libsepol|libselinux: fix build on
-	ancient distros
-Message-ID: <1467445635-31782-1-git-send-email-yann.morin.1998@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 2 Jul 2016 10:36:15 +0200
+Subject: [Buildroot] [PATCH v2 10/15] toolchain/toolchain-external:
+ enable fortran check when it is selected
+In-Reply-To: <20160701232044.19aa733c@free-electrons.com>
+References: <20160701162920.19632-1-s.martin49@gmail.com>
+ <20160701162920.19632-11-s.martin49@gmail.com>
+ <20160701232044.19aa733c@free-electrons.com>
+Message-ID: <CAHXCMMJk-RyhVx=8sJOac-G2Y658UFKBFrqjT_JVNpCE-J=uTQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ancient distros (especially enterprise-grade still in use) do not accept
-ln --relative.
+On Fri, Jul 1, 2016 at 11:20 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Fri,  1 Jul 2016 18:29:15 +0200, Samuel Martin wrote:
+>
+>>  ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
+>> @@ -529,6 +530,10 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
+>>       if test "$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
+>>               $(call check_cplusplus,$(TOOLCHAIN_EXTERNAL_CXX)) ; \
+>>       fi ; \
+>> +     if test "$(BR2_TOOLCHAIN_HAS_FORTRAN)" = "y" ; then \
+>> +             $(call check_fortran,\
+>> +                     "$(TOOLCHAIN_EXTERNAL_FC) $(TOOLCHAIN_EXTERNAL_CFLAGS)") ; \
+>
+> Why are you passing TOOLCHAIN_EXTERNAL_CFLAGS for the fortran compiler
+> check, while we are not using them for the C++ compiler check ?
 
-Revert the upstream commit, since the problem it was trying to fix is
-not applicable in the cntext of Buildroot (even with a merged /usr).
+Well, no real reason to do this indeed... only gfortran is supposed to
+support gcc option, so it should be harmless.
+Anyway, I drop them.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Adam Duskett <Aduskett@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libselinux/0003-revert-ln-relative.patch | 24 ++++++++++++++++++++++++
- package/libsepol/0004-revert-ln-relative.patch   | 24 ++++++++++++++++++++++++
- 2 files changed, 48 insertions(+)
- create mode 100644 package/libselinux/0003-revert-ln-relative.patch
- create mode 100644 package/libsepol/0004-revert-ln-relative.patch
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-diff --git a/package/libselinux/0003-revert-ln-relative.patch b/package/libselinux/0003-revert-ln-relative.patch
-new file mode 100644
-index 0000000..b8ad070
---- /dev/null
-+++ b/package/libselinux/0003-revert-ln-relative.patch
-@@ -0,0 +1,24 @@
-+Makefile: revert libselinux: use ln --relative to create .so symlinks
-+
-+This reverts 71393a181d63c9baae5fe8dcaeb9411d1f253998
-+
-+ln --relative is too recent to be available in all distributions,
-+especially enterprise-grade distros that can stick around as long as
-+they are maintained (up to 10 years in some cases?).
-+
-+For the sake of Buildroot, revert the upstream patch.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN a/src/Makefile b/src/Makefile
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -151,7 +151,7 @@
-+ 	install -m 755 $(LIBSO) $(SHLIBDIR)
-+ 	test -d $(LIBDIR)/pkgconfig || install -m 755 -d $(LIBDIR)/pkgconfig
-+ 	install -m 644 $(LIBPC) $(LIBDIR)/pkgconfig
-+-	ln -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
-++	cd $(LIBDIR) && ln -sf ../../`basename $(SHLIBDIR)`/$(LIBSO) $(TARGET)
-+ 
-+ install-pywrap: pywrap
-+ 	test -d $(PYLIBDIR)/site-packages/selinux || install -m 755 -d $(PYLIBDIR)/site-packages/selinux
-diff --git a/package/libsepol/0004-revert-ln-relative.patch b/package/libsepol/0004-revert-ln-relative.patch
-new file mode 100644
-index 0000000..0902d8d
---- /dev/null
-+++ b/package/libsepol/0004-revert-ln-relative.patch
-@@ -0,0 +1,24 @@
-+Makefile: revert libsepol: use ln --relative to create .so symlinks
-+
-+This reverts 71393a181d63c9baae5fe8dcaeb9411d1f253998
-+
-+ln --relative is too recent to be available in all distributions,
-+especially enterprise-grade distros that can stick around as long as
-+they are maintained (up to 10 years in some cases?).
-+
-+For the sake of Buildroot, revert the upstream patch.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN a/src/Makefile b/src/Makefile
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -77,7 +77,7 @@
-+ ifeq ($(STATIC),)
-+ 	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
-+ 	install -m 755 $(LIBSO) $(SHLIBDIR)
-+-	ln -sf --relative $(SHLIBDIR)/$(LIBSO) $(LIBDIR)/$(TARGET)
-++	cd $(LIBDIR) && ln -sf ../../`basename $(SHLIBDIR)`/$(LIBSO) $(TARGET)
-+ endif
-+ 
-+ relabel:
+
+
 -- 
-2.7.4
+Samuel
