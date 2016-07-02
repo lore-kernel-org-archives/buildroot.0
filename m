@@ -1,49 +1,64 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 02 Jul 2016 17:25:30 +0200
-Subject: [Buildroot] [PATCH/RFC] package/kodi: bump to version
-	17.0-Krypton
-References: <npc90dxkun.ln2@ID-313208.user.individual.net>
- <movk4dx0de.ln2@ID-313208.user.individual.net>
- <20160702164034.76b8530e@free-electrons.com>
-Message-ID: <XnsA639B141C445EID313208userindividu@bernd-kuhls.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  2 Jul 2016 17:29:52 +0200
+Subject: [Buildroot] [PATCH v2] package/boost: add boot-type_erasure support
+Message-ID: <1467473392-16516-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Romain Naour <romain.naour@smile.fr>
 
-[posted and mailed]
+Until now this library wasn't handled by the Buildroot packaging,
+so add a new config option to disable it when requested.
 
-Thomas Petazzoni <thomas.petazzoni-
-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8@public.gmane.org> wrote in 
-news:20160702164034.76b8530e at free-electrons.com:
+Also disable boost-type_erasure for the host variant to keep it as
+minimal as possible.
 
->> http://patchwork.ozlabs.org/patch/640796/
->> [v2,2/4] package/kodi: Add suboption to control MySQL support
-> 
-> I made a comment on this one, asking why we add a sub-option instead of
-> using an implicit, not sure I got a reply.
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+v2: remove the dependency on toolchain w/ NTPL threads support (Bernd)
+---
+ package/boost/Config.in | 3 +++
+ package/boost/boost.mk  | 4 +++-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-you will find my reply in the previous patchworks entry:
-http://patchwork.ozlabs.org/patch/635581/
-
-> Is ffmpeg 3.x mandatory for Kodi 17 ?
-
-yes:
-https://github.com/xbmc/xbmc/blob/master/tools/depends/target/ffmpeg/FFMPEG-
-VERSION
-
-Upstream bump to 3.1 is pending: https://github.com/xbmc/xbmc/pull/10039
-
-> Cool! It's really very useful to have a contributor like you very
-> active on keeping our Kodi support up to date!
-
-Thanks, but keep in mind that my production platform is based on x86 with an 
-Intel Haswell CPU using its internal GPU so my test chain includes libva-
-intel-driver, X.org with xdriver_xf86-video-intel and mesa3d with 
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965, this combo should stay in usable shape in 
-buildroot, I can not runtime test on other archs.
-
-Regards, Bernd
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 0cc9a58..51d4ed7 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -154,6 +154,9 @@ config BR2_PACKAGE_BOOST_THREAD
+ config BR2_PACKAGE_BOOST_TIMER
+ 	bool "boost-timer"
+ 
++config BR2_PACKAGE_BOOST_TYPE_ERASURE
++	bool "boost-type_erasure"
++
+ config BR2_PACKAGE_BOOST_WAVE
+ 	bool "boost-wave"
+ 
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index fc89265..1d42f6c 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -18,7 +18,8 @@ HOST_BOOST_FLAGS = --without-icu \
+ 	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
+ 	coroutine coroutine2 date_time exception filesystem graph \
+ 	graph_parallel iostreams locale log math mpi program_options python \
+-	random regex serialization signals system test thread timer wave)
++	random regex serialization signals system test thread timer type_erasure \
++	wave)
+ 
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
+@@ -47,6 +48,7 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SYSTEM),,system)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TEST),,test)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_THREAD),,thread)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TIMER),,timer)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TYPE_ERASURE),,type_erasure)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_WAVE),,wave)
+ 
+ BOOST_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+-- 
+2.5.5
