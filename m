@@ -1,80 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Jul 2016 16:48:08 +0200
-Subject: [Buildroot] [PATCH 2/3] cmake: add documentation about how it
- is built
-In-Reply-To: <1467388410-28135-3-git-send-email-luca@lucaceresoli.net>
-References: <1467388410-28135-1-git-send-email-luca@lucaceresoli.net>
- <1467388410-28135-3-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20160702144807.GO22343@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 2 Jul 2016 16:50:01 +0200
+Subject: [Buildroot] [PATCH 1/9] package/systemd: Add optional support
+ for myhostname
+In-Reply-To: <1467467955-14609-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1467467955-14609-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20160702165001.4be22adf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+Hello,
 
-On 2016-07-01 17:53 +0200, Luca Ceresoli spake thusly:
-> Commit 7b17bafc5d7948aff3059e058ada80ad1fc50500 by Davide Viti has a
-> detailed explanation of some unusual techniques used for building
-> host-cmake and (target-)cmake. This is useful information for whoever
-> starts hacking on it, so copy it in the makefile, where it will be
-> easily noticed.
-> 
-> Also remove the sentence about host-cmake having a runtime dependency
-> on host-pkgconfig (not true anymore: it's the specific cmake-packages
-> that depend on it) and fix typos.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Davide Viti <zinosat@tiscali.it>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
+On Sat,  2 Jul 2016 15:59:07 +0200, Maxime Hadjinlian wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
->  package/cmake/cmake.mk | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  package/systemd/Config.in  | 11 +++++++++++
+>  package/systemd/systemd.mk |  6 ++++++
+>  2 files changed, 17 insertions(+)
 > 
-> diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-> index 33fb4aa..d734e03 100644
-> --- a/package/cmake/cmake.mk
-> +++ b/package/cmake/cmake.mk
-> @@ -10,6 +10,18 @@ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
->  CMAKE_LICENSE = BSD-3c
->  CMAKE_LICENSE_FILES = Copyright.txt
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index b44d57a..7c591b7 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -225,6 +225,17 @@ config BR2_PACKAGE_SYSTEMD_HOSTNAMED
 >  
-> +# CMake is a particular package:
-> +# * CMake can be built using the generic infrastructure or the cmake one.
-> +#   Since Buildroot has no requirement regarding the host system cmake
-> +#   program presence, it uses the generic infrastructure to build the
-> +#   host-cmake package, then the (target-)cmake package can be built
-> +#   using the cmake infrastructure;
-> +# * CMake bundles its dependencies within its sources. This is the
-> +#   reason why the host-cmake package has no dependencies:, whereas
-> +#   the (target-)cmake package has a lot of dependencies, using only
-> +#   the system-wide libraries instead of rebuilding and statically
-> +#   linking with the ones bundled into the CMake sources.
-> +
->  HOST_CMAKE_DEPENDENCIES =
->  CMAKE_DEPENDENCIES = zlib jsoncpp libcurl libarchive expat bzip2 xz
+>  	  http://www.freedesktop.org/software/systemd/man/systemd-hostnamed.service.html
 >  
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
+> +	bool "enable myhostname NSS plugin"
+> +	default y
+> +	help
+> +	  nss-myhostname is a plug-in module for the GNU Name Service Switch (NSS)
+> +	  functionality of the GNU C Library (glibc), primarily providing hostname
+> +	  resolution for the locally configured system hostname as returned by
+> +	  gethostname(2).
 
+Too long lines, so I rewrapped them and applied. Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
