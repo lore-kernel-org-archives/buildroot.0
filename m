@@ -1,93 +1,56 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  2 Jul 2016 21:25:05 +0200
-Subject: [Buildroot] [PATCH 1/4] package/libaacs: new package
-Message-ID: <1467487508-30061-1-git-send-email-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 2 Jul 2016 22:04:25 +0200
+Subject: [Buildroot] [RFC 1/3] zip: add explicit dependencies for host
+	variant
+In-Reply-To: <1467485315-28264-2-git-send-email-julien.floret@6wind.com>
+References: <1467485315-28264-1-git-send-email-julien.floret@6wind.com>
+ <1467485315-28264-2-git-send-email-julien.floret@6wind.com>
+Message-ID: <a87cf40d-7deb-254a-ff4f-b5167abca4e8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/Config.in            |  1 +
- package/libaacs/Config.in    | 14 ++++++++++++++
- package/libaacs/libaacs.hash |  2 ++
- package/libaacs/libaacs.mk   | 24 ++++++++++++++++++++++++
- 4 files changed, 41 insertions(+)
- create mode 100644 package/libaacs/Config.in
- create mode 100644 package/libaacs/libaacs.hash
- create mode 100644 package/libaacs/libaacs.mk
+On 02-07-16 20:48, Julien Floret wrote:
+> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+> ---
+>  package/zip/zip.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/zip/zip.mk b/package/zip/zip.mk
+> index 5338f881663d..f56ac5a4804d 100644
+> --- a/package/zip/zip.mk
+> +++ b/package/zip/zip.mk
+> @@ -12,6 +12,7 @@ ZIP_LICENSE_FILES = LICENSE
+>  
+>  ifeq ($(BR2_PACKAGE_BZIP2),y)
+>  ZIP_DEPENDENCIES += bzip2
+> +HOST_ZIP_DEPENDENCIES += host-bzip2
 
-diff --git a/package/Config.in b/package/Config.in
-index 3d6d1f0..abbdac1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1116,6 +1116,7 @@ endmenu
- 
- menu "Multimedia"
- 	source "package/bitstream/Config.in"
-+	source "package/libaacs/Config.in"
- 	source "package/libass/Config.in"
- 	source "package/libbluray/Config.in"
- 	source "package/libdcadec/Config.in"
-diff --git a/package/libaacs/Config.in b/package/libaacs/Config.in
-new file mode 100644
-index 0000000..d7da406
---- /dev/null
-+++ b/package/libaacs/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_LIBAACS
-+	bool "libaacs"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBGCRYPT
-+	help
-+	  libaacs is a research project to implement the Advanced Access
-+	  Content System specification.
-+	  NB: this project doesn't offer any key or certificate that
-+	  could be used to decode encrypted copyrighted material.
-+
-+	  http://www.videolan.org/developers/libaacs.html
-+
-+comment "libaacs needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/libaacs/libaacs.hash b/package/libaacs/libaacs.hash
-new file mode 100644
-index 0000000..7160c6a
---- /dev/null
-+++ b/package/libaacs/libaacs.hash
-@@ -0,0 +1,2 @@
-+# From http://download.videolan.org/pub/videolan/libaacs/0.8.1/libaacs-0.8.1.tar.bz2.sha512
-+sha512	dd677627f073460b719b9f836b026acc3e23b166c7b16bd205cf2ca97c376095980532fb15087c0d77b30c712cd5a5dd90b2cc2ae3128da717621ebd825afcc4	libaacs-0.8.1.tar.bz2
-diff --git a/package/libaacs/libaacs.mk b/package/libaacs/libaacs.mk
-new file mode 100644
-index 0000000..df61154
---- /dev/null
-+++ b/package/libaacs/libaacs.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# libaacs
-+#
-+################################################################################
-+
-+LIBAACS_VERSION = 0.8.1
-+LIBAACS_SITE = http://download.videolan.org/pub/videolan/libaacs/$(LIBAACS_VERSION)
-+LIBAACS_SOURCE = libaacs-$(LIBAACS_VERSION).tar.bz2
-+LIBAACS_LICENSE = LGPLv2.1+
-+LIBAACS_LICENSE_FILES = COPYING
-+LIBAACS_INSTALL_STAGING = YES
-+LIBAACS_DEPENDENCIES = host-bison host-flex libgcrypt
-+LIBAACS_CONF_OPTS = \
-+	--disable-werror \
-+	--disable-extra-warnings \
-+	--disable-optimizations \
-+	--disable-examples \
-+	--disable-debug \
-+	--with-gnu-ld \
-+	--with-libgcrypt-prefix=$(STAGING_DIR)/usr \
-+	--with-gpg-error-prefix=$(STAGING_DIR)/usr
-+
-+$(eval $(autotools-package))
+ Nack. This is another example why the automatic derivation is not good.
+host-zip should either depend on host-bzip2 unconditionally, or never depend on
+it, or depend on it based on BR2_PACKAGE_HOST_BZIP2.
+
+ In this specific case, it should not depend on host-bzip2 IMHO. So the correct
+thing to do with the automatic derivation would be
+
+HOST_ZIP_DEPENDENCIES =
+
+
+ Regards,
+ Arnout
+
+>  endif
+>  
+>  # Infozip's default CFLAGS.
+> 
+
+
 -- 
-2.8.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
