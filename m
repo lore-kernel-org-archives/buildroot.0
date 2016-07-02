@@ -1,10 +1,10 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Sun,  3 Jul 2016 00:21:31 +0200
-Subject: [Buildroot] [PATCH 62/69] gawk: remove empty host dependencies
+Date: Sun,  3 Jul 2016 00:21:32 +0200
+Subject: [Buildroot] [PATCH 63/69] lua: remove empty host dependencies
 	definition
 In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467498098-23731-63-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467498098-23731-64-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/gawk/gawk.mk | 3 ---
+ package/lua/lua.mk | 3 ---
  1 file changed, 3 deletions(-)
 
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index da9be95cd07f..b5b0f8d562af 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
-@@ -36,9 +36,6 @@ else
- GAWK_CONF_OPTS += --without-readline
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index b2dab3937c45..be3328434b3b 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -62,9 +62,6 @@ endef
+ LUA_POST_PATCH_HOOKS += LUA_32BITS_LUACONF
  endif
  
--# We don't have a host-busybox, and we don't want to use readline or mpfr
--HOST_GAWK_DEPENDENCIES =
--
- HOST_GAWK_CONF_OPTS = --without-readline --without-mpfr
+-# We never want to have host-readline and host-ncurses as dependencies
+-# of host-lua.
+-HOST_LUA_DEPENDENCIES =
+ HOST_LUA_CFLAGS = -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
+ HOST_LUA_MYLIBS = -ldl
  
- define GAWK_CREATE_SYMLINK
 -- 
 2.1.0
