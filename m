@@ -1,50 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 2 Jul 2016 11:56:59 +0200
-Subject: [Buildroot] Python distutils.sysconfig values
-In-Reply-To: <5774F565.1070603@gmail.com>
-References: <5774F565.1070603@gmail.com>
-Message-ID: <e03815f5-a875-13f8-2c70-7ecf448a7c9b@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 2 Jul 2016 12:00:24 +0200
+Subject: [Buildroot] [git commit] reproducibility: override locale and
+	timezone
+Message-ID: <20160702100057.86B8481843@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30-06-16 12:33, Zoltan Gyarmati wrote:
-> Dear All,
-> 
-> i'm trying to enable the gpsd python module in Buildroot (currently it's
-> disabled, see package/gpsd/gpsd.mk line #25). The gpsd build system uses
-> scons, which in turn uses distutils.sysconfig to get the value of
-> various paramaters (like the compiler to use, etc) like this:
-> 
->> vars = sysconfig.get_config_vars('CC', 'CXX', 'OPT', 'BASECFLAGS', 'CCSHARED', 'LDSHARED', 'SO', 'INCLUDEPY', 'LDFLAGS')
-> 
-> which apparently yields the following values:
-> 
->> ['/usr/bin/gcc -pthread', '/usr/bin/g++ -pthread', '-DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes', '-fno-strict-aliasing', '-fPIC', '/usr/bin/gcc -pthread -shared -L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/lib -L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,-rpath,/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,--enable-new-dtags', '.so', '/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/include/python2.7', '-L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/lib -L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,-rpath,/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,--enable-new-dtags']
-> 
-> 
->  Note that some of the variables related to the BR environment (like the
-> python include dir), while others (most importantly CC) are coming from
-> the host environment.
->  Does anybody could offer a hint where to look to get
-> distutils.sysconfig to set all of these values correctly?
+commit: https://git.buildroot.net/buildroot/commit/?id=a5f3513b220015bceed2de231e90fe6e4b4431b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- You need to pass $(TARGET_CONFIGURE_OPTS) in the environment to set everything
-correctly. gpsd does this:
+And export BR2_REPRODUCIBLE for post-build / post-image scripts.
 
-GPSD_SCONS_ENV = $(TARGET_CONFIGURE_OPTS)
+[Peter: Extend commit message,
+	move export together with our other exports,
+	add comment explaining why we override local/timezone]
+Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Makefile | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/Makefile b/Makefile
+index 41f0274..027f21c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -213,6 +213,13 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+ -include $(BR2_CONFIG)
+ endif
+ 
++# timezone and locale may affect build output
++ifeq ($(BR2_REPRODUCIBLE),y)
++export TZ=UTC
++export LANG=C
++export LC_ALL=C
++endif
++
+ # To put more focus on warnings, be less verbose as default
+ # Use 'make V=1' to see the full commands
+ ifeq ("$(origin V)", "command line")
+@@ -410,6 +417,7 @@ endif
+ # Scripts in support/ or post-build scripts may need to reference
+ # these locations, so export them so it is easier to use
+ export BR2_CONFIG
++export BR2_REPRODUCIBLE
+ export TARGET_DIR
+ export STAGING_DIR
+ export HOST_DIR
