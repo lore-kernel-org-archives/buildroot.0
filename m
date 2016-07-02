@@ -1,18 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 12:37:28 +0200
+Date: Sat, 2 Jul 2016 12:28:29 +0200
 Subject: [Buildroot] [git commit] package/systemd: add optional support for
-	machined
-Message-ID: <20160702110927.4281F81D7C@busybox.osuosl.org>
+	firstboot
+Message-ID: <20160702110926.BDCDA81D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3651fc5feaaa8843d0ddafb741719a14faa90a8
+commit: https://git.buildroot.net/buildroot/commit/?id=9dd9a00109070f62d7c99e369cc929f70f67ea45
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+[Maxime: Add default y]
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
@@ -21,37 +22,37 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  2 files changed, 15 insertions(+)
 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index c2499e6..d9f31b6 100644
+index 20b4e28..a2cf4be 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -192,6 +192,15 @@ config BR2_PACKAGE_SYSTEMD_LOGIND
+@@ -150,6 +150,15 @@ config BR2_PACKAGE_SYSTEMD_SYSUSERS
  
- 	  http://www.freedesktop.org/software/systemd/man/systemd-logind.service.html
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-sysusers.html
  
-+config BR2_PACKAGE_SYSTEMD_MACHINED
-+	bool "enable machine daemon"
++config BR2_PACKAGE_SYSTEMD_FIRSTBOOT
++	bool "enable firstboot support"
++	default y
 +	help
-+	  systemd-machined is a system service that keeps track of
-+	  virtual machines and containers, and processes belonging to
-+	  them.
++	  systemd-firstboot initializes the most basic system settings
++	  interactively on the first boot.
 +
-+	  http://www.freedesktop.org/software/systemd/man/systemd-machined.service.html
++	  http://www.freedesktop.org/software/systemd/man/systemd-firstboot.html
 +
  config BR2_PACKAGE_SYSTEMD_NETWORKD
  	bool "enable network manager"
  	help
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 93b56fc..44a22a9 100644
+index 0520ced..c5d6478 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -201,6 +201,12 @@ else
- SYSTEMD_CONF_OPTS += --disable-logind
+@@ -171,6 +171,12 @@ else
+ SYSTEMD_CONF_OPTS += --disable-sysusers
  endif
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD_MACHINED),y)
-+SYSTEMD_CONF_OPTS += --enable-machined
++ifeq ($(BR2_PACKAGE_SYSTEMD_FIRSTBOOT),y)
++SYSTEMD_CONF_OPTS += --enable-firstboot
 +else
-+SYSTEMD_CONF_OPTS += --disable-machined
++SYSTEMD_CONF_OPTS += --disable-firstboot
 +endif
 +
  ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
