@@ -1,61 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 02 Jul 2016 11:58:53 +0200
-Subject: [Buildroot] [PATCH 02/12] reproducibility: override locale and
-	timezone
-In-Reply-To: <1465918277-30675-2-git-send-email-gilles.chanteperdrix@xenomai.org>
- (Gilles Chanteperdrix's message of "Tue, 14 Jun 2016 17:31:10 +0200")
-References: <20160614152928.GH3060@hermes.click-hack.org>
- <1465918277-30675-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1465918277-30675-2-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <87wpl4bbtu.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 2 Jul 2016 11:56:59 +0200
+Subject: [Buildroot] Python distutils.sysconfig values
+In-Reply-To: <5774F565.1070603@gmail.com>
+References: <5774F565.1070603@gmail.com>
+Message-ID: <e03815f5-a875-13f8-2c70-7ecf448a7c9b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org> writes:
+On 30-06-16 12:33, Zoltan Gyarmati wrote:
+> Dear All,
+> 
+> i'm trying to enable the gpsd python module in Buildroot (currently it's
+> disabled, see package/gpsd/gpsd.mk line #25). The gpsd build system uses
+> scons, which in turn uses distutils.sysconfig to get the value of
+> various paramaters (like the compiler to use, etc) like this:
+> 
+>> vars = sysconfig.get_config_vars('CC', 'CXX', 'OPT', 'BASECFLAGS', 'CCSHARED', 'LDSHARED', 'SO', 'INCLUDEPY', 'LDFLAGS')
+> 
+> which apparently yields the following values:
+> 
+>> ['/usr/bin/gcc -pthread', '/usr/bin/g++ -pthread', '-DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes', '-fno-strict-aliasing', '-fPIC', '/usr/bin/gcc -pthread -shared -L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/lib -L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,-rpath,/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,--enable-new-dtags', '.so', '/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/include/python2.7', '-L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/lib -L/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,-rpath,/home/zgyarmati/projects/buildroot-upstream/buildroot/output/host/usr/lib -Wl,--enable-new-dtags']
+> 
+> 
+>  Note that some of the variables related to the BR environment (like the
+> python include dir), while others (most importantly CC) are coming from
+> the host environment.
+>  Does anybody could offer a hint where to look to get
+> distutils.sysconfig to set all of these values correctly?
 
- > Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
- > ---
- >  Makefile | 7 +++++++
- >  1 file changed, 7 insertions(+)
+ You need to pass $(TARGET_CONFIGURE_OPTS) in the environment to set everything
+correctly. gpsd does this:
 
- > diff --git a/Makefile b/Makefile
- > index 3f5c3d3..0217ff0 100644
- > --- a/Makefile
- > +++ b/Makefile
- > @@ -208,6 +208,13 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
- >  -include $(BR2_CONFIG)
- >  endif
- 
- > +export BR2_REPRODUCIBLE
+GPSD_SCONS_ENV = $(TARGET_CONFIGURE_OPTS)
 
-I moved this down with the other exports we do for post-build /
-post-image scripts.
 
- > +ifeq ($(BR2_REPRODUCIBLE),y)
-
-And added a comment why we do this.
-
-Committed with that fixed, thanks.
-
- > +export TZ=UTC
- > +export LANG=C
- > +export LC_ALL=C
- > +endif
- > +
- >  # To put more focus on warnings, be less verbose as default
- >  # Use 'make V=1' to see the full commands
- >  ifeq ("$(origin V)", "command line")
- > -- 
- > 2.8.2
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+ Regards,
+ Arnout
 
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
