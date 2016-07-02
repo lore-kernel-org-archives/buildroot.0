@@ -1,36 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 2 Jul 2016 13:19:12 +0200
-Subject: [Buildroot] [git commit] a20_ollinuxino: Accommodate U-Boot
-	environment on SD-card
-Message-ID: <20160702111923.E991A8179A@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 2 Jul 2016 13:22:52 +0200
+Subject: [Buildroot] [PATCH v2 11/15] toolchain/toolchain-external: add
+ libgfortran and libquadmath to the TOOLCHAIN_EXTERNAL_LIBS list
+In-Reply-To: <20160701232238.3d0f725c@free-electrons.com>
+References: <20160701162920.19632-1-s.martin49@gmail.com>
+ <20160701162920.19632-12-s.martin49@gmail.com>
+ <20160701232238.3d0f725c@free-electrons.com>
+Message-ID: <9e216551-f324-fb88-829b-43423169ba35@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1034c11efbc2c6a1c0aa2d5e60db3093e4ad4b0d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 01-07-16 23:22, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri,  1 Jul 2016 18:29:16 +0200, Samuel Martin wrote:
+> 
+>> +ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
+>> +TOOLCHAIN_EXTERNAL_LIBS += libgfortran.so.*
+>> +# fortran needs quadmath on x86 and x86_64
+>> +ifeq ($(BR2_I386)$(BR2_x86_64),y)
+>> +TOOLCHAIN_EXTERNAL_LIBS += libquadmath.so*
+>> +endif
+>> +endif
+> 
+> OK. Then maybe on the internal toolchain backend side, we should keep
+> things simple for libquadmath:
+> 
+>  1/ Disable it when we know it's not supported (wchar missing)
+> 
+>  2/ Forcefully enable it when Fortran is enabled and we're on
+>     i386/x86_64
+> 
+>  3/ Copy it only when Fortran is enabled and i386/x86_64
+> 
+> Which is pretty much what you did originally I believe.
+> 
+> This way, only the people who care about Fortran support will have
+> libquadmath copied to their target. If in the future some other
+> non-Fortran related package needs libquadmath, we can revisit this at
+> this time.
 
-As described by http://linux-sunxi.org/Bootable_SD_card#SD_Card_Layout
+ fftw you mean? :-)
 
-The space betweem 544KB..1MB is reserved / used for the u-boot environment,
-so mark it as such to make sure genimage doesn't put other partitions here.
+ At this point, it is perhaps better to introduce a blind
+BR2_TOOLCHAIN_HAS_QUADMATH option (or should it be USE?) that is selected
+automatically as appropriate. Later we could add a BR2_PACKAGE_GCC_QUADMATH
+option to enable it explicitly.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/olimex/a20_olinuxino/genimage.cfg | 1 +
- 1 file changed, 1 insertion(+)
+ Regards,
+ Arnout
 
-diff --git a/board/olimex/a20_olinuxino/genimage.cfg b/board/olimex/a20_olinuxino/genimage.cfg
-index 8ea24cc..fc2f7f8 100644
---- a/board/olimex/a20_olinuxino/genimage.cfg
-+++ b/board/olimex/a20_olinuxino/genimage.cfg
-@@ -6,6 +6,7 @@ image sdcard.img {
- 		in-partition-table = "no"
- 		image = "u-boot-sunxi-with-spl.bin"
- 		offset = 8192
-+		size = 1040384 # 1MB - 8192
- 	}
- 
- 	partition rootfs {
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
