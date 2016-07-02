@@ -1,10 +1,10 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Sun,  3 Jul 2016 00:21:35 +0200
-Subject: [Buildroot] [PATCH 66/69] pax-utils: remove empty host dependencies
-	definition
+Date: Sun,  3 Jul 2016 00:21:15 +0200
+Subject: [Buildroot] [PATCH 46/69] xlib_libXau: add explicit dependencies
+	for host variant
 In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467498098-23731-67-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467498098-23731-47-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/pax-utils/pax-utils.mk | 3 ---
- 1 file changed, 3 deletions(-)
+ package/x11r7/xlib_libXau/xlib_libXau.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pax-utils/pax-utils.mk b/package/pax-utils/pax-utils.mk
-index 747c2bb1145b..8d5f3eea73c7 100644
---- a/package/pax-utils/pax-utils.mk
-+++ b/package/pax-utils/pax-utils.mk
-@@ -27,9 +27,6 @@ else
- PAX_UTILS_CONF_OPTS += --without-seccomp
- endif
+diff --git a/package/x11r7/xlib_libXau/xlib_libXau.mk b/package/x11r7/xlib_libXau/xlib_libXau.mk
+index 8ef48e4a7b30..1c50cb2e4e56 100644
+--- a/package/x11r7/xlib_libXau/xlib_libXau.mk
++++ b/package/x11r7/xlib_libXau/xlib_libXau.mk
+@@ -11,6 +11,8 @@ XLIB_LIBXAU_LICENSE = MIT
+ XLIB_LIBXAU_LICENSE_FILES = COPYING
+ XLIB_LIBXAU_INSTALL_STAGING = YES
+ XLIB_LIBXAU_DEPENDENCIES = host-pkgconf xutil_util-macros xproto_xproto
++HOST_XLIB_LIBXAU_DEPENDENCIES = \
++	host-pkgconf host-xutil_util-macros host-xproto_xproto
  
--# libcap is only useful for pspax (a running system)
--HOST_PAX_UTILS_DEPENDENCIES =
--
- # lddtree and symtree need bash
- ifeq ($(BR2_PACKAGE_BASH),)
- define PAX_UTILS_REMOVE_BASH_TOOLS
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.1.0
