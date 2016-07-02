@@ -1,10 +1,10 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Sun,  3 Jul 2016 00:20:35 +0200
-Subject: [Buildroot] [PATCH 06/69] cramfs: add explicit dependencies for
+Date: Sun,  3 Jul 2016 00:20:36 +0200
+Subject: [Buildroot] [PATCH 07/69] doxygen: add explicit dependencies for
 	host variant
 In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467498098-23731-7-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467498098-23731-8-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/cramfs/cramfs.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/doxygen/doxygen.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cramfs/cramfs.mk b/package/cramfs/cramfs.mk
-index 72860b6b7a5d..3cbe2744e6e3 100644
---- a/package/cramfs/cramfs.mk
-+++ b/package/cramfs/cramfs.mk
-@@ -10,6 +10,7 @@ CRAMFS_LICENSE = GPLv2+
- CRAMFS_LICENSE_FILES = COPYING
+diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
+index 14dd0905961d..cf7dfee2a545 100644
+--- a/package/doxygen/doxygen.mk
++++ b/package/doxygen/doxygen.mk
+@@ -9,7 +9,7 @@ DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
+ DOXYGEN_SITE = http://ftp.stack.nl/pub/users/dimitri
+ DOXYGEN_LICENSE = GPLv2
+ DOXYGEN_LICENSE_FILES = LICENSE
+-DOXYGEN_DEPENDENCIES = host-flex host-bison
++HOST_DOXYGEN_DEPENDENCIES = host-flex host-bison
  
- CRAMFS_DEPENDENCIES = zlib
-+HOST_CRAMFS_DEPENDENCIES = host-zlib
- 
- define CRAMFS_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" -C $(@D)
+ define HOST_DOXYGEN_CONFIGURE_CMDS
+ 	(cd $(@D); $(HOST_MAKE_ENV) ./configure --shared --prefix=$(HOST_DIR)/usr)
 -- 
 2.1.0
