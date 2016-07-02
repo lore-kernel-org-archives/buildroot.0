@@ -1,10 +1,10 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Sun,  3 Jul 2016 00:21:13 +0200
-Subject: [Buildroot] [PATCH 44/69] xfont_font-util: add explicit
-	dependencies for host variant
+Date: Sun,  3 Jul 2016 00:21:26 +0200
+Subject: [Buildroot] [PATCH 57/69] tcl: remove empty host dependencies
+	definition
 In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467498098-23731-45-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467498098-23731-58-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/x11r7/xfont_font-util/xfont_font-util.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/tcl/tcl.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.mk b/package/x11r7/xfont_font-util/xfont_font-util.mk
-index 1c43d6a70666..36853770ef14 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.mk
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.mk
-@@ -11,6 +11,7 @@ XFONT_FONT_UTIL_LICENSE = MIT/BSD-2c
- XFONT_FONT_UTIL_LICENSE_FILES = COPYING
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index a1153c72314c..a2ac8e6c83ca 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -75,7 +75,6 @@ TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_EXTRA
+ TCL_DEPENDENCIES = $(if $(BR2_PACKAGE_SQLITE),sqlite) \
+ 	$(if $(BR2_PACKAGE_MYSQL),mysql) \
+ 	$(if $(BR2_PACKAGE_POSTGRESQL),postgresql)
+-HOST_TCL_DEPENDENCIES =
  
- XFONT_FONT_UTIL_DEPENDENCIES = host-pkgconf
-+HOST_XFONT_FONT_UTIL_DEPENDENCIES = host-pkgconf
- XFONT_FONT_UTIL_INSTALL_STAGING = YES
- XFONT_FONT_UTIL_INSTALL_TARGET = NO
- 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.1.0
