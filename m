@@ -1,10 +1,10 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Sun,  3 Jul 2016 00:21:17 +0200
-Subject: [Buildroot] [PATCH 48/69] xlib_libXdmcp: add explicit dependencies
-	for host variant
+Date: Sun,  3 Jul 2016 00:21:12 +0200
+Subject: [Buildroot] [PATCH 43/69] xfont_encodings: add explicit
+	dependencies for host variant
 In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467498098-23731-49-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467498098-23731-44-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,19 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/x11r7/xfont_encodings/xfont_encodings.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-index 119c01813713..ec1b861b9250 100644
---- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-+++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
-@@ -11,6 +11,7 @@ XLIB_LIBXDMCP_LICENSE = MIT
- XLIB_LIBXDMCP_LICENSE_FILES = COPYING
- XLIB_LIBXDMCP_INSTALL_STAGING = YES
- XLIB_LIBXDMCP_DEPENDENCIES = xutil_util-macros xproto_xproto
-+HOST_XLIB_LIBXDMCP_DEPENDENCIES = host-xutil_util-macros host-xproto_xproto
+diff --git a/package/x11r7/xfont_encodings/xfont_encodings.mk b/package/x11r7/xfont_encodings/xfont_encodings.mk
+index 568dbcbde81f..9c5c9f30bf8b 100644
+--- a/package/x11r7/xfont_encodings/xfont_encodings.mk
++++ b/package/x11r7/xfont_encodings/xfont_encodings.mk
+@@ -11,6 +11,8 @@ XFONT_ENCODINGS_LICENSE = Public Domain
+ XFONT_ENCODINGS_LICENSE_FILES = COPYING
+ 
+ XFONT_ENCODINGS_DEPENDENCIES = host-xapp_mkfontscale host-pkgconf xutil_util-macros
++HOST_XFONT_ENCODINGS_DEPENDENCIES = \
++	host-xapp_mkfontscale host-pkgconf host-xutil_util-macros
  
  $(eval $(autotools-package))
  $(eval $(host-autotools-package))
