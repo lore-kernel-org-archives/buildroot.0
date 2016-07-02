@@ -1,44 +1,63 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  2 Jul 2016 13:07:15 +0200
-Subject: [Buildroot] [PATCH] package/libiio: libiio network backend needs
-	threads
-Message-ID: <1467457635-31517-1-git-send-email-romain.naour@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 02 Jul 2016 13:07:25 +0200
+Subject: [Buildroot] [PATCH] cubieboard2: Accommodate U-Boot environment
+	on SD-card
+In-Reply-To: <1467403317-16425-1-git-send-email-abrodkin@synopsys.com> (Alexey
+ Brodkin's message of "Fri, 1 Jul 2016 23:01:57 +0300")
+References: <1467403317-16425-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <877fd49u36.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When libiio network backend is enabled, NEED_THREADS is set in the
-build system and require a toolchain with treads support.
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/cfc/cfc70094d8f4008f4e660250b1b90a35a2ab384d
+ > According to current "include/configs/sunxi-common.h"
+ > U-Boot environment is stored on SD-card with offset 544 kB
+ > and its size is limited as 128 kB.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- package/libiio/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ > Given memory layout of sunxi boards:
+ >   1. SPL
+ >   2. U-Boot
+ >   3. U-Boot environment
+ >   4. Partitions
+ > we need to make sure the first real partition starts at least
+ > with 544+128 kB offset. Adding a small safety gap let's put
+ > the first partition with offset 1Mb from the beginning of SD-card.
 
-diff --git a/package/libiio/Config.in b/package/libiio/Config.in
-index 99da4c1..28a43f9 100644
---- a/package/libiio/Config.in
-+++ b/package/libiio/Config.in
-@@ -17,11 +17,15 @@ config BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
- 
- config BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
- 	bool "Network backend"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBXML2
- 	default y
- 	help
- 	  Enable the network backend of the library.
- 
-+comment "IIO Network backend needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_LIBIIO_IIOD
- 	bool "IIO Daemon"
- 	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
+ > Otherwise current setup gets broken as soon as one saves U-Boot
+ > environment with "saveenv" which basically overwrites FAT partition with
+ > zImage and board no longer boots into Linux kernel.
+
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > Cc: Erico Nunes <nunes.erico@gmail.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Carlos Quijano <carlos@crqgestion.es>
+ > Cc: Andi Shyti <andi@etezian.org>
+ > ---
+ >  board/cubietech/cubieboard2/genimage.cfg | 1 +
+ >  1 file changed, 1 insertion(+)
+
+ > diff --git a/board/cubietech/cubieboard2/genimage.cfg b/board/cubietech/cubieboard2/genimage.cfg
+ > index 8929a72..cde78e1 100644
+ > --- a/board/cubietech/cubieboard2/genimage.cfg
+ > +++ b/board/cubietech/cubieboard2/genimage.cfg
+ > @@ -26,6 +26,7 @@ image sdcard.img {
+ >  		partition-type = 0xC
+ >  		bootable = "true"
+ >  		image = "boot.vfat"
+ > +		offset = 1048576
+
+Thanks. I prefer to add the padding to the u-boot "partition", as that
+is logically where it belongs, so I've instead set the size of that one
+to 1MB - 8K, and committed - Thanks.
+
+We need to do the same for the other sunxi boards as well. I'll do so
+now.
+
 -- 
-2.5.5
+Venlig hilsen,
+Peter Korsgaard 
