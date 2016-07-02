@@ -1,25 +1,22 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat, 02 Jul 2016 19:00:49 +0000
-Subject: [Buildroot] [PATCH v2 3/3] aufs-util: new package
-In-Reply-To: <1461936744-1528-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-References: <1461936744-1528-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-Message-ID: <1467486054169-cb888515-ddf0f3ca-351ee8ec@mixmax.com>
+From: Julien Floret <julien.floret@6wind.com>
+Date: Sat, 2 Jul 2016 21:15:11 +0200
+Subject: [Buildroot] [PATCH 00/24] Drop unused host packages
+In-Reply-To: <a950cc3d-5aef-1591-e014-b786a5eb6fa1@mind.be>
+References: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
+ <20160629155233.510c456e@free-electrons.com>
+ <77293ee3-6e4c-7342-214d-adffdde679f8@mind.be>
+ <20160702123305.6bfbbc81@free-electrons.com> <87poqw8ege.fsf@dell.be.48ers.dk>
+ <CAHfJR7heFn1QsWoVSJB4kostyz9QTHVCKRNhgeerDBEx4tjVwQ@mail.gmail.com>
+ <a950cc3d-5aef-1591-e014-b786a5eb6fa1@mind.be>
+Message-ID: <CAHfJR7iYv=A_riLyW67mJuJzK3hZS+rDyfDbQbVWudT-2inCPg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Atul,
-On Fri, Apr 29, 2016 at 6:32 AM Atul Singh
-<atul.singh.mandla@rockwellcollins.com> wrote:
-> + $(MAKE) -C $(@D) CPPFLAGS=?-I $(LINUX_BUILDDIR)/usr/include/?
-HOSTCC=?$(TARGET_CC)? HOSTLD=?$(TARGET_LD)? INSTALL=?$(INSTALL)? all +endef
-FYI, this is wrong - HOSTCC should be $(HOSTCC), as it's used to build some
-small utilities called by aufs-util like ?ver? on the host.
-Even setting it like so I can't seem to get the makefile to use the host cc
-properly?
-Best, Christian
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160702/4a7e985b/attachment.html>
+>  Since that will be 64 patches, it may be a good idea to already submit just a
+> subset.
+
+Ok, done. By the way, I only found 60 packages to modify actually
+(4 target packages have a dependency on their host variant only).
