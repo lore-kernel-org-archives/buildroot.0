@@ -1,37 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 15:42:16 +0200
-Subject: [Buildroot] [git commit] fftw: Disable combined threads when
-	building with OpenMP support
-Message-ID: <20160702134336.3D9CA81999@busybox.osuosl.org>
+Date: Sat, 2 Jul 2016 15:43:42 +0200
+Subject: [Buildroot] [PATCH v2] fftw: Disable combined threads when
+ building with OpenMP support
+In-Reply-To: <1466614816-24785-1-git-send-email-nerv@dawncrow.de>
+References: <1466614816-24785-1-git-send-email-nerv@dawncrow.de>
+Message-ID: <20160702154342.4527d84b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f163c819c4d8ee76c317ce45e71c9267bae28c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Otherwise fftw fails to configure:
-configure: error: --with-combined-threads incompatible with --enable-openmp
+On Wed, 22 Jun 2016 19:00:16 +0200, Andr? Hentschel wrote:
+> Otherwise fftw fails to configure:
+> configure: error: --with-combined-threads incompatible with --enable-openmp
+> 
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> ---
+>  package/fftw/fftw.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/fftw/fftw.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-index 5045ab6..e89671f 100644
---- a/package/fftw/fftw.mk
-+++ b/package/fftw/fftw.mk
-@@ -31,7 +31,8 @@ FFTW_CFLAGS += $(if $(BR2_PACKAGE_FFTW_USE_NEON),-mfpu=neon)
- 
- # Generic optimisations
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--FFTW_CONF_OPTS += --enable-threads --with-combined-threads
-+FFTW_CONF_OPTS += --enable-threads
-+FFTW_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--without,--with)-combined-threads
- else
- FFTW_CONF_OPTS += --disable-threads
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
