@@ -1,31 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  2 Jul 2016 20:24:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libbluray: fix comment
-Message-ID: <1467483844-31013-1-git-send-email-bernd.kuhls@t-online.de>
+From: Julien Floret <julien.floret@6wind.com>
+Date: Sat,  2 Jul 2016 20:48:32 +0200
+Subject: [Buildroot] [RFC 0/3] Remove auto derivation of host dependencies
+Message-ID: <1467485315-28264-1-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The comment was missing in menuconfig with a non-threaded toolchain
-supporting dynamic linking.
+The auto derivation of host dependencies feature consists in
+automatically deducing dependencies of host variant of a package
+from the dependencies of the target variant.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libbluray/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+However, it causes some issues, and most host packages need different
+dependencies than their target variants.
 
-diff --git a/package/libbluray/Config.in b/package/libbluray/Config.in
-index 4b883e1..a004c4c 100644
---- a/package/libbluray/Config.in
-+++ b/package/libbluray/Config.in
-@@ -9,5 +9,4 @@ config BR2_PACKAGE_LIBBLURAY
- 	  http://www.videolan.org/developers/libbluray.html
- 
- comment "libbluray needs a toolchain w/ threads, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+The goal of this RFC is to remove this feature, after having
+set explicit dependencies for all host packages.
+
+There are about 60 packages impacted, in this series I only take 2
+packages as example (zip and erlang-lager).
+I will send an applicable patch series later with all packages if
+feedbacks are positive.
+
+Note that this has not been intensively tested, it is possible that I
+missed something.
+
+Julien Floret (3):
+  zip: add explicit dependencies for host variant
+  erlang-lager: add explicit dependencies for host variant
+  infra: remove auto derivation of host dependencies
+
+ package/erlang-lager/erlang-lager.mk |  1 +
+ package/pkg-autotools.mk             |  9 ---------
+ package/pkg-cmake.mk                 |  7 -------
+ package/pkg-generic.mk               |  4 ----
+ package/pkg-python.mk                | 15 ---------------
+ package/pkg-rebar.mk                 | 14 --------------
+ package/pkg-virtual.mk               |  7 -------
+ package/zip/zip.mk                   |  1 +
+ 8 files changed, 2 insertions(+), 56 deletions(-)
+
 -- 
-2.8.1
+2.1.0
