@@ -1,36 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 12:33:05 +0200
-Subject: [Buildroot] [PATCH 00/24] Drop unused host packages
-In-Reply-To: <77293ee3-6e4c-7342-214d-adffdde679f8@mind.be>
-References: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
- <20160629155233.510c456e@free-electrons.com>
- <77293ee3-6e4c-7342-214d-adffdde679f8@mind.be>
-Message-ID: <20160702123305.6bfbbc81@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 2 Jul 2016 12:37:49 +0200
+Subject: [Buildroot] [PATCH v2 12/15] toolchain/toolchain-external: add
+ knob for fortran support
+In-Reply-To: <20160701232339.5bbd7793@free-electrons.com>
+References: <20160701162920.19632-1-s.martin49@gmail.com>
+ <20160701162920.19632-13-s.martin49@gmail.com>
+ <20160701232339.5bbd7793@free-electrons.com>
+Message-ID: <CAHXCMMJbqkVwGYcrnrNJaXJV2vQzGA1jB8ixk-JOu32cwCHPXg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Fri, Jul 1, 2016 at 11:23 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Fri,  1 Jul 2016 18:29:17 +0200, Samuel Martin wrote:
+>
+>> +config BR2_TOOLCHAIN_EXTERNAL_FORTRAN
+>> +     bool "Toolchain has Fortran support?"
+>> +     depends on BR2_USE_WCHAR # libquadmath
+>
+> Is this dependency really needed? Plus libquadmath is only needed on
+> i386/x86_64, so on other architectures, we could have Fortran support
+> without wchar, could we?
+Right, it should be:
+  depends on (wchar && (i386 || x86_64)) || !(i386 || x86_64)
 
-On Sat, 2 Jul 2016 12:18:30 +0200, Arnout Vandecappelle wrote:
+>
+>> +     select BR2_TOOLCHAIN_HAS_FORTRAN
+>> +     help
+>> +       Select this option if your external toolchain has fortran
+>> +       support. If you don't know, leave the default value,
+>> +       Buildroot will tell you if it's correct or not.
+>> +
+>> +comment "Fortran support needs a toolchain w/ wchar"
+>> +     depends on !BR2_USE_WCHAR
+>
+> I think this comment is not needed.
+Indeed, if the external toolchain has fortran, then it already meets
+all the fortran dependencies.
 
->  That automatic derivation of dependencies of host packages sounded like a good
-> idea at the time, but it can really bite you. Of the 200 host packages that we
-> have at the moment, there are just 64 that use the inheritance - and many of
-> them are in Julien's list here (possibly incorrectly).
-> 
->  So, as the person who introduced this mis-feature, I'm the first one to vote
-> for removing it again.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-I agree that this automatic derivation has caused quite a few issues in
-the past and in many cases, we need different dependencies for the host
-and the target variants. So maybe we should think of removing this
-functionality.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Samuel
