@@ -1,59 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 15:07:03 +0200
-Subject: [Buildroot] [git commit] configs/qemu: update aarch64 to linux 4.6.3
-Message-ID: <20160702130840.0807F7FCC1@busybox.osuosl.org>
+Date: Sat, 2 Jul 2016 15:07:22 +0200
+Subject: [Buildroot] [git commit] memcached: bump to version 1.4.28
+Message-ID: <20160702130841.3578E7FED3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0240ab741929f9651ae3b1c6c6ceace15f55a7b8
+commit: https://git.buildroot.net/buildroot/commit/?id=321ee11c1a9914eab108ce619c6aadc11281b2a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The console problem goes away with qemu 2.6.0 so it seems it's now a
-requirement, update readme.txt accordingly.
+Removes the 64-bit atomic intrinsics constraint previously introduced.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/qemu/aarch64-virt/{linux-4.5.config => linux-4.6.config} | 0
- board/qemu/aarch64-virt/readme.txt                             | 2 +-
- configs/qemu_aarch64_virt_defconfig                            | 8 ++++----
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/memcached/Config.in      | 2 --
+ package/memcached/memcached.hash | 6 +++---
+ package/memcached/memcached.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/board/qemu/aarch64-virt/linux-4.5.config b/board/qemu/aarch64-virt/linux-4.6.config
-similarity index 100%
-rename from board/qemu/aarch64-virt/linux-4.5.config
-rename to board/qemu/aarch64-virt/linux-4.6.config
-diff --git a/board/qemu/aarch64-virt/readme.txt b/board/qemu/aarch64-virt/readme.txt
-index cfd5e81..1c4c7f9 100644
---- a/board/qemu/aarch64-virt/readme.txt
-+++ b/board/qemu/aarch64-virt/readme.txt
-@@ -4,4 +4,4 @@ Run the emulation with:
+diff --git a/package/memcached/Config.in b/package/memcached/Config.in
+index 901ecf2..e011d08 100644
+--- a/package/memcached/Config.in
++++ b/package/memcached/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_MEMCACHED
+ 	bool "memcached"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_8
+ 	select BR2_PACKAGE_LIBEVENT
+ 	help
+ 	  Memcached is an in-memory key-value store for small chunks
+@@ -14,4 +13,3 @@ config BR2_PACKAGE_MEMCACHED
+ comment "memcached needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_8
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index 99ee9ac..e774a61 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,4 +1,4 @@
+-# From http://www.memcached.org/files/memcached-1.4.27.tar.gz.sha1
+-sha1	b5869038dc5f2dce24f3a62806eadfd64d58662e	memcached-1.4.27.tar.gz
++# From http://www.memcached.org/files/memcached-1.4.28.tar.gz.sha1
++sha1	c27662ca84933f5ebd837a86dde9378d05c1f200	memcached-1.4.28.tar.gz
+ # Calculated based on the hash above
+-sha256	96a90e7abec041a3c03258b6ce01ab21be16a9c594b7891a55567428392e8fe7	memcached-1.4.27.tar.gz
++sha256	ef847bba60301cc600f06a8c64bf91c6c3f65ca507462951f918963297bcb816	memcached-1.4.28.tar.gz
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index 37e52ad..6490271 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- The login prompt will appear in the terminal that started Qemu.
- 
--Tested with QEMU 2.5.0
-+Tested with QEMU 2.6.0
-diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-index d540bf5..195d51e 100644
---- a/configs/qemu_aarch64_virt_defconfig
-+++ b/configs/qemu_aarch64_virt_defconfig
-@@ -9,12 +9,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
--# Linux headers same as kernel, a 4.5 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
-+# Linux headers same as kernel, a 4.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.3"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-4.5.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-4.6.config"
+-MEMCACHED_VERSION = 1.4.27
++MEMCACHED_VERSION = 1.4.28
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
