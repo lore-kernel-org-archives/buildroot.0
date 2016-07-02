@@ -1,46 +1,99 @@
-From: Julien Floret <julien.floret@6wind.com>
-Date: Sat, 2 Jul 2016 22:11:21 +0200
-Subject: [Buildroot] [RFC 1/3] zip: add explicit dependencies for host
-	variant
-In-Reply-To: <a87cf40d-7deb-254a-ff4f-b5167abca4e8@mind.be>
-References: <1467485315-28264-1-git-send-email-julien.floret@6wind.com>
- <1467485315-28264-2-git-send-email-julien.floret@6wind.com>
- <a87cf40d-7deb-254a-ff4f-b5167abca4e8@mind.be>
-Message-ID: <CAHfJR7g8+JRGQG=e-=PAbvuNE-HtCPUgw8kKLeiasiSU2yr9nQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 2 Jul 2016 22:15:59 +0200
+Subject: [Buildroot] [PATCH 4/4 v3] kodi: allow enablement of libamcodec
+ as codec if selected
+In-Reply-To: <trinity-90b29fc0-247c-47a2-9a96-f80d2a588ee3-1467482301230@3capp-mailcom-bs01>
+References: <20160624182256.11909-1-daggs@gmx.com>
+ <20160624182256.11909-4-daggs@gmx.com>
+ <37g24dxqbs.ln2@ID-313208.user.individual.net>
+ <trinity-6552df3a-288c-4396-95fb-c56acc32c4d5-1467371097197@3capp-mailcom-bs11>
+ <trinity-90b29fc0-247c-47a2-9a96-f80d2a588ee3-1467482301230@3capp-mailcom-bs01>
+Message-ID: <f6f8aa1e-e673-4d86-a51a-807987b14209@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2016-07-02 22:04 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
-> On 02-07-16 20:48, Julien Floret wrote:
->> Signed-off-by: Julien Floret <julien.floret@6wind.com>
->> ---
->>  package/zip/zip.mk | 1 +
->>  1 file changed, 1 insertion(+)
+On 02-07-16 19:58, daggs wrote:
+> Greetings Bernd,
 >>
->> diff --git a/package/zip/zip.mk b/package/zip/zip.mk
->> index 5338f881663d..f56ac5a4804d 100644
->> --- a/package/zip/zip.mk
->> +++ b/package/zip/zip.mk
->> @@ -12,6 +12,7 @@ ZIP_LICENSE_FILES = LICENSE
+>> Greetings,
+>>>
+>>>> +else ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
+>>>> +KODI_DEPENDENCIES += libamcodec
+>>>> +KODI_CONF_OPTS += --enable-codec=amcodec
+>>>
+>>> Hi,
+>>>
+>>> using this defconfig
+>>>
+>>> BR2_arm=y
+>>> BR2_cortex_a15=y
+>>> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+>>> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>>> BR2_PACKAGE_KODI=y
+>>> BR2_PACKAGE_MESA3D=y
+>>> BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+>>> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+>>> BR2_PACKAGE_MESA3D_OPENGL_ES=y
+>>> BR2_PACKAGE_XORG7=y
+>>> BR2_PACKAGE_LIBAMCODEC=y
+>>>
+>>> $ grep -i unsafe .config
+>>> BR2_COMPILER_PARANOID_UNSAFE_PATH=y
+>>>
+>>> compiling Kodi fails:
+>>>
+>>> CPP     xbmc/cores/dvdplayer/DVDCodecs/Video/AMLCodec.o
+>>> arm-buildroot-linux-uclibcgnueabihf-g++: ERROR: unsafe header/library path used in cross-compilation: '/usr/include/amcodec'
+>>>
+>>> due to not compile-safe code used here:
+>>> https://github.com/xbmc/xbmc/blob/Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/Makefile.in#L29
+>>>
+>>> Regards, Bernd
+>>>
+>> will take a look on this, thanks.
 >>
->>  ifeq ($(BR2_PACKAGE_BZIP2),y)
->>  ZIP_DEPENDENCIES += bzip2
->> +HOST_ZIP_DEPENDENCIES += host-bzip2
->
->  Nack. This is another example why the automatic derivation is not good.
-> host-zip should either depend on host-bzip2 unconditionally, or never depend on
-> it, or depend on it based on BR2_PACKAGE_HOST_BZIP2.
->
->  In this specific case, it should not depend on host-bzip2 IMHO. So the correct
-> thing to do with the automatic derivation would be
->
-> HOST_ZIP_DEPENDENCIES =
+>> Dagg.
+> 
+> I've looked into this issue, the root of the issue can be found at output/build/kodi-16.1-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/Makefile.in
+> where we see the following:
+> ifeq (@USE_LIBAMCODEC@,1)
+> SRCS += AMLCodec.cpp
+> SRCS += DVDVideoCodecAmlogic.cpp
+> INCLUDES += -I$(prefix)/include/amcodec
+> INCLUDES += -I$(prefix)/include/amplayer
 
-I agree, but the idea of this example was to be isofunctional - to keep the same
-dependencies as with auto derivation.
-The fix should be done in another patch IMO, probably before this patch.
+ That is just wrong, the cpp file does #include <amcodec/codec.h> so there is no
+need for this additional -I...
 
-Julien
+ So IMHO the fix is to remove those INCLUDES lines.
+
+ Regards,
+ Arnout
+
+> endif
+> 
+> as prefix is set to /usr (see output/build/kodi-16.1-Jarvis/config.log), I'm not sure fixing prefix is the answer.
+> in general, replacing the include lines with the follows:
+> INCLUDES += -I$(shell $(CC) --print-sysroot)/$(prefix)/include/amcodec
+> INCLUDES += -I$(shell $(CC) --print-sysroot)/$(prefix)/include/amplayer
+> 
+> but I'm not this is the right way to fix this, thoughts?
+> 
+> Dagg.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
