@@ -1,44 +1,47 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sat,  2 Jul 2016 17:06:18 +0200
-Subject: [Buildroot] [PATCH 1/1] Config.in: indentation cleanup
-Message-ID: <1467471978-18813-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 2 Jul 2016 17:16:20 +0200
+Subject: [Buildroot] [PATCH 1/2] package/boost: boost-local needs NTPL
+ threads
+In-Reply-To: <ng0l4dx0de.ln2@ID-313208.user.individual.net>
+References: <1467469950-11984-1-git-send-email-romain.naour@smile.fr>
+ <ng0l4dx0de.ln2@ID-313208.user.individual.net>
+Message-ID: <0c77d26a-d98c-372b-fbd0-2e3fb6422183@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- Config.in | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Hi Bernd,
 
-diff --git a/Config.in b/Config.in
-index bbe2bc3..7bb2a01 100644
---- a/Config.in
-+++ b/Config.in
-@@ -730,14 +730,14 @@ endmenu
- 
- config BR2_REPRODUCIBLE
- 	bool "Make the build reproducible (experimental)"
--        help
--          This option will remove all sources of non-reproducibility
--          from the build process. For a given Buildroot configuration,
--          this allows to generate exactly identical binaries from one
--          build to the other, including on different machines.
--
--          This is labeled as an experimental feature, as not all
--          packages behave properly to ensure reproducibility.
-+	help
-+	  This option will remove all sources of non-reproducibility
-+	  from the build process. For a given Buildroot configuration,
-+	  this allows to generate exactly identical binaries from one
-+	  build to the other, including on different machines.
-+
-+	  This is labeled as an experimental feature, as not all
-+	  packages behave properly to ensure reproducibility.
- 
- endmenu
- 
--- 
-1.9.1
+Le 02/07/2016 ? 16:43, Bernd Kuhls a ?crit :
+> Hi Romain,
+> 
+> Am Sat, 02 Jul 2016 16:32:29 +0200 schrieb Romain Naour:
+> 
+>> Since Boost 1.61.0 boost-local require a toolchain with NTPL threads
+>> support.
+> 
+> NAK, the Cortex m4 toolchain is broken, not boost:
+> http://lists.busybox.net/pipermail/buildroot/2016-June/163865.html
+
+Thanks for the link.
+I guess the patch 2/2 has the same issue on NTPL requirement.
+Still we probably need the library handling in the packaging.
+
+Is the patch from Waldemar has been merged upstream ?
+For now, can we add an autobuilder exception ?
+
+I'll mark the series rejected.
+
+Best regards,
+Romain
+
+> 
+> Regards, Bernd
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
