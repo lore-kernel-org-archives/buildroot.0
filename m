@@ -1,38 +1,114 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 12:56:25 +0200
-Subject: [Buildroot] Unable to compile uboot v2012.10 on Buildroot
- 2016.05
-In-Reply-To: <e3405ae6-8f0b-0e40-e2e4-efafe77bf717@mind.be>
-References: <1249010753.7483898.1467378648497.JavaMail.zimbra@datacom.ind.br>
- <20160701151804.61f389e9@free-electrons.com>
- <1572014322.7513168.1467381657827.JavaMail.zimbra@datacom.ind.br>
- <20160701161556.5e65b3df@free-electrons.com>
- <1533419985.7541395.1467386922132.JavaMail.zimbra@datacom.ind.br>
- <e3405ae6-8f0b-0e40-e2e4-efafe77bf717@mind.be>
-Message-ID: <20160702125625.11882f51@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 Jul 2016 13:02:37 +0200
+Subject: [Buildroot] [PATCH 3/3] package/libuio: fix build with musl
+In-Reply-To: <1467450008-27597-3-git-send-email-romain.naour@smile.fr>
+References: <1467450008-27597-1-git-send-email-romain.naour@smile.fr>
+ <1467450008-27597-3-git-send-email-romain.naour@smile.fr>
+Message-ID: <20160702110237.GJ22343@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Romain, All,
 
-On Sat, 2 Jul 2016 12:47:14 +0200, Arnout Vandecappelle wrote:
-
-> > Because the value of HOSTCFLAGS set in U-Boot's config.mk is overwritten.   
+On 2016-07-02 11:00 +0200, Romain Naour spake thusly:
+> limits.h header is missing in attr.c, base.c and helper.c to provide
+> PATH_MAX.
 > 
->  How about leaving HOSTCFLAGS alone, and instead setting
-> HOSTCC="$(HOSTCC) $(HOST_CFLAGS)". HOSTLDFLAGS can probably be overridden.
+> Fixes:
+> http://autobuild.buildroot.net/results/702/7023104e6018ea46c54073ddbe5119d0f66ae5a3
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-Good point, that's possibly an alternate solution. I sent a patch
-implementing a different solution, but Carlos, if you can try Arnout's
-suggestion, it would be good.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thanks,
+Don't forget to send it upstream. ;-)
 
-Thomas
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/libuio/0002-fix-build-with-musl.patch | 57 +++++++++++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 package/libuio/0002-fix-build-with-musl.patch
+> 
+> diff --git a/package/libuio/0002-fix-build-with-musl.patch b/package/libuio/0002-fix-build-with-musl.patch
+> new file mode 100644
+> index 0000000..6e5b168
+> --- /dev/null
+> +++ b/package/libuio/0002-fix-build-with-musl.patch
+> @@ -0,0 +1,57 @@
+> +From c378ee112857128002754c616acb6841ee32aaf6 Mon Sep 17 00:00:00 2001
+> +From: Romain Naour <romain.naour@smile.fr>
+> +Date: Sat, 2 Jul 2016 10:52:28 +0200
+> +Subject: [PATCH] fix build with musl
+> +
+> +limits.h header is missing in attr.c, base.c and helper.c to provide
+> +PATH_MAX.
+> +
+> +Fixes:
+> +http://autobuild.buildroot.net/results/702/7023104e6018ea46c54073ddbe5119d0f66ae5a3
+> +
+> +Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> +---
+> + attr.c   | 1 +
+> + base.c   | 1 +
+> + helper.c | 1 +
+> + 3 files changed, 3 insertions(+)
+> +
+> +diff --git a/attr.c b/attr.c
+> +index 4245140..7512f4e 100644
+> +--- a/attr.c
+> ++++ b/attr.c
+> +@@ -25,6 +25,7 @@
+> + #include <dirent.h>
+> + #include <errno.h>
+> + #include <fcntl.h>
+> ++#include <limits.h>
+> + #include <stdio.h>
+> + #include <stdlib.h>
+> + #include <string.h>
+> +diff --git a/base.c b/base.c
+> +index 14ebcee..4ce7301 100644
+> +--- a/base.c
+> ++++ b/base.c
+> +@@ -25,6 +25,7 @@
+> + #include <dirent.h>
+> + #include <errno.h>
+> + #include <fcntl.h>
+> ++#include <limits.h>
+> + #include <stdio.h>
+> + #include <stdlib.h>
+> + #include <string.h>
+> +diff --git a/helper.c b/helper.c
+> +index 170f084..1fb0b4c 100644
+> +--- a/helper.c
+> ++++ b/helper.c
+> +@@ -25,6 +25,7 @@
+> + #include <dirent.h>
+> + #include <errno.h>
+> + #include <fcntl.h>
+> ++#include <limits.h>
+> + #include <regex.h>
+> + #include <stdio.h>
+> + #include <stdlib.h>
+> +-- 
+> +2.5.5
+> +
+> -- 
+> 2.5.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
