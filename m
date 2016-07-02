@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 02 Jul 2016 19:08:04 +0200
-Subject: [Buildroot] [PATCH 2/4 v3] support/download/git: do not use git
-	archive, handle it manually
-In-Reply-To: <dabe52d4bc6a665abc37b40cfd2585ba759d0e45.1467363623.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Fri, 1 Jul 2016 11:01:17 +0200")
+Date: Sat, 02 Jul 2016 19:09:51 +0200
+Subject: [Buildroot] [PATCH 3/4 v3] support/download/git: add support
+	for submodules
+In-Reply-To: <4d8136108e0e7be40bad4fa68ebb3dd558f42f8d.1467363623.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Fri, 1 Jul 2016 11:01:18 +0200")
 References: <cover.1467363623.git.yann.morin.1998@free.fr>
- <dabe52d4bc6a665abc37b40cfd2585ba759d0e45.1467363623.git.yann.morin.1998@free.fr>
-Message-ID: <878txk55or.fsf@dell.be.48ers.dk>
+ <4d8136108e0e7be40bad4fa68ebb3dd558f42f8d.1467363623.git.yann.morin.1998@free.fr>
+Message-ID: <874m8855ls.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,47 +15,31 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > We currently use git-archive to generate the tarball. This is all handy
- > and dandy, but git-archive does not support submodules. In the follow-up
- > patch, we're going to handle submodules, so we would not be able to use
- > git-archive.
+ > Some git repositories may be split into a master repository and
+ > submodules. Up until now, we did not have support for submodules,
+ > because we were using bare clones, in which it is not possible to
+ > update the list of submodules.
 
- > Instead, we manually generate the archive:
- >   - extract the tree to the requested cset,
- >   - get the date of the commit to store in the archive,
- >   - store only numeric owners,
- >   - store owner and group as 0 (zero, although any arbitrary value would
- >     have been fine, as long as it's a constant),
- >   - sort the files to store in the archive.
+ > Now that we are using plain clones with a working copy, we can retrieve
+ > the submdoules.
 
- > We also get rid of the .git directory, because there is no reason to
- > keep it in the context of Buildroot. Some people would love to keep it
- > so as to speed up later downloads when updating a package, but that is
- > not really doable. For example:
- >   - use current Buildroot
- >   - it would need foo-12345, so do a clone and keep the .git in the
- >     generated tarball
- >   - update Buildroot
- >   - it would need foo-98765
- > For that second clone, how could we know we would have to first extract
- > foo-12345 ? So, the .git in the archive is pretty much useless for
- > Buildroot.
+ > Add an option to the git downlaod helper to kick the update of
+ > submodules, so that they are only fetched for those packages that
+ > require them. Also document the existing -q option at the same time.
 
-I've wondered if it wouldn't have been simpler to keep git archive and
-then just append the git-archive output of the individual submodules
-(like we do for the generated documentation in make release) with git
-submodule foreach, E.G:
+ > Submodules have a .git file at their root, which contains the path to
+ > the real .git directory of the master repository. Since we remove it,
+ > there is no point in keeping those .git files either.
 
-https://ttboj.wordpress.com/2015/07/23/git-archive-with-submodules-and-tar-magic/
+ > Note: this is currently unused, but will be enabled with the follow-up
+ > patch , that adds the necessary parts in the pkg-generic and pkg-download
+ > infrastructures.
 
-Something like:
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Tested-by: Matt Weber <matt@thewebers.ws>
+ > Reviewed-by: Matt Weber <matt@thewebers.ws>
 
-git archive --prefix=foo/ ... > $TAR
-git submodule foreach --recursive \
-    'git archive --prefix=foo/$path/ $sha1 > $TAR.tmp && tar Af $TAR $TAR.tmp'
-rm $TAR.tmp
-
-But we can do that later if needed.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
