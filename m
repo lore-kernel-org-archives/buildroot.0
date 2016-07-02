@@ -1,33 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 Jul 2016 01:55:43 +0200
-Subject: [Buildroot] [PATCH 4/4 v3] core/pkg-infra: download git
-	submodules if the package wants them
-In-Reply-To: <20160702234033.GQ22343@free.fr> (Yann E. MORIN's message of
- "Sun, 3 Jul 2016 01:40:33 +0200")
-References: <cover.1467363623.git.yann.morin.1998@free.fr>
- <b9061693f4d7a2c7030190efd686c988c1278e43.1467363623.git.yann.morin.1998@free.fr>
- <87ziq03qzd.fsf@dell.be.48ers.dk> <20160702234033.GQ22343@free.fr>
-Message-ID: <87vb0n4mtc.fsf@dell.be.48ers.dk>
+Date: Sat, 2 Jul 2016 19:11:14 +0200
+Subject: [Buildroot] [git commit] support/download/git: do not use bare
+	clones
+Message-ID: <20160702235622.D3F7E7F9AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=13c89c2f897258bfe389d953018ec99854a1dd53
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Peter, All,
- > On 2016-07-02 19:11 +0200, Peter Korsgaard spake thusly:
- >> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
- >> > Add a new package variable that packages can set to specify that they
- >> > need git submodules.
- > [--SNIP--]
- >> Will you also send a patch to update the user manual?
+Currently, we are using bare clones, so as to minimise the disk usage,
+most notably for largeish repositories such as the one for the Linux
+kernel, which can go beyond the 1GiB barrier.
 
- > Say "please", and I'll see what I can do... ;-)
+However, this precludes updating (and thus using) the submodules, if
+any, of the repositories, as a working copy is required to use
+submodules (becaue we need to know the list of submodules, where to find
+them, where to clone them, what cset to checkout, and all those is
+dependent upon the checked out cset of the father repository).
 
-Pretty please with sugar on top! ;)
+Switch to using /plain/ clones with a working copy.
 
--- 
-Venlig hilsen,
-Peter Korsgaard 
+This means that the extra refs used by some forges (like pull-requests
+for Github, or changes for gerrit...) are no longer fetched as part of
+the clone, because git does not offer to do a mirror clone when there is
+a working copy.
+
+Instead, we have to fetch those special refs by hand. Since there is no
+easy solution to know whether the cset the user asked for is such a
+special ref or not, we just try to always fetch the cset requested by
+the user; if this fails, we assume that this is not a special ref (most
+probably, it is a sha1) and we defer the check to the archive creation,
+which would fail if the requested cset is missing anyway.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: Matt Weber <matt@thewebers.ws>
+Reviewed-by: Matt Weber <matt@thewebers.ws>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/download/git | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/support/download/git b/support/download/git
+index 314b388..2d98923 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -41,7 +41,7 @@ _git() {
+ git_done=0
+ if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
+     printf "Doing shallow clone\n"
+-    if _git clone ${verbose} --depth 1 -b "'${cset}'" --bare "'${repo}'" "'${basename}'"; then
++    if _git clone ${verbose} --depth 1 -b "'${cset}'" "'${repo}'" "'${basename}'"; then
+         git_done=1
+     else
+         printf "Shallow clone failed, falling back to doing a full clone\n"
+@@ -49,10 +49,25 @@ if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
+ fi
+ if [ ${git_done} -eq 0 ]; then
+     printf "Doing full clone\n"
+-    _git clone ${verbose} --mirror "'${repo}'" "'${basename}'"
++    _git clone ${verbose} "'${repo}'" "'${basename}'"
++fi
++
++pushd "${basename}" >/dev/null
++
++# Try to get the special refs exposed by some forges (pull-requests for
++# github, changes for gerrit...). There is no easy way to know whether
++# the cset the user passed us is such a special ref or a tag or a sha1
++# or whatever else. We'll eventually fail at checking out that cset,
++# below, if there is an issue anyway. Since most of the cset we're gonna
++# have to clone are not such special refs, consign the output to oblivion
++# so as not to alarm unsuspecting users, but still trace it as a warning.
++if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
++    printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
+ fi
+ 
+-GIT_DIR="${basename}" \
+ _git archive --prefix="'${basename}/'" -o "'${output}.tmp'" --format=tar "'${cset}'"
+ 
++# Not really required, but here for consistency
++popd >/dev/null
++
+ gzip -n <"${output}.tmp" >"${output}"
