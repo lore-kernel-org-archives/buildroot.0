@@ -1,45 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  2 Jul 2016 15:32:15 +0200
-Subject: [Buildroot] [PATCH v4 3/7] package/ffmpeg: cosmetic change for the
-	mips fpu option
+Date: Sat,  2 Jul 2016 15:32:17 +0200
+Subject: [Buildroot] [PATCH v4 5/7] package/ffmpeg: re-enable for mips64r2
+	and mips64r6
 In-Reply-To: <1467466339-19422-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1467466339-19422-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1467466339-19422-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1467466339-19422-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ffmpeg 3 fixed support for mips64r2 and mips64r6, for details see
+http://patchwork.ozlabs.org/patch/626756/
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v4: no changes
-v3: no changes
-v2: no changes
+v4: first release
 
- package/ffmpeg/ffmpeg.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/ffmpeg/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index a5511d4..08914b8 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -422,11 +422,9 @@ FFMPEG_CONF_OPTS += --enable-neon
- endif
+diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
+index 096ff95..6b7a6e7 100644
+--- a/package/ffmpeg/Config.in
++++ b/package/ffmpeg/Config.in
+@@ -1,8 +1,7 @@
+ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	bool
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
+-	# ffmpeg's configure script only supports mips64 (r1) variant
+-	default y if !BR2_nios2 && !BR2_mips_64r2 && !BR2_mips_64r6
++	default y if !BR2_nios2
  
- ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
--FFMPEG_CONF_OPTS += \
--	--disable-mipsfpu
-+FFMPEG_CONF_OPTS += --disable-mipsfpu
- else
--FFMPEG_CONF_OPTS += \
--	--enable-mipsfpu
-+FFMPEG_CONF_OPTS += --enable-mipsfpu
- endif
- 
- ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
+ menuconfig BR2_PACKAGE_FFMPEG
+ 	bool "ffmpeg"
 -- 
 2.8.1
