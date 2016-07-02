@@ -1,10 +1,10 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Sun,  3 Jul 2016 00:21:00 +0200
-Subject: [Buildroot] [PATCH 31/69] mpfr: add explicit dependencies for host
-	variant
+Date: Sun,  3 Jul 2016 00:21:01 +0200
+Subject: [Buildroot] [PATCH 32/69] pixman: add explicit dependencies for
+	host variant
 In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467498098-23731-32-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467498098-23731-33-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/mpfr/mpfr.mk | 1 +
+ package/pixman/pixman.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
-index 5c3a6ef54fef..cc1034c10324 100644
---- a/package/mpfr/mpfr.mk
-+++ b/package/mpfr/mpfr.mk
-@@ -11,6 +11,7 @@ MPFR_LICENSE = LGPLv3+
- MPFR_LICENSE_FILES = COPYING.LESSER
- MPFR_INSTALL_STAGING = YES
- MPFR_DEPENDENCIES = gmp
-+HOST_MPFR_DEPENDENCIES = host-gmp
- MPFR_MAKE_OPTS = RANLIB=$(TARGET_RANLIB)
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index ae8d62c589bb..38524e63c450 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -12,6 +12,7 @@ PIXMAN_LICENSE_FILES = COPYING
  
- $(eval $(autotools-package))
+ PIXMAN_INSTALL_STAGING = YES
+ PIXMAN_DEPENDENCIES = host-pkgconf
++HOST_PIXMAN_DEPENDENCIES = host-pkgconf
+ 
+ # For 0001-Disable-tests.patch
+ PIXMAN_AUTORECONF = YES
 -- 
 2.1.0
