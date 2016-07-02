@@ -1,10 +1,10 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Sun,  3 Jul 2016 00:21:30 +0200
-Subject: [Buildroot] [PATCH 61/69] dosfstools: remove empty host
-	dependencies definition
+Date: Sun,  3 Jul 2016 00:21:35 +0200
+Subject: [Buildroot] [PATCH 66/69] pax-utils: remove empty host dependencies
+	definition
 In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467498098-23731-62-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467498098-23731-67-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/dosfstools/dosfstools.mk | 3 ---
+ package/pax-utils/pax-utils.mk | 3 ---
  1 file changed, 3 deletions(-)
 
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index 28a7b421c227..67c6f7310319 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -12,9 +12,6 @@ DOSFSTOOLS_LICENSE_FILES = COPYING
- DOSFSTOOLS_CONF_OPTS = --enable-compat-symlinks --exec-prefix=/
- HOST_DOSFSTOOLS_CONF_OPTS = --enable-compat-symlinks
+diff --git a/package/pax-utils/pax-utils.mk b/package/pax-utils/pax-utils.mk
+index 747c2bb1145b..8d5f3eea73c7 100644
+--- a/package/pax-utils/pax-utils.mk
++++ b/package/pax-utils/pax-utils.mk
+@@ -27,9 +27,6 @@ else
+ PAX_UTILS_CONF_OPTS += --without-seccomp
+ endif
  
--# Avoid target dosfstools dependencies, no host-libiconv
--HOST_DOSFSTOOLS_DEPENDENCIES =
+-# libcap is only useful for pspax (a running system)
+-HOST_PAX_UTILS_DEPENDENCIES =
 -
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- DOSFSTOOLS_CONF_OPTS += --with-udev
- DOSFSTOOLS_DEPENDENCIES += udev
+ # lddtree and symtree need bash
+ ifeq ($(BR2_PACKAGE_BASH),)
+ define PAX_UTILS_REMOVE_BASH_TOOLS
 -- 
 2.1.0
