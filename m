@@ -1,39 +1,82 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  2 Jul 2016 15:32:17 +0200
-Subject: [Buildroot] [PATCH v4 5/7] package/ffmpeg: re-enable for mips64r2
-	and mips64r6
+Date: Sat,  2 Jul 2016 15:32:19 +0200
+Subject: [Buildroot] [PATCH v4 7/7] package/tvheadend: remove compat patch
+	for ffmpeg < 3.x
 In-Reply-To: <1467466339-19422-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1467466339-19422-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1467466339-19422-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1467466339-19422-7-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ffmpeg 3 fixed support for mips64r2 and mips64r6, for details see
-http://patchwork.ozlabs.org/patch/626756/
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v4: first release
+v4: no changes
+v3: no changes
+v2: no changes
 
- package/ffmpeg/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ ...g-revert-minimum-required-version-numbers.patch | 51 ----------------------
+ 1 file changed, 51 deletions(-)
+ delete mode 100644 package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 096ff95..6b7a6e7 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	bool
- 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2
--	# ffmpeg's configure script only supports mips64 (r1) variant
--	default y if !BR2_nios2 && !BR2_mips_64r2 && !BR2_mips_64r6
-+	default y if !BR2_nios2
- 
- menuconfig BR2_PACKAGE_FFMPEG
- 	bool "ffmpeg"
+diff --git a/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch b/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
+deleted file mode 100644
+index 74136fe..0000000
+--- a/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 78a7b7365a67fa2f5394c6b4ca39de01b00416dc Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sat, 2 Apr 2016 19:05:52 +0200
+-Subject: [PATCH 1/1] ffmpeg: revert minimum required version numbers
+-
+-This commit reverts the minimum version numbers required by configure to
+-the values before
+-https://github.com/tvheadend/tvheadend/commit/1359effe28a0381b8c9cbd362d6e144fb87b00fc#diff-e2d5a00791bce9a01f99bc6fd613a39dL486
+-in order to allow compilation with older versions of ffmpeg again.
+-
+-Please note that the previous version numbers of all ffmpeg libs, with
+-the exception of libavfilter, are those of ffmpeg 2.0.7:
+-https://ffmpeg.org/olddownload.html
+-
+-Therefore I synced the minimum version number required for libavfilter to
+-3.79.101 and not to 4.0.0 as previous in tvheadend's configure script.
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Patch sent upstream: https://github.com/tvheadend/tvheadend/pull/838]
+----
+- configure | 14 +++++++-------
+- 1 file changed, 7 insertions(+), 7 deletions(-)
+-
+-diff --git a/configure b/configure
+-index be3d2e2..2ffd280 100755
+---- a/configure
+-+++ b/configure
+-@@ -512,13 +512,13 @@ else
+-   if enabled_or_auto libav; then
+-     has_libav=true
+- 
+--    check_pkg libavfilter   ">=6.31.100"  || has_libav=false
+--    check_pkg libswresample ">=2.0.101"   || has_libav=false
+--    check_pkg libavresample ">=3.0.0"     || has_libav=false
+--    check_pkg libswscale    ">=4.0.100"   || has_libav=false
+--    check_pkg libavformat   ">=57.25.100" || has_libav=false
+--    check_pkg libavcodec    ">=57.24.102" || has_libav=false
+--    check_pkg libavutil     ">=55.17.103" || has_libav=false
+-+    check_pkg libavfilter   ">=3.79.101"  || has_libav=false
+-+    check_pkg libswresample ">=0.17.102"   || has_libav=false
+-+    check_pkg libavresample ">=1.1.0"     || has_libav=false
+-+    check_pkg libswscale    ">=2.3.100"   || has_libav=false
+-+    check_pkg libavformat   ">=55.12.100" || has_libav=false
+-+    check_pkg libavcodec    ">=55.18.102" || has_libav=false
+-+    check_pkg libavutil     ">=52.38.100" || has_libav=false
+- 
+-     if $has_libav; then
+-       enable libav
+--- 
+-2.8.0.rc3
+-
 -- 
 2.8.1
