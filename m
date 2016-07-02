@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 18:47:51 +0200
-Subject: [Buildroot] [PATCH v3 1/1] sphinxbase: new package
-In-Reply-To: <1456904441-28632-1-git-send-email-yba@tkos.co.il>
-References: <1456904441-28632-1-git-send-email-yba@tkos.co.il>
-Message-ID: <20160702184751.38add1ed@free-electrons.com>
+Date: Sat, 2 Jul 2016 18:50:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mplayer: needs
+ BR2_TOOLCHAIN_HAS_SYNC_4
+In-Reply-To: <1467477991-13051-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1467477991-13051-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160702185004.34235606@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +13,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-Sorry for the long delay in reviewing and applying this patch.
+On Sat,  2 Jul 2016 18:46:31 +0200, Bernd Kuhls wrote:
+> Also propagate as reverse dependency to libplayer & tovid.
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/630/6306757da3be9bb7e3cdcbfc8abb4e64a3fb7913/
 
-On Wed,  2 Mar 2016 09:40:41 +0200, Jonathan Ben-Avraham wrote:
+According to this build failure:
 
-> +SPHINXBASE_VERSION = 5prealpha
-> +SPHINXBASE_SITE = http://downloads.sourceforge.net/project/cmusphinx/sphinxbase/5prealpha
-> +SPHINXBASE_LICENSE = MIT
+ffmpeg/libavcodec/libavcodec.a(utils.o): In function `default_lockmgr_cb':
+utils.c:(.text+0x3f8): undefined reference to `__sync_val_compare_and_swap_4'
+utils.c:(.text+0x48c): undefined reference to `__sync_val_compare_and_swap_4'
 
-The license really is BSD-2c, so I've fixed that up.
+So it's the internal copy of ffmpeg that mplayer carries that uses
+those atomic operations.
 
-> +# Note http://sourceforge.net/p/cmusphinx/bugs/441/ "LICENSE file missing in"
-> +# 5prealpha tarballs". The license is contained in the copyright notice at the
-> +# top of each source file. For example:
-> +SPHINXBASE_LICENSE_FILES = src/libsphinxbase/util/bio.c
-> +SPHINXBASE_CONF_OPTS = --without-python
-
-I've also added --without-lapack here, just to be sure.
-
-Applied with those two changes. Thanks a lot!
+In this case, why doesn't the standalone ffmpeg package also use atomic
+operations ? Is the ffmpeg code base different ?
 
 Thomas
 -- 
