@@ -1,43 +1,25 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 2 Jul 2016 20:54:45 +0200
-Subject: [Buildroot] [PATCH 1/2] package/boost: boost-local needs NTPL
- threads
-In-Reply-To: <0c77d26a-d98c-372b-fbd0-2e3fb6422183@smile.fr>
-References: <1467469950-11984-1-git-send-email-romain.naour@smile.fr>
- <ng0l4dx0de.ln2@ID-313208.user.individual.net>
- <0c77d26a-d98c-372b-fbd0-2e3fb6422183@smile.fr>
-Message-ID: <20160702185445.GG17620@waldemar-brodkorb.de>
+From: Christian Stewart <christian@paral.in>
+Date: Sat, 02 Jul 2016 19:00:49 +0000
+Subject: [Buildroot] [PATCH v2 3/3] aufs-util: new package
+In-Reply-To: <1461936744-1528-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
+References: <1461936744-1528-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
+Message-ID: <1467486054169-cb888515-ddf0f3ca-351ee8ec@mixmax.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Romain Naour wrote,
-
-> Hi Bernd,
-> 
-> Le 02/07/2016 ? 16:43, Bernd Kuhls a ?crit :
-> > Hi Romain,
-> > 
-> > Am Sat, 02 Jul 2016 16:32:29 +0200 schrieb Romain Naour:
-> > 
-> >> Since Boost 1.61.0 boost-local require a toolchain with NTPL threads
-> >> support.
-> > 
-> > NAK, the Cortex m4 toolchain is broken, not boost:
-> > http://lists.busybox.net/pipermail/buildroot/2016-June/163865.html
-> 
-> Thanks for the link.
-> I guess the patch 2/2 has the same issue on NTPL requirement.
-> Still we probably need the library handling in the packaging.
-> 
-> Is the patch from Waldemar has been merged upstream ?
-> For now, can we add an autobuilder exception ?
-
-I have sent a official patch today to buildroot and reported the
-issue upstream.
-
-best regards
- Waldemar
+Atul,
+On Fri, Apr 29, 2016 at 6:32 AM Atul Singh
+<atul.singh.mandla@rockwellcollins.com> wrote:
+> + $(MAKE) -C $(@D) CPPFLAGS=?-I $(LINUX_BUILDDIR)/usr/include/?
+HOSTCC=?$(TARGET_CC)? HOSTLD=?$(TARGET_LD)? INSTALL=?$(INSTALL)? all +endef
+FYI, this is wrong - HOSTCC should be $(HOSTCC), as it's used to build some
+small utilities called by aufs-util like ?ver? on the host.
+Even setting it like so I can't seem to get the makefile to use the host cc
+properly?
+Best, Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160702/4a7e985b/attachment.html>
