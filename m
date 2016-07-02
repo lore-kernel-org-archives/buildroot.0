@@ -1,89 +1,62 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  2 Jul 2016 11:00:08 +0200
-Subject: [Buildroot] [PATCH 3/3] package/libuio: fix build with musl
-In-Reply-To: <1467450008-27597-1-git-send-email-romain.naour@smile.fr>
-References: <1467450008-27597-1-git-send-email-romain.naour@smile.fr>
-Message-ID: <1467450008-27597-3-git-send-email-romain.naour@smile.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 Jul 2016 11:01:27 +0200
+Subject: [Buildroot] [PATCH 02/12] reproducibility: override locale and
+ timezone
+In-Reply-To: <1465918277-30675-2-git-send-email-gilles.chanteperdrix@xenomai.org>
+References: <20160614152928.GH3060@hermes.click-hack.org>
+ <1465918277-30675-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <1465918277-30675-2-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <20160702090127.GB22343@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-limits.h header is missing in attr.c, base.c and helper.c to provide
-PATH_MAX.
+Gilles, All,
 
-Fixes:
-http://autobuild.buildroot.net/results/702/7023104e6018ea46c54073ddbe5119d0f66ae5a3
+On 2016-06-14 17:31 +0200, Gilles Chanteperdrix spake thusly:
+> Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- package/libuio/0002-fix-build-with-musl.patch | 57 +++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 package/libuio/0002-fix-build-with-musl.patch
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/libuio/0002-fix-build-with-musl.patch b/package/libuio/0002-fix-build-with-musl.patch
-new file mode 100644
-index 0000000..6e5b168
---- /dev/null
-+++ b/package/libuio/0002-fix-build-with-musl.patch
-@@ -0,0 +1,57 @@
-+From c378ee112857128002754c616acb6841ee32aaf6 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@smile.fr>
-+Date: Sat, 2 Jul 2016 10:52:28 +0200
-+Subject: [PATCH] fix build with musl
-+
-+limits.h header is missing in attr.c, base.c and helper.c to provide
-+PATH_MAX.
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/702/7023104e6018ea46c54073ddbe5119d0f66ae5a3
-+
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ attr.c   | 1 +
-+ base.c   | 1 +
-+ helper.c | 1 +
-+ 3 files changed, 3 insertions(+)
-+
-+diff --git a/attr.c b/attr.c
-+index 4245140..7512f4e 100644
-+--- a/attr.c
-++++ b/attr.c
-+@@ -25,6 +25,7 @@
-+ #include <dirent.h>
-+ #include <errno.h>
-+ #include <fcntl.h>
-++#include <limits.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+diff --git a/base.c b/base.c
-+index 14ebcee..4ce7301 100644
-+--- a/base.c
-++++ b/base.c
-+@@ -25,6 +25,7 @@
-+ #include <dirent.h>
-+ #include <errno.h>
-+ #include <fcntl.h>
-++#include <limits.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+diff --git a/helper.c b/helper.c
-+index 170f084..1fb0b4c 100644
-+--- a/helper.c
-++++ b/helper.c
-+@@ -25,6 +25,7 @@
-+ #include <dirent.h>
-+ #include <errno.h>
-+ #include <fcntl.h>
-++#include <limits.h>
-+ #include <regex.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+-- 
-+2.5.5
-+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  Makefile | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 3f5c3d3..0217ff0 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -208,6 +208,13 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+>  -include $(BR2_CONFIG)
+>  endif
+>  
+> +export BR2_REPRODUCIBLE
+> +ifeq ($(BR2_REPRODUCIBLE),y)
+> +export TZ=UTC
+> +export LANG=C
+> +export LC_ALL=C
+> +endif
+> +
+>  # To put more focus on warnings, be less verbose as default
+>  # Use 'make V=1' to see the full commands
+>  ifeq ("$(origin V)", "command line")
+> -- 
+> 2.8.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.5.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
