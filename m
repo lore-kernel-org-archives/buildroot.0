@@ -1,10 +1,10 @@
 From: Julien Floret <julien.floret@6wind.com>
-Date: Sun,  3 Jul 2016 00:20:45 +0200
-Subject: [Buildroot] [PATCH 16/69] gmp: add explicit dependencies for host
-	variant
+Date: Sun,  3 Jul 2016 00:20:46 +0200
+Subject: [Buildroot] [PATCH 17/69] heimdal: add explicit dependencies for
+	host variant
 In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <1467498098-23731-17-git-send-email-julien.floret@6wind.com>
+Message-ID: <1467498098-23731-18-git-send-email-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/gmp/gmp.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/heimdal/heimdal.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index 09753a016bdd..45571900cd99 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -11,6 +11,7 @@ GMP_INSTALL_STAGING = YES
- GMP_LICENSE = LGPLv3+
- GMP_LICENSE_FILES = COPYING.LESSERv3
- GMP_DEPENDENCIES = host-m4
-+HOST_GMP_DEPENDENCIES = host-m4
+diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
+index 626e68e9469b..8199229c727d 100644
+--- a/package/heimdal/heimdal.mk
++++ b/package/heimdal/heimdal.mk
+@@ -6,7 +6,7 @@
  
- # GMP doesn't support assembly for coldfire or mips r6 ISA yet
- ifeq ($(BR2_m68k_cf)$(BR2_mips_32r6)$(BR2_mips_64r6),y)
+ HEIMDAL_VERSION = 1.6rc2
+ HEIMDAL_SITE = http://www.h5l.org/dist/src
+-HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
++HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
+ HEIMDAL_INSTALL_STAGING = YES
+ # static because of -fPIC issues with e2fsprogs on x86_64 host
+ HOST_HEIMDAL_CONF_OPTS = \
 -- 
 2.1.0
