@@ -1,34 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Jul 2016 12:40:38 +0200
-Subject: [Buildroot] [PATCH 1/4] Package netsnmp: Created start(), stop(),
-	reload().
-In-Reply-To: <87bn2g9w0h.fsf@dell.be.48ers.dk>
-References: <1456435484-4723-1-git-send-email-universeII@gmx.de>
- <20160701150121.7eebcb5e@free-electrons.com>
- <87bn2g9w0h.fsf@dell.be.48ers.dk>
-Message-ID: <20160702124038.358c9c15@free-electrons.com>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Sat, 2 Jul 2016 12:45:21 +0200
+Subject: [Buildroot] [PATCH 2/2] acpica: new package
+In-Reply-To: <a3fe6cc6-15ac-b2e4-d995-9fbd25ce034c@smile.fr>
+References: <1459016777-27952-1-git-send-email-nunes.erico@gmail.com>
+ <1459016777-27952-2-git-send-email-nunes.erico@gmail.com>
+ <a3fe6cc6-15ac-b2e4-d995-9fbd25ce034c@smile.fr>
+Message-ID: <CAK4VdL15DMSXe-y5vzAffjRA6JV2XLUqUwbwmL4rGPd5m8U9gg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Romain,
 
-On Sat, 02 Jul 2016 12:25:50 +0200, Peter Korsgaard wrote:
+thank you very much for your review and testing.
 
-> For the future, please use your full name in the From: as well (git
-> commit user.name "Andreas Ehmanns"). Now these commits are listed as
-> being from "universe II".
+On Sat, Jul 2, 2016 at 11:54 AM, Romain Naour <romain.naour@smile.fr> wrote:
+> The license seems to be a BSD like or GPLv2
 
-Yeah, also noticed that, but after pushing :-/ The Signed-off-by line
-is more visible and that one was correct, so I didn't notice.
+I've look again and indeed it looks like a dual license, I'll update
+accordingly.
 
-Sadly, the new pedantic git commit hook checks that the e-mail between
-the From and the SoB line are matching, but not the name itself.
+> Maybe you can use TARGET_CONFIGURE_OPTS like as Peter suggested in [1]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Ok. By the way, during some more testing after your comment, I've
+found that it builds without errors but fails to install on non-x86_64
+architectures due to the use of "install -s" (install fails attempting
+to use 'strip' from the host on other architectures).
+
+I'll have that fixed too in a v2.
+
+Thank you
+
+Erico
