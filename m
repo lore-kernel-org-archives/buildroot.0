@@ -1,18 +1,20 @@
 From: Nathaniel Roach <nroach44@gmail.com>
-Date: Sun, 3 Jul 2016 21:02:42 +0800
+Date: Sun, 3 Jul 2016 21:06:57 +0800
 Subject: [Buildroot] [PATCH v3] package/quagga: Add systemd.service file
 In-Reply-To: <CAGduivweAB_oyvVutnw18Sry0mUdi_eapL-RUSZUtRVyEiH8Cw@mail.gmail.com>
 References: <1467533939-26606-1-git-send-email-nroach44@gmail.com>
  <CAGduivyM5Y4TBVos3Pz8bW-7KeZc0RQA+uTbDQtXrA0tR-sR+A@mail.gmail.com>
  <55ce8415-62de-2e1e-bc88-f35d511866ec@gmail.com>
  <CAGduivweAB_oyvVutnw18Sry0mUdi_eapL-RUSZUtRVyEiH8Cw@mail.gmail.com>
-Message-ID: <166ee2dd-e116-0bae-731d-29e29371b220@gmail.com>
+Message-ID: <f1ecfb6a-1adc-4f51-35e1-3fed8c054607@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Oh, and it's not 0 such that it won't restart and hog resources quite as 
+badly if it's instantly dieing.
 
 
 On 03/07/16 20:59, Maxime Hadjinlian wrote:
@@ -125,8 +127,6 @@ On 03/07/16 20:59, Maxime Hadjinlian wrote:
 >> undesirable as it's responsible for keeping a large amount of routes in my
 >> router's tables.
 > I was thinking about the RestartSec delay, I agree on the "on-failure".
-Oh, derp. I didn't pick 1 second for any reason other than it's 
-quickest. If there's a good argument for longer it can be set longer.
 >>>> +
 >>>> +[Install]
 >>>> +WantedBy=multi-user.target
