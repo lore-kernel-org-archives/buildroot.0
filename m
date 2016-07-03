@@ -1,36 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 10:29:06 +0200
-Subject: [Buildroot] [PATCH 69/69] tar: remove empty host dependencies
- definition
-In-Reply-To: <1467498098-23731-70-git-send-email-julien.floret@6wind.com>
-References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-70-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160703102906.38f40567@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 3 Jul 2016 10:28:57 +0200
+Subject: [Buildroot] [PATCH 04/24 v2] system/skeleton: update etc/mtab
+ with a more sensible link
+In-Reply-To: <4be6668a795a8af830d18094decfffdf18e5090f.1466622379.git.yann.morin.1998@free.fr>
+References: <cover.1466622379.git.yann.morin.1998@free.fr>
+ <4be6668a795a8af830d18094decfffdf18e5090f.1466622379.git.yann.morin.1998@free.fr>
+Message-ID: <68b936ec-3c91-2fbe-c755-5cfd5c3b2935@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Yann,
 
-On Sun,  3 Jul 2016 00:21:38 +0200, Julien Floret wrote:
-> Note that host-tar dependencies were broken with automatic derivation
-> of host dependencies:
-> host-tar could depend (or not) on host-attr (and even on non-existing
-> host-acl!), depending on BR2_PACKAGE_BUSYBOX.
+Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
+> Currently, our /etc/mtab points to /proc/mounts. This was all neat so
+> far, and was good for a sysv-like init system.
 > 
-> Now, host-tar has no dependency.
+> However, the way today is to point it at /proc/self/mounts, the
+> per-process mount tab.
 > 
-> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+> Additionnally, that's what systemd expects. If /etc/mtab is not a
+> symlink to ../proc/self/mounts and the rootfs is readonly, systemd would
+> whine loudly (and a service unit would be marked failed).
+> 
+> Since it works well for sysv-like init systems too, just use that.
+
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  package/tar/tar.mk | 1 -
->  1 file changed, 1 deletion(-)
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>  system/skeleton/etc/mtab | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/system/skeleton/etc/mtab b/system/skeleton/etc/mtab
+> index 4c0a094..5c4677a 120000
+> --- a/system/skeleton/etc/mtab
+> +++ b/system/skeleton/etc/mtab
+> @@ -1 +1 @@
+> -/proc/mounts
+> \ No newline at end of file
+> +../proc/self/mounts
+> \ No newline at end of file
+> 
