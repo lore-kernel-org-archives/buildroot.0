@@ -1,139 +1,87 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Jul 2016 11:08:00 +0200
-Subject: [Buildroot] [git commit] tekui: new package
-Message-ID: <20160703090819.B29DA802C8@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 3 Jul 2016 11:11:41 +0200
+Subject: [Buildroot] [PATCH 11/24 v2] system: do not set hostname and
+ issue for custom skeleton
+In-Reply-To: <4fb0c79b53f137cd3f1362b3f3ebab44f8b1d782.1466622379.git.yann.morin.1998@free.fr>
+References: <cover.1466622379.git.yann.morin.1998@free.fr>
+ <4fb0c79b53f137cd3f1362b3f3ebab44f8b1d782.1466622379.git.yann.morin.1998@free.fr>
+Message-ID: <ba159b96-5dac-1ee3-8171-8527207f157c@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c30c07fa8e64b9ee727778075e1620da45688260
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in        |  1 +
- package/tekui/Config.in  | 19 ++++++++++++++
- package/tekui/tekui.hash |  2 ++
- package/tekui/tekui.mk   | 66 ++++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 88 insertions(+)
+Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
+> We expect the custom skeleton to be fully filled with the necessary
+> files, now. There is definitely no reason we should handle setting the
+> hostname and the issue file in there. A user using a custom skeleton
+> should be fully responsible for providing a functional skeleton.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/Config.in b/package/Config.in
-index c57c932..f238c1d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -293,6 +293,7 @@ comment "QT libraries and helper libraries"
- 	source "package/quazip/Config.in"
- 	source "package/qwt/Config.in"
- endif
-+	source "package/tekui/Config.in"
- 	source "package/weston/Config.in"
- 	source "package/x11r7/Config.in"
- 
-diff --git a/package/tekui/Config.in b/package/tekui/Config.in
-new file mode 100644
-index 0000000..998c25a
---- /dev/null
-+++ b/package/tekui/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_TEKUI
-+	bool "tekui"
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_LUAFILESYSTEM	# runtime only
-+	select BR2_PACKAGE_LUAEXPAT		# runtime only
-+	select BR2_PACKAGE_LUASOCKET		# runtime only
-+	select BR2_PACKAGE_LUAPOSIX		# runtime only
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  TekUI is a small, freestanding and portable graphical user interface
-+	  (GUI) toolkit written in Lua and C. It was initially developed for
-+	  the X Window System and has been ported to DirectFB, Windows, Nano-X
-+	  and a raw framebuffer since
-+
-+	  http://tekui.neoscientists.org/
-+
-+comment "TekUI needs a Lua interpreter and a toolchain w/ threads"
-+	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/tekui/tekui.hash b/package/tekui/tekui.hash
-new file mode 100644
-index 0000000..07de2ed
---- /dev/null
-+++ b/package/tekui/tekui.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  28abfaacc0f2ddae962afbbca862a7fb619c33a99a497be9edd746091013dd7f  tekui-1.12.tgz
-diff --git a/package/tekui/tekui.mk b/package/tekui/tekui.mk
-new file mode 100644
-index 0000000..60b48e0
---- /dev/null
-+++ b/package/tekui/tekui.mk
-@@ -0,0 +1,66 @@
-+################################################################################
-+#
-+# tekui
-+#
-+################################################################################
-+
-+TEKUI_VERSION = 1.12
-+TEKUI_SOURCE = tekui-$(TEKUI_VERSION).tgz
-+TEKUI_SITE = http://tekui.neoscientists.org/releases
-+TEKUI_LICENSE = MIT
-+TEKUI_LICENSE_FILES = COPYRIGHT
-+TEKUI_DEPENDENCIES = freetype luainterpreter
-+
-+TEKUI_MAKE_OPTS = \
-+	CC="$(TARGET_CC) -fPIC" \
-+	AR="$(TARGET_AR) rcu" \
-+	INSTALL_S="install" \
-+	LUAVER=$(LUAINTERPRETER_ABIVER) \
-+	LUA_DEFS=""
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+TEKUI_DEPENDENCIES += libpng
-+TEKUI_MAKE_OPTS += TEKUI_DEFS="-DENABLE_GRADIENT -DENABLE_FILENO -DENABLE_PIXMAP_CACHE -DENABLE_PNG"
-+TEKUI_MAKE_OPTS += TEKUI_LIBS=-lpng
-+else
-+TEKUI_MAKE_OPTS += TEKUI_DEFS="-DENABLE_GRADIENT -DENABLE_FILENO -DENABLE_PIXMAP_CACHE"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DEJAVU),y)
-+TEKUI_FONTDIR=/usr/share/fonts/dejavu
-+else
-+TEKUI_FONTDIR=/usr/share/lua/$(LUAINTERPRETER_ABIVER)/tek/ui/font
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXFT)$(BR2_PACKAGE_XLIB_LIBXXF86VM),yy)
-+TEKUI_DEPENDENCIES += xlib_libXft xlib_libXxf86vm
-+TEKUI_MAKE_OPTS += \
-+	X11_LIBS="-lXext -lXxf86vm -lXft -lfreetype -lfontconfig" \
-+	X11_DEFS="-D_XOPEN_SOURCE -DENABLE_XFT -DENABLE_XVID -I$(STAGING_DIR)/usr/include/freetype2 -I$(STAGING_DIR)/usr/include/fontconfig" \
-+	DISPLAY_DRIVER=x11
-+else
-+ifeq ($(BR2_PACKAGE_DIRECTFB),y)
-+TEKUI_DEPENDENCIES += directfb
-+TEKUI_MAKE_OPTS += \
-+	DIRECTFB_LIBS="-lfreetype -ldirectfb -lpthread" \
-+	DIRECTFB_DEFS="-D_REENTRANT -I$(STAGING_DIR)/usr/include/directfb -I$(STAGING_DIR)/usr/include/freetype2" \
-+	DISPLAY_DRIVER=directfb
-+else
-+TEKUI_MAKE_OPTS += \
-+	FREETYPE_LIBS=-lfreetype \
-+	FREETYPE_DEFS="-I$(STAGING_DIR)/usr/include/freetype2" \
-+	RAWFB_SUB_LIBS="" \
-+	RAWFB_SUB_DEFS="-DDEF_FONTDIR=\\\"$(TEKUI_FONTDIR)\\\"" \
-+	DISPLAY_DRIVER=rawfb
-+endif
-+endif
-+
-+define TEKUI_BUILD_CMDS
-+	$(MAKE) $(TEKUI_MAKE_OPTS) PREFIX="/usr" -C $(@D) all
-+endef
-+
-+define TEKUI_INSTALL_TARGET_CMDS
-+	$(MAKE) $(TEKUI_MAKE_OPTS) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
-+endef
-+
-+$(eval $(generic-package))
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+> 
+> ---
+> Note: beside the skeleton, the only other user of the hostname was the
+> perl package, and it was just previously changed not to use it anymore.
+> ---
+>  package/skeleton/skeleton.mk | 8 ++++----
+>  system/Config.in             | 4 ++++
+>  2 files changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+> index 144b759..e67a477 100644
+> --- a/package/skeleton/skeleton.mk
+> +++ b/package/skeleton/skeleton.mk
+> @@ -110,6 +110,10 @@ define SKELETON_INSTALL_STAGING_CMDS
+>  	ln -snf lib $(STAGING_DIR)/usr/$(SKELETON_LIB_SYMLINK)
+>  endef
+>  
+> +# The TARGET_FINALIZE_HOOKS must be sourced only if the users choose to use the
+> +# default skeleton.
+> +ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+> +
+>  SKELETON_TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+>  SKELETON_TARGET_GENERIC_ISSUE = $(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
+>  SKELETON_TARGET_GENERIC_ROOT_PASSWD = $(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
+> @@ -138,10 +142,6 @@ endef
+>  TARGET_FINALIZE_HOOKS += SKELETON_SET_ISSUE
+>  endif
+>  
+> -# The TARGET_FINALIZE_HOOKS must be sourced only if the users choose to use the
+> -# default skeleton.
+> -ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+> -
+>  define SKELETON_SET_NETWORK_LOCALHOST
+>  	( \
+>  		echo "# interface file auto-generated by buildroot"; \
+> diff --git a/system/Config.in b/system/Config.in
+> index c02f394..3a38bd4 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -28,6 +28,8 @@ config BR2_ROOTFS_MERGED_USR
+>  
+>  endif
+>  
+> +if BR2_ROOTFS_SKELETON_DEFAULT
+> +
+>  config BR2_TARGET_GENERIC_HOSTNAME
+>  	string "System hostname"
+>  	default "buildroot"
+> @@ -46,6 +48,8 @@ config BR2_TARGET_GENERIC_ISSUE
+>  	  Leave empty to not create /etc/issue, or to keep the
+>  	  one from a custom skeleton.
+>  
+> +endif
+> +
+>  choice
+>  	bool "Passwords encoding"
+>  	default BR2_TARGET_GENERIC_PASSWD_MD5
+> 
