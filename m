@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 10:26:22 +0200
-Subject: [Buildroot] [PATCH 61/69] dosfstools: remove empty host
- dependencies definition
-In-Reply-To: <1467498098-23731-62-git-send-email-julien.floret@6wind.com>
+Date: Sun, 3 Jul 2016 10:26:25 +0200
+Subject: [Buildroot] [PATCH 63/69] lua: remove empty host dependencies
+ definition
+In-Reply-To: <1467498098-23731-64-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-62-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160703102622.7af3bd07@free-electrons.com>
+ <1467498098-23731-64-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160703102625.4f0ec915@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +14,10 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Jul 2016 00:21:30 +0200, Julien Floret wrote:
+On Sun,  3 Jul 2016 00:21:32 +0200, Julien Floret wrote:
 > Signed-off-by: Julien Floret <julien.floret@6wind.com>
 > ---
->  package/dosfstools/dosfstools.mk | 3 ---
+>  package/lua/lua.mk | 3 ---
 >  1 file changed, 3 deletions(-)
 
 Applied to master, thanks.
