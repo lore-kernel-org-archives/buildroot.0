@@ -1,115 +1,55 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Sun, 3 Jul 2016 20:26:23 -0300
-Subject: [Buildroot] [PATCH v4] supertuxkart: new package
-In-Reply-To: <8737nql3ge.fsf@dell.be.48ers.dk>
-References: <20160703214937.5418-1-ezequiel@vanguardiasur.com.ar>
- <8737nql3ge.fsf@dell.be.48ers.dk>
-Message-ID: <CAAEAJfCpPaKEYOVXwJs-vdTrqKdaOE0EepwABu9mcWy9CBrfVA@mail.gmail.com>
+From: Georges Savoundararadj <savoundg@gmail.com>
+Date: Sun,  3 Jul 2016 16:28:52 -0700
+Subject: [Buildroot] [PATCH 1/1] wpa_supplicant: add option to enable Wi-Fi
+	Display
+Message-ID: <20160703232852.8222-1-savoundg@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 3 July 2016 at 20:14, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
->
->  > Note that this package builds and bundles a number of libraries,
->  > such as GLEW and Irrlicht. We are not interested in doing
->  > non-upstreamable changes, so it is not desirable to modify
->  > this choice in any way.
->
->  > In addition, Supertuxkart builds a version of the angelscript
->  > interpreter. If a compatible version of angelscript is installed
->  > on the system, it's possible to use it.
->
->  > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
->  > --
->  > Changes from v3:
->  >   * Bumped to v0.9.2
->  >   * Added a patch to fix bad return jpeglib 'boolean' type
->
->  > +++ b/package/supertuxkart/0002-irrlicht-Fix-boolean-return-type-for-jpeglib-s-callb.patch
->  > @@ -0,0 +1,39 @@
->
-> Something went wrong with this patch / your mailer. The file you are
-> patching has DOS style line endings, but the patch didn't, so it
-> couldn't be applied on my side and I had to fix it.
->
+BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY depends on
+BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT because CONFIG_WIFI_DISPLAY needs
+CONFIG_P2P.
 
-Hm, that must have been the git-send-email, because the patch
-has DOS style endings here. Sorry about that!
+Signed-off-by: Georges Savoundararadj <savoundg@gmail.com>
+---
+ package/wpa_supplicant/Config.in         | 6 ++++++
+ package/wpa_supplicant/wpa_supplicant.mk | 4 ++++
+ 2 files changed, 10 insertions(+)
 
->> diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
->  > new file mode 100644
->  > index 000000000000..4ee8c4d57efe
->  > --- /dev/null
->  > +++ b/package/supertuxkart/Config.in
->  > @@ -0,0 +1,34 @@
->  > +config BR2_PACKAGE_SUPERTUXKART
->  > +    bool "supertuxkart"
->  > +    depends on BR2_USE_MMU # fork()
->  > +    depends on BR2_INSTALL_LIBSTDCPP # openal
->  > +    depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
->  > +    depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS # openal
->  > +    depends on BR2_PACKAGE_HAS_LIBGL
->  > +    depends on BR2_PACKAGE_XORG7
->  > +    depends on !BR2_TOOLCHAIN_USES_MUSL
->  > +    select BR2_PACKAGE_JPEG
->  > +    select BR2_PACKAGE_LIBCURL
->  > +    select BR2_PACKAGE_LIBGLU
->  > +    select BR2_PACKAGE_LIBOGG
->  > +    select BR2_PACKAGE_LIBPNG
->  > +    select BR2_PACKAGE_LIBVORBIS
->  > +    select BR2_PACKAGE_OPENAL
->  > +    select BR2_PACKAGE_XLIB_LIBXRANDR
->  > +    select BR2_PACKAGE_ZLIB
->  > +    help
->  > +      Karts. Nitro. Action! SuperTuxKart is a free 3D arcade kart
->  > +      racer with multiple karts, tracks and modes you can play.
->  > +      Beat the evil Nolok by any means necessary, and make the
->  > +      mascot kingdom safe once again!
->  > +
->  > +      http://supertuxkart.sourceforge.net/Main_Page
->  > +
->  > +comment "supertux needs X, an OpenGL backend, a uClibc or glibc toolchain w/ NPTL, C++"
->  > +    depends on BR2_USE_MMU
->  > +    depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
->  > +    depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
->  > +            || !BR2_INSTALL_LIBSTDCPP \
->  > +            || !BR2_PACKAGE_HAS_LIBGL \
->  > +            || BR2_TOOLCHAIN_USES_MUSL \
->  > +            || !BR2_PACKAGE_XORG7
->
-> We normally don't list the xorg dependency in the comment, so I've
-> dropped that (and made the comment depend on BR2_PACKAGE_XORG7).
->
->> +++ b/package/supertuxkart/supertuxkart.mk
->  > @@ -0,0 +1,48 @@
->  > +################################################################################
->  > +#
->  > +# supertuxkart
->  > +#
->  > +################################################################################
->  > +
->  > +SUPERTUXKART_VERSION = 0.9.2
->  > +SUPERTUXKART_SOURCE = supertuxkart-$(SUPERTUXKART_VERSION)-src.tar.xz
->  > +SUPERTUXKART_SITE = http://downloads.sourceforge.net/project/supertuxkart/SuperTuxKart/$(SUPERTUXKART_VERSION)
->  > +
->  > +# Supertuxkart itself is GPLv3+, but it bundles a few libraries with different
->  > +# licenses. Irrlicht, bullet and angelscript have zlib license, while glew is
->  > +# BSD-3c. Since they are linked statically, the result is GPLv3+.
->  > +SUPERTUXKART_LICENSE = GPLv3+
->  > +SUPERTUXKART_LICENSE_FILES = COPYING
->  > +
->  > +SUPERTUXKART_DEPENDENCIES += \
->
-> No need for +=, so I've changed this to use '='.
->
-> Committed with these fixes, thanks.
->
-
-Cool, thanks!
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 1920774..85520b6 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -38,6 +38,12 @@ config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
+ 	  making it bigger but dispensing the need for a separate hostapd
+ 	  binary in some applications hence being smaller overall.
+ 
++config BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY
++	bool "Enable Wi-Fi Display"
++	depends on BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
++	help
++	  Enable support for Wi-Fi Display
++
+ config BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN
+ 	bool "Enable autoscan"
+ 	help
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index d1d59f7..d46328e 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -68,6 +68,10 @@ WPA_SUPPLICANT_CONFIG_ENABLE += \
+ 	CONFIG_P2P
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY),y)
++WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WIFI_DISPLAY
++endif
++
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN),y)
+ WPA_SUPPLICANT_CONFIG_ENABLE += \
+ 	CONFIG_AUTOSCAN_EXPONENTIAL \
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+2.9.0
