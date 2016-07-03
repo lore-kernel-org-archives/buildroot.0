@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 09:02:19 +0200
-Subject: [Buildroot] [git commit] isl: add explicit dependencies for host
-	variant
-Message-ID: <20160703071146.3D2717FE29@busybox.osuosl.org>
+Date: Sun, 3 Jul 2016 09:07:18 +0200
+Subject: [Buildroot] [git commit] libcroco: add explicit dependencies for
+	host variant
+Message-ID: <20160703071146.691DD7FFD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ebc214d7fafdb45fb2468bcf90759350b5e160f
+commit: https://git.buildroot.net/buildroot/commit/?id=16ef6473ce5130d8f40ede2b2320f50fd27af17a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/isl/isl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcroco/libcroco.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/isl/isl.mk b/package/isl/isl.mk
-index bb79039..74de125 100644
---- a/package/isl/isl.mk
-+++ b/package/isl/isl.mk
-@@ -12,7 +12,7 @@ ISL_SOURCE = isl-$(ISL_VERSION).tar.xz
- ISL_SITE = http://isl.gforge.inria.fr
- ISL_LICENSE = MIT
- ISL_LICENSE_FILES = LICENSE
--ISL_DEPENDENCIES = gmp
-+HOST_ISL_DEPENDENCIES = host-gmp
- 
- # Our libtool patch doesn't apply, and since this package is only
- # built for the host, we don't really care about it.
+diff --git a/package/libcroco/libcroco.mk b/package/libcroco/libcroco.mk
+index c4cb676..39dd527 100644
+--- a/package/libcroco/libcroco.mk
++++ b/package/libcroco/libcroco.mk
+@@ -10,6 +10,7 @@ LIBCROCO_SITE = http://ftp.gnome.org/pub/gnome/sources/libcroco/$(LIBCROCO_VERSI
+ LIBCROCO_SOURCE = libcroco-$(LIBCROCO_VERSION).tar.xz
+ LIBCROCO_INSTALL_STAGING = YES
+ LIBCROCO_DEPENDENCIES = host-pkgconf libglib2 libxml2
++HOST_LIBCROCO_DEPENDENCIES = host-pkgconf host-libglib2 host-libxml2
+ LIBCROCO_CONFIG_SCRIPTS = croco-$(LIBCROCO_VERSION_MAJOR)-config
+ # NEWS states that it's only LGPL
+ # Source code says v2.1+ even though COPYING.LIB is v2
