@@ -1,55 +1,95 @@
-From: Georges Savoundararadj <savoundg@gmail.com>
-Date: Sun,  3 Jul 2016 16:28:52 -0700
-Subject: [Buildroot] [PATCH 1/1] wpa_supplicant: add option to enable Wi-Fi
-	Display
-Message-ID: <20160703232852.8222-1-savoundg@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon,  4 Jul 2016 01:35:04 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/pulseaudio: allow to build
+	without C++11 support
+Message-ID: <1467588906-14153-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY depends on
-BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT because CONFIG_WIFI_DISPLAY needs
-CONFIG_P2P.
+C++11 support is only required for WebRTC optional support but
+pulseaudio can still be built with toolchains based on gcc 4.7 or older
+witch doesn't have it.
 
-Signed-off-by: Georges Savoundararadj <savoundg@gmail.com>
+Add a patch to make C++11 support optional and explicitely check for
+gnu++11. Also stop the build only if no C++11 support has been found
+and WebRTC support has been resquested.
+
+Fixes:
+http://autobuild.buildroot.net/results/d89/d897a94a8b6a52eba03d04c24536f554a7643000
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/wpa_supplicant/Config.in         | 6 ++++++
- package/wpa_supplicant/wpa_supplicant.mk | 4 ++++
- 2 files changed, 10 insertions(+)
+v2: keep original comments in configure.ac (Yann)
+    fix syntax paramters to m4 macros (Yann)
+---
+ ...-C-11-is-only-required-for-WebRTC-support.patch | 41 ++++++++++++++++++++++
+ package/pulseaudio/pulseaudio.mk                   |  3 ++
+ 2 files changed, 44 insertions(+)
+ create mode 100644 package/pulseaudio/0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
 
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index 1920774..85520b6 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -38,6 +38,12 @@ config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
- 	  making it bigger but dispensing the need for a separate hostapd
- 	  binary in some applications hence being smaller overall.
- 
-+config BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY
-+	bool "Enable Wi-Fi Display"
-+	depends on BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
-+	help
-+	  Enable support for Wi-Fi Display
+diff --git a/package/pulseaudio/0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch b/package/pulseaudio/0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
+new file mode 100644
+index 0000000..b2c0651
+--- /dev/null
++++ b/package/pulseaudio/0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
+@@ -0,0 +1,41 @@
++From 7af6cbe74d48a9853b60b029d4ce38a963386138 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 3 Jul 2016 20:19:48 +0200
++Subject: [PATCH] webrtc: C++11 is only required for WebRTC support
 +
- config BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN
- 	bool "Enable autoscan"
- 	help
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index d1d59f7..d46328e 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -68,6 +68,10 @@ WPA_SUPPLICANT_CONFIG_ENABLE += \
- 	CONFIG_P2P
- endif
- 
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY),y)
-+WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WIFI_DISPLAY
-+endif
++Make C++11 support optional and explicitely check for gnu++11.
 +
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN),y)
- WPA_SUPPLICANT_CONFIG_ENABLE += \
- 	CONFIG_AUTOSCAN_EXPONENTIAL \
++Stop the build only if no C++11 support has been found and WebRTC
++support has been resquested.
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ configure.ac | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 4edc8e0..fea93a9 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -84,7 +84,7 @@ AM_PROG_CC_C_O
++ # Only required if you want the WebRTC canceller -- no runtime dep on
++ # libstdc++ otherwise
++ AC_PROG_CXX
++-AX_CXX_COMPILE_STDCXX_11
+++AX_CXX_COMPILE_STDCXX_11([ext],[optional])
++ AC_PROG_GCC_TRADITIONAL
++ AC_USE_SYSTEM_EXTENSIONS
++ 
++@@ -1414,6 +1414,9 @@ fi
++ AC_ARG_ENABLE([webrtc-aec],
++     AS_HELP_STRING([--enable-webrtc-aec], [Enable the optional WebRTC-based echo canceller]))
++ 
+++AS_IF([test "x$enable_webrtc_aec" = "xyes" && test "$HAVE_CXX11" = "0"],
+++    [AC_MSG_ERROR([*** webrtc-audio-processing needs C++11 support])])
+++
++ AS_IF([test "x$enable_webrtc_aec" != "xno"],
++     [PKG_CHECK_MODULES(WEBRTC, [ webrtc-audio-processing >= 0.2 ], [HAVE_WEBRTC=1], [HAVE_WEBRTC=0])],
++     [HAVE_WEBRTC=0])
++-- 
++2.5.5
++
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index f50ea67..bc95d91 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -21,6 +21,9 @@ PULSEAUDIO_CONF_OPTS = \
+ PULSE_AUDIO_CONF_ENV += \
+ 	ac_cv_header_atomic_ops_h=no
+ 
++# 0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
++PULSEAUDIO_AUTORECONF = YES
++
+ PULSEAUDIO_DEPENDENCIES = \
+ 	host-pkgconf libtool json-c libsndfile speex host-intltool \
+ 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
 -- 
-2.9.0
+2.5.5
