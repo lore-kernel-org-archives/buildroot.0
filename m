@@ -1,37 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 Jul 2016 11:49:57 +0200
-Subject: [Buildroot] [PATCH 09/13] skeleton: remove SOURCE variable
-In-Reply-To: <1467539401-3411-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1467539401-3411-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1467539401-3411-9-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 3 Jul 2016 11:53:10 +0200
+Subject: [Buildroot] [PATCH 14/24 v2] core/pkg-generic: allow packages
+ to declare target-finalize hooks
+In-Reply-To: <464b6d13a2edac4d3fabbb9b712194c53987f1be.1466622379.git.yann.morin.1998@free.fr>
+References: <cover.1466622379.git.yann.morin.1998@free.fr>
+ <464b6d13a2edac4d3fabbb9b712194c53987f1be.1466622379.git.yann.morin.1998@free.fr>
+Message-ID: <d689d075-0085-c9ba-3b72-b5507902c466@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that the package infrastructure doen't attempt to download a package
-that has an empty version string, there's no need to define the SOURCE
-variable in the skeleton package.
+Hi Yann,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/skeleton/skeleton.mk | 3 ---
- 1 file changed, 3 deletions(-)
+Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
+> Currently, our skeleton declares target-finalize hooks, and does so
+> unconditionally.
+> 
+> That's fine since we have a single skeleton package, and thus the hooks
+> it declares need not be conditional.
+> 
+> However, we're going to be adding more skeleton packages, one for the
+> custom skeleton, one for the sysv-like init systems and, eventually, one
+> for the systemd init system.
+> 
+> In that case, we will not want the sysv-like target-finalize hooks to be
+> applied when the init system is systemd. And the other way around, of
+> course. And so on for each type of skeleton...
+> 
+> The only solution we have so far is to enclose all target-finalize hooks
+> declarations between an ifeq-block to check that the package is enabled.
+> This is cumbersome to do, even more so when the hooks are themselves
+> conditional.
+> 
+> Add support in the core infra for packages to register such hooks, like
+> is done to register users, device tables and whatnots.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 4e3cdc6..d8d1e70 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -4,9 +4,6 @@
- #
- ################################################################################
- 
--# source included in buildroot
--SKELETON_SOURCE =
--
- # The skeleton can't depend on the toolchain, since all packages depends on the
- # skeleton and the toolchain is a target package, as is skeleton.
- # Hence, skeleton would depends on the toolchain and the toolchain would depend
--- 
-2.7.4
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+
+> ---
+>  docs/manual/adding-packages-hooks.txt | 7 +++++++
+>  package/pkg-generic.mk                | 2 ++
+>  2 files changed, 9 insertions(+)
+> 
+> diff --git a/docs/manual/adding-packages-hooks.txt b/docs/manual/adding-packages-hooks.txt
+> index 5b5bf6a..d25092a 100644
+> --- a/docs/manual/adding-packages-hooks.txt
+> +++ b/docs/manual/adding-packages-hooks.txt
+> @@ -77,3 +77,10 @@ others, use the following variables:
+>  
+>  * +$(SRCDIR)+: the path to the overridden source directory
+>  * +$(@D)+: the path to the build directory
+> +
+> +==== Target-finalize hook
+> +
+> +Packages may also register hooks in +LIBFOO_TARGET_FINALIZE_HOOKS+.
+> +These hooks are run after all packages are built, but before the
+> +filesystem images are generated. They are seldom used, and your
+> +package probably do not need them.
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 3281374..4415342 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -558,6 +558,7 @@ $(2)_PRE_INSTALL_IMAGES_HOOKS   ?=
+>  $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
+>  $(2)_PRE_LEGAL_INFO_HOOKS       ?=
+>  $(2)_POST_LEGAL_INFO_HOOKS      ?=
+> +$(2)_TARGET_FINALIZE_HOOKS      ?=
+>  
+>  # human-friendly targets and target sequencing
+>  $(1):			$(1)-install
+> @@ -858,6 +859,7 @@ endif
+>  ifneq ($$($(2)_USERS),)
+>  PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+>  endif
+> +TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
+>  
+>  ifeq ($$($(2)_SITE_METHOD),svn)
+>  DL_TOOLS_DEPENDENCIES += svn
+> 
