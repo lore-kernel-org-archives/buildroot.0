@@ -1,35 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 00:31:26 +0200
-Subject: [Buildroot] [PATCH 6/6] qemu: add support for vde2
-In-Reply-To: <1462348079-7631-6-git-send-email-simonn.maes@gmail.com>
-References: <1462348079-7631-1-git-send-email-simonn.maes@gmail.com>
- <1462348079-7631-6-git-send-email-simonn.maes@gmail.com>
-Message-ID: <20160704003126.6a107311@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon,  4 Jul 2016 00:32:49 +0200
+Subject: [Buildroot] [PATCH 1/4] package/webrtc-audio-processing: needs gcc
+	>= 4.8
+Message-ID: <1467585172-10299-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Webrtc-audio-processing require a C++11 compiler
 
-On Wed,  4 May 2016 09:47:59 +0200, Simon Maes wrote:
-> Additional configuration for qemu package:
-> - Enable VDE2 support for qemu
-> 
-> Signed-off-by: Simon Maes <simonn.maes@gmail.com>
-> ---
->  package/qemu/Config.in.host | 8 ++++++++
->  package/qemu/qemu.mk        | 5 +++++
->  2 files changed, 13 insertions(+)
+Fixes:
+http://autobuild.buildroot.net/results/729/729cd0039ac172cfe31a4325bad902e9a14e146f
 
-I also did a respin of this patch, in a very similar way. See
-http://patchwork.ozlabs.org/patch/643850/.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/webrtc-audio-processing/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Best regards,
-
-Thomas
+diff --git a/package/webrtc-audio-processing/Config.in b/package/webrtc-audio-processing/Config.in
+index f228bc7..7c69903 100644
+--- a/package/webrtc-audio-processing/Config.in
++++ b/package/webrtc-audio-processing/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
+ 	bool "webrtc-audio-processing"
+ 	depends on BR2_arm || BR2_i386 || BR2_x86_64
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  AudioProcessing library based on Google's implementation of
+@@ -9,6 +10,7 @@ config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
+ 
+ 	  http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/
+ 
+-comment "webrtc-audio-processing needs a toolchain w/ C++, threads"
++comment "webrtc-audio-processing needs a toolchain w/ C++, threads, gcc >= 4.8"
+ 	depends on BR2_arm || BR2_i386 || BR2_x86_64
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.5
