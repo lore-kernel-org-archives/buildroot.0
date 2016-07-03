@@ -1,63 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 3 Jul 2016 12:43:39 +0200
-Subject: [Buildroot] [git commit] cups: reformat patch with Git
-Message-ID: <20160703104344.8F65981E64@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] cups: fix static linking with GnuTLS
+Message-ID: <20160703104344.9B71D81E64@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0071464e8b92a270fe9c8031b0ea0e4a7fd9cbee
+commit: https://git.buildroot.net/buildroot/commit/?id=4ff8fc555c8b9faebf7ec3245c342832be60aa03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-All patches in the cups package are Git formatted, except
-0004-remove-pie.patch, so this commit makes things consistent by also
-making this patch Git formatted.
+cups forgets to link against the libs found by pkg-config if it is build with
+GnuTLS support.
 
+Otherwise, static build fails with:
+../cups/libcups.a(tls.o): In function `http_gnutls_create_credential':
+cups-2.1.2/cups/tls-gnutls.c:762: undefined reference to `gnutls_x509_crt_init'
+[..]
+
+Fixes:
+http://autobuild.buildroot.net/results/205/20509b7d1edc73dc2a7622f2ae7dbf9f6665a918/
+http://autobuild.buildroot.net/results/b86/b86d685caf8cf812f9505fca2de36fb8c18baee1/
+
+Patch is sent upstream.
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+[Thomas: refresh and rename patch.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...patch => 0004-Remove-PIE-flags-from-the-build.patch} | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ .../cups/0005-Fix-static-linking-with-GnuTLS.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/package/cups/0004-remove-pie.patch b/package/cups/0004-Remove-PIE-flags-from-the-build.patch
-similarity index 59%
-rename from package/cups/0004-remove-pie.patch
-rename to package/cups/0004-Remove-PIE-flags-from-the-build.patch
-index 3d81941..492418f 100644
---- a/package/cups/0004-remove-pie.patch
-+++ b/package/cups/0004-Remove-PIE-flags-from-the-build.patch
-@@ -1,16 +1,22 @@
--Remove PIE flags from the build
-+From b341a1e1fce48012fc5bcf39337488fd33210616 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 3 Jul 2016 12:20:21 +0200
-+Subject: [PATCH] Remove PIE flags from the build
- 
- Generating a statically linked binary built with PIE requires the
- Scrt1.o file, which isn't part of Buildroot uClibc toolchains. To
- solve this, we simply disable the PIE flags.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+diff --git a/package/cups/0005-Fix-static-linking-with-GnuTLS.patch b/package/cups/0005-Fix-static-linking-with-GnuTLS.patch
+new file mode 100644
+index 0000000..5702caa
+--- /dev/null
++++ b/package/cups/0005-Fix-static-linking-with-GnuTLS.patch
+@@ -0,0 +1,39 @@
++From 79a2389f590f4d16885bdd0715f3f04fd9fa6cc5 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Sun, 28 Feb 2016 16:35:56 +0100
++Subject: [PATCH] Fix static linking with GnuTLS
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++cups forgets to link against the libs found by pkg-config if it is build with
++GnuTLS support.
++
++Otherwise, static build fails with:
++../cups/libcups.a(tls.o): In function `http_gnutls_create_credential':
++cups-2.1.2/cups/tls-gnutls.c:762: undefined reference to `gnutls_x509_crt_init'
++[..]
++
++Status upstream: Pending
++
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 +---
 + Makedefs.in | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
- 
--Index: b/Makedefs.in
--===================================================================
++
 +diff --git a/Makedefs.in b/Makedefs.in
-+index 3afef0a..299b297 100644
- --- a/Makedefs.in
- +++ b/Makedefs.in
--@@ -142,7 +142,7 @@
-+@@ -142,7 +142,7 @@ IPPFIND_BIN	=	@IPPFIND_BIN@
-  IPPFIND_MAN	=	@IPPFIND_MAN@
-  LDFLAGS		=	-L../cgi-bin -L../cups -L../filter -L../ppdc \
-  			-L../scheduler @LDARCHFLAGS@ \
-@@ -19,3 +25,6 @@ Index: b/Makedefs.in
-  LINKCUPS	=	@LINKCUPS@ $(LIBGSSAPI) $(DNSSDLIBS) $(LIBZ)
-  LINKCUPSIMAGE	=	@LINKCUPSIMAGE@
-  LIBS		=	$(LINKCUPS) $(COMMONLIBS)
++index 299b297..ce9d535 100644
++--- a/Makedefs.in
+++++ b/Makedefs.in
++@@ -143,7 +143,7 @@ IPPFIND_MAN	=	@IPPFIND_MAN@
++ LDFLAGS		=	-L../cgi-bin -L../cups -L../filter -L../ppdc \
++ 			-L../scheduler @LDARCHFLAGS@ \
++ 			@LDFLAGS@ @RELROFLAGS@ $(OPTIM)
++-LINKCUPS	=	@LINKCUPS@ $(LIBGSSAPI) $(DNSSDLIBS) $(LIBZ)
+++LINKCUPS	=	@LINKCUPS@ $(SSLLIBS) $(LIBGSSAPI) $(DNSSDLIBS) $(LIBZ)
++ LINKCUPSIMAGE	=	@LINKCUPSIMAGE@
++ LIBS		=	$(LINKCUPS) $(COMMONLIBS)
++ ONDEMANDFLAGS	=	@ONDEMANDFLAGS@
 +-- 
 +2.7.4
 +
