@@ -1,32 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 00:25:46 +0200
-Subject: [Buildroot] [PATCH 1/6] qemu: add support for host-qemu-system
-In-Reply-To: <1462348079-7631-1-git-send-email-simonn.maes@gmail.com>
+Date: Mon, 4 Jul 2016 00:26:59 +0200
+Subject: [Buildroot] [PATCH 2/6] qemu: make qemu and host-qemu packages'
+ version (separately) configurable
+In-Reply-To: <1462348079-7631-2-git-send-email-simonn.maes@gmail.com>
 References: <1462348079-7631-1-git-send-email-simonn.maes@gmail.com>
-Message-ID: <20160704002546.6671a78b@free-electrons.com>
+ <1462348079-7631-2-git-send-email-simonn.maes@gmail.com>
+Message-ID: <20160704002659.6956c2b6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Simon,
 
-On Wed,  4 May 2016 09:47:54 +0200, Simon Maes wrote:
->     Additional package configurations are:
->     - Enable system or linux user-land emulation
->     - Enable SDL frontend and FDT support
->     - Enable Qemu debug
->     - Disable stripped binary format
-> 
-> Signed-off-by: Simon Maes <simonn.maes@gmail.com>
+On Wed,  4 May 2016 09:47:55 +0200, Simon Maes wrote:
 
-I just respined a new version of this patch, which takes into account
-Arnout comments, and more. See:
+> +config BR2_PACKAGE_QEMU_VERSION
+> +	string "qemu version"
+> +	default "2.5.0"
 
-   https://patchwork.ozlabs.org/patch/643849/
+Making the version selectable will break badly with the hash file: it
+will only work if you use a version for which a hash is listed in the
+hash file.
 
-Thanks,
+For now, we'd prefer to stick to a single supported version, and see if
+we really have situations where using an older version is mandatory.
+
+Therefore, I've marked this patch as Rejected in our patch tracking
+system.
+
+Best regards,
 
 Thomas
 -- 
