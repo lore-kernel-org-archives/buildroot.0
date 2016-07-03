@@ -1,14 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 21:17:32 +0200
-Subject: [Buildroot] [PATCH 04/69] cdrkit: add explicit dependencies for
- host variant
-In-Reply-To: <CAHfJR7gOV3FB2nBxe-WxjE8_aR6yre81=rvr9K=iu8pVWcSFYA@mail.gmail.com>
-References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-5-git-send-email-julien.floret@6wind.com>
- <20160703083649.02b0b8cc@free-electrons.com>
- <CAHfJR7j5+zZqBwXvosJwSs71J8gzxuZmAYAze=tMjxeXXG7jLg@mail.gmail.com>
- <CAHfJR7gOV3FB2nBxe-WxjE8_aR6yre81=rvr9K=iu8pVWcSFYA@mail.gmail.com>
-Message-ID: <20160703211732.67243eb9@free-electrons.com>
+Date: Sun, 3 Jul 2016 21:24:04 +0200
+Subject: [Buildroot] [PATCH v2 1/1] libvdpau: new package
+In-Reply-To: <1466434827-17088-1-git-send-email-damien@kal-host.com>
+References: <1466434827-17088-1-git-send-email-damien@kal-host.com>
+Message-ID: <20160703212404.16425a1e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,23 +12,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 3 Jul 2016 20:47:54 +0200, Julien Floret wrote:
+On Mon, 20 Jun 2016 17:00:27 +0200, Damien Lanson wrote:
+> Signed-off-by: Damien Lanson <damien@kal-host.com>
+> ---
+>  package/Config.in                                  |    1 +
+>  .../libvdpau/0001-missing-configh-include.patch    |   29 +++++++++++++
+>  package/libvdpau/0002-link-with-libx11.patch       |   30 +++++++++++++
+>  .../libvdpau/0003-vdpau-module-searchpath.patch    |   45 ++++++++++++++++++++
+>  package/libvdpau/Config.in                         |   15 +++++++
+>  package/libvdpau/libvdpau.hash                     |    4 ++
+>  package/libvdpau/libvdpau.mk                       |   27 ++++++++++++
+>  7 files changed, 151 insertions(+)
+>  create mode 100755 package/libvdpau/0001-missing-configh-include.patch
+>  create mode 100755 package/libvdpau/0002-link-with-libx11.patch
+>  create mode 100755 package/libvdpau/0003-vdpau-module-searchpath.patch
+>  create mode 100755 package/libvdpau/Config.in
+>  create mode 100755 package/libvdpau/libvdpau.hash
+>  create mode 100755 package/libvdpau/libvdpau.mk
 
-> > Hm, this commit seems be missing in buildroot upstream, I don't see it
-> > amongst the others.
-> > Thanks a lot!  
-> 
-> I mean, "[PATCH 04/69] cdrkit: add explicit dependencies for host variant"
-> was marked as applied, but there was no associate git commit, so unless
-> I missed something, the modification doesn't seem to be in buildroot
-> upstream git tree.
+Thanks for your patch! I've done the following changes:
 
-Ah, yes, you're right. This series was so long that I messed up on this
-patch (even though it was at the beginning of the series). I hope it
-doesn't indicate that I messed things up even more with the rest of the
-series :-/
+    [Thomas:
+     - Add dependency on BR2_PACKAGE_XORG7, which is necessary when
+       selecting BR2_PACKAGE_XLIB_LIBX11 and BR2_PACKAGE_XLIB_LIBXEXT.
+     - Fix indentation of Config.in help text.
+     - Add host-pkgconf to the dependencies, since the configure script uses
+       pkg-config to detect dependencies.
+     - Add references for the patches.]
 
-Thanks for noticing!
+and then I applied your patch.
+
+Best regards,
 
 Thomas
 -- 
