@@ -1,84 +1,125 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 3 Jul 2016 11:30:13 +0200
-Subject: [Buildroot] [PATCH 12/24 v2] core/pkg-generic: add variable to
- skip skeleton dependency
-In-Reply-To: <0d8ab7f21c35de1bb1a07ac839e84bdfc525e628.1466622379.git.yann.morin.1998@free.fr>
-References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <0d8ab7f21c35de1bb1a07ac839e84bdfc525e628.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <692dc287-0ef9-7fa9-f0d0-3b3c0d7b7f79@gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 3 Jul 2016 11:30:12 +0200
+Subject: [Buildroot] [PATCH 1/1 v3] pyqtgraph: new package
+In-Reply-To: <1444755264-17899-1-git-send-email-guillaume.bressaix@gmail.com>
+References: <1444755264-17899-1-git-send-email-guillaume.bressaix@gmail.com>
+Message-ID: <CAGduivwFkd6aiysSepGysOJOiaweTKS=qbd0d5UtcccWE7sr=A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hi Guillaume, all
 
-Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
-> We currently skip the skeleton dependency by checking if the current
-> package is the skeleton.
-> 
-> We are going to introduce more skeleton-related packages, so we
-> need a way to exclude the skeleton dependency for those, or we'd
-> get a circular dependency, for the same reason we need to skip
-> the toolchain dependency.
-> 
-> Instead of checking for all the skeleton-providing packages in the core
-> infra, add a new package options so that packages can express they do
-> not need the dependency on the skeleton, like we have an option to avoid
-> the depednency on the toolchain. The only packages that will use that
-> option are probably the skeletons, so we need not document this
-> variable, like we did not document the option to exclude the dependency
-> on the toolchain.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thank you for your patches, I have made a few comments inline, your
+patch has been marked as Changes Requested in our patchwork, if you
+can address theses and resend a new version of your patch.
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-
+On Tue, Oct 13, 2015 at 6:54 PM, Guillaume William Bres
+<guillaume.bressaix@gmail.com> wrote:
+>
+> Signed-off-by: Guillaume William Bres <guillaume.bressaix@gmail.com>
 > ---
->  package/pkg-generic.mk       | 7 +++++--
->  package/skeleton/skeleton.mk | 1 +
->  2 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 374d9d5..3281374 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -486,15 +486,18 @@ $(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)
->  
->  # When a target package is a toolchain dependency set this variable to
->  # 'NO' so the 'toolchain' dependency is not added to prevent a circular
-> -# dependency
-> +# dependency.
-> +# Similarly for the skeleton.
->  $(2)_ADD_TOOLCHAIN_DEPENDENCY	?= YES
-> +$(2)_ADD_SKELETON_DEPENDENCY	?= YES
+>  PyQtGraph is an easy to use library using PyQt bindings, to develop
+>  scientific applications.
+>
+>  The library requires python-numpy to run, which depends on
+>  certain types of toolchain. I know Gwen has submitted a new variable
+>  BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS so I added that one as a
+>  dependency: please correct me on that.
+>
+>  All suggestions are appreciated.
+>  The package builds easily because it is only made of python scripts.
+>
+>  Builds and runs successfully on ARM Cortex A9.
+>
+>  package/Config.in                              |    1 +
+>  package/python-pyqtgraph/Config.in             |   14 ++++++++++++++
+>  package/python-pyqtgraph/python-pyqtgraph.hash |    5 +++++
+>  package/python-pyqtgraph/python-pyqtgraph.mk   |   15 +++++++++++++++
+>  4 files changed, 35 insertions(+)
+>  create mode 100644 package/python-pyqtgraph/Config.in
+>  create mode 100644 package/python-pyqtgraph/python-pyqtgraph.hash
+>  create mode 100644 package/python-pyqtgraph/python-pyqtgraph.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index f686f13..7ef27b4 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -646,6 +646,7 @@ menu "External python modules"
+>         source "package/python-pyparsing/Config.in"
+>         source "package/python-pypcap/Config.in"
+>         source "package/python-pyqt/Config.in"
+> +       source "package/python-pyqtgraph/Config.in"
+>         source "package/python-pyratemp/Config.in"
+>         source "package/python-pyro/Config.in"
+>         source "package/python-pyroute2/Config.in"
+> diff --git a/package/python-pyqtgraph/Config.in b/package/python-pyqtgraph/Config.in
+Your patch doesn't apply anymore, if you could rebase on a more recent
+master and resend with the other comments it would be great.
+
+> new file mode 100644
+> index 0000000..5e1a1e6
+> --- /dev/null
+> +++ b/package/python-pyqtgraph/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_PYTHON_PYQTGRAPH
+> +       bool "python-pyqtgraph"
+> +       depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS
+This symbol doesn't exists (anymore maybe), it's
+BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS.
+> +       select BR2_PACKAGE_PYTHON_PYQT
+> +       select BR2_PACKAGE_PYTHON_NUMPY # runtime dependency
+> +       select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime dependency
+> +       select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 #runtime dependency
+> +       select BR2_PACKAGE_QT_SVG # runtime dependency
+It doesn't make sense to select BR2_PACKAGE_QT_SVG without selecting
+BR2_PACKAGE_QT. And it's fine to select it, because it's not a hidden
+dependency, it's even in the name of the package.
+> +       help
+> +         Pyqtgraph is a pure Python graphics and GUI library built on PyQt4,
+> +         PySide and Numpy.
 > +
->  
->  ifeq ($(4),host)
->  $(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
->  	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
->  endif
->  ifeq ($(4),target)
-> -ifneq ($(1),skeleton)
-> +ifeq ($$($(2)_ADD_SKELETON_DEPENDENCY),YES)
->  $(2)_DEPENDENCIES += skeleton
->  endif
->  ifeq ($$($(2)_ADD_TOOLCHAIN_DEPENDENCY),YES)
-> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-> index e67a477..072d217 100644
-> --- a/package/skeleton/skeleton.mk
-> +++ b/package/skeleton/skeleton.mk
-> @@ -12,6 +12,7 @@ SKELETON_SOURCE =
->  # Hence, skeleton would depends on the toolchain and the toolchain would depend
->  # on skeleton.
->  SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
-> +SKELETON_ADD_SKELETON_DEPENDENCY = NO
->  
->  # The skeleton also handles the merged /usr case in the sysroot
->  SKELETON_INSTALL_STAGING = YES
-> 
+> +         Official website:
+> +         http://www.pyqtgraph.org/
+> diff --git a/package/python-pyqtgraph/python-pyqtgraph.hash b/package/python-pyqtgraph/python-pyqtgraph.hash
+> new file mode 100644
+> index 0000000..c20eea2
+> --- /dev/null
+> +++ b/package/python-pyqtgraph/python-pyqtgraph.hash
+> @@ -0,0 +1,5 @@
+> +# From http://www.pyqtgraph.org/downloads
+> +md5 6e2efa185b6b9227dfe16fefd921a8ec  pyqtgraph-0.9.10.tar.gz
+> +
+> +# Locally calculated:
+> +sha256 4c0589774e3c8b0c374931397cf6356b9cc99a790215d1917bb7f015c6f0729a  pyqtgraph-0.9.10.tar.gz
+> diff --git a/package/python-pyqtgraph/python-pyqtgraph.mk b/package/python-pyqtgraph/python-pyqtgraph.mk
+> new file mode 100644
+> index 0000000..575ea71
+> --- /dev/null
+> +++ b/package/python-pyqtgraph/python-pyqtgraph.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# python-pyqtgraph
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYQTGRAPH_VERSION = 0.9.10
+> +PYTHON_PYQTGRAPH_SOURCE = pyqtgraph-$(PYTHON_PYQTGRAPH_VERSION).tar.gz
+> +PYTHON_PYQTGRAPH_SITE = http://www.pyqtgraph.org/downloads
+> +PYTHON_PYQTGRAPH_LICENSE = MIT
+> +PYTHON_PYQTGRAPH_LICENSE_FILES = LICENSE
+You have a trailing space in your patch
+> +PYTHON_PYQTGRAPH_SETUP_TYPE = distutils
+> +PYTHON_PYQTGRAPH_DEPENDENCIES = python-pyqt
+> +
+> +$(eval $(python-package))
+> --
+> 1.7.10.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
