@@ -1,120 +1,63 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Sun,  3 Jul 2016 12:45:35 +0200
-Subject: [Buildroot] [PATCH v2 1/1] acpica: new package
-Message-ID: <20160703104535.10401-1-nunes.erico@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Jul 2016 12:43:39 +0200
+Subject: [Buildroot] [git commit] cups: reformat patch with Git
+Message-ID: <20160703104344.8F65981E64@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ACPI Component Architecture (ACPICA) project provides an operating
-system (OS)-independent reference implementation of the Advanced
-Configuration and Power Interface Specification (ACPI).
+commit: https://git.buildroot.net/buildroot/commit/?id=0071464e8b92a270fe9c8031b0ea0e4a7fd9cbee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It contains tools such as acpidump, iasl, acpixtract, etc.
+All patches in the cups package are Git formatted, except
+0004-remove-pie.patch, so this commit makes things consistent by also
+making this patch Git formatted.
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
+ ...patch => 0004-Remove-PIE-flags-from-the-build.patch} | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
-Romain had added a (conditional) Reviewed-by and Tested-by to v1 which I
-hope to have solved in this v2, but I decided to not add it here from
-the start as this v2 contains some other small fixes and includes a
-version bump.
-If you think that it is still appliable, please add it before applying
-this patch. Thanks
-
-Changes v1 -> v2:
-  - Fixed license which is not only GPLv2 but dual BSD-3c or GPLv2
-  (pointed out by Romain Naour)
-  - Changed TARGET_MAKE_ENV to TARGET_CONFIGURE_OPTS (pointed out by
-  Romain Naour). CC still has to be set as a make argument, otherwise it
-  gets set back again by the Makefile.
-  - TARGET_ARCH was wrong, should have been BR2_ARCH.
-  - Got rid of the sed hack for 'uname' by passing HARDWARE_NAME as a
-  make argument variable.
-  - Fixed installing in architectures different than host, by removing
-  the -s argument from 'install' to avoid running 'strip' from host.
-  - Bumped up to 20160527 which has been released since patch v1
-  submission.
----
- package/Config.in          |  1 +
- package/acpica/Config.in   |  9 +++++++++
- package/acpica/acpica.hash |  2 ++
- package/acpica/acpica.mk   | 26 ++++++++++++++++++++++++++
- 4 files changed, 38 insertions(+)
- create mode 100644 package/acpica/Config.in
- create mode 100644 package/acpica/acpica.hash
- create mode 100644 package/acpica/acpica.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 3fddf8e..3c8910d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -352,6 +352,7 @@ menu "Firmware"
- 	source "package/zd1211-firmware/Config.in"
- endmenu
- 	source "package/a10disp/Config.in"
-+	source "package/acpica/Config.in"
- 	source "package/acpid/Config.in"
- 	source "package/acpitool/Config.in"
- 	source "package/aer-inject/Config.in"
-diff --git a/package/acpica/Config.in b/package/acpica/Config.in
-new file mode 100644
-index 0000000..8c33d0f
---- /dev/null
-+++ b/package/acpica/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_ACPICA
-+	bool "acpica"
-+	help
-+	  The ACPI Component Architecture (ACPICA) project provides an
-+	  operating system (OS)-independent reference implementation of
-+	  the Advanced Configuration and Power Interface Specification
-+	  (ACPI).
+diff --git a/package/cups/0004-remove-pie.patch b/package/cups/0004-Remove-PIE-flags-from-the-build.patch
+similarity index 59%
+rename from package/cups/0004-remove-pie.patch
+rename to package/cups/0004-Remove-PIE-flags-from-the-build.patch
+index 3d81941..492418f 100644
+--- a/package/cups/0004-remove-pie.patch
++++ b/package/cups/0004-Remove-PIE-flags-from-the-build.patch
+@@ -1,16 +1,22 @@
+-Remove PIE flags from the build
++From b341a1e1fce48012fc5bcf39337488fd33210616 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 3 Jul 2016 12:20:21 +0200
++Subject: [PATCH] Remove PIE flags from the build
+ 
+ Generating a statically linked binary built with PIE requires the
+ Scrt1.o file, which isn't part of Buildroot uClibc toolchains. To
+ solve this, we simply disable the PIE flags.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makedefs.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+-Index: b/Makedefs.in
+-===================================================================
++diff --git a/Makedefs.in b/Makedefs.in
++index 3afef0a..299b297 100644
+ --- a/Makedefs.in
+ +++ b/Makedefs.in
+-@@ -142,7 +142,7 @@
++@@ -142,7 +142,7 @@ IPPFIND_BIN	=	@IPPFIND_BIN@
+  IPPFIND_MAN	=	@IPPFIND_MAN@
+  LDFLAGS		=	-L../cgi-bin -L../cups -L../filter -L../ppdc \
+  			-L../scheduler @LDARCHFLAGS@ \
+@@ -19,3 +25,6 @@ Index: b/Makedefs.in
+  LINKCUPS	=	@LINKCUPS@ $(LIBGSSAPI) $(DNSSDLIBS) $(LIBZ)
+  LINKCUPSIMAGE	=	@LINKCUPSIMAGE@
+  LIBS		=	$(LINKCUPS) $(COMMONLIBS)
++-- 
++2.7.4
 +
-+	  https://www.acpica.org
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-new file mode 100644
-index 0000000..8d5257f
---- /dev/null
-+++ b/package/acpica/acpica.hash
-@@ -0,0 +1,2 @@
-+# locally computed hash
-+sha256 4ac73a5887b643dcca483f0241cbb808a53326846928edad9a2f86cffcde5850 acpica-unix2-20160527.tar.gz
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-new file mode 100644
-index 0000000..9b32099
---- /dev/null
-+++ b/package/acpica/acpica.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# acpica
-+#
-+################################################################################
-+
-+ACPICA_VERSION = 20160527
-+ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
-+ACPICA_SITE = https://acpica.org/sites/acpica/files
-+ACPICA_LICENSE = BSD-3c or GPLv2
-+ACPICA_LICENSE_FILES = source/include/acpi.h
-+ACPICA_DEPENDENCIES = host-bison host-flex
-+
-+define ACPICA_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX CC="$(TARGET_CC)" \
-+		all
-+endef
-+
-+define ACPICA_INSTALL_TARGET_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		HARDWARE_NAME=$(BR2_ARCH) DESTDIR="$(TARGET_DIR)" \
-+		INSTALLFLAGS=-m555 install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.9.0
