@@ -1,84 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Jul 2016 19:53:53 +0200
-Subject: [Buildroot] [git commit] package/transmission: add optional support
-	for libminiupnpc/libnatpmp
-Message-ID: <20160703175405.F1A8280282@busybox.osuosl.org>
+Date: Sun, 03 Jul 2016 20:09:28 +0200
+Subject: [Buildroot] [PATCH] lvm2: fix m68k build error
+In-Reply-To: <20160703165617.GA27285@waldemar-brodkorb.de> (Waldemar
+ Brodkorb's message of "Sun, 3 Jul 2016 18:56:17 +0200")
+References: <20160703165617.GA27285@waldemar-brodkorb.de>
+Message-ID: <87a8hypp9j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=349b1688a5a52b28ac33541363e70b613079f18c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-Transmission bundles copies of both libraries and uses them if they are
-not provided by the system. This patch allows transmission to use the
-system libraries of libminiupnpc/libnatpmp.
+ > Disable PIE for m68k as it is not supported.
+ > Fixes following autobuild failures:
+ > http://autobuild.buildroot.net/results/2f976292ddbb8eddb58cc978f209f4f445b5b756/
+ > http://autobuild.buildroot.net/results/7a2b1eef06004886be28744bf1c53d027f8d0123/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/transmission/0003-miniupnpc-cross.patch | 31 +++++++++++++++++++++++++
- package/transmission/transmission.mk            | 11 +++++++++
- 2 files changed, 42 insertions(+)
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-diff --git a/package/transmission/0003-miniupnpc-cross.patch b/package/transmission/0003-miniupnpc-cross.patch
-new file mode 100644
-index 0000000..5037c2e
---- /dev/null
-+++ b/package/transmission/0003-miniupnpc-cross.patch
-@@ -0,0 +1,31 @@
-+Fix libminiupnpc version detection
-+
-+Problem is known upstream: https://trac.transmissionbt.com/ticket/6140
-+
-+For buildroot we know the libminiupnpc version so we hard-code 2.0.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr transmission-2.92.org/configure.ac transmission-2.92/configure.ac
-+--- transmission-2.92.org/configure.ac	2016-03-06 21:23:45.336198393 +0100
-++++ transmission-2.92/configure.ac	2016-07-02 21:48:13.452385686 +0200
-+@@ -386,18 +386,7 @@
-+ dnl MINIUPNPC_API_VERSION and we won't have to figure
-+ dnl it out on our own
-+ if test "x$upnp_version" = "xunknown" ; then
-+-  AC_RUN_IFELSE(
-+-    [AC_LANG_PROGRAM(
-+-      [#include <stdlib.h>
-+-       #include <miniupnpc/miniupnpc.h>],
-+-      [#ifdef MINIUPNPC_API_VERSION
-+-       return EXIT_SUCCESS;
-+-       #else
-+-       return EXIT_FAILURE;
-+-       #endif]
-+-    )],
-+-    [upnp_version=">= 1.7"]
-+-  )
-++  upnp_version="2.0"
-+ fi
-+ 
-+ dnl Or maybe it's miniupnp 1.6
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index c8d3773..e0cfc2d 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
-@@ -21,6 +21,17 @@ TRANSMISSION_CONF_OPTS = \
- TRANSMISSION_LICENSE = GPLv2 or GPLv3 with OpenSSL exception
- TRANSMISSION_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_LIBMINIUPNPC),y)
-+TRANSMISSION_DEPENDENCIES += libminiupnpc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNATPMP),y)
-+TRANSMISSION_DEPENDENCIES += libnatpmp
-+TRANSMISSION_CONF_OPTS += --enable-external-natpmp
-+else
-+TRANSMISSION_CONF_OPTS += --disable-external-natpmp
-+endif
-+
- ifeq ($(BR2_PACKAGE_TRANSMISSION_UTP),y)
- TRANSMISSION_CONF_OPTS += --enable-utp
- else
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
