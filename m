@@ -1,77 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Jul 2016 11:21:05 +0200
-Subject: [Buildroot] [git commit] package/sunxi-mali: remove useless package
-Message-ID: <20160703092146.12FE981F6B@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 3 Jul 2016 11:30:13 +0200
+Subject: [Buildroot] [PATCH 12/24 v2] core/pkg-generic: add variable to
+ skip skeleton dependency
+In-Reply-To: <0d8ab7f21c35de1bb1a07ac839e84bdfc525e628.1466622379.git.yann.morin.1998@free.fr>
+References: <cover.1466622379.git.yann.morin.1998@free.fr>
+ <0d8ab7f21c35de1bb1a07ac839e84bdfc525e628.1466622379.git.yann.morin.1998@free.fr>
+Message-ID: <692dc287-0ef9-7fa9-f0d0-3b3c0d7b7f79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4963a77323532ea70c42da572fec60e32f606f25
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann,
 
-sunxi-mali-prop only served a feeding prey for sunxi-mali to get the
-proprietary libs.
+Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
+> We currently skip the skeleton dependency by checking if the current
+> package is the skeleton.
+> 
+> We are going to introduce more skeleton-related packages, so we
+> need a way to exclude the skeleton dependency for those, or we'd
+> get a circular dependency, for the same reason we need to skip
+> the toolchain dependency.
+> 
+> Instead of checking for all the skeleton-providing packages in the core
+> infra, add a new package options so that packages can express they do
+> not need the dependency on the skeleton, like we have an option to avoid
+> the depednency on the toolchain. The only packages that will use that
+> option are probably the skeletons, so we need not document this
+> variable, like we did not document the option to exclude the dependency
+> on the toolchain.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Now that sunxi-mali downloads them (as the git submodule they are), we
-no longer need sunxi-mali-prop.
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
-Remove it.
+Best regards,
+Romain
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                            |  1 -
- package/sunxi-mali-prop/Config.in            |  4 ----
- package/sunxi-mali-prop/sunxi-mali-prop.hash |  2 --
- package/sunxi-mali-prop/sunxi-mali-prop.mk   | 10 ----------
- 4 files changed, 17 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f238c1d..3fddf8e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -467,7 +467,6 @@ endif
- 	source "package/stm32flash/Config.in"
- 	source "package/sunxi-cedarx/Config.in"
- 	source "package/sunxi-mali/Config.in"
--	source "package/sunxi-mali-prop/Config.in"
- 	source "package/sysstat/Config.in"
- 	source "package/targetcli-fb/Config.in"
- 	source "package/ti-gfx/Config.in"
-diff --git a/package/sunxi-mali-prop/Config.in b/package/sunxi-mali-prop/Config.in
-deleted file mode 100644
-index b9efb4e..0000000
---- a/package/sunxi-mali-prop/Config.in
-+++ /dev/null
-@@ -1,4 +0,0 @@
--# Sunxi-mali-prop is a git submodule of sunxi-mali. To use this package
--# select the sunxi-mali option.
--config BR2_PACKAGE_SUNXI_MALI_PROP
--	bool
-diff --git a/package/sunxi-mali-prop/sunxi-mali-prop.hash b/package/sunxi-mali-prop/sunxi-mali-prop.hash
-deleted file mode 100644
-index baf16fa..0000000
---- a/package/sunxi-mali-prop/sunxi-mali-prop.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# locally computed
--sha256  f87d93629072dd0306ffe1200425188129e5f7f97750126dff38464ea707f673  sunxi-mali-prop-1c5063f43cdc9de341c0d63b2e3921cab86c7742.tar.gz
-diff --git a/package/sunxi-mali-prop/sunxi-mali-prop.mk b/package/sunxi-mali-prop/sunxi-mali-prop.mk
-deleted file mode 100644
-index b828dc2..0000000
---- a/package/sunxi-mali-prop/sunxi-mali-prop.mk
-+++ /dev/null
-@@ -1,10 +0,0 @@
--################################################################################
--#
--# sunxi-mali-prop
--#
--################################################################################
--
--SUNXI_MALI_PROP_VERSION = 1c5063f43cdc9de341c0d63b2e3921cab86c7742
--SUNXI_MALI_PROP_SITE = $(call github,linux-sunxi,sunxi-mali-proprietary,$(SUNXI_MALI_PROP_VERSION))
--
--$(eval $(generic-package))
+> ---
+>  package/pkg-generic.mk       | 7 +++++--
+>  package/skeleton/skeleton.mk | 1 +
+>  2 files changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 374d9d5..3281374 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -486,15 +486,18 @@ $(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)
+>  
+>  # When a target package is a toolchain dependency set this variable to
+>  # 'NO' so the 'toolchain' dependency is not added to prevent a circular
+> -# dependency
+> +# dependency.
+> +# Similarly for the skeleton.
+>  $(2)_ADD_TOOLCHAIN_DEPENDENCY	?= YES
+> +$(2)_ADD_SKELETON_DEPENDENCY	?= YES
+> +
+>  
+>  ifeq ($(4),host)
+>  $(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
+>  	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
+>  endif
+>  ifeq ($(4),target)
+> -ifneq ($(1),skeleton)
+> +ifeq ($$($(2)_ADD_SKELETON_DEPENDENCY),YES)
+>  $(2)_DEPENDENCIES += skeleton
+>  endif
+>  ifeq ($$($(2)_ADD_TOOLCHAIN_DEPENDENCY),YES)
+> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+> index e67a477..072d217 100644
+> --- a/package/skeleton/skeleton.mk
+> +++ b/package/skeleton/skeleton.mk
+> @@ -12,6 +12,7 @@ SKELETON_SOURCE =
+>  # Hence, skeleton would depends on the toolchain and the toolchain would depend
+>  # on skeleton.
+>  SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
+> +SKELETON_ADD_SKELETON_DEPENDENCY = NO
+>  
+>  # The skeleton also handles the merged /usr case in the sysroot
+>  SKELETON_INSTALL_STAGING = YES
+> 
