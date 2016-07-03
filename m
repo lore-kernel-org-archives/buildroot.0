@@ -1,32 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 21:16:36 +0200
-Subject: [Buildroot] [git commit] cdrkit: add explicit dependencies for host
-	variant
-Message-ID: <20160703191643.0318B81767@busybox.osuosl.org>
+Date: Sun, 3 Jul 2016 21:17:32 +0200
+Subject: [Buildroot] [PATCH 04/69] cdrkit: add explicit dependencies for
+ host variant
+In-Reply-To: <CAHfJR7gOV3FB2nBxe-WxjE8_aR6yre81=rvr9K=iu8pVWcSFYA@mail.gmail.com>
+References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
+ <1467498098-23731-5-git-send-email-julien.floret@6wind.com>
+ <20160703083649.02b0b8cc@free-electrons.com>
+ <CAHfJR7j5+zZqBwXvosJwSs71J8gzxuZmAYAze=tMjxeXXG7jLg@mail.gmail.com>
+ <CAHfJR7gOV3FB2nBxe-WxjE8_aR6yre81=rvr9K=iu8pVWcSFYA@mail.gmail.com>
+Message-ID: <20160703211732.67243eb9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=985ec224d38e5db73f619329e3a8d869c66c9067
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Julien Floret <julien.floret@6wind.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cdrkit/cdrkit.mk | 1 +
- 1 file changed, 1 insertion(+)
+On Sun, 3 Jul 2016 20:47:54 +0200, Julien Floret wrote:
 
-diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
-index 2e4bb1f..10d118c 100644
---- a/package/cdrkit/cdrkit.mk
-+++ b/package/cdrkit/cdrkit.mk
-@@ -8,6 +8,7 @@ CDRKIT_VERSION = 1.1.11
- CDRKIT_SOURCE = cdrkit_$(CDRKIT_VERSION).orig.tar.gz
- CDRKIT_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/cdrkit
- CDRKIT_DEPENDENCIES = libcap bzip2 zlib
-+HOST_CDRKIT_DEPENDENCIES = host-libcap host-bzip2 host-zlib
- CDRKIT_LICENSE = GPLv2
- CDRKIT_LICENSE_FILES = COPYING
- 
+> > Hm, this commit seems be missing in buildroot upstream, I don't see it
+> > amongst the others.
+> > Thanks a lot!  
+> 
+> I mean, "[PATCH 04/69] cdrkit: add explicit dependencies for host variant"
+> was marked as applied, but there was no associate git commit, so unless
+> I missed something, the modification doesn't seem to be in buildroot
+> upstream git tree.
+
+Ah, yes, you're right. This series was so long that I messed up on this
+patch (even though it was at the beginning of the series). I hope it
+doesn't indicate that I messed things up even more with the rest of the
+series :-/
+
+Thanks for noticing!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
