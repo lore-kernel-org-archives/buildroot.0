@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 10:08:13 +0200
-Subject: [Buildroot] [PATCH 48/69] xlib_libXdmcp: add explicit
+Date: Sun, 3 Jul 2016 10:08:17 +0200
+Subject: [Buildroot] [PATCH 49/69] xlib_libXfixes: add explicit
  dependencies for host variant
-In-Reply-To: <1467498098-23731-49-git-send-email-julien.floret@6wind.com>
+In-Reply-To: <1467498098-23731-50-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-49-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160703100813.5b65beb5@free-electrons.com>
+ <1467498098-23731-50-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160703100817.4ba5aa2e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +14,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Jul 2016 00:21:17 +0200, Julien Floret wrote:
+On Sun,  3 Jul 2016 00:21:18 +0200, Julien Floret wrote:
 > Signed-off-by: Julien Floret <julien.floret@6wind.com>
 > ---
->  package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/x11r7/xlib_libXfixes/xlib_libXfixes.mk | 3 +++
+>  1 file changed, 3 insertions(+)
 
 Applied to master, thanks.
 
