@@ -1,40 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 10:30:55 +0200
-Subject: [Buildroot] [PATCH] package/tinyxml2: Bump version
-In-Reply-To: <1467472618-3612-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1467472618-3612-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20160703103055.2fd28db9@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 3 Jul 2016 10:31:19 +0200
+Subject: [Buildroot] [PATCH 05/24 v2] system: systemd only really
+ supports a R/W rootfs
+In-Reply-To: <bc1119c9b182fbf253680375178dc4642a4ee149.1466622379.git.yann.morin.1998@free.fr>
+References: <cover.1466622379.git.yann.morin.1998@free.fr>
+ <bc1119c9b182fbf253680375178dc4642a4ee149.1466622379.git.yann.morin.1998@free.fr>
+Message-ID: <174d94b1-dc82-d060-fed9-749daf3214e3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Yann,
 
-On Sat,  2 Jul 2016 17:16:58 +0200, Maxime Hadjinlian wrote:
-> Remove patches as they were applied upstream:
+Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
+> Supporting a R/O rootfs needs a bit more love to be fully operational.
+> This will come in later patches...
 > 
-> 0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch
-> https://github.com/leethomason/tinyxml2/commit/c8ec6fcab4eb501cc5bd328c19dcbd4b30722d52
-> 
-> 0002-Rename-test-fixed-cmake-warning.patch
-> https://github.com/leethomason/tinyxml2/commit/0b2c22bd46be95b08f234b8b4cb262f72ab3f0e8
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+
 > ---
->  ...0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch | 65 ----------------------
->  .../0002-Rename-test-fixed-cmake-warning.patch     | 38 -------------
->  package/tinyxml2/tinyxml2.hash                     |  2 +-
->  package/tinyxml2/tinyxml2.mk                       |  2 +-
->  4 files changed, 2 insertions(+), 105 deletions(-)
->  delete mode 100644 package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch
->  delete mode 100644 package/tinyxml2/0002-Rename-test-fixed-cmake-warning.patch
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>  system/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/system/Config.in b/system/Config.in
+> index 2d20230..4f9f270 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -94,6 +94,7 @@ config BR2_INIT_SYSTEMD
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+>  	select BR2_ROOTFS_MERGED_USR
+>  	select BR2_PACKAGE_SYSTEMD
+> +	select BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+>  
+>  comment "systemd needs (e)glibc toolchain, headers >= 3.10"
+>  	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
+> 
