@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 08:47:49 +0200
-Subject: [Buildroot] [git commit] erlang-lager: add explicit dependencies
-	for host variant
-Message-ID: <20160703064824.968A181D8A@busybox.osuosl.org>
+Date: Sun, 3 Jul 2016 08:48:05 +0200
+Subject: [Buildroot] [git commit] expat: add explicit dependencies for host
+	variant
+Message-ID: <20160703064824.BF79E80AC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2c0d12d2544f548d05ce8ac1666657d1d85a9ad
+commit: https://git.buildroot.net/buildroot/commit/?id=3aa12cc0dadaaeba6d3ed15c85422d96a86973fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang-lager/erlang-lager.mk | 1 +
+ package/expat/expat.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/erlang-lager/erlang-lager.mk b/package/erlang-lager/erlang-lager.mk
-index 19940a9..b55b6f7 100644
---- a/package/erlang-lager/erlang-lager.mk
-+++ b/package/erlang-lager/erlang-lager.mk
-@@ -9,6 +9,7 @@ ERLANG_LAGER_SITE = $(call github,basho,lager,$(ERLANG_LAGER_VERSION))
- ERLANG_LAGER_LICENSE = Apache-2.0
- ERLANG_LAGER_LICENSE_FILES = LICENSE
- ERLANG_LAGER_DEPENDENCIES = erlang-goldrush
-+HOST_ERLANG_LAGER_DEPENDENCIES = host-erlang-goldrush
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index 5c1a444..e7bb74a 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -11,6 +11,7 @@ EXPAT_INSTALL_STAGING = YES
+ EXPAT_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) installlib
+ EXPAT_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) installlib
+ EXPAT_DEPENDENCIES = host-pkgconf
++HOST_EXPAT_DEPENDENCIES = host-pkgconf
+ EXPAT_LICENSE = MIT
+ EXPAT_LICENSE_FILES = COPYING
  
- $(eval $(rebar-package))
- $(eval $(host-rebar-package))
