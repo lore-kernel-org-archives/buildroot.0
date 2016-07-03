@@ -1,29 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 08:36:49 +0200
-Subject: [Buildroot] [PATCH 04/69] cdrkit: add explicit dependencies for
- host variant
-In-Reply-To: <1467498098-23731-5-git-send-email-julien.floret@6wind.com>
-References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-5-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160703083649.02b0b8cc@free-electrons.com>
+Date: Sun, 3 Jul 2016 08:40:55 +0200
+Subject: [Buildroot] [git commit] axfsutils: add explicit dependencies for
+	host variant
+Message-ID: <20160703064348.3EE358177C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=81cb325c9d60a985ff0f9f116bec8d40a2698e3f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  3 Jul 2016 00:20:33 +0200, Julien Floret wrote:
-> Signed-off-by: Julien Floret <julien.floret@6wind.com>
-> ---
->  package/cdrkit/cdrkit.mk | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Julien Floret <julien.floret@6wind.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/axfsutils/axfsutils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/axfsutils/axfsutils.mk b/package/axfsutils/axfsutils.mk
+index 6c9c58b..1bd6280 100644
+--- a/package/axfsutils/axfsutils.mk
++++ b/package/axfsutils/axfsutils.mk
+@@ -8,7 +8,7 @@ AXFSUTILS_VERSION = 64886703fdff6cfc64eb20fbe7d7295bbeec867b
+ AXFSUTILS_SITE = $(call github,jaredeh,axfs,$(AXFSUTILS_VERSION))
+ AXFSUTILS_LICENSE = GPLv2
+ AXFSUTILS_LICENSE_FILES = mkfs.axfs-legacy/COPYING
+-AXFSUTILS_DEPENDENCIES = host-zlib
++HOST_AXFSUTILS_DEPENDENCIES = host-zlib
+ 
+ # The 'new' mkfs.axfs version requires GNUstep which is not a buildroot
+ # prerequisite. The 'legacy' one works just as well without that requirement.
