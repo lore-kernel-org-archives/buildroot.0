@@ -1,125 +1,71 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 3 Jul 2016 11:30:12 +0200
-Subject: [Buildroot] [PATCH 1/1 v3] pyqtgraph: new package
-In-Reply-To: <1444755264-17899-1-git-send-email-guillaume.bressaix@gmail.com>
-References: <1444755264-17899-1-git-send-email-guillaume.bressaix@gmail.com>
-Message-ID: <CAGduivwFkd6aiysSepGysOJOiaweTKS=qbd0d5UtcccWE7sr=A@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 3 Jul 2016 11:39:54 +0200
+Subject: [Buildroot] [PATCH 13/24 v2] package/skeleton: add macro to
+ rsync skeleton directory
+In-Reply-To: <0002da14343e3283c557ef0a796dee4e6d9a91e4.1466622379.git.yann.morin.1998@free.fr>
+References: <cover.1466622379.git.yann.morin.1998@free.fr>
+ <0002da14343e3283c557ef0a796dee4e6d9a91e4.1466622379.git.yann.morin.1998@free.fr>
+Message-ID: <392011e6-8fb3-3bb4-5ad4-c5e9c6e28d34@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Guillaume, all
+Hi Yann,
 
-Thank you for your patches, I have made a few comments inline, your
-patch has been marked as Changes Requested in our patchwork, if you
-can address theses and resend a new version of your patch.
+Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
+> The rsync command is currently called from a single location. In
+> follow-up patches, it will be called from various places now.
+> 
+> It will be easier to update and fix this command if it is defined in a
+> single location, rather than if duplicated in many places.
+> 
+> Define a macro that skeleton packages can call to install their skeleton
+> directories. Since at least one occurence of it will want to install in
+> staging, the macro must accept a destination path, rather than hard-code
+> target as the destination.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Tue, Oct 13, 2015 at 6:54 PM, Guillaume William Bres
-<guillaume.bressaix@gmail.com> wrote:
->
-> Signed-off-by: Guillaume William Bres <guillaume.bressaix@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+
 > ---
->  PyQtGraph is an easy to use library using PyQt bindings, to develop
->  scientific applications.
->
->  The library requires python-numpy to run, which depends on
->  certain types of toolchain. I know Gwen has submitted a new variable
->  BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS so I added that one as a
->  dependency: please correct me on that.
->
->  All suggestions are appreciated.
->  The package builds easily because it is only made of python scripts.
->
->  Builds and runs successfully on ARM Cortex A9.
->
->  package/Config.in                              |    1 +
->  package/python-pyqtgraph/Config.in             |   14 ++++++++++++++
->  package/python-pyqtgraph/python-pyqtgraph.hash |    5 +++++
->  package/python-pyqtgraph/python-pyqtgraph.mk   |   15 +++++++++++++++
->  4 files changed, 35 insertions(+)
->  create mode 100644 package/python-pyqtgraph/Config.in
->  create mode 100644 package/python-pyqtgraph/python-pyqtgraph.hash
->  create mode 100644 package/python-pyqtgraph/python-pyqtgraph.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index f686f13..7ef27b4 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -646,6 +646,7 @@ menu "External python modules"
->         source "package/python-pyparsing/Config.in"
->         source "package/python-pypcap/Config.in"
->         source "package/python-pyqt/Config.in"
-> +       source "package/python-pyqtgraph/Config.in"
->         source "package/python-pyratemp/Config.in"
->         source "package/python-pyro/Config.in"
->         source "package/python-pyroute2/Config.in"
-> diff --git a/package/python-pyqtgraph/Config.in b/package/python-pyqtgraph/Config.in
-Your patch doesn't apply anymore, if you could rebase on a more recent
-master and resend with the other comments it would be great.
-
-> new file mode 100644
-> index 0000000..5e1a1e6
-> --- /dev/null
-> +++ b/package/python-pyqtgraph/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_PYTHON_PYQTGRAPH
-> +       bool "python-pyqtgraph"
-> +       depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS
-This symbol doesn't exists (anymore maybe), it's
-BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS.
-> +       select BR2_PACKAGE_PYTHON_PYQT
-> +       select BR2_PACKAGE_PYTHON_NUMPY # runtime dependency
-> +       select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime dependency
-> +       select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 #runtime dependency
-> +       select BR2_PACKAGE_QT_SVG # runtime dependency
-It doesn't make sense to select BR2_PACKAGE_QT_SVG without selecting
-BR2_PACKAGE_QT. And it's fine to select it, because it's not a hidden
-dependency, it's even in the name of the package.
-> +       help
-> +         Pyqtgraph is a pure Python graphics and GUI library built on PyQt4,
-> +         PySide and Numpy.
+>  package/skeleton/skeleton.mk | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+> index 072d217..e3ae694 100644
+> --- a/package/skeleton/skeleton.mk
+> +++ b/package/skeleton/skeleton.mk
+> @@ -62,6 +62,14 @@ SKELETON_PATH = system/skeleton
+>  
+>  endif # ! custom skeleton
+>  
+> +# This function rsyncs the skeleton directory in $(1) to the destination
+> +# in $(2), which should be either $(TARTGET_DIR) or $(STAGING_DIR)
+> +define SKELETON_RSYNC
+> +	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+> +		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+> +		$(1)/ $(2)/
+> +endef
 > +
-> +         Official website:
-> +         http://www.pyqtgraph.org/
-> diff --git a/package/python-pyqtgraph/python-pyqtgraph.hash b/package/python-pyqtgraph/python-pyqtgraph.hash
-> new file mode 100644
-> index 0000000..c20eea2
-> --- /dev/null
-> +++ b/package/python-pyqtgraph/python-pyqtgraph.hash
-> @@ -0,0 +1,5 @@
-> +# From http://www.pyqtgraph.org/downloads
-> +md5 6e2efa185b6b9227dfe16fefd921a8ec  pyqtgraph-0.9.10.tar.gz
-> +
-> +# Locally calculated:
-> +sha256 4c0589774e3c8b0c374931397cf6356b9cc99a790215d1917bb7f015c6f0729a  pyqtgraph-0.9.10.tar.gz
-> diff --git a/package/python-pyqtgraph/python-pyqtgraph.mk b/package/python-pyqtgraph/python-pyqtgraph.mk
-> new file mode 100644
-> index 0000000..575ea71
-> --- /dev/null
-> +++ b/package/python-pyqtgraph/python-pyqtgraph.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-pyqtgraph
-> +#
-> +################################################################################
-> +
-> +PYTHON_PYQTGRAPH_VERSION = 0.9.10
-> +PYTHON_PYQTGRAPH_SOURCE = pyqtgraph-$(PYTHON_PYQTGRAPH_VERSION).tar.gz
-> +PYTHON_PYQTGRAPH_SITE = http://www.pyqtgraph.org/downloads
-> +PYTHON_PYQTGRAPH_LICENSE = MIT
-> +PYTHON_PYQTGRAPH_LICENSE_FILES = LICENSE
-You have a trailing space in your patch
-> +PYTHON_PYQTGRAPH_SETUP_TYPE = distutils
-> +PYTHON_PYQTGRAPH_DEPENDENCIES = python-pyqt
-> +
-> +$(eval $(python-package))
-> --
-> 1.7.10.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  # This function handles the merged or non-merged /usr cases
+>  ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+>  define SKELETON_USR_SYMLINKS_OR_DIRS
+> @@ -86,9 +94,7 @@ SKELETON_LIB_SYMLINK = lib32
+>  endif
+>  
+>  define SKELETON_INSTALL_TARGET_CMDS
+> -	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+> -		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+> -		$(SKELETON_PATH)/ $(TARGET_DIR)/
+> +	$(call SKELETON_RSYNC,$(SKELETON_PATH),$(TARGET_DIR))
+>  	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
+>  	ln -snf lib $(TARGET_DIR)/$(SKELETON_LIB_SYMLINK)
+>  	ln -snf lib $(TARGET_DIR)/usr/$(SKELETON_LIB_SYMLINK)
+> 
