@@ -1,101 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Jul 2016 19:53:42 +0200
-Subject: [Buildroot] [git commit] libnatpmp: New package
-Message-ID: <20160703175405.DD9A182114@busybox.osuosl.org>
+Date: Sun, 3 Jul 2016 19:53:53 +0200
+Subject: [Buildroot] [git commit] package/transmission: add optional support
+	for libminiupnpc/libnatpmp
+Message-ID: <20160703175405.F1A8280282@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06015c7deb097ec97743835483d02329ca9bf210
+commit: https://git.buildroot.net/buildroot/commit/?id=349b1688a5a52b28ac33541363e70b613079f18c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Transmission bundles copies of both libraries and uses them if they are
+not provided by the system. This patch allows transmission to use the
+system libraries of libminiupnpc/libnatpmp.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                |  1 +
- package/libnatpmp/Config.in      | 16 ++++++++++++++++
- package/libnatpmp/libnatpmp.hash |  2 ++
- package/libnatpmp/libnatpmp.mk   | 31 +++++++++++++++++++++++++++++++
- 4 files changed, 50 insertions(+)
+ package/transmission/0003-miniupnpc-cross.patch | 31 +++++++++++++++++++++++++
+ package/transmission/transmission.mk            | 11 +++++++++
+ 2 files changed, 42 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index fef626f..3fdde25 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1178,6 +1178,7 @@ menu "Networking"
- 	source "package/libminiupnpc/Config.in"
- 	source "package/libmnl/Config.in"
- 	source "package/libmodbus/Config.in"
-+	source "package/libnatpmp/Config.in"
- 	source "package/libndp/Config.in"
- 	source "package/libnet/Config.in"
- 	source "package/libnetfilter_acct/Config.in"
-diff --git a/package/libnatpmp/Config.in b/package/libnatpmp/Config.in
+diff --git a/package/transmission/0003-miniupnpc-cross.patch b/package/transmission/0003-miniupnpc-cross.patch
 new file mode 100644
-index 0000000..879e5ee
+index 0000000..5037c2e
 --- /dev/null
-+++ b/package/libnatpmp/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_LIBNATPMP
-+	bool "libnatpmp"
-+	depends on !BR2_BINFMT_FLAT
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  libnatpmp is an attempt to make a portable and fully compliant
-+	  implementation of the NAT-PMP protocol for the client side. It
-+	  is based on non blocking sockets and all calls of the API are
-+	  asynchronous. It is therefore very easy to integrate the
-+	  NAT-PMP code to any event driven code.
-+
-+	  http://miniupnp.free.fr/libnatpmp.html
-+
-+comment "libnatpmp needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+	depends on !BR2_BINFMT_FLAT
-diff --git a/package/libnatpmp/libnatpmp.hash b/package/libnatpmp/libnatpmp.hash
-new file mode 100644
-index 0000000..a5cab3c
---- /dev/null
-+++ b/package/libnatpmp/libnatpmp.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 e1aa9c4c4219bc06943d6b2130f664daee213fb262fcb94dd355815b8f4536b0  libnatpmp-20150609.tar.gz
-diff --git a/package/libnatpmp/libnatpmp.mk b/package/libnatpmp/libnatpmp.mk
-new file mode 100644
-index 0000000..cdd65e9
---- /dev/null
-+++ b/package/libnatpmp/libnatpmp.mk
++++ b/package/transmission/0003-miniupnpc-cross.patch
 @@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# libnatpmp
-+#
-+################################################################################
++Fix libminiupnpc version detection
 +
-+LIBNATPMP_VERSION = 20150609
-+LIBNATPMP_SITE = http://miniupnp.free.fr/files
-+LIBNATPMP_INSTALL_STAGING = YES
-+LIBNATPMP_LICENSE = BSD-3c
-+LIBNATPMP_LICENSE_FILES = LICENSE
++Problem is known upstream: https://trac.transmissionbt.com/ticket/6140
 +
-+define LIBNATPMP_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CC="$(TARGET_CC)"
-+endef
++For buildroot we know the libminiupnpc version so we hard-code 2.0.
 +
-+define LIBNATPMP_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		PREFIX=$(STAGING_DIR) \
-+		HEADERS='declspec.h natpmp.h' \
-+		$(TARGET_CONFIGURE_OPTS) install
-+endef
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+define LIBNATPMP_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		PREFIX=$(TARGET_DIR) \
-+		$(TARGET_CONFIGURE_OPTS) install
-+endef
++diff -uNr transmission-2.92.org/configure.ac transmission-2.92/configure.ac
++--- transmission-2.92.org/configure.ac	2016-03-06 21:23:45.336198393 +0100
+++++ transmission-2.92/configure.ac	2016-07-02 21:48:13.452385686 +0200
++@@ -386,18 +386,7 @@
++ dnl MINIUPNPC_API_VERSION and we won't have to figure
++ dnl it out on our own
++ if test "x$upnp_version" = "xunknown" ; then
++-  AC_RUN_IFELSE(
++-    [AC_LANG_PROGRAM(
++-      [#include <stdlib.h>
++-       #include <miniupnpc/miniupnpc.h>],
++-      [#ifdef MINIUPNPC_API_VERSION
++-       return EXIT_SUCCESS;
++-       #else
++-       return EXIT_FAILURE;
++-       #endif]
++-    )],
++-    [upnp_version=">= 1.7"]
++-  )
+++  upnp_version="2.0"
++ fi
++ 
++ dnl Or maybe it's miniupnp 1.6
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index c8d3773..e0cfc2d 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -21,6 +21,17 @@ TRANSMISSION_CONF_OPTS = \
+ TRANSMISSION_LICENSE = GPLv2 or GPLv3 with OpenSSL exception
+ TRANSMISSION_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_LIBMINIUPNPC),y)
++TRANSMISSION_DEPENDENCIES += libminiupnpc
++endif
 +
-+$(eval $(generic-package))
++ifeq ($(BR2_PACKAGE_LIBNATPMP),y)
++TRANSMISSION_DEPENDENCIES += libnatpmp
++TRANSMISSION_CONF_OPTS += --enable-external-natpmp
++else
++TRANSMISSION_CONF_OPTS += --disable-external-natpmp
++endif
++
+ ifeq ($(BR2_PACKAGE_TRANSMISSION_UTP),y)
+ TRANSMISSION_CONF_OPTS += --enable-utp
+ else
