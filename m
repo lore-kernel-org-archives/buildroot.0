@@ -1,32 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 09:31:16 +0200
-Subject: [Buildroot] [git commit] xapp_mkfontdir: add explicit dependencies
-	for host variant
-Message-ID: <20160703073137.9EC3D8195E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 03 Jul 2016 09:36:29 +0200
+Subject: [Buildroot] [PATCH 1/1] new package: alsacap
+In-Reply-To: <7cdd4c8373ad3a3a08131b2eaf5e2bcc@poczta.spox.org> ("Wojciech
+ =?utf-8?Q?Nizi=C5=84ski=22's?= message of "Wed, 06 Apr 2016 16:37:32
+ +0200")
+References: <1459926063-11265-1-git-send-email-niziak@spox.org>
+ <CAGm1_ks=HSe8v+7e2WrFj=M9SpuLkav=WS_xhMtB76521wJ3rw@mail.gmail.com>
+ <7cdd4c8373ad3a3a08131b2eaf5e2bcc@poczta.spox.org>
+Message-ID: <87eg7b41he.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=242486e2e355bcb7eb125b9878b204432233d604
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Wojciech" == Wojciech Nizi?ski <niziak@spox.org> writes:
 
-Signed-off-by: Julien Floret <julien.floret@6wind.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Hello!
+ > Corrected patch below.
+ > Hash file added, but hash is not used, because source comes from git
+ > repository.
 
-diff --git a/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk b/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk
-index b74f993..f2227bd 100644
---- a/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk
-+++ b/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk
-@@ -10,6 +10,7 @@ XAPP_MKFONTDIR_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_MKFONTDIR_LICENSE = MIT
- XAPP_MKFONTDIR_LICENSE_FILES = COPYING
- XAPP_MKFONTDIR_DEPENDENCIES = xapp_mkfontscale
-+HOST_XAPP_MKFONTDIR_DEPENDENCIES = host-xapp_mkfontscale
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ > Alsa capability tool displays the capabilities of your sound card and
+ > its ALSA driver
+
+ > Signed-off-by: Wojciech Nizinski <niziak@spox.org>
+
+Care to send an updated patch with the fixes suggested by Arnout and
+Jerzy? Also please add a locally calculated sha256 for the .hash file.
+
+Looking at the upstream code I see it will need to be fixed for static
+linking. Right now it is simply hardcoded to link with
+-lasound. Alsa-lib provides a .pc files, so ideally it should use
+pkg-config to get the right linker/compiler flags.
+
+In the mean time I will mark this patch as changes requested in
+patchwork.
+
+-- 
+Bye, Peter Korsgaard
