@@ -1,71 +1,39 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 3 Jul 2016 11:39:54 +0200
-Subject: [Buildroot] [PATCH 13/24 v2] package/skeleton: add macro to
- rsync skeleton directory
-In-Reply-To: <0002da14343e3283c557ef0a796dee4e6d9a91e4.1466622379.git.yann.morin.1998@free.fr>
-References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <0002da14343e3283c557ef0a796dee4e6d9a91e4.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <392011e6-8fb3-3bb4-5ad4-c5e9c6e28d34@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  3 Jul 2016 11:49:50 +0200
+Subject: [Buildroot] [PATCH 02/13] makedevs: remove VERSION/SOURCE
+In-Reply-To: <1467539401-3411-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1467539401-3411-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1467539401-3411-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Now that the package infrastructure doen't attempt to download a package
+that has an empty version string, there's no need to define the VERSION
+and SOURCE variables in the makedevs package.
 
-Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
-> The rsync command is currently called from a single location. In
-> follow-up patches, it will be called from various places now.
-> 
-> It will be easier to update and fix this command if it is defined in a
-> single location, rather than if duplicated in many places.
-> 
-> Define a macro that skeleton packages can call to install their skeleton
-> directories. Since at least one occurence of it will want to install in
-> staging, the macro must accept a destination path, rather than hard-code
-> target as the destination.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/makedevs/makedevs.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-
-> ---
->  package/skeleton/skeleton.mk | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-> index 072d217..e3ae694 100644
-> --- a/package/skeleton/skeleton.mk
-> +++ b/package/skeleton/skeleton.mk
-> @@ -62,6 +62,14 @@ SKELETON_PATH = system/skeleton
->  
->  endif # ! custom skeleton
->  
-> +# This function rsyncs the skeleton directory in $(1) to the destination
-> +# in $(2), which should be either $(TARTGET_DIR) or $(STAGING_DIR)
-> +define SKELETON_RSYNC
-> +	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-> +		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
-> +		$(1)/ $(2)/
-> +endef
-> +
->  # This function handles the merged or non-merged /usr cases
->  ifeq ($(BR2_ROOTFS_MERGED_USR),y)
->  define SKELETON_USR_SYMLINKS_OR_DIRS
-> @@ -86,9 +94,7 @@ SKELETON_LIB_SYMLINK = lib32
->  endif
->  
->  define SKELETON_INSTALL_TARGET_CMDS
-> -	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-> -		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
-> -		$(SKELETON_PATH)/ $(TARGET_DIR)/
-> +	$(call SKELETON_RSYNC,$(SKELETON_PATH),$(TARGET_DIR))
->  	$(call SKELETON_USR_SYMLINKS_OR_DIRS,$(TARGET_DIR))
->  	ln -snf lib $(TARGET_DIR)/$(SKELETON_LIB_SYMLINK)
->  	ln -snf lib $(TARGET_DIR)/usr/$(SKELETON_LIB_SYMLINK)
-> 
+diff --git a/package/makedevs/makedevs.mk b/package/makedevs/makedevs.mk
+index 130f5bc..95933c4 100644
+--- a/package/makedevs/makedevs.mk
++++ b/package/makedevs/makedevs.mk
+@@ -4,11 +4,6 @@
+ #
+ ################################################################################
+ 
+-# source included in buildroot
+-MAKEDEVS_SOURCE =
+-HOST_MAKEDEVS_SOURCE =
+-
+-MAKEDEVS_VERSION = buildroot-$(BR2_VERSION)
+ MAKEDEVS_LICENSE = GPLv2
+ 
+ HOST_MAKEDEVS_CFLAGS = $(HOST_CFLAGS)
+-- 
+2.7.4
