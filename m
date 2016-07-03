@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 Jul 2016 11:49:52 +0200
-Subject: [Buildroot] [PATCH 04/13] getent: remove VERSION/SOURCE
+Date: Sun,  3 Jul 2016 11:49:54 +0200
+Subject: [Buildroot] [PATCH 06/13] mke2img: remove SOURCE
 In-Reply-To: <1467539401-3411-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1467539401-3411-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1467539401-3411-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1467539401-3411-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,28 +11,25 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Now that the package infrastructure doen't attempt to download a package
-that has an empty version string, there's no need to define the VERSION
-and SOURCE variables in the getent package.
+that has an empty version string, there's no need to define the SOURCE
+variable in the mke2img package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/getent/getent.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/mke2img/mke2img.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/getent/getent.mk b/package/getent/getent.mk
-index 18f0991..ed249e8 100644
---- a/package/getent/getent.mk
-+++ b/package/getent/getent.mk
-@@ -4,10 +4,6 @@
+diff --git a/package/mke2img/mke2img.mk b/package/mke2img/mke2img.mk
+index 04aaa8f..9de387a 100644
+--- a/package/mke2img/mke2img.mk
++++ b/package/mke2img/mke2img.mk
+@@ -4,7 +4,6 @@
  #
  ################################################################################
  
--# source included in Buildroot
--GETENT_SOURCE =
--
--GETENT_VERSION = buildroot-$(BR2_VERSION)
- GETENT_LICENSE = LGPLv2.1+
+-HOST_MKE2IMG_SOURCE =
+ HOST_MKE2IMG_DEPENDENCIES = host-genext2fs host-e2fsprogs
  
- # For glibc toolchains, we use the getent program built/installed by
+ define HOST_MKE2IMG_INSTALL_CMDS
 -- 
 2.7.4
