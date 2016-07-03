@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 11:53:21 +0200
-Subject: [Buildroot] [PATCH] core: do not attempt downloads with no
- _VERSION set
-In-Reply-To: <20160124223345.GA31752@vostro>
-References: <20160124223345.GA31752@vostro>
-Message-ID: <20160703115321.33abb9be@free-electrons.com>
+Date: Sun, 3 Jul 2016 11:54:28 +0200
+Subject: [Buildroot] wget download: 'scheme missing' results in empty
+ output file
+In-Reply-To: <CAAXf6LXVweNYNvHNZG9bvYu9KVeAa9L6=qPOwRsmsx8DhVGTJQ@mail.gmail.com>
+References: <CAAXf6LXVweNYNvHNZG9bvYu9KVeAa9L6=qPOwRsmsx8DhVGTJQ@mail.gmail.com>
+Message-ID: <20160703115428.24dad374@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +13,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 25 Jan 2016 00:33:45 +0200, Alex Suykov wrote:
-> Currently, when the package defines no _SOURCE and no _VERSION
-> variables, we end up trying to download <PACKAGE>-undefined.tar.gz.
+On Thu, 25 Feb 2016 14:19:56 +0100, Thomas De Schampheleire wrote:
+> Hi Yann, all,
 > 
-> This is utterly pointless.
+> When a package does not (by error) define FOO_SITE, and the source
+> archive is not already present, the wget download helper will be
+> invoked with as URL /foo-xxx.tar.gz. wget reports 'Scheme missing' and
+> bails out, but _returns with a successful error code (0)_.
 > 
-> Change the logic to not attempt a download when neither _SOURCE
-> nor _VERSION is set:
->   - do not set an undefined _VERSION to "undefined"
->   - do not append an empty (or "undefined") version to the package
->     rawname
->   - use the package rawname in the MESSAGE macro
+> As a result, the download helper happily continues with hash checking
+> and finally with the atomic mv of the temporary download file (which
+> has been created but is still empty) to the final output location.
 > 
-> Consequently, for packages that have no _VERSION, the build
-> directory will be just the package name (which to some may look
-> nicer than the current "package-undefined").
+> Because as far as the download helper is concerned, everything went
+> successfully, also the build continues (but obviously fails further
+> on).
 > 
-> Furthermore, the message trace is also a bit leaner (to the same
-> people that find "package" nicer than "package-undefined").
+> While I think wget should not return 0 on such a problem, I think we
+> should try and prevent such problems. One way is to expect the
+> downloaded file size to be greater than 0. If that requirement is not
+> met, the download helper should bail out.
 > 
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> A patch like the below fixes the problem:
 
-Thanks for this patch! I just sent a patch series that includes your
-patch, plus several follow-up patches to clean up existing patches that
-needlessly define _SOURCE to the empty value.
+Instead of this, I just submitted a patch that verifies that SITE is
+not empty if SOURCE is not empty. See
+https://patchwork.ozlabs.org/patch/643725/. Consequently, I've marked
+your patch as Superseded in patchwork.
 
-See http://lists.busybox.net/pipermail/buildroot/2016-July/166270.html
-and following e-mails.
-
-Consequently, I've marked your patch as "Changes Requested" in
-patchwork. Of course, the new iteration preserves your authorship.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
