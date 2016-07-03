@@ -1,87 +1,82 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Sun,  3 Jul 2016 16:18:59 +0800
-Subject: [Buildroot] [PATCH v3] package/quagga: Add systemd.service file
-Message-ID: <1467533939-26606-1-git-send-email-nroach44@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 3 Jul 2016 09:50:07 +0200
+Subject: [Buildroot] [git commit] acpitool: new package
+Message-ID: <20160703082050.34FB181D8A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use a template service file as all of the daemons use almost
-identical arguments and generally appear the same to the init
-system.
+commit: https://git.buildroot.net/buildroot/commit/?id=6ad939961e8f38b82f5a51db2abd8547af176635
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We "Wants=" zebra as that's the daemon for interfacing to the
-kernel, and it's not required for the other daemons to work
-but it's probably going to be used in nearly all setups.
+acpitool is a small, convenient command-line ACPI client.
 
-/usr/bin/env is needed as systemd doesn't allow the instance
-variable (%i) in the executable path.
-
-We don't enable these services by default as this would require
-creating configuration and /etc/default files. (And is easily
-achieved with an FS overlay)
-
-Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Tested-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v2 -> v3:
- - Remove invalid references to quagga.service (Arnout)
- - Check if the binary is executable before trying to start it
-   (Arnout)
- - Remove PID file arguments and options (Arnout)
- - Add reload capability as the daemons do support it
+ package/Config.in              |  1 +
+ package/acpitool/Config.in     | 11 +++++++++++
+ package/acpitool/acpitool.hash |  2 ++
+ package/acpitool/acpitool.mk   | 13 +++++++++++++
+ 4 files changed, 27 insertions(+)
 
-Changes v1 -> v2:
- (As suggested by Arnout Vandecappelle)
- - Completely remove shim and use /usr/bin/env instead
- - Don't tell quagga to fork as systemd prefers it
- - Add comment to .service file about /usr/bin/env
- - Explain not enabling the service on build in patch
----
- package/quagga/quagga.mk       |  2 ++
- package/quagga/quagga at .service | 20 ++++++++++++++++++++
- 2 files changed, 22 insertions(+)
- create mode 100644 package/quagga/quagga at .service
-
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 22e90ad..1bbc72d 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -75,6 +75,8 @@ endif
- define QUAGGA_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/quagga/quagga_tmpfiles.conf \
- 		$(TARGET_DIR)/usr/lib/tmpfiles.d/quagga.conf
-+	$(INSTALL) -D -m 644 package/quagga/quagga at .service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/quagga at .service
- endef
- 
- $(eval $(autotools-package))
-diff --git a/package/quagga/quagga at .service b/package/quagga/quagga at .service
+diff --git a/package/Config.in b/package/Config.in
+index 550beb3..c57c932 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -352,6 +352,7 @@ menu "Firmware"
+ endmenu
+ 	source "package/a10disp/Config.in"
+ 	source "package/acpid/Config.in"
++	source "package/acpitool/Config.in"
+ 	source "package/aer-inject/Config.in"
+ 	source "package/am335x-pru-package/Config.in"
+ 	source "package/avrdude/Config.in"
+diff --git a/package/acpitool/Config.in b/package/acpitool/Config.in
 new file mode 100644
-index 0000000..16acc30
+index 0000000..7992e0f
 --- /dev/null
-+++ b/package/quagga/quagga at .service
-@@ -0,0 +1,20 @@
-+[Unit]
-+Description=Quagga %i routing daemon
-+ConditionFileIsExecutable=/usr/sbin/%i
-+Wants=quagga at zebra.service
++++ b/package/acpitool/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_ACPITOOL
++	bool "acpitool"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  A small, convenient command-line ACPI client with a lot of
++	  features for Linux
 +
-+[Service]
-+Type=simple
-+EnvironmentFile=/etc/default/quagga-%i
-+PrivateTmp=true
-+# Systemd doesn't like having %i in the executable path.
-+ExecStart=/usr/bin/env /usr/sbin/%i $OPTS -f /etc/quagga/%i.conf
-+ExecReload=/bin/kill -HUP $MAINPID
-+KillMode=mixed
-+KillSignal=SIGINT
-+Restart=on-failure
-+RestartSec=1
++	  http://acpitool.sourceforge.net
 +
-+[Install]
-+WantedBy=multi-user.target
++comment "acpitool needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/acpitool/acpitool.hash b/package/acpitool/acpitool.hash
+new file mode 100644
+index 0000000..e25dc54
+--- /dev/null
++++ b/package/acpitool/acpitool.hash
+@@ -0,0 +1,2 @@
++# locally computed hash
++sha256 004fb6cd43102918b6302cf537a2db7ceadda04aef2e0906ddf230f820dad34f acpitool-0.5.1.tar.bz2
+diff --git a/package/acpitool/acpitool.mk b/package/acpitool/acpitool.mk
+new file mode 100644
+index 0000000..f663fbb
+--- /dev/null
++++ b/package/acpitool/acpitool.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# acpitool
++#
++################################################################################
 +
--- 
-2.8.1
++ACPITOOL_VERSION = 0.5.1
++ACPITOOL_SOURCE = acpitool-$(ACPITOOL_VERSION).tar.bz2
++ACPITOOL_SITE = http://downloads.sourceforge.net/sourceforge/acpitool
++ACPITOOL_LICENSE = GPLv2+
++ACPITOOL_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
