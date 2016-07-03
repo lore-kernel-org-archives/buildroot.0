@@ -1,35 +1,36 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  4 Jul 2016 00:32:52 +0200
-Subject: [Buildroot] [PATCH 4/4] package/puseaudio: fix typo
-In-Reply-To: <1467585172-10299-1-git-send-email-romain.naour@gmail.com>
-References: <1467585172-10299-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1467585172-10299-4-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2016 00:34:01 +0200
+Subject: [Buildroot] [git commit] gmp: dissable assembly for armv7m
+Message-ID: <20160703223411.00D6A80455@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit 7290dc1e87b23fe21c75c50b2238004273a0ec5c added
-PULSE_AUDIO_CONF_ENV instead of PULSEAUDIO_CONF_ENV.
+commit: https://git.buildroot.net/buildroot/commit/?id=bc99774b9f30459fd8be04daac5a743e6d890c4c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+It has different assembly constraints which can't be satisfied. Fixes:
+http://autobuild.buildroot.net/results/ac6/ac65384a325912788790ceafa7db657cef9382fa/
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pulseaudio/pulseaudio.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gmp/gmp.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index 9ef11bc..e0d9ab4 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -18,7 +18,7 @@ PULSEAUDIO_CONF_OPTS = \
- # Make sure we don't detect libatomic_ops. Indeed, since pulseaudio
- # requires json-c, which needs 4 bytes __sync builtins, there should
- # be no need for pulseaudio to rely on libatomic_ops.
--PULSE_AUDIO_CONF_ENV += \
-+PULSEAUDIO_CONF_ENV += \
- 	ac_cv_header_atomic_ops_h=no
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index 4557190..cdde794 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -14,7 +14,8 @@ GMP_DEPENDENCIES = host-m4
+ HOST_GMP_DEPENDENCIES = host-m4
  
- # 0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
--- 
-2.5.5
+ # GMP doesn't support assembly for coldfire or mips r6 ISA yet
+-ifeq ($(BR2_m68k_cf)$(BR2_mips_32r6)$(BR2_mips_64r6),y)
++# Disable for ARM v7m since it has different asm constraints
++ifeq ($(BR2_m68k_cf)$(BR2_mips_32r6)$(BR2_mips_64r6)$(BR2_ARM_CPU_ARMV7M),y)
+ GMP_CONF_OPTS += --disable-assembly
+ endif
+ 
