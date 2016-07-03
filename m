@@ -1,32 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 09:06:39 +0200
-Subject: [Buildroot] [git commit] libconfuse: add explicit dependencies for
+Date: Sun, 3 Jul 2016 08:58:12 +0200
+Subject: [Buildroot] [git commit] heimdal: add explicit dependencies for
 	host variant
-Message-ID: <20160703071146.4E6AA7FE29@busybox.osuosl.org>
+Message-ID: <20160703071146.06CC97FFD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d61782c296e001d9d77277e8de58a6b543a33f5c
+commit: https://git.buildroot.net/buildroot/commit/?id=526f3db84d23a7fd6f765c2f2cfca4708faa6218
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libconfuse/libconfuse.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/heimdal/heimdal.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
-index 089e12c..fea90f1 100644
---- a/package/libconfuse/libconfuse.mk
-+++ b/package/libconfuse/libconfuse.mk
-@@ -10,6 +10,7 @@ LIBCONFUSE_SITE = https://github.com/martinh/libconfuse/releases/download/v$(LIB
- LIBCONFUSE_INSTALL_STAGING = YES
- LIBCONFUSE_CONF_OPTS = --disable-rpath
- LIBCONFUSE_DEPENDENCIES = host-flex
-+HOST_LIBCONFUSE_DEPENDENCIES = host-flex
- LIBCONFUSE_LICENSE = ISC
- LIBCONFUSE_LICENSE_FILES = LICENSE
+diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
+index 626e68e..8199229 100644
+--- a/package/heimdal/heimdal.mk
++++ b/package/heimdal/heimdal.mk
+@@ -6,7 +6,7 @@
  
+ HEIMDAL_VERSION = 1.6rc2
+ HEIMDAL_SITE = http://www.h5l.org/dist/src
+-HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
++HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
+ HEIMDAL_INSTALL_STAGING = YES
+ # static because of -fPIC issues with e2fsprogs on x86_64 host
+ HOST_HEIMDAL_CONF_OPTS = \
