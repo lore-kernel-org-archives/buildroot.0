@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 17:02:11 +0200
-Subject: [Buildroot] [PATCH v3 00/14] Fortran support for all toolchains
-In-Reply-To: <20160703134750.7516-1-s.martin49@gmail.com>
-References: <20160703134750.7516-1-s.martin49@gmail.com>
-Message-ID: <20160703170211.39c252b6@free-electrons.com>
+Date: Sun, 3 Jul 2016 17:02:17 +0200
+Subject: [Buildroot] [PACH v3] efivar: disable for some incompatible
+ Sourcery CodeBench toolchains
+In-Reply-To: <1467555636-17085-1-git-send-email-romain.naour@gmail.com>
+References: <1467555636-17085-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160703170217.7be8143d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +13,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Jul 2016 15:47:36 +0200, Samuel Martin wrote:
+On Sun,  3 Jul 2016 16:20:36 +0200, Romain Naour wrote:
+> From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> 
+> linux/nvme.h has been renamed to linux/nvme_ioctl.h since 4.4, and we
+> have a patch to handle that situation. However, some Sourcery CodeBench
+> toolchains use 4.4 kernel headers but don't have that header file
+> renamed, and that is causing build failures. So, prevent this package
+> to be built using those toolchains.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/66c/66cf68261fa73c2366610f8d14bd02180ba7cd2d/
+>   http://autobuild.buildroot.net/results/54c/54cc7d4e3b284b35931e08f9c7f0f902df96a989/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> [Romain:
+>   - add back slash on line breaks
+>   - propagate efivar dependencies to efibootmgr
+>   - add comments dependencies]
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  package/efibootmgr/Config.in |  4 ++++
+>  package/efivar/Config.in     | 10 ++++++++++
+>  2 files changed, 14 insertions(+)
 
-> Samuel Martin (13):
->   toolchain/toolchain-common.in: add BR2_TOOLCHAIN_HAS_LIBQUADMATH
->     hidden symbol
->   package/gcc: complete the logic on libquadmath
->   package/gcc: fix fortran support
->   toolchain: add hidden symbol for fortran support in the toolchain
->   docs/manual: document dependency on fortran
->   package/gcc: select BR2_TOOLCHAIN_HAS_FORTRAN when appropriate
->   pkg-cmake.mk: export the fortran compiler path in the CMake toolchain
->     file
->   toolchain/helpers: add fortran check
->   toolchain/toolchain-external: enable fortran check when it is selected
->   toolchain/toolchain-external: add libgfortran and libquadmath to the
->     TOOLCHAIN_EXTERNAL_LIBS list
->   toolchain/toolchain-external: add knob for fortran support
->   toolchain/toolchain-external: update external toolchain configuration
->     with BR2_TOOLCHAIN_HAS_FORTRAN
->   package/fftw: add fortran support
-
-I've applied those patches, with some minor tweaks here and there.
-
-However, I haven't applied the lapack patch since it fails to build
-with the Linaro toolchain as we discussed.
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
