@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 08:32:00 +0200
-Subject: [Buildroot] [PATCH 01/69] am335x-pru-package: add explicit
- dependencies for host variant
-In-Reply-To: <1467498098-23731-2-git-send-email-julien.floret@6wind.com>
+Date: Sun, 3 Jul 2016 08:33:31 +0200
+Subject: [Buildroot] [PATCH 00/69] Remove automatic derivation of host
+	dependencies
+In-Reply-To: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-2-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160703083200.3ae6e278@free-electrons.com>
+Message-ID: <20160703083331.7b0e3282@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,42 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Jul 2016 00:20:30 +0200, Julien Floret wrote:
-> Signed-off-by: Julien Floret <julien.floret@6wind.com>
-> ---
->  package/am335x-pru-package/am335x-pru-package.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/am335x-pru-package/am335x-pru-package.mk b/package/am335x-pru-package/am335x-pru-package.mk
-> index a97e8a49eacb..8b33eb3d6cbf 100644
-> --- a/package/am335x-pru-package/am335x-pru-package.mk
-> +++ b/package/am335x-pru-package/am335x-pru-package.mk
-> @@ -9,6 +9,7 @@ AM335X_PRU_PACKAGE_SITE = $(call github,beagleboard,am335x_pru_package,$(AM335X_
->  AM335X_PRU_PACKAGE_LICENSE = BSD-3c
->  AM335X_PRU_PACKAGE_LICENSE_FILES = pru_sw/utils/LICENCE.txt
->  AM335X_PRU_PACKAGE_DEPENDENCIES = host-am335x-pru-package
-> +HOST_AM335X_PRU_PACKAGE_DEPENDENCIES = host-am335x-pru-package
+On Sun,  3 Jul 2016 00:20:29 +0200, Julien Floret wrote:
+> The automatic derivation of host dependencies feature consists in
+> automatically deducing dependencies of a package host variant from the
+> dependencies of the target variant.
 
-With this addition, host-am335x-pru-package now depends on
-host-am335x-pru-package, which introduces a circular dependency.
+Thanks for this series. However, there are still a number of issues
+(I'll reply to the patches independently).
 
-Having:
+But most importantly, I think it's a topic I would prefer to not have
+to handle right now. We are in the middle of a Buildroot Summer Camp,
+trying to reduce significantly the backlog of patches, so a 69 patches
+series is kind of going against this goal. While this objective is
+desirable, it's also not a super high priority, so I would have
+preferred to defer this work a bit and concentrate on other topics.
 
-  AM335X_PRU_PACKAGE_DEPENDENCIES = host-am335x-pru-package
-
-does *not* imply:
-
-  HOST_AM335X_PRU_PACKAGE_DEPENDENCIES = host-am335x-pru-package
-
-Because in the logic to derive host dependencies from target
-dependencies, we filter out if the package would depend on itself:
-
-$(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
-        $$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
-
-See the $(1) in the call of filter-out ?
-
-I'll mark this patch as Rejected then.
+Best regards,
 
 Thomas
 -- 
