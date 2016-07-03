@@ -1,130 +1,174 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 3 Jul 2016 14:47:02 +0200
-Subject: [Buildroot] [PATCH 1/1] owncloud: new package
-In-Reply-To: <1458223208-7133-1-git-send-email-sylvain.raybaud@green-communications.fr>
-References: <1458223208-7133-1-git-send-email-sylvain.raybaud@green-communications.fr>
-Message-ID: <CAGduivx_5t_906+eatqCmiONVhY-xcKwdBEwhWdVZd-dzsn12Q@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 3 Jul 2016 14:54:54 +0200
+Subject: [Buildroot] [PATCH 23/24 v2] system: make systemd work on a
+ read-only rootfs
+In-Reply-To: <f70403a971adf75668e702cb93d242bc07ede270.1466622379.git.yann.morin.1998@free.fr>
+References: <cover.1466622379.git.yann.morin.1998@free.fr>
+ <f70403a971adf75668e702cb93d242bc07ede270.1466622379.git.yann.morin.1998@free.fr>
+Message-ID: <355fae6a-5a17-f4f0-43c7-05298a71430f@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sylvain, all,
+Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
+> When the rootfs is readonly, systemd will expect /var to be writable.
+> Because we do not really have a R/W filesystem to mount on /var, we make
+> it a tmpfs, and use the systemd-tmpfiles feautre to populate it with
+                                            ^
+s/feautre/feature/
 
-Thank you for your patch, below are some comments. Your patch is
-marked as "Changes-Requested" in our patchwork, you need to fix your
-patch and resend.
-Of course, we can discuss any of the comments below.
+> "factory" defaults.
+> 
+> We obtain those factory defaults by redirecting /var to that location at
+> build time, usign a symlink /var -> /usr/share/factory which is the
+               ^
+s/usign/using/
+> location in which systemd-tmpfiles will look for when instructed to
+> "recursively copy" a directory.
+> 
+> With a line like:
+> 
+>     C /var/something - - - -
+> 
+> it will look for /usr/share/factory/something and copy it (recursively
+> if it is a directory) to /var/something, but only if it does not already
+> exist there.
+> 
+> We also mark this copy with the exclamation mark, as it is only safe to
+> copy on boot, not when changing targets.
+> 
+> To be noted: the real format for such lines are:
+> 
+>     C /var/something - - - - /from/where/to/copy/something
+> 
+> But if the source is not given, then it is implicitly taken from
+> /usr/share/factory (which in our case is as-good a location as whatever
+> else, so we use it, and thus we need not specify the source of the
+> copy).
+> 
+> Note that we treat symlinks a little bit specially, by creating symlinks
+> to the factory defaults rather than copying them.
+> 
+> Finally, /var at build time is a symlink, but at runtime, it must be a
+> directory (so we can mount the tmpfs over there). We can't change that
+> as a target-finalize hook, because:
+> 
+>   - some packages may want to set ownership and/or acces rights on files
+                                                         ^
+s/acces/access/
 
-On Thu, Mar 17, 2016 at 3:00 PM, Sylvain Raybaud
-<sylvain.raybaud@green-communications.fr> wrote:
-> Add package owncloud 9.0.0: http://www.owncloud.org
-> Copy static files to /usr/lib/owncloud and dynamic files to
-> /var/lib/owncloud.
->
-> owncloud needs php, mysql and a webserver. MySQL and the webserver
-> can be provided by different packages therefore no specific
-> dependency is set.
->
-> Signed-off-by: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
+>     or directoris in /var, and that only happens while assemblig the
+                  ^                                              ^
+s/directoris/directories/
+s/assemblig/assembling/
+
+>     filesystem images; changing /var from a symlink to a (then empty)
+>     directory would break this;
+> 
+>   - /var would be a directory on sub-sequent builds (until the next
+>     "make clean").
+> 
+> Instead, we use the newly-introduce pre- and post-rootfs command hooks,
+> to turn /var into a directory before assembling the image, and back to a
+> symlink after assembling the image.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+Other than small typos highlighted by my mail client ;-)
+
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+
 > ---
->  package/Config.in              |  1 +
->  package/owncloud/Config.in     |  9 +++++++++
->  package/owncloud/owncloud.hash |  3 +++
->  package/owncloud/owncloud.mk   | 34 ++++++++++++++++++++++++++++++++++
->  4 files changed, 47 insertions(+)
->  create mode 100644 package/owncloud/Config.in
->  create mode 100644 package/owncloud/owncloud.hash
->  create mode 100644 package/owncloud/owncloud.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 2401867..eeaa791 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1453,6 +1453,7 @@ endif
->         source "package/openssh/Config.in"
->         source "package/openswan/Config.in"
->         source "package/openvpn/Config.in"
-> +       source "package/owncloud/Config.in"
->         source "package/p910nd/Config.in"
->         source "package/phidgetwebservice/Config.in"
->         source "package/portmap/Config.in"
-> diff --git a/package/owncloud/Config.in b/package/owncloud/Config.in
-> new file mode 100644
-> index 0000000..8fe18de
-> --- /dev/null
-> +++ b/package/owncloud/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_OWNCLOUD
-> +       bool "owncloud"
-> +       depends on BR2_PACKAGE_PHP       # runtime
-It should be a select here, a user that wants to select owncloud
-shouldn't have to select PHP first, it should be done by KConfig.
-Shouldn't you select some basic PHP extensions, like GD ? Maybe offer
-some options for the most common extensions that are needed.
-> +       help
-> +         OwnCloud is a web app for accessing and sharing your files,
-> +         calendars, contacts, mail and more.
+> Note: I haven't seen any symlinks installed in the factory so far, but I
+> haven't build a lot of packages yet... So, I'm not sure what to do with
+> the symlinks, especially when a package install relative symlinks...
+> ---
+>  package/skeleton-systemd/skeleton-systemd.mk | 51 ++++++++++++++++++++++++++--
+>  system/Config.in                             |  1 -
+>  2 files changed, 49 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/skeleton-systemd/skeleton-systemd.mk b/package/skeleton-systemd/skeleton-systemd.mk
+> index b45bbde..c7c2e26 100644
+> --- a/package/skeleton-systemd/skeleton-systemd.mk
+> +++ b/package/skeleton-systemd/skeleton-systemd.mk
+> @@ -36,12 +36,59 @@ ifeq ($(SKELETON_SYSTEM_LOCALTIME),)
+>  SKELETON_SYSTEM_LOCALTIME = Etc/UTC
+>  endif
+>  
+> +ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
 > +
-> +comment "OwnCloud needs PHP"
-> +    depends on !BR2_PACKAGE_PHP
-
-> diff --git a/package/owncloud/owncloud.hash b/package/owncloud/owncloud.hash
-> new file mode 100644
-> index 0000000..c40c87f
-> --- /dev/null
-> +++ b/package/owncloud/owncloud.hash
-> @@ -0,0 +1,3 @@
-> +# Hashes from: https://download.owncloud.org/community/owncloud-9.0.0.tar.bz2.{md5,sha256}
-> +md5     1f14d7f2faa0ba704901e062301854db                                       owncloud-9.0.0.tar.bz2
-> +sha256  d16737510a77a81489f7c4d5e19b0756fa2ea1c5081ba174b0fec0f00da3a77c       owncloud-9.0.0.tar.bz2
-> diff --git a/package/owncloud/owncloud.mk b/package/owncloud/owncloud.mk
-> new file mode 100644
-> index 0000000..ff9e105
-> --- /dev/null
-> +++ b/package/owncloud/owncloud.mk
-> @@ -0,0 +1,34 @@
-> +################################################################################
-> +#
-> +# owncloud
-> +#
-> +################################################################################
-> +
-> +OWNCLOUD_VERSION = 9.0.0
-There's a newer version available.
-> +OWNCLOUD_SOURCE = owncloud-$(OWNCLOUD_VERSION).tar.bz2
-> +OWNCLOUD_SITE = https://download.owncloud.org/community
-> +OWNCLOUD_DEPENDENCIES =
-You can remove this line since you don't have any build dependencies.
-> +OWNCLOUD_LICENSE = AGPL
-> +OWNCLOUD_LICENSE_FILES = COPYING-AGPL
-> +
-> +define OWNCLOUD_INSTALL_TARGET_CMDS
-> +       #install files /usr/lib
-> +       mkdir -p $(TARGET_DIR)/usr/lib
-> +       cp -a $(@D) $(TARGET_DIR)/usr/lib/owncloud
-> +       #move dynamic files in /var/lib and make symbolic links
-> +       mkdir -p $(TARGET_DIR)/var/lib/owncloud
-> +       mkdir -p $(TARGET_DIR)/var/lib/owncloud/data
-> +       mv $(TARGET_DIR)/usr/lib/owncloud/config $(TARGET_DIR)/var/lib/owncloud/
-> +       mv $(TARGET_DIR)/usr/lib/owncloud/apps $(TARGET_DIR)/var/lib/owncloud/
-> +       #use relative path so that permissions can be set by OWNCLOUD_PERMISSIONS hook
-> +       ln -s ../../../var/lib/owncloud/data $(TARGET_DIR)/usr/lib/owncloud/data
-> +       ln -s ../../../var/lib/owncloud/config $(TARGET_DIR)/usr/lib/owncloud/config
-> +       ln -s ../../../var/lib/owncloud/apps $(TARGET_DIR)/usr/lib/owncloud/apps
+> +define SKELETON_SYSTEMD_ROOT_RW
+> +	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
+> +	mkdir -p $(TARGET_DIR)/var
 > +endef
 > +
-> +define OWNCLOUD_PERMISSIONS
-> +       /usr/lib/owncloud r -1 root root - - - - -
-> +       /var/lib/owncloud r -1 www-data www-data - - - - -
+> +else
+> +
+> +# On a R/O rootfs, /var is a tmpfs filesystem. So, at build time, we
+> +# redirect /var to the "factory settings" location. Just before the
+> +# filesystem gets created, the /var symlink will be replaced with
+> +# a real (but empty) directory, and the "factory files" will be copied
+> +# back there by the tmpfiles.d mechanism.
+> +define SKELETON_SYSTEMD_ROOT_RO
+> +	mkdir -p $(TARGET_DIR)/etc/systemd/tmpfiles.d
+> +	mkdir -p $(TARGET_DIR)/usr/share/factory
+> +	ln -s usr/share/factory $(TARGET_DIR)/var
+> +	echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab
+> +	echo "tmpfs /var tmpfs mode=1777 0 0" >>$(TARGET_DIR)/etc/fstab
 > +endef
 > +
-> +$(eval $(generic-package))
-> --
-> 1.9.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +define SKELETON_SYSTEMD_VAR_PRE_FS
+> +	rm -f $(TARGET_DIR)/var
+> +	mkdir $(TARGET_DIR)/var
+> +	for i in $(TARGET_DIR)/usr/share/factory/*; do \
+> +		j="$${i##*/}"; \
+> +		if [ -L "$${i}" ]; then \
+> +			printf "L+! /var/%s - - - - %s\n" \
+> +				"$${j}" "../usr/share/factory/$${j}" \
+> +			|| exit 1; \
+> +		else \
+> +			printf "C! /var/%s - - - -\n" "$${j}" \
+> +			|| exit 1; \
+> +		fi; \
+> +	done >$(TARGET_DIR)/etc/systemd/tmpfiles.d/var-factory.conf
+> +endef
+> +SKELETON_SYSTEMD_FS_PRE_CMD_HOOKS += SKELETON_SYSTEMD_VAR_PRE_FS
+> +
+> +define SKELETON_SYSTEMD_VAR_POST_FS
+> +	rm -rf $(TARGET_DIR)/var
+> +	ln -s usr/share/factory $(TARGET_DIR)/var
+> +endef
+> +SKELETON_SYSTEMD_FS_POST_CMD_HOOKS += SKELETON_SYSTEMD_VAR_POST_FS
+> +
+> +endif
+> +
+>  define SKELETON_SYSTEMD_INSTALL_TARGET_CMDS
+>  	mkdir -p $(TARGET_DIR)/etc
+>  	mkdir -p $(TARGET_DIR)/home
+>  	mkdir -p $(TARGET_DIR)/srv
+> -	mkdir -p $(TARGET_DIR)/var
+> -	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
+> +	$(SKELETON_SYSTEMD_ROOT_RO)
+> +	$(SKELETON_SYSTEMD_ROOT_RW)
+>  	ln -sf ../usr/share/zoneinfo/$(SKELETON_SYSTEMD_LOCALTIME) \
+>  		$(TARGET_DIR)/etc/localtime
+>  	$(SKELETON_SYSTEMD_RSYNC_NETWORK)
+> diff --git a/system/Config.in b/system/Config.in
+> index 07af2e0..32d6542 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -129,7 +129,6 @@ config BR2_INIT_SYSTEMD
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+>  	select BR2_ROOTFS_MERGED_USR
+>  	select BR2_PACKAGE_SYSTEMD
+> -	select BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+>  	select BR2_TARGET_TZ_INFO
+>  
+>  comment "systemd needs (e)glibc toolchain, headers >= 3.10"
+> 
