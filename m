@@ -1,36 +1,36 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  4 Jul 2016 01:35:06 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/pulseaudio: fix typo
-In-Reply-To: <1467588906-14153-1-git-send-email-romain.naour@gmail.com>
-References: <1467588906-14153-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1467588906-14153-3-git-send-email-romain.naour@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 4 Jul 2016 01:32:42 +0200
+Subject: [Buildroot] [git commit] libbdplus: select libgcrypt in Config.in
+	as well
+Message-ID: <20160703233533.AEACE803CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit 7290dc1e87b23fe21c75c50b2238004273a0ec5c added
-PULSE_AUDIO_CONF_ENV instead of PULSEAUDIO_CONF_ENV.
+commit: https://git.buildroot.net/buildroot/commit/?id=133369f46fd2c522b8f00af8d4693d6870951419
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fixes http://autobuild.buildroot.org/results/4d9/4d91521378402f3f5b6402ea453df4c14c391bdc/
+
+libbdplus adds libgcrypt to its _DEPENDENCIES, but forgot to select it in
+Config.in.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pulseaudio/pulseaudio.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libbdplus/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index 9ef11bc..e0d9ab4 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -18,7 +18,7 @@ PULSEAUDIO_CONF_OPTS = \
- # Make sure we don't detect libatomic_ops. Indeed, since pulseaudio
- # requires json-c, which needs 4 bytes __sync builtins, there should
- # be no need for pulseaudio to rely on libatomic_ops.
--PULSE_AUDIO_CONF_ENV += \
-+PULSEAUDIO_CONF_ENV += \
- 	ac_cv_header_atomic_ops_h=no
- 
- # 0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
--- 
-2.5.5
+diff --git a/package/libbdplus/Config.in b/package/libbdplus/Config.in
+index 19170a6..df5ea27 100644
+--- a/package/libbdplus/Config.in
++++ b/package/libbdplus/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBBDPLUS
+ 	bool "libbdplus"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBGCRYPT
+ 	help
+ 	  libbdplus is a research project to implement the BD+ System
+ 	  Specifications.
