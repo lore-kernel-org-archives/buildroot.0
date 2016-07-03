@@ -1,48 +1,48 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 4 Jul 2016 00:09:54 +0200
-Subject: [Buildroot] [PATCH v3 1/1] babeld: new package
-In-Reply-To: <20160703212947.5aa91caf@free-electrons.com>
-References: <1465355790-16139-1-git-send-email-christian@paral.in>
- <20160703212947.5aa91caf@free-electrons.com>
-Message-ID: <CAGduivyUNiLWYzcPOb+KtNqR-cDkWRCyDETUYNsm5ewzQqjAbg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  4 Jul 2016 00:24:22 +0200
+Subject: [Buildroot] [PATCH 2/4] vde2: enable building host package
+In-Reply-To: <1467584664-11640-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1467584664-11640-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1467584664-11640-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Christian, all,
+From: Simon Maes <simonn.maes@gmail.com>
 
-Sorry about that, I did not see your patch either and sent the patches
-that I had in my work tree :/.
+In preparation of enabling vde2 support in host-qemu package.
 
-On Sun, Jul 3, 2016 at 9:29 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Tue,  7 Jun 2016 20:16:30 -0700, Christian Stewart wrote:
->> Babel is a loop-avoiding distance-vector routing protocol for IPv6 and
->> IPv4 with fast convergence properties. It is based on the ideas in DSDV,
->> AODV and Cisco's EIGRP, but is designed to work well not only in wired
->> networks but also in wireless mesh networks, and has been extended with
->> support for overlay networks.
->>
->> https://www.irif.univ-paris-diderot.fr/~jch/software/babel/
->>
->> Signed-off-by: Christian Stewart <christian@paral.in>
->
-> Thanks for this new version, but I forgot about it, and Maxime
-> Hadjinlian separately sent the same package, with almost exactly the
-> same contents. I have merged Maxime's patch, sorry about that.
->
-> But the most important is that babeld is now in Buildroot :)
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Simon Maes <simonn.maes@gmail.com>
+[Thomas:
+ - add HOST_VDE2_CONF_OPTS and HOST_VDE2_MAKE, like we have for the
+   target variant.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/vde2/vde2.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
+index bad758d..d9b11bb 100644
+--- a/package/vde2/vde2.mk
++++ b/package/vde2/vde2.mk
+@@ -37,4 +37,16 @@ VDE2_CONF_OPTS = \
+ #?Package does not build in parallel due to improper make rules
+ VDE2_MAKE = $(MAKE1)
+ 
++HOST_VDE2_CONF_OPTS = \
++	--disable-experimental  \
++	--disable-cryptcab      \
++	--disable-pcap          \
++	--disable-python        \
++	--disable-profile       \
++	--disable-kernel-switch \
++	--enable-tuntap         \
++
++HOST_VDE2_MAKE = $(MAKE1)
++
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
+-- 
+2.7.4
