@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 10:29:01 +0200
-Subject: [Buildroot] [PATCH 67/69] perl: remove empty host dependencies
- definition
-In-Reply-To: <1467498098-23731-68-git-send-email-julien.floret@6wind.com>
+Date: Sun, 3 Jul 2016 10:29:04 +0200
+Subject: [Buildroot] [PATCH 68/69] rpi-firmware: remove empty host
+ dependencies definition
+In-Reply-To: <1467498098-23731-69-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-68-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160703102901.6bba791b@free-electrons.com>
+ <1467498098-23731-69-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160703102904.012ae6bf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +14,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Jul 2016 00:21:36 +0200, Julien Floret wrote:
+On Sun,  3 Jul 2016 00:21:37 +0200, Julien Floret wrote:
 > Signed-off-by: Julien Floret <julien.floret@6wind.com>
 > ---
->  package/perl/perl.mk | 4 ----
->  1 file changed, 4 deletions(-)
+>  package/rpi-firmware/rpi-firmware.mk | 1 -
+>  1 file changed, 1 deletion(-)
 
 Applied to master, thanks.
 
