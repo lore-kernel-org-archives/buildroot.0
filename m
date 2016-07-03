@@ -1,38 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Jul 2016 20:09:21 +0200
-Subject: [Buildroot] [git commit] lvm2: fix m68k build error
-Message-ID: <20160703181005.192988026B@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 03 Jul 2016 20:18:47 +0200
+Subject: [Buildroot] [PATCH v6] package/python-pillow: new package
+References: <1467233456-17500-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <XnsA63ACEA291BC5berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d56f0cc554dd5deb7220323f46a7962b4ca804f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Disable PIE for m68k as it is not supported.
+my first try to get this package to work with Kodi failed due to segfaults I 
+have yet to investigate. I am sending this mail to inform you about some 
+other stuff I found out while working on the package.
 
-Fixes following autobuild failures:
-http://autobuild.buildroot.net/results/2f976292ddbb8eddb58cc978f209f4f445b5b756/
-http://autobuild.buildroot.net/results/7a2b1eef06004886be28744bf1c53d027f8d0123/
+[posted and mailed]
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lvm2/lvm2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>  ...y-add-option-to-disable-platform-guessing.patch | 65 
+++++++++++++++++++++++
 
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 62cc4e2..7e66aa2 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -43,7 +43,7 @@ else
- LVM2_CONF_OPTS += --disable-applib
- endif
- 
--ifeq ($(BR2_arc),y)
-+ifeq ($(BR2_arc)$(BR2_m68k),y)
- LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
- endif
- 
+You can remove this patch because python-pillow-3.3.0, released 2016-07-01 
+includes it.
+
+> +PYTHON_PILLOW_VERSION = 3.2.0
+
+See above, please bump to 3.3.0.
+
+> +PYTHON_PILLOW_INSTALL_TARGET_CMDS = $(PYTHON_PILLOW_BUILD_CMDS) install
+
+With my setup I needed to remove this line, otherwise the files installed by 
+this package would end up in $(HOST_DIR) instead of $(TARGET_DIR).
+
+While investigating the Kodi segfault I saw that they carry their own cross 
+compile patch in 
+https://github.com/xbmc/xbmc/tree/master/tools/depends/target/pythonmodule-
+pil
+
+Though aimed at pillow-3.0.0, it is possible to rebase the patch for 3.3.0, 
+but I am lacking time atm to continue working on it.
+
+Regards, Bernd
