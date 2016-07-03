@@ -1,51 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 21:24:04 +0200
-Subject: [Buildroot] [PATCH v2 1/1] libvdpau: new package
-In-Reply-To: <1466434827-17088-1-git-send-email-damien@kal-host.com>
-References: <1466434827-17088-1-git-send-email-damien@kal-host.com>
-Message-ID: <20160703212404.16425a1e@free-electrons.com>
+Date: Sun, 3 Jul 2016 21:25:50 +0200
+Subject: [Buildroot] [git commit] babeld: use TARGET_CONFIGURE_OPTS
+Message-ID: <20160703192631.D2791807E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=dbf799e2afa80875be240dc8f97c7288460e13a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 20 Jun 2016 17:00:27 +0200, Damien Lanson wrote:
-> Signed-off-by: Damien Lanson <damien@kal-host.com>
-> ---
->  package/Config.in                                  |    1 +
->  .../libvdpau/0001-missing-configh-include.patch    |   29 +++++++++++++
->  package/libvdpau/0002-link-with-libx11.patch       |   30 +++++++++++++
->  .../libvdpau/0003-vdpau-module-searchpath.patch    |   45 ++++++++++++++++++++
->  package/libvdpau/Config.in                         |   15 +++++++
->  package/libvdpau/libvdpau.hash                     |    4 ++
->  package/libvdpau/libvdpau.mk                       |   27 ++++++++++++
->  7 files changed, 151 insertions(+)
->  create mode 100755 package/libvdpau/0001-missing-configh-include.patch
->  create mode 100755 package/libvdpau/0002-link-with-libx11.patch
->  create mode 100755 package/libvdpau/0003-vdpau-module-searchpath.patch
->  create mode 100755 package/libvdpau/Config.in
->  create mode 100755 package/libvdpau/libvdpau.hash
->  create mode 100755 package/libvdpau/libvdpau.mk
+As suggested by a previous submission of
+babeld (https://patchwork.ozlabs.org/patch/631953/), we can use
+TARGET_CONFIGURE_OPTS instead of passing CFLAGS and LDFLAGS in
+PLATFORM_DEFINES.
 
-Thanks for your patch! I've done the following changes:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/babeld/babeld.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-    [Thomas:
-     - Add dependency on BR2_PACKAGE_XORG7, which is necessary when
-       selecting BR2_PACKAGE_XLIB_LIBX11 and BR2_PACKAGE_XLIB_LIBXEXT.
-     - Fix indentation of Config.in help text.
-     - Add host-pkgconf to the dependencies, since the configure script uses
-       pkg-config to detect dependencies.
-     - Add references for the patches.]
-
-and then I applied your patch.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/babeld/babeld.mk b/package/babeld/babeld.mk
+index fa504b8..ca39c71 100644
+--- a/package/babeld/babeld.mk
++++ b/package/babeld/babeld.mk
+@@ -10,8 +10,7 @@ BALELD_LICENSE = MIT
+ BALELD_LICENSE_FILES = LICENSE
+ 
+ define BABELD_BUILD_CMDS
+-	$(MAKE) -C $(@D) CC="$(TARGET_CC)" \
+-		PLATFORM_DEFINES="$(TARGET_CFLAGS) $(TARGET_LDFLAGS)"
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
+ endef
+ 
+ define BABELD_INSTALL_TARGET_CMDS
