@@ -1,95 +1,56 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  4 Jul 2016 01:35:04 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/pulseaudio: allow to build
-	without C++11 support
-Message-ID: <1467588906-14153-1-git-send-email-romain.naour@gmail.com>
+Date: Mon,  4 Jul 2016 01:35:05 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package/pulseaudio: explicitly
+	enable/disable WebRTC support
+In-Reply-To: <1467588906-14153-1-git-send-email-romain.naour@gmail.com>
+References: <1467588906-14153-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <1467588906-14153-2-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-C++11 support is only required for WebRTC optional support but
-pulseaudio can still be built with toolchains based on gcc 4.7 or older
-witch doesn't have it.
+Currently, pulseaudio optionally depends on webrtc if it is enabled.
 
-Add a patch to make C++11 support optional and explicitely check for
-gnu++11. Also stop the build only if no C++11 support has been found
-and WebRTC support has been resquested.
+However, it is never explcitly enabled or disabled, although
+pulseaudio's ./configure has --enable/disable-webrtc-aec.
 
-Fixes:
-http://autobuild.buildroot.net/results/d89/d897a94a8b6a52eba03d04c24536f554a7643000
+Forcibly enable/disable webrtc support using those options.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v2: keep original comments in configure.ac (Yann)
-    fix syntax paramters to m4 macros (Yann)
+v2: rewrite comments (Yann)
 ---
- ...-C-11-is-only-required-for-WebRTC-support.patch | 41 ++++++++++++++++++++++
- package/pulseaudio/pulseaudio.mk                   |  3 ++
- 2 files changed, 44 insertions(+)
- create mode 100644 package/pulseaudio/0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
+ package/pulseaudio/pulseaudio.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/pulseaudio/0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch b/package/pulseaudio/0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
-new file mode 100644
-index 0000000..b2c0651
---- /dev/null
-+++ b/package/pulseaudio/0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
-@@ -0,0 +1,41 @@
-+From 7af6cbe74d48a9853b60b029d4ce38a963386138 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sun, 3 Jul 2016 20:19:48 +0200
-+Subject: [PATCH] webrtc: C++11 is only required for WebRTC support
-+
-+Make C++11 support optional and explicitely check for gnu++11.
-+
-+Stop the build only if no C++11 support has been found and WebRTC
-+support has been resquested.
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ configure.ac | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 4edc8e0..fea93a9 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -84,7 +84,7 @@ AM_PROG_CC_C_O
-+ # Only required if you want the WebRTC canceller -- no runtime dep on
-+ # libstdc++ otherwise
-+ AC_PROG_CXX
-+-AX_CXX_COMPILE_STDCXX_11
-++AX_CXX_COMPILE_STDCXX_11([ext],[optional])
-+ AC_PROG_GCC_TRADITIONAL
-+ AC_USE_SYSTEM_EXTENSIONS
-+ 
-+@@ -1414,6 +1414,9 @@ fi
-+ AC_ARG_ENABLE([webrtc-aec],
-+     AS_HELP_STRING([--enable-webrtc-aec], [Enable the optional WebRTC-based echo canceller]))
-+ 
-++AS_IF([test "x$enable_webrtc_aec" = "xyes" && test "$HAVE_CXX11" = "0"],
-++    [AC_MSG_ERROR([*** webrtc-audio-processing needs C++11 support])])
-++
-+ AS_IF([test "x$enable_webrtc_aec" != "xno"],
-+     [PKG_CHECK_MODULES(WEBRTC, [ webrtc-audio-processing >= 0.2 ], [HAVE_WEBRTC=1], [HAVE_WEBRTC=0])],
-+     [HAVE_WEBRTC=0])
-+-- 
-+2.5.5
-+
 diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index f50ea67..bc95d91 100644
+index bc95d91..9ef11bc 100644
 --- a/package/pulseaudio/pulseaudio.mk
 +++ b/package/pulseaudio/pulseaudio.mk
-@@ -21,6 +21,9 @@ PULSEAUDIO_CONF_OPTS = \
- PULSE_AUDIO_CONF_ENV += \
- 	ac_cv_header_atomic_ops_h=no
+@@ -34,7 +34,6 @@ PULSEAUDIO_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_BLUEZ_UTILS),bluez_utils) \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+ 	$(if $(BR2_PACKAGE_FFTW),fftw) \
+-	$(if $(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),webrtc-audio-processing) \
+ 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
  
-+# 0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
-+PULSEAUDIO_AUTORECONF = YES
+ ifeq ($(BR2_PACKAGE_GDBM),y)
+@@ -88,6 +87,13 @@ else
+ PULSEAUDIO_CONF_OPTS += --disable-udev
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),y)
++PULSEAUDIO_CONF_OPTS += --enable-webrtc-aec
++PULSEAUDIO_DEPENDENCIES += webrtc-audio-processing
++else
++PULSEAUDIO_CONF_OPTS += --disable-webrtc-aec
++endif
 +
- PULSEAUDIO_DEPENDENCIES = \
- 	host-pkgconf libtool json-c libsndfile speex host-intltool \
- 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ # The optional webrtc echo canceller is written in C++, causing auto* to want
+ # to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
 -- 
 2.5.5
