@@ -1,88 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 3 Jul 2016 18:05:58 +0200
-Subject: [Buildroot] [git commit] package/libbdplus: new package
-Message-ID: <20160703160923.E7D8D7FBEA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libaacs: new package
+Message-ID: <20160703160923.D7BCD817E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cdbedcec47836f947b6f90ae1beed9e77872e20
+commit: https://git.buildroot.net/buildroot/commit/?id=dbe16f2a36b1f0db5e76c4292113c5d5b21f3a32
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                |  1 +
- package/libbdplus/Config.in      | 17 +++++++++++++++++
- package/libbdplus/libbdplus.hash |  2 ++
- package/libbdplus/libbdplus.mk   | 31 +++++++++++++++++++++++++++++++
- 4 files changed, 51 insertions(+)
+ package/Config.in            |  1 +
+ package/libaacs/Config.in    | 14 ++++++++++++++
+ package/libaacs/libaacs.hash |  2 ++
+ package/libaacs/libaacs.mk   | 24 ++++++++++++++++++++++++
+ 4 files changed, 41 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index f1fda97..fef626f 100644
+index 73bf32f..f1fda97 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1114,6 +1114,7 @@ menu "Multimedia"
+@@ -1112,6 +1112,7 @@ endmenu
+ 
+ menu "Multimedia"
  	source "package/bitstream/Config.in"
- 	source "package/libaacs/Config.in"
++	source "package/libaacs/Config.in"
  	source "package/libass/Config.in"
-+	source "package/libbdplus/Config.in"
  	source "package/libbluray/Config.in"
  	source "package/libdcadec/Config.in"
- 	source "package/libdvbcsa/Config.in"
-diff --git a/package/libbdplus/Config.in b/package/libbdplus/Config.in
+diff --git a/package/libaacs/Config.in b/package/libaacs/Config.in
 new file mode 100644
-index 0000000..19170a6
+index 0000000..d7da406
 --- /dev/null
-+++ b/package/libbdplus/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_LIBBDPLUS
-+	bool "libbdplus"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
++++ b/package/libaacs/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_LIBAACS
++	bool "libaacs"
 +	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBGCRYPT
 +	help
-+	  libbdplus is a research project to implement the BD+ System
-+	  Specifications.
-+	  This research project provides, through an open-source
-+	  library, a way to understand how the BD+ works.
-+	  NB: this project doesn't offer any key, configuration file or
-+	  certificate that could be used to decode encrypted copyrighted
-+	  material.
++	  libaacs is a research project to implement the Advanced Access
++	  Content System specification.
++	  NB: this project doesn't offer any key or certificate that
++	  could be used to decode encrypted copyrighted material.
 +
-+	  http://www.videolan.org/developers/libbdplus.html
++	  http://www.videolan.org/developers/libaacs.html
 +
-+comment "libbdplus needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libbdplus/libbdplus.hash b/package/libbdplus/libbdplus.hash
++comment "libaacs needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/libaacs/libaacs.hash b/package/libaacs/libaacs.hash
 new file mode 100644
-index 0000000..552cd71
+index 0000000..7160c6a
 --- /dev/null
-+++ b/package/libbdplus/libbdplus.hash
++++ b/package/libaacs/libaacs.hash
 @@ -0,0 +1,2 @@
-+# From http://download.videolan.org/pub/videolan/libbdplus/0.1.2/libbdplus-0.1.2.tar.bz2.sha512
-+sha512	e00e7bc9f52b9275646593b753ba646b052255be94a7241965f4dbe4734f8f6a072973ed4b9997957f939236b0633897c295749f79e232188430795be5b5087b	libbdplus-0.1.2.tar.bz2
-diff --git a/package/libbdplus/libbdplus.mk b/package/libbdplus/libbdplus.mk
++# From http://download.videolan.org/pub/videolan/libaacs/0.8.1/libaacs-0.8.1.tar.bz2.sha512
++sha512	dd677627f073460b719b9f836b026acc3e23b166c7b16bd205cf2ca97c376095980532fb15087c0d77b30c712cd5a5dd90b2cc2ae3128da717621ebd825afcc4	libaacs-0.8.1.tar.bz2
+diff --git a/package/libaacs/libaacs.mk b/package/libaacs/libaacs.mk
 new file mode 100644
-index 0000000..45913ed
+index 0000000..df61154
 --- /dev/null
-+++ b/package/libbdplus/libbdplus.mk
-@@ -0,0 +1,31 @@
++++ b/package/libaacs/libaacs.mk
+@@ -0,0 +1,24 @@
 +################################################################################
 +#
-+# libbdplus
++# libaacs
 +#
 +################################################################################
 +
-+LIBBDPLUS_VERSION = 0.1.2
-+LIBBDPLUS_SITE = http://download.videolan.org/pub/videolan/libbdplus/$(LIBBDPLUS_VERSION)
-+LIBBDPLUS_SOURCE = libbdplus-$(LIBBDPLUS_VERSION).tar.bz2
-+LIBBDPLUS_LICENSE = LGPLv2.1+
-+LIBBDPLUS_LICENSE_FILES = COPYING
-+LIBBDPLUS_INSTALL_STAGING = YES
-+LIBBDPLUS_DEPENDENCIES = libgcrypt
-+LIBBDPLUS_CONF_OPTS = \
++LIBAACS_VERSION = 0.8.1
++LIBAACS_SITE = http://download.videolan.org/pub/videolan/libaacs/$(LIBAACS_VERSION)
++LIBAACS_SOURCE = libaacs-$(LIBAACS_VERSION).tar.bz2
++LIBAACS_LICENSE = LGPLv2.1+
++LIBAACS_LICENSE_FILES = COPYING
++LIBAACS_INSTALL_STAGING = YES
++LIBAACS_DEPENDENCIES = host-bison host-flex libgcrypt
++LIBAACS_CONF_OPTS = \
 +	--disable-werror \
 +	--disable-extra-warnings \
 +	--disable-optimizations \
@@ -91,12 +88,5 @@ index 0000000..45913ed
 +	--with-gnu-ld \
 +	--with-libgcrypt-prefix=$(STAGING_DIR)/usr \
 +	--with-gpg-error-prefix=$(STAGING_DIR)/usr
-+
-+ifeq ($(BR2_PACKAGE_LIBAACS),y)
-+LIBBDPLUS_DEPENDENCIES += libaacs
-+LIBBDPLUS_CONF_OPTS += --with-libaacs
-+else
-+LIBBDPLUS_CONF_OPTS += --without-libaacs
-+endif
 +
 +$(eval $(autotools-package))
