@@ -1,45 +1,65 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 3 Jul 2016 10:31:19 +0200
-Subject: [Buildroot] [PATCH 05/24 v2] system: systemd only really
- supports a R/W rootfs
-In-Reply-To: <bc1119c9b182fbf253680375178dc4642a4ee149.1466622379.git.yann.morin.1998@free.fr>
-References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <bc1119c9b182fbf253680375178dc4642a4ee149.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <174d94b1-dc82-d060-fed9-749daf3214e3@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  3 Jul 2016 10:33:07 +0200
+Subject: [Buildroot] [PATCH 0/3] git-submodules: document it,
+	use it (branch yem/git-modules)
+Message-ID: <cover.1467534694.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello All!
 
-Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
-> Supporting a R/O rootfs needs a bit more love to be fully operational.
-> This will come in later patches...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+This series is a follow-up on the recently applied support for git
+submodules.
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+It adds the documentation that was missing, and changes sunxi-mali to
+use git submodules instead of the dirty hack we play with
+sunxi-mali-prop.
 
-Best regards,
-Romain
+Regards,
+Yann E. MORIN.
 
 
-> ---
->  system/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/system/Config.in b/system/Config.in
-> index 2d20230..4f9f270 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -94,6 +94,7 @@ config BR2_INIT_SYSTEMD
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
->  	select BR2_ROOTFS_MERGED_USR
->  	select BR2_PACKAGE_SYSTEMD
-> +	select BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
->  
->  comment "systemd needs (e)glibc toolchain, headers >= 3.10"
->  	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
-> 
+The following changes since commit d0b11058511642d4dc6fd26abbb2419b959a9806
+
+  babeld: needs MMU as it uses fork() (2016-07-03 10:26:53 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to c7293830796ec228f541077aa09df81dda34d8af
+
+  package/sunxi-mali: remove useless package (2016-07-03 10:29:06 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      docs/manual: document FOO_GIT_SUBMODULE
+      package/sunxi-mali: use git submodules
+      package/sunxi-mali: remove useless package
+
+ docs/manual/adding-packages-generic.txt      |  6 ++++++
+ package/Config.in                            |  1 -
+ package/sunxi-mali-prop/Config.in            |  4 ----
+ package/sunxi-mali-prop/sunxi-mali-prop.hash |  2 --
+ package/sunxi-mali-prop/sunxi-mali-prop.mk   | 10 ----------
+ package/sunxi-mali/Config.in                 |  3 ---
+ package/sunxi-mali/sunxi-mali.hash           |  2 --
+ package/sunxi-mali/sunxi-mali.mk             | 15 ++++++---------
+ 8 files changed, 12 insertions(+), 31 deletions(-)
+ delete mode 100644 package/sunxi-mali-prop/Config.in
+ delete mode 100644 package/sunxi-mali-prop/sunxi-mali-prop.hash
+ delete mode 100644 package/sunxi-mali-prop/sunxi-mali-prop.mk
+ delete mode 100644 package/sunxi-mali/sunxi-mali.hash
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
