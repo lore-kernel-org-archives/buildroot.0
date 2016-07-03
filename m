@@ -1,50 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 13:18:29 +0200
-Subject: [Buildroot] [PATCHv3] [autobuild] etc: add SysV-init startup
- script and sample config file
-In-Reply-To: <1448809362-6340-1-git-send-email-yann.morin.1998@free.fr>
-References: <1448809362-6340-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160703131829.1ed4afc1@free-electrons.com>
+Date: Sun, 3 Jul 2016 13:19:05 +0200
+Subject: [Buildroot] [git commit] core/pkg-virtual: fix fallout of
+	host-dependecy no auto-derivation
+Message-ID: <20160703112002.601137FDE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1e0d06cf2016638873c861394b2a5f21580d972b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 29 Nov 2015 16:02:42 +0100, Yann E. MORIN wrote:
-> This startup script (and its companion configuration file in
-> /etc/default/) allows one to easily start/stop an autobuilder.
-> 
-> An autobuilder can be run either on the current system, or in
-> a chroot (preferred). Running in a chrrot is done by setting
-> the AUTOBUILD_CHROOT variable in the configuration file. If
-> that variable is not set, then hte autobuilder does not enter
-> a chroot.
-> 
-> It is expected that the buildroot-test tree be already present
-> somewhere (for example, as a git checkout).
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> ---
-> Changes v2 -> v3:
->   - allow not entering in a chroot  (Thomas)
->   - always require an existing buildroot-test tree  (Thomas)
-> ---
->  etc/default/buildroot-autobuild |  16 ++++
->  etc/init.d/buildroot-autobuild  | 171 ++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 187 insertions(+)
->  create mode 100644 etc/default/buildroot-autobuild
->  create mode 100755 etc/init.d/buildroot-autobuild
+In 4bdb067 (infra: remove auto derivation of host dependencies), the
+dependencies of host packages are no longer inherited from the
+dependencies of the corresponding target package.
 
-Applied to buildroot-test, and I've changed my autobuilder instance to
-use it. Thanks!
+However, for virtual packages, there is no provider declared for the
+host variant, so we end up with no dependency for the host variant
+of virtual packages.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+This causes host-luainterpreter to have no provider, and thus breaks the
+build of host-luarocks.
+
+To fix that, we use the host variant of the provider of the target
+variant of the virtual package to define the provider of the host variant
+of the virtual package (re-read it, it's correct!).
+
+Fixes:
+    http://autobuild.buildroot.org/results/d8b/d8baf44b1e2f8e0e32c86558fc3e0694235b512a
+    http://autobuild.buildroot.org/results/59a/59ac0fe84e5c76a590c698a1483b2a3ae26e1dcf
+    http://autobuild.buildroot.org/results/203/2039f24731d8e14cde24c613b487b3db530dd238
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Julien Floret <julien.floret@6wind.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-virtual.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+index bcb2cad..2e83e07 100644
+--- a/package/pkg-virtual.mk
++++ b/package/pkg-virtual.mk
+@@ -44,7 +44,13 @@ endif
+ $(2)_IS_VIRTUAL = YES
+ 
+ # Add dependency against the provider
++# For a host package, there is no corresponding BR2_PACKAGE_PROVIDES_HOST_FOO,
++# so we need to compute it from the target variant.
++ifeq ($(4),target)
+ $(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
++else
++$(2)_DEPENDENCIES += host-$$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(3)))
++endif
+ 
+ # Call the generic package infrastructure to generate the necessary
+ # make targets
