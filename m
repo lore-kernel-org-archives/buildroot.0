@@ -1,34 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 3 Jul 2016 08:40:55 +0200
-Subject: [Buildroot] [git commit] axfsutils: add explicit dependencies for
+Subject: [Buildroot] [git commit] e2tools: add explicit dependencies for
 	host variant
-Message-ID: <20160703064348.3EE358177C@busybox.osuosl.org>
+Message-ID: <20160703064348.DE4677FE0A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81cb325c9d60a985ff0f9f116bec8d40a2698e3f
+commit: https://git.buildroot.net/buildroot/commit/?id=259c1877c3264805a485b5ab2427cc80a1b83986
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/axfsutils/axfsutils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/e2tools/e2tools.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/axfsutils/axfsutils.mk b/package/axfsutils/axfsutils.mk
-index 6c9c58b..1bd6280 100644
---- a/package/axfsutils/axfsutils.mk
-+++ b/package/axfsutils/axfsutils.mk
-@@ -8,7 +8,7 @@ AXFSUTILS_VERSION = 64886703fdff6cfc64eb20fbe7d7295bbeec867b
- AXFSUTILS_SITE = $(call github,jaredeh,axfs,$(AXFSUTILS_VERSION))
- AXFSUTILS_LICENSE = GPLv2
- AXFSUTILS_LICENSE_FILES = mkfs.axfs-legacy/COPYING
--AXFSUTILS_DEPENDENCIES = host-zlib
-+HOST_AXFSUTILS_DEPENDENCIES = host-zlib
+diff --git a/package/e2tools/e2tools.mk b/package/e2tools/e2tools.mk
+index 789519f..1f3bb5c 100644
+--- a/package/e2tools/e2tools.mk
++++ b/package/e2tools/e2tools.mk
+@@ -13,6 +13,7 @@ E2TOOLS_LICENSE = GPLv2
+ E2TOOLS_LICENSE_FILES = COPYING
+ E2TOOLS_DEPENDENCIES = e2fsprogs
+ E2TOOLS_CONF_ENV = LIBS="-lpthread"
++HOST_E2TOOLS_DEPENDENCIES = host-e2fsprogs
+ HOST_E2TOOLS_CONF_ENV = LIBS="-lpthread"
  
- # The 'new' mkfs.axfs version requires GNUstep which is not a buildroot
- # prerequisite. The 'legacy' one works just as well without that requirement.
+ $(eval $(autotools-package))
