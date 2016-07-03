@@ -1,47 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 17:02:17 +0200
-Subject: [Buildroot] [PACH v3] efivar: disable for some incompatible
- Sourcery CodeBench toolchains
-In-Reply-To: <1467555636-17085-1-git-send-email-romain.naour@gmail.com>
-References: <1467555636-17085-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160703170217.7be8143d@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 03 Jul 2016 17:03:03 +0200
+Subject: [Buildroot] [PATCH v4 1/2] ts4800-mbrboot: new package
+In-Reply-To: <1465498542-7333-2-git-send-email-patrick.keroulas@savoirfairelinux.com>
+ (Patrick Keroulas's message of "Thu, 9 Jun 2016 14:55:41 -0400")
+References: <1465498542-7333-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
+ <1465498542-7333-2-git-send-email-patrick.keroulas@savoirfairelinux.com>
+Message-ID: <87vb0mu5lk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Patrick" == Patrick Keroulas <patrick.keroulas@savoirfairelinux.com> writes:
 
-On Sun,  3 Jul 2016 16:20:36 +0200, Romain Naour wrote:
-> From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> 
-> linux/nvme.h has been renamed to linux/nvme_ioctl.h since 4.4, and we
-> have a patch to handle that situation. However, some Sourcery CodeBench
-> toolchains use 4.4 kernel headers but don't have that header file
-> renamed, and that is causing build failures. So, prevent this package
-> to be built using those toolchains.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/66c/66cf68261fa73c2366610f8d14bd02180ba7cd2d/
->   http://autobuild.buildroot.net/results/54c/54cc7d4e3b284b35931e08f9c7f0f902df96a989/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> [Romain:
->   - add back slash on line breaks
->   - propagate efivar dependencies to efibootmgr
->   - add comments dependencies]
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/efibootmgr/Config.in |  4 ++++
->  package/efivar/Config.in     | 10 ++++++++++
->  2 files changed, 14 insertions(+)
+ > This MBR routine is based on TS' original bootloader.  It is loaded by
+ > the bootrom stored in the companion FPGA, and chainloads an executable
+ > located at the beginning of the first non-fs (0xda) partition.
 
-Applied to master, thanks.
+ > Signed-off-by: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
 
-Thomas
+Is there no official upstream location for this so we don't need to
+carry it inside Buildroot? I know it is small, but still.
+
+ > diff --git a/package/ts4800-mbrboot/ts4800-mbrboot.mk b/package/ts4800-mbrboot/ts4800-mbrboot.mk
+ > new file mode 100644
+ > index 0000000..706d191
+ > --- /dev/null
+ > +++ b/package/ts4800-mbrboot/ts4800-mbrboot.mk
+ > @@ -0,0 +1,22 @@
+ > +################################################################################
+ > +#
+ > +# ts4800-mbrboot
+ > +#
+ > +################################################################################
+ > +
+ > +TS4800_MBRBOOT_VERSION = 1.0
+ > +TS4800_MBRBOOT_SITE = $(TOPDIR)/package/ts4800-mbrboot/src
+ > +TS4800_MBRBOOT_SITE_METHOD = local
+
+That's not really nice. If we have to include it inside buildroot then I
+would prefer to handle it like we do for E.G. makedevs.
+
+
+> +TS4800_MBRBOOT_LICENSE = BSD-2c
+ > +TS4800_MBRBOOT_LICENSE_FILES = LICENSE
+ > +
+ > +define TS4800_MBRBOOT_BUILD_CMDS
+ > +	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" \
+ > +		OBJCOPY="$(TARGET_OBJCOPY)" -C $(@D)
+
+please use $(TARGET_CONFIGURE_OPTS) instead.
+
+> +endef
+ > +
+ > +define TS4800_MBRBOOT_INSTALL_TARGET_CMDS
+ > +	$(INSTALL) -m 0644 $(@D)/mbrboot.bin $(BINARIES_DIR)/
+
+We normally use install -D, so I would prefer to use that here as well.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
