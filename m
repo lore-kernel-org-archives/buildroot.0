@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 08:50:45 +0200
-Subject: [Buildroot] [git commit] fontconfig: add explicit dependencies for
-	host variant
-Message-ID: <20160703065521.9F53180434@busybox.osuosl.org>
+Date: Sun, 3 Jul 2016 08:54:40 +0200
+Subject: [Buildroot] [git commit] fwup: add explicit dependencies for host
+	variant
+Message-ID: <20160703065521.B556D80434@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42a2d5c5059ab88f217f6b57a907d1237454b433
+commit: https://git.buildroot.net/buildroot/commit/?id=bd849a10318b0379c59b052889c8cb6e1157c27f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fontconfig/fontconfig.mk | 1 +
+ package/fwup/fwup.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
-index caf997b..f3bf0d4 100644
---- a/package/fontconfig/fontconfig.mk
-+++ b/package/fontconfig/fontconfig.mk
-@@ -8,6 +8,7 @@ FONTCONFIG_VERSION = 2.11.1
- FONTCONFIG_SITE = http://fontconfig.org/release
- FONTCONFIG_INSTALL_STAGING = YES
- FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf
-+HOST_FONTCONFIG_DEPENDENCIES = host-freetype host-expat host-pkgconf
- FONTCONFIG_LICENSE = fontconfig license
- FONTCONFIG_LICENSE_FILES = COPYING
+diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
+index 0a23856..ae85716 100644
+--- a/package/fwup/fwup.mk
++++ b/package/fwup/fwup.mk
+@@ -9,6 +9,7 @@ FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
+ FWUP_LICENSE = Apache-2.0
+ FWUP_LICENSE_FILES = LICENSE
+ FWUP_DEPENDENCIES = libconfuse libarchive libsodium
++HOST_FWUP_DEPENDENCIES = host-libconfuse host-libarchive host-libsodium
+ FWUP_AUTORECONF = YES
+ FWUP_CONF_ENV = ac_cv_path_HELP2MAN=""
  
