@@ -1,80 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 3 Jul 2016 16:04:34 +0200
-Subject: [Buildroot] [git commit] Package nfs-utils: Added check for OK/FAIL
-Message-ID: <20160703140503.5FA5582117@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/quagga: Add systemd.service file
+Message-ID: <20160703140503.4EDD980AC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e122862c2419baea9bd60627f9211ee768ac3f55
+commit: https://git.buildroot.net/buildroot/commit/?id=649cf99821d4418319aaf0c897ab43cab4dc902f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed unconditional 'done' output when starting
-and stopping the daemons. Instead check return value
-of daemon and print out OK or FAIL.
+Use a template service file as all of the daemons use almost
+identical arguments and generally appear the same to the init
+system.
 
-Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+We "Wants=" zebra as that's the daemon for interfacing to the
+kernel, and it's not required for the other daemons to work
+but it's probably going to be used in nearly all setups.
+
+/usr/bin/env is needed as systemd doesn't allow the instance
+variable (%i) in the executable path.
+
+We don't enable these services by default as this would require
+creating configuration and /etc/default files. (And is easily
+achieved with an FS overlay)
+
+[Peter: remove killmode/killsignal/restartsec as suggested by Maxime]
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
 Reviewed-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nfs-utils/S60nfs | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ package/quagga/quagga.mk       |  2 ++
+ package/quagga/quagga at .service | 17 +++++++++++++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
-index 5639b8f..7a49c79 100755
---- a/package/nfs-utils/S60nfs
-+++ b/package/nfs-utils/S60nfs
-@@ -25,20 +25,20 @@ start() {
- 	# Start daemons.
- 	printf "Starting NFS statd: "
- 	rpc.statd
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 	touch /var/lock/subsys/nfslock
--	echo "done"
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 22e90ad..1bbc72d 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -75,6 +75,8 @@ endif
+ define QUAGGA_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/quagga/quagga_tmpfiles.conf \
+ 		$(TARGET_DIR)/usr/lib/tmpfiles.d/quagga.conf
++	$(INSTALL) -D -m 644 package/quagga/quagga at .service \
++		$(TARGET_DIR)/usr/lib/systemd/system/quagga at .service
+ endef
  
- 	printf "Starting NFS services: "
- 	/usr/sbin/exportfs -r
--	echo "done"
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 
- 	printf "Starting NFS daemon: "
- 	rpc.nfsd ${NR_THREADS}
--	echo "done"
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 
- 	printf "Starting NFS mountd: "
- 	rpc.mountd
--	echo "done"
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 	touch /var/lock/subsys/nfs
- }
- 
-@@ -46,21 +46,21 @@ stop() {
- 	# Stop daemons.
- 	printf "Shutting down NFS mountd: "
- 	killall -q rpc.mountd
--	echo "done"
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 
- 	printf "Shutting down NFS daemon: "
- 	kill -9 `pidof nfsd` 2>/dev/null
--	echo "done"
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 
- 	printf "Shutting down NFS services: "
- 	/usr/sbin/exportfs -au
- 	rm -f /var/lock/subsys/nfs
- 	killall -q rpc.statd
--	echo "done"
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 
- 	printf "Stopping NFS statd: "
- 	killall -q rpc.statd
--	echo "done"
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 	rm -f /var/lock/subsys/nfslock
- }
- 
+ $(eval $(autotools-package))
+diff --git a/package/quagga/quagga at .service b/package/quagga/quagga at .service
+new file mode 100644
+index 0000000..797af32
+--- /dev/null
++++ b/package/quagga/quagga at .service
+@@ -0,0 +1,17 @@
++[Unit]
++Description=Quagga %i routing daemon
++ConditionFileIsExecutable=/usr/sbin/%i
++Wants=quagga at zebra.service
++
++[Service]
++Type=simple
++EnvironmentFile=/etc/default/quagga-%i
++PrivateTmp=true
++# Systemd doesn't like having %i in the executable path.
++ExecStart=/usr/bin/env /usr/sbin/%i $OPTS -f /etc/quagga/%i.conf
++ExecReload=/bin/kill -HUP $MAINPID
++Restart=on-failure
++
++[Install]
++WantedBy=multi-user.target
++
