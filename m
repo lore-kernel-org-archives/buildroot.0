@@ -1,34 +1,29 @@
-From: Julien Floret <julien.floret@6wind.com>
-Date: Sun, 3 Jul 2016 10:52:25 +0200
-Subject: [Buildroot] [PATCH 04/69] cdrkit: add explicit dependencies for
-	host variant
-In-Reply-To: <20160703083649.02b0b8cc@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Jul 2016 09:40:52 +0200
+Subject: [Buildroot] [PATCH 46/69] xlib_libXau: add explicit
+ dependencies for host variant
+In-Reply-To: <1467498098-23731-47-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-5-git-send-email-julien.floret@6wind.com>
- <20160703083649.02b0b8cc@free-electrons.com>
-Message-ID: <CAHfJR7j5+zZqBwXvosJwSs71J8gzxuZmAYAze=tMjxeXXG7jLg@mail.gmail.com>
+ <1467498098-23731-47-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160703094052.64f06e8d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello,
 
-2016-07-03 8:36 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Sun,  3 Jul 2016 00:20:33 +0200, Julien Floret wrote:
->> Signed-off-by: Julien Floret <julien.floret@6wind.com>
->> ---
->>  package/cdrkit/cdrkit.mk | 1 +
->>  1 file changed, 1 insertion(+)
->
-> Applied to master, thanks.
+On Sun,  3 Jul 2016 00:21:15 +0200, Julien Floret wrote:
+> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+> ---
+>  package/x11r7/xlib_libXau/xlib_libXau.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Hm, this commit seems be missing in buildroot upstream, I don't see it
-amongst the others.
-Thanks a lot!
+Applied to master, thanks.
 
-Julien
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
