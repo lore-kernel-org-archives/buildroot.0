@@ -1,29 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 09:45:46 +0200
-Subject: [Buildroot] [PATCH 47/69] xlib_libXcursor: add explicit
- dependencies for host variant
-In-Reply-To: <1467498098-23731-48-git-send-email-julien.floret@6wind.com>
-References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-48-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160703094546.68912c6d@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 3 Jul 2016 09:43:31 +0200
+Subject: [Buildroot] [git commit] package/libbluray: fix comment
+Message-ID: <20160703074906.0D5A780030@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=653b329336facfbb83faa1f1580c5271a980b1d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  3 Jul 2016 00:21:16 +0200, Julien Floret wrote:
-> Signed-off-by: Julien Floret <julien.floret@6wind.com>
-> ---
->  package/x11r7/xlib_libXcursor/xlib_libXcursor.mk | 3 +++
->  1 file changed, 3 insertions(+)
+The comment was missing in menuconfig with a non-threaded toolchain
+supporting dynamic linking.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libbluray/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libbluray/Config.in b/package/libbluray/Config.in
+index 357a562..b958935 100644
+--- a/package/libbluray/Config.in
++++ b/package/libbluray/Config.in
+@@ -8,5 +8,4 @@ config BR2_PACKAGE_LIBBLURAY
+ 	  http://www.videolan.org/developers/libbluray.html
+ 
+ comment "libbluray needs a toolchain w/ threads, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
