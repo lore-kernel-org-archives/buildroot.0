@@ -1,9 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  3 Jul 2016 15:47:44 +0200
-Subject: [Buildroot] [PATCH v3 08/14] toolchain/helpers: add fortran check
+Date: Sun,  3 Jul 2016 15:47:45 +0200
+Subject: [Buildroot] [PATCH v3 09/14] toolchain/toolchain-external: enable
+	fortran check when it is selected
 In-Reply-To: <20160703134750.7516-1-s.martin49@gmail.com>
 References: <20160703134750.7516-1-s.martin49@gmail.com>
-Message-ID: <20160703134750.7516-9-s.martin49@gmail.com>
+Message-ID: <20160703134750.7516-10-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,39 +19,37 @@ changes v1->v2:
 - none
 
 changes v2->v3:
-- use real files as input/output in the test (Thomas P.)
+- remove CFLAGS in the check call (Thomas P.)
 ---
- toolchain/helpers.mk | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ toolchain/toolchain-external/toolchain-external.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 108fdaa..74ec944 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -311,6 +311,24 @@ check_cplusplus = \
- 	fi
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 342bc84..4240a9b 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -160,6 +160,7 @@ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += \
+ TOOLCHAIN_EXTERNAL_CROSS = $(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
+ TOOLCHAIN_EXTERNAL_CC = $(TOOLCHAIN_EXTERNAL_CROSS)gcc$(TOOLCHAIN_EXTERNAL_SUFFIX)
+ TOOLCHAIN_EXTERNAL_CXX = $(TOOLCHAIN_EXTERNAL_CROSS)g++$(TOOLCHAIN_EXTERNAL_SUFFIX)
++TOOLCHAIN_EXTERNAL_FC = $(TOOLCHAIN_EXTERNAL_CROSS)gfortran$(TOOLCHAIN_EXTERNAL_SUFFIX)
+ TOOLCHAIN_EXTERNAL_READELF = $(TOOLCHAIN_EXTERNAL_CROSS)readelf$(TOOLCHAIN_EXTERNAL_SUFFIX)
  
- #
-+#
-+# Check that the external toolchain supports Fortran
-+#
-+# $1: cross-gfortran path
-+#
-+check_fortran = \
-+	__CROSS_FC=$(strip $1) ; \
-+	__o=$(BUILD_DIR)/.br-toolchain-test-fortran.tmp.f.o ; \
-+	printf 'program hello\n\tprint *, "Hello Fortran!\\n"\nend program hello\n' | \
-+	$${__CROSS_FC} -x f95 -o $${__o} - ; \
-+	if test $$? -ne 0 ; then \
-+		rm -f $${__o}* ; \
-+		echo "Fortran support is selected but is not available in external toolchain" ; \
-+		exit 1 ; \
+ ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
+@@ -521,6 +522,9 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
+ 	if test "$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
+ 		$(call check_cplusplus,$(TOOLCHAIN_EXTERNAL_CXX)) ; \
+ 	fi ; \
++	if test "$(BR2_TOOLCHAIN_HAS_FORTRAN)" = "y" ; then \
++		$(call check_fortran,$(TOOLCHAIN_EXTERNAL_FC)) ; \
 +	fi ; \
-+	rm -f $${__o}* \
-+
-+#
- # Check that the cross-compiler given in the configuration exists
- #
- # $1: cross-gcc path
+ 	if test "$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
+ 		$(call check_uclibc,$${SYSROOT_DIR}) ; \
+ 	elif test "$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
+@@ -796,4 +800,3 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
+ endef
+ 
+ $(eval $(generic-package))
+-
 -- 
 2.9.0
