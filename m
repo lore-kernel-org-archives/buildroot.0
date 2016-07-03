@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 09:17:41 +0200
-Subject: [Buildroot] [PATCH 29/69] lzop: add explicit dependencies for
+Date: Sun, 3 Jul 2016 09:17:44 +0200
+Subject: [Buildroot] [PATCH 30/69] mpc: add explicit dependencies for
 	host variant
-In-Reply-To: <1467498098-23731-30-git-send-email-julien.floret@6wind.com>
+In-Reply-To: <1467498098-23731-31-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-30-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160703091741.1124b307@free-electrons.com>
+ <1467498098-23731-31-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160703091744.3d4a9acb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +14,10 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Jul 2016 00:20:58 +0200, Julien Floret wrote:
+On Sun,  3 Jul 2016 00:20:59 +0200, Julien Floret wrote:
 > Signed-off-by: Julien Floret <julien.floret@6wind.com>
 > ---
->  package/lzop/lzop.mk | 1 +
+>  package/mpc/mpc.mk | 1 +
 >  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
