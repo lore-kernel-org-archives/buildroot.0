@@ -1,29 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 08:56:52 +0200
-Subject: [Buildroot] [PATCH 15/69] genimage: add explicit dependencies
- for host variant
-In-Reply-To: <1467498098-23731-16-git-send-email-julien.floret@6wind.com>
-References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-16-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160703085652.31d6f45d@free-electrons.com>
+Date: Sun, 3 Jul 2016 08:55:36 +0200
+Subject: [Buildroot] [git commit] genimage: add explicit dependencies for
+	host variant
+Message-ID: <20160703065707.1A9A5817E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9e9dc4fc6884e352340b7229736652a29be1ee04
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  3 Jul 2016 00:20:44 +0200, Julien Floret wrote:
-> Signed-off-by: Julien Floret <julien.floret@6wind.com>
-> ---
->  package/genimage/genimage.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Julien Floret <julien.floret@6wind.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/genimage/genimage.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index 2dffbc5..489e8d0 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -7,7 +7,7 @@
+ GENIMAGE_VERSION = 8
+ GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE = http://www.pengutronix.de/software/genimage/download
+-GENIMAGE_DEPENDENCIES = host-pkgconf libconfuse
++HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
+ GENIMAGE_LICENSE = GPLv2
+ 
+ $(eval $(host-autotools-package))
