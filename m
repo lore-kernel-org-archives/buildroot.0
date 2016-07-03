@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 09:38:57 +0200
-Subject: [Buildroot] [PATCH 40/69] xapp_xcursorgen: add explicit
- dependencies for host variant
-In-Reply-To: <1467498098-23731-41-git-send-email-julien.floret@6wind.com>
+Date: Sun, 3 Jul 2016 09:39:03 +0200
+Subject: [Buildroot] [PATCH 42/69] xcb-proto: add explicit dependencies
+ for host variant
+In-Reply-To: <1467498098-23731-43-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-41-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160703093857.0dba6e56@free-electrons.com>
+ <1467498098-23731-43-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160703093903.56f1061a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +14,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Jul 2016 00:21:09 +0200, Julien Floret wrote:
+On Sun,  3 Jul 2016 00:21:11 +0200, Julien Floret wrote:
 > Signed-off-by: Julien Floret <julien.floret@6wind.com>
 > ---
->  package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/x11r7/xcb-proto/xcb-proto.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
 
