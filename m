@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 3 Jul 2016 10:24:02 +0200
-Subject: [Buildroot] [git commit] xorriso: remove empty host dependencies
+Subject: [Buildroot] [git commit] tcl: remove empty host dependencies
 	definition
-Message-ID: <20160703082409.0CEA57FE9E@busybox.osuosl.org>
+Message-ID: <20160703082409.1FCEF81836@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc5f44d98b376bf9f742fff67e41bf8168cda2e6
+commit: https://git.buildroot.net/buildroot/commit/?id=eee0a6414c5c4d6fe06d25acd20d95baee646743
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-While there, fix some typos.
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xorriso/xorriso.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/tcl/tcl.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
-index 396eeae..be19322 100644
---- a/package/xorriso/xorriso.mk
-+++ b/package/xorriso/xorriso.mk
-@@ -8,9 +8,8 @@ XORRISO_VERSION = 1.4.2
- XORRISO_SITE = $(BR2_GNU_MIRROR)/xorriso
- XORRISO_LICENSE = GPLv3+
- XORRISO_LICENSE_FILES = COPYING COPYRIGHT
--HOST_XORRISO_DEPENDENCIES =
--# Disable everything until we actually need those feature, and add the correct
--# host-libraries
-+# Disable everything until we actually need those features, and add the correct
-+# host libraries
- HOST_XORRISO_CONF_OPTS = \
- 	--disable-zlib \
- 	--disable-bzip2 \
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index a1153c7..a2ac8e6 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -75,7 +75,6 @@ TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_EXTRA
+ TCL_DEPENDENCIES = $(if $(BR2_PACKAGE_SQLITE),sqlite) \
+ 	$(if $(BR2_PACKAGE_MYSQL),mysql) \
+ 	$(if $(BR2_PACKAGE_POSTGRESQL),postgresql)
+-HOST_TCL_DEPENDENCIES =
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
