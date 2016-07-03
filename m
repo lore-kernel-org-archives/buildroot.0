@@ -1,129 +1,107 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Jul 2016 01:13:55 +0200
-Subject: [Buildroot] [PATCH 1/4] qemu: add support for host-qemu-system
-In-Reply-To: <1467584664-11640-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1467584664-11640-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1467584664-11640-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160703231355.GH3482@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Jul 2016 01:14:09 +0200
+Subject: [Buildroot] [PATCH v4] supertuxkart: new package
+In-Reply-To: <20160703214937.5418-1-ezequiel@vanguardiasur.com.ar> (Ezequiel
+ Garcia's message of "Sun, 3 Jul 2016 18:49:37 -0300")
+References: <20160703214937.5418-1-ezequiel@vanguardiasur.com.ar>
+Message-ID: <8737nql3ge.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simon, Thomas, All,
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
 
-On 2016-07-04 00:24 +0200, Thomas Petazzoni spake thusly:
-> From: Simon Maes <simonn.maes@gmail.com>
-> 
-> This commit adds support for building the system emulation mode in
-> host-qemu. To do so, it adds the BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE and
-> BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE sub-options, making sure that the
-> latter is selected if the former is not enabled. This ensures that at
-> least one is enabled *and* that existing configurations continue to
-> build the user-land emulation (which was the only one we supported until
-> now).
-> 
-> The list of architectures supported by the system emulation mode is the
-> same as the one for the user-space emulation mode (as far as the
-> existing list is concerned), so we simply drop the comment about this
-> dependency list being related to the user-space emulation only.
-> 
-> Signed-off-by: Simon Maes <simonn.maes@gmail.com>
-> [Thomas:
->  - Make sure either BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE or
->    BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE get selected.
->  - Unconditionally enable FDT support in host-qemu when in system
->    mode (so the option BR2_PACKAGE_HOST_QEMU_FDT has been removed)
->  - Remove the unneeded BR2_PACKAGE_HOST_QEMU_HAS_EMULS option.
->  - Remove the SDL related option, we really on the system to provide
->    SDL.
->  - Remove the BR2_PACKAGE_HOST_QEMU_DEBUG and
->    BR2_PACKAGE_HOST_QEMU_STRIP_BINARY options, since they are not really
->    useful.
->  - Remove HOST_QEMU_SITE and HOST_QEMU_SOURCE definitions, since they
->    are automatically derived from QEMU_SITE and QEMU_SOURCE anyway.
->  - Group things more logically in the .mk file.]
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-[--SNIP--]
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index 5fa95bb..5c3cfea 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -61,9 +61,19 @@ endif
->  ifeq ($(HOST_QEMU_ARCH),sh4aeb)
->  HOST_QEMU_ARCH = sh4eb
->  endif
-> -HOST_QEMU_TARGETS = $(HOST_QEMU_ARCH)-linux-user
->  
-> -ifeq ($(BR2_PACKAGE_HOST_QEMU),y)
-> +ifeq ($(BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE),y)
-> +HOST_QEMU_TARGETS += $(HOST_QEMU_ARCH)-softmmu
-> +HOST_QEMU_OPTS += --enable-system --enable-fdt
-> +HOST_QEMU_DEPENDENCIES += host-dtc
-> +else
-> +HOST_QEMU_OPTS += --disable-system
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE),y)
-> +HOST_QEMU_TARGETS += $(HOST_QEMU_ARCH)-linux-user
-> +HOST_QEMU_OPTS += --enable-linux-user
+ > Note that this package builds and bundles a number of libraries,
+ > such as GLEW and Irrlicht. We are not interested in doing
+ > non-upstreamable changes, so it is not desirable to modify
+ > this choice in any way.
 
-It is unnecessary to pass --enable-system and/or --enable-linux-user
-when an explicit --target-list is passed.
+ > In addition, Supertuxkart builds a version of the angelscript
+ > interpreter. If a compatible version of angelscript is installed
+ > on the system, it's possible to use it.
 
-Othrewise:
+ > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+ > --
+ > Changes from v3:
+ >   * Bumped to v0.9.2
+ >   * Added a patch to fix bad return jpeglib 'boolean' type
 
-    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > +++ b/package/supertuxkart/0002-irrlicht-Fix-boolean-return-type-for-jpeglib-s-callb.patch
+ > @@ -0,0 +1,39 @@
 
-Regards,
-Yann E. MORIN.
+Something went wrong with this patch / your mailer. The file you are
+patching has DOS style line endings, but the patch didn't, so it
+couldn't be applied on my side and I had to fix it.
 
->  HOST_QEMU_HOST_SYSTEM_TYPE = $(shell uname -s)
->  ifneq ($(HOST_QEMU_HOST_SYSTEM_TYPE),Linux)
->  $(error "qemu-user can only be used on Linux hosts")
-> @@ -84,12 +94,16 @@ HOST_QEMU_COMPARE_VERSION = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION) -ge $(
->  # built with kernel headers that are older or the same as the kernel
->  # version running on the host machine.
->  #
-> +
->  ifeq ($(BR_BUILDING),y)
->  ifneq ($(HOST_QEMU_COMPARE_VERSION),OK)
->  $(error "Refusing to build qemu-user: target Linux version newer than host's.")
->  endif
-> -endif
-> -endif
-> +endif # BR_BUILDING
-> +
-> +else # BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
-> +HOST_QEMU_OPTS += --disable-linux-user
-> +endif # BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
->  
->  define HOST_QEMU_CONFIGURE_CMDS
->  	cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
-> @@ -100,7 +114,8 @@ define HOST_QEMU_CONFIGURE_CMDS
->  		--host-cc="$(HOSTCC)"                   \
->  		--python=$(HOST_DIR)/usr/bin/python2    \
->  		--extra-cflags="$(HOST_CFLAGS)"         \
-> -		--extra-ldflags="$(HOST_LDFLAGS)"
-> +		--extra-ldflags="$(HOST_LDFLAGS)"       \
-> +		$(HOST_QEMU_OPTS)
->  endef
->  
->  define HOST_QEMU_BUILD_CMDS
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
+ > new file mode 100644
+ > index 000000000000..4ee8c4d57efe
+ > --- /dev/null
+ > +++ b/package/supertuxkart/Config.in
+ > @@ -0,0 +1,34 @@
+ > +config BR2_PACKAGE_SUPERTUXKART
+ > +	bool "supertuxkart"
+ > +	depends on BR2_USE_MMU # fork()
+ > +	depends on BR2_INSTALL_LIBSTDCPP # openal
+ > +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # openal
+ > +	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS # openal
+ > +	depends on BR2_PACKAGE_HAS_LIBGL
+ > +	depends on BR2_PACKAGE_XORG7
+ > +	depends on !BR2_TOOLCHAIN_USES_MUSL
+ > +	select BR2_PACKAGE_JPEG
+ > +	select BR2_PACKAGE_LIBCURL
+ > +	select BR2_PACKAGE_LIBGLU
+ > +	select BR2_PACKAGE_LIBOGG
+ > +	select BR2_PACKAGE_LIBPNG
+ > +	select BR2_PACKAGE_LIBVORBIS
+ > +	select BR2_PACKAGE_OPENAL
+ > +	select BR2_PACKAGE_XLIB_LIBXRANDR
+ > +	select BR2_PACKAGE_ZLIB
+ > +	help
+ > +	  Karts. Nitro. Action! SuperTuxKart is a free 3D arcade kart
+ > +	  racer with multiple karts, tracks and modes you can play.
+ > +	  Beat the evil Nolok by any means necessary, and make the
+ > +	  mascot kingdom safe once again!
+ > +
+ > +	  http://supertuxkart.sourceforge.net/Main_Page
+ > +
+ > +comment "supertux needs X, an OpenGL backend, a uClibc or glibc toolchain w/ NPTL, C++"
+ > +	depends on BR2_USE_MMU
+ > +	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+ > +	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+ > +		|| !BR2_INSTALL_LIBSTDCPP \
+ > +		|| !BR2_PACKAGE_HAS_LIBGL \
+ > +		|| BR2_TOOLCHAIN_USES_MUSL \
+ > +		|| !BR2_PACKAGE_XORG7
+
+We normally don't list the xorg dependency in the comment, so I've
+dropped that (and made the comment depend on BR2_PACKAGE_XORG7).
+
+> +++ b/package/supertuxkart/supertuxkart.mk
+ > @@ -0,0 +1,48 @@
+ > +################################################################################
+ > +#
+ > +# supertuxkart
+ > +#
+ > +################################################################################
+ > +
+ > +SUPERTUXKART_VERSION = 0.9.2
+ > +SUPERTUXKART_SOURCE = supertuxkart-$(SUPERTUXKART_VERSION)-src.tar.xz
+ > +SUPERTUXKART_SITE = http://downloads.sourceforge.net/project/supertuxkart/SuperTuxKart/$(SUPERTUXKART_VERSION)
+ > +
+ > +# Supertuxkart itself is GPLv3+, but it bundles a few libraries with different
+ > +# licenses. Irrlicht, bullet and angelscript have zlib license, while glew is
+ > +# BSD-3c. Since they are linked statically, the result is GPLv3+.
+ > +SUPERTUXKART_LICENSE = GPLv3+
+ > +SUPERTUXKART_LICENSE_FILES = COPYING
+ > +
+ > +SUPERTUXKART_DEPENDENCIES += \
+
+No need for +=, so I've changed this to use '='.
+
+Committed with these fixes, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
