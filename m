@@ -1,35 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 09:23:45 +0200
-Subject: [Buildroot] [git commit] libxcb: add explicit dependencies for host
+Date: Sun, 3 Jul 2016 09:20:21 +0200
+Subject: [Buildroot] [git commit] swig: add explicit dependencies for host
 	variant
-Message-ID: <20160703072403.9B0F481E70@busybox.osuosl.org>
+Message-ID: <20160703072403.7D29281E22@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bfafa8cf34d1017ff92d18373f50293dd672b2b
+commit: https://git.buildroot.net/buildroot/commit/?id=b725bcb2e410d849de0e95fe09dab0897669131b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
-[Thomas: add missing host-xcb-proto dependency.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/libxcb/libxcb.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/swig/swig.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
-index 7f7823b..dbb2a84 100644
---- a/package/x11r7/libxcb/libxcb.mk
-+++ b/package/x11r7/libxcb/libxcb.mk
-@@ -15,6 +15,9 @@ LIBXCB_INSTALL_STAGING = YES
- LIBXCB_DEPENDENCIES = \
- 	host-libxslt libpthread-stubs xcb-proto xlib_libXdmcp xlib_libXau \
- 	host-xcb-proto host-python host-pkgconf
-+HOST_LIBXCB_DEPENDENCIES = \
-+	host-libxslt host-libpthread-stubs host-xcb-proto host-xlib_libXdmcp \
-+	host-xlib_libXau host-xcb-proto host-python host-pkgconf
- 
- LIBXCB_CONF_OPTS = --with-doxygen=no
- HOST_LIBXCB_CONF_OPTS = --with-doxygen=no
+diff --git a/package/swig/swig.mk b/package/swig/swig.mk
+index 5329d1b..8fed8da 100644
+--- a/package/swig/swig.mk
++++ b/package/swig/swig.mk
+@@ -7,7 +7,7 @@
+ SWIG_VERSION_MAJOR = 3.0
+ SWIG_VERSION = $(SWIG_VERSION_MAJOR).10
+ SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
+-SWIG_DEPENDENCIES = host-bison
++HOST_SWIG_DEPENDENCIES = host-bison
+ HOST_SWIG_CONF_OPTS = \
+ 	--without-pcre \
+ 	--disable-ccache \
