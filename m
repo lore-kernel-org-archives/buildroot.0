@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 10:26:19 +0200
-Subject: [Buildroot] [PATCH 60/69] dos2unix: remove empty host
- dependencies definition
-In-Reply-To: <1467498098-23731-61-git-send-email-julien.floret@6wind.com>
+Date: Sun, 3 Jul 2016 10:26:16 +0200
+Subject: [Buildroot] [PATCH 59/69] boost: remove empty host dependencies
+ definition
+In-Reply-To: <1467498098-23731-60-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-61-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160703102619.363d6807@free-electrons.com>
+ <1467498098-23731-60-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160703102616.170374b2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +14,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Jul 2016 00:21:29 +0200, Julien Floret wrote:
+On Sun,  3 Jul 2016 00:21:28 +0200, Julien Floret wrote:
 > Signed-off-by: Julien Floret <julien.floret@6wind.com>
 > ---
->  package/dos2unix/dos2unix.mk | 1 -
->  1 file changed, 1 deletion(-)
+>  package/boost/boost.mk | 2 --
+>  1 file changed, 2 deletions(-)
 
 Applied to master, thanks.
 
