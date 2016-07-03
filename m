@@ -1,58 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 Jul 2016 10:08:11 +0200
-Subject: [Buildroot] [PATCH 1/2] acpitool: new package
-In-Reply-To: <1459016777-27952-1-git-send-email-nunes.erico@gmail.com> (Erico
- Nunes's message of "Sat, 26 Mar 2016 15:26:16 -0300")
-References: <1459016777-27952-1-git-send-email-nunes.erico@gmail.com>
-Message-ID: <87wpl32lg4.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Jul 2016 10:08:13 +0200
+Subject: [Buildroot] [PATCH 48/69] xlib_libXdmcp: add explicit
+ dependencies for host variant
+In-Reply-To: <1467498098-23731-49-git-send-email-julien.floret@6wind.com>
+References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
+ <1467498098-23731-49-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160703100813.5b65beb5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Erico" == Erico Nunes <nunes.erico@gmail.com> writes:
+Hello,
 
- > acpitool is a small, convenient command-line ACPI client.
- > Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
- > ---
- >  package/Config.in              |  1 +
- >  package/acpitool/Config.in     | 11 +++++++++++
- >  package/acpitool/acpitool.hash |  2 ++
- >  package/acpitool/acpitool.mk   | 13 +++++++++++++
- >  4 files changed, 27 insertions(+)
- >  create mode 100644 package/acpitool/Config.in
- >  create mode 100644 package/acpitool/acpitool.hash
- >  create mode 100644 package/acpitool/acpitool.mk
+On Sun,  3 Jul 2016 00:21:17 +0200, Julien Floret wrote:
+> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+> ---
+>  package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
- > diff --git a/package/Config.in b/package/Config.in
- > index 1467f33..cca553c 100644
- > --- a/package/Config.in
- > +++ b/package/Config.in
- > @@ -340,6 +340,7 @@ menu "Firmware"
- >  endmenu
- >  	source "package/a10disp/Config.in"
- >  	source "package/acpid/Config.in"
- > +	source "package/acpitool/Config.in"
- >  	source "package/am335x-pru-package/Config.in"
- >  	source "package/avrdude/Config.in"
- >  	source "package/bcache-tools/Config.in"
- > diff --git a/package/acpitool/Config.in b/package/acpitool/Config.in
- > new file mode 100644
- > index 0000000..7992e0f
- > --- /dev/null
- > +++ b/package/acpitool/Config.in
- > @@ -0,0 +1,11 @@
- > +config BR2_PACKAGE_ACPITOOL
- > +	bool "acpitool"
- > +	depends on BR2_INSTALL_LIBSTDCPP
+Applied to master, thanks.
 
-I was hessitating if we needed some architecture dependencies as this
-uses the /proc/acpi kernel interface which is only available on
-x86/ia64/arm64 - But as this is only a runtime dependency I left it as
-is.
-
-Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
