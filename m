@@ -1,24 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 03 Jul 2016 09:44:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libbluray: fix comment
-In-Reply-To: <1467483844-31013-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Sat, 2 Jul 2016 20:24:04 +0200")
-References: <1467483844-31013-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <871t3b414m.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Jul 2016 09:45:39 +0200
+Subject: [Buildroot] [PATCH 46/69] xlib_libXau: add explicit
+ dependencies for host variant
+In-Reply-To: <1467498098-23731-47-git-send-email-julien.floret@6wind.com>
+References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
+ <1467498098-23731-47-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160703094539.0b196d1a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Hello,
 
- > The comment was missing in menuconfig with a non-threaded toolchain
- > supporting dynamic linking.
+On Sun,  3 Jul 2016 00:21:15 +0200, Julien Floret wrote:
+> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+> ---
+>  package/x11r7/xlib_libXau/xlib_libXau.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Applied to master, thanks.
 
-Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
