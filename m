@@ -1,41 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Jul 2016 11:17:08 +0200
-Subject: [Buildroot] [git commit] package/dovecot: bump version to 2.2.25
-Message-ID: <20160703092145.AD66781DEE@busybox.osuosl.org>
+Date: Sun, 3 Jul 2016 11:21:05 +0200
+Subject: [Buildroot] [git commit] package/sunxi-mali: remove useless package
+Message-ID: <20160703092146.12FE981F6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=178054f61f6316a945f3b6ee9e6875fed34eaed8
+commit: https://git.buildroot.net/buildroot/commit/?id=4963a77323532ea70c42da572fec60e32f606f25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+sunxi-mali-prop only served a feeding prey for sunxi-mali to get the
+proprietary libs.
+
+Now that sunxi-mali downloads them (as the git submodule they are), we
+no longer need sunxi-mali-prop.
+
+Remove it.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in                            |  1 -
+ package/sunxi-mali-prop/Config.in            |  4 ----
+ package/sunxi-mali-prop/sunxi-mali-prop.hash |  2 --
+ package/sunxi-mali-prop/sunxi-mali-prop.mk   | 10 ----------
+ 4 files changed, 17 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 33de82d..0f67f0e 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	71c86891ea8deb5703d3dbbc3ea31ce2cbf7638f1aa395d9e8794d3ff7aebeb7	dovecot-2.2.24.tar.gz
-+sha256	d8d9f32c846397f7c22749a84c5cf6f59c55ff7ded3dc9f07749a255182f9667	dovecot-2.2.25.tar.gz
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index a9c0769..31c62d3 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- DOVECOT_VERSION_MAJOR = 2.2
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).24
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).25
- DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPLv2.1
+diff --git a/package/Config.in b/package/Config.in
+index f238c1d..3fddf8e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -467,7 +467,6 @@ endif
+ 	source "package/stm32flash/Config.in"
+ 	source "package/sunxi-cedarx/Config.in"
+ 	source "package/sunxi-mali/Config.in"
+-	source "package/sunxi-mali-prop/Config.in"
+ 	source "package/sysstat/Config.in"
+ 	source "package/targetcli-fb/Config.in"
+ 	source "package/ti-gfx/Config.in"
+diff --git a/package/sunxi-mali-prop/Config.in b/package/sunxi-mali-prop/Config.in
+deleted file mode 100644
+index b9efb4e..0000000
+--- a/package/sunxi-mali-prop/Config.in
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# Sunxi-mali-prop is a git submodule of sunxi-mali. To use this package
+-# select the sunxi-mali option.
+-config BR2_PACKAGE_SUNXI_MALI_PROP
+-	bool
+diff --git a/package/sunxi-mali-prop/sunxi-mali-prop.hash b/package/sunxi-mali-prop/sunxi-mali-prop.hash
+deleted file mode 100644
+index baf16fa..0000000
+--- a/package/sunxi-mali-prop/sunxi-mali-prop.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# locally computed
+-sha256  f87d93629072dd0306ffe1200425188129e5f7f97750126dff38464ea707f673  sunxi-mali-prop-1c5063f43cdc9de341c0d63b2e3921cab86c7742.tar.gz
+diff --git a/package/sunxi-mali-prop/sunxi-mali-prop.mk b/package/sunxi-mali-prop/sunxi-mali-prop.mk
+deleted file mode 100644
+index b828dc2..0000000
+--- a/package/sunxi-mali-prop/sunxi-mali-prop.mk
++++ /dev/null
+@@ -1,10 +0,0 @@
+-################################################################################
+-#
+-# sunxi-mali-prop
+-#
+-################################################################################
+-
+-SUNXI_MALI_PROP_VERSION = 1c5063f43cdc9de341c0d63b2e3921cab86c7742
+-SUNXI_MALI_PROP_SITE = $(call github,linux-sunxi,sunxi-mali-proprietary,$(SUNXI_MALI_PROP_VERSION))
+-
+-$(eval $(generic-package))
