@@ -1,48 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  4 Jul 2016 00:24:22 +0200
-Subject: [Buildroot] [PATCH 2/4] vde2: enable building host package
-In-Reply-To: <1467584664-11640-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1467584664-11640-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1467584664-11640-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon,  4 Jul 2016 00:24:20 +0200
+Subject: [Buildroot] [PATCH 0/4] System emulation support in host-qemu
+Message-ID: <1467584664-11640-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Maes <simonn.maes@gmail.com>
+Hello,
 
-In preparation of enabling vde2 support in host-qemu package.
+This is a respin of Simon Maes series adding system emulation support
+to the host-qemu package. Compared to the original series from Simon:
 
-Signed-off-by: Simon Maes <simonn.maes@gmail.com>
-[Thomas:
- - add HOST_VDE2_CONF_OPTS and HOST_VDE2_MAKE, like we have for the
-   target variant.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vde2/vde2.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ - The initial patch adding the support has been reworked, taking into
+   account numerous comments from Arnout, plus additional
+   simplifications and improvements.
 
-diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
-index bad758d..d9b11bb 100644
---- a/package/vde2/vde2.mk
-+++ b/package/vde2/vde2.mk
-@@ -37,4 +37,16 @@ VDE2_CONF_OPTS = \
- #?Package does not build in parallel due to improper make rules
- VDE2_MAKE = $(MAKE1)
- 
-+HOST_VDE2_CONF_OPTS = \
-+	--disable-experimental  \
-+	--disable-cryptcab      \
-+	--disable-pcap          \
-+	--disable-python        \
-+	--disable-profile       \
-+	--disable-kernel-switch \
-+	--enable-tuntap         \
-+
-+HOST_VDE2_MAKE = $(MAKE1)
-+
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ - The patch adding version selection has been dropped. We can revisit
+   that later, but adding version selection is complicated (think
+   about hash verification for example)
+
+ - The cleanup patch from Simon has been dropped, as it didn't clean
+   up things according to Buildroot best practices.
+
+ - The patch adding the "qemu-system-run" target has been
+   dropped. That's too specific, and if people really want to automate
+   starting qemu, they can write a script for it outside of Buildroot.
+
+ - A patch to bump to Qemu 2.6.0 has been added.
+
+Thanks,
+
+Thomas
+
+Simon Maes (3):
+  qemu: add support for host-qemu-system
+  vde2: enable building host package
+  qemu: add support for vde2
+
+Thomas Petazzoni (1):
+  qemu: bump to version 2.6.0
+
+ package/qemu/Config.in.host | 32 ++++++++++++++++++++++++++++----
+ package/qemu/qemu.hash      |  2 +-
+ package/qemu/qemu.mk        | 30 +++++++++++++++++++++++++-----
+ package/vde2/vde2.mk        | 12 ++++++++++++
+ 4 files changed, 66 insertions(+), 10 deletions(-)
+
 -- 
 2.7.4
