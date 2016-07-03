@@ -1,69 +1,58 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 3 Jul 2016 09:53:30 +0200
-Subject: [Buildroot] [PATCH 02/24 v2] system: sysvinit only selects
- busybox-show-others if busybox is enabled
-In-Reply-To: <a6739dce77434d44e657409dcc953ec3532789c1.1466622379.git.yann.morin.1998@free.fr>
-References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <a6739dce77434d44e657409dcc953ec3532789c1.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <927864ad-b946-bf1a-8317-c8244fc8358a@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 03 Jul 2016 10:08:11 +0200
+Subject: [Buildroot] [PATCH 1/2] acpitool: new package
+In-Reply-To: <1459016777-27952-1-git-send-email-nunes.erico@gmail.com> (Erico
+ Nunes's message of "Sat, 26 Mar 2016 15:26:16 -0300")
+References: <1459016777-27952-1-git-send-email-nunes.erico@gmail.com>
+Message-ID: <87wpl32lg4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+>>>>> "Erico" == Erico Nunes <nunes.erico@gmail.com> writes:
 
-Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
-> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is a bit special. When Busybox is
-> enabled, it is a Busybox option. When Busybox is not enabled, it is a
-> stand-alone option, forcibly enabled.
-> 
-> So we can safely 'select' it without ensuring (via a 'depends on' or
-> another 'select') that Busybox is enabled.
-> 
-> However, the name of this option does not express the fact that it is
-> safe to select it without checking Busybox, which can lead to a bit of
-> time-consuming head-scratching.
-> 
-> To avoid future puzzlement from an unsuspecting observer, consider this
-> to be a Busybox option, and only select it when Busybox is enabled.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
+ > acpitool is a small, convenient command-line ACPI client.
+ > Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+ > ---
+ >  package/Config.in              |  1 +
+ >  package/acpitool/Config.in     | 11 +++++++++++
+ >  package/acpitool/acpitool.hash |  2 ++
+ >  package/acpitool/acpitool.mk   | 13 +++++++++++++
+ >  4 files changed, 27 insertions(+)
+ >  create mode 100644 package/acpitool/Config.in
+ >  create mode 100644 package/acpitool/acpitool.hash
+ >  create mode 100644 package/acpitool/acpitool.mk
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 1467f33..cca553c 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -340,6 +340,7 @@ menu "Firmware"
+ >  endmenu
+ >  	source "package/a10disp/Config.in"
+ >  	source "package/acpid/Config.in"
+ > +	source "package/acpitool/Config.in"
+ >  	source "package/am335x-pru-package/Config.in"
+ >  	source "package/avrdude/Config.in"
+ >  	source "package/bcache-tools/Config.in"
+ > diff --git a/package/acpitool/Config.in b/package/acpitool/Config.in
+ > new file mode 100644
+ > index 0000000..7992e0f
+ > --- /dev/null
+ > +++ b/package/acpitool/Config.in
+ > @@ -0,0 +1,11 @@
+ > +config BR2_PACKAGE_ACPITOOL
+ > +	bool "acpitool"
+ > +	depends on BR2_INSTALL_LIBSTDCPP
 
-Not related to your patch but should we do the same change for tovid and systemd
-packages which select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS ?
+I was hessitating if we needed some architecture dependencies as this
+uses the /proc/acpi kernel interface which is only available on
+x86/ia64/arm64 - But as this is only a runtime dependency I left it as
+is.
 
-Best regards,
-Romain
+Committed, thanks.
 
-> 
-> ---
-> Changes v1 -> v2:
->   - only select if busybox is enabled  (Thomas)
-> 
-> ---
-> Hopefully, this will avoid people to go hunting like I did, and loose a
-> few precious minutes of hair-pulling... ;-]
-> ---
->  system/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/system/Config.in b/system/Config.in
-> index 9441467..2d20230 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -74,7 +74,7 @@ config BR2_INIT_BUSYBOX
->  
->  config BR2_INIT_SYSV
->  	bool "systemV"
-> -	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
-> +	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS if BR2_PACKAGE_BUSYBOX # sysvinit
->  	select BR2_PACKAGE_INITSCRIPTS
->  	select BR2_PACKAGE_SYSVINIT
->  
-> 
+-- 
+Bye, Peter Korsgaard
