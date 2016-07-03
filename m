@@ -1,109 +1,34 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 3 Jul 2016 10:50:19 +0200
-Subject: [Buildroot] [PATCH 08/24 v2] system: move the rootfs skeleton
- choice
-In-Reply-To: <4ab3e1017436a1f608eb37300087551f05f42740.1466622379.git.yann.morin.1998@free.fr>
-References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <4ab3e1017436a1f608eb37300087551f05f42740.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <087ddbde-bb7c-bf9d-f2f0-fdd18fa9eb79@gmail.com>
+From: Julien Floret <julien.floret@6wind.com>
+Date: Sun, 3 Jul 2016 10:52:25 +0200
+Subject: [Buildroot] [PATCH 04/69] cdrkit: add explicit dependencies for
+	host variant
+In-Reply-To: <20160703083649.02b0b8cc@free-electrons.com>
+References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
+ <1467498098-23731-5-git-send-email-julien.floret@6wind.com>
+ <20160703083649.02b0b8cc@free-electrons.com>
+Message-ID: <CAHfJR7j5+zZqBwXvosJwSs71J8gzxuZmAYAze=tMjxeXXG7jLg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello Thomas,
 
-Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
-> In the following commits, we'll be switching more options to be
-> conditional on the default or custom skeleton.
-> 
-> So, it makes sense that those options come after the choice of a
-> skeleton.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+2016-07-03 8:36 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Sun,  3 Jul 2016 00:20:33 +0200, Julien Floret wrote:
+>> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+>> ---
+>>  package/cdrkit/cdrkit.mk | 1 +
+>>  1 file changed, 1 insertion(+)
+>
+> Applied to master, thanks.
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Hm, this commit seems be missing in buildroot upstream, I don't see it
+amongst the others.
+Thanks a lot!
 
-Best regards,
-Romain
-
-
-> ---
->  system/Config.in | 56 ++++++++++++++++++++++++++++----------------------------
->  1 file changed, 28 insertions(+), 28 deletions(-)
-> 
-> diff --git a/system/Config.in b/system/Config.in
-> index 04b886b..662443b 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -1,5 +1,33 @@
->  menu "System configuration"
->  
-> +choice
-> +	prompt "Root FS skeleton"
-> +
-> +config BR2_ROOTFS_SKELETON_DEFAULT
-> +	bool "default target skeleton"
-> +	help
-> +	  Use default target skeleton
-> +
-> +config BR2_ROOTFS_SKELETON_CUSTOM
-> +	bool "custom target skeleton"
-> +	help
-> +	  Use custom target skeleton.
-> +
-> +endchoice
-> +
-> +if BR2_ROOTFS_SKELETON_CUSTOM
-> +
-> +config BR2_ROOTFS_SKELETON_CUSTOM_PATH
-> +	string "custom target skeleton path"
-> +	help
-> +	  Path to custom target skeleton.
-> +
-> +# dummy config so merged /usr workarounds can also be activated for
-> +# custom rootfs skeleton
-> +config BR2_ROOTFS_MERGED_USR
-> +
-> +endif
-> +
->  config BR2_TARGET_GENERIC_HOSTNAME
->  	string "System hostname"
->  	default "buildroot"
-> @@ -163,34 +191,6 @@ config BR2_ROOTFS_STATIC_DEVICE_TABLE
->  	  See package/makedevs/README for details on the usage and
->  	  syntax of these files.
->  
-> -choice
-> -	prompt "Root FS skeleton"
-> -
-> -config BR2_ROOTFS_SKELETON_DEFAULT
-> -	bool "default target skeleton"
-> -	help
-> -	  Use default target skeleton
-> -
-> -config BR2_ROOTFS_SKELETON_CUSTOM
-> -	bool "custom target skeleton"
-> -	help
-> -	  Use custom target skeleton.
-> -
-> -endchoice
-> -
-> -if BR2_ROOTFS_SKELETON_CUSTOM
-> -
-> -config BR2_ROOTFS_SKELETON_CUSTOM_PATH
-> -	string "custom target skeleton path"
-> -	help
-> -	  Path to custom target skeleton.
-> -
-> -# dummy config so merged /usr workarounds can also be activated for
-> -# custom rootfs skeleton
-> -config BR2_ROOTFS_MERGED_USR
-> -
-> -endif
-> -
->  if BR2_ROOTFS_SKELETON_DEFAULT
->  
->  config BR2_ROOTFS_MERGED_USR
-> 
+Julien
