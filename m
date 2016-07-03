@@ -1,40 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Jul 2016 12:52:45 +0200
-Subject: [Buildroot] [git commit] pkg-virtual: remove VERSION/SOURCE
-Message-ID: <20160703111558.0518B8179A@busybox.osuosl.org>
+Date: Sun, 3 Jul 2016 12:56:06 +0200
+Subject: [Buildroot] [git commit] mke2img: remove SOURCE
+Message-ID: <20160703111558.EA156820F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d29fd96a437a540a3aa996194712f8decf4c0f5
+commit: https://git.buildroot.net/buildroot/commit/?id=49202b307fedff399a0dc2250e000b55de633f88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Now that the package infrastructure doesn't attempt to download a package
-that has an empty version string, there's no need to define the VERSION and
-SOURCE variables in the virtual package infrastructure.
+that has an empty version string, there's no need to define the SOURCE
+variable in the mke2img package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-virtual.mk | 6 ------
- 1 file changed, 6 deletions(-)
+ package/mke2img/mke2img.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
-index 3fbe0a3..bcb2cad 100644
---- a/package/pkg-virtual.mk
-+++ b/package/pkg-virtual.mk
-@@ -43,12 +43,6 @@ endif
+diff --git a/package/mke2img/mke2img.mk b/package/mke2img/mke2img.mk
+index 04aaa8f..9de387a 100644
+--- a/package/mke2img/mke2img.mk
++++ b/package/mke2img/mke2img.mk
+@@ -4,7 +4,6 @@
+ #
+ ################################################################################
  
- $(2)_IS_VIRTUAL = YES
+-HOST_MKE2IMG_SOURCE =
+ HOST_MKE2IMG_DEPENDENCIES = host-genext2fs host-e2fsprogs
  
--# A virtual package does not have any source associated
--$(2)_SOURCE =
--
--# Fake a version string, so it looks nicer in the build log
--$(2)_VERSION = virtual
--
- # Add dependency against the provider
- $(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
- 
+ define HOST_MKE2IMG_INSTALL_CMDS
