@@ -1,100 +1,130 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 3 Jul 2016 13:49:45 +0200
-Subject: [Buildroot] [PATCH 22/24 v2] fs: add pre- and post-command hooks
-In-Reply-To: <a233b4b0fbce3823dca317fe24d8678397a7c8fc.1466622379.git.yann.morin.1998@free.fr>
-References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <a233b4b0fbce3823dca317fe24d8678397a7c8fc.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <1665996e-8fd6-da64-4552-b57b27b06dc9@gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 3 Jul 2016 14:47:02 +0200
+Subject: [Buildroot] [PATCH 1/1] owncloud: new package
+In-Reply-To: <1458223208-7133-1-git-send-email-sylvain.raybaud@green-communications.fr>
+References: <1458223208-7133-1-git-send-email-sylvain.raybaud@green-communications.fr>
+Message-ID: <CAGduivx_5t_906+eatqCmiONVhY-xcKwdBEwhWdVZd-dzsn12Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hi Sylvain, all,
 
-Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
-> In some cases, the directory structure we want in the filesystem is not
-> exactly what we have in target/
-> 
-> For example, when systemd is used on a read-only rootfs, /var must be a
-> tmpfs. However, we may have packages that install stuff in there, and
-> set important rights (via the permission-table). So, at build time, we
-> need /var to be a symlink to the remanent location (/usr/share/factory)
-> while at runtime we need /var to be a directory.
-> 
-> One option would have seen to be do have /var as a real directory even
-> during build time, and in a target-finalize hook, move everything out of
-> there and into the "factory" location. However, that's not possible
-> because it's too early: some packages may want to set ownership and/or
-> acces rights on directories or files in /var, and this is only done in
-> the fakeroot script, which is called only later during the assembling of
-> the filesystem images.
-> 
-> Also, there would have been no way to undo the tweak (i.e. we need to
-> restore the /var symlink so that subsequent builds continue to work) if
-> it were done as a target-finalize hook.
-> 
-> The only solution is to allow packages to register pre- and post-hooks
-> that are called right before and right after the rootfs commands are
-> executed.
-> 
-> Those hooks are not documented on-purpose; they are probably going to be
-> used only by systemd.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thank you for your patch, below are some comments. Your patch is
+marked as "Changes-Requested" in our patchwork, you need to fix your
+patch and resend.
+Of course, we can discuss any of the comments below.
+
+On Thu, Mar 17, 2016 at 3:00 PM, Sylvain Raybaud
+<sylvain.raybaud@green-communications.fr> wrote:
+> Add package owncloud 9.0.0: http://www.owncloud.org
+> Copy static files to /usr/lib/owncloud and dynamic files to
+> /var/lib/owncloud.
+>
+> owncloud needs php, mysql and a webserver. MySQL and the webserver
+> can be provided by different packages therefore no specific
+> dependency is set.
+>
+> Signed-off-by: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
 > ---
->  fs/common.mk           | 4 ++++
->  package/pkg-generic.mk | 4 ++++
->  2 files changed, 8 insertions(+)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index b7202c3..8feb172 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -92,7 +92,11 @@ endif
->  	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(FULL_DEVICE_TABLE)
->  	echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
->  endif
-> +	$$(foreach hook,$$(FS_INIT_PRE_CMD_HOOKS),\
-> +		$$(call PRINTF,$$($$(hook))) >>$$(FAKEROOT_SCRIPT))
-                                               ^
->  	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
-> +	$$(foreach hook,$$(FS_INIT_POST_CMD_HOOKS),\
-> +		$$(call PRINTF,$$($$(hook))) >>$$(FAKEROOT_SCRIPT))
-                                               ^
+>  package/Config.in              |  1 +
+>  package/owncloud/Config.in     |  9 +++++++++
+>  package/owncloud/owncloud.hash |  3 +++
+>  package/owncloud/owncloud.mk   | 34 ++++++++++++++++++++++++++++++++++
+>  4 files changed, 47 insertions(+)
+>  create mode 100644 package/owncloud/Config.in
+>  create mode 100644 package/owncloud/owncloud.hash
+>  create mode 100644 package/owncloud/owncloud.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 2401867..eeaa791 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1453,6 +1453,7 @@ endif
+>         source "package/openssh/Config.in"
+>         source "package/openswan/Config.in"
+>         source "package/openvpn/Config.in"
+> +       source "package/owncloud/Config.in"
+>         source "package/p910nd/Config.in"
+>         source "package/phidgetwebservice/Config.in"
+>         source "package/portmap/Config.in"
+> diff --git a/package/owncloud/Config.in b/package/owncloud/Config.in
+> new file mode 100644
+> index 0000000..8fe18de
+> --- /dev/null
+> +++ b/package/owncloud/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_OWNCLOUD
+> +       bool "owncloud"
+> +       depends on BR2_PACKAGE_PHP       # runtime
+It should be a select here, a user that wants to select owncloud
+shouldn't have to select PHP first, it should be done by KConfig.
+Shouldn't you select some basic PHP extensions, like GD ? Maybe offer
+some options for the most common extensions that are needed.
+> +       help
+> +         OwnCloud is a web app for accessing and sharing your files,
+> +         calendars, contacts, mail and more.
+> +
+> +comment "OwnCloud needs PHP"
+> +    depends on !BR2_PACKAGE_PHP
 
-We need a space between >> and $$
-
-With that fixed:
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
->  	chmod a+x $$(FAKEROOT_SCRIPT)
->  	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
->  	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 4415342..2f80392 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -559,6 +559,8 @@ $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
->  $(2)_PRE_LEGAL_INFO_HOOKS       ?=
->  $(2)_POST_LEGAL_INFO_HOOKS      ?=
->  $(2)_TARGET_FINALIZE_HOOKS      ?=
-> +$(2)_FS_PRE_CMD_HOOKS           ?=
-> +$(2)_FS_POST_CMD_HOOKS          ?=
->  
->  # human-friendly targets and target sequencing
->  $(1):			$(1)-install
-> @@ -860,6 +862,8 @@ ifneq ($$($(2)_USERS),)
->  PACKAGES_USERS += $$($(2)_USERS)$$(sep)
->  endif
->  TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
-> +FS_INIT_PRE_CMD_HOOKS += $$($(2)_FS_PRE_CMD_HOOKS)
-> +FS_INIT_POST_CMD_HOOKS += $$($(2)_FS_POST_CMD_HOOKS)
->  
->  ifeq ($$($(2)_SITE_METHOD),svn)
->  DL_TOOLS_DEPENDENCIES += svn
-> 
+> diff --git a/package/owncloud/owncloud.hash b/package/owncloud/owncloud.hash
+> new file mode 100644
+> index 0000000..c40c87f
+> --- /dev/null
+> +++ b/package/owncloud/owncloud.hash
+> @@ -0,0 +1,3 @@
+> +# Hashes from: https://download.owncloud.org/community/owncloud-9.0.0.tar.bz2.{md5,sha256}
+> +md5     1f14d7f2faa0ba704901e062301854db                                       owncloud-9.0.0.tar.bz2
+> +sha256  d16737510a77a81489f7c4d5e19b0756fa2ea1c5081ba174b0fec0f00da3a77c       owncloud-9.0.0.tar.bz2
+> diff --git a/package/owncloud/owncloud.mk b/package/owncloud/owncloud.mk
+> new file mode 100644
+> index 0000000..ff9e105
+> --- /dev/null
+> +++ b/package/owncloud/owncloud.mk
+> @@ -0,0 +1,34 @@
+> +################################################################################
+> +#
+> +# owncloud
+> +#
+> +################################################################################
+> +
+> +OWNCLOUD_VERSION = 9.0.0
+There's a newer version available.
+> +OWNCLOUD_SOURCE = owncloud-$(OWNCLOUD_VERSION).tar.bz2
+> +OWNCLOUD_SITE = https://download.owncloud.org/community
+> +OWNCLOUD_DEPENDENCIES =
+You can remove this line since you don't have any build dependencies.
+> +OWNCLOUD_LICENSE = AGPL
+> +OWNCLOUD_LICENSE_FILES = COPYING-AGPL
+> +
+> +define OWNCLOUD_INSTALL_TARGET_CMDS
+> +       #install files /usr/lib
+> +       mkdir -p $(TARGET_DIR)/usr/lib
+> +       cp -a $(@D) $(TARGET_DIR)/usr/lib/owncloud
+> +       #move dynamic files in /var/lib and make symbolic links
+> +       mkdir -p $(TARGET_DIR)/var/lib/owncloud
+> +       mkdir -p $(TARGET_DIR)/var/lib/owncloud/data
+> +       mv $(TARGET_DIR)/usr/lib/owncloud/config $(TARGET_DIR)/var/lib/owncloud/
+> +       mv $(TARGET_DIR)/usr/lib/owncloud/apps $(TARGET_DIR)/var/lib/owncloud/
+> +       #use relative path so that permissions can be set by OWNCLOUD_PERMISSIONS hook
+> +       ln -s ../../../var/lib/owncloud/data $(TARGET_DIR)/usr/lib/owncloud/data
+> +       ln -s ../../../var/lib/owncloud/config $(TARGET_DIR)/usr/lib/owncloud/config
+> +       ln -s ../../../var/lib/owncloud/apps $(TARGET_DIR)/usr/lib/owncloud/apps
+> +endef
+> +
+> +define OWNCLOUD_PERMISSIONS
+> +       /usr/lib/owncloud r -1 root root - - - - -
+> +       /var/lib/owncloud r -1 www-data www-data - - - - -
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 1.9.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
