@@ -1,43 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Jul 2016 13:00:53 +0200
-Subject: [Buildroot] [git commit] pkg-generic: check that SITE has a value
-	when SOURCE
-Message-ID: <20160703111601.4EAE38015F@busybox.osuosl.org>
+Date: Sun, 3 Jul 2016 12:58:51 +0200
+Subject: [Buildroot] [git commit] mcookie: remove SOURCE variable
+Message-ID: <20160703111601.1D5DA8015F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=235ac0cc185b453c475cfde32f0ba00da0137e36
+commit: https://git.buildroot.net/buildroot/commit/?id=d0cc8792937558c52888c91f8d108e471b863de6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, when an user forgets to define a SITE, he gets some fairly
-weird download failure. In order to make things easier to diagnose, this
-commit adds a check in the package infrastructure that verifies that if
-SOURCE has a value, SITE is not empty.
+Now that the package infrastructure doesn't attempt to download a package
+that has an empty version string, there's no need to define the SOURCE
+variable in the mcookie package.
 
-Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/x11r7/mcookie/mcookie.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index dab455c..0c9c7ab 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -938,6 +938,12 @@ endif
- 	$(1)-source \
- 	$(1)-source-check
+diff --git a/package/x11r7/mcookie/mcookie.mk b/package/x11r7/mcookie/mcookie.mk
+index 87a236f..b14599d 100644
+--- a/package/x11r7/mcookie/mcookie.mk
++++ b/package/x11r7/mcookie/mcookie.mk
+@@ -4,8 +4,6 @@
+ #
+ ################################################################################
  
-+ifneq ($$($(2)_SOURCE),)
-+ifeq ($$($(2)_SITE),)
-+$$(error $(2)_SITE cannot be empty when $(2)_SOURCE is not)
-+endif
-+endif
-+
- ifeq ($$(patsubst %/,ERROR,$$($(2)_SITE)),ERROR)
- $$(error $(2)_SITE ($$($(2)_SITE)) cannot have a trailing slash)
- endif
+-# Source included in Buildroot
+-MCOOKIE_SOURCE =
+ MCOOKIE_LICENSE = Public Domain
+ 
+ define MCOOKIE_EXTRACT_CMDS
