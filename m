@@ -1,34 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 13:17:35 +0200
-Subject: [Buildroot] [git commit] iprutils: uses fork(), needs MMU
-Message-ID: <20160703111758.9923F805EE@busybox.osuosl.org>
+Date: Sun, 3 Jul 2016 13:18:29 +0200
+Subject: [Buildroot] [PATCHv3] [autobuild] etc: add SysV-init startup
+ script and sample config file
+In-Reply-To: <1448809362-6340-1-git-send-email-yann.morin.1998@free.fr>
+References: <1448809362-6340-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160703131829.1ed4afc1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9b004e846398e92d23d9a8a5ab1ce772ad6671c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
+On Sun, 29 Nov 2015 16:02:42 +0100, Yann E. MORIN wrote:
+> This startup script (and its companion configuration file in
+> /etc/default/) allows one to easily start/stop an autobuilder.
+> 
+> An autobuilder can be run either on the current system, or in
+> a chroot (preferred). Running in a chrrot is done by setting
+> the AUTOBUILD_CHROOT variable in the configuration file. If
+> that variable is not set, then hte autobuilder does not enter
+> a chroot.
+> 
+> It is expected that the buildroot-test tree be already present
+> somewhere (for example, as a git checkout).
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> ---
+> Changes v2 -> v3:
+>   - allow not entering in a chroot  (Thomas)
+>   - always require an existing buildroot-test tree  (Thomas)
+> ---
+>  etc/default/buildroot-autobuild |  16 ++++
+>  etc/init.d/buildroot-autobuild  | 171 ++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 187 insertions(+)
+>  create mode 100644 etc/default/buildroot-autobuild
+>  create mode 100755 etc/init.d/buildroot-autobuild
 
-  http://autobuild.buildroot.net/results/6ee89f9a4e05c89375a96ac7085747afc301b896/
+Applied to buildroot-test, and I've changed my autobuilder instance to
+use it. Thanks!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/iprutils/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/iprutils/Config.in b/package/iprutils/Config.in
-index 1bc58e8..42f372c 100644
---- a/package/iprutils/Config.in
-+++ b/package/iprutils/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_IPRUTILS
- 	select BR2_PACKAGE_NCURSES_TARGET_MENU
- 	select BR2_PACKAGE_LIBSYSFS
- 	select BR2_PACKAGE_PCIUTILS
-+	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_bfin # pciutils
- 	help
- 	  System utilities for IBM Power RAID devices
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
