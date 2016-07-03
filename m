@@ -1,56 +1,36 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  4 Jul 2016 01:35:05 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package/pulseaudio: explicitly
-	enable/disable WebRTC support
+Date: Mon,  4 Jul 2016 01:35:06 +0200
+Subject: [Buildroot] [PATCH v2 3/3] package/pulseaudio: fix typo
 In-Reply-To: <1467588906-14153-1-git-send-email-romain.naour@gmail.com>
 References: <1467588906-14153-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1467588906-14153-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <1467588906-14153-3-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, pulseaudio optionally depends on webrtc if it is enabled.
-
-However, it is never explcitly enabled or disabled, although
-pulseaudio's ./configure has --enable/disable-webrtc-aec.
-
-Forcibly enable/disable webrtc support using those options.
+commit 7290dc1e87b23fe21c75c50b2238004273a0ec5c added
+PULSE_AUDIO_CONF_ENV instead of PULSEAUDIO_CONF_ENV.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v2: rewrite comments (Yann)
----
- package/pulseaudio/pulseaudio.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/pulseaudio/pulseaudio.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index bc95d91..9ef11bc 100644
+index 9ef11bc..e0d9ab4 100644
 --- a/package/pulseaudio/pulseaudio.mk
 +++ b/package/pulseaudio/pulseaudio.mk
-@@ -34,7 +34,6 @@ PULSEAUDIO_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_BLUEZ_UTILS),bluez_utils) \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
- 	$(if $(BR2_PACKAGE_FFTW),fftw) \
--	$(if $(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),webrtc-audio-processing) \
- 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
+@@ -18,7 +18,7 @@ PULSEAUDIO_CONF_OPTS = \
+ # Make sure we don't detect libatomic_ops. Indeed, since pulseaudio
+ # requires json-c, which needs 4 bytes __sync builtins, there should
+ # be no need for pulseaudio to rely on libatomic_ops.
+-PULSE_AUDIO_CONF_ENV += \
++PULSEAUDIO_CONF_ENV += \
+ 	ac_cv_header_atomic_ops_h=no
  
- ifeq ($(BR2_PACKAGE_GDBM),y)
-@@ -88,6 +87,13 @@ else
- PULSEAUDIO_CONF_OPTS += --disable-udev
- endif
- 
-+ifeq ($(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),y)
-+PULSEAUDIO_CONF_OPTS += --enable-webrtc-aec
-+PULSEAUDIO_DEPENDENCIES += webrtc-audio-processing
-+else
-+PULSEAUDIO_CONF_OPTS += --disable-webrtc-aec
-+endif
-+
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
- # The optional webrtc echo canceller is written in C++, causing auto* to want
- # to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
+ # 0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
 -- 
 2.5.5
