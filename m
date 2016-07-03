@@ -1,50 +1,37 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 3 Jul 2016 10:28:57 +0200
-Subject: [Buildroot] [PATCH 04/24 v2] system/skeleton: update etc/mtab
- with a more sensible link
-In-Reply-To: <4be6668a795a8af830d18094decfffdf18e5090f.1466622379.git.yann.morin.1998@free.fr>
-References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <4be6668a795a8af830d18094decfffdf18e5090f.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <68b936ec-3c91-2fbe-c755-5cfd5c3b2935@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Jul 2016 10:29:19 +0200
+Subject: [Buildroot] [PATCH] xcb-proto: add upstream patch for python3.5
+ build failure
+In-Reply-To: <1467506243-18432-1-git-send-email-arnout@mind.be>
+References: <1467506243-18432-1-git-send-email-arnout@mind.be>
+Message-ID: <20160703102919.22ec7558@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello,
 
-Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
-> Currently, our /etc/mtab points to /proc/mounts. This was all neat so
-> far, and was good for a sysv-like init system.
+On Sun, 3 Jul 2016 02:37:23 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> Since we run compileall on all python files in TARGET_DIR as part of
+> the finalization, the align.py from xcb-proto will be compiled (it is
+> not compiled as part of the package build). This file contains mixed
+> tab-spaces indentation, which python 3.5 no longer allows.
 > 
-> However, the way today is to point it at /proc/self/mounts, the
-> per-process mount tab.
+> Add an upstream patch that cleans up the indentation in this file.
 > 
-> Additionnally, that's what systemd expects. If /etc/mtab is not a
-> symlink to ../proc/self/mounts and the rootfs is readonly, systemd would
-> whine loudly (and a service unit would be marked failed).
-> 
-> Since it works well for sysv-like init systems too, just use that.
-
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > ---
->  system/skeleton/etc/mtab | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/system/skeleton/etc/mtab b/system/skeleton/etc/mtab
-> index 4c0a094..5c4677a 120000
-> --- a/system/skeleton/etc/mtab
-> +++ b/system/skeleton/etc/mtab
-> @@ -1 +1 @@
-> -/proc/mounts
-> \ No newline at end of file
-> +../proc/self/mounts
-> \ No newline at end of file
-> 
+>  .../0001-Make-whitespace-use-consistent.patch      | 212 +++++++++++++++++++++
+>  1 file changed, 212 insertions(+)
+>  create mode 100644 package/x11r7/xcb-proto/0001-Make-whitespace-use-consistent.patch
+
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
