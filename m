@@ -1,182 +1,123 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 3 Jul 2016 12:47:43 +0200
-Subject: [Buildroot] [PATCH 17/24 v2] package/skeleton: make it a
- virtual package
-In-Reply-To: <ab993ffd9048d2ca17a0a6a0a4639e039698a2b0.1466622379.git.yann.morin.1998@free.fr>
-References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <ab993ffd9048d2ca17a0a6a0a4639e039698a2b0.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <1aac877d-658c-5ef6-816f-8c6418377674@gmail.com>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Sun, 3 Jul 2016 18:54:41 +0800
+Subject: [Buildroot] [PATCH v3] package/quagga: Add systemd.service file
+In-Reply-To: <CAGduivyM5Y4TBVos3Pz8bW-7KeZc0RQA+uTbDQtXrA0tR-sR+A@mail.gmail.com>
+References: <1467533939-26606-1-git-send-email-nroach44@gmail.com>
+ <CAGduivyM5Y4TBVos3Pz8bW-7KeZc0RQA+uTbDQtXrA0tR-sR+A@mail.gmail.com>
+Message-ID: <55ce8415-62de-2e1e-bc88-f35d511866ec@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hi Maxime,
 
-Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
-> The skeleton package now only serves as an intermediate package to
-> direct to the real skeleton implementaion.
-                                ^
-s/implementaion/implementation/
 
-> 
-> This is exactly what a virtual package is. Make it so.
-
-Great, you already addressed my previous comment :)
-
-> 
-> Note: when graphing the dependency chain, and contrary to other virtual
-> packages, skeleton is de facto excluded from the dependencies of all
-> packages, and is "attached" as a dependency of the "All" package
-> instead, so as not to make the graph overly complicated and unreadable.
-> 
-> So, for it to appear on the graph, it needs to have a
-> BR2_PACKAGE_SKELETON kconfig variable, so that it appears in the output
-> of "make show-targets", like we do for the toolchain.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/skeleton-custom/Config.in          |  4 ++++
->  package/skeleton-custom/skeleton-custom.mk |  2 ++
->  package/skeleton-sysv/Config.in            |  4 ++++
->  package/skeleton-sysv/skeleton-sysv.mk     |  2 ++
->  package/skeleton/Config.in                 | 13 +++++++++++--
->  package/skeleton/skeleton.mk               | 11 ++---------
->  system/Config.in                           |  2 ++
->  7 files changed, 27 insertions(+), 11 deletions(-)
-> 
-> diff --git a/package/skeleton-custom/Config.in b/package/skeleton-custom/Config.in
-> index 1f3c87c..601c3b2 100644
-> --- a/package/skeleton-custom/Config.in
-> +++ b/package/skeleton-custom/Config.in
-> @@ -1,2 +1,6 @@
->  config BR2_PACKAGE_SKELETON_CUSTOM
->  	bool
-> +	select BR2_PACKAGE_HAS_SKELETON
-> +
-> +config BR2_PACKAGE_PROVIDES_SKELETON
-> +	default "skeleton-custom" if BR2_PACKAGE_SKELETON_CUSTOM
-> diff --git a/package/skeleton-custom/skeleton-custom.mk b/package/skeleton-custom/skeleton-custom.mk
-> index 8690af4..e251448 100644
-> --- a/package/skeleton-custom/skeleton-custom.mk
-> +++ b/package/skeleton-custom/skeleton-custom.mk
-> @@ -6,6 +6,8 @@
->  
->  SKELETON_CUSTOM_SOURCE =
->  
-> +SKELETON_CUSTOM_PROVIDES = skeleton
-> +
->  SKELETON_CUSTOM_ADD_TOOLCHAIN_DEPENDENCY = NO
->  SKELETON_CUSTOM_ADD_SKELETON_DEPENDENCY = NO
->  
-> diff --git a/package/skeleton-sysv/Config.in b/package/skeleton-sysv/Config.in
-> index 8c2e7dd..95c796f 100644
-> --- a/package/skeleton-sysv/Config.in
-> +++ b/package/skeleton-sysv/Config.in
-> @@ -1,2 +1,6 @@
->  config BR2_PACKAGE_SKELETON_SYSV
->  	bool
-> +	select BR2_PACKAGE_HAS_SKELETON
-> +
-> +config BR2_PACKAGE_PROVIDES_SKELETON
-> +	default "skeleton-sysv" if BR2_PACKAGE_SKELETON_SYSV
-> diff --git a/package/skeleton-sysv/skeleton-sysv.mk b/package/skeleton-sysv/skeleton-sysv.mk
-> index 0a2f51b..aa0b65c 100644
-> --- a/package/skeleton-sysv/skeleton-sysv.mk
-> +++ b/package/skeleton-sysv/skeleton-sysv.mk
-> @@ -6,6 +6,8 @@
->  
->  SKELETON_SYSV_SOURCE =
->  
-> +SKELETON_SYSV_PROVIDES = skeleton
-> +
->  SKELETON_SYSV_ADD_TOOLCHAIN_DEPENDENCY = NO
->  SKELETON_SYSV_ADD_SKELETON_DEPENDENCY = NO
->  
-> diff --git a/package/skeleton/Config.in b/package/skeleton/Config.in
-> index 6db0634..762196c 100644
-> --- a/package/skeleton/Config.in
-> +++ b/package/skeleton/Config.in
-> @@ -1,7 +1,16 @@
-> +# Every packages depend on the 'skeleton' package, but noone selects its
-                                                           ^
-s/noone/none/
-
-> +# symbol since it is an implicit dependency. So we just force that symbol
-> +# to always be 'y' so that it does appear in the dependency graph. Just
-> +# for that, no kidding.
->  config BR2_PACKAGE_SKELETON
->  	bool
->  	default y
-> -	select BR2_PACKAGE_SKELETON_SYSV   if BR2_ROOTFS_SKELETON_DEFAULT
-> -	select BR2_PACKAGE_SKELETON_CUSTOM if BR2_ROOTFS_SKELETON_CUSTOM
->  	help
->  	  The basic skeleton for your rootfs.
-> +
-> +config BR2_PACKAGE_HAS_SKELETON
-> +	bool
-> +
-> +config BR2_PACKAGE_PROVIDES_SKELETON
-> +	string
-> +	depends on BR2_PACKAGE_SKELETON
-
-Should it be depends on BR2_PACKAGE_HAS_SKELETON instead ?
-
-Other that that, the patch looks ok.
-
-Best regards,
-Romain
-
-> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-> index bd787db..b791650 100644
-> --- a/package/skeleton/skeleton.mk
-> +++ b/package/skeleton/skeleton.mk
-> @@ -4,13 +4,6 @@
->  #
->  ################################################################################
->  
-> -# source included in buildroot
-> -SKELETON_SOURCE =
-> -
-> -SKELETON_DEPENDENCIES = \
-> -	$(if $(BR2_PACKAGE_SKELETON_SYSV),skeleton-sysv) \
-> -	$(if $(BR2_PACKAGE_SKELETON_CUSTOM),skeleton-custom)
-> -
->  # The skeleton can't depend on the toolchain, since all packages depends on the
->  # skeleton and the toolchain is a target package, as is skeleton.
->  # Hence, skeleton would depends on the toolchain and the toolchain would depend
-> @@ -18,6 +11,8 @@ SKELETON_DEPENDENCIES = \
->  SKELETON_ADD_TOOLCHAIN_DEPENDENCY = NO
->  SKELETON_ADD_SKELETON_DEPENDENCY = NO
->  
-> +$(eval $(virtual-package))
-> +
->  # The following definitions are to be used by the specific skeletons:
->  # - SKELETON_USR_SYMLINKS_OR_DIRS
->  # - SKELETON_LIB_SYMLINK
-> @@ -113,5 +108,3 @@ endif
->  else # !BR2_TARGET_ENABLE_ROOT_LOGIN
->  SKELETON_ROOT_PASSWORD = "*"
->  endif
-> -
-> -$(eval $(generic-package))
-> diff --git a/system/Config.in b/system/Config.in
-> index 3a38bd4..3792be2 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -5,11 +5,13 @@ choice
->  
->  config BR2_ROOTFS_SKELETON_DEFAULT
->  	bool "default target skeleton"
-> +	select BR2_PACKAGE_SKELETON_SYSV
->  	help
->  	  Use default target skeleton
->  
->  config BR2_ROOTFS_SKELETON_CUSTOM
->  	bool "custom target skeleton"
-> +	select BR2_PACKAGE_SKELETON_CUSTOM
->  	help
->  	  Use custom target skeleton.
->  
-> 
+On 03/07/16 18:42, Maxime Hadjinlian wrote:
+> Hi Nathaniel, all
+>
+> On Sun, Jul 3, 2016 at 10:18 AM, Nathaniel Roach <nroach44@gmail.com> wrote:
+>> Use a template service file as all of the daemons use almost
+>> identical arguments and generally appear the same to the init
+>> system.
+>>
+>> We "Wants=" zebra as that's the daemon for interfacing to the
+>> kernel, and it's not required for the other daemons to work
+>> but it's probably going to be used in nearly all setups.
+>>
+>> /usr/bin/env is needed as systemd doesn't allow the instance
+>> variable (%i) in the executable path.
+>>
+>> We don't enable these services by default as this would require
+>> creating configuration and /etc/default files. (And is easily
+>> achieved with an FS overlay)
+>>
+>> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+>> ---
+>> Changes v2 -> v3:
+>>   - Remove invalid references to quagga.service (Arnout)
+>>   - Check if the binary is executable before trying to start it
+>>     (Arnout)
+>>   - Remove PID file arguments and options (Arnout)
+>>   - Add reload capability as the daemons do support it
+>>
+>> Changes v1 -> v2:
+>>   (As suggested by Arnout Vandecappelle)
+>>   - Completely remove shim and use /usr/bin/env instead
+>>   - Don't tell quagga to fork as systemd prefers it
+>>   - Add comment to .service file about /usr/bin/env
+>>   - Explain not enabling the service on build in patch
+>> ---
+>>   package/quagga/quagga.mk       |  2 ++
+>>   package/quagga/quagga at .service | 20 ++++++++++++++++++++
+>>   2 files changed, 22 insertions(+)
+>>   create mode 100644 package/quagga/quagga at .service
+>>
+>> diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+>> index 22e90ad..1bbc72d 100644
+>> --- a/package/quagga/quagga.mk
+>> +++ b/package/quagga/quagga.mk
+>> @@ -75,6 +75,8 @@ endif
+>>   define QUAGGA_INSTALL_INIT_SYSTEMD
+>>          $(INSTALL) -D -m 644 package/quagga/quagga_tmpfiles.conf \
+>>                  $(TARGET_DIR)/usr/lib/tmpfiles.d/quagga.conf
+>> +       $(INSTALL) -D -m 644 package/quagga/quagga at .service \
+>> +               $(TARGET_DIR)/usr/lib/systemd/system/quagga at .service
+>>   endef
+>>
+>>   $(eval $(autotools-package))
+>> diff --git a/package/quagga/quagga at .service b/package/quagga/quagga at .service
+>> new file mode 100644
+>> index 0000000..16acc30
+>> --- /dev/null
+>> +++ b/package/quagga/quagga at .service
+>> @@ -0,0 +1,20 @@
+>> +[Unit]
+>> +Description=Quagga %i routing daemon
+>> +ConditionFileIsExecutable=/usr/sbin/%i
+>> +Wants=quagga at zebra.service
+> Just a though, I read about why you added the Wants, maybe a comment
+> would be nice here ?
+>> +
+>> +[Service]
+>> +Type=simple
+> Since you have removed the '--daemon' option, maybe you should revert
+> this to "forking" ?
+I might have it backwards, but it would need "forking" if --daemon was 
+specified, otherwise "systemctl start quagga at ospfd" would hang.
+>> +EnvironmentFile=/etc/default/quagga-%i
+>> +PrivateTmp=true
+>> +# Systemd doesn't like having %i in the executable path.
+>> +ExecStart=/usr/bin/env /usr/sbin/%i $OPTS -f /etc/quagga/%i.conf
+>> +ExecReload=/bin/kill -HUP $MAINPID
+>> +KillMode=mixed
+>> +KillSignal=SIGINT
+> If I understand correctly, what you want to do is send a SIGINT to the
+> main processes and SIGKILL to the other ? From the services file I can
+> find in major distro, they don't specify it so it's left to the
+> default SIGTERM, why did you need to change that ? (Maybe you already
+> explained in your previous mail and I missed, sorry if that's the
+> case).
+KillMode=Mixed is an artefact left over from the OpenVPN .service file I 
+used as a reference. I (again) misread the systemd docs and left it in 
+as it seemed more appropriate than the default if any child processes 
+are started. This can be removed on commit, or I'll fix it if there's 
+any other things that need to be changed.
+>> +Restart=on-failure
+>> +RestartSec=1
+> Why ?
+I've had ospfd crash during configuration and general usage, this is 
+undesirable as it's responsible for keeping a large amount of routes in 
+my router's tables.
+>> +
+>> +[Install]
+>> +WantedBy=multi-user.target
+>> +
+>> --
+>> 2.8.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
