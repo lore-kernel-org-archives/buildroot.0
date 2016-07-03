@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 09:24:06 +0200
-Subject: [Buildroot] [PATCH 32/69] pixman: add explicit dependencies for
- host variant
-In-Reply-To: <1467498098-23731-33-git-send-email-julien.floret@6wind.com>
+Date: Sun, 3 Jul 2016 09:27:42 +0200
+Subject: [Buildroot] [PATCH 33/69] python-pycrypto: add explicit
+ dependencies for host variant
+In-Reply-To: <1467498098-23731-34-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-33-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160703092406.74981b27@free-electrons.com>
+ <1467498098-23731-34-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160703092742.560d9b43@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +14,10 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Jul 2016 00:21:01 +0200, Julien Floret wrote:
+On Sun,  3 Jul 2016 00:21:02 +0200, Julien Floret wrote:
 > Signed-off-by: Julien Floret <julien.floret@6wind.com>
 > ---
->  package/pixman/pixman.mk | 1 +
+>  package/python-pycrypto/python-pycrypto.mk | 1 +
 >  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
