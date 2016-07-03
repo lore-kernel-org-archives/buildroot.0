@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 12:43:39 +0200
-Subject: [Buildroot] [git commit] cups: bump to version 2.1.4,
-	change upstream location
-Message-ID: <20160703104344.AA38D81E64@busybox.osuosl.org>
+Date: Sun, 3 Jul 2016 12:44:34 +0200
+Subject: [Buildroot] [PATCH] package/cups: fix static linking with GnuTLS
+In-Reply-To: <1456675640-22176-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1456675640-22176-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20160703124434.342effb4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1bfde6a73a9ab85a4df6b04966c907de2973deae
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-cups is now available from Github, with tarballs uploaded by the
-maintainers, so we use this new upstream location.
+On Sun, 28 Feb 2016 17:07:20 +0100, J?rg Krause wrote:
+> cups forgets to link against the libs found by pkg-config if it is build with
+> GnuTLS support.
+> 
+> Otherwise, static build fails with:
+> ../cups/libcups.a(tls.o): In function `http_gnutls_create_credential':
+> cups-2.1.2/cups/tls-gnutls.c:762: undefined reference to `gnutls_x509_crt_init'
+> [..]
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/205/20509b7d1edc73dc2a7622f2ae7dbf9f6665a918/
+> http://autobuild.buildroot.net/results/b86/b86d685caf8cf812f9505fca2de36fb8c18baee1/
+> 
+> Patch is sent upstream.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  .../cups/0004-Fix-static-linking-with-GnuTLS.patch | 39 ++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 package/cups/0004-Fix-static-linking-with-GnuTLS.patch
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cups/cups.hash | 2 +-
- package/cups/cups.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+In the end, since nobody ever worked on a better solution, I applied
+your patch (together with a bump to cups 2.1.4).
 
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-index f38399f..2d103f2 100644
---- a/package/cups/cups.hash
-+++ b/package/cups/cups.hash
-@@ -1,2 +1,2 @@
- # Locally calculated:
--sha256 bab0ca3ba80eae48319b3a6b19a5b14fad5ce230f30151a0cfa4c0271df281ad  cups-2.1.2-source.tar.bz2
-+sha256 4b14fd833180ac529ebebea766a09094c2568bf8426e219cb3a1715304ef728d  cups-2.1.4-source.tar.gz
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 797d31a..2f8a18e 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CUPS_VERSION = 2.1.2
--CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.bz2
--CUPS_SITE = http://www.cups.org/software/$(CUPS_VERSION)
-+CUPS_VERSION = 2.1.4
-+CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
-+CUPS_SITE = https://github.com/apple/cups/releases/download/release-$(CUPS_VERSION)
- CUPS_LICENSE = GPLv2 LGPLv2
- CUPS_LICENSE_FILES = LICENSE.txt
- CUPS_INSTALL_STAGING = YES
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
