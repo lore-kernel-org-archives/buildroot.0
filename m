@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 08:56:56 +0200
-Subject: [Buildroot] [PATCH 16/69] gmp: add explicit dependencies for
-	host variant
-In-Reply-To: <1467498098-23731-17-git-send-email-julien.floret@6wind.com>
+Date: Sun, 3 Jul 2016 08:58:49 +0200
+Subject: [Buildroot] [PATCH 17/69] heimdal: add explicit dependencies
+ for host variant
+In-Reply-To: <1467498098-23731-18-git-send-email-julien.floret@6wind.com>
 References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-17-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160703085656.3fff01f1@free-electrons.com>
+ <1467498098-23731-18-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160703085849.09a0f616@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +14,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Jul 2016 00:20:45 +0200, Julien Floret wrote:
+On Sun,  3 Jul 2016 00:20:46 +0200, Julien Floret wrote:
 > Signed-off-by: Julien Floret <julien.floret@6wind.com>
 > ---
->  package/gmp/gmp.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/heimdal/heimdal.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
