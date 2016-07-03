@@ -1,79 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 3 Jul 2016 12:43:39 +0200
-Subject: [Buildroot] [git commit] cups: fix static linking with GnuTLS
-Message-ID: <20160703104344.9B71D81E64@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] cups: bump to version 2.1.4,
+	change upstream location
+Message-ID: <20160703104344.AA38D81E64@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ff8fc555c8b9faebf7ec3245c342832be60aa03
+commit: https://git.buildroot.net/buildroot/commit/?id=1bfde6a73a9ab85a4df6b04966c907de2973deae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cups forgets to link against the libs found by pkg-config if it is build with
-GnuTLS support.
+cups is now available from Github, with tarballs uploaded by the
+maintainers, so we use this new upstream location.
 
-Otherwise, static build fails with:
-../cups/libcups.a(tls.o): In function `http_gnutls_create_credential':
-cups-2.1.2/cups/tls-gnutls.c:762: undefined reference to `gnutls_x509_crt_init'
-[..]
-
-Fixes:
-http://autobuild.buildroot.net/results/205/20509b7d1edc73dc2a7622f2ae7dbf9f6665a918/
-http://autobuild.buildroot.net/results/b86/b86d685caf8cf812f9505fca2de36fb8c18baee1/
-
-Patch is sent upstream.
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-[Thomas: refresh and rename patch.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../cups/0005-Fix-static-linking-with-GnuTLS.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ package/cups/cups.hash | 2 +-
+ package/cups/cups.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/cups/0005-Fix-static-linking-with-GnuTLS.patch b/package/cups/0005-Fix-static-linking-with-GnuTLS.patch
-new file mode 100644
-index 0000000..5702caa
---- /dev/null
-+++ b/package/cups/0005-Fix-static-linking-with-GnuTLS.patch
-@@ -0,0 +1,39 @@
-+From 79a2389f590f4d16885bdd0715f3f04fd9fa6cc5 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Sun, 28 Feb 2016 16:35:56 +0100
-+Subject: [PATCH] Fix static linking with GnuTLS
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+cups forgets to link against the libs found by pkg-config if it is build with
-+GnuTLS support.
-+
-+Otherwise, static build fails with:
-+../cups/libcups.a(tls.o): In function `http_gnutls_create_credential':
-+cups-2.1.2/cups/tls-gnutls.c:762: undefined reference to `gnutls_x509_crt_init'
-+[..]
-+
-+Status upstream: Pending
-+
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+ Makedefs.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makedefs.in b/Makedefs.in
-+index 299b297..ce9d535 100644
-+--- a/Makedefs.in
-++++ b/Makedefs.in
-+@@ -143,7 +143,7 @@ IPPFIND_MAN	=	@IPPFIND_MAN@
-+ LDFLAGS		=	-L../cgi-bin -L../cups -L../filter -L../ppdc \
-+ 			-L../scheduler @LDARCHFLAGS@ \
-+ 			@LDFLAGS@ @RELROFLAGS@ $(OPTIM)
-+-LINKCUPS	=	@LINKCUPS@ $(LIBGSSAPI) $(DNSSDLIBS) $(LIBZ)
-++LINKCUPS	=	@LINKCUPS@ $(SSLLIBS) $(LIBGSSAPI) $(DNSSDLIBS) $(LIBZ)
-+ LINKCUPSIMAGE	=	@LINKCUPSIMAGE@
-+ LIBS		=	$(LINKCUPS) $(COMMONLIBS)
-+ ONDEMANDFLAGS	=	@ONDEMANDFLAGS@
-+-- 
-+2.7.4
-+
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index f38399f..2d103f2 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated:
+-sha256 bab0ca3ba80eae48319b3a6b19a5b14fad5ce230f30151a0cfa4c0271df281ad  cups-2.1.2-source.tar.bz2
++sha256 4b14fd833180ac529ebebea766a09094c2568bf8426e219cb3a1715304ef728d  cups-2.1.4-source.tar.gz
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 797d31a..2f8a18e 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-CUPS_VERSION = 2.1.2
+-CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.bz2
+-CUPS_SITE = http://www.cups.org/software/$(CUPS_VERSION)
++CUPS_VERSION = 2.1.4
++CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
++CUPS_SITE = https://github.com/apple/cups/releases/download/release-$(CUPS_VERSION)
+ CUPS_LICENSE = GPLv2 LGPLv2
+ CUPS_LICENSE_FILES = LICENSE.txt
+ CUPS_INSTALL_STAGING = YES
