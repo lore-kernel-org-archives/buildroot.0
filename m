@@ -1,220 +1,98 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 3 Jul 2016 12:02:26 +0200
-Subject: [Buildroot] [PATCH 15/24 v2] packages: use the
- <PKG>_TARGET_FINALIZE_HOOKS
-In-Reply-To: <8fc9a5924f5adb37bd30284049e7fcc38df66c79.1466622379.git.yann.morin.1998@free.fr>
-References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <8fc9a5924f5adb37bd30284049e7fcc38df66c79.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <f62f08e0-eea9-c2ec-e44b-98b7833e5f6b@gmail.com>
+From: Xin Zhao <tibalt.zhao@gmail.com>
+Date: Sun, 3 Jul 2016 18:20:58 +0800
+Subject: [Buildroot] no device wlan0 for wifi on rasp3 linux system from
+	raspberrypi3_defconfig
+In-Reply-To: <CAKgJ3BKWnQ32y_9n7Ux-8WvoDw_90NSuFT+n_ttn78fp6pgySw@mail.gmail.com>
+References: <CAKgJ3BKWnQ32y_9n7Ux-8WvoDw_90NSuFT+n_ttn78fp6pgySw@mail.gmail.com>
+Message-ID: <CAKgJ3BL1X2wwxPe2Zmn9hTBRSgpG4J21Quf2uB7kqjMUmJ4JXA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+This issue can be solved following below link:
+http://lists.busybox.net/pipermail/buildroot/2016-April/159688.html
 
-Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
-> Register package-specific target-finalize hooks with the
-> newly-introduced <PKG>_TARGET_FINALIZE_HOOKS.
-> 
-> This incidentally fixes luarocks, which was registering target-finalize
-> hooks even when it was not enabled.
-> 
-> To be noted, the skeleton package is not converted, because it is not
-> optional, we always have it; so its hooks would always be registered
-> anyway. Besides, the followup patches would render this conversion moot
-> anyway, since those hooks would be spread across the various skeleton
-> packages.
+A short summary is that the linux from raspberrypi3_defconfig does not have
+brcmfmac43430-sdio.bin.
+From the link I downloaded shows that it is not free in some way:
+https://raw.githubusercontent.com/RPi-Distro/firmware-nonfree/master/brcm80211/brcm/brcmfmac43430-sdio.bin
 
-Have you considered the two TARGET_FINALIZE_HOOKS from the toolchain package ?
+Could buildroot handle the driver with below license?
+https://github.com/RPi-Distro/firmware-nonfree/blob/master/brcm80211/LICENSE
 
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Otherwise:
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
+If it is possible, I would like to make a patch to make wifi work for
+raspberry pi 3 without the trouble above.
 
 
-> ---
->  package/google-breakpad/google-breakpad.mk |  6 ++----
->  package/libglib2/libglib2.mk               |  6 ++----
->  package/libgtk3/libgtk3.mk                 |  4 +---
->  package/luarocks/luarocks.mk               |  3 +--
->  package/perl/perl.mk                       |  4 +---
->  package/python/python.mk                   | 10 ++++------
->  package/python3/python3.mk                 | 10 ++++------
->  7 files changed, 15 insertions(+), 28 deletions(-)
-> 
-> diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
-> index 1bbe4da..7a88c76 100644
-> --- a/package/google-breakpad/google-breakpad.mk
-> +++ b/package/google-breakpad/google-breakpad.mk
-> @@ -13,15 +13,13 @@ GOOGLE_BREAKPAD_INSTALL_TARGET = NO
->  GOOGLE_BREAKPAD_INSTALL_STAGING = YES
->  GOOGLE_BREAKPAD_LICENSE = BSD-3c
->  GOOGLE_BREAKPAD_LICENSE_FILES = LICENSE
-> -
-> -ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
->  GOOGLE_BREAKPAD_DEPENDENCIES = host-google-breakpad
-> +
->  define GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
->  	$(EXTRA_ENV) package/google-breakpad/gen-syms.sh $(STAGING_DIR) \
->  		$(TARGET_DIR) $(call qstrip,$(BR2_GOOGLE_BREAKPAD_INCLUDE_FILES))
->  endef
-> -TARGET_FINALIZE_HOOKS += GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
-> -endif
-> +GOOGLE_BREAKPAD_TARGET_FINALIZE_HOOKS += GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
->  
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-> index b479bae..e2bff6d 100644
-> --- a/package/libglib2/libglib2.mk
-> +++ b/package/libglib2/libglib2.mk
-> @@ -160,10 +160,8 @@ define LIBGLIB2_COMPILE_SCHEMAS
->  		--targetdir=$(TARGET_DIR)/usr/share/glib-2.0/schemas
->  endef
->  
-> -ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-> -TARGET_FINALIZE_HOOKS += LIBGLIB2_REMOVE_TARGET_SCHEMAS
-> -TARGET_FINALIZE_HOOKS += LIBGLIB2_COMPILE_SCHEMAS
-> -endif
-> +LIBGLIB2_TARGET_FINALIZE_HOOKS += LIBGLIB2_REMOVE_TARGET_SCHEMAS
-> +LIBGLIB2_TARGET_FINALIZE_HOOKS += LIBGLIB2_COMPILE_SCHEMAS
->  
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-> index f447e7a..08d172f 100644
-> --- a/package/libgtk3/libgtk3.mk
-> +++ b/package/libgtk3/libgtk3.mk
-> @@ -182,13 +182,11 @@ endef
->  
->  # Create icon-theme.cache for each of the icon directories/themes
->  # It's not strictly necessary but speeds up lookups
-> -ifeq ($(BR2_PACKAGE_LIBGTK3),y)
->  define LIBGTK3_UPDATE_ICON_CACHE
->  	find $(TARGET_DIR)/usr/share/icons -maxdepth 1 -mindepth 1 -type d \
->  		-exec $(HOST_DIR)/usr/bin/gtk-update-icon-cache {} \;
->  endef
-> -TARGET_FINALIZE_HOOKS += LIBGTK3_UPDATE_ICON_CACHE
-> -endif
-> +LIBGTK3_TARGET_FINALIZE_HOOKS += LIBGTK3_UPDATE_ICON_CACHE
->  
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-> index 656b832..eddd435 100644
-> --- a/package/luarocks/luarocks.mk
-> +++ b/package/luarocks/luarocks.mk
-> @@ -60,5 +60,4 @@ define LUAROCKS_FINALIZE_TARGET
->  	rm -rf $(TARGET_DIR)/usr/lib/luarocks
->  endef
->  
-> -TARGET_FINALIZE_HOOKS += LUAROCKS_FINALIZE_TARGET
-> -
-> +LUAROCKS_TARGET_FINALIZE_HOOKS += LUAROCKS_FINALIZE_TARGET
-> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-> index 29af7a4..ca70123 100644
-> --- a/package/perl/perl.mk
-> +++ b/package/perl/perl.mk
-> @@ -114,7 +114,6 @@ endef
->  $(eval $(generic-package))
->  $(eval $(host-generic-package))
->  
-> -ifeq ($(BR2_PACKAGE_PERL),y)
->  define PERL_FINALIZE_TARGET
->  	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
->  	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE
-> @@ -122,5 +121,4 @@ define PERL_FINALIZE_TARGET
->  	find $(TARGET_DIR)/usr/lib/perl5/ -name '*.bs' -print0 | xargs -0 rm -f
->  	find $(TARGET_DIR)/usr/lib/perl5/ -name '.packlist' -print0 | xargs -0 rm -f
->  endef
-> -TARGET_FINALIZE_HOOKS += PERL_FINALIZE_TARGET
-> -endif
-> +PERL_TARGET_FINALIZE_HOOKS += PERL_FINALIZE_TARGET
-> diff --git a/package/python/python.mk b/package/python/python.mk
-> index 913dc2c..5e13bf3 100644
-> --- a/package/python/python.mk
-> +++ b/package/python/python.mk
-> @@ -226,7 +226,7 @@ define PYTHON_CREATE_PYC_FILES
->  endef
->  
->  ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON_PY_PYC),y)
-> -TARGET_FINALIZE_HOOKS += PYTHON_CREATE_PYC_FILES
-> +PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_CREATE_PYC_FILES
->  endif
->  
->  ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
-> @@ -234,7 +234,7 @@ define PYTHON_REMOVE_PY_FILES
->  	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
->  		xargs -0 --no-run-if-empty rm -f
->  endef
-> -TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
-> +PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
->  endif
->  
->  # Normally, *.pyc files should not have been compiled, but just in
-> @@ -244,14 +244,12 @@ define PYTHON_REMOVE_PYC_FILES
->  	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | \
->  		xargs -0 --no-run-if-empty rm -f
->  endef
-> -TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYC_FILES
-> +PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYC_FILES
->  endif
->  
->  # In all cases, we don't want to keep the optimized .pyo files
-> -ifeq ($(BR2_PACKAGE_PYTHON),y)
->  define PYTHON_REMOVE_PYO_FILES
->  	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyo' -print0 | \
->  		xargs -0 --no-run-if-empty rm -f
->  endef
-> -TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYO_FILES
-> -endif
-> +PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYO_FILES
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index 8459b11..dc776fe 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -217,7 +217,7 @@ define PYTHON3_CREATE_PYC_FILES
->  endef
->  
->  ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PY_PYC),y)
-> -TARGET_FINALIZE_HOOKS += PYTHON3_CREATE_PYC_FILES
-> +PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_CREATE_PYC_FILES
->  endif
->  
->  ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
-> @@ -225,7 +225,7 @@ define PYTHON3_REMOVE_PY_FILES
->  	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | \
->  		xargs -0 --no-run-if-empty rm -f
->  endef
-> -TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
-> +PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
->  endif
->  
->  # Normally, *.pyc files should not have been compiled, but just in
-> @@ -235,16 +235,14 @@ define PYTHON3_REMOVE_PYC_FILES
->  	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.pyc' -print0 | \
->  		xargs -0 --no-run-if-empty rm -f
->  endef
-> -TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PYC_FILES
-> +PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PYC_FILES
->  endif
->  
->  # In all cases, we don't want to keep the optimized .opt-1.pyc and
->  # .opt-2.pyc files, since they can't work without their non-optimized
->  # variant.
-> -ifeq ($(BR2_PACKAGE_PYTHON3),y)
->  define PYTHON3_REMOVE_OPTIMIZED_PYC_FILES
->  	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.opt-1.pyc' -print0 -o -name '*.opt-2.pyc' -print0 | \
->  		xargs -0 --no-run-if-empty rm -f
->  endef
-> -TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_OPTIMIZED_PYC_FILES
-> -endif
-> +PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_OPTIMIZED_PYC_FILES
-> 
+Thanks,
+Regards,
+Tibalt
+
+
+2016-07-01 16:28 GMT+08:00 Xin Zhao <tibalt.zhao@gmail.com>:
+
+> I do not know if somebody has suffered the same problem.
+> I tried the defconfig for rasp3. The sdcard.img generated by buildroot is
+> running well except that wlan0 is not in the system. Then I tried to fix it
+> by compilation with BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y, but still
+> did not work.
+>
+> Then I checked the modules loaded by the system
+> *# lsmod*
+> *Module                  Size  Used by    Not tainted*
+> *ipv6                  334070 24 [permanent]*
+> *bcm2835_wdt             3128  0*
+> *bcm2835_gpiomem         2939  0*
+> *uio_pdrv_genirq         3089  0*
+> *uio                     7715  1 uio_pdrv_genirq*
+> *brcmfmac              175175  0*
+> *brcmutil                5585  1 brcmfmac*
+> *cfg80211              416114  1 brcmfmac*
+> *rfkill                 14461  1 cfg80211*
+>
+> Seems brcmfmac is the needed module for wlan. And it is loaded. The dmesg
+> shows
+> *[    2.958655] gpiomem-bcm2835 3f200000.gpiomem: Initialised: Registers
+> at 0x3f200000*
+> *[    2.964906] bcm2835-wdt 3f100000.watchdog: Broadcom BCM2835 watchdog
+> timer*
+> *[    2.988707] random: dd urandom read with 79 bits of entropy available*
+> *[    3.138008] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
+> clkctl 0x50*
+> *[    3.232991] NET: Registered protocol family 10*
+> *[    3.329925] smsc95xx 1-1.1:1.0 eth0: hardware isn't capable of remote
+> wakeup*
+> *[    3.332085] IPv6: ADDRCONF(NETDEV_UP): eth0: link is not ready*
+> *[    4.148354] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
+> clkctl 0x50*
+> *[    4.820909] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready*
+> *[    4.823506] smsc95xx 1-1.1:1.0 eth0: link up, 100Mbps, full-duplex,
+> lpa 0xC5E1*
+> *[   12.292458] random: nonblocking pool is initialized*
+>
+> Then I tried remove the module and load the module again. Dmesg shows:
+> *[  294.949174] usbcore: deregistering interface driver brcmfmac*
+> *[  298.170953] brcmfmac: brcmf_sdio_drivestrengthinit: No SDIO Drive
+> strength init done for chip 43430 rev 1 pmurev 24*
+> *[  298.177551] usbcore: registered new interface driver brcmfmac*
+> *[  298.179173] brcmfmac_sdio mmc1:0001:1: Direct firmware load for
+> brcm/brcmfmac43430-sdio.bin failed with error -2*
+> *[  299.187783] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
+> clkctl 0x50*
+>
+> And ifconfig -a shows no wlan0.
+>
+>
+> The version of buildroot I am using is pretty new.  Version details as
+> below:
+>
+> *commit a542d0fd55e961e3c5805f12bba490d3dcc15d33*
+> *Author: Frank Hunleth <fhunleth@troodon-software.com
+> <fhunleth@troodon-software.com>>*
+> *Date:   Tue Jun 21 12:46:53 2016 -0400*
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160703/4fd5a39f/attachment.html>
