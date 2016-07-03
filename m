@@ -1,33 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 10:26:53 +0200
-Subject: [Buildroot] [git commit] babeld: needs MMU as it uses fork()
-Message-ID: <20160703082717.8BB1080F5F@busybox.osuosl.org>
+Date: Sun, 3 Jul 2016 10:26:19 +0200
+Subject: [Buildroot] [PATCH 60/69] dos2unix: remove empty host
+ dependencies definition
+In-Reply-To: <1467498098-23731-61-git-send-email-julien.floret@6wind.com>
+References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
+ <1467498098-23731-61-git-send-email-julien.floret@6wind.com>
+Message-ID: <20160703102619.363d6807@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0b11058511642d4dc6fd26abbb2419b959a9806
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
+On Sun,  3 Jul 2016 00:21:29 +0200, Julien Floret wrote:
+> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+> ---
+>  package/dos2unix/dos2unix.mk | 1 -
+>  1 file changed, 1 deletion(-)
 
-  http://autobuild.buildroot.net/results/986953a9bb49cd68338dc15e1a2f96045e44bf02/
+Applied to master, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/babeld/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/babeld/Config.in b/package/babeld/Config.in
-index 67f499c..5d08c08 100644
---- a/package/babeld/Config.in
-+++ b/package/babeld/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_BABELD
- 	bool "babeld"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Babel is a loop-avoiding distance-vector routing protocol for IPv6
- 	  and IPv4 with fast convergence properties.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
