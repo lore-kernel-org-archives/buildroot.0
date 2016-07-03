@@ -1,45 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 3 Jul 2016 13:00:25 +0200
-Subject: [Buildroot] [git commit] toolchain-external: remove SOURCE/SITE for
-	locally available toolchain
-Message-ID: <20160703111601.333758015F@busybox.osuosl.org>
+Date: Sun, 3 Jul 2016 13:00:53 +0200
+Subject: [Buildroot] [git commit] pkg-generic: check that SITE has a value
+	when SOURCE
+Message-ID: <20160703111601.4EAE38015F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0aa7e0e1750f6ace2879ea8adb1425a41431b79
+commit: https://git.buildroot.net/buildroot/commit/?id=235ac0cc185b453c475cfde32f0ba00da0137e36
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When the custom external toolchain is locally available, we currently
-define SITE/SOURCE to empty variables. Now that the package
-infrastructure doesn't define a value for SOURCE when VERSION is empty,
-it doesn't attempt to download a file anymore, so we can get rid of
-those empty SOURCE/SITE variables in the toolchain-external package.
+Currently, when an user forgets to define a SITE, he gets some fairly
+weird download failure. In order to make things easier to diagnose, this
+commit adds a check in the package infrastructure that verifies that if
+SOURCE has a value, SITE is not empty.
 
+Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ package/pkg-generic.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 7f46234..342bc84 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -453,14 +453,6 @@ TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL ?= \
- 	$(subst -i686-pc-linux-gnu.tar.bz2,.src.tar.bz2,$(subst -i686-pc-linux-gnu-i386-linux.tar.bz2,-i686-pc-linux-gnu.src.tar.bz2,$(TOOLCHAIN_EXTERNAL_SOURCE)))
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index dab455c..0c9c7ab 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -938,6 +938,12 @@ endif
+ 	$(1)-source \
+ 	$(1)-source-check
+ 
++ifneq ($$($(2)_SOURCE),)
++ifeq ($$($(2)_SITE),)
++$$(error $(2)_SITE cannot be empty when $(2)_SOURCE is not)
++endif
++endif
++
+ ifeq ($$(patsubst %/,ERROR,$$($(2)_SITE)),ERROR)
+ $$(error $(2)_SITE ($$($(2)_SITE)) cannot have a trailing slash)
  endif
- 
--# In fact, we don't need to download the toolchain, since it is already
--# available on the system, so force the site and source to be empty so
--# that nothing will be downloaded/extracted.
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED),y)
--TOOLCHAIN_EXTERNAL_SITE =
--TOOLCHAIN_EXTERNAL_SOURCE =
--endif
--
- TOOLCHAIN_EXTERNAL_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
- TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
