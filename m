@@ -1,54 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 3 Jul 2016 16:58:11 +0200
-Subject: [Buildroot] [git commit] pkg-cmake.mk: export the fortran compiler
-	path in the CMake toolchain file
-Message-ID: <20160703145820.ABE0081E3B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/toolchain-common.in: add
+	BR2_TOOLCHAIN_HAS_LIBQUADMATH hidden symbol
+Message-ID: <20160703145820.44FEC81E3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=019ba1dc5283864405f966fbbf9ce799a06f7c27
+commit: https://git.buildroot.net/buildroot/commit/?id=b16f8c7876482864b391963588362e5bdbd99d01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the fortran support is conditional, only enable it when needed.
+This hidden symbol allow to know when libquadmath can be built and
+installed.
 
+Also, declaring this symbol in toolchain-common.in allows to use it in
+both external and buildroot toolchain backend.
+
+This will be needed for adding/improving the fortran support.
+
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Cc: Benjamin Kamath <bkamath@spaceflight.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-cmake.mk                | 3 +++
- support/misc/toolchainfile.cmake.in | 4 ++++
- 2 files changed, 7 insertions(+)
+ toolchain/toolchain-common.in | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 6f0ecf9..9291523 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -236,9 +236,12 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
- 		-e 's#@@STAGING_SUBDIR@@#$(call qstrip,$(STAGING_SUBDIR))#' \
- 		-e 's#@@TARGET_CFLAGS@@#$(call qstrip,$(TARGET_CFLAGS))#' \
- 		-e 's#@@TARGET_CXXFLAGS@@#$(call qstrip,$(TARGET_CXXFLAGS))#' \
-+		-e 's#@@TARGET_FCFLAGS@@#$(call qstrip,$(TARGET_FCFLAGS))#' \
- 		-e 's#@@TARGET_LDFLAGS@@#$(call qstrip,$(TARGET_LDFLAGS))#' \
- 		-e 's#@@TARGET_CC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC)))#' \
- 		-e 's#@@TARGET_CXX@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX)))#' \
-+		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
- 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
-+		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
- 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
- 		> $@
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index 5cf381e..e550b8f 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -29,3 +29,7 @@ set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
- # This toolchain file can be used both inside and outside Buildroot.
- set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
- set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
-+if(@@TOOLCHAIN_HAS_FORTRAN@@)
-+  set(CMAKE_Fortran_FLAGS "@@TARGET_FCFLAGS@@ ${CMAKE_Fortran_FLAGS}" CACHE STRING "Buildroot FCFLAGS")
-+  set(CMAKE_Fortran_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_FC@@")
-+endif()
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 847c905..96ce3d1 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -419,3 +419,13 @@ config BR2_TOOLCHAIN_HAS_ATOMIC
+ 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 && BR2_armeb
+ 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 && BR2_xtensa
+ 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 && BR2_ARCH_IS_64
++
++# - libquadmath is not needed/available on all architectures (but gcc
++#   correctly handles this already).
++# - At least, libquadmath is available on:
++#   - i*86
++#   - x86_64
++# - When available, libquadmath requires wchar support.
++config BR2_TOOLCHAIN_HAS_LIBQUADMATH
++	bool
++	default y if BR2_i386 || BR2_x86_64
