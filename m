@@ -1,10 +1,11 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 3 Jul 2016 13:22:45 +0200
-Subject: [Buildroot] [PATCH 19/24 v2] system: split skeleton
-In-Reply-To: <9e2788b68e636c59be89be5cf056b92f70f67427.1466622379.git.yann.morin.1998@free.fr>
+Date: Sun, 3 Jul 2016 13:34:28 +0200
+Subject: [Buildroot] [PATCH 20/24 v2] package/skeleton-systemd: new
+ package
+In-Reply-To: <5869f5146ba204a0688058af4779ea4a1f7da13c.1466622379.git.yann.morin.1998@free.fr>
 References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <9e2788b68e636c59be89be5cf056b92f70f67427.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <8fa352cf-f32f-2b54-0dd3-850fe457dc29@gmail.com>
+ <5869f5146ba204a0688058af4779ea4a1f7da13c.1466622379.git.yann.morin.1998@free.fr>
+Message-ID: <063262bc-03ec-172c-4970-db0bbaa3d656@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +15,9 @@ To: buildroot@busybox.net
 Hi Yann,
 
 Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
-> Move the sysv-related parts to separate skeletons.
-> 
-> The network-related parts of the skeleton will also be useable by the
-> systemd skeleton (but only when systemd-networkd is not enabled), so we
-> also split that out into its own skeleton.
+> Given the very few things to create in the skeleton, there is no real
+> need in having a pre-populated skeleton that we rsync. We can very well
+> just create the directory structure with simple mkdir commands.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
@@ -27,128 +26,101 @@ Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Best regards,
 Romain
 
-
 > ---
->  package/skeleton-sysv/skeleton-sysv.mk                             | 7 +++++++
->  .../network/if-up.d => skeleton-net/etc/network/if-down.d}/.empty  | 0
->  .../{skeleton => skeleton-net}/etc/network/if-post-down.d/.empty   | 0
->  .../{skeleton => skeleton-net}/etc/network/if-pre-up.d/wait_iface  | 0
->  .../network/if-down.d => skeleton-net/etc/network/if-up.d}/.empty  | 0
->  system/{skeleton => skeleton-sysv}/dev/log                         | 0
->  system/{skeleton/dev/shm => skeleton-sysv/dev/pts}/.empty          | 0
->  system/{skeleton/dev/pts => skeleton-sysv/dev/shm}/.empty          | 0
->  system/{skeleton => skeleton-sysv}/etc/fstab                       | 0
->  system/{skeleton => skeleton-sysv}/etc/resolv.conf                 | 0
->  system/{skeleton => skeleton-sysv}/var/cache                       | 0
->  system/{skeleton => skeleton-sysv}/var/lib/misc                    | 0
->  system/{skeleton => skeleton-sysv}/var/lock                        | 0
->  system/{skeleton => skeleton-sysv}/var/log                         | 0
->  system/{skeleton => skeleton-sysv}/var/run                         | 0
->  system/{skeleton => skeleton-sysv}/var/spool                       | 0
->  system/{skeleton => skeleton-sysv}/var/tmp                         | 0
->  system/skeleton/dev/.empty                                         | 0
->  18 files changed, 7 insertions(+)
->  rename system/{skeleton/etc/network/if-up.d => skeleton-net/etc/network/if-down.d}/.empty (100%)
->  rename system/{skeleton => skeleton-net}/etc/network/if-post-down.d/.empty (100%)
->  rename system/{skeleton => skeleton-net}/etc/network/if-pre-up.d/wait_iface (100%)
->  rename system/{skeleton/etc/network/if-down.d => skeleton-net/etc/network/if-up.d}/.empty (100%)
->  rename system/{skeleton => skeleton-sysv}/dev/log (100%)
->  rename system/{skeleton/dev/shm => skeleton-sysv/dev/pts}/.empty (100%)
->  rename system/{skeleton/dev/pts => skeleton-sysv/dev/shm}/.empty (100%)
->  rename system/{skeleton => skeleton-sysv}/etc/fstab (100%)
->  rename system/{skeleton => skeleton-sysv}/etc/resolv.conf (100%)
->  rename system/{skeleton => skeleton-sysv}/var/cache (100%)
->  rename system/{skeleton => skeleton-sysv}/var/lib/misc (100%)
->  rename system/{skeleton => skeleton-sysv}/var/lock (100%)
->  rename system/{skeleton => skeleton-sysv}/var/log (100%)
->  rename system/{skeleton => skeleton-sysv}/var/run (100%)
->  rename system/{skeleton => skeleton-sysv}/var/spool (100%)
->  rename system/{skeleton => skeleton-sysv}/var/tmp (100%)
->  create mode 100644 system/skeleton/dev/.empty
+>  package/Config.in                            |  1 +
+>  package/skeleton-systemd/Config.in           |  7 +++++
+>  package/skeleton-systemd/skeleton-systemd.mk | 43 ++++++++++++++++++++++++++++
+>  system/Config.in                             |  3 +-
+>  4 files changed, 53 insertions(+), 1 deletion(-)
+>  create mode 100644 package/skeleton-systemd/Config.in
+>  create mode 100644 package/skeleton-systemd/skeleton-systemd.mk
 > 
-> diff --git a/package/skeleton-sysv/skeleton-sysv.mk b/package/skeleton-sysv/skeleton-sysv.mk
-> index 6e15b15..ee9e670 100644
-> --- a/package/skeleton-sysv/skeleton-sysv.mk
-> +++ b/package/skeleton-sysv/skeleton-sysv.mk
-> @@ -29,6 +29,13 @@ SKELETON_SYSV_INSTALL_STAGING = YES
->  # - SKELETON_SET_NETWORK_IFUPDOWN_LOOPBACK
->  # - SKELETON_SET_NETWORK_IFUPDOWN_DHCP
+> diff --git a/package/Config.in b/package/Config.in
+> index 9db6332..17356fe 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -4,6 +4,7 @@ menu "Target packages"
+>  	source "package/skeleton/Config.in"
+>  	source "package/skeleton-common/Config.in"
+>  	source "package/skeleton-custom/Config.in"
+> +	source "package/skeleton-systemd/Config.in"
+>  	source "package/skeleton-sysv/Config.in"
 >  
-> +# Even without a configured DHCP interface, we still need the network part
-> +# of the skeleton, because it is used to configure the loopback interface.
-> +define SKELETON_SYSV_INSTALL_TARGET_CMDS
-> +	$(call SKELETON_RSYNC,system/skeleton-sysv,$(TARGET_DIR))
-> +	$(call SKELETON_RSYNC,system/skeleton-net,$(TARGET_DIR))
+>  menu "Audio and video applications"
+> diff --git a/package/skeleton-systemd/Config.in b/package/skeleton-systemd/Config.in
+> new file mode 100644
+> index 0000000..c507264
+> --- /dev/null
+> +++ b/package/skeleton-systemd/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_SKELETON_SYSTEMD
+> +	bool
+> +	select BR2_PACKAGE_HAS_SKELETON
+> +	select BR2_PACKAGE_SKELETON_COMMON
+> +
+> +config BR2_PACKAGE_PROVIDES_SKELETON
+> +	default "skeleton-systemd" if BR2_PACKAGE_SKELETON_SYSTEMD
+> diff --git a/package/skeleton-systemd/skeleton-systemd.mk b/package/skeleton-systemd/skeleton-systemd.mk
+> new file mode 100644
+> index 0000000..e781ce9
+> --- /dev/null
+> +++ b/package/skeleton-systemd/skeleton-systemd.mk
+> @@ -0,0 +1,43 @@
+> +################################################################################
+> +#
+> +# skeleton-systemd
+> +#
+> +################################################################################
+> +
+> +SKELETON_SYSTEMD_SOURCE =
+> +
+> +SKELETON_SYSTEMD_PROVIDES = skeleton
+> +
+> +SKELETON_SYSTEMD_DEPENDENCIES = skeleton-common
+> +
+> +SKELETON_SYSTEMD_ADD_TOOLCHAIN_DEPENDENCY = NO
+> +SKELETON_SYSTEMD_ADD_SKELETON_DEPENDENCY = NO
+> +
+> +# In case we're not using systemd-networkd, use the sysv-like network infra;
+> +# otherwise, the necessary bits are installed by the systemd package.
+> +ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),)
+> +
+> +define SKELETON_SYSTEMD_RSYNC_NETWORK
+> +	 $(call SKELETON_RSYNC,system/skeleton-net,$(TARGET_DIR))
 > +endef
 > +
->  define SKELETON_SYSV_SET_NETWORK
->  	mkdir -p $(TARGET_DIR)/etc/network/
->  	$(SKELETON_SET_NETWORK_IFUPDOWN_LOOPBACK)
-> diff --git a/system/skeleton/etc/network/if-up.d/.empty b/system/skeleton-net/etc/network/if-down.d/.empty
-> similarity index 100%
-> rename from system/skeleton/etc/network/if-up.d/.empty
-> rename to system/skeleton-net/etc/network/if-down.d/.empty
-> diff --git a/system/skeleton/etc/network/if-post-down.d/.empty b/system/skeleton-net/etc/network/if-post-down.d/.empty
-> similarity index 100%
-> rename from system/skeleton/etc/network/if-post-down.d/.empty
-> rename to system/skeleton-net/etc/network/if-post-down.d/.empty
-> diff --git a/system/skeleton/etc/network/if-pre-up.d/wait_iface b/system/skeleton-net/etc/network/if-pre-up.d/wait_iface
-> similarity index 100%
-> rename from system/skeleton/etc/network/if-pre-up.d/wait_iface
-> rename to system/skeleton-net/etc/network/if-pre-up.d/wait_iface
-> diff --git a/system/skeleton/etc/network/if-down.d/.empty b/system/skeleton-net/etc/network/if-up.d/.empty
-> similarity index 100%
-> rename from system/skeleton/etc/network/if-down.d/.empty
-> rename to system/skeleton-net/etc/network/if-up.d/.empty
-> diff --git a/system/skeleton/dev/log b/system/skeleton-sysv/dev/log
-> similarity index 100%
-> rename from system/skeleton/dev/log
-> rename to system/skeleton-sysv/dev/log
-> diff --git a/system/skeleton/dev/shm/.empty b/system/skeleton-sysv/dev/pts/.empty
-> similarity index 100%
-> rename from system/skeleton/dev/shm/.empty
-> rename to system/skeleton-sysv/dev/pts/.empty
-> diff --git a/system/skeleton/dev/pts/.empty b/system/skeleton-sysv/dev/shm/.empty
-> similarity index 100%
-> rename from system/skeleton/dev/pts/.empty
-> rename to system/skeleton-sysv/dev/shm/.empty
-> diff --git a/system/skeleton/etc/fstab b/system/skeleton-sysv/etc/fstab
-> similarity index 100%
-> rename from system/skeleton/etc/fstab
-> rename to system/skeleton-sysv/etc/fstab
-> diff --git a/system/skeleton/etc/resolv.conf b/system/skeleton-sysv/etc/resolv.conf
-> similarity index 100%
-> rename from system/skeleton/etc/resolv.conf
-> rename to system/skeleton-sysv/etc/resolv.conf
-> diff --git a/system/skeleton/var/cache b/system/skeleton-sysv/var/cache
-> similarity index 100%
-> rename from system/skeleton/var/cache
-> rename to system/skeleton-sysv/var/cache
-> diff --git a/system/skeleton/var/lib/misc b/system/skeleton-sysv/var/lib/misc
-> similarity index 100%
-> rename from system/skeleton/var/lib/misc
-> rename to system/skeleton-sysv/var/lib/misc
-> diff --git a/system/skeleton/var/lock b/system/skeleton-sysv/var/lock
-> similarity index 100%
-> rename from system/skeleton/var/lock
-> rename to system/skeleton-sysv/var/lock
-> diff --git a/system/skeleton/var/log b/system/skeleton-sysv/var/log
-> similarity index 100%
-> rename from system/skeleton/var/log
-> rename to system/skeleton-sysv/var/log
-> diff --git a/system/skeleton/var/run b/system/skeleton-sysv/var/run
-> similarity index 100%
-> rename from system/skeleton/var/run
-> rename to system/skeleton-sysv/var/run
-> diff --git a/system/skeleton/var/spool b/system/skeleton-sysv/var/spool
-> similarity index 100%
-> rename from system/skeleton/var/spool
-> rename to system/skeleton-sysv/var/spool
-> diff --git a/system/skeleton/var/tmp b/system/skeleton-sysv/var/tmp
-> similarity index 100%
-> rename from system/skeleton/var/tmp
-> rename to system/skeleton-sysv/var/tmp
-> diff --git a/system/skeleton/dev/.empty b/system/skeleton/dev/.empty
-> new file mode 100644
-> index 0000000..e69de29
+> +define SKELETON_SYSTEMD_SET_NETWORK
+> +	ln -fs ../tmp/resolv.conf $(TARGET_DIR)/etc/resolv.conf
+> +	mkdir -p $(TARGET_DIR)/etc/network/
+> +	$(SKELETON_SET_NETWORK_IFUPDOWN_LOOPBACK)
+> +	$(SKELETON_SET_NETWORK_IFUPDOWN_DHCP)
+> +endef
+> +SKELETON_SYSTEMD_TARGET_FINALIZE_HOOKS += SKELETON_SYSTEMD_SET_NETWORK
+> +
+> +endif # BR2_PACKAGE_SYSTEMD_NETWORKD not set
+> +
+> +define SKELETON_SYSTEMD_INSTALL_TARGET_CMDS
+> +	mkdir -p $(TARGET_DIR)/etc
+> +	mkdir -p $(TARGET_DIR)/home
+> +	mkdir -p $(TARGET_DIR)/srv
+> +	mkdir -p $(TARGET_DIR)/var
+> +	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
+> +	$(SKELETON_SYSTEMD_RSYNC_NETWORK)
+> +endef
+> +
+> +$(eval $(generic-package))
+> diff --git a/system/Config.in b/system/Config.in
+> index 3792be2..17ce832 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -5,7 +5,8 @@ choice
+>  
+>  config BR2_ROOTFS_SKELETON_DEFAULT
+>  	bool "default target skeleton"
+> -	select BR2_PACKAGE_SKELETON_SYSV
+> +	select BR2_PACKAGE_SKELETON_SYSV    if !BR2_INIT_SYSTEMD
+> +	select BR2_PACKAGE_SKELETON_SYSTEMD if BR2_INIT_SYSTEMD
+>  	help
+>  	  Use default target skeleton
+>  
 > 
