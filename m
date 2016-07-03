@@ -1,36 +1,42 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 3 Jul 2016 18:56:17 +0200
-Subject: [Buildroot] [PATCH] lvm2: fix m68k build error
-Message-ID: <20160703165617.GA27285@waldemar-brodkorb.de>
+Date: Sun, 3 Jul 2016 19:08:19 +0200
+Subject: [Buildroot] [PATCH] m68k: binfmt flat configuration fixes
+Message-ID: <20160703170819.GA15135@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable PIE for m68k as it is not supported.
+The situation looks like following for elf2flt and binfmt FLAT:
 
-Fixes following autobuild failures:
-http://autobuild.buildroot.net/results/2f976292ddbb8eddb58cc978f209f4f445b5b756/
-http://autobuild.buildroot.net/results/7a2b1eef06004886be28744bf1c53d027f8d0123/
+Only gcc for m68k implements -msep-data (BR2_BINFMT_FLAT_SEP_DATA)
+so we should depend on m68k.  When the default (BR2_BINFMT_FLAT_ONE)
+is used on m68k, broken binaries are produced, which mainly end up
+in SIGILL, so do not use it for m68k.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/lvm2/lvm2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 62cc4e2..7e66aa2 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -43,7 +43,7 @@ else
- LVM2_CONF_OPTS += --disable-applib
- endif
+diff --git a/arch/Config.in b/arch/Config.in
+index 1fdd36a..92b094a 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -360,11 +360,13 @@ choice
  
--ifeq ($(BR2_arc),y)
-+ifeq ($(BR2_arc)$(BR2_m68k),y)
- LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
- endif
+ config BR2_BINFMT_FLAT_ONE
+ 	bool "One memory region"
++	depends on !BR2_m68k
+ 	help
+ 	  All segments are linked into one memory region.
  
+ config BR2_BINFMT_FLAT_SEP_DATA
+ 	bool "Separate data and code region"
++	depends on BR2_m68k
+ 	help
+ 	  Allow for the data and text segments to be separated and placed in
+ 	  different regions of memory.
 -- 
 2.1.4
