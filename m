@@ -1,58 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  4 Jul 2016 00:24:23 +0200
-Subject: [Buildroot] [PATCH 3/4] qemu: add support for vde2
+Date: Mon,  4 Jul 2016 00:24:24 +0200
+Subject: [Buildroot] [PATCH 4/4] qemu: bump to version 2.6.0
 In-Reply-To: <1467584664-11640-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1467584664-11640-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1467584664-11640-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1467584664-11640-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Maes <simonn.maes@gmail.com>
-
-Additional configuration for qemu package:
-- Enable VDE2 support for qemu
-
-Signed-off-by: Simon Maes <simonn.maes@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qemu/Config.in.host | 7 +++++++
- package/qemu/qemu.mk        | 5 +++++
- 2 files changed, 12 insertions(+)
+ package/qemu/qemu.hash | 2 +-
+ package/qemu/qemu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index 227749a..b3eb590 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -31,4 +31,11 @@ config BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
- 	  Enables the build of the user-land emulator, which allows to
- 	  run user-space applications.
- 
-+config BR2_PACKAGE_HOST_QEMU_VDE2
-+	bool "VDE2 support"
-+	help
-+	  Enables VDE2 support. VDE2 stands for Virtual Distributed
-+	  Ethernet and can be used to create virtual switches to
-+	  "plug" both physical and virtual machines in them.
-+
- endif
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index d35960a..2d6d96c 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,2 +1,2 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256 28d9946e43765a44ccccca3cba5f4f9034f2759ec1f2ce16594ddb6776c8efe6  qemu-2.5.1.1.tar.bz2
++sha256 c9ac4a651b273233d21b8bec32e30507cb9cce7900841febc330956a1a8434ec  qemu-2.6.0.tar.bz2
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 5c3cfea..3ca0958 100644
+index 3ca0958..5ca0e77 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -105,6 +105,11 @@ else # BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
- HOST_QEMU_OPTS += --disable-linux-user
- endif # BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_HOST_QEMU_VDE2),y)
-+HOST_QEMU_OPTS += --enable-vde
-+HOST_QEMU_DEPENDENCIES += host-vde2
-+endif
-+
- define HOST_QEMU_CONFIGURE_CMDS
- 	cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
- 		--target-list="$(HOST_QEMU_TARGETS)"    \
+-QEMU_VERSION = 2.5.1.1
++QEMU_VERSION = 2.6.0
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
+ QEMU_SITE = http://wiki.qemu.org/download
+ QEMU_LICENSE = GPLv2, LGPLv2.1, MIT, BSD-3c, BSD-2c, Others/BSD-1c
 -- 
 2.7.4
