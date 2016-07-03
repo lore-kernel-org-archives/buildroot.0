@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 Jul 2016 11:49:53 +0200
-Subject: [Buildroot] [PATCH 05/13] initscripts: remove SOURCE
+Date: Sun,  3 Jul 2016 11:49:52 +0200
+Subject: [Buildroot] [PATCH 04/13] getent: remove VERSION/SOURCE
 In-Reply-To: <1467539401-3411-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1467539401-3411-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1467539401-3411-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1467539401-3411-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,27 +11,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Now that the package infrastructure doen't attempt to download a package
-that has an empty version string, there's no need to define the SOURCE
-variable in the initscripts package.
+that has an empty version string, there's no need to define the VERSION
+and SOURCE variables in the getent package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/initscripts/initscripts.mk | 3 ---
- 1 file changed, 3 deletions(-)
+ package/getent/getent.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/initscripts/initscripts.mk b/package/initscripts/initscripts.mk
-index a5d8db7..cfee155 100644
---- a/package/initscripts/initscripts.mk
-+++ b/package/initscripts/initscripts.mk
-@@ -4,9 +4,6 @@
+diff --git a/package/getent/getent.mk b/package/getent/getent.mk
+index 18f0991..ed249e8 100644
+--- a/package/getent/getent.mk
++++ b/package/getent/getent.mk
+@@ -4,10 +4,6 @@
  #
  ################################################################################
  
--# source included in buildroot
--INITSCRIPTS_SOURCE =
+-# source included in Buildroot
+-GETENT_SOURCE =
 -
- define INITSCRIPTS_INSTALL_TARGET_CMDS
- 	mkdir -p  $(TARGET_DIR)/etc/init.d
- 	$(INSTALL) -D -m 0755 package/initscripts/init.d/* $(TARGET_DIR)/etc/init.d/
+-GETENT_VERSION = buildroot-$(BR2_VERSION)
+ GETENT_LICENSE = LGPLv2.1+
+ 
+ # For glibc toolchains, we use the getent program built/installed by
 -- 
 2.7.4
