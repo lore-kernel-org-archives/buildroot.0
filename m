@@ -1,88 +1,56 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 3 Jul 2016 11:53:10 +0200
-Subject: [Buildroot] [PATCH 14/24 v2] core/pkg-generic: allow packages
- to declare target-finalize hooks
-In-Reply-To: <464b6d13a2edac4d3fabbb9b712194c53987f1be.1466622379.git.yann.morin.1998@free.fr>
-References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <464b6d13a2edac4d3fabbb9b712194c53987f1be.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <d689d075-0085-c9ba-3b72-b5507902c466@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Jul 2016 11:53:21 +0200
+Subject: [Buildroot] [PATCH] core: do not attempt downloads with no
+ _VERSION set
+In-Reply-To: <20160124223345.GA31752@vostro>
+References: <20160124223345.GA31752@vostro>
+Message-ID: <20160703115321.33abb9be@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello,
 
-Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
-> Currently, our skeleton declares target-finalize hooks, and does so
-> unconditionally.
+On Mon, 25 Jan 2016 00:33:45 +0200, Alex Suykov wrote:
+> Currently, when the package defines no _SOURCE and no _VERSION
+> variables, we end up trying to download <PACKAGE>-undefined.tar.gz.
 > 
-> That's fine since we have a single skeleton package, and thus the hooks
-> it declares need not be conditional.
+> This is utterly pointless.
 > 
-> However, we're going to be adding more skeleton packages, one for the
-> custom skeleton, one for the sysv-like init systems and, eventually, one
-> for the systemd init system.
+> Change the logic to not attempt a download when neither _SOURCE
+> nor _VERSION is set:
+>   - do not set an undefined _VERSION to "undefined"
+>   - do not append an empty (or "undefined") version to the package
+>     rawname
+>   - use the package rawname in the MESSAGE macro
 > 
-> In that case, we will not want the sysv-like target-finalize hooks to be
-> applied when the init system is systemd. And the other way around, of
-> course. And so on for each type of skeleton...
+> Consequently, for packages that have no _VERSION, the build
+> directory will be just the package name (which to some may look
+> nicer than the current "package-undefined").
 > 
-> The only solution we have so far is to enclose all target-finalize hooks
-> declarations between an ifeq-block to check that the package is enabled.
-> This is cumbersome to do, even more so when the hooks are themselves
-> conditional.
+> Furthermore, the message trace is also a bit leaner (to the same
+> people that find "package" nicer than "package-undefined").
 > 
-> Add support in the core infra for packages to register such hooks, like
-> is done to register users, device tables and whatnots.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Thanks for this patch! I just sent a patch series that includes your
+patch, plus several follow-up patches to clean up existing patches that
+needlessly define _SOURCE to the empty value.
+
+See http://lists.busybox.net/pipermail/buildroot/2016-July/166270.html
+and following e-mails.
+
+Consequently, I've marked your patch as "Changes Requested" in
+patchwork. Of course, the new iteration preserves your authorship.
 
 Best regards,
-Romain
 
-
-> ---
->  docs/manual/adding-packages-hooks.txt | 7 +++++++
->  package/pkg-generic.mk                | 2 ++
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/docs/manual/adding-packages-hooks.txt b/docs/manual/adding-packages-hooks.txt
-> index 5b5bf6a..d25092a 100644
-> --- a/docs/manual/adding-packages-hooks.txt
-> +++ b/docs/manual/adding-packages-hooks.txt
-> @@ -77,3 +77,10 @@ others, use the following variables:
->  
->  * +$(SRCDIR)+: the path to the overridden source directory
->  * +$(@D)+: the path to the build directory
-> +
-> +==== Target-finalize hook
-> +
-> +Packages may also register hooks in +LIBFOO_TARGET_FINALIZE_HOOKS+.
-> +These hooks are run after all packages are built, but before the
-> +filesystem images are generated. They are seldom used, and your
-> +package probably do not need them.
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 3281374..4415342 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -558,6 +558,7 @@ $(2)_PRE_INSTALL_IMAGES_HOOKS   ?=
->  $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
->  $(2)_PRE_LEGAL_INFO_HOOKS       ?=
->  $(2)_POST_LEGAL_INFO_HOOKS      ?=
-> +$(2)_TARGET_FINALIZE_HOOKS      ?=
->  
->  # human-friendly targets and target sequencing
->  $(1):			$(1)-install
-> @@ -858,6 +859,7 @@ endif
->  ifneq ($$($(2)_USERS),)
->  PACKAGES_USERS += $$($(2)_USERS)$$(sep)
->  endif
-> +TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
->  
->  ifeq ($$($(2)_SITE_METHOD),svn)
->  DL_TOOLS_DEPENDENCIES += svn
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
