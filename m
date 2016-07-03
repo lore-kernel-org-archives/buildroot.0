@@ -1,45 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 15:53:09 +0200
-Subject: [Buildroot] [PATCH v3 2/2] gcc: apply patches stored in global
- patches directories
-In-Reply-To: <1460521232-28778-3-git-send-email-hchunhui@mail.ustc.edu.cn>
-References: <1460521232-28778-1-git-send-email-hchunhui@mail.ustc.edu.cn>
- <1460521232-28778-3-git-send-email-hchunhui@mail.ustc.edu.cn>
-Message-ID: <20160703155309.4012a0d0@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 03 Jul 2016 16:02:16 +0200
+Subject: [Buildroot] [PATCH v3] package/quagga: Add systemd.service file
+In-Reply-To: <1467533939-26606-1-git-send-email-nroach44@gmail.com> (Nathaniel
+ Roach's message of "Sun, 3 Jul 2016 16:18:59 +0800")
+References: <1467533939-26606-1-git-send-email-nroach44@gmail.com>
+Message-ID: <87shvqx1jr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Nathaniel" == Nathaniel Roach <nroach44@gmail.com> writes:
 
-On Wed, 13 Apr 2016 04:20:32 +0000, Chunhui He wrote:
-> When building host gcc, patches stored in global patches directories
-> are skipped.
-> This patch fixes the unexpected behavior.
-> 
-> Signed-off-by: Chunhui He <hchunhui@mail.ustc.edu.cn>
-> ---
->  package/gcc/gcc.mk | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
+ > Use a template service file as all of the daemons use almost
+ > identical arguments and generally appear the same to the init
+ > system.
 
-We had some pretty lengthy discussion today with Peter and Yann about
-this patch, arguing about the various possibilities to solve this
-problem. In the end, even though your solution is a bit of a hack, it's
-the one that is the easiest in terms of on-going maintenance, so I
-applied your patch after doing some minor modifications:
+ > We "Wants=" zebra as that's the daemon for interfacing to the
+ > kernel, and it's not required for the other daemons to work
+ > but it's probably going to be used in nearly all setups.
 
-    [Thomas:
-     - rename the loop variable from 'D' to 'patchdir'
-     - add some additional comments
-     - remove final ; at end of loop when applying the patches, since it's
-       not needed]
+ > /usr/bin/env is needed as systemd doesn't allow the instance
+ > variable (%i) in the executable path.
 
-Thanks!
+ > We don't enable these services by default as this would require
+ > creating configuration and /etc/default files. (And is easily
+ > achieved with an FS overlay)
 
-Thomas
+ > Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+ > ---
+ > Changes v2 -> v3:
+ >  - Remove invalid references to quagga.service (Arnout)
+ >  - Check if the binary is executable before trying to start it
+ >    (Arnout)
+ >  - Remove PID file arguments and options (Arnout)
+ >  - Add reload capability as the daemons do support it
+
+Committed after removing killmode/killsignal/restartsec as suggested by
+Maxime, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
