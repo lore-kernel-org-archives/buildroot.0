@@ -1,52 +1,53 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 3 Jul 2016 10:42:56 +0200
-Subject: [Buildroot] [PATCH 07/24 v2] system: provide no default for
- custom skeleton path
-In-Reply-To: <fc45f1eb2c78908429ed2dd0551097a3df653ccf.1466622379.git.yann.morin.1998@free.fr>
-References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <fc45f1eb2c78908429ed2dd0551097a3df653ccf.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <19c2e8c7-fae7-b828-8aff-8653ec5d705b@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 3 Jul 2016 10:42:32 +0200
+Subject: [Buildroot] [PATCH 1/3] docs/manual: document FOO_GIT_SUBMODULE
+In-Reply-To: <379161dbd5720bdb842077d05b88e7437206ead8.1467534694.git.yann.morin.1998@free.fr>
+References: <cover.1467534694.git.yann.morin.1998@free.fr>
+ <379161dbd5720bdb842077d05b88e7437206ead8.1467534694.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMJgg7gsPbj-m2OuWv3Wm-gnmusy5BzEO2NQLDc-7MQJ0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Yann, all,
 
-Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
-> Being custom means that our default one is not suitable to start with.
-> 
-> So there is no reson to offer it as the default path.
-> 
-> Add a separating empty line, for good measure, too.
-> 
+On Sun, Jul 3, 2016 at 10:33 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  system/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/system/Config.in b/system/Config.in
-> index 4f9f270..04b886b 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -179,9 +179,9 @@ config BR2_ROOTFS_SKELETON_CUSTOM
->  endchoice
->  
->  if BR2_ROOTFS_SKELETON_CUSTOM
+>  docs/manual/adding-packages-generic.txt | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index de8aca2..2d7e677 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -310,6 +310,12 @@ information is (assuming the package name is +libfoo+) :
+>       the package source code. Buildroot copies the contents of the
+>       source directory into the package's build directory.
+>
+> +* +LIBFOO_GIT_SUBMODULES+, when +LIBFOO_SITE_METHOD=git+, will create
+> +  an archive with the git submodules in the repository.
+> +  Note that we try not to use such git submodules when they contain
+> +  bundled librraries, in which case we prefer to use those libraries
+s/librraries/libraries/
+
+> +  from their own package.
 > +
->  config BR2_ROOTFS_SKELETON_CUSTOM_PATH
->  	string "custom target skeleton path"
-> -	default "system/skeleton"
+>  * +LIBFOO_STRIP_COMPONENTS+ is the number of leading components
+>    (directories) that tar must strip from file names on extraction.
+>    The tarball for most packages has one leading component named
+> --
+> 2.7.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Then, I think we should add a check in skeleton.mk if
-BR2_ROOTFS_SKELETON_CUSTOM_PATH is not empty and print an explicit error message.
+Regards,
 
-Best regards,
-Romain
-
-
->  	help
->  	  Path to custom target skeleton.
->  
-> 
+-- 
+Samuel
