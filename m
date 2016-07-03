@@ -1,10 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  3 Jul 2016 15:47:45 +0200
-Subject: [Buildroot] [PATCH v3 09/14] toolchain/toolchain-external: enable
-	fortran check when it is selected
+Date: Sun,  3 Jul 2016 15:47:46 +0200
+Subject: [Buildroot] [PATCH v3 10/14] toolchain/toolchain-external: add
+	libgfortran and libquadmath to the TOOLCHAIN_EXTERNAL_LIBS list
 In-Reply-To: <20160703134750.7516-1-s.martin49@gmail.com>
 References: <20160703134750.7516-1-s.martin49@gmail.com>
-Message-ID: <20160703134750.7516-10-s.martin49@gmail.com>
+Message-ID: <20160703134750.7516-11-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,40 +16,36 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 ---
 changes v1->v2:
-- none
+- s/USR_LIB_EXTERNAL_LIBS/TOOLCHAIN_EXTERNAL_LIBS/
+- only install libquadmath for x86{,_64} target (not built on other
+  arch.)
 
 changes v2->v3:
-- remove CFLAGS in the check call (Thomas P.)
+- s/BR2_I386/BR2_i386/ (Thomas P.)
+- use BR2_TOOLCHAIN_HAS_LIBQUADMATH to drive the libquadmath
+  installation
 ---
- toolchain/toolchain-external/toolchain-external.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ toolchain/toolchain-external/toolchain-external.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 342bc84..4240a9b 100644
+index 4240a9b..d6a3d0e 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -160,6 +160,7 @@ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += \
- TOOLCHAIN_EXTERNAL_CROSS = $(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
- TOOLCHAIN_EXTERNAL_CC = $(TOOLCHAIN_EXTERNAL_CROSS)gcc$(TOOLCHAIN_EXTERNAL_SUFFIX)
- TOOLCHAIN_EXTERNAL_CXX = $(TOOLCHAIN_EXTERNAL_CROSS)g++$(TOOLCHAIN_EXTERNAL_SUFFIX)
-+TOOLCHAIN_EXTERNAL_FC = $(TOOLCHAIN_EXTERNAL_CROSS)gfortran$(TOOLCHAIN_EXTERNAL_SUFFIX)
- TOOLCHAIN_EXTERNAL_READELF = $(TOOLCHAIN_EXTERNAL_CROSS)readelf$(TOOLCHAIN_EXTERNAL_SUFFIX)
+@@ -90,6 +90,14 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ TOOLCHAIN_EXTERNAL_LIBS += libstdc++.so.*
+ endif
  
- ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
-@@ -521,6 +522,9 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
- 	if test "$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
- 		$(call check_cplusplus,$(TOOLCHAIN_EXTERNAL_CXX)) ; \
- 	fi ; \
-+	if test "$(BR2_TOOLCHAIN_HAS_FORTRAN)" = "y" ; then \
-+		$(call check_fortran,$(TOOLCHAIN_EXTERNAL_FC)) ; \
-+	fi ; \
- 	if test "$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
- 		$(call check_uclibc,$${SYSROOT_DIR}) ; \
- 	elif test "$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
-@@ -796,4 +800,3 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
- endef
++ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
++TOOLCHAIN_EXTERNAL_LIBS += libgfortran.so.*
++# fortran needs quadmath on x86 and x86_64
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBQUADMATH),y)
++TOOLCHAIN_EXTERNAL_LIBS += libquadmath.so*
++endif
++endif
++
+ TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
  
- $(eval $(generic-package))
--
+ # Details about sysroot directory selection.
 -- 
 2.9.0
