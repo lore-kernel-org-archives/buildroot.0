@@ -1,51 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 3 Jul 2016 16:58:11 +0200
-Subject: [Buildroot] [git commit] toolchain/helpers: add fortran check
-Message-ID: <20160703145820.BC99581E3B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain: add hidden symbol for fortran
+	support in the toolchain
+Message-ID: <20160703145820.772D881E3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26db83c8a03bd7199902a9bcb62a0b63537c0048
+commit: https://git.buildroot.net/buildroot/commit/?id=b8a05376f607d4212dca615cf723df67228f5a65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This symbol should be used in all packages requiring/testing for fortran
+support.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-[Thomas: remove extension for the generated temporary file, since it's
-really an executable, not an object file.]
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ toolchain/toolchain-common.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 108fdaa..3991bc1 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -311,6 +311,24 @@ check_cplusplus = \
- 	fi
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 96ce3d1..65df31b 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -21,6 +21,9 @@ config BR2_ENABLE_LOCALE
+ config BR2_INSTALL_LIBSTDCPP
+ 	bool
  
- #
-+#
-+# Check that the external toolchain supports Fortran
-+#
-+# $1: cross-gfortran path
-+#
-+check_fortran = \
-+	__CROSS_FC=$(strip $1) ; \
-+	__o=$(BUILD_DIR)/.br-toolchain-test-fortran.tmp ; \
-+	printf 'program hello\n\tprint *, "Hello Fortran!\\n"\nend program hello\n' | \
-+	$${__CROSS_FC} -x f95 -o $${__o} - ; \
-+	if test $$? -ne 0 ; then \
-+		rm -f $${__o}* ; \
-+		echo "Fortran support is selected but is not available in external toolchain" ; \
-+		exit 1 ; \
-+	fi ; \
-+	rm -f $${__o}* \
++config BR2_TOOLCHAIN_HAS_FORTRAN
++	bool
 +
-+#
- # Check that the cross-compiler given in the configuration exists
- #
- # $1: cross-gcc path
+ config BR2_TOOLCHAIN_HAS_THREADS
+ 	bool
+ 
