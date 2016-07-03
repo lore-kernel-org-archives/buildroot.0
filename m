@@ -1,75 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 Jul 2016 11:49:49 +0200
-Subject: [Buildroot] [PATCH 01/13] core: do not attempt downloads with no
-	_VERSION set
-Message-ID: <1467539401-3411-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun,  3 Jul 2016 11:49:51 +0200
+Subject: [Buildroot] [PATCH 03/13] pkg-virtual: remove VERSION/SOURCE
+In-Reply-To: <1467539401-3411-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1467539401-3411-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1467539401-3411-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Alex Suykov <alex.suykov@gmail.com>
+Now that the package infrastructure doen't attempt to download a package
+that has an empty version string, there's no need to define the VERSION
+and SOURCE variables in the virtual package infrastructure.
 
-Currently, when the package defines no _SOURCE and no _VERSION
-variables, we end up trying to download <PACKAGE>-undefined.tar.gz.
-
-This is utterly pointless.
-
-Change the logic to not attempt a download when neither _SOURCE
-nor _VERSION is set:
-  - do not set an undefined _VERSION to "undefined"
-  - do not append an empty (or "undefined") version to the package
-    rawname
-
-Consequently, for packages that have no _VERSION, the build
-directory will be just the package name (which to some may look
-nicer than the current "package-undefined").
-
-Furthermore, the message trace is also a bit leaner (to the same
-people that find "package" nicer than "package-undefined").
-
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ package/pkg-virtual.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 94187f9..dab455c 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -386,8 +386,6 @@ ifndef $(2)_VERSION
-   $(2)_DL_VERSION := $$($(3)_DL_VERSION)
-  else ifdef $(3)_VERSION
-   $(2)_DL_VERSION := $$($(3)_VERSION)
-- else
--  $(2)_DL_VERSION = undefined
-  endif
- else
-  $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
-@@ -398,8 +396,8 @@ ifdef $(3)_OVERRIDE_SRCDIR
-   $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
- endif
+diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+index 3fbe0a3..bcb2cad 100644
+--- a/package/pkg-virtual.mk
++++ b/package/pkg-virtual.mk
+@@ -43,12 +43,6 @@ endif
  
--$(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
--$(2)_RAW_BASE_NAME = $$($(2)_RAWNAME)-$$($(2)_VERSION)
-+$(2)_BASE_NAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
-+$(2)_RAW_BASE_NAME = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
- $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
- $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+ $(2)_IS_VIRTUAL = YES
  
-@@ -429,7 +427,7 @@ endif
- ifndef $(2)_SOURCE
-  ifdef $(3)_SOURCE
-   $(2)_SOURCE = $$($(3)_SOURCE)
-- else
-+ else ifdef $(2)_VERSION
-   $(2)_SOURCE			?= $$($(2)_RAW_BASE_NAME).tar.gz
-  endif
- endif
+-# A virtual package does not have any source associated
+-$(2)_SOURCE =
+-
+-# Fake a version string, so it looks nicer in the build log
+-$(2)_VERSION = virtual
+-
+ # Add dependency against the provider
+ $(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
+ 
 -- 
 2.7.4
