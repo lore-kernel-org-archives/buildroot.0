@@ -1,91 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Jul 2016 00:54:46 +0200
-Subject: [Buildroot] [PATCH 3/4] package/pulseaudio: add WebRTC optional
- dependency
-In-Reply-To: <1467585172-10299-3-git-send-email-romain.naour@gmail.com>
-References: <1467585172-10299-1-git-send-email-romain.naour@gmail.com>
- <1467585172-10299-3-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160703225446.GG3482@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Jul 2016 00:56:03 +0200
+Subject: [Buildroot] [PATCH 3/3] package/transmission: add optional
+	support for libminiupnpc/libnatpmp
+In-Reply-To: <87eg7apq1l.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sun, 03 Jul 2016 19:52:38 +0200")
+References: <1467497893-16126-1-git-send-email-bernd.kuhls@t-online.de>
+ <1467497893-16126-3-git-send-email-bernd.kuhls@t-online.de>
+ <87eg7apq1l.fsf@dell.be.48ers.dk>
+Message-ID: <87furql4ak.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+ >> Transmission bundles copies of both libraries and uses them if they are
+ >> not provided by the system. This patch allows transmission to use the
+ >> system libraries of libminiupnpc/libnatpmp.
 
-On 2016-07-04 00:32 +0200, Romain Naour spake thusly:
-> WebRTC is an optional pulseaudio dependency which require C++11
-> support in the toolchain.
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-This change has nothing to do with the c++11 support, has it?
+ > Committed, thanks.
 
-> Also the autotool script provide
-> --enable/--disable option for this support, so use them in
-> pulseaudio.mk.
+This unfortunately causes some build issues. Care to have a look?
 
-I would rephrase that commit log such as;
-
-    package/pulseaudio: explicitly enable/disable WebRTC support
-
-    Currently, pulseaudio optionally depends on webrtc if it is enabled.
-
-    However, it is never explcitly enabled or disabled, although
-    pulseaudio's ./configure has --enable/disable-webrtc-aec.
-
-    Forcibly enable/disable webrtc support usign those options.
-
-    Signed-off-by: You
-    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-(You can keep my reviewd-by tag when you respin)
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/pulseaudio/pulseaudio.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-> index bc95d91..9ef11bc 100644
-> --- a/package/pulseaudio/pulseaudio.mk
-> +++ b/package/pulseaudio/pulseaudio.mk
-> @@ -34,7 +34,6 @@ PULSEAUDIO_DEPENDENCIES = \
->  	$(if $(BR2_PACKAGE_BLUEZ_UTILS),bluez_utils) \
->  	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
->  	$(if $(BR2_PACKAGE_FFTW),fftw) \
-> -	$(if $(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),webrtc-audio-processing) \
->  	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
->  
->  ifeq ($(BR2_PACKAGE_GDBM),y)
-> @@ -88,6 +87,13 @@ else
->  PULSEAUDIO_CONF_OPTS += --disable-udev
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),y)
-> +PULSEAUDIO_CONF_OPTS += --enable-webrtc-aec
-> +PULSEAUDIO_DEPENDENCIES += webrtc-audio-processing
-> +else
-> +PULSEAUDIO_CONF_OPTS += --disable-webrtc-aec
-> +endif
-> +
->  ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
->  # The optional webrtc echo canceller is written in C++, causing auto* to want
->  # to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
-> -- 
-> 2.5.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+http://autobuild.buildroot.org/results/bcd/bcdc704c48ccccc2f1203983574546dfca60ded7/build-end.log
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
