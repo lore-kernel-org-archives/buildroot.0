@@ -1,33 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 09:34:19 +0200
-Subject: [Buildroot] [git commit] xlib_libXau: add explicit dependencies for
-	host variant
-Message-ID: <20160703073819.4B499807C8@busybox.osuosl.org>
+Date: Sun, 3 Jul 2016 09:35:13 +0200
+Subject: [Buildroot] [git commit] xlib_libXfixes: add explicit dependencies
+	for host variant
+Message-ID: <20160703073819.9026A807C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b37ab3aea6fa2dde4b2d2512a9d30dfea21548d2
+commit: https://git.buildroot.net/buildroot/commit/?id=f31e626b0dbb61feb89a6a22d3b97176c1b26c7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libXau/xlib_libXau.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/x11r7/xlib_libXfixes/xlib_libXfixes.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/x11r7/xlib_libXau/xlib_libXau.mk b/package/x11r7/xlib_libXau/xlib_libXau.mk
-index 8ef48e4..1c50cb2 100644
---- a/package/x11r7/xlib_libXau/xlib_libXau.mk
-+++ b/package/x11r7/xlib_libXau/xlib_libXau.mk
-@@ -11,6 +11,8 @@ XLIB_LIBXAU_LICENSE = MIT
- XLIB_LIBXAU_LICENSE_FILES = COPYING
- XLIB_LIBXAU_INSTALL_STAGING = YES
- XLIB_LIBXAU_DEPENDENCIES = host-pkgconf xutil_util-macros xproto_xproto
-+HOST_XLIB_LIBXAU_DEPENDENCIES = \
-+	host-pkgconf host-xutil_util-macros host-xproto_xproto
+diff --git a/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk b/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
+index 2a10d49..82799a3 100644
+--- a/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
++++ b/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
+@@ -11,6 +11,9 @@ XLIB_LIBXFIXES_LICENSE = MIT
+ XLIB_LIBXFIXES_LICENSE_FILES = COPYING
+ XLIB_LIBXFIXES_INSTALL_STAGING = YES
+ XLIB_LIBXFIXES_DEPENDENCIES = xproto_fixesproto xlib_libX11 xproto_xextproto xproto_xproto
++HOST_XLIB_LIBXFIXES_DEPENDENCIES = \
++	host-xproto_fixesproto host-xlib_libX11 host-xproto_xextproto \
++	host-xproto_xproto
  
  $(eval $(autotools-package))
  $(eval $(host-autotools-package))
