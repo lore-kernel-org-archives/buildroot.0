@@ -1,34 +1,68 @@
-From: Julien Floret <julien.floret@6wind.com>
-Date: Sun, 3 Jul 2016 20:47:54 +0200
-Subject: [Buildroot] [PATCH 04/69] cdrkit: add explicit dependencies for
-	host variant
-In-Reply-To: <CAHfJR7j5+zZqBwXvosJwSs71J8gzxuZmAYAze=tMjxeXXG7jLg@mail.gmail.com>
-References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-5-git-send-email-julien.floret@6wind.com>
- <20160703083649.02b0b8cc@free-electrons.com>
- <CAHfJR7j5+zZqBwXvosJwSs71J8gzxuZmAYAze=tMjxeXXG7jLg@mail.gmail.com>
-Message-ID: <CAHfJR7gOV3FB2nBxe-WxjE8_aR6yre81=rvr9K=iu8pVWcSFYA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  3 Jul 2016 21:01:58 +0200
+Subject: [Buildroot] [PATCH] docs/manual: document
+	BR2_ROOTFS_POST_FAKEROOT_SCRIPT
+Message-ID: <1467572518-4536-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> On Sun,  3 Jul 2016 00:20:33 +0200, Julien Floret wrote:
->>> Signed-off-by: Julien Floret <julien.floret@6wind.com>
->>> ---
->>>  package/cdrkit/cdrkit.mk | 1 +
->>>  1 file changed, 1 insertion(+)
->>
->> Applied to master, thanks.
->
-> Hm, this commit seems be missing in buildroot upstream, I don't see it
-> amongst the others.
-> Thanks a lot!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/customize-rootfs.txt | 33 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 32 insertions(+), 1 deletion(-)
 
-I mean, "[PATCH 04/69] cdrkit: add explicit dependencies for host variant"
-was marked as applied, but there was no associate git commit, so unless
-I missed something, the modification doesn't seem to be in buildroot
-upstream git tree.
-
-Julien
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index 558bd72..8d8acd2 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -61,7 +61,7 @@ In addition, you may also use these environment variables:
+     stored
+   - +BASE_DIR+: the base output directory
+ 
+-Below two more methods of customizing the target filesystem are
++Below three more methods of customizing the target filesystem are
+ described, but they are not recommended.
+ 
+ Direct modification of the target filesystem::
+@@ -104,4 +104,35 @@ This method is not recommended because it duplicates the entire
+   skeleton, which prevents taking advantage of the fixes or improvements
+   brought to the default skeleton in later Buildroot releases.
+ 
++Post-fakeroot scripts (+BR2_ROOTFS_POST_FAKEROOT_SCRIPT+)::
+++
++When aggregating the final images, some parts of the process requires
++  root rights: creating device nodes in `/dev`, setting permissions or
++  ownership to files and directories... To avoid requiring actual root
++  rights, Buildroot uses +fakeroot+ to simulate root rights. This is not
++  a complete substitute for actually being root, but is enough for what
++  Buildroot needs.
+++
++Post-fakeroot scripts are shell scripts that are called at the 'end' of
++  the fakeroot phase, 'right before' the filesystem image generator is
++  called. As such, they are called in the fakeroot context.
+++
++Post-fakeroot scripts can be useful in case you need to tweak the
++  filesystem to do modifications that are usually only available to the
++  root user.
+++
++.Note:
++It is recommended to use the existing mechanisms to set file permissions
++  or create entries in `/dev` (see xref:customize-device-permission[]) or
++  to create users (see xref:customize-users[])
+++
++.Note:
++The difference between post-build scripts (above) and fakeroot scripts,
++  is that post-build scripts are not called in the fakeroot context.
+++
++.Note;
++Using `fakeroot` is not an absolute substitute for actually being root.
++  `fakeroot` only ever fakes the file access rights and types (regular,
++  block-or-char device...) and uid/gid; these are emulated them in-memory.
++
+ include::customize-device-permission-tables.txt[]
+-- 
+2.7.4
