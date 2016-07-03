@@ -1,46 +1,40 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  3 Jul 2016 15:47:40 +0200
-Subject: [Buildroot] [PATCH v3 04/14] toolchain: add hidden symbol for
-	fortran support in the toolchain
+Date: Sun,  3 Jul 2016 15:47:41 +0200
+Subject: [Buildroot] [PATCH v3 05/14] docs/manual: document dependency on
+	fortran
 In-Reply-To: <20160703134750.7516-1-s.martin49@gmail.com>
 References: <20160703134750.7516-1-s.martin49@gmail.com>
-Message-ID: <20160703134750.7516-5-s.martin49@gmail.com>
+Message-ID: <20160703134750.7516-6-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This symbol should be used in all packages requiring/testing for fortran
-support.
-
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 ---
-changes v1->v2:
-- none
-
 changes v2->v3:
-- update A/R/T tags
+- new patch
 ---
- toolchain/toolchain-common.in | 3 +++
- 1 file changed, 3 insertions(+)
+ docs/manual/adding-packages-directory.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 96ce3d1..65df31b 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -21,6 +21,9 @@ config BR2_ENABLE_LOCALE
- config BR2_INSTALL_LIBSTDCPP
- 	bool
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index ee4a721..dc66f00 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -318,6 +318,10 @@ use in the comment.
+ ** Dependency symbol: +BR2_INSTALL_LIBSTDCPP+
+ ** Comment string: `C++`
  
-+config BR2_TOOLCHAIN_HAS_FORTRAN
-+	bool
++* Fortran support
++** Dependency symbol: +BR2_TOOLCHAIN_HAS_FORTRAN+
++** Comment string: `fortran`
 +
- config BR2_TOOLCHAIN_HAS_THREADS
- 	bool
- 
+ * thread support
+ ** Dependency symbol: +BR2_TOOLCHAIN_HAS_THREADS+
+ ** Comment string: +threads+ (unless +BR2_TOOLCHAIN_HAS_THREADS_NPTL+
 -- 
 2.9.0
