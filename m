@@ -1,31 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Jul 2016 00:56:03 +0200
-Subject: [Buildroot] [PATCH 3/3] package/transmission: add optional
-	support for libminiupnpc/libnatpmp
-In-Reply-To: <87eg7apq1l.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sun, 03 Jul 2016 19:52:38 +0200")
-References: <1467497893-16126-1-git-send-email-bernd.kuhls@t-online.de>
- <1467497893-16126-3-git-send-email-bernd.kuhls@t-online.de>
- <87eg7apq1l.fsf@dell.be.48ers.dk>
-Message-ID: <87furql4ak.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  4 Jul 2016 01:09:43 +0200
+Subject: [Buildroot] [PATCH] libmicrohttpd: fix thread detection on ARC and
+	Blackfin
+Message-ID: <1467587383-30328-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
- >> Transmission bundles copies of both libraries and uses them if they are
- >> not provided by the system. This patch allows transmission to use the
- >> system libraries of libminiupnpc/libnatpmp.
+Due to compiler deficiences, gcc on ARC and Blackfin doesn't define
+_REENTRANT, which the latest version of the ax_pthread.m4
+autoconf-archive macros looks at to determine whether thread support is
+available or not.
 
- >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixing the compilers is definitely the right thing to do, but it's not
+doable for pre-built external toolchains like the Blackfin one, so for
+now, we simply define _REENTRANT manually on ARC and Blackfin. If more
+packages are affected by this problem, a more general solution will have
+to be found.
 
- > Committed, thanks.
+Fixes
+http://autobuild.buildroot.net/results/593/593b5050473a83a9ddcada9de39f8f14ab38d554/
+http://autobuild.buildroot.net/results/ff0/ff058a378b91740b5b399f32a6b375fbc3c8df06/
 
-This unfortunately causes some build issues. Care to have a look?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+This commit is an improved solution based on the discussion that occured
+on Bernd's patch at https://patchwork.ozlabs.org/patch/634835/.
+---
+ package/libmicrohttpd/libmicrohttpd.mk | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-http://autobuild.buildroot.org/results/bcd/bcdc704c48ccccc2f1203983574546dfca60ded7/build-end.log
-
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index c53676f..2266d3c 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -9,7 +9,17 @@ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
+ LIBMICROHTTPD_INSTALL_STAGING = YES
+ LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-examples
+-LIBMICROHTTPD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
++LIBMICROHTTPD_CFLAGS = $(TARGET_CFLAGS) -std=c99
++
++# gcc on arc and bfin doesn't define _REENTRANT when -pthread is
++# passed while it should. Compensate this defiency here otherwise
++# libmicrohttpd configure script doesn't find that thread support is
++# enabled.
++ifeq ($(BR2_arc)$(BR2_bfin),y)
++LIBMICROHTTPD_CFLAGS += -D_REENTRANT
++endif
++
++LIBMICROHTTPD_CONF_ENV += CFLAGS="$(LIBMICROHTTPD_CFLAGS)"
+ 
+ ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
+ LIBMICROHTTPD_LICENSE = LGPLv2.1+
 -- 
-Bye, Peter Korsgaard
+2.7.4
