@@ -1,137 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Jul 2016 17:12:28 +0200
-Subject: [Buildroot] [PATCH v2 1/1] overlay: Add archive-based (tar)
- rootfs overlays
-In-Reply-To: <1460693286-6245-1-git-send-email-camh@xdna.net>
-References: <1460693286-6245-1-git-send-email-camh@xdna.net>
-Message-ID: <20160703151228.GA3482@free.fr>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Sun, 3 Jul 2016 12:22:02 -0300 (BRT)
+Subject: [Buildroot] [PATCH 14/24] perl-file-util: drop unused host
+ variant
+In-Reply-To: <1467207991-4905-15-git-send-email-julien.floret@6wind.com>
+References: <1467207991-4905-1-git-send-email-julien.floret@6wind.com>
+ <1467207991-4905-15-git-send-email-julien.floret@6wind.com>
+Message-ID: <645482902.7741906.1467559322826.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cam, All,
+> From: "Julien Floret" <julien.floret@6wind.com>
+> To: buildroot at buildroot.org
+> Cc: "thomas petazzoni" <thomas.petazzoni@free-electrons.com>
+> Sent: Wednesday, June 29, 2016 10:46:21 AM
+> Subject: [Buildroot] [PATCH 14/24] perl-file-util: drop unused host variant
 
-On 2016-04-15 14:08 +1000, Cam Hutchison spake thusly:
-> Add a feature to extract tar archives into the target rootfs when
-> building filesystem images. The archives are extracted inside the
-> fakeroot used to build the filesystem images so that the ownership and
-> permissions of files in the archive are preserved.
-> 
-> This is useful when an external build process produces rootfs archives
-> or software is supplied as an archive that need to be incorporated the
-> generated rootfs.
-> 
-> Configuration options are added to configure a list of paths to archives
-> to be extracted, and to configure how many path components to strip from
-> paths in those archives. It is not possible to configure a different
-> number of components for different archives.
-
-We discussed this during our summer-camp, and came to the conclusion
-that this is not flexible engouh.
-
-Also, all tarballs have to be archived with the same "strip-component"
-depth. This is not very nice.
-
-So, instead, we've come up with a different solution, which is to allow
-arbitrary scrippts to be run in the fakeroot script. I've sent this
-patch:
-    https://patchwork.ozlabs.org/patch/643751/
-
-Hopefully, that should also cover your use-case (even though you'll have
-to also write a little script).
-
-So, I'm marking your patch as rejected in patchwork.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Cam Hutchison <camh@xdna.net>
+> Signed-off-by: Julien Floret <julien.floret@6wind.com>
 > ---
-> Changes v1 -> v2:
->  - Use suitable-extractor instead of the tar -a option
->  - Split config option from BR2_ROOTFS_OVERLAY
->  - Add configurable --strip-components
->  - Move archive extraction to fakeroot from target-finalize target
-> ---
->  fs/common.mk     |  9 +++++++++
->  system/Config.in | 21 +++++++++++++++++++++
->  2 files changed, 30 insertions(+)
+> package/perl-file-util/perl-file-util.mk | 2 --
+> 1 file changed, 2 deletions(-)
 > 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 3a424f6..414e5e6 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -38,6 +38,10 @@ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
->  USERS_TABLE = $(BUILD_DIR)/_users_table.txt
->  ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
->  
-> +define rootfs-extract-overlay
-> +$(call suitable-extractor,$(1)) $(1) | tar -xf - -C $(TARGET_DIR) --strip-components=$(call qstrip,$(BR2_ROOTFS_OVERLAY_ARCHIVES_STRIP_COMPONENTS))
-> +endef
-> +
->  # Since this function will be called from within an $(eval ...)
->  # all variable references except the arguments must be $$-quoted.
->  define ROOTFS_TARGET_INTERNAL
-> @@ -91,6 +95,11 @@ endif
->  	printf '$$(subst $$(sep),\n,$$(PACKAGES_PERMISSIONS_TABLE))' >> $$(FULL_DEVICE_TABLE)
->  	echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
->  endif
-> +ifneq ($$(BR2_ROOTFS_OVERLAY_ARCHIVES),)
-> +	$$(foreach archive,$$(call qstrip,$$(BR2_ROOTFS_OVERLAY_ARCHIVES)),\
-> +		echo "$$(call rootfs-extract-overlay,$$(archive))" >> $$(FAKEROOT_SCRIPT) \
-> +		$$(sep))
-> +endif
->  	echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
->  	chmod a+x $$(FAKEROOT_SCRIPT)
->  	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
-> diff --git a/system/Config.in b/system/Config.in
-> index 2e14971..df23ea6 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -429,6 +429,27 @@ config BR2_ROOTFS_OVERLAY
->  	  They are copied as-is into the rootfs, excluding files ending with
->  	  ~ and .git, .svn and .hg directories.
->  
-> +config BR2_ROOTFS_OVERLAY_ARCHIVES
-> +	string "Root filesystem overlay archives"
-> +	default ""
-> +	help
-> +	  Specify a list of tar archives that are extracted into the
-> +	  output filesystem images as they are built. The archives will
-> +	  be extracted while running under the fakeroot environment
-> +	  used to build the images so they may contain files that only
-> +	  root may extract (such as setuid binaries), and permissions
-> +	  and ownerships are maintained.
-> +
-> +config BR2_ROOTFS_OVERLAY_ARCHIVES_STRIP_COMPONENTS
-> +	string "Leading path components to strip from overlay archives"
-> +	default "0"
-> +	help
-> +	  The number of leading path components to strip from each
-> +	  archive specified under Root filesystem overlay archives.
-> +	  The same number of components must be stripped from all
-> +	  archives - it is not possible to have a different number of
-> +	  components stripped from different archives.
-> +
->  config BR2_ROOTFS_POST_BUILD_SCRIPT
->  	string "Custom scripts to run before creating filesystem images"
->  	default ""
-> -- 
-> 2.1.4
+> diff --git a/package/perl-file-util/perl-file-util.mk
+> b/package/perl-file-util/perl-file-util.mk
+> index 7026515e6649..fe83585f3614 100644
+> --- a/package/perl-file-util/perl-file-util.mk
+> +++ b/package/perl-file-util/perl-file-util.mk
+> @@ -10,7 +10,5 @@ PERL_FILE_UTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOMMY
+> PERL_FILE_UTIL_DEPENDENCIES = host-perl-module-build
+> PERL_FILE_UTIL_LICENSE = Artistic or GPLv1+
+> PERL_FILE_UTIL_LICENSE_FILES = COPYING LICENSE
+> -HOST_PERL_FILE_UTIL_DEPENDENCIES = host-perl-module-build
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> $(eval $(perl-package))
+> -$(eval $(host-perl-package))
+> --
+> 2.1.0
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Not again, please!
+
+commit 5b7cb94c967549cd59cc692ec2fc843f66974478
+Author: Carlos Santos <casantos@datacom.ind.br>
+Date:   Tue Nov 17 10:24:06 2015 -0200
+
+    perl-file-util: restore host variant and fix dependencies
+    
+    The host variant was added by us (DATACOM) because it is useful to
+    build some third-party packages that we use in our firmware. We humbly
+    request you to keep it alive.
+    
+    Declare that it requires host-perl-module-build.
+    
+    Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+commit 4b33c324809c4928e0da827a3ec88703a73c654a
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Fri Nov 13 22:48:49 2015 +0100
+
+    package/perl-file-util: remove host variant
+    
+    It does not build, and no one depends on it.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+    Cc: Francois Perrad <fperrad@gmail.com>
+    Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Carlos Santos (Casantos)
+DATACOM, P&D
