@@ -1,29 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jul 2016 09:12:01 +0200
-Subject: [Buildroot] [PATCH 22/69] libftdi: add explicit dependencies
- for host variant
-In-Reply-To: <1467498098-23731-23-git-send-email-julien.floret@6wind.com>
-References: <1467498098-23731-1-git-send-email-julien.floret@6wind.com>
- <1467498098-23731-23-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160703091201.393df19c@free-electrons.com>
+Date: Sun, 3 Jul 2016 09:13:33 +0200
+Subject: [Buildroot] [git commit] libsepol: add explicit dependencies for
+	host variant
+Message-ID: <20160703071557.E7ED07FF6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=94eb3843f9da07844e14747b68c412fb8764dd65
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  3 Jul 2016 00:20:51 +0200, Julien Floret wrote:
-> This patch also removes an incorrect dependency between host-libftdi and
-> host-boost when BR2_PACKAGE_LIBTFDI_CPP is set.
+Signed-off-by: Julien Floret <julien.floret@6wind.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libsepol/libsepol.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Nice find!
-
-Applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index c53707a..3b02175 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
+@@ -11,6 +11,7 @@ LIBSEPOL_LICENSE_FILES = COPYING
+ 
+ LIBSEPOL_INSTALL_STAGING = YES
+ LIBSEPOL_DEPENDENCIES = host-flex
++HOST_LIBSEPOL_DEPENDENCIES = host-flex
+ 
+ LIBSEPOL_MAKE_FLAGS = $(TARGET_CONFIGURE_OPTS)
+ 
