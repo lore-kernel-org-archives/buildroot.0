@@ -1,75 +1,100 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 3 Jul 2016 13:41:59 +0200
-Subject: [Buildroot] [PATCH 21/24 v2] system/systemd: needs timezone
-In-Reply-To: <92c59faf9f5eeba1856b1897d30f4f8b2b57460d.1466622379.git.yann.morin.1998@free.fr>
+Date: Sun, 3 Jul 2016 13:49:45 +0200
+Subject: [Buildroot] [PATCH 22/24 v2] fs: add pre- and post-command hooks
+In-Reply-To: <a233b4b0fbce3823dca317fe24d8678397a7c8fc.1466622379.git.yann.morin.1998@free.fr>
 References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <92c59faf9f5eeba1856b1897d30f4f8b2b57460d.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <84e8315f-bf11-4cc8-6bf9-3c03ef1273f1@gmail.com>
+ <a233b4b0fbce3823dca317fe24d8678397a7c8fc.1466622379.git.yann.morin.1998@free.fr>
+Message-ID: <1665996e-8fd6-da64-4552-b57b27b06dc9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Yann,
+
 Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
-> systemd does not like being booted without any timezone info (especially
-> on a R/O filesystem), so we forcibly enable that. If there is no default
-> timezone set, we fallback to UTC (which is basically what no TZ means
-> anyway).
+> In some cases, the directory structure we want in the filesystem is not
+> exactly what we have in target/
+> 
+> For example, when systemd is used on a read-only rootfs, /var must be a
+> tmpfs. However, we may have packages that install stuff in there, and
+> set important rights (via the permission-table). So, at build time, we
+> need /var to be a symlink to the remanent location (/usr/share/factory)
+> while at runtime we need /var to be a directory.
+> 
+> One option would have seen to be do have /var as a real directory even
+> during build time, and in a target-finalize hook, move everything out of
+> there and into the "factory" location. However, that's not possible
+> because it's too early: some packages may want to set ownership and/or
+> acces rights on directories or files in /var, and this is only done in
+> the fakeroot script, which is called only later during the assembling of
+> the filesystem images.
+> 
+> Also, there would have been no way to undo the tweak (i.e. we need to
+> restore the /var symlink so that subsequent builds continue to work) if
+> it were done as a target-finalize hook.
+> 
+> The only solution is to allow packages to register pre- and post-hooks
+> that are called right before and right after the rootfs commands are
+> executed.
+> 
+> Those hooks are not documented on-purpose; they are probably going to be
+> used only by systemd.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  package/skeleton-systemd/skeleton-systemd.mk | 7 +++++++
->  system/Config.in                             | 1 +
+>  fs/common.mk           | 4 ++++
+>  package/pkg-generic.mk | 4 ++++
 >  2 files changed, 8 insertions(+)
 > 
-> diff --git a/package/skeleton-systemd/skeleton-systemd.mk b/package/skeleton-systemd/skeleton-systemd.mk
-> index e781ce9..b45bbde 100644
-> --- a/package/skeleton-systemd/skeleton-systemd.mk
-> +++ b/package/skeleton-systemd/skeleton-systemd.mk
-> @@ -31,12 +31,19 @@ SKELETON_SYSTEMD_TARGET_FINALIZE_HOOKS += SKELETON_SYSTEMD_SET_NETWORK
->  
->  endif # BR2_PACKAGE_SYSTEMD_NETWORKD not set
->  
-> +SKELETON_SYSTEM_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
-                 ^
-> +ifeq ($(SKELETON_SYSTEM_LOCALTIME),)
-                         ^
-> +SKELETON_SYSTEM_LOCALTIME = Etc/UTC
-                 ^
-> +endif
-> +
+> diff --git a/fs/common.mk b/fs/common.mk
+> index b7202c3..8feb172 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -92,7 +92,11 @@ endif
+>  	$$(call PRINTF,$$(PACKAGES_PERMISSIONS_TABLE)) >> $$(FULL_DEVICE_TABLE)
+>  	echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+>  endif
+> +	$$(foreach hook,$$(FS_INIT_PRE_CMD_HOOKS),\
+> +		$$(call PRINTF,$$($$(hook))) >>$$(FAKEROOT_SCRIPT))
+                                               ^
+>  	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+> +	$$(foreach hook,$$(FS_INIT_POST_CMD_HOOKS),\
+> +		$$(call PRINTF,$$($$(hook))) >>$$(FAKEROOT_SCRIPT))
+                                               ^
 
-s/SKELETON_SYSTEM_LOCALTIME/SKELETON_SYSTEMD_LOCALTIME/
+We need a space between >> and $$
 
->  define SKELETON_SYSTEMD_INSTALL_TARGET_CMDS
->  	mkdir -p $(TARGET_DIR)/etc
->  	mkdir -p $(TARGET_DIR)/home
->  	mkdir -p $(TARGET_DIR)/srv
->  	mkdir -p $(TARGET_DIR)/var
->  	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
-> +	ln -sf ../usr/share/zoneinfo/$(SKELETON_SYSTEMD_LOCALTIME) \
-
-This one is ok :)
+With that fixed:
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
 Best regards,
 Romain
 
-
-> +		$(TARGET_DIR)/etc/localtime
->  	$(SKELETON_SYSTEMD_RSYNC_NETWORK)
->  endef
+>  	chmod a+x $$(FAKEROOT_SCRIPT)
+>  	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+>  	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 4415342..2f80392 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -559,6 +559,8 @@ $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
+>  $(2)_PRE_LEGAL_INFO_HOOKS       ?=
+>  $(2)_POST_LEGAL_INFO_HOOKS      ?=
+>  $(2)_TARGET_FINALIZE_HOOKS      ?=
+> +$(2)_FS_PRE_CMD_HOOKS           ?=
+> +$(2)_FS_POST_CMD_HOOKS          ?=
 >  
-> diff --git a/system/Config.in b/system/Config.in
-> index 17ce832..07af2e0 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -130,6 +130,7 @@ config BR2_INIT_SYSTEMD
->  	select BR2_ROOTFS_MERGED_USR
->  	select BR2_PACKAGE_SYSTEMD
->  	select BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
-> +	select BR2_TARGET_TZ_INFO
+>  # human-friendly targets and target sequencing
+>  $(1):			$(1)-install
+> @@ -860,6 +862,8 @@ ifneq ($$($(2)_USERS),)
+>  PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+>  endif
+>  TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
+> +FS_INIT_PRE_CMD_HOOKS += $$($(2)_FS_PRE_CMD_HOOKS)
+> +FS_INIT_POST_CMD_HOOKS += $$($(2)_FS_POST_CMD_HOOKS)
 >  
->  comment "systemd needs (e)glibc toolchain, headers >= 3.10"
->  	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
+>  ifeq ($$($(2)_SITE_METHOD),svn)
+>  DL_TOOLS_DEPENDENCIES += svn
 > 
