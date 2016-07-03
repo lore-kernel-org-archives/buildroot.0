@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 3 Jul 2016 10:24:02 +0200
-Subject: [Buildroot] [git commit] boost: remove empty host dependencies
+Subject: [Buildroot] [git commit] ncurses: remove empty host dependencies
 	definition
-Message-ID: <20160703082409.448FF800F3@busybox.osuosl.org>
+Message-ID: <20160703082409.A894A800F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c230b3fabaf0c85c678da4df3b8649b682fcd46
+commit: https://git.buildroot.net/buildroot/commit/?id=cc2eb3679ed93accd004e81e0b5bea9eb19dabc3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Julien Floret <julien.floret@6wind.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/boost/boost.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/ncurses/ncurses.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 1d42f6c..1bed6b2 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -11,8 +11,6 @@ BOOST_INSTALL_STAGING = YES
- BOOST_LICENSE = Boost Software License 1.0
- BOOST_LICENSE_FILES = LICENSE_1_0.txt
- 
--HOST_BOOST_DEPENDENCIES =
--
- # keep host variant as minimal as possible
- HOST_BOOST_FLAGS = --without-icu \
- 	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 8368c69..bef57c5 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -8,7 +8,6 @@ NCURSES_VERSION = 5.9
+ NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
+ NCURSES_INSTALL_STAGING = YES
+ NCURSES_DEPENDENCIES = host-ncurses
+-HOST_NCURSES_DEPENDENCIES =
+ NCURSES_PROGS = clear infocmp tabs tic toe tput tset
+ NCURSES_LICENSE = MIT with advertising clause
+ NCURSES_LICENSE_FILES = README
