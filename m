@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 17:34:09 +0200
-Subject: [Buildroot] [git commit] openblas: pass ONLY_CBLAS=1 only when
-	Fortran is not available
-Message-ID: <20160704153822.263EC80797@busybox.osuosl.org>
+Date: Mon, 4 Jul 2016 17:39:45 +0200
+Subject: [Buildroot] [PATCH] openblas: build only C-language BLAS if the
+ toolchain doesn't have Fortran
+In-Reply-To: <1467645779-35133-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1467645779-35133-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160704173945.78386c1a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d125e8d4d3929cbfa2a7b3dd10514cf1bac87816
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/openblas/openblas.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+On Mon, 4 Jul 2016 16:22:59 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/openblas/openblas.mk | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index d07d09d..baeef05 100644
---- a/package/openblas/openblas.mk
-+++ b/package/openblas/openblas.mk
-@@ -19,9 +19,10 @@ OPENBLAS_MAKE_OPTS += CROSS=1
- # Set OpenBLAS target
- OPENBLAS_MAKE_OPTS += TARGET=$(BR2_PACKAGE_OPENBLAS_TARGET)
- 
--# Disable fortran by default until we add BR2_TOOLCHAIN_HAS_FORTRAN
--# hidden symbol to our toolchain infrastructure
-+# When Fortran is not available, only build the C version of BLAS
-+ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),)
- OPENBLAS_MAKE_OPTS += ONLY_CBLAS=1
-+endif
- 
- # Enable/Disable multi-threading (not for static-only since it uses dlfcn.h)
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS):$(BR2_STATIC_LIBS),y:)
+I've applied, after reworking the commit title and comment. Indeed when
+you say "openblas: build only C-language BLAS if the toolchain doesn't
+have Fortran" one might think that the C-language BLAS will only be
+built when Fortran is not available.
+
+While what you are doing is just making sure that BLAS tries to only
+build the C version when Fortran support is not available.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
