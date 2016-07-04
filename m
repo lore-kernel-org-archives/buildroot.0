@@ -1,36 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 14:55:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mplayer: needs
- BR2_TOOLCHAIN_HAS_SYNC_4
-In-Reply-To: <1467477991-13051-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1467477991-13051-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160704145515.04091db5@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  4 Jul 2016 15:05:17 +0200
+Subject: [Buildroot] [PATCH] package/open2300: fix static builds
+Message-ID: <1467637517-14388-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+libmysqlclient needs -lz to build, so we have to pass it explicitly for
+static builds.
 
-On Sat,  2 Jul 2016 18:46:31 +0200, Bernd Kuhls wrote:
-> Also propagate as reverse dependency to libplayer & tovid.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/630/6306757da3be9bb7e3cdcbfc8abb4e64a3fb7913/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libplayer/Config.in | 1 +
->  package/mplayer/Config.in   | 2 ++
->  package/tovid/Config.in     | 2 ++
->  3 files changed, 5 insertions(+)
+For almost-two-and-a-half years this error has been happenning, noone
+ever tried to fix it. This is now done, at last! ;-]
 
-Applied with an improved commit log, using the explanations you have
-provided in our discussion. Thanks!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/open2300/open2300.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thomas
+diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
+index 73db2a0..323f566 100644
+--- a/package/open2300/open2300.mk
++++ b/package/open2300/open2300.mk
+@@ -21,6 +21,10 @@ OPEN2300_DEPENDENCIES += mysql
+ OPEN2300_BINS += mysql2300 mysqlhistlog2300
+ OPEN2300_CFLAGS += -I$(STAGING_DIR)/usr/include/mysql
+ OPEN2300_LDFLAGS += -L$(STAGING_DIR)/usr/lib/mysql -lmysqlclient
++ifeq ($(BR2_STATIC_LIBS),y)
++# mysql needs -lz, so we need to specify it for static builds
++OPEN2300_LDFLAGS += -lz
++endif
+ endif
+ 
+ define OPEN2300_BUILD_CMDS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
