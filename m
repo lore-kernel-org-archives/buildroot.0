@@ -1,386 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  4 Jul 2016 11:24:30 +0200
-Subject: [Buildroot] [PATCH 19/83 v2] package/python{,
-	3}: move inclusion of external python modules
+Date: Mon,  4 Jul 2016 11:24:36 +0200
+Subject: [Buildroot] [PATCH 25/83 v2] package/gstreamer1: include plugins
+	from gstreamer1's real Config.in
 In-Reply-To: <cover.1467624132.git.yann.morin.1998@free.fr>
 References: <cover.1467624132.git.yann.morin.1998@free.fr>
-Message-ID: <11398caf0f945497219033dc859a6867b9829a6e.1467624132.git.yann.morin.1998@free.fr>
+Message-ID: <7b0b263b5aaa8be42984430af874500a7b307493.1467624132.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce a Config.ext for external python modules, that both python and
-python include from there respective sub-menus.
+It is more logical to have a single if-clause, rather than repeat it in
+another file, possiblty brealking indentation like it previously was.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in          | 155 ---------------------------------------------
- package/python/Config.ext  | 155 +++++++++++++++++++++++++++++++++++++++++++++
- package/python/Config.in   |   2 +
- package/python3/Config.ext |   1 +
- package/python3/Config.in  |   2 +
- 5 files changed, 160 insertions(+), 155 deletions(-)
- create mode 100644 package/python/Config.ext
- create mode 120000 package/python3/Config.ext
+ package/gstreamer1/Config.in            | 11 -----------
+ package/gstreamer1/gstreamer1/Config.in |  9 +++++++++
+ 2 files changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 8f1c870..dcf1525 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -574,161 +574,6 @@ endif
- 	source "package/php/Config.in"
- 	source "package/python/Config.in"
- 	source "package/python3/Config.in"
--if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
--menu "External python modules"
--	source "package/python-alsaaudio/Config.in"
--	source "package/python-argh/Config.in"
--	source "package/python-autobahn/Config.in"
--	source "package/python-backports-abc/Config.in"
--	source "package/python-beautifulsoup4/Config.in"
--	source "package/python-bottle/Config.in"
--	source "package/python-can/Config.in"
--	source "package/python-cbor/Config.in"
--	source "package/python-certifi/Config.in"
--	source "package/python-cffi/Config.in"
--	source "package/python-characteristic/Config.in"
--	source "package/python-cheetah/Config.in"
--	source "package/python-cherrypy/Config.in"
--	source "package/python-click/Config.in"
--	source "package/python-coherence/Config.in"
--	source "package/python-configobj/Config.in"
--	source "package/python-configshell-fb/Config.in"
--	source "package/python-crc16/Config.in"
--	source "package/python-crossbar/Config.in"
--	source "package/python-cryptography/Config.in"
--	source "package/python-cssselect/Config.in"
--	source "package/python-daemon/Config.in"
--	source "package/python-dataproperty/Config.in"
--	source "package/python-dateutil/Config.in"
--	source "package/python-dialog/Config.in"
--	source "package/python-django/Config.in"
--	source "package/python-docopt/Config.in"
--	source "package/python-dominate/Config.in"
--	source "package/python-dpkt/Config.in"
--	source "package/python-ecdsa/Config.in"
--	source "package/python-engineio/Config.in"
--	source "package/python-enum/Config.in"
--	source "package/python-enum34/Config.in"
--	source "package/python-flask/Config.in"
--	source "package/python-flask-jsonrpc/Config.in"
--	source "package/python-flask-login/Config.in"
--	source "package/python-flup/Config.in"
--	source "package/python-gobject/Config.in"
--	source "package/python-html5lib/Config.in"
--	source "package/python-httplib2/Config.in"
--	source "package/python-id3/Config.in"
--	source "package/python-idna/Config.in"
--	source "package/python-iniparse/Config.in"
--	source "package/python-iowait/Config.in"
--	source "package/python-ipaddr/Config.in"
--	source "package/python-ipaddress/Config.in"
--	source "package/python-ipy/Config.in"
--	source "package/python-ipython/Config.in"
--	source "package/python-itsdangerous/Config.in"
--	source "package/python-jinja2/Config.in"
--	source "package/python-json-schema-validator/Config.in"
--	source "package/python-keyring/Config.in"
--	source "package/python-libconfig/Config.in"
--	source "package/python-lmdb/Config.in"
--	source "package/python-lxml/Config.in"
--	source "package/python-mad/Config.in"
--	source "package/python-mako/Config.in"
--	source "package/python-markdown/Config.in"
--	source "package/python-markupsafe/Config.in"
--	source "package/python-meld3/Config.in"
--	source "package/python-mistune/Config.in"
--	source "package/python-msgpack/Config.in"
--	source "package/python-netaddr/Config.in"
--	source "package/python-netifaces/Config.in"
--	source "package/python-networkmanager/Config.in"
--	source "package/python-nfc/Config.in"
--	source "package/python-numpy/Config.in"
--	source "package/python-paho-mqtt/Config.in"
--	source "package/python-pam/Config.in"
--	source "package/python-paramiko/Config.in"
--	source "package/python-pathtools/Config.in"
--	source "package/python-pathvalidate/Config.in"
--	source "package/python-pexpect/Config.in"
--	source "package/python-posix-ipc/Config.in"
--	source "package/python-protobuf/Config.in"
--	source "package/python-psutil/Config.in"
--	source "package/python-ptyprocess/Config.in"
--	source "package/python-pyasn/Config.in"
--	source "package/python-pyasn-modules/Config.in"
--	source "package/python-pycli/Config.in"
--	source "package/python-pycparser/Config.in"
--	source "package/python-pycrypto/Config.in"
--	source "package/python-pydal/Config.in"
--	source "package/python-pyftpdlib/Config.in"
--	source "package/python-pygame/Config.in"
--	source "package/python-pygments/Config.in"
--	source "package/python-pyinotify/Config.in"
--	source "package/python-pymysql/Config.in"
--	source "package/python-pynacl/Config.in"
--	source "package/python-pyopenssl/Config.in"
--	source "package/python-pyparsing/Config.in"
--	source "package/python-pyparted/Config.in"
--	source "package/python-pypcap/Config.in"
--	source "package/python-pyqt/Config.in"
--	source "package/python-pyratemp/Config.in"
--	source "package/python-pyro/Config.in"
--	source "package/python-pyroute2/Config.in"
--	source "package/python-pysendfile/Config.in"
--	source "package/python-pysmb/Config.in"
--	source "package/python-pysnmp/Config.in"
--	source "package/python-pysnmp-apps/Config.in"
--	source "package/python-pysnmp-mibs/Config.in"
--	source "package/python-pysocks/Config.in"
--	source "package/python-pytablewriter/Config.in"
--	source "package/python-pytrie/Config.in"
--	source "package/python-pytz/Config.in"
--	source "package/python-pyudev/Config.in"
--	source "package/python-pyusb/Config.in"
--	source "package/python-pyxb/Config.in"
--	source "package/python-pyyaml/Config.in"
--	source "package/python-pyzmq/Config.in"
--	source "package/python-requests/Config.in"
--	source "package/python-rpi-gpio/Config.in"
--	source "package/python-rtslib-fb/Config.in"
--	source "package/python-scapy3k/Config.in"
--	source "package/python-sdnotify/Config.in"
--	source "package/python-serial/Config.in"
--	source "package/python-service-identity/Config.in"
--	source "package/python-setproctitle/Config.in"
--	source "package/python-setuptools/Config.in"
--	source "package/python-shutilwhich/Config.in"
--	source "package/python-simplejson/Config.in"
--	source "package/python-singledispatch/Config.in"
--	source "package/python-sip/Config.in"
--	source "package/python-six/Config.in"
--	source "package/python-smbus-cffi/Config.in"
--	source "package/python-socketio/Config.in"
--	source "package/python-spidev/Config.in"
--	source "package/python-thrift/Config.in"
--	source "package/python-tomako/Config.in"
--	source "package/python-tornado/Config.in"
--	source "package/python-treq/Config.in"
--	source "package/python-twisted/Config.in"
--	source "package/python-txaio/Config.in"
--	source "package/python-u-msgpack/Config.in"
--	source "package/python-ubjson/Config.in"
--	source "package/python-ujson/Config.in"
--	source "package/python-urllib3/Config.in"
--	source "package/python-urwid/Config.in"
--	source "package/python-versiontools/Config.in"
--	source "package/python-watchdog/Config.in"
--	source "package/python-web2py/Config.in"
--	source "package/python-webpy/Config.in"
--	source "package/python-werkzeug/Config.in"
--	source "package/python-ws4py/Config.in"
--	source "package/python-wsaccel/Config.in"
--	source "package/python-xlrd/Config.in"
--	source "package/python-xlsxwriter/Config.in"
--	source "package/python-xlutils/Config.in"
--	source "package/python-xlwt/Config.in"
--	source "package/python-zope-interface/Config.in"
--endmenu
+diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
+index ea35ecc..ca3240f 100644
+--- a/package/gstreamer1/Config.in
++++ b/package/gstreamer1/Config.in
+@@ -1,13 +1,2 @@
+ # Gstreamer 1.x & Plugins
+ source "package/gstreamer1/gstreamer1/Config.in"
+-
+-if BR2_PACKAGE_GSTREAMER1
+-source "package/gstreamer1/gst1-plugins-base/Config.in"
+-source "package/gstreamer1/gst1-plugins-good/Config.in"
+-source "package/gstreamer1/gst1-plugins-bad/Config.in"
+-source "package/gstreamer1/gst1-plugins-ugly/Config.in"
+-source "package/gstreamer1/gst1-imx/Config.in"
+-source "package/gstreamer1/gst1-libav/Config.in"
+-source "package/gstreamer1/gst1-validate/Config.in"
+-source "package/gstreamer1/gst-omx/Config.in"
 -endif
- 	source "package/ruby/Config.in"
- 	source "package/tcl/Config.in"
- if BR2_PACKAGE_TCL
-diff --git a/package/python/Config.ext b/package/python/Config.ext
-new file mode 100644
-index 0000000..6dfcc1e
---- /dev/null
-+++ b/package/python/Config.ext
-@@ -0,0 +1,155 @@
-+# This file is included both from python and python3
-+
-+comment "External python modules"
-+
-+source "package/python-alsaaudio/Config.in"
-+source "package/python-argh/Config.in"
-+source "package/python-autobahn/Config.in"
-+source "package/python-backports-abc/Config.in"
-+source "package/python-beautifulsoup4/Config.in"
-+source "package/python-bottle/Config.in"
-+source "package/python-can/Config.in"
-+source "package/python-cbor/Config.in"
-+source "package/python-certifi/Config.in"
-+source "package/python-cffi/Config.in"
-+source "package/python-characteristic/Config.in"
-+source "package/python-cheetah/Config.in"
-+source "package/python-cherrypy/Config.in"
-+source "package/python-click/Config.in"
-+source "package/python-coherence/Config.in"
-+source "package/python-configobj/Config.in"
-+source "package/python-configshell-fb/Config.in"
-+source "package/python-crc16/Config.in"
-+source "package/python-crossbar/Config.in"
-+source "package/python-cryptography/Config.in"
-+source "package/python-cssselect/Config.in"
-+source "package/python-daemon/Config.in"
-+source "package/python-dataproperty/Config.in"
-+source "package/python-dateutil/Config.in"
-+source "package/python-dialog/Config.in"
-+source "package/python-django/Config.in"
-+source "package/python-docopt/Config.in"
-+source "package/python-dominate/Config.in"
-+source "package/python-dpkt/Config.in"
-+source "package/python-ecdsa/Config.in"
-+source "package/python-engineio/Config.in"
-+source "package/python-enum/Config.in"
-+source "package/python-enum34/Config.in"
-+source "package/python-flask/Config.in"
-+source "package/python-flask-jsonrpc/Config.in"
-+source "package/python-flask-login/Config.in"
-+source "package/python-flup/Config.in"
-+source "package/python-gobject/Config.in"
-+source "package/python-html5lib/Config.in"
-+source "package/python-httplib2/Config.in"
-+source "package/python-id3/Config.in"
-+source "package/python-idna/Config.in"
-+source "package/python-iniparse/Config.in"
-+source "package/python-iowait/Config.in"
-+source "package/python-ipaddr/Config.in"
-+source "package/python-ipaddress/Config.in"
-+source "package/python-ipy/Config.in"
-+source "package/python-ipython/Config.in"
-+source "package/python-itsdangerous/Config.in"
-+source "package/python-jinja2/Config.in"
-+source "package/python-json-schema-validator/Config.in"
-+source "package/python-keyring/Config.in"
-+source "package/python-libconfig/Config.in"
-+source "package/python-lmdb/Config.in"
-+source "package/python-lxml/Config.in"
-+source "package/python-mad/Config.in"
-+source "package/python-mako/Config.in"
-+source "package/python-markdown/Config.in"
-+source "package/python-markupsafe/Config.in"
-+source "package/python-meld3/Config.in"
-+source "package/python-mistune/Config.in"
-+source "package/python-msgpack/Config.in"
-+source "package/python-netaddr/Config.in"
-+source "package/python-netifaces/Config.in"
-+source "package/python-networkmanager/Config.in"
-+source "package/python-nfc/Config.in"
-+source "package/python-numpy/Config.in"
-+source "package/python-paho-mqtt/Config.in"
-+source "package/python-pam/Config.in"
-+source "package/python-paramiko/Config.in"
-+source "package/python-pathtools/Config.in"
-+source "package/python-pathvalidate/Config.in"
-+source "package/python-pexpect/Config.in"
-+source "package/python-posix-ipc/Config.in"
-+source "package/python-protobuf/Config.in"
-+source "package/python-psutil/Config.in"
-+source "package/python-ptyprocess/Config.in"
-+source "package/python-pyasn/Config.in"
-+source "package/python-pyasn-modules/Config.in"
-+source "package/python-pycli/Config.in"
-+source "package/python-pycparser/Config.in"
-+source "package/python-pycrypto/Config.in"
-+source "package/python-pydal/Config.in"
-+source "package/python-pyftpdlib/Config.in"
-+source "package/python-pygame/Config.in"
-+source "package/python-pygments/Config.in"
-+source "package/python-pyinotify/Config.in"
-+source "package/python-pymysql/Config.in"
-+source "package/python-pynacl/Config.in"
-+source "package/python-pyopenssl/Config.in"
-+source "package/python-pyparsing/Config.in"
-+source "package/python-pyparted/Config.in"
-+source "package/python-pypcap/Config.in"
-+source "package/python-pyqt/Config.in"
-+source "package/python-pyratemp/Config.in"
-+source "package/python-pyro/Config.in"
-+source "package/python-pyroute2/Config.in"
-+source "package/python-pysendfile/Config.in"
-+source "package/python-pysmb/Config.in"
-+source "package/python-pysnmp/Config.in"
-+source "package/python-pysnmp-apps/Config.in"
-+source "package/python-pysnmp-mibs/Config.in"
-+source "package/python-pysocks/Config.in"
-+source "package/python-pytablewriter/Config.in"
-+source "package/python-pytrie/Config.in"
-+source "package/python-pytz/Config.in"
-+source "package/python-pyudev/Config.in"
-+source "package/python-pyusb/Config.in"
-+source "package/python-pyxb/Config.in"
-+source "package/python-pyyaml/Config.in"
-+source "package/python-pyzmq/Config.in"
-+source "package/python-requests/Config.in"
-+source "package/python-rpi-gpio/Config.in"
-+source "package/python-rtslib-fb/Config.in"
-+source "package/python-scapy3k/Config.in"
-+source "package/python-sdnotify/Config.in"
-+source "package/python-serial/Config.in"
-+source "package/python-service-identity/Config.in"
-+source "package/python-setproctitle/Config.in"
-+source "package/python-setuptools/Config.in"
-+source "package/python-shutilwhich/Config.in"
-+source "package/python-simplejson/Config.in"
-+source "package/python-singledispatch/Config.in"
-+source "package/python-sip/Config.in"
-+source "package/python-six/Config.in"
-+source "package/python-smbus-cffi/Config.in"
-+source "package/python-socketio/Config.in"
-+source "package/python-spidev/Config.in"
-+source "package/python-thrift/Config.in"
-+source "package/python-tomako/Config.in"
-+source "package/python-tornado/Config.in"
-+source "package/python-treq/Config.in"
-+source "package/python-twisted/Config.in"
-+source "package/python-txaio/Config.in"
-+source "package/python-u-msgpack/Config.in"
-+source "package/python-ubjson/Config.in"
-+source "package/python-ujson/Config.in"
-+source "package/python-urllib3/Config.in"
-+source "package/python-urwid/Config.in"
-+source "package/python-versiontools/Config.in"
-+source "package/python-watchdog/Config.in"
-+source "package/python-web2py/Config.in"
-+source "package/python-webpy/Config.in"
-+source "package/python-werkzeug/Config.in"
-+source "package/python-ws4py/Config.in"
-+source "package/python-wsaccel/Config.in"
-+source "package/python-xlrd/Config.in"
-+source "package/python-xlsxwriter/Config.in"
-+source "package/python-xlutils/Config.in"
-+source "package/python-xlwt/Config.in"
-+source "package/python-zope-interface/Config.in"
-diff --git a/package/python/Config.in b/package/python/Config.in
-index 40a2ef4..6563cd6 100644
---- a/package/python/Config.in
-+++ b/package/python/Config.in
-@@ -127,4 +127,6 @@ config BR2_PACKAGE_PYTHON_HASHLIB
- 	help
- 	  hashlib support in Python
+diff --git a/package/gstreamer1/gstreamer1/Config.in b/package/gstreamer1/gstreamer1/Config.in
+index 274171b..99aadb4 100644
+--- a/package/gstreamer1/gstreamer1/Config.in
++++ b/package/gstreamer1/gstreamer1/Config.in
+@@ -52,4 +52,13 @@ config BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS
+ 	  Install the gst-launch and gst-inspect tools. This will take up
+ 	  additional space on the target.
  
-+source "package/python/Config.ext"
-+
- endif
-diff --git a/package/python3/Config.ext b/package/python3/Config.ext
-new file mode 120000
-index 0000000..1b3df59
---- /dev/null
-+++ b/package/python3/Config.ext
-@@ -0,0 +1 @@
-+../python/Config.ext
-\ No newline at end of file
-diff --git a/package/python3/Config.in b/package/python3/Config.in
-index aadc8b6..f221a54 100644
---- a/package/python3/Config.in
-+++ b/package/python3/Config.in
-@@ -104,4 +104,6 @@ config BR2_PACKAGE_PYTHON3_ZLIB
- 	help
- 	  zlib support in Python3
- 
-+source "package/python3/Config.ext"
++source "package/gstreamer1/gst1-plugins-base/Config.in"
++source "package/gstreamer1/gst1-plugins-good/Config.in"
++source "package/gstreamer1/gst1-plugins-bad/Config.in"
++source "package/gstreamer1/gst1-plugins-ugly/Config.in"
++source "package/gstreamer1/gst1-imx/Config.in"
++source "package/gstreamer1/gst1-libav/Config.in"
++source "package/gstreamer1/gst1-validate/Config.in"
++source "package/gstreamer1/gst-omx/Config.in"
 +
  endif
 -- 
