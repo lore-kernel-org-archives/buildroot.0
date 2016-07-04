@@ -1,86 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 14:53:51 +0200
-Subject: [Buildroot] [git commit] package/mplayer: needs
-	BR2_TOOLCHAIN_HAS_SYNC_4
-Message-ID: <20160704125451.E0F8E7FB60@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 4 Jul 2016 14:55:06 +0200
+Subject: [Buildroot] [git commit] toolchain-external: wrap gfortran
+Message-ID: <20160704125513.27BB07FF6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54069ccabe7b6fe984bfbb781797f6447fd41a95
+commit: https://git.buildroot.net/buildroot/commit/?id=c1d90e9bb7ad1b9737db9f6476a5bdaa27a9fa8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even though mplayer bundles the ffmpeg code base (and ffmpeg is not
-affected by this issue), mplayer uses its own build system and doesn't
-test properly for the availability (or not) of atomic operations. In
-order to keep things simple, we simply make mplayer depend on the
-availability of atomic operations, since it assumes they are available.
-
-The reverse dependency is propagated to libplayer and tovid.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/6306757da3be9bb7e3cdcbfc8abb4e64a3fb7913/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libplayer/Config.in | 1 +
- package/mplayer/Config.in   | 2 ++
- package/tovid/Config.in     | 2 ++
- 3 files changed, 5 insertions(+)
+ toolchain/toolchain-external/toolchain-external.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
-index 665b947..37fbb26 100644
---- a/package/libplayer/Config.in
-+++ b/package/libplayer/Config.in
-@@ -12,6 +12,7 @@ if BR2_PACKAGE_LIBPLAYER
- config BR2_PACKAGE_LIBPLAYER_MPLAYER
- 	bool "mplayer backend"
- 	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mplayer
- 	select BR2_PACKAGE_MPLAYER
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index a31a04b..c103b96 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -729,9 +729,9 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT
+ endef
+ endif
  
- config BR2_PACKAGE_LIBPLAYER_GSTREAMER
-diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
-index 97b1f38..76bb6f0 100644
---- a/package/mplayer/Config.in
-+++ b/package/mplayer/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
- config BR2_PACKAGE_MPLAYER
- 	bool "mplayer"
- 	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  MPlayer is a movie player which runs on many systems and supports
-@@ -19,6 +20,7 @@ config BR2_PACKAGE_MPLAYER
- 
- comment "mplayer needs a toolchain w/ threads"
- 	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
- 
- if BR2_PACKAGE_MPLAYER
-diff --git a/package/tovid/Config.in b/package/tovid/Config.in
-index 1288f84..d8052ea 100644
---- a/package/tovid/Config.in
-+++ b/package/tovid/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_TOVID
- 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mplayer
- 	# The below dependencies are runtime dependencies only
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps_ng
- 	select BR2_PACKAGE_DVDAUTHOR
-@@ -30,6 +31,7 @@ comment "tovid needs a toolchain w/ threads, C++, wchar"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_USE_WCHAR
+-# Build toolchain wrapper for preprocessor, C and C++ compiler and setup
+-# symlinks for everything else. Skip gdb symlink when we are building our
+-# own gdb to prevent two gdb's in output/host/usr/bin.
++# Build toolchain wrapper for preprocessor, C, C++ and Fortran compilers
++# and setup symlinks for everything else. Skip gdb symlink when we are
++# building our own gdb to prevent two gdb's in output/host/usr/bin.
+ # The LTO support in gcc creates wrappers for ar, ranlib and nm which load
+ # the lto plugin. These wrappers are called *-gcc-ar, *-gcc-ranlib, and
+ # *-gcc-nm and should be used instead of the real programs when -flto is
+@@ -746,7 +746,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+ 		*-ar|*-ranlib|*-nm) \
+ 			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
+ 			;; \
+-		*cc|*cc-*|*++|*++-*|*cpp) \
++		*cc|*cc-*|*++|*++-*|*cpp|*-gfortran) \
+ 			ln -sf toolchain-wrapper $$base; \
+ 			;; \
+ 		*gdb|*gdbtui) \
