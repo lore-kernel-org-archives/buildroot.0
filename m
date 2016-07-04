@@ -1,70 +1,141 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Jul 2016 15:22:57 +0200
-Subject: [Buildroot] [git commit] docs/manual: document
-	BR2_ROOTFS_POST_FAKEROOT_SCRIPT
-Message-ID: <20160704132446.2EBF582135@busybox.osuosl.org>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Mon, 04 Jul 2016 16:33:06 +0300
+Subject: [Buildroot] [PATCH v2 1/1] acpica: new package
+In-Reply-To: <20160703104535.10401-1-nunes.erico@gmail.com>
+References: <20160703104535.10401-1-nunes.erico@gmail.com>
+Message-ID: <1467639186.30123.453.camel@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14463d9319731b13aa0a7dc25207fb545eb23ee4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 2016-07-03 at 12:45 +0200, Erico Nunes wrote:
+> The ACPI Component Architecture (ACPICA) project provides an operating
+> system (OS)-independent reference implementation of the Advanced
+> Configuration and Power Interface Specification (ACPI).
+> 
+> It contains tools such as acpidump, iasl, acpixtract, etc.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/customize-rootfs.txt | 33 ++++++++++++++++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
+Thank you for doing this!
+Though in our case we need this as a host tool. Can you add support into
+next version of the patch?
 
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index 558bd72..44fc460 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -61,7 +61,7 @@ In addition, you may also use these environment variables:
-     stored
-   - +BASE_DIR+: the base output directory
- 
--Below two more methods of customizing the target filesystem are
-+Below three more methods of customizing the target filesystem are
- described, but they are not recommended.
- 
- Direct modification of the target filesystem::
-@@ -104,4 +104,35 @@ This method is not recommended because it duplicates the entire
-   skeleton, which prevents taking advantage of the fixes or improvements
-   brought to the default skeleton in later Buildroot releases.
- 
-+Post-fakeroot scripts (+BR2_ROOTFS_POST_FAKEROOT_SCRIPT+)::
-++
-+When aggregating the final images, some parts of the process requires
-+  root rights: creating device nodes in `/dev`, setting permissions or
-+  ownership to files and directories... To avoid requiring actual root
-+  rights, Buildroot uses +fakeroot+ to simulate root rights. This is not
-+  a complete substitute for actually being root, but is enough for what
-+  Buildroot needs.
-++
-+Post-fakeroot scripts are shell scripts that are called at the 'end' of
-+  the fakeroot phase, 'right before' the filesystem image generator is
-+  called. As such, they are called in the fakeroot context.
-++
-+Post-fakeroot scripts can be useful in case you need to tweak the
-+  filesystem to do modifications that are usually only available to the
-+  root user.
-++
-+.Note:
-+It is recommended to use the existing mechanisms to set file permissions
-+  or create entries in `/dev` (see xref:customize-device-permission[]) or
-+  to create users (see xref:customize-users[])
-++
-+.Note:
-+The difference between post-build scripts (above) and fakeroot scripts,
-+  is that post-build scripts are not called in the fakeroot context.
-++
-+.Note;
-+Using `fakeroot` is not an absolute substitute for actually being root.
-+  `fakeroot` only ever fakes the file access rights and types (regular,
-+  block-or-char device...) and uid/gid; these are emulated in-memory.
-+
- include::customize-device-permission-tables.txt[]
+> 
+> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+> Cc: Romain Naour <romain.naour@gmail.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> ---
+> 
+> Romain had added a (conditional) Reviewed-by and Tested-by to v1 which
+> I
+> hope to have solved in this v2, but I decided to not add it here from
+> the start as this v2 contains some other small fixes and includes a
+> version bump.
+> If you think that it is still appliable, please add it before applying
+> this patch. Thanks
+> 
+> Changes v1 -> v2:
+> ? - Fixed license which is not only GPLv2 but dual BSD-3c or GPLv2
+> ? (pointed out by Romain Naour)
+> ? - Changed TARGET_MAKE_ENV to TARGET_CONFIGURE_OPTS (pointed out by
+> ? Romain Naour). CC still has to be set as a make argument, otherwise
+> it
+> ? gets set back again by the Makefile.
+> ? - TARGET_ARCH was wrong, should have been BR2_ARCH.
+> ? - Got rid of the sed hack for 'uname' by passing HARDWARE_NAME as a
+> ? make argument variable.
+> ? - Fixed installing in architectures different than host, by removing
+> ? the -s argument from 'install' to avoid running 'strip' from host.
+> ? - Bumped up to 20160527 which has been released since patch v1
+> ? submission.
+> ---
+> ?package/Config.in??????????|??1 +
+> ?package/acpica/Config.in???|??9 +++++++++
+> ?package/acpica/acpica.hash |??2 ++
+> ?package/acpica/acpica.mk???| 26 ++++++++++++++++++++++++++
+> ?4 files changed, 38 insertions(+)
+> ?create mode 100644 package/acpica/Config.in
+> ?create mode 100644 package/acpica/acpica.hash
+> ?create mode 100644 package/acpica/acpica.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 3fddf8e..3c8910d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -352,6 +352,7 @@ menu "Firmware"
+> ?	source "package/zd1211-firmware/Config.in"
+> ?endmenu
+> ?	source "package/a10disp/Config.in"
+> +	source "package/acpica/Config.in"
+> ?	source "package/acpid/Config.in"
+> ?	source "package/acpitool/Config.in"
+> ?	source "package/aer-inject/Config.in"
+> diff --git a/package/acpica/Config.in b/package/acpica/Config.in
+> new file mode 100644
+> index 0000000..8c33d0f
+> --- /dev/null
+> +++ b/package/acpica/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_ACPICA
+> +	bool "acpica"
+> +	help
+> +	??The ACPI Component Architecture (ACPICA) project provides
+> an
+> +	??operating system (OS)-independent reference implementation
+> of
+> +	??the Advanced Configuration and Power Interface
+> Specification
+> +	??(ACPI).
+> +
+> +	??https://www.acpica.org
+> diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
+> new file mode 100644
+> index 0000000..8d5257f
+> --- /dev/null
+> +++ b/package/acpica/acpica.hash
+> @@ -0,0 +1,2 @@
+> +# locally computed hash
+> +sha256
+> 4ac73a5887b643dcca483f0241cbb808a53326846928edad9a2f86cffcde5850
+> acpica-unix2-20160527.tar.gz
+> diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+> new file mode 100644
+> index 0000000..9b32099
+> --- /dev/null
+> +++ b/package/acpica/acpica.mk
+> @@ -0,0 +1,26 @@
+> +#####################################################################
+> ###########
+> +#
+> +# acpica
+> +#
+> +#####################################################################
+> ###########
+> +
+> +ACPICA_VERSION = 20160527
+> +ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
+> +ACPICA_SITE = https://acpica.org/sites/acpica/files
+> +ACPICA_LICENSE = BSD-3c or GPLv2
+> +ACPICA_LICENSE_FILES = source/include/acpi.h
+> +ACPICA_DEPENDENCIES = host-bison host-flex
+> +
+> +define ACPICA_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> +		HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX
+> CC="$(TARGET_CC)" \
+> +		all
+> +endef
+> +
+> +define ACPICA_INSTALL_TARGET_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> +		HARDWARE_NAME=$(BR2_ARCH) DESTDIR="$(TARGET_DIR)" \
+> +		INSTALLFLAGS=-m555 install
+> +endef
+> +
+> +$(eval $(generic-package))
+
+-- 
+
+Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Intel Finland Oy
