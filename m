@@ -1,43 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 23:50:11 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain-wrapper: prevent use of
- unsupported -fstack-protector*
-In-Reply-To: <1447724880-5020-1-git-send-email-rprebello@gmail.com>
-References: <1447724880-5020-1-git-send-email-rprebello@gmail.com>
-Message-ID: <20160704235011.7088d2fc@free-electrons.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon,  4 Jul 2016 23:57:46 +0200
+Subject: [Buildroot] [PATCH] package/libbdplus: Add missing libgpg arch
+	support
+Message-ID: <1467669466-16341-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thanks to Romain Naour for finding the culprit package.
 
-On Mon, 16 Nov 2015 23:48:00 -0200, Rodrigo Rebello wrote:
-> In cases where, for example, the compiler accepts -fstack-protector*
-> options, but the C library does not provide the necessary
-> __stack_chk_*() functions, many configure scripts incorrectly assume SSP
-> is supported by the toolchain. This is because either no link test is
-> performed by them, or the test code used does not actually trigger stack
-> protection code emission, producing false positives.
-> 
-> Forcing toolchain-wrapper to error out on stack protection options when
-> SSP is known to be unsupported works as a way to prevent these false
-> positives. At the same time, it renders package-specific workarounds,
-> like disabling SSP detection by force, unnecessary.
-> 
-> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Fix:
+http://autobuild.buildroot.org/results/d06/d06e3eb9ef48540b71fbec267c534523632b224f/
 
-Thanks for this contribution. However, we no longer have SSP related
-build issue (the few packages that had to be fixed have been fixed),
-and I really dislike making the wrapper more complicated than it
-already is. I understand that this is potentially a controversial
-decision, but I prefer to not apply this patch.
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/libbdplus/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
+diff --git a/package/libbdplus/Config.in b/package/libbdplus/Config.in
+index df5ea27..afde075 100644
+--- a/package/libbdplus/Config.in
++++ b/package/libbdplus/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBBDPLUS
+ 	bool "libbdplus"
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBGCRYPT
+@@ -15,4 +16,5 @@ config BR2_PACKAGE_LIBBDPLUS
+ 	  http://www.videolan.org/developers/libbdplus.html
+ 
+ comment "libbdplus needs a toolchain w/ threads, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		!BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
