@@ -1,139 +1,143 @@
 From: Christian Stewart <christian@paral.in>
-Date: Mon,  4 Jul 2016 12:26:18 -0700
-Subject: [Buildroot] [PATCH v6 1/5] runc: new package
-Message-ID: <1467660382-6317-1-git-send-email-christian@paral.in>
+Date: Mon,  4 Jul 2016 12:26:19 -0700
+Subject: [Buildroot] [PATCH v6 2/5] docker-containerd: new package
+In-Reply-To: <1467660382-6317-1-git-send-email-christian@paral.in>
+References: <1467660382-6317-1-git-send-email-christian@paral.in>
+Message-ID: <1467660382-6317-2-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-runC is a CLI tool for spawning and running containers according to the
-OCP specification.
+docker-containerd is a daemon and API for controlling and managing runC
+containers.
 
-runC is used by the latest Docker engine versions, however, runc itself
-is standalone and has no other dependencies.
-
-https://runc.io/
+https://containerd.tools/
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 
 ---
 
-Changes since v1:
- - use call github to generate source url
 Changes since v3:
- - fix indentation in Config.in
- - add dep on threads in Config.in
- - break gopath into separate variable
- - use HOST_GO_TARGET_ENV
+ - Don't depend on runc at compile-time
+ - Add threading dependency
+ - Use HOST_GO_TARGET_ENV, partially
+ - Cleanup compile commands
+ - Include patch to fix arm64 compilation
 Changes since v4:
- - use RUNC_VERSION instead of commit hash
- - only show comment when build is possible with threads enabled
+ - Bump to v0.2.2
+ - update hash for 0.2.2
+ - fix docker-runc simlink
+ - use CONTAINERD_VERSION for GitCommit const
+ - add go arch supports to config.in comment
+ - did runtime tests
+ - added signed-off-by to the patch series
 Changes since v5:
- - bump to v1.0.0-rc1
+ - containerd-shim aliased to docker-containerd-shim
+ - bumped to 1b3a8154 (commit pin required)
+ - patches removed (included in bump)
 
 ---
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in      |  1 +
- package/runc/Config.in | 13 +++++++++++++
- package/runc/runc.hash |  2 ++
- package/runc/runc.mk   | 46 ++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 62 insertions(+)
- create mode 100644 package/runc/Config.in
- create mode 100644 package/runc/runc.hash
- create mode 100644 package/runc/runc.mk
+ package/Config.in                                |  1 +
+ package/docker-containerd/Config.in              | 13 +++++++
+ package/docker-containerd/docker-containerd.hash |  2 ++
+ package/docker-containerd/docker-containerd.mk   | 45 ++++++++++++++++++++++++
+ 4 files changed, 61 insertions(+)
+ create mode 100644 package/docker-containerd/Config.in
+ create mode 100644 package/docker-containerd/docker-containerd.hash
+ create mode 100644 package/docker-containerd/docker-containerd.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 2c4c196..078436e 100644
+index 078436e..01c0811 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1665,6 +1665,7 @@ menu "System tools"
- 	source "package/pwgen/Config.in"
- 	source "package/quota/Config.in"
- 	source "package/rsyslog/Config.in"
-+	source "package/runc/Config.in"
- 	source "package/scrub/Config.in"
- 	source "package/scrypt/Config.in"
- 	source "package/smack/Config.in"
-diff --git a/package/runc/Config.in b/package/runc/Config.in
+@@ -1636,6 +1636,7 @@ menu "System tools"
+ 	source "package/cpuload/Config.in"
+ 	source "package/dcron/Config.in"
+ 	source "package/debianutils/Config.in"
++	source "package/docker-containerd/Config.in"
+ 	source "package/cgroupfs-mount/Config.in"
+ 	source "package/dsp-tools/Config.in"
+ 	source "package/efibootmgr/Config.in"
+diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
 new file mode 100644
-index 0000000..1802e59
+index 0000000..e76a6a2
 --- /dev/null
-+++ b/package/runc/Config.in
++++ b/package/docker-containerd/Config.in
 @@ -0,0 +1,13 @@
-+config BR2_PACKAGE_RUNC
-+	bool "runc"
++config BR2_PACKAGE_DOCKER_CONTAINERD
++	bool "docker-containerd"
 +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_RUNC
 +	help
-+	  runC is a CLI tool for spawning and running containers
-+	  according to the OCP specification.
++	  containerd is a daemon to control runC.
 +
-+	  https://github.com/opencontainers/runc
++	  https://github.com/docker/containerd
 +
-+comment "runc needs a toolchain w/ threads"
++comment "docker-containerd needs a toolchain w/ threads"
 +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
 new file mode 100644
-index 0000000..e6ec483
+index 0000000..a4a427d
 --- /dev/null
-+++ b/package/runc/runc.hash
++++ b/package/docker-containerd/docker-containerd.hash
 @@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 77f9d4df1657fecc939be0261fcccccd34d5b22c02b8a49abad23fac33b4059a  runc-v1.0.0-rc1.tar.gz
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
++# Computed locally
++sha256 bdfa54c94f3de901a7983dc0bc924dd2268e9a5f5fe920d27bfdafad60958522  docker-containerd-1b3a81545ca79456086dc2aa424357be98b962ee.tar.gz
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
 new file mode 100644
-index 0000000..3f352bd
+index 0000000..f0000e6
 --- /dev/null
-+++ b/package/runc/runc.mk
-@@ -0,0 +1,46 @@
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -0,0 +1,45 @@
 +################################################################################
 +#
-+# runc
++# docker-containerd
 +#
 +################################################################################
 +
-+RUNC_VERSION = v1.0.0-rc1
-+RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
++DOCKER_CONTAINERD_VERSION = 1b3a81545ca79456086dc2aa424357be98b962ee
++DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
 +
-+RUNC_LICENSE = Apache-2.0
-+RUNC_LICENSE_FILES = LICENSE
++DOCKER_CONTAINERD_LICENSE = Apache-2.0
++DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
 +
-+RUNC_DEPENDENCIES = host-go
++DOCKER_CONTAINERD_DEPENDENCIES = host-go
 +
-+RUNC_GOPATH = "$(@D)/Godeps/_workspace"
-+RUNC_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
++DOCKER_CONTAINERD_GOPATH = "$(@D)/vendor"
++DOCKER_CONTAINERD_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
 +	CGO_ENABLED=1 \
 +	GOBIN="$(@D)/bin" \
-+	GOPATH="$(RUNC_GOPATH)"
++	GOPATH="$(DOCKER_CONTAINERD_GOPATH)"
 +
-+RUNC_GLDFLAGS = \
-+	-X main.gitCommit=$(RUNC_VERSION) \
++DOCKER_CONTAINERD_GLDFLAGS = \
++	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION) \
 +	-extldflags '-static'
 +
-+RUNC_GOTAGS = cgo static_build
-+
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+RUNC_GOTAGS += seccomp
-+RUNC_DEPENDENCIES += libseccomp
-+endif
-+
-+define RUNC_CONFIGURE_CMDS
-+	mkdir -p $(RUNC_GOPATH)/src/github.com/opencontainers
-+	ln -s $(@D) $(RUNC_GOPATH)/src/github.com/opencontainers/runc
++define DOCKER_CONTAINERD_CONFIGURE_CMDS
++	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
++	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
++	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
++	ln -s $(RUNC_SRCDIR) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
 +endef
 +
-+define RUNC_BUILD_CMDS
-+	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/usr/bin/go \
-+		build -v -o $(@D)/bin/runc -tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
++define DOCKER_CONTAINERD_BUILD_CMDS
++	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/ctr -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./ctr
++	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/containerd -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./containerd
++	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/containerd-shim -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./containerd-shim
 +endef
 +
-+define RUNC_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/runc $(TARGET_DIR)/usr/bin/runc
++define DOCKER_CONTAINERD_INSTALL_TARGET_CMDS
++	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
++	$(INSTALL) -D -m 0755 $(@D)/bin/containerd $(TARGET_DIR)/usr/bin/docker-containerd
++	$(INSTALL) -D -m 0755 $(@D)/bin/containerd-shim $(TARGET_DIR)/usr/bin/containerd-shim
++	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
 +endef
 +
 +$(eval $(generic-package))
