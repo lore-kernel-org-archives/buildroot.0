@@ -1,115 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Jul 2016 17:23:07 +0200
-Subject: [Buildroot] [git commit] package/gpsd: use 'menuconfig' instead of
-	'config'+'menu'
-Message-ID: <20160704152319.27E4F819EF@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2016 17:24:18 +0200
+Subject: [Buildroot] [PATCH] package/dvblast: fix static linking
+In-Reply-To: <1467645076-13092-1-git-send-email-yann.morin.1998@free.fr>
+References: <1467645076-13092-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160704172418.2f2e11d0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d35008fc6ab944b158a77d068b62f69c1b566a6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Since there were multiple sub-menus, their prompts are turned into
-comments.
+On Mon,  4 Jul 2016 17:11:16 +0200, Yann E. MORIN wrote:
+> dvblast uconditionally believes that any Linux system will have support
+> for clock nanosleep().
+> 
+> However, clock_nanosleep() is only availabe with NPTL.
+> 
+> Fixing dvblast is not really complicated, but not trivial either. So we
+> jsut make it depend on NPTL.
 
-Some option were missing a prompt, so add one; switch integer options to
-use the 'int' type instead of 'string'. Add separating lines around
-options.
+jsut -> just
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gpsd/Config.in | 25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
+Also, the title was wrong: you're not fixing static linking, but build
+on non-NPTL platforms. So I fixed that up and applied.
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index b4008eb..876ab9b 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -2,7 +2,7 @@ comment "gpsd needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
--config BR2_PACKAGE_GPSD
-+menuconfig BR2_PACKAGE_GPSD
- 	bool "gpsd"
- 	# Uses fork()
- 	depends on BR2_USE_MMU
-@@ -25,7 +25,7 @@ config BR2_PACKAGE_GPSD_DEVICES
- 	string "Where to look for GPSes"
- 	default "/dev/ttyS1"
- 
--menu "Features"
-+comment "Features"
- 
- config BR2_PACKAGE_GPSD_CLIENT_DEBUG
- 	bool "client debugging support"
-@@ -50,36 +50,41 @@ config BR2_PACKAGE_GPSD_PPS
- 
- config BR2_PACKAGE_GPSD_USER
- 	bool "GPSD privilege revocation user"
-+
- config BR2_PACKAGE_GPSD_USER_VALUE
--	string ""
-+	string "user to run as"
- 	default "nobody"
- 	depends on BR2_PACKAGE_GPSD_USER
- 
- config BR2_PACKAGE_GPSD_GROUP
- 	bool "GPSD privilege revocation group"
-+
- config BR2_PACKAGE_GPSD_GROUP_VALUE
--	string ""
-+	string "group to run as"
- 	default "nobody"
- 	depends on BR2_PACKAGE_GPSD_GROUP
- 
- config BR2_PACKAGE_GPSD_FIXED_PORT_SPEED
- 	bool "compile with fixed serial port speed"
-+
- config BR2_PACKAGE_GPSD_FIXED_PORT_SPEED_VALUE
--	string ""
-+	int "serial port speed"
- 	default "9600"
- 	depends on BR2_PACKAGE_GPSD_FIXED_PORT_SPEED
- 
- config BR2_PACKAGE_GPSD_MAX_CLIENT
- 	bool "compile with limited maximum clients"
-+
- config BR2_PACKAGE_GPSD_MAX_CLIENT_VALUE
--	string "compile with limited maximum clients"
-+	int "maximum number of clients"
- 	default "10"
- 	depends on BR2_PACKAGE_GPSD_MAX_CLIENT
- 
- config BR2_PACKAGE_GPSD_MAX_DEV
- 	bool "compile with maximum allowed devices"
-+
- config BR2_PACKAGE_GPSD_MAX_DEV_VALUE
--	string "compile with maximum allowed devices"
-+	int "maximum allowed devices"
- 	default "2"
- 	depends on BR2_PACKAGE_GPSD_MAX_DEV
- 
-@@ -94,9 +99,7 @@ config BR2_PACKAGE_GPSD_CONTROLSEND
- config BR2_PACKAGE_GPSD_SQUELCH
- 	bool "squelch gpsd_report and gpsd_hexdump to save cpu"
- 
--endmenu
--
--menu "Protocols"
-+comment "Protocols"
- 
- config BR2_PACKAGE_GPSD_AIVDM
- 	bool "Aivdm"
-@@ -231,6 +234,4 @@ config BR2_PACKAGE_GPSD_UBX
- 	help
- 	  uBlox UBX binary support
- 
--endmenu
--
- endif
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
