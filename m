@@ -1,47 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Jul 2016 17:10:14 +0200
-Subject: [Buildroot] [PATCH 04/83 v2] package/gd: use 'menuconfig'
-	instead of 'config'+'menu'
-In-Reply-To: <9f7e2cbc99ed22ceaab8e2d35f53736d5fbaae42.1467624132.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 4 Jul 2016 11:24:15 +0200")
-References: <cover.1467624132.git.yann.morin.1998@free.fr>
- <9f7e2cbc99ed22ceaab8e2d35f53736d5fbaae42.1467624132.git.yann.morin.1998@free.fr>
-Message-ID: <87eg79e8x5.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  4 Jul 2016 17:11:16 +0200
+Subject: [Buildroot] [PATCH] package/dvblast: fix static linking
+Message-ID: <1467645076-13092-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+dvblast uconditionally believes that any Linux system will have support
+for clock nanosleep().
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > ---
- > Changes RFC -> v1:
- >   - typo in title  (Arnout)
- > ---
- >  package/gd/Config.in | 6 ++----
- >  1 file changed, 2 insertions(+), 4 deletions(-)
+However, clock_nanosleep() is only availabe with NPTL.
 
- > diff --git a/package/gd/Config.in b/package/gd/Config.in
- > index 28b0b0f..092bc06 100644
- > --- a/package/gd/Config.in
- > +++ b/package/gd/Config.in
- > @@ -1,4 +1,4 @@
- > -config BR2_PACKAGE_GD
- > +menuconfig BR2_PACKAGE_GD
- >  	bool "gd"
- >  	help
- >  	  GD is a graphics library. It allows your code to quickly
- > @@ -12,7 +12,7 @@ config BR2_PACKAGE_GD
+Fixing dvblast is not really complicated, but not trivial either. So we
+jsut make it depend on NPTL.
+
+Fixes:
+    http://autobuild.buildroot.org/?reason=dvblast-3.0
+    http://autobuild.buildroot.org/results/dbe/dbe91dd6543b4b88fbf1e5b09d4997d2dc730747/
+    http://autobuild.buildroot.org/results/32b/32bee5071f46b86de61db7f35a2cd04e270bc73c/
+    [and many more...]
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/dvblast/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/dvblast/Config.in b/package/dvblast/Config.in
+index 1ea8f93..b9c5c14 100644
+--- a/package/dvblast/Config.in
++++ b/package/dvblast/Config.in
+@@ -4,13 +4,13 @@ config BR2_PACKAGE_DVBLAST
+ 	select BR2_PACKAGE_LIBEV
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	depends on !BR2_bfin  # libev
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # clock_nanosleep()
+ 	help
+ 	  DVBlast is a simple and powerful MPEG-2/TS demux and
+ 	  streaming application.
  
- >  if BR2_PACKAGE_GD
+ 	  http://www.videolan.org/projects/dvblast.html
  
- > -menu "gd tools"
- > +comment "gd tools"
-
-I don't think this comment really adds any value, so I've dropped this
-and committed, thanks.
-
+-comment 'dvblast needs a toolchain w/ threads'
++comment 'dvblast needs a toolchain w/ NPTL'
+ 	depends on !BR2_bfin  # libev
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 -- 
-Bye, Peter Korsgaard
+2.7.4
