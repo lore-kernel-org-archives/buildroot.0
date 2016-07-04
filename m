@@ -1,69 +1,43 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 4 Jul 2016 08:15:00 -0300 (BRT)
-Subject: [Buildroot] Unable to compile uboot v2012.10 on Buildroot
- 2016.05
-In-Reply-To: <902df8d4-b600-9322-af0b-eea6aa56be9a@mind.be>
-References: <1249010753.7483898.1467378648497.JavaMail.zimbra@datacom.ind.br>
- <1572014322.7513168.1467381657827.JavaMail.zimbra@datacom.ind.br>
- <20160701161556.5e65b3df@free-electrons.com>
- <1533419985.7541395.1467386922132.JavaMail.zimbra@datacom.ind.br>
- <e3405ae6-8f0b-0e40-e2e4-efafe77bf717@mind.be>
- <20160702125625.11882f51@free-electrons.com>
- <170867641.7742576.1467562508600.JavaMail.zimbra@datacom.ind.br>
- <902df8d4-b600-9322-af0b-eea6aa56be9a@mind.be>
-Message-ID: <337360765.7782418.1467630900829.JavaMail.zimbra@datacom.ind.br>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 4 Jul 2016 13:26:35 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: wrap gfortran
+Message-ID: <1467635195-7315-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: "Carlos Santos" <casantos@datacom.ind.br>, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> Cc: "Julien Boibessot" <julien.boibessot@armadeus.com>, "buildroot" <buildroot@buildroot.org>
-> Sent: Monday, July 4, 2016 6:26:09 AM
-> Subject: Re: [Buildroot] Unable to compile uboot v2012.10 on Buildroot 2016.05
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> Hi Carlos,
-> 
-> On 03-07-16 18:15, Carlos Santos wrote:
->>> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
->>> To: "Arnout Vandecappelle" <arnout@mind.be>
->>> Cc: "Carlos Santos" <casantos@datacom.ind.br>, "Julien Boibessot"
->>> <julien.boibessot@armadeus.com>, "buildroot"
->>> <buildroot@buildroot.org>
->>> Sent: Saturday, July 2, 2016 7:56:25 AM
->>> Subject: Re: [Buildroot] Unable to compile uboot v2012.10 on Buildroot 2016.05
->> 
->>> Hello,
->>>
->>> On Sat, 2 Jul 2016 12:47:14 +0200, Arnout Vandecappelle wrote:
->>>
->>>>> Because the value of HOSTCFLAGS set in U-Boot's config.mk is overwritten.
->>>>
->>>>  How about leaving HOSTCFLAGS alone, and instead setting
->>>> HOSTCC="$(HOSTCC) $(HOST_CFLAGS)". HOSTLDFLAGS can probably be overridden.
->>>
->>> Good point, that's possibly an alternate solution. I sent a patch
->>> implementing a different solution, but Carlos, if you can try Arnout's
->>> suggestion, it would be good.
->> 
->> Yes, it works, but this reminds me that HOSTCC is not passed when building
->> buildroot, so the command line for version 2015.01 becomes
->> 
->> cc -Wp,-MD,tools/.img2srec.d -O2 -I/work/freescale_imx28evk/host/usr/include
->> -include ./include/libfdt_env.h -idirafterinclude
->> -idirafter./arch/arm/include -I./lib/libfdt -I./tools
->> -DCONFIG_SYS_TEXT_BASE=0x40002000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES
->> -D_GNU_SOURCE -pedantic -o tools/img2srec tools/img2srec.c
->> 
->> This may not be a problem now but I believe that HOSTCC should always be
->> provided.
-> 
-> Care to prepare a patch then that replaces HOSTCFLAGS by HOSTCC?
-> 
-
-Thomas already submitted a patch: http://patchwork.ozlabs.org/patch/643426/
-
-Carlos Santos (Casantos)
-DATACOM, P&D
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index e675045..783986f 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -729,9 +729,9 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT
+ endef
+ endif
+ 
+-# Build toolchain wrapper for preprocessor, C and C++ compiler and setup
+-# symlinks for everything else. Skip gdb symlink when we are building our
+-# own gdb to prevent two gdb's in output/host/usr/bin.
++# Build toolchain wrapper for preprocessor, C, C++ and Fortran compilers
++# and setup symlinks for everything else. Skip gdb symlink when we are
++# building our own gdb to prevent two gdb's in output/host/usr/bin.
+ # The LTO support in gcc creates wrappers for ar, ranlib and nm which load
+ # the lto plugin. These wrappers are called *-gcc-ar, *-gcc-ranlib, and
+ # *-gcc-nm and should be used instead of the real programs when -flto is
+@@ -746,7 +746,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+ 		*-ar|*-ranlib|*-nm) \
+ 			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
+ 			;; \
+-		*cc|*cc-*|*++|*++-*|*cpp) \
++		*cc|*cc-*|*++|*++-*|*cpp|*-gfortran) \
+ 			ln -sf toolchain-wrapper $$base; \
+ 			;; \
+ 		*gdb|*gdbtui) \
+-- 
+2.7.3
