@@ -1,35 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 17:24:18 +0200
-Subject: [Buildroot] [PATCH] package/dvblast: fix static linking
-In-Reply-To: <1467645076-13092-1-git-send-email-yann.morin.1998@free.fr>
-References: <1467645076-13092-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160704172418.2f2e11d0@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Jul 2016 17:28:07 +0200
+Subject: [Buildroot] [PATCH 03/83 v2] package/collectd: use 'menuconfig'
+	instead of 'config'+'menu'
+In-Reply-To: <20160704151822.GA3549@free.fr> (Yann E. MORIN's message of "Mon, 
+ 4 Jul 2016 17:18:22 +0200")
+References: <cover.1467624132.git.yann.morin.1998@free.fr>
+ <46b7f0adce308bf807e169fa8c8348c4f349a4b2.1467624132.git.yann.morin.1998@free.fr>
+ <87a8hxe8qd.fsf@dell.be.48ers.dk> <20160704151822.GA3549@free.fr>
+Message-ID: <871t39e83c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Mon,  4 Jul 2016 17:11:16 +0200, Yann E. MORIN wrote:
-> dvblast uconditionally believes that any Linux system will have support
-> for clock nanosleep().
-> 
-> However, clock_nanosleep() is only availabe with NPTL.
-> 
-> Fixing dvblast is not really complicated, but not trivial either. So we
-> jsut make it depend on NPTL.
+Hi,
 
-jsut -> just
+ >> Which looks sensible to me.
+ >> 
+ >> With the change we instead have:
+ >> 
+ >> [ ] collectd  ----
 
-Also, the title was wrong: you're not fixing static linking, but build
-on non-NPTL platforms. So I fixed that up and applied.
+ > You did notice the trailing '---' which means that the menu is empty, I
+ > guess? ;-)
 
-Thanks,
+Yes. I do find it quite stupid that enter isn't just a no-op when the
+option isn't enabled, but I guess that's just kconfig :/
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
