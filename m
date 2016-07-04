@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Jul 2016 17:56:17 +0200
-Subject: [Buildroot] [PATCH 4/6] iw: correct license name
-In-Reply-To: <1467636386-6759-4-git-send-email-rahul.bedarkar@imgtec.com>
+Date: Mon, 4 Jul 2016 18:07:07 +0200
+Subject: [Buildroot] [PATCH 5/6] gmp: correct legal info
+In-Reply-To: <1467636386-6759-5-git-send-email-rahul.bedarkar@imgtec.com>
 References: <1467636386-6759-1-git-send-email-rahul.bedarkar@imgtec.com>
- <1467636386-6759-4-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20160704155617.GD3549@free.fr>
+ <1467636386-6759-5-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <20160704160707.GE3549@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,33 +14,44 @@ To: buildroot@busybox.net
 Rahul, All,
 
 On 2016-07-04 18:16 +0530, Rahul Bedarkar spake thusly:
-> iw license is ISC.
+> Since version 6, GMP is distributed under the dual licenses LGPLv3+ or
+> GPLv2+
 > 
 > Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
 > Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+> ---
+>  package/gmp/gmp.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+> index cdde794..485bf7c 100644
+> --- a/package/gmp/gmp.mk
+> +++ b/package/gmp/gmp.mk
+> @@ -8,8 +8,8 @@ GMP_VERSION = 6.1.1
+>  GMP_SITE = $(BR2_GNU_MIRROR)/gmp
+>  GMP_SOURCE = gmp-$(GMP_VERSION).tar.xz
+>  GMP_INSTALL_STAGING = YES
+> -GMP_LICENSE = LGPLv3+
+> -GMP_LICENSE_FILES = COPYING.LESSERv3
+> +GMP_LICENSE = LGPLv3+ or GPLv2+
+> +GMP_LICENSE_FILES = COPYING.LESSERv3 COPYINGv2
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+There are also COPYING and COPYINGv3; both contain the text of the
+GPLv3. I'm not sure whether we should carry them or not...
+
+I've looked at a few files, used a few grep-fuu, and they seem to really
+consistently refer to either LGPLv3 or GPLv2, which is what you wrote.
+
+So I'd be tempted to agree with you.
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/iw/iw.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-> index 200e703..6f3f309 100644
-> --- a/package/iw/iw.mk
-> +++ b/package/iw/iw.mk
-> @@ -7,7 +7,7 @@
->  IW_VERSION = 4.7
->  IW_SOURCE = iw-$(IW_VERSION).tar.xz
->  IW_SITE = $(BR2_KERNEL_MIRROR)/software/network/iw
-> -IW_LICENSE = iw license
-> +IW_LICENSE = ISC
->  IW_LICENSE_FILES = COPYING
->  IW_DEPENDENCIES = host-pkgconf libnl
->  IW_MAKE_OPTS = CC="$(TARGET_CC)" LD="$(TARGET_LD)" LDFLAGS="$(TARGET_LDFLAGS)"
+>  GMP_DEPENDENCIES = host-m4
+>  HOST_GMP_DEPENDENCIES = host-m4
+>  
 > -- 
 > 2.6.2
 > 
