@@ -1,55 +1,42 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 4 Jul 2016 22:44:24 +0200
-Subject: [Buildroot] Version 2016.05: Python 3.5.1. Building python
- packages . error: Download error on https://pypi.python.org/simple/:
- unknown url type: https
-In-Reply-To: <577A7B86.2030001@gmail.com>
-References: <577A7B86.2030001@gmail.com>
-Message-ID: <CAGm1_kvmv6aAN6UoO+4A_Wwho9PjP58dmnBzgG1x_-c=qpvgGw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2016 22:47:19 +0200
+Subject: [Buildroot] [git commit] package/collectd: use 'menuconfig' instead
+	of 'config'+'menu'
+Message-ID: <20160704204726.A1AC38080F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Borut,
+commit: https://git.buildroot.net/buildroot/commit/?id=86440f59148c374853d58014e90806d0e73220be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Jul 4, 2016 at 5:06 PM, pborut123 <pborut123@gmail.com> wrote:
-> Hello,
-> Searching for solution I've found that this error is connected with ssl
-> access in buildroot's host python3 installation.
-> If I run exact python3 from buildroot (./output/host/usr/bin/python3) and
-> enter code to test https connection:
->
-> Python 3.5.1 (default, Jul  3 2016, 21:09:24)
-> [GCC 4.8.4] on linux
-> Type "help", "copyright", "credits" or "license" for more information.
->>>>
->>>> from urllib.request import urlopen
->>>> urlopen('https://askubuntu.com').read()
->
-> Traceback (most recent call last):
->   File "<stdin>", line 1, in <module>
->   File
-> "/home/pborut/strhub/2/buildroot2/output/host/usr/lib/python3.5/urllib/request.py",
-> line 162, in urlopen
->     return opener.open(url, data, timeout)
->  ...
->   File
-> "/home/pborut/strhub/2/buildroot2/output/host/usr/lib/python3.5/urllib/request.py",
-> line 1310, in unknown_open
->     raise URLError('unknown url type: %s' % type)
-> urllib.error.URLError: <urlopen error unknown url type: https>
->
-> which is same error message I get while building module.
->
-> I have built buildroot configuration with python3, I have ssl option
-> checked, I have openssl package also selected.
->
-> I'm running 64-bit LinuxMint vm (ubuntu) with Python3 3.4.3, works normal.
->
-> Do you have any suggestion on what else to check to get over this issue?
+Keep the existing sub-menus, because there are a lot of entries in those
+sub-menus. Using comments to separate them is not a totally satifactory
+solution.
 
-What package are going to build?
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/collectd/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Yegor
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 71301ec..6405af6 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_COLLECTD
++menuconfig BR2_PACKAGE_COLLECTD
+ 	bool "collectd"
+ 	# Uses fork()
+ 	depends on BR2_USE_MMU
+@@ -39,6 +39,7 @@ config BR2_PACKAGE_COLLECTD_VALUE
+ 	bool "value"
+ 	help
+ 	  Select values by their data sources' values.
++
+ endmenu
+ 
+ menu "misc plugins"
