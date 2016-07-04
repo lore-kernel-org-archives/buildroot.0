@@ -1,54 +1,65 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 4 Jul 2016 11:05:48 +0200
-Subject: [Buildroot] [PATCH 1/1] wireless_tools: Ensure ifrename is
- built and installed
-In-Reply-To: <BE7DD8D2CBE7B241971A69A3E62C11B7011890FE@partis.dyndns.org>
-References: <BE7DD8D2CBE7B241971A69A3E62C11B7011890FE@partis.dyndns.org>
-Message-ID: <CAGduivxk6q9P3PJNzo=w_MUQ2SFFRk9WB_hw1KKGCoy0avz72A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2016 11:06:56 +0200
+Subject: [Buildroot] [PATCH v3 3/3] board: add blackfin gdb simulator
+ support
+In-Reply-To: <20160603040750.GA31665@waldemar-brodkorb.de>
+References: <20160603040750.GA31665@waldemar-brodkorb.de>
+Message-ID: <20160704110656.7112a59a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary, all
+Hello,
 
-Thanks a lot for your patch. Below are some comments.
-Your patch will be marked as "Changes Requested" in our patchwork,
-feel free to resend the patch with the modification.
+On Fri, 3 Jun 2016 06:07:50 +0200, Waldemar Brodkorb wrote:
+> With this config you can bootup a Linux kernel
+> in GDB simulator and test Blackfin kernel and
+> userland.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-On Thu, Jun 9, 2016 at 4:54 PM, Gary Partis <gary@partis.co.uk> wrote:
-> Signed-off-by: Gary Partis <gary@partis.co.uk>
-> ---
->  package/wireless_tools/wireless_tools.mk |    4 ++--
->  1 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/wireless_tools/wireless_tools.mk
-> b/package/wireless_tools/wireless_tools.mk
-> index 5fb8f12..12e1c1f 100644
-> --- a/package/wireless_tools/wireless_tools.mk
-> +++ b/package/wireless_tools/wireless_tools.mk
-> @@ -12,8 +12,8 @@ WIRELESS_TOOLS_LICENSE = GPLv2
->  WIRELESS_TOOLS_LICENSE_FILES = COPYING
->  WIRELESS_TOOLS_INSTALL_STAGING = YES
->
-> -WIRELESS_TOOLS_BUILD_TARGETS = iwmulticall
-> -WIRELESS_TOOLS_INSTALL_TARGETS = install-iwmulticall
-> +WIRELESS_TOOLS_BUILD_TARGETS = iwmulticall all
-> +WIRELESS_TOOLS_INSTALL_TARGETS = install-iwmulticall install
-If I understand your commit log correctly, you only want the
-'ifrename' binary but in your changes, you build and install every
-binary.
-There is a target in the wireless_tools's Makefile to build only
-ifrename, there's no target to install it specifically, but you can
-install it by using the $(INSTALL) command in the
-WIRELESS_TOOLS_INSTALL_TARGET_CMDS.
->
->
->  ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS_LIB),y)
-> --
-> 1.7.1
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+The simulator support doesn't build here. Weird because I'm pretty sure
+it used to build when you submitted it, but now it fails with:
+
+In file included from ./sim-main.h:35,
+                 from ./../common/sim-command.c:21:
+../common/sim-base.h:76: error: redefinition of typedef 'SIM_CPU'
+./sim-main.h:29: note: previous declaration of 'SIM_CPU' was here
+make[5]: *** [sim-command.o] Error 1
+make[5]: *** Waiting for unfinished jobs....
+In file included from ./sim-main.h:35,
+                 from ./../common/sim-close.c:21:
+../common/sim-base.h:76: error: redefinition of typedef 'SIM_CPU'
+./sim-main.h:29: note: previous declaration of 'SIM_CPU' was here
+In file included from ./sim-main.h:35,
+                 from ./../common/sim-config.c:23:
+../common/sim-base.h:76: error: redefinition of typedef 'SIM_CPU'
+./sim-main.h:29: note: previous declaration of 'SIM_CPU' was here
+make[5]: *** [sim-close.o] Error 1
+make[5]: *** [sim-config.o] Error 1
+In file included from ./sim-main.h:35,
+                 from ./../common/sim-core.c:26:
+../common/sim-base.h:76: error: redefinition of typedef 'SIM_CPU'
+./sim-main.h:29: note: previous declaration of 'SIM_CPU' was here
+make[5]: *** [sim-core.o] Error 1
+make[4]: *** [all] Error 1
+make[3]: *** [all-sim] Error 2
+make[2]: *** [all] Error 2
+make[1]: *** [/home/test/outputs/bfin/build/host-gdb-7.11.1/.stamp_built] Error 2
+make: *** [_all] Error 2
+
+I remember about the hack that we do in a pre-configure hook, and this
+hack is still done. But it fails to build. I've tried both gdb 7.10
+(default) and 7.11 (above) and they both fail in the same way.
+
+Could you have a look?
+
+Thanks a lot,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
