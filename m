@@ -1,40 +1,238 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 4 Jul 2016 19:45:02 +0200
-Subject: [Buildroot] [PATCH v6 3/3] docker-engine: new package
-In-Reply-To: <CA+h8R2rXS2TgsDk_6sLSD4-ZuWtVc2QV=V1=tueLsNje+4hDfQ@mail.gmail.com>
-References: <1464475578-22239-1-git-send-email-christian@paral.in>
- <1464475578-22239-4-git-send-email-christian@paral.in>
- <a711b084-add6-8698-5cb7-ddf4bfeaf317@gmail.com>
- <CA+h8R2rXS2TgsDk_6sLSD4-ZuWtVc2QV=V1=tueLsNje+4hDfQ@mail.gmail.com>
-Message-ID: <c6264c10-e92d-9a87-f7d1-b12eff6fd1a7@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 4 Jul 2016 20:05:45 +0200
+Subject: [Buildroot] [PATCH 15/24 v2] packages: use the
+ <PKG>_TARGET_FINALIZE_HOOKS
+In-Reply-To: <f62f08e0-eea9-c2ec-e44b-98b7833e5f6b@gmail.com>
+References: <cover.1466622379.git.yann.morin.1998@free.fr>
+ <8fc9a5924f5adb37bd30284049e7fcc38df66c79.1466622379.git.yann.morin.1998@free.fr>
+ <f62f08e0-eea9-c2ec-e44b-98b7833e5f6b@gmail.com>
+Message-ID: <20160704180545.GJ3549@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 04/07/2016 ? 18:16, Christian Stewart a ?crit :
-> Romain,
-> 
-> On Mon, Jul 4, 2016, 9:13 AM Romain Naour <romain.naour@gmail.com
-> <mailto:romain.naour@gmail.com>> wrote:
-> 
->     This script clone dozen git repository
-> 
-> 
-> That script is unnecessary and I have removed it in my newer version of this
-> series. It's intended to be called by developers to update the vendor tree, not
-> at build time. 
+Romain, All,
 
-Ok, great. You had some review on patch 2 and 3, I'll mark the series changes
-requested in the patchwork. Please, don't forget to send an updated version.
-
-Thanks!
-
-Best regards,
-Romain
-
-
+On 2016-07-03 12:02 +0200, Romain Naour spake thusly:
+> Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
+> > Register package-specific target-finalize hooks with the
+> > newly-introduced <PKG>_TARGET_FINALIZE_HOOKS.
+> > 
+> > This incidentally fixes luarocks, which was registering target-finalize
+> > hooks even when it was not enabled.
+> > 
+> > To be noted, the skeleton package is not converted, because it is not
+> > optional, we always have it; so its hooks would always be registered
+> > anyway. Besides, the followup patches would render this conversion moot
+> > anyway, since those hooks would be spread across the various skeleton
+> > packages.
 > 
-> Christian 
+> Have you considered the two TARGET_FINALIZE_HOOKS from the toolchain package ?
+
+Good idea! Done, now.
+
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
+> Otherwise:
+> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+> Best regards,
+> Romain
+> 
+> 
+> > ---
+> >  package/google-breakpad/google-breakpad.mk |  6 ++----
+> >  package/libglib2/libglib2.mk               |  6 ++----
+> >  package/libgtk3/libgtk3.mk                 |  4 +---
+> >  package/luarocks/luarocks.mk               |  3 +--
+> >  package/perl/perl.mk                       |  4 +---
+> >  package/python/python.mk                   | 10 ++++------
+> >  package/python3/python3.mk                 | 10 ++++------
+> >  7 files changed, 15 insertions(+), 28 deletions(-)
+> > 
+> > diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
+> > index 1bbe4da..7a88c76 100644
+> > --- a/package/google-breakpad/google-breakpad.mk
+> > +++ b/package/google-breakpad/google-breakpad.mk
+> > @@ -13,15 +13,13 @@ GOOGLE_BREAKPAD_INSTALL_TARGET = NO
+> >  GOOGLE_BREAKPAD_INSTALL_STAGING = YES
+> >  GOOGLE_BREAKPAD_LICENSE = BSD-3c
+> >  GOOGLE_BREAKPAD_LICENSE_FILES = LICENSE
+> > -
+> > -ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
+> >  GOOGLE_BREAKPAD_DEPENDENCIES = host-google-breakpad
+> > +
+> >  define GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
+> >  	$(EXTRA_ENV) package/google-breakpad/gen-syms.sh $(STAGING_DIR) \
+> >  		$(TARGET_DIR) $(call qstrip,$(BR2_GOOGLE_BREAKPAD_INCLUDE_FILES))
+> >  endef
+> > -TARGET_FINALIZE_HOOKS += GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
+> > -endif
+> > +GOOGLE_BREAKPAD_TARGET_FINALIZE_HOOKS += GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
+> >  
+> >  $(eval $(autotools-package))
+> >  $(eval $(host-autotools-package))
+> > diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+> > index b479bae..e2bff6d 100644
+> > --- a/package/libglib2/libglib2.mk
+> > +++ b/package/libglib2/libglib2.mk
+> > @@ -160,10 +160,8 @@ define LIBGLIB2_COMPILE_SCHEMAS
+> >  		--targetdir=$(TARGET_DIR)/usr/share/glib-2.0/schemas
+> >  endef
+> >  
+> > -ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+> > -TARGET_FINALIZE_HOOKS += LIBGLIB2_REMOVE_TARGET_SCHEMAS
+> > -TARGET_FINALIZE_HOOKS += LIBGLIB2_COMPILE_SCHEMAS
+> > -endif
+> > +LIBGLIB2_TARGET_FINALIZE_HOOKS += LIBGLIB2_REMOVE_TARGET_SCHEMAS
+> > +LIBGLIB2_TARGET_FINALIZE_HOOKS += LIBGLIB2_COMPILE_SCHEMAS
+> >  
+> >  $(eval $(autotools-package))
+> >  $(eval $(host-autotools-package))
+> > diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+> > index f447e7a..08d172f 100644
+> > --- a/package/libgtk3/libgtk3.mk
+> > +++ b/package/libgtk3/libgtk3.mk
+> > @@ -182,13 +182,11 @@ endef
+> >  
+> >  # Create icon-theme.cache for each of the icon directories/themes
+> >  # It's not strictly necessary but speeds up lookups
+> > -ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+> >  define LIBGTK3_UPDATE_ICON_CACHE
+> >  	find $(TARGET_DIR)/usr/share/icons -maxdepth 1 -mindepth 1 -type d \
+> >  		-exec $(HOST_DIR)/usr/bin/gtk-update-icon-cache {} \;
+> >  endef
+> > -TARGET_FINALIZE_HOOKS += LIBGTK3_UPDATE_ICON_CACHE
+> > -endif
+> > +LIBGTK3_TARGET_FINALIZE_HOOKS += LIBGTK3_UPDATE_ICON_CACHE
+> >  
+> >  $(eval $(autotools-package))
+> >  $(eval $(host-autotools-package))
+> > diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+> > index 656b832..eddd435 100644
+> > --- a/package/luarocks/luarocks.mk
+> > +++ b/package/luarocks/luarocks.mk
+> > @@ -60,5 +60,4 @@ define LUAROCKS_FINALIZE_TARGET
+> >  	rm -rf $(TARGET_DIR)/usr/lib/luarocks
+> >  endef
+> >  
+> > -TARGET_FINALIZE_HOOKS += LUAROCKS_FINALIZE_TARGET
+> > -
+> > +LUAROCKS_TARGET_FINALIZE_HOOKS += LUAROCKS_FINALIZE_TARGET
+> > diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+> > index 29af7a4..ca70123 100644
+> > --- a/package/perl/perl.mk
+> > +++ b/package/perl/perl.mk
+> > @@ -114,7 +114,6 @@ endef
+> >  $(eval $(generic-package))
+> >  $(eval $(host-generic-package))
+> >  
+> > -ifeq ($(BR2_PACKAGE_PERL),y)
+> >  define PERL_FINALIZE_TARGET
+> >  	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
+> >  	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE
+> > @@ -122,5 +121,4 @@ define PERL_FINALIZE_TARGET
+> >  	find $(TARGET_DIR)/usr/lib/perl5/ -name '*.bs' -print0 | xargs -0 rm -f
+> >  	find $(TARGET_DIR)/usr/lib/perl5/ -name '.packlist' -print0 | xargs -0 rm -f
+> >  endef
+> > -TARGET_FINALIZE_HOOKS += PERL_FINALIZE_TARGET
+> > -endif
+> > +PERL_TARGET_FINALIZE_HOOKS += PERL_FINALIZE_TARGET
+> > diff --git a/package/python/python.mk b/package/python/python.mk
+> > index 913dc2c..5e13bf3 100644
+> > --- a/package/python/python.mk
+> > +++ b/package/python/python.mk
+> > @@ -226,7 +226,7 @@ define PYTHON_CREATE_PYC_FILES
+> >  endef
+> >  
+> >  ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON_PY_PYC),y)
+> > -TARGET_FINALIZE_HOOKS += PYTHON_CREATE_PYC_FILES
+> > +PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_CREATE_PYC_FILES
+> >  endif
+> >  
+> >  ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+> > @@ -234,7 +234,7 @@ define PYTHON_REMOVE_PY_FILES
+> >  	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.py' -print0 | \
+> >  		xargs -0 --no-run-if-empty rm -f
+> >  endef
+> > -TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
+> > +PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PY_FILES
+> >  endif
+> >  
+> >  # Normally, *.pyc files should not have been compiled, but just in
+> > @@ -244,14 +244,12 @@ define PYTHON_REMOVE_PYC_FILES
+> >  	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyc' -print0 | \
+> >  		xargs -0 --no-run-if-empty rm -f
+> >  endef
+> > -TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYC_FILES
+> > +PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYC_FILES
+> >  endif
+> >  
+> >  # In all cases, we don't want to keep the optimized .pyo files
+> > -ifeq ($(BR2_PACKAGE_PYTHON),y)
+> >  define PYTHON_REMOVE_PYO_FILES
+> >  	find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR) -name '*.pyo' -print0 | \
+> >  		xargs -0 --no-run-if-empty rm -f
+> >  endef
+> > -TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYO_FILES
+> > -endif
+> > +PYTHON_TARGET_FINALIZE_HOOKS += PYTHON_REMOVE_PYO_FILES
+> > diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> > index 8459b11..dc776fe 100644
+> > --- a/package/python3/python3.mk
+> > +++ b/package/python3/python3.mk
+> > @@ -217,7 +217,7 @@ define PYTHON3_CREATE_PYC_FILES
+> >  endef
+> >  
+> >  ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PY_PYC),y)
+> > -TARGET_FINALIZE_HOOKS += PYTHON3_CREATE_PYC_FILES
+> > +PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_CREATE_PYC_FILES
+> >  endif
+> >  
+> >  ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+> > @@ -225,7 +225,7 @@ define PYTHON3_REMOVE_PY_FILES
+> >  	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.py' -print0 | \
+> >  		xargs -0 --no-run-if-empty rm -f
+> >  endef
+> > -TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
+> > +PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PY_FILES
+> >  endif
+> >  
+> >  # Normally, *.pyc files should not have been compiled, but just in
+> > @@ -235,16 +235,14 @@ define PYTHON3_REMOVE_PYC_FILES
+> >  	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.pyc' -print0 | \
+> >  		xargs -0 --no-run-if-empty rm -f
+> >  endef
+> > -TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PYC_FILES
+> > +PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_PYC_FILES
+> >  endif
+> >  
+> >  # In all cases, we don't want to keep the optimized .opt-1.pyc and
+> >  # .opt-2.pyc files, since they can't work without their non-optimized
+> >  # variant.
+> > -ifeq ($(BR2_PACKAGE_PYTHON3),y)
+> >  define PYTHON3_REMOVE_OPTIMIZED_PYC_FILES
+> >  	find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) -name '*.opt-1.pyc' -print0 -o -name '*.opt-2.pyc' -print0 | \
+> >  		xargs -0 --no-run-if-empty rm -f
+> >  endef
+> > -TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_OPTIMIZED_PYC_FILES
+> > -endif
+> > +PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_OPTIMIZED_PYC_FILES
+> > 
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
