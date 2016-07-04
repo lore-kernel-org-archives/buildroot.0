@@ -1,273 +1,165 @@
 From: Christian Stewart <christian@paral.in>
-Date: Mon,  4 Jul 2016 12:26:20 -0700
-Subject: [Buildroot] [PATCH v6 3/5] docker-engine: new package
+Date: Mon,  4 Jul 2016 12:26:21 -0700
+Subject: [Buildroot] [PATCH v6 4/5] package/docker-engine: proper sysv init
+	file
 In-Reply-To: <1467660382-6317-1-git-send-email-christian@paral.in>
 References: <1467660382-6317-1-git-send-email-christian@paral.in>
-Message-ID: <1467660382-6317-3-git-send-email-christian@paral.in>
+Message-ID: <1467660382-6317-4-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Docker is a platform to build, ship, and run applications in portable
-containers.
+From: Andrew Webster <awebster@arcx.com>
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+The packaged redhat init file is not suitable for buildroot.
+This adds a customized version for buildroot.
 
----
-
-Changes since v1:
- - use call github to build source URL
-Changes since v3:
- - fix help indentation in Config.in
- - use HOST_GO_TARGET_ENV as a base for build env vars
- - cleanup build commands
- - cleanup GOPATH and vendor directory setup
- - Remove selections for graph drivers. Docker will gracefully degrade
-   at runtime to the best available graphdriver. It is unnecessary to
-   disable these at build time, or to pull in any other dependencies
-   like aufs-util or btrfs tools. The daemon will use whatever is
-   available at runtime.
-Changes since v4:
- - remove commit hash from version scheme
-Changes since v5:
- - re-introduce graphdriver selections
- - these selections are required for btrfs and devicemapper
- - there are buildtime dependencies on headers.
- - bump to v1.12.0-rc3
- - remove hack/vendor.sh call, it is unnecessary, dependencies are
-   pre-vendored into the source tree.
-
----
-
+Acked-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Andrew Webster <awebster@arcx.com>
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in                        |   1 +
- package/docker-engine/Config.in          |  69 ++++++++++++++++++
- package/docker-engine/docker-engine.hash |   2 +
- package/docker-engine/docker-engine.mk   | 116 +++++++++++++++++++++++++++++++
- 4 files changed, 188 insertions(+)
- create mode 100644 package/docker-engine/Config.in
- create mode 100644 package/docker-engine/docker-engine.hash
- create mode 100644 package/docker-engine/docker-engine.mk
+ package/docker-engine/docker-engine.mk |   6 +-
+ package/docker-engine/docker.init      | 112 +++++++++++++++++++++++++++++++++
+ 2 files changed, 115 insertions(+), 3 deletions(-)
+ create mode 100644 package/docker-engine/docker.init
 
-diff --git a/package/Config.in b/package/Config.in
-index 01c0811..fee59a1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1637,6 +1637,7 @@ menu "System tools"
- 	source "package/dcron/Config.in"
- 	source "package/debianutils/Config.in"
- 	source "package/docker-containerd/Config.in"
-+	source "package/docker-engine/Config.in"
- 	source "package/cgroupfs-mount/Config.in"
- 	source "package/dsp-tools/Config.in"
- 	source "package/efibootmgr/Config.in"
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-new file mode 100644
-index 0000000..bbf56b1
---- /dev/null
-+++ b/package/docker-engine/Config.in
-@@ -0,0 +1,69 @@
-+config BR2_PACKAGE_DOCKER_ENGINE
-+	bool "docker-engine"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # util-linux
-+	depends on BR2_USE_WCHAR # util-linux
-+	select BR2_PACKAGE_DOCKER_CONTAINERD
-+	select BR2_PACKAGE_RUNC
-+	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_BINARIES
-+	select BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNT
-+	help
-+	  Docker is a platform to build, ship,
-+	  and run applications as lightweight containers.
-+
-+	  https://github.com/docker/docker
-+
-+comment "docker-engine needs a toolchain w/ threads"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+if BR2_PACKAGE_DOCKER_ENGINE
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
-+	bool "docker daemon"
-+	default y
-+	help
-+	  Build the Docker system daemon.
-+	  If not selected, will build client only.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL
-+	bool "build experimental features"
-+
-+if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
-+	bool "btrfs filesystem driver"
-+	depends on BR2_USE_WCHAR # btrfs-progs
-+	depends on BR2_USE_MMU # btrfs-progs
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
-+	select BR2_PACKAGE_BTRFS_PROGS
-+	help
-+	  Build the btrfs filesystem driver for Docker.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
-+	bool "devicemapper filesystem driver"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
-+	depends on BR2_USE_MMU # lvm2
-+	depends on !BR2_STATIC_LIBS # lvm2
-+	select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_LVM2_APP_LIBRARY
-+	help
-+	  Build the devicemapper filesystem driver for Docker.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
-+	bool "vfs filesystem driver"
-+	depends on BR2_USE_WCHAR # gvfs
-+	depends on BR2_USE_MMU # gvfs
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gvfs
-+	select BR2_PACKAGE_GVFS
-+	help
-+	  Build the vfs filesystem driver for Docker.
-+
-+endif
-+
-+endif
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-new file mode 100644
-index 0000000..ac90ee6
---- /dev/null
-+++ b/package/docker-engine/docker-engine.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 3f030c4f084ed518efeb00f21f3fdfb25252dd9c153b1d42da953e59bb41c582  docker-engine-v1.12.0-rc3.tar.gz
 diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-new file mode 100644
-index 0000000..501afbc
---- /dev/null
+index 501afbc..4cb896c 100644
+--- a/package/docker-engine/docker-engine.mk
 +++ b/package/docker-engine/docker-engine.mk
-@@ -0,0 +1,116 @@
-+################################################################################
-+#
-+# docker-engine
-+#
-+################################################################################
+@@ -103,10 +103,10 @@ define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+ endef
+ 
+ define DOCKER_ENGINE_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 755 $(@D)/contrib/init/sysvinit-redhat/docker \
++	$(INSTALL) -D -m 755 package/docker-engine/docker.init \
+ 		$(TARGET_DIR)/etc/init.d/S61docker
+-	$(INSTALL) -D -m 644 $(@D)/contrib/init/sysvinit-redhat/docker.sysconfig \
+-		$(TARGET_DIR)/etc/sysconfig/docker.sysconfig
++	$(INSTALL) -D -m 644 $(@D)/contrib/init/sysvinit-debian/docker.default \
++		$(TARGET_DIR)/etc/default/docker
+ endef
+ 
+ define DOCKER_ENGINE_USERS
+diff --git a/package/docker-engine/docker.init b/package/docker-engine/docker.init
+new file mode 100644
+index 0000000..a751551
+--- /dev/null
++++ b/package/docker-engine/docker.init
+@@ -0,0 +1,112 @@
++#!/bin/sh
++set -e
 +
-+DOCKER_ENGINE_VERSION = v1.12.0-rc3
-+DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
++### BEGIN INIT INFO
++# Provides:           docker
++# Required-Start:     $syslog $remote_fs
++# Required-Stop:      $syslog $remote_fs
++# Should-Start:       cgroupfs-mount cgroup-lite
++# Should-Stop:        cgroupfs-mount cgroup-lite
++# Default-Start:      2 3 4 5
++# Default-Stop:       0 1 6
++# Short-Description:  Create lightweight, portable, self-sufficient containers.
++# Description:
++#  Docker is an open-source project to easily create lightweight, portable,
++#  self-sufficient containers from any application. The same container that a
++#  developer builds and tests on a laptop can run at scale, in production, on
++#  VMs, bare metal, OpenStack clusters, public clouds and more.
++### END INIT INFO
 +
-+DOCKER_ENGINE_LICENSE = Apache-2.0
-+DOCKER_ENGINE_LICENSE_FILES = LICENSE
++export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
 +
-+DOCKER_ENGINE_DEPENDENCIES = host-go docker-containerd
++BASE=docker
 +
-+DOCKER_ENGINE_GOPATH = "$(@D)/vendor"
-+DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-+	CGO_ENABLED=1 \
-+	CGO_NO_EMULATION=1 \
-+	GOBIN="$(@D)/bin" \
-+	GOPATH="$(DOCKER_ENGINE_GOPATH)"
++# modify these in /etc/default/$BASE (/etc/default/docker)
++DOCKERD=/usr/bin/dockerd
++# This is the pid file managed by docker itself
++DOCKER_PIDFILE=/var/run/$BASE.pid
++# This is the pid file created/managed by start-stop-daemon
++DOCKER_SSD_PIDFILE=/var/run/$BASE-ssd.pid
++DOCKER_LOGFILE=/var/log/$BASE.log
++DOCKER_OPTS=
++DOCKER_DESC="Docker"
 +
-+DOCKER_ENGINE_GLDFLAGS = \
-+	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
-+	-X main.Version=$(DOCKER_ENGINE_VERSION) \
-+	-extldflags '-static'
++if [ -f /etc/default/$BASE ]; then
++       . /etc/default/$BASE
++fi
 +
-+DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs autogen
++# Check docker is present
++if [ ! -x $DOCKERD ]; then
++       echo "$DOCKERD not present or not executable"
++       exit 1
++fi
 +
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+DOCKER_ENGINE_BUILD_TAGS += seccomp
-+DOCKER_ENGINE_DEPENDENCIES += libseccomp
-+endif
++cgroupfs_mount() {
++       # see also https://github.com/tianon/cgroupfs-mount/blob/master/cgroupfs-mount
++       if grep -v '^#' /etc/fstab | grep -q cgroup \
++               || [ ! -e /proc/cgroups ] \
++               || [ ! -d /sys/fs/cgroup ]; then
++               return
++       fi
++       if ! mountpoint -q /sys/fs/cgroup; then
++               mount -t tmpfs -o uid=0,gid=0,mode=0755 cgroup /sys/fs/cgroup
++       fi
++       (
++               cd /sys/fs/cgroup
++               for sys in $(awk '!/^#/ { if ($4 == 1) print $1 }' /proc/cgroups); do
++                       mkdir -p $sys
++                       if ! mountpoint -q $sys; then
++                               if ! mount -n -t cgroup -o $sys cgroup $sys; then
++                                       rmdir $sys || true
++                               fi
++                       fi
++               done
++       )
++}
 +
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
-+DOCKER_ENGINE_BUILD_TAGS += daemon
-+endif
++case "$1" in
++       start)
++               cgroupfs_mount
 +
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
-+DOCKER_ENGINE_BUILD_TAGS += experimental
-+endif
++               ulimit -n 1048576
++               if [ "$BASH" ]; then
++                       ulimit -u 1048576
++               else
++                       ulimit -p 1048576
++               fi
 +
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS),y)
-+DOCKER_ENGINE_DEPENDENCIES += btrfs-progs
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_btrfs
-+endif
++               echo "Starting $DOCKER_DESC: $BASE"
++               start-stop-daemon --start --background \
++                       --exec "$DOCKERD" \
++                       --pidfile "$DOCKER_SSD_PIDFILE" \
++                       --make-pidfile \
++                       -- \
++                               -p "$DOCKER_PIDFILE" \
++                               $DOCKER_OPTS \
++                                       >> "$DOCKER_LOGFILE" 2>&1
++               echo $?
++               ;;
 +
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER),y)
-+DOCKER_ENGINE_DEPENDENCIES += lvm2
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_devicemapper
-+endif
++       stop)
++               echo "Stopping $DOCKER_DESC: $BASE"
++               start-stop-daemon --stop --pidfile "$DOCKER_SSD_PIDFILE" --retry 10
++               echo $?
++               ;;
 +
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS),y)
-+DOCKER_ENGINE_DEPENDENCIES += gvfs
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_vfs
-+endif
++       restart)
++               docker_pid=`cat "$DOCKER_SSD_PIDFILE" 2>/dev/null`
++               [ -n "$docker_pid" ] \
++                       && ps -p $docker_pid > /dev/null 2>&1 \
++                       && $0 stop
++               $0 start
++               ;;
 +
-+define DOCKER_ENGINE_CONFIGURE_CMDS
-+	mkdir -p $(DOCKER_ENGINE_GOPATH)/src/github.com/docker
-+	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
-+	ln -fs $(DOCKER_CONTAINERD_SRCDIR) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/containerd
-+	mkdir -p $(DOCKER_ENGINE_GOPATH)/src/github.com/opencontainers
-+	ln -fs $(RUNC_SRCDIR) $(DOCKER_ENGINE_GOPATH)/src/github.com/opencontainers/runc
-+	cd $(@D) && \
-+		GITCOMMIT="unknown" BUILDTIME="$$(date)" VERSION="$(DOCKER_ENGINE_VERSION)" \
-+		bash ./hack/make/.go-autogen
-+endef
++       force-reload)
++               $0 restart
++               ;;
 +
-+define DOCKER_ENGINE_BUILD_CLIENT_CMDS
-+	cd $(@D); $(DOCKER_ENGINE_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/docker -tags "$(DOCKER_ENGINE_BUILD_TAGS)" -ldflags "$(DOCKER_ENGINE_GLDFLAGS)" ./cmd/docker
-+endef
-+
-+define DOCKER_ENGINE_BUILD_DAEMON_CMDS
-+	cd $(@D); $(DOCKER_ENGINE_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/dockerd -tags "$(DOCKER_ENGINE_BUILD_TAGS)" -ldflags "$(DOCKER_ENGINE_GLDFLAGS)" ./cmd/dockerd
-+endef
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
-+define DOCKER_ENGINE_BUILD_CMDS
-+	$(DOCKER_ENGINE_BUILD_CLIENT_CMDS)
-+	$(DOCKER_ENGINE_BUILD_DAEMON_CMDS)
-+endef
-+else
-+define DOCKER_ENGINE_BUILD_CMDS
-+	$(DOCKER_ENGINE_BUILD_CLIENT_CMDS)
-+endef
-+endif
-+
-+define DOCKER_ENGINE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/docker $(TARGET_DIR)/usr/bin/docker
-+	$(INSTALL) -D -m 0755 $(@D)/bin/dockerd $(TARGET_DIR)/usr/bin/dockerd
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
-+	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/system/docker.socket
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
-+	ln -fs ../../../../usr/lib/systemd/system/docker.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/docker.service
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 $(@D)/contrib/init/sysvinit-redhat/docker \
-+		$(TARGET_DIR)/etc/init.d/S61docker
-+	$(INSTALL) -D -m 644 $(@D)/contrib/init/sysvinit-redhat/docker.sysconfig \
-+		$(TARGET_DIR)/etc/sysconfig/docker.sysconfig
-+endef
-+
-+define DOCKER_ENGINE_USERS
-+	- - docker -1 * - - - Docker Application Container Framework
-+endef
-+
-+$(eval $(generic-package))
++       *)
++               echo "Usage: service docker {start|stop|restart}"
++               exit 1
++               ;;
++esac
 -- 
 2.7.3
