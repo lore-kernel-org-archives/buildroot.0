@@ -1,28 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 11:15:07 +0200
-Subject: [Buildroot] [PATCH 1/2] package/wireless_tools: Remove install
- man pages
-In-Reply-To: <1467623276-25850-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1467623276-25850-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20160704111507.09ae6b9a@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Jul 2016 11:21:37 +0200
+Subject: [Buildroot] [PATCH 3/4] qemu: add support for vde2
+In-Reply-To: <1467584664-11640-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 4 Jul 2016 00:24:23 +0200")
+References: <1467584664-11640-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1467584664-11640-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87zipxiwri.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Mon,  4 Jul 2016 11:07:55 +0200, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/wireless_tools/wireless_tools.mk | 1 -
->  1 file changed, 1 deletion(-)
+ > From: Simon Maes <simonn.maes@gmail.com>
+ > Additional configuration for qemu package:
+ > - Enable VDE2 support for qemu
 
-Both applied to master, thanks.
+ > Signed-off-by: Simon Maes <simonn.maes@gmail.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Thomas
+I've tweaked the config text to make it clear this is about host-qemu
+and committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
