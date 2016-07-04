@@ -1,45 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 11:42:29 +0200
-Subject: [Buildroot] [PATCH 1/2] Package nfs-utils: Start/stop daemons
- consistently
-In-Reply-To: <1467564419-21313-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1467564419-21313-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20160704114229.5f5e9ea8@free-electrons.com>
+Date: Mon, 4 Jul 2016 11:42:35 +0200
+Subject: [Buildroot] [git commit] package/mplayer: Fix static linking with
+	tremor & libogg
+Message-ID: <20160704094256.2263880741@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e63e6dc87d327f65c0bcf7c68878d4f83ee973e8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  3 Jul 2016 18:46:58 +0200, Maxime Hadjinlian wrote:
-> From: universe II <universeii@gmx.de>
-> 
-> Changed init script to start and stop all nfs daemons
-> in a consistent way. Using the same kill command,
-> start/stop the daemon, printout OK or FAIL and touch
-> or deleted necessary files.
-> 
-> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
-> [Maxime:
->    - Make it really consistent to stop the daemons as pointed out by Yann E. Morin
->    - Remove the -9]
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/nfs-utils/S60nfs | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+Fixes
+http://autobuild.buildroot.net/results/bc9/bc98fa585399b53ea181dbaf392b93424145911d/
 
-Both applied, with minor tweaks. Regarding the second patch, I really
-wasn't sure since we don't have written rules about indentation in our
-init scripts, it's the kind of things that tends to get changed in one
-direction, and then in the other direction a few months later. But
-anyway, since the patch was done, I applied it.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mplayer/0005-tremor-ogg.patch | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mplayer/0005-tremor-ogg.patch b/package/mplayer/0005-tremor-ogg.patch
+new file mode 100644
+index 0000000..b4d6505
+--- /dev/null
++++ b/package/mplayer/0005-tremor-ogg.patch
+@@ -0,0 +1,29 @@
++Fix static linking with tremor & libogg
++
++The order of the libraries needs to be changed to fix a bug during
++static linking caught by buildroot autobuilders:
++
++http://autobuild.buildroot.net/results/bc9/bc98fa585399b53ea181dbaf392b93424145911d/
++
++/home/test/autobuild/instance-3/output/host/usr/powerpc-buildroot-linux-uclibc/sysroot/usr/lib/libvorbisidec.a(synthesis.o): In function `_vorbis_synthesis1':
++synthesis.c:(.text+0x90): undefined reference to `oggpack_readinit'
++synthesis.c:(.text+0x9c): undefined reference to `oggpack_read'
++[...]
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(patch sent upstream:
++ http://lists.mplayerhq.hu/pipermail/mplayer-dev-eng/2016-July/073501.html)
++
++Index: configure
++===================================================================
++--- a/configure	(revision 37873)
+++++ b/configure	(working copy)
++@@ -6629,7 +6629,7 @@
++   def_tremor='#define CONFIG_TREMOR 1'
++   codecmodules="tremor $codecmodules"
++   res_comment="integer libvorbis"
++-  extra_ldflags="$extra_ldflags -logg -lvorbisidec"
+++  extra_ldflags="$extra_ldflags -lvorbisidec -logg"
++ elif test "$_libvorbis" = yes ; then
++   _vorbis=yes
++   def_vorbis='#define CONFIG_OGGVORBIS 1'
