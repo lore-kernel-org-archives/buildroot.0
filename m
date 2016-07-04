@@ -1,96 +1,200 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon,  4 Jul 2016 15:33:07 +0200
-Subject: [Buildroot] [PATCH] circus: new package
-Message-ID: <1467639187-23454-1-git-send-email-yegorslists@googlemail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 4 Jul 2016 15:35:35 +0200
+Subject: [Buildroot] [PATCH v4] toolchain-external: Commonize
+ /lib/<tuple> symlinks
+In-Reply-To: <1463766725-15724-1-git-send-email-mfornero@mathworks.com>
+References: <1459381580-18169-1-git-send-email-mfornero@mathworks.com>
+ <1463766725-15724-1-git-send-email-mfornero@mathworks.com>
+Message-ID: <aaf6a41c-7fc4-91a1-7272-3f3cdb64a901@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi Matthew,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in          |  3 +++
- package/circus/Config.in   | 21 +++++++++++++++++++++
- package/circus/circus.hash |  4 ++++
- package/circus/circus.mk   | 14 ++++++++++++++
- 4 files changed, 42 insertions(+)
- create mode 100644 package/circus/Config.in
- create mode 100644 package/circus/circus.hash
- create mode 100644 package/circus/circus.mk
+Le 20/05/2016 ? 19:52, Matthew Fornero a ?crit :
+> Commonize the creation of symlinks from {/usr}/lib to
+> {/usr}/lib/<tuple>.
+> 
+> These were originally defined on a per-toolchain basis for the Linaro
+> toolchains, but there is currently no support for creating symlinks
+> for custom toolchains that may have been based on Linaro (or older
+> versions of the Linaro toolchain).
+> 
+> Add common code for all supported Linaro toolchains and add a new
+> config option, BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK to enable custom
+> toolchains to enable the symbolic link creation.
 
-diff --git a/package/Config.in b/package/Config.in
-index 67810b0..ba55d1d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1677,6 +1677,9 @@ menu "System tools"
- 	source "package/audit/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/bootutils/Config.in"
-+endif
-+	source "package/circus/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/coreutils/Config.in"
- endif
- 	source "package/cpuload/Config.in"
-diff --git a/package/circus/Config.in b/package/circus/Config.in
-new file mode 100644
-index 0000000..476a53e
---- /dev/null
-+++ b/package/circus/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_CIRCUS
-+	bool "circus"
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-+	depends on BR2_USE_WCHAR # zeromq
-+	depends on BR2_INSTALL_LIBSTDCPP # zeromq
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-+	select BR2_PACKAGE_PYTHON_IOWAIT # runtime
-+	select BR2_PACKAGE_PYTHON_PSUTIL # runtime
-+	select BR2_PACKAGE_PYTHON_PYZMQ # runtime
-+	select BR2_PACKAGE_PYTHON_TORNADO # runtime
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	help
-+	  Circus is a program that will let you run and watch multiple
-+	  processes and sockets.
-+
-+	  https://circus.readthedocs.org/en/latest/
-+
-+comment "circus needs a toolchain w/ C++, wchar, threads and Python2/3"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
-+		BR2_TOOLCHAIN_HAS_THREADS && (BR2_PACKAGE_PYTHON || \
-+		BR2_PACKAGE_PYTHON3))
-diff --git a/package/circus/circus.hash b/package/circus/circus.hash
-new file mode 100644
-index 0000000..01994f4
---- /dev/null
-+++ b/package/circus/circus.hash
-@@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/circus/json
-+md5	cddd4a8844907d8b6b402ca9c713d176  circus-0.13.0.tar.gz
-+# sha256 calculated by scanpypi
-+sha256	6201800a5fb05144b5e6c5ac9eb901b914305e8beaeb01f8edf54ab6ab1a295a  circus-0.13.0.tar.gz
-diff --git a/package/circus/circus.mk b/package/circus/circus.mk
-new file mode 100644
-index 0000000..a7693bd
---- /dev/null
-+++ b/package/circus/circus.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# circus
-+#
-+################################################################################
-+
-+CIRCUS_VERSION = 0.13.0
-+CIRCUS_SOURCE = circus-$(CIRCUS_VERSION).tar.gz
-+CIRCUS_SITE = https://pypi.python.org/packages/source/c/circus
-+CIRCUS_SETUP_TYPE = setuptools
-+CIRCUS_LICENSE = Apache-2.0
-+CIRCUS_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
--- 
-2.8.1
+Since we don't support older Linaro toolchains which require these symlinks
+other than the latest supporting x86 host (i.e Linaro 2014.09), I'm agree to add
+a way to easily import them without having to change the toolchain-external
+code. On another side such Linaro specific symlinks are no longer needed and the
+option is no longer be necessary.
+
+> 
+> Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
+> ---
+> v4: Rebase to current master
+> v3: Invert Kconfig and cleanup as suggested by Arnout and Baruch Siach
+> v2: Cleanup as suggested by Arnout Vandecappelle
+> ---
+>  toolchain/toolchain-external/Config.in             |   17 +++++++++++++
+>  toolchain/toolchain-external/toolchain-external.mk |   26 ++++++--------------
+>  2 files changed, 25 insertions(+), 18 deletions(-)
+> 
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index b7f9241..fa698b1 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -23,6 +23,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+>  	depends on !BR2_STATIC_LIBS
+>  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+>  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+>  	select BR2_INSTALL_LIBSTDCPP
+>  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+>  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> @@ -45,6 +46,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+>  	depends on !BR2_STATIC_LIBS
+>  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+>  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+
+Not required for newer Linaro toolchain.
+
+>  	select BR2_INSTALL_LIBSTDCPP
+>  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+>  	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> @@ -67,6 +69,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+>  	depends on !BR2_STATIC_LIBS
+>  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+>  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+>  	select BR2_INSTALL_LIBSTDCPP
+>  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+>  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> @@ -89,6 +92,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+>  	depends on !BR2_STATIC_LIBS
+>  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+>  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+Not required for newer Linaro toolchain.
+
+>  	select BR2_INSTALL_LIBSTDCPP
+>  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+>  	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> @@ -523,6 +527,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+>  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+>  	select BR2_INSTALL_LIBSTDCPP
+>  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+>  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+>  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+>  	help
+> @@ -538,6 +543,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+>  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+>  	select BR2_INSTALL_LIBSTDCPP
+>  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+
+Not required for newer Linaro toolchain.
+
+With that fixed:
+
+  Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+
+>  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+>  	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+>  	help
+> @@ -692,6 +698,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+>  	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX \
+>  					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+>  
+> +config BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+> +	bool
+> +
+>  config BR2_TOOLCHAIN_EXTERNAL_GLIBC
+>  	bool
+>  	select BR2_TOOLCHAIN_USES_GLIBC
+> @@ -1005,6 +1014,14 @@ config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+>  	  need to be copied to the target filesystem, enter them
+>  	  here, separated by spaces.
+>  
+> +config BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
+> +	bool "Symlink /lib/<tuple>"
+> +	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+> +	help
+> +	  Select this option if your external toolchain needs a symlink
+> +	  from {/usr}/lib to {/usr}/lib/<tuple>. This may be required if
+> +	  your toolchain is based on one from Linaro.
+> +
+>  endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+>  
+>  config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index 34217c0..6706fbf 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -244,23 +244,16 @@ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+>  TOOLCHAIN_EXTERNAL_DEPENDENCIES += netbsd-queue
+>  endif
+>  
+> -# The Linaro ARMhf toolchain expects the libraries in
+> -# {/usr,}/lib/arm-linux-gnueabihf, but Buildroot copies them to
+> +# Some toolchains, such as Linaro, expect the libraries in
+> +# {/usr,}/lib/<tuple>, but Buildroot copies them to
+>  # {/usr,}/lib, so we need to create a symbolic link.
+> -define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+> -	ln -snf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
+> -	ln -snf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
+> -endef
+> -
+> -define TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+> -	ln -snf . $(TARGET_DIR)/lib/armeb-linux-gnueabihf
+> -	ln -snf . $(TARGET_DIR)/usr/lib/armeb-linux-gnueabihf
+> -endef
+> -
+> -define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+> -	ln -snf . $(TARGET_DIR)/lib/aarch64-linux-gnu
+> -	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
+> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK),y)
+> +define TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
+> +	ln -snf . $(TARGET_DIR)/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
+> +	ln -snf . $(TARGET_DIR)/usr/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
+>  endef
+> +TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
+> +endif
+>  
+>  # Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
+>  # sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
+> @@ -318,7 +311,6 @@ ifeq ($(HOSTARCH),x86)
+>  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+>  TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_src.tar.bz2
+> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+>  else
+>  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/arm-linux-gnueabihf
+>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_arm-linux-gnueabihf.tar.xz
+> @@ -328,7 +320,6 @@ ifeq ($(HOSTARCH),x86)
+>  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+>  TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_src.tar.bz2
+> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+>  else
+>  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/armeb-linux-gnueabihf
+>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_armeb-linux-gnueabihf.tar.xz
+> @@ -369,7 +360,6 @@ ifeq ($(HOSTARCH),x86)
+>  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+>  TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
+> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+>  else
+>  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/aarch64-linux-gnu
+>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_aarch64-linux-gnu.tar.xz
+> 
