@@ -1,124 +1,69 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 4 Jul 2016 16:17:47 +0200
-Subject: [Buildroot] [PATCH v4] toolchain-external: Commonize
- /lib/<tuple> symlinks
-In-Reply-To: <aaf6a41c-7fc4-91a1-7272-3f3cdb64a901@gmail.com>
-References: <1459381580-18169-1-git-send-email-mfornero@mathworks.com>
- <1463766725-15724-1-git-send-email-mfornero@mathworks.com>
- <aaf6a41c-7fc4-91a1-7272-3f3cdb64a901@gmail.com>
-Message-ID: <42f862e3-4e60-1e17-1cba-71355c592924@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2016 16:22:16 +0200
+Subject: [Buildroot] [PATCH v3 01/14] toolchain/toolchain-common.in: add
+ BR2_TOOLCHAIN_HAS_LIBQUADMATH hidden symbol
+In-Reply-To: <7e95119d-44a7-dbf5-bc60-95b8a5bab77f@mind.be>
+References: <20160703134750.7516-1-s.martin49@gmail.com>
+ <20160703134750.7516-2-s.martin49@gmail.com>
+ <7e95119d-44a7-dbf5-bc60-95b8a5bab77f@mind.be>
+Message-ID: <20160704162216.272f1883@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
+Hello,
 
-Le 04/07/2016 ? 15:35, Romain Naour a ?crit :
-> Hi Matthew,
+On Mon, 4 Jul 2016 11:16:08 +0200, Arnout Vandecappelle wrote:
+
+> > +# - libquadmath is not needed/available on all architectures (but gcc
+> > +#   correctly handles this already).
+> > +# - At least, libquadmath is available on:
+> > +#   - i*86
+> > +#   - x86_64
+> > +# - When available, libquadmath requires wchar support.
+> > +config BR2_TOOLCHAIN_HAS_LIBQUADMATH
+> > +	bool
+> > +	default y if BR2_i386 || BR2_x86_64  
 > 
-> Le 20/05/2016 ? 19:52, Matthew Fornero a ?crit :
->> Commonize the creation of symlinks from {/usr}/lib to
->> {/usr}/lib/<tuple>.
->>
->> These were originally defined on a per-toolchain basis for the Linaro
->> toolchains, but there is currently no support for creating symlinks
->> for custom toolchains that may have been based on Linaro (or older
->> versions of the Linaro toolchain).
->>
->> Add common code for all supported Linaro toolchains and add a new
->> config option, BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK to enable custom
->> toolchains to enable the symbolic link creation.
+>  Wouldn't it make more sense to add here:
 > 
-> Since we don't support older Linaro toolchains which require these symlinks
-> other than the latest supporting x86 host (i.e Linaro 2014.09), I'm agree to add
-> a way to easily import them without having to change the toolchain-external
-> code. On another side such Linaro specific symlinks are no longer needed and the
-> option is no longer be necessary.
-
-After some discussion with other developers, I suggest you to register the
-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS from BR2_EXTERNAL instead of
-adding a new configuration option to Buildroot. That way you can customize
-easily what should be done for your specific toolchain.
-
-I'm doing this for my CodeSourcery x86 standard toolchain which require another
-symlink in staging directory.
-
+> 	depends on BR2_USE_WCHAR
 > 
->>
->> Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
->> ---
->> v4: Rebase to current master
->> v3: Invert Kconfig and cleanup as suggested by Arnout and Baruch Siach
->> v2: Cleanup as suggested by Arnout Vandecappelle
->> ---
+> (and remove it from the .mk file)?
 
-[snip]
+We thought about this, and discussed it with Samuel, but we had a good
+reason not to do it. It was yesterday so I already forgot why.
 
->>  
->> -# The Linaro ARMhf toolchain expects the libraries in
->> -# {/usr,}/lib/arm-linux-gnueabihf, but Buildroot copies them to
->> +# Some toolchains, such as Linaro, expect the libraries in
->> +# {/usr,}/lib/<tuple>, but Buildroot copies them to
->>  # {/usr,}/lib, so we need to create a symbolic link.
->> -define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
->> -	ln -snf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
->> -	ln -snf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
->> -endef
->> -
->> -define TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
->> -	ln -snf . $(TARGET_DIR)/lib/armeb-linux-gnueabihf
->> -	ln -snf . $(TARGET_DIR)/usr/lib/armeb-linux-gnueabihf
->> -endef
->> -
->> -define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
->> -	ln -snf . $(TARGET_DIR)/lib/aarch64-linux-gnu
->> -	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
->> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK),y)
->> +define TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
->> +	ln -snf . $(TARGET_DIR)/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
->> +	ln -snf . $(TARGET_DIR)/usr/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
->>  endef
->> +TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
->> +endif
+Ah, there it is. Look at this option:
 
-I would like to keep this part for our Linaro 14.09 support.
-I'll send a patch with only this part.
+ config BR2_TOOLCHAIN_BUILDROOT_FORTRAN
+        bool "Enable Fortran support"
++       # on architecture building libquadmath, wchar is required
++       depends on !BR2_TOOLCHAIN_HAS_LIBQUADMATH || \
++               (BR2_TOOLCHAIN_HAS_LIBQUADMATH && BR2_USE_WCHAR)
 
-In the same time, I'll mark your patch as rejected in the patchwork.
+How would express the dependency of Fortran is
+BR2_TOOLCHAIN_HAS_LIBQUADMATH handles the BR2_USE_WCHAR dependency?
+libquadmath is only available on i386 and x86_64, and in *this* case
+wchar is needed for Fortran support.
 
-Thanks!
+So, we want to show the Fortran option if:
+
+ * We are on an architecture that does not need libquadmath
+
+or
+
+ * We are on an architecture that does need libquadmath, in which case
+   we also need wchar.
+
+Do you see a better solution ?
 
 Best regards,
-Romain
 
->>  
->>  # Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
->>  # sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
->> @@ -318,7 +311,6 @@ ifeq ($(HOSTARCH),x86)
->>  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
->>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
->>  TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_src.tar.bz2
->> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
->>  else
->>  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/arm-linux-gnueabihf
->>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_arm-linux-gnueabihf.tar.xz
->> @@ -328,7 +320,6 @@ ifeq ($(HOSTARCH),x86)
->>  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
->>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
->>  TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_src.tar.bz2
->> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
->>  else
->>  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/armeb-linux-gnueabihf
->>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_armeb-linux-gnueabihf.tar.xz
->> @@ -369,7 +360,6 @@ ifeq ($(HOSTARCH),x86)
->>  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
->>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
->>  TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
->> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
->>  else
->>  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/aarch64-linux-gnu
->>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_aarch64-linux-gnu.tar.xz
->>
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
