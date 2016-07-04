@@ -1,47 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  4 Jul 2016 11:24:33 +0200
-Subject: [Buildroot] [PATCH 22/83 v2] package/tiff: use 'menuconfig' instead
-	of 'config'+'menu'
+Date: Mon,  4 Jul 2016 11:24:34 +0200
+Subject: [Buildroot] [PATCH 23/83 v2] package/udpcast: use 'menuconfig'
+	instead of 'config'+'menu'
 In-Reply-To: <cover.1467624132.git.yann.morin.1998@free.fr>
 References: <cover.1467624132.git.yann.morin.1998@free.fr>
-Message-ID: <66b0a2d0a679453343184d9992cb51849d904f82.1467624132.git.yann.morin.1998@free.fr>
+Message-ID: <6f0ca434a3a4e6b42e7fee883ddd1dd88b46787d.1467624132.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/tiff/Config.in | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+This is a bit overkill, as there is only two sub-items. However, this
+commit is not about judging whether it makes sense or not to have a
+sub-menu, but to cleanup the 'config'+'menu' situation.
 
-diff --git a/package/tiff/Config.in b/package/tiff/Config.in
-index 7d66dd2..6e5c176 100644
---- a/package/tiff/Config.in
-+++ b/package/tiff/Config.in
-@@ -1,4 +1,4 @@
--config BR2_PACKAGE_TIFF
-+menuconfig BR2_PACKAGE_TIFF
- 	bool "tiff"
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/udpcast/Config.in | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/package/udpcast/Config.in b/package/udpcast/Config.in
+index 0424db7..a61829a 100644
+--- a/package/udpcast/Config.in
++++ b/package/udpcast/Config.in
+@@ -2,7 +2,7 @@ comment "udpcast needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
+-config BR2_PACKAGE_UDPCAST
++menuconfig BR2_PACKAGE_UDPCAST
+ 	bool "udpcast"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+@@ -14,8 +14,6 @@ config BR2_PACKAGE_UDPCAST
+ 
+ if BR2_PACKAGE_UDPCAST
+ 
+-menu "udpcast tools selection"
+-
+ config BR2_PACKAGE_UDPCAST_SENDER
+ 	bool "sender"
  	help
- 	  Library for handling TIFF (Tag Image File Format) images.
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_TIFF
- 	  http://www.remotesensing.org/libtiff/
+@@ -26,6 +24,4 @@ config BR2_PACKAGE_UDPCAST_RECEIVER
+ 	help
+ 	  The udpcast receiver.
  
- if BR2_PACKAGE_TIFF
--menu "tiff Options"
- 
- config BR2_PACKAGE_TIFF_CCITT
- 	bool "CCITT Group 3 & 4 support"
-@@ -62,7 +61,6 @@ config BR2_PACKAGE_TIFF_OLD_JPEG
- config BR2_PACKAGE_TIFF_JBIG
- 	bool "JBIG compression"
- 	default y
 -endmenu
- 
- config BR2_PACKAGE_TIFF_UTILITIES
- 	bool "tiff utilities"
+-
+ endif
 -- 
 2.7.4
