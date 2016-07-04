@@ -1,34 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 11:27:00 +0200
-Subject: [Buildroot] [PATCH] gcc: uClinux supports POSIX threads
-In-Reply-To: <20160702185327.GA17114@waldemar-brodkorb.de>
-References: <20160702185327.GA17114@waldemar-brodkorb.de>
-Message-ID: <20160704112700.27a4d395@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  4 Jul 2016 11:25:33 +0200
+Subject: [Buildroot] [PATCH 82/83 v2] boot/syslinux: use 'menuconfig'
+In-Reply-To: <cover.1467624132.git.yann.morin.1998@free.fr>
+References: <cover.1467624132.git.yann.morin.1998@free.fr>
+Message-ID: <f0aac3259d063781004b6dfe32aa3e770ba51f16.1467624132.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+syslinux can show up to 5 options, so use a 'menuconfig' to group the
+options in a sub-menu.
 
-On Sat, 2 Jul 2016 20:53:27 +0200, Waldemar Brodkorb wrote:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ boot/syslinux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org> 
-
-There was a trailing white space here, and in all other Signed-off-by
-line. I've fixed this and applied your patch. Thanks!
-
-Of course, one unfortunate thing is that if we use external toolchains
-for Cortex-M3/M4, they will suffer for this issue and cause build
-failures. But since we don't have such toolchains now, and I don't
-really expect to have any in the future, it's probably fine. I hope
-that the gcc fixes will get merged.
-
-Thanks,
-
-Thomas
+diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+index 6067e9c..ad0704a 100644
+--- a/boot/syslinux/Config.in
++++ b/boot/syslinux/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_TARGET_SYSLINUX
++menuconfig BR2_TARGET_SYSLINUX
+ 	bool "syslinux"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_HOSTARCH_NEEDS_IA32_COMPILER
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
