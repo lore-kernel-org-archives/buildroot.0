@@ -1,35 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  4 Jul 2016 11:25:13 +0200
-Subject: [Buildroot] [PATCH 62/83 v2] package/nvidia-driver: use 'menuconfig'
+Date: Mon,  4 Jul 2016 11:25:20 +0200
+Subject: [Buildroot] [PATCH 69/83 v2] package/sdl: include SDL external
+	libraries from sdl's Config.in
 In-Reply-To: <cover.1467624132.git.yann.morin.1998@free.fr>
 References: <cover.1467624132.git.yann.morin.1998@free.fr>
-Message-ID: <d0b062fa37edfd465884bf84f7ae9f4a36eae9b8.1467624132.git.yann.morin.1998@free.fr>
+Message-ID: <4d50663370a487fc9446b813b4a266325ccf6d9a.1467624132.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-nvidia-driver has 5-or-more options, so use a 'menuconfig' to group the
-options in a sub-menu.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/nvidia-driver/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/Config.in     | 6 ------
+ package/sdl/Config.in | 9 +++++++++
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/package/nvidia-driver/Config.in b/package/nvidia-driver/Config.in
-index 04499f6..8632835 100644
---- a/package/nvidia-driver/Config.in
-+++ b/package/nvidia-driver/Config.in
-@@ -2,7 +2,7 @@ comment "nvidia-driver needs a glibc toolchain"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/Config.in b/package/Config.in
+index 6fcd6e6..b329fc9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -274,12 +274,6 @@ endif
+ 	source "package/ocrad/Config.in"
+ 	source "package/psplash/Config.in"
+ 	source "package/sdl/Config.in"
+-	source "package/sdl_gfx/Config.in"
+-	source "package/sdl_image/Config.in"
+-	source "package/sdl_mixer/Config.in"
+-	source "package/sdl_net/Config.in"
+-	source "package/sdl_sound/Config.in"
+-	source "package/sdl_ttf/Config.in"
+ 	source "package/sdl2/Config.in"
  
--config BR2_PACKAGE_NVIDIA_DRIVER
-+menuconfig BR2_PACKAGE_NVIDIA_DRIVER
- 	bool "nvidia-driver"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ comment "Other GUIs"
+diff --git a/package/sdl/Config.in b/package/sdl/Config.in
+index e0a4437..bba089c 100644
+--- a/package/sdl/Config.in
++++ b/package/sdl/Config.in
+@@ -27,4 +27,13 @@ config BR2_PACKAGE_SDL_X11
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 
++comment "External libraries"
++
++source "package/sdl_gfx/Config.in"
++source "package/sdl_image/Config.in"
++source "package/sdl_mixer/Config.in"
++source "package/sdl_net/Config.in"
++source "package/sdl_sound/Config.in"
++source "package/sdl_ttf/Config.in"
++
+ endif
 -- 
 2.7.4
