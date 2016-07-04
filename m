@@ -1,40 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 00:14:03 +0200
-Subject: [Buildroot] [PATCH 1/6] gnutls: update legal info
-In-Reply-To: <1467636386-6759-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1467636386-6759-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20160705001403.3c4acc33@free-electrons.com>
+From: Georges Savoundararadj <savoundg@gmail.com>
+Date: Mon, 4 Jul 2016 15:30:30 -0700
+Subject: [Buildroot] [PATCH 1/1] create-boot-sd.sh: fix script for
+ sfdisk (>=2.26)
+In-Reply-To: <20160704220120.046a1b66@free-electrons.com>
+References: <20160704002229.9354-1-savoundg@gmail.com>
+ <20160704090448.20f94608@free-electrons.com>
+ <8fd7392c-375c-db64-8124-04c75d0160a3@gmail.com>
+ <20160704220120.046a1b66@free-electrons.com>
+Message-ID: <79235d50-6982-6d22-3f43-5ce99aabb673@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Mon, 4 Jul 2016 18:16:21 +0530, Rahul Bedarkar wrote:
-> GnuTLS core library is licensed under LGPLv2.1+ while gnutls-openssl
-> library is licensed under GPLv3+. Annotate the license with components.
-> 
-> Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> ---
->  package/gnutls/gnutls.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On 07/04/2016 01:01 PM, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Mon, 4 Jul 2016 12:44:50 -0700, Georges Savoundararadj wrote:
+>
+>>> As far as I can see, only the imx28evk and imx6sabre support in
+>>> Buildroot still have a reference to this script. Are you using of those
+>>> two platforms? If that's the case, then we would very much prefer a
+>>> solution where the platform is migrated to use genimage.
+>> I am using this script for the imx6sololiteevk
+>> (freescale_imx6sololiteevk_defconfig)
+>> platform which does not refer to this script.
+> OK. What about using genimage instead then?
+OK, I will send you a patch based on genimage.
 
-Applied with some changes:
+Thanks,
 
-    [Thomas:
-     - add comment about the license of the "core library" since some files
-       seems to be mistakenly under LGPLv3+ even though the library is
-       licensed under LGPLv2.1+.
-     - add the README file in the license information, since it contains a
-       lot of useful details.]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Georges
+> Thanks,
+>
+> Thomas
