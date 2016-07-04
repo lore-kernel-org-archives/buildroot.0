@@ -1,38 +1,46 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 4 Jul 2016 23:17:39 +0200
-Subject: [Buildroot] [PATCH v6 1/5] runc: new package
-In-Reply-To: <1467662962069-86a12333-f03da0ee-0d3ff579@mixmax.com>
-References: <1467660382-6317-1-git-send-email-christian@paral.in>
- <fc921f71-eeba-bb2c-1135-4a09d2a0218b@gmail.com>
- <1467662962069-86a12333-f03da0ee-0d3ff579@mixmax.com>
-Message-ID: <a7de91c6-55ed-6592-0eb2-32941df7195f@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2016 23:21:47 +0200
+Subject: [Buildroot] [PATCH] package/qjson: not available for static
+	builds
+In-Reply-To: <1467666414-25116-1-git-send-email-yann.morin.1998@free.fr>
+References: <1467666414-25116-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160704232147.1102aafa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 04/07/2016 ? 22:09, Christian Stewart a ?crit :
-> Romain,
-> 
-> On Mon, Jul 4, 2016 1:05 PM, Romain Naour romain.naour at gmail.com
-> <mailto:romain.naour@gmail.com> wrote:
-> 
->     Usually we prefer a stable release but ok for this new package.
-> 
-> 
-> Unfortunately they haven't spun a release in ages and Docker is using a commit
-> pin as well. It's a bit of a weird setup they have going.
-> 
-> I have it pinned to a newer release because some aarch64 fixes are in there.
+Hello,
 
-I asked to Thomas about using -rc version and he say that it's fine for a new
-package and to avoid carrying to much patches in Buildroot.
-
-Best regards,
-Romain
-
+On Mon,  4 Jul 2016 23:06:54 +0200, Yann E. MORIN wrote:
+> Fixes:
+>     http://autobuild.buildroot.org/results/ffa/ffa343702727e118bb98b9c273bd0605de7e75e2/
+>     http://autobuild.buildroot.org/results/3ca/3ca05b777789c58b0621a100490373416846aa87/
+>     http://autobuild.buildroot.org/results/a4f/a4f3f9c79731c69082f70c3841c012c576517921/
+>     ...
 > 
-> Best,
-> Christian
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/qjson/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 > 
+> diff --git a/package/qjson/Config.in b/package/qjson/Config.in
+> index 0f0cc09..9ad164f 100644
+> --- a/package/qjson/Config.in
+> +++ b/package/qjson/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_QJSON
+>  	bool "qjson"
+> +	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
+>  	help
+>  	  QJson is a Qt-based library that maps JSON data to
+
+Config.in comment perhaps ? :-)
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
