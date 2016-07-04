@@ -1,141 +1,96 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Mon, 04 Jul 2016 16:33:06 +0300
-Subject: [Buildroot] [PATCH v2 1/1] acpica: new package
-In-Reply-To: <20160703104535.10401-1-nunes.erico@gmail.com>
-References: <20160703104535.10401-1-nunes.erico@gmail.com>
-Message-ID: <1467639186.30123.453.camel@linux.intel.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon,  4 Jul 2016 15:33:07 +0200
+Subject: [Buildroot] [PATCH] circus: new package
+Message-ID: <1467639187-23454-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2016-07-03 at 12:45 +0200, Erico Nunes wrote:
-> The ACPI Component Architecture (ACPICA) project provides an operating
-> system (OS)-independent reference implementation of the Advanced
-> Configuration and Power Interface Specification (ACPI).
-> 
-> It contains tools such as acpidump, iasl, acpixtract, etc.
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Thank you for doing this!
-Though in our case we need this as a host tool. Can you add support into
-next version of the patch?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in          |  3 +++
+ package/circus/Config.in   | 21 +++++++++++++++++++++
+ package/circus/circus.hash |  4 ++++
+ package/circus/circus.mk   | 14 ++++++++++++++
+ 4 files changed, 42 insertions(+)
+ create mode 100644 package/circus/Config.in
+ create mode 100644 package/circus/circus.hash
+ create mode 100644 package/circus/circus.mk
 
-> 
-> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
-> 
-> Romain had added a (conditional) Reviewed-by and Tested-by to v1 which
-> I
-> hope to have solved in this v2, but I decided to not add it here from
-> the start as this v2 contains some other small fixes and includes a
-> version bump.
-> If you think that it is still appliable, please add it before applying
-> this patch. Thanks
-> 
-> Changes v1 -> v2:
-> ? - Fixed license which is not only GPLv2 but dual BSD-3c or GPLv2
-> ? (pointed out by Romain Naour)
-> ? - Changed TARGET_MAKE_ENV to TARGET_CONFIGURE_OPTS (pointed out by
-> ? Romain Naour). CC still has to be set as a make argument, otherwise
-> it
-> ? gets set back again by the Makefile.
-> ? - TARGET_ARCH was wrong, should have been BR2_ARCH.
-> ? - Got rid of the sed hack for 'uname' by passing HARDWARE_NAME as a
-> ? make argument variable.
-> ? - Fixed installing in architectures different than host, by removing
-> ? the -s argument from 'install' to avoid running 'strip' from host.
-> ? - Bumped up to 20160527 which has been released since patch v1
-> ? submission.
-> ---
-> ?package/Config.in??????????|??1 +
-> ?package/acpica/Config.in???|??9 +++++++++
-> ?package/acpica/acpica.hash |??2 ++
-> ?package/acpica/acpica.mk???| 26 ++++++++++++++++++++++++++
-> ?4 files changed, 38 insertions(+)
-> ?create mode 100644 package/acpica/Config.in
-> ?create mode 100644 package/acpica/acpica.hash
-> ?create mode 100644 package/acpica/acpica.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 3fddf8e..3c8910d 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -352,6 +352,7 @@ menu "Firmware"
-> ?	source "package/zd1211-firmware/Config.in"
-> ?endmenu
-> ?	source "package/a10disp/Config.in"
-> +	source "package/acpica/Config.in"
-> ?	source "package/acpid/Config.in"
-> ?	source "package/acpitool/Config.in"
-> ?	source "package/aer-inject/Config.in"
-> diff --git a/package/acpica/Config.in b/package/acpica/Config.in
-> new file mode 100644
-> index 0000000..8c33d0f
-> --- /dev/null
-> +++ b/package/acpica/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_ACPICA
-> +	bool "acpica"
-> +	help
-> +	??The ACPI Component Architecture (ACPICA) project provides
-> an
-> +	??operating system (OS)-independent reference implementation
-> of
-> +	??the Advanced Configuration and Power Interface
-> Specification
-> +	??(ACPI).
-> +
-> +	??https://www.acpica.org
-> diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-> new file mode 100644
-> index 0000000..8d5257f
-> --- /dev/null
-> +++ b/package/acpica/acpica.hash
-> @@ -0,0 +1,2 @@
-> +# locally computed hash
-> +sha256
-> 4ac73a5887b643dcca483f0241cbb808a53326846928edad9a2f86cffcde5850
-> acpica-unix2-20160527.tar.gz
-> diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-> new file mode 100644
-> index 0000000..9b32099
-> --- /dev/null
-> +++ b/package/acpica/acpica.mk
-> @@ -0,0 +1,26 @@
-> +#####################################################################
-> ###########
-> +#
-> +# acpica
-> +#
-> +#####################################################################
-> ###########
-> +
-> +ACPICA_VERSION = 20160527
-> +ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
-> +ACPICA_SITE = https://acpica.org/sites/acpica/files
-> +ACPICA_LICENSE = BSD-3c or GPLv2
-> +ACPICA_LICENSE_FILES = source/include/acpi.h
-> +ACPICA_DEPENDENCIES = host-bison host-flex
-> +
-> +define ACPICA_BUILD_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> +		HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX
-> CC="$(TARGET_CC)" \
-> +		all
-> +endef
-> +
-> +define ACPICA_INSTALL_TARGET_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> +		HARDWARE_NAME=$(BR2_ARCH) DESTDIR="$(TARGET_DIR)" \
-> +		INSTALLFLAGS=-m555 install
-> +endef
-> +
-> +$(eval $(generic-package))
-
+diff --git a/package/Config.in b/package/Config.in
+index 67810b0..ba55d1d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1677,6 +1677,9 @@ menu "System tools"
+ 	source "package/audit/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/bootutils/Config.in"
++endif
++	source "package/circus/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/coreutils/Config.in"
+ endif
+ 	source "package/cpuload/Config.in"
+diff --git a/package/circus/Config.in b/package/circus/Config.in
+new file mode 100644
+index 0000000..476a53e
+--- /dev/null
++++ b/package/circus/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_CIRCUS
++	bool "circus"
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
++	depends on BR2_USE_WCHAR # zeromq
++	depends on BR2_INSTALL_LIBSTDCPP # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	select BR2_PACKAGE_PYTHON_IOWAIT # runtime
++	select BR2_PACKAGE_PYTHON_PSUTIL # runtime
++	select BR2_PACKAGE_PYTHON_PYZMQ # runtime
++	select BR2_PACKAGE_PYTHON_TORNADO # runtime
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
++	help
++	  Circus is a program that will let you run and watch multiple
++	  processes and sockets.
++
++	  https://circus.readthedocs.org/en/latest/
++
++comment "circus needs a toolchain w/ C++, wchar, threads and Python2/3"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
++		BR2_TOOLCHAIN_HAS_THREADS && (BR2_PACKAGE_PYTHON || \
++		BR2_PACKAGE_PYTHON3))
+diff --git a/package/circus/circus.hash b/package/circus/circus.hash
+new file mode 100644
+index 0000000..01994f4
+--- /dev/null
++++ b/package/circus/circus.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi/circus/json
++md5	cddd4a8844907d8b6b402ca9c713d176  circus-0.13.0.tar.gz
++# sha256 calculated by scanpypi
++sha256	6201800a5fb05144b5e6c5ac9eb901b914305e8beaeb01f8edf54ab6ab1a295a  circus-0.13.0.tar.gz
+diff --git a/package/circus/circus.mk b/package/circus/circus.mk
+new file mode 100644
+index 0000000..a7693bd
+--- /dev/null
++++ b/package/circus/circus.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# circus
++#
++################################################################################
++
++CIRCUS_VERSION = 0.13.0
++CIRCUS_SOURCE = circus-$(CIRCUS_VERSION).tar.gz
++CIRCUS_SITE = https://pypi.python.org/packages/source/c/circus
++CIRCUS_SETUP_TYPE = setuptools
++CIRCUS_LICENSE = Apache-2.0
++CIRCUS_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
-
-Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Intel Finland Oy
+2.8.1
