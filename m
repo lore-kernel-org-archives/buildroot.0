@@ -1,38 +1,22 @@
-From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Mon, 4 Jul 2016 18:16:23 +0530
-Subject: [Buildroot] [PATCH 3/6] dbus: update legal info
-In-Reply-To: <1467636386-6759-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1467636386-6759-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <1467636386-6759-3-git-send-email-rahul.bedarkar@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Jul 2016 14:48:11 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: bump Codescape
+	toolchains to 2016.05
+In-Reply-To: <1467627460-42769-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Mon, 4 Jul 2016 11:17:40 +0100")
+References: <1467627460-42769-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87wpl1h8ms.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Library and some tools (dbus-lanuch, dbus-run-session) are dual
-licensed under GPLv2 or AFLv2.1 and others (dbus-monitor, dbus-send,
-dbus-cleanup-sockets, dbus-uuidgen) are licensed under GPLv2+
-only.
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
----
- package/dbus/dbus.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index fbdceb3..11c3d4e 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -6,7 +6,7 @@
- 
- DBUS_VERSION = 1.10.8
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
--DBUS_LICENSE = AFLv2.1, GPLv2+
-+DBUS_LICENSE = AFLv2.1 or GPLv2+ (library, tools), GPLv2+ (tools)
- DBUS_LICENSE_FILES = COPYING
- DBUS_INSTALL_STAGING = YES
- 
+Committed, thanks.
+
 -- 
-2.6.2
+Bye, Peter Korsgaard
