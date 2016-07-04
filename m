@@ -1,34 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  4 Jul 2016 23:06:54 +0200
-Subject: [Buildroot] [PATCH] package/qjson: not available for static builds
-Message-ID: <1467666414-25116-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2016 23:07:35 +0200
+Subject: [Buildroot] [git commit] nodejs: remove the menu ... endmenu
+Message-ID: <20160704210754.8CAAF821A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/ffa/ffa343702727e118bb98b9c273bd0605de7e75e2/
-    http://autobuild.buildroot.org/results/3ca/3ca05b777789c58b0621a100490373416846aa87/
-    http://autobuild.buildroot.org/results/a4f/a4f3f9c79731c69082f70c3841c012c576517921/
-    ...
+commit: https://git.buildroot.net/buildroot/commit/?id=c2e94b7f08b8c25d305e8bdab5d844655ffdd735
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+The only menu was "Module Selection", even though it contained
+options (like "NPM for target") which are not related to selecting
+modules. This commit therefore removes the menu ... endmenu.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qjson/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/nodejs/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/qjson/Config.in b/package/qjson/Config.in
-index 0f0cc09..9ad164f 100644
---- a/package/qjson/Config.in
-+++ b/package/qjson/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_QJSON
- 	bool "qjson"
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
- 	help
- 	  QJson is a Qt-based library that maps JSON data to
--- 
-2.7.4
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 432792f..da9ca7f 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -46,8 +46,6 @@ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	default "6.2.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 	default "0.10.45"
+ 
+-menu "Module Selection"
+-
+ config BR2_PACKAGE_NODEJS_NPM
+ 	bool "NPM for the target"
+ 	select BR2_PACKAGE_OPENSSL
+@@ -102,6 +100,4 @@ config BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS
+ 	  'libcurl' here, to ensure that buildroot builds the libcurl package,
+ 	  and does so before building your node modules.
+ 
+-endmenu
+-
+ endif
