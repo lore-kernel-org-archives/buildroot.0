@@ -1,31 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 23:40:11 +0200
-Subject: [Buildroot] [PATCH 11/83 v2] package/nfs-utils: use
- 'menuconfig' instead of 'config'+'menu'
-In-Reply-To: <975a2e949c201e16f3e33268347609fcfe4531b7.1467624132.git.yann.morin.1998@free.fr>
-References: <cover.1467624132.git.yann.morin.1998@free.fr>
- <975a2e949c201e16f3e33268347609fcfe4531b7.1467624132.git.yann.morin.1998@free.fr>
-Message-ID: <20160704234011.0356fe04@free-electrons.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon,  4 Jul 2016 23:42:32 +0200
+Subject: [Buildroot] [PATCH] package/libbdplus: Add missing libgpg arch
+	support
+Message-ID: <1467668552-15811-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thanks to Romain Naour for finding the culprit package.
 
-On Mon,  4 Jul 2016 11:24:22 +0200, Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/nfs-utils/Config.in | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
+Fix:
+http://autobuild.buildroot.org/results/d06/d06e3eb9ef48540b71fbec267c534523632b224f/
 
-I've instead applied a patch that removes the menu...endmenu, because
-it was a bit silly to have a sub-menu for just 3 options.
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/libbdplus/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
+diff --git a/package/libbdplus/Config.in b/package/libbdplus/Config.in
+index df5ea27..7cb5893 100644
+--- a/package/libbdplus/Config.in
++++ b/package/libbdplus/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBBDPLUS
+ 	bool "libbdplus"
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBGCRYPT
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
