@@ -1,80 +1,87 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Jul 2016 17:04:16 +0200
-Subject: [Buildroot] [git commit] configs: chromebook snow: bump to linux
-	4.6.3
-Message-ID: <20160704150424.647CA81E70@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2016 17:05:36 +0200
+Subject: [Buildroot] [git commit] toolchain-external: Commonize /lib/<tuple>
+	symlinks for Linaro toolchains
+Message-ID: <20160704150542.653F8804FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=541c0856a7f5ea2950665da386a978b415762f83
+commit: https://git.buildroot.net/buildroot/commit/?id=ffafb77da2d298cb5f4b0ea8486c7596f51af18e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No significant changes but 4.6.3 moved parts of the device tree
-into a different file, so dts patch must be updated.
+As proposed initialy by Matthew Fornero [1], commonize the creation of
+symlinks from {/usr}/lib to {/usr}/lib/<tuple> for Linaro toolchains.
 
-[Peter: explicitly configure kernel headers for 4.6]
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This symlinks are only required for old Linaro toolchains.
+
+[1] http://patchwork.ozlabs.org/patch/624577
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Matthew Fornero <mfornero@mathworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../snow/{linux-4.3-dts-tpm.patch => linux-4.6-dts-tpm.patch}     | 7 ++++---
- board/chromebook/snow/{linux-4.3.fragment => linux-4.6.fragment}  | 0
- configs/chromebook_snow_defconfig                                 | 8 ++++----
- 3 files changed, 8 insertions(+), 7 deletions(-)
+ toolchain/toolchain-external/toolchain-external.mk | 26 +++++++---------------
+ 1 file changed, 8 insertions(+), 18 deletions(-)
 
-diff --git a/board/chromebook/snow/linux-4.3-dts-tpm.patch b/board/chromebook/snow/linux-4.6-dts-tpm.patch
-similarity index 82%
-rename from board/chromebook/snow/linux-4.3-dts-tpm.patch
-rename to board/chromebook/snow/linux-4.6-dts-tpm.patch
-index 4a9dd85..c71ff1b 100644
---- a/board/chromebook/snow/linux-4.3-dts-tpm.patch
-+++ b/board/chromebook/snow/linux-4.6-dts-tpm.patch
-@@ -10,9 +10,9 @@ and https://lkml.org/lkml/2013/3/4/242
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index c103b96..29c1f36 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -253,22 +253,12 @@ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+ TOOLCHAIN_EXTERNAL_DEPENDENCIES += netbsd-queue
+ endif
  
- Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+-# The Linaro ARMhf toolchain expects the libraries in
+-# {/usr,}/lib/arm-linux-gnueabihf, but Buildroot copies them to
++# The Linaro toolchain expects the libraries in
++# {/usr,}/lib/<tuple>, but Buildroot copies them to
+ # {/usr,}/lib, so we need to create a symbolic link.
+-define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+-	ln -snf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
+-	ln -snf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
+-endef
+-
+-define TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+-	ln -snf . $(TARGET_DIR)/lib/armeb-linux-gnueabihf
+-	ln -snf . $(TARGET_DIR)/usr/lib/armeb-linux-gnueabihf
+-endef
+-
+-define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+-	ln -snf . $(TARGET_DIR)/lib/aarch64-linux-gnu
+-	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
++define TOOLCHAIN_EXTERNAL_LINARO_SYMLINK
++	ln -snf . $(TARGET_DIR)/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
++	ln -snf . $(TARGET_DIR)/usr/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
+ endef
  
----- a/arch/arm/boot/dts/exynos5250-snow.dts
--+++ b/arch/arm/boot/dts/exynos5250-snow.dts
--@@ -474,6 +474,11 @@
-+--- a/arch/arm/boot/dts/exynos5250-snow-common.dtsi
-++++ b/arch/arm/boot/dts/exynos5250-snow-common.dtsi
-+@@ -466,6 +466,11 @@
-  	status = "okay";
-  	samsung,i2c-sda-delay = <100>;
-  	samsung,i2c-max-bus-freq = <66000>;
-@@ -24,3 +24,4 @@ Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-  };
-  
-  &i2c_5 {
-+
-diff --git a/board/chromebook/snow/linux-4.3.fragment b/board/chromebook/snow/linux-4.6.fragment
-similarity index 100%
-rename from board/chromebook/snow/linux-4.3.fragment
-rename to board/chromebook/snow/linux-4.6.fragment
-diff --git a/configs/chromebook_snow_defconfig b/configs/chromebook_snow_defconfig
-index b96441d..70cd42b 100644
---- a/configs/chromebook_snow_defconfig
-+++ b/configs/chromebook_snow_defconfig
-@@ -1,16 +1,16 @@
- BR2_arm=y
- BR2_cortex_a15=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_3=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
- BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- BR2_TARGET_GENERIC_GETTY_TERM="linux"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/chromebook/snow/sign.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/chromebook/snow/mksd.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.3.6"
--BR2_LINUX_KERNEL_PATCH="board/chromebook/snow/linux-4.3-dts-tpm.patch"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.3"
-+BR2_LINUX_KERNEL_PATCH="board/chromebook/snow/linux-4.6-dts-tpm.patch"
- BR2_LINUX_KERNEL_DEFCONFIG="exynos"
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/chromebook/snow/linux-4.3.fragment"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/chromebook/snow/linux-4.6.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="exynos5250-snow"
- BR2_PACKAGE_LINUX_FIRMWARE=y
+ # The Codescape toolchain uses a sysroot layout that places them
+@@ -339,7 +329,7 @@ ifeq ($(HOSTARCH),x86)
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_src.tar.bz2
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_SYMLINK
+ else
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/arm-linux-gnueabihf
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_arm-linux-gnueabihf.tar.xz
+@@ -349,7 +339,7 @@ ifeq ($(HOSTARCH),x86)
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_src.tar.bz2
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_SYMLINK
+ else
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/armeb-linux-gnueabihf
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_armeb-linux-gnueabihf.tar.xz
+@@ -392,7 +382,7 @@ ifeq ($(HOSTARCH),x86)
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_SYMLINK
+ else
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/aarch64-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_aarch64-linux-gnu.tar.xz
