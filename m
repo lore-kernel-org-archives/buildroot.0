@@ -1,35 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 3 Jul 2016 21:16:35 -0300
-Subject: [Buildroot] ptpd vs ptpd2
-In-Reply-To: <87wpl2snzp.fsf@dell.be.48ers.dk>
-References: <CANxTyt5W=FBwe6WkNKZ-+4g1oyC2h9=8m-hyECyi37hfOmbq3A@mail.gmail.com>
- <87wpl2snzp.fsf@dell.be.48ers.dk>
-Message-ID: <5779AAE3.8090507@zacarias.com.ar>
+From: Georges Savoundararadj <savoundg@gmail.com>
+Date: Sun,  3 Jul 2016 17:22:29 -0700
+Subject: [Buildroot] [PATCH 1/1] create-boot-sd.sh: fix script for sfdisk
+	(>=2.26)
+Message-ID: <20160704002229.9354-1-savoundg@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/07/16 13:08, Peter Korsgaard wrote:
+"Since version 2.26, sfdisk [...] no longer provides any functionality
+for CHS (Cylinder-Head-Sector) addressing." [1]
 
->>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
->
->   > All,
->   > The ptpd Config.in cites: http://ptpd.sourceforge.net/ .  But when I
->   > go there, I get redirected to https://github.com/ptpd/ptpd .
->
->   > The ptpd2 Config.in cites https://github.com/ptpd/ptpd directly.
->
->   > Do we have two recipes for the same package?
->
-> They afaik didn't use to be the same at least. Gustavoz, you added both,
-> do you know more?
+The unit used in this script is the cylinder which is not supported in
+the latest versions of sfdisk. However, it supports the deprecated option
+"--unit S" that allows to keep the retro-compatibility with the older
+versions of sfdisk if we use the sector unit.
 
-Hi.
-The homepage may have changed as usual.
-That being said, no, they are not duplicated, ptpd2 implements 1588-2008 
-(protocol version 2), ptpd implements 1588-2002 (protocol version 1), 
-and they're not forward/backward compatible.
-See: https://en.wikipedia.org/wiki/Precision_Time_Protocol
-Regards.
+This commit converts the offset and size from the cylinder unit (8 bytes)
+to the sector unit (512 bytes).
+
+[1] man page of sfdisk 2.28
+
+Signed-off-by: Georges Savoundararadj <savoundg@gmail.com>
+Signed-off-by: Stanislas Bach <sbach@0g.re>
+---
+ board/freescale/create-boot-sd.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/board/freescale/create-boot-sd.sh b/board/freescale/create-boot-sd.sh
+index af45115..32ad31e 100755
+--- a/board/freescale/create-boot-sd.sh
++++ b/board/freescale/create-boot-sd.sh
+@@ -59,9 +59,9 @@ sync
+ # - Bootloader at offset 1024
+ # - FAT partition starting at 1MB offset, containing uImage and *.dtb
+ # - ext2/3 partition formatted as ext2 or ext3, containing the root filesystem.
+-sfdisk ${DEV} <<EOF
+-32,480,b
+-512,,L
++sfdisk --unit S ${DEV} <<EOF
++2048,30720,b
++32768,,L
+ EOF
+ 
+ sync
+-- 
+2.9.0
