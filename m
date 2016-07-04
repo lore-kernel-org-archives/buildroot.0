@@ -1,129 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 11:21:57 +0200
-Subject: [Buildroot] [git commit] gcc: uClinux supports POSIX threads
-Message-ID: <20160704092309.A6DA381794@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 4 Jul 2016 11:23:44 +0200
+Subject: [Buildroot] [PATCH 1/3] Move the host-pkgconf dependency from
+ host-cmake to pkg-cmake
+In-Reply-To: <20160702154337.GP22343@free.fr>
+References: <1467388410-28135-1-git-send-email-luca@lucaceresoli.net>
+ <1467388410-28135-2-git-send-email-luca@lucaceresoli.net>
+ <14747128-2dd0-efb6-6c4c-faf744e8899a@mind.be>
+ <20160702144455.GN22343@free.fr>
+ <a3e6ad6e-525a-80c7-9764-16bac0149e75@mind.be>
+ <20160702154337.GP22343@free.fr>
+Message-ID: <577A2B20.4010400@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ab32f38562e8976d75bbfd53a9ab46e9701c492
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Yann, Arnout,
 
-Fixes for example boost compile errors for m68k-nommu or
-arm cortex-m4.
-Following autobuild failures fixed:
-http://autobuild.buildroot.net/results/f95511e839d85ea18c5b150a59e994ef069601a1/
-http://autobuild.buildroot.net/results/ff2b8be247e50c170b6317886509cc2922e1c77e/
+On 02/07/2016 17:43, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2016-07-02 16:52 +0200, Arnout Vandecappelle spake thusly:
+>> On 02-07-16 16:44, Yann E. MORIN wrote:
+>>> However, because the culprit for causing the dependency to host-pkgconf
+>>> is cmake itslef, and not a cmake-based package, I would suggest that we
+>>> do not consider this a hack, but the reality.
+>>
+>>  Isn't the problem that package foo uses FindBar from cmake, which uses
+>> pkg-config to find the package? For me, the burden of depending on host-pkgconf
+>> is on package foo in that case.
+> 
+> I don't agree. ;-) The use of pkg-config is an internal detail of the
+> CMake modules, of which the package should have no knowledge.
 
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gcc/4.8.5/940-uclinux-enable-threads.patch | 19 +++++++++++++++++++
- package/gcc/4.9.3/940-uclinux-enable-threads.patch | 19 +++++++++++++++++++
- package/gcc/5.4.0/940-uclinux-enable-threads.patch | 19 +++++++++++++++++++
- package/gcc/6.1.0/940-uclinux-enable-threads.patch | 19 +++++++++++++++++++
- 4 files changed, 76 insertions(+)
+Good point, you're right. FindBar might even be not using pkgconf in the
+current CMake release, and start using it in a future release. As long
+as it's provided among the CMake built-in modules, this should be
+considered a CMake implementation detail.
 
-diff --git a/package/gcc/4.8.5/940-uclinux-enable-threads.patch b/package/gcc/4.8.5/940-uclinux-enable-threads.patch
-new file mode 100644
-index 0000000..e58e824
---- /dev/null
-+++ b/package/gcc/4.8.5/940-uclinux-enable-threads.patch
-@@ -0,0 +1,19 @@
-+Enable POSIX threads for uClinux targets
-+Reported upstream:
-+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71721
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur gcc-4.8.5.orig/gcc/config.gcc gcc-4.8.5/gcc/config.gcc
-+--- gcc-4.8.5.orig/gcc/config.gcc	2015-05-21 22:57:29.000000000 +0200
-++++ gcc-4.8.5/gcc/config.gcc	2016-07-02 20:35:24.107644834 +0200
-+@@ -741,6 +741,9 @@
-+ *-*-uclinux*)
-+   extra_options="$extra_options gnu-user.opt"
-+   use_gcc_stdint=wrap
-++  case ${enable_threads} in
-++    "" | yes | posix) thread_file='posix' ;;
-++  esac
-+   tm_defines="$tm_defines DEFAULT_LIBC=LIBC_UCLIBC SINGLE_LIBC"
-+   ;;
-+ *-*-rdos*)
-diff --git a/package/gcc/4.9.3/940-uclinux-enable-threads.patch b/package/gcc/4.9.3/940-uclinux-enable-threads.patch
-new file mode 100644
-index 0000000..f89f090
---- /dev/null
-+++ b/package/gcc/4.9.3/940-uclinux-enable-threads.patch
-@@ -0,0 +1,19 @@
-+Enable POSIX threads for uClinux targets
-+Reported upstream:
-+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71721
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur gcc-4.9.3.orig/gcc/config.gcc gcc-4.9.3/gcc/config.gcc
-+--- gcc-4.9.3.orig/gcc/config.gcc	2015-05-21 22:50:59.000000000 +0200
-++++ gcc-4.9.3/gcc/config.gcc	2016-06-30 22:05:21.338233965 +0200
-+@@ -807,6 +807,9 @@
-+ *-*-uclinux*)
-+   extra_options="$extra_options gnu-user.opt"
-+   use_gcc_stdint=wrap
-++  case ${enable_threads} in
-++    "" | yes | posix) thread_file='posix' ;;
-++  esac
-+   tm_defines="$tm_defines DEFAULT_LIBC=LIBC_UCLIBC SINGLE_LIBC"
-+   ;;
-+ *-*-rdos*)
-diff --git a/package/gcc/5.4.0/940-uclinux-enable-threads.patch b/package/gcc/5.4.0/940-uclinux-enable-threads.patch
-new file mode 100644
-index 0000000..490a55b
---- /dev/null
-+++ b/package/gcc/5.4.0/940-uclinux-enable-threads.patch
-@@ -0,0 +1,19 @@
-+Enable POSIX threads for uClinux targets
-+Reported upstream:
-+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71721
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur gcc-5.4.0.orig/gcc/config.gcc gcc-5.4.0/gcc/config.gcc
-+--- gcc-5.4.0.orig/gcc/config.gcc	2015-09-10 16:17:53.000000000 +0200
-++++ gcc-5.4.0/gcc/config.gcc	2016-07-01 21:26:02.772958441 +0200
-+@@ -808,6 +808,9 @@
-+ *-*-uclinux*)
-+   extra_options="$extra_options gnu-user.opt"
-+   use_gcc_stdint=wrap
-++  case ${enable_threads} in
-++    "" | yes | posix) thread_file='posix' ;;
-++  esac
-+   tm_defines="$tm_defines DEFAULT_LIBC=LIBC_UCLIBC SINGLE_LIBC"
-+   ;;
-+ *-*-rdos*)
-diff --git a/package/gcc/6.1.0/940-uclinux-enable-threads.patch b/package/gcc/6.1.0/940-uclinux-enable-threads.patch
-new file mode 100644
-index 0000000..5532656
---- /dev/null
-+++ b/package/gcc/6.1.0/940-uclinux-enable-threads.patch
-@@ -0,0 +1,19 @@
-+Enable POSIX threads for uClinux targets
-+Reported upstream:
-+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71721
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur gcc-6.1.0.orig/gcc/config.gcc gcc-6.1.0/gcc/config.gcc
-+--- gcc-6.1.0.orig/gcc/config.gcc	2016-04-11 12:14:59.000000000 +0200
-++++ gcc-6.1.0/gcc/config.gcc	2016-07-02 20:04:25.732169982 +0200
-+@@ -833,6 +833,9 @@
-+ *-*-uclinux*)
-+   extra_options="$extra_options gnu-user.opt"
-+   use_gcc_stdint=wrap
-++  case ${enable_threads} in
-++    "" | yes | posix) thread_file='posix' ;;
-++  esac
-+   tm_defines="$tm_defines DEFAULT_LIBC=LIBC_UCLIBC SINGLE_LIBC"
-+   ;;
-+ *-*-rdos*)
+Thus my comment to the patch should be changed, but the patch content is
+still needed in case we skip building host-cmake. Either in the current
+form...
+
+> 
+>>  That said, this hack really simplifies things so let's indeed keep it.
+> 
+> On which I'll close the discussion. Thanks! :-)
+> 
+>>  Actually, why don't we just always build host-pkgconf? On my machine 'make
+>> host-pkgconf' takes 6.5 seconds, of which 4.7 seconds are parsing the makefiles.
+>> Can we afford the cost of 1.5 seconds of build time and 844K of build size?
+
+...or in the variant suggested by Arnout.
+
+> If we decide so, then we should move this non-hack into the
+> generic-package infra, so that it benefits all packages at once, not
+> only cmake-based packages.
+
+This might add an unneeded host-pkgconf build in a some corner cases,
+thus it would be once again a "hack". But its cost is so negligible that
+I would definitely consider it.
+
+-- 
+Luca
