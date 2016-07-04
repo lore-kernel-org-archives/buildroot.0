@@ -1,54 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 4 Jul 2016 11:40:08 +0200
-Subject: [Buildroot] [PATCH 1/3] package/go-bootstrap: Build host tools
- with host CC
-In-Reply-To: <78eb610ef2c82ae5c2adb5be9309401eeffe8cfb.1463696779.git.geoff@infradead.org>
-References: <cover.1463696779.git.geoff@infradead.org>
- <78eb610ef2c82ae5c2adb5be9309401eeffe8cfb.1463696779.git.geoff@infradead.org>
-Message-ID: <c3671ab3-be2e-e2b5-c29e-cf849cc96a5d@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2016 11:42:29 +0200
+Subject: [Buildroot] [PATCH 1/2] Package nfs-utils: Start/stop daemons
+ consistently
+In-Reply-To: <1467564419-21313-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1467564419-21313-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20160704114229.5f5e9ea8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Geoff,
+Hello,
 
-Le 20/05/2016 ? 00:33, Geoff Levand a ?crit :
-> Use the host compiler when building host tools.
+On Sun,  3 Jul 2016 18:46:58 +0200, Maxime Hadjinlian wrote:
+> From: universe II <universeii@gmx.de>
 > 
-> The go build system is not compatable with ccache, so use HOSTCC_NOCCACHE
-> here.  See https://github.com/golang/go/issues/11685.
+> Changed init script to start and stop all nfs daemons
+> in a consistent way. Using the same kill command,
+> start/stop the daemon, printout OK or FAIL and touch
+> or deleted necessary files.
 > 
-> Signed-off-by: Geoff Levand <geoff@infradead.org>
-
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-
+> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
+> [Maxime:
+>    - Make it really consistent to stop the daemons as pointed out by Yann E. Morin
+>    - Remove the -9]
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
->  package/go-bootstrap/go-bootstrap.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/go-bootstrap/go-bootstrap.mk b/package/go-bootstrap/go-bootstrap.mk
-> index 47f5013..29f2b03 100644
-> --- a/package/go-bootstrap/go-bootstrap.mk
-> +++ b/package/go-bootstrap/go-bootstrap.mk
-> @@ -19,11 +19,14 @@ HOST_GO_BOOTSTRAP_DEPENDENCIES = toolchain
->  
->  HOST_GO_BOOTSTRAP_ROOT = $(HOST_DIR)/usr/lib/go-$(GO_BOOTSTRAP_VERSION)
->  
-> +# The go build system is not compatable with ccache, so use HOSTCC_NOCCACHE
-> +# here.  See https://github.com/golang/go/issues/11685.
->  HOST_GO_BOOTSTRAP_MAKE_ENV = \
->  	GOOS=linux \
->  	GOROOT_FINAL="$(HOST_GO_BOOTSTRAP_ROOT)" \
->  	GOROOT="$(@D)" \
->  	GOBIN="$(@D)/bin" \
-> +	CC=$(HOSTCC_NOCCACHE) \
->  	CGO_ENABLED=0
->  
->  define HOST_GO_BOOTSTRAP_BUILD_CMDS
-> 
+>  package/nfs-utils/S60nfs | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+
+Both applied, with minor tweaks. Regarding the second patch, I really
+wasn't sure since we don't have written rules about indentation in our
+init scripts, it's the kind of things that tends to get changed in one
+direction, and then in the other direction a few months later. But
+anyway, since the patch was done, I applied it.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
