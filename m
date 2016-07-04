@@ -1,47 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Jul 2016 17:14:18 +0200
-Subject: [Buildroot] [PATCH 03/83 v2] package/collectd: use 'menuconfig'
-	instead of 'config'+'menu'
-In-Reply-To: <46b7f0adce308bf807e169fa8c8348c4f349a4b2.1467624132.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 4 Jul 2016 11:24:14 +0200")
-References: <cover.1467624132.git.yann.morin.1998@free.fr>
- <46b7f0adce308bf807e169fa8c8348c4f349a4b2.1467624132.git.yann.morin.1998@free.fr>
-Message-ID: <87a8hxe8qd.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2016 17:15:39 +0200
+Subject: [Buildroot] [git commit] package/pulseaudio: fix typo
+Message-ID: <20160704151611.26FA0816A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=68af095845127c467c1df83a7dabdf7c1865a5b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Keep the existing sub-menus, because there are a lot of entries in those
- > sub-menus. Using comments to separate them is not a totally satifactory
- > solution.
+commit 7290dc1e87b23fe21c75c50b2238004273a0ec5c added
+PULSE_AUDIO_CONF_ENV instead of PULSEAUDIO_CONF_ENV.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pulseaudio/pulseaudio.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm not quite sure I think this is an improvement. We used to have:
-
-  [ ] collectd
-
-Which when selected becomes:
-
-  [*] collectd
-       match plugins  --->
-       misc plugins  --->
-       read plugins  --->
-       target plugins  --->
-       write plugins  --->
-
-Which looks sensible to me.
-
-With the change we instead have:
-
-[ ] collectd  ----
-
-(and if you press enter you get to an empty menu). When enabled you
-again have to press enter to get to the submenus.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index 9ef11bc..e0d9ab4 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -18,7 +18,7 @@ PULSEAUDIO_CONF_OPTS = \
+ # Make sure we don't detect libatomic_ops. Indeed, since pulseaudio
+ # requires json-c, which needs 4 bytes __sync builtins, there should
+ # be no need for pulseaudio to rely on libatomic_ops.
+-PULSE_AUDIO_CONF_ENV += \
++PULSEAUDIO_CONF_ENV += \
+ 	ac_cv_header_atomic_ops_h=no
+ 
+ # 0002-webrtc-C-11-is-only-required-for-WebRTC-support.patch
