@@ -1,47 +1,47 @@
-From: pborut123 <pborut123@gmail.com>
-Date: Mon, 04 Jul 2016 17:06:46 +0200
-Subject: [Buildroot] Version 2016.05: Python 3.5.1. Building python packages
- . error: Download error on https://pypi.python.org/simple/: unknown url
- type: https
-Message-ID: <577A7B86.2030001@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Jul 2016 17:10:14 +0200
+Subject: [Buildroot] [PATCH 04/83 v2] package/gd: use 'menuconfig'
+	instead of 'config'+'menu'
+In-Reply-To: <9f7e2cbc99ed22ceaab8e2d35f53736d5fbaae42.1467624132.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 4 Jul 2016 11:24:15 +0200")
+References: <cover.1467624132.git.yann.morin.1998@free.fr>
+ <9f7e2cbc99ed22ceaab8e2d35f53736d5fbaae42.1467624132.git.yann.morin.1998@free.fr>
+Message-ID: <87eg79e8x5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-Searching for solution I've found that this error is connected with ssl 
-access in buildroot's host python3 installation.
-If I run exact python3 from buildroot (./output/host/usr/bin/python3) 
-and enter code to test https connection:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Python 3.5.1 (default, Jul  3 2016, 21:09:24)
-[GCC 4.8.4] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>>from urllib.request import urlopen
->>>urlopen('https://askubuntu.com').read()
-Traceback (most recent call last):
-   File "<stdin>", line 1, in <module>
-   File 
-"/home/pborut/strhub/2/buildroot2/output/host/usr/lib/python3.5/urllib/request.py", 
-line 162, in urlopen
-     return opener.open(url, data, timeout)
-  ...
-   File 
-"/home/pborut/strhub/2/buildroot2/output/host/usr/lib/python3.5/urllib/request.py", 
-line 1310, in unknown_open
-     raise URLError('unknown url type: %s' % type)
-urllib.error.URLError: <urlopen error unknown url type: https>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > ---
+ > Changes RFC -> v1:
+ >   - typo in title  (Arnout)
+ > ---
+ >  package/gd/Config.in | 6 ++----
+ >  1 file changed, 2 insertions(+), 4 deletions(-)
 
-which is same error message I get while building module.
+ > diff --git a/package/gd/Config.in b/package/gd/Config.in
+ > index 28b0b0f..092bc06 100644
+ > --- a/package/gd/Config.in
+ > +++ b/package/gd/Config.in
+ > @@ -1,4 +1,4 @@
+ > -config BR2_PACKAGE_GD
+ > +menuconfig BR2_PACKAGE_GD
+ >  	bool "gd"
+ >  	help
+ >  	  GD is a graphics library. It allows your code to quickly
+ > @@ -12,7 +12,7 @@ config BR2_PACKAGE_GD
+ 
+ >  if BR2_PACKAGE_GD
+ 
+ > -menu "gd tools"
+ > +comment "gd tools"
 
-I have built buildroot configuration with python3, I have ssl option 
-checked, I have openssl package also selected.
+I don't think this comment really adds any value, so I've dropped this
+and committed, thanks.
 
-I'm running 64-bit LinuxMint vm (ubuntu) with Python3 3.4.3, works normal.
-
-Do you have any suggestion on what else to check to get over this issue?
-
-Best regards,
-Borut.
+-- 
+Bye, Peter Korsgaard
