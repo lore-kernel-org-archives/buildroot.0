@@ -1,33 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  4 Jul 2016 11:25:32 +0200
-Subject: [Buildroot] [PATCH 81/83 v2] boot/mxs-bootlets: use 'menuconfig'
-In-Reply-To: <cover.1467624132.git.yann.morin.1998@free.fr>
-References: <cover.1467624132.git.yann.morin.1998@free.fr>
-Message-ID: <4bfe754981197eba1916d12532f3b31e8bc1dc8a.1467624132.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Jul 2016 11:28:51 +0200
+Subject: [Buildroot] [PATCH 0/4] System emulation support in host-qemu
+In-Reply-To: <1467584664-11640-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 4 Jul 2016 00:24:20 +0200")
+References: <1467584664-11640-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87vb0liwfg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mxs-bootlets has 5 options, so use a 'menuconfig' to
-group the options in a sub-menu.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- boot/mxs-bootlets/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Hello,
+ > This is a respin of Simon Maes series adding system emulation support
+ > to the host-qemu package. Compared to the original series from Simon:
 
-diff --git a/boot/mxs-bootlets/Config.in b/boot/mxs-bootlets/Config.in
-index 4bb07a0..2712d8d 100644
---- a/boot/mxs-bootlets/Config.in
-+++ b/boot/mxs-bootlets/Config.in
-@@ -1,4 +1,4 @@
--config BR2_TARGET_MXS_BOOTLETS
-+menuconfig BR2_TARGET_MXS_BOOTLETS
- 	bool "mxs-bootlets"
- 	depends on BR2_arm
- 	help
+ >  - The initial patch adding the support has been reworked, taking into
+ >    account numerous comments from Arnout, plus additional
+ >    simplifications and improvements.
+
+ >  - The patch adding version selection has been dropped. We can revisit
+ >    that later, but adding version selection is complicated (think
+ >    about hash verification for example)
+
+ >  - The cleanup patch from Simon has been dropped, as it didn't clean
+ >    up things according to Buildroot best practices.
+
+ >  - The patch adding the "qemu-system-run" target has been
+ >    dropped. That's too specific, and if people really want to automate
+ >    starting qemu, they can write a script for it outside of Buildroot.
+
+ >  - A patch to bump to Qemu 2.6.0 has been added.
+
+Committed series, thanks!
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
