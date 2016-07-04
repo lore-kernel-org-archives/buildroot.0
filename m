@@ -1,32 +1,43 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 4 Jul 2016 15:09:35 +0200
-Subject: [Buildroot] [PATCH v2 1/1] flatcc: new package
-In-Reply-To: <CAHXCMML55cnFBZ2i+PNuRxX08rtAb5BTnCiL+OY7h2zQ6QSYvw@mail.gmail.com>
-References: <1462145376-1377-1-git-send-email-steve.derosier@lairdtech.com>
- <CAHXCMM+wVwqthUOEh+e3fHDA_=J0FS6FqG2cBF+zhVM0BGVoFQ@mail.gmail.com>
- <CALupW3BnsWbBFZhd+GQe26rtXsg-KZUsxkxupZ_5J88Yb14PeA@mail.gmail.com>
- <c0a641fc-b5ce-7c69-14f1-1b53f0af7623@mind.be>
- <CALupW3B76bWmAnLSLAizMgZBGwig5Gm6o3dG9q5ydtEaSyqqpw@mail.gmail.com>
- <bbbedfcc-6c2f-4441-95ad-543ea1c53fef@mind.be>
- <CAHXCMML55cnFBZ2i+PNuRxX08rtAb5BTnCiL+OY7h2zQ6QSYvw@mail.gmail.com>
-Message-ID: <95806770-e12e-cde6-db81-3ef56968a141@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Jul 2016 15:13:06 +0200
+Subject: [Buildroot] [PATCH 01/83 v2] boot/at91bootstrap: choices must
+	have a type
+In-Reply-To: <e37e8e59300b9a2c1a4b6179a000aa37df8c675f.1467624132.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 4 Jul 2016 11:24:12 +0200")
+References: <cover.1467624132.git.yann.morin.1998@free.fr>
+ <e37e8e59300b9a2c1a4b6179a000aa37df8c675f.1467624132.git.yann.morin.1998@free.fr>
+Message-ID: <87bn2dh7h9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-[snip]
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > ---
+ >  boot/at91bootstrap/Config.in | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-What the status of this patch ?
+ > diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
+ > index 57fdeda..d131a6a 100644
+ > --- a/boot/at91bootstrap/Config.in
+ > +++ b/boot/at91bootstrap/Config.in
+ > @@ -26,7 +26,7 @@ config BR2_TARGET_AT91BOOTSTRAP_BOARD
+ >  	  This is used to do a make <board>_config
+ 
+ >  choice
+ > -	prompt "Boot Memory"
+ > +	bool "Boot Memory"
 
-Steve you said that you'll send an updated version:
-"So, please don't merge v2 of this patch. I'll try again in a few weeks."
+We use prompts in several other places in Buildroot:
 
-I'll mark it changes requested in the patchwork, please don't forget to send an
-updated version.
+git grep 'prompt "' **/Config.in | wc -l
+89
 
-Best regards,
-Romain
+And we have "always" done so without issues, so I don't think we need to
+change this now.
+
+-- 
+Bye, Peter Korsgaard
