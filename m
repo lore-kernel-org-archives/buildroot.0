@@ -1,33 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Jul 2016 15:08:33 +0200
-Subject: [Buildroot] [PATCH 1/3] package/go-bootstrap: Build host tools
-	with host CC
-In-Reply-To: <c3671ab3-be2e-e2b5-c29e-cf849cc96a5d@gmail.com> (Romain Naour's
- message of "Mon, 4 Jul 2016 11:40:08 +0200")
-References: <cover.1463696779.git.geoff@infradead.org>
- <78eb610ef2c82ae5c2adb5be9309401eeffe8cfb.1463696779.git.geoff@infradead.org>
- <c3671ab3-be2e-e2b5-c29e-cf849cc96a5d@gmail.com>
-Message-ID: <87furph7ou.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 4 Jul 2016 15:09:35 +0200
+Subject: [Buildroot] [PATCH v2 1/1] flatcc: new package
+In-Reply-To: <CAHXCMML55cnFBZ2i+PNuRxX08rtAb5BTnCiL+OY7h2zQ6QSYvw@mail.gmail.com>
+References: <1462145376-1377-1-git-send-email-steve.derosier@lairdtech.com>
+ <CAHXCMM+wVwqthUOEh+e3fHDA_=J0FS6FqG2cBF+zhVM0BGVoFQ@mail.gmail.com>
+ <CALupW3BnsWbBFZhd+GQe26rtXsg-KZUsxkxupZ_5J88Yb14PeA@mail.gmail.com>
+ <c0a641fc-b5ce-7c69-14f1-1b53f0af7623@mind.be>
+ <CALupW3B76bWmAnLSLAizMgZBGwig5Gm6o3dG9q5ydtEaSyqqpw@mail.gmail.com>
+ <bbbedfcc-6c2f-4441-95ad-543ea1c53fef@mind.be>
+ <CAHXCMML55cnFBZ2i+PNuRxX08rtAb5BTnCiL+OY7h2zQ6QSYvw@mail.gmail.com>
+Message-ID: <95806770-e12e-cde6-db81-3ef56968a141@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+Hi all,
 
- > Hi Geoff,
- > Le 20/05/2016 ? 00:33, Geoff Levand a ?crit :
- >> Use the host compiler when building host tools.
- >> 
- >> The go build system is not compatable with ccache, so use HOSTCC_NOCCACHE
- >> here.  See https://github.com/golang/go/issues/11685.
- >> 
- >> Signed-off-by: Geoff Levand <geoff@infradead.org>
+[snip]
 
- > Reviewed-by: Romain Naour <romain.naour@gmail.com>
+What the status of this patch ?
 
-Committed, thanks.
+Steve you said that you'll send an updated version:
+"So, please don't merge v2 of this patch. I'll try again in a few weeks."
 
--- 
-Bye, Peter Korsgaard
+I'll mark it changes requested in the patchwork, please don't forget to send an
+updated version.
+
+Best regards,
+Romain
