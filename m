@@ -1,75 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 11:38:41 +0200
-Subject: [Buildroot] [git commit] package/nfs-utils: fix indentation
-Message-ID: <20160704093947.7C8D47FD4C@busybox.osuosl.org>
+Date: Mon, 4 Jul 2016 11:32:49 +0200
+Subject: [Buildroot] [git commit] package/nfs-utils: start/stop daemons
+	consistently
+Message-ID: <20160704093947.70B0B802C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c2982bf8c0645407ccd692205c800fbc44319b4
+commit: https://git.buildroot.net/buildroot/commit/?id=5b36e651770658afc46be219b0d2bf375b217381
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use tabs everywhere still we don't have an official policy.
+Change init script to start and stop all nfs daemons in a consistent
+way. Using the same kill command, start/stop the daemon, printout OK or
+FAIL and touch or deleted necessary files.
 
+Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
+[Maxime:
+   - Make it really consistent to stop the daemons as pointed out by
+     Yann E. Morin
+   - Remove the -9]
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nfs-utils/S60nfs | 36 ++++++++++++++++++------------------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+ package/nfs-utils/S60nfs | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
-index 2d4e082..893b1e4 100755
+index 7a49c79..2d4e082 100755
 --- a/package/nfs-utils/S60nfs
 +++ b/package/nfs-utils/S60nfs
-@@ -17,7 +17,7 @@ CFG_FILE=/etc/default/nfsd
+@@ -45,22 +45,22 @@ start() {
+ stop() {
+ 	# Stop daemons.
+ 	printf "Shutting down NFS mountd: "
+-	killall -q rpc.mountd
++	killall -q rpc.mountd 2>/dev/null
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
  
- NR_THREADS=2
- if [ -f "${CFG_FILE}" ]; then
--    . "${CFG_FILE}"
-+	. "${CFG_FILE}"
- fi
+ 	printf "Shutting down NFS daemon: "
+-	kill -9 `pidof nfsd` 2>/dev/null
++	killall -q nfsd 2>/dev/null
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
  
+ 	printf "Shutting down NFS services: "
+ 	/usr/sbin/exportfs -au
+-	rm -f /var/lock/subsys/nfs
+-	killall -q rpc.statd
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
  
-@@ -66,23 +66,23 @@ stop() {
+ 	printf "Stopping NFS statd: "
+-	killall -q rpc.statd
++	killall -q rpc.statd 2>/dev/null
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	rm -f /var/lock/subsys/nfs
++	rm -f /var/run/rpc.statd.pid
+ 	rm -f /var/lock/subsys/nfslock
+ }
  
- # See how we were called.
- case "$1" in
--  start)
--	start
--	;;
--  stop)
--	stop
--	;;
--  restart)
--	stop
--	start
--	;;
--  reload)
--	/usr/sbin/exportfs -r
--	touch /var/lock/subsys/nfs
--	;;
--  *)
--	echo "Usage: $0 {start|stop|restart|reload}"
--	exit 1
-+	start)
-+		start
-+		;;
-+	stop)
-+		stop
-+		;;
-+	restart)
-+		stop
-+		start
-+		;;
-+	reload)
-+		/usr/sbin/exportfs -r
-+		touch /var/lock/subsys/nfs
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
+@@ -81,7 +81,7 @@ case "$1" in
+ 	touch /var/lock/subsys/nfs
+ 	;;
+   *)
+-	echo "Usage: nfs {start|stop|reload}"
++	echo "Usage: $0 {start|stop|restart|reload}"
+ 	exit 1
  esac
  
- exit 0
