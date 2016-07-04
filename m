@@ -1,30 +1,37 @@
-From: Julien Floret <julien.floret@6wind.com>
-Date: Mon,  4 Jul 2016 17:33:30 +0200
-Subject: [Buildroot] [PATCH] yasm: add license
-Message-ID: <1467646410-19785-1-git-send-email-julien.floret@6wind.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2016 17:34:09 +0200
+Subject: [Buildroot] [git commit] openblas: pass ONLY_CBLAS=1 only when
+	Fortran is not available
+Message-ID: <20160704153822.263EC80797@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Julien Floret <julien.floret@6wind.com>
----
- package/yasm/yasm.mk | 2 ++
- 1 file changed, 2 insertions(+)
+commit: https://git.buildroot.net/buildroot/commit/?id=d125e8d4d3929cbfa2a7b3dd10514cf1bac87816
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
-index 6729b6a74dba..19800344299d 100644
---- a/package/yasm/yasm.mk
-+++ b/package/yasm/yasm.mk
-@@ -6,6 +6,8 @@
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openblas/openblas.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index d07d09d..baeef05 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
+@@ -19,9 +19,10 @@ OPENBLAS_MAKE_OPTS += CROSS=1
+ # Set OpenBLAS target
+ OPENBLAS_MAKE_OPTS += TARGET=$(BR2_PACKAGE_OPENBLAS_TARGET)
  
- YASM_VERSION = 1.3.0
- YASM_SITE = http://www.tortall.net/projects/yasm/releases
-+YASM_LICENSE = BSD-2c, BSD-3c, Artistic, GPLv2, LGPLv2
-+YASM_LICENSE_FILES = COPYING BSD.txt Artistic.txt GNU_GPL-2.0 GNU_LGPL-2.0
+-# Disable fortran by default until we add BR2_TOOLCHAIN_HAS_FORTRAN
+-# hidden symbol to our toolchain infrastructure
++# When Fortran is not available, only build the C version of BLAS
++ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),)
+ OPENBLAS_MAKE_OPTS += ONLY_CBLAS=1
++endif
  
- # This sed prevents it compiling 2 programs (vsyasm and ytasm)
- # that are only of use on Microsoft Windows.
--- 
-2.1.0
+ # Enable/Disable multi-threading (not for static-only since it uses dlfcn.h)
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS):$(BR2_STATIC_LIBS),y:)
