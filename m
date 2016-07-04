@@ -1,49 +1,32 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  4 Jul 2016 11:24:52 +0200
-Subject: [Buildroot] [PATCH 41/83 v2] package/gnuradio: split long omment
+Date: Mon,  4 Jul 2016 11:24:54 +0200
+Subject: [Buildroot] [PATCH 43/83 v2] package/gr-osmosdr: use 'menuconfig'
 In-Reply-To: <cover.1467624132.git.yann.morin.1998@free.fr>
 References: <cover.1467624132.git.yann.morin.1998@free.fr>
-Message-ID: <fda179f1f20228dfe91ad5d6d0f88381d6c26b63.1467624132.git.yann.morin.1998@free.fr>
+Message-ID: <b91ab6b1d21af69a867a339abad4a183e21117f6.1467624132.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It does not fit even is a wider-than-normal terminal.
+gr-osmosdr has 5-or-more options, so use a 'menuconfig' to group the
+options in a sub-menu.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
 ---
-Changes RFC -> v1;
-  - tabulate comment  (Arnout)
-  - slightly tweak sentence  (Arnout)
-  - follow alphabetical ordering
+ package/gr-osmosdr/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
----
-Note to Arnout: I did not exactly use your proposal to fix the sentence,
-because it was too wide or would have required yet another line.
----
- package/gnuradio/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index 9efe9d3..4bc71b9 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -67,8 +67,11 @@ config BR2_PACKAGE_GNURADIO_UTILS
- 	help
- 	  Misc python utilities
- 
--comment "gr-fft, -filter, -analog, -channels, -digital, -trellis, -pager, -qtgui depends fftw's single precision"
--	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
-+if !BR2_PACKAGE_FFTW_PRECISION_SINGLE
-+comment "gr-analog, gr-channels, gr-digital, gr-fft,i"
-+comment "gr-filter, gr-pager, gr-trellis and gr-qtgui"
-+comment "all depend on fftw with single precision.   "
-+endif
- 
- if BR2_PACKAGE_FFTW_PRECISION_SINGLE
- 
+diff --git a/package/gr-osmosdr/Config.in b/package/gr-osmosdr/Config.in
+index aa6ef0d..56d7fe7 100644
+--- a/package/gr-osmosdr/Config.in
++++ b/package/gr-osmosdr/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_GR_OSMOSDR
++menuconfig BR2_PACKAGE_GR_OSMOSDR
+ 	bool "gr-osmosdr"
+ 	depends on BR2_PACKAGE_GNURADIO
+ 	select BR2_PACKAGE_GNURADIO_BLOCKS
 -- 
 2.7.4
