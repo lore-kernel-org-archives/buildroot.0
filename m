@@ -1,42 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  4 Jul 2016 11:24:14 +0200
-Subject: [Buildroot] [PATCH 03/83 v2] package/collectd: use 'menuconfig'
-	instead of 'config'+'menu'
+Date: Mon,  4 Jul 2016 11:24:15 +0200
+Subject: [Buildroot] [PATCH 04/83 v2] package/gd: use 'menuconfig' instead
+	of 'config'+'menu'
 In-Reply-To: <cover.1467624132.git.yann.morin.1998@free.fr>
 References: <cover.1467624132.git.yann.morin.1998@free.fr>
-Message-ID: <46b7f0adce308bf807e169fa8c8348c4f349a4b2.1467624132.git.yann.morin.1998@free.fr>
+Message-ID: <9f7e2cbc99ed22ceaab8e2d35f53736d5fbaae42.1467624132.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Keep the existing sub-menus, because there are a lot of entries in those
-sub-menus. Using comments to separate them is not a totally satifactory
-solution.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/collectd/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 71301ec..6405af6 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
+---
+Changes RFC -> v1:
+  - typo in title  (Arnout)
+---
+ package/gd/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/package/gd/Config.in b/package/gd/Config.in
+index 28b0b0f..092bc06 100644
+--- a/package/gd/Config.in
++++ b/package/gd/Config.in
 @@ -1,4 +1,4 @@
--config BR2_PACKAGE_COLLECTD
-+menuconfig BR2_PACKAGE_COLLECTD
- 	bool "collectd"
- 	# Uses fork()
- 	depends on BR2_USE_MMU
-@@ -39,6 +39,7 @@ config BR2_PACKAGE_COLLECTD_VALUE
- 	bool "value"
+-config BR2_PACKAGE_GD
++menuconfig BR2_PACKAGE_GD
+ 	bool "gd"
  	help
- 	  Select values by their data sources' values.
-+
- endmenu
+ 	  GD is a graphics library. It allows your code to quickly
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_GD
  
- menu "misc plugins"
+ if BR2_PACKAGE_GD
+ 
+-menu "gd tools"
++comment "gd tools"
+ 
+ config BR2_PACKAGE_GD_ANNOTATE
+ 	bool "annotate"
+@@ -57,6 +57,4 @@ config BR2_PACKAGE_GD_WEBPNG
+ 	bool "webpng"
+ 	select BR2_PACKAGE_LIBPNG
+ 
+-endmenu
+-
+ endif
 -- 
 2.7.4
