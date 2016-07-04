@@ -1,391 +1,170 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon,  4 Jul 2016 15:30:33 -0700
-Subject: [Buildroot] [PATCH v7 3/3] docker-engine: new package
-In-Reply-To: <1467671433-18113-1-git-send-email-christian@paral.in>
-References: <1467671433-18113-1-git-send-email-christian@paral.in>
-Message-ID: <1467671433-18113-3-git-send-email-christian@paral.in>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 5 Jul 2016 00:36:08 +0200
+Subject: [Buildroot] [PATCH 1/1] Added shellinabox v2.19
+In-Reply-To: <CACcFhEUPPTzt8GcEwGV3yNJLKBEubZHbE3z=9_Ei_DbymapYvA@mail.gmail.com>
+References: <CACcFhEUPPTzt8GcEwGV3yNJLKBEubZHbE3z=9_Ei_DbymapYvA@mail.gmail.com>
+Message-ID: <f07527e0-b411-512b-e83b-e8bd97ba5d4e@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Docker is a platform to build, ship, and run applications in portable
-containers.
+Hi Olivier,
 
-Signed-off-by: Andrew Webster <awebster@arcx.com>
-Signed-off-by: Christian Stewart <christian@paral.in>
+Thanks for this contribution, some comments below:
 
----
+Le 04/07/2016 ? 21:15, Olivier Singla a ?crit :
+> From 5af5aa8d3e6d20d6611611a9782bc47b5f49a8d8 Mon Sep 17 00:00:00 2001
+> From: Olivier <olivier.singla at gmail.com <mailto:olivier.singla@gmail.com>>
+> Date: Mon, 4 Jul 2016 14:53:21 -0400
+> Subject: [PATCH 1/1] Added shellinabox v2.19
 
-Changes since v1:
- - use call github to build source URL
-Changes since v3:
- - fix help indentation in Config.in
- - use HOST_GO_TARGET_ENV as a base for build env vars
- - cleanup build commands
- - cleanup GOPATH and vendor directory setup
- - Remove selections for graph drivers. Docker will gracefully degrade
-   at runtime to the best available graphdriver. It is unnecessary to
-   disable these at build time, or to pull in any other dependencies
-   like aufs-util or btrfs tools. The daemon will use whatever is
-   available at runtime.
-Changes since v4:
- - remove commit hash from version scheme
-Changes since v5:
- - re-introduce graphdriver selections
- - these selections are required for btrfs and devicemapper
- - there are buildtime dependencies on headers.
- - bump to v1.12.0-rc3
- - remove hack/vendor.sh call, it is unnecessary, dependencies are
-   pre-vendored into the source tree.
-Changes since v6:
- - remove build-time dependency on docker-containerd and runc
- - install dockerd only if daemon is enabled
- - move all daemon dependencies into daemon selection
- - only install sysv, users, etc if daemon is enabled
- - add a proper sysv init file
- - remove DOCKER_OPTS in init file
- - remove test for $BASH as bash is never used for init
- - use hash for documentation link in sysv init file
- - remove unnecessary path change in sysv init file
- - remove exit on error line in sysv init file
- - remove init info comment from sysv init file
----
- package/Config.in                        |   1 +
- package/docker-engine/Config.in          |  69 +++++++++++++++++
- package/docker-engine/docker-engine.hash |   2 +
- package/docker-engine/docker-engine.mk   | 128 +++++++++++++++++++++++++++++++
- package/docker-engine/docker.init        |  89 +++++++++++++++++++++
- 5 files changed, 289 insertions(+)
- create mode 100644 package/docker-engine/Config.in
- create mode 100644 package/docker-engine/docker-engine.hash
- create mode 100644 package/docker-engine/docker-engine.mk
- create mode 100644 package/docker-engine/docker.init
+Please send a patch using git send-email command:
+http://nightly.buildroot.org/manual.html#submitting-patches
 
-diff --git a/package/Config.in b/package/Config.in
-index 01c0811..fee59a1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1637,6 +1637,7 @@ menu "System tools"
- 	source "package/dcron/Config.in"
- 	source "package/debianutils/Config.in"
- 	source "package/docker-containerd/Config.in"
-+	source "package/docker-engine/Config.in"
- 	source "package/cgroupfs-mount/Config.in"
- 	source "package/dsp-tools/Config.in"
- 	source "package/efibootmgr/Config.in"
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-new file mode 100644
-index 0000000..fa40678
---- /dev/null
-+++ b/package/docker-engine/Config.in
-@@ -0,0 +1,69 @@
-+config BR2_PACKAGE_DOCKER_ENGINE
-+	bool "docker-engine"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Docker is a platform to build, ship,
-+	  and run applications as lightweight containers.
-+
-+	  https://github.com/docker/docker
-+
-+comment "docker-engine needs a toolchain w/ threads"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+if BR2_PACKAGE_DOCKER_ENGINE
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
-+	bool "docker daemon"
-+	depends on BR2_USE_MMU # docker-containerd
-+	depends on BR2_USE_WCHAR # docker-containerd
-+	select BR2_PACKAGE_DOCKER_CONTAINERD # docker-containerd: runtime dependency
-+	select BR2_PACKAGE_RUNC # docker-containerd: runtime dependency
-+	select BR2_PACKAGE_UTIL_LINUX # docker-containerd: runtime dependency
-+	select BR2_PACKAGE_UTIL_LINUX_BINARIES # docker-containerd: runtime dependency
-+	select BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT # docker-containerd: runtime dependency
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT # docker-containerd: runtime dependency
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNT # docker-containerd: runtime dependency
-+	select BR2_PACKAGE_SQLITE # docker-engine: runtime dependency
-+	default y
-+	help
-+	  Build the Docker system daemon.
-+	  If not selected, will build client only.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL
-+	bool "build experimental features"
-+
-+if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
-+	bool "btrfs filesystem driver"
-+	depends on BR2_USE_WCHAR # btrfs-progs
-+	depends on BR2_USE_MMU # btrfs-progs
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
-+	select BR2_PACKAGE_BTRFS_PROGS
-+	help
-+	  Build the btrfs filesystem driver for Docker.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
-+	bool "devicemapper filesystem driver"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
-+	depends on BR2_USE_MMU # lvm2
-+	depends on !BR2_STATIC_LIBS # lvm2
-+	select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_LVM2_APP_LIBRARY
-+	help
-+	  Build the devicemapper filesystem driver for Docker.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
-+	bool "vfs filesystem driver"
-+	depends on BR2_USE_WCHAR # gvfs
-+	depends on BR2_USE_MMU # gvfs
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gvfs
-+	select BR2_PACKAGE_GVFS
-+	help
-+	  Build the vfs filesystem driver for Docker.
-+
-+endif
-+
-+endif
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-new file mode 100644
-index 0000000..ac90ee6
---- /dev/null
-+++ b/package/docker-engine/docker-engine.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 3f030c4f084ed518efeb00f21f3fdfb25252dd9c153b1d42da953e59bb41c582  docker-engine-v1.12.0-rc3.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-new file mode 100644
-index 0000000..5516423
---- /dev/null
-+++ b/package/docker-engine/docker-engine.mk
-@@ -0,0 +1,128 @@
-+################################################################################
-+#
-+# docker-engine
-+#
-+################################################################################
-+
-+DOCKER_ENGINE_VERSION = v1.12.0-rc3
-+DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
-+
-+DOCKER_ENGINE_LICENSE = Apache-2.0
-+DOCKER_ENGINE_LICENSE_FILES = LICENSE
-+
-+DOCKER_ENGINE_DEPENDENCIES = host-go
-+
-+DOCKER_ENGINE_GOPATH = "$(@D)/vendor"
-+DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-+	CGO_ENABLED=1 \
-+	CGO_NO_EMULATION=1 \
-+	GOBIN="$(@D)/bin" \
-+	GOPATH="$(DOCKER_ENGINE_GOPATH)"
-+
-+DOCKER_ENGINE_GLDFLAGS = \
-+	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
-+	-X main.Version=$(DOCKER_ENGINE_VERSION) \
-+	-extldflags '-static'
-+
-+DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs autogen
-+
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+DOCKER_ENGINE_BUILD_TAGS += seccomp
-+DOCKER_ENGINE_DEPENDENCIES += libseccomp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
-+DOCKER_ENGINE_BUILD_TAGS += daemon
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
-+DOCKER_ENGINE_BUILD_TAGS += experimental
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS),y)
-+DOCKER_ENGINE_DEPENDENCIES += btrfs-progs
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_btrfs
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER),y)
-+DOCKER_ENGINE_DEPENDENCIES += lvm2
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_devicemapper
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS),y)
-+DOCKER_ENGINE_DEPENDENCIES += gvfs
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_vfs
-+endif
-+
-+define DOCKER_ENGINE_CONFIGURE_CMDS
-+	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
-+	cd $(@D) && \
-+		GITCOMMIT="unknown" BUILDTIME="$$(date)" VERSION="$(DOCKER_ENGINE_VERSION)" \
-+		bash ./hack/make/.go-autogen
-+endef
-+
-+define DOCKER_ENGINE_BUILD_CLIENT_CMDS
-+	cd $(@D); $(DOCKER_ENGINE_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/docker -tags "$(DOCKER_ENGINE_BUILD_TAGS)" -ldflags "$(DOCKER_ENGINE_GLDFLAGS)" ./cmd/docker
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_TARGET_CLIENT_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/docker $(TARGET_DIR)/usr/bin/docker
-+endef
-+
-+define DOCKER_ENGINE_BUILD_DAEMON_CMDS
-+	cd $(@D); $(DOCKER_ENGINE_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/dockerd -tags "$(DOCKER_ENGINE_BUILD_TAGS)" -ldflags "$(DOCKER_ENGINE_GLDFLAGS)" ./cmd/dockerd
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_TARGET_DAEMON_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/dockerd $(TARGET_DIR)/usr/bin/dockerd
-+endef
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
-+
-+define DOCKER_ENGINE_BUILD_CMDS
-+	$(DOCKER_ENGINE_BUILD_CLIENT_CMDS)
-+	$(DOCKER_ENGINE_BUILD_DAEMON_CMDS)
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_TARGET_CMDS
-+	$(DOCKER_ENGINE_INSTALL_TARGET_CLIENT_CMDS)
-+	$(DOCKER_ENGINE_INSTALL_TARGET_DAEMON_CMDS)
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
-+	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/system/docker.socket
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
-+	ln -fs ../../../../usr/lib/systemd/system/docker.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/docker.service
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/docker-engine/docker.init \
-+		$(TARGET_DIR)/etc/init.d/S61docker
-+	$(INSTALL) -D -m 644 $(@D)/contrib/init/sysvinit-debian/docker.default \
-+		$(TARGET_DIR)/etc/default/docker
-+endef
-+
-+define DOCKER_ENGINE_USERS
-+	- - docker -1 * - - - Docker Application Container Framework
-+endef
-+
-+else
-+
-+define DOCKER_ENGINE_BUILD_CMDS
-+	$(DOCKER_ENGINE_BUILD_CLIENT_CMDS)
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_TARGET_CMDS
-+	$(DOCKER_ENGINE_INSTALL_TARGET_CLIENT_CMDS)
-+endef
-+
-+endif
-+
-+$(eval $(generic-package))
-diff --git a/package/docker-engine/docker.init b/package/docker-engine/docker.init
-new file mode 100644
-index 0000000..99c38b7
---- /dev/null
-+++ b/package/docker-engine/docker.init
-@@ -0,0 +1,89 @@
-+#!/bin/sh
-+
-+BASE=docker
-+
-+# modify these in /etc/default/$BASE (/etc/default/docker)
-+DOCKERD=/usr/bin/dockerd
-+# This is the pid file managed by docker itself
-+DOCKER_PIDFILE=/var/run/$BASE.pid
-+# This is the pid file created/managed by start-stop-daemon
-+DOCKER_SSD_PIDFILE=/var/run/$BASE-ssd.pid
-+DOCKER_LOGFILE=/var/log/$BASE.log
-+DOCKER_DESC="Docker"
-+
-+if [ -f /etc/default/$BASE ]; then
-+       . /etc/default/$BASE
-+fi
-+
-+# Check docker is present
-+if [ ! -x $DOCKERD ]; then
-+       echo "$DOCKERD not present or not executable"
-+       exit 1
-+fi
-+
-+cgroupfs_mount() {
-+       # see also https://github.com/tianon/cgroupfs-mount/blob/951c38ee8d802330454bdede20d85ec1c0f8d312/cgroupfs-mount
-+       if grep -v '^#' /etc/fstab | grep -q cgroup \
-+               || [ ! -e /proc/cgroups ] \
-+               || [ ! -d /sys/fs/cgroup ]; then
-+               return
-+       fi
-+       if ! mountpoint -q /sys/fs/cgroup; then
-+               mount -t tmpfs -o uid=0,gid=0,mode=0755 cgroup /sys/fs/cgroup
-+       fi
-+       (
-+               cd /sys/fs/cgroup
-+               for sys in $(awk '!/^#/ { if ($4 == 1) print $1 }' /proc/cgroups); do
-+                       mkdir -p $sys
-+                       if ! mountpoint -q $sys; then
-+                               if ! mount -n -t cgroup -o $sys cgroup $sys; then
-+                                       rmdir $sys || true
-+                               fi
-+                       fi
-+               done
-+       )
-+}
-+
-+case "$1" in
-+       start)
-+               cgroupfs_mount
-+
-+               ulimit -n 1048576
-+               ulimit -p 1048576
-+
-+               echo "Starting $DOCKER_DESC: $BASE"
-+               start-stop-daemon --start --background \
-+                       --exec "$DOCKERD" \
-+                       --pidfile "$DOCKER_SSD_PIDFILE" \
-+                       --make-pidfile \
-+                       -- \
-+                               -p "$DOCKER_PIDFILE" \
-+                               $DOCKER_OPTS \
-+                                       >> "$DOCKER_LOGFILE" 2>&1
-+               echo $?
-+               ;;
-+
-+       stop)
-+               echo "Stopping $DOCKER_DESC: $BASE"
-+               start-stop-daemon --stop --pidfile "$DOCKER_SSD_PIDFILE" --retry 10
-+               echo $?
-+               ;;
-+
-+       restart)
-+               docker_pid=`cat "$DOCKER_SSD_PIDFILE" 2>/dev/null`
-+               [ -n "$docker_pid" ] \
-+                       && [ -d /proc/$docker_pid ] \
-+                       && $0 stop \
-+                       && sleep 1
-+               $0 start
-+               ;;
-+
-+       force-reload)
-+               $0 restart
-+               ;;
-+
-+       *)
-+               echo "Usage: service docker {start|stop|restart}"
-+               exit 1
-+               ;;
-+esac
--- 
-2.7.3
+Your patch is corrupted by your mail client.
+
+> 
+> Signed-off-by: Olivier <olivier.singla at gmail.com <mailto:olivier.singla@gmail.com>>
+> ---
+>  package/Config.in                                  |  1 +
+>  .../shellinabox/0001-Makefile.am-fix-static.patch  | 11 +++++++++++
+>  package/shellinabox/Config.in                      | 10 ++++++++++
+>  package/shellinabox/shellinabox.hash               |  3 +++
+>  package/shellinabox/shellinabox.mk <http://shellinabox.mk>                 | 23
+> ++++++++++++++++++++++
+>  5 files changed, 48 insertions(+)
+>  create mode 100644 package/shellinabox/0001-Makefile.am-fix-static.patch
+>  create mode 100644 package/shellinabox/Config.in
+>  create mode 100644 package/shellinabox/shellinabox.hash
+>  create mode 100644 package/shellinabox/shellinabox.mk <http://shellinabox.mk>
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 2c4c196..91fcf37 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1525,6 +1525,7 @@ menu "Networking applications"
+>  source "package/sconeserver/Config.in"
+>  source "package/ser2net/Config.in"
+>  source "package/shairport-sync/Config.in"
+> +source "package/shellinabox/Config.in"
+>  source "package/smcroute/Config.in"
+>  source "package/socat/Config.in"
+>  source "package/socketcand/Config.in"
+> diff --git a/package/shellinabox/0001-Makefile.am-fix-static.patch
+> b/package/shellinabox/0001-Makefile.am-fix-static.patch
+> new file mode 100644
+> index 0000000..e1ad67d
+> --- /dev/null
+> +++ b/package/shellinabox/0001-Makefile.am-fix-static.patch
+> @@ -0,0 +1,11 @@
+> +--- shellinabox-2.19/Makefile.am.orig2016-07-03 20:46:42.655784211 -0400
+> ++++ shellinabox-2.19/Makefile.am2016-07-03 20:46:50.582801842 -0400
+
+Please, add a comment about what the patch is doing and don't forget to add your
+Sob line.
+
+http://nightly.buildroot.org/manual.html#_format_and_licensing_of_the_package_patches
+
+> +@@ -126,7 +126,7 @@
+> + 
+> + shellinaboxd_LDADD   = liblogging.la <http://liblogging.la>                  
+>                        \
+> +                        libhttp.la <http://libhttp.la>
+> +-shellinaboxd_LDFLAGS = -static
+> ++shellinaboxd_LDFLAGS =
+> + ## Added this for compatibility with older versions of autoconf/automake
+> + docdir               = ${datadir}/doc/${PACKAGE}
+> + 
+> diff --git a/package/shellinabox/Config.in b/package/shellinabox/Config.in
+> new file mode 100644
+> index 0000000..75cdfd8
+> --- /dev/null
+> +++ b/package/shellinabox/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_SHELLINABOX
+> +bool "shellinabox"
+Indent with one tab
+> +select BR2_PACKAGE_ZLIB
+> +help
+> + Shell In A Box implements a web server that can export arbitrary command
+> + line tools to a web based terminal emulator. This emulator is accessible
+> + to any JavaScript and CSS enabled web browser and does not require any
+> + additional browser plugins.
+> +
+> + https://github.com/shellinabox/shellinabox
+Indent the help text with one tab + 2 spaces (72 characters max per line)
+> diff --git a/package/shellinabox/shellinabox.hash
+> b/package/shellinabox/shellinabox.hash
+> new file mode 100644
+> index 0000000..16bf12c
+> --- /dev/null
+> +++ b/package/shellinabox/shellinabox.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated after checking pgp signature
+> +
+> +sha256d25ba9f72f04471fc1a8a564c65ef466c4553280ff3eeb365ed9c897d05ed2da
+>  v2.19.tar.gz
+Your patch is wrapped here by you mail client.
+
+> diff --git a/package/shellinabox/shellinabox.mk <http://shellinabox.mk>
+> b/package/shellinabox/shellinabox.mk <http://shellinabox.mk>
+> new file mode 100644
+> index 0000000..03adc21
+> --- /dev/null
+> +++ b/package/shellinabox/shellinabox.mk <http://shellinabox.mk>
+> @@ -0,0 +1,23 @@
+> +################################################################################
+> +#
+> +# shellinabox
+> +#
+> +################################################################################
+> +
+> +SHELLINABOX_VERSION = 2.19
+> +SHELLINABOX_SOURCE = v$(SHELLINABOX_VERSION).tar.gz
+> +SHELLINABOX_SITE = https://github.com/shellinabox/shellinabox/archive
+Use the gitbub helper here
+http://nightly.buildroot.org/manual.html#github-download-url
+
+> +SHELLINABOX_INSTALL_STAGING = YES
+Why shellinabox is installed on staging ?
+
+> +SHELLINABOX_LICENSE = GNU GPL v2
+should be GPLv2
+Also check if a license file is available.
+> +#SHELLINABOX_CONF_OPTS = --enable-shared --disable-static
+Remove this commented line.
+
+> +SHELLINABOX_AUTORECONF = YES
+Why we need to autoreconf the package ?
+is a configure script available ?
+> +
+> +SHELLINABOX_DEPENDENCIES = zlib 
+> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> +SHELLINABOX_CONF_OPTS += --enable-ssl
+missing build dependency on openssl package
+
+I'll mark this package change requested in patchwork, please send an updated
+version.
+
+Best regards,
+Romain Naour
+
+
+> +else
+> +SHELLINABOX_CONF_OPTS += --disable-ssl
+> +endif
+> +SHELLINABOX_CONF_OPTS += --disable-runtime-loading
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 2.5.5
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
