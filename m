@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 11:12:38 +0200
-Subject: [Buildroot] [PATCH 1/1] wpa_supplicant: add option to enable
- Wi-Fi Display
-In-Reply-To: <20160703232852.8222-1-savoundg@gmail.com>
-References: <20160703232852.8222-1-savoundg@gmail.com>
-Message-ID: <20160704111238.50bf3b1d@free-electrons.com>
+Date: Mon, 4 Jul 2016 11:12:58 +0200
+Subject: [Buildroot] [git commit] package/wireless_tools: Remove install man
+	pages
+Message-ID: <20160704091309.ED97281979@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bbccb03a69cdf0bb4a2aed14ec975e1fcbe6e29a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  3 Jul 2016 16:28:52 -0700, Georges Savoundararadj wrote:
-> BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY depends on
-> BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT because CONFIG_WIFI_DISPLAY needs
-> CONFIG_P2P.
-> 
-> Signed-off-by: Georges Savoundararadj <savoundg@gmail.com>
-> ---
->  package/wpa_supplicant/Config.in         | 6 ++++++
->  package/wpa_supplicant/wpa_supplicant.mk | 4 ++++
->  2 files changed, 10 insertions(+)
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wireless_tools/wireless_tools.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wireless_tools/wireless_tools.mk b/package/wireless_tools/wireless_tools.mk
+index 5fb8f12..973340b 100644
+--- a/package/wireless_tools/wireless_tools.mk
++++ b/package/wireless_tools/wireless_tools.mk
+@@ -34,7 +34,6 @@ endef
+ 
+ define WIRELESS_TOOLS_INSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" LDCONFIG=/bin/true $(WIRELESS_TOOLS_INSTALL_TARGETS)
+-	$(MAKE) -C $(@D) INSTALL_MAN="$(TARGET_DIR)/usr/share/man" install-man
+ endef
+ 
+ $(eval $(generic-package))
