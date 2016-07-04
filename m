@@ -1,45 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Jul 2016 14:55:06 +0200
-Subject: [Buildroot] [git commit] toolchain-external: wrap gfortran
-Message-ID: <20160704125513.27BB07FF6F@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2016 14:55:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mplayer: needs
+ BR2_TOOLCHAIN_HAS_SYNC_4
+In-Reply-To: <1467477991-13051-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1467477991-13051-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160704145515.04091db5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1d90e9bb7ad1b9737db9f6476a5bdaa27a9fa8a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- toolchain/toolchain-external/toolchain-external.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Sat,  2 Jul 2016 18:46:31 +0200, Bernd Kuhls wrote:
+> Also propagate as reverse dependency to libplayer & tovid.
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/630/6306757da3be9bb7e3cdcbfc8abb4e64a3fb7913/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libplayer/Config.in | 1 +
+>  package/mplayer/Config.in   | 2 ++
+>  package/tovid/Config.in     | 2 ++
+>  3 files changed, 5 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index a31a04b..c103b96 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -729,9 +729,9 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_BFIN_FLAT
- endef
- endif
- 
--# Build toolchain wrapper for preprocessor, C and C++ compiler and setup
--# symlinks for everything else. Skip gdb symlink when we are building our
--# own gdb to prevent two gdb's in output/host/usr/bin.
-+# Build toolchain wrapper for preprocessor, C, C++ and Fortran compilers
-+# and setup symlinks for everything else. Skip gdb symlink when we are
-+# building our own gdb to prevent two gdb's in output/host/usr/bin.
- # The LTO support in gcc creates wrappers for ar, ranlib and nm which load
- # the lto plugin. These wrappers are called *-gcc-ar, *-gcc-ranlib, and
- # *-gcc-nm and should be used instead of the real programs when -flto is
-@@ -746,7 +746,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
- 		*-ar|*-ranlib|*-nm) \
- 			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
- 			;; \
--		*cc|*cc-*|*++|*++-*|*cpp) \
-+		*cc|*cc-*|*++|*++-*|*cpp|*-gfortran) \
- 			ln -sf toolchain-wrapper $$base; \
- 			;; \
- 		*gdb|*gdbtui) \
+Applied with an improved commit log, using the explanations you have
+provided in our discussion. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
