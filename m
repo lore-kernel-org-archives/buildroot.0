@@ -1,42 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  4 Jul 2016 11:25:15 +0200
-Subject: [Buildroot] [PATCH 64/83 v2] package/openocd: use 'menuconfig'
+Date: Mon,  4 Jul 2016 11:25:16 +0200
+Subject: [Buildroot] [PATCH 65/83 v2] package/poco: use 'menuconfig'
 In-Reply-To: <cover.1467624132.git.yann.morin.1998@free.fr>
 References: <cover.1467624132.git.yann.morin.1998@free.fr>
-Message-ID: <c405d54173b2708cdd67d0063f5627be0976b28b.1467624132.git.yann.morin.1998@free.fr>
+Message-ID: <7edf1023b0eb364d942b004d253c9f7792c82b1b.1467624132.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-openocd has more than 5 options, so use a 'menuconfig' to group the
+poco has more than 5 options, so use a 'menuconfig' to group the
 options in a sub-menu.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/openocd/Config.in | 4 +---
+ package/poco/Config.in | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/openocd/Config.in b/package/openocd/Config.in
-index 2313671..66d3826 100644
---- a/package/openocd/Config.in
-+++ b/package/openocd/Config.in
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index dfdc8d1..1e7ca21 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
 @@ -1,4 +1,4 @@
--config BR2_PACKAGE_OPENOCD
-+menuconfig BR2_PACKAGE_OPENOCD
- 	bool "openocd"
- 	help
- 	  OpenOCD - Open On-Chip Debugger
-@@ -7,8 +7,6 @@ config BR2_PACKAGE_OPENOCD
+-config BR2_PACKAGE_POCO
++menuconfig BR2_PACKAGE_POCO
+ 	bool "poco"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+@@ -15,8 +15,6 @@ config BR2_PACKAGE_POCO
  
- if BR2_PACKAGE_OPENOCD
+ if BR2_PACKAGE_POCO
  
--comment "Adapters"
+-comment "poco components"
 -
- config BR2_PACKAGE_OPENOCD_FTDI
- 	bool "MPSSE mode of FTDI based devices"
- 	select BR2_PACKAGE_LIBUSB
+ config BR2_PACKAGE_POCO_XML
+ 	bool "xml"
+ 	select BR2_PACKAGE_EXPAT
 -- 
 2.7.4
