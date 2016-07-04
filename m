@@ -1,200 +1,27 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 4 Jul 2016 15:35:35 +0200
-Subject: [Buildroot] [PATCH v4] toolchain-external: Commonize
- /lib/<tuple> symlinks
-In-Reply-To: <1463766725-15724-1-git-send-email-mfornero@mathworks.com>
-References: <1459381580-18169-1-git-send-email-mfornero@mathworks.com>
- <1463766725-15724-1-git-send-email-mfornero@mathworks.com>
-Message-ID: <aaf6a41c-7fc4-91a1-7272-3f3cdb64a901@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Jul 2016 15:40:25 +0200
+Subject: [Buildroot] [PATCH] package/open2300: fix static builds
+In-Reply-To: <1467637517-14388-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Mon, 4 Jul 2016 15:05:17 +0200")
+References: <1467637517-14388-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87poqtfrna.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Le 20/05/2016 ? 19:52, Matthew Fornero a ?crit :
-> Commonize the creation of symlinks from {/usr}/lib to
-> {/usr}/lib/<tuple>.
-> 
-> These were originally defined on a per-toolchain basis for the Linaro
-> toolchains, but there is currently no support for creating symlinks
-> for custom toolchains that may have been based on Linaro (or older
-> versions of the Linaro toolchain).
-> 
-> Add common code for all supported Linaro toolchains and add a new
-> config option, BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK to enable custom
-> toolchains to enable the symbolic link creation.
+ > libmysqlclient needs -lz to build, so we have to pass it explicitly for
+ > static builds.
 
-Since we don't support older Linaro toolchains which require these symlinks
-other than the latest supporting x86 host (i.e Linaro 2014.09), I'm agree to add
-a way to easily import them without having to change the toolchain-external
-code. On another side such Linaro specific symlinks are no longer needed and the
-option is no longer be necessary.
+ > For almost-two-and-a-half years this error has been happenning, noone
+ > ever tried to fix it. This is now done, at last! ;-]
 
-> 
-> Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
-> ---
-> v4: Rebase to current master
-> v3: Invert Kconfig and cleanup as suggested by Arnout and Baruch Siach
-> v2: Cleanup as suggested by Arnout Vandecappelle
-> ---
->  toolchain/toolchain-external/Config.in             |   17 +++++++++++++
->  toolchain/toolchain-external/toolchain-external.mk |   26 ++++++--------------
->  2 files changed, 25 insertions(+), 18 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index b7f9241..fa698b1 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -23,6 +23,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
->  	depends on !BR2_STATIC_LIBS
->  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> +	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
->  	select BR2_INSTALL_LIBSTDCPP
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> @@ -45,6 +46,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
->  	depends on !BR2_STATIC_LIBS
->  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> +	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Not required for newer Linaro toolchain.
+Committed after adding a reference to the autobuilders, thanks.
 
->  	select BR2_INSTALL_LIBSTDCPP
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
-> @@ -67,6 +69,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
->  	depends on !BR2_STATIC_LIBS
->  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> +	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
->  	select BR2_INSTALL_LIBSTDCPP
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> @@ -89,6 +92,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
->  	depends on !BR2_STATIC_LIBS
->  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> +	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
-Not required for newer Linaro toolchain.
-
->  	select BR2_INSTALL_LIBSTDCPP
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
-> @@ -523,6 +527,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
->  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
->  	select BR2_INSTALL_LIBSTDCPP
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> +	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
->  	help
-> @@ -538,6 +543,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
->  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
->  	select BR2_INSTALL_LIBSTDCPP
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> +	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
-
-Not required for newer Linaro toolchain.
-
-With that fixed:
-
-  Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
->  	help
-> @@ -692,6 +698,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
->  	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX \
->  					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
->  
-> +config BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
-> +	bool
-> +
->  config BR2_TOOLCHAIN_EXTERNAL_GLIBC
->  	bool
->  	select BR2_TOOLCHAIN_USES_GLIBC
-> @@ -1005,6 +1014,14 @@ config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
->  	  need to be copied to the target filesystem, enter them
->  	  here, separated by spaces.
->  
-> +config BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
-> +	bool "Symlink /lib/<tuple>"
-> +	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
-> +	help
-> +	  Select this option if your external toolchain needs a symlink
-> +	  from {/usr}/lib to {/usr}/lib/<tuple>. This may be required if
-> +	  your toolchain is based on one from Linaro.
-> +
->  endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
->  
->  config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index 34217c0..6706fbf 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -244,23 +244,16 @@ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
->  TOOLCHAIN_EXTERNAL_DEPENDENCIES += netbsd-queue
->  endif
->  
-> -# The Linaro ARMhf toolchain expects the libraries in
-> -# {/usr,}/lib/arm-linux-gnueabihf, but Buildroot copies them to
-> +# Some toolchains, such as Linaro, expect the libraries in
-> +# {/usr,}/lib/<tuple>, but Buildroot copies them to
->  # {/usr,}/lib, so we need to create a symbolic link.
-> -define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
-> -	ln -snf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
-> -	ln -snf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
-> -endef
-> -
-> -define TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
-> -	ln -snf . $(TARGET_DIR)/lib/armeb-linux-gnueabihf
-> -	ln -snf . $(TARGET_DIR)/usr/lib/armeb-linux-gnueabihf
-> -endef
-> -
-> -define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
-> -	ln -snf . $(TARGET_DIR)/lib/aarch64-linux-gnu
-> -	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
-> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK),y)
-> +define TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
-> +	ln -snf . $(TARGET_DIR)/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
-> +	ln -snf . $(TARGET_DIR)/usr/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
->  endef
-> +TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
-> +endif
->  
->  # Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
->  # sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
-> @@ -318,7 +311,6 @@ ifeq ($(HOSTARCH),x86)
->  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
->  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
->  TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_src.tar.bz2
-> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
->  else
->  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/arm-linux-gnueabihf
->  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_arm-linux-gnueabihf.tar.xz
-> @@ -328,7 +320,6 @@ ifeq ($(HOSTARCH),x86)
->  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
->  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
->  TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_src.tar.bz2
-> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
->  else
->  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/armeb-linux-gnueabihf
->  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_armeb-linux-gnueabihf.tar.xz
-> @@ -369,7 +360,6 @@ ifeq ($(HOSTARCH),x86)
->  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
->  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
->  TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
-> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
->  else
->  TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.3-2016.02/aarch64-linux-gnu
->  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.3-2016.02-x86_64_aarch64-linux-gnu.tar.xz
-> 
+-- 
+Bye, Peter Korsgaard
