@@ -1,70 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 11:32:49 +0200
-Subject: [Buildroot] [git commit] package/nfs-utils: start/stop daemons
-	consistently
-Message-ID: <20160704093947.70B0B802C9@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 4 Jul 2016 11:40:08 +0200
+Subject: [Buildroot] [PATCH 1/3] package/go-bootstrap: Build host tools
+ with host CC
+In-Reply-To: <78eb610ef2c82ae5c2adb5be9309401eeffe8cfb.1463696779.git.geoff@infradead.org>
+References: <cover.1463696779.git.geoff@infradead.org>
+ <78eb610ef2c82ae5c2adb5be9309401eeffe8cfb.1463696779.git.geoff@infradead.org>
+Message-ID: <c3671ab3-be2e-e2b5-c29e-cf849cc96a5d@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b36e651770658afc46be219b0d2bf375b217381
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Geoff,
 
-Change init script to start and stop all nfs daemons in a consistent
-way. Using the same kill command, start/stop the daemon, printout OK or
-FAIL and touch or deleted necessary files.
+Le 20/05/2016 ? 00:33, Geoff Levand a ?crit :
+> Use the host compiler when building host tools.
+> 
+> The go build system is not compatable with ccache, so use HOSTCC_NOCCACHE
+> here.  See https://github.com/golang/go/issues/11685.
+> 
+> Signed-off-by: Geoff Levand <geoff@infradead.org>
 
-Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
-[Maxime:
-   - Make it really consistent to stop the daemons as pointed out by
-     Yann E. Morin
-   - Remove the -9]
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nfs-utils/S60nfs | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
-diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
-index 7a49c79..2d4e082 100755
---- a/package/nfs-utils/S60nfs
-+++ b/package/nfs-utils/S60nfs
-@@ -45,22 +45,22 @@ start() {
- stop() {
- 	# Stop daemons.
- 	printf "Shutting down NFS mountd: "
--	killall -q rpc.mountd
-+	killall -q rpc.mountd 2>/dev/null
- 	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 
- 	printf "Shutting down NFS daemon: "
--	kill -9 `pidof nfsd` 2>/dev/null
-+	killall -q nfsd 2>/dev/null
- 	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 
- 	printf "Shutting down NFS services: "
- 	/usr/sbin/exportfs -au
--	rm -f /var/lock/subsys/nfs
--	killall -q rpc.statd
- 	[ $? = 0 ] && echo "OK" || echo "FAIL"
- 
- 	printf "Stopping NFS statd: "
--	killall -q rpc.statd
-+	killall -q rpc.statd 2>/dev/null
- 	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+	rm -f /var/lock/subsys/nfs
-+	rm -f /var/run/rpc.statd.pid
- 	rm -f /var/lock/subsys/nfslock
- }
- 
-@@ -81,7 +81,7 @@ case "$1" in
- 	touch /var/lock/subsys/nfs
- 	;;
-   *)
--	echo "Usage: nfs {start|stop|reload}"
-+	echo "Usage: $0 {start|stop|restart|reload}"
- 	exit 1
- esac
- 
+Best regards,
+Romain
+
+
+> ---
+>  package/go-bootstrap/go-bootstrap.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/go-bootstrap/go-bootstrap.mk b/package/go-bootstrap/go-bootstrap.mk
+> index 47f5013..29f2b03 100644
+> --- a/package/go-bootstrap/go-bootstrap.mk
+> +++ b/package/go-bootstrap/go-bootstrap.mk
+> @@ -19,11 +19,14 @@ HOST_GO_BOOTSTRAP_DEPENDENCIES = toolchain
+>  
+>  HOST_GO_BOOTSTRAP_ROOT = $(HOST_DIR)/usr/lib/go-$(GO_BOOTSTRAP_VERSION)
+>  
+> +# The go build system is not compatable with ccache, so use HOSTCC_NOCCACHE
+> +# here.  See https://github.com/golang/go/issues/11685.
+>  HOST_GO_BOOTSTRAP_MAKE_ENV = \
+>  	GOOS=linux \
+>  	GOROOT_FINAL="$(HOST_GO_BOOTSTRAP_ROOT)" \
+>  	GOROOT="$(@D)" \
+>  	GOBIN="$(@D)/bin" \
+> +	CC=$(HOSTCC_NOCCACHE) \
+>  	CGO_ENABLED=0
+>  
+>  define HOST_GO_BOOTSTRAP_BUILD_CMDS
+> 
