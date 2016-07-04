@@ -1,39 +1,139 @@
-From: Georges Savoundararadj <savoundg@gmail.com>
-Date: Mon, 4 Jul 2016 15:30:30 -0700
-Subject: [Buildroot] [PATCH 1/1] create-boot-sd.sh: fix script for
- sfdisk (>=2.26)
-In-Reply-To: <20160704220120.046a1b66@free-electrons.com>
-References: <20160704002229.9354-1-savoundg@gmail.com>
- <20160704090448.20f94608@free-electrons.com>
- <8fd7392c-375c-db64-8124-04c75d0160a3@gmail.com>
- <20160704220120.046a1b66@free-electrons.com>
-Message-ID: <79235d50-6982-6d22-3f43-5ce99aabb673@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Mon,  4 Jul 2016 15:30:31 -0700
+Subject: [Buildroot] [PATCH v7 1/3] runc: new package
+Message-ID: <1467671433-18113-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+runC is a CLI tool for spawning and running containers according to the
+OCP specification.
 
-On 07/04/2016 01:01 PM, Thomas Petazzoni wrote:
-> Hello,
->
-> On Mon, 4 Jul 2016 12:44:50 -0700, Georges Savoundararadj wrote:
->
->>> As far as I can see, only the imx28evk and imx6sabre support in
->>> Buildroot still have a reference to this script. Are you using of those
->>> two platforms? If that's the case, then we would very much prefer a
->>> solution where the platform is migrated to use genimage.
->> I am using this script for the imx6sololiteevk
->> (freescale_imx6sololiteevk_defconfig)
->> platform which does not refer to this script.
-> OK. What about using genimage instead then?
-OK, I will send you a patch based on genimage.
+runC is used by the latest Docker engine versions, however, runc itself
+is standalone and has no other dependencies.
 
-Thanks,
+https://runc.io/
 
-Georges
-> Thanks,
->
-> Thomas
+Signed-off-by: Christian Stewart <christian@paral.in>
+
+---
+
+Changes since v1:
+ - use call github to generate source url
+Changes since v3:
+ - fix indentation in Config.in
+ - add dep on threads in Config.in
+ - break gopath into separate variable
+ - use HOST_GO_TARGET_ENV
+Changes since v4:
+ - use RUNC_VERSION instead of commit hash
+ - only show comment when build is possible with threads enabled
+Changes since v5:
+ - bump to v1.0.0-rc1
+
+---
+---
+ package/Config.in      |  1 +
+ package/runc/Config.in | 13 +++++++++++++
+ package/runc/runc.hash |  2 ++
+ package/runc/runc.mk   | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 62 insertions(+)
+ create mode 100644 package/runc/Config.in
+ create mode 100644 package/runc/runc.hash
+ create mode 100644 package/runc/runc.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 2c4c196..078436e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1665,6 +1665,7 @@ menu "System tools"
+ 	source "package/pwgen/Config.in"
+ 	source "package/quota/Config.in"
+ 	source "package/rsyslog/Config.in"
++	source "package/runc/Config.in"
+ 	source "package/scrub/Config.in"
+ 	source "package/scrypt/Config.in"
+ 	source "package/smack/Config.in"
+diff --git a/package/runc/Config.in b/package/runc/Config.in
+new file mode 100644
+index 0000000..1802e59
+--- /dev/null
++++ b/package/runc/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_RUNC
++	bool "runc"
++	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  runC is a CLI tool for spawning and running containers
++	  according to the OCP specification.
++
++	  https://github.com/opencontainers/runc
++
++comment "runc needs a toolchain w/ threads"
++	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+new file mode 100644
+index 0000000..e6ec483
+--- /dev/null
++++ b/package/runc/runc.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 77f9d4df1657fecc939be0261fcccccd34d5b22c02b8a49abad23fac33b4059a  runc-v1.0.0-rc1.tar.gz
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+new file mode 100644
+index 0000000..3f352bd
+--- /dev/null
++++ b/package/runc/runc.mk
+@@ -0,0 +1,46 @@
++################################################################################
++#
++# runc
++#
++################################################################################
++
++RUNC_VERSION = v1.0.0-rc1
++RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
++
++RUNC_LICENSE = Apache-2.0
++RUNC_LICENSE_FILES = LICENSE
++
++RUNC_DEPENDENCIES = host-go
++
++RUNC_GOPATH = "$(@D)/Godeps/_workspace"
++RUNC_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
++	CGO_ENABLED=1 \
++	GOBIN="$(@D)/bin" \
++	GOPATH="$(RUNC_GOPATH)"
++
++RUNC_GLDFLAGS = \
++	-X main.gitCommit=$(RUNC_VERSION) \
++	-extldflags '-static'
++
++RUNC_GOTAGS = cgo static_build
++
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++RUNC_GOTAGS += seccomp
++RUNC_DEPENDENCIES += libseccomp
++endif
++
++define RUNC_CONFIGURE_CMDS
++	mkdir -p $(RUNC_GOPATH)/src/github.com/opencontainers
++	ln -s $(@D) $(RUNC_GOPATH)/src/github.com/opencontainers/runc
++endef
++
++define RUNC_BUILD_CMDS
++	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/usr/bin/go \
++		build -v -o $(@D)/bin/runc -tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
++endef
++
++define RUNC_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/bin/runc $(TARGET_DIR)/usr/bin/runc
++endef
++
++$(eval $(generic-package))
+-- 
+2.7.3
