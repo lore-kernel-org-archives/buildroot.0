@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 23:44:36 +0200
-Subject: [Buildroot] [git commit] package/qjson: not available for static
-	builds
-Message-ID: <20160704214456.338F68041E@busybox.osuosl.org>
+Date: Mon, 4 Jul 2016 23:50:11 +0200
+Subject: [Buildroot] [PATCH 1/1] toolchain-wrapper: prevent use of
+ unsupported -fstack-protector*
+In-Reply-To: <1447724880-5020-1-git-send-email-rprebello@gmail.com>
+References: <1447724880-5020-1-git-send-email-rprebello@gmail.com>
+Message-ID: <20160704235011.7088d2fc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f800b6610fb4f743b02df75a137991b5cac112a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-    http://autobuild.buildroot.org/results/ffa/ffa343702727e118bb98b9c273bd0605de7e75e2/
-    http://autobuild.buildroot.org/results/3ca/3ca05b777789c58b0621a100490373416846aa87/
-    http://autobuild.buildroot.org/results/a4f/a4f3f9c79731c69082f70c3841c012c576517921/
-    ...
+On Mon, 16 Nov 2015 23:48:00 -0200, Rodrigo Rebello wrote:
+> In cases where, for example, the compiler accepts -fstack-protector*
+> options, but the C library does not provide the necessary
+> __stack_chk_*() functions, many configure scripts incorrectly assume SSP
+> is supported by the toolchain. This is because either no link test is
+> performed by them, or the test code used does not actually trigger stack
+> protection code emission, producing false positives.
+> 
+> Forcing toolchain-wrapper to error out on stack protection options when
+> SSP is known to be unsupported works as a way to prevent these false
+> positives. At the same time, it renders package-specific workarounds,
+> like disabling SSP detection by force, unnecessary.
+> 
+> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Thomas: don't mention the qt4/5 dependency in the comment.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qjson/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+Thanks for this contribution. However, we no longer have SSP related
+build issue (the few packages that had to be fixed have been fixed),
+and I really dislike making the wrapper more complicated than it
+already is. I understand that this is potentially a controversial
+decision, but I prefer to not apply this patch.
 
-diff --git a/package/qjson/Config.in b/package/qjson/Config.in
-index 0f0cc09..5c423bf 100644
---- a/package/qjson/Config.in
-+++ b/package/qjson/Config.in
-@@ -1,8 +1,13 @@
- config BR2_PACKAGE_QJSON
- 	bool "qjson"
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
- 	help
- 	  QJson is a Qt-based library that maps JSON data to
- 	  QVariant objects and vice versa.
- 
- 	  http://qjson.sourceforge.net
-+
-+comment "qjson needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
