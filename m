@@ -1,64 +1,88 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 4 Jul 2016 10:43:15 +0200
-Subject: [Buildroot] [PATCH v6] package/python-pillow: new package
-In-Reply-To: <XnsA63ACEA291BC5berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1467233456-17500-1-git-send-email-angelo.compagnucci@gmail.com>
- <XnsA63ACEA291BC5berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <CA+TH9VnhmDCyhW1jj_BjX0FjyXzzbiF6Ps0qPw+i9pPNZ8a4hQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 4 Jul 2016 10:41:52 +0200
+Subject: [Buildroot] [git commit] package/f2fs-tools: update version
+Message-ID: <20160704084423.D9F3881E4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: https://git.buildroot.net/buildroot/commit/?id=f716308be8a4ecf764e2373a125338b352463d15
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-2016-07-03 20:18 GMT+02:00 Bernd Kuhls <bernd.kuhls@t-online.de>:
->
->
-> Hi,
->
-> my first try to get this package to work with Kodi failed due to segfaults I
-> have yet to investigate. I am sending this mail to inform you about some
-> other stuff I found out while working on the package.
->
-> [posted and mailed]
->
->>  ...y-add-option-to-disable-platform-guessing.patch | 65
-> ++++++++++++++++++++++
->
-> You can remove this patch because python-pillow-3.3.0, released 2016-07-01
-> includes it.
->
->> +PYTHON_PILLOW_VERSION = 3.2.0
->
-> See above, please bump to 3.3.0.
+Use a tag rather than a sha1, it's more obvious.
+Remove the patch, it's been applied upstream.
 
-Wonderful news!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-configure-add-check-for-fallocate.patch   | 46 ----------------------
+ package/f2fs-tools/f2fs-tools.mk                   |  2 +-
+ 2 files changed, 1 insertion(+), 47 deletions(-)
 
->> +PYTHON_PILLOW_INSTALL_TARGET_CMDS = $(PYTHON_PILLOW_BUILD_CMDS) install
->
-> With my setup I needed to remove this line, otherwise the files installed by
-> this package would end up in $(HOST_DIR) instead of $(TARGET_DIR).
-
-I'll give a look at this but I have used this package several times in
-the past and never encountered such a problem. Probably something
-related to the latests releases.
-
-> While investigating the Kodi segfault I saw that they carry their own cross
-> compile patch in
-> https://github.com/xbmc/xbmc/tree/master/tools/depends/target/pythonmodule-
-> pil
->
-> Though aimed at pillow-3.0.0, it is possible to rebase the patch for 3.3.0,
-> but I am lacking time atm to continue working on it.
-
-I had a look at this patch but it implements in a cruder way what I've
-done with the implementation of --disable-platform-guessing
-configuration switch.
-
->
-> Regards, Bernd
->
-
-Sincerely, Angelo
+diff --git a/package/f2fs-tools/0001-configure-add-check-for-fallocate.patch b/package/f2fs-tools/0001-configure-add-check-for-fallocate.patch
+deleted file mode 100644
+index b7ead76..0000000
+--- a/package/f2fs-tools/0001-configure-add-check-for-fallocate.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From 265d97d02e8ef373653c76a339869985eb3ba27a Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 10 Mar 2015 15:10:35 -0300
+-Subject: [PATCH] configure: add check for fallocate
+-
+-We need to check for fallocate() rather than just linux/falloc.h +
+-FALLOC_FL_PUNCH_HOLE since in uClibc we've got both but still not
+-fallocate() itself since it's only implemented in newer unreleased
+-versions.
+-
+-Status: sent upstream.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- configure.ac             | 1 +
+- mkfs/f2fs_format_utils.c | 2 +-
+- 2 files changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index ae451b8..900b84a 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -68,6 +68,7 @@ AC_TYPE_SIZE_T
+- # Checks for library functions.
+- AC_FUNC_GETMNTENT
+- AC_CHECK_FUNCS_ONCE([
+-+	fallocate
+- 	getmntent
+- 	memset
+- ])
+-diff --git a/mkfs/f2fs_format_utils.c b/mkfs/f2fs_format_utils.c
+-index a0f85f5..ddeafeb 100644
+---- a/mkfs/f2fs_format_utils.c
+-+++ b/mkfs/f2fs_format_utils.c
+-@@ -46,7 +46,7 @@ int f2fs_trim_device()
+- #if defined(WITH_BLKDISCARD) && defined(BLKDISCARD)
+- 	MSG(0, "Info: Discarding device\n");
+- 	if (S_ISREG(stat_buf.st_mode)) {
+--#ifdef FALLOC_FL_PUNCH_HOLE
+-+#if defined(HAVE_FALLOCATE) && defined(FALLOC_FL_PUNCH_HOLE)
+- 		if (fallocate(config.fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+- 				range[0], range[1]) < 0) {
+- 			MSG(0, "Info: fallocate(PUNCH_HOLE|KEEP_SIZE) is failed\n");
+--- 
+-2.0.5
+-
+diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
+index e5c4a54..d3956c4 100644
+--- a/package/f2fs-tools/f2fs-tools.mk
++++ b/package/f2fs-tools/f2fs-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-F2FS_TOOLS_VERSION = fd32210229d4ad7d1c916c74a0dfc150aae4c89e
++F2FS_TOOLS_VERSION = v1.6.1
+ F2FS_TOOLS_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
+ F2FS_TOOLS_SITE_METHOD = git
+ F2FS_TOOLS_CONF_ENV = ac_cv_file__git=no
