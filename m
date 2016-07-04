@@ -1,29 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 04 Jul 2016 16:13:34 +0200
-Subject: [Buildroot] [PATCH 2/2] package: move busybox show others
-	dependency to per-package
-In-Reply-To: <1467640016-19732-2-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 4 Jul 2016 15:46:56 +0200")
-References: <1467640016-19732-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1467640016-19732-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <874m85fq41.fsf@dell.be.48ers.dk>
+Date: Mon, 4 Jul 2016 16:10:26 +0200
+Subject: [Buildroot] [git commit] netcat-openbsd: remove stray ~ character
+	at end of Config.in
+Message-ID: <20160704141454.C9A55817C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=011d684c0b1cf0e0fcc7c207f4746efaf5bd64b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Having the BR2_PACKAGE_BUSYBOX_SHOW_OTHERS dependencies in
- > package/Config.in is not very practical: it makes this file not very
- > readable, and puts the dependency away from the package itself, which
- > can sometimes be confusing. Therefore, this commit moves the dependency
- > in each package Config.in file.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/netcat-openbsd/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/netcat-openbsd/Config.in b/package/netcat-openbsd/Config.in
+index fec0ad5..9681801 100644
+--- a/package/netcat-openbsd/Config.in
++++ b/package/netcat-openbsd/Config.in
+@@ -21,4 +21,3 @@ config BR2_PACKAGE_NETCAT_OPENBSD
+ comment "netcat-openbsd needs a glibc toolchain w/ threads"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
+-~
