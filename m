@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 23:38:41 +0200
-Subject: [Buildroot] [PATCH 09/83 v2] package/mono: use 'menuconfig'
+Date: Mon, 4 Jul 2016 23:38:47 +0200
+Subject: [Buildroot] [PATCH 13/83 v2] package/ola: use 'menuconfig'
  instead of 'config'+'menu'
-In-Reply-To: <1c9519ae3a9607d6d11266c43ae99e77077ccc60.1467624132.git.yann.morin.1998@free.fr>
+In-Reply-To: <62fb636ff3c61aa04623c65b91ba203ca175f52f.1467624132.git.yann.morin.1998@free.fr>
 References: <cover.1467624132.git.yann.morin.1998@free.fr>
- <1c9519ae3a9607d6d11266c43ae99e77077ccc60.1467624132.git.yann.morin.1998@free.fr>
-Message-ID: <20160704233841.613b290f@free-electrons.com>
+ <62fb636ff3c61aa04623c65b91ba203ca175f52f.1467624132.git.yann.morin.1998@free.fr>
+Message-ID: <20160704233847.3dd6acfb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  4 Jul 2016 11:24:20 +0200, Yann E. MORIN wrote:
+On Mon,  4 Jul 2016 11:24:24 +0200, Yann E. MORIN wrote:
+> Since there were multiple sub-menus, their prompts are turned into
+> comments.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/ola/Config.in | 14 ++++----------
+>  1 file changed, 4 insertions(+), 10 deletions(-)
 
-> -config BR2_PACKAGE_MONO
-> +menuconfig BR2_PACKAGE_MONO
->  	bool "mono"
->  	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> @@ -14,6 +14,12 @@ config BR2_PACKAGE_MONO
->  
->  	  http://download.mono-project.com/sources/mono/
->  
-> +if BR2_PACKAGE_MONO
-> +
-> +source "package/mono-gtksharp3/Config.in"
-> +
-> +endif
-
-I want to keep the package inclusions as much as possible in
-package/Config.in, so I've not applied this patch, and for the same
-reason, I have not applied:
-
-[PATCH 14/83 v2] package/perl: use 'menuconfig' instead of 'config'+'menu'
-[PATCH 16/83 v2] package/php: use 'menuconfig' instead of 'config'+'menu'
-[PATCH 19/83 v2] package/python{, 3}: move inclusion of external python modules
-[PATCH 21/83 v2] package/tcl: use 'menuconfig' instead of 'config'+'menu'
+Applied to master, thanks.
 
 Thomas
 -- 
