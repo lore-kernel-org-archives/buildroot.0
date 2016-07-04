@@ -1,38 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  4 Jul 2016 15:05:17 +0200
-Subject: [Buildroot] [PATCH] package/open2300: fix static builds
-Message-ID: <1467637517-14388-1-git-send-email-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Jul 2016 15:08:33 +0200
+Subject: [Buildroot] [PATCH 1/3] package/go-bootstrap: Build host tools
+	with host CC
+In-Reply-To: <c3671ab3-be2e-e2b5-c29e-cf849cc96a5d@gmail.com> (Romain Naour's
+ message of "Mon, 4 Jul 2016 11:40:08 +0200")
+References: <cover.1463696779.git.geoff@infradead.org>
+ <78eb610ef2c82ae5c2adb5be9309401eeffe8cfb.1463696779.git.geoff@infradead.org>
+ <c3671ab3-be2e-e2b5-c29e-cf849cc96a5d@gmail.com>
+Message-ID: <87furph7ou.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libmysqlclient needs -lz to build, so we have to pass it explicitly for
-static builds.
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-For almost-two-and-a-half years this error has been happenning, noone
-ever tried to fix it. This is now done, at last! ;-]
+ > Hi Geoff,
+ > Le 20/05/2016 ? 00:33, Geoff Levand a ?crit :
+ >> Use the host compiler when building host tools.
+ >> 
+ >> The go build system is not compatable with ccache, so use HOSTCC_NOCCACHE
+ >> here.  See https://github.com/golang/go/issues/11685.
+ >> 
+ >> Signed-off-by: Geoff Levand <geoff@infradead.org>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/open2300/open2300.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
-diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
-index 73db2a0..323f566 100644
---- a/package/open2300/open2300.mk
-+++ b/package/open2300/open2300.mk
-@@ -21,6 +21,10 @@ OPEN2300_DEPENDENCIES += mysql
- OPEN2300_BINS += mysql2300 mysqlhistlog2300
- OPEN2300_CFLAGS += -I$(STAGING_DIR)/usr/include/mysql
- OPEN2300_LDFLAGS += -L$(STAGING_DIR)/usr/lib/mysql -lmysqlclient
-+ifeq ($(BR2_STATIC_LIBS),y)
-+# mysql needs -lz, so we need to specify it for static builds
-+OPEN2300_LDFLAGS += -lz
-+endif
- endif
- 
- define OPEN2300_BUILD_CMDS
+Committed, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
