@@ -1,51 +1,48 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 5 Jul 2016 00:00:38 +0200
-Subject: [Buildroot] [PATCH] package/libbdplus: Add missing libgpg arch
- support
-In-Reply-To: <1467669466-16341-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1467669466-16341-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <4bb56ddf-7710-31a8-e927-e67527ceefdf@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2016 00:10:05 +0200
+Subject: [Buildroot] [git commit] gnutls: update legal info
+Message-ID: <20160704221225.1719581D4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
+commit: https://git.buildroot.net/buildroot/commit/?id=f2844807a7e6a590dd42642a5484baf683cef73b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 04/07/2016 ? 23:57, Maxime Hadjinlian a ?crit :
-> Thanks to Romain Naour for finding the culprit package.
-> 
-> Fix:
-> http://autobuild.buildroot.org/results/d06/d06e3eb9ef48540b71fbec267c534523632b224f/
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+GnuTLS core library is licensed under LGPLv2.1+ while gnutls-openssl
+library is licensed under GPLv3+. Annotate the license with components.
 
-Acked-by: Romain Naour <romain.naour@gmail.com>
+Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+[Thomas:
+ - add comment about the license of the "core library" since some files
+   seems to be mistakenly under LGPLv3+ even though the library is
+   licensed under LGPLv2.1+.
+ - add the README file in the license information, since it contains a
+   lot of useful details.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gnutls/gnutls.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Best regards,
-Romain
-
-> ---
->  package/libbdplus/Config.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libbdplus/Config.in b/package/libbdplus/Config.in
-> index df5ea27..afde075 100644
-> --- a/package/libbdplus/Config.in
-> +++ b/package/libbdplus/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_LIBBDPLUS
->  	bool "libbdplus"
-> +	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on !BR2_STATIC_LIBS
->  	select BR2_PACKAGE_LIBGCRYPT
-> @@ -15,4 +16,5 @@ config BR2_PACKAGE_LIBBDPLUS
->  	  http://www.videolan.org/developers/libbdplus.html
->  
->  comment "libbdplus needs a toolchain w/ threads, dynamic library"
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-> +		!BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
-> 
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 76d2ca2..3cb08d1 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -8,8 +8,12 @@ GNUTLS_VERSION_MAJOR = 3.4
+ GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+-GNUTLS_LICENSE = GPLv3+, LGPLv2.1+
+-GNUTLS_LICENSE_FILES = COPYING COPYING.LESSER
++# README says that the core library is under LGPLv2.1+, but a few
++# files in libdane specify LGPLv3+. It seems to be a mistake, and we
++# therefore trust the README file here. A bug was reported upstream at
++# https://gitlab.com/gnutls/gnutls/issues/109.
++GNUTLS_LICENSE = LGPLv2.1+ (core library), GPLv3+ (gnutls-openssl library)
++GNUTLS_LICENSE_FILES = COPYING COPYING.LESSER README
+ GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
+ GNUTLS_CONF_OPTS = \
+ 	--disable-doc \
