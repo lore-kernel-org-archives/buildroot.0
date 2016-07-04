@@ -1,47 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 23:12:42 +0200
-Subject: [Buildroot] [git commit] package/sdl_image: use 'menuconfig'
-	instead of 'config'+'menu'
-Message-ID: <20160704212259.B6C2482118@busybox.osuosl.org>
+Date: Mon, 4 Jul 2016 23:23:35 +0200
+Subject: [Buildroot] [git commit] package/tiff: use 'menuconfig' instead of
+	'config'+'menu'
+Message-ID: <20160704212442.534DC81836@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=512e9b4046c93825c59431e94ca9aebc2f53d7a4
+commit: https://git.buildroot.net/buildroot/commit/?id=e66ce8a30013ba1c4805f36c3e558bf3ac448dcc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sdl_image/Config.in | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/tiff/Config.in | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/sdl_image/Config.in b/package/sdl_image/Config.in
-index 1b98066..0c4a018 100644
---- a/package/sdl_image/Config.in
-+++ b/package/sdl_image/Config.in
+diff --git a/package/tiff/Config.in b/package/tiff/Config.in
+index 7d66dd2..6e5c176 100644
+--- a/package/tiff/Config.in
++++ b/package/tiff/Config.in
 @@ -1,4 +1,4 @@
--config BR2_PACKAGE_SDL_IMAGE
-+menuconfig BR2_PACKAGE_SDL_IMAGE
- 	bool "SDL_image"
- 	depends on BR2_PACKAGE_SDL
+-config BR2_PACKAGE_TIFF
++menuconfig BR2_PACKAGE_TIFF
+ 	bool "tiff"
  	help
-@@ -10,8 +10,6 @@ config BR2_PACKAGE_SDL_IMAGE
+ 	  Library for handling TIFF (Tag Image File Format) images.
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_TIFF
+ 	  http://www.remotesensing.org/libtiff/
  
- if BR2_PACKAGE_SDL_IMAGE
+ if BR2_PACKAGE_TIFF
+-menu "tiff Options"
  
--menu "SDL_image file format support"
--
- config BR2_PACKAGE_SDL_IMAGE_BMP
- 	bool "enable BMP file format support"
+ config BR2_PACKAGE_TIFF_CCITT
+ 	bool "CCITT Group 3 & 4 support"
+@@ -62,7 +61,6 @@ config BR2_PACKAGE_TIFF_OLD_JPEG
+ config BR2_PACKAGE_TIFF_JBIG
+ 	bool "JBIG compression"
  	default y
-@@ -56,6 +54,4 @@ config BR2_PACKAGE_SDL_IMAGE_XPM
- config BR2_PACKAGE_SDL_IMAGE_XV
- 	bool "enable XV file format support"
- 
 -endmenu
--
- endif
+ 
+ config BR2_PACKAGE_TIFF_UTILITIES
+ 	bool "tiff utilities"
