@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 23:39:20 +0200
-Subject: [Buildroot] [PATCH 10/83 v2] package/ncftp: use 'menuconfig'
- instead of 'config'+'menu'
-In-Reply-To: <d263bff3c1e8642610ed59ca47588e7386f89434.1467624132.git.yann.morin.1998@free.fr>
+Date: Mon, 4 Jul 2016 23:40:11 +0200
+Subject: [Buildroot] [PATCH 11/83 v2] package/nfs-utils: use
+ 'menuconfig' instead of 'config'+'menu'
+In-Reply-To: <975a2e949c201e16f3e33268347609fcfe4531b7.1467624132.git.yann.morin.1998@free.fr>
 References: <cover.1467624132.git.yann.morin.1998@free.fr>
- <d263bff3c1e8642610ed59ca47588e7386f89434.1467624132.git.yann.morin.1998@free.fr>
-Message-ID: <20160704233920.7a632566@free-electrons.com>
+ <975a2e949c201e16f3e33268347609fcfe4531b7.1467624132.git.yann.morin.1998@free.fr>
+Message-ID: <20160704234011.0356fe04@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +14,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  4 Jul 2016 11:24:21 +0200, Yann E. MORIN wrote:
+On Mon,  4 Jul 2016 11:24:22 +0200, Yann E. MORIN wrote:
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > ---
-> Changes RFC -> v1:
->   - drop the comment  (Arnout)
-> ---
->  package/ncftp/Config.in | 6 +-----
+>  package/nfs-utils/Config.in | 6 +-----
 >  1 file changed, 1 insertion(+), 5 deletions(-)
 
-I've replaced this by a commit that removes the menu ... endmenu and
-simplifies the prompt of the sub-options.
+I've instead applied a patch that removes the menu...endmenu, because
+it was a bit silly to have a sub-menu for just 3 options.
 
 Thomas
 -- 
