@@ -1,42 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Jul 2016 22:47:19 +0200
-Subject: [Buildroot] [git commit] package/collectd: use 'menuconfig' instead
+Date: Mon, 4 Jul 2016 22:44:02 +0200
+Subject: [Buildroot] [git commit] package/libdrm: use 'menuconfig' instead
 	of 'config'+'menu'
-Message-ID: <20160704204726.A1AC38080F@busybox.osuosl.org>
+Message-ID: <20160704204726.8AB5B8080F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86440f59148c374853d58014e90806d0e73220be
+commit: https://git.buildroot.net/buildroot/commit/?id=bb855d961e134b42f47ec7a3de972a85ae48cb03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Keep the existing sub-menus, because there are a lot of entries in those
-sub-menus. Using comments to separate them is not a totally satifactory
-solution.
+Transform the menu prompt into a comment.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/collectd/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/libdrm/Config.in | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 71301ec..6405af6 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 7bc73fd..3f39e27 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
 @@ -1,4 +1,4 @@
--config BR2_PACKAGE_COLLECTD
-+menuconfig BR2_PACKAGE_COLLECTD
- 	bool "collectd"
- 	# Uses fork()
- 	depends on BR2_USE_MMU
-@@ -39,6 +39,7 @@ config BR2_PACKAGE_COLLECTD_VALUE
- 	bool "value"
- 	help
- 	  Select values by their data sources' values.
-+
- endmenu
+-config BR2_PACKAGE_LIBDRM
++menuconfig BR2_PACKAGE_LIBDRM
+ 	bool "libdrm"
+ 	select BR2_PACKAGE_LIBPTHREAD_STUBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libpthread-stubs
+@@ -18,8 +18,6 @@ config BR2_PACKAGE_LIBDRM_ENABLE_ATOMIC
+ 	bool
+ 	select BR2_PACKAGE_LIBATOMIC_OPS if !BR2_TOOLCHAIN_HAS_SYNC_4
  
- menu "misc plugins"
+-menu "DRM Drivers"
+-
+ config BR2_PACKAGE_LIBDRM_INTEL
+ 	bool "intel"
+ 	select BR2_PACKAGE_LIBPCIACCESS
+@@ -92,8 +90,6 @@ config BR2_PACKAGE_LIBDRM_VC4
+ 	help
+ 	  Install vc4 (Raspberry Pi) driver.
+ 
+-endmenu
+-
+ config BR2_PACKAGE_LIBDRM_INSTALL_TESTS
+ 	bool "Install test programs"
+ 	help
