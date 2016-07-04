@@ -1,45 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  4 Jul 2016 23:26:22 +0200
-Subject: [Buildroot] [PATCHv2] package/qjson: not available for static builds
-Message-ID: <1467667582-2193-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2016 23:35:57 +0200
+Subject: [Buildroot] [PATCH 08/83 v2] package/libdrm: use 'menuconfig'
+ instead of 'config'+'menu'
+In-Reply-To: <480ef600cac5b7e6233b663c5f779603c302d3b8.1467624132.git.yann.morin.1998@free.fr>
+References: <cover.1467624132.git.yann.morin.1998@free.fr>
+ <480ef600cac5b7e6233b663c5f779603c302d3b8.1467624132.git.yann.morin.1998@free.fr>
+Message-ID: <20160704233557.3bc03785@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/ffa/ffa343702727e118bb98b9c273bd0605de7e75e2/
-    http://autobuild.buildroot.org/results/3ca/3ca05b777789c58b0621a100490373416846aa87/
-    http://autobuild.buildroot.org/results/a4f/a4f3f9c79731c69082f70c3841c012c576517921/
-    ...
+Hello,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Mon,  4 Jul 2016 11:24:19 +0200, Yann E. MORIN wrote:
+> Transform the menu prompt into a comment.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> ---
+> Changes RFC -> v1:
+>   - drop the comment  (Arnout)
+> ---
+>  package/libdrm/Config.in | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
 
----
-Changes v1 -> v2:
-  - add comment  (Thomas)
----
- package/qjson/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+I applied, but I discovered afterwards that the result now looks worse
+than it was: there is now no indication that the
+intel/nouveau/amdgpu/... options are DRM drivers.
 
-diff --git a/package/qjson/Config.in b/package/qjson/Config.in
-index 0f0cc09..711b345 100644
---- a/package/qjson/Config.in
-+++ b/package/qjson/Config.in
-@@ -1,8 +1,13 @@
- config BR2_PACKAGE_QJSON
- 	bool "qjson"
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
- 	help
- 	  QJson is a Qt-based library that maps JSON data to
- 	  QVariant objects and vice versa.
- 
- 	  http://qjson.sourceforge.net
-+
-+comment "qjson needs qt4/5 and a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
