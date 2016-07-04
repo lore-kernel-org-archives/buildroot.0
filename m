@@ -1,44 +1,52 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Mon, 04 Jul 2016 17:04:43 +0300
-Subject: [Buildroot] [PATCH v2 1/1] acpica: new package
-In-Reply-To: <CAK4VdL0dXyheLx2LJusbfdJRD+3yYuEi7-E-cGruvB1178tKVg@mail.gmail.com>
-References: <20160703104535.10401-1-nunes.erico@gmail.com>		
- <abb8c8a9-0bca-a441-b2bf-2c5f419e0d72@gmail.com>
- <CAK4VdL0dXyheLx2LJusbfdJRD+3yYuEi7-E-cGruvB1178tKVg@mail.gmail.com>
-Message-ID: <1467641083.30123.470.camel@linux.intel.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 04 Jul 2016 16:07:13 +0200
+Subject: [Buildroot] [PATCH 02/83 v2] package/angularjs: simplify
+	modules selection
+In-Reply-To: <1578b9ca612a91a04bc42601d0fc77a545413868.1467624132.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 4 Jul 2016 11:24:13 +0200")
+References: <cover.1467624132.git.yann.morin.1998@free.fr>
+ <1578b9ca612a91a04bc42601d0fc77a545413868.1467624132.git.yann.morin.1998@free.fr>
+Message-ID: <87d1mtfqem.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2016-07-04 at 15:45 +0200, Erico Nunes wrote:
-> Hello,
->?
-> It contains tools such as acpidump, iasl, acpixtract, etc.
-> > 
-> > Thank you for doing this!
-> > Though in our case we need this as a host tool. Can you add support
-> > into
-> > next version of the patch?
-> 
-> Hi Andy.
-> 
-> Thank you for the feedback!
-> I think, though, that we would need to have some other target
-> Buildroot target package depending on a host version of this one, in
-> order to have it accepted with a host version. Otherwise it is an
-> orphan host package. Or do we have a strong reason to have it enabled
-> as a host package of its own (maybe adding a Config.in.host in this
-> case)?
->?
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-We would like to add our ASL excerpts to initrd image which requires at
-least iasl to be present on host side. We are developing the way how to
-provide ASL excerpts for open connected boards such as Intel Galileo or
-Minnowboard MAX.
+ > Remove the superfluous config option, and make all modules default to
+ > 'y', which provides exactly the same functionality.
+
+ > simplify (and slightly beautify) the handling of modules in the .mk:
+ > since the modules' symbols are always meaningful now, we can get rid of
+ > the else-clause, and always build the list of modules using the Kconfig
+ > options.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+As discussed, the angular sub modules are really small compared to
+angular:
+
+ls -lahS target/var/www
+total 228K
+-rw-r--r-- 1 peko peko 142K Jul  4 16:06 angular.js
+-rw-r--r-- 1 peko peko  23K Jul  4 16:06 angular-animate.js
+-rw-r--r-- 1 peko peko  11K Jul  4 16:06 angular-message-format.js
+-rw-r--r-- 1 peko peko 5.9K Jul  4 16:06 angular-sanitize.js
+-rw-r--r-- 1 peko peko 4.3K Jul  4 16:06 angular-route.js
+drwxr-xr-x 2 peko peko 4.0K Jul  4 16:06 .
+drwxr-xr-x 5 peko peko 4.0K Jul  4 15:58 ..
+-rw-r--r-- 1 peko peko 3.7K Jul  4 16:06 angular-aria.js
+-rw-r--r-- 1 peko peko 3.6K Jul  4 16:06 angular-resource.js
+-rw-r--r-- 1 peko peko 3.6K Jul  4 16:06 angular-touch.js
+-rw-r--r-- 1 peko peko 2.6K Jul  4 16:06 angular-messages.js
+-rw-r--r-- 1 peko peko 1.7K Jul  4 16:06 angular-loader.js
+-rw-r--r-- 1 peko peko 1.4K Jul  4 16:06 angular-cookies.js
+
+So committed after removing the suboptions, thanks.
 
 -- 
-
-Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Intel Finland Oy
+Bye, Peter Korsgaard
