@@ -1,73 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Jul 2016 17:39:50 +0200
-Subject: [Buildroot] [PATCH 1/6] gnutls: update legal info
-In-Reply-To: <1467636386-6759-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1467636386-6759-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20160704153950.GB3549@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Jul 2016 17:41:54 +0200
+Subject: [Buildroot] [git commit] scancpan: improve message when bad host
+	perl version
+Message-ID: <20160704154504.74857802C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rahul, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=28a001fc7b1df037b8528a55aabc92d23dc2c8ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-07-04 18:16 +0530, Rahul Bedarkar spake thusly:
-> GnuTLS core library is licensed under LGPLv2.1+ while gnutls-openssl
-> library is licensed under GPLv3+. Annotate the license with components.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Thomas:
+ - add comment in scancpan about the version dependency, suggested by
+   Yann E. Morin.
+ - add comment in perl.mk about the need to sync any version change with
+   scancpan, also suggested by Yann E. Morin.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perl/perl.mk     |  1 +
+ support/scripts/scancpan | 19 ++++++++++++++-----
+ 2 files changed, 15 insertions(+), 5 deletions(-)
 
-What do you call "core library" and "gnutls-openssl library"?
-
-Do you consider libdane to be that "gnutls-openssl library" you talk
-about?
-
-I've looked at the source, and libdane is (at least partially) LGPLv3:
-
-    libdane/errors.c:
-    [--SNIP--]
-     * libdane is free software; you can redistribute it and/or
-     * modify it under the terms of the GNU Lesser General Public License
-     * as published by the Free Software Foundation; either version 3 of
-     * the License, or (at your option) any later version.
-    [--SNIP--]
-
-Could you please review the situation and provide a bit more
-explanations as to what is what, please?
-
-Regards,
-Yann E. MORIN.
-
-> Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> ---
->  package/gnutls/gnutls.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-> index 76d2ca2..c063f8f 100644
-> --- a/package/gnutls/gnutls.mk
-> +++ b/package/gnutls/gnutls.mk
-> @@ -8,7 +8,7 @@ GNUTLS_VERSION_MAJOR = 3.4
->  GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
->  GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
->  GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
-> -GNUTLS_LICENSE = GPLv3+, LGPLv2.1+
-> +GNUTLS_LICENSE = GPLv3+ (gnutls-openssl library), LGPLv2.1+ (core library)
->  GNUTLS_LICENSE_FILES = COPYING COPYING.LESSER
->  GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
->  GNUTLS_CONF_OPTS = \
-> -- 
-> 2.6.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index d66e448..f96b638 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -4,6 +4,7 @@
+ #
+ ################################################################################
+ 
++# When updating the version here, also update support/scripts/scancpan
+ PERL_VERSION_MAJOR = 22
+ PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
+ PERL_SITE = http://www.cpan.org/src/5.0
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index 6c70cfb..3ee543a 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -471,7 +471,7 @@ unshift @INC, sub {
+ } # END OF FATPACK CODE
+ 
+ 
+-use 5.022;      # same major version as target perl
++use 5.010;
+ use strict;
+ use warnings;
+ use Fatal qw(open close);
+@@ -484,6 +484,19 @@ use HTTP::Tiny;
+ use Safe;
+ use MetaCPAN::API::Tiny;
+ 
++# Below, 5.022 should be aligned with the version of perl actually
++# bundled in Buildroot:
++die <<"MSG" if $] < 5.022;
++This script needs a host perl with the same major version as Buildroot target perl.
++
++Your current host perl is:
++    $^X
++    version $]
++
++You may install a local one by running:
++    perlbrew install perl-5.22.2
++MSG
++
+ my ($help, $man, $quiet, $force, $recommend, $test, $host);
+ my $target = 1;
+ GetOptions( 'help|?' => \$help,
+@@ -746,10 +759,6 @@ support/scripts/scancpan Try-Tiny Moo
+ 
+ =head1 SYNOPSIS
+ 
+-curl -kL http://install.perlbrew.pl | bash
+-
+-perlbrew install perl-5.18.2
+-
+ supports/scripts/scancpan [options] [distname ...]
+ 
+  Options:
