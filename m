@@ -1,150 +1,97 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 4 Jul 2016 18:29:17 +0200
-Subject: [Buildroot] [PATCH v6 1/3] runc: new package
-In-Reply-To: <1464475578-22239-2-git-send-email-christian@paral.in>
-References: <1464475578-22239-1-git-send-email-christian@paral.in>
- <1464475578-22239-2-git-send-email-christian@paral.in>
-Message-ID: <7eda6705-c7de-693c-b24e-6e61e0631241@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 4 Jul 2016 18:49:17 +0200
+Subject: [Buildroot] [PATCH 02/24 v2] system: sysvinit only selects
+ busybox-show-others if busybox is enabled
+In-Reply-To: <927864ad-b946-bf1a-8317-c8244fc8358a@gmail.com>
+References: <cover.1466622379.git.yann.morin.1998@free.fr>
+ <a6739dce77434d44e657409dcc953ec3532789c1.1466622379.git.yann.morin.1998@free.fr>
+ <927864ad-b946-bf1a-8317-c8244fc8358a@gmail.com>
+Message-ID: <20160704164917.GG3549@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Christian,
+Romain, All,
 
-Le 29/05/2016 ? 00:46, Christian Stewart a ?crit :
-> runC is a CLI tool for spawning and running containers according to the
-> OCP specification.
+On 2016-07-03 09:53 +0200, Romain Naour spake thusly:
+> Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
+> > BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is a bit special. When Busybox is
+> > enabled, it is a Busybox option. When Busybox is not enabled, it is a
+> > stand-alone option, forcibly enabled.
+> > 
+> > So we can safely 'select' it without ensuring (via a 'depends on' or
+> > another 'select') that Busybox is enabled.
+> > 
+> > However, the name of this option does not express the fact that it is
+> > safe to select it without checking Busybox, which can lead to a bit of
+> > time-consuming head-scratching.
+> > 
+> > To avoid future puzzlement from an unsuspecting observer, consider this
+> > to be a Busybox option, and only select it when Busybox is enabled.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Cc: Peter Korsgaard <peter@korsgaard.com>
 > 
-> runC is used by the latest Docker engine versions, however, runc itself
-> is standalone and has no other dependencies.
+> Reviewed-by: Romain Naour <romain.naour@gmail.com>
 > 
-> https://runc.io/
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+> Not related to your patch but should we do the same change for tovid and systemd
+> packages which select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS ?
 
-Verified License and License file, build test.
+Indeed, but in retrospect, I think I should drop this patch
+altogether...
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+This option is really special, so I think a better solution would
+probably to add a big fat comment above that option that basically
+states that:
 
-Best regards,
-Romain
+    # This option is not an option of Busybox, it canbe selected even
+    # if Busybox is not enabled.
 
+I'll do that in a follow-up series.
 
+Thanks for the review! ;-)
+
+Regards,
+Yann E. MORIN.
+
+> Best regards,
+> Romain
 > 
-> ---
+> > 
+> > ---
+> > Changes v1 -> v2:
+> >   - only select if busybox is enabled  (Thomas)
+> > 
+> > ---
+> > Hopefully, this will avoid people to go hunting like I did, and loose a
+> > few precious minutes of hair-pulling... ;-]
+> > ---
+> >  system/Config.in | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/system/Config.in b/system/Config.in
+> > index 9441467..2d20230 100644
+> > --- a/system/Config.in
+> > +++ b/system/Config.in
+> > @@ -74,7 +74,7 @@ config BR2_INIT_BUSYBOX
+> >  
+> >  config BR2_INIT_SYSV
+> >  	bool "systemV"
+> > -	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
+> > +	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS if BR2_PACKAGE_BUSYBOX # sysvinit
+> >  	select BR2_PACKAGE_INITSCRIPTS
+> >  	select BR2_PACKAGE_SYSVINIT
+> >  
+> > 
 > 
-> Changes since v1:
->  - use call github to generate source url
-> Changes since v3:
->  - fix indentation in Config.in
->  - add dep on threads in Config.in
->  - break gopath into separate variable
->  - use HOST_GO_TARGET_ENV
-> Changes since v4:
->  - use RUNC_VERSION instead of commit hash
->  - only show comment when build is possible with threads enabled
-> 
-> ---
->  package/Config.in      |  1 +
->  package/runc/Config.in | 13 +++++++++++++
->  package/runc/runc.hash |  2 ++
->  package/runc/runc.mk   | 46 ++++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 62 insertions(+)
->  create mode 100644 package/runc/Config.in
->  create mode 100644 package/runc/runc.hash
->  create mode 100644 package/runc/runc.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 9d668bf..6c513ba 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1664,6 +1664,7 @@ endif
->  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  	source "package/rsyslog/Config.in"
->  endif
-> +	source "package/runc/Config.in"
->  	source "package/scrub/Config.in"
->  	source "package/scrypt/Config.in"
->  	source "package/smack/Config.in"
-> diff --git a/package/runc/Config.in b/package/runc/Config.in
-> new file mode 100644
-> index 0000000..1802e59
-> --- /dev/null
-> +++ b/package/runc/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_RUNC
-> +	bool "runc"
-> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	help
-> +	  runC is a CLI tool for spawning and running containers
-> +	  according to the OCP specification.
-> +
-> +	  https://github.com/opencontainers/runc
-> +
-> +comment "runc needs a toolchain w/ threads"
-> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-> new file mode 100644
-> index 0000000..c109c33
-> --- /dev/null
-> +++ b/package/runc/runc.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256 f9955daed1e73e842b2f28a258fba51f4e72a6b4b64cc3fc06415481d55ce000  runc-v0.1.1.tar.gz
-> diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-> new file mode 100644
-> index 0000000..72b194d
-> --- /dev/null
-> +++ b/package/runc/runc.mk
-> @@ -0,0 +1,46 @@
-> +################################################################################
-> +#
-> +# runc
-> +#
-> +################################################################################
-> +
-> +RUNC_VERSION = v0.1.1
-> +RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
-> +
-> +RUNC_LICENSE = Apache-2.0
-> +RUNC_LICENSE_FILES = LICENSE
-> +
-> +RUNC_DEPENDENCIES = host-go
-> +
-> +RUNC_GOPATH = "$(@D)/Godeps/_workspace"
-> +RUNC_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-> +	CGO_ENABLED=1 \
-> +	GOBIN="$(@D)/bin" \
-> +	GOPATH="$(RUNC_GOPATH)"
-> +
-> +RUNC_GLDFLAGS = \
-> +	-X main.gitCommit=$(RUNC_VERSION) \
-> +	-extldflags '-static'
-> +
-> +RUNC_GOTAGS = cgo static_build
-> +
-> +ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-> +RUNC_GOTAGS += seccomp
-> +RUNC_DEPENDENCIES += libseccomp
-> +endif
-> +
-> +define RUNC_CONFIGURE_CMDS
-> +	mkdir -p $(RUNC_GOPATH)/src/github.com/opencontainers
-> +	ln -s $(@D) $(RUNC_GOPATH)/src/github.com/opencontainers/runc
-> +endef
-> +
-> +define RUNC_BUILD_CMDS
-> +	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/usr/bin/go \
-> +		build -v -o $(@D)/bin/runc -tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
-> +endef
-> +
-> +define RUNC_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/bin/runc $(TARGET_DIR)/usr/bin/runc
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
