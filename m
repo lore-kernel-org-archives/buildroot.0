@@ -1,99 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 10:12:42 +0200
-Subject: [Buildroot] [git commit] acpica: new package
-Message-ID: <20160705081537.E991881E64@busybox.osuosl.org>
+Date: Tue, 5 Jul 2016 10:16:53 +0200
+Subject: [Buildroot] [PATCH v2 1/1] acpica: new package
+In-Reply-To: <20160703104535.10401-1-nunes.erico@gmail.com>
+References: <20160703104535.10401-1-nunes.erico@gmail.com>
+Message-ID: <20160705101653.365090c4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0639d15d3aff49acd006c489c039df329df52b31
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The ACPI Component Architecture (ACPICA) project provides an operating
-system (OS)-independent reference implementation of the Advanced
-Configuration and Power Interface Specification (ACPI).
+On Sun,  3 Jul 2016 12:45:35 +0200, Erico Nunes wrote:
 
-It contains tools such as acpidump, iasl, acpixtract, etc.
+> +ACPICA_VERSION = 20160527
+> +ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
+> +ACPICA_SITE = https://acpica.org/sites/acpica/files
+> +ACPICA_LICENSE = BSD-3c or GPLv2
+> +ACPICA_LICENSE_FILES = source/include/acpi.h
+> +ACPICA_DEPENDENCIES = host-bison host-flex
+> +
+> +define ACPICA_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> +		HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX CC="$(TARGET_CC)" \
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-[Thomas: adjust install flags to -m755.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in          |  1 +
- package/acpica/Config.in   |  9 +++++++++
- package/acpica/acpica.hash |  2 ++
- package/acpica/acpica.mk   | 26 ++++++++++++++++++++++++++
- 4 files changed, 38 insertions(+)
+The HARDWARE_NAME variable is pretty useless, it's only used to echo
+some messages. But I've kept it since it's used, and sent a patch
+upstream to get rid of it (https://github.com/acpica/acpica/pull/152).
 
-diff --git a/package/Config.in b/package/Config.in
-index 2c4c196..9d20f6b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -335,6 +335,7 @@ menu "Firmware"
- 	source "package/zd1211-firmware/Config.in"
- endmenu
- 	source "package/a10disp/Config.in"
-+	source "package/acpica/Config.in"
- 	source "package/acpid/Config.in"
- 	source "package/acpitool/Config.in"
- 	source "package/aer-inject/Config.in"
-diff --git a/package/acpica/Config.in b/package/acpica/Config.in
-new file mode 100644
-index 0000000..74d1f26
---- /dev/null
-+++ b/package/acpica/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_ACPICA
-+	bool "acpica"
-+	help
-+	  The ACPI Component Architecture (ACPICA) project provides an
-+	  operating system (OS)-independent reference implementation
-+	  of the Advanced Configuration and Power Interface
-+	  Specification (ACPI).
-+
-+	  https://www.acpica.org
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-new file mode 100644
-index 0000000..8d5257f
---- /dev/null
-+++ b/package/acpica/acpica.hash
-@@ -0,0 +1,2 @@
-+# locally computed hash
-+sha256 4ac73a5887b643dcca483f0241cbb808a53326846928edad9a2f86cffcde5850 acpica-unix2-20160527.tar.gz
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-new file mode 100644
-index 0000000..b8459d8
---- /dev/null
-+++ b/package/acpica/acpica.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# acpica
-+#
-+################################################################################
-+
-+ACPICA_VERSION = 20160527
-+ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
-+ACPICA_SITE = https://acpica.org/sites/acpica/files
-+ACPICA_LICENSE = BSD-3c or GPLv2
-+ACPICA_LICENSE_FILES = source/include/acpi.h
-+ACPICA_DEPENDENCIES = host-bison host-flex
-+
-+define ACPICA_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		HARDWARE_NAME=$(BR2_ARCH) HOST=_LINUX CC="$(TARGET_CC)" \
-+		all
-+endef
-+
-+define ACPICA_INSTALL_TARGET_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		HARDWARE_NAME=$(BR2_ARCH) DESTDIR="$(TARGET_DIR)" \
-+		INSTALLFLAGS=-m755 install
-+endef
-+
-+$(eval $(generic-package))
+> +define ACPICA_INSTALL_TARGET_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> +		HARDWARE_NAME=$(BR2_ARCH) DESTDIR="$(TARGET_DIR)" \
+> +		INSTALLFLAGS=-m555 install
+
+555 is a bit unusual for binaries, we prefer to use 755. I've changed
+it and applied your patch.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
