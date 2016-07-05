@@ -1,9 +1,7 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 10:43:11 +0200
-Subject: [Buildroot] [PATCH v7 1/3] runc: new package
-In-Reply-To: <1467671433-18113-1-git-send-email-christian@paral.in>
-References: <1467671433-18113-1-git-send-email-christian@paral.in>
-Message-ID: <20160705104311.74fe441b@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 5 Jul 2016 08:43:39 +0000
+Subject: [Buildroot] hostapd: default hostapd.conf on target
+Message-ID: <1467708149.3144.46.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +10,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  4 Jul 2016 15:30:31 -0700, Christian Stewart wrote:
-> runC is a CLI tool for spawning and running containers according to the
-> OCP specification.
-> 
-> runC is used by the latest Docker engine versions, however, runc itself
-> is standalone and has no other dependencies.
-> 
-> https://runc.io/
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> 
-> ---
+I'm wondering if there's a reason default/example hostapd.conf is not installed on target?
+IMHO it would be pretty convenient to have that config as a starting point.
+Otherwise user has to create it manually from scratch.
 
-Applied to master, thanks.
+Technically this is just a matter of:
+------------------------>8-------------------------
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index dca07c1..40a21ff 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -85,7 +85,9 @@ define HOSTAPD_INSTALL_TARGET_CMDS
+????????$(INSTALL) -m 0755 -D $(@D)/$(HOSTAPD_SUBDIR)/hostapd \
+????????????????$(TARGET_DIR)/usr/sbin/hostapd
+????????$(INSTALL) -m 0755 -D $(@D)/$(HOSTAPD_SUBDIR)/hostapd_cli \
+-???????????????$(TARGET_DIR)/usr/bin/hostapd_cli
++???????????????$(TARGET_DIR)/usr/bin/hostapd_cli \
++???????$(INSTALL) -m 0644 -D $(@D)/$(HOSTAPD_SUBDIR)/hostapd/hostapd.conf \
++???????????????$(TARGET_DIR)/etc/hostapd.conf
+?endef
+?
+?$(eval $(generic-package))
+------------------------>8-------------------------
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+If there's no real reason to not have this I'll send a patch happily.
+
+-Alexey
