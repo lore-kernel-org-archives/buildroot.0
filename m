@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 19:14:24 +0200
-Subject: [Buildroot] [Patch v2 1/3] jemalloc: new package
-In-Reply-To: <1466797592-5565-2-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1466797592-5565-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1466797592-5565-2-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20160705191424.06fbdd6f@free-electrons.com>
+Date: Tue, 5 Jul 2016 19:14:48 +0200
+Subject: [Buildroot] [PATCH] dante: New package
+In-Reply-To: <1467449278-3166-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1467449278-3166-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20160705191448.19410d6a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +12,29 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 24 Jun 2016 21:46:30 +0200, Eric Le Bihan wrote:
-> This new package provides jemalloc, a malloc(3) implementation that
-> emphasizes fragmentation avoidance and scalable concurrency support.
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+On Sat,  2 Jul 2016 10:47:58 +0200, Maxime Hadjinlian wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
->  package/Config.in              |  1 +
->  package/jemalloc/Config.in     |  7 +++++++
->  package/jemalloc/jemalloc.hash |  2 ++
->  package/jemalloc/jemalloc.mk   | 15 +++++++++++++++
->  4 files changed, 25 insertions(+)
->  create mode 100644 package/jemalloc/Config.in
->  create mode 100644 package/jemalloc/jemalloc.hash
->  create mode 100644 package/jemalloc/jemalloc.mk
+>  package/Config.in           |  1 +
+>  package/dante/Config.in     |  9 +++++++++
+>  package/dante/S50dante      | 40 ++++++++++++++++++++++++++++++++++++++++
+>  package/dante/dante.hash    |  2 ++
+>  package/dante/dante.mk      | 32 ++++++++++++++++++++++++++++++++
+>  package/dante/dante.service | 15 +++++++++++++++
+>  6 files changed, 99 insertions(+)
+>  create mode 100644 package/dante/Config.in
+>  create mode 100644 package/dante/S50dante
+>  create mode 100644 package/dante/dante.hash
+>  create mode 100644 package/dante/dante.mk
+>  create mode 100644 package/dante/dante.service
 
-This package fails to build on NIOS2:
+This package fails to build on SPARC64:
 
-   http://autobuild.buildroot.net/results/674/674b6022f9a403528a758c0785656d2bda79e0a9/build-end.log
+   http://autobuild.buildroot.net/results/b2d/b2d136c859fff72290006a6fafa624aa12f96d0c/build-end.log
 
 Could you have a look ?
+
+Thanks,
 
 Thomas
 -- 
