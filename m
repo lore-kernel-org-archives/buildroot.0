@@ -1,46 +1,141 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 15:45:04 +0200
-Subject: [Buildroot] [git commit] package/perl: use dummy hostname
-Message-ID: <20160705134512.02ADB7FD0B@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 5 Jul 2016 15:45:32 +0200
+Subject: [Buildroot] [PATCH 3/4] ajtcl: new package
+In-Reply-To: <20390_1467040718_577143CE_20390_5576_1_9bcd6009-a0eb-41a1-a31a-dd6fd4a34e7d@OPEXCLILM5F.corporate.adroot.infra.ftgroup>
+References: <20390_1467040718_577143CE_20390_5576_1_9bcd6009-a0eb-41a1-a31a-dd6fd4a34e7d@OPEXCLILM5F.corporate.adroot.infra.ftgroup>
+Message-ID: <9e3c5bff-3dd2-26db-3bce-e0d5aaee28d1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af9bb14f3cc0ec70241b74eec4e317778fdd5307
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le 27/06/2016 ? 17:18, fabrice.fontaine at orange.com a ?crit :
+> The AllJoyn framework defines a common way for devices and apps to
+> communicate with one another regardless of brands, categories,
+> transports, and OSes. Developers write applications that discover
+> nearby devices, and communicate with each other directly and through
+> the cloud, unleashing new possibilities in the Internet of Things.
+> 
+> AllJoyn Thin Core Library (AJTCL) is designed to bring the benefits
+> of the AllJoyn distributed programming environment to embedded
+> systems.
+> 
+> https://allseenalliance.org
+> 
+> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> ---
+>  package/Config.in        |  1 +
+>  package/ajtcl/Config.in  | 18 ++++++++++++++++++
+>  package/ajtcl/ajtcl.hash |  2 ++
+>  package/ajtcl/ajtcl.mk   | 44 ++++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 65 insertions(+)
+>  create mode 100644 package/ajtcl/Config.in
+>  create mode 100644 package/ajtcl/ajtcl.hash
+>  create mode 100644 package/ajtcl/ajtcl.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 5cde173..d262ff7 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1123,6 +1123,7 @@ endmenu
+>  
+>  menu "Networking"
+>  	source "package/agentpp/Config.in"
+> +	source "package/ajtcl/Config.in"
+>  	source "package/alljoyn/Config.in"
+>  	source "package/alljoyn-base/Config.in"
+>  	source "package/batman-adv/Config.in"
+> diff --git a/package/ajtcl/Config.in b/package/ajtcl/Config.in
+> new file mode 100644
+> index 0000000..3f2e573
+> --- /dev/null
+> +++ b/package/ajtcl/Config.in
+> @@ -0,0 +1,18 @@
+> +config BR2_PACKAGE_AJTCL
+> +	bool "alljoyn-thin-core"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
 
-The hostname does not look like it serves any useful purpose, except
-maybe to set set perladmin email.
+As for alljoyn, ajtcl should depends on "depends on !BR2_STATIC_LIBS" due to
+lib*.so build and install.
 
-Which is undoubtfully useless on the target.
+> +	help
+> +	  The AllJoyn framework defines a common way for devices and apps to
+> +	  communicate with one another regardless of brands, categories,
+> +	  transports, and OSes. Developers write applications that discover
+> +	  nearby devices, and communicate with each other directly and through
+> +	  the cloud, unleashing new possibilities in the Internet of Things.
+> +
+> +	  AllJoyn Thin Core Library (AJTCL) is designed to bring the benefits
+> +	  of the AllJoyn distributed programming environment to embedded
+> +	  systems.
+> +
+> +	  https://allseenalliance.org
+> +
+> +comment "alljoyn-thin-core needs a toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
 
-A followup commit will make the hostname depend on the default skeleton,
-so it won't always be available. We can not rely on it to be set.
+Update the comment dependency accordingly.
 
-Besides, even today it is not guaranteed to be set; a user may well
-leave it empty.
+> diff --git a/package/ajtcl/ajtcl.hash b/package/ajtcl/ajtcl.hash
+> new file mode 100644
+> index 0000000..a1cdf16
+> --- /dev/null
+> +++ b/package/ajtcl/ajtcl.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed:
+> +sha256	ce6a05a67ff405ba6274e85fe750d98f40cbe7ab2c968218c7741a10bd86e21a	ajtcl-16.04.00-src.tar.gz
+> diff --git a/package/ajtcl/ajtcl.mk b/package/ajtcl/ajtcl.mk
+> new file mode 100644
+> index 0000000..d74be97
+> --- /dev/null
+> +++ b/package/ajtcl/ajtcl.mk
+> @@ -0,0 +1,44 @@
+> +################################################################################
+> +#
+> +# ajtcl
+> +#
+> +################################################################################
+> +
+> +AJTCL_REV = 16.04
+> +AJTCL_VERSION = $(AJTCL_REV).00
+> +AJTCL_SOURCE = ajtcl-$(AJTCL_VERSION)-src.tar.gz
+> +AJTCL_SITE = https://mirrors.kernel.org/allseenalliance/alljoyn/$(AJTCL_REV)
+> +# See https://allseenalliance.org/alliance/ip-policy
+> +AJTCL_LICENSE = ISC
+> +# AllJoyn Thin Core does not provide any license files with source code
+> +# AJTCL_LICENSE_FILES = 
 
-Use a dummy hostname.
+Same comment as for alljoyn package.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/perl/perl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index f96b638..38f30ab 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -55,7 +55,7 @@ PERL_CONF_OPTS = \
- 	-Dccflags="$(TARGET_CFLAGS)" \
- 	-Dldflags="$(TARGET_LDFLAGS) -lm" \
- 	-Dmydomain="" \
--	-Dmyhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
-+	-Dmyhostname="noname" \
- 	-Dmyuname="Buildroot $(BR2_VERSION_FULL)" \
- 	-Dosname=linux \
- 	-Dosvers=$(LINUX_VERSION) \
+> +
+> +AJTCL_DEPENDENCIES = host-scons
+> +AJTCL_INSTALL_STAGING = YES
+> +
+> +# AllJoyn Thin Core can be compiled in debug or release mode. By default,
+> +# AllJoyn Thin Core is built in debug mode.
+> +AJTCL_VARIANT = release
+> +
+> +AJTCL_SCONS_OPTS = \
+> +	-j$(PARALLEL_JOBS) \
+> +	V=1 \
+> +	VARIANT=$(AJTCL_VARIANT) \
+> +	CC="$(TARGET_CC)" \
+> +	CXX="$(TARGET_CXX)"
+> +
+> +define AJTCL_BUILD_CMDS
+> +	cd $(@D); $(SCONS) $(AJTCL_SCONS_OPTS)
+> +endef
+> +
+> +define AJTCL_INSTALL_STAGING_CMDS
+> +	cp -a $(@D)/dist/lib/lib* $(STAGING_DIR)/usr/lib/
+> +	cp -a $(@D)/dist/include/* $(STAGING_DIR)/usr/include/
+> +endef
+> +
+> +# Only install AllJoyn Thin Core dynamic libraries into target directory
+> +define AJTCL_INSTALL_TARGET_CMDS
+> +	cp -a $(@D)/dist/lib/lib*.so* $(TARGET_DIR)/usr/lib/
+> +endef
+> +
+> +$(eval $(generic-package))
+> 
