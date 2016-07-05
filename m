@@ -1,63 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 15:41:10 +0200
-Subject: [Buildroot] [PATCH 06/24 v2] package/systemd: disabling tty1
- getty is a post-install hook
-In-Reply-To: <fe81b5c13c44ebd66ef69fd8bc76e6e8acb14725.1466622379.git.yann.morin.1998@free.fr>
-References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <fe81b5c13c44ebd66ef69fd8bc76e6e8acb14725.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <20160705154110.625d8c60@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 5 Jul 2016 15:43:03 +0200
+Subject: [Buildroot] [PATCH 1/4] alljoyn: new package
+In-Reply-To: <20c2a9eb-15bb-3049-bae9-329c4ef4a6c9@gmail.com>
+References: <20939_1467184224_57737460_20939_8004_1_f44dcc70-6b83-4a10-9e0e-494a4c74c46d@OPEXCLILM5F.corporate.adroot.infra.ftgroup>
+ <20c2a9eb-15bb-3049-bae9-329c4ef4a6c9@gmail.com>
+Message-ID: <9bfa61de-997d-02e3-dbe7-d58b526f2b8d@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Wed, 22 Jun 2016 21:07:28 +0200, Yann E. MORIN wrote:
+Le 05/07/2016 ? 15:25, Romain Naour a ?crit :
+> Hi Fabrice,
 
-> +define SYSTEMD_DISABLE_SERVICE_TTY1_HOOK
-> +	rm -f $(TARGET_DIR)/etc/systemd/system/getty.target.wants/getty at tty1.service
-> +endef
-> +
->  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
->  	SYSTEMD_INSTALL_INIT_HOOK \
->  	SYSTEMD_INSTALL_MACHINEID_HOOK \
-> -	SYSTEMD_INSTALL_RESOLVCONF_HOOK
-> +	SYSTEMD_INSTALL_RESOLVCONF_HOOK \
-> +	SYSTEMD_DISABLE_SERVICE_TTY1_HOOK
->  
->  define SYSTEMD_USERS
->  	systemd-journal -1 systemd-journal -1 * /var/log/journal - - Journal
-> @@ -228,10 +233,6 @@ define SYSTEMD_USERS
->  	- - input -1 * - - - Input device group
->  endef
->  
-> -define SYSTEMD_DISABLE_SERVICE_TTY1
-> -	rm -f $(TARGET_DIR)/etc/systemd/system/getty.target.wants/getty at tty1.service
-> -endef
-> -
->  ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
->  # systemd needs getty.service for VTs and serial-getty.service for serial ttys
->  # also patch the file to use the correct baud-rate, the default baudrate is 115200 so look for that
-> @@ -252,7 +253,6 @@ endef
->  endif
->  
->  define SYSTEMD_INSTALL_INIT_SYSTEMD
-> -	$(SYSTEMD_DISABLE_SERVICE_TTY1)
->  	$(SYSTEMD_INSTALL_SERVICE_TTY)
->  	$(SYSTEMD_INSTALL_SERVICE_NETWORK)
->  	$(SYSTEMD_INSTALL_SERVICE_TIMESYNC)
+>> +++ b/package/alljoyn/Config.in
+>> @@ -0,0 +1,18 @@
+>> +config BR2_PACKAGE_ALLJOYN
+>> +	bool "alljoyn"
+>> +	depends on BR2_INSTALL_LIBSTDCPP
+>> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+>> +	depends on BR2_USE_WCHAR
+> 
+> I see some fork() function calls in the source code, so alljoyn should depends
+> on BR2_USE_MMU
+> 
+> Also add "depends on BR2_STATIC_LIBS" here (see the last comment)
+> 
+Obviously I mean "depends on !BR2_STATIC_LIBS"
 
-Doing this change doesn't work if BR2_TARGET_GENERIC_GETTY_PORT is
-"tty1". In this case, you will create getty at tty1.service symlink during
-<pkg>_INIT_SYSTEMD, and then you will remove it in your post-install
-target hook. And you end up with no getty@<foo>.service symbolic link.
-
-So, I've marked this patch as Rejected in patchwork.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Romain
