@@ -1,38 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 18:04:54 +0200
-Subject: [Buildroot] [git commit] package/sphinxbase: add missing dependency
-	on host-bison
-Message-ID: <20160705160521.6B38A81841@busybox.osuosl.org>
+From: Paul Cercueil <paul.cercueil@analog.com>
+Date: Tue, 5 Jul 2016 18:05:54 +0200
+Subject: [Buildroot] [PATCH] libiio: BR2_PACKAGE_LIBIIO_TESTS requires
+	BR2_PACKAGE_LIBIIO_XML_BACKEND
+Message-ID: <1467734754-16816-1-git-send-email-paul.cercueil@analog.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01f5b511cbbc787c1235a11e10669c2fed05ef76
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/741f04fce74b4dfc4d4405d14c82c21f67cbfff1/
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
 ---
- package/sphinxbase/sphinxbase.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/libiio/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/sphinxbase/sphinxbase.mk b/package/sphinxbase/sphinxbase.mk
-index a8f9a53..5c87c89 100644
---- a/package/sphinxbase/sphinxbase.mk
-+++ b/package/sphinxbase/sphinxbase.mk
-@@ -11,6 +11,9 @@ SPHINXBASE_LICENSE = BSD-2c
- # 5prealpha tarballs". The license is contained in the copyright notice at the
- # top of each source file. For example:
- SPHINXBASE_LICENSE_FILES = src/libsphinxbase/util/bio.c
-+
-+SPHINXBASE_DEPENDENCIES = host-bison
-+
- SPHINXBASE_CONF_OPTS = --without-python --without-lapack
- 
- $(eval $(autotools-package))
+diff --git a/package/libiio/Config.in b/package/libiio/Config.in
+index e7a5d18..69269e0 100644
+--- a/package/libiio/Config.in
++++ b/package/libiio/Config.in
+@@ -63,6 +63,7 @@ comment "IIO Daemon needs a toolchain w/ threads"
+ config BR2_PACKAGE_LIBIIO_TESTS
+ 	bool "Install test programs"
+ 	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
++	select BR2_PACKAGE_LIBIIO_XML_BACKEND
+ 	select BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+-- 
+2.8.1
