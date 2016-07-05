@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 5 Jul 2016 13:32:24 +0200
-Subject: [Buildroot] [PATCH 4/5] gdb: add dependency on host-flex and
- host-bison for Git versions
-In-Reply-To: <1467712019-24632-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2016 13:37:14 +0200
+Subject: [Buildroot] [PATCH 5/5] binutils: fix build of 2.26 when
+ makeinfo is not available
+In-Reply-To: <1467712019-24632-5-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1467712019-24632-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1467712019-24632-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <79dbff1d-b31f-8bf9-143b-0e1d17de2127@gmail.com>
+ <1467712019-24632-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <7fa13621-8f15-d961-c0cd-e4bd48d9d266@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,13 +15,16 @@ To: buildroot@busybox.net
 Hi Thomas,
 
 Le 05/07/2016 ? 11:46, Thomas Petazzoni a ?crit :
-> gdb versions fetched from git (such as the ARC version) will not build
-> with host-flex and host-bison.
+> The 2.26 binutils tarball has incorrect timestamps for the .info files,
+> so binutils build system tries to regenerate them with makeinfo. In
+> order to avoid depending on host-texinfo, we simply touch the .info
+> files so that their timestamp is newer than the corresponding source
+> files.
 
-I'm wondering why host-flex and host-bison was not already present in gdb
-dependency when fetched from git.
+Build issue reproduced and fixed with this patch.
 
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Romain Naour <romain.naour@gmail.com>
 
 Best regards,
 Romain
@@ -30,22 +33,29 @@ Romain
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/gdb/gdb.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/binutils/binutils.mk | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
-> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-> index c9c6bd1..6d70955 100644
-> --- a/package/gdb/gdb.mk
-> +++ b/package/gdb/gdb.mk
-> @@ -49,8 +49,8 @@ HOST_GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
+> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+> index 33aaf85..50a3531 100644
+> --- a/package/binutils/binutils.mk
+> +++ b/package/binutils/binutils.mk
+> @@ -33,6 +33,17 @@ BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
+>  HOST_BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
 >  endif
 >  
->  ifeq ($(GDB_FROM_GIT),y)
-> -GDB_DEPENDENCIES += host-texinfo
-> -HOST_GDB_DEPENDENCIES += host-texinfo
-> +GDB_DEPENDENCIES += host-texinfo host-flex host-bison
-> +HOST_GDB_DEPENDENCIES += host-texinfo host-flex host-bison
->  endif
->  
->  # When gdb sources are fetched from the binutils-gdb repository, they
+> +# The .info files in the 2.26 tarball have an incorrect timestamp, so
+> +# binutils tries to re-generate them. In order to avoid the dependency
+> +# on host-texinfo, we simply update the timestamps.
+> +ifeq ($(BR2_BINUTILS_VERSION_2_26_X),y)
+> +define BINUTILS_FIXUP_INFO_TIMESTAMPS
+> +	find $(@D) -name '*.info' -exec touch {} \;
+> +endef
+> +BINUTILS_POST_PATCH_HOOKS += BINUTILS_FIXUP_INFO_TIMESTAMPS
+> +HOST_BINUTILS_POST_PATCH_HOOKS += BINUTILS_FIXUP_INFO_TIMESTAMPS
+> +endif
+> +
+>  # When binutils sources are fetched from the binutils-gdb repository,
+>  # they also contain the gdb sources, but gdb shouldn't be built, so we
+>  # disable it.
 > 
