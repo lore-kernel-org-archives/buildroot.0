@@ -1,11 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 5 Jul 2016 10:03:43 +0200
-Subject: [Buildroot] [PATCH 21/24 v2] system/systemd: needs timezone
-In-Reply-To: <84e8315f-bf11-4cc8-6bf9-3c03ef1273f1@gmail.com>
+Date: Tue, 5 Jul 2016 10:12:44 +0200
+Subject: [Buildroot] [PATCH 23/24 v2] system: make systemd work on a
+ read-only rootfs
+In-Reply-To: <355fae6a-5a17-f4f0-43c7-05298a71430f@gmail.com>
 References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <92c59faf9f5eeba1856b1897d30f4f8b2b57460d.1466622379.git.yann.morin.1998@free.fr>
- <84e8315f-bf11-4cc8-6bf9-3c03ef1273f1@gmail.com>
-Message-ID: <20160705080343.GE6533@free.fr>
+ <f70403a971adf75668e702cb93d242bc07ede270.1466622379.git.yann.morin.1998@free.fr>
+ <355fae6a-5a17-f4f0-43c7-05298a71430f@gmail.com>
+Message-ID: <20160705081244.GF6533@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,73 +15,113 @@ To: buildroot@busybox.net
 
 Romain, All,
 
-On 2016-07-03 13:41 +0200, Romain Naour spake thusly:
+On 2016-07-03 14:54 +0200, Romain Naour spake thusly:
 > Le 22/06/2016 ? 21:07, Yann E. MORIN a ?crit :
-> > systemd does not like being booted without any timezone info (especially
-> > on a R/O filesystem), so we forcibly enable that. If there is no default
-> > timezone set, we fallback to UTC (which is basically what no TZ means
-> > anyway).
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  package/skeleton-systemd/skeleton-systemd.mk | 7 +++++++
-> >  system/Config.in                             | 1 +
-> >  2 files changed, 8 insertions(+)
-> > 
-> > diff --git a/package/skeleton-systemd/skeleton-systemd.mk b/package/skeleton-systemd/skeleton-systemd.mk
-> > index e781ce9..b45bbde 100644
-> > --- a/package/skeleton-systemd/skeleton-systemd.mk
-> > +++ b/package/skeleton-systemd/skeleton-systemd.mk
-> > @@ -31,12 +31,19 @@ SKELETON_SYSTEMD_TARGET_FINALIZE_HOOKS += SKELETON_SYSTEMD_SET_NETWORK
-> >  
-> >  endif # BR2_PACKAGE_SYSTEMD_NETWORKD not set
-> >  
-> > +SKELETON_SYSTEM_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
->                  ^
-> > +ifeq ($(SKELETON_SYSTEM_LOCALTIME),)
->                          ^
-> > +SKELETON_SYSTEM_LOCALTIME = Etc/UTC
->                  ^
-> > +endif
-> > +
-> 
-> s/SKELETON_SYSTEM_LOCALTIME/SKELETON_SYSTEMD_LOCALTIME/
+> > When the rootfs is readonly, systemd will expect /var to be writable.
+> > Because we do not really have a R/W filesystem to mount on /var, we make
+> > it a tmpfs, and use the systemd-tmpfiles feautre to populate it with
+> s/feautre/feature/
+[--SNIP--]
+> Other than small typos highlighted by my mail client ;-)
 
-Fixed.
+Typoes fixed, thanks!
 
 Regards,
 Yann E. MORIN.
 
-> >  define SKELETON_SYSTEMD_INSTALL_TARGET_CMDS
-> >  	mkdir -p $(TARGET_DIR)/etc
-> >  	mkdir -p $(TARGET_DIR)/home
-> >  	mkdir -p $(TARGET_DIR)/srv
-> >  	mkdir -p $(TARGET_DIR)/var
-> >  	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
-> > +	ln -sf ../usr/share/zoneinfo/$(SKELETON_SYSTEMD_LOCALTIME) \
-> 
-> This one is ok :)
+> Reviewed-by: Romain Naour <romain.naour@gmail.com>
 > 
 > Best regards,
 > Romain
 > 
 > 
-> > +		$(TARGET_DIR)/etc/localtime
-> >  	$(SKELETON_SYSTEMD_RSYNC_NETWORK)
-> >  endef
+> > ---
+> > Note: I haven't seen any symlinks installed in the factory so far, but I
+> > haven't build a lot of packages yet... So, I'm not sure what to do with
+> > the symlinks, especially when a package install relative symlinks...
+> > ---
+> >  package/skeleton-systemd/skeleton-systemd.mk | 51 ++++++++++++++++++++++++++--
+> >  system/Config.in                             |  1 -
+> >  2 files changed, 49 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/package/skeleton-systemd/skeleton-systemd.mk b/package/skeleton-systemd/skeleton-systemd.mk
+> > index b45bbde..c7c2e26 100644
+> > --- a/package/skeleton-systemd/skeleton-systemd.mk
+> > +++ b/package/skeleton-systemd/skeleton-systemd.mk
+> > @@ -36,12 +36,59 @@ ifeq ($(SKELETON_SYSTEM_LOCALTIME),)
+> >  SKELETON_SYSTEM_LOCALTIME = Etc/UTC
+> >  endif
 > >  
+> > +ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
+> > +
+> > +define SKELETON_SYSTEMD_ROOT_RW
+> > +	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
+> > +	mkdir -p $(TARGET_DIR)/var
+> > +endef
+> > +
+> > +else
+> > +
+> > +# On a R/O rootfs, /var is a tmpfs filesystem. So, at build time, we
+> > +# redirect /var to the "factory settings" location. Just before the
+> > +# filesystem gets created, the /var symlink will be replaced with
+> > +# a real (but empty) directory, and the "factory files" will be copied
+> > +# back there by the tmpfiles.d mechanism.
+> > +define SKELETON_SYSTEMD_ROOT_RO
+> > +	mkdir -p $(TARGET_DIR)/etc/systemd/tmpfiles.d
+> > +	mkdir -p $(TARGET_DIR)/usr/share/factory
+> > +	ln -s usr/share/factory $(TARGET_DIR)/var
+> > +	echo "/dev/root / auto ro 0 1" >$(TARGET_DIR)/etc/fstab
+> > +	echo "tmpfs /var tmpfs mode=1777 0 0" >>$(TARGET_DIR)/etc/fstab
+> > +endef
+> > +
+> > +define SKELETON_SYSTEMD_VAR_PRE_FS
+> > +	rm -f $(TARGET_DIR)/var
+> > +	mkdir $(TARGET_DIR)/var
+> > +	for i in $(TARGET_DIR)/usr/share/factory/*; do \
+> > +		j="$${i##*/}"; \
+> > +		if [ -L "$${i}" ]; then \
+> > +			printf "L+! /var/%s - - - - %s\n" \
+> > +				"$${j}" "../usr/share/factory/$${j}" \
+> > +			|| exit 1; \
+> > +		else \
+> > +			printf "C! /var/%s - - - -\n" "$${j}" \
+> > +			|| exit 1; \
+> > +		fi; \
+> > +	done >$(TARGET_DIR)/etc/systemd/tmpfiles.d/var-factory.conf
+> > +endef
+> > +SKELETON_SYSTEMD_FS_PRE_CMD_HOOKS += SKELETON_SYSTEMD_VAR_PRE_FS
+> > +
+> > +define SKELETON_SYSTEMD_VAR_POST_FS
+> > +	rm -rf $(TARGET_DIR)/var
+> > +	ln -s usr/share/factory $(TARGET_DIR)/var
+> > +endef
+> > +SKELETON_SYSTEMD_FS_POST_CMD_HOOKS += SKELETON_SYSTEMD_VAR_POST_FS
+> > +
+> > +endif
+> > +
+> >  define SKELETON_SYSTEMD_INSTALL_TARGET_CMDS
+> >  	mkdir -p $(TARGET_DIR)/etc
+> >  	mkdir -p $(TARGET_DIR)/home
+> >  	mkdir -p $(TARGET_DIR)/srv
+> > -	mkdir -p $(TARGET_DIR)/var
+> > -	echo "/dev/root / auto rw 0 1" >$(TARGET_DIR)/etc/fstab
+> > +	$(SKELETON_SYSTEMD_ROOT_RO)
+> > +	$(SKELETON_SYSTEMD_ROOT_RW)
+> >  	ln -sf ../usr/share/zoneinfo/$(SKELETON_SYSTEMD_LOCALTIME) \
+> >  		$(TARGET_DIR)/etc/localtime
+> >  	$(SKELETON_SYSTEMD_RSYNC_NETWORK)
 > > diff --git a/system/Config.in b/system/Config.in
-> > index 17ce832..07af2e0 100644
+> > index 07af2e0..32d6542 100644
 > > --- a/system/Config.in
 > > +++ b/system/Config.in
-> > @@ -130,6 +130,7 @@ config BR2_INIT_SYSTEMD
+> > @@ -129,7 +129,6 @@ config BR2_INIT_SYSTEMD
+> >  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
 > >  	select BR2_ROOTFS_MERGED_USR
 > >  	select BR2_PACKAGE_SYSTEMD
-> >  	select BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
-> > +	select BR2_TARGET_TZ_INFO
+> > -	select BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+> >  	select BR2_TARGET_TZ_INFO
 > >  
 > >  comment "systemd needs (e)glibc toolchain, headers >= 3.10"
-> >  	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
 > > 
 > 
 
