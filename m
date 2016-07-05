@@ -1,59 +1,163 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 09:48:19 +0200
-Subject: [Buildroot] [git commit] arch: define dependencies for the binfmt
-	flat formats
-Message-ID: <20160705075425.A5EA7821FA@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 5 Jul 2016 09:55:03 +0200
+Subject: [Buildroot] [PATCH v7 2/3] docker-containerd: new package
+In-Reply-To: <1467671433-18113-2-git-send-email-christian@paral.in>
+References: <1467671433-18113-1-git-send-email-christian@paral.in>
+ <1467671433-18113-2-git-send-email-christian@paral.in>
+Message-ID: <1a2c3bd0-3e4c-15ad-07fd-e5014dbddf11@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49d97993d83f92bb975110a7ff49ea75a84ee2c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Christian,
 
-The situation looks like following for elf2flt and binfmt FLAT:
+Le 05/07/2016 ? 00:30, Christian Stewart a ?crit :
+> docker-containerd is a daemon and API for controlling and managing runC
+> containers.
+> 
+> https://containerd.tools/
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
 
- * Only gcc for bfin/m68k implements
-   -msep-data (BR2_BINFMT_FLAT_SEP_DATA) and
-   -mid-shared-library (BR2_BINFMT_FLAT_SHARED), so the corresponding
-   options are made only visible on those architectures.
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
- * When the default of BR2_BINFMT_FLAT_ONE is used on m68k, broken
-   binaries are produced, which mainly end up in SIGILL, so do not use
-   it for m68k.
+Best regards,
+Romain
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-[Thomas:
- - also add the dependencies on m68k/bfin to BR2_BINFMT_FLAT_SHARED
- - rework commit log.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- arch/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index be37481..b980e05 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -331,17 +331,20 @@ choice
- 
- config BR2_BINFMT_FLAT_ONE
- 	bool "One memory region"
-+	depends on !BR2_m68k
- 	help
- 	  All segments are linked into one memory region.
- 
- config BR2_BINFMT_FLAT_SEP_DATA
- 	bool "Separate data and code region"
-+	depends on BR2_m68k || BR2_bfin
- 	help
- 	  Allow for the data and text segments to be separated and placed in
- 	  different regions of memory.
- 
- config BR2_BINFMT_FLAT_SHARED
- 	bool "Shared binary"
-+	depends on BR2_m68k || BR2_bfin
- 	# Even though this really generates shared binaries, there is no libdl
- 	# and dlopen() cannot be used. So packages that require shared
- 	# libraries cannot be built. Therefore, we don't select
+> 
+> ---
+> 
+> Changes since v3:
+>  - Don't depend on runc at compile-time
+>  - Add threading dependency
+>  - Use HOST_GO_TARGET_ENV, partially
+>  - Cleanup compile commands
+>  - Include patch to fix arm64 compilation
+> Changes since v4:
+>  - Bump to v0.2.2
+>  - update hash for 0.2.2
+>  - fix docker-runc simlink
+>  - use CONTAINERD_VERSION for GitCommit const
+>  - add go arch supports to config.in comment
+>  - did runtime tests
+>  - added signed-off-by to the patch series
+> Changes since v5:
+>  - containerd-shim aliased to docker-containerd-shim
+>  - bumped to 1b3a8154 (commit pin required)
+>  - patches removed (included in bump)
+> Changes since v6:
+>  - added note about runtime dependency
+>  - add required dependencies on util-linux, mmu, wchar
+> 
+> ---
+> ---
+>  package/Config.in                                |  1 +
+>  package/docker-containerd/Config.in              | 20 +++++++++++
+>  package/docker-containerd/docker-containerd.hash |  2 ++
+>  package/docker-containerd/docker-containerd.mk   | 45 ++++++++++++++++++++++++
+>  4 files changed, 68 insertions(+)
+>  create mode 100644 package/docker-containerd/Config.in
+>  create mode 100644 package/docker-containerd/docker-containerd.hash
+>  create mode 100644 package/docker-containerd/docker-containerd.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 078436e..01c0811 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1636,6 +1636,7 @@ menu "System tools"
+>  	source "package/cpuload/Config.in"
+>  	source "package/dcron/Config.in"
+>  	source "package/debianutils/Config.in"
+> +	source "package/docker-containerd/Config.in"
+>  	source "package/cgroupfs-mount/Config.in"
+>  	source "package/dsp-tools/Config.in"
+>  	source "package/efibootmgr/Config.in"
+> diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
+> new file mode 100644
+> index 0000000..b2f2983
+> --- /dev/null
+> +++ b/package/docker-containerd/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_DOCKER_CONTAINERD
+> +	bool "docker-containerd"
+> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_USE_MMU # util-linux
+> +	depends on BR2_USE_WCHAR # util-linux
+> +	select BR2_PACKAGE_RUNC # runc: runtime dependency
+> +	select BR2_PACKAGE_UTIL_LINUX # util-linux: runtime dependency
+> +	select BR2_PACKAGE_UTIL_LINUX_BINARIES # util-linux: runtime dependency
+> +	select BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT # util-linux: runtime dependency
+> +	select BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT # util-linux: runtime dependency
+> +	select BR2_PACKAGE_UTIL_LINUX_MOUNT # util-linux: runtime dependency
+> +	help
+> +	  containerd is a daemon to control runC.
+> +
+> +	  https://github.com/docker/containerd
+> +
+> +comment "docker-containerd needs a toolchain w/ threads"
+> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+> new file mode 100644
+> index 0000000..a4a427d
+> --- /dev/null
+> +++ b/package/docker-containerd/docker-containerd.hash
+> @@ -0,0 +1,2 @@
+> +# Computed locally
+> +sha256 bdfa54c94f3de901a7983dc0bc924dd2268e9a5f5fe920d27bfdafad60958522  docker-containerd-1b3a81545ca79456086dc2aa424357be98b962ee.tar.gz
+> diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+> new file mode 100644
+> index 0000000..f0000e6
+> --- /dev/null
+> +++ b/package/docker-containerd/docker-containerd.mk
+> @@ -0,0 +1,45 @@
+> +################################################################################
+> +#
+> +# docker-containerd
+> +#
+> +################################################################################
+> +
+> +DOCKER_CONTAINERD_VERSION = 1b3a81545ca79456086dc2aa424357be98b962ee
+> +DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
+> +
+> +DOCKER_CONTAINERD_LICENSE = Apache-2.0
+> +DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
+> +
+> +DOCKER_CONTAINERD_DEPENDENCIES = host-go
+> +
+> +DOCKER_CONTAINERD_GOPATH = "$(@D)/vendor"
+> +DOCKER_CONTAINERD_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
+> +	CGO_ENABLED=1 \
+> +	GOBIN="$(@D)/bin" \
+> +	GOPATH="$(DOCKER_CONTAINERD_GOPATH)"
+> +
+> +DOCKER_CONTAINERD_GLDFLAGS = \
+> +	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION) \
+> +	-extldflags '-static'
+> +
+> +define DOCKER_CONTAINERD_CONFIGURE_CMDS
+> +	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker
+> +	ln -s $(@D) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/docker/containerd
+> +	mkdir -p $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers
+> +	ln -s $(RUNC_SRCDIR) $(DOCKER_CONTAINERD_GOPATH)/src/github.com/opencontainers/runc
+> +endef
+> +
+> +define DOCKER_CONTAINERD_BUILD_CMDS
+> +	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/ctr -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./ctr
+> +	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/containerd -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./containerd
+> +	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/containerd-shim -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./containerd-shim
+> +endef
+> +
+> +define DOCKER_CONTAINERD_INSTALL_TARGET_CMDS
+> +	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/containerd $(TARGET_DIR)/usr/bin/docker-containerd
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/containerd-shim $(TARGET_DIR)/usr/bin/containerd-shim
+> +	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
+> +endef
+> +
+> +$(eval $(generic-package))
+> 
