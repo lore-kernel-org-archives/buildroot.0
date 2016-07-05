@@ -1,57 +1,51 @@
-From: Patrick Williams <patrick@stwcx.xyz>
-Date: Tue, 5 Jul 2016 14:32:12 -0500
-Subject: [Buildroot] [PATCH v3 2/6] Add documentation for merged
- defconfigs
-In-Reply-To: <489e6359-291e-5920-87d6-da23fe8c5d0a@smile.fr>
-References: <cover.1467176798.git.sam.bobroff@au1.ibm.com>
- <fb148ddadbc12c9a9437192761ba342237a27325.1467176798.git.sam.bobroff@au1.ibm.com>
- <489e6359-291e-5920-87d6-da23fe8c5d0a@smile.fr>
-Message-ID: <20160705193212.GB20922@asimov.austin.ibm.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2016 22:41:52 +0200
+Subject: [Buildroot] [V2] 4th: new package
+In-Reply-To: <1467745520-4449-1-git-send-email-francois.perrad@gadz.org>
+References: <1467745520-4449-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20160705224152.2e1e3161@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 01, 2016 at 03:18:58PM +0200, Romain Naour wrote:
-> Hi Sam,
-> 
-> This series has been discussed with other developers and we concluded that this
-> feature is not the responsibility of Buildroot to generate a defconfig from
-> partial configuration files.
-> 
-> Instead we recommend to use merge_config.sh from outside of Buildroot to
-> generate the merged defconfig before calling make. Maybe we should add some
-> documentation in the manual to explain how to use it.
-> 
-> Best regards,
-> Romain
-> 
+Hello,
 
-Earlier we had two independent patch sets that we were asked to merge.
+When doing a new iteration of a patch, please add a changelog that
+indicates what has been changed.
 
-   1) Merged defconfigs (now this patch set).
-   2) Subdirs for defconfigs.
+On Tue,  5 Jul 2016 21:05:20 +0200, Francois Perrad wrote:
 
-If #1 has been rejected as undesireable, should we now prepare an
-indepenent patch set for #2 or is that also not wanted now?
+> +4TH_VERSION = 3.62.4
+> +4TH_SOURCE = 4th-$(4TH_VERSION)-unix.tar.gz
+> +4TH_SITE = http://downloads.sourceforge.net/project/forth-4th/4th-$(4TH_VERSION)
+> +4TH_LICENSE = GPLv3, LGPLv3
+> +4TH_LICENSE_FILES = COPYING
 
-There is currently no way for us to manage this behavior in a
-BR2_EXTERNAL layer alone because there is no Makefile from the
-BR2_EXTERNAL path sourced in the defconfig case.  Is there any issue
-with a patch that will source a file like $(BR2_EXTERNAL)/external-defconfig.mk?
+Did you resolve the licensing issue? That was the main point of my
+previous review:
 
-I realize we could have a new script, but we already have users that are
-use to 'make <system>_defconfig && make' so we would like to be able to
-preserve that behavior even though we are moving to merged defconfig
-fragments.
+"""
+I was about to apply your patch, with some minimal changes (see
+http://code.bulix.org/i2s65n-101064), but there is one fundamental
+license issue here.
 
+The COPYING file, as well as documentation/license.txt contain the
+license text of the LGPLv3. But the source code (sources/*.c) all claim
+to be licensed under the GPLv3. Only the .4th files are under LGPLv3.
+
+This is clearly not good. Could you talk with upstream to get this
+situation resolved?
+"""
+
+At least some reply from you about this would have been useful to
+understand what's going on.
+
+Thanks,
+
+Thomas
 -- 
-Patrick Williams
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160705/3485a4b1/attachment.asc>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
