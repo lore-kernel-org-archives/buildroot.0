@@ -1,105 +1,85 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 5 Jul 2016 11:09:30 +0200
-Subject: [Buildroot] [Patch v2 1/3] jemalloc: new package
-In-Reply-To: <1466797592-5565-2-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1466797592-5565-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1466797592-5565-2-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <dab29f40-27b6-1b2a-54af-5b2163ef7846@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 5 Jul 2016 11:10:58 +0200
+Subject: [Buildroot] Unable to compile uboot v2012.10 on Buildroot
+	2016.05
+In-Reply-To: <337360765.7782418.1467630900829.JavaMail.zimbra@datacom.ind.br>
+References: <1249010753.7483898.1467378648497.JavaMail.zimbra@datacom.ind.br>
+ <1572014322.7513168.1467381657827.JavaMail.zimbra@datacom.ind.br>
+ <20160701161556.5e65b3df@free-electrons.com>
+ <1533419985.7541395.1467386922132.JavaMail.zimbra@datacom.ind.br>
+ <e3405ae6-8f0b-0e40-e2e4-efafe77bf717@mind.be>
+ <20160702125625.11882f51@free-electrons.com>
+ <170867641.7742576.1467562508600.JavaMail.zimbra@datacom.ind.br>
+ <902df8d4-b600-9322-af0b-eea6aa56be9a@mind.be>
+ <337360765.7782418.1467630900829.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <6a54dcba-8506-6318-6706-5a4a0216973c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eric,
 
-Le 24/06/2016 ? 21:46, Eric Le Bihan a ?crit :
-> This new package provides jemalloc, a malloc(3) implementation that
-> emphasizes fragmentation avoidance and scalable concurrency support.
+
+On 04-07-16 13:15, Carlos Santos wrote:
+>> From: "Arnout Vandecappelle" <arnout@mind.be>
+>> To: "Carlos Santos" <casantos@datacom.ind.br>, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+>> Cc: "Julien Boibessot" <julien.boibessot@armadeus.com>, "buildroot" <buildroot@buildroot.org>
+>> Sent: Monday, July 4, 2016 6:26:09 AM
+>> Subject: Re: [Buildroot] Unable to compile uboot v2012.10 on Buildroot 2016.05
 > 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/Config.in              |  1 +
->  package/jemalloc/Config.in     |  7 +++++++
->  package/jemalloc/jemalloc.hash |  2 ++
->  package/jemalloc/jemalloc.mk   | 15 +++++++++++++++
->  4 files changed, 25 insertions(+)
->  create mode 100644 package/jemalloc/Config.in
->  create mode 100644 package/jemalloc/jemalloc.hash
->  create mode 100644 package/jemalloc/jemalloc.mk
+>> Hi Carlos,
+>>
+>> On 03-07-16 18:15, Carlos Santos wrote:
+>>>> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+>>>> To: "Arnout Vandecappelle" <arnout@mind.be>
+>>>> Cc: "Carlos Santos" <casantos@datacom.ind.br>, "Julien Boibessot"
+>>>> <julien.boibessot@armadeus.com>, "buildroot"
+>>>> <buildroot@buildroot.org>
+>>>> Sent: Saturday, July 2, 2016 7:56:25 AM
+>>>> Subject: Re: [Buildroot] Unable to compile uboot v2012.10 on Buildroot 2016.05
+>>>
+>>>> Hello,
+>>>>
+>>>> On Sat, 2 Jul 2016 12:47:14 +0200, Arnout Vandecappelle wrote:
+>>>>
+>>>>>> Because the value of HOSTCFLAGS set in U-Boot's config.mk is overwritten.
+>>>>>
+>>>>>  How about leaving HOSTCFLAGS alone, and instead setting
+>>>>> HOSTCC="$(HOSTCC) $(HOST_CFLAGS)". HOSTLDFLAGS can probably be overridden.
+>>>>
+>>>> Good point, that's possibly an alternate solution. I sent a patch
+>>>> implementing a different solution, but Carlos, if you can try Arnout's
+>>>> suggestion, it would be good.
+>>>
+>>> Yes, it works, but this reminds me that HOSTCC is not passed when building
+>>> buildroot, so the command line for version 2015.01 becomes
+>>>
+>>> cc -Wp,-MD,tools/.img2srec.d -O2 -I/work/freescale_imx28evk/host/usr/include
+>>> -include ./include/libfdt_env.h -idirafterinclude
+>>> -idirafter./arch/arm/include -I./lib/libfdt -I./tools
+>>> -DCONFIG_SYS_TEXT_BASE=0x40002000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES
+>>> -D_GNU_SOURCE -pedantic -o tools/img2srec tools/img2srec.c
+>>>
+>>> This may not be a problem now but I believe that HOSTCC should always be
+>>> provided.
+>>
+>> Care to prepare a patch then that replaces HOSTCFLAGS by HOSTCC?
+>>
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index a2a02a8..38734f3 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1242,6 +1242,7 @@ menu "Other"
->  	source "package/gmp/Config.in"
->  	source "package/gsl/Config.in"
->  	source "package/gtest/Config.in"
-> +	source "package/jemalloc/Config.in"
->  	source "package/libargtable2/Config.in"
->  	source "package/libatomic_ops/Config.in"
->  	source "package/libbsd/Config.in"
-> diff --git a/package/jemalloc/Config.in b/package/jemalloc/Config.in
-> new file mode 100644
-> index 0000000..86bafbf
-> --- /dev/null
-> +++ b/package/jemalloc/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_JEMALLOC
-> +	bool "jemalloc"
+> Thomas already submitted a patch: http://patchwork.ozlabs.org/patch/643426/
 
-Can you check the jemalloc dependency ?
+ Yes, but Thomas's patch still sets HOSTCFLAGS. My question was: do you care to
+submit an alternative (better) patch that sets HOSTCC (unconditionally) rather
+than changing HOSTCFLAGS?
 
-Since it try to build libjemalloc.so.2, jmalloc should be disabled for static
-only build.
+ Regards,
+ Arnout
 
-jemalloc build fine with uclibc-ng and musl.
-
-> +	help
-> +	 This library providing a malloc(3) implementation that emphasizes
-> +	 fragmentation avoidance and scalable concurrency support.
-> +
-> +	 http://www.canonware.com/jemalloc/
-> diff --git a/package/jemalloc/jemalloc.hash b/package/jemalloc/jemalloc.hash
-> new file mode 100644
-> index 0000000..c24a273
-> --- /dev/null
-> +++ b/package/jemalloc/jemalloc.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256 b216ddaeb901697fe38bd30ea02d7505a4b60e8979092009f95cfda860d46acb jemalloc-4.2.0.tar.bz2
-> diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
-> new file mode 100644
-> index 0000000..4c76a21
-> --- /dev/null
-> +++ b/package/jemalloc/jemalloc.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# jemalloc
-> +#
-> +################################################################################
-> +
-> +JEMALLOC_VERSION = 4.2.0
-> +JEMALLOC_SOURCE = jemalloc-$(JEMALLOC_VERSION).tar.bz2
-> +JEMALLOC_SITE = http://www.canonware.com/download/jemalloc/
-
-Remove the trailing stash:
-package/jemalloc/jemalloc.mk:14: *** JEMALLOC_SITE
-(http://www.canonware.com/download/jemalloc/) cannot have a trailing slash. Stop.
-
-Otherwise:
-  Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-
-> +JEMALLOC_LICENSE = BSD-2c
-> +JEMALLOC_LICENSE_FILES = COPYING
-> +JEMALLOC_INSTALL_STAGING = YES
-> +
-> +$(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
-> 
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
