@@ -1,35 +1,46 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 5 Jul 2016 15:43:03 +0200
-Subject: [Buildroot] [PATCH 1/4] alljoyn: new package
-In-Reply-To: <20c2a9eb-15bb-3049-bae9-329c4ef4a6c9@gmail.com>
-References: <20939_1467184224_57737460_20939_8004_1_f44dcc70-6b83-4a10-9e0e-494a4c74c46d@OPEXCLILM5F.corporate.adroot.infra.ftgroup>
- <20c2a9eb-15bb-3049-bae9-329c4ef4a6c9@gmail.com>
-Message-ID: <9bfa61de-997d-02e3-dbe7-d58b526f2b8d@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2016 15:45:04 +0200
+Subject: [Buildroot] [git commit] package/perl: use dummy hostname
+Message-ID: <20160705134512.02ADB7FD0B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=af9bb14f3cc0ec70241b74eec4e317778fdd5307
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 05/07/2016 ? 15:25, Romain Naour a ?crit :
-> Hi Fabrice,
+The hostname does not look like it serves any useful purpose, except
+maybe to set set perladmin email.
 
->> +++ b/package/alljoyn/Config.in
->> @@ -0,0 +1,18 @@
->> +config BR2_PACKAGE_ALLJOYN
->> +	bool "alljoyn"
->> +	depends on BR2_INSTALL_LIBSTDCPP
->> +	depends on BR2_TOOLCHAIN_HAS_THREADS
->> +	depends on BR2_USE_WCHAR
-> 
-> I see some fork() function calls in the source code, so alljoyn should depends
-> on BR2_USE_MMU
-> 
-> Also add "depends on BR2_STATIC_LIBS" here (see the last comment)
-> 
-Obviously I mean "depends on !BR2_STATIC_LIBS"
+Which is undoubtfully useless on the target.
 
-Best regards,
-Romain
+A followup commit will make the hostname depend on the default skeleton,
+so it won't always be available. We can not rely on it to be set.
+
+Besides, even today it is not guaranteed to be set; a user may well
+leave it empty.
+
+Use a dummy hostname.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perl/perl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index f96b638..38f30ab 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -55,7 +55,7 @@ PERL_CONF_OPTS = \
+ 	-Dccflags="$(TARGET_CFLAGS)" \
+ 	-Dldflags="$(TARGET_LDFLAGS) -lm" \
+ 	-Dmydomain="" \
+-	-Dmyhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
++	-Dmyhostname="noname" \
+ 	-Dmyuname="Buildroot $(BR2_VERSION_FULL)" \
+ 	-Dosname=linux \
+ 	-Dosvers=$(LINUX_VERSION) \
