@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 19:14:48 +0200
-Subject: [Buildroot] [PATCH] dante: New package
-In-Reply-To: <1467449278-3166-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1467449278-3166-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20160705191448.19410d6a@free-electrons.com>
+Date: Tue, 5 Jul 2016 19:15:12 +0200
+Subject: [Buildroot] [PATCH v2 1/1] acpica: new package
+In-Reply-To: <20160703104535.10401-1-nunes.erico@gmail.com>
+References: <20160703104535.10401-1-nunes.erico@gmail.com>
+Message-ID: <20160705191512.1109aa83@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  2 Jul 2016 10:47:58 +0200, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+On Sun,  3 Jul 2016 12:45:35 +0200, Erico Nunes wrote:
+> The ACPI Component Architecture (ACPICA) project provides an operating
+> system (OS)-independent reference implementation of the Advanced
+> Configuration and Power Interface Specification (ACPI).
+> 
+> It contains tools such as acpidump, iasl, acpixtract, etc.
+> 
+> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+> Cc: Romain Naour <romain.naour@gmail.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/Config.in           |  1 +
->  package/dante/Config.in     |  9 +++++++++
->  package/dante/S50dante      | 40 ++++++++++++++++++++++++++++++++++++++++
->  package/dante/dante.hash    |  2 ++
->  package/dante/dante.mk      | 32 ++++++++++++++++++++++++++++++++
->  package/dante/dante.service | 15 +++++++++++++++
->  6 files changed, 99 insertions(+)
->  create mode 100644 package/dante/Config.in
->  create mode 100644 package/dante/S50dante
->  create mode 100644 package/dante/dante.hash
->  create mode 100644 package/dante/dante.mk
->  create mode 100644 package/dante/dante.service
 
-This package fails to build on SPARC64:
+This package fails to build on MIPS64:
 
-   http://autobuild.buildroot.net/results/b2d/b2d136c859fff72290006a6fafa624aa12f96d0c/build-end.log
+   http://autobuild.buildroot.net/results/d7a/d7adbd07c5e74f0305ac03fab615290dfa20e9b5/build-end.log
 
 Could you have a look ?
 
