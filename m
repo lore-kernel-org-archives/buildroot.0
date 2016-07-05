@@ -1,45 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 17:21:28 +0200
-Subject: [Buildroot] [PATCH] libiio: Bump version to 0.7
-In-Reply-To: <1467714448-19177-1-git-send-email-paul.cercueil@analog.com>
-References: <1467714448-19177-1-git-send-email-paul.cercueil@analog.com>
-Message-ID: <20160705172128.3e25f4f7@free-electrons.com>
+Date: Tue, 5 Jul 2016 17:21:42 +0200
+Subject: [Buildroot] [git commit] package/liboping: fix build after bump
+Message-ID: <20160705152202.68D178195E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=246c9918911c6faf9b505a474c3500a7f9671882
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 5 Jul 2016 12:27:28 +0200, Paul Cercueil wrote:
-> The two previous patches have been merged upstream, so they have been
-> deleted here. Another patch (picked from upstream) has been added to fix
-> the build with thread-less toolchains.
-> 
-> Libiio v0.7 provides two new backends, a USB backend (using libusb-1.0)
-> and a serial backend (using libserialport).
-> 
-> Additionally, it is now possible to compile libiio with thread-less
-> toolchains. In that case, thread safety is disabled.
-> 
-> Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
-> ---
->  ...l2-detection-try-first-the-CMake-module-f.patch | 43 ----------------------
->  ...t-include-pthread.h-if-NO_THREADS-is-defi.patch | 26 +++++++++++++
->  ...IIOD-Link-pthread-with-no-network-backend.patch | 30 ---------------
->  package/libiio/Config.in                           | 31 ++++++++++++++--
->  package/libiio/libiio.hash                         |  4 +-
->  package/libiio/libiio.mk                           | 23 ++++++++++--
->  6 files changed, 74 insertions(+), 83 deletions(-)
->  delete mode 100644 package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
->  create mode 100644 package/libiio/0001-lock.c-Don-t-include-pthread.h-if-NO_THREADS-is-defi.patch
->  delete mode 100644 package/libiio/0002-IIOD-Link-pthread-with-no-network-backend.patch
+Fixes:
+    http://autobuild.buildroot.org/results/6a9/6a9b4d7b1b3cd72e32579fbaf5a69dbde0fea8e4/
 
-Applied to master, thanks.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...001-configure-also-check-for-clockgettime.patch | 39 ++++++++++++++++++++++
+ package/liboping/liboping.mk                       |  2 ++
+ 2 files changed, 41 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/liboping/0001-configure-also-check-for-clockgettime.patch b/package/liboping/0001-configure-also-check-for-clockgettime.patch
+new file mode 100644
+index 0000000..b2c5855
+--- /dev/null
++++ b/package/liboping/0001-configure-also-check-for-clockgettime.patch
+@@ -0,0 +1,39 @@
++From a45f3610beba1f7e6e1a038e3a1fe4150057c262 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Tue, 5 Jul 2016 15:31:28 +0200
++Subject: [PATCH] configure: also check for clockgettime()
++
++clock_gettime() is also in -lrt so we also need to check for it.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ configure.ac | 10 +++++++---
++ 1 file changed, 7 insertions(+), 3 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index f83f5ab..3b6ae09 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -199,12 +199,16 @@ fi
++ 
++ AC_SUBST(LIBOPING_PC_LIBS_PRIVATE)
++ 
++-nanosleep_needs_rt="no"
+++needs_rt="no"
++ AC_CHECK_FUNCS(nanosleep, [],
++ 	AC_CHECK_LIB(rt, nanosleep,
++-		[nanosleep_needs_rt="yes"],
+++		[needs_rt="yes"],
++ 		AC_MSG_ERROR(cannot find nanosleep)))
++-AM_CONDITIONAL(BUILD_WITH_LIBRT, test "x$nanosleep_needs_rt" = "xyes")
+++AC_CHECK_FUNCS(clock_gettime, [],
+++	AC_CHECK_LIB(rt, clock_gettime,
+++		[needs_rt="yes"],
+++		AC_MSG_ERROR(cannot find clock_gettime)))
+++AM_CONDITIONAL(BUILD_WITH_LIBRT, test "x$needs_rt" = "xyes")
++ 
++ with_ncurses="no"
++ AC_CHECK_HEADERS(ncursesw/ncurses.h ncurses.h, [with_ncurses="yes"], [])
++-- 
++2.7.4
++
+diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
+index 6e071a5..dd70387 100644
+--- a/package/liboping/liboping.mk
++++ b/package/liboping/liboping.mk
+@@ -13,4 +13,6 @@ LIBOPING_CONF_OPTS = --without-perl-bindings
+ LIBOPING_LICENSE = LGPLv2.1+, GPLv2
+ LIBOPING_LICENSE_FILES = COPYING
+ 
++LIBOPING_AUTORECONF = YES
++
+ $(eval $(autotools-package))
