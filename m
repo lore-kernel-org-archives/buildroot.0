@@ -1,41 +1,44 @@
-From: Matt Fornero <Matt.Fornero@mathworks.com>
-Date: Tue, 5 Jul 2016 15:16:57 +0000
-Subject: [Buildroot] [PATCH v4] toolchain-external: Commonize
- /lib/<tuple> symlinks
-In-Reply-To: <42f862e3-4e60-1e17-1cba-71355c592924@gmail.com>
-References: <1459381580-18169-1-git-send-email-mfornero@mathworks.com>
- <1463766725-15724-1-git-send-email-mfornero@mathworks.com>
- <aaf6a41c-7fc4-91a1-7272-3f3cdb64a901@gmail.com>
- <42f862e3-4e60-1e17-1cba-71355c592924@gmail.com>
-Message-ID: <29dffd9fd6594bca8449d2007871d3bc@ex13amer-00-ah.ad.mathworks.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2016 17:21:06 +0200
+Subject: [Buildroot] [git commit] squid: bump version to 3.5.20
+Message-ID: <20160705152114.0313B8222B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> -----Original Message-----
-> From: Romain Naour [mailto:romain.naour at gmail.com]
-> Sent: Monday, July 04, 2016 7:18 AM
-> To: Matt Fornero <Matt.Fornero@mathworks.com>;
-> buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH v4] toolchain-external: Commonize
-> /lib/<tuple> symlinks
-> 
-[snip]
+commit: https://git.buildroot.net/buildroot/commit/?id=0e685431956600444d6cfc8c1c37c5f0f076fb10
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> After some discussion with other developers, I suggest you to register
-> the TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS from
-> BR2_EXTERNAL instead of adding a new configuration option to
-> Buildroot. That way you can customize easily what should be done for
-> your specific toolchain.
-> 
-> I'm doing this for my CodeSourcery x86 standard toolchain which require
-> another symlink in staging directory.
-> 
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/squid/squid.hash | 6 +++---
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Hi Romain,
-
-If I understand this correctly, I would simply define a new package in the BR2_EXTERNAL directory that was responsible for creating the symlinks as a _POST_INSTALL_STAGING_HOOKS action, and then enable this package for configurations that used the "custom" Linaro toolchains?
-
--Matt
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index c8f25b0..b25a0e0 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.19.tar.xz.asc
+-md5	a1d990284c429a63ee85d80ee5b3b8b9	squid-3.5.19.tar.xz
+-sha1	809133b751df9fb5bca07f181b3e2f7df392f761	squid-3.5.19.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.20.tar.xz.asc
++md5 48fb18679a30606de98882528beab3a7  squid-3.5.20.tar.xz
++sha1 2bb6d3568e7167c9b99fea092a97287d0e430863  squid-3.5.20.tar.xz
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 847ed30..7179b33 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).19
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).20
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
