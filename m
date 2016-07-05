@@ -1,54 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  5 Jul 2016 19:35:48 +0200
-Subject: [Buildroot] [PATCH] package/jemalloc: filter on suported
-	architectures
-Message-ID: <1467740148-10178-1-git-send-email-yann.morin.1998@free.fr>
+Date: Tue,  5 Jul 2016 19:36:03 +0200
+Subject: [Buildroot] [PATCH] support/apply-patches: re-instate set -e
+Message-ID: <1467740163-10650-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-jemalloc has a hard-coded list of supported architectures, which it uses
-to define the minimum alignment for allocations. It whines at build time
-(not at configure time) when it does not know that alignment.
+As reported by S?bastien Szymanski [1], the apply-patches script
+doesn't stop if a tar command can't extract an archive.
 
-Fix that by making jemalloc depend on the known-supported architectures.
+Use "set -e" to exit immediately if a command return an error.
 
-Fixes:
-    http://autobuild.buildroot.org/results/674/674b6022f9a403528a758c0785656d2bda79e0a9/
+Be sure to ignore any expected error: when we check if a patch to be
+applied has the same basename as an already applied patch, the grep
+would fail when no such patch was already applied. We should not fail
+in this case.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- package/jemalloc/Config.in | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Cc: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Cc: Romain Naour <romain.naour@openwide.fr>
 
-diff --git a/package/jemalloc/Config.in b/package/jemalloc/Config.in
-index ff74387..a166821 100644
---- a/package/jemalloc/Config.in
-+++ b/package/jemalloc/Config.in
-@@ -1,5 +1,15 @@
-+config BR2_PACKAGE_JEMALLOC_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be
-+	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_mips || BR2_mipsel
-+	default y if BR2_sparc64
-+	default y if BR2_powerpc
-+	default y if BR2_sh && !BR2_sh2a
-+
- config BR2_PACKAGE_JEMALLOC
- 	bool "jemalloc"
-+	depends on BR2_PACKAGE_JEMALLOC_ARCH_SUPPORTS
- 	depends on !BR2_STATIC_LIBS
- 	help
- 	 This library providing a malloc(3) implementation that emphasizes
-@@ -8,4 +18,5 @@ config BR2_PACKAGE_JEMALLOC
- 	 http://www.canonware.com/jemalloc/
+---
+Tested with:
+    make defconfig
+    make allyespackageconfig
+    [remove luainterpreter to avoid multiple providers for
+     luainterpreter; disable qemu-user; disable tar rootfs]
+    make source
+    make $(make -s show-targets |sed -r -e 's/ |$/-patch /g')
+---
+ support/scripts/apply-patches.sh | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 694302d..7ccb39d 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -31,6 +31,8 @@
+ # applied. The list of the patches applied is stored in '.applied_patches_list'
+ # file in the build directory.
  
- comment "jemalloc needs a toolchain w/ dynamic library"
-+	depends on BR2_PACKAGE_JEMALLOC_ARCH_SUPPORTS
- 	depends on BR2_STATIC_LIBS
++set -e
++
+ silent=
+ if [ "$1" = "-s" ] ; then
+     # add option to be used by the patch tool
+@@ -103,7 +105,7 @@ function apply_patch {
+         echo "Error: missing patch file ${path}/$patch"
+         exit 1
+     fi
+-    existing="$(grep -E "/${patch}\$" ${builddir}/.applied_patches_list)"
++    existing="$(grep -E "/${patch}\$" ${builddir}/.applied_patches_list || true)"
+     if [ -n "${existing}" ]; then
+         echo "Error: duplicate filename '${patch}'"
+         echo "Conflicting files are:"
 -- 
 2.7.4
