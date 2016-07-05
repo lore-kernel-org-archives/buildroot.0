@@ -1,41 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 15:28:39 +0200
-Subject: [Buildroot] [PATCH 04/24 v2] system/skeleton: update etc/mtab
- with a more sensible link
-In-Reply-To: <4be6668a795a8af830d18094decfffdf18e5090f.1466622379.git.yann.morin.1998@free.fr>
-References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <4be6668a795a8af830d18094decfffdf18e5090f.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <20160705152839.3698bbc8@free-electrons.com>
+Date: Tue, 5 Jul 2016 15:29:28 +0200
+Subject: [Buildroot] [git commit] system: systemd only really supports a R/W
+	rootfs
+Message-ID: <20160705132942.34400821FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=886f3109bc6e77fa1a6b7edb9647a3c4ab0ec431
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Jun 2016 21:07:26 +0200, Yann E. MORIN wrote:
-> Currently, our /etc/mtab points to /proc/mounts. This was all neat so
-> far, and was good for a sysv-like init system.
-> 
-> However, the way today is to point it at /proc/self/mounts, the
-> per-process mount tab.
-> 
-> Additionnally, that's what systemd expects. If /etc/mtab is not a
-> symlink to ../proc/self/mounts and the rootfs is readonly, systemd would
-> whine loudly (and a service unit would be marked failed).
-> 
-> Since it works well for sysv-like init systems too, just use that.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  system/skeleton/etc/mtab | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Supporting a R/O rootfs needs a bit more love to be fully operational.
+This will come in later patches...
 
-Applied to master, thanks.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ system/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/system/Config.in b/system/Config.in
+index 385d305..b895db9 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -94,6 +94,7 @@ config BR2_INIT_SYSTEMD
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 	select BR2_ROOTFS_MERGED_USR
+ 	select BR2_PACKAGE_SYSTEMD
++	select BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+ 
+ comment "systemd needs a glibc toolchain, headers >= 3.10"
+ 	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
