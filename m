@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 15:59:42 +0200
-Subject: [Buildroot] [PATCH 10/24 v2] package/perl: use dummy hostname
-In-Reply-To: <9303aacab6fc99c113c9ca742beae73abbab47c6.1466622379.git.yann.morin.1998@free.fr>
+Date: Tue, 5 Jul 2016 16:00:44 +0200
+Subject: [Buildroot] [PATCH 14/24 v2] core/pkg-generic: allow packages
+ to declare target-finalize hooks
+In-Reply-To: <464b6d13a2edac4d3fabbb9b712194c53987f1be.1466622379.git.yann.morin.1998@free.fr>
 References: <cover.1466622379.git.yann.morin.1998@free.fr>
- <9303aacab6fc99c113c9ca742beae73abbab47c6.1466622379.git.yann.morin.1998@free.fr>
-Message-ID: <20160705155942.7247fad0@free-electrons.com>
+ <464b6d13a2edac4d3fabbb9b712194c53987f1be.1466622379.git.yann.morin.1998@free.fr>
+Message-ID: <20160705160044.60096a3c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +14,41 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 22 Jun 2016 21:07:32 +0200, Yann E. MORIN wrote:
-> The hostname does not look like it serves any useful purpose, except
-> maybe to set set perladmin email.
+On Wed, 22 Jun 2016 21:07:36 +0200, Yann E. MORIN wrote:
+> Currently, our skeleton declares target-finalize hooks, and does so
+> unconditionally.
 > 
-> Which is undoubtfully useless on the target.
+> That's fine since we have a single skeleton package, and thus the hooks
+> it declares need not be conditional.
 > 
-> A followup commit will make the hostname depend on the default skeleton,
-> so it won't always be available. We can not rely on it to be set.
+> However, we're going to be adding more skeleton packages, one for the
+> custom skeleton, one for the sysv-like init systems and, eventually, one
+> for the systemd init system.
 > 
-> Besides, even today it is not guaranteed to be set; a user may well
-> leave it empty.
+> In that case, we will not want the sysv-like target-finalize hooks to be
+> applied when the init system is systemd. And the other way around, of
+> course. And so on for each type of skeleton...
 > 
-> Use a dummy hostname.
+> The only solution we have so far is to enclose all target-finalize hooks
+> declarations between an ifeq-block to check that the package is enabled.
+> This is cumbersome to do, even more so when the hooks are themselves
+> conditional.
+> 
+> Add support in the core infra for packages to register such hooks, like
+> is done to register users, device tables and whatnots.
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  package/perl/perl.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  docs/manual/adding-packages-hooks.txt | 7 +++++++
+>  package/pkg-generic.mk                | 2 ++
+>  2 files changed, 9 insertions(+)
 
-Applied to master, thanks.
+I've applied after rewriting the commit log. Indeed, I am not yet sure
+we will have multiple skeleton packages, so the commit log from that
+perspective may not be correct. However, the functionality itself is
+useful on its own, for other packages, which is why I've applied it.
+
+Thanks,
 
 Thomas
 -- 
