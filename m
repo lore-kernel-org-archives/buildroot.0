@@ -1,70 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 10:43:33 +0200
-Subject: [Buildroot] [git commit] package/libgpg-error: Fix typo
-Message-ID: <20160705084412.AF8F481913@busybox.osuosl.org>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Tue,  5 Jul 2016 10:38:50 +0200
+Subject: [Buildroot] [PATCH] package/rs485conf: new package
+Message-ID: <20160705083850.13914-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f812c6b36f59583d37aab25aef8a292494532c6e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fix autobuilders failures:
-http://autobuild.buildroot.net/results/a45/a45d4310e9313d7e12a584e373c54916b5502d32/
-http://autobuild.buildroot.net/results/3e0/3e09ed66bc9705ce6e02560f792f1872e2ff438a/
-http://autobuild.buildroot.net/results/3f5/3f588651bd8565962274d6f7930c7c7031ca26af/
-http://autobuild.buildroot.net/results/779/77955a015d6027544b4ba2cb5098cc83fc7bcfce/
-http://autobuild.buildroot.net/results/215/215c4a5512b9b7bd9c302e46618fa7319c6dc293/
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/libgpg-error/Config.in | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ package/Config.in                |  1 +
+ package/rs485conf/Config.in      |  9 +++++++++
+ package/rs485conf/rs485conf.hash |  2 ++
+ package/rs485conf/rs485conf.mk   | 20 ++++++++++++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 package/rs485conf/Config.in
+ create mode 100644 package/rs485conf/rs485conf.hash
+ create mode 100644 package/rs485conf/rs485conf.mk
 
-diff --git a/package/libgpg-error/Config.in b/package/libgpg-error/Config.in
-index 4a667b4..40424e4 100644
---- a/package/libgpg-error/Config.in
-+++ b/package/libgpg-error/Config.in
-@@ -21,29 +21,29 @@ config BR2_PACKAGE_LIBGPG_ERROR
- 
- config BR2_PACKAGE_LIBGPG_ERROR_SYSCFG
- 	string
--	default "aarch64-unkown-linux-gnu" \
-+	default "aarch64-unknown-linux-gnu" \
- 		if BR2_aarch64 || BR2_aarch64_eb
- 	default "arm-unknown-linux-gnueabi" \
- 		if BR2_arm || BR2_armeb
- 	default "i686-pc-linux-gnu" \
- 		if BR2_i386
--	default "mips-unkown-linux-gnu" \
-+	default "mips-unknown-linux-gnu" \
- 		if BR2_mips || BR2_mipsel
--	default "mips64el-unkown-linux-gnuabi64" \
-+	default "mips64el-unknown-linux-gnuabi64" \
- 		if BR2_mips64 || BR2_mips64el
--	default "m68k-unkown-linux-gnu" \
-+	default "m68k-unknown-linux-gnu" \
- 		if BR2_m68k
- 	default "nios2-unknown-linux-gnu" \
- 		if BR2_nios2
--	default "powerpc-unkown-linux-gnu" \
-+	default "powerpc-unknown-linux-gnu" \
- 		if BR2_powerpc
--	default "powerpc64-unkown-linux-gnu" \
-+	default "powerpc64-unknown-linux-gnu" \
- 		if BR2_powerpc64 || BR2_powerpc64le
--	default "sh4-unkown-linux-gnu" \
-+	default "sh4-unknown-linux-gnu" \
- 		if BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb
--	default "sparc-unkown-linux-gnu" \
-+	default "sparc-unknown-linux-gnu" \
- 		if BR2_sparc
- 	default "sparc64-unknown-linux-gnu" \
- 		if BR2_sparc64
- 	default "x86_64-pc-linux-gnu" \
--		if BR2_x86_64
-\ No newline at end of file
-+		if BR2_x86_64
+diff --git a/package/Config.in b/package/Config.in
+index 9d20f6b..cf25982 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -430,6 +430,7 @@ endmenu
+ 	source "package/rfkill/Config.in"
+ 	source "package/rng-tools/Config.in"
+ 	source "package/rpi-userland/Config.in"
++	source "package/rs485conf/Config.in"
+ 	source "package/rtl8188eu/Config.in"
+ 	source "package/rtl8821au/Config.in"
+ 	source "package/sane-backends/Config.in"
+diff --git a/package/rs485conf/Config.in b/package/rs485conf/Config.in
+new file mode 100644
+index 0000000..ff0b743
+--- /dev/null
++++ b/package/rs485conf/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_RS485CONF
++	bool "rs485conf"
++	help
++	  rs485conf is intended to be used on embedded boards with RS485
++	  interface. It can show as well as modify RS485 configuration
++	  parameters of TTY device with easy to use command line
++	  options.
++
++	  https://github.com/mniestroj/rs485conf
+diff --git a/package/rs485conf/rs485conf.hash b/package/rs485conf/rs485conf.hash
+new file mode 100644
+index 0000000..e2ccbfd
+--- /dev/null
++++ b/package/rs485conf/rs485conf.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 f163f81cd50aae6fa39cbb4f6408a3699da7a87a56649c4b96d6f168c9be6a7d rs485conf-5c8d00cf70950fab3454549b81dea843d844492a.tar.gz
+diff --git a/package/rs485conf/rs485conf.mk b/package/rs485conf/rs485conf.mk
+new file mode 100644
+index 0000000..7fda39c
+--- /dev/null
++++ b/package/rs485conf/rs485conf.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# rs485conf
++#
++################################################################################
++
++RS485CONF_VERSION = 5c8d00cf70950fab3454549b81dea843d844492a
++RS485CONF_SITE = $(call github,mniestroj,rs485conf,$(RS485CONF_VERSION))
++RS485CONF_LICENSE = BSD-3c
++RS485CONF_LICENSE_FILES = LICENSE
++
++define RS485CONF_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define RS485CONF_INSTALL_TARGET_CMDS
++	$(MAKE) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
++endef
++
++$(eval $(generic-package))
+-- 
+2.9.0
