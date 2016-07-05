@@ -1,45 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 09:20:26 +0200
-Subject: [Buildroot] [git commit] package/libbdplus: add missing
-	libgpg-error arch dependency
-Message-ID: <20160705072049.8A4CF81A0E@busybox.osuosl.org>
+Date: Tue, 5 Jul 2016 09:23:12 +0200
+Subject: [Buildroot] [PATCH] package/libbdplus: Add missing libgpg arch
+ support
+In-Reply-To: <1467669466-16341-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1467669466-16341-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20160705092312.0b7b1119@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b4ed7a7f9f11d3bb180045b2d907f30edb8280e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Thanks to Romain Naour for finding the culprit package.
+On Mon,  4 Jul 2016 23:57:46 +0200, Maxime Hadjinlian wrote:
 
-Fixes:
+>  comment "libbdplus needs a toolchain w/ threads, dynamic library"
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+> +		!BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
 
-  http://autobuild.buildroot.org/results/d06e3eb9ef48540b71fbec267c534523632b224f/
+That's not the proper way of taking into account architecture
+dependencies. What we want is that the comment is only displayed if the
+architecture requirements are met, so:
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Acked-by: Romain Naour <romain.naour@gmail.com>
-[Thomas: fix Config.in comment dependencies.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libbdplus/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+comment "libbdplus needs a toolchain w/ threads, dynamic library"
+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 
-diff --git a/package/libbdplus/Config.in b/package/libbdplus/Config.in
-index df5ea27..2d314d1 100644
---- a/package/libbdplus/Config.in
-+++ b/package/libbdplus/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBBDPLUS
- 	bool "libbdplus"
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBGCRYPT
-@@ -15,4 +16,5 @@ config BR2_PACKAGE_LIBBDPLUS
- 	  http://www.videolan.org/developers/libbdplus.html
- 
- comment "libbdplus needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+Applied with this fixed.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
