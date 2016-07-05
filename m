@@ -1,67 +1,97 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 5 Jul 2016 16:37:53 +0200
-Subject: [Buildroot] [PATCH] libiio: Bump version to 0.7
-In-Reply-To: <1467729343.2504.12.camel@analog.com>
-References: <1467714448-19177-1-git-send-email-paul.cercueil@analog.com>
- <c736b54e-15f5-81fe-8aec-06b856efcdc0@gmail.com>
- <1467729343.2504.12.camel@analog.com>
-Message-ID: <d1e6d01e-4df3-3fb1-1bd9-cbbab5cfaf36@gmail.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue,  5 Jul 2016 16:41:33 +0200
+Subject: [Buildroot] [PATCH v2] circus: new package
+Message-ID: <1467729693-27460-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Paul,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Le 05/07/2016 ? 16:35, Cercueil, Paul a ?crit :
-> Hi Romain,Le mardi 05 juillet 2016 ? 16:25 +0200, Romain Naour a ?crit :
->> Hi Paul,
->>
->> Le 05/07/2016 ? 12:27, Paul Cercueil a ?crit :
->>> The two previous patches have been merged upstream, so they have
->>> been
->>> deleted here. Another patch (picked from upstream) has been added
->>> to fix
->>> the build with thread-less toolchains.
->>>
->>> Libiio v0.7 provides two new backends, a USB backend (using libusb-
->>> 1.0)
->>> and a serial backend (using libserialport).
->>>
->>> Additionally, it is now possible to compile libiio with thread-less
->>> toolchains. In that case, thread safety is disabled.
->>
->> In the CMakeLists.txt, if WITH_NETWORK_BACKEND is selected then
->> NEED_THREADS is
->> set to 1. But you removed the dependency on BR2_TOOLCHAIN_HAS_THREADS
->> for
->> BR2_PACKAGE_LIBIIO_NETWORK_BACKEND, so it revert the previous fix.
->>
->> It's weird to select something that require threads support in
->> Buildroot which
->> is finally disabled by the build system.
->>
->> CMake Warning at CMakeLists.txt:239 (message):
->>   pthread library not found; support for threads will be disabled
-> 
-> The 'NEED_THREADS' in the CMakeLists.txt previously meant a hard
-> dependency on pthreads for the paths that enabled it. Now with v0.7,
-> its meaning switched to 'requires thread locking mechanisms of lock.c',
-> and those will be no-ops with a thread-less toolchain. So despite the
-> warning, the network backend will still compile and work fine.
+Reviewed-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes:
+	v2: fix merge conflict (Maxime Hadjinlian)
 
-Ok, thanks for the explanation :)
+ package/Config.in          |  1 +
+ package/circus/Config.in   | 21 +++++++++++++++++++++
+ package/circus/circus.hash |  3 +++
+ package/circus/circus.mk   | 14 ++++++++++++++
+ 4 files changed, 39 insertions(+)
+ create mode 100644 package/circus/Config.in
+ create mode 100644 package/circus/circus.hash
+ create mode 100644 package/circus/circus.mk
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-
-> 
-> Regards,
-> -Paul
-> 
->>
->
+diff --git a/package/Config.in b/package/Config.in
+index 6cc1d3e..4d3d202 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1635,6 +1635,7 @@ menu "System tools"
+ 	source "package/attr/Config.in"
+ 	source "package/audit/Config.in"
+ 	source "package/bootutils/Config.in"
++	source "package/circus/Config.in"
+ 	source "package/coreutils/Config.in"
+ 	source "package/cpuload/Config.in"
+ 	source "package/dcron/Config.in"
+diff --git a/package/circus/Config.in b/package/circus/Config.in
+new file mode 100644
+index 0000000..476a53e
+--- /dev/null
++++ b/package/circus/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_CIRCUS
++	bool "circus"
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
++	depends on BR2_USE_WCHAR # zeromq
++	depends on BR2_INSTALL_LIBSTDCPP # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	select BR2_PACKAGE_PYTHON_IOWAIT # runtime
++	select BR2_PACKAGE_PYTHON_PSUTIL # runtime
++	select BR2_PACKAGE_PYTHON_PYZMQ # runtime
++	select BR2_PACKAGE_PYTHON_TORNADO # runtime
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
++	help
++	  Circus is a program that will let you run and watch multiple
++	  processes and sockets.
++
++	  https://circus.readthedocs.org/en/latest/
++
++comment "circus needs a toolchain w/ C++, wchar, threads and Python2/3"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
++		BR2_TOOLCHAIN_HAS_THREADS && (BR2_PACKAGE_PYTHON || \
++		BR2_PACKAGE_PYTHON3))
+diff --git a/package/circus/circus.hash b/package/circus/circus.hash
+new file mode 100644
+index 0000000..728cad5
+--- /dev/null
++++ b/package/circus/circus.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/circus/json, sha256 locally computed
++md5	cddd4a8844907d8b6b402ca9c713d176  circus-0.13.0.tar.gz
++sha256	6201800a5fb05144b5e6c5ac9eb901b914305e8beaeb01f8edf54ab6ab1a295a  circus-0.13.0.tar.gz
+diff --git a/package/circus/circus.mk b/package/circus/circus.mk
+new file mode 100644
+index 0000000..a7693bd
+--- /dev/null
++++ b/package/circus/circus.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# circus
++#
++################################################################################
++
++CIRCUS_VERSION = 0.13.0
++CIRCUS_SOURCE = circus-$(CIRCUS_VERSION).tar.gz
++CIRCUS_SITE = https://pypi.python.org/packages/source/c/circus
++CIRCUS_SETUP_TYPE = setuptools
++CIRCUS_LICENSE = Apache-2.0
++CIRCUS_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+-- 
+2.8.1
