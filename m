@@ -1,256 +1,207 @@
-From: Paul Cercueil <paul.cercueil@analog.com>
-Date: Tue, 5 Jul 2016 12:25:14 +0200
-Subject: [Buildroot] [PATCH] configs: Use HTTPS URL for Github repos
-Message-ID: <1467714314-18935-1-git-send-email-paul.cercueil@analog.com>
+From: Joel Stanley <joel@jms.id.au>
+Date: Tue,  5 Jul 2016 21:57:25 +0930
+Subject: [Buildroot] [PATCH] binutils: Fix 2.26 build failures if makeinfo
+	is missing
+Message-ID: <1467721645-19613-1-git-send-email-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This makes it possible to clone git repositories hosted on Github while
-behind a firewall.
+This patch was introduced for the ARC toolchain in caf515e25e699eb. From
+that commit message:
 
-Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+    Build failed when "makeinfo" was missing on the build host.
+    This was happening because "makeinfo" is required to build .info targets
+    and make exited with error. The issue hadn't appeared before as there was
+    prebuilt documentation in ARC binutils tarballs, so no attempts had been
+    made to build docs.
+
+    Missing "makeinfo" only stops us from building docs
+    ("missing" script already throws a warning on that regard).
+    Let's continue to build other targets.
+
+    Now exit code of the script called "missing" is checked.
+    The value 127 means that "makeinfo" is not available on the build host.
+
+    So when such value occurs, 0 is returned to the top level makefile.
+    Documentation is not being built but further build of binutils continues.
+
+This was first discovered when building the OpenPower firmware:
+
+ https://github.com/open-power/op-build/issues/507#issuecomment-230390711
+
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
- configs/acmesystems_aria_g25_128mb_defconfig    | 2 +-
- configs/acmesystems_aria_g25_256mb_defconfig    | 2 +-
- configs/acmesystems_arietta_g25_128mb_defconfig | 2 +-
- configs/acmesystems_arietta_g25_256mb_defconfig | 2 +-
- configs/at91sam9g45m10ek_defconfig              | 2 +-
- configs/at91sam9rlek_defconfig                  | 2 +-
- configs/at91sam9x5ek_defconfig                  | 2 +-
- configs/atmel_sama5d3_xplained_defconfig        | 2 +-
- configs/atmel_sama5d3xek_defconfig              | 2 +-
- configs/atmel_sama5d4_xplained_defconfig        | 2 +-
- configs/atmel_sama5d4_xplained_mmc_defconfig    | 2 +-
- configs/atmel_sama5d4ek_defconfig               | 2 +-
- configs/via_imx6_vab820_defconfig               | 4 ++--
- configs/zynq_microzed_defconfig                 | 2 +-
- configs/zynq_zc706_defconfig                    | 4 ++--
- configs/zynq_zed_defconfig                      | 2 +-
- 16 files changed, 18 insertions(+), 18 deletions(-)
+ ...t-build-failures-when-makeinfo-is-missing.patch | 159 +++++++++++++++++++++
+ 1 file changed, 159 insertions(+)
+ create mode 100644 package/binutils/2.26.1/0800-Docs-Prevent-build-failures-when-makeinfo-is-missing.patch
 
-diff --git a/configs/acmesystems_aria_g25_128mb_defconfig b/configs/acmesystems_aria_g25_128mb_defconfig
-index fea30fa..c4d2cd6 100644
---- a/configs/acmesystems_aria_g25_128mb_defconfig
-+++ b/configs/acmesystems_aria_g25_128mb_defconfig
-@@ -15,6 +15,6 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
- # Bootloader
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="git://github.com/tanzilli/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/tanzilli/at91bootstrap.git"
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="3f957cec253abc80fd10c733e5e596f46e1aef56"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-128m"
-diff --git a/configs/acmesystems_aria_g25_256mb_defconfig b/configs/acmesystems_aria_g25_256mb_defconfig
-index f838a8e..ba191c6 100644
---- a/configs/acmesystems_aria_g25_256mb_defconfig
-+++ b/configs/acmesystems_aria_g25_256mb_defconfig
-@@ -15,6 +15,6 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
- # Bootloader
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="git://github.com/tanzilli/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/tanzilli/at91bootstrap.git"
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="3f957cec253abc80fd10c733e5e596f46e1aef56"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-256m"
-diff --git a/configs/acmesystems_arietta_g25_128mb_defconfig b/configs/acmesystems_arietta_g25_128mb_defconfig
-index 061cb8b..e5ddf13 100644
---- a/configs/acmesystems_arietta_g25_128mb_defconfig
-+++ b/configs/acmesystems_arietta_g25_128mb_defconfig
-@@ -16,7 +16,7 @@ BR2_LINUX_KERNEL_XZ=y
- # Bootloader
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="git://github.com/tanzilli/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/tanzilli/at91bootstrap.git"
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="cedbde4b36695b715f469f4872f47e5cc8115000"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="arietta-128m"
- 
-diff --git a/configs/acmesystems_arietta_g25_256mb_defconfig b/configs/acmesystems_arietta_g25_256mb_defconfig
-index 2d62837..cf6f67b 100644
---- a/configs/acmesystems_arietta_g25_256mb_defconfig
-+++ b/configs/acmesystems_arietta_g25_256mb_defconfig
-@@ -16,7 +16,7 @@ BR2_LINUX_KERNEL_XZ=y
- # Bootloader
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="git://github.com/tanzilli/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/tanzilli/at91bootstrap.git"
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="cedbde4b36695b715f469f4872f47e5cc8115000"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="arietta-256m"
- 
-diff --git a/configs/at91sam9g45m10ek_defconfig b/configs/at91sam9g45m10ek_defconfig
-index 70176e8..35618d5 100644
---- a/configs/at91sam9g45m10ek_defconfig
-+++ b/configs/at91sam9g45m10ek_defconfig
-@@ -17,6 +17,6 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9m10g45eknf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="at91sam9m10g45ek_nandflash"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
- BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/at91sam9rlek_defconfig b/configs/at91sam9rlek_defconfig
-index 5c6643b..66e4a88 100644
---- a/configs/at91sam9rlek_defconfig
-+++ b/configs/at91sam9rlek_defconfig
-@@ -17,6 +17,6 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9rleknf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="at91sam9rlek_nandflash"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
- BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/at91sam9x5ek_defconfig b/configs/at91sam9x5ek_defconfig
-index 2160a7e..79031b6 100644
---- a/configs/at91sam9x5ek_defconfig
-+++ b/configs/at91sam9x5ek_defconfig
-@@ -18,6 +18,6 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9x5eknf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="at91sam9x5ek_nandflash"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
- BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
-index 4eb5304..480f2fd 100644
---- a/configs/atmel_sama5d3_xplained_defconfig
-+++ b/configs/atmel_sama5d3_xplained_defconfig
-@@ -22,7 +22,7 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
- BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/atmel_sama5d3xek_defconfig b/configs/atmel_sama5d3xek_defconfig
-index 079378c..086c18e 100644
---- a/configs/atmel_sama5d3xek_defconfig
-+++ b/configs/atmel_sama5d3xek_defconfig
-@@ -20,7 +20,7 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3xeknf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="sama5d3xek_nandflash"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
- BR2_TARGET_UBOOT_SPL=y
- BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
-index ad4bff1..65313f3 100644
---- a/configs/atmel_sama5d4_xplained_defconfig
-+++ b/configs/atmel_sama5d4_xplained_defconfig
-@@ -26,7 +26,7 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
- BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/atmel_sama5d4_xplained_mmc_defconfig b/configs/atmel_sama5d4_xplained_mmc_defconfig
-index 5f0b748..7f93a82 100644
---- a/configs/atmel_sama5d4_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_defconfig
-@@ -22,7 +22,7 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-diff --git a/configs/atmel_sama5d4ek_defconfig b/configs/atmel_sama5d4ek_defconfig
-index 31f5a51..9d74eee 100644
---- a/configs/atmel_sama5d4ek_defconfig
-+++ b/configs/atmel_sama5d4ek_defconfig
-@@ -24,7 +24,7 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4eknf_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="sama5d4ek_nandflash"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
- BR2_TARGET_UBOOT_SPL=y
- BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/via_imx6_vab820_defconfig b/configs/via_imx6_vab820_defconfig
-index a86c513..fa646f0 100644
---- a/configs/via_imx6_vab820_defconfig
-+++ b/configs/via_imx6_vab820_defconfig
-@@ -9,7 +9,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/viaembedded/vab820-kernel-bsp.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/viaembedded/vab820-kernel-bsp.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="via_3.10.17_2.0.6"
- BR2_LINUX_KERNEL_DEFCONFIG="via_vab820"
- BR2_LINUX_KERNEL_UIMAGE=y
-@@ -21,7 +21,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-vab820"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6qvab820"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/viaembedded/vab820-uboot-bsp.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/viaembedded/vab820-uboot-bsp.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="via_3.10.17_2.0.6"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index 3faa3b8..06d0d7f 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -6,7 +6,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index fff49d3..2dc4adb 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -7,7 +7,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2014.2.01"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
-@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="zynq_zc70x"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2014.1"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
-diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
-index 0e2c8ff..d3cfa70 100644
---- a/configs/zynq_zed_defconfig
-+++ b/configs/zynq_zed_defconfig
-@@ -6,7 +6,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
+diff --git a/package/binutils/2.26.1/0800-Docs-Prevent-build-failures-when-makeinfo-is-missing.patch b/package/binutils/2.26.1/0800-Docs-Prevent-build-failures-when-makeinfo-is-missing.patch
+new file mode 100644
+index 000000000000..3f072decaafb
+--- /dev/null
++++ b/package/binutils/2.26.1/0800-Docs-Prevent-build-failures-when-makeinfo-is-missing.patch
+@@ -0,0 +1,159 @@
++From 5bd39e24e4903e49a0c301de4013c6b720862da1 Mon Sep 17 00:00:00 2001
++From: Zakharov Vlad <vzakhar@synopsys.com>
++Date: Fri, 3 Jun 2016 21:33:43 +0300
++Subject: [PATCH] Docs: Prevent build failures when "makeinfo" is missing
++
++Build failed when "makeinfo" was missing on the build host.
++This was happenning because "makeinfo" is required to build .info targets
++and make exited with error. But missing "makeinfo" only stops us from
++building docs ("missing" script already throws a warning on that regard).
++Let's continue to build other targets.
++
++Now exit code of the script called "missing" is checked.
++The value 127 means that "makeinfo" is not available on the build host.
++
++So when such value occurs 0 is returned to the top level makefile.
++Documentation is not being built but further build of binutils continues.
++
++Signed-off-by: Zakharov Vlad <vzakhar@synopsys.com>
++---
++ bfd/doc/Makefile.in      | 8 +++++++-
++ binutils/doc/Makefile.in | 8 +++++++-
++ gas/doc/Makefile.in      | 8 +++++++-
++ gprof/Makefile.in        | 8 +++++++-
++ ld/Makefile.in           | 8 +++++++-
++ 5 files changed, 35 insertions(+), 5 deletions(-)
++
++diff --git a/bfd/doc/Makefile.in b/bfd/doc/Makefile.in
++index be737f6..6c1eaf7 100644
++--- a/bfd/doc/Makefile.in
+++++ b/bfd/doc/Makefile.in
++@@ -468,6 +468,8 @@ mostlyclean-libtool:
++ clean-libtool:
++ 	-rm -rf .libs _libs
++ 
+++# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
+++# but return 0 to top level Makefile to build all other targets.
++ bfd.info: bfd.texinfo $(bfd_TEXINFOS)
++ 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
++ 	rm -rf $$backupdir && mkdir $$backupdir && \
++@@ -481,7 +483,11 @@ bfd.info: bfd.texinfo $(bfd_TEXINFOS)
++ 	then \
++ 	  rc=0; \
++ 	else \
++-	  rc=$$?; \
+++	  if test $$? -eq 127; then \
+++		rc=0; \
+++	  else \
+++	  	rc=$$?; \
+++	  fi; \
++ 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
++ 	fi; \
++ 	rm -rf $$backupdir; exit $$rc
++diff --git a/binutils/doc/Makefile.in b/binutils/doc/Makefile.in
++index ea3f938..8ed7884 100644
++--- a/binutils/doc/Makefile.in
+++++ b/binutils/doc/Makefile.in
++@@ -397,6 +397,8 @@ mostlyclean-libtool:
++ clean-libtool:
++ 	-rm -rf .libs _libs
++ 
+++# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
+++# but return 0 to top level Makefile to build all other targets.
++ binutils.info: binutils.texi 
++ 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
++ 	rm -rf $$backupdir && mkdir $$backupdir && \
++@@ -410,7 +412,11 @@ binutils.info: binutils.texi
++ 	then \
++ 	  rc=0; \
++ 	else \
++-	  rc=$$?; \
+++	  if test $$? -eq 127; then \
+++		rc=0; \
+++	  else \
+++		rc=$$?; \
+++	  fi; \
++ 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
++ 	fi; \
++ 	rm -rf $$backupdir; exit $$rc
++diff --git a/gas/doc/Makefile.in b/gas/doc/Makefile.in
++index 9ca5e8e..3159bc3 100644
++--- a/gas/doc/Makefile.in
+++++ b/gas/doc/Makefile.in
++@@ -425,6 +425,8 @@ mostlyclean-libtool:
++ clean-libtool:
++ 	-rm -rf .libs _libs
++ 
+++# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
+++# but return 0 to top level Makefile to build all other targets.
++ as.info: as.texinfo $(as_TEXINFOS)
++ 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
++ 	rm -rf $$backupdir && mkdir $$backupdir && \
++@@ -438,7 +440,11 @@ as.info: as.texinfo $(as_TEXINFOS)
++ 	then \
++ 	  rc=0; \
++ 	else \
++-	  rc=$$?; \
+++	  if test $$? -eq 127; then \
+++		rc=0; \
+++	  else \
+++	    rc=$$?; \
+++	  fi; \
++ 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
++ 	fi; \
++ 	rm -rf $$backupdir; exit $$rc
++diff --git a/gprof/Makefile.in b/gprof/Makefile.in
++index 67e85cd..c4040eb 100644
++--- a/gprof/Makefile.in
+++++ b/gprof/Makefile.in
++@@ -538,6 +538,8 @@ clean-libtool:
++ distclean-libtool:
++ 	-rm -f libtool config.lt
++ 
+++# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
+++# but return 0 to top level Makefile to build all other targets.
++ gprof.info: gprof.texi $(gprof_TEXINFOS)
++ 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
++ 	rm -rf $$backupdir && mkdir $$backupdir && \
++@@ -551,7 +553,11 @@ gprof.info: gprof.texi $(gprof_TEXINFOS)
++ 	then \
++ 	  rc=0; \
++ 	else \
++-	  rc=$$?; \
+++	  if test $$? -eq 127; then \
+++		rc=0; \
+++	  else \
+++		rc=$$?; \
+++	  fi; \
++ 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
++ 	fi; \
++ 	rm -rf $$backupdir; exit $$rc
++diff --git a/ld/Makefile.in b/ld/Makefile.in
++index 7c78198..08950a8 100644
++--- a/ld/Makefile.in
+++++ b/ld/Makefile.in
++@@ -1591,6 +1591,8 @@ clean-libtool:
++ distclean-libtool:
++ 	-rm -f libtool config.lt
++ 
+++# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
+++# but return 0 to top level Makefile to build all other targets.
++ ld.info: ld.texinfo $(ld_TEXINFOS)
++ 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
++ 	rm -rf $$backupdir && mkdir $$backupdir && \
++@@ -1604,7 +1606,11 @@ ld.info: ld.texinfo $(ld_TEXINFOS)
++ 	then \
++ 	  rc=0; \
++ 	else \
++-	  rc=$$?; \
+++	  if test $$? -eq 127; then \
+++		rc=0; \
+++	  else \
+++		rc=$$?; \
+++	  fi; \
++ 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
++ 	fi; \
++ 	rm -rf $$backupdir; exit $$rc
++-- 
++2.5.5
++
 -- 
 2.8.1
