@@ -1,83 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 5 Jul 2016 09:19:43 +0200
-Subject: [Buildroot] [PATCH] libmicrohttpd: fix thread detection on ARC
- and Blackfin
-In-Reply-To: <1467587383-30328-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1467587383-30328-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160705071943.GA6533@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2016 09:20:26 +0200
+Subject: [Buildroot] [git commit] package/libbdplus: add missing
+	libgpg-error arch dependency
+Message-ID: <20160705072049.8A4CF81A0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=4b4ed7a7f9f11d3bb180045b2d907f30edb8280e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-07-04 01:09 +0200, Thomas Petazzoni spake thusly:
-> Due to compiler deficiences, gcc on ARC and Blackfin doesn't define
-> _REENTRANT, which the latest version of the ax_pthread.m4
-> autoconf-archive macros looks at to determine whether thread support is
-> available or not.
-> 
-> Fixing the compilers is definitely the right thing to do, but it's not
-> doable for pre-built external toolchains like the Blackfin one, so for
-> now, we simply define _REENTRANT manually on ARC and Blackfin. If more
-> packages are affected by this problem, a more general solution will have
-> to be found.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/593/593b5050473a83a9ddcada9de39f8f14ab38d554/
-> http://autobuild.buildroot.net/results/ff0/ff058a378b91740b5b399f32a6b375fbc3c8df06/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Thanks to Romain Naour for finding the culprit package.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fixes:
 
-Regards,
-Yann E. MORIN.
+  http://autobuild.buildroot.org/results/d06e3eb9ef48540b71fbec267c534523632b224f/
 
-> ---
-> This commit is an improved solution based on the discussion that occured
-> on Bernd's patch at https://patchwork.ozlabs.org/patch/634835/.
-> ---
->  package/libmicrohttpd/libmicrohttpd.mk | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-> index c53676f..2266d3c 100644
-> --- a/package/libmicrohttpd/libmicrohttpd.mk
-> +++ b/package/libmicrohttpd/libmicrohttpd.mk
-> @@ -9,7 +9,17 @@ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
->  LIBMICROHTTPD_LICENSE_FILES = COPYING
->  LIBMICROHTTPD_INSTALL_STAGING = YES
->  LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-examples
-> -LIBMICROHTTPD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
-> +LIBMICROHTTPD_CFLAGS = $(TARGET_CFLAGS) -std=c99
-> +
-> +# gcc on arc and bfin doesn't define _REENTRANT when -pthread is
-> +# passed while it should. Compensate this defiency here otherwise
-> +# libmicrohttpd configure script doesn't find that thread support is
-> +# enabled.
-> +ifeq ($(BR2_arc)$(BR2_bfin),y)
-> +LIBMICROHTTPD_CFLAGS += -D_REENTRANT
-> +endif
-> +
-> +LIBMICROHTTPD_CONF_ENV += CFLAGS="$(LIBMICROHTTPD_CFLAGS)"
->  
->  ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
->  LIBMICROHTTPD_LICENSE = LGPLv2.1+
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Acked-by: Romain Naour <romain.naour@gmail.com>
+[Thomas: fix Config.in comment dependencies.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libbdplus/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libbdplus/Config.in b/package/libbdplus/Config.in
+index df5ea27..2d314d1 100644
+--- a/package/libbdplus/Config.in
++++ b/package/libbdplus/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBBDPLUS
+ 	bool "libbdplus"
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBGCRYPT
+@@ -15,4 +16,5 @@ config BR2_PACKAGE_LIBBDPLUS
+ 	  http://www.videolan.org/developers/libbdplus.html
+ 
+ comment "libbdplus needs a toolchain w/ threads, dynamic library"
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
