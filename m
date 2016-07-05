@@ -1,59 +1,56 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 5 Jul 2016 13:05:26 +0200
-Subject: [Buildroot] [PATCH 1/1] support/scripts/apply-patches.sh:
- handle tar and mkdir failures
-In-Reply-To: <1464178439-3333-1-git-send-email-sebastien.szymanski@armadeus.com>
-References: <1464178439-3333-1-git-send-email-sebastien.szymanski@armadeus.com>
-Message-ID: <a6707437-fd76-c538-3e21-eceaff76976e@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 5 Jul 2016 12:16:05 +0100
+Subject: [Buildroot] [PATCH v2] openblas: add an option to install tests on
+	the target
+Message-ID: <1467717365-27849-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi S?bastien,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v1 -> v2:
+ - Also install some necessary input files for the tests.
 
-Le 25/05/2016 ? 14:13, S?bastien Szymanski a ?crit :
-> With several archives in a space-separated list of patches, if one archive
-> cannot be untar (i.e because it is not readable), Buildroot keeps going instead
-> of aborting. Fix this by checking the tar return code.
-> While at it, check if the unpack archive directory creation is successful.
+ package/openblas/Config.in   |  3 +++
+ package/openblas/openblas.mk | 13 +++++++++++++
+ 2 files changed, 16 insertions(+)
 
-As discussed with other Buildroot developers, we prefer to use "set -e" in
-apply-patches.sh
-
-See:
-http://patchwork.ozlabs.org/patch/644705
-
-I'll mark you patch rejected in patchwork.
-
-Thanks!
-
-Best regards,
-Romain
-
-
-> 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> ---
->  support/scripts/apply-patches.sh | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-> index 201278d..b0a8ad4 100755
-> --- a/support/scripts/apply-patches.sh
-> +++ b/support/scripts/apply-patches.sh
-> @@ -132,7 +132,11 @@ function scan_patchdir {
->                  unpackedarchivedir="$builddir/.patches-$(basename $i)-unpacked"
->                  rm -rf "$unpackedarchivedir" 2> /dev/null
->                  mkdir "$unpackedarchivedir"
-> -                tar -C "$unpackedarchivedir" -xaf "${path}/$i"
-> +                if [ $? != 0 ] ; then
-> +                    echo "Error: cannot create $unpackedarchivedir directory."
-> +                    exit 1
-> +                fi
-> +                tar -C "$unpackedarchivedir" -xaf "${path}/$i" || exit 1
->                  scan_patchdir "$unpackedarchivedir"
->              else
->                  apply_patch "$path" "$i"
-> 
+diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+index 51afaec..67dbf71 100644
+--- a/package/openblas/Config.in
++++ b/package/openblas/Config.in
+@@ -59,4 +59,7 @@ config BR2_PACKAGE_OPENBLAS_TARGET
+ 	string "OpenBLAS target CPU"
+ 	default BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+ 
++config BR2_PACKAGE_OPENBLAS_INSTALL_TESTS
++	bool "Install OpenBLAS tests"
++
+ endif
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index baeef05..a5e5100 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
+@@ -53,4 +53,17 @@ define OPENBLAS_INSTALL_TARGET_CMDS
+ 		-C $(@D) install PREFIX=$(TARGET_DIR)/usr
+ endef
+ 
++ifeq ($(BR2_PACKAGE_OPENBLAS_INSTALL_TESTS),y)
++define OPENBLAS_INSTALL_TESTS
++	for i in test ctest utest; do \
++		mkdir -p $(TARGET_DIR)/usr/share/openblas/$$i && \
++		cd $(@D)/$$i && \
++		find . -type f -perm -a=x -exec $(INSTALL) -m 0755 {} $(TARGET_DIR)/usr/share/openblas/$$i/{} \; && \
++		find . -type f -name "?in*" -exec $(INSTALL) -m 0644 {} $(TARGET_DIR)/usr/share/openblas/$$i/{} \; && \
++		find . -type f -name "*.dat" -exec $(INSTALL) -m 0644 {} $(TARGET_DIR)/usr/share/openblas/$$i/{} \; ; \
++		done
++endef
++OPENBLAS_POST_INSTALL_TARGET_HOOKS += OPENBLAS_INSTALL_TESTS
++endif
++
+ $(eval $(generic-package))
+-- 
+2.7.3
