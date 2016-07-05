@@ -1,39 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 19:15:12 +0200
-Subject: [Buildroot] [PATCH v2 1/1] acpica: new package
-In-Reply-To: <20160703104535.10401-1-nunes.erico@gmail.com>
-References: <20160703104535.10401-1-nunes.erico@gmail.com>
-Message-ID: <20160705191512.1109aa83@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 5 Jul 2016 19:16:15 +0200
+Subject: [Buildroot] [PATCH v6 1/6] audit: bump to version 2.6
+In-Reply-To: <1466980753-667-2-git-send-email-Aduskett@gmail.com>
+References: <1466980753-667-1-git-send-email-Aduskett@gmail.com>
+ <1466980753-667-2-git-send-email-Aduskett@gmail.com>
+Message-ID: <20160705171615.GJ6533@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Adam, All,
 
-On Sun,  3 Jul 2016 12:45:35 +0200, Erico Nunes wrote:
-> The ACPI Component Architecture (ACPICA) project provides an operating
-> system (OS)-independent reference implementation of the Advanced
-> Configuration and Power Interface Specification (ACPI).
-> 
-> It contains tools such as acpidump, iasl, acpixtract, etc.
-> 
-> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
+On 2016-06-26 18:39 -0400, Adam Duskett spake thusly:
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > ---
+[--SNIP--]
+> diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+> index 1fbc623..937244d 100644
+> --- a/package/audit/audit.mk
+> +++ b/package/audit/audit.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -AUDIT_VERSION = 2.4.4
+> +AUDIT_VERSION = 2.6
 
-This package fails to build on MIPS64:
+This is causing a bunch of autobuilder failures:
+    http://autobuild.buildroot.org/?reason=audit-2.6.2
 
-   http://autobuild.buildroot.net/results/d7a/d7adbd07c5e74f0305ac03fab615290dfa20e9b5/build-end.log
+Care to have a look at it, please?
 
-Could you have a look ?
+Regards,
+Yann E. MORIN.
 
-Thanks,
+>  AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+>  AUDIT_LICENSE = GPLv2
+>  AUDIT_LICENSE_FILES = COPYING
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
