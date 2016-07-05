@@ -1,49 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 18:04:02 +0200
-Subject: [Buildroot] [PATCH] dante: New package
-In-Reply-To: <1467449278-3166-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1467449278-3166-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20160705180402.54cfe139@free-electrons.com>
+Date: Tue, 5 Jul 2016 18:04:54 +0200
+Subject: [Buildroot] [git commit] package/sphinxbase: add missing dependency
+	on host-bison
+Message-ID: <20160705160521.6B38A81841@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=01f5b511cbbc787c1235a11e10669c2fed05ef76
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  2 Jul 2016 10:47:58 +0200, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/Config.in           |  1 +
->  package/dante/Config.in     |  9 +++++++++
->  package/dante/S50dante      | 40 ++++++++++++++++++++++++++++++++++++++++
->  package/dante/dante.hash    |  2 ++
->  package/dante/dante.mk      | 32 ++++++++++++++++++++++++++++++++
->  package/dante/dante.service | 15 +++++++++++++++
->  6 files changed, 99 insertions(+)
->  create mode 100644 package/dante/Config.in
->  create mode 100644 package/dante/S50dante
->  create mode 100644 package/dante/dante.hash
->  create mode 100644 package/dante/dante.mk
->  create mode 100644 package/dante/dante.service
+Fixes:
 
-Applied after doing a "few" changes:
+  http://autobuild.buildroot.net/results/741f04fce74b4dfc4d4405d14c82c21f67cbfff1/
 
-    [Thomas:
-     - Add dependency on BR2_USE_MMU
-     - Rewrap Config.in help text
-     - PID file goes in /var/run/
-     - Daemon to start is /usr/sbin/sockd, not /usr/sbin/dante
-     - Remove staging installation, as it is not needed
-     - Remove --enable-debug, since that's not what BR2_ENABLE_DEBUG is
-       meant for
-     - Install an example configuration file.]
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sphinxbase/sphinxbase.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/sphinxbase/sphinxbase.mk b/package/sphinxbase/sphinxbase.mk
+index a8f9a53..5c87c89 100644
+--- a/package/sphinxbase/sphinxbase.mk
++++ b/package/sphinxbase/sphinxbase.mk
+@@ -11,6 +11,9 @@ SPHINXBASE_LICENSE = BSD-2c
+ # 5prealpha tarballs". The license is contained in the copyright notice at the
+ # top of each source file. For example:
+ SPHINXBASE_LICENSE_FILES = src/libsphinxbase/util/bio.c
++
++SPHINXBASE_DEPENDENCIES = host-bison
++
+ SPHINXBASE_CONF_OPTS = --without-python --without-lapack
+ 
+ $(eval $(autotools-package))
