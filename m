@@ -1,98 +1,256 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 5 Jul 2016 13:52:24 +0200
-Subject: [Buildroot] [PATCH] package/rs485conf: new package
-In-Reply-To: <20160705083850.13914-1-m.niestroj@grinn-global.com>
-References: <20160705083850.13914-1-m.niestroj@grinn-global.com>
-Message-ID: <CAGduivyarJQ8aDNbXmT84CmGDpMYvUF+UAH6tCrah46ZMyab_g@mail.gmail.com>
+From: Paul Cercueil <paul.cercueil@analog.com>
+Date: Tue, 5 Jul 2016 12:25:14 +0200
+Subject: [Buildroot] [PATCH] configs: Use HTTPS URL for Github repos
+Message-ID: <1467714314-18935-1-git-send-email-paul.cercueil@analog.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Marcin, all
+This makes it possible to clone git repositories hosted on Github while
+behind a firewall.
 
+Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+---
+ configs/acmesystems_aria_g25_128mb_defconfig    | 2 +-
+ configs/acmesystems_aria_g25_256mb_defconfig    | 2 +-
+ configs/acmesystems_arietta_g25_128mb_defconfig | 2 +-
+ configs/acmesystems_arietta_g25_256mb_defconfig | 2 +-
+ configs/at91sam9g45m10ek_defconfig              | 2 +-
+ configs/at91sam9rlek_defconfig                  | 2 +-
+ configs/at91sam9x5ek_defconfig                  | 2 +-
+ configs/atmel_sama5d3_xplained_defconfig        | 2 +-
+ configs/atmel_sama5d3xek_defconfig              | 2 +-
+ configs/atmel_sama5d4_xplained_defconfig        | 2 +-
+ configs/atmel_sama5d4_xplained_mmc_defconfig    | 2 +-
+ configs/atmel_sama5d4ek_defconfig               | 2 +-
+ configs/via_imx6_vab820_defconfig               | 4 ++--
+ configs/zynq_microzed_defconfig                 | 2 +-
+ configs/zynq_zc706_defconfig                    | 4 ++--
+ configs/zynq_zed_defconfig                      | 2 +-
+ 16 files changed, 18 insertions(+), 18 deletions(-)
 
-
-On Tue, Jul 5, 2016 at 10:38 AM, Marcin Niestroj
-<m.niestroj@grinn-global.com> wrote:
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> ---
->  package/Config.in                |  1 +
->  package/rs485conf/Config.in      |  9 +++++++++
->  package/rs485conf/rs485conf.hash |  2 ++
->  package/rs485conf/rs485conf.mk   | 20 ++++++++++++++++++++
->  4 files changed, 32 insertions(+)
->  create mode 100644 package/rs485conf/Config.in
->  create mode 100644 package/rs485conf/rs485conf.hash
->  create mode 100644 package/rs485conf/rs485conf.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 9d20f6b..cf25982 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -430,6 +430,7 @@ endmenu
->         source "package/rfkill/Config.in"
->         source "package/rng-tools/Config.in"
->         source "package/rpi-userland/Config.in"
-> +       source "package/rs485conf/Config.in"
->         source "package/rtl8188eu/Config.in"
->         source "package/rtl8821au/Config.in"
->         source "package/sane-backends/Config.in"
-> diff --git a/package/rs485conf/Config.in b/package/rs485conf/Config.in
-> new file mode 100644
-> index 0000000..ff0b743
-> --- /dev/null
-> +++ b/package/rs485conf/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_RS485CONF
-> +       bool "rs485conf"
-> +       help
-> +         rs485conf is intended to be used on embedded boards with RS485
-> +         interface. It can show as well as modify RS485 configuration
-> +         parameters of TTY device with easy to use command line
-> +         options.
-> +
-> +         https://github.com/mniestroj/rs485conf
-> diff --git a/package/rs485conf/rs485conf.hash b/package/rs485conf/rs485conf.hash
-> new file mode 100644
-> index 0000000..e2ccbfd
-> --- /dev/null
-> +++ b/package/rs485conf/rs485conf.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256 f163f81cd50aae6fa39cbb4f6408a3699da7a87a56649c4b96d6f168c9be6a7d rs485conf-5c8d00cf70950fab3454549b81dea843d844492a.tar.gz
-> diff --git a/package/rs485conf/rs485conf.mk b/package/rs485conf/rs485conf.mk
-> new file mode 100644
-> index 0000000..7fda39c
-> --- /dev/null
-> +++ b/package/rs485conf/rs485conf.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# rs485conf
-> +#
-> +################################################################################
-> +
-> +RS485CONF_VERSION = 5c8d00cf70950fab3454549b81dea843d844492a
-> +RS485CONF_SITE = $(call github,mniestroj,rs485conf,$(RS485CONF_VERSION))
-> +RS485CONF_LICENSE = BSD-3c
-> +RS485CONF_LICENSE_FILES = LICENSE
-> +
-> +define RS485CONF_BUILD_CMDS
-> +       $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-> +endef
-> +
-> +define RS485CONF_INSTALL_TARGET_CMDS
-> +       $(MAKE) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
-> +endef
-> +
-> +$(eval $(generic-package))
-> --
-> 2.9.0
->
-Reviewed-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/configs/acmesystems_aria_g25_128mb_defconfig b/configs/acmesystems_aria_g25_128mb_defconfig
+index fea30fa..c4d2cd6 100644
+--- a/configs/acmesystems_aria_g25_128mb_defconfig
++++ b/configs/acmesystems_aria_g25_128mb_defconfig
+@@ -15,6 +15,6 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
+ # Bootloader
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="git://github.com/tanzilli/at91bootstrap.git"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/tanzilli/at91bootstrap.git"
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="3f957cec253abc80fd10c733e5e596f46e1aef56"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-128m"
+diff --git a/configs/acmesystems_aria_g25_256mb_defconfig b/configs/acmesystems_aria_g25_256mb_defconfig
+index f838a8e..ba191c6 100644
+--- a/configs/acmesystems_aria_g25_256mb_defconfig
++++ b/configs/acmesystems_aria_g25_256mb_defconfig
+@@ -15,6 +15,6 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
+ # Bootloader
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="git://github.com/tanzilli/at91bootstrap.git"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/tanzilli/at91bootstrap.git"
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="3f957cec253abc80fd10c733e5e596f46e1aef56"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-256m"
+diff --git a/configs/acmesystems_arietta_g25_128mb_defconfig b/configs/acmesystems_arietta_g25_128mb_defconfig
+index 061cb8b..e5ddf13 100644
+--- a/configs/acmesystems_arietta_g25_128mb_defconfig
++++ b/configs/acmesystems_arietta_g25_128mb_defconfig
+@@ -16,7 +16,7 @@ BR2_LINUX_KERNEL_XZ=y
+ # Bootloader
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="git://github.com/tanzilli/at91bootstrap.git"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/tanzilli/at91bootstrap.git"
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="cedbde4b36695b715f469f4872f47e5cc8115000"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="arietta-128m"
+ 
+diff --git a/configs/acmesystems_arietta_g25_256mb_defconfig b/configs/acmesystems_arietta_g25_256mb_defconfig
+index 2d62837..cf6f67b 100644
+--- a/configs/acmesystems_arietta_g25_256mb_defconfig
++++ b/configs/acmesystems_arietta_g25_256mb_defconfig
+@@ -16,7 +16,7 @@ BR2_LINUX_KERNEL_XZ=y
+ # Bootloader
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="git://github.com/tanzilli/at91bootstrap.git"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/tanzilli/at91bootstrap.git"
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="cedbde4b36695b715f469f4872f47e5cc8115000"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="arietta-256m"
+ 
+diff --git a/configs/at91sam9g45m10ek_defconfig b/configs/at91sam9g45m10ek_defconfig
+index 70176e8..35618d5 100644
+--- a/configs/at91sam9g45m10ek_defconfig
++++ b/configs/at91sam9g45m10ek_defconfig
+@@ -17,6 +17,6 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9m10g45eknf_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="at91sam9m10g45ek_nandflash"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
+ BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/configs/at91sam9rlek_defconfig b/configs/at91sam9rlek_defconfig
+index 5c6643b..66e4a88 100644
+--- a/configs/at91sam9rlek_defconfig
++++ b/configs/at91sam9rlek_defconfig
+@@ -17,6 +17,6 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9rleknf_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="at91sam9rlek_nandflash"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
+ BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/configs/at91sam9x5ek_defconfig b/configs/at91sam9x5ek_defconfig
+index 2160a7e..79031b6 100644
+--- a/configs/at91sam9x5ek_defconfig
++++ b/configs/at91sam9x5ek_defconfig
+@@ -18,6 +18,6 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9x5eknf_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="at91sam9x5ek_nandflash"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
+ BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
+index 4eb5304..480f2fd 100644
+--- a/configs/atmel_sama5d3_xplained_defconfig
++++ b/configs/atmel_sama5d3_xplained_defconfig
+@@ -22,7 +22,7 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
+ BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/configs/atmel_sama5d3xek_defconfig b/configs/atmel_sama5d3xek_defconfig
+index 079378c..086c18e 100644
+--- a/configs/atmel_sama5d3xek_defconfig
++++ b/configs/atmel_sama5d3xek_defconfig
+@@ -20,7 +20,7 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3xeknf_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="sama5d3xek_nandflash"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
+index ad4bff1..65313f3 100644
+--- a/configs/atmel_sama5d4_xplained_defconfig
++++ b/configs/atmel_sama5d4_xplained_defconfig
+@@ -26,7 +26,7 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
+ BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/configs/atmel_sama5d4_xplained_mmc_defconfig b/configs/atmel_sama5d4_xplained_mmc_defconfig
+index 5f0b748..7f93a82 100644
+--- a/configs/atmel_sama5d4_xplained_mmc_defconfig
++++ b/configs/atmel_sama5d4_xplained_mmc_defconfig
+@@ -22,7 +22,7 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/configs/atmel_sama5d4ek_defconfig b/configs/atmel_sama5d4ek_defconfig
+index 31f5a51..9d74eee 100644
+--- a/configs/atmel_sama5d4ek_defconfig
++++ b/configs/atmel_sama5d4ek_defconfig
+@@ -24,7 +24,7 @@ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4eknf_uboot_secure"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="sama5d4ek_nandflash"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/configs/via_imx6_vab820_defconfig b/configs/via_imx6_vab820_defconfig
+index a86c513..fa646f0 100644
+--- a/configs/via_imx6_vab820_defconfig
++++ b/configs/via_imx6_vab820_defconfig
+@@ -9,7 +9,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/viaembedded/vab820-kernel-bsp.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/viaembedded/vab820-kernel-bsp.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="via_3.10.17_2.0.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="via_vab820"
+ BR2_LINUX_KERNEL_UIMAGE=y
+@@ -21,7 +21,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-vab820"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6qvab820"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/viaembedded/vab820-uboot-bsp.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/viaembedded/vab820-uboot-bsp.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="via_3.10.17_2.0.6"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
+index 3faa3b8..06d0d7f 100644
+--- a/configs/zynq_microzed_defconfig
++++ b/configs/zynq_microzed_defconfig
+@@ -6,7 +6,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
+index fff49d3..2dc4adb 100644
+--- a/configs/zynq_zc706_defconfig
++++ b/configs/zynq_zc706_defconfig
+@@ -7,7 +7,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2014.2.01"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="zynq_zc70x"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2014.1"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
+index 0e2c8ff..d3cfa70 100644
+--- a/configs/zynq_zed_defconfig
++++ b/configs/zynq_zed_defconfig
+@@ -6,7 +6,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+-- 
+2.8.1
