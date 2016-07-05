@@ -1,61 +1,98 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 5 Jul 2016 13:37:14 +0200
-Subject: [Buildroot] [PATCH 5/5] binutils: fix build of 2.26 when
- makeinfo is not available
-In-Reply-To: <1467712019-24632-5-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1467712019-24632-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1467712019-24632-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <7fa13621-8f15-d961-c0cd-e4bd48d9d266@gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Tue, 5 Jul 2016 13:52:24 +0200
+Subject: [Buildroot] [PATCH] package/rs485conf: new package
+In-Reply-To: <20160705083850.13914-1-m.niestroj@grinn-global.com>
+References: <20160705083850.13914-1-m.niestroj@grinn-global.com>
+Message-ID: <CAGduivyarJQ8aDNbXmT84CmGDpMYvUF+UAH6tCrah46ZMyab_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-Le 05/07/2016 ? 11:46, Thomas Petazzoni a ?crit :
-> The 2.26 binutils tarball has incorrect timestamps for the .info files,
-> so binutils build system tries to regenerate them with makeinfo. In
-> order to avoid depending on host-texinfo, we simply touch the .info
-> files so that their timestamp is newer than the corresponding source
-> files.
-
-Build issue reproduced and fixed with this patch.
-
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Tested-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
+Hi Marcin, all
 
 
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+On Tue, Jul 5, 2016 at 10:38 AM, Marcin Niestroj
+<m.niestroj@grinn-global.com> wrote:
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
->  package/binutils/binutils.mk | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-> index 33aaf85..50a3531 100644
-> --- a/package/binutils/binutils.mk
-> +++ b/package/binutils/binutils.mk
-> @@ -33,6 +33,17 @@ BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
->  HOST_BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
->  endif
->  
-> +# The .info files in the 2.26 tarball have an incorrect timestamp, so
-> +# binutils tries to re-generate them. In order to avoid the dependency
-> +# on host-texinfo, we simply update the timestamps.
-> +ifeq ($(BR2_BINUTILS_VERSION_2_26_X),y)
-> +define BINUTILS_FIXUP_INFO_TIMESTAMPS
-> +	find $(@D) -name '*.info' -exec touch {} \;
-> +endef
-> +BINUTILS_POST_PATCH_HOOKS += BINUTILS_FIXUP_INFO_TIMESTAMPS
-> +HOST_BINUTILS_POST_PATCH_HOOKS += BINUTILS_FIXUP_INFO_TIMESTAMPS
-> +endif
+>  package/Config.in                |  1 +
+>  package/rs485conf/Config.in      |  9 +++++++++
+>  package/rs485conf/rs485conf.hash |  2 ++
+>  package/rs485conf/rs485conf.mk   | 20 ++++++++++++++++++++
+>  4 files changed, 32 insertions(+)
+>  create mode 100644 package/rs485conf/Config.in
+>  create mode 100644 package/rs485conf/rs485conf.hash
+>  create mode 100644 package/rs485conf/rs485conf.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 9d20f6b..cf25982 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -430,6 +430,7 @@ endmenu
+>         source "package/rfkill/Config.in"
+>         source "package/rng-tools/Config.in"
+>         source "package/rpi-userland/Config.in"
+> +       source "package/rs485conf/Config.in"
+>         source "package/rtl8188eu/Config.in"
+>         source "package/rtl8821au/Config.in"
+>         source "package/sane-backends/Config.in"
+> diff --git a/package/rs485conf/Config.in b/package/rs485conf/Config.in
+> new file mode 100644
+> index 0000000..ff0b743
+> --- /dev/null
+> +++ b/package/rs485conf/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_RS485CONF
+> +       bool "rs485conf"
+> +       help
+> +         rs485conf is intended to be used on embedded boards with RS485
+> +         interface. It can show as well as modify RS485 configuration
+> +         parameters of TTY device with easy to use command line
+> +         options.
 > +
->  # When binutils sources are fetched from the binutils-gdb repository,
->  # they also contain the gdb sources, but gdb shouldn't be built, so we
->  # disable it.
-> 
+> +         https://github.com/mniestroj/rs485conf
+> diff --git a/package/rs485conf/rs485conf.hash b/package/rs485conf/rs485conf.hash
+> new file mode 100644
+> index 0000000..e2ccbfd
+> --- /dev/null
+> +++ b/package/rs485conf/rs485conf.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256 f163f81cd50aae6fa39cbb4f6408a3699da7a87a56649c4b96d6f168c9be6a7d rs485conf-5c8d00cf70950fab3454549b81dea843d844492a.tar.gz
+> diff --git a/package/rs485conf/rs485conf.mk b/package/rs485conf/rs485conf.mk
+> new file mode 100644
+> index 0000000..7fda39c
+> --- /dev/null
+> +++ b/package/rs485conf/rs485conf.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# rs485conf
+> +#
+> +################################################################################
+> +
+> +RS485CONF_VERSION = 5c8d00cf70950fab3454549b81dea843d844492a
+> +RS485CONF_SITE = $(call github,mniestroj,rs485conf,$(RS485CONF_VERSION))
+> +RS485CONF_LICENSE = BSD-3c
+> +RS485CONF_LICENSE_FILES = LICENSE
+> +
+> +define RS485CONF_BUILD_CMDS
+> +       $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+> +endef
+> +
+> +define RS485CONF_INSTALL_TARGET_CMDS
+> +       $(MAKE) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 2.9.0
+>
+Reviewed-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
