@@ -1,153 +1,59 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 5 Jul 2016 09:52:34 +0200
-Subject: [Buildroot] [PATCH v7 1/3] runc: new package
-In-Reply-To: <1467671433-18113-1-git-send-email-christian@paral.in>
-References: <1467671433-18113-1-git-send-email-christian@paral.in>
-Message-ID: <1dcc33b5-5c11-ecca-b187-102f11488170@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2016 09:48:19 +0200
+Subject: [Buildroot] [git commit] arch: define dependencies for the binfmt
+	flat formats
+Message-ID: <20160705075425.A5EA7821FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Christian,
+commit: https://git.buildroot.net/buildroot/commit/?id=49d97993d83f92bb975110a7ff49ea75a84ee2c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 05/07/2016 ? 00:30, Christian Stewart a ?crit :
-> runC is a CLI tool for spawning and running containers according to the
-> OCP specification.
-> 
-> runC is used by the latest Docker engine versions, however, runc itself
-> is standalone and has no other dependencies.
-> 
-> https://runc.io/
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+The situation looks like following for elf2flt and binfmt FLAT:
 
-If you get a reviewed/acked/tested tag on a patch in a series and if you do not
-change it, you can keep the tag when you respin the series.
+ * Only gcc for bfin/m68k implements
+   -msep-data (BR2_BINFMT_FLAT_SEP_DATA) and
+   -mid-shared-library (BR2_BINFMT_FLAT_SHARED), so the corresponding
+   options are made only visible on those architectures.
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+ * When the default of BR2_BINFMT_FLAT_ONE is used on m68k, broken
+   binaries are produced, which mainly end up in SIGILL, so do not use
+   it for m68k.
 
-Best regards,
-Romain
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+[Thomas:
+ - also add the dependencies on m68k/bfin to BR2_BINFMT_FLAT_SHARED
+ - rework commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-
-> 
-> ---
-> 
-> Changes since v1:
->  - use call github to generate source url
-> Changes since v3:
->  - fix indentation in Config.in
->  - add dep on threads in Config.in
->  - break gopath into separate variable
->  - use HOST_GO_TARGET_ENV
-> Changes since v4:
->  - use RUNC_VERSION instead of commit hash
->  - only show comment when build is possible with threads enabled
-> Changes since v5:
->  - bump to v1.0.0-rc1
-> 
-> ---
-> ---
->  package/Config.in      |  1 +
->  package/runc/Config.in | 13 +++++++++++++
->  package/runc/runc.hash |  2 ++
->  package/runc/runc.mk   | 46 ++++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 62 insertions(+)
->  create mode 100644 package/runc/Config.in
->  create mode 100644 package/runc/runc.hash
->  create mode 100644 package/runc/runc.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 2c4c196..078436e 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1665,6 +1665,7 @@ menu "System tools"
->  	source "package/pwgen/Config.in"
->  	source "package/quota/Config.in"
->  	source "package/rsyslog/Config.in"
-> +	source "package/runc/Config.in"
->  	source "package/scrub/Config.in"
->  	source "package/scrypt/Config.in"
->  	source "package/smack/Config.in"
-> diff --git a/package/runc/Config.in b/package/runc/Config.in
-> new file mode 100644
-> index 0000000..1802e59
-> --- /dev/null
-> +++ b/package/runc/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_RUNC
-> +	bool "runc"
-> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	help
-> +	  runC is a CLI tool for spawning and running containers
-> +	  according to the OCP specification.
-> +
-> +	  https://github.com/opencontainers/runc
-> +
-> +comment "runc needs a toolchain w/ threads"
-> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-> new file mode 100644
-> index 0000000..e6ec483
-> --- /dev/null
-> +++ b/package/runc/runc.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256 77f9d4df1657fecc939be0261fcccccd34d5b22c02b8a49abad23fac33b4059a  runc-v1.0.0-rc1.tar.gz
-> diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-> new file mode 100644
-> index 0000000..3f352bd
-> --- /dev/null
-> +++ b/package/runc/runc.mk
-> @@ -0,0 +1,46 @@
-> +################################################################################
-> +#
-> +# runc
-> +#
-> +################################################################################
-> +
-> +RUNC_VERSION = v1.0.0-rc1
-> +RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
-> +
-> +RUNC_LICENSE = Apache-2.0
-> +RUNC_LICENSE_FILES = LICENSE
-> +
-> +RUNC_DEPENDENCIES = host-go
-> +
-> +RUNC_GOPATH = "$(@D)/Godeps/_workspace"
-> +RUNC_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-> +	CGO_ENABLED=1 \
-> +	GOBIN="$(@D)/bin" \
-> +	GOPATH="$(RUNC_GOPATH)"
-> +
-> +RUNC_GLDFLAGS = \
-> +	-X main.gitCommit=$(RUNC_VERSION) \
-> +	-extldflags '-static'
-> +
-> +RUNC_GOTAGS = cgo static_build
-> +
-> +ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-> +RUNC_GOTAGS += seccomp
-> +RUNC_DEPENDENCIES += libseccomp
-> +endif
-> +
-> +define RUNC_CONFIGURE_CMDS
-> +	mkdir -p $(RUNC_GOPATH)/src/github.com/opencontainers
-> +	ln -s $(@D) $(RUNC_GOPATH)/src/github.com/opencontainers/runc
-> +endef
-> +
-> +define RUNC_BUILD_CMDS
-> +	cd $(@D) && $(RUNC_MAKE_ENV) $(HOST_DIR)/usr/bin/go \
-> +		build -v -o $(@D)/bin/runc -tags "$(RUNC_GOTAGS)" -ldflags "$(RUNC_GLDFLAGS)" .
-> +endef
-> +
-> +define RUNC_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/bin/runc $(TARGET_DIR)/usr/bin/runc
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
+diff --git a/arch/Config.in b/arch/Config.in
+index be37481..b980e05 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -331,17 +331,20 @@ choice
+ 
+ config BR2_BINFMT_FLAT_ONE
+ 	bool "One memory region"
++	depends on !BR2_m68k
+ 	help
+ 	  All segments are linked into one memory region.
+ 
+ config BR2_BINFMT_FLAT_SEP_DATA
+ 	bool "Separate data and code region"
++	depends on BR2_m68k || BR2_bfin
+ 	help
+ 	  Allow for the data and text segments to be separated and placed in
+ 	  different regions of memory.
+ 
+ config BR2_BINFMT_FLAT_SHARED
+ 	bool "Shared binary"
++	depends on BR2_m68k || BR2_bfin
+ 	# Even though this really generates shared binaries, there is no libdl
+ 	# and dlopen() cannot be used. So packages that require shared
+ 	# libraries cannot be built. Therefore, we don't select
