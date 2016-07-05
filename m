@@ -1,114 +1,215 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 5 Jul 2016 13:19:40 +0200
-Subject: [Buildroot] [PATCH] uboot: install multiple spl images
-In-Reply-To: <CAAXf6LXZaUpnRxKqP28fKaMWwPqssq+TkR3MDhsntv_VcGa7ZQ@mail.gmail.com>
-References: <1457648583-25071-1-git-send-email-jason.abele@gmail.com>
- <CAAXf6LXZaUpnRxKqP28fKaMWwPqssq+TkR3MDhsntv_VcGa7ZQ@mail.gmail.com>
-Message-ID: <CAGduivx0fbyTUqyWrXiHPo+dfMUc-UZGFhmYZyVvRzz+o7WxKA@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 5 Jul 2016 13:25:19 +0200
+Subject: [Buildroot] [PATCH 2/5] binutils: build host-texinfo if needed
+In-Reply-To: <1467712019-24632-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1467712019-24632-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1467712019-24632-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <550d850f-9508-89c0-64ac-c6555ab9983f@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jason, all,
+Hi Thomas,
 
-I have respinned your patch, you can find it here:
-https://patchwork.ozlabs.org/patch/644708/
+Le 05/07/2016 ? 11:46, Thomas Petazzoni a ?crit :
+> This commit adds the dependency on host-texinfo to binutils, when the
+> source is fetched from Git. Thanks to this, we can remove the
+> 0800-Docs-Prevent-build-failures-when-makeinfo-is-missing.patch patch
+> from the ARC-specific version of binutils.
 
-Your patch has been marked as "Changes Requested" in our patchwork.
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
-Thomas: I haven't taken into account your demand since you have a
-patch, it's better that you send yours it will match your needs better
-that what I could propose :).
+Best regards,
+Romain
 
-Thanks for your patch
-
-On Wed, May 4, 2016 at 5:08 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Hi,
->
-> (late reply, just noticed this patch)
->
-> On Thu, Mar 10, 2016 at 11:23 PM, Jason Abele <jason.abele@gmail.com> wrote:
->> From: Jason Abele <jason@nextthing.co>
->>
->> For some platforms, there are multiple generated spl images.  Extend
->> BR2_TARGET_UBOOT_SPL_NAME to allow these multiple images to be installed
->> after uboot build completes.
->>
->> Signed-off-by: Jason Abele <jason@nextthing.co>
->> ---
->> For example, the NextThingCo C.H.I.P. uses two binaries from uboot,
->> spl/sunxi-spl.bin and spl/sunxi-spl-with-ecc.bin.
->>
->> This patch allows them to be listed explicitly.
->>
->>  boot/uboot/Config.in |  2 +-
->>  boot/uboot/uboot.mk  | 12 ++++++++----
->>  2 files changed, 9 insertions(+), 5 deletions(-)
->>
->> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
->> index 4a6dc56..d4f9445 100644
->> --- a/boot/uboot/Config.in
->> +++ b/boot/uboot/Config.in
->> @@ -322,7 +322,7 @@ config BR2_TARGET_UBOOT_SPL_NAME
->>         default "spl/u-boot-spl.bin"
->>         depends on BR2_TARGET_UBOOT_SPL
->>         help
->> -         This is the name of the SPL binary, generated during
->> +         A space-separated list of SPL binaries, generated during
->>           u-boot build. For most platform it is spl/u-boot-spl.bin
->>           but not always. It is MLO on OMAP for example.
->>
->> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
->> index d539b31..aae99f8 100644
->> --- a/boot/uboot/uboot.mk
->> +++ b/boot/uboot/uboot.mk
->> @@ -169,7 +169,9 @@ define UBOOT_INSTALL_IMAGES_CMDS
->>         $(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
->>                 cp -dpf $(@D)/$(UBOOT_MAKE_TARGET) $(BINARIES_DIR))
->>         $(if $(BR2_TARGET_UBOOT_SPL),
->> -               cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
->> +               for p in $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)); do \
->> +                       cp -dpf $(@D)/$$p $(BINARIES_DIR)/; \
->> +               done)
->>         $(if $(BR2_TARGET_UBOOT_ENVIMAGE),
->>                 $(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
->>                 $(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
->> @@ -196,9 +198,11 @@ endif
->>
->>  ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
->>  define UBOOT_GENERATE_ZYNQ_IMAGE
->> -       $(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
->> -               -u $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))     \
->> -               -o $(BINARIES_DIR)/BOOT.BIN
->> +       for p in $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)); do \
->> +               $(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
->> +                       -u $(@D)/$$p -o $(BINARIES_DIR)/BOOT.BIN; \
->> +               fi; \
->> +       done
->>  endef
->>  UBOOT_DEPENDENCIES += host-zynq-boot-bin
->>  UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_GENERATE_ZYNQ_IMAGE
->
-> We have a similar modification in our tree but for the real u-boot
-> image and not the SPL image. In this case, the UBOOT_BOARD_NAME can
-> take a list of board names, and we use a similar for loop to iterate
-> over the configure, build, install step for each board.
->
-> Use case is to use a single defconfig for different hardware boards
-> that are very much alike but need some different u-boot (different
-> device tree, among other subtleties).
->
-> I thought I once shared this patch with the list but I cannot find it back.
->
-> If the path is now more open for inclusion of such change, I would be
-> more than happy to send it.
->
-> Let me know,
-> Thomas
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  ...t-build-failures-when-makeinfo-is-missing.patch | 159 ---------------------
+>  package/binutils/binutils.mk                       |   4 +-
+>  2 files changed, 2 insertions(+), 161 deletions(-)
+>  delete mode 100644 package/binutils/arc-2016.09-eng005/0800-Docs-Prevent-build-failures-when-makeinfo-is-missing.patch
+> 
+> diff --git a/package/binutils/arc-2016.09-eng005/0800-Docs-Prevent-build-failures-when-makeinfo-is-missing.patch b/package/binutils/arc-2016.09-eng005/0800-Docs-Prevent-build-failures-when-makeinfo-is-missing.patch
+> deleted file mode 100644
+> index 3f072de..0000000
+> --- a/package/binutils/arc-2016.09-eng005/0800-Docs-Prevent-build-failures-when-makeinfo-is-missing.patch
+> +++ /dev/null
+> @@ -1,159 +0,0 @@
+> -From 5bd39e24e4903e49a0c301de4013c6b720862da1 Mon Sep 17 00:00:00 2001
+> -From: Zakharov Vlad <vzakhar@synopsys.com>
+> -Date: Fri, 3 Jun 2016 21:33:43 +0300
+> -Subject: [PATCH] Docs: Prevent build failures when "makeinfo" is missing
+> -
+> -Build failed when "makeinfo" was missing on the build host.
+> -This was happenning because "makeinfo" is required to build .info targets
+> -and make exited with error. But missing "makeinfo" only stops us from
+> -building docs ("missing" script already throws a warning on that regard).
+> -Let's continue to build other targets.
+> -
+> -Now exit code of the script called "missing" is checked.
+> -The value 127 means that "makeinfo" is not available on the build host.
+> -
+> -So when such value occurs 0 is returned to the top level makefile.
+> -Documentation is not being built but further build of binutils continues.
+> -
+> -Signed-off-by: Zakharov Vlad <vzakhar@synopsys.com>
+> ----
+> - bfd/doc/Makefile.in      | 8 +++++++-
+> - binutils/doc/Makefile.in | 8 +++++++-
+> - gas/doc/Makefile.in      | 8 +++++++-
+> - gprof/Makefile.in        | 8 +++++++-
+> - ld/Makefile.in           | 8 +++++++-
+> - 5 files changed, 35 insertions(+), 5 deletions(-)
+> -
+> -diff --git a/bfd/doc/Makefile.in b/bfd/doc/Makefile.in
+> -index be737f6..6c1eaf7 100644
+> ---- a/bfd/doc/Makefile.in
+> -+++ b/bfd/doc/Makefile.in
+> -@@ -468,6 +468,8 @@ mostlyclean-libtool:
+> - clean-libtool:
+> - 	-rm -rf .libs _libs
+> - 
+> -+# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
+> -+# but return 0 to top level Makefile to build all other targets.
+> - bfd.info: bfd.texinfo $(bfd_TEXINFOS)
+> - 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
+> - 	rm -rf $$backupdir && mkdir $$backupdir && \
+> -@@ -481,7 +483,11 @@ bfd.info: bfd.texinfo $(bfd_TEXINFOS)
+> - 	then \
+> - 	  rc=0; \
+> - 	else \
+> --	  rc=$$?; \
+> -+	  if test $$? -eq 127; then \
+> -+		rc=0; \
+> -+	  else \
+> -+	  	rc=$$?; \
+> -+	  fi; \
+> - 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
+> - 	fi; \
+> - 	rm -rf $$backupdir; exit $$rc
+> -diff --git a/binutils/doc/Makefile.in b/binutils/doc/Makefile.in
+> -index ea3f938..8ed7884 100644
+> ---- a/binutils/doc/Makefile.in
+> -+++ b/binutils/doc/Makefile.in
+> -@@ -397,6 +397,8 @@ mostlyclean-libtool:
+> - clean-libtool:
+> - 	-rm -rf .libs _libs
+> - 
+> -+# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
+> -+# but return 0 to top level Makefile to build all other targets.
+> - binutils.info: binutils.texi 
+> - 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
+> - 	rm -rf $$backupdir && mkdir $$backupdir && \
+> -@@ -410,7 +412,11 @@ binutils.info: binutils.texi
+> - 	then \
+> - 	  rc=0; \
+> - 	else \
+> --	  rc=$$?; \
+> -+	  if test $$? -eq 127; then \
+> -+		rc=0; \
+> -+	  else \
+> -+		rc=$$?; \
+> -+	  fi; \
+> - 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
+> - 	fi; \
+> - 	rm -rf $$backupdir; exit $$rc
+> -diff --git a/gas/doc/Makefile.in b/gas/doc/Makefile.in
+> -index 9ca5e8e..3159bc3 100644
+> ---- a/gas/doc/Makefile.in
+> -+++ b/gas/doc/Makefile.in
+> -@@ -425,6 +425,8 @@ mostlyclean-libtool:
+> - clean-libtool:
+> - 	-rm -rf .libs _libs
+> - 
+> -+# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
+> -+# but return 0 to top level Makefile to build all other targets.
+> - as.info: as.texinfo $(as_TEXINFOS)
+> - 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
+> - 	rm -rf $$backupdir && mkdir $$backupdir && \
+> -@@ -438,7 +440,11 @@ as.info: as.texinfo $(as_TEXINFOS)
+> - 	then \
+> - 	  rc=0; \
+> - 	else \
+> --	  rc=$$?; \
+> -+	  if test $$? -eq 127; then \
+> -+		rc=0; \
+> -+	  else \
+> -+	    rc=$$?; \
+> -+	  fi; \
+> - 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
+> - 	fi; \
+> - 	rm -rf $$backupdir; exit $$rc
+> -diff --git a/gprof/Makefile.in b/gprof/Makefile.in
+> -index 67e85cd..c4040eb 100644
+> ---- a/gprof/Makefile.in
+> -+++ b/gprof/Makefile.in
+> -@@ -538,6 +538,8 @@ clean-libtool:
+> - distclean-libtool:
+> - 	-rm -f libtool config.lt
+> - 
+> -+# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
+> -+# but return 0 to top level Makefile to build all other targets.
+> - gprof.info: gprof.texi $(gprof_TEXINFOS)
+> - 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
+> - 	rm -rf $$backupdir && mkdir $$backupdir && \
+> -@@ -551,7 +553,11 @@ gprof.info: gprof.texi $(gprof_TEXINFOS)
+> - 	then \
+> - 	  rc=0; \
+> - 	else \
+> --	  rc=$$?; \
+> -+	  if test $$? -eq 127; then \
+> -+		rc=0; \
+> -+	  else \
+> -+		rc=$$?; \
+> -+	  fi; \
+> - 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
+> - 	fi; \
+> - 	rm -rf $$backupdir; exit $$rc
+> -diff --git a/ld/Makefile.in b/ld/Makefile.in
+> -index 7c78198..08950a8 100644
+> ---- a/ld/Makefile.in
+> -+++ b/ld/Makefile.in
+> -@@ -1591,6 +1591,8 @@ clean-libtool:
+> - distclean-libtool:
+> - 	-rm -f libtool config.lt
+> - 
+> -+# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
+> -+# but return 0 to top level Makefile to build all other targets.
+> - ld.info: ld.texinfo $(ld_TEXINFOS)
+> - 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
+> - 	rm -rf $$backupdir && mkdir $$backupdir && \
+> -@@ -1604,7 +1606,11 @@ ld.info: ld.texinfo $(ld_TEXINFOS)
+> - 	then \
+> - 	  rc=0; \
+> - 	else \
+> --	  rc=$$?; \
+> -+	  if test $$? -eq 127; then \
+> -+		rc=0; \
+> -+	  else \
+> -+		rc=$$?; \
+> -+	  fi; \
+> - 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
+> - 	fi; \
+> - 	rm -rf $$backupdir; exit $$rc
+> --- 
+> -2.5.5
+> -
+> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+> index 60aa87b..33aaf85 100644
+> --- a/package/binutils/binutils.mk
+> +++ b/package/binutils/binutils.mk
+> @@ -29,8 +29,8 @@ BINUTILS_LICENSE = GPLv3+, libiberty LGPLv2.1+
+>  BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
+>  
+>  ifeq ($(BINUTILS_FROM_GIT),y)
+> -BINUTILS_DEPENDENCIES += host-flex host-bison
+> -HOST_BINUTILS_DEPENDENCIES += host-flex host-bison
+> +BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
+> +HOST_BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
+>  endif
+>  
+>  # When binutils sources are fetched from the binutils-gdb repository,
+> 
