@@ -1,39 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 08:54:08 +0200
-Subject: [Buildroot] [git commit] gmp: correct legal info
-Message-ID: <20160705071604.2092A817B3@busybox.osuosl.org>
+Date: Tue, 5 Jul 2016 09:16:12 +0200
+Subject: [Buildroot] [git commit] dbus: update legal info
+Message-ID: <20160705071811.C15DC81D60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6a7ad5fa5baa9224d278546f2d536436a1830e0
+commit: https://git.buildroot.net/buildroot/commit/?id=3cbb78389a5454c7754d92acce38c72425c29244
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since version 6, GMP is distributed under the dual licenses LGPLv3+ or
-GPLv2+
+Library and some tools (dbus-lanuch, dbus-run-session) are dual
+licensed under GPLv2 or AFLv2.1 and others (dbus-monitor, dbus-send,
+dbus-cleanup-sockets, dbus-uuidgen) are licensed under GPLv2+
+only.
 
 Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
 Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gmp/gmp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/dbus/dbus.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index cdde794..485bf7c 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -8,8 +8,8 @@ GMP_VERSION = 6.1.1
- GMP_SITE = $(BR2_GNU_MIRROR)/gmp
- GMP_SOURCE = gmp-$(GMP_VERSION).tar.xz
- GMP_INSTALL_STAGING = YES
--GMP_LICENSE = LGPLv3+
--GMP_LICENSE_FILES = COPYING.LESSERv3
-+GMP_LICENSE = LGPLv3+ or GPLv2+
-+GMP_LICENSE_FILES = COPYING.LESSERv3 COPYINGv2
- GMP_DEPENDENCIES = host-m4
- HOST_GMP_DEPENDENCIES = host-m4
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index fbdceb3..11c3d4e 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -6,7 +6,7 @@
+ 
+ DBUS_VERSION = 1.10.8
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+-DBUS_LICENSE = AFLv2.1, GPLv2+
++DBUS_LICENSE = AFLv2.1 or GPLv2+ (library, tools), GPLv2+ (tools)
+ DBUS_LICENSE_FILES = COPYING
+ DBUS_INSTALL_STAGING = YES
  
