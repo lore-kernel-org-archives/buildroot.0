@@ -1,69 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  5 Jul 2016 15:25:41 +0200
-Subject: [Buildroot] [PATCH] package/liboping: fix build after bump
-Message-ID: <1467725141-26791-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2016 15:24:38 +0200
+Subject: [Buildroot] [git commit] system/skeleton: update etc/mtab with a
+	more sensible link
+Message-ID: <20160705132812.D3DCB7FE17@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/6a9/6a9b4d7b1b3cd72e32579fbaf5a69dbde0fea8e4/
+commit: https://git.buildroot.net/buildroot/commit/?id=25a503272366b8a0bc07a09ca493d25577579c92
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Currently, our /etc/mtab points to /proc/mounts. This was all neat so
+far, and was good for a sysv-like init system.
+
+However, the way today is to point it at /proc/self/mounts, the
+per-process mount tab.
+
+Additionnally, that's what systemd expects. If /etc/mtab is not a
+symlink to ../proc/self/mounts and the rootfs is readonly, systemd would
+whine loudly (and a service unit would be marked failed).
+
+Since it works well for sysv-like init systems too, just use that.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../liboping/0001-clock_gettime-needs-lrt.patch    | 29 ++++++++++++++++++++++
- package/liboping/liboping.mk                       |  2 ++
- 2 files changed, 31 insertions(+)
- create mode 100644 package/liboping/0001-clock_gettime-needs-lrt.patch
+ system/skeleton/etc/mtab | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/liboping/0001-clock_gettime-needs-lrt.patch b/package/liboping/0001-clock_gettime-needs-lrt.patch
-new file mode 100644
-index 0000000..63b2e55
---- /dev/null
-+++ b/package/liboping/0001-clock_gettime-needs-lrt.patch
-@@ -0,0 +1,29 @@
-+configure: also check for clockgettime()
-+
-+clock_gettime() is also in -lrt so we also need to check for it.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN liboping-1.9.0.orig/configure.ac liboping-1.9.0/configure.ac
-+--- liboping-1.9.0.orig/configure.ac	2016-06-27 08:41:10.000000000 +0200
-++++ liboping-1.9.0/configure.ac	2016-07-05 15:14:15.793663190 +0200
-+@@ -199,12 +199,16 @@
-+ 
-+ AC_SUBST(LIBOPING_PC_LIBS_PRIVATE)
-+ 
-+-nanosleep_needs_rt="no"
-++needs_rt="no"
-+ AC_CHECK_FUNCS(nanosleep, [],
-+ 	AC_CHECK_LIB(rt, nanosleep,
-+-		[nanosleep_needs_rt="yes"],
-++		[needs_rt="yes"],
-+ 		AC_MSG_ERROR(cannot find nanosleep)))
-+-AM_CONDITIONAL(BUILD_WITH_LIBRT, test "x$nanosleep_needs_rt" = "xyes")
-++AC_CHECK_FUNCS(clock_gettime, [],
-++	AC_CHECK_LIB(rt, nanosleep,
-++		[needs_rt="yes"],
-++		AC_MSG_ERROR(cannot find clock_gettime)))
-++AM_CONDITIONAL(BUILD_WITH_LIBRT, test "x$needs_rt" = "xyes")
-+ 
-+ with_ncurses="no"
-+ AC_CHECK_HEADERS(ncursesw/ncurses.h ncurses.h, [with_ncurses="yes"], [])
-diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
-index 6e071a5..dd70387 100644
---- a/package/liboping/liboping.mk
-+++ b/package/liboping/liboping.mk
-@@ -13,4 +13,6 @@ LIBOPING_CONF_OPTS = --without-perl-bindings
- LIBOPING_LICENSE = LGPLv2.1+, GPLv2
- LIBOPING_LICENSE_FILES = COPYING
- 
-+LIBOPING_AUTORECONF = YES
-+
- $(eval $(autotools-package))
--- 
-2.7.4
+diff --git a/system/skeleton/etc/mtab b/system/skeleton/etc/mtab
+index 4c0a094..5c4677a 120000
+--- a/system/skeleton/etc/mtab
++++ b/system/skeleton/etc/mtab
+@@ -1 +1 @@
+-/proc/mounts
+\ No newline at end of file
++../proc/self/mounts
+\ No newline at end of file
