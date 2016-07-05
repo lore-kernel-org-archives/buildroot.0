@@ -1,53 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  5 Jul 2016 11:46:55 +0200
-Subject: [Buildroot] [PATCH 1/5] texinfo: new host package
-Message-ID: <1467712019-24632-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue,  5 Jul 2016 11:46:59 +0200
+Subject: [Buildroot] [PATCH 5/5] binutils: fix build of 2.26 when makeinfo
+	is not available
+In-Reply-To: <1467712019-24632-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1467712019-24632-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1467712019-24632-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have tried multiple solutions to solve the "makeinfo" problem in
-binutils and gdb, without finding anything really convincing. So it
-seems like the easiest solution is to add a texinfo host package, and
-use it as a dependency of binutils/gdb when they are fetched from
-Git. This commit introduces just the host-texinfo package.
+The 2.26 binutils tarball has incorrect timestamps for the .info files,
+so binutils build system tries to regenerate them with makeinfo. In
+order to avoid depending on host-texinfo, we simply touch the .info
+files so that their timestamp is newer than the corresponding source
+files.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/texinfo/texinfo.hash |  2 ++
- package/texinfo/texinfo.mk   | 13 +++++++++++++
- 2 files changed, 15 insertions(+)
- create mode 100644 package/texinfo/texinfo.hash
- create mode 100644 package/texinfo/texinfo.mk
+ package/binutils/binutils.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/texinfo/texinfo.hash b/package/texinfo/texinfo.hash
-new file mode 100644
-index 0000000..4bdf343
---- /dev/null
-+++ b/package/texinfo/texinfo.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 ac68394ce21b2420ba7ed7cec65d84aacf308cc88e9bf4716fcfff88286883d2 texinfo-6.1.tar.xz
-diff --git a/package/texinfo/texinfo.mk b/package/texinfo/texinfo.mk
-new file mode 100644
-index 0000000..ebd0b48
---- /dev/null
-+++ b/package/texinfo/texinfo.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# texinfo
-+#
-+################################################################################
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 33aaf85..50a3531 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -33,6 +33,17 @@ BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
+ HOST_BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
+ endif
+ 
++# The .info files in the 2.26 tarball have an incorrect timestamp, so
++# binutils tries to re-generate them. In order to avoid the dependency
++# on host-texinfo, we simply update the timestamps.
++ifeq ($(BR2_BINUTILS_VERSION_2_26_X),y)
++define BINUTILS_FIXUP_INFO_TIMESTAMPS
++	find $(@D) -name '*.info' -exec touch {} \;
++endef
++BINUTILS_POST_PATCH_HOOKS += BINUTILS_FIXUP_INFO_TIMESTAMPS
++HOST_BINUTILS_POST_PATCH_HOOKS += BINUTILS_FIXUP_INFO_TIMESTAMPS
++endif
 +
-+TEXINFO_VERSION = 6.1
-+TEXINFO_SITE = $(BR2_GNU_MIRROR)/texinfo
-+TEXINFO_SOURCE = texinfo-$(TEXINFO_VERSION).tar.xz
-+TEXINFO_LICENSE = GPLv3+
-+TEXINFO_LICENSE_FILES = COPYING
-+
-+$(eval $(host-autotools-package))
+ # When binutils sources are fetched from the binutils-gdb repository,
+ # they also contain the gdb sources, but gdb shouldn't be built, so we
+ # disable it.
 -- 
 2.7.4
