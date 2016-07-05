@@ -1,54 +1,49 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue,  5 Jul 2016 18:02:29 +0200
-Subject: [Buildroot] [PATCH] package/gdb: add dependency on host-textinfo
-Message-ID: <1467734549-2767-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2016 18:04:02 +0200
+Subject: [Buildroot] [PATCH] dante: New package
+In-Reply-To: <1467449278-3166-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1467449278-3166-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20160705180402.54cfe139@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Starting with gdb 7.10, gdb wants to re-generate its documentation.
-We were trying to avoid that by patching the Makefiles, but it wasn't
-working in all situations. So, we simply add a dependency on
-host-texinfo in all case.
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/f72/f72eac3e2f995e93f0e8f215e68ce4356a696dcb
+On Sat,  2 Jul 2016 10:47:58 +0200, Maxime Hadjinlian wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/Config.in           |  1 +
+>  package/dante/Config.in     |  9 +++++++++
+>  package/dante/S50dante      | 40 ++++++++++++++++++++++++++++++++++++++++
+>  package/dante/dante.hash    |  2 ++
+>  package/dante/dante.mk      | 32 ++++++++++++++++++++++++++++++++
+>  package/dante/dante.service | 15 +++++++++++++++
+>  6 files changed, 99 insertions(+)
+>  create mode 100644 package/dante/Config.in
+>  create mode 100644 package/dante/S50dante
+>  create mode 100644 package/dante/dante.hash
+>  create mode 100644 package/dante/dante.mk
+>  create mode 100644 package/dante/dante.service
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/gdb/gdb.mk | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+Applied after doing a "few" changes:
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 6d70955..3941b45 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -35,7 +35,12 @@ endif
- # For the host variant, we really want to build with XML support,
- # which is needed to read XML descriptions of target architectures. We
- # also need ncurses.
--HOST_GDB_DEPENDENCIES = host-expat host-ncurses
-+# Starting with gdb 7.10, gdb wants to re-generate its documentation.
-+# We were trying to avoid that by patching the Makefiles, but it wasn't
-+# working in all situations. So, we simply add a dependency on
-+# host-texinfo in all case.
-+HOST_GDB_DEPENDENCIES += host-expat host-ncurses host-texinfo
-+GDB_DEPENDENCIES += host-texinfo
- 
- # Apply the Xtensa specific patches
- XTENSA_CORE_NAME = $(call qstrip, $(BR2_XTENSA_CORE_NAME))
-@@ -49,8 +54,8 @@ HOST_GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
- endif
- 
- ifeq ($(GDB_FROM_GIT),y)
--GDB_DEPENDENCIES += host-texinfo host-flex host-bison
--HOST_GDB_DEPENDENCIES += host-texinfo host-flex host-bison
-+GDB_DEPENDENCIES += host-flex host-bison
-+HOST_GDB_DEPENDENCIES += host-flex host-bison
- endif
- 
- # When gdb sources are fetched from the binutils-gdb repository, they
+    [Thomas:
+     - Add dependency on BR2_USE_MMU
+     - Rewrap Config.in help text
+     - PID file goes in /var/run/
+     - Daemon to start is /usr/sbin/sockd, not /usr/sbin/dante
+     - Remove staging installation, as it is not needed
+     - Remove --enable-debug, since that's not what BR2_ENABLE_DEBUG is
+       meant for
+     - Install an example configuration file.]
+
+Thanks!
+
+Thomas
 -- 
-2.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
