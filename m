@@ -1,42 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 17:28:25 +0200
-Subject: [Buildroot] [PATCH v2] circus: new package
-In-Reply-To: <1467729693-27460-1-git-send-email-yegorslists@googlemail.com>
-References: <1467729693-27460-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160705172825.1aa57f88@free-electrons.com>
+Date: Tue, 5 Jul 2016 17:30:12 +0200
+Subject: [Buildroot] [git commit] uboot: install multiple spl images
+Message-ID: <20160705153508.5D3B380AE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b05ff12b6cd38566003b99291a47a56cbd88f396
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  5 Jul 2016 16:41:33 +0200, yegorslists at googlemail.com wrote:
+For some platforms, there are multiple generated spl images.  Extend
+BR2_TARGET_UBOOT_SPL_NAME to allow these multiple images to be installed
+after uboot build completes.
 
-> +	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-> +	depends on BR2_USE_WCHAR # zeromq
-> +	depends on BR2_INSTALL_LIBSTDCPP # zeromq
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+For example, the NextThingCo C.H.I.P. uses two binaries from uboot,
+spl/sunxi-spl.bin and spl/sunxi-spl-with-ecc.bin.
 
-zeromq is not selected anywhere in this package, so these comments
-where a bit confusing. Instead, I've added "# pyzmq -> zeromq" which
-makes it clear where the dependency comes from.
+Signed-off-by: Jason Abele <jason@nextthing.co>
+[Maxime:
+ - Add foreach loop for general case and mkpimage
+ - Use firstword for zynq case]
+Signe-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-> +comment "circus needs a toolchain w/ C++, wchar, threads and Python2/3"
-> +	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
-> +		BR2_TOOLCHAIN_HAS_THREADS && (BR2_PACKAGE_PYTHON || \
-> +		BR2_PACKAGE_PYTHON3))
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/uboot/Config.in |  2 +-
+ boot/uboot/uboot.mk  | 17 ++++++++++++-----
+ 2 files changed, 13 insertions(+), 6 deletions(-)
 
-I've replaced this with the slightly simpler (IMO) :
-
-comment "circus needs Python and a toolchain w/ C++, wchar, threads"
-        depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-                !BR2_TOOLCHAIN_HAS_THREADS || \
-                !(BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3)
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 9ffbb51..a468548 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -313,7 +313,7 @@ config BR2_TARGET_UBOOT_SPL_NAME
+ 	default "spl/u-boot-spl.bin"
+ 	depends on BR2_TARGET_UBOOT_SPL
+ 	help
+-	  This is the name of the SPL binary, generated during
++	  A space-separated list of SPL binaries, generated during
+ 	  u-boot build. For most platform it is spl/u-boot-spl.bin
+ 	  but not always. It is MLO on OMAP for example.
+ 
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 4e6863d..065bdf9 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -170,7 +170,10 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 	$(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
+ 		cp -dpf $(@D)/$(UBOOT_MAKE_TARGET) $(BINARIES_DIR))
+ 	$(if $(BR2_TARGET_UBOOT_SPL),
+-		cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
++		$(foreach f,$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)), \
++			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
++		)
++	)
+ 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+ 		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
+ 			$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+@@ -198,8 +201,9 @@ endif
+ 
+ ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
+ define UBOOT_GENERATE_ZYNQ_IMAGE
+-	$(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
+-		-u $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))     \
++	$(HOST_DIR)/usr/bin/python2 \
++		$(HOST_DIR)/usr/bin/zynq-boot-bin.py \
++		-u $(@D)/$(firstword $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) \
+ 		-o $(BINARIES_DIR)/BOOT.BIN
+ endef
+ UBOOT_DEPENDENCIES += host-zynq-boot-bin
+@@ -208,8 +212,11 @@ endif
+ 
+ ifeq ($(BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC),y)
+ define UBOOT_CRC_ALTERA_SOCFPGA_IMAGE
+-	$(HOST_DIR)/usr/bin/mkpimage -o $(BINARIES_DIR)/$(notdir $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))).crc \
+-		$(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
++	$(foreach f,$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)), \
++		$(HOST_DIR)/usr/bin/mkpimage \
++			-o $(BINARIES_DIR)/$(notdir $(call qstrip,$(f))).crc \
++			$(@D)/$(call qstrip,$(f))
++	)
+ endef
+ UBOOT_DEPENDENCIES += host-mkpimage
+ UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_CRC_ALTERA_SOCFPGA_IMAGE
