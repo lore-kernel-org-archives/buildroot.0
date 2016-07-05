@@ -1,9 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 15:06:23 +0200
-Subject: [Buildroot] [PATCH 1/5] texinfo: new host package
-In-Reply-To: <1467712019-24632-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2016 15:07:27 +0200
+Subject: [Buildroot] [PATCH 4/5] gdb: add dependency on host-flex and
+ host-bison for Git versions
+In-Reply-To: <79dbff1d-b31f-8bf9-143b-0e1d17de2127@gmail.com>
 References: <1467712019-24632-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160705150623.5b5d9a76@free-electrons.com>
+ <1467712019-24632-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <79dbff1d-b31f-8bf9-143b-0e1d17de2127@gmail.com>
+Message-ID: <20160705150727.43c2ba73@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +15,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  5 Jul 2016 11:46:55 +0200, Thomas Petazzoni wrote:
-> We have tried multiple solutions to solve the "makeinfo" problem in
-> binutils and gdb, without finding anything really convincing. So it
-> seems like the easiest solution is to add a texinfo host package, and
-> use it as a dependency of binutils/gdb when they are fetched from
-> Git. This commit introduces just the host-texinfo package.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/texinfo/texinfo.hash |  2 ++
->  package/texinfo/texinfo.mk   | 13 +++++++++++++
->  2 files changed, 15 insertions(+)
->  create mode 100644 package/texinfo/texinfo.hash
->  create mode 100644 package/texinfo/texinfo.mk
+On Tue, 5 Jul 2016 13:32:24 +0200, Romain Naour wrote:
 
-Entire patch series applied.
+> Le 05/07/2016 ? 11:46, Thomas Petazzoni a ?crit :
+> > gdb versions fetched from git (such as the ARC version) will not build
+> > with host-flex and host-bison.  
+> 
+> I'm wondering why host-flex and host-bison was not already present in gdb
+> dependency when fetched from git.
+
+I'm not sure either, but clearly gdb failed to build without
+host-flex/host-bison available, when gdb was coming from Git.
 
 Thomas
 -- 
