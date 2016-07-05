@@ -1,88 +1,114 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue,  5 Jul 2016 13:17:25 +0200
+Date: Tue, 5 Jul 2016 13:19:40 +0200
 Subject: [Buildroot] [PATCH] uboot: install multiple spl images
-Message-ID: <1467717445-29708-1-git-send-email-maxime.hadjinlian@gmail.com>
+In-Reply-To: <CAAXf6LXZaUpnRxKqP28fKaMWwPqssq+TkR3MDhsntv_VcGa7ZQ@mail.gmail.com>
+References: <1457648583-25071-1-git-send-email-jason.abele@gmail.com>
+ <CAAXf6LXZaUpnRxKqP28fKaMWwPqssq+TkR3MDhsntv_VcGa7ZQ@mail.gmail.com>
+Message-ID: <CAGduivx0fbyTUqyWrXiHPo+dfMUc-UZGFhmYZyVvRzz+o7WxKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jason Abele <jason@nextthing.co>
+Hi Jason, all,
 
-For some platforms, there are multiple generated spl images.  Extend
-BR2_TARGET_UBOOT_SPL_NAME to allow these multiple images to be installed
-after uboot build completes.
+I have respinned your patch, you can find it here:
+https://patchwork.ozlabs.org/patch/644708/
 
-For example, the NextThingCo C.H.I.P. uses two binaries from uboot,
-spl/sunxi-spl.bin and spl/sunxi-spl-with-ecc.bin.
+Your patch has been marked as "Changes Requested" in our patchwork.
 
-Signed-off-by: Jason Abele <jason@nextthing.co>
-[Maxime:
- - Add foreach loop for general case and mkpimage
- - Use firstword for zynq case]
-Signe-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Thomas: I haven't taken into account your demand since you have a
+patch, it's better that you send yours it will match your needs better
+that what I could propose :).
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- boot/uboot/Config.in |  2 +-
- boot/uboot/uboot.mk  | 17 ++++++++++++-----
- 2 files changed, 13 insertions(+), 6 deletions(-)
+Thanks for your patch
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 9ffbb51..a468548 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -313,7 +313,7 @@ config BR2_TARGET_UBOOT_SPL_NAME
- 	default "spl/u-boot-spl.bin"
- 	depends on BR2_TARGET_UBOOT_SPL
- 	help
--	  This is the name of the SPL binary, generated during
-+	  A space-separated list of SPL binaries, generated during
- 	  u-boot build. For most platform it is spl/u-boot-spl.bin
- 	  but not always. It is MLO on OMAP for example.
- 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index a2274ee..8ac035b 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -170,7 +170,10 @@ define UBOOT_INSTALL_IMAGES_CMDS
- 	$(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
- 		cp -dpf $(@D)/$(UBOOT_MAKE_TARGET) $(BINARIES_DIR))
- 	$(if $(BR2_TARGET_UBOOT_SPL),
--		cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
-+		$(foreach f,$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)), \
-+			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
-+		)
-+	)
- 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
- 		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
- 			$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
-@@ -198,8 +201,9 @@ endif
- 
- ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
- define UBOOT_GENERATE_ZYNQ_IMAGE
--	$(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
--		-u $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))     \
-+	$(HOST_DIR)/usr/bin/python2 \
-+		$(HOST_DIR)/usr/bin/zynq-boot-bin.py \
-+		-u $(@D)/$(firstword $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) \
- 		-o $(BINARIES_DIR)/BOOT.BIN
- endef
- UBOOT_DEPENDENCIES += host-zynq-boot-bin
-@@ -208,8 +212,11 @@ endif
- 
- ifeq ($(BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC),y)
- define UBOOT_CRC_ALTERA_SOCFPGA_IMAGE
--	$(HOST_DIR)/usr/bin/mkpimage -o $(BINARIES_DIR)/$(notdir $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))).crc \
--		$(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
-+	$(foreach f,$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)), \
-+		$(HOST_DIR)/usr/bin/mkpimage \
-+			-o $(BINARIES_DIR)/$(notdir $(call qstrip,$(f))).crc \
-+			$(@D)/$(call qstrip,$(f))
-+	)
- endef
- UBOOT_DEPENDENCIES += host-mkpimage
- UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_CRC_ALTERA_SOCFPGA_IMAGE
--- 
-2.8.1
+On Wed, May 4, 2016 at 5:08 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Hi,
+>
+> (late reply, just noticed this patch)
+>
+> On Thu, Mar 10, 2016 at 11:23 PM, Jason Abele <jason.abele@gmail.com> wrote:
+>> From: Jason Abele <jason@nextthing.co>
+>>
+>> For some platforms, there are multiple generated spl images.  Extend
+>> BR2_TARGET_UBOOT_SPL_NAME to allow these multiple images to be installed
+>> after uboot build completes.
+>>
+>> Signed-off-by: Jason Abele <jason@nextthing.co>
+>> ---
+>> For example, the NextThingCo C.H.I.P. uses two binaries from uboot,
+>> spl/sunxi-spl.bin and spl/sunxi-spl-with-ecc.bin.
+>>
+>> This patch allows them to be listed explicitly.
+>>
+>>  boot/uboot/Config.in |  2 +-
+>>  boot/uboot/uboot.mk  | 12 ++++++++----
+>>  2 files changed, 9 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+>> index 4a6dc56..d4f9445 100644
+>> --- a/boot/uboot/Config.in
+>> +++ b/boot/uboot/Config.in
+>> @@ -322,7 +322,7 @@ config BR2_TARGET_UBOOT_SPL_NAME
+>>         default "spl/u-boot-spl.bin"
+>>         depends on BR2_TARGET_UBOOT_SPL
+>>         help
+>> -         This is the name of the SPL binary, generated during
+>> +         A space-separated list of SPL binaries, generated during
+>>           u-boot build. For most platform it is spl/u-boot-spl.bin
+>>           but not always. It is MLO on OMAP for example.
+>>
+>> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+>> index d539b31..aae99f8 100644
+>> --- a/boot/uboot/uboot.mk
+>> +++ b/boot/uboot/uboot.mk
+>> @@ -169,7 +169,9 @@ define UBOOT_INSTALL_IMAGES_CMDS
+>>         $(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
+>>                 cp -dpf $(@D)/$(UBOOT_MAKE_TARGET) $(BINARIES_DIR))
+>>         $(if $(BR2_TARGET_UBOOT_SPL),
+>> -               cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
+>> +               for p in $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)); do \
+>> +                       cp -dpf $(@D)/$$p $(BINARIES_DIR)/; \
+>> +               done)
+>>         $(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+>>                 $(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+>>                 $(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+>> @@ -196,9 +198,11 @@ endif
+>>
+>>  ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
+>>  define UBOOT_GENERATE_ZYNQ_IMAGE
+>> -       $(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
+>> -               -u $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))     \
+>> -               -o $(BINARIES_DIR)/BOOT.BIN
+>> +       for p in $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)); do \
+>> +               $(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
+>> +                       -u $(@D)/$$p -o $(BINARIES_DIR)/BOOT.BIN; \
+>> +               fi; \
+>> +       done
+>>  endef
+>>  UBOOT_DEPENDENCIES += host-zynq-boot-bin
+>>  UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_GENERATE_ZYNQ_IMAGE
+>
+> We have a similar modification in our tree but for the real u-boot
+> image and not the SPL image. In this case, the UBOOT_BOARD_NAME can
+> take a list of board names, and we use a similar for loop to iterate
+> over the configure, build, install step for each board.
+>
+> Use case is to use a single defconfig for different hardware boards
+> that are very much alike but need some different u-boot (different
+> device tree, among other subtleties).
+>
+> I thought I once shared this patch with the list but I cannot find it back.
+>
+> If the path is now more open for inclusion of such change, I would be
+> more than happy to send it.
+>
+> Let me know,
+> Thomas
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
