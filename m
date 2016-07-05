@@ -1,215 +1,98 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 5 Jul 2016 13:25:19 +0200
-Subject: [Buildroot] [PATCH 2/5] binutils: build host-texinfo if needed
-In-Reply-To: <1467712019-24632-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1467712019-24632-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1467712019-24632-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <550d850f-9508-89c0-64ac-c6555ab9983f@gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Tue, 5 Jul 2016 13:26:01 +0200
+Subject: [Buildroot] [PATCH] uboot: install multiple spl images
+In-Reply-To: <1467717445-29708-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1467717445-29708-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <CAGduivwQTnmQ6bYxoP9q8vKBG-eOSmUbYd13_rjo9SSr4t_LxA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi all,
 
-Le 05/07/2016 ? 11:46, Thomas Petazzoni a ?crit :
-> This commit adds the dependency on host-texinfo to binutils, when the
-> source is fetched from Git. Thanks to this, we can remove the
-> 0800-Docs-Prevent-build-failures-when-makeinfo-is-missing.patch patch
-> from the ARC-specific version of binutils.
+The SoB lines are mangled, don't know what happened there. Anyway this
+can be fixed when it's merged.
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Tue, Jul 5, 2016 at 1:17 PM, Maxime Hadjinlian
+<maxime.hadjinlian@gmail.com> wrote:
+> From: Jason Abele <jason@nextthing.co>
+>
+> For some platforms, there are multiple generated spl images.  Extend
+> BR2_TARGET_UBOOT_SPL_NAME to allow these multiple images to be installed
+> after uboot build completes.
+>
+> For example, the NextThingCo C.H.I.P. uses two binaries from uboot,
+> spl/sunxi-spl.bin and spl/sunxi-spl-with-ecc.bin.
+>
+> Signed-off-by: Jason Abele <jason@nextthing.co>
+> [Maxime:
+>  - Add foreach loop for general case and mkpimage
+>  - Use firstword for zynq case]
+> Signe-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
->  ...t-build-failures-when-makeinfo-is-missing.patch | 159 ---------------------
->  package/binutils/binutils.mk                       |   4 +-
->  2 files changed, 2 insertions(+), 161 deletions(-)
->  delete mode 100644 package/binutils/arc-2016.09-eng005/0800-Docs-Prevent-build-failures-when-makeinfo-is-missing.patch
-> 
-> diff --git a/package/binutils/arc-2016.09-eng005/0800-Docs-Prevent-build-failures-when-makeinfo-is-missing.patch b/package/binutils/arc-2016.09-eng005/0800-Docs-Prevent-build-failures-when-makeinfo-is-missing.patch
-> deleted file mode 100644
-> index 3f072de..0000000
-> --- a/package/binutils/arc-2016.09-eng005/0800-Docs-Prevent-build-failures-when-makeinfo-is-missing.patch
-> +++ /dev/null
-> @@ -1,159 +0,0 @@
-> -From 5bd39e24e4903e49a0c301de4013c6b720862da1 Mon Sep 17 00:00:00 2001
-> -From: Zakharov Vlad <vzakhar@synopsys.com>
-> -Date: Fri, 3 Jun 2016 21:33:43 +0300
-> -Subject: [PATCH] Docs: Prevent build failures when "makeinfo" is missing
-> -
-> -Build failed when "makeinfo" was missing on the build host.
-> -This was happenning because "makeinfo" is required to build .info targets
-> -and make exited with error. But missing "makeinfo" only stops us from
-> -building docs ("missing" script already throws a warning on that regard).
-> -Let's continue to build other targets.
-> -
-> -Now exit code of the script called "missing" is checked.
-> -The value 127 means that "makeinfo" is not available on the build host.
-> -
-> -So when such value occurs 0 is returned to the top level makefile.
-> -Documentation is not being built but further build of binutils continues.
-> -
-> -Signed-off-by: Zakharov Vlad <vzakhar@synopsys.com>
-> ----
-> - bfd/doc/Makefile.in      | 8 +++++++-
-> - binutils/doc/Makefile.in | 8 +++++++-
-> - gas/doc/Makefile.in      | 8 +++++++-
-> - gprof/Makefile.in        | 8 +++++++-
-> - ld/Makefile.in           | 8 +++++++-
-> - 5 files changed, 35 insertions(+), 5 deletions(-)
-> -
-> -diff --git a/bfd/doc/Makefile.in b/bfd/doc/Makefile.in
-> -index be737f6..6c1eaf7 100644
-> ---- a/bfd/doc/Makefile.in
-> -+++ b/bfd/doc/Makefile.in
-> -@@ -468,6 +468,8 @@ mostlyclean-libtool:
-> - clean-libtool:
-> - 	-rm -rf .libs _libs
-> - 
-> -+# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
-> -+# but return 0 to top level Makefile to build all other targets.
-> - bfd.info: bfd.texinfo $(bfd_TEXINFOS)
-> - 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
-> - 	rm -rf $$backupdir && mkdir $$backupdir && \
-> -@@ -481,7 +483,11 @@ bfd.info: bfd.texinfo $(bfd_TEXINFOS)
-> - 	then \
-> - 	  rc=0; \
-> - 	else \
-> --	  rc=$$?; \
-> -+	  if test $$? -eq 127; then \
-> -+		rc=0; \
-> -+	  else \
-> -+	  	rc=$$?; \
-> -+	  fi; \
-> - 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
-> - 	fi; \
-> - 	rm -rf $$backupdir; exit $$rc
-> -diff --git a/binutils/doc/Makefile.in b/binutils/doc/Makefile.in
-> -index ea3f938..8ed7884 100644
-> ---- a/binutils/doc/Makefile.in
-> -+++ b/binutils/doc/Makefile.in
-> -@@ -397,6 +397,8 @@ mostlyclean-libtool:
-> - clean-libtool:
-> - 	-rm -rf .libs _libs
-> - 
-> -+# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
-> -+# but return 0 to top level Makefile to build all other targets.
-> - binutils.info: binutils.texi 
-> - 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
-> - 	rm -rf $$backupdir && mkdir $$backupdir && \
-> -@@ -410,7 +412,11 @@ binutils.info: binutils.texi
-> - 	then \
-> - 	  rc=0; \
-> - 	else \
-> --	  rc=$$?; \
-> -+	  if test $$? -eq 127; then \
-> -+		rc=0; \
-> -+	  else \
-> -+		rc=$$?; \
-> -+	  fi; \
-> - 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
-> - 	fi; \
-> - 	rm -rf $$backupdir; exit $$rc
-> -diff --git a/gas/doc/Makefile.in b/gas/doc/Makefile.in
-> -index 9ca5e8e..3159bc3 100644
-> ---- a/gas/doc/Makefile.in
-> -+++ b/gas/doc/Makefile.in
-> -@@ -425,6 +425,8 @@ mostlyclean-libtool:
-> - clean-libtool:
-> - 	-rm -rf .libs _libs
-> - 
-> -+# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
-> -+# but return 0 to top level Makefile to build all other targets.
-> - as.info: as.texinfo $(as_TEXINFOS)
-> - 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
-> - 	rm -rf $$backupdir && mkdir $$backupdir && \
-> -@@ -438,7 +440,11 @@ as.info: as.texinfo $(as_TEXINFOS)
-> - 	then \
-> - 	  rc=0; \
-> - 	else \
-> --	  rc=$$?; \
-> -+	  if test $$? -eq 127; then \
-> -+		rc=0; \
-> -+	  else \
-> -+	    rc=$$?; \
-> -+	  fi; \
-> - 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
-> - 	fi; \
-> - 	rm -rf $$backupdir; exit $$rc
-> -diff --git a/gprof/Makefile.in b/gprof/Makefile.in
-> -index 67e85cd..c4040eb 100644
-> ---- a/gprof/Makefile.in
-> -+++ b/gprof/Makefile.in
-> -@@ -538,6 +538,8 @@ clean-libtool:
-> - distclean-libtool:
-> - 	-rm -f libtool config.lt
-> - 
-> -+# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
-> -+# but return 0 to top level Makefile to build all other targets.
-> - gprof.info: gprof.texi $(gprof_TEXINFOS)
-> - 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
-> - 	rm -rf $$backupdir && mkdir $$backupdir && \
-> -@@ -551,7 +553,11 @@ gprof.info: gprof.texi $(gprof_TEXINFOS)
-> - 	then \
-> - 	  rc=0; \
-> - 	else \
-> --	  rc=$$?; \
-> -+	  if test $$? -eq 127; then \
-> -+		rc=0; \
-> -+	  else \
-> -+		rc=$$?; \
-> -+	  fi; \
-> - 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
-> - 	fi; \
-> - 	rm -rf $$backupdir; exit $$rc
-> -diff --git a/ld/Makefile.in b/ld/Makefile.in
-> -index 7c78198..08950a8 100644
-> ---- a/ld/Makefile.in
-> -+++ b/ld/Makefile.in
-> -@@ -1591,6 +1591,8 @@ clean-libtool:
-> - distclean-libtool:
-> - 	-rm -f libtool config.lt
-> - 
-> -+# Exit code 127 means that "makeinfo" is missing. So let's skip .info target
-> -+# but return 0 to top level Makefile to build all other targets.
-> - ld.info: ld.texinfo $(ld_TEXINFOS)
-> - 	restore=: && backupdir="$(am__leading_dot)am$$$$" && \
-> - 	rm -rf $$backupdir && mkdir $$backupdir && \
-> -@@ -1604,7 +1606,11 @@ ld.info: ld.texinfo $(ld_TEXINFOS)
-> - 	then \
-> - 	  rc=0; \
-> - 	else \
-> --	  rc=$$?; \
-> -+	  if test $$? -eq 127; then \
-> -+		rc=0; \
-> -+	  else \
-> -+		rc=$$?; \
-> -+	  fi; \
-> - 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
-> - 	fi; \
-> - 	rm -rf $$backupdir; exit $$rc
-> --- 
-> -2.5.5
-> -
-> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-> index 60aa87b..33aaf85 100644
-> --- a/package/binutils/binutils.mk
-> +++ b/package/binutils/binutils.mk
-> @@ -29,8 +29,8 @@ BINUTILS_LICENSE = GPLv3+, libiberty LGPLv2.1+
->  BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
->  
->  ifeq ($(BINUTILS_FROM_GIT),y)
-> -BINUTILS_DEPENDENCIES += host-flex host-bison
-> -HOST_BINUTILS_DEPENDENCIES += host-flex host-bison
-> +BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
-> +HOST_BINUTILS_DEPENDENCIES += host-flex host-bison host-texinfo
->  endif
->  
->  # When binutils sources are fetched from the binutils-gdb repository,
-> 
+>  boot/uboot/Config.in |  2 +-
+>  boot/uboot/uboot.mk  | 17 ++++++++++++-----
+>  2 files changed, 13 insertions(+), 6 deletions(-)
+>
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index 9ffbb51..a468548 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -313,7 +313,7 @@ config BR2_TARGET_UBOOT_SPL_NAME
+>         default "spl/u-boot-spl.bin"
+>         depends on BR2_TARGET_UBOOT_SPL
+>         help
+> -         This is the name of the SPL binary, generated during
+> +         A space-separated list of SPL binaries, generated during
+>           u-boot build. For most platform it is spl/u-boot-spl.bin
+>           but not always. It is MLO on OMAP for example.
+>
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index a2274ee..8ac035b 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -170,7 +170,10 @@ define UBOOT_INSTALL_IMAGES_CMDS
+>         $(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
+>                 cp -dpf $(@D)/$(UBOOT_MAKE_TARGET) $(BINARIES_DIR))
+>         $(if $(BR2_TARGET_UBOOT_SPL),
+> -               cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
+> +               $(foreach f,$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)), \
+> +                       cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
+> +               )
+> +       )
+>         $(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+>                 cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
+>                         $(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+> @@ -198,8 +201,9 @@ endif
+>
+>  ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
+>  define UBOOT_GENERATE_ZYNQ_IMAGE
+> -       $(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
+> -               -u $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))     \
+> +       $(HOST_DIR)/usr/bin/python2 \
+> +               $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
+> +               -u $(@D)/$(firstword $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) \
+>                 -o $(BINARIES_DIR)/BOOT.BIN
+>  endef
+>  UBOOT_DEPENDENCIES += host-zynq-boot-bin
+> @@ -208,8 +212,11 @@ endif
+>
+>  ifeq ($(BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC),y)
+>  define UBOOT_CRC_ALTERA_SOCFPGA_IMAGE
+> -       $(HOST_DIR)/usr/bin/mkpimage -o $(BINARIES_DIR)/$(notdir $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))).crc \
+> -               $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
+> +       $(foreach f,$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)), \
+> +               $(HOST_DIR)/usr/bin/mkpimage \
+> +                       -o $(BINARIES_DIR)/$(notdir $(call qstrip,$(f))).crc \
+> +                       $(@D)/$(call qstrip,$(f))
+> +       )
+>  endef
+>  UBOOT_DEPENDENCIES += host-mkpimage
+>  UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_CRC_ALTERA_SOCFPGA_IMAGE
+> --
+> 2.8.1
+>
