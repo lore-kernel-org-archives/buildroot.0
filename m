@@ -1,59 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 12:16:03 +0200
-Subject: [Buildroot] [git commit] binutils: add required upstream patch for
-	bfin
-Message-ID: <20160705101621.EA00582133@busybox.osuosl.org>
+Date: Tue, 5 Jul 2016 12:18:36 +0200
+Subject: [Buildroot] [git commit] cmake: move the host-pkgconf dependency
+	from host-cmake to pkg-cmake
+Message-ID: <20160705101946.8D42A82117@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d248bd8cae278cd0c797768cb3fb19e7c6e4657
+commit: https://git.buildroot.net/buildroot/commit/?id=6ab3383f76c4e9f7151c4fce103e5ff7d5b6eb98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is required to build uClibc-ng with threading support and FDPIC
-binary format.
+In 3d475ee0ba4d6eea6aca25594cfe5bb153ac804f a dependency on
+host-pkgconf was added to host-cmake. It is a workaround to fix build
+failures for packages that use pkgconf through a cmake module, but do
+not depend on host-pkgconf as they should.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Since it is the package that needs host-pkgconf and not host-cmake
+itself, move the dependency to the proper place, in pkg-cmake.mk.
+
+Also copy the explanation on the mentioned commit as a comment in
+order to clarify why we do this.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Davide Viti <zinosat@tiscali.it>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Thomas:
+ - update on top of master
+ - drop empty HOST_CMAKE_DEPENDENCIES, no longer needed since host
+   dependencies are no longer derived from target dependencies.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../binutils/2.26.1/0904-bfin-fdpic-upstream.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ package/cmake/cmake.mk | 1 -
+ package/pkg-cmake.mk   | 4 ++++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/binutils/2.26.1/0904-bfin-fdpic-upstream.patch b/package/binutils/2.26.1/0904-bfin-fdpic-upstream.patch
-new file mode 100644
-index 0000000..ffbacc4
---- /dev/null
-+++ b/package/binutils/2.26.1/0904-bfin-fdpic-upstream.patch
-@@ -0,0 +1,30 @@
-+From ed3056ebdb9795446157af03d3e08fbb93c1b01d Mon Sep 17 00:00:00 2001
-+From: Nick Clifton <nickc@redhat.com>
-+Date: Tue, 29 Mar 2016 10:24:16 +0100
-+Subject: [PATCH] Relax assertion in BFIN linker to allow for discard GOT relocs.
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index a776b14..95c73c0 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -10,7 +10,6 @@ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
+ 
+-HOST_CMAKE_DEPENDENCIES = host-pkgconf
+ CMAKE_DEPENDENCIES = zlib jsoncpp libcurl libarchive expat bzip2 xz
+ 
+ CMAKE_CONF_OPTS = \
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 9291523..4c6dc62 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -142,6 +142,10 @@ endef
+ endif
+ endif
+ 
++# Since some CMake modules (even upstream ones) use pgk_check_modules
++# primitives to find {C,LD}FLAGS, add it to the dependency list.
++$(2)_DEPENDENCIES += host-pkgconf
 +
-+	PR 17334
-+	* elf32-bfin.c (elf32_bfinfdpic_finish_dynamic_sections): Relax
-+	assertion on the size of the got section to allow it to be bigger
-+	than the number of relocs.
-+diff --git a/bfd/elf32-bfin.c b/bfd/elf32-bfin.c
-+index 7cc8b6d..b2fcf38 100644
-+--- a/bfd/elf32-bfin.c
-++++ b/bfd/elf32-bfin.c
-+@@ -4457,7 +4457,13 @@ elf32_bfinfdpic_finish_dynamic_sections (bfd *output_bfd,
-+   if (bfinfdpic_got_section (info))
-+     {
-+       BFD_ASSERT (bfinfdpic_gotrel_section (info)->size
-+-		  == (bfinfdpic_gotrel_section (info)->reloc_count
-++		  /* PR 17334: It appears that the GOT section can end up
-++		     being bigger than the number of relocs.  Presumably
-++		     because some relocs have been deleted.  A test case has
-++		     yet to be generated for verify this, but in the meantime
-++		     the test below has been changed from == to >= so that
-++		     applications can continue to be built.  */
-++		  >= (bfinfdpic_gotrel_section (info)->reloc_count
-+ 		      * sizeof (Elf32_External_Rel)));
-+ 
-+       if (bfinfdpic_gotfixup_section (info))
-+-- 
-+1.7.1
+ $(2)_DEPENDENCIES += host-cmake
+ 
+ #
