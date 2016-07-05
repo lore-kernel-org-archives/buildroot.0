@@ -1,77 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 13:16:36 +0200
-Subject: [Buildroot] [git commit] iptables: add upstream patch to fix AR
-	substitution
-Message-ID: <20160705111713.26C218043E@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Tue,  5 Jul 2016 13:17:25 +0200
+Subject: [Buildroot] [PATCH] uboot: install multiple spl images
+Message-ID: <1467717445-29708-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcfe05a7e9ce49bcc447fd956f52da0032f534e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Jason Abele <jason@nextthing.co>
 
-This ensures the correct AR is used for some of the iptables build
-process. This is the same fix as
-<https://bugs.gentoo.org/show_bug.cgi?id=444282>
+For some platforms, there are multiple generated spl images.  Extend
+BR2_TARGET_UBOOT_SPL_NAME to allow these multiple images to be installed
+after uboot build completes.
 
-Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
-[Thomas: use upstream patch instead of passing AR in the environment.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+For example, the NextThingCo C.H.I.P. uses two binaries from uboot,
+spl/sunxi-spl.bin and spl/sunxi-spl-with-ecc.bin.
+
+Signed-off-by: Jason Abele <jason@nextthing.co>
+[Maxime:
+ - Add foreach loop for general case and mkpimage
+ - Use firstword for zynq case]
+Signe-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- .../0003-extensions-added-AR-substitution.patch    | 33 ++++++++++++++++++++++
- package/iptables/iptables.mk                       |  1 +
- 2 files changed, 34 insertions(+)
+ boot/uboot/Config.in |  2 +-
+ boot/uboot/uboot.mk  | 17 ++++++++++++-----
+ 2 files changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/package/iptables/0003-extensions-added-AR-substitution.patch b/package/iptables/0003-extensions-added-AR-substitution.patch
-new file mode 100644
-index 0000000..b522ba7
---- /dev/null
-+++ b/package/iptables/0003-extensions-added-AR-substitution.patch
-@@ -0,0 +1,33 @@
-+From eca9b91b832dfc27d0e1a6d08e2ce4878f229373 Mon Sep 17 00:00:00 2001
-+From: Jordan Yelloz <jordan@yelloz.me>
-+Date: Fri, 24 Jun 2016 12:18:45 -0700
-+Subject: [PATCH] extensions: added AR substitution
-+
-+This is to ensure that the correct AR is run in cross-compile jobs.
-+Often a cross-compile build will succeed without this change but it
-+fails on my Gentoo Linux system when I have binutils installed with the
-+"multitarget" USE flag.
-+This change substitues AR with the autotools-supplied AR for the
-+extensions subdirectory.
-+
-+Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
-+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-+---
-+ extensions/GNUmakefile.in | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/extensions/GNUmakefile.in b/extensions/GNUmakefile.in
-+index 53be2cd..33b06ef 100644
-+--- a/extensions/GNUmakefile.in
-++++ b/extensions/GNUmakefile.in
-+@@ -11,6 +11,7 @@ libdir       = @libdir@
-+ libexecdir   = @libexecdir@
-+ xtlibdir     = @xtlibdir@
-+ 
-++AR                 = @AR@
-+ CC                 = @CC@
-+ CCLD               = ${CC}
-+ CFLAGS             = @CFLAGS@
-+-- 
-+2.7.4
-+
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index 12e00f2..a8ebec8 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -16,6 +16,7 @@ IPTABLES_LICENSE_FILES = COPYING
- IPTABLES_CONF_OPTS = --libexecdir=/usr/lib --with-kernel=$(STAGING_DIR)/usr \
- 	$(if $(BR2_STATIC_LIBS),,--disable-static)
- # For 0002-iptables-add-xtables-config-parser.h-to-BUILT_SOURCES.patch
-+# and 0003-extensions-added-AR-substitution.patch
- IPTABLES_AUTORECONF = YES
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 9ffbb51..a468548 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -313,7 +313,7 @@ config BR2_TARGET_UBOOT_SPL_NAME
+ 	default "spl/u-boot-spl.bin"
+ 	depends on BR2_TARGET_UBOOT_SPL
+ 	help
+-	  This is the name of the SPL binary, generated during
++	  A space-separated list of SPL binaries, generated during
+ 	  u-boot build. For most platform it is spl/u-boot-spl.bin
+ 	  but not always. It is MLO on OMAP for example.
  
- # For connlabel match
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index a2274ee..8ac035b 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -170,7 +170,10 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 	$(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
+ 		cp -dpf $(@D)/$(UBOOT_MAKE_TARGET) $(BINARIES_DIR))
+ 	$(if $(BR2_TARGET_UBOOT_SPL),
+-		cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
++		$(foreach f,$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)), \
++			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
++		)
++	)
+ 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
+ 		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
+ 			$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+@@ -198,8 +201,9 @@ endif
+ 
+ ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
+ define UBOOT_GENERATE_ZYNQ_IMAGE
+-	$(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
+-		-u $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))     \
++	$(HOST_DIR)/usr/bin/python2 \
++		$(HOST_DIR)/usr/bin/zynq-boot-bin.py \
++		-u $(@D)/$(firstword $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) \
+ 		-o $(BINARIES_DIR)/BOOT.BIN
+ endef
+ UBOOT_DEPENDENCIES += host-zynq-boot-bin
+@@ -208,8 +212,11 @@ endif
+ 
+ ifeq ($(BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC),y)
+ define UBOOT_CRC_ALTERA_SOCFPGA_IMAGE
+-	$(HOST_DIR)/usr/bin/mkpimage -o $(BINARIES_DIR)/$(notdir $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))).crc \
+-		$(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
++	$(foreach f,$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)), \
++		$(HOST_DIR)/usr/bin/mkpimage \
++			-o $(BINARIES_DIR)/$(notdir $(call qstrip,$(f))).crc \
++			$(@D)/$(call qstrip,$(f))
++	)
+ endef
+ UBOOT_DEPENDENCIES += host-mkpimage
+ UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_CRC_ALTERA_SOCFPGA_IMAGE
+-- 
+2.8.1
