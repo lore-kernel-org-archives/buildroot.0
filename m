@@ -1,51 +1,76 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 5 Jul 2016 10:07:49 +0100
-Subject: [Buildroot] [PATCH] openblas: add an option to install tests on the
-	target
-Message-ID: <1467709669-45114-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2016 11:08:49 +0200
+Subject: [Buildroot] [PATCH v7 2/3] docker-containerd: new package
+In-Reply-To: <1467671433-18113-2-git-send-email-christian@paral.in>
+References: <1467671433-18113-1-git-send-email-christian@paral.in>
+ <1467671433-18113-2-git-send-email-christian@paral.in>
+Message-ID: <20160705110849.56206495@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/openblas/Config.in   |  3 +++
- package/openblas/openblas.mk | 11 +++++++++++
- 2 files changed, 14 insertions(+)
+Hello,
 
-diff --git a/package/openblas/Config.in b/package/openblas/Config.in
-index 51afaec..67dbf71 100644
---- a/package/openblas/Config.in
-+++ b/package/openblas/Config.in
-@@ -59,4 +59,7 @@ config BR2_PACKAGE_OPENBLAS_TARGET
- 	string "OpenBLAS target CPU"
- 	default BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
- 
-+config BR2_PACKAGE_OPENBLAS_INSTALL_TESTS
-+	bool "Install OpenBLAS tests"
-+
- endif
-diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-index baeef05..1894d29 100644
---- a/package/openblas/openblas.mk
-+++ b/package/openblas/openblas.mk
-@@ -53,4 +53,15 @@ define OPENBLAS_INSTALL_TARGET_CMDS
- 		-C $(@D) install PREFIX=$(TARGET_DIR)/usr
- endef
- 
-+ifeq ($(BR2_PACKAGE_OPENBLAS_INSTALL_TESTS),y)
-+define OPENBLAS_INSTALL_TESTS
-+	for i in test ctest utest; do \
-+		mkdir -p $(TARGET_DIR)/usr/share/openblas/$$i && \
-+		cd $(@D)/$$i && \
-+		find . -type f -perm -a=x -exec $(INSTALL) -m 0755 {} $(TARGET_DIR)/usr/share/openblas/$$i/{} \; ; \
-+		done
-+endef
-+OPENBLAS_POST_INSTALL_TARGET_HOOKS += OPENBLAS_INSTALL_TESTS
-+endif
-+
- $(eval $(generic-package))
+I applied your patch, after doing some changes. See below.
+
+On Mon,  4 Jul 2016 15:30:32 -0700, Christian Stewart wrote:
+
+> diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
+> new file mode 100644
+> index 0000000..b2f2983
+> --- /dev/null
+> +++ b/package/docker-containerd/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_DOCKER_CONTAINERD
+> +	bool "docker-containerd"
+> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_USE_MMU # util-linux
+> +	depends on BR2_USE_WCHAR # util-linux
+> +	select BR2_PACKAGE_RUNC # runc: runtime dependency
+
+No need to indicate "runc: runtime dependency", "runtime dependency" is
+enough.
+
+> +	select BR2_PACKAGE_UTIL_LINUX # util-linux: runtime dependency
+
+Ditto.
+
+> +	select BR2_PACKAGE_UTIL_LINUX_BINARIES # util-linux: runtime dependency
+> +	select BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT # util-linux: runtime dependency
+> +	select BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT # util-linux: runtime dependency
+> +	select BR2_PACKAGE_UTIL_LINUX_MOUNT # util-linux: runtime dependency
+
+For those selects, the "runtime dependency" comment is useless, so I
+removed it.
+
+> +	help
+> +	  containerd is a daemon to control runC.
+> +
+> +	  https://github.com/docker/containerd
+> +
+> +comment "docker-containerd needs a toolchain w/ threads"
+> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+
+You forgot the wchar dependency here, and also the BR2_USE_MMU
+dependency.
+
+
+> +define DOCKER_CONTAINERD_BUILD_CMDS
+> +	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/ctr -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./ctr
+> +	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/containerd -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./containerd
+> +	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/containerd-shim -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./containerd-shim
+
+These lines were a bit too long, and also repetitive. So I refactored
+this with a foreach loop.
+
+Thanks,
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
