@@ -1,141 +1,68 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 5 Jul 2016 15:45:32 +0200
-Subject: [Buildroot] [PATCH 3/4] ajtcl: new package
-In-Reply-To: <20390_1467040718_577143CE_20390_5576_1_9bcd6009-a0eb-41a1-a31a-dd6fd4a34e7d@OPEXCLILM5F.corporate.adroot.infra.ftgroup>
-References: <20390_1467040718_577143CE_20390_5576_1_9bcd6009-a0eb-41a1-a31a-dd6fd4a34e7d@OPEXCLILM5F.corporate.adroot.infra.ftgroup>
-Message-ID: <9e3c5bff-3dd2-26db-3bce-e0d5aaee28d1@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 5 Jul 2016 15:48:48 +0200
+Subject: [Buildroot] [git commit] core/pkg-generic: allow packages to
+	declare target-finalize hooks
+Message-ID: <20160705135120.33BA37FAF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 27/06/2016 ? 17:18, fabrice.fontaine at orange.com a ?crit :
-> The AllJoyn framework defines a common way for devices and apps to
-> communicate with one another regardless of brands, categories,
-> transports, and OSes. Developers write applications that discover
-> nearby devices, and communicate with each other directly and through
-> the cloud, unleashing new possibilities in the Internet of Things.
-> 
-> AllJoyn Thin Core Library (AJTCL) is designed to bring the benefits
-> of the AllJoyn distributed programming environment to embedded
-> systems.
-> 
-> https://allseenalliance.org
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> ---
->  package/Config.in        |  1 +
->  package/ajtcl/Config.in  | 18 ++++++++++++++++++
->  package/ajtcl/ajtcl.hash |  2 ++
->  package/ajtcl/ajtcl.mk   | 44 ++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 65 insertions(+)
->  create mode 100644 package/ajtcl/Config.in
->  create mode 100644 package/ajtcl/ajtcl.hash
->  create mode 100644 package/ajtcl/ajtcl.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 5cde173..d262ff7 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1123,6 +1123,7 @@ endmenu
->  
->  menu "Networking"
->  	source "package/agentpp/Config.in"
-> +	source "package/ajtcl/Config.in"
->  	source "package/alljoyn/Config.in"
->  	source "package/alljoyn-base/Config.in"
->  	source "package/batman-adv/Config.in"
-> diff --git a/package/ajtcl/Config.in b/package/ajtcl/Config.in
-> new file mode 100644
-> index 0000000..3f2e573
-> --- /dev/null
-> +++ b/package/ajtcl/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_AJTCL
-> +	bool "alljoyn-thin-core"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+commit: https://git.buildroot.net/buildroot/commit/?id=624dbec7e1f971519be9a165b09c0b95a8ee282b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As for alljoyn, ajtcl should depends on "depends on !BR2_STATIC_LIBS" due to
-lib*.so build and install.
+Currently, packages using target finalize hooks must remember that they
+need to register their hook in TARGET_FINALIZE_HOOKS
+conditionally (otherwise their hook will be triggered even if the
+package is disabled).
 
-> +	help
-> +	  The AllJoyn framework defines a common way for devices and apps to
-> +	  communicate with one another regardless of brands, categories,
-> +	  transports, and OSes. Developers write applications that discover
-> +	  nearby devices, and communicate with each other directly and through
-> +	  the cloud, unleashing new possibilities in the Internet of Things.
-> +
-> +	  AllJoyn Thin Core Library (AJTCL) is designed to bring the benefits
-> +	  of the AllJoyn distributed programming environment to embedded
-> +	  systems.
-> +
-> +	  https://allseenalliance.org
-> +
-> +comment "alljoyn-thin-core needs a toolchain w/ threads"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+In order to avoid this potential mistake, this commit introduces a
+per-package target-finalize hook variable, in which packages can
+register their target-finalize hooks, with the guarantee that they will
+only be triggered if the package is enabled.
 
-Update the comment dependency accordingly.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+[Thomas: rework commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/adding-packages-hooks.txt | 7 +++++++
+ package/pkg-generic.mk                | 2 ++
+ 2 files changed, 9 insertions(+)
 
-> diff --git a/package/ajtcl/ajtcl.hash b/package/ajtcl/ajtcl.hash
-> new file mode 100644
-> index 0000000..a1cdf16
-> --- /dev/null
-> +++ b/package/ajtcl/ajtcl.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256	ce6a05a67ff405ba6274e85fe750d98f40cbe7ab2c968218c7741a10bd86e21a	ajtcl-16.04.00-src.tar.gz
-> diff --git a/package/ajtcl/ajtcl.mk b/package/ajtcl/ajtcl.mk
-> new file mode 100644
-> index 0000000..d74be97
-> --- /dev/null
-> +++ b/package/ajtcl/ajtcl.mk
-> @@ -0,0 +1,44 @@
-> +################################################################################
-> +#
-> +# ajtcl
-> +#
-> +################################################################################
-> +
-> +AJTCL_REV = 16.04
-> +AJTCL_VERSION = $(AJTCL_REV).00
-> +AJTCL_SOURCE = ajtcl-$(AJTCL_VERSION)-src.tar.gz
-> +AJTCL_SITE = https://mirrors.kernel.org/allseenalliance/alljoyn/$(AJTCL_REV)
-> +# See https://allseenalliance.org/alliance/ip-policy
-> +AJTCL_LICENSE = ISC
-> +# AllJoyn Thin Core does not provide any license files with source code
-> +# AJTCL_LICENSE_FILES = 
-
-Same comment as for alljoyn package.
-
-> +
-> +AJTCL_DEPENDENCIES = host-scons
-> +AJTCL_INSTALL_STAGING = YES
-> +
-> +# AllJoyn Thin Core can be compiled in debug or release mode. By default,
-> +# AllJoyn Thin Core is built in debug mode.
-> +AJTCL_VARIANT = release
-> +
-> +AJTCL_SCONS_OPTS = \
-> +	-j$(PARALLEL_JOBS) \
-> +	V=1 \
-> +	VARIANT=$(AJTCL_VARIANT) \
-> +	CC="$(TARGET_CC)" \
-> +	CXX="$(TARGET_CXX)"
-> +
-> +define AJTCL_BUILD_CMDS
-> +	cd $(@D); $(SCONS) $(AJTCL_SCONS_OPTS)
-> +endef
-> +
-> +define AJTCL_INSTALL_STAGING_CMDS
-> +	cp -a $(@D)/dist/lib/lib* $(STAGING_DIR)/usr/lib/
-> +	cp -a $(@D)/dist/include/* $(STAGING_DIR)/usr/include/
-> +endef
-> +
-> +# Only install AllJoyn Thin Core dynamic libraries into target directory
-> +define AJTCL_INSTALL_TARGET_CMDS
-> +	cp -a $(@D)/dist/lib/lib*.so* $(TARGET_DIR)/usr/lib/
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
+diff --git a/docs/manual/adding-packages-hooks.txt b/docs/manual/adding-packages-hooks.txt
+index 5b5bf6a..d25092a 100644
+--- a/docs/manual/adding-packages-hooks.txt
++++ b/docs/manual/adding-packages-hooks.txt
+@@ -77,3 +77,10 @@ others, use the following variables:
+ 
+ * +$(SRCDIR)+: the path to the overridden source directory
+ * +$(@D)+: the path to the build directory
++
++==== Target-finalize hook
++
++Packages may also register hooks in +LIBFOO_TARGET_FINALIZE_HOOKS+.
++These hooks are run after all packages are built, but before the
++filesystem images are generated. They are seldom used, and your
++package probably do not need them.
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 0c9c7ab..68ead3d 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -572,6 +572,7 @@ $(2)_PRE_INSTALL_IMAGES_HOOKS   ?=
+ $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
+ $(2)_PRE_LEGAL_INFO_HOOKS       ?=
+ $(2)_POST_LEGAL_INFO_HOOKS      ?=
++$(2)_TARGET_FINALIZE_HOOKS      ?=
+ 
+ # human-friendly targets and target sequencing
+ $(1):			$(1)-install
+@@ -882,6 +883,7 @@ endif
+ ifneq ($$($(2)_USERS),)
+ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+ endif
++TARGET_FINALIZE_HOOKS += $$($(2)_TARGET_FINALIZE_HOOKS)
+ 
+ ifeq ($$($(2)_SITE_METHOD),svn)
+ DL_TOOLS_DEPENDENCIES += svn
