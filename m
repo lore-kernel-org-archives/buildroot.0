@@ -1,133 +1,387 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 5 Jul 2016 16:46:47 +0200
-Subject: [Buildroot] [PATCH] circus: new package
-In-Reply-To: <CAGduivznsbcMDSDkqRDGTFSaAvPnVOPrSt7uTH77pjww0vVs_Q@mail.gmail.com>
-References: <1467639187-23454-1-git-send-email-yegorslists@googlemail.com>
- <CAGduivznsbcMDSDkqRDGTFSaAvPnVOPrSt7uTH77pjww0vVs_Q@mail.gmail.com>
-Message-ID: <CAGm1_kuU_rnpoQL4Ut8EX04-Pzv1dZXqpM+t+doch5MO+t_jhA@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 5 Jul 2016 17:11:33 +0200
+Subject: [Buildroot] [PATCH v5] util-linux: rework utilities menu for
+ finer control
+In-Reply-To: <1465266353-5834-1-git-send-email-casantos@datacom.ind.br>
+References: <1464982539-26551-1-git-send-email-casantos@datacom.ind.br>
+ <1465266353-5834-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <f4fa0b18-1280-1fa5-908a-d12a0fc621a2@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
+Hi Carlos,
 
-On Tue, Jul 5, 2016 at 4:00 PM, Maxime Hadjinlian
-<maxime.hadjinlian@gmail.com> wrote:
-> Hi Yegor, all
->
-> On Mon, Jul 4, 2016 at 3:33 PM,  <yegorslists@googlemail.com> wrote:
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->> ---
->>  package/Config.in          |  3 +++
->>  package/circus/Config.in   | 21 +++++++++++++++++++++
->>  package/circus/circus.hash |  4 ++++
->>  package/circus/circus.mk   | 14 ++++++++++++++
->>  4 files changed, 42 insertions(+)
->>  create mode 100644 package/circus/Config.in
->>  create mode 100644 package/circus/circus.hash
->>  create mode 100644 package/circus/circus.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 67810b0..ba55d1d 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -1677,6 +1677,9 @@ menu "System tools"
->>         source "package/audit/Config.in"
->>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->>         source "package/bootutils/Config.in"
->> +endif
->> +       source "package/circus/Config.in"
->> +if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> There's a bug here, and we don't have this kind of if in the main
-> 'Config.in' anyway, you can remove it or it can be fixed during the
-> merge.
+Le 07/06/2016 ? 04:25, Carlos Santos a ?crit :
+> When even a single extra util-linux utility is enabled, the
+> default build and install will install many more programs,
+> including many that overlap with those offered by busybox.
+> 
+> Fix by reworking the install-utilies menu to take advantage
+> of the new --disable-all-programs config option.  This option
+> make it possible to disable the basic set of apps, and then
+> enable only the desired apps.
+> 
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+> 
+> Changes v1 -> v2:
+>   - Rework to incorporate ideas and suggestions from Thomas Petazzoni
+>     and Arnout Vandecappelle.  At least, in spirit.
+> 
+> Changes v2 -> v3:
+>   - Change BR2_PACKAGE_UTIL_LINUX_SELECTED_BINARIES to
+>     BR2_PACKAGE_UTIL_LINUX_BINARIES, to conserve backwards-
+>     compatibility without need for a legacy option.
+>   - Enable 'Basic set' by default to match output of previous
+>     build when binaries were selected.
+> 
+> Changes v3 -> v4:
+>   - Rework to apply on top of master branch
+> 
+> Changes v4 -> v5:
+>   - Add option to control installation of libfdisk.
+>   - Fine-grained selection of libraries in custom selection of
+>     utilities.
+>   - Document that linux32, linux64, uname26, i386 and x86_64 are
+>     setarch aliases.
+>   - Add options to instal cal, ipcrm, ipcs, logger, lslogin and pg.
+>   - Remove options to install findfs and lsblk because there are no
+>     corresponding --enable- and --disable- configure options.
+> ---
+>  package/util-linux/Config.in     | 117 ++++++++++++++++++++++++++++++++++-----
+>  package/util-linux/util-linux.mk |  23 +++++---
+>  2 files changed, 116 insertions(+), 24 deletions(-)
+> 
+> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+> index 8a36c0a..d002495 100644
+> --- a/package/util-linux/Config.in
+> +++ b/package/util-linux/Config.in
+> @@ -18,6 +18,14 @@ config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+>  	help
+>  	  Install libblkid.
+>  
+> +config BR2_PACKAGE_UTIL_LINUX_LIBFDISK
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+> +	depends on BR2_USE_MMU # fork
+> +	bool "libfdisk"
+> +	help
+> +	  Install libfdisk.
+> +
+>  config BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+>  	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+>  	depends on BR2_USE_MMU # util-linux/libblkid
+> @@ -36,18 +44,62 @@ config BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>  	help
+>  	  Install libuuid.
+>  
+> +choice
+> +	prompt "Install utilities"
+> +	default BR2_PACKAGE_UTIL_LINUX_NO_BINARIES
+> +
+> +config BR2_PACKAGE_UTIL_LINUX_NO_BINARIES
+> +	bool "none"
+> +	help
+> +	  Disable all util-linux binaries.
+> +
+> +config BR2_PACKAGE_UTIL_LINUX_ALL_BINARIES
+> +	bool "all"
+> +	depends on BR2_USE_MMU # fork()
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID     # findmnt, etc
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT     # findmnt, etc
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK     # fdisk, etc
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS # findmnt, etc
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID      # findmnt, etc
+> +	select BR2_PACKAGE_LINUX_PAM  # login utils
+> +	select BR2_PACKAGE_ZLIB  # cramfs
+> +	select BR2_PACKAGE_NCURSES  # more, setterm, ul
+> +	select BR2_PACKAGE_LIBCAP_NG  # setpriv
+> +	help
+> +	  Install the complete set of util-linux binaries.
+> +
+>  config BR2_PACKAGE_UTIL_LINUX_BINARIES
+> -	bool "install utilities"
+> +	bool "custom"
+>  	depends on BR2_USE_MMU # fork()
+> -	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+> -	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+> -	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
+> -	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>  	help
+> -	  Install the basic set of util-linux binaries.
+> +	  Manually select which util-linux binaries to install.
+> +
+> +endchoice
+>  
+>  if BR2_PACKAGE_UTIL_LINUX_BINARIES
+>  
+> +config BR2_PACKAGE_UTIL_LINUX_BASIC_SET
+> +	bool "Basic set"
 
-Fixed in v2.
+Use "basic set" instead since all other option are lowercase.
 
-> Also I am wondering, I see that circus can be used as daemon (and I
-> think it might be it's most common usage) it would be nice if you
-> could provide an init script (even better if you want to provide a
-> service file), but none of this is mandatory, your patch can be
-> applied as is and the init script can be added later on.
+> +	default y
 
-I'm planning to add scripts later.
+missing depends on BR2_USE_MMU # fork()
 
-> Other than that:
->
-> Reviewed-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID     # findmnt, etc
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT     # findmnt, etc
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK     # fdisk, etc
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS # findmnt, etc
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID      # findmnt, etc
+> +	help
+> +	  Install a basic set of util-linux binaries.
+> +
+> +	  blkdiscard, blkid, blockdev, chcpu, col, colcrt, colrm,
+> +	  column, ctrlaltdel, dmesg, fdisk, findfs, findmnt, flock,
+> +	  fsfreeze, fstrim, getopt, hexdump, ipcmk, isosize, ldattach,
+> +	  look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie, mkfs,
+> +	  mkswap, namei, prlimit, readprofile, renice, rev, rtcwake,
+> +	  script, scriptreplay, setarch, setsid, sfdisk, swaplabel,
+> +	  swapoff, swapon, tailf, uuidgen, whereis, wipefs
+> +
+> +	  The setarch utility may also install architecture-specific
+> +	  "aliases" like linux32, linux64, uname26, i386 and x86_64.
+> +
+>  config BR2_PACKAGE_UTIL_LINUX_AGETTY
+>  	bool "agetty"
+>  	help
+> @@ -58,6 +110,11 @@ config BR2_PACKAGE_UTIL_LINUX_BFS
+>  	help
+>  	  SCO bfs filesystem support
+>  
+> +config BR2_PACKAGE_UTIL_LINUX_CAL
+> +	bool "cal"
+> +	help
+> +	  Display a calendar, or some part of it
+> +
+>  config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
+>  	bool "chfn/chsh"
+>  	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+> @@ -79,6 +136,9 @@ config BR2_PACKAGE_UTIL_LINUX_CRAMFS
+>  
+>  config BR2_PACKAGE_UTIL_LINUX_EJECT
+>  	bool "eject"
 
-Thanks for review.
+missing depends on BR2_USE_MMU # fork()
 
-Yegor
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>  	help
+>  	  Eject removable media
+>  
+> @@ -92,13 +152,11 @@ config BR2_PACKAGE_UTIL_LINUX_FDFORMAT
+>  	help
+>  	  Low-level format a floppy disk
+>  
+> -config BR2_PACKAGE_UTIL_LINUX_FINDFS
+> -	bool "findfs"
+> -	help
+> -	  Find a filesystem by label or UUID
+> -
+>  config BR2_PACKAGE_UTIL_LINUX_FSCK
+>  	bool "fsck"
 
->>         source "package/coreutils/Config.in"
->>  endif
->>         source "package/cpuload/Config.in"
->> diff --git a/package/circus/Config.in b/package/circus/Config.in
->> new file mode 100644
->> index 0000000..476a53e
->> --- /dev/null
->> +++ b/package/circus/Config.in
->> @@ -0,0 +1,21 @@
->> +config BR2_PACKAGE_CIRCUS
->> +       bool "circus"
->> +       depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
->> +       depends on BR2_USE_WCHAR # zeromq
->> +       depends on BR2_INSTALL_LIBSTDCPP # zeromq
->> +       depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
->> +       select BR2_PACKAGE_PYTHON_IOWAIT # runtime
->> +       select BR2_PACKAGE_PYTHON_PSUTIL # runtime
->> +       select BR2_PACKAGE_PYTHON_PYZMQ # runtime
->> +       select BR2_PACKAGE_PYTHON_TORNADO # runtime
->> +       select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
->> +       help
->> +         Circus is a program that will let you run and watch multiple
->> +         processes and sockets.
->> +
->> +         https://circus.readthedocs.org/en/latest/
->> +
->> +comment "circus needs a toolchain w/ C++, wchar, threads and Python2/3"
->> +       depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
->> +               BR2_TOOLCHAIN_HAS_THREADS && (BR2_PACKAGE_PYTHON || \
->> +               BR2_PACKAGE_PYTHON3))
->> diff --git a/package/circus/circus.hash b/package/circus/circus.hash
->> new file mode 100644
->> index 0000000..01994f4
->> --- /dev/null
->> +++ b/package/circus/circus.hash
->> @@ -0,0 +1,4 @@
->> +# md5 from https://pypi.python.org/pypi/circus/json
->> +md5    cddd4a8844907d8b6b402ca9c713d176  circus-0.13.0.tar.gz
->> +# sha256 calculated by scanpypi
->> +sha256 6201800a5fb05144b5e6c5ac9eb901b914305e8beaeb01f8edf54ab6ab1a295a  circus-0.13.0.tar.gz
->> diff --git a/package/circus/circus.mk b/package/circus/circus.mk
->> new file mode 100644
->> index 0000000..a7693bd
->> --- /dev/null
->> +++ b/package/circus/circus.mk
->> @@ -0,0 +1,14 @@
->> +################################################################################
->> +#
->> +# circus
->> +#
->> +################################################################################
->> +
->> +CIRCUS_VERSION = 0.13.0
->> +CIRCUS_SOURCE = circus-$(CIRCUS_VERSION).tar.gz
->> +CIRCUS_SITE = https://pypi.python.org/packages/source/c/circus
->> +CIRCUS_SETUP_TYPE = setuptools
->> +CIRCUS_LICENSE = Apache-2.0
->> +CIRCUS_LICENSE_FILES = LICENSE
->> +
->> +$(eval $(python-package))
->> --
->> 2.8.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+missing depends on BR2_USE_MMU # fork()
+
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>  	help
+>  	  Check and repair a linux filesystem
+>  
+> @@ -107,6 +165,16 @@ config BR2_PACKAGE_UTIL_LINUX_HWCLOCK
+>  	help
+>  	  Query or set the hardware clock (RTC)
+>  
+> +config BR2_PACKAGE_UTIL_LINUX_IPCRM
+> +	bool "ipcrm"
+> +	help
+> +	  Remove certain IPC resources
+> +
+> +config BR2_PACKAGE_UTIL_LINUX_IPCS
+> +	bool "ipcs"
+> +	help
+> +	  Show information on IPC facilities
+> +
+>  config BR2_PACKAGE_UTIL_LINUX_KILL
+>  	bool "kill"
+>  	help
+> @@ -135,15 +203,20 @@ comment "login utilities needs a uClibc or (e)glibc toolchain w/ wchar, locale,
+>  	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+>  		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+>  
+> +config BR2_PACKAGE_UTIL_LINUX_LOGGER
+> +	bool "logger"
+> +	help
+> +	  Enter messages into the system log
+> +
+>  config BR2_PACKAGE_UTIL_LINUX_LOSETUP
+>  	bool "losetup"
+>  	help
+>  	  Set up and control loop devices
+>  
+> -config BR2_PACKAGE_UTIL_LINUX_LSBLK
+> -	bool "lsblk"
+> +config BR2_PACKAGE_UTIL_LINUX_LSLOGINS
+> +	bool "lslogin"
+>  	help
+> -	  List block devices.
+> +	  Display information about known users in the system
+>  
+>  config BR2_PACKAGE_UTIL_LINUX_MESG
+>  	bool "mesg"
+> @@ -163,11 +236,17 @@ config BR2_PACKAGE_UTIL_LINUX_MORE
+>  
+>  config BR2_PACKAGE_UTIL_LINUX_MOUNT
+>  	bool "mount/umount"
+
+missing depends on BR2_USE_MMU # fork()
+
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>  	help
+>  	  Mount/unmount filesystems
+>  
+>  config BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT
+>  	bool "mountpoint"
+
+missing depends on BR2_USE_MMU # fork()
+
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>  	help
+>  	  See if a directory is a mountpoint
+>  
+> @@ -185,13 +264,20 @@ config BR2_PACKAGE_UTIL_LINUX_NSENTER
+>  	bool "nsenter"
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+>  	help
+> -	  Enter the namespaces of another process.
+> +	  Enter the namespaces of another process
+>  
+>  comment "nsenter needs a toolchain w/ headers >= 3.0"
+>  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+>  
+> +config BR2_PACKAGE_UTIL_LINUX_PG
+> +	bool "pg"
+> +	help
+> +	  Browse pagewise through text files
+> +
+>  config BR2_PACKAGE_UTIL_LINUX_PARTX
+>  	bool "partition utilities"
+
+missing depends on BR2_USE_MMU # fork()
+
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>  	help
+>  	  Partition tools (addpart, delpart, partx)
+>  
+> @@ -261,6 +347,7 @@ config BR2_PACKAGE_UTIL_LINUX_UTMPDUMP
+>  
+>  config BR2_PACKAGE_UTIL_LINUX_UUIDD
+>  	bool "uuidd"
+
+missing depends on BR2_USE_MMU # fork()
+
+With that fixed:
+  Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>  	help
+>  	  UUID generation daemon
+>  
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index 93f45c2..d979852 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -63,18 +63,26 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
+>  # Used by login-utils
+>  UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
+>  
+> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_NO_BINARIES),y)
+> +UTIL_LINUX_CONF_OPTS += --disable-all-programs
+> +else ifeq ($(BR2_PACKAGE_UTIL_LINUX_ALL_BINARIES),y)
+> +UTIL_LINUX_CONF_OPTS += --enable-all-programs
+> +else
+>  # Disable/Enable utilities
+>  UTIL_LINUX_CONF_OPTS += \
+> +	$(if $(BR2_PACKAGE_UTIL_LINUX_BASIC_SET),,--disable-all-programs) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),--enable-agetty,--disable-agetty) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_BFS),--enable-bfs,--disable-bfs) \
+> +	$(if $(BR2_PACKAGE_UTIL_LINUX_CAL),--enable-cal,--disable-cal) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH),--enable-chfn-chsh,--disable-chfn-chsh) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),--enable-cramfs,--disable-cramfs) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_FDFORMAT),--enable-fdformat,--disable-fdformat) \
+> -	$(if $(BR2_PACKAGE_UTIL_LINUX_FINDFS),--enable-findfs,--disable-findfs) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_HWCLOCK),--enable-hwclock,--disable-hwclock) \
+> +	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCRM),--enable-ipcrm,--disable-ipcrm) \
+> +	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCS),--enable-ipcs,--disable-ipcs) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
+> @@ -83,8 +91,9 @@ UTIL_LINUX_CONF_OPTS += \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_LINE),--enable-line,--disable-line) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-runuser --enable-su --enable-sulogin,--disable-last --disable-login --disable-runuser --disable-su --disable-sulogin) \
+> +	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGGER),--enable-logger,--disable-logger) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
+> -	$(if $(BR2_PACKAGE_UTIL_LINUX_LSBLK),--enable-lsblk,--disable-lsblk) \
+> +	$(if $(BR2_PACKAGE_UTIL_LINUX_LSLOGINS),--enable-lslogins,--disable-lslogins) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_MINIX),--enable-minix,--disable-minix) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_MORE),--enable-more,--disable-more) \
+> @@ -94,6 +103,7 @@ UTIL_LINUX_CONF_OPTS += \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_NOLOGIN),--enable-nologin,--disable-nologin) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_NSENTER),--enable-nsenter,--disable-nsenter) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),--enable-partx,--disable-partx) \
+> +	$(if $(BR2_PACKAGE_UTIL_LINUX_PG),--enable-pg,--disable-pg) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT),--enable-pivot_root,--disable-pivot_root) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
+> @@ -112,6 +122,7 @@ UTIL_LINUX_CONF_OPTS += \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_WDCTL),--enable-wdctl,--disable-wdctl) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_ZRAMCTL),--enable-zramctl,--disable-zramctl)
+> +endif
+>  
+>  # In the host version of util-linux, we so far only require libuuid,
+>  # and none of the util-linux utilities, so we disable all of them, unless
+> @@ -130,12 +141,6 @@ else
+>  HOST_UTIL_LINUX_CONF_OPTS += --disable-all-programs
+>  endif
+>  
+> -# Avoid building the tools if they are disabled since we can't install on
+> -# a per-directory basis.
+> -ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),)
+> -UTIL_LINUX_CONF_OPTS += --disable-all-programs
+> -endif
+> -
+>  # Install libmount Python bindings
+>  ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
+>  UTIL_LINUX_CONF_OPTS += --with-python
+> @@ -162,7 +167,7 @@ endif
+>  UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_INSTALL_PAMFILES
+>  
+>  # Install agetty->getty symlink to avoid breakage when there's no busybox
+> -ifeq ($(BR2_PACKAGE_UTIL_LINUX_AGETTY),y)
+> +ifneq ($(BR2_PACKAGE_UTIL_LINUX_ALL_BINARIES)$(BR2_PACKAGE_UTIL_LINUX_AGETTY),)
+>  ifeq ($(BR2_PACKAGE_BUSYBOX),)
+>  define UTIL_LINUX_GETTY_SYMLINK
+>  	ln -sf agetty $(TARGET_DIR)/sbin/getty
+> 
