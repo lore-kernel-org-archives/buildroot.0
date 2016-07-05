@@ -1,30 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 19:28:49 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/linknx: make it build with
- the musl C library
-In-Reply-To: <1465847131-23796-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1465847131-23796-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160705192849.5f8d04dd@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  5 Jul 2016 19:35:48 +0200
+Subject: [Buildroot] [PATCH] package/jemalloc: filter on suported
+	architectures
+Message-ID: <1467740148-10178-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+jemalloc has a hard-coded list of supported architectures, which it uses
+to define the minimum alignment for allocations. It whines at build time
+(not at configure time) when it does not know that alignment.
 
-On Mon, 13 Jun 2016 21:45:31 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/c0f/c0f59d3f9eb115072d410ef199f4773f2c380d6d/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: added better patch description and sent patch upstream
+Fix that by making jemalloc depend on the known-supported architectures.
 
-Applied to master, thanks.
+Fixes:
+    http://autobuild.buildroot.org/results/674/674b6022f9a403528a758c0785656d2bda79e0a9/
 
-Thomas
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/jemalloc/Config.in | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/package/jemalloc/Config.in b/package/jemalloc/Config.in
+index ff74387..a166821 100644
+--- a/package/jemalloc/Config.in
++++ b/package/jemalloc/Config.in
+@@ -1,5 +1,15 @@
++config BR2_PACKAGE_JEMALLOC_ARCH_SUPPORTS
++	bool
++	default y if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be
++	default y if BR2_i386 || BR2_x86_64
++	default y if BR2_mips || BR2_mipsel
++	default y if BR2_sparc64
++	default y if BR2_powerpc
++	default y if BR2_sh && !BR2_sh2a
++
+ config BR2_PACKAGE_JEMALLOC
+ 	bool "jemalloc"
++	depends on BR2_PACKAGE_JEMALLOC_ARCH_SUPPORTS
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+ 	 This library providing a malloc(3) implementation that emphasizes
+@@ -8,4 +18,5 @@ config BR2_PACKAGE_JEMALLOC
+ 	 http://www.canonware.com/jemalloc/
+ 
+ comment "jemalloc needs a toolchain w/ dynamic library"
++	depends on BR2_PACKAGE_JEMALLOC_ARCH_SUPPORTS
+ 	depends on BR2_STATIC_LIBS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
