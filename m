@@ -1,76 +1,105 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jul 2016 11:08:49 +0200
-Subject: [Buildroot] [PATCH v7 2/3] docker-containerd: new package
-In-Reply-To: <1467671433-18113-2-git-send-email-christian@paral.in>
-References: <1467671433-18113-1-git-send-email-christian@paral.in>
- <1467671433-18113-2-git-send-email-christian@paral.in>
-Message-ID: <20160705110849.56206495@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 5 Jul 2016 11:09:30 +0200
+Subject: [Buildroot] [Patch v2 1/3] jemalloc: new package
+In-Reply-To: <1466797592-5565-2-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1466797592-5565-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1466797592-5565-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <dab29f40-27b6-1b2a-54af-5b2163ef7846@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Eric,
 
-I applied your patch, after doing some changes. See below.
-
-On Mon,  4 Jul 2016 15:30:32 -0700, Christian Stewart wrote:
-
-> diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
+Le 24/06/2016 ? 21:46, Eric Le Bihan a ?crit :
+> This new package provides jemalloc, a malloc(3) implementation that
+> emphasizes fragmentation avoidance and scalable concurrency support.
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  package/Config.in              |  1 +
+>  package/jemalloc/Config.in     |  7 +++++++
+>  package/jemalloc/jemalloc.hash |  2 ++
+>  package/jemalloc/jemalloc.mk   | 15 +++++++++++++++
+>  4 files changed, 25 insertions(+)
+>  create mode 100644 package/jemalloc/Config.in
+>  create mode 100644 package/jemalloc/jemalloc.hash
+>  create mode 100644 package/jemalloc/jemalloc.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index a2a02a8..38734f3 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1242,6 +1242,7 @@ menu "Other"
+>  	source "package/gmp/Config.in"
+>  	source "package/gsl/Config.in"
+>  	source "package/gtest/Config.in"
+> +	source "package/jemalloc/Config.in"
+>  	source "package/libargtable2/Config.in"
+>  	source "package/libatomic_ops/Config.in"
+>  	source "package/libbsd/Config.in"
+> diff --git a/package/jemalloc/Config.in b/package/jemalloc/Config.in
 > new file mode 100644
-> index 0000000..b2f2983
+> index 0000000..86bafbf
 > --- /dev/null
-> +++ b/package/docker-containerd/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_DOCKER_CONTAINERD
-> +	bool "docker-containerd"
-> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_USE_MMU # util-linux
-> +	depends on BR2_USE_WCHAR # util-linux
-> +	select BR2_PACKAGE_RUNC # runc: runtime dependency
+> +++ b/package/jemalloc/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_JEMALLOC
+> +	bool "jemalloc"
 
-No need to indicate "runc: runtime dependency", "runtime dependency" is
-enough.
+Can you check the jemalloc dependency ?
 
-> +	select BR2_PACKAGE_UTIL_LINUX # util-linux: runtime dependency
+Since it try to build libjemalloc.so.2, jmalloc should be disabled for static
+only build.
 
-Ditto.
-
-> +	select BR2_PACKAGE_UTIL_LINUX_BINARIES # util-linux: runtime dependency
-> +	select BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT # util-linux: runtime dependency
-> +	select BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT # util-linux: runtime dependency
-> +	select BR2_PACKAGE_UTIL_LINUX_MOUNT # util-linux: runtime dependency
-
-For those selects, the "runtime dependency" comment is useless, so I
-removed it.
+jemalloc build fine with uclibc-ng and musl.
 
 > +	help
-> +	  containerd is a daemon to control runC.
+> +	 This library providing a malloc(3) implementation that emphasizes
+> +	 fragmentation avoidance and scalable concurrency support.
 > +
-> +	  https://github.com/docker/containerd
+> +	 http://www.canonware.com/jemalloc/
+> diff --git a/package/jemalloc/jemalloc.hash b/package/jemalloc/jemalloc.hash
+> new file mode 100644
+> index 0000000..c24a273
+> --- /dev/null
+> +++ b/package/jemalloc/jemalloc.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 b216ddaeb901697fe38bd30ea02d7505a4b60e8979092009f95cfda860d46acb jemalloc-4.2.0.tar.bz2
+> diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
+> new file mode 100644
+> index 0000000..4c76a21
+> --- /dev/null
+> +++ b/package/jemalloc/jemalloc.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# jemalloc
+> +#
+> +################################################################################
 > +
-> +comment "docker-containerd needs a toolchain w/ threads"
-> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +JEMALLOC_VERSION = 4.2.0
+> +JEMALLOC_SOURCE = jemalloc-$(JEMALLOC_VERSION).tar.bz2
+> +JEMALLOC_SITE = http://www.canonware.com/download/jemalloc/
 
-You forgot the wchar dependency here, and also the BR2_USE_MMU
-dependency.
+Remove the trailing stash:
+package/jemalloc/jemalloc.mk:14: *** JEMALLOC_SITE
+(http://www.canonware.com/download/jemalloc/) cannot have a trailing slash. Stop.
+
+Otherwise:
+  Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
 
 
-> +define DOCKER_CONTAINERD_BUILD_CMDS
-> +	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/ctr -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./ctr
-> +	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/containerd -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./containerd
-> +	cd $(@D); $(DOCKER_CONTAINERD_MAKE_ENV) $(HOST_DIR)/usr/bin/go build -v -o $(@D)/bin/containerd-shim -ldflags "$(DOCKER_CONTAINERD_GLDFLAGS)" ./containerd-shim
-
-These lines were a bit too long, and also repetitive. So I refactored
-this with a foreach loop.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> +JEMALLOC_LICENSE = BSD-2c
+> +JEMALLOC_LICENSE_FILES = COPYING
+> +JEMALLOC_INSTALL_STAGING = YES
+> +
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> 
