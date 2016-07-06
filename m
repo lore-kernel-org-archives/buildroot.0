@@ -1,40 +1,123 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 6 Jul 2016 13:01:40 +0200
-Subject: [Buildroot] [PATCH v4] supertuxkart: new package
-In-Reply-To: <CAAEAJfCpPaKEYOVXwJs-vdTrqKdaOE0EepwABu9mcWy9CBrfVA@mail.gmail.com>
-References: <20160703214937.5418-1-ezequiel@vanguardiasur.com.ar>
- <8737nql3ge.fsf@dell.be.48ers.dk>
- <CAAEAJfCpPaKEYOVXwJs-vdTrqKdaOE0EepwABu9mcWy9CBrfVA@mail.gmail.com>
-Message-ID: <3f2bbda4-fd4c-6f3d-8496-8ef2581132be@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Jul 2016 13:50:13 +0200
+Subject: [Buildroot] [PATCH 1/1] shellinabox: new package
+In-Reply-To: <1467772051-1522-1-git-send-email-olivier.singla@gmail.com>
+References: <1467772051-1522-1-git-send-email-olivier.singla@gmail.com>
+Message-ID: <20160706135013.05fac66d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04-07-16 01:26, Ezequiel Garcia wrote:
-> > Something went wrong with this patch / your mailer. The file you are
-> > > patching has DOS style line endings, but the patch didn't, so it
-> > > couldn't be applied on my side and I had to fix it.
-> > >
-> Hm, that must have been the git-send-email, because the patch
-> has DOS style endings here. Sorry about that!
->
- Actually, the entire mail (in fact all mail I think) has DOS line endings. See
-RFC 822 IIRC.
+Hello,
 
- If a patch has DOS line endings, it should be sent with
-*|--transfer-encoding=base64 - at least I think so, I never tried.
+Thanks. I've applied your patch, but after doing some changes. Read on
+below for the details.
 
- This may make review difficult for some people however.
+When sending a new version, you should make sure the prefix of the
+patch is "PATCH v2". This can be achieved by using the --subject-prefix
+option of git format-patch.
 
- Regards,
- Arnout
-|*
+On Tue,  5 Jul 2016 22:27:31 -0400, Olivier Singla wrote:
+
+> diff --git a/package/shellinabox/0001-Makefile.am-fix-static.patch b/package/shellinabox/0001-Makefile.am-fix-static.patch
+> new file mode 100644
+> index 0000000..0fadde0
+> --- /dev/null
+> +++ b/package/shellinabox/0001-Makefile.am-fix-static.patch
+> @@ -0,0 +1,15 @@
+> +Makefile: disable always building statically.
+> +
+> +Signed-off-by:  "Olivier Singla" <olivier.singla@gmail.com>
+
+Looks good. Please submit this patch to the upstream shellinabox
+developers.
+
+
+> +config BR2_PACKAGE_SHELLINABOX
+> +	bool "shellinabox"
+> +	select BR2_PACKAGE_ZLIB
+> +	depends on BR2_PACKAGE_OPENSSL
+
+This should have been a "select" not a "depends on". And they should be
+ordered alphabetically.
+
+> +	help
+> +	  Shell In A Box implements a web server that can export arbitrary command
+> +	  line tools to a web based terminal emulator. This emulator is accessible
+> +	  to any JavaScript and CSS enabled web browser and does not require any
+> +	  additional browser plugins.
+
+Those lines were slightly too long, so I rewrapped the Config.in help
+text.
+
+> +
+> +	  https://github.com/shellinabox/shellinabox
+> diff --git a/package/shellinabox/shellinabox.hash b/package/shellinabox/shellinabox.hash
+> new file mode 100644
+> index 0000000..b7d4523
+> --- /dev/null
+> +++ b/package/shellinabox/shellinabox.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated after checking pgp signature
+> +sha256	d25ba9f72f04471fc1a8a564c65ef466c4553280ff3eeb365ed9c897d05ed2da	v2.19.tar.gz
+> diff --git a/package/shellinabox/shellinabox.mk b/package/shellinabox/shellinabox.mk
+> new file mode 100644
+> index 0000000..94e49e0
+> --- /dev/null
+> +++ b/package/shellinabox/shellinabox.mk
+> @@ -0,0 +1,22 @@
+> +################################################################################
+> +#
+> +# shellinabox
+> +#
+> +################################################################################
+> +
+> +SHELLINABOX_VERSION = v2.19
+> +SHELLINABOX_SOURCE = $(SHELLINABOX_VERSION).tar.gz
+> +SHELLINABOX_SITE = https://github.com/shellinabox/shellinabox/archive
+
+In the previous review, I think you were told to use the github helper
+function, but didn't take into account this comment. So I've done the
+necessary change.
+
+> +
+> +# Fetching from Github, and patching Makefile.am, so we need to autoreconf
+> +SHELLINABOX_AUTORECONF = YES
+> +
+> +SHELLINABOX_DEPENDENCIES = zlib
+> +
+> +SHELLINABOX_LICENSE = GPLv2 with OpenSSL exception
+> +SHELLINABOX_CONF_OPTS += --enable-ssl
+> +SHELLINABOX_DEPENDENCIES += openssl
+
+It would have been good to indicate why you force enable the OpenSSL
+support, while it seemed to be optional. I've tested, and indeed with
+OpenSSL disabled, it fails to build. I've reported this issue upstream.
+
+So, I've grouped things together and added a comment:
+
+# The OpenSSL support is supposed to be optional, but in practice,
+# with OpenSSL disabled, it fails to build. See
+# https://github.com/shellinabox/shellinabox/issues/385.
+SHELLINABOX_DEPENDENCIES = zlib openssl
+SHELLINABOX_CONF_OPTS = \
+        --disable-runtime-loading \
+        --enable-ssl
+
+As said above, I've fixed those issues and applied your patch.
+
+Since shellinaboxd is a daemon, it would be great to have it started
+automatically at boot time. Could you submit a follow-up patch that
+adds either a init script or a systemd service file (or ideally both) ?
+
+Thanks a lot for your contribution!
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle arnout at mind be
-Senior Embedded Software Architect +32-16-286500
-Essensium/Mind http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
