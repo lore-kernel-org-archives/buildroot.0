@@ -1,34 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jul 2016 13:54:40 +0200
-Subject: [Buildroot] [git commit] Config.in.legacy: fix typo
-Message-ID: <20160706115454.75233821AC@busybox.osuosl.org>
+Date: Wed, 6 Jul 2016 13:54:49 +0200
+Subject: [Buildroot] [git commit] freetype: bump version to 2.6.4
+Message-ID: <20160706115454.A102A821AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17bccf176ed3ea236f6aae1e8a26661bd95fe798
+commit: https://git.buildroot.net/buildroot/commit/?id=7e23692ece811ac11abeeb59337c14d5f79427de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks to Ben Boeckel who noticed it.
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/freetype/freetype.hash | 6 +++---
+ package/freetype/freetype.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a135d3d..4101cb0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -148,7 +148,7 @@ comment "Legacy options removed in 2016.08"
- config BR2_PACKAGE_SYSTEMD_COMPAT
- 	bool "systemd compatibility libraries have been removed"
- 	help
--	  The systemd option te enable the compatibility libraries has
-+	  The systemd option to enable the compatibility libraries has
- 	  been removed. Theses libraries have been useless since a few
- 	  version, and have been fully dropped from the source since
- 	  v230.
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index 45f91df..8695f26 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.3/
+-md5	0037b25a8c090bc8a1218e867b32beb1	freetype-2.6.3.tar.bz2
+-sha1	6c98bd5d0be313207c37ca23d25faf983486aee5	freetype-2.6.3.tar.bz2
++# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.4/
++md5 9c3b2258757a19cdba46d34ed1b0852a  freetype-2.6.4.tar.bz2
++sha1 5eaa8c949b4841eeabba44d2c582ff6859e5c4b9  freetype-2.6.4.tar.bz2
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index d95c424..d2dbe5f 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREETYPE_VERSION = 2.6.3
++FREETYPE_VERSION = 2.6.4
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+ FREETYPE_INSTALL_STAGING = YES
