@@ -1,45 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jul 2016 20:21:04 +0200
-Subject: [Buildroot] [PATCH] package/gdb: add dependency on host-textinfo
-In-Reply-To: <1467734549-2767-1-git-send-email-romain.naour@gmail.com>
-References: <1467734549-2767-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160706202104.50779a5a@free-electrons.com>
+Date: Wed, 6 Jul 2016 21:05:03 +0200
+Subject: [Buildroot] [git commit] tekui: add missing dependency on dynamic
+	library
+Message-ID: <20160706190517.0CA0C8182E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8e011f45bbc4e0a922cced2cf3d579e3411a71e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  5 Jul 2016 18:02:29 +0200, Romain Naour wrote:
+tekui selects a bunch of Lua modules, which are only available when
+!BR2_STATIC_LIBS, so add this missing dependency.
 
-> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-> index 6d70955..3941b45 100644
-> --- a/package/gdb/gdb.mk
-> +++ b/package/gdb/gdb.mk
-> @@ -35,7 +35,12 @@ endif
->  # For the host variant, we really want to build with XML support,
->  # which is needed to read XML descriptions of target architectures. We
->  # also need ncurses.
-> -HOST_GDB_DEPENDENCIES = host-expat host-ncurses
+Fixes:
 
-I prefer to keep this as is.
+   http://autobuild.buildroot.net/results/0c8ae60a7c0dfb64ee12d557b1660a4a1fc84703/
 
-> +# Starting with gdb 7.10, gdb wants to re-generate its documentation.
-> +# We were trying to avoid that by patching the Makefiles, but it wasn't
-> +# working in all situations. So, we simply add a dependency on
-> +# host-texinfo in all case.
-> +HOST_GDB_DEPENDENCIES += host-expat host-ncurses host-texinfo
+While we're at it, use the lower-case name of the package in the
+Config.in comment.
 
-And just add host-texinfo here.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tekui/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-> +GDB_DEPENDENCIES += host-texinfo
-
-Applied with this modification. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tekui/Config.in b/package/tekui/Config.in
+index 998c25a..244b18b 100644
+--- a/package/tekui/Config.in
++++ b/package/tekui/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_TEKUI
+ 	select BR2_PACKAGE_LUAEXPAT		# runtime only
+ 	select BR2_PACKAGE_LUASOCKET		# runtime only
+ 	select BR2_PACKAGE_LUAPOSIX		# runtime only
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+@@ -15,5 +16,6 @@ config BR2_PACKAGE_TEKUI
+ 
+ 	  http://tekui.neoscientists.org/
+ 
+-comment "TekUI needs a Lua interpreter and a toolchain w/ threads"
+-	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || !BR2_TOOLCHAIN_HAS_THREADS
++comment "tekui needs a Lua interpreter and a toolchain w/ threads, dynamic library"
++	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || !BR2_TOOLCHAIN_HAS_THREADS ||
++		BR2_STATIC_LIBS
