@@ -1,41 +1,94 @@
 From: Andreas Ehmanns <universeii@gmx.de>
-Date: Wed, 6 Jul 2016 18:47:11 +0200
-Subject: [Buildroot] [PATCH 4/4] Package netsnmp: Added OK/FAIL output
-In-Reply-To: <20160701150415.515459b2@free-electrons.com>
-References: <1456435484-4723-1-git-send-email-universeII@gmx.de>
- <1456435484-4723-4-git-send-email-universeII@gmx.de>
- <20160701123644.GB25487@free.fr> <20160701150415.515459b2@free-electrons.com>
-Message-ID: <577D360F.5090606@gmx.de>
+Date: Wed, 6 Jul 2016 18:53:59 +0200
+Subject: [Buildroot] [PATCH 1/2] Package nfs-utils: Start/stop daemons
+ consistently
+In-Reply-To: <20160703185343.5a0f7911@free-electrons.com>
+References: <1467564419-21313-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <20160703185343.5a0f7911@free-electrons.com>
+Message-ID: <577D37A7.8080105@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas, Yann, all,
-thanks for revising the patch series and for incorporating the changes 
-into buildroot.
+Dear all,
+thanks for revising the patch series. As requested I will use the 
+present instead of the past in the future :-)
 
 Regards,
 Andreas
 
-
-Am 01.07.2016 um 15:04 schrieb Thomas Petazzoni:
+Am 03.07.2016 um 18:53 schrieb Thomas Petazzoni:
 > Hello,
 >
-> On Fri, 1 Jul 2016 14:36:44 +0200, Yann E. MORIN wrote:
+> Title should be:
 >
->>> @@ -92,6 +98,7 @@ case "$1" in
->>>       reload|force-reload)
->>>           reload
->>>           ;;
->>> +
->> Spurious empty line.
-> It's indeed not strictly related, but in all other cases of this
-> switch, there is an empty line separating cases. So I think it's good
-> to also have this one for consistency. It could have been in a separate
-> commit, but oh well, that was good enough.
+> 	package/nfs-utils: start/stop daemons consistently
 >
-> Thanks for the review!
+> On Sun,  3 Jul 2016 18:46:58 +0200, Maxime Hadjinlian wrote:
+>> From: universe II <universeii@gmx.de>
+> Please fix this "From" to be consistent with the Signed-off-by. I
+> forgot about it when applying the previous patches from Andreas.
 >
+>> Changed init script to start and stop all nfs daemons
+> Please use the present "Change" and not the past "Changed". I don't
+> understand why people use the past tense in commit logs.
+>
+>> in a consistent way. Using the same kill command,
+>> start/stop the daemon, printout OK or FAIL and touch
+>> or deleted necessary files.
+>>
+>> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
+>> [Maxime:
+>>     - Make it really consistent to stop the daemons as pointed out by Yann E. Morin
+> Line too long, no? :)
+>
+>>     - Remove the -9]
+>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>> ---
+>>   package/nfs-utils/S60nfs | 12 ++++++------
+>>   1 file changed, 6 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
+>> index 7a49c79..2d4e082 100755
+>> --- a/package/nfs-utils/S60nfs
+>> +++ b/package/nfs-utils/S60nfs
+>> @@ -45,22 +45,22 @@ start() {
+>>   stop() {
+>>   	# Stop daemons.
+>>   	printf "Shutting down NFS mountd: "
+>> -	killall -q rpc.mountd
+>> +	killall -q rpc.mountd 2>/dev/null
+>>   	[ $? = 0 ] && echo "OK" || echo "FAIL"
+>>   
+>>   	printf "Shutting down NFS daemon: "
+>> -	kill -9 `pidof nfsd` 2>/dev/null
+>> +	killall -q nfsd 2>/dev/null
+>>   	[ $? = 0 ] && echo "OK" || echo "FAIL"
+>>   
+>>   	printf "Shutting down NFS services: "
+>>   	/usr/sbin/exportfs -au
+>> -	rm -f /var/lock/subsys/nfs
+>> -	killall -q rpc.statd
+>>   	[ $? = 0 ] && echo "OK" || echo "FAIL"
+>>   
+>>   	printf "Stopping NFS statd: "
+>> -	killall -q rpc.statd
+>> +	killall -q rpc.statd 2>/dev/null
+>>   	[ $? = 0 ] && echo "OK" || echo "FAIL"
+>> +	rm -f /var/lock/subsys/nfs
+>> +	rm -f /var/run/rpc.statd.pid
+>>   	rm -f /var/lock/subsys/nfslock
+>>   }
+>>   
+>> @@ -81,7 +81,7 @@ case "$1" in
+>>   	touch /var/lock/subsys/nfs
+>>   	;;
+>>     *)
+>> -	echo "Usage: nfs {start|stop|reload}"
+>> +	echo "Usage: $0 {start|stop|restart|reload}"
+>>   	exit 1
+>>   esac
+>>   
 > Thomas
