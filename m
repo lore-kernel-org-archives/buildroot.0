@@ -1,133 +1,471 @@
-From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-Date: Wed, 6 Jul 2016 12:22:18 +0200
-Subject: [Buildroot] [PATCH 1/2 v2] spidermonkey185: New package.
-In-Reply-To: <CAGduivzTWqWi7kf7OWz19OwcpQLUJ50GOhbu3=30i8HbmvKNNw@mail.gmail.com>
-References: <20160520162929.04ca1b1b@free-electrons.com>
- <1465483576-28267-1-git-send-email-nicolas.cavallari@green-communications.fr>
- <1465483576-28267-2-git-send-email-nicolas.cavallari@green-communications.fr>
- <CAGduivxXrJYZRt28=TOTbtBcZ4yd5jYO1NkTV1M8fMgCbni-_w@mail.gmail.com>
- <7a047c02-21c4-0dc9-7e76-74e8335768d6@green-communications.fr>
- <CAGduivzTWqWi7kf7OWz19OwcpQLUJ50GOhbu3=30i8HbmvKNNw@mail.gmail.com>
-Message-ID: <0dc17f18-b259-a618-67f3-099fd6ef0897@green-communications.fr>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Wed,  6 Jul 2016 12:24:08 +0200
+Subject: [Buildroot] [PATCH v3 1/2] spidermonkey185: New package.
+In-Reply-To: <0dc17f18-b259-a618-67f3-099fd6ef0897@green-communications.fr>
+References: <0dc17f18-b259-a618-67f3-099fd6ef0897@green-communications.fr>
+Message-ID: <1467800649-22119-1-git-send-email-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/07/2016 13:03, Maxime Hadjinlian wrote:
-> Hi Nicolas, all
-> 
-> On Tue, Jul 5, 2016 at 11:46 AM, Nicolas Cavallari
-> <Nicolas.Cavallari@green-communications.fr> wrote:
->> On 04/07/2016 23:37, Maxime Hadjinlian wrote:
->>> Hi Nicolas, all,
->>>
->>> Thanks for your patch, I look forward to have spidermonkey, because we
->>> can then update polkit, which is a long standing issue for me.
->>> My comments are inline.
->>>
->>> Some of your patches did not apply on the sources, I would recommend
->>> that you  extract the sources, then move the directory somehere and do
->>> a 'git init' then 'git add . && git commit -m "init"' and work in that
->>> directory, when you are finished you can use 'git format-patch HEAD~n'
->>> and collect your patch in a mailbox format.
->>
->> It works for me. How/why does it fails for you ?
-> There's two problem on my side.
-> First when I try to git-am your patch on top of the actual master I get this:
-> 
-> Applying patch #632988 using 'git am -s'
-> Description: [1/2,v2] spidermonkey185: New package.
-> Applying: spidermonkey185: New package.
-> .git/rebase-apply/patch:93: space before tab in indent.
->   mv -f $(SHLIB_ANY_VER) $(SHLIB_EXACT_VER)
+This is the old 1.8.5 branch of spidermonkey, used in Firefox 4.
+It is rather unmaintained, but some software still depend on it,
+such as couchdb.
 
-I am patching a makefile. The makefile is obviously indented with
-tabs, and diff add a space at the beggining of context lines.
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
+ package/Config.in                                  |  1 +
+ ...01-remove-unused-pkgconfg-nspr-dependency.patch | 18 +++++
+ .../0002-make-shlib-synlink-relative.patch         | 21 +++++
+ .../0003-regenerate-configure.patch                | 44 ++++++++++
+ ...val_layout-on-64-bit-big-endian-platforms.patch | 91 +++++++++++++++++++++
+ ...tatic-assert-fix-strict-aliasing-warnings.patch | 94 ++++++++++++++++++++++
+ ...heFlush-support-error-on-exotic-platforms.patch | 34 ++++++++
+ package/spidermonkey185/Config.in                  | 14 ++++
+ package/spidermonkey185/spidermonkey185.hash       |  2 +
+ package/spidermonkey185/spidermonkey185.mk         | 30 +++++++
+ 10 files changed, 349 insertions(+)
+ create mode 100644 package/spidermonkey185/0001-remove-unused-pkgconfg-nspr-dependency.patch
+ create mode 100644 package/spidermonkey185/0002-make-shlib-synlink-relative.patch
+ create mode 100644 package/spidermonkey185/0003-regenerate-configure.patch
+ create mode 100644 package/spidermonkey185/0004-Fix-jsval_layout-on-64-bit-big-endian-platforms.patch
+ create mode 100644 package/spidermonkey185/0005-Remove-bad-static-assert-fix-strict-aliasing-warnings.patch
+ create mode 100644 package/spidermonkey185/0006-Avoid-missing-cacheFlush-support-error-on-exotic-platforms.patch
+ create mode 100644 package/spidermonkey185/Config.in
+ create mode 100644 package/spidermonkey185/spidermonkey185.hash
+ create mode 100644 package/spidermonkey185/spidermonkey185.mk
 
-> .git/rebase-apply/patch:94: space before tab in indent.
->   @[ ! -h $(SHLIB_ABI_VER) ] || rm -f $(SHLIB_ABI_VER)
-> .git/rebase-apply/patch:121: trailing whitespace.
-> 
-> .git/rebase-apply/patch:146: trailing whitespace.
-> 
-> .git/rebase-apply/patch:163: trailing whitespace.
-> 
+v2 -> v3: Addressed Maxime Hadjinlian's comments
 
-Those are context empty lines.
+v1 -> v2:
+* Moved package to Libraries/Other
+* Tried to make the package reconfigurable, but stopped when the patch
+  grew even larger than previous patches.  Instead, simplified the patch
+  to not force a specific arm version, to make the configure patch smaller.
+* Added patches to fix DESTDIR being embedded in the symlink and
+  remove the leftover nspr dependency.
+* Added comment on why we define symbols for the host compiler.
+* Added upstream patches to fix problems on various architectures,
+  taking inspiration for the patches that Debian uses.
+* Disabled the JIT on sparc64 because that does not compile.
+* Added host-perl and host-python, because they are used to build.
+* Changed license as per Arnout suggestion
 
-> error: patch failed: package/Config.in:1284
-> error: package/Config.in: patch does not apply
-> Patch failed at 0001 spidermonkey185: New package.
-> The copy of the patch that failed is found in: .git/rebase-apply/patch
-> When you have resolved this problem, run "git am --continue".
-> If you prefer to skip this patch, run "git am --skip" instead.
-> To restore the original branch and stop patching, run "git am --abort".
-> 
-> So I have to use patch -p1 to apply it by hand, I removed my git
-> configuration but to no avail.
-> 
-> The second part is Buildroot applying the patches in your patch but it
-> appears to be something in my git config, probably because there's
-> some line ending mixes between Windows/Linux or things like that.
-> I am using git.core.apply.whitespace=fix, maybe that's not an important issue.
-
-If you "fix" the white space in these patch files, they obviously
-won't apply anymore.
-
->>>> diff --git a/package/spidermonkey185/0001-remove-unused-pkgconfg-nspr-dependency.patch b/package/spidermonkey185/0001-remove-unused-pkgconfg-nspr-dependency.patch
->>>> new file mode 100644
->>>> index 0000000..cef1aae
->>>> --- /dev/null
->>>> +++ b/package/spidermonkey185/0001-remove-unused-pkgconfg-nspr-dependency.patch
->>>> @@ -0,0 +1,18 @@
->>>> +From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
->>>> +
->>>> +Remove the dependency on nspr.
->>>> +
->>>> +This dependency was removed when spidermonkey was extracted from the
->>>> +mozilla code base.  This is probably a left-over, since it is not used.
->>>> +
->>>> +Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
->>>> +
->>>> +--- spidermonkey185-1.0.0/js/src/mozjs185.pc.in        2016-05-23 13:41:28.430466213 +0200
->>>> ++++ spidermonkey185-1.0.0/js/src/mozjs185.pc.in        2016-05-23 13:42:00.727558977 +0200
->>>> +@@ -5,6 +5,5 @@
->>>> + Name: SpiderMonkey 1.8.5
->>>> + Description: The Mozilla library for JavaScript 1.8.5
->>>> + Version: %MOZILLA_VERSION%
->>>> +-Requires: nspr >= 4.7
->>>> + Libs: -L${libdir} -lmozjs185
->>>> + Cflags: -I${includedir}/js
->>>> diff --git a/package/spidermonkey185/0002-make-shlib-synlink-relative.patch b/package/spidermonkey185/0002-make-shlib-synlink-relative.patch
->>>> new file mode 100644
->>>> index 0000000..c6bdce9
->>>
->>> When I quickly grepped through the source, you can still find:
->>> js/jsd/jsd_xpc.h:47:#include "nspr.h"
->>>
->>> Won't that cause trouble ? Since we have libnspr, why don't we add the
->>> dependencies and be done with it ?
->>
->> Anything outside of js/src is ignored.  Specifically, js/jsd has no
->> complete build system (there is Makefile.in, but no configure script),
->> so it cannot cause any problem.
->>
->> And why should we re-add libnspr when upstream did massive patches to
->> get rid of it, even if they missed some places ?
-> Ok, it's indeed a small patch and if the file in question is not even
-> touched there's no harm.
-> There's no link to what does upstream as it's a deprecated version and
-> it will never be updated anymore.
-
-The spidermonkey code base heavily depended on nspr, especially its
-various integer typedefs which were sprinkled everywhere.  To release
-an independent javascript engine, almost all the source code had to be
-converted to use the JSInt* typedefs. There are even some conversion
-scripts left in the tarball.
-
-Even if upstream stopped updating this package, the removal of the
-nspr dependency is still 99.9% complete.
-
-Anyway, here are the V3 of the patches.
+diff --git a/package/Config.in b/package/Config.in
+index 15271a2..fdc3194 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1306,6 +1306,7 @@ endif
+ 	source "package/qhull/Config.in"
+ 	source "package/qlibc/Config.in"
+ 	source "package/sphinxbase/Config.in"
++	source "package/spidermonkey185/Config.in"
+ 	source "package/startup-notification/Config.in"
+ 	source "package/tz/Config.in"
+ 	source "package/tzdata/Config.in"
+diff --git a/package/spidermonkey185/0001-remove-unused-pkgconfg-nspr-dependency.patch b/package/spidermonkey185/0001-remove-unused-pkgconfg-nspr-dependency.patch
+new file mode 100644
+index 0000000..cef1aae
+--- /dev/null
++++ b/package/spidermonkey185/0001-remove-unused-pkgconfg-nspr-dependency.patch
+@@ -0,0 +1,18 @@
++From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++
++Remove the dependency on nspr.
++
++This dependency was removed when spidermonkey was extracted from the
++mozilla code base.  This is probably a left-over, since it is not used.
++
++Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++
++--- spidermonkey185-1.0.0/js/src/mozjs185.pc.in	2016-05-23 13:41:28.430466213 +0200
+++++ spidermonkey185-1.0.0/js/src/mozjs185.pc.in	2016-05-23 13:42:00.727558977 +0200
++@@ -5,6 +5,5 @@
++ Name: SpiderMonkey 1.8.5
++ Description: The Mozilla library for JavaScript 1.8.5
++ Version: %MOZILLA_VERSION%
++-Requires: nspr >= 4.7
++ Libs: -L${libdir} -lmozjs185
++ Cflags: -I${includedir}/js
+diff --git a/package/spidermonkey185/0002-make-shlib-synlink-relative.patch b/package/spidermonkey185/0002-make-shlib-synlink-relative.patch
+new file mode 100644
+index 0000000..c6bdce9
+--- /dev/null
++++ b/package/spidermonkey185/0002-make-shlib-synlink-relative.patch
+@@ -0,0 +1,21 @@
++From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++
++Fix the creation of the shared library symbolic links.
++
++Do not create absolute symbolic links that references DESTDIR.
++
++Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++
++--- spidermonkey185-1.0.0/js/src/Makefile.in	2016-05-23 13:49:39.535010860 +0200
+++++ spidermonkey185-1.0.0/js/src/Makefile.in	2016-05-23 13:50:06.555917036 +0200
++@@ -888,8 +888,8 @@
++ ifeq (,$(HOST_BIN_SUFFIX))
++ 	mv -f $(SHLIB_ANY_VER) $(SHLIB_EXACT_VER)
++ 	@[ ! -h $(SHLIB_ABI_VER) ] || rm -f $(SHLIB_ABI_VER)
++-	ln -s $(SHLIB_EXACT_VER) $(SHLIB_ABI_VER)
++-	ln -s $(SHLIB_ABI_VER) $(SHLIB_ANY_VER)
+++	ln -s $(notdir $(SHLIB_EXACT_VER)) $(SHLIB_ABI_VER)
+++	ln -s $(notdir $(SHLIB_ABI_VER)) $(SHLIB_ANY_VER)
++ endif
++ endif
++ ifneq (,$(IMPORT_LIBRARY))
+diff --git a/package/spidermonkey185/0003-regenerate-configure.patch b/package/spidermonkey185/0003-regenerate-configure.patch
+new file mode 100644
+index 0000000..3d39947
+--- /dev/null
++++ b/package/spidermonkey185/0003-regenerate-configure.patch
+@@ -0,0 +1,44 @@
++From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++
++Do not force an ARM variant.
++
++Buildroot already passes the correct CFLAGS, so do not meddle with
++them by default.
++
++This patches the configure script directly, because one need to use
++an antique autoconf to regenerate it.  The removed lines
++appears verbatim in configure.in anyway.
++
++Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++
++--- spidermonkey185-1.0.0/js/src/configure	2016-05-25 11:26:19.392163540 +0200
+++++ spidermonkey185-1.0.0/js/src/configure	2016-05-25 11:26:28.704477125 +0200
++@@ -13264,11 +13264,6 @@
++ 
++ # Individual module options
++ 
++-case "$target_cpu" in
++-  arm*)
++-    MOZ_ARM_ARCH=armv7
++-  ;;
++-esac
++ # Check whether --enable-thumb2 or --disable-thumb2 was given.
++ if test "${enable_thumb2+set}" = set; then
++   enableval="$enable_thumb2"
++@@ -13337,16 +13332,6 @@
++       { echo "configure: error: --with-cpu-arch=armv7 is not supported for non-ARM CPU architectures" 1>&2; exit 1; }
++     ;;
++   esac
++-else
++-  case "$target_cpu" in
++-    arm*)
++-      if test "$GNU_CC"; then
++-        CFLAGS="$CFLAGS -march=armv5te -mthumb-interwork -msoft-float"
++-        CXXFLAGS="$CXXFLAGS -march=armv5te -mthumb-interwork -msoft-float"
++-        ASFLAGS="$ASFLAGS -march=armv5te -mthumb-interwork -msoft-float"
++-      fi
++-      ;;
++-  esac
++ fi
++ 
++ 
+diff --git a/package/spidermonkey185/0004-Fix-jsval_layout-on-64-bit-big-endian-platforms.patch b/package/spidermonkey185/0004-Fix-jsval_layout-on-64-bit-big-endian-platforms.patch
+new file mode 100644
+index 0000000..9aa4725
+--- /dev/null
++++ b/package/spidermonkey185/0004-Fix-jsval_layout-on-64-bit-big-endian-platforms.patch
+@@ -0,0 +1,91 @@
++
++# HG changeset patch
++# User Luke Wagner <luke@mozilla.com>
++# Date 1312494575 25200
++# Node ID 1d186a5f3a96e938a253726ac48ecaf00e80c712
++# Parent  cd0106ceb8ce337636875ef7b1f0d143cb33b7a4
++Bug 674522 - Fix jsval_layout on 64-bit big-endian platforms (r=waldo)
++
++[nicolas.cavallari at green-communications.fr: refresh patch]
++Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++
++diff --git a/js/src/jsval.h b/js/src/jsval.h
++--- a/js/src/jsval.h
+++++ b/js/src/jsval.h
++@@ -301,17 +301,16 @@ typedef union jsval_layout
++         JSValueTag         tag : 17;
++     } debugView;
++ #endif
++     struct {
++         union {
++             int32          i32;
++             uint32         u32;
++             JSWhyMagic     why;
++-            jsuword        word;
++         } payload;
++     } s;
++     double asDouble;
++     void *asPtr;
++ } jsval_layout;
++ # endif  /* JS_BITS_PER_WORD */
++ #else   /* defined(IS_LITTLE_ENDIAN) */
++ # if JS_BITS_PER_WORD == 32
++@@ -338,28 +337,31 @@ typedef union jsval_layout
++ typedef union jsval_layout
++ {
++     uint64 asBits;
++     struct {
++         JSValueTag         tag : 17;
++         uint64             payload47 : 47;
++     } debugView;
++     struct {
+++        uint32             padding;
++         union {
++             int32          i32;
++             uint32         u32;
++             JSWhyMagic     why;
++         } payload;
++     } s;
++     double asDouble;
++     void *asPtr;
++ } jsval_layout;
++ # endif /* JS_BITS_PER_WORD */
++ #endif  /* defined(IS_LITTLE_ENDIAN) */
++ 
+++JS_STATIC_ASSERT(sizeof(jsval_layout) == 8);
+++
++ #if JS_BITS_PER_WORD == 32
++ 
++ /*
++  * N.B. GCC, in some but not all cases, chooses to emit signed comparison of
++  * JSValueTag even though its underlying type has been forced to be uint32.
++  * Thus, all comparisons should explicitly cast operands to uint32.
++  */
++ 
++diff --git a/js/src/jsvalue.h b/js/src/jsvalue.h
++--- a/js/src/jsvalue.h
+++++ b/js/src/jsvalue.h
++@@ -724,17 +724,21 @@ class Value
++     }
++ 
++     JS_ALWAYS_INLINE
++     void *toUnmarkedPtr() const {
++         return data.asPtr;
++     }
++ 
++     const jsuword *payloadWord() const {
++-        return &data.s.payload.word;
+++#if JS_BITS_PER_WORD == 32
+++        return reinterpret_cast<const jsuword *>(&data.s.payload.word);
+++#elif JS_BITS_PER_WORD == 64
+++        return reinterpret_cast<const jsuword *>(&data.asBits);
+++#endif
++     }
++ 
++   private:
++     void staticAssertions() {
++         JS_STATIC_ASSERT(sizeof(JSValueType) == 1);
++         JS_STATIC_ASSERT(sizeof(JSValueTag) == 4);
++         JS_STATIC_ASSERT(sizeof(JSBool) == 4);
++         JS_STATIC_ASSERT(sizeof(JSWhyMagic) <= 4);
++
+diff --git a/package/spidermonkey185/0005-Remove-bad-static-assert-fix-strict-aliasing-warnings.patch b/package/spidermonkey185/0005-Remove-bad-static-assert-fix-strict-aliasing-warnings.patch
+new file mode 100644
+index 0000000..0fc8e32
+--- /dev/null
++++ b/package/spidermonkey185/0005-Remove-bad-static-assert-fix-strict-aliasing-warnings.patch
+@@ -0,0 +1,94 @@
++
++# HG changeset patch
++# User Luke Wagner <luke@mozilla.com>
++# Date 1312825636 25200
++# Node ID 6f2c0dbb88d338df44a624041f8808c9de0a9a9b
++# Parent  e605ebcd59845fca46a52555eb1b18e70bb3a37d
++Bug 674522 - Remove bad static assert; fix strict-aliasing warnings (rs=waldo)
++
++[nicolas.cavallari at green-communications.fr: refresh patch]
++Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++
++diff --git a/js/src/jsval.h b/js/src/jsval.h
++--- a/js/src/jsval.h
+++++ b/js/src/jsval.h
++@@ -305,16 +305,17 @@ typedef union jsval_layout
++         union {
++             int32          i32;
++             uint32         u32;
++             JSWhyMagic     why;
++         } payload;
++     } s;
++     double asDouble;
++     void *asPtr;
+++    jsuword asWord;
++ } jsval_layout;
++ # endif  /* JS_BITS_PER_WORD */
++ #else   /* defined(IS_LITTLE_ENDIAN) */
++ # if JS_BITS_PER_WORD == 32
++ typedef union jsval_layout
++ {
++     uint64 asBits;
++     struct {
++@@ -346,16 +347,17 @@ typedef union jsval_layout
++         union {
++             int32          i32;
++             uint32         u32;
++             JSWhyMagic     why;
++         } payload;
++     } s;
++     double asDouble;
++     void *asPtr;
+++    jsuword asWord;
++ } jsval_layout;
++ # endif /* JS_BITS_PER_WORD */
++ #endif  /* defined(IS_LITTLE_ENDIAN) */
++ 
++ JS_STATIC_ASSERT(sizeof(jsval_layout) == 8);
++ 
++ #if JS_BITS_PER_WORD == 32
++ 
++diff --git a/js/src/jsvalue.h b/js/src/jsvalue.h
++--- a/js/src/jsvalue.h
+++++ b/js/src/jsvalue.h
++@@ -286,17 +286,16 @@ static JS_ALWAYS_INLINE JSValueTag
++ JSVAL_EXTRACT_NON_DOUBLE_TAG_IMPL(jsval_layout l)
++ {
++     uint64 tag = l.asBits >> JSVAL_TAG_SHIFT;
++     JS_ASSERT(tag > JSVAL_TAG_MAX_DOUBLE);
++     return (JSValueTag)tag;
++ }
++ 
++ #ifdef __cplusplus
++-JS_STATIC_ASSERT(offsetof(jsval_layout, s.payload) == 0);
++ JS_STATIC_ASSERT((JSVAL_TYPE_NONFUNOBJ & 0xF) == JSVAL_TYPE_OBJECT);
++ JS_STATIC_ASSERT((JSVAL_TYPE_FUNOBJ & 0xF) == JSVAL_TYPE_OBJECT);
++ #endif
++ 
++ static JS_ALWAYS_INLINE jsval_layout
++ BOX_NON_DOUBLE_JSVAL(JSValueType type, uint64 *slot)
++ {
++     /* N.B. for 32-bit payloads, the high 32 bits of the slot are trash. */
++@@ -725,19 +724,19 @@ class Value
++ 
++     JS_ALWAYS_INLINE
++     void *toUnmarkedPtr() const {
++         return data.asPtr;
++     }
++ 
++     const jsuword *payloadWord() const {
++ #if JS_BITS_PER_WORD == 32
++-        return reinterpret_cast<const jsuword *>(&data.s.payload.word);
+++        return &data.s.payload.word;
++ #elif JS_BITS_PER_WORD == 64
++-        return reinterpret_cast<const jsuword *>(&data.asBits);
+++        return &data.asWord;
++ #endif
++     }
++ 
++   private:
++     void staticAssertions() {
++         JS_STATIC_ASSERT(sizeof(JSValueType) == 1);
++         JS_STATIC_ASSERT(sizeof(JSValueTag) == 4);
++         JS_STATIC_ASSERT(sizeof(JSBool) == 4);
++
+diff --git a/package/spidermonkey185/0006-Avoid-missing-cacheFlush-support-error-on-exotic-platforms.patch b/package/spidermonkey185/0006-Avoid-missing-cacheFlush-support-error-on-exotic-platforms.patch
+new file mode 100644
+index 0000000..c12a2ba
+--- /dev/null
++++ b/package/spidermonkey185/0006-Avoid-missing-cacheFlush-support-error-on-exotic-platforms.patch
+@@ -0,0 +1,34 @@
++
++# HG changeset patch
++# User Mike Hommey <mh+mozilla@glandium.org>
++# Date 1303461188 -7200
++# Node ID 59771590e9203d48ef8cbcd7eaf2f8ae45dbb1c1
++# Parent  c4b82ec27d6d6e1c02ef0abb3b6e805bfdd092ec
++Bug 638056 - Avoid "The cacheFlush support is missing on this platform" error on exotic platforms. r=cdleary
++
++[nicolas.cavallari at green-communications.fr: refresh patch]
++Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++
++diff --git a/js/src/Makefile.in b/js/src/Makefile.in
++--- a/js/src/Makefile.in
+++++ b/js/src/Makefile.in
++@@ -377,17 +377,17 @@ CPPSRCS += 	checks.cc \
++ 		platform.cc \
++ 		utils.cc \
++ 		$(NONE)
++ 
++ #
++ # END enclude sources for V8 dtoa
++ #############################################
++ 
++-ifeq (,$(filter-out powerpc sparc,$(TARGET_CPU)))
+++ifeq (,$(filter arm %86 x86_64,$(TARGET_CPU)))
++ 
++ VPATH +=	$(srcdir)/assembler \
++ 		$(srcdir)/assembler/wtf \
++ 		$(srcdir)/yarr/pcre \
++ 		$(NULL)
++ 
++ CPPSRCS += 	pcre_compile.cpp \
++                 pcre_exec.cpp \
++
+diff --git a/package/spidermonkey185/Config.in b/package/spidermonkey185/Config.in
+new file mode 100644
+index 0000000..ed7331f
+--- /dev/null
++++ b/package/spidermonkey185/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_SPIDERMONKEY185
++	bool "spidermonkey (1.8.5)"
++	depends on BR2_USE_MMU # fork in executable tools.
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  SpiderMonkey is Mozilla's JavaScript engine written in C/C++. It is
++	  used in various Mozilla products, including Firefox.
++
++	  This is the old 1.8.5 branch, used in Firefox 4.
++
++comment "Spider monkey (1.8.5) need a toolchain with C++, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/spidermonkey185/spidermonkey185.hash b/package/spidermonkey185/spidermonkey185.hash
+new file mode 100644
+index 0000000..bd651d7
+--- /dev/null
++++ b/package/spidermonkey185/spidermonkey185.hash
+@@ -0,0 +1,2 @@
++# Locally generated.
++sha256	5d12f7e1f5b4a99436685d97b9b7b75f094d33580227aa998c406bbae6f2a687	js185-1.0.0.tar.gz
+diff --git a/package/spidermonkey185/spidermonkey185.mk b/package/spidermonkey185/spidermonkey185.mk
+new file mode 100644
+index 0000000..fcd8999
+--- /dev/null
++++ b/package/spidermonkey185/spidermonkey185.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# Spidermonkey (1.8.5)
++#
++################################################################################
++
++SPIDERMONKEY185_VERSION = 1.0.0
++SPIDERMONKEY185_SITE = http://ftp.mozilla.org/pub/js
++SPIDERMONKEY185_SOURCE = js185-${SPIDERMONKEY185_VERSION}.tar.gz
++SPIDERMONKEY185_SUBDIR = js/src
++
++SPIDERMONKEY185_LICENSE = MPLv1.1 or GPLv2.0+ or LGPLv2.1+
++SPIDERMONKEY185_INSTALL_STAGING = YES
++SPIDERMONKEY185_DEPENDENCIES = host-python host-perl
++
++# This define is used by jscpucfg.cpp which is normally used to runtime-detect
++# the system endianess.
++SPIDERMONKEY185_CONF_ENV = \
++	HOST_CXXFLAGS="$(HOST_CXXFLAGS) -DFORCE_$(BR2_ENDIAN)_ENDIAN"
++
++# Mozilla mixes up target, host and build.  See the comment in configure.in
++# around line 360.  Also, nanojit fails to build on sparc64 with
++# #error "unknown nanojit architecture", so disable the JIT.
++SPIDERMONKEY185_CONF_OPTS = \
++	--target=$(GNU_TARGET_NAME) \
++	--build=$(GNU_TARGET_NAME) \
++	--host=$(GNU_HOST_NAME) \
++	$(if $(BR2_sparc64),--disable-tracejit)
++
++$(eval $(autotools-package))
+-- 
+2.8.1
