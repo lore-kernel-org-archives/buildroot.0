@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jul 2016 21:44:08 +0200
-Subject: [Buildroot] [git commit] opus: don't use assembly when on ARM,
-	but without ARM instructions
-Message-ID: <20160706195122.9552580842@busybox.osuosl.org>
+Date: Wed, 6 Jul 2016 21:56:07 +0200
+Subject: [Buildroot] [PATCH v2] openblas: add an option to install tests
+ on the target
+In-Reply-To: <1467717365-27849-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1467717365-27849-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160706215607.785816dd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d55c6b132e2f4835b6af6e5055c985ad5f715936
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The ARM assembly code in opus uses full ARM instructions, which won't
-work on Thumb-2 only platforms such as ARMv7-M, so we disable the
-assembly code in such situations.
+On Tue, 5 Jul 2016 12:16:05 +0100, Vicente Olivert Riera wrote:
 
-Fixes:
+> +ifeq ($(BR2_PACKAGE_OPENBLAS_INSTALL_TESTS),y)
+> +define OPENBLAS_INSTALL_TESTS
+> +	for i in test ctest utest; do \
+> +		mkdir -p $(TARGET_DIR)/usr/share/openblas/$$i && \
+> +		cd $(@D)/$$i && \
+> +		find . -type f -perm -a=x -exec $(INSTALL) -m 0755 {} $(TARGET_DIR)/usr/share/openblas/$$i/{} \; && \
+> +		find . -type f -name "?in*" -exec $(INSTALL) -m 0644 {} $(TARGET_DIR)/usr/share/openblas/$$i/{} \; && \
+> +		find . -type f -name "*.dat" -exec $(INSTALL) -m 0644 {} $(TARGET_DIR)/usr/share/openblas/$$i/{} \; ; \
+> +		done
+> +endef
+> +OPENBLAS_POST_INSTALL_TARGET_HOOKS += OPENBLAS_INSTALL_TESTS
+> +endif
 
-  http://autobuild.buildroot.net/results/ffa12ab7abadd76901228fc82da24e81bb6da625/
+To be honest, I really dislike such complicated install procedures.
+Could you instead work with upstream to have them add an appropriate
+target that allows to install the test programs?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/opus/opus.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+Looking at the upstream Github repository, they look very active, so
+getting some feedback should be possible.
 
-diff --git a/package/opus/opus.mk b/package/opus/opus.mk
-index f746a2f..71fdcb3 100644
---- a/package/opus/opus.mk
-+++ b/package/opus/opus.mk
-@@ -14,4 +14,10 @@ ifeq ($(BR2_PACKAGE_OPUS_FIXED_POINT),y)
- OPUS_CONF_OPTS += --enable-fixed-point
- endif
- 
-+# When we're on ARM, but we don't have ARM instructions (only
-+# Thumb-2), disable the usage of assembly as it is not Thumb-ready.
-+ifeq ($(BR2_arm)$(BR2_armeb):$(BR2_ARM_CPU_HAS_ARM),y:)
-+OPUS_CONF_OPTS += --disable-asm
-+endif
-+
- $(eval $(autotools-package))
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
