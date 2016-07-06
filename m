@@ -1,200 +1,209 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 6 Jul 2016 23:54:07 +0200
-Subject: [Buildroot] [PATCH v6] util-linux: rework utilities menu for
- finer control
-In-Reply-To: <1467773719-10013-1-git-send-email-casantos@datacom.ind.br>
-References: <1275872201.8394962.1467773032223.JavaMail.zimbra@datacom.ind.br>
- <1467773719-10013-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20160706215407.GF3763@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 7 Jul 2016 00:28:53 +0200
+Subject: [Buildroot] [PATCH v4] board: add blackfin gdb simulator support
+Message-ID: <20160706222853.GA12734@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+With this config you can bootup a Linux kernel
+in GDB simulator and test Blackfin kernel and
+userland.
 
-On 2016-07-05 23:55 -0300, Carlos Santos spake thusly:
-> When even a single extra util-linux utility is enabled, the
-> default build and install will install many more programs,
-> including many that overlap with those offered by busybox.
-> 
-> Fix by reworking the install-utilies menu to take advantage
-> of the new --disable-all-programs config option.  This option
-> make it possible to disable the basic set of apps, and then
-> enable only the desired apps.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+v3 -> v4:
+  - update to use latest 4.6 kernel
+  - remove ldconfig workaround, as uclibc-utils now compile
+v2 -> v3:
+  - no changes
+v1 -> v2:
+  - do not use devtmpfs, as login via getty fails
+---
+ board/gdb/bfin-bf512/linux-4.6.config | 87 +++++++++++++++++++++++++++++++++++
+ board/gdb/bfin-bf512/readme.txt       | 11 +++++
+ board/gdb/post-build.sh               |  4 ++
+ configs/gdb_bfin_bf512_defconfig      | 34 ++++++++++++++
+ system/device_table_dev.txt           |  1 +
+ 5 files changed, 137 insertions(+)
+ create mode 100644 board/gdb/bfin-bf512/linux-4.6.config
+ create mode 100644 board/gdb/bfin-bf512/readme.txt
+ create mode 100755 board/gdb/post-build.sh
+ create mode 100644 configs/gdb_bfin_bf512_defconfig
 
-Thanks for respining this patch.
-
-I know this is already version 6 of the patch, yet, there are still
-issues with this patch. It lacked more reviews so far becasue it is too
-big.
-
-First, it is too big because it groups together at least three different
-changes:
-
-  - cleanups in the libraries and tools selections: this should be a
-    patch on its own (but see more comments below);
-
-  - addition of new libs and tools: this should be a second, separate
-    patch too;
-
-  - addition of the biggish choice: this should be done as a separate
-    third patch, on its own. Furthemore, it should default to installign
-    everything (or at least, as much as possible), otherwise the
-    autobuilders would default to installing nothing, and thus we would
-    never exercise this package at all.
-
-Basically, the idea is that each patch is a separate, autonomous, atomic
-and semantically-unique change. In your big patch, there are things that
-are not controversial (fixing dependencies, adding new libs and tools),
-whiel the choice is more prone to discussion.
-
-Having the non-controversial changes as separate patches means those can
-be applied (relatively) quickly, thus reducing the amount of maintenance
-of the changes on your side.
-
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
-[--SNIP--]
-> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-> index 429dfa7..3a56f7c 100644
-> --- a/package/util-linux/Config.in
-> +++ b/package/util-linux/Config.in
-> @@ -12,22 +12,30 @@ menuconfig BR2_PACKAGE_UTIL_LINUX
->  if BR2_PACKAGE_UTIL_LINUX
->  
->  config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> -	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-> -	depends on BR2_USE_MMU # fork
->  	bool "libblkid"
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-> +	depends on BR2_USE_MMU # fork()
-
-While you are at it, move the depends before the selects:
-
-    config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-        bool "libblkid"
-        depends on BR2_USE_MMU # fork()
-        select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-
-This kind of fixups should be in the first patch.
-
->  	help
->  	  Install libblkid.
->  
-> -config BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-> +config BR2_PACKAGE_UTIL_LINUX_LIBFDISK
-
-Here, you ar adding a new library: it should be part of the second
-patch.
-
-[--SNIP--]
-> +choice
-> +	prompt "Install utilities"
-> +	default BR2_PACKAGE_UTIL_LINUX_NO_BINARIES
-> +
-> +config BR2_PACKAGE_UTIL_LINUX_NO_BINARIES
-> +	bool "none"
-> +	help
-> +	  Disable all util-linux binaries.
-> +
-> +config BR2_PACKAGE_UTIL_LINUX_ALL_BINARIES
-> +	bool "all"
->  	depends on BR2_USE_MMU # fork()
-> -	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> -	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-> -	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
-> -	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID     # findmnt, etc
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT     # findmnt, etc
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK     # fdisk, etc
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS # findmnt, etc
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID      # findmnt, etc
-> +	select BR2_PACKAGE_LINUX_PAM  # login utils
-> +	select BR2_PACKAGE_ZLIB  # cramfs
-> +	select BR2_PACKAGE_NCURSES  # more, setterm, ul
-> +	select BR2_PACKAGE_LIBCAP_NG  # setpriv
-> +	help
-> +	  Install the complete set of util-linux binaries.
-> +
-> +config BR2_PACKAGE_UTIL_LINUX_BINARIES
-> +	bool "custom"
->  	help
-> -	  Install the basic set of util-linux binaries.
-> +	  Manually select which util-linux binaries to install.
-> +
-> +endchoice
-
-As said above, this choice would default to "none", which is not nice
-for the user (if util-linux is selected, surely the user wants things
-from it). It laso means the autobuilders (which can't randomise the
-choices) would never really test util-linux.
-
-So, it should default to "all". And I think the entries should be
-re-orderd, like that:
-
-    all
-    none
-    custom
-
->  if BR2_PACKAGE_UTIL_LINUX_BINARIES
->  
-> +config BR2_PACKAGE_UTIL_LINUX_BASIC_SET
-> +	bool "Basic set"
-
-Would it make sense to have this in the choice?
-
-    all
-    basic set
-    none
-    custom
-
-> +	default y
-> +	depends on BR2_USE_MMU # fork() (dmesg, flock, script, setsid, swapon)
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID     # findmnt, etc
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT     # findmnt, etc
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK     # fdisk, etc
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS # findmnt, etc
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID      # findmnt, etc
-> +	help
-> +	  Install a basic set of util-linux binaries.
-> +
-> +	  blkdiscard, blkid, blockdev, chcpu, col, colcrt, colrm,
-> +	  column, ctrlaltdel, dmesg, fdisk, findfs, findmnt, flock,
-> +	  fsfreeze, fstrim, getopt, hexdump, ipcmk, isosize, ldattach,
-> +	  look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie, mkfs,
-> +	  mkswap, namei, prlimit, readprofile, renice, rev, rtcwake,
-> +	  script, scriptreplay, setarch, setsid, sfdisk, swaplabel,
-> +	  swapoff, swapon, tailf, uuidgen, whereis, wipefs
-
-Is this list supposed to change between version of util-linux?
-I don't think we should assume it would not.
-
-This will make it rather difficult to maintain that list when bumping to
-a new version.
-
-I would suggest that we do not mention that list at all (unless there is
-a super-easy way to get it just by extracting the source of util-linux).
-
-I've stopped reviewing here, becasue all the following changes are
-partly due to each of the three changes your patch does.
-
-Could you please split it on three, as explained above, and respin?
-
-To be honest, I'm not sure if the biggish choice will eventually land,
-but at least the fixups and the additions of new libs and tools will.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/board/gdb/bfin-bf512/linux-4.6.config b/board/gdb/bfin-bf512/linux-4.6.config
+new file mode 100644
+index 0000000..bc2a907
+--- /dev/null
++++ b/board/gdb/bfin-bf512/linux-4.6.config
+@@ -0,0 +1,87 @@
++# CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_SYSVIPC=y
++CONFIG_BLK_DEV_INITRD=y
++# CONFIG_RD_GZIP is not set
++# CONFIG_RD_BZIP2 is not set
++# CONFIG_RD_LZMA is not set
++# CONFIG_RD_XZ is not set
++# CONFIG_RD_LZO is not set
++# CONFIG_RD_LZ4 is not set
++CONFIG_CC_OPTIMIZE_FOR_SIZE=y
++# CONFIG_UID16 is not set
++# CONFIG_SGETMASK_SYSCALL is not set
++# CONFIG_SYSFS_SYSCALL is not set
++# CONFIG_KALLSYMS is not set
++# CONFIG_BUG is not set
++# CONFIG_BASE_FULL is not set
++# CONFIG_ADVISE_SYSCALLS is not set
++# CONFIG_MEMBARRIER is not set
++CONFIG_EMBEDDED=y
++# CONFIG_VM_EVENT_COUNTERS is not set
++# CONFIG_SLUB_DEBUG is not set
++# CONFIG_COMPAT_BRK is not set
++CONFIG_MODULES=y
++# CONFIG_BLOCK is not set
++CONFIG_BF512=y
++# CONFIG_SET_GENERIC_CLOCKEVENTS is not set
++# CONFIG_I_ENTRY_L1 is not set
++# CONFIG_EXCPT_IRQ_SYSC_L1 is not set
++# CONFIG_DO_IRQ_L1 is not set
++# CONFIG_CORE_TIMER_IRQ_L1 is not set
++# CONFIG_IDLE_L1 is not set
++# CONFIG_SCHEDULE_L1 is not set
++# CONFIG_ARITHMETIC_OPS_L1 is not set
++# CONFIG_ACCESS_OK_L1 is not set
++# CONFIG_MEMSET_L1 is not set
++# CONFIG_MEMCPY_L1 is not set
++# CONFIG_STRCMP_L1 is not set
++# CONFIG_STRNCMP_L1 is not set
++# CONFIG_STRCPY_L1 is not set
++# CONFIG_STRNCPY_L1 is not set
++# CONFIG_SYS_BFIN_SPINLOCK_L1 is not set
++# CONFIG_CACHELINE_ALIGNED_L1 is not set
++# CONFIG_DCACHE_FLUSH_L1 is not set
++# CONFIG_APP_STACK_L1 is not set
++# CONFIG_BFIN_INS_LOWOVERHEAD is not set
++# CONFIG_BFIN_ICACHE is not set
++# CONFIG_BFIN_DCACHE is not set
++# CONFIG_C_AMCKEN is not set
++CONFIG_BINFMT_ELF_FDPIC=y
++CONFIG_BINFMT_FLAT=y
++# CONFIG_COREDUMP is not set
++# CONFIG_SUSPEND is not set
++# CONFIG_UEVENT_HELPER is not set
++# CONFIG_STANDALONE is not set
++# CONFIG_PREVENT_FIRMWARE_BUILD is not set
++# CONFIG_FW_LOADER is not set
++# CONFIG_ALLOW_DEV_COREDUMP is not set
++# CONFIG_INPUT is not set
++# CONFIG_SERIO is not set
++# CONFIG_VT is not set
++# CONFIG_LEGACY_PTYS is not set
++CONFIG_SERIAL_BFIN=y
++CONFIG_SERIAL_BFIN_CONSOLE=y
++CONFIG_SERIAL_BFIN_UART0=y
++CONFIG_SERIAL_BFIN_UART1=y
++# CONFIG_BFIN_OTP is not set
++# CONFIG_HW_RANDOM is not set
++# CONFIG_HWMON is not set
++# CONFIG_USB_SUPPORT is not set
++# CONFIG_MANDATORY_FILE_LOCKING is not set
++# CONFIG_DNOTIFY is not set
++# CONFIG_MISC_FILESYSTEMS is not set
++CONFIG_NLS=y
++CONFIG_NLS_DEFAULT="utf-8"
++CONFIG_PRINTK_TIME=y
++# CONFIG_ENABLE_WARN_DEPRECATED is not set
++# CONFIG_ENABLE_MUST_CHECK is not set
++# CONFIG_SECTION_MISMATCH_WARN_ONLY is not set
++CONFIG_MAGIC_SYSRQ=y
++# CONFIG_SCHED_DEBUG is not set
++# CONFIG_FTRACE is not set
++# CONFIG_DEBUG_VERBOSE is not set
++# CONFIG_DEBUG_HUNT_FOR_ZERO is not set
++# CONFIG_DEBUG_BFIN_HWTRACE_ON is not set
++CONFIG_EARLY_PRINTK=y
++# CONFIG_ACCESS_CHECK is not set
++# CONFIG_CRC32 is not set
+diff --git a/board/gdb/bfin-bf512/readme.txt b/board/gdb/bfin-bf512/readme.txt
+new file mode 100644
+index 0000000..a56b5bc
+--- /dev/null
++++ b/board/gdb/bfin-bf512/readme.txt
+@@ -0,0 +1,11 @@
++Run the simulation with GDB for FDPIC:
++
++ ./output/host/usr/bin/bfin-buildroot-linux-uclibc-run --env operating --model bf512 output/images/vmlinux
++
++Run the simulation with GDB for FLAT:
++
++ ./output/host/usr/bin/bfin-buildroot-uclinux-uclibc-run --env operating --model bf512 output/images/vmlinux
++
++The login prompt will appear in the terminal that started GDB.
++
++Tested with GDB 7.9
+diff --git a/board/gdb/post-build.sh b/board/gdb/post-build.sh
+new file mode 100755
+index 0000000..8933d50
+--- /dev/null
++++ b/board/gdb/post-build.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++# no simulated network devices at the moment
++rm -f ${TARGET_DIR}/etc/init.d/S40network
++rm -rf ${TARGET_DIR}/etc/network/
+diff --git a/configs/gdb_bfin_bf512_defconfig b/configs/gdb_bfin_bf512_defconfig
+new file mode 100644
+index 0000000..37ee728
+--- /dev/null
++++ b/configs/gdb_bfin_bf512_defconfig
+@@ -0,0 +1,34 @@
++# Architecture
++BR2_bfin=y
++BR2_bf512=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_INITRAMFS=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/gdb/post-build.sh"
++
++# Linux headers same as kernel, a 4.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.3"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/gdb/bfin-bf512/linux-4.6.config"
++BR2_LINUX_KERNEL_VMLINUX=y
++
++# Serial port config
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyBF0"
++
++# use minimal busybox with hush
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
++
++# compile gdb sim
++BR2_PACKAGE_HOST_GDB=y
++# BR2_PACKAGE_HOST_GDB_TUI is not set
++# BR2_PACKAGE_HOST_GDB_PYTHON is not set
++BR2_PACKAGE_HOST_GDB_SIM=y
++
+diff --git a/system/device_table_dev.txt b/system/device_table_dev.txt
+index c4257a6..4f0b637 100644
+--- a/system/device_table_dev.txt
++++ b/system/device_table_dev.txt
+@@ -31,6 +31,7 @@
+ /dev/ttyAM	c	666	0	0	204	16	0	1	3
+ /dev/ttyCPM	c	666	0	0	204	46	0	1	4
+ /dev/ttyAMA	c	666	0	0	204	64	0	1	4
++/dev/ttyBF	c	666	0	0	204	64	0	1	2
+ /dev/ttySAC	c	666	0	0	204	64	0	1	4
+ /dev/ttySC	c	666	0	0	204	8	0	1	8
+ /dev/ttyPSC	c	666	0	0	204	148	0	1	4
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.4
