@@ -1,220 +1,155 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 6 Jul 2016 22:09:09 +0200
-Subject: [Buildroot] [PATCH v2,2/4] alljoyn-base: new package
-In-Reply-To: <1467806931-9880-2-git-send-email-fabrice.fontaine@orange.com>
-References: <1467806931-9880-1-git-send-email-fabrice.fontaine@orange.com>
- <1467806931-9880-2-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <72b59c0e-ce4a-c781-da88-a04b70d94ace@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Jul 2016 22:13:04 +0200
+Subject: [Buildroot] [git commit] 4th: new package
+Message-ID: <20160706201407.1B050818EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=ac4471d09f11231d6696995373088095409b0a0c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 06/07/2016 ? 14:08, Fabrice Fontaine a ?crit :
-> AllJoyn Base Services are common services used by many devices,
-> providing a set of interfaces for different devices to interact and
-> interoperate with one another.
-> 
-> https://allseenalliance.org
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> ---
-> Changes v1 -> v2 (after review of Romain Naour):
->  - Add dependencies on BR2_USE_MMU and !BR2_STATIC_LIBS
->  - Select BR2_PACKAGE_OPENSSL and never use builtin crypto library
->  - Remove unneeded comments on ALLJOYN_LICENSE_FILES
->  - Remove unneeded select and dependency on BR2_PACKAGE_LIBCAP as it is
->    already done in alljoyn package
-> 
->  package/Config.in                      |  1 +
->  package/alljoyn-base/Config.in         | 43 ++++++++++++++++
->  package/alljoyn-base/alljoyn-base.hash |  2 +
->  package/alljoyn-base/alljoyn-base.mk   | 94 ++++++++++++++++++++++++++++++++++
->  4 files changed, 140 insertions(+)
->  create mode 100644 package/alljoyn-base/Config.in
->  create mode 100644 package/alljoyn-base/alljoyn-base.hash
->  create mode 100644 package/alljoyn-base/alljoyn-base.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 77d8fb3..8b50ebb 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1126,6 +1126,7 @@ endmenu
->  menu "Networking"
->  	source "package/agentpp/Config.in"
->  	source "package/alljoyn/Config.in"
-> +	source "package/alljoyn-base/Config.in"
->  	source "package/batman-adv/Config.in"
->  	source "package/c-ares/Config.in"
->  	source "package/canfestival/Config.in"
-> diff --git a/package/alljoyn-base/Config.in b/package/alljoyn-base/Config.in
-> new file mode 100644
-> index 0000000..adf3149
-> --- /dev/null
-> +++ b/package/alljoyn-base/Config.in
-> @@ -0,0 +1,43 @@
-> +config BR2_PACKAGE_ALLJOYN_BASE
-> +	bool "alljoyn-base"
-> +	depends on BR2_USE_MMU # alljoyn
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_USE_WCHAR # alljoyn
-> +	select BR2_PACKAGE_ALLJOYN
-> +	select BR2_PACKAGE_OPENSSL
-> +	help
-> +	  AllJoyn Base Services are common services used by many devices,
-> +	  providing a set of interfaces for different devices to interact and
-> +	  interoperate with one another.
-> +
-> +	  https://allseenalliance.org
-> +
-> +comment "alljoyn-base needs a toolchain w/ C++, threads, wchar, dynamic library"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_USE_WCHAR || BR2_STATIC_LIBS
-> +
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Thomas:
+ - fix the license information, it's GPLv3+, LGPLv3+.
+ - add a comment about the COPYING file containing only the LGPLv3 text,
+   even though there is some GPLv3+ code.
+ - minor tweaks in the .mk file
+ - rewrap Config.in help text.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/4th/0001-avoid-regen-during-install.patch | 17 ++++++
+ package/4th/4th.hash                              |  2 +
+ package/4th/4th.mk                                | 63 +++++++++++++++++++++++
+ package/4th/Config.in                             |  8 +++
+ package/Config.in                                 |  1 +
+ 5 files changed, 91 insertions(+)
 
-The comment should be moved above BR2_PACKAGE_ALLJOYN_BASE or at the end of the
-file. Otherwise Kconfig doesn't indent correctly all sub options bellow.
-
-With that fixed:
-  Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-> +if BR2_PACKAGE_ALLJOYN_BASE
-> +
-> +config BR2_PACKAGE_ALLJOYN_BASE_CONTROLPANEL
-> +	bool "alljoyn-controlpanel"
-> +	help
-> +	  Enable AllJoyn Control Panel base service which allows devices to
-> +	  advertise a virtual control panel to be controlled remotely.
-> +
-> +config BR2_PACKAGE_ALLJOYN_BASE_NOTIFICATION
-> +	bool "alljoyn-notification"
-> +	help
-> +	  Enable AllJoyn Notification base service which allows text-based
-> +	  notifications to be sent and received by devices on the AllJoyn
-> +	  network. Also supports audio and images via URLs.
-> +
-> +config BR2_PACKAGE_ALLJOYN_BASE_ONBOARDING
-> +	bool "alljoyn-onboarding"
-> +	help
-> +	  Enable AllJoyn Onboarding base service which provides a consistent way
-> +	  to bring a new device onto the Wi-Fi network.
-> +
-> +endif # BR2_PACKAGE_ALLJOYN_BASE
-> diff --git a/package/alljoyn-base/alljoyn-base.hash b/package/alljoyn-base/alljoyn-base.hash
-> new file mode 100644
-> index 0000000..dbec3a3
-> --- /dev/null
-> +++ b/package/alljoyn-base/alljoyn-base.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256	742f724b3a06c8fc4039591dba24871755728221ca5dc4afb78ebd9a7e3beb44	alljoyn-base-16.04.00.tar.gz
-> diff --git a/package/alljoyn-base/alljoyn-base.mk b/package/alljoyn-base/alljoyn-base.mk
-> new file mode 100644
-> index 0000000..b6e9bd9
-> --- /dev/null
-> +++ b/package/alljoyn-base/alljoyn-base.mk
-> @@ -0,0 +1,94 @@
-> +################################################################################
-> +#
-> +# alljoyn-base
-> +#
-> +################################################################################
-> +
-> +ALLJOYN_BASE_REV = 16.04
-> +ALLJOYN_BASE_VERSION = $(ALLJOYN_BASE_REV).00
-> +ALLJOYN_BASE_SOURCE = alljoyn-base-$(ALLJOYN_BASE_VERSION).tar.gz
-> +ALLJOYN_BASE_SITE = \
-> +	https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_BASE_REV)
-> +# See https://allseenalliance.org/alliance/ip-policy
-> +ALLJOYN_BASE_LICENSE = ISC
-> +
-> +ALLJOYN_BASE_DEPENDENCIES = host-scons alljoyn openssl
-> +ALLJOYN_BASE_INSTALL_STAGING = YES
-> +
-> +ALLJOYN_BASE_CRYPTO = openssl
-> +
-> +# AllJoyn can be compiled in debug or release mode. By default, AllJoyn is built
-> +# in debug mode.
-> +ALLJOYN_BASE_VARIANT = release
-> +
-> +ALLJOYN_BASE_BINDINGS = c,cpp
-> +
-> +# By setting openwrt for OS and CPU, AllJoyn cross-compilation can be finely
-> +# tuned through TARGET_xxx options. All TARGET_xxx variables must be defined
-> +# otherwise compilation will fail.
-> +# CROSS_COMPILE option should not be used as it works only for linux/ARM.
-> +ALLJOYN_BASE_OS = openwrt
-> +ALLJOYN_BASE_CPU = openwrt
-> +
-> +# AllJoyn install everything in this relative path
-> +ALLJOYN_BASE_DISTDIR = \
-> +	/build/$(ALLJOYN_OS)/$(ALLJOYN_CPU)/$(ALLJOYN_VARIANT)/dist/
-> +
-> +ALLJOYN_BASE_SCONS_OPTS = \
-> +	-j$(PARALLEL_JOBS) \
-> +	V=1 \
-> +	OS=$(ALLJOYN_BASE_OS) \
-> +	CPU=$(ALLJOYN_BASE_CPU) \
-> +	VARIANT=$(ALLJOYN_BASE_VARIANT) \
-> +	BR=off \
-> +	CRYPTO=$(ALLJOYN_BASE_CRYPTO) \
-> +	BINDINGS=$(ALLJOYN_BASE_BINDINGS) \
-> +	ALLJOYN_DISTDIR="$(STAGING_DIR)"\
-> +	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-> +	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
-> +	TARGET_LINKFLAGS="$(TARGET_LINKFLAGS)" \
-> +	TARGET_CC="$(TARGET_CC)" \
-> +	TARGET_CXX="$(TARGET_CXX)" \
-> +	TARGET_LD="$(TARGET_LD)" \
-> +	TARGET_LINK="$(TARGET_CXX)" \
-> +	TARGET_AR="$(TARGET_AR)" \
-> +	TARGET_RANLIB="$(TARGET_RANLIB)" \
-> +	TARGET_PATH="$(BR_PATH)"
-> +
-> +ifeq ($(BR2_PACKAGE_ALLJOYN_BASE_CONTROLPANEL), y)
-> +ALLJOYN_BASE_BUILD_CONTROLPANEL = \
-> +	cd $(@D)/controlpanel; $(SCONS) $(ALLJOYN_BASE_SCONS_OPTS)
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_ALLJOYN_BASE_NOTIFICATION), y)
-> +ALLJOYN_BASE_BUILD_NOTIFICATION = \
-> +	cd $(@D)/notification; $(SCONS) $(ALLJOYN_BASE_SCONS_OPTS)
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_ALLJOYN_BASE_ONBOARDING), y)
-> +ALLJOYN_BASE_BUILD_ONBOARDING = \
-> +	cd $(@D)/onboarding; $(SCONS) $(ALLJOYN_BASE_SCONS_OPTS)
-> +endif
-> +
-> +define ALLJOYN_BASE_BUILD_CMDS
-> +	$(ALLJOYN_BASE_BUILD_CONTROLPANEL)
-> +	$(ALLJOYN_BASE_BUILD_NOTIFICATION)
-> +	$(ALLJOYN_BASE_BUILD_ONBOARDING)
-> +endef
-> +
-> +# Suppress error code and error message as those directories could be missing if
-> +# BR2_PACKAGE_ALLJOYN_BASE_xxx variables are all unset
-> +define ALLJOYN_BASE_INSTALL_STAGING_CMDS
-> +	cp -a $(@D)/*/$(ALLJOYN_BASE_DISTDIR)/*/lib/lib* \
-> +		$(STAGING_DIR)/usr/lib/ 2>/dev/null || :
-> +	cp -a $(@D)/*/$(ALLJOYN_BASE_DISTDIR)/*/inc/* \
-> +		$(STAGING_DIR)/usr/include/ 2>/dev/null || :
-> +endef
-> +
-> +# Only install alljoyn dynamic libraries into target directory
-> +define ALLJOYN_BASE_INSTALL_TARGET_CMDS
-> +	cp -a $(@D)/*/$(ALLJOYN_BASE_DISTDIR)/*/lib/lib*.so* \
-> +		$(TARGET_DIR)/usr/lib/ 2>/dev/null || :
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
+diff --git a/package/4th/0001-avoid-regen-during-install.patch b/package/4th/0001-avoid-regen-during-install.patch
+new file mode 100644
+index 0000000..436cff1
+--- /dev/null
++++ b/package/4th/0001-avoid-regen-during-install.patch
+@@ -0,0 +1,17 @@
++avoid regen during install
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++--- a/sources/Makefile
+++++ b/sources/Makefile
++@@ -120,7 +120,7 @@
++ 	ln -sf $(SHARED_LIB) $(LIBRARIES)/lib4th.so
++ endif
++ 
++-mostlyinstall: libinstall all
+++mostlyinstall: libinstall
++ 	cp 4th 4tsh pp4th $(BINARIES)
++ 
++ install: mostlyinstall
++-- 
++
+diff --git a/package/4th/4th.hash b/package/4th/4th.hash
+new file mode 100644
+index 0000000..97083da
+--- /dev/null
++++ b/package/4th/4th.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  1c7adbb1a56dad4c4c781e6e023d77ac862842560c05246b691d07e9a4460ab2  4th-3.62.4-unix.tar.gz
+diff --git a/package/4th/4th.mk b/package/4th/4th.mk
+new file mode 100644
+index 0000000..bdf0672
+--- /dev/null
++++ b/package/4th/4th.mk
+@@ -0,0 +1,63 @@
++################################################################################
++#
++# 4th
++#
++################################################################################
++
++4TH_VERSION = 3.62.4
++4TH_SOURCE = 4th-$(4TH_VERSION)-unix.tar.gz
++4TH_SITE = http://downloads.sourceforge.net/project/forth-4th/4th-$(4TH_VERSION)
++4TH_LICENSE = GPLv3+, LGPLv3+
++# The COPYING file only contains the text of the LGPLv3, but the
++# source code really contains parts under GPLv3+.
++4TH_LICENSE_FILES = COPYING
++4TH_DEPENDENCIES = host-4th
++4TH_INSTALL_STAGING = YES
++
++ifeq ($(BR2_STATIC_LIBS),y)
++4TH_MAKE_ENV = STATIC=1
++else
++4TH_MAKE_ENV = SHARED=1
++endif
++
++define 4TH_BUILD_CMDS
++	$(4TH_MAKE_ENV) $(MAKE) -C $(@D)/sources all \
++		CROSS="$(TARGET_CROSS)" \
++		CFLAGS="$(TARGET_CFLAGS) -DUNIX -fsigned-char" \
++		FOURTH=$(HOST_DIR)/usr/bin/4th
++endef
++
++define 4TH_INSTALL_STAGING_CMDS
++	$(4TH_MAKE_ENV) $(MAKE) -C $(@D)/sources libinstall \
++		LIBRARIES=$(STAGING_DIR)/usr/lib
++	$(INSTALL) -D -m 0644 $(@D)/sources/4th.h \
++		$(STAGING_DIR)/usr/include/4th.h
++endef
++
++define 4TH_INSTALL_TARGET_CMDS
++	$(4TH_MAKE_ENV) $(MAKE) -C $(@D)/sources mostlyinstall \
++		BINARIES=$(TARGET_DIR)/usr/bin \
++		LIBRARIES=$(TARGET_DIR)/usr/lib
++	mkdir -p $(TARGET_DIR)/usr/share/4th/lib
++	cp -dpf $(@D)/4th/*.4th $(TARGET_DIR)/usr/share/4th
++	cp -dpf $(@D)/4th/lib/*.4th $(TARGET_DIR)/usr/share/4th/lib
++	mkdir -p $(TARGET_DIR)/usr/share/4th/demo
++	cp -dpf $(@D)/4th/demo/*.4th $(TARGET_DIR)/usr/share/4th/demo
++	mkdir -p $(TARGET_DIR)/usr/share/4th/4pp/lib
++	cp -dpf $(@D)/4th/4pp/*.4pp $(TARGET_DIR)/usr/share/4th/4pp
++	cp -dpf $(@D)/4th/4pp/lib/*.4pp $(TARGET_DIR)/usr/share/4th/4pp/lib
++endef
++
++define HOST_4TH_BUILD_CMDS
++	$(MAKE) -C $(@D)/sources all \
++		CFLAGS="$(HOST_CFLAGS) -DUNIX -fsigned-char"
++endef
++
++define HOST_4TH_INSTALL_CMDS
++	$(MAKE) -C $(@D)/sources mostlyinstall \
++		BINARIES=$(HOST_DIR)/usr/bin \
++		LIBRARIES=$(HOST_DIR)/usr/lib
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
+diff --git a/package/4th/Config.in b/package/4th/Config.in
+new file mode 100644
+index 0000000..4554664
+--- /dev/null
++++ b/package/4th/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_4TH
++	bool "4th"
++	help
++	  4tH is a Forth compiler that can create bytecode,
++	  C-embeddable bytecode, standalone executables, but also
++	  works fine as a scripting language
++
++	  http://thebeez.home.xs4all.nl/4tH/
+diff --git a/package/Config.in b/package/Config.in
+index d6c7600..b9a7567 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -469,6 +469,7 @@ endmenu
+ endmenu
+ 
+ menu "Interpreter languages and scripting"
++	source "package/4th/Config.in"
+ 	source "package/enscript/Config.in"
+ 	source "package/erlang/Config.in"
+ if BR2_PACKAGE_ERLANG
