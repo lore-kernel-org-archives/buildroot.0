@@ -1,128 +1,79 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  6 Jul 2016 14:08:51 +0200
-Subject: [Buildroot] [PATCH v2,4/4] alljoyn-base_tcl: new package
-In-Reply-To: <1467806931-9880-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1467806931-9880-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <1467806931-9880-4-git-send-email-fabrice.fontaine@orange.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 6 Jul 2016 14:46:16 +0200
+Subject: [Buildroot] [PATCH] support/apply-patches: re-instate set -e
+In-Reply-To: <1467740163-10650-1-git-send-email-yann.morin.1998@free.fr>
+References: <1467740163-10650-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <e58d3879-22ca-cefa-05f4-5f16d4a3e489@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-AllJoyn Base Services are common services used by many devices,
-providing a set of interfaces for different devices to interact and
-interoperate with one another.
+Hi Yann,
 
-Thin Client Library is designed to bring the benefits of the AllJoyn
-distributed programming environment to embedded systems.
+Le 05/07/2016 ? 19:36, Yann E. MORIN a ?crit :
+> As reported by S?bastien Szymanski [1], the apply-patches script
+> doesn't stop if a tar command can't extract an archive.
+> 
+> Use "set -e" to exit immediately if a command return an error.
+> 
+> Be sure to ignore any expected error: when we check if a patch to be
+> applied has the same basename as an already applied patch, the grep
+> would fail when no such patch was already applied. We should not fail
+> in this case.
 
-https://allseenalliance.org
+Thanks for the respin!
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
----
- package/Config.in                              |  1 +
- package/alljoyn-base_tcl/Config.in             | 17 ++++++++++
- package/alljoyn-base_tcl/alljoyn-base_tcl.hash |  2 ++
- package/alljoyn-base_tcl/alljoyn-base_tcl.mk   | 45 ++++++++++++++++++++++++++
- 4 files changed, 65 insertions(+)
- create mode 100644 package/alljoyn-base_tcl/Config.in
- create mode 100644 package/alljoyn-base_tcl/alljoyn-base_tcl.hash
- create mode 100644 package/alljoyn-base_tcl/alljoyn-base_tcl.mk
+Sorry about the mess in the autobuilder yesterday.. lesson learned :)
 
-diff --git a/package/Config.in b/package/Config.in
-index 4120b0d..e3b47ad 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1128,6 +1128,7 @@ menu "Networking"
- 	source "package/ajtcl/Config.in"
- 	source "package/alljoyn/Config.in"
- 	source "package/alljoyn-base/Config.in"
-+	source "package/alljoyn-base_tcl/Config.in"
- 	source "package/batman-adv/Config.in"
- 	source "package/c-ares/Config.in"
- 	source "package/canfestival/Config.in"
-diff --git a/package/alljoyn-base_tcl/Config.in b/package/alljoyn-base_tcl/Config.in
-new file mode 100644
-index 0000000..12ebcef
---- /dev/null
-+++ b/package/alljoyn-base_tcl/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_ALLJOYN_BASE_TCL
-+	bool "alljoyn-base_tcl"
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # ajtcl
-+	select BR2_PACKAGE_AJTCL
-+	help
-+	  AllJoyn Base Services are common services used by many devices,
-+	  providing a set of interfaces for different devices to interact and
-+	  interoperate with one another.
-+
-+	  Thin Client Library is designed to bring the benefits of the AllJoyn
-+	  distributed programming environment to embedded systems.
-+
-+	  https://allseenalliance.org
-+
-+comment "alljoyn-base_tcl needs a toolchain w/ threads and dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/alljoyn-base_tcl/alljoyn-base_tcl.hash b/package/alljoyn-base_tcl/alljoyn-base_tcl.hash
-new file mode 100644
-index 0000000..882839d
---- /dev/null
-+++ b/package/alljoyn-base_tcl/alljoyn-base_tcl.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	741f7a71929ccd6a66bf75d2b03affc62411e229b70bb89399be9b1b2ce40629	alljoyn-base_tcl-16.04.00.tar.gz
-diff --git a/package/alljoyn-base_tcl/alljoyn-base_tcl.mk b/package/alljoyn-base_tcl/alljoyn-base_tcl.mk
-new file mode 100644
-index 0000000..d6c339b
---- /dev/null
-+++ b/package/alljoyn-base_tcl/alljoyn-base_tcl.mk
-@@ -0,0 +1,45 @@
-+################################################################################
-+#
-+# alljoyn-base_tcl
-+#
-+################################################################################
-+
-+ALLJOYN_BASE_TCL_REV = 16.04
-+ALLJOYN_BASE_TCL_VERSION = $(ALLJOYN_BASE_TCL_REV).00
-+ALLJOYN_BASE_TCL_SOURCE = alljoyn-base_tcl-$(ALLJOYN_BASE_TCL_VERSION).tar.gz
-+ALLJOYN_BASE_TCL_SITE = \
-+	https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_BASE_TCL_REV)
-+# See https://allseenalliance.org/alliance/ip-policy
-+ALLJOYN_BASE_TCL_LICENSE = ISC
-+
-+ALLJOYN_BASE_TCL_DEPENDENCIES = host-scons ajtcl
-+ALLJOYN_BASE_TCL_INSTALL_STAGING = YES
-+
-+# AllJoyn Base Thin Core can be compiled in debug or release mode. By default,
-+# AllJoyn Base Thin Core is built in debug mode.
-+ALLJOYN_BASE_TCL_VARIANT = release
-+
-+ALLJOYN_BASE_TCL_SCONS_OPTS = \
-+	-j$(PARALLEL_JOBS) \
-+	V=1 \
-+	VARIANT=$(AJTCL_VARIANT) \
-+	CC="$(TARGET_CC)" \
-+	CXX="$(TARGET_CXX)" \
-+	AJTCL_DIST=$(STAGING_DIR) \
-+	WS=off
-+
-+define ALLJOYN_BASE_TCL_BUILD_CMDS
-+	cd $(@D); $(SCONS) $(ALLJOYN_BASE_TCL_SCONS_OPTS)
-+endef
-+
-+define ALLJOYN_BASE_TCL_INSTALL_STAGING_CMDS
-+	cp -a $(@D)/dist/lib/lib* $(STAGING_DIR)/usr/lib/
-+	cp -a $(@D)/dist/include/* $(STAGING_DIR)/usr/include/
-+endef
-+
-+# Only install AllJoyn Base Thin Core dynamic libraries into target directory
-+define ALLJOYN_BASE_TCL_INSTALL_TARGET_CMDS
-+	cp -a $(@D)/dist/lib/lib*.so* $(TARGET_DIR)/usr/lib/
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.7.4
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+> Cc: Romain Naour <romain.naour@openwide.fr>
+> 
+> ---
+> Tested with:
+>     make defconfig
+>     make allyespackageconfig
+>     [remove luainterpreter to avoid multiple providers for
+>      luainterpreter; disable qemu-user; disable tar rootfs]
+>     make source
+>     make $(make -s show-targets |sed -r -e 's/ |$/-patch /g')
+
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Tested with the commands above.
+Tested-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+
+> ---
+>  support/scripts/apply-patches.sh | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+> index 694302d..7ccb39d 100755
+> --- a/support/scripts/apply-patches.sh
+> +++ b/support/scripts/apply-patches.sh
+> @@ -31,6 +31,8 @@
+>  # applied. The list of the patches applied is stored in '.applied_patches_list'
+>  # file in the build directory.
+>  
+> +set -e
+> +
+>  silent=
+>  if [ "$1" = "-s" ] ; then
+>      # add option to be used by the patch tool
+> @@ -103,7 +105,7 @@ function apply_patch {
+>          echo "Error: missing patch file ${path}/$patch"
+>          exit 1
+>      fi
+> -    existing="$(grep -E "/${patch}\$" ${builddir}/.applied_patches_list)"
+> +    existing="$(grep -E "/${patch}\$" ${builddir}/.applied_patches_list || true)"
+>      if [ -n "${existing}" ]; then
+>          echo "Error: duplicate filename '${patch}'"
+>          echo "Conflicting files are:"
+> 
