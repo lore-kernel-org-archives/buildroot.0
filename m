@@ -1,81 +1,42 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed,  6 Jul 2016 09:18:16 +0200
-Subject: [Buildroot] [PATCH] python-humanize: new package
-Message-ID: <1467789496-20404-1-git-send-email-yegorslists@googlemail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 6 Jul 2016 09:20:10 +0100
+Subject: [Buildroot] [PATCH] freetype: bump version to 2.6.4
+Message-ID: <1467793210-38023-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/Config.in                            |  1 +
- package/python-humanize/Config.in            |  9 +++++++++
- package/python-humanize/python-humanize.hash |  3 +++
- package/python-humanize/python-humanize.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-humanize/Config.in
- create mode 100644 package/python-humanize/python-humanize.hash
- create mode 100644 package/python-humanize/python-humanize.mk
+ package/freetype/freetype.hash | 6 +++---
+ package/freetype/freetype.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 15271a2..ff625b8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -664,6 +664,7 @@ menu "External python modules"
- 	source "package/python-gobject/Config.in"
- 	source "package/python-html5lib/Config.in"
- 	source "package/python-httplib2/Config.in"
-+	source "package/python-humanize/Config.in"
- 	source "package/python-id3/Config.in"
- 	source "package/python-idna/Config.in"
- 	source "package/python-iniparse/Config.in"
-diff --git a/package/python-humanize/Config.in b/package/python-humanize/Config.in
-new file mode 100644
-index 0000000..f4f4e67
---- /dev/null
-+++ b/package/python-humanize/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_HUMANIZE
-+	bool "python-humanize"
-+	help
-+	  Python humanize package contains various common humanization
-+	  utilities, like turning a number into a fuzzy human readable
-+	  duration ('3 minutes ago') or into a human readable size or
-+	  throughput.
-+
-+	  http://github.com/jmoiron/humanize
-diff --git a/package/python-humanize/python-humanize.hash b/package/python-humanize/python-humanize.hash
-new file mode 100644
-index 0000000..bb66e44
---- /dev/null
-+++ b/package/python-humanize/python-humanize.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/humanize/json, sha256 locally computed
-+md5	e8473d9dc1b220911cac2edd53b1d973  humanize-0.5.1.tar.gz
-+sha256	a43f57115831ac7c70de098e6ac46ac13be00d69abbf60bdcac251344785bb19  humanize-0.5.1.tar.gz
-diff --git a/package/python-humanize/python-humanize.mk b/package/python-humanize/python-humanize.mk
-new file mode 100644
-index 0000000..60ec82b
---- /dev/null
-+++ b/package/python-humanize/python-humanize.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-humanize
-+#
-+################################################################################
-+
-+PYTHON_HUMANIZE_VERSION = 0.5.1
-+PYTHON_HUMANIZE_SOURCE = humanize-$(PYTHON_HUMANIZE_VERSION).tar.gz
-+PYTHON_HUMANIZE_SITE = https://pypi.python.org/packages/8c/e0/e512e4ac6d091fc990bbe13f9e0378f34cf6eecd1c6c268c9e598dcf5bb9
-+PYTHON_HUMANIZE_SETUP_TYPE = setuptools
-+PYTHON_HUMANIZE_LICENSE = MIT
-+PYTHON_HUMANIZE_LICENSE_FILES = LICENCE
-+
-+$(eval $(python-package))
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index 45f91df..8695f26 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.3/
+-md5	0037b25a8c090bc8a1218e867b32beb1	freetype-2.6.3.tar.bz2
+-sha1	6c98bd5d0be313207c37ca23d25faf983486aee5	freetype-2.6.3.tar.bz2
++# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.4/
++md5 9c3b2258757a19cdba46d34ed1b0852a  freetype-2.6.4.tar.bz2
++sha1 5eaa8c949b4841eeabba44d2c582ff6859e5c4b9  freetype-2.6.4.tar.bz2
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index d95c424..d2dbe5f 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREETYPE_VERSION = 2.6.3
++FREETYPE_VERSION = 2.6.4
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+ FREETYPE_INSTALL_STAGING = YES
 -- 
-2.8.1
+2.7.3
