@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jul 2016 13:59:34 +0200
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.159
-In-Reply-To: <1467795359-51963-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1467795359-51963-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160706135934.7531fc07@free-electrons.com>
+Date: Wed, 6 Jul 2016 13:59:36 +0200
+Subject: [Buildroot] [PATCH] Config.in.legacy: fix typo
+In-Reply-To: <1467795047-4254-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1467795047-4254-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20160706135936.3368587b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 6 Jul 2016 09:55:59 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Wed,  6 Jul 2016 10:50:47 +0200, Maxime Hadjinlian wrote:
+> Thanks to Ben Boeckel who noticed it.
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
->  package/lvm2/lvm2.hash | 2 +-
->  package/lvm2/lvm2.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  Config.in.legacy | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
