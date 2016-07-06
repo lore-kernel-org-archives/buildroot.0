@@ -1,35 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 06 Jul 2016 16:03:18 +0000
-Subject: [Buildroot] [Bug 9086] Syntax Error (missing ")" in
- boot/uboot/uboot.mk on line 203)
-In-Reply-To: <bug-9086-163@https.bugs.busybox.net/>
-References: <bug-9086-163@https.bugs.busybox.net/>
-Message-ID: <bug-9086-163-L0lwS2mFBb@https.bugs.busybox.net/>
+From: Andreas Ehmanns <universeii@gmx.de>
+Date: Wed, 6 Jul 2016 18:47:11 +0200
+Subject: [Buildroot] [PATCH 4/4] Package netsnmp: Added OK/FAIL output
+In-Reply-To: <20160701150415.515459b2@free-electrons.com>
+References: <1456435484-4723-1-git-send-email-universeII@gmx.de>
+ <1456435484-4723-4-git-send-email-universeII@gmx.de>
+ <20160701123644.GB25487@free.fr> <20160701150415.515459b2@free-electrons.com>
+Message-ID: <577D360F.5090606@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9086
+Dear Thomas, Yann, all,
+thanks for revising the patch series and for incorporating the changes 
+into buildroot.
 
---- Comment #2 from Jebodiah Sensai <dkaplan65@gmail.com> ---
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 065bdf9..7c3512a 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -203,7 +203,7 @@ ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
- define UBOOT_GENERATE_ZYNQ_IMAGE
-        $(HOST_DIR)/usr/bin/python2 \
-                $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
--               -u $(@D)/$(firstword $(call
-qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) \
-+               -u $(@D)/$(firstword $(call
-qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))) \
-                -o $(BINARIES_DIR)/BOOT.BIN
- endef
- UBOOT_DEPENDENCIES += host-zynq-boot-bin
+Regards,
+Andreas
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+
+Am 01.07.2016 um 15:04 schrieb Thomas Petazzoni:
+> Hello,
+>
+> On Fri, 1 Jul 2016 14:36:44 +0200, Yann E. MORIN wrote:
+>
+>>> @@ -92,6 +98,7 @@ case "$1" in
+>>>       reload|force-reload)
+>>>           reload
+>>>           ;;
+>>> +
+>> Spurious empty line.
+> It's indeed not strictly related, but in all other cases of this
+> switch, there is an empty line separating cases. So I think it's good
+> to also have this one for consistency. It could have been in a separate
+> commit, but oh well, that was good enough.
+>
+> Thanks for the review!
+>
+> Thomas
