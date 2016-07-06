@@ -1,56 +1,49 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 6 Jul 2016 07:43:17 +0200
-Subject: [Buildroot] [PATCH] uclibc: add ldd compile fix from upstream
-Message-ID: <20160706054317.GA24041@waldemar-brodkorb.de>
+Date: Wed, 6 Jul 2016 07:51:13 +0200
+Subject: [Buildroot] [PATCH] bfin: default to bf532,
+	disable bf6xx for internal toolchain
+Message-ID: <20160706055113.GA25276@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a build error, when uclibc utils is selected targeting Blackfin.
+The default Blackfin processor in Buildroot isn't supported by
+gcc 6.1.0, so use bf532 as default. Disable any bf6xx processors
+for internal toolchain users.
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/uclibc/0001-bfin-allow-to-build-ldd.patch | 29 +++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/uclibc/0001-bfin-allow-to-build-ldd.patch
+ arch/Config.in.bfin | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/uclibc/0001-bfin-allow-to-build-ldd.patch b/package/uclibc/0001-bfin-allow-to-build-ldd.patch
-new file mode 100644
-index 0000000..95b0fef
---- /dev/null
-+++ b/package/uclibc/0001-bfin-allow-to-build-ldd.patch
-@@ -0,0 +1,29 @@
-+From 10f469f6ce1a0c14e4506c42e47e15aa83be2eef Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+Date: Wed, 6 Jul 2016 06:08:51 +0200
-+Subject: [PATCH] bfin: allow to build ldd
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+---
-+ utils/ldd.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/utils/ldd.c b/utils/ldd.c
-+index f6413c6..5d2c8f4 100644
-+--- a/utils/ldd.c
-++++ b/utils/ldd.c
-+@@ -35,6 +35,11 @@
-+ #define ELFCLASSM      ELFCLASS32
-+ #endif
-+
-++#if defined(__bfin__)
-++#define MATCH_MACHINE(x) (x == EM_BLACKFIN)
-++#define ELFCLASSM      ELFCLASS32
-++#endif
-++
-+ #if defined(__s390__)
-+ #define MATCH_MACHINE(x) (x == EM_S390)
-+ #define ELFCLASSM	ELFCLASS32
-+--
-+2.1.4
-+
+diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+index 415fc89..9ffdb94 100644
+--- a/arch/Config.in.bfin
++++ b/arch/Config.in.bfin
+@@ -1,17 +1,21 @@
+ choice
+ 	prompt "Target CPU"
+ 	depends on BR2_bfin
+-	default BR2_bf609
++	default BR2_bf532
+ 	help
+ 	  Specify target CPU
+ config BR2_bf606
+ 	bool "bf606"
++	depends on BR2_TOOLCHAIN_EXTERNAL
+ config BR2_bf607
+ 	bool "bf607"
++	depends on BR2_TOOLCHAIN_EXTERNAL
+ config BR2_bf608
+ 	bool "bf608"
++	depends on BR2_TOOLCHAIN_EXTERNAL
+ config BR2_bf609
+ 	bool "bf609"
++	depends on BR2_TOOLCHAIN_EXTERNAL
+ config BR2_bf512
+ 	bool "bf512"
+ config BR2_bf514
 -- 
 2.1.4
