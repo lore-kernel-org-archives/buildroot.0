@@ -1,61 +1,36 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 6 Jul 2016 09:47:02 -0400
-Subject: [Buildroot] [PATCH v6 1/6] audit: bump to version 2.6
-In-Reply-To: <20160705171615.GJ6533@free.fr>
-References: <1466980753-667-1-git-send-email-Aduskett@gmail.com>
- <1466980753-667-2-git-send-email-Aduskett@gmail.com>
- <20160705171615.GJ6533@free.fr>
-Message-ID: <CAFSsvmp7sABianSmyfWOUv+P3-Y+ZOFVqf5cctU8Acs_zUz+kQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Jul 2016 15:47:32 +0200
+Subject: [Buildroot] [git commit] python-pillow: fix typo on tiff package
+	dependency
+Message-ID: <20160706134804.A643D807D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey! Sorry about not getting back to you sooner; I will look into this
-right away!
+commit: https://git.buildroot.net/buildroot/commit/?id=ded16b82872547218dc5b83e9811c778adb0a029
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Jul 5, 2016 at 1:16 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Adam, All,
->
-> On 2016-06-26 18:39 -0400, Adam Duskett spake thusly:
->> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
->> ---
-> [--SNIP--]
->> diff --git a/package/audit/audit.mk b/package/audit/audit.mk
->> index 1fbc623..937244d 100644
->> --- a/package/audit/audit.mk
->> +++ b/package/audit/audit.mk
->> @@ -4,7 +4,7 @@
->>  #
->>  ################################################################################
->>
->> -AUDIT_VERSION = 2.4.4
->> +AUDIT_VERSION = 2.6
->
-> This is causing a bunch of autobuilder failures:
->     http://autobuild.buildroot.org/?reason=audit-2.6.2
->
-> Care to have a look at it, please?
->
-> Regards,
-> Yann E. MORIN.
->
->>  AUDIT_SITE = http://people.redhat.com/sgrubb/audit
->>  AUDIT_LICENSE = GPLv2
->>  AUDIT_LICENSE_FILES = COPYING
->> --
->> 2.7.4
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Fixes:
+
+  http://autobuild.buildroot.net/results/5ac12f08a366fc15ec138c900df0e5f62d0b70bc/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-pillow/python-pillow.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index 878fdad..84d6e65 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -33,7 +33,7 @@ else
+ PYTHON_PILLOW_BUILD_OPTS += --disable-jpeg2000
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
++ifeq ($(BR2_PACKAGE_TIFF),y)
+ PYTHON_PILLOW_DEPENDENCIES += tiff
+ PYTHON_PILLOW_BUILD_OPTS += --enable-tiff
+ else
