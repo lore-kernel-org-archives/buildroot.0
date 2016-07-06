@@ -1,94 +1,64 @@
-From: Andreas Ehmanns <universeii@gmx.de>
-Date: Wed, 6 Jul 2016 18:53:59 +0200
-Subject: [Buildroot] [PATCH 1/2] Package nfs-utils: Start/stop daemons
- consistently
-In-Reply-To: <20160703185343.5a0f7911@free-electrons.com>
-References: <1467564419-21313-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20160703185343.5a0f7911@free-electrons.com>
-Message-ID: <577D37A7.8080105@gmx.de>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Wed, 6 Jul 2016 19:04:54 +0200
+Subject: [Buildroot] [V2] 4th: new package
+In-Reply-To: <20160705224152.2e1e3161@free-electrons.com>
+References: <1467745520-4449-1-git-send-email-francois.perrad@gadz.org>
+ <20160705224152.2e1e3161@free-electrons.com>
+Message-ID: <CAB0FRss1DfjWSa6K9w0Np99ntsxiUsZgq9ZO55zBiqz6PKmwzA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
-thanks for revising the patch series. As requested I will use the 
-present instead of the past in the future :-)
-
-Regards,
-Andreas
-
-Am 03.07.2016 um 18:53 schrieb Thomas Petazzoni:
+2016-07-05 22:41 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
 > Hello,
 >
-> Title should be:
+> When doing a new iteration of a patch, please add a changelog that
+> indicates what has been changed.
 >
-> 	package/nfs-utils: start/stop daemons consistently
+> On Tue,  5 Jul 2016 21:05:20 +0200, Francois Perrad wrote:
 >
-> On Sun,  3 Jul 2016 18:46:58 +0200, Maxime Hadjinlian wrote:
->> From: universe II <universeii@gmx.de>
-> Please fix this "From" to be consistent with the Signed-off-by. I
-> forgot about it when applying the previous patches from Andreas.
+>> +4TH_VERSION = 3.62.4
+>> +4TH_SOURCE = 4th-$(4TH_VERSION)-unix.tar.gz
+>> +4TH_SITE = http://downloads.sourceforge.net/project/forth-4th/4th-$(4TH_VERSION)
+>> +4TH_LICENSE = GPLv3, LGPLv3
+>> +4TH_LICENSE_FILES = COPYING
 >
->> Changed init script to start and stop all nfs daemons
-> Please use the present "Change" and not the past "Changed". I don't
-> understand why people use the past tense in commit logs.
+> Did you resolve the licensing issue? That was the main point of my
+> previous review:
+
+After double checking, it appears that most of files in the latest
+release are under GPLv3 and the others are under LGPLv3.
+
+Fran?ois
+
 >
->> in a consistent way. Using the same kill command,
->> start/stop the daemon, printout OK or FAIL and touch
->> or deleted necessary files.
->>
->> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
->> [Maxime:
->>     - Make it really consistent to stop the daemons as pointed out by Yann E. Morin
-> Line too long, no? :)
+> """
+> I was about to apply your patch, with some minimal changes (see
+> http://code.bulix.org/i2s65n-101064), but there is one fundamental
+> license issue here.
 >
->>     - Remove the -9]
->> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->> ---
->>   package/nfs-utils/S60nfs | 12 ++++++------
->>   1 file changed, 6 insertions(+), 6 deletions(-)
->>
->> diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
->> index 7a49c79..2d4e082 100755
->> --- a/package/nfs-utils/S60nfs
->> +++ b/package/nfs-utils/S60nfs
->> @@ -45,22 +45,22 @@ start() {
->>   stop() {
->>   	# Stop daemons.
->>   	printf "Shutting down NFS mountd: "
->> -	killall -q rpc.mountd
->> +	killall -q rpc.mountd 2>/dev/null
->>   	[ $? = 0 ] && echo "OK" || echo "FAIL"
->>   
->>   	printf "Shutting down NFS daemon: "
->> -	kill -9 `pidof nfsd` 2>/dev/null
->> +	killall -q nfsd 2>/dev/null
->>   	[ $? = 0 ] && echo "OK" || echo "FAIL"
->>   
->>   	printf "Shutting down NFS services: "
->>   	/usr/sbin/exportfs -au
->> -	rm -f /var/lock/subsys/nfs
->> -	killall -q rpc.statd
->>   	[ $? = 0 ] && echo "OK" || echo "FAIL"
->>   
->>   	printf "Stopping NFS statd: "
->> -	killall -q rpc.statd
->> +	killall -q rpc.statd 2>/dev/null
->>   	[ $? = 0 ] && echo "OK" || echo "FAIL"
->> +	rm -f /var/lock/subsys/nfs
->> +	rm -f /var/run/rpc.statd.pid
->>   	rm -f /var/lock/subsys/nfslock
->>   }
->>   
->> @@ -81,7 +81,7 @@ case "$1" in
->>   	touch /var/lock/subsys/nfs
->>   	;;
->>     *)
->> -	echo "Usage: nfs {start|stop|reload}"
->> +	echo "Usage: $0 {start|stop|restart|reload}"
->>   	exit 1
->>   esac
->>   
+> The COPYING file, as well as documentation/license.txt contain the
+> license text of the LGPLv3. But the source code (sources/*.c) all claim
+> to be licensed under the GPLv3. Only the .4th files are under LGPLv3.
+>
+> This is clearly not good. Could you talk with upstream to get this
+> situation resolved?
+> """
+>
+> At least some reply from you about this would have been useful to
+> understand what's going on.
+>
+> Thanks,
+>
 > Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
