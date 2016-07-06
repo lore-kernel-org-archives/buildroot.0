@@ -1,38 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jul 2016 14:46:23 +0200
-Subject: [Buildroot] [PATCH] package/python-pillow: fix wrong install
- step
-In-Reply-To: <1467756127-30393-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1467756127-30393-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20160706144623.4015111f@free-electrons.com>
+Date: Wed, 6 Jul 2016 14:47:30 +0200
+Subject: [Buildroot] [git commit] support/apply-patches: re-instate set -e
+Message-ID: <20160706124747.410BA82259@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d5ae67b4f4b4256a392997f81c9668c6809aab3b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  6 Jul 2016 00:02:07 +0200, Angelo Compagnucci wrote:
+As reported by S??bastien Szymanski [1], the apply-patches script
+doesn't stop if a tar command can't extract an archive.
 
-> -PYTHON_PILLOW_INSTALL_TARGET_CMDS = $(PYTHON_PILLOW_BUILD_CMDS) install
-> +PYTHON_PILLOW_INSTALL_TARGET_CMDS = cd $(PYTHON_PILLOW_BUILDDIR); \
-> +		$(PYTHON_PILLOW_BASE_ENV) $(PYTHON_PILLOW_ENV) \
-> +		$(PYTHON_PILLOW_PYTHON_INTERPRETER) setup.py build_ext \
+Use "set -e" to exit immediately if a command return an error.
 
-What are you doing the build_ext target again here?
+Be sure to ignore any expected error: when we check if a patch to be
+applied has the same basename as an already applied patch, the grep
+would fail when no such patch was already applied. We should not fail
+in this case.
 
-> +		$(PYTHON_PILLOW_BUILD_OPTS) install \
-> +		$(PYTHON_PILLOW_BASE_INSTALL_TARGET_OPTS) \
-> +		$(PYTHON_PILLOW_INSTALL_TARGET_OPTS)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+Cc: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/apply-patches.sh | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Also, please use define ... endef for those commands (ditto for the
-build command, I missed that when applying the patch).
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 694302d..7ccb39d 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -31,6 +31,8 @@
+ # applied. The list of the patches applied is stored in '.applied_patches_list'
+ # file in the build directory.
+ 
++set -e
++
+ silent=
+ if [ "$1" = "-s" ] ; then
+     # add option to be used by the patch tool
+@@ -103,7 +105,7 @@ function apply_patch {
+         echo "Error: missing patch file ${path}/$patch"
+         exit 1
+     fi
+-    existing="$(grep -E "/${patch}\$" ${builddir}/.applied_patches_list)"
++    existing="$(grep -E "/${patch}\$" ${builddir}/.applied_patches_list || true)"
+     if [ -n "${existing}" ]; then
+         echo "Error: duplicate filename '${patch}'"
+         echo "Conflicting files are:"
