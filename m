@@ -1,40 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jul 2016 21:22:15 +0200
-Subject: [Buildroot] [git commit] audit: bump to version 2.6.3
-Message-ID: <20160706192226.02BFF8222E@busybox.osuosl.org>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Wed, 6 Jul 2016 19:25:03 +0000
+Subject: [Buildroot] Interesting circular dependency, how to solve?
+In-Reply-To: <20160706202005.6e2ac6c3@free-electrons.com>
+References: <20160706175617.67b0e1ea@free-electrons.com>
+ <F9C551623D2CBB4C9488801D14F864C6EE83C112@ex-mb1.corp.adtran.com>
+ <20160706202005.6e2ac6c3@free-electrons.com>
+Message-ID: <F9C551623D2CBB4C9488801D14F864C6EE83C19D@ex-mb1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00025c2686b1265e4f1ad0702f98655e90722114
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> -----Original Message-----
+> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
+> Sent: Wednesday, July 06, 2016 1:20 PM
+> To: ANDY KENNEDY
+> Cc: buildroot at uclibc.org; paul.ashford at zurria.co.uk
+> Subject: Re: [Buildroot] Interesting circular dependency, how to solve?
+> 
+> Hello,
+> 
+> On Wed, 6 Jul 2016 17:54:01 +0000, ANDY KENNEDY wrote:
+> 
+> > >  - When cryptodev-linux is enabled, OpenSSL will depend on it to use
+> > >    crypto accelerators supported in the kernel via cryptodev-linux.
+> >
+> > If I understand you correctly, this builds TWO things, right?
+> >
+> > If this is the case, make it separate packages to build the
+> > kernel module then the userspace package.
+> 
+> It builds a kernel module, so it has to depend on "linux", and it
+> installs cryptodev.h, which OpenSSL needs. I am not sure splitting this
+> package into two is really a good idea, though it would indeed solve
+> the problem: all what OpenSSL needs at build time is the cryptodev.h
+> header file. The kernel module can be built separately, and is only at
+> runtime.
+> 
+> So, yes, one possibility is to break cryptodev-linux into two packages.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/audit/audit.hash | 2 +-
- package/audit/audit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+You _could_ do it via a hidden option that is selected by the other
+option.  Then, it is still "one" package, however, the make
+dependency tree would see it as two.
 
-diff --git a/package/audit/audit.hash b/package/audit/audit.hash
-index 62cd186..8d6649b 100644
---- a/package/audit/audit.hash
-+++ b/package/audit/audit.hash
-@@ -1,2 +1,2 @@
- #Locally computed
--sha256	e04662a44466e4fd115dd91e0948154b3b002c325f2c0765ddfef6da0c8b65f1	audit-2.6.2.tar.gz
-+sha256	016a101d6f8f5608ff90355b49adeb2848990ab2fdbb0933c3e09ac8c95db1d9	audit-2.6.3.tar.gz
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index 849b68a..4cc87d1 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AUDIT_VERSION = 2.6.2
-+AUDIT_VERSION = 2.6.3
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
- AUDIT_LICENSE = GPLv2
- AUDIT_LICENSE_FILES = COPYING
+Andy
