@@ -1,171 +1,68 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 6 Jul 2016 22:04:47 +0200
-Subject: [Buildroot] [PATCH v2,1/4] alljoyn: new package
-In-Reply-To: <1467806931-9880-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1467806931-9880-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <8a767dde-7998-9c0c-81c8-b737d34c919b@gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed,  6 Jul 2016 22:07:57 +0200
+Subject: [Buildroot] [PATCH v2] package/python-pillow: fix wrong install step
+Message-ID: <1467835677-3867-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+This patch changes PYTHON_PILLOW_INSTALL_TARGET_CMDS to actually
+install pillow in target directory instead of host.
+It also fixes the version for the hash.
 
-Le 06/07/2016 ? 14:08, Fabrice Fontaine a ?crit :
-> The AllJoyn framework defines a common way for devices and apps to
-> communicate with one another regardless of brands, categories,
-> transports, and OSes. Developers write applications that discover
-> nearby devices, and communicate with each other directly and through
-> the cloud, unleashing new possibilities in the Internet of Things.
-> 
-> https://allseenalliance.org
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+Changes:
 
-Thanks for this new version!
+v1 -> v2:
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+* reworked build and install cmds with define [suggested by Thomas Petazzoni]
 
-Best regards,
-Romain
+ package/python-pillow/python-pillow.hash |  2 +-
+ package/python-pillow/python-pillow.mk   | 19 ++++++++++++++-----
+ 2 files changed, 15 insertions(+), 6 deletions(-)
 
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> ---
-> Changes v1 -> v2 (after review of Romain Naour):
->  - Add dependencies on BR2_USE_MMU and !BR2_STATIC_LIBS
->  - Select BR2_PACKAGE_OPENSSL and never use builtin crypto library
->  - Remove unneeded comments on ALLJOYN_LICENSE_FILES
-> 
->  package/Config.in            |  1 +
->  package/alljoyn/Config.in    | 22 ++++++++++++++
->  package/alljoyn/alljoyn.hash |  2 ++
->  package/alljoyn/alljoyn.mk   | 69 ++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 94 insertions(+)
->  create mode 100644 package/alljoyn/Config.in
->  create mode 100644 package/alljoyn/alljoyn.hash
->  create mode 100644 package/alljoyn/alljoyn.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 6cc1d3e..77d8fb3 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1125,6 +1125,7 @@ endmenu
->  
->  menu "Networking"
->  	source "package/agentpp/Config.in"
-> +	source "package/alljoyn/Config.in"
->  	source "package/batman-adv/Config.in"
->  	source "package/c-ares/Config.in"
->  	source "package/canfestival/Config.in"
-> diff --git a/package/alljoyn/Config.in b/package/alljoyn/Config.in
-> new file mode 100644
-> index 0000000..eebc3e3
-> --- /dev/null
-> +++ b/package/alljoyn/Config.in
-> @@ -0,0 +1,22 @@
-> +config BR2_PACKAGE_ALLJOYN
-> +	bool "alljoyn"
-> +	depends on BR2_USE_MMU # fork()
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_USE_WCHAR
-> +	select BR2_PACKAGE_LIBCAP
-> +	select BR2_PACKAGE_OPENSSL
-> +	help
-> +	  The AllJoyn framework defines a common way for devices and apps to
-> +	  communicate with one another regardless of brands, categories,
-> +	  transports, and OSes. Developers write applications that discover
-> +	  nearby devices, and communicate with each other directly and through
-> +	  the cloud, unleashing new possibilities in the Internet of Things.
-> +
-> +	  https://allseenalliance.org
-> +
-> +comment "alljoyn needs a toolchain w/ C++, threads, wchar and dynamic library"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_USE_WCHAR || BR2_STATIC_LIBS
-> diff --git a/package/alljoyn/alljoyn.hash b/package/alljoyn/alljoyn.hash
-> new file mode 100644
-> index 0000000..e18d66e
-> --- /dev/null
-> +++ b/package/alljoyn/alljoyn.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256	41bd424d376d22dc2b48cc035400bd63595d19467eeb6a7ae81429f5a43ed2e2	alljoyn-16.04.00-src.tar.gz
-> diff --git a/package/alljoyn/alljoyn.mk b/package/alljoyn/alljoyn.mk
-> new file mode 100644
-> index 0000000..3d9bdee
-> --- /dev/null
-> +++ b/package/alljoyn/alljoyn.mk
-> @@ -0,0 +1,69 @@
-> +################################################################################
-> +#
-> +# alljoyn
-> +#
-> +################################################################################
-> +
-> +ALLJOYN_REV = 16.04
-> +ALLJOYN_VERSION = $(ALLJOYN_REV).00
-> +ALLJOYN_SOURCE = alljoyn-$(ALLJOYN_VERSION)-src.tar.gz
-> +ALLJOYN_SITE = https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_REV)
-> +# See https://allseenalliance.org/alliance/ip-policy
-> +ALLJOYN_LICENSE = ISC
-> +
-> +ALLJOYN_DEPENDENCIES = host-scons libcap openssl
-> +ALLJOYN_INSTALL_STAGING = YES
-> +
-> +ALLJOYN_CRYPTO = openssl
-> +
-> +# AllJoyn can be compiled in debug or release mode. By default, AllJoyn is built
-> +# in debug mode.
-> +ALLJOYN_VARIANT = release
-> +
-> +ALLJOYN_BINDINGS = c,cpp
-> +
-> +# By setting openwrt for OS and CPU, AllJoyn cross-compilation can be finely
-> +# tuned through TARGET_xxx options. All TARGET_xxx variables must be defined
-> +# otherwise compilation will fail.
-> +# CROSS_COMPILE option should not be used as it works only for linux/ARM.
-> +ALLJOYN_OS = openwrt
-> +ALLJOYN_CPU = openwrt
-> +
-> +# AllJoyn install everything in this relative path
-> +ALLJOYN_DISTDIR = /build/$(ALLJOYN_OS)/$(ALLJOYN_CPU)/$(ALLJOYN_VARIANT)/dist/
-> +
-> +ALLJOYN_SCONS_OPTS = \
-> +	-j$(PARALLEL_JOBS) \
-> +	V=1 \
-> +	OS=$(ALLJOYN_OS) \
-> +	CPU=$(ALLJOYN_CPU) \
-> +	VARIANT=$(ALLJOYN_VARIANT) \
-> +	BR=off \
-> +	CRYPTO=$(ALLJOYN_CRYPTO) \
-> +	BINDINGS=$(ALLJOYN_BINDINGS) \
-> +	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-> +	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
-> +	TARGET_LINKFLAGS="$(TARGET_LINKFLAGS)" \
-> +	TARGET_CC="$(TARGET_CC)" \
-> +	TARGET_CXX="$(TARGET_CXX)" \
-> +	TARGET_LD="$(TARGET_LD)" \
-> +	TARGET_LINK="$(TARGET_CXX)" \
-> +	TARGET_AR="$(TARGET_AR)" \
-> +	TARGET_RANLIB="$(TARGET_RANLIB)" \
-> +	TARGET_PATH="$(BR_PATH)"
-> +
-> +define ALLJOYN_BUILD_CMDS
-> +	cd $(@D); $(SCONS) $(ALLJOYN_SCONS_OPTS)
-> +endef
-> +
-> +define ALLJOYN_INSTALL_STAGING_CMDS
-> +	cp -a $(@D)/$(ALLJOYN_DISTDIR)/*/lib/lib* $(STAGING_DIR)/usr/lib/
-> +	cp -a $(@D)/$(ALLJOYN_DISTDIR)/*/inc/* $(STAGING_DIR)/usr/include/
-> +endef
-> +
-> +# Only install alljoyn dynamic libraries into target directory
-> +define ALLJOYN_INSTALL_TARGET_CMDS
-> +	cp -a $(@D)/$(ALLJOYN_DISTDIR)/*/lib/lib*.so* $(TARGET_DIR)/usr/lib/
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index 033692d..bf7828d 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,4 +1,4 @@
+ # https://pypi.python.org/pypi?:action=show_md5&digest=b5a15b03bf402fe254636c015fcf04da
+ md5 b5a15b03bf402fe254636c015fcf04da  Pillow-3.3.0.tar.gz
+ # sha256 locally computed
+-sha256 031e7c9c885a4f343d1ad366c7fd2340449dc70318acb4a28d6411994f0accd1  Pillow-3.2.0.tar.gz
++sha256 031e7c9c885a4f343d1ad366c7fd2340449dc70318acb4a28d6411994f0accd1  Pillow-3.3.0.tar.gz
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index 84d6e65..0346ae8 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -54,11 +54,20 @@ else
+ PYTHON_PILLOW_BUILD_OPTS += --disable-zlib
+ endif
+ 
+-PYTHON_PILLOW_BUILD_CMDS = cd $(PYTHON_PILLOW_BUILDDIR); \
+-		$(PYTHON_PILLOW_BASE_ENV) $(PYTHON_PILLOW_ENV) \
+-		$(PYTHON_PILLOW_PYTHON_INTERPRETER) setup.py build_ext \
+-		$(PYTHON_PILLOW_BASE_BUILD_OPTS) $(PYTHON_PILLOW_BUILD_OPTS)
++define PYTHON_PILLOW_BUILD_CMDS
++	cd $(PYTHON_PILLOW_BUILDDIR); \
++	$(PYTHON_PILLOW_BASE_ENV) $(PYTHON_PILLOW_ENV) \
++	$(PYTHON_PILLOW_PYTHON_INTERPRETER) setup.py build_ext \
++	$(PYTHON_PILLOW_BASE_BUILD_OPTS) $(PYTHON_PILLOW_BUILD_OPTS)
++endef
+ 
+-PYTHON_PILLOW_INSTALL_TARGET_CMDS = $(PYTHON_PILLOW_BUILD_CMDS) install
++define PYTHON_PILLOW_INSTALL_TARGET_CMDS
++	cd $(PYTHON_PILLOW_BUILDDIR); \
++	$(PYTHON_PILLOW_BASE_ENV) $(PYTHON_PILLOW_ENV) \
++	$(PYTHON_PILLOW_PYTHON_INTERPRETER) setup.py build_ext \
++	$(PYTHON_PILLOW_BUILD_OPTS) install \
++	$(PYTHON_PILLOW_BASE_INSTALL_TARGET_OPTS) \
++	$(PYTHON_PILLOW_INSTALL_TARGET_OPTS)
++endef
+ 
+ $(eval $(python-package))
+-- 
+1.9.1
