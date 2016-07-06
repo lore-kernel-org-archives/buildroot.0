@@ -1,34 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jul 2016 21:34:44 +0200
-Subject: [Buildroot] [git commit] libsigsegv: mark as not available on m68k
-Message-ID: <20160706193511.956A482233@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 06 Jul 2016 21:42:10 +0200
+Subject: [Buildroot] [v2] package/libgpg-error: bump to version 1.23
+References: <1467589714-6122-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <ih305dxce7.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=755d6cb0fef6cdce43608cde980686f247033a7c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Fixes:
+the patches to libssh and libssh2 look wrong. If I select openssl
+then I can select neither libssh nor libssh2 anymore.
 
-  http://autobuild.buildroot.net/results/059fd862bd3e9456783f2f4ba307df15dbab0d41/
+Am Mon, 04 Jul 2016 01:48:34 +0200 schrieb Maxime Hadjinlian:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libsigsegv/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+> diff --git a/package/libssh/Config.in b/package/libssh/Config.in
+> index 3357fb9..6029f45 100644
+> --- a/package/libssh/Config.in
+> +++ b/package/libssh/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBSSH
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	# Either OpenSSL or libgcrypt are mandatory
+> +	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS && !BR2_PACKAGE_OPENSSL # libgcrypt
+>  	select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
+>  	help
+>  	  libssh is a multiplatform C library implementing the SSHv2
+> diff --git a/package/libssh2/Config.in b/package/libssh2/Config.in
+> index 017fd40..0deb3bb 100644
+> --- a/package/libssh2/Config.in
+> +++ b/package/libssh2/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_LIBSSH2
+>  	bool "libssh2"
+> +	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS && !BR2_PACKAGE_OPENSSL # libgcrypt
+>  	select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
+>  	help
+>  	  libssh2 is a client-side C library implementing the SSH2
 
-diff --git a/package/libsigsegv/Config.in b/package/libsigsegv/Config.in
-index a420474..1f41f0d 100644
---- a/package/libsigsegv/Config.in
-+++ b/package/libsigsegv/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBSIGSEGV
- 	depends on !BR2_xtensa
- 	depends on !BR2_arc # no ucontext_i.sym file
- 	depends on !BR2_microblaze
-+	depends on !BR2_m68k # unknown type name 'ucontext_t'
- 	# No ucontext support in uclibc for powerpc and superh
- 	depends on !((BR2_powerpc || BR2_sh) && BR2_TOOLCHAIN_USES_UCLIBC)
- 	help
+Both packages support either openssl or libgcrypt.
+
+Regards, Bernd
