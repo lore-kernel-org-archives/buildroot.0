@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jul 2016 13:59:36 +0200
-Subject: [Buildroot] [PATCH] Config.in.legacy: fix typo
-In-Reply-To: <1467795047-4254-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1467795047-4254-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20160706135936.3368587b@free-electrons.com>
+Date: Wed, 6 Jul 2016 13:59:38 +0200
+Subject: [Buildroot] [PATCH] freetype: bump version to 2.6.4
+In-Reply-To: <1467793210-38023-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1467793210-38023-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160706135938.73054f14@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  6 Jul 2016 10:50:47 +0200, Maxime Hadjinlian wrote:
-> Thanks to Ben Boeckel who noticed it.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+On Wed, 6 Jul 2016 09:20:10 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  Config.in.legacy | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/freetype/freetype.hash | 6 +++---
+>  package/freetype/freetype.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
