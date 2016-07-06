@@ -1,48 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jul 2016 14:48:57 +0200
-Subject: [Buildroot] [PATCH] support/apply-patches: re-instate set -e
-In-Reply-To: <1467740163-10650-1-git-send-email-yann.morin.1998@free.fr>
-References: <1467740163-10650-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160706144857.2c91cf52@free-electrons.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 6 Jul 2016 14:51:26 +0200
+Subject: [Buildroot] [PATCH] package/python-pillow: fix wrong install
+	step
+In-Reply-To: <20160706144623.4015111f@free-electrons.com>
+References: <1467756127-30393-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20160706144623.4015111f@free-electrons.com>
+Message-ID: <CA+TH9Vk4NMSP67dBpKjYTs9KRCrSBviZeCeo4NGXZzCdTxcWYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Thomas Petazzoni,
 
-On Tue,  5 Jul 2016 19:36:03 +0200, Yann E. MORIN wrote:
-> As reported by S?bastien Szymanski [1], the apply-patches script
-> doesn't stop if a tar command can't extract an archive.
-> 
-> Use "set -e" to exit immediately if a command return an error.
-> 
-> Be sure to ignore any expected error: when we check if a patch to be
-> applied has the same basename as an already applied patch, the grep
-> would fail when no such patch was already applied. We should not fail
-> in this case.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-> Cc: Romain Naour <romain.naour@openwide.fr>
-> 
-> ---
-> Tested with:
->     make defconfig
->     make allyespackageconfig
->     [remove luainterpreter to avoid multiple providers for
->      luainterpreter; disable qemu-user; disable tar rootfs]
->     make source
->     make $(make -s show-targets |sed -r -e 's/ |$/-patch /g')
-> ---
->  support/scripts/apply-patches.sh | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+2016-07-06 14:46 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Wed,  6 Jul 2016 00:02:07 +0200, Angelo Compagnucci wrote:
+>
+>> -PYTHON_PILLOW_INSTALL_TARGET_CMDS = $(PYTHON_PILLOW_BUILD_CMDS) install
+>> +PYTHON_PILLOW_INSTALL_TARGET_CMDS = cd $(PYTHON_PILLOW_BUILDDIR); \
+>> +             $(PYTHON_PILLOW_BASE_ENV) $(PYTHON_PILLOW_ENV) \
+>> +             $(PYTHON_PILLOW_PYTHON_INTERPRETER) setup.py build_ext \
+>
+> What are you doing the build_ext target again here?
 
-Applied to master, thanks.
+python pillow build command is:
 
-Thomas
+python setup.py build_ext --enable-[feature]
+
+and installation command is:
+
+python setup.py build_ext --enable-[feature] install
+
+It doesn't work either way, see the documentation here [1].
+
+>> +             $(PYTHON_PILLOW_BUILD_OPTS) install \
+>> +             $(PYTHON_PILLOW_BASE_INSTALL_TARGET_OPTS) \
+>> +             $(PYTHON_PILLOW_INSTALL_TARGET_OPTS)
+>
+> Also, please use define ... endef for those commands (ditto for the
+> build command, I missed that when applying the patch).
+
+Define what? They are the manadtory build and installation commands,
+why make them conditional?
+
+[1] https://pillow.readthedocs.io/en/3.3.x/installation.html#build-options
+
+>
+> Thanks,
+>
+> Thomas
+
+Sincerely, Angelo
+
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Profile: http://it.linkedin.com/in/compagnucciangelo
