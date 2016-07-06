@@ -1,7 +1,8 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 6 Jul 2016 09:20:10 +0100
-Subject: [Buildroot] [PATCH] freetype: bump version to 2.6.4
-Message-ID: <1467793210-38023-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Wed, 6 Jul 2016 09:34:28 +0100
+Subject: [Buildroot] [PATCH 1/3] go: define a hidden boolean to specify if
+	CGO linking is supported
+Message-ID: <1467794070-44443-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +11,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/freetype/freetype.hash | 6 +++---
- package/freetype/freetype.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/go/Config.in.host | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index 45f91df..8695f26 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.3/
--md5	0037b25a8c090bc8a1218e867b32beb1	freetype-2.6.3.tar.bz2
--sha1	6c98bd5d0be313207c37ca23d25faf983486aee5	freetype-2.6.3.tar.bz2
-+# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.4/
-+md5 9c3b2258757a19cdba46d34ed1b0852a  freetype-2.6.4.tar.bz2
-+sha1 5eaa8c949b4841eeabba44d2c582ff6859e5c4b9  freetype-2.6.4.tar.bz2
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index d95c424..d2dbe5f 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREETYPE_VERSION = 2.6.3
-+FREETYPE_VERSION = 2.6.4
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
- FREETYPE_INSTALL_STAGING = YES
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index e1b13c0..d6d35dc 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -5,3 +5,11 @@ config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on !BR2_ARM_CPU_ARMV4
+ 	# MIPS R6 support in Go has not yet been developed.
+ 	depends on !BR2_mips_64r6
++
++config BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
++	bool
++	default y
++	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
++	# Go doesn't support CGO linking on MIPS64x platforms
++	# See: https://github.com/karalabe/xgo/issues/46
++	depends on !BR2_mips64 && !BR2_mips64el
 -- 
 2.7.3
