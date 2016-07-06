@@ -1,64 +1,42 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 6 Jul 2016 21:50:47 +0200
-Subject: [Buildroot] [PATCH] package/jemalloc: filter on suported
- architectures
-In-Reply-To: <1467740148-10178-1-git-send-email-yann.morin.1998@free.fr>
-References: <1467740148-10178-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <404a6790-8511-9442-96ce-4dd6863cd7a4@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Jul 2016 21:44:08 +0200
+Subject: [Buildroot] [git commit] opus: don't use assembly when on ARM,
+	but without ARM instructions
+Message-ID: <20160706195122.9552580842@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=d55c6b132e2f4835b6af6e5055c985ad5f715936
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 05/07/2016 ? 19:35, Yann E. MORIN a ?crit :
-> jemalloc has a hard-coded list of supported architectures, which it uses
-> to define the minimum alignment for allocations. It whines at build time
-> (not at configure time) when it does not know that alignment.
-> 
-> Fix that by making jemalloc depend on the known-supported architectures.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/674/674b6022f9a403528a758c0785656d2bda79e0a9/
+The ARM assembly code in opus uses full ARM instructions, which won't
+work on Thumb-2 only platforms such as ARMv7-M, so we disable the
+assembly code in such situations.
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Fixes:
 
-Best regards,
-Romain
+  http://autobuild.buildroot.net/results/ffa12ab7abadd76901228fc82da24e81bb6da625/
 
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/jemalloc/Config.in | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/package/jemalloc/Config.in b/package/jemalloc/Config.in
-> index ff74387..a166821 100644
-> --- a/package/jemalloc/Config.in
-> +++ b/package/jemalloc/Config.in
-> @@ -1,5 +1,15 @@
-> +config BR2_PACKAGE_JEMALLOC_ARCH_SUPPORTS
-> +	bool
-> +	default y if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be
-> +	default y if BR2_i386 || BR2_x86_64
-> +	default y if BR2_mips || BR2_mipsel
-> +	default y if BR2_sparc64
-> +	default y if BR2_powerpc
-> +	default y if BR2_sh && !BR2_sh2a
-> +
->  config BR2_PACKAGE_JEMALLOC
->  	bool "jemalloc"
-> +	depends on BR2_PACKAGE_JEMALLOC_ARCH_SUPPORTS
->  	depends on !BR2_STATIC_LIBS
->  	help
->  	 This library providing a malloc(3) implementation that emphasizes
-> @@ -8,4 +18,5 @@ config BR2_PACKAGE_JEMALLOC
->  	 http://www.canonware.com/jemalloc/
->  
->  comment "jemalloc needs a toolchain w/ dynamic library"
-> +	depends on BR2_PACKAGE_JEMALLOC_ARCH_SUPPORTS
->  	depends on BR2_STATIC_LIBS
-> 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/opus/opus.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/opus/opus.mk b/package/opus/opus.mk
+index f746a2f..71fdcb3 100644
+--- a/package/opus/opus.mk
++++ b/package/opus/opus.mk
+@@ -14,4 +14,10 @@ ifeq ($(BR2_PACKAGE_OPUS_FIXED_POINT),y)
+ OPUS_CONF_OPTS += --enable-fixed-point
+ endif
+ 
++# When we're on ARM, but we don't have ARM instructions (only
++# Thumb-2), disable the usage of assembly as it is not Thumb-ready.
++ifeq ($(BR2_arm)$(BR2_armeb):$(BR2_ARM_CPU_HAS_ARM),y:)
++OPUS_CONF_OPTS += --disable-asm
++endif
++
+ $(eval $(autotools-package))
