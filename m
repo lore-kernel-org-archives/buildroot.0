@@ -1,123 +1,133 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jul 2016 12:04:15 +0200
-Subject: [Buildroot] [git commit] shellinabox: new package
-Message-ID: <20160706100948.E491082233@busybox.osuosl.org>
+From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+Date: Wed, 6 Jul 2016 12:22:18 +0200
+Subject: [Buildroot] [PATCH 1/2 v2] spidermonkey185: New package.
+In-Reply-To: <CAGduivzTWqWi7kf7OWz19OwcpQLUJ50GOhbu3=30i8HbmvKNNw@mail.gmail.com>
+References: <20160520162929.04ca1b1b@free-electrons.com>
+ <1465483576-28267-1-git-send-email-nicolas.cavallari@green-communications.fr>
+ <1465483576-28267-2-git-send-email-nicolas.cavallari@green-communications.fr>
+ <CAGduivxXrJYZRt28=TOTbtBcZ4yd5jYO1NkTV1M8fMgCbni-_w@mail.gmail.com>
+ <7a047c02-21c4-0dc9-7e76-74e8335768d6@green-communications.fr>
+ <CAGduivzTWqWi7kf7OWz19OwcpQLUJ50GOhbu3=30i8HbmvKNNw@mail.gmail.com>
+Message-ID: <0dc17f18-b259-a618-67f3-099fd6ef0897@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=479cebcfb75cc0d738714102e647f401628a849e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 05/07/2016 13:03, Maxime Hadjinlian wrote:
+> Hi Nicolas, all
+> 
+> On Tue, Jul 5, 2016 at 11:46 AM, Nicolas Cavallari
+> <Nicolas.Cavallari@green-communications.fr> wrote:
+>> On 04/07/2016 23:37, Maxime Hadjinlian wrote:
+>>> Hi Nicolas, all,
+>>>
+>>> Thanks for your patch, I look forward to have spidermonkey, because we
+>>> can then update polkit, which is a long standing issue for me.
+>>> My comments are inline.
+>>>
+>>> Some of your patches did not apply on the sources, I would recommend
+>>> that you  extract the sources, then move the directory somehere and do
+>>> a 'git init' then 'git add . && git commit -m "init"' and work in that
+>>> directory, when you are finished you can use 'git format-patch HEAD~n'
+>>> and collect your patch in a mailbox format.
+>>
+>> It works for me. How/why does it fails for you ?
+> There's two problem on my side.
+> First when I try to git-am your patch on top of the actual master I get this:
+> 
+> Applying patch #632988 using 'git am -s'
+> Description: [1/2,v2] spidermonkey185: New package.
+> Applying: spidermonkey185: New package.
+> .git/rebase-apply/patch:93: space before tab in indent.
+>   mv -f $(SHLIB_ANY_VER) $(SHLIB_EXACT_VER)
 
-Shell In A Box implements a web server that can export arbitrary command
-line tools to a web based terminal emulator. This emulator is accessible
-to any JavaScript and CSS enabled web browser and does not require any
-additional browser plugins.
+I am patching a makefile. The makefile is obviously indented with
+tabs, and diff add a space at the beggining of context lines.
 
-Signed-off-by: Olivier Singla <olivier.singla@gmail.com>
-[Thomas:
- - Use "select" instead of "depends on" for the OpenSSL dependency, and
-   use alphabetic ordering.
- - Rewrap Config.in help text.
- - Use github macro
- - Explain why the OpenSSL dependency is mandatory, while
-   --enable-ssl/--disable-ssl are available.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                                  |  1 +
- .../shellinabox/0001-Makefile.am-fix-static.patch  | 15 ++++++++++++++
- package/shellinabox/Config.in                      | 12 +++++++++++
- package/shellinabox/shellinabox.hash               |  2 ++
- package/shellinabox/shellinabox.mk                 | 23 ++++++++++++++++++++++
- 5 files changed, 53 insertions(+)
+> .git/rebase-apply/patch:94: space before tab in indent.
+>   @[ ! -h $(SHLIB_ABI_VER) ] || rm -f $(SHLIB_ABI_VER)
+> .git/rebase-apply/patch:121: trailing whitespace.
+> 
+> .git/rebase-apply/patch:146: trailing whitespace.
+> 
+> .git/rebase-apply/patch:163: trailing whitespace.
+> 
 
-diff --git a/package/Config.in b/package/Config.in
-index 15271a2..d6c7600 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1530,6 +1530,7 @@ menu "Networking applications"
- 	source "package/sconeserver/Config.in"
- 	source "package/ser2net/Config.in"
- 	source "package/shairport-sync/Config.in"
-+	source "package/shellinabox/Config.in"
- 	source "package/smcroute/Config.in"
- 	source "package/socat/Config.in"
- 	source "package/socketcand/Config.in"
-diff --git a/package/shellinabox/0001-Makefile.am-fix-static.patch b/package/shellinabox/0001-Makefile.am-fix-static.patch
-new file mode 100644
-index 0000000..0fadde0
---- /dev/null
-+++ b/package/shellinabox/0001-Makefile.am-fix-static.patch
-@@ -0,0 +1,15 @@
-+Makefile: disable always building statically.
-+
-+Signed-off-by:  "Olivier Singla" <olivier.singla@gmail.com>
-+
-+--- shellinabox-2.19/Makefile.am.orig	2016-07-03 20:46:42.655784211 -0400
-++++ shellinabox-2.19/Makefile.am	2016-07-03 20:46:50.582801842 -0400
-+@@ -126,7 +126,7 @@
-+ 
-+ shellinaboxd_LDADD   = liblogging.la                                          \
-+                        libhttp.la
-+-shellinaboxd_LDFLAGS = -static
-++shellinaboxd_LDFLAGS =
-+ ## Added this for compatibility with older versions of autoconf/automake
-+ docdir               = ${datadir}/doc/${PACKAGE}
-+ 
-diff --git a/package/shellinabox/Config.in b/package/shellinabox/Config.in
-new file mode 100644
-index 0000000..b349ef3
---- /dev/null
-+++ b/package/shellinabox/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_SHELLINABOX
-+	bool "shellinabox"
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Shell In A Box implements a web server that can export
-+	  arbitrary command line tools to a web based terminal
-+	  emulator. This emulator is accessible to any JavaScript and
-+	  CSS enabled web browser and does not require any additional
-+	  browser plugins.
-+
-+	  https://github.com/shellinabox/shellinabox
-diff --git a/package/shellinabox/shellinabox.hash b/package/shellinabox/shellinabox.hash
-new file mode 100644
-index 0000000..4bc1103
---- /dev/null
-+++ b/package/shellinabox/shellinabox.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	d25ba9f72f04471fc1a8a564c65ef466c4553280ff3eeb365ed9c897d05ed2da	shellinabox-v2.19.tar.gz
-diff --git a/package/shellinabox/shellinabox.mk b/package/shellinabox/shellinabox.mk
-new file mode 100644
-index 0000000..e4e0b06
---- /dev/null
-+++ b/package/shellinabox/shellinabox.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# shellinabox
-+#
-+################################################################################
-+
-+SHELLINABOX_VERSION = v2.19
-+SHELLINABOX_SITE = $(call github,shellinabox,shellinabox,$(SHELLINABOX_VERSION))
-+SHELLINABOX_LICENSE = GPLv2 with OpenSSL exception
-+SHELLINABOX_LICENSE_FILES = COPYING GPL-2
-+
-+# Fetching from Github, and patching Makefile.am, so we need to autoreconf
-+SHELLINABOX_AUTORECONF = YES
-+
-+# The OpenSSL support is supposed to be optional, but in practice,
-+# with OpenSSL disabled, it fails to build. See
-+# https://github.com/shellinabox/shellinabox/issues/385.
-+SHELLINABOX_DEPENDENCIES = zlib openssl
-+SHELLINABOX_CONF_OPTS = \
-+	--disable-runtime-loading \
-+	--enable-ssl
-+
-+$(eval $(autotools-package))
+Those are context empty lines.
+
+> error: patch failed: package/Config.in:1284
+> error: package/Config.in: patch does not apply
+> Patch failed at 0001 spidermonkey185: New package.
+> The copy of the patch that failed is found in: .git/rebase-apply/patch
+> When you have resolved this problem, run "git am --continue".
+> If you prefer to skip this patch, run "git am --skip" instead.
+> To restore the original branch and stop patching, run "git am --abort".
+> 
+> So I have to use patch -p1 to apply it by hand, I removed my git
+> configuration but to no avail.
+> 
+> The second part is Buildroot applying the patches in your patch but it
+> appears to be something in my git config, probably because there's
+> some line ending mixes between Windows/Linux or things like that.
+> I am using git.core.apply.whitespace=fix, maybe that's not an important issue.
+
+If you "fix" the white space in these patch files, they obviously
+won't apply anymore.
+
+>>>> diff --git a/package/spidermonkey185/0001-remove-unused-pkgconfg-nspr-dependency.patch b/package/spidermonkey185/0001-remove-unused-pkgconfg-nspr-dependency.patch
+>>>> new file mode 100644
+>>>> index 0000000..cef1aae
+>>>> --- /dev/null
+>>>> +++ b/package/spidermonkey185/0001-remove-unused-pkgconfg-nspr-dependency.patch
+>>>> @@ -0,0 +1,18 @@
+>>>> +From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+>>>> +
+>>>> +Remove the dependency on nspr.
+>>>> +
+>>>> +This dependency was removed when spidermonkey was extracted from the
+>>>> +mozilla code base.  This is probably a left-over, since it is not used.
+>>>> +
+>>>> +Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+>>>> +
+>>>> +--- spidermonkey185-1.0.0/js/src/mozjs185.pc.in        2016-05-23 13:41:28.430466213 +0200
+>>>> ++++ spidermonkey185-1.0.0/js/src/mozjs185.pc.in        2016-05-23 13:42:00.727558977 +0200
+>>>> +@@ -5,6 +5,5 @@
+>>>> + Name: SpiderMonkey 1.8.5
+>>>> + Description: The Mozilla library for JavaScript 1.8.5
+>>>> + Version: %MOZILLA_VERSION%
+>>>> +-Requires: nspr >= 4.7
+>>>> + Libs: -L${libdir} -lmozjs185
+>>>> + Cflags: -I${includedir}/js
+>>>> diff --git a/package/spidermonkey185/0002-make-shlib-synlink-relative.patch b/package/spidermonkey185/0002-make-shlib-synlink-relative.patch
+>>>> new file mode 100644
+>>>> index 0000000..c6bdce9
+>>>
+>>> When I quickly grepped through the source, you can still find:
+>>> js/jsd/jsd_xpc.h:47:#include "nspr.h"
+>>>
+>>> Won't that cause trouble ? Since we have libnspr, why don't we add the
+>>> dependencies and be done with it ?
+>>
+>> Anything outside of js/src is ignored.  Specifically, js/jsd has no
+>> complete build system (there is Makefile.in, but no configure script),
+>> so it cannot cause any problem.
+>>
+>> And why should we re-add libnspr when upstream did massive patches to
+>> get rid of it, even if they missed some places ?
+> Ok, it's indeed a small patch and if the file in question is not even
+> touched there's no harm.
+> There's no link to what does upstream as it's a deprecated version and
+> it will never be updated anymore.
+
+The spidermonkey code base heavily depended on nspr, especially its
+various integer typedefs which were sprinkled everywhere.  To release
+an independent javascript engine, almost all the source code had to be
+converted to use the JSInt* typedefs. There are even some conversion
+scripts left in the tarball.
+
+Even if upstream stopped updating this package, the removal of the
+nspr dependency is still 99.9% complete.
+
+Anyway, here are the V3 of the patches.
