@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jul 2016 20:20:05 +0200
-Subject: [Buildroot] Interesting circular dependency, how to solve?
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C6EE83C112@ex-mb1.corp.adtran.com>
-References: <20160706175617.67b0e1ea@free-electrons.com>
- <F9C551623D2CBB4C9488801D14F864C6EE83C112@ex-mb1.corp.adtran.com>
-Message-ID: <20160706202005.6e2ac6c3@free-electrons.com>
+Date: Wed, 6 Jul 2016 20:21:04 +0200
+Subject: [Buildroot] [PATCH] package/gdb: add dependency on host-textinfo
+In-Reply-To: <1467734549-2767-1-git-send-email-romain.naour@gmail.com>
+References: <1467734549-2767-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160706202104.50779a5a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +12,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 6 Jul 2016 17:54:01 +0000, ANDY KENNEDY wrote:
+On Tue,  5 Jul 2016 18:02:29 +0200, Romain Naour wrote:
 
-> >  - When cryptodev-linux is enabled, OpenSSL will depend on it to use
-> >    crypto accelerators supported in the kernel via cryptodev-linux.  
-> 
-> If I understand you correctly, this builds TWO things, right?
-> 
-> If this is the case, make it separate packages to build the
-> kernel module then the userspace package.
+> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+> index 6d70955..3941b45 100644
+> --- a/package/gdb/gdb.mk
+> +++ b/package/gdb/gdb.mk
+> @@ -35,7 +35,12 @@ endif
+>  # For the host variant, we really want to build with XML support,
+>  # which is needed to read XML descriptions of target architectures. We
+>  # also need ncurses.
+> -HOST_GDB_DEPENDENCIES = host-expat host-ncurses
 
-It builds a kernel module, so it has to depend on "linux", and it
-installs cryptodev.h, which OpenSSL needs. I am not sure splitting this
-package into two is really a good idea, though it would indeed solve
-the problem: all what OpenSSL needs at build time is the cryptodev.h
-header file. The kernel module can be built separately, and is only at
-runtime.
+I prefer to keep this as is.
 
-So, yes, one possibility is to break cryptodev-linux into two packages.
+> +# Starting with gdb 7.10, gdb wants to re-generate its documentation.
+> +# We were trying to avoid that by patching the Makefiles, but it wasn't
+> +# working in all situations. So, we simply add a dependency on
+> +# host-texinfo in all case.
+> +HOST_GDB_DEPENDENCIES += host-expat host-ncurses host-texinfo
+
+And just add host-texinfo here.
+
+> +GDB_DEPENDENCIES += host-texinfo
+
+Applied with this modification. Thanks!
 
 Thomas
 -- 
