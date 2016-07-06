@@ -1,38 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jul 2016 21:31:45 +0200
-Subject: [Buildroot] [git commit] runc: add missing dependency on
-	host-pkgconf
-Message-ID: <20160706193216.B7AA18211F@busybox.osuosl.org>
+Date: Wed, 6 Jul 2016 21:32:53 +0200
+Subject: [Buildroot] [PATCH 1/3] go: define a hidden boolean to specify
+ if CGO linking is supported
+In-Reply-To: <1467794070-44443-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1467794070-44443-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160706213253.2e8b563a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8ea5ef41b24d7176541991814a215a4cba5e5e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-runc uses pkg-config to detect libseccomp, so we need to depend on it.
+On Wed, 6 Jul 2016 09:34:28 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/go/Config.in.host | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
-Fixes:
+All patches applied. I've added autobuilder failure references to
+patches 2/3 and 3/3, as discussed on IRC.
 
-  http://autobuild.buildroot.net/results/72f1cf194843b8519a3ebf213cdbf06873809055/
+Thanks!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/runc/runc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 6a0c88c..c4e75dd 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -25,7 +25,7 @@ RUNC_GOTAGS = cgo static_build
- 
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- RUNC_GOTAGS += seccomp
--RUNC_DEPENDENCIES += libseccomp
-+RUNC_DEPENDENCIES += libseccomp host-pkgconf
- endif
- 
- define RUNC_CONFIGURE_CMDS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
