@@ -1,67 +1,70 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Wed, 6 Jul 2016 13:35:04 +1000
-Subject: [Buildroot] [PATCH v3 2/6] Add documentation for merged
- defconfigs
-In-Reply-To: <20160705081644.6fd47292@free-electrons.com>
-References: <cover.1467176798.git.sam.bobroff@au1.ibm.com>
- <fb148ddadbc12c9a9437192761ba342237a27325.1467176798.git.sam.bobroff@au1.ibm.com>
- <489e6359-291e-5920-87d6-da23fe8c5d0a@smile.fr>
- <20160705060625.GB27663@tungsten.ozlabs.ibm.com>
- <20160705081644.6fd47292@free-electrons.com>
-Message-ID: <20160706033503.GA4610@tungsten.ozlabs.ibm.com>
+From: daggs <daggs@gmx.com>
+Date: Wed, 6 Jul 2016 07:02:18 +0200
+Subject: [Buildroot] [PATCH 4/4 v3] kodi: allow enablement of libamcodec
+ as codec if selected
+In-Reply-To: <3ca27259-fade-eee6-f108-c5bb4a0b388f@mind.be>
+References: <20160624182256.11909-1-daggs@gmx.com>
+ <20160624182256.11909-4-daggs@gmx.com>
+ <37g24dxqbs.ln2@ID-313208.user.individual.net>
+ <trinity-6552df3a-288c-4396-95fb-c56acc32c4d5-1467371097197@3capp-mailcom-bs11>
+ <trinity-90b29fc0-247c-47a2-9a96-f80d2a588ee3-1467482301230@3capp-mailcom-bs01>
+ <f6f8aa1e-e673-4d86-a51a-807987b14209@mind.be>
+ <trinity-03edb1a5-1beb-41bf-9ff0-5e241acea84c-1467524433514@3capp-mailcom-bs04>,
+ <3ca27259-fade-eee6-f108-c5bb4a0b388f@mind.be>
+Message-ID: <trinity-77079792-dc2e-4173-83ba-0862e1bde734-1467781338276@3capp-mailcom-bs06>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 05, 2016 at 08:16:44AM +0200, Thomas Petazzoni wrote:
-> Hello Sam,
-> 
-> On Tue, 5 Jul 2016 16:06:25 +1000, Sam Bobroff wrote:
-> 
-> > > Instead we recommend to use merge_config.sh from outside of Buildroot to
-> > > generate the merged defconfig before calling make. Maybe we should add some
-> > > documentation in the manual to explain how to use it.  
+Greetings,
+> > Greetings,
 > > 
-> > That seems fine, it might even be possible to add something to
-> > $(BR2_EXTERNAL)/external.mk to hook it directly into the Makefiles.
+> >> On 02-07-16 19:58, daggs wrote:
+> [snip]
+> >>> I've looked into this issue, the root of the issue can be found at output/build/kodi-16.1-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/Makefile.in
+> >>> where we see the following:
+> >>> ifeq (@USE_LIBAMCODEC@,1)
+> >>> SRCS += AMLCodec.cpp
+> >>> SRCS += DVDVideoCodecAmlogic.cpp
+> >>> INCLUDES += -I$(prefix)/include/amcodec
+> >>> INCLUDES += -I$(prefix)/include/amplayer
+> >>
+> >>  That is just wrong, the cpp file does #include <amcodec/codec.h> so there is no
+> >> need for this additional -I...
+> >>
+> >>  So IMHO the fix is to remove those INCLUDES lines.
+> >>
+> >>  Regards,
+> >>  Arnout
 > > 
-> > Could you elaborate a bit on what you mean by using merge_config.sh outside of
-> > buildroot? Would the fragment files still be checked into buildroot somewhere
-> > (but just not hooked into the build system) or would they be maintained outside
-> > it?
+> > that was one of the first things I've tried, the problem is that that one of the headers under include/amcodec includes another header from the same folder in this format: #include <abc.h>
+> > I can change it to either #include "abc.h" is this preferable? also this will require a change in libamcodec it self, a change that I'm not sure that can be accepted by the maintainer.
 > 
-> The idea is that Buildroot just takes as input a configuration file.
-> How this configuration file is provided/generated is not Buildroot's
-> responsibility.
+>  I think it's better to patch libamcodec itself. I you don't patch it, it means
+> any other user of libamcodec will be facing the same problem. Also using "" is
+> the proper thing to do, so upstream might accept it. Insofar as
 > 
-> For example, you could have in your BR2_EXTERNAL tree a bunch of
-> defconfig fragments, and then a "genconfig" shell script to generate the
-> final configuration you want to build using the defconfig fragments.
-> This "genconfig" script relies on merge_config.sh to actually merge the
-> relevant fragments together.
+>  An alternative is to not install libamcodec in the amcodec directory, since the
+> package's Makefile doesn't do that anyway, it installs directly in /usr/include.
+> Ugly, but if that is what upstream does, it makes sense to stick to it. But that
+> would mean that kodi has to be patched to _remove_ the amcodec part from the
+> #include directives.
 > 
+>  Regards,
+>  Arnout
 
-Ah right, yes I'm sure something like that will work for work that stays
-external to buildroot, but the case I'm concerned about is where BR2_EXTERNAL
-isn't being used. We want to get our defconfigs out there for everyone to use
-and contribute to :-) It looks like existing defconfigs could make use of this
-too: from a bit of diff'ing in the configs directory there are already configs
-that share a lot of values and would be easier to maintain using merging.
+ok, so I've fixed the includes in libamcodec and removed the include part from kodi, it still failes on another file but with the same issue.
+this got me thinking so I've extracted the full compile commnad of the relevant file, here is it:
+/home/dagg/workspace/buildroots/buildroot-master/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-g++ -MF AMLCodec.d -MD -c -O2 -g -D_DEBUG -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -I/home/dagg/workspace/buildroots/buildroot-master/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include -I/home/dagg/workspace/buildroots/buildroot-master/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/libdrm -L/home/dagg/workspace/buildroots/buildroot-master/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lEGL -fPIC -DPIC -D_REENTRANT -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -std=gnu++11 -mno-apcs-stack-check -mfpu=neon -mvectorize-with-neon-quad -DTARGET_POSIX -DTARGET_LINUX -D_LINUX -D_FILE_DEFINED -D__STDC_CONSTANT_MACROS '-DBIN_INSTALL_PATH="/usr/lib/kodi"' '-DINSTALL_PATH="/usr/share/kodi"' '-DGIT_REV="Unknown"' -DNPT_CONFIG_ENABLE_LOGGING '-DPLT_HTTP_DEFAULT_USER_AGENT="UPnP/1.0 DLNADOC/1.50 Kodi"' '-DPLT_HTTP_DEFAULT_SERVER="UPnP/1.0 DLNADOC/1.50 Kodi"' -DHAVE_CONFIG_H -I/home/dagg/workspace/buildroots/buildroot-master/output/build/kodi-16.1-Jarvis/xbmc/cores/dvdplayer -I/home/dagg/workspace/buildroots/buildroot-master/output/build/kodi-16.1-Jarvis -I/home/dagg/workspace/buildroots/buildroot-master/output/build/kodi-16.1-Jarvis/lib -I/home/dagg/workspace/buildroots/buildroot-master/output/build/kodi-16.1-Jarvis/xbmc -I/home/dagg/workspace/buildroots/buildroot-master/output/build/kodi-16.1-Jarvis/xbmc/addons/include -I/home/dagg/workspace/buildroots/buildroot-master/output/build/kodi-16.1-Jarvis/addons/library.kodi.guilib -I/home/dagg/workspace/buildroots/buildroot-master/output/build/kodi-16.1-Jarvis/addons/library.xbmc.addon -I/home/dagg/workspace/buildroots/buildroot-master/output/build/kodi-16.1-Jarvis/addons/library.kodi.adsp -I/home/dagg/workspace/buildroots/buildroot-master/output/build/kodi-16.1-Jarvis/addons/library.kodi.audioengine -I/home/dagg/workspace/buildroots/buildroot-master/output/build/kodi-16.1-Jarvis/addons/library.xbmc.pvr -I/home/dagg/workspace/buildroots/buildroot-master/output/build/kodi-16.1-Jarvis/addons/library.xbmc.codec -I/home/dagg/workspace/buildroots/buildroot-master/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include -I/home/dagg/workspace/buildroots/buildroot-master/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/freetype2 -I/home/dagg/workspace/buildroots/buildroot-master/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/fribidi -I/home/dagg/workspace/buildroots/buildroot-master/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/libpng16 -I/home/dagg/workspace/buildroots/buildroot-master/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/libxml2 -I/home/dagg/workspace/buildroots/buildroot-master/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/taglib -I/home/dagg/workspace/buildroots/buildroot-master/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/yajl -I/home/dagg/workspace/buildroots/buildroot-master/output/build/kodi-16.1-Jarvis/xbmc/linux -I/home/dagg/workspace/buildroots/buildroot-master/output/build/kodi-16.1-Jarvis/xbmc/cores/dvdplayer AMLCodec.cpp -o AMLCodec.o
 
-So how would you suggest handling merged configs that should be contributed
-back to the community? Would you expect that we maintain our own merge-config
-system and fragments and then contribute the full configs back to buildroot?
+looking at the line above reveals something intresting, when enabling the enable-codec=amcodec switch, as amcodec is a lib, someone might expect to find a -i$(SYSROOT)/usr/include/amcodec in the command. there isn't one.
 
-That seems like the simplest way to do it but I can't see a good way to handle
-patches to them: users who have downloaded buildroot would have the defconfigs
-but not the input fragments that were used to create them, so it would be
-difficult to handle changes they need to make.
+as I agree the is a bug in the amcodec lib when it comes to the includes, there is a bug in kodi too, probably because laziness of the devs.
+I couldn't find any place in the code that checks if libamcodec is installed as it is a prerequisits. it is done for taglib or fribidi for example. but not for libamcodec.
 
-Would an alternative approach be to include the fragments and genconfig system
-in buildroot but make it a separate component, so it wouldn't add complexity to
-the build system? (e.g. you "make configs" to update your defconfigs.)
+imho that is wrong, supporting cross compilation on most of the pkgs and ignoring another is not the way to do that.
+I know my suggestion before was ugly (using --print-sysroot), but as I see it, it is the only simple way to do so.
 
-Cheers,
-Sam.
+Dagg.
