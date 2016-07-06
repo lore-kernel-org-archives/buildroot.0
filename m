@@ -1,7 +1,9 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  6 Jul 2016 14:08:48 +0200
-Subject: [Buildroot] [PATCH v2,1/4] alljoyn: new package
-Message-ID: <1467806931-9880-1-git-send-email-fabrice.fontaine@orange.com>
+Date: Wed,  6 Jul 2016 14:08:50 +0200
+Subject: [Buildroot] [PATCH v2,3/4] ajtcl: new package
+In-Reply-To: <1467806931-9880-1-git-send-email-fabrice.fontaine@orange.com>
+References: <1467806931-9880-1-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <1467806931-9880-3-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,51 +16,49 @@ transports, and OSes. Developers write applications that discover
 nearby devices, and communicate with each other directly and through
 the cloud, unleashing new possibilities in the Internet of Things.
 
+AllJoyn Thin Core Library (AJTCL) is designed to bring the benefits
+of the AllJoyn distributed programming environment to embedded
+systems.
+
 https://allseenalliance.org
 
 Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 ---
 Changes v1 -> v2 (after review of Romain Naour):
- - Add dependencies on BR2_USE_MMU and !BR2_STATIC_LIBS
- - Select BR2_PACKAGE_OPENSSL and never use builtin crypto library
+ - Add dependencies on !BR2_STATIC_LIBS
  - Remove unneeded comments on ALLJOYN_LICENSE_FILES
 
- package/Config.in            |  1 +
- package/alljoyn/Config.in    | 22 ++++++++++++++
- package/alljoyn/alljoyn.hash |  2 ++
- package/alljoyn/alljoyn.mk   | 69 ++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 94 insertions(+)
- create mode 100644 package/alljoyn/Config.in
- create mode 100644 package/alljoyn/alljoyn.hash
- create mode 100644 package/alljoyn/alljoyn.mk
+ package/Config.in        |  1 +
+ package/ajtcl/Config.in  | 19 +++++++++++++++++++
+ package/ajtcl/ajtcl.hash |  2 ++
+ package/ajtcl/ajtcl.mk   | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 64 insertions(+)
+ create mode 100644 package/ajtcl/Config.in
+ create mode 100644 package/ajtcl/ajtcl.hash
+ create mode 100644 package/ajtcl/ajtcl.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 6cc1d3e..77d8fb3 100644
+index 8b50ebb..4120b0d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -1125,6 +1125,7 @@ endmenu
  
  menu "Networking"
  	source "package/agentpp/Config.in"
-+	source "package/alljoyn/Config.in"
++	source "package/ajtcl/Config.in"
+ 	source "package/alljoyn/Config.in"
+ 	source "package/alljoyn-base/Config.in"
  	source "package/batman-adv/Config.in"
- 	source "package/c-ares/Config.in"
- 	source "package/canfestival/Config.in"
-diff --git a/package/alljoyn/Config.in b/package/alljoyn/Config.in
+diff --git a/package/ajtcl/Config.in b/package/ajtcl/Config.in
 new file mode 100644
-index 0000000..eebc3e3
+index 0000000..793e778
 --- /dev/null
-+++ b/package/alljoyn/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_ALLJOYN
-+	bool "alljoyn"
-+	depends on BR2_USE_MMU # fork()
++++ b/package/ajtcl/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_AJTCL
++	bool "alljoyn-thin-core"
 +	depends on !BR2_STATIC_LIBS
-+	depends on BR2_INSTALL_LIBSTDCPP
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_LIBCAP
-+	select BR2_PACKAGE_OPENSSL
 +	help
 +	  The AllJoyn framework defines a common way for devices and apps to
 +	  communicate with one another regardless of brands, categories,
@@ -66,92 +66,67 @@ index 0000000..eebc3e3
 +	  nearby devices, and communicate with each other directly and through
 +	  the cloud, unleashing new possibilities in the Internet of Things.
 +
++	  AllJoyn Thin Core Library (AJTCL) is designed to bring the benefits
++	  of the AllJoyn distributed programming environment to embedded
++	  systems.
++
 +	  https://allseenalliance.org
 +
-+comment "alljoyn needs a toolchain w/ C++, threads, wchar and dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR || BR2_STATIC_LIBS
-diff --git a/package/alljoyn/alljoyn.hash b/package/alljoyn/alljoyn.hash
++comment "alljoyn-thin-core needs a toolchain w/ threads and dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/ajtcl/ajtcl.hash b/package/ajtcl/ajtcl.hash
 new file mode 100644
-index 0000000..e18d66e
+index 0000000..a1cdf16
 --- /dev/null
-+++ b/package/alljoyn/alljoyn.hash
++++ b/package/ajtcl/ajtcl.hash
 @@ -0,0 +1,2 @@
 +# Locally computed:
-+sha256	41bd424d376d22dc2b48cc035400bd63595d19467eeb6a7ae81429f5a43ed2e2	alljoyn-16.04.00-src.tar.gz
-diff --git a/package/alljoyn/alljoyn.mk b/package/alljoyn/alljoyn.mk
++sha256	ce6a05a67ff405ba6274e85fe750d98f40cbe7ab2c968218c7741a10bd86e21a	ajtcl-16.04.00-src.tar.gz
+diff --git a/package/ajtcl/ajtcl.mk b/package/ajtcl/ajtcl.mk
 new file mode 100644
-index 0000000..3d9bdee
+index 0000000..018a8bd
 --- /dev/null
-+++ b/package/alljoyn/alljoyn.mk
-@@ -0,0 +1,69 @@
++++ b/package/ajtcl/ajtcl.mk
+@@ -0,0 +1,42 @@
 +################################################################################
 +#
-+# alljoyn
++# ajtcl
 +#
 +################################################################################
 +
-+ALLJOYN_REV = 16.04
-+ALLJOYN_VERSION = $(ALLJOYN_REV).00
-+ALLJOYN_SOURCE = alljoyn-$(ALLJOYN_VERSION)-src.tar.gz
-+ALLJOYN_SITE = https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_REV)
++AJTCL_REV = 16.04
++AJTCL_VERSION = $(AJTCL_REV).00
++AJTCL_SOURCE = ajtcl-$(AJTCL_VERSION)-src.tar.gz
++AJTCL_SITE = https://mirrors.kernel.org/allseenalliance/alljoyn/$(AJTCL_REV)
 +# See https://allseenalliance.org/alliance/ip-policy
-+ALLJOYN_LICENSE = ISC
++AJTCL_LICENSE = ISC
 +
-+ALLJOYN_DEPENDENCIES = host-scons libcap openssl
-+ALLJOYN_INSTALL_STAGING = YES
++AJTCL_DEPENDENCIES = host-scons
++AJTCL_INSTALL_STAGING = YES
 +
-+ALLJOYN_CRYPTO = openssl
++# AllJoyn Thin Core can be compiled in debug or release mode. By default,
++# AllJoyn Thin Core is built in debug mode.
++AJTCL_VARIANT = release
 +
-+# AllJoyn can be compiled in debug or release mode. By default, AllJoyn is built
-+# in debug mode.
-+ALLJOYN_VARIANT = release
-+
-+ALLJOYN_BINDINGS = c,cpp
-+
-+# By setting openwrt for OS and CPU, AllJoyn cross-compilation can be finely
-+# tuned through TARGET_xxx options. All TARGET_xxx variables must be defined
-+# otherwise compilation will fail.
-+# CROSS_COMPILE option should not be used as it works only for linux/ARM.
-+ALLJOYN_OS = openwrt
-+ALLJOYN_CPU = openwrt
-+
-+# AllJoyn install everything in this relative path
-+ALLJOYN_DISTDIR = /build/$(ALLJOYN_OS)/$(ALLJOYN_CPU)/$(ALLJOYN_VARIANT)/dist/
-+
-+ALLJOYN_SCONS_OPTS = \
++AJTCL_SCONS_OPTS = \
 +	-j$(PARALLEL_JOBS) \
 +	V=1 \
-+	OS=$(ALLJOYN_OS) \
-+	CPU=$(ALLJOYN_CPU) \
-+	VARIANT=$(ALLJOYN_VARIANT) \
-+	BR=off \
-+	CRYPTO=$(ALLJOYN_CRYPTO) \
-+	BINDINGS=$(ALLJOYN_BINDINGS) \
-+	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-+	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
-+	TARGET_LINKFLAGS="$(TARGET_LINKFLAGS)" \
-+	TARGET_CC="$(TARGET_CC)" \
-+	TARGET_CXX="$(TARGET_CXX)" \
-+	TARGET_LD="$(TARGET_LD)" \
-+	TARGET_LINK="$(TARGET_CXX)" \
-+	TARGET_AR="$(TARGET_AR)" \
-+	TARGET_RANLIB="$(TARGET_RANLIB)" \
-+	TARGET_PATH="$(BR_PATH)"
++	VARIANT=$(AJTCL_VARIANT) \
++	CC="$(TARGET_CC)" \
++	CXX="$(TARGET_CXX)"
 +
-+define ALLJOYN_BUILD_CMDS
-+	cd $(@D); $(SCONS) $(ALLJOYN_SCONS_OPTS)
++define AJTCL_BUILD_CMDS
++	cd $(@D); $(SCONS) $(AJTCL_SCONS_OPTS)
 +endef
 +
-+define ALLJOYN_INSTALL_STAGING_CMDS
-+	cp -a $(@D)/$(ALLJOYN_DISTDIR)/*/lib/lib* $(STAGING_DIR)/usr/lib/
-+	cp -a $(@D)/$(ALLJOYN_DISTDIR)/*/inc/* $(STAGING_DIR)/usr/include/
++define AJTCL_INSTALL_STAGING_CMDS
++	cp -a $(@D)/dist/lib/lib* $(STAGING_DIR)/usr/lib/
++	cp -a $(@D)/dist/include/* $(STAGING_DIR)/usr/include/
 +endef
 +
-+# Only install alljoyn dynamic libraries into target directory
-+define ALLJOYN_INSTALL_TARGET_CMDS
-+	cp -a $(@D)/$(ALLJOYN_DISTDIR)/*/lib/lib*.so* $(TARGET_DIR)/usr/lib/
++# Only install AllJoyn Thin Core dynamic libraries into target directory
++define AJTCL_INSTALL_TARGET_CMDS
++	cp -a $(@D)/dist/lib/lib*.so* $(TARGET_DIR)/usr/lib/
 +endef
 +
 +$(eval $(generic-package))
