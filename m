@@ -1,48 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Jul 2016 10:03:34 +0200
-Subject: [Buildroot] [git commit] 4th: build with -fPIC when shared library
-	build is enabled
-Message-ID: <20160707080422.D886382119@busybox.osuosl.org>
+Date: Thu, 7 Jul 2016 10:36:03 +0200
+Subject: [Buildroot] [git commit] shellinabox: needs MMU support
+Message-ID: <20160707083632.6053C80288@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3991b22121b7a0f26753ecc2c3ec7877978dd0ec
+commit: https://git.buildroot.net/buildroot/commit/?id=cc2be0b2566a1a56c2a6c420f8dae8d40ec44b91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/1e288dabbdd0c5131c18e1426ed6ceedce046b9c/
+  http://autobuild.buildroot.net/results/609ec63d36e235581fe0388c0e1102362743d5b2/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/4th/4th.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/shellinabox/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/4th/4th.mk b/package/4th/4th.mk
-index d920eb0..071c2d4 100644
---- a/package/4th/4th.mk
-+++ b/package/4th/4th.mk
-@@ -14,16 +14,19 @@
- 4TH_DEPENDENCIES = host-4th
- 4TH_INSTALL_STAGING = YES
- 
-+4TH_CFLAGS = $(TARGET_CFLAGS) -DUNIX -fsigned-char
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- 4TH_MAKE_ENV = STATIC=1
- else
- 4TH_MAKE_ENV = SHARED=1
-+4TH_CFLAGS += -fPIC
- endif
- 
- define 4TH_BUILD_CMDS
- 	$(4TH_MAKE_ENV) $(MAKE) -C $(@D)/sources all \
- 		CROSS="$(TARGET_CROSS)" \
--		CFLAGS="$(TARGET_CFLAGS) -DUNIX -fsigned-char" \
-+		CFLAGS="$(4TH_CFLAGS)" \
- 		FOURTH=$(HOST_DIR)/usr/bin/4th
- endef
- 
+diff --git a/package/shellinabox/Config.in b/package/shellinabox/Config.in
+index b349ef3..10c492c 100644
+--- a/package/shellinabox/Config.in
++++ b/package/shellinabox/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SHELLINABOX
+ 	bool "shellinabox"
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+ 	help
