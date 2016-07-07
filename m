@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  7 Jul 2016 23:25:31 +0200
-Subject: [Buildroot] [PATCH v3 2/6] package/kodi: Add suboption to control
-	MySQL support
+Date: Thu,  7 Jul 2016 23:25:32 +0200
+Subject: [Buildroot] [PATCH v3 3/6] package/kodi: Add suboption to control
+	UPnP support
 In-Reply-To: <1467926735-29733-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1467926735-29733-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1467926735-29733-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1467926735-29733-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,39 +16,42 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 v3: rebased series, no changes to this patch
 v2: rebased series, no changes to this patch
 
- package/kodi/Config.in | 6 ++++++
- package/kodi/kodi.mk   | 2 +-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ package/kodi/Config.in | 5 +++++
+ package/kodi/kodi.mk   | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 3d3ecfd..e57939e 100644
+index e57939e..7c8ada0 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -174,6 +174,12 @@ config BR2_PACKAGE_KODI_LIBNFS
- comment "nfs support needs a toolchain w/ threads support"
- 	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
+@@ -233,6 +233,11 @@ config BR2_PACKAGE_KODI_LIBVA
+ 	help
+ 	  Enable libva support.
  
-+config BR2_PACKAGE_KODI_MYSQL
-+	bool "mysql"
-+	select BR2_PACKAGE_MYSQL
++config BR2_PACKAGE_KODI_UPNP
++	bool "upnp"
 +	help
-+	  Enable MySQL support
++	  Enable UPnP support
 +
- config BR2_PACKAGE_KODI_RTMPDUMP
- 	bool "rtmp"
- 	select BR2_PACKAGE_RTMPDUMP
+ config BR2_PACKAGE_KODI_OPTICALDRIVE
+ 	bool
+ 
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 8a3b0bf..9d6b966 100644
+index 9d6b966..0d98180 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -78,7 +78,7 @@ KODI_CONF_OPTS +=  \
- 	--disable-vtbdecoder \
- 	--enable-optimizations
+@@ -228,6 +228,12 @@ else
+ KODI_CONF_OPTS += --disable-vaapi
+ endif
  
--ifeq ($(BR2_PACKAGE_MYSQL),y)
-+ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
- KODI_CONF_OPTS += --enable-mysql
- KODI_CONF_ENV += ac_cv_path_MYSQL_CONFIG="$(STAGING_DIR)/usr/bin/mysql_config"
- KODI_DEPENDENCIES += mysql
++ifeq ($(BR2_PACKAGE_KODI_UPNP),y)
++KODI_CONF_OPTS += --enable-upnp
++else
++KODI_CONF_OPTS += --disable-upnp
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_OPTICALDRIVE),y)
+ KODI_CONF_OPTS += --enable-optical-drive --enable-dvdcss
+ else
 -- 
 2.8.1
