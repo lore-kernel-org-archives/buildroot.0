@@ -1,45 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  7 Jul 2016 07:08:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apache: security bump to version
-	2.4.23
-Message-ID: <1467868080-32365-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu,  7 Jul 2016 07:10:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libsndfile: bump version to 1.0.27
+Message-ID: <1467868209-32472-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2016-4979:
-TLS/SSL X.509 client certificate auth bypass with HTTP/2
-http://httpd.apache.org/security/vulnerabilities_24.html
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/apache/apache.hash | 4 ++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libsndfile/libsndfile.hash | 2 +-
+ package/libsndfile/libsndfile.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 062a549..e4710b0 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
+diff --git a/package/libsndfile/libsndfile.hash b/package/libsndfile/libsndfile.hash
+index 04d091b..a87b7c3 100644
+--- a/package/libsndfile/libsndfile.hash
++++ b/package/libsndfile/libsndfile.hash
 @@ -1,2 +1,2 @@
--# From http://www.apache.org/dist/httpd/httpd-2.4.20.tar.bz2.sha1
--sha1	cefe8ea4a3f81c7a08e36c80ebbd792c67ab361b	httpd-2.4.20.tar.bz2
-+# From http://www.apache.org/dist/httpd/httpd-2.4.23.tar.bz2.sha1
-+sha1	5101be34ac4a509b245adb70a56690a84fcc4e7f	httpd-2.4.23.tar.bz2
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 6d9a324..e78545a 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
+ # Locally calculated after checking pgp signature
+-sha256	cd6520ec763d1a45573885ecb1f8e4e42505ac12180268482a44b28484a25092	libsndfile-1.0.26.tar.gz
++sha256	a391952f27f4a92ceb2b4c06493ac107896ed6c76be9a613a4731f076d30fac0	libsndfile-1.0.27.tar.gz
+diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
+index 107a356..aaef657 100644
+--- a/package/libsndfile/libsndfile.mk
++++ b/package/libsndfile/libsndfile.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APACHE_VERSION = 2.4.20
-+APACHE_VERSION = 2.4.23
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+-LIBSNDFILE_VERSION = 1.0.26
++LIBSNDFILE_VERSION = 1.0.27
+ LIBSNDFILE_SITE = http://www.mega-nerd.com/libsndfile/files
+ LIBSNDFILE_INSTALL_STAGING = YES
+ LIBSNDFILE_LICENSE = LGPLv2.1+
 -- 
 2.8.1
