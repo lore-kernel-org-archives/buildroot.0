@@ -1,33 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Jul 2016 10:36:03 +0200
-Subject: [Buildroot] [git commit] shellinabox: needs MMU support
-Message-ID: <20160707083632.6053C80288@busybox.osuosl.org>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu,  7 Jul 2016 11:04:39 +0200
+Subject: [Buildroot] [PATCH] scanpypi: include LICENCE in the list of
+	supported license files
+Message-ID: <1467882279-24370-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc2be0b2566a1a56c2a6c420f8dae8d40ec44b91
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/609ec63d36e235581fe0388c0e1102362743d5b2/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/shellinabox/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ support/scripts/scanpypi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/shellinabox/Config.in b/package/shellinabox/Config.in
-index b349ef3..10c492c 100644
---- a/package/shellinabox/Config.in
-+++ b/package/shellinabox/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SHELLINABOX
- 	bool "shellinabox"
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
- 	help
+diff --git a/support/scripts/scanpypi b/support/scripts/scanpypi
+index 7546cf1..e150ae5 100755
+--- a/support/scripts/scanpypi
++++ b/support/scripts/scanpypi
+@@ -416,7 +416,8 @@ class BuildrootPackage():
+             license=', '.join(licenses))
+         lines.append(license_line)
+ 
+-        filenames = ['LICENSE', 'LICENSE.TXT', 'COPYING', 'COPYING.TXT']
++        filenames = ['LICENCE', 'LICENSE', 'LICENSE.TXT', 'COPYING',
++		     'COPYING.TXT']
+         license_files = list(find_file_upper_case(filenames, self.tmp_extract))
+         license_files = [license.replace(self.tmp_extract, '')[1:]
+                          for license in license_files]
+-- 
+2.8.1
