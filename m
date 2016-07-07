@@ -1,44 +1,41 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri,  8 Jul 2016 00:01:09 +0200
-Subject: [Buildroot] [PATCH] package/efl: disable libevas jp2k loader
-Message-ID: <1467928869-2412-1-git-send-email-romain.naour@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 8 Jul 2016 01:25:54 +0200
+Subject: [Buildroot] Interesting circular dependency, how to solve?
+In-Reply-To: <20160707212628.3df1cef5@free-electrons.com>
+References: <20160706175617.67b0e1ea@free-electrons.com>
+ <F9C551623D2CBB4C9488801D14F864C6EE83C112@ex-mb1.corp.adtran.com>
+ <20160706202005.6e2ac6c3@free-electrons.com>
+ <20160707170024.GB3827@free.fr>
+ <20160707212628.3df1cef5@free-electrons.com>
+Message-ID: <20160707232554.GE3827@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the support for JP2K is requested, the configure script is looking
-for libopenjpeg1.pc which is not provided by the openjpeg package since
-it's too recent (currently v2.1).
+Thomas, All,
 
-Mark BR2_PACKAGE_EFL_JP2K as broken until a new version of the efl
-stack support the new openjpeg library.
+On 2016-07-07 21:26 +0200, Thomas Petazzoni spake thusly:
+> On Thu, 7 Jul 2016 19:00:24 +0200, Yann E. MORIN wrote:
+> > But then we would probably have to do it for other packages that build
+> > both a kernel module and userland stuff, no?
+> > 
+> > I'm not sure I like that... :-/
+> > 
+> > I think the best option would be to break at the linux-tools.
+> Agreed.
 
-Fixes:
-http://autobuild.buildroot.net/results/ff1/ff1dbbc6cffdb5b2550b3613295151ff9fa964d6
+OK, done locally, I've been a little bit side-tracked, so it is not
+completely tested yet. will spin it tomorrow...
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/efl/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 4ab1ec4..ee1a39d 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -151,9 +151,12 @@ config BR2_PACKAGE_EFL_PNG
- 	  This enables the loader code that loads png files using
- 	  libpng.
- 
-+# JP2K support require openjpeg 1.x (libopenjpeg1.pc) which is not
-+# available in Buildroot anymore.
- config BR2_PACKAGE_EFL_JP2K
- 	bool "libevas jp2k loader"
- 	select BR2_PACKAGE_OPENJPEG
-+	depends on BROKEN # require openjpeg 1.x
- 	help
- 	  This enables the loader code that loads jp2k files using
- 	  openjpeg.
 -- 
-2.5.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
