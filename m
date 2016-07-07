@@ -1,55 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Jul 2016 11:48:48 +0200
-Subject: [Buildroot] [git commit] package/pulseaudio: remove WebRTC hook for
-	toolchains without C++
-Message-ID: <20160707094913.340A582259@busybox.osuosl.org>
+Date: Thu, 7 Jul 2016 11:48:51 +0200
+Subject: [Buildroot] [git commit] hostapd: Install default hostapd.conf on
+	target
+Message-ID: <20160707094913.7791F80450@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d6beb7dd78b0d48854da9623ad42205ab844c45
+commit: https://git.buildroot.net/buildroot/commit/?id=13f364daaf8bf34bd6ecebf5f5f3fa237818ff35
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This hook is not required anymore since we handle WebRTC dependency
-with --enable/disable-webrtc-aec.
+For convenience it's nice to have default hostapd.conf installed
+on target automatically as a good starting point.
 
-Also the hook doesn't have any effect since we use autoreconf because
-it should have been a POST_CONFIGURE_HOOKS.
+Otherwise user has to create it manually from scratch.
 
-So, we can remove it safely.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>i
 Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pulseaudio/pulseaudio.mk | 15 ---------------
- 1 file changed, 15 deletions(-)
+ package/hostapd/hostapd.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index e0d9ab4..74a028b 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -94,21 +94,6 @@ else
- PULSEAUDIO_CONF_OPTS += --disable-webrtc-aec
- endif
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index dca07c1..5aa2b9a 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -86,6 +86,8 @@ define HOSTAPD_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR)/usr/sbin/hostapd
+ 	$(INSTALL) -m 0755 -D $(@D)/$(HOSTAPD_SUBDIR)/hostapd_cli \
+ 		$(TARGET_DIR)/usr/bin/hostapd_cli
++	$(INSTALL) -m 0644 -D $(@D)/$(HOSTAPD_SUBDIR)/hostapd.conf \
++		$(TARGET_DIR)/etc/hostapd.conf
+ endef
  
--ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
--# The optional webrtc echo canceller is written in C++, causing auto* to want
--# to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
--# If we don't have C++ support enabled in BR, CXX will point to /bin/false,
--# which makes configure think we aren't able to create C++ .so files
--# (arguable true), breaking the build when it tries to install the .so
--# workaround it by patching up the libtool invocations to use C mode instead
--define PULSEAUDIO_FORCE_CC
--	$(SED) 's/--tag=CXX/--tag=CC/g' -e 's/(CXXLD)/(CCLD)/g' \
--		$(@D)/src/Makefile.in
--endef
--
--PULSEAUDIO_POST_PATCH_HOOKS += PULSEAUDIO_FORCE_CC
--endif
--
- # neon intrinsics not available with float-abi=soft
- ifeq ($(BR2_ARM_SOFT_FLOAT),)
- ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+ $(eval $(generic-package))
