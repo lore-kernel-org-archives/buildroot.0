@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Jul 2016 21:31:43 +0200
-Subject: [Buildroot] Interesting circular dependency, how to solve?
-In-Reply-To: <20160707163322.GA3827@free.fr>
-References: <20160706175617.67b0e1ea@free-electrons.com>
- <20160707163322.GA3827@free.fr>
-Message-ID: <20160707213143.37841dd3@free-electrons.com>
+Date: Thu, 7 Jul 2016 21:32:40 +0200
+Subject: [Buildroot] [PATCH] tekui: relax dynamic library dependency
+In-Reply-To: <1467910890-16574-1-git-send-email-francois.perrad@gadz.org>
+References: <1467910890-16574-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20160707213240.378baea9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 7 Jul 2016 18:33:22 +0200, Yann E. MORIN wrote:
+On Thu,  7 Jul 2016 19:01:30 +0200, Francois Perrad wrote:
+> tekui doesn't really require these Lua modules.
+> These modules are added because they increase the user experience with demo/examples.
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-> Maybe we could have some autobuilders use our defconfigs as starting
-> points for randpackageconfig? Most (all?) of our defconfigs have a
-> kernel enabled, so we could probably catch such a situation...
+Then perhaps there should be a sub-option to enable the demo/examples?
 
-My idea for this topic is more something like randomly, enabling the
-Linux kernel package and depending on the selected architecture, use a
-given defconfig (with a table of architecture <-> defconfig) match in
-the autobuild-run script.
+Thanks,
 
 Thomas
 -- 
