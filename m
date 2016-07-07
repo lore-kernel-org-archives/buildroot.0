@@ -1,142 +1,58 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 7 Jul 2016 19:02:33 +0200
-Subject: [Buildroot] [PATCH v3,3/3] alljoyn-tcl-base: new package
-In-Reply-To: <1467884015-27464-3-git-send-email-fabrice.fontaine@orange.com>
-References: <1467884015-27464-1-git-send-email-fabrice.fontaine@orange.com>
- <1467884015-27464-3-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <6c0b36f8-2cda-eb89-e92f-8f887c628bf8@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 7 Jul 2016 19:33:14 +0200
+Subject: [Buildroot] Interesting circular dependency, how to solve?
+In-Reply-To: <20160707163322.GA3827@free.fr>
+References: <20160706175617.67b0e1ea@free-electrons.com>
+ <20160707163322.GA3827@free.fr>
+Message-ID: <20160707173314.GC3827@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Thomas, Paul, All,
 
-Le 07/07/2016 ? 11:33, Fabrice Fontaine a ?crit :
-> AllJoyn Base Services are common services used by many devices,
-> providing a set of interfaces for different devices to interact and
-> interoperate with one another.
+On 2016-07-07 18:33 +0200, Yann E. MORIN spake thusly:
+> On 2016-07-06 17:56 +0200, Thomas Petazzoni spake thusly:
+> > Today, Paul (in Cc) reported on IRC an interesting problem: on a
+> > configuration with systemd enabled (and acting as udev provider),
+> > pciutils would fail to build due to libudev.h being missing.
+> > 
+> > After some investigation, "make graph-depends" revealed the origin of
+> > the problem: a very interesting circular dependency. Here is what make
+> > graph-depends thinks of the situation:
+> > 
+> > Recursion detected for  : systemd
+> > which is a dependency of: udev
+> > which is a dependency of: pciutils
+> > which is a dependency of: linux
+> > which is a dependency of: cryptodev-linux
+> > which is a dependency of: openssl
+> > which is a dependency of: libcurl
+> > which is a dependency of: systemd
 > 
-> Thin Client Library is designed to bring the benefits of the AllJoyn
-> distributed programming environment to embedded systems.
-> 
-> https://allseenalliance.org
+> Hmmm... make itself should have spit a warning of its own. However, I
+> could not see a way to have make error out; it is a mere warning... :-(
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Indeed it does catch it. But not until it is time for it to actuall
+build openssl:
 
-Best regards,
-Romain
+    make[1]: Circular /home/ymorin/dev/buildroot/O/build/openssl-1.0.2h/.stamp_configured <- cryptodev-linux dependency dropped.
+    >>> openssl 1.0.2h Downloading
 
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> ---
-> Changes v2 -> v3 (after review of Romain Naour):
->  - Rewrap Config.in help text
->  - Replace dependency on ajtcl to alljoyn-tcl
-> 
->  package/Config.in                              |  1 +
->  package/alljoyn-tcl-base/Config.in             | 18 +++++++++++
->  package/alljoyn-tcl-base/alljoyn-tcl-base.hash |  2 ++
->  package/alljoyn-tcl-base/alljoyn-tcl-base.mk   | 45 ++++++++++++++++++++++++++
->  4 files changed, 66 insertions(+)
->  create mode 100644 package/alljoyn-tcl-base/Config.in
->  create mode 100644 package/alljoyn-tcl-base/alljoyn-tcl-base.hash
->  create mode 100644 package/alljoyn-tcl-base/alljoyn-tcl-base.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 5715bff..f86e1ef 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1131,6 +1131,7 @@ menu "Networking"
->  	source "package/alljoyn/Config.in"
->  	source "package/alljoyn-base/Config.in"
->  	source "package/alljoyn-tcl/Config.in"
-> +	source "package/alljoyn-tcl-base/Config.in"
->  	source "package/batman-adv/Config.in"
->  	source "package/c-ares/Config.in"
->  	source "package/canfestival/Config.in"
-> diff --git a/package/alljoyn-tcl-base/Config.in b/package/alljoyn-tcl-base/Config.in
-> new file mode 100644
-> index 0000000..ebc3370
-> --- /dev/null
-> +++ b/package/alljoyn-tcl-base/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_ALLJOYN_TCL_BASE
-> +	bool "alljoyn-tcl-base"
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # alljoyn-tcl
-> +	select BR2_PACKAGE_ALLJOYN_TCL
-> +	help
-> +	  AllJoyn Base Services are common services used by many
-> +	  devices, providing a set of interfaces for different devices
-> +	  to interact and interoperate with one another.
-> +
-> +	  Thin Client Library is designed to bring the benefits of the
-> +	  AllJoyn distributed programming environment to embedded
-> +	  systems.
-> +
-> +	  https://allseenalliance.org
-> +
-> +comment "alljoyn-tcl-base needs a toolchain w/ threads and dynamic library"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> diff --git a/package/alljoyn-tcl-base/alljoyn-tcl-base.hash b/package/alljoyn-tcl-base/alljoyn-tcl-base.hash
-> new file mode 100644
-> index 0000000..882839d
-> --- /dev/null
-> +++ b/package/alljoyn-tcl-base/alljoyn-tcl-base.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256	741f7a71929ccd6a66bf75d2b03affc62411e229b70bb89399be9b1b2ce40629	alljoyn-base_tcl-16.04.00.tar.gz
-> diff --git a/package/alljoyn-tcl-base/alljoyn-tcl-base.mk b/package/alljoyn-tcl-base/alljoyn-tcl-base.mk
-> new file mode 100644
-> index 0000000..461cd09
-> --- /dev/null
-> +++ b/package/alljoyn-tcl-base/alljoyn-tcl-base.mk
-> @@ -0,0 +1,45 @@
-> +################################################################################
-> +#
-> +# alljoyn-tcl-base
-> +#
-> +################################################################################
-> +
-> +ALLJOYN_TCL_BASE_REV = 16.04
-> +ALLJOYN_TCL_BASE_VERSION = $(ALLJOYN_TCL_BASE_REV).00
-> +ALLJOYN_TCL_BASE_SOURCE = alljoyn-base_tcl-$(ALLJOYN_TCL_BASE_VERSION).tar.gz
-> +ALLJOYN_TCL_BASE_SITE = \
-> +	https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_TCL_BASE_REV)
-> +# See https://allseenalliance.org/alliance/ip-policy
-> +ALLJOYN_TCL_BASE_LICENSE = ISC
-> +
-> +ALLJOYN_TCL_BASE_DEPENDENCIES = host-scons alljoyn-tcl
-> +ALLJOYN_TCL_BASE_INSTALL_STAGING = YES
-> +
-> +# AllJoyn Base Thin Core can be compiled in debug or release mode. By default,
-> +# AllJoyn Base Thin Core is built in debug mode.
-> +ALLJOYN_TCL_BASE_VARIANT = release
-> +
-> +ALLJOYN_TCL_BASE_SCONS_OPTS = \
-> +	-j$(PARALLEL_JOBS) \
-> +	V=1 \
-> +	VARIANT=$(ALLJOYN_TCL_BASE_VARIANT) \
-> +	CC="$(TARGET_CC)" \
-> +	CXX="$(TARGET_CXX)" \
-> +	AJTCL_DIST=$(STAGING_DIR) \
-> +	WS=off
-> +
-> +define ALLJOYN_TCL_BASE_BUILD_CMDS
-> +	cd $(@D); $(SCONS) $(ALLJOYN_TCL_BASE_SCONS_OPTS)
-> +endef
-> +
-> +define ALLJOYN_TCL_BASE_INSTALL_STAGING_CMDS
-> +	cp -a $(@D)/dist/lib/lib* $(STAGING_DIR)/usr/lib/
-> +	cp -a $(@D)/dist/include/* $(STAGING_DIR)/usr/include/
-> +endef
-> +
-> +# Only install AllJoyn Base Thin Core dynamic libraries into target directory
-> +define ALLJOYN_TCL_BASE_INSTALL_TARGET_CMDS
-> +	cp -a $(@D)/dist/lib/lib*.so* $(TARGET_DIR)/usr/lib/
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
+DAng. Why doesn't it detect it at the beginning of the build? And why
+can't we tell make to consider it an error rather than a warning?
+
+Damn... :-/
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
