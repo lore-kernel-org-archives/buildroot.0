@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 7 Jul 2016 16:39:18 +0100
-Subject: [Buildroot] [PATCH 1/2] openmpi: add Fortran support for MIPS32
-Message-ID: <1467905959-60052-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Thu, 7 Jul 2016 16:47:33 +0100
+Subject: [Buildroot] [PATCH v2 1/2] openmpi: add Fortran support for MIPS32
+Message-ID: <1467906454-60557-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,6 +21,9 @@ doesn't actually have to run anything)"
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
+Changes v1 -> v2:
+ - Nothing.
+
  package/openmpi/openmpi.mk                         | 12 ++++-
  .../openmpi_mips32_fortran_cached_values.mk        | 51 ++++++++++++++++++++++
  2 files changed, 61 insertions(+), 2 deletions(-)
