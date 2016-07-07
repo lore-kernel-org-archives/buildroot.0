@@ -1,44 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  7 Jul 2016 22:49:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: add optional support for
-	libvdpau
-Message-ID: <1467924554-18058-1-git-send-email-bernd.kuhls@t-online.de>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu,  7 Jul 2016 22:52:15 +0200
+Subject: [Buildroot] [PATCH] package/mono: bump version to 4.4.1.0
+Message-ID: <1467924735-11497-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/ffmpeg.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+This patch bumps mono version to the latest released version 4.4.1.0.
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index d5396ad..a4e2be6 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -36,7 +36,6 @@ FFMPEG_CONF_OPTS = \
- 	--enable-mdct \
- 	--enable-rdft \
- 	--disable-crystalhd \
--	--disable-vdpau \
- 	--disable-dxva2 \
- 	--enable-runtime-cpudetect \
- 	--disable-hardcoded-tables \
-@@ -247,6 +246,13 @@ else
- FFMPEG_CONF_OPTS += --disable-vaapi
- endif
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ package/mono/mono.hash | 2 +-
+ package/mono/mono.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+index 748a9e1..ea358d5 100644
+--- a/package/mono/mono.hash
++++ b/package/mono/mono.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 983e27a054bc3dc6709b32b8de45a0f4335e9e9c3911b20d29f63eb7cc00bfe5  mono-4.4.0.182.tar.bz2
++sha256 165e7686b5cbb1ab671b4cb2069207999c3d70044002190b6ec84bb1fdf62b4a  mono-4.4.1.0.tar.bz2
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index 3104622..f2d36ff 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBVDPAU),y)
-+FFMPEG_CONF_OPTS += --enable-vdpau
-+FFMPEG_DEPENDENCIES += libvdpau
-+else
-+FFMPEG_CONF_OPTS += --disable-vdpau
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPUS),y)
- FFMPEG_CONF_OPTS += --enable-libopus
- FFMPEG_DEPENDENCIES += opus
+-MONO_VERSION = 4.4.0.182
++MONO_VERSION = 4.4.1.0
+ MONO_SITE = http://download.mono-project.com/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
+ MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
 -- 
-2.8.1
+1.9.1
