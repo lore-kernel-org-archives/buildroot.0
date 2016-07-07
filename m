@@ -1,89 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  7 Jul 2016 23:25:30 +0200
-Subject: [Buildroot] [PATCH v3 1/6] package/kodi: re-structure dependencies
-Message-ID: <1467926735-29733-1-git-send-email-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri,  8 Jul 2016 00:01:09 +0200
+Subject: [Buildroot] [PATCH] package/efl: disable libevas jp2k loader
+Message-ID: <1467928869-2412-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use one package per line to ease review of Kodi 17 version bump, where
-10+ packages will be removed. This patch contains no code changes.
+When the support for JP2K is requested, the configure script is looking
+for libopenjpeg1.pc which is not provided by the openjpeg package since
+it's too recent (currently v2.1).
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Mark BR2_PACKAGE_EFL_JP2K as broken until a new version of the efl
+stack support the new openjpeg library.
+
+Fixes:
+http://autobuild.buildroot.net/results/ff1/ff1dbbc6cffdb5b2550b3613295151ff9fa964d6
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
-v3: rebased series, no changes to this patch
-v2: rebased series, no changes to this patch
+ package/efl/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
- package/kodi/kodi.mk | 55 +++++++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 48 insertions(+), 7 deletions(-)
-
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 90c50c3..8a3b0bf 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -10,13 +10,54 @@ KODI_LICENSE = GPLv2
- KODI_LICENSE_FILES = LICENSE.GPL
- # needed for binary addons
- KODI_INSTALL_STAGING = YES
--KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-zip host-giflib \
--	host-libjpeg host-lzo host-nasm host-libpng host-swig
--KODI_DEPENDENCIES += boost bzip2 expat ffmpeg fontconfig freetype giflib jasper jpeg \
--	libass libcdio libcrossguid libcurl libdcadec libfribidi libgcrypt libmpeg2 \
--	libogg libplist libpng libsamplerate libsquish libvorbis libxml2 \
--	libxslt lzo ncurses openssl pcre python readline sqlite taglib tiff \
--	tinyxml yajl zlib
-+KODI_DEPENDENCIES = \
-+	boost \
-+	bzip2 \
-+	expat \
-+	ffmpeg \
-+	fontconfig \
-+	freetype \
-+	giflib \
-+	host-gawk \
-+	host-gettext \
-+	host-giflib \
-+	host-gperf \
-+	host-libjpeg \
-+	host-libpng \
-+	host-lzo \
-+	host-nasm \
-+	host-swig \
-+	host-zip \
-+	jasper \
-+	jpeg \
-+	libass \
-+	libcdio \
-+	libcrossguid \
-+	libcurl \
-+	libdcadec \
-+	libfribidi \
-+	libgcrypt \
-+	libmpeg2 \
-+	libogg \
-+	libplist \
-+	libpng \
-+	libsamplerate \
-+	libsquish \
-+	libvorbis \
-+	libxml2 \
-+	libxslt \
-+	lzo \
-+	ncurses \
-+	openssl \
-+	pcre \
-+	python \
-+	readline \
-+	sqlite \
-+	taglib \
-+	tiff \
-+	tinyxml \
-+	yajl \
-+	zlib
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 4ab1ec4..ee1a39d 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -151,9 +151,12 @@ config BR2_PACKAGE_EFL_PNG
+ 	  This enables the loader code that loads png files using
+ 	  libpng.
  
- KODI_CONF_ENV = \
- 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
++# JP2K support require openjpeg 1.x (libopenjpeg1.pc) which is not
++# available in Buildroot anymore.
+ config BR2_PACKAGE_EFL_JP2K
+ 	bool "libevas jp2k loader"
+ 	select BR2_PACKAGE_OPENJPEG
++	depends on BROKEN # require openjpeg 1.x
+ 	help
+ 	  This enables the loader code that loads jp2k files using
+ 	  openjpeg.
 -- 
-2.8.1
+2.5.5
