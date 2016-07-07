@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Jul 2016 11:49:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libsndfile: bump version to
- 1.0.27
-In-Reply-To: <1467868209-32472-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1467868209-32472-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160707114940.1d09bae0@free-electrons.com>
+Date: Thu, 7 Jul 2016 11:49:43 +0200
+Subject: [Buildroot] [PATCH] hostapd: Install default hostapd.conf on
+ target
+In-Reply-To: <1467871946-14568-1-git-send-email-abrodkin@synopsys.com>
+References: <1467871946-14568-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20160707114943.166a45cf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  7 Jul 2016 07:10:09 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Thu,  7 Jul 2016 09:12:26 +0300, Alexey Brodkin wrote:
+> For convenience it's nice to have default hostapd.conf installed
+> on target automatically as a good starting point.
+> 
+> Otherwise user has to create it manually from scratch.
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>i
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/libsndfile/libsndfile.hash | 2 +-
->  package/libsndfile/libsndfile.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/hostapd/hostapd.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
 Applied to master, thanks.
 
