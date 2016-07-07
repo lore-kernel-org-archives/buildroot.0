@@ -1,40 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Jul 2016 11:48:47 +0200
-Subject: [Buildroot] [git commit] musl: bump to version 1.1.15
-Message-ID: <20160707094913.204EC80450@busybox.osuosl.org>
+Date: Thu, 7 Jul 2016 11:48:50 +0200
+Subject: [Buildroot] [git commit] package/libsndfile: bump version to 1.0.27
+Message-ID: <20160707094913.6025380450@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57fc25e8b2164adddf4c77a3632e2e9d2d7f31ad
+commit: https://git.buildroot.net/buildroot/commit/?id=e7a82e9653c79dfe202881ec0304016e7582a6bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/musl/musl.hash | 2 +-
- package/musl/musl.mk   | 2 +-
+ package/libsndfile/libsndfile.hash | 2 +-
+ package/libsndfile/libsndfile.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index 907e9c6..8ef4def 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
+diff --git a/package/libsndfile/libsndfile.hash b/package/libsndfile/libsndfile.hash
+index 04d091b..a87b7c3 100644
+--- a/package/libsndfile/libsndfile.hash
++++ b/package/libsndfile/libsndfile.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256	35f6c00c84a6091bd5dab29eedde7508dae755ead92dcc0239f3677d1055b9b5  musl-1.1.14.tar.gz
-+sha256	97e447c7ee2a7f613186ec54a93054fe15469fe34d7d323080f7ef38f5ecb0fa  musl-1.1.15.tar.gz
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 733f940..920bbbf 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
+-sha256	cd6520ec763d1a45573885ecb1f8e4e42505ac12180268482a44b28484a25092	libsndfile-1.0.26.tar.gz
++sha256	a391952f27f4a92ceb2b4c06493ac107896ed6c76be9a613a4731f076d30fac0	libsndfile-1.0.27.tar.gz
+diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
+index 107a356..aaef657 100644
+--- a/package/libsndfile/libsndfile.mk
++++ b/package/libsndfile/libsndfile.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MUSL_VERSION = 1.1.14
-+MUSL_VERSION = 1.1.15
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+-LIBSNDFILE_VERSION = 1.0.26
++LIBSNDFILE_VERSION = 1.0.27
+ LIBSNDFILE_SITE = http://www.mega-nerd.com/libsndfile/files
+ LIBSNDFILE_INSTALL_STAGING = YES
+ LIBSNDFILE_LICENSE = LGPLv2.1+
