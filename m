@@ -1,32 +1,45 @@
-From: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
-Date: Thu, 7 Jul 2016 08:25:10 +0900
-Subject: [Buildroot] qt5: QT5_QMAKE spec bug
-In-Reply-To: <5f3cc15c-6a24-e41a-993b-7c00d35e5a26@stu.hosei.ac.jp>
-References: <5f3cc15c-6a24-e41a-993b-7c00d35e5a26@stu.hosei.ac.jp>
-Message-ID: <83bdbc0d-5521-02c6-cffa-c35a6297c0d6@stu.hosei.ac.jp>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  7 Jul 2016 07:08:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apache: security bump to version
+	2.4.23
+Message-ID: <1467868080-32365-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ping
+Fixes CVE-2016-4979:
+TLS/SSL X.509 client certificate auth bypass with HTTP/2
+http://httpd.apache.org/security/vulnerabilities_24.html
 
-On 2016?06?28? 18:16, Akihiko Odaki wrote:
-> Hi,
->
-> I was trying to use QT5_QMAKE variable for a new package.
-> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/152724
->
-> However, it failed to build. I found that it failed because -spec option
-> for cross compiling was applied for host_build. It can be fixed by
-> setting the value to QMAKE_XSPEC in qmake configuration instead of using
-> the option.
->
-> I'm making a patch to apply the change, but I have a question. Now
-> QT5_QMAKE variable has the path to qmake, but there are no variables to
-> indicate the path for other commands such as python. Should I remove
-> QT5_QMAKE variable or keep as it is?
->
-> Regards,
-> Akihiko
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/apache/apache.hash | 4 ++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 062a549..e4710b0 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,2 +1,2 @@
+-# From http://www.apache.org/dist/httpd/httpd-2.4.20.tar.bz2.sha1
+-sha1	cefe8ea4a3f81c7a08e36c80ebbd792c67ab361b	httpd-2.4.20.tar.bz2
++# From http://www.apache.org/dist/httpd/httpd-2.4.23.tar.bz2.sha1
++sha1	5101be34ac4a509b245adb70a56690a84fcc4e7f	httpd-2.4.23.tar.bz2
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 6d9a324..e78545a 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APACHE_VERSION = 2.4.20
++APACHE_VERSION = 2.4.23
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
+-- 
+2.8.1
