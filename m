@@ -1,116 +1,115 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 7 Jul 2016 16:47:34 +0100
-Subject: [Buildroot] [PATCH v2 2/2] openmpi: add Fortran support for MIPS64
-In-Reply-To: <1467906454-60557-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1467906454-60557-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1467906454-60557-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 7 Jul 2016 18:33:22 +0200
+Subject: [Buildroot] Interesting circular dependency, how to solve?
+In-Reply-To: <20160706175617.67b0e1ea@free-electrons.com>
+References: <20160706175617.67b0e1ea@free-electrons.com>
+Message-ID: <20160707163322.GA3827@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We include a file containing cached values for Fortran tests that are
-performed at the configure step. These tests fail when cross-compiling
-and this is known upstream. See:
+Thomas, Paul, All,
 
-https://www.open-mpi.org/community/lists/users/2013/01/21186.php
+On 2016-07-06 17:56 +0200, Thomas Petazzoni spake thusly:
+> Today, Paul (in Cc) reported on IRC an interesting problem: on a
+> configuration with systemd enabled (and acting as udev provider),
+> pciutils would fail to build due to libudev.h being missing.
+> 
+> After some investigation, "make graph-depends" revealed the origin of
+> the problem: a very interesting circular dependency. Here is what make
+> graph-depends thinks of the situation:
+> 
+> Recursion detected for  : systemd
+> which is a dependency of: udev
+> which is a dependency of: pciutils
+> which is a dependency of: linux
+> which is a dependency of: cryptodev-linux
+> which is a dependency of: openssl
+> which is a dependency of: libcurl
+> which is a dependency of: systemd
 
-In that thread the upstream maintainer admits that "cross compiling
-OpenMPI is a known issue" and the way to workaround this is to
-"pre-populate configure's answers to the Fortran tests (so that it
-doesn't actually have to run anything)"
+Hmmm... make itself should have spit a warning of its own. However, I
+could not see a way to have make error out; it is a mere warning... :-(
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-Changes v1 -> v2:
- - Commit log fixed.
+> So, starting from the bottom:
+> 
+>  - When libcurl is enabled, systemd depends on it
+> 
+>  - When OpenSSL is enabled, obviously, libcurl will use it for SSL
+>    support
+> 
+>  - When cryptodev-linux is enabled, OpenSSL will depend on it to use
+>    crypto accelerators supported in the kernel via cryptodev-linux.
+> 
+>  - cryptodev-linux being a kernel module, it depends on linux
+> 
+>  - linux by itself (the kernel) does not depend on pciutils, but the
+>    linux tool "cpupower" (managed in linux-tool-cpupower) depends on
+>    pciutils
+> 
+>  - pciutils depends on udev when available
+> 
+>  - udev is provided by systemd.
 
- package/openmpi/openmpi.mk                         |  4 ++
- .../openmpi_mips64_fortran_cached_values.mk        | 60 ++++++++++++++++++++++
- 2 files changed, 64 insertions(+)
- create mode 100644 package/openmpi/openmpi_mips64_fortran_cached_values.mk
+Indeed. :-/
 
-diff --git a/package/openmpi/openmpi.mk b/package/openmpi/openmpi.mk
-index 47f42be..a2e79aa 100644
---- a/package/openmpi/openmpi.mk
-+++ b/package/openmpi/openmpi.mk
-@@ -19,6 +19,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
- ifeq ($(BR2_mips)$(BR2_mipsel),y)
- OPENMPI_CONF_OPTS += --enable-mpi-fortran=yes
- include $(TOPDIR)/package/openmpi/openmpi_mips32_fortran_cached_values.mk
-+# Enable Fortran for MIPS64
-+else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
-+OPENMPI_CONF_OPTS += --enable-mpi-fortran=yes
-+include $(TOPDIR)/package/openmpi/openmpi_mips64_fortran_cached_values.mk
- endif
- 
- else
-diff --git a/package/openmpi/openmpi_mips64_fortran_cached_values.mk b/package/openmpi/openmpi_mips64_fortran_cached_values.mk
-new file mode 100644
-index 0000000..d0070b3
---- /dev/null
-+++ b/package/openmpi/openmpi_mips64_fortran_cached_values.mk
-@@ -0,0 +1,60 @@
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_CHARACTER=1
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_LOGICAL=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_LOGICALp1=1
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_LOGICALp2=2
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_LOGICALp4=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_LOGICALp8=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_INTEGER=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_INTEGERp1=1
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_INTEGERp2=2
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_INTEGERp4=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_INTEGERp8=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_INTEGERp16=16
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_REAL=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_REALp4=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_REALp8=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_REALp16=16
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_DOUBLE_PRECISION=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_COMPLEX=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_COMPLEXp8=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_COMPLEXp16=16
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_COMPLEXp32=32
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_DOUBLE_COMPLEX=16
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_CHARACTER=1
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_LOGICAL=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_LOGICALp1=1
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_LOGICALp2=2
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_LOGICALp4=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_LOGICALp8=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_INTEGER=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_INTEGERp1=1
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_INTEGERp2=2
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_INTEGERp4=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_INTEGERp8=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_REAL=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_REALp4=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_REALp8=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_REALp16=16
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_DOUBLE_PRECISION=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_COMPLEX=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_COMPLEXp8=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_COMPLEXp16=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_COMPLEXp32=16
-+OPENMPI_CONF_ENV += ompi_cv_fortran_alignment_DOUBLE_COMPLEX=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_kind_value_C_SIGNED_CHAR=1
-+OPENMPI_CONF_ENV += ompi_cv_fortran_kind_value_C_SHORT=2
-+OPENMPI_CONF_ENV += ompi_cv_fortran_kind_value_C_INT=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_kind_value_C_INT16_T=2
-+OPENMPI_CONF_ENV += ompi_cv_fortran_kind_value_C_INT32_T=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_kind_value_C_INT64_T=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_kind_value_C_LONG_LONG=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_kind_value_C_LONG_DOUBLE=16
-+OPENMPI_CONF_ENV += ompi_cv_fortran_kind_value_C_LONG_DOUBLE_COMPLEX=16
-+OPENMPI_CONF_ENV += ompi_cv_fortran_kind_value_C_FLOAT=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_kind_value_C_FLOAT_COMPLEX=4
-+OPENMPI_CONF_ENV += ompi_cv_fortran_kind_value_C_DOUBLE=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_kind_value_C_DOUBLE_COMPLEX=8
-+OPENMPI_CONF_ENV += ompi_cv_fortran_kind_value_0=0
-+OPENMPI_CONF_ENV += ompi_cv_real16_c_equiv=yes
-+OPENMPI_CONF_ENV += ompi_cv_fortran_true_value=1
-+OPENMPI_CONF_ENV += ompi_cv_fortran_sizeof_type_test_mpi_handle_=4
+> So we have a dependency loop. This was not detected in the autobuilders
+> because it requires the linux package to be enabled to trigger.
+
+Maybe we could have some autobuilders use our defconfigs as starting
+points for randpackageconfig? Most (all?) of our defconfigs have a
+kernel enabled, so we could probably catch such a situation...
+
+> I'm not sure where to break the dependency loop here. The real problem
+> is that cryptodev-linux does *NOT* require cpupower, it only needs the
+> kernel itself. Does this means that our current architecture for
+> packaging "tools" whose source code is part of the kernel as part of
+> the "linux" package is wrong ?
+> 
+> Do you have some suggestions or ideas on how to solve this ? The only
+> two solutions that I can find is:
+> 
+>  - Arbitrarily break this dependency loop by removing some
+>    functionality (but I'm not sure where)
+> 
+>  - Moving the cpupower build logic outside of the linux package.
+
+I think this is the best solution. We could make the linux-tools be
+built in their own package, vampirising the sources from the kernel (or
+even building in there) by way of carefully crafted _PATCH_DEPENDENCIES
+(but I'm afraid patch dependencies are still used to build the
+dependency graph anyway... :-/ ).
+
+I will look at it...
+
+> The other question is how we can improve our autobuilder testing to
+> detect such situations.
+
+See above: have a randcom defconfig be picked and use it as a starting
+point. We have almost all architectures covered, except maybe a few
+corner cases for exotic stuff like bfin or arc...
+
+Regards,
+Yann E. MORIN.
+
+> Thanks,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.7.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
