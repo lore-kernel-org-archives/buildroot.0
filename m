@@ -1,47 +1,72 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 7 Jul 2016 12:11:19 +0200
-Subject: [Buildroot] [PATCH 2/2] dependencies: check for Math
- BigInt/BigRat Perl module
-In-Reply-To: <20160707115745.429a01cc@free-electrons.com>
-References: <1467845012-10531-1-git-send-email-romain.naour@gmail.com>
- <1467845012-10531-2-git-send-email-romain.naour@gmail.com>
- <20160707115745.429a01cc@free-electrons.com>
-Message-ID: <9177495b-b3f2-422c-2965-ad65837ea33d@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 7 Jul 2016 14:06:22 +0200
+Subject: [Buildroot] [PATCH v4] board: add blackfin gdb simulator support
+In-Reply-To: <20160706222853.GA12734@waldemar-brodkorb.de>
+References: <20160706222853.GA12734@waldemar-brodkorb.de>
+Message-ID: <20160707140622.7aa9b619@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-Le 07/07/2016 ? 11:57, Thomas Petazzoni a ?crit :
-> Hello,
+On Thu, 7 Jul 2016 00:28:53 +0200, Waldemar Brodkorb wrote:
+> With this config you can bootup a Linux kernel
+> in GDB simulator and test Blackfin kernel and
+> userland.
 > 
-> On Thu,  7 Jul 2016 00:43:32 +0200, Romain Naour wrote:
-> 
->> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
->> index 5832cf3..40e83d4 100755
->> --- a/support/dependencies/dependencies.sh
->> +++ b/support/dependencies/dependencies.sh
->> @@ -239,6 +239,8 @@ fi
->>  # Check that the Perl installation is complete enough for Buildroot.
->>  required_perl_modules="Data::Dumper" # Needed to build host-autoconf
->>  required_perl_modules="$required_perl_modules ExtUtils::MakeMaker" # Used by host-libxml-parser-perl
->> +required_perl_modules="$required_perl_modules Math::BigInt" # Used by mpv
->> +required_perl_modules="$required_perl_modules Math::BigRat" # Used by mpv
->>  required_perl_modules="$required_perl_modules Thread::Queue" # Used by host-automake
-> 
-> Should the addition of those Perl modules be conditional on the mpv
-> package being enabled? I'm not sure, just wondering.
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Yes, I hesitated doing so, but these modules are pretty small.
+Thanks, but it still doesn't build here:
 
-I haven't a strong opinion...
+ $ make gdb_bfin_bf512_defconfig
+ $ make
 
-Best regards,
-Romain
+Fails with:
 
-> 
-> Thomas
-> 
+In file included from ./sim-main.h:35,
+                 from ./../common/sim-command.c:21:
+../common/sim-base.h:76: error: redefinition of typedef 'SIM_CPU'
+./sim-main.h:29: note: previous declaration of 'SIM_CPU' was here
+In file included from ./sim-main.h:35,
+                 from ./../common/sim-config.c:23:
+../common/sim-base.h:76: error: redefinition of typedef 'SIM_CPU'
+./sim-main.h:29: note: previous declaration of 'SIM_CPU' was here
+make[4]: *** [sim-command.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+In file included from ./sim-main.h:35,
+                 from ./../common/sim-core.c:26:
+../common/sim-base.h:76: error: redefinition of typedef 'SIM_CPU'
+./sim-main.h:29: note: previous declaration of 'SIM_CPU' was here
+make[4]: *** [sim-config.o] Error 1
+In file included from ./sim-main.h:35,
+                 from ./../common/sim-cpu.c:20:
+../common/sim-base.h:76: error: redefinition of typedef 'SIM_CPU'
+./sim-main.h:29: note: previous declaration of 'SIM_CPU' was here
+make[4]: *** [sim-cpu.o] Error 1
+make[4]: *** [sim-core.o] Error 1
+In file included from ./sim-main.h:35,
+                 from ./../common/sim-engine.c:22:
+../common/sim-base.h:76: error: redefinition of typedef 'SIM_CPU'
+./sim-main.h:29: note: previous declaration of 'SIM_CPU' was here
+make[4]: *** [sim-engine.o] Error 1
+make[4]: Leaving directory `/home/test/buildroot/output/build/host-gdb-7.10.1/sim/bfin'
+make[3]: *** [all] Error 1
+make[3]: Leaving directory `/home/test/buildroot/output/build/host-gdb-7.10.1/sim'
+make[2]: *** [all-sim] Error 2
+make[2]: Leaving directory `/home/test/buildroot/output/build/host-gdb-7.10.1'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/test/buildroot/output/build/host-gdb-7.10.1'
+make: *** [/home/test/buildroot/output/build/host-gdb-7.10.1/.stamp_built] Error 2
+
+Full build log at http://code.bulix.org/sh07yj-103579.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
