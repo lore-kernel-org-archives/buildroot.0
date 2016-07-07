@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Jul 2016 11:49:50 +0200
-Subject: [Buildroot] [PATCH] musl: bump to version 1.1.15
-In-Reply-To: <1467839622-30542-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1467839622-30542-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160707114950.76c1de6c@free-electrons.com>
+Date: Thu, 7 Jul 2016 11:57:45 +0200
+Subject: [Buildroot] [PATCH 2/2] dependencies: check for Math
+ BigInt/BigRat Perl module
+In-Reply-To: <1467845012-10531-2-git-send-email-romain.naour@gmail.com>
+References: <1467845012-10531-1-git-send-email-romain.naour@gmail.com>
+ <1467845012-10531-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160707115745.429a01cc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +14,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  6 Jul 2016 23:13:42 +0200, Thomas Petazzoni wrote:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/musl/musl.hash | 2 +-
->  package/musl/musl.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On Thu,  7 Jul 2016 00:43:32 +0200, Romain Naour wrote:
 
-Applied to master, thanks.
+> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+> index 5832cf3..40e83d4 100755
+> --- a/support/dependencies/dependencies.sh
+> +++ b/support/dependencies/dependencies.sh
+> @@ -239,6 +239,8 @@ fi
+>  # Check that the Perl installation is complete enough for Buildroot.
+>  required_perl_modules="Data::Dumper" # Needed to build host-autoconf
+>  required_perl_modules="$required_perl_modules ExtUtils::MakeMaker" # Used by host-libxml-parser-perl
+> +required_perl_modules="$required_perl_modules Math::BigInt" # Used by mpv
+> +required_perl_modules="$required_perl_modules Math::BigRat" # Used by mpv
+>  required_perl_modules="$required_perl_modules Thread::Queue" # Used by host-automake
+
+Should the addition of those Perl modules be conditional on the mpv
+package being enabled? I'm not sure, just wondering.
 
 Thomas
 -- 
