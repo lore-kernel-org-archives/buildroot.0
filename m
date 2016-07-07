@@ -1,9 +1,7 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Thu,  7 Jul 2016 20:39:37 +0200
+Date: Thu,  7 Jul 2016 20:45:09 +0200
 Subject: [Buildroot] [PATCH 3/3] package/runc: disable for static only build
-In-Reply-To: <1467916777-29220-1-git-send-email-romain.naour@gmail.com>
-References: <1467916777-29220-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1467916777-29220-3-git-send-email-romain.naour@gmail.com>
+Message-ID: <1467917109-29580-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
