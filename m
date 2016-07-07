@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Jul 2016 21:26:28 +0200
+Date: Thu, 7 Jul 2016 21:31:43 +0200
 Subject: [Buildroot] Interesting circular dependency, how to solve?
-In-Reply-To: <20160707170024.GB3827@free.fr>
+In-Reply-To: <20160707163322.GA3827@free.fr>
 References: <20160706175617.67b0e1ea@free-electrons.com>
- <F9C551623D2CBB4C9488801D14F864C6EE83C112@ex-mb1.corp.adtran.com>
- <20160706202005.6e2ac6c3@free-electrons.com>
- <20160707170024.GB3827@free.fr>
-Message-ID: <20160707212628.3df1cef5@free-electrons.com>
+ <20160707163322.GA3827@free.fr>
+Message-ID: <20160707213143.37841dd3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 7 Jul 2016 19:00:24 +0200, Yann E. MORIN wrote:
+On Thu, 7 Jul 2016 18:33:22 +0200, Yann E. MORIN wrote:
 
-> But then we would probably have to do it for other packages that build
-> both a kernel module and userland stuff, no?
-> 
-> I'm not sure I like that... :-/
-> 
-> I think the best option would be to break at the linux-tools.
+> Maybe we could have some autobuilders use our defconfigs as starting
+> points for randpackageconfig? Most (all?) of our defconfigs have a
+> kernel enabled, so we could probably catch such a situation...
 
-Agreed.
+My idea for this topic is more something like randomly, enabling the
+Linux kernel package and depending on the selected architecture, use a
+given defconfig (with a table of architecture <-> defconfig) match in
+the autobuild-run script.
 
 Thomas
 -- 
