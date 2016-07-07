@@ -1,47 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Jul 2016 11:48:49 +0200
-Subject: [Buildroot] [git commit] package/apache: security bump to version
-	2.4.23
-Message-ID: <20160707094913.4BFF380450@busybox.osuosl.org>
+Date: Thu, 7 Jul 2016 11:48:48 +0200
+Subject: [Buildroot] [git commit] package/pulseaudio: remove WebRTC hook for
+	toolchains without C++
+Message-ID: <20160707094913.340A582259@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d72868f1583cb745a875f1eae263c24e085ce592
+commit: https://git.buildroot.net/buildroot/commit/?id=9d6beb7dd78b0d48854da9623ad42205ab844c45
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2016-4979:
-TLS/SSL X.509 client certificate auth bypass with HTTP/2
-http://httpd.apache.org/security/vulnerabilities_24.html
+This hook is not required anymore since we handle WebRTC dependency
+with --enable/disable-webrtc-aec.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Also the hook doesn't have any effect since we use autoreconf because
+it should have been a POST_CONFIGURE_HOOKS.
+
+So, we can remove it safely.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/apache/apache.hash | 4 ++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pulseaudio/pulseaudio.mk | 15 ---------------
+ 1 file changed, 15 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 062a549..e4710b0 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,2 +1,2 @@
--# From http://www.apache.org/dist/httpd/httpd-2.4.20.tar.bz2.sha1
--sha1	cefe8ea4a3f81c7a08e36c80ebbd792c67ab361b	httpd-2.4.20.tar.bz2
-+# From http://www.apache.org/dist/httpd/httpd-2.4.23.tar.bz2.sha1
-+sha1	5101be34ac4a509b245adb70a56690a84fcc4e7f	httpd-2.4.23.tar.bz2
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 6d9a324..e78545a 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index e0d9ab4..74a028b 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -94,21 +94,6 @@ else
+ PULSEAUDIO_CONF_OPTS += --disable-webrtc-aec
+ endif
  
--APACHE_VERSION = 2.4.20
-+APACHE_VERSION = 2.4.23
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+-ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+-# The optional webrtc echo canceller is written in C++, causing auto* to want
+-# to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
+-# If we don't have C++ support enabled in BR, CXX will point to /bin/false,
+-# which makes configure think we aren't able to create C++ .so files
+-# (arguable true), breaking the build when it tries to install the .so
+-# workaround it by patching up the libtool invocations to use C mode instead
+-define PULSEAUDIO_FORCE_CC
+-	$(SED) 's/--tag=CXX/--tag=CC/g' -e 's/(CXXLD)/(CCLD)/g' \
+-		$(@D)/src/Makefile.in
+-endef
+-
+-PULSEAUDIO_POST_PATCH_HOOKS += PULSEAUDIO_FORCE_CC
+-endif
+-
+ # neon intrinsics not available with float-abi=soft
+ ifeq ($(BR2_ARM_SOFT_FLOAT),)
+ ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
