@@ -1,33 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Jul 2016 22:03:06 +0200
-Subject: [Buildroot] [git commit] imx-usb-loader: remove - from prompt
-Message-ID: <20160708200346.B40BB8222B@busybox.osuosl.org>
+Date: Fri, 8 Jul 2016 22:05:50 +0200
+Subject: [Buildroot] [PATCH 1/1] mxsldr: new package
+In-Reply-To: <1467913764-10467-1-git-send-email-erik.stromdahl@gmail.com>
+References: <1467913764-10467-1-git-send-email-erik.stromdahl@gmail.com>
+Message-ID: <20160708220550.6e9790df@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7774a48b5d293a48742bc8082f5b58e0e46ad4b4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The prompt of all host packages is "host foo", except for imx-usb-loader
-that uses "host-foo", and more precisely "host-imx-usb loader", which is
-really weird. This commit fixes this inconsistency.
+On Thu,  7 Jul 2016 19:49:23 +0200, Erik Stromdahl wrote:
+> Signed-off-by: Erik Stromdahl <erik.stromdahl@gmail.com>
+> ---
+>  package/Config.in.host        |    1 +
+>  package/mxsldr/Config.in.host |    9 +++++++++
+>  package/mxsldr/mxsldr.hash    |    2 ++
+>  package/mxsldr/mxsldr.mk      |   21 +++++++++++++++++++++
+>  4 files changed, 33 insertions(+)
+>  create mode 100644 package/mxsldr/Config.in.host
+>  create mode 100644 package/mxsldr/mxsldr.hash
+>  create mode 100644 package/mxsldr/mxsldr.mk
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/imx-usb-loader/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, after doing the following changes:
 
-diff --git a/package/imx-usb-loader/Config.in.host b/package/imx-usb-loader/Config.in.host
-index aefa01b..a4a0f88 100644
---- a/package/imx-usb-loader/Config.in.host
-+++ b/package/imx-usb-loader/Config.in.host
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_HOST_IMX_USB_LOADER
--	bool "host-imx-usb loader"
-+	bool "host imx-usb-loader"
- 	depends on BR2_arm
- 	help
- 	  This package contains tools to download and execute code
+    [Thomas:
+     - Rename prompt from "host-mxsldr" to "host mxsldr".
+     - Add BR2_armeb in the list of architectures under which this package
+       can be enabled.
+     - Remove double quotes around the _SITE value.
+     - The license is GPLv2+, not GPLv2.
+     - Add a value for the _LICENSE_FILES variable
+     - Rename MXSLDR_DEPENDENCIES to HOST_MXSLDR_DEPENDENCIES, since the
+       dependencies of the host package are no longer derived from the
+       dependencies of the target package.
+     - Remove the MXSLDR_MAKE_OPTS variable that contained the PKG_CONFIG
+       variable definition: it is already passed in HOST_CONFIGURE_OPTS.
+     - Remove hash file, as it is not checked on Git packages for now.]
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
