@@ -1,28 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Jul 2016 10:59:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/Config.in: fix alphabetical
- order
-In-Reply-To: <1467966437-20104-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1467966437-20104-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20160708105908.4ff02e43@free-electrons.com>
+From: Alvaro Gamez <alvaro.gamez@hazent.com>
+Date: Fri, 8 Jul 2016 11:10:31 +0200
+Subject: [Buildroot] Config defined package version is always built
+Message-ID: <CAM+bi4tV3U-JVJkB3YY1pZY7ce12hzqXLZ7x+ebM=JzUdT7=bg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi!
 
-On Fri,  8 Jul 2016 10:27:17 +0200, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
->  package/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+I'm writing a custom package whose version I want to define via menuconfig.
+Thus, I include in Config.in a string config option called
+BR2_PACKAGE_MYPKG_VERSION, and inside mypkg.mk I set MYPKG_VERSION =
+$(BR2_PACKAGE_MYPKG_VERSION)
 
-Applied to master, thanks.
+This works fine, I can set any version I want via menuconfig and buildroot
+will download and install that version from a git repository.
 
-Thomas
+However, whenever I type make, this package will be built again, even if it
+has just been built and no change have been made.
+
+Is there anyway to avoid this?
+
+Thanks!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+?lvaro G?mez Machado
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160708/ce4b1a28/attachment.html>
