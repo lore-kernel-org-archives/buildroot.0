@@ -1,11 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Jul 2016 21:47:12 +0200
-Subject: [Buildroot] [PATCH 3/3] package/runc: disable for static only
- build
-In-Reply-To: <1467916777-29220-3-git-send-email-romain.naour@gmail.com>
+Date: Fri, 8 Jul 2016 21:50:31 +0200
+Subject: [Buildroot] [PATCH 2/3] package/runc: fix shared only build
+ when libseccomp is enabled.
+In-Reply-To: <1468006361981-b8d5773f-c47578b5-9b1f9581@mixmax.com>
 References: <1467916777-29220-1-git-send-email-romain.naour@gmail.com>
- <1467916777-29220-3-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160708214712.30976a76@free-electrons.com>
+ <1467916777-29220-2-git-send-email-romain.naour@gmail.com>
+ <20160708212753.55d3c2ae@free-electrons.com>
+ <1468006361981-b8d5773f-c47578b5-9b1f9581@mixmax.com>
+Message-ID: <20160708215031.17fe15de@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +16,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  7 Jul 2016 20:39:37 +0200, Romain Naour wrote:
-> When build statically, runc try to link against Scrt1.o which is not
-> provided by a toolchain for static build only.
-> 
-> [...]arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find Scrt1.o: No such file or directory
-> collect2: error: ld returned 1 exit status
-> 
-> Add the reverse dependency on docker-containerd.
-> 
-> Remove the static case handling for runc.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Christian Stewart <christian@paral.in>
 
-I believe this only happens on ARM, because on ARM, Go forces the use
-of -pie, for some reason:
+On Fri, 08 Jul 2016 19:32:41 +0000, Christian Stewart wrote:
 
-        pie := (goarch == "arm" && goos == "linux") || goos == "android"
-        if pie { // we need to use -pie for Linux/ARM to get accurate imported sym
-                cgoLDFLAGS = append(cgoLDFLAGS, "-pie")
-        }
+> In my latest revision of docker-engine I removed the -static flag for CGO
+> because btrfs would not link for the same reason.
+> I think it's fine to remove the ?-static? extldflag on everything for Go. I have
+> had no trouble doing so with docker-engine and I don't see why there would be a
+> problem with the other packages.
+> We want to statically link the Go code to other go code, yes, but linking the Go
+> code to C libraries should be fine dynamically.
 
-And static linking + PIE isn't supported by uClibc. But on
-architectures other than ARM, I believe Go doesn't use -pie, so static
-linking with uClibc should work (remains to be tested, though).
+OK. Can we remove unconditionally, or should we still keep it for
+BR2_STATIC_LIBS=y builds?
 
-For this reason, I believe your patch is not correct as it disables Go
-packages for static linking on all architectures, while only ARM is
-affected by this problem.
+Perhaps we should pass -extldflags '$(TARGET_LDFLAGS)', since
+TARGET_LDFLAGS will automatically contain -static when
+BR2_STATIC_LIBS=y.
 
-This is yet another situation which makes me think we should add a
-"BR2_TOOLCHAIN_SUPPORTS_PIE" hidden boolean.
+For the specific case of runc, is "RUNC_GOTAGS = static_build" needed
+when BR2_STATIC_LIBS=y ?
+
+Thanks,
 
 Thomas
 -- 
