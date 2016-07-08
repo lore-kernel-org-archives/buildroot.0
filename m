@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Jul 2016 18:34:12 +0200
-Subject: [Buildroot] Config defined package version is always built
-In-Reply-To: <CAM+bi4tPaCSYhp4EJ7HfTSxCZ+h=jkPt0hRjSmtKc+9QwsxRbQ@mail.gmail.com>
-References: <CAM+bi4tV3U-JVJkB3YY1pZY7ce12hzqXLZ7x+ebM=JzUdT7=bg@mail.gmail.com>
- <20160708112941.516fd688@free-electrons.com>
- <CAM+bi4tPaCSYhp4EJ7HfTSxCZ+h=jkPt0hRjSmtKc+9QwsxRbQ@mail.gmail.com>
-Message-ID: <20160708183412.1812e2ad@free-electrons.com>
+Date: Fri, 8 Jul 2016 18:36:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libsepol: Remove use of cdefs.h
+In-Reply-To: <1467990214-30905-1-git-send-email-Aduskett@gmail.com>
+References: <1467990214-30905-1-git-send-email-Aduskett@gmail.com>
+Message-ID: <20160708183606.615035cd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +12,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 8 Jul 2016 17:53:56 +0200, Alvaro Gamez wrote:
+On Fri,  8 Jul 2016 11:03:34 -0400, Adam Duskett wrote:
+>  Libsepol uses cdefs.h which is a internal glibc header. 
+>  This header is not intended to be used by any program and will cause 
+>  compiling against musl (and possibly other c libraries) to fail.    
+>  This patch fixed this issue and replaces all references of
+>  #include <sys/cdefs.h> and __BEGIN/END_DECLS with the appropriate #ifdefs.
 
-> Nothing different happened this time, it built the package again.
+Please include a reference to the autobuilder issue being fixed. Like:
 
-Weird. Can you create a minimal test case and send us the .mk file so
-that we can reproduce?
+Fixes:
+
+   http://autobuild.buildroot.org/results/..../
+
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/libsepol/0005-replace-cdefs.patch | 1059 +++++++++++++++++++++++++++++
+>  1 file changed, 1059 insertions(+)
+>  create mode 100644 package/libsepol/0005-replace-cdefs.patch
+> 
+> diff --git a/package/libsepol/0005-replace-cdefs.patch b/package/libsepol/0005-replace-cdefs.patch
+> new file mode 100644
+> index 0000000..e9da24f
+
+We need a description + Signed-off-by inside the patch itself. See
+other patches in Buildroot, and the Buildroot manual for details.
+Please indicate in the patch description that it has been submitted
+upstream.
 
 Thanks,
 
-Thoams
+Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
