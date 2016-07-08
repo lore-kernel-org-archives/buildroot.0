@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Jul 2016 21:22:53 +0200
-Subject: [Buildroot] [PATCH 1/3] package/runc: use BR_PATH to find
- pkg-config
-In-Reply-To: <1467916777-29220-1-git-send-email-romain.naour@gmail.com>
+Date: Fri, 8 Jul 2016 21:27:53 +0200
+Subject: [Buildroot] [PATCH 2/3] package/runc: fix shared only build
+ when libseccomp is enabled.
+In-Reply-To: <1467916777-29220-2-git-send-email-romain.naour@gmail.com>
 References: <1467916777-29220-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160708212253.04137369@free-electrons.com>
+ <1467916777-29220-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160708212753.55d3c2ae@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +14,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  7 Jul 2016 20:39:35 +0200, Romain Naour wrote:
-> When BR2_PACKAGE_LIBSECCOMP is set, go will try to find libseccomp
-> library using pkg-config. But pkg-config is not in the PATH when go
-> is called during the runc build.
-> 
-> Set the correct PATH in RUNC_MAKE_ENV.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/fea/fea069fec671b32bffd3d133898d71d45abab552
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Christian Stewart <christian@paral.in>
-> ---
->  package/runc/runc.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Adding Geoff in Cc.
 
-Applied to master, thanks.
+On Thu,  7 Jul 2016 20:39:36 +0200, Romain Naour wrote:
+> When BR2_PACKAGE_LIBSECCOMP is set, the go build system will try to
+> find static library libseccomp.a since "static_build" and
+> "extldflags '-static'" are used.
+
+Indeed, in BR2_SHARED_LIBS=y builds, libseccomp.a will not be produced.
+
+> Link runc statically only for static only build and prefer dynamic
+> linking otherwise.
+
+That's interesting, I thought Go was making static linking *mandatory*.
+If that's not the case, then I would indeed prefer if we handled this
+like all other packages: static linking only when BR2_STATIC_LIBS.
+
+However, this should be done consistently for all packages: flannel and
+docker-containerd also pass -extldflags '-static' unconditionally.
+
+Geoff, Christian, do you see a problem with Romain's proposal?
+
+Thanks,
 
 Thomas
 -- 
