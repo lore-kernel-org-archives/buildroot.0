@@ -1,37 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Jul 2016 09:55:24 +0200
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Fri, 8 Jul 2016 09:42:00 +0200
 Subject: [Buildroot] [PATCH] tekui: relax dynamic library dependency
-In-Reply-To: <CAB0FRstErD=FH8SJS13GdwV-+N_fc5VZU7hRkk98x6kGmz+eug@mail.gmail.com>
+In-Reply-To: <20160707213240.378baea9@free-electrons.com>
 References: <1467910890-16574-1-git-send-email-francois.perrad@gadz.org>
  <20160707213240.378baea9@free-electrons.com>
- <CAB0FRstErD=FH8SJS13GdwV-+N_fc5VZU7hRkk98x6kGmz+eug@mail.gmail.com>
-Message-ID: <20160708095524.357ed893@free-electrons.com>
+Message-ID: <CAB0FRstErD=FH8SJS13GdwV-+N_fc5VZU7hRkk98x6kGmz+eug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+2016-07-07 21:32 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Thu,  7 Jul 2016 19:01:30 +0200, Francois Perrad wrote:
+>> tekui doesn't really require these Lua modules.
+>> These modules are added because they increase the user experience with demo/examples.
+>>
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+> Then perhaps there should be a sub-option to enable the demo/examples?
+>
 
-On Fri, 8 Jul 2016 09:42:00 +0200, Fran?ois Perrad wrote:
+A sub-option "Demo" is usual in BR.
+But with TekUI, the sub-option will be "Dependencies for Demo".
+It sounds bad.
 
-> A sub-option "Demo" is usual in BR.
-> But with TekUI, the sub-option will be "Dependencies for Demo".
-> It sounds bad.
+Fran?ois
 
-Why would the sub-option be named "Dependencies for Demo" ?
-
-If the tekui build system automatically detects the availability of
-those dependencies to build/install the demos, then it is just fine:
-you can have a sub-option called "Install demos" that adds the
-necessary dependencies.
-
-Or is tekui installing the demos unconditionally, and then they are
-potentially broken on the target due to missing dependencies ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
