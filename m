@@ -1,72 +1,78 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <fperrad@gmail.com>
-Date: Fri, 8 Jul 2016 11:50:08 +0200
-Subject: [Buildroot] [PATCH] tekui: relax dynamic library dependency
-In-Reply-To: <1467910890-16574-1-git-send-email-francois.perrad@gadz.org>
-References: <1467910890-16574-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <CAGhdn57MXZR2r_9+9-rGwbxHJuKPOhtjZtff8NM5H1yMQfSOcQ@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 8 Jul 2016 12:11:56 +0200
+Subject: [Buildroot] [PATCH v2 1/2] openmpi: add Fortran support for
+ MIPS32
+In-Reply-To: <20160708105624.534d353c@free-electrons.com>
+References: <1467906454-60557-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20160708105624.534d353c@free-electrons.com>
+Message-ID: <577F7C6C.8050708@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Forget this patch.
+Hello Thomas,
 
-TekUI requires dynamic library.
+On 08/07/16 10:56, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Thu, 7 Jul 2016 16:47:33 +0100, Vicente Olivert Riera wrote:
+>> We include a file containing cached values for Fortran tests that are
+>> performed at the configure step. These tests fail when cross-compiling
+>> and this is known upstream. See:
+>>
+>> https://www.open-mpi.org/community/lists/users/2013/01/21186.php
+>>
+>> In that thread the upstream maintainer admits that "cross compiling
+>> OpenMPI is a known issue" and the way to workaround this is to
+>> "pre-populate configure's answers to the Fortran tests (so that it
+>> doesn't actually have to run anything)"
+>>
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>
+> After discussing with Yann, we have changed your solution to use the
+> "config cache" mechanism of autoconf, which allows to preseed in a file
+> a number of configuration variables. It makes the whole thing a little
+> bit cleaner. It looks like this:
+>
+> # Enabling Fortran support requires pre-seeding the configure script
+> # with various values that cannot be guessed, so we provide cache
+> # files for various architectures.
+>
+> ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
+> ifeq ($(BR2_mips)$(BR2_mipsel),y)
+> OPENMPI_FORTRAN_CONF_CACHE = package/openmpi/openmpi-mips32-fortran.cache
+> else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
+> OPENMPI_FORTRAN_CONF_CACHE = package/openmpi/openmpi-mips64-fortran.cache
+> endif
+> endif
+>
+> ifneq ($(OPENMPI_FORTRAN_CONF_CACHE),)
+> define OPENMPI_COPY_FORTRAN_CACHE
+>          cp $(OPENMPI_FORTRAN_CONF_CACHE) $(@D)/openmpi-config.cache
+> endef
+>
+> OPENMPI_POST_PATCH_HOOKS += OPENMPI_COPY_FORTRAN_CACHE
+> OPENMPI_CONF_OPTS += \
+>          --enable-mpi-fortran=yes \
+>          --cache-file=$(@D)/openmpi-config.cache
+> else
+> OPENMPI_CONF_OPTS += --enable-mpi-fortran=no
+> endif
+>
+> And the openmpi-mips*-fortran.cache simply contain the list of
+> variables.
+>
+> I've adjusted your two commits to this mechanism, and applied.
 
-Fran?ois
+ok, perfect. Thanks a lot.
 
-2016-07-07 19:01 GMT+02:00 Francois Perrad <fperrad@gmail.com>:
+Regards,
 
-> tekui doesn't really require these Lua modules.
-> These modules are added because they increase the user experience with
-> demo/examples.
+Vincent.
+
+> Thanks!
 >
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/tekui/Config.in | 14 ++++++--------
->  1 file changed, 6 insertions(+), 8 deletions(-)
+> Thomas
 >
-> diff --git a/package/tekui/Config.in b/package/tekui/Config.in
-> index 1203667..5f461ec 100644
-> --- a/package/tekui/Config.in
-> +++ b/package/tekui/Config.in
-> @@ -1,11 +1,10 @@
->  config BR2_PACKAGE_TEKUI
->         bool "tekui"
->         select BR2_PACKAGE_FREETYPE
-> -       select BR2_PACKAGE_LUAFILESYSTEM        # runtime only
-> -       select BR2_PACKAGE_LUAEXPAT             # runtime only
-> -       select BR2_PACKAGE_LUASOCKET            # runtime only
-> -       select BR2_PACKAGE_LUAPOSIX             # runtime only
-> -       depends on !BR2_STATIC_LIBS
-> +       select BR2_PACKAGE_LUAFILESYSTEM if !BR2_STATIC_LIBS    # runtime
-> only (demo/examples)
-> +       select BR2_PACKAGE_LUAEXPAT if !BR2_STATIC_LIBS         # runtime
-> only (demo/examples)
-> +       select BR2_PACKAGE_LUASOCKET if !BR2_STATIC_LIBS                #
-> runtime only (demo/examples)
-> +       select BR2_PACKAGE_LUAPOSIX if !BR2_STATIC_LIBS         # runtime
-> only (demo/examples)
->         depends on BR2_PACKAGE_HAS_LUAINTERPRETER
->         depends on BR2_TOOLCHAIN_HAS_THREADS
->         help
-> @@ -16,6 +15,5 @@ config BR2_PACKAGE_TEKUI
->
->           http://tekui.neoscientists.org/
->
-> -comment "tekui needs a Lua interpreter and a toolchain w/ threads,
-> dynamic library"
-> -       depends on !BR2_PACKAGE_HAS_LUAINTERPRETER ||
-> !BR2_TOOLCHAIN_HAS_THREADS || \
-> -               BR2_STATIC_LIBS
-> +comment "tekui needs a Lua interpreter and a toolchain w/ threads"
-> +       depends on !BR2_PACKAGE_HAS_LUAINTERPRETER ||
-> !BR2_TOOLCHAIN_HAS_THREADS
-> --
-> 2.7.4
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160708/48e6aa8d/attachment.html>
