@@ -1,483 +1,156 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  8 Jul 2016 22:23:50 +0200
-Subject: [Buildroot] [PATCH] linux/tools: make it a real, separate package
-Message-ID: <1468009430-18011-1-git-send-email-yann.morin.1998@free.fr>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri, 8 Jul 2016 17:33:05 -0300 (BRT)
+Subject: [Buildroot] [PATCH v6] util-linux: rework utilities menu for
+ finer control
+In-Reply-To: <20160706215407.GF3763@free.fr>
+References: <1275872201.8394962.1467773032223.JavaMail.zimbra@datacom.ind.br>
+ <1467773719-10013-1-git-send-email-casantos@datacom.ind.br>
+ <20160706215407.GF3763@free.fr>
+Message-ID: <903784225.9298241.1468009985372.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The kernel source tree also contains the sources for various userland
-tools, of which cpupower, perf or selftests.
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: buildroot at buildroot.org, "romain naour" <romain.naour@gmail.com>
+> Sent: Wednesday, July 6, 2016 6:54:07 PM
+> Subject: Re: [Buildroot] [PATCH v6] util-linux: rework utilities menu for finer control
 
-Currently, we have support for building those tools as part of the
-kernel build procedure. This looked the correct hing to do so far,
-because, well, they *are* part of the kernel source tree and some
-really have to be the same version as the kernel that will run.
+---8<---
+> I know this is already version 6 of the patch, yet, there are still
+> issues with this patch. It lacked more reviews so far becasue it is too
+> big.
+> 
+> First, it is too big because it groups together at least three different
+> changes:
+> 
+>  - cleanups in the libraries and tools selections: this should be a
+>    patch on its own (but see more comments below);
+> 
+>  - addition of new libs and tools: this should be a second, separate
+>    patch too;
+> 
+>  - addition of the biggish choice: this should be done as a separate
+>    third patch, on its own. Furthemore, it should default to installign
+>    everything (or at least, as much as possible), otherwise the
+>    autobuilders would default to installing nothing, and thus we would
+>    never exercise this package at all.
+---8<---
 
-However, this is causing quite a non-trivial-to-break circular
-dependency in some configurations. For example, this defconfig fails to
-build (similar to the one reported by Paul):
+OK, I will split the patch as suggested.
 
-    BR2_arm=y
-    BR2_cortex_a7=y
-    BR2_ARM_FPU_NEON_VFPV4=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_INIT_SYSTEMD=y
-    BR2_LINUX_KERNEL=y
-    BR2_LINUX_KERNEL_CUSTOM_GIT=y
-    BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
-    BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="26f3b72a9c049be10e6af196252283e1f6ab9d1f"
-    BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-    BR2_PACKAGE_LINUX_TOOLS_CPUPOWER=y
-    BR2_PACKAGE_CRYPTODEV=y
-    BR2_PACKAGE_OPENSSL=y
-    BR2_PACKAGE_LIBCURL=y
+---8<--- 
 
-This causes a circular dependency, as explained by Thomas:
+>> +choice
+>> +	prompt "Install utilities"
+>> +	default BR2_PACKAGE_UTIL_LINUX_NO_BINARIES
+>> +
+>> +config BR2_PACKAGE_UTIL_LINUX_NO_BINARIES
+>> +	bool "none"
+>> +	help
+>> +	  Disable all util-linux binaries.
+>> +
+>> +config BR2_PACKAGE_UTIL_LINUX_ALL_BINARIES
+>> +	bool "all"
+>>  	depends on BR2_USE_MMU # fork()
+>> -	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+>> -	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+>> -	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
+>> -	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID     # findmnt, etc
+>> +	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT     # findmnt, etc
+>> +	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK     # fdisk, etc
+>> +	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS # findmnt, etc
+>> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID      # findmnt, etc
+>> +	select BR2_PACKAGE_LINUX_PAM  # login utils
+>> +	select BR2_PACKAGE_ZLIB  # cramfs
+>> +	select BR2_PACKAGE_NCURSES  # more, setterm, ul
+>> +	select BR2_PACKAGE_LIBCAP_NG  # setpriv
+>> +	help
+>> +	  Install the complete set of util-linux binaries.
+>> +
+>> +config BR2_PACKAGE_UTIL_LINUX_BINARIES
+>> +	bool "custom"
+>>  	help
+>> -	  Install the basic set of util-linux binaries.
+>> +	  Manually select which util-linux binaries to install.
+>> +
+>> +endchoice
+> 
+> As said above, this choice would default to "none", which is not nice
+> for the user (if util-linux is selected, surely the user wants things
+> from it). It laso means the autobuilders (which can't randomise the
+> choices) would never really test util-linux.
 
- - When libcurl is enabled, systemd depends on it
+I can make "basic set" the default but this will be different from the current default and potentally conflict with busybox. Remember that installing only the libraries is a valid option because other packages require them (bcache-tools, btrfs-progs, e2fsprogs, efl, eudev, systemd and xfsprogs select BR2_PACKAGE_UTIL_LINUX_LIBBLKID).
 
- - When OpenSSL is enabled, obviously, libcurl will use it for SSL
-   support
+> So, it should default to "all". And I think the entries should be
+> re-orderd, like that:
+> 
+>    all
+>    none
+>    custom
+> 
+>>  if BR2_PACKAGE_UTIL_LINUX_BINARIES
+>>  
+>> +config BR2_PACKAGE_UTIL_LINUX_BASIC_SET
+>> +	bool "Basic set"
+> 
+> Would it make sense to have this in the choice?
+> 
+>    all
+>    basic set
+>    none
+>    custom
 
- - When cryptodev-linux is enabled, OpenSSL will depend on it to use
-   crypto accelerators supported in the kernel via cryptodev-linux.
+The problem is that both "all" and "custom" are supersets of "basic set". I will look for a better way to group them.
 
- - cryptodev-linux being a kernel module, it depends on linux
+>> +	default y
+>> +	depends on BR2_USE_MMU # fork() (dmesg, flock, script, setsid, swapon)
+>> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID     # findmnt, etc
+>> +	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT     # findmnt, etc
+>> +	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK     # fdisk, etc
+>> +	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS # findmnt, etc
+>> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID      # findmnt, etc
+>> +	help
+>> +	  Install a basic set of util-linux binaries.
+>> +
+>> +	  blkdiscard, blkid, blockdev, chcpu, col, colcrt, colrm,
+>> +	  column, ctrlaltdel, dmesg, fdisk, findfs, findmnt, flock,
+>> +	  fsfreeze, fstrim, getopt, hexdump, ipcmk, isosize, ldattach,
+>> +	  look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie, mkfs,
+>> +	  mkswap, namei, prlimit, readprofile, renice, rev, rtcwake,
+>> +	  script, scriptreplay, setarch, setsid, sfdisk, swaplabel,
+>> +	  swapoff, swapon, tailf, uuidgen, whereis, wipefs
+> 
+> Is this list supposed to change between version of util-linux?
+> I don't think we should assume it would not.
+> 
+> This will make it rather difficult to maintain that list when bumping to
+> a new version.
+> 
+> I would suggest that we do not mention that list at all (unless there is
+> a super-easy way to get it just by extracting the source of util-linux).
 
- - linux by itself (the kernel) does not depend on pciutils, but the
-   linux tool "cpupower" (managed in linux-tool-cpupower) depends on
-   pciutils
 
- - pciutils depends on udev when available
+It is easy to obtain. Just choose the basic set, make run
 
- - udev is provided by systemd.
+    $ make util-linux-dirclean util-linux
+    $ make util-linux-reinstall TARGET_DIR=/tmp/util-linux-target
+    $ echo $(find /tmp/util-linux-target/{usr/,}{s,}bin -type f | sed -e 's:.*/::g'|sort)|sed 's/ /, /g'
 
-And indeed, during the build, we can see that make warns (it's only
-reported as a *warning*, not as an actual error):
+> I've stopped reviewing here, becasue all the following changes are
+> partly due to each of the three changes your patch does.
+> 
+> Could you please split it on three, as explained above, and respin?
+> 
+> To be honest, I'm not sure if the biggish choice will eventually land,
+> but at least the fixups and the additions of new libs and tools will.
 
-    [...]
-    make[1]: Circular /home/ymorin/dev/buildroot/O/build/openssl-1.0.2h/.stamp_configured
-    <- cryptodev-linux dependency dropped.
-    >>> openssl 1.0.2h Downloading
-    [...]
+Thanks for the review!
 
-So the build fails later on, when openssl is actually built:
-
-    eng_cryptodev.c:57:31: fatal error: crypto/cryptodev.h: No such file or directory
-    compilation terminated.
-    <builtin>: recipe for target 'eng_cryptodev.o' failed
-
-Furthermore, graph-depends also detects the circular dependency, but
-treats it as a hard-error:
-
-    Recursion detected for  : cryptodev-linux
-    which is a dependency of: openssl
-    which is a dependency of: libcurl
-    which is a dependency of: systemd
-    which is a dependency of: udev
-    which is a dependency of: pciutils
-    which is a dependency of: linux
-    which is a dependency of: cryptodev-linux
-    Makefile:738: recipe for target 'graph-depends' failed
-
-Of course, there is no way to break the loop without losing
-functionality in either one of the involved packages *and* keep
-our infrastructure and packages as-is.
-
-The only solution is to break the loop at the linux-tools level, by
-moving them away in their own package, so that the linux package will no
-longer have the opportunity to depend on another package via a
-dependency of one the tools.
-
-All three linux tools are thus moved away to their own package.
-
-The package infrastructure only knows of three types of packages: those
-in package/ , those in boot/ and the one in linux/ . So we create that
-new linux-tools package in package/ so that we don;t have to fiddle with
-yet another special case in the infra. Still, we want its configure
-options to appear in the kernel's sub-menu.
-
-So, we make it a prompt-less package, with only the tools visible as
-options of that package, but without the usual dependency on their
-master symbol; they are only dependent on the Linux kernel.
-
-Furthermore, because the kernel is such a huge pile of code, we would
-not be very happy to extract it a second time just for the sake of a few
-tools. We can't extract only the tools/ sub-directory from the kernel
-source either, because some tools have hard-coded path to includes from
-the kernel (arch and stuff).
-
-Instead, we just symlink the linux build tree into our own build tree.
-But we can't replace our build tree itself with a symlink to the
-kernel's or the two would share the same stamp files, which is no-good,
-no-no... So we just create the symlink in our build tree.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Paul Ashford <paul.ashford@zurria.co.uk>
-
----
-Note that the tools were ported over as-is to their new package:
-post-build, post-target-install and post-staging-install hooks were used
-previously, and we still use that with no actual _BUILD_CMDS. We could
-very well have defined build and install commands for each tool and
-shoehorned that into the _BUKLD_CMDS, but just portign the hooks over
-was the easiest way forward. A later patch can provide more cleanup if
-needed.
----
- Config.in.legacy                                   | 21 ++++++++
- linux/Config.in                                    |  2 +-
- linux/linux.mk                                     | 24 +--------
- .../linux-tools/Config.in                          | 14 ++++--
- .../linux-tools}/linux-tool-cpupower.mk            |  8 +--
- {linux => package/linux-tools}/linux-tool-perf.mk  | 18 +++----
- .../linux-tools}/linux-tool-selftests.mk           | 14 +++---
- package/linux-tools/linux-tools.mk                 | 58 ++++++++++++++++++++++
- 8 files changed, 112 insertions(+), 47 deletions(-)
- rename linux/Config.tools.in => package/linux-tools/Config.in (81%)
- rename {linux => package/linux-tools}/linux-tool-cpupower.mk (77%)
- rename {linux => package/linux-tools}/linux-tool-perf.mk (85%)
- rename {linux => package/linux-tools}/linux-tool-selftests.mk (65%)
- create mode 100644 package/linux-tools/linux-tools.mk
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 4101cb0..e44e8a9 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,27 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.08"
- 
-+config BR2_LINUX_KERNEL_TOOL_CPUPOWER
-+	bool "linux-tool cpupower"
-+	depends on BR2_LINUX_KERNEL
-+	select BR2_PACKAGE_LINUX_TOOLS_CPUPOWER
-+	help
-+	  Linux tool cpupower option was renamed.
-+
-+config BR2_LINUX_KERNEL_TOOL_PERF
-+	bool "linux-tool perf"
-+	depends on BR2_LINUX_KERNEL
-+	select BR2_PACKAGE_LINUX_TOOLS_PERF
-+	help
-+	  Linux tool perf option was renamed.
-+
-+config BR2_LINUX_KERNEL_TOOL_SELFTESTS
-+	bool "linux-tool selftests"
-+	depends on BR2_LINUX_KERNEL
-+	select BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
-+	help
-+	  Linux tool selftests option was renamed.
-+
- config BR2_PACKAGE_SYSTEMD_COMPAT
- 	bool "systemd compatibility libraries have been removed"
- 	help
-diff --git a/linux/Config.in b/linux/Config.in
-index a4ff8bc..bfc4ea0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -414,7 +414,7 @@ config BR2_LINUX_KERNEL_INSTALL_TARGET
- source "linux/Config.ext.in"
- 
- # Linux tools
--source "linux/Config.tools.in"
-+source "package/linux-tools/Config.in"
- 
- endif # BR2_LINUX_KERNEL
- 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index fb844ef..441449b 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -399,7 +399,7 @@ define LINUX_INSTALL_TARGET_CMDS
- 	$(LINUX_INSTALL_HOST_TOOLS)
- endef
- 
--# Include all our extensions and tools definitions.
-+# Include all our extensions.
- #
- # Note: our package infrastructure uses the full-path of the last-scanned
- # Makefile to determine what package we're currently defining, using the
-@@ -410,7 +410,6 @@ endef
- # the current Makefile, we are OK. But this is a hard requirement: files
- # included here *must* be in the same directory!
- include $(sort $(wildcard linux/linux-ext-*.mk))
--include $(sort $(wildcard linux/linux-tool-*.mk))
- 
- LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
- 	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
-@@ -419,27 +418,6 @@ LINUX_PRE_PATCH_HOOKS += $(foreach ext,$(LINUX_EXTENSIONS),\
- 	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),\
- 		$(call UPPERCASE,$(ext))_PREPARE_KERNEL))
- 
--# Install Linux kernel tools in the staging directory since some tools
--# may install shared libraries and headers (e.g. cpupower). The kernel
--# image is NOT installed in the staging directory.
--LINUX_INSTALL_STAGING = YES
--
--LINUX_DEPENDENCIES += $(foreach tool,$(LINUX_TOOLS),\
--	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
--		$($(call UPPERCASE,$(tool))_DEPENDENCIES)))
--
--LINUX_POST_BUILD_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
--	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
--		$(call UPPERCASE,$(tool))_BUILD_CMDS))
--
--LINUX_POST_INSTALL_STAGING_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
--	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
--		$(call UPPERCASE,$(tool))_INSTALL_STAGING_CMDS))
--
--LINUX_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
--	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
--		$(call UPPERCASE,$(tool))_INSTALL_TARGET_CMDS))
--
- # Checks to give errors that the user can understand
- ifeq ($(BR_BUILDING),y)
- 
-diff --git a/linux/Config.tools.in b/package/linux-tools/Config.in
-similarity index 81%
-rename from linux/Config.tools.in
-rename to package/linux-tools/Config.in
-index 09bcfab..a78225a 100644
---- a/linux/Config.tools.in
-+++ b/package/linux-tools/Config.in
-@@ -1,15 +1,22 @@
- menu "Linux Kernel Tools"
- 
--config BR2_LINUX_KERNEL_TOOL_CPUPOWER
-+# No prompt, this is sourced by linux/Config.in as this
-+# is no real package and really belongs to the kernel.
-+config BR2_PACKAGE_LINUX_TOOLS
-+	bool
-+
-+config BR2_PACKAGE_LINUX_TOOLS_CPUPOWER
- 	bool "cpupower"
- 	depends on !BR2_bfin # pciutils
-+	select BR2_PACKAGE_LINUX_TOOLS
- 	select BR2_PACKAGE_PCIUTILS
- 	help
- 	  cpupower is a collection of tools to examine and tune power
- 	  saving related features of your processor.
- 
--config BR2_LINUX_KERNEL_TOOL_PERF
-+config BR2_PACKAGE_LINUX_TOOLS_PERF
- 	bool "perf"
-+	select BR2_PACKAGE_LINUX_TOOLS
- 	help
- 	  perf (sometimes "Perf Events" or perf tools, originally
- 	  "Performance Counters for Linux") - is a performance
-@@ -26,10 +33,11 @@ config BR2_LINUX_KERNEL_TOOL_PERF
- 
- 	  https://perf.wiki.kernel.org/
- 
--config BR2_LINUX_KERNEL_TOOL_SELFTESTS
-+config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
- 	bool"selftests"
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
- 	depends on BR2_USE_MMU  # bash
-+	select BR2_PACKAGE_LINUX_TOOLS
- 	select BR2_PACKAGE_BASH # runtime
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_LIBCAP_NG
-diff --git a/linux/linux-tool-cpupower.mk b/package/linux-tools/linux-tool-cpupower.mk
-similarity index 77%
-rename from linux/linux-tool-cpupower.mk
-rename to package/linux-tools/linux-tool-cpupower.mk
-index 4551cda..65e5012 100644
---- a/linux/linux-tool-cpupower.mk
-+++ b/package/linux-tools/linux-tool-cpupower.mk
-@@ -13,26 +13,26 @@ CPUPOWER_MAKE_OPTS = CROSS=$(TARGET_CROSS) \
- 	DEBUG=false
- 
- define CPUPOWER_BUILD_CMDS
--	$(Q)if test ! -f $(@D)/tools/power/cpupower/Makefile ; then \
-+	$(Q)if test ! -f $(@D)/linux/tools/power/cpupower/Makefile ; then \
- 		echo "Your kernel version is too old and does not have the cpupower tool." ; \
- 		echo "At least kernel 3.4 must be used." ; \
- 		exit 1 ; \
- 	fi
- 
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/linux/tools \
- 		$(CPUPOWER_MAKE_OPTS) \
- 		cpupower
- endef
- 
- define CPUPOWER_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/linux/tools \
- 		$(CPUPOWER_MAKE_OPTS) \
- 		DESTDIR=$(STAGING_DIR) \
- 		cpupower_install
- endef
- 
- define CPUPOWER_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/tools \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/linux/tools \
- 		$(CPUPOWER_MAKE_OPTS) \
- 		DESTDIR=$(TARGET_DIR) \
- 		cpupower_install
-diff --git a/linux/linux-tool-perf.mk b/package/linux-tools/linux-tool-perf.mk
-similarity index 85%
-rename from linux/linux-tool-perf.mk
-rename to package/linux-tools/linux-tool-perf.mk
-index 8143474..e7264d8 100644
---- a/linux/linux-tool-perf.mk
-+++ b/package/linux-tools/linux-tool-perf.mk
-@@ -95,25 +95,25 @@ endif
- # We name it 'GNUmakefile' so that GNU make will use it instead of
- # the existing 'Makefile'.
- define PERF_DISABLE_DOCUMENTATION
--	if [ -f $(@D)/tools/perf/Documentation/Makefile ]; then \
--		printf "%%:\n\t@:\n" >$(@D)/tools/perf/Documentation/GNUmakefile; \
-+	if [ -f $(@D)/linux/tools/perf/Documentation/Makefile ]; then \
-+		printf "%%:\n\t@:\n" >$(@D)/linux/tools/perf/Documentation/GNUmakefile; \
- 	fi
- endef
- LINUX_POST_PATCH_HOOKS += PERF_DISABLE_DOCUMENTATION
- 
- # O must be redefined here to overwrite the one used by Buildroot for
--# out of tree build. We build perf in $(@D)/tools/perf/ and not just
--# $(@D) so that it isn't built in the root directory of the kernel
-+# out of tree build. We build perf in $(@D)/linux/tools/perf/ and not just
-+# $(@D)/linux so that it isn't built in the root directory of the kernel
- # sources.
- define PERF_BUILD_CMDS
--	$(Q)if test ! -f $(@D)/tools/perf/Makefile ; then \
-+	$(Q)if test ! -f $(@D)/linux/tools/perf/Makefile ; then \
- 		echo "Your kernel version is too old and does not have the perf tool." ; \
- 		echo "At least kernel 2.6.31 must be used." ; \
- 		exit 1 ; \
- 	fi
- 	$(Q)if test "$(BR2_PACKAGE_ELFUTILS)" = "" ; then \
--		if ! grep -q NO_LIBELF $(@D)/tools/perf/Makefile* ; then \
--			if ! test -r $(@D)/tools/perf/config/Makefile ; then \
-+		if ! grep -q NO_LIBELF $(@D)/linux/tools/perf/Makefile* ; then \
-+			if ! test -r $(@D)/linux/tools/perf/config/Makefile ; then \
- 				echo "The perf tool in your kernel cannot be built without libelf." ; \
- 				echo "Either upgrade your kernel to >= 3.7, or enable the elfutils package." ; \
- 				exit 1 ; \
-@@ -121,14 +121,14 @@ define PERF_BUILD_CMDS
- 		fi \
- 	fi
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(PERF_MAKE_FLAGS) \
--		-C $(@D)/tools/perf O=$(@D)/tools/perf/
-+		-C $(@D)/linux/tools/perf O=$(@D)/linux/tools/perf/
- endef
- 
- # After installation, we remove the Perl and Python scripts from the
- # target.
- define PERF_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(PERF_MAKE_FLAGS) \
--		-C $(@D)/tools/perf O=$(@D)/tools/perf/ install
-+		-C $(@D)/linux/tools/perf O=$(@D)/linux/tools/perf/ install
- 	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/
- 	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/tests/
- endef
-diff --git a/linux/linux-tool-selftests.mk b/package/linux-tools/linux-tool-selftests.mk
-similarity index 65%
-rename from linux/linux-tool-selftests.mk
-rename to package/linux-tools/linux-tool-selftests.mk
-index 3cbfed2..0ed7205 100644
---- a/linux/linux-tool-selftests.mk
-+++ b/package/linux-tools/linux-tool-selftests.mk
-@@ -23,8 +23,8 @@ SELFTESTS_MAKE_FLAGS = \
- 	ARCH=$(SELFTESTS_ARCH)
- 
- # O must be redefined here to overwrite the one used by Buildroot for
--# out of tree build. We build the selftests in $(@D)/tools/selftests and
--# not just $(@D) so that it isn't built in the root directory of the kernel
-+# out of tree build. We build the selftests in $(@D)/linux/tools/selftests and
-+# not just $(@D)/linux so that it isn't built in the root directory of the kernel
- # sources.
- #
- # The headers_install step here is important as some kernel selftests use a
-@@ -33,14 +33,14 @@ SELFTESTS_MAKE_FLAGS = \
- # The headers_install target will install the kernel headers locally inside
- # the Linux build dir
- define SELFTESTS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) $(SELFTESTS_MAKE_FLAGS) \
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/linux $(SELFTESTS_MAKE_FLAGS) \
- 		headers_install
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/tools/testing/selftests \
--		$(SELFTESTS_MAKE_FLAGS) O=$(@D)/tools/testing/selftests
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/linux/tools/testing/selftests \
-+		$(SELFTESTS_MAKE_FLAGS) O=$(@D)/linux/tools/testing/selftests
- endef
- 
- define SELFTESTS_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/tools/testing/selftests \
--		$(SELFTESTS_MAKE_FLAGS) O=$(@D)/tools/testing/selftests \
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/linux/tools/testing/selftests \
-+		$(SELFTESTS_MAKE_FLAGS) O=$(@D)/linux/tools/testing/selftests \
- 		INSTALL_PATH=$(TARGET_DIR)/usr/lib/kselftests install
- endef
-diff --git a/package/linux-tools/linux-tools.mk b/package/linux-tools/linux-tools.mk
-new file mode 100644
-index 0000000..a657967
---- /dev/null
-+++ b/package/linux-tools/linux-tools.mk
-@@ -0,0 +1,58 @@
-+################################################################################
-+#
-+# linux-tools
-+#
-+################################################################################
-+
-+# Vampirising sources from the kernel tree
-+LINUX_TOOLS_VERSION =
-+LINUX_TOOLS_SOURCE =
-+
-+# We only need the kernel to be extracted, not actually built
-+LINUX_TOOLS_PATCH_DEPENDENCIES = linux
-+
-+# Install Linux kernel tools in the staging directory since some tools
-+# may install shared libraries and headers (e.g. cpupower).
-+LINUX_TOOLS_INSTALL_STAGING = YES
-+
-+# Hack! To avoid extracting the kernel twice, we override the extract
-+# commands to create a symlink to the kernel source tree.
-+#
-+# However, we can't have our own $(@D) be the symlink, or our stamp files
-+# and those of the kernel would clash, and either one would not get built.
-+#
-+# Instead, we symlink into a sub-directory of our own $(@D).
-+#
-+define LINUX_TOOLS_EXTRACT_CMDS
-+	ln -s $(LINUX_DIR) $(@D)/linux
-+endef
-+
-+# Include all our tools definitions.
-+#
-+# Note: our package infrastructure uses the full-path of the last-scanned
-+# Makefile to determine what package we're currently defining, using the
-+# last directory component in the path. As such, including other Makefile,
-+# like below, before we call one of the *-package macro is usally not
-+# working.
-+# However, since the files we include here are in the same directory as
-+# the current Makefile, we are OK. But this is a hard requirement: files
-+# included here *must* be in the same directory!
-+include $(sort $(wildcard linux/linux-tools/linux-ext-*.mk))
-+
-+LINUX_TOOLS_DEPENDENCIES += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_PACKAGE_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
-+		$($(call UPPERCASE,$(tool))_DEPENDENCIES)))
-+
-+LINUX_TOOLS_POST_BUILD_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_PACKAGE_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
-+		$(call UPPERCASE,$(tool))_BUILD_CMDS))
-+
-+LINUX_TOOLS_POST_INSTALL_STAGING_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_PACKAGE_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
-+		$(call UPPERCASE,$(tool))_INSTALL_STAGING_CMDS))
-+
-+LINUX_TOOLS_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_PACKAGE_LINUX_TOOLS_$(call UPPERCASE,$(tool))),\
-+		$(call UPPERCASE,$(tool))_INSTALL_TARGET_CMDS))
-+
-+$(eval $(generic-package))
--- 
-2.7.4
+Carlos Santos (Casantos)
+DATACOM, P&D
