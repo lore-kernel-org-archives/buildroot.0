@@ -1,32 +1,35 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Fri, 8 Jul 2016 11:10:31 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 8 Jul 2016 11:29:41 +0200
 Subject: [Buildroot] Config defined package version is always built
-Message-ID: <CAM+bi4tV3U-JVJkB3YY1pZY7ce12hzqXLZ7x+ebM=JzUdT7=bg@mail.gmail.com>
+In-Reply-To: <CAM+bi4tV3U-JVJkB3YY1pZY7ce12hzqXLZ7x+ebM=JzUdT7=bg@mail.gmail.com>
+References: <CAM+bi4tV3U-JVJkB3YY1pZY7ce12hzqXLZ7x+ebM=JzUdT7=bg@mail.gmail.com>
+Message-ID: <20160708112941.516fd688@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Hello,
 
-I'm writing a custom package whose version I want to define via menuconfig.
-Thus, I include in Config.in a string config option called
-BR2_PACKAGE_MYPKG_VERSION, and inside mypkg.mk I set MYPKG_VERSION =
-$(BR2_PACKAGE_MYPKG_VERSION)
+On Fri, 8 Jul 2016 11:10:31 +0200, Alvaro Gamez wrote:
 
-This works fine, I can set any version I want via menuconfig and buildroot
-will download and install that version from a git repository.
+> I'm writing a custom package whose version I want to define via menuconfig.
+> Thus, I include in Config.in a string config option called
+> BR2_PACKAGE_MYPKG_VERSION, and inside mypkg.mk I set MYPKG_VERSION =
+> $(BR2_PACKAGE_MYPKG_VERSION)
 
-However, whenever I type make, this package will be built again, even if it
-has just been built and no change have been made.
+Use:
 
-Is there anyway to avoid this?
+MYPKG_VERSION = $(call qstrip,$(BR2_PACKAGE_MYPKG_VERSION))
 
-Thanks!
+to remove the double quotes around the string. This might help in
+solving your problem.
 
+Thanks,
+
+Thomas
 -- 
-?lvaro G?mez Machado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160708/ce4b1a28/attachment.html>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
