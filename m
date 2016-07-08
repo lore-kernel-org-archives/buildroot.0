@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Jul 2016 10:59:03 +0200
-Subject: [Buildroot] [PATCH 1/1] libupnp: bump to version 1.6.20
-In-Reply-To: <1467962712-306-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1467962712-306-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20160708105903.679d5abf@free-electrons.com>
+Date: Fri, 8 Jul 2016 10:59:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/Config.in: fix alphabetical
+ order
+In-Reply-To: <1467966437-20104-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1467966437-20104-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20160708105908.4ff02e43@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +13,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  8 Jul 2016 09:25:12 +0200, Fabrice Fontaine wrote:
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+On Fri,  8 Jul 2016 10:27:17 +0200, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 > ---
->  package/libupnp/libupnp.hash | 2 +-
->  package/libupnp/libupnp.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
