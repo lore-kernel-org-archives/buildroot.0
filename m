@@ -1,50 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Jul 2016 18:36:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libsepol: Remove use of cdefs.h
-In-Reply-To: <1467990214-30905-1-git-send-email-Aduskett@gmail.com>
-References: <1467990214-30905-1-git-send-email-Aduskett@gmail.com>
-Message-ID: <20160708183606.615035cd@free-electrons.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Fri,  8 Jul 2016 13:01:26 -0400
+Subject: [Buildroot] [PATCH 1/1] package/audit: Bump to version 2.6.4
+Message-ID: <1467997286-20425-1-git-send-email-Aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Also removed 0002-Fix-usage-of-audit_status.feature_bitmap.patch as this was
+applied upstream.
 
-On Fri,  8 Jul 2016 11:03:34 -0400, Adam Duskett wrote:
->  Libsepol uses cdefs.h which is a internal glibc header. 
->  This header is not intended to be used by any program and will cause 
->  compiling against musl (and possibly other c libraries) to fail.    
->  This patch fixed this issue and replaces all references of
->  #include <sys/cdefs.h> and __BEGIN/END_DECLS with the appropriate #ifdefs.
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ ...-Fix-usage-of-audit_status.feature_bitmap.patch | 59 ----------------------
+ package/audit/audit.hash                           |  2 +-
+ package/audit/audit.mk                             |  2 +-
+ 3 files changed, 2 insertions(+), 61 deletions(-)
+ delete mode 100644 package/audit/0002-Fix-usage-of-audit_status.feature_bitmap.patch
 
-Please include a reference to the autobuilder issue being fixed. Like:
-
-Fixes:
-
-   http://autobuild.buildroot.org/results/..../
-
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/libsepol/0005-replace-cdefs.patch | 1059 +++++++++++++++++++++++++++++
->  1 file changed, 1059 insertions(+)
->  create mode 100644 package/libsepol/0005-replace-cdefs.patch
-> 
-> diff --git a/package/libsepol/0005-replace-cdefs.patch b/package/libsepol/0005-replace-cdefs.patch
-> new file mode 100644
-> index 0000000..e9da24f
-
-We need a description + Signed-off-by inside the patch itself. See
-other patches in Buildroot, and the Buildroot manual for details.
-Please indicate in the patch description that it has been submitted
-upstream.
-
-Thanks,
-
-Thomas
+diff --git a/package/audit/0002-Fix-usage-of-audit_status.feature_bitmap.patch b/package/audit/0002-Fix-usage-of-audit_status.feature_bitmap.patch
+deleted file mode 100644
+index a6af43b..0000000
+--- a/package/audit/0002-Fix-usage-of-audit_status.feature_bitmap.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From f9e4d6aa957c0728827d7efee44a57f887766ae6 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Wed, 6 Jul 2016 20:22:11 +0200
+-Subject: [PATCH] Fix usage of audit_status.feature_bitmap
+-
+-The feature_bitmap field of "struct audit_status" only appeared in
+-kernel headers >= 3.19. However, the code using it in libaudit.c is only
+-conditional on the existence of AUDIT_FEATURE_VERSION, which has been
+-added in Linux 3.13.
+-
+-This means that building audit with kernel headers >= 3.13 but < 3.19
+-currently fails:
+-
+-libaudit.c: In function 'load_feature_bitmap':
+-libaudit.c:609:33: error: 'struct audit_status' has no member named 'feature_bitmap'
+-     features_bitmap = rep.status->feature_bitmap;
+-                                 ^
+-libaudit.c: In function 'audit_rule_fieldpair_data':
+-libaudit.c:1424:9: warning: this decimal constant is unsigned only in ISO C90 [enabled by default]
+-         4294967295;
+-
+-This commit fixes that by testing the availability of the feature_bitmap
+-field.
+-
+-Submitted upstream: https://www.redhat.com/archives/linux-audit/2016-July/msg00022.html
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- configure.ac   | 1 +
+- lib/libaudit.c | 2 +-
+- 2 files changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 219720b..00788c4 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -64,6 +64,7 @@ AC_CHECK_SIZEOF([unsigned int])
+- AC_CHECK_SIZEOF([unsigned long])
+- AM_PROG_CC_C_O
+- AC_CHECK_DECLS([AUDIT_FEATURE_VERSION], [], [], [[#include <linux/audit.h>]])
+-+AC_CHECK_MEMBERS([struct audit_status.feature_bitmap], [], [], [[#include <linux/audit.h>]])
+- AC_CHECK_DECLS([AUDIT_VERSION_BACKLOG_WAIT_TIME], [], [], [[#include <linux/audit.h>]])
+- AC_CHECK_DECLS([ADDR_NO_RANDOMIZE],,, [#include <sys/personality.h>])
+- dnl; posix_fallocate is used in audisp-remote
+-diff --git a/lib/libaudit.c b/lib/libaudit.c
+-index 2c96f29..510d841 100644
+---- a/lib/libaudit.c
+-+++ b/lib/libaudit.c
+-@@ -579,7 +579,7 @@ static void load_feature_bitmap(void)
+- 		return;
+- 	}
+- 
+--#if HAVE_DECL_AUDIT_FEATURE_VERSION
+-+#if defined(HAVE_DECL_AUDIT_FEATURE_VERSION) && defined(HAVE_STRUCT_AUDIT_STATUS_FEATURE_BITMAP)
+- 	if ((rc = audit_request_status(fd)) > 0) {
+- 		struct audit_reply rep;
+- 		int i;
+--- 
+-2.7.4
+-
+diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+index 8d6649b..a0d7c22 100644
+--- a/package/audit/audit.hash
++++ b/package/audit/audit.hash
+@@ -1,2 +1,2 @@
+ #Locally computed
+-sha256	016a101d6f8f5608ff90355b49adeb2848990ab2fdbb0933c3e09ac8c95db1d9	audit-2.6.3.tar.gz
++sha256	b5a79cecd9593c368c9e42d5af72fcd14f046676657e906970b6c4a1aa5d06c7	audit-2.6.4.tar.gz
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 4cc87d1..2baf589 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUDIT_VERSION = 2.6.3
++AUDIT_VERSION = 2.6.4
+ AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+ AUDIT_LICENSE = GPLv2
+ AUDIT_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
