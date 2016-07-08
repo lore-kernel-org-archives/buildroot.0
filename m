@@ -1,61 +1,29 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 08 Jul 2016 19:55:59 +0000
-Subject: [Buildroot] [PATCH 2/3] package/runc: fix shared only build
- when libseccomp is enabled.
-In-Reply-To: <20160708215031.17fe15de@free-electrons.com>
-References: <1467916777-29220-1-git-send-email-romain.naour@gmail.com>
- <1467916777-29220-2-git-send-email-romain.naour@gmail.com>
- <20160708212753.55d3c2ae@free-electrons.com>
- <1468006361981-b8d5773f-c47578b5-9b1f9581@mixmax.com>
- <20160708215031.17fe15de@free-electrons.com>
-Message-ID: <1468007759371-ab3cc5cc-18ef6641-3fcef03d@mixmax.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 8 Jul 2016 21:58:07 +0200
+Subject: [Buildroot] [PATCH v3 2/6] package/kodi: Add suboption to
+ control MySQL support
+In-Reply-To: <1467926735-29733-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1467926735-29733-1-git-send-email-bernd.kuhls@t-online.de>
+ <1467926735-29733-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160708215807.6a2cf3d0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello,
 
+On Thu,  7 Jul 2016 23:25:31 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-On Fri, Jul 8, 2016 12:50 PM, Thomas Petazzoni thomas.petazzoni at free-electrons.com wrote:OK. Can we remove unconditionally, or should we still keep it for
+There is still no commit log to explain the motivation for switching
+from an implicit dependency to an explicit one. Could you improve this?
 
-BR2_STATIC_LIBS=y builds?
+Thanks,
 
-
-
-
-Perhaps we should pass -extldflags '$(TARGET_LDFLAGS)', since
-
-TARGET_LDFLAGS will automatically contain -static when
-
-BR2_STATIC_LIBS=y.
-
-
-
-
-That should be fine since extldflags is, I believe, only passed to C related
-linkers.
-For the specific case of runc, is ?RUNC_GOTAGS = static_build? needed
-
-when BR2_STATIC_LIBS=y ?
-
-
-
-That go tag is related to linking Go related code? In the runc code with a quick
-grep I see only one inconsequential place it's actually referenced:
-
-Godeps/_workspace/src/github.com/godbus/dbus/homedir_dynamic.go:// +build
-!static_build Godeps/_workspace/src/github.com/godbus/dbus/homedir_static.go:// +build
-static_build
-And in that code I cannot even see the logic between the differences in the two
-files, as far as I can tell when doing a static build it just looks up the
-current home dir of the user, when doing a dynamic build it does some complex
-/etc/passwd checking or the like. Absolutely nonsensical.
-I'd just leave the static_build tag in there unconditionally, as it seems to
-have little to no effect anyway, and turning it off will actually result in some
-more complex and unnecessary home directory detection code being activated.
-Best, Christian
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160708/70ff0c4e/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
