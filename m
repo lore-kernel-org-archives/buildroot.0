@@ -1,13 +1,20 @@
 From: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
-Date: Fri,  8 Jul 2016 09:07:36 +0900
-Subject: [Buildroot] qt5base: don't enable KMS if it doesn't have udev
-Message-ID: <20160708000736.2329-1-akihiko.odaki.4i@stu.hosei.ac.jp>
+Date: Fri,  8 Jul 2016 10:17:32 +0900
+Subject: [Buildroot] [PATCH v2] qt5base: don't enable KMS if it doesn't have
+	udev
+In-Reply-To: <20160708000736.2329-1-akihiko.odaki.4i@stu.hosei.ac.jp>
+References: <20160708000736.2329-1-akihiko.odaki.4i@stu.hosei.ac.jp>
+Message-ID: <20160708011732.3949-1-akihiko.odaki.4i@stu.hosei.ac.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
+---
+ package/qt5/qt5base/qt5base.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
 index bf541b0..60b4e94 100644
@@ -26,3 +33,5 @@ index bf541b0..60b4e94 100644
  else
  QT5BASE_CONFIGURE_OPTS += -no-kms
  endif
+-- 
+2.9.0
