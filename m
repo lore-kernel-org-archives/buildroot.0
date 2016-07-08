@@ -1,38 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Jul 2016 10:58:22 +0200
-Subject: [Buildroot] [git commit] package/Config.in: fix alphabetical order
-Message-ID: <20160708085827.528BC80165@busybox.osuosl.org>
+Date: Fri, 8 Jul 2016 10:59:03 +0200
+Subject: [Buildroot] [PATCH 1/1] libupnp: bump to version 1.6.20
+In-Reply-To: <1467962712-306-1-git-send-email-fabrice.fontaine@orange.com>
+References: <1467962712-306-1-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <20160708105903.679d5abf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bef0daec739aa28760f3b3507f0818698d87b08f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri,  8 Jul 2016 09:25:12 +0200, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> ---
+>  package/libupnp/libupnp.hash | 2 +-
+>  package/libupnp/libupnp.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 7d6924c..1910251 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1643,13 +1643,13 @@ menu "System tools"
- 	source "package/attr/Config.in"
- 	source "package/audit/Config.in"
- 	source "package/bootutils/Config.in"
-+	source "package/cgroupfs-mount/Config.in"
- 	source "package/circus/Config.in"
- 	source "package/coreutils/Config.in"
- 	source "package/cpuload/Config.in"
- 	source "package/dcron/Config.in"
- 	source "package/debianutils/Config.in"
- 	source "package/docker-containerd/Config.in"
--	source "package/cgroupfs-mount/Config.in"
- 	source "package/dsp-tools/Config.in"
- 	source "package/efibootmgr/Config.in"
- 	source "package/efivar/Config.in"
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
