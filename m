@@ -1,44 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 8 Jul 2016 21:27:53 +0200
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 08 Jul 2016 19:32:41 +0000
 Subject: [Buildroot] [PATCH 2/3] package/runc: fix shared only build
  when libseccomp is enabled.
-In-Reply-To: <1467916777-29220-2-git-send-email-romain.naour@gmail.com>
+In-Reply-To: <20160708212753.55d3c2ae@free-electrons.com>
 References: <1467916777-29220-1-git-send-email-romain.naour@gmail.com>
  <1467916777-29220-2-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160708212753.55d3c2ae@free-electrons.com>
+ <20160708212753.55d3c2ae@free-electrons.com>
+Message-ID: <1468006361981-b8d5773f-c47578b5-9b1f9581@mixmax.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-Adding Geoff in Cc.
-
-On Thu,  7 Jul 2016 20:39:36 +0200, Romain Naour wrote:
-> When BR2_PACKAGE_LIBSECCOMP is set, the go build system will try to
-> find static library libseccomp.a since "static_build" and
-> "extldflags '-static'" are used.
-
-Indeed, in BR2_SHARED_LIBS=y builds, libseccomp.a will not be produced.
-
-> Link runc statically only for static only build and prefer dynamic
-> linking otherwise.
-
-That's interesting, I thought Go was making static linking *mandatory*.
-If that's not the case, then I would indeed prefer if we handled this
-like all other packages: static linking only when BR2_STATIC_LIBS.
-
-However, this should be done consistently for all packages: flannel and
+On Fri, Jul 8, 2016 at 12:27 PM Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote: > That's interesting, I thought Go was making static linking *mandatory*.
+> If that's not the case, then I would indeed prefer if we handled this
+> like all other packages: static linking only when BR2_STATIC_LIBS.
+> However, this should be done consistently for all packages: flannel and
 docker-containerd also pass -extldflags '-static' unconditionally.
-
-Geoff, Christian, do you see a problem with Romain's proposal?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Geoff, Christian, do you see a problem with Romain's proposal?
+In my latest revision of docker-engine I removed the -static flag for CGO
+because btrfs would not link for the same reason.
+I think it's fine to remove the ?-static? extldflag on everything for Go. I have
+had no trouble doing so with docker-engine and I don't see why there would be a
+problem with the other packages.
+We want to statically link the Go code to other go code, yes, but linking the Go
+code to C libraries should be fine dynamically.
+Best, Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160708/d4aec296/attachment.html>
