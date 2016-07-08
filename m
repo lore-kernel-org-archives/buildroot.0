@@ -1,39 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 Jul 2016 09:25:12 +0200
-Subject: [Buildroot] [PATCH 1/1] libupnp: bump to version 1.6.20
-Message-ID: <1467962712-306-1-git-send-email-fabrice.fontaine@orange.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 8 Jul 2016 09:55:24 +0200
+Subject: [Buildroot] [PATCH] tekui: relax dynamic library dependency
+In-Reply-To: <CAB0FRstErD=FH8SJS13GdwV-+N_fc5VZU7hRkk98x6kGmz+eug@mail.gmail.com>
+References: <1467910890-16574-1-git-send-email-francois.perrad@gadz.org>
+ <20160707213240.378baea9@free-electrons.com>
+ <CAB0FRstErD=FH8SJS13GdwV-+N_fc5VZU7hRkk98x6kGmz+eug@mail.gmail.com>
+Message-ID: <20160708095524.357ed893@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
----
- package/libupnp/libupnp.hash | 2 +-
- package/libupnp/libupnp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
-index 59f7d7b..64a8bdb 100644
---- a/package/libupnp/libupnp.hash
-+++ b/package/libupnp/libupnp.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  b3142b39601243b50532eec90f4a27dba85eb86f58d4b849ac94edeb29d9b22a  libupnp-1.6.19.tar.bz2
-+sha256  ee3537081e3ea56f66ada10387486823989210bc98002f098305551c966e3a63  libupnp-1.6.20.tar.bz2
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index 48233b6..e12f410 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUPNP_VERSION = 1.6.19
-+LIBUPNP_VERSION = 1.6.20
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
- LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
+On Fri, 8 Jul 2016 09:42:00 +0200, Fran?ois Perrad wrote:
+
+> A sub-option "Demo" is usual in BR.
+> But with TekUI, the sub-option will be "Dependencies for Demo".
+> It sounds bad.
+
+Why would the sub-option be named "Dependencies for Demo" ?
+
+If the tekui build system automatically detects the availability of
+those dependencies to build/install the demos, then it is just fine:
+you can have a sub-option called "Install demos" that adds the
+necessary dependencies.
+
+Or is tekui installing the demos unconditionally, and then they are
+potentially broken on the target due to missing dependencies ?
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
