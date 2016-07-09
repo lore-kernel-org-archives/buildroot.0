@@ -1,42 +1,64 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  9 Jul 2016 11:05:42 +0200
-Subject: [Buildroot] [PATCH 2/2] package/dovecot-pigeonhole: bump version to
-	0.4.15
-In-Reply-To: <1468055142-25124-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1468055142-25124-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1468055142-25124-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  9 Jul 2016 11:11:32 +0200
+Subject: [Buildroot] [PATCH v4 2/6] package/kodi: Add suboption to control
+	MySQL support
+In-Reply-To: <1468055496-26192-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1468055496-26192-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1468055496-26192-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+In a buildroot defconfig with mysql enabled I would like to be able to
+build Kodi without mysql support because I do not need it at runtime.
+
+Kodi can store its internal databases not only locally using sqlite but
+also on a mysql server, this allows several local Kodi machines to share
+the same databases. Because I do only use one Kodi instance I do not
+need mysql support and would like to reduce build time when testing/
+installing Kodi while not touching other packages.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+v4: added a note about the motivation for this patch (Thomas)
+v3: rebased series, no changes to this patch
+v2: rebased series, no changes to this patch
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-index 2ef063e..f598825 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	dff30a636c1516158f3e159c669a254569c9dabaa6ecfa3669379101ea5b3300	dovecot-2.2-pigeonhole-0.4.14.tar.gz
-+sha256	c99ace6ead310c6c3b639922da618f90d846307da4fe252d994e5e51bf8a3de3	dovecot-2.2-pigeonhole-0.4.15.tar.gz
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index 132bef4..7c0a14c 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ package/kodi/Config.in | 6 ++++++
+ package/kodi/kodi.mk   | 2 +-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 3d3ecfd..e57939e 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -174,6 +174,12 @@ config BR2_PACKAGE_KODI_LIBNFS
+ comment "nfs support needs a toolchain w/ threads support"
+ 	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
  
--DOVECOT_PIGEONHOLE_VERSION = 0.4.14
-+DOVECOT_PIGEONHOLE_VERSION = 0.4.15
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
- DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
++config BR2_PACKAGE_KODI_MYSQL
++	bool "mysql"
++	select BR2_PACKAGE_MYSQL
++	help
++	  Enable MySQL support
++
+ config BR2_PACKAGE_KODI_RTMPDUMP
+ 	bool "rtmp"
+ 	select BR2_PACKAGE_RTMPDUMP
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 8a3b0bf..9d6b966 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -78,7 +78,7 @@ KODI_CONF_OPTS +=  \
+ 	--disable-vtbdecoder \
+ 	--enable-optimizations
+ 
+-ifeq ($(BR2_PACKAGE_MYSQL),y)
++ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
+ KODI_CONF_OPTS += --enable-mysql
+ KODI_CONF_ENV += ac_cv_path_MYSQL_CONFIG="$(STAGING_DIR)/usr/bin/mysql_config"
+ KODI_DEPENDENCIES += mysql
 -- 
 2.8.1
