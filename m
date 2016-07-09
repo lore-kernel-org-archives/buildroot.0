@@ -1,135 +1,229 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  9 Jul 2016 12:52:14 +0200
-Subject: [Buildroot] [PATCH] package/libgpg-error: fix no-thread build
-Message-ID: <1468061534-26225-1-git-send-email-yann.morin.1998@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 9 Jul 2016 13:20:30 +0200
+Subject: [Buildroot] [PATCH] toolchain: add hidden symbol for PIE support
+Message-ID: <20160709112030.GA25741@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Including the pthreads header was not properly guarded; fix that.
+uClibc-ng does not support PIE for some architectures as
+arc and m68k. It isn't implemented in the static linking case, too.
+With musl toolchains you might have static PIE support with little
+patching of gcc. Static linking for GNU libc isn't enabled in
+buildroot. Fixup any package using special treatment of PIE.
+(grep -ir pie package/*/*.mk)
 
-Disable building tests, as they are too not properly guarding against
-missing pthreads.
-
-Note that autoreconfiguring is very noisy and spits out a lot of git
-errors as their configure.ac expects, and even *requires* to be run from
-a git clone. Although reported as fatal errors, it's just git whining.
-We can ignore them.
-
-Fixes:
-    http://autobuild.buildroot.org/results/049/0495d60556139de8f3f6df420d9a226ee8a432a0/
-    http://autobuild.buildroot.org/results/0d1/0d12423877b4aac2a18fac651063de98774b5108/
-    [...]
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Romain Naour <romain.naour@openwide.fr>
-Cc: J?rg Krause <joerg.krause@embedded.rocks>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
-First patch will be sent upstream shortly; second patch will be reworked
-in an upstreamable solution.
----
- ...-posix-lock-obj-fix-build-without-threads.patch | 34 ++++++++++++++++++++++
- package/libgpg-error/0002-tests-do-not-build.patch | 29 ++++++++++++++++++
- package/libgpg-error/libgpg-error.mk               |  3 ++
- 3 files changed, 66 insertions(+)
- create mode 100644 package/libgpg-error/0001-gen-posix-lock-obj-fix-build-without-threads.patch
- create mode 100644 package/libgpg-error/0002-tests-do-not-build.patch
+ package/bluez_utils/bluez_utils.mk   | 3 +--
+ package/cifs-utils/cifs-utils.mk     | 2 +-
+ package/libmemcached/libmemcached.mk | 4 +---
+ package/libsodium/libsodium.mk       | 2 +-
+ package/lvm2/lvm2.mk                 | 2 +-
+ package/openssh/openssh.mk           | 7 +------
+ package/openswan/openswan.mk         | 4 ++--
+ package/pure-ftpd/pure-ftpd.mk       | 2 +-
+ package/quagga/quagga.mk             | 2 +-
+ package/tinc/tinc.mk                 | 2 +-
+ package/trousers/trousers.mk         | 3 +--
+ toolchain/Config.in                  | 3 +++
+ toolchain/toolchain-common.in        | 4 ++++
+ 13 files changed, 19 insertions(+), 21 deletions(-)
 
-diff --git a/package/libgpg-error/0001-gen-posix-lock-obj-fix-build-without-threads.patch b/package/libgpg-error/0001-gen-posix-lock-obj-fix-build-without-threads.patch
-new file mode 100644
-index 0000000..0f3504e
---- /dev/null
-+++ b/package/libgpg-error/0001-gen-posix-lock-obj-fix-build-without-threads.patch
-@@ -0,0 +1,34 @@
-+From 05ccf08a84e4ab671dae1c04c383c660a78d91d9 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sat, 9 Jul 2016 12:28:43 +0200
-+Subject: [PATCH 1/2] gen-posix-lock-obj: fix build without threads
-+
-+Although ./configure checks for thread support, gen-posix-lock-obj still
-+includes pthreads.h unconditionally.
-+
-+Guard that inclusion using the same condition as all other uses of
-+pthreads-related code.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ src/gen-posix-lock-obj.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/gen-posix-lock-obj.c b/src/gen-posix-lock-obj.c
-+index e32a3cd..e6f33ae 100644
-+--- a/src/gen-posix-lock-obj.c
-++++ b/src/gen-posix-lock-obj.c
-+@@ -29,7 +29,9 @@
-+ #include <string.h>
-+ #include <stdio.h>
-+ #include <errno.h>
-+-#include <pthread.h>
-++#ifdef USE_POSIX_THREADS
-++# include <pthread.h>
-++#endif
-+ 
-+ #include "posix-lock-obj.h"
-+ 
-+-- 
-+2.7.4
-+
-diff --git a/package/libgpg-error/0002-tests-do-not-build.patch b/package/libgpg-error/0002-tests-do-not-build.patch
-new file mode 100644
-index 0000000..5eded5f
---- /dev/null
-+++ b/package/libgpg-error/0002-tests-do-not-build.patch
-@@ -0,0 +1,29 @@
-+From 9694693d4d35a433509a4da61341e1cb5b0143d0 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sat, 9 Jul 2016 12:30:40 +0200
-+Subject: [PATCH 2/2] tests: do not build
-+
-+Building tests fails without thread support. Forcefulyl disable tests,
-+which we don't care much about for Buildroot.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index baeba14..dc959e4 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -39,7 +39,7 @@ else
-+ doc =
-+ endif
-+ 
-+-SUBDIRS = m4 src $(doc) tests po $(lang_subdirs)
-++SUBDIRS = m4 src $(doc) po $(lang_subdirs)
-+ 
-+ 
-+ dist-hook: gen-ChangeLog
-+-- 
-+2.7.4
-+
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index b074ff6..92754e5 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
-@@ -11,6 +11,9 @@ LIBGPG_ERROR_LICENSE_FILES = COPYING COPYING.LIB
- LIBGPG_ERROR_INSTALL_STAGING = YES
- LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
+diff --git a/package/bluez_utils/bluez_utils.mk b/package/bluez_utils/bluez_utils.mk
+index 91c2905..5885f18 100644
+--- a/package/bluez_utils/bluez_utils.mk
++++ b/package/bluez_utils/bluez_utils.mk
+@@ -54,8 +54,7 @@ BLUEZ_UTILS_CONF_OPTS +=	\
+ 	--disable-usb
+ endif
  
-+# 0002-tests-do-not-build.patch touches Makefile.am
-+LIBGPG_ERROR_AUTORECONF = YES
+-# PIE is broken for m68k
+-ifeq ($(BR2_m68k),y)
++ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
+ BLUEZ_UTILS_CONF_OPTS += --disable-pie
+ endif
+ 
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index c90a504..6ab408a 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -10,7 +10,7 @@ CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPLv3+
+ CIFS_UTILS_LICENSE_FILES = COPYING
+ 
+-ifneq ($(BR2_STATIC_LIBS)$(BR2_m68k),)
++ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
+ CIFS_UTILS_CONF_OPTS += --disable-pie
+ endif
+ 
+diff --git a/package/libmemcached/libmemcached.mk b/package/libmemcached/libmemcached.mk
+index a5ea4f5..1606fdf 100644
+--- a/package/libmemcached/libmemcached.mk
++++ b/package/libmemcached/libmemcached.mk
+@@ -18,9 +18,7 @@ LIBMEMCACHED_AUTORECONF = YES
+ LIBMEMCACHED_LICENSE = BSD-3c
+ LIBMEMCACHED_LICENSE_FILES = COPYING
+ 
+-# Help libmemcached to understand that -fPIE and -pie should not be
+-# used when linking statically.
+-ifeq ($(BR2_STATIC_LIBS),y)
++ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
+ LIBMEMCACHED_CONF_ENV += \
+ 	ax_cv_check_cflags__Werror__fPIE=no \
+ 	ax_cv_check_cflags__Werror__pie=no \
+diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
+index 13dba8d..2ce8f81 100644
+--- a/package/libsodium/libsodium.mk
++++ b/package/libsodium/libsodium.mk
+@@ -10,7 +10,7 @@ LIBSODIUM_LICENSE = ISC
+ LIBSODIUM_LICENSE_FILES = LICENSE
+ LIBSODIUM_INSTALL_STAGING = YES
+ 
+-ifeq ($(BR2_arc),y)
++ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
+ LIBSODIUM_CONF_OPTS += --disable-pie
+ endif
+ 
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 64eb926..9a45b53 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -43,7 +43,7 @@ else
+ LVM2_CONF_OPTS += --disable-applib
+ endif
+ 
+-ifeq ($(BR2_arc)$(BR2_m68k),y)
++ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
+ LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
+ endif
+ 
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 856646c..32d2929 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -22,12 +22,7 @@ define OPENSSH_USERS
+ 	sshd -1 sshd -1 * - - - SSH drop priv user
+ endef
+ 
+-# uClibc toolchain for ARC doesn't support PIE at the moment
+-ifeq ($(BR2_arc),y)
+-OPENSSH_CONF_OPTS += --without-pie
+-endif
+-# PIE and static does not work on Linux
+-ifeq ($(BR2_STATIC_LIBS),y)
++ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
+ OPENSSH_CONF_OPTS += --without-pie
+ endif
+ 
+diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+index 54bd4b3..5bf9bb6 100644
+--- a/package/openswan/openswan.mk
++++ b/package/openswan/openswan.mk
+@@ -11,8 +11,8 @@ OPENSWAN_LICENSE_FILES = COPYING LICENSE
+ 
+ OPENSWAN_DEPENDENCIES = host-bison host-flex gmp iproute2
+ OPENSWAN_MAKE_OPTS = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
+-	USERCOMPILE="$(TARGET_CFLAGS) $(if $(BR2_STATIC_LIBS),,-fPIE)" \
+-	USERLINK="$(TARGET_LDFLAGS) $(if $(BR2_STATIC_LIBS),,-fPIE)" \
++	USERCOMPILE="$(TARGET_CFLAGS) $(if $(BR2_TOOLCHAIN_SUPPORTS_PIE),-fPIE,)" \
++	USERLINK="$(TARGET_LDFLAGS) $(if $(BR2_TOOLCHAIN_SUPPORTS_PIE),-fPIE,)" \
+ 	INC_USRLOCAL=/usr USE_KLIPS=false USE_MAST=false USE_NM=false
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index e1040fa..db1d82f 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -41,7 +41,7 @@ else
+ PURE_FTPD_CONF_OPTS += --without-tls
+ endif
+ 
+-ifeq ($(BR2_arc),y)
++ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
+ PURE_FTPD_CONF_ENV += ax_cv_check_cflags___fPIE=no ax_cv_check_ldflags___fPIE=no
+ endif
+ 
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 1bbc72d..3954509 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -68,7 +68,7 @@ else
+ QUAGGA_CONF_OPTS += --disable-vtysh
+ endif
+ 
+-ifeq ($(BR2_arc),y)
++ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
+ QUAGGA_CONF_OPTS += --disable-pie
+ endif
+ 
+diff --git a/package/tinc/tinc.mk b/package/tinc/tinc.mk
+index cb0785b..1cc4cbd 100644
+--- a/package/tinc/tinc.mk
++++ b/package/tinc/tinc.mk
+@@ -11,7 +11,7 @@ TINC_LICENSE = GPLv2+ with OpenSSL exception
+ TINC_LICENSE_FILES = COPYING COPYING.README
+ TINC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=c99"
+ 
+-ifeq ($(BR2_arc),y)
++ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
+ TINC_CONF_ENV += \
+ 	ax_cv_check_cflags___fPIE=no \
+ 	ax_cv_check_ldflags___pie=no
+diff --git a/package/trousers/trousers.mk b/package/trousers/trousers.mk
+index 70daa88..f0932e7 100644
+--- a/package/trousers/trousers.mk
++++ b/package/trousers/trousers.mk
+@@ -23,8 +23,7 @@ endif
+ # workaround.
+ TROUSERS_CONF_OPTS += --disable-usercheck
+ 
+-# uClibc toolchain for ARC doesn't support PIE at the moment
+-ifeq ($(BR2_arc),y)
++ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
+ TROUSERS_CONF_ENV += \
+ 	ax_cv_check_cflags___fPIE__DPIE=no \
+ 	ax_cv_check_ldflags___pie=no
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index b49588f..35db809 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -15,9 +15,11 @@ config BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
++	select BR2_TOOLCHAIN_SUPPORTS_PIE
+ 
+ config BR2_TOOLCHAIN_USES_UCLIBC
+ 	bool
++	select BR2_TOOLCHAIN_SUPPORTS_PIE if !BR2_arc && !BR2_m68k && !BR2_STATIC_LIBS
+ 
+ config BR2_TOOLCHAIN_USES_MUSL
+ 	bool
+@@ -26,6 +28,7 @@ config BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	select BR2_TOOLCHAIN_SUPPORTS_PIE
+ 
+ choice
+ 	prompt "Toolchain type"
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 65df31b..417eee3 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -39,6 +39,10 @@ config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ config BR2_TOOLCHAIN_HAS_SSP
+ 	bool
+ 
++config BR2_TOOLCHAIN_SUPPORTS_PIE
++	bool
++	depends on !BR2_STATIC_LIBS && !BR2_arc && !BR2_m68k
 +
- define LIBGPG_ERROR_FIX_CROSS_COMPILATION
- 	cd $(@D)/src/syscfg && \
- 	ln -s lock-obj-pub.$(call qstrip, $(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG)).h \
+ config BR2_ENABLE_LOCALE_PURGE
+ 	bool "Purge unwanted locales"
+ 	help
 -- 
-2.7.4
+2.1.4
