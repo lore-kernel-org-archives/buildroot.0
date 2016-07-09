@@ -1,126 +1,43 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sat,  9 Jul 2016 15:49:07 +0200
-Subject: [Buildroot] [PATCH 2/2] docs/manual: document meson-based packages
-In-Reply-To: <1468072147-17509-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1468072147-17509-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1468072147-17509-3-git-send-email-eric.le.bihan.dev@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  9 Jul 2016 16:42:19 +0200
+Subject: [Buildroot] [PATCH] package/upmpdcli: needs MMU
+Message-ID: <1468075339-29551-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add instructions for adding a package which uses the Meson build system.
+... because it uses fork().
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Fixes:
+    http://autobuild.buildroot.org/results/9ae/9ae5c773e62bbe84f2d0495f074d659fa3dcd55b/
+    http://autobuild.buildroot.org/results/8af/8afb9f96bb827b723b859ff73cdf674ca6434e7c/
+    http://autobuild.buildroot.org/results/abe/abe9be3b78f26f56035ec805a86ab33b1d145a02/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- docs/manual/adding-packages-meson.txt | 84 +++++++++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt       |  2 +
- 2 files changed, 86 insertions(+)
- create mode 100644 docs/manual/adding-packages-meson.txt
+ package/upmpdcli/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
-new file mode 100644
-index 0000000..85457b7
---- /dev/null
-+++ b/docs/manual/adding-packages-meson.txt
-@@ -0,0 +1,84 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
-+
-+=== Integration of Meson-based packages
-+
-+[[meson-package-tutorial]]
-+
-+==== +meson-package+ tutorial
-+
-+http://mesonbuild.com[Meson] is an open source build system meant to be both
-+extremely fast, and, even more importantly, as user friendly as possible.
-+
-+Buildroot does not (yet) provide a dedicated package infrastructure for
-+meson-based packages. So, we will explain how to write a +.mk+ file for such a
-+package. Let's start with an example:
-+
-+------------------------------
-+01: ################################################################################
-+02: #
-+03: # foo
-+04: #
-+05: ################################################################################
-+06:
-+07: FOO_VERSION = 1.0
-+08: FOO_SOURCE = foo-$(FOO_VERSION).tar.gz
-+09: FOO_SITE = http://www.foosoftware.org/download
-+10: FOO_LICENSE = GPLv3+
-+11: FOO_LICENSE_FILES = COPYING
-+12:
-+13: FOO_DEPENDENCIES = host-meson host-pkgconf bar
-+14:
-+15: ifeq ($(BR2_ENABLE_DEBUG),y)
-+16: FOO_MESON_MODE = debug
-+17: else
-+18: FOO_MESON_MODE = release
-+19: endif
-+20:
-+21: FOO_MESON_OPTS += \
-+22: 	--prefix=/usr \
-+23: 	--buildtype $(FOO_MESON_MODE) \
-+24: 	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
-+25:
-+26: define FOO_CONFIGURE_CMDS
-+27: 	rm -rf $(@D)/build
-+28: 	mkdir -p $(@D)/build
-+29: 	$(TARGET_MAKE_ENV) meson.py $(FOO_MESON_OPTS) $(@D) $(@D)/build
-+30: endef
-+31:
-+32: define FOO_BUILD_CMDS
-+33: 	$(TARGET_MAKE_ENV) ninja -C $(@D)/build
-+34: endef
-+35:
-+36: define FOO_INSTALL_TARGET_CMDS
-+37: 	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja -C $(@D)/build install
-+38: endef
-+39:
-+40: $(eval $(generic-package))
-+--------------------------------
-+
-+The Makefile starts with the definition of the standard variables for package
-+declaration (lines 7 to 11).
-+
-+As seen in line 40, it is based on the
-+xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
-+the variables required by this particular infrastructure, where Meson and its
-+companion tool, Ninja, are invoked:
-+
-+* +FOO_CONFIGURE_CMDS+: the build directory required by Meson is created, and
-+  Meson is invoked to generate the Ninja build file. The options required to
-+  configure the cross-compilation of the package are passed via +FOO_MESON_OPTS+.
-+
-+* +FOO_BUILD_CMDS+: Ninja is invoked to perform the build.
-+
-+* +FOO_INSTALL_TARGET_CMDS+: Ninja is invoked to install the files generated
-+  during the build step.
-+
-+In order to have Meson available for the build, +FOO_DEPENDENCIES+ needs to
-+contain +host-meson+. In the example, +host-pkgconf+ and +bar+ are also
-+declared as dependencies because the Meson build file of +foo+ uses `pkg-config`
-+to determine the compilation flags and libraries of package +bar+.
-+
-+To sum it up, to add a new meson-based package, the Makefile example can be
-+copied verbatim then edited to replace all occurences of +FOO+ with the uppercase
-+name of the new package and update the values of the standard variables.
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index 76f90c9..8b80a63 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -29,6 +29,8 @@ include::adding-packages-kconfig.txt[]
- 
- include::adding-packages-rebar.txt[]
- 
-+include::adding-packages-meson.txt[]
-+
- include::adding-packages-kernel-module.txt[]
- 
- include::adding-packages-asciidoc.txt[]
+diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
+index 3218205..eacfd4d 100644
+--- a/package/upmpdcli/Config.in
++++ b/package/upmpdcli/Config.in
+@@ -1,10 +1,11 @@
+ config BR2_PACKAGE_UPMPDCLI
+ 	bool "upmpdcli"
+-	select BR2_PACKAGE_LIBMPDCLIENT
+-	select BR2_PACKAGE_LIBUPNPP
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnpp -> libupnp
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
++	select BR2_PACKAGE_LIBMPDCLIENT
++	select BR2_PACKAGE_LIBUPNPP
+ 	help
+ 	  upmpdcli is a UPnP Media Renderer front-end for MPD, the Music
+ 	  Player Daemon. It supports UPnP gapless track transitions and
 -- 
-2.4.11
+2.7.4
