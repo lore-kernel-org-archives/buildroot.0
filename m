@@ -1,34 +1,34 @@
-From: Georges Savoundararadj <savoundg@gmail.com>
-Date: Fri,  8 Jul 2016 23:40:04 -0700
-Subject: [Buildroot] [PATCH 5/5] imx6dlsabresd: use zImage
-In-Reply-To: <20160709064004.8844-1-savoundg@gmail.com>
-References: <20160709064004.8844-1-savoundg@gmail.com>
-Message-ID: <20160709064004.8844-6-savoundg@gmail.com>
+From: Dagg Stompler <daggs@gmx.com>
+Date: Sat,  9 Jul 2016 11:03:34 +0300
+Subject: [Buildroot] [PATCH 1/2] freescale-imx: update src url
+Message-ID: <20160709080335.30055-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-U-Boot, with the default environment, is looking for a zImage.
+it seems that with the freescale-nxp merge, the imx sources were dropped
+from the website.
+looks like they were moved to the yocoto project website.
 
-Signed-off-by: Georges Savoundararadj <savoundg@gmail.com>
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
 ---
- configs/freescale_imx6dlsabresd_defconfig | 2 --
- 1 file changed, 2 deletions(-)
+ package/freescale-imx/freescale-imx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
-index c01bf7a..7e42faa 100644
---- a/configs/freescale_imx6dlsabresd_defconfig
-+++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -17,8 +17,6 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.1.15_1.1.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
--BR2_LINUX_KERNEL_UIMAGE=y
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabresd"
+diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+index e8ca77f..f019745 100644
+--- a/package/freescale-imx/freescale-imx.mk
++++ b/package/freescale-imx/freescale-imx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-FREESCALE_IMX_SITE = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO
++FREESCALE_IMX_SITE = http://downloads.yoctoproject.org/mirror/sources
+ 
+ # Helper for self-extracting binaries distributed by Freescale.
+ #
 -- 
 2.9.0
