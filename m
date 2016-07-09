@@ -1,64 +1,90 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  9 Jul 2016 11:11:32 +0200
-Subject: [Buildroot] [PATCH v4 2/6] package/kodi: Add suboption to control
-	MySQL support
-In-Reply-To: <1468055496-26192-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1468055496-26192-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1468055496-26192-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  9 Jul 2016 11:11:31 +0200
+Subject: [Buildroot] [PATCH v4 1/6] package/kodi: re-structure dependencies
+Message-ID: <1468055496-26192-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In a buildroot defconfig with mysql enabled I would like to be able to
-build Kodi without mysql support because I do not need it at runtime.
-
-Kodi can store its internal databases not only locally using sqlite but
-also on a mysql server, this allows several local Kodi machines to share
-the same databases. Because I do only use one Kodi instance I do not
-need mysql support and would like to reduce build time when testing/
-installing Kodi while not touching other packages.
+Use one package per line to ease review of Kodi 17 version bump, where
+10+ packages will be removed. This patch contains no code changes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v4: added a note about the motivation for this patch (Thomas)
+v4: no changes
 v3: rebased series, no changes to this patch
 v2: rebased series, no changes to this patch
 
- package/kodi/Config.in | 6 ++++++
- package/kodi/kodi.mk   | 2 +-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ package/kodi/kodi.mk | 55 +++++++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 48 insertions(+), 7 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 3d3ecfd..e57939e 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -174,6 +174,12 @@ config BR2_PACKAGE_KODI_LIBNFS
- comment "nfs support needs a toolchain w/ threads support"
- 	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
- 
-+config BR2_PACKAGE_KODI_MYSQL
-+	bool "mysql"
-+	select BR2_PACKAGE_MYSQL
-+	help
-+	  Enable MySQL support
-+
- config BR2_PACKAGE_KODI_RTMPDUMP
- 	bool "rtmp"
- 	select BR2_PACKAGE_RTMPDUMP
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 8a3b0bf..9d6b966 100644
+index 90c50c3..8a3b0bf 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -78,7 +78,7 @@ KODI_CONF_OPTS +=  \
- 	--disable-vtbdecoder \
- 	--enable-optimizations
+@@ -10,13 +10,54 @@ KODI_LICENSE = GPLv2
+ KODI_LICENSE_FILES = LICENSE.GPL
+ # needed for binary addons
+ KODI_INSTALL_STAGING = YES
+-KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-zip host-giflib \
+-	host-libjpeg host-lzo host-nasm host-libpng host-swig
+-KODI_DEPENDENCIES += boost bzip2 expat ffmpeg fontconfig freetype giflib jasper jpeg \
+-	libass libcdio libcrossguid libcurl libdcadec libfribidi libgcrypt libmpeg2 \
+-	libogg libplist libpng libsamplerate libsquish libvorbis libxml2 \
+-	libxslt lzo ncurses openssl pcre python readline sqlite taglib tiff \
+-	tinyxml yajl zlib
++KODI_DEPENDENCIES = \
++	boost \
++	bzip2 \
++	expat \
++	ffmpeg \
++	fontconfig \
++	freetype \
++	giflib \
++	host-gawk \
++	host-gettext \
++	host-giflib \
++	host-gperf \
++	host-libjpeg \
++	host-libpng \
++	host-lzo \
++	host-nasm \
++	host-swig \
++	host-zip \
++	jasper \
++	jpeg \
++	libass \
++	libcdio \
++	libcrossguid \
++	libcurl \
++	libdcadec \
++	libfribidi \
++	libgcrypt \
++	libmpeg2 \
++	libogg \
++	libplist \
++	libpng \
++	libsamplerate \
++	libsquish \
++	libvorbis \
++	libxml2 \
++	libxslt \
++	lzo \
++	ncurses \
++	openssl \
++	pcre \
++	python \
++	readline \
++	sqlite \
++	taglib \
++	tiff \
++	tinyxml \
++	yajl \
++	zlib
  
--ifeq ($(BR2_PACKAGE_MYSQL),y)
-+ifeq ($(BR2_PACKAGE_KODI_MYSQL),y)
- KODI_CONF_OPTS += --enable-mysql
- KODI_CONF_ENV += ac_cv_path_MYSQL_CONFIG="$(STAGING_DIR)/usr/bin/mysql_config"
- KODI_DEPENDENCIES += mysql
+ KODI_CONF_ENV = \
+ 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
 -- 
 2.8.1
