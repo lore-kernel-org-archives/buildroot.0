@@ -1,16 +1,113 @@
-From: daggs <daggs@gmx.com>
-Date: Sat, 9 Jul 2016 20:13:28 +0200
-Subject: [Buildroot] prefix question for kodi.
-Message-ID: <trinity-f49f8e10-13bc-491a-a4be-f1a55d2f391d-1468088008466@3capp-mailcom-bs09>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 9 Jul 2016 22:05:51 +0200
+Subject: [Buildroot] [Patch v2 2/3] rust-bootstrap: new package
+In-Reply-To: <20160709143638.778d7964@itchy>
+References: <1466797592-5565-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1466797592-5565-3-git-send-email-eric.le.bihan.dev@free.fr>
+ <f68bcce5-e616-81fd-e217-7abd07f03017@gmail.com>
+ <20160709143638.778d7964@itchy>
+Message-ID: <7d0b365c-8694-8c9a-eeef-e526816dc9e5@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Hi Eric,
 
-I'm trying to understand why the kodi's configure prefix param points to /usr and not to the staging dir. can someone help me understand?
-here is the line:
-cd /home/dagg/workspace/buildroots/buildroot-master2/output/build/kodi-16.1-Jarvis/ && rm -rf config.cache && PATH="/home/dagg/workspace/buildroots/buildroot-master2/output/host/bin:/home/dagg/workspace/buildroots/buildroot-master2/output/host/sbin:/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin:/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/sbin:/usr/local/bin:/usr/bin:/bin:/opt/vmware/bin:/opt/bin:/usr/x86_64-pc-linux-gnu/gcc-bin/5.3.0:/usr/x86_64-pc-linux-gnu/aarch64-unknown-linux-muslabi/gcc-bin/5.3.0:/usr/games/bin:/usr/sbin:/usr/local/bin" AR="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-ar" AS="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-as" LD="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-ld" NM="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-nm" CC="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gcc" GCC="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gcc" CPP="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-cpp" CXX="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-g++" FC="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gfortran" F77="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gfortran" RANLIB="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-ranlib" READELF="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-readelf" STRIP="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-strip" OBJCOPY="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-objcopy" OBJDUMP="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-objdump" AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as" CC_FOR_BUILD="/usr/bin/gcc" GCC_FOR_BUILD="/usr/bin/gcc" CXX_FOR_BUILD="/usr/bin/g++" LD_FOR_BUILD="/usr/bin/ld" CPPFLAGS_FOR_BUILD="-I/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/include" CFLAGS_FOR_BUILD="-O2 -I/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/include" CXXFLAGS_FOR_BUILD="-O2 -I/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/include" LDFLAGS_FOR_BUILD="-L/home/dagg/workspace/buildroots/buildroot-master2/output/host/lib -L/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/lib -Wl,-rpath,/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/lib" FCFLAGS_FOR_BUILD="" DEFAULT_ASSEMBLER="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-as" DEFAULT_LINKER="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-ld" CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os " CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os " LDFLAGS="" FCFLAGS=" -Os " FFLAGS=" -Os " PKG_CONFIG="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/pkg-config" STAGING_DIR="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot" INTLTOOL_PERL=/usr/bin/perl ac_cv_lbl_unaligned_fail=yes ac_cv_func_mmap_fixed_mapped=yes ac_cv_func_memcmp_working=yes ac_cv_have_decl_malloc=yes gl_cv_func_malloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes ac_cv_func_calloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes lt_cv_sys_lib_search_path_spec="" ac_cv_c_bigendian=no  PYTHON_VERSION="2.7" 
-PYTHON_LDFLAGS="-lpython2.7 -lpthread -ldl -lutil -lm" PYTHON_CPPFLAGS="-I/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/python2.7" PYTHON_SITE_PKG="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/python2.7/site-packages" PYTHON_NOVERSIONCHECK="no-check" use_texturepacker_native=yes USE_TEXTUREPACKER_NATIVE_ROOT="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr" TEXTUREPACKER_NATIVE_ROOT="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr" CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  `/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/pkg-config --cflags --libs egl`" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  `/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/pkg-config --cflags --libs egl`" CONFIG_SITE=/dev/null ./configure --target=arm-buildroot-linux-gnueabihf --host=arm-buildroot-linux-gnueabihf --build=x86_64-pc-linux-gnu --prefix=/usr --exec-prefix=/usr --sysconfdir=/etc --localstatedir=/var --program-prefix="" --disable-gtk-doc --disable-gtk-doc-html --disable-doc --disable-docs --disable-documentation --with-xmlto=no --with-fop=no --disable-dependency-tracking --enable-ipv6  --disable-static --enable-shared  --with-ffmpeg=shared --disable-joystick --disable-openmax --disable-pulse --disable-vdpau --disable-vtbdecoder --enable-optimizations --disable-mysql --enable-codec=amcodec --disable-libcap --disable-dbus --disable-alsa --disable-gl --disable-x11 --enable-gles --disable-libusb --disable-webserver --disable-samba --disable-nfs --disable-rtmp --disable-libbluray --disable-airplay --disable-ssh --disable-avahi --disable-libcec --disable-lirc --disable-vaapi --disable-optical-drive --disable-dvdcss
+Adding the list in Cc
+
+Le 09/07/2016 ? 14:36, Eric Le Bihan a ?crit :
+> Hi!
+> 
+> Le Tue, 5 Jul 2016 11:47:02 +0200,
+> Romain Naour <romain.naour@gmail.com> a ?crit :
+> 
+>> Le 24/06/2016 ? 21:46, Eric Le Bihan a ?crit :
+>>> This new package fetches a binary snapshot of the Rust compiler,
+>>> suitable for the host, in order to bootstrap the Rust compiler.  
+>>
+>> There is a way to not use the binary snapshot of the Rust compiler ?
+> 
+> I do not understand your question. As the Rust compiler is written
+> in Rust, a Rust compiler is needed for bootstrapping.
+
+I meant adding a Rust compiler in Buildroot prerequisites.
+It make sens to download the Rust compiler in his binary format since it not
+available yet in all GNU/Linux distribution.
+I don't know mush rust. Actually this is the first time I look at it ;-)
+
+> 
+> I'll post a respin of the series bumping Rust to version 1.10.0. In
+> this version, bootstrapping is not performed using an "anonymous"
+> version of rustc anymore, but with the previous official version (i.e.
+> 1.9.0).
+
+ok
+
+> 
+>>> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>>> ---
+>>>  package/rust-bootstrap/rust-bootstrap.hash |  3 +++
+>>>  package/rust-bootstrap/rust-bootstrap.mk   | 24
+>>> ++++++++++++++++++++++++ 2 files changed, 27 insertions(+)
+>>>  create mode 100644 package/rust-bootstrap/rust-bootstrap.hash
+>>>  create mode 100644 package/rust-bootstrap/rust-bootstrap.mk
+>>>
+>>> diff --git a/package/rust-bootstrap/rust-bootstrap.hash
+>>> b/package/rust-bootstrap/rust-bootstrap.hash new file mode 100644
+>>> index 0000000..00f686b
+>>> --- /dev/null
+>>> +++ b/package/rust-bootstrap/rust-bootstrap.hash
+>>> @@ -0,0 +1,3 @@
+>>> +# Locally calculated
+>>> +sha256
+>>> a8ca657d78162a9f0a69a1ec8b0460e97259cdf2e6353ee256ae206876c9637e
+>>> rust-stage0-2016-03-18-235d774-linux-x86_64-1273b6b6aed421c9e40c59f366d0df6092ec0397.tar.bz2
+>>> +sha256
+>>> 36958fcd55387d7b1b86618111fa8660c1d488fe191e85ad9659c6470874322b
+>>> rust-stage0-2016-03-18-235d774-linux-i386-0e0e4448b80d0a12b75485795244bb3857a0a7ef.tar.bz2
+>>> diff --git a/package/rust-bootstrap/rust-bootstrap.mk
+>>> b/package/rust-bootstrap/rust-bootstrap.mk new file mode 100644
+>>> index 0000000..9a74c3b --- /dev/null +++
+>>> b/package/rust-bootstrap/rust-bootstrap.mk @@ -0,0 +1,24 @@
+>>> +################################################################################
+>>> +# +# rust-bootstrap +#
+>>> +################################################################################
+>>> +
+>>> +# Taken from src/snapshots.txt
+>>> +RUST_BOOTSTRAP_DATE = 2016-03-18
+>>> +RUST_BOOTSTRAP_REV = 235d774
+>>> +
+>>> +ifeq ($(HOSTARCH),x86_64)
+>>> +RUST_BOOTSTRAP_HASH = 1273b6b6aed421c9e40c59f366d0df6092ec0397
+>>> +else
+>>> +RUST_BOOTSTRAP_HASH = 0e0e4448b80d0a12b75485795244bb3857a0a7ef
+>>> +endif
+>>> +
+>>> +RUST_BOOTSTRAP_VERSION =
+>>> $(RUST_BOOTSTRAP_DATE)-$(RUST_BOOTSTRAP_REV)-linux-$(HOSTARCH)-$(RUST_BOOTSTRAP_HASH)
+>>> +RUST_BOOTSTRAP_SITE =
+>>> https://static.rust-lang.org/stage0-snapshots +
+>>> +RUST_BOOTSTRAP_SOURCE =
+>>> rust-stage0-$(RUST_BOOTSTRAP_VERSION).tar.bz2
+>>> +RUST_BOOTSTRAP_LICENSE = Apache-2.0, MIT  
+>> I guess that is the same license as for the rust package.
+> 
+> Indeed it is.
+>  
+>>> +RUST_BOOTSTRAP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT  
+>> There is not license files extracted from the archive, so make
+>> legal-info doesn't work.
+> 
+> This should be solved in the respin, where host-rust-bootstrap has
+> been reworkded.
+
+Great, thanks!
+
+Best regards,
+Romain
+
+> 
+> Regards,
+> 
