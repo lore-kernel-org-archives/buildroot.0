@@ -1,8 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  9 Jul 2016 11:05:41 +0200
-Subject: [Buildroot] [PATCH 1/2] package/{mesa3d,
-	mesa3d-headers}: bump version to 12.0.1
-Message-ID: <1468055142-25124-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  9 Jul 2016 11:05:42 +0200
+Subject: [Buildroot] [PATCH 2/2] package/dovecot-pigeonhole: bump version to
+	0.4.15
+In-Reply-To: <1468055142-25124-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1468055142-25124-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1468055142-25124-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,45 +13,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 4 ++--
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 2b1e4d8..c3b57e4 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 12.0.0
-+MESA3D_HEADERS_VERSION = 12.0.1
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 3572b46..fa01128 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index 2ef063e..f598825 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
 @@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2016-July/000226.html
--sha256	0090c025219318935124292b482e3439bc43e8c074ad01086449fcad88547dc6	mesa-12.0.0.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2016-July/000227.html
-+sha256	bab24fb79f78c876073527f515ed871fc9c81d816f66c8a0b051d8d653896389	mesa-12.0.1.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index dcccb41..9cce0ef 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+ # Locally computed
+-sha256	dff30a636c1516158f3e159c669a254569c9dabaa6ecfa3669379101ea5b3300	dovecot-2.2-pigeonhole-0.4.14.tar.gz
++sha256	c99ace6ead310c6c3b639922da618f90d846307da4fe252d994e5e51bf8a3de3	dovecot-2.2-pigeonhole-0.4.15.tar.gz
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 132bef4..7c0a14c 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 12.0.0
-+MESA3D_VERSION = 12.0.1
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+-DOVECOT_PIGEONHOLE_VERSION = 0.4.14
++DOVECOT_PIGEONHOLE_VERSION = 0.4.15
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
+ DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
 -- 
 2.8.1
