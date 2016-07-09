@@ -1,78 +1,71 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 9 Jul 2016 22:48:25 +0200
-Subject: [Buildroot] [Patch v2 3/3] rust: new package
-In-Reply-To: <20160709142533.5d4e34b6@itchy>
-References: <1466797592-5565-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1466797592-5565-4-git-send-email-eric.le.bihan.dev@free.fr>
- <78101ffb-56d4-75be-465a-69b1a236798c@gmail.com>
- <20160709142533.5d4e34b6@itchy>
-Message-ID: <d3d8e020-e7e1-3c27-0fd9-078710f1292c@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 9 Jul 2016 22:55:16 +0200
+Subject: [Buildroot] prefix question for kodi.
+In-Reply-To: <trinity-f49f8e10-13bc-491a-a4be-f1a55d2f391d-1468088008466@3capp-mailcom-bs09>
+References: <trinity-f49f8e10-13bc-491a-a4be-f1a55d2f391d-1468088008466@3capp-mailcom-bs09>
+Message-ID: <CAHXCMM+xuaawC=rJiDrX8VwLQbhTVcDoekS86ZTsfRzK5mODdQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eric,
+Hi all,
 
-Le 09/07/2016 ? 14:25, Eric Le Bihan a ?crit :
-> Hi!
-> 
-> Le Tue, 5 Jul 2016 12:11:13 +0200,
-> Romain Naour <romain.naour@gmail.com> a ?crit :
-> 
->> Le 24/06/2016 ? 21:46, Eric Le Bihan a ?crit :
->>> This new package provides the compiler for the Rust programming
->>> language.
->>>
->>> Currently, only the host variant is built.
->>>
->>> The internal build process is as follows:
->>>
->>>  1. rustc-stage0, provided by rust-bootstrap, is used to build
->>>     rustc-stage1.
->>>  2. rust-stage1 builds the final Rust compiler (rust-stage2)
->>>     and the standard library for the host architecture.
->>>  3. the standard library for the target architecture is build.
->>>
->>> The Rust compiler uses LLVM as its backend, compiled with support
->>> for x86, ARM, PowerPC and MIPS architectures.  
->>
->> rust build it's own bundled copy of llvm if it's not available on the
->> host. If host-rust require a llvm compiler we need to add llvm
->> support in Buildroot first.
->>
->> I have some WIP patches about llvm/clang, if you want to take a look:
->> https://github.com/RomainNaour/buildroot/tree/clang-llvm
-> 
-> Indeed, having host-rust depends on host-llvm may be added later.
+On Sat, Jul 9, 2016 at 8:13 PM, daggs <daggs@gmx.com> wrote:
+> Greetings,
+>
+> I'm trying to understand why the kodi's configure prefix param points to /usr and not to the staging dir. can someone help me understand?
+> here is the line:
 
-I don't think it's a good idea to use the LLVM bundled in Rust since the
-dependency on Rust and LLVM will be mixed in the rust package. It will be
-difficult to maintain the package in the future.
+This is not Kodi-specific, this is done like things for many packages
+(i.e. for all packages using a decent build-system, e.g. autotools
+[1], cmake [2], etc).. So, almost all packages.
 
-For example, LLVM needs to be build with gcc >= 4.7 on the host, so the rust
-package must depends on BR2_HOST_GCC_AT_LEAST_4_7.
+For building a target package, the prefix must point to /usr, and not
+to the staging dir. because:
+1. The --prefix option sets the prefix location in the target
+directory, i.e. as its should be at runtime (at runtime in the target
+system).
+So, in the case of Buildroot, this is not (and must not be) the
+absolute location where stuff will be installed.
+Note that if you set prefix to STAGING_DIR, I bet your final rootfs
+won't look like what you'd expect, and may not work as expected... or
+not work at all!
+2. To install stuff in a location different from the runtime one, we
+use the standard variable DESTDIR (see [3,4])
+So, basically when a package using a decent build-system execute an
+install rule, it computes the install location like this:
+  stuff_install_path = ${DESTDIR}${prefix}/${stuf_dir}
+3. We don't (want to) build target packages twice, with only the
+--prefix option changed between these 2 builds (i.e. once with
+--prefix=$(STAGING_DIR)... and a second time with
+--prefix=$(TARGET_DIR)...).
+So, from the aforementioned reasons we build each target package once
+with the right prefix for the target rootfs, and install twice (if
+needed), once with DESTDIR=$(TARGET_DIR) and a second time with
+DESTDIR=$(STAGING_DIR), see [3,4].
 
-> AFAIK, the copy of LLVM bundled in Rust only contains optimizations.
+Note that for the build, things are correctly routed to the staging
+dir. thanks to:
+- the --sysroot option, optionally with -I.. or -L.. pointing to the
+staging tree;
+- the Buildroot compiler wrapper that enforce these options to be
+correctly set, and also check for poisoning paths (i.e. paths pointing
+to standard host system locations, e.g. /usr/lib or /usr/local/lib,
+etc).
 
-Do you know if there is some custom patch in LLVM bundled by Rust and if an
-external LLVM compiler can be used ?
+So, unless you are not lucky packaging a projet that use a
+non-standard build-system, or does nasty things at configure-time, you
+should not  paid much attention to this prefix option, Buildroot
+handles it for you ;-)
 
-> In any case, a version of LLVM/clang will have to be built and this takes a
-> very long time... Maybe disabling support for some architectures
-> will speed it up (I haven't checked). I'll try your patch.
+Regards,
 
-This is the responsibility to the host-llvm package to enable the required
-optimizations on which host-rust must depends on. Also it would be possible to
-build LLVM only for the architecture selected in Buildroot.
+[1] https://github.com/buildroot/buildroot/blob/master/package/pkg-autotools.mk#L181
+[2] https://github.com/buildroot/buildroot/blob/master/package/pkg-cmake.mk#L91
+[3] https://github.com/buildroot/buildroot/blob/master/package/pkg-autotools.mk#L159
+[4] https://github.com/buildroot/buildroot/blob/master/package/pkg-cmake.mk#L60
 
-In the end, I think LLVM should be part of the toolchain package, that way it
-would be possible to use a prebuild toolchain and only rebuild rust.
-
-Best regards,
-Romain
-
-> 
-> Regards,
-> 
+-- 
+Samuel
