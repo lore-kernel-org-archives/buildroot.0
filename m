@@ -1,112 +1,16 @@
-From: Dagg Stompler <daggs@gmx.com>
-Date: Sat,  9 Jul 2016 20:41:20 +0300
-Subject: [Buildroot] [PATCH v4] libamcodec: New Package
-Message-ID: <20160709174120.4438-1-daggs@gmx.com>
+From: daggs <daggs@gmx.com>
+Date: Sat, 9 Jul 2016 20:13:28 +0200
+Subject: [Buildroot] prefix question for kodi.
+Message-ID: <trinity-f49f8e10-13bc-491a-a4be-f1a55d2f391d-1468088008466@3capp-mailcom-bs09>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-v3 -> v4:
-  - add missing LIBAMCODEC_INSTALL_STAGING (thanks to Bernd Kuhls).
-  - use new version of git repo and update the hash.
-  - drop 0001-libamcodec-fix-makefiles-to-allow-cross-compilation.patch patch as it was merged into the repo.
+Greetings,
 
-v2 -> v3:
-  - fix sum256 value.
-  - fix patch.
-
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
----
- package/Config.in                  |  1 +
- package/libamcodec/Config.in       | 13 +++++++++++++
- package/libamcodec/libamcodec.hash |  2 ++
- package/libamcodec/libamcodec.mk   | 35 +++++++++++++++++++++++++++++++++++
- 4 files changed, 51 insertions(+)
- create mode 100644 package/libamcodec/Config.in
- create mode 100644 package/libamcodec/libamcodec.hash
- create mode 100644 package/libamcodec/libamcodec.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 4e746a3..b264766 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1100,6 +1100,7 @@ endmenu
- menu "Multimedia"
- 	source "package/bitstream/Config.in"
- 	source "package/libaacs/Config.in"
-+	source "package/libamcodec/Config.in"
- 	source "package/libass/Config.in"
- 	source "package/libbdplus/Config.in"
- 	source "package/libbluray/Config.in"
-diff --git a/package/libamcodec/Config.in b/package/libamcodec/Config.in
-new file mode 100644
-index 0000000..52778ba
---- /dev/null
-+++ b/package/libamcodec/Config.in
-@@ -0,0 +1,13 @@
-+comment "libamcodec needs a toolchain w/ threads"
-+	depends on BR2_arm || BR2_aarch64
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_LIBAMCODEC
-+	bool "libamcodec"
-+	depends on BR2_arm || BR2_aarch64
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
-+	select BR2_PACKAGE_ALSA_LIB
-+	help
-+	    Interface library for Amlogic media codecs
-+
-+	    https://github.com/mdrjr/c2_aml_libs.git
-diff --git a/package/libamcodec/libamcodec.hash b/package/libamcodec/libamcodec.hash
-new file mode 100644
-index 0000000..13bb1e85
---- /dev/null
-+++ b/package/libamcodec/libamcodec.hash
-@@ -0,0 +1,2 @@
-+# Locally computed hash
-+sha256 5e4a1157e75f802585445df55182b5ef123f635b7faca95fbda3f7cdef8bad1c  libamcodec-6f9b99182f94be14fce785c75aa1e9bce868e229.tar.gz
-diff --git a/package/libamcodec/libamcodec.mk b/package/libamcodec/libamcodec.mk
-new file mode 100644
-index 0000000..1d280d5
---- /dev/null
-+++ b/package/libamcodec/libamcodec.mk
-@@ -0,0 +1,35 @@
-+################################################################################
-+#
-+# libamcodec
-+#
-+################################################################################
-+
-+LIBAMCODEC_VERSION = 6f9b99182f94be14fce785c75aa1e9bce868e229
-+LIBAMCODEC_SITE = $(call github,mdrjr,c2_aml_libs,$(LIBAMCODEC_VERSION))
-+LIBAMCODEC_DEPENDENCIES = alsa-lib
-+LIBAMCODEC_LICENSE = Unclear
-+LIBAMCODEC_INSTALL_STAGING = YES
-+
-+# This package uses the M_PREFIX or PREFIX variables to construct the header and
-+# library paths used when compiling
-+define LIBAMCODEC_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/amavutils M_PREFIX="$(STAGING_DIR)/usr"
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/amadec M_PREFIX="$(STAGING_DIR)/usr"
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/amcodec PREFIX="$(STAGING_DIR)"
-+endef
-+
-+define LIBAMCODEC_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/amavutils/libamavutils.so $(STAGING_DIR)/usr/lib/libamavutils.so
-+	$(INSTALL) -D -m 0555 $(@D)/amadec/libamadec.so $(STAGING_DIR)/usr/lib/libamadec.so
-+	$(INSTALL) -D -m 0555 $(@D)/amcodec/libamcodec.so $(STAGING_DIR)/usr/lib/libamcodec.so
-+	mkdir -p $(STAGING_DIR)/usr/include/amcodec
-+	cp -rf $(@D)/amcodec/include/* $(STAGING_DIR)/usr/include/amcodec
-+endef
-+
-+define LIBAMCODEC_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/amavutils/libamavutils.so $(TARGET_DIR)/usr/lib/libamavutils.so
-+	$(INSTALL) -D -m 0555 $(@D)/amadec/libamadec.so $(TARGET_DIR)/usr/lib/libamadec.so
-+	$(INSTALL) -D -m 0555 $(@D)/amcodec/libamcodec.so $(TARGET_DIR)/usr/lib/libamcodec.so
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.9.0
+I'm trying to understand why the kodi's configure prefix param points to /usr and not to the staging dir. can someone help me understand?
+here is the line:
+cd /home/dagg/workspace/buildroots/buildroot-master2/output/build/kodi-16.1-Jarvis/ && rm -rf config.cache && PATH="/home/dagg/workspace/buildroots/buildroot-master2/output/host/bin:/home/dagg/workspace/buildroots/buildroot-master2/output/host/sbin:/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin:/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/sbin:/usr/local/bin:/usr/bin:/bin:/opt/vmware/bin:/opt/bin:/usr/x86_64-pc-linux-gnu/gcc-bin/5.3.0:/usr/x86_64-pc-linux-gnu/aarch64-unknown-linux-muslabi/gcc-bin/5.3.0:/usr/games/bin:/usr/sbin:/usr/local/bin" AR="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-ar" AS="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-as" LD="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-ld" NM="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-nm" CC="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gcc" GCC="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gcc" CPP="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-cpp" CXX="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-g++" FC="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gfortran" F77="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gfortran" RANLIB="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-ranlib" READELF="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-readelf" STRIP="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-strip" OBJCOPY="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-objcopy" OBJDUMP="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-objdump" AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as" CC_FOR_BUILD="/usr/bin/gcc" GCC_FOR_BUILD="/usr/bin/gcc" CXX_FOR_BUILD="/usr/bin/g++" LD_FOR_BUILD="/usr/bin/ld" CPPFLAGS_FOR_BUILD="-I/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/include" CFLAGS_FOR_BUILD="-O2 -I/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/include" CXXFLAGS_FOR_BUILD="-O2 -I/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/include" LDFLAGS_FOR_BUILD="-L/home/dagg/workspace/buildroots/buildroot-master2/output/host/lib -L/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/lib -Wl,-rpath,/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/lib" FCFLAGS_FOR_BUILD="" DEFAULT_ASSEMBLER="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-as" DEFAULT_LINKER="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/arm-buildroot-linux-gnueabihf-ld" CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os " CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os " LDFLAGS="" FCFLAGS=" -Os " FFLAGS=" -Os " PKG_CONFIG="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/pkg-config" STAGING_DIR="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot" INTLTOOL_PERL=/usr/bin/perl ac_cv_lbl_unaligned_fail=yes ac_cv_func_mmap_fixed_mapped=yes ac_cv_func_memcmp_working=yes ac_cv_have_decl_malloc=yes gl_cv_func_malloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes ac_cv_func_calloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes lt_cv_sys_lib_search_path_spec="" ac_cv_c_bigendian=no  PYTHON_VERSION="2.7" 
+PYTHON_LDFLAGS="-lpython2.7 -lpthread -ldl -lutil -lm" PYTHON_CPPFLAGS="-I/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/python2.7" PYTHON_SITE_PKG="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/python2.7/site-packages" PYTHON_NOVERSIONCHECK="no-check" use_texturepacker_native=yes USE_TEXTUREPACKER_NATIVE_ROOT="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr" TEXTUREPACKER_NATIVE_ROOT="/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr" CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  `/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/pkg-config --cflags --libs egl`" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  `/home/dagg/workspace/buildroots/buildroot-master2/output/host/usr/bin/pkg-config --cflags --libs egl`" CONFIG_SITE=/dev/null ./configure --target=arm-buildroot-linux-gnueabihf --host=arm-buildroot-linux-gnueabihf --build=x86_64-pc-linux-gnu --prefix=/usr --exec-prefix=/usr --sysconfdir=/etc --localstatedir=/var --program-prefix="" --disable-gtk-doc --disable-gtk-doc-html --disable-doc --disable-docs --disable-documentation --with-xmlto=no --with-fop=no --disable-dependency-tracking --enable-ipv6  --disable-static --enable-shared  --with-ffmpeg=shared --disable-joystick --disable-openmax --disable-pulse --disable-vdpau --disable-vtbdecoder --enable-optimizations --disable-mysql --enable-codec=amcodec --disable-libcap --disable-dbus --disable-alsa --disable-gl --disable-x11 --enable-gles --disable-libusb --disable-webserver --disable-samba --disable-nfs --disable-rtmp --disable-libbluray --disable-airplay --disable-ssh --disable-avahi --disable-libcec --disable-lirc --disable-vaapi --disable-optical-drive --disable-dvdcss
