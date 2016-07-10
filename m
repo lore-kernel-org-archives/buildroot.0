@@ -1,94 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Jul 2016 22:04:46 +0200
-Subject: [Buildroot] [PATCH] package/duma: fix build with C++14
-Message-ID: <1468181086-17042-1-git-send-email-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 10 Jul 2016 22:30:50 +0200
+Subject: [Buildroot] [PATCH] package/efl: disable libevas jp2k loader
+In-Reply-To: <1467928869-2412-1-git-send-email-romain.naour@gmail.com>
+References: <1467928869-2412-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <a369a0e0-7106-3f91-ebc7-be6703c90765@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/f7f/f7fc0092ec43a5a4bc38b5e6878842df77f32d3a/
-    http://autobuild.buildroot.org/results/7ae/7ae0d5e4821c70077fc1731f578e8222e9d6691b/
-    http://autobuild.buildroot.org/results/438/438032a6d6a38c9929cd26dffb8b3c5d1aed9106/
+Hi,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/duma/0003-fix-C++14.patch | 65 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/duma/0003-fix-C++14.patch
+Le 08/07/2016 ? 00:01, Romain Naour a ?crit :
+> When the support for JP2K is requested, the configure script is looking
+> for libopenjpeg1.pc which is not provided by the openjpeg package since
+> it's too recent (currently v2.1).
+> 
+> Mark BR2_PACKAGE_EFL_JP2K as broken until a new version of the efl
+> stack support the new openjpeg library.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/ff1/ff1dbbc6cffdb5b2550b3613295151ff9fa964d6
 
-diff --git a/package/duma/0003-fix-C++14.patch b/package/duma/0003-fix-C++14.patch
-new file mode 100644
-index 0000000..d19213c
---- /dev/null
-+++ b/package/duma/0003-fix-C++14.patch
-@@ -0,0 +1,65 @@
-+dumapp: fix for C++14
-+
-+With C++14, the way exceptions are specified has changed (somehow, don't
-+ask me), thus causing build failures:
-+
-+    dumapp.cpp: In function ?void* operator new(std::size_t)?:
-+    dumapp.cpp:192:19: error: declaration of ?void* operator new(std::size_t) throw (std::bad_alloc)? has a different exception specifier
-+     void * DUMA_CDECL operator new( DUMA_SIZE_T size )
-+                       ^~~~~~~~
-+    In file included from dumapp.cpp:39:0:
-+    dumapp.h:91:23: note: from previous declaration ?void* operator new(std::size_t)?
-+     void * DUMA_CDECL operator new(DUMA_SIZE_T) throw(std::bad_alloc);
-+                       ^~~~~~~~
-+
-+This is most evident with gcc-6.x, since the default C++ standard has
-+changed from C++11 to C++14, thus exposing these new failures.
-+
-+Fix that by guarding the exception handling, a bit like was done
-+with GRASS GIS (thanks DuckDuckGo):
-+
-+    https://trac.osgeo.org/grass/changeset?old_path=%2F&old=68817&new_path=%2F&new=68818&sfp_email=&sfph_mail=
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+Note: The last commit in DUMA's CVS repo was more than 7 years ago.
-+I doubt it is still active, so the patch was not sent upstream. :-/
-+
-+diff -durN duma-2.5.15.orig/dumapp.cpp duma-2.5.15/dumapp.cpp
-+--- duma-2.5.15.orig/dumapp.cpp	2008-08-03 22:46:06.000000000 +0200
-++++ duma-2.5.15/dumapp.cpp	2016-07-10 21:55:22.670386099 +0200
-+@@ -190,7 +190,9 @@
-+  * (11) = (a) ; ASW
-+  */
-+ void * DUMA_CDECL operator new( DUMA_SIZE_T size )
-++#ifdef DUMA_EXCEPTION_SPECS
-+ throw(std::bad_alloc)
-++#endif
-+ {
-+   return duma_new_operator(size, EFA_NEW_ELEM, true  DUMA_PARAMS_UK);
-+ }
-+@@ -254,7 +256,9 @@
-+  * (21) = (a) ; AAW
-+  */
-+ void * DUMA_CDECL operator new[]( DUMA_SIZE_T size )
-++#ifdef DUMA_EXCEPTION_SPECS
-+ throw(std::bad_alloc)
-++#endif
-+ {
-+   return duma_new_operator(size, EFA_NEW_ARRAY, true  DUMA_PARAMS_UK);
-+ }
-+diff -durN duma-2.5.15.orig/dumapp.h duma-2.5.15/dumapp.h
-+--- duma-2.5.15.orig/dumapp.h	2009-04-11 14:41:44.000000000 +0200
-++++ duma-2.5.15/dumapp.h	2016-07-10 21:55:22.670386099 +0200
-+@@ -35,6 +35,10 @@
-+ 
-+ #include "duma.h"
-+ 
-++#if __cplusplus < 201103L
-++  #define DUMA_EXCEPTION_SPECS 1
-++#endif
-++
-+ /* remove previous macro definitions */
-+ #include "noduma.h"
-+ 
--- 
-2.7.4
+This patch has been marked accepted in patch work but not commited, I changed it
+to "new" in patchwork.
+
+It seems that efl jp2k support require MJ2 codecs support in the library but
+openjpeg doesn't build at all if this support is enabled...
+
+So lets mark this support as broken until a new version of openjpeg is released.
+
+Best regards,
+Romain
+
+
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  package/efl/Config.in | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/efl/Config.in b/package/efl/Config.in
+> index 4ab1ec4..ee1a39d 100644
+> --- a/package/efl/Config.in
+> +++ b/package/efl/Config.in
+> @@ -151,9 +151,12 @@ config BR2_PACKAGE_EFL_PNG
+>  	  This enables the loader code that loads png files using
+>  	  libpng.
+>  
+> +# JP2K support require openjpeg 1.x (libopenjpeg1.pc) which is not
+> +# available in Buildroot anymore.
+>  config BR2_PACKAGE_EFL_JP2K
+>  	bool "libevas jp2k loader"
+>  	select BR2_PACKAGE_OPENJPEG
+> +	depends on BROKEN # require openjpeg 1.x
+>  	help
+>  	  This enables the loader code that loads jp2k files using
+>  	  openjpeg.
+> 
