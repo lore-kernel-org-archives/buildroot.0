@@ -1,75 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Jul 2016 18:54:12 +0200
-Subject: [Buildroot] [PATCH] package/acpica: disable -Werror
-In-Reply-To: <CAK4VdL3NbNaC8U6QnAz=bQZoh9s+YSo+qYcC9qfO=7vADzGbQQ@mail.gmail.com>
-References: <1468160051-23957-1-git-send-email-yann.morin.1998@free.fr>
- <CAK4VdL3NbNaC8U6QnAz=bQZoh9s+YSo+qYcC9qfO=7vADzGbQQ@mail.gmail.com>
-Message-ID: <20160710165412.GC3688@free.fr>
+Date: Sun, 10 Jul 2016 18:56:18 +0200
+Subject: [Buildroot] [PATCH 1/1] acpica: needs threads
+In-Reply-To: <20160710174305.18872-1-nunes.erico@gmail.com>
+References: <20160710174305.18872-1-nunes.erico@gmail.com>
+Message-ID: <20160710165618.GD3688@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enrico, All,
+Erico, Allm
 
-On 2016-07-10 18:37 +0200, Erico Nunes spake thusly:
-> On Sun, Jul 10, 2016 at 4:14 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Fixes:
-> >     http://autobuild.buildroot.org/results/d17/d1728c29e90d978405d24bb97f5c8687dc5a6165/
-> >     http://autobuild.buildroot.org/results/2ec/2ecdf0e87a76781b66098d034768fc8de657faaa/
-> >
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  package/acpica/0001-build-do-not-use-Werror.patch | 62 +++++++++++++++++++++++
-> >  1 file changed, 62 insertions(+)
-> >  create mode 100644 package/acpica/0001-build-do-not-use-Werror.patch
-> >
-> > diff --git a/package/acpica/0001-build-do-not-use-Werror.patch b/package/acpica/0001-build-do-not-use-Werror.patch
-> > new file mode 100644
-> > index 0000000..4ccb4d4
-> > --- /dev/null
-> > +++ b/package/acpica/0001-build-do-not-use-Werror.patch
-> > @@ -0,0 +1,62 @@
-> > +From 9382ae2431d2962c430e7149302c8690f5bc159c Mon Sep 17 00:00:00 2001
-> > +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > +Date: Sun, 10 Jul 2016 15:06:15 +0200
-> > +Subject: [PATCH] build: do not use -Werror
-> > +
-> > +Warnings come and go with various compiler versions, so using -Werror is
-> > +prone to cause build failures with various compiler versions, especially
-> > +newer versions that introduce new warnings.
-> > +
-> > +Remove use of -Werror.
-> > +
-> > +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > +---
-[--SNIP--]
-> I was taking a look at this issue before this patch, and it seems that
-> of these errors with acpica are the same as one that has happened
-> before for mips64, as in fixed by:
-> https://patchwork.ozlabs.org/patch/521624/
+On 2016-07-10 19:43 +0200, Erico Nunes spake thusly:
+> Fixes:
+>   http://autobuild.buildroot.net/results/53e/53e38f278ad6d1a7d0a48bce74976f59475b1a99/
+>   http://autobuild.buildroot.net/results/a7c/a7cc6187451f944e6846d3f6b5cd3aac700796dd/
 > 
-> I'm trying a similar patch to that to fix this error in acpica.
+> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 
--Werror is a *development* opiton; it should not be used in a *release*.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Fact is, warnings are added with new versions of the compiler, so when
-we update to a newer version and keep -Wall -Werror, and the code hits
-such a new warning, we'd still get build issues for code that might even
-be correct with an overly pessimistic compiler.
-
-> In case you can wait a bit for that, maybe fixing it in the same way
-> as micropython would be a patch easier to upstream.
-
-Even if you manage to fix those very warnings, I still believe this
-patch to be valid and applied.
-
-Granted, we could turn it into something that is acceptable upstream, to
-only enable (or disable) use of -Werror at will.
+I was surprised that semaphores would require threads, since it is
+possible to use semaphores across processes (we'd just need a shared
+memory segment to share the semaphore), but indeed, one needs to link
+against -pthread to get the semaphores.
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  package/acpica/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/acpica/Config.in b/package/acpica/Config.in
+> index 74d1f26..c5ffb00 100644
+> --- a/package/acpica/Config.in
+> +++ b/package/acpica/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_ACPICA
+>  	bool "acpica"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	help
+>  	  The ACPI Component Architecture (ACPICA) project provides an
+>  	  operating system (OS)-independent reference implementation
+> @@ -7,3 +8,6 @@ config BR2_PACKAGE_ACPICA
+>  	  Specification (ACPI).
+>  
+>  	  https://www.acpica.org
+> +
+> +comment "acpica needs a toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> -- 
+> 2.9.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
