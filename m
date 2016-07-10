@@ -1,66 +1,90 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Jul 2016 16:06:59 +0200
-Subject: [Buildroot] [PATCH] package/e2fsprogs: fix 0002 patch
-Message-ID: <1468159619-26689-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 10 Jul 2016 16:14:11 +0200
+Subject: [Buildroot] [PATCH] package/acpica: disable -Werror
+Message-ID: <1468160051-23957-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch 0002-fuse2fs-might-need-librt.patch introduced a new configure.ac
-variable that should contain whether -lrt is needed to gt clock_gettime.
-
-However, it forgot to propagate that variable into the Makefiles.
-
-Because e2fprogs is not using automake (just autoconf), the configure
-variables are not automatically propagated; it needs to be done
-manually.
-
 Fixes:
-    http://autobuild.buildroot.org/results/edf/edf4195d33720d51031a84c3bdb6b6b0ed3b4731/
-    http://autobuild.buildroot.org/results/987/987efb687870062c509361eaefd0ff80043392f8/
-    http://autobuild.buildroot.org/results/f58/f58b5f8f5cd069b63aae4249bc7aefb145789b7d/
-    [...]
+    http://autobuild.buildroot.org/results/d17/d1728c29e90d978405d24bb97f5c8687dc5a6165/
+    http://autobuild.buildroot.org/results/2ec/2ecdf0e87a76781b66098d034768fc8de657faaa/
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/e2fsprogs/0002-fuse2fs-might-need-librt.patch | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ package/acpica/0001-build-do-not-use-Werror.patch | 62 +++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+ create mode 100644 package/acpica/0001-build-do-not-use-Werror.patch
 
-diff --git a/package/e2fsprogs/0002-fuse2fs-might-need-librt.patch b/package/e2fsprogs/0002-fuse2fs-might-need-librt.patch
-index 42a7fbd..fef3d20 100644
---- a/package/e2fsprogs/0002-fuse2fs-might-need-librt.patch
-+++ b/package/e2fsprogs/0002-fuse2fs-might-need-librt.patch
-@@ -6,6 +6,8 @@ Subject: [PATCH] fuse2fs: might need librt
- It uses clock_gettime() which in older glibc versions is in librt.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+[yann.morin.1998 at free.fr: properly expand it in the Makefile]
+diff --git a/package/acpica/0001-build-do-not-use-Werror.patch b/package/acpica/0001-build-do-not-use-Werror.patch
+new file mode 100644
+index 0000000..4ccb4d4
+--- /dev/null
++++ b/package/acpica/0001-build-do-not-use-Werror.patch
+@@ -0,0 +1,62 @@
++From 9382ae2431d2962c430e7149302c8690f5bc159c Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 10 Jul 2016 15:06:15 +0200
++Subject: [PATCH] build: do not use -Werror
++
++Warnings come and go with various compiler versions, so using -Werror is
++prone to cause build failures with various compiler versions, especially
++newer versions that introduce new warnings.
++
++Remove use of -Werror.
++
 +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- ---
- Patch status: sent to linux-ext4 ML
- 
-@@ -43,6 +45,19 @@ index 43e3c7e..070a6e3 100644
-  
-  journal.o: $(srcdir)/../debugfs/journal.c
-  	$(E) "	CC $@"
-+diff --git a/misc/Makefile.in b/misc/Makefile.in
-+index 43e3c7e..070a6e3 100644
-+--- a/misc/Makefile.in
-++++ b/misc/Makefile.in
-+@@ -32,6 +32,8 @@
++---
++ generate/unix/Makefile.config |  1 -
++ generate/unix/iasl/Makefile   | 12 ++++++------
++ 2 files changed, 6 insertions(+), 7 deletions(-)
++
++diff --git a/generate/unix/Makefile.config b/generate/unix/Makefile.config
++index da0f61d..1476e27 100644
++--- a/generate/unix/Makefile.config
+++++ b/generate/unix/Makefile.config
++@@ -185,7 +185,6 @@ CWARNINGFLAGS = \
++     -Wall\
++     -Wbad-function-cast\
++     -Wdeclaration-after-statement\
++-    -Werror\
++     -Wformat=2\
++     -Wmissing-declarations\
++     -Wmissing-prototypes\
++diff --git a/generate/unix/iasl/Makefile b/generate/unix/iasl/Makefile
++index a3759cc..c2dc8f0 100644
++--- a/generate/unix/iasl/Makefile
+++++ b/generate/unix/iasl/Makefile
++@@ -320,19 +320,19 @@ $(OBJDIR)/prparserparse.c $(OBJDIR)/prparser.y.h :       $(ASL_COMPILER)/prparse
++ # by the utilities above and they are not necessarily ANSI C, etc.
++ #
++ $(OBJDIR)/aslcompilerlex.o :   $(OBJDIR)/aslcompilerlex.c
++-	$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+++	$(CC) -c $(CFLAGS) -Wall -o$@ $<
 + 
-+ @FUSE_CMT at FUSE_PROG= fuse2fs
++ $(OBJDIR)/aslcompilerparse.o : $(OBJDIR)/aslcompilerparse.c
++-	$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+++	$(CC) -c $(CFLAGS) -Wall -o$@ $<
 + 
-++CLOCK_GETTIME_LIB = @CLOCK_GETTIME_LIB@
-++
-+ SPROGS=		mke2fs badblocks tune2fs dumpe2fs $(BLKID_PROG) logsave \
-+ 			$(E2IMAGE_PROG) @FSCK_PROG@ e2undo
-+ USPROGS=	mklost+found filefrag e2freefrag $(UUIDD_PROG) \
- -- 
- 2.7.3
- 
++ $(OBJDIR)/dtparserlex.o :      $(OBJDIR)/dtparserlex.c
++-	$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+++	$(CC) -c $(CFLAGS) -Wall -o$@ $<
++ 
++ $(OBJDIR)/dtparserparse.o :    $(OBJDIR)/dtparserparse.c
++-	$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+++	$(CC) -c $(CFLAGS) -Wall -o$@ $<
++ 
++ $(OBJDIR)/prparserlex.o :      $(OBJDIR)/prparserlex.c
++-	$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+++	$(CC) -c $(CFLAGS) -Wall -o$@ $<
++ 
++ $(OBJDIR)/prparserparse.o :    $(OBJDIR)/prparserparse.c
++-	$(CC) -c $(CFLAGS) -Wall -Werror -o$@ $<
+++	$(CC) -c $(CFLAGS) -Wall -o$@ $<
++-- 
++2.7.4
++
 -- 
 2.7.4
