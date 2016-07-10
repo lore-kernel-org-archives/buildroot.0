@@ -1,34 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Jul 2016 15:22:45 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: Fix udev dependency check
-Message-ID: <20160710132255.AA63E7FB5F@busybox.osuosl.org>
+Date: Sun, 10 Jul 2016 15:23:04 +0200
+Subject: [Buildroot] [PATCH 2/3] package/mesa3d: Fix udev dependency
+ check
+In-Reply-To: <1468145355-11597-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1468145355-11597-1-git-send-email-bernd.kuhls@t-online.de>
+ <1468145355-11597-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160710152304.461b6056@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e685bcf460a9a61635805e4c072316d6bf3e93e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Sorry for the typo ;)
+On Sun, 10 Jul 2016 12:09:14 +0200, Bernd Kuhls wrote:
+> Sorry for the typo ;)
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mesa3d/mesa3d.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mesa3d/mesa3d.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 9cce0ef..dcd43d5 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -38,7 +38,7 @@ MESA3D_DEPENDENCIES += libgcrypt
- MESA3D_CONF_OPTS += --with-sha1=libgcrypt
- endif
- 
--ifeq ($(BR2_PACKAGE_HAS_LIBUDEV),y)
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- MESA3D_DEPENDENCIES += udev
- MESA3D_CONF_OPTS += --disable-sysfs
- else
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
