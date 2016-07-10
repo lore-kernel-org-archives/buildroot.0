@@ -1,186 +1,185 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Sat,  9 Jul 2016 22:16:09 -0300
-Subject: [Buildroot] [PATCH v7 3/3] util-linux: rework utilities menu for
-	finer control
+Date: Sat,  9 Jul 2016 22:16:08 -0300
+Subject: [Buildroot] [PATCH v7 2/3] util-linux: expand selection of
+	libraries and utilities
 In-Reply-To: <1468113369-16118-1-git-send-email-casantos@datacom.ind.br>
 References: <20160708205217.GB3757@free.fr>
  <1468113369-16118-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <1468113369-16118-5-git-send-email-casantos@datacom.ind.br>
+Message-ID: <1468113369-16118-4-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When even a single extra util-linux utility is enabled, the
-default build and install will install many more programs,
-including many that overlap with those offered by busybox.
-
-Fix by reworking the install-utilies menu to take advantage
-of the new --disable-all-programs config option.  This option
-make it possible to disable the basic set of apps, and then
-enable only the desired apps.
-
-Original patch by Danomi Manchego, visible at
-http://patchwork.ozlabs.org/patch/494866/
+- Add option to control installation of libfdisk
+- Add libfdisk license to the comment in util-linux.mk
+- List all utilities provided by the basic set and document that
+  linux32, linux64, uname26, i386 and x86_64 are symlinks to setarch
+- Add options to install cal, ipcrm, ipcs, logger, lslogin and pg
 
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- Config.in.legacy                 | 16 ++++++++++++
- package/util-linux/Config.in     | 53 +++++++++++++++++++++++++++++++---------
- package/util-linux/util-linux.mk | 15 ++++++------
- 3 files changed, 66 insertions(+), 18 deletions(-)
+ package/util-linux/Config.in     | 51 ++++++++++++++++++++++++++++++++++++++++
+ package/util-linux/util-linux.mk |  9 ++++++-
+ 2 files changed, 59 insertions(+), 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 4101cb0..78a6866 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,22 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.08"
- 
-+config BR2_PACKAGE_UTIL_LINUX_BINARIES
-+	bool "utility selection in util-linux has been refactored"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_UTIL_LINUX_CUSTOM_BINARIES
-+	select BR2_PACKAGE_UTIL_LINUX_BASIC_BINARIES
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-+	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
-+	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	help
-+	  This option has been removed in favor of a more fine-grained
-+	  configuration, which is recommended. Selecting this option
-+	  enables building and installing the basic set of utilities.
-+	  It will also install all util-linux libraries.
-+
- config BR2_PACKAGE_SYSTEMD_COMPAT
- 	bool "systemd compatibility libraries have been removed"
- 	help
 diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 266dc47..0ca961d 100644
+index 3b32bc7..266dc47 100644
 --- a/package/util-linux/Config.in
 +++ b/package/util-linux/Config.in
-@@ -44,8 +44,41 @@ config BR2_PACKAGE_UTIL_LINUX_LIBUUID
+@@ -18,6 +18,14 @@ config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
  	help
- 	  Install libuuid.
+ 	  Install libblkid.
  
--config BR2_PACKAGE_UTIL_LINUX_BINARIES
--	bool "Install utilities"
-+choice
-+	prompt "Install utilities"
-+	default BR2_PACKAGE_UTIL_LINUX_NO_BINARIES
-+
-+config BR2_PACKAGE_UTIL_LINUX_ALL_BINARIES
-+	bool "all"
++config BR2_PACKAGE_UTIL_LINUX_LIBFDISK
++	bool "libfdisk"
 +	depends on BR2_USE_MMU # fork()
 +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-+	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
-+	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
 +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_LINUX_PAM
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_LIBCAP_NG
 +	help
-+	  Install the complete set of util-linux binaries.
++	  Install libfdisk.
 +
-+config BR2_PACKAGE_UTIL_LINUX_CUSTOM_BINARIES
-+	bool "custom"
-+	help
-+	  Manually select which util-linux binaries to install.
-+
-+config BR2_PACKAGE_UTIL_LINUX_NO_BINARIES
-+	bool "none"
-+	help
-+	  Disable all util-linux binaries.
-+
-+endchoice
-+
-+if BR2_PACKAGE_UTIL_LINUX_CUSTOM_BINARIES
-+
-+config BR2_PACKAGE_UTIL_LINUX_BASIC_BINARIES
-+	bool "Basic set"
+ config BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+ 	bool "libmount"
+ 	depends on BR2_USE_MMU # fork()
+@@ -41,11 +49,23 @@ config BR2_PACKAGE_UTIL_LINUX_BINARIES
  	depends on BR2_USE_MMU # fork()
  	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
  	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-@@ -55,19 +88,17 @@ config BR2_PACKAGE_UTIL_LINUX_BINARIES
++	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
  	help
  	  Install the basic set of util-linux binaries.
  
--	  blkdiscard, blkid, blockdev, cfdisk, chcpu, col, colcrt,
--	  colrm, column, ctrlaltdel, dmesg, fdisk, findfs, findmnt,
--	  flock, fsfreeze, fstrim, getopt, hexdump, ipcmk, isosize,
--	  ldattach, look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie,
--	  mkfs, mkswap, namei, prlimit, readprofile, renice, rev,
--	  rtcwake, script, scriptreplay, setarch, setsid, sfdisk,
--	  swaplabel, swapoff, swapon, tailf, uuidgen, whereis, wipefs
-+	  blkdiscard, blkid, blockdev, chcpu, col, colcrt, colrm,
-+	  column, ctrlaltdel, dmesg, fdisk, findfs, findmnt, flock,
-+	  fsfreeze, fstrim, getopt, hexdump, ipcmk, isosize, ldattach,
-+	  look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie, mkfs,
-+	  mkswap, namei, prlimit, readprofile, renice, rev, rtcwake,
-+	  script, scriptreplay, setarch, setsid, sfdisk, swaplabel,
-+	  swapoff, swapon, tailf, uuidgen, whereis, wipefs
++	  blkdiscard, blkid, blockdev, cfdisk, chcpu, col, colcrt,
++	  colrm, column, ctrlaltdel, dmesg, fdisk, findfs, findmnt,
++	  flock, fsfreeze, fstrim, getopt, hexdump, ipcmk, isosize,
++	  ldattach, look, lsblk, lscpu, lsipc, lslocks, lsns, mcookie,
++	  mkfs, mkswap, namei, prlimit, readprofile, renice, rev,
++	  rtcwake, script, scriptreplay, setarch, setsid, sfdisk,
++	  swaplabel, swapoff, swapon, tailf, uuidgen, whereis, wipefs
++
++	  The setarch utility also installs architecture-specific
++	  symlinks like linux32, linux64, uname26, i386 and x86_64.
++
+ if BR2_PACKAGE_UTIL_LINUX_BINARIES
  
- 	  The setarch utility also installs architecture-specific
- 	  symlinks like linux32, linux64, uname26, i386 and x86_64.
- 
--if BR2_PACKAGE_UTIL_LINUX_BINARIES
--
  config BR2_PACKAGE_UTIL_LINUX_AGETTY
- 	bool "agetty"
+@@ -59,6 +79,11 @@ config BR2_PACKAGE_UTIL_LINUX_BFS
+ 	help
+ 	  SCO bfs filesystem support
+ 
++config BR2_PACKAGE_UTIL_LINUX_CAL
++	bool "cal"
++	help
++	  Display a calendar, or some part of it
++
+ config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
+ 	bool "chfn/chsh"
+ 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+@@ -111,6 +136,16 @@ config BR2_PACKAGE_UTIL_LINUX_HWCLOCK
+ 	help
+ 	  Query or set the hardware clock (RTC)
+ 
++config BR2_PACKAGE_UTIL_LINUX_IPCRM
++	bool "ipcrm"
++	help
++	  Remove certain IPC resources
++
++config BR2_PACKAGE_UTIL_LINUX_IPCS
++	bool "ipcs"
++	help
++	  Show information on IPC facilities
++
+ config BR2_PACKAGE_UTIL_LINUX_KILL
+ 	bool "kill"
+ 	help
+@@ -140,11 +175,21 @@ comment "Login utilities needs a uClibc or glibc toolchain w/ wchar, locale, dyn
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+ 		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
++config BR2_PACKAGE_UTIL_LINUX_LOGGER
++	bool "logger"
++	help
++	  Enter messages into the system log
++
+ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
+ 	bool "losetup"
+ 	help
+ 	  Set up and control loop devices
+ 
++config BR2_PACKAGE_UTIL_LINUX_LSLOGINS
++	bool "lslogins"
++	help
++	  Display information about known users in the system
++
+ config BR2_PACKAGE_UTIL_LINUX_MESG
+ 	bool "mesg"
+ 	help
+@@ -200,6 +245,12 @@ config BR2_PACKAGE_UTIL_LINUX_NSENTER
+ comment "nsenter needs a toolchain w/ headers >= 3.0"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 
++config BR2_PACKAGE_UTIL_LINUX_PG
++	bool "pg"
++	depends on BR2_USE_MMU # fork()
++	help
++	  Browse pagewise through text files
++
+ config BR2_PACKAGE_UTIL_LINUX_PARTX
+ 	bool "Partition utilities"
  	depends on BR2_USE_MMU # fork()
 diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 097291d..c78ca7d 100644
+index ed734b0..097291d 100644
 --- a/package/util-linux/util-linux.mk
 +++ b/package/util-linux/util-linux.mk
-@@ -63,8 +63,14 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
- # Used by login-utils
- UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
+@@ -10,7 +10,7 @@ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERS
  
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_NO_BINARIES),y)
-+UTIL_LINUX_CONF_OPTS += --disable-all-programs
-+else ifeq ($(BR2_PACKAGE_UTIL_LINUX_ALL_BINARIES),y)
-+UTIL_LINUX_CONF_OPTS += --enable-all-programs
-+else
- # Disable/Enable utilities
+ # README.licensing claims that some files are GPLv2-only, but this is not true.
+ # Some files are GPLv3+ but only in tests.
+-UTIL_LINUX_LICENSE = GPLv2+, BSD-4c, libblkid and libmount LGPLv2.1+, libuuid BSD-3c
++UTIL_LINUX_LICENSE = GPLv2+, BSD-4c, libblkid, libfdisk and libmount LGPLv2.1+, libuuid BSD-3c
+ UTIL_LINUX_LICENSE_FILES = README.licensing Documentation/licenses/COPYING.GPLv2 Documentation/licenses/COPYING.UCB Documentation/licenses/COPYING.LGPLv2.1 Documentation/licenses/COPYING.BSD-3
+ # For 0001-Fix-libmount-build-under-uClibc.patch
+ UTIL_LINUX_AUTORECONF = YES
+@@ -67,6 +67,7 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
  UTIL_LINUX_CONF_OPTS += \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_BASIC_BINARIES),,--disable-all-programs) \
  	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),--enable-agetty,--disable-agetty) \
  	$(if $(BR2_PACKAGE_UTIL_LINUX_BFS),--enable-bfs,--disable-bfs) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_CAL),--enable-cal,--disable-cal) \
-@@ -117,6 +123,7 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WDCTL),--enable-wdctl,--disable-wdctl) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write,--disable-write) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_ZRAMCTL),--enable-zramctl,--disable-zramctl)
-+endif
- 
- # In the host version of util-linux, we so far only require libuuid,
- # and none of the util-linux utilities, so we disable all of them, unless
-@@ -135,12 +142,6 @@ else
- HOST_UTIL_LINUX_CONF_OPTS += --disable-all-programs
- endif
- 
--# Avoid building the tools if they are disabled since we can't install on
--# a per-directory basis.
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),)
--UTIL_LINUX_CONF_OPTS += --disable-all-programs
--endif
--
- # Install libmount Python bindings
- ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
- UTIL_LINUX_CONF_OPTS += --with-python
-@@ -167,7 +168,7 @@ endif
- UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_INSTALL_PAMFILES
- 
- # Install agetty->getty symlink to avoid breakage when there's no busybox
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_AGETTY),y)
-+ifeq ($(or $(BR2_PACKAGE_UTIL_LINUX_ALL_BINARIES),$(BR2_PACKAGE_UTIL_LINUX_AGETTY)),y)
- ifeq ($(BR2_PACKAGE_BUSYBOX),)
- define UTIL_LINUX_GETTY_SYMLINK
- 	ln -sf agetty $(TARGET_DIR)/sbin/getty
++	$(if $(BR2_PACKAGE_UTIL_LINUX_CAL),--enable-cal,--disable-cal) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH),--enable-chfn-chsh,--disable-chfn-chsh) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),--enable-cramfs,--disable-cramfs) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
+@@ -74,15 +75,20 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FDFORMAT),--enable-fdformat,--disable-fdformat) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_HWCLOCK),--enable-hwclock,--disable-hwclock) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCRM),--enable-ipcrm,--disable-ipcrm) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCS),--enable-ipcs,--disable-ipcs) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBFDISK),--enable-libfdisk,--disable-libfdisk) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS),--enable-libsmartcols,--disable-libsmartcols) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LINE),--enable-line,--disable-line) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-runuser --enable-su --enable-sulogin,--disable-last --disable-login --disable-runuser --disable-su --disable-sulogin) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGGER),--enable-logger,--disable-logger) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LSLOGINS),--enable-lslogins,--disable-lslogins) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MINIX),--enable-minix,--disable-minix) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MORE),--enable-more,--disable-more) \
+@@ -92,6 +98,7 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_NOLOGIN),--enable-nologin,--disable-nologin) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_NSENTER),--enable-nsenter,--disable-nsenter) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),--enable-partx,--disable-partx) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_PG),--enable-pg,--disable-pg) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT),--enable-pivot_root,--disable-pivot_root) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw,--disable-raw) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),--enable-rename,--disable-rename) \
 -- 
 2.7.4
