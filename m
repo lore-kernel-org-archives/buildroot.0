@@ -1,34 +1,52 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Jul 2016 12:09:14 +0200
-Subject: [Buildroot] [PATCH 2/3] package/mesa3d: Fix udev dependency check
-In-Reply-To: <1468145355-11597-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1468145355-11597-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1468145355-11597-2-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 10 Jul 2016 15:17:36 +0200
+Subject: [Buildroot] [git commit] dante: fix sparc compile issue
+Message-ID: <20160710131745.B9F2081780@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry for the typo ;)
+commit: https://git.buildroot.net/buildroot/commit/?id=9e160b4a510b65478e315a9c05472801570c5c8d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes following autobuild failure:
+http://autobuild.buildroot.net/results/536d95a46ef9527c6ed38b397f7e1b33f4b7b5fe/
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/mesa3d.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/dante/0001-fix-sparc-compile.patch | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 9cce0ef..dcd43d5 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -38,7 +38,7 @@ MESA3D_DEPENDENCIES += libgcrypt
- MESA3D_CONF_OPTS += --with-sha1=libgcrypt
- endif
- 
--ifeq ($(BR2_PACKAGE_HAS_LIBUDEV),y)
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- MESA3D_DEPENDENCIES += udev
- MESA3D_CONF_OPTS += --disable-sysfs
- else
--- 
-2.8.1
+diff --git a/package/dante/0001-fix-sparc-compile.patch b/package/dante/0001-fix-sparc-compile.patch
+new file mode 100644
+index 0000000..a23e2e2
+--- /dev/null
++++ b/package/dante/0001-fix-sparc-compile.patch
+@@ -0,0 +1,24 @@
++Signal handling for sparc is broken, fix it.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++--- dante-1.4.1.orig/lib/tostring.c	2014-08-21 18:21:50.000000000 +0200
+++++ dante-1.4.1/lib/tostring.c	2016-07-10 10:08:39.785662622 +0200
++@@ -1526,7 +1526,7 @@ signal2string(sig)
++          return "SIGKILL";
++ #endif /* SIGKILL */
++ 
++-#if (defined SIGLOST) && (!defined SIGABRT || SIGLOST != SIGABRT)
+++#if (defined SIGLOST) && (!defined SIGABRT || SIGLOST != SIGABRT || SIGLOST != SIGPWR)
++       case SIGLOST:
++          return "SIGLOST";
++ #endif /* SIGLOST */
++@@ -1551,7 +1551,7 @@ signal2string(sig)
++          return "SIGPROF";
++ #endif /* SIGPROF */
++ 
++-#ifdef SIGPWR
+++#if (defined SIGPWR) && SIGPWR != SIGLOST
++       case SIGPWR:
++          return "SIGPWR";
++ #endif /* SIGPWR */
