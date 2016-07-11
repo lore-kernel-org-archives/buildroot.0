@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 12 Jul 2016 00:16:31 +0200
-Subject: [Buildroot] [PATCH 08/12 v8] package/eudev: provides libudev
+Date: Tue, 12 Jul 2016 00:16:32 +0200
+Subject: [Buildroot] [PATCH 09/12 v8] package/systemd: provides libudev
 In-Reply-To: <cover.1468274498.git.yann.morin.1998@free.fr>
 References: <cover.1468274498.git.yann.morin.1998@free.fr>
-Message-ID: <32369f6d41cbf57c3f72bbe428fb422f0358e2b7.1468274498.git.yann.morin.1998@free.fr>
+Message-ID: <bee42855747d1ee54c5fb87a35b6dafcf10e6e41.1468274498.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +12,44 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/eudev/Config.in | 4 ++++
- package/eudev/eudev.mk  | 4 +++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ package/systemd/Config.in  | 4 ++++
+ package/systemd/systemd.mk | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index b24ee02..3695143 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -16,6 +16,7 @@ config BR2_PACKAGE_EUDEV
- 	depends on BR2_USE_MMU # uses fork() (for daemon) and dlfcn.h (for libudev)
- 	depends on BR2_USE_WCHAR # C99
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index ddaf3e2..ff685f8 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -14,6 +14,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	depends on !BR2_STATIC_LIBS # kmod
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_USE_MMU # dbus
 +	select BR2_PACKAGE_HAS_LIBUDEV
- 	help
- 	  eudev is a fork of systemd-udev with the goal of obtaining better
- 	  compatibility with existing software such as OpenRC and Upstart,
-@@ -30,6 +31,9 @@ config BR2_PACKAGE_EUDEV
+ 	select BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_DBUS # runtime dependency only
+ 	select BR2_PACKAGE_LIBCAP
+@@ -66,6 +67,9 @@ menuconfig BR2_PACKAGE_SYSTEMD
  
- if BR2_PACKAGE_EUDEV
+ if BR2_PACKAGE_SYSTEMD
  
 +config BR2_PACKAGE_PROVIDES_LIBUDEV
-+	default "eudev"
++	default "systemd"
 +
- comment "udev daemon needs eudev /dev management"
- 	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+ config BR2_PACKAGE_PROVIDES_UDEV
+ 	default "systemd"
  
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index a4c8ebf..27d88f8 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -11,6 +11,8 @@ EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
- EUDEV_LICENSE_FILES = COPYING
- EUDEV_INSTALL_STAGING = YES
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 689b40d..9073299 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -16,7 +16,7 @@ SYSTEMD_DEPENDENCIES = \
+ 	kmod \
+ 	host-gperf
  
-+EUDEV_PROVIDES = libudev
-+
- ifeq ($(BR2_PACKAGE_EUDEV_DAEMON),y)
+-SYSTEMD_PROVIDES = udev
++SYSTEMD_PROVIDES = libudev udev
+ SYSTEMD_AUTORECONF = YES
  
- # mq_getattr is in librt
-@@ -26,7 +28,7 @@ EUDEV_CONF_OPTS = \
- 	--enable-blkid
- 
- EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
--EUDEV_PROVIDES = udev
-+EUDEV_PROVIDES += udev
- 
- ifeq ($(BR2_ROOTFS_MERGED_USR),)
- EUDEV_CONF_OPTS += --with-rootlibdir=/lib --enable-split-usr
+ # Make sure that systemd will always be built after busybox so that we have
 -- 
 2.7.4
