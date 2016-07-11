@@ -1,41 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jul 2016 14:11:44 +0200
-Subject: [Buildroot] [git commit] package/libv4l: bump version to 1.10.1
-Message-ID: <20160711121220.D9C15818C0@busybox.osuosl.org>
+Date: Mon, 11 Jul 2016 14:12:13 +0200
+Subject: [Buildroot] [git commit] python-tomako: bump to version 0.1.0.post1
+Message-ID: <20160711121221.1CBA0818C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0074ffee627524563db0cb8d00763c527fee08de
+commit: https://git.buildroot.net/buildroot/commit/?id=c2dacf7e07cc0434475518e6f57863c829e16d34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+Add license file.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libv4l/libv4l.hash | 2 +-
- package/libv4l/libv4l.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-tomako/python-tomako.hash | 7 +++----
+ package/python-tomako/python-tomako.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
-index d58296f..2bf17ee 100644
---- a/package/libv4l/libv4l.hash
-+++ b/package/libv4l/libv4l.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	78ead27ee58a701d7c6342303cf4520bdd4a2b88a7813bc99a0b389307e4336b	v4l-utils-1.10.0.tar.bz2
-+sha256	6147ccc29fe7dd3c5c3994d613c4f2a099bac8b44694a96e5cf4d7caca8336c0	v4l-utils-1.10.1.tar.bz2
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index d0a3f2b..d557414 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-tomako/python-tomako.hash b/package/python-tomako/python-tomako.hash
+index 678944a..af07a88 100644
+--- a/package/python-tomako/python-tomako.hash
++++ b/package/python-tomako/python-tomako.hash
+@@ -1,4 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/tomako/json
+-md5	74597762d156f52b8716aced94d51f2a  tomako-0.1.0.tar.gz
+-# sha256 calculated by scanpypi
+-sha256	e541e6bad009d3f61956b135757d491bf42c97cb441e7c11ef7a0ef6e9460a9f  tomako-0.1.0.tar.gz
++# md5 from https://pypi.python.org/pypi/tomako/json, sha256 locally computed
++md5	a2e9e99be4ddf2263ed441ddc3dfcf96  tomako-0.1.0.post1.tar.gz
++sha256	2d8ec113199408eb16ec00361aac6f10b716925779b6331083f304d01dafd150  tomako-0.1.0.post1.tar.gz
+diff --git a/package/python-tomako/python-tomako.mk b/package/python-tomako/python-tomako.mk
+index a9eef64..23c0b34 100644
+--- a/package/python-tomako/python-tomako.mk
++++ b/package/python-tomako/python-tomako.mk
+@@ -4,10 +4,11 @@
  #
  ################################################################################
  
--LIBV4L_VERSION = 1.10.0
-+LIBV4L_VERSION = 1.10.1
- LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
- LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils
- LIBV4L_INSTALL_STAGING = YES
+-PYTHON_TOMAKO_VERSION = 0.1.0
++PYTHON_TOMAKO_VERSION = 0.1.0.post1
+ PYTHON_TOMAKO_SOURCE = tomako-$(PYTHON_TOMAKO_VERSION).tar.gz
+-PYTHON_TOMAKO_SITE = https://pypi.python.org/packages/66/6f/de5449d401ca6953691c765d7465941e772cf99a3547646edc58cdca452d
++PYTHON_TOMAKO_SITE = https://pypi.python.org/packages/30/64/e174248281cb2fa8f5bce955d4bd49b253e622bb540a6001e48dec378a07
+ PYTHON_TOMAKO_SETUP_TYPE = setuptools
+ PYTHON_TOMAKO_LICENSE = MIT
++PYTHON_TOMAKO_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
