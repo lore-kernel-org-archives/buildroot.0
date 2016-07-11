@@ -1,47 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Jul 2016 23:56:21 +0200
-Subject: [Buildroot] [PATCH] package/systemd: importd broken on Sourcery
-	CodeBench ARM 2014.05
-Message-ID: <1468187781-7497-1-git-send-email-yann.morin.1998@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 11 Jul 2016 06:26:15 +0300
+Subject: [Buildroot] [PATCH] core: do not remove dl/ directory on
+ distclean
+In-Reply-To: <1468187749-3955-1-git-send-email-yann.morin.1998@free.fr>
+References: <1468187749-3955-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160711032615.GJ3870@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This toolchain uses glibc-2.18, which is tool old to provide O_TMPFILE,
-which was added only in glibc-2.19.
+Hi Yann,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/systemd/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Sun, Jul 10, 2016 at 11:55:49PM +0200, Yann E. MORIN wrote:
+> Currently, if the dl/ directory is the default location, it is removed
+> on distclean.
+> 
+> However, the dl/ directory is a precious location: it contains all the
+> tarballs downloaded so far, and some can be relatively huge, taking some
+> previous time to re-download, especially on slowish links.
+> 
+> Don't remove it on distclean. If the user really needs to regain some
+> space, leave it to him to clean this directory up manually.
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 4a2aa33..48e6c45 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -145,6 +145,8 @@ config BR2_PACKAGE_SYSTEMD_IMPORTD
- 	bool "enable import daemon"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # O_TMPFILE
-+	# This toolchain has glibc-2.18, too old to provide O_TMPFILE
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_BZIP2
-@@ -160,8 +162,12 @@ config BR2_PACKAGE_SYSTEMD_IMPORTD
- 
- comment "import daemon needs a toolchain w/ headers >= 3.11"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
- 
-+comment "import daemon broken on Sourcery CodeBench ARM 2014.05"
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
-+
- config BR2_PACKAGE_SYSTEMD_KDBUS
- 	bool "enable kdbus support"
- 	help
+Current Makefile help text for 'distclean' says:
+
+  delete all non-source files (including .config)
+
+Not deleting the dl/ directory is not consistent with this description, IMO.
+
+baruch
+
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  Makefile | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 027f21c..5d840f6 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -901,9 +901,6 @@ clean:
+>  		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
+>  
+>  distclean: clean
+> -ifeq ($(DL_DIR),$(TOPDIR)/dl)
+> -	rm -rf $(DL_DIR)
+> -endif
+>  ifeq ($(O),output)
+>  	rm -rf $(O)
+>  endif
+
 -- 
-2.7.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
