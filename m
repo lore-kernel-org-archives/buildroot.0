@@ -1,52 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jul 2016 14:12:13 +0200
-Subject: [Buildroot] [git commit] python-tomako: bump to version 0.1.0.post1
-Message-ID: <20160711121221.1CBA0818C0@busybox.osuosl.org>
+Date: Mon, 11 Jul 2016 14:11:35 +0200
+Subject: [Buildroot] [git commit] package/zic: bump version to 2016f
+Message-ID: <20160711121220.C2A5F818C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2dacf7e07cc0434475518e6f57863c829e16d34
+commit: https://git.buildroot.net/buildroot/commit/?id=4b04033fc3304223a2c4962640e75934d2b8d386
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add license file.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-tomako/python-tomako.hash | 7 +++----
- package/python-tomako/python-tomako.mk   | 5 +++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/zic/zic.hash | 4 ++--
+ package/zic/zic.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-tomako/python-tomako.hash b/package/python-tomako/python-tomako.hash
-index 678944a..af07a88 100644
---- a/package/python-tomako/python-tomako.hash
-+++ b/package/python-tomako/python-tomako.hash
-@@ -1,4 +1,3 @@
--# md5 from https://pypi.python.org/pypi/tomako/json
--md5	74597762d156f52b8716aced94d51f2a  tomako-0.1.0.tar.gz
--# sha256 calculated by scanpypi
--sha256	e541e6bad009d3f61956b135757d491bf42c97cb441e7c11ef7a0ef6e9460a9f  tomako-0.1.0.tar.gz
-+# md5 from https://pypi.python.org/pypi/tomako/json, sha256 locally computed
-+md5	a2e9e99be4ddf2263ed441ddc3dfcf96  tomako-0.1.0.post1.tar.gz
-+sha256	2d8ec113199408eb16ec00361aac6f10b716925779b6331083f304d01dafd150  tomako-0.1.0.post1.tar.gz
-diff --git a/package/python-tomako/python-tomako.mk b/package/python-tomako/python-tomako.mk
-index a9eef64..23c0b34 100644
---- a/package/python-tomako/python-tomako.mk
-+++ b/package/python-tomako/python-tomako.mk
-@@ -4,10 +4,11 @@
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index 7a231a8..360575a 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
+@@ -1,2 +1,2 @@
+-# From http://mm.icann.org/pipermail/tz-announce/2016-June/000039.html
+-sha512	dcaf615ada96920e60ffb336253f53541861153decc156d41661f43e0bfb128c6c231b0b776bbe3f2176549346275fc5a879074f4977d5141228e58cb33a41c6	tzcode2016e.tar.gz
++# From http://mm.icann.org/pipermail/tz-announce/2016-July/000040.html
++sha512 97d084f4b0a688fef097dca256083ca9948393848d77c8ee637bdd26f859150cce7d2b26fc1165a3b44b28cc1c9075e10192332261ed68990b4b21a85438b023	tzcode2016f.tar.gz
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index 2e7d1cc..8a0c8dc 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_TOMAKO_VERSION = 0.1.0
-+PYTHON_TOMAKO_VERSION = 0.1.0.post1
- PYTHON_TOMAKO_SOURCE = tomako-$(PYTHON_TOMAKO_VERSION).tar.gz
--PYTHON_TOMAKO_SITE = https://pypi.python.org/packages/66/6f/de5449d401ca6953691c765d7465941e772cf99a3547646edc58cdca452d
-+PYTHON_TOMAKO_SITE = https://pypi.python.org/packages/30/64/e174248281cb2fa8f5bce955d4bd49b253e622bb540a6001e48dec378a07
- PYTHON_TOMAKO_SETUP_TYPE = setuptools
- PYTHON_TOMAKO_LICENSE = MIT
-+PYTHON_TOMAKO_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+-ZIC_VERSION = 2016e
++ZIC_VERSION = 2016f
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = http://www.iana.org/time-zones/repository/releases
+ ZIC_STRIP_COMPONENTS = 0
