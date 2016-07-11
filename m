@@ -1,25 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jul 2016 23:05:01 +0200
-Subject: [Buildroot] [PATCH 1/1] acpica: needs threads
-In-Reply-To: <20160710174305.18872-1-nunes.erico@gmail.com> (Erico Nunes's
- message of "Sun, 10 Jul 2016 19:43:05 +0200")
-References: <20160710174305.18872-1-nunes.erico@gmail.com>
-Message-ID: <87k2gr998i.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 11 Jul 2016 23:13:31 +0200
+Subject: [Buildroot] [PATCH v1] log4cpp: fix musl compile
+Message-ID: <1468271611-28362-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Erico" == Erico Nunes <nunes.erico@gmail.com> writes:
+Include proper config.h (via log4cpp/Portability.hh) to fix the
+evaluate of LOG4CPP_HAVE_STDINT_H in the file tests/Clock.hh
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/53e/53e38f278ad6d1a7d0a48bce74976f59475b1a99/
- >   http://autobuild.buildroot.net/results/a7c/a7cc6187451f944e6846d3f6b5cd3aac700796dd/
+Fixes [1]:
 
- > Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+  Clock.hh:17:13: error: 'int64_t' does not name a type
+       typedef int64_t usec_t;
 
-Committed, thanks.
+[1] http://autobuild.buildroot.net/results/186/1867632f30531da69f06b965bc833817400f618f
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/log4cpp/0001-Fix-musl-compile.patch | 34 +++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/log4cpp/0001-Fix-musl-compile.patch
+
+diff --git a/package/log4cpp/0001-Fix-musl-compile.patch b/package/log4cpp/0001-Fix-musl-compile.patch
+new file mode 100644
+index 0000000..f1a13a0
+--- /dev/null
++++ b/package/log4cpp/0001-Fix-musl-compile.patch
+@@ -0,0 +1,34 @@
++From 17562259fb6684f351a70b98b4f3b438927ba1aa Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Mon, 11 Jul 2016 22:58:31 +0200
++Subject: [PATCH] Fix musl compile.
++
++Include proper config.h (via log4cpp/Portability.hh) to fix the
++evaluate of LOG4CPP_HAVE_STDINT_H in the file tests/Clock.hh
++
++Fixes:
++
++  Clock.hh:17:13: error: 'int64_t' does not name a type
++       typedef int64_t usec_t;
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ log4cpp/tests/Clock.hh | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/log4cpp/tests/Clock.hh b/log4cpp/tests/Clock.hh
++index 4bf0ca4..45c6467 100644
++--- a/log4cpp/tests/Clock.hh
+++++ b/log4cpp/tests/Clock.hh
++@@ -6,6 +6,8 @@
++ #ifndef __CLOCK_H
++ #define __CLOCK_H
++ 
+++#include <log4cpp/Portability.hh>
+++
++ #ifdef LOG4CPP_HAVE_STDINT_H
++ #include <stdint.h>
++ #endif // LOG4CPP_HAVE_STDINT_H
++-- 
++2.8.1
++
 -- 
-Bye, Peter Korsgaard
+2.8.1
