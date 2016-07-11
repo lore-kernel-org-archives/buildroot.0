@@ -1,42 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jul 2016 14:11:35 +0200
-Subject: [Buildroot] [git commit] package/zic: bump version to 2016f
-Message-ID: <20160711121220.C2A5F818C0@busybox.osuosl.org>
+Date: Mon, 11 Jul 2016 14:11:49 +0200
+Subject: [Buildroot] [git commit] python-dataproperty: bump to version 0.7.1
+Message-ID: <20160711121220.E5507821A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b04033fc3304223a2c4962640e75934d2b8d386
+commit: https://git.buildroot.net/buildroot/commit/?id=8cb078d479a11755447d0d49e3246218350bd009
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/zic/zic.hash | 4 ++--
- package/zic/zic.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-dataproperty/python-dataproperty.hash | 4 ++--
+ package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/zic/zic.hash b/package/zic/zic.hash
-index 7a231a8..360575a 100644
---- a/package/zic/zic.hash
-+++ b/package/zic/zic.hash
-@@ -1,2 +1,2 @@
--# From http://mm.icann.org/pipermail/tz-announce/2016-June/000039.html
--sha512	dcaf615ada96920e60ffb336253f53541861153decc156d41661f43e0bfb128c6c231b0b776bbe3f2176549346275fc5a879074f4977d5141228e58cb33a41c6	tzcode2016e.tar.gz
-+# From http://mm.icann.org/pipermail/tz-announce/2016-July/000040.html
-+sha512 97d084f4b0a688fef097dca256083ca9948393848d77c8ee637bdd26f859150cce7d2b26fc1165a3b44b28cc1c9075e10192332261ed68990b4b21a85438b023	tzcode2016f.tar.gz
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index 2e7d1cc..8a0c8dc 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+index dd1b84c..916352e 100644
+--- a/package/python-dataproperty/python-dataproperty.hash
++++ b/package/python-dataproperty/python-dataproperty.hash
+@@ -1,4 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/dataproperty/json
+-md5	b0dfde2908e26585db24ef51d2153ca5  DataProperty-0.3.1.tar.gz
++md5	7ad4dabb5469bb3f150dd1018680119c  DataProperty-0.7.1.tar.gz
+ # sha256 calculated by scanpypi
+-sha256	12a5e97a7fba5a938ecadf24f8e9c0ed4f3fd045b84ec107d5fa5ce15c03f9ad  DataProperty-0.3.1.tar.gz
++sha256	2d53019e6ca7b95511ec733ea57dc108d916d2dd0818d88d1b7c0e06854a2d2e  DataProperty-0.7.1.tar.gz
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index 06b8caf..927fa69 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--ZIC_VERSION = 2016e
-+ZIC_VERSION = 2016f
- ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
- ZIC_SITE = http://www.iana.org/time-zones/repository/releases
- ZIC_STRIP_COMPONENTS = 0
+-PYTHON_DATAPROPERTY_VERSION = 0.3.1
++PYTHON_DATAPROPERTY_VERSION = 0.7.1
+ PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
+-PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/94/84/a78a208b4fe3001e8fa1dc553122e3f27a807f26fee097f20714d6def70b
++PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/1f/64/b17e5ab3935484869cc3e8ec06ede0c94a296b4955c947d1dfe4460955f9
+ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
