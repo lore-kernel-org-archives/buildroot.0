@@ -1,41 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jul 2016 10:22:05 +0200
-Subject: [Buildroot] [PATCH 1/2] package/kodi: add support for libudev
-In-Reply-To: <1468175780-18062-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1468175780-18062-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160711102205.1294d35d@free-electrons.com>
+From: Romain Perier <romain.perier@free-electrons.com>
+Date: Mon, 11 Jul 2016 10:48:39 +0200
+Subject: [Buildroot] [PATCH 0/6] Add support for AMD Catalyst graphics driver
+Message-ID: <1468226925-21264-1-git-send-email-romain.perier@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The AMD Catalyst Proprietary Linux Graphics Driver 15.9 supports GPUs
+AMD Radeon HD 5xxx and newer graphics. It requires at least glibc 2.2
+or 2.3 and is compatible up to Xorg 1.17. This serie adds the required
+changes to support this driver.
 
-On Sun, 10 Jul 2016 20:36:19 +0200, Bernd Kuhls wrote:
-> Most of the times this is not needed because libdrm & mesa3d already
-> pull in the dependency to udev. Let's add it anyway to make sure that
-> udev is really used and to document that Kodi makes use of udev.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi/kodi.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-> index 90c50c3..21a0d53 100644
-> --- a/package/kodi/kodi.mk
-> +++ b/package/kodi/kodi.mk
-> @@ -53,6 +53,13 @@ KODI_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads
->  	LIBS="-lvcos -lvchostif"
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_HAS_LIBUDEV),y)
+The fglrx kernel module is compatible up to Linux kernel 4.4 LTS.
+All the graphical stack has been tested on a x86_64 system with an
+AMD-GT40N (w/ Radeon HD 6290 GPU).
 
-HAS_UDEV (same typo as mesa3d) :-)
+Romain Perier (6):
+  support/download: Add support for the referer option to wget
+  pkg-download: Allow packages to pass an URL referer to the wget method
+  docs/manual: Document the variable $(PKG)_DL_REFERER
+  package/xserver_xorg-server: add version 1.17.4
+  qt: Add option for enabling the accessibility support
+  package/amd-catalyst-driver: Add AMD proprietary graphic stack support
 
-Thomas
+ docs/manual/adding-packages-generic.txt            |  75 +++++----
+ package/Config.in                                  |   1 +
+ .../0001-Add-support-for-Linux-4.0.patch           |  45 ++++++
+ .../0002-Add-support-for-Linux-4.1.patch           |  31 ++++
+ .../0003-Add-support-for-Linux-4.2.patch           | 121 ++++++++++++++
+ ...0004-Use-fpregs_active-instead-of-has_fpu.patch |  33 ++++
+ ...-Use-a-local-copy-of-copy_xregs_to_kernel.patch |  79 ++++++++++
+ .../0006-Add-support-for-Linux-4.4.patch           |  78 +++++++++
+ package/amd-catalyst-driver/20-fglrx.conf          |   4 +
+ package/amd-catalyst-driver/Config.in              |  89 +++++++++++
+ .../amd-catalyst-driver/amd-catalyst-driver.hash   |   2 +
+ package/amd-catalyst-driver/amd-catalyst-driver.mk | 175 +++++++++++++++++++++
+ package/amd-catalyst-driver/gl.pc                  |  12 ++
+ package/pkg-download.mk                            |   3 +-
+ package/qt/Config.in                               |   5 +
+ package/qt/qt.mk                                   |   7 +-
+ package/x11r7/xserver_xorg-server/Config.in        |  10 ++
+ .../xserver_xorg-server/xserver_xorg-server.hash   |   2 +
+ support/download/wget                              |  10 +-
+ 19 files changed, 744 insertions(+), 38 deletions(-)
+ create mode 100644 package/amd-catalyst-driver/0001-Add-support-for-Linux-4.0.patch
+ create mode 100644 package/amd-catalyst-driver/0002-Add-support-for-Linux-4.1.patch
+ create mode 100644 package/amd-catalyst-driver/0003-Add-support-for-Linux-4.2.patch
+ create mode 100644 package/amd-catalyst-driver/0004-Use-fpregs_active-instead-of-has_fpu.patch
+ create mode 100644 package/amd-catalyst-driver/0005-Use-a-local-copy-of-copy_xregs_to_kernel.patch
+ create mode 100644 package/amd-catalyst-driver/0006-Add-support-for-Linux-4.4.patch
+ create mode 100644 package/amd-catalyst-driver/20-fglrx.conf
+ create mode 100644 package/amd-catalyst-driver/Config.in
+ create mode 100644 package/amd-catalyst-driver/amd-catalyst-driver.hash
+ create mode 100644 package/amd-catalyst-driver/amd-catalyst-driver.mk
+ create mode 100644 package/amd-catalyst-driver/gl.pc
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
