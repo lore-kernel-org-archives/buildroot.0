@@ -1,20 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jul 2016 21:55:33 +0200
-Subject: [Buildroot] [PATCH 2/2] linux-headers: Bump to 4.6.4 kernel
-In-Reply-To: <1468265492-28037-2-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Mon, 11 Jul 2016 16:31:32 -0300")
-References: <1468265492-28037-1-git-send-email-festevam@gmail.com>
- <1468265492-28037-2-git-send-email-festevam@gmail.com>
-Message-ID: <87r3b09cga.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jul 2016 21:57:54 +0200
+Subject: [Buildroot] [PATCH] package/systemd: import daemon needs
+	headers >= 3.11
+In-Reply-To: <1468182896-8355-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 10 Jul 2016 22:34:56 +0200")
+References: <1468182896-8355-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87eg709ccd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > ... since it uses O_TMPFILE as an open(2) flag, and it was only
+ > introduced in 3.11.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Gabe Evans <gabe@hashrabbit.co>
+ > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
 Committed, thanks.
 
