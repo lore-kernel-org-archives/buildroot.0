@@ -1,44 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jul 2016 12:11:41 +0200
-Subject: [Buildroot] [PATCH 3/6] docs/manual: Document the variable
- $(PKG)_DL_REFERER
-In-Reply-To: <57836D3D.5020801@free-electrons.com>
-References: <1468226925-21264-1-git-send-email-romain.perier@free-electrons.com>
- <1468226925-21264-4-git-send-email-romain.perier@free-electrons.com>
- <20160711112709.448eaec2@free-electrons.com>
- <57836D3D.5020801@free-electrons.com>
-Message-ID: <20160711121141.23703922@free-electrons.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Mon, 11 Jul 2016 11:23:11 +0100
+Subject: [Buildroot] [PATCH 2/2] package/tzdata: bump version to 2016f
+In-Reply-To: <20160711102311.18311-1-martin@barkynet.com>
+References: <20160711102311.18311-1-martin@barkynet.com>
+Message-ID: <20160711102311.18311-2-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Mon, 11 Jul 2016 11:56:13 +0200, Romain Perier wrote:
-
-> > This big chunk of change seems completely unrelated to your patch. Some
-> > issue with your text editor?  
-> 
-> I just added this variable to the example. By doing so, it shifts the 
-> lines number. However, I don't think that's very useful to add this 
-> variable to this snippet of code, because this example seems to be 
-> helpful only for the most basic common cases.
-
-Yeah, sorry, I missed the fact that you added a <pkg>_DL_REFERER
-example (it was lost in the "noise" of the patch).
-
-But indeed, I don't think adding DL_REFERER to the example is useful.
-Only package needs it as of now, and I don't expect many packages to
-need that in the future. So having it in the reference of available
-variables is definitely necessary (we document *all* variables), but
-not in the example of the tutorial.
-
-Thanks,
-
-Thomas
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index 9f1859e..1d7fbcd 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,2 +1,2 @@
+-# From http://mm.icann.org/pipermail/tz-announce/2016-June/000039.html
+-sha512	dace0f6fc87a73879ca3a1b143d7dcf9c50803e23e6b8c91f83711704e28129af776676c547c42f14dee7f1e8e285ce25296e53a52d11f4c8f155b5f80f4beb3 	tzdata2016e.tar.gz
++# From http://mm.icann.org/pipermail/tz-announce/2016-July/000040.html
++sha512 0472f9516b6c3d83c0a5d0953a5535f4c48d9b9171e125f528188dac512f3556bc1805b7029c4f467a122cbce1beb4e804dd4ae63b259952de3bb217f8e8941d	tzdata2016f.tar.gz
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 17da3a1..de7d1be 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TZDATA_VERSION = 2016e
++TZDATA_VERSION = 2016f
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
+ TZDATA_STRIP_COMPONENTS = 0
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.9.0
