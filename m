@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jul 2016 14:17:42 +0200
-Subject: [Buildroot] [PATCH] package/libv4l: bump version to 1.10.1
-In-Reply-To: <20160711075440.27051-1-ludovic.desroches@atmel.com>
-References: <20160711075440.27051-1-ludovic.desroches@atmel.com>
-Message-ID: <20160711141742.10fbd6fb@free-electrons.com>
+Date: Mon, 11 Jul 2016 14:17:50 +0200
+Subject: [Buildroot] [PATCH 1/4] python-dataproperty: bump to version
+ 0.7.1
+In-Reply-To: <1468223677-20192-1-git-send-email-yegorslists@googlemail.com>
+References: <1468223677-20192-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160711141750.603b846b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 11 Jul 2016 09:54:40 +0200, Ludovic Desroches wrote:
-> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+On Mon, 11 Jul 2016 09:54:34 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/libv4l/libv4l.hash | 2 +-
->  package/libv4l/libv4l.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/python-dataproperty/python-dataproperty.hash | 4 ++--
+>  package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
+All four patches applied, thanks.
 
 Thomas
 -- 
