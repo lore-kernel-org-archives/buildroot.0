@@ -1,68 +1,117 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 11 Jul 2016 23:13:31 +0200
-Subject: [Buildroot] [PATCH v1] log4cpp: fix musl compile
-Message-ID: <1468271611-28362-1-git-send-email-ps.report@gmx.net>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 11 Jul 2016 23:25:38 +0200
+Subject: [Buildroot] prefix question for kodi.
+In-Reply-To: <trinity-cc016c92-f8fd-4e35-8ecb-627f04899e3c-1468270832325@3capp-mailcom-bs13>
+References: <trinity-f49f8e10-13bc-491a-a4be-f1a55d2f391d-1468088008466@3capp-mailcom-bs09>
+ <CAHXCMM+xuaawC=rJiDrX8VwLQbhTVcDoekS86ZTsfRzK5mODdQ@mail.gmail.com>
+ <trinity-cc016c92-f8fd-4e35-8ecb-627f04899e3c-1468270832325@3capp-mailcom-bs13>
+Message-ID: <CAHXCMMKO_1zD1bL1V1Z7j15byNTQf291Pu5W9ro6r4Qzh2qjiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Include proper config.h (via log4cpp/Portability.hh) to fix the
-evaluate of LOG4CPP_HAVE_STDINT_H in the file tests/Clock.hh
+Hi all,
 
-Fixes [1]:
+On Mon, Jul 11, 2016 at 11:00 PM, daggs <daggs@gmx.com> wrote:
+> Greetings,
+>
+>> This is not Kodi-specific, this is done like things for many packages
+>> (i.e. for all packages using a decent build-system, e.g. autotools
+>> [1], cmake [2], etc).. So, almost all packages.
+>>
+>> For building a target package, the prefix must point to /usr, and not
+>> to the staging dir. because:
+>> 1. The --prefix option sets the prefix location in the target
+>> directory, i.e. as its should be at runtime (at runtime in the target
+>> system).
+>> So, in the case of Buildroot, this is not (and must not be) the
+>> absolute location where stuff will be installed.
+>> Note that if you set prefix to STAGING_DIR, I bet your final rootfs
+>> won't look like what you'd expect, and may not work as expected... or
+>> not work at all!
+>> 2. To install stuff in a location different from the runtime one, we
+>> use the standard variable DESTDIR (see [3,4])
+>> So, basically when a package using a decent build-system execute an
+>> install rule, it computes the install location like this:
+>>   stuff_install_path = ${DESTDIR}${prefix}/${stuf_dir}
+>> 3. We don't (want to) build target packages twice, with only the
+>> --prefix option changed between these 2 builds (i.e. once with
+>> --prefix=$(STAGING_DIR)... and a second time with
+>> --prefix=$(TARGET_DIR)...).
+>> So, from the aforementioned reasons we build each target package once
+>> with the right prefix for the target rootfs, and install twice (if
+>> needed), once with DESTDIR=$(TARGET_DIR) and a second time with
+>> DESTDIR=$(STAGING_DIR), see [3,4].
+>>
+>> Note that for the build, things are correctly routed to the staging
+>> dir. thanks to:
+>> - the --sysroot option, optionally with -I.. or -L.. pointing to the
+>> staging tree;
+>> - the Buildroot compiler wrapper that enforce these options to be
+>> correctly set, and also check for poisoning paths (i.e. paths pointing
+>> to standard host system locations, e.g. /usr/lib or /usr/local/lib,
+>> etc).
+>>
+>> So, unless you are not lucky packaging a projet that use a
+>> non-standard build-system, or does nasty things at configure-time, you
+>> should not  paid much attention to this prefix option, Buildroot
+>> handles it for you ;-)
+>>
+>> Regards,
+>>
+>> [1] https://github.com/buildroot/buildroot/blob/master/package/pkg-autotools.mk#L181
+>> [2] https://github.com/buildroot/buildroot/blob/master/package/pkg-cmake.mk#L91
+>> [3] https://github.com/buildroot/buildroot/blob/master/package/pkg-autotools.mk#L159
+>> [4] https://github.com/buildroot/buildroot/blob/master/package/pkg-cmake.mk#L60
+>>
+>> --
+>> Samuel
+>>
+>
+> thanks for the detailed explenation, I'm not trying to do anyting fancy, only compile kodi with the --enable-codec=amcodec.
+On an autotools package, it should be pretty straight forward...
 
-  Clock.hh:17:13: error: 'int64_t' does not name a type
-       typedef int64_t usec_t;
+> as seen in my previous mail, there is no --sysroot passed to kodi, also unless I'm misunderstood something,
+As mentioned above, the Buildroot wrapper ensure --sysroot is
+correctly passed to the actual cross-compiler, but may not print it on
+standard verbose make call. To see the actual full command, try
+setting the BR2_DEBUG_WRAPPER env. var. [5].
 
-[1] http://autobuild.buildroot.net/results/186/1867632f30531da69f06b965bc833817400f618f
+> using the DESTDIR doesn't help at it is blank.
+DESTDIR is only useful at install time, not configure/build/run time.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/log4cpp/0001-Fix-musl-compile.patch | 34 +++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/log4cpp/0001-Fix-musl-compile.patch
+> my issue is that when amcodec is enabled, one of kodi's makefiles define adds new incldue path as follows: ${prefix}/usr/include/<something>.
+> as prefix is empty, instead of searching the code at staging's sysroot, it searches it on the local machine's path,
+Here is your issue.
 
-diff --git a/package/log4cpp/0001-Fix-musl-compile.patch b/package/log4cpp/0001-Fix-musl-compile.patch
-new file mode 100644
-index 0000000..f1a13a0
---- /dev/null
-+++ b/package/log4cpp/0001-Fix-musl-compile.patch
-@@ -0,0 +1,34 @@
-+From 17562259fb6684f351a70b98b4f3b438927ba1aa Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 11 Jul 2016 22:58:31 +0200
-+Subject: [PATCH] Fix musl compile.
-+
-+Include proper config.h (via log4cpp/Portability.hh) to fix the
-+evaluate of LOG4CPP_HAVE_STDINT_H in the file tests/Clock.hh
-+
-+Fixes:
-+
-+  Clock.hh:17:13: error: 'int64_t' does not name a type
-+       typedef int64_t usec_t;
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ log4cpp/tests/Clock.hh | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/log4cpp/tests/Clock.hh b/log4cpp/tests/Clock.hh
-+index 4bf0ca4..45c6467 100644
-+--- a/log4cpp/tests/Clock.hh
-++++ b/log4cpp/tests/Clock.hh
-+@@ -6,6 +6,8 @@
-+ #ifndef __CLOCK_H
-+ #define __CLOCK_H
-+ 
-++#include <log4cpp/Portability.hh>
-++
-+ #ifdef LOG4CPP_HAVE_STDINT_H
-+ #include <stdint.h>
-+ #endif // LOG4CPP_HAVE_STDINT_H
-+-- 
-+2.8.1
-+
+Few hints to move forward:
+1- identify what Makefile{,.in,.am} sets this;
+2- how this makefile set this? does it call a *-config script, or call
+pkg_check_modules, or get it from some options/env. vars. when
+invoking the configure script (check: ./configure --help), or  just do
+nasty things manually/handwritten?
+3- does amcodec provides a *-config script or a pkg-config module (i.e. a *.pc)?
+
+Depending on your findings in kodi and amcodec, you may need to patch
+the culprit (make?)file from kodi...
+
+> generating a WARNING: unsafe header/library path used in cross-compilation error.
+This is the poisin path check ;)
+
+>
+> how can I use DESTDIR properly?
+I'm not sure you need to do anything special about it.
+AFAICS, amcodec is autotools-based, so everything should already be
+correctly handled.
+
+>
+> Dagg.
+
+[5] http://nightly.buildroot.org/manual.html#_external_toolchain_wrapper
+
+Regards,
+
 -- 
-2.8.1
+Samuel
