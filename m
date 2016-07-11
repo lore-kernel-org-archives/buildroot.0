@@ -1,65 +1,113 @@
 From: Romain Perier <romain.perier@free-electrons.com>
-Date: Mon, 11 Jul 2016 10:48:44 +0200
-Subject: [Buildroot] [PATCH 5/6] qt: Add option for enabling the
-	accessibility support
+Date: Mon, 11 Jul 2016 10:48:42 +0200
+Subject: [Buildroot] [PATCH 3/6] docs/manual: Document the variable
+	$(PKG)_DL_REFERER
 In-Reply-To: <1468226925-21264-1-git-send-email-romain.perier@free-electrons.com>
 References: <1468226925-21264-1-git-send-email-romain.perier@free-electrons.com>
-Message-ID: <1468226925-21264-6-git-send-email-romain.perier@free-electrons.com>
+Message-ID: <1468226925-21264-4-git-send-email-romain.perier@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This adds an entry in the configuration menu in order to
-enable or disable the accessibility support.
-
 Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
 ---
- package/qt/Config.in | 5 +++++
- package/qt/qt.mk     | 7 ++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ docs/manual/adding-packages-generic.txt | 75 ++++++++++++++++++---------------
+ 1 file changed, 41 insertions(+), 34 deletions(-)
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 0ab8417..2523276 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -302,6 +302,11 @@ config BR2_PACKAGE_QT_QTTIFF
- 	bool "Use Qt bundled libtiff"
- endchoice
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 8ed7fe8..2ed01a9 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -22,40 +22,41 @@ system is based on hand-written Makefiles or shell scripts.
+ 07: LIBFOO_VERSION = 1.0
+ 08: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
+ 09: LIBFOO_SITE = http://www.foosoftware.org/download
+-10: LIBFOO_LICENSE = GPLv3+
+-11: LIBFOO_LICENSE_FILES = COPYING
+-12: LIBFOO_INSTALL_STAGING = YES
+-13: LIBFOO_CONFIG_SCRIPTS = libfoo-config
+-14: LIBFOO_DEPENDENCIES = host-libaaa libbbb
+-15:
+-16: define LIBFOO_BUILD_CMDS
+-17:	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+-18: endef
+-19:
+-20: define LIBFOO_INSTALL_STAGING_CMDS
+-21:	$(INSTALL) -D -m 0755 $(@D)/libfoo.a $(STAGING_DIR)/usr/lib/libfoo.a
+-22:	$(INSTALL) -D -m 0644 $(@D)/foo.h $(STAGING_DIR)/usr/include/foo.h
+-23:	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(STAGING_DIR)/usr/lib
+-24: endef
+-25:
+-26: define LIBFOO_INSTALL_TARGET_CMDS
+-27:	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(TARGET_DIR)/usr/lib
+-28:	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
+-29: endef
+-30:
+-31: define LIBFOO_USERS
+-32:	foo -1 libfoo -1 * - - - LibFoo daemon
+-33: endef
+-34:
+-35: define LIBFOO_DEVICES
+-36:	/dev/foo  c  666  0  0	42  0  -  -  -
+-37: endef
+-38:
+-39: define LIBFOO_PERMISSIONS
+-40:	/bin/foo  f  4755  foo  libfoo	 -  -  -  -  -
+-41: endef
+-42:
+-43: $(eval $(generic-package))
++10  LIBFOO_DL_REFERER = http://www.foosoftware.org
++11: LIBFOO_LICENSE = GPLv3+
++12: LIBFOO_LICENSE_FILES = COPYING
++13: LIBFOO_INSTALL_STAGING = YES
++14: LIBFOO_CONFIG_SCRIPTS = libfoo-config
++15: LIBFOO_DEPENDENCIES = host-libaaa libbbb
++16:
++17: define LIBFOO_BUILD_CMDS
++18:	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
++19: endef
++20:
++21: define LIBFOO_INSTALL_STAGING_CMDS
++22:	$(INSTALL) -D -m 0755 $(@D)/libfoo.a $(STAGING_DIR)/usr/lib/libfoo.a
++23:	$(INSTALL) -D -m 0644 $(@D)/foo.h $(STAGING_DIR)/usr/include/foo.h
++24:	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(STAGING_DIR)/usr/lib
++25: endef
++26:
++27: define LIBFOO_INSTALL_TARGET_CMDS
++28:	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(TARGET_DIR)/usr/lib
++29:	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
++30: endef
++31:
++32: define LIBFOO_USERS
++33:	foo -1 libfoo -1 * - - - LibFoo daemon
++34: endef
++35:
++36: define LIBFOO_DEVICES
++37:	/dev/foo  c  666  0  0	42  0  -  -  -
++38: endef
++39:
++40: define LIBFOO_PERMISSIONS
++41:	/bin/foo  f  4755  foo  libfoo	 -  -  -  -  -
++42: endef
++43:
++44: $(eval $(generic-package))
+ --------------------------------
  
-+config BR2_PACKAGE_QT_ACCESSIBILITY
-+	bool "Enable accessibility support"
-+	help
-+	  This enables and compile the accessibility support.
+ The Makefile begins on line 7 to 11 with metadata information: the
+@@ -250,6 +251,12 @@ information is (assuming the package name is +libfoo+) :
+     +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
+     +LIBFOO_SITE=$(TOPDIR)/../src/libfoo+
+ 
++* +LIBFOO_DL_REFERER+ provides the location from where the HTTP client
++  downloads the tarball. Useful for retrieving documents with server-side
++  processing that assume they are always being retrieved by interactive
++  web browsers and only come out properly when Referer is set to one of the
++  pages that point to them.
 +
- endif # BR2_PACKAGE_QT_GUI_MODULE
- 
- choice
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index f29a671..fa9dbf9 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -258,6 +258,12 @@ else
- QT_CONFIGURE_OPTS += -no-libmng
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT_ACCESSIBILITY),y)
-+QT_CONFIGURE_OPTS += -accessibility
-+else
-+QT_CONFIGURE_OPTS += -no-accessibility
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT_QTZLIB),y)
- QT_CONFIGURE_OPTS += -qt-zlib
- else
-@@ -517,7 +523,6 @@ define QT_CONFIGURE_CMDS
- 		-no-xinerama \
- 		-no-cups \
- 		-no-nis \
--		-no-accessibility \
- 		-no-separate-debug-info \
- 		-prefix /usr \
- 		-plugindir /usr/lib/qt/plugins \
+ * +LIBFOO_EXTRA_DOWNLOADS+ is a space-separated list of additional
+   files that Buildroot should download. If an entry contains +://+
+   then Buildroot will assume it is a complete URL and will download
 -- 
 2.8.1
