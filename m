@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 11 Jul 2016 09:54:36 +0200
-Subject: [Buildroot] [PATCH 3/4] python-mako: bump to version 1.0.4
+Date: Mon, 11 Jul 2016 09:54:37 +0200
+Subject: [Buildroot] [PATCH 4/4] python-tomako: bump to version 0.1.0.post1
 In-Reply-To: <1468223677-20192-1-git-send-email-yegorslists@googlemail.com>
 References: <1468223677-20192-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1468223677-20192-3-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1468223677-20192-4-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +12,43 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
+Add license file.
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-mako/python-mako.hash | 7 +++----
- package/python-mako/python-mako.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/python-tomako/python-tomako.hash | 7 +++----
+ package/python-tomako/python-tomako.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
-index 374be1a..b6a74f3 100644
---- a/package/python-mako/python-mako.hash
-+++ b/package/python-mako/python-mako.hash
+diff --git a/package/python-tomako/python-tomako.hash b/package/python-tomako/python-tomako.hash
+index 678944a..af07a88 100644
+--- a/package/python-tomako/python-tomako.hash
++++ b/package/python-tomako/python-tomako.hash
 @@ -1,4 +1,3 @@
--# From https://pypi.python.org/pypi/Mako/1.0.3
--md5	a78f20f6366a8a0659ce5532f8614e53	Mako-1.0.3.tar.gz
--# Locally computed
--sha256	7644bc0ee35965d2e146dde31827b8982ed70a58281085fac42869a09764d38c	Mako-1.0.3.tar.gz
-+# md5 from https://pypi.python.org/pypi/Mako/json, sha256 locally computed
-+md5	c5fc31a323dd4990683d2f2da02d4e20	Mako-1.0.4.tar.gz
-+sha256	fed99dbe4d0ddb27a33ee4910d8708aca9ef1fe854e668387a9ab9a90cbf9059	Mako-1.0.4.tar.gz
-diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
-index 52679e0..88ce13e 100644
---- a/package/python-mako/python-mako.mk
-+++ b/package/python-mako/python-mako.mk
-@@ -4,9 +4,9 @@
+-# md5 from https://pypi.python.org/pypi/tomako/json
+-md5	74597762d156f52b8716aced94d51f2a  tomako-0.1.0.tar.gz
+-# sha256 calculated by scanpypi
+-sha256	e541e6bad009d3f61956b135757d491bf42c97cb441e7c11ef7a0ef6e9460a9f  tomako-0.1.0.tar.gz
++# md5 from https://pypi.python.org/pypi/tomako/json, sha256 locally computed
++md5	a2e9e99be4ddf2263ed441ddc3dfcf96  tomako-0.1.0.post1.tar.gz
++sha256	2d8ec113199408eb16ec00361aac6f10b716925779b6331083f304d01dafd150  tomako-0.1.0.post1.tar.gz
+diff --git a/package/python-tomako/python-tomako.mk b/package/python-tomako/python-tomako.mk
+index a9eef64..23c0b34 100644
+--- a/package/python-tomako/python-tomako.mk
++++ b/package/python-tomako/python-tomako.mk
+@@ -4,10 +4,11 @@
  #
  ################################################################################
  
--PYTHON_MAKO_VERSION = 1.0.3
-+PYTHON_MAKO_VERSION = 1.0.4
- PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
--PYTHON_MAKO_SITE = https://pypi.python.org/packages/source/M/Mako
-+PYTHON_MAKO_SITE = https://pypi.python.org/packages/7a/ae/925434246ee90b42e8ef57d3b30a0ab7caf9a2de3e449b876c56dcb48155
- PYTHON_MAKO_SETUP_TYPE = setuptools
- PYTHON_MAKO_LICENSE = MIT
- PYTHON_MAKO_LICENSE_FILES = LICENSE
+-PYTHON_TOMAKO_VERSION = 0.1.0
++PYTHON_TOMAKO_VERSION = 0.1.0.post1
+ PYTHON_TOMAKO_SOURCE = tomako-$(PYTHON_TOMAKO_VERSION).tar.gz
+-PYTHON_TOMAKO_SITE = https://pypi.python.org/packages/66/6f/de5449d401ca6953691c765d7465941e772cf99a3547646edc58cdca452d
++PYTHON_TOMAKO_SITE = https://pypi.python.org/packages/30/64/e174248281cb2fa8f5bce955d4bd49b253e622bb540a6001e48dec378a07
+ PYTHON_TOMAKO_SETUP_TYPE = setuptools
+ PYTHON_TOMAKO_LICENSE = MIT
++PYTHON_TOMAKO_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
 -- 
 2.8.1
