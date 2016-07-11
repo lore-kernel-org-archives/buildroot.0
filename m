@@ -1,39 +1,47 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Mon, 11 Jul 2016 09:54:40 +0200
-Subject: [Buildroot] [PATCH] package/libv4l: bump version to 1.10.1
-Message-ID: <20160711075440.27051-1-ludovic.desroches@atmel.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 11 Jul 2016 09:54:34 +0200
+Subject: [Buildroot] [PATCH 1/4] python-dataproperty: bump to version 0.7.1
+Message-ID: <1468223677-20192-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
----
- package/libv4l/libv4l.hash | 2 +-
- package/libv4l/libv4l.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
-index d58296f..2bf17ee 100644
---- a/package/libv4l/libv4l.hash
-+++ b/package/libv4l/libv4l.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	78ead27ee58a701d7c6342303cf4520bdd4a2b88a7813bc99a0b389307e4336b	v4l-utils-1.10.0.tar.bz2
-+sha256	6147ccc29fe7dd3c5c3994d613c4f2a099bac8b44694a96e5cf4d7caca8336c0	v4l-utils-1.10.1.tar.bz2
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index d0a3f2b..d557414 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -4,7 +4,7 @@
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-dataproperty/python-dataproperty.hash | 4 ++--
+ package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
+index dd1b84c..916352e 100644
+--- a/package/python-dataproperty/python-dataproperty.hash
++++ b/package/python-dataproperty/python-dataproperty.hash
+@@ -1,4 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/dataproperty/json
+-md5	b0dfde2908e26585db24ef51d2153ca5  DataProperty-0.3.1.tar.gz
++md5	7ad4dabb5469bb3f150dd1018680119c  DataProperty-0.7.1.tar.gz
+ # sha256 calculated by scanpypi
+-sha256	12a5e97a7fba5a938ecadf24f8e9c0ed4f3fd045b84ec107d5fa5ce15c03f9ad  DataProperty-0.3.1.tar.gz
++sha256	2d53019e6ca7b95511ec733ea57dc108d916d2dd0818d88d1b7c0e06854a2d2e  DataProperty-0.7.1.tar.gz
+diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
+index 06b8caf..927fa69 100644
+--- a/package/python-dataproperty/python-dataproperty.mk
++++ b/package/python-dataproperty/python-dataproperty.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBV4L_VERSION = 1.10.0
-+LIBV4L_VERSION = 1.10.1
- LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
- LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils
- LIBV4L_INSTALL_STAGING = YES
+-PYTHON_DATAPROPERTY_VERSION = 0.3.1
++PYTHON_DATAPROPERTY_VERSION = 0.7.1
+ PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
+-PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/94/84/a78a208b4fe3001e8fa1dc553122e3f27a807f26fee097f20714d6def70b
++PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/1f/64/b17e5ab3935484869cc3e8ec06ede0c94a296b4955c947d1dfe4460955f9
+ PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
+ PYTHON_DATAPROPERTY_LICENSE = MIT
+ PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
 -- 
-2.9.0
+2.8.1
