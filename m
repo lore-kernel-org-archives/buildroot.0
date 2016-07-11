@@ -1,63 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jul 2016 22:03:42 +0200
-Subject: [Buildroot] [PATCH] core: do not remove dl/ directory on
-	distclean
-In-Reply-To: <20160711163446.GB3734@free.fr> (Yann E. MORIN's message of "Mon, 
- 11 Jul 2016 18:34:46 +0200")
-References: <1468187749-3955-1-git-send-email-yann.morin.1998@free.fr>
- <20160711032615.GJ3870@tarshish> <20160711163446.GB3734@free.fr>
-Message-ID: <87a8ho9c2p.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 11 Jul 2016 22:13:48 +0200
+Subject: [Buildroot] [PATCH v1] fbset: fix musl compile
+Message-ID: <1468268028-13960-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Unconditional include <asm/types.h> for __u32 type.
 
- > Baruch, All,
- > On 2016-07-11 06:26 +0300, Baruch Siach spake thusly:
- >> On Sun, Jul 10, 2016 at 11:55:49PM +0200, Yann E. MORIN wrote:
- >> > Currently, if the dl/ directory is the default location, it is removed
- >> > on distclean.
- >> > 
- >> > However, the dl/ directory is a precious location: it contains all the
- >> > tarballs downloaded so far, and some can be relatively huge, taking some
- >> > previous time to re-download, especially on slowish links.
- >> > 
- >> > Don't remove it on distclean. If the user really needs to regain some
- >> > space, leave it to him to clean this directory up manually.
- >> 
- >> Current Makefile help text for 'distclean' says:
- >> 
- >> delete all non-source files (including .config)
- >> 
- >> Not deleting the dl/ directory is not consistent with this description, IMO.
+Fixes [1]:
 
- > Well, I do understand it the other way: non-source files are deleted,
- > but source files are not deleted.
+  error: unknown type name '__u32'
 
- > And I would argue that the content of dl/ *are* source files. If
- > anything, they are the archetype of source files.
+[1] http://autobuild.buildroot.net/results/90f/90fc7954c532417c2ceaf9ab8549099d84561a42
 
- > Ergo, distclean should not remove them.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/fbset/0001-Fix-musl-compile.patch | 33 +++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/fbset/0001-Fix-musl-compile.patch
 
-Sorry, I agree with Baruch. Distclean should leave the directory
-structure like it was when the buildroot tarball was extracted (or git
-cloned)
-
-E.G. the GNU standard make targets state:
-
-https://www.gnu.org/prep/standards/standards.html#Standard-Targets
-
-?distclean?
-
-Delete all files in the current directory (or created by this makefile)
-that are created by configuring or building the program. If you have
-unpacked the source and built the program without creating any other
-files, ?make distclean? should leave only the files that were in the
-distribution. However, there is no need to delete parent directories
-that were created with ?mkdir -p?, since they could have existed anyway.
-
+diff --git a/package/fbset/0001-Fix-musl-compile.patch b/package/fbset/0001-Fix-musl-compile.patch
+new file mode 100644
+index 0000000..65d84c5
+--- /dev/null
++++ b/package/fbset/0001-Fix-musl-compile.patch
+@@ -0,0 +1,33 @@
++From 6d42be24b62b94df8e2f01956842b7ee4b640e97 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Mon, 11 Jul 2016 22:07:42 +0200
++Subject: [PATCH] Fix musl compile.
++
++Unconditional include <asm/types.h> for __u32 type.
++
++Fixes:
++
++  error: unknown type name '__u32'
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ fbset.h | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/fbset.h b/fbset.h
++index 9b1d2ac..3c511e1 100644
++--- a/fbset.h
+++++ b/fbset.h
++@@ -15,9 +15,7 @@
++ #include <stdio.h>
++ #include <sys/types.h>
++ 
++-#ifdef __GLIBC__
++ #include <asm/types.h>
++-#endif
++ 
++ #define VERSION         "Linux Frame Buffer Device Configuration " \
++ 			"Version 2.1 (23/06/1999)\n"  \
++-- 
++2.8.1
++
 -- 
-Bye, Peter Korsgaard
+2.8.1
