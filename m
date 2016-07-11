@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jul 2016 14:17:39 +0200
-Subject: [Buildroot] [PATCH 1/2] package/zic: bump version to 2016f
-In-Reply-To: <20160711102311.18311-1-martin@barkynet.com>
-References: <20160711102311.18311-1-martin@barkynet.com>
-Message-ID: <20160711141739.16f3d19a@free-electrons.com>
+Date: Mon, 11 Jul 2016 14:17:42 +0200
+Subject: [Buildroot] [PATCH] package/libv4l: bump version to 1.10.1
+In-Reply-To: <20160711075440.27051-1-ludovic.desroches@atmel.com>
+References: <20160711075440.27051-1-ludovic.desroches@atmel.com>
+Message-ID: <20160711141742.10fbd6fb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 11 Jul 2016 11:23:10 +0100, Martin Bark wrote:
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+On Mon, 11 Jul 2016 09:54:40 +0200, Ludovic Desroches wrote:
+> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 > ---
->  package/zic/zic.hash | 4 ++--
->  package/zic/zic.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/libv4l/libv4l.hash | 2 +-
+>  package/libv4l/libv4l.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
