@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 11 Jul 2016 09:54:34 +0200
-Subject: [Buildroot] [PATCH 1/4] python-dataproperty: bump to version 0.7.1
-Message-ID: <1468223677-20192-1-git-send-email-yegorslists@googlemail.com>
+Date: Mon, 11 Jul 2016 09:54:35 +0200
+Subject: [Buildroot] [PATCH 2/4] python-pytablewriter: bump to version 0.5.0
+In-Reply-To: <1468223677-20192-1-git-send-email-yegorslists@googlemail.com>
+References: <1468223677-20192-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1468223677-20192-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +14,36 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-dataproperty/python-dataproperty.hash | 4 ++--
- package/python-dataproperty/python-dataproperty.mk   | 4 ++--
+ package/python-pytablewriter/python-pytablewriter.hash | 4 ++--
+ package/python-pytablewriter/python-pytablewriter.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dataproperty/python-dataproperty.hash b/package/python-dataproperty/python-dataproperty.hash
-index dd1b84c..916352e 100644
---- a/package/python-dataproperty/python-dataproperty.hash
-+++ b/package/python-dataproperty/python-dataproperty.hash
+diff --git a/package/python-pytablewriter/python-pytablewriter.hash b/package/python-pytablewriter/python-pytablewriter.hash
+index 8684fca..9c27aed 100644
+--- a/package/python-pytablewriter/python-pytablewriter.hash
++++ b/package/python-pytablewriter/python-pytablewriter.hash
 @@ -1,4 +1,4 @@
- # md5 from https://pypi.python.org/pypi/dataproperty/json
--md5	b0dfde2908e26585db24ef51d2153ca5  DataProperty-0.3.1.tar.gz
-+md5	7ad4dabb5469bb3f150dd1018680119c  DataProperty-0.7.1.tar.gz
+ # md5 from https://pypi.python.org/pypi/pytablewriter/json
+-md5	173ec08d6e0ded5219abaa1cb906ce62  pytablewriter-0.1.6.tar.gz
++md5	7a28e4ddb8b59199e161b7ee9e97e3a3  pytablewriter-0.5.0.tar.gz
  # sha256 calculated by scanpypi
--sha256	12a5e97a7fba5a938ecadf24f8e9c0ed4f3fd045b84ec107d5fa5ce15c03f9ad  DataProperty-0.3.1.tar.gz
-+sha256	2d53019e6ca7b95511ec733ea57dc108d916d2dd0818d88d1b7c0e06854a2d2e  DataProperty-0.7.1.tar.gz
-diff --git a/package/python-dataproperty/python-dataproperty.mk b/package/python-dataproperty/python-dataproperty.mk
-index 06b8caf..927fa69 100644
---- a/package/python-dataproperty/python-dataproperty.mk
-+++ b/package/python-dataproperty/python-dataproperty.mk
+-sha256	7faee0d52b13048d89157a82c38a8fa19512df625572dd918b2f43944c034d2d  pytablewriter-0.1.6.tar.gz
++sha256	e939adec820e68ed1b7c2eddfba73ce82a88f315aa90c81e04af0229020bfb7c  pytablewriter-0.5.0.tar.gz
+diff --git a/package/python-pytablewriter/python-pytablewriter.mk b/package/python-pytablewriter/python-pytablewriter.mk
+index 879102c..1de7a69 100644
+--- a/package/python-pytablewriter/python-pytablewriter.mk
++++ b/package/python-pytablewriter/python-pytablewriter.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DATAPROPERTY_VERSION = 0.3.1
-+PYTHON_DATAPROPERTY_VERSION = 0.7.1
- PYTHON_DATAPROPERTY_SOURCE = DataProperty-$(PYTHON_DATAPROPERTY_VERSION).tar.gz
--PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/94/84/a78a208b4fe3001e8fa1dc553122e3f27a807f26fee097f20714d6def70b
-+PYTHON_DATAPROPERTY_SITE = https://pypi.python.org/packages/1f/64/b17e5ab3935484869cc3e8ec06ede0c94a296b4955c947d1dfe4460955f9
- PYTHON_DATAPROPERTY_SETUP_TYPE = setuptools
- PYTHON_DATAPROPERTY_LICENSE = MIT
- PYTHON_DATAPROPERTY_LICENSE_FILES = LICENSE
+-PYTHON_PYTABLEWRITER_VERSION = 0.1.6
++PYTHON_PYTABLEWRITER_VERSION = 0.5.0
+ PYTHON_PYTABLEWRITER_SOURCE = pytablewriter-$(PYTHON_PYTABLEWRITER_VERSION).tar.gz
+-PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/da/34/394aeb8850d17a5e93ab931bc9fda1fbf598fe14e443be040c04f92cd1e3
++PYTHON_PYTABLEWRITER_SITE = https://pypi.python.org/packages/c8/01/e4b7f1d83434d268fe6a0aec2d8ad00515de042285e58533090cfd72904d
+ PYTHON_PYTABLEWRITER_SETUP_TYPE = setuptools
+ PYTHON_PYTABLEWRITER_LICENSE = MIT
+ PYTHON_PYTABLEWRITER_LICENSE_FILES = LICENSE
 -- 
 2.8.1
