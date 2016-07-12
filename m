@@ -1,84 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Jul 2016 12:23:14 +0200
-Subject: [Buildroot] [git commit] cmake: bump version to 3.6.0
-Message-ID: <20160714102606.A29E381F12@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Jul 2016 23:22:47 +0200
+Subject: [Buildroot] [git commit] opusfile: bump to version 0.8
+Message-ID: <20160714102605.CC97D81F12@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6ff742ca0d8b2901036d3ad03fe60c6b2a7725f
+commit: https://git.buildroot.net/buildroot/commit/?id=e288b3e983c00637218761c5b64b34e15e974e60
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cmake/0001-rename_cmake_rootfile.patch | 27 +++++++++++++++-----------
- package/cmake/cmake.hash                       |  4 ++--
- package/cmake/cmake.mk                         |  4 ++--
- 3 files changed, 20 insertions(+), 15 deletions(-)
+ package/opusfile/opusfile.hash | 2 +-
+ package/opusfile/opusfile.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cmake/0001-rename_cmake_rootfile.patch b/package/cmake/0001-rename_cmake_rootfile.patch
-index 915b7e3..3169f16 100644
---- a/package/cmake/0001-rename_cmake_rootfile.patch
-+++ b/package/cmake/0001-rename_cmake_rootfile.patch
-@@ -6,18 +6,23 @@ This buildroot-specific patch makes sure ctest looks also for
- "Modules/CMake.cmake.ctest" before complaining
- 
- Signed-off-by: Davide Viti <zinosat@tiscali.it>
-+[Vincent: tweak patch for 3.6.0]
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- 
----- cmake-3.0.2/Source/cmake.cxx~	2014-09-11 15:24:01.000000000 +0200
--+++ cmake-3.0.2/Source/cmake.cxx	2014-11-25 15:48:04.461033690 +0100
--@@ -957,7 +957,10 @@
--      "Path to cpack program executable.", cmCacheManager::INTERNAL);
-+diff -rup a/Source/cmake.cxx b/Source/cmake.cxx
-+--- a/Source/cmake.cxx	2016-07-07 15:47:27.000000000 +0100
-++++ b/Source/cmake.cxx	2016-07-14 10:14:59.914265515 +0100
-+@@ -771,7 +771,12 @@ int cmake::AddCMakePaths()
-+                       "Path to cpack program executable.", cmState::INTERNAL);
-  #endif
--   if(!cmSystemTools::FileExists(
---       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()))
--+       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()) &&
--+     !cmSystemTools::FileExists(
--+       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake.ctest").c_str())
-+   if (!cmSystemTools::FileExists(
-+-        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake").c_str())) {
-++        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake").c_str()) &&
-++	!cmSystemTools::FileExists(
-++	  (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake.ctest").c_str()
-++        )
- +     )
--     {
-++  {
-      // couldn't find modules
--     cmSystemTools::Error("Could not find CMAKE_ROOT !!!\n"
-+     cmSystemTools::Error(
-+       "Could not find CMAKE_ROOT !!!\n"
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index e40d4ea..7cd1133 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
+diff --git a/package/opusfile/opusfile.hash b/package/opusfile/opusfile.hash
+index 2da4bab..541a21f 100644
+--- a/package/opusfile/opusfile.hash
++++ b/package/opusfile/opusfile.hash
 @@ -1,2 +1,2 @@
--# From http://www.cmake.org/files/v3.5/cmake-3.5.2-SHA-256.txt
--sha256	92d8410d3d981bb881dfff2aed466da55a58d34c7390d50449aa59b32bb5e62a	cmake-3.5.2.tar.gz
-+# From http://www.cmake.org/files/v3.6/cmake-3.6.0-SHA-256.txt
-+sha256 fd05ed40cc40ef9ef99fac7b0ece2e0b871858a82feade48546f5d2940147670  cmake-3.6.0.tar.gz
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 7a80c1b..25eafe8 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -4,8 +4,8 @@
+ # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
+-sha256	9e2bed13bc729058591a0f1cab2505e8cfd8e7ac460bf10a78bcc3b125e7c301	opusfile-0.7.tar.gz
++sha256	2c231ed3cfaa1b3173f52d740e5bbd77d51b9dfecb87014b404917fba4b855a4	opusfile-0.8.tar.gz
+diff --git a/package/opusfile/opusfile.mk b/package/opusfile/opusfile.mk
+index c8108d3..4c3fb35 100644
+--- a/package/opusfile/opusfile.mk
++++ b/package/opusfile/opusfile.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CMAKE_VERSION_MAJOR = 3.5
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
-+CMAKE_VERSION_MAJOR = 3.6
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
+-OPUSFILE_VERSION = 0.7
++OPUSFILE_VERSION = 0.8
+ OPUSFILE_SITE = http://downloads.xiph.org/releases/opus
+ OPUSFILE_DEPENDENCIES = host-pkgconf libogg opus
+ OPUSFILE_LICENSE = BSD-3c
