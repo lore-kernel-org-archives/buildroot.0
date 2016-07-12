@@ -1,83 +1,90 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 12 Jul 2016 09:39:03 +0200
-Subject: [Buildroot] [PATCH 2/2] python-prompt-toolkit: new package
-In-Reply-To: <1468309143-27576-1-git-send-email-yegorslists@googlemail.com>
-References: <1468309143-27576-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1468309143-27576-2-git-send-email-yegorslists@googlemail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <fperrad@gmail.com>
+Date: Tue, 12 Jul 2016 10:00:41 +0200
+Subject: [Buildroot] perl XS modules
+In-Reply-To: <20160708174043.3e1b7d11@free-electrons.com>
+References: <20160708095910.621ad48a@gmail.com>
+ <20160708174043.3e1b7d11@free-electrons.com>
+Message-ID: <CAGhdn55xFz6+4f46w3OLMwqUGvGv-mVgDLQzg8o07vWMcRQ3Pw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+The BR package libxml-parser-perl is a very specific host package which
+works only with the the system perl.
+(The reason is : this packge is heavy used, and we don't want the cost|time
+of the host-perl build)
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in                                        |  1 +
- package/python-prompt-toolkit/Config.in                  |  9 +++++++++
- package/python-prompt-toolkit/python-prompt-toolkit.hash |  3 +++
- package/python-prompt-toolkit/python-prompt-toolkit.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-prompt-toolkit/Config.in
- create mode 100644 package/python-prompt-toolkit/python-prompt-toolkit.hash
- create mode 100644 package/python-prompt-toolkit/python-prompt-toolkit.mk
+All Perl modules (XS or Pure Perl) use the naming scheme :
+perl-module-name.
+For example, the wrapper for libxml2 is perl-xml-libxml.
+All these packages use the BR infrastructure perl-package.
 
-diff --git a/package/Config.in b/package/Config.in
-index 07e7887..32c3e1c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -702,6 +702,7 @@ menu "External python modules"
- 	source "package/python-pexpect/Config.in"
- 	source "package/python-pillow/Config.in"
- 	source "package/python-posix-ipc/Config.in"
-+	source "package/python-prompt-toolkit/Config.in"
- 	source "package/python-protobuf/Config.in"
- 	source "package/python-psutil/Config.in"
- 	source "package/python-ptyprocess/Config.in"
-diff --git a/package/python-prompt-toolkit/Config.in b/package/python-prompt-toolkit/Config.in
-new file mode 100644
-index 0000000..ccc9ebb
---- /dev/null
-+++ b/package/python-prompt-toolkit/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_PROMPT_TOOLKIT
-+	bool "python-prompt-toolkit"
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_WCWIDTH # runtime
-+	help
-+	  Library for building powerful interactive command lines in
-+	  Python.
-+
-+	  https://github.com/jonathanslenders/python-prompt-toolkit
-diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.hash b/package/python-prompt-toolkit/python-prompt-toolkit.hash
-new file mode 100644
-index 0000000..f33e99a
---- /dev/null
-+++ b/package/python-prompt-toolkit/python-prompt-toolkit.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/prompt_toolkit/json, sha256 locally computed
-+md5	6c4133d099603f496c761491043bf0ef  prompt_toolkit-1.0.3.tar.gz
-+sha256	805e026f0cbad27467e93f9dd3e3777718d401a62788c1e84ca038e967ad8ba2  prompt_toolkit-1.0.3.tar.gz
-diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.mk b/package/python-prompt-toolkit/python-prompt-toolkit.mk
-new file mode 100644
-index 0000000..634f20e
---- /dev/null
-+++ b/package/python-prompt-toolkit/python-prompt-toolkit.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-prompt-toolkit
-+#
-+################################################################################
-+
-+PYTHON_PROMPT_TOOLKIT_VERSION = 1.0.3
-+PYTHON_PROMPT_TOOLKIT_SOURCE = prompt_toolkit-$(PYTHON_PROMPT_TOOLKIT_VERSION).tar.gz
-+PYTHON_PROMPT_TOOLKIT_SITE = https://pypi.python.org/packages/8d/de/412f23919929c01e6b55183e124623f705e4b91796d3d2dce2cb53d595ad
-+PYTHON_PROMPT_TOOLKIT_SETUP_TYPE = setuptools
-+PYTHON_PROMPT_TOOLKIT_LICENSE = BSD-3c
-+PYTHON_PROMPT_TOOLKIT_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
--- 
-2.8.1
+If you want a target package perl-xml-parser (XML expat wrapper), start by
+running:
+   $ support/script/scancpan XML-Parser
+which creates a decent template.
+After add manually, the specific part required by the expat C library.
+(And obviously, read
+https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_perl_cpan_packages
+)
+
+Fran?ois
+
+2016-07-08 17:40 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+
+> Hello,
+>
+> Fran?ois, could you have a look at the below question, that is Perl and
+> cross-compilation related?
+>
+> Thanks!
+>
+> Thomas
+>
+> On Fri, 8 Jul 2016 09:59:10 +0200, Arne Caspari wrote:
+> > Hi all,
+> >
+> > I try to build the libxml-parser-perl package for an ARM target.
+> > Unfortunately the compiled perl module fails to load with the following
+> > error message:
+> >
+> > loadable library and perl binaries are mismatched
+> >
+> > After some digging I found that the module needs to be compiled with
+> > the same toolchain and compiler defines as the perl binary in order to
+> > be ABI compatible. Forcing the defines to be exactly the same as the
+> > ones used for the perl binary did not fix the issue so I believe it
+> > must be a problem with the toolchain.
+> >
+> > I get it right, buildroot builds the host-perl package with the GCC
+> > installed on the build system. In my case this is GCC Version 6.1 while
+> > the toolchain in buildroot uses 4.9.3. If I get the build procedure
+> > right, the ABI for perl is then configured for the 6.1 toolchain while
+> > module builds will use the toolchain provided by buildroot which is ABI
+> > incompatible.
+> >
+> > Is there a way to make buildroot build an initial toolchain to build
+> > the host packages with? Did anybody ever successfully build perlXS
+> > modules?
+> >
+> > Thanks,
+> >
+> > /Arne
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+>
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160712/c5cd40bc/attachment.html>
