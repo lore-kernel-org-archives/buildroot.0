@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Jul 2016 15:51:50 +0200
-Subject: [Buildroot] [PATCH v2 1/1] Arcturus uCP1020 BSP support.
-In-Reply-To: <175f7bda-dca6-c61d-75db-3e746f9a8c99@arcturusnetworks.com>
-References: <1468247442-6923-1-git-send-email-arcsupport@arcturusnetworks.com>
- <175f7bda-dca6-c61d-75db-3e746f9a8c99@arcturusnetworks.com>
-Message-ID: <20160712155150.0a87a82a@free-electrons.com>
+Date: Tue, 12 Jul 2016 16:28:39 +0200
+Subject: [Buildroot] [PATCH] core: do not remove dl/ directory on
+ distclean
+In-Reply-To: <1468187749-3955-1-git-send-email-yann.morin.1998@free.fr>
+References: <1468187749-3955-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160712162839.1a34656c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 12 Jul 2016 09:12:38 -0400, Oleksandr G Zhadan wrote:
-> Hi Tomas,
+On Sun, 10 Jul 2016 23:55:49 +0200, Yann E. MORIN wrote:
+> Currently, if the dl/ directory is the default location, it is removed
+> on distclean.
 > 
-> Thank you you for your previous comments and suggestions.
-> This new fixed version is the "minimalist" patch we can do :).
+> However, the dl/ directory is a precious location: it contains all the
+> tarballs downloaded so far, and some can be relatively huge, taking some
+> previous time to re-download, especially on slowish links.
+> 
+> Don't remove it on distclean. If the user really needs to regain some
+> space, leave it to him to clean this directory up manually.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thanks, but please submit the patch as a separate mail, using "git
-send-email".
+Like Baruch and Peter, I don't really see the need to change this
+behavior. Buildroot has beeing removing the default dl/ location during
+distclean for many years, without anybody complaining. It matches the
+GNU definition of "distclean" and changing this would break existing
+behavior with no good benefit.
 
 Thomas
 -- 
