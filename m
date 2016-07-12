@@ -1,46 +1,31 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 12 Jul 2016 13:09:20 -0400
-Subject: [Buildroot] [PATCH 1/1] package/syslog-ng: fix localstatdir
-	directory.
-Message-ID: <1468343360-15309-1-git-send-email-aduskett@codeblue.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 12 Jul 2016 19:45:37 +0200
+Subject: [Buildroot] [PATCH] olimex_a20_olinuxino_lime: bump u-boot to
+	2016.07
+Message-ID: <1468345537-18648-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-syslog-ng is built with the default buildroot flag localstatdir=/var
-
-This causes three issues:
-
-1) syslog-ng creates two files (syslog-ng.ctl and syslog-ng.persist in /var)
-which shouldn't have random files generated in it.
-
-2) SELinux expects it in it's default directory /var/run.
-
-3) This breakes read only file systems because /var/ usually isn't mounted as
-a seperate filing system.
-
-Setting the buildflag to the default /var/run
-fixes all three of thee of these issues.
-
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/syslog-ng/syslog-ng.mk | 2 +-
+ configs/olimex_a20_olinuxino_lime_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 1acaad8..48a727e 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -13,7 +13,7 @@ SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
- 	eventlog libglib2 openssl pcre
- # rabbit-mq needs -lrt
- SYSLOG_NG_CONF_ENV = LIBS=-lrt
--SYSLOG_NG_CONF_OPTS = --disable-manpages
-+SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run
- 
- # We override busybox's S01logging init script
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 389fdd6..b3a8503 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -34,7 +34,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
 -- 
 2.7.4
