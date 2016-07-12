@@ -1,102 +1,91 @@
-From: Peter Thompson <peter.macleod.thompson@gmail.com>
-Date: Tue, 12 Jul 2016 08:54:06 -0600
-Subject: [Buildroot] 3 patches to buildroot via git send-email - 2nd try
-Message-ID: <CAGrGpJBnpic0X+N07Uc33FQ1r+hpw8Fks4G8rTh4Z5PC1Yr2NQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 12 Jul 2016 16:55:28 +0200
+Subject: [Buildroot] [PATCH 5/7] new package: ti-sgx/ti-sgx-demos SGX
+ binary demos
+In-Reply-To: <1468311988-22059-6-git-send-email-lothar.felten@gmail.com>
+References: <1468311988-22059-1-git-send-email-lothar.felten@gmail.com>
+ <1468311988-22059-6-git-send-email-lothar.felten@gmail.com>
+Message-ID: <20160712165528.462c81ce@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hello,
 
-    Hope it works better this time.   Thanks for advice and help.  Let me
-know if any other changes are needed.
+On Tue, 12 Jul 2016 10:26:26 +0200, Lothar Felten wrote:
+> This package adds the SGX demos from Imagination Technologies.
+> The demos are available as binaries only.
+> 
+> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 
-Peter
+Commit title should be:
 
+	ti-sgx-demos: new package
 
+> diff --git a/package/ti-sgx/ti-sgx-demos/Config.in b/package/ti-sgx/ti-sgx-demos/Config.in
+> new file mode 100644
+> index 0000000..e4d4321
+> --- /dev/null
+> +++ b/package/ti-sgx/ti-sgx-demos/Config.in
+> @@ -0,0 +1,4 @@
+> +config BR2_PACKAGE_TI_SGX_DEMOS
+> +	bool "sgx powervr demo binaries"
 
-Below are my personal notes used to create the 3 patches
+	bool "ti-sgx-demos"
 
-Step 1 - Git buildroot from github
-----------------------------------
-mkdir ~/Documents/git/buildroot/
-cd ~/Documents/git/buildroot/
-git clone git://git.buildroot.net/buildroot
+> +	help
+> +	  TI SGX powervr demos
 
-cd ~/Documents/git/buildroot/buildroot/
-git status
-git branch -a
-git remote -v
-git remote show origin
+More details + upstream link.
 
+> diff --git a/package/ti-sgx/ti-sgx-demos/ti-sgx-demos.mk b/package/ti-sgx/ti-sgx-demos/ti-sgx-demos.mk
+> new file mode 100644
+> index 0000000..04389f1
+> --- /dev/null
+> +++ b/package/ti-sgx/ti-sgx-demos/ti-sgx-demos.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# ti-sgx-demos
+> +#
+> +################################################################################
+> +
+> +# This correpsonds to SDK 02.00.00.00
+> +TI_SGX_DEMOS_VERSION = f24650bc8243b25c23d6a0a502ed79fc472ac424
+> +TI_SGX_DEMOS_SITE = git://git.ti.com/graphics/img-pvr-sdk.git
 
-Step 2 - create 1 branch
------------------------------------------
-git checkout master     # recheck original
-git branch sdl2suite
-git branch -a            #
-git branch
-git status
+http:// download if possible.
 
+> +TI_SGX_DEMOS_LICENSE = Imagination Technogolies License Agreement 
+> +TI_SGX_DEMOS_LICENSE_FILES = LegalNotice.txt
+> +
+> +TI_SGX_DEMOS_DEPENDENCIES =  ti-sgx-km ti-sgx-um 
 
-Step 3 - create patch and commit x 3 (one per patch
------------------------------------------
-git checkout sdl2suite     #make changes see 09xpeterBuildrootPatchREADME
-git add package/sdl2_image/Config.in        # p17-19 git pro book
-git add package/sdl2_image/sdl2_image.mk
-git add package/sdl2_image/sdl2_image.hash
-git add package/Config.in
-git add -A                 # adds all files - don't use here...
-    make the changes (add 2 files plus change Config.in)
-git status                # make sure you know what you are commiting
-git commit -as            # -as=all modified files with signoff
-    commit message =
-sdl2_image: new package
-sdl2_image created from sdl2_image with minor changes for sdl2
+Trailing space + one too many space after the =.
 
+I guess those demos only work with the TI SGX OpenGL implementation,
+and cannot be used with other OpenGL implementations.
 
-rm *~                     # get rid of junk
+> +define TI_SGX_DEMOS_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m 0555 -t $(TARGET_DIR)/usr/bin \
+> +                $(@D)/targetfs/Examples/Advanced/OGLES* 
 
-Step 4 create hash file
-----------------------
-download sdl2_image via firefox
-cd ~/Downloads/FirefoxDownloads/
-sha256sum SDL2_ttf-2.0.14.tar.gz  > sdl2_ttf.hash
-     edit sdle_ttf.hash file as per below....
-# Locally calculated
-sha256 a5a69a6abf80bcce713fa873607735fe712f44276a7f048d60a61bb2f6b3c90c
-SDL2-2.0.3.tar.gz
-add sdl2_ttf.hash to sdl2suite branch
+Please use tabs to indent the second line.
 
+> +endef
 
-Step 5
-------
-repeat step 3,4 (3 times) for
-sdl2_gfx
-sdl2_image
-sdl2_ttf
+555 isn't good, 755 should be used instead. However, it is true that we
+generally prefer to use cp -dpfr for such installations:
 
+	cp -dpfr $(@D)/targetfs/Examples/Advanced/OGLES \
+		$(TARGET_DIR)/usr/bin/
 
+Thanks,
 
-https://buildroot.org/downloads/manual/manual.html#adding-packages-hash
-
-Step 6 submit
--------------
-submit via
-https://buildroot.org/downloads/manual/manual.html#submitting-patches
-$ git fetch --all --tags    # update with latest buildroot version
-$ git rebase origin/master    # redo my commits on latest buildroot version
-$ git format-patch -M -n -s -o outgoing origin/master
-        # -M = detect renames???
-        # -n = Name output in [PATCH n/m] format = [PATCH 1/1]
-        # -s = signed off
-        # -o = output
-test the results...
-git send-email --to peter.macleod.thompson at gmail.com outgoing/*
-submit it....
-$ git send-email --to buildroot at buildroot.org outgoing/*
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160712/58103474/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
