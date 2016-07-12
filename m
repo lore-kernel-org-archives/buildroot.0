@@ -1,144 +1,42 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 12 Jul 2016 11:08:31 -0400
-Subject: [Buildroot] [PATCH 1/1] package/nginx: Add naxsi module option.
-In-Reply-To: <20160712163312.32b1157e@free-electrons.com>
-References: <1468259776-26584-1-git-send-email-aduskett@codeblue.com>
- <20160712163312.32b1157e@free-electrons.com>
-Message-ID: <CAFSsvmq-bKYVxb3YVNkbqeAp6NCX81JzTikMYCLrwqk-DJLsqQ@mail.gmail.com>
+From: Oleksandr G Zhadan <oleks@arcturusnetworks.com>
+Date: Tue, 12 Jul 2016 11:16:30 -0400
+Subject: [Buildroot] [PATCH v2 1/1] Arcturus uCP1020 BSP support.
+In-Reply-To: <20160712155150.0a87a82a@free-electrons.com>
+References: <1468247442-6923-1-git-send-email-arcsupport@arcturusnetworks.com>
+ <175f7bda-dca6-c61d-75db-3e746f9a8c99@arcturusnetworks.com>
+ <20160712155150.0a87a82a@free-electrons.com>
+Message-ID: <495790b1-5e25-5235-c199-69f6ccb23ef4@arcturusnetworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Mon, 11 Jul 2016 13:56:16 -0400, Adam Duskett wrote:
-> Naxsi is a third party nginx module reads a small subset of simple rules
-> containing a list of known patterns involved in website vulnerabilities.
-> This module behaves like a DROP-by-default firewall for nginx.
->
-> The reason for the changes to the make file was because naxsi is listed
-> on github, and even though there is a option to specify a url for a 3rd party
-> module, this option only seems to work for a local file url.  As such
-> a EXTRA_DOWNLOADS and POST_EXTRACT_HOOKS was added to the makefile
-> so that the module is first downloaded and then extracted into the
-> nginx source directory, and then the module source is added to the
-> config options.  This was the cleanest solution I could find, if anybody
-> thinks of a cleaner solution please let me know.
->
-> The hash for the module was also added to nginx.hash.
->
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+I already did it to buildroot at buildroot.org.
+Please look 07/11/2016 10:30 AM
 
-> Thanks for this patch. I had a look at this nginx thing, and indeed
-> building third-party modules is annoying, as they can only be built as
-> part of the nginx build process. I.e you cannot build nginx, and then
-> later on build additional third-party extensions.
+Thank you,
 
-Agreed; I am glad this will be fixed in the future.
+Oleks
 
-> However, I don't like the approach taken in your patch. I would instead
-> prefer if you could do something like this:
-
-> * A separate nginx-naxsi package, which just downloads and extracts
->   the source code of the third party module. It should be like 4 lines
->   of code, using the generic-package infrastructure.
-
-I discussed this with Yani before hand and the reason I submitted it
-like this is because
-we thought that perhaps it would be a bit.... cluttering if we had a
-separate package for each
-new module.
-
-> * Then, in nginx.mk, if BR2_PACKAGE_NGINX_NAXSI is enabled, you add a
->   dependency on it, and add a pre-configure hook that creates a
->   symbolic link from the appropriate location in the nginx source tree
->   to the directory where nginx-naxsi was extracted.
-
-By all means I absolutely can.  Again, are you sure it won't be too
-much clutter?
-
-
-> Could you try something like this?
-
-> It is worth mentioning that since nginx 1.9.1, they have added the
-> possibility of building modules as shared objects that are loaded at
-> runtime, and they are planning in the future to allow third party
-> modules to be built separately from nginx itself. See
-> https://www.nginx.com/blog/dynamic-modules-nginx-1-9-11/:
-
-That will be fantastic once a lot more 3rd party modules are updated
-to include independent
-building!
-
-> """
-> In future releases, we plan to add the ability to compile modules after
-> the NGINX binary has been compiled.
-> """
-
-Fantastic news!
-
-
-Adam
-
-
-On Tue, Jul 12, 2016 at 10:33 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+On 07/12/2016 09:51 AM, Thomas Petazzoni wrote:
 > Hello,
 >
-> On Mon, 11 Jul 2016 13:56:16 -0400, Adam Duskett wrote:
->> Naxsi is a third party nginx module reads a small subset of simple rules
->> containing a list of known patterns involved in website vulnerabilities.
->> This module behaves like a DROP-by-default firewall for nginx.
+> On Tue, 12 Jul 2016 09:12:38 -0400, Oleksandr G Zhadan wrote:
+>> Hi Tomas,
 >>
->> The reason for the changes to the make file was because naxsi is listed
->> on github, and even though there is a option to specify a url for a 3rd party
->> module, this option only seems to work for a local file url.  As such
->> a EXTRA_DOWNLOADS and POST_EXTRACT_HOOKS was added to the makefile
->> so that the module is first downloaded and then extracted into the
->> nginx source directory, and then the module source is added to the
->> config options.  This was the cleanest solution I could find, if anybody
->> thinks of a cleaner solution please let me know.
->>
->> The hash for the module was also added to nginx.hash.
->>
->> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
->
-> Thanks for this patch. I had a look at this nginx thing, and indeed
-> building third-party modules is annoying, as they can only be built as
-> part of the nginx build process. I.e you cannot build nginx, and then
-> later on build additional third-party extensions.
->
-> However, I don't like the approach taken in your patch. I would instead
-> prefer if you could do something like this:
->
->  * A separate nginx-naxsi package, which just downloads and extracts
->    the source code of the third party module. It should be like 4 lines
->    of code, using the generic-package infrastructure.
->
->  * Then, in nginx.mk, if BR2_PACKAGE_NGINX_NAXSI is enabled, you add a
->    dependency on it, and add a pre-configure hook that creates a
->    symbolic link from the appropriate location in the nginx source tree
->    to the directory where nginx-naxsi was extracted.
->
-> Could you try something like this?
->
-> It is worth mentioning that since nginx 1.9.1, they have added the
-> possibility of building modules as shared objects that are loaded at
-> runtime, and they are planning in the future to allow third party
-> modules to be built separately from nginx itself. See
-> https://www.nginx.com/blog/dynamic-modules-nginx-1-9-11/:
->
-> """
-> In future releases, we plan to add the ability to compile modules after
-> the NGINX binary has been compiled.
-> """
->
-> Best regards,
+>> Thank you you for your previous comments and suggestions.
+>> This new fixed version is the "minimalist" patch we can do :).
+> Thanks, but please submit the patch as a separate mail, using "git
+> send-email".
 >
 > Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+
+
+-- 
+Oleksandr Zhadan
+Arcturus Networks
+T 416 621-0125 x235
+F 416 621-0190
