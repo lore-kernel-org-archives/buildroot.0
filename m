@@ -1,77 +1,43 @@
-From: Mike King <mkwired@gmail.com>
-Date: Tue, 12 Jul 2016 15:06:13 -0400
-Subject: [Buildroot] help please
-Message-ID: <CAAfO8NyXP5-PFMoC3bN7v8NRD+jzcvgtBfgZZXKijGquARhU8Q@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 12 Jul 2016 22:16:14 +0200
+Subject: [Buildroot] [PATCH 00/12 v8] Introduce libudev (branch
+	yem/libudev-4)
+References: <cover.1468274498.git.yann.morin.1998@free.fr>
+Message-ID: <XnsA643E28C98875ID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am hoping someone will help me.  I am trying to create a package for
-linux-gpib.  I can get it to configure and build but not install.  I
-have listed below the package files that I have created.  I am not an
-autotools expert.
+[posted and mailed]
 
+Hi Yann,
 
-###Config.in FILE###
-config BR2_PACKAGE_LINUX_GPIB
-bool "linux-gpib"
-help
- The Linux GPIB Package is a support package for GPIB (IEEE 488) hardware.
- The package contains kernel driver modules, and a C user-space library with
- Guile, Perl, PHP, Python and TCL bindings. The API of the C library is intended
- to be compatible with National Instrument's GPIB library.
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+news:cover.1468274498.git.yann.morin.1998 at free.fr:
 
- http://linux-gpib.sourceforge.net
+> Not all packages that reference udev have been switched over to depend
+> on libudev, though, since it is unclear to me whether they require a
+> udev daemon, or would be happy with just libudev. This can be done in
+> follow up patches once libudev is eventually in the tree (for good this
+> time I hope! ;-) )
 
-###linux-gpib.mk FILE###
-################################################################################
-#
-# linux-gpib
-#
-################################################################################
+great to see the libudev patch series revived :)
 
-LINUX_GPIB_VERSION = 4.0.3
-LINUX_GPIB_SITE =
-http://downloads.sourceforge.net/project/linux-gpib/linux-gpib%20for%203.x.x%20and%202.6.x%20kernels/$(LINUX_GPIB_VERSION)
-LINUX_GPIB_SOURCE = linux-gpib-$(LINUX_GPIB_VERSION).tar.gz
-LINUX_GPIB_LICENSE = GPLv2
-LINUX_GPIB_LICENSE_FILES = COPYING
-LINUX_GPIB_INSTALL_STAGING = YES
-LINUX_GPIB_AUTORECONF = YES
-LINUX_GPIB_CONF_OPTS = --with-linux-srcdir=$(LINUX_DIR)/
+I included your patch series in my buildroot repo and added four patches
+for libdrm, mesa3d, kodi and libcec, they do not need a udev daemon
 
-$(eval $(autotools-package))
+https://github.com/bkuhls/buildroot/commits/libudev
 
+* 4cb2069 - package/libdrm: optionally use libudev
+* de1f466 - package/mesa3d: optionally use libudev
+* 360d492 - package/kodi: libcec support only needs libudev, not udev daemon
+* a6c4a70 - package/libcec: optionally use libudev
 
-###PATCH FILE###
---- linux-gpib-4.0.3/configure.ac 2016-04-09 13:34:55.000000000 +0000
-+++ linux-gpib-4.0.3/configure.ac.new 2016-07-05 01:37:47.524290832 +0000
-@@ -30,9 +30,10 @@
- [ISODATE=`date +%Y-%m-%d`]
- AC_SUBST([ISODATE])
+Feel free to pick them up to your patch series if you like.
 
--AC_CHECK_FILE([util/.scm_version.tmp],
--  [SCM_VERSION=[$VERSION"\ [r"`cat util/.scm_version.tmp`"]"]],
--  [SCM_VERSION=$VERSION])
-+#AC_CHECK_FILE([util/.scm_version.tmp],
-+#  [SCM_VERSION=[$VERSION"\ [r"`cat util/.scm_version.tmp`"]"]],
-+#  [SCM_VERSION=$VERSION])
-+SCM_VERSION=4.0.3
+On my kodi17 branch you will find the patches from the libudev branch as well
+https://github.com/bkuhls/buildroot/commits/kodi17
 
- AC_SUBST(SCM_VERSION)
-
---- linux-gpib-4.0.3/drivers/Makefile.am 2016-04-09 09:33:14.000000000 -0400
-+++ linux-gpib-4.0.3/drivers/Makefile.am.new 2016-07-09 11:13:37.356298300 -0400
-@@ -28,7 +28,7 @@
-  CC="$(LINUX_CC) -I at abs_top_srcdir@
--I at abs_top_srcdir@/drivers/gpib/include -I at abs_top_srcdir@/include" \
-  SUBDIRS="$(GPIB_ABS_MODULE_SUBDIR)"
-
--install-data-hook: device-file-check /etc/gpib.conf
-+install-data-hook:
-  $(MAKE) -C $(LINUX_SRCDIR) V=1 modules_install\
-  CC="$(LINUX_CC) -I at abs_top_srcdir@ -I at abs_top_srcdir@/driver/include
--I at abs_top_srcdir@/include" \
-  SUBDIRS="$(GPIB_ABS_MODULE_SUBDIR)" INSTALL_MOD_DIR="gpib"
+Regards, Bernd
