@@ -1,62 +1,201 @@
 From: Romain Perier <romain.perier@free-electrons.com>
-Date: Tue, 12 Jul 2016 11:30:14 +0200
-Subject: [Buildroot] [PATCH v2 0/6] Add support for AMD Catalyst graphics
-	driver
-Message-ID: <1468315820-9341-1-git-send-email-romain.perier@free-electrons.com>
+Date: Tue, 12 Jul 2016 11:30:15 +0200
+Subject: [Buildroot] [PATCH v2 1/6] support/download: Add support to pass
+	options directly to downloaders
+In-Reply-To: <1468315820-9341-1-git-send-email-romain.perier@free-electrons.com>
+References: <1468315820-9341-1-git-send-email-romain.perier@free-electrons.com>
+Message-ID: <1468315820-9341-2-git-send-email-romain.perier@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The AMD Catalyst Proprietary Linux Graphics Driver 15.9 supports GPUs
-AMD Radeon HD 5xxx and newer graphics. It requires at least glibc 2.2
-or 2.3 and is compatible up to Xorg 1.17. This serie adds the required
-changes to support this driver.
+This adds support to pass options to the underlying command that is used
+by downloader. Useful for retrieving data with server-side checking for
+user login or passwords, use a proxy or use specific options for cloning
+a repository via git and hg.
 
-The fglrx kernel module is compatible up to Linux kernel 4.4 LTS.
-All the graphical stack has been tested on a x86_64 system with an
-AMD-GT40N (w/ Radeon HD 6290 GPU).
+Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+---
 
-Romain Perier (6):
-  support/download: Add support for the referer option to wget
-  pkg-download: Allow packages to pass an URL referer to the wget method
-  docs/manual: Document the variable $(PKG)_DL_REFERER
-  package/xserver_xorg-server: add version 1.17.4
-  qt: Add option for enabling the accessibility support
-  package/amd-catalyst-driver: Add AMD proprietary graphic stack support
+Changes in v2:
+ - Replaced the variable $(PKG)_DL_REFERER by $(PKG)_DL_OPTS
+ - Add modification to all downloaders
 
- docs/manual/adding-packages-generic.txt            |  75 +++++----
- package/Config.in                                  |   1 +
- .../0001-Add-support-for-Linux-4.0.patch           |  45 ++++++
- .../0002-Add-support-for-Linux-4.1.patch           |  31 ++++
- .../0003-Add-support-for-Linux-4.2.patch           | 121 ++++++++++++++
- ...0004-Use-fpregs_active-instead-of-has_fpu.patch |  33 ++++
- ...-Use-a-local-copy-of-copy_xregs_to_kernel.patch |  79 ++++++++++
- .../0006-Add-support-for-Linux-4.4.patch           |  78 +++++++++
- package/amd-catalyst-driver/20-fglrx.conf          |   4 +
- package/amd-catalyst-driver/Config.in              |  89 +++++++++++
- .../amd-catalyst-driver/amd-catalyst-driver.hash   |   2 +
- package/amd-catalyst-driver/amd-catalyst-driver.mk | 175 +++++++++++++++++++++
- package/amd-catalyst-driver/gl.pc                  |  12 ++
- package/pkg-download.mk                            |   3 +-
- package/qt/Config.in                               |   5 +
- package/qt/qt.mk                                   |   7 +-
- package/x11r7/xserver_xorg-server/Config.in        |  10 ++
- .../xserver_xorg-server/xserver_xorg-server.hash   |   2 +
- support/download/wget                              |  10 +-
- 19 files changed, 744 insertions(+), 38 deletions(-)
- create mode 100644 package/amd-catalyst-driver/0001-Add-support-for-Linux-4.0.patch
- create mode 100644 package/amd-catalyst-driver/0002-Add-support-for-Linux-4.1.patch
- create mode 100644 package/amd-catalyst-driver/0003-Add-support-for-Linux-4.2.patch
- create mode 100644 package/amd-catalyst-driver/0004-Use-fpregs_active-instead-of-has_fpu.patch
- create mode 100644 package/amd-catalyst-driver/0005-Use-a-local-copy-of-copy_xregs_to_kernel.patch
- create mode 100644 package/amd-catalyst-driver/0006-Add-support-for-Linux-4.4.patch
- create mode 100644 package/amd-catalyst-driver/20-fglrx.conf
- create mode 100644 package/amd-catalyst-driver/Config.in
- create mode 100644 package/amd-catalyst-driver/amd-catalyst-driver.hash
- create mode 100644 package/amd-catalyst-driver/amd-catalyst-driver.mk
- create mode 100644 package/amd-catalyst-driver/gl.pc
+ support/download/bzr  | 3 ++-
+ support/download/cp   | 3 ++-
+ support/download/cvs  | 3 ++-
+ support/download/git  | 3 ++-
+ support/download/hg   | 3 ++-
+ support/download/scp  | 3 ++-
+ support/download/svn  | 3 ++-
+ support/download/wget | 5 +++--
+ 8 files changed, 17 insertions(+), 9 deletions(-)
 
+diff --git a/support/download/bzr b/support/download/bzr
+index e18b01f..9443e03 100755
+--- a/support/download/bzr
++++ b/support/download/bzr
+@@ -25,6 +25,7 @@ output="${1}"
+ repo="${2}"
+ rev="${3}"
+ basename="${4}"
++dl_opts="${5}"
+ 
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+@@ -49,5 +50,5 @@ if [ ${bzr_version} -ge ${bzr_min_version} ]; then
+ fi
+ 
+ _bzr export ${verbose} --root="'${basename}/'" --format=tgz \
+-    ${timestamp_opt} - "'${repo}'" -r "'${rev}'" \
++    ${timestamp_opt} - "${dl_opts}" "'${repo}'" -r "'${rev}'" \
+     >"${output}"
+diff --git a/support/download/cp b/support/download/cp
+index 09ce3d1..8864a9d 100755
+--- a/support/download/cp
++++ b/support/download/cp
+@@ -27,6 +27,7 @@ shift $((OPTIND-1))
+ 
+ output="${1}"
+ source="${2}"
++dl_opts="${3}"
+ 
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+@@ -34,4 +35,4 @@ _localfiles() {
+     eval ${LOCALFILES} "${@}"
+ }
+ 
+-_localfiles ${verbose} "'${source}'" "'${output}'"
++_localfiles ${verbose} "${dl_opts}""'${source}'" "'${output}'"
+diff --git a/support/download/cvs b/support/download/cvs
+index 7980389..e02c58e 100755
+--- a/support/download/cvs
++++ b/support/download/cvs
+@@ -25,6 +25,7 @@ repo="${2}"
+ rev="${3}"
+ rawname="${4}"
+ basename="${5}"
++dl_opts="${6}"
+ 
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+@@ -48,6 +49,6 @@ fi
+ 
+ export TZ=UTC
+ _cvs ${verbose} -z3 -d"'${repo}'" \
+-     co -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
++     co "${dl_opts}" -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
+ 
+ tar czf "${output}" "${basename}"
+diff --git a/support/download/git b/support/download/git
+index 314b388..7fd7563 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -24,6 +24,7 @@ output="${1}"
+ repo="${2}"
+ cset="${3}"
+ basename="${4}"
++dl_opts="${5}"
+ 
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+@@ -49,7 +50,7 @@ if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
+ fi
+ if [ ${git_done} -eq 0 ]; then
+     printf "Doing full clone\n"
+-    _git clone ${verbose} --mirror "'${repo}'" "'${basename}'"
++    _git clone ${verbose} "${dl_opts}" --mirror "'${repo}'" "'${basename}'"
+ fi
+ 
+ GIT_DIR="${basename}" \
+diff --git a/support/download/hg b/support/download/hg
+index 25cb4e9..04ca7a0 100755
+--- a/support/download/hg
++++ b/support/download/hg
+@@ -24,6 +24,7 @@ output="${1}"
+ repo="${2}"
+ cset="${3}"
+ basename="${4}"
++dl_opts="${5}"
+ 
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+@@ -31,7 +32,7 @@ _hg() {
+     eval ${HG} "${@}"
+ }
+ 
+-_hg clone ${verbose} --noupdate "'${repo}'" "'${basename}'"
++_hg clone ${verbose} "${dl_opts}" --noupdate "'${repo}'" "'${basename}'"
+ 
+ _hg archive ${verbose} --repository "'${basename}'" --type tgz \
+             --prefix "'${basename}'" --rev "'${cset}'" \
+diff --git a/support/download/scp b/support/download/scp
+index 95cf502..7ecc0d0 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -22,6 +22,7 @@ shift $((OPTIND-1))
+ 
+ output="${1}"
+ url="${2}"
++dl_opts="${3}"
+ 
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+@@ -29,4 +30,4 @@ _scp() {
+     eval ${SCP} "${@}"
+ }
+ 
+-_scp ${verbose} "'${url}'" "'${output}'"
++_scp ${verbose} "${dl_opts}" "'${url}'" "'${output}'"
+diff --git a/support/download/svn b/support/download/svn
+index 4dcdd06..695762e 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -24,6 +24,7 @@ output="${1}"
+ repo="${2}"
+ rev="${3}"
+ basename="${4}"
++dl_opts="${5}"
+ 
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+@@ -31,6 +32,6 @@ _svn() {
+     eval ${SVN} "${@}"
+ }
+ 
+-_svn export ${verbose} "'${repo}@${rev}'" "'${basename}'"
++_svn export ${verbose} "${dl_opts}" "'${repo}@${rev}'" "'${basename}'"
+ 
+ tar czf "${output}" "${basename}"
+diff --git a/support/download/wget b/support/download/wget
+index 0fc7ffa..95019dc 100755
+--- a/support/download/wget
++++ b/support/download/wget
+@@ -6,7 +6,7 @@ set -e
+ # Download helper for wget, to be called from the download wrapper script
+ #
+ # Call it as:
+-#   .../wget [-q] OUT_FILE URL
++#   .../wget [-q] OUT_FILE URL [DL_OPTS]
+ #
+ # Environment:
+ #   WGET     : the wget command to call
+@@ -22,6 +22,7 @@ shift $((OPTIND-1))
+ 
+ output="${1}"
+ url="${2}"
++dl_opts="${3}"
+ 
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+@@ -29,4 +30,4 @@ _wget() {
+     eval ${WGET} "${@}"
+ }
+ 
+-_wget ${verbose} -O "'${output}'" "'${url}'"
++_wget ${verbose} "${dl_opts}" -O "'${output}'" "'${url}'"
 -- 
 2.8.1
