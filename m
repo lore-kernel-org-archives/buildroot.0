@@ -1,59 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Jul 2016 17:54:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nginx: Add naxsi module option.
-In-Reply-To: <CAFSsvmq-bKYVxb3YVNkbqeAp6NCX81JzTikMYCLrwqk-DJLsqQ@mail.gmail.com>
-References: <1468259776-26584-1-git-send-email-aduskett@codeblue.com>
- <20160712163312.32b1157e@free-electrons.com>
- <CAFSsvmq-bKYVxb3YVNkbqeAp6NCX81JzTikMYCLrwqk-DJLsqQ@mail.gmail.com>
-Message-ID: <20160712175434.18daa4a0@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 12 Jul 2016 18:41:54 +0200
+Subject: [Buildroot] Report from the Buildroot Summer Camp
+In-Reply-To: <20160706221748.3bd00890@free-electrons.com>
+References: <20160706221748.3bd00890@free-electrons.com>
+Message-ID: <20160712164154.GA3680@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Tue, 12 Jul 2016 11:08:31 -0400, Adam Duskett wrote:
+Chiming in a bit late...
 
-> > Thanks for this patch. I had a look at this nginx thing, and indeed
-> > building third-party modules is annoying, as they can only be built as
-> > part of the nginx build process. I.e you cannot build nginx, and then
-> > later on build additional third-party extensions.  
-> 
-> Agreed; I am glad this will be fixed in the future.
+On 2016-07-06 22:17 +0200, Thomas Petazzoni spake thusly:
+> As was announced on the list, six core/regular Buildroot developers
+> met from July 1 to July 5 in Toulouse, France, for the "Buildroot
+> Summer Camp". Peter Korsgaard, Samuel Martin, Yann E. Morin, Romain
+> Naour, Maxime Hadjinlian and myself participated to this event. Thanks
+> to spending 5 days full time on Buildroot, we managed to work on a
+> significant number of topics.
 
-Me too :)
+Yes, this was a very intense WE. A little bit sleep-deprived, but
+nothing that can't be compensated by the pelasure to do all that work!
 
+> Noticeable things that have been merged:
+[--SNIP--]
 
-> I discussed this with Yani before hand and the reason I submitted it
-> like this is because
-> we thought that perhaps it would be a bit.... cluttering if we had a
-> separate package for each
-> new module.
-> 
-> > * Then, in nginx.mk, if BR2_PACKAGE_NGINX_NAXSI is enabled, you add a
-> >   dependency on it, and add a pre-configure hook that creates a
-> >   symbolic link from the appropriate location in the nginx source tree
-> >   to the directory where nginx-naxsi was extracted.  
-> 
-> By all means I absolutely can.  Again, are you sure it won't be too
-> much clutter?
+All that thanks to Thomas and Peter who were around so we could poke
+them until they applied such or such patches! Good job! ;-)
 
-I don't think so, especially when in the future they plan to add the
-possibility of building third-party modules separately. When this will
-be possible, we will definitely want to take advantage of this
-feature, which means we'll have one Buildroot package per nginx
-third-party module.
+Thanks to all participants, it was again fun!
 
-So we can just as well start today by having separate packages per
-nginx third-party module, even if today they do not really build "on
-their own".
+Regards,
+Yann E. MORIN.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
