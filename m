@@ -1,40 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jul 2016 23:59:25 +0200
-Subject: [Buildroot] [PATCH v2] toolchain: Bump ARC tools to
-	arc-2016.09-eng006
-In-Reply-To: <1468313301-30311-1-git-send-email-vzakhar@synopsys.com> (Vlad
- Zakharov's message of "Tue, 12 Jul 2016 11:48:21 +0300")
-References: <1468313301-30311-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <87r3ay5xhe.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 13 Jul 2016 00:08:14 +0200
+Subject: [Buildroot] [PATCH] package/rt-tests: switch to the upstream
+	repository
+Message-ID: <1468361294-13630-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
+rt-tests is not maintained from Clark Williams's repository anymore.
 
- > As described at:
- > 4520524ba055706236db9f00dd79f1b2e2e87fde
- > this commit continues a series of updates of ARC tools.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+We missed some rt-tests release (v0.90 to v1.0).
+Since v0.92 a release tarball is available at
+https://www.kernel.org/pub/linux/utils/rt-tests so we
+no longer need to clone the git repository.
+---
+ package/rt-tests/rt-tests.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > This engineering build fixes the kernel dwarf stack unwinder feature for
- > ARC targets.
-
- > We still keep GDB as it is of arc-2016.03 release because there're some
- > issues we'd like to resolve before releasing it to wider audience.
-
- > So again note this is next engineering builds of arc-2016.09 series
- > and it might have all kinds of breakages, please don't use it for
- > production builds.
-
- > Related to:
- > 4520524ba055706236db9f00dd79f1b2e2e87fde
-
- > Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-
-Committed, thanks.
-
+diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
+index 74d7c6d..380bacf 100644
+--- a/package/rt-tests/rt-tests.mk
++++ b/package/rt-tests/rt-tests.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RT_TESTS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/clrkwllms/rt-tests.git
++RT_TESTS_SITE = git://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
+ RT_TESTS_VERSION = v0.89
+ RT_TESTS_LICENSE = GPLv2+
+ RT_TESTS_LICENSE_FILES = COPYING
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.5.5
