@@ -1,72 +1,39 @@
 From: Lothar Felten <lothar.felten@gmail.com>
-Date: Tue, 12 Jul 2016 10:26:26 +0200
-Subject: [Buildroot] [PATCH 5/7] new package: ti-sgx/ti-sgx-demos SGX binary
-	demos
+Date: Tue, 12 Jul 2016 10:26:22 +0200
+Subject: [Buildroot] [PATCH 1/7] ti-gfx: config help text: list supported
+	processors
 In-Reply-To: <1468311988-22059-1-git-send-email-lothar.felten@gmail.com>
 References: <1468311988-22059-1-git-send-email-lothar.felten@gmail.com>
-Message-ID: <1468311988-22059-6-git-send-email-lothar.felten@gmail.com>
+Message-ID: <1468311988-22059-2-git-send-email-lothar.felten@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package adds the SGX demos from Imagination Technologies.
-The demos are available as binaries only.
+The ti-gfx package supports a set of SGX implementations which are used in
+some TI SoCs, newer parts are not supported by this package.
+This patch adds a list of supported TI SoCs.
 
 Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 ---
- package/ti-sgx/ti-sgx-demos/Config.in         |  4 ++++
- package/ti-sgx/ti-sgx-demos/ti-sgx-demos.hash |  2 ++
- package/ti-sgx/ti-sgx-demos/ti-sgx-demos.mk   | 20 ++++++++++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/ti-sgx/ti-sgx-demos/Config.in
- create mode 100644 package/ti-sgx/ti-sgx-demos/ti-sgx-demos.hash
- create mode 100644 package/ti-sgx/ti-sgx-demos/ti-sgx-demos.mk
+ package/ti-gfx/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/ti-sgx/ti-sgx-demos/Config.in b/package/ti-sgx/ti-sgx-demos/Config.in
-new file mode 100644
-index 0000000..e4d4321
---- /dev/null
-+++ b/package/ti-sgx/ti-sgx-demos/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_TI_SGX_DEMOS
-+	bool "sgx powervr demo binaries"
-+	help
-+	  TI SGX powervr demos
-diff --git a/package/ti-sgx/ti-sgx-demos/ti-sgx-demos.hash b/package/ti-sgx/ti-sgx-demos/ti-sgx-demos.hash
-new file mode 100644
-index 0000000..43acf91
---- /dev/null
-+++ b/package/ti-sgx/ti-sgx-demos/ti-sgx-demos.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 9d1d4da2c2b35303e239f99eb4003b8b206078a682aa083d5fb831ee4197f3bf ti-sgx-demos-f24650bc8243b25c23d6a0a502ed79fc472ac424.tar.gz
-diff --git a/package/ti-sgx/ti-sgx-demos/ti-sgx-demos.mk b/package/ti-sgx/ti-sgx-demos/ti-sgx-demos.mk
-new file mode 100644
-index 0000000..04389f1
---- /dev/null
-+++ b/package/ti-sgx/ti-sgx-demos/ti-sgx-demos.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# ti-sgx-demos
-+#
-+################################################################################
-+
-+# This correpsonds to SDK 02.00.00.00
-+TI_SGX_DEMOS_VERSION = f24650bc8243b25c23d6a0a502ed79fc472ac424
-+TI_SGX_DEMOS_SITE = git://git.ti.com/graphics/img-pvr-sdk.git
-+TI_SGX_DEMOS_LICENSE = Imagination Technogolies License Agreement 
-+TI_SGX_DEMOS_LICENSE_FILES = LegalNotice.txt
-+
-+TI_SGX_DEMOS_DEPENDENCIES =  ti-sgx-km ti-sgx-um 
-+
-+define TI_SGX_DEMOS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0555 -t $(TARGET_DIR)/usr/bin \
-+                $(@D)/targetfs/Examples/Advanced/OGLES* 
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
+index 39b0a93..e4a102f 100644
+--- a/package/ti-gfx/Config.in
++++ b/package/ti-gfx/Config.in
+@@ -8,7 +8,9 @@ config BR2_PACKAGE_TI_GFX
+ 	select BR2_PACKAGE_FBSET if !BR2_PACKAGE_BUSYBOX # Runtime dependency only
+ 	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
+ 	help
+-	  Graphics libraries for TI boards.
++	  Graphics libraries for TI boards using SGX acceleration.
++	  Supports OMAP35xx, DM37xx/AM37xx, DM816x, DM814x, AM335x and AM43xx.
++	  For newer CPUs or kernels use the ti-sgx package.
+ 
+ 	  http://downloads.ti.com/dsps/dsps_public_sw/gfxsdk/
+ 
 -- 
 1.9.1
