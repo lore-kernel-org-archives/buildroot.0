@@ -1,88 +1,102 @@
 From: Peter Thompson <peter.macleod.thompson@gmail.com>
-Date: Tue, 12 Jul 2016 08:53:05 -0600
-Subject: [Buildroot] [PATCH 3/3] sdl2_ttf: new package
-In-Reply-To: <1468335185-19378-1-git-send-email-peter.macleod.thompson@gmail.com>
-References: <1468335185-19378-1-git-send-email-peter.macleod.thompson@gmail.com>
-Message-ID: <1468335185-19378-3-git-send-email-peter.macleod.thompson@gmail.com>
+Date: Tue, 12 Jul 2016 08:54:06 -0600
+Subject: [Buildroot] 3 patches to buildroot via git send-email - 2nd try
+Message-ID: <CAGrGpJBnpic0X+N07Uc33FQ1r+hpw8Fks4G8rTh4Z5PC1Yr2NQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sdl2_ttf created from sdl_ttf with some minor changes
+Hi
 
-Signed-off-by: Peter Thompson <peter.macleod.thompson@gmail.com>
----
- package/Config.in              |  1 +
- package/sdl2_ttf/Config.in     |  9 +++++++++
- package/sdl2_ttf/sdl2_ttf.hash |  2 ++
- package/sdl2_ttf/sdl2_ttf.mk   | 20 ++++++++++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/sdl2_ttf/Config.in
- create mode 100644 package/sdl2_ttf/sdl2_ttf.hash
- create mode 100644 package/sdl2_ttf/sdl2_ttf.mk
+    Hope it works better this time.   Thanks for advice and help.  Let me
+know if any other changes are needed.
 
-diff --git a/package/Config.in b/package/Config.in
-index b79c237..10617bc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -265,6 +265,7 @@ comment "Graphic libraries"
- 	source "package/sdl2/Config.in"
- 	source "package/sdl2_gfx/Config.in"
- 	source "package/sdl2_image/Config.in"
-+	source "package/sdl2_ttf/Config.in"
- 
- comment "Other GUIs"
- 	source "package/qt/Config.in"
-diff --git a/package/sdl2_ttf/Config.in b/package/sdl2_ttf/Config.in
-new file mode 100644
-index 0000000..cb77059
---- /dev/null
-+++ b/package/sdl2_ttf/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_SDL2_TTF
-+	bool "SDL2_TTF"
-+	depends on BR2_PACKAGE_SDL2
-+	select BR2_PACKAGE_FREETYPE
-+	help
-+	  SDL2_ttf is a sample TrueType font library. It allows you to
-+	  use TrueType fonts in your SDL2 applications.
-+
-+	  http://www.libsdl.org/projects/SDL_ttf/
-diff --git a/package/sdl2_ttf/sdl2_ttf.hash b/package/sdl2_ttf/sdl2_ttf.hash
-new file mode 100644
-index 0000000..515189a
---- /dev/null
-+++ b/package/sdl2_ttf/sdl2_ttf.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 34db5e20bcf64e7071fe9ae25acaa7d72bdc4f11ab3ce59acc768ab62fe39276  SDL2_ttf-2.0.14.tar.gz
-diff --git a/package/sdl2_ttf/sdl2_ttf.mk b/package/sdl2_ttf/sdl2_ttf.mk
-new file mode 100644
-index 0000000..2428e9b
---- /dev/null
-+++ b/package/sdl2_ttf/sdl2_ttf.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# sdl2_ttf
-+#
-+################################################################################
-+
-+SDL2_TTF_VERSION = 2.0.14
-+SDL2_TTF_SOURCE = SDL2_ttf-$(SDL2_TTF_VERSION).tar.gz
-+SDL2_TTF_SITE = http://www.libsdl.org/projects/SDL_ttf/release
-+SDL2_TTF_LICENSE = zlib
-+SDL2_TTF_LICENSE_FILES = COPYING
-+
-+SDL2_TTF_INSTALL_STAGING = YES
-+SDL2_TTF_DEPENDENCIES = sdl2 freetype
-+SDL2_TTF_CONF_OPTS = \
-+	--without-x \
-+	--with-freetype-prefix=$(STAGING_DIR)/usr \
-+	--with-sdl2-prefix=$(STAGING_DIR)/usr
-+
-+$(eval $(autotools-package))
--- 
-1.9.1
+Peter
+
+
+
+Below are my personal notes used to create the 3 patches
+
+Step 1 - Git buildroot from github
+----------------------------------
+mkdir ~/Documents/git/buildroot/
+cd ~/Documents/git/buildroot/
+git clone git://git.buildroot.net/buildroot
+
+cd ~/Documents/git/buildroot/buildroot/
+git status
+git branch -a
+git remote -v
+git remote show origin
+
+
+Step 2 - create 1 branch
+-----------------------------------------
+git checkout master     # recheck original
+git branch sdl2suite
+git branch -a            #
+git branch
+git status
+
+
+Step 3 - create patch and commit x 3 (one per patch
+-----------------------------------------
+git checkout sdl2suite     #make changes see 09xpeterBuildrootPatchREADME
+git add package/sdl2_image/Config.in        # p17-19 git pro book
+git add package/sdl2_image/sdl2_image.mk
+git add package/sdl2_image/sdl2_image.hash
+git add package/Config.in
+git add -A                 # adds all files - don't use here...
+    make the changes (add 2 files plus change Config.in)
+git status                # make sure you know what you are commiting
+git commit -as            # -as=all modified files with signoff
+    commit message =
+sdl2_image: new package
+sdl2_image created from sdl2_image with minor changes for sdl2
+
+
+rm *~                     # get rid of junk
+
+Step 4 create hash file
+----------------------
+download sdl2_image via firefox
+cd ~/Downloads/FirefoxDownloads/
+sha256sum SDL2_ttf-2.0.14.tar.gz  > sdl2_ttf.hash
+     edit sdle_ttf.hash file as per below....
+# Locally calculated
+sha256 a5a69a6abf80bcce713fa873607735fe712f44276a7f048d60a61bb2f6b3c90c
+SDL2-2.0.3.tar.gz
+add sdl2_ttf.hash to sdl2suite branch
+
+
+Step 5
+------
+repeat step 3,4 (3 times) for
+sdl2_gfx
+sdl2_image
+sdl2_ttf
+
+
+
+https://buildroot.org/downloads/manual/manual.html#adding-packages-hash
+
+Step 6 submit
+-------------
+submit via
+https://buildroot.org/downloads/manual/manual.html#submitting-patches
+$ git fetch --all --tags    # update with latest buildroot version
+$ git rebase origin/master    # redo my commits on latest buildroot version
+$ git format-patch -M -n -s -o outgoing origin/master
+        # -M = detect renames???
+        # -n = Name output in [PATCH n/m] format = [PATCH 1/1]
+        # -s = signed off
+        # -o = output
+test the results...
+git send-email --to peter.macleod.thompson at gmail.com outgoing/*
+submit it....
+$ git send-email --to buildroot at buildroot.org outgoing/*
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160712/58103474/attachment.html>
