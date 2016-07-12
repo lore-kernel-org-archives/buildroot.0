@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 12 Jul 2016 16:55:28 +0200
-Subject: [Buildroot] [PATCH 5/7] new package: ti-sgx/ti-sgx-demos SGX
- binary demos
-In-Reply-To: <1468311988-22059-6-git-send-email-lothar.felten@gmail.com>
+Date: Tue, 12 Jul 2016 16:57:22 +0200
+Subject: [Buildroot] [PATCH 6/7] new package: ti-sgx top level package
+ for SGX graphics accelerator
+In-Reply-To: <1468311988-22059-7-git-send-email-lothar.felten@gmail.com>
 References: <1468311988-22059-1-git-send-email-lothar.felten@gmail.com>
- <1468311988-22059-6-git-send-email-lothar.felten@gmail.com>
-Message-ID: <20160712165528.462c81ce@free-electrons.com>
+ <1468311988-22059-7-git-send-email-lothar.felten@gmail.com>
+Message-ID: <20160712165722.6d3751fd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,73 +14,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 12 Jul 2016 10:26:26 +0200, Lothar Felten wrote:
-> This package adds the SGX demos from Imagination Technologies.
-> The demos are available as binaries only.
-> 
-> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
+On Tue, 12 Jul 2016 10:26:27 +0200, Lothar Felten wrote:
+> This is a virtual package that selects the packages required for SGX support:
+> ti-sgx-km, ti-sgx-um, ti-sgx-libgbm and optionally ti-sgx-demos.
 
-Commit title should be:
+This is an improper use of a virtual package. A virtual package is
+*not* a meta package that is meant to depend on a bunch of other
+packages to simplify their selection.
 
-	ti-sgx-demos: new package
+A virtual package is a package that *provides* some kind of generic
+API, which is implemented by various providers. This is not the case
+here: the package that actually provides the OpenGL ES and EGL APIs is
+ti-sgx-um.
 
-> diff --git a/package/ti-sgx/ti-sgx-demos/Config.in b/package/ti-sgx/ti-sgx-demos/Config.in
-> new file mode 100644
-> index 0000000..e4d4321
-> --- /dev/null
-> +++ b/package/ti-sgx/ti-sgx-demos/Config.in
-> @@ -0,0 +1,4 @@
-> +config BR2_PACKAGE_TI_SGX_DEMOS
-> +	bool "sgx powervr demo binaries"
+So I believe this whole package should be removed, and instead the four
+other packages be made independent packages.
 
-	bool "ti-sgx-demos"
-
-> +	help
-> +	  TI SGX powervr demos
-
-More details + upstream link.
-
-> diff --git a/package/ti-sgx/ti-sgx-demos/ti-sgx-demos.mk b/package/ti-sgx/ti-sgx-demos/ti-sgx-demos.mk
-> new file mode 100644
-> index 0000000..04389f1
-> --- /dev/null
-> +++ b/package/ti-sgx/ti-sgx-demos/ti-sgx-demos.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# ti-sgx-demos
-> +#
-> +################################################################################
-> +
-> +# This correpsonds to SDK 02.00.00.00
-> +TI_SGX_DEMOS_VERSION = f24650bc8243b25c23d6a0a502ed79fc472ac424
-> +TI_SGX_DEMOS_SITE = git://git.ti.com/graphics/img-pvr-sdk.git
-
-http:// download if possible.
-
-> +TI_SGX_DEMOS_LICENSE = Imagination Technogolies License Agreement 
-> +TI_SGX_DEMOS_LICENSE_FILES = LegalNotice.txt
-> +
-> +TI_SGX_DEMOS_DEPENDENCIES =  ti-sgx-km ti-sgx-um 
-
-Trailing space + one too many space after the =.
-
-I guess those demos only work with the TI SGX OpenGL implementation,
-and cannot be used with other OpenGL implementations.
-
-> +define TI_SGX_DEMOS_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 0555 -t $(TARGET_DIR)/usr/bin \
-> +                $(@D)/targetfs/Examples/Advanced/OGLES* 
-
-Please use tabs to indent the second line.
-
-> +endef
-
-555 isn't good, 755 should be used instead. However, it is true that we
-generally prefer to use cp -dpfr for such installations:
-
-	cp -dpfr $(@D)/targetfs/Examples/Advanced/OGLES \
-		$(TARGET_DIR)/usr/bin/
+You can have a look at package/freescale-imx/Config.in for an example.
 
 Thanks,
 
