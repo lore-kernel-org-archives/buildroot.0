@@ -1,34 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Jul 2016 14:23:14 +0200
-Subject: [Buildroot] servers unavailable
-In-Reply-To: <1468408735.29064.17.camel@synopsys.com> (Vlad Zakharov's message
- of "Wed, 13 Jul 2016 11:18:55 +0000")
-References: <1468408735.29064.17.camel@synopsys.com>
-Message-ID: <87mvll6825.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 13 Jul 2016 09:56:57 -0300
+Subject: [Buildroot] [PATCH] gnutls: security bump to version 3.4.14
+Message-ID: <1468414617-12700-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
+Fixes:
+GNUTLS-SA-2016-2 - vulnerability that affects certificate verification
+when GnuTLS is used in combination with the p11-kit trust module.
 
- > Hi Peter and Thomas,
- > Today (June 13, 2016) many buildroot resources became
- > unavailable. E.g. me and Alexey Brodkin are not able to get response
- > from:
- > 	-?https://git.buildroot.net/
- > 	-?https://buildroot.org/
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gnutls/gnutls.hash | 2 +-
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > So inter alia we can't access your git repo to download upstream changes.
- > Are you working now on this problem??
- > Could we hope the issue would be solved in near future??
-
-Yes, the server is unfortunately under a DDoS attack. For git, you can
-temporarily use the github mirror:
-
-https://github.com/buildroot/buildroot
-
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 85254d1..e2c5fa1 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	fd3386e8e72725980bcd7f40949aa0121dcb7650b5147c6490e794555ed25859	gnutls-3.4.13.tar.xz
++sha256	35deddf2779b76ac11057de38bf380b8066c05de21b94263ad5b6dfa75dfbb23	gnutls-3.4.14.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 3cb08d1..429c1b2 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.4
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).13
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).14
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ # README says that the core library is under LGPLv2.1+, but a few
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.7.3
