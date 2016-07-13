@@ -1,42 +1,115 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 13 Jul 2016 20:16:59 +0300
-Subject: [Buildroot] How to use the ft6236 touchscreen driver ?
-In-Reply-To: <f9bfab32-2dd3-6b86-9ca1-5fca7fff84e7@yahoo.fr>
-References: <f9bfab32-2dd3-6b86-9ca1-5fca7fff84e7@yahoo.fr>
-Message-ID: <20160713171659.GF2139@sapphire.tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 13 Jul 2016 20:21:35 +0200
+Subject: [Buildroot] help please
+In-Reply-To: <CAAfO8NykMv=DCdn=rV6tCFOfRvZQf84V82ZrKgtJW-422F9nfQ@mail.gmail.com>
+References: <CAAfO8NyXP5-PFMoC3bN7v8NRD+jzcvgtBfgZZXKijGquARhU8Q@mail.gmail.com>
+ <20160712204436.GE3680@free.fr>
+ <CAAfO8NykMv=DCdn=rV6tCFOfRvZQf84V82ZrKgtJW-422F9nfQ@mail.gmail.com>
+Message-ID: <20160713182135.GA3687@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi David,
+Mike, All,
 
-On Wed, Jul 13, 2016 at 07:07:43PM +0200, David Picard wrote:
-> I am trying to use the touch capability of Adafruit's PiTFT 2.8" on a RPi2,
-> BR 2016.05. When I modprobe ft6236, nothing happens : no message in dmesg,
-> no device created in /dev/input. i2cdetect detects it at address 38h.
-> 
-> I did load i2c_bcm2708, i2c-dev. I2C works (tested with a RTCC).
-> 
-> I tried :
-> # echo ft6236 0x38 > /sys/class/i2c-adapter/i2c-1/new_device
-> 
-> and I got something in dmesg :
-> ft6236 1-0038: irq is missing
-> ft6236: probe of 1-0038 failed with error -22
-> i2c i2c-1: new_device: Instantiated device ft6236 at 0x38
-> 
-> But still no entry in /dev/input.
-> 
-> Any idea ?
+On 2016-07-12 17:05 -0400, Mike King spake thusly:
+> I have attached the build log.  I am now having compile errors.
+> Before it was using the host kernel headers.  I "fixed" that by adding
+> _CONF_OPTS line.
 
-You most likely need to update your device tree file (.dts), and add your 
-PiTFT device as a sub-node of the i2c master.
+OK, so I've had a quick look at your build log, and it looks like
+linux-gpib is quite a mess and will be difficult to package properly.
 
-baruch
+So, first, let's look at the configure log:
+
+    Checking Linux kernel directory... ok
+    checking Linux kernel compile flags... FATAL: /home/vagrant/buildroot-2016.05/output/build/linux-gpib-4.0.3/util/linux_flags/fake.o has no symtab?
+    make[3]: *** [__modpost] Error 1
+    make[2]: *** [modules] Error 2
+    configure: WARNING: Failed to get compile flags from Linux kernel directory.
+    ok
+    checking for arm-buildroot-linux-uclibcgnueabihf-gcc... /home/vagrant/buildroot-2016.05/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+
+This sounds like it is incorrectly looking for Linux directory for the
+build system and/or kernel-land headers. Besides, it did not already
+checked for the cross-compiler, as we can see that it does so *after*,
+so it is probably using the host compiler at that point (and this will
+be confirmed later during the build, see below...).
+
+That one will be very difficult to fix, especially since their
+configure.ac is very badly written:
+
+   90 dnl get compile flags for modules from linux kernel source tree
+   91 AC_MSG_CHECKING([Linux kernel compile flags])
+   92 FLAGDIR=$(pwd)/util/linux_flags
+   93 env LDFLAGS="" CFLAGS="" make --quiet -C ${LINUX_SRCDIR} V=1 SUBDIRS=${FLAGDIR} LINUXDIR=${LINUX_SRCDIR} modules > /dev/null
+   94 if [[ $? != 0 ]]; then
+   95     AC_MSG_WARN([Failed to get compile flags from Linux kernel directory.])
+   96 fi
+   97 AC_MSG_RESULT([ok])
+
+Since it is not using standard and not passing the compiler, we can't
+override it will configure flags or any ac_cv_* variable. :-(
+
+That will be tough to fix. Unless this is not really needed in fact, and
+we can in fact pass the expected values in the environment or some such
+afterwards. And it seems we could do that, as the intermediate file
+generated in this command (util/linux_flags/flags) is only used later to
+actually build the driver. So we don;t need it at configure time, and
+the check can very well fail, we don;t care (but it is nonetheless
+completely borked).
+
+And then, it means we can also probably use our kernel-module infra as
+well to build the kernel module instead of letting their weirdly borked
+buildsystem do it.
+
+Then not much of interest, until it starts trying to build the kernel
+module. And there, everything goes down hill pretty quick (lines slightly
+reformatted by me):
+
+    /usr/bin/make -C /home/vagrant/buildroot-2016.05/output/build/linux-26f3b72a9c049be10e6af196252283e1f6ab9d1f/ V=1 modules\
+        CC="gcc -I/home/vagrant/buildroot-2016.05/output/build/linux-gpib-4.0.3 
+                -I/home/vagrant/buildroot-2016.05/output/build/linux-gpib-4.0.3/drivers/gpib/include
+                -I/home/vagrant/buildroot-2016.05/output/build/linux-gpib-4.0.3/include" \
+        CONFIG_GPIB_ISA="no" \
+        SUBDIRS="/home/vagrant/buildroot-2016.05/output/build/linux-gpib-4.0.3/drivers/gpib"
+
+Bing, it uses the host compiler! That's just so utterly broken... :-/
+
+And then (again, reformatted and elided by me):
+
+    gcc -I/home/vagrant/buildroot-2016.05/output/build/linux-gpib-4.0.3
+        -I/home/vagrant/buildroot-2016.05/output/build/linux-gpib-4.0.3/drivers/gpib/include
+        -I/home/vagrant/buildroot-2016.05/output/build/linux-gpib-4.0.3/include
+        -Wp,-MD,/home/vagrant/buildroot-2016.05/output/build/linux-gpib-4.0.3/drivers/gpib/ni_usb/.ni_usb_gpib.o.d
+        [--SNIP--]
+        -DMODULE  -D"KBUILD_STR(s)=#s"
+        -D"KBUILD_BASENAME=KBUILD_STR(ni_usb_gpib)"
+        -D"KBUILD_MODNAME=KBUILD_STR(ni_usb_gpib)" -c -o
+        /home/vagrant/buildroot-2016.05/output/build/linux-gpib-4.0.3/drivers/gpib/ni_usb/.tmp_ni_usb_gpib.o
+        /home/vagrant/buildroot-2016.05/output/build/linux-gpib-4.0.3/drivers/gpib/ni_usb/ni_usb_gpib.c
+
+So, really, it *is* using the host compiler, and there is no way, with
+their infrastructure, to tell them to use another one. Definitely broken
+beyond repair...
+
+So, all we have to do is:
+  - convince it not to try to build the kernel module,
+  - build it ourselves with our kernel-module infra.
+
+I'll try to have a deeper look latter... Dinner now. :-)
+
+If you hang around on IRC tonight UTC+2, we can talk about it, too.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
