@@ -1,149 +1,75 @@
 From: Lothar Felten <lothar.felten@gmail.com>
-Date: Wed, 13 Jul 2016 22:13:36 +0200
-Subject: [Buildroot] [PATCH v2 2/5] package/ti-sgx-um: new package
+Date: Wed, 13 Jul 2016 22:13:37 +0200
+Subject: [Buildroot] [PATCH v2 3/5] package/ti-sgx-demos: new package
 In-Reply-To: <1468440819-13434-1-git-send-email-lothar.felten@gmail.com>
 References: <1468440819-13434-1-git-send-email-lothar.felten@gmail.com>
-Message-ID: <1468440819-13434-2-git-send-email-lothar.felten@gmail.com>
+Message-ID: <1468440819-13434-3-git-send-email-lothar.felten@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package adds the userspace libraries for the SGX graphics accelerator of
-the following Texas Instruments SoCs: AM335x, AM437x, AM4430, AM5430
-It also adds a config file for the libraries and a System-V init script.
+This package adds the SGX demos from Imagination Technologies, they are
+available as binaries only.
+This package contains binaries compiled for the SGX graphics accelerator used
+in the following Texas Instruments SoCs: AM335x, AM437x, AM4430, AM5430.
 
 Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 ---
- package/ti-sgx-um/Config.in      | 29 +++++++++++++++++++++++++++++
- package/ti-sgx-um/S80ti-sgx      | 14 ++++++++++++++
- package/ti-sgx-um/powervr.ini    |  6 ++++++
- package/ti-sgx-um/ti-sgx-um.hash |  2 ++
- package/ti-sgx-um/ti-sgx-um.mk   | 38 ++++++++++++++++++++++++++++++++++++++
- 5 files changed, 89 insertions(+)
- create mode 100644 package/ti-sgx-um/Config.in
- create mode 100644 package/ti-sgx-um/S80ti-sgx
- create mode 100644 package/ti-sgx-um/powervr.ini
- create mode 100644 package/ti-sgx-um/ti-sgx-um.hash
- create mode 100644 package/ti-sgx-um/ti-sgx-um.mk
+ package/ti-sgx-demos/Config.in         | 10 ++++++++++
+ package/ti-sgx-demos/ti-sgx-demos.hash |  2 ++
+ package/ti-sgx-demos/ti-sgx-demos.mk   | 18 ++++++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/ti-sgx-demos/Config.in
+ create mode 100644 package/ti-sgx-demos/ti-sgx-demos.hash
+ create mode 100644 package/ti-sgx-demos/ti-sgx-demos.mk
 
-diff --git a/package/ti-sgx-um/Config.in b/package/ti-sgx-um/Config.in
+diff --git a/package/ti-sgx-demos/Config.in b/package/ti-sgx-demos/Config.in
 new file mode 100644
-index 0000000..5bfb8b6
+index 0000000..52c58e5
 --- /dev/null
-+++ b/package/ti-sgx-um/Config.in
-@@ -0,0 +1,29 @@
-+config BR2_PACKAGE_TI_SGX_UM
-+	bool "ti-sgx-um"
-+	depends on BR2_PACKAGE_TI_SGX_KM
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBDRM_OMAP
-+	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_HAS_POWERVR
++++ b/package/ti-sgx-demos/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_TI_SGX_DEMOS
++	bool "ti-sgx-demos"
++	select BR2_PACKAGE_TI_SGX_KM
++	select BR2_PACKAGE_TI_SGX_UM
 +	help
-+	  Graphics libraries for TI CPUs with SGX5xx GPU.
-+          This package supports AM335x, AM437x, AM4430 and AM5430.
-+          It builds the kernel module and the user space binaries.
-+          For older CPUs or kernels use the ti-gfx package.
-+	 
-+	  http://git.ti.com/graphics/omap5-sgx-ddk-um-linux
-+
-+if BR2_PACKAGE_TI_SGX_UM
-+
-+config BR2_PACKAGE_PROVIDES_LIBEGL
-+	default "ti-sgx-um"
-+
-+config BR2_PACKAGE_PROVIDES_LIBGLES
-+	default "ti-sgx-um"
-+
-+config BR2_PACKAGE_PROVIDES_POWERVR
-+	default "ti-sgx-um"
-+
-+endif
-diff --git a/package/ti-sgx-um/S80ti-sgx b/package/ti-sgx-um/S80ti-sgx
++	  These SGX powervr demo applications from Imagination Technologies are
++	  availabe as binaries only.
++	  The binaries are compiled for the TI SGX implementation.
++	
++	  http://git.ti.com/graphics/img-pvr-sdk
+diff --git a/package/ti-sgx-demos/ti-sgx-demos.hash b/package/ti-sgx-demos/ti-sgx-demos.hash
 new file mode 100644
-index 0000000..8cae52f
+index 0000000..43acf91
 --- /dev/null
-+++ b/package/ti-sgx-um/S80ti-sgx
-@@ -0,0 +1,14 @@
-+#!/bin/sh
-+case "$1" in
-+  start)
-+	printf "Initializing SGX graphics driver "
-+	/usr/bin/pvrsrvinit
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+  ;;
-+  stop)
-+  ;;
-+  *)
-+    echo "Usage: $0 {start|stop}"
-+    exit 1
-+  ;;
-+esac
-diff --git a/package/ti-sgx-um/powervr.ini b/package/ti-sgx-um/powervr.ini
-new file mode 100644
-index 0000000..fc92d45
---- /dev/null
-+++ b/package/ti-sgx-um/powervr.ini
-@@ -0,0 +1,6 @@
-+[default]
-+#defaul library without double buffering:
-+WindowSystem=libpvrDRMWSEGL_FRONT.so
-+#alternative library, slower but with double buffering
-+#WindowSystem=libpvrDRMWSEGL.so
-+DisableHWTQTextureUpload=1
-diff --git a/package/ti-sgx-um/ti-sgx-um.hash b/package/ti-sgx-um/ti-sgx-um.hash
-new file mode 100644
-index 0000000..a6a0566
---- /dev/null
-+++ b/package/ti-sgx-um/ti-sgx-um.hash
++++ b/package/ti-sgx-demos/ti-sgx-demos.hash
 @@ -0,0 +1,2 @@
 +# Locally computed:
-+sha256 c17f23d255cff8fe72fc3f5cae3d7550e387af07d036954b4f08e573379406d0 ti-sgx-um-e15f1543bab4de9e8927a2c4934addf3fd16ffcb.tar.gz
-diff --git a/package/ti-sgx-um/ti-sgx-um.mk b/package/ti-sgx-um/ti-sgx-um.mk
++sha256 9d1d4da2c2b35303e239f99eb4003b8b206078a682aa083d5fb831ee4197f3bf ti-sgx-demos-f24650bc8243b25c23d6a0a502ed79fc472ac424.tar.gz
+diff --git a/package/ti-sgx-demos/ti-sgx-demos.mk b/package/ti-sgx-demos/ti-sgx-demos.mk
 new file mode 100644
-index 0000000..f5d2327
+index 0000000..6891282
 --- /dev/null
-+++ b/package/ti-sgx-um/ti-sgx-um.mk
-@@ -0,0 +1,38 @@
++++ b/package/ti-sgx-demos/ti-sgx-demos.mk
+@@ -0,0 +1,18 @@
 +################################################################################
 +#
-+# ti-sgx-um
++# ti-sgx-demos
 +#
 +################################################################################
 +
 +# This correpsonds to SDK 02.00.00.00
-+TI_SGX_UM_VERSION = e15f1543bab4de9e8927a2c4934addf3fd16ffcb
-+TI_SGX_UM_SITE = http://git.ti.com/graphics/omap5-sgx-ddk-um-linux.git
-+TI_SGX_UM_LICENSE = TI TSPA License
-+TI_SGX_UM_LICENSE_FILES = OMAP5-Linux-Graphics-DDK-UM-Manifest.doc
-+TI_SGX_UM_INSTALL_STAGING = YES
++TI_SGX_DEMOS_VERSION = f24650bc8243b25c23d6a0a502ed79fc472ac424
++TI_SGX_DEMOS_SITE = http://git.ti.com/graphics/img-pvr-sdk.git
++TI_SGX_DEMOS_LICENSE = Imagination Technologies License Agreement
++TI_SGX_DEMOS_LICENSE_FILES = LegalNotice.txt
 +
-+# ti-sgx-um is a egl/gles provider only if libdrm is installed
-+TI_SGX_UM_DEPENDENCIES = libdrm
-+
-+define TI_SGX_UM_INSTALL_STAGING_CMDS
-+	$(MAKE) DISCIMAGE=$(STAGING_DIR) install -C $(@D)
-+endef
-+
-+define TI_SGX_UM_INSTALL_TARGET_CMDS
-+	$(MAKE) DISCIMAGE=$(TARGET_DIR) install -C $(@D)
-+endef
-+
-+define TI_SGX_UM_INSTALL_CONF
-+        # libs use the following file for configuration.
-+        $(INSTALL) -D -m 0644 package/ti-sgx-um/powervr.ini \
-+                $(TARGET_DIR)/etc/powervr.ini
-+endef
-+
-+TI_SGX_UM_POST_INSTALL_TARGET_HOOKS += TI_SGX_UM_INSTALL_CONF
-+
-+define TI_SGX_UM_INSTALL_INIT_SYSV
-+        $(INSTALL) -D -m 0755 package/ti-sgx-um/S80ti-sgx \
-+                $(TARGET_DIR)/etc/init.d/S80ti-sgx
++define TI_SGX_DEMOS_INSTALL_TARGET_CMDS
++	cp -dpfr $(@D)/targetfs/Examples/Advanced/OGLES* \
++		$(TARGET_DIR)/usr/bin/
 +endef
 +
 +$(eval $(generic-package))
