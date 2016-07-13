@@ -1,39 +1,37 @@
 From: Lothar Felten <lothar.felten@gmail.com>
-Date: Wed, 13 Jul 2016 22:13:38 +0200
-Subject: [Buildroot] [PATCH v2 4/5] package/ti-gfx: config help text: list
-	SoCs
+Date: Wed, 13 Jul 2016 22:13:39 +0200
+Subject: [Buildroot] [PATCH v2 5/5] package/Config: ti-sgx-km, ti-sgx-um,
+	ti-sgx-demos
 In-Reply-To: <1468440819-13434-1-git-send-email-lothar.felten@gmail.com>
 References: <1468440819-13434-1-git-send-email-lothar.felten@gmail.com>
-Message-ID: <1468440819-13434-4-git-send-email-lothar.felten@gmail.com>
+Message-ID: <1468440819-13434-5-git-send-email-lothar.felten@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ti-gfx package supports a set of SGX implementations which are used in
-some TI SoCs, newer parts are not supported by this package.
-This patch adds a list of supported TI SoCs to the help text.
+Add the ti-sgx-km, ti-sgx-um and ti-sgx-demos packages to the Target Packages
+/ Hardware handling menu.
 
 Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 ---
- package/ti-gfx/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
-index 39b0a93..e4a102f 100644
---- a/package/ti-gfx/Config.in
-+++ b/package/ti-gfx/Config.in
-@@ -8,7 +8,9 @@ config BR2_PACKAGE_TI_GFX
- 	select BR2_PACKAGE_FBSET if !BR2_PACKAGE_BUSYBOX # Runtime dependency only
- 	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
- 	help
--	  Graphics libraries for TI boards.
-+	  Graphics libraries for TI boards using SGX acceleration.
-+	  Supports OMAP35xx, DM37xx/AM37xx, DM816x, DM814x, AM335x and AM43xx.
-+	  For newer CPUs or kernels use the ti-sgx package.
- 
- 	  http://downloads.ti.com/dsps/dsps_public_sw/gfxsdk/
- 
+diff --git a/package/Config.in b/package/Config.in
+index 1910251..e24aac1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -451,6 +451,9 @@ endmenu
+ 	source "package/sysstat/Config.in"
+ 	source "package/targetcli-fb/Config.in"
+ 	source "package/ti-gfx/Config.in"
++	source "package/ti-sgx-demos/Config.in"
++	source "package/ti-sgx-km/Config.in"
++	source "package/ti-sgx-um/Config.in"
+ 	source "package/ti-uim/Config.in"
+ 	source "package/ti-utils/Config.in"
+ 	source "package/triggerhappy/Config.in"
 -- 
 1.9.1
