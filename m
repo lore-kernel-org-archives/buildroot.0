@@ -1,38 +1,39 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Wed, 13 Jul 2016 13:38:17 +0000
-Subject: [Buildroot] buildroot autobuild we access
-Message-ID: <1468417097.19768.49.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Jul 2016 15:49:35 +0200
+Subject: [Buildroot] servers unavailable
+In-Reply-To: <CA+TH9VkBy3_krEK-buHDxhMq_ooYLA=HODWovLjeFvpZ6M=zEg@mail.gmail.com>
+References: <1468408735.29064.17.camel@synopsys.com>
+ <87mvll6825.fsf@dell.be.48ers.dk>
+ <CA+TH9VkBy3_krEK-buHDxhMq_ooYLA=HODWovLjeFvpZ6M=zEg@mail.gmail.com>
+Message-ID: <20160713154935.625340f7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter and Thomas,
+Hello,
 
-Sometimes I use your web page with autobuild buildroot results:
-http://autobuild.buildroot.net/
+On Wed, 13 Jul 2016 15:26:45 +0200, Angelo Compagnucci wrote:
 
-And I found the following behavior:?
-When I want to view results limited to the ARC architecture, I click at "arc" link in the "Arch" column. After that I get to a page with
-results for ARC.?
+> Since buildroot has a github account, why keep the website outside?!
+> Github offers github pages with custom domain and protected against
+> ddos attacks (and many more attack vectors).
+> And why use a custom git server? We can always switch off pull
+> requests and issues and keep the patch flow going as it goes now if we
+> switch to github.
 
-But when I want to get older results (click at "Next results" at the bottom of the web page) I get a page with next 50 results for all
-architectures, not only for ARC.
+I am also starting to think we should switch to use github. We could
+also use the Github issue tracker, since http://bugs.busybox.net/ is
+down as well.
 
-I looked at the browser's address bar and found the following:
-	1) When I click at "arc" a GET request with parameter "arch=arc" is sent,
-	2) Then I click at "Next results" request with "start=50" is sent, but "arch=arc" parameter gets missed.?
-? ? ? ? ? ?So I get results for all architectures.
+How does one disable pull requests in a Github project? This is clearly
+one aspect where I (and I believe most of the core developers) prefer
+the mailing list based review than the Web-based review for pull
+requests.
 
-Thereafter?if I want to get results from 50 to 100 and older for ARC I have to edit the address bar myself to send GET request with
-"arch=arc&start=50" parameters.
-
-I think it isn't very convenient that when we click at "Next results" while viewing a page for specific arch we are getting results for all
-archs. As for me we should get next 50 results for that specific arch.
-
-To fix it we just have not to lose "arch" parameter when clicking at "Next results" link.
-
+Thomas
 -- 
-Best regards,
-Vlad Zakharov <vzakhar@synopsys.com>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
