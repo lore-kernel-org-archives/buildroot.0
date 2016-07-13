@@ -1,46 +1,57 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 13 Jul 2016 09:57:43 -0300
-Subject: [Buildroot] [PATCH] freetype: bump to version 2.6.5
-Message-ID: <1468414663-12747-1-git-send-email-gustavo@zacarias.com.ar>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 13 Jul 2016 15:26:45 +0200
+Subject: [Buildroot] servers unavailable
+In-Reply-To: <87mvll6825.fsf@dell.be.48ers.dk>
+References: <1468408735.29064.17.camel@synopsys.com>
+ <87mvll6825.fsf@dell.be.48ers.dk>
+Message-ID: <CA+TH9VkBy3_krEK-buHDxhMq_ooYLA=HODWovLjeFvpZ6M=zEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to savannah download site since sourceforge is acting funny.
+Dear All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/freetype/freetype.hash | 5 ++---
- package/freetype/freetype.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 5 deletions(-)
+2016-07-13 14:23 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
+>>>>>> "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
+>
+>  > Hi Peter and Thomas,
+>  > Today (June 13, 2016) many buildroot resources became
+>  > unavailable. E.g. me and Alexey Brodkin are not able to get response
+>  > from:
+>  >      - https://git.buildroot.net/
+>  >      - https://buildroot.org/
+>
+>  > So inter alia we can't access your git repo to download upstream changes.
+>  > Are you working now on this problem?
+>  > Could we hope the issue would be solved in near future?
+>
+> Yes, the server is unfortunately under a DDoS attack. For git, you can
+> temporarily use the github mirror:
+>
+> https://github.com/buildroot/buildroot
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index 8695f26..3d8c225 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,3 +1,2 @@
--# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.4/
--md5 9c3b2258757a19cdba46d34ed1b0852a  freetype-2.6.4.tar.bz2
--sha1 5eaa8c949b4841eeabba44d2c582ff6859e5c4b9  freetype-2.6.4.tar.bz2
-+# Locally calculated after checking pgp signature
-+sha256	e20a6e1400798fd5e3d831dd821b61c35b1f9a6465d6b18a53a9df4cf441acf0	freetype-2.6.5.tar.bz2
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index d2dbe5f..78e81dd 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--FREETYPE_VERSION = 2.6.4
-+FREETYPE_VERSION = 2.6.5
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
--FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
-+FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
- FREETYPE_MAKE_OPTS = CCexe="$(HOSTCC)"
- FREETYPE_LICENSE = Dual FTL/GPLv2+
+Since buildroot has a github account, why keep the website outside?!
+Github offers github pages with custom domain and protected against
+ddos attacks (and many more attack vectors).
+And why use a custom git server? We can always switch off pull
+requests and issues and keep the patch flow going as it goes now if we
+switch to github.
+
+Sincerely, Angelo
+
+
+>
+> --
+> Venlig hilsen,
+> Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-2.7.3
+Profile: http://it.linkedin.com/in/compagnucciangelo
