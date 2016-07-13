@@ -1,34 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Jul 2016 16:33:31 +0200
-Subject: [Buildroot] buildroot autobuild we access
-In-Reply-To: <1468418534.19768.60.camel@synopsys.com>
-References: <1468417097.19768.49.camel@synopsys.com>
- <20160713155237.1797c8a2@free-electrons.com>
- <1468418534.19768.60.camel@synopsys.com>
-Message-ID: <20160713163331.310524dc@free-electrons.com>
+From: David Picard <davepiq@yahoo.fr>
+Date: Wed, 13 Jul 2016 19:07:43 +0200
+Subject: [Buildroot] How to use the ft6236 touchscreen driver ?
+Message-ID: <f9bfab32-2dd3-6b86-9ca1-5fca7fff84e7@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Wed, 13 Jul 2016 14:02:14 +0000, Vlad Zakharov wrote:
+I am trying to use the touch capability of Adafruit's PiTFT 2.8" on a 
+RPi2, BR 2016.05. When I modprobe ft6236, nothing happens : no message 
+in dmesg, no device created in /dev/input. i2cdetect detects it at 
+address 38h.
 
-> Unfortunately we still have to much failures for our ARC
-> architecture, so we have a lot of urgent work.
+I did load i2c_bcm2708, i2c-dev. I2C works (tested with a RTCC).
 
-Sure, understood.
+I tried :
+# echo ft6236 0x38 > /sys/class/i2c-adapter/i2c-1/new_device
 
-> Despite this I will try to improve that when I find some free time.
+and I got something in dmesg :
+ft6236 1-0038: irq is missing
+ft6236: probe of 1-0038 failed with error -22
+i2c i2c-1: new_device: Instantiated device ft6236 at 0x38
 
-I never found the problem to be sufficiently annoying to have me spend
-some time on it. I typically look at the daily reports by e-mail, or
-instead write down the autobuild.buildroot.org manually.
+But still no entry in /dev/input.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Any idea ?
+David.
