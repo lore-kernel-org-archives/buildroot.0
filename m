@@ -1,43 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Jul 2016 13:58:01 +0200
-Subject: [Buildroot] servers unavailable
-In-Reply-To: <1468408735.29064.17.camel@synopsys.com>
-References: <1468408735.29064.17.camel@synopsys.com>
-Message-ID: <77485828-FC01-455B-A6A8-E9BE77A9500D@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Jul 2016 14:15:04 +0200
+Subject: [Buildroot] [PATCH v2] toolchain: Bump ARC tools to
+	arc-2016.09-eng006
+In-Reply-To: <1468409466.29064.24.camel@synopsys.com>
+References: <1468313301-30311-1-git-send-email-vzakhar@synopsys.com>
+ <87r3ay5xhe.fsf@dell.be.48ers.dk>
+ <1468409466.29064.24.camel@synopsys.com>
+Message-ID: <20160713141504.170f4d3e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On July 13, 2016 1:18:55 PM GMT+02:00, Vlad Zakharov <Vladislav.Zakharov@synopsys.com> wrote:
->Hi Peter and Thomas,
->
->Today (June 13, 2016) many buildroot resources became unavailable. E.g.
->me and Alexey Brodkin are not able to get response from:
->	-?https://git.buildroot.net/
->	-?https://buildroot.org/
->
->So inter alia we can't access your git repo to download upstream
->changes.
->Are you working now on this problem??
->Could we hope the issue would be solved in near future??
->
->Thank you.
->
->-- 
->Best regards,
->Vlad Zakharov <vzakhar@synopsys.com>
->_______________________________________________
->buildroot mailing list
->buildroot at busybox.net
->http://lists.busybox.net/mailman/listinfo/buildroot
+Hello,
 
-Vlad, All,
+On Wed, 13 Jul 2016 11:31:06 +0000, Vlad Zakharov wrote:
 
-The server has been under DDoS attack for ~24h now. It has been taken down voluntarily until the attacks ceases.
+> Could you please rebuild toolchain for ARC with this patch to keep us
+> up to date with issues we have fixed and still have to fix?
+
+Yes, I'll do it once the Git server is back online.
+
+Note that we have two toolchain configuration for ARC in the
+autobuilders:
+
+http://autobuild.buildroot.net/toolchains/configs/br-arc-full-internal.config
+
+This one is an internal toolchain configuration, so it always rebuilds
+from scratch a toolchain, using the latest updates. So if there are
+failures with this base configuration, they apply to your latest ARC
+tools updates.
+
+http://autobuild.buildroot.net/toolchains/configs/br-arcle-hs38.config
+
+This one is a pre-built external toolchain, and indeed I have to
+rebuild that one each time you update the ARC tools.
+
+Thanks!
+
+Thomas
 -- 
-Sent from my Android device with K-9 Mail. Please excuse my brevity.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160713/375e603a/attachment.html>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
