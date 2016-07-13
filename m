@@ -1,57 +1,38 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 13 Jul 2016 15:26:45 +0200
-Subject: [Buildroot] servers unavailable
-In-Reply-To: <87mvll6825.fsf@dell.be.48ers.dk>
-References: <1468408735.29064.17.camel@synopsys.com>
- <87mvll6825.fsf@dell.be.48ers.dk>
-Message-ID: <CA+TH9VkBy3_krEK-buHDxhMq_ooYLA=HODWovLjeFvpZ6M=zEg@mail.gmail.com>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Wed, 13 Jul 2016 13:38:17 +0000
+Subject: [Buildroot] buildroot autobuild we access
+Message-ID: <1468417097.19768.49.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear All,
+Hi Peter and Thomas,
 
-2016-07-13 14:23 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
->>>>>> "Vlad" == Vlad Zakharov <Vladislav.Zakharov@synopsys.com> writes:
->
->  > Hi Peter and Thomas,
->  > Today (June 13, 2016) many buildroot resources became
->  > unavailable. E.g. me and Alexey Brodkin are not able to get response
->  > from:
->  >      - https://git.buildroot.net/
->  >      - https://buildroot.org/
->
->  > So inter alia we can't access your git repo to download upstream changes.
->  > Are you working now on this problem?
->  > Could we hope the issue would be solved in near future?
->
-> Yes, the server is unfortunately under a DDoS attack. For git, you can
-> temporarily use the github mirror:
->
-> https://github.com/buildroot/buildroot
+Sometimes I use your web page with autobuild buildroot results:
+http://autobuild.buildroot.net/
 
-Since buildroot has a github account, why keep the website outside?!
-Github offers github pages with custom domain and protected against
-ddos attacks (and many more attack vectors).
-And why use a custom git server? We can always switch off pull
-requests and issues and keep the patch flow going as it goes now if we
-switch to github.
+And I found the following behavior:?
+When I want to view results limited to the ARC architecture, I click at "arc" link in the "Arch" column. After that I get to a page with
+results for ARC.?
 
-Sincerely, Angelo
+But when I want to get older results (click at "Next results" at the bottom of the web page) I get a page with next 50 results for all
+architectures, not only for ARC.
 
+I looked at the browser's address bar and found the following:
+	1) When I click at "arc" a GET request with parameter "arch=arc" is sent,
+	2) Then I click at "Next results" request with "start=50" is sent, but "arch=arc" parameter gets missed.?
+? ? ? ? ? ?So I get results for all architectures.
 
->
-> --
-> Venlig hilsen,
-> Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thereafter?if I want to get results from 50 to 100 and older for ARC I have to edit the address bar myself to send GET request with
+"arch=arc&start=50" parameters.
 
+I think it isn't very convenient that when we click at "Next results" while viewing a page for specific arch we are getting results for all
+archs. As for me we should get next 50 results for that specific arch.
 
+To fix it we just have not to lose "arch" parameter when clicking at "Next results" link.
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Best regards,
+Vlad Zakharov <vzakhar@synopsys.com>
