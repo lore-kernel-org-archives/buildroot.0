@@ -1,45 +1,84 @@
-From: David Picard <davepiq@yahoo.fr>
-Date: Thu, 14 Jul 2016 11:26:58 +0200
-Subject: [Buildroot] How to use the ft6236 touchscreen driver ?
-In-Reply-To: <20160713171659.GF2139@sapphire.tkos.co.il>
-References: <f9bfab32-2dd3-6b86-9ca1-5fca7fff84e7@yahoo.fr>
- <20160713171659.GF2139@sapphire.tkos.co.il>
-Message-ID: <57875AE2.1010908@yahoo.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 14 Jul 2016 11:06:50 +0100
+Subject: [Buildroot] [PATCH] cmake: bump version to 3.6.0
+Message-ID: <1468490810-62781-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Well, could you please give me some directions ? Like where the dts file 
-is, how do I compile it, some reference documentation...
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/cmake/0001-rename_cmake_rootfile.patch | 28 ++++++++++++++++----------
+ package/cmake/cmake.hash                       |  4 ++--
+ package/cmake/cmake.mk                         |  4 ++--
+ 3 files changed, 21 insertions(+), 15 deletions(-)
 
-Thanks.
-
-Le 13/07/2016 19:16, Baruch Siach a ?crit :
-> Hi David,
->
-> On Wed, Jul 13, 2016 at 07:07:43PM +0200, David Picard wrote:
->> I am trying to use the touch capability of Adafruit's PiTFT 2.8" on a RPi2,
->> BR 2016.05. When I modprobe ft6236, nothing happens : no message in dmesg,
->> no device created in /dev/input. i2cdetect detects it at address 38h.
->>
->> I did load i2c_bcm2708, i2c-dev. I2C works (tested with a RTCC).
->>
->> I tried :
->> # echo ft6236 0x38 > /sys/class/i2c-adapter/i2c-1/new_device
->>
->> and I got something in dmesg :
->> ft6236 1-0038: irq is missing
->> ft6236: probe of 1-0038 failed with error -22
->> i2c i2c-1: new_device: Instantiated device ft6236 at 0x38
->>
->> But still no entry in /dev/input.
->>
->> Any idea ?
->
-> You most likely need to update your device tree file (.dts), and add your
-> PiTFT device as a sub-node of the i2c master.
->
-> baruch
->
+diff --git a/package/cmake/0001-rename_cmake_rootfile.patch b/package/cmake/0001-rename_cmake_rootfile.patch
+index 915b7e3..e76f9cd 100644
+--- a/package/cmake/0001-rename_cmake_rootfile.patch
++++ b/package/cmake/0001-rename_cmake_rootfile.patch
+@@ -5,19 +5,25 @@ files are removed at build time via the target-finalize rule.
+ This buildroot-specific patch makes sure ctest looks also for
+ "Modules/CMake.cmake.ctest" before complaining
+ 
++[Vincent: tweak patch for 3.6.0]
++
+ Signed-off-by: Davide Viti <zinosat@tiscali.it>
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ 
+---- cmake-3.0.2/Source/cmake.cxx~	2014-09-11 15:24:01.000000000 +0200
+-+++ cmake-3.0.2/Source/cmake.cxx	2014-11-25 15:48:04.461033690 +0100
+-@@ -957,7 +957,10 @@
+-      "Path to cpack program executable.", cmCacheManager::INTERNAL);
++diff -rup a/Source/cmake.cxx b/Source/cmake.cxx
++--- a/Source/cmake.cxx	2016-07-07 15:47:27.000000000 +0100
+++++ b/Source/cmake.cxx	2016-07-14 10:14:59.914265515 +0100
++@@ -771,7 +771,12 @@ int cmake::AddCMakePaths()
++                       "Path to cpack program executable.", cmState::INTERNAL);
+  #endif
+-   if(!cmSystemTools::FileExists(
+--       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()))
+-+       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()) &&
+-+     !cmSystemTools::FileExists(
+-+       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake.ctest").c_str())
++   if (!cmSystemTools::FileExists(
++-        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake").c_str())) {
+++        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake").c_str()) &&
+++	!cmSystemTools::FileExists(
+++	  (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake.ctest").c_str()
+++        )
+ +     )
+-     {
+++  {
+      // couldn't find modules
+-     cmSystemTools::Error("Could not find CMAKE_ROOT !!!\n"
++     cmSystemTools::Error(
++       "Could not find CMAKE_ROOT !!!\n"
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index e40d4ea..7cd1133 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+-# From http://www.cmake.org/files/v3.5/cmake-3.5.2-SHA-256.txt
+-sha256	92d8410d3d981bb881dfff2aed466da55a58d34c7390d50449aa59b32bb5e62a	cmake-3.5.2.tar.gz
++# From http://www.cmake.org/files/v3.6/cmake-3.6.0-SHA-256.txt
++sha256 fd05ed40cc40ef9ef99fac7b0ece2e0b871858a82feade48546f5d2940147670  cmake-3.6.0.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 7a80c1b..25eafe8 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-CMAKE_VERSION_MAJOR = 3.5
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
++CMAKE_VERSION_MAJOR = 3.6
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
+-- 
+2.7.3
