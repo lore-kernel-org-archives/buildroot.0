@@ -1,107 +1,132 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Jul 2016 22:08:08 +0200
-Subject: [Buildroot] [PATCH v2 1/3] aufs: new package
-In-Reply-To: <1461936690-1389-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-References: <1461936690-1389-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-Message-ID: <20160714200808.GD3737@free.fr>
+Date: Thu, 14 Jul 2016 22:14:33 +0200
+Subject: [Buildroot] [PATCH v2 2/3] aufs: new kernel extension
+In-Reply-To: <1461936711-1432-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
+References: <1461936711-1432-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
+Message-ID: <20160714201433.GE3737@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Aul, Christian, All,
+Atul, Christian, All,
 
 On 2016-04-29 19:01 +0530, Atul Singh spake thusly:
 > From: Christian Stewart <christian@paral.in>
 > 
-> aufs is a dummy package that downloads the correct
-> aufs-standalone sources for patching the kernel with the aufs
-> filesystem. The package is not selectable because it does nothing but
-> download the sources on default. It is a dependency of the Aufs kernel
-> extension.
+> Adding a kernel extension that patches the kernel with the correct
+> version of aufs-standalone. This relies on the user ensuring the
+> correct version is set in the configs.
 > 
 > Signed-off-by: Christian Stewart <christian@paral.in>
 > [Atul:
->  - Removed the duplicate conditional block.
->  - Updated the license to GPLv2.
->  - Removed the visibilty of package from menuconfig.
->  - Removed dependencies.
->  - Removed the comment.
->  - Changed the name of variable from BR2_PACKAGE_AUFS_STANDALONE_VERSION to BR2_LINUX_KERNEL_EXT_AUFS_VERSION.
->  - Removed the AUFS_INSTALL_STAGING  and AUFS_INSTALL_TARGET  variables.
->  - Removed the BR2_PACKAGE_AUFS_3X and BR2_PACKAGE_AUFS_4X variables.
+>  - Removed the depends on.
+>  - Changed the name of the variable BR2_PACKAGE_AUFS_STANDALONE_VERSION.
+>  - Removed the comment  "aufs needs a toolchain w/ threads".
+>  - Removed the choice BR2_PACKAGE_AUFS_3X or BR2_PACKAGE_AUFS_4X.
+>  - Default left to empty rather than some text.
+>  - Used AUFS_DIR instead of AUFS_SRCDIR.
+>  - Used $(@D) instead of $(LINUX_DIR).
 > ]
 > Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
 > ---
-[--SNIP--]
-
-Please add a .hash file too:
-    http://nightly.buildroot.org/#adding-packages-hash
-
-Although it is "downloaded from a version control system (git,
-subversion, etc?)", it is provided by the github download helper, which
-in fact will download a tarball and will not do a git-clone. Github now
-generates reproducible archives in our experience, so we can/must add a
-.hash file.
-
-> diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
-> new file mode 100644
-> index 0000000..a139547
-> --- /dev/null
-> +++ b/package/aufs/aufs.mk
-> @@ -0,0 +1,24 @@
-> +################################################################################
-> +#
-> +# aufs
-> +#
-> +# patches for the linux kernel, used by the extension.
-
-Just the package name in the header, please.
-
-> +#
-> +################################################################################
+>  linux/Config.ext.in     | 28 ++++++++++++++++++++++++++++
+>  linux/linux-ext-aufs.mk | 23 +++++++++++++++++++++++
+>  2 files changed, 51 insertions(+)
+>  create mode 100644 linux/linux-ext-aufs.mk
+> 
+> diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+> index 755c23b..7fa1156 100644
+> --- a/linux/Config.ext.in
+> +++ b/linux/Config.ext.in
+> @@ -64,4 +64,32 @@ config BR2_LINUX_KERNEL_EXT_FBTFT
+>  
+>  	  https://github.com/notro/fbtft
+>  
+> +# aufs-standalone
+> +config BR2_LINUX_KERNEL_EXT_AUFS
+> +	bool "Aufs Filesystem Module patch"
+> +	select BR2_PACKAGE_AUFS
+> +	help
+> +	  Aufs is split in two parts: a kernel part and a userspace
+> +	  part. Enabling this option automatically selects the aufs
+> +	  standalone (module) package and patches the Linux kernel
+> +	  built by Buildroot with the aufs kernel part (ie fs/aufs).
 > +
-> +AUFS_VERSION = aufs$(call qstrip,$(BR2_LINUX_KERNEL_EXT_AUFS_VERSION))
-
-The BR2_LINUX_KERNEL_EXT_AUFS_VERSION does not exist in this patch, it
-is only provided with the next patch.
-
-So you can't use it here.
-
-The only way is to squash the two patches into one: they are in fact a
-single change, they can't be logically split.
-
-> +AUFS_VERSION_MAJOR = $(firstword $(subst .,$(space),$(call qstrip,$(BR2_LINUX_KERNEL_EXT_AUFS_VERSION))))
-> +AUFS_SITE = $(call github,sfjro,aufs4-standalone,$(AUFS_VERSION))
-> +AUFS_LICENSE = GPLv2
-> +AUFS_LICENSE_FILES = COPYING
+> +	  It is important to use the correct branch of aufs-standalone.
 > +
-> +ifeq ($(AUFS_VERSION_MAJOR),3)
-> +AUFS_SITE = http://git.code.sf.net/p/aufs/aufs3-standalone
-> +AUFS_SITE_METHOD = git
-> +else ifeq ($(AUFS_VERSION_MAJOR),4)
-> +AUFS_SITE = $(call github,sfjro,aufs4-standalone,$(AUFS_VERSION))
-> +else
-> +$(error Unknown aufs major version)
+> +if BR2_LINUX_KERNEL_EXT_AUFS
+
+When there is a single option, we don;t use an if statement, but...
+
+> +config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
+> +	string "aufs-standalone branch"
+
+... jsut a depends on statement here:
+
+    depends on BR2_LINUX_KERNEL_EXT_AUFS
+
+> +	default ""
+> +	help
+> +	  Aufs-standalone repository branch must be selected and
+> +	  must match the current kernel version.  Review the
+> +	  following pages to determine what branch number is valid
+> +	  depending on which major version that was selected.
+
+I'm not sure this is very explicit. What about:
+
+    Select the aufs-standalone branch to use, without the leading
+    'aufs' part (i.e. just the version).
+
+    Note that the version you choose must match that of your kernel.
+    See the following resources to see what versions are available:
+
+> +	  https://sourceforge.net/p/aufs/aufs3-standalone/ref/master/branches/
+> +	  https://github.com/sfjro/aufs4-standalone/branches/all
+> +
 > +endif
+> +
+>  endmenu
+> diff --git a/linux/linux-ext-aufs.mk b/linux/linux-ext-aufs.mk
+> new file mode 100644
+> index 0000000..7d48745
+> --- /dev/null
+> +++ b/linux/linux-ext-aufs.mk
+> @@ -0,0 +1,23 @@
+> +################################################################################
+> +# Linux Aufs extensions
+> +#
+> +# Patch the linux kernel with aufs extension
+> +################################################################################
+> +
+> +LINUX_EXTENSIONS += aufs
+> +
+> +define AUFS_PREPARE_KERNEL
+> +	if test -d $(@D)/fs/aufs/; then \
+> +		echo "Your kernel already supports AUFS. Not patching."; \
 
-As noticed by Christian, this won't work when the aufs extension is not
-enabled. You must enclose such checks inside a more stringent test:
+We want to consider this an error, so you must also "exit 1;" here.
 
-ifeq ($(BR2_PACKAGE_AUFS),y)
-# Do the checks here
-endif # BR_BUILDING
+> +	else \
+> +		$(APPLY_PATCHES) $(@D) $(AUFS_DIR) \
+> +			$(AUFS_MAJOR_VERSION)-kbuild.patch \
+> +			$(AUFS_MAJOR_VERSION)-base.patch \
+> +			$(AUFS_MAJOR_VERSION)-mmap.patch \
+> +			$(AUFS_MAJOR_VERSION)-standalone.patch ; \
+> +	fi
+> +	cp $(AUFS_DIR)/Documentation/ABI/testing/* $(@D)/Documentation/ABI/testing/
+> +	cp -r $(AUFS_DIR)/Documentation/filesystems/aufs/ $(@D)/Documentation/filesystems/aufs/
 
-However, I'm not too fan of this after-the-fact checking. But we can't
-seriously have a 30+ choice to select the appropriate version, nor can
-we even derive the version from that of the kernel... So I guess we'll
-have to live with that check... :-/
+We don't care much about the documentation for the build, don't copy it.
+The user can still see it in $(AUFS_DIR).
 
 Regards,
 Yann E. MORIN.
 
-> +$(eval $(generic-package))
+> +	cp -r $(AUFS_DIR)/fs/aufs/ $(@D)/fs/
+> +	cp $(AUFS_DIR)/include/uapi/linux/aufs_type.h $(@D)/include/uapi/linux/
+> +endef
 > -- 
 > 2.5.0
 > 
