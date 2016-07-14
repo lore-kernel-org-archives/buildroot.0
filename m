@@ -1,54 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Jul 2016 20:07:43 +0200
-Subject: [Buildroot] help please
-In-Reply-To: <CAAfO8NwwwFGA-gCeFnOYs0HAbDAAnKs6nHnWusA-LzWpTWQ8ag@mail.gmail.com>
-References: <CAAfO8NyXP5-PFMoC3bN7v8NRD+jzcvgtBfgZZXKijGquARhU8Q@mail.gmail.com>
- <20160712204436.GE3680@free.fr>
- <CAAfO8NykMv=DCdn=rV6tCFOfRvZQf84V82ZrKgtJW-422F9nfQ@mail.gmail.com>
- <20160713182135.GA3687@free.fr>
- <CAAfO8NwwwFGA-gCeFnOYs0HAbDAAnKs6nHnWusA-LzWpTWQ8ag@mail.gmail.com>
-Message-ID: <20160714180743.GC3737@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 14 Jul 2016 21:00:12 +0200
+Subject: [Buildroot] [PATCH] package/rt-tests: switch to the upstream
+ repository
+In-Reply-To: <1468361294-13630-1-git-send-email-romain.naour@gmail.com>
+References: <1468361294-13630-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <68c5ce25-4c97-1050-5cf3-1d4a5c65cb50@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mike, All,
+Hi,
 
-[Please, keep the list in Cc: when you reply]
+Le 13/07/2016 ? 00:08, Romain Naour a ?crit :
+> rt-tests is not maintained from Clark Williams's repository anymore.
+> 
 
-On 2016-07-14 02:11 -0400, Mike King spake thusly:
-> Buildroot can now build and install the package minus the drivers of
-> course.  Thanks again!
+Please, discard this patch. I'll send it within a series that bump rt-tests
+package to the latest version.
 
-So, I've done some work to build the kernel modules, too. It works now,
-but it was far from being easy.
+Best regards,
+Romain
 
-linux-gpib uses such a weird, deviously-twisted buildsystem, that
-building the kernel modules, especially in cross-compilation, is not
-trivial:
 
-  - they forget to pass correct include paths;
-
-  - they override standard kernel headers because they want to provide
-    legacy handling (but even fail at that).
-
-I've done a few patches to fix that (and the rest of the install
-procedure, btw) so that linux-gpib now should work, except for the
-language bindings, that are yet another challenge to address... :-/
-
-You'll find my branch updated there:
-
-    https://github.com/yann-morin-1998/buildroot/commits/yem/linux-gpib
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> We missed some rt-tests release (v0.90 to v1.0).
+> Since v0.92 a release tarball is available at
+> https://www.kernel.org/pub/linux/utils/rt-tests so we
+> no longer need to clone the git repository.
+> ---
+>  package/rt-tests/rt-tests.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
+> index 74d7c6d..380bacf 100644
+> --- a/package/rt-tests/rt-tests.mk
+> +++ b/package/rt-tests/rt-tests.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -RT_TESTS_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/clrkwllms/rt-tests.git
+> +RT_TESTS_SITE = git://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
+>  RT_TESTS_VERSION = v0.89
+>  RT_TESTS_LICENSE = GPLv2+
+>  RT_TESTS_LICENSE_FILES = COPYING
+> 
