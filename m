@@ -1,114 +1,147 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 14 Jul 2016 18:19:11 +0100
-Subject: [Buildroot] [PATCH] cmake: bump version to 3.6.0
-In-Reply-To: <20160714135926.GA3737@free.fr>
-References: <1468490810-62781-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160714135926.GA3737@free.fr>
-Message-ID: <a20c45fc-56f0-0e7a-eb0c-80ac07080d42@imgtec.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Thu, 14 Jul 2016 13:26:09 -0400
+Subject: [Buildroot] [V2 1/1] package/nginx: Add naxsi module option.
+In-Reply-To: <1468508509-7974-1-git-send-email-Aduskett@gmail.com>
+References: <1468508509-7974-1-git-send-email-Aduskett@gmail.com>
+Message-ID: <CANxTyt77Mi0yDA4=a-_SJCrTpE0+CkNynGC_sKrokKLHkkw0WA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Adam,
 
-I would say revert this for now since there are many things to fix. This
-way we avoid all the build failures.
+On Thu, Jul 14, 2016 at 11:01 AM, Adam Duskett <aduskett@gmail.com> wrote:
+> Naxsi is a third party nginx module reads a small subset of simple rules
+> containing a list of known patterns involved in website vulnerabilities.
+> This module behaves like a DROP-by-default firewall for nginx.
+>
+> The reason for the changes to the make file was because naxsi is listed
+> on github, and even though there is a option to specify a url for a 3rd party
+> module, this option only seems to work for a local file url.
+>
+> As such a new comment was added to the menu for external modules, and a new
+> package that downloads and extracts the module was added under
+> package/nginx-naxsi.  This is then used with a pre-configure hook to create
+> a soft symbolic link to the source inside of the nginx-source tree.
+>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+> Changes:
+>
+> v1 - v2:
+> - Moved naxsi module into a seperate package.
+>
+>  package/nginx-naxsi/Config.in        |  4 ++++
+>  package/nginx-naxsi/nginx-naxsi.hash |  1 +
+>  package/nginx-naxsi/nginx-naxsi.mk   |  5 +++++
+>  package/nginx/Config.in              |  3 +++
+>  package/nginx/nginx.mk               | 10 ++++++++++
+>  5 files changed, 23 insertions(+)
+>  create mode 100644 package/nginx-naxsi/Config.in
+>  create mode 100644 package/nginx-naxsi/nginx-naxsi.hash
+>  create mode 100644 package/nginx-naxsi/nginx-naxsi.mk
+>
+> diff --git a/package/nginx-naxsi/Config.in b/package/nginx-naxsi/Config.in
+> new file mode 100644
+> index 0000000..8d88833
+> --- /dev/null
+> +++ b/package/nginx-naxsi/Config.in
+> @@ -0,0 +1,4 @@
+> +config BR2_PACKAGE_NGINX_NAXSI
+> +       bool "ngx_http_naxsi_module"
+> +       help
+> +         Enable ngx_http_naxsi_module
+
+No URL to https://github.com/nbs-system/naxsi ?
+
+> diff --git a/package/nginx-naxsi/nginx-naxsi.hash b/package/nginx-naxsi/nginx-naxsi.hash
+> new file mode 100644
+> index 0000000..dd7f5cd
+> --- /dev/null
+> +++ b/package/nginx-naxsi/nginx-naxsi.hash
+> @@ -0,0 +1 @@
+> +sha256 9cc2c09405bc71f78ef26a8b6d70afcea3fccbe8125df70cb0cfc480133daba5        0.54.tar.gz
+> diff --git a/package/nginx-naxsi/nginx-naxsi.mk b/package/nginx-naxsi/nginx-naxsi.mk
+> new file mode 100644
+> index 0000000..9a284ff
+> --- /dev/null
+> +++ b/package/nginx-naxsi/nginx-naxsi.mk
+> @@ -0,0 +1,5 @@
+> +NGINX_NAXSI_VERSION = 0.54
+> +NGINX_NAXSI_SOURCE = $(NGINX_NAXSI_VERSION).tar.gz
+> +NGINX_NAXSI_SITE = $(call github,nbs-system,naxsi,$(NGINX_NAXSI_SOURCE))
+
+No title comment?
+
+Licensing?  I'm thinking:
+
+NGINX_NAXSI_LICENSE = GPLv3
+NGINX_NAXSI_LICENSE_FILES = LICENSE
+
+
+> +
+> +$(eval $(generic-package))
+> diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+> index e6f2d96..c1a3394 100644
+> --- a/package/nginx/Config.in
+> +++ b/package/nginx/Config.in
+> @@ -380,4 +380,7 @@ config BR2_PACKAGE_NGINX_ADD_MODULES
+>         help
+>           Space separated list of urls of the additional modules
+>
+> +comment "external modules"
+> +       source "package/nginx-naxsi/Config.in"
+> +
+>  endif
+> diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+> index 5eb5488..bc895fe 100644
+> --- a/package/nginx/nginx.mk
+> +++ b/package/nginx/nginx.mk
+> @@ -156,6 +156,12 @@ else
+>  NGINX_CONF_OPTS += --without-http_gzip_module
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_NGINX_NAXSI),y)
+> +NGINX_DEPENDENCIES += nginx-naxsi
+> +NGINX_PRE_CONFIGURE_HOOKS += NGINX_NAXSI_LINK
+> +NGINX_CONF_OPTS += $(addprefix --add-module=,$(call qstrip,$(@D)/nginx-naxsi-$(NGINX_NAXSI_VERSION)/naxsi_src))
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_NGINX_HTTP_REWRITE_MODULE),y)
+>  NGINX_DEPENDENCIES += pcre
+>  else
+> @@ -241,6 +247,10 @@ define NGINX_DISABLE_WERROR
+>         $(SED) 's/-Werror//g' -i $(@D)/auto/cc/*
+>  endef
+>
+> +define NGINX_NAXSI_LINK
+> +       ln -fs $(BUILD_DIR)/nginx-naxsi-$(NGINX_NAXSI_VERSION)/ $(@D)
+> +endef
+> +
+
+We have several ngx_* packages (ngx_echo, ngx_lua, ngx_devel), and
+were able to add them this way, without a symlink:
+
+ifeq ($(BR2_PACKAGE_NGINX_NAXSI),y)
+NGINX_DEPENDENCIES += nginx-naxsi
+NGINX_CONF_OPTS += --add-module=$(NGINX_NAXSI_DIR)
+endif
+
+That is, using the ${PKG}_DIR automatically supplied by generic-package.
 
 Regards,
+Danomi -
 
-Vincent.
 
-On 14/07/16 14:59, Yann E. MORIN wrote:
-> Vicente, All,
-> 
-> On 2016-07-14 11:06 +0100, Vicente Olivert Riera spake thusly:
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> ---
-> [--SNIP--]
->> diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
->> index 7a80c1b..25eafe8 100644
->> --- a/package/cmake/cmake.mk
->> +++ b/package/cmake/cmake.mk
->> @@ -4,8 +4,8 @@
->>  #
->>  ################################################################################
->>  
->> -CMAKE_VERSION_MAJOR = 3.5
->> -CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
->> +CMAKE_VERSION_MAJOR = 3.6
->> +CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
-> 
-> This is causing a lot of build failures:
->     http://autobuild.buildroot.org/?reason=host-cmake-3.6.0
-> 
-> There are various tyes of failures:
-> 
->   - incorrect openssl used:
-> 
->     http://autobuild.buildroot.org/results/193/193e88df98230554e304a8c550e5ded97e3a4177
-> 
->     -- Found OpenSSL: /home/buildroot/build/instance-1/output/host/usr/xtensa-buildroot-lin
->     ux-uclibc/sysroot/usr/lib/libssl.so;/home/buildroot/build/instance-1/output/host/usr/xt
->     ensa-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.so (found version "1.0.2h")
-> 
->     Clearly, this is finding the target openssl when we are building the
->     host-cmake. That's wrong.
-> 
->   - a weird error while configuring its bundled libcurl:
-> 
->     http://autobuild.buildroot.org/results/f8c/f8c335440e3132ee7e01fadd03c4d18e0de767ba
-> 
->     -- Check size of curl_off_t
->     -- Check size of curl_off_t - failed
->     -- Check size of socklen_t
->     -- Check size of socklen_t - failed
->     CMake Error at Utilities/cmcurl/CMakeLists.txt:1042 (message):
->       Check for sizeof socklen_t failed, see CMakeFiles/CMakerror.log
-> 
->     If cmake insists on having curl+ssl support (what for, for g*d's
->     sake?) we should add a host-libcurl and make host-cmake depend on it
->     and on host-openssl.
-> 
->   - another weird build issue:
-> 
->     http://autobuild.buildroot.org/results/89f/89fd8085da9cacf612a6aea585eb1ad6941f146b
-> 
->     /home/buildroot/build/instance-1/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/multi.c:
->     Assembler messages:
->     /home/buildroot/build/instance-1/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/multi.c:761: Error: incorrect register `%rdx' used with `l' suffix
->     /home/buildroot/build/instance-1/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/multi.c:765: Error: incorrect register `%rcx' used with `l' suffix
->     Utilities/cmcurl/lib/CMakeFiles/cmcurl.dir/build.make:950: recipe for target 'Utilities/cmcurl/lib/CMakeFiles/cmcurl.dir/multi.c.o' failed
-> 
->     This one looks like again like it is confusing host and target, and
->     using the wrong compiler and/or assembler.
-> 
->   - yet again another weird build issue:
-> 
->     http://autobuild.buildroot.org/results/85f/85f5e9329047c9d40f7fd35c645835d83a5fcef3/
-> 
->     /home/buildroot/autobuild/run/instance-2/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/ftp.c:
->     Assembler messages: /home/buildroot/autobuild/run/instance-2/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/ftp.c:1167: Error: junk at end of line, first unrecognized character is `%'
->     /home/buildroot/autobuild/run/instance-2/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/ftp.c:1167: Error: junk at end of line, first unrecognized character is `%'
->     /home/buildroot/autobuild/run/instance-2/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/ftp.c:1258: Error: junk at end of line, first unrecognized character is `%'
->     /home/buildroot/autobuild/run/instance-2/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/ftp.c:1258: Error: junk at end of line, first unrecognized character is `%'
->     /home/buildroot/autobuild/run/instance-2/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/ftp.c:1258: Error: junk at end of line, first unrecognized character is `%'
->     /home/buildroot/autobuild/run/instance-2/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/ftp.c:1258: Error: junk at end of line, first unrecognized character is `%'
->     make[4]: *** [Utilities/cmcurl/lib/CMakeFiles/cmcurl.dir/ftp.c.o] Error 1
->     make[4]: *** Waiting for unfinished jobs....
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->>  CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
->>  CMAKE_LICENSE = BSD-3c
->>  CMAKE_LICENSE_FILES = Copyright.txt
->> -- 
->> 2.7.3
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+>  NGINX_PRE_CONFIGURE_HOOKS += NGINX_DISABLE_WERROR
+>
+>  define NGINX_CONFIGURE_CMDS
+> --
+> 2.7.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
