@@ -1,151 +1,114 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 14 Jul 2016 18:00:52 +0100
-Subject: [Buildroot] [PATCH] openblas: fix build failure for MIPS n32
-Message-ID: <1468515652-63841-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Thu, 14 Jul 2016 18:19:11 +0100
+Subject: [Buildroot] [PATCH] cmake: bump version to 3.6.0
+In-Reply-To: <20160714135926.GA3737@free.fr>
+References: <1468490810-62781-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20160714135926.GA3737@free.fr>
+Message-ID: <a20c45fc-56f0-0e7a-eb0c-80ac07080d42@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Support for n32 ABI in OpenBLAS is not complete. Adding a patch to fix
-this problem.
+Hello Yann,
 
-This patch has been sent upstream as a pull request:
+I would say revert this for now since there are many things to fix. This
+way we avoid all the build failures.
 
-  https://github.com/xianyi/OpenBLAS/pull/926
+Regards,
 
-Fixes:
+Vincent.
 
-  http://autobuild.buildroot.net/results/1e8/1e8506a0d7b4fe1b773535f7d23ca422c03f9770/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- .../0001-Complete-support-for-MIPS-n32-ABI.patch   | 116 +++++++++++++++++++++
- 1 file changed, 116 insertions(+)
- create mode 100644 package/openblas/0001-Complete-support-for-MIPS-n32-ABI.patch
-
-diff --git a/package/openblas/0001-Complete-support-for-MIPS-n32-ABI.patch b/package/openblas/0001-Complete-support-for-MIPS-n32-ABI.patch
-new file mode 100644
-index 0000000..6e6c5a6
---- /dev/null
-+++ b/package/openblas/0001-Complete-support-for-MIPS-n32-ABI.patch
-@@ -0,0 +1,116 @@
-+From 7f28cd1f88145a701e5dbbf50558bb65fce79f61 Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Thu, 14 Jul 2016 17:20:51 +0100
-+Subject: [PATCH] Complete support for MIPS n32 ABI
-+
-+Pull request: https://github.com/xianyi/OpenBLAS/pull/926
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+---
-+ Makefile.system | 27 +++++++++------------------
-+ c_check         |  9 +++++++--
-+ f_check         |  7 ++++++-
-+ 3 files changed, 22 insertions(+), 21 deletions(-)
-+
-+diff --git a/Makefile.system b/Makefile.system
-+index 24a7a64..bbcdb82 100644
-+--- a/Makefile.system
-++++ b/Makefile.system
-+@@ -502,13 +502,16 @@ endif
-+ 
-+ ifdef NO_BINARY_MODE
-+ 
-+-ifeq ($(ARCH), $(filter $(ARCH),mips64 mips))
-++ifeq ($(ARCH), $(filter $(ARCH),mips64))
-+ ifdef BINARY64
-+ CCOMMON_OPT += -mabi=64
-+ else
-+-CCOMMON_OPT += -mabi=32
-++CCOMMON_OPT += -mabi=n32
-+ endif
-+ BINARY_DEFINED = 1
-++else ifeq ($(ARCH), $(filter $(ARCH),mips))
-++CCOMMON_OPT += -mabi=32
-++BINARY_DEFINED = 1
-+ endif
-+ 
-+ ifeq ($(CORE), LOONGSON3A)
-+@@ -599,12 +602,14 @@ ifneq ($(NO_LAPACK), 1)
-+ EXTRALIB += -lgfortran
-+ endif
-+ ifdef NO_BINARY_MODE
-+-ifeq ($(ARCH), $(filter $(ARCH),mips64 mips))
-++ifeq ($(ARCH), $(filter $(ARCH),mips64))
-+ ifdef BINARY64
-+ FCOMMON_OPT += -mabi=64
-+ else
-+-FCOMMON_OPT += -mabi=32
-++FCOMMON_OPT += -mabi=n32
-+ endif
-++else ifeq ($(ARCH), $(filter $(ARCH),mips))
-++FCOMMON_OPT += -mabi=32
-+ endif
-+ else
-+ ifdef BINARY64
-+@@ -688,20 +693,6 @@ endif
-+ endif
-+ endif
-+ 
-+-ifeq ($(filter $(ARCH),mips64 mips))
-+-ifndef BINARY64
-+-FCOMMON_OPT += -m32
-+-else
-+-FCOMMON_OPT += -m64
-+-endif
-+-else
-+-ifdef BINARY64
-+-FCOMMON_OPT += -mabi=64
-+-else
-+-FCOMMON_OPT += -mabi=32
-+-endif
-+-endif
-+-
-+ ifeq ($(USE_OPENMP), 1)
-+ FCOMMON_OPT += -mp
-+ endif
-+diff --git a/c_check b/c_check
-+index 50ff360..9f457df 100644
-+--- a/c_check
-++++ b/c_check
-+@@ -79,8 +79,13 @@ if ($os eq "AIX") {
-+     $defined = 1;
-+ }
-+ 
-+-if (($architecture eq "mips") || ($architecture eq "mips64")) {
-+-    $compiler_name .= " -mabi=32" if ($binary eq "32");
-++if ($architecture eq "mips") {
-++    $compiler_name .= " -mabi=32";
-++    $defined = 1;
-++}
-++
-++if ($architecture eq "mips64") {
-++    $compiler_name .= " -mabi=n32" if ($binary eq "32");
-+     $compiler_name .= " -mabi=64" if ($binary eq "64");
-+     $defined = 1;
-+ }
-+diff --git a/f_check b/f_check
-+index 4c03ac7..3520e8b 100644
-+--- a/f_check
-++++ b/f_check
-+@@ -223,7 +223,12 @@ if (!$?) {
-+ 	}
-+        #For gfortran MIPS
-+ 	if ($?) {
-+-	    $link = `$compiler $openmp -mabi=32 -v ftest2.f 2>&1 && rm -f a.out a.exe`;
-++            $mips_data = `$compiler_bin -E -dM - < /dev/null`;
-++            if ($mips_data =~ /_MIPS_ISA_MIPS64/) {
-++	        $link = `$compiler $openmp -mabi=n32 -v ftest2.f 2>&1 && rm -f a.out a.exe`;
-++	    } else {
-++	        $link = `$compiler $openmp -mabi=32 -v ftest2.f 2>&1 && rm -f a.out a.exe`;
-++	    }
-+ 	}
-+ 	$binary = "" if ($?);
-+     }
-+-- 
-+2.7.3
-+
--- 
-2.7.3
+On 14/07/16 14:59, Yann E. MORIN wrote:
+> Vicente, All,
+> 
+> On 2016-07-14 11:06 +0100, Vicente Olivert Riera spake thusly:
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> ---
+> [--SNIP--]
+>> diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+>> index 7a80c1b..25eafe8 100644
+>> --- a/package/cmake/cmake.mk
+>> +++ b/package/cmake/cmake.mk
+>> @@ -4,8 +4,8 @@
+>>  #
+>>  ################################################################################
+>>  
+>> -CMAKE_VERSION_MAJOR = 3.5
+>> -CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
+>> +CMAKE_VERSION_MAJOR = 3.6
+>> +CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
+> 
+> This is causing a lot of build failures:
+>     http://autobuild.buildroot.org/?reason=host-cmake-3.6.0
+> 
+> There are various tyes of failures:
+> 
+>   - incorrect openssl used:
+> 
+>     http://autobuild.buildroot.org/results/193/193e88df98230554e304a8c550e5ded97e3a4177
+> 
+>     -- Found OpenSSL: /home/buildroot/build/instance-1/output/host/usr/xtensa-buildroot-lin
+>     ux-uclibc/sysroot/usr/lib/libssl.so;/home/buildroot/build/instance-1/output/host/usr/xt
+>     ensa-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.so (found version "1.0.2h")
+> 
+>     Clearly, this is finding the target openssl when we are building the
+>     host-cmake. That's wrong.
+> 
+>   - a weird error while configuring its bundled libcurl:
+> 
+>     http://autobuild.buildroot.org/results/f8c/f8c335440e3132ee7e01fadd03c4d18e0de767ba
+> 
+>     -- Check size of curl_off_t
+>     -- Check size of curl_off_t - failed
+>     -- Check size of socklen_t
+>     -- Check size of socklen_t - failed
+>     CMake Error at Utilities/cmcurl/CMakeLists.txt:1042 (message):
+>       Check for sizeof socklen_t failed, see CMakeFiles/CMakerror.log
+> 
+>     If cmake insists on having curl+ssl support (what for, for g*d's
+>     sake?) we should add a host-libcurl and make host-cmake depend on it
+>     and on host-openssl.
+> 
+>   - another weird build issue:
+> 
+>     http://autobuild.buildroot.org/results/89f/89fd8085da9cacf612a6aea585eb1ad6941f146b
+> 
+>     /home/buildroot/build/instance-1/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/multi.c:
+>     Assembler messages:
+>     /home/buildroot/build/instance-1/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/multi.c:761: Error: incorrect register `%rdx' used with `l' suffix
+>     /home/buildroot/build/instance-1/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/multi.c:765: Error: incorrect register `%rcx' used with `l' suffix
+>     Utilities/cmcurl/lib/CMakeFiles/cmcurl.dir/build.make:950: recipe for target 'Utilities/cmcurl/lib/CMakeFiles/cmcurl.dir/multi.c.o' failed
+> 
+>     This one looks like again like it is confusing host and target, and
+>     using the wrong compiler and/or assembler.
+> 
+>   - yet again another weird build issue:
+> 
+>     http://autobuild.buildroot.org/results/85f/85f5e9329047c9d40f7fd35c645835d83a5fcef3/
+> 
+>     /home/buildroot/autobuild/run/instance-2/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/ftp.c:
+>     Assembler messages: /home/buildroot/autobuild/run/instance-2/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/ftp.c:1167: Error: junk at end of line, first unrecognized character is `%'
+>     /home/buildroot/autobuild/run/instance-2/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/ftp.c:1167: Error: junk at end of line, first unrecognized character is `%'
+>     /home/buildroot/autobuild/run/instance-2/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/ftp.c:1258: Error: junk at end of line, first unrecognized character is `%'
+>     /home/buildroot/autobuild/run/instance-2/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/ftp.c:1258: Error: junk at end of line, first unrecognized character is `%'
+>     /home/buildroot/autobuild/run/instance-2/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/ftp.c:1258: Error: junk at end of line, first unrecognized character is `%'
+>     /home/buildroot/autobuild/run/instance-2/output/build/host-cmake-3.6.0/Utilities/cmcurl/lib/ftp.c:1258: Error: junk at end of line, first unrecognized character is `%'
+>     make[4]: *** [Utilities/cmcurl/lib/CMakeFiles/cmcurl.dir/ftp.c.o] Error 1
+>     make[4]: *** Waiting for unfinished jobs....
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>>  CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+>>  CMAKE_LICENSE = BSD-3c
+>>  CMAKE_LICENSE_FILES = Copyright.txt
+>> -- 
+>> 2.7.3
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
