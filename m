@@ -1,40 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jul 2016 23:22:47 +0200
-Subject: [Buildroot] [git commit] opusfile: bump to version 0.8
-Message-ID: <20160714102605.CC97D81F12@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 14 Jul 2016 11:26:09 +0100
+Subject: [Buildroot] [PATCH] imagemagick: bump version to 7.0.2-4
+Message-ID: <1468491969-30592-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e288b3e983c00637218761c5b64b34e15e974e60
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Option --disable-jp2 removed as it doesn't exist anymore.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/opusfile/opusfile.hash | 2 +-
- package/opusfile/opusfile.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/opusfile/opusfile.hash b/package/opusfile/opusfile.hash
-index 2da4bab..541a21f 100644
---- a/package/opusfile/opusfile.hash
-+++ b/package/opusfile/opusfile.hash
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index ef73b24..b04ecd5 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
 @@ -1,2 +1,2 @@
- # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
--sha256	9e2bed13bc729058591a0f1cab2505e8cfd8e7ac460bf10a78bcc3b125e7c301	opusfile-0.7.tar.gz
-+sha256	2c231ed3cfaa1b3173f52d740e5bbd77d51b9dfecb87014b404917fba4b855a4	opusfile-0.8.tar.gz
-diff --git a/package/opusfile/opusfile.mk b/package/opusfile/opusfile.mk
-index c8108d3..4c3fb35 100644
---- a/package/opusfile/opusfile.mk
-+++ b/package/opusfile/opusfile.mk
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 a4420a125609d6cac2fbc141a291bbf143d71bd15e21c09946fdf98f90247225  ImageMagick-7.0.2-1.tar.xz
++sha256 3d870568432520095755fad9bb29b332351c7e25061d5d7d44873accc0eb08fe  ImageMagick-7.0.2-4.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 864e033..ae6c62a 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPUSFILE_VERSION = 0.7
-+OPUSFILE_VERSION = 0.8
- OPUSFILE_SITE = http://downloads.xiph.org/releases/opus
- OPUSFILE_DEPENDENCIES = host-pkgconf libogg opus
- OPUSFILE_LICENSE = BSD-3c
+-IMAGEMAGICK_VERSION = 7.0.2-1
++IMAGEMAGICK_VERSION = 7.0.2-4
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
+@@ -30,7 +30,6 @@ IMAGEMAGICK_CONF_OPTS = \
+ 	--without-gslib \
+ 	--without-gvc \
+ 	--without-jbig \
+-	--without-jp2 \
+ 	--without-lqr \
+ 	--without-openexr \
+ 	--without-perl \
+-- 
+2.7.3
