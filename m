@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 14 Jul 2016 11:06:50 +0100
-Subject: [Buildroot] [PATCH] cmake: bump version to 3.6.0
-Message-ID: <1468490810-62781-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Thu, 14 Jul 2016 11:07:18 +0100
+Subject: [Buildroot] [PATCH] git: bump version to 2.9.1
+Message-ID: <1468490838-62992-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,75 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/cmake/0001-rename_cmake_rootfile.patch | 28 ++++++++++++++++----------
- package/cmake/cmake.hash                       |  4 ++--
- package/cmake/cmake.mk                         |  4 ++--
- 3 files changed, 21 insertions(+), 15 deletions(-)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cmake/0001-rename_cmake_rootfile.patch b/package/cmake/0001-rename_cmake_rootfile.patch
-index 915b7e3..e76f9cd 100644
---- a/package/cmake/0001-rename_cmake_rootfile.patch
-+++ b/package/cmake/0001-rename_cmake_rootfile.patch
-@@ -5,19 +5,25 @@ files are removed at build time via the target-finalize rule.
- This buildroot-specific patch makes sure ctest looks also for
- "Modules/CMake.cmake.ctest" before complaining
- 
-+[Vincent: tweak patch for 3.6.0]
-+
- Signed-off-by: Davide Viti <zinosat@tiscali.it>
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- 
----- cmake-3.0.2/Source/cmake.cxx~	2014-09-11 15:24:01.000000000 +0200
--+++ cmake-3.0.2/Source/cmake.cxx	2014-11-25 15:48:04.461033690 +0100
--@@ -957,7 +957,10 @@
--      "Path to cpack program executable.", cmCacheManager::INTERNAL);
-+diff -rup a/Source/cmake.cxx b/Source/cmake.cxx
-+--- a/Source/cmake.cxx	2016-07-07 15:47:27.000000000 +0100
-++++ b/Source/cmake.cxx	2016-07-14 10:14:59.914265515 +0100
-+@@ -771,7 +771,12 @@ int cmake::AddCMakePaths()
-+                       "Path to cpack program executable.", cmState::INTERNAL);
-  #endif
--   if(!cmSystemTools::FileExists(
---       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()))
--+       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()) &&
--+     !cmSystemTools::FileExists(
--+       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake.ctest").c_str())
-+   if (!cmSystemTools::FileExists(
-+-        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake").c_str())) {
-++        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake").c_str()) &&
-++	!cmSystemTools::FileExists(
-++	  (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake.ctest").c_str()
-++        )
- +     )
--     {
-++  {
-      // couldn't find modules
--     cmSystemTools::Error("Could not find CMAKE_ROOT !!!\n"
-+     cmSystemTools::Error(
-+       "Could not find CMAKE_ROOT !!!\n"
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index e40d4ea..7cd1133 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 9e047a3..e7763f3 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
 @@ -1,2 +1,2 @@
--# From http://www.cmake.org/files/v3.5/cmake-3.5.2-SHA-256.txt
--sha256	92d8410d3d981bb881dfff2aed466da55a58d34c7390d50449aa59b32bb5e62a	cmake-3.5.2.tar.gz
-+# From http://www.cmake.org/files/v3.6/cmake-3.6.0-SHA-256.txt
-+sha256 fd05ed40cc40ef9ef99fac7b0ece2e0b871858a82feade48546f5d2940147670  cmake-3.6.0.tar.gz
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 7a80c1b..25eafe8 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -4,8 +4,8 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 7d8e6c274a88b4a73b3c98c70d3438ec12871300ce8bb4ca179ea19fcf74aa91  git-2.8.3.tar.xz
++sha256 e8fe60bc72c1c979feb43740b3c74fea7f8ffbe7712b71cd9734ddb9c89282a2  git-2.9.1.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 1d6574d..2f28200 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CMAKE_VERSION_MAJOR = 3.5
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
-+CMAKE_VERSION_MAJOR = 3.6
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
+-GIT_VERSION = 2.8.3
++GIT_VERSION = 2.9.1
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
 -- 
 2.7.3
