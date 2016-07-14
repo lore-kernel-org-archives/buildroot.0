@@ -1,48 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jul 2016 23:50:33 +0200
-Subject: [Buildroot] [git commit] package/syslog-ng: fix localstatdir
-	directory
-Message-ID: <20160714102606.5B48D8212D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Jul 2016 12:23:14 +0200
+Subject: [Buildroot] [git commit] cmake: bump version to 3.6.0
+Message-ID: <20160714102606.A29E381F12@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6868a342b4cf6a0b0184a0c3040cc300a68bb86b
+commit: https://git.buildroot.net/buildroot/commit/?id=b6ff742ca0d8b2901036d3ad03fe60c6b2a7725f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-syslog-ng is built with the default buildroot flag localstatdir=/var
-
-This causes three issues:
-
-1) syslog-ng creates two files (syslog-ng.ctl and syslog-ng.persist in /var)
-which shouldn't have random files generated in it.
-
-2) SELinux expects it in it's default directory /var/run.
-
-3) This breakes read only file systems because /var/ usually isn't mounted as
-a seperate filing system.
-
-Setting the buildflag to the default /var/run
-fixes all three of thee of these issues.
-
-Signed-off-by: Adam Duskett <aduskett@codeblue.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/syslog-ng/syslog-ng.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/cmake/0001-rename_cmake_rootfile.patch | 27 +++++++++++++++-----------
+ package/cmake/cmake.hash                       |  4 ++--
+ package/cmake/cmake.mk                         |  4 ++--
+ 3 files changed, 20 insertions(+), 15 deletions(-)
 
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 1acaad8..c11d3bd 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -13,7 +13,7 @@ SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
- 	eventlog libglib2 openssl pcre
- # rabbit-mq needs -lrt
- SYSLOG_NG_CONF_ENV = LIBS=-lrt
--SYSLOG_NG_CONF_OPTS = --disable-manpages
-+SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run
+diff --git a/package/cmake/0001-rename_cmake_rootfile.patch b/package/cmake/0001-rename_cmake_rootfile.patch
+index 915b7e3..3169f16 100644
+--- a/package/cmake/0001-rename_cmake_rootfile.patch
++++ b/package/cmake/0001-rename_cmake_rootfile.patch
+@@ -6,18 +6,23 @@ This buildroot-specific patch makes sure ctest looks also for
+ "Modules/CMake.cmake.ctest" before complaining
  
- # We override busybox's S01logging init script
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ Signed-off-by: Davide Viti <zinosat@tiscali.it>
++[Vincent: tweak patch for 3.6.0]
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ 
+---- cmake-3.0.2/Source/cmake.cxx~	2014-09-11 15:24:01.000000000 +0200
+-+++ cmake-3.0.2/Source/cmake.cxx	2014-11-25 15:48:04.461033690 +0100
+-@@ -957,7 +957,10 @@
+-      "Path to cpack program executable.", cmCacheManager::INTERNAL);
++diff -rup a/Source/cmake.cxx b/Source/cmake.cxx
++--- a/Source/cmake.cxx	2016-07-07 15:47:27.000000000 +0100
+++++ b/Source/cmake.cxx	2016-07-14 10:14:59.914265515 +0100
++@@ -771,7 +771,12 @@ int cmake::AddCMakePaths()
++                       "Path to cpack program executable.", cmState::INTERNAL);
+  #endif
+-   if(!cmSystemTools::FileExists(
+--       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()))
+-+       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()) &&
+-+     !cmSystemTools::FileExists(
+-+       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake.ctest").c_str())
++   if (!cmSystemTools::FileExists(
++-        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake").c_str())) {
+++        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake").c_str()) &&
+++	!cmSystemTools::FileExists(
+++	  (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake.ctest").c_str()
+++        )
+ +     )
+-     {
+++  {
+      // couldn't find modules
+-     cmSystemTools::Error("Could not find CMAKE_ROOT !!!\n"
++     cmSystemTools::Error(
++       "Could not find CMAKE_ROOT !!!\n"
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index e40d4ea..7cd1133 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+-# From http://www.cmake.org/files/v3.5/cmake-3.5.2-SHA-256.txt
+-sha256	92d8410d3d981bb881dfff2aed466da55a58d34c7390d50449aa59b32bb5e62a	cmake-3.5.2.tar.gz
++# From http://www.cmake.org/files/v3.6/cmake-3.6.0-SHA-256.txt
++sha256 fd05ed40cc40ef9ef99fac7b0ece2e0b871858a82feade48546f5d2940147670  cmake-3.6.0.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 7a80c1b..25eafe8 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-CMAKE_VERSION_MAJOR = 3.5
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
++CMAKE_VERSION_MAJOR = 3.6
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
