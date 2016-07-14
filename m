@@ -1,110 +1,917 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 14 Jul 2016 11:01:49 -0400
-Subject: [Buildroot] [V2 1/1] package/nginx: Add naxsi module option.
-Message-ID: <1468508509-7974-1-git-send-email-Aduskett@gmail.com>
+From: Lothar Felten <lothar.felten@gmail.com>
+Date: Thu, 14 Jul 2016 18:33:46 +0200
+Subject: [Buildroot] [PATCH 1/1] Texas Instruments am335x-evm support
+Message-ID: <1468514026-4457-1-git-send-email-lothar.felten@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Naxsi is a third party nginx module reads a small subset of simple rules
-containing a list of known patterns involved in website vulnerabilities.
-This module behaves like a DROP-by-default firewall for nginx.
+This patch adds a target config for the ti am335x-evm based on the am335x CPU.
+It also supports the beaglebone and beagleboneblack. By default SGX drivers
+and Qt5 are selected, demos for SGX and Qt5 are built.
+Device tree blobs for am335x-evm, am335x-evmsk, am335x-bone, am335x-boneblack
+will be built and a sd card image is created with a post-image script.
+The kernel and driver versions match the ti-processor-sdk 02.00.00.00.
+Patches allow the use of old am335x evm revisions (1 bit sd card) and JTAG
+debugging.
 
-The reason for the changes to the make file was because naxsi is listed
-on github, and even though there is a option to specify a url for a 3rd party
-module, this option only seems to work for a local file url.
+Kernel JTAG patch:
+By default the kernel will disable the JTAG clock, access via the JTAG port
+will not work after the kernel booted. The am335x-evm has a JTAG header fitted,
+this patch keeps the JTAG clock alive.
 
-As such a new comment was added to the menu for external modules, and a new
-package that downloads and extracts the module was added under
-package/nginx-naxsi.  This is then used with a pre-configure hook to create
-a soft symbolic link to the source inside of the nginx-source tree.
+Uboot SD card patch:
+Early AM335x-evm boards can only use 1 bit communication to the SD card, on
+newer board revisions this might be fixed.
+Forcing 1 bit communication slows down the communication but will work
+regardless if the SD card is attached via 1 or 4 bits.
+If the board has a working 4 bit SD card interface, this patch can be removed,
+this will speed up the access.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
 ---
-Changes:
+ board/ti/am335x-evm/genimage.cfg                   |  32 ++
+ board/ti/am335x-evm/kernel.config                  | 621 +++++++++++++++++++++
+ .../0004-keep-jtag-clock-alive-for-debugger.patch  |  10 +
+ .../uboot/0001-mmc-force-1bit-bus-width.patch      |  29 +
+ board/ti/am335x-evm/post-image.sh                  |  22 +
+ board/ti/am335x-evm/readme.txt                     |  62 ++
+ board/ti/am335x-evm/uEnv.txt                       |   3 +
+ configs/am335x-evm_defconfig                       |  36 ++
+ 8 files changed, 815 insertions(+)
+ create mode 100644 board/ti/am335x-evm/genimage.cfg
+ create mode 100644 board/ti/am335x-evm/kernel.config
+ create mode 100644 board/ti/am335x-evm/patches/linux/0004-keep-jtag-clock-alive-for-debugger.patch
+ create mode 100644 board/ti/am335x-evm/patches/uboot/0001-mmc-force-1bit-bus-width.patch
+ create mode 100755 board/ti/am335x-evm/post-image.sh
+ create mode 100644 board/ti/am335x-evm/readme.txt
+ create mode 100644 board/ti/am335x-evm/uEnv.txt
+ create mode 100644 configs/am335x-evm_defconfig
 
-v1 - v2:
-- Moved naxsi module into a seperate package.
- 
- package/nginx-naxsi/Config.in        |  4 ++++
- package/nginx-naxsi/nginx-naxsi.hash |  1 +
- package/nginx-naxsi/nginx-naxsi.mk   |  5 +++++
- package/nginx/Config.in              |  3 +++
- package/nginx/nginx.mk               | 10 ++++++++++
- 5 files changed, 23 insertions(+)
- create mode 100644 package/nginx-naxsi/Config.in
- create mode 100644 package/nginx-naxsi/nginx-naxsi.hash
- create mode 100644 package/nginx-naxsi/nginx-naxsi.mk
-
-diff --git a/package/nginx-naxsi/Config.in b/package/nginx-naxsi/Config.in
+diff --git a/board/ti/am335x-evm/genimage.cfg b/board/ti/am335x-evm/genimage.cfg
 new file mode 100644
-index 0000000..8d88833
+index 0000000..c9de722
 --- /dev/null
-+++ b/package/nginx-naxsi/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_NGINX_NAXSI
-+	bool "ngx_http_naxsi_module"
-+	help
-+	  Enable ngx_http_naxsi_module
-diff --git a/package/nginx-naxsi/nginx-naxsi.hash b/package/nginx-naxsi/nginx-naxsi.hash
++++ b/board/ti/am335x-evm/genimage.cfg
+@@ -0,0 +1,32 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"MLO",
++			"u-boot.img",
++			"zImage",
++			"uEnv.txt",
++			"am335x-evm.dtb",
++			"am335x-evmsk.dtb",
++			"am335x-bone.dtb",
++			"am335x-boneblack.dtb",
++		}
++	}
++	size = 16M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		partition-type = 0xC
++		bootable = "true"
++                image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext2"
++		size = 240M
++	}
++}
+diff --git a/board/ti/am335x-evm/kernel.config b/board/ti/am335x-evm/kernel.config
 new file mode 100644
-index 0000000..dd7f5cd
+index 0000000..39b1bd3
 --- /dev/null
-+++ b/package/nginx-naxsi/nginx-naxsi.hash
-@@ -0,0 +1 @@
-+sha256	9cc2c09405bc71f78ef26a8b6d70afcea3fccbe8125df70cb0cfc480133daba5	0.54.tar.gz
-diff --git a/package/nginx-naxsi/nginx-naxsi.mk b/package/nginx-naxsi/nginx-naxsi.mk
++++ b/board/ti/am335x-evm/kernel.config
+@@ -0,0 +1,621 @@
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_FHANDLE=y
++CONFIG_AUDIT=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_BSD_PROCESS_ACCT=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_LOG_BUF_SHIFT=16
++CONFIG_CGROUPS=y
++CONFIG_CGROUP_FREEZER=y
++CONFIG_CGROUP_DEVICE=y
++CONFIG_CPUSETS=y
++CONFIG_CGROUP_CPUACCT=y
++CONFIG_MEMCG=y
++CONFIG_MEMCG_SWAP=y
++CONFIG_MEMCG_KMEM=y
++CONFIG_CGROUP_PERF=y
++CONFIG_CGROUP_SCHED=y
++CONFIG_CFS_BANDWIDTH=y
++CONFIG_RT_GROUP_SCHED=y
++CONFIG_BLK_CGROUP=y
++CONFIG_NAMESPACES=y
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_EXPERT=y
++CONFIG_KALLSYMS_ALL=y
++# CONFIG_SLUB_DEBUG is not set
++CONFIG_PROFILING=y
++CONFIG_OPROFILE=y
++CONFIG_KPROBES=y
++CONFIG_JUMP_LABEL=y
++CONFIG_MODULES=y
++CONFIG_MODULE_FORCE_LOAD=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODULE_FORCE_UNLOAD=y
++CONFIG_MODVERSIONS=y
++CONFIG_MODULE_SRCVERSION_ALL=y
++# CONFIG_BLK_DEV_BSG is not set
++CONFIG_PARTITION_ADVANCED=y
++CONFIG_ARCH_MULTI_V6=y
++CONFIG_OMAP_RESET_CLOCKS=y
++CONFIG_OMAP_MUX_DEBUG=y
++CONFIG_SOC_AM33XX=y
++CONFIG_SOC_HAS_OMAP2_SDRC=y
++CONFIG_ARM_THUMBEE=y
++CONFIG_SWP_EMULATE=y
++CONFIG_PL310_ERRATA_588369=y
++CONFIG_PL310_ERRATA_727915=y
++CONFIG_ARM_ERRATA_411920=y
++CONFIG_ARM_ERRATA_430973=y
++CONFIG_ARM_ERRATA_720789=y
++CONFIG_ARM_ERRATA_754322=y
++CONFIG_ARM_ERRATA_775420=y
++CONFIG_PCI=y
++CONFIG_PCI_DRA7XX=y
++CONFIG_HAVE_ARM_ARCH_TIMER=y
++CONFIG_PREEMPT=y
++CONFIG_CMA=y
++CONFIG_SECCOMP=y
++CONFIG_ZBOOT_ROM_TEXT=0x0
++CONFIG_ZBOOT_ROM_BSS=0x0
++CONFIG_ARM_APPENDED_DTB=y
++CONFIG_ARM_ATAG_DTB_COMPAT=y
++CONFIG_CMDLINE="root=/dev/mmcblk0p2 rootwait console=ttyO2,115200"
++CONFIG_KEXEC=y
++CONFIG_CPU_FREQ=y
++CONFIG_CPU_FREQ_STAT_DETAILS=y
++CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
++CONFIG_CPU_FREQ_GOV_POWERSAVE=y
++CONFIG_CPU_FREQ_GOV_USERSPACE=y
++CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
++CONFIG_CPUFREQ_DT=m
++CONFIG_CPUFREQ_VOLTDM=m
++# CONFIG_ARM_OMAP2PLUS_CPUFREQ is not set
++CONFIG_CPU_IDLE=y
++CONFIG_BINFMT_MISC=y
++CONFIG_PM_DEBUG=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_XFRM_USER=y
++CONFIG_NET_KEY=y
++CONFIG_NET_KEY_MIGRATE=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++CONFIG_IP_PNP_BOOTP=y
++CONFIG_IP_PNP_RARP=y
++# CONFIG_INET_LRO is not set
++CONFIG_INET6_AH=m
++CONFIG_INET6_IPCOMP=m
++CONFIG_IPV6_TUNNEL=m
++CONFIG_NETFILTER=y
++CONFIG_NF_CONNTRACK=m
++CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
++CONFIG_NETFILTER_XT_TARGET_IDLETIMER=m
++CONFIG_NETFILTER_XT_TARGET_MARK=m
++CONFIG_NETFILTER_XT_MATCH_COMMENT=m
++CONFIG_NETFILTER_XT_MATCH_CPU=m
++CONFIG_NETFILTER_XT_MATCH_IPRANGE=m
++CONFIG_NETFILTER_XT_MATCH_LENGTH=m
++CONFIG_NETFILTER_XT_MATCH_LIMIT=m
++CONFIG_NETFILTER_XT_MATCH_MAC=m
++CONFIG_NETFILTER_XT_MATCH_MARK=m
++CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
++CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
++CONFIG_NF_CONNTRACK_IPV4=m
++CONFIG_NF_NAT_IPV4=m
++CONFIG_IP_NF_IPTABLES=m
++CONFIG_IP_NF_FILTER=m
++CONFIG_IP_NF_ARPTABLES=m
++CONFIG_IP_NF_ARPFILTER=m
++CONFIG_IP_NF_ARP_MANGLE=m
++CONFIG_BRIDGE_NF_EBTABLES=m
++CONFIG_BRIDGE_EBT_BROUTE=m
++CONFIG_BRIDGE_EBT_T_FILTER=m
++CONFIG_BRIDGE_EBT_T_NAT=m
++CONFIG_BRIDGE_EBT_802_3=m
++CONFIG_BRIDGE_EBT_AMONG=m
++CONFIG_BRIDGE_EBT_ARP=m
++CONFIG_BRIDGE_EBT_IP=m
++CONFIG_BRIDGE_EBT_IP6=m
++CONFIG_BRIDGE_EBT_LIMIT=m
++CONFIG_BRIDGE_EBT_MARK=m
++CONFIG_BRIDGE_EBT_PKTTYPE=m
++CONFIG_BRIDGE_EBT_STP=m
++CONFIG_BRIDGE_EBT_VLAN=m
++CONFIG_BRIDGE_EBT_ARPREPLY=m
++CONFIG_BRIDGE_EBT_DNAT=m
++CONFIG_BRIDGE_EBT_MARK_T=m
++CONFIG_BRIDGE_EBT_REDIRECT=m
++CONFIG_BRIDGE_EBT_SNAT=m
++CONFIG_BRIDGE_EBT_LOG=m
++CONFIG_BRIDGE_EBT_NFLOG=m
++CONFIG_IP_SCTP=m
++CONFIG_BRIDGE=m
++CONFIG_VLAN_8021Q=m
++CONFIG_PHONET=m
++CONFIG_NET_SCHED=y
++CONFIG_NET_SCH_CBQ=m
++CONFIG_NET_SCH_HTB=m
++CONFIG_NET_SCH_HFSC=m
++CONFIG_NET_SCH_PRIO=m
++CONFIG_NET_SCH_MULTIQ=m
++CONFIG_NET_SCH_RED=m
++CONFIG_NET_SCH_SFB=m
++CONFIG_NET_SCH_SFQ=m
++CONFIG_NET_SCH_TEQL=m
++CONFIG_NET_SCH_TBF=m
++CONFIG_NET_SCH_GRED=m
++CONFIG_NET_SCH_DSMARK=m
++CONFIG_NET_SCH_NETEM=m
++CONFIG_NET_SCH_DRR=m
++CONFIG_NET_SCH_MQPRIO=m
++CONFIG_NET_SCH_CHOKE=m
++CONFIG_NET_SCH_QFQ=m
++CONFIG_NET_SCH_CODEL=m
++CONFIG_NET_SCH_FQ_CODEL=m
++CONFIG_NET_SCH_INGRESS=m
++CONFIG_NET_CLS_BASIC=m
++CONFIG_NET_CLS_TCINDEX=m
++CONFIG_NET_CLS_ROUTE4=m
++CONFIG_NET_CLS_FW=m
++CONFIG_NET_CLS_U32=m
++CONFIG_CLS_U32_MARK=y
++CONFIG_NET_CLS_RSVP=m
++CONFIG_NET_CLS_RSVP6=m
++CONFIG_NET_CLS_FLOW=m
++CONFIG_NET_EMATCH=y
++CONFIG_NET_EMATCH_CMP=m
++CONFIG_NET_EMATCH_NBYTE=m
++CONFIG_NET_EMATCH_U32=m
++CONFIG_NET_EMATCH_META=m
++CONFIG_NET_EMATCH_TEXT=m
++CONFIG_NET_CLS_ACT=y
++CONFIG_NET_ACT_POLICE=m
++CONFIG_NET_ACT_GACT=m
++CONFIG_GACT_PROB=y
++CONFIG_NET_ACT_MIRRED=m
++CONFIG_NET_ACT_IPT=m
++CONFIG_NET_ACT_NAT=m
++CONFIG_NET_ACT_PEDIT=m
++CONFIG_NET_ACT_SIMP=m
++CONFIG_NET_ACT_SKBEDIT=m
++CONFIG_NET_ACT_CSUM=m
++CONFIG_NET_CLS_IND=y
++CONFIG_CAN=m
++CONFIG_CAN_C_CAN=m
++CONFIG_CAN_C_CAN_PLATFORM=m
++CONFIG_BT=m
++CONFIG_BT_RFCOMM=m
++CONFIG_BT_RFCOMM_TTY=y
++CONFIG_BT_BNEP=m
++CONFIG_BT_BNEP_MC_FILTER=y
++CONFIG_BT_BNEP_PROTO_FILTER=y
++CONFIG_BT_HIDP=m
++CONFIG_BT_HCIBTUSB=m
++CONFIG_BT_HCIBTSDIO=m
++CONFIG_BT_HCIUART=m
++CONFIG_BT_HCIUART_H4=y
++CONFIG_BT_HCIUART_BCSP=y
++CONFIG_BT_HCIUART_LL=y
++CONFIG_BT_HCIUART_3WIRE=y
++CONFIG_BT_HCIBCM203X=m
++CONFIG_BT_HCIBPA10X=m
++CONFIG_BT_HCIBFUSB=m
++CONFIG_BT_HCIVHCI=m
++CONFIG_BT_MRVL=m
++CONFIG_BT_MRVL_SDIO=m
++CONFIG_AF_RXRPC=m
++CONFIG_RXKAD=m
++CONFIG_CFG80211=m
++CONFIG_MAC80211=m
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y
++CONFIG_DMA_CMA=y
++CONFIG_CMA_SIZE_MBYTES=24
++CONFIG_OMAP_INTERCONNECT=y
++CONFIG_OMAP_OCP2SCP=y
++CONFIG_CONNECTOR=m
++CONFIG_MTD=y
++CONFIG_MTD_TESTS=m
++CONFIG_MTD_CMDLINE_PARTS=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_OOPS=y
++CONFIG_MTD_CFI=y
++CONFIG_MTD_CFI_INTELEXT=y
++CONFIG_MTD_PHYSMAP=y
++CONFIG_MTD_PHYSMAP_OF=y
++CONFIG_MTD_M25P80=m
++CONFIG_MTD_NAND=y
++CONFIG_MTD_NAND_ECC_BCH=y
++CONFIG_MTD_NAND_OMAP2=y
++CONFIG_MTD_NAND_OMAP_BCH=y
++CONFIG_MTD_ONENAND=y
++CONFIG_MTD_ONENAND_VERIFY_WRITE=y
++CONFIG_MTD_SPI_NOR=m
++CONFIG_MTD_UBI=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_SIZE=16384
++CONFIG_SENSORS_TSL2550=m
++CONFIG_BMP085_I2C=m
++CONFIG_SRAM=y
++CONFIG_SENSORS_LIS3_I2C=m
++CONFIG_SCSI=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_SCSI_SCAN_ASYNC=y
++CONFIG_ATA=m
++CONFIG_SATA_AHCI=m
++CONFIG_SATA_AHCI_PLATFORM=m
++CONFIG_NETDEVICES=y
++# CONFIG_NET_VENDOR_ARC is not set
++# CONFIG_NET_CADENCE is not set
++CONFIG_TIGON3=m
++# CONFIG_NET_VENDOR_CIRRUS is not set
++# CONFIG_NET_VENDOR_FARADAY is not set
++# CONFIG_NET_VENDOR_HISILICON is not set
++CONFIG_E1000=m
++CONFIG_E1000E=m
++CONFIG_SKGE=m
++CONFIG_KS8851=y
++CONFIG_KS8851_MLL=y
++# CONFIG_NET_VENDOR_MICROCHIP is not set
++# CONFIG_NET_VENDOR_NATSEMI is not set
++# CONFIG_NET_VENDOR_QUALCOMM is not set
++# CONFIG_NET_VENDOR_SAMSUNG is not set
++# CONFIG_NET_VENDOR_SEEQ is not set
++CONFIG_SMC91X=y
++CONFIG_SMSC911X=y
++# CONFIG_NET_VENDOR_STMICRO is not set
++CONFIG_TI_CPSW=y
++CONFIG_TI_CPTS=y
++# CONFIG_NET_VENDOR_VIA is not set
++# CONFIG_NET_VENDOR_WIZNET is not set
++CONFIG_AT803X_PHY=y
++CONFIG_SMSC_PHY=y
++CONFIG_USB_USBNET=m
++CONFIG_USB_NET_SMSC95XX=m
++CONFIG_USB_ALI_M5632=y
++CONFIG_USB_AN2720=y
++CONFIG_USB_EPSON2888=y
++CONFIG_USB_KC2190=y
++CONFIG_USB_CDC_PHONET=m
++CONFIG_IWLWIFI=m
++CONFIG_LIBERTAS=m
++CONFIG_LIBERTAS_USB=m
++CONFIG_LIBERTAS_SDIO=m
++CONFIG_LIBERTAS_DEBUG=y
++CONFIG_WL_TI=y
++CONFIG_WL12XX=m
++CONFIG_WL18XX=m
++CONFIG_WLCORE_SPI=m
++CONFIG_WLCORE_SDIO=m
++CONFIG_MWIFIEX=m
++CONFIG_MWIFIEX_SDIO=m
++CONFIG_MWIFIEX_USB=m
++CONFIG_INPUT_JOYDEV=m
++CONFIG_INPUT_EVDEV=m
++CONFIG_KEYBOARD_ATKBD=m
++CONFIG_KEYBOARD_GPIO=m
++CONFIG_KEYBOARD_MATRIX=m
++CONFIG_KEYBOARD_OMAP4=m
++CONFIG_KEYBOARD_TWL4030=m
++# CONFIG_INPUT_MOUSE is not set
++CONFIG_INPUT_TOUCHSCREEN=y
++CONFIG_TOUCHSCREEN_ADS7846=m
++CONFIG_TOUCHSCREEN_EDT_FT5X06=m
++CONFIG_TOUCHSCREEN_TI_AM335X_TSC=m
++CONFIG_TOUCHSCREEN_PIXCIR=m
++CONFIG_TOUCHSCREEN_TSC2005=m
++CONFIG_TOUCHSCREEN_TSC2007=m
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_TPS65218_PWRBUTTON=m
++CONFIG_INPUT_TWL4030_PWRBUTTON=m
++CONFIG_INPUT_PALMAS_PWRBUTTON=m
++CONFIG_SERIO=m
++# CONFIG_LEGACY_PTYS is not set
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++# CONFIG_SERIAL_8250_DMA is not set
++CONFIG_SERIAL_8250_NR_UARTS=32
++CONFIG_SERIAL_8250_RUNTIME_UARTS=10
++CONFIG_SERIAL_8250_EXTENDED=y
++CONFIG_SERIAL_8250_MANY_PORTS=y
++CONFIG_SERIAL_8250_SHARE_IRQ=y
++CONFIG_SERIAL_8250_DETECT_IRQ=y
++CONFIG_SERIAL_8250_RSA=y
++CONFIG_SERIAL_8250_OMAP=y
++CONFIG_SERIAL_OF_PLATFORM=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_SPI=y
++CONFIG_SPI_OMAP24XX=y
++CONFIG_SPI_TI_QSPI=m
++CONFIG_HSI=m
++CONFIG_PINCTRL_SINGLE=y
++CONFIG_PINCTRL_TI_IODELAY=y
++CONFIG_DEBUG_GPIO=y
++CONFIG_GPIO_SYSFS=y
++CONFIG_GPIO_PCF857X=y
++CONFIG_GPIO_PALMAS=y
++CONFIG_GPIO_TWL4030=y
++CONFIG_W1=m
++CONFIG_HDQ_MASTER_OMAP=m
++CONFIG_POWER_SUPPLY=y
++CONFIG_BATTERY_BQ27x00=m
++CONFIG_CHARGER_ISP1704=m
++CONFIG_CHARGER_TWL4030=m
++CONFIG_CHARGER_BQ2415X=m
++CONFIG_CHARGER_BQ24190=m
++CONFIG_CHARGER_BQ24735=m
++CONFIG_POWER_RESET=y
++CONFIG_POWER_AVS=y
++CONFIG_VOLTAGE_DOMAIN_OMAP=y
++CONFIG_HWMON=m
++CONFIG_SENSORS_GPIO_FAN=m
++CONFIG_SENSORS_LM75=m
++CONFIG_SENSORS_TMP102=m
++CONFIG_THERMAL=m
++CONFIG_THERMAL_GOV_FAIR_SHARE=y
++CONFIG_THERMAL_GOV_USER_SPACE=y
++CONFIG_CPU_THERMAL=y
++CONFIG_TI_SOC_THERMAL=m
++CONFIG_TI_THERMAL=y
++CONFIG_WATCHDOG=y
++CONFIG_OMAP_WATCHDOG=m
++CONFIG_TWL4030_WATCHDOG=m
++CONFIG_MFD_TI_AM335X_TSCADC=m
++CONFIG_MFD_PALMAS=y
++CONFIG_MFD_TPS65217=y
++CONFIG_MFD_TPS65218=y
++CONFIG_MFD_TPS65910=y
++CONFIG_TWL4030_CORE=y
++CONFIG_TWL4030_POWER=y
++CONFIG_TWL6040_CORE=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_REGULATOR_PALMAS=y
++CONFIG_REGULATOR_PBIAS=y
++CONFIG_REGULATOR_TI_ABB=y
++CONFIG_REGULATOR_TPS62360=m
++CONFIG_REGULATOR_TPS65023=y
++CONFIG_REGULATOR_TPS6507X=y
++CONFIG_REGULATOR_TPS65217=y
++CONFIG_REGULATOR_TPS65218=y
++CONFIG_REGULATOR_TPS65910=y
++CONFIG_REGULATOR_TWL4030=y
++CONFIG_MEDIA_SUPPORT=m
++CONFIG_MEDIA_CAMERA_SUPPORT=y
++CONFIG_MEDIA_CONTROLLER=y
++CONFIG_VIDEO_V4L2_SUBDEV_API=y
++CONFIG_MEDIA_USB_SUPPORT=y
++CONFIG_USB_VIDEO_CLASS=m
++CONFIG_V4L_PLATFORM_DRIVERS=y
++CONFIG_V4L_MEM2MEM_DRIVERS=y
++# CONFIG_MEDIA_SUBDRV_AUTOSELECT is not set
++CONFIG_VIDEO_OV2659=m
++CONFIG_VIDEO_OV1063X=m
++CONFIG_VIDEO_MT9T11X=m
++CONFIG_DRM=y
++CONFIG_DRM_I2C_NXP_TDA998X=y
++CONFIG_DRM_OMAP=y
++CONFIG_DRM_OMAP_NUM_CRTCS=2
++CONFIG_DRM_OMAP_SGX_PLUGIN=y
++CONFIG_DRM_TILCDC=y
++CONFIG_FIRMWARE_EDID=y
++CONFIG_FB_MODE_HELPERS=y
++CONFIG_FB_TILEBLITTING=y
++CONFIG_OMAP2_DSS=y
++CONFIG_OMAP5_DSS_HDMI=y
++CONFIG_OMAP2_DSS_SDI=y
++CONFIG_OMAP2_DSS_DSI=y
++CONFIG_DISPLAY_ENCODER_TFP410=m
++CONFIG_DISPLAY_ENCODER_TPD12S015=y
++CONFIG_DISPLAY_DRA7EVM_ENCODER_TPD12S015=y
++CONFIG_DISPLAY_ENCODER_SII9022=y
++CONFIG_DISPLAY_ENCODER_TC358768=y
++CONFIG_DISPLAY_CONNECTOR_DVI=m
++CONFIG_DISPLAY_CONNECTOR_HDMI=y
++CONFIG_DISPLAY_CONNECTOR_ANALOG_TV=m
++CONFIG_DISPLAY_PANEL_DPI=y
++CONFIG_DISPLAY_PANEL_DSI_CM=m
++CONFIG_DISPLAY_PANEL_SONY_ACX565AKM=m
++CONFIG_DISPLAY_PANEL_LGPHILIPS_LB035Q02=m
++CONFIG_DISPLAY_PANEL_SHARP_LS037V7DW01=m
++CONFIG_DISPLAY_PANEL_TPO_TD028TTEC1=m
++CONFIG_DISPLAY_PANEL_TPO_TD043MTEA1=m
++CONFIG_DISPLAY_PANEL_NEC_NL8048HL11=m
++CONFIG_DISPLAY_PANEL_TLC59108=y
++CONFIG_LCD_CLASS_DEVICE=y
++CONFIG_LCD_PLATFORM=y
++CONFIG_BACKLIGHT_GENERIC=m
++CONFIG_BACKLIGHT_PWM=y
++CONFIG_BACKLIGHT_PANDORA=m
++CONFIG_BACKLIGHT_GPIO=y
++CONFIG_BACKLIGHT_LED=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
++CONFIG_LOGO=y
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_SND_MIXER_OSS=m
++CONFIG_SND_PCM_OSS=m
++CONFIG_SND_VERBOSE_PRINTK=y
++CONFIG_SND_DEBUG=y
++CONFIG_SND_USB_AUDIO=m
++CONFIG_SND_SOC=y
++CONFIG_SND_EDMA_SOC=y
++CONFIG_SND_DAVINCI_SOC_MCASP=y
++CONFIG_SND_AM33XX_SOC_EVM=m
++CONFIG_SND_OMAP_SOC=y
++CONFIG_SND_OMAP_SOC_HDMI_AUDIO=m
++CONFIG_SND_OMAP_SOC_OMAP_TWL4030=m
++CONFIG_SND_SOC_HDMI_CODEC=m
++CONFIG_SND_SOC_TLV320AIC31XX=m
++CONFIG_SND_SIMPLE_CARD=m
++CONFIG_HID_GENERIC=m
++CONFIG_USB_HIDDEV=y
++CONFIG_USB_KBD=m
++CONFIG_USB_MOUSE=m
++CONFIG_USB=m
++CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
++CONFIG_USB_OTG=y
++CONFIG_USB_MON=m
++CONFIG_USB_XHCI_HCD=m
++CONFIG_USB_EHCI_HCD=m
++CONFIG_USB_OHCI_HCD=m
++CONFIG_USB_WDM=m
++CONFIG_USB_STORAGE=m
++CONFIG_USB_MUSB_HDRC=m
++CONFIG_USB_MUSB_OMAP2PLUS=m
++CONFIG_USB_MUSB_AM35X=m
++CONFIG_USB_MUSB_DSPS=m
++CONFIG_USB_TI_CPPI41_DMA=y
++CONFIG_USB_DWC3=m
++CONFIG_USB_TEST=m
++CONFIG_AM335X_PHY_USB=y
++CONFIG_USB_GADGET=m
++CONFIG_USB_GADGET_DEBUG=y
++CONFIG_USB_GADGET_DEBUG_FILES=y
++CONFIG_USB_GADGET_DEBUG_FS=y
++CONFIG_USB_CONFIGFS=m
++CONFIG_USB_CONFIGFS_SERIAL=y
++CONFIG_USB_CONFIGFS_ACM=y
++CONFIG_USB_CONFIGFS_OBEX=y
++CONFIG_USB_CONFIGFS_NCM=y
++CONFIG_USB_CONFIGFS_ECM=y
++CONFIG_USB_CONFIGFS_ECM_SUBSET=y
++CONFIG_USB_CONFIGFS_RNDIS=y
++CONFIG_USB_CONFIGFS_EEM=y
++CONFIG_USB_CONFIGFS_PHONET=y
++CONFIG_USB_CONFIGFS_MASS_STORAGE=y
++CONFIG_USB_CONFIGFS_F_LB_SS=y
++CONFIG_USB_CONFIGFS_F_FS=y
++CONFIG_USB_CONFIGFS_F_UAC1=y
++CONFIG_USB_CONFIGFS_F_UAC2=y
++CONFIG_USB_CONFIGFS_F_MIDI=y
++CONFIG_USB_CONFIGFS_F_HID=y
++CONFIG_USB_ZERO=m
++CONFIG_USB_AUDIO=m
++CONFIG_USB_ETH=m
++CONFIG_USB_G_NCM=m
++CONFIG_USB_GADGETFS=m
++CONFIG_USB_FUNCTIONFS=m
++CONFIG_USB_FUNCTIONFS_ETH=y
++CONFIG_USB_FUNCTIONFS_RNDIS=y
++CONFIG_USB_FUNCTIONFS_GENERIC=y
++CONFIG_USB_MASS_STORAGE=m
++CONFIG_USB_G_SERIAL=m
++CONFIG_USB_MIDI_GADGET=m
++CONFIG_USB_G_PRINTER=m
++CONFIG_USB_CDC_COMPOSITE=m
++CONFIG_USB_G_NOKIA=m
++CONFIG_USB_G_ACM_MS=m
++CONFIG_USB_G_MULTI=m
++CONFIG_USB_G_MULTI_CDC=y
++CONFIG_USB_G_HID=m
++CONFIG_USB_G_DBGP=m
++CONFIG_USB_G_WEBCAM=m
++CONFIG_MMC=y
++CONFIG_SDIO_UART=y
++CONFIG_MMC_OMAP=y
++CONFIG_MMC_OMAP_HS=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=m
++CONFIG_LEDS_PWM=m
++CONFIG_LEDS_TLC591XX=y
++CONFIG_LEDS_TRIGGER_TIMER=m
++CONFIG_LEDS_TRIGGER_ONESHOT=m
++CONFIG_LEDS_TRIGGER_HEARTBEAT=m
++CONFIG_LEDS_TRIGGER_BACKLIGHT=m
++CONFIG_LEDS_TRIGGER_CPU=y
++CONFIG_LEDS_TRIGGER_GPIO=m
++CONFIG_LEDS_TRIGGER_DEFAULT_ON=m
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_DS1307=m
++CONFIG_RTC_DRV_PALMAS=m
++CONFIG_RTC_DRV_TWL4030=m
++CONFIG_RTC_DRV_OMAP=m
++CONFIG_DMADEVICES=y
++CONFIG_TI_EDMA=y
++CONFIG_DMA_OMAP=y
++CONFIG_COMMON_CLK_PALMAS=y
++CONFIG_HWSPINLOCK_OMAP=y
++CONFIG_MAILBOX=y
++CONFIG_OMAP2PLUS_MBOX=y
++CONFIG_OMAP_IOMMU=y
++CONFIG_OMAP_IOMMU_DEBUG=y
++CONFIG_WKUP_M3_RPROC=y
++CONFIG_SOC_TI=y
++CONFIG_WKUP_M3_IPC=y
++CONFIG_EXTCON=m
++CONFIG_EXTCON_PALMAS=m
++CONFIG_EXTCON_USB_GPIO=m
++CONFIG_TI_EMIF=m
++CONFIG_TI_EMIF_SRAM=y
++CONFIG_IIO=m
++CONFIG_TI_AM335X_ADC=m
++CONFIG_PWM=y
++CONFIG_PWM_TIECAP=y
++CONFIG_PWM_TIEHRPWM=y
++CONFIG_PWM_TWL=m
++CONFIG_PWM_TWL_LED=m
++CONFIG_OMAP_USB2=m
++CONFIG_TI_PIPE3=y
++CONFIG_TWL4030_USB=m
++CONFIG_EXT2_FS=y
++CONFIG_EXT3_FS=y
++# CONFIG_EXT3_FS_XATTR is not set
++CONFIG_EXT4_FS=y
++CONFIG_FANOTIFY=y
++CONFIG_QUOTA=y
++CONFIG_QFMT_V2=y
++CONFIG_AUTOFS4_FS=m
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_CONFIGFS_FS=y
++CONFIG_JFFS2_FS=y
++CONFIG_JFFS2_SUMMARY=y
++CONFIG_JFFS2_FS_XATTR=y
++CONFIG_JFFS2_COMPRESSION_OPTIONS=y
++CONFIG_JFFS2_LZO=y
++CONFIG_JFFS2_RUBIN=y
++CONFIG_UBIFS_FS=y
++CONFIG_CRAMFS=y
++CONFIG_NFS_FS=y
++CONFIG_NFS_V3_ACL=y
++CONFIG_NFS_V4=y
++CONFIG_ROOT_NFS=y
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_PRINTK_TIME=y
++CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_FS=y
++CONFIG_MAGIC_SYSRQ=y
++# CONFIG_SCHED_DEBUG is not set
++# CONFIG_DEBUG_PREEMPT is not set
++# CONFIG_DEBUG_BUGVERBOSE is not set
++# CONFIG_FTRACE is not set
++# CONFIG_ARM_UNWIND is not set
++CONFIG_SECURITY=y
++CONFIG_CRYPTO_MICHAEL_MIC=y
++# CONFIG_CRYPTO_ANSI_CPRNG is not set
++CONFIG_CRYPTO_USER_API_HASH=y
++CONFIG_CRYPTO_USER_API_SKCIPHER=y
++CONFIG_CRYPTO_DEV_OMAP_SHAM=y
++CONFIG_CRYPTO_DEV_OMAP_AES=y
++CONFIG_CRYPTO_DEV_OMAP_DES=y
++CONFIG_CRC_CCITT=y
++CONFIG_CRC_T10DIF=y
++CONFIG_CRC_ITU_T=y
++CONFIG_CRC7=y
++CONFIG_LIBCRC32C=y
++CONFIG_FONTS=y
++CONFIG_FONT_8x8=y
++CONFIG_FONT_8x16=y
+diff --git a/board/ti/am335x-evm/patches/linux/0004-keep-jtag-clock-alive-for-debugger.patch b/board/ti/am335x-evm/patches/linux/0004-keep-jtag-clock-alive-for-debugger.patch
 new file mode 100644
-index 0000000..9a284ff
+index 0000000..0192e64
 --- /dev/null
-+++ b/package/nginx-naxsi/nginx-naxsi.mk
-@@ -0,0 +1,5 @@
-+NGINX_NAXSI_VERSION = 0.54
-+NGINX_NAXSI_SOURCE = $(NGINX_NAXSI_VERSION).tar.gz
-+NGINX_NAXSI_SITE = $(call github,nbs-system,naxsi,$(NGINX_NAXSI_SOURCE))
++++ b/board/ti/am335x-evm/patches/linux/0004-keep-jtag-clock-alive-for-debugger.patch
+@@ -0,0 +1,10 @@
++--- a/arch/arm/mach-omap2/omap_hwmod_33xx_data.c	2016-01-08 21:16:11.000000000 +0100
+++++ b/arch/arm/mach-omap2/omap_hwmod_33xx_data.c	2016-03-10 10:47:15.209992555 +0100
++@@ -208,6 +208,7 @@
++ 	.name		= "debugss",
++ 	.class		= &am33xx_debugss_hwmod_class,
++ 	.clkdm_name	= "l3_aon_clkdm",
+++	.flags		= (HWMOD_INIT_NO_IDLE|HWMOD_INIT_NO_RESET), /* keep debugSS clock alive for JTAG */
++ 	.main_clk	= "trace_clk_div_ck",
++ 	.prcm		= {
++ 		.omap4	= {
+diff --git a/board/ti/am335x-evm/patches/uboot/0001-mmc-force-1bit-bus-width.patch b/board/ti/am335x-evm/patches/uboot/0001-mmc-force-1bit-bus-width.patch
+new file mode 100644
+index 0000000..ecaabaa
+--- /dev/null
++++ b/board/ti/am335x-evm/patches/uboot/0001-mmc-force-1bit-bus-width.patch
+@@ -0,0 +1,29 @@
++diff -Naur a/drivers/mmc/mmc.c b/drivers/mmc/mmc.c
++--- a/drivers/mmc/mmc.c	2016-05-16 16:40:32.000000000 +0200
+++++ b/drivers/mmc/mmc.c	2016-07-11 13:23:13.235880737 +0200
++@@ -1351,25 +1351,6 @@
++ 	mmc->card_caps &= mmc->cfg->host_caps;
++ 
++ 	if (IS_SD(mmc)) {
++-		if (mmc->card_caps & MMC_MODE_4BIT) {
++-			cmd.cmdidx = MMC_CMD_APP_CMD;
++-			cmd.resp_type = MMC_RSP_R1;
++-			cmd.cmdarg = mmc->rca << 16;
++-
++-			err = mmc_send_cmd(mmc, &cmd, NULL);
++-			if (err)
++-				return err;
++-
++-			cmd.cmdidx = SD_CMD_APP_SET_BUS_WIDTH;
++-			cmd.resp_type = MMC_RSP_R1;
++-			cmd.cmdarg = 2;
++-			err = mmc_send_cmd(mmc, &cmd, NULL);
++-			if (err)
++-				return err;
++-
++-			mmc_set_bus_width(mmc, 4);
++-		}
++-
++ 		if (mmc->card_caps & MMC_MODE_HS)
++ 			mmc->tran_speed = 50000000;
++ 		else
+diff --git a/board/ti/am335x-evm/post-image.sh b/board/ti/am335x-evm/post-image.sh
+new file mode 100755
+index 0000000..6b16f40
+--- /dev/null
++++ b/board/ti/am335x-evm/post-image.sh
+@@ -0,0 +1,22 @@
++#!/bin/sh
++# post-image.sh for ti am335x-evm
++# based on post-image from beagleboard
++# 2014, Marcin Jabrzyk <marcin.jabrzyk@gmail.com>
++# 2016, Lothar Felten <lothar.felten@gmail.com>
 +
-+$(eval $(generic-package))
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index e6f2d96..c1a3394 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -380,4 +380,7 @@ config BR2_PACKAGE_NGINX_ADD_MODULES
- 	help
- 	  Space separated list of urls of the additional modules
- 
-+comment "external modules"
-+	source "package/nginx-naxsi/Config.in"
++BOARD_DIR="$(dirname $0)"
 +
- endif
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 5eb5488..bc895fe 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -156,6 +156,12 @@ else
- NGINX_CONF_OPTS += --without-http_gzip_module
- endif
- 
-+ifeq ($(BR2_PACKAGE_NGINX_NAXSI),y)
-+NGINX_DEPENDENCIES += nginx-naxsi
-+NGINX_PRE_CONFIGURE_HOOKS += NGINX_NAXSI_LINK
-+NGINX_CONF_OPTS += $(addprefix --add-module=,$(call qstrip,$(@D)/nginx-naxsi-$(NGINX_NAXSI_VERSION)/naxsi_src))
-+endif
++# copy the uEnv.txt to the output/images directory
++cp board/ti/am335x-evm/uEnv.txt $BINARIES_DIR/uEnv.txt
 +
- ifeq ($(BR2_PACKAGE_NGINX_HTTP_REWRITE_MODULE),y)
- NGINX_DEPENDENCIES += pcre
- else
-@@ -241,6 +247,10 @@ define NGINX_DISABLE_WERROR
- 	$(SED) 's/-Werror//g' -i $(@D)/auto/cc/*
- endef
- 
-+define NGINX_NAXSI_LINK
-+	ln -fs $(BUILD_DIR)/nginx-naxsi-$(NGINX_NAXSI_VERSION)/ $(@D)
-+endef
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 +
- NGINX_PRE_CONFIGURE_HOOKS += NGINX_DISABLE_WERROR
- 
- define NGINX_CONFIGURE_CMDS
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++    --rootpath "${TARGET_DIR}" \
++    --tmppath "${GENIMAGE_TMP}" \
++    --inputpath "${BINARIES_DIR}" \
++    --outputpath "${BINARIES_DIR}" \
++    --config "${GENIMAGE_CFG}"
+diff --git a/board/ti/am335x-evm/readme.txt b/board/ti/am335x-evm/readme.txt
+new file mode 100644
+index 0000000..f25c8ea
+--- /dev/null
++++ b/board/ti/am335x-evm/readme.txt
+@@ -0,0 +1,62 @@
++Texas Instuments AM335x Evaluation Module (TMDXEVM3358)
++
++Description
++===========
++
++This configuration will build a complete image for the AM335x-EVM, including
++SGX530 graphics acceleation support (only included in the 3354/8/9) and Qt5.
++
++The configuration is based on the ti-processor-sdk-02.00.00.00.
++
++Device tree blobs for the evm-sk, and beaglebone variants are built too.
++
++
++How to build it
++===============
++
++Select the default configuration for the am335x-evm target:
++$ make am335x-evm_defconfig
++
++Optional: modify the configuration:
++$ make menuconfig
++
++Build:
++$ make
++
++
++Result of the build
++===================
++output/images/
++??? am335x-boneblack.dtb
++??? am335x-bone.dtb
++??? am335x-evm.dtb
++??? am335x-evmsk.dtb
++??? boot.vfat
++??? MLO
++??? rootfs.ext2
++??? rootfs.tar
++??? sdcard.img
++??? u-boot.img
++??? uEnv.txt
++??? zImage
++
++To copy the image file to the sdcard use dd:
++dd if=output/images/sdcard.img of=/dev/XXX
++
++
++Tested hardware
++===============
++am335x-evm (rev. 1.1A):
++/usr/bin/sha512sum
++/usr/lib/qt/examples/opengl/hellowindow/hellowindow 
++/usr/bin/OGLES2MagicLantern
++
++beagleboneblack (rev. A5A): 
++/usr/bin/sha512sum
++/usr/lib/qt/examples/opengl/hellowindow/hellowindow 
++/usr/bin/OGLES2MagicLantern
++
++beaglebone (rev. A6):
++/usr/bin/sha512sum
++
++2016, Lothar Felten <lothar.felten@gmail.com>
+diff --git a/board/ti/am335x-evm/uEnv.txt b/board/ti/am335x-evm/uEnv.txt
+new file mode 100644
+index 0000000..e09fff5
+--- /dev/null
++++ b/board/ti/am335x-evm/uEnv.txt
+@@ -0,0 +1,3 @@
++bootpart=0:1
++bootdir=
++uenvcmd=run loadimage;run loadramdisk;run findfdt;run loadfdt;run ramboot
+diff --git a/configs/am335x-evm_defconfig b/configs/am335x-evm_defconfig
+new file mode 100644
+index 0000000..a5c0edf
+--- /dev/null
++++ b/configs/am335x-evm_defconfig
+@@ -0,0 +1,36 @@
++BR2_arm=y
++BR2_cortex_a8=y
++BR2_KERNEL_HEADERS_4_1=y
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_ENABLE_LOCALE_PURGE=y
++BR2_ENABLE_LOCALE_WHITELIST="C en_US"
++BR2_TARGET_GENERIC_HOSTNAME="TI am335x-evm"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/ti/am335x-evm/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/processor-sdk/processor-sdk-linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="52c4aa7cdb93d61f8008f380135beaf7b8fa6593"
++BR2_LINUX_KERNEL_PATCH="board/ti/am335x-evm/patches/linux/"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/ti/am335x-evm/kernel.config"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-evmsk"
++BR2_PACKAGE_FBV=y
++BR2_PACKAGE_QT5=y
++BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
++BR2_PACKAGE_QT5BASE_EXAMPLES=y
++BR2_PACKAGE_QT5BASE_EGLFS=y
++BR2_PACKAGE_QT5QUICKCONTROLS=y
++BR2_PACKAGE_TI_SGX_DEMOS=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_PATCH="board/ti/am335x-evm/patches/uboot"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
++BR2_TARGET_UBOOT_FORMAT_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="MLO"
++BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
-2.7.4
+1.9.1
