@@ -1,95 +1,63 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 14 Jul 2016 16:45:49 -0500
-Subject: [Buildroot] [PATCH] nginx_upload_module: new package
-Message-ID: <1468532749-63693-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri, 15 Jul 2016 00:01:14 +0200
+Subject: [Buildroot] [Patch v3 0/2] Add support for the Rust programming
+	language
+Message-ID: <1468533676-10894-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Bimal Jacob <Bimal.Jacob@rockwellcollins.com>
+This series adds support for the Rust programming language by providing a
+package for the host variant of the Rust compiler, able to cross-compile code
+for ARM, MIPS and x86_64 architectures.
 
-This is an external style nginx module.
+v2 -> v3:
 
-Signed-off-by: Bimal Jacob <bimal.jacob@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
----
- package/Config.in                                    |  1 +
- package/nginx/nginx.mk                               |  5 +++++
- package/nginx_upload_module/Config.in                |  8 ++++++++
- package/nginx_upload_module/nginx_upload_module.hash |  2 ++
- package/nginx_upload_module/nginx_upload_module.mk   | 12 ++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/nginx_upload_module/Config.in
- create mode 100644 package/nginx_upload_module/nginx_upload_module.hash
- create mode 100644 package/nginx_upload_module/nginx_upload_module.mk
+ - bump rust to 1.10.0
+ - rework and bump rust-bootstrap to 1.9.0
+ - host-rust requires at least GCC 4.7 because of LLVM (suggested by R. Naour)
+ - rust requires a glibc-based cross-compiler
+ - rust requires GCC 5.x or above for Aarch64 
 
-diff --git a/package/Config.in b/package/Config.in
-index 1910251..f702f32 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1494,6 +1494,7 @@ menu "Networking applications"
- 	source "package/nfacct/Config.in"
- 	source "package/nftables/Config.in"
- 	source "package/nginx/Config.in"
-+	source "package/nginx_upload_module/Config.in"
- 	source "package/ngircd/Config.in"
- 	source "package/ngrep/Config.in"
- 	source "package/nload/Config.in"
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 5eb5488..aaa6dfb 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -277,4 +277,9 @@ define NGINX_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S50nginx
- endef
- 
-+ifeq ($(BR2_PACKAGE_NGINX_UPLOAD_MODULE),y)
-+NGINX_CONF_OPTS += $(addprefix --add-module=,$(NGINX_UPLOAD_MODULE_SRCDIR))
-+NGINX_DEPENDENCIES += nginx_upload_module
-+endif
-+
- $(eval $(generic-package))
-diff --git a/package/nginx_upload_module/Config.in b/package/nginx_upload_module/Config.in
-new file mode 100644
-index 0000000..10fc0dd
---- /dev/null
-+++ b/package/nginx_upload_module/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_NGINX_UPLOAD_MODULE
-+	bool "nginx_upload_module"
-+	select BR2_PACKAGE_NGINX
-+	help
-+	  A module for nginx web server for handling file uploads using
-+	  multipart/form-data encoding (RFC 1867).
-+
-+	  https://github.com/vkholodkov/nginx-upload-module
-diff --git a/package/nginx_upload_module/nginx_upload_module.hash b/package/nginx_upload_module/nginx_upload_module.hash
-new file mode 100644
-index 0000000..43ca430
---- /dev/null
-+++ b/package/nginx_upload_module/nginx_upload_module.hash
-@@ -0,0 +1,2 @@
-+#Locally Computed:
-+sha256 8cd1d9d968ffba807de2e546ea9cad5e1ae294ec60b4927b2d60a98bdb4a1144  nginx_upload_module-aba1e3f34c754551f4f49e572bc86863d535609d.tar.gz
-diff --git a/package/nginx_upload_module/nginx_upload_module.mk b/package/nginx_upload_module/nginx_upload_module.mk
-new file mode 100644
-index 0000000..b6dc145
---- /dev/null
-+++ b/package/nginx_upload_module/nginx_upload_module.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# nginx_upload_module
-+#
-+################################################################################
-+
-+NGINX_UPLOAD_MODULE_VERSION = aba1e3f34c754551f4f49e572bc86863d535609d
-+NGINX_UPLOAD_MODULE_SITE = $(call github,vkholodkov,nginx-upload-module,$(NGINX_UPLOAD_MODULE_VERSION))
-+NGINX_UPLOAD_MODULE_LICENSE = BSD-3c
-+NGINX_UPLOAD_MODULE_LICENSE_FILES = LICENCE
-+
-+$(eval $(generic-package))
+v1 -> v2:
+
+ - bump rust to version 1.9.0.
+ - drop patch for bzip2 support in host-python.
+ - add package for jemalloc.
+ - add dependency on host being a x86 machine.
+ - add dependency on toolchain.
+ - use dedicated package to provide bootstrapping binary: rust-bootstrap.
+ - let ./configure find out host/build on its own.
+ - remove entry from configuration menu.
+ - clarify some comments.
+
+Eric Le Bihan (3):
+  jemalloc: new package
+  rust-bootstrap: new package
+  rust: new package
+
+ package/Config.in.host                             |   1 +
+ package/rust-bootstrap/rust-bootstrap.hash         |   3 +
+ package/rust-bootstrap/rust-bootstrap.mk           |  24 ++
+ ...monize-use-of-CROSS_PREFIX_-in-mk-cfg-.mk.patch |  53 ++++
+ .../0002-Expand-CC-to-gcc-in-x86-mk-cfg-.cfg.patch |  73 +++++
+ ...eclaration-in-mipsel-unknown-linux-gnu.mk.patch |  26 ++
+ package/rust/Config.in.host                        |  14 +
+ package/rust/rust-target-gen                       | 315 +++++++++++++++++++++
+ package/rust/rust.hash                             |   2 +
+ package/rust/rust.mk                               |  67 +++++
+ 10 files changed, 578 insertions(+)
+ create mode 100644 package/rust-bootstrap/rust-bootstrap.hash
+ create mode 100644 package/rust-bootstrap/rust-bootstrap.mk
+ create mode 100644 package/rust/0001-Harmonize-use-of-CROSS_PREFIX_-in-mk-cfg-.mk.patch
+ create mode 100644 package/rust/0002-Expand-CC-to-gcc-in-x86-mk-cfg-.cfg.patch
+ create mode 100644 package/rust/0003-Fix-CPP-declaration-in-mipsel-unknown-linux-gnu.mk.patch
+ create mode 100644 package/rust/Config.in.host
+ create mode 100755 package/rust/rust-target-gen
+ create mode 100644 package/rust/rust.hash
+ create mode 100644 package/rust/rust.mk
+
 -- 
-1.9.1
+2.4.11
