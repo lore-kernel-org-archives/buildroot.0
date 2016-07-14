@@ -1,144 +1,26 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Jul 2016 22:14:33 +0200
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 14 Jul 2016 20:21:41 +0000
 Subject: [Buildroot] [PATCH v2 2/3] aufs: new kernel extension
-In-Reply-To: <1461936711-1432-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
+In-Reply-To: <20160714201433.GE3737@free.fr>
 References: <1461936711-1432-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-Message-ID: <20160714201433.GE3737@free.fr>
+ <20160714201433.GE3737@free.fr>
+Message-ID: <1468527701361-11b51733-3c18b089-672f8547@mixmax.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Atul, Christian, All,
+All, Atul,
+On Thu, Jul 14, 2016 1:14 PM, Yann E. MORIN yann.morin.1998 at free.fr wrote:We don't care much about the documentation for the build, don't copy it.
 
-On 2016-04-29 19:01 +0530, Atul Singh spake thusly:
-> From: Christian Stewart <christian@paral.in>
-> 
-> Adding a kernel extension that patches the kernel with the correct
-> version of aufs-standalone. This relies on the user ensuring the
-> correct version is set in the configs.
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> [Atul:
->  - Removed the depends on.
->  - Changed the name of the variable BR2_PACKAGE_AUFS_STANDALONE_VERSION.
->  - Removed the comment  "aufs needs a toolchain w/ threads".
->  - Removed the choice BR2_PACKAGE_AUFS_3X or BR2_PACKAGE_AUFS_4X.
->  - Default left to empty rather than some text.
->  - Used AUFS_DIR instead of AUFS_SRCDIR.
->  - Used $(@D) instead of $(LINUX_DIR).
-> ]
-> Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-> ---
->  linux/Config.ext.in     | 28 ++++++++++++++++++++++++++++
->  linux/linux-ext-aufs.mk | 23 +++++++++++++++++++++++
->  2 files changed, 51 insertions(+)
->  create mode 100644 linux/linux-ext-aufs.mk
-> 
-> diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-> index 755c23b..7fa1156 100644
-> --- a/linux/Config.ext.in
-> +++ b/linux/Config.ext.in
-> @@ -64,4 +64,32 @@ config BR2_LINUX_KERNEL_EXT_FBTFT
->  
->  	  https://github.com/notro/fbtft
->  
-> +# aufs-standalone
-> +config BR2_LINUX_KERNEL_EXT_AUFS
-> +	bool "Aufs Filesystem Module patch"
-> +	select BR2_PACKAGE_AUFS
-> +	help
-> +	  Aufs is split in two parts: a kernel part and a userspace
-> +	  part. Enabling this option automatically selects the aufs
-> +	  standalone (module) package and patches the Linux kernel
-> +	  built by Buildroot with the aufs kernel part (ie fs/aufs).
-> +
-> +	  It is important to use the correct branch of aufs-standalone.
-> +
-> +if BR2_LINUX_KERNEL_EXT_AUFS
-
-When there is a single option, we don;t use an if statement, but...
-
-> +config BR2_LINUX_KERNEL_EXT_AUFS_VERSION
-> +	string "aufs-standalone branch"
-
-... jsut a depends on statement here:
-
-    depends on BR2_LINUX_KERNEL_EXT_AUFS
-
-> +	default ""
-> +	help
-> +	  Aufs-standalone repository branch must be selected and
-> +	  must match the current kernel version.  Review the
-> +	  following pages to determine what branch number is valid
-> +	  depending on which major version that was selected.
-
-I'm not sure this is very explicit. What about:
-
-    Select the aufs-standalone branch to use, without the leading
-    'aufs' part (i.e. just the version).
-
-    Note that the version you choose must match that of your kernel.
-    See the following resources to see what versions are available:
-
-> +	  https://sourceforge.net/p/aufs/aufs3-standalone/ref/master/branches/
-> +	  https://github.com/sfjro/aufs4-standalone/branches/all
-> +
-> +endif
-> +
->  endmenu
-> diff --git a/linux/linux-ext-aufs.mk b/linux/linux-ext-aufs.mk
-> new file mode 100644
-> index 0000000..7d48745
-> --- /dev/null
-> +++ b/linux/linux-ext-aufs.mk
-> @@ -0,0 +1,23 @@
-> +################################################################################
-> +# Linux Aufs extensions
-> +#
-> +# Patch the linux kernel with aufs extension
-> +################################################################################
-> +
-> +LINUX_EXTENSIONS += aufs
-> +
-> +define AUFS_PREPARE_KERNEL
-> +	if test -d $(@D)/fs/aufs/; then \
-> +		echo "Your kernel already supports AUFS. Not patching."; \
-
-We want to consider this an error, so you must also "exit 1;" here.
-
-> +	else \
-> +		$(APPLY_PATCHES) $(@D) $(AUFS_DIR) \
-> +			$(AUFS_MAJOR_VERSION)-kbuild.patch \
-> +			$(AUFS_MAJOR_VERSION)-base.patch \
-> +			$(AUFS_MAJOR_VERSION)-mmap.patch \
-> +			$(AUFS_MAJOR_VERSION)-standalone.patch ; \
-> +	fi
-> +	cp $(AUFS_DIR)/Documentation/ABI/testing/* $(@D)/Documentation/ABI/testing/
-> +	cp -r $(AUFS_DIR)/Documentation/filesystems/aufs/ $(@D)/Documentation/filesystems/aufs/
-
-We don't care much about the documentation for the build, don't copy it.
 The user can still see it in $(AUFS_DIR).
 
-Regards,
-Yann E. MORIN.
 
-> +	cp -r $(AUFS_DIR)/fs/aufs/ $(@D)/fs/
-> +	cp $(AUFS_DIR)/include/uapi/linux/aufs_type.h $(@D)/include/uapi/linux/
-> +endef
-> -- 
-> 2.5.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+I haven't worked on this package for over a year now, so you may want to remove
+my Signed-off-by and just CC me.
+Am definitely still interested to see this completed, though.
+Best, Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160714/64b2da26/attachment.html>
