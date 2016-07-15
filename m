@@ -1,42 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jul 2016 13:07:25 +0200
-Subject: [Buildroot] [PATCH] package/weston: Add demo clients install
- option
-In-Reply-To: <1468579851-415-1-git-send-email-xerpi.g.12@gmail.com>
-References: <1468579851-415-1-git-send-email-xerpi.g.12@gmail.com>
-Message-ID: <20160715130725.05e0af71@free-electrons.com>
+Date: Fri, 15 Jul 2016 13:11:06 +0200
+Subject: [Buildroot] [git commit] ntp: add support for SHM clocks
+Message-ID: <20160715111632.6BF0E82230@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c091ecda8743683102f9cccffa15f10b55b52ef3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 15 Jul 2016 12:50:51 +0200, Sergi Granell wrote:
-> ---
->  package/weston/Config.in | 3 +++
->  package/weston/weston.mk | 6 ++++++
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/package/weston/Config.in b/package/weston/Config.in
-> index 0812279..9349317 100644
-> --- a/package/weston/Config.in
-> +++ b/package/weston/Config.in
-> @@ -104,4 +104,7 @@ config BR2_PACKAGE_WESTON_XWAYLAND
->  comment "XWayland support needs libepoxy and X.org enabled"
->  	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
->  
-> +config BR2_PACKAGE_WESTON_DEMO_CLIENTS
-> +	bool "demo clients"
+In order for gpsd to work with the new version of ntpd, an enable
+option must be added to the configure step of ntp that allows for
+support of SHM clocks to be attached through shared memory.
 
-The patch looks good, but could you send an updated version with some
-help text for this option?
+Signed-off-by: Yugendra Sai Babu Nadupuru <yugendra.sai.babu.nadupuru@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ntp/Config.in | 6 ++++++
+ package/ntp/ntp.mk    | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ntp/Config.in b/package/ntp/Config.in
+index 1763225..8ce9a5b 100644
+--- a/package/ntp/Config.in
++++ b/package/ntp/Config.in
+@@ -19,6 +19,12 @@ config BR2_PACKAGE_NTP_NTP_KEYGEN
+ 	help
+ 	  Create a NTP host key
+ 
++config BR2_PACKAGE_NTP_NTP_SHM_CLK
++	bool "SHM clock support"
++	help
++	  Compile ntp with support for a SHM clock attached through
++	  shared memory.
++
+ config BR2_PACKAGE_NTP_NTP_WAIT
+ 	bool "ntp-wait"
+ 	depends on BR2_PACKAGE_PERL
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 8d3a6f3..7d203a5 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -42,6 +42,12 @@ else
+ NTP_CONF_OPTS += --disable-ATOM
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NTP_NTP_SHM_CLK),y)
++NTP_CONF_OPTS += --enable-SHM
++else
++NTP_CONF_OPTS += --disable-SHM
++endif
++
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_KEYGEN) += util/ntp-keygen
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_WAIT) += scripts/ntp-wait/ntp-wait
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDATE) += ntpdate/ntpdate
