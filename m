@@ -1,110 +1,105 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jul 2016 15:44:37 +0200
-Subject: [Buildroot] [git commit] sdl2_gfx: new package
-Message-ID: <20160715134613.5F2AE82257@busybox.osuosl.org>
+Date: Fri, 15 Jul 2016 15:49:18 +0200
+Subject: [Buildroot] [PATCH 1/3] sdl2_gfx: new package
+In-Reply-To: <1468335185-19378-1-git-send-email-peter.macleod.thompson@gmail.com>
+References: <1468335185-19378-1-git-send-email-peter.macleod.thompson@gmail.com>
+Message-ID: <20160715154918.6850b194@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72fb754f4c7e4112262ca9e232f7e96e7fa714da
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Thompson <peter.macleod.thompson@gmail.com>
-[Thomas:
- - Rewrap Config.in help text.
- - Remove unused SDL2_GFX_VERSION_MAJOR variable
- - Add host-pkgconf to the dependencies, since pkg-config is used to
-   find sdl2. This fixes the build, otherwise -I/usr/include/sdl2 was
-   added to the CFLAGS when sdl2-config was found on the host machine.
- - Remove --with-sdl2-prefix, since this option doesn't exist, and
-   using pkg-config is a better solution (--with-sdl-prefix exists,
-   but is not useful when pkg-config is available).
- - Remove --enable-static, packages are not supposed to pass such an
-   option, it's not automatically by the autotools package
-   infrastructure.
- - Pass --disable-sdltest instead of --disable-sdl2test since the
-   latter doesn't exist, while the former does.
- - Pass SDL2_GFX_AUTORECONF = YES since the configure/Makefile.in are
-   not up-to-date and therefore it tries to use aclocal at build time.
- - Adjust _LICENSE_FILES, since there is no file named 'LICENSE', use
-   the smallest source file instead, since it contains the license
-   text.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in              |  1 +
- package/sdl2_gfx/Config.in     | 10 ++++++++++
- package/sdl2_gfx/sdl2_gfx.hash |  2 ++
- package/sdl2_gfx/sdl2_gfx.mk   | 27 +++++++++++++++++++++++++++
- 4 files changed, 40 insertions(+)
+On Tue, 12 Jul 2016 08:53:03 -0600, Peter Thompson wrote:
+> sdl2_gfx created from sdl_gfx with minor changes for sdl2
+> 
+> Signed-off-by: Peter Thompson <peter.macleod.thompson@gmail.com>
 
-diff --git a/package/Config.in b/package/Config.in
-index 32c3e1c..0ec9ba4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -263,6 +263,7 @@ comment "Graphic libraries"
- 	source "package/sdl_sound/Config.in"
- 	source "package/sdl_ttf/Config.in"
- 	source "package/sdl2/Config.in"
-+	source "package/sdl2_gfx/Config.in"
- 
- comment "Other GUIs"
- 	source "package/qt/Config.in"
-diff --git a/package/sdl2_gfx/Config.in b/package/sdl2_gfx/Config.in
-new file mode 100644
-index 0000000..357647f
---- /dev/null
-+++ b/package/sdl2_gfx/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_SDL2_GFX
-+	bool "SDL2_gfx"
-+	depends on BR2_PACKAGE_SDL2
-+	help
-+	  The SDL2_gfx library is an extension to the SDL2 library
-+	  which provides basic antialiased drawing routines such as
-+	  lines, circles or polygons, an interpolating rotozoomer for
-+	  SDL surfaces, framerate control and MMX image filters.
-+
-+	  http://www.ferzkopp.net/wordpress/2016/01/02/sdl_gfx-sdl2_gfx
-diff --git a/package/sdl2_gfx/sdl2_gfx.hash b/package/sdl2_gfx/sdl2_gfx.hash
-new file mode 100644
-index 0000000..4cb07ee
---- /dev/null
-+++ b/package/sdl2_gfx/sdl2_gfx.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 d69bcbceb811b4e5712fbad3ede737166327f44b727f1388c32581dbbe8c599a  SDL2_gfx-1.0.1.tar.gz
-diff --git a/package/sdl2_gfx/sdl2_gfx.mk b/package/sdl2_gfx/sdl2_gfx.mk
-new file mode 100644
-index 0000000..975bca7
---- /dev/null
-+++ b/package/sdl2_gfx/sdl2_gfx.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# sdl2_gfx
-+#
-+################################################################################
-+
-+SDL2_GFX_VERSION = 1.0.1
-+SDL2_GFX_SOURCE = SDL2_gfx-$(SDL2_GFX_VERSION).tar.gz
-+SDL2_GFX_SITE = http://www.ferzkopp.net/Software/SDL2_gfx
-+SDL2_GFX_LICENSE = zlib
-+SDL2_GFX_LICENSE_FILES = COPYING SDL2_framerate.h
-+SDL2_GFX_INSTALL_STAGING = YES
-+SDL2_GFX_DEPENDENCIES = sdl2 host-pkgconf
-+SDL2_GFX_CONF_OPTS = --disable-sdltest
-+# configure/Makefile.in not up-to-date, causing aclocal to be used at
-+# build time if we don't autoreconf.
-+SDL2_GFX_AUTORECONF = YES
-+
-+# Even though x86_64 processors support MMX, the MMX-specific assembly
-+# code in sdl2_gfx is IA32 specific, and does not build for x86_64.
-+ifeq ($(BR2_i386)$(BR2_X86_CPU_HAS_MMX),yy)
-+SDL2_GFX_CONF_OPTS += --enable-mmx
-+else
-+SDL2_GFX_CONF_OPTS += --disable-mmx
-+endif
-+
-+$(eval $(autotools-package))
+Thanks, I've applied, but many, many things had to be changed. It did
+not even build for me. I think you re-used too much of the sdl_gfx
+package without checking.
+
+
+> +++ b/package/sdl2_gfx/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_SDL2_GFX
+> +	bool "SDL2_gfx"
+> +	depends on BR2_PACKAGE_SDL2
+> +	help
+> +	  The SDL2_gfx library is an extension to the SDL2 library which
+> +	  provides basic antialiased drawing routines such as lines,
+> +	  circles or polygons, an interpolating rotozoomer for SDL
+> +	  surfaces, framerate control and MMX image filters.
+
+I have rewrapped the Config.in help text.
+
+> +SDL2_GFX_VERSION_MAJOR = 2.0
+
+This variable is not used anywhere.
+
+> +SDL2_GFX_VERSION = 1.0.1
+> +SDL2_GFX_SOURCE = SDL2_gfx-$(SDL2_GFX_VERSION).tar.gz
+> +SDL2_GFX_SITE = http://www.ferzkopp.net/Software/SDL2_gfx
+> +SDL2_GFX_LICENSE = zlib
+> +SDL2_GFX_LICENSE_FILES = COPYING LICENSE
+
+There is no file named "LICENSE" in the source tree, so I've replaced
+that with a source file that contains the license text.
+
+> +SDL2_GFX_INSTALL_STAGING = YES
+> +SDL2_GFX_DEPENDENCIES = sdl2
+
+I've added host-pkgconf in the dependencies since sdl2_gfx configure
+script tries to use pkg-config.
+
+> +SDL2_GFX_CONF_OPTS = \
+> +	--with-sdl2-prefix=$(STAGING_DIR)/usr \
+
+This option doesn't exist, it is called --with-sdl-prefix. But once
+pkg-config is available, passing --with-sdl-prefix is useless.
+
+> +	--disable-sdl2test \
+
+This option doesn't exist, it is called --disable-sdltest.
+
+> +	--enable-static
+
+This option shouldn't be passed by packages, the autotools package
+infrastructure takes care of passing --{enable,disable}-{static,shared}
+as needed.
+
+Also, the configure/Makefile.in files need to be regenerated, otherwise
+it tries to use aclocal at build time. So I've added SDL2_AUTORECONF =
+YES.
+
+Summary of the changes:
+
+    [Thomas:
+     - Rewrap Config.in help text.
+     - Remove unused SDL2_GFX_VERSION_MAJOR variable
+     - Add host-pkgconf to the dependencies, since pkg-config is used to
+       find sdl2. This fixes the build, otherwise -I/usr/include/sdl2 was
+       added to the CFLAGS when sdl2-config was found on the host machine.
+     - Remove --with-sdl2-prefix, since this option doesn't exist, and
+       using pkg-config is a better solution (--with-sdl-prefix exists,
+       but is not useful when pkg-config is available).
+     - Remove --enable-static, packages are not supposed to pass such an
+       option, it's not automatically by the autotools package
+       infrastructure.
+     - Pass --disable-sdltest instead of --disable-sdl2test since the
+       latter doesn't exist, while the former does.
+     - Pass SDL2_GFX_AUTORECONF = YES since the configure/Makefile.in are
+       not up-to-date and therefore it tries to use aclocal at build time.
+     - Adjust _LICENSE_FILES, since there is no file named 'LICENSE', use
+       the smallest source file instead, since it contains the license
+       text.]
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
