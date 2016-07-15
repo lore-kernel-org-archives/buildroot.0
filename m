@@ -1,28 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jul 2016 14:56:54 +0200
-Subject: [Buildroot] [PATCH] olimex_a20_olinuxino_lime: bump u-boot to
- 2016.07
-In-Reply-To: <1468345537-18648-1-git-send-email-francois.perrad@gadz.org>
-References: <1468345537-18648-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20160715145654.4edff199@free-electrons.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Fri, 15 Jul 2016 10:00:45 -0300
+Subject: [Buildroot] [PATCH] configs: new configuration for i.MX6UL Pico
+	board
+In-Reply-To: <20160531221650.385eccad@free-electrons.com>
+References: <1463601264-16293-1-git-send-email-festevam@gmail.com>
+ <20160531221650.385eccad@free-electrons.com>
+Message-ID: <CAOMZO5B-PeCvDQ9C7Hsya9pSVxtsj6NbT7xWV_QzQbW1AXLa6A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Tue, 12 Jul 2016 19:45:37 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  configs/olimex_a20_olinuxino_lime_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, May 31, 2016 at 5:16 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Wed, 18 May 2016 16:54:24 -0300, Fabio Estevam wrote:
+>> Add support for Technexion's i.MX6UL Pico board.
+>>
+>> For information about this board, please visit:
+>> http://www.wandboard.org/images/hobbit/hobbitboard-imx6ul-reva1.pdf
+>>
+>> Currently two patches are needed, but in the future they can be removed
+>> when we switch to kernel 4.7 and U-boot 2016.07 versions.
+>>
+>> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+>
+> This generally looks good, but we generally like when a readme.txt is
+> added to indicate how to quickly setup the board to use the Buildroot
+> image.
 
-Applied to master, thanks.
+Thanks for the review. I will send v2 including the readme file.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I will wait for 4.7 kernel to be released this weekend, so that I
+don't have to carry the extra dts patch anymore.
+
+Will also bump U-boot to 2016.07.
+
+Regards,
+
+Fabio Estevam
