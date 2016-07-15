@@ -1,99 +1,155 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 Jul 2016 18:12:17 +0200
-Subject: [Buildroot] [PATCH v6 1/2] ts4800-mbrboot: new package
-In-Reply-To: <1468594860-14932-2-git-send-email-patrick.keroulas@savoirfairelinux.com>
-References: <1468594860-14932-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
- <1468594860-14932-2-git-send-email-patrick.keroulas@savoirfairelinux.com>
-Message-ID: <20160715161217.GG3692@free.fr>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Fri, 15 Jul 2016 12:38:11 -0400
+Subject: [Buildroot] [V2 1/1] package/nginx: Add naxsi module option.
+In-Reply-To: <CANxTyt77Mi0yDA4=a-_SJCrTpE0+CkNynGC_sKrokKLHkkw0WA@mail.gmail.com>
+References: <1468508509-7974-1-git-send-email-Aduskett@gmail.com>
+ <CANxTyt77Mi0yDA4=a-_SJCrTpE0+CkNynGC_sKrokKLHkkw0WA@mail.gmail.com>
+Message-ID: <CAFSsvmqj46KSDJPQrJE=ci1Mwg6tOkj250w5S8Za55b86StMdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patrick, All,
+On Thu, Jul 14, 2016 at 1:26 PM, Danomi Manchego
+<danomimanchego123@gmail.com> wrote:
+> Adam,
+>
+> On Thu, Jul 14, 2016 at 11:01 AM, Adam Duskett <aduskett@gmail.com> wrote:
+>> Naxsi is a third party nginx module reads a small subset of simple rules
+>> containing a list of known patterns involved in website vulnerabilities.
+>> This module behaves like a DROP-by-default firewall for nginx.
+>>
+>> The reason for the changes to the make file was because naxsi is listed
+>> on github, and even though there is a option to specify a url for a 3rd party
+>> module, this option only seems to work for a local file url.
+>>
+>> As such a new comment was added to the menu for external modules, and a new
+>> package that downloads and extracts the module was added under
+>> package/nginx-naxsi.  This is then used with a pre-configure hook to create
+>> a soft symbolic link to the source inside of the nginx-source tree.
+>>
+>> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+>> ---
+>> Changes:
+>>
+>> v1 - v2:
+>> - Moved naxsi module into a seperate package.
+>>
+>>  package/nginx-naxsi/Config.in        |  4 ++++
+>>  package/nginx-naxsi/nginx-naxsi.hash |  1 +
+>>  package/nginx-naxsi/nginx-naxsi.mk   |  5 +++++
+>>  package/nginx/Config.in              |  3 +++
+>>  package/nginx/nginx.mk               | 10 ++++++++++
+>>  5 files changed, 23 insertions(+)
+>>  create mode 100644 package/nginx-naxsi/Config.in
+>>  create mode 100644 package/nginx-naxsi/nginx-naxsi.hash
+>>  create mode 100644 package/nginx-naxsi/nginx-naxsi.mk
+>>
+>> diff --git a/package/nginx-naxsi/Config.in b/package/nginx-naxsi/Config.in
+>> new file mode 100644
+>> index 0000000..8d88833
+>> --- /dev/null
+>> +++ b/package/nginx-naxsi/Config.in
+>> @@ -0,0 +1,4 @@
+>> +config BR2_PACKAGE_NGINX_NAXSI
+>> +       bool "ngx_http_naxsi_module"
+>> +       help
+>> +         Enable ngx_http_naxsi_module
+>
+> No URL to https://github.com/nbs-system/naxsi ?
+Fair enough, I will fix this.
 
-On 2016-07-15 11:00 -0400, Patrick Keroulas spake thusly:
-> This MBR routine is based on TS' original bootloader.  It is loaded by
-> the bootrom stored in the companion FPGA, and chainloads an executable
-> located at the beginning of the first non-fs (0xda) partition.
-> 
-> Signed-off-by: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
-> ---
-[--SNIP--]
-> diff --git a/package/ts4800-mbrboot/Config.in b/package/ts4800-mbrboot/Config.in
-> new file mode 100644
-> index 0000000..556b0ec
-> --- /dev/null
-> +++ b/package/ts4800-mbrboot/Config.in
-
-The firmware stuff is more for firmware blobs that need to be loaded
-into a device (e.g. a WiFi dongle, and ehternet card, a GPU...);
-
-ts4800-mbrboot is really a bootloader, so it should probably go to boot/
-rather than package/ and be added in the bootloader menu.
-
-> @@ -0,0 +1,5 @@
-> +config BR2_PACKAGE_TS4800_MBRBOOT
-> +	bool "ts4800-mbrboot"
-> +	depends on BR2_ARM_CPU_ARMV7A
-> +	help
-> +	  This package generate the ts4800 bootloader.
-
-Please add a homepage (or if none, the github repo).
-
-> diff --git a/package/ts4800-mbrboot/ts4800-mbrboot.mk b/package/ts4800-mbrboot/ts4800-mbrboot.mk
-> new file mode 100644
-> index 0000000..825a66b
-> --- /dev/null
-> +++ b/package/ts4800-mbrboot/ts4800-mbrboot.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# ts4800-mbrboot
-> +#
-> +################################################################################
-> +
-> +TS4800_MBRBOOT_VERSION = master
-
-Don;t use 'master' as it is a moving target: today, it points to a
-specific chageset, but tomorrow it may well point to another, thus
-rendering the build non-reproducible.
-
-Please use a tag or the sha1 of a commit, like:
-
-    TS4800_MBRBOOT_VERSION = cf8f7072ed5a4a4e48fcb9841b2e31e519ec5dca
-
-Otherwise looks sane.
-
-Regards,
-Yann E. MORIN.
-
-> +TS4800_MBRBOOT_SITE = $(call github,embeddedarm,ts4800-mbrboot,$(TS4800_MBRBOOT_VERSION))
-> +TS4800_MBRBOOT_LICENSE = BSD-2c
-> +TS4800_MBRBOOT_LICENSE_FILES = LICENSE
-> +
-> +define TS4800_MBRBOOT_BUILD_CMDS
-> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-> +endef
-> +
-> +define TS4800_MBRBOOT_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0644 $(@D)/mbrboot.bin $(BINARIES_DIR)/mbrboot.bin
-> +endef
-> +
-> +$(eval $(generic-package))
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+>> diff --git a/package/nginx-naxsi/nginx-naxsi.hash b/package/nginx-naxsi/nginx-naxsi.hash
+>> new file mode 100644
+>> index 0000000..dd7f5cd
+>> --- /dev/null
+>> +++ b/package/nginx-naxsi/nginx-naxsi.hash
+>> @@ -0,0 +1 @@
+>> +sha256 9cc2c09405bc71f78ef26a8b6d70afcea3fccbe8125df70cb0cfc480133daba5        0.54.tar.gz
+>> diff --git a/package/nginx-naxsi/nginx-naxsi.mk b/package/nginx-naxsi/nginx-naxsi.mk
+>> new file mode 100644
+>> index 0000000..9a284ff
+>> --- /dev/null
+>> +++ b/package/nginx-naxsi/nginx-naxsi.mk
+>> @@ -0,0 +1,5 @@
+>> +NGINX_NAXSI_VERSION = 0.54
+>> +NGINX_NAXSI_SOURCE = $(NGINX_NAXSI_VERSION).tar.gz
+>> +NGINX_NAXSI_SITE = $(call github,nbs-system,naxsi,$(NGINX_NAXSI_SOURCE))
+>
+> No title comment?
+>
+> Licensing?  I'm thinking:
+>
+> NGINX_NAXSI_LICENSE = GPLv3
+> NGINX_NAXSI_LICENSE_FILES = LICENSE
+>
+This would be correct, I will fix that as well.
+>
+>> +
+>> +$(eval $(generic-package))
+>> diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+>> index e6f2d96..c1a3394 100644
+>> --- a/package/nginx/Config.in
+>> +++ b/package/nginx/Config.in
+>> @@ -380,4 +380,7 @@ config BR2_PACKAGE_NGINX_ADD_MODULES
+>>         help
+>>           Space separated list of urls of the additional modules
+>>
+>> +comment "external modules"
+>> +       source "package/nginx-naxsi/Config.in"
+>> +
+>>  endif
+>> diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+>> index 5eb5488..bc895fe 100644
+>> --- a/package/nginx/nginx.mk
+>> +++ b/package/nginx/nginx.mk
+>> @@ -156,6 +156,12 @@ else
+>>  NGINX_CONF_OPTS += --without-http_gzip_module
+>>  endif
+>>
+>> +ifeq ($(BR2_PACKAGE_NGINX_NAXSI),y)
+>> +NGINX_DEPENDENCIES += nginx-naxsi
+>> +NGINX_PRE_CONFIGURE_HOOKS += NGINX_NAXSI_LINK
+>> +NGINX_CONF_OPTS += $(addprefix --add-module=,$(call qstrip,$(@D)/nginx-naxsi-$(NGINX_NAXSI_VERSION)/naxsi_src))
+>> +endif
+>> +
+>>  ifeq ($(BR2_PACKAGE_NGINX_HTTP_REWRITE_MODULE),y)
+>>  NGINX_DEPENDENCIES += pcre
+>>  else
+>> @@ -241,6 +247,10 @@ define NGINX_DISABLE_WERROR
+>>         $(SED) 's/-Werror//g' -i $(@D)/auto/cc/*
+>>  endef
+>>
+>> +define NGINX_NAXSI_LINK
+>> +       ln -fs $(BUILD_DIR)/nginx-naxsi-$(NGINX_NAXSI_VERSION)/ $(@D)
+>> +endef
+>> +
+>
+> We have several ngx_* packages (ngx_echo, ngx_lua, ngx_devel), and
+> were able to add them this way, without a symlink:
+>
+> ifeq ($(BR2_PACKAGE_NGINX_NAXSI),y)
+> NGINX_DEPENDENCIES += nginx-naxsi
+> NGINX_CONF_OPTS += --add-module=$(NGINX_NAXSI_DIR)
+> endif
+>
+> That is, using the ${PKG}_DIR automatically supplied by generic-package.
+>
+I will look into this.
+As for
+> Regards,
+> Danomi -
+>
+>
+>>  NGINX_PRE_CONFIGURE_HOOKS += NGINX_DISABLE_WERROR
+>>
+>>  define NGINX_CONFIGURE_CMDS
+>> --
+>> 2.7.4
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
