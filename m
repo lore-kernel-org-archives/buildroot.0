@@ -1,117 +1,170 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Fri, 15 Jul 2016 13:45:12 -0400
-Subject: [Buildroot] [v3 1/1] package/nginx: Add naxsi module option.
-Message-ID: <1468604712-1264-1-git-send-email-aduskett@codeblue.com>
+Date: Fri, 15 Jul 2016 13:46:01 -0400
+Subject: [Buildroot] [v2 1/2] package/audit: Bump to version 2.6.5
+Message-ID: <1468604761-1390-1-git-send-email-aduskett@codeblue.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Naxsi is a third party nginx module reads a small subset of simple rules
-containing a list of known patterns involved in website vulnerabilities.
-This module behaves like a DROP-by-default firewall for nginx.
+- Removed 0001-lib-gen_tables.c-define-EHWPOISON-when-not-available.patch
+  as this was applied upstream.
 
-The reason for the changes to the make file was because naxsi is listed
-on github, and even though there is a option to specify a url for a 3rd party
-module, this option only seems to work for a local file url.
-
-As such a new comment was added to the menu for external modules, and a new
-package that downloads and extracts the module was added under
-package/nginx-naxsi.  This is then used with a pre-configure hook to create
-a soft symbolic link to the source inside of the nginx-source tree.
+- Removed 0002-Fix-usage-of-audit_status.feature_bitmap.patch as this was
+  applied upstream.
 
 Signed-off-by: Adam Duskett <aduskett@codeblue.com>
 ---
 Changes:
 
-v2 - v3:
- - package/nginx-naxsi/Config.in: 
-      - Added url to the help section.
- - package/nginx-naxsi/nginx-naxsi.mk:
-      - Added Title comment
-      - Added licensing
- - package/nginx/nginx.mk: 
-      - Removed uneeded pre_configure hook.
-      - Nginx now links the module directly from the extractes source
-
 v1 - v2:
- - Moved naxsi module into a seperate package.
+ - Fixed sha256sum
 
- package/nginx-naxsi/Config.in        |  5 +++++
- package/nginx-naxsi/nginx-naxsi.hash |  1 +
- package/nginx-naxsi/nginx-naxsi.mk   | 13 +++++++++++++
- package/nginx/Config.in              |  3 +++
- package/nginx/nginx.mk               |  5 +++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/nginx-naxsi/Config.in
- create mode 100644 package/nginx-naxsi/nginx-naxsi.hash
- create mode 100644 package/nginx-naxsi/nginx-naxsi.mk
 
-diff --git a/package/nginx-naxsi/Config.in b/package/nginx-naxsi/Config.in
-new file mode 100644
-index 0000000..bdcd16d
---- /dev/null
-+++ b/package/nginx-naxsi/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_NGINX_NAXSI
-+	bool "ngx_http_naxsi_module"
-+	help
-+	  Enable ngx_http_naxsi_module
-+	  https://github.com/nbs-system/naxsi
-diff --git a/package/nginx-naxsi/nginx-naxsi.hash b/package/nginx-naxsi/nginx-naxsi.hash
-new file mode 100644
-index 0000000..dd7f5cd
---- /dev/null
-+++ b/package/nginx-naxsi/nginx-naxsi.hash
-@@ -0,0 +1 @@
-+sha256	9cc2c09405bc71f78ef26a8b6d70afcea3fccbe8125df70cb0cfc480133daba5	0.54.tar.gz
-diff --git a/package/nginx-naxsi/nginx-naxsi.mk b/package/nginx-naxsi/nginx-naxsi.mk
-new file mode 100644
-index 0000000..6949f30
---- /dev/null
-+++ b/package/nginx-naxsi/nginx-naxsi.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# nginx-naxsi
-+#
-+################################################################################
-+
-+NGINX_NAXSI_VERSION = 0.54
-+NGINX_NAXSI_SOURCE = $(NGINX_NAXSI_VERSION).tar.gz
-+NGINX_NAXSI_SITE = $(call github,nbs-system,naxsi,$(NGINX_NAXSI_SOURCE))
-+NGINX_NAXSI_LICENSE = GPLv3
-+NGINX_NAXSI_LICENSE_FILES = LICENSE
-+
-+$(eval $(generic-package))
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index e6f2d96..c1a3394 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -380,4 +380,7 @@ config BR2_PACKAGE_NGINX_ADD_MODULES
- 	help
- 	  Space separated list of urls of the additional modules
+ ...les.c-define-EHWPOISON-when-not-available.patch | 44 ----------------
+ ...-Fix-usage-of-audit_status.feature_bitmap.patch | 59 ----------------------
+ package/audit/audit.hash                           |  2 +-
+ package/audit/audit.mk                             |  2 +-
+ 4 files changed, 2 insertions(+), 105 deletions(-)
+ delete mode 100644 package/audit/0001-lib-gen_tables.c-define-EHWPOISON-when-not-available.patch
+ delete mode 100644 package/audit/0002-Fix-usage-of-audit_status.feature_bitmap.patch
+
+diff --git a/package/audit/0001-lib-gen_tables.c-define-EHWPOISON-when-not-available.patch b/package/audit/0001-lib-gen_tables.c-define-EHWPOISON-when-not-available.patch
+deleted file mode 100644
+index 8880d6c..0000000
+--- a/package/audit/0001-lib-gen_tables.c-define-EHWPOISON-when-not-available.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From ac10cdedd136689028223088ffca80b98c7bbaff Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sat, 2 Jul 2016 10:33:34 +0200
+-Subject: [PATCH] lib/gen_tables.c: define EHWPOISON when not available
+-
+-When building on some old system with old kernel headers, the
+-gen_tables.c program (built natively) doesn't build due to missing
+-EHWPOISON. This commit defines EHWPOISON to the value found in
+-asm-generic kernel headers, which is correct for most (but not all
+-architectures).
+-
+-Anyway, the whole concept of building a program on the host to generate
+-a table with errno values, then built into a target program is
+-inherently broken, so our fix is not more broken than the rest of the
+-mechanism used by audit.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- lib/gen_tables.c | 9 +++++++++
+- 1 file changed, 9 insertions(+)
+-
+-diff --git a/lib/gen_tables.c b/lib/gen_tables.c
+-index 98f576c..d0bb7f5 100644
+---- a/lib/gen_tables.c
+-+++ b/lib/gen_tables.c
+-@@ -55,6 +55,15 @@
+- #define SHMGET          23
+- #define SHMCTL          24
+- 
+-+/*
+-+ * Values from asm-generic, might be different on other architectures,
+-+ * but anyway the concept of building a program on the host to
+-+ * generate errno related tables used on another architecture is
+-+ * broken.
+-+ */
+-+#ifndef EHWPOISON
+-+#define EHWPOISON	133
+-+#endif
+- 
+- /* The ratio of table size to number of non-empty elements allowed for a
+-    "direct" s2i table; if the ratio would be bigger, bsearch tables are used
+--- 
+-2.7.4
+-
+diff --git a/package/audit/0002-Fix-usage-of-audit_status.feature_bitmap.patch b/package/audit/0002-Fix-usage-of-audit_status.feature_bitmap.patch
+deleted file mode 100644
+index a6af43b..0000000
+--- a/package/audit/0002-Fix-usage-of-audit_status.feature_bitmap.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From f9e4d6aa957c0728827d7efee44a57f887766ae6 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Wed, 6 Jul 2016 20:22:11 +0200
+-Subject: [PATCH] Fix usage of audit_status.feature_bitmap
+-
+-The feature_bitmap field of "struct audit_status" only appeared in
+-kernel headers >= 3.19. However, the code using it in libaudit.c is only
+-conditional on the existence of AUDIT_FEATURE_VERSION, which has been
+-added in Linux 3.13.
+-
+-This means that building audit with kernel headers >= 3.13 but < 3.19
+-currently fails:
+-
+-libaudit.c: In function 'load_feature_bitmap':
+-libaudit.c:609:33: error: 'struct audit_status' has no member named 'feature_bitmap'
+-     features_bitmap = rep.status->feature_bitmap;
+-                                 ^
+-libaudit.c: In function 'audit_rule_fieldpair_data':
+-libaudit.c:1424:9: warning: this decimal constant is unsigned only in ISO C90 [enabled by default]
+-         4294967295;
+-
+-This commit fixes that by testing the availability of the feature_bitmap
+-field.
+-
+-Submitted upstream: https://www.redhat.com/archives/linux-audit/2016-July/msg00022.html
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- configure.ac   | 1 +
+- lib/libaudit.c | 2 +-
+- 2 files changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 219720b..00788c4 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -64,6 +64,7 @@ AC_CHECK_SIZEOF([unsigned int])
+- AC_CHECK_SIZEOF([unsigned long])
+- AM_PROG_CC_C_O
+- AC_CHECK_DECLS([AUDIT_FEATURE_VERSION], [], [], [[#include <linux/audit.h>]])
+-+AC_CHECK_MEMBERS([struct audit_status.feature_bitmap], [], [], [[#include <linux/audit.h>]])
+- AC_CHECK_DECLS([AUDIT_VERSION_BACKLOG_WAIT_TIME], [], [], [[#include <linux/audit.h>]])
+- AC_CHECK_DECLS([ADDR_NO_RANDOMIZE],,, [#include <sys/personality.h>])
+- dnl; posix_fallocate is used in audisp-remote
+-diff --git a/lib/libaudit.c b/lib/libaudit.c
+-index 2c96f29..510d841 100644
+---- a/lib/libaudit.c
+-+++ b/lib/libaudit.c
+-@@ -579,7 +579,7 @@ static void load_feature_bitmap(void)
+- 		return;
+- 	}
+- 
+--#if HAVE_DECL_AUDIT_FEATURE_VERSION
+-+#if defined(HAVE_DECL_AUDIT_FEATURE_VERSION) && defined(HAVE_STRUCT_AUDIT_STATUS_FEATURE_BITMAP)
+- 	if ((rc = audit_request_status(fd)) > 0) {
+- 		struct audit_reply rep;
+- 		int i;
+--- 
+-2.7.4
+-
+diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+index 8d6649b..75b0197 100644
+--- a/package/audit/audit.hash
++++ b/package/audit/audit.hash
+@@ -1,2 +1,2 @@
+ #Locally computed
+-sha256	016a101d6f8f5608ff90355b49adeb2848990ab2fdbb0933c3e09ac8c95db1d9	audit-2.6.3.tar.gz
++sha256	d99339a63fc6efaaee89efe7fa0e0c395f661392a4ae5056b2c9d10c67ca63a1	audit-2.6.5.tar.gz
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 4cc87d1..89fdf14 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+comment "external modules"
-+	source "package/nginx-naxsi/Config.in"
-+
- endif
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 5eb5488..70ed58e 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -156,6 +156,11 @@ else
- NGINX_CONF_OPTS += --without-http_gzip_module
- endif
- 
-+ifeq ($(BR2_PACKAGE_NGINX_NAXSI),y)
-+NGINX_DEPENDENCIES += nginx-naxsi
-+NGINX_CONF_OPTS += --add-module=$(NGINX_NAXSI_DIR)/naxsi_src
-+endif
-+
- ifeq ($(BR2_PACKAGE_NGINX_HTTP_REWRITE_MODULE),y)
- NGINX_DEPENDENCIES += pcre
- else
+-AUDIT_VERSION = 2.6.3
++AUDIT_VERSION = 2.6.5
+ AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+ AUDIT_LICENSE = GPLv2
+ AUDIT_LICENSE_FILES = COPYING
 -- 
 2.7.4
