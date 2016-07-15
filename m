@@ -1,44 +1,35 @@
-From: Sergi Granell <xerpi.g.12@gmail.com>
-Date: Fri, 15 Jul 2016 12:50:51 +0200
-Subject: [Buildroot] [PATCH] package/weston: Add demo clients install option
-Message-ID: <1468579851-415-1-git-send-email-xerpi.g.12@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Jul 2016 13:00:56 +0200
+Subject: [Buildroot] [git commit] package/chrony: fix systemd service
+Message-ID: <20160715110247.D4EAD82231@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/weston/Config.in | 3 +++
- package/weston/weston.mk | 6 ++++++
- 2 files changed, 9 insertions(+)
+commit: https://git.buildroot.net/buildroot/commit/?id=7ce32aa271fd7e9e72bbef6119be038e834c677a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 0812279..9349317 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -104,4 +104,7 @@ config BR2_PACKAGE_WESTON_XWAYLAND
- comment "XWayland support needs libepoxy and X.org enabled"
- 	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
+Fixes the systemd service, the binary is located at /usr/sbin not
+/usr/bin.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/chrony/chrony.service | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/chrony/chrony.service b/package/chrony/chrony.service
+index 6000fce..325b63c 100644
+--- a/package/chrony/chrony.service
++++ b/package/chrony/chrony.service
+@@ -4,7 +4,7 @@ After=syslog.target network.target
+ Conflicts=systemd-timesyncd.service
  
-+config BR2_PACKAGE_WESTON_DEMO_CLIENTS
-+	bool "demo clients"
-+
- endif
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index dfcb9ac..31c9281 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -142,4 +142,10 @@ else
- WESTON_CONF_OPTS += --disable-junit-xml
- endif
+ [Service]
+-ExecStart=/usr/bin/chronyd -n
++ExecStart=/usr/sbin/chronyd -n
+ Restart=always
  
-+ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
-+WESTON_CONF_OPTS += --enable-demo-clients-install
-+else
-+WESTON_CONF_OPTS += --disable-demo-clients-install
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.7.4
+ [Install]
