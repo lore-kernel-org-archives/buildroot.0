@@ -1,30 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jul 2016 13:22:59 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/chrony: fix systemd service
-In-Reply-To: <1468523102-4191-1-git-send-email-christian@paral.in>
-References: <1468523102-4191-1-git-send-email-christian@paral.in>
-Message-ID: <20160715132259.53c403a8@free-electrons.com>
+From: Sergi Granell <xerpi.g.12@gmail.com>
+Date: Fri, 15 Jul 2016 13:23:40 +0200
+Subject: [Buildroot] [PATCH] package/weston: Add demo clients install option
+Message-ID: <1468581820-9927-1-git-send-email-xerpi.g.12@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+---
+ package/weston/Config.in | 5 +++++
+ package/weston/weston.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-On Thu, 14 Jul 2016 12:05:02 -0700, Christian Stewart wrote:
-> Fixes the systemd service, the binary is located at /usr/sbin not
-> /usr/bin.
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/chrony/chrony.service | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 0812279..c1eb7da 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -104,4 +104,9 @@ config BR2_PACKAGE_WESTON_XWAYLAND
+ comment "XWayland support needs libepoxy and X.org enabled"
+ 	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
+ 
++config BR2_PACKAGE_WESTON_DEMO_CLIENTS
++	bool "demo clients"
++	help
++	  This enables the installation of Weston's demo clients.
++
+ endif
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index dfcb9ac..31c9281 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -142,4 +142,10 @@ else
+ WESTON_CONF_OPTS += --disable-junit-xml
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
++WESTON_CONF_OPTS += --enable-demo-clients-install
++else
++WESTON_CONF_OPTS += --disable-demo-clients-install
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
