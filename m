@@ -1,152 +1,106 @@
-From: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
-Date: Fri, 15 Jul 2016 15:23:08 -0400
-Subject: [Buildroot] [PATCH v7 2/2] configs: add defconfig for TS-4800
-In-Reply-To: <1468610588-9709-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
-References: <1468610588-9709-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
-Message-ID: <1468610588-9709-3-git-send-email-patrick.keroulas@savoirfairelinux.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Jul 2016 22:22:39 +0200
+Subject: [Buildroot] [git commit] nginx-upload: new package
+Message-ID: <20160715202434.DBFE282257@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The TS-4800 is supported by mainline Linux as of 4.5 and by U-boot
-as of v2016-07.
+commit: https://git.buildroot.net/buildroot/commit/?id=e103967d6fd7653464041c3589b11a64e48b58c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The config requires the custom ts4800-mbrboot routine.
+A module for nginx web server for handling file uploads using
+multipart/form-data encoding (RFC 1867).
 
-A post-image script is provided to generate an image that can be "dd"
-directly to an SD card.
-
-More details on the board here:
-  http://wiki.embeddedarm.com/wiki/TS-4800
-
-Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Signed-off-by: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+Signed-off-by: Bimal Jacob <bimal.jacob@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+[Thomas:
+ - rename from nginx-upload-module to nginx-upload. Indeed, we don't
+   want all nginx modules to be suffixed with "-module"
+ - include the module Config.in file directly from package/Config.in,
+   like we do for Python, Perl, Lua or TCL modules.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v6->v7:
-	- moved package to boot/
-Changes v5->v6:
-	- removed custom U-boot v2016.07 which is now the default version in
-	  BR
-Changes v4->v5:
-with Linaro toolchain
-	- delete all the unnecessary defconfig options
+ package/Config.in                      |  5 +++++
+ package/nginx-upload/Config.in         |  8 ++++++++
+ package/nginx-upload/nginx-upload.hash |  2 ++
+ package/nginx-upload/nginx-upload.mk   | 13 +++++++++++++
+ package/nginx/nginx.mk                 |  6 ++++++
+ 5 files changed, 34 insertions(+)
 
- board/technologic/ts4800/genimage.cfg   | 37 +++++++++++++++++++++++++++++++++
- board/technologic/ts4800/linux.fragment |  3 +++
- board/technologic/ts4800/post-image.sh  | 22 ++++++++++++++++++++
- configs/ts4800_defconfig                | 19 +++++++++++++++++
- 4 files changed, 81 insertions(+)
- create mode 100644 board/technologic/ts4800/genimage.cfg
- create mode 100644 board/technologic/ts4800/linux.fragment
- create mode 100755 board/technologic/ts4800/post-image.sh
- create mode 100644 configs/ts4800_defconfig
-
-diff --git a/board/technologic/ts4800/genimage.cfg b/board/technologic/ts4800/genimage.cfg
+diff --git a/package/Config.in b/package/Config.in
+index da7b855..7756a4c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1499,6 +1499,11 @@ menu "Networking applications"
+ 	source "package/nfacct/Config.in"
+ 	source "package/nftables/Config.in"
+ 	source "package/nginx/Config.in"
++if BR2_PACKAGE_NGINX
++menu "External nginx modules"
++	source "package/nginx-upload/Config.in"
++endmenu
++endif
+ 	source "package/ngircd/Config.in"
+ 	source "package/ngrep/Config.in"
+ 	source "package/nload/Config.in"
+diff --git a/package/nginx-upload/Config.in b/package/nginx-upload/Config.in
 new file mode 100644
-index 0000000..2070cc5
+index 0000000..b4ee71c
 --- /dev/null
-+++ b/board/technologic/ts4800/genimage.cfg
-@@ -0,0 +1,37 @@
-+image boot.vfat {
-+        vfat {
-+                files = {
-+                        "zImage",
-+                        "imx51-ts4800.dtb"
-+                }
-+        }
-+        size = 8M
-+}
++++ b/package/nginx-upload/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_NGINX_UPLOAD
++	bool "nginx-upload"
++	select BR2_PACKAGE_OPENSSL
++	help
++	  A module for nginx web server for handling file uploads
++	  using multipart/form-data encoding (RFC 1867).
 +
-+image sdcard.img {
-+        hdimage {
-+        }
-+
-+        partition mbrboot {
-+                in-partition-table = "no"
-+                image = "mbrboot.bin"
-+                offset = 0
-+        }
-+
-+        partition uboot {
-+                partition-type = 0xda
-+                image = "u-boot.bin"
-+                size = 256k
-+        }
-+
-+        partition kernel {
-+                partition-type = 0xC
-+                image = "boot.vfat"
-+        }
-+
-+        partition rootfs {
-+                partition-type = 0x83
-+                image = "rootfs.ext4"
-+                size = 256M
-+        }
-+}
-diff --git a/board/technologic/ts4800/linux.fragment b/board/technologic/ts4800/linux.fragment
++	  https://github.com/vkholodkov/nginx-upload-module
+diff --git a/package/nginx-upload/nginx-upload.hash b/package/nginx-upload/nginx-upload.hash
 new file mode 100644
-index 0000000..0451c86
+index 0000000..4fc4347
 --- /dev/null
-+++ b/board/technologic/ts4800/linux.fragment
-@@ -0,0 +1,3 @@
-+CONFIG_TOUCHSCREEN_TS4800=y
-+CONFIG_TS4800_WATCHDOG=y
-+CONFIG_TS4800_IRQ=y
-diff --git a/board/technologic/ts4800/post-image.sh b/board/technologic/ts4800/post-image.sh
-new file mode 100755
-index 0000000..bbfea28
++++ b/package/nginx-upload/nginx-upload.hash
+@@ -0,0 +1,2 @@
++#Locally Computed:
++sha256 8cd1d9d968ffba807de2e546ea9cad5e1ae294ec60b4927b2d60a98bdb4a1144  nginx-upload-aba1e3f34c754551f4f49e572bc86863d535609d.tar.gz
+diff --git a/package/nginx-upload/nginx-upload.mk b/package/nginx-upload/nginx-upload.mk
+new file mode 100644
+index 0000000..6f94d35
 --- /dev/null
-+++ b/board/technologic/ts4800/post-image.sh
-@@ -0,0 +1,22 @@
-+#!/bin/bash
++++ b/package/nginx-upload/nginx-upload.mk
+@@ -0,0 +1,13 @@
++################################################################################
 +#
-+# Copyright (C) 2015 Savoir-faire Linux
-+# Post image generation script.
++# nginx-upload
++#
++################################################################################
 +
-+IDIR="$1"
++NGINX_UPLOAD_VERSION = aba1e3f34c754551f4f49e572bc86863d535609d
++NGINX_UPLOAD_SITE = $(call github,vkholodkov,nginx-upload-module,$(NGINX_UPLOAD_VERSION))
++NGINX_UPLOAD_LICENSE = BSD-3c
++NGINX_UPLOAD_LICENSE_FILES = LICENCE
++NGINX_UPLOAD_DEPENDENCIES = openssl
 +
-+BOARD_DIR="board/technologic/ts4800"
-+GENIMAGE_CFG_DEFAULT="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_CFG=${GENIMAGE_CFG_DEFAULT}
-+GENIMAGE_TMP=${BUILD_DIR}/.genimage_tmp
++$(eval $(generic-package))
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 5eb5488..018d0f8 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -234,6 +234,12 @@ NGINX_CONF_OPTS += \
+ 
+ endif # BR2_PACKAGE_NGINX_STREAM
+ 
++# external modules
++ifeq ($(BR2_PACKAGE_NGINX_UPLOAD),y)
++NGINX_CONF_OPTS += $(addprefix --add-module=,$(NGINX_UPLOAD_DIR))
++NGINX_DEPENDENCIES += nginx-upload
++endif
 +
-+rm -rf ${GENIMAGE_TMP}
-+
-+${HOST_DIR}/usr/bin/genimage \
-+        --config ${GENIMAGE_CFG} \
-+        --rootpath ${TARGET_DIR} \
-+        --tmppath ${GENIMAGE_TMP} \
-+        --inputpath $IDIR \
-+        --outputpath $IDIR
-+
-+exit $?
-diff --git a/configs/ts4800_defconfig b/configs/ts4800_defconfig
-new file mode 100644
-index 0000000..0dd3e84
---- /dev/null
-+++ b/configs/ts4800_defconfig
-@@ -0,0 +1,19 @@
-+BR2_arm=y
-+BR2_cortex_a8=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/technologic/ts4800/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.3"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(TOPDIR)/board/technologic/ts4800/linux.fragment"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx51-ts4800"
-+BR2_PACKAGE_BUSYBOX_WATCHDOG=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_TS4800_MBRBOOT=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="ts4800"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
--- 
-1.9.1
+ # Debug logging
+ NGINX_CONF_OPTS += $(if $(BR2_PACKAGE_NGINX_DEBUG),--with-debug)
+ 
