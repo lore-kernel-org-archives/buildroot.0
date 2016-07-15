@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jul 2016 13:00:56 +0200
-Subject: [Buildroot] [git commit] package/chrony: fix systemd service
-Message-ID: <20160715110247.D4EAD82231@busybox.osuosl.org>
+Date: Fri, 15 Jul 2016 13:07:25 +0200
+Subject: [Buildroot] [PATCH] package/weston: Add demo clients install
+ option
+In-Reply-To: <1468579851-415-1-git-send-email-xerpi.g.12@gmail.com>
+References: <1468579851-415-1-git-send-email-xerpi.g.12@gmail.com>
+Message-ID: <20160715130725.05e0af71@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ce32aa271fd7e9e72bbef6119be038e834c677a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes the systemd service, the binary is located at /usr/sbin not
-/usr/bin.
+On Fri, 15 Jul 2016 12:50:51 +0200, Sergi Granell wrote:
+> ---
+>  package/weston/Config.in | 3 +++
+>  package/weston/weston.mk | 6 ++++++
+>  2 files changed, 9 insertions(+)
+> 
+> diff --git a/package/weston/Config.in b/package/weston/Config.in
+> index 0812279..9349317 100644
+> --- a/package/weston/Config.in
+> +++ b/package/weston/Config.in
+> @@ -104,4 +104,7 @@ config BR2_PACKAGE_WESTON_XWAYLAND
+>  comment "XWayland support needs libepoxy and X.org enabled"
+>  	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
+>  
+> +config BR2_PACKAGE_WESTON_DEMO_CLIENTS
+> +	bool "demo clients"
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/chrony/chrony.service | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The patch looks good, but could you send an updated version with some
+help text for this option?
 
-diff --git a/package/chrony/chrony.service b/package/chrony/chrony.service
-index 6000fce..325b63c 100644
---- a/package/chrony/chrony.service
-+++ b/package/chrony/chrony.service
-@@ -4,7 +4,7 @@ After=syslog.target network.target
- Conflicts=systemd-timesyncd.service
- 
- [Service]
--ExecStart=/usr/bin/chronyd -n
-+ExecStart=/usr/sbin/chronyd -n
- Restart=always
- 
- [Install]
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
