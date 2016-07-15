@@ -1,35 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jul 2016 15:04:22 +0200
-Subject: [Buildroot] [PATCH 2/3] package/rt-tests: bump to 1.0
-In-Reply-To: <1468522869-3887-2-git-send-email-romain.naour@gmail.com>
-References: <1468522869-3887-1-git-send-email-romain.naour@gmail.com>
- <1468522869-3887-2-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160715150422.5da4a111@free-electrons.com>
+From: Sergi Granell <xerpi.g.12@gmail.com>
+Date: Fri, 15 Jul 2016 15:07:52 +0200
+Subject: [Buildroot] [PATCH v2] package/weston: Add demo clients install
+	option
+Message-ID: <1468588072-19866-1-git-send-email-xerpi.g.12@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Sergi Granell <xerpi.g.12@gmail.com>
+---
+ package/weston/Config.in | 5 +++++
+ package/weston/weston.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-One quick comment on this patch.
-
-On Thu, 14 Jul 2016 21:01:08 +0200, Romain Naour wrote:
-
-> +Subject: [PATCH 1/2] Fix various minor issues with rt-tests build system
-
-> +Subject: [PATCH 2/2] Fix a build issue with uClibc-ng
-
-Please use "git format-patch -N" when generating patches for Buildroot
-packages, in order to avoid the 1/2 and 2/2 specifications. These
-specifications very quickly get wrong when we add or remove patches, so
-we prefer not to have them.
-
-Thanks,
-
-Thomas
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 0812279..c1eb7da 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -104,4 +104,9 @@ config BR2_PACKAGE_WESTON_XWAYLAND
+ comment "XWayland support needs libepoxy and X.org enabled"
+ 	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
+ 
++config BR2_PACKAGE_WESTON_DEMO_CLIENTS
++	bool "demo clients"
++	help
++	  This enables the installation of Weston's demo clients.
++
+ endif
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index dfcb9ac..0ad91ab 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -142,4 +142,10 @@ else
+ WESTON_CONF_OPTS += --disable-junit-xml
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
++WESTON_CONF_OPTS += --enable-demo-clients-install
++lse
++WESTON_CONF_OPTS += --disable-demo-clients-install
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
