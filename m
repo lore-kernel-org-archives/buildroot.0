@@ -1,152 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jul 2016 10:11:40 +0200
-Subject: [Buildroot] [git commit] openblas: fix build failure for MIPS n32
-Message-ID: <20160715081157.3967C82231@busybox.osuosl.org>
+Date: Fri, 15 Jul 2016 10:12:08 +0200
+Subject: [Buildroot] [PATCH] openblas: fix build failure for MIPS n32
+In-Reply-To: <1468515652-63841-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1468515652-63841-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160715101208.5201eee7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=151cc4fdcb3c9dfe646a6881ebdc0da157b58a25
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Support for n32 ABI in OpenBLAS is not complete. Adding a patch to fix
-this problem.
+On Thu, 14 Jul 2016 18:00:52 +0100, Vicente Olivert Riera wrote:
+> Support for n32 ABI in OpenBLAS is not complete. Adding a patch to fix
+> this problem.
+> 
+> This patch has been sent upstream as a pull request:
+> 
+>   https://github.com/xianyi/OpenBLAS/pull/926
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/1e8/1e8506a0d7b4fe1b773535f7d23ca422c03f9770/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  .../0001-Complete-support-for-MIPS-n32-ABI.patch   | 116 +++++++++++++++++++++
+>  1 file changed, 116 insertions(+)
+>  create mode 100644 package/openblas/0001-Complete-support-for-MIPS-n32-ABI.patch
 
-This patch has been sent upstream as a pull request:
+Applied to master, thanks.
 
-  https://github.com/xianyi/OpenBLAS/pull/926
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/1e8/1e8506a0d7b4fe1b773535f7d23ca422c03f9770/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0001-Complete-support-for-MIPS-n32-ABI.patch   | 116 +++++++++++++++++++++
- 1 file changed, 116 insertions(+)
-
-diff --git a/package/openblas/0001-Complete-support-for-MIPS-n32-ABI.patch b/package/openblas/0001-Complete-support-for-MIPS-n32-ABI.patch
-new file mode 100644
-index 0000000..6e6c5a6
---- /dev/null
-+++ b/package/openblas/0001-Complete-support-for-MIPS-n32-ABI.patch
-@@ -0,0 +1,116 @@
-+From 7f28cd1f88145a701e5dbbf50558bb65fce79f61 Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Thu, 14 Jul 2016 17:20:51 +0100
-+Subject: [PATCH] Complete support for MIPS n32 ABI
-+
-+Pull request: https://github.com/xianyi/OpenBLAS/pull/926
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+---
-+ Makefile.system | 27 +++++++++------------------
-+ c_check         |  9 +++++++--
-+ f_check         |  7 ++++++-
-+ 3 files changed, 22 insertions(+), 21 deletions(-)
-+
-+diff --git a/Makefile.system b/Makefile.system
-+index 24a7a64..bbcdb82 100644
-+--- a/Makefile.system
-++++ b/Makefile.system
-+@@ -502,13 +502,16 @@ endif
-+ 
-+ ifdef NO_BINARY_MODE
-+ 
-+-ifeq ($(ARCH), $(filter $(ARCH),mips64 mips))
-++ifeq ($(ARCH), $(filter $(ARCH),mips64))
-+ ifdef BINARY64
-+ CCOMMON_OPT += -mabi=64
-+ else
-+-CCOMMON_OPT += -mabi=32
-++CCOMMON_OPT += -mabi=n32
-+ endif
-+ BINARY_DEFINED = 1
-++else ifeq ($(ARCH), $(filter $(ARCH),mips))
-++CCOMMON_OPT += -mabi=32
-++BINARY_DEFINED = 1
-+ endif
-+ 
-+ ifeq ($(CORE), LOONGSON3A)
-+@@ -599,12 +602,14 @@ ifneq ($(NO_LAPACK), 1)
-+ EXTRALIB += -lgfortran
-+ endif
-+ ifdef NO_BINARY_MODE
-+-ifeq ($(ARCH), $(filter $(ARCH),mips64 mips))
-++ifeq ($(ARCH), $(filter $(ARCH),mips64))
-+ ifdef BINARY64
-+ FCOMMON_OPT += -mabi=64
-+ else
-+-FCOMMON_OPT += -mabi=32
-++FCOMMON_OPT += -mabi=n32
-+ endif
-++else ifeq ($(ARCH), $(filter $(ARCH),mips))
-++FCOMMON_OPT += -mabi=32
-+ endif
-+ else
-+ ifdef BINARY64
-+@@ -688,20 +693,6 @@ endif
-+ endif
-+ endif
-+ 
-+-ifeq ($(filter $(ARCH),mips64 mips))
-+-ifndef BINARY64
-+-FCOMMON_OPT += -m32
-+-else
-+-FCOMMON_OPT += -m64
-+-endif
-+-else
-+-ifdef BINARY64
-+-FCOMMON_OPT += -mabi=64
-+-else
-+-FCOMMON_OPT += -mabi=32
-+-endif
-+-endif
-+-
-+ ifeq ($(USE_OPENMP), 1)
-+ FCOMMON_OPT += -mp
-+ endif
-+diff --git a/c_check b/c_check
-+index 50ff360..9f457df 100644
-+--- a/c_check
-++++ b/c_check
-+@@ -79,8 +79,13 @@ if ($os eq "AIX") {
-+     $defined = 1;
-+ }
-+ 
-+-if (($architecture eq "mips") || ($architecture eq "mips64")) {
-+-    $compiler_name .= " -mabi=32" if ($binary eq "32");
-++if ($architecture eq "mips") {
-++    $compiler_name .= " -mabi=32";
-++    $defined = 1;
-++}
-++
-++if ($architecture eq "mips64") {
-++    $compiler_name .= " -mabi=n32" if ($binary eq "32");
-+     $compiler_name .= " -mabi=64" if ($binary eq "64");
-+     $defined = 1;
-+ }
-+diff --git a/f_check b/f_check
-+index 4c03ac7..3520e8b 100644
-+--- a/f_check
-++++ b/f_check
-+@@ -223,7 +223,12 @@ if (!$?) {
-+ 	}
-+        #For gfortran MIPS
-+ 	if ($?) {
-+-	    $link = `$compiler $openmp -mabi=32 -v ftest2.f 2>&1 && rm -f a.out a.exe`;
-++            $mips_data = `$compiler_bin -E -dM - < /dev/null`;
-++            if ($mips_data =~ /_MIPS_ISA_MIPS64/) {
-++	        $link = `$compiler $openmp -mabi=n32 -v ftest2.f 2>&1 && rm -f a.out a.exe`;
-++	    } else {
-++	        $link = `$compiler $openmp -mabi=32 -v ftest2.f 2>&1 && rm -f a.out a.exe`;
-++	    }
-+ 	}
-+ 	$binary = "" if ($?);
-+     }
-+-- 
-+2.7.3
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
