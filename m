@@ -1,71 +1,31 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 Jul 2016 14:34:26 +0200
-Subject: [Buildroot] [PATCH] package/weston: Add demo clients install
- option
-In-Reply-To: <1468581820-9927-1-git-send-email-xerpi.g.12@gmail.com>
-References: <1468581820-9927-1-git-send-email-xerpi.g.12@gmail.com>
-Message-ID: <20160715123426.GB3692@free.fr>
+Date: Fri, 15 Jul 2016 14:43:26 +0200
+Subject: [Buildroot] [PATCH] package/libgpg-error: disable tests
+Message-ID: <1468586606-31578-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergi, All,
+Tests are not usefull on an embedded device.
 
-On 2016-07-15 13:23 +0200, Sergi Granell spake thusly:
-> ---
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/libgpg-error/libgpg-error.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-You forgot to sign-off your patch.
-
-Regards,
-Yann E. MORIN.
-
->  package/weston/Config.in | 5 +++++
->  package/weston/weston.mk | 6 ++++++
->  2 files changed, 11 insertions(+)
-> 
-> diff --git a/package/weston/Config.in b/package/weston/Config.in
-> index 0812279..c1eb7da 100644
-> --- a/package/weston/Config.in
-> +++ b/package/weston/Config.in
-> @@ -104,4 +104,9 @@ config BR2_PACKAGE_WESTON_XWAYLAND
->  comment "XWayland support needs libepoxy and X.org enabled"
->  	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
->  
-> +config BR2_PACKAGE_WESTON_DEMO_CLIENTS
-> +	bool "demo clients"
-> +	help
-> +	  This enables the installation of Weston's demo clients.
-> +
->  endif
-> diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-> index dfcb9ac..31c9281 100644
-> --- a/package/weston/weston.mk
-> +++ b/package/weston/weston.mk
-> @@ -142,4 +142,10 @@ else
->  WESTON_CONF_OPTS += --disable-junit-xml
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
-> +WESTON_CONF_OPTS += --enable-demo-clients-install
-> +else
-> +WESTON_CONF_OPTS += --disable-demo-clients-install
-> +endif
-> +
->  $(eval $(autotools-package))
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 4acd32c..e081b36 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -18,4 +18,6 @@ define LIBGPG_ERROR_FIX_CROSS_COMPILATION
+ endef
+ LIBGPG_ERROR_PRE_CONFIGURE_HOOKS += LIBGPG_ERROR_FIX_CROSS_COMPILATION
+ 
++LIBGPG_ERROR_CONF_OPTS = --disable-tests
++
+ $(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
