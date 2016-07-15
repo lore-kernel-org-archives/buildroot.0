@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jul 2016 15:03:25 +0200
-Subject: [Buildroot] [PATCH 1/3] package/rt-tests: switch to the
- upstream repository
-In-Reply-To: <1468522869-3887-1-git-send-email-romain.naour@gmail.com>
+Date: Fri, 15 Jul 2016 15:04:22 +0200
+Subject: [Buildroot] [PATCH 2/3] package/rt-tests: bump to 1.0
+In-Reply-To: <1468522869-3887-2-git-send-email-romain.naour@gmail.com>
 References: <1468522869-3887-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160715150325.5cff9584@free-electrons.com>
+ <1468522869-3887-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160715150422.5da4a111@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 14 Jul 2016 21:01:07 +0200, Romain Naour wrote:
-> rt-tests is not maintained from Clark Williams's repository anymore.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> We missed some rt-tests release (v0.90 to v1.0).
-> Since v0.92 a release tarball is available at
-> https://www.kernel.org/pub/linux/utils/rt-tests so we
-> no longer need to clone the git repository.
-> ---
->  package/rt-tests/rt-tests.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+One quick comment on this patch.
 
-Series applied, thanks!
+On Thu, 14 Jul 2016 21:01:08 +0200, Romain Naour wrote:
+
+> +Subject: [PATCH 1/2] Fix various minor issues with rt-tests build system
+
+> +Subject: [PATCH 2/2] Fix a build issue with uClibc-ng
+
+Please use "git format-patch -N" when generating patches for Buildroot
+packages, in order to avoid the 1/2 and 2/2 specifications. These
+specifications very quickly get wrong when we add or remove patches, so
+we prefer not to have them.
+
+Thanks,
 
 Thomas
 -- 
