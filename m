@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jul 2016 14:29:30 +0200
-Subject: [Buildroot] [git commit] libgpg-error: bump version to 1.24
-Message-ID: <20160715122955.D01D082257@busybox.osuosl.org>
+Date: Fri, 15 Jul 2016 14:29:43 +0200
+Subject: [Buildroot] [git commit] libassuan: bump version to 2.4.3
+Message-ID: <20160715122956.1604F82258@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=accdb421dba9c5c6714d1a1821faa8a706759d1f
+commit: https://git.buildroot.net/buildroot/commit/?id=678102e4f46a149e668aac0167534f53b1cd8643
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgpg-error/libgpg-error.hash | 2 +-
- package/libgpg-error/libgpg-error.mk   | 2 +-
+ package/libassuan/libassuan.hash | 2 +-
+ package/libassuan/libassuan.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
-index 7e06b91..85d433d 100644
---- a/package/libgpg-error/libgpg-error.hash
-+++ b/package/libgpg-error/libgpg-error.hash
+diff --git a/package/libassuan/libassuan.hash b/package/libassuan/libassuan.hash
+index a019f76..01ade11 100644
+--- a/package/libassuan/libassuan.hash
++++ b/package/libassuan/libassuan.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	0939cd4bd9bc027ae24a8b05a698af962b5af3d7a34c1fea15279ea69ea27abc	libgpg-error-1.23.tar.gz
-+sha256 88cb2d2370f8378fd38452b99dc1419a80fd5897739b7198a4a7996364507803  libgpg-error-1.24.tar.gz
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index b074ff6..4acd32c 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  c21b86482f6a3624c2b46b91e20f8415f244233a  libassuan-2.2.1.tar.bz2
++sha1 27391cf4a820b5350ea789c30661830c9a271518  libassuan-2.4.3.tar.bz2
+diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
+index 3656ea5..c4d2e4f 100644
+--- a/package/libassuan/libassuan.mk
++++ b/package/libassuan/libassuan.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGPG_ERROR_VERSION = 1.23
-+LIBGPG_ERROR_VERSION = 1.24
- LIBGPG_ERROR_SITE = ftp://ftp.gnupg.org/gcrypt/libgpg-error
- LIBGPG_ERROR_LICENSE = GPLv2+, LGPLv2.1+
- LIBGPG_ERROR_LICENSE_FILES = COPYING COPYING.LIB
+-LIBASSUAN_VERSION = 2.2.1
++LIBASSUAN_VERSION = 2.4.3
+ LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan
+ LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
+ LIBASSUAN_LICENSE = LGPLv2.1+ (library), GPLv3 (tests, doc)
