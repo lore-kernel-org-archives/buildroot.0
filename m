@@ -1,39 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jul 2016 20:32:48 +0200
-Subject: [Buildroot] [git commit] libgudev: remove incorrect Config.in help
-	text information
-Message-ID: <20160715183413.A9D2782258@busybox.osuosl.org>
+Date: Fri, 15 Jul 2016 19:40:10 +0200
+Subject: [Buildroot] [git commit] package/eudev: fix configure options
+Message-ID: <20160715183413.8B9227FC6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d925b39a4082a17cd8c7711eb942488da66ec33f
+commit: https://git.buildroot.net/buildroot/commit/?id=df8525530f004c52c602031800c9242b49e6b5a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libgudev indeed used to be provided directly by eudev, but it's no
-longer the case since eudev 3.1.3, and this has been already taken
-into account in Buildroot in commit
-6cfa5de33e71b46e9ae668550dc77aacabbde663. We simply forgot to update
-the comment.
+--enable-libkmod does not exist, but there's --enable-kmod.
 
+Also, add --enable-blkid to the list of options, since we already depend
+on it (from util-linux).
+
+Also do not align \ for line continuations.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgudev/Config.in | 3 ---
- 1 file changed, 3 deletions(-)
+ package/eudev/eudev.mk | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/libgudev/Config.in b/package/libgudev/Config.in
-index ecaacf5..21606ac 100644
---- a/package/libgudev/Config.in
-+++ b/package/libgudev/Config.in
-@@ -11,9 +11,6 @@ config BR2_PACKAGE_LIBGUDEV
- 	  It's now a project on its own. Required for building some
- 	  programs that use udev, when using systemd.
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index e3d3d63..0fe96e8 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -14,13 +14,14 @@ EUDEV_INSTALL_STAGING = YES
+ # mq_getattr is in librt
+ EUDEV_CONF_ENV += LIBS=-lrt
  
--	  When systemd is not used, libgudev is directly provided by
--	  eudev.
--
- 	  https://wiki.gnome.org/Projects/libgudev
+-EUDEV_CONF_OPTS =		\
+-	--disable-manpages	\
+-	--sbindir=/sbin		\
+-	--libexecdir=/lib	\
+-	--with-firmware-path=/lib/firmware	\
+-	--disable-introspection			\
+-	--enable-libkmod
++EUDEV_CONF_OPTS = \
++	--disable-manpages \
++	--sbindir=/sbin \
++	--libexecdir=/lib \
++	--with-firmware-path=/lib/firmware \
++	--disable-introspection \
++	--enable-kmod \
++	--enable-blkid
  
- comment "libgudev needs udev /dev handling and a toolchain w/ wchar, threads"
+ EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
+ EUDEV_PROVIDES = udev
