@@ -1,45 +1,44 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 15 Jul 2016 11:08:42 +0100
-Subject: [Buildroot] [PATCH 2/3] libgcrypt: bump version to 1.7.2
-In-Reply-To: <1468577323-2248-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1468577323-2248-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1468577323-2248-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Sergi Granell <xerpi.g.12@gmail.com>
+Date: Fri, 15 Jul 2016 12:50:51 +0200
+Subject: [Buildroot] [PATCH] package/weston: Add demo clients install option
+Message-ID: <1468579851-415-1-git-send-email-xerpi.g.12@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/libgcrypt/libgcrypt.hash | 6 +++---
- package/libgcrypt/libgcrypt.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/weston/Config.in | 3 +++
+ package/weston/weston.mk | 6 ++++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 272d332..63148d4 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,4 +1,4 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2016q1/000384.html
--sha1	c3a5a13e717f7b3e3895650afc1b6e0d3fe9c726	libgcrypt-1.6.5.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2016q3/000392.html
-+sha1 85a6a936bcab4c3c05f5efbf6ce847f23d35c0c4  libgcrypt-1.7.2.tar.bz2
- # Calculated based on the hash above
--sha256	f49ebc5842d455ae7019def33eb5a014a0f07a2a8353dc3aa50a76fd1dafa924	libgcrypt-1.6.5.tar.bz2
-+sha256 3d35df906d6eab354504c05d749a9b021944cb29ff5f65c8ef9c3dd5f7b6689f  libgcrypt-1.7.2.tar.bz2
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 7c27a22..5eb54a4 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 0812279..9349317 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -104,4 +104,7 @@ config BR2_PACKAGE_WESTON_XWAYLAND
+ comment "XWayland support needs libepoxy and X.org enabled"
+ 	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
  
--LIBGCRYPT_VERSION = 1.6.5
-+LIBGCRYPT_VERSION = 1.7.2
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPLv2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
++config BR2_PACKAGE_WESTON_DEMO_CLIENTS
++	bool "demo clients"
++
+ endif
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index dfcb9ac..31c9281 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -142,4 +142,10 @@ else
+ WESTON_CONF_OPTS += --disable-junit-xml
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
++WESTON_CONF_OPTS += --enable-demo-clients-install
++else
++WESTON_CONF_OPTS += --disable-demo-clients-install
++endif
++
+ $(eval $(autotools-package))
 -- 
-2.7.3
+2.7.4
