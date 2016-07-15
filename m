@@ -1,88 +1,153 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jul 2016 09:52:26 +0200
-Subject: [Buildroot] [git commit] Revert "cmake: bump version to 3.6.0"
-Message-ID: <20160715075258.D5E3982231@busybox.osuosl.org>
+Date: Fri, 15 Jul 2016 09:53:47 +0200
+Subject: [Buildroot] [git commit] package/swupdate: bump to version 2016.07
+Message-ID: <20160715075353.EB6FC82231@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8428dbd88e1531abf0628f3308c234bcf28e9921
+commit: https://git.buildroot.net/buildroot/commit/?id=91e0a02e9ec02913aec1aa78b54e9725bc07074d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit b6ff742ca0d8b2901036d3ad03fe60c6b2a7725f.
+* Remove fetching upstream patch to fix build without MTD support
+* Update .config
+* Update help text as SSL support is now needed for other features
+  than the webserver too
 
-This bump causes numerous build failures, so Vicente and Yann proposed
-to revert it.
-
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cmake/0001-rename_cmake_rootfile.patch | 27 +++++++++++---------------
- package/cmake/cmake.hash                       |  4 ++--
- package/cmake/cmake.mk                         |  4 ++--
- 3 files changed, 15 insertions(+), 20 deletions(-)
+ package/swupdate/Config.in       |  3 +--
+ package/swupdate/swupdate.config | 43 ++++++++++------------------------------
+ package/swupdate/swupdate.hash   |  3 +--
+ package/swupdate/swupdate.mk     |  5 +----
+ 4 files changed, 13 insertions(+), 41 deletions(-)
 
-diff --git a/package/cmake/0001-rename_cmake_rootfile.patch b/package/cmake/0001-rename_cmake_rootfile.patch
-index 3169f16..915b7e3 100644
---- a/package/cmake/0001-rename_cmake_rootfile.patch
-+++ b/package/cmake/0001-rename_cmake_rootfile.patch
-@@ -6,23 +6,18 @@ This buildroot-specific patch makes sure ctest looks also for
- "Modules/CMake.cmake.ctest" before complaining
+diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
+index 1d14a7c..5f5e1e7 100644
+--- a/package/swupdate/Config.in
++++ b/package/swupdate/Config.in
+@@ -20,8 +20,7 @@ config BR2_PACKAGE_SWUPDATE
  
- Signed-off-by: Davide Viti <zinosat@tiscali.it>
--[Vincent: tweak patch for 3.6.0]
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ 	  * Select BR2_PACKAGE_LUA if you want to have Lua support.
+ 	  * Select BR2_LIBCURL if you want to use the download feature.
+-	  * Select BR2_PACKAGE_OPENSSL is you want to add encryptions support
+-	    to the webserver.
++	  * Select BR2_PACKAGE_OPENSSL is you want to add encryption support.
+ 	  * Select BR2_PACKAGE_MTD if you want to use swupdate with UBI
+ 	    partitions.
+ 	  * Select BR2_PACKAGE_ZLIB if you want to deal with gzip compressed
+diff --git a/package/swupdate/swupdate.config b/package/swupdate/swupdate.config
+index b5180ee..51869bb 100644
+--- a/package/swupdate/swupdate.config
++++ b/package/swupdate/swupdate.config
+@@ -14,14 +14,8 @@ CONFIG_HAVE_DOT_CONFIG=y
+ CONFIG_SCRIPTS=y
+ # CONFIG_HW_COMPATIBILITY is not set
+ CONFIG_SW_VERSIONS_FILE="/etc/sw-versions"
+-
+-#
+-# MTD support needs libmtd
+-#
+-
+-#
+-# Lua support needs a Lua interpreter
+-#
++# CONFIG_MTD is not set
++# CONFIG_LUA is not set
+ # CONFIG_FEATURE_SYSLOG is not set
  
--diff -rup a/Source/cmake.cxx b/Source/cmake.cxx
----- a/Source/cmake.cxx	2016-07-07 15:47:27.000000000 +0100
--+++ b/Source/cmake.cxx	2016-07-14 10:14:59.914265515 +0100
--@@ -771,7 +771,12 @@ int cmake::AddCMakePaths()
--                       "Path to cpack program executable.", cmState::INTERNAL);
-+--- cmake-3.0.2/Source/cmake.cxx~	2014-09-11 15:24:01.000000000 +0200
-++++ cmake-3.0.2/Source/cmake.cxx	2014-11-25 15:48:04.461033690 +0100
-+@@ -957,7 +957,10 @@
-+      "Path to cpack program executable.", cmCacheManager::INTERNAL);
-  #endif
--   if (!cmSystemTools::FileExists(
---        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake").c_str())) {
--+        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake").c_str()) &&
--+	!cmSystemTools::FileExists(
--+	  (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake.ctest").c_str()
--+        )
-+   if(!cmSystemTools::FileExists(
-+-       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()))
-++       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()) &&
-++     !cmSystemTools::FileExists(
-++       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake.ctest").c_str())
- +     )
--+  {
-+     {
-      // couldn't find modules
--     cmSystemTools::Error(
--       "Could not find CMAKE_ROOT !!!\n"
-+     cmSystemTools::Error("Could not find CMAKE_ROOT !!!\n"
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index 7cd1133..e40d4ea 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
-@@ -1,2 +1,2 @@
--# From http://www.cmake.org/files/v3.6/cmake-3.6.0-SHA-256.txt
--sha256 fd05ed40cc40ef9ef99fac7b0ece2e0b871858a82feade48546f5d2940147670  cmake-3.6.0.tar.gz
-+# From http://www.cmake.org/files/v3.5/cmake-3.5.2-SHA-256.txt
-+sha256	92d8410d3d981bb881dfff2aed466da55a58d34c7390d50449aa59b32bb5e62a	cmake-3.5.2.tar.gz
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 25eafe8..7a80c1b 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -4,8 +4,8 @@
+ #
+@@ -40,10 +34,9 @@ CONFIG_EXTRA_LDLIBS=""
+ # CONFIG_DEBUG is not set
+ # CONFIG_WERROR is not set
+ # CONFIG_NOCLEANUP is not set
+-
+-#
+-# Image downloading support needs libcurl
+-#
++# CONFIG_DOWNLOAD is not set
++# CONFIG_SIGNED_IMAGES is not set
++# CONFIG_SURICATTA is not set
+ CONFIG_WEBSERVER=y
+ 
+ #
+@@ -55,41 +48,25 @@ CONFIG_MONGOOSE=y
+ # Mongoose Feature
+ #
+ CONFIG_MONGOOSEIPV6=y
+-
+-#
+-# SSL support needs libcrypto, libssl
+-#
++# CONFIG_MONGOOSESSL is not set
+ 
+ #
+ # Archival Features
+ #
+-CONFIG_CPIO=y
+-
+-#
+-# gunzip support needs libz
+-#
++# CONFIG_GUNZIP is not set
+ 
+ #
+ # Parser Features
+ #
+ CONFIG_LIBCONFIG=y
+ CONFIG_LIBCONFIGROOT=""
+-
+-#
+-# JSON config parser support needs json-c
+-#
++# CONFIG_JSON is not set
+ # CONFIG_SETSWDESCRIPTION is not set
+ 
+ #
+ # Image Handlers
+ #
+-
+-#
+-# ubivol support needs libubi
+-#
+ CONFIG_RAW=y
+ # CONFIG_SHELLSCRIPTHANDLER is not set
+-
+-#
+-# uboot support needs libz
+-#
++# CONFIG_ARCHIVE is not set
++# CONFIG_UBOOT is not set
+\ No newline at end of file
+diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
+index 70299a9..918ca2f 100644
+--- a/package/swupdate/swupdate.hash
++++ b/package/swupdate/swupdate.hash
+@@ -1,3 +1,2 @@
+ # Locally calculated
+-sha256  534342ecb89e004edf641945afb49ae185e2599fd93dbcba8dbf1ba77e507f46  swupdate-2016.04.tar.gz
+-sha256  089393b0c8aec626078bc66f759474fa3d1bb7c48c7ae3c493d981514248fed5  69c0e66994f01ce1bf2299fbce86aee7a1baa37b.patch
++sha256  c21d2fd52eb7ed9c304a7a996d230a8f1b47b9879a8c9fa50c80b41e117d1e60  swupdate-2016.07.tar.gz
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index f49cbaa..313a54f 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -4,14 +4,11 @@
  #
  ################################################################################
  
--CMAKE_VERSION_MAJOR = 3.6
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
-+CMAKE_VERSION_MAJOR = 3.5
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
+-SWUPDATE_VERSION = 2016.04
++SWUPDATE_VERSION = 2016.07
+ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+ SWUPDATE_LICENSE = GPLv2+, MIT, Public Domain
+ SWUPDATE_LICENSE_FILES = COPYING
+ 
+-# Upstream patch to fix build without MTD support
+-SWUPDATE_PATCH = https://github.com/sbabic/swupdate/commit/69c0e66994f01ce1bf2299fbce86aee7a1baa37b.patch
+-
+ # swupdate bundles its own version of mongoose (version 3.8)
+ 
+ ifeq ($(BR2_PACKAGE_JSON_C),y)
