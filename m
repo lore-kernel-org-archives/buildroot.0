@@ -1,8 +1,8 @@
 From: Sergi Granell <xerpi.g.12@gmail.com>
-Date: Fri, 15 Jul 2016 15:07:52 +0200
-Subject: [Buildroot] [PATCH v2] package/weston: Add demo clients install
+Date: Fri, 15 Jul 2016 15:14:09 +0200
+Subject: [Buildroot] [PATCH v3] package/weston: Add demo clients install
 	option
-Message-ID: <1468588072-19866-1-git-send-email-xerpi.g.12@gmail.com>
+Message-ID: <1468588449-20390-1-git-send-email-xerpi.g.12@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -30,7 +30,7 @@ index 0812279..c1eb7da 100644
 +
  endif
 diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index dfcb9ac..0ad91ab 100644
+index dfcb9ac..31c9281 100644
 --- a/package/weston/weston.mk
 +++ b/package/weston/weston.mk
 @@ -142,4 +142,10 @@ else
@@ -39,7 +39,7 @@ index dfcb9ac..0ad91ab 100644
  
 +ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
 +WESTON_CONF_OPTS += --enable-demo-clients-install
-+lse
++else
 +WESTON_CONF_OPTS += --disable-demo-clients-install
 +endif
 +
