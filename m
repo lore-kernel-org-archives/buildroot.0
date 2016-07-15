@@ -1,105 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jul 2016 22:56:11 +0200
-Subject: [Buildroot] [v3 1/1] package/nginx: Add naxsi module option.
-In-Reply-To: <1468604712-1264-1-git-send-email-aduskett@codeblue.com>
-References: <1468604712-1264-1-git-send-email-aduskett@codeblue.com>
-Message-ID: <20160715225611.434ecec8@free-electrons.com>
+Date: Fri, 15 Jul 2016 23:15:12 +0200
+Subject: [Buildroot] [git commit] boot: add ts4800-mbrboot package
+Message-ID: <20160715211559.5383182257@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d42ec02282225490257c1da26ec306198afe193c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 15 Jul 2016 13:45:12 -0400, Adam Duskett wrote:
-> Naxsi is a third party nginx module reads a small subset of simple rules
-> containing a list of known patterns involved in website vulnerabilities.
-> This module behaves like a DROP-by-default firewall for nginx.
-> 
-> The reason for the changes to the make file was because naxsi is listed
-> on github, and even though there is a option to specify a url for a 3rd party
-> module, this option only seems to work for a local file url.
-> 
-> As such a new comment was added to the menu for external modules, and a new
-> package that downloads and extracts the module was added under
-> package/nginx-naxsi.  This is then used with a pre-configure hook to create
-> a soft symbolic link to the source inside of the nginx-source tree.
-> 
-> Signed-off-by: Adam Duskett <aduskett@codeblue.com>
+This MBR routine is based on TS' original bootloader.  It is loaded by
+the bootrom stored in the companion FPGA, and chainloads an executable
+located at the beginning of the first non-fs (0xda) partition.
 
-I've applied, after doing a number of changes. First of all, your
-commit log was wrong: you're no longer doing a pre-configure hook and a
-symbolic link. See below for more issues.
+Signed-off-by: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+[Thomas:
+ - add hash file.
+ - install image in INSTALL_IMAGES_CMDS instead of
+   INSTALL_TARGET_CMDS.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/Config.in                          |  1 +
+ boot/ts4800-mbrboot/Config.in           |  7 +++++++
+ boot/ts4800-mbrboot/ts4800-mbrboot.hash |  2 ++
+ boot/ts4800-mbrboot/ts4800-mbrboot.mk   | 21 +++++++++++++++++++++
+ 4 files changed, 31 insertions(+)
 
-> diff --git a/package/nginx-naxsi/Config.in b/package/nginx-naxsi/Config.in
-> new file mode 100644
-> index 0000000..bdcd16d
-> --- /dev/null
-> +++ b/package/nginx-naxsi/Config.in
-> @@ -0,0 +1,5 @@
-> +config BR2_PACKAGE_NGINX_NAXSI
-> +	bool "ngx_http_naxsi_module"
-
-Changed to:
-
-	bool "nginx-naxsi"
-
-> +	help
-> +	  Enable ngx_http_naxsi_module
-
-This is really short, I've replaced with some more details copy/pasted
-from the Github description.
-
-Also, there should have been one empty line between the description and
-the upstream URL below.
-
-> +	  https://github.com/nbs-system/naxsi
-> diff --git a/package/nginx-naxsi/nginx-naxsi.mk b/package/nginx-naxsi/nginx-naxsi.mk
-> new file mode 100644
-> index 0000000..6949f30
-> --- /dev/null
-> +++ b/package/nginx-naxsi/nginx-naxsi.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# nginx-naxsi
-> +#
-> +################################################################################
-> +
-> +NGINX_NAXSI_VERSION = 0.54
-> +NGINX_NAXSI_SOURCE = $(NGINX_NAXSI_VERSION).tar.gz
-
-Wrong for packages fetched from Github.
-
-> +NGINX_NAXSI_SITE = $(call github,nbs-system,naxsi,$(NGINX_NAXSI_SOURCE))
-
-Last argument should have been NGINX_NAXSI_VERSION
-
-> +NGINX_NAXSI_LICENSE = GPLv3
-
-The license as indicated by the source code is "GPLv2+ with OpenSSL
-exception". I know there is a LICENSE file in the latest master that
-indicates GPLv3, but this LICENSE file is not in the 0.54 tag we're
-currently packaging. It would be good to report upstream a bug to tell
-the maintainer about the discrepancy between the LICENSE file (GPLv3)
-and the source code itself (GPLv2+ with OpenSSL exception).
-
-> +NGINX_NAXSI_LICENSE_FILES = LICENSE
-
-This file does not exist in 0.54. Please test with "make legal-info"
-when you create a new package, to make sure the legal information files
-actually exist.
-
-> +comment "external modules"
-> +	source "package/nginx-naxsi/Config.in"
-
-I've moved this to package/Config.in.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/boot/Config.in b/boot/Config.in
+index cd10cd8..677e5f0 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -13,6 +13,7 @@ source "boot/lpc32xxcdl/Config.in"
+ source "boot/mxs-bootlets/Config.in"
+ source "boot/s500-bootloader/Config.in"
+ source "boot/syslinux/Config.in"
++source "boot/ts4800-mbrboot/Config.in"
+ source "boot/uboot/Config.in"
+ source "boot/xloader/Config.in"
+ 
+diff --git a/boot/ts4800-mbrboot/Config.in b/boot/ts4800-mbrboot/Config.in
+new file mode 100644
+index 0000000..7ed0b21
+--- /dev/null
++++ b/boot/ts4800-mbrboot/Config.in
+@@ -0,0 +1,7 @@
++config BR2_TARGET_TS4800_MBRBOOT
++	bool "ts4800-mbrboot"
++	depends on BR2_ARM_CPU_ARMV7A
++	help
++	  First level bootloader for TS4800 board
++
++	  https://github.com/embeddedarm/ts4800-mbrboot
+diff --git a/boot/ts4800-mbrboot/ts4800-mbrboot.hash b/boot/ts4800-mbrboot/ts4800-mbrboot.hash
+new file mode 100644
+index 0000000..04e7072
+--- /dev/null
++++ b/boot/ts4800-mbrboot/ts4800-mbrboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 617c70dcf50b7ad35ed3f40666ff2a9a654a5440b522ad73662abdf9f843cee9  ts4800-mbrboot-cf8f7072ed5a4a4e48fcb9841b2e31e519ec5dca.tar.gz
+diff --git a/boot/ts4800-mbrboot/ts4800-mbrboot.mk b/boot/ts4800-mbrboot/ts4800-mbrboot.mk
+new file mode 100644
+index 0000000..9862092
+--- /dev/null
++++ b/boot/ts4800-mbrboot/ts4800-mbrboot.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# ts4800-mbrboot
++#
++################################################################################
++
++TS4800_MBRBOOT_VERSION = cf8f7072ed5a4a4e48fcb9841b2e31e519ec5dca
++TS4800_MBRBOOT_SITE = $(call github,embeddedarm,ts4800-mbrboot,$(TS4800_MBRBOOT_VERSION))
++TS4800_MBRBOOT_LICENSE = BSD-2c
++TS4800_MBRBOOT_LICENSE_FILES = LICENSE
++TS4800_MBRBOOT_INSTALL_IMAGES = YES
++
++define TS4800_MBRBOOT_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define TS4800_MBRBOOT_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/mbrboot.bin $(BINARIES_DIR)/mbrboot.bin
++endef
++
++$(eval $(generic-package))
