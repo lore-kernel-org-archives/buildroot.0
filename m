@@ -1,64 +1,89 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 Jul 2016 18:03:21 +0200
-Subject: [Buildroot] [PATCH v3] package/weston: Add demo clients install
- option
-In-Reply-To: <1468588449-20390-1-git-send-email-xerpi.g.12@gmail.com>
-References: <1468588449-20390-1-git-send-email-xerpi.g.12@gmail.com>
-Message-ID: <20160715160320.GF3692@free.fr>
+Date: Fri, 15 Jul 2016 18:12:17 +0200
+Subject: [Buildroot] [PATCH v6 1/2] ts4800-mbrboot: new package
+In-Reply-To: <1468594860-14932-2-git-send-email-patrick.keroulas@savoirfairelinux.com>
+References: <1468594860-14932-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
+ <1468594860-14932-2-git-send-email-patrick.keroulas@savoirfairelinux.com>
+Message-ID: <20160715161217.GG3692@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergi, All,
+Patrick, All,
 
-On 2016-07-15 15:14 +0200, Sergi Granell spake thusly:
-> Signed-off-by: Sergi Granell <xerpi.g.12@gmail.com>
+On 2016-07-15 11:00 -0400, Patrick Keroulas spake thusly:
+> This MBR routine is based on TS' original bootloader.  It is loaded by
+> the bootrom stored in the companion FPGA, and chainloads an executable
+> located at the beginning of the first non-fs (0xda) partition.
+> 
+> Signed-off-by: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+> ---
+[--SNIP--]
+> diff --git a/package/ts4800-mbrboot/Config.in b/package/ts4800-mbrboot/Config.in
+> new file mode 100644
+> index 0000000..556b0ec
+> --- /dev/null
+> +++ b/package/ts4800-mbrboot/Config.in
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+The firmware stuff is more for firmware blobs that need to be loaded
+into a device (e.g. a WiFi dongle, and ehternet card, a GPU...);
 
-Thanks! :-)
+ts4800-mbrboot is really a bootloader, so it should probably go to boot/
+rather than package/ and be added in the bootloader menu.
+
+> @@ -0,0 +1,5 @@
+> +config BR2_PACKAGE_TS4800_MBRBOOT
+> +	bool "ts4800-mbrboot"
+> +	depends on BR2_ARM_CPU_ARMV7A
+> +	help
+> +	  This package generate the ts4800 bootloader.
+
+Please add a homepage (or if none, the github repo).
+
+> diff --git a/package/ts4800-mbrboot/ts4800-mbrboot.mk b/package/ts4800-mbrboot/ts4800-mbrboot.mk
+> new file mode 100644
+> index 0000000..825a66b
+> --- /dev/null
+> +++ b/package/ts4800-mbrboot/ts4800-mbrboot.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# ts4800-mbrboot
+> +#
+> +################################################################################
+> +
+> +TS4800_MBRBOOT_VERSION = master
+
+Don;t use 'master' as it is a moving target: today, it points to a
+specific chageset, but tomorrow it may well point to another, thus
+rendering the build non-reproducible.
+
+Please use a tag or the sha1 of a commit, like:
+
+    TS4800_MBRBOOT_VERSION = cf8f7072ed5a4a4e48fcb9841b2e31e519ec5dca
+
+Otherwise looks sane.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/weston/Config.in | 5 +++++
->  package/weston/weston.mk | 6 ++++++
->  2 files changed, 11 insertions(+)
-> 
-> diff --git a/package/weston/Config.in b/package/weston/Config.in
-> index 0812279..c1eb7da 100644
-> --- a/package/weston/Config.in
-> +++ b/package/weston/Config.in
-> @@ -104,4 +104,9 @@ config BR2_PACKAGE_WESTON_XWAYLAND
->  comment "XWayland support needs libepoxy and X.org enabled"
->  	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_LIBEPOXY
->  
-> +config BR2_PACKAGE_WESTON_DEMO_CLIENTS
-> +	bool "demo clients"
-> +	help
-> +	  This enables the installation of Weston's demo clients.
+> +TS4800_MBRBOOT_SITE = $(call github,embeddedarm,ts4800-mbrboot,$(TS4800_MBRBOOT_VERSION))
+> +TS4800_MBRBOOT_LICENSE = BSD-2c
+> +TS4800_MBRBOOT_LICENSE_FILES = LICENSE
 > +
->  endif
-> diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-> index dfcb9ac..31c9281 100644
-> --- a/package/weston/weston.mk
-> +++ b/package/weston/weston.mk
-> @@ -142,4 +142,10 @@ else
->  WESTON_CONF_OPTS += --disable-junit-xml
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
-> +WESTON_CONF_OPTS += --enable-demo-clients-install
-> +else
-> +WESTON_CONF_OPTS += --disable-demo-clients-install
-> +endif
+> +define TS4800_MBRBOOT_BUILD_CMDS
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+> +endef
 > +
->  $(eval $(autotools-package))
+> +define TS4800_MBRBOOT_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0644 $(@D)/mbrboot.bin $(BINARIES_DIR)/mbrboot.bin
+> +endef
+> +
+> +$(eval $(generic-package))
 > -- 
-> 2.7.4
+> 1.9.1
 > 
 > _______________________________________________
 > buildroot mailing list
