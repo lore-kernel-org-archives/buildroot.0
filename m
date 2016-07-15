@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 15 Jul 2016 17:54:35 +0200
-Subject: [Buildroot] [PATCH v2 1/6] support/download: Add support to
- pass options directly to downloaders
-In-Reply-To: <1468315820-9341-2-git-send-email-romain.perier@free-electrons.com>
+Date: Fri, 15 Jul 2016 17:56:44 +0200
+Subject: [Buildroot] [PATCH v2 2/6] pkg-download: Allow packages to pass
+ generic options to download methods
+In-Reply-To: <1468315820-9341-3-git-send-email-romain.perier@free-electrons.com>
 References: <1468315820-9341-1-git-send-email-romain.perier@free-electrons.com>
- <1468315820-9341-2-git-send-email-romain.perier@free-electrons.com>
-Message-ID: <20160715155435.GC3692@free.fr>
+ <1468315820-9341-3-git-send-email-romain.perier@free-electrons.com>
+Message-ID: <20160715155644.GD3692@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,219 +15,117 @@ To: buildroot@busybox.net
 Romain, All,
 
 On 2016-07-12 11:30 +0200, Romain Perier spake thusly:
-> This adds support to pass options to the underlying command that is used
-> by downloader. Useful for retrieving data with server-side checking for
-> user login or passwords, use a proxy or use specific options for cloning
-> a repository via git and hg.
+> Introduce a new package variable $(PKG)_DL_OPTS. When this variable
+> is defined, its value is passed to the downloader as options to
+> the underlying command. Packages can now retrieve archives from server
+> expecting logins and passwords, use referer url, proxy or specific
+> options for cloning a repository.
 > 
 > Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
-> ---
-[--SNIP--]
-> diff --git a/support/download/bzr b/support/download/bzr
-> index e18b01f..9443e03 100755
-> --- a/support/download/bzr
-> +++ b/support/download/bzr
-> @@ -25,6 +25,7 @@ output="${1}"
->  repo="${2}"
->  rev="${3}"
->  basename="${4}"
-> +dl_opts="${5}"
 
-With Thomas, we've recently discussed the way we currently pass options
-to the download helpers.
+On principle:
+    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-As you could experience first-hand, it is not trivial to add new options
-to those helpers, because they expect their arguments to be non-otions:
-URL, version, site... They only accept a single option, that nust be the
-first argument shen calling them.
-
-Instead, Thomas suggested, and I concur, that we should change them all
-so that we pass them those as options. For example:
-
-  - for bzr:
-    -o output-file
-    -r repo-url
-    -R revision
-    -n basename
-
-  - for cp:
-    -o output-file
-    -s soruce-file
-
-  - for cvs;
-    -o output-file
-    -r repo-url
-    -R revision
-    -N rawname
-    -n basename
-
-  - for git:
-    -o output-file  # Do you see a pattern here? ;-)
-    -r repo-url     # and here? ;-)
-    -c cset
-    -n basenamne
-
-and so on...
-
-That way, adding more options will be dead easy.
+... which you can add when you respin after the download backends are
+changed to accept options, of course.
 
 Regards,
 Yann E. MORIN.
 
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
-> @@ -49,5 +50,5 @@ if [ ${bzr_version} -ge ${bzr_min_version} ]; then
->  fi
+> ---
+> 
+> Changes in v2:
+>  - Replaced $(PKG)_DL_REFERER by $(PKG)_DL_OPTS
+>  - Add support for this options to all downloaders
+> 
+> 
+>  package/pkg-download.mk | 24 ++++++++++++++++--------
+>  1 file changed, 16 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index a0f694d..00fbe6c 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -80,7 +80,8 @@ define DOWNLOAD_GIT
+>  		-- \
+>  		$($(PKG)_SITE) \
+>  		$($(PKG)_DL_VERSION) \
+> -		$($(PKG)_BASE_NAME)
+> +		$($(PKG)_BASE_NAME) \
+> +		$($(PKG)_DL_OPTS)
+>  endef
 >  
->  _bzr export ${verbose} --root="'${basename}/'" --format=tgz \
-> -    ${timestamp_opt} - "'${repo}'" -r "'${rev}'" \
-> +    ${timestamp_opt} - "${dl_opts}" "'${repo}'" -r "'${rev}'" \
->      >"${output}"
-> diff --git a/support/download/cp b/support/download/cp
-> index 09ce3d1..8864a9d 100755
-> --- a/support/download/cp
-> +++ b/support/download/cp
-> @@ -27,6 +27,7 @@ shift $((OPTIND-1))
+>  # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+> @@ -96,7 +97,8 @@ define DOWNLOAD_BZR
+>  		-- \
+>  		$($(PKG)_SITE) \
+>  		$($(PKG)_DL_VERSION) \
+> -		$($(PKG)_BASE_NAME)
+> +		$($(PKG)_BASE_NAME) \
+> +		$($(PKG)_DL_OPTS)
+>  endef
 >  
->  output="${1}"
->  source="${2}"
-> +dl_opts="${3}"
+>  define SOURCE_CHECK_BZR
+> @@ -111,7 +113,8 @@ define DOWNLOAD_CVS
+>  		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
+>  		$($(PKG)_DL_VERSION) \
+>  		$($(PKG)_RAWNAME) \
+> -		$($(PKG)_BASE_NAME)
+> +		$($(PKG)_BASE_NAME) \
+> +		$($(PKG)_DL_OPTS)
+>  endef
 >  
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
-> @@ -34,4 +35,4 @@ _localfiles() {
->      eval ${LOCALFILES} "${@}"
->  }
+>  # Not all CVS servers support ls/rls, use login to see if we can connect
+> @@ -126,7 +129,8 @@ define DOWNLOAD_SVN
+>  		-- \
+>  		$($(PKG)_SITE) \
+>  		$($(PKG)_DL_VERSION) \
+> -		$($(PKG)_BASE_NAME)
+> +		$($(PKG)_BASE_NAME) \
+> +		$($(PKG)_DL_OPTS)
+>  endef
 >  
-> -_localfiles ${verbose} "'${source}'" "'${output}'"
-> +_localfiles ${verbose} "${dl_opts}""'${source}'" "'${output}'"
-> diff --git a/support/download/cvs b/support/download/cvs
-> index 7980389..e02c58e 100755
-> --- a/support/download/cvs
-> +++ b/support/download/cvs
-> @@ -25,6 +25,7 @@ repo="${2}"
->  rev="${3}"
->  rawname="${4}"
->  basename="${5}"
-> +dl_opts="${6}"
+>  define SOURCE_CHECK_SVN
+> @@ -142,7 +146,8 @@ define DOWNLOAD_SCP
+>  		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+>  		$(QUIET) \
+>  		-- \
+> -		'$(call stripurischeme,$(call qstrip,$(1)))'
+> +		'$(call stripurischeme,$(call qstrip,$(1)))' \
+> +		$($(PKG)_DL_OPTS)
+>  endef
 >  
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
-> @@ -48,6 +49,6 @@ fi
+>  define SOURCE_CHECK_SCP
+> @@ -156,7 +161,8 @@ define DOWNLOAD_HG
+>  		-- \
+>  		$($(PKG)_SITE) \
+>  		$($(PKG)_DL_VERSION) \
+> -		$($(PKG)_BASE_NAME)
+> +		$($(PKG)_BASE_NAME) \
+> +		$($(PKG)_DL_OPTS)
+>  endef
 >  
->  export TZ=UTC
->  _cvs ${verbose} -z3 -d"'${repo}'" \
-> -     co -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
-> +     co "${dl_opts}" -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
+>  # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+> @@ -171,7 +177,8 @@ define DOWNLOAD_WGET
+>  		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+>  		$(QUIET) \
+>  		-- \
+> -		'$(call qstrip,$(1))'
+> +		'$(call qstrip,$(1))' \
+> +		$($(PKG)_DL_OPTS)
+>  endef
 >  
->  tar czf "${output}" "${basename}"
-> diff --git a/support/download/git b/support/download/git
-> index 314b388..7fd7563 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -24,6 +24,7 @@ output="${1}"
->  repo="${2}"
->  cset="${3}"
->  basename="${4}"
-> +dl_opts="${5}"
+>  define SOURCE_CHECK_WGET
+> @@ -184,7 +191,8 @@ define DOWNLOAD_LOCALFILES
+>  		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+>  		$(QUIET) \
+>  		-- \
+> -		$(call stripurischeme,$(call qstrip,$(1)))
+> +		$(call stripurischeme,$(call qstrip,$(1))) \
+> +		$($(PKG)_DL_OPTS)
+>  endef
 >  
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
-> @@ -49,7 +50,7 @@ if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
->  fi
->  if [ ${git_done} -eq 0 ]; then
->      printf "Doing full clone\n"
-> -    _git clone ${verbose} --mirror "'${repo}'" "'${basename}'"
-> +    _git clone ${verbose} "${dl_opts}" --mirror "'${repo}'" "'${basename}'"
->  fi
->  
->  GIT_DIR="${basename}" \
-> diff --git a/support/download/hg b/support/download/hg
-> index 25cb4e9..04ca7a0 100755
-> --- a/support/download/hg
-> +++ b/support/download/hg
-> @@ -24,6 +24,7 @@ output="${1}"
->  repo="${2}"
->  cset="${3}"
->  basename="${4}"
-> +dl_opts="${5}"
->  
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
-> @@ -31,7 +32,7 @@ _hg() {
->      eval ${HG} "${@}"
->  }
->  
-> -_hg clone ${verbose} --noupdate "'${repo}'" "'${basename}'"
-> +_hg clone ${verbose} "${dl_opts}" --noupdate "'${repo}'" "'${basename}'"
->  
->  _hg archive ${verbose} --repository "'${basename}'" --type tgz \
->              --prefix "'${basename}'" --rev "'${cset}'" \
-> diff --git a/support/download/scp b/support/download/scp
-> index 95cf502..7ecc0d0 100755
-> --- a/support/download/scp
-> +++ b/support/download/scp
-> @@ -22,6 +22,7 @@ shift $((OPTIND-1))
->  
->  output="${1}"
->  url="${2}"
-> +dl_opts="${3}"
->  
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
-> @@ -29,4 +30,4 @@ _scp() {
->      eval ${SCP} "${@}"
->  }
->  
-> -_scp ${verbose} "'${url}'" "'${output}'"
-> +_scp ${verbose} "${dl_opts}" "'${url}'" "'${output}'"
-> diff --git a/support/download/svn b/support/download/svn
-> index 4dcdd06..695762e 100755
-> --- a/support/download/svn
-> +++ b/support/download/svn
-> @@ -24,6 +24,7 @@ output="${1}"
->  repo="${2}"
->  rev="${3}"
->  basename="${4}"
-> +dl_opts="${5}"
->  
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
-> @@ -31,6 +32,6 @@ _svn() {
->      eval ${SVN} "${@}"
->  }
->  
-> -_svn export ${verbose} "'${repo}@${rev}'" "'${basename}'"
-> +_svn export ${verbose} "${dl_opts}" "'${repo}@${rev}'" "'${basename}'"
->  
->  tar czf "${output}" "${basename}"
-> diff --git a/support/download/wget b/support/download/wget
-> index 0fc7ffa..95019dc 100755
-> --- a/support/download/wget
-> +++ b/support/download/wget
-> @@ -6,7 +6,7 @@ set -e
->  # Download helper for wget, to be called from the download wrapper script
->  #
->  # Call it as:
-> -#   .../wget [-q] OUT_FILE URL
-> +#   .../wget [-q] OUT_FILE URL [DL_OPTS]
->  #
->  # Environment:
->  #   WGET     : the wget command to call
-> @@ -22,6 +22,7 @@ shift $((OPTIND-1))
->  
->  output="${1}"
->  url="${2}"
-> +dl_opts="${3}"
->  
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
-> @@ -29,4 +30,4 @@ _wget() {
->      eval ${WGET} "${@}"
->  }
->  
-> -_wget ${verbose} -O "'${output}'" "'${url}'"
-> +_wget ${verbose} "${dl_opts}" -O "'${output}'" "'${url}'"
+>  define SOURCE_CHECK_LOCALFILES
 > -- 
 > 2.8.1
 > 
