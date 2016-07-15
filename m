@@ -1,39 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jul 2016 09:52:14 +0200
-Subject: [Buildroot] [PATCH] jemalloc: fix sparc64 build
-In-Reply-To: <1468530719-12814-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1468530719-12814-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20160715095214.74766065@free-electrons.com>
+Date: Fri, 15 Jul 2016 09:52:26 +0200
+Subject: [Buildroot] [git commit] Revert "cmake: bump version to 3.6.0"
+Message-ID: <20160715075258.D5E3982231@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8428dbd88e1531abf0628f3308c234bcf28e9921
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 14 Jul 2016 23:11:59 +0200, Eric Le Bihan wrote:
-> GCC 4.9.3 for sparc64 defines __sparc_v9__, not __sparc64__ nor
-> __sparcv9 (as reported by `gcc -dM -E - < /dev/null | egrep 'sparc|arch'`).
-> 
-> This prevents LG_QUANTUM from being properly defined. Adding this new
-> value solves the issue.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/95d/95df560b13be7abbce6aeeb3ed0f0814d597bd08/
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  ...001-Fix-LG_QUANTUM-definition-for-sparc64.patch | 30 ++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/jemalloc/0001-Fix-LG_QUANTUM-definition-for-sparc64.patch
+This reverts commit b6ff742ca0d8b2901036d3ad03fe60c6b2a7725f.
 
-Applied to master, thanks. Please submit the patch upstream to the
-jemalloc project. Thanks!
+This bump causes numerous build failures, so Vicente and Yann proposed
+to revert it.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cmake/0001-rename_cmake_rootfile.patch | 27 +++++++++++---------------
+ package/cmake/cmake.hash                       |  4 ++--
+ package/cmake/cmake.mk                         |  4 ++--
+ 3 files changed, 15 insertions(+), 20 deletions(-)
+
+diff --git a/package/cmake/0001-rename_cmake_rootfile.patch b/package/cmake/0001-rename_cmake_rootfile.patch
+index 3169f16..915b7e3 100644
+--- a/package/cmake/0001-rename_cmake_rootfile.patch
++++ b/package/cmake/0001-rename_cmake_rootfile.patch
+@@ -6,23 +6,18 @@ This buildroot-specific patch makes sure ctest looks also for
+ "Modules/CMake.cmake.ctest" before complaining
+ 
+ Signed-off-by: Davide Viti <zinosat@tiscali.it>
+-[Vincent: tweak patch for 3.6.0]
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ 
+-diff -rup a/Source/cmake.cxx b/Source/cmake.cxx
+---- a/Source/cmake.cxx	2016-07-07 15:47:27.000000000 +0100
+-+++ b/Source/cmake.cxx	2016-07-14 10:14:59.914265515 +0100
+-@@ -771,7 +771,12 @@ int cmake::AddCMakePaths()
+-                       "Path to cpack program executable.", cmState::INTERNAL);
++--- cmake-3.0.2/Source/cmake.cxx~	2014-09-11 15:24:01.000000000 +0200
+++++ cmake-3.0.2/Source/cmake.cxx	2014-11-25 15:48:04.461033690 +0100
++@@ -957,7 +957,10 @@
++      "Path to cpack program executable.", cmCacheManager::INTERNAL);
+  #endif
+-   if (!cmSystemTools::FileExists(
+--        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake").c_str())) {
+-+        (cmSystemTools::GetCMakeRoot() + "/Modules/CMake.cmake").c_str()) &&
+-+	!cmSystemTools::FileExists(
+-+	  (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake.ctest").c_str()
+-+        )
++   if(!cmSystemTools::FileExists(
++-       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()))
+++       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake").c_str()) &&
+++     !cmSystemTools::FileExists(
+++       (cmSystemTools::GetCMakeRoot()+"/Modules/CMake.cmake.ctest").c_str())
+ +     )
+-+  {
++     {
+      // couldn't find modules
+-     cmSystemTools::Error(
+-       "Could not find CMAKE_ROOT !!!\n"
++     cmSystemTools::Error("Could not find CMAKE_ROOT !!!\n"
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index 7cd1133..e40d4ea 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+-# From http://www.cmake.org/files/v3.6/cmake-3.6.0-SHA-256.txt
+-sha256 fd05ed40cc40ef9ef99fac7b0ece2e0b871858a82feade48546f5d2940147670  cmake-3.6.0.tar.gz
++# From http://www.cmake.org/files/v3.5/cmake-3.5.2-SHA-256.txt
++sha256	92d8410d3d981bb881dfff2aed466da55a58d34c7390d50449aa59b32bb5e62a	cmake-3.5.2.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 25eafe8..7a80c1b 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-CMAKE_VERSION_MAJOR = 3.6
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
++CMAKE_VERSION_MAJOR = 3.5
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
