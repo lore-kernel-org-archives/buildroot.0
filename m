@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jul 2016 14:52:24 +0200
-Subject: [Buildroot] [PATCH] package/libgpg-error: disable tests
-In-Reply-To: <1468586606-31578-1-git-send-email-yann.morin.1998@free.fr>
-References: <1468586606-31578-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160715145224.22296333@free-electrons.com>
+Date: Fri, 15 Jul 2016 14:52:38 +0200
+Subject: [Buildroot] [PATCH 1/2] python-wcwidth: new package
+In-Reply-To: <1468309143-27576-1-git-send-email-yegorslists@googlemail.com>
+References: <1468309143-27576-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160715145238.0adbc59e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 15 Jul 2016 14:43:26 +0200, Yann E. MORIN wrote:
-> Tests are not usefull on an embedded device.
+On Tue, 12 Jul 2016 09:39:02 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/libgpg-error/libgpg-error.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/Config.in                          |  1 +
+>  package/python-wcwidth/Config.in           |  7 +++++++
+>  package/python-wcwidth/python-wcwidth.hash |  3 +++
+>  package/python-wcwidth/python-wcwidth.mk   | 14 ++++++++++++++
+>  4 files changed, 25 insertions(+)
+>  create mode 100644 package/python-wcwidth/Config.in
+>  create mode 100644 package/python-wcwidth/python-wcwidth.hash
+>  create mode 100644 package/python-wcwidth/python-wcwidth.mk
 
-Applied to master, thanks.
+Both patches applied. Thanks!
 
 Thomas
 -- 
