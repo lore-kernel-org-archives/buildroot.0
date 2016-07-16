@@ -1,37 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 16:40:11 +0200
-Subject: [Buildroot] [git commit] dbus: disable bundled initscript
-Message-ID: <20160716144016.42F7E7FC6B@busybox.osuosl.org>
+Date: Sat, 16 Jul 2016 16:41:15 +0200
+Subject: [Buildroot] [git commit] package/alljoyn: needs
+	BR2_TOOLCHAIN_HAS_SYNC_4
+Message-ID: <20160716144128.AFFAA7FC6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab173610fc51be27edca90337ef91b39c0c754db
+commit: https://git.buildroot.net/buildroot/commit/?id=47e885f14de4f66982329c2bf76f5517ece71b26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Otherwise it will install $(TARGET_DIR)/etc/rc.d/init.d/messagebus when
-building on a redhat/fedora host.
-Regardless of that we provide our own initscript.
+After applying a patch like [1], the build failed with the following
+error:
+liballjoyn_c.a(Message.o): In function `alljoyn_message_destroy':
+Message.cc:(.text+0x74): undefined reference to `__sync_sub_and_fetch_4'
+liballjoyn.so: undefined reference to `__sync_bool_compare_and_swap_4'
+liballjoyn.so: undefined reference to `__sync_add_and_fetch_4'
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+So, add dependency on BR2_TOOLCHAIN_HAS_SYNC_4 which also disable the
+alljoyn build on sparc.
+
+[1] https://git.buildroot.org/buildroot/commit/?id=c5e96d8935016456bea342db170ae6a139a8470f
+
+Fixes:
+http://autobuild.buildroot.net/results/cea/cea62a7ed7f1eda6f817d8e27fd645942def25ec
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dbus/dbus.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/alljoyn/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 11c3d4e..6064501 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -32,7 +32,8 @@ DBUS_CONF_OPTS = \
- 	--disable-dnotify \
- 	--with-xml=expat \
- 	--with-system-socket=/var/run/dbus/system_bus_socket \
--	--with-system-pid-file=/var/run/messagebus.pid
-+	--with-system-pid-file=/var/run/messagebus.pid \
-+	--with-init-scripts=none
+diff --git a/package/alljoyn/Config.in b/package/alljoyn/Config.in
+index 021a07b..6eb417d 100644
+--- a/package/alljoyn/Config.in
++++ b/package/alljoyn/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_ALLJOYN
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_LIBCAP
+@@ -19,5 +20,6 @@ config BR2_PACKAGE_ALLJOYN
  
- ifeq ($(BR2_STATIC_LIBS),y)
- DBUS_CONF_OPTS += LIBS='-pthread'
+ comment "alljoyn needs a toolchain w/ C++, threads, wchar and dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_USE_WCHAR || BR2_STATIC_LIBS
