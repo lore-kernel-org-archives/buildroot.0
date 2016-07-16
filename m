@@ -1,29 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
 Date: Sat, 16 Jul 2016 20:17:39 +0200
-Subject: [Buildroot] [PATCH] package/ti-sgx-um: fix Config.in
-In-Reply-To: <1468681359-11581-1-git-send-email-yann.morin.1998@free.fr>
-References: <1468681359-11581-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160716201739.0971a9cd@free-electrons.com>
+Subject: [Buildroot] grub2 installation query
+In-Reply-To: <CANxTyt45ajPv1av2X=EFHEKTDy8mEiKx2-j+66kPZi_89-MDng@mail.gmail.com>
+References: <CANxTyt45ajPv1av2X=EFHEKTDy8mEiKx2-j+66kPZi_89-MDng@mail.gmail.com>
+Message-ID: <d7003eef-c205-0b38-526c-562dc8d5d54e@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Danomi,
 
-On Sat, 16 Jul 2016 17:02:39 +0200, Yann E. MORIN wrote:
-> The continuation line was fogotten. However, it fits on a single line.
+Le 16/07/2016 ? 20:02, Danomi Manchego a ?crit :
+> All,
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/ti-sgx-um/Config.in | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> I recently noticed that grub2 will fail to install if stripping is turned off.
+> This is because $(STRIP) is used to make a "kernel.img" from another file
+> during installation, and the `true` command won't simulate that.
+> 
+> I think that grub2 is not unique in this.  I notice these lines in openldap.mk:
+> 
+>   # Somehow, ${STRIP} does not percolates through to the shtool script
+>   # used to install the executables; thus, that script tries to run the
+>   # executable it is supposed to install, resulting in an error.
+>   OPENLDAP_MAKE_ENV = STRIP="$(TARGET_STRIP)"
+> 
+> And indeed the comment is true - there is at least two instances of openldap
+> makefiles installing things to $(DESTDIR) via $(STRIP).
+> 
+> So I'm wondering:
+> 
+> - Should not the autobuilders be hitting these?
 
-Sorry for the mess. Applied to master, thanks!
+It's due to the choice for the strip option.
+BR2_STRIP_none is not the default choice and the randconfig command used in
+autobuilders can't select other config symbol than the default choice.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> 
+> - Should there by a TARGET_STRIP_FOR_REAL that is actual a strip, in
+>   addition to TARGET_STRIP, for these cases?
+
+It remind me a patch in patchwork:
+http://patchwork.ozlabs.org/patch/624875/
+
+Can you take a look at it ?
+
+Best regards,
+Romain
+
+> 
+> Danomi -
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
