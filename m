@@ -1,51 +1,83 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sat, 16 Jul 2016 17:36:15 +0200
-Subject: [Buildroot] [PATCH v2] directfb: depends on NPTL threading
-In-Reply-To: <20160708222129.GA22796@waldemar-brodkorb.de>
-References: <20160708222129.GA22796@waldemar-brodkorb.de>
-Message-ID: <f5a4dbc5-844f-7098-eb32-fc11db1976db@smile.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 16 Jul 2016 18:08:18 +0200
+Subject: [Buildroot] [PATCH] package/pppd: disable for musl toolchains
+Message-ID: <1468685298-29083-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+For the same reason as for ipsec-tools [1], disable pppd for musl
+toolchains.
+It also include <sys/cdefs.h> which is not provided by musl [2].
 
-Le 09/07/2016 ? 00:21, Waldemar Brodkorb a ?crit :
-> Fixes following autobuild failure:
-> http://autobuild.buildroot.net/results/162db0d62075a16c7abae1229676e2cdb29fe953/
+This fixes a compilation error with musl libc because of undeclared
+__P and missing sys/cdefs.h include.
 
-Please propagate BR2_TOOLCHAIN_HAS_THREADS_NPTL to the comment dependency at the
-bottom of the file.
+Propagate the dependency to network-manager and rp-pppoe
+packages.
 
-With that fixed:
-  Reviewed-by: Romain Naour <romain.naour@gmail.com>
+[1] 33499484e457018203023cdfdd5286478f2ae381
+[2] http://wiki.musl-libc.org/wiki/FAQ#Q:_I.27m_trying_to_compile_something_against_musl_and_I_get_error_messages_about_sys.2Fcdefs.h
 
-Best regards,
-Romain
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/network-manager/Config.in | 1 +
+ package/pppd/Config.in            | 5 +++--
+ package/rp-pppoe/Config.in        | 5 +++--
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> v1 -> v2:
->   - rather adding an experimental patch without runtime testing for
->     an unmaintained software, we depend on NPTL as discussed with
->     Thomas Petazzoni on IRC
-> ---
->  package/directfb/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-> index f0bcaaa..f38f051 100644
-> --- a/package/directfb/Config.in
-> +++ b/package/directfb/Config.in
-> @@ -1,6 +1,6 @@
->  config BR2_PACKAGE_DIRECTFB
->  	bool "directfb"
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
->  	depends on !BR2_TOOLCHAIN_USES_MUSL # sigval_t issue
-> 
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index 0636415..b1bca7c 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -47,6 +47,7 @@ config BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER
+ 
+ config BR2_PACKAGE_NETWORK_MANAGER_PPPD
+ 	bool "pppd support"
++	depends on !BR2_TOOLCHAIN_USES_MUSL # pppd
+ 	select BR2_PACKAGE_PPPD
+ 	help
+ 	  This option enables support for PPPD daemon
+diff --git a/package/pppd/Config.in b/package/pppd/Config.in
+index b77d7b0..b56b623 100644
+--- a/package/pppd/Config.in
++++ b/package/pppd/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PPPD
+ 	bool "pppd"
+ 	depends on !BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_USES_MUSL # Use __P() macro all over the tree
+ 	depends on BR2_USE_MMU
+ 	help
+ 	  An implementation of the Point-to-point protocol.
+@@ -24,6 +25,6 @@ config BR2_PACKAGE_PPPD_RADIUS
+ 
+ endif
+ 
+-comment "pppd needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "pppd needs a uClibc or glibc toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU
+diff --git a/package/rp-pppoe/Config.in b/package/rp-pppoe/Config.in
+index 7f6afe2..a41de33 100644
+--- a/package/rp-pppoe/Config.in
++++ b/package/rp-pppoe/Config.in
+@@ -1,10 +1,11 @@
+-comment "rp-pppoe needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "rp-pppoe needs a uClibc or glibc toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_RP_PPPOE
+ 	bool "rp-pppoe"
+ 	depends on !BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_USES_MUSL # pppd
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_PPPD
+ 	help
+-- 
+2.5.5
