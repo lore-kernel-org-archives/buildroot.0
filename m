@@ -1,59 +1,58 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 16 Jul 2016 13:58:07 +0200
-Subject: [Buildroot] [PATCH 2/3] package/rt-tests: bump to 1.0
-In-Reply-To: <20160715150422.5da4a111@free-electrons.com>
-References: <1468522869-3887-1-git-send-email-romain.naour@gmail.com>
- <1468522869-3887-2-git-send-email-romain.naour@gmail.com>
- <20160715150422.5da4a111@free-electrons.com>
-Message-ID: <6212cf57-3d62-614d-4188-3afb603e76a7@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 16 Jul 2016 14:02:10 +0200
+Subject: [Buildroot] [PATCH] xapp_init: Point to target's "mcookie"
+In-Reply-To: <1468530639-38934-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1468530639-38934-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20160716140210.1258ae0e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-Le 15/07/2016 ? 15:04, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> One quick comment on this patch.
-> 
-> On Thu, 14 Jul 2016 21:01:08 +0200, Romain Naour wrote:
-> 
->> +Subject: [PATCH 1/2] Fix various minor issues with rt-tests build system
-> 
->> +Subject: [PATCH 2/2] Fix a build issue with uClibc-ng
-> 
-> Please use "git format-patch -N" when generating patches for Buildroot
-> packages, in order to avoid the 1/2 and 2/2 specifications. These
-> specifications very quickly get wrong when we add or remove patches, so
-> we prefer not to have them.
+The title was slightly incorrect: the package is named xapp_xinit, not
+xapp_init.
 
-Agree, I just forgot about patch numbering.
+On Thu, 14 Jul 2016 16:10:39 -0500, Matt Weber wrote:
 
-I noticed a build issue with this new version of rt-tests [1] due to local
-syscall number definition for the new kernel deadline scheduler on some
-architectures. Upsteam added __NR_sched_setattr and __NR_sched_setattr
-definition for common architectures (x86, x86_64, arm) and tile if not already
-defined [2].
+> From: ynadupur <yugendra.sai.babu.nadupuru@rockwellcollins.com>
 
-Maybe instead of adding missing syscall number, we can avoid building rt-tests
-with toolchain compiled with too old kernel headers (i.e
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14)
+This From: line didn't match the SoB line.
 
-Thoughts ?
+> Description:
 
-Best regards,
-Romain
+Not needed.
 
-[1]
-http://autobuild.buildroot.net/results/6fa/6facaeb10588bdf3ff029b882a8ae6ffba815cdc
-[2]
-https://kernel.googlesource.com/pub/scm/utils/rt-tests/rt-tests.git/+/ef2dee4232b7cae594ef7ecb7230c4bd18cea3f3%5E%21/
+>     The X11 package builds the "mcookie" executable, when selected, into the
+>     directory output/host/usr/bin/mcookie. The xapp_init's "configure"
+>     attempts to find the "mcookie" executable using the host's path. If the
+>     host has an installed "mcookie" application in their /bin folder, it
+>     can influence the build. The following patch forces the expected
+>     mcookie location.
 
-> 
-> Thanks,
-> 
-> Thomas
-> 
+Indentation not needed.
+
+> diff --git a/package/x11r7/xapp_xinit/xapp_xinit.mk b/package/x11r7/xapp_xinit/xapp_xinit.mk
+> index a67ba14..bf5cbbb 100644
+> --- a/package/x11r7/xapp_xinit/xapp_xinit.mk
+> +++ b/package/x11r7/xapp_xinit/xapp_xinit.mk
+> @@ -11,4 +11,8 @@ XAPP_XINIT_DEPENDENCIES = xapp_xauth xlib_libX11
+>  XAPP_XINIT_LICENSE = MIT
+>  XAPP_XINIT_LICENSE_FILES = COPYING
+>  
+> +ifeq ($(BR2_PACKAGE_MCOOKIE),y)
+
+I've removed this conditional, because xapp_xinit depends on the X.org
+server, and the X.org server selects BR2_PACKAGE_MCOOKIE.
+
+Applied with these issues fixed.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
