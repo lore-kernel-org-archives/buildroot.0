@@ -1,50 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 12:00:52 +0200
-Subject: [Buildroot] [git commit] docs/website: adjust presentation of Mind
-	sponsoring
-Message-ID: <20160716100135.393507FBF2@busybox.osuosl.org>
+Date: Sat, 16 Jul 2016 11:57:14 +0200
+Subject: [Buildroot] [git commit] docs/website: add OpenWide/Smile as sponsor
+Message-ID: <20160716100135.1C7497FBF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d07521f798a7d2a609f34fbbcacf70799a4e7899
+commit: https://git.buildroot.net/buildroot/commit/?id=607c97c47e7277a9e3356884bd813ec5fddafb87
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Make the font size of the Mind block the same as all other blocks (it
-was smaller) and re-adjust the min height of all blocks so that they
-look the same.
+As mentionned in
+http://lists.busybox.net/pipermail/buildroot/2016-July/167050.html,
+OpenWide/Smile has sponsored the Buildroot Summer Camp, by allowing
+Romain Naour to participate, and by paying the food expenses for the
+event.
 
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: J??r??my Rosen <jeremy.rosen@smile.fr>
+[Thomas:
+ - renamed the logo file
+ - remove useless white area in the logo, so that it appears bigger on
+   the website]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/website/css/main.css  | 2 +-
- docs/website/sponsors.html | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/website/images/owi-smile-logo.png | Bin 0 -> 25258 bytes
+ docs/website/sponsors.html             |  17 +++++++++++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/docs/website/css/main.css b/docs/website/css/main.css
-index db9c4c9..5255531 100644
---- a/docs/website/css/main.css
-+++ b/docs/website/css/main.css
-@@ -163,7 +163,7 @@ i {
- }
- 
- .panel-sponsor {
--	min-height: 300px;
-+	min-height: 350px;
- 	text-align: justify;
- 	text-justify: inter-word;
- }
+diff --git a/docs/website/images/owi-smile-logo.png b/docs/website/images/owi-smile-logo.png
+new file mode 100644
+index 0000000..9744ca1
+Binary files /dev/null and b/docs/website/images/owi-smile-logo.png differ
 diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
-index 48c50c4..7a176ee 100644
+index 200e7e4..be1fac6 100644
 --- a/docs/website/sponsors.html
 +++ b/docs/website/sponsors.html
-@@ -44,7 +44,7 @@
- 		  <img class="img-responsive center-block" src="images/mind-logo.png"/>
+@@ -13,6 +13,23 @@
+ 	  <div class="panel panel-default">
+ 	    <div class="panel-body">
+ 	      <div class="col-sm-4">
++		<a href="http://ingenierie.openwide.fr">
++		  <img class="img-responsive center-block" src="images/owi-smile-logo.png"/>
++		</a>
++	      </div>
++	      <div class="col-sm-8">
++		<a href="http://ingenierie.openwide.fr">OpenWide/Smile</a> is sponsoring
++		the Buildroot Summer Camp taking place on July 1-5 2016 in Toulouse, France. OpenWide/Smile is
++		sponsoring the participation of Romain Naour and paid the food expenses for the meeting participants.
++	      </div>
++	    </div>
++	  </div>
++	</div>
++
++	<div class="col-sm-12">
++	  <div class="panel panel-default">
++	    <div class="panel-body">
++	      <div class="col-sm-4">
+ 		<a href="http://google.com">
+ 		  <img class="img-responsive center-block" src="images/google-logo.png"/>
  		</a>
- 	      </div>
--	      <div class="col-sm-12" style="font-size: 12px;">
-+	      <div class="col-sm-12">
- 		<a href="http://www.mind.be">Mind</a> sponsored the
- 		dinner of the FOSDEM 2014, 2015 and 2016 Developers
- 		Meeting (Brussels), the meeting room and the dinner
