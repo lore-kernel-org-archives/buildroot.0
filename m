@@ -1,37 +1,32 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 16 Jul 2016 17:36:42 -0300
-Subject: [Buildroot] [PATCH 1/5] freescale: genimage: Factorize scripts
-In-Reply-To: <20160716124125.7ed46855@free-electrons.com>
-References: <20160709064004.8844-1-savoundg@gmail.com>
- <20160709064004.8844-2-savoundg@gmail.com>
- <20160716124125.7ed46855@free-electrons.com>
-Message-ID: <CAOMZO5CoV5Ng2+_X0MVP_y-1MYPZaxAdJt8H46h5hL+=V2W+Ew@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 16 Jul 2016 22:38:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ti-sgx-um: fix syntax error in
+ Config.in
+In-Reply-To: <1468696161-7287-1-git-send-email-Aduskett@gmail.com>
+References: <1468696161-7287-1-git-send-email-Aduskett@gmail.com>
+Message-ID: <20160716223855.3d25c151@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Sat, Jul 16, 2016 at 7:41 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+On Sat, 16 Jul 2016 15:09:21 -0400, Adam Duskett wrote:
+> This fixes a small syntax error in Config.in that stops buildroot from
+> parsing the Config file.  The error is as follows:
+> 
+> package/ti-sgx-um/Config.in:6: syntax error
+> package/ti-sgx-um/Config.in:5: invalid option
+> package/ti-sgx-um/Config.in:6: unknown option "BR2_TOOLCHAIN_HAS_THREADS"
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-> Peter, Yann, Fabio, could you have a look at this patch and let me know
-> what you think?
+Thanks, but this has already been fixed in master.
 
-I really like this patch as it will make it easier to add new i.mx
-boards in Buildroot.
-
-> On one hand, yes the genimage.cfg files and post-image scripts for the
-> different freescale boards are very similar, so some factorization
-> seems to make sense.
->
-> On the other hand, the factorization implies a bit of additional
-> complexity, which is not that nice for defconfigs, that aim at being
-> simple.
-
-It seems to me that the defconfig complexity did not change after this patch.
-They only switched to using the common fsl post-image.sh.
-
-Thanks
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
