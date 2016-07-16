@@ -1,42 +1,39 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 16 Jul 2016 16:06:25 -0400
-Subject: [Buildroot] [v2 1/5] package/libcap-ng: add support for host variant
-Message-ID: <1468699589-14328-1-git-send-email-Aduskett@gmail.com>
+Date: Sat, 16 Jul 2016 16:06:26 -0400
+Subject: [Buildroot] [v2 2/5] package/audit: add support for host variant
+In-Reply-To: <1468699589-14328-1-git-send-email-Aduskett@gmail.com>
+References: <1468699589-14328-1-git-send-email-Aduskett@gmail.com>
+Message-ID: <1468699589-14328-2-git-send-email-Aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-refpolicy requires several packages to be compiled as a host variant.
-The following list is in order of required packages:
-
-refpolicy
-host-policycoreutils
-host-libsemanage
-host-audit
-host-libcap-ng
+refpolicy requires host-audit to compile.  This patch adds that support.
+As previously discussed, libcap-ng is required as far as I can tell, and
+as such, I have made it mandatory to compile it as a dependency.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
 Changes:
 
 v1 - v2:
- - Changed patch order
+ - Removed frivilous check for libcap-ng
+ - made host-libcap-ng mandatory.
 
- package/libcap-ng/libcap-ng.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/audit/audit.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
-index d78f5dc..fae6346 100644
---- a/package/libcap-ng/libcap-ng.mk
-+++ b/package/libcap-ng/libcap-ng.mk
-@@ -13,4 +13,8 @@ LIBCAP_NG_INSTALL_STAGING = YES
- LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
- LIBCAP_NG_CONF_OPTS = --without-python
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 89fdf14..1300c72 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -58,4 +58,7 @@ define AUDIT_INSTALL_CLEANUP
+ endef
+ AUDIT_POST_INSTALL_TARGET_HOOKS += AUDIT_INSTALL_CLEANUP
  
-+HOST_LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
-+HOST_LIBCAP_NG_CONF_OPTS = --without-python
++HOST_AUDIT_CONF_OPTS = --without-python --without-python3 --disable-zos-remote --with-libcap-ng=yes
 +
  $(eval $(autotools-package))
 +$(eval $(host-autotools-package))
