@@ -1,32 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 21:04:36 +0200
-Subject: [Buildroot] [PATCH] lighttpd: bump to version 1.4.40
-In-Reply-To: <1468695149-3289-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1468695149-3289-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160716210436.3f87ba27@free-electrons.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sat, 16 Jul 2016 15:09:21 -0400
+Subject: [Buildroot] [PATCH 1/1] package/ti-sgx-um: fix syntax error in
+	Config.in
+Message-ID: <1468696161-7287-1-git-send-email-Aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This fixes a small syntax error in Config.in that stops buildroot from
+parsing the Config file.  The error is as follows:
 
-On Sat, 16 Jul 2016 15:52:29 -0300, Gustavo Zacarias wrote:
-> Drop upstream patch.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/lighttpd/0002-compat-latest-lua.patch | 1398 -------------------------
->  package/lighttpd/lighttpd.hash                |    2 +-
->  package/lighttpd/lighttpd.mk                  |    2 +-
->  3 files changed, 2 insertions(+), 1400 deletions(-)
->  delete mode 100644 package/lighttpd/0002-compat-latest-lua.patch
+package/ti-sgx-um/Config.in:6: syntax error
+package/ti-sgx-um/Config.in:5: invalid option
+package/ti-sgx-um/Config.in:6: unknown option "BR2_TOOLCHAIN_HAS_THREADS"
 
-Applied to master, thanks.
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/ti-sgx-um/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thomas
+diff --git a/package/ti-sgx-um/Config.in b/package/ti-sgx-um/Config.in
+index 2be6c06..8e1e4fb 100644
+--- a/package/ti-sgx-um/Config.in
++++ b/package/ti-sgx-um/Config.in
+@@ -2,8 +2,7 @@ comment "ti-sgx-um needs the ti-sgx-km driver"
+ 	depends on !BR2_PACKAGE_TI_SGX_KM
+ 
+ comment "ti-sgx-um needs a glibc toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC ||
+-		!BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_TI_SGX_UM
+ 	bool "ti-sgx-um"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
