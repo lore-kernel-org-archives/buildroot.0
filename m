@@ -1,135 +1,178 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 12:16:38 +0200
-Subject: [Buildroot] [PATCH 1/2] freescale-imx: update src url
-In-Reply-To: <20160709080335.30055-1-daggs@gmx.com>
-References: <20160709080335.30055-1-daggs@gmx.com>
-Message-ID: <20160716121638.11247747@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 16 Jul 2016 12:25:06 +0200
+Subject: [Buildroot] [PATCH 3/3] package/protobuf-lua: new package
+In-Reply-To: <1467291218-7710-3-git-send-email-tiago.brusamarello@datacom.ind.br>
+References: <1467291218-7710-1-git-send-email-tiago.brusamarello@datacom.ind.br>
+ <1467291218-7710-3-git-send-email-tiago.brusamarello@datacom.ind.br>
+Message-ID: <84f82695-4f8f-b9bd-250a-f500d92e0607@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Tiago,
 
-On Sat,  9 Jul 2016 11:03:34 +0300, Dagg Stompler wrote:
+Le 30/06/2016 ? 14:53, Tiago Brusamarello a ?crit :
+> This package adds support to use Google's Protocol buffers
+> from Lua scripts.
+> 
+> The original package from GitHub supports deployment as
+> a LuaRocks package, but the module name as set to 'protobuf'
+> and not 'protobuf-lua' which causes naming problems when
+> building it in Buildroot so the 'generick-package' method
+s/generik/generic/
 
-> -FREESCALE_IMX_SITE = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO
+> was used instead.
+> 
+> This package depends on the 'protoc-gen-lua' plugin package
+> for generation of Protobuf messages types in Lua format.
+> 
+> Signed-off-by: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+> ---
+>  package/Config.in                    |  1 +
+>  package/protobuf-lua/Config.in       |  7 +++++
+>  package/protobuf-lua/protobuf-lua.mk | 60 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 68 insertions(+)
+>  create mode 100644 package/protobuf-lua/Config.in
+>  create mode 100644 package/protobuf-lua/protobuf-lua.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 715f8ab..dc32465 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -548,6 +548,7 @@ menu "Lua libraries/modules"
+>  	source "package/luvi/Config.in"
+>  	source "package/lzlib/Config.in"
+>  	source "package/orbit/Config.in"
+> +	source "package/protobuf-lua/Config.in"
+>  	source "package/rings/Config.in"
+>  	source "package/turbolua/Config.in"
+>  	source "package/wsapi/Config.in"
+> diff --git a/package/protobuf-lua/Config.in b/package/protobuf-lua/Config.in
+> new file mode 100644
+> index 0000000..e602111
+> --- /dev/null
+> +++ b/package/protobuf-lua/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PROTOBUF_LUA
+> +	bool "protobuf-lua"
+> +	depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUA_5_2
 
-The current site works fine for me:
+Why protobuf-lua depends on lua 5.1 and 5.2 only ?
+What was the issue ?
 
->>> firmware-imx 5.4 Downloading
---2016-07-16 12:13:38--  http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-5.4.bin
-Resolving www.freescale.com (www.freescale.com)... 23.35.121.50
-Connecting to www.freescale.com (www.freescale.com)|23.35.121.50|:80... connected.
-HTTP request sent, awaiting response... 301 Moved Permanently
-Location: http://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-5.4.bin [following]
---2016-07-16 12:13:38--  http://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-5.4.bin
-Resolving www.nxp.com (www.nxp.com)... 23.206.34.99
-Connecting to www.nxp.com (www.nxp.com)|23.206.34.99|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: unspecified [application/octet-stream]
-Saving to: ?/home/thomas/projets/buildroot/output/build/.firmware-imx-5.4.bin.EORoO8/output?
+Also, is protobuf-lua can be used with luajit ?
+If yes, maybe you can use "depends on BR2_PACKAGE_HAS_LUAINTERPRETER" instead.
 
-/home/thomas/projets/buildroot/output/b     [  <=>                                                                          ] 419,67K  1,57MB/s    in 0,3s    
+> +	help
+> +		Runtime libraries to use Protocol Buffers from Lua scripts.
+> +
+> +		https://github.com/djungelorm/protobuf-lua
 
-2016-07-16 12:13:39 (1,57 MB/s) - ?/home/thomas/projets/buildroot/output/build/.firmware-imx-5.4.bin.EORoO8/output? saved [429744]
+Indent with one tab and two space.
 
-firmware-imx-5.4.bin: OK (sha256: c5bd4bff48cce9715a5d6d2c190ff3cd2262c7196f7facb9b0eda231c92cc223)
->>> imx-codec 4.0.9 Downloading
---2016-07-16 12:13:39--  http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/imx-codec-4.0.9.bin
-Resolving www.freescale.com (www.freescale.com)... 23.35.121.50
-Connecting to www.freescale.com (www.freescale.com)|23.35.121.50|:80... connected.
-HTTP request sent, awaiting response... 301 Moved Permanently
-Location: http://www.nxp.com/lgfiles/NMG/MAD/YOCTO/imx-codec-4.0.9.bin [following]
---2016-07-16 12:13:40--  http://www.nxp.com/lgfiles/NMG/MAD/YOCTO/imx-codec-4.0.9.bin
-Resolving www.nxp.com (www.nxp.com)... 23.206.34.99
-Connecting to www.nxp.com (www.nxp.com)|23.206.34.99|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: unspecified [application/octet-stream]
-Saving to: ?/home/thomas/projets/buildroot/output/build/.imx-codec-4.0.9.bin.0meccC/output?
+> diff --git a/package/protobuf-lua/protobuf-lua.mk b/package/protobuf-lua/protobuf-lua.mk
+> new file mode 100644
+> index 0000000..1a6c693
+> --- /dev/null
+> +++ b/package/protobuf-lua/protobuf-lua.mk
+> @@ -0,0 +1,60 @@
+> +################################################################################
+> +#
+> +# protobuf-lua
+> +#
+> +################################################################################
+> +
+> +
 
-/home/thomas/projets/buildroot/output/b     [                         <=>                                                   ]   9,56M  1,93MB/s    in 5,1s    
+remove one empty line
 
-2016-07-16 12:13:45 (1,87 MB/s) - ?/home/thomas/projets/buildroot/output/build/.imx-codec-4.0.9.bin.0meccC/output? saved [10024936]
+> +PROTOBUF_LUA_VERSION = v1.1.1
+> +PROTOBUF_LUA_SITE = $(call github,djungelorm,protobuf-lua,$(PROTOBUF_LUA_VERSION))
+> +PROTOBUF_LUA_DEPENDENCIES = luainterpreter host-protoc-gen-lua
 
-imx-codec-4.0.9.bin: OK (sha256: 62bda182143cde9743cba0eb2a1c315a53cb434294605742f9fc364219958888)
->>> imx-gpu-viv 5.0.11.p8.4-hfp Downloading
---2016-07-16 12:13:45--  http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/imx-gpu-viv-5.0.11.p8.4-hfp.bin
-Resolving www.freescale.com (www.freescale.com)... 23.35.121.50
-Connecting to www.freescale.com (www.freescale.com)|23.35.121.50|:80... connected.
-HTTP request sent, awaiting response... 301 Moved Permanently
-Location: http://www.nxp.com/lgfiles/NMG/MAD/YOCTO/imx-gpu-viv-5.0.11.p8.4-hfp.bin [following]
---2016-07-16 12:13:45--  http://www.nxp.com/lgfiles/NMG/MAD/YOCTO/imx-gpu-viv-5.0.11.p8.4-hfp.bin
-Resolving www.nxp.com (www.nxp.com)... 23.206.34.99
-Connecting to www.nxp.com (www.nxp.com)|23.206.34.99|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: unspecified [application/octet-stream]
-Saving to: ?/home/thomas/projets/buildroot/output/build/.imx-gpu-viv-5.0.11.p8.4-hfp.bin.5malXu/output?
+There is a missing dependency on host-protobuf which provide protoc
 
-/home/thomas/projets/buildroot/output/b     [                                         <=>                                   ] 102,21M  1,90MB/s    in 56s     
+> +PROTOBUF_LUA_LICENSE = BSD-3c
+> +PROTOBUF_LUA_LICENSE_FILES = LICENSE
+> +
+> +define PROTOBUF_LUA_BUILD_CMDS
+> +	# build Lua Protobuf shared lib
+> +	$(TARGET_CC) -Os -shared -std=gnu99 -fPIC $(@D)/protobuf/pb.c -o $(@D)/protobuf/pb.so
+> +
+> +	# build Protobuf examples
+> +	PATH=$(BR_PATH) $(HOST_DIR)/usr/bin/protoc --lua_out=$(@D)/example --proto_path=$(@D)/example \
+> +		$(@D)/example/person.proto
+> +endef
 
-2016-07-16 12:14:42 (1,81 MB/s) - ?/home/thomas/projets/buildroot/output/build/.imx-gpu-viv-5.0.11.p8.4-hfp.bin.5malXu/output? saved [107172712]
+protoc-gen-lua doesn't work with any host-python version:
 
-imx-gpu-viv-5.0.11.p8.4-hfp.bin: OK (sha256: 8f79ce562d8ac1efb0a2af403b405541f98c55ae1631a18a3d7fad3224dfb44b)
->>> imx-parser 4.0.9 Downloading
---2016-07-16 12:14:43--  http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/imx-parser-4.0.9.bin
-Resolving www.freescale.com (www.freescale.com)... 23.35.121.50
-Connecting to www.freescale.com (www.freescale.com)|23.35.121.50|:80... connected.
-HTTP request sent, awaiting response... 301 Moved Permanently
-Location: http://www.nxp.com/lgfiles/NMG/MAD/YOCTO/imx-parser-4.0.9.bin [following]
---2016-07-16 12:14:44--  http://www.nxp.com/lgfiles/NMG/MAD/YOCTO/imx-parser-4.0.9.bin
-Resolving www.nxp.com (www.nxp.com)... 23.206.34.99
-Connecting to www.nxp.com (www.nxp.com)|23.206.34.99|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: unspecified [application/octet-stream]
-Saving to: ?/home/thomas/projets/buildroot/output/build/.imx-parser-4.0.9.bin.G3votu/output?
+host-python3:
 
-/home/thomas/projets/buildroot/output/b     [     <=>                                                                       ]   1,78M  1,83MB/s    in 1,0s    
+Traceback (most recent call last):
+  File "output/host/usr/bin/protoc-gen-lua", line 15, in <module>
+    from cStringIO import StringIO
+ImportError: No module named 'cStringIO'
+--lua_out: protoc-gen-lua: Plugin failed with status code 1.
 
-2016-07-16 12:14:45 (1,83 MB/s) - ?/home/thomas/projets/buildroot/output/build/.imx-parser-4.0.9.bin.G3votu/output? saved [1862047]
+host-python2:
 
-imx-parser-4.0.9.bin: OK (sha256: 1bec0101843db2e95d61e3dbe9e35172d874e54be19cc5d8bf72a735d5e3236f)
->>> imx-uuc 0.5.1 Downloading
---2016-07-16 12:14:45--  http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/imx-uuc-0.5.1.tar.gz
-Resolving www.freescale.com (www.freescale.com)... 23.35.121.50
-Connecting to www.freescale.com (www.freescale.com)|23.35.121.50|:80... connected.
-HTTP request sent, awaiting response... 301 Moved Permanently
-Location: http://www.nxp.com/lgfiles/NMG/MAD/YOCTO/imx-uuc-0.5.1.tar.gz [following]
---2016-07-16 12:14:45--  http://www.nxp.com/lgfiles/NMG/MAD/YOCTO/imx-uuc-0.5.1.tar.gz
-Resolving www.nxp.com (www.nxp.com)... 23.206.34.99
-Connecting to www.nxp.com (www.nxp.com)|23.206.34.99|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 14215 (14K) [application/x-gzip]
-Saving to: ?/home/thomas/projets/buildroot/output/build/.imx-uuc-0.5.1.tar.gz.pZo0Yy/output?
+Traceback (most recent call last):
+  File "output/host/usr/bin/protoc-gen-lua", line 17, in <module>
+    import plugin_pb2
+  File "output/host/usr/bin/plugin_pb2.py", line 3, in <module>
+    from google.protobuf import descriptor
+ImportError: No module named google.protobuf
+--lua_out: protoc-gen-lua: Plugin failed with status code 1.
 
-/home/thomas/projets/buildroot/output/b 100%[==============================================================================>]  13,88K  --.-KB/s    in 0,003s  
+So, I've marked your patch as Changes Requested in patchwork. Feel free
+to submit an updated version that takes into account the comments and fixed the
+build issue.
 
-2016-07-16 12:14:45 (5,24 MB/s) - ?/home/thomas/projets/buildroot/output/build/.imx-uuc-0.5.1.tar.gz.pZo0Yy/output? saved [14215/14215]
+Thanks!
 
-imx-uuc-0.5.1.tar.gz: OK (sha256: 95d7f7b075f58fedc07602fbc0e5bf5212d28deea3d09cdbcbd80992dcd18482)
->>> imx-vpu 5.4.33 Downloading
---2016-07-16 12:14:47--  http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/imx-vpu-5.4.33.bin
-Resolving www.freescale.com (www.freescale.com)... 23.35.121.50
-Connecting to www.freescale.com (www.freescale.com)|23.35.121.50|:80... connected.
-HTTP request sent, awaiting response... 301 Moved Permanently
-Location: http://www.nxp.com/lgfiles/NMG/MAD/YOCTO/imx-vpu-5.4.33.bin [following]
---2016-07-16 12:14:47--  http://www.nxp.com/lgfiles/NMG/MAD/YOCTO/imx-vpu-5.4.33.bin
-Resolving www.nxp.com (www.nxp.com)... 23.206.34.99
-Connecting to www.nxp.com (www.nxp.com)|23.206.34.99|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: unspecified [application/octet-stream]
-Saving to: ?/home/thomas/projets/buildroot/output/build/.imx-vpu-5.4.33.bin.TdpXOi/output?
-
-/home/thomas/projets/buildroot/output/b     [ <=>                                                                           ] 105,63K   680KB/s    in 0,2s    
-
-2016-07-16 12:14:47 (680 KB/s) - ?/home/thomas/projets/buildroot/output/build/.imx-vpu-5.4.33.bin.TdpXOi/output? saved [108169]
-
-imx-vpu-5.4.33.bin: OK (sha256: 2e670ef2337a5dbe6c32fa07128ad9aad32afdbf472c23d44133245ec6a66d46)
-
+Best regards,
+Romain
 
 
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> +
+> +define PROTOBUF_LUA_INSTALL_TARGET_CMDS
+> +	# install Lua Protobuf support
+> +	mkdir -p $(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +	$(INSTALL) -m 0755 $(@D)/protobuf/pb.so \
+> +		$(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/protobuf/pb.so
+> +	mkdir -p $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +	$(INSTALL) -m 0755 $(@D)/protobuf/containers.lua \
+> +		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +	$(INSTALL) -m 0755 $(@D)/protobuf/decoder.lua \
+> +		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +	$(INSTALL) -m 0755 $(@D)/protobuf/descriptor.lua \
+> +		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +	$(INSTALL) -m 0755 $(@D)/protobuf/encoder.lua \
+> +		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +	$(INSTALL) -m 0755 $(@D)/protobuf/init.lua \
+> +		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +	$(INSTALL) -m 0755 $(@D)/protobuf/listener.lua \
+> +		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +	$(INSTALL) -m 0755 $(@D)/protobuf/text_format.lua \
+> +		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +	$(INSTALL) -m 0755 $(@D)/protobuf/type_checkers.lua \
+> +		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +	$(INSTALL) -m 0755 $(@D)/protobuf/type_checkers.lua \
+> +		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +	$(INSTALL) -m 0755 $(@D)/protobuf/wire_format.lua \
+> +		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
+> +
+> +	# install example files
+> +	mkdir -p $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf/example
+> +	$(INSTALL) -m 0755 $(@D)/example/person_pb.lua \
+> +		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf/example
+> +	$(INSTALL) -m 0755 $(@D)/example/person.proto \
+> +		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf/example
+> +	$(INSTALL) -m 0755 $(@D)/example/test.lua \
+> +		$(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf/example
+> +endef
+> +
+> +$(eval $(generic-package))
+> 
