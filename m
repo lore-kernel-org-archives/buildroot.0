@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 22:41:24 +0200
+Date: Sat, 16 Jul 2016 22:51:16 +0200
 Subject: [Buildroot] [v2 2/5] package/audit: add support for host variant
 In-Reply-To: <1468699589-14328-2-git-send-email-Aduskett@gmail.com>
 References: <1468699589-14328-1-git-send-email-Aduskett@gmail.com>
  <1468699589-14328-2-git-send-email-Aduskett@gmail.com>
-Message-ID: <20160716224124.3e2284c1@free-electrons.com>
+Message-ID: <20160716225116.3a479c5c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,33 +17,15 @@ On Sat, 16 Jul 2016 16:06:26 -0400, Adam Duskett wrote:
 > refpolicy requires host-audit to compile.  This patch adds that support.
 > As previously discussed, libcap-ng is required as far as I can tell, and
 > as such, I have made it mandatory to compile it as a dependency.
-
-Don't use first person sentences in commit log.
-
+> 
 > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > ---
 > Changes:
-> 
-> v1 - v2:
->  - Removed frivilous check for libcap-ng
->  - made host-libcap-ng mandatory.
-> 
->  package/audit/audit.mk | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-> index 89fdf14..1300c72 100644
-> --- a/package/audit/audit.mk
-> +++ b/package/audit/audit.mk
-> @@ -58,4 +58,7 @@ define AUDIT_INSTALL_CLEANUP
->  endef
->  AUDIT_POST_INSTALL_TARGET_HOOKS += AUDIT_INSTALL_CLEANUP
->  
-> +HOST_AUDIT_CONF_OPTS = --without-python --without-python3 --disable-zos-remote --with-libcap-ng=yes
 
-So you use libcap-ng, but you don't depend on it? Doesn't seem right.
-Also, it would be good to be really sure it is needed. Did you try
-without it? How do you test this patch series?
+I've applied after removing the libcap-ng usage for the moment, and
+reworking the commit log.
+
+Thanks,
 
 Thomas
 -- 
