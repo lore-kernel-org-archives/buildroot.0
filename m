@@ -1,36 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 16 Jul 2016 14:31:14 -0300
-Subject: [Buildroot] [PATCH] ti-sgx-um: fix missing line continuation
-Message-ID: <1468690274-22919-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 16 Jul 2016 19:42:49 +0200
+Subject: [Buildroot] [PATCH 1/3] package/mesa3d: add optional support for
+	libsha1
+Message-ID: <1468690971-19702-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's missing for the threads conditional, which otherwise results in:
-package/ti-sgx-um/Config.in:6: syntax error
-package/ti-sgx-um/Config.in:5: invalid option
-package/ti-sgx-um/Config.in:6: unknown option
-"BR2_TOOLCHAIN_HAS_THREADS"
+mesa3d supports several sha1 implementations:
+https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=12.0#n1167
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This patch adds support for libsha1, inspired by the
+xserver_xorg-server package:
+https://github.com/buildroot/buildroot/blob/master/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk#L247
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ti-sgx-um/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch is needed for the next patch of this series:
+package/mesa3d: add support for Intel Vulkan driver
 
-diff --git a/package/ti-sgx-um/Config.in b/package/ti-sgx-um/Config.in
-index 2be6c06..c73df37 100644
---- a/package/ti-sgx-um/Config.in
-+++ b/package/ti-sgx-um/Config.in
-@@ -2,7 +2,7 @@ comment "ti-sgx-um needs the ti-sgx-km driver"
- 	depends on !BR2_PACKAGE_TI_SGX_KM
+ package/mesa3d/mesa3d.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index dcd43d5..19dec49 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -36,6 +36,9 @@ MESA3D_CONF_OPTS += --with-sha1=libcrypto
+ else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ MESA3D_DEPENDENCIES += libgcrypt
+ MESA3D_CONF_OPTS += --with-sha1=libgcrypt
++else ifeq ($(BR2_PACKAGE_LIBSHA1),y)
++MESA3D_DEPENDENCIES += libsha1
++MESA3D_CONF_OPTS += --with-sha1=libsha1
+ endif
  
- comment "ti-sgx-um needs a glibc toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC ||
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
- 		!BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_TI_SGX_UM
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
 -- 
-2.7.3
+2.8.1
