@@ -1,12 +1,16 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 16 Jul 2016 15:01:37 +0200
-Subject: [Buildroot] [PATCH] package/rt-tests: disable for too old toolchains
-Message-ID: <1468674097-30468-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 16 Jul 2016 15:02:42 +0200
+Subject: [Buildroot] [git commit] package/rt-tests: disable for too old
+	toolchains
+Message-ID: <20160716130250.48E757FC6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=b9fa6c00b1213fd038f2aed52057f22c7e18fd4b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 rt-tests doesn't build with some "old" toolchains due to missing local
 syscall number definition for the new kernel deadline scheduler on some
@@ -28,6 +32,7 @@ Fixes:
 http://autobuild.buildroot.net/results/6fa/6facaeb10588bdf3ff029b882a8ae6ffba815cdc
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/rt-tests/Config.in | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
@@ -54,5 +59,3 @@ index 08967ce..b39856d 100644
 -		|| BR2_TOOLCHAIN_USES_MUSL
 +		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
  	depends on BR2_USE_MMU
--- 
-2.5.5
