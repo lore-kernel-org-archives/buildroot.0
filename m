@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 15:50:59 +0200
-Subject: [Buildroot] [PATCH v3 1/4] package/ti-sgx-km: new package
-In-Reply-To: <1468497888-6464-1-git-send-email-lothar.felten@gmail.com>
-References: <1468497888-6464-1-git-send-email-lothar.felten@gmail.com>
-Message-ID: <20160716155059.3eeb6d5f@free-electrons.com>
+Date: Sat, 16 Jul 2016 15:57:27 +0200
+Subject: [Buildroot] [PATCH 2/4] libcap-ng: Allow host compilation.
+In-Reply-To: <1468518424-11785-2-git-send-email-Aduskett@gmail.com>
+References: <1468518424-11785-1-git-send-email-Aduskett@gmail.com>
+ <1468518424-11785-2-git-send-email-Aduskett@gmail.com>
+Message-ID: <20160716155727.04d3fe81@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 14 Jul 2016 14:04:45 +0200, Lothar Felten wrote:
+On Thu, 14 Jul 2016 13:47:02 -0400, Adam Duskett wrote:
+> Audit may require libcap-ng as  a dependency, this allows
+> libcap-ng to compile as a host package.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/libcap-ng/libcap-ng.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-> +config BR2_PACKAGE_TI_SGX_KM
-> +	bool "ti-sgx-km"
-> +	depends on BR2_LINUX_KERNEL && BR2_arm
+Following my comments on PATCH 1/4, not sure if this patch is still
+needed. If it is still needed, then this patch must appear *before* it
+is used.
 
-When there is a dependency on BR2_LINUX_KERNEL, we normally add a
-Config.in comment about this, so I've added that.
+Imagine I apply only PATCH 1/4, but not PATCH 2/4: PATCH 1/4 might lead
+to host-libcap-ng being used, but this package doesn't exist.
 
-> +	select BR2_LINUX_NEEDS_MODULES
-> +	help
-> +	  Kernel modules for TI CPUs with SGX GPU.
-> +	  This package supports AM335x, AM437x, AM4430 and AM5430.
-> +	  It builds the kernel module and the user space binaries.
-> +	  For older CPUs or kernels use the ti-gfx package.
-
-I tried building with a vanilla Linux kernel, and it failed due to some
-missing SGX specific headers. A TI specific kernel is needed, so I've
-extended the help text with this information.
-
-
-> +# This correpsonds to SDK 02.00.00.00
-> +TI_SGX_KM_VERSION = 2b7523d07a13ab704a24a7664749551f4a13ed32
-> +TI_SGX_KM_SITE = http://git.ti.com/graphics/omap5-sgx-ddk-linux.git
-
-Fetching over http:// doesn't work, it seems like you didn't test this
-properly (you still add the tarball in your BR2_DL_DIR cache). So I've
-reverted back to fetching from git://.
-
-Applied with those changes.
+Please make sure that the *order* of the patches in your series is
+correct.
 
 Thanks!
 
