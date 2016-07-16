@@ -1,137 +1,259 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jul 2016 18:46:04 +0200
-Subject: [Buildroot] Buildroot, github and nopullrequest.com
-In-Reply-To: <CA+TH9VnO2kF00pQJB3K_f6NcRboq3afw-MmxM1sNHxXWpjdThw@mail.gmail.com>
-References: <CA+TH9VnO2kF00pQJB3K_f6NcRboq3afw-MmxM1sNHxXWpjdThw@mail.gmail.com>
-Message-ID: <20160716164604.GA3882@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 16 Jul 2016 18:47:33 +0200
+Subject: [Buildroot] [PATCH 1/1] igd2-for-linux: new package
+In-Reply-To: <1467905712-3559-1-git-send-email-fabrice.fontaine@orange.com>
+References: <1467905712-3559-1-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <fd6aa4bf-3bbc-e19a-962b-72ae57e4d5ec@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo, All,
+Hi Fabrice,
 
-On 2016-07-16 14:44 +0200, Angelo Compagnucci spake thusly:
-> Personally, I'm really sad that the buildroot infrastructure is
-> currently down from a few days, buildroot is such a wonderful project
-> that not merits such a shame.
-
-Yes, DDoS are painful... :-(
-
-> Obviously, the infrastructure behind buildroot is not up to date to
-> the current standards, I think we should change.
-
-That's something that had been floating for the past year or so...
-
-> So, I'm drafting a tentative approach, and I'm sharing it with you.
-> Obviously I'm not entitled in acting in any way, but hey, can I dream
-> for a better Buildroot?!
-
-Your input is much welcome! :-)
-
-We all believe self-hosting is a waste of time: it's too difficult, we
-don't really need it, and it would not be much better than what we have
-today. We all believe a forge of some sort is what we want to go to.
-
-> 1) Website: we have a github account, we have github pages, we should
-> switch there! The only downside here is that github pages doesn't
-> suppo SSI, so we should write a simple bash script to assemble the
-> website before publication. Github pages resides on their own
-> repository, so we can have the website as always in the main
-> repository and the bash script will assemble the website in an outside
-> directory where the other repository it's cloned.
-
-There is also Gitlab. I would favour Gitlab over github, if at least
-because it is an open source project, not a closed, walled garden like
-Github is. All things being equal, Gitlab is on par with github
-regarding the features we need, plus a killer one: we can disable PRs
-alltogether with Gitlab, which we can't with Github.
-
-And if we were ever to re-self-host, we could take the data as-is with
-our own instance of Gitlab. And even if moving to something else than
-Gitlab, taking the data out of Gitlab is easier than out of Github.
-
-> 2) We have a github account, we should use it as the main repository.
-> No other words here.
-
-Or Gitlab! ;-)
-
-> 3) Githb pull requests. Obviously, we won't github pull requests, and
-> here enters the game https://nopullrequests.com.
-
-Or Gitlab, which allows to disable PRs altogether.
-
-> It's a simple github
-> webhook that closes a PR with a message. The source is publicly
-> available on github. We can use that service as is, or run an instance
-> ourselves on GAE.
-
-As Thomas said, I'm not too comfortable with allowing a third party
-automatic access to our repo. Especially since it looks like it wants a
-Google account.
-
-As for running an instance ourselves, it would mean we self-host again,
-which wee don;t want.
-
-> I had a look at the source code and it's pretty
-> secure, once it's authorized on github, it receives a message on each
-> pull requests and replies immediately without keeping anything
-> (caching or disk). Hosting our instance on GAE will have the benefit
-> on personalizing the commit message with something more specific than
-> the pretty aseptic default message.
+Le 07/07/2016 ? 17:35, Fabrice Fontaine a ?crit :
+> This is The Linux UPnP Internet Gateway Device 2. It is
+> modified from the original Linux UPnP Internet Gateway Device
+> [http://linux-igd.sourceforge.net/] according to UPnP
+> InternetGatewayDevice:2 specifications.
 > 
-> 4) Issues: well, everything is better than bugzilla!
+> It implements the UPnP Internet Gateway Device version 2
+> specification (IGDv2) and allows UPnP aware clients, such as
+> MSN Messenger, Azureus or Miranda to work properly from behind
+> a NAT firewall.
+> 
+> Please edit /etc/upnpd.conf before using upnpd!
+> 
+> https://github.com/ffontaine/igd2-for-linux
 
-Issues in Github are a pain IMHO: except for their "template", there is
-no possibility to have arbitrary fields. Git lab is not much better in
-this respect either.
+igd2-for-linux doesn't build with a musl toolchains due to mixed userspace and
+kernel headers [1]
 
-And there's still the emails for each commit: neither Github nor Gitlab
-can do that; they can only send an email per push, not per commit.
+Also, some define IPPROTO_TCP/IPPROTO_TCP are undeclared.
 
-However, with Gitlab, it looks like we could implement it and do a PR.
-With Github, there's no way we can do it.
+Can you have a look ?
+
+[1]
+http://wiki.musl-libc.org/wiki/FAQ#Q:_why_am_i_getting_.22error:_redefinition_of_struct_ethhdr.2Ftcphdr.2Fetc.22_.3F
+
+> 
+> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> ---
+>  package/Config.in                          |  1 +
+>  package/igd2-for-linux/Config.in           | 25 +++++++++++++
+>  package/igd2-for-linux/S99upnpd            | 42 +++++++++++++++++++++
+>  package/igd2-for-linux/igd2-for-linux.hash |  2 +
+>  package/igd2-for-linux/igd2-for-linux.mk   | 59 ++++++++++++++++++++++++++++++
+>  package/igd2-for-linux/upnpd.service       | 12 ++++++
+>  6 files changed, 141 insertions(+)
+>  create mode 100644 package/igd2-for-linux/Config.in
+>  create mode 100644 package/igd2-for-linux/S99upnpd
+>  create mode 100644 package/igd2-for-linux/igd2-for-linux.hash
+>  create mode 100644 package/igd2-for-linux/igd2-for-linux.mk
+>  create mode 100644 package/igd2-for-linux/upnpd.service
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index f86e1ef..8062437 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1443,6 +1443,7 @@ menu "Networking applications"
+>  	source "package/ifplugd/Config.in"
+>  	source "package/iftop/Config.in"
+>  	source "package/ifupdown/Config.in"
+> +	source "package/igd2-for-linux/Config.in"
+>  	source "package/igh-ethercat/Config.in"
+>  	source "package/igmpproxy/Config.in"
+>  	source "package/inadyn/Config.in"
+> diff --git a/package/igd2-for-linux/Config.in b/package/igd2-for-linux/Config.in
+> new file mode 100644
+> index 0000000..c7f5dfa
+> --- /dev/null
+> +++ b/package/igd2-for-linux/Config.in
+> @@ -0,0 +1,25 @@
+> +config BR2_PACKAGE_IGD2_FOR_LINUX
+> +	bool "igd2-for-linux"
+> +	depends on BR2_USE_MMU # fork()
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_USE_WCHAR
+> +	select BR2_PACKAGE_IPTABLES
+> +	select BR2_PACKAGE_LIBUPNP
+> +	help
+> +	  This is The Linux UPnP Internet Gateway Device 2. It is
+> +	  modified from the original Linux UPnP Internet Gateway Device
+> +	  [http://linux-igd.sourceforge.net/] according to UPnP
+> +	  InternetGatewayDevice:2 specifications.
+> +
+> +	  It implements the UPnP Internet Gateway Device version 2
+> +	  specification (IGDv2) and allows UPnP aware clients, such as
+> +	  MSN Messenger, Azureus or Miranda to work properly from behind
+> +	  a NAT firewall.
+> +
+> +	  Please edit /etc/upnpd.conf before using upnpd!
+> +
+> +	  https://github.com/ffontaine/igd2-for-linux
+> +
+> +comment "igd2-for-linux needs a toolchain w/ threads and wchar"
+> +	depends on BR2_USE_MMU
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+> diff --git a/package/igd2-for-linux/S99upnpd b/package/igd2-for-linux/S99upnpd
+> new file mode 100644
+> index 0000000..3a5b20a
+> --- /dev/null
+> +++ b/package/igd2-for-linux/S99upnpd
+> @@ -0,0 +1,42 @@
+> +#!/bin/sh
+> +
+> +NAME=upnpd
+> +PIDFILE=/var/run/$NAME.pid
+> +DAEMON=/usr/sbin/$NAME
+> +LAN=eth0
+> +WAN=eth0
+> +DAEMON_ARGS="-f $WAN $LAN"
+> +
+> +start() {
+> +	printf "Starting $NAME: "
+> +	route add -net 239.0.0.0 netmask 255.0.0.0 $LAN
+> +	start-stop-daemon -S -q -m -b -p $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
+> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
+> +}
+> +stop() {
+> +	printf "Stopping $NAME: "
+> +	start-stop-daemon -K -q -p $PIDFILE
+> +	route del -net 239.0.0.0 netmask 255.0.0.0 $LAN
+> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
+> +}
+> +restart() {
+> +	stop
+> +	start
+> +}
+> +
+> +case "$1" in
+> +  start)
+> +	start
+> +	;;
+> +  stop)
+> +	stop
+> +	;;
+> +  restart|reload)
+> +	restart
+> +	;;
+> +  *)
+> +	echo "Usage: $0 {start|stop|restart|reload}"
+> +	exit 1
+> +esac
+> +
+> +exit $?
+> diff --git a/package/igd2-for-linux/igd2-for-linux.hash b/package/igd2-for-linux/igd2-for-linux.hash
+> new file mode 100644
+> index 0000000..a46fe5f
+> --- /dev/null
+> +++ b/package/igd2-for-linux/igd2-for-linux.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed:
+> +sha256	a8edc4c14aa104dcffa79d1f3057b8b9c5cef0f8f43901f61e306120a4efe01f	igd2-for-linux-v1.1.tar.gz
+> diff --git a/package/igd2-for-linux/igd2-for-linux.mk b/package/igd2-for-linux/igd2-for-linux.mk
+> new file mode 100644
+> index 0000000..5d0cb23
+> --- /dev/null
+> +++ b/package/igd2-for-linux/igd2-for-linux.mk
+> @@ -0,0 +1,59 @@
+> +################################################################################
+> +#
+> +# igd2-for-linux
+> +#
+> +################################################################################
+> +
+> +IGD2_FOR_LINUX_VERSION = v1.1
+> +IGD2_FOR_LINUX_SITE = \
+> +	$(call github,ffontaine,igd2-for-linux,$(IGD2_FOR_LINUX_VERSION))
+> +
+> +IGD2_FOR_LINUX_LICENSE = GPLv2
+> +IGD2_FOR_LINUX_LICENSE_FILES = linuxigd2/doc/LICENSE
+> +
+> +IGD2_FOR_LINUX_DEPENDENCIES = iptables libupnp
+> +
+> +# igd2-for-linux can use libiptc API calls or iptables calls
+> +# By default, igd2-for-linux uses iptables calls
+> +IGD2_FOR_LINUX_HAVE_LIBIPTC=1
+> +
+> +IGD2_FOR_LINUX_BUILD_DIR = $(@D)/linuxigd2
+> +
+> +define IGD2_FOR_LINUX_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(IGD2_FOR_LINUX_BUILD_DIR) \
+> +	$(TARGET_CONFIGURE_OPTS) \
+> +	CFLAGS="$(TARGET_CFLAGS)" \
+
+CFLAGS is already part of TARGET_CONFIGURE_OPTS, you can remove this line.
+
+> +	BINDIR="/usr/sbin" \
+> +	MANDIR="/usr/man" \
+
+I don't see any BINDIR or MANDIR in the Makefile. it seems useless and can be
+removed.
+
+> +	HAVE_LIBIPTC=$(IGD2_FOR_LINUX_HAVE_LIBIPTC) \
+> +	LIBIPTC_PREFIX="$(STAGING_DIR)/usr" \
+> +	LIBUPNP_PREFIX="$(STAGING_DIR)/usr" \
+> +	all
+> +endef
+> +
+> +define IGD2_FOR_LINUX_INSTALL_TARGET_CMDS
+> +        $(INSTALL) -m 0755 $(IGD2_FOR_LINUX_BUILD_DIR)/bin/upnpd \
+> +		$(TARGET_DIR)/usr/sbin/
+
+Please use:
+
+$(INSTALL) -D -m 0755 $(IGD2_FOR_LINUX_BUILD_DIR)/bin/upnpd \
+		$(TARGET_DIR)/usr/sbin/upnpd
+
+(for all files)
+
+I.e: use the -D option, and specify a full destination path.
+
+Best regards,
+Romain
 
 
-So, lemme recap:
-
-                            | Github            | Gitlab            |
-----------------------------+-------------------+-------------------+
-License                     | Proprietary       | Open Source       |
-Network effect              | Definitely        | Somewhat          |
-git tree                    | Yes               | Yes               |
-Web pages                   | Static            | Static            |
-web hooks                   | Yes               | Yes               |
-C.I.                        | Yes, many [0]     | Yes, many [1]     |
-emails                      | on push           | on push [2]       |
-IRC                         | No?               | irker             |
-Markup language             | Markdown (MD)     | Markdown (MD)     |
-README                      | Yes, MD           | Yes, MD           |
-Issue tracker               | Yes, minimal, MD  | Yes, minimal, MD  |
-Snippets                    | Yes               | Yes               |
-Export project data         | No?               | Yes               |
-
-
-So there is no clear winner. The only things that would tip the scale is
-the license and the possibility to have per-commit emails.
-
-My favourite is obviously Gitlab. ;-)
-
-
-[0] of which, Travis
-[1] of which, Jenkins
-[2] The source code is available, we could do the modifications and
-    submit back to Gitlab; for now, I opened an issue there;
-    https://gitlab.com/gitlab-org/gitlab-ce/issues/19901
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/linuxigd
+> +        $(INSTALL) -m 0644 $(IGD2_FOR_LINUX_BUILD_DIR)/configs/*.png \
+> +		$(TARGET_DIR)/etc/linuxigd/
+> +        $(INSTALL) -m 0644 $(IGD2_FOR_LINUX_BUILD_DIR)/configs/*.xml \
+> +		$(TARGET_DIR)/etc/linuxigd/
+> +        $(INSTALL) -m 0644 $(IGD2_FOR_LINUX_BUILD_DIR)/configs/upnpd.conf \
+> +		$(TARGET_DIR)/etc/
+> +endef
+> +
+> +define IGD2_FOR_LINUX_INSTALL_INIT_SYSV
+> +	$(INSTALL) -D -m 0755 package/igd2-for-linux/S99upnpd \
+> +		$(TARGET_DIR)/etc/init.d/S99upnpd
+> +endef
+> +
+> +define IGD2_FOR_LINUX_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -D -m 0644 package/domoticz/upnpd.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/upnpd.service
+> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +	ln -sf ../../../../usr/lib/systemd/system/upnpd.service \
+> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/upnpd.service
+> +endef
+> +
+> +$(eval $(generic-package))
+> diff --git a/package/igd2-for-linux/upnpd.service b/package/igd2-for-linux/upnpd.service
+> new file mode 100644
+> index 0000000..479f5b2
+> --- /dev/null
+> +++ b/package/igd2-for-linux/upnpd.service
+> @@ -0,0 +1,12 @@
+> +[Unit]
+> +Description=UPnP Internet Gateway Device version 2 daemon
+> +After=network.target
+> +
+> +[Service]
+> +ExecStartPre=/sbin/route add -net 239.0.0.0 netmask 255.0.0.0 eth0
+> +ExecStart=/usr/sbin/upnpd -f eth0 eth0
+> +Restart=always
+> +ExecStopPost=/sbin/route del -net 239.0.0.0 netmask 255.0.0.0 eth0
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+> 
