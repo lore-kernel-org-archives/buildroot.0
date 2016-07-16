@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 22:51:16 +0200
-Subject: [Buildroot] [v2 2/5] package/audit: add support for host variant
-In-Reply-To: <1468699589-14328-2-git-send-email-Aduskett@gmail.com>
+Date: Sat, 16 Jul 2016 22:52:05 +0200
+Subject: [Buildroot] [v2 3/5] package/libsemanage: add host-audit as a
+ dependency.
+In-Reply-To: <1468699589-14328-3-git-send-email-Aduskett@gmail.com>
 References: <1468699589-14328-1-git-send-email-Aduskett@gmail.com>
- <1468699589-14328-2-git-send-email-Aduskett@gmail.com>
-Message-ID: <20160716225116.3a479c5c@free-electrons.com>
+ <1468699589-14328-3-git-send-email-Aduskett@gmail.com>
+Message-ID: <20160716225205.2ac3c1fa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +14,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 16 Jul 2016 16:06:26 -0400, Adam Duskett wrote:
-> refpolicy requires host-audit to compile.  This patch adds that support.
-> As previously discussed, libcap-ng is required as far as I can tell, and
-> as such, I have made it mandatory to compile it as a dependency.
+On Sat, 16 Jul 2016 16:06:27 -0400, Adam Duskett wrote:
+> refpolicy requires host-libsemanage.  host-libsemanage will fail
+> to compile without host-audit.  This adds host-audit as a requirement
+> for host-libsemanage.
 > 
 > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > ---
 > Changes:
 
-I've applied after removing the libcap-ng usage for the moment, and
-reworking the commit log.
+I've indeed reproduce the host-libsemanage build issue. This build
+issue is in fact an excellent illustration what I hate to have host
+package that are not used by any other package in Buildroot: it has
+been broken since ages, and nobody noticed.
 
-Thanks,
+So, I've applied your patch, which fixed the build problem.
+
+Thanks!
 
 Thomas
 -- 
