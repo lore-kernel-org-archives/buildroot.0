@@ -1,52 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 16:39:36 +0200
-Subject: [Buildroot] [PATCH v3 2/4] package/ti-sgx-um: new package
-In-Reply-To: <1468497888-6464-2-git-send-email-lothar.felten@gmail.com>
-References: <1468497888-6464-1-git-send-email-lothar.felten@gmail.com>
- <1468497888-6464-2-git-send-email-lothar.felten@gmail.com>
-Message-ID: <20160716163936.55380669@free-electrons.com>
+Date: Sat, 16 Jul 2016 16:40:11 +0200
+Subject: [Buildroot] [git commit] dbus: disable bundled initscript
+Message-ID: <20160716144016.42F7E7FC6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ab173610fc51be27edca90337ef91b39c0c754db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 14 Jul 2016 14:04:46 +0200, Lothar Felten wrote:
-> This package adds the userspace libraries for the SGX graphics accelerator of
-> the following Texas Instruments SoCs: AM335x, AM437x, AM4430, AM5430
-> It also adds a config file for the libraries and a System-V init script.
-> 
-> Signed-off-by: Lothar Felten <lothar.felten@gmail.com>
-> ---
->  package/Config.in                |  1 +
->  package/ti-sgx-um/Config.in      | 29 +++++++++++++++++++++++++++++
->  package/ti-sgx-um/S80ti-sgx      | 14 ++++++++++++++
->  package/ti-sgx-um/powervr.ini    |  6 ++++++
->  package/ti-sgx-um/ti-sgx-um.hash |  2 ++
->  package/ti-sgx-um/ti-sgx-um.mk   | 38 ++++++++++++++++++++++++++++++++++++++
->  6 files changed, 90 insertions(+)
->  create mode 100644 package/ti-sgx-um/Config.in
->  create mode 100644 package/ti-sgx-um/S80ti-sgx
->  create mode 100644 package/ti-sgx-um/powervr.ini
->  create mode 100644 package/ti-sgx-um/ti-sgx-um.hash
->  create mode 100644 package/ti-sgx-um/ti-sgx-um.mk
+Otherwise it will install $(TARGET_DIR)/etc/rc.d/init.d/messagebus when
+building on a redhat/fedora host.
+Regardless of that we provide our own initscript.
 
-Applied, with the following changes:
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dbus/dbus.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-    [Thomas:
-     - Add Config.in comment about the ti-sgx-km dependency.
-     - Add dependency on glibc since the package consists of pre-built
-       libraries that can only work with glibc.
-     - Add Config.in comment about thread and glibc dependencies
-     - Use tabs for indentation everywhere.
-     - Use git:// instead of http:// to clone, since http:// doesn't work.]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 11c3d4e..6064501 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -32,7 +32,8 @@ DBUS_CONF_OPTS = \
+ 	--disable-dnotify \
+ 	--with-xml=expat \
+ 	--with-system-socket=/var/run/dbus/system_bus_socket \
+-	--with-system-pid-file=/var/run/messagebus.pid
++	--with-system-pid-file=/var/run/messagebus.pid \
++	--with-init-scripts=none
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ DBUS_CONF_OPTS += LIBS='-pthread'
