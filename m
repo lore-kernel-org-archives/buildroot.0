@@ -1,32 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 15:17:48 +0200
-Subject: [Buildroot] [PATCH v2] nginx-upload-module: new package
-In-Reply-To: <1468552217-17318-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1468552217-17318-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20160716151748.1b901462@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 16 Jul 2016 15:44:54 +0200
+Subject: [Buildroot] [PATCH] package/alljoyn: needs BR2_TOOLCHAIN_HAS_SYNC_4
+Message-ID: <1468676694-14108-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+After applying a patch like [1], the build failed with the following
+error:
+liballjoyn_c.a(Message.o): In function `alljoyn_message_destroy':
+Message.cc:(.text+0x74): undefined reference to `__sync_sub_and_fetch_4'
+liballjoyn.so: undefined reference to `__sync_bool_compare_and_swap_4'
+liballjoyn.so: undefined reference to `__sync_add_and_fetch_4'
 
-On Thu, 14 Jul 2016 22:10:17 -0500, Matt Weber wrote:
-> From: Bimal Jacob <Bimal.Jacob@rockwellcollins.com>
-> 
-> A module for nginx web server for handling file uploads using
-> multipart/form-data encoding (RFC 1867).
-> 
-> Signed-off-by: Bimal Jacob <bimal.jacob@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+So, add dependency on BR2_TOOLCHAIN_HAS_SYNC_4 which also disable the
+alljoyn build on sparc.
 
-This seems to break the build in certain conditions:
+[1] https://git.buildroot.org/buildroot/commit/?id=c5e96d8935016456bea342db170ae6a139a8470f
 
-  http://autobuild.buildroot.net/results/64b/64b1bde02346ca67b670f0b095bd3acad707e8cd/build-end.log
+Fixes:
+http://autobuild.buildroot.net/results/cea/cea62a7ed7f1eda6f817d8e27fd645942def25ec
 
-Thomas
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/alljoyn/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/alljoyn/Config.in b/package/alljoyn/Config.in
+index 021a07b..6eb417d 100644
+--- a/package/alljoyn/Config.in
++++ b/package/alljoyn/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_ALLJOYN
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_LIBCAP
+@@ -19,5 +20,6 @@ config BR2_PACKAGE_ALLJOYN
+ 
+ comment "alljoyn needs a toolchain w/ C++, threads, wchar and dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_USE_WCHAR || BR2_STATIC_LIBS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.5
