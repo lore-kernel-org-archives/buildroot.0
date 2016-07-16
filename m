@@ -1,65 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jul 2016 20:28:56 +0200
-Subject: [Buildroot] [PATCH] package/systemd: import daemon needs
- headers >= 3.11
-In-Reply-To: <20160716142624.1e045c31@free-electrons.com>
-References: <1468182896-8355-1-git-send-email-yann.morin.1998@free.fr>
- <87eg709ccd.fsf@dell.be.48ers.dk> <20160711202325.GB5122@free.fr>
- <87r3az6y58.fsf@dell.be.48ers.dk>
- <20160716142624.1e045c31@free-electrons.com>
-Message-ID: <20160716182856.GB3882@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 16 Jul 2016 20:33:44 +0200
+Subject: [Buildroot] [PATCH] package/pppd: disable for musl toolchains
+In-Reply-To: <20160716202434.0a3a6440@free-electrons.com>
+References: <1468685298-29083-1-git-send-email-romain.naour@gmail.com>
+ <20160716202434.0a3a6440@free-electrons.com>
+Message-ID: <15985f1d-b02e-b670-4b71-5fb11c4afc44@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Peter, All,
+Hi Thomas,
 
-On 2016-07-16 14:26 +0200, Thomas Petazzoni spake thusly:
-> On Tue, 12 Jul 2016 10:47:31 +0200, Peter Korsgaard wrote:
+Le 16/07/2016 ? 20:24, Thomas Petazzoni a ?crit :
+> Hello,
 > 
-> > I hadn't, no. I just did a test build with 3.10 headers and glibc 2.22,
-> > and it built without problems - So I've dropped this patch.
+> On Sat, 16 Jul 2016 18:08:18 +0200, Romain Naour wrote:
+>> For the same reason as for ipsec-tools [1], disable pppd for musl
+>> toolchains.
+>> It also include <sys/cdefs.h> which is not provided by musl [2].
+>>
+>> This fixes a compilation error with musl libc because of undeclared
+>> __P and missing sys/cdefs.h include.
+>>
+>> Propagate the dependency to network-manager and rp-pppoe
+>> packages.
+>>
+>> [1] 33499484e457018203023cdfdd5286478f2ae381
+>> [2] http://wiki.musl-libc.org/wiki/FAQ#Q:_I.27m_trying_to_compile_something_against_musl_and_I_get_error_messages_about_sys.2Fcdefs.h
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> ---
+>>  package/network-manager/Config.in | 1 +
+>>  package/pppd/Config.in            | 5 +++--
+>>  package/rp-pppoe/Config.in        | 5 +++--
+>>  3 files changed, 7 insertions(+), 4 deletions(-)
+> 
+> I've added a Config.in comment in the network-manager package, and
+> applied. Thanks!
+> 
+> It's a bit sad that we have to disable packages just because of silly
+> __P macros, but there are indeed tons of them in pppd :-/
 
-Yes, it works because glibc 2.22 (which is >= 2.19) defines it even if
-not available in the kernel headers).
+Well, I'm also not really happy to disable packages in Buildroot for such reason :-/
 
-> So the comment from Yann in https://patchwork.ozlabs.org/patch/646796/
-> that both were needed is incorrect?
+Best regards,
+Romain
 
-So, I built a toolchain with Linux headers 3.10 and glibc 2.18. And
-systemd-importd does not build:
 
-    src/import/export-raw.c: In function 'reflink_snapshot':
-    src/import/export-raw.c:271:26: error: 'O_TMPFILE' undeclared (first use in this function)
-             new_fd = open(d, O_TMPFILE|O_CLOEXEC|O_NOCTTY|O_RDWR, 0600);
-                              ^
-    src/import/export-raw.c:271:26: note: each undeclared identifier is reported only once for each function it appears in
-    Makefile:16515: recipe for target 'src/import/systemd_export-export-raw.o' failed
-
-O_TMPFILE was added in Linux 3.11; glibc added the corresponding
-definition in glib-2.19.
-
-    glibc \ linux   | <= 3.10   | >= 3.11   |
-    ----------------+-----------+-----------+
-    <= 2.18         | No        | No*       |
-    >= 2.19         | Yes       | Yes       |
-
-*: headers 3.12
-
-So, not sure where to go from there...
-
-Note: I have not tested uClibc or musl, because,well, systemd depends on
-glibc...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> 
+> Thomas
+> 
