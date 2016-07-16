@@ -1,30 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 12:20:34 +0200
-Subject: [Buildroot] [PATCH 2/2] freescale-imx: add missing hash
-In-Reply-To: <20160709080335.30055-2-daggs@gmx.com>
-References: <20160709080335.30055-1-daggs@gmx.com>
- <20160709080335.30055-2-daggs@gmx.com>
-Message-ID: <20160716122034.72393a39@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 16 Jul 2016 12:32:33 +0200
+Subject: [Buildroot] [PATCH] docs/website: add OpenWide/Smile as sponsor
+In-Reply-To: <20160716120440.08786dc3@free-electrons.com>
+References: <1468660786-5386-1-git-send-email-romain.naour@gmail.com>
+ <20160716120440.08786dc3@free-electrons.com>
+Message-ID: <2d4f1bb2-494c-d350-0359-41edd08688a1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sat,  9 Jul 2016 11:03:35 +0300, Dagg Stompler wrote:
-> add hash for amd-gpu-bin-mx51-11.09.01.bin
+Le 16/07/2016 ? 12:04, Thomas Petazzoni a ?crit :
+> Hello,
 > 
-> Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> ---
->  package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.hash | 1 +
->  1 file changed, 1 insertion(+)
+> On Sat, 16 Jul 2016 11:19:46 +0200, Romain Naour wrote:
+>> From: Romain Naour <romain.naour@smile.fr>
+>>
+>> http://lists.busybox.net/pipermail/buildroot/2016-July/167050.html
+>>
+>> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>> Cc: J?r?my Rosen <jeremy.rosen@smile.fr>
+>> ---
+>>  .../images/Open-Wide-Ingenierie_logo_header.png        | Bin 0 -> 26040 bytes
+>>  docs/website/sponsors.html                             |  17 +++++++++++++++++
+>>  2 files changed, 17 insertions(+)
+>>  create mode 100644 docs/website/images/Open-Wide-Ingenierie_logo_header.png
+> 
+> I've renamed the logo file to owi-smile-logo.png, which matches better
+> the naming for other logos, and I've reworked a bit the logo to remove
+> a lot of white area that was making the logo appear smaller than the
+> other logos on the website.
 
-Applied to master, thanks.
+Thanks for fixing this.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> 
+> Then I've applied. Of course, you can hardly see the result right now,
+> since the site is still dead :-/
+
+Well, that's true I can't wait :)
+
+Romain
+
+> 
+> Thomas
+> 
