@@ -1,37 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 22:50:26 +0200
-Subject: [Buildroot] [git commit] package/libsemanage: add host-audit as a
-	dependency of the host variant
-Message-ID: <20160716205214.BB8EA7F995@busybox.osuosl.org>
+Date: Sat, 16 Jul 2016 22:47:58 +0200
+Subject: [Buildroot] [git commit] package/audit: add support for host variant
+Message-ID: <20160716205214.AA7217FCC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=582c64d4faf7f58a2d8ff573feb63e24c8f7191a
+commit: https://git.buildroot.net/buildroot/commit/?id=c2f7b6e196caefa2ece7c19b2cd5401be697a2c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-refpolicy requires host-libsemanage. host-libsemanage will fail to
-compile without host-audit. This commit adds host-audit as a
-requirement for host-libsemanage.
+host-libsemanage requires host-audit to compile, therefore this patch
+adds a host variant for the audit package.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[Thomas: remove libcap-ng usage for now, rework commit log.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsemanage/libsemanage.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/audit/audit.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
-index a60d018..beb34ba 100644
---- a/package/libsemanage/libsemanage.mk
-+++ b/package/libsemanage/libsemanage.mk
-@@ -27,7 +27,7 @@ define LIBSEMANAGE_INSTALL_TARGET_CMDS
- 	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 89fdf14..06ec959 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -58,4 +58,11 @@ define AUDIT_INSTALL_CLEANUP
  endef
+ AUDIT_POST_INSTALL_TARGET_HOOKS += AUDIT_INSTALL_CLEANUP
  
--HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-libsepol host-libselinux \
-+HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-audit host-libsepol host-libselinux \
- 				host-ustr host-bzip2 host-swig
- HOST_LIBSEMANAGE_MAKE_OPTS += $(HOST_CONFIGURE_OPTS) \
- 	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
++HOST_AUDIT_CONF_OPTS = \
++	--without-python \
++	--without-python3 \
++	--disable-zos-remote \
++	--without-libcap-ng
++
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
