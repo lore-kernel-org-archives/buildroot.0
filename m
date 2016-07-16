@@ -1,42 +1,60 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 16 Jul 2016 11:56:01 +0200
-Subject: [Buildroot] [PATCH 1/3] package/python-protobuf: Allow
- generating host-python-protobuf
-In-Reply-To: <1467291218-7710-1-git-send-email-tiago.brusamarello@datacom.ind.br>
-References: <1467291218-7710-1-git-send-email-tiago.brusamarello@datacom.ind.br>
-Message-ID: <e6b56a17-ab1c-37ea-46ff-4e4a70aa662c@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 16 Jul 2016 12:00:16 +0200
+Subject: [Buildroot] [PATCH 1/2] host-autoconf2-13: new package
+Message-ID: <1468663217-21940-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Tiago,
+this obsolete version is required by Mozilla b2g
 
-Le 30/06/2016 ? 14:53, Tiago Brusamarello a ?crit :
-> This change allows use of python-protobuf libraries on the host, so
-> 'protoc-gen-lua' plugin for the 'protoc' tool can be run on host.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/autoconf2-13/autoconf2-13.hash |  2 ++
+ package/autoconf2-13/autoconf2-13.mk   | 24 ++++++++++++++++++++++++
+ 2 files changed, 26 insertions(+)
+ create mode 100644 package/autoconf2-13/autoconf2-13.hash
+ create mode 100644 package/autoconf2-13/autoconf2-13.mk
 
-Thanks for the improved commit log.
-
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-> 
-> Signed-off-by: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
-> ---
->  package/python-protobuf/python-protobuf.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
-> index d8be76d..b328e3e 100644
-> --- a/package/python-protobuf/python-protobuf.mk
-> +++ b/package/python-protobuf/python-protobuf.mk
-> @@ -14,3 +14,4 @@ PYTHON_PROTOBUF_SETUP_TYPE = setuptools
->  PYTHON_PROTOBUF_SUBDIR = python
->  
->  $(eval $(python-package))
-> +$(eval $(host-python-package))
-> 
+diff --git a/package/autoconf2-13/autoconf2-13.hash b/package/autoconf2-13/autoconf2-13.hash
+new file mode 100644
+index 0000000..9283646
+--- /dev/null
++++ b/package/autoconf2-13/autoconf2-13.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 f0611136bee505811e9ca11ca7ac188ef5323a8e2ef19cffd3edb3cf08fd791e  autoconf-2.13.tar.gz
+diff --git a/package/autoconf2-13/autoconf2-13.mk b/package/autoconf2-13/autoconf2-13.mk
+new file mode 100644
+index 0000000..69c0eef
+--- /dev/null
++++ b/package/autoconf2-13/autoconf2-13.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# autoconf2-13
++#
++################################################################################
++
++AUTOCONF2_13_VERSION = 2.13
++AUTOCONF2_13_SOURCE = autoconf-$(AUTOCONF2_13_VERSION).tar.gz
++AUTOCONF2_13_SITE = $(BR2_GNU_MIRROR)/autoconf
++
++AUTOCONF2_13_LICENSE = GPLv2
++AUTOCONF2_13_LICENSE_FILES = COPYING
++
++HOST_AUTOCONF2_13_CONF_ENV = \
++	EMACS="no" \
++	ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
++	ac_cv_prog_gnu_m4_gnu=no
++
++HOST_AUTOCONF2_13_CONF_OPTS = \
++	--program-suffix=$(AUTOCONF2_13_VERSION) \
++
++HOST_AUTOCONF2_13_DEPENDENCIES = host-m4 host-libtool
++
++$(eval $(host-autotools-package))
+-- 
+2.7.4
