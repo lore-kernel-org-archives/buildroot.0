@@ -1,34 +1,42 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sat, 16 Jul 2016 14:02:04 -0400
-Subject: [Buildroot] grub2 installation query
-Message-ID: <CANxTyt45ajPv1av2X=EFHEKTDy8mEiKx2-j+66kPZi_89-MDng@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 16 Jul 2016 20:15:01 +0200
+Subject: [Buildroot] [PATCH 1/1] igd2-for-linux: new package
+In-Reply-To: <1467905712-3559-1-git-send-email-fabrice.fontaine@orange.com>
+References: <1467905712-3559-1-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <20160716201501.4975cbfa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hello,
 
-I recently noticed that grub2 will fail to install if stripping is turned off.
-This is because $(STRIP) is used to make a "kernel.img" from another file
-during installation, and the `true` command won't simulate that.
+On Thu,  7 Jul 2016 17:35:12 +0200, Fabrice Fontaine wrote:
+> This is The Linux UPnP Internet Gateway Device 2. It is
+> modified from the original Linux UPnP Internet Gateway Device
+> [http://linux-igd.sourceforge.net/] according to UPnP
+> InternetGatewayDevice:2 specifications.
+> 
+> It implements the UPnP Internet Gateway Device version 2
+> specification (IGDv2) and allows UPnP aware clients, such as
+> MSN Messenger, Azureus or Miranda to work properly from behind
+> a NAT firewall.
+> 
+> Please edit /etc/upnpd.conf before using upnpd!
+> 
+> https://github.com/ffontaine/igd2-for-linux
+> 
+> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 
-I think that grub2 is not unique in this.  I notice these lines in openldap.mk:
+Following the comments from Romain Naour, I've marked your patch as
+"Changes Requested" in our patch tracking system. Could you respin a
+new version that takes into account Romain's comments?
 
-  # Somehow, ${STRIP} does not percolates through to the shtool script
-  # used to install the executables; thus, that script tries to run the
-  # executable it is supposed to install, resulting in an error.
-  OPENLDAP_MAKE_ENV = STRIP="$(TARGET_STRIP)"
+Thanks a lot!
 
-And indeed the comment is true - there is at least two instances of openldap
-makefiles installing things to $(DESTDIR) via $(STRIP).
-
-So I'm wondering:
-
-- Should not the autobuilders be hitting these?
-
-- Should there by a TARGET_STRIP_FOR_REAL that is actual a strip, in
-  addition to TARGET_STRIP, for these cases?
-
-Danomi -
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
