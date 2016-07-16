@@ -1,73 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 11:53:17 +0200
-Subject: [Buildroot] [PATCH] mtd: Add option to install mtd integrity
- test
-In-Reply-To: <1468530227-28124-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1468530227-28124-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20160716115317.4723e7a6@free-electrons.com>
+Date: Sat, 16 Jul 2016 11:53:32 +0200
+Subject: [Buildroot] [git commit] package/vde2: remove trailing \ from last
+	item of _VDE2_CONF_OPTS
+Message-ID: <20160716095402.6A1E87FBF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1531392c83247b34e19cca1e70fba12462651ae4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 14 Jul 2016 16:03:47 -0500, Matt Weber wrote:
-> From: ynadupur <yugendra.sai.babu.nadupuru@rockwellcollins.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/vde2/vde2.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-This From...
-
-> 
-> Description:
-> 	The mtd tests have proven very useful in testing both flash stability
-> 	and JFFS2 changes. Adding an option to install the integrity test.
-> 
-> Signed-off-by:[YUGENDRA SAI BABU NADUPURU]<yugendra.sai.babu.nadupuru@rockwellcollins.com>
-
-... didn't match this SoB line.
-
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/mtd/Config.in |  3 +++
->  package/mtd/mtd.mk    | 12 ++++++++++++
->  2 files changed, 15 insertions(+)
-> 
-> diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-> index 6e4346f..780ba94 100644
-> --- a/package/mtd/Config.in
-> +++ b/package/mtd/Config.in
-> @@ -159,4 +159,7 @@ config BR2_PACKAGE_MTD_UBIBLOCK
->  	bool "ubiblock"
->  	default y
->  
-> +config BR2_PACKAGE_MTD_TESTS
-
-Renamed to BR2_PACKAGE_MTD_INTEGCK, since it installs only this tool.
-
-
-> +ifeq ($(BR2_PACKAGE_MTD_TESTS),y)
-> +define MTD_TESTS_BUILD_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) $(MAKE1) CROSS=$(TARGET_CROSS) \
-> +		BUILDDIR=$(@D) $(MTD_MAKE_OPTS) -C $(@D)/tests/fs-tests all
-> +endef
-> +MTD_POST_BUILD_HOOKS += MTD_TESTS_BUILD_CMDS
-> +define MTD_TESTS_TARGET_INSTALL_CMDS
-> +	$(INSTALL) -D -m 755 $(@D)/tests/fs-tests/integrity/integck $(TARGET_DIR)/usr/sbin/integck
-> +endef
-> +MTD_POST_INSTALL_TARGET_HOOKS += MTD_TESTS_TARGET_INSTALL_CMDS
-> +endif
-
-Instead of hooks, I've used intermediate variables.
-
-Also, integck was not building properly with uClibc or musl due to its
-use of <execinfo.h>. I've added a patch to fix that, which I've
-submitted upstream.
-
-Applied with those changes, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
+index d9b11bb..558d0f3 100644
+--- a/package/vde2/vde2.mk
++++ b/package/vde2/vde2.mk
+@@ -32,7 +32,7 @@ VDE2_CONF_OPTS = \
+ 	--disable-python        \
+ 	--disable-profile       \
+ 	--disable-kernel-switch \
+-	--enable-tuntap         \
++	--enable-tuntap
+ 
+ #??Package does not build in parallel due to improper make rules
+ VDE2_MAKE = $(MAKE1)
+@@ -44,7 +44,7 @@ HOST_VDE2_CONF_OPTS = \
+ 	--disable-python        \
+ 	--disable-profile       \
+ 	--disable-kernel-switch \
+-	--enable-tuntap         \
++	--enable-tuntap
+ 
+ HOST_VDE2_MAKE = $(MAKE1)
+ 
