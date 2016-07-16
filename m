@@ -1,30 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 12:21:53 +0200
-Subject: [Buildroot] [git commit] gpu-amd-bin-mx51: add missing hash
-Message-ID: <20160716115408.9E4AA7FC6B@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 16 Jul 2016 13:58:07 +0200
+Subject: [Buildroot] [PATCH 2/3] package/rt-tests: bump to 1.0
+In-Reply-To: <20160715150422.5da4a111@free-electrons.com>
+References: <1468522869-3887-1-git-send-email-romain.naour@gmail.com>
+ <1468522869-3887-2-git-send-email-romain.naour@gmail.com>
+ <20160715150422.5da4a111@free-electrons.com>
+Message-ID: <6212cf57-3d62-614d-4188-3afb603e76a7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=752a3aad96d3fbab2ac53b0384656ed49fb2ca4f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Add hash for amd-gpu-bin-mx51-11.09.01.bin (the framebuffer variant of
-the driver).
+Le 15/07/2016 ? 15:04, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> One quick comment on this patch.
+> 
+> On Thu, 14 Jul 2016 21:01:08 +0200, Romain Naour wrote:
+> 
+>> +Subject: [PATCH 1/2] Fix various minor issues with rt-tests build system
+> 
+>> +Subject: [PATCH 2/2] Fix a build issue with uClibc-ng
+> 
+> Please use "git format-patch -N" when generating patches for Buildroot
+> packages, in order to avoid the 1/2 and 2/2 specifications. These
+> specifications very quickly get wrong when we add or remove patches, so
+> we prefer not to have them.
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.hash | 1 +
- 1 file changed, 1 insertion(+)
+Agree, I just forgot about patch numbering.
 
-diff --git a/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.hash b/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.hash
-index 200265e..9c08e4a 100644
---- a/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.hash
-+++ b/package/freescale-imx/gpu-amd-bin-mx51/gpu-amd-bin-mx51.hash
-@@ -1,2 +1,3 @@
- # locally computed
- sha256  c7a6fa03b7aa2a375556c59908876554ba720c1e744baba2debb84a408f790db  amd-gpu-x11-bin-mx51-11.09.01.bin
-+sha256  f0db68a764b5fb199729e7435f606b8d12b61ca97990336c647b7e81f4a584d9  amd-gpu-bin-mx51-11.09.01.bin
+I noticed a build issue with this new version of rt-tests [1] due to local
+syscall number definition for the new kernel deadline scheduler on some
+architectures. Upsteam added __NR_sched_setattr and __NR_sched_setattr
+definition for common architectures (x86, x86_64, arm) and tile if not already
+defined [2].
+
+Maybe instead of adding missing syscall number, we can avoid building rt-tests
+with toolchain compiled with too old kernel headers (i.e
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14)
+
+Thoughts ?
+
+Best regards,
+Romain
+
+[1]
+http://autobuild.buildroot.net/results/6fa/6facaeb10588bdf3ff029b882a8ae6ffba815cdc
+[2]
+https://kernel.googlesource.com/pub/scm/utils/rt-tests/rt-tests.git/+/ef2dee4232b7cae594ef7ecb7230c4bd18cea3f3%5E%21/
+
+> 
+> Thanks,
+> 
+> Thomas
+> 
