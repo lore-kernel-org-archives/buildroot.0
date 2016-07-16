@@ -1,42 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 20:15:01 +0200
-Subject: [Buildroot] [PATCH 1/1] igd2-for-linux: new package
-In-Reply-To: <1467905712-3559-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1467905712-3559-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20160716201501.4975cbfa@free-electrons.com>
+Date: Sat, 16 Jul 2016 20:17:28 +0200
+Subject: [Buildroot] [git commit] package/ti-sgx-um: fix Config.in
+Message-ID: <20160716181734.1DD107FC97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f5dd6040821a5df948466ea9d116c089d1134c9d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  7 Jul 2016 17:35:12 +0200, Fabrice Fontaine wrote:
-> This is The Linux UPnP Internet Gateway Device 2. It is
-> modified from the original Linux UPnP Internet Gateway Device
-> [http://linux-igd.sourceforge.net/] according to UPnP
-> InternetGatewayDevice:2 specifications.
-> 
-> It implements the UPnP Internet Gateway Device version 2
-> specification (IGDv2) and allows UPnP aware clients, such as
-> MSN Messenger, Azureus or Miranda to work properly from behind
-> a NAT firewall.
-> 
-> Please edit /etc/upnpd.conf before using upnpd!
-> 
-> https://github.com/ffontaine/igd2-for-linux
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+The continuation line was fogotten. However, it fits on a single line.
 
-Following the comments from Romain Naour, I've marked your patch as
-"Changes Requested" in our patch tracking system. Could you respin a
-new version that takes into account Romain's comments?
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ti-sgx-um/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ti-sgx-um/Config.in b/package/ti-sgx-um/Config.in
+index 2be6c06..8e1e4fb 100644
+--- a/package/ti-sgx-um/Config.in
++++ b/package/ti-sgx-um/Config.in
+@@ -2,8 +2,7 @@ comment "ti-sgx-um needs the ti-sgx-km driver"
+ 	depends on !BR2_PACKAGE_TI_SGX_KM
+ 
+ comment "ti-sgx-um needs a glibc toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC ||
+-		!BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_TI_SGX_UM
+ 	bool "ti-sgx-um"
