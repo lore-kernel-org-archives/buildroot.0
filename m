@@ -1,31 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Jul 2016 16:48:31 +0200
-Subject: [Buildroot] [PATCH] dtach: bump to version v0.9
-In-Reply-To: <1468013946-1285-1-git-send-email-fhunleth@troodon-software.com>
-References: <1468013946-1285-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20160716164831.627fdc48@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 16 Jul 2016 16:57:39 +0200
+Subject: [Buildroot] [PATCH] package/autofs: requires NPTL
+Message-ID: <1468681059-20867-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+autofs uses pthread_condattr_setclock() which is available only with
+toolchains with NPTL threads support.
 
-On Fri,  8 Jul 2016 17:39:06 -0400, Frank Hunleth wrote:
-> As part of the v0.9 release, development moved from sourceforge to
-> GitHub.
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  package/dtach/dtach.hash | 2 +-
->  package/dtach/dtach.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/152/152d917b0078aeb3715cd562cdecf7d0debf924b
 
-Applied to master, thanks.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/autofs/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
+diff --git a/package/autofs/Config.in b/package/autofs/Config.in
+index dbe6674..8e08357 100644
+--- a/package/autofs/Config.in
++++ b/package/autofs/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_AUTOFS
+ 	bool "autofs"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	depends on !BR2_STATIC_LIBS # dlfcn
+@@ -15,7 +15,7 @@ config BR2_PACKAGE_AUTOFS
+ 
+ 	  http://www.linuxfromscratch.org/blfs/view/svn/general/autofs.html
+ 
+-comment "autofs needs a toolchain w/ threads, RPC, dynamic library"
++comment "autofs needs a toolchain w/ NPTL, RPC, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HAS_NATIVE_RPC
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.5
