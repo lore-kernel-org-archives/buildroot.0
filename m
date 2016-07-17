@@ -1,81 +1,95 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 12:34:32 +0200
-Subject: [Buildroot] [PATCH 12/16 v3] core: handle .br-external in a make
-	rule
+Date: Sun, 17 Jul 2016 12:34:35 +0200
+Subject: [Buildroot] [PATCH 15/16 v3] docs/manual: include packages from
+	BR2_EXTERNAL if set
 In-Reply-To: <cover.1468750623.git.yann.morin.1998@free.fr>
 References: <cover.1468750623.git.yann.morin.1998@free.fr>
-Message-ID: <0994022779466155b22c6e815e737d21c447a528.1468750623.git.yann.morin.1998@free.fr>
+Message-ID: <70e458ffdb5d33a1477ddeb37f4c69507e8dcb00.1468750623.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we treat the case where we have no br2-external tree
-(BR2_EXTERNAL is empty) differently from the case where we do have
-one (BR2_EXTERNAL is not empty).
+If the user is using one or more br2-external trees, add the list of
+packages therein to the manual.
 
-There is now no reason to treat those two cases differently:
+Note that we do re-introduce BR2_EXTERNAL (when it was removed in
+[-SHA1-] (docs/manual: do not override BR2_EXTERNAL). The reason for
+the removal is that BR2_EXTERNAL is no longer used as a Kconfig option.
 
-  - the kconfig snippet is always generated appropriately (i.e. it would
-    include the br2-external tree if set, or include nothing otherwise);
+However, BR2_EXTERNAL is now used by the gen-manual-lists.py script,
+which needs it to find packages' .mk files in the br2-external trees,
+not as a Kconfig option (which it is not).
 
-  - we no longer have a dummy br-external tree either.
+So, even though that looks like a revert, that's not: the purpose is
+different, and we only pass it when not empty.
 
-As such, generate the .br-external cache file in both cases.
-
-This will make it much easier to handle when we introduce support for
-multiple br2-external trees.
+In case we have no br2-external, we want to create an empty file, so
+we can't just touch it, in case it was previously generated with
+br2-external trees; instead, we printf an empty string in there to
+ensure the file exists and is empty.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
- Makefile | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ docs/manual/appendix.txt |  5 +++++
+ docs/manual/manual.mk    | 18 ++++++++++++++++++
+ 2 files changed, 23 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 72b55cb..67334e5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -146,23 +146,17 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
- # On subsequent invocations of make, it is read in. It can still be overridden
- # on the command line, therefore the file is re-created every time make is run.
- #
--# When BR2_EXTERNAL is set to an empty value (e.g. explicitly in command
--# line), the .br-external file is removed.
--#
- # If the br2-external tree defines its ID, then export the path in the
- # BR2_EXTERNAL_$(ID) variable.
+diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
+index 87a20bd..7ef8bbc 100644
+--- a/docs/manual/appendix.txt
++++ b/docs/manual/appendix.txt
+@@ -40,3 +40,8 @@ year following deprecation. For example, a symbol depending on
+ +BR2_DEPRECATED_SINCE_2013_05+ can be removed from 2014.05 onwards.
  
- BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external
- -include $(BR2_EXTERNAL_FILE)
--ifeq ($(BR2_EXTERNAL),)
--  $(shell rm -f $(BR2_EXTERNAL_FILE))
--else
-+ifneq ($(BR2_EXTERNAL),)
-   _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
-   ifeq ($(_BR2_EXTERNAL),)
-     $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relative to $(TOPDIR))
-   endif
-   override BR2_EXTERNAL := $(_BR2_EXTERNAL)
--  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
-   ifneq ($(wildcard $(BR2_EXTERNAL)/external.id),)
-     BR2_EXTERNAL_ID := $(shell cat $(BR2_EXTERNAL)/external.id 2>/dev/null)
-     ifeq ($(BR2_EXTERNAL_ID),)
-@@ -173,6 +167,11 @@ else
-   BR2_EXTERNAL_MK = $(BR2_EXTERNAL)/external.mk
- endif
- 
-+# This needs to be *after* we compute BR_EXTERNAL, above.
-+.PHONY: $(BR2_EXTERNAL_FILE)
-+$(BR2_EXTERNAL_FILE):
-+	@echo BR2_EXTERNAL ?= $(BR_EXTERNAL) >$@
+ include::deprecated-list.txt[]
 +
- # To make sure that the environment variable overrides the .config option,
- # set this before including .config.
- ifneq ($(BR2_DL_DIR),)
++// This file is generated:
++// - with the list of br2-external packages if BR2_EXTERNAL is set
++// - empty otherwise
++include::br2-external.txt[]
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index b26f912..2e711b8 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -10,14 +10,32 @@ MANUAL_RESOURCES = $(TOPDIR)/docs/images
+ # Ensure the kconfig snippet is generated (for MANUAL_GEN_LISTS, below):
+ MANUAL_DEPENDENCIES += prepare-kconfig
+ 
++# If using one or more BR2_EXTERNAL trees, include the list of
++# packages therein, otherwise, generate an empty file
++ifeq ($(BR2_EXTERNAL),)
++define MANUAL_GEN_LISTS_BR2_EXTERNAL
++	$(Q)printf "" >$(@D)/br2-external.txt
++endef
++else
++define MANUAL_GEN_LISTS_BR2_EXTERNAL
++	$(Q)( \
++		printf "== List of BR2_EXTERNAL packages\n\n"; \
++		printf "include::br2-external-package-list.txt[]\n"; \
++	) >$(@D)/br2-external.txt
++endef
++MANUAL_GEN_LISTS_ENV = BR2_EXTERNAL="$(BR2_EXTERNAL)"
++endif
++
+ # Our manual needs to generate lists
+ define MANUAL_GEN_LISTS
+ 	$(Q)$(call MESSAGE,"Updating the manual lists...")
+ 	$(Q)$(COMMON_CONFIG_ENV) \
++		$(MANUAL_GEN_LISTS_ENV) \
+ 		BR2_DEFCONFIG="" \
+ 		TOPDIR=$(TOPDIR) \
+ 		O=$(@D) \
+ 		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
++	$(MANUAL_GEN_LISTS_BR2_EXTERNAL)
+ endef
+ MANUAL_POST_RSYNC_HOOKS += MANUAL_GEN_LISTS
+ 
 -- 
 2.7.4
