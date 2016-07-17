@@ -1,144 +1,134 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 18:23:25 +0200
-Subject: [Buildroot] [PATCH 1/2] meson: new package
-In-Reply-To: <1468072147-17509-2-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1468072147-17509-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1468072147-17509-2-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20160717162325.GM3614@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 17 Jul 2016 18:27:55 +0200
+Subject: [Buildroot] [PATCH v3 3/3] package/mesa3d: add support for Intel
+	Vulkan driver
+In-Reply-To: <1468772875-5090-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1468772875-5090-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1468772875-5090-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-?ric, All,
+The Vulkan intel driver depends on the i965 dri driver:
+https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=12.0#n1653
 
-On 2016-07-09 15:49 +0200, Eric Le Bihan spake thusly:
-> This new package provides the host variant of the Meson Build System, an
-> open source build system meant to be both extremely fast, and as user
-> friendly as possible.
-> 
-> More precisely, Meson creates configuration files for the Ninja build
-> system.
-> 
-> Besides building Meson, it generates a configuration file
-> ("$(HOST_DIR)/etc/meson/cross-compilation.conf") to be used when
-> cross-compiling a Meson-based project.
+and a sha1 implementation:
+https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=12.0#n1656
 
-OK, so I've done a review on this package, because it is not far from
-being good.
+The Vulkan driver needs linux/memfd.h
+https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_allocator.c?h=12.0#n30
+which is not available in kernel headers older than 3.18:
+https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/log/include/uapi/linux/memfd.h?id=refs/tags/v3.18.36
 
-However, I wonder how much we should have it *now* in Buildroot.
+The Vulkan driver makes use of ifunc
+https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_entrypoints_gen.py?h=12.0#n287
+which is not available on uClibc:
+https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config.gcc;h=82cc9a9959b5ab57c0b8779e054b80cdb95f169b;hb=gcc-6-branch#l1485
+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=e6cdd6b1755033e8f416efaa4334d1294c0a43c6
 
-As you said as a reply to my previous review, there are not many
-packages that use the meson buildsystem, and that you did not plan on
-providing one in the foreseeable future.
+The Vulkan driver makes use of static_assert
+https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_private.h?h=12.0#n153
 
-What was your interest in adding meson in Buildroot, if you do not have
-at least one package to submit that uses it?
+Compiling the Vulkan driver with uClibc and musl fails, therefore this
+driver is glibc-only.
 
-Host packages that are not used by any target package, and that have no
-entry in Kconfig, will never be exercised by the autobuilders, so we
-won't be able to catch any build failure. Also, they are prone to
-bit-rot, because they are not used, and thus breakage is never caught,
-and thus no one fixes them.
+Although the configure script does not check for dri3 support if the
+Intel Vulkan driver is enabled it needs it nonetheless:
+https://cgit.freedesktop.org/mesa/mesa/tree/src/intel/vulkan/anv_wsi_x11.c?h=12.0#n682
 
-In other words: why would we, in Buildroot mainstream, add this host
-package, right now?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v3: no changes
+v2: added dependency on BR2_PACKAGE_XORG7 (Thomas)
+    optionally select libsha1
 
-Regards,
-Yann E. MORIN.
+ package/mesa3d/Config.in | 29 ++++++++++++++++++++++++++++-
+ package/mesa3d/mesa3d.mk | 10 ++++++++++
+ 2 files changed, 38 insertions(+), 1 deletion(-)
 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/meson/cross-compilation.conf.in | 17 +++++++++++++++++
->  package/meson/meson.hash                |  2 ++
->  package/meson/meson.mk                  | 31 +++++++++++++++++++++++++++++++
->  3 files changed, 50 insertions(+)
->  create mode 100644 package/meson/cross-compilation.conf.in
->  create mode 100644 package/meson/meson.hash
->  create mode 100644 package/meson/meson.mk
-> 
-> diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-> new file mode 100644
-> index 0000000..33fa001
-> --- /dev/null
-> +++ b/package/meson/cross-compilation.conf.in
-> @@ -0,0 +1,17 @@
-> +# Note: in Meson terminology, what Buildroot calls the "host" system is the
-> +# "build" system and the "target" system is called the "host" system.
-> +
-> +[host_machine]
-> +system = 'linux'
-> +cpu_family ='@TARGET_ARCH@'
-> +cpu = 'generic'
-> +endian = '@TARGET_ENDIAN@'
-> +
-> +[properties]
-> +
-> +[binaries]
-> +c = '@TARGET_CROSS at gcc'
-> +cpp = '@TARGET_CROSS at g++'
-> +ar = '@TARGET_CROSS at ar'
-> +strip = '@TARGET_CROSS at strip'
-> +pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
-> diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-> new file mode 100644
-> index 0000000..3a9ac2a
-> --- /dev/null
-> +++ b/package/meson/meson.hash
-> @@ -0,0 +1,2 @@
-> +# Locally generated
-> +sha256 372c18e40ffc3fe101f4ab48e8077f048dd774eaf4e87bbea3221908fca74835 meson-0.32.0.tar.gz
-> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> new file mode 100644
-> index 0000000..8b95a6f
-> --- /dev/null
-> +++ b/package/meson/meson.mk
-> @@ -0,0 +1,31 @@
-> +################################################################################
-> +#
-> +# meson
-> +#
-> +################################################################################
-> +
-> +MESON_VERSION = 0.32.0
-> +MESON_SITE = $(call github,mesonbuild,meson,$(MESON_VERSION))
-> +MESON_LICENSE = Apache-2.0
-> +MESON_LICENSE_FILES = COPYING
-> +MESON_SETUP_TYPE = setuptools
-> +
-> +HOST_MESON_DEPENDENCIES = host-ninja
-> +HOST_MESON_NEEDS_HOST_PYTHON = python3
-> +
-> +HOST_MESON_TARGET_ENDIAN = $(shell echo $(BR2_ENDIAN) | tr 'A-Z' 'a-z')
-> +
-> +define HOST_MESON_INSTALL_CROSS_CONF
-> +	$(INSTALL) -D -m 0644 package/meson/cross-compilation.conf.in \
-> +		$(HOST_DIR)/etc/meson/cross-compilation.conf
-> +	$(SED) 's;@TARGET_CROSS@;$(TARGET_CROSS);g' \
-> +		-e 's;@TARGET_ARCH@;$(ARCH);g' \
-> +		-e 's;@TARGET_ENDIAN@;$(HOST_MESON_TARGET_ENDIAN);g' \
-> +		-e 's;@HOST_DIR@;$(HOST_DIR);g' \
-> +		$(HOST_DIR)/etc/meson/cross-compilation.conf
-> +endef
-> +
-> +HOST_MESON_POST_INSTALL_HOOKS += \
-> +	HOST_MESON_INSTALL_CROSS_CONF
-> +
-> +$(eval $(host-python-package))
-> -- 
-> 2.4.11
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index a7c8743..0b141b8 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -22,7 +22,7 @@ menuconfig BR2_PACKAGE_MESA3D
+ 
+ if BR2_PACKAGE_MESA3D
+ 
+-# inform the .mk file of gallium or dri driver selection
++# inform the .mk file of gallium, dri or vulkan driver selection
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_MESA3D_DRIVER
+ 	bool
+@@ -33,6 +33,10 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO if BR2_PACKAGE_XPROTO_DRI3PROTO
+ 	bool
+ 
++config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
++	bool
++	select BR2_PACKAGE_MESA3D_DRIVER
++
+ config BR2_PACKAGE_MESA3D_DRIVER
+ 	bool
+ 
+@@ -132,6 +136,29 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+ 	help
+ 	  Legacy Radeon driver for R100 series GPUs.
+ 
++comment "Vulkan drivers"
++
++config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
++	bool "Vulkan Intel driver"
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # memfd.h
++	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
++	depends on BR2_PACKAGE_XORG7 # xproto_dri3proto
++	# We need a SHA1 implementation. If either openssl or
++	# libgcrypt are already part of the build, we'll use one of
++	# them, otherwise, use the small libsha1 library.
++	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
++	select BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
++	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
++	select BR2_PACKAGE_XPROTO_DRI3PROTO
++	help
++	  Vulkan driver for Intel hardware from Ivy Bridge onward.
++
++comment "intel vulkan depends on X.org and needs a glibc toolchain w/ headers >= 3.18"
++	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 || \
++		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_PACKAGE_XORG7
++
+ comment "Off-screen Rendering"
+ 
+ config BR2_PACKAGE_MESA3D_OSMESA
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 3be8831..c636a8a 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -86,6 +86,8 @@ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I915)   += i915
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965)   += i965
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU) += nouveau
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON) += radeon
++# Vulkan Drivers
++MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)   += intel
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER),)
+ MESA3D_CONF_OPTS += \
+@@ -115,6 +117,14 @@ MESA3D_CONF_OPTS += \
+ 	--with-dri-drivers=$(subst $(space),$(comma),$(MESA3D_DRI_DRIVERS-y))
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
++MESA3D_CONF_OPTS += \
++	--without-vulkan-drivers
++else
++MESA3D_CONF_OPTS += \
++	--with-vulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
++endif
++
+ # APIs
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.8.1
