@@ -1,75 +1,74 @@
-From: daggs <daggs@gmx.com>
-Date: Sun, 17 Jul 2016 19:16:50 +0200
-Subject: [Buildroot] [PATCH v4] libamcodec: New Package
-In-Reply-To: <20160716141816.3b53ed8b@free-electrons.com>
-References: <20160709174120.4438-1-daggs@gmx.com>,
- <20160716141816.3b53ed8b@free-electrons.com>
-Message-ID: <trinity-367457f9-186f-47f1-a7c4-4bb9a49814a6-1468775810016@3capp-mailcom-bs10>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 17 Jul 2016 19:56:00 +0200
+Subject: [Buildroot] [PATCH] package/acpitool: not available for bfin
+Message-ID: <1468778160-32413-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+bfin is the only arch on which acpitool fails to build with the
+autobuilders:
 
-> Hello,
-> 
-> I've applied, but did a few changes before that. See below.
-> 
-> On Sat,  9 Jul 2016 20:41:20 +0300, Dagg Stompler wrote:
-> > v3 -> v4:
-> >   - add missing LIBAMCODEC_INSTALL_STAGING (thanks to Bernd Kuhls).
-> >   - use new version of git repo and update the hash.
-> >   - drop 0001-libamcodec-fix-makefiles-to-allow-cross-compilation.patch patch as it was merged into the repo.
-> > 
-> > v2 -> v3:
-> >   - fix sum256 value.
-> >   - fix patch.
-> 
-> The changelog should be ...
-> 
-> > 
-> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> > ---
-> 
-> ... here.
-> 
-> Otherwise, it gets merged as part of the commit log into the project
-> Git history, which is not what we want.
-> 
-> 
-> 
-> > +LIBAMCODEC_VERSION = 6f9b99182f94be14fce785c75aa1e9bce868e229
-> > +LIBAMCODEC_SITE = $(call github,mdrjr,c2_aml_libs,$(LIBAMCODEC_VERSION))
-> > +LIBAMCODEC_DEPENDENCIES = alsa-lib
-> > +LIBAMCODEC_LICENSE = Unclear
-> > +LIBAMCODEC_INSTALL_STAGING = YES
-> > +
-> > +# This package uses the M_PREFIX or PREFIX variables to construct the header and
-> > +# library paths used when compiling
-> 
-> In fact, a better variable is AML_LIBS_STAGING_DIR. It's the same
-> across all components of libamcodec, which allows to replace:
-> 
-> > +define LIBAMCODEC_BUILD_CMDS
-> > +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/amavutils M_PREFIX="$(STAGING_DIR)/usr"
-> > +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/amadec M_PREFIX="$(STAGING_DIR)/usr"
-> > +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/amcodec PREFIX="$(STAGING_DIR)"
-> 
-> by a foreach loop:
-> 
-> +define LIBAMCODEC_BUILD_CMDS
-> +       $(foreach d,amavutils amadec amcodec,\
-> +               $(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-> +                       -C $(@D)/$(d) AML_LIBS_STAGING_DIR=$(STAGING_DIR)
-> +       )
-> +endef
-> 
-> Thanks a lot!
-> 
-> Thomas
+    http://autobuild.buildroot.org/?reason=acpitool-0.5.1
+    http://autobuild.buildroot.org/results/802/802f6bbc74ad8e89b2bb6a2f592ac91ef9cd88e3/
+    http://autobuild.buildroot.org/results/d2c/d2c708fc2aa18ecfc368a4ce93400cfc44366102/
+    [...]
 
-thanks a lot for all the help.
+The cryptic error message;
+    configure: error: C++ compiler cannot create executables
 
-Dagg.
+is due to the order in which AC_PROG_CXX and AC_PROG_CC are called.
+Calling AC_PROG_CC first fixes this error message.
+
+But then we get linking errors:
+
+    /home/ymorin/dev/buildroot/O/host/usr/bin/bfin-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -o acpitool main.o acpitool.o ac_adapter.o toshiba.o asus.o thinkpad.o cpu.o battery.o freq.o -lgcc
+    acpitool.o: In function `Has_ACPI(char*)':
+    acpitool.cpp:(.text+0x1be): undefined reference to `_Unwind_Resume'
+    acpitool.o: In function `Get_Kernel_Version(char*, int)':
+    acpitool.cpp:(.text+0x2aa): undefined reference to `_Unwind_Resume'
+    acpitool.o: In function `Set_Kernel_Version()':
+    acpitool.cpp:(.text+0x43e): undefined reference to `_Unwind_Resume'
+    acpitool.o: In function `Do_Fan_Info(int)':
+    acpitool.cpp:(.text+0x60a): undefined reference to `_Unwind_Resume'
+    acpitool.o: In function `Show_WakeUp_Devices(int)':
+    acpitool.cpp:(.text+0x770): undefined reference to `_Unwind_Resume'
+    acpitool.o:acpitool.cpp:(.text+0x9ca): more undefined references to `_Unwind_Resume' follow
+    /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld: acpitool: hidden symbol `___udivsi3' in /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/libgcc.a(_udivsi3.o) is referenced by DSO
+    /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld: final link failed: Bad value
+    collect2: error: ld returned 1 exit status
+
+The last one of those (the hidden ___udivsi3 symbol) is mopst
+concerning, and even the unwind stuff is not trivial.
+
+Because there's not many chances that a bfin board has ACPI, we just
+disable acpitoll for bfin.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Erico Nunes <nunes.erico@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/acpitool/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/acpitool/Config.in b/package/acpitool/Config.in
+index 7992e0f..9081bf1 100644
+--- a/package/acpitool/Config.in
++++ b/package/acpitool/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_ACPITOOL
+ 	bool "acpitool"
++	depends on !BR2_bfin
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  A small, convenient command-line ACPI client with a lot of
+@@ -8,4 +9,5 @@ config BR2_PACKAGE_ACPITOOL
+ 	  http://acpitool.sourceforge.net
+ 
+ comment "acpitool needs a toolchain w/ C++"
++	depends on !BR2_bfin
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-- 
+2.7.4
