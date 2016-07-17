@@ -1,149 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 18:11:35 +0200
-Subject: [Buildroot] [PATCH 1/2] meson: new package
-In-Reply-To: <1468072147-17509-2-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1468072147-17509-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1468072147-17509-2-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20160717161135.GL3614@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 17 Jul 2016 18:17:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fs-uae: new package
+References: <1465404120-27923-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160717143724.GG3614@free.fr>
+Message-ID: <flns5dx21u.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-?ric, All,
+Hi Yann,
 
-On 2016-07-09 15:49 +0200, Eric Le Bihan spake thusly:
-> This new package provides the host variant of the Meson Build System, an
-> open source build system meant to be both extremely fast, and as user
-> friendly as possible.
+Am Sun, 17 Jul 2016 16:37:24 +0200 schrieb Yann E. MORIN:
+
+> Are those tools only used during compilation and not at runtime?
+
+partly, the tools itself are only used during compilation but they
+contain .o files which are also part of the target version of
+libuae.so. As an example have a look at src/readcpu.cpp, it is part
+of libuae_a_SOURCES and needed by gen/gencomp and gen/gencpu.
+
+> Please, depends before selects.
+
+Ok.
+
+>> +	  http://fs-uae.net
 > 
-> More precisely, Meson creates configuration files for the Ninja build
-> system.
+> Out of curiosity, what would be the purpose for having an Amiga
+> emulator?
+
+http://openelec.tv/forum/128-addons/76825-addon-fs-uae-amiga-emulator
+
+;)
+
+>> +FS_UAE_POST_CONFIGURE_HOOKS = FS_UAE_MAKE_HOST_TOOLS
 > 
-> Besides building Meson, it generates a configuration file
-> ("$(HOST_DIR)/etc/meson/cross-compilation.conf") to be used when
-> cross-compiling a Meson-based project.
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/meson/cross-compilation.conf.in | 17 +++++++++++++++++
->  package/meson/meson.hash                |  2 ++
->  package/meson/meson.mk                  | 31 +++++++++++++++++++++++++++++++
->  3 files changed, 50 insertions(+)
->  create mode 100644 package/meson/cross-compilation.conf.in
->  create mode 100644 package/meson/meson.hash
->  create mode 100644 package/meson/meson.mk
-> 
-> diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-> new file mode 100644
-> index 0000000..33fa001
-> --- /dev/null
-> +++ b/package/meson/cross-compilation.conf.in
-> @@ -0,0 +1,17 @@
-> +# Note: in Meson terminology, what Buildroot calls the "host" system is the
-> +# "build" system and the "target" system is called the "host" system.
+> This should be a PRE_BUILD hook.
 
-Meson is using the correct terminology, the same as the autotools. It's
-Buildroot that is /special/. ;-)
+Ok.
 
-But yes, the comment is useful, to remove any ambiguity.
+> If the Makefile rules are correct (hehe!), then once they are built,
+> they won't be rebuilt, so will correctly be host tools, not target
+> tools.
 
-> +[host_machine]
-> +system = 'linux'
-> +cpu_family ='@TARGET_ARCH@'
-> +cpu = 'generic'
-> +endian = '@TARGET_ENDIAN@'
-> +
-> +[properties]
+Besides the object files needed both a target and host versions there
+are numerous time stamps in use in the Makefile so I would propose to
+stick to my patch ;)
 
-This properties section is empty. Can we do without it?
-
-> +[binaries]
-> +c = '@TARGET_CROSS at gcc'
-> +cpp = '@TARGET_CROSS at g++'
-> +ar = '@TARGET_CROSS at ar'
-> +strip = '@TARGET_CROSS at strip'
-> +pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
-> diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-> new file mode 100644
-> index 0000000..3a9ac2a
-> --- /dev/null
-> +++ b/package/meson/meson.hash
-> @@ -0,0 +1,2 @@
-> +# Locally generated
-> +sha256 372c18e40ffc3fe101f4ab48e8077f048dd774eaf4e87bbea3221908fca74835 meson-0.32.0.tar.gz
-> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> new file mode 100644
-> index 0000000..8b95a6f
-> --- /dev/null
-> +++ b/package/meson/meson.mk
-> @@ -0,0 +1,31 @@
-> +################################################################################
-> +#
-> +# meson
-> +#
-> +################################################################################
-> +
-> +MESON_VERSION = 0.32.0
-> +MESON_SITE = $(call github,mesonbuild,meson,$(MESON_VERSION))
-> +MESON_LICENSE = Apache-2.0
-> +MESON_LICENSE_FILES = COPYING
-> +MESON_SETUP_TYPE = setuptools
-> +
-> +HOST_MESON_DEPENDENCIES = host-ninja
-> +HOST_MESON_NEEDS_HOST_PYTHON = python3
-> +
-> +HOST_MESON_TARGET_ENDIAN = $(shell echo $(BR2_ENDIAN) | tr 'A-Z' 'a-z')
-> +
-> +define HOST_MESON_INSTALL_CROSS_CONF
-> +	$(INSTALL) -D -m 0644 package/meson/cross-compilation.conf.in \
-> +		$(HOST_DIR)/etc/meson/cross-compilation.conf
-> +	$(SED) 's;@TARGET_CROSS@;$(TARGET_CROSS);g' \
-> +		-e 's;@TARGET_ARCH@;$(ARCH);g' \
-> +		-e 's;@TARGET_ENDIAN@;$(HOST_MESON_TARGET_ENDIAN);g' \
-> +		-e 's;@HOST_DIR@;$(HOST_DIR);g' \
-
-There is a reason I don;t like this $(SED): the first -e is implicit,
-and so the code is not obvious.
-
-> +		$(HOST_DIR)/etc/meson/cross-compilation.conf
-
-Also, I would do it in a single pass:
-
-    mkdir -p $(HOST_DIR)/etc/meson
-    sed -e 's;@TARGET_CROSS@;$(TARGET_CROSS);g' \
-        -e blabla \
-        $(MESON_PKGDIR)/cross-compilation.conf.in \
-        >$(HOST_DIR)/etc/meson/cross-compilation.conf
-
-And then I'd be happy because there would be no implicit '-e'! :-)
-
-But wait yet a bit more for others to express their preferences... ;-)
-
-> +endef
-> +
-> +HOST_MESON_POST_INSTALL_HOOKS += \
-> +	HOST_MESON_INSTALL_CROSS_CONF
-
-No need for a continuation line, it all fits on a single line.
-
-Regards,
-Yann E. MORIN.
-
-> +$(eval $(host-python-package))
-> -- 
-> 2.4.11
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Regards, Bernd
