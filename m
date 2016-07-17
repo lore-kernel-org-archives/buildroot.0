@@ -1,58 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Jul 2016 14:29:01 +0200
-Subject: [Buildroot] [git commit] package/kodi: Add suboption to control
-	unrar support
-Message-ID: <20160717123353.8B09C81D65@busybox.osuosl.org>
+Date: Sun, 17 Jul 2016 14:31:08 +0200
+Subject: [Buildroot] [git commit] package/kodi: add optional support for
+	libvdpau
+Message-ID: <20160717123353.BF87F81D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2aae80b209de91740fd57a36d42b3801f2793eeb
+commit: https://git.buildroot.net/buildroot/commit/?id=aab1690637755d638101ddd490a858f4a9e447c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: tweak Config.in description.]
+[Thomas: drop select of libX11 and libXext, since the libvdpau package
+already selects them.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi/Config.in | 6 ++++++
- package/kodi/kodi.mk   | 8 ++++++++
- 2 files changed, 14 insertions(+)
+ package/kodi/Config.in | 10 ++++++++++
+ package/kodi/kodi.mk   |  8 +++++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index a000e79..a4cbab2 100644
+index 9a5baa8..afb834e 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -174,6 +174,12 @@ config BR2_PACKAGE_KODI_LIBNFS
- comment "nfs support needs a toolchain w/ threads support"
- 	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
+@@ -236,6 +236,16 @@ config BR2_PACKAGE_KODI_LIBVA
+ 	help
+ 	  Enable libva support.
  
-+config BR2_PACKAGE_KODI_NONFREE
-+	bool "nonfree components"
++config BR2_PACKAGE_KODI_LIBVDPAU
++	bool "vdpau"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_LIBVDPAU
 +	help
-+	  Enable components with non-free licenses. This option
-+	  currently only controls support for RAR archives.
++	  Enable libvdpau support.
 +
- config BR2_PACKAGE_KODI_RTMPDUMP
- 	bool "rtmp"
- 	select BR2_PACKAGE_RTMPDUMP
++comment "libvdpau support needs X.org"
++	depends on !BR2_PACKAGE_XORG7
++
+ config BR2_PACKAGE_KODI_UPNP
+ 	bool "upnp"
+ 	help
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 52593aa..da5d1fa 100644
+index e291947..9f21bf2 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -86,6 +86,14 @@ else
- KODI_CONF_OPTS += --disable-mysql
+@@ -74,7 +74,6 @@ KODI_CONF_OPTS +=  \
+ 	--disable-joystick \
+ 	--disable-openmax \
+ 	--disable-pulse \
+-	--disable-vdpau \
+ 	--disable-vtbdecoder \
+ 	--enable-optimizations
+ 
+@@ -243,6 +242,13 @@ else
+ KODI_CONF_OPTS += --disable-vaapi
  endif
  
-+ifeq ($(BR2_PACKAGE_KODI_NONFREE),y)
-+KODI_CONF_OPTS += --enable-non-free
-+KODI_LICENSE := $(KODI_LICENSE), unrar
-+KODI_LICENSE_FILES += lib/UnrarXLib/license.txt
++ifeq ($(BR2_PACKAGE_KODI_LIBVDPAU),y)
++KODI_DEPENDENCIES += libvdpau
++KODI_CONF_OPTS += --enable-vdpau
 +else
-+KODI_CONF_OPTS += --disable-non-free
++KODI_CONF_OPTS += --disable-vdpau
 +endif
 +
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- KODI_DEPENDENCIES += rpi-userland
- KODI_CONF_OPTS += --with-platform=raspberry-pi --enable-player=omxplayer
+ ifeq ($(BR2_PACKAGE_KODI_UPNP),y)
+ KODI_CONF_OPTS += --enable-upnp
+ else
