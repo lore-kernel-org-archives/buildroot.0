@@ -1,47 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Jul 2016 15:06:17 +0200
-Subject: [Buildroot] [git commit] directfb: depends on NPTL threading
-Message-ID: <20160717130659.D1C0F81D43@busybox.osuosl.org>
+Date: Sun, 17 Jul 2016 15:08:02 +0200
+Subject: [Buildroot] [PATCH v2] directfb: depends on NPTL threading
+In-Reply-To: <20160708222129.GA22796@waldemar-brodkorb.de>
+References: <20160708222129.GA22796@waldemar-brodkorb.de>
+Message-ID: <20160717150802.359bc380@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e27ade8e27b0a7e4dddef6000fb6a6d66f3f9d8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes following autobuild failure:
-http://autobuild.buildroot.net/results/162db0d62075a16c7abae1229676e2cdb29fe953/
+On Sat, 9 Jul 2016 00:21:29 +0200, Waldemar Brodkorb wrote:
+> Fixes following autobuild failure:
+> http://autobuild.buildroot.net/results/162db0d62075a16c7abae1229676e2cdb29fe953/
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+> v1 -> v2:
+>   - rather adding an experimental patch without runtime testing for
+>     an unmaintained software, we depend on NPTL as discussed with
+>     Thomas Petazzoni on IRC
+> ---
+>  package/directfb/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-[Thomas: as noticed yb Romain, propagate the new dependency to the
-Config.in comment.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/directfb/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I've applied, after adjusting the Config.in comment, as noticed by
+Romain Naour.
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index f0bcaaa..b552164 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_DIRECTFB
- 	bool "directfb"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # sigval_t issue
-@@ -161,7 +161,7 @@ config BR2_PACKAGE_DIRECTFB_TESTS
- 
- endif # BR2_PACKAGE_DIRECTFB
- 
--comment "directfb needs a glibc or uClibc toolchain w/ C++, threads, gcc >= 4.5"
-+comment "directfb needs a glibc or uClibc toolchain w/ C++, NPTL, gcc >= 4.5"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || BR2_TOOLCHAIN_USES_MUSL
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
