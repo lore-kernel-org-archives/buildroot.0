@@ -1,88 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Jul 2016 14:24:28 +0200
-Subject: [Buildroot] [git commit] package/kodi: re-structure dependencies
-Message-ID: <20160717123353.676407FAAD@busybox.osuosl.org>
+Date: Sun, 17 Jul 2016 14:24:38 +0200
+Subject: [Buildroot] [git commit] package/kodi: Add suboption to control
+	UPnP support
+Message-ID: <20160717123353.7796781D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=632b5aa9ab446e5b24e767331e794a5ffc62d07e
+commit: https://git.buildroot.net/buildroot/commit/?id=29ad494654266816d6b6a0e5818f8ff0f7465c7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Use one package per line to ease review of Kodi 17 version bump, where
-10+ packages will be removed. This patch contains no code changes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi/kodi.mk | 55 +++++++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 48 insertions(+), 7 deletions(-)
+ package/kodi/Config.in | 5 +++++
+ package/kodi/kodi.mk   | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 3d3ecfd..a000e79 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -227,6 +227,11 @@ config BR2_PACKAGE_KODI_LIBVA
+ 	help
+ 	  Enable libva support.
+ 
++config BR2_PACKAGE_KODI_UPNP
++	bool "upnp"
++	help
++	  Enable UPnP support
++
+ config BR2_PACKAGE_KODI_OPTICALDRIVE
+ 	bool
+ 
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 90c50c3..8a3b0bf 100644
+index 8a3b0bf..52593aa 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -10,13 +10,54 @@ KODI_LICENSE = GPLv2
- KODI_LICENSE_FILES = LICENSE.GPL
- # needed for binary addons
- KODI_INSTALL_STAGING = YES
--KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-zip host-giflib \
--	host-libjpeg host-lzo host-nasm host-libpng host-swig
--KODI_DEPENDENCIES += boost bzip2 expat ffmpeg fontconfig freetype giflib jasper jpeg \
--	libass libcdio libcrossguid libcurl libdcadec libfribidi libgcrypt libmpeg2 \
--	libogg libplist libpng libsamplerate libsquish libvorbis libxml2 \
--	libxslt lzo ncurses openssl pcre python readline sqlite taglib tiff \
--	tinyxml yajl zlib
-+KODI_DEPENDENCIES = \
-+	boost \
-+	bzip2 \
-+	expat \
-+	ffmpeg \
-+	fontconfig \
-+	freetype \
-+	giflib \
-+	host-gawk \
-+	host-gettext \
-+	host-giflib \
-+	host-gperf \
-+	host-libjpeg \
-+	host-libpng \
-+	host-lzo \
-+	host-nasm \
-+	host-swig \
-+	host-zip \
-+	jasper \
-+	jpeg \
-+	libass \
-+	libcdio \
-+	libcrossguid \
-+	libcurl \
-+	libdcadec \
-+	libfribidi \
-+	libgcrypt \
-+	libmpeg2 \
-+	libogg \
-+	libplist \
-+	libpng \
-+	libsamplerate \
-+	libsquish \
-+	libvorbis \
-+	libxml2 \
-+	libxslt \
-+	lzo \
-+	ncurses \
-+	openssl \
-+	pcre \
-+	python \
-+	readline \
-+	sqlite \
-+	taglib \
-+	tiff \
-+	tinyxml \
-+	yajl \
-+	zlib
+@@ -228,6 +228,12 @@ else
+ KODI_CONF_OPTS += --disable-vaapi
+ endif
  
- KODI_CONF_ENV = \
- 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
++ifeq ($(BR2_PACKAGE_KODI_UPNP),y)
++KODI_CONF_OPTS += --enable-upnp
++else
++KODI_CONF_OPTS += --disable-upnp
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_OPTICALDRIVE),y)
+ KODI_CONF_OPTS += --enable-optical-drive --enable-dvdcss
+ else
