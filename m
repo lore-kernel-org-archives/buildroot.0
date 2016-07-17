@@ -1,78 +1,34 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 17 Jul 2016 13:59:08 +0200
-Subject: [Buildroot] [PATCH 3/6] system: provide no default for custom
- skeleton path
-In-Reply-To: <409ca6c1a9e541db283e4b2276f25b8322cad63f.1468744792.git.yann.morin.1998@free.fr>
-References: <cover.1468744792.git.yann.morin.1998@free.fr>
- <409ca6c1a9e541db283e4b2276f25b8322cad63f.1468744792.git.yann.morin.1998@free.fr>
-Message-ID: <22eb572d-f777-394a-70b6-23f2534b92c3@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 17 Jul 2016 14:29:37 +0200
+Subject: [Buildroot] [git commit] package/kodi: if libudev is available,
+	we don't need libusb
+Message-ID: <20160717123353.AD2B081E0A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=9acee7c649dd2a2acd20ae100fb1cf9e13a6de50
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 17/07/2016 ? 10:44, Yann E. MORIN a ?crit :
-> Being custom means that our default one is not suitable to start with.
-> So there is no reson to offer it as the default path.
-                 ^
-reason
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kodi/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> 
-> Add a check that it is not empty.
-> 
-> Add a separating empty line, for good measure, too.
-
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Romain Naour <romain.naour@openwide.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> 
-> ---
-> Changes v2 -> v3:
->   - add a check that it is not empty (Romain, Arnout)
-> ---
->  package/skeleton/skeleton.mk | 6 ++++++
->  system/Config.in             | 2 +-
->  2 files changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-> index 7a7c200..d580fcb 100644
-> --- a/package/skeleton/skeleton.mk
-> +++ b/package/skeleton/skeleton.mk
-> @@ -17,6 +17,12 @@ ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
->  
->  SKELETON_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
->  
-> +ifeq ($(BR_BUILDING),y)
-> +ifeq ($(SKELETON_PATH),)
-> +$(error No path specified for the custom skeleton)
-> +endif
-> +endif
-> +
->  ifeq ($(BR2_ROOTFS_MERGED_USR),y)
->  
->  # Ensure the user has prepared a merged /usr.
-> diff --git a/system/Config.in b/system/Config.in
-> index b895db9..6fce8e1 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -184,9 +184,9 @@ config BR2_ROOTFS_SKELETON_CUSTOM
->  endchoice
->  
->  if BR2_ROOTFS_SKELETON_CUSTOM
-> +
->  config BR2_ROOTFS_SKELETON_CUSTOM_PATH
->  	string "custom target skeleton path"
-> -	default "system/skeleton"
->  	help
->  	  Path to custom target skeleton.
->  
-> 
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index a4cbab2..9a5baa8 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -222,6 +222,9 @@ config BR2_PACKAGE_KODI_LIBTHEORA
+ 
+ config BR2_PACKAGE_KODI_LIBUSB
+ 	bool "usb"
++	# https://github.com/xbmc/xbmc/blob/Jarvis/configure.ac#L1554
++	# "if libudev is available, we don't need libusb"
++	depends on !BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	help
