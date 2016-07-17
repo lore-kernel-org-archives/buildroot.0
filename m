@@ -1,66 +1,148 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 12:34:22 +0200
-Subject: [Buildroot] [PATCH 02/16 v3] core: commonalise the bundled and
-	br2-external %_defconfig rules
+Date: Sun, 17 Jul 2016 12:34:24 +0200
+Subject: [Buildroot] [PATCH 04/16 v3] core: introduce an intermediate rule
+	before the configurators
 In-Reply-To: <cover.1468750623.git.yann.morin.1998@free.fr>
 References: <cover.1468750623.git.yann.morin.1998@free.fr>
-Message-ID: <e302f10d06b7406978bbc888b903cb917cb0e754.1468750623.git.yann.morin.1998@free.fr>
+Message-ID: <22c8e4df35485da3ab9dd836465e4892305c7073.1468750623.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The code for both cases is exactly the same, and only differs in the
-location where defconfig files are looked for.
+Currently, all configurators depend on generating the out-of-tree
+Makefile wrapper.
 
-We use an intermediate macro to generate the corresponding rules,
-because directly generating the rules is ugly and needs lots of escaping
-and double-dollar-ing for the $(eval ...) and $(foreach ...) calls to
-play nicely together.
+In an upcoming patch, we'll need to also generate a kconfig fragment,
+so it will have to kick in before we run the configurators.
 
-Furthermore, that will be tremendously useful when we support multiple
-br2-external trees.
+Introduce a new intermediate "prepare-kconfig" rule, so we can
+commonalise the dependencies of the configurators. Move the dependency
+on the Makefile wrapper to that new intermediate rule.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
-Changes v2 -> v3:
-  - use lower-case macro  (Arnout)
-  - move comment in the generated rule  (Arnout)
----
- Makefile | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ Makefile | 36 +++++++++++++++++++-----------------
+ 1 file changed, 19 insertions(+), 17 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index af2d982..7c0dcb1 100644
+index 7c0dcb1..6f947f3 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -847,14 +847,13 @@ olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+@@ -760,6 +760,8 @@ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ HOSTCFLAGS = $(CFLAGS_FOR_BUILD)
+ export HOSTCFLAGS
+ 
++prepare-kconfig: outputmakefile
++
+ $(BUILD_DIR)/buildroot-config/%onf:
+ 	mkdir -p $(@D)/lxdialog
+ 	PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)" $(MAKE) CC="$(HOSTCC_NOCCACHE)" HOSTCC="$(HOSTCC_NOCCACHE)" \
+@@ -779,19 +781,19 @@ COMMON_CONFIG_ENV = \
+ 	HOST_GCC_VERSION="$(HOSTCC_VERSION)" \
+ 	SKIP_LEGACY=
+ 
+-xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
++xconfig: $(BUILD_DIR)/buildroot-config/qconf prepare-kconfig
+ 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+ 
+-gconfig: $(BUILD_DIR)/buildroot-config/gconf outputmakefile
++gconfig: $(BUILD_DIR)/buildroot-config/gconf prepare-kconfig
+ 	@$(COMMON_CONFIG_ENV) srctree=$(TOPDIR) $< $(CONFIG_CONFIG_IN)
+ 
+-menuconfig: $(BUILD_DIR)/buildroot-config/mconf outputmakefile
++menuconfig: $(BUILD_DIR)/buildroot-config/mconf prepare-kconfig
+ 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+ 
+-nconfig: $(BUILD_DIR)/buildroot-config/nconf outputmakefile
++nconfig: $(BUILD_DIR)/buildroot-config/nconf prepare-kconfig
+ 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+ 
+-config: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++config: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+ 
+ # For the config targets that automatically select options, we pass
+@@ -799,22 +801,22 @@ config: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ # no values are set for the legacy options so a subsequent oldconfig
+ # will query them. Therefore, run an additional olddefconfig.
+ 
+-oldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++oldconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ 	@$(COMMON_CONFIG_ENV) $< --oldconfig $(CONFIG_CONFIG_IN)
+ 
+-randconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++randconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --randconfig $(CONFIG_CONFIG_IN)
+ 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
+ 
+-allyesconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++allyesconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --allyesconfig $(CONFIG_CONFIG_IN)
+ 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
+ 
+-allnoconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++allnoconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --allnoconfig $(CONFIG_CONFIG_IN)
+ 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
+ 
+-randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++randpackageconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ 	@grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
+ 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y \
+ 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
+@@ -822,7 +824,7 @@ randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@rm -f $(CONFIG_DIR)/.config.nopkg
+ 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
+ 
+-allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ 	@grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
+ 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y \
+ 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
+@@ -830,7 +832,7 @@ allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@rm -f $(CONFIG_DIR)/.config.nopkg
+ 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
+ 
+-allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ 	@grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
+ 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y \
+ 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
+@@ -838,24 +840,24 @@ allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@rm -f $(CONFIG_DIR)/.config.nopkg
+ 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
+ 
+-silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++silentoldconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ 	$(COMMON_CONFIG_ENV) $< --silentoldconfig $(CONFIG_CONFIG_IN)
+ 
+-olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++olddefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ 	$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN)
+ 
+-defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++defconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
  	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
  
--# Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
--%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
--	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(TOPDIR)/configs/$@ \
--		$< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
--
--%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/configs/%_defconfig outputmakefile
--	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
--		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
-+define percent_defconfig
-+%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
-+	# Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
-+	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
-+		$$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
-+endef
-+$(eval $(foreach d,$(TOPDIR) $(BR2_EXTERNAL),$(call percent_defconfig,$(d))$(sep)))
+ define percent_defconfig
+-%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
++%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig prepare-kconfig
+ 	# Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
+ 	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
+ 		$$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
+ endef
+ $(eval $(foreach d,$(TOPDIR) $(BR2_EXTERNAL),$(call percent_defconfig,$(d))$(sep)))
  
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+-savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++savedefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
  	@$(COMMON_CONFIG_ENV) $< \
+ 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+ 		$(CONFIG_CONFIG_IN)
 -- 
 2.7.4
