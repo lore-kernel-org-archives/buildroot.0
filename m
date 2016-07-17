@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 17 Jul 2016 13:52:32 +0200
-Subject: [Buildroot] [PATCH 2/6] toolchain: use the
- <PKG>_TARGET_FINALIZE_HOOKS
-In-Reply-To: <c147ef54ea80186f8a9e2582da525fb1ec457b5b.1468744792.git.yann.morin.1998@free.fr>
+Date: Sun, 17 Jul 2016 13:59:08 +0200
+Subject: [Buildroot] [PATCH 3/6] system: provide no default for custom
+ skeleton path
+In-Reply-To: <409ca6c1a9e541db283e4b2276f25b8322cad63f.1468744792.git.yann.morin.1998@free.fr>
 References: <cover.1468744792.git.yann.morin.1998@free.fr>
- <c147ef54ea80186f8a9e2582da525fb1ec457b5b.1468744792.git.yann.morin.1998@free.fr>
-Message-ID: <b6ca9984-5421-c732-6258-f3f96582a2ee@gmail.com>
+ <409ca6c1a9e541db283e4b2276f25b8322cad63f.1468744792.git.yann.morin.1998@free.fr>
+Message-ID: <22eb572d-f777-394a-70b6-23f2534b92c3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +15,15 @@ To: buildroot@busybox.net
 Hi Yann, All,
 
 Le 17/07/2016 ? 10:44, Yann E. MORIN a ?crit :
-> Register toolchain-specific target-finalize hooks with the
-> newly-introduced <PKG>_TARGET_FINALIZE_HOOKS.
+> Being custom means that our default one is not suitable to start with.
+> So there is no reson to offer it as the default path.
+                 ^
+reason
+
+> 
+> Add a check that it is not empty.
+> 
+> Add a separating empty line, for good measure, too.
 
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
@@ -25,28 +32,47 @@ Romain
 
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  toolchain/toolchain.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Cc: Romain Naour <romain.naour@openwide.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 > 
-> diff --git a/toolchain/toolchain.mk b/toolchain/toolchain.mk
-> index 0a35909..59fc905 100644
-> --- a/toolchain/toolchain.mk
-> +++ b/toolchain/toolchain.mk
-> @@ -10,7 +10,7 @@ define GLIBC_COPY_NSSWITCH_FILE
->  		$(INSTALL) -D -m 0644 package/glibc/nsswitch.conf $(TARGET_DIR)/etc/nsswitch.conf ; \
->  	fi
->  endef
-> -TARGET_FINALIZE_HOOKS += GLIBC_COPY_NSSWITCH_FILE
-> +TOOLCHAIN_TARGET_FINALIZE_HOOKS += GLIBC_COPY_NSSWITCH_FILE
->  endif
+> ---
+> Changes v2 -> v3:
+>   - add a check that it is not empty (Romain, Arnout)
+> ---
+>  package/skeleton/skeleton.mk | 6 ++++++
+>  system/Config.in             | 2 +-
+>  2 files changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+> index 7a7c200..d580fcb 100644
+> --- a/package/skeleton/skeleton.mk
+> +++ b/package/skeleton/skeleton.mk
+> @@ -17,6 +17,12 @@ ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
 >  
->  # Install the gconv modules
-> @@ -52,5 +52,5 @@ define COPY_GCONV_LIBS
->  			>$(TARGET_DIR)/usr/lib/gconv/gconv-modules; \
->  	fi
->  endef
-> -TARGET_FINALIZE_HOOKS += COPY_GCONV_LIBS
-> +TOOLCHAIN_TARGET_FINALIZE_HOOKS += COPY_GCONV_LIBS
->  endif
+>  SKELETON_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
+>  
+> +ifeq ($(BR_BUILDING),y)
+> +ifeq ($(SKELETON_PATH),)
+> +$(error No path specified for the custom skeleton)
+> +endif
+> +endif
+> +
+>  ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+>  
+>  # Ensure the user has prepared a merged /usr.
+> diff --git a/system/Config.in b/system/Config.in
+> index b895db9..6fce8e1 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -184,9 +184,9 @@ config BR2_ROOTFS_SKELETON_CUSTOM
+>  endchoice
+>  
+>  if BR2_ROOTFS_SKELETON_CUSTOM
+> +
+>  config BR2_ROOTFS_SKELETON_CUSTOM_PATH
+>  	string "custom target skeleton path"
+> -	default "system/skeleton"
+>  	help
+>  	  Path to custom target skeleton.
+>  
 > 
