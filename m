@@ -1,99 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 10:44:26 +0200
-Subject: [Buildroot] [PATCH 4/6] system: move the rootfs skeleton choice
+Date: Sun, 17 Jul 2016 10:44:25 +0200
+Subject: [Buildroot] [PATCH 3/6] system: provide no default for custom
+	skeleton path
 In-Reply-To: <cover.1468744792.git.yann.morin.1998@free.fr>
 References: <cover.1468744792.git.yann.morin.1998@free.fr>
-Message-ID: <0d652d8d1753cde7788f538ac480f2724d5a2040.1468744792.git.yann.morin.1998@free.fr>
+Message-ID: <409ca6c1a9e541db283e4b2276f25b8322cad63f.1468744792.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the following commits, we'll be switching more options to be
-conditional on the default or custom skeleton.
+Being custom means that our default one is not suitable to start with.
+So there is no reson to offer it as the default path.
 
-So, it makes sense that those options come after the choice of a
-skeleton.
+Add a check that it is not empty.
+
+Add a separating empty line, for good measure, too.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
----
- system/Config.in | 56 ++++++++++++++++++++++++++++----------------------------
- 1 file changed, 28 insertions(+), 28 deletions(-)
+Cc: Romain Naour <romain.naour@openwide.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
-diff --git a/system/Config.in b/system/Config.in
-index 6fce8e1..5549318 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -1,5 +1,33 @@
- menu "System configuration"
+---
+Changes v2 -> v3:
+  - add a check that it is not empty (Romain, Arnout)
+---
+ package/skeleton/skeleton.mk | 6 ++++++
+ system/Config.in             | 2 +-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 7a7c200..d580fcb 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -17,6 +17,12 @@ ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
  
-+choice
-+	prompt "Root FS skeleton"
-+
-+config BR2_ROOTFS_SKELETON_DEFAULT
-+	bool "default target skeleton"
-+	help
-+	  Use default target skeleton
-+
-+config BR2_ROOTFS_SKELETON_CUSTOM
-+	bool "custom target skeleton"
-+	help
-+	  Use custom target skeleton.
-+
-+endchoice
-+
-+if BR2_ROOTFS_SKELETON_CUSTOM
-+
-+config BR2_ROOTFS_SKELETON_CUSTOM_PATH
-+	string "custom target skeleton path"
-+	help
-+	  Path to custom target skeleton.
-+
-+# dummy config so merged /usr workarounds can also be activated for
-+# custom rootfs skeleton
-+config BR2_ROOTFS_MERGED_USR
-+
+ SKELETON_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
+ 
++ifeq ($(BR_BUILDING),y)
++ifeq ($(SKELETON_PATH),)
++$(error No path specified for the custom skeleton)
++endif
 +endif
 +
- config BR2_TARGET_GENERIC_HOSTNAME
- 	string "System hostname"
- 	default "buildroot"
-@@ -168,34 +196,6 @@ config BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
+ ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+ 
+ # Ensure the user has prepared a merged /usr.
+diff --git a/system/Config.in b/system/Config.in
+index b895db9..6fce8e1 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -184,9 +184,9 @@ config BR2_ROOTFS_SKELETON_CUSTOM
+ endchoice
+ 
+ if BR2_ROOTFS_SKELETON_CUSTOM
++
+ config BR2_ROOTFS_SKELETON_CUSTOM_PATH
+ 	string "custom target skeleton path"
+-	default "system/skeleton"
  	help
- 	  Support extended attributes handling in device tables
+ 	  Path to custom target skeleton.
  
--choice
--	prompt "Root FS skeleton"
--
--config BR2_ROOTFS_SKELETON_DEFAULT
--	bool "default target skeleton"
--	help
--	  Use default target skeleton
--
--config BR2_ROOTFS_SKELETON_CUSTOM
--	bool "custom target skeleton"
--	help
--	  Use custom target skeleton.
--
--endchoice
--
--if BR2_ROOTFS_SKELETON_CUSTOM
--
--config BR2_ROOTFS_SKELETON_CUSTOM_PATH
--	string "custom target skeleton path"
--	help
--	  Path to custom target skeleton.
--
--# dummy config so merged /usr workarounds can also be activated for
--# custom rootfs skeleton
--config BR2_ROOTFS_MERGED_USR
--
--endif
--
- if BR2_ROOTFS_SKELETON_DEFAULT
- 
- config BR2_ROOTFS_MERGED_USR
 -- 
 2.7.4
