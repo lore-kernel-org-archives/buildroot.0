@@ -1,150 +1,184 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 19:00:17 +0200
-Subject: [Buildroot] [PATCH v3 2/2] fcgiwrap: new package
-In-Reply-To: <1432916111-1122-2-git-send-email-thomas.claveirole@green-communications.fr>
-References: <55679467.7090801@mind.be>
- <1432916111-1122-2-git-send-email-thomas.claveirole@green-communications.fr>
-Message-ID: <20160717170017.GP3614@free.fr>
+Date: Sun, 17 Jul 2016 19:02:57 +0200
+Subject: [Buildroot] [PATCH] dante: New package
+In-Reply-To: <1467449278-3166-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1467449278-3166-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20160717170256.GQ3614@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas C, All,
+Maxime, All,
 
-On 2015-05-29 18:15 +0200, Thomas Claveirole spake thusly:
-> Add package fcgiwrap from https://nginx.localdomain.pl/wiki/FcgiWrap
-> 
-> fcgiwrap is a simple server for running CGI applications over
-> FastCGI. It hopes to provide clean CGI support to Nginx (and other web
-> servers that may need it).
+On 2016-07-02 10:47 +0200, Maxime Hadjinlian spake thusly:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/Config.in           |  1 +
+>  package/dante/Config.in     |  9 +++++++++
+>  package/dante/S50dante      | 40 ++++++++++++++++++++++++++++++++++++++++
+>  package/dante/dante.hash    |  2 ++
+>  package/dante/dante.mk      | 32 ++++++++++++++++++++++++++++++++
+>  package/dante/dante.service | 15 +++++++++++++++
+>  6 files changed, 99 insertions(+)
+>  create mode 100644 package/dante/Config.in
+>  create mode 100644 package/dante/S50dante
+>  create mode 100644 package/dante/dante.hash
+>  create mode 100644 package/dante/dante.mk
+>  create mode 100644 package/dante/dante.service
 
-fcgiwrap fails to build because it does not find the systemd libraries:
+dante still fails to build on various archs:
 
-    http://autobuild.buildroot.org/results/9b5/9b5e70e42e53e7752245f7c43bd01f208fcf76d0/build-end.log
-    http://autobuild.buildroot.org/results/065/0656fde5005c7472e9e8ae8da32a6955ed5093cc/build-end.log
-
-That's because it is looking for the legacy systemd compat libraries,
-which have been removed in systemd 230:
-
-    PKG_CHECK_MODULES(systemd, [libsystemd-daemon],
-
-Also, it seems the homepage referenced in the Config.in is no longer
-available. The git tree has not changed since April 2015.
+    http://autobuild.buildroot.org/?reason=dante-1.4.1
 
 Care to have a look, please?
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-> ---
->  package/Config.in                                  |  1 +
->  .../fcgiwrap/0001-use-LIBS-from-configure.patch    | 22 +++++++++++++++
->  package/fcgiwrap/Config.in                         | 10 +++++++
->  package/fcgiwrap/fcgiwrap.mk                       | 32 ++++++++++++++++++++++
->  4 files changed, 65 insertions(+)
->  create mode 100644 package/fcgiwrap/0001-use-LIBS-from-configure.patch
->  create mode 100644 package/fcgiwrap/Config.in
->  create mode 100644 package/fcgiwrap/fcgiwrap.mk
-> 
 > diff --git a/package/Config.in b/package/Config.in
-> index e0c2e2a..188ff0d 100644
+> index 5779d04..0840ef2 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -1168,6 +1168,7 @@ endif
->  	source "package/ejabberd/Config.in"
->  	source "package/ethtool/Config.in"
->  	source "package/faifa/Config.in"
-> +	source "package/fcgiwrap/Config.in"
->  	source "package/fmc/Config.in"
->  	source "package/foomatic-filters/Config.in"
->  	source "package/fping/Config.in"
-> diff --git a/package/fcgiwrap/0001-use-LIBS-from-configure.patch b/package/fcgiwrap/0001-use-LIBS-from-configure.patch
+> @@ -1416,6 +1416,7 @@ menu "Networking applications"
+>  	source "package/crda/Config.in"
+>  	source "package/ctorrent/Config.in"
+>  	source "package/cups/Config.in"
+> +	source "package/dante/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  	source "package/dhcp/Config.in"
+>  endif
+> diff --git a/package/dante/Config.in b/package/dante/Config.in
 > new file mode 100644
-> index 0000000..12563c4
+> index 0000000..4aa30bc
 > --- /dev/null
-> +++ b/package/fcgiwrap/0001-use-LIBS-from-configure.patch
-> @@ -0,0 +1,22 @@
-> +Makefile.in: Use LIBS from configure rather than specifying -lfcgi manually.
-> +
-> +libfcgi needs libm and fcgiwrap does not use libtool or pkgconf to
-> +detect libfcgi, so we need to add -lm explicitely when using static
-> +libs.  Buildroot does this by providing LIBS=-lm to configure when
-> +needed.  However fcgiwrap does not use Automake and its Makefile.in
-> +ignores LIBS from configure.  Fix it with this patch.
-> +
-> +Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-> +
-> +diff -ur a/Makefile.in b/Makefile.in
-> +--- a/Makefile.in	2013-02-03 14:25:17.000000000 +0100
-> ++++ b/Makefile.in	2015-05-29 16:33:23.895280138 +0200
-> +@@ -16,7 +16,7 @@
-> + 	install -m 644 systemd/fcgiwrap.service $(DESTDIR)@systemdsystemunitdir@
-> + endif
-> +
-> +-LDLIBS = -lfcgi @systemd_LIBS@
-> ++LDLIBS = @LIBS@ @systemd_LIBS@
-> + CFLAGS = @AM_CFLAGS@
-> +
-> + fcgiwrap: fcgiwrap.c
-> diff --git a/package/fcgiwrap/Config.in b/package/fcgiwrap/Config.in
-> new file mode 100644
-> index 0000000..c3a31fc
-> --- /dev/null
-> +++ b/package/fcgiwrap/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_FCGIWRAP
-> +	bool "fcgiwrap"
-> +	depends on BR2_USE_MMU # libfcgi
-> +	select BR2_PACKAGE_LIBFCGI
+> +++ b/package/dante/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_DANTE
+> +	bool "dante"
 > +	help
-> +	  fcgiwrap is a simple server for running CGI applications
-> +	  over FastCGI. It hopes to provide clean CGI support to Nginx
-> +	  (and other web servers that may need it).
+> +	  Dante is a product developed by Inferno Nettverk A/S. It consists of a
+> +	  SOCKS server and a SOCKS client, implementing RFC 1928 and related
+> +	  standards. It is a flexible product that can be used to provide
+> +	  convenient and secure network connectivity.
 > +
-> +	  https://nginx.localdomain.pl/wiki/FcgiWrap
-> diff --git a/package/fcgiwrap/fcgiwrap.mk b/package/fcgiwrap/fcgiwrap.mk
+> +	  http://www.inet.no/dante/
+> diff --git a/package/dante/S50dante b/package/dante/S50dante
 > new file mode 100644
-> index 0000000..698a130
+> index 0000000..3613991
 > --- /dev/null
-> +++ b/package/fcgiwrap/fcgiwrap.mk
+> +++ b/package/dante/S50dante
+> @@ -0,0 +1,40 @@
+> +#!/bin/sh
+> +#
+> +# Starts dante
+> +#
+> +
+> +# Allow a few customizations from a config file
+> +test -r /etc/default/dante && . /etc/default/dante
+> +
+> +start() {
+> +	printf "Starting dante: "
+> +	start-stop-daemon -S -q -p /run/dante.pid \
+> +		--exec /usr/sbin/dante -- $DAEMON_ARGS
+> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
+> +}
+> +stop() {
+> +	printf "Stopping dante: "
+> +	start-stop-daemon -K -q -p /run/dante.pid
+> +	[ $? = 0 ] && echo "OK" || echo "FAIL"
+> +}
+> +restart() {
+> +	stop
+> +	start
+> +}
+> +
+> +case "$1" in
+> +  start)
+> +	start
+> +	;;
+> +  stop)
+> +	stop
+> +	;;
+> +  restart|reload)
+> +	restart
+> +	;;
+> +  *)
+> +	echo "Usage: $0 {start|stop|restart}"
+> +	exit 1
+> +esac
+> +
+> +exit $?
+> diff --git a/package/dante/dante.hash b/package/dante/dante.hash
+> new file mode 100644
+> index 0000000..38dea61
+> --- /dev/null
+> +++ b/package/dante/dante.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256	b6d232bd6fefc87d14bf97e447e4fcdeef4b28b16b048d804b50b48f261c4f53	dante-1.4.1.tar.gz
+> diff --git a/package/dante/dante.mk b/package/dante/dante.mk
+> new file mode 100644
+> index 0000000..3aa04b4
+> --- /dev/null
+> +++ b/package/dante/dante.mk
 > @@ -0,0 +1,32 @@
 > +################################################################################
 > +#
-> +# fcgiwrap
+> +# dante
 > +#
 > +################################################################################
 > +
-> +FCGIWRAP_VERSION = 1.1.0
-> +FCGIWRAP_SITE = $(call github,gnosek,fcgiwrap,$(FCGIWRAP_VERSION))
-> +FCGIWRAP_DEPENDENCIES = host-pkgconf libfcgi
-> +FCGIWRAP_LICENSE = MIT
-> +FCGIWRAP_LICENSE_FILES = fcgiwrap.c
-> +FCGIWRAP_AUTORECONF = YES
+> +DANTE_VERSION = 1.4.1
+> +DANTE_SITE = http://www.inet.no/dante/files
+> +DANTE_LICENSE = BSD-3c
+> +DANTE_LICENSE_FILES = LICENSE
 > +
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +FCGIWRAP_DEPENDENCIES += systemd
-> +FCGIWRAP_CONF_OPTS += --with-systemd
-> +else
-> +FCGIWRAP_CONF_OPTS += --without-systemd
+> +# Dante uses a *VERY* old configure.ac
+> +DANTE_LIBTOOL_PATCH = NO
+> +DANTE_INSTALL_STAGING = YES
+> +
+> +DANTE_CONF_OPTS += --disable-client --disable-preload
+> +
+> +ifeq ($(BR2_ENABLE_DEBUG),y)
+> +	DANTE_CONF_OPTS += --enable-debug
 > +endif
 > +
-> +# libfcgi needs libm and fcgiwrap does not use libtool or pkgconf to
-> +# detect libfcgi, so we need to add -lm explicitely when using static
-> +# libs.
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +FCGIWRAP_CONF_OPTS += LIBS=-lm
-> +endif
+> +define DANTE_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -D -m 644 package/dante/dante.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/dante.service
+> +endef
 > +
-> +# fcgiwrap uses Autoconf, but not Automake, so we need to provide
-> +# these to make.
-> +FCGIWRAP_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
+> +define DANTE_INSTALL_INIT_SYSV
+> +	$(INSTALL) -D -m 755 package/dante/S50dante \
+> +		$(TARGET_DIR)/etc/init.d/S50dante
+> +endef
 > +
 > +$(eval $(autotools-package))
+> diff --git a/package/dante/dante.service b/package/dante/dante.service
+> new file mode 100644
+> index 0000000..b783cee
+> --- /dev/null
+> +++ b/package/dante/dante.service
+> @@ -0,0 +1,15 @@
+> +[Unit]
+> +Description=SOCKS v4 and v5 compatible proxy server and client
+> +Requires=network.target
+> +After=network.target
+> +
+> +[Service]
+> +Type=forking
+> +EnvironmentFile=-/etc/default/dante
+> +PIDFile=/run/dante.pid
+> +ExecStart=/usr/sbin/sockd -D -p /run/dante.pid $DAEMON_ARGS
+> +ExecReload=/bin/kill -HUP $MAINPID
+> +Restart=always
+> +
+> +[Install]
+> +WantedBy=multi-user.target
 > -- 
-> 2.1.4
+> 2.8.1
 > 
 > _______________________________________________
 > buildroot mailing list
