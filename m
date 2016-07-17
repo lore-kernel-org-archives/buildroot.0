@@ -1,101 +1,100 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 12:34:30 +0200
-Subject: [Buildroot] [PATCH 10/16 v3] core: introduce per br2-external ID
+Date: Sun, 17 Jul 2016 12:34:26 +0200
+Subject: [Buildroot] [PATCH 06/16 v3] core: introduce a generated kconfig
+	snippet
 In-Reply-To: <cover.1468750623.git.yann.morin.1998@free.fr>
 References: <cover.1468750623.git.yann.morin.1998@free.fr>
-Message-ID: <a161d4b17c131b471418e4fa979aa73129ad102c.1468750623.git.yann.morin.1998@free.fr>
+Message-ID: <e4930f24c2ca2291b55d122df292702136feb91e.1468750623.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This unique ID is used to construct a per br2-external tree variable,
-BR2_EXTERNAL_$(ID), which contains the path to the br2-external tree.
-
-This variable is available both from Kconfig (set in the Kconfig
-snippet) and from the .mk files.
-
-Also, display the BR2_EXTERNAL_$(ID) and its path as a comment in the
+Add the infrastructure for adding generated kconfig snippet in the
 menuconfig.
 
-This will ultimately allow us to support multiple br2-external trees at
-once, with that ID (and thus BR2_EXTERNAL_$(ID)) uniquely defining which
-br2-external tree is being used.
-
-Note: since the variables in the Makefile and in Kconfig are named the
-same, the one we computed early on (second hunk) will be overridden by
-the one in .config when we have it. Thus, even though they are set to
-the same raw value, the one from .config is quoted and, being included
-later in the Makefile, will take precedence, so we must un-quote it
-before we include the br2-external's makefile (third hunk). That's
-unfortunate, but there is no easy way around that as we want the two
-variables to be named the same in Makefile and Kconfig (and we can't
-ask the user to un-quote that variable himself either), hence the
-little dirty trick.
+For now, the kconfig snippet is generated empty, the recipe for filling
+it in will be introduced in sub-sequent patches.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
 ---
- Makefile | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+ Config.in             | 6 ++++++
+ Makefile              | 7 ++++++-
+ docs/manual/manual.mk | 3 +++
+ 3 files changed, 15 insertions(+), 1 deletion(-)
 
+diff --git a/Config.in b/Config.in
+index 7bb2a01..7f533ce 100644
+--- a/Config.in
++++ b/Config.in
+@@ -18,6 +18,10 @@ config BR2_EXTERNAL
+ 	string
+ 	option env="BR2_EXTERNAL"
+ 
++config BR2_BUILD_DIR
++	string
++	option env="BUILD_DIR"
++
+ # Hidden config symbols for packages to check system gcc version
+ config BR2_HOST_GCC_VERSION
+ 	string
+@@ -763,3 +767,5 @@ menu "User-provided options"
+ source "$BR2_EXTERNAL/Config.in"
+ 
+ endmenu
++
++source "$BR2_BUILD_DIR/.br2-external.in"
 diff --git a/Makefile b/Makefile
-index be2f586..72b55cb 100644
+index d4dc1c5..39a1507 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -148,6 +148,9 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
- #
- # When BR2_EXTERNAL is set to an empty value (e.g. explicitly in command
- # line), the .br-external file is removed.
-+#
-+# If the br2-external tree defines its ID, then export the path in the
-+# BR2_EXTERNAL_$(ID) variable.
+@@ -760,7 +760,7 @@ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ HOSTCFLAGS = $(CFLAGS_FOR_BUILD)
+ export HOSTCFLAGS
  
- BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external
- -include $(BR2_EXTERNAL_FILE)
-@@ -160,6 +163,13 @@ else
-   endif
-   override BR2_EXTERNAL := $(_BR2_EXTERNAL)
-   $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
-+  ifneq ($(wildcard $(BR2_EXTERNAL)/external.id),)
-+    BR2_EXTERNAL_ID := $(shell cat $(BR2_EXTERNAL)/external.id 2>/dev/null)
-+    ifeq ($(BR2_EXTERNAL_ID),)
-+      $(error $(BR2_EXTERNAL) has no ID (in file 'external.id'))
-+    endif
-+    BR2_EXTERNAL_$(BR2_EXTERNAL_ID) = $(BR2_EXTERNAL)
-+  endif
-   BR2_EXTERNAL_MK = $(BR2_EXTERNAL)/external.mk
+-prepare-kconfig: outputmakefile
++prepare-kconfig: outputmakefile $(BUILD_DIR)/.br2-external.in
+ 
+ $(BUILD_DIR)/buildroot-config/%onf:
+ 	mkdir -p $(@D)/lxdialog
+@@ -779,6 +779,7 @@ COMMON_CONFIG_ENV = \
+ 	BR2_CONFIG=$(BR2_CONFIG) \
+ 	BR2_EXTERNAL=$(BR2_EXTERNAL) \
+ 	HOST_GCC_VERSION="$(HOSTCC_VERSION)" \
++	BUILD_DIR=$(BUILD_DIR) \
+ 	SKIP_LEGACY=
+ 
+ xconfig: $(BUILD_DIR)/buildroot-config/qconf prepare-kconfig
+@@ -879,6 +880,10 @@ ifeq ($(NEED_WRAPPER),y)
+ 	$(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O)
  endif
  
-@@ -457,6 +467,10 @@ include boot/common.mk
- include linux/linux.mk
- include fs/common.mk
++.PHONY: $(BUILD_DIR)/.br2-external.in
++$(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
++	@touch $@
++
+ # printvars prints all the variables currently defined in our
+ # Makefiles. Alternatively, if a non-empty VARS variable is passed,
+ # only the variables matching the make pattern passed in VARS are
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+index caf080a..b26f912 100644
+--- a/docs/manual/manual.mk
++++ b/docs/manual/manual.mk
+@@ -7,6 +7,9 @@
+ MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
+ MANUAL_RESOURCES = $(TOPDIR)/docs/images
  
-+# If the br2-external tree defines its ID, then the BR2_EXTERNAL_$(ID)
-+# variable is also present in .config, so it is quoted. We must unquote
-+# it before feeding it to the br2-external makefile.
-+BR2_EXTERNAL_$(BR2_EXTERNAL_ID) := $(call qstrip,$(BR2_EXTERNAL_$(BR2_EXTERNAL_ID)))
- # Nothing to include if no BR2_EXTERNAL tree in use
- include $(BR2_EXTERNAL_MK)
- 
-@@ -882,7 +896,13 @@ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
- 	$(Q)if [ -n '$(BR2_EXTERNAL)' ]; then \
- 		printf "#\n# Automatically generated file; DO NOT EDIT.\n#\n\n"; \
- 		printf 'menu "User-provided options"\n\n'; \
--		printf 'source "%s/Config.in"\n\n' $$(cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd); \
-+		if [ -z "$(BR2_EXTERNAL_ID)" ]; then \
-+			printf 'source "%s/Config.in"\n\n' $$(cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd); \
-+		else \
-+			printf 'config BR2_EXTERNAL_%s\n' $(BR2_EXTERNAL_ID); \
-+			printf '\tstring\n\tdefault "%s"\n\n' $(BR2_EXTERNAL_$(BR2_EXTERNAL_ID)); \
-+			printf 'source "$$BR2_EXTERNAL_%s/Config.in"\n\n' $(BR2_EXTERNAL_ID); \
-+		fi; \
- 		printf 'endmenu # User-provided options\n'; \
- 	fi >$@
- 
++# Ensure the kconfig snippet is generated (for MANUAL_GEN_LISTS, below):
++MANUAL_DEPENDENCIES += prepare-kconfig
++
+ # Our manual needs to generate lists
+ define MANUAL_GEN_LISTS
+ 	$(Q)$(call MESSAGE,"Updating the manual lists...")
 -- 
 2.7.4
