@@ -1,109 +1,98 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 12:34:29 +0200
-Subject: [Buildroot] [PATCH 09/16 v3] core: get rid of our dummy
-	br2-external tree
+Date: Sun, 17 Jul 2016 12:34:34 +0200
+Subject: [Buildroot] [PATCH 14/16 v3] support/scripts: teach
+	gen-manual-lists about BR2_EXTERNAL
 In-Reply-To: <cover.1468750623.git.yann.morin.1998@free.fr>
 References: <cover.1468750623.git.yann.morin.1998@free.fr>
-Message-ID: <1539019862ece0541de3e2ee6a36871958af2d15.1468750623.git.yann.morin.1998@free.fr>
+Message-ID: <f07d4d2f301a92ad0380c6de3e947739265bc23d.1468750623.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we generate a kconfig snippet, we can conditionally include the
-BR2_EXTERNAL's Config.in only when BR2_EXTERNAL is supplied by the user,
-which means our empty/dummy Config.in is no longer useful to us.
+When using BR2_EXTERNAL, generate the list of packages from there.
 
-As for external.mk, we can also include it only when BR2_EXTERNAL is
-supplied by the user, which means our empty/dummy external.mk is no
-longer of any use to us.
-
-Ditch both of those files, and:
-
-  - only generate actual content in the Kconfig snippet when we actually
-    do have a BR2_EXTERNAL provided by the user (i.e. BR2_EXTERNAL is not
-    empty);
-
-  - add a variable that contains the path to the external.mk provided by
-    the user, or empty if none, and include the path set in that variable
-    (make can 'include' nothing without any problem! ;-) )
+This is currently effectively unused for now, as BR2_EXTERNAL is not
+available (not exported in the environment); that will be updated in a
+later patch.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- Makefile                           | 18 +++++++-----------
- support/dummy-external/Config.in   |  0
- support/dummy-external/external.mk |  0
- 3 files changed, 7 insertions(+), 11 deletions(-)
- delete mode 100644 support/dummy-external/Config.in
- delete mode 100644 support/dummy-external/external.mk
+ support/scripts/gen-manual-lists.py | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 86c532e..be2f586 100644
---- a/Makefile
-+++ b/Makefile
-@@ -147,16 +147,11 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
- # on the command line, therefore the file is re-created every time make is run.
- #
- # When BR2_EXTERNAL is set to an empty value (e.g. explicitly in command
--# line), the .br-external file is removed and we point to
--# support/dummy-external. This makes sure we can unconditionally include the
--# Config.in and external.mk from the BR2_EXTERNAL directory. In this case,
--# override is necessary so the user can clear BR2_EXTERNAL from the command
--# line, but the dummy path is still used internally.
-+# line), the .br-external file is removed.
+diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+index d231eda..a672b7b 100644
+--- a/support/scripts/gen-manual-lists.py
++++ b/support/scripts/gen-manual-lists.py
+@@ -141,7 +141,6 @@ class Buildroot:
  
- BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external
- -include $(BR2_EXTERNAL_FILE)
- ifeq ($(BR2_EXTERNAL),)
--  override BR2_EXTERNAL = support/dummy-external
-   $(shell rm -f $(BR2_EXTERNAL_FILE))
- else
-   _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
-@@ -165,6 +160,7 @@ else
-   endif
-   override BR2_EXTERNAL := $(_BR2_EXTERNAL)
-   $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
-+  BR2_EXTERNAL_MK = $(BR2_EXTERNAL)/external.mk
- endif
+     """
+     root_config = "Config.in"
+-    package_dirname = "package"
+     package_prefixes = ["BR2_PACKAGE_", "BR2_PACKAGE_HOST_"]
+     re_pkg_prefix = re.compile(r"^(" + "|".join(package_prefixes) + ").*")
+     deprecated_symbol = "BR2_DEPRECATED"
+@@ -182,12 +181,22 @@ class Buildroot:
+             'format': "_format_symbol_prompt_location",
+             'sorted': False,
+         },
++        'external': {
++            'filename': "br2-external-package-list",
++            'root_menu': "User-provided options",
++            'filter': "_is_real_package",
++            'format': "_format_symbol_prompt_location",
++            'sorted': True,
++        },
+     }
  
- # To make sure that the environment variable overrides the .config option,
-@@ -461,7 +457,8 @@ include boot/common.mk
- include linux/linux.mk
- include fs/common.mk
+     def __init__(self):
+         self.base_dir = os.environ.get("TOPDIR")
+         self.output_dir = os.environ.get("O")
+-        self.package_dir = os.path.join(self.base_dir, self.package_dirname)
++        self.package_dirs = []
++        self.package_dirs.append(os.path.join(self.base_dir, "package"))
++        if os.getenv('BR2_EXTERNAL'):
++            self.package_dirs.extend(os.environ["BR2_EXTERNAL"].split())
+         self.config = kconfiglib.Config(os.path.join(self.base_dir,
+                                                      self.root_config),
+                                         self.base_dir)
+@@ -259,9 +268,10 @@ class Buildroot:
+         #   symbol.
+         if not hasattr(self, "_package_list"):
+             pkg_list = []
+-            for _, _, files in os.walk(self.package_dir):
+-                for file_ in (f for f in files if f.endswith(".mk")):
+-                    pkg_list.append(re.sub(r"(.*?)\.mk", r"\1", file_))
++            for d in self.package_dirs:
++                for _, _, files in os.walk(d):
++                    for file_ in (f for f in files if f.endswith(".mk")):
++                        pkg_list.append(re.sub(r"(.*?)\.mk", r"\1", file_))
+             setattr(self, "_package_list", pkg_list)
+         for pkg in getattr(self, "_package_list"):
+             if type == 'real':
+@@ -491,6 +501,8 @@ class Buildroot:
  
--include $(BR2_EXTERNAL)/external.mk
-+# Nothing to include if no BR2_EXTERNAL tree in use
-+include $(BR2_EXTERNAL_MK)
- 
- # Now we are sure we have all the packages scanned and defined. We now
- # check for each package in the list of enabled packages, that all its
-@@ -882,13 +879,12 @@ endif
- 
- .PHONY: $(BUILD_DIR)/.br2-external.in
- $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
--	$(Q)( \
-+	$(Q)if [ -n '$(BR2_EXTERNAL)' ]; then \
- 		printf "#\n# Automatically generated file; DO NOT EDIT.\n#\n\n"; \
--		printf 'menu "User-provided options"\n'; \
--		printf '\tdepends on BR2_EXTERNAL != "support/dummy-external"\n\n'; \
-+		printf 'menu "User-provided options"\n\n'; \
- 		printf 'source "%s/Config.in"\n\n' $$(cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd); \
- 		printf 'endmenu # User-provided options\n'; \
--	) >$@
-+	fi >$@
- 
- # printvars prints all the variables currently defined in our
- # Makefiles. Alternatively, if a non-empty VARS variable is passed,
-diff --git a/support/dummy-external/Config.in b/support/dummy-external/Config.in
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/support/dummy-external/external.mk b/support/dummy-external/external.mk
-deleted file mode 100644
-index e69de29..0000000
+ if __name__ == '__main__':
+     list_types = ['target-packages', 'host-packages', 'virtual-packages', 'deprecated']
++    if os.getenv('BR2_EXTERNAL'):
++        list_types.append('external')
+     parser = ArgumentParser()
+     parser.add_argument("list_type", nargs="?", choices=list_types,
+                         help="""\
+@@ -505,6 +517,8 @@ Generate the given list (generate all lists if unspecified)""")
+                         help="Output virtual package file")
+     parser.add_argument("--output-deprecated", dest="output_deprecated",
+                         help="Output deprecated file")
++    parser.add_argument("--output-external", dest="output_external",
++                        help="Output br2-external file")
+     args = parser.parse_args()
+     lists = [args.list_type] if args.list_type else list_types
+     buildroot = Buildroot()
 -- 
 2.7.4
