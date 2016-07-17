@@ -1,70 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Jul 2016 14:31:08 +0200
-Subject: [Buildroot] [git commit] package/kodi: add optional support for
-	libvdpau
-Message-ID: <20160717123353.BF87F81D65@busybox.osuosl.org>
+Date: Sun, 17 Jul 2016 14:29:23 +0200
+Subject: [Buildroot] [git commit] package/kodi: add support for libudev
+Message-ID: <20160717123353.9CE0D81D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aab1690637755d638101ddd490a858f4a9e447c4
+commit: https://git.buildroot.net/buildroot/commit/?id=10979bb2c6b5f827b356427a556b9500010a3eca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Most of the times this is not needed because libdrm & mesa3d already
+pull in the dependency to udev. Let's add it anyway to make sure that
+udev is really used and to document that Kodi makes use of udev.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: drop select of libX11 and libXext, since the libvdpau package
-already selects them.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi/Config.in | 10 ++++++++++
- package/kodi/kodi.mk   |  8 +++++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ package/kodi/kodi.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 9a5baa8..afb834e 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -236,6 +236,16 @@ config BR2_PACKAGE_KODI_LIBVA
- 	help
- 	  Enable libva support.
- 
-+config BR2_PACKAGE_KODI_LIBVDPAU
-+	bool "vdpau"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBVDPAU
-+	help
-+	  Enable libvdpau support.
-+
-+comment "libvdpau support needs X.org"
-+	depends on !BR2_PACKAGE_XORG7
-+
- config BR2_PACKAGE_KODI_UPNP
- 	bool "upnp"
- 	help
 diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index e291947..9f21bf2 100644
+index da5d1fa..e291947 100644
 --- a/package/kodi/kodi.mk
 +++ b/package/kodi/kodi.mk
-@@ -74,7 +74,6 @@ KODI_CONF_OPTS +=  \
- 	--disable-joystick \
- 	--disable-openmax \
- 	--disable-pulse \
--	--disable-vdpau \
- 	--disable-vtbdecoder \
- 	--enable-optimizations
- 
-@@ -243,6 +242,13 @@ else
- KODI_CONF_OPTS += --disable-vaapi
+@@ -102,6 +102,13 @@ KODI_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads
+ 	LIBS="-lvcos -lvchostif"
  endif
  
-+ifeq ($(BR2_PACKAGE_KODI_LIBVDPAU),y)
-+KODI_DEPENDENCIES += libvdpau
-+KODI_CONF_OPTS += --enable-vdpau
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++KODI_DEPENDENCIES += udev
++KODI_CONF_OPTS += --enable-udev
 +else
-+KODI_CONF_OPTS += --disable-vdpau
++KODI_CONF_OPTS += --disable-udev
 +endif
 +
- ifeq ($(BR2_PACKAGE_KODI_UPNP),y)
- KODI_CONF_OPTS += --enable-upnp
- else
+ ifeq ($(BR2_PACKAGE_IMX_VPUWRAP),y)
+ KODI_DEPENDENCIES += imx-vpuwrap
+ KODI_CONF_OPTS += --enable-codec=imxvpu
