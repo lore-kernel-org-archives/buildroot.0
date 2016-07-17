@@ -1,72 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 10:44:24 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	yem/systemd-skeleton-2
-Message-ID: <cover.1468744792.git.yann.morin.1998@free.fr>
+Date: Sun, 17 Jul 2016 10:44:23 +0200
+Subject: [Buildroot] [PATCH 1/6] package/busybox: add comment about
+	BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+In-Reply-To: <cover.1468744792.git.yann.morin.1998@free.fr>
+References: <cover.1468744792.git.yann.morin.1998@free.fr>
+Message-ID: <ce037a071acb910af0b9b962885496169848718b.1468744792.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is a bit special. When Busybox is
+enabled, it is a Busybox option. When Busybox is not enabled, it is a
+stand-alone option, forcibly enabled.
 
-This series is a clean-up of our skeleton handling, especially the
-customskeleton, aimed at preparing the ground for adding proper systemd
-handling in our skeleton.
+So we can safely 'select' it without ensuring (via a 'depends on' or
+another 'select') that Busybox is enabled.
 
-The first wo patches are independent cleanups, adding a comment about
-busybox-show-others and using package-specific target-finalize hooks.
+However, the name of this option does not express the fact that it is
+safe to select it without checking Busybox, which can lead to a bit of
+time-consuming head-scratching.
 
-The next four patches remove all choice options for customising the
-custom skeleton, on the assumption that the user is responsible for
-providing a complete skeleton.
+To avoid future puzzlement from an unsuspecting observer, adda a big fat
+comment that this option can be selected without any dependency on
+busybox.
 
-This is a resend of the previous patches that were almost accepted
-previously, taking inteo account the few comments that were made during
-the Summer Camp two weeks ago.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Romain Naour <romain.naour@openwide.fr>
 
-When this is in, I'll rework the rest of the skeleton-systemd series as
-suggested by Thomas.
+---
+Changes v2 -> v3:
+  - add the comment  (Romain)
+  - drop the condition select  (Romain)
 
+Changes v1 -> v2:
+  - only select if busybox is enabled  (Thomas)
 
-Regards,
-Yann E. MORIN.
+---
+Hopefully, this will avoid people to go hunting like I did, and loose a
+few precious minutes of hair-pulling... ;-]
+---
+ package/busybox/Config.in | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-
-The following changes since commit 97308d8e9ae0f096ec2df8275deb063266583b91
-
-  package/ti-gfx: list supported SoCs in Config.in help text (2016-07-16 22:53:55 +0200)
-
-
-are available in the git repository at:
-
-  https://gitlab.com/ymorin/buildroot.git
-
-for you to fetch changes up to c890968b9496cac9613f3ea69282ec4db8fa3de2
-
-  system: do not set hostname and issue for custom skeleton (2016-07-17 00:04:42 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (6):
-      package/busybox: add comment about BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-      toolchain: use the <PKG>_TARGET_FINALIZE_HOOKS
-      system: provide no default for custom skeleton path
-      system: move the rootfs skeleton choice
-      system: do not handle network settings for custom skeleton
-      system: do not set hostname and issue for custom skeleton
-
- package/busybox/Config.in    |  6 +++-
- package/skeleton/skeleton.mk | 14 +++++++---
- system/Config.in             | 65 +++++++++++++++++++++++---------------------
- toolchain/toolchain.mk       |  4 +--
- 4 files changed, 51 insertions(+), 38 deletions(-)
-
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 91c5d9e..8f84fc9 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -26,6 +26,8 @@ config BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES
+ 	  A space-separated list of configuration fragment files,
+ 	  that will be merged to the main BusyBox configuration file.
+ 
++# This option is not an option of Busybox, it can be selected even
++# if Busybox is not enabled.
+ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	bool "Show packages that are also provided by busybox"
+ 	help
+@@ -75,7 +77,9 @@ endif
+ 
+ if !BR2_PACKAGE_BUSYBOX # kconfig doesn't support else
+ 
+-# add dummy config so the stuff with busybox alternatives are shown
++# This option is not an option of Busybox, it can be selected even
++# if Busybox is not enabled.
++# Add dummy config so the stuff with busybox alternatives are shown
+ # when busybox is disabled
+ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	default y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
