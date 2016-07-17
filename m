@@ -1,95 +1,109 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 12:34:35 +0200
-Subject: [Buildroot] [PATCH 15/16 v3] docs/manual: include packages from
-	BR2_EXTERNAL if set
+Date: Sun, 17 Jul 2016 12:34:29 +0200
+Subject: [Buildroot] [PATCH 09/16 v3] core: get rid of our dummy
+	br2-external tree
 In-Reply-To: <cover.1468750623.git.yann.morin.1998@free.fr>
 References: <cover.1468750623.git.yann.morin.1998@free.fr>
-Message-ID: <70e458ffdb5d33a1477ddeb37f4c69507e8dcb00.1468750623.git.yann.morin.1998@free.fr>
+Message-ID: <1539019862ece0541de3e2ee6a36871958af2d15.1468750623.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If the user is using one or more br2-external trees, add the list of
-packages therein to the manual.
+Now that we generate a kconfig snippet, we can conditionally include the
+BR2_EXTERNAL's Config.in only when BR2_EXTERNAL is supplied by the user,
+which means our empty/dummy Config.in is no longer useful to us.
 
-Note that we do re-introduce BR2_EXTERNAL (when it was removed in
-[-SHA1-] (docs/manual: do not override BR2_EXTERNAL). The reason for
-the removal is that BR2_EXTERNAL is no longer used as a Kconfig option.
+As for external.mk, we can also include it only when BR2_EXTERNAL is
+supplied by the user, which means our empty/dummy external.mk is no
+longer of any use to us.
 
-However, BR2_EXTERNAL is now used by the gen-manual-lists.py script,
-which needs it to find packages' .mk files in the br2-external trees,
-not as a Kconfig option (which it is not).
+Ditch both of those files, and:
 
-So, even though that looks like a revert, that's not: the purpose is
-different, and we only pass it when not empty.
+  - only generate actual content in the Kconfig snippet when we actually
+    do have a BR2_EXTERNAL provided by the user (i.e. BR2_EXTERNAL is not
+    empty);
 
-In case we have no br2-external, we want to create an empty file, so
-we can't just touch it, in case it was previously generated with
-br2-external trees; instead, we printf an empty string in there to
-ensure the file exists and is empty.
+  - add a variable that contains the path to the external.mk provided by
+    the user, or empty if none, and include the path set in that variable
+    (make can 'include' nothing without any problem! ;-) )
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
- docs/manual/appendix.txt |  5 +++++
- docs/manual/manual.mk    | 18 ++++++++++++++++++
- 2 files changed, 23 insertions(+)
+ Makefile                           | 18 +++++++-----------
+ support/dummy-external/Config.in   |  0
+ support/dummy-external/external.mk |  0
+ 3 files changed, 7 insertions(+), 11 deletions(-)
+ delete mode 100644 support/dummy-external/Config.in
+ delete mode 100644 support/dummy-external/external.mk
 
-diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
-index 87a20bd..7ef8bbc 100644
---- a/docs/manual/appendix.txt
-+++ b/docs/manual/appendix.txt
-@@ -40,3 +40,8 @@ year following deprecation. For example, a symbol depending on
- +BR2_DEPRECATED_SINCE_2013_05+ can be removed from 2014.05 onwards.
+diff --git a/Makefile b/Makefile
+index 86c532e..be2f586 100644
+--- a/Makefile
++++ b/Makefile
+@@ -147,16 +147,11 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
+ # on the command line, therefore the file is re-created every time make is run.
+ #
+ # When BR2_EXTERNAL is set to an empty value (e.g. explicitly in command
+-# line), the .br-external file is removed and we point to
+-# support/dummy-external. This makes sure we can unconditionally include the
+-# Config.in and external.mk from the BR2_EXTERNAL directory. In this case,
+-# override is necessary so the user can clear BR2_EXTERNAL from the command
+-# line, but the dummy path is still used internally.
++# line), the .br-external file is removed.
  
- include::deprecated-list.txt[]
-+
-+// This file is generated:
-+// - with the list of br2-external packages if BR2_EXTERNAL is set
-+// - empty otherwise
-+include::br2-external.txt[]
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index b26f912..2e711b8 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -10,14 +10,32 @@ MANUAL_RESOURCES = $(TOPDIR)/docs/images
- # Ensure the kconfig snippet is generated (for MANUAL_GEN_LISTS, below):
- MANUAL_DEPENDENCIES += prepare-kconfig
+ BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external
+ -include $(BR2_EXTERNAL_FILE)
+ ifeq ($(BR2_EXTERNAL),)
+-  override BR2_EXTERNAL = support/dummy-external
+   $(shell rm -f $(BR2_EXTERNAL_FILE))
+ else
+   _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
+@@ -165,6 +160,7 @@ else
+   endif
+   override BR2_EXTERNAL := $(_BR2_EXTERNAL)
+   $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
++  BR2_EXTERNAL_MK = $(BR2_EXTERNAL)/external.mk
+ endif
  
-+# If using one or more BR2_EXTERNAL trees, include the list of
-+# packages therein, otherwise, generate an empty file
-+ifeq ($(BR2_EXTERNAL),)
-+define MANUAL_GEN_LISTS_BR2_EXTERNAL
-+	$(Q)printf "" >$(@D)/br2-external.txt
-+endef
-+else
-+define MANUAL_GEN_LISTS_BR2_EXTERNAL
-+	$(Q)( \
-+		printf "== List of BR2_EXTERNAL packages\n\n"; \
-+		printf "include::br2-external-package-list.txt[]\n"; \
-+	) >$(@D)/br2-external.txt
-+endef
-+MANUAL_GEN_LISTS_ENV = BR2_EXTERNAL="$(BR2_EXTERNAL)"
-+endif
-+
- # Our manual needs to generate lists
- define MANUAL_GEN_LISTS
- 	$(Q)$(call MESSAGE,"Updating the manual lists...")
- 	$(Q)$(COMMON_CONFIG_ENV) \
-+		$(MANUAL_GEN_LISTS_ENV) \
- 		BR2_DEFCONFIG="" \
- 		TOPDIR=$(TOPDIR) \
- 		O=$(@D) \
- 		python -B $(TOPDIR)/support/scripts/gen-manual-lists.py
-+	$(MANUAL_GEN_LISTS_BR2_EXTERNAL)
- endef
- MANUAL_POST_RSYNC_HOOKS += MANUAL_GEN_LISTS
+ # To make sure that the environment variable overrides the .config option,
+@@ -461,7 +457,8 @@ include boot/common.mk
+ include linux/linux.mk
+ include fs/common.mk
  
+-include $(BR2_EXTERNAL)/external.mk
++# Nothing to include if no BR2_EXTERNAL tree in use
++include $(BR2_EXTERNAL_MK)
+ 
+ # Now we are sure we have all the packages scanned and defined. We now
+ # check for each package in the list of enabled packages, that all its
+@@ -882,13 +879,12 @@ endif
+ 
+ .PHONY: $(BUILD_DIR)/.br2-external.in
+ $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
+-	$(Q)( \
++	$(Q)if [ -n '$(BR2_EXTERNAL)' ]; then \
+ 		printf "#\n# Automatically generated file; DO NOT EDIT.\n#\n\n"; \
+-		printf 'menu "User-provided options"\n'; \
+-		printf '\tdepends on BR2_EXTERNAL != "support/dummy-external"\n\n'; \
++		printf 'menu "User-provided options"\n\n'; \
+ 		printf 'source "%s/Config.in"\n\n' $$(cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd); \
+ 		printf 'endmenu # User-provided options\n'; \
+-	) >$@
++	fi >$@
+ 
+ # printvars prints all the variables currently defined in our
+ # Makefiles. Alternatively, if a non-empty VARS variable is passed,
+diff --git a/support/dummy-external/Config.in b/support/dummy-external/Config.in
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/support/dummy-external/external.mk b/support/dummy-external/external.mk
+deleted file mode 100644
+index e69de29..0000000
 -- 
 2.7.4
