@@ -1,203 +1,290 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 12:34:32 +0200
-Subject: [Buildroot] [PATCH 00/16 v3] br2-external: support multiple trees
-	at once (branch yem/multi-br2-external-ID-7)
-Message-ID: <cover.1468750623.git.yann.morin.1998@free.fr>
+Date: Sun, 17 Jul 2016 12:34:21 +0200
+Subject: [Buildroot] [PATCH 01/16 v3] core: move pkg-utils.mk to support/
+In-Reply-To: <cover.1468750623.git.yann.morin.1998@free.fr>
+References: <cover.1468750623.git.yann.morin.1998@free.fr>
+Message-ID: <baf402ac561bf88a4f0262b463f165f91c00cb75.1468750623.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+pkg-utils.mk contains various definitions that are used in the package
+infrastructures and packages themselves.
 
-This rather complex series introduces support for using multiple
-br2-external trees at once.
+However, those definitions can be useful in other parts of Buildroot,
+and are already used in a few places that are not related to the package
+infrastructure. Also, $(sep) will be needed early in the Makefile when
+we eventually support multiple br2-external trees.
 
+Since this file only contains definitions, we can include it anytime.
 
-Currently, Buildroot can use what we call a br2-external tree, that is a
-location where one can store customisations outisde of the Buildroot
-tree:
+So, consider that file to no longer be specific to the package infras:
+  - move it to support and rename it,
+  - move a few similar definitions from the main Makefile to that file.
 
-  - defconfig files;
-  - packages;
-  - custom make rules and logic;
-  - company-, project- and board-related configurations files, like a
-    kernel config file, a rootfs overlay;
-  - any other content that does not belong to the Buildroot tree...
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+---
+ Makefile              |  10 +----
+ package/pkg-utils.mk  |  96 -------------------------------------------
+ support/misc/utils.mk | 111 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 113 insertions(+), 104 deletions(-)
+ create mode 100644 support/misc/utils.mk
 
-This is very nice and very handy!
-
-However, it is not possible to use more than one such br2-external tree
-at a time; Buildroot only supports using at most one br2-external tree.
-
-
-Having support for using more than one br2-external tree at the same
-time would allow more flexibility organising those out-of-tree
-customisations. One could use a br2-external tree to store FLOSS
-packages not yet in Buildroot and a second br2-external tree for
-proprietary packages; such a separation would make compliance with
-FLOSS licenses easier (by allowing distributing only the br2-external
-tree with FLOSS packages, keeping the proprietary bits private).
-
-It could also be used to commonalise br2-external trees from different
-internal projects, where each would provide a set of extensions (new
-packages, new boards defconfigs...) that a project could cherry-pick.
-
-And countless other possibilities.
-
-This series is an attempt at making it possible to use such setups.
-
-
-The series is organised as such:
-
-  - patch 1 is a little cleanup that moves common Makefiles definitions
-    out of the package infra and out of the main Makefile, into a
-    separate file. Those definitions are generic, not specific to
-    packages, and may be used throughout the Makefile.
-
-  - patches 2..5 are preparatory work aimed at allowing to generate a
-    kconfig snippet in the menuconfig.
-
-  - patches 6..9 introduce a generated kconfig snippet, that is used to
-    include the br2-external tree, rather than have conditional code in
-    our existing static kconfig. They also get rid of our bundled, dummy
-    br2-external tree, as it is no longer needed.
-
-  - patches 10..11 introduce support for br2-external trees to define an
-    hopefully-globally-unique ID describing this br2-external tree. See
-    below for an in-depth expanation for the reason for that ID.
-
-  - patch 12 adds a Makefile rule to generate out .br-external file,
-    rather than handling it with cutom Makefile code (arguably, this
-    change could have come before 10..11, but since I wrote it in this
-    order and they concflict pretty hard, I left it in this position).
-
-  - patch 13 is is the core of the series; it eventually introduces
-    support for using multiple br2-external trees at once. Tanks to all
-    the previous changes, it is pretty light (70+, 31-), even if a bit
-    complex;
-
-  - patch 14..15 teaches gen-manual to generate lists for packages from
-    the br2-external trees,if any and if requested (default: do not
-    include those packages).
-
-  - patch 16 eventually documents support for multi br2-external trees.
-
-
-The pivotal change in this series is implemented in patch 10, and aims
-at providing br2-external trees with a way to find their own files,
-given that their locations at runtime is completely unkown, and can
-not even be deduced relative to Buildroot's own TOPDIR; this is
-explained below.
-
-Unlike Makefiles, Kconfig does not allow us to redefine a variable at
-various moments of the parsing, because the values are only valid and
-acted upon when the complete Kconfig code has been parsed. So, we need
-a way to provide Config.in files from each br2-external with their
-actual location. For that, we need different variables, one for each
-br2-external tree.
-
-So, we need a way to uniquely identify each br2-external tree, and we
-need a stable scheme. We can't use indexes (because they would not be
-stable across various runs or various ordering of the br2-external
-trees); we can't use path-based hashing (because paths are not stable
-accross users/machines/time); we can't use content-based hashing
-(external.mk and/or Config.in may all be empty, giving the same hash);
-we can't use hashes altogether because they are not human-friendly.
-
-The solution is to require br2-external trees to provide a unique ID
-that is used as a kind of 'name-space' for that tree: we eventually
-provide a single variable, BR2_EXTERNAL_$(ID) that points to the
-location of that tree; because $(ID) is known to the external tree,
-it also knows BR2_EXTERNAL_$(ID) exists, so it can use it, and we
-export it both in Config.in and external.mk .
-
-Therefore, br2-external trees must now use $(BR2_EXTERNAL_$(MY_ID)) to
-refer to their own files. It also prevent them from (accidentally)
-including files from other br2-external trees.
-
-Note: IDs are optional, so that existing br2-external trees continue to
-work as before. However, if a br2-external tree does not provide an ID,
-it will not be useable in conjunction with other br2-external trees.
-Using multiple br2-external trees mandates that all of them provide an
-ID.
-
-
-Please have a look at the various commit logs for more details about
-each change, they are usually pretty copious in details (sometimes even
-much bigger than the actual change they are commenting!).
-
-
-And that's about all for this time. ;-)
-
-
-Changes v2 -> v3:
-  - not much. ;-)
-
-Changes RFC -> v2:
-  - much. :-]
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 97308d8e9ae0f096ec2df8275deb063266583b91
-
-  package/ti-gfx: list supported SoCs in Config.in help text (2016-07-16 22:53:55 +0200)
-
-
-are available in the git repository at:
-
-  https://gitlab.com/ymorin/buildroot.git
-
-for you to fetch changes up to 8eca23fffd802ef089aab2300b9041455076e771
-
-  docs/manual: document multi br2-external (2016-07-17 12:06:42 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (16):
-      core: move pkg-utils.mk to support/
-      core: commonalise the bundled and br2-external %_defconfig rules
-      doc/asciidoc: add possibility to define document dependencies
-      core: introduce an intermediate rule before the configurators
-      core: move rule to create basic directories
-      core: introduce a generated kconfig snippet
-      docs/manual: prepare-config can be used as a dependency of documents
-      core: do not hard-code inclusion of br2-external in Kconfig
-      core: get rid of our dummy br2-external tree
-      core: introduce per br2-external ID
-      docs/manual: document the br2-external ID
-      core: handle .br-external in a make rule
-      core: add support for multiple br2-external trees
-      support/scripts: teach gen-manual-lists about BR2_EXTERNAL
-      docs/manual: include packages from BR2_EXTERNAL if set
-      docs/manual: document multi br2-external
-
- Config.in                                     |  11 +-
- Makefile                                      | 184 +++++++++++++++++---------
- docs/manual/adding-packages-asciidoc.txt      |   5 +
- docs/manual/appendix.txt                      |   5 +
- docs/manual/customize-outside-br.txt          | 119 ++++++++++++-----
- docs/manual/manual.mk                         |  21 +++
- package/Makefile.in                           |   2 +-
- package/doc-asciidoc.mk                       |   2 +-
- package/pkg-utils.mk                          |  96 --------------
- support/dummy-external/Config.in              |   0
- support/dummy-external/external.mk            |   0
- package/pkg-utils.mk => support/misc/utils.mk | 106 ++-------------
- support/scripts/gen-manual-lists.py           |  24 +++-
- 13 files changed, 276 insertions(+), 299 deletions(-)
- delete mode 100644 support/dummy-external/Config.in
- delete mode 100644 support/dummy-external/external.mk
- copy package/pkg-utils.mk => support/misc/utils.mk (57%)
-
+diff --git a/Makefile b/Makefile
+index 027f21c..af2d982 100644
+--- a/Makefile
++++ b/Makefile
+@@ -106,14 +106,8 @@ else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
+ BR_BUILDING = y
+ endif
+ 
+-# Strip quotes and then whitespaces
+-qstrip = $(strip $(subst ",,$(1)))
+-#"))
+-
+-# Variables for use in Make constructs
+-comma := ,
+-empty :=
+-space := $(empty) $(empty)
++# Include some helper macros and variables
++include support/misc/utils.mk
+ 
+ ifneq ("$(origin O)", "command line")
+ O := output
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index c61b3b6..28db481 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -5,43 +5,6 @@
+ #
+ ################################################################################
+ 
+-# Case conversion macros. This is inspired by the 'up' macro from gmsl
+-# (http://gmsl.sf.net). It is optimised very heavily because these macros
+-# are used a lot. It is about 5 times faster than forking a shell and tr.
+-#
+-# The caseconvert-helper creates a definition of the case conversion macro.
+-# After expansion by the outer $(eval ), the UPPERCASE macro is defined as:
+-# $(strip $(eval __tmp := $(1))  $(eval __tmp := $(subst a,A,$(__tmp))) ... )
+-# In other words, every letter is substituted one by one.
+-#
+-# The caseconvert-helper allows us to create this definition out of the
+-# [FROM] and [TO] lists, so we don't need to write down every substition
+-# manually. The uses of $ and $$ quoting are chosen in order to do as
+-# much expansion as possible up-front.
+-#
+-# Note that it would be possible to conceive a slightly more optimal
+-# implementation that avoids the use of __tmp, but that would be even
+-# more unreadable and is not worth the effort.
+-
+-[FROM] := a b c d e f g h i j k l m n o p q r s t u v w x y z - .
+-[TO]   := A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _ _
+-
+-define caseconvert-helper
+-$(1) = $$(strip \
+-	$$(eval __tmp := $$(1))\
+-	$(foreach c, $(2),\
+-		$$(eval __tmp := $$(subst $(word 1,$(subst :, ,$c)),$(word 2,$(subst :, ,$c)),$$(__tmp))))\
+-	$$(__tmp))
+-endef
+-
+-$(eval $(call caseconvert-helper,UPPERCASE,$(join $(addsuffix :,$([FROM])),$([TO]))))
+-$(eval $(call caseconvert-helper,LOWERCASE,$(join $(addsuffix :,$([TO])),$([FROM]))))
+-
+-# Sanitize macro cleans up generic strings so it can be used as a filename
+-# and in rules. Particularly useful for VCS version strings, that can contain
+-# slashes, colons (OK in filenames but not in rules), and spaces.
+-sanitize = $(subst $(space),_,$(subst :,_,$(subst /,_,$(strip $(1)))))
+-
+ #
+ # Manipulation of .config files based on the Kconfig
+ # infrastructure. Used by the BusyBox package, the Linux kernel
+@@ -82,65 +45,6 @@ INFLATE.tar  = cat
+ # suitable-extractor(filename): returns extractor based on suffix
+ suitable-extractor = $(INFLATE$(suffix $(1)))
+ 
+-# MESSAGE Macro -- display a message in bold type
+-MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
+-TERM_BOLD := $(shell tput smso 2>/dev/null)
+-TERM_RESET := $(shell tput rmso 2>/dev/null)
+-
+-# Utility functions for 'find'
+-# findfileclauses(filelist) => -name 'X' -o -name 'Y'
+-findfileclauses = $(call notfirstword,$(patsubst %,-o -name '%',$(1)))
+-# finddirclauses(base, dirlist) => -path 'base/dirX' -o -path 'base/dirY'
+-finddirclauses = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
+-
+-# Miscellaneous utility functions
+-# notfirstword(wordlist): returns all but the first word in wordlist
+-notfirstword = $(wordlist 2,$(words $(1)),$(1))
+-
+-# Needed for the foreach loops to loop over the list of hooks, so that
+-# each hook call is properly separated by a newline.
+-define sep
+-
+-
+-endef
+-
+-PERCENT = %
+-QUOTE = '
+-# ' # Meh... syntax-highlighting
+-
+-# This macro properly escapes a command string, then prints it with printf:
+-#
+-#   - first, backslash '\' are self-escaped, so that they do not escape
+-#     the following char and so that printf properly outputs a backslash;
+-#
+-#   - next, single quotes are escaped by closing an existing one, adding
+-#     an escaped one, and re-openning a new one (see below for the reason);
+-#
+-#   - then '%' signs are self-escaped so that the printf does not interpret
+-#     them as a format specifier, in case the variable contains an actual
+-#     printf with a format;
+-#
+-#   - finally, $(sep) is replaced with the literal '\n' so that make does
+-#     not break on the so-expanded variable, but so that the printf does
+-#     correctly output an LF.
+-#
+-# Note: this must be escaped in this order to avoid over-escaping the
+-# previously escaped elements.
+-#
+-# Once everything has been escaped, it is passed between single quotes
+-# (that's why the single-quotes are escaped they way they are, above,
+-# and why the dollar sign is not escaped) to printf(1). A trailing
+-# newline is apended, too.
+-#
+-# Note: leading or trailing spaces are *not* stripped.
+-#
+-define PRINTF
+-	printf '$(subst $(sep),\n,\
+-			$(subst $(PERCENT),$(PERCENT)$(PERCENT),\
+-				$(subst $(QUOTE),$(QUOTE)\$(QUOTE)$(QUOTE),\
+-					$(subst \,\\,$(1)))))\n'
+-endef
+-
+ # check-deprecated-variable -- throw an error on deprecated variables
+ # example:
+ #   $(eval $(call check-deprecated-variable,FOO_MAKE_OPT,FOO_MAKE_OPTS))
+diff --git a/support/misc/utils.mk b/support/misc/utils.mk
+new file mode 100644
+index 0000000..990a3d1
+--- /dev/null
++++ b/support/misc/utils.mk
+@@ -0,0 +1,111 @@
++################################################################################
++#
++# This file contains various utility macros and variables used about
++# everywhere in make constructs.
++#
++################################################################################
++
++# Strip quotes and then whitespaces
++qstrip = $(strip $(subst ",,$(1)))
++#"))
++
++# Variables for use in Make constructs
++comma := ,
++empty :=
++space := $(empty) $(empty)
++
++# Case conversion macros. This is inspired by the 'up' macro from gmsl
++# (http://gmsl.sf.net). It is optimised very heavily because these macros
++# are used a lot. It is about 5 times faster than forking a shell and tr.
++#
++# The caseconvert-helper creates a definition of the case conversion macro.
++# After expansion by the outer $(eval ), the UPPERCASE macro is defined as:
++# $(strip $(eval __tmp := $(1))  $(eval __tmp := $(subst a,A,$(__tmp))) ... )
++# In other words, every letter is substituted one by one.
++#
++# The caseconvert-helper allows us to create this definition out of the
++# [FROM] and [TO] lists, so we don't need to write down every substition
++# manually. The uses of $ and $$ quoting are chosen in order to do as
++# much expansion as possible up-front.
++#
++# Note that it would be possible to conceive a slightly more optimal
++# implementation that avoids the use of __tmp, but that would be even
++# more unreadable and is not worth the effort.
++
++[FROM] := a b c d e f g h i j k l m n o p q r s t u v w x y z - .
++[TO]   := A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _ _
++
++define caseconvert-helper
++$(1) = $$(strip \
++	$$(eval __tmp := $$(1))\
++	$(foreach c, $(2),\
++		$$(eval __tmp := $$(subst $(word 1,$(subst :, ,$c)),$(word 2,$(subst :, ,$c)),$$(__tmp))))\
++	$$(__tmp))
++endef
++
++$(eval $(call caseconvert-helper,UPPERCASE,$(join $(addsuffix :,$([FROM])),$([TO]))))
++$(eval $(call caseconvert-helper,LOWERCASE,$(join $(addsuffix :,$([TO])),$([FROM]))))
++
++# Sanitize macro cleans up generic strings so it can be used as a filename
++# and in rules. Particularly useful for VCS version strings, that can contain
++# slashes, colons (OK in filenames but not in rules), and spaces.
++sanitize = $(subst $(space),_,$(subst :,_,$(subst /,_,$(strip $(1)))))
++
++# MESSAGE Macro -- display a message in bold type
++MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
++TERM_BOLD := $(shell tput smso 2>/dev/null)
++TERM_RESET := $(shell tput rmso 2>/dev/null)
++
++# Utility functions for 'find'
++# findfileclauses(filelist) => -name 'X' -o -name 'Y'
++findfileclauses = $(call notfirstword,$(patsubst %,-o -name '%',$(1)))
++# finddirclauses(base, dirlist) => -path 'base/dirX' -o -path 'base/dirY'
++finddirclauses = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
++
++# Miscellaneous utility functions
++# notfirstword(wordlist): returns all but the first word in wordlist
++notfirstword = $(wordlist 2,$(words $(1)),$(1))
++
++# Needed for the foreach loops to loop over the list of hooks, so that
++# each hook call is properly separated by a newline.
++define sep
++
++
++endef
++
++PERCENT = %
++QUOTE = '
++# ' # Meh... syntax-highlighting
++
++# This macro properly escapes a command string, then prints it with printf:
++#
++#   - first, backslash '\' are self-escaped, so that they do not escape
++#     the following char and so that printf properly outputs a backslash;
++#
++#   - next, single quotes are escaped by closing an existing one, adding
++#     an escaped one, and re-openning a new one (see below for the reason);
++#
++#   - then '%' signs are self-escaped so that the printf does not interpret
++#     them as a format specifier, in case the variable contains an actual
++#     printf with a format;
++#
++#   - finally, $(sep) is replaced with the literal '\n' so that make does
++#     not break on the so-expanded variable, but so that the printf does
++#     correctly output an LF.
++#
++# Note: this must be escaped in this order to avoid over-escaping the
++# previously escaped elements.
++#
++# Once everything has been escaped, it is passed between single quotes
++# (that's why the single-quotes are escaped they way they are, above,
++# and why the dollar sign is not escaped) to printf(1). A trailing
++# newline is apended, too.
++#
++# Note: leading or trailing spaces are *not* stripped.
++#
++define PRINTF
++	printf '$(subst $(sep),\n,\
++		$(subst $(PERCENT),$(PERCENT)$(PERCENT),\
++			$(subst $(QUOTE),$(QUOTE)\$(QUOTE)$(QUOTE),\
++				$(subst \,\\,$(1)))))\n'
++endef
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
