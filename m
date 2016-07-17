@@ -1,208 +1,115 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 21:44:15 +0200
-Subject: [Buildroot] [PATCH 12/12] reproducible/syslinux: make syslinux
- build reproducible
-In-Reply-To: <1465918337-30732-3-git-send-email-gilles.chanteperdrix@xenomai.org>
-References: <20160614152928.GH3060@hermes.click-hack.org>
- <1465918337-30732-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1465918337-30732-3-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <20160717194415.GS3614@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 17 Jul 2016 22:22:03 +0200
+Subject: [Buildroot] [PATCH 1/2] package/efl: enable Eolian languages
+	bindings
+Message-ID: <1468786924-18394-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gilles, All,
+Eolian languages bindings needs C++11, so we needs at least a gcc 4.8
+for the host and target variant.
+The C++11 support with gcc 4.7 is not sufficient.
 
-On 2016-06-14 17:32 +0200, Gilles Chanteperdrix spake thusly:
-> Build with the target toolchain so that the binaries are identical with
-> different host toolchains.
-> Sort files lists in order to get deterministic link order.
-> Build with HEXDATE set to the source date epoch.
+Build eolian_cxx for the host only if Eolian support for the target is
+selected.
 
-It looks like those are three different changes, so should have been
-three different patches.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/efl/Config.in |  8 ++++++++
+ package/efl/efl.mk    | 21 ++++++++++++++++-----
+ 2 files changed, 24 insertions(+), 5 deletions(-)
 
-Especially the change to use the cross-toolchain should really be
-separate (and come first).
-
-Further comments below...
-
-> Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-[--SNIP--]
-> diff --git a/boot/syslinux/0001-fixed-build-order.patch b/boot/syslinux/0001-fixed-build-order.patch
-> new file mode 100644
-> index 0000000..3697b74
-> --- /dev/null
-> +++ b/boot/syslinux/0001-fixed-build-order.patch
-> @@ -0,0 +1,42 @@
-> +Sort source file names in order for the link order not to depend on the order in
-> +which find return file names.
-> +
-> +Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-
-Have you tried submitting this patch upstream?
-
-We do not much like having feature patches in Buildroot, because they
-are a pain to maintain when we want to update the package.
-
-Otherwise, this looks pretty simple, I guess upstream will probably like
-it. ;-)
-
-[--SNIP--]
-> diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-> index 82890c5..cdd5b3c 100644
-> --- a/boot/syslinux/syslinux.mk
-> +++ b/boot/syslinux/syslinux.mk
-> @@ -13,7 +13,7 @@ SYSLINUX_LICENSE_FILES = COPYING
->  
->  SYSLINUX_INSTALL_IMAGES = YES
->  
-> -SYSLINUX_DEPENDENCIES = host-nasm host-util-linux host-upx
-> +SYSLINUX_DEPENDENCIES = host-nasm host-util-linux host-upx host-perl host-python host-xz
-
-Why are those new host packages needed?
-
->  ifeq ($(BR2_TARGET_SYSLINUX_LEGACY_BIOS),y)
->  SYSLINUX_TARGET += bios
-> @@ -47,12 +47,35 @@ define SYSLINUX_CLEANUP
->  endef
->  SYSLINUX_POST_PATCH_HOOKS += SYSLINUX_CLEANUP
->  
-> +ifeq ($(BR2_REPRODUCIBLE),y)
-> +define SYSLINUX_REPRODUCIBLE
-> +	HEXDATE="`printf "0x%x" $(SOURCE_DATE_EPOCH)`"
-> +endef
-> +endif
-> +
-> +define SYSLINUX_MAKE
-> +	$(TARGET_MAKE_ENV) $(MAKE1) \
-> +		$(SYSLINUX_REPRODUCIBLE) \
-> +		NASM=$(HOST_DIR)/usr/bin/nasm \
-> +		PERL=$(HOST_DIR)/usr/bin/perl \
-> +		PYTHON=$(HOST_DIR)/usr/bin/python \
-
-Why do we need to specify nasm, perl and python? The PATH as set by
-Buildroot already has the host dirs early in the PATH, so they should
-be found before the system ones.
-
-> +		UPX=$(HOST_DIR)/usr/bin/upx \
-> +		CC="$(TARGET_CC)" \
-> +		LD="$(TARGET_LD) -m elf_i386" \
-> +		OBJDUMP="$(TARGET_OBJDUMP)" \
-> +		OBJCOPY="$(TARGET_OBJCOPY)" \
-> +		STRIP="$(TARGET_STRIP)" \
-> +		AR="$(TARGET_AR)" \
-> +		NM="$(TARGET_NM)" \
-> +		RANLIB="$(TARGET_RANLIB)" \
-> +		XZ=$(HOST_DIR)/usr/bin/xz $(SYSLINUX_EFI_ARGS)
-
-Ditto xz.
-
-You're also adding more variables than were present in the existing
-commands; that's why using the cross-toolchain should be a separate
-patch: so that we can more easily understand the changes.
-
-> +endef
-> +
->  # syslinux build system has no convenient way to pass CFLAGS,
->  # and the internal zlib should take precedence so -I shouldn't
->  # be used.
->  define SYSLINUX_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" \
-> -		AR="$(HOSTAR)" $(SYSLINUX_EFI_ARGS) -C $(@D) $(SYSLINUX_TARGET)
-> +	$(SYSLINUX_MAKE) -C $(@D) $(SYSLINUX_TARGET)
->  endef
->  
->  # While the actual bootloader is compiled for the target, several
-> @@ -61,8 +84,7 @@ endef
->  # Repeat CC and AR, since syslinux really wants to check them at
->  # install time
->  define SYSLINUX_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" \
-> -		AR="$(HOSTAR)" $(SYSLINUX_EFI_ARGS) INSTALLROOT=$(HOST_DIR) \
-> +	$(SYSLINUX_MAKE) INSTALLROOT=$(@D)/inst \
->  		-C $(@D) $(SYSLINUX_TARGET) install
->  endef
->  
-> @@ -80,10 +102,21 @@ define SYSLINUX_INSTALL_IMAGES_CMDS
->  	for i in $(SYSLINUX_IMAGES-y); do \
->  		$(INSTALL) -D -m 0755 $(@D)/$$i $(BINARIES_DIR)/syslinux/$${i##*/}; \
->  	done
-> -	for i in $(SYSLINUX_C32); do \
-> -		$(INSTALL) -D -m 0755 $(HOST_DIR)/usr/share/syslinux/$${i} \
-> +	for i in $(SYSLINUX_C32) ldlinux.c32; do \
-> +		$(INSTALL) -D -m 0755 $(@D)/inst/usr/share/syslinux/$${i} \
->  			$(BINARIES_DIR)/syslinux/$${i}; \
->  	done
->  endef
->  
-> +define HOST_SYSLINUX_BUILD_CMDS
-> +       $(HOST_MAKE_ENV) $(MAKE1) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" \
-> +-               AR="$(HOSTAR)" -C $(@D) bios
-   ^
-Leading dash here?...
-
-Also, use TABs for indentation of the *_CMDS defines.
-
-But then, you are building the 'bios' stuff with the host compiler.
-Doesn't that defeats the very purpose of that patch, and contradicts the
-commit log itself (which states that we are now using the target
-toolchain) ?
-
-> +endef
-> +
-> +define HOST_SYSLINUX_INSTALL_CMDS
-> +       $(HOST_MAKE_ENV) $(MAKE1) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" \
-> +-               AR="$(HOSTAR)" -C $(@D) INSTALLROOT=$(HOST_DIR) bios install
-> +endef
-> +
->  $(eval $(generic-package))
-> +$(eval $(host-generic-package))
-
-Since you submitted this patch, we've changed the way how dependencies
-of host packages are handled: they are no longer automatically inherited
-from the dependencies of the target variant; you now have to explicitly
-define the dependencies of the host variant.
-
-Regards,
-Yann E. MORIN.
-
-> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-> index f97a9d7..db22ca4 100644
-> --- a/fs/iso9660/iso9660.mk
-> +++ b/fs/iso9660/iso9660.mk
-> @@ -70,8 +70,6 @@ ROOTFS_ISO9660_BOOT_IMAGE = isolinux/isolinux.bin
->  define ROOTFS_ISO9660_INSTALL_BOOTLOADER
->  	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/syslinux/* \
->  		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/
-> -	$(INSTALL) -D -m 0644 $(HOST_DIR)/usr/share/syslinux/ldlinux.c32 \
-> -		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/ldlinux.c32
->  endef
->  endif
->  
-> @@ -166,6 +164,8 @@ define ROOTFS_ISO9660_CMD
->  endef
->  
->  ifeq ($(BR2_TARGET_ROOTFS_ISO9660_HYBRID),y)
-> +ROOTFS_ISO9660_DEPENDENCIES += host-syslinux
-> +
->  define ROOTFS_ISO9660_GEN_HYBRID
->  	$(ROOTFS_ISO9660_ISOHYBRID) -t 0x96 $@
->  endef
-> -- 
-> 2.8.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index ee1a39d..f73700d 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -121,6 +121,14 @@ config BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG
+ comment "Warning: one of the recommended option for EFL is not enabled"
+ 	depends on !BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG
+ 
++config BR2_PACKAGE_EFL_EOLIAN
++	bool "Enable Eolian"
++	depends on BR2_HOST_GCC_AT_LEAST_4_8 # Eolian (host) needs C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # Eolian needs C++11
++
++comment "Eolian needs host and target gcc >= 4.8"
++	depends on !BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
+ comment "libecore video support"
+ 
+ config BR2_PACKAGE_EFL_FB
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index fd06246..0ae11b2 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -23,7 +23,6 @@ EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
+ 	jpeg luajit udev util-linux zlib
+ 
+ # Configure options:
+-# --disable-cxx-bindings: disable C++11 bindings.
+ # --disable-lua-old: build elua for the target.
+ # --disable-sdl: disable sdl2 support.
+ # --disable-systemd: disable systemd support.
+@@ -32,8 +31,8 @@ EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
+ EFL_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+ 	--with-elua=$(HOST_DIR)/usr/bin/elua \
++	--with-eolian-cxx=$(HOST_DIR)/usr/bin/eolian_cxx \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+-	--disable-cxx-bindings \
+ 	--disable-lua-old \
+ 	--disable-sdl \
+ 	--disable-systemd \
+@@ -45,6 +44,12 @@ ifeq ($(BR2_PACKAGE_EFL_HAS_RECOMMENDED_CONFIG),)
+ EFL_CONF_OPTS += --enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-abb
+ endif
+ 
++ifeq ($(BR2_PACKAGE_EFL_EOLIAN),y)
++EFL_CONF_OPTS += --enable-cxx-bindings
++else
++EFL_CONF_OPTS += --disable-cxx-bindings
++endif
++
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
+ EFL_DEPENDENCIES += util-linux
+ EFL_CONF_OPTS += --enable-libmount
+@@ -216,7 +221,7 @@ $(eval $(autotools-package))
+ ################################################################################
+ 
+ # We want to build only some host tools used later in the build.
+-# Actually we want: edje_cc, embryo_cc and eet.
++# Actually we want: edje_cc, eet, embryo_cc and eolian_cxx.
+ 
+ # Host dependencies:
+ # * host-dbus: for Eldbus
+@@ -234,9 +239,16 @@ HOST_EFL_DEPENDENCIES = \
+ 	host-luajit \
+ 	host-zlib
+ 
++# Enable Eolian language bindings to provide eolian_cxx tool for the host which
++# is required to build Eolian language bindings for the target.
++ifeq ($(BR2_PACKAGE_EFL_EOLIAN),y)
++HOST_EFL_CONF_OPTS += --enable-cxx-bindings
++else
++HOST_EFL_CONF_OPTS += --disable-cxx-bindings
++endif
++
+ # Configure options:
+ # --disable-audio, --disable-multisense remove libsndfile dependency.
+-# --disable-cxx-bindings: disable C++11 bindings.
+ # --disable-fontconfig: remove dependency on fontconfig.
+ # --disable-fribidi: remove dependency on libfribidi.
+ # --disable-gstreamer1: remove dependency on gtreamer 1.0.
+@@ -251,7 +263,6 @@ HOST_EFL_DEPENDENCIES = \
+ #   Yes I really know what I am doing.
+ HOST_EFL_CONF_OPTS += \
+ 	--disable-audio \
+-	--disable-cxx-bindings \
+ 	--disable-fontconfig \
+ 	--disable-fribidi \
+ 	--disable-gstreamer1 \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.5.5
