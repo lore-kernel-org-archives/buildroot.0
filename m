@@ -1,42 +1,70 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 17 Jul 2016 22:22:04 +0200
-Subject: [Buildroot] [PATCH 2/2] package/elementary: add path to eolian_cxx
-In-Reply-To: <1468786924-18394-1-git-send-email-romain.naour@gmail.com>
-References: <1468786924-18394-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1468786924-18394-2-git-send-email-romain.naour@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 17 Jul 2016 22:23:03 +0200
+Subject: [Buildroot] [PATCH v3 1/3] package/mesa3d: add optional support
+ for libsha1
+In-Reply-To: <1468772875-5090-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1468772875-5090-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160717202303.GT3614@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When efl package is build with Eolian support, eolian_cxx tool is
-build for the host.
+Bernd, All,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/elementary/elementary.mk | 2 ++
- 1 file changed, 2 insertions(+)
+On 2016-07-17 18:27 +0200, Bernd Kuhls spake thusly:
+> mesa3d supports several sha1 implementations:
+> https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=12.0#n1167
+> 
+> This patch adds support for libsha1, inspired by the
+> xserver_xorg-server package:
+> https://github.com/buildroot/buildroot/blob/master/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk#L247
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/elementary/elementary.mk b/package/elementary/elementary.mk
-index 33d4034..dfd296e 100644
---- a/package/elementary/elementary.mk
-+++ b/package/elementary/elementary.mk
-@@ -18,6 +18,7 @@ ELEMENTARY_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
-+	--with-eolian-cxx=$(HOST_DIR)/usr/bin/eolian_cxx \
- 	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
- 	--with-elm-prefs-cc=$(HOST_DIR)/usr/bin/elm_prefs_cc \
- 	--with-doxygen=no \
-@@ -30,6 +31,7 @@ HOST_ELEMENTARY_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
-+	--with-eolian-cxx=$(HOST_DIR)/usr/bin/eolian_cxx \
- 	--with-doxygen=no \
- 	--disable-elementary-test
- 
+Since I gave my Acked-by on the previous ieteration of this patch, and
+given that you did not change, you were totally entitled to add my
+Acked-by when respinning this patch. Here it goes for posterity:
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> v3: no changes
+> v2: never released, jumped from v1 to v3
+> 
+>  package/mesa3d/mesa3d.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index dcd43d5..19dec49 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -36,6 +36,9 @@ MESA3D_CONF_OPTS += --with-sha1=libcrypto
+>  else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+>  MESA3D_DEPENDENCIES += libgcrypt
+>  MESA3D_CONF_OPTS += --with-sha1=libgcrypt
+> +else ifeq ($(BR2_PACKAGE_LIBSHA1),y)
+> +MESA3D_DEPENDENCIES += libsha1
+> +MESA3D_CONF_OPTS += --with-sha1=libsha1
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+> -- 
+> 2.8.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.5.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
