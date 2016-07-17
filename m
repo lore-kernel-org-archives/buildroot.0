@@ -1,48 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Jul 2016 14:53:44 +0200
-Subject: [Buildroot] [PATCH] package/alljoyn: fix SPARC build issue
-In-Reply-To: <1468754074-14740-1-git-send-email-romain.naour@gmail.com>
-References: <1468754074-14740-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160717145344.622864e3@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 17 Jul 2016 14:48:42 +0200
+Subject: [Buildroot] [PATCH v5 4/8] package/kodi: Add suboption to
+ control unrar support
+References: <1468260542-7194-1-git-send-email-bernd.kuhls@t-online.de>
+ <1468260542-7194-4-git-send-email-bernd.kuhls@t-online.de>
+ <20160717143628.3589aa0a@free-electrons.com>
+Message-ID: <aebs5dx21u.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-In the title: you're actually fixing a sparc64 build issue. Indeed,
-alljoyn cannot be built on sparc since you added the sync_4 dependency
-recently.
+Am Sun, 17 Jul 2016 14:36:28 +0200 schrieb Thomas Petazzoni:
 
-On Sun, 17 Jul 2016 13:14:34 +0200, Romain Naour wrote:
-> Some of the serial port highest speed are not defined on SPARC, so
-> alljoyn should not use them, so we add a patch to fix that.
-> 
-> From:
+>> +	help
+>> +	  Enable components with non-compliant licenses.
 
-"From" is not very specific. Something like:
+the help text was copied from
+https://github.com/xbmc/xbmc/blob/Jarvis/configure.ac#L419
 
-Inspired by commit ...
+;)
 
-Would have been nicer.
+> "non-compliant" doesn't mean anything. non-compliant with what?
 
-> c5e96d8935016456bea342db170ae6a139a8470f
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/e5b/e5b30b5e0d86b44b97410d434b771e1fb7b18de0
+I guess they mean non-compliance with GPLv2 under which Kodi is licensed.
 
-In the autobuilder URL you can remove    ^^^^
+Thanks for committing the series!
 
-Also, please submit this patch upstream.
-
-Applied with those nits fixed.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
