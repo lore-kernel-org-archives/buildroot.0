@@ -1,129 +1,97 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 21:29:07 +0200
-Subject: [Buildroot] [PATCH 11/12] reproducibility/fs/iso9660:
- reproducible iso images
-In-Reply-To: <1465918337-30732-2-git-send-email-gilles.chanteperdrix@xenomai.org>
-References: <20160614152928.GH3060@hermes.click-hack.org>
- <1465918337-30732-1-git-send-email-gilles.chanteperdrix@xenomai.org>
- <1465918337-30732-2-git-send-email-gilles.chanteperdrix@xenomai.org>
-Message-ID: <20160717192907.GR3614@free.fr>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 17 Jul 2016 16:36:03 -0300
+Subject: [Buildroot] [PATCH] uboot-tools: fix conditional build of FIT
+	support
+Message-ID: <20160717193603.13671-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gilles, All,
+The removal of the inconditional linking of some .o files were missed when
+porting the patch 0003 to the version 2016.07, leading to errors like these:
 
-On 2016-06-14 17:32 +0200, Gilles Chanteperdrix spake thusly:
-> When reproducibility is required, we:
-> - run genisoimage with the -creation-date option to avoid using the
->   build date for files in the iso image automatically created by
->   genisoimage (such as the catalog)
-> - disable the rockridge extension, as it stores each file "ctime", which
->   can not be changed easily on the host filesystem
-> - force using an initrd, as a trying and booting an iso image without
->   the rockridge extensions will not work
-> - use isohybrid -i option to avoid embedding a random number in the
->   generated iso.
+tools/fit_common.o: In function `fit_verify_header':
+fit_common.c:(.text+0x0): multiple definition of `fit_verify_header'
+tools/fit_common.o:fit_common.c:(.text+0x0): first defined here
+tools/fit_common.o: In function `fit_check_image_types':
+fit_common.c:(.text+0x10): multiple definition of `fit_check_image_types'
 
-I'm not too fond of having a huge patch in Buildroot, that has no chance
-of ever getting upstream (since upstream is virtually dead as there's
-been no activity since Oct 2010, and their homepage is now a blank
-page).
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Reported-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+CC: Fabio Estevam <festevam@gmail.com>
+CC: Carlos Santos <casantos@datacom.ind.br>
+---
+CC: Masahiro Yamada <yamada.masahiro@socionext.com>
+Unfortunately I could only build test because I have no access to hardware
+with u-boot right now.
+I probably can test on hardware this week ... if no one do this earlier ;)
+---
+ .../0003-Make-FIT-support-really-optional.patch    | 25 ++++++++++++++++------
+ 1 file changed, 19 insertions(+), 6 deletions(-)
 
-Instead, when programs can't be told what date to use, I'd prefer we
-have a look at libfaketime:
-    https://github.com/wolfcw/libfaketime
-
-Then one can use the 'faketime' wrapper to force a specific date:
-
-    faketime '2016-07-17 21:28:42' genisoimage blablalba
-
-In which case, it might be worth doing it directly in the fs infra so
-that all filesystem images are handled once and for all.
-
-Thoughts?
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-> ---
->  fs/iso9660/Config.in  |  9 +++++++++
->  fs/iso9660/iso9660.mk | 20 ++++++++++++++++++--
->  2 files changed, 27 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-> index 2482e44..bb82d03 100644
-> --- a/fs/iso9660/Config.in
-> +++ b/fs/iso9660/Config.in
-> @@ -71,6 +71,15 @@ config BR2_TARGET_ROOTFS_ISO9660_INITRD
->  	  contain a kernel image, an initrd image (unless an initramfs
->  	  linked into the kernel is used) and the bootloader.
->  
-> +config BR2_TARGET_ROOTFS_ISO9660_REPRODUCIBLE
-> +       def_bool BR2_REPRODUCIBLE
-> +       select BR2_TARGET_ROOTFS_ISO9660_INITRD
-> +
-> +if BR2_REPRODUCIBLE
-> +comment "A reproducible build requires disabling the RockRidge extensions"
-> +comment "Which makes using an initrd the only sane solution"
-> +endif
-> +
->  config BR2_TARGET_ROOTFS_ISO9660_HYBRID
->  	bool "Build hybrid image"
->  	depends on BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
-> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-> index 32d79d7..f97a9d7 100644
-> --- a/fs/iso9660/iso9660.mk
-> +++ b/fs/iso9660/iso9660.mk
-> @@ -143,15 +143,31 @@ ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_DISABLE_EXTERNAL_INITRD
->  endif # ROOTFS_ISO9660_USE_INITRD
->  
->  
-> +ifneq ($(BR2_REPRODUCIBLE),y)
-> +define ROOTFS_ISO9660_GENISOIMAGE
-> +	$(HOST_DIR)/usr/bin/genisoimage -R
-> +endef
-> +define ROOTFS_ISO9660_ISOHYBRID
-> +	$(HOST_DIR)/usr/bin/isohybrid
-> +endef
-> +else
-> +define ROOTFS_ISO9660_GENISOIMAGE
-> +	$(HOST_DIR)/usr/bin/genisoimage -creation-date $(SOURCE_DATE_EPOCH)
-> +endef
-> +define ROOTFS_ISO9660_ISOHYBRID
-> +	$(HOST_DIR)/usr/bin/isohybrid -i $(SOURCE_DATE_EPOCH)
-> +endef
-> +endif
-> +
->  define ROOTFS_ISO9660_CMD
-> -	$(HOST_DIR)/usr/bin/genisoimage -J -R -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
-> +	$(ROOTFS_ISO9660_GENISOIMAGE) -J -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
->  		-no-emul-boot -boot-load-size 4 -boot-info-table \
->  		-o $@ $(ROOTFS_ISO9660_TARGET_DIR)
->  endef
->  
->  ifeq ($(BR2_TARGET_ROOTFS_ISO9660_HYBRID),y)
->  define ROOTFS_ISO9660_GEN_HYBRID
-> -	$(HOST_DIR)/usr/bin/isohybrid -t 0x96 $@
-> +	$(ROOTFS_ISO9660_ISOHYBRID) -t 0x96 $@
->  endef
->  
->  ROOTFS_ISO9660_POST_GEN_HOOKS += ROOTFS_ISO9660_GEN_HYBRID
-> -- 
-> 2.8.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/uboot-tools/0003-Make-FIT-support-really-optional.patch b/package/uboot-tools/0003-Make-FIT-support-really-optional.patch
+index 3ba5389..71c7d6f 100644
+--- a/package/uboot-tools/0003-Make-FIT-support-really-optional.patch
++++ b/package/uboot-tools/0003-Make-FIT-support-really-optional.patch
+@@ -1,4 +1,4 @@
+-From ddcd6cd622889a2d74d0a16efae8e3b2d098f717 Mon Sep 17 00:00:00 2001
++From 196c924e0353604a30a257c5b5fbc5eac86f347a Mon Sep 17 00:00:00 2001
+ From: Carlos Santos <casantos@datacom.ind.br>
+ Date: Sun, 8 May 2016 11:11:39 -0300
+ Subject: [PATCH] Make FIT support really optional
+@@ -19,11 +19,13 @@ following changes:
+ Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+ [fabio: adapt for 2016.07]
+ Signed-off-by: Fabio Estevam <festevam@gmail.com>
++[Ricardo: fix conditional linking of the files mentioned above for 2016.07]
++Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ ---
+  common/bootm.c  | 2 ++
+  include/bootm.h | 2 ++
+- tools/Makefile  | 2 ++
+- 3 files changed, 6 insertions(+)
++ tools/Makefile  | 6 ++----
++ 3 files changed, 6 insertions(+), 4 deletions(-)
+ 
+ diff --git a/common/bootm.c b/common/bootm.c
+ index 2431019..7e1adc8 100644
+@@ -59,7 +61,7 @@ index 4981377..94d62a1 100644
+  int boot_selected_os(int argc, char * const argv[], int state,
+  		     bootm_headers_t *images, boot_os_fn *boot_fn);
+ diff --git a/tools/Makefile b/tools/Makefile
+-index f72294a..adf7c83 100644
++index f72294a..ccf5120 100644
+ --- a/tools/Makefile
+ +++ b/tools/Makefile
+ @@ -54,6 +54,7 @@ mkenvimage-objs := mkenvimage.o os_support.o lib/crc32.o
+@@ -70,7 +72,7 @@ index f72294a..adf7c83 100644
+  FIT_SIG_OBJS-$(CONFIG_FIT_SIGNATURE) := common/image-sig.o
+  # Flattened device tree objects
+  LIBFDT_OBJS := $(addprefix lib/libfdt/, \
+-@@ -68,6 +69,7 @@ ROCKCHIP_OBS = lib/rc4.o rkcommon.o rkimage.o rksd.o rkspi.o
++@@ -68,16 +69,13 @@ ROCKCHIP_OBS = lib/rc4.o rkcommon.o rkimage.o rksd.o rkspi.o
+  # common objs for dumpimage and mkimage
+  dumpimage-mkimage-objs := aisimage.o \
+  			atmelimage.o \
+@@ -78,5 +80,16 @@ index f72294a..adf7c83 100644
+  			$(FIT_SIG_OBJS-y) \
+  			common/bootm.o \
+  			lib/crc32.o \
++ 			default_image.o \
++ 			lib/fdtdec_common.o \
++ 			lib/fdtdec.o \
++-			fit_common.o \
++-			fit_image.o \
++-			common/image-fit.o \
++-			image-host.o \
++ 			common/image.o \
++ 			imagetool.o \
++ 			imximage.o \
+ -- 
+-1.9.1
++2.9.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.9.1
