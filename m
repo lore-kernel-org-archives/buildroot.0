@@ -1,91 +1,119 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Jul 2016 14:50:49 +0200
-Subject: [Buildroot] [git commit] package/alljoyn: fix sparc64 build issue
-Message-ID: <20160717125231.C64B881DFA@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 17 Jul 2016 14:52:49 +0200
+Subject: [Buildroot] [PATCH v2 1/3] aufs: new package
+In-Reply-To: <1461936690-1389-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
+References: <1461936690-1389-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
+Message-ID: <20160717125249.GC3614@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e15c4d5fbb6e31b4208d9a01a856a4c3c4210e32
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Atul, Christian, All,
 
-Some of the serial port highest speed are not defined on
-sparc/sparc64, so alljoyn should not use them. This commit adds a
-patch to fix that.
+On 2016-04-29 19:01 +0530, Atul Singh spake thusly:
+> aufs is a dummy package that downloads the correct
+> aufs-standalone sources for patching the kernel with the aufs
+> filesystem. The package is not selectable because it does nothing but
+> download the sources on default. It is a dependency of the Aufs kernel
+> extension.
 
-Inspired by commit c5e96d8935016456bea342db170ae6a139a8470f.
+I've sent an updated series that adds support for aufs:
 
-Fixes:
+    https://patchwork.ozlabs.org/patch/649251/
+    https://patchwork.ozlabs.org/patch/649252/
+    https://patchwork.ozlabs.org/patch/649253/
 
-  http://autobuild.buildroot.net/results/e5b30b5e0d86b44b97410d434b771e1fb7b18de0
+So, I've marked your these patches as superseded in ourPatchwork.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0001-UARTStreamLinux-fix-build-on-sparc.patch  | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+Thnaks for the initial work! :-)
 
-diff --git a/package/alljoyn/0001-UARTStreamLinux-fix-build-on-sparc.patch b/package/alljoyn/0001-UARTStreamLinux-fix-build-on-sparc.patch
-new file mode 100644
-index 0000000..efca67f
---- /dev/null
-+++ b/package/alljoyn/0001-UARTStreamLinux-fix-build-on-sparc.patch
-@@ -0,0 +1,56 @@
-+From b8e35cf95184ff18bcf923f900439f56c93609db Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sat, 16 Jul 2016 15:23:41 +0200
-+Subject: [PATCH] UARTStreamLinux: fix build on sparc
-+
-+Some of the serial port highest speed are not defined on SPARC, so
-+alljoyn should not use them, so we add a patch to fix that.
-+
-+From:
-+https://git.buildroot.org/buildroot/commit/?id=c5e96d8935016456bea342db170ae6a139a8470f
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/e5b/e5b30b5e0d86b44b97410d434b771e1fb7b18de0
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ common/os/posix/UARTStreamLinux.cc | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/common/os/posix/UARTStreamLinux.cc b/common/os/posix/UARTStreamLinux.cc
-+index c193b70..ae81d9d 100644
-+--- a/common/os/posix/UARTStreamLinux.cc
-++++ b/common/os/posix/UARTStreamLinux.cc
-+@@ -111,21 +111,29 @@ QStatus UART(const qcc::String& devName, uint32_t baud, uint8_t databits, const
-+         speed = B2000000;
-+         break;
-+ 
-++#ifdef B2500000
-+     case 2500000:
-+         speed = B2500000;
-+         break;
-++#endif
-+ 
-++#ifdef B3000000
-+     case 3000000:
-+         speed = B3000000;
-+         break;
-++#endif
-+ 
-++#ifdef B3500000
-+     case 3500000:
-+         speed = B3500000;
-+         break;
-++#endif
-+ 
-++#ifdef B4000000
-+     case 4000000:
-+         speed = B4000000;
-+         break;
-++#endif
-+ 
-+     default:
-+         QCC_LogError(ER_BAD_ARG_2, ("Invalid baud %d", baud));
-+-- 
-+2.5.5
-+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> [Atul:
+>  - Removed the duplicate conditional block.
+>  - Updated the license to GPLv2.
+>  - Removed the visibilty of package from menuconfig.
+>  - Removed dependencies.
+>  - Removed the comment.
+>  - Changed the name of variable from BR2_PACKAGE_AUFS_STANDALONE_VERSION to BR2_LINUX_KERNEL_EXT_AUFS_VERSION.
+>  - Removed the AUFS_INSTALL_STAGING  and AUFS_INSTALL_TARGET  variables.
+>  - Removed the BR2_PACKAGE_AUFS_3X and BR2_PACKAGE_AUFS_4X variables.
+> ]
+> Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
+> ---
+>  package/Config.in      |  1 +
+>  package/aufs/Config.in |  2 ++
+>  package/aufs/aufs.mk   | 24 ++++++++++++++++++++++++
+>  3 files changed, 27 insertions(+)
+>  create mode 100644 package/aufs/Config.in
+>  create mode 100644 package/aufs/aufs.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 27db639..54166b1 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -160,6 +160,7 @@ endif
+>  endmenu
+>  
+>  menu "Filesystem and flash utilities"
+> +	source "package/aufs/Config.in"
+>  	source "package/autofs/Config.in"
+>  	source "package/btrfs-progs/Config.in"
+>  	source "package/cifs-utils/Config.in"
+> diff --git a/package/aufs/Config.in b/package/aufs/Config.in
+> new file mode 100644
+> index 0000000..3ff4691
+> --- /dev/null
+> +++ b/package/aufs/Config.in
+> @@ -0,0 +1,2 @@
+> +config BR2_PACKAGE_AUFS
+> +	bool
+> diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
+> new file mode 100644
+> index 0000000..a139547
+> --- /dev/null
+> +++ b/package/aufs/aufs.mk
+> @@ -0,0 +1,24 @@
+> +################################################################################
+> +#
+> +# aufs
+> +#
+> +# patches for the linux kernel, used by the extension.
+> +#
+> +################################################################################
+> +
+> +AUFS_VERSION = aufs$(call qstrip,$(BR2_LINUX_KERNEL_EXT_AUFS_VERSION))
+> +AUFS_VERSION_MAJOR = $(firstword $(subst .,$(space),$(call qstrip,$(BR2_LINUX_KERNEL_EXT_AUFS_VERSION))))
+> +AUFS_SITE = $(call github,sfjro,aufs4-standalone,$(AUFS_VERSION))
+> +AUFS_LICENSE = GPLv2
+> +AUFS_LICENSE_FILES = COPYING
+> +
+> +ifeq ($(AUFS_VERSION_MAJOR),3)
+> +AUFS_SITE = http://git.code.sf.net/p/aufs/aufs3-standalone
+> +AUFS_SITE_METHOD = git
+> +else ifeq ($(AUFS_VERSION_MAJOR),4)
+> +AUFS_SITE = $(call github,sfjro,aufs4-standalone,$(AUFS_VERSION))
+> +else
+> +$(error Unknown aufs major version)
+> +endif
+> +
+> +$(eval $(generic-package))
+> -- 
+> 2.5.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
