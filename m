@@ -1,219 +1,129 @@
-From: daggs <daggs@gmx.com>
-Date: Sun, 17 Jul 2016 20:29:25 +0200
-Subject: [Buildroot] prefix question for kodi.
-In-Reply-To: <CAHXCMMKsfYBq46KzQ=_DgpUCFnefpuqV=mc7gDR5VKStakW74A@mail.gmail.com>
-References: <trinity-f49f8e10-13bc-491a-a4be-f1a55d2f391d-1468088008466@3capp-mailcom-bs09>
- <CAHXCMM+xuaawC=rJiDrX8VwLQbhTVcDoekS86ZTsfRzK5mODdQ@mail.gmail.com>
- <trinity-cc016c92-f8fd-4e35-8ecb-627f04899e3c-1468270832325@3capp-mailcom-bs13>
- <CAHXCMMKO_1zD1bL1V1Z7j15byNTQf291Pu5W9ro6r4Qzh2qjiw@mail.gmail.com>
- <trinity-5d49d8ed-9951-4e33-97e5-190c56dca933-1468301099561@3capp-mailcom-bs12>
- <CAHXCMMKSc_qjLXXdvbUdvjhWvSnLOKODgVM4Lf+H2Gmr72tJ5w@mail.gmail.com>
- <trinity-ebbdc85a-c645-43c9-b000-8395114a47cb-1468340376643@3capp-mailcom-bs04>,
- <CAHXCMMKsfYBq46KzQ=_DgpUCFnefpuqV=mc7gDR5VKStakW74A@mail.gmail.com>
-Message-ID: <trinity-04dd04f9-3b34-4775-b168-f27582d609ae-1468780165596@3capp-mailcom-bs10>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 17 Jul 2016 21:29:07 +0200
+Subject: [Buildroot] [PATCH 11/12] reproducibility/fs/iso9660:
+ reproducible iso images
+In-Reply-To: <1465918337-30732-2-git-send-email-gilles.chanteperdrix@xenomai.org>
+References: <20160614152928.GH3060@hermes.click-hack.org>
+ <1465918337-30732-1-git-send-email-gilles.chanteperdrix@xenomai.org>
+ <1465918337-30732-2-git-send-email-gilles.chanteperdrix@xenomai.org>
+Message-ID: <20160717192907.GR3614@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Gilles, All,
 
-> Hi Dagg, all,
+On 2016-06-14 17:32 +0200, Gilles Chanteperdrix spake thusly:
+> When reproducibility is required, we:
+> - run genisoimage with the -creation-date option to avoid using the
+>   build date for files in the iso image automatically created by
+>   genisoimage (such as the catalog)
+> - disable the rockridge extension, as it stores each file "ctime", which
+>   can not be changed easily on the host filesystem
+> - force using an initrd, as a trying and booting an iso image without
+>   the rockridge extensions will not work
+> - use isohybrid -i option to avoid embedding a random number in the
+>   generated iso.
+
+I'm not too fond of having a huge patch in Buildroot, that has no chance
+of ever getting upstream (since upstream is virtually dead as there's
+been no activity since Oct 2010, and their homepage is now a blank
+page).
+
+Instead, when programs can't be told what date to use, I'd prefer we
+have a look at libfaketime:
+    https://github.com/wolfcw/libfaketime
+
+Then one can use the 'faketime' wrapper to force a specific date:
+
+    faketime '2016-07-17 21:28:42' genisoimage blablalba
+
+In which case, it might be worth doing it directly in the fs infra so
+that all filesystem images are handled once and for all.
+
+Thoughts?
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+> ---
+>  fs/iso9660/Config.in  |  9 +++++++++
+>  fs/iso9660/iso9660.mk | 20 ++++++++++++++++++--
+>  2 files changed, 27 insertions(+), 2 deletions(-)
 > 
-> On Tue, Jul 12, 2016 at 6:19 PM, daggs <daggs@gmx.com> wrote:
-> > Greetings,
-> >
-> >> Sent: Tuesday, July 12, 2016 at 9:11 AM
-> >> From: "Samuel Martin" <s.martin49@gmail.com>
-> >> To: daggs <daggs@gmx.com>
-> >> Subject: Re: [Buildroot] prefix question for kodi.
-> >>
-> >> Hi all,
-> >>
-> >> On Tue, Jul 12, 2016 at 7:24 AM, daggs <daggs@gmx.com> wrote:
-> >> > Greetings,
-> >> >
-> >> >> Hi all,
-> >> >>
-> >> >> On Mon, Jul 11, 2016 at 11:00 PM, daggs <daggs@gmx.com> wrote:
-> >> >> > Greetings,
-> >> >> >
-> >> >> >> This is not Kodi-specific, this is done like things for many packages
-> >> >> >> (i.e. for all packages using a decent build-system, e.g. autotools
-> >> >> >> [1], cmake [2], etc).. So, almost all packages.
-> >> >> >>
-> >> >> >> For building a target package, the prefix must point to /usr, and not
-> >> >> >> to the staging dir. because:
-> >> >> >> 1. The --prefix option sets the prefix location in the target
-> >> >> >> directory, i.e. as its should be at runtime (at runtime in the target
-> >> >> >> system).
-> >> >> >> So, in the case of Buildroot, this is not (and must not be) the
-> >> >> >> absolute location where stuff will be installed.
-> >> >> >> Note that if you set prefix to STAGING_DIR, I bet your final rootfs
-> >> >> >> won't look like what you'd expect, and may not work as expected... or
-> >> >> >> not work at all!
-> >> >> >> 2. To install stuff in a location different from the runtime one, we
-> >> >> >> use the standard variable DESTDIR (see [3,4])
-> >> >> >> So, basically when a package using a decent build-system execute an
-> >> >> >> install rule, it computes the install location like this:
-> >> >> >>   stuff_install_path = ${DESTDIR}${prefix}/${stuf_dir}
-> >> >> >> 3. We don't (want to) build target packages twice, with only the
-> >> >> >> --prefix option changed between these 2 builds (i.e. once with
-> >> >> >> --prefix=$(STAGING_DIR)... and a second time with
-> >> >> >> --prefix=$(TARGET_DIR)...).
-> >> >> >> So, from the aforementioned reasons we build each target package once
-> >> >> >> with the right prefix for the target rootfs, and install twice (if
-> >> >> >> needed), once with DESTDIR=$(TARGET_DIR) and a second time with
-> >> >> >> DESTDIR=$(STAGING_DIR), see [3,4].
-> >> >> >>
-> >> >> >> Note that for the build, things are correctly routed to the staging
-> >> >> >> dir. thanks to:
-> >> >> >> - the --sysroot option, optionally with -I.. or -L.. pointing to the
-> >> >> >> staging tree;
-> >> >> >> - the Buildroot compiler wrapper that enforce these options to be
-> >> >> >> correctly set, and also check for poisoning paths (i.e. paths pointing
-> >> >> >> to standard host system locations, e.g. /usr/lib or /usr/local/lib,
-> >> >> >> etc).
-> >> >> >>
-> >> >> >> So, unless you are not lucky packaging a projet that use a
-> >> >> >> non-standard build-system, or does nasty things at configure-time, you
-> >> >> >> should not  paid much attention to this prefix option, Buildroot
-> >> >> >> handles it for you ;-)
-> >> >> >>
-> >> >> >> Regards,
-> >> >> >>
-> >> >> >> [1] https://github.com/buildroot/buildroot/blob/master/package/pkg-autotools.mk#L181
-> >> >> >> [2] https://github.com/buildroot/buildroot/blob/master/package/pkg-cmake.mk#L91
-> >> >> >> [3] https://github.com/buildroot/buildroot/blob/master/package/pkg-autotools.mk#L159
-> >> >> >> [4] https://github.com/buildroot/buildroot/blob/master/package/pkg-cmake.mk#L60
-> >> >> >>
-> >> >> >> --
-> >> >> >> Samuel
-> >> >> >>
-> >> >> >
-> >> >> > thanks for the detailed explenation, I'm not trying to do anyting fancy, only compile kodi with the --enable-codec=amcodec.
-> >> >> On an autotools package, it should be pretty straight forward...
-> >> >>
-> >> >> > as seen in my previous mail, there is no --sysroot passed to kodi, also unless I'm misunderstood something,
-> >> >> As mentioned above, the Buildroot wrapper ensure --sysroot is
-> >> >> correctly passed to the actual cross-compiler, but may not print it on
-> >> >> standard verbose make call. To see the actual full command, try
-> >> >> setting the BR2_DEBUG_WRAPPER env. var. [5].
-> >> > thanks for the tip, will enable it take a look.
-> >> >
-> >> >>
-> >> >> > using the DESTDIR doesn't help at it is blank.
-> >> >> DESTDIR is only useful at install time, not configure/build/run time.
-> >> > I see, so DESTDIR is not what I need.
-> >> >
-> >> >>
-> >> >> > my issue is that when amcodec is enabled, one of kodi's makefiles define adds new incldue path as follows: ${prefix}/usr/include/<something>.
-> >> >> > as prefix is empty, instead of searching the code at staging's sysroot, it searches it on the local machine's path,
-> >> >> Here is your issue.
-> >> >>
-> >> >> Few hints to move forward:
-> >> >> 1- identify what Makefile{,.in,.am} sets this;
-> >> > found it.
-> >> >
-> >> >> 2- how this makefile set this? does it call a *-config script, or call
-> >> >> pkg_check_modules, or get it from some options/env. vars. when
-> >> >> invoking the configure script (check: ./configure --help), or  just do
-> >> >> nasty things manually/handwritten?
-> >> > not sure I follow, buildroot does not call it, the kodi makefile does that.
-> >> I meant the makefile from kodi's source.
-> >> In this makefile, how does this "${prefix}/usr/include/<something>"
-> >> end in some variables?
-> >> Is it:
-> >> - filled thanks to a call to pkg-config or some *-config script? (be
-> >> carefull here, some intermediate variables set in the configure
-> >> scripts may be used)
-> >> - or filled from env. vars. and/or options from the configure script?
-> >> - or just handwritten/hard-coded in the makefile?
-> >> - or anything else?
-> >> Once you have tracked down how this path ends up in the flags, it will
-> >> be easier to know how to fix this the proper way.
-> > you can find the code in question at https://github.com/xbmc/xbmc/blob/Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/Makefile.in#L26
-> > the issue is quite simple to understand.
-> >
-> In such case, I would fix upstream like this:
-> 
-> ifeq (@USE_LIBAMCODEC@,1)
-> LIBAMCODEC_INCLUDES ?= -I$(prefix)/include/amcodec -I$(prefix)/include/amplayer
-> SRCS += AMLCodec.cpp
-> SRCS += DVDVideoCodecAmlogic.cpp
-> INCLUDES += $(LIBAMCODEC_INCLUDES)
-> endif
-> 
-> Then, this allows to override LIBAMCODEC_INCLUDES via the make command
-> line (or make environment)
-> 
-> >>
-> >> >
-> >> >> 3- does amcodec provides a *-config script or a pkg-config module (i.e. a *.pc)?
-> >> > no, it is a simple makefile project. just enter the folder and run make.
-> >> Ok.
-> >> This certainly means you'll have to do something like (in the
-> >> Buildroot's kodi.mk file):
-> >>
-> >> KODI_CFLAGS = $(TARGET_CFLAGS)
-> >> ...
-> >> ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
-> >> KODI_CONF_OPTS += --enable-amcodec
-> >> KODI_DEPENDENCIES += libamcodec
-> >> KODI_CFLAGS += -I$(STAGING_DIR)/usr/include/<something>
-> >> KODI_LDFLAGS += -L$(STAGING_DIR)/usr/lib -lamcodec
-> >> else
-> >> KODI_CONF_OPTS += --disable-amcodec
-> >> endif
-> >> ...
-> >> KODI_CONF_ENV += CFLAGS="$(KODI_CFLAGS)" LDFAGS="$(KODI_LDFLAGS)"
-> > ok, I see where you are going, that might help.
-> > will take into account, thanks.
-> 
-> So, here you just need to do:
-> ifeq ($(BR2_PACKAGE_LIBAMCODEC),y)
-> KODI_CONF_OPTS += --enable-amcodec
-> KODI_DEPENDENCIES += libamcodec
-> KODI_CONF_ENV +=
-> LIBAMCODEC_INCLUDES="-I$(STAGING_DIR)/usr/include/amcodec
-> -I$(STAGING_DIR)/usr/include/amplayer"
-> else
-> KODI_CONF_OPTS += --disable-amcodec
-> endif
-> 
-> >
-> >>
-> >> >
-> >> >>
-> >> >> Depending on your findings in kodi and amcodec, you may need to patch
-> >> >> the culprit (make?)file from kodi...
-> >> >>
-> >> >> > generating a WARNING: unsafe header/library path used in cross-compilation error.
-> >> >> This is the poisin path check ;)
-> >> >>
-> >> >> >
-> >> >> > how can I use DESTDIR properly?
-> >> >> I'm not sure you need to do anything special about it.
-> >> >> AFAICS, amcodec is autotools-based, so everything should already be
-> >> >> correctly handled.
-> >> > per your comment above, this isn't the var I need.
-> >> >
-> >> > Dagg.
-> >>
-> >> Regards,
-> >>
-> >> --
-> >> Samuel
-> >>
-> >
-> > Dagg.
-> 
-> Regards,
-> 
+> diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+> index 2482e44..bb82d03 100644
+> --- a/fs/iso9660/Config.in
+> +++ b/fs/iso9660/Config.in
+> @@ -71,6 +71,15 @@ config BR2_TARGET_ROOTFS_ISO9660_INITRD
+>  	  contain a kernel image, an initrd image (unless an initramfs
+>  	  linked into the kernel is used) and the bootloader.
+>  
+> +config BR2_TARGET_ROOTFS_ISO9660_REPRODUCIBLE
+> +       def_bool BR2_REPRODUCIBLE
+> +       select BR2_TARGET_ROOTFS_ISO9660_INITRD
+> +
+> +if BR2_REPRODUCIBLE
+> +comment "A reproducible build requires disabling the RockRidge extensions"
+> +comment "Which makes using an initrd the only sane solution"
+> +endif
+> +
+>  config BR2_TARGET_ROOTFS_ISO9660_HYBRID
+>  	bool "Build hybrid image"
+>  	depends on BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
+> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+> index 32d79d7..f97a9d7 100644
+> --- a/fs/iso9660/iso9660.mk
+> +++ b/fs/iso9660/iso9660.mk
+> @@ -143,15 +143,31 @@ ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_DISABLE_EXTERNAL_INITRD
+>  endif # ROOTFS_ISO9660_USE_INITRD
+>  
+>  
+> +ifneq ($(BR2_REPRODUCIBLE),y)
+> +define ROOTFS_ISO9660_GENISOIMAGE
+> +	$(HOST_DIR)/usr/bin/genisoimage -R
+> +endef
+> +define ROOTFS_ISO9660_ISOHYBRID
+> +	$(HOST_DIR)/usr/bin/isohybrid
+> +endef
+> +else
+> +define ROOTFS_ISO9660_GENISOIMAGE
+> +	$(HOST_DIR)/usr/bin/genisoimage -creation-date $(SOURCE_DATE_EPOCH)
+> +endef
+> +define ROOTFS_ISO9660_ISOHYBRID
+> +	$(HOST_DIR)/usr/bin/isohybrid -i $(SOURCE_DATE_EPOCH)
+> +endef
+> +endif
+> +
+>  define ROOTFS_ISO9660_CMD
+> -	$(HOST_DIR)/usr/bin/genisoimage -J -R -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
+> +	$(ROOTFS_ISO9660_GENISOIMAGE) -J -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
+>  		-no-emul-boot -boot-load-size 4 -boot-info-table \
+>  		-o $@ $(ROOTFS_ISO9660_TARGET_DIR)
+>  endef
+>  
+>  ifeq ($(BR2_TARGET_ROOTFS_ISO9660_HYBRID),y)
+>  define ROOTFS_ISO9660_GEN_HYBRID
+> -	$(HOST_DIR)/usr/bin/isohybrid -t 0x96 $@
+> +	$(ROOTFS_ISO9660_ISOHYBRID) -t 0x96 $@
+>  endef
+>  
+>  ROOTFS_ISO9660_POST_GEN_HOOKS += ROOTFS_ISO9660_GEN_HYBRID
 > -- 
-> Samuel
+> 2.8.2
 > 
-I've tried your suggestion, it still complains about the same include path. it seems that the change doesn't apply for inner makefiles of kodi.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Dagg.
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
