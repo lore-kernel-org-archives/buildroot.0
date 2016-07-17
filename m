@@ -1,19 +1,30 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 15:35:07 +0200
-Subject: [Buildroot] [PATCH] yasm: add license
-In-Reply-To: <1467646410-19785-1-git-send-email-julien.floret@6wind.com>
-References: <1467646410-19785-1-git-send-email-julien.floret@6wind.com>
-Message-ID: <20160717133506.GE3614@free.fr>
+Date: Sun, 17 Jul 2016 15:57:17 +0200
+Subject: [Buildroot] [PATCH 1/1] grub2: if BR2_STRIP_none is 'y' then
+ grub2 will not build
+In-Reply-To: <1463861470-16123-1-git-send-email-ckhardin@exablox.com>
+References: <1463861470-16123-1-git-send-email-ckhardin@exablox.com>
+Message-ID: <20160717135717.GF3614@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien, All,
+Charles, All,
 
-On 2016-07-04 17:33 +0200, Julien Floret spake thusly:
-> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+On 2016-05-21 13:11 -0700, Charles Hardin spake thusly:
+> grub2 assumes the strip command will generate output and the
+> output should always be stripped - so, just use the $(TARGET_CROSS)strip
+> to make sure that the build succeeds regards of the buildroot
+                                       ^^^^^^^
+*regardless
+
+> strip configuration.
+> 
+> Signed-off-by: Charles Hardin <ckhardin@exablox.com>
+
+Otherwise:
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
@@ -21,24 +32,34 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/yasm/yasm.mk | 2 ++
->  1 file changed, 2 insertions(+)
+>  boot/grub2/grub2.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
-> index 6729b6a74dba..19800344299d 100644
-> --- a/package/yasm/yasm.mk
-> +++ b/package/yasm/yasm.mk
-> @@ -6,6 +6,8 @@
+> diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+> index 88a46f4..e656265 100644
+> --- a/boot/grub2/grub2.mk
+> +++ b/boot/grub2/grub2.mk
+> @@ -45,6 +45,9 @@ endif
+>  # the confusion, it also uses NM, OBJCOPY and STRIP to build the
+>  # bootloader itself; none of these are used to build the native
+>  # tools.
+> +#
+> +# NOTE: TARGET_STRIP is overridden by BR2_STRIP_none, so always
+> +# use the cross compile variant to ensure grub2 builds
 >  
->  YASM_VERSION = 1.3.0
->  YASM_SITE = http://www.tortall.net/projects/yasm/releases
-> +YASM_LICENSE = BSD-2c, BSD-3c, Artistic, GPLv2, LGPLv2
-> +YASM_LICENSE_FILES = COPYING BSD.txt Artistic.txt GNU_GPL-2.0 GNU_LGPL-2.0
+>  GRUB2_CONF_ENV = \
+>  	$(HOST_CONFIGURE_OPTS) \
+> @@ -55,7 +58,7 @@ GRUB2_CONF_ENV = \
+>  	TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
+>  	NM="$(TARGET_NM)" \
+>  	OBJCOPY="$(TARGET_OBJCOPY)" \
+> -	STRIP="$(TARGET_STRIP)"
+> +	STRIP="$(TARGET_CROSS)strip"
 >  
->  # This sed prevents it compiling 2 programs (vsyasm and ytasm)
->  # that are only of use on Microsoft Windows.
+>  GRUB2_CONF_OPTS = \
+>  	--target=$(GRUB2_TARGET) \
 > -- 
-> 2.1.0
+> 2.7.4 (Apple Git-66)
 > 
 > _______________________________________________
 > buildroot mailing list
