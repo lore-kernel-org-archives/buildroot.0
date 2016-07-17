@@ -1,70 +1,81 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 22:23:03 +0200
-Subject: [Buildroot] [PATCH v3 1/3] package/mesa3d: add optional support
- for libsha1
-In-Reply-To: <1468772875-5090-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1468772875-5090-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160717202303.GT3614@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 17 Jul 2016 22:36:21 +0200
+Subject: [Buildroot] [PATCH] package/terminology: new package
+Message-ID: <1468787781-5576-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/Config.in                    |  1 +
+ package/terminology/Config.in        |  9 +++++++++
+ package/terminology/terminology.hash |  2 ++
+ package/terminology/terminology.mk   | 17 +++++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/terminology/Config.in
+ create mode 100644 package/terminology/terminology.hash
+ create mode 100644 package/terminology/terminology.mk
 
-On 2016-07-17 18:27 +0200, Bernd Kuhls spake thusly:
-> mesa3d supports several sha1 implementations:
-> https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=12.0#n1167
-> 
-> This patch adds support for libsha1, inspired by the
-> xserver_xorg-server package:
-> https://github.com/buildroot/buildroot/blob/master/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk#L247
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Since I gave my Acked-by on the previous ieteration of this patch, and
-given that you did not change, you were totally entitled to add my
-Acked-by when respinning this patch. Here it goes for posterity:
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> v3: no changes
-> v2: never released, jumped from v1 to v3
-> 
->  package/mesa3d/mesa3d.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index dcd43d5..19dec49 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -36,6 +36,9 @@ MESA3D_CONF_OPTS += --with-sha1=libcrypto
->  else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
->  MESA3D_DEPENDENCIES += libgcrypt
->  MESA3D_CONF_OPTS += --with-sha1=libgcrypt
-> +else ifeq ($(BR2_PACKAGE_LIBSHA1),y)
-> +MESA3D_DEPENDENCIES += libsha1
-> +MESA3D_CONF_OPTS += --with-sha1=libsha1
->  endif
->  
->  ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-> -- 
-> 2.8.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in b/package/Config.in
+index 009b828..deafb53 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1644,6 +1644,7 @@ comment "Utilities"
+ 	source "package/ranger/Config.in"
+ 	source "package/screen/Config.in"
+ 	source "package/sudo/Config.in"
++	source "package/terminology/Config.in"
+ 	source "package/time/Config.in"
+ 	source "package/tmux/Config.in"
+ 	source "package/which/Config.in"
+diff --git a/package/terminology/Config.in b/package/terminology/Config.in
+new file mode 100644
+index 0000000..75fe1f5
+--- /dev/null
++++ b/package/terminology/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_TERMINOLOGY
++	bool "terminology"
++	depends on BR2_PACKAGE_EFL
++	select BR2_PACKAGE_ELEMENTARY
++	help
++	  Terminology is an EFL terminal emulator with some extra bells
++	  and whistles.
++
++	  https://www.enlightenment.org/about-terminology
+diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
+new file mode 100644
+index 0000000..841ff94
+--- /dev/null
++++ b/package/terminology/terminology.hash
+@@ -0,0 +1,2 @@
++# From http://sourceforge.net/p/enlightenment/mailman/message/34472601/
++sha256	ecee7ae6ba2fa10bfc5b6531292157dec2373dbb7d248cc62eb53d0be74e9bcf	terminology-0.9.1.tar.xz
+diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
+new file mode 100644
+index 0000000..f28ed1e
+--- /dev/null
++++ b/package/terminology/terminology.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# terminology
++#
++################################################################################
++
++TERMINOLOGY_VERSION = 0.9.1
++TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
++TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
++TERMINOLOGY_LICENSE = BSD
++TERMINOLOGY_LICENSE_FILES = COPYING
++
++TERMINOLOGY_DEPENDENCIES = efl elementary
++
++TERMINOLOGY_CONF_OPTS += --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.5.5
