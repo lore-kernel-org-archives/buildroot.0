@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jul 2016 17:56:46 +0200
-Subject: [Buildroot] [PATCH 1/3] package/mesa3d: add optional support
- for libsha1
-In-Reply-To: <1468690971-19702-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 17 Jul 2016 17:59:55 +0200
+Subject: [Buildroot] [PATCH v2 3/3] package/mesa3d: provides libgl not
+ only with DRI drivers
+In-Reply-To: <1468690971-19702-3-git-send-email-bernd.kuhls@t-online.de>
 References: <1468690971-19702-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160717155646.GJ3614@free.fr>
+ <1468690971-19702-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160717155955.GK3614@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,43 +15,114 @@ To: buildroot@busybox.net
 Bernd, All,
 
 On 2016-07-16 19:42 +0200, Bernd Kuhls spake thusly:
-> mesa3d supports several sha1 implementations:
-> https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=12.0#n1167
+> This patch is a follow-up for
+> https://github.com/buildroot/buildroot/commit/999d4a263118ab8581190d3e3c8bdc471896628f
 > 
-> This patch adds support for libsha1, inspired by the
-> xserver_xorg-server package:
-> https://github.com/buildroot/buildroot/blob/master/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk#L247
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> libGL.so and support files are not only available with DRI drivers but
+> also with Gallium drivers, in fact mesa3d can be built without any
+> drivers enabled - unless X.org is enabled it will provide libGL.so.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I guess you meant: unless X.org is disabled, mesa3d will provide libGL.so.
 
-This can go in even if the Vulkan driver does not go in yet.
+I think this patch should got before the Vulkan one. Otherwise, with
+only the Vulkan patch applied and not this one, this would create an
+incorrect situation, whereby libGL is installed, but we're not saying
+so.
 
 Regards,
 Yann E. MORIN.
 
+> Tested using this defconfig:
+> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_KODI=y
+> BR2_PACKAGE_KODI_VISUALISATION_WAVEFORHUE=y
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_XORG7=y
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/d97/d97a80e6de066a7dea08b284eab24fc44b11d661/
+> 
+> kodi-visualisation-waveforhue detects OpenGL installed by mesa3d but the
+> kodi package itself does not select libglew before because mesa3d was
+> not listed as a provider for libgl in the buildroot build system.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> This patch is needed for the next patch of this series:
-> package/mesa3d: add support for Intel Vulkan driver
+> v2: rebased and included in Vulkan-driver patch series
 > 
->  package/mesa3d/mesa3d.mk | 3 +++
->  1 file changed, 3 insertions(+)
+>  package/mesa3d/Config.in | 9 ++++-----
+>  package/mesa3d/mesa3d.mk | 9 +++++----
+>  2 files changed, 9 insertions(+), 9 deletions(-)
 > 
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index 4c4a273..0b141b8 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -6,6 +6,7 @@ menuconfig BR2_PACKAGE_MESA3D
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>  	select BR2_PACKAGE_LIBDRM
+>  	select BR2_PACKAGE_EXPAT
+> +	select BR2_PACKAGE_HAS_LIBGL if BR2_PACKAGE_XORG7
+>  	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
+>  	select BR2_PACKAGE_XPROTO_GLPROTO if BR2_PACKAGE_XORG7
+>  	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
+> @@ -28,7 +29,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+>  
+>  config BR2_PACKAGE_MESA3D_DRI_DRIVER
+>  	select BR2_PACKAGE_MESA3D_DRIVER
+> -	select BR2_PACKAGE_HAS_LIBGL if BR2_PACKAGE_XORG7
+>  	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XPROTO_DRI3PROTO
+>  	select BR2_PACKAGE_XPROTO_PRESENTPROTO if BR2_PACKAGE_XPROTO_DRI3PROTO
+>  	bool
+> @@ -37,10 +37,6 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+>  	bool
+>  	select BR2_PACKAGE_MESA3D_DRIVER
+>  
+> -config BR2_PACKAGE_PROVIDES_LIBGL
+> -	default "mesa3d" if BR2_PACKAGE_MESA3D_DRI_DRIVER && \
+> -		BR2_PACKAGE_XORG7
+> -
+>  config BR2_PACKAGE_MESA3D_DRIVER
+>  	bool
+>  
+> @@ -190,6 +186,9 @@ config BR2_PACKAGE_MESA3D_OPENGL_ES
+>  
+>  endif # BR2_PACKAGE_MESA3D_DRIVER
+>  
+> +config BR2_PACKAGE_PROVIDES_LIBGL
+> +	default "mesa3d" if BR2_PACKAGE_XORG7
+> +
+>  config BR2_PACKAGE_PROVIDES_LIBEGL
+>  	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_EGL
+>  
 > diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index dcd43d5..19dec49 100644
+> index a7a787a..c636a8a 100644
 > --- a/package/mesa3d/mesa3d.mk
 > +++ b/package/mesa3d/mesa3d.mk
-> @@ -36,6 +36,9 @@ MESA3D_CONF_OPTS += --with-sha1=libcrypto
->  else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
->  MESA3D_DEPENDENCIES += libgcrypt
->  MESA3D_CONF_OPTS += --with-sha1=libgcrypt
-> +else ifeq ($(BR2_PACKAGE_LIBSHA1),y)
-> +MESA3D_DEPENDENCIES += libsha1
-> +MESA3D_CONF_OPTS += --with-sha1=libsha1
+> @@ -111,10 +111,6 @@ endif
+>  ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86VM),y)
+>  MESA3D_DEPENDENCIES += xlib_libXxf86vm
 >  endif
+> -# libGL is only provided for a full xorg stack
+> -ifeq ($(BR2_PACKAGE_XORG7),y)
+> -MESA3D_PROVIDES += libgl
+> -endif
+>  MESA3D_CONF_OPTS += \
+>  	--enable-shared-glapi \
+>  	--enable-driglx-direct \
+> @@ -145,6 +141,11 @@ MESA3D_CONF_OPTS += --enable-opengl --enable-dri
+>  # we do not need libva support in mesa3d, therefore disable this option
+>  MESA3D_CONF_OPTS += --disable-va
 >  
->  ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+> +# libGL is only provided for a full xorg stack
+> +ifeq ($(BR2_PACKAGE_XORG7),y)
+> +MESA3D_PROVIDES += libgl
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+>  MESA3D_PROVIDES += libegl
+>  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
 > -- 
 > 2.8.1
 > 
