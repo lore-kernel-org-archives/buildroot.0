@@ -1,32 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jul 2016 23:39:48 +0200
-Subject: [Buildroot] [PATCH 2/6] toolchain: use the
- <PKG>_TARGET_FINALIZE_HOOKS
-In-Reply-To: <c147ef54ea80186f8a9e2582da525fb1ec457b5b.1468744792.git.yann.morin.1998@free.fr>
-References: <cover.1468744792.git.yann.morin.1998@free.fr>
- <c147ef54ea80186f8a9e2582da525fb1ec457b5b.1468744792.git.yann.morin.1998@free.fr>
-Message-ID: <20160718233948.7d635f2c@free-electrons.com>
+Date: Mon, 18 Jul 2016 23:40:06 +0200
+Subject: [Buildroot] [git commit] system: provide no default for custom
+	skeleton path
+Message-ID: <20160718214404.BA67081E80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b541b9ff94af8d0464deeb6e902dcc653b9c44b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 17 Jul 2016 10:44:24 +0200, Yann E. MORIN wrote:
-> Register toolchain-specific target-finalize hooks with the
-> newly-introduced <PKG>_TARGET_FINALIZE_HOOKS.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  toolchain/toolchain.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Being custom means that our default one is not suitable to start with.
+So there is no reason to offer it as the default path.
 
-Applied to master, thanks.
+Add a check that it is not empty.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Add a separating empty line, for good measure, too.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@openwide.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/skeleton/skeleton.mk | 6 ++++++
+ system/Config.in             | 2 +-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 7a7c200..d580fcb 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -17,6 +17,12 @@ ifeq ($(BR2_ROOTFS_SKELETON_CUSTOM),y)
+ 
+ SKELETON_PATH = $(call qstrip,$(BR2_ROOTFS_SKELETON_CUSTOM_PATH))
+ 
++ifeq ($(BR_BUILDING),y)
++ifeq ($(SKELETON_PATH),)
++$(error No path specified for the custom skeleton)
++endif
++endif
++
+ ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+ 
+ # Ensure the user has prepared a merged /usr.
+diff --git a/system/Config.in b/system/Config.in
+index b895db9..6fce8e1 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -184,9 +184,9 @@ config BR2_ROOTFS_SKELETON_CUSTOM
+ endchoice
+ 
+ if BR2_ROOTFS_SKELETON_CUSTOM
++
+ config BR2_ROOTFS_SKELETON_CUSTOM_PATH
+ 	string "custom target skeleton path"
+-	default "system/skeleton"
+ 	help
+ 	  Path to custom target skeleton.
+ 
