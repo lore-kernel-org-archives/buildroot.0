@@ -1,76 +1,128 @@
 From: Masahiro Yamada <yamada.masahiro@socionext.com>
-Date: Mon, 18 Jul 2016 18:38:16 +0900
-Subject: [Buildroot] [PATCH 0/7] zynq: bump all Zynq boards to newest U-Boot,
-	Linux, unifying readme.txt
-Message-ID: <1468834703-27518-1-git-send-email-yamada.masahiro@socionext.com>
+Date: Mon, 18 Jul 2016 18:38:22 +0900
+Subject: [Buildroot] [PATCH 6/7] zynq_zc706: bump U-Boot to xilinx-v2016.2
+In-Reply-To: <1468834703-27518-1-git-send-email-yamada.masahiro@socionext.com>
+References: <1468834703-27518-1-git-send-email-yamada.masahiro@socionext.com>
+Message-ID: <1468834703-27518-7-git-send-email-yamada.masahiro@socionext.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, Buildroot supports three Zynq boards.  This series bumps
-all of them to the latest U-Boot and Linux which are available in
-the Xilinx GitHub repository.
+This is the latest release tag in the Xilinx repository, based on
+U-Boot v2016.01 in the mainline.  It includes proper ps7_init_gpl.c/h
+in it, so builds working SPL without any manual intervention.
 
-Building systems for Zynq boards is getting easy and easy.  With this
-series, we need no more manual intervention, no more local patches.
+BR2_TARGET_UBOOT_BOARD_NAME should be changed to zynq_zc706 since
+U-Boot now has separate defconfig files for ZC702 and ZC706 boards.
 
-Also, three similar readme files are merged together.  Maintaining
-the documents will be easier too.
+BR2_TARGET_UBOOT_SPL_NAME should be changed to spl/boot.bin since
+the Zynq image support for the mkimage tool was upstreamed and it
+now generates boot.bin under spl/ directory.
 
-After bumped to the same version, the build procedure is almost the
-same for the Zynq-based boards.  The difference is only in U-Boot
-board defconfig and the Device Tree file name.  This applies to other
-Zynq boards that are not supported by Buildroot natively.
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
 
-So, I come up with one question; how many defconfigs we want to
-support for similar build steps?  I know the support for Zynq Zybo
-board is being proposed.
+ board/xilinx/zc706/readme.txt | 69 +++++++++++++------------------------------
+ configs/zynq_zc706_defconfig  |  7 +++--
+ 2 files changed, 25 insertions(+), 51 deletions(-)
 
-We can boot the system on Zybo board, starting from zynq_zed_defconfig,
-by changing two options from "make menuconfig":
-BR2_LINUX_KERNEL_INTREE_DTS_NAME=zynq-zybo
-BR2_TARGET_UBOOT_BOARDNAME=zynq_zybo
-
-That's it.
-
-So far, new Zynq board supports have been added time to time,
-by copy-paste work (see commit 03130f944a2053, for example),
-but maintained separately. And now we are going to support another
-board maintained by another developer.  We are duplicating efforts.
-I want to see improvements for all the Zynq boards synced.
-If we use genimage for Zybo board, why not for the existing three
-boards?  Let's think about it.  This is my point of this series.
-
-(Moreover, I want to merge three defconfigs into one.)
-
-
-Masahiro Yamada (7):
-  zynq_zed: bump Linux to xilinx-v2016.2
-  zynq_zed: bump U-Boot to xilinx-v2016.2
-  zynq_microzed: bump Linux to xilinx-v2016.2
-  zynq_microzed: bump U-Boot to xilinx-v2016.2
-  zynq_zc706: bump Linux to xilinx-v2016.2
-  zynq_zc706: bump U-Boot to xilinx-v2016.2
-  zynq: unify readme.txt for all Zynq boards
-
- board/avnet/microzed/readme.txt                    | 68 ----------------------
- ...eate-microzed-specific-U-Boot-environment.patch | 41 -------------
- board/avnet/zedboard/readme.txt                    | 64 --------------------
- ...eate-zedboard-specific-U-Boot-environment.patch | 45 --------------
- board/xilinx/zc706/readme.txt                      | 56 ------------------
- board/zynq/readme.txt                              | 52 +++++++++++++++++
- configs/zynq_microzed_defconfig                    | 15 +++--
- configs/zynq_zc706_defconfig                       | 12 ++--
- configs/zynq_zed_defconfig                         | 15 +++--
- 9 files changed, 72 insertions(+), 296 deletions(-)
- delete mode 100644 board/avnet/microzed/readme.txt
- delete mode 100644 board/avnet/microzed/uboot/0001-zynq-Create-microzed-specific-U-Boot-environment.patch
- delete mode 100644 board/avnet/zedboard/readme.txt
- delete mode 100644 board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch
- delete mode 100644 board/xilinx/zc706/readme.txt
- create mode 100644 board/zynq/readme.txt
-
+diff --git a/board/xilinx/zc706/readme.txt b/board/xilinx/zc706/readme.txt
+index b180dea..5034658 100644
+--- a/board/xilinx/zc706/readme.txt
++++ b/board/xilinx/zc706/readme.txt
+@@ -6,51 +6,24 @@ ZC706 information including schematics, reference designs, and manuals
+ are available from
+ http://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html.
+ 
+-uboot.bin  -- U-Boot SPL w/ Xilinx boot.bin wrapper
+----------------------------------------------------
+-
+-Due to licensing issues, the files ps7_init.c/h are not distributed
+-with the U-Boot source code.  These files are required to make a
+-boot.bin file.
+-
+-If you already have the Xilinx tools installed, the following sequence
+-will unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
+-
+-make zynq_zc706_defconfig
+-make uboot-patch
+-cp ${XILINX_SDK_LIB}/hwplatform_templates/ZC706_hw_platform/ps7_init.{c,h} \
+-   output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
+-
+-Where ${XILINX_SDK_LIB} is ${XILINX}/SDK/${VERSION}/data/embeddedsw/lib.
+-
+-After copying these files into the U-Boot source tree, you can
+-continue the build with:
+-
+-make
+-
+-*Notice*
+-While the build will successfully complete without the ps7_init.*
+-files, the uboot.bin file generated by this configuration will not
+-function properly on the ZC706. Therefore, it is imperative that the
+-ps7_init.* files be copied into the U-Boot source tree any time the
+-clean, or uboot-dirclean targets are executed.
+-
+-Resulting system
+-----------------
+-
+-A FAT32 partition should be created at the beggining of the SD Card
+-and the following files should be installed:
+-
+-- boot.bin
+-- devicetree.dtb
+-- uImage
+-- uramdisk.image.gz
+-- u-boot.img
+-
+-All needed files can be taken from <output>/images/
+-
+-cp <output>/images/boot.bin /media/sdcard/
+-cp <output>/images/uImage /media/sdcard/
+-cp <output>/images/u-boot.img /media/sdcard/
+-cp <output>/images/zynq-zc706.dtb /media/sdcard/devicetree.dtb
+-cp <output>/images/rootfs.cpio.uboot /media/sdcard/uramdisk.image.gz
++Steps to create a working system for ZC706 board:
++
++1) make zynq_zc706_defconfig
++2) make
++3) All needed files will be available in the output/images directory.
++   Create a FAT32 partition at the beginning of your SD Card and copy files:
++     - boot.bin
++     - u-boot.img
++     - uImage
++     - uramdisk.image.gz (should be renamed from rootfs.cpio.uboot)
++     - devicetree.dtb (should be renamed from zynq-zc706.dtb)
++   into your SD card
++4) boot your ZC706 board
++
++You can alter the booting procedure by creating a file uEnv.txt
++in the root of the SD card. It is a plain text file in format
++<key>=<value> one per line:
++
++kernel_image=myimage
++modeboot=myboot
++myboot=...
+diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
+index 746abcb..4ac2fe8 100644
+--- a/configs/zynq_zc706_defconfig
++++ b/configs/zynq_zc706_defconfig
+@@ -17,10 +17,11 @@ BR2_TARGET_ROOTFS_CPIO=y
+ BR2_TARGET_ROOTFS_CPIO_GZIP=y
+ BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="zynq_zc70x"
++BR2_TARGET_UBOOT_BOARDNAME="zynq_zc706"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2014.1"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2016.2"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="boot.bin"
++BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
 -- 
 1.9.1
