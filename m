@@ -1,87 +1,43 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 18 Jul 2016 10:57:25 +0200
-Subject: [Buildroot] [PATCH 1/2] meson: new package
-In-Reply-To: <20160717162325.GM3614@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Jul 2016 11:13:21 +0200
+Subject: [Buildroot] [PATCH 2/2] docs/manual: document meson-based
+ packages
+In-Reply-To: <20160717163724.GN3614@free.fr>
 References: <1468072147-17509-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1468072147-17509-2-git-send-email-eric.le.bihan.dev@free.fr>
- <20160717162325.GM3614@free.fr>
-Message-ID: <20160718105725.46864568@itchy>
+ <1468072147-17509-3-git-send-email-eric.le.bihan.dev@free.fr>
+ <20160717163724.GN3614@free.fr>
+Message-ID: <20160718111321.40fc5ee8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Hello,
 
-Le Sun, 17 Jul 2016 18:23:25 +0200,
-"Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
+On Sun, 17 Jul 2016 18:37:24 +0200, Yann E. MORIN wrote:
 
-> On 2016-07-09 15:49 +0200, Eric Le Bihan spake thusly:
-> > This new package provides the host variant of the Meson Build
-> > System, an open source build system meant to be both extremely
-> > fast, and as user friendly as possible.
-> > 
-> > More precisely, Meson creates configuration files for the Ninja
-> > build system.
-> > 
-> > Besides building Meson, it generates a configuration file
-> > ("$(HOST_DIR)/etc/meson/cross-compilation.conf") to be used when
-> > cross-compiling a Meson-based project.  
+> > +Buildroot does not (yet) provide a dedicated package infrastructure for
+> > +meson-based packages.  
 > 
-> OK, so I've done a review on this package, because it is not far from
-> being good.
-
-Thanks again for the insightful review.
- 
-> However, I wonder how much we should have it *now* in Buildroot.
+> So why not provide one? A new infra is not trivial to write, indeed, but
+> given your example, the meson-package does not look like it is a complex
+> one to write (see below).
 > 
-> As you said as a reply to my previous review, there are not many
-> packages that use the meson buildsystem, and that you did not plan on
-> providing one in the foreseeable future.
-> 
-> What was your interest in adding meson in Buildroot, if you do not
-> have at least one package to submit that uses it?
+> However, considering that we have no package that use meson yet, and
+> that you do not plan on sending one shortly, what's the point in having
+> either an infra or even this documentation?
 
-IHMO, besides providing packages for programs to be run on embedded
-devices, Buildroot should also provide tools for developing for such
-devices: compilers, tools to generate flash images, debuggers and of
-course build systems such as Meson.
+I prefer to have an infrastructure once we have a few packages that
+actually use meson. Until it is the case, I prefer to not have a
+package infrastructure for this, especially since using generic-package
+for Meson packages remains pretty simple, according to Eric's
+documentation.
 
-It is true that Meson is relatively young and has a small user base
-ATM, but as it is relatively easy to use and tries to handle
-cross-compilation from the start, it may generate attraction (or not!).
+Best regards,
 
-But the same applies to the Rust series I also posted. This series
-provides the Rust compiler and Cargo, the package manager, but no
-target package depending on them. This new language is branded as being
-oriented towards system programming and the compiler can generate code
-for ARM and MIPS, which shows it is meant to be used for developing for
-embedded devices.
-
-Some users may be glad to have support for these tools out-of-the-box
-in Buildroot, even though they are not developing programs to be
-packaged for upstream. This is why I submitted this patch series.
-
-> Host packages that are not used by any target package, and that have
-> no entry in Kconfig, will never be exercised by the autobuilders, so
-> we won't be able to catch any build failure. Also, they are prone to
-> bit-rot, because they are not used, and thus breakage is never caught,
-> and thus no one fixes them.
-
-True. Even though host packages may only be built for x86, they may have
-some dependencies between themselves that may break.
-
-From what I understand the only host packages which are allowed to
-appear in the "host utilities" configuration menu are the tools that
-may be invoked by user scripts. These ones will be exercised by
-the autobuilders, right?
-
-Maybe other packages such as exotic/new compilers and build
-systems should also be allowed, in order to be tested and to inform the
-user that Buildroot provides them...
-
-Regards,
-
+Thomas
 -- 
-ELB
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
