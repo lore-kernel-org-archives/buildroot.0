@@ -1,122 +1,82 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 17 Jul 2016 21:07:08 -0300
-Subject: [Buildroot] [PATCH v2] uboot-tools: fix conditional build of FIT
-	support
-In-Reply-To: <20160717193603.13671-1-ricardo.martincoski@gmail.com>
-References: <20160717193603.13671-1-ricardo.martincoski@gmail.com>
-Message-ID: <20160718000708.26051-1-ricardo.martincoski@gmail.com>
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Date: Sun, 17 Jul 2016 21:36:44 -0300
+Subject: [Buildroot] [PATCH 1/2] build: add support for as-needed linking
+In-Reply-To: <20160717210154.GU3614@free.fr>
+References: <1468767958-19572-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <20160717210154.GU3614@free.fr>
+Message-ID: <578C249C.9040700@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The removal of the unconditional compilation and linking of some .o files were
-missed when porting the patch 0003 to the version 2016.07, leading to errors
-like these when FIT support is enabled:
+On 17/07/16 18:01, Yann E. MORIN wrote:
 
-tools/fit_common.o: In function `fit_verify_header':
-fit_common.c:(.text+0x0): multiple definition of `fit_verify_header'
-tools/fit_common.o:fit_common.c:(.text+0x0): first defined here
-tools/fit_common.o: In function `fit_check_image_types':
-fit_common.c:(.text+0x10): multiple definition of `fit_check_image_types'
+> OK, I read both of the above, and I do understand the technicalities
+> behind --as-needed.
+>
+> However, I fail to see what it would bring to Buidlroot.
+>
+> One key point of --as-needed is to not pull in an unneeded library into
+> an executable, in case it does not need it, especially in the case that
+> this library is a second-order depedency by way of another library,
+> e.g.:
+>
+>      foo:
+>        NEEDED: libbar.so
+>        NEEDED: libbuz.so
+>
+>      libbar.so:
+>        NEEDED: libbuz.so
+>
+> but where foo does not use any symbol from libbuz.so. This purportedly
+> allows to update second-order libraries (libbuz, above) when there is
+> an ABI change in those libs, and only have to rebuild first-order libs
+> (libbar, above) without to rebuild the executable itself.
 
-When FIT support is disabled, the build does not fail but it includes FIT
-support.
+Hi Yann.
+Indeed this is not the point of the new option.
 
-Fix the patch 0003 to be equivalent to the original one.
+> Another key point is that the dynamic loader will not have to load
+> unncessary libraries,thus reducing startup time.
 
-Fixes:
-http://autobuild.buildroot.net/results/7494a5b22e3df1c05cdcc47670deaf54d9e04133
-http://autobuild.buildroot.net/results/f98f30bbf9d4cdde37a96b9310873d83dd649c54
+But this is.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Reported-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-CC: Fabio Estevam <festevam@gmail.com>
-CC: Carlos Santos <casantos@datacom.ind.br>
----
-Changes v1 -> v2:
- - add reference to autobuild failures, as I just noticed the error was caught
- - clarify a bit the error on the commit log, and also in the patch header
-  - the build failure occurs when FIT support is enabled
-  - when it is disabled the build includes FIT support but does not fail
-  - compilation is also conditional in the original patch, not just linking
- - fix typo on commit log
- - git format-patch -U4 when sending to the list to make this review easier
+> However, I fail to see how that can be any usefull in the context of
+> Buildroot.
+>
+> First, we do not support partial updates, and only catter to full-system
+> updates. Thus the first point is moot IMHO.
 
-CC: Masahiro Yamada <yamada.masahiro@socionext.com>
----
- .../0003-Make-FIT-support-really-optional.patch    | 26 +++++++++++++++++-----
- 1 file changed, 20 insertions(+), 6 deletions(-)
+Agreed.
 
-diff --git a/package/uboot-tools/0003-Make-FIT-support-really-optional.patch b/package/uboot-tools/0003-Make-FIT-support-really-optional.patch
-index 3ba5389..8853198 100644
---- a/package/uboot-tools/0003-Make-FIT-support-really-optional.patch
-+++ b/package/uboot-tools/0003-Make-FIT-support-really-optional.patch
-@@ -1,5 +1,5 @@
--From ddcd6cd622889a2d74d0a16efae8e3b2d098f717 Mon Sep 17 00:00:00 2001
-+From d9d7d7cf8b27516d45c66daa1bf0a18c878c4e33 Mon Sep 17 00:00:00 2001
- From: Carlos Santos <casantos@datacom.ind.br>
- Date: Sun, 8 May 2016 11:11:39 -0300
- Subject: [PATCH] Make FIT support really optional
- 
-@@ -18,13 +18,16 @@ following changes:
- 
- Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
- [fabio: adapt for 2016.07]
- Signed-off-by: Fabio Estevam <festevam@gmail.com>
-+[Ricardo: fix conditional compilation and linking of the files mentioned above
-+for 2016.07]
-+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
- ---
-  common/bootm.c  | 2 ++
-  include/bootm.h | 2 ++
-- tools/Makefile  | 2 ++
-- 3 files changed, 6 insertions(+)
-+ tools/Makefile  | 6 ++----
-+ 3 files changed, 6 insertions(+), 4 deletions(-)
- 
- diff --git a/common/bootm.c b/common/bootm.c
- index 2431019..7e1adc8 100644
- --- a/common/bootm.c
-@@ -58,9 +61,9 @@ index 4981377..94d62a1 100644
-  
-  int boot_selected_os(int argc, char * const argv[], int state,
-  		     bootm_headers_t *images, boot_os_fn *boot_fn);
- diff --git a/tools/Makefile b/tools/Makefile
--index f72294a..adf7c83 100644
-+index f72294a..ccf5120 100644
- --- a/tools/Makefile
- +++ b/tools/Makefile
- @@ -54,6 +54,7 @@ mkenvimage-objs := mkenvimage.o os_support.o lib/crc32.o
-  hostprogs-y += dumpimage mkimage
-@@ -69,14 +72,25 @@ index f72294a..adf7c83 100644
- +FIT_OBJS-$(CONFIG_FIT) := fit_common.o fit_image.o image-host.o common/image-fit.o
-  FIT_SIG_OBJS-$(CONFIG_FIT_SIGNATURE) := common/image-sig.o
-  # Flattened device tree objects
-  LIBFDT_OBJS := $(addprefix lib/libfdt/, \
--@@ -68,6 +69,7 @@ ROCKCHIP_OBS = lib/rc4.o rkcommon.o rkimage.o rksd.o rkspi.o
-+@@ -68,16 +69,13 @@ ROCKCHIP_OBS = lib/rc4.o rkcommon.o rkimage.o rksd.o rkspi.o
-  # common objs for dumpimage and mkimage
-  dumpimage-mkimage-objs := aisimage.o \
-  			atmelimage.o \
- +			$(FIT_OBJS-y) \
-  			$(FIT_SIG_OBJS-y) \
-  			common/bootm.o \
-  			lib/crc32.o \
-+ 			default_image.o \
-+ 			lib/fdtdec_common.o \
-+ 			lib/fdtdec.o \
-+-			fit_common.o \
-+-			fit_image.o \
-+-			common/image-fit.o \
-+-			image-host.o \
-+ 			common/image.o \
-+ 			imagetool.o \
-+ 			imximage.o \
- -- 
--1.9.1
-+2.9.1
-+
--- 
-2.9.1
+> Second, the default behaviour of the dynamic linker is to do lazy
+> binding, i.e. to only resolve sumbols at the time they are first needed,
+> and thus only loading libraries to resolve a missing symbol (unless I'm
+> mistaken...)
+>
+>
+> So, what would that bring to us?
+
+Yes, that's what lazy binding does... but it's still based on DT_NEEDED 
+entries, hence instead of scanning 10 libraries at required time in my 
+example it will only need to scan 8 to resolve required symbols.
+For more complex applications that use many nested libraries the savings 
+can be bigger.
+Example diff between non-as-needed gst-launch-1.0 and as-needed version:
+
+libgstreamer-1.0.so.0
+libgobject-2.0.so.0
+-libgmodule-2.0.so.0
+libglib-2.0.so.0
+-librt.so.1
+-libdl.so.2
+libgcc_s.so.1
+libpthread.so.0
+libc.so.6
+
+Most of the time even with lazy bindings any given binary will need to 
+resolve symbols unless we are building statically.
+
+Regards.
