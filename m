@@ -1,150 +1,211 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 18 Jul 2016 20:30:59 +0200
-Subject: [Buildroot] [PATCH] package/acpitool: not available for bfin
-In-Reply-To: <CAK4VdL1HipqOpg5CuYi+KDZiyrLBZQvNLYcDsECLHNC+pqsAiA@mail.gmail.com>
-References: <1468778160-32413-1-git-send-email-yann.morin.1998@free.fr>
- <CAK4VdL1HipqOpg5CuYi+KDZiyrLBZQvNLYcDsECLHNC+pqsAiA@mail.gmail.com>
-Message-ID: <20160718183059.GA12720@free.fr>
+From: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+Date: Mon, 18 Jul 2016 14:41:36 -0400
+Subject: [Buildroot] [PATCH v8] configs: add defconfig for TS-4800
+Message-ID: <1468867296-9995-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Erico, All,
+The TS-4800 is supported by mainline Linux as of 4.5 and by U-boot
+as of v2016-07.
 
-On 2016-07-18 19:37 +0200, Erico Nunes spake thusly:
-> On Sun, Jul 17, 2016 at 7:56 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > bfin is the only arch on which acpitool fails to build with the
-> > autobuilders:
-> >
-> >     http://autobuild.buildroot.org/?reason=acpitool-0.5.1
-> >     http://autobuild.buildroot.org/results/802/802f6bbc74ad8e89b2bb6a2f592ac91ef9cd88e3/
-> >     http://autobuild.buildroot.org/results/d2c/d2c708fc2aa18ecfc368a4ce93400cfc44366102/
-> >     [...]
-> >
-> > The cryptic error message;
-> >     configure: error: C++ compiler cannot create executables
-> >
-> > is due to the order in which AC_PROG_CXX and AC_PROG_CC are called.
-> > Calling AC_PROG_CC first fixes this error message.
-> >
-> > But then we get linking errors:
-> >
-> >     /home/ymorin/dev/buildroot/O/host/usr/bin/bfin-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -o acpitool main.o acpitool.o ac_adapter.o toshiba.o asus.o thinkpad.o cpu.o battery.o freq.o -lgcc
-> >     acpitool.o: In function `Has_ACPI(char*)':
-> >     acpitool.cpp:(.text+0x1be): undefined reference to `_Unwind_Resume'
-> >     acpitool.o: In function `Get_Kernel_Version(char*, int)':
-> >     acpitool.cpp:(.text+0x2aa): undefined reference to `_Unwind_Resume'
-> >     acpitool.o: In function `Set_Kernel_Version()':
-> >     acpitool.cpp:(.text+0x43e): undefined reference to `_Unwind_Resume'
-> >     acpitool.o: In function `Do_Fan_Info(int)':
-> >     acpitool.cpp:(.text+0x60a): undefined reference to `_Unwind_Resume'
-> >     acpitool.o: In function `Show_WakeUp_Devices(int)':
-> >     acpitool.cpp:(.text+0x770): undefined reference to `_Unwind_Resume'
-> >     acpitool.o:acpitool.cpp:(.text+0x9ca): more undefined references to `_Unwind_Resume' follow
-> >     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld: acpitool: hidden symbol `___udivsi3' in /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/libgcc.a(_udivsi3.o) is referenced by DSO
-> >     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld: final link failed: Bad value
-> >     collect2: error: ld returned 1 exit status
-> >
-> > The last one of those (the hidden ___udivsi3 symbol) is mopst
-> > concerning, and even the unwind stuff is not trivial.
-> >
-> > Because there's not many chances that a bfin board has ACPI, we just
-> > disable acpitoll for bfin.
-> 
-> No problem with me about disabling it for bfin.
+The package requires the custom ts4800-mbrboot routine.
 
-Is that an Acked-by you? ;-)
+A post-image script is provided to generate an image that can be
+directly written to an SD card.
 
-> I'm just not sure whether it is actually acpitool's fault, I have
-> performed the following tests regarding the toolchain referenced in
-> the autobuilder config:
-> 
-> $ cat main.cpp
-> int main(int argc, char **argv)
-> {
->     return 0;
-> }
-> $ output/host/usr/bin/bfin-linux-g++ main.cpp
-> /home/erico/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld:
-> a.out: hidden symbol `___udivsi3' in
-> /home/erico/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/libgcc.a(_udivsi3.o)
-> is referenced by DSO
-> /home/erico/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld:
-> final link failed: Bad value
-> collect2: error: ld returned 1 exit status
+More details on the board here:
+  http://wiki.embeddedarm.com/wiki/TS-4800
 
-Yeah, I also tried that. As I said, I'm not investigating this issue;
-it's too weird! ;-)
+Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Signed-off-by: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+---
+Changes v7->v8:
+	- cleaned up defconfig and post-image script
+	- added a readme file
+Changes v6->v7:
+	- moved package to boot/
+Changes v5->v6:
+	- removed custom U-boot v2016.07 which is now the default version in
+	  BR
+Changes v4->v5:
+with Linaro toolchain
+	- delete all the unnecessary defconfig options
 
-But I've had a further look now, and all I can say is that ld-uClibc.so.1
-defines the ___udivsi3 symbol, and it is not undefined (i.e. it *is* in
-there). At the same time, libgcc.a also has the same symbol, but set to
-be hidden, so they clash.
+ board/technologic/ts4800/genimage.cfg   | 37 ++++++++++++++++++++++++
+ board/technologic/ts4800/linux.fragment |  3 ++
+ board/technologic/ts4800/post-image.sh  | 19 +++++++++++++
+ board/technologic/ts4800/readme.txt     | 50 +++++++++++++++++++++++++++++++++
+ configs/ts4800_defconfig                | 22 +++++++++++++++
+ 5 files changed, 131 insertions(+)
+ create mode 100644 board/technologic/ts4800/genimage.cfg
+ create mode 100644 board/technologic/ts4800/linux.fragment
+ create mode 100755 board/technologic/ts4800/post-image.sh
+ create mode 100644 board/technologic/ts4800/readme.txt
+ create mode 100644 configs/ts4800_defconfig
 
-I suspect there is a bug somewhere in the bfin toolchain. Not sure whose
-fault it is: gcc, uClibc-ng or ld...
-
-> I have then also picked one other C++ package at random to test with
-> this toolchain, called "bellagio". It also shows the same "configure:
-> error: C++ compiler cannot create executables" error with the
-> autobuilder toolchain.
-
-That's because Bellagio also checks for AC_PROG_CXX before AC_PROG_CC:
-
-    https://sourceforge.net/p/omxil/omxil/ci/master/tree/configure.ac
-
-    129 # Check for a working C compiler
-    130 AC_PROG_CXX
-    131 AC_PROG_CC
-
-If you inverse the checks (i.e. AC_PROG_CC then AC_PROG_CXX) it works.
-I also tried that with acpitool, and it indeed fixes the configure issue
-(but then there was the build issue, at which point I bailed out).
-
-> Not sure why the autobuilders haven't ever
-> reported this one, though.
-
-There are:
-
-    http://autobuild.buildroot.org/?reason=bellagio-0.9.3
-    http://autobuild.buildroot.org/results/e9b/e9b18697e3c519d38ea3666f69bed5cf008d772d/
-    http://autobuild.buildroot.org/results/05f/05fa9cb522514e9e5b9e81893f145aab00abd803/
-
-There's even one such failure on ARM:
-    http://autobuild.buildroot.org/results/f6d/f6db9a9072e19d0632c8e6d64f67248e90f227ce/
-
-And on ARC:
-    http://autobuild.buildroot.org/results/203/203eb72ead23ea7930dc1a55dd54a8b3eea5c576/
-    http://autobuild.buildroot.org/results/5d5/5d5fd738f10697985adbc6ed58e6c52ee95b8b33/
-
-It's just that nobody really investigated them, since they are not
-frequent... The last such failure occured in exactly one year ago; but I
-was not able to see what changed in Bellagio that it no longer occurs...
-
-> It's possible to reproduce this by running 'make bellagio' with
-> http://autobuild.buildroot.org/results/802/802f6bbc74ad8e89b2bb6a2f592ac91ef9cd88e3/defconfig
-> .
-> 
-> If I switch the toolchain to "Blackfin.uclinux.org 2014R1", then
-> acpitool, bellagio build fine and I also don't get a linking error
-> with the simple test program.
-> 
-> So it seems to me that acpitool is taking the blame for just being the
-> first C++ package (alphabetically) to be built with the toolchain
-> referenced by these autobuilder failures?
-
-Maybe. Don't add packages that sort alphabetically-early if you don't
-want to be noticed! ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/board/technologic/ts4800/genimage.cfg b/board/technologic/ts4800/genimage.cfg
+new file mode 100644
+index 0000000..2070cc5
+--- /dev/null
++++ b/board/technologic/ts4800/genimage.cfg
+@@ -0,0 +1,37 @@
++image boot.vfat {
++        vfat {
++                files = {
++                        "zImage",
++                        "imx51-ts4800.dtb"
++                }
++        }
++        size = 8M
++}
++
++image sdcard.img {
++        hdimage {
++        }
++
++        partition mbrboot {
++                in-partition-table = "no"
++                image = "mbrboot.bin"
++                offset = 0
++        }
++
++        partition uboot {
++                partition-type = 0xda
++                image = "u-boot.bin"
++                size = 256k
++        }
++
++        partition kernel {
++                partition-type = 0xC
++                image = "boot.vfat"
++        }
++
++        partition rootfs {
++                partition-type = 0x83
++                image = "rootfs.ext4"
++                size = 256M
++        }
++}
+diff --git a/board/technologic/ts4800/linux.fragment b/board/technologic/ts4800/linux.fragment
+new file mode 100644
+index 0000000..0451c86
+--- /dev/null
++++ b/board/technologic/ts4800/linux.fragment
+@@ -0,0 +1,3 @@
++CONFIG_TOUCHSCREEN_TS4800=y
++CONFIG_TS4800_WATCHDOG=y
++CONFIG_TS4800_IRQ=y
+diff --git a/board/technologic/ts4800/post-image.sh b/board/technologic/ts4800/post-image.sh
+new file mode 100755
+index 0000000..167dea8
+--- /dev/null
++++ b/board/technologic/ts4800/post-image.sh
+@@ -0,0 +1,19 @@
++#!/bin/bash
++#
++# Copyright (C) 2015 Savoir-faire Linux
++# Post image generation script.
++
++BOARD_DIR="$(dirname $0)"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP=${BUILD_DIR}/.genimage_tmp
++
++rm -rf ${GENIMAGE_TMP}
++
++${HOST_DIR}/usr/bin/genimage \
++        --config ${GENIMAGE_CFG} \
++        --rootpath ${TARGET_DIR} \
++        --tmppath ${GENIMAGE_TMP} \
++        --inputpath $BINARIES_DIR \
++        --outputpath $BINARIES_DIR
++
++exit $?
+diff --git a/board/technologic/ts4800/readme.txt b/board/technologic/ts4800/readme.txt
+new file mode 100644
+index 0000000..20b50e9
+--- /dev/null
++++ b/board/technologic/ts4800/readme.txt
+@@ -0,0 +1,50 @@
++Technologic Systems TS-4800
++===========================
++
++This document explains how to set up a basic Buildroot system for the
++Technologic Systems TS-4800 System on Module.
++
++The TS-4800 is a TS-SOCKET macrocontroller board based on the Freescale
++i.MX515 ARM Cortex-A8 CPU running at 800MHz. The TS-4800 features 10/100
++Ethernet, high speed USB host and device (OTG), microSD card, and 256MB
++XNAND drive.  More details on the board here:
++	http://wiki.embeddedarm.com/wiki/TS-4800
++
++The TS-4800 is supported by mainline Linux as of 4.5 and by U-boot as of
++v2016-07. The defconfig includes a custom 1st level bootloader located
++in boot/ts4800-mbrboot. This one scans the SD card's partition table to
++find partition having the 0xDA type, corresponding to U-boot.
++
++To build the default configuration you only have to:
++
++	$ make ts4800_defconfig
++	$ make
++
++The ouput looks like:
++	output/images/
++	??? boot.vfat
++	??? imx51-ts4800.dtb
++	??? mbrboot.bin
++	??? rootfs.ext2
++	??? rootfs.ext4 -> rootfs.ext2
++	??? rootfs.tar
++	??? sdcard.img
++	??? u-boot.bin
++	??? zImage
++
++The provided post-image script generates an image file containing 3
++partitions for U-boot, Linux kernel + device tree and rootfs
++respectively:
++	$ fdisk output/images/sdcard.img
++	                   Device Boot Start    End Blocks Id  System
++	output/images/sdcard.img1          1    512    256 da  Non-FS data
++	output/images/sdcard.img2        513  16896   8192  c  W95 FAT32 (LBA)
++	output/images/sdcard.img3      16897 541184 262144 83  Linux
++
++This image can be directly written to an SD card.
++
++	$ sudo dd if=output/images/sdcard.img of=/dev/mmcblk0
++
++In order to test the image on TS-4800 board, a TS baseboard, such as
++TS-8xxx the serie, is needed to provide power, console header, RJ45
++connector etc.
+diff --git a/configs/ts4800_defconfig b/configs/ts4800_defconfig
+new file mode 100644
+index 0000000..0999ebc
+--- /dev/null
++++ b/configs/ts4800_defconfig
+@@ -0,0 +1,22 @@
++BR2_arm=y
++BR2_cortex_a8=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/technologic/ts4800/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.3"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/technologic/ts4800/linux.fragment"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx51-ts4800"
++BR2_PACKAGE_BUSYBOX_WATCHDOG=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_TS4800_MBRBOOT=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="ts4800"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
