@@ -1,159 +1,67 @@
-From: Roland Franke <fli4l@franke-prem.de>
-Date: Mon, 18 Jul 2016 14:12:22 +0200
-Subject: [Buildroot] [PATCH 1/1] rrdtool: bump version to 1.6.0
-In-Reply-To: <1462824635-15327-1-git-send-email-fli4l@franke-prem.de>
-References: <1462824635-15327-1-git-send-email-fli4l@franke-prem.de>
-Message-ID: <7784C342613B494384D01500F96DF13D@ROLANDAMD64>
+From: Oleksandr G Zhadan <oleks@arcturusnetworks.com>
+Date: Mon, 18 Jul 2016 09:43:57 -0400
+Subject: [Buildroot] [PATCH] Arcturus uCP1020 BSP support.
+In-Reply-To: <20160715193007.6440d7ae@free-electrons.com>
+References: <1468595175-6303-1-git-send-email-oleks@arcturusnetworks.com>
+ <20160715193007.6440d7ae@free-electrons.com>
+Message-ID: <4c5b625f-3a50-2e2d-7273-eca4ea4ac063@arcturusnetworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As the second version of this patch with deleted function
-RRDTOOL_AUTORECONF = YES
-RRDTOOL_GETTEXTIZE = YES
+Hello Thomas,
 
-will not work in all situations, my question is if this first version
-can be used for the update of RRDTool to version 1.6.0
+On 07/15/2016 01:30 PM, Thomas Petazzoni wrote:
 
-Best regards,
-Roland
+>> +++ b/board/arcturus/ppc-ucp1020/patches/linux/0001-Arcturus-uCP1020-BSP-support.patch
+>> @@ -0,0 +1,469 @@
+>> +From c27eeadb6c6cecbc07b330030c494c226643dcd1 Mon Sep 17 00:00:00 2001
+>> +From: Oleksandr G Zhadan <arcsupport@arcturusnetworks.com>
+>> +Date: Fri, 8 Jul 2016 11:02:59 -0400
+>> +Subject: [PATCH] Arcturus uCP1020 BSP support
+>> +
+>> +The uCP1020 product family (ucp1020) is an Arcturus Networks Inc.
+>> +System on Modules product featuring a NXP QorIQ P1020 CPU,
+>> +optionally populated with 1 or 2 Gig-Ethernet PHYs,
+>> +DDR3, NOR Flash, eMMC NAND Flash and/or SPI Flash.
+>> +
+>> +Signed-off-by: Oleksandr G Zhadan <arcsupport@arcturusnetworks.com>
+>> +Signed-off-by: Michael Durrant <arcsupport@arcturusnetworks.com>
+> Has this support been submitted to the upstream Linux kernel?
+Not yet. It's in our plans.
+>
+>
+>> ++/**********
+>> ++	sdhc at 2e000 {
+>> ++		cd-gpios = <&gpio0 8 0>;	* card detect *
+>> ++		wp-gpios = <&gpio0 9 0>;	* write protect *
+>> ++		wp-inverted;			* WP active high *
+>> ++	};
+>> ++***********/
+> It would be better to not keep commented code in the Device Tree.
+Thanks - forgot to remove.
+>
+>
+>> +# U-boot
+>> +BR2_TARGET_UBOOT=y
+>> +BR2_TARGET_UBOOT_BOARDNAME="UCP1020"
+> Please use a specific U-Boot version.
+Our u-boot patches already accepted by denx while ago - they always in 
+the latest version and we keep supporting it.
+BTW, after I run `make savedefconfig` in buildroot it updates 
+arcturus_ucp1020_defconfig with only these two lines.
+For sure I can add version, but it's not a CUSTOM version.
+Please be more specific why I should do it.
 
------Urspr?ngliche Nachricht----- 
-From: Roland Franke
-Sent: Monday, May 9, 2016 10:10 PM
-To: buildroot at buildroot.org
-Cc: Roland Franke
-Subject: [PATCH 1/1] rrdtool: bump version to 1.6.0
+> Thanks!
+>
+> Thomas
 
-delete patch 0001-Add-configure-option-to-disable-documentation.patch
-as this is now include in the new version.
 
-Signed-off-by: Roland Franke <fli4l@franke-prem.de>
----
-...configure-option-to-disable-documentation.patch | 
-71 ----------------------
-package/rrdtool/rrdtool.hash                       |  2 +-
-package/rrdtool/rrdtool.mk                         |  3 +-
-3 files changed, 2 insertions(+), 74 deletions(-)
-delete mode 100644 
-package/rrdtool/0001-Add-configure-option-to-disable-documentation.patch
-
-diff --git 
-a/package/rrdtool/0001-Add-configure-option-to-disable-documentation.patch 
-b/package/rrdtool/0001-Add-configure-option-to-disable-documentation.patch
-deleted file mode 100644
-index afb6292..0000000
----  
-a/package/rrdtool/0001-Add-configure-option-to-disable-documentation.patch
-+++ /dev/null
-@@ -1,71 +0,0 @@
--From deaef0790f3cbbce826275d3564551fc9568b628 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Wed, 2 Dec 2015 14:31:52 -0300
--Subject: [PATCH] Add configure option to disable documentation
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- Makefile.am  | 6 +++++-
-- configure.ac | 8 ++++++++
-- 2 files changed, 13 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index f45975c..1f46a9b 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -5,7 +5,11 @@ RSYNC = rsync --rsh=ssh
--
-- # build the following subdirectories
--
---SUBDIRS = po src doc bindings tests
--+SUBDIRS = po src bindings tests
--+
--+if BUILD_DOCS
--+SUBDIRS += doc
--+endif
--
-- if BUILD_EXAMPLES
-- SUBDIRS += examples
--diff --git a/configure.ac b/configure.ac
--index dc70e7d..7460c67 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -100,6 +100,9 @@ AC_ARG_VAR(RRDGRAPH_YLEGEND_ANGLE,
-- AC_DEFINE_UNQUOTED(RRDGRAPH_YLEGEND_ANGLE,${RRDGRAPH_YLEGEND_ANGLE:-90.0},
--  [Vertical label angle: -90.0 (default) or 90.0])
--
--+AC_ARG_ENABLE(docs,AS_HELP_STRING([--disable-docs],[disable building 
-documentation]),
--+[],[enable_docs=yes])
--+
-- AC_ARG_ENABLE(examples,AS_HELP_STRING([--disable-examples],[disable 
-building of examples]),
-- [],[enable_examples=yes])
--
--@@ -115,6 +118,7 @@ 
-AC_ARG_ENABLE(rrd_graph,AS_HELP_STRING([--disable-rrd_graph],[disable all 
-rrd_gr
-- AC_ARG_ENABLE(rrd_restore,AS_HELP_STRING([--disable-rrd_restore],[disable 
-rrd_restore XML import functions]),
-- [],[enable_rrd_restore=yes])
--
--+AM_CONDITIONAL(BUILD_DOCS,[test $enable_docs != no])
-- AM_CONDITIONAL(BUILD_EXAMPLES,[test $enable_examples != no])
-- AM_CONDITIONAL(BUILD_RRDCGI,[test $enable_rrdcgi != no])
-- AM_CONDITIONAL(BUILD_RRDCACHED,[test $enable_rrdcached != no])
--@@ -945,6 +949,8 @@ fi
--
-- AC_SUBST(COMP_PYTHON)
--
--+if test $enable_docs != no; then
--+
-- dnl Check for nroff
-- AC_ARG_VAR(NROFF, [path to the local nroff version])
-- AC_PATH_PROGS(NROFF, [gnroff nroff])
--@@ -961,6 +967,8 @@ AC_ARG_VAR(RRDDOCDIR, [[DATADIR/doc/PACKAGE-VERSION] 
-Documentation directory])
-- if test -z "$RRDDOCDIR"; then
--    RRDDOCDIR='${datadir}/doc/${PACKAGE}-${VERSION}'; fi
--
--+fi
--+
-- # systemd check
-- PKG_PROG_PKG_CONFIG
-- AC_ARG_WITH([systemdsystemunitdir],
---- 
--2.4.10
--
-diff --git a/package/rrdtool/rrdtool.hash b/package/rrdtool/rrdtool.hash
-index 97741c9..3422ad7 100644
---- a/package/rrdtool/rrdtool.hash
-+++ b/package/rrdtool/rrdtool.hash
-@@ -1,2 +1,2 @@
-# Locally calculated
--sha256 9832775479684b8f94767201ee0440a1cacdbbbb7dd6736eb96b9a0750644ce8 
-rrdtool-1.5.6.tar.gz
-+sha256 cd948e89cd2d8825fab4a6fb0323f810948d934af7d92c9ee8b5e9e1350e52d7 
-rrdtool-1.6.0.tar.gz
-diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
-index 6d6ab0c..f3c7451 100644
---- a/package/rrdtool/rrdtool.mk
-+++ b/package/rrdtool/rrdtool.mk
-@@ -4,12 +4,11 @@
-#
-################################################################################
-
--RRDTOOL_VERSION = 1.5.6
-+RRDTOOL_VERSION = 1.6.0
-RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
-RRDTOOL_LICENSE = GPLv2+ with FLOSS license exceptions as explained in 
-COPYRIGHT
-RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
-RRDTOOL_DEPENDENCIES = host-pkgconf libglib2
--# For 0001-Add-configure-option-to-disable-documentation.patch
-RRDTOOL_AUTORECONF = YES
-RRDTOOL_GETTEXTIZE = YES
-RRDTOOL_INSTALL_STAGING = YES
 -- 
-1.9.1 
+Oleksandr Zhadan
+Arcturus Networks
+T 416 621-0125 x235
+F 416 621-0190
