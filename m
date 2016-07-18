@@ -1,11 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jul 2016 23:30:11 +0200
-Subject: [Buildroot] [PATCH 1/6] package/busybox: add comment about
- BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-In-Reply-To: <ce037a071acb910af0b9b962885496169848718b.1468744792.git.yann.morin.1998@free.fr>
-References: <cover.1468744792.git.yann.morin.1998@free.fr>
- <ce037a071acb910af0b9b962885496169848718b.1468744792.git.yann.morin.1998@free.fr>
-Message-ID: <20160718233011.04779426@free-electrons.com>
+Date: Mon, 18 Jul 2016 23:31:33 +0200
+Subject: [Buildroot] [PATCH] package/acpitool: not available for bfin
+In-Reply-To: <20160718212005.GD12720@free.fr>
+References: <1468778160-32413-1-git-send-email-yann.morin.1998@free.fr>
+ <CAK4VdL1HipqOpg5CuYi+KDZiyrLBZQvNLYcDsECLHNC+pqsAiA@mail.gmail.com>
+ <20160718183059.GA12720@free.fr>
+ <20160718215151.4948f20d@free-electrons.com>
+ <20160718212005.GD12720@free.fr>
+Message-ID: <20160718233133.3dd7d144@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +16,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 17 Jul 2016 10:44:23 +0200, Yann E. MORIN wrote:
-> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is a bit special. When Busybox is
-> enabled, it is a Busybox option. When Busybox is not enabled, it is a
-> stand-alone option, forcibly enabled.
+On Mon, 18 Jul 2016 23:20:05 +0200, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> So we can safely 'select' it without ensuring (via a 'depends on' or
-> another 'select') that Busybox is enabled.
+> On 2016-07-18 21:51 +0200, Thomas Petazzoni spake thusly:
+> > On Mon, 18 Jul 2016 20:30:59 +0200, Yann E. MORIN wrote:  
+> > > And on ARC:
+> > >     http://autobuild.buildroot.org/results/203/203eb72ead23ea7930dc1a55dd54a8b3eea5c576/
+> > >     http://autobuild.buildroot.org/results/5d5/5d5fd738f10697985adbc6ed58e6c52ee95b8b33/  
+> > Is it reproducible on ARC ?  
 > 
-> However, the name of this option does not express the fact that it is
-> safe to select it without checking Busybox, which can lead to a bit of
-> time-consuming head-scratching.
-> 
-> To avoid future puzzlement from an unsuspecting observer, adda a big fat
-> comment that this option can be selected without any dependency on
-> busybox.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Romain Naour <romain.naour@openwide.fr>
+> No. It configures and builds fine with current master.
 
-I've applied, after taking Romain's comment into account (except the
-first one), and after tweaking a bit the last comment in the Config.in
-file.
-
-Thanks!
+So presumably, it was a toolchain issue.
 
 Thomas
 -- 
