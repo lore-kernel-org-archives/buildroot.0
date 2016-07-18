@@ -1,8 +1,8 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 18 Jul 2016 13:03:19 +0100
-Subject: [Buildroot] [PATCH] openblas: P5600 and I6400 cores only available
-	for Codescape toolchains
-Message-ID: <1468843399-28863-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Mon, 18 Jul 2016 13:05:39 +0100
+Subject: [Buildroot] [PATCH v2] openblas: P5600 and I6400 cores only
+	available for Codescape toolchains
+Message-ID: <1468843539-29696-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,7 +11,7 @@ To: buildroot@busybox.net
 
 These two MIPS cores are built with MSA support (-mmsa) which is
 currently in GCC trunk. The only toolchains that support it right now
-are Codescape MTI and Codescape IMG from Imagiation Technologies.
+are Codescape MTI and Codescape IMG from Imagination Technologies.
 
 Fixes:
   http://autobuild.buildroot.net/results/af5/af5e9f10287aaf9b9be6228ad7d12b2d926f8051/
@@ -19,6 +19,9 @@ Fixes:
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
+Changes v1 -> v2:
+ - Amend commit log: s/Imagiation/Imagination/
+
  package/openblas/Config.in | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
