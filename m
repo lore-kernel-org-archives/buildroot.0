@@ -1,35 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jul 2016 23:46:46 +0200
-Subject: [Buildroot] [PATCH 4/6] system: move the rootfs skeleton choice
-In-Reply-To: <0d652d8d1753cde7788f538ac480f2724d5a2040.1468744792.git.yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 18 Jul 2016 23:48:23 +0200
+Subject: [Buildroot] [PATCH 1/6] package/busybox: add comment about
+ BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+In-Reply-To: <20160718232942.207a6407@free-electrons.com>
 References: <cover.1468744792.git.yann.morin.1998@free.fr>
- <0d652d8d1753cde7788f538ac480f2724d5a2040.1468744792.git.yann.morin.1998@free.fr>
-Message-ID: <20160718234646.32fba134@free-electrons.com>
+ <ce037a071acb910af0b9b962885496169848718b.1468744792.git.yann.morin.1998@free.fr>
+ <97dd0669-ee80-c512-8768-54ff4d2b1ed7@gmail.com>
+ <20160718232942.207a6407@free-electrons.com>
+Message-ID: <d0eefa04-a3dc-ef22-fe12-f1f0b6d3769d@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Sun, 17 Jul 2016 10:44:26 +0200, Yann E. MORIN wrote:
-> In the following commits, we'll be switching more options to be
-> conditional on the default or custom skeleton.
+Le 18/07/2016 ? 23:29, Thomas Petazzoni a ?crit :
+> Hello,
 > 
-> So, it makes sense that those options come after the choice of a
-> skeleton.
+> On Sun, 17 Jul 2016 13:46:27 +0200, Romain Naour wrote:
+>> Hi Yann, All,
+>>
+>> Le 17/07/2016 ? 10:44, Yann E. MORIN a ?crit :
+>>> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is a bit special. When Busybox is
+>>> enabled, it is a Busybox option. When Busybox is not enabled, it is a  
+>>                                                        ^
+>> s/enabled/disabled/
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Reviewed-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  system/Config.in | 56 ++++++++++++++++++++++++++++----------------------------
->  1 file changed, 28 insertions(+), 28 deletions(-)
+> Why?
 
-Patches 4 to 6 applied. Thanks!
+Humm, I missed the "not" while reading... :-/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Romain
+
+> 
+> Thomas
+> 
