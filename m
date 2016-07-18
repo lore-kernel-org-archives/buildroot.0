@@ -1,216 +1,101 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 18 Jul 2016 22:06:56 +0200
-Subject: [Buildroot] [PATCH 3/3] package/protobuf-lua: new package
-In-Reply-To: <578D1280.30702@datacom.ind.br>
-References: <1467291218-7710-1-git-send-email-tiago.brusamarello@datacom.ind.br>
- <1467291218-7710-3-git-send-email-tiago.brusamarello@datacom.ind.br>
- <84f82695-4f8f-b9bd-250a-f500d92e0607@gmail.com>
- <578D1280.30702@datacom.ind.br>
-Message-ID: <e8d99212-d3b0-b3af-f932-5ff33e74dd40@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Jul 2016 22:19:35 +0200
+Subject: [Buildroot] [PATCH 00/12 v8] Introduce libudev (branch
+ yem/libudev-4)
+In-Reply-To: <20160718175241.GA3738@free.fr>
+References: <cover.1468274498.git.yann.morin.1998@free.fr>
+ <20160716154736.19dd42fb@free-electrons.com>
+ <20160718175241.GA3738@free.fr>
+Message-ID: <20160718221935.3dbad2da@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Tiago,
+Hello,
 
-Le 18/07/2016 ? 19:31, Tiago Brusamarello a ?crit :
-> Hi Romain.
+On Mon, 18 Jul 2016 19:52:41 +0200, Yann E. MORIN wrote:
+
+> That is *not* about size; I don't think I even ever made that point as a
+> reason to have only libudev.
+
+OK, then I really don't see the point.
+
+> > So I'm not sure if it's really worth the effort. After all, installing
+> > only libudev without eudev is not really supported upstream (we have to
+> > trick by building only some subdirectories).
+> > 
+> > I'm not entirely decided yet, so I'm waiting for arguments. But I'm
+> > hesitating between merging this, or asking people who really care about
+> > this to simply remove the eudev daemon in a post-build script.  
 > 
-> Em 16-07-2016 07:25, Romain Naour escreveu:
->> Hi Tiago,
->>
->> Le 30/06/2016 ? 14:53, Tiago Brusamarello a ?crit :
->>> This package adds support to use Google's Protocol buffers
->>> from Lua scripts.
->>>
->>> The original package from GitHub supports deployment as
->>> a LuaRocks package, but the module name as set to 'protobuf'
->>> and not 'protobuf-lua' which causes naming problems when
->>> building it in Buildroot so the 'generick-package' method
->> s/generik/generic/
->>
->>> was used instead.
->>>
->>> This package depends on the 'protoc-gen-lua' plugin package
->>> for generation of Protobuf messages types in Lua format.
->>>
->>> Signed-off-by: Tiago Brusamarello<tiago.brusamarello@datacom.ind.br>
->>> ---
->>>   package/Config.in                    |  1 +
->>>   package/protobuf-lua/Config.in       |  7 +++++
->>>   package/protobuf-lua/protobuf-lua.mk | 60 ++++++++++++++++++++++++++++++++++++
->>>   3 files changed, 68 insertions(+)
->>>   create mode 100644 package/protobuf-lua/Config.in
->>>   create mode 100644 package/protobuf-lua/protobuf-lua.mk
->>>
->>> diff --git a/package/Config.in b/package/Config.in
->>> index 715f8ab..dc32465 100644
->>> --- a/package/Config.in
->>> +++ b/package/Config.in
->>> @@ -548,6 +548,7 @@ menu "Lua libraries/modules"
->>>       source "package/luvi/Config.in"
->>>       source "package/lzlib/Config.in"
->>>       source "package/orbit/Config.in"
->>> +    source "package/protobuf-lua/Config.in"
->>>       source "package/rings/Config.in"
->>>       source "package/turbolua/Config.in"
->>>       source "package/wsapi/Config.in"
->>> diff --git a/package/protobuf-lua/Config.in b/package/protobuf-lua/Config.in
->>> new file mode 100644
->>> index 0000000..e602111
->>> --- /dev/null
->>> +++ b/package/protobuf-lua/Config.in
->>> @@ -0,0 +1,7 @@
->>> +config BR2_PACKAGE_PROTOBUF_LUA
->>> +    bool "protobuf-lua"
->>> +    depends on BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUA_5_2
->> Why protobuf-lua depends on lua 5.1 and 5.2 only ?
->> What was the issue ?
-> It seems that the shared library 'pb.so' built by the package is only compatible
-> with Lua 5.2 and Lua 5.2.
+> But then you would not have libudev if you use mdev or a static /dev.
 
-Then, can you add a comment about pd.so?
+Correct. But why would you want mdev or a static /dev absolutely if you
+need udev?
 
+> Note that libudev is not about managing /dev. It is about providing an
+> abstraction to device descriptions (e.g. type and so on) as well as
+> events (like hotplug).
+
+Right, but libudev is provided by eudev, and it does both, without even
+providing a configure option to build either one or the other.
+
+> A udev daemon (be it from eudev or systemd) is about managing the
+> content of /dev. For that it uses libudev to get the device descriptions
+> and events, and matches that to a DB of rules to generate the entries
+> in /dev.
 > 
->> Also, is protobuf-lua can be used with luajit ?
->> If yes, maybe you can use "depends on BR2_PACKAGE_HAS_LUAINTERPRETER" instead.
-> I can't tell you if it's compatible with 'luajit' or not.
+> Bernd has a (imho, valid) use-case about using only libudev without a
+> udev daemon altogether; there *are* other similar cases.
 
-It's ok to disable luajit support now and if someone want to use it, it can be
-enabled later with a followup patch.
+You still don't explain which use-case is that. You keep saying that
+Bernd wants to use libudev without the udev daemon, but you don't
+explain *why*.
 
->>> +    help
->>> +        Runtime libraries to use Protocol Buffers from Lua scripts.
->>> +
->>> +        https://github.com/djungelorm/protobuf-lua
->> Indent with one tab and two space.
->>
->>> diff --git a/package/protobuf-lua/protobuf-lua.mk
->>> b/package/protobuf-lua/protobuf-lua.mk
->>> new file mode 100644
->>> index 0000000..1a6c693
->>> --- /dev/null
->>> +++ b/package/protobuf-lua/protobuf-lua.mk
->>> @@ -0,0 +1,60 @@
->>> +################################################################################
->>>
->>> +#
->>> +# protobuf-lua
->>> +#
->>> +################################################################################
->>>
->>> +
->>> +
->> remove one empty line
->>
->>> +PROTOBUF_LUA_VERSION = v1.1.1
->>> +PROTOBUF_LUA_SITE = $(call
->>> github,djungelorm,protobuf-lua,$(PROTOBUF_LUA_VERSION))
->>> +PROTOBUF_LUA_DEPENDENCIES = luainterpreter host-protoc-gen-lua
->> There is a missing dependency on host-protobuf which provide protoc
->>
->>> +PROTOBUF_LUA_LICENSE = BSD-3c
->>> +PROTOBUF_LUA_LICENSE_FILES = LICENSE
->>> +
->>> +define PROTOBUF_LUA_BUILD_CMDS
->>> +    # build Lua Protobuf shared lib
->>> +    $(TARGET_CC) -Os -shared -std=gnu99 -fPIC $(@D)/protobuf/pb.c -o
->>> $(@D)/protobuf/pb.so
->>> +
->>> +    # build Protobuf examples
->>> +    PATH=$(BR_PATH) $(HOST_DIR)/usr/bin/protoc --lua_out=$(@D)/example
->>> --proto_path=$(@D)/example \
->>> +        $(@D)/example/person.proto
->>> +endef
->> protoc-gen-lua doesn't work with any host-python version:
->>
->> host-python3:
->>
->> Traceback (most recent call last):
->>    File "output/host/usr/bin/protoc-gen-lua", line 15, in <module>
->>      from cStringIO import StringIO
->> ImportError: No module named 'cStringIO'
->> --lua_out: protoc-gen-lua: Plugin failed with status code 1.
-> I guess it will not work whit Python 3 because the missing 'cStringIO '.
+As far as I'm aware, Bernd's use case is on using Kodi, so I'm sure you
+can agree that the build time savings and storage size savings are
+really in the noise.
 
-It seems you're right "The StringIO and cStringIO modules are gone."
-http://stackoverflow.com/questions/28200366/python-3-4-0-email-package-install-importerror-no-module-named-cstringio
+> For example, we now have support (and have pending patches) for some
+> "containerisation" stuff, like docker and lxc. You can also see that
+> Buildroot can be used to generate lightweight containers. Such
+> containers need not have a udev daemon of their own (the system has one,
+> and /dev is bind-mounted into the container); however, an application
+> inside that container will need to have access to the device "DB" and
+> events, thus needs libudev.
 
->> host-python2:
->>
->> Traceback (most recent call last):
->>    File "output/host/usr/bin/protoc-gen-lua", line 17, in <module>
->>      import plugin_pb2
->>    File "output/host/usr/bin/plugin_pb2.py", line 3, in <module>
->>      from google.protobuf import descriptor
->> ImportError: No module named google.protobuf
->> --lua_out: protoc-gen-lua: Plugin failed with status code 1.
-> I've tested it with Python 2.7.11 and it worked well for me. Maybe this error is
-> caused
-> by the missing dependency to 'host-protobuf'.
+As far as I understand, in a Docker situation, you don't bind
+mount /dev into your container. Instead, you use the --device option of
+docker run to get only some specific devices visible in your container.
 
-Well, I tried to build it with host-protobuf dependency fixed... not sure what's
-going on.
+Regarding LXC
+(https://linuxcontainers.org/fr/lxc/manpages/man5/lxc.container.conf.5.html) :
 
-I can retry when you send a new patch version.
+  By default, lxc creates a few symbolic links (fd,stdin,stdout,stderr)
+  in the container's /dev directory but does not automatically create
+  device node entries. This allows the container's /dev to be set up as
+  needed in the container rootfs. If lxc.autodev is set to 1, then
+  after mounting the container's rootfs LXC will mount a fresh tmpfs
+  under /dev (limited to 100k) and fill in a minimal set of initial
+  devices. This is generally required when starting a container
+  containing a "systemd" based "init" but may be optional at other
+  times. Additional devices in the containers /dev directory may be
+  created through the use of the lxc.hook.autodev hook. 
+
+So no, it does not seem like bind-mounting /dev inside a container is a
+typical use-case.
+
+Again, this is a lot of additional complexity for very very dubious
+use-cases. I believe we have much more interesting and useful things to
+merge than this functionality, at least as long as it doesn't come with
+stronger arguments as to why it's useful.
 
 Best regards,
-Romain
 
-> 
->> So, I've marked your patch as Changes Requested in patchwork. Feel free
->> to submit an updated version that takes into account the comments and fixed the
->> build issue.
->>
->> Thanks!
->>
->> Best regards,
->> Romain
->>
->>
->>> +
->>> +define PROTOBUF_LUA_INSTALL_TARGET_CMDS
->>> +    # install Lua Protobuf support
->>> +    mkdir -p $(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/protobuf
->>> +    $(INSTALL) -m 0755 $(@D)/protobuf/pb.so \
->>> +        $(TARGET_DIR)/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/protobuf/pb.so
->>> +    mkdir -p $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
->>> +    $(INSTALL) -m 0755 $(@D)/protobuf/containers.lua \
->>> +        $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
->>> +    $(INSTALL) -m 0755 $(@D)/protobuf/decoder.lua \
->>> +        $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
->>> +    $(INSTALL) -m 0755 $(@D)/protobuf/descriptor.lua \
->>> +        $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
->>> +    $(INSTALL) -m 0755 $(@D)/protobuf/encoder.lua \
->>> +        $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
->>> +    $(INSTALL) -m 0755 $(@D)/protobuf/init.lua \
->>> +        $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
->>> +    $(INSTALL) -m 0755 $(@D)/protobuf/listener.lua \
->>> +        $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
->>> +    $(INSTALL) -m 0755 $(@D)/protobuf/text_format.lua \
->>> +        $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
->>> +    $(INSTALL) -m 0755 $(@D)/protobuf/type_checkers.lua \
->>> +        $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
->>> +    $(INSTALL) -m 0755 $(@D)/protobuf/type_checkers.lua \
->>> +        $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
->>> +    $(INSTALL) -m 0755 $(@D)/protobuf/wire_format.lua \
->>> +        $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf
->>> +
->>> +    # install example files
->>> +    mkdir -p
->>> $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf/example
->>> +    $(INSTALL) -m 0755 $(@D)/example/person_pb.lua \
->>> +        $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf/example
->>> +    $(INSTALL) -m 0755 $(@D)/example/person.proto \
->>> +        $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf/example
->>> +    $(INSTALL) -m 0755 $(@D)/example/test.lua \
->>> +        $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/protobuf/example
->>> +endef
->>> +
->>> +$(eval $(generic-package))
->>>
-> Best Regards,
-> 
-> Tiago.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
