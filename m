@@ -1,47 +1,159 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 18 Jul 2016 13:05:39 +0100
-Subject: [Buildroot] [PATCH v2] openblas: P5600 and I6400 cores only
-	available for Codescape toolchains
-Message-ID: <1468843539-29696-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Roland Franke <fli4l@franke-prem.de>
+Date: Mon, 18 Jul 2016 14:12:22 +0200
+Subject: [Buildroot] [PATCH 1/1] rrdtool: bump version to 1.6.0
+In-Reply-To: <1462824635-15327-1-git-send-email-fli4l@franke-prem.de>
+References: <1462824635-15327-1-git-send-email-fli4l@franke-prem.de>
+Message-ID: <7784C342613B494384D01500F96DF13D@ROLANDAMD64>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These two MIPS cores are built with MSA support (-mmsa) which is
-currently in GCC trunk. The only toolchains that support it right now
-are Codescape MTI and Codescape IMG from Imagination Technologies.
+As the second version of this patch with deleted function
+RRDTOOL_AUTORECONF = YES
+RRDTOOL_GETTEXTIZE = YES
 
-Fixes:
-  http://autobuild.buildroot.net/results/af5/af5e9f10287aaf9b9be6228ad7d12b2d926f8051/
-  http://autobuild.buildroot.net/results/b20/b201e4072b0b634d5ac86781aee24c698f88d689/
+will not work in all situations, my question is if this first version
+can be used for the update of RRDTool to version 1.6.0
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Best regards,
+Roland
+
+-----Urspr?ngliche Nachricht----- 
+From: Roland Franke
+Sent: Monday, May 9, 2016 10:10 PM
+To: buildroot at buildroot.org
+Cc: Roland Franke
+Subject: [PATCH 1/1] rrdtool: bump version to 1.6.0
+
+delete patch 0001-Add-configure-option-to-disable-documentation.patch
+as this is now include in the new version.
+
+Signed-off-by: Roland Franke <fli4l@franke-prem.de>
 ---
-Changes v1 -> v2:
- - Amend commit log: s/Imagiation/Imagination/
+...configure-option-to-disable-documentation.patch | 
+71 ----------------------
+package/rrdtool/rrdtool.hash                       |  2 +-
+package/rrdtool/rrdtool.mk                         |  3 +-
+3 files changed, 2 insertions(+), 74 deletions(-)
+delete mode 100644 
+package/rrdtool/0001-Add-configure-option-to-disable-documentation.patch
 
- package/openblas/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+diff --git 
+a/package/rrdtool/0001-Add-configure-option-to-disable-documentation.patch 
+b/package/rrdtool/0001-Add-configure-option-to-disable-documentation.patch
+deleted file mode 100644
+index afb6292..0000000
+---  
+a/package/rrdtool/0001-Add-configure-option-to-disable-documentation.patch
++++ /dev/null
+@@ -1,71 +0,0 @@
+-From deaef0790f3cbbce826275d3564551fc9568b628 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Wed, 2 Dec 2015 14:31:52 -0300
+-Subject: [PATCH] Add configure option to disable documentation
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- Makefile.am  | 6 +++++-
+- configure.ac | 8 ++++++++
+- 2 files changed, 13 insertions(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index f45975c..1f46a9b 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -5,7 +5,11 @@ RSYNC = rsync --rsh=ssh
+-
+- # build the following subdirectories
+-
+--SUBDIRS = po src doc bindings tests
+-+SUBDIRS = po src bindings tests
+-+
+-+if BUILD_DOCS
+-+SUBDIRS += doc
+-+endif
+-
+- if BUILD_EXAMPLES
+- SUBDIRS += examples
+-diff --git a/configure.ac b/configure.ac
+-index dc70e7d..7460c67 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -100,6 +100,9 @@ AC_ARG_VAR(RRDGRAPH_YLEGEND_ANGLE,
+- AC_DEFINE_UNQUOTED(RRDGRAPH_YLEGEND_ANGLE,${RRDGRAPH_YLEGEND_ANGLE:-90.0},
+-  [Vertical label angle: -90.0 (default) or 90.0])
+-
+-+AC_ARG_ENABLE(docs,AS_HELP_STRING([--disable-docs],[disable building 
+documentation]),
+-+[],[enable_docs=yes])
+-+
+- AC_ARG_ENABLE(examples,AS_HELP_STRING([--disable-examples],[disable 
+building of examples]),
+- [],[enable_examples=yes])
+-
+-@@ -115,6 +118,7 @@ 
+AC_ARG_ENABLE(rrd_graph,AS_HELP_STRING([--disable-rrd_graph],[disable all 
+rrd_gr
+- AC_ARG_ENABLE(rrd_restore,AS_HELP_STRING([--disable-rrd_restore],[disable 
+rrd_restore XML import functions]),
+- [],[enable_rrd_restore=yes])
+-
+-+AM_CONDITIONAL(BUILD_DOCS,[test $enable_docs != no])
+- AM_CONDITIONAL(BUILD_EXAMPLES,[test $enable_examples != no])
+- AM_CONDITIONAL(BUILD_RRDCGI,[test $enable_rrdcgi != no])
+- AM_CONDITIONAL(BUILD_RRDCACHED,[test $enable_rrdcached != no])
+-@@ -945,6 +949,8 @@ fi
+-
+- AC_SUBST(COMP_PYTHON)
+-
+-+if test $enable_docs != no; then
+-+
+- dnl Check for nroff
+- AC_ARG_VAR(NROFF, [path to the local nroff version])
+- AC_PATH_PROGS(NROFF, [gnroff nroff])
+-@@ -961,6 +967,8 @@ AC_ARG_VAR(RRDDOCDIR, [[DATADIR/doc/PACKAGE-VERSION] 
+Documentation directory])
+- if test -z "$RRDDOCDIR"; then
+-    RRDDOCDIR='${datadir}/doc/${PACKAGE}-${VERSION}'; fi
+-
+-+fi
+-+
+- # systemd check
+- PKG_PROG_PKG_CONFIG
+- AC_ARG_WITH([systemdsystemunitdir],
+--- 
+-2.4.10
+-
+diff --git a/package/rrdtool/rrdtool.hash b/package/rrdtool/rrdtool.hash
+index 97741c9..3422ad7 100644
+--- a/package/rrdtool/rrdtool.hash
++++ b/package/rrdtool/rrdtool.hash
+@@ -1,2 +1,2 @@
+# Locally calculated
+-sha256 9832775479684b8f94767201ee0440a1cacdbbbb7dd6736eb96b9a0750644ce8 
+rrdtool-1.5.6.tar.gz
++sha256 cd948e89cd2d8825fab4a6fb0323f810948d934af7d92c9ee8b5e9e1350e52d7 
+rrdtool-1.6.0.tar.gz
+diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
+index 6d6ab0c..f3c7451 100644
+--- a/package/rrdtool/rrdtool.mk
++++ b/package/rrdtool/rrdtool.mk
+@@ -4,12 +4,11 @@
+#
+################################################################################
 
-diff --git a/package/openblas/Config.in b/package/openblas/Config.in
-index 51afaec..e79b611 100644
---- a/package/openblas/Config.in
-+++ b/package/openblas/Config.in
-@@ -26,9 +26,11 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
- 	default "PPC970"       if BR2_powerpc_970
- 	default "PPC440"       if BR2_powerpc_440
- 	default "PPC440FP2"    if BR2_powerpc_440fp
--	default "P5600"        if BR2_mips_32r2
-+	# P5600 is built with MSA support which is only available in Codescape toolchains
-+	default "P5600"        if BR2_mips_32r2 && BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
- 	default "SICORTEX"     if BR2_mips_64
--	default "I6400"        if BR2_mips_64r6
-+	# I6400 is built with MSA support which is only available in Codescape toolchains
-+	default "I6400"        if BR2_mips_64r6 && BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
- 	default "SPARC"        if BR2_sparc
- 	default "CORTEXA15"    if BR2_cortex_a15
- 	default "CORTEXA9"     if BR2_cortex_a9
+-RRDTOOL_VERSION = 1.5.6
++RRDTOOL_VERSION = 1.6.0
+RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
+RRDTOOL_LICENSE = GPLv2+ with FLOSS license exceptions as explained in 
+COPYRIGHT
+RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
+RRDTOOL_DEPENDENCIES = host-pkgconf libglib2
+-# For 0001-Add-configure-option-to-disable-documentation.patch
+RRDTOOL_AUTORECONF = YES
+RRDTOOL_GETTEXTIZE = YES
+RRDTOOL_INSTALL_STAGING = YES
 -- 
-2.7.3
+1.9.1 
