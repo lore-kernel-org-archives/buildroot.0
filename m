@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jul 2016 23:24:25 +0200
-Subject: [Buildroot] [PATCH 1/2] fcgiwrap: Bump to
- 99c942c90063c73734e56bacaa65f947772d9186.
-In-Reply-To: <1468852130-1525-2-git-send-email-thomas.claveirole@green-communications.fr>
+Date: Mon, 18 Jul 2016 23:25:30 +0200
+Subject: [Buildroot] [PATCH 2/2] fcgiwrap: Add a patch to link with
+ libsystemd, not libsystemd-daemon.
+In-Reply-To: <1468852130-1525-3-git-send-email-thomas.claveirole@green-communications.fr>
 References: <1468852130-1525-1-git-send-email-thomas.claveirole@green-communications.fr>
- <1468852130-1525-2-git-send-email-thomas.claveirole@green-communications.fr>
-Message-ID: <20160718232425.5b61b029@free-electrons.com>
+ <1468852130-1525-3-git-send-email-thomas.claveirole@green-communications.fr>
+Message-ID: <20160718232530.6d98be5e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 18 Jul 2016 16:28:49 +0200, Thomas Claveirole wrote:
-> fcgiwrap was not updated since April 2015, but the last GitHub release
-> is from February 2013.  Therefore, bump fcgiwrap to the latest commit
-> as it features fixes and improvements, but is unlikely to be part of a
-> release soon.
-> 
-> Update as well:
-> * the license file (latest commit features a COPYING file),
-> * the Config.in URL, as the previous "official" URL now returns an
->   HTTP 502 error.
-> 
+On Mon, 18 Jul 2016 16:28:50 +0200, Thomas Claveirole wrote:
 > Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-> ---
->  package/fcgiwrap/Config.in     | 2 +-
->  package/fcgiwrap/fcgiwrap.hash | 2 +-
->  package/fcgiwrap/fcgiwrap.mk   | 4 ++--
->  3 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
+I've added a reference to the autobuilder fixed by this commit, and
+applied. However, see below...
+
+> ---
+>  ...ith-libsystemd-instead-of-libsystemd-daemon.patch | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>  create mode 100644 package/fcgiwrap/0002-link-with-libsystemd-instead-of-libsystemd-daemon.patch
+> 
+> diff --git a/package/fcgiwrap/0002-link-with-libsystemd-instead-of-libsystemd-daemon.patch b/package/fcgiwrap/0002-link-with-libsystemd-instead-of-libsystemd-daemon.patch
+> new file mode 100644
+> index 0000000..e88706f
+> --- /dev/null
+> +++ b/package/fcgiwrap/0002-link-with-libsystemd-instead-of-libsystemd-daemon.patch
+> @@ -0,0 +1,20 @@
+> +configure.ac: Check for libsystemd, not libsystemd-daemon.
+> +
+> +Newer versions of systemd do not provide libsystemd-daemon anymore.
+> +Therefore, use libsystemd instead.
+> +
+> +Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+
+it would have been good for this patch to be formatted with "git
+format-patch", just like the existing 0001 patch on this package.
+
+Also, both patches should be submitted upstream, especially since
+upstream is hosted on Github, which makes it really easy to submit pull
+requests.
+
+Thanks,
 
 Thomas
 -- 
