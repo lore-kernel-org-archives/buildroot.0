@@ -1,67 +1,55 @@
-From: Oleksandr G Zhadan <oleks@arcturusnetworks.com>
-Date: Mon, 18 Jul 2016 09:43:57 -0400
-Subject: [Buildroot] [PATCH] Arcturus uCP1020 BSP support.
-In-Reply-To: <20160715193007.6440d7ae@free-electrons.com>
-References: <1468595175-6303-1-git-send-email-oleks@arcturusnetworks.com>
- <20160715193007.6440d7ae@free-electrons.com>
-Message-ID: <4c5b625f-3a50-2e2d-7273-eca4ea4ac063@arcturusnetworks.com>
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Date: Mon, 18 Jul 2016 16:28:48 +0200
+Subject: [Buildroot] [PATCH 0/2] Bump fcgiwrap, then fixes it w.r.t. systemd.
+In-Reply-To: <20160717170017.GP3614@free.fr>
+References: <20160717170017.GP3614@free.fr>
+Message-ID: <1468852130-1525-1-git-send-email-thomas.claveirole@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hi all,
 
-On 07/15/2016 01:30 PM, Thomas Petazzoni wrote:
+> fcgiwrap fails to build because it does not find the systemd
+> libraries:
+>
+> http://autobuild.buildroot.org/results/9b5/9b5e70e42e53e7752245f7c43bd01f208fcf76d0/build-end.log
+> http://autobuild.buildroot.org/results/065/0656fde5005c7472e9e8ae8da32a6955ed5093cc/build-end.log
+>
+> That's because it is looking for the legacy systemd compat
+> libraries, which have been removed in systemd 230:
+>
+>     PKG_CHECK_MODULES(systemd, [libsystemd-daemon],
 
->> +++ b/board/arcturus/ppc-ucp1020/patches/linux/0001-Arcturus-uCP1020-BSP-support.patch
->> @@ -0,0 +1,469 @@
->> +From c27eeadb6c6cecbc07b330030c494c226643dcd1 Mon Sep 17 00:00:00 2001
->> +From: Oleksandr G Zhadan <arcsupport@arcturusnetworks.com>
->> +Date: Fri, 8 Jul 2016 11:02:59 -0400
->> +Subject: [PATCH] Arcturus uCP1020 BSP support
->> +
->> +The uCP1020 product family (ucp1020) is an Arcturus Networks Inc.
->> +System on Modules product featuring a NXP QorIQ P1020 CPU,
->> +optionally populated with 1 or 2 Gig-Ethernet PHYs,
->> +DDR3, NOR Flash, eMMC NAND Flash and/or SPI Flash.
->> +
->> +Signed-off-by: Oleksandr G Zhadan <arcsupport@arcturusnetworks.com>
->> +Signed-off-by: Michael Durrant <arcsupport@arcturusnetworks.com>
-> Has this support been submitted to the upstream Linux kernel?
-Not yet. It's in our plans.
->
->
->> ++/**********
->> ++	sdhc at 2e000 {
->> ++		cd-gpios = <&gpio0 8 0>;	* card detect *
->> ++		wp-gpios = <&gpio0 9 0>;	* write protect *
->> ++		wp-inverted;			* WP active high *
->> ++	};
->> ++***********/
-> It would be better to not keep commented code in the Device Tree.
-Thanks - forgot to remove.
->
->
->> +# U-boot
->> +BR2_TARGET_UBOOT=y
->> +BR2_TARGET_UBOOT_BOARDNAME="UCP1020"
-> Please use a specific U-Boot version.
-Our u-boot patches already accepted by denx while ago - they always in 
-the latest version and we keep supporting it.
-BTW, after I run `make savedefconfig` in buildroot it updates 
-arcturus_ucp1020_defconfig with only these two lines.
-For sure I can add version, but it's not a CUSTOM version.
-Please be more specific why I should do it.
+I am not familiar with systemd and the documentation on
+freedesktop.org appears very messy.  As far as I understand, linking
+with libsystemd instead of libsystemd-daemon is a proper fix, right?
+At least it does fix compilation and seems to produce a proper
+fcgiwrap binary.
 
-> Thanks!
->
-> Thomas
+> Also, it seems the homepage referenced in the Config.in is no longer
+> available. The git tree has not changed since April 2015.
 
+I bumped the fcgiwrap package to the latest commit (which is not a GitHub
+release, but the latest release is from February 2013) and changed the
+homepage to the GitHub page.
 
--- 
-Oleksandr Zhadan
-Arcturus Networks
-T 416 621-0125 x235
-F 416 621-0190
+> Care to have a look, please?
+
+See the following patches.
+
+Thomas Claveirole (2):
+  fcgiwrap: Bump to 99c942c90063c73734e56bacaa65f947772d9186.
+  fcgiwrap: Add a patch to link with libsystemd, not libsystemd-daemon.
+
+ ...ith-libsystemd-instead-of-libsystemd-daemon.patch | 20 ++++++++++++++++++++
+ package/fcgiwrap/Config.in                           |  2 +-
+ package/fcgiwrap/fcgiwrap.hash                       |  2 +-
+ package/fcgiwrap/fcgiwrap.mk                         |  4 ++--
+ 4 files changed, 24 insertions(+), 4 deletions(-)
+ create mode 100644 package/fcgiwrap/0002-link-with-libsystemd-instead-of-libsystemd-daemon.patch
+
+--
+2.8.1
