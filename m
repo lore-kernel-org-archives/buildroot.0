@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jul 2016 23:07:47 +0200
-Subject: [Buildroot] [PATCH 1/1] rrdtool: bump version to 1.6.0
-In-Reply-To: <7784C342613B494384D01500F96DF13D@ROLANDAMD64>
-References: <1462824635-15327-1-git-send-email-fli4l@franke-prem.de>
- <7784C342613B494384D01500F96DF13D@ROLANDAMD64>
-Message-ID: <20160718230747.5c95117e@free-electrons.com>
+Date: Mon, 18 Jul 2016 23:10:21 +0200
+Subject: [Buildroot] [PATCH 1/2] lftp: bump version to 4.7.3
+In-Reply-To: <1468833997-36127-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1468833997-36127-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160718231021.3a442136@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 18 Jul 2016 14:12:22 +0200, Roland Franke wrote:
-> As the second version of this patch with deleted function
-> RRDTOOL_AUTORECONF = YES
-> RRDTOOL_GETTEXTIZE = YES
-> 
-> will not work in all situations, my question is if this first version
-> can be used for the update of RRDTool to version 1.6.0
-> 
-> Best regards,
-> Roland
+On Mon, 18 Jul 2016 10:26:36 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/lftp/lftp.hash | 2 +-
+>  package/lftp/lftp.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-I've applied your patch, after doing some fixes:
-
-    [Thomas:
-     - add dependency on gettext when needed
-     - add comment about why autoreconf/gettextize are kept
-     - cleanup commit log.]
-
-Thanks!
+Both applied, thanks.
 
 Thomas
 -- 
