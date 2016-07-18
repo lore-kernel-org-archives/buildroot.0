@@ -1,43 +1,44 @@
-From: Masahiro Yamada <yamada.masahiro@socionext.com>
-Date: Mon, 18 Jul 2016 18:38:21 +0900
-Subject: [Buildroot] [PATCH 5/7] zynq_zc706: bump Linux to xilinx-v2016.2
-In-Reply-To: <1468834703-27518-1-git-send-email-yamada.masahiro@socionext.com>
-References: <1468834703-27518-1-git-send-email-yamada.masahiro@socionext.com>
-Message-ID: <1468834703-27518-6-git-send-email-yamada.masahiro@socionext.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 18 Jul 2016 13:03:19 +0100
+Subject: [Buildroot] [PATCH] openblas: P5600 and I6400 cores only available
+	for Codescape toolchains
+Message-ID: <1468843399-28863-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is the latest release tag in the Xilinx repository, based on
-Linux v4.4 in the mainline.
+These two MIPS cores are built with MSA support (-mmsa) which is
+currently in GCC trunk. The only toolchains that support it right now
+are Codescape MTI and Codescape IMG from Imagiation Technologies.
 
-Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Fixes:
+  http://autobuild.buildroot.net/results/af5/af5e9f10287aaf9b9be6228ad7d12b2d926f8051/
+  http://autobuild.buildroot.net/results/b20/b201e4072b0b634d5ac86781aee24c698f88d689/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
+ package/openblas/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
- configs/zynq_zc706_defconfig | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index 2dc4adb..746abcb 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -2,13 +2,12 @@ BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_ENABLE_NEON=y
--# Linux headers same as kernel, a 3.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2014.2.01"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2016.2"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+index 51afaec..e79b611 100644
+--- a/package/openblas/Config.in
++++ b/package/openblas/Config.in
+@@ -26,9 +26,11 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+ 	default "PPC970"       if BR2_powerpc_970
+ 	default "PPC440"       if BR2_powerpc_440
+ 	default "PPC440FP2"    if BR2_powerpc_440fp
+-	default "P5600"        if BR2_mips_32r2
++	# P5600 is built with MSA support which is only available in Codescape toolchains
++	default "P5600"        if BR2_mips_32r2 && BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS
+ 	default "SICORTEX"     if BR2_mips_64
+-	default "I6400"        if BR2_mips_64r6
++	# I6400 is built with MSA support which is only available in Codescape toolchains
++	default "I6400"        if BR2_mips_64r6 && BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS
+ 	default "SPARC"        if BR2_sparc
+ 	default "CORTEXA15"    if BR2_cortex_a15
+ 	default "CORTEXA9"     if BR2_cortex_a9
 -- 
-1.9.1
+2.7.3
