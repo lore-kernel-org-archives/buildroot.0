@@ -1,36 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 18 Jul 2016 23:20:05 +0200
-Subject: [Buildroot] [PATCH] package/acpitool: not available for bfin
-In-Reply-To: <20160718215151.4948f20d@free-electrons.com>
-References: <1468778160-32413-1-git-send-email-yann.morin.1998@free.fr>
- <CAK4VdL1HipqOpg5CuYi+KDZiyrLBZQvNLYcDsECLHNC+pqsAiA@mail.gmail.com>
- <20160718183059.GA12720@free.fr>
- <20160718215151.4948f20d@free-electrons.com>
-Message-ID: <20160718212005.GD12720@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Jul 2016 23:20:09 +0200
+Subject: [Buildroot] [git commit] fcgiwrap: Add a patch to link with
+	libsystemd, not libsystemd-daemon.
+Message-ID: <20160718212412.5EE53803A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3dbd99c0d7a4d9fa318900db11d7b88141985739
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-07-18 21:51 +0200, Thomas Petazzoni spake thusly:
-> On Mon, 18 Jul 2016 20:30:59 +0200, Yann E. MORIN wrote:
-> > And on ARC:
-> >     http://autobuild.buildroot.org/results/203/203eb72ead23ea7930dc1a55dd54a8b3eea5c576/
-> >     http://autobuild.buildroot.org/results/5d5/5d5fd738f10697985adbc6ed58e6c52ee95b8b33/
-> Is it reproducible on ARC ?
+Fixes:
 
-No. It configures and builds fine with current master.
+  http://autobuild.buildroot.org/results/9b5e70e42e53e7752245f7c43bd01f208fcf76d0/
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...ith-libsystemd-instead-of-libsystemd-daemon.patch | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/fcgiwrap/0002-link-with-libsystemd-instead-of-libsystemd-daemon.patch b/package/fcgiwrap/0002-link-with-libsystemd-instead-of-libsystemd-daemon.patch
+new file mode 100644
+index 0000000..e88706f
+--- /dev/null
++++ b/package/fcgiwrap/0002-link-with-libsystemd-instead-of-libsystemd-daemon.patch
+@@ -0,0 +1,20 @@
++configure.ac: Check for libsystemd, not libsystemd-daemon.
++
++Newer versions of systemd do not provide libsystemd-daemon anymore.
++Therefore, use libsystemd instead.
++
++Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
++
++diff --git a/configure.ac b/configure.ac
++index bb3674e..2b02ef4 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -28,7 +28,7 @@ AC_ARG_WITH([systemd],
++   [], [with_systemd=check])
++ have_systemd=no
++ if test "x$with_systemd" != "xno"; then
++-  PKG_CHECK_MODULES(systemd, [libsystemd-daemon],
+++  PKG_CHECK_MODULES(systemd, [libsystemd],
++     [AC_DEFINE(HAVE_SYSTEMD, 1, [Define if systemd is available])
++     have_systemd=yes],
++   have_systemd=no)
