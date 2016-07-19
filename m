@@ -1,48 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jul 2016 23:18:38 +0200
-Subject: [Buildroot] [PATCH] nginx-upload: select BR2_PACKAGE_NGINX_HTTP
-In-Reply-To: <1468937435-62705-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1468937435-62705-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20160719231838.1c6ac384@free-electrons.com>
+Date: Tue, 19 Jul 2016 23:19:23 +0200
+Subject: [Buildroot] [git commit] libamcodec: needs dynamic library
+Message-ID: <20160719211952.3402481DBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a80f0efa9c610b00b531b69d14c2ff9852fd721b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 19 Jul 2016 09:10:35 -0500, Matt Weber wrote:
-> From: Bimal Jacob <Bimal.Jacob@rockwellcollins.com>
-> 
-> Resolves:
-> http://autobuild.buildroot.net/results/64b/64b1bde02346ca67b670f0b095bd3acad707e8cd
-> 
-> Signed-off-by: Bimal Jacob <bimal.jacob@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/nginx-upload/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/nginx-upload/Config.in b/package/nginx-upload/Config.in
-> index b4ee71c..bd2d51f 100644
-> --- a/package/nginx-upload/Config.in
-> +++ b/package/nginx-upload/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_NGINX_UPLOAD
->  	bool "nginx-upload"
->  	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_NGINX_HTTP
+libamcodec uses <dlfcn.h>, so it requires dynamic library support.
 
-All the built-in Nginx modules that need the http server to be enabled
-have a "depends on" dependency on the http server. So to be consistent
-with this, I've changed this "select" to a "depends on", and applied
-your patch.
+Fixes:
 
-Thanks a lot for the investigation!
+  http://autobuild.buildroot.net/results/b7653c299a60a67b360c98d59d6707ab468ce6f1/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libamcodec/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/libamcodec/Config.in b/package/libamcodec/Config.in
+index 52778ba..7300259 100644
+--- a/package/libamcodec/Config.in
++++ b/package/libamcodec/Config.in
+@@ -1,11 +1,12 @@
+-comment "libamcodec needs a toolchain w/ threads"
++comment "libamcodec needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_arm || BR2_aarch64
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_LIBAMCODEC
+ 	bool "libamcodec"
+ 	depends on BR2_arm || BR2_aarch64
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
++	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	help
+ 	    Interface library for Amlogic media codecs
