@@ -1,88 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 Jul 2016 14:33:34 +0200
-Subject: [Buildroot] mkusers: create system users/groups below UID/GID
- 1000
-In-Reply-To: <CANqV4tWfazqOvG6HCiruvi3dwAKT6bobnCgWsn=tBqMFFNGR5w@mail.gmail.com>
-References: <CANqV4tWfazqOvG6HCiruvi3dwAKT6bobnCgWsn=tBqMFFNGR5w@mail.gmail.com>
-Message-ID: <20160719123334.GB5628@free.fr>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 19 Jul 2016 08:18:36 -0500
+Subject: [Buildroot] [PATCH v2] nginx-upload-module: new package
+In-Reply-To: <20160719091653.584da534@free-electrons.com>
+References: <1468552217-17318-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20160716151748.1b901462@free-electrons.com>
+ <CANQCQpa6X5dm1kWE5DNr9=+jD=gApnZ5oYiZgShx2hL=ndmJ-A@mail.gmail.com>
+ <20160719091653.584da534@free-electrons.com>
+Message-ID: <CANQCQpYFt09zc5iHGPmEBOLkXH9JPACx5nOwJWG2u2rUW924hQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pascal, All,
+All,
 
-On 2016-07-19 14:19 +0200, Pascal de Bruijn spake thusly:
-> For your consideration, see attached patch.
+On Tue, Jul 19, 2016 at 2:16 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> Hello,
+>
+> On Sat, 16 Jul 2016 11:49:05 -0500, Matthew Weber wrote:
+>
+> > http://autobuild.buildroot.net/results/64b/64b1bde02346ca67b670f0b095bd3acad707e8cd/build-end.log
+> >
+> > Will take a look.
+>
+> Have you had the change to take a look?
 
-Please, do not send patches as attachement. Send them in the body of the
-mail.
 
-Also, use "git send-email" which we will conveniently prepare the mails
-and send them for you, all properly formatted.
+Yes, (sorry on vacation Fri/Mon).  There was a missing http module
+dependency, we plan to submit a patch later today.
 
-> Regards,
-> Pascal de Bruijn
+Thanks!
 
-> From 5e05b94edc2d7cacddd0b65810a583062f8c18e2 Mon Sep 17 00:00:00 2001
-> From: Pascal de Bruijn <pmjdebruijn@pcode.nl>
-> Date: Tue, 19 Jul 2016 14:07:17 +0200
-> Subject: [PATCH] mkusers: create system users/groups below UID/GID 1000
-> 
-> Try not to create users/groups past UID/GID 1000, as this space
-> is usually reserved for proper user/group accounts.
-> 
-> Change buildroot behaviour to be similar to distros (like Debian)
-> where UID/GID 101-999 are used for dynamic allocation to system
-> service accounts.
-> 
-> diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-> index e2c24c7..a6557d4 100755
-> --- a/support/scripts/mkusers
-> +++ b/support/scripts/mkusers
-> @@ -4,10 +4,10 @@ myname="${0##*/}"
->  
->  #----------------------------------------------------------------------------
->  # Configurable items
-> -MIN_UID=1000
-> -MAX_UID=1999
-> -MIN_GID=1000
-> -MAX_GID=1999
-> +MIN_UID=101
-> +MAX_UID=999
-> +MIN_GID=101
-> +MAX_GID=999
+>
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-Otherwise, OK for me.
 
-Note that this has the potential to break upgrades of existing systems,
-since the range allocated to generated users has changed, and thus may
-no longer match the UIDs/GIDs of files created on the device.
-
-But we never ever made the promise that this would work anyway, so I am
-totally OK with changing this range.
-
-Regards,
-Yann E. MORIN.
-
->  # No more is configurable below this point
->  #----------------------------------------------------------------------------
->  
-> -- 
-> 2.7.4
-> 
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
