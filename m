@@ -1,26 +1,65 @@
-From: Pascal de Bruijn <pmjdebruijn@pcode.nl>
-Date: Tue, 19 Jul 2016 14:19:02 +0200
-Subject: [Buildroot] mkusers: create system users/groups below UID/GID 1000
-Message-ID: <CANqV4tWfazqOvG6HCiruvi3dwAKT6bobnCgWsn=tBqMFFNGR5w@mail.gmail.com>
+From: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+Date: Tue, 19 Jul 2016 09:31:12 -0300
+Subject: [Buildroot] [PATCH v2 2/3] package/protoc-gen-lua: new package
+In-Reply-To: <1468931473-19614-1-git-send-email-tiago.brusamarello@datacom.ind.br>
+References: <1468931473-19614-1-git-send-email-tiago.brusamarello@datacom.ind.br>
+Message-ID: <1468931473-19614-2-git-send-email-tiago.brusamarello@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
+This package adds support to compile Google's Protocol buffers
+for use with Lua scripts. This tool is needed to allow use of the
+'protobuf-lua' package.
 
-For your consideration, see attached patch.
+Signed-off-by: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
 
-Regards,
-Pascal de Bruijn
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160719/3bcf5414/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-mkusers-create-system-users-groups-below-UID-GID-100.patch
-Type: text/x-patch
-Size: 1030 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160719/3bcf5414/attachment.bin>
+---
+Changes v1 -> v2:
+  - Removed Config.in (suggested by Romain Naour)
+  - Added new line at end of the .mk file (suggested by Romain Naour)
+
+Signed-off-by: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+---
+ package/protoc-gen-lua/protoc-gen-lua.hash |  2 ++
+ package/protoc-gen-lua/protoc-gen-lua.mk   | 18 ++++++++++++++++++
+ 2 files changed, 20 insertions(+)
+ create mode 100644 package/protoc-gen-lua/protoc-gen-lua.hash
+ create mode 100644 package/protoc-gen-lua/protoc-gen-lua.mk
+
+diff --git a/package/protoc-gen-lua/protoc-gen-lua.hash b/package/protoc-gen-lua/protoc-gen-lua.hash
+new file mode 100644
+index 0000000..0badc84
+--- /dev/null
++++ b/package/protoc-gen-lua/protoc-gen-lua.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  bccdd9c65970c42fd29b87084db83777cad75780a67c5107b68f96603b5788a8  protoc-gen-lua-v1.1.1.tar.gz
+diff --git a/package/protoc-gen-lua/protoc-gen-lua.mk b/package/protoc-gen-lua/protoc-gen-lua.mk
+new file mode 100644
+index 0000000..5c83372
+--- /dev/null
++++ b/package/protoc-gen-lua/protoc-gen-lua.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# protoc-gen-lua
++#
++################################################################################
++
++PROTOC_GEN_LUA_VERSION = v1.1.1
++PROTOC_GEN_LUA_SITE = $(call github,djungelorm,protobuf-lua,$(PROTOC_GEN_LUA_VERSION))
++PROTOC_GEN_LUA_DEPENDENCIES = host-python-protobuf
++PROTOC_GEN_LUA_LICENSE = BSD-3c
++PROTOC_GEN_LUA_LICENSE_FILES = LICENSE
++
++define HOST_PROTOC_GEN_LUA_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/protoc-plugin/plugin_pb2.py $(HOST_DIR)/usr/bin
++	$(INSTALL) -D -m 0755 $(@D)/protoc-plugin/protoc-gen-lua $(HOST_DIR)/usr/bin
++endef
++
++$(eval $(host-generic-package))
+-- 
+1.9.1
