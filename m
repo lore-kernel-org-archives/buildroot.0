@@ -1,43 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jul 2016 23:19:23 +0200
-Subject: [Buildroot] [git commit] libamcodec: needs dynamic library
-Message-ID: <20160719211952.3402481DBC@busybox.osuosl.org>
+Date: Wed, 20 Jul 2016 00:01:54 +0200
+Subject: [Buildroot] Issues with cross-compiling from x86_64 to a
+ different x86_64
+In-Reply-To: <34C69F44FE4EA4498813EAECDBF40C1623A46E39@GUSALE0B.na.utcmail.com>
+References: <34C69F44FE4EA4498813EAECDBF40C1623A46E39@GUSALE0B.na.utcmail.com>
+Message-ID: <20160720000154.4132543d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a80f0efa9c610b00b531b69d14c2ff9852fd721b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-libamcodec uses <dlfcn.h>, so it requires dynamic library support.
+First of all, thanks for your report!
 
-Fixes:
+On Tue, 19 Jul 2016 18:13:31 +0000, Arguin, Christopher P     UTAS
+wrote:
 
-  http://autobuild.buildroot.net/results/b7653c299a60a67b360c98d59d6707ab468ce6f1/
+> I think I've uncovered a bug where targeting special instruction sets within the x86_64 family is not always getting treated as a cross-compile. 
+> 
+> I'm targeting a 4th Gen i7 board. We had everything working, but had the generic "nocona"  architecture instead of the more specific 'core-avx2'. Our application would benefit from the AVX2 instruction set, so I switched it. After switching everything built fine on my laptop, which also happens to be a 4th Gen i7.
+> 
+> I then migrated my build environment onto our build server, which is Xeon processor based. Suddenly the build starting failing with "illegal instruction" errors during the compile process. I switched the target architecture back to "nocona" and everything works in both environments.
+> 
+> The only change between working and not-working is this entry in the config file:
+>    BR2_x86_core_avx2=y
+> 
+> Currently there are two failure points, the second of which is fatal. A full working build takes about 61 minutes and the failing build took 52 minutes, so it got through most of the stuff before giving up.
+> 
+> The first sign of problems occurs when building openssl, and it may be that it is incorrectly trying to use just-built code to generate or verify certificates:
+>    Doing certs/demo
+>    Illegal instruction (core dumped)
+>    Illegal instruction (core dumped)
+>    WARNING: Skipping duplicate certificate pca-cert.pem
+>    Illegal instruction (core dumped)
+>    WARNING: Skipping duplicate certificate ca-cert.pem
+>    Illegal instruction (core dumped)
+> 
+> 
+> The second failure is on ncftp, and it fails immediately and catastrophically, as if the compiler is not working at all:
+>    Makefile:62: recipe for target 'DStrFree.o' failed
+>    make[4]: *** [DStrFree.o] Illegal instruction (core dumped)
+>    make[4]: *** Waiting for unfinished jobs....
+>    Makefile:62: recipe for target 'strtokc.o' failed
+>    make[4]: *** [strtokc.o] Illegal instruction (core dumped)
+>    Makefile:62: recipe for target 'Strncpy.o' failed
+>    make[4]: *** [Strncpy.o] Illegal instruction (core dumped)
+>    Makefile:62: recipe for target 'Strnpcpy.o' failed
+>    make[4]: *** [Strnpcpy.o] Illegal instruction (core dumped)
+>    Makefile:62: recipe for target 'StrFree.o' failed
+>    make[4]: *** [StrFree.o] Illegal instruction (core dumped)
+>    Makefile:62: recipe for target 'DStrCpyList.o' failed
+>    make[4]: *** [DStrCpyList.o] Illegal instruction (core dumped)
+>    Makefile:62: recipe for target 'Strncat.o' failed
+>    make[4]: *** [Strncat.o] Illegal instruction (core dumped)
+>    Makefile:62: recipe for target 'DStrCpy.o' failed
+>    make[4]: *** [DStrCpy.o] Illegal instruction (core dumped)
+>    Makefile:62: recipe for target 'DStrInit.o' failed
+>    make[4]: *** [DStrInit.o] Illegal instruction (core dumped)
+>    Makefile:32: recipe for target 'libs' failed
+>    make[3]: *** [libs] Error 2
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libamcodec/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+I've just built the following defconfig:
 
-diff --git a/package/libamcodec/Config.in b/package/libamcodec/Config.in
-index 52778ba..7300259 100644
---- a/package/libamcodec/Config.in
-+++ b/package/libamcodec/Config.in
-@@ -1,11 +1,12 @@
--comment "libamcodec needs a toolchain w/ threads"
-+comment "libamcodec needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_arm || BR2_aarch64
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_LIBAMCODEC
- 	bool "libamcodec"
- 	depends on BR2_arm || BR2_aarch64
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	select BR2_PACKAGE_ALSA_LIB
- 	help
- 	    Interface library for Amlogic media codecs
+BR2_x86_64=y
+BR2_x86_core_avx2=y
+BR2_PACKAGE_NCFTP=y
+
+On a Xeon machine:
+
+$ cat /proc/cpuinfo  | grep "model name"
+model name      : Intel(R) Xeon(R) CPU E3-1240 v3 @ 3.40GHz
+model name      : Intel(R) Xeon(R) CPU E3-1240 v3 @ 3.40GHz
+model name      : Intel(R) Xeon(R) CPU E3-1240 v3 @ 3.40GHz
+model name      : Intel(R) Xeon(R) CPU E3-1240 v3 @ 3.40GHz
+model name      : Intel(R) Xeon(R) CPU E3-1240 v3 @ 3.40GHz
+model name      : Intel(R) Xeon(R) CPU E3-1240 v3 @ 3.40GHz
+model name      : Intel(R) Xeon(R) CPU E3-1240 v3 @ 3.40GHz
+model name      : Intel(R) Xeon(R) CPU E3-1240 v3 @ 3.40GHz
+
+And it built just fine.
+
+Could you provide us a minimal configuration, which exhibits the ncftp
+problem in your case?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
