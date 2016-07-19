@@ -1,35 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jul 2016 10:34:38 +0200
-Subject: [Buildroot] [PATCH 1/1] rrdtool: bump version to 1.6.0
-In-Reply-To: <F5AC2770B8C44FEA82C97608417562E9@ROLANDAMD64>
-References: <1462824635-15327-1-git-send-email-fli4l@franke-prem.de>
- <7784C342613B494384D01500F96DF13D@ROLANDAMD64>
- <20160718230747.5c95117e@free-electrons.com>
- <F5AC2770B8C44FEA82C97608417562E9@ROLANDAMD64>
-Message-ID: <20160719103438.4e5ac2d7@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 19 Jul 2016 09:15:20 +0000
+Subject: [Buildroot] Access to Buildroot git via https
+In-Reply-To: <20160719091308.5aea4608@free-electrons.com>
+References: <1468831359.3068.19.camel@synopsys.com>
+ <20160719062852.GA3656@free.fr>
+ <20160719091308.5aea4608@free-electrons.com>
+Message-ID: <1468919638.5489.0.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas, Yann,
 
-On Tue, 19 Jul 2016 10:06:06 +0200, Roland Franke wrote:
+On Tue, 2016-07-19 at 09:13 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 19 Jul 2016 08:28:52 +0200, Yann E. MORIN wrote:
+> > 
+> > Alexey, All,
+> > 
+> > On 2016-07-18 08:44 +0000, Alexey Brodkin spake thusly:
+> > > 
+> > > I'm wondering if there's a way to access Buildroot main git repo via HTTPS?
+> > > Here (https://git.busybox.net/buildroot/) it is mentioned only git protocol URL:??
+> > I just tried this:
+> > 
+> > ????$ git clone https://git.busybox.net/buildroot/
+> > ????Cloning into 'buildroot'...
+> > ????[...]
+> Then it is sad that the https:// address is not mentioned in
+> https://git.buildroot.org/buildroot/ under the "Clone:" section.
 
-> As i have made an mistake by me local, my checkout is complete
-> down and i will not be able to come back to an point for bring 
-> up an clean patch in the system (Sorry).
-> So anyone feel free to do that instead of me.
+That's exactly what I meant - why don't we add that URL there?
 
-I already cleaned up your patch, and applied it, see:
-
-	https://git.buildroot.org/buildroot/commit/?id=856c407976d5095c13b243b9ab2be6a4dcf8deb5
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-Alexey
