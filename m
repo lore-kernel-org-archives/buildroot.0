@@ -1,16 +1,20 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 19 Jul 2016 10:29:06 +0100
-Subject: [Buildroot] [PATCH] bind: bump version to 9.10.4-P2
-Message-ID: <1468920546-50576-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 19 Jul 2016 11:50:22 +0200
+Subject: [Buildroot] [git commit] bind: bump version to 9.10.4-P2
+Message-ID: <20160719095027.1371581973@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=c5a55f79c0ca5fc1a649e69b15cadb1ce5a74c14
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Security fixes: CVE-2016-2775
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/bind/bind.hash | 4 ++--
  package/bind/bind.mk   | 2 +-
@@ -38,5 +42,3 @@ index 8cfcf7f..fc9e30e 100644
  BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
  # bind does not support parallel builds.
  BIND_MAKE = $(MAKE1)
--- 
-2.7.3
