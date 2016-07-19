@@ -1,38 +1,42 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 19 Jul 2016 09:15:20 +0000
-Subject: [Buildroot] Access to Buildroot git via https
-In-Reply-To: <20160719091308.5aea4608@free-electrons.com>
-References: <1468831359.3068.19.camel@synopsys.com>
- <20160719062852.GA3656@free.fr>
- <20160719091308.5aea4608@free-electrons.com>
-Message-ID: <1468919638.5489.0.camel@synopsys.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 19 Jul 2016 10:29:06 +0100
+Subject: [Buildroot] [PATCH] bind: bump version to 9.10.4-P2
+Message-ID: <1468920546-50576-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Yann,
+Security fixes: CVE-2016-2775
 
-On Tue, 2016-07-19 at 09:13 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 19 Jul 2016 08:28:52 +0200, Yann E. MORIN wrote:
-> > 
-> > Alexey, All,
-> > 
-> > On 2016-07-18 08:44 +0000, Alexey Brodkin spake thusly:
-> > > 
-> > > I'm wondering if there's a way to access Buildroot main git repo via HTTPS?
-> > > Here (https://git.busybox.net/buildroot/) it is mentioned only git protocol URL:??
-> > I just tried this:
-> > 
-> > ????$ git clone https://git.busybox.net/buildroot/
-> > ????Cloning into 'buildroot'...
-> > ????[...]
-> Then it is sad that the https:// address is not mentioned in
-> https://git.buildroot.org/buildroot/ under the "Clone:" section.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-That's exactly what I meant - why don't we add that URL there?
-
--Alexey
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 1f8b8b7..0fb4eb4 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,2 @@
+-# Verified from ftp://ftp.isc.org/isc/bind9/9.10.4/bind-9.10.4.tar.gz.sha256.asc
+-sha256	f8d412b38d5ac390275b943bde69f4608f67862a45487ec854b30e4448fcb056	bind-9.10.4.tar.gz
++# Verified from ftp://ftp.isc.org/isc/bind9/9.10.4-P2/bind-9.10.4-P2.tar.gz.sha256.asc
++sha256 b35b8af8fe030196d03b3e487f5ecd0c0836b5e124abc7a3ecd184740b444423  bind-9.10.4-P2.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 8cfcf7f..fc9e30e 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.10.4
++BIND_VERSION = 9.10.4-P2
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
+-- 
+2.7.3
