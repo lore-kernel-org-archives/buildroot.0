@@ -1,70 +1,75 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 21 Jul 2016 02:04:03 +0200
-Subject: [Buildroot] bfin c++ problem
-Message-ID: <20160721000402.GR22524@waldemar-brodkorb.de>
+From: Arguin, Christopher P     UTAS <Christopher.Arguin@utas.utc.com>
+Date: Wed, 20 Jul 2016 23:12:13 +0000
+Subject: [Buildroot] [External] Re: Issues with cross-compiling from
+ x86_64 to a different x86_64
+In-Reply-To: <20160720220258.46331635@free-electrons.com>
+References: <34C69F44FE4EA4498813EAECDBF40C1623A46E39@GUSALE0B.na.utcmail.com>
+ <20160720000154.4132543d@free-electrons.com>
+ <34C69F44FE4EA4498813EAECDBF40C1623A47405@GUSALE0B.na.utcmail.com>
+ <20160720220258.46331635@free-electrons.com>
+Message-ID: <34C69F44FE4EA4498813EAECDBF40C1623A483E0@GUSALE0B.na.utcmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Thomas,
 
-recently Thomas Petazzoni reported an issue for the internal
-toolchain support in Buildroot targeting Blackfin to me.
+> However, I don't understand why on my system, ccdv doesn't get built, while it does get built for you.
 
-It seem a simple c++ hello world program can't be compiled:
-cat t.c
-#include <iostream>
-int main(void) { std::cout << "hello, world\n"; }
+I just stumbled into the answer to that. I pulled buildroot from git so I could start making changes, and did a 'mostly-default' build first. Much to my surprise, the ccdv executable didn't get built.
 
-./output/host/usr/bin/bfin-buildroot-linux-uclibc-g++ -o t t.c                                                                                                         
-/home/wbx/buildroot/output/host/usr/lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld:
-t: hidden symbol `___gtdf2' in
-/home/wbx/buildroot/output/host/usr/lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/libgcc.a(_gt_df.o)
-is referenced by DSO
-/home/wbx/buildroot/output/host/usr/lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld:
-final link failed: Bad value
-collect2: error: ld returned 1 exit status
+Switching from the default uclibc target to glibc target changed that.
 
-It seems not specific to ___gtdf2, I have seen other symbols in
-other buildsystems.
+Basically, the configure script in ncftp tries it's hardest to build ccdv, but if it doesn't generate a working executable it gives up on it. In my case the executable worked well enough if you didn't pass any arguments, so it passed the configure test... but then died when you try to actually use it. With uclibc as the target, ccdv may not have been successfully built because the C library was mismatched.
 
-./output/host/usr/bin/bfin-buildroot-linux-uclibc-g++ -v                                                                                                               
-Using built-in specs.
-COLLECT_GCC=/home/wbx/buildroot/output/host/usr/bin/bfin-buildroot-linux-uclibc-g++.br_real
-COLLECT_LTO_WRAPPER=/home/wbx/buildroot/output/host/usr/libexec/gcc/bfin-buildroot-linux-uclibc/6.1.0/lto-wrapper
-Target: bfin-buildroot-linux-uclibc
-Configured with: ./configure
---prefix=/home/wbx/buildroot/output/host/usr
---sysconfdir=/home/wbx/buildroot/output/host/etc --enable-static
---target=bfin-buildroot-linux-uclibc
---with-sysroot=/home/wbx/buildroot/output/host/usr/bfin-buildroot-linux-uclibc/sysroot
---disable-__cxa_atexit --with-gnu-ld --disable-libssp
---disable-multilib --with-gmp=/home/wbx/buildroot/output/host/usr
---with-mpfr=/home/wbx/buildroot/output/host/usr
---with-pkgversion='Buildroot 2016.08-git-01367-gdf60d48'
---with-bugurl=http://bugs.buildroot.net/ --disable-libquadmath
---disable-libsanitizer --disable-tls --disable-libmudflap
---enable-threads --with-mpc=/home/wbx/buildroot/output/host/usr
---without-isl --without-cloog --disable-decimal-float
---enable-languages=c,c++
---with-build-time-tools=/home/wbx/buildroot/output/host/usr/bfin-buildroot-linux-uclibc/bin
---enable-shared --disable-libgomp
-Thread model: posix
-gcc version 6.1.0 (Buildroot 2016.08-git-01367-gdf60d48) 
+Now that I know what to look for, I see that you predicted this a few years ago. From http://lists.busybox.net/pipermail/buildroot/2014-February/089526.html:
+> That being said, I agree that the cross-compilation test is stupid: it
+> builds a program, and tries to run it. If it runs, then the configure
+> script concludes that we're doing native compilation, if it doesn't
+> run, we're doing cross-compilation. Except that of course when you're
+> building x86 or x86-64 on x86-64 and both the target and host use
+> glibc, the program may very well run.
 
-binutils 2.26.1, gcc 6.1.0 is used.
+That addressed the detection of cross-compilation in ncftp, but not the use of the host-tool.  I managed to have just the right setup to hit a pretty obscure corner case. 
 
-At least two patches are applied on top of gcc 6.1.0,
-one for Bug 68468 and one for Bug 71721.
+Thanks,
+Chris
 
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68468
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71721
+-----Original Message-----
+From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
+Sent: Wednesday, July 20, 2016 4:03 PM
+To: Arguin, Christopher P UTAS
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] [External] Re: Issues with cross-compiling from x86_64 to a different x86_64
 
-ADI GNU Toolchain 2014R1 can compile the test program.
+Hello,
 
-Does anyone have an idea?
+On Wed, 20 Jul 2016 02:49:45 +0000, Arguin, Christopher P     UTAS
+wrote:
 
-best regards
- Waldemar
+> I dug into it more and found the source of the problem, which is in 
+> ncftp itself. As part of the 'configure' script it actually creates a 
+> 'ccdv.c' file and compiles it, apparently using the wrong compiler.
+> Then this 'ccdv' tool is used throughout the build process instead of 
+> CC. It was to make the compilation output prettier.
+
+Thanks for the investigation!
+
+> It's not directly AVX-related, but from the BMI instruction set...
+> the actual failure is the "andn" instruction. I still need to dig into 
+> it more to understand what's going on there.
+> 
+> There is a configure option to disable use of ccdv, so I may give that 
+> shot. Then I have to go look at what is going on in openssl. I guess 
+> you can probably expect a patch or two from me this week :)
+
+Looks like indeed passing --disable-ccdv is the best way forward.
+
+However, I don't understand why on my system, ccdv doesn't get built, while it does get built for you.
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering http://free-electrons.com
