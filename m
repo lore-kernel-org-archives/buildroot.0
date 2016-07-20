@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jul 2016 21:24:27 +0200
-Subject: [Buildroot] [PATCH v1] domoticz: remove
- BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-In-Reply-To: <1469018268-1530-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1469018268-1530-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20160720212427.1341812d@free-electrons.com>
+Date: Wed, 20 Jul 2016 21:24:31 +0200
+Subject: [Buildroot] [PATCH] kmod: bump version to 23
+In-Reply-To: <1469021280-26382-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1469021280-26382-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160720212431.6b18bed0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 20 Jul 2016 14:37:48 +0200, Fabrice Fontaine wrote:
-> The option was globally removed with
-> https://git.busybox.net/buildroot/commit/package/boost?id=668ce456448d671f30bf98c4d4819a88b0bf9f4e
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+On Wed, 20 Jul 2016 14:28:00 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/domoticz/Config.in | 2 --
->  1 file changed, 2 deletions(-)
+>  package/kmod/kmod.hash | 2 +-
+>  package/kmod/kmod.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
