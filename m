@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jul 2016 21:24:01 +0200
-Subject: [Buildroot] [git commit] domoticz: remove
-	BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-Message-ID: <20160720192411.AC916817B4@busybox.osuosl.org>
+Date: Wed, 20 Jul 2016 21:24:18 +0200
+Subject: [Buildroot] [git commit] kmod: bump version to 23
+Message-ID: <20160720192421.D843A81DF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b76606d38d413fcd80a0261b09c969c5a493389
+commit: https://git.buildroot.net/buildroot/commit/?id=15308d6ed3ef545e45b9ba7bcc9616d761b576e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The option was globally removed with
-https://git.busybox.net/buildroot/commit/package/boost?id=668ce456448d671f30bf98c4d4819a88b0bf9f4e
-
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/domoticz/Config.in | 2 --
- 1 file changed, 2 deletions(-)
+ package/kmod/kmod.hash | 2 +-
+ package/kmod/kmod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index e6d2571..3bd7824 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_DOMOTICZ
- 	bool "domoticz"
--	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
- 	depends on BR2_USE_MMU # mosquitto
- 	depends on !BR2_STATIC_LIBS # mosquitto
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-@@ -26,7 +25,6 @@ config BR2_PACKAGE_DOMOTICZ
- 	  http://domoticz.com
+diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
+index 75b819e..8220fd4 100644
+--- a/package/kmod/kmod.hash
++++ b/package/kmod/kmod.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
+-sha256  ba3b1ddea33228b473189fcb05b809024a3b86e9a7cf37d420cae06beb749f82  kmod-22.tar.xz
++sha256 d303d5519faec9d69e1132f6b37db2579db17a7fb5c1517da0115d03ba168155  kmod-23.tar.xz
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 2b9d002..1753b1d 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynamic library"
--	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
+-KMOD_VERSION = 22
++KMOD_VERSION = 23
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
+ KMOD_INSTALL_STAGING = YES
