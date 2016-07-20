@@ -1,48 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jul 2016 13:45:48 +0200
-Subject: [Buildroot] [PATCH v8] configs: add defconfig for TS-4800
-In-Reply-To: <1468867296-9995-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
-References: <1468867296-9995-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
-Message-ID: <20160720134548.4420af74@free-electrons.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Wed, 20 Jul 2016 08:45:09 -0300 (BRT)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-07-19
+In-Reply-To: <20160720063026.114921016CF@stock.ovh.net>
+References: <20160720063026.114921016CF@stock.ovh.net>
+Message-ID: <1941589130.11473733.1469015109793.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> To: buildroot at uclibc.org
+> Sent: Wednesday, July 20, 2016 3:30:26 AM
+> Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-07-19
 
-On Mon, 18 Jul 2016 14:41:36 -0400, Patrick Keroulas wrote:
-> The TS-4800 is supported by mainline Linux as of 4.5 and by U-boot
-> as of v2016-07.
-> 
-> The package requires the custom ts4800-mbrboot routine.
-> 
-> A post-image script is provided to generate an image that can be
-> directly written to an SD card.
-> 
-> More details on the board here:
->   http://wiki.embeddedarm.com/wiki/TS-4800
-> 
-> Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
-> Signed-off-by: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
-> ---
-> Changes v7->v8:
-> 	- cleaned up defconfig and post-image script
-> 	- added a readme file
-> Changes v6->v7:
-> 	- moved package to boot/
-> Changes v5->v6:
-> 	- removed custom U-boot v2016.07 which is now the default version in
-> 	  BR
-> Changes v4->v5:
-> with Linaro toolchain
-> 	- delete all the unnecessary defconfig options
+>      x86_64 |            uboot-tools-2016.07 | NOK |
+>      http://autobuild.buildroot.net/results/8e85481441b68dd8e3734b16c90e9c34d9cfd689/
+>       sparc |            uboot-tools-2016.07 | NOK |
+>       http://autobuild.buildroot.net/results/1987f296b6fb03b46507d63927b2180bb7d6cb9c/
 
-Applied to master, thanks a lot!
+Fixed in commit 31afc5866855ac480b5f327341c52655ee5b17fe.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Carlos Santos (Casantos)
+DATACOM, P&D
