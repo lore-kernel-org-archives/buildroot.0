@@ -1,49 +1,196 @@
-From: Lothar Felten <lothar.felten@gmail.com>
-Date: Wed, 20 Jul 2016 10:27:34 +0200
-Subject: [Buildroot] how to add UART1,2,3 on beaglebone
-In-Reply-To: <20160720052040.GA3766@sapphire.tkos.co.il>
-References: <e53c5a20-dc1d-3fda-0dfd-9e46c8f98185@gmail.com>
- <20160720052040.GA3766@sapphire.tkos.co.il>
-Message-ID: <578F35F6.9020008@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 20 Jul 2016 13:45:09 +0200
+Subject: [Buildroot] [git commit] configs: add defconfig for TS-4800
+Message-ID: <20160720114534.5CCE9802B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jehun,
+commit: https://git.buildroot.net/buildroot/commit/?id=1cda15f494abe48fa81b1a0815af278d11cb05c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 20.07.2016 07:20, Baruch Siach wrote:
-> Hi Jehun Lee,
->
-> On Tue, Jul 19, 2016 at 09:07:26PM -0700, Jehun Lee wrote:
->> I made and load successfully on my beaglebone black by following docs on
->> https://buildroot.org/docs.html.
->> But that image has only one ttyO0 for console. I want to add UART1,2,3 of
->> beaglebone black.
->> How can I do that? Any advice?
->
-> You need to add getty entries in your target /etc/inittab file. Look for
-> 'ttyO0' in /etc/inittab, and add similar entries for ttyO{1,2,3}.
->
-> This assumes that you are using either Busybox init (most likely) or sysvinit.
-> If you use systemd, add a symlink in /etc/systemd/system/getty.target.wants/
-> for each console.
->
-> Hope this helps,
-> baruch
->
+The TS-4800 is supported by mainline Linux as of 4.5 and by U-boot
+as of v2016-07.
 
-Maybe your device tree also needs an entry to enable the other uarts, 
-something like this:
+The package requires the custom ts4800-mbrboot routine.
 
-&uart1 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&uart1_pins_default>;
-	status = "okay";
-};
+A post-image script is provided to generate an image that can be
+directly written to an SD card.
 
-(And check the pinmux, here it's the uart1_pins_default entry)
+More details on the board here:
+  http://wiki.embeddedarm.com/wiki/TS-4800
 
---
-Lothar
+Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Signed-off-by: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/technologic/ts4800/genimage.cfg   | 37 ++++++++++++++++++++++++
+ board/technologic/ts4800/linux.fragment |  3 ++
+ board/technologic/ts4800/post-image.sh  | 19 +++++++++++++
+ board/technologic/ts4800/readme.txt     | 50 +++++++++++++++++++++++++++++++++
+ configs/ts4800_defconfig                | 22 +++++++++++++++
+ 5 files changed, 131 insertions(+)
+
+diff --git a/board/technologic/ts4800/genimage.cfg b/board/technologic/ts4800/genimage.cfg
+new file mode 100644
+index 0000000..2070cc5
+--- /dev/null
++++ b/board/technologic/ts4800/genimage.cfg
+@@ -0,0 +1,37 @@
++image boot.vfat {
++        vfat {
++                files = {
++                        "zImage",
++                        "imx51-ts4800.dtb"
++                }
++        }
++        size = 8M
++}
++
++image sdcard.img {
++        hdimage {
++        }
++
++        partition mbrboot {
++                in-partition-table = "no"
++                image = "mbrboot.bin"
++                offset = 0
++        }
++
++        partition uboot {
++                partition-type = 0xda
++                image = "u-boot.bin"
++                size = 256k
++        }
++
++        partition kernel {
++                partition-type = 0xC
++                image = "boot.vfat"
++        }
++
++        partition rootfs {
++                partition-type = 0x83
++                image = "rootfs.ext4"
++                size = 256M
++        }
++}
+diff --git a/board/technologic/ts4800/linux.fragment b/board/technologic/ts4800/linux.fragment
+new file mode 100644
+index 0000000..0451c86
+--- /dev/null
++++ b/board/technologic/ts4800/linux.fragment
+@@ -0,0 +1,3 @@
++CONFIG_TOUCHSCREEN_TS4800=y
++CONFIG_TS4800_WATCHDOG=y
++CONFIG_TS4800_IRQ=y
+diff --git a/board/technologic/ts4800/post-image.sh b/board/technologic/ts4800/post-image.sh
+new file mode 100755
+index 0000000..167dea8
+--- /dev/null
++++ b/board/technologic/ts4800/post-image.sh
+@@ -0,0 +1,19 @@
++#!/bin/bash
++#
++# Copyright (C) 2015 Savoir-faire Linux
++# Post image generation script.
++
++BOARD_DIR="$(dirname $0)"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP=${BUILD_DIR}/.genimage_tmp
++
++rm -rf ${GENIMAGE_TMP}
++
++${HOST_DIR}/usr/bin/genimage \
++        --config ${GENIMAGE_CFG} \
++        --rootpath ${TARGET_DIR} \
++        --tmppath ${GENIMAGE_TMP} \
++        --inputpath $BINARIES_DIR \
++        --outputpath $BINARIES_DIR
++
++exit $?
+diff --git a/board/technologic/ts4800/readme.txt b/board/technologic/ts4800/readme.txt
+new file mode 100644
+index 0000000..20b50e9
+--- /dev/null
++++ b/board/technologic/ts4800/readme.txt
+@@ -0,0 +1,50 @@
++Technologic Systems TS-4800
++===========================
++
++This document explains how to set up a basic Buildroot system for the
++Technologic Systems TS-4800 System on Module.
++
++The TS-4800 is a TS-SOCKET macrocontroller board based on the Freescale
++i.MX515 ARM Cortex-A8 CPU running at 800MHz. The TS-4800 features 10/100
++Ethernet, high speed USB host and device (OTG), microSD card, and 256MB
++XNAND drive.  More details on the board here:
++	http://wiki.embeddedarm.com/wiki/TS-4800
++
++The TS-4800 is supported by mainline Linux as of 4.5 and by U-boot as of
++v2016-07. The defconfig includes a custom 1st level bootloader located
++in boot/ts4800-mbrboot. This one scans the SD card's partition table to
++find partition having the 0xDA type, corresponding to U-boot.
++
++To build the default configuration you only have to:
++
++	$ make ts4800_defconfig
++	$ make
++
++The ouput looks like:
++	output/images/
++	????????? boot.vfat
++	????????? imx51-ts4800.dtb
++	????????? mbrboot.bin
++	????????? rootfs.ext2
++	????????? rootfs.ext4 -> rootfs.ext2
++	????????? rootfs.tar
++	????????? sdcard.img
++	????????? u-boot.bin
++	????????? zImage
++
++The provided post-image script generates an image file containing 3
++partitions for U-boot, Linux kernel + device tree and rootfs
++respectively:
++	$ fdisk output/images/sdcard.img
++	                   Device Boot Start    End Blocks Id  System
++	output/images/sdcard.img1          1    512    256 da  Non-FS data
++	output/images/sdcard.img2        513  16896   8192  c  W95 FAT32 (LBA)
++	output/images/sdcard.img3      16897 541184 262144 83  Linux
++
++This image can be directly written to an SD card.
++
++	$ sudo dd if=output/images/sdcard.img of=/dev/mmcblk0
++
++In order to test the image on TS-4800 board, a TS baseboard, such as
++TS-8xxx the serie, is needed to provide power, console header, RJ45
++connector etc.
+diff --git a/configs/ts4800_defconfig b/configs/ts4800_defconfig
+new file mode 100644
+index 0000000..0999ebc
+--- /dev/null
++++ b/configs/ts4800_defconfig
+@@ -0,0 +1,22 @@
++BR2_arm=y
++BR2_cortex_a8=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/technologic/ts4800/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.3"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/technologic/ts4800/linux.fragment"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx51-ts4800"
++BR2_PACKAGE_BUSYBOX_WATCHDOG=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_TS4800_MBRBOOT=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="ts4800"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
