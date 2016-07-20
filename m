@@ -1,16 +1,41 @@
 From: Arguin, Christopher P     UTAS <Christopher.Arguin@utas.utc.com>
-Date: Wed, 20 Jul 2016 02:07:43 +0000
+Date: Wed, 20 Jul 2016 02:49:45 +0000
 Subject: [Buildroot] [External] Re: Issues with cross-compiling from
  x86_64 to a different x86_64
-In-Reply-To: <20160720000154.4132543d@free-electrons.com>
 References: <34C69F44FE4EA4498813EAECDBF40C1623A46E39@GUSALE0B.na.utcmail.com>
- <20160720000154.4132543d@free-electrons.com>
-Message-ID: <34C69F44FE4EA4498813EAECDBF40C1623A47382@GUSALE0B.na.utcmail.com>
+ <20160720000154.4132543d@free-electrons.com> 
+Message-ID: <34C69F44FE4EA4498813EAECDBF40C1623A47405@GUSALE0B.na.utcmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+I dug into it more and found the source of the problem, which is in ncftp itself. As part of the 'configure' script it actually creates a 'ccdv.c' file and compiles it, apparently using the wrong compiler. Then this 'ccdv' tool is used throughout the build process instead of CC. It was to make the compilation output prettier.
+
+It's not directly AVX-related, but from the BMI instruction set... the actual failure is the "andn" instruction. I still need to dig into it more to understand what's going on there.
+
+There is a configure option to disable use of ccdv, so I may give that shot. Then I have to go look at what is going on in openssl. I guess you can probably expect a patch or two from me this week :)
+
+Thanks,
+Chris
+
+-- 
+Christopher Arguin - Software Architect - ISR Systems
+UTC AEROSPACE SYSTEMS
+7 Technology Park Drive, Westford, MA 01886
+Tel: +1 978 490 2278  Mobile: +1 978 495 2542  Fax: +1 978 490 2806
+christopher.arguin at utas.utc.com  www.utcaerospacesystems.com
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or privileged information of UTC Aerospace Systems and its affiliated companies. If you are not the intended recipient please 1) do not disclose, copy, distribute or use this message or its contents, 2) advise the sender by return e-mail, and 3) delete all copies (including all attachments) from your computer. Your cooperation is greatly appreciated.
+
+
+-----Original Message-----
+From: Arguin, Christopher P UTAS 
+Sent: Tuesday, July 19, 2016 10:08 PM
+To: 'Thomas Petazzoni'
+Cc: buildroot at busybox.net
+Subject: RE: [External] Re: [Buildroot] Issues with cross-compiling from x86_64 to a different x86_64
 
 Thomas,
 
