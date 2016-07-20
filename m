@@ -1,29 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jul 2016 23:08:52 +0200
-Subject: [Buildroot] mkusers: create system users/groups below UID/GID
- 1000
-In-Reply-To: <CANqV4tWfazqOvG6HCiruvi3dwAKT6bobnCgWsn=tBqMFFNGR5w@mail.gmail.com>
-References: <CANqV4tWfazqOvG6HCiruvi3dwAKT6bobnCgWsn=tBqMFFNGR5w@mail.gmail.com>
-Message-ID: <20160720230852.0181c185@free-electrons.com>
+Date: Wed, 20 Jul 2016 23:35:44 +0200
+Subject: [Buildroot] [git commit] efl: add missing select of zlib
+Message-ID: <20160720213717.9696E81DBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ef5d9f433b3b246ed52471fefef556a62688adc7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 19 Jul 2016 14:19:02 +0200, Pascal de Bruijn wrote:
+The efl package has zlib in its dependencies, but does not select it,
+which causes a dependency check error with the following defconfig:
 
-> For your consideration, see attached patch.
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2016.05-1162-g94c7298.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_SYSTEM_BIN_SH_NONE=y
+BR2_PACKAGE_EFL=y
 
-As Yann suggested, could you please resend with "git send-email", and
-also make sure to Signed-off-by your patch, otherwise we can't apply it.
+This commit fixes this by selecting the zlib package at the Config.in
+level.
 
-Thanks,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/efl/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 50d5f7f..97157f8 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -20,6 +20,7 @@ config BR2_PACKAGE_EFL
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	# libblkid is part of required tools, see EFL's README.
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Enlightenment Foundation Libraries
+ 
