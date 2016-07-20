@@ -1,27 +1,40 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed, 20 Jul 2016 08:45:09 -0300 (BRT)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-07-19
-In-Reply-To: <20160720063026.114921016CF@stock.ovh.net>
-References: <20160720063026.114921016CF@stock.ovh.net>
-Message-ID: <1941589130.11473733.1469015109793.JavaMail.zimbra@datacom.ind.br>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 20 Jul 2016 14:37:48 +0200
+Subject: [Buildroot] [PATCH v1] domoticz: remove
+	BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+Message-ID: <1469018268-1530-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: buildroot at uclibc.org
-> Sent: Wednesday, July 20, 2016 3:30:26 AM
-> Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-07-19
+The option was globally removed with
+https://git.busybox.net/buildroot/commit/package/boost?id=668ce456448d671f30bf98c4d4819a88b0bf9f4e
 
->      x86_64 |            uboot-tools-2016.07 | NOK |
->      http://autobuild.buildroot.net/results/8e85481441b68dd8e3734b16c90e9c34d9cfd689/
->       sparc |            uboot-tools-2016.07 | NOK |
->       http://autobuild.buildroot.net/results/1987f296b6fb03b46507d63927b2180bb7d6cb9c/
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+ package/domoticz/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-Fixed in commit 31afc5866855ac480b5f327341c52655ee5b17fe.
-
-Carlos Santos (Casantos)
-DATACOM, P&D
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+index e6d2571..3bd7824 100644
+--- a/package/domoticz/Config.in
++++ b/package/domoticz/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_DOMOTICZ
+ 	bool "domoticz"
+-	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
+ 	depends on BR2_USE_MMU # mosquitto
+ 	depends on !BR2_STATIC_LIBS # mosquitto
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+@@ -26,7 +25,6 @@ config BR2_PACKAGE_DOMOTICZ
+ 	  http://domoticz.com
+ 
+ comment "domoticz needs lua >= 5.2 and a toolchain w/ C++, threads, wchar, dynamic library"
+-	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
+-- 
+2.7.4
