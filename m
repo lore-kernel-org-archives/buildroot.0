@@ -1,62 +1,39 @@
-From: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
-Date: Wed, 20 Jul 2016 09:18:09 -0400 (EDT)
-Subject: [Buildroot] [PATCH v7 1/2] boot: add ts4800-mbrboot package
-In-Reply-To: <20160715231954.5f97d28e@free-electrons.com>
-References: <1468610588-9709-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
- <1468610588-9709-2-git-send-email-patrick.keroulas@savoirfairelinux.com>
- <20160715231954.5f97d28e@free-electrons.com>
-Message-ID: <852992333.17129.1469020689897.JavaMail.zimbra@savoirfairelinux.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 20 Jul 2016 14:28:00 +0100
+Subject: [Buildroot] [PATCH] kmod: bump version to 23
+Message-ID: <1469021280-26382-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Peter and Yann,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/kmod/kmod.hash | 2 +-
+ package/kmod/kmod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks a lot for your time/effort.
-Cheers.
-
---
-Patrick Keroulas
-Consultant en logiciel libre,
-Savoir-faire Linux Inc.
-
-7275 Saint-Urbain, bureau 200
-Montr?al, Qu?bec H2R 2Y5
-t?l: (514) 276-5468 ext. 167
-fax: (514) 276-5465
-_____________________
-
------ On Jul 15, 2016, at 5:19 PM, Thomas Petazzoni thomas.petazzoni at free-electrons.com wrote:
-
-> Hello,
-> 
-> I've applied, after doing some minor changes, see below.
-> 
-> On Fri, 15 Jul 2016 15:23:07 -0400, Patrick Keroulas wrote:
-> 
->>  boot/Config.in                        |  1 +
->>  boot/ts4800-mbrboot/Config.in         |  7 +++++++
->>  boot/ts4800-mbrboot/ts4800-mbrboot.mk | 20 ++++++++++++++++++++
-> 
-> A hash file was missing, so I've added one.
-> 
-> 
->> +define TS4800_MBRBOOT_INSTALL_TARGET_CMDS
->> +	$(INSTALL) -D -m 0644 $(@D)/mbrboot.bin $(BINARIES_DIR)/mbrboot.bin
->> +endef
-> 
-> You're installing to $(BINARIES_DIR), not $(TARGET_DIR), so using
-> INSTALL_TARGET_CMDS is not correct (it works, but it's not correct).
-> 
-> I've changed that to use INSTALL_IMAGES_CMDS (and therefore I've also
-> added INSTALL_IMAGES = YES).
-> 
-> Thanks,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
+index 75b819e..8220fd4 100644
+--- a/package/kmod/kmod.hash
++++ b/package/kmod/kmod.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
+-sha256  ba3b1ddea33228b473189fcb05b809024a3b86e9a7cf37d420cae06beb749f82  kmod-22.tar.xz
++sha256 d303d5519faec9d69e1132f6b37db2579db17a7fb5c1517da0115d03ba168155  kmod-23.tar.xz
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 2b9d002..1753b1d 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KMOD_VERSION = 22
++KMOD_VERSION = 23
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
+ KMOD_INSTALL_STAGING = YES
+-- 
+2.7.3
