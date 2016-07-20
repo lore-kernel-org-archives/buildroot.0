@@ -1,39 +1,35 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 20 Jul 2016 14:28:00 +0100
-Subject: [Buildroot] [PATCH] kmod: bump version to 23
-Message-ID: <1469021280-26382-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Michael Habibi <mikehabibi@gmail.com>
+Date: Wed, 20 Jul 2016 09:26:41 -0500
+Subject: [Buildroot] Workflow question - separating the distribution from
+	embedded applications
+Message-ID: <CAOsp8o8U3=xT4u6y33Om125WCk+wPzn_bYbzKEBYbiV=dUqzig@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/kmod/kmod.hash | 2 +-
- package/kmod/kmod.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+We are looking at switching to a buildroot-based distribution from our
+current option for our embedded device. Right now, we have a giant
+source tree that combines both the distribution and our applications
+to build a root filesystem that contains everything. This makes things
+simple as everything is co-located in one source tree. However it
+complicates and extends the build because we must rebuild the
+distribution with our code in order to build a complete image.
 
-diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
-index 75b819e..8220fd4 100644
---- a/package/kmod/kmod.hash
-+++ b/package/kmod/kmod.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
--sha256  ba3b1ddea33228b473189fcb05b809024a3b86e9a7cf37d420cae06beb749f82  kmod-22.tar.xz
-+sha256 d303d5519faec9d69e1132f6b37db2579db17a7fb5c1517da0115d03ba168155  kmod-23.tar.xz
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 2b9d002..1753b1d 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KMOD_VERSION = 22
-+KMOD_VERSION = 23
- KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
- KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
- KMOD_INSTALL_STAGING = YES
--- 
-2.7.3
+With buildroot, I imagine we can do the same thing since it also
+builds a root filesystem. However I am trying to understand a workflow
+where we could build the distribution's root filesystem of the
+distribution separate from our embedded applications. A workflow where
+the application developers only have to build their code and not the
+whole distribution, and can 'insert' their applications into the
+distribution somehow and just regenerate the final images. I know I
+can create packages for the embedded applications and separate them in
+repos, but it seems that we still have to have the developers do the
+distribution build in that scenario.
+
+Are there some common workflows that I can use as a guide or basis in this area?
+
+Thanks for your help
+
+Michael
