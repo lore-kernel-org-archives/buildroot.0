@@ -1,38 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jul 2016 22:31:08 +0200
-Subject: [Buildroot] [PATCH v3,3/3] alljoyn-tcl-base: new package
-In-Reply-To: <1467884015-27464-3-git-send-email-fabrice.fontaine@orange.com>
-References: <1467884015-27464-1-git-send-email-fabrice.fontaine@orange.com>
- <1467884015-27464-3-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20160720223108.4fa2548a@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 20 Jul 2016 22:36:15 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package/protoc-gen-lua: new package
+In-Reply-To: <1468931473-19614-2-git-send-email-tiago.brusamarello@datacom.ind.br>
+References: <1468931473-19614-1-git-send-email-tiago.brusamarello@datacom.ind.br>
+ <1468931473-19614-2-git-send-email-tiago.brusamarello@datacom.ind.br>
+Message-ID: <88750252-9b65-cb6a-3004-f693ab6cdef6@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Tiago,
 
-On Thu,  7 Jul 2016 11:33:35 +0200, Fabrice Fontaine wrote:
-> AllJoyn Base Services are common services used by many devices,
-> providing a set of interfaces for different devices to interact and
-> interoperate with one another.
+Le 19/07/2016 ? 14:31, Tiago Brusamarello a ?crit :
+> This package adds support to compile Google's Protocol buffers
+> for use with Lua scripts. This tool is needed to allow use of the
+> 'protobuf-lua' package.
 > 
-> Thin Client Library is designed to bring the benefits of the AllJoyn
-> distributed programming environment to embedded systems.
+Thanks for this new version!
+
+Sorry but it still doesn't work here for the same reason:
+
+ImportError: No module named google.protobuf
+
+I have not idea...
+
+Best regards,
+Romain
+
+
+> Signed-off-by: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
 > 
-> https://allseenalliance.org
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 > ---
-> Changes v2 -> v3 (after review of Romain Naour):
->  - Rewrap Config.in help text
->  - Replace dependency on ajtcl to alljoyn-tcl
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Changes v1 -> v2:
+>   - Removed Config.in (suggested by Romain Naour)
+>   - Added new line at end of the .mk file (suggested by Romain Naour)
+> 
+> Signed-off-by: Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
+> ---
+>  package/protoc-gen-lua/protoc-gen-lua.hash |  2 ++
+>  package/protoc-gen-lua/protoc-gen-lua.mk   | 18 ++++++++++++++++++
+>  2 files changed, 20 insertions(+)
+>  create mode 100644 package/protoc-gen-lua/protoc-gen-lua.hash
+>  create mode 100644 package/protoc-gen-lua/protoc-gen-lua.mk
+> 
+> diff --git a/package/protoc-gen-lua/protoc-gen-lua.hash b/package/protoc-gen-lua/protoc-gen-lua.hash
+> new file mode 100644
+> index 0000000..0badc84
+> --- /dev/null
+> +++ b/package/protoc-gen-lua/protoc-gen-lua.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256  bccdd9c65970c42fd29b87084db83777cad75780a67c5107b68f96603b5788a8  protoc-gen-lua-v1.1.1.tar.gz
+> diff --git a/package/protoc-gen-lua/protoc-gen-lua.mk b/package/protoc-gen-lua/protoc-gen-lua.mk
+> new file mode 100644
+> index 0000000..5c83372
+> --- /dev/null
+> +++ b/package/protoc-gen-lua/protoc-gen-lua.mk
+> @@ -0,0 +1,18 @@
+> +################################################################################
+> +#
+> +# protoc-gen-lua
+> +#
+> +################################################################################
+> +
+> +PROTOC_GEN_LUA_VERSION = v1.1.1
+> +PROTOC_GEN_LUA_SITE = $(call github,djungelorm,protobuf-lua,$(PROTOC_GEN_LUA_VERSION))
+> +PROTOC_GEN_LUA_DEPENDENCIES = host-python-protobuf
+> +PROTOC_GEN_LUA_LICENSE = BSD-3c
+> +PROTOC_GEN_LUA_LICENSE_FILES = LICENSE
+> +
+> +define HOST_PROTOC_GEN_LUA_INSTALL_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/protoc-plugin/plugin_pb2.py $(HOST_DIR)/usr/bin
+> +	$(INSTALL) -D -m 0755 $(@D)/protoc-plugin/protoc-gen-lua $(HOST_DIR)/usr/bin
+> +endef
+> +
+> +$(eval $(host-generic-package))
+> 
