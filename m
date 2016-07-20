@@ -1,15 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jul 2016 00:01:54 +0200
-Subject: [Buildroot] Issues with cross-compiling from x86_64 to a
- different x86_64
-In-Reply-To: <34C69F44FE4EA4498813EAECDBF40C1623A46E39@GUSALE0B.na.utcmail.com>
+From: Arguin, Christopher P     UTAS <Christopher.Arguin@utas.utc.com>
+Date: Wed, 20 Jul 2016 02:07:43 +0000
+Subject: [Buildroot] [External] Re: Issues with cross-compiling from
+ x86_64 to a different x86_64
+In-Reply-To: <20160720000154.4132543d@free-electrons.com>
 References: <34C69F44FE4EA4498813EAECDBF40C1623A46E39@GUSALE0B.na.utcmail.com>
-Message-ID: <20160720000154.4132543d@free-electrons.com>
+ <20160720000154.4132543d@free-electrons.com>
+Message-ID: <34C69F44FE4EA4498813EAECDBF40C1623A47382@GUSALE0B.na.utcmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+Thomas,
+
+Thanks for the quick reply.
+
+I'm working on a minimal set now. I've stripped out practically everything and still see the same issue, but I'll also upgrade buildroot from 2016.02 to 2016.05 and move away from the BR2_EXTERNAL setup I have to make it as simple as possible. 
+
+I looked up your Xeon processor and it still supports the AVX extensions, although not AVX2. Mine is an "Intel(R) Xeon(R) CPU           E5649  @ 2.53GHz", which doesn't support AVX at all.
+
+That said, I can't imagine why compiling ncftp of all things would be a problem.
+
+Thanks,
+Chris
+
+
+
+-----Original Message-----
+From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
+Sent: Tuesday, July 19, 2016 6:02 PM
+To: Arguin, Christopher P UTAS
+Cc: buildroot at busybox.net
+Subject: [External] Re: [Buildroot] Issues with cross-compiling from x86_64 to a different x86_64
 
 Hello,
 
@@ -82,13 +105,11 @@ model name      : Intel(R) Xeon(R) CPU E3-1240 v3 @ 3.40GHz
 
 And it built just fine.
 
-Could you provide us a minimal configuration, which exhibits the ncftp
-problem in your case?
+Could you provide us a minimal configuration, which exhibits the ncftp problem in your case?
 
 Thanks,
 
 Thomas
--- 
+--
 Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Embedded Linux, Kernel and Android engineering http://free-electrons.com
