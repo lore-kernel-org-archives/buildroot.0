@@ -1,75 +1,65 @@
-From: Arguin, Christopher P     UTAS <Christopher.Arguin@utas.utc.com>
-Date: Wed, 20 Jul 2016 23:12:13 +0000
-Subject: [Buildroot] [External] Re: Issues with cross-compiling from
- x86_64 to a different x86_64
-In-Reply-To: <20160720220258.46331635@free-electrons.com>
-References: <34C69F44FE4EA4498813EAECDBF40C1623A46E39@GUSALE0B.na.utcmail.com>
- <20160720000154.4132543d@free-electrons.com>
- <34C69F44FE4EA4498813EAECDBF40C1623A47405@GUSALE0B.na.utcmail.com>
- <20160720220258.46331635@free-electrons.com>
-Message-ID: <34C69F44FE4EA4498813EAECDBF40C1623A483E0@GUSALE0B.na.utcmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 21 Jul 2016 06:45:51 +0300
+Subject: [Buildroot] [PATCH] gamin: improve PTHREAD_MUTEX_RECURSIVE_NP
+ patch to fix build issue
+In-Reply-To: <1469044031-2875-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1469044031-2875-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160721034551.GQ3697@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hi Thomas,
 
-> However, I don't understand why on my system, ccdv doesn't get built, while it does get built for you.
+On Wed, Jul 20, 2016 at 09:47:11PM +0200, Thomas Petazzoni wrote:
+> In the gamin package, patch
+> 0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch was introduced to fix
+> the build with musl. Indeed, while musl defines "linux", it does not
+> define PTHREAD_MUTEX_RECURSIVE_NP, but only PTHREAD_MUTEX_RECURSIVE. So
+> the check was simplified to only verify if PTHREAD_MUTEX_RECURSIVE_NP is
+> defined.
+> 
+> However, this doesn't work well with uClibc linuxthreads. In uClibc,
+> PTHREAD_MUTEX_RECURSIVE_NP and PTHREAD_MUTEX_RECURSIVE are not
+> pre-processor defines, but enum values. For this reason, even if
+> PTHREAD_MUTEX_RECURSIVE_NP actually exists, #if
+> defined(PTHREAD_MUTEX_RECURSIVE_NP) is false. So, the gamin code falls
+> back to using PTHREAD_MUTEX_RECURSIVE.
+> 
+> Except that for uClibc linuxthreads, PTHREAD_MUTEX_RECURSIVE is defined
+> only if __USE_UNIX98 is defined. For the NPTL implementation,
+> PTHREAD_MUTEX_RECURSIVE is defined either if __USE_UNIX98 or
+> __USE_XOPEN2K8 are defined. This strange difference has been reported to
+> uClibc-ng upstream [1].
+> 
+> However, regardless of this uClibc behavior, using #if defined to check
+> for the availability of PTHREAD_MUTEX_RECURSIVE_NP is not good. This
+> commit therefore switches to using a proper AC_CHECK_DECL() autoconf
+> test, which works regardless of whether the value is #define'd or
+> defined as an enum value.
+> 
+> This fixes the build of gamin on linuxthreads platforms, such as
+> Microblaze or m68k.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/887df97196d7777efbf18a7bee91aa45c1a98700/ (Microblaze)
+>   http://autobuild.buildroot.net/results/eb4389474e1b30b5c395a07a857da13a66763bdb/ (m68k)
+> 
+> [1] http://mailman.uclibc-ng.org/pipermail/devel/2016-July/001087.html
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-I just stumbled into the answer to that. I pulled buildroot from git so I could start making changes, and did a 'mostly-default' build first. Much to my surprise, the ccdv executable didn't get built.
+Makes sense. I which upstream was more responsive.
 
-Switching from the default uclibc target to glibc target changed that.
-
-Basically, the configure script in ncftp tries it's hardest to build ccdv, but if it doesn't generate a working executable it gives up on it. In my case the executable worked well enough if you didn't pass any arguments, so it passed the configure test... but then died when you try to actually use it. With uclibc as the target, ccdv may not have been successfully built because the C library was mismatched.
-
-Now that I know what to look for, I see that you predicted this a few years ago. From http://lists.busybox.net/pipermail/buildroot/2014-February/089526.html:
-> That being said, I agree that the cross-compilation test is stupid: it
-> builds a program, and tries to run it. If it runs, then the configure
-> script concludes that we're doing native compilation, if it doesn't
-> run, we're doing cross-compilation. Except that of course when you're
-> building x86 or x86-64 on x86-64 and both the target and host use
-> glibc, the program may very well run.
-
-That addressed the detection of cross-compilation in ncftp, but not the use of the host-tool.  I managed to have just the right setup to hit a pretty obscure corner case. 
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
 
 Thanks,
-Chris
+baruch
 
------Original Message-----
-From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
-Sent: Wednesday, July 20, 2016 4:03 PM
-To: Arguin, Christopher P UTAS
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] [External] Re: Issues with cross-compiling from x86_64 to a different x86_64
-
-Hello,
-
-On Wed, 20 Jul 2016 02:49:45 +0000, Arguin, Christopher P     UTAS
-wrote:
-
-> I dug into it more and found the source of the problem, which is in 
-> ncftp itself. As part of the 'configure' script it actually creates a 
-> 'ccdv.c' file and compiles it, apparently using the wrong compiler.
-> Then this 'ccdv' tool is used throughout the build process instead of 
-> CC. It was to make the compilation output prettier.
-
-Thanks for the investigation!
-
-> It's not directly AVX-related, but from the BMI instruction set...
-> the actual failure is the "andn" instruction. I still need to dig into 
-> it more to understand what's going on there.
-> 
-> There is a configure option to disable use of ccdv, so I may give that 
-> shot. Then I have to go look at what is going on in openssl. I guess 
-> you can probably expect a patch or two from me this week :)
-
-Looks like indeed passing --disable-ccdv is the best way forward.
-
-However, I don't understand why on my system, ccdv doesn't get built, while it does get built for you.
-
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering http://free-electrons.com
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
