@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 21 Jul 2016 21:08:52 +0200
-Subject: [Buildroot] [PATCH 3/6] perl-module-build: bump to version 0.4218
+Date: Thu, 21 Jul 2016 21:08:53 +0200
+Subject: [Buildroot] [PATCH 4/6] perl-try-tiny: bump to version 0.24
 In-Reply-To: <1469128135-10250-1-git-send-email-francois.perrad@gadz.org>
 References: <1469128135-10250-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1469128135-10250-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1469128135-10250-4-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,48 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-module-build/perl-module-build.hash | 4 ++--
- package/perl-module-build/perl-module-build.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-try-tiny/Config.in          | 2 +-
+ package/perl-try-tiny/perl-try-tiny.hash | 4 ++--
+ package/perl-try-tiny/perl-try-tiny.mk   | 6 +++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/perl-module-build/perl-module-build.hash b/package/perl-module-build/perl-module-build.hash
-index 558434b..d42dbad 100644
---- a/package/perl-module-build/perl-module-build.hash
-+++ b/package/perl-module-build/perl-module-build.hash
+diff --git a/package/perl-try-tiny/Config.in b/package/perl-try-tiny/Config.in
+index 7bd5396..ea25589 100644
+--- a/package/perl-try-tiny/Config.in
++++ b/package/perl-try-tiny/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_PERL_TRY_TINY
+ 	help
+ 	  minimal try/catch with proper preservation of $@
+ 
+-	  http://metacpan.org/release/Try-Tiny
++	  https://github.com/karenetheridge/Try-Tiny
+diff --git a/package/perl-try-tiny/perl-try-tiny.hash b/package/perl-try-tiny/perl-try-tiny.hash
+index bff911f..dc44f18 100644
+--- a/package/perl-try-tiny/perl-try-tiny.hash
++++ b/package/perl-try-tiny/perl-try-tiny.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    7b7ca5a47bef48c50c8b5906ca3ac7fb Module-Build-0.4214.tar.gz
--sha256 c579488918cf4db84954a550c475272b3c25f5100c739339e91a65d7c055dc3f Module-Build-0.4214.tar.gz
-+md5    7e3b17e14b54036c5ac18c27f7955e79 Module-Build-0.4218.tar.gz
-+sha256 1ef0aa529a3f296f894a5e79240a77d71be60dd595e8cad3a0d04c7ea187c0d0 Module-Build-0.4218.tar.gz
-diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
-index 3caf302..0effbac 100644
---- a/package/perl-module-build/perl-module-build.mk
-+++ b/package/perl-module-build/perl-module-build.mk
-@@ -4,7 +4,7 @@
+-md5    6769658bfbca241a470206c9a8819ff2 Try-Tiny-0.22.tar.gz
+-sha256 60fba46f4693d33d54539104f9001df008dabb400b6837e9605c39a6ee6a1b19 Try-Tiny-0.22.tar.gz
++md5    1a12a51cfeb7e2c301e4ae093c7ecdfb Try-Tiny-0.24.tar.gz
++sha256 9b7a1af24c0256973d175369ebbdc25ec01e2452a97f2d3ab61481c826f38d81 Try-Tiny-0.24.tar.gz
+diff --git a/package/perl-try-tiny/perl-try-tiny.mk b/package/perl-try-tiny/perl-try-tiny.mk
+index 05cea54..f033197 100644
+--- a/package/perl-try-tiny/perl-try-tiny.mk
++++ b/package/perl-try-tiny/perl-try-tiny.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PERL_MODULE_BUILD_VERSION = 0.4214
-+PERL_MODULE_BUILD_VERSION = 0.4218
- PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
- PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
- PERL_MODULE_BUILD_LICENSE = Artistic or GPLv1+
+-PERL_TRY_TINY_VERSION = 0.22
++PERL_TRY_TINY_VERSION = 0.24
+ PERL_TRY_TINY_SOURCE = Try-Tiny-$(PERL_TRY_TINY_VERSION).tar.gz
+-PERL_TRY_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DO/DOY
++PERL_TRY_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+ PERL_TRY_TINY_LICENSE = MIT
+-PERL_TRY_TINY_LICENSE_FILES = LICENSE
++PERL_TRY_TINY_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
 -- 
 1.9.1
