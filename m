@@ -1,49 +1,42 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Thu, 21 Jul 2016 11:10:26 -0300
-Subject: [Buildroot] [PATCH v2] libarchive: fix build error when linking
-	with lzma
-Message-ID: <1469110226-24349-1-git-send-email-sergio.prado@e-labworks.com>
+From: Alexander Dahl <post@lespocky.de>
+Date: Thu, 21 Jul 2016 18:35:12 +0200
+Subject: [Buildroot] [PATCH] dropbear: bump version to 2016.74
+Message-ID: <1469118912-22481-1-git-send-email-post@lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build fails when linking with liblzma compiled without threads support.
+According to https://matt.ucc.asn.au/dropbear/CHANGES there were some
+severe security issues fixed.
 
-./.libs/libarchive.so: undefined reference to `lzma_cputhreads'
-./.libs/libarchive.so: undefined reference to `lzma_stream_encoder_mt'
-
-So let's enable LZMA only when toolchain has threads support.
-
-Fixes:
-http://autobuild.buildroot.org/results/2cb7f8a056982d0b894d0e2531ef357e74c8b796
-http://autobuild.buildroot.org/results/d12954fbd460d396f255158fa127f39ff9d2be8d
-http://autobuild.buildroot.org/results/abe10c70f38423a212ab27d7d27e22174eaa5aab
-Many more...
-
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-
+Signed-off-by: Alexander Dahl <post@lespocky.de>
 ---
-Changes v1 -> v2:
-  - removing extra comma from evaluation
----
- package/libarchive/libarchive.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/dropbear/dropbear.hash | 2 +-
+ package/dropbear/dropbear.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 6e9c0a1e867b..30a231885a71 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -92,7 +92,8 @@ else
- LIBARCHIVE_CONF_OPTS += --without-zlib
- endif
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+index 2692889..88f3e6e 100644
+--- a/package/dropbear/dropbear.hash
++++ b/package/dropbear/dropbear.hash
+@@ -1,2 +1,2 @@
+ # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
+-sha256	5c61a4f69b093b688629cd365be38701485ff63cfb23642dab7a05ad250aefd7  dropbear-2016.73.tar.bz2
++sha256 2720ea54ed009af812701bcc290a2a601d5c107d12993e5d92c0f5f81f718891 dropbear-2016.74.tar.bz2
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 32e2167..743d524 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_XZ),y)
-+# libarchive requires LZMA with thread support in the toolchain
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_PACKAGE_XZ),yy)
- LIBARCHIVE_DEPENDENCIES += xz
- LIBARCHIVE_CONF_OPTS += --with-lzma
- else
+-DROPBEAR_VERSION = 2016.73
++DROPBEAR_VERSION = 2016.74
+ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
 -- 
-1.9.1
+2.1.4
