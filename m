@@ -1,70 +1,55 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 21 Jul 2016 18:47:21 +0200
-Subject: [Buildroot] bfin c++ problem
-In-Reply-To: <20160721121643.GP4023@csltok.swansea.ac.uk>
-References: <20160721000402.GR22524@waldemar-brodkorb.de>
- <20160721030504.GN4023@csltok.swansea.ac.uk>
- <CAH6eHdRNcLv9iT8dKN_zneVp2=P=yakUH=p8wq5dz5q2gNL-xQ@mail.gmail.com>
- <20160721111244.GO4023@csltok.swansea.ac.uk>
- <CAH6eHdT-H+4qUe3uU268uG8O_7KQLoOZchtsW3AdFAVaeuN6cg@mail.gmail.com>
- <20160721121643.GP4023@csltok.swansea.ac.uk>
-Message-ID: <20160721164721.GU22524@waldemar-brodkorb.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 21 Jul 2016 21:07:20 +0200
+Subject: [Buildroot] [PATCH 2/2] package/x11r7/xserver_xorg-server: bump
+	version to 1.18.4
+In-Reply-To: <1469128040-4558-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1469128040-4558-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1469128040-4558-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Oliver,
-Oliver Kullmann wrote,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xserver_xorg-server/Config.in                | 4 ++--
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> On Thu, Jul 21, 2016 at 12:40:43PM +0100, Jonathan Wakely wrote:
-> > On 21 July 2016 at 12:12, Oliver Kullmann wrote:
-> > > On Thu, Jul 21, 2016 at 11:26:42AM +0100, Jonathan Wakely wrote:
-> > >> On 21 July 2016 at 04:05, Oliver Kullmann wrote:
-> > >> > Hello,
-> > >> >
-> > >> > a C++ compiler is not required to recognise "main(void)":
-> > >>
-> > >> That's incorrect.
-
-Thanks for any advice about correct usage of C++, but I am afraid
-it does not help in any way to fix my original problem.
-Please open up a new thread to discuss this. Thanks.
-
-Anyway, even a simple C application does compile with gcc, but not
-with g++:
-
-./output/host/usr/bin/bfin-buildroot-linux-uclibc-g++ -o t test.c
-/home/wbx/buildroot/output/host/usr/lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld:
-t: hidden symbol `___gtdf2' in
-/home/wbx/buildroot/output/host/usr/lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/libgcc.a(_gt_df.o)
-is referenced by DSO
-/home/wbx/buildroot/output/host/usr/lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld:
-final link failed: Bad value
-collect2: error: ld returned 1 exit status
-$ cat test.c
-int main() {
- return(0);
-}
-
-$ ./output/host/usr/bin/bfin-buildroot-linux-uclibc-gcc -o t test.c
-$ file t
-t: ELF 32-bit LSB executable, Analog Devices Blackfin, version 1
-(SYSV), dynamically linked (uses shared libs), not stripped
-$ 
-
-Any advice? Why does the hidden symbols in libgcc.a from the
-first-stage gcc, doesn't make it into libstdc++ shared library?
-
-Buildroot first compiles gcc with --disable-shared and have then a
-libgcc.a. Afterwards the C library (uClibc-ng) is build. In the next
-step a full --enable-shared gcc including libstdc++ is build.
-This one is then somehow mislinked and then g++ can not compile 
-a simple application.
-
-It must be some architecture specific problem, because we are not
-seeing this kind of issues on any other architecture at the moment.
-
-Thanks in advance
- Waldemar
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index af1bac9..df3801c 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -74,7 +74,7 @@ choice
+ 	bool "X Window System server version"
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
+-	bool "1.18.3"
++	bool "1.18.4"
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
+ 
+@@ -91,7 +91,7 @@ endchoice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
+ 	string
+-	default "1.18.3" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
++	default "1.18.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
+ 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+ 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+ 
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index abd1589..ab7ba7e 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -3,5 +3,5 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
+ sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
+ # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
+ sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
+-# From https://lists.freedesktop.org/archives/xorg-announce/2016-April/002683.html
+-sha256	ea739c22517cdbe2b5f7c0a5fd05fe8a10ac0629003e71c0c7862f4bb60142cd	xorg-server-1.18.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2016-July/002699.html
++sha256 278459b2c31d61a15655d95a72fb79930c480a6bb8cf9226e48a07df8b1d31c8        xorg-server-1.18.4.tar.bz2
+-- 
+2.8.1
