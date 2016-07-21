@@ -1,65 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Jul 2016 09:22:22 +0200
-Subject: [Buildroot] [External] Re: Issues with cross-compiling from
- x86_64 to a different x86_64
-In-Reply-To: <34C69F44FE4EA4498813EAECDBF40C1623A483E0@GUSALE0B.na.utcmail.com>
-References: <34C69F44FE4EA4498813EAECDBF40C1623A46E39@GUSALE0B.na.utcmail.com>
- <20160720000154.4132543d@free-electrons.com>
- <34C69F44FE4EA4498813EAECDBF40C1623A47405@GUSALE0B.na.utcmail.com>
- <20160720220258.46331635@free-electrons.com>
- <34C69F44FE4EA4498813EAECDBF40C1623A483E0@GUSALE0B.na.utcmail.com>
-Message-ID: <20160721092222.07ad1f9b@free-electrons.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu, 21 Jul 2016 10:38:59 +0200
+Subject: [Buildroot] [PATCH] python-dicttoxml: new package
+Message-ID: <1469090339-7451-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Wed, 20 Jul 2016 23:12:13 +0000, Arguin, Christopher P     UTAS
-wrote:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                              |  1 +
+ package/python-dicttoxml/Config.in             |  9 +++++++++
+ package/python-dicttoxml/python-dicttoxml.hash |  3 +++
+ package/python-dicttoxml/python-dicttoxml.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-dicttoxml/Config.in
+ create mode 100644 package/python-dicttoxml/python-dicttoxml.hash
+ create mode 100644 package/python-dicttoxml/python-dicttoxml.mk
 
-> I just stumbled into the answer to that. I pulled buildroot from git
-> so I could start making changes, and did a 'mostly-default' build
-> first. Much to my surprise, the ccdv executable didn't get built.
-> 
-> Switching from the default uclibc target to glibc target changed that.
-> 
-> Basically, the configure script in ncftp tries it's hardest to build
-> ccdv, but if it doesn't generate a working executable it gives up on
-> it. In my case the executable worked well enough if you didn't pass
-> any arguments, so it passed the configure test... but then died when
-> you try to actually use it. With uclibc as the target, ccdv may not
-> have been successfully built because the C library was mismatched.
-
-Aah, makes sense.
-
-> Now that I know what to look for, I see that you predicted this a few
-> years ago. From
-> http://lists.busybox.net/pipermail/buildroot/2014-February/089526.html:
-> > That being said, I agree that the cross-compilation test is stupid:
-> > it builds a program, and tries to run it. If it runs, then the
-> > configure script concludes that we're doing native compilation, if
-> > it doesn't run, we're doing cross-compilation. Except that of
-> > course when you're building x86 or x86-64 on x86-64 and both the
-> > target and host use glibc, the program may very well run.  
-
-Wow, I did some useful predictions two years ago that turn out to be
-true today? I wish I had instead predicted the winning numbers at the
-lottery. I would then have been able to work full time on Buildroot...
-or just enjoy Pi?a Coladas on the beach.
-
-> That addressed the detection of cross-compilation in ncftp, but not
-> the use of the host-tool.  I managed to have just the right setup to
-> hit a pretty obscure corner case. 
-
-Indeed. Will you submit a patch for --disable-ccdv ?
-
-Thanks,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 6a84f9f..6b5b011 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -656,6 +656,7 @@ menu "External python modules"
+ 	source "package/python-dateutil/Config.in"
+ 	source "package/python-dialog/Config.in"
+ 	source "package/python-dialog3/Config.in"
++	source "package/python-dicttoxml/Config.in"
+ 	source "package/python-django/Config.in"
+ 	source "package/python-docopt/Config.in"
+ 	source "package/python-dominate/Config.in"
+diff --git a/package/python-dicttoxml/Config.in b/package/python-dicttoxml/Config.in
+new file mode 100644
+index 0000000..152afbb
+--- /dev/null
++++ b/package/python-dicttoxml/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_DICTTOXML
++	bool "python-dicttoxml"
++	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
++	help
++	  Converts a Python dictionary or other native data type into a valid
++	  XML string.
++
++	  https://github.com/quandyfactory/dicttoxml
+diff --git a/package/python-dicttoxml/python-dicttoxml.hash b/package/python-dicttoxml/python-dicttoxml.hash
+new file mode 100644
+index 0000000..32ba6b0
+--- /dev/null
++++ b/package/python-dicttoxml/python-dicttoxml.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi/dicttoxml/json, sha256 locally computed
++md5	ec5643a048cf32dad3c28db236b923e4  dicttoxml-1.7.4.tar.gz
++sha256	ea44cc4ec6c0f85098c57a431a1ee891b3549347b07b7414c8a24611ecf37e45  dicttoxml-1.7.4.tar.gz
+diff --git a/package/python-dicttoxml/python-dicttoxml.mk b/package/python-dicttoxml/python-dicttoxml.mk
+new file mode 100644
+index 0000000..2579f19
+--- /dev/null
++++ b/package/python-dicttoxml/python-dicttoxml.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-dicttoxml
++#
++################################################################################
++
++PYTHON_DICTTOXML_VERSION = 1.7.4
++PYTHON_DICTTOXML_SOURCE = dicttoxml-$(PYTHON_DICTTOXML_VERSION).tar.gz
++PYTHON_DICTTOXML_SITE = https://pypi.python.org/packages/74/36/534db111db9e7610a41641a1f6669a964aacaf51858f466de264cc8dcdd9
++PYTHON_DICTTOXML_SETUP_TYPE = distutils
++PYTHON_DICTTOXML_LICENSE = GPLv2+
++PYTHON_DICTTOXML_LICENSE_FILES = LICENCE.txt
++
++$(eval $(python-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
