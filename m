@@ -1,37 +1,26 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 21 Jul 2016 21:45:24 -0300
-Subject: [Buildroot] [PATCH v2] warpboard: Bump to U-Boot 2016.07
-Message-ID: <1469148324-29155-1-git-send-email-festevam@gmail.com>
+From: mr_ada at cox.net <mr_ada@cox.net>
+Date: Thu, 21 Jul 2016 19:58:01 -0700
+Subject: [Buildroot] Building tarball
+In-Reply-To: <Mcls1t01C2yBjFQ01cluLy>
+Message-ID: <20160721225801.CPFYY.53403.imail@fed1rmwml304>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+Hello,
 
-U-Boot 2016.07 works well on warpboard, so bump to this version.
+Just finished build from the tarball (may 5 version) and even thought it seemed to complete and create an sdcard.img, my Pi 3 doesn't boot up.  I even hooked it to my TV (HDMI receiver) and no signal.  So I have no clue what to do next.  Did this ever work for Raspberry Pi?  Are there any other Pi people out there?
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
-Changes since v1:
-- Fixed a typo in the Subject (warpbboard)
+Thanks,
+Chris 
 
- configs/warpboard_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+PS: there were some issues I saw:
+1) cc1: error: no include path in which to search for stdc-predef.h
+2) bunch of warnings in dwarf2.c, server.c, libtool, expr.c, directives.c, macro.c, genhoooks.c, gt-c-c-decl.h, c-parser.c, dwarf2asm.c, final.c, function.c, gyte-desc.c, ipa-devirt.c, ipa-pure-const.c, ipa-reference.c, ipa,c, ira-color.c, ... (didn't feel like listing them after this point)
 
-diff --git a/configs/warpboard_defconfig b/configs/warpboard_defconfig
-index d3cffb9..8dfe52e 100644
---- a/configs/warpboard_defconfig
-+++ b/configs/warpboard_defconfig
-@@ -31,7 +31,7 @@ BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="warp"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # host utility
--- 
-1.9.1
+In the pi readme.txt I saw this:
+Insert the SDcard into your Raspberry Pi, and power it up. Your new system should come up now and start two consoles: one on the serial port on the P1 header, one on the HDMI output where you can login using a USB keyboard.
+
+No clue what the P1 header is and the HDMI didn't output to anything.  I do have the official display that comes with the Pi.
