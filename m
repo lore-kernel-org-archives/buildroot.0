@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 22 Jul 2016 19:38:39 -0300
-Subject: [Buildroot] [PATCH] mpv: bump to version 0.18.1
-Message-ID: <1469227119-25523-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 22 Jul 2016 20:34:19 -0300
+Subject: [Buildroot] [PATCH] iozone: bump to version 3_446
+Message-ID: <1469230459-22824-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/mpv/mpv.hash | 2 +-
- package/mpv/mpv.mk   | 2 +-
+ package/iozone/iozone.hash | 2 +-
+ package/iozone/iozone.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
-index 8d9c9d1..8a2f44b 100644
---- a/package/mpv/mpv.hash
-+++ b/package/mpv/mpv.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
+index 8d05382..b387588 100644
+--- a/package/iozone/iozone.hash
++++ b/package/iozone/iozone.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
--sha256	b656638d4f6bce2621baaacb60d8be384aa492fcd86dfd43996aaa2c16fee02b	v0.18.0.tar.gz
-+sha256	e413d57fec4ad43b9f9b848f38d13fb921313fc9a4a64bf1e906c8d0f7a46329	v0.18.1.tar.gz
- sha256	01bf2beab2106d1558800c8709bc2c8e496d3da4a2ca343fe091f22fca60c98b	waf-1.8.12
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index 7ecac9e..d2ed3f2 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
+-sha256	e8388238326dc29359e5cb9f790d193f1e1bdadfbf260e010c50fa682387faed	iozone3_430.tar
++sha256	bbbda98d7c052d8654ea23fb2187d831107ab4ac89842fa21509276d9a6915f0	iozone3_446.tar
+diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
+index 0662207..e2f8557 100644
+--- a/package/iozone/iozone.mk
++++ b/package/iozone/iozone.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPV_VERSION = 0.18.0
-+MPV_VERSION = 0.18.1
- MPV_WAF_VERSION = 1.8.12
- MPV_SITE = https://github.com/mpv-player/mpv/archive
- MPV_SOURCE = v$(MPV_VERSION).tar.gz
+-IOZONE_VERSION = 3_430
++IOZONE_VERSION = 3_446
+ IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
+ IOZONE_SITE = http://www.iozone.org/src/current
+ IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
 -- 
 2.7.3
