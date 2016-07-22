@@ -1,43 +1,40 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 23 Jul 2016 00:23:18 +0200
-Subject: [Buildroot] [PATCH 2/2] package/enlightenment: enable systemd
-	support
-In-Reply-To: <1469226198-26474-1-git-send-email-romain.naour@gmail.com>
-References: <1469226198-26474-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1469226198-26474-2-git-send-email-romain.naour@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 22 Jul 2016 19:38:39 -0300
+Subject: [Buildroot] [PATCH] mpv: bump to version 0.18.1
+Message-ID: <1469227119-25523-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Tested with Qemu for x86_64 target with systemd + X11 server
----
- package/enlightenment/enlightenment.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ package/mpv/mpv.hash | 2 +-
+ package/mpv/mpv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index e8fee3f..2440cec 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -22,8 +22,14 @@ ENLIGHTENMENT_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
- 	--disable-pam \
--	--disable-rpath \
--	--disable-systemd
-+	--disable-rpath
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+ENLIGHTENMENT_CONF_OPTS += --enable-systemd
-+ENLIGHTENMENT_DEPENDENCIES += systemd
-+else
-+ENLIGHTENMENT_CONF_OPTS += --disable-systemd
-+endif
+diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
+index 8d9c9d1..8a2f44b 100644
+--- a/package/mpv/mpv.hash
++++ b/package/mpv/mpv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	b656638d4f6bce2621baaacb60d8be384aa492fcd86dfd43996aaa2c16fee02b	v0.18.0.tar.gz
++sha256	e413d57fec4ad43b9f9b848f38d13fb921313fc9a4a64bf1e906c8d0f7a46329	v0.18.1.tar.gz
+ sha256	01bf2beab2106d1558800c8709bc2c8e496d3da4a2ca343fe091f22fca60c98b	waf-1.8.12
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index 7ecac9e..d2ed3f2 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # uClibc has an old incomplete sys/ptrace.h for powerpc & sparc
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_powerpc)$(BR2_sparc),yy)
+-MPV_VERSION = 0.18.0
++MPV_VERSION = 0.18.1
+ MPV_WAF_VERSION = 1.8.12
+ MPV_SITE = https://github.com/mpv-player/mpv/archive
+ MPV_SOURCE = v$(MPV_VERSION).tar.gz
 -- 
-2.5.5
+2.7.3
