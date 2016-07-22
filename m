@@ -1,48 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 22 Jul 2016 20:38:34 -0300
-Subject: [Buildroot] [PATCH] libidn: security bump to version 1.33
-Message-ID: <1469230714-4779-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 22 Jul 2016 20:39:08 -0300
+Subject: [Buildroot] [PATCH] unrar: bump to version 5.4.3
+Message-ID: <1469230748-5146-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2015-8948 - out-of-bounds read in CLI tool.
-CVE-2016-6261 - out-of-bounds stack read in idna_to_ascii_4i.
-CVE-2016-6262 - followup fix to CVE-2015-8948.
-CVE-2016-6263 - stringprep_utf8_nfkc_normalize reject invalid UTF-8.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libidn/libidn.hash | 6 ++++--
- package/libidn/libidn.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/unrar/unrar.hash | 2 +-
+ package/unrar/unrar.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
-index 20c844e..4658a3e 100644
---- a/package/libidn/libidn.hash
-+++ b/package/libidn/libidn.hash
-@@ -1,2 +1,4 @@
--# From http://lists.nongnu.org/archive/html/help-libidn/2015-08/msg00001.html
--sha1	ddd018611b98af7c67d434aa42d15d39f45129f5	libidn-1.32.tar.gz
-+# From http://lists.nongnu.org/archive/html/help-libidn/2016-07/msg00009.html
-+sha1	57872fdc665dcc585e16f4ac0bb35374b1103f7e	libidn-1.33.tar.gz
-+# Calculated based on the hash above
-+sha256	44a7aab635bb721ceef6beecc4d49dfd19478325e1b47f3196f7d2acc4930e19	libidn-1.33.tar.gz
-diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
-index ab43949..99c9e2c 100644
---- a/package/libidn/libidn.mk
-+++ b/package/libidn/libidn.mk
+diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
+index 4490d70..e6a146c 100644
+--- a/package/unrar/unrar.hash
++++ b/package/unrar/unrar.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	ff593728aed0ac865908b8ea52cff449a4c298f095db2f3d27438ffbc3e35d5b	unrarsrc-5.3.9.tar.gz
++sha256	e4f05190d9e379449a04c22baffc24cc2f03164a4738befe601b1325440db0c6	unrarsrc-5.4.3.tar.gz
+diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
+index 89dff9b..e49fe6c 100644
+--- a/package/unrar/unrar.mk
++++ b/package/unrar/unrar.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBIDN_VERSION = 1.32
-+LIBIDN_VERSION = 1.33
- LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN_INSTALL_STAGING = YES
- LIBIDN_CONF_ENV = EMACS="no"
+-UNRAR_VERSION = 5.3.9
++UNRAR_VERSION = 5.4.3
+ UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
+ UNRAR_SITE = http://www.rarlab.com/rar
+ UNRAR_LICENSE = unrar
 -- 
 2.7.3
