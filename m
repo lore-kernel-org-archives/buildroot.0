@@ -1,30 +1,48 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 22 Jul 2016 20:35:52 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.12.x series
-Message-ID: <1469230552-23409-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 22 Jul 2016 20:38:34 -0300
+Subject: [Buildroot] [PATCH] libidn: security bump to version 1.33
+Message-ID: <1469230714-4779-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+CVE-2015-8948 - out-of-bounds read in CLI tool.
+CVE-2016-6261 - out-of-bounds stack read in idna_to_ascii_4i.
+CVE-2016-6262 - followup fix to CVE-2015-8948.
+CVE-2016-6263 - stringprep_utf8_nfkc_normalize reject invalid UTF-8.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libidn/libidn.hash | 6 ++++--
+ package/libidn/libidn.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5845f60..0df5d5d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -230,7 +230,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.81"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.61"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.73"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.18.37"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
+index 20c844e..4658a3e 100644
+--- a/package/libidn/libidn.hash
++++ b/package/libidn/libidn.hash
+@@ -1,2 +1,4 @@
+-# From http://lists.nongnu.org/archive/html/help-libidn/2015-08/msg00001.html
+-sha1	ddd018611b98af7c67d434aa42d15d39f45129f5	libidn-1.32.tar.gz
++# From http://lists.nongnu.org/archive/html/help-libidn/2016-07/msg00009.html
++sha1	57872fdc665dcc585e16f4ac0bb35374b1103f7e	libidn-1.33.tar.gz
++# Calculated based on the hash above
++sha256	44a7aab635bb721ceef6beecc4d49dfd19478325e1b47f3196f7d2acc4930e19	libidn-1.33.tar.gz
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index ab43949..99c9e2c 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBIDN_VERSION = 1.32
++LIBIDN_VERSION = 1.33
+ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no"
 -- 
 2.7.3
