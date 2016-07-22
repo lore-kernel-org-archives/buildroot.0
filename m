@@ -1,61 +1,44 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 22 Jul 2016 13:54:48 -0700
-Subject: [Buildroot] [PATCH 1/1] package/rtl8821au: switch upstream to
-	abperiasamy
-Message-ID: <1469220888-2215-1-git-send-email-christian@paral.in>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 23 Jul 2016 00:22:14 +0200
+Subject: [Buildroot] [PATCH] package/enlightenment: bump to 0.20.10
+Message-ID: <1469226134-26306-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switching to the very active and well maintained rtl8821au
-fork at github.com/abperiasamy/rtl8812AU_8821AU_linux.
+"This will be the last release in the e20 series"
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+https://www.enlightenment.org/news/e-0.20.10-release
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/rtl8821au/rtl8821au.hash |  2 +-
- package/rtl8821au/rtl8821au.mk   | 15 ++++-----------
- 2 files changed, 5 insertions(+), 12 deletions(-)
+ package/enlightenment/enlightenment.hash | 4 ++--
+ package/enlightenment/enlightenment.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
-index cac4ce2..01f22cc 100644
---- a/package/rtl8821au/rtl8821au.hash
-+++ b/package/rtl8821au/rtl8821au.hash
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+index fad14b7..ecfe537 100644
+--- a/package/enlightenment/enlightenment.hash
++++ b/package/enlightenment/enlightenment.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 64d068b92215f06f877629b2e6cd5da41329ac1222104ff9dc7ec504ca23af09  rtl8821au-116a3abe7783b023655e9917afe2d1eabe178028.tar.gz
-+sha256 6e4334b0718b2ac611bf8b4d7a493b016bdb1c24daa7b459f091b92b6fd961c7  rtl8821au-c33ddb05a77741d2a9c9b974ad0cf0fa26d17b6e.tar.gz
-diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
-index ebb1665..9ba43ef 100644
---- a/package/rtl8821au/rtl8821au.mk
-+++ b/package/rtl8821au/rtl8821au.mk
-@@ -4,22 +4,15 @@
+-# From https://www.enlightenment.org/news/e-0.20.9-release
+-sha256	db792ad4d97b2523ff0bfc2c911bb3fea4b1eda60400871f4b78bc3ae2f1d1be 	enlightenment-0.20.9.tar.xz
++# From https://www.enlightenment.org/news/e-0.20.10-release
++sha256	59fd447d120d91d18958a31a5827f97842cc472f2e22f132b2c7d4d208944baf 	enlightenment-0.20.10.tar.xz
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index 6fe8f45..e8fee3f 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTL8821AU_VERSION = 116a3abe7783b023655e9917afe2d1eabe178028
--RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
--RTL8821AU_LICENSE = GPLv2, proprietary (rtl8821au.bin firmware)
-+RTL8821AU_VERSION = c33ddb05a77741d2a9c9b974ad0cf0fa26d17b6e
-+RTL8821AU_SITE = $(call github,abperiasamy,rtl8812AU_8821AU_linux,$(RTL8821AU_VERSION))
-+RTL8821AU_LICENSE = GPLv2
- RTL8821AU_LICENSE_FILES = COPYING
- 
- RTL8821AU_MODULE_MAKE_OPTS = \
--	CONFIG_RTL8821AU=m \
-+	CONFIG_RTL8812AU_8821AU=m \
- 	KVER=$(LINUX_VERSION_PROBED) \
- 	USER_EXTRA_CFLAGS=-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
- 
--define RTL8821AU_FIRMWARE_INSTALL
--	mkdir -p $(TARGET_DIR)/lib/firmware/rtlwifi/
--	$(INSTALL) -D -m 0644 $(@D)/firmware/* $(TARGET_DIR)/lib/firmware/rtlwifi/
--endef
--
--RTL8821AU_POST_INSTALL_TARGET_HOOKS += RTL8821AU_FIRMWARE_INSTALL
--
- $(eval $(kernel-module))
- $(eval $(generic-package))
+-ENLIGHTENMENT_VERSION = 0.20.9
++ENLIGHTENMENT_VERSION = 0.20.10
+ ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
+ ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
+ ENLIGHTENMENT_LICENSE = BSD-2c
 -- 
-2.7.3
+2.5.5
