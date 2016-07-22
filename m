@@ -1,7 +1,7 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 21 Jul 2016 21:41:55 -0300
-Subject: [Buildroot] [PATCH] warpbboard: Bump to U-Boot 2016.07
-Message-ID: <1469148115-29023-1-git-send-email-festevam@gmail.com>
+Date: Thu, 21 Jul 2016 21:45:24 -0300
+Subject: [Buildroot] [PATCH v2] warpboard: Bump to U-Boot 2016.07
+Message-ID: <1469148324-29155-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,6 +14,9 @@ U-Boot 2016.07 works well on warpboard, so bump to this version.
 
 Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 ---
+Changes since v1:
+- Fixed a typo in the Subject (warpbboard)
+
  configs/warpboard_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
