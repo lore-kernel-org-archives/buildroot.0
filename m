@@ -1,61 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 14:46:53 +0200
-Subject: [Buildroot] [git commit] perl-html-parser: bump to version 3.72
-Message-ID: <20160723125541.0107F7FA3A@busybox.osuosl.org>
+Date: Sat, 23 Jul 2016 14:46:56 +0200
+Subject: [Buildroot] [git commit] perl-datetime-tiny: bump to version 1.06
+Message-ID: <20160723125541.2B06580AE9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=230e72a3da7b8176497dabe9b9d6c32cfd81e09f
+commit: https://git.buildroot.net/buildroot/commit/?id=01070c56c2071adf64f0a936df71556ac02668a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-html-parser/Config.in             | 5 ++---
- package/perl-html-parser/perl-html-parser.hash | 4 ++--
- package/perl-html-parser/perl-html-parser.mk   | 2 +-
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ package/perl-datetime-tiny/Config.in               | 4 ++--
+ package/perl-datetime-tiny/perl-datetime-tiny.hash | 4 ++--
+ package/perl-datetime-tiny/perl-datetime-tiny.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/perl-html-parser/Config.in b/package/perl-html-parser/Config.in
-index 8a725f1..22a16d6 100644
---- a/package/perl-html-parser/Config.in
-+++ b/package/perl-html-parser/Config.in
-@@ -3,10 +3,9 @@ config BR2_PACKAGE_PERL_HTML_PARSER
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_PERL_HTML_TAGSET
+diff --git a/package/perl-datetime-tiny/Config.in b/package/perl-datetime-tiny/Config.in
+index e84db8b..7721c07 100644
+--- a/package/perl-datetime-tiny/Config.in
++++ b/package/perl-datetime-tiny/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PERL_DATETIME_TINY
+ 	bool "perl-datetime-tiny"
  	help
--	  The HTML-Parser distribution is is a collection of modules that parse
--	  and extract information from HTML documents
-+	  HTML parser class
+-	  A datetime object with as little code as possible
++	  A date object, with as little code as possible
  
--	  http://github.com/gisle/html-parser
-+	  https://metacpan.org/release/HTML-Parser
- 
- comment "perl-html-parser needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-html-parser/perl-html-parser.hash b/package/perl-html-parser/perl-html-parser.hash
-index eed22b7..0c0bb1f 100644
---- a/package/perl-html-parser/perl-html-parser.hash
-+++ b/package/perl-html-parser/perl-html-parser.hash
+-	  https://metacpan.org/release/DateTime-Tiny
++	  https://github.com/dagolden/DateTime-Tiny
+diff --git a/package/perl-datetime-tiny/perl-datetime-tiny.hash b/package/perl-datetime-tiny/perl-datetime-tiny.hash
+index e498edb..68f2c02 100644
+--- a/package/perl-datetime-tiny/perl-datetime-tiny.hash
++++ b/package/perl-datetime-tiny/perl-datetime-tiny.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    9128a45893097dfa3bf03301b19c5efe HTML-Parser-3.71.tar.gz
--sha256 be918b3749d3ff93627f72ee4b825683332ecb4c81c67a3a8d72b0435ffbd802 HTML-Parser-3.71.tar.gz
-+md5    eb7505e5f626913350df9dd4a03d54a8 HTML-Parser-3.72.tar.gz
-+sha256 ec28c7e1d9e67c45eca197077f7cdc41ead1bb4c538c7f02a3296a4bb92f608b HTML-Parser-3.72.tar.gz
-diff --git a/package/perl-html-parser/perl-html-parser.mk b/package/perl-html-parser/perl-html-parser.mk
-index 18d25c5..14a2826 100644
---- a/package/perl-html-parser/perl-html-parser.mk
-+++ b/package/perl-html-parser/perl-html-parser.mk
-@@ -4,7 +4,7 @@
+-md5    9e7e4fe588445023763df113d3f2345f DateTime-Tiny-1.04.tar.gz
+-sha256 68137c8ab3ca2a7f8a5fcea20f94b2f82bc2c7c36bb45063dbd81faadf0c7881 DateTime-Tiny-1.04.tar.gz
++md5    736be4b3e8171f4a029fb6ac3712a9b4 DateTime-Tiny-1.06.tar.gz
++sha256 bd725df481d7223ee787e154c116098b08a129f55e0763194b07ebea3dda33ec DateTime-Tiny-1.06.tar.gz
+diff --git a/package/perl-datetime-tiny/perl-datetime-tiny.mk b/package/perl-datetime-tiny/perl-datetime-tiny.mk
+index bf3b7d9..5758973 100644
+--- a/package/perl-datetime-tiny/perl-datetime-tiny.mk
++++ b/package/perl-datetime-tiny/perl-datetime-tiny.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_HTML_PARSER_VERSION = 3.71
-+PERL_HTML_PARSER_VERSION = 3.72
- PERL_HTML_PARSER_SOURCE = HTML-Parser-$(PERL_HTML_PARSER_VERSION).tar.gz
- PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
- PERL_HTML_PARSER_DEPENDENCIES = perl-html-tagset
+-PERL_DATETIME_TINY_VERSION = 1.04
++PERL_DATETIME_TINY_VERSION = 1.06
+ PERL_DATETIME_TINY_SOURCE = DateTime-Tiny-$(PERL_DATETIME_TINY_VERSION).tar.gz
+-PERL_DATETIME_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AD/ADAMK
++PERL_DATETIME_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DA/DAGOLDEN
+ PERL_DATETIME_TINY_LICENSE = Artistic or GPLv1+
+ PERL_DATETIME_TINY_LICENSE_FILES = LICENSE
+ 
