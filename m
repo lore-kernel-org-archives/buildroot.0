@@ -1,46 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 22:59:08 +0200
-Subject: [Buildroot] [git commit] stunnel: security bump to version 5.35
-Message-ID: <20160723210654.AE00C81D43@busybox.osuosl.org>
+Date: Sat, 23 Jul 2016 22:59:55 +0200
+Subject: [Buildroot] [git commit] zeromq: bump to version 4.1.5
+Message-ID: <20160723210654.BC11981D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fb327b0e031acb922067b34d669549900451634
+commit: https://git.buildroot.net/buildroot/commit/?id=bcb8e31e0de0ae72435caf7be67632a260370c4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-TLS session caching memory leak
-Malfunctioning "verify = 4"
+Switch to github download URL since upstream switched.
+Drop upstream patch.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Thomas: remove duplicate _SITE variable.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/stunnel/stunnel.hash | 4 ++--
- package/stunnel/stunnel.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../zeromq/0003-allow-to-build-sparc-v8-leon.patch | 30 ----------------------
+ package/zeromq/zeromq.hash                         |  6 ++---
+ package/zeromq/zeromq.mk                           |  4 +--
+ 3 files changed, 5 insertions(+), 35 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 3f0d6e5..abea1a2 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From http://www.stunnel.org/pipermail/stunnel-announce/2016-March/000120.html
--sha256	a746b71ab3dc6c23eacb0daf7342467870e43ac933430905eb1b1d050bbae0b7	stunnel-5.31.tar.gz
-+# From http://www.stunnel.org/pipermail/stunnel-announce/2016-July/000124.html
-+sha256	ffa386ae4c825f35f35157c285e7402a6d58779ad8c3822f74a9d355b54aba1d	stunnel-5.35.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index a222a1c..ab4457e 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/zeromq/0003-allow-to-build-sparc-v8-leon.patch b/package/zeromq/0003-allow-to-build-sparc-v8-leon.patch
+deleted file mode 100644
+index 126a03b..0000000
+--- a/package/zeromq/0003-allow-to-build-sparc-v8-leon.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From d0b22397ebbef8e250c4cad25b8686018804aa15 Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@uclibc-ng.org>
+-Date: Sat, 4 Jun 2016 09:30:49 +0200
+-Subject: [PATCH] allow to build sparc (v8,leon)
+-
+-Only set sparcv9 optimization for sparc64 systems.
+-This allows to run for example application using zeromq
+-on sparc32 systems.
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index af8293c..cabd734 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -291,7 +291,7 @@ fi
+- 
+- # CPU-specific optimizations
+- case "${host_cpu}" in
+--    *sparc*)
+-+    *sparc64*)
+-         AC_LANG_PUSH([C++])
+-         LIBZMQ_CHECK_LANG_FLAG_PREPEND([-mcpu=v9])
+-         AC_LANG_POP([C++])
+--- 
+-2.7.4 (Apple Git-66)
+-
+diff --git a/package/zeromq/zeromq.hash b/package/zeromq/zeromq.hash
+index a3eeb45..76067d9 100644
+--- a/package/zeromq/zeromq.hash
++++ b/package/zeromq/zeromq.hash
+@@ -1,4 +1,4 @@
+-# From http://download.zeromq.org/SHA1SUMS:
+-sha1	b632a4b6f8a14390dc17824e37ff7b10831ce2b4	zeromq-4.1.4.tar.gz
++# From https://github.com/zeromq/zeromq4-1/releases
++sha1	2b7490b77860be3060b1b1f92cd73184d309ca69	zeromq-4.1.5.tar.gz
+ # Calculated based on the hash above
+-sha256	e99f44fde25c2e4cb84ce440f87ca7d3fe3271c2b8cfbc67d55e4de25e6fe378	zeromq-4.1.4.tar.gz
++sha256	04aac57f081ffa3a2ee5ed04887be9e205df3a7ddade0027460b8042432bdbcf	zeromq-4.1.5.tar.gz
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index 871f37c..4891e59 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).31
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).35
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+-ZEROMQ_VERSION = 4.1.4
+-ZEROMQ_SITE = http://download.zeromq.org
++ZEROMQ_VERSION = 4.1.5
++ZEROMQ_SITE = https://github.com/zeromq/zeromq4-1/releases/download/v$(ZEROMQ_VERSION)
+ ZEROMQ_INSTALL_STAGING = YES
+ ZEROMQ_DEPENDENCIES = util-linux
+ ZEROMQ_LICENSE = LGPLv3+ with exceptions
