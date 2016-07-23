@@ -1,50 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 15:06:43 +0200
-Subject: [Buildroot] [git commit] libidn: security bump to version 1.33
-Message-ID: <20160723130817.6C29881DEE@busybox.osuosl.org>
+Date: Sat, 23 Jul 2016 15:06:25 +0200
+Subject: [Buildroot] [git commit] imagemagick: bump to version 7.0.2-5
+Message-ID: <20160723130817.58BDC80634@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=153827c901c7e393a2ddd76977d89b28fdcef29d
+commit: https://git.buildroot.net/buildroot/commit/?id=d70e2fc28ec6127e1220b1b0f574cba923615808
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-CVE-2015-8948 - out-of-bounds read in CLI tool.
-CVE-2016-6261 - out-of-bounds stack read in idna_to_ascii_4i.
-CVE-2016-6262 - followup fix to CVE-2015-8948.
-CVE-2016-6263 - stringprep_utf8_nfkc_normalize reject invalid UTF-8.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libidn/libidn.hash | 6 ++++--
- package/libidn/libidn.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
-index 20c844e..4658a3e 100644
---- a/package/libidn/libidn.hash
-+++ b/package/libidn/libidn.hash
-@@ -1,2 +1,4 @@
--# From http://lists.nongnu.org/archive/html/help-libidn/2015-08/msg00001.html
--sha1	ddd018611b98af7c67d434aa42d15d39f45129f5	libidn-1.32.tar.gz
-+# From http://lists.nongnu.org/archive/html/help-libidn/2016-07/msg00009.html
-+sha1	57872fdc665dcc585e16f4ac0bb35374b1103f7e	libidn-1.33.tar.gz
-+# Calculated based on the hash above
-+sha256	44a7aab635bb721ceef6beecc4d49dfd19478325e1b47f3196f7d2acc4930e19	libidn-1.33.tar.gz
-diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
-index ab43949..99c9e2c 100644
---- a/package/libidn/libidn.mk
-+++ b/package/libidn/libidn.mk
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index b04ecd5..1665112 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 3d870568432520095755fad9bb29b332351c7e25061d5d7d44873accc0eb08fe  ImageMagick-7.0.2-4.tar.xz
++sha256 44b5c7cb930c85c0dc0da258fb2721b0c34bf9005a0778253fc4cd9e0deca508  ImageMagick-7.0.2-5.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index ae6c62a..ece3e36 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBIDN_VERSION = 1.32
-+LIBIDN_VERSION = 1.33
- LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN_INSTALL_STAGING = YES
- LIBIDN_CONF_ENV = EMACS="no"
+-IMAGEMAGICK_VERSION = 7.0.2-4
++IMAGEMAGICK_VERSION = 7.0.2-5
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
