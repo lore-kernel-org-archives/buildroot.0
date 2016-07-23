@@ -1,39 +1,47 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 23 Jul 2016 10:39:42 -0300
-Subject: [Buildroot] [PATCH] connman: bump to version 1.33
-Message-ID: <1469281182-11931-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 23 Jul 2016 15:54:31 +0200
+Subject: [Buildroot] [git commit] libarchive: fix build error when linking
+	with lzma
+Message-ID: <20160723135441.56ADE8081A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/connman/connman.hash | 2 +-
- package/connman/connman.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=985543fcfe8327c5b6a137f6043c1bf76f10b456
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index e0bb483..f27af3d 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256	3185864c73206a6033d12e9f583689dcd03f714a40a58333709d3f74a4e0934c	connman-1.32.tar.xz
-+sha256	bc8946036fa70124d663136f9f6b6238d897ca482782df907b07a428b09df5a0	connman-1.33.tar.xz
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index d21284b..f7c9f23 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Build fails when linking with liblzma compiled without threads support.
+
+./.libs/libarchive.so: undefined reference to `lzma_cputhreads'
+./.libs/libarchive.so: undefined reference to `lzma_stream_encoder_mt'
+
+So let's enable LZMA only when toolchain has threads support.
+
+Fixes:
+http://autobuild.buildroot.org/results/2cb7f8a056982d0b894d0e2531ef357e74c8b796
+http://autobuild.buildroot.org/results/d12954fbd460d396f255158fa127f39ff9d2be8d
+http://autobuild.buildroot.org/results/abe10c70f38423a212ab27d7d27e22174eaa5aab
+Many more...
+
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libarchive/libarchive.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 6e9c0a1..30a2318 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -92,7 +92,8 @@ else
+ LIBARCHIVE_CONF_OPTS += --without-zlib
+ endif
  
--CONNMAN_VERSION = 1.32
-+CONNMAN_VERSION = 1.33
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables
--- 
-2.7.3
+-ifeq ($(BR2_PACKAGE_XZ),y)
++# libarchive requires LZMA with thread support in the toolchain
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)$(BR2_PACKAGE_XZ),yy)
+ LIBARCHIVE_DEPENDENCIES += xz
+ LIBARCHIVE_CONF_OPTS += --with-lzma
+ else
