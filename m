@@ -1,97 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 15:08:02 +0200
-Subject: [Buildroot] [git commit] htop: bump to version 2.0.2
-Message-ID: <20160723130817.9D3A3818ED@busybox.osuosl.org>
+Date: Sat, 23 Jul 2016 15:06:43 +0200
+Subject: [Buildroot] [git commit] libidn: security bump to version 1.33
+Message-ID: <20160723130817.6C29881DEE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a7da4c66ad2abd9f9659c3c3619fb3d5901f1e8
+commit: https://git.buildroot.net/buildroot/commit/?id=153827c901c7e393a2ddd76977d89b28fdcef29d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And drop upstream patch.
+Fixes:
+CVE-2015-8948 - out-of-bounds read in CLI tool.
+CVE-2016-6261 - out-of-bounds stack read in idna_to_ascii_4i.
+CVE-2016-6262 - followup fix to CVE-2015-8948.
+CVE-2016-6263 - stringprep_utf8_nfkc_normalize reject invalid UTF-8.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...001-Allow-to-override-ncurses-config-path.patch | 36 ----------------------
- package/htop/htop.hash                             |  6 ++--
- package/htop/htop.mk                               |  6 ++--
- 3 files changed, 5 insertions(+), 43 deletions(-)
+ package/libidn/libidn.hash | 6 ++++--
+ package/libidn/libidn.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/htop/0001-Allow-to-override-ncurses-config-path.patch b/package/htop/0001-Allow-to-override-ncurses-config-path.patch
-deleted file mode 100644
-index 9a8de15..0000000
---- a/package/htop/0001-Allow-to-override-ncurses-config-path.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 666f12f60f7d7936af932bf513bc0e9c5c5158f9 Mon Sep 17 00:00:00 2001
--From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
--Date: Sat, 9 Jul 2016 22:48:34 -0300
--Subject: [PATCH] Allow to override ncurses*-config path
--
--This will be used when cross-compiling with ncurses*-config generated for the
--target, using constructs like
--htop_ncurses_config_script=/path/to/ncurses5-config
--
--Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-----
--Patch sent upstream: https://github.com/hishamhm/htop/pull/524
-----
-- configure.ac | 6 +++++-
-- 1 file changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index fa32359..790a7f4 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -147,7 +147,11 @@ fi
-- # HTOP_CHECK_SCRIPT(LIBNAME, FUNCTION, DEFINE, CONFIG_SCRIPT, ELSE_PART)
-- m4_define([HTOP_CHECK_SCRIPT],
-- [
---   htop_config_script=$([$4] --libs 2> /dev/null)
--+   if test ! -z "$htop_[$1]_config_script"; then
--+      htop_config_script=$($htop_[$1]_config_script --libs 2> /dev/null)
--+   else
--+      htop_config_script=$([$4] --libs 2> /dev/null)
--+   fi
--    htop_script_success=no
--    htop_save_LDFLAGS="$LDFLAGS"
--    if test ! "x$htop_config_script" = x; then
---- 
--2.9.0
--
-diff --git a/package/htop/htop.hash b/package/htop/htop.hash
-index ae359ec..cfea23f 100644
---- a/package/htop/htop.hash
-+++ b/package/htop/htop.hash
-@@ -1,3 +1,3 @@
--# Hashes from: http://www.freelists.org/post/htop/ANN-htop-201
--md5   f75fe92b4defaa80d99109830f34b5e2          htop-2.0.1.tar.gz
--sha1  ef9adab68b0218a16936c306f635e7fce227b7e6  htop-2.0.1.tar.gz
-+# Hashes from: http://www.freelists.org/post/htop/ANN-htop-202
-+md5	7d354d904bad591a931ad57e99fea84a	htop-2.0.2.tar.gz
-+sha1	201f793f13dce2448e36047079875b9bd5bba75a	htop-2.0.2.tar.gz
-diff --git a/package/htop/htop.mk b/package/htop/htop.mk
-index 8a6b020..7409a78 100644
---- a/package/htop/htop.mk
-+++ b/package/htop/htop.mk
-@@ -4,14 +4,12 @@
+diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
+index 20c844e..4658a3e 100644
+--- a/package/libidn/libidn.hash
++++ b/package/libidn/libidn.hash
+@@ -1,2 +1,4 @@
+-# From http://lists.nongnu.org/archive/html/help-libidn/2015-08/msg00001.html
+-sha1	ddd018611b98af7c67d434aa42d15d39f45129f5	libidn-1.32.tar.gz
++# From http://lists.nongnu.org/archive/html/help-libidn/2016-07/msg00009.html
++sha1	57872fdc665dcc585e16f4ac0bb35374b1103f7e	libidn-1.33.tar.gz
++# Calculated based on the hash above
++sha256	44a7aab635bb721ceef6beecc4d49dfd19478325e1b47f3196f7d2acc4930e19	libidn-1.33.tar.gz
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index ab43949..99c9e2c 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HTOP_VERSION = 2.0.1
-+HTOP_VERSION = 2.0.2
- HTOP_SITE = http://hisham.hm/htop/releases/$(HTOP_VERSION)
- HTOP_DEPENDENCIES = ncurses
--# For 0001-Allow-to-override-ncurses-config-path.patch
--HTOP_AUTORECONF = YES
- HTOP_CONF_OPTS = --disable-unicode
- # Prevent htop build system from searching the host paths
--HTOP_CONF_ENV = htop_ncurses_config_script=$(STAGING_DIR)/usr/bin/ncurses5-config
-+HTOP_CONF_ENV = HTOP_NCURSES_CONFIG_SCRIPT=$(STAGING_DIR)/usr/bin/ncurses5-config
- HTOP_LICENSE = GPLv2
- HTOP_LICENSE_FILES = COPYING
- 
+-LIBIDN_VERSION = 1.32
++LIBIDN_VERSION = 1.33
+ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no"
