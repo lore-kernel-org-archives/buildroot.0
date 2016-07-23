@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 15:08:43 +0200
-Subject: [Buildroot] [PATCH] libinput: bump to version 1.4.0
-In-Reply-To: <1469234892-560-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1469234892-560-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160723150843.798e7e67@free-electrons.com>
+Date: Sat, 23 Jul 2016 15:08:46 +0200
+Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.3.0
+In-Reply-To: <1469234919-605-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1469234919-605-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160723150846.4f610181@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 22 Jul 2016 21:48:12 -0300, Gustavo Zacarias wrote:
-> And drop upstream patch.
-> 
+On Fri, 22 Jul 2016 21:48:39 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  ...-Add-configure.ac-check-for-static_assert.patch | 34 ----------------------
->  package/libinput/libinput.hash                     |  4 +--
->  package/libinput/libinput.mk                       |  4 +--
->  3 files changed, 3 insertions(+), 39 deletions(-)
->  delete mode 100644 package/libinput/0002-Add-configure.ac-check-for-static_assert.patch
+>  package/harfbuzz/harfbuzz.hash | 4 ++--
+>  package/harfbuzz/harfbuzz.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
