@@ -1,100 +1,86 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 23 Jul 2016 18:50:22 +0200
-Subject: [Buildroot] [PATCH] package/gdb: fix gnulib issue with musl and
-	uClibc toolchains
-Message-ID: <1469292622-32034-1-git-send-email-romain.naour@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 23 Jul 2016 14:30:00 -0300
+Subject: [Buildroot] [PATCH 1/2] zeromq: bump to version 4.1.5
+Message-ID: <1469295001-21786-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gnulib whant to use rpl_gettimeofday due bad guessing when
-cross-compiling with musl and uClibc toolchains.
+Switch to github download URL since upstream switched.
+Drop upstream patch.
 
-tracepoint-ipa.o: In function `get_timestamp':
-tracepoint.c:(.text+0x147): undefined reference to `rpl_gettimeofday'
-Makefile:329: recipe for target 'libinproctrace.so' failed
-
-reported upstream:
-https://sourceware.org/bugzilla/show_bug.cgi?id=19798
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...fix-bad-guessing-when-cross-compiling-wit.patch | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/gdb/7.11.1/0001-gdb-gnulib-fix-bad-guessing-when-cross-compiling-wit.patch
+ .../zeromq/0003-allow-to-build-sparc-v8-leon.patch | 30 ----------------------
+ package/zeromq/zeromq.hash                         |  6 ++---
+ package/zeromq/zeromq.mk                           |  3 ++-
+ 3 files changed, 5 insertions(+), 34 deletions(-)
+ delete mode 100644 package/zeromq/0003-allow-to-build-sparc-v8-leon.patch
 
-diff --git a/package/gdb/7.11.1/0001-gdb-gnulib-fix-bad-guessing-when-cross-compiling-wit.patch b/package/gdb/7.11.1/0001-gdb-gnulib-fix-bad-guessing-when-cross-compiling-wit.patch
-new file mode 100644
-index 0000000..1ad0f5c
---- /dev/null
-+++ b/package/gdb/7.11.1/0001-gdb-gnulib-fix-bad-guessing-when-cross-compiling-wit.patch
-@@ -0,0 +1,65 @@
-+From 5696f95f7a6c214319a10edbdb4037ebec7a02f7 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sat, 23 Jul 2016 18:39:15 +0200
-+Subject: [PATCH] gdb/gnulib: fix bad guessing when cross-compiling with musl
-+ and uClibc toolchains
-+
-+Commit b2234a55a9065eeb2aba8d26706c63facd34f3ef disable gettimeofday
-+replacement with rpl_gettimeofday for glibc toolchains but the same
-+fix is needed for musl and uClibc toolchains.
-+
-+Otherwise the build fail with this error:
-+tracepoint-ipa.o: In function `get_timestamp':
-+tracepoint.c:(.text+0x147): undefined reference to `rpl_gettimeofday'
-+Makefile:329: recipe for target 'libinproctrace.so' failed
-+
-+"It's a bit nasty.  Basically there are a lot of configure tests being
-+done in order to figure out if the used runtime routines adhere to the
-+standard(s).  A couple of those tests concern gettimeofday(). The last
-+one wants to check if gettimeofday() and localtime() share a static
-+buffer (apparently a MacOS X issue)" [2]
-+
-+[1] https://sourceware.org/bugzilla/show_bug.cgi?id=19798
-+[2] http://www.riscos.info/pipermail/gcc/2014-April/006093.html
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gdb/gnulib/configure                 | 4 +++-
-+ gdb/gnulib/import/m4/gettimeofday.m4 | 4 +++-
-+ 2 files changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/gdb/gnulib/configure b/gdb/gnulib/configure
-+index 540bad3..c5f6078 100644
-+--- a/gdb/gnulib/configure
-++++ b/gdb/gnulib/configure
-+@@ -13520,8 +13520,10 @@ else
-+   if test "$cross_compiling" = yes; then :
-+   # When cross-compiling:
-+       case "$host_os" in
-+-                # Guess all is fine on glibc systems.
-++                # Guess all is fine on glibc/musl/uClibc systems.
-+         *-gnu*) gl_cv_func_gettimeofday_clobber="guessing no" ;;
-++        *-musl*) gl_cv_func_gettimeofday_clobber="guessing no" ;;
-++        *-uclibc*) gl_cv_func_gettimeofday_clobber="guessing no" ;;
-+                 # If we don't know, assume the worst.
-+         *)      gl_cv_func_gettimeofday_clobber="guessing yes" ;;
-+       esac
-+diff --git a/gdb/gnulib/import/m4/gettimeofday.m4 b/gdb/gnulib/import/m4/gettimeofday.m4
-+index ce246e1..7984252 100644
-+--- a/gdb/gnulib/import/m4/gettimeofday.m4
-++++ b/gdb/gnulib/import/m4/gettimeofday.m4
-+@@ -109,8 +109,10 @@ AC_DEFUN([gl_FUNC_GETTIMEOFDAY_CLOBBER],
-+      [gl_cv_func_gettimeofday_clobber=yes],
-+      [# When cross-compiling:
-+       case "$host_os" in
-+-                # Guess all is fine on glibc systems.
-++                # Guess all is fine on glibc/musl/uClibc systems.
-+         *-gnu*) gl_cv_func_gettimeofday_clobber="guessing no" ;;
-++        *-musl*) gl_cv_func_gettimeofday_clobber="guessing no" ;;
-++        *-uclibc*) gl_cv_func_gettimeofday_clobber="guessing no" ;;
-+                 # If we don't know, assume the worst.
-+         *)      gl_cv_func_gettimeofday_clobber="guessing yes" ;;
-+       esac
-+-- 
-+2.5.5
-+
+diff --git a/package/zeromq/0003-allow-to-build-sparc-v8-leon.patch b/package/zeromq/0003-allow-to-build-sparc-v8-leon.patch
+deleted file mode 100644
+index 126a03b..0000000
+--- a/package/zeromq/0003-allow-to-build-sparc-v8-leon.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From d0b22397ebbef8e250c4cad25b8686018804aa15 Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@uclibc-ng.org>
+-Date: Sat, 4 Jun 2016 09:30:49 +0200
+-Subject: [PATCH] allow to build sparc (v8,leon)
+-
+-Only set sparcv9 optimization for sparc64 systems.
+-This allows to run for example application using zeromq
+-on sparc32 systems.
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index af8293c..cabd734 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -291,7 +291,7 @@ fi
+- 
+- # CPU-specific optimizations
+- case "${host_cpu}" in
+--    *sparc*)
+-+    *sparc64*)
+-         AC_LANG_PUSH([C++])
+-         LIBZMQ_CHECK_LANG_FLAG_PREPEND([-mcpu=v9])
+-         AC_LANG_POP([C++])
+--- 
+-2.7.4 (Apple Git-66)
+-
+diff --git a/package/zeromq/zeromq.hash b/package/zeromq/zeromq.hash
+index a3eeb45..76067d9 100644
+--- a/package/zeromq/zeromq.hash
++++ b/package/zeromq/zeromq.hash
+@@ -1,4 +1,4 @@
+-# From http://download.zeromq.org/SHA1SUMS:
+-sha1	b632a4b6f8a14390dc17824e37ff7b10831ce2b4	zeromq-4.1.4.tar.gz
++# From https://github.com/zeromq/zeromq4-1/releases
++sha1	2b7490b77860be3060b1b1f92cd73184d309ca69	zeromq-4.1.5.tar.gz
+ # Calculated based on the hash above
+-sha256	e99f44fde25c2e4cb84ce440f87ca7d3fe3271c2b8cfbc67d55e4de25e6fe378	zeromq-4.1.4.tar.gz
++sha256	04aac57f081ffa3a2ee5ed04887be9e205df3a7ddade0027460b8042432bdbcf	zeromq-4.1.5.tar.gz
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index 871f37c..889c94a 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-ZEROMQ_VERSION = 4.1.4
++ZEROMQ_VERSION = 4.1.5
+ ZEROMQ_SITE = http://download.zeromq.org
++ZEROMQ_SITE = https://github.com/zeromq/zeromq4-1/releases/download/v$(ZEROMQ_VERSION)
+ ZEROMQ_INSTALL_STAGING = YES
+ ZEROMQ_DEPENDENCIES = util-linux
+ ZEROMQ_LICENSE = LGPLv3+ with exceptions
 -- 
-2.5.5
+2.7.3
