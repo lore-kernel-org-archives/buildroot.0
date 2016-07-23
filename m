@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 22:58:55 +0200
-Subject: [Buildroot] [PATCH] libunwind: needs ARM instruction support
-In-Reply-To: <1469287474-4391-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1469287474-4391-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160723225855.0f054ded@free-electrons.com>
+Date: Sat, 23 Jul 2016 22:59:15 +0200
+Subject: [Buildroot] [PATCH] stunnel: security bump to version 5.35
+In-Reply-To: <1469289812-15705-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1469289812-15705-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160723225915.7e4fb890@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 23 Jul 2016 12:24:34 -0300, Gustavo Zacarias wrote:
+On Sat, 23 Jul 2016 13:03:32 -0300, Gustavo Zacarias wrote:
 > Fixes:
-> http://autobuild.buildroot.net/results/4cf/4cf517cd81d3aa5da26848edaba5df0bfbab2c77/
+> TLS session caching memory leak
+> Malfunctioning "verify = 4"
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/libunwind/Config.in | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+>  package/stunnel/stunnel.hash | 4 ++--
+>  package/stunnel/stunnel.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
