@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 15:05:40 +0200
-Subject: [Buildroot] [git commit] package/elementary: provide the path to
-	elementary_codgen
-Message-ID: <20160723130817.3D07881DEE@busybox.osuosl.org>
+Date: Sat, 23 Jul 2016 15:06:03 +0200
+Subject: [Buildroot] [git commit] mpv: bump to version 0.18.1
+Message-ID: <20160723130817.470F880634@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b5d6a69acc5395f3efd7aeed6df163d6e8d0c89
+commit: https://git.buildroot.net/buildroot/commit/?id=a22722ead7866716d6317916a936300edab03e9d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-elementary_codgen tool is build for the host, so use it while building
-elementary for the target.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/elementary/elementary.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/mpv/mpv.hash | 2 +-
+ package/mpv/mpv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/elementary/elementary.mk b/package/elementary/elementary.mk
-index a06809f..01fc6e4 100644
---- a/package/elementary/elementary.mk
-+++ b/package/elementary/elementary.mk
-@@ -19,6 +19,7 @@ ELEMENTARY_CONF_OPTS = \
- 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
- 	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
-+	--with-elementary-codegen=$(HOST_DIR)/usr/bin/elementary_codegen \
- 	--with-elm-prefs-cc=$(HOST_DIR)/usr/bin/elm_prefs_cc \
- 	--with-doxygen=no \
- 	--disable-elementary-test
+diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
+index 8d9c9d1..8a2f44b 100644
+--- a/package/mpv/mpv.hash
++++ b/package/mpv/mpv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	b656638d4f6bce2621baaacb60d8be384aa492fcd86dfd43996aaa2c16fee02b	v0.18.0.tar.gz
++sha256	e413d57fec4ad43b9f9b848f38d13fb921313fc9a4a64bf1e906c8d0f7a46329	v0.18.1.tar.gz
+ sha256	01bf2beab2106d1558800c8709bc2c8e496d3da4a2ca343fe091f22fca60c98b	waf-1.8.12
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index 7ecac9e..d2ed3f2 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MPV_VERSION = 0.18.0
++MPV_VERSION = 0.18.1
+ MPV_WAF_VERSION = 1.8.12
+ MPV_SITE = https://github.com/mpv-player/mpv/archive
+ MPV_SOURCE = v$(MPV_VERSION).tar.gz
