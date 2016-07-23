@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 14:42:10 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libdrm: bump version to 2.4.69
-In-Reply-To: <1469128040-4558-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1469128040-4558-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160723144210.27a3377d@free-electrons.com>
+Date: Sat, 23 Jul 2016 14:46:54 +0200
+Subject: [Buildroot] [git commit] perl-module-build: bump to version 0.4218
+Message-ID: <20160723125541.0E7F47FA3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2d92fa3c9e660ee725ee5454252f0f9375cb7dea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 21 Jul 2016 21:07:19 +0200, Bernd Kuhls wrote:
-> Removed patch 0002, applied upstream:
-> https://cgit.freedesktop.org/mesa/drm/commit/xf86drm.c?id=4031dc17bb728850c9b079c8d5f9cc0a379b9d46
-> 
-> Renumbered patch 0003.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...mic-require-CAS-support-in-libatomic_ops.patch} |  0
->  ...nclude-limits.h-to-fix-build-error-on-Sol.patch | 31 ----------------------
->  package/libdrm/libdrm.hash                         |  4 +--
->  package/libdrm/libdrm.mk                           |  2 +-
->  4 files changed, 3 insertions(+), 34 deletions(-)
->  rename package/libdrm/{0003-xf86atomic-require-CAS-support-in-libatomic_ops.patch => 0002-xf86atomic-require-CAS-support-in-libatomic_ops.patch} (100%)
->  delete mode 100644 package/libdrm/0002-xf86drm.c-Include-limits.h-to-fix-build-error-on-Sol.patch
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perl-module-build/perl-module-build.hash | 4 ++--
+ package/perl-module-build/perl-module-build.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Both patches applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/perl-module-build/perl-module-build.hash b/package/perl-module-build/perl-module-build.hash
+index 558434b..d42dbad 100644
+--- a/package/perl-module-build/perl-module-build.hash
++++ b/package/perl-module-build/perl-module-build.hash
+@@ -1,3 +1,3 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    7b7ca5a47bef48c50c8b5906ca3ac7fb Module-Build-0.4214.tar.gz
+-sha256 c579488918cf4db84954a550c475272b3c25f5100c739339e91a65d7c055dc3f Module-Build-0.4214.tar.gz
++md5    7e3b17e14b54036c5ac18c27f7955e79 Module-Build-0.4218.tar.gz
++sha256 1ef0aa529a3f296f894a5e79240a77d71be60dd595e8cad3a0d04c7ea187c0d0 Module-Build-0.4218.tar.gz
+diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
+index 3caf302..0effbac 100644
+--- a/package/perl-module-build/perl-module-build.mk
++++ b/package/perl-module-build/perl-module-build.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_MODULE_BUILD_VERSION = 0.4214
++PERL_MODULE_BUILD_VERSION = 0.4218
+ PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
+ PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
+ PERL_MODULE_BUILD_LICENSE = Artistic or GPLv1+
