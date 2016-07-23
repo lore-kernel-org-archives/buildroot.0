@@ -1,43 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 15:56:56 +0200
-Subject: [Buildroot] [git commit] libfm: bump to version 1.2.4
-Message-ID: <20160723150127.9D0DA81D8A@busybox.osuosl.org>
+Date: Sat, 23 Jul 2016 17:00:58 +0200
+Subject: [Buildroot] [git commit] pcmanfm: add optional support for gtk3
+Message-ID: <20160723150127.BC63B80089@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19c330a77e37711714835c77b02c95a346cd5dad
+commit: https://git.buildroot.net/buildroot/commit/?id=97f1cbb0aad762385bbaf67e70f2fdcf171e6c6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+pcmanfm can now use gtk3+ so use that over gtk2+ if it's available.
+Since it's only x11-safe for the moment the comment and deps other than
+gtk stay the same.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libfm/libfm.hash | 5 +++--
- package/libfm/libfm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/pcmanfm/Config.in  |  2 +-
+ package/pcmanfm/pcmanfm.mk | 10 +++++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/libfm/libfm.hash b/package/libfm/libfm.hash
-index 5311dec..8a78ade 100644
---- a/package/libfm/libfm.hash
-+++ b/package/libfm/libfm.hash
-@@ -1,2 +1,3 @@
--# From http://blog.lxde.org/?p=1280
--sha1  c3f2f34086761d89d6aba549883610084ba00750  libfm-1.2.3.tar.xz
-+# From https://sourceforge.net/projects/pcmanfm/files/PCManFM%20%2B%20Libfm%20%28tarball%20release%29/LibFM/
-+md5	74997d75e7e87dc73398746fd373bf52	libfm-1.2.4.tar.xz
-+sha1	2f8183389c8e74edb15c6c8ab260df5dd39f3b2d	libfm-1.2.4.tar.xz
-diff --git a/package/libfm/libfm.mk b/package/libfm/libfm.mk
-index e8410d0..a9be094 100644
---- a/package/libfm/libfm.mk
-+++ b/package/libfm/libfm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pcmanfm/Config.in b/package/pcmanfm/Config.in
+index ac68188..40ebbdf 100644
+--- a/package/pcmanfm/Config.in
++++ b/package/pcmanfm/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PCMANFM
+ 	select BR2_PACKAGE_LIBFM
+ 	select BR2_PACKAGE_MENU_CACHE
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_LIBGTK2
++	select BR2_PACKAGE_LIBGTK2 if !BR2_PACKAGE_LIBGTK3_X11
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+diff --git a/package/pcmanfm/pcmanfm.mk b/package/pcmanfm/pcmanfm.mk
+index 2f5fa47..e361909 100644
+--- a/package/pcmanfm/pcmanfm.mk
++++ b/package/pcmanfm/pcmanfm.mk
+@@ -7,8 +7,16 @@
+ PCMANFM_VERSION = 1.2.4
+ PCMANFM_SOURCE = pcmanfm-$(PCMANFM_VERSION).tar.xz
+ PCMANFM_SITE = http://sourceforge.net/projects/pcmanfm/files
+-PCMANFM_DEPENDENCIES = libgtk2 libglib2 menu-cache libfm
++PCMANFM_DEPENDENCIES = libglib2 menu-cache libfm
+ PCMANFM_LICENSE = GPLv2+
+ PCMANFM_LICENSE_FILES = COPYING
  
--LIBFM_VERSION = 1.2.3
-+LIBFM_VERSION = 1.2.4
- LIBFM_SOURCE = libfm-$(LIBFM_VERSION).tar.xz
- LIBFM_SITE = http://sourceforge.net/projects/pcmanfm/files
- LIBFM_DEPENDENCIES = menu-cache libgtk2 libglib2 cairo
++ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
++PCMANFM_CONF_OPTS += --with-gtk=3
++PCMANFM_DEPENDENCIES += libgtk3
++else
++PCMANFM_CONF_OPTS += --with-gtk=2
++PCMANFM_DEPENDENCIES += libgtk2
++endif
++
+ $(eval $(autotools-package))
