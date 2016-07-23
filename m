@@ -1,59 +1,62 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 23 Jul 2016 10:31:25 -0300
-Subject: [Buildroot] [PATCH 6/6] pcmanfm: add optional support for gtk3
-In-Reply-To: <1469280685-11787-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1469280685-11787-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1469280685-11787-6-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 23 Jul 2016 15:39:07 +0200
+Subject: [Buildroot] [PATCH] ser2net: add SYSV init script
+In-Reply-To: <1469200138-56632-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1469200138-56632-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160723153907.633fe6e6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pcmanfm can now use gtk3+ so use that over gtk2+ if it's available.
-Since it's only x11-safe for the moment the comment and deps other than
-gtk stay the same.
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/pcmanfm/Config.in  |  2 +-
- package/pcmanfm/pcmanfm.mk | 10 +++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+On Fri, 22 Jul 2016 16:08:58 +0100, Vicente Olivert Riera wrote:
 
-diff --git a/package/pcmanfm/Config.in b/package/pcmanfm/Config.in
-index ac68188..40ebbdf 100644
---- a/package/pcmanfm/Config.in
-+++ b/package/pcmanfm/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_PCMANFM
- 	select BR2_PACKAGE_LIBFM
- 	select BR2_PACKAGE_MENU_CACHE
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_LIBGTK2
-+	select BR2_PACKAGE_LIBGTK2 if !BR2_PACKAGE_LIBGTK3_X11
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-diff --git a/package/pcmanfm/pcmanfm.mk b/package/pcmanfm/pcmanfm.mk
-index 2f5fa47..e361909 100644
---- a/package/pcmanfm/pcmanfm.mk
-+++ b/package/pcmanfm/pcmanfm.mk
-@@ -7,8 +7,16 @@
- PCMANFM_VERSION = 1.2.4
- PCMANFM_SOURCE = pcmanfm-$(PCMANFM_VERSION).tar.xz
- PCMANFM_SITE = http://sourceforge.net/projects/pcmanfm/files
--PCMANFM_DEPENDENCIES = libgtk2 libglib2 menu-cache libfm
-+PCMANFM_DEPENDENCIES = libglib2 menu-cache libfm
- PCMANFM_LICENSE = GPLv2+
- PCMANFM_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
-+PCMANFM_CONF_OPTS += --with-gtk=3
-+PCMANFM_DEPENDENCIES += libgtk3
-+else
-+PCMANFM_CONF_OPTS += --with-gtk=2
-+PCMANFM_DEPENDENCIES += libgtk2
-+endif
-+
- $(eval $(autotools-package))
+> +# Startup script for ser2net
+> +#
+> +
+> +[ -f /usr/sbin/ser2net ] || exit 0
+
+This check is pretty useless: the init script is installed along with
+the ser2net binary. So I've removed this check.
+
+> +
+> +start() {
+> +    echo -n  "Starting ser2net: "
+
+We normally use printf instead of echo -n.
+
+Also, starting the daemon fails if there's no config file, with no
+error message whatsoever. So I've added a check here to see if there's
+a configuration file or not, and show a clear message where there's
+none.
+
+> +    start-stop-daemon -S -q --exec /usr/sbin/ser2net -- -P /var/run/ser2net.pid
+> +    [ $? = 0 ] && echo "OK" || echo "FAIL"
+> +}
+> +
+> +stop() {
+> +    echo -n "Shutting down ser2net "
+> +    start-stop-daemon -K -q -p /var/run/ser2net.pid
+> +    [ $? = 0 ] && echo "OK" || echo "FAIL"
+> +}
+> +
+> +restart() {
+> +	stop
+> +	start
+
+Indentation here was done with one tab, while it was done with 4 spaces
+above. So I've changed that to 4 spaces everywhere, since it seems to
+be what we do in most init scripts.
+
+Applied with those changes.
+
+Thanks!
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
