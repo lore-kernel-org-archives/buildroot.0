@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 23 Jul 2016 10:31:22 -0300
-Subject: [Buildroot] [PATCH 3/6] libfm: bump to version 1.2.4
+Date: Sat, 23 Jul 2016 10:31:23 -0300
+Subject: [Buildroot] [PATCH 4/6] pcmanfm: bump to version 1.2.4
 In-Reply-To: <1469280685-11787-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1469280685-11787-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1469280685-11787-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1469280685-11787-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libfm/libfm.hash | 5 +++--
- package/libfm/libfm.mk   | 2 +-
+ package/pcmanfm/pcmanfm.hash | 5 +++--
+ package/pcmanfm/pcmanfm.mk   | 2 +-
  2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/libfm/libfm.hash b/package/libfm/libfm.hash
-index 5311dec..8a78ade 100644
---- a/package/libfm/libfm.hash
-+++ b/package/libfm/libfm.hash
+diff --git a/package/pcmanfm/pcmanfm.hash b/package/pcmanfm/pcmanfm.hash
+index a3b7653..cb0d206 100644
+--- a/package/pcmanfm/pcmanfm.hash
++++ b/package/pcmanfm/pcmanfm.hash
 @@ -1,2 +1,3 @@
 -# From http://blog.lxde.org/?p=1280
--sha1  c3f2f34086761d89d6aba549883610084ba00750  libfm-1.2.3.tar.xz
-+# From https://sourceforge.net/projects/pcmanfm/files/PCManFM%20%2B%20Libfm%20%28tarball%20release%29/LibFM/
-+md5	74997d75e7e87dc73398746fd373bf52	libfm-1.2.4.tar.xz
-+sha1	2f8183389c8e74edb15c6c8ab260df5dd39f3b2d	libfm-1.2.4.tar.xz
-diff --git a/package/libfm/libfm.mk b/package/libfm/libfm.mk
-index e8410d0..a9be094 100644
---- a/package/libfm/libfm.mk
-+++ b/package/libfm/libfm.mk
+-sha1  0a195301de31c82f1c169e620be7cea8b91813b5  pcmanfm-1.2.3.tar.xz
++# From https://sourceforge.net/projects/pcmanfm/files/PCManFM%20%2B%20Libfm%20%28tarball%20release%29/PCManFM/
++md5	19764c2f59653724c8713e0064fa6829	pcmanfm-1.2.4.tar.xz
++sha1	4768ee564a36021977e4af8c33270b6835b3391d	pcmanfm-1.2.4.tar.xz
+diff --git a/package/pcmanfm/pcmanfm.mk b/package/pcmanfm/pcmanfm.mk
+index 62d8618..2f5fa47 100644
+--- a/package/pcmanfm/pcmanfm.mk
++++ b/package/pcmanfm/pcmanfm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFM_VERSION = 1.2.3
-+LIBFM_VERSION = 1.2.4
- LIBFM_SOURCE = libfm-$(LIBFM_VERSION).tar.xz
- LIBFM_SITE = http://sourceforge.net/projects/pcmanfm/files
- LIBFM_DEPENDENCIES = menu-cache libgtk2 libglib2 cairo
+-PCMANFM_VERSION = 1.2.3
++PCMANFM_VERSION = 1.2.4
+ PCMANFM_SOURCE = pcmanfm-$(PCMANFM_VERSION).tar.xz
+ PCMANFM_SITE = http://sourceforge.net/projects/pcmanfm/files
+ PCMANFM_DEPENDENCIES = libgtk2 libglib2 menu-cache libfm
 -- 
 2.7.3
