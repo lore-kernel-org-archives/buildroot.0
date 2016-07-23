@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 17:01:30 +0200
-Subject: [Buildroot] [PATCH] connman: bump to version 1.33
-In-Reply-To: <1469281182-11931-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1469281182-11931-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160723170130.05d06303@free-electrons.com>
+Date: Sat, 23 Jul 2016 17:01:39 +0200
+Subject: [Buildroot] [PATCH 1/6] libfm-extra: bump to version 1.2.4
+In-Reply-To: <1469280685-11787-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1469280685-11787-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160723170139.0711a315@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 23 Jul 2016 10:39:42 -0300, Gustavo Zacarias wrote:
+On Sat, 23 Jul 2016 10:31:20 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/connman/connman.hash | 2 +-
->  package/connman/connman.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/libfm-extra/Config.in        | 2 +-
+>  package/libfm-extra/libfm-extra.hash | 5 +++--
+>  package/libfm-extra/libfm-extra.mk   | 2 +-
+>  3 files changed, 5 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
+All 6 patches applied. Thanks!
 
 Thomas
 -- 
