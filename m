@@ -1,47 +1,37 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 23 Jul 2016 12:19:42 +0200
-Subject: [Buildroot] [PATCH] package/sdl2_ttf: x-includes and x-libraries
-	must be set for cross-compiling
-Message-ID: <1469269182-16000-1-git-send-email-romain.naour@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 23 Jul 2016 12:27:09 +0200
+Subject: [Buildroot] [PATCH] libcurl: bump version to 7.50.0
+References: <1469100633-54298-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20160721135713.0468f67e@free-electrons.com>
+Message-ID: <tctb6dxt16.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If those flags are not explicitly passed, the sdl2_ttf configure script
-will include -I/usr/include and -L/usr/lib in the compile flags, which
-are obviously unsafe for cross-compilation.
+Am Thu, 21 Jul 2016 13:57:13 +0200 schrieb Thomas Petazzoni:
 
-"checking for X... libraries /usr/lib, headers /usr/include"
+> Hello,
+> 
+> On Thu, 21 Jul 2016 12:30:33 +0100, Vicente Olivert Riera wrote:
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> ---
+>>  package/libcurl/libcurl.hash | 2 +-
+>>  package/libcurl/libcurl.mk   | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> Applied to master, thanks.
+> 
+> Thomas
 
-Fixes:
-http://autobuild.buildroot.net/results/f96/f968fb31e9882cc856296a7c729d93e345e9e861
+Hi,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/sdl2_ttf/sdl2_ttf.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+this patch breaks compilation of Kodi:
+http://autobuild.buildroot.net/results/bc3/bc392094b5b05f5f4b4ede5ab3a54200d6d33be5//
+http://forum.kodi.tv/showthread.php?tid=283382
 
-diff --git a/package/sdl2_ttf/sdl2_ttf.mk b/package/sdl2_ttf/sdl2_ttf.mk
-index 71c5bc7..e1674a1 100644
---- a/package/sdl2_ttf/sdl2_ttf.mk
-+++ b/package/sdl2_ttf/sdl2_ttf.mk
-@@ -14,4 +14,15 @@ SDL2_TTF_DEPENDENCIES = sdl2 freetype host-pkgconf
- SDL2_TTF_CONF_ENV = \
- 	FREETYPE_CONFIG=$(STAGING_DIR)/usr/bin/freetype-config
- 
-+# x-includes and x-libraries must be set for cross-compiling
-+# By default x_includes and x_libraries contains unsafe paths.
-+# (/usr/include and /usr/lib)
-+ifeq ($(BR2_PACKAGE_SDL2_X11),y)
-+SDL2_TTF_CONF_OPTS += --with-x=$(STAGING_DIR) \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib
-+else
-+SDL2_TTF_CONF_OPTS += --with-x=no
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.5.5
+In my kodi17 branch I reverted the bump
+https://github.com/bkuhls/buildroot/commit/b7885476b212b87a7ef38164c9c36d81f16ce882
+
+Regards, Bernd
