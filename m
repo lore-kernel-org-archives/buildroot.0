@@ -1,34 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 17:03:19 +0200
-Subject: [Buildroot] [PATCH] lighttpd: add clock_gettime patch
-In-Reply-To: <1469285814-3197-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1469285814-3197-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160723170319.6816a256@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 23 Jul 2016 17:17:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.70
+Message-ID: <1469287037-15165-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libdrm/libdrm.hash | 4 ++--
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Sat, 23 Jul 2016 11:56:54 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/590/5901153a345c69d0a041309cfb79329bb42ff98d/
-> 
-> Patch status: upstream.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  ...tobuild-clock_gettime-lrt-with-glibc-2.17.patch | 155 +++++++++++++++++++++
->  package/lighttpd/lighttpd.mk                       |   2 +
->  2 files changed, 157 insertions(+)
->  create mode 100644 package/lighttpd/0002-autobuild-clock_gettime-lrt-with-glibc-2.17.patch
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 3cfa34e..c205780 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-July/002700.html
+-sha256	09510cbc75adba7e84fd3ec86586fd352a787fd534a63377de9e19ff85280b33	libdrm-2.4.69.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2016-July/113899.html
++sha256	b17d4b39ed97ca0e4cffa0db06ff609e617bac94646ec38e8e0579d530540e7b	libdrm-2.4.70.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index e62f813..03bc7db 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.69
++LIBDRM_VERSION = 2.4.70
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
