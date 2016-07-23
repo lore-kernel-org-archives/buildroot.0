@@ -1,62 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 15:39:07 +0200
-Subject: [Buildroot] [PATCH] ser2net: add SYSV init script
-In-Reply-To: <1469200138-56632-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1469200138-56632-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160723153907.633fe6e6@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 23 Jul 2016 10:39:42 -0300
+Subject: [Buildroot] [PATCH] connman: bump to version 1.33
+Message-ID: <1469281182-11931-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/connman/connman.hash | 2 +-
+ package/connman/connman.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Fri, 22 Jul 2016 16:08:58 +0100, Vicente Olivert Riera wrote:
-
-> +# Startup script for ser2net
-> +#
-> +
-> +[ -f /usr/sbin/ser2net ] || exit 0
-
-This check is pretty useless: the init script is installed along with
-the ser2net binary. So I've removed this check.
-
-> +
-> +start() {
-> +    echo -n  "Starting ser2net: "
-
-We normally use printf instead of echo -n.
-
-Also, starting the daemon fails if there's no config file, with no
-error message whatsoever. So I've added a check here to see if there's
-a configuration file or not, and show a clear message where there's
-none.
-
-> +    start-stop-daemon -S -q --exec /usr/sbin/ser2net -- -P /var/run/ser2net.pid
-> +    [ $? = 0 ] && echo "OK" || echo "FAIL"
-> +}
-> +
-> +stop() {
-> +    echo -n "Shutting down ser2net "
-> +    start-stop-daemon -K -q -p /var/run/ser2net.pid
-> +    [ $? = 0 ] && echo "OK" || echo "FAIL"
-> +}
-> +
-> +restart() {
-> +	stop
-> +	start
-
-Indentation here was done with one tab, while it was done with 4 spaces
-above. So I've changed that to 4 spaces everywhere, since it seems to
-be what we do in most init scripts.
-
-Applied with those changes.
-
-Thanks!
-
-Thomas
+diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+index e0bb483..f27af3d 100644
+--- a/package/connman/connman.hash
++++ b/package/connman/connman.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+-sha256	3185864c73206a6033d12e9f583689dcd03f714a40a58333709d3f74a4e0934c	connman-1.32.tar.xz
++sha256	bc8946036fa70124d663136f9f6b6238d897ca482782df907b07a428b09df5a0	connman-1.33.tar.xz
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index d21284b..f7c9f23 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONNMAN_VERSION = 1.32
++CONNMAN_VERSION = 1.33
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
