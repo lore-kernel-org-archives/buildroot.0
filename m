@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 15:08:36 +0200
-Subject: [Buildroot] [PATCH] libidn: security bump to version 1.33
-In-Reply-To: <1469230714-4779-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1469230714-4779-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160723150836.6c01528e@free-electrons.com>
+Date: Sat, 23 Jul 2016 15:08:38 +0200
+Subject: [Buildroot] [PATCH] unrar: bump to version 5.4.3
+In-Reply-To: <1469230748-5146-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1469230748-5146-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160723150838.08c806a9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 22 Jul 2016 20:38:34 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2015-8948 - out-of-bounds read in CLI tool.
-> CVE-2016-6261 - out-of-bounds stack read in idna_to_ascii_4i.
-> CVE-2016-6262 - followup fix to CVE-2015-8948.
-> CVE-2016-6263 - stringprep_utf8_nfkc_normalize reject invalid UTF-8.
-> 
+On Fri, 22 Jul 2016 20:39:08 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/libidn/libidn.hash | 6 ++++--
->  package/libidn/libidn.mk   | 2 +-
->  2 files changed, 5 insertions(+), 3 deletions(-)
+>  package/unrar/unrar.hash | 2 +-
+>  package/unrar/unrar.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
