@@ -1,40 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 23 Jul 2016 17:17:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.70
-Message-ID: <1469287037-15165-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 23 Jul 2016 12:24:34 -0300
+Subject: [Buildroot] [PATCH] libunwind: needs ARM instruction support
+Message-ID: <1469287474-4391-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libdrm/libdrm.hash | 4 ++--
- package/libdrm/libdrm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/4cf/4cf517cd81d3aa5da26848edaba5df0bfbab2c77/
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 3cfa34e..c205780 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,2 +1,2 @@
--# From https://lists.x.org/archives/xorg-announce/2016-July/002700.html
--sha256	09510cbc75adba7e84fd3ec86586fd352a787fd534a63377de9e19ff85280b33	libdrm-2.4.69.tar.bz2
-+# From https://lists.freedesktop.org/archives/dri-devel/2016-July/113899.html
-+sha256	b17d4b39ed97ca0e4cffa0db06ff609e617bac94646ec38e8e0579d530540e7b	libdrm-2.4.70.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index e62f813..03bc7db 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libunwind/Config.in | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
+index 593172f..a70d9e8 100644
+--- a/package/libunwind/Config.in
++++ b/package/libunwind/Config.in
+@@ -10,13 +10,16 @@
+ config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_TOOLCHAIN_USES_GLIBC && \
+-		(BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_mips64 || \
++		((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
++		(BR2_mips || BR2_mipsel || BR2_mips64 || \
+ 		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64)
+ 	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
+-		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || \
++		((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
++		(BR2_i386 || BR2_mips || BR2_mipsel || \
+ 		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
+ 	default y if BR2_TOOLCHAIN_USES_MUSL && \
+-		(BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64)
++		((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
++		(BR2_i386 || BR2_x86_64)
  
--LIBDRM_VERSION = 2.4.69
-+LIBDRM_VERSION = 2.4.70
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+ config BR2_PACKAGE_LIBUNWIND
+ 	bool "libunwind"
 -- 
-2.8.1
+2.7.3
