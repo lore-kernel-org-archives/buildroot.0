@@ -1,88 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 15:22:45 +0200
-Subject: [Buildroot] [git commit] ser2net: add sysv init script
-Message-ID: <20160723132330.CF3FC81DE4@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 23 Jul 2016 10:31:20 -0300
+Subject: [Buildroot] [PATCH 1/6] libfm-extra: bump to version 1.2.4
+Message-ID: <1469280685-11787-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cf4080087e7d7defa5fc50f42a3c6f94e3979be
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-[Thomas:
- - remove check for the ser2net binary
- - add check for the configuration file
- - use 'printf' instead of 'echo -n'
- - fix indentation where needed]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ser2net/S50ser2net | 43 +++++++++++++++++++++++++++++++++++++++++++
- package/ser2net/ser2net.mk |  5 +++++
- 2 files changed, 48 insertions(+)
+ package/libfm-extra/Config.in        | 2 +-
+ package/libfm-extra/libfm-extra.hash | 5 +++--
+ package/libfm-extra/libfm-extra.mk   | 2 +-
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/ser2net/S50ser2net b/package/ser2net/S50ser2net
-new file mode 100644
-index 0000000..200dfd0
---- /dev/null
-+++ b/package/ser2net/S50ser2net
-@@ -0,0 +1,43 @@
-+#!/bin/sh
-+#
-+# Startup script for ser2net
-+#
-+
-+start() {
-+    printf  "Starting ser2net: "
-+    if [ ! -f /etc/ser2net.conf ] ; then
-+	echo "no configuration file"
-+	exit 1
-+    fi
-+
-+    start-stop-daemon -S -q --exec /usr/sbin/ser2net -- -P /var/run/ser2net.pid
-+    [ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+stop() {
-+    printf "Shutting down ser2net: "
-+    start-stop-daemon -K -q -p /var/run/ser2net.pid
-+    [ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+restart() {
-+    stop
-+    start
-+}
-+
-+case "$1" in
-+	start)
-+	    start
-+	    ;;
-+	stop)
-+	    stop
-+	    ;;
-+	restart)
-+	    restart
-+	    ;;
-+	*)
-+	    echo "Usage: ser2net {start|stop|restart}"
-+	    exit 1
-+esac
-+
-+exit $?
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index ac64c3d..85b23ae 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -9,4 +9,9 @@ SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPLv2+
- SER2NET_LICENSE_FILES = COPYING
+diff --git a/package/libfm-extra/Config.in b/package/libfm-extra/Config.in
+index f0e0b63..79465f9 100644
+--- a/package/libfm-extra/Config.in
++++ b/package/libfm-extra/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBFM_EXTRA
+ 	depends on BR2_USE_MMU # libglib2
+ 	help
+ 	  The libfm-extra package contains a library and other files
+-	  required by menu-cache-gen libexec of menu-cache-1.0.0
++	  required by menu-cache-gen libexec of menu-cache
  
-+define SER2NET_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/ser2net/S50ser2net \
-+		$(TARGET_DIR)/etc/init.d/S50ser2net
-+endef
-+
- $(eval $(autotools-package))
+ 	  http://wiki.lxde.org/en/Libfm
+ 
+diff --git a/package/libfm-extra/libfm-extra.hash b/package/libfm-extra/libfm-extra.hash
+index 5311dec..8a78ade 100644
+--- a/package/libfm-extra/libfm-extra.hash
++++ b/package/libfm-extra/libfm-extra.hash
+@@ -1,2 +1,3 @@
+-# From http://blog.lxde.org/?p=1280
+-sha1  c3f2f34086761d89d6aba549883610084ba00750  libfm-1.2.3.tar.xz
++# From https://sourceforge.net/projects/pcmanfm/files/PCManFM%20%2B%20Libfm%20%28tarball%20release%29/LibFM/
++md5	74997d75e7e87dc73398746fd373bf52	libfm-1.2.4.tar.xz
++sha1	2f8183389c8e74edb15c6c8ab260df5dd39f3b2d	libfm-1.2.4.tar.xz
+diff --git a/package/libfm-extra/libfm-extra.mk b/package/libfm-extra/libfm-extra.mk
+index f5b1928..0e7a7dc 100644
+--- a/package/libfm-extra/libfm-extra.mk
++++ b/package/libfm-extra/libfm-extra.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFM_EXTRA_VERSION = 1.2.3
++LIBFM_EXTRA_VERSION = 1.2.4
+ LIBFM_EXTRA_SOURCE = libfm-$(LIBFM_EXTRA_VERSION).tar.xz
+ LIBFM_EXTRA_SITE = http://sourceforge.net/projects/pcmanfm/files
+ LIBFM_EXTRA_DEPENDENCIES = libglib2 host-intltool
+-- 
+2.7.3
