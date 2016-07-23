@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 22:58:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.70
-In-Reply-To: <1469287037-15165-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1469287037-15165-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160723225811.4f1bdda8@free-electrons.com>
+Date: Sat, 23 Jul 2016 22:58:55 +0200
+Subject: [Buildroot] [PATCH] libunwind: needs ARM instruction support
+In-Reply-To: <1469287474-4391-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1469287474-4391-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160723225855.0f054ded@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 23 Jul 2016 17:17:17 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Sat, 23 Jul 2016 12:24:34 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/4cf/4cf517cd81d3aa5da26848edaba5df0bfbab2c77/
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/libdrm/libdrm.hash | 4 ++--
->  package/libdrm/libdrm.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/libunwind/Config.in | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
