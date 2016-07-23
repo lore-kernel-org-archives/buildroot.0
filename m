@@ -1,49 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 22:16:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rtl8821au: switch upstream to
- abperiasamy
-In-Reply-To: <1469296205024-87d916e6-ee65ee9e-32c5cbb8@mixmax.com>
-References: <1469220888-2215-1-git-send-email-christian@paral.in>
- <20160723151352.77eea94b@free-electrons.com>
- <1469296205024-87d916e6-ee65ee9e-32c5cbb8@mixmax.com>
-Message-ID: <20160723221650.712ba2f2@free-electrons.com>
+From: Christian Stewart <christian@paral.in>
+Date: Sat, 23 Jul 2016 13:28:40 -0700
+Subject: [Buildroot] [PATCH v2 1/1] package/rtl8821au: switch to abperiasamy
+	fork
+Message-ID: <1469305720-23793-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Switching to the rtl8821au fork at github.com/abperiasamy/rtl8812AU_8821AU_linux.
 
-On Sat, 23 Jul 2016 17:50:04 +0000, Christian Stewart wrote:
+ - The current fork we are using is maintained by 1 person.
+ - The current fork does not work, and there are no plans to fix this:
+     - https://github.com/ulli-kroll/rtl8821au/issues/5
+     - https://github.com/ulli-kroll/rtl8821au/issues/6
+ - In practice, the current fork has numerous instability issues.
+ - Our lab switched to the abperiasamy fork a couple months ago and have been very happy with it.
+ - The contributor list for the abperiasamy fork contains 21 well-known individuals in the community.
+ - The raspberry pi community recommends the abperiasamy fork and uses it extensively.
+ - Firmware blobs are not necessary with the new fork.
 
-> Here is my reasoning:
-> - The current fork we are using is maintained by 1 person. - The current fork does not work, and there are no plans to fix this: - https://github.com/ulli-kroll/rtl8821au/issues/5 - https://github.com/ulli-kroll/rtl8821au/issues/6 - The current fork has never worked very well (we've had lots of issues with
-> it) - Our lab switched to the abperiasamy fork a couple months ago and have been
-> very happy with it. - The contributor list for the abperiasamy fork contains 21 well-known
-> individuals in the community. - The raspberry pi community recommends the abperiasamy fork and uses it
-> extensively. - Firmware blobs are not necessary with the new fork and all of the devices we
-> have tested the driver with have not required firmware blobs. In fact, we found
-> that the firmware blobs in ulli-kroll's version bricked a few of our wifi cards,
-> and are quite happy with not using a driver that messes with firmware. - There is a version of rtl8821au in the Raspberry Pi kernel but that is
-> obviously unsuitable for use in Buildroot as it cannot be applied to arbitrary
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/rtl8821au/rtl8821au.hash |  2 +-
+ package/rtl8821au/rtl8821au.mk   | 15 ++++-----------
+ 2 files changed, 5 insertions(+), 12 deletions(-)
 
-OK. Thanks. It is somewhat sad that all these information are not part
-of the commit log, isn't it?
-
-> PS: Please let me know if this email formats strangely, it looks OK on my end:
-> http://i.imgur.com/E4ymrB7.png
-
-Your e-mail contains both a plain text version and a HTML version. The
-HTML version looks fine, but my e-mail client displays the plain text
-version. And the plain text version is really badly formatted.
-
-See http://imgur.com/a/Iz1ZP.
-
-Best regards,
-
-Thomas
+diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
+index cac4ce2..01f22cc 100644
+--- a/package/rtl8821au/rtl8821au.hash
++++ b/package/rtl8821au/rtl8821au.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 64d068b92215f06f877629b2e6cd5da41329ac1222104ff9dc7ec504ca23af09  rtl8821au-116a3abe7783b023655e9917afe2d1eabe178028.tar.gz
++sha256 6e4334b0718b2ac611bf8b4d7a493b016bdb1c24daa7b459f091b92b6fd961c7  rtl8821au-c33ddb05a77741d2a9c9b974ad0cf0fa26d17b6e.tar.gz
+diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
+index ebb1665..9ba43ef 100644
+--- a/package/rtl8821au/rtl8821au.mk
++++ b/package/rtl8821au/rtl8821au.mk
+@@ -4,22 +4,15 @@
+ #
+ ################################################################################
+ 
+-RTL8821AU_VERSION = 116a3abe7783b023655e9917afe2d1eabe178028
+-RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
+-RTL8821AU_LICENSE = GPLv2, proprietary (rtl8821au.bin firmware)
++RTL8821AU_VERSION = c33ddb05a77741d2a9c9b974ad0cf0fa26d17b6e
++RTL8821AU_SITE = $(call github,abperiasamy,rtl8812AU_8821AU_linux,$(RTL8821AU_VERSION))
++RTL8821AU_LICENSE = GPLv2
+ RTL8821AU_LICENSE_FILES = COPYING
+ 
+ RTL8821AU_MODULE_MAKE_OPTS = \
+-	CONFIG_RTL8821AU=m \
++	CONFIG_RTL8812AU_8821AU=m \
+ 	KVER=$(LINUX_VERSION_PROBED) \
+ 	USER_EXTRA_CFLAGS=-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
+ 
+-define RTL8821AU_FIRMWARE_INSTALL
+-	mkdir -p $(TARGET_DIR)/lib/firmware/rtlwifi/
+-	$(INSTALL) -D -m 0644 $(@D)/firmware/* $(TARGET_DIR)/lib/firmware/rtlwifi/
+-endef
+-
+-RTL8821AU_POST_INSTALL_TARGET_HOOKS += RTL8821AU_FIRMWARE_INSTALL
+-
+ $(eval $(kernel-module))
+ $(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
