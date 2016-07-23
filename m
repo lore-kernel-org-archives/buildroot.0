@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 23 Jul 2016 10:31:21 -0300
-Subject: [Buildroot] [PATCH 2/6] menu-cache: bump to version 1.0.1
+Date: Sat, 23 Jul 2016 10:31:22 -0300
+Subject: [Buildroot] [PATCH 3/6] libfm: bump to version 1.2.4
 In-Reply-To: <1469280685-11787-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1469280685-11787-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1469280685-11787-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1469280685-11787-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/menu-cache/menu-cache.hash | 5 +++--
- package/menu-cache/menu-cache.mk   | 2 +-
+ package/libfm/libfm.hash | 5 +++--
+ package/libfm/libfm.mk   | 2 +-
  2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/menu-cache/menu-cache.hash b/package/menu-cache/menu-cache.hash
-index 3b9e5c4..1b30fcc 100644
---- a/package/menu-cache/menu-cache.hash
-+++ b/package/menu-cache/menu-cache.hash
+diff --git a/package/libfm/libfm.hash b/package/libfm/libfm.hash
+index 5311dec..8a78ade 100644
+--- a/package/libfm/libfm.hash
++++ b/package/libfm/libfm.hash
 @@ -1,2 +1,3 @@
--# From http://blog.lxde.org/?p=1299
--sha1  e7b3854109f9826472cf9795e924acebe5e27861  menu-cache-1.0.0.tar.xz
-+# From https://sourceforge.net/projects/lxde/files/menu-cache/1.0/
-+md5	a856ba860b16fdc8c69ee784bc4ade36	menu-cache-1.0.1.tar.xz
-+sha1	58862c665f2ae56870a9937cdcd643674b2ac8ba	menu-cache-1.0.1.tar.xz
-diff --git a/package/menu-cache/menu-cache.mk b/package/menu-cache/menu-cache.mk
-index 9d43864..1687825 100644
---- a/package/menu-cache/menu-cache.mk
-+++ b/package/menu-cache/menu-cache.mk
-@@ -5,7 +5,7 @@
+-# From http://blog.lxde.org/?p=1280
+-sha1  c3f2f34086761d89d6aba549883610084ba00750  libfm-1.2.3.tar.xz
++# From https://sourceforge.net/projects/pcmanfm/files/PCManFM%20%2B%20Libfm%20%28tarball%20release%29/LibFM/
++md5	74997d75e7e87dc73398746fd373bf52	libfm-1.2.4.tar.xz
++sha1	2f8183389c8e74edb15c6c8ab260df5dd39f3b2d	libfm-1.2.4.tar.xz
+diff --git a/package/libfm/libfm.mk b/package/libfm/libfm.mk
+index e8410d0..a9be094 100644
+--- a/package/libfm/libfm.mk
++++ b/package/libfm/libfm.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MENU_CACHE_VERSION_MAJOR = 1.0
--MENU_CACHE_VERSION = $(MENU_CACHE_VERSION_MAJOR).0
-+MENU_CACHE_VERSION = $(MENU_CACHE_VERSION_MAJOR).1
- MENU_CACHE_SOURCE = menu-cache-$(MENU_CACHE_VERSION).tar.xz
- MENU_CACHE_SITE = http://sourceforge.net/projects/lxde/files/menu-cache/$(MENU_CACHE_VERSION_MAJOR)
- MENU_CACHE_DEPENDENCIES = libfm-extra libglib2
+-LIBFM_VERSION = 1.2.3
++LIBFM_VERSION = 1.2.4
+ LIBFM_SOURCE = libfm-$(LIBFM_VERSION).tar.xz
+ LIBFM_SITE = http://sourceforge.net/projects/pcmanfm/files
+ LIBFM_DEPENDENCIES = menu-cache libgtk2 libglib2 cairo
 -- 
 2.7.3
