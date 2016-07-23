@@ -1,70 +1,85 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat, 23 Jul 2016 13:28:40 -0700
-Subject: [Buildroot] [PATCH v2 1/1] package/rtl8821au: switch to abperiasamy
-	fork
-Message-ID: <1469305720-23793-1-git-send-email-christian@paral.in>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 23 Jul 2016 22:56:24 +0200
+Subject: [Buildroot] [git commit] tunctl: new package
+Message-ID: <20160723205652.5FB8181E06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switching to the rtl8821au fork at github.com/abperiasamy/rtl8812AU_8821AU_linux.
+commit: https://git.buildroot.net/buildroot/commit/?id=689b2b74effc1d112f43f7ee4f21c757a2312e56
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- - The current fork we are using is maintained by 1 person.
- - The current fork does not work, and there are no plans to fix this:
-     - https://github.com/ulli-kroll/rtl8821au/issues/5
-     - https://github.com/ulli-kroll/rtl8821au/issues/6
- - In practice, the current fork has numerous instability issues.
- - Our lab switched to the abperiasamy fork a couple months ago and have been very happy with it.
- - The contributor list for the abperiasamy fork contains 21 well-known individuals in the community.
- - The raspberry pi community recommends the abperiasamy fork and uses it extensively.
- - Firmware blobs are not necessary with the new fork.
+Tunctl is a tool for controlling the TUN/TAP driver in Linux.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+[Thomas: use $(TARGET_CONFIGURE_OPTS).]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rtl8821au/rtl8821au.hash |  2 +-
- package/rtl8821au/rtl8821au.mk   | 15 ++++-----------
- 2 files changed, 5 insertions(+), 12 deletions(-)
+ package/Config.in          |  1 +
+ package/tunctl/Config.in   |  6 ++++++
+ package/tunctl/tunctl.hash |  2 ++
+ package/tunctl/tunctl.mk   | 22 ++++++++++++++++++++++
+ 4 files changed, 31 insertions(+)
 
-diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
-index cac4ce2..01f22cc 100644
---- a/package/rtl8821au/rtl8821au.hash
-+++ b/package/rtl8821au/rtl8821au.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 64d068b92215f06f877629b2e6cd5da41329ac1222104ff9dc7ec504ca23af09  rtl8821au-116a3abe7783b023655e9917afe2d1eabe178028.tar.gz
-+sha256 6e4334b0718b2ac611bf8b4d7a493b016bdb1c24daa7b459f091b92b6fd961c7  rtl8821au-c33ddb05a77741d2a9c9b974ad0cf0fa26d17b6e.tar.gz
-diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
-index ebb1665..9ba43ef 100644
---- a/package/rtl8821au/rtl8821au.mk
-+++ b/package/rtl8821au/rtl8821au.mk
-@@ -4,22 +4,15 @@
- #
- ################################################################################
- 
--RTL8821AU_VERSION = 116a3abe7783b023655e9917afe2d1eabe178028
--RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
--RTL8821AU_LICENSE = GPLv2, proprietary (rtl8821au.bin firmware)
-+RTL8821AU_VERSION = c33ddb05a77741d2a9c9b974ad0cf0fa26d17b6e
-+RTL8821AU_SITE = $(call github,abperiasamy,rtl8812AU_8821AU_linux,$(RTL8821AU_VERSION))
-+RTL8821AU_LICENSE = GPLv2
- RTL8821AU_LICENSE_FILES = COPYING
- 
- RTL8821AU_MODULE_MAKE_OPTS = \
--	CONFIG_RTL8821AU=m \
-+	CONFIG_RTL8812AU_8821AU=m \
- 	KVER=$(LINUX_VERSION_PROBED) \
- 	USER_EXTRA_CFLAGS=-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
- 
--define RTL8821AU_FIRMWARE_INSTALL
--	mkdir -p $(TARGET_DIR)/lib/firmware/rtlwifi/
--	$(INSTALL) -D -m 0644 $(@D)/firmware/* $(TARGET_DIR)/lib/firmware/rtlwifi/
--endef
--
--RTL8821AU_POST_INSTALL_TARGET_HOOKS += RTL8821AU_FIRMWARE_INSTALL
--
- $(eval $(kernel-module))
- $(eval $(generic-package))
--- 
-2.7.3
+diff --git a/package/Config.in b/package/Config.in
+index 6b5b011..46ad276 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1575,6 +1575,7 @@ endif
+ 	source "package/tn5250/Config.in"
+ 	source "package/tor/Config.in"
+ 	source "package/transmission/Config.in"
++	source "package/tunctl/Config.in"
+ 	source "package/tvheadend/Config.in"
+ 	source "package/udpcast/Config.in"
+ 	source "package/ulogd/Config.in"
+diff --git a/package/tunctl/Config.in b/package/tunctl/Config.in
+new file mode 100644
+index 0000000..26eed4c
+--- /dev/null
++++ b/package/tunctl/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_TUNCTL
++	bool "tunctl"
++	help
++	  Tunctl is a tool for controlling the TUN/TAP driver in Linux.
++
++	  https://sourceforge.net/projects/tunctl/
+diff --git a/package/tunctl/tunctl.hash b/package/tunctl/tunctl.hash
+new file mode 100644
+index 0000000..d3aaeec
+--- /dev/null
++++ b/package/tunctl/tunctl.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 aa2a6c4cc6bfacb11e0d9f62334a6638a0d435475c61230116f00b6af8b14fff  tunctl-1.5.tar.gz
+diff --git a/package/tunctl/tunctl.mk b/package/tunctl/tunctl.mk
+new file mode 100644
+index 0000000..81e6c8c
+--- /dev/null
++++ b/package/tunctl/tunctl.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# tunctl
++#
++################################################################################
++
++TUNCTL_VERSION = 1.5
++TUNCTL_SOURCE = tunctl-$(TUNCTL_VERSION).tar.gz
++TUNCTL_SITE = http://downloads.sourceforge.net/project/tunctl/tunctl/$(TUNCTL_VERSION)
++
++TUNCTL_LICENSE = GPLv2
++TUNCTL_LICENSE_FILES = tunctl.c
++
++define TUNCTL_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) tunctl
++endef
++
++define TUNCTL_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/tunctl $(TARGET_DIR)/usr/sbin/tunctl
++endef
++
++$(eval $(generic-package))
