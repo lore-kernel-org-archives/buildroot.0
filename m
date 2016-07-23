@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 23:06:47 +0200
-Subject: [Buildroot] [git commit] zeromq: disable documentation
-Message-ID: <20160723210654.C7C0A81D43@busybox.osuosl.org>
+Date: Sat, 23 Jul 2016 22:57:58 +0200
+Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.70
+Message-ID: <20160723210654.9656E81D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b5926d30408be53c38c4819741c9af10f0fe9d4
+commit: https://git.buildroot.net/buildroot/commit/?id=ad225d8c2a6cde309bd220e298770962f78618b8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If asciidoc and xmlto are around it will automatically enable the
-documentation build which is pointless.
-Build time on i5-3330 with docs = 37s, without docs 25s.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/zeromq/zeromq.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libdrm/libdrm.hash | 4 ++--
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 4891e59..5c99983 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -8,6 +8,7 @@ ZEROMQ_VERSION = 4.1.5
- ZEROMQ_SITE = https://github.com/zeromq/zeromq4-1/releases/download/v$(ZEROMQ_VERSION)
- ZEROMQ_INSTALL_STAGING = YES
- ZEROMQ_DEPENDENCIES = util-linux
-+ZEROMQ_CONF_OPTS = --without-documentation
- ZEROMQ_LICENSE = LGPLv3+ with exceptions
- ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
- # For 0001-acinclude.m4-make-kernel-specific-flags-cacheable.patch
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 3cfa34e..c205780 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-July/002700.html
+-sha256	09510cbc75adba7e84fd3ec86586fd352a787fd534a63377de9e19ff85280b33	libdrm-2.4.69.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2016-July/113899.html
++sha256	b17d4b39ed97ca0e4cffa0db06ff609e617bac94646ec38e8e0579d530540e7b	libdrm-2.4.70.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 8fedfe6..d8d7744 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.69
++LIBDRM_VERSION = 2.4.70
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
