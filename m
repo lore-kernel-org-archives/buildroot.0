@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 23:07:19 +0200
-Subject: [Buildroot] [PATCH 2/2] zeromq: disable documentation
-In-Reply-To: <1469295001-21786-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1469295001-21786-1-git-send-email-gustavo@zacarias.com.ar>
- <1469295001-21786-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160723230719.462280dc@free-electrons.com>
+Date: Sat, 23 Jul 2016 23:07:37 +0200
+Subject: [Buildroot] [git commit] fio: add optional zlib dependency
+Message-ID: <20160723210759.87B7481E0A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d79885b03af073ef6560c404c4d05c8575accde6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 23 Jul 2016 14:30:01 -0300, Gustavo Zacarias wrote:
-> If asciidoc and xmlto are around it will automatically enable the
-> documentation build which is pointless.
-> Build time on i5-3330 with docs = 37s, without docs 25s.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/zeromq/zeromq.mk | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/fio/fio.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/fio/fio.mk b/package/fio/fio.mk
+index e09bd71..662b2b2 100644
+--- a/package/fio/fio.mk
++++ b/package/fio/fio.mk
+@@ -13,6 +13,10 @@ ifeq ($(BR2_PACKAGE_LIBAIO),y)
+ FIO_DEPENDENCIES += libaio
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++FIO_DEPENDENCIES += zlib
++endif
++
+ define FIO_CONFIGURE_CMDS
+ 	(cd $(@D); ./configure --cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
+ endef
