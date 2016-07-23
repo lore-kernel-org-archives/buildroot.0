@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 23:07:13 +0200
-Subject: [Buildroot] [PATCH 1/2] zeromq: bump to version 4.1.5
-In-Reply-To: <1469295001-21786-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 23 Jul 2016 23:07:19 +0200
+Subject: [Buildroot] [PATCH 2/2] zeromq: disable documentation
+In-Reply-To: <1469295001-21786-2-git-send-email-gustavo@zacarias.com.ar>
 References: <1469295001-21786-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160723230713.6bf985c0@free-electrons.com>
+ <1469295001-21786-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160723230719.462280dc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 23 Jul 2016 14:30:00 -0300, Gustavo Zacarias wrote:
+On Sat, 23 Jul 2016 14:30:01 -0300, Gustavo Zacarias wrote:
+> If asciidoc and xmlto are around it will automatically enable the
+> documentation build which is pointless.
+> Build time on i5-3330 with docs = 37s, without docs 25s.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/zeromq/zeromq.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-> -ZEROMQ_VERSION = 4.1.4
-> +ZEROMQ_VERSION = 4.1.5
->  ZEROMQ_SITE = http://download.zeromq.org
-> +ZEROMQ_SITE = https://github.com/zeromq/zeromq4-1/releases/download/v$(ZEROMQ_VERSION)
-
-Duplicate _SITE variable, so I've dropped the old one and applied.
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
