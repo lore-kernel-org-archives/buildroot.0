@@ -1,59 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 23 Jul 2016 14:14:59 +0200
-Subject: [Buildroot] [PATCH] package/gdb: gdbserver: add missing header
-Message-ID: <1469276099-13936-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 23 Jul 2016 14:41:04 +0200
+Subject: [Buildroot] [git commit] dropbear: bump version to 2016.74
+Message-ID: <20160723124120.9728E818EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport upstream patch for musl toolchains
+commit: https://git.buildroot.net/buildroot/commit/?id=52b06ebbcffd0905cf8cf26673453bd619194d3d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/564/56443134388ee6c4a13add10cc53eff6f47f244e
+According to https://matt.ucc.asn.au/dropbear/CHANGES there were some
+severe security issues fixed.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../7.10.1/0005-target.h-include-sys-types.h.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/gdb/7.10.1/0005-target.h-include-sys-types.h.patch
+ package/dropbear/dropbear.hash | 2 +-
+ package/dropbear/dropbear.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gdb/7.10.1/0005-target.h-include-sys-types.h.patch b/package/gdb/7.10.1/0005-target.h-include-sys-types.h.patch
-new file mode 100644
-index 0000000..ba5419d
---- /dev/null
-+++ b/package/gdb/7.10.1/0005-target.h-include-sys-types.h.patch
-@@ -0,0 +1,30 @@
-+From cd68d0ebe7748a5448c86eb021b717df6fe83f35 Mon Sep 17 00:00:00 2001
-+From: Doug Evans <xdje42@gmail.com>
-+Date: Sun, 22 Nov 2015 17:24:03 -0800
-+Subject: [PATCH] target.h: #include <sys/types.h>.
-+
-+For musl.
-+
-+[Romain:
-+  rebase on gdb 7.10.1 from upstream (7.11)
-+  remove ChangeLog entry]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gdb/gdbserver/target.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/gdb/gdbserver/target.h b/gdb/gdbserver/target.h
-+index 9a40867..6af043c 100644
-+--- a/gdb/gdbserver/target.h
-++++ b/gdb/gdbserver/target.h
-+@@ -21,6 +21,7 @@
-+ #ifndef TARGET_H
-+ #define TARGET_H
-+ 
-++#include <sys/types.h> /* for mode_t */
-+ #include "target/target.h"
-+ #include "target/resume.h"
-+ #include "target/wait.h"
-+-- 
-+2.5.5
-+
--- 
-2.5.5
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+index 2692889..88f3e6e 100644
+--- a/package/dropbear/dropbear.hash
++++ b/package/dropbear/dropbear.hash
+@@ -1,2 +1,2 @@
+ # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
+-sha256	5c61a4f69b093b688629cd365be38701485ff63cfb23642dab7a05ad250aefd7  dropbear-2016.73.tar.bz2
++sha256 2720ea54ed009af812701bcc290a2a601d5c107d12993e5d92c0f5f81f718891 dropbear-2016.74.tar.bz2
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 32e2167..743d524 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DROPBEAR_VERSION = 2016.73
++DROPBEAR_VERSION = 2016.74
+ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
