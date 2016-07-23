@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 15:08:40 +0200
-Subject: [Buildroot] [PATCH] bmon: bump to version 3.9
-In-Reply-To: <1469232639-397-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1469232639-397-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160723150840.4a94bde4@free-electrons.com>
+Date: Sat, 23 Jul 2016 15:08:43 +0200
+Subject: [Buildroot] [PATCH] libinput: bump to version 1.4.0
+In-Reply-To: <1469234892-560-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1469234892-560-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160723150843.798e7e67@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 22 Jul 2016 21:10:39 -0300, Gustavo Zacarias wrote:
-> And switch to github homepage.
+On Fri, 22 Jul 2016 21:48:12 -0300, Gustavo Zacarias wrote:
+> And drop upstream patch.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/bmon/Config.in | 2 +-
->  package/bmon/bmon.hash | 2 +-
->  package/bmon/bmon.mk   | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+>  ...-Add-configure.ac-check-for-static_assert.patch | 34 ----------------------
+>  package/libinput/libinput.hash                     |  4 +--
+>  package/libinput/libinput.mk                       |  4 +--
+>  3 files changed, 3 insertions(+), 39 deletions(-)
+>  delete mode 100644 package/libinput/0002-Add-configure.ac-check-for-static_assert.patch
 
 Applied to master, thanks.
 
