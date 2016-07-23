@@ -1,40 +1,198 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 23 Jul 2016 11:56:44 -0300
-Subject: [Buildroot] [PATCH] lighttpd: webdav locks require libuuid
-Message-ID: <1469285804-3153-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 23 Jul 2016 11:56:54 -0300
+Subject: [Buildroot] [PATCH] lighttpd: add clock_gettime patch
+Message-ID: <1469285814-3197-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since 1.4.40 webdav locks require libuuid from util-linux, so make it an
-automatic dependency. Fixes:
-http://autobuild.buildroot.net/results/b14/b14484300b4acfcaa18593b097167cef14330898/
+Fixes:
+http://autobuild.buildroot.net/results/590/5901153a345c69d0a041309cfb79329bb42ff98d/
+
+Patch status: upstream.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/lighttpd/lighttpd.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ ...tobuild-clock_gettime-lrt-with-glibc-2.17.patch | 155 +++++++++++++++++++++
+ package/lighttpd/lighttpd.mk                       |   2 +
+ 2 files changed, 157 insertions(+)
+ create mode 100644 package/lighttpd/0002-autobuild-clock_gettime-lrt-with-glibc-2.17.patch
 
+diff --git a/package/lighttpd/0002-autobuild-clock_gettime-lrt-with-glibc-2.17.patch b/package/lighttpd/0002-autobuild-clock_gettime-lrt-with-glibc-2.17.patch
+new file mode 100644
+index 0000000..90821b7
+--- /dev/null
++++ b/package/lighttpd/0002-autobuild-clock_gettime-lrt-with-glibc-2.17.patch
+@@ -0,0 +1,155 @@
++From 4d920466f7a8163adb3de2862b48c53b24a9a915 Mon Sep 17 00:00:00 2001
++From: Glenn Strauss <gstrauss@gluelogic.com>
++Date: Mon, 18 Jul 2016 14:24:39 -0400
++Subject: [PATCH] [autobuild] clock_gettime() -lrt with glibc < 2.17
++
++clock_gettime() needs -lrt with glibc < 2.17,
++and possibly other platforms
++
++On systems without clock_gettime (-cough- Mac OSX -cough-),
++use gettimeofday() (deprecated in POSIX.1-2008) which is slightly
++lower precision, but reasonably fast in execution.  References:
++http://stackoverflow.com/questions/5167269/clock-gettime-alternative-in-mac-os-x
++http://stackoverflow.com/questions/11680461/monotonic-clock-on-osx
++https://discussions.apple.com/thread/6023936?tstart=0
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ configure.ac        |  5 ++++-
++ src/connections.c   |  4 ++--
++ src/log.c           | 20 ++++++++++++++++++++
++ src/log.h           |  3 +++
++ src/mod_accesslog.c | 12 ++++++++----
++ 5 files changed, 37 insertions(+), 7 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index ffe6a17..1d172a1 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -286,6 +286,9 @@ AC_SEARCH_LIBS(hstrerror,resolv)
++ dnl On Haiku accept() and friends are in libnetwork
++ AC_SEARCH_LIBS(accept,network)
++ 
+++dnl clock_gettime() needs -lrt with glibc < 2.17, and possibly other platforms
+++AC_SEARCH_LIBS([clock_gettime],[rt])
+++
++ save_LIBS=$LIBS
++ AC_SEARCH_LIBS(dlopen,dl,[
++   AC_CHECK_HEADERS([dlfcn.h],[
++@@ -699,7 +702,7 @@ AC_CHECK_FUNCS([dup2 getcwd inet_ntoa inet_ntop inet_pton issetugid memset mmap
++ 		  gethostbyname poll epoll_ctl getrlimit chroot \
++ 		  getuid select signal pathconf madvise posix_fadvise posix_madvise \
++ 		  writev sigaction sendfile64 send_file kqueue port_create localtime_r gmtime_r \
++-		  memset_s explicit_bzero])
+++		  memset_s explicit_bzero clock_gettime])
++ 
++ AC_MSG_CHECKING(if weak symbols are supported)
++ AC_LINK_IFELSE([AC_LANG_PROGRAM([[
++diff --git a/src/connections.c b/src/connections.c
++index e73a667..507838c 100644
++--- a/src/connections.c
+++++ b/src/connections.c
++@@ -692,7 +692,7 @@ static int connection_handle_read_state(server *srv, connection *con)  {
++ 	if (con->request_count > 1 && is_request_start) {
++ 		con->request_start = srv->cur_ts;
++ 		if (con->conf.high_precision_timestamps)
++-			clock_gettime(CLOCK_REALTIME, &con->request_start_hp);
+++			log_clock_gettime_realtime(&con->request_start_hp);
++ 	}
++ 
++ 		/* if there is a \r\n\r\n in the chunkqueue
++@@ -1000,7 +1000,7 @@ int connection_state_machine(server *srv, connection *con) {
++ 			con->request_start = srv->cur_ts;
++ 			con->read_idle_ts = srv->cur_ts;
++ 			if (con->conf.high_precision_timestamps)
++-				clock_gettime(CLOCK_REALTIME, &con->request_start_hp);
+++				log_clock_gettime_realtime(&con->request_start_hp);
++ 
++ 			con->request_count++;
++ 			con->loops_per_request = 0;
++diff --git a/src/log.c b/src/log.c
++index b10bebe..21a2916 100644
++--- a/src/log.c
+++++ b/src/log.c
++@@ -28,6 +28,26 @@
++ # define O_LARGEFILE 0
++ #endif
++ 
+++#ifndef HAVE_CLOCK_GETTIME
+++#ifdef HAVE_SYS_TIME_H
+++# include <sys/time.h>  /* gettimeofday() */
+++#endif
+++#endif
+++
+++int log_clock_gettime_realtime (struct timespec *ts) {
+++      #ifdef HAVE_CLOCK_GETTIME
+++	return clock_gettime(CLOCK_REALTIME, ts);
+++      #else
+++	/* Mac OSX does not provide clock_gettime()
+++	 * e.g. defined(__APPLE__) && defined(__MACH__) */
+++	struct timeval tv;
+++	gettimeofday(&tv, NULL);
+++	ts->tv_sec  = tv.tv_sec;
+++	ts->tv_nsec = tv.tv_usec * 1000;
+++	return 0;
+++      #endif
+++}
+++
++ /* retry write on EINTR or when not all data was written */
++ ssize_t write_all(int fd, const void* buf, size_t count) {
++ 	ssize_t written = 0;
++diff --git a/src/log.h b/src/log.h
++index 0570f0b..32ce8d4 100644
++--- a/src/log.h
+++++ b/src/log.h
++@@ -4,6 +4,9 @@
++ 
++ #include "server.h"
++ 
+++struct timespec; /* declaration */
+++int log_clock_gettime_realtime (struct timespec *ts);
+++
++ ssize_t write_all(int fd, const void* buf, size_t count);
++ 
++ /* Close fd and _try_ to get a /dev/null for it instead.
++diff --git a/src/mod_accesslog.c b/src/mod_accesslog.c
++index 5e82ef5..fba1cb4 100644
++--- a/src/mod_accesslog.c
+++++ b/src/mod_accesslog.c
++@@ -765,7 +765,7 @@ REQUESTDONE_FUNC(log_access_write) {
++ 						off_t t; /*(expected to be 64-bit since large file support enabled)*/
++ 						long ns;
++ 						if (!(f->opt & FORMAT_FLAG_TIME_BEGIN)) {
++-							if (0 == ts.tv_sec) clock_gettime(CLOCK_REALTIME, &ts);
+++							if (0 == ts.tv_sec) log_clock_gettime_realtime(&ts);
++ 							t = (off_t)ts.tv_sec;
++ 							ns = ts.tv_nsec;
++ 						} else {
++@@ -787,7 +787,7 @@ REQUESTDONE_FUNC(log_access_write) {
++ 						long ns;
++ 						char *ptr;
++ 						if (!(f->opt & FORMAT_FLAG_TIME_BEGIN)) {
++-							if (0 == ts.tv_sec) clock_gettime(CLOCK_REALTIME, &ts);
+++							if (0 == ts.tv_sec) log_clock_gettime_realtime(&ts);
++ 							ns = ts.tv_nsec;
++ 						} else {
++ 							ns = con->request_start_hp.tv_nsec;
++@@ -880,9 +880,13 @@ REQUESTDONE_FUNC(log_access_write) {
++ 				} else {
++ 					const struct timespec * const bs = &con->request_start_hp;
++ 					off_t tdiff; /*(expected to be 64-bit since large file support enabled)*/
++-					if (0 == ts.tv_sec) clock_gettime(CLOCK_REALTIME, &ts);
+++					if (0 == ts.tv_sec) log_clock_gettime_realtime(&ts);
++ 					tdiff = (off_t)(ts.tv_sec - bs->tv_sec)*1000000000 + (ts.tv_nsec - bs->tv_nsec);
++-					if (f->opt & FORMAT_FLAG_TIME_MSEC) {
+++					if (tdiff <= 0) {
+++						/* sanity check for time moving backwards
+++						 * (daylight savings adjustment or leap seconds or ?) */
+++						tdiff  = -1;
+++					} else if (f->opt & FORMAT_FLAG_TIME_MSEC) {
++ 						tdiff +=  999999; /* ceil */
++ 						tdiff /= 1000000;
++ 					} else if (f->opt & FORMAT_FLAG_TIME_USEC) {
++-- 
++2.7.3
++
 diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 4a92a68..29d8634 100644
+index 29d8634..b6784b8 100644
 --- a/package/lighttpd/lighttpd.mk
 +++ b/package/lighttpd/lighttpd.mk
-@@ -46,7 +46,13 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIGHTTPD_WEBDAV),y)
- LIGHTTPD_DEPENDENCIES += libxml2 sqlite
--LIGHTTPD_CONF_OPTS += --with-webdav-props --with-webdav-locks
-+LIGHTTPD_CONF_OPTS += --with-webdav-props
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
-+LIGHTTPD_CONF_OPTS += --with-webdav-locks
-+LIGHTTPD_DEPENDENCIES += util-linux
-+else
-+LIGHTTPD_CONF_OPTS += --without-webdav-locks
-+endif
- else
- LIGHTTPD_CONF_OPTS += --without-webdav-props --without-webdav-locks
- endif
+@@ -11,6 +11,8 @@ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSIO
+ LIGHTTPD_LICENSE = BSD-3c
+ LIGHTTPD_LICENSE_FILES = COPYING
+ LIGHTTPD_DEPENDENCIES = host-pkgconf
++# For 0002-autobuild-clock_gettime-lrt-with-glibc-2.17.patch
++LIGHTTPD_AUTORECONF = YES
+ LIGHTTPD_CONF_OPTS = \
+ 	--libdir=/usr/lib/lighttpd \
+ 	--libexecdir=/usr/lib
 -- 
 2.7.3
