@@ -1,35 +1,166 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 23 Jul 2016 14:30:01 -0300
-Subject: [Buildroot] [PATCH 2/2] zeromq: disable documentation
-In-Reply-To: <1469295001-21786-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1469295001-21786-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1469295001-21786-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 23 Jul 2016 14:30:34 -0300
+Subject: [Buildroot] [PATCH 1/3] fio: bump to version 2.13
+Message-ID: <1469295036-21853-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If asciidoc and xmlto are around it will automatically enable the
-documentation build which is pointless.
-Build time on i5-3330 with docs = 37s, without docs 25s.
+And drop upstream patch.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/zeromq/zeromq.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...-of-test-programs-on-archs-that-use-arch_.patch | 126 ---------------------
+ package/fio/fio.mk                                 |   2 +-
+ 2 files changed, 1 insertion(+), 127 deletions(-)
+ delete mode 100644 package/fio/0001-Fix-compile-of-test-programs-on-archs-that-use-arch_.patch
 
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 889c94a..05f789c 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -9,6 +9,7 @@ ZEROMQ_SITE = http://download.zeromq.org
- ZEROMQ_SITE = https://github.com/zeromq/zeromq4-1/releases/download/v$(ZEROMQ_VERSION)
- ZEROMQ_INSTALL_STAGING = YES
- ZEROMQ_DEPENDENCIES = util-linux
-+ZEROMQ_CONF_OPTS = --without-documentation
- ZEROMQ_LICENSE = LGPLv3+ with exceptions
- ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
- # For 0001-acinclude.m4-make-kernel-specific-flags-cacheable.patch
+diff --git a/package/fio/0001-Fix-compile-of-test-programs-on-archs-that-use-arch_.patch b/package/fio/0001-Fix-compile-of-test-programs-on-archs-that-use-arch_.patch
+deleted file mode 100644
+index f9f4826..0000000
+--- a/package/fio/0001-Fix-compile-of-test-programs-on-archs-that-use-arch_.patch
++++ /dev/null
+@@ -1,126 +0,0 @@
+-From 71471cb1d05f3877c8fb935fbf70a6bae789ac49 Mon Sep 17 00:00:00 2001
+-From: Jens Axboe <axboe@fb.com>
+-Date: Thu, 10 Mar 2016 08:09:41 -0700
+-Subject: [PATCH] Fix compile of test programs on archs that use arch_flags at
+- runtime
+-
+-SuperH compile currently fails with:
+-
+-gettime.o: In function fio_gettime':
+-/home/thomas/projets/buildroot/output/build/fio-fio-2.7/gettime.c:163: undefined reference to arch_flags'
+-gettime.o: In function utime_since_now':
+-/home/thomas/projets/buildroot/output/build/fio-fio-2.7/gettime.c:164: undefined reference to arch_flags'
+-gettime.o: In function mtime_since_now':
+-/home/thomas/projets/buildroot/output/build/fio-fio-2.7/gettime.c:164: undefined reference to arch_flags'
+-gettime.o: In function time_since_now':
+-/home/thomas/projets/buildroot/output/build/fio-fio-2.7/gettime.c:164: undefined reference to arch_flags'
+-mutex.o: In function fio_mutex_up':
+-/home/thomas/projets/buildroot/output/build/fio-fio-2.7/mutex.c:189: undefined reference to arch_flags'
+-collect2: error: ld returned 1 exit status
+-Makefile:375: recipe for target 't/stest' failed
+-make[2]: *** [t/stest] Error 1
+-make[2]: *** Waiting for unfinished jobs....
+-
+-Fix that by ensuring we have a stub arch.o with the necessary arch flags
+-for the standalone test programs.
+-
+-Signed-off-by: Jens Axboe <axboe@fb.com>
+----
+- Makefile      | 6 +++---
+- t/arch.c      | 5 +++++
+- t/dedupe.c    | 1 +
+- t/lfsr-test.c | 2 ++
+- t/stest.c     | 2 ++
+- 5 files changed, 13 insertions(+), 3 deletions(-)
+- create mode 100644 t/arch.c
+-
+-diff --git a/Makefile b/Makefile
+-index 6b4c9db..a2502dc 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -191,7 +191,7 @@ endif
+- -include $(OBJS:.o=.d)
+- 
+- T_SMALLOC_OBJS = t/stest.o
+--T_SMALLOC_OBJS += gettime.o mutex.o smalloc.o t/log.o t/debug.o
+-+T_SMALLOC_OBJS += gettime.o mutex.o smalloc.o t/log.o t/debug.o t/arch.o
+- T_SMALLOC_PROGS = t/stest
+- 
+- T_IEEE_OBJS = t/ieee754.o
+-@@ -208,7 +208,7 @@ T_AXMAP_OBJS += lib/lfsr.o lib/axmap.o
+- T_AXMAP_PROGS = t/axmap
+- 
+- T_LFSR_TEST_OBJS = t/lfsr-test.o
+--T_LFSR_TEST_OBJS += lib/lfsr.o gettime.o t/log.o t/debug.o
+-+T_LFSR_TEST_OBJS += lib/lfsr.o gettime.o t/log.o t/debug.o t/arch.o
+- T_LFSR_TEST_PROGS = t/lfsr-test
+- 
+- T_GEN_RAND_OBJS = t/gen-rand.o
+-@@ -223,7 +223,7 @@ endif
+- 
+- T_DEDUPE_OBJS = t/dedupe.o
+- T_DEDUPE_OBJS += lib/rbtree.o t/log.o mutex.o smalloc.o gettime.o crc/md5.o \
+--		lib/memalign.o lib/bloom.o t/debug.o crc/xxhash.o \
+-+		lib/memalign.o lib/bloom.o t/debug.o crc/xxhash.o t/arch.o \
+- 		crc/murmur3.o crc/crc32c.o crc/crc32c-intel.o crc/fnv.o
+- T_DEDUPE_PROGS = t/fio-dedupe
+- 
+-diff --git a/t/arch.c b/t/arch.c
+-new file mode 100644
+-index 0000000..befb7c7
+---- /dev/null
+-+++ b/t/arch.c
+-@@ -0,0 +1,5 @@
+-+#include "../arch/arch.h"
+-+
+-+unsigned long arch_flags = 0;
+-+int tsc_reliable;
+-+int arch_random;
+-diff --git a/t/dedupe.c b/t/dedupe.c
+-index 3a66820..7856da1 100644
+---- a/t/dedupe.c
+-+++ b/t/dedupe.c
+-@@ -537,6 +537,7 @@ int main(int argc, char *argv[])
+- 	uint64_t nextents = 0, nchunks = 0;
+- 	int c, ret;
+- 
+-+	arch_init(argv);
+- 	debug_init();
+- 
+- 	while ((c = getopt(argc, argv, "b:t:d:o:c:p:B:")) != -1) {
+-diff --git a/t/lfsr-test.c b/t/lfsr-test.c
+-index 4352b89..bad5097 100644
+---- a/t/lfsr-test.c
+-+++ b/t/lfsr-test.c
+-@@ -38,6 +38,8 @@ int main(int argc, char *argv[])
+- 	void *v = NULL, *v_start;
+- 	double total, mean;
+- 
+-+	arch_init(argv);
+-+
+- 	/* Read arguments */
+- 	switch (argc) {
+- 		case 5: if (strncmp(argv[4], "verify", 7) == 0)
+-diff --git a/t/stest.c b/t/stest.c
+-index fb51989..0e0d8b0 100644
+---- a/t/stest.c
+-+++ b/t/stest.c
+-@@ -4,6 +4,7 @@
+- 
+- #include "../smalloc.h"
+- #include "../flist.h"
+-+#include "../arch/arch.h"
+- #include "debug.h"
+- 
+- #define MAGIC1	0xa9b1c8d2
+-@@ -69,6 +70,7 @@ static int do_specific_alloc(unsigned long size)
+- 
+- int main(int argc, char *argv[])
+- {
+-+	arch_init(argv);
+- 	sinit();
+- 	debug_init();
+- 
+--- 
+-2.6.4
+-
+diff --git a/package/fio/fio.mk b/package/fio/fio.mk
+index 6c4ad6c..e09bd71 100644
+--- a/package/fio/fio.mk
++++ b/package/fio/fio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FIO_VERSION = fio-2.7
++FIO_VERSION = fio-2.13
+ FIO_SITE = git://git.kernel.dk/fio.git
+ FIO_LICENSE = GPLv2 + special obligations
+ FIO_LICENSE_FILES = COPYING
 -- 
 2.7.3
