@@ -1,33 +1,25 @@
-From: Dagg Stompler <daggs@gmx.com>
-Date: Sat, 23 Jul 2016 21:55:00 +0300
-Subject: [Buildroot] [PATCH 2/3] odroidc2: bump kernel to rev
-	1cb48cebb9d525e524de0ede46710bb29f54d4a6
-In-Reply-To: <20160723185501.12148-1-daggs@gmx.com>
-References: <20160723185501.12148-1-daggs@gmx.com>
-Message-ID: <20160723185501.12148-2-daggs@gmx.com>
+From: Ben Boeckel <mathstuf@gmail.com>
+Date: Sat, 23 Jul 2016 19:33:10 +0000 (UTC)
+Subject: [Buildroot] [PATCH v4] Don't build host-cmake if it is
+ available on the build host
+References: <1468702571-23265-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <nn0gpm$pjm$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
----
- configs/odroidc2_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, 16 Jul, 2016 at 20:56:11 GMT, Luca Ceresoli wrote:
+> Currently all cmake packages depend on host-cmake. Unfortunately
+> host-cmake takes a long time to configure and build: almost 7 minutes
+> on a dual-core i5 with SSD. The time does not change even with ccache
+> enabled.
 
-diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
-index 30fa2d5..43c2787 100644
---- a/configs/odroidc2_defconfig
-+++ b/configs/odroidc2_defconfig
-@@ -14,7 +14,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/hardkernel/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="db9b5cfbd380d2316b7723599ee0c7e9d866db17"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="1cb48cebb9d525e524de0ede46710bb29f54d4a6"
- BR2_LINUX_KERNEL_DEFCONFIG="odroidc2"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_BUILD_DEFAULT_DTS=y
--- 
-2.9.2
+FWIW, if Ninja is used to build CMake it is faster[1]. Though I don't see a
+way to use Ninja from a bootstrapped build?I'm not sure how much work
+that would be.
+
+--Ben
+
+[1]This is also true of pretty much any CMake-based project.
