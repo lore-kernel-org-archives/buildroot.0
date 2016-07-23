@@ -1,48 +1,76 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat, 23 Jul 2016 17:50:04 +0000
-Subject: [Buildroot] [PATCH 1/1] package/rtl8821au: switch upstream to
- abperiasamy
-In-Reply-To: <20160723151352.77eea94b@free-electrons.com>
-References: <1469220888-2215-1-git-send-email-christian@paral.in>
- <20160723151352.77eea94b@free-electrons.com>
-Message-ID: <1469296205024-87d916e6-ee65ee9e-32c5cbb8@mixmax.com>
+From: Dagg Stompler <daggs@gmx.com>
+Date: Sat, 23 Jul 2016 21:55:01 +0300
+Subject: [Buildroot] [PATCH 3/3] odroidc2: update boot.ini
+In-Reply-To: <20160723185501.12148-1-daggs@gmx.com>
+References: <20160723185501.12148-1-daggs@gmx.com>
+Message-ID: <20160723185501.12148-3-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+---
+ board/hardkernel/odroidc2/boot.ini | 32 ++++++++++++++++++++++++++++++--
+ 1 file changed, 30 insertions(+), 2 deletions(-)
 
-
-On Sat, Jul 23, 2016 6:13 AM, Thomas Petazzoni thomas.petazzoni at free-electrons.com wrote: Is it really more active and maintained?
-Yes.
-
-This new github in fact has a
-
-lot less recent commits that the current github we're using. So it
-
-isn't really clear that this new github is a better ?upstream?. What
-
-makes you believe it is a better upstream?
-
-
-
-
-Here is my reasoning:
-- The current fork we are using is maintained by 1 person. - The current fork does not work, and there are no plans to fix this: - https://github.com/ulli-kroll/rtl8821au/issues/5 - https://github.com/ulli-kroll/rtl8821au/issues/6 - The current fork has never worked very well (we've had lots of issues with
-it) - Our lab switched to the abperiasamy fork a couple months ago and have been
-very happy with it. - The contributor list for the abperiasamy fork contains 21 well-known
-individuals in the community. - The raspberry pi community recommends the abperiasamy fork and uses it
-extensively. - Firmware blobs are not necessary with the new fork and all of the devices we
-have tested the driver with have not required firmware blobs. In fact, we found
-that the firmware blobs in ulli-kroll's version bricked a few of our wifi cards,
-and are quite happy with not using a driver that messes with firmware. - There is a version of rtl8821au in the Raspberry Pi kernel but that is
-obviously unsuitable for use in Buildroot as it cannot be applied to arbitrary
-kernels.
-Best, Christian
-PS: Please let me know if this email formats strangely, it looks OK on my end:
-http://i.imgur.com/E4ymrB7.png
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160723/88b47d43/attachment.html>
+diff --git a/board/hardkernel/odroidc2/boot.ini b/board/hardkernel/odroidc2/boot.ini
+index 8b67b5e..ba90bb4 100644
+--- a/board/hardkernel/odroidc2/boot.ini
++++ b/board/hardkernel/odroidc2/boot.ini
+@@ -1,16 +1,36 @@
+ ODROIDC2-UBOOT-CONFIG
+ 
+ # HDMI mode
+-setenv m "720p60hz" # Progressive 60Hz
++setenv m "1080p60hz" # Progressive 60Hz
+ 
+ # HDMI BPP Mode
+ setenv m_bpp "32"
+ 
++# HDMI HotPlug Detection control
++# Allows you to force HDMI thinking that the cable is connected.
++# true = HDMI will believe that cable is always connected
++# false = will let board/monitor negotiate the connection status
++setenv hpd "true"
++
+ # Default Console Device Setting
+ setenv condev "console=ttyS0,115200n8"	# Serial Console
+ 
++# Meson Timer
++# 1 - Meson Timer
++# 0 - Arch Timer 
++# Using meson_timer improves the video playback whoever it breaks KVM (virtualization).
++# Using arch timer allows KVM/Virtualization to work however you'll experience poor video
++setenv mesontimer "1"
++
++# Server Mode (aka. No Graphics)
++# Setting nographics to 1 will disable all video subsystem
++# This mode is ideal of server type usage. (Saves ~300Mb of RAM)
++setenv nographics "0"
++
++###########################################
++
+ # Boot Arguments
+-setenv bootargs "root=/dev/mmcblk0p2 rootwait ro ${condev} no_console_suspend hdmimode=${m} m_bpp=${m_bpp} vout=${vout} fsck.repair=yes net.ifnames=0 elevator=noop"
++setenv bootargs "root=/dev/mmcblk0p2 rootwait ro ${condev} no_console_suspend hdmimode=${m} m_bpp=${m_bpp} vout=${vout} fsck.repair=yes net.ifnames=0 elevator=noop =${hpd}"
+ 
+ # Load Images
+ setenv loadaddr "0x11000000"
+@@ -18,5 +38,13 @@ setenv dtb_loadaddr "0x10000000"
+ fatload mmc 0:1 ${loadaddr} Image
+ fatload mmc 0:1 ${dtb_loadaddr} meson64_odroidc2.dtb
+ 
++if test "${mesontimer}" = "0"; then fdt rm /meson_timer; fdt rm /cpus/cpu at 0/timer; fdt rm /cpus/cpu at 1/timer; fdt rm /cpus/cpu at 2/timer; fdt rm /cpus/cpu at 3/timer; fi
++if test "${mesontimer}" = "1"; then fdt rm /timer; fi
++
++if test "${nographics}" = "1"; then fdt rm /reserved-memory; fdt rm /aocec; fi
++if test "${nographics}" = "1"; then fdt rm /meson-fb; fdt rm /amhdmitx; fdt rm /picdec; fdt rm /ppmgr; fi
++if test "${nographics}" = "1"; then fdt rm /meson-vout; fdt rm /mesonstream; fdt rm /meson-fb; fi
++if test "${nographics}" = "1"; then fdt rm /deinterlace; fdt rm /codec_mm; fi
++
+ # Booting
+ booti ${loadaddr} - ${dtb_loadaddr}
+-- 
+2.9.2
