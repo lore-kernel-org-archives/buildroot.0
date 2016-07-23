@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jul 2016 15:07:38 +0200
-Subject: [Buildroot] [git commit] harfbuzz: bump to version 1.3.0
-Message-ID: <20160723130817.9374980634@busybox.osuosl.org>
+Date: Sat, 23 Jul 2016 15:06:15 +0200
+Subject: [Buildroot] [git commit] iozone: bump to version 3_446
+Message-ID: <20160723130817.504F980634@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eaa3785dcf349668c36ec8f6b19e945aaefe8926
+commit: https://git.buildroot.net/buildroot/commit/?id=906b6ae532e39c0b2ef2844ae432dce93fcdfe6d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/iozone/iozone.hash | 2 +-
+ package/iozone/iozone.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index e8a909d..17f2fa6 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
+diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
+index 8d05382..b387588 100644
+--- a/package/iozone/iozone.hash
++++ b/package/iozone/iozone.hash
 @@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.7.tar.bz2.sha256
--sha256	bba0600ae08b84384e6d2d7175bea10b5fc246c4583dc841498d01894d479026	harfbuzz-1.2.7.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.3.0.tar.bz2.sha256
-+sha256	b04be31633efee2cae1d62d46434587302554fa837224845a62565ec68a0334d	harfbuzz-1.3.0.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 8e8e7b6..8ba5e4d 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
+ # Locally calculated
+-sha256	e8388238326dc29359e5cb9f790d193f1e1bdadfbf260e010c50fa682387faed	iozone3_430.tar
++sha256	bbbda98d7c052d8654ea23fb2187d831107ab4ac89842fa21509276d9a6915f0	iozone3_446.tar
+diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
+index 0662207..e2f8557 100644
+--- a/package/iozone/iozone.mk
++++ b/package/iozone/iozone.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 1.2.7
-+HARFBUZZ_VERSION = 1.3.0
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-IOZONE_VERSION = 3_430
++IOZONE_VERSION = 3_446
+ IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
+ IOZONE_SITE = http://www.iozone.org/src/current
+ IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
