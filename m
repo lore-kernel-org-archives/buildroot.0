@@ -1,54 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jul 2016 23:15:20 +0200
-Subject: [Buildroot] [PATCH v5] board: add blackfin gdb simulator support
-In-Reply-To: <20160708221918.GA11610@waldemar-brodkorb.de>
-References: <20160708221918.GA11610@waldemar-brodkorb.de>
-Message-ID: <20160724231520.2f5d811a@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 24 Jul 2016 21:18:23 +0000
+Subject: [Buildroot] [Bug 9021] Kodi - Broken: Illegal instruction (core
+	dumped)
+In-Reply-To: <bug-9021-163@https.bugs.busybox.net/>
+References: <bug-9021-163@https.bugs.busybox.net/>
+Message-ID: <bug-9021-163-MZhkfWGeYo@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=9021
 
-On Sat, 9 Jul 2016 00:19:18 +0200, Waldemar Brodkorb wrote:
-> With this config you can bootup a Linux kernel
-> in GDB simulator and test Blackfin kernel and
-> userland.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> v4 -> v5:
->   - fix gdb sim compile on older systems with gcc 4.4 reported
->     by THomas Petazzoni 
-> v3 -> v4:
->   - update to use latest 4.6 kernel
->   - remove ldconfig workaround, as uclibc-utils now compile
-> v2 -> v3:
->   - no changes
-> v1 -> v2:
->   - do not use devtmpfs, as login via getty fails
-> ---
->  board/gdb/bfin-bf512/linux-4.6.config         | 87 +++++++++++++++++++++++++++
->  board/gdb/bfin-bf512/readme.txt               | 11 ++++
->  board/gdb/post-build.sh                       |  4 ++
->  configs/gdb_bfin_bf512_defconfig              | 34 +++++++++++
->  package/gdb/7.10.1/0005-fix-sim-compile.patch | 16 +++++
->  package/gdb/7.11.1/0001-fix-sim-compile.patch | 16 +++++
->  system/device_table_dev.txt                   |  1 +
->  7 files changed, 169 insertions(+)
->  create mode 100644 board/gdb/bfin-bf512/linux-4.6.config
->  create mode 100644 board/gdb/bfin-bf512/readme.txt
->  create mode 100755 board/gdb/post-build.sh
->  create mode 100644 configs/gdb_bfin_bf512_defconfig
->  create mode 100644 package/gdb/7.10.1/0005-fix-sim-compile.patch
->  create mode 100644 package/gdb/7.11.1/0001-fix-sim-compile.patch
+--- Comment #2 from Bernd Kuhls <bernd.kuhls@t-online.de> ---
+Please provide more infos about the crash, as a hint for required logs read
+http://kodi.wiki/view/HOW-TO:Submit_a_bug_report#Right.2C_so_what_information_do_you_guys_need.3F
 
-Applied to master, thanks a lot!
+Please also read
+http://kodi.wiki/view/Raspberry_Pi_FAQ#Raspberry_Pi_known_issues
 
-Thomas
+Buildroot contains some patches for Kodi 16.1 but there maybe more patches
+needed
+to support raspberry pi. Since I do not own such a box I can not test it
+myself,
+the machine where I run Kodi on has in Intel CPU, its GPU is used for hardware
+decoding using vaapi.
+
+To get a hint about what might be needed for the raspberry pi have a look at
+http://forum.kodi.tv/showthread.php?tid=231092
+
+or try my Kodi 17 branch: https://github.com/bkuhls/buildroot/tree/kodi17
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
