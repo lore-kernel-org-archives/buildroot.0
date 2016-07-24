@@ -1,145 +1,72 @@
-From: daggs <daggs@gmx.com>
-Date: Sun, 24 Jul 2016 15:29:31 +0200
-Subject: [Buildroot] [PATCH 2/2 v4] odroid-mali: New Package.
-In-Reply-To: <20160724144418.79f779f4@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Jul 2016 15:33:20 +0200
+Subject: [Buildroot] [PATCH 1/2 v3] odroid-scripts: New Package.
+In-Reply-To: <trinity-ae8b0b55-8d97-4c34-9726-f0a50212c8e1-1469366784462@3capp-mailcom-bs05>
 References: <20160724055602.7159-1-daggs@gmx.com>
- <20160724055602.7159-2-daggs@gmx.com>,
- <20160724144418.79f779f4@free-electrons.com>
-Message-ID: <trinity-433daad2-ef46-4fa5-91d7-8ad0ed76e138-1469366971377@3capp-mailcom-bs05>
+ <20160724144040.52d51f5f@free-electrons.com>
+ <trinity-ae8b0b55-8d97-4c34-9726-f0a50212c8e1-1469366784462@3capp-mailcom-bs05>
+Message-ID: <20160724153320.1329f844@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
->
-> Hello,
-> 
-> On Sun, 24 Jul 2016 08:56:02 +0300, Dagg Stompler wrote:
-> > v3 -> v4:
-> >  - update repo rev to 46fe49f37e3506c6205ad8c50980eca9bfff11e3.
-> >  - update hash
-> >  - 32 and 64 bit flavors can now use the same repo rev.
+Hello,
+
+On Sun, 24 Jul 2016 15:26:24 +0200, daggs wrote:
+
+> > The changelog should not be part of the commit log.
+> >   
+> > > 
+> > > Signed-off-by: Dagg Stompler <daggs@gmx.com>
+> > > ---  
 > > 
-> > v2 -> v3:
-> >  - fix pkgconfig installation.
-> > 
-> > v1 -> v2:
-> >  - added hash for 32 bits revision.
-> >  - fix file permissions for S50odroidc2_fb and odroidc2_init_fb.sh
+> > It should be here.  
 > 
-> The changelog should not be part of the commit log. It should go...
-> 
-> > 
-> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> > ---
-> 
-> ... here.
+> I always seems to forget were to place it.... :-/
 
-I'll never learn :-/ will do.
+It's pretty simple:
 
-> 
-> >  package/Config.in                    |  1 +
-> >  package/odroid-mali/Config.in        | 21 +++++++++++++++++++++
-> >  package/odroid-mali/odroid-mali.hash |  2 ++
-> >  package/odroid-mali/odroid-mali.mk   | 36 ++++++++++++++++++++++++++++++++++++
-> >  4 files changed, 60 insertions(+)
-> >  create mode 100644 package/odroid-mali/Config.in
-> >  create mode 100644 package/odroid-mali/odroid-mali.hash
-> >  create mode 100644 package/odroid-mali/odroid-mali.mk
-> 
-> > +	depends on BR2_PACKAGE_ODROID_SCRIPTS
-> 
-> Why do you have this dependency?
+"""
+foo: new package
 
-because afaiu, this will not work if the scripts form odroid-scripts got executed.
+Blabla what this new package is all about. Blabla.
 
-> 
-> > +################################################################################
-> > +#
-> > +# odroid-mali
-> > +#
-> > +################################################################################
-> > +
-> > +ODROID_MALI_VERSION = 46fe49f37e3506c6205ad8c50980eca9bfff11e3
-> > +ODROID_MALI_SITE = $(call github,mdrjr,c2_mali,$(ODROID_MALI_VERSION))
-> > +ODROID_MALI_LICENSE = hardkernel
-> 
-> I think:
-> 
-> 	Hardkernel EULA
-> 
-> would be better here.
+Signed-off-by: John Doe
+---
+Changes since v2:
+ ...
+"""
 
-will update.
+Everything that is *above* the "---" sign gets kept in the Git history
+as the commit log. Everything that is *below" the "---" sign is ignored
+when the patch is applied.
 
-> 
-> > +ODROID_MALI_LICENSE_FILES = README.md
-> > +
-> > +ODROID_MALI_INSTALL_STAGING = YES
-> > +ODROID_MALI_PROVIDES = libegl libgles
-> > +
-> > +ifeq ($(BR2_aarch64),y)
-> > +ODROID_MALI_LIBS_INSTALL_ARCH=mali_libs
-> > +else
-> > +ODROID_MALI_LIBS_INSTALL_ARCH=32bit_libs
-> > +endif
-> > +
-> > +define ODROID_MALI_INSTALL_LIBS
-> > +	cp -aRP $(@D)/fbdev/$(ODROID_MALI_LIBS_INSTALL_ARCH)/lib* $(1)/lib/
-> 
-> Make it:
-> 
-> 	cp -aRP $(@D)/fbdev/$(ODROID_MALI_LIBS_INSTALL_ARCH)/lib* $(1)/usr/lib/
-> 
-> This way you just have to pass TARGET_DIR or STAGING_DIR, and not
-> TARGET_DIR/usr and STAGING_DIR/usr.
-> 
-> Also, in Buildroot, we by convention use:
-> 
-> 	cp -dpfr
-> 
+Since the changelog is describing what was changed between iterations
+of the patch, we don't want the changelog to be committed forever in
+the Git history, so it should be below the "---" sign.
 
-understood.
+When doing a commit, you can simply introduce a "---" manually below
+your Signed-off-by and write your changelog here.
 
-> 
-> > +endef
-> > +
-> > +define ODROID_MALI_INSTALL_STAGING_CMDS
-> > +	$(call ODROID_MALI_INSTALL_LIBS,$(STAGING_DIR)/usr)
-> > +	$(INSTALL) -d $(STAGING_DIR)/usr/lib/pkgconfig
-> > +	$(INSTALL) -m 644 $(@D)/pkgconfig/*.pc $(STAGING_DIR)/usr/lib/pkgconfig/
-> 
-> Use cp
-> 
-> > +	cp -aRP $(@D)/fbdev/mali_headers/* $(STAGING_DIR)/usr/include
-> 
-> cp -dpfr
 
-will do.
+> this resulted im my serial usb stop working, e.g. I didn't know where I was in the boot nor couldn't log in into the system.
+> 
+> without both of the changes, the system boots ok.
 
-> 
-> > +endef
-> > +
-> > +define ODROID_MALI_INSTALL_TARGET_CMDS
-> > +	$(call ODROID_MALI_INSTALL_LIBS,$(TARGET_DIR)/usr)
-> > +endef
-> > +
-> > +$(eval $(generic-package))
-> 
-> Other than that, looks good.
-> 
-> Thomas
+OK, makes sense. Thanks for explaining.
 
-thanks for the rejects.
-
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> > Other than that, looks good. Can you respin a new version?  
 > 
+> maybe later today.
+
+Sure, or another day, there's no hurry.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
