@@ -1,73 +1,28 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 Jul 2016 17:53:17 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libebur128: new package
-Message-ID: <1469375598-10887-1-git-send-email-bernd.kuhls@t-online.de>
+From: Christian Stewart <christian@paral.in>
+Date: Sun, 24 Jul 2016 09:30:37 -0700
+Subject: [Buildroot] [PATCH 1/3] docker-containerd: pass -extldflags
+	'-static' on when BR2_STATIC_LIBS=y
+In-Reply-To: <1469371427-25201-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1469371427-25201-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CA+h8R2rzRGmuV+Lek5c1GTCxeGPetiCStQayDgKBEhn=Y-N06g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/Config.in                |  1 +
- package/libebur128/Config.in     | 14 ++++++++++++++
- package/libebur128/libebur128.mk | 14 ++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/libebur128/Config.in
- create mode 100644 package/libebur128/libebur128.mk
+Thomas,
 
-diff --git a/package/Config.in b/package/Config.in
-index 181921b..04ca8cb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -816,6 +816,7 @@ menu "Audio/Sound"
- 	source "package/libcodec2/Config.in"
- 	source "package/libcue/Config.in"
- 	source "package/libcuefile/Config.in"
-+	source "package/libebur128/Config.in"
- 	source "package/libg7221/Config.in"
- 	source "package/libid3tag/Config.in"
- 	source "package/libilbc/Config.in"
-diff --git a/package/libebur128/Config.in b/package/libebur128/Config.in
-new file mode 100644
-index 0000000..1a6a743
---- /dev/null
-+++ b/package/libebur128/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_LIBEBUR128
-+	bool "libebur128"
-+	# build system has no support to disable shared linking
-+	# leading to a build error with a static-only toolchain
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_SPEEX
-+	help
-+	  libebur128 is a library that implements the EBU R 128 standard
-+	  for loudness normalization.
-+
-+	  https://github.com/jiixyj/libebur128
-+
-+comment "libebur128 needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/libebur128/libebur128.mk b/package/libebur128/libebur128.mk
-new file mode 100644
-index 0000000..f5ada31
---- /dev/null
-+++ b/package/libebur128/libebur128.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# libebur128
-+#
-+################################################################################
-+
-+LIBEBUR128_VERSION = v1.1.0
-+LIBEBUR128_SITE = $(call github,jiixyj,libebur128,$(LIBEBUR128_VERSION))
-+LIBEBUR128_LICENSE = MIT
-+LIBEBUR128_LICENSE_FILES = COPYING
-+LIBEBUR128_INSTALL_STAGING = YES
-+LIBEBUR128_DEPENDENCIES = speex
-+
-+$(eval $(cmake-package))
--- 
-2.8.1
+On Sun, Jul 24, 2016 at 7:43 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> There is no reason to link Go binaries statically, unless when
+> BR2_STATIC_LIBS=y.
+
+Acknowledged, this series looks OK to me but I will do some runtime
+testing today and get back to you, probably around the same time of my
+next docker-engine series revision.
+
+Best,
+Christian
+
+PS: Email look OK now?
