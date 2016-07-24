@@ -1,34 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jul 2016 15:44:53 +0200
-Subject: [Buildroot] [PATCH v3 1/1] configs: add Arcturus uCP1020 BSP
- support
-In-Reply-To: <1468878727-13864-1-git-send-email-oleks@arcturusnetworks.com>
-References: <1468878727-13864-1-git-send-email-oleks@arcturusnetworks.com>
-Message-ID: <20160724154453.33b43f84@free-electrons.com>
+Date: Sun, 24 Jul 2016 15:45:08 +0200
+Subject: [Buildroot] [git commit] package/gdb: gdbserver: add missing header
+Message-ID: <20160724134526.BB692817DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fa0e26de0b48472251bc1333f33e1517270e3370
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 18 Jul 2016 17:52:07 -0400, Oleksandr G Zhadan wrote:
-> The uCP1020 product family (ucp1020) is an Arcturus Networks Inc.
-> System on Modules product featuring a Freescale P1020 CPU,
-> optionally populated with 1 or 2 Gig-Ethernet PHYs,
-> DDR3, NOR Flash, eMMC NAND Flash and/or SPI Flash.
-> 
-> Signed-off-by: Oleksandr G Zhadan <oleks@arcturusnetworks.com>
-> Signed-off-by: Michael Durrant <mdurrant@arcturusnetworks.com>
-> ---
-> V3:
-> - change u-boot version from latest to custom
+Backport upstream patch for musl toolchains
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/564/56443134388ee6c4a13add10cc53eff6f47f244e
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../7.10.1/0005-target.h-include-sys-types.h.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/package/gdb/7.10.1/0005-target.h-include-sys-types.h.patch b/package/gdb/7.10.1/0005-target.h-include-sys-types.h.patch
+new file mode 100644
+index 0000000..ba5419d
+--- /dev/null
++++ b/package/gdb/7.10.1/0005-target.h-include-sys-types.h.patch
+@@ -0,0 +1,30 @@
++From cd68d0ebe7748a5448c86eb021b717df6fe83f35 Mon Sep 17 00:00:00 2001
++From: Doug Evans <xdje42@gmail.com>
++Date: Sun, 22 Nov 2015 17:24:03 -0800
++Subject: [PATCH] target.h: #include <sys/types.h>.
++
++For musl.
++
++[Romain:
++  rebase on gdb 7.10.1 from upstream (7.11)
++  remove ChangeLog entry]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ gdb/gdbserver/target.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/gdb/gdbserver/target.h b/gdb/gdbserver/target.h
++index 9a40867..6af043c 100644
++--- a/gdb/gdbserver/target.h
+++++ b/gdb/gdbserver/target.h
++@@ -21,6 +21,7 @@
++ #ifndef TARGET_H
++ #define TARGET_H
++ 
+++#include <sys/types.h> /* for mode_t */
++ #include "target/target.h"
++ #include "target/resume.h"
++ #include "target/wait.h"
++-- 
++2.5.5
++
