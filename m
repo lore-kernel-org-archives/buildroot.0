@@ -1,56 +1,84 @@
-From: daggs <daggs@gmx.com>
-Date: Sun, 24 Jul 2016 06:54:52 +0200
-Subject: [Buildroot] [PATCH 3/3] odroidc2: update boot.ini
-In-Reply-To: <20160723232849.61c4fe4a@free-electrons.com>
-References: <20160723185501.12148-1-daggs@gmx.com>
- <20160723185501.12148-3-daggs@gmx.com>,
- <20160723232849.61c4fe4a@free-electrons.com>
-Message-ID: <trinity-6f6661cd-f250-4e75-b09d-92147f2f08d5-1469336092267@3capp-mailcom-bs13>
+From: Dagg Stompler <daggs@gmx.com>
+Date: Sun, 24 Jul 2016 08:20:12 +0300
+Subject: [Buildroot] [PATCH v2] odroidc2: update boot.ini
+Message-ID: <20160724052012.4964-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+- fix disablehpd bug (thanks to Thomas for spotting it.)
+- change default HDMI mode to 1080p60hz.
+- add support for HDMI HotPlug Detection control.
+- add support for mason timer.
+- add support for headless boot
 
-> Hello,
-> 
-> On Sat, 23 Jul 2016 21:55:01 +0300, Dagg Stompler wrote:
-> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> 
-> This one would benefit from a more detailed commit log.
-will do.
+v1 -> v2:
+- bug fix (Thomas Petazzoni).
+- add more extensive commit msg (Thomas Petazzoni).
 
-> 
-> 
-> >  # Boot Arguments
-> > -setenv bootargs "root=/dev/mmcblk0p2 rootwait ro ${condev} no_console_suspend hdmimode=${m} m_bpp=${m_bpp} vout=${vout} fsck.repair=yes net.ifnames=0 elevator=noop"
-> > +setenv bootargs "root=/dev/mmcblk0p2 rootwait ro ${condev} no_console_suspend hdmimode=${m} m_bpp=${m_bpp} vout=${vout} fsck.repair=yes net.ifnames=0 elevator=noop =${hpd}"
-> 
-> Is =${hpd} really a valid kernel argument? Seems a bit weird, no?
-good catch, this is a bug on my part, will fix.
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+---
+ board/hardkernel/odroidc2/boot.ini | 32 ++++++++++++++++++++++++++++++--
+ 1 files changed, 32 insertions(+), 2 deletions(-)
 
-> 
-> > +if test "${mesontimer}" = "0"; then fdt rm /meson_timer; fdt rm /cpus/cpu at 0/timer; fdt rm /cpus/cpu at 1/timer; fdt rm /cpus/cpu at 2/timer; fdt rm /cpus/cpu at 3/timer; fi
-> > +if test "${mesontimer}" = "1"; then fdt rm /timer; fi
-> > +
-> > +if test "${nographics}" = "1"; then fdt rm /reserved-memory; fdt rm /aocec; fi
-> > +if test "${nographics}" = "1"; then fdt rm /meson-fb; fdt rm /amhdmitx; fdt rm /picdec; fdt rm /ppmgr; fi
-> > +if test "${nographics}" = "1"; then fdt rm /meson-vout; fdt rm /mesonstream; fdt rm /meson-fb; fi
-> > +if test "${nographics}" = "1"; then fdt rm /deinterlace; fdt rm /codec_mm; fi
-> 
-> Yerk :-/
-I don't write the code, I just relay it to buildroot.
-
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/board/hardkernel/odroidc2/boot.ini b/board/hardkernel/odroidc2/boot.ini
+index 8b67b5e..e909fb4 100644
+--- a/board/hardkernel/odroidc2/boot.ini
++++ b/board/hardkernel/odroidc2/boot.ini
+@@ -1,16 +1,36 @@
+ ODROIDC2-UBOOT-CONFIG
+ 
+ # HDMI mode
+-setenv m "720p60hz" # Progressive 60Hz
++setenv m "1080p60hz" # Progressive 60Hz
+ 
+ # HDMI BPP Mode
+ setenv m_bpp "32"
+ 
++# HDMI HotPlug Detection control
++# Allows you to force HDMI thinking that the cable is connected.
++# true = HDMI will believe that cable is always connected
++# false = will let board/monitor negotiate the connection status
++setenv hpd "true"
++
+ # Default Console Device Setting
+ setenv condev "console=ttyS0,115200n8"	# Serial Console
+ 
++# Meson Timer
++# 1 - Meson Timer
++# 0 - Arch Timer 
++# Using meson_timer improves the video playback whoever it breaks KVM (virtualization).
++# Using arch timer allows KVM/Virtualization to work however you'll experience poor video
++setenv mesontimer "1"
++
++# Server Mode (aka. No Graphics)
++# Setting nographics to 1 will disable all video subsystem
++# This mode is ideal of server type usage. (Saves ~300Mb of RAM)
++setenv nographics "0"
++
++###########################################
++
+ # Boot Arguments
+-setenv bootargs "root=/dev/mmcblk0p2 rootwait ro ${condev} no_console_suspend hdmimode=${m} m_bpp=${m_bpp} vout=${vout} fsck.repair=yes net.ifnames=0 elevator=noop"
++setenv bootargs "root=/dev/mmcblk0p2 rootwait ro ${condev} no_console_suspend hdmimode=${m} m_bpp=${m_bpp} vout=${vout} fsck.repair=yes net.ifnames=0 elevator=noop disablehpd=${hpd}"
+ 
+ # Load Images
+ setenv loadaddr "0x11000000"
+@@ -18,5 +38,13 @@ setenv dtb_loadaddr "0x10000000"
+ fatload mmc 0:1 ${loadaddr} Image
+ fatload mmc 0:1 ${dtb_loadaddr} meson64_odroidc2.dtb
+ 
++if test "${mesontimer}" = "0"; then fdt rm /meson_timer; fdt rm /cpus/cpu at 0/timer; fdt rm /cpus/cpu at 1/timer; fdt rm /cpus/cpu at 2/timer; fdt rm /cpus/cpu at 3/timer; fi
++if test "${mesontimer}" = "1"; then fdt rm /timer; fi
++
++if test "${nographics}" = "1"; then fdt rm /reserved-memory; fdt rm /aocec; fi
++if test "${nographics}" = "1"; then fdt rm /meson-fb; fdt rm /amhdmitx; fdt rm /picdec; fdt rm /ppmgr; fi
++if test "${nographics}" = "1"; then fdt rm /meson-vout; fdt rm /mesonstream; fdt rm /meson-fb; fi
++if test "${nographics}" = "1"; then fdt rm /deinterlace; fdt rm /codec_mm; fi
++
+ # Booting
+ booti ${loadaddr} - ${dtb_loadaddr}
+-- 
+2.9.2
