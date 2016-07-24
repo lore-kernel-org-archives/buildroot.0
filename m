@@ -1,593 +1,245 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sun, 24 Jul 2016 14:10:28 -0700
-Subject: [Buildroot] [PATCH v11 2/2] docker-engine: new package
-In-Reply-To: <1469394628-19412-1-git-send-email-christian@paral.in>
-References: <1469394628-19412-1-git-send-email-christian@paral.in>
-Message-ID: <1469394628-19412-2-git-send-email-christian@paral.in>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Jul 2016 22:51:42 +0200
+Subject: [Buildroot] [git commit] board: add blackfin gdb simulator support
+Message-ID: <20160724211447.8209B817BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Docker is a platform to build, ship, and run applications in portable
-containers.
+commit: https://git.buildroot.net/buildroot/commit/?id=9068fe0dea774fb35620b31f71b51e663b35167b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+With this config you can bootup a Linux kernel
+in GDB simulator and test Blackfin kernel and
+userland.
 
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
+ board/gdb/bfin-bf512/linux-4.6.config         | 87 +++++++++++++++++++++++++++
+ board/gdb/bfin-bf512/readme.txt               | 11 ++++
+ board/gdb/post-build.sh                       |  4 ++
+ configs/gdb_bfin_bf512_defconfig              | 34 +++++++++++
+ package/gdb/7.10.1/0005-fix-sim-compile.patch | 16 +++++
+ package/gdb/7.11.1/0001-fix-sim-compile.patch | 16 +++++
+ system/device_table_dev.txt                   |  1 +
+ 7 files changed, 169 insertions(+)
 
-Changes since v1:
- - use call github to build source URL
-Changes since v3:
- - fix help indentation in Config.in
- - use HOST_GO_TARGET_ENV as a base for build env vars
- - cleanup build commands
- - cleanup GOPATH and vendor directory setup
- - Remove selections for graph drivers. Docker will gracefully degrade
-   at runtime to the best available graphdriver. It is unnecessary to
-   disable these at build time, or to pull in any other dependencies
-   like aufs-util or btrfs tools. The daemon will use whatever is
-   available at runtime.
-Changes since v4:
- - remove commit hash from version scheme
-Changes since v5:
- - re-introduce graphdriver selections
- - these selections are required for btrfs and devicemapper
- - there are buildtime dependencies on headers.
- - bump to v1.12.0-rc3
- - remove hack/vendor.sh call, it is unnecessary, dependencies are
-   pre-vendored into the source tree.
-Changes since v6:
- - remove build-time dependency on docker-containerd and runc
- - install dockerd only if daemon is enabled
- - move all daemon dependencies into daemon selection
- - only install sysv, users, etc if daemon is enabled
- - add a proper sysv init file
- - remove DOCKER_OPTS in init file
- - remove test for $BASH as bash is never used for init
- - use hash for documentation link in sysv init file
- - remove unnecessary path change in sysv init file
- - remove exit on error line in sysv init file
- - remove init info comment from sysv init file
-Changes since v7:
- - remove "-static" cgo flag which fixes build of btrfs and other
-   additional filesystem drivers.
- - build + run test with alternate filesystem drivers.
-Changes since v8:
- - Bump to v1.12.0-rc4
-Changes since v9:
- - Introduce patch to fix docker log file rotation issue
- - Restructure build targets to use a foreach loop
- - Remove "select" duplicates from docker-containerd
- - Added BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- - Rename docker.init to S61docker
- - Add -static if BR2_STATIC_LIBS is enabled.
- - Remove sysv init file to be added in later patch
-Changes since v10:
- - Add note about reason for extra patch
- - Remove requirement on MMU and WCHAR
- - Fix indentation on foreach loop
- - Select docker-containerd
- - Remove CPATH modification due to btrfs-progs patch
----
- package/Config.in                                  |   1 +
- ...-issues-with-tailing-rotated-jsonlog-file.patch | 297 +++++++++++++++++++++
- package/docker-engine/Config.in                    |  64 +++++
- package/docker-engine/docker-engine.hash           |   2 +
- package/docker-engine/docker-engine.mk             | 108 ++++++++
- 5 files changed, 472 insertions(+)
- create mode 100644 package/docker-engine/0001-Fix-issues-with-tailing-rotated-jsonlog-file.patch
- create mode 100644 package/docker-engine/Config.in
- create mode 100644 package/docker-engine/docker-engine.hash
- create mode 100644 package/docker-engine/docker-engine.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 814141f..42a9ff5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1675,6 +1675,7 @@ menu "System tools"
- 	source "package/dcron/Config.in"
- 	source "package/debianutils/Config.in"
- 	source "package/docker-containerd/Config.in"
-+	source "package/docker-engine/Config.in"
- 	source "package/dsp-tools/Config.in"
- 	source "package/efibootmgr/Config.in"
- 	source "package/efivar/Config.in"
-diff --git a/package/docker-engine/0001-Fix-issues-with-tailing-rotated-jsonlog-file.patch b/package/docker-engine/0001-Fix-issues-with-tailing-rotated-jsonlog-file.patch
+diff --git a/board/gdb/bfin-bf512/linux-4.6.config b/board/gdb/bfin-bf512/linux-4.6.config
 new file mode 100644
-index 0000000..413cfd6
+index 0000000..bc2a907
 --- /dev/null
-+++ b/package/docker-engine/0001-Fix-issues-with-tailing-rotated-jsonlog-file.patch
-@@ -0,0 +1,297 @@
-+From 8d6f2e3fe8851b581309da25fc4c32f8be675932 Mon Sep 17 00:00:00 2001
-+From: Brian Goff <cpuguy83@gmail.com>
-+Date: Mon, 11 Jul 2016 16:31:42 -0400
-+Subject: [PATCH] Fix issues with tailing rotated jsonlog file
-+
-+Fixes a race where the log reader would get events for both an actual
-+rotation as we from fsnotify (`fsnotify.Rename`).
-+This issue becomes extremely apparent when rotations are fast, for
-+example:
-+
-+```
-+$ docker run -d --name test --log-opt max-size=1 --log-opt max-file=2
-+busybox sh -c 'while true; do echo hello; usleep 100000; done'
-+```
-+
-+With this change the log reader for jsonlogs can handle rotations that
-+happen as above.
-+
-+Instead of listening for both fs events AND rotation events
-+simultaneously, potentially meaning we see 2 rotations for only a single
-+rotation due to channel buffering, only listen for fs events (like
-+`Rename`) and then wait to be notified about rotation by the logger.
-+This makes sure that we don't see 2 rotations for 1, and that we don't
-+start trying to read until the logger is actually ready for us to.
-+
-+Signed-off-by: Brian Goff <cpuguy83@gmail.com>
-+
-+This commit is pending upstream commit fixing broken log tailing. The
-+original commit can be found in the PR here:
-+
-+  - https://github.com/docker/docker/pull/24514
-+
-+Signed-off-by: Christian Stewart <christian@paral.in>
-+---
-+ daemon/logger/jsonfilelog/read.go | 180 +++++++++++++++++++++++++-------------
-+ 1 file changed, 119 insertions(+), 61 deletions(-)
-+
-+diff --git a/daemon/logger/jsonfilelog/read.go b/daemon/logger/jsonfilelog/read.go
-+index bea83dd..0cb44af 100644
-+--- a/daemon/logger/jsonfilelog/read.go
-++++ b/daemon/logger/jsonfilelog/read.go
-+@@ -3,11 +3,14 @@ package jsonfilelog
-+ import (
-+ 	"bytes"
-+ 	"encoding/json"
-++	"errors"
-+ 	"fmt"
-+ 	"io"
-+ 	"os"
-+ 	"time"
-+ 
-++	"gopkg.in/fsnotify.v1"
-++
-+ 	"github.com/Sirupsen/logrus"
-+ 	"github.com/docker/docker/daemon/logger"
-+ 	"github.com/docker/docker/pkg/filenotify"
-+@@ -44,6 +47,10 @@ func (l *JSONFileLogger) ReadLogs(config logger.ReadConfig) *logger.LogWatcher {
-+ func (l *JSONFileLogger) readLogs(logWatcher *logger.LogWatcher, config logger.ReadConfig) {
-+ 	defer close(logWatcher.Msg)
-+ 
-++	// lock so the read stream doesn't get corrupted do to rotations or other log data written while we read
-++	// This will block writes!!!
-++	l.mu.Lock()
-++
-+ 	pth := l.writer.LogPath()
-+ 	var files []io.ReadSeeker
-+ 	for i := l.writer.MaxFiles(); i > 1; i-- {
-+@@ -61,6 +68,7 @@ func (l *JSONFileLogger) readLogs(logWatcher *logger.LogWatcher, config logger.R
-+ 	latestFile, err := os.Open(pth)
-+ 	if err != nil {
-+ 		logWatcher.Err <- err
-++		l.mu.Unlock()
-+ 		return
-+ 	}
-+ 
-+@@ -80,6 +88,7 @@ func (l *JSONFileLogger) readLogs(logWatcher *logger.LogWatcher, config logger.R
-+ 		if err := latestFile.Close(); err != nil {
-+ 			logrus.Errorf("Error closing file: %v", err)
-+ 		}
-++		l.mu.Unlock()
-+ 		return
-+ 	}
-+ 
-+@@ -87,7 +96,6 @@ func (l *JSONFileLogger) readLogs(logWatcher *logger.LogWatcher, config logger.R
-+ 		latestFile.Seek(0, os.SEEK_END)
-+ 	}
-+ 
-+-	l.mu.Lock()
-+ 	l.readers[logWatcher] = struct{}{}
-+ 	l.mu.Unlock()
-+ 
-+@@ -128,92 +136,142 @@ func tailFile(f io.ReadSeeker, logWatcher *logger.LogWatcher, tail int, since ti
-+ 	}
-+ }
-+ 
-++func watchFile(name string) (filenotify.FileWatcher, error) {
-++	fileWatcher, err := filenotify.New()
-++	if err != nil {
-++		return nil, err
-++	}
-++
-++	if err := fileWatcher.Add(name); err != nil {
-++		logrus.WithField("logger", "json-file").Warnf("falling back to file poller due to error: %v", err)
-++		fileWatcher.Close()
-++		fileWatcher = filenotify.NewPollingWatcher()
-++
-++		if err := fileWatcher.Add(name); err != nil {
-++			fileWatcher.Close()
-++			logrus.Debugf("error watching log file for modifications: %v", err)
-++			return nil, err
-++		}
-++	}
-++	return fileWatcher, nil
-++}
-++
-+ func followLogs(f *os.File, logWatcher *logger.LogWatcher, notifyRotate chan interface{}, since time.Time) {
-+ 	dec := json.NewDecoder(f)
-+ 	l := &jsonlog.JSONLog{}
-+ 
-+-	fileWatcher, err := filenotify.New()
-++	name := f.Name()
-++	fileWatcher, err := watchFile(name)
-+ 	if err != nil {
-+ 		logWatcher.Err <- err
-++		return
-+ 	}
-+ 	defer func() {
-+ 		f.Close()
-+ 		fileWatcher.Close()
-+ 	}()
-+-	name := f.Name()
-+ 
-+-	if err := fileWatcher.Add(name); err != nil {
-+-		logrus.WithField("logger", "json-file").Warnf("falling back to file poller due to error: %v", err)
-+-		fileWatcher.Close()
-+-		fileWatcher = filenotify.NewPollingWatcher()
-++	var retries int
-++	handleRotate := func() error {
-++		f.Close()
-++		fileWatcher.Remove(name)
-+ 
-++		// retry when the file doesn't exist
-++		for retries := 0; retries <= 5; retries++ {
-++			f, err = os.Open(name)
-++			if err == nil || !os.IsNotExist(err) {
-++				break
-++			}
-++		}
-++		if err != nil {
-++			return err
-++		}
-+ 		if err := fileWatcher.Add(name); err != nil {
-+-			logrus.Debugf("error watching log file for modifications: %v", err)
-+-			logWatcher.Err <- err
-+-			return
-++			return err
-+ 		}
-++		dec = json.NewDecoder(f)
-++		return nil
-+ 	}
-+ 
-+-	var retries int
-+-	for {
-+-		msg, err := decodeLogLine(dec, l)
-+-		if err != nil {
-+-			if err != io.EOF {
-+-				// try again because this shouldn't happen
-+-				if _, ok := err.(*json.SyntaxError); ok && retries <= maxJSONDecodeRetry {
-+-					dec = json.NewDecoder(f)
-+-					retries++
-+-					continue
-++	errRetry := errors.New("retry")
-++	errDone := errors.New("done")
-++	waitRead := func() error {
-++		select {
-++		case e := <-fileWatcher.Events():
-++			switch e.Op {
-++			case fsnotify.Write:
-++				dec = json.NewDecoder(f)
-++				return nil
-++			case fsnotify.Rename, fsnotify.Remove:
-++				<-notifyRotate
-++				if err := handleRotate(); err != nil {
-++					return err
-+ 				}
-+-
-+-				// io.ErrUnexpectedEOF is returned from json.Decoder when there is
-+-				// remaining data in the parser's buffer while an io.EOF occurs.
-+-				// If the json logger writes a partial json log entry to the disk
-+-				// while at the same time the decoder tries to decode it, the race condition happens.
-+-				if err == io.ErrUnexpectedEOF && retries <= maxJSONDecodeRetry {
-+-					reader := io.MultiReader(dec.Buffered(), f)
-+-					dec = json.NewDecoder(reader)
-+-					retries++
-+-					continue
-++				return nil
-++			}
-++			return errRetry
-++		case err := <-fileWatcher.Errors():
-++			logrus.Debug("logger got error watching file: %v", err)
-++			// Something happened, let's try and stay alive and create a new watcher
-++			if retries <= 5 {
-++				fileWatcher, err = watchFile(name)
-++				if err != nil {
-++					return err
-+ 				}
-+-
-+-				return
-++				retries++
-++				return errRetry
-+ 			}
-++			return err
-++		case <-logWatcher.WatchClose():
-++			fileWatcher.Remove(name)
-++			return errDone
-++		}
-++	}
-+ 
-+-			select {
-+-			case <-fileWatcher.Events():
-+-				dec = json.NewDecoder(f)
-+-				continue
-+-			case <-fileWatcher.Errors():
-+-				logWatcher.Err <- err
-+-				return
-+-			case <-logWatcher.WatchClose():
-+-				fileWatcher.Remove(name)
-+-				return
-+-			case <-notifyRotate:
-+-				f.Close()
-+-				fileWatcher.Remove(name)
-+-
-+-				// retry when the file doesn't exist
-+-				for retries := 0; retries <= 5; retries++ {
-+-					f, err = os.Open(name)
-+-					if err == nil || !os.IsNotExist(err) {
-+-						break
-+-					}
-++	handleDecodeErr := func(err error) error {
-++		if err == io.EOF {
-++			for err := waitRead(); err != nil; {
-++				if err == errRetry {
-++					// retry the waitRead
-++					continue
-+ 				}
-++				return err
-++			}
-++			return nil
-++		}
-++		// try again because this shouldn't happen
-++		if _, ok := err.(*json.SyntaxError); ok && retries <= maxJSONDecodeRetry {
-++			dec = json.NewDecoder(f)
-++			retries++
-++			return nil
-++		}
-++		// io.ErrUnexpectedEOF is returned from json.Decoder when there is
-++		// remaining data in the parser's buffer while an io.EOF occurs.
-++		// If the json logger writes a partial json log entry to the disk
-++		// while@the same time the decoder tries to decode it, the race condition happens.
-++		if err == io.ErrUnexpectedEOF && retries <= maxJSONDecodeRetry {
-++			reader := io.MultiReader(dec.Buffered(), f)
-++			dec = json.NewDecoder(reader)
-++			retries++
-++			return nil
-++		}
-++		return err
-++	}
-+ 
-+-				if err = fileWatcher.Add(name); err != nil {
-+-					logWatcher.Err <- err
-+-					return
-+-				}
-+-				if err != nil {
-+-					logWatcher.Err <- err
-++	// main loop
-++	for {
-++		msg, err := decodeLogLine(dec, l)
-++		if err != nil {
-++			if err := handleDecodeErr(err); err != nil {
-++				if err == errDone {
-+ 					return
-+ 				}
-+-
-+-				dec = json.NewDecoder(f)
-+-				continue
-++				// we got an unrecoverable error, so return
-++				logWatcher.Err <- err
-++				return
-+ 			}
-++			// ready to try again
-++			continue
-+ 		}
-+ 
-+ 		retries = 0 // reset retries since we've succeeded
-+-- 
-+2.7.3
-+
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
++++ b/board/gdb/bfin-bf512/linux-4.6.config
+@@ -0,0 +1,87 @@
++# CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_SYSVIPC=y
++CONFIG_BLK_DEV_INITRD=y
++# CONFIG_RD_GZIP is not set
++# CONFIG_RD_BZIP2 is not set
++# CONFIG_RD_LZMA is not set
++# CONFIG_RD_XZ is not set
++# CONFIG_RD_LZO is not set
++# CONFIG_RD_LZ4 is not set
++CONFIG_CC_OPTIMIZE_FOR_SIZE=y
++# CONFIG_UID16 is not set
++# CONFIG_SGETMASK_SYSCALL is not set
++# CONFIG_SYSFS_SYSCALL is not set
++# CONFIG_KALLSYMS is not set
++# CONFIG_BUG is not set
++# CONFIG_BASE_FULL is not set
++# CONFIG_ADVISE_SYSCALLS is not set
++# CONFIG_MEMBARRIER is not set
++CONFIG_EMBEDDED=y
++# CONFIG_VM_EVENT_COUNTERS is not set
++# CONFIG_SLUB_DEBUG is not set
++# CONFIG_COMPAT_BRK is not set
++CONFIG_MODULES=y
++# CONFIG_BLOCK is not set
++CONFIG_BF512=y
++# CONFIG_SET_GENERIC_CLOCKEVENTS is not set
++# CONFIG_I_ENTRY_L1 is not set
++# CONFIG_EXCPT_IRQ_SYSC_L1 is not set
++# CONFIG_DO_IRQ_L1 is not set
++# CONFIG_CORE_TIMER_IRQ_L1 is not set
++# CONFIG_IDLE_L1 is not set
++# CONFIG_SCHEDULE_L1 is not set
++# CONFIG_ARITHMETIC_OPS_L1 is not set
++# CONFIG_ACCESS_OK_L1 is not set
++# CONFIG_MEMSET_L1 is not set
++# CONFIG_MEMCPY_L1 is not set
++# CONFIG_STRCMP_L1 is not set
++# CONFIG_STRNCMP_L1 is not set
++# CONFIG_STRCPY_L1 is not set
++# CONFIG_STRNCPY_L1 is not set
++# CONFIG_SYS_BFIN_SPINLOCK_L1 is not set
++# CONFIG_CACHELINE_ALIGNED_L1 is not set
++# CONFIG_DCACHE_FLUSH_L1 is not set
++# CONFIG_APP_STACK_L1 is not set
++# CONFIG_BFIN_INS_LOWOVERHEAD is not set
++# CONFIG_BFIN_ICACHE is not set
++# CONFIG_BFIN_DCACHE is not set
++# CONFIG_C_AMCKEN is not set
++CONFIG_BINFMT_ELF_FDPIC=y
++CONFIG_BINFMT_FLAT=y
++# CONFIG_COREDUMP is not set
++# CONFIG_SUSPEND is not set
++# CONFIG_UEVENT_HELPER is not set
++# CONFIG_STANDALONE is not set
++# CONFIG_PREVENT_FIRMWARE_BUILD is not set
++# CONFIG_FW_LOADER is not set
++# CONFIG_ALLOW_DEV_COREDUMP is not set
++# CONFIG_INPUT is not set
++# CONFIG_SERIO is not set
++# CONFIG_VT is not set
++# CONFIG_LEGACY_PTYS is not set
++CONFIG_SERIAL_BFIN=y
++CONFIG_SERIAL_BFIN_CONSOLE=y
++CONFIG_SERIAL_BFIN_UART0=y
++CONFIG_SERIAL_BFIN_UART1=y
++# CONFIG_BFIN_OTP is not set
++# CONFIG_HW_RANDOM is not set
++# CONFIG_HWMON is not set
++# CONFIG_USB_SUPPORT is not set
++# CONFIG_MANDATORY_FILE_LOCKING is not set
++# CONFIG_DNOTIFY is not set
++# CONFIG_MISC_FILESYSTEMS is not set
++CONFIG_NLS=y
++CONFIG_NLS_DEFAULT="utf-8"
++CONFIG_PRINTK_TIME=y
++# CONFIG_ENABLE_WARN_DEPRECATED is not set
++# CONFIG_ENABLE_MUST_CHECK is not set
++# CONFIG_SECTION_MISMATCH_WARN_ONLY is not set
++CONFIG_MAGIC_SYSRQ=y
++# CONFIG_SCHED_DEBUG is not set
++# CONFIG_FTRACE is not set
++# CONFIG_DEBUG_VERBOSE is not set
++# CONFIG_DEBUG_HUNT_FOR_ZERO is not set
++# CONFIG_DEBUG_BFIN_HWTRACE_ON is not set
++CONFIG_EARLY_PRINTK=y
++# CONFIG_ACCESS_CHECK is not set
++# CONFIG_CRC32 is not set
+diff --git a/board/gdb/bfin-bf512/readme.txt b/board/gdb/bfin-bf512/readme.txt
 new file mode 100644
-index 0000000..a22786a
+index 0000000..a56b5bc
 --- /dev/null
-+++ b/package/docker-engine/Config.in
-@@ -0,0 +1,64 @@
-+config BR2_PACKAGE_DOCKER_ENGINE
-+	bool "docker-engine"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Docker is a platform to build, ship,
-+	  and run applications as lightweight containers.
++++ b/board/gdb/bfin-bf512/readme.txt
+@@ -0,0 +1,11 @@
++Run the simulation with GDB for FDPIC:
 +
-+	  https://github.com/docker/docker
++ ./output/host/usr/bin/bfin-buildroot-linux-uclibc-run --env operating --model bf512 output/images/vmlinux
 +
-+if BR2_PACKAGE_DOCKER_ENGINE
++Run the simulation with GDB for FLAT:
 +
-+config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
-+	bool "docker daemon"
-+	depends on BR2_USE_WCHAR # docker-containerd
-+	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
-+	select BR2_PACKAGE_SQLITE # runtime dependency
-+	default y
-+	help
-+	  Build the Docker system daemon.
-+	  If not selected, will build client only.
++ ./output/host/usr/bin/bfin-buildroot-uclinux-uclibc-run --env operating --model bf512 output/images/vmlinux
 +
-+config BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL
-+	bool "build experimental features"
++The login prompt will appear in the terminal that started GDB.
 +
-+if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
-+	bool "btrfs filesystem driver"
-+	depends on BR2_USE_WCHAR # btrfs-progs
-+	depends on BR2_USE_MMU # btrfs-progs
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
-+	select BR2_PACKAGE_BTRFS_PROGS
-+	help
-+	  Build the btrfs filesystem driver for Docker.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
-+	bool "devicemapper filesystem driver"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
-+	depends on BR2_USE_MMU # lvm2
-+	depends on !BR2_STATIC_LIBS # lvm2
-+	select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_LVM2_APP_LIBRARY
-+	help
-+	  Build the devicemapper filesystem driver for Docker.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
-+	bool "vfs filesystem driver"
-+	depends on BR2_USE_WCHAR # gvfs
-+	depends on BR2_USE_MMU # gvfs
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gvfs
-+	select BR2_PACKAGE_GVFS
-+	help
-+	  Build the vfs filesystem driver for Docker.
-+
-+endif
-+
-+endif
-+
-+comment "docker-engine needs a toolchain w/ threads"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
++Tested with GDB 7.9
+diff --git a/board/gdb/post-build.sh b/board/gdb/post-build.sh
+new file mode 100755
+index 0000000..8933d50
+--- /dev/null
++++ b/board/gdb/post-build.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++# no simulated network devices at the moment
++rm -f ${TARGET_DIR}/etc/init.d/S40network
++rm -rf ${TARGET_DIR}/etc/network/
+diff --git a/configs/gdb_bfin_bf512_defconfig b/configs/gdb_bfin_bf512_defconfig
 new file mode 100644
-index 0000000..1de09f8
+index 0000000..37ee728
 --- /dev/null
-+++ b/package/docker-engine/docker-engine.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 bc256d2a348efbf236eab991254c925fa1917dd1e29cb40586f1696f4e24852e  docker-engine-v1.12.0-rc4.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
++++ b/configs/gdb_bfin_bf512_defconfig
+@@ -0,0 +1,34 @@
++# Architecture
++BR2_bfin=y
++BR2_bf512=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_INITRAMFS=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/gdb/post-build.sh"
++
++# Linux headers same as kernel, a 4.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_6=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.3"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/gdb/bfin-bf512/linux-4.6.config"
++BR2_LINUX_KERNEL_VMLINUX=y
++
++# Serial port config
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyBF0"
++
++# use minimal busybox with hush
++BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-minimal.config"
++
++# compile gdb sim
++BR2_PACKAGE_HOST_GDB=y
++# BR2_PACKAGE_HOST_GDB_TUI is not set
++# BR2_PACKAGE_HOST_GDB_PYTHON is not set
++BR2_PACKAGE_HOST_GDB_SIM=y
++
+diff --git a/package/gdb/7.10.1/0005-fix-sim-compile.patch b/package/gdb/7.10.1/0005-fix-sim-compile.patch
 new file mode 100644
-index 0000000..359913b
+index 0000000..c886363
 --- /dev/null
-+++ b/package/docker-engine/docker-engine.mk
-@@ -0,0 +1,108 @@
-+################################################################################
-+#
-+# docker-engine
-+#
-+################################################################################
++++ b/package/gdb/7.10.1/0005-fix-sim-compile.patch
+@@ -0,0 +1,16 @@
++Fix compile on older systems with gcc 4.4.x.
 +
-+DOCKER_ENGINE_VERSION = v1.12.0-rc4
-+DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 +
-+DOCKER_ENGINE_LICENSE = Apache-2.0
-+DOCKER_ENGINE_LICENSE_FILES = LICENSE
++diff -Nur gdb-7.10.1.orig//sim/common/sim-base.h gdb-7.10.1/sim/common/sim-base.h
++--- gdb-7.10.1.orig//sim/common/sim-base.h	2015-05-13 13:03:56.000000000 -0500
+++++ gdb-7.10.1/sim/common/sim-base.h	2016-07-08 07:44:17.000000000 -0500
++@@ -72,8 +72,6 @@
++ #define INVALID_INSTRUCTION_ADDRESS ((address_word)0 - 1)
++ #endif
++ 
++-/* TODO: Probably should just delete SIM_CPU.  */
++-typedef struct _sim_cpu SIM_CPU;
++ typedef struct _sim_cpu sim_cpu;
++ 
++ #include "sim-module.h"
+diff --git a/package/gdb/7.11.1/0001-fix-sim-compile.patch b/package/gdb/7.11.1/0001-fix-sim-compile.patch
+new file mode 100644
+index 0000000..ecb0514
+--- /dev/null
++++ b/package/gdb/7.11.1/0001-fix-sim-compile.patch
+@@ -0,0 +1,16 @@
++Fix compile on older systems with gcc 4.4.x
 +
-+DOCKER_ENGINE_DEPENDENCIES = host-go
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 +
-+DOCKER_ENGINE_GOPATH = "$(@D)/vendor"
-+DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-+	CGO_ENABLED=1 \
-+	CGO_NO_EMULATION=1 \
-+	GOBIN="$(@D)/bin" \
-+	GOPATH="$(DOCKER_ENGINE_GOPATH)" \
-+	LIBRARY_PATH=$$LIBRARY_PATH:$(TARGET_DIR)/usr/lib/
-+
-+DOCKER_ENGINE_GLDFLAGS = \
-+	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
-+	-X main.Version=$(DOCKER_ENGINE_VERSION)
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+DOCKER_ENGINE_GLDFLAGS += -extldflags '-static'
-+endif
-+
-+DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs autogen
-+DOCKER_ENGINE_BUILD_TARGETS = docker
-+
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+DOCKER_ENGINE_BUILD_TAGS += seccomp
-+DOCKER_ENGINE_DEPENDENCIES += libseccomp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
-+DOCKER_ENGINE_BUILD_TAGS += daemon
-+DOCKER_ENGINE_BUILD_TARGETS += dockerd
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
-+DOCKER_ENGINE_BUILD_TAGS += experimental
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS),y)
-+DOCKER_ENGINE_DEPENDENCIES += btrfs-progs
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_btrfs
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER),y)
-+DOCKER_ENGINE_DEPENDENCIES += lvm2
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_devicemapper
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS),y)
-+DOCKER_ENGINE_DEPENDENCIES += gvfs
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_vfs
-+endif
-+
-+define DOCKER_ENGINE_CONFIGURE_CMDS
-+	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
-+	cd $(@D) && \
-+		GITCOMMIT="unknown" BUILDTIME="$$(date)" VERSION="$(DOCKER_ENGINE_VERSION)" \
-+		bash ./hack/make/.go-autogen
-+endef
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
-+
-+define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
-+	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/system/docker.socket
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
-+	ln -fs ../../../../usr/lib/systemd/system/docker.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/docker.service
-+endef
-+
-+define DOCKER_ENGINE_USERS
-+	- - docker -1 * - - - Docker Application Container Framework
-+endef
-+
-+endif
-+
-+define DOCKER_ENGINE_BUILD_CMDS
-+	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
-+		cd $(@D); $(DOCKER_ENGINE_MAKE_ENV) \
-+		$(HOST_DIR)/usr/bin/go build -v \
-+			-o $(@D)/bin/$(target) \
-+			-tags "$(DOCKER_ENGINE_BUILD_TAGS)" \
-+			-ldflags "$(DOCKER_ENGINE_GLDFLAGS)" \
-+			./cmd/$(target)
-+	)
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_TARGET_CMDS
-+	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
-+		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
-+	)
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.7.3
++diff -Nur gdb-7.11.1.orig//sim/common/sim-base.h gdb-7.11.1/sim/common/sim-base.h
++--- gdb-7.11.1.orig//sim/common/sim-base.h	2016-02-09 21:19:39.000000000 -0600
+++++ gdb-7.11.1/sim/common/sim-base.h	2016-07-08 08:02:09.000000000 -0500
++@@ -72,8 +72,6 @@
++ #define INVALID_INSTRUCTION_ADDRESS ((address_word)0 - 1)
++ #endif
++ 
++-/* TODO: Probably should just delete SIM_CPU.  */
++-typedef struct _sim_cpu SIM_CPU;
++ typedef struct _sim_cpu sim_cpu;
++ 
++ #include "sim-module.h"
+diff --git a/system/device_table_dev.txt b/system/device_table_dev.txt
+index c4257a6..4f0b637 100644
+--- a/system/device_table_dev.txt
++++ b/system/device_table_dev.txt
+@@ -31,6 +31,7 @@
+ /dev/ttyAM	c	666	0	0	204	16	0	1	3
+ /dev/ttyCPM	c	666	0	0	204	46	0	1	4
+ /dev/ttyAMA	c	666	0	0	204	64	0	1	4
++/dev/ttyBF	c	666	0	0	204	64	0	1	2
+ /dev/ttySAC	c	666	0	0	204	64	0	1	4
+ /dev/ttySC	c	666	0	0	204	8	0	1	8
+ /dev/ttyPSC	c	666	0	0	204	148	0	1	4
