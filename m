@@ -1,252 +1,222 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 24 Jul 2016 17:06:17 +0200
-Subject: [Buildroot] [PATCH v2] toolchain: add hidden symbol for PIE
- support
-In-Reply-To: <20160711143513.GA6072@waldemar-brodkorb.de>
-References: <20160711143513.GA6072@waldemar-brodkorb.de>
-Message-ID: <ad24a697-55f9-aa38-4c26-dd81f9345e97@gmail.com>
+From: Sebastien Van Cauwenberghe <svancau@gmail.com>
+Date: Sun, 24 Jul 2016 17:36:58 +0200
+Subject: [Buildroot] [PATCH v2] configs: add defconfig for Digilent Zybo
+Message-ID: <ecf2d7c6-c68e-1571-86f5-06cf7ba91118@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+This configuration allows out-of-the box Digilent Zybo
+support. It uses mainline U-boot and Linux kernel. 
+This configuration generates a SD card image named sdcard.img.
 
-Le 11/07/2016 ? 16:35, Waldemar Brodkorb a ?crit :
-> uClibc-ng does not support PIE for some architectures as
-> arc and m68k. It isn't implemented in the static linking case, too.
-> With musl toolchains you might have static PIE support with little
-> patching of gcc. Static linking for GNU libc isn't enabled in
-> buildroot. Fixup any package using special treatment of PIE.
-> (grep -ir pie package/*/*.mk)
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> v1 -> v2:
->   - depends on not required, suggested by Thomas Petazzoni
-> ---
->  package/bluez_utils/bluez_utils.mk   | 3 +--
->  package/cifs-utils/cifs-utils.mk     | 2 +-
->  package/libmemcached/libmemcached.mk | 4 +---
->  package/libsodium/libsodium.mk       | 2 +-
->  package/lvm2/lvm2.mk                 | 2 +-
->  package/openssh/openssh.mk           | 7 +------
->  package/openswan/openswan.mk         | 4 ++--
->  package/pure-ftpd/pure-ftpd.mk       | 2 +-
->  package/quagga/quagga.mk             | 2 +-
->  package/tinc/tinc.mk                 | 2 +-
->  package/trousers/trousers.mk         | 3 +--
->  toolchain/Config.in                  | 3 +++
->  toolchain/toolchain-common.in        | 3 +++
->  13 files changed, 18 insertions(+), 21 deletions(-)
-> 
-> diff --git a/package/bluez_utils/bluez_utils.mk b/package/bluez_utils/bluez_utils.mk
-> index 91c2905..5885f18 100644
-> --- a/package/bluez_utils/bluez_utils.mk
-> +++ b/package/bluez_utils/bluez_utils.mk
-> @@ -54,8 +54,7 @@ BLUEZ_UTILS_CONF_OPTS +=	\
->  	--disable-usb
->  endif
->  
-> -# PIE is broken for m68k
-> -ifeq ($(BR2_m68k),y)
-> +ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
->  BLUEZ_UTILS_CONF_OPTS += --disable-pie
->  endif
->  
-> diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-> index c90a504..6ab408a 100644
-> --- a/package/cifs-utils/cifs-utils.mk
-> +++ b/package/cifs-utils/cifs-utils.mk
-> @@ -10,7 +10,7 @@ CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
->  CIFS_UTILS_LICENSE = GPLv3+
->  CIFS_UTILS_LICENSE_FILES = COPYING
->  
-> -ifneq ($(BR2_STATIC_LIBS)$(BR2_m68k),)
-> +ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
->  CIFS_UTILS_CONF_OPTS += --disable-pie
->  endif
->  
-> diff --git a/package/libmemcached/libmemcached.mk b/package/libmemcached/libmemcached.mk
-> index a5ea4f5..1606fdf 100644
-> --- a/package/libmemcached/libmemcached.mk
-> +++ b/package/libmemcached/libmemcached.mk
-> @@ -18,9 +18,7 @@ LIBMEMCACHED_AUTORECONF = YES
->  LIBMEMCACHED_LICENSE = BSD-3c
->  LIBMEMCACHED_LICENSE_FILES = COPYING
->  
-> -# Help libmemcached to understand that -fPIE and -pie should not be
-> -# used when linking statically.
-> -ifeq ($(BR2_STATIC_LIBS),y)
-> +ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
->  LIBMEMCACHED_CONF_ENV += \
->  	ax_cv_check_cflags__Werror__fPIE=no \
->  	ax_cv_check_cflags__Werror__pie=no \
-> diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
-> index 13dba8d..2ce8f81 100644
-> --- a/package/libsodium/libsodium.mk
-> +++ b/package/libsodium/libsodium.mk
-> @@ -10,7 +10,7 @@ LIBSODIUM_LICENSE = ISC
->  LIBSODIUM_LICENSE_FILES = LICENSE
->  LIBSODIUM_INSTALL_STAGING = YES
->  
-> -ifeq ($(BR2_arc),y)
-> +ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
->  LIBSODIUM_CONF_OPTS += --disable-pie
->  endif
->  
-> diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-> index 64eb926..9a45b53 100644
-> --- a/package/lvm2/lvm2.mk
-> +++ b/package/lvm2/lvm2.mk
-> @@ -43,7 +43,7 @@ else
->  LVM2_CONF_OPTS += --disable-applib
->  endif
->  
-> -ifeq ($(BR2_arc)$(BR2_m68k),y)
-> +ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
->  LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
->  endif
->  
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index 856646c..32d2929 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -22,12 +22,7 @@ define OPENSSH_USERS
->  	sshd -1 sshd -1 * - - - SSH drop priv user
->  endef
->  
-> -# uClibc toolchain for ARC doesn't support PIE at the moment
-> -ifeq ($(BR2_arc),y)
-> -OPENSSH_CONF_OPTS += --without-pie
-> -endif
-> -# PIE and static does not work on Linux
-> -ifeq ($(BR2_STATIC_LIBS),y)
-> +ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
->  OPENSSH_CONF_OPTS += --without-pie
->  endif
->  
-> diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
-> index 54bd4b3..5bf9bb6 100644
-> --- a/package/openswan/openswan.mk
-> +++ b/package/openswan/openswan.mk
-> @@ -11,8 +11,8 @@ OPENSWAN_LICENSE_FILES = COPYING LICENSE
->  
->  OPENSWAN_DEPENDENCIES = host-bison host-flex gmp iproute2
->  OPENSWAN_MAKE_OPTS = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
-> -	USERCOMPILE="$(TARGET_CFLAGS) $(if $(BR2_STATIC_LIBS),,-fPIE)" \
-> -	USERLINK="$(TARGET_LDFLAGS) $(if $(BR2_STATIC_LIBS),,-fPIE)" \
-> +	USERCOMPILE="$(TARGET_CFLAGS) $(if $(BR2_TOOLCHAIN_SUPPORTS_PIE),-fPIE,)" \
-> +	USERLINK="$(TARGET_LDFLAGS) $(if $(BR2_TOOLCHAIN_SUPPORTS_PIE),-fPIE,)" \
->  	INC_USRLOCAL=/usr USE_KLIPS=false USE_MAST=false USE_NM=false
->  
->  ifeq ($(BR2_PACKAGE_LIBCURL),y)
-> diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-> index e1040fa..db1d82f 100644
-> --- a/package/pure-ftpd/pure-ftpd.mk
-> +++ b/package/pure-ftpd/pure-ftpd.mk
-> @@ -41,7 +41,7 @@ else
->  PURE_FTPD_CONF_OPTS += --without-tls
->  endif
->  
-> -ifeq ($(BR2_arc),y)
-> +ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
->  PURE_FTPD_CONF_ENV += ax_cv_check_cflags___fPIE=no ax_cv_check_ldflags___fPIE=no
->  endif
->  
-> diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-> index 1bbc72d..3954509 100644
-> --- a/package/quagga/quagga.mk
-> +++ b/package/quagga/quagga.mk
-> @@ -68,7 +68,7 @@ else
->  QUAGGA_CONF_OPTS += --disable-vtysh
->  endif
->  
-> -ifeq ($(BR2_arc),y)
-> +ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
->  QUAGGA_CONF_OPTS += --disable-pie
->  endif
->  
-> diff --git a/package/tinc/tinc.mk b/package/tinc/tinc.mk
-> index cb0785b..1cc4cbd 100644
-> --- a/package/tinc/tinc.mk
-> +++ b/package/tinc/tinc.mk
-> @@ -11,7 +11,7 @@ TINC_LICENSE = GPLv2+ with OpenSSL exception
->  TINC_LICENSE_FILES = COPYING COPYING.README
->  TINC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=c99"
->  
-> -ifeq ($(BR2_arc),y)
-> +ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
->  TINC_CONF_ENV += \
->  	ax_cv_check_cflags___fPIE=no \
->  	ax_cv_check_ldflags___pie=no
-> diff --git a/package/trousers/trousers.mk b/package/trousers/trousers.mk
-> index 70daa88..f0932e7 100644
-> --- a/package/trousers/trousers.mk
-> +++ b/package/trousers/trousers.mk
-> @@ -23,8 +23,7 @@ endif
->  # workaround.
->  TROUSERS_CONF_OPTS += --disable-usercheck
->  
-> -# uClibc toolchain for ARC doesn't support PIE at the moment
-> -ifeq ($(BR2_arc),y)
-> +ifneq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),y)
->  TROUSERS_CONF_ENV += \
->  	ax_cv_check_cflags___fPIE__DPIE=no \
->  	ax_cv_check_ldflags___pie=no
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index b49588f..35db809 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -15,9 +15,11 @@ config BR2_TOOLCHAIN_USES_GLIBC
->  	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
->  	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
-> +	select BR2_TOOLCHAIN_SUPPORTS_PIE
->  
->  config BR2_TOOLCHAIN_USES_UCLIBC
->  	bool
-> +	select BR2_TOOLCHAIN_SUPPORTS_PIE if !BR2_arc && !BR2_m68k && !BR2_STATIC_LIBS
+Signed-off-by: Sebastien Van Cauwenberghe <svancau@gmail.com>
+---
+ board/digilent/zybo/genimage-zybo.cfg | 29 +++++++++++++
+ board/digilent/zybo/post-image.sh     | 21 ++++++++++
+ board/digilent/zybo/readme.txt        | 76 +++++++++++++++++++++++++++++++++++
+ board/digilent/zybo/system.bit        |  0
+ board/digilent/zybo/uEnv.txt          |  5 +++
+ configs/zynq_zybo_defconfig           | 26 ++++++++++++
+ 6 files changed, 157 insertions(+)
+ create mode 100644 board/digilent/zybo/genimage-zybo.cfg
+ create mode 100755 board/digilent/zybo/post-image.sh
+ create mode 100644 board/digilent/zybo/readme.txt
+ create mode 100644 board/digilent/zybo/system.bit
+ create mode 100644 board/digilent/zybo/uEnv.txt
+ create mode 100644 configs/zynq_zybo_defconfig
 
-It seems that we also need to black list ARM + uClibc + static linking config [1]
-
-Also, what about a test in the toolchain helper to check PIE support is really
-available ?
-
-In order to ease the review, I would be great if you can split these changes in
-two patches ?
-- add BR2_TOOLCHAIN_SUPPORTS_PIE in the toolchain infra
-- use BR2_TOOLCHAIN_SUPPORTS_PIE in packages
-
-[1] http://lists.busybox.net/pipermail/buildroot/2016-July/168309.html
-
-Best regards,
-Romain
-
->  
->  config BR2_TOOLCHAIN_USES_MUSL
->  	bool
-> @@ -26,6 +28,7 @@ config BR2_TOOLCHAIN_USES_MUSL
->  	select BR2_TOOLCHAIN_HAS_THREADS
->  	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
->  	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> +	select BR2_TOOLCHAIN_SUPPORTS_PIE
->  
->  choice
->  	prompt "Toolchain type"
-> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-> index 65df31b..d69acf2 100644
-> --- a/toolchain/toolchain-common.in
-> +++ b/toolchain/toolchain-common.in
-> @@ -39,6 +39,9 @@ config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
->  config BR2_TOOLCHAIN_HAS_SSP
->  	bool
->  
-> +config BR2_TOOLCHAIN_SUPPORTS_PIE
-> +	bool
-> +
->  config BR2_ENABLE_LOCALE_PURGE
->  	bool "Purge unwanted locales"
->  	help
-> 
+diff --git a/board/digilent/zybo/genimage-zybo.cfg b/board/digilent/zybo/genimage-zybo.cfg
+new file mode 100644
+index 0000000..f39186d
+--- /dev/null
++++ b/board/digilent/zybo/genimage-zybo.cfg
+@@ -0,0 +1,29 @@
++image boot.vfat {
++  vfat {
++    files = {
++      "BOOT.BIN",
++      "uEnv.txt",
++      "system.bit",
++      "zynq-zybo.dtb",
++      "u-boot-dtb.img",
++      "uImage"
++    }
++  }
++  size = 32M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++  }
++}
+diff --git a/board/digilent/zybo/post-image.sh b/board/digilent/zybo/post-image.sh
+new file mode 100755
+index 0000000..782ca2a
+--- /dev/null
++++ b/board/digilent/zybo/post-image.sh
+@@ -0,0 +1,21 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++BOARD_NAME="$(basename ${BOARD_DIR})"
++GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++OUTPUT_DIR="${O}/images"
++
++rm -rf "${GENIMAGE_TMP}"
++
++cp board/digilent/zybo/uEnv.txt ${BINARIES_DIR}
++cp board/digilent/zybo/system.bit ${BINARIES_DIR}
++
++genimage                           \
++	--rootpath "${TARGET_DIR}"     \
++	--tmppath "${GENIMAGE_TMP}"    \
++	--inputpath "${BINARIES_DIR}"  \
++	--outputpath "${BINARIES_DIR}" \
++	--config "${GENIMAGE_CFG}"
++
++exit $?
+diff --git a/board/digilent/zybo/readme.txt b/board/digilent/zybo/readme.txt
+new file mode 100644
+index 0000000..2a60a7cc
+--- /dev/null
++++ b/board/digilent/zybo/readme.txt
+@@ -0,0 +1,76 @@
++Digilent Zybo
++=============
++
++This is the Buildroot board support for the Digilent Zybo. The Zybo is
++a development board based on the Xilinx Zynq-7000 based All-Programmable
++System-On-Chip.
++
++Zybo information including schematics, reference designs, and manuals are
++available from http://store.digilentinc.com/zybo-zynq-7000-arm-fpga-soc-trainer-board/ .
++
++If you want a custom FPGA bitstream to be loaded by U-Boot, copy it as
++system.bit in board/digilent/zybo/.
++
++Steps to create a working system for Zybo:
++
++1) make zynq_zybo_defconfig
++2) make
++3) write your SD Card with the sdcard.img file using dd by doing
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++4) insert the SD Card and power up your Zybo
++5) Expect serial console on the second USB serial port exposed by the board
++
++The expected output:
++
++ U-Boot SPL 2016.05 (May 20 2016 - 16:16:24)
++ mmc boot
++ Trying to boot from MMC1
++ reading system.dtb
++ spl_load_image_fat_os: error reading image system.dtb, err - -1
++ reading u-boot-dtb.img
++ reading u-boot-dtb.img
++
++
++ U-Boot 2016.05 (May 20 2016 - 16:16:24 +0200)
++
++ Model: Zynq ZYBO Development Board
++ Board: Xilinx Zynq
++ I2C:   ready
++ DRAM:  ECC disabled 512 MiB
++ MMC:   sdhci at e0100000: 0
++ SF: Detected S25FL128S_64K with page size 256 Bytes, erase size 64 KiB, total 16 MiB
++ In:    serial at e0001000
++ Out:   serial at e0001000
++ Err:   serial at e0001000
++ Model: Zynq ZYBO Development Board
++ Board: Xilinx Zynq
++ Net:   ZYNQ GEM: e000b000, phyaddr 0, interface rgmii-id
++ I2C EEPROM MAC address read failed
++
++ Warning: ethernet at e000b000 (eth0) using random MAC address - 56:64:dd:a7:6d:94
++ eth0: ethernet at e000b000
++ ...
++
++Resulting system
++----------------
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++The first partition is a FAT32 partition created at the beginning of the SD Card
++that contains the following files :
++	/BOOT.BIN
++	/zynq-zybo.dtb
++    /uEnv.txt
++    /system.bit
++	/uImage
++	/u-boot-dtb.img
++
++The second partition is an ext4 partition that contains the root filesystem.
++
++You can alter the booting procedure by modifying the uEnv.txt file
++in first partition of the SD card. It is a plain text file in format
++<key>=<value> one per line:
++
++kernel_image=myimage
++modeboot=myboot
++myboot=...
+diff --git a/board/digilent/zybo/system.bit b/board/digilent/zybo/system.bit
+new file mode 100644
+index 0000000..e69de29
+diff --git a/board/digilent/zybo/uEnv.txt b/board/digilent/zybo/uEnv.txt
+new file mode 100644
+index 0000000..1042538
+--- /dev/null
++++ b/board/digilent/zybo/uEnv.txt
+@@ -0,0 +1,5 @@
++bootargs=root=/dev/mmcblk0p2 rootwait rw rootfstype=ext4
++fpga_image=system.bit
++fpgaboot=if fatload mmc 0 0x1000000 ${fpga_image}; then echo Booting FPGA from ${fpga_image}; fpga info 0 && fpga loadb 0 0x1000000 $filesize; else echo FPGA image ${fpga_image} was not found, skipping...; fi;
++kernel_image=uImage
++sdboot=echo Booting from SD...; run fpgaboot; fatload mmc 0 0x1000000 ${kernel_image} && fatload mmc 0 0x2000000 zynq-zybo.dtb && bootm 0x1000000 - 0x2000000
+diff --git a/configs/zynq_zybo_defconfig b/configs/zynq_zybo_defconfig
+new file mode 100644
+index 0000000..8ab152f
+--- /dev/null
++++ b/configs/zynq_zybo_defconfig
+@@ -0,0 +1,26 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/digilent/zybo/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.6.4"
++BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
++BR2_LINUX_KERNEL_UIMAGE=y
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zybo"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zybo"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_ZYNQ_IMAGE=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-- 
+2.5.5
