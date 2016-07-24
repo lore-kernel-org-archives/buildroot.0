@@ -1,84 +1,126 @@
 From: Dagg Stompler <daggs@gmx.com>
-Date: Sun, 24 Jul 2016 08:20:12 +0300
-Subject: [Buildroot] [PATCH v2] odroidc2: update boot.ini
-Message-ID: <20160724052012.4964-1-daggs@gmx.com>
+Date: Sun, 24 Jul 2016 08:56:02 +0300
+Subject: [Buildroot] [PATCH 2/2 v4] odroid-mali: New Package.
+In-Reply-To: <20160724055602.7159-1-daggs@gmx.com>
+References: <20160724055602.7159-1-daggs@gmx.com>
+Message-ID: <20160724055602.7159-2-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- fix disablehpd bug (thanks to Thomas for spotting it.)
-- change default HDMI mode to 1080p60hz.
-- add support for HDMI HotPlug Detection control.
-- add support for mason timer.
-- add support for headless boot
+v3 -> v4:
+ - update repo rev to 46fe49f37e3506c6205ad8c50980eca9bfff11e3.
+ - update hash
+ - 32 and 64 bit flavors can now use the same repo rev.
+
+v2 -> v3:
+ - fix pkgconfig installation.
 
 v1 -> v2:
-- bug fix (Thomas Petazzoni).
-- add more extensive commit msg (Thomas Petazzoni).
+ - added hash for 32 bits revision.
+ - fix file permissions for S50odroidc2_fb and odroidc2_init_fb.sh
 
 Signed-off-by: Dagg Stompler <daggs@gmx.com>
 ---
- board/hardkernel/odroidc2/boot.ini | 32 ++++++++++++++++++++++++++++++--
- 1 files changed, 32 insertions(+), 2 deletions(-)
+ package/Config.in                    |  1 +
+ package/odroid-mali/Config.in        | 21 +++++++++++++++++++++
+ package/odroid-mali/odroid-mali.hash |  2 ++
+ package/odroid-mali/odroid-mali.mk   | 36 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 60 insertions(+)
+ create mode 100644 package/odroid-mali/Config.in
+ create mode 100644 package/odroid-mali/odroid-mali.hash
+ create mode 100644 package/odroid-mali/odroid-mali.mk
 
-diff --git a/board/hardkernel/odroidc2/boot.ini b/board/hardkernel/odroidc2/boot.ini
-index 8b67b5e..e909fb4 100644
---- a/board/hardkernel/odroidc2/boot.ini
-+++ b/board/hardkernel/odroidc2/boot.ini
-@@ -1,16 +1,36 @@
- ODROIDC2-UBOOT-CONFIG
- 
- # HDMI mode
--setenv m "720p60hz" # Progressive 60Hz
-+setenv m "1080p60hz" # Progressive 60Hz
- 
- # HDMI BPP Mode
- setenv m_bpp "32"
- 
-+# HDMI HotPlug Detection control
-+# Allows you to force HDMI thinking that the cable is connected.
-+# true = HDMI will believe that cable is always connected
-+# false = will let board/monitor negotiate the connection status
-+setenv hpd "true"
+diff --git a/package/Config.in b/package/Config.in
+index a7858dc..f7e7592 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -414,6 +414,7 @@ endmenu
+ 	source "package/nvidia-driver/Config.in"
+ 	source "package/nvidia-tegra23/Config.in"
+ 	source "package/nvme/Config.in"
++	source "package/odroid-mali/Config.in"
+ 	source "package/ofono/Config.in"
+ 	source "package/ola/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+diff --git a/package/odroid-mali/Config.in b/package/odroid-mali/Config.in
+new file mode 100644
+index 0000000..02c6ca0
+--- /dev/null
++++ b/package/odroid-mali/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_ODROID_MALI
++	bool "odroid-mali"
++	select BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_HAS_LIBGLES
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	select BR2_PACKAGE_FBSET
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_aarch64 || BR2_arm
++	depends on BR2_PACKAGE_ODROID_SCRIPTS
++	help
++	  Install the ARM Mali drivers for odroidc2 based systems.
 +
- # Default Console Device Setting
- setenv condev "console=ttyS0,115200n8"	# Serial Console
- 
-+# Meson Timer
-+# 1 - Meson Timer
-+# 0 - Arch Timer 
-+# Using meson_timer improves the video playback whoever it breaks KVM (virtualization).
-+# Using arch timer allows KVM/Virtualization to work however you'll experience poor video
-+setenv mesontimer "1"
++	  https://github.com/mdrjr/c2_mali
 +
-+# Server Mode (aka. No Graphics)
-+# Setting nographics to 1 will disable all video subsystem
-+# This mode is ideal of server type usage. (Saves ~300Mb of RAM)
-+setenv nographics "0"
++if BR2_PACKAGE_ODROID_MALI
++config BR2_PACKAGE_PROVIDES_LIBEGL
++	default "odroid-mali"
 +
-+###########################################
++config BR2_PACKAGE_PROVIDES_LIBGLES
++	default "odroid-mali"
++endif
+diff --git a/package/odroid-mali/odroid-mali.hash b/package/odroid-mali/odroid-mali.hash
+new file mode 100644
+index 0000000..4d24824
+--- /dev/null
++++ b/package/odroid-mali/odroid-mali.hash
+@@ -0,0 +1,2 @@
++# Locally computed hash
++sha256 29d98ed4b8694b860d9289787c416faa847b0de26d36580a53add1752b4c2e9a  odroid-mali-46fe49f37e3506c6205ad8c50980eca9bfff11e3.tar.gz
+diff --git a/package/odroid-mali/odroid-mali.mk b/package/odroid-mali/odroid-mali.mk
+new file mode 100644
+index 0000000..17a7de2
+--- /dev/null
++++ b/package/odroid-mali/odroid-mali.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# odroid-mali
++#
++################################################################################
 +
- # Boot Arguments
--setenv bootargs "root=/dev/mmcblk0p2 rootwait ro ${condev} no_console_suspend hdmimode=${m} m_bpp=${m_bpp} vout=${vout} fsck.repair=yes net.ifnames=0 elevator=noop"
-+setenv bootargs "root=/dev/mmcblk0p2 rootwait ro ${condev} no_console_suspend hdmimode=${m} m_bpp=${m_bpp} vout=${vout} fsck.repair=yes net.ifnames=0 elevator=noop disablehpd=${hpd}"
- 
- # Load Images
- setenv loadaddr "0x11000000"
-@@ -18,5 +38,13 @@ setenv dtb_loadaddr "0x10000000"
- fatload mmc 0:1 ${loadaddr} Image
- fatload mmc 0:1 ${dtb_loadaddr} meson64_odroidc2.dtb
- 
-+if test "${mesontimer}" = "0"; then fdt rm /meson_timer; fdt rm /cpus/cpu at 0/timer; fdt rm /cpus/cpu at 1/timer; fdt rm /cpus/cpu at 2/timer; fdt rm /cpus/cpu at 3/timer; fi
-+if test "${mesontimer}" = "1"; then fdt rm /timer; fi
++ODROID_MALI_VERSION = 46fe49f37e3506c6205ad8c50980eca9bfff11e3
++ODROID_MALI_SITE = $(call github,mdrjr,c2_mali,$(ODROID_MALI_VERSION))
++ODROID_MALI_LICENSE = hardkernel
++ODROID_MALI_LICENSE_FILES = README.md
 +
-+if test "${nographics}" = "1"; then fdt rm /reserved-memory; fdt rm /aocec; fi
-+if test "${nographics}" = "1"; then fdt rm /meson-fb; fdt rm /amhdmitx; fdt rm /picdec; fdt rm /ppmgr; fi
-+if test "${nographics}" = "1"; then fdt rm /meson-vout; fdt rm /mesonstream; fdt rm /meson-fb; fi
-+if test "${nographics}" = "1"; then fdt rm /deinterlace; fdt rm /codec_mm; fi
++ODROID_MALI_INSTALL_STAGING = YES
++ODROID_MALI_PROVIDES = libegl libgles
 +
- # Booting
- booti ${loadaddr} - ${dtb_loadaddr}
++ifeq ($(BR2_aarch64),y)
++ODROID_MALI_LIBS_INSTALL_ARCH=mali_libs
++else
++ODROID_MALI_LIBS_INSTALL_ARCH=32bit_libs
++endif
++
++define ODROID_MALI_INSTALL_LIBS
++	cp -aRP $(@D)/fbdev/$(ODROID_MALI_LIBS_INSTALL_ARCH)/lib* $(1)/lib/
++endef
++
++define ODROID_MALI_INSTALL_STAGING_CMDS
++	$(call ODROID_MALI_INSTALL_LIBS,$(STAGING_DIR)/usr)
++	$(INSTALL) -d $(STAGING_DIR)/usr/lib/pkgconfig
++	$(INSTALL) -m 644 $(@D)/pkgconfig/*.pc $(STAGING_DIR)/usr/lib/pkgconfig/
++	cp -aRP $(@D)/fbdev/mali_headers/* $(STAGING_DIR)/usr/include
++endef
++
++define ODROID_MALI_INSTALL_TARGET_CMDS
++	$(call ODROID_MALI_INSTALL_LIBS,$(TARGET_DIR)/usr)
++endef
++
++$(eval $(generic-package))
 -- 
 2.9.2
