@@ -1,41 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jul 2016 14:50:05 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/rtl8821au: switch to
- abperiasamy fork
-In-Reply-To: <1469305720-23793-1-git-send-email-christian@paral.in>
-References: <1469305720-23793-1-git-send-email-christian@paral.in>
-Message-ID: <20160724145005.60926353@free-electrons.com>
+Date: Sun, 24 Jul 2016 15:03:31 +0200
+Subject: [Buildroot] [git commit] package/sdl2_ttf: x-includes and
+	x-libraries must be set for cross-compiling
+Message-ID: <20160724130410.5713E819C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0ccc5b717e2db1df7c1c98071ffc62a8c0aa0c45
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 23 Jul 2016 13:28:40 -0700, Christian Stewart wrote:
-> Switching to the rtl8821au fork at github.com/abperiasamy/rtl8812AU_8821AU_linux.
-> 
->  - The current fork we are using is maintained by 1 person.
->  - The current fork does not work, and there are no plans to fix this:
->      - https://github.com/ulli-kroll/rtl8821au/issues/5
->      - https://github.com/ulli-kroll/rtl8821au/issues/6
->  - In practice, the current fork has numerous instability issues.
->  - Our lab switched to the abperiasamy fork a couple months ago and have been very happy with it.
->  - The contributor list for the abperiasamy fork contains 21 well-known individuals in the community.
->  - The raspberry pi community recommends the abperiasamy fork and uses it extensively.
->  - Firmware blobs are not necessary with the new fork.
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/rtl8821au/rtl8821au.hash |  2 +-
->  package/rtl8821au/rtl8821au.mk   | 15 ++++-----------
->  2 files changed, 5 insertions(+), 12 deletions(-)
+If those flags are not explicitly passed, the sdl2_ttf configure script
+will include -I/usr/include and -L/usr/lib in the compile flags, which
+are obviously unsafe for cross-compilation.
 
-Applied to master, thanks.
+"checking for X... libraries /usr/lib, headers /usr/include"
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fixes:
+
+  http://autobuild.buildroot.net/results/f968fb31e9882cc856296a7c729d93e345e9e861
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[Thomas:
+ - don't pass an argument to --with-x
+ - use --without-x instead of --with-x=no]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sdl2_ttf/sdl2_ttf.mk | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/package/sdl2_ttf/sdl2_ttf.mk b/package/sdl2_ttf/sdl2_ttf.mk
+index 71c5bc7..6834d16 100644
+--- a/package/sdl2_ttf/sdl2_ttf.mk
++++ b/package/sdl2_ttf/sdl2_ttf.mk
+@@ -14,4 +14,17 @@ SDL2_TTF_DEPENDENCIES = sdl2 freetype host-pkgconf
+ SDL2_TTF_CONF_ENV = \
+ 	FREETYPE_CONFIG=$(STAGING_DIR)/usr/bin/freetype-config
+ 
++# x-includes and x-libraries must be set for cross-compiling
++# By default x_includes and x_libraries contains unsafe paths.
++# (/usr/include and /usr/lib)
++ifeq ($(BR2_PACKAGE_SDL2_X11),y)
++SDL2_TTF_CONF_OPTS += \
++	--with-x \
++	--x-includes=$(STAGING_DIR)/usr/include \
++	--x-libraries=$(STAGING_DIR)/usr/lib
++else
++SDL2_TTF_CONF_OPTS += \
++	--without-x
++endif
++
+ $(eval $(autotools-package))
