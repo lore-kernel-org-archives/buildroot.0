@@ -1,22 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 24 Jul 2016 20:46:59 +0000
-Subject: [Buildroot] [Bug 9021] Kodi - Broken: Illegal instruction (core
-	dumped)
-In-Reply-To: <bug-9021-163@https.bugs.busybox.net/>
-References: <bug-9021-163@https.bugs.busybox.net/>
-Message-ID: <bug-9021-163-8Meq7nki2P@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 24 Jul 2016 22:47:18 +0200
+Subject: [Buildroot] [PATCH] package/acpitool: not available for bfin
+References: <1468778160-32413-1-git-send-email-yann.morin.1998@free.fr>
+ <CAK4VdL1HipqOpg5CuYi+KDZiyrLBZQvNLYcDsECLHNC+pqsAiA@mail.gmail.com>
+ <20160718183059.GA12720@free.fr>
+Message-ID: <m3mf6dx0cb.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9021
+Am Mon, 18 Jul 2016 20:30:59 +0200 schrieb Yann E. MORIN:
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Can you try to build with BR2_PACKAGE_PYTHON_PY_PYC=y instead of
-BR2_PACKAGE_PYTHON_PYC_ONLY=y and see if it makes a difference?
+> Erico, All,
+> 
+> On 2016-07-18 19:37 +0200, Erico Nunes spake thusly:
+>> So it seems to me that acpitool is taking the blame for just being the
+>> first C++ package (alphabetically) to be built with the toolchain
+>> referenced by these autobuilder failures?
+> 
+> Maybe. Don't add packages that sort alphabetically-early if you don't
+> want to be noticed! ;-)
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Hi,
+
+libplatform as cmake-package is also affected:
+http://autobuild.buildroot.net/?reason=libplatform-feafe68e3e0b02c3261aefb3d711863ef6fadd38
+
+Regards, Bernd
