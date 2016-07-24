@@ -1,17 +1,28 @@
-From: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
-Date: Mon, 25 Jul 2016 07:43:55 +0900
-Subject: [Buildroot] [PATCH v2] qt5base: don't enable KMS if it doesn't
- have udev
-In-Reply-To: <2c5128be-77d4-2776-8b47-12fb0ec94e68@stu.hosei.ac.jp>
-References: <20160708000736.2329-1-akihiko.odaki.4i@stu.hosei.ac.jp>
- <20160708011732.3949-1-akihiko.odaki.4i@stu.hosei.ac.jp>
- <20160708205319.13b5a01e@free-electrons.com>
- <2c5128be-77d4-2776-8b47-12fb0ec94e68@stu.hosei.ac.jp>
-Message-ID: <956d2b97-6878-0b33-4173-16e36c386b39@stu.hosei.ac.jp>
+From: Jordan Yelloz <jordan@yelloz.me>
+Date: Sun, 24 Jul 2016 16:27:35 -0700
+Subject: [Buildroot] [PATCH 0/4] swupdate: allow configuring with LuaJIT
+Message-ID: <20160724232739.14132-1-jordan@yelloz.me>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ping
+This allows people to build swupdate against LuaJIT for custom Lua upgrade
+manifest parsers or pre/post-install hook scripts.
+
+Also, information was added about the limitations of building against Lua 5.1
+(which is currently allowed in buildroot) or LuaJIT.
+
+Jordan Yelloz (4):
+  swupdate: allowed luajit to enable HAVE_LUA
+  swupdate: updated lua check for libconfig
+  swupdate: improved help text for Lua support
+  swupdate: added a warning for LuaJIT/Lua 5.1
+
+ package/swupdate/Config.in   | 15 +++++++++++++--
+ package/swupdate/swupdate.mk |  3 +++
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+-- 
+2.9.2
