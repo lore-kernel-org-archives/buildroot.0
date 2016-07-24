@@ -1,582 +1,124 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sun, 24 Jul 2016 13:10:47 -0700
-Subject: [Buildroot] [PATCH v10 1/1] docker-engine: new package
-Message-ID: <1469391047-17228-1-git-send-email-christian@paral.in>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Jul 2016 22:13:34 +0200
+Subject: [Buildroot] [git commit] odroid-scripts: new package
+Message-ID: <20160724201351.2548D81E16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Docker is a platform to build, ship, and run applications in portable
-containers.
+commit: https://git.buildroot.net/buildroot/commit/?id=4f61cbb3b9d2ecaabb8fb5883282a0ff44a9dd5a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Andrew Webster <awebster@arcx.com>
-Signed-off-by: Christian Stewart <christian@paral.in>
-
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-
-Changes since v1:
- - use call github to build source URL
-Changes since v3:
- - fix help indentation in Config.in
- - use HOST_GO_TARGET_ENV as a base for build env vars
- - cleanup build commands
- - cleanup GOPATH and vendor directory setup
- - Remove selections for graph drivers. Docker will gracefully degrade
-   at runtime to the best available graphdriver. It is unnecessary to
-   disable these at build time, or to pull in any other dependencies
-   like aufs-util or btrfs tools. The daemon will use whatever is
-   available at runtime.
-Changes since v4:
- - remove commit hash from version scheme
-Changes since v5:
- - re-introduce graphdriver selections
- - these selections are required for btrfs and devicemapper
- - there are buildtime dependencies on headers.
- - bump to v1.12.0-rc3
- - remove hack/vendor.sh call, it is unnecessary, dependencies are
-   pre-vendored into the source tree.
-Changes since v6:
- - remove build-time dependency on docker-containerd and runc
- - install dockerd only if daemon is enabled
- - move all daemon dependencies into daemon selection
- - only install sysv, users, etc if daemon is enabled
- - add a proper sysv init file
- - remove DOCKER_OPTS in init file
- - remove test for $BASH as bash is never used for init
- - use hash for documentation link in sysv init file
- - remove unnecessary path change in sysv init file
- - remove exit on error line in sysv init file
- - remove init info comment from sysv init file
-Changes since v7:
- - remove "-static" cgo flag which fixes build of btrfs and other
-   additional filesystem drivers.
- - build + run test with alternate filesystem drivers.
-Changes since v8:
- - Bump to v1.12.0-rc4
-Changes since v9:
- - Introduce patch to fix docker log file rotation issue
- - Restructure build targets to use a foreach loop
- - Remove "select" duplicates from docker-containerd
- - Added BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- - Rename docker.init to S61docker
- - Add -static if BR2_STATIC_LIBS is enabled.
- - Remove sysv init file to be added in later patch
----
- package/Config.in                                  |   2 +
- ...-issues-with-tailing-rotated-jsonlog-file.patch | 290 +++++++++++++++++++++
- package/docker-engine/Config.in                    |  65 +++++
- package/docker-engine/docker-engine.hash           |   2 +
- package/docker-engine/docker-engine.mk             | 109 ++++++++
- 5 files changed, 468 insertions(+)
- create mode 100644 package/docker-engine/0001-Fix-issues-with-tailing-rotated-jsonlog-file.patch
- create mode 100644 package/docker-engine/Config.in
- create mode 100644 package/docker-engine/docker-engine.hash
- create mode 100644 package/docker-engine/docker-engine.mk
+ package/Config.in                          |  1 +
+ package/odroid-scripts/Config.in           |  7 ++++++
+ package/odroid-scripts/S50odroidc2_fb      | 20 +++++++++++++++++
+ package/odroid-scripts/odroid-scripts.hash |  2 ++
+ package/odroid-scripts/odroid-scripts.mk   | 36 ++++++++++++++++++++++++++++++
+ 5 files changed, 66 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 04ca8cb..36f8b29 100644
+index 04ca8cb..be9b4cb 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1673,6 +1673,8 @@ menu "System tools"
- 	source "package/dcron/Config.in"
- 	source "package/debianutils/Config.in"
- 	source "package/docker-containerd/Config.in"
-+	source "package/docker-engine/Config.in"
-+	source "package/cgroupfs-mount/Config.in"
- 	source "package/dsp-tools/Config.in"
- 	source "package/efibootmgr/Config.in"
- 	source "package/efivar/Config.in"
-diff --git a/package/docker-engine/0001-Fix-issues-with-tailing-rotated-jsonlog-file.patch b/package/docker-engine/0001-Fix-issues-with-tailing-rotated-jsonlog-file.patch
+@@ -414,6 +414,7 @@ endmenu
+ 	source "package/nvidia-driver/Config.in"
+ 	source "package/nvidia-tegra23/Config.in"
+ 	source "package/nvme/Config.in"
++	source "package/odroid-scripts/Config.in"
+ 	source "package/ofono/Config.in"
+ 	source "package/ola/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+diff --git a/package/odroid-scripts/Config.in b/package/odroid-scripts/Config.in
 new file mode 100644
-index 0000000..e85be61
+index 0000000..48544b6
 --- /dev/null
-+++ b/package/docker-engine/0001-Fix-issues-with-tailing-rotated-jsonlog-file.patch
-@@ -0,0 +1,290 @@
-+From 8d6f2e3fe8851b581309da25fc4c32f8be675932 Mon Sep 17 00:00:00 2001
-+From: Brian Goff <cpuguy83@gmail.com>
-+Date: Mon, 11 Jul 2016 16:31:42 -0400
-+Subject: [PATCH] Fix issues with tailing rotated jsonlog file
++++ b/package/odroid-scripts/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ODROID_SCRIPTS
++	bool "odroid-scripts"
++	depends on BR2_aarch64 || BR2_arm
++	help
++	  Install the scripts for the odroidc2 based systems.
 +
-+Fixes a race where the log reader would get events for both an actual
-+rotation as we from fsnotify (`fsnotify.Rename`).
-+This issue becomes extremely apparent when rotations are fast, for
-+example:
-+
-+```
-+$ docker run -d --name test --log-opt max-size=1 --log-opt max-file=2
-+busybox sh -c 'while true; do echo hello; usleep 100000; done'
-+```
-+
-+With this change the log reader for jsonlogs can handle rotations that
-+happen as above.
-+
-+Instead of listening for both fs events AND rotation events
-+simultaneously, potentially meaning we see 2 rotations for only a single
-+rotation due to channel buffering, only listen for fs events (like
-+`Rename`) and then wait to be notified about rotation by the logger.
-+This makes sure that we don't see 2 rotations for 1, and that we don't
-+start trying to read until the logger is actually ready for us to.
-+
-+Signed-off-by: Brian Goff <cpuguy83@gmail.com>
-+---
-+ daemon/logger/jsonfilelog/read.go | 180 +++++++++++++++++++++++++-------------
-+ 1 file changed, 119 insertions(+), 61 deletions(-)
-+
-+diff --git a/daemon/logger/jsonfilelog/read.go b/daemon/logger/jsonfilelog/read.go
-+index bea83dd..0cb44af 100644
-+--- a/daemon/logger/jsonfilelog/read.go
-++++ b/daemon/logger/jsonfilelog/read.go
-+@@ -3,11 +3,14 @@ package jsonfilelog
-+ import (
-+ 	"bytes"
-+ 	"encoding/json"
-++	"errors"
-+ 	"fmt"
-+ 	"io"
-+ 	"os"
-+ 	"time"
-+ 
-++	"gopkg.in/fsnotify.v1"
-++
-+ 	"github.com/Sirupsen/logrus"
-+ 	"github.com/docker/docker/daemon/logger"
-+ 	"github.com/docker/docker/pkg/filenotify"
-+@@ -44,6 +47,10 @@ func (l *JSONFileLogger) ReadLogs(config logger.ReadConfig) *logger.LogWatcher {
-+ func (l *JSONFileLogger) readLogs(logWatcher *logger.LogWatcher, config logger.ReadConfig) {
-+ 	defer close(logWatcher.Msg)
-+ 
-++	// lock so the read stream doesn't get corrupted do to rotations or other log data written while we read
-++	// This will block writes!!!
-++	l.mu.Lock()
-++
-+ 	pth := l.writer.LogPath()
-+ 	var files []io.ReadSeeker
-+ 	for i := l.writer.MaxFiles(); i > 1; i-- {
-+@@ -61,6 +68,7 @@ func (l *JSONFileLogger) readLogs(logWatcher *logger.LogWatcher, config logger.R
-+ 	latestFile, err := os.Open(pth)
-+ 	if err != nil {
-+ 		logWatcher.Err <- err
-++		l.mu.Unlock()
-+ 		return
-+ 	}
-+ 
-+@@ -80,6 +88,7 @@ func (l *JSONFileLogger) readLogs(logWatcher *logger.LogWatcher, config logger.R
-+ 		if err := latestFile.Close(); err != nil {
-+ 			logrus.Errorf("Error closing file: %v", err)
-+ 		}
-++		l.mu.Unlock()
-+ 		return
-+ 	}
-+ 
-+@@ -87,7 +96,6 @@ func (l *JSONFileLogger) readLogs(logWatcher *logger.LogWatcher, config logger.R
-+ 		latestFile.Seek(0, os.SEEK_END)
-+ 	}
-+ 
-+-	l.mu.Lock()
-+ 	l.readers[logWatcher] = struct{}{}
-+ 	l.mu.Unlock()
-+ 
-+@@ -128,92 +136,142 @@ func tailFile(f io.ReadSeeker, logWatcher *logger.LogWatcher, tail int, since ti
-+ 	}
-+ }
-+ 
-++func watchFile(name string) (filenotify.FileWatcher, error) {
-++	fileWatcher, err := filenotify.New()
-++	if err != nil {
-++		return nil, err
-++	}
-++
-++	if err := fileWatcher.Add(name); err != nil {
-++		logrus.WithField("logger", "json-file").Warnf("falling back to file poller due to error: %v", err)
-++		fileWatcher.Close()
-++		fileWatcher = filenotify.NewPollingWatcher()
-++
-++		if err := fileWatcher.Add(name); err != nil {
-++			fileWatcher.Close()
-++			logrus.Debugf("error watching log file for modifications: %v", err)
-++			return nil, err
-++		}
-++	}
-++	return fileWatcher, nil
-++}
-++
-+ func followLogs(f *os.File, logWatcher *logger.LogWatcher, notifyRotate chan interface{}, since time.Time) {
-+ 	dec := json.NewDecoder(f)
-+ 	l := &jsonlog.JSONLog{}
-+ 
-+-	fileWatcher, err := filenotify.New()
-++	name := f.Name()
-++	fileWatcher, err := watchFile(name)
-+ 	if err != nil {
-+ 		logWatcher.Err <- err
-++		return
-+ 	}
-+ 	defer func() {
-+ 		f.Close()
-+ 		fileWatcher.Close()
-+ 	}()
-+-	name := f.Name()
-+ 
-+-	if err := fileWatcher.Add(name); err != nil {
-+-		logrus.WithField("logger", "json-file").Warnf("falling back to file poller due to error: %v", err)
-+-		fileWatcher.Close()
-+-		fileWatcher = filenotify.NewPollingWatcher()
-++	var retries int
-++	handleRotate := func() error {
-++		f.Close()
-++		fileWatcher.Remove(name)
-+ 
-++		// retry when the file doesn't exist
-++		for retries := 0; retries <= 5; retries++ {
-++			f, err = os.Open(name)
-++			if err == nil || !os.IsNotExist(err) {
-++				break
-++			}
-++		}
-++		if err != nil {
-++			return err
-++		}
-+ 		if err := fileWatcher.Add(name); err != nil {
-+-			logrus.Debugf("error watching log file for modifications: %v", err)
-+-			logWatcher.Err <- err
-+-			return
-++			return err
-+ 		}
-++		dec = json.NewDecoder(f)
-++		return nil
-+ 	}
-+ 
-+-	var retries int
-+-	for {
-+-		msg, err := decodeLogLine(dec, l)
-+-		if err != nil {
-+-			if err != io.EOF {
-+-				// try again because this shouldn't happen
-+-				if _, ok := err.(*json.SyntaxError); ok && retries <= maxJSONDecodeRetry {
-+-					dec = json.NewDecoder(f)
-+-					retries++
-+-					continue
-++	errRetry := errors.New("retry")
-++	errDone := errors.New("done")
-++	waitRead := func() error {
-++		select {
-++		case e := <-fileWatcher.Events():
-++			switch e.Op {
-++			case fsnotify.Write:
-++				dec = json.NewDecoder(f)
-++				return nil
-++			case fsnotify.Rename, fsnotify.Remove:
-++				<-notifyRotate
-++				if err := handleRotate(); err != nil {
-++					return err
-+ 				}
-+-
-+-				// io.ErrUnexpectedEOF is returned from json.Decoder when there is
-+-				// remaining data in the parser's buffer while an io.EOF occurs.
-+-				// If the json logger writes a partial json log entry to the disk
-+-				// while at the same time the decoder tries to decode it, the race condition happens.
-+-				if err == io.ErrUnexpectedEOF && retries <= maxJSONDecodeRetry {
-+-					reader := io.MultiReader(dec.Buffered(), f)
-+-					dec = json.NewDecoder(reader)
-+-					retries++
-+-					continue
-++				return nil
-++			}
-++			return errRetry
-++		case err := <-fileWatcher.Errors():
-++			logrus.Debug("logger got error watching file: %v", err)
-++			// Something happened, let's try and stay alive and create a new watcher
-++			if retries <= 5 {
-++				fileWatcher, err = watchFile(name)
-++				if err != nil {
-++					return err
-+ 				}
-+-
-+-				return
-++				retries++
-++				return errRetry
-+ 			}
-++			return err
-++		case <-logWatcher.WatchClose():
-++			fileWatcher.Remove(name)
-++			return errDone
-++		}
-++	}
-+ 
-+-			select {
-+-			case <-fileWatcher.Events():
-+-				dec = json.NewDecoder(f)
-+-				continue
-+-			case <-fileWatcher.Errors():
-+-				logWatcher.Err <- err
-+-				return
-+-			case <-logWatcher.WatchClose():
-+-				fileWatcher.Remove(name)
-+-				return
-+-			case <-notifyRotate:
-+-				f.Close()
-+-				fileWatcher.Remove(name)
-+-
-+-				// retry when the file doesn't exist
-+-				for retries := 0; retries <= 5; retries++ {
-+-					f, err = os.Open(name)
-+-					if err == nil || !os.IsNotExist(err) {
-+-						break
-+-					}
-++	handleDecodeErr := func(err error) error {
-++		if err == io.EOF {
-++			for err := waitRead(); err != nil; {
-++				if err == errRetry {
-++					// retry the waitRead
-++					continue
-+ 				}
-++				return err
-++			}
-++			return nil
-++		}
-++		// try again because this shouldn't happen
-++		if _, ok := err.(*json.SyntaxError); ok && retries <= maxJSONDecodeRetry {
-++			dec = json.NewDecoder(f)
-++			retries++
-++			return nil
-++		}
-++		// io.ErrUnexpectedEOF is returned from json.Decoder when there is
-++		// remaining data in the parser's buffer while an io.EOF occurs.
-++		// If the json logger writes a partial json log entry to the disk
-++		// while@the same time the decoder tries to decode it, the race condition happens.
-++		if err == io.ErrUnexpectedEOF && retries <= maxJSONDecodeRetry {
-++			reader := io.MultiReader(dec.Buffered(), f)
-++			dec = json.NewDecoder(reader)
-++			retries++
-++			return nil
-++		}
-++		return err
-++	}
-+ 
-+-				if err = fileWatcher.Add(name); err != nil {
-+-					logWatcher.Err <- err
-+-					return
-+-				}
-+-				if err != nil {
-+-					logWatcher.Err <- err
-++	// main loop
-++	for {
-++		msg, err := decodeLogLine(dec, l)
-++		if err != nil {
-++			if err := handleDecodeErr(err); err != nil {
-++				if err == errDone {
-+ 					return
-+ 				}
-+-
-+-				dec = json.NewDecoder(f)
-+-				continue
-++				// we got an unrecoverable error, so return
-++				logWatcher.Err <- err
-++				return
-+ 			}
-++			// ready to try again
-++			continue
-+ 		}
-+ 
-+ 		retries = 0 // reset retries since we've succeeded
-+-- 
-+2.7.3
-+
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
++	  https://github.com/mdrjr/c2_bootini
+diff --git a/package/odroid-scripts/S50odroidc2_fb b/package/odroid-scripts/S50odroidc2_fb
 new file mode 100644
-index 0000000..1acf121
+index 0000000..2aae59d
 --- /dev/null
-+++ b/package/docker-engine/Config.in
-@@ -0,0 +1,65 @@
-+config BR2_PACKAGE_DOCKER_ENGINE
-+	bool "docker-engine"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Docker is a platform to build, ship,
-+	  and run applications as lightweight containers.
++++ b/package/odroid-scripts/S50odroidc2_fb
+@@ -0,0 +1,20 @@
++#!/bin/sh
++#
++# Set up frame buffer
++#
 +
-+	  https://github.com/docker/docker
++case "$1" in
++    start)
++        echo "Setting up display..."
++        /usr/sbin/odroidc2_init_fb.sh
++        ;;
++    stop)
++        ;;
++    restart|reload)
++        ;;
++    *)
++        echo "Usage: $0 {start|stop|restart}"
++        exit 1
++esac
 +
-+if BR2_PACKAGE_DOCKER_ENGINE
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
-+	bool "docker daemon"
-+	depends on BR2_USE_MMU # docker-containerd
-+	depends on BR2_USE_WCHAR # docker-containerd
-+	select BR2_PACKAGE_SQLITE # runtime dependency
-+	default y
-+	help
-+	  Build the Docker system daemon.
-+	  If not selected, will build client only.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL
-+	bool "build experimental features"
-+
-+if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
-+	bool "btrfs filesystem driver"
-+	depends on BR2_USE_WCHAR # btrfs-progs
-+	depends on BR2_USE_MMU # btrfs-progs
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
-+	select BR2_PACKAGE_BTRFS_PROGS
-+	help
-+	  Build the btrfs filesystem driver for Docker.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
-+	bool "devicemapper filesystem driver"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
-+	depends on BR2_USE_MMU # lvm2
-+	depends on !BR2_STATIC_LIBS # lvm2
-+	select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_LVM2_APP_LIBRARY
-+	help
-+	  Build the devicemapper filesystem driver for Docker.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
-+	bool "vfs filesystem driver"
-+	depends on BR2_USE_WCHAR # gvfs
-+	depends on BR2_USE_MMU # gvfs
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gvfs
-+	select BR2_PACKAGE_GVFS
-+	help
-+	  Build the vfs filesystem driver for Docker.
-+
-+endif
-+
-+endif
-+
-+comment "docker-engine needs a toolchain w/ threads, wchar"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
++exit $?
+diff --git a/package/odroid-scripts/odroid-scripts.hash b/package/odroid-scripts/odroid-scripts.hash
 new file mode 100644
-index 0000000..1de09f8
+index 0000000..8fd4b2c
 --- /dev/null
-+++ b/package/docker-engine/docker-engine.hash
++++ b/package/odroid-scripts/odroid-scripts.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 bc256d2a348efbf236eab991254c925fa1917dd1e29cb40586f1696f4e24852e  docker-engine-v1.12.0-rc4.tar.gz
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
++#  Locally computed hash
++sha256 779e8beccf8c66d51e495a4cc0e6eccf72c295499a1ecdc0740aa4459de786a0 odroid-scripts-a252de04562dcf8d8a4918a544b45a9e3d46d2fb.tar.gz
+diff --git a/package/odroid-scripts/odroid-scripts.mk b/package/odroid-scripts/odroid-scripts.mk
 new file mode 100644
-index 0000000..cec6141
+index 0000000..858ec37
 --- /dev/null
-+++ b/package/docker-engine/docker-engine.mk
-@@ -0,0 +1,109 @@
++++ b/package/odroid-scripts/odroid-scripts.mk
+@@ -0,0 +1,36 @@
 +################################################################################
 +#
-+# docker-engine
++# odroid-scripts
 +#
 +################################################################################
 +
-+DOCKER_ENGINE_VERSION = v1.12.0-rc4
-+DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
++ODROID_SCRIPTS_VERSION = a252de04562dcf8d8a4918a544b45a9e3d46d2fb
++ODROID_SCRIPTS_SITE = $(call github,mdrjr,c2_bootini,$(ODROID_SCRIPTS_VERSION))
++ODROID_SCRIPTS_LICENSE = unclear
 +
-+DOCKER_ENGINE_LICENSE = Apache-2.0
-+DOCKER_ENGINE_LICENSE_FILES = LICENSE
-+
-+DOCKER_ENGINE_DEPENDENCIES = host-go
-+
-+DOCKER_ENGINE_GOPATH = "$(@D)/vendor"
-+DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-+	CGO_ENABLED=1 \
-+	CGO_NO_EMULATION=1 \
-+	GOBIN="$(@D)/bin" \
-+	GOPATH="$(DOCKER_ENGINE_GOPATH)" \
-+	CPATH=$$CPATH:$(TARGET_DIR)/usr/include/ \
-+	LIBRARY_PATH=$$LIBRARY_PATH:$(TARGET_DIR)/usr/lib/
-+
-+DOCKER_ENGINE_GLDFLAGS = \
-+	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
-+	-X main.Version=$(DOCKER_ENGINE_VERSION)
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+DOCKER_ENGINE_GLDFLAGS += -extldflags '-static'
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++define ODROID_SCRIPTS_INSTALL_UDEV_RULES
++	$(INSTALL) -D -m 0644 $(@D)/10-odroid.rules \
++		$(TARGET_DIR)/etc/udev/rules.d/10-odroid.rules
++endef
 +endif
 +
-+DOCKER_ENGINE_BUILD_TAGS = cgo exclude_graphdriver_zfs autogen
-+DOCKER_ENGINE_BUILD_TARGETS = docker
-+
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+DOCKER_ENGINE_BUILD_TAGS += seccomp
-+DOCKER_ENGINE_DEPENDENCIES += libseccomp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
-+DOCKER_ENGINE_BUILD_TAGS += daemon
-+DOCKER_ENGINE_BUILD_TARGETS += dockerd
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
-+DOCKER_ENGINE_BUILD_TAGS += experimental
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS),y)
-+DOCKER_ENGINE_DEPENDENCIES += btrfs-progs
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_btrfs
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER),y)
-+DOCKER_ENGINE_DEPENDENCIES += lvm2
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_devicemapper
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS),y)
-+DOCKER_ENGINE_DEPENDENCIES += gvfs
-+else
-+DOCKER_ENGINE_BUILD_TAGS += exclude_graphdriver_vfs
-+endif
-+
-+define DOCKER_ENGINE_CONFIGURE_CMDS
-+	ln -fs $(@D) $(DOCKER_ENGINE_GOPATH)/src/github.com/docker/docker
-+	cd $(@D) && \
-+		GITCOMMIT="unknown" BUILDTIME="$$(date)" VERSION="$(DOCKER_ENGINE_VERSION)" \
-+		bash ./hack/make/.go-autogen
++define ODROID_SCRIPTS_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/c2_init.sh $(TARGET_DIR)/usr/sbin/odroidc2_init_fb.sh
++	$(ODROID_SCRIPTS_INSTALL_UDEV_RULES)
 +endef
 +
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
-+
-+define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
-+	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/system/docker.socket
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
-+	ln -fs ../../../../usr/lib/systemd/system/docker.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/docker.service
++define ODROID_SCRIPTS_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 $(@D)/amlogic.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/odroidc2_fb.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib/systemd/system/odroidc2_fb.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/odroidc2_fb.service
 +endef
 +
-+define DOCKER_ENGINE_USERS
-+	- - docker -1 * - - - Docker Application Container Framework
-+endef
-+
-+endif
-+
-+define DOCKER_ENGINE_BUILD_CMDS
-+	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
-+		cd $(@D); $(DOCKER_ENGINE_MAKE_ENV) \
-+		$(HOST_DIR)/usr/bin/go build -v \
-+		-o $(@D)/bin/$(target) \
-+		-tags "$(DOCKER_ENGINE_BUILD_TAGS)" \
-+		-ldflags "$(DOCKER_ENGINE_GLDFLAGS)" \
-+		./cmd/$(target)
-+	)
-+endef
-+
-+define DOCKER_ENGINE_INSTALL_TARGET_CMDS
-+	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
-+		$(INSTALL) -D -m 0755 $(@D)/bin/$(target) $(TARGET_DIR)/usr/bin/$(target)
-+	)
++define ODROID_SCRIPTS_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/odroid-scripts/S50odroidc2_fb \
++		$(TARGET_DIR)/etc/init.d/S50odroidc2_fb
 +endef
 +
 +$(eval $(generic-package))
--- 
-2.7.3
