@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jul 2016 15:55:15 +0200
-Subject: [Buildroot] [PATCH] package/gdb: fix gnulib issue with musl and
- uClibc toolchains
-In-Reply-To: <1469292622-32034-1-git-send-email-romain.naour@gmail.com>
-References: <1469292622-32034-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160724155515.73be1284@free-electrons.com>
+Date: Sun, 24 Jul 2016 16:00:48 +0200
+Subject: [Buildroot] [PATCH v2 1/6] support/download: Add support to
+ pass options directly to downloaders
+In-Reply-To: <20160715204729.GH3692@free.fr>
+References: <1468315820-9341-1-git-send-email-romain.perier@free-electrons.com>
+ <1468315820-9341-2-git-send-email-romain.perier@free-electrons.com>
+ <20160715204729.GH3692@free.fr>
+Message-ID: <20160724160048.39770315@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,42 +15,42 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 23 Jul 2016 18:50:22 +0200, Romain Naour wrote:
-> gnulib whant to use rpl_gettimeofday due bad guessing when
-> cross-compiling with musl and uClibc toolchains.
+On Fri, 15 Jul 2016 22:47:29 +0200, Yann E. MORIN wrote:
+
+> > ---  
+> [--SNIP--]
+> > diff --git a/support/download/bzr b/support/download/bzr
+> > index e18b01f..9443e03 100755
+> > --- a/support/download/bzr
+> > +++ b/support/download/bzr
+> > @@ -25,6 +25,7 @@ output="${1}"
+> >  repo="${2}"
+> >  rev="${3}"
+> >  basename="${4}"
+> > +dl_opts="${5}"  
 > 
-> tracepoint-ipa.o: In function `get_timestamp':
-> tracepoint.c:(.text+0x147): undefined reference to `rpl_gettimeofday'
-> Makefile:329: recipe for target 'libinproctrace.so' failed
+> So we expect the additional options to be pased as a single string?
+> Why not use something like:
+> 
+>     shift 4 # Get rid of our options
+> 
+> and then:
+> 
+>     _bzr export ${verbose} --root="'${basename}/'" --format=tgz \
+>         ${timestamp_opt} - "'${repo}'" -r "'${rev}'" \
+>         ${timestamp_opt} - "${@}" "'${repo}'" -r "'${rev}'" \
+> 
+> Ditto for all backends, of course.
+> 
+> Note: I wrote the above after writing the comment below; that construct
+> above would fix the concerns I expressed below.
+> 
+> (I'm hard to follow, am I not? My brain is really tortuous... ;-] )
 
-I tested the following defconfig:
-
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_VFP=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2016.05-1162-g94c7298.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_6=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_GDB=y
-BR2_PACKAGE_GDB_SERVER=y
-BR2_PACKAGE_GDB_DEBUGGER=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-and did not encounter any problem.
-
-If you can still reproduce the problem, isn't it solved by:
-
-GDB_CONF_ENV += gl_cv_func_gettimeofday_clobber=no
-
- ?
+Below, you're concerned that "${dl_opts}" will lead to a problem as it
+will be an empty "" if no options are passed. But you suggest to use
+"${@}" instead, still with "". How does that fix the particular problem
+you mentioned below?
 
 Thanks,
 
