@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jul 2016 14:40:40 +0200
-Subject: [Buildroot] [PATCH 1/2 v3] odroid-scripts: New Package.
-In-Reply-To: <20160724055602.7159-1-daggs@gmx.com>
+Date: Sun, 24 Jul 2016 14:44:18 +0200
+Subject: [Buildroot] [PATCH 2/2 v4] odroid-mali: New Package.
+In-Reply-To: <20160724055602.7159-2-daggs@gmx.com>
 References: <20160724055602.7159-1-daggs@gmx.com>
-Message-ID: <20160724144040.52d51f5f@free-electrons.com>
+ <20160724055602.7159-2-daggs@gmx.com>
+Message-ID: <20160724144418.79f779f4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,95 +13,104 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 24 Jul 2016 08:56:01 +0300, Dagg Stompler wrote:
-> v2 -> v3:
->  - update repo rev to a252de04562dcf8d8a4918a544b45a9e3d46d2fb.
+On Sun, 24 Jul 2016 08:56:02 +0300, Dagg Stompler wrote:
+> v3 -> v4:
+>  - update repo rev to 46fe49f37e3506c6205ad8c50980eca9bfff11e3.
 >  - update hash
+>  - 32 and 64 bit flavors can now use the same repo rev.
+> 
+> v2 -> v3:
+>  - fix pkgconfig installation.
 > 
 > v1 -> v2:
->  - fix hash type in hash file.
+>  - added hash for 32 bits revision.
+>  - fix file permissions for S50odroidc2_fb and odroidc2_init_fb.sh
 
-The changelog should not be part of the commit log.
+The changelog should not be part of the commit log. It should go...
 
 > 
 > Signed-off-by: Dagg Stompler <daggs@gmx.com>
 > ---
 
-It should be here.
+... here.
 
->  configs/odroidc2_defconfig                 |  1 +
->  package/Config.in                          |  1 +
->  package/odroid-scripts/Config.in           |  7 +++++++
->  package/odroid-scripts/S50odroidc2_fb      | 20 +++++++++++++++++++
->  package/odroid-scripts/odroid-scripts.hash |  2 ++
->  package/odroid-scripts/odroid-scripts.mk   | 32 ++++++++++++++++++++++++++++++
->  6 files changed, 63 insertions(+)
->  create mode 100644 package/odroid-scripts/Config.in
->  create mode 100644 package/odroid-scripts/S50odroidc2_fb
->  create mode 100644 package/odroid-scripts/odroid-scripts.hash
->  create mode 100644 package/odroid-scripts/odroid-scripts.mk
-> 
-> diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
-> index 43c2787..45ede62 100644
-> --- a/configs/odroidc2_defconfig
-> +++ b/configs/odroidc2_defconfig
-> @@ -6,6 +6,7 @@ BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
->  BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image.sh"
-> +BR2_PACKAGE_ODROID_SCRIPTS=y
+>  package/Config.in                    |  1 +
+>  package/odroid-mali/Config.in        | 21 +++++++++++++++++++++
+>  package/odroid-mali/odroid-mali.hash |  2 ++
+>  package/odroid-mali/odroid-mali.mk   | 36 ++++++++++++++++++++++++++++++++++++
+>  4 files changed, 60 insertions(+)
+>  create mode 100644 package/odroid-mali/Config.in
+>  create mode 100644 package/odroid-mali/odroid-mali.hash
+>  create mode 100644 package/odroid-mali/odroid-mali.mk
 
-This should be part of a separate commit.
+> +	depends on BR2_PACKAGE_ODROID_SCRIPTS
 
+Why do you have this dependency?
 
-> +ODROID_SCRIPTS_VERSION = a252de04562dcf8d8a4918a544b45a9e3d46d2fb
-> +ODROID_SCRIPTS_SITE = $(call github,mdrjr,c2_bootini,$(ODROID_SCRIPTS_VERSION))
-
-This repository contains the boot.ini for which you add a copy in
-Buildroot (see our discussion from yesterday). Why don't we use this
-one? It seems to be pretty much the same.
-
-> +ODROID_SCRIPTS_LICENSE = unclear
+> +################################################################################
+> +#
+> +# odroid-mali
+> +#
+> +################################################################################
 > +
-> +ifeq ($(BR2_PACKAGE_EUDEV),y)
+> +ODROID_MALI_VERSION = 46fe49f37e3506c6205ad8c50980eca9bfff11e3
+> +ODROID_MALI_SITE = $(call github,mdrjr,c2_mali,$(ODROID_MALI_VERSION))
+> +ODROID_MALI_LICENSE = hardkernel
 
-BR2_PACKAGE_HAS_UDEV
+I think:
 
-so that it also works with systemd
+	Hardkernel EULA
 
-> +	ODROID_SCRIPTS_INSTALL_UDEV_RULES = $(INSTALL) -D -m 0644 $(@D)/10-odroid.rules $(TARGET_DIR)/etc/udev/rules.d/10-odroid.rules
+would be better here.
 
-Please use:
-
-define ODROID_SCRIPTS_INSTALL_UDEV_RULES
-	$(INSTALL) -D -m 0644 $(@D)/10-odroid.rules $(TARGET_DIR)/etc/udev/rules.d/10-odroid.rules
-endef
-
+> +ODROID_MALI_LICENSE_FILES = README.md
+> +
+> +ODROID_MALI_INSTALL_STAGING = YES
+> +ODROID_MALI_PROVIDES = libegl libgles
+> +
+> +ifeq ($(BR2_aarch64),y)
+> +ODROID_MALI_LIBS_INSTALL_ARCH=mali_libs
 > +else
-> +	ODROID_SCRIPTS_INSTALL_UDEV_RULES =
-
-Not needed, by default variables are empty.
-
+> +ODROID_MALI_LIBS_INSTALL_ARCH=32bit_libs
 > +endif
 > +
-> +define ODROID_SCRIPTS_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/c2_init.sh $(TARGET_DIR)/usr/sbin/odroidc2_init_fb.sh
-> +	$(ODROID_SCRIPTS_INSTALL_UDEV_RULES)
+> +define ODROID_MALI_INSTALL_LIBS
+> +	cp -aRP $(@D)/fbdev/$(ODROID_MALI_LIBS_INSTALL_ARCH)/lib* $(1)/lib/
+
+Make it:
+
+	cp -aRP $(@D)/fbdev/$(ODROID_MALI_LIBS_INSTALL_ARCH)/lib* $(1)/usr/lib/
+
+This way you just have to pass TARGET_DIR or STAGING_DIR, and not
+TARGET_DIR/usr and STAGING_DIR/usr.
+
+Also, in Buildroot, we by convention use:
+
+	cp -dpfr
+
+
 > +endef
 > +
-> +define ODROID_SCRIPTS_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -D -m 0644 $(@D)/amlogic.service $(TARGET_DIR)/usr/lib/systemd/system/odroidc2_fb.service
-> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +	ln -fs ../../../../usr/lib/systemd/system/odroidc2_fb.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/odroidc2_fb.service
+> +define ODROID_MALI_INSTALL_STAGING_CMDS
+> +	$(call ODROID_MALI_INSTALL_LIBS,$(STAGING_DIR)/usr)
+> +	$(INSTALL) -d $(STAGING_DIR)/usr/lib/pkgconfig
+> +	$(INSTALL) -m 644 $(@D)/pkgconfig/*.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+
+Use cp
+
+> +	cp -aRP $(@D)/fbdev/mali_headers/* $(STAGING_DIR)/usr/include
+
+cp -dpfr
+
 > +endef
 > +
-> +define ODROID_SCRIPTS_INSTALL_INIT_SYSV
-> +	$(INSTALL) -D -m 0755 package/odroid-scripts/S50odroidc2_fb $(TARGET_DIR)/etc/init.d/S50odroidc2_fb
+> +define ODROID_MALI_INSTALL_TARGET_CMDS
+> +	$(call ODROID_MALI_INSTALL_LIBS,$(TARGET_DIR)/usr)
 > +endef
+> +
+> +$(eval $(generic-package))
 
-Other than that, looks good. Can you respin a new version?
-
-Thanks!
+Other than that, looks good.
 
 Thomas
 -- 
