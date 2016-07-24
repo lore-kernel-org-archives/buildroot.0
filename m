@@ -1,95 +1,54 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 24 Jul 2016 23:14:45 +0200
-Subject: [Buildroot] [autobuild-script] confis: update Kconfig symbols for
-	sourcery toolchains
-Message-ID: <1469394885-15001-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Jul 2016 23:15:20 +0200
+Subject: [Buildroot] [PATCH v5] board: add blackfin gdb simulator support
+In-Reply-To: <20160708221918.GA11610@waldemar-brodkorb.de>
+References: <20160708221918.GA11610@waldemar-brodkorb.de>
+Message-ID: <20160724231520.2f5d811a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_<arch><version> symbols
-has been renamed to BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_<arch> since
-Buildroot only support one version of these toolchains.
+Hello,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- web/toolchains/configs/sourcery-arm-armv4t.config | 2 +-
- web/toolchains/configs/sourcery-arm.config        | 2 +-
- web/toolchains/configs/sourcery-mips.config       | 2 +-
- web/toolchains/configs/sourcery-mips64.config     | 2 +-
- web/toolchains/configs/sourcery-sh.config         | 2 +-
- web/toolchains/configs/sourcery-x86-64.config     | 2 +-
- web/toolchains/configs/sourcery-x86.config        | 2 +-
- 7 files changed, 7 insertions(+), 7 deletions(-)
+On Sat, 9 Jul 2016 00:19:18 +0200, Waldemar Brodkorb wrote:
+> With this config you can bootup a Linux kernel
+> in GDB simulator and test Blackfin kernel and
+> userland.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+> v4 -> v5:
+>   - fix gdb sim compile on older systems with gcc 4.4 reported
+>     by THomas Petazzoni 
+> v3 -> v4:
+>   - update to use latest 4.6 kernel
+>   - remove ldconfig workaround, as uclibc-utils now compile
+> v2 -> v3:
+>   - no changes
+> v1 -> v2:
+>   - do not use devtmpfs, as login via getty fails
+> ---
+>  board/gdb/bfin-bf512/linux-4.6.config         | 87 +++++++++++++++++++++++++++
+>  board/gdb/bfin-bf512/readme.txt               | 11 ++++
+>  board/gdb/post-build.sh                       |  4 ++
+>  configs/gdb_bfin_bf512_defconfig              | 34 +++++++++++
+>  package/gdb/7.10.1/0005-fix-sim-compile.patch | 16 +++++
+>  package/gdb/7.11.1/0001-fix-sim-compile.patch | 16 +++++
+>  system/device_table_dev.txt                   |  1 +
+>  7 files changed, 169 insertions(+)
+>  create mode 100644 board/gdb/bfin-bf512/linux-4.6.config
+>  create mode 100644 board/gdb/bfin-bf512/readme.txt
+>  create mode 100755 board/gdb/post-build.sh
+>  create mode 100644 configs/gdb_bfin_bf512_defconfig
+>  create mode 100644 package/gdb/7.10.1/0005-fix-sim-compile.patch
+>  create mode 100644 package/gdb/7.11.1/0001-fix-sim-compile.patch
 
-diff --git a/web/toolchains/configs/sourcery-arm-armv4t.config b/web/toolchains/configs/sourcery-arm-armv4t.config
-index 2450351..4c0e01f 100644
---- a/web/toolchains/configs/sourcery-arm-armv4t.config
-+++ b/web/toolchains/configs/sourcery-arm-armv4t.config
-@@ -1,4 +1,4 @@
- BR2_arm=y
- BR2_arm920t=y
- BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201405=y
-+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
-diff --git a/web/toolchains/configs/sourcery-arm.config b/web/toolchains/configs/sourcery-arm.config
-index fb98b28..8ade464 100644
---- a/web/toolchains/configs/sourcery-arm.config
-+++ b/web/toolchains/configs/sourcery-arm.config
-@@ -1,3 +1,3 @@
- BR2_arm=y
- BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201405=y
-+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM=y
-diff --git a/web/toolchains/configs/sourcery-mips.config b/web/toolchains/configs/sourcery-mips.config
-index a49fe70..103e20b 100644
---- a/web/toolchains/configs/sourcery-mips.config
-+++ b/web/toolchains/configs/sourcery-mips.config
-@@ -1,4 +1,4 @@
- BR2_mips=y
- BR2_mips_32r2=y
- BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505=y
-+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS=y
-diff --git a/web/toolchains/configs/sourcery-mips64.config b/web/toolchains/configs/sourcery-mips64.config
-index d89af1c..77e3a85 100644
---- a/web/toolchains/configs/sourcery-mips64.config
-+++ b/web/toolchains/configs/sourcery-mips64.config
-@@ -2,4 +2,4 @@ BR2_mips64el=y
- BR2_mips_64r2=y
- BR2_MIPS_NABI64=y
- BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505=y
-+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS=y
-diff --git a/web/toolchains/configs/sourcery-sh.config b/web/toolchains/configs/sourcery-sh.config
-index f68373f..515fc8f 100644
---- a/web/toolchains/configs/sourcery-sh.config
-+++ b/web/toolchains/configs/sourcery-sh.config
-@@ -1,4 +1,4 @@
- BR2_sh=y
- BR2_sh4a=y
- BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209=y
-+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH=y
-diff --git a/web/toolchains/configs/sourcery-x86-64.config b/web/toolchains/configs/sourcery-x86-64.config
-index 05bde59..646288d 100644
---- a/web/toolchains/configs/sourcery-x86-64.config
-+++ b/web/toolchains/configs/sourcery-x86-64.config
-@@ -1,3 +1,3 @@
- BR2_x86_64=y
- BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209=y
-+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86=y
-diff --git a/web/toolchains/configs/sourcery-x86.config b/web/toolchains/configs/sourcery-x86.config
-index 4d61b86..ad629f6 100644
---- a/web/toolchains/configs/sourcery-x86.config
-+++ b/web/toolchains/configs/sourcery-x86.config
-@@ -1,3 +1,3 @@
- BR2_x86_pentium4=y
- BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209=y
-+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86=y
+Applied to master, thanks a lot!
+
+Thomas
 -- 
-2.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
