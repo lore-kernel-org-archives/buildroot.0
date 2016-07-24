@@ -1,43 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jul 2016 16:45:09 +0200
-Subject: [Buildroot] [PATCH 2/3] package/runc: fix shared only build
- when libseccomp is enabled.
-In-Reply-To: <1467916777-29220-2-git-send-email-romain.naour@gmail.com>
-References: <1467916777-29220-1-git-send-email-romain.naour@gmail.com>
- <1467916777-29220-2-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160724164509.4cd1df61@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 24 Jul 2016 16:49:13 +0200
+Subject: [Buildroot] [PATCH v2] package/gdb: fix gnulib issue with musl and
+	uClibc toolchains
+Message-ID: <1469371753-18468-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Starting with gdb 7.11, the bundled gnulib want to use rpl_gettimeofday
+(gettimeofday replacement) due bad guessing when cross-compiling with musl
+and uClibc toolchains. Instead of patching gnulib configure script to fix
+the test, use gl_cv_func_gettimeofday_clobber=no to not use rpl_gettimeofday.
 
-On Thu,  7 Jul 2016 20:39:36 +0200, Romain Naour wrote:
-> When BR2_PACKAGE_LIBSECCOMP is set, the go build system will try to
-> find static library libseccomp.a since "static_build" and
-> "extldflags '-static'" are used.
-> 
-> Link runc statically only for static only build and prefer dynamic
-> linking otherwise.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Christian Stewart <christian@paral.in>
+Thanks to Thomas Petazzoni to suggest this patch.
 
-I have just sent a patch series that passes -static only when
-BR2_STATIC_LIBS=y:
+Reported upstream:
+https://sourceware.org/bugzilla/show_bug.cgi?id=19798
 
-http://patchwork.ozlabs.org/patch/652100/
-http://patchwork.ozlabs.org/patch/652101/
-http://patchwork.ozlabs.org/patch/652102/
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+v2: Use gl_cv_func_gettimeofday_clobber=no instead of patching gnulib.
+---
+ package/gdb/gdb.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-So I've marked this patch as superseded.
-
-Thanks,
-
-Thomas
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 1e23e5a..1386006 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -68,6 +68,10 @@ GDB_DISABLE_BINUTILS_CONF_OPTS = \
+ 	--disable-ld \
+ 	--disable-gas
+ 
++# Starting with gdb 7.11, the bundled gnulib want to use rpl_gettimeofday
++# (gettimeofday replacement) due bad guessing when cross-compiling with musl
++# and uClibc toolchains. So use gl_cv_func_gettimeofday_clobber=no to not
++# use rpl_gettimeofday.
+ GDB_CONF_ENV = \
+ 	ac_cv_type_uintptr_t=yes \
+ 	gt_cv_func_gettext_libintl=yes \
+@@ -77,7 +81,8 @@ GDB_CONF_ENV = \
+ 	bash_cv_must_reinstall_sighandlers=no \
+ 	bash_cv_func_sigsetjmp=present \
+ 	bash_cv_have_mbstate_t=yes \
+-	gdb_cv_func_sigsetjmp=yes
++	gdb_cv_func_sigsetjmp=yes \
++	gl_cv_func_gettimeofday_clobber=no
+ 
+ # The shared only build is not supported by gdb, so enable static build for
+ # build-in libraries with --enable-static.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.5
