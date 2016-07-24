@@ -1,49 +1,19 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jul 2016 23:49:32 +0200
-Subject: [Buildroot] [PATCH] leaktracer: New package
-In-Reply-To: <f6cb2b96-270c-d11e-d6dd-c8d4fc14d00c@gmail.com>
-References: <1467412308-17545-1-git-send-email-maxime.hadjinlian@gmail.com>
- <f6cb2b96-270c-d11e-d6dd-c8d4fc14d00c@gmail.com>
-Message-ID: <20160724234932.276586df@free-electrons.com>
+From: Akihiko Odaki <akihiko.odaki.4i@stu.hosei.ac.jp>
+Date: Mon, 25 Jul 2016 07:43:25 +0900
+Subject: [Buildroot] qt5: QT5_QMAKE spec bug
+In-Reply-To: <21b75eff-731c-5c5b-d0d1-4b1958d59b11@stu.hosei.ac.jp>
+References: <5f3cc15c-6a24-e41a-993b-7c00d35e5a26@stu.hosei.ac.jp>
+ <83bdbc0d-5521-02c6-cffa-c35a6297c0d6@stu.hosei.ac.jp>
+ <ADAE54FA6BC6A040A89AC44D7C863F8379FC549B@MAIL-SINTERS-01.sinters-int.fr>
+ <c7b1de47-7662-cd58-def1-f82fd70aa533@stu.hosei.ac.jp>
+ <20160707160636.505b2da4@free-electrons.com>
+ <815daf75-807a-f510-bd73-d87e50b72073@stu.hosei.ac.jp>
+ <21b75eff-731c-5c5b-d0d1-4b1958d59b11@stu.hosei.ac.jp>
+Message-ID: <b2cb8f92-72bf-e54e-8ff0-004075fbe4a9@stu.hosei.ac.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Wed, 6 Jul 2016 23:35:24 +0200, Romain Naour wrote:
-
-> > diff --git a/package/leaktracer/Config.in b/package/leaktracer/Config.in
-> > new file mode 100644
-> > index 0000000..18c07a7
-> > --- /dev/null
-> > +++ b/package/leaktracer/Config.in
-> > @@ -0,0 +1,8 @@
-> > +config BR2_PACKAGE_LEAKTRACER
-> > +	bool "leaktracer"  
-> 
-> leaktracer must depends on !musl and !uClibc-ng since it use execinfo.h
-> 
-> libleaktracer/include/MemoryTrace.hpp:25:22: fatal error: execinfo.h: No such
-> file or directory
->  #include <execinfo.h>
-> 
-> see
-> http://www.openwall.com/lists/musl/2015/04/09/3
-
-Or alternatively (better), make sure that the Makefile does not pass
--DUSE_BACKTRACE. Indeed, it is already planned in the leaktracer source
-code to support systems with <execinfo.h>. Maybe a simple patch to the
-Makefile would allow passing a make variable to disable backtrace usage.
-
-Maxime, can you look into this and respin a new version of this patch?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ping
