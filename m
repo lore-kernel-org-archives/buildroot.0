@@ -1,56 +1,38 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 24 Jul 2016 17:39:43 +0200
-Subject: [Buildroot] [PATCH] package/go: needs PIE support
-Message-ID: <1469374783-22190-1-git-send-email-romain.naour@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 24 Jul 2016 17:53:18 +0200
+Subject: [Buildroot] [PATCH 2/2] package/ffmpeg: add optional dependency to
+	libebur128
+In-Reply-To: <1469375598-10887-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1469375598-10887-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1469375598-10887-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When build statically, runc try to link against Scrt1.o which is not
-provided by uClibc ARM toolchain for static build only.
+ebur128 support depends on gpl support in ffmpeg:
+http://git.videolan.org/?p=ffmpeg.git;a=blob;f=configure;h=ec4ff083dd373bce34869b67189905e2822b848b;hb=refs/heads/release/2.8#l2747
 
-[...]arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find Scrt1.o: No such file or directory
-collect2: error: ld returned 1 exit status
-
-On ARM, Go forces the use of -pie, for some reason:
-
-    pie := (goarch == "arm" && goos == "linux") || goos == "android"
-    if pie { // we need to use -pie for Linux/ARM to get accurate imported sym
-              cgoLDFLAGS = append(cgoLDFLAGS, "-pie")
-    }
-
-For this reason, add a dependency on BR2_TOOLCHAIN_SUPPORTS_PIE for ARM CPUs
-to disable Go for such toolchains.
-
-While at it, rewrap Go dependencies.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2016-July/167206.html
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Christian Stewart <christian@paral.in>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Require https://patchwork.ozlabs.org/patch/646956/
----
- package/go/Config.in.host | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/ffmpeg/ffmpeg.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index d6d35dc..d79c669 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -1,7 +1,9 @@
- config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	bool
- 	default y
--	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 || BR2_powerpc64 || BR2_powerpc64le || BR2_mips64 || BR2_mips64el
-+	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
-+		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64 || BR2_powerpc64le \
-+		|| BR2_mips64 || BR2_mips64el
- 	depends on !BR2_ARM_CPU_ARMV4
- 	# MIPS R6 support in Go has not yet been developed.
- 	depends on !BR2_mips_64r6
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index a4e2be6..c42336f 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -224,6 +224,10 @@ else
+ FFMPEG_CONF_OPTS += --disable-libdcadec
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FFMPEG_GPL)$(BR2_PACKAGE_LIBEBUR128),yy)
++FFMPEG_DEPENDENCIES += libebur128
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBOPENH264),y)
+ FFMPEG_CONF_OPTS += --enable-libopenh264
+ FFMPEG_DEPENDENCIES += libopenh264
 -- 
-2.5.5
+2.8.1
