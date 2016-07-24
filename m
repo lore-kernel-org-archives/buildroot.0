@@ -1,190 +1,299 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jul 2016 22:41:22 +0200
-Subject: [Buildroot] [PATCH v10 1/1] docker-engine: new package
-In-Reply-To: <1469391047-17228-1-git-send-email-christian@paral.in>
-References: <1469391047-17228-1-git-send-email-christian@paral.in>
-Message-ID: <20160724224122.4e911ff9@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 24 Jul 2016 22:43:45 +0200
+Subject: [Buildroot] [PATCH 01/16 v3] core: move pkg-utils.mk to support/
+In-Reply-To: <baf402ac561bf88a4f0262b463f165f91c00cb75.1468750623.git.yann.morin.1998@free.fr>
+References: <cover.1468750623.git.yann.morin.1998@free.fr>
+ <baf402ac561bf88a4f0262b463f165f91c00cb75.1468750623.git.yann.morin.1998@free.fr>
+Message-ID: <8313eb2c-54f9-bf01-bb92-7f189dcc4d82@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Yann,
 
-Thanks for this new version.
-
-On Sun, 24 Jul 2016 13:10:47 -0700, Christian Stewart wrote:
-> Docker is a platform to build, ship, and run applications in portable
-> containers.
+Le 17/07/2016 ? 12:34, Yann E. MORIN a ?crit :
+> pkg-utils.mk contains various definitions that are used in the package
+> infrastructures and packages themselves.
 > 
-> Signed-off-by: Andrew Webster <awebster@arcx.com>
+> However, those definitions can be useful in other parts of Buildroot,
+> and are already used in a few places that are not related to the package
+> infrastructure. Also, $(sep) will be needed early in the Makefile when
+> we eventually support multiple br2-external trees.
+> 
+> Since this file only contains definitions, we can include it anytime.
+> 
+> So, consider that file to no longer be specific to the package infras:
+>   - move it to support and rename it,
+>   - move a few similar definitions from the main Makefile to that file.
 
-The author is normally the first Signed-off-by line.
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+Best regards,
+Romain
 
-
-> diff --git a/package/Config.in b/package/Config.in
-> index 04ca8cb..36f8b29 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1673,6 +1673,8 @@ menu "System tools"
->  	source "package/dcron/Config.in"
->  	source "package/debianutils/Config.in"
->  	source "package/docker-containerd/Config.in"
-> +	source "package/docker-engine/Config.in"
-> +	source "package/cgroupfs-mount/Config.in"
-
-Still there.
-
->  	source "package/dsp-tools/Config.in"
->  	source "package/efibootmgr/Config.in"
->  	source "package/efivar/Config.in"
-> diff --git a/package/docker-engine/0001-Fix-issues-with-tailing-rotated-jsonlog-file.patch b/package/docker-engine/0001-Fix-issues-with-tailing-rotated-jsonlog-file.patch
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> ---
+>  Makefile              |  10 +----
+>  package/pkg-utils.mk  |  96 -------------------------------------------
+>  support/misc/utils.mk | 111 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 113 insertions(+), 104 deletions(-)
+>  create mode 100644 support/misc/utils.mk
+> 
+> diff --git a/Makefile b/Makefile
+> index 027f21c..af2d982 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -106,14 +106,8 @@ else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
+>  BR_BUILDING = y
+>  endif
+>  
+> -# Strip quotes and then whitespaces
+> -qstrip = $(strip $(subst ",,$(1)))
+> -#"))
+> -
+> -# Variables for use in Make constructs
+> -comma := ,
+> -empty :=
+> -space := $(empty) $(empty)
+> +# Include some helper macros and variables
+> +include support/misc/utils.mk
+>  
+>  ifneq ("$(origin O)", "command line")
+>  O := output
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index c61b3b6..28db481 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -5,43 +5,6 @@
+>  #
+>  ################################################################################
+>  
+> -# Case conversion macros. This is inspired by the 'up' macro from gmsl
+> -# (http://gmsl.sf.net). It is optimised very heavily because these macros
+> -# are used a lot. It is about 5 times faster than forking a shell and tr.
+> -#
+> -# The caseconvert-helper creates a definition of the case conversion macro.
+> -# After expansion by the outer $(eval ), the UPPERCASE macro is defined as:
+> -# $(strip $(eval __tmp := $(1))  $(eval __tmp := $(subst a,A,$(__tmp))) ... )
+> -# In other words, every letter is substituted one by one.
+> -#
+> -# The caseconvert-helper allows us to create this definition out of the
+> -# [FROM] and [TO] lists, so we don't need to write down every substition
+> -# manually. The uses of $ and $$ quoting are chosen in order to do as
+> -# much expansion as possible up-front.
+> -#
+> -# Note that it would be possible to conceive a slightly more optimal
+> -# implementation that avoids the use of __tmp, but that would be even
+> -# more unreadable and is not worth the effort.
+> -
+> -[FROM] := a b c d e f g h i j k l m n o p q r s t u v w x y z - .
+> -[TO]   := A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _ _
+> -
+> -define caseconvert-helper
+> -$(1) = $$(strip \
+> -	$$(eval __tmp := $$(1))\
+> -	$(foreach c, $(2),\
+> -		$$(eval __tmp := $$(subst $(word 1,$(subst :, ,$c)),$(word 2,$(subst :, ,$c)),$$(__tmp))))\
+> -	$$(__tmp))
+> -endef
+> -
+> -$(eval $(call caseconvert-helper,UPPERCASE,$(join $(addsuffix :,$([FROM])),$([TO]))))
+> -$(eval $(call caseconvert-helper,LOWERCASE,$(join $(addsuffix :,$([TO])),$([FROM]))))
+> -
+> -# Sanitize macro cleans up generic strings so it can be used as a filename
+> -# and in rules. Particularly useful for VCS version strings, that can contain
+> -# slashes, colons (OK in filenames but not in rules), and spaces.
+> -sanitize = $(subst $(space),_,$(subst :,_,$(subst /,_,$(strip $(1)))))
+> -
+>  #
+>  # Manipulation of .config files based on the Kconfig
+>  # infrastructure. Used by the BusyBox package, the Linux kernel
+> @@ -82,65 +45,6 @@ INFLATE.tar  = cat
+>  # suitable-extractor(filename): returns extractor based on suffix
+>  suitable-extractor = $(INFLATE$(suffix $(1)))
+>  
+> -# MESSAGE Macro -- display a message in bold type
+> -MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
+> -TERM_BOLD := $(shell tput smso 2>/dev/null)
+> -TERM_RESET := $(shell tput rmso 2>/dev/null)
+> -
+> -# Utility functions for 'find'
+> -# findfileclauses(filelist) => -name 'X' -o -name 'Y'
+> -findfileclauses = $(call notfirstword,$(patsubst %,-o -name '%',$(1)))
+> -# finddirclauses(base, dirlist) => -path 'base/dirX' -o -path 'base/dirY'
+> -finddirclauses = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
+> -
+> -# Miscellaneous utility functions
+> -# notfirstword(wordlist): returns all but the first word in wordlist
+> -notfirstword = $(wordlist 2,$(words $(1)),$(1))
+> -
+> -# Needed for the foreach loops to loop over the list of hooks, so that
+> -# each hook call is properly separated by a newline.
+> -define sep
+> -
+> -
+> -endef
+> -
+> -PERCENT = %
+> -QUOTE = '
+> -# ' # Meh... syntax-highlighting
+> -
+> -# This macro properly escapes a command string, then prints it with printf:
+> -#
+> -#   - first, backslash '\' are self-escaped, so that they do not escape
+> -#     the following char and so that printf properly outputs a backslash;
+> -#
+> -#   - next, single quotes are escaped by closing an existing one, adding
+> -#     an escaped one, and re-openning a new one (see below for the reason);
+> -#
+> -#   - then '%' signs are self-escaped so that the printf does not interpret
+> -#     them as a format specifier, in case the variable contains an actual
+> -#     printf with a format;
+> -#
+> -#   - finally, $(sep) is replaced with the literal '\n' so that make does
+> -#     not break on the so-expanded variable, but so that the printf does
+> -#     correctly output an LF.
+> -#
+> -# Note: this must be escaped in this order to avoid over-escaping the
+> -# previously escaped elements.
+> -#
+> -# Once everything has been escaped, it is passed between single quotes
+> -# (that's why the single-quotes are escaped they way they are, above,
+> -# and why the dollar sign is not escaped) to printf(1). A trailing
+> -# newline is apended, too.
+> -#
+> -# Note: leading or trailing spaces are *not* stripped.
+> -#
+> -define PRINTF
+> -	printf '$(subst $(sep),\n,\
+> -			$(subst $(PERCENT),$(PERCENT)$(PERCENT),\
+> -				$(subst $(QUOTE),$(QUOTE)\$(QUOTE)$(QUOTE),\
+> -					$(subst \,\\,$(1)))))\n'
+> -endef
+> -
+>  # check-deprecated-variable -- throw an error on deprecated variables
+>  # example:
+>  #   $(eval $(call check-deprecated-variable,FOO_MAKE_OPT,FOO_MAKE_OPTS))
+> diff --git a/support/misc/utils.mk b/support/misc/utils.mk
 > new file mode 100644
-> index 0000000..e85be61
+> index 0000000..990a3d1
 > --- /dev/null
-> +++ b/package/docker-engine/0001-Fix-issues-with-tailing-rotated-jsonlog-file.patch
-> @@ -0,0 +1,290 @@
-> +From 8d6f2e3fe8851b581309da25fc4c32f8be675932 Mon Sep 17 00:00:00 2001
-> +From: Brian Goff <cpuguy83@gmail.com>
-> +Date: Mon, 11 Jul 2016 16:31:42 -0400
-> +Subject: [PATCH] Fix issues with tailing rotated jsonlog file
+> +++ b/support/misc/utils.mk
+> @@ -0,0 +1,111 @@
+> +################################################################################
+> +#
+> +# This file contains various utility macros and variables used about
+> +# everywhere in make constructs.
+> +#
+> +################################################################################
 > +
-> +Fixes a race where the log reader would get events for both an actual
-> +rotation as we from fsnotify (`fsnotify.Rename`).
-> +This issue becomes extremely apparent when rotations are fast, for
-> +example:
+> +# Strip quotes and then whitespaces
+> +qstrip = $(strip $(subst ",,$(1)))
+> +#"))
 > +
-> +```
-> +$ docker run -d --name test --log-opt max-size=1 --log-opt max-file=2
-> +busybox sh -c 'while true; do echo hello; usleep 100000; done'
-> +```
+> +# Variables for use in Make constructs
+> +comma := ,
+> +empty :=
+> +space := $(empty) $(empty)
 > +
-> +With this change the log reader for jsonlogs can handle rotations that
-> +happen as above.
+> +# Case conversion macros. This is inspired by the 'up' macro from gmsl
+> +# (http://gmsl.sf.net). It is optimised very heavily because these macros
+> +# are used a lot. It is about 5 times faster than forking a shell and tr.
+> +#
+> +# The caseconvert-helper creates a definition of the case conversion macro.
+> +# After expansion by the outer $(eval ), the UPPERCASE macro is defined as:
+> +# $(strip $(eval __tmp := $(1))  $(eval __tmp := $(subst a,A,$(__tmp))) ... )
+> +# In other words, every letter is substituted one by one.
+> +#
+> +# The caseconvert-helper allows us to create this definition out of the
+> +# [FROM] and [TO] lists, so we don't need to write down every substition
+> +# manually. The uses of $ and $$ quoting are chosen in order to do as
+> +# much expansion as possible up-front.
+> +#
+> +# Note that it would be possible to conceive a slightly more optimal
+> +# implementation that avoids the use of __tmp, but that would be even
+> +# more unreadable and is not worth the effort.
 > +
-> +Instead of listening for both fs events AND rotation events
-> +simultaneously, potentially meaning we see 2 rotations for only a single
-> +rotation due to channel buffering, only listen for fs events (like
-> +`Rename`) and then wait to be notified about rotation by the logger.
-> +This makes sure that we don't see 2 rotations for 1, and that we don't
-> +start trying to read until the logger is actually ready for us to.
+> +[FROM] := a b c d e f g h i j k l m n o p q r s t u v w x y z - .
+> +[TO]   := A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _ _
 > +
-> +Signed-off-by: Brian Goff <cpuguy83@gmail.com>
-
-Misses your Signed-off-by + an indication on whether this is upstream
-or not.
-
-> diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-> new file mode 100644
-> index 0000000..1acf121
-> --- /dev/null
-> +++ b/package/docker-engine/Config.in
-> @@ -0,0 +1,65 @@
-> +config BR2_PACKAGE_DOCKER_ENGINE
-> +	bool "docker-engine"
-> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	help
-> +	  Docker is a platform to build, ship,
-> +	  and run applications as lightweight containers.
+> +define caseconvert-helper
+> +$(1) = $$(strip \
+> +	$$(eval __tmp := $$(1))\
+> +	$(foreach c, $(2),\
+> +		$$(eval __tmp := $$(subst $(word 1,$(subst :, ,$c)),$(word 2,$(subst :, ,$c)),$$(__tmp))))\
+> +	$$(__tmp))
+> +endef
 > +
-> +	  https://github.com/docker/docker
+> +$(eval $(call caseconvert-helper,UPPERCASE,$(join $(addsuffix :,$([FROM])),$([TO]))))
+> +$(eval $(call caseconvert-helper,LOWERCASE,$(join $(addsuffix :,$([TO])),$([FROM]))))
 > +
-> +if BR2_PACKAGE_DOCKER_ENGINE
+> +# Sanitize macro cleans up generic strings so it can be used as a filename
+> +# and in rules. Particularly useful for VCS version strings, that can contain
+> +# slashes, colons (OK in filenames but not in rules), and spaces.
+> +sanitize = $(subst $(space),_,$(subst :,_,$(subst /,_,$(strip $(1)))))
 > +
-> +config BR2_PACKAGE_DOCKER_ENGINE_DAEMON
-> +	bool "docker daemon"
-> +	depends on BR2_USE_MMU # docker-containerd
-> +	depends on BR2_USE_WCHAR # docker-containerd
-
-Why do you have the "depends on" of docker-containerd if you don't
-select it ?
-
-> +	select BR2_PACKAGE_SQLITE # runtime dependency
-> +	default y
-> +	help
-> +	  Build the Docker system daemon.
-> +	  If not selected, will build client only.
+> +# MESSAGE Macro -- display a message in bold type
+> +MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
+> +TERM_BOLD := $(shell tput smso 2>/dev/null)
+> +TERM_RESET := $(shell tput rmso 2>/dev/null)
 > +
-> +config BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL
-> +	bool "build experimental features"
+> +# Utility functions for 'find'
+> +# findfileclauses(filelist) => -name 'X' -o -name 'Y'
+> +findfileclauses = $(call notfirstword,$(patsubst %,-o -name '%',$(1)))
+> +# finddirclauses(base, dirlist) => -path 'base/dirX' -o -path 'base/dirY'
+> +finddirclauses = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
 > +
-> +if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
+> +# Miscellaneous utility functions
+> +# notfirstword(wordlist): returns all but the first word in wordlist
+> +notfirstword = $(wordlist 2,$(words $(1)),$(1))
 > +
-> +config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
-> +	bool "btrfs filesystem driver"
-> +	depends on BR2_USE_WCHAR # btrfs-progs
-> +	depends on BR2_USE_MMU # btrfs-progs
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
-> +	select BR2_PACKAGE_BTRFS_PROGS
-> +	help
-> +	  Build the btrfs filesystem driver for Docker.
+> +# Needed for the foreach loops to loop over the list of hooks, so that
+> +# each hook call is properly separated by a newline.
+> +define sep
 > +
-> +config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER
-> +	bool "devicemapper filesystem driver"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
-> +	depends on BR2_USE_MMU # lvm2
-> +	depends on !BR2_STATIC_LIBS # lvm2
-> +	select BR2_PACKAGE_LVM2
-> +	select BR2_PACKAGE_LVM2_APP_LIBRARY
-> +	help
-> +	  Build the devicemapper filesystem driver for Docker.
 > +
-> +config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
-> +	bool "vfs filesystem driver"
-> +	depends on BR2_USE_WCHAR # gvfs
-> +	depends on BR2_USE_MMU # gvfs
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # gvfs
-> +	select BR2_PACKAGE_GVFS
-> +	help
-> +	  Build the vfs filesystem driver for Docker.
+> +endef
 > +
-> +endif
+> +PERCENT = %
+> +QUOTE = '
+> +# ' # Meh... syntax-highlighting
 > +
-> +endif
-> +
-> +comment "docker-engine needs a toolchain w/ threads, wchar"
-> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-> +	depends on BR2_USE_MMU
-
-There is no BR2_USE_MMU dependency on the top-level option to enable
-docker-engine, so we do have this dependency here?
-
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-
-There is no wchar dependency on the top-level option to enable
-docker-engine, so why do you have a comment mentioning wchar here ?
-
-> +DOCKER_ENGINE_GOPATH = "$(@D)/vendor"
-> +DOCKER_ENGINE_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
-> +	CGO_ENABLED=1 \
-> +	CGO_NO_EMULATION=1 \
-> +	GOBIN="$(@D)/bin" \
-> +	GOPATH="$(DOCKER_ENGINE_GOPATH)" \
-> +	CPATH=$$CPATH:$(TARGET_DIR)/usr/include/ \
-> +	LIBRARY_PATH=$$LIBRARY_PATH:$(TARGET_DIR)/usr/lib/
-
-I'm still not happy with this TARGET_DIR/usr/include and
-TARGET_DIR/usr/lib, and I'm wondering if they shouldn't be
-STAGING_DIR/usr/include and STAGING_DIR/usr/lib. Have you tried this?
-
-
-> +define DOCKER_ENGINE_BUILD_CMDS
-> +	$(foreach target,$(DOCKER_ENGINE_BUILD_TARGETS), \
-> +		cd $(@D); $(DOCKER_ENGINE_MAKE_ENV) \
-> +		$(HOST_DIR)/usr/bin/go build -v \
-
-Indent this line and the followings with one more tab.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> +# This macro properly escapes a command string, then prints it with printf:
+> +#
+> +#   - first, backslash '\' are self-escaped, so that they do not escape
+> +#     the following char and so that printf properly outputs a backslash;
+> +#
+> +#   - next, single quotes are escaped by closing an existing one, adding
+> +#     an escaped one, and re-openning a new one (see below for the reason);
+> +#
+> +#   - then '%' signs are self-escaped so that the printf does not interpret
+> +#     them as a format specifier, in case the variable contains an actual
+> +#     printf with a format;
+> +#
+> +#   - finally, $(sep) is replaced with the literal '\n' so that make does
+> +#     not break on the so-expanded variable, but so that the printf does
+> +#     correctly output an LF.
+> +#
+> +# Note: this must be escaped in this order to avoid over-escaping the
+> +# previously escaped elements.
+> +#
+> +# Once everything has been escaped, it is passed between single quotes
+> +# (that's why the single-quotes are escaped they way they are, above,
+> +# and why the dollar sign is not escaped) to printf(1). A trailing
+> +# newline is apended, too.
+> +#
+> +# Note: leading or trailing spaces are *not* stripped.
+> +#
+> +define PRINTF
+> +	printf '$(subst $(sep),\n,\
+> +		$(subst $(PERCENT),$(PERCENT)$(PERCENT),\
+> +			$(subst $(QUOTE),$(QUOTE)\$(QUOTE)$(QUOTE),\
+> +				$(subst \,\\,$(1)))))\n'
+> +endef
+> 
