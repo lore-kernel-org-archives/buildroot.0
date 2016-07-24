@@ -1,26 +1,31 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sun, 24 Jul 2016 14:25:51 -0700
-Subject: [Buildroot] [PATCH v11 2/2] docker-engine: new package
-In-Reply-To: <1469394628-19412-2-git-send-email-christian@paral.in>
-References: <1469394628-19412-1-git-send-email-christian@paral.in>
- <1469394628-19412-2-git-send-email-christian@paral.in>
-Message-ID: <CA+h8R2oKj0ONK=64YAj_8efpLSDJobpV5JRMoZLz9Qmv1k_W0w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Jul 2016 23:26:43 +0200
+Subject: [Buildroot] [PATCH] support: pkg-stats: add efl package in
+ packages stats
+In-Reply-To: <1469393350-12548-1-git-send-email-romain.naour@gmail.com>
+References: <1469393350-12548-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160724232643.30fd6de7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello,
 
-On Sun, Jul 24, 2016 at 2:10 PM, Christian Stewart <christian@paral.in> wrote:
-> +       GOPATH="$(DOCKER_ENGINE_GOPATH)" \
-> +       LIBRARY_PATH=$$LIBRARY_PATH:$(TARGET_DIR)/usr/lib/
+On Sun, 24 Jul 2016 22:49:10 +0200, Romain Naour wrote:
+> Since efl update to 1.15 version, the efl package is a "real"
+> Buildroot package. It doesn't contain any subdirectories anymore.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  support/scripts/pkg-stats | 1 -
+>  1 file changed, 1 deletion(-)
 
-The last line here can also be removed.
+Applied to master, thanks.
 
-This version tested on aarch64, arm, and amd64 with the aufs and
-overlayfs drivers, no problems.
-
-Best,
-Christian
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
