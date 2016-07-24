@@ -1,37 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jul 2016 21:32:36 +0200
+From: Christian Stewart <christian@paral.in>
+Date: Sun, 24 Jul 2016 12:36:19 -0700
 Subject: [Buildroot] [PATCH 1/3] docker-containerd: pass -extldflags
- '-static' on when BR2_STATIC_LIBS=y
-In-Reply-To: <CA+h8R2rzRGmuV+Lek5c1GTCxeGPetiCStQayDgKBEhn=Y-N06g@mail.gmail.com>
+	'-static' on when BR2_STATIC_LIBS=y
+In-Reply-To: <20160724213236.2a328c84@free-electrons.com>
 References: <1469371427-25201-1-git-send-email-thomas.petazzoni@free-electrons.com>
  <CA+h8R2rzRGmuV+Lek5c1GTCxeGPetiCStQayDgKBEhn=Y-N06g@mail.gmail.com>
-Message-ID: <20160724213236.2a328c84@free-electrons.com>
+ <20160724213236.2a328c84@free-electrons.com>
+Message-ID: <CA+h8R2pZc5q5ys72NZVERTB5bCOmdySieAaChnWYQc72wKtnJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Sun, 24 Jul 2016 09:30:37 -0700, Christian Stewart wrote:
+On Sun, Jul 24, 2016 at 12:32 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Thanks. I'll wait for your formal Tested-by then.
 
-> Acknowledged, this series looks OK to me but I will do some runtime
-> testing today and get back to you, probably around the same time of my
-> next docker-engine series revision.
+Works fine, runtime-tested on aarch64, arm, and x86-64.
 
-Thanks. I'll wait for your formal Tested-by then.
+Tested-by: Christian Stewart <christian@paral.in>
 
-> PS: Email look OK now?
+Best,
+Christian
 
-Email looks perfect now. This e-mail only has a plain text variant, and
-this plain text variant is good.
+> Email looks perfect now. This e-mail only has a plain text variant, and
+> this plain text variant is good.
 
-I generally don't mind when people send plain text + HTML, but in your
-case, the plain text variant was terrible :-/
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Great. I just forced gmail into plain text mode.
