@@ -1,37 +1,34 @@
-From: Jordan Yelloz <jordan@yelloz.me>
-Date: Sun, 24 Jul 2016 16:27:37 -0700
-Subject: [Buildroot] [PATCH 2/4] swupdate: updated lua check for libconfig
-In-Reply-To: <20160724232739.14132-1-jordan@yelloz.me>
-References: <20160724232739.14132-1-jordan@yelloz.me>
-Message-ID: <20160724232739.14132-3-jordan@yelloz.me>
+From: Christian Stewart <christian@paral.in>
+Date: Sun, 24 Jul 2016 16:35:06 -0700
+Subject: [Buildroot] [PATCH v11 1/2] package/btrfs-progs: install to
+	staging directory
+In-Reply-To: <20160724234816.63c8bff9@free-electrons.com>
+References: <1469394628-19412-1-git-send-email-christian@paral.in>
+ <20160724234816.63c8bff9@free-electrons.com>
+Message-ID: <CA+h8R2oeq=eauq+jLQ01Js02zTcsQ7=bzQV7Xkb6cy+C1EtdMQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Most probably this was missed in commit
-65b2ae49feb310d3272a47c44cf3b406646b25c1 which removed pinning to Lua
-5.2.
+Thomas,
 
-Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
----
- package/swupdate/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Sun, Jul 24, 2016 at 2:48 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> So it seems like a btrfs-progs patch is needed to make this whole thing
+> work properly :-/
 
-diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-index 5f5e1e77b9d1..d7217af1c47f 100644
---- a/package/swupdate/Config.in
-+++ b/package/swupdate/Config.in
-@@ -3,7 +3,8 @@ config BR2_PACKAGE_SWUPDATE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	# swupdate requires a parser and uses libconfig as default
--	select BR2_PACKAGE_LIBCONFIG if !BR2_PACKAGE_JSON_C && !BR2_PACKAGE_LUA_5_2
-+	select BR2_PACKAGE_LIBCONFIG if !BR2_PACKAGE_JSON_C && \
-+		!BR2_PACKAGE_HAS_LUAINTERPRETER
- 	help
- 	  swupdate provides a reliable way to update the software on an
- 	  embedded system.
--- 
-2.9.2
+A few short term solutions are:
+
+ - Remove btrfs support from docker-engine temporarily until a fix is
+made to btrfs-progs
+ - Source the headers from $(TARGET_DIR) as before temporarily,
+resorting to bad practice
+ - Copy the headers from $(TARGET_DIR) to $(STAGING_DIR) in a
+post-build hook of btrfs-progs.
+
+Would any of these options be acceptable to you?
+
+Thanks!
+Christian
