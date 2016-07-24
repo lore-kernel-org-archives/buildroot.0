@@ -1,34 +1,41 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sun, 24 Jul 2016 16:35:06 -0700
-Subject: [Buildroot] [PATCH v11 1/2] package/btrfs-progs: install to
-	staging directory
-In-Reply-To: <20160724234816.63c8bff9@free-electrons.com>
-References: <1469394628-19412-1-git-send-email-christian@paral.in>
- <20160724234816.63c8bff9@free-electrons.com>
-Message-ID: <CA+h8R2oeq=eauq+jLQ01Js02zTcsQ7=bzQV7Xkb6cy+C1EtdMQ@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 24 Jul 2016 20:56:07 -0300
+Subject: [Buildroot] [PATCH 1/4] linux kernel: bump default to version 4.7
+Message-ID: <1469404570-19495-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+From: Fabio Estevam <fabio.estevam@nxp.com>
 
-On Sun, Jul 24, 2016 at 2:48 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> So it seems like a btrfs-progs patch is needed to make this whole thing
-> work properly :-/
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-A few short term solutions are:
-
- - Remove btrfs support from docker-engine temporarily until a fix is
-made to btrfs-progs
- - Source the headers from $(TARGET_DIR) as before temporarily,
-resorting to bad practice
- - Copy the headers from $(TARGET_DIR) to $(STAGING_DIR) in a
-post-build hook of btrfs-progs.
-
-Would any of these options be acceptable to you?
-
-Thanks!
-Christian
+diff --git a/linux/Config.in b/linux/Config.in
+index 310f18b..b6f3e5e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -27,7 +27,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (4.6.4)"
++	bool "Latest version (4.7)"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -110,7 +110,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.6.4" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-- 
+1.9.1
