@@ -1,37 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 24 Jul 2016 21:18:23 +0000
-Subject: [Buildroot] [Bug 9021] Kodi - Broken: Illegal instruction (core
-	dumped)
-In-Reply-To: <bug-9021-163@https.bugs.busybox.net/>
-References: <bug-9021-163@https.bugs.busybox.net/>
-Message-ID: <bug-9021-163-MZhkfWGeYo@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Jul 2016 23:19:51 +0200
+Subject: [Buildroot] [autobuild-script] confis: update Kconfig symbols
+ for sourcery toolchains
+In-Reply-To: <1469394885-15001-1-git-send-email-romain.naour@gmail.com>
+References: <1469394885-15001-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160724231951.508a3383@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9021
+Hello,
 
---- Comment #2 from Bernd Kuhls <bernd.kuhls@t-online.de> ---
-Please provide more infos about the crash, as a hint for required logs read
-http://kodi.wiki/view/HOW-TO:Submit_a_bug_report#Right.2C_so_what_information_do_you_guys_need.3F
+On Sun, 24 Jul 2016 23:14:45 +0200, Romain Naour wrote:
+> All BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_<arch><version> symbols
+> has been renamed to BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_<arch> since
+> Buildroot only support one version of these toolchains.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  web/toolchains/configs/sourcery-arm-armv4t.config | 2 +-
+>  web/toolchains/configs/sourcery-arm.config        | 2 +-
+>  web/toolchains/configs/sourcery-mips.config       | 2 +-
+>  web/toolchains/configs/sourcery-mips64.config     | 2 +-
+>  web/toolchains/configs/sourcery-sh.config         | 2 +-
+>  web/toolchains/configs/sourcery-x86-64.config     | 2 +-
+>  web/toolchains/configs/sourcery-x86.config        | 2 +-
+>  7 files changed, 7 insertions(+), 7 deletions(-)
 
-Please also read
-http://kodi.wiki/view/Raspberry_Pi_FAQ#Raspberry_Pi_known_issues
+Applied to buildroot-test, thanks.
 
-Buildroot contains some patches for Kodi 16.1 but there maybe more patches
-needed
-to support raspberry pi. Since I do not own such a box I can not test it
-myself,
-the machine where I run Kodi on has in Intel CPU, its GPU is used for hardware
-decoding using vaapi.
-
-To get a hint about what might be needed for the raspberry pi have a look at
-http://forum.kodi.tv/showthread.php?tid=231092
-
-or try my Kodi 17 branch: https://github.com/bkuhls/buildroot/tree/kodi17
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
