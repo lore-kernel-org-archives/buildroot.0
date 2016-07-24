@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jul 2016 23:48:16 +0200
-Subject: [Buildroot] [PATCH v11 1/2] package/btrfs-progs: install to
- staging directory
-In-Reply-To: <1469394628-19412-1-git-send-email-christian@paral.in>
-References: <1469394628-19412-1-git-send-email-christian@paral.in>
-Message-ID: <20160724234816.63c8bff9@free-electrons.com>
+Date: Sun, 24 Jul 2016 23:49:32 +0200
+Subject: [Buildroot] [PATCH] leaktracer: New package
+In-Reply-To: <f6cb2b96-270c-d11e-d6dd-c8d4fc14d00c@gmail.com>
+References: <1467412308-17545-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <f6cb2b96-270c-d11e-d6dd-c8d4fc14d00c@gmail.com>
+Message-ID: <20160724234932.276586df@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +13,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 24 Jul 2016 14:10:27 -0700, Christian Stewart wrote:
+On Wed, 6 Jul 2016 23:35:24 +0200, Romain Naour wrote:
 
-> diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-> index 2c3dc50..8d50eb4 100644
-> --- a/package/btrfs-progs/btrfs-progs.mk
-> +++ b/package/btrfs-progs/btrfs-progs.mk
-> @@ -11,6 +11,7 @@ BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
->  BTRFS_PROGS_CONF_OPTS = --disable-backtrace
->  BTRFS_PROGS_LICENSE = GPLv2
->  BTRFS_PROGS_LICENSE_FILES = COPYING
-> +BTRFS_PROGS_INSTALL_STAGING = YES
->  
->  # Doesn't autodetect static-only and tries to build both
->  ifeq ($(BR2_STATIC_LIBS),y)
+> > diff --git a/package/leaktracer/Config.in b/package/leaktracer/Config.in
+> > new file mode 100644
+> > index 0000000..18c07a7
+> > --- /dev/null
+> > +++ b/package/leaktracer/Config.in
+> > @@ -0,0 +1,8 @@
+> > +config BR2_PACKAGE_LEAKTRACER
+> > +	bool "leaktracer"  
+> 
+> leaktracer must depends on !musl and !uClibc-ng since it use execinfo.h
+> 
+> libleaktracer/include/MemoryTrace.hpp:25:22: fatal error: execinfo.h: No such
+> file or directory
+>  #include <execinfo.h>
+> 
+> see
+> http://www.openwall.com/lists/musl/2015/04/09/3
 
-Unfortunately, this breaks the build in a BR2_STATIC_LIBS=y
-configuration. So I've tried adding:
+Or alternatively (better), make sure that the Makefile does not pass
+-DUSE_BACKTRACE. Indeed, it is already planned in the leaktracer source
+code to support systems with <execinfo.h>. Maybe a simple patch to the
+Makefile would allow passing a make variable to disable backtrace usage.
 
-BTRFS_PROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-static
+Maxime, can you look into this and respin a new version of this patch?
 
-in the existing ifeq ($(BR2_STATIC_LIBS),y). It fixes the build but it
-isn't correct: it only installs the programs, and not the headers and
-the static library.
-
-So it seems like a btrfs-progs patch is needed to make this whole thing
-work properly :-/
+Thanks!
 
 Thomas
 -- 
