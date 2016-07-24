@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jul 2016 15:04:47 +0200
-Subject: [Buildroot] [PATCH] package/sdl2_ttf: x-includes and
- x-libraries must be set for cross-compiling
-In-Reply-To: <1469269182-16000-1-git-send-email-romain.naour@gmail.com>
-References: <1469269182-16000-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160724150447.57fd9303@free-electrons.com>
+Date: Sun, 24 Jul 2016 15:09:10 +0200
+Subject: [Buildroot] [PATCH] package/terminology: new package
+In-Reply-To: <1468787781-5576-1-git-send-email-romain.naour@gmail.com>
+References: <1468787781-5576-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160724150910.0c2cb5a1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +12,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 23 Jul 2016 12:19:42 +0200, Romain Naour wrote:
+On Sun, 17 Jul 2016 22:36:21 +0200, Romain Naour wrote:
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  package/Config.in                    |  1 +
+>  package/terminology/Config.in        |  9 +++++++++
+>  package/terminology/terminology.hash |  2 ++
+>  package/terminology/terminology.mk   | 17 +++++++++++++++++
+>  4 files changed, 29 insertions(+)
+>  create mode 100644 package/terminology/Config.in
+>  create mode 100644 package/terminology/terminology.hash
+>  create mode 100644 package/terminology/terminology.mk
 
-> +# x-includes and x-libraries must be set for cross-compiling
-> +# By default x_includes and x_libraries contains unsafe paths.
-> +# (/usr/include and /usr/lib)
-> +ifeq ($(BR2_PACKAGE_SDL2_X11),y)
-> +SDL2_TTF_CONF_OPTS += --with-x=$(STAGING_DIR) \
+Applied with the following changes:
 
-I *think* --with-x doesn't look at its argument, so I've changed this
-to just --with-x.
+    [Thomas:
+     - rewrap Config.in help text
+     - fix license, it's BSD-2c, not just "BSD"
+     - add dependency on host-pkgconf]
 
-> +	--x-includes=$(STAGING_DIR)/usr/include \
-> +	--x-libraries=$(STAGING_DIR)/usr/lib
-> +else
-> +SDL2_TTF_CONF_OPTS += --with-x=no
-
-And I've changed this to --without-x.
-
-Applied with those changes. Thanks!
+Thanks,
 
 Thomas
 -- 
