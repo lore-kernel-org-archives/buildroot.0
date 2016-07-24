@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jul 2016 16:43:47 +0200
-Subject: [Buildroot] [PATCH 3/3] runc: pass -extldflags '-static' on when
-	BR2_STATIC_LIBS=y
-In-Reply-To: <1469371427-25201-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1469371427-25201-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1469371427-25201-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Jul 2016 16:45:09 +0200
+Subject: [Buildroot] [PATCH 2/3] package/runc: fix shared only build
+ when libseccomp is enabled.
+In-Reply-To: <1467916777-29220-2-git-send-email-romain.naour@gmail.com>
+References: <1467916777-29220-1-git-send-email-romain.naour@gmail.com>
+ <1467916777-29220-2-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160724164509.4cd1df61@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no reason to link Go binaries statically, unless when
-BR2_STATIC_LIBS=y.
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/runc/runc.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+On Thu,  7 Jul 2016 20:39:36 +0200, Romain Naour wrote:
+> When BR2_PACKAGE_LIBSECCOMP is set, the go build system will try to
+> find static library libseccomp.a since "static_build" and
+> "extldflags '-static'" are used.
+> 
+> Link runc statically only for static only build and prefer dynamic
+> linking otherwise.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Christian Stewart <christian@paral.in>
 
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 1396e0c..7ebba57 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -19,8 +19,11 @@ RUNC_MAKE_ENV = $(HOST_GO_TARGET_ENV) \
- 	PATH=$(BR_PATH)
- 
- RUNC_GLDFLAGS = \
--	-X main.gitCommit=$(RUNC_VERSION) \
--	-extldflags '-static'
-+	-X main.gitCommit=$(RUNC_VERSION)
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+FLANNEL_GLDFLAGS += -extldflags '-static'
-+endif
- 
- RUNC_GOTAGS = cgo static_build
- 
+I have just sent a patch series that passes -static only when
+BR2_STATIC_LIBS=y:
+
+http://patchwork.ozlabs.org/patch/652100/
+http://patchwork.ozlabs.org/patch/652101/
+http://patchwork.ozlabs.org/patch/652102/
+
+So I've marked this patch as superseded.
+
+Thanks,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
