@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 24 Jul 2016 22:15:46 +0200
-Subject: [Buildroot] [PATCH 2/3] odroid: select odroid-scripts for
- odroidc2 defconfig
-In-Reply-To: <20160724163506.20024-2-daggs@gmx.com>
-References: <20160724163506.20024-1-daggs@gmx.com>
- <20160724163506.20024-2-daggs@gmx.com>
-Message-ID: <20160724221546.58389841@free-electrons.com>
+Date: Sun, 24 Jul 2016 22:23:48 +0200
+Subject: [Buildroot] Patchwork cleanup week #24
+In-Reply-To: <20160615220634.67eb8fa9@free-electrons.com>
+References: <20160615220634.67eb8fa9@free-electrons.com>
+Message-ID: <20160724222348.6758c82c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +12,117 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 24 Jul 2016 19:35:05 +0300, Dagg Stompler wrote:
-> Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> ---
->  configs/odroidc2_defconfig | 1 +
->  1 file changed, 1 insertion(+)
+With a huge delay, here is the conclusion of this patchwork cleanup.
+Things have been mainly cleaned up during the Buildroot Summer Camp
+organized in early July.
 
-Applied to master, thanks.
+On Wed, 15 Jun 2016 22:06:34 +0200, Thomas Petazzoni wrote:
+
+>  1. board: add support for Chromebook Snow
+>     http://patchwork.ozlabs.org/patch/563197/
+> 
+>     This one has not been reviewed. It would be sad not to merge it,
+>     because we have merged some specific packages that are needed for
+>     this defconfig (host-vboot-utils).
+
+This patch has been applied, after some tweaks.
+
+>  2. pyqtgraph: new package
+>     http://patchwork.ozlabs.org/patch/529864/
+> 
+>     It seems to be a pretty straightforward package, but nobody
+>     reviewed it.
+
+Maxime Hadjinlian did some review, but there was no feedback from the
+original author. The patch is marked as Changes Requested, so if nobody
+resends a new version, we will simply forget it.
+
+>  3. toolchain-wrapper: prevent use of unsupported -fstack-protector*
+>     http://patchwork.ozlabs.org/patch/545315/
+> 
+>     This patch proposes to make the toolchain wrapper fail immediately
+>     when -fstack-protector is passed to gcc, but SSP support is not
+>     available. This helps with some packages that assume that compiling
+>     with -fstack-protector is enough to determine if SSP support is
+>     available, while in several cases, doing a link test is necessary.
+> 
+>     I personally don't really like this change, as I believe it's
+>     adding even more sorcery to our toolchain wrapper. Instead, the
+>     problematic upstream packages should be fixed. Plus, at the time,
+>     we had a few packages in this situation, but nowadays, I don't
+>     think we have build failures due to this.
+> 
+>     So, my proposal would be to reject this patch.
+
+It has been collectively decided that this patch was no longer needed.
+
+>  4. uboot: install multiple spl images
+>     http://patchwork.ozlabs.org/patch/595980/
+
+This patch was adopted by Maxime Hadjinlian, and merged.
+
+>  5. Fix for the makeinfo / missing issue, proposal from Romain
+>     http://patchwork.ozlabs.org/patch/595041/
+>     http://patchwork.ozlabs.org/patch/595042/
+>     http://patchwork.ozlabs.org/patch/595043/
+> 
+>     We need to take a decision on this one. The problem also occurs for
+>     gdb and binutils on ARC, for which we've added a custom hack
+>     recently.
+> 
+>     I tried to play with timestamps by touch'ing the .info files before
+>     the build, it worked with one of gdb or binutils, but failed for
+>     the other.
+> 
+>     So either we take Romain's approach, or we bite the bullet and add
+>     a host-makeinfo package on which we depend when gdb/binutils are
+>     fetched from Git.
+
+We've taken the approach of adding a host-texinfo package to solve this
+problem. The patches are merged, and it seems to work.
+
+>  6. wget download: 'scheme missing' results in empty output file
+>     http://patchwork.ozlabs.org/patch/599387/
+
+We've taken a different approach for this problem: ensure _SITE is not
+empty. The corresponding patch has been merged.
+
+>  7. Fortran support
+>     http://patchwork.ozlabs.org/patch/599678/
+>     http://patchwork.ozlabs.org/patch/599679/
+>     http://patchwork.ozlabs.org/patch/599680/
+
+Improved Fortran support has been merged during the Buildroot Summer
+Camp, and we have already enabled a few Fortran-based packages. So
+those patches were no longer needed.
+
+>  8. new package: alsacap
+>     http://patchwork.ozlabs.org/patch/607045/
+> 
+>     Isn't there already a tool in alsa-utils that does the same thing
+>     more or less?
+
+A review has been done, so we've suggested the original submitter to
+contribute a new version of the patch. In the mean time, the patch has
+been marked as Changes Requested.
+
+>  9. overlay: Add archive-based (tar) rootfs overlays
+>     http://patchwork.ozlabs.org/patch/610752/
+
+We have rejected this patch, and instead added a mechanism to run
+custom scripts within the fakeroot environment.
+
+> 10. Improvements to kernel headers version selection
+>     http://patchwork.ozlabs.org/patch/612316/
+>     http://patchwork.ozlabs.org/patch/612315/
+>     http://patchwork.ozlabs.org/patch/612313/
+
+We've rejected some of those patches, but did a few improvements in
+this area as well.
+
+All in all, none of those 10 topics remain in patchwork today.
+
+Best regards,
 
 Thomas
 -- 
