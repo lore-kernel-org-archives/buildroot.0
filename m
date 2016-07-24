@@ -1,31 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 24 Jul 2016 22:47:18 +0200
-Subject: [Buildroot] [PATCH] package/acpitool: not available for bfin
-References: <1468778160-32413-1-git-send-email-yann.morin.1998@free.fr>
- <CAK4VdL1HipqOpg5CuYi+KDZiyrLBZQvNLYcDsECLHNC+pqsAiA@mail.gmail.com>
- <20160718183059.GA12720@free.fr>
-Message-ID: <m3mf6dx0cb.ln2@ID-313208.user.individual.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 24 Jul 2016 22:49:10 +0200
+Subject: [Buildroot] [PATCH] support: pkg-stats: add efl package in packages
+	stats
+Message-ID: <1469393350-12548-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 18 Jul 2016 20:30:59 +0200 schrieb Yann E. MORIN:
+Since efl update to 1.15 version, the efl package is a "real"
+Buildroot package. It doesn't contain any subdirectories anymore.
 
-> Erico, All,
-> 
-> On 2016-07-18 19:37 +0200, Erico Nunes spake thusly:
->> So it seems to me that acpitool is taking the blame for just being the
->> first C++ package (alphabetically) to be built with the toolchain
->> referenced by these autobuilder failures?
-> 
-> Maybe. Don't add packages that sort alphabetically-early if you don't
-> want to be noticed! ;-)
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ support/scripts/pkg-stats | 1 -
+ 1 file changed, 1 deletion(-)
 
-Hi,
-
-libplatform as cmake-package is also affected:
-http://autobuild.buildroot.net/?reason=libplatform-feafe68e3e0b02c3261aefb3d711863ef6fadd38
-
-Regards, Bernd
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index fad7ae9..cc3bef4 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -97,7 +97,6 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
+ 	$i = "linux/linux-ext-fbtft.mk" -o \
+ 	$i = "linux/linux-ext-xenomai.mk" -o \
+ 	$i = "linux/linux-ext-rtai.mk" -o \
+-	$i = "package/efl/efl.mk" -o \
+ 	$i = "package/freescale-imx/freescale-imx.mk" -o \
+ 	$i = "package/gcc/gcc.mk" -o \
+ 	$i = "package/gstreamer/gstreamer.mk" -o \
+-- 
+2.5.5
