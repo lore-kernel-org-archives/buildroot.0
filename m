@@ -1,91 +1,77 @@
 From: daggs <daggs@gmx.com>
-Date: Mon, 25 Jul 2016 19:55:33 +0200
-Subject: [Buildroot] [PATCH 1/3 v4] odroid-scripts: New Package.
-In-Reply-To: <20160724221455.144fc50d@free-electrons.com>
-References: <20160724163506.20024-1-daggs@gmx.com>,
- <20160724221455.144fc50d@free-electrons.com>
-Message-ID: <trinity-e4c6f188-35cc-4f82-8463-4dd747d2ddbc-1469469333153@3capp-mailcom-bs03>
+Date: Mon, 25 Jul 2016 19:59:33 +0200
+Subject: [Buildroot] [PATCH 3/3 v5] odroid-mali: New Package
+In-Reply-To: <20160724223543.1c9dcfc5@free-electrons.com>
+References: <20160724163506.20024-1-daggs@gmx.com>
+ <20160724163506.20024-3-daggs@gmx.com>,
+ <20160724223543.1c9dcfc5@free-electrons.com>
+Message-ID: <trinity-8c1f22c5-57a0-4421-aaa1-77ccc703a9ce-1469469573490@3capp-mailcom-bs03>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
-
+Greetings
+>
 > Hello,
 > 
-> On Sun, 24 Jul 2016 19:35:04 +0300, Dagg Stompler wrote:
-> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> 
-> Thanks, I've applied with a few minor changes, see below.
-> 
-> > diff --git a/package/Config.in b/package/Config.in
-> > index 72c0be3..4529371 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -1690,6 +1690,7 @@ menu "System tools"
-> >  	source "package/ncdu/Config.in"
-> >  	source "package/numactl/Config.in"
-> >  	source "package/nut/Config.in"
-> > +	source "package/odroid-scripts/Config.in"
-> 
-> I've moved to "Hardware handling" instead of "System tools".
-
-it was placed originally in Hardware handling, not sure how it ended up at System tools.
-
-> 
-> > diff --git a/package/odroid-scripts/odroid-scripts.mk b/package/odroid-scripts/odroid-scripts.mk
+> On Sun, 24 Jul 2016 19:35:06 +0300, Dagg Stompler wrote:
+> > diff --git a/package/odroid-mali/Config.in b/package/odroid-mali/Config.in
 > > new file mode 100644
-> > index 0000000..34a4501
+> > index 0000000..a648f03
 > > --- /dev/null
-> > +++ b/package/odroid-scripts/odroid-scripts.mk
-> > @@ -0,0 +1,32 @@
-> > +################################################################################
-> > +#
-> > +# odroid-scripts
-> > +#
-> > +################################################################################
-> > +
-> > +ODROID_SCRIPTS_VERSION = a252de04562dcf8d8a4918a544b45a9e3d46d2fb
-> > +ODROID_SCRIPTS_SITE = $(call github,mdrjr,c2_bootini,$(ODROID_SCRIPTS_VERSION))
-> > +ODROID_SCRIPTS_LICENSE = unclear
-> > +
-> > +ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-> > +	define ODROID_SCRIPTS_INSTALL_UDEV_RULES
+> > +++ b/package/odroid-mali/Config.in
+> > @@ -0,0 +1,21 @@
+> > +config BR2_PACKAGE_ODROID_MALI
+> > +	bool "odroid-mali"
+> > +	select BR2_PACKAGE_HAS_LIBEGL
+> > +	select BR2_PACKAGE_HAS_LIBGLES
+> > +	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> > +	select BR2_PACKAGE_FBSET
 > 
-> We typically do not indent such lines.
+> fbset is not used by odroid-mali, it's used by odroid-scripts, so this
+> dependency should be in odroid-scripts. So I've dropped those two lines
+> from here. Could you send a patch that adds the dependency to
+> odroid-scripts?
+
+you are correct, will send a new patch.
+
 > 
-> > +		$(INSTALL) -D -m 0644 $(@D)/10-odroid.rules $(TARGET_DIR)/etc/udev/rules.d/10-odroid.rules
+> > +	select BR2_PACKAGE_ODROID_SCRIPTS
 > 
-> I've split this line.
+> I've added a comment that indicates it's a runtime dependency.
 > 
-> > +	endef
-> > +endif
-> > +
-> > +define ODROID_SCRIPTS_INSTALL_TARGET_CMDS
-> > +	$(INSTALL) -D -m 0755 $(@D)/c2_init.sh $(TARGET_DIR)/usr/sbin/odroidc2_init_fb.sh
-> > +	$(ODROID_SCRIPTS_INSTALL_UDEV_RULES)
-> > +endef
-> > +
-> > +define ODROID_SCRIPTS_INSTALL_INIT_SYSTEMD
-> > +	$(INSTALL) -D -m 0644 $(@D)/amlogic.service $(TARGET_DIR)/usr/lib/systemd/system/odroidc2_fb.service
-> > +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> > +	ln -fs ../../../../usr/lib/systemd/system/odroidc2_fb.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/odroidc2_fb.service
+> > +	depends on BR2_TOOLCHAIN_USES_GLIBC
 > 
-> Those long lines as well.
+> I've added a Config.in comment that helps the user to know that
+> odroid-mali needs glibc.
 > 
-> > +endef
-> > +
-> > +define ODROID_SCRIPTS_INSTALL_INIT_SYSV
-> > +	$(INSTALL) -D -m 0755 package/odroid-scripts/S50odroidc2_fb $(TARGET_DIR)/etc/init.d/S50odroidc2_fb
+> > +	depends on BR2_aarch64 || BR2_arm
 > 
-> And this one as well.
+> On ARM, the prebuilt libraries use the EABIhf ABI, so I've changed
+> BR2_arm to BR2_ARM_EABIHF.
 > 
-> Thanks!
+> It's worth mentioning that for AArch64, this repo contains the OpenGL
+> libraries for X11. If you have the opportunity to test them, it would
+> be nice to add support for them.
+
+I wanted to test it with kodi but 16 doesn't support aarch64.
+there is a DDX driver for X which I intend to add as soon as I understand how to build it.
+
+> 
+> > +ifeq ($(BR2_aarch64),y)
+> > +ODROID_MALI_LIBS_INSTALL_ARCH=mali_libs
+> 
+> I've changed this to:
+> 
+> ODROID_MALI_INSTALL_ARCH = mali_libs
+> 
+> I.e, simplified the name of the variable, and added spaces around the
+> equal sign.
+> 
+> Applied with those changes. Thanks! 
 > 
 > Thomas
 
-ok, thanks for the help.
-
-Dagg.
+Dagg
