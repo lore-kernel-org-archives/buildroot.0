@@ -1,55 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jul 2016 22:16:59 +0200
-Subject: [Buildroot] [git commit] toolchain: add 4.7.x choice for headers
-Message-ID: <20160725201804.D9DA481F05@busybox.osuosl.org>
+Date: Mon, 25 Jul 2016 22:18:39 +0200
+Subject: [Buildroot] [PATCH 1/4] linux kernel: bump default to version
+ 4.7
+In-Reply-To: <1469404570-19495-1-git-send-email-festevam@gmail.com>
+References: <1469404570-19495-1-git-send-email-festevam@gmail.com>
+Message-ID: <20160725221839.6b64ef24@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e36bf63f9fe1f5a2daef6ea1d1bde0a049886e42
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-common.in          | 5 +++++
- toolchain/toolchain-external/Config.in | 4 ++++
- 2 files changed, 9 insertions(+)
+On Sun, 24 Jul 2016 20:56:07 -0300, Fabio Estevam wrote:
+> From: Fabio Estevam <fabio.estevam@nxp.com>
+> 
+> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+> ---
+>  linux/Config.in | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index d69acf2..5611b5b 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -251,10 +251,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
- 
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "4.7"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
- 	default "4.6"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
- 	default "4.5"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
- 	default "4.4"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 16b877a..5edde24 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -793,6 +793,10 @@ choice
- 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_7
-+	bool "4.7.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_6
- 	bool "4.6.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
+Thanks, I've applied after changing the prefix from "linux kernel:" to
+just "linux:" since "linux" is the name of the Buildroot package this
+change applies to.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
