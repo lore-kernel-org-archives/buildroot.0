@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jul 2016 22:35:59 +0200
-Subject: [Buildroot] [PATCH v1] qt5imageformats: fix AArch64 compile
-In-Reply-To: <1469477992-27484-1-git-send-email-ps.report@gmx.net>
-References: <1469477992-27484-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20160725223559.6bbba979@free-electrons.com>
+Date: Mon, 25 Jul 2016 22:36:15 +0200
+Subject: [Buildroot] [PATCH 4/4] configs: Add new configuration for
+ i.MX6UL Pico board
+In-Reply-To: <1469404570-19495-4-git-send-email-festevam@gmail.com>
+References: <1469404570-19495-1-git-send-email-festevam@gmail.com>
+ <1469404570-19495-4-git-send-email-festevam@gmail.com>
+Message-ID: <20160725223615.4cf2afb2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +14,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 25 Jul 2016 22:19:52 +0200, Peter Seiderer wrote:
+On Sun, 24 Jul 2016 20:56:10 -0300, Fabio Estevam wrote:
+> From: Fabio Estevam <fabio.estevam@nxp.com>
+> 
+> Add support for Technexion's i.MX6UL Pico board running U-boot 2016.07
+> and kernel 4.7.
+> 
+> For information about this board, please visit:
+> http://www.wandboard.org/images/hobbit/hobbitboard-imx6ul-reva1.pdf
+> 
+> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+> ---
+>  board/technexion/imx6ulpico/genimage.cfg  | 41 +++++++++++++++++++++
+>  board/technexion/imx6ulpico/post-image.sh | 16 +++++++++
+>  board/technexion/imx6ulpico/readme.txt    | 59 +++++++++++++++++++++++++++++++
+>  configs/imx6ulpico_defconfig              | 34 ++++++++++++++++++
+>  4 files changed, 150 insertions(+)
+>  create mode 100644 board/technexion/imx6ulpico/genimage.cfg
+>  create mode 100755 board/technexion/imx6ulpico/post-image.sh
+>  create mode 100644 board/technexion/imx6ulpico/readme.txt
+>  create mode 100644 configs/imx6ulpico_defconfig
 
-> +-equals(QT_ARCH, arm) {
-> ++equals(QT_ARCH, arm)|equals(QT_ARCH, arm64) {
-> +     SOURCES_FOR_NEON += \
-> +         $$PWD/libwebp/src/dsp/dec_neon.c \
-> +         $$PWD/libwebp/src/dsp/enc_neon.c \
-
-This seems exactly identical to upstream commit
-e4c1d9ece74de212ebe5c55b134de7cb23469e2d, see
-https://github.com/qt/qtimageformats/commit/e4c1d9ece74de212ebe5c55b134de7cb23469e2d.
+Applied to master, thanks.
 
 Thomas
 -- 
