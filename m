@@ -1,57 +1,84 @@
-From: Jordan Yelloz <jordan@yelloz.me>
-Date: Mon, 25 Jul 2016 09:46:23 -0700
-Subject: [Buildroot] [PATCH 1/4] swupdate: allowed luajit to enable
- HAVE_LUA
-In-Reply-To: <20160725093115.0d47ba9b@free-electrons.com>
-References: <20160724232739.14132-1-jordan@yelloz.me>
- <20160724232739.14132-2-jordan@yelloz.me>
- <20160725093115.0d47ba9b@free-electrons.com>
-Message-ID: <a5ee3682-3a49-3bf7-7c79-14a58871acdc@yelloz.me>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 25 Jul 2016 19:24:47 +0200
+Subject: [Buildroot] bfin c++ problem
+In-Reply-To: <20160721164721.GU22524@waldemar-brodkorb.de>
+References: <20160721000402.GR22524@waldemar-brodkorb.de>
+ <20160721030504.GN4023@csltok.swansea.ac.uk>
+ <CAH6eHdRNcLv9iT8dKN_zneVp2=P=yakUH=p8wq5dz5q2gNL-xQ@mail.gmail.com>
+ <20160721111244.GO4023@csltok.swansea.ac.uk>
+ <CAH6eHdT-H+4qUe3uU268uG8O_7KQLoOZchtsW3AdFAVaeuN6cg@mail.gmail.com>
+ <20160721121643.GP4023@csltok.swansea.ac.uk>
+ <20160721164721.GU22524@waldemar-brodkorb.de>
+Message-ID: <20160725172447.GB22524@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/25/2016 12:31 AM, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun, 24 Jul 2016 16:27:36 -0700, Jordan Yelloz wrote:
-> 
->> diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
->> index 313a54febd87..7a0fcaea5741 100644
->> --- a/package/swupdate/swupdate.mk
->> +++ b/package/swupdate/swupdate.mk
->> @@ -42,6 +42,9 @@ endif
->>  ifeq ($(BR2_PACKAGE_LUA),y)
->>  SWUPDATE_DEPENDENCIES += lua host-pkgconf
->>  SWUPDATE_MAKE_ENV += HAVE_LUA=y
->> +else ifeq ($(BR2_PACKAGE_LUAJIT),y)
->> +SWUPDATE_DEPENDENCIES += luajit host-pkgconf
->> +SWUPDATE_MAKE_ENV += HAVE_LUA=y
-> 
-> If both luajit and classic lua are supported, then could you instead
-> use:
-> 
-> ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
-> SWUPDATE_DEPENDENCIES += luainterpreter host-pkgconf
-> SWUPDATE_MAKE_ENV += HAVE_LUA=y
-> 
-> luainterpreter is a virtual package that automatically depends either
-> on lua or luajit, depending on which of the two is enabled in the
-> configuration.
-> 
-> Could you test this solution, and send an updated version of your patch?
-> 
-> Thanks a lot!
-> 
-> Thomas
-> 
-
 Hi,
+Waldemar Brodkorb wrote,
 
-I've updated my patch to reflect your changes and it still works. I'll
-resubmit the patch series if you're okay with my explanation for patch 3/4.
+> Hi Oliver,
+> Oliver Kullmann wrote,
+> 
+> > On Thu, Jul 21, 2016 at 12:40:43PM +0100, Jonathan Wakely wrote:
+> > > On 21 July 2016 at 12:12, Oliver Kullmann wrote:
+> > > > On Thu, Jul 21, 2016 at 11:26:42AM +0100, Jonathan Wakely wrote:
+> > > >> On 21 July 2016 at 04:05, Oliver Kullmann wrote:
+> > > >> > Hello,
+> > > >> >
+> > > >> > a C++ compiler is not required to recognise "main(void)":
+> > > >>
+> > > >> That's incorrect.
+> 
+> Thanks for any advice about correct usage of C++, but I am afraid
+> it does not help in any way to fix my original problem.
+> Please open up a new thread to discuss this. Thanks.
+> 
+> Anyway, even a simple C application does compile with gcc, but not
+> with g++:
+> 
+> ./output/host/usr/bin/bfin-buildroot-linux-uclibc-g++ -o t test.c
+> /home/wbx/buildroot/output/host/usr/lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld:
+> t: hidden symbol `___gtdf2' in
+> /home/wbx/buildroot/output/host/usr/lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/libgcc.a(_gt_df.o)
+> is referenced by DSO
+> /home/wbx/buildroot/output/host/usr/lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld:
+> final link failed: Bad value
+> collect2: error: ld returned 1 exit status
+> $ cat test.c
+> int main() {
+>  return(0);
+> }
+> 
+> $ ./output/host/usr/bin/bfin-buildroot-linux-uclibc-gcc -o t test.c
+> $ file t
+> t: ELF 32-bit LSB executable, Analog Devices Blackfin, version 1
+> (SYSV), dynamically linked (uses shared libs), not stripped
+> $ 
+> 
+> Any advice? Why does the hidden symbols in libgcc.a from the
+> first-stage gcc, doesn't make it into libstdc++ shared library?
+> 
+> Buildroot first compiles gcc with --disable-shared and have then a
+> libgcc.a. Afterwards the C library (uClibc-ng) is build. In the next
+> step a full --enable-shared gcc including libstdc++ is build.
+> This one is then somehow mislinked and then g++ can not compile 
+> a simple application.
+> 
+> It must be some architecture specific problem, because we are not
+> seeing this kind of issues on any other architecture at the moment.
 
---
-Jordan
+I think this might be solved by using a linker script for
+libgcc_so.so as described here:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=40134
+
+But now I am fighting again with:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68468
+
+How can the libgcc dwarf or sjlj execptions needed for C++ can be
+compiled for FDPIC toolchains?
+
+best regards
+ Waldemar
