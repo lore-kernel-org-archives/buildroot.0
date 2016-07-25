@@ -1,79 +1,105 @@
-From: David Raeman <draeman@bbn.com>
-Date: Mon, 25 Jul 2016 16:26:57 -0400
-Subject: [Buildroot] [PATCH 2/2] host-dtc: Install libftd and associated
-	header files.
-In-Reply-To: <20160725220137.663c9c03@free-electrons.com>
-References: <20160725195227.21112-1-draeman@bbn.com>	<20160725195227.21112-2-draeman@bbn.com>
- <20160725220137.663c9c03@free-electrons.com>
-Message-ID: <00d701d1e6b2$e48f0380$adad0a80$@bbn.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 25 Jul 2016 23:13:35 +0200
+Subject: [Buildroot] [PATCH 12/16 v3] core: handle .br-external in a
+ make rule
+In-Reply-To: <0bcafdc5-0462-c502-5390-f27ec227af79@gmail.com>
+References: <cover.1468750623.git.yann.morin.1998@free.fr>
+ <0994022779466155b22c6e815e737d21c447a528.1468750623.git.yann.morin.1998@free.fr>
+ <0bcafdc5-0462-c502-5390-f27ec227af79@gmail.com>
+Message-ID: <20160725211335.GA5958@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Romain, All,
 
-Sorry for the confusion.  I did not mean to imply any problem with the qemu
-package provided by buildroot.  I am emulating a Xilinx Zynq target, so I
-use a custom package in my br2-external tree that fetches the version of
-QEMU that is patched by Xilinx.  It is fetched from
-https://github.com/Xilinx/qemu using the new github hook for the SITE macro:
-
-        XLNX_QEMU_SITE = $(call github,Xilinx,qemu,$(XLNX_QEMU_VERSION))
-
-The canonical QEMU repository embeds a ref to dtc's upstream repo in its
-source tree using a git submodule.  The QEMU source tree fetched by
-buildroot from http://wiki.qemu.org/download/ has that submodule content
-populated as a part of the downloaded tarball.  So the qemu package is able
-to build using its internal tree of dtc/libfdt, and thus it does not require
-finding libfdt within HOST_DIR.
-
-In my case, the Xilinx-patched version downloaded using $(call github ...)
-is fetching a tarball from GitHub which does not have the embedded Git
-submodule populated.  So the build is instead looking for libfdt within
-HOST_DIR and fails if it does not find it.
-
-If there is an aversion to allowing libfdt to be installed as a part of the
-host package, I could instead change my br2-external package to download the
-Xilinx-patched QEMU using the git:// scheme instead of grabbing the tarball
-via $(call github ...).  Then it would grab the Git submodule reference and
-I could fetch it by customizing EXTRACT_CMDS.  Either approach is equally
-fine with me.
-
-Cheers,
-David
-
-
------Original Message-----
-From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
-Sent: Monday, July 25, 2016 4:02 PM
-To: David Raeman <draeman@bbn.com>
-Cc: buildroot at buildroot.org
-Subject: Re: [Buildroot] [PATCH 2/2] host-dtc: Install libftd and associated
-header files.
-
-Hello,
-
-On Mon, 25 Jul 2016 15:52:27 -0400, David Raeman wrote:
-> The dtc package currently does not install libfdt for the host install.
-> It can be useful to have libfdt on the host, such as for building QEMU 
-> with the --enable-fdt configure switch.
+On 2016-07-24 22:05 +0200, Romain Naour spake thusly:
+> Le 17/07/2016 ? 12:34, Yann E. MORIN a ?crit :
+> > Currently, we treat the case where we have no br2-external tree
+> > (BR2_EXTERNAL is empty) differently from the case where we do have
+> > one (BR2_EXTERNAL is not empty).
+> > 
+> > There is now no reason to treat those two cases differently:
+> > 
+> >   - the kconfig snippet is always generated appropriately (i.e. it would
+> >     include the br2-external tree if set, or include nothing otherwise);
+> > 
+> >   - we no longer have a dummy br-external tree either.
+> > 
+> > As such, generate the .br-external cache file in both cases.
+> > 
+> > This will make it much easier to handle when we introduce support for
+> > multiple br2-external trees.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Cc: Peter Korsgaard <jacmet@uclibc.org>
+> > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > ---
+> >  Makefile | 13 ++++++-------
+> >  1 file changed, 6 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/Makefile b/Makefile
+> > index 72b55cb..67334e5 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -146,23 +146,17 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does not exist))
+> >  # On subsequent invocations of make, it is read in. It can still be overridden
+> >  # on the command line, therefore the file is re-created every time make is run.
+> >  #
+> > -# When BR2_EXTERNAL is set to an empty value (e.g. explicitly in command
+> > -# line), the .br-external file is removed.
+> > -#
+> >  # If the br2-external tree defines its ID, then export the path in the
+> >  # BR2_EXTERNAL_$(ID) variable.
+> >  
+> >  BR2_EXTERNAL_FILE = $(BASE_DIR)/.br-external
+> >  -include $(BR2_EXTERNAL_FILE)
+> > -ifeq ($(BR2_EXTERNAL),)
+> > -  $(shell rm -f $(BR2_EXTERNAL_FILE))
+> > -else
+> > +ifneq ($(BR2_EXTERNAL),)
+> >    _BR2_EXTERNAL = $(shell cd $(BR2_EXTERNAL) >/dev/null 2>&1 && pwd)
+> >    ifeq ($(_BR2_EXTERNAL),)
+> >      $(error BR2_EXTERNAL='$(BR2_EXTERNAL)' does not exist, relative to $(TOPDIR))
+> >    endif
+> >    override BR2_EXTERNAL := $(_BR2_EXTERNAL)
+> > -  $(shell echo BR2_EXTERNAL ?= $(BR2_EXTERNAL) > $(BR2_EXTERNAL_FILE))
+> >    ifneq ($(wildcard $(BR2_EXTERNAL)/external.id),)
+> >      BR2_EXTERNAL_ID := $(shell cat $(BR2_EXTERNAL)/external.id 2>/dev/null)
+> >      ifeq ($(BR2_EXTERNAL_ID),)
+> > @@ -173,6 +167,11 @@ else
+> >    BR2_EXTERNAL_MK = $(BR2_EXTERNAL)/external.mk
+> >  endif
+> >  
+> > +# This needs to be *after* we compute BR_EXTERNAL, above.
+> > +.PHONY: $(BR2_EXTERNAL_FILE)
+> > +$(BR2_EXTERNAL_FILE):
+> > +	@echo BR2_EXTERNAL ?= $(BR_EXTERNAL) >$@
 > 
-> Signed-off-by: David Raeman <draeman@bbn.com>
+> s/BR_EXTERNAL/BR2_EXTERNAL/
 
-We already have the support for --enable-fdt for the host qemu:
+Right, but it should be: s/BR2_EXTERNAL/_BR2_EXTERNAL/  (i.e. with a
+leading underscore) as we want to store the full path, which is
+constructed with the first line in the ifdef block.
 
-ifeq ($(BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE),y)
-HOST_QEMU_TARGETS += $(HOST_QEMU_ARCH)-softmmu HOST_QEMU_OPTS +=
---enable-system --enable-fdt HOST_QEMU_DEPENDENCIES += host-dtc else
-HOST_QEMU_OPTS += --disable-system endif
+> It's probably a rebase issue since it's fixed in the following patch ;-)
 
-Do you mean that it doesn't work?
+Probably, probably... ;-)
 
-Thanks,
+Thanks for spotting.
 
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering http://free-electrons.com
+Regards,
+Yann E. MORIN.
+
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
