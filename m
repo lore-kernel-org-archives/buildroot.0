@@ -1,36 +1,141 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 24 Jul 2016 21:15:59 -0300
-Subject: [Buildroot] [PATCH] nettle: disable assembly optimizations for
-	ARMv7M
-Message-ID: <1469405759-3224-1-git-send-email-gustavo@zacarias.com.ar>
+From: Joel Stanley <joel@jms.id.au>
+Date: Mon, 25 Jul 2016 15:31:27 +0930
+Subject: [Buildroot] [PATCH] package/pflash: new package
+Message-ID: <1469426487-19558-1-git-send-email-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's thumb2-only and it requires ARM instructions.
-Since V4 and V5 aren't enough either use the V7M knob to avoid
-over-complicating the conditional. Fixes:
-http://autobuild.buildroot.net/results/354/35418d33efa902d3a1a82b2cd58d8db1b1172e49/
+pflash is a tool for reading and writing to the PNOR on OpenPower
+servers, for firmware upgrades, and extracting diagnostic information.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This includes a fix so that pflash can build with musl, which has been submitted
+upstream[1].
+
+[1] http://patchwork.ozlabs.org/patch/652168/
+
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
- package/nettle/nettle.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/Config.in                                  |  1 +
+ ...-pflash-use-atexit-for-musl-compatibility.patch | 42 ++++++++++++++++++++++
+ package/pflash/Config.in                           |  6 ++++
+ package/pflash/pflash.mk                           | 32 +++++++++++++++++
+ 4 files changed, 81 insertions(+)
+ create mode 100644 package/pflash/0001-pflash-use-atexit-for-musl-compatibility.patch
+ create mode 100644 package/pflash/Config.in
+ create mode 100644 package/pflash/pflash.mk
 
-diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-index c133839..a94a7fc 100644
---- a/package/nettle/nettle.mk
-+++ b/package/nettle/nettle.mk
-@@ -15,7 +15,7 @@ NETTLE_LICENSE_FILES = COPYING.LESSERv3 COPYINGv2
- NETTLE_CONF_OPTS = --disable-openssl
- 
- # ARM assembly requires v6+ ISA
--ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5),y)
-+ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV7M),y)
- NETTLE_CONF_OPTS += --disable-assembler
- endif
- 
+diff --git a/package/Config.in b/package/Config.in
+index 814141f18784..9f873c31fa58 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -426,6 +426,7 @@ endmenu
+ 	source "package/owl-linux/Config.in"
+ 	source "package/parted/Config.in"
+ 	source "package/pciutils/Config.in"
++	source "package/pflash/Config.in"
+ 	source "package/picocom/Config.in"
+ 	source "package/pifmrds/Config.in"
+ 	source "package/powertop/Config.in"
+diff --git a/package/pflash/0001-pflash-use-atexit-for-musl-compatibility.patch b/package/pflash/0001-pflash-use-atexit-for-musl-compatibility.patch
+new file mode 100644
+index 000000000000..f8ac58eba329
+--- /dev/null
++++ b/package/pflash/0001-pflash-use-atexit-for-musl-compatibility.patch
+@@ -0,0 +1,42 @@
++From 7f6b017b8dc3b5f276b30353e0a7186e4e433e7a Mon Sep 17 00:00:00 2001
++From: Joel Stanley <joel@jms.id.au>
++Date: Mon, 25 Jul 2016 13:24:37 +0930
++Subject: [PATCH] pflash: use atexit for musl compatibility
++To: skiboot at lists.ozlabs.org
++
++I accidentally built myself a cross-toolchain with the musl libc. It does
++not support on_exit which we use to clean up in pflash.
++
++Instead use atexit with is supported by both uclibc, musl and glibc.
++
++Signed-off-by: Joel Stanley <joel@jms.id.au>
++---
++ external/pflash/pflash.c | 5 ++---
++ 1 file changed, 2 insertions(+), 3 deletions(-)
++
++diff --git a/external/pflash/pflash.c b/external/pflash/pflash.c
++index c124356fd3d9..27000469052e 100644
++--- a/external/pflash/pflash.c
+++++ b/external/pflash/pflash.c
++@@ -509,7 +509,7 @@ static void print_help(const char *pname)
++ 	printf("\t\tThis message.\n\n");
++ }
++ 
++-void exiting(int d, void *p)
+++void exiting(void)
++ {
++ 	if (need_relock)
++ 		arch_flash_set_wrprotect(bl, 1);
++@@ -775,8 +775,7 @@ int main(int argc, char *argv[])
++ 		exit(1);
++ 	}
++ 
++-	on_exit(exiting, NULL);
++-
+++	atexit(exiting);
++ 
++ 	rc = blocklevel_get_info(bl, &fl_name,
++ 			    &fl_total_size, &fl_erase_granule);
++-- 
++2.8.1
++
+diff --git a/package/pflash/Config.in b/package/pflash/Config.in
+new file mode 100644
+index 000000000000..315989724088
+--- /dev/null
++++ b/package/pflash/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PFLASH
++	bool "pflash"
++	depends on BR2_arm || BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64
++	help
++	  PNOR Flash reading and writing tool for OpenPower servers. Used for
++	  firmware upgrades and extracting diagnostic infromation from flash.
+diff --git a/package/pflash/pflash.mk b/package/pflash/pflash.mk
+new file mode 100644
+index 000000000000..ab19ad699866
+--- /dev/null
++++ b/package/pflash/pflash.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# pflash
++#
++################################################################################
++
++PFLASH_VERSION = skiboot-5.2.4
++
++PFLASH_SITE = $(call github,open-power,skiboot,$(PFLASH_VERSION))
++PFLASH_INSTALL_STAGING = YES
++PFLASH_LICENSE = Apache 2.0
++PFLASH_LICENSE_FILE = LICENCE
++
++PFLASH_MAKE_OPTS += CROSS_COMPILE="$(TARGET_CROSS)" \
++		    PFLASH_VERSION=$(PFLASH_VERSION) \
++		    DESTDIR=$(TARGET_DIR) \
++		    -C $(@D)/external/pflash \
++
++# A makefile bug causes recent versions of pflash to fail setting CC and LD
++# based on CROSS_COMPILE. Set CC and LD to remain compatible with those
++# versions.
++PFLASH_MAKE_OPTS += CC=$(TARGET_CC) LD=$(TARGET_LD)
++
++define PFLASH_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(PFLASH_MAKE_OPTS) all
++endef
++
++define PFLASH_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(PFLASH_MAKE_OPTS) install
++endef
++
++$(eval $(generic-package))
 -- 
-2.7.3
+2.8.1
