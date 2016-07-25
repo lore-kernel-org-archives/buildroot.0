@@ -1,33 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jul 2016 22:09:51 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] package/libsepol: Remove use of
- cdefs.h
-In-Reply-To: <1468014336-25570-1-git-send-email-Aduskett@gmail.com>
-References: <1468014336-25570-1-git-send-email-Aduskett@gmail.com>
-Message-ID: <20160725220951.7f9b2b69@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 25 Jul 2016 20:10:34 +0000
+Subject: [Buildroot] [Bug 8991] grub2 fails to compile
+In-Reply-To: <bug-8991-163@https.bugs.busybox.net/>
+References: <bug-8991-163@https.bugs.busybox.net/>
+Message-ID: <bug-8991-163-NRXEAaOCXJ@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=8991
 
-On Fri,  8 Jul 2016 17:45:36 -0400, Adam Duskett wrote:
-> Libsepol uses cdefs.h which is a internal glibc header.
-> This header is not intended to be used by any program and will cause
-> compiling against musl (and possibly other c libraries) to fail.
-> This patch fixed this issue and replaces all references of
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-That's a pretty big patch, so I hope it will be accepted upstream.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-Thanks,
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed in
+https://git.buildroot.org/buildroot/commit/?id=4770c4ef83f89fc3348fd6df636b0e4adac05d16.
+Thanks for reporting the bug!
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
