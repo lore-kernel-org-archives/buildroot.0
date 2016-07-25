@@ -1,32 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jul 2016 18:39:25 +0200
-Subject: [Buildroot] [PATCH] tunctl: new package
-In-Reply-To: <CANu7NGu_jDbUkw9mtJecsYnvz+OzY18t=3P1vtKNYQC5U6FauA@mail.gmail.com>
-References: <1469283530-24618-1-git-send-email-sergio.prado@e-labworks.com>
- <20160723225727.7d8cfe80@free-electrons.com>
- <CANu7NGu_jDbUkw9mtJecsYnvz+OzY18t=3P1vtKNYQC5U6FauA@mail.gmail.com>
-Message-ID: <20160725183925.5d3c70d5@free-electrons.com>
+From: Jordan Yelloz <jordan@yelloz.me>
+Date: Mon, 25 Jul 2016 09:46:23 -0700
+Subject: [Buildroot] [PATCH 1/4] swupdate: allowed luajit to enable
+ HAVE_LUA
+In-Reply-To: <20160725093115.0d47ba9b@free-electrons.com>
+References: <20160724232739.14132-1-jordan@yelloz.me>
+ <20160724232739.14132-2-jordan@yelloz.me>
+ <20160725093115.0d47ba9b@free-electrons.com>
+Message-ID: <a5ee3682-3a49-3bf7-7c79-14a58871acdc@yelloz.me>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 07/25/2016 12:31 AM, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sun, 24 Jul 2016 16:27:36 -0700, Jordan Yelloz wrote:
+> 
+>> diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+>> index 313a54febd87..7a0fcaea5741 100644
+>> --- a/package/swupdate/swupdate.mk
+>> +++ b/package/swupdate/swupdate.mk
+>> @@ -42,6 +42,9 @@ endif
+>>  ifeq ($(BR2_PACKAGE_LUA),y)
+>>  SWUPDATE_DEPENDENCIES += lua host-pkgconf
+>>  SWUPDATE_MAKE_ENV += HAVE_LUA=y
+>> +else ifeq ($(BR2_PACKAGE_LUAJIT),y)
+>> +SWUPDATE_DEPENDENCIES += luajit host-pkgconf
+>> +SWUPDATE_MAKE_ENV += HAVE_LUA=y
+> 
+> If both luajit and classic lua are supported, then could you instead
+> use:
+> 
+> ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
+> SWUPDATE_DEPENDENCIES += luainterpreter host-pkgconf
+> SWUPDATE_MAKE_ENV += HAVE_LUA=y
+> 
+> luainterpreter is a virtual package that automatically depends either
+> on lua or luajit, depending on which of the two is enabled in the
+> configuration.
+> 
+> Could you test this solution, and send an updated version of your patch?
+> 
+> Thanks a lot!
+> 
+> Thomas
+> 
 
-On Mon, 25 Jul 2016 13:36:07 -0300, Sergio Prado wrote:
+Hi,
 
-> Should we update the Buildroot manual since it is still using CC and LD in
-> the generic-package tutorial example?
+I've updated my patch to reflect your changes and it still works. I'll
+resubmit the patch series if you're okay with my explanation for patch 3/4.
 
-Yes, we probably should. And we should also document somewhere those
-"useful variables" for packages, so that people know which one  they
-can/should use.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+--
+Jordan
