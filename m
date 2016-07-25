@@ -1,33 +1,39 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Mon, 25 Jul 2016 15:35:18 -0300
-Subject: [Buildroot] [PATCH] docs/manual: use TARGET_CONFIGURE_OPTS in
-	generic-package tutorial
-Message-ID: <1469471718-26700-1-git-send-email-sergio.prado@e-labworks.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 25 Jul 2016 18:38:34 +0000
+Subject: [Buildroot] [Bug 8931] segment fault when compile argp-help.c using
+ aarch64-buildroot-linux-gnu-gcc
+In-Reply-To: <bug-8931-163@https.bugs.busybox.net/>
+References: <bug-8931-163@https.bugs.busybox.net/>
+Message-ID: <bug-8931-163-hSep9XqqPV@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-TARGET_CONFIGURE_OPTS is preferred over manually using CC and LD.
+https://bugs.busybox.net/show_bug.cgi?id=8931
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
- docs/manual/adding-packages-generic.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index f18465b85107..ef895ec91717 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -29,7 +29,7 @@ system is based on hand-written Makefiles or shell scripts.
- 14: LIBFOO_DEPENDENCIES = host-libaaa libbbb
- 15:
- 16: define LIBFOO_BUILD_CMDS
--17:	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-+17:	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
- 18: endef
- 19:
- 20: define LIBFOO_INSTALL_STAGING_CMDS
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |WORKSFORME
+
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+I've just tested:
+
+BR2_aarch64=y
+BR2_GLIBC_VERSION_2_22=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+
+Which is a AArch64, gcc 4.9.3, glibc 2.22 defconfig, and it builds just fine
+for me with the current master (9068fe0dea774fb35620b31f71b51e663b35167b).
+
+Since the bug submitter did not provide the Buildroot .config, we're not able
+to reproduce, so I'm closing this bug. Do not hesitate to reopen if the problem
+still exists.
+
 -- 
-1.9.1
+You are receiving this mail because:
+You are on the CC list for the bug.
