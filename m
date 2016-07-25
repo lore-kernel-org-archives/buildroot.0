@@ -1,99 +1,119 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 25 Jul 2016 23:38:00 +0200
-Subject: [Buildroot] [PATCH v2] package/elementary: fix parallel install
-	issue
-Message-ID: <1469482680-28281-1-git-send-email-romain.naour@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 25 Jul 2016 23:39:32 +0200
+Subject: [Buildroot] [PATCH 2/2] host-dtc: Install libftd and associated
+ header files.
+In-Reply-To: <00d701d1e6b2$e48f0380$adad0a80$@bbn.com>
+References: <20160725195227.21112-1-draeman@bbn.com>
+ <20160725195227.21112-2-draeman@bbn.com>
+ <20160725220137.663c9c03@free-electrons.com>
+ <00d701d1e6b2$e48f0380$adad0a80$@bbn.com>
+Message-ID: <20160725213932.GD5958@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is some *.eo.h files listed in includesub_HEADERS list but
-these files are already installed from elm_eolian_files list.
+David, All,
 
-Use AUTORECONF and GETTEXTIZE to regenerate the configure script.
+On 2016-07-25 16:26 -0400, David Raeman spake thusly:
+> Sorry for the confusion.  I did not mean to imply any problem with the qemu
+> package provided by buildroot.  I am emulating a Xilinx Zynq target, so I
+> use a custom package in my br2-external tree that fetches the version of
+> QEMU that is patched by Xilinx.  It is fetched from
+> https://github.com/Xilinx/qemu using the new github hook for the SITE macro:
+> 
+>         XLNX_QEMU_SITE = $(call github,Xilinx,qemu,$(XLNX_QEMU_VERSION))
+> 
+> The canonical QEMU repository embeds a ref to dtc's upstream repo in its
+> source tree using a git submodule.  The QEMU source tree fetched by
+> buildroot from http://wiki.qemu.org/download/ has that submodule content
+> populated as a part of the downloaded tarball.  So the qemu package is able
+> to build using its internal tree of dtc/libfdt, and thus it does not require
+> finding libfdt within HOST_DIR.
 
-Fixes:
-http://autobuild.buildroot.net/results/7e9/7e9caffe442dcf40ee41da56fd3f55ffedf3a291
+That's a shame they have a bundled version... Is it possible to tell
+qemu to use the system-installed one (i.e. in our host-dir) instead of
+its own bundled one?
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-v2: reword the patch commit log (Yann E. MORIN)
+> In my case, the Xilinx-patched version downloaded using $(call github ...)
+> is fetching a tarball from GitHub which does not have the embedded Git
+> submodule populated.  So the build is instead looking for libfdt within
+> HOST_DIR and fails if it does not find it.
+> 
+> If there is an aversion to allowing libfdt to be installed as a part of the
+> host package,
 
-I have to check if this patch is upstreamable since elementary has been
-merged with efl tree.
----
- ...emove-.eo.h-files-from-includesub_HEADERS.patch | 45 ++++++++++++++++++++++
- package/elementary/elementary.mk                   |  4 ++
- 2 files changed, 49 insertions(+)
- create mode 100644 package/elementary/0001-lib-remove-.eo.h-files-from-includesub_HEADERS.patch
+I think those explanations are enough to warant installation of libfdt
+for the host-package. However, it (or a striped-down version of it)
+should have been part of the commit log for your patch.
 
-diff --git a/package/elementary/0001-lib-remove-.eo.h-files-from-includesub_HEADERS.patch b/package/elementary/0001-lib-remove-.eo.h-files-from-includesub_HEADERS.patch
-new file mode 100644
-index 0000000..d1b2f21
---- /dev/null
-+++ b/package/elementary/0001-lib-remove-.eo.h-files-from-includesub_HEADERS.patch
-@@ -0,0 +1,45 @@
-+From 2f6a65718a0992d0624836ce4b1416a7420782d2 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Mon, 25 Jul 2016 22:52:41 +0200
-+Subject: [PATCH] lib: remove *.eo.h files from includesub_HEADERS
-+
-+Otherwise *.eo.h files will be installed twice, so it can break a
-+parallel install on fast machines, whereby two make jobs may run
-+concurently, trying to install the same files.
-+
-+/usr/bin/install -c -m 644 elm_sys_notify.eo.h
-+/usr/bin/install -c -m 644 elm_sys_notify.eo.h
-+usr/bin/install: cannot create regular file 'elm_sys_notify.eo.h': File exists
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/7e9/7e9caffe442dcf40ee41da56fd3f55ffedf3a291
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/lib/Makefile.am | 3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+diff --git a/src/lib/Makefile.am b/src/lib/Makefile.am
-+index 40fb597..9df9424 100644
-+--- a/src/lib/Makefile.am
-++++ b/src/lib/Makefile.am
-+@@ -351,8 +351,6 @@ elm_systray_eo.h \
-+ elm_systray_common.h \
-+ elm_systray_watcher.h \
-+ elm_sys_notify.h \
-+-elm_sys_notify.eo.h \
-+-elm_sys_notify_dbus.eo.h \
-+ elm_table.h \
-+ elm_table_eo.h \
-+ elm_table_legacy.h \
-+@@ -381,7 +379,6 @@ elm_win_common.h \
-+ elm_win_eo.h \
-+ elm_win_legacy.h \
-+ elm_win_standard.h \
-+-elm_win_standard.eo.h \
-+ elm_helper.h
-+ includesubdir = $(includedir)/elementary- at VMAJ@/
-+ 
-+-- 
-+2.5.5
-+
-diff --git a/package/elementary/elementary.mk b/package/elementary/elementary.mk
-index 01fc6e4..e686647 100644
---- a/package/elementary/elementary.mk
-+++ b/package/elementary/elementary.mk
-@@ -10,6 +10,10 @@ ELEMENTARY_SITE = http://download.enlightenment.org/rel/libs/elementary
- ELEMENTARY_LICENSE = LGPLv2.1
- ELEMENTARY_LICENSE_FILES = COPYING
- 
-+# 0001-lib-remove-.eo.h-files-from-includesub_HEADERS.patch
-+ELEMENTARY_AUTORECONF = YES
-+ELEMENTARY_GETTEXTIZE = YES
-+
- ELEMENTARY_INSTALL_STAGING = YES
- 
- ELEMENTARY_DEPENDENCIES = host-pkgconf host-efl host-elementary efl
+> I could instead change my br2-external package to download the
+> Xilinx-patched QEMU using the git:// scheme instead of grabbing the tarball
+> via $(call github ...).  Then it would grab the Git submodule reference and
+> I could fetch it by customizing EXTRACT_CMDS.  Either approach is equally
+> fine with me.
+
+Note that we now have support for git-submodules since f109e7e
+(support/download/git: add support for submodules) and documented in the
+manual (nightly version):
+
+    http://nightly.buildroot.org/
+
+    LIBFOO_GIT_SUBMODULES, when LIBFOO_SITE_METHOD=git, will create an
+    archive with the git submodules in the repository. Note that we try
+    not to use such git submodules when they contain bundled libraries,
+    in which case we prefer to use those libraries from their own package.
+
+Regards,
+Yann E. MORIN.
+
+> Cheers,
+> David
+> 
+> 
+> -----Original Message-----
+> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
+> Sent: Monday, July 25, 2016 4:02 PM
+> To: David Raeman <draeman@bbn.com>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH 2/2] host-dtc: Install libftd and associated
+> header files.
+> 
+> Hello,
+> 
+> On Mon, 25 Jul 2016 15:52:27 -0400, David Raeman wrote:
+> > The dtc package currently does not install libfdt for the host install.
+> > It can be useful to have libfdt on the host, such as for building QEMU 
+> > with the --enable-fdt configure switch.
+> > 
+> > Signed-off-by: David Raeman <draeman@bbn.com>
+> 
+> We already have the support for --enable-fdt for the host qemu:
+> 
+> ifeq ($(BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE),y)
+> HOST_QEMU_TARGETS += $(HOST_QEMU_ARCH)-softmmu HOST_QEMU_OPTS +=
+> --enable-system --enable-fdt HOST_QEMU_DEPENDENCIES += host-dtc else
+> HOST_QEMU_OPTS += --disable-system endif
+> 
+> Do you mean that it doesn't work?
+> 
+> Thanks,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering http://free-electrons.com
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.5.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
