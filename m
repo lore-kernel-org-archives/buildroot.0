@@ -1,84 +1,91 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 25 Jul 2016 19:24:47 +0200
-Subject: [Buildroot] bfin c++ problem
-In-Reply-To: <20160721164721.GU22524@waldemar-brodkorb.de>
-References: <20160721000402.GR22524@waldemar-brodkorb.de>
- <20160721030504.GN4023@csltok.swansea.ac.uk>
- <CAH6eHdRNcLv9iT8dKN_zneVp2=P=yakUH=p8wq5dz5q2gNL-xQ@mail.gmail.com>
- <20160721111244.GO4023@csltok.swansea.ac.uk>
- <CAH6eHdT-H+4qUe3uU268uG8O_7KQLoOZchtsW3AdFAVaeuN6cg@mail.gmail.com>
- <20160721121643.GP4023@csltok.swansea.ac.uk>
- <20160721164721.GU22524@waldemar-brodkorb.de>
-Message-ID: <20160725172447.GB22524@waldemar-brodkorb.de>
+From: daggs <daggs@gmx.com>
+Date: Mon, 25 Jul 2016 19:55:33 +0200
+Subject: [Buildroot] [PATCH 1/3 v4] odroid-scripts: New Package.
+In-Reply-To: <20160724221455.144fc50d@free-electrons.com>
+References: <20160724163506.20024-1-daggs@gmx.com>,
+ <20160724221455.144fc50d@free-electrons.com>
+Message-ID: <trinity-e4c6f188-35cc-4f82-8463-4dd747d2ddbc-1469469333153@3capp-mailcom-bs03>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Waldemar Brodkorb wrote,
+Greetings,
 
-> Hi Oliver,
-> Oliver Kullmann wrote,
+> Hello,
 > 
-> > On Thu, Jul 21, 2016 at 12:40:43PM +0100, Jonathan Wakely wrote:
-> > > On 21 July 2016 at 12:12, Oliver Kullmann wrote:
-> > > > On Thu, Jul 21, 2016 at 11:26:42AM +0100, Jonathan Wakely wrote:
-> > > >> On 21 July 2016 at 04:05, Oliver Kullmann wrote:
-> > > >> > Hello,
-> > > >> >
-> > > >> > a C++ compiler is not required to recognise "main(void)":
-> > > >>
-> > > >> That's incorrect.
+> On Sun, 24 Jul 2016 19:35:04 +0300, Dagg Stompler wrote:
+> > Signed-off-by: Dagg Stompler <daggs@gmx.com>
 > 
-> Thanks for any advice about correct usage of C++, but I am afraid
-> it does not help in any way to fix my original problem.
-> Please open up a new thread to discuss this. Thanks.
+> Thanks, I've applied with a few minor changes, see below.
 > 
-> Anyway, even a simple C application does compile with gcc, but not
-> with g++:
+> > diff --git a/package/Config.in b/package/Config.in
+> > index 72c0be3..4529371 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -1690,6 +1690,7 @@ menu "System tools"
+> >  	source "package/ncdu/Config.in"
+> >  	source "package/numactl/Config.in"
+> >  	source "package/nut/Config.in"
+> > +	source "package/odroid-scripts/Config.in"
 > 
-> ./output/host/usr/bin/bfin-buildroot-linux-uclibc-g++ -o t test.c
-> /home/wbx/buildroot/output/host/usr/lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld:
-> t: hidden symbol `___gtdf2' in
-> /home/wbx/buildroot/output/host/usr/lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/libgcc.a(_gt_df.o)
-> is referenced by DSO
-> /home/wbx/buildroot/output/host/usr/lib/gcc/bfin-buildroot-linux-uclibc/6.1.0/../../../../bfin-buildroot-linux-uclibc/bin/ld:
-> final link failed: Bad value
-> collect2: error: ld returned 1 exit status
-> $ cat test.c
-> int main() {
->  return(0);
-> }
-> 
-> $ ./output/host/usr/bin/bfin-buildroot-linux-uclibc-gcc -o t test.c
-> $ file t
-> t: ELF 32-bit LSB executable, Analog Devices Blackfin, version 1
-> (SYSV), dynamically linked (uses shared libs), not stripped
-> $ 
-> 
-> Any advice? Why does the hidden symbols in libgcc.a from the
-> first-stage gcc, doesn't make it into libstdc++ shared library?
-> 
-> Buildroot first compiles gcc with --disable-shared and have then a
-> libgcc.a. Afterwards the C library (uClibc-ng) is build. In the next
-> step a full --enable-shared gcc including libstdc++ is build.
-> This one is then somehow mislinked and then g++ can not compile 
-> a simple application.
-> 
-> It must be some architecture specific problem, because we are not
-> seeing this kind of issues on any other architecture at the moment.
+> I've moved to "Hardware handling" instead of "System tools".
 
-I think this might be solved by using a linker script for
-libgcc_so.so as described here:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=40134
+it was placed originally in Hardware handling, not sure how it ended up at System tools.
 
-But now I am fighting again with:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68468
+> 
+> > diff --git a/package/odroid-scripts/odroid-scripts.mk b/package/odroid-scripts/odroid-scripts.mk
+> > new file mode 100644
+> > index 0000000..34a4501
+> > --- /dev/null
+> > +++ b/package/odroid-scripts/odroid-scripts.mk
+> > @@ -0,0 +1,32 @@
+> > +################################################################################
+> > +#
+> > +# odroid-scripts
+> > +#
+> > +################################################################################
+> > +
+> > +ODROID_SCRIPTS_VERSION = a252de04562dcf8d8a4918a544b45a9e3d46d2fb
+> > +ODROID_SCRIPTS_SITE = $(call github,mdrjr,c2_bootini,$(ODROID_SCRIPTS_VERSION))
+> > +ODROID_SCRIPTS_LICENSE = unclear
+> > +
+> > +ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+> > +	define ODROID_SCRIPTS_INSTALL_UDEV_RULES
+> 
+> We typically do not indent such lines.
+> 
+> > +		$(INSTALL) -D -m 0644 $(@D)/10-odroid.rules $(TARGET_DIR)/etc/udev/rules.d/10-odroid.rules
+> 
+> I've split this line.
+> 
+> > +	endef
+> > +endif
+> > +
+> > +define ODROID_SCRIPTS_INSTALL_TARGET_CMDS
+> > +	$(INSTALL) -D -m 0755 $(@D)/c2_init.sh $(TARGET_DIR)/usr/sbin/odroidc2_init_fb.sh
+> > +	$(ODROID_SCRIPTS_INSTALL_UDEV_RULES)
+> > +endef
+> > +
+> > +define ODROID_SCRIPTS_INSTALL_INIT_SYSTEMD
+> > +	$(INSTALL) -D -m 0644 $(@D)/amlogic.service $(TARGET_DIR)/usr/lib/systemd/system/odroidc2_fb.service
+> > +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> > +	ln -fs ../../../../usr/lib/systemd/system/odroidc2_fb.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/odroidc2_fb.service
+> 
+> Those long lines as well.
+> 
+> > +endef
+> > +
+> > +define ODROID_SCRIPTS_INSTALL_INIT_SYSV
+> > +	$(INSTALL) -D -m 0755 package/odroid-scripts/S50odroidc2_fb $(TARGET_DIR)/etc/init.d/S50odroidc2_fb
+> 
+> And this one as well.
+> 
+> Thanks!
+> 
+> Thomas
 
-How can the libgcc dwarf or sjlj execptions needed for C++ can be
-compiled for FDPIC toolchains?
+ok, thanks for the help.
 
-best regards
- Waldemar
+Dagg.
