@@ -1,37 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jul 2016 20:22:51 +0200
-Subject: [Buildroot] [PATCH] odroid-scripts: select fbset if selected.
-In-Reply-To: <20160725180120.24643-1-daggs@gmx.com>
-References: <20160725180120.24643-1-daggs@gmx.com>
-Message-ID: <20160725202251.769be926@free-electrons.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Mon, 25 Jul 2016 15:35:18 -0300
+Subject: [Buildroot] [PATCH] docs/manual: use TARGET_CONFIGURE_OPTS in
+	generic-package tutorial
+Message-ID: <1469471718-26700-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+TARGET_CONFIGURE_OPTS is preferred over manually using CC and LD.
 
-On Mon, 25 Jul 2016 21:01:20 +0300, Dagg Stompler wrote:
-> Signed-off-by: Dagg Stompler <daggs@gmx.com>
-> ---
->  package/odroid-scripts/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/odroid-scripts/Config.in b/package/odroid-scripts/Config.in
-> index 48544b6..975b4fd 100644
-> --- a/package/odroid-scripts/Config.in
-> +++ b/package/odroid-scripts/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_ODROID_SCRIPTS
->  	bool "odroid-scripts"
->  	depends on BR2_aarch64 || BR2_arm
-> +	select BR2_PACKAGE_FBSET
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ docs/manual/adding-packages-generic.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But then you miss the select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS.
-
-Thomas
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index f18465b85107..ef895ec91717 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -29,7 +29,7 @@ system is based on hand-written Makefiles or shell scripts.
+ 14: LIBFOO_DEPENDENCIES = host-libaaa libbbb
+ 15:
+ 16: define LIBFOO_BUILD_CMDS
+-17:	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
++17:	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+ 18: endef
+ 19:
+ 20: define LIBFOO_INSTALL_STAGING_CMDS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
