@@ -1,62 +1,200 @@
 From: Romain Perier <romain.perier@free-electrons.com>
-Date: Tue, 26 Jul 2016 10:21:24 +0200
-Subject: [Buildroot] [PATCH v3 0/6] Add support for AMD Catalyst graphics
-	driver
-Message-ID: <1469521290-20446-1-git-send-email-romain.perier@free-electrons.com>
+Date: Tue, 26 Jul 2016 10:21:25 +0200
+Subject: [Buildroot] [PATCH v3 1/6] support/download: Add support to pass
+	options directly to downloaders
+In-Reply-To: <1469521290-20446-1-git-send-email-romain.perier@free-electrons.com>
+References: <1469521290-20446-1-git-send-email-romain.perier@free-electrons.com>
+Message-ID: <1469521290-20446-2-git-send-email-romain.perier@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The AMD Catalyst Proprietary Linux Graphics Driver 15.9 supports GPUs
-AMD Radeon HD 5xxx and newer graphics. It requires at least glibc 2.2
-or 2.3 and is compatible up to Xorg 1.17. This serie adds the required
-changes to support this driver.
+This adds support to pass options to the underlying command that is used
+by downloader. Useful for retrieving data with server-side checking for
+user login or passwords, use a proxy or use specific options for cloning
+a repository via git and hg.
 
-The fglrx kernel module is compatible up to Linux kernel 4.4 LTS.
-All the graphical stack has been tested on a x86_64 system with an
-AMD-GT40N (w/ Radeon HD 6290 GPU).
+Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+---
 
-Romain Perier (6):
-  support/download: Add support for the referer option to wget
-  pkg-download: Allow packages to pass an URL referer to the wget method
-  docs/manual: Document the variable $(PKG)_DL_REFERER
-  package/xserver_xorg-server: add version 1.17.4
-  qt: Add option for enabling the accessibility support
-  package/amd-catalyst-driver: Add AMD proprietary graphic stack support
+Changes in v3:
+ - Don't use the variable ${dl_opts} to catch extra arguments
+ - We prefer to use shift and "${@}", it does not introduce
+   empty string when there are no extra parameters.
 
- docs/manual/adding-packages-generic.txt            |  75 +++++----
- package/Config.in                                  |   1 +
- .../0001-Add-support-for-Linux-4.0.patch           |  45 ++++++
- .../0002-Add-support-for-Linux-4.1.patch           |  31 ++++
- .../0003-Add-support-for-Linux-4.2.patch           | 121 ++++++++++++++
- ...0004-Use-fpregs_active-instead-of-has_fpu.patch |  33 ++++
- ...-Use-a-local-copy-of-copy_xregs_to_kernel.patch |  79 ++++++++++
- .../0006-Add-support-for-Linux-4.4.patch           |  78 +++++++++
- package/amd-catalyst-driver/20-fglrx.conf          |   4 +
- package/amd-catalyst-driver/Config.in              |  89 +++++++++++
- .../amd-catalyst-driver/amd-catalyst-driver.hash   |   2 +
- package/amd-catalyst-driver/amd-catalyst-driver.mk | 175 +++++++++++++++++++++
- package/amd-catalyst-driver/gl.pc                  |  12 ++
- package/pkg-download.mk                            |   3 +-
- package/qt/Config.in                               |   5 +
- package/qt/qt.mk                                   |   7 +-
- package/x11r7/xserver_xorg-server/Config.in        |  10 ++
- .../xserver_xorg-server/xserver_xorg-server.hash   |   2 +
- support/download/wget                              |  10 +-
- 19 files changed, 744 insertions(+), 38 deletions(-)
- create mode 100644 package/amd-catalyst-driver/0001-Add-support-for-Linux-4.0.patch
- create mode 100644 package/amd-catalyst-driver/0002-Add-support-for-Linux-4.1.patch
- create mode 100644 package/amd-catalyst-driver/0003-Add-support-for-Linux-4.2.patch
- create mode 100644 package/amd-catalyst-driver/0004-Use-fpregs_active-instead-of-has_fpu.patch
- create mode 100644 package/amd-catalyst-driver/0005-Use-a-local-copy-of-copy_xregs_to_kernel.patch
- create mode 100644 package/amd-catalyst-driver/0006-Add-support-for-Linux-4.4.patch
- create mode 100644 package/amd-catalyst-driver/20-fglrx.conf
- create mode 100644 package/amd-catalyst-driver/Config.in
- create mode 100644 package/amd-catalyst-driver/amd-catalyst-driver.hash
- create mode 100644 package/amd-catalyst-driver/amd-catalyst-driver.mk
- create mode 100644 package/amd-catalyst-driver/gl.pc
+Changes in v2:
+ - Replaced the variable $(PKG)_DL_REFERER by $(PKG)_DL_OPTS
+ - Add modification to all downloaders
 
+ support/download/bzr  | 4 +++-
+ support/download/cp   | 4 +++-
+ support/download/cvs  | 4 +++-
+ support/download/git  | 4 +++-
+ support/download/hg   | 4 +++-
+ support/download/scp  | 4 +++-
+ support/download/svn  | 4 +++-
+ support/download/wget | 4 +++-
+ 8 files changed, 24 insertions(+), 8 deletions(-)
+
+diff --git a/support/download/bzr b/support/download/bzr
+index e18b01f..75b7b41 100755
+--- a/support/download/bzr
++++ b/support/download/bzr
+@@ -26,6 +26,8 @@ repo="${2}"
+ rev="${3}"
+ basename="${4}"
+ 
++shift 4 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _bzr() {
+@@ -49,5 +51,5 @@ if [ ${bzr_version} -ge ${bzr_min_version} ]; then
+ fi
+ 
+ _bzr export ${verbose} --root="'${basename}/'" --format=tgz \
+-    ${timestamp_opt} - "'${repo}'" -r "'${rev}'" \
++    ${timestamp_opt} - "${@}" "'${repo}'" -r "'${rev}'" \
+     >"${output}"
+diff --git a/support/download/cp b/support/download/cp
+index 09ce3d1..0ee1f3b 100755
+--- a/support/download/cp
++++ b/support/download/cp
+@@ -28,10 +28,12 @@ shift $((OPTIND-1))
+ output="${1}"
+ source="${2}"
+ 
++shift 2 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _localfiles() {
+     eval ${LOCALFILES} "${@}"
+ }
+ 
+-_localfiles ${verbose} "'${source}'" "'${output}'"
++_localfiles ${verbose} "${@}""'${source}'" "'${output}'"
+diff --git a/support/download/cvs b/support/download/cvs
+index 7980389..50050ab 100755
+--- a/support/download/cvs
++++ b/support/download/cvs
+@@ -26,6 +26,8 @@ rev="${3}"
+ rawname="${4}"
+ basename="${5}"
+ 
++shift 5 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _cvs() {
+@@ -48,6 +50,6 @@ fi
+ 
+ export TZ=UTC
+ _cvs ${verbose} -z3 -d"'${repo}'" \
+-     co -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
++     co "${@}" -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
+ 
+ tar czf "${output}" "${basename}"
+diff --git a/support/download/git b/support/download/git
+index 314b388..686c26f 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -25,6 +25,8 @@ repo="${2}"
+ cset="${3}"
+ basename="${4}"
+ 
++shift 4 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _git() {
+@@ -49,7 +51,7 @@ if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
+ fi
+ if [ ${git_done} -eq 0 ]; then
+     printf "Doing full clone\n"
+-    _git clone ${verbose} --mirror "'${repo}'" "'${basename}'"
++    _git clone ${verbose} "${@}" --mirror "'${repo}'" "'${basename}'"
+ fi
+ 
+ GIT_DIR="${basename}" \
+diff --git a/support/download/hg b/support/download/hg
+index 25cb4e9..3af0169 100755
+--- a/support/download/hg
++++ b/support/download/hg
+@@ -25,13 +25,15 @@ repo="${2}"
+ cset="${3}"
+ basename="${4}"
+ 
++shift 4 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _hg() {
+     eval ${HG} "${@}"
+ }
+ 
+-_hg clone ${verbose} --noupdate "'${repo}'" "'${basename}'"
++_hg clone ${verbose} "${@}" --noupdate "'${repo}'" "'${basename}'"
+ 
+ _hg archive ${verbose} --repository "'${basename}'" --type tgz \
+             --prefix "'${basename}'" --rev "'${cset}'" \
+diff --git a/support/download/scp b/support/download/scp
+index 95cf502..825fd41 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -23,10 +23,12 @@ shift $((OPTIND-1))
+ output="${1}"
+ url="${2}"
+ 
++shift 2 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _scp() {
+     eval ${SCP} "${@}"
+ }
+ 
+-_scp ${verbose} "'${url}'" "'${output}'"
++_scp ${verbose} "${@}" "'${url}'" "'${output}'"
+diff --git a/support/download/svn b/support/download/svn
+index 4dcdd06..77abf3d 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -25,12 +25,14 @@ repo="${2}"
+ rev="${3}"
+ basename="${4}"
+ 
++shift 4 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _svn() {
+     eval ${SVN} "${@}"
+ }
+ 
+-_svn export ${verbose} "'${repo}@${rev}'" "'${basename}'"
++_svn export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
+ 
+ tar czf "${output}" "${basename}"
+diff --git a/support/download/wget b/support/download/wget
+index 0fc7ffa..768de90 100755
+--- a/support/download/wget
++++ b/support/download/wget
+@@ -23,10 +23,12 @@ shift $((OPTIND-1))
+ output="${1}"
+ url="${2}"
+ 
++shift 2 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _wget() {
+     eval ${WGET} "${@}"
+ }
+ 
+-_wget ${verbose} -O "'${output}'" "'${url}'"
++_wget ${verbose} "${@}" -O "'${output}'" "'${url}'"
 -- 
 2.8.1
