@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jul 2016 21:31:15 +0200
-Subject: [Buildroot] [git commit] gssdp: bump to version 0.14.16
-Message-ID: <20160726193210.144C482119@busybox.osuosl.org>
+Date: Tue, 26 Jul 2016 21:30:52 +0200
+Subject: [Buildroot] [git commit] libmbim: bump to version 1.14.0
+Message-ID: <20160726193209.E762A82119@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ee00d53d7b88a4ee2c68ebfb4d7449b89d62251
+commit: https://git.buildroot.net/buildroot/commit/?id=b100839e4ee01ce95fc5acd4bbad27285d6ba469
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gssdp/gssdp.hash | 4 ++--
- package/gssdp/gssdp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libmbim/libmbim.hash | 2 +-
+ package/libmbim/libmbim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
-index fe7d981..485c03f 100644
---- a/package/gssdp/gssdp.hash
-+++ b/package/gssdp/gssdp.hash
+diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
+index 2c10b4f..21921c9 100644
+--- a/package/libmbim/libmbim.hash
++++ b/package/libmbim/libmbim.hash
 @@ -1,2 +1,2 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/0.14/gssdp-0.14.14.sha256sum:
--sha256	685718755b5b8d24aaeadda44047e515443784712891fc53879ab9a4865b48d6	gssdp-0.14.14.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/0.14/gssdp-0.14.16.sha256sum:
-+sha256	54520bfb230b9c8c938eba88d87df44e04749682c95fb8aa381d13441345c5b2	gssdp-0.14.16.tar.xz
-diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
-index 6ba1252..59f633f 100644
---- a/package/gssdp/gssdp.mk
-+++ b/package/gssdp/gssdp.mk
-@@ -5,7 +5,7 @@
+ # Locally computed:
+-sha256  7bd9af154e88ee1cccaf2fedd05e0f5cb82e3359ab6ad2a75cfec98bf57f973a  libmbim-1.12.4.tar.xz
++sha256  ca8d52a95a18cbabae8f15f83f1572316e888b6504f946e6645d24405127ab5b  libmbim-1.14.0.tar.xz
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index 746596e..0f757c0 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GSSDP_VERSION_MAJOR = 0.14
--GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).14
-+GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).16
- GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
- GSSDP_SITE = http://ftp.gnome.org/pub/gnome/sources/gssdp/$(GSSDP_VERSION_MAJOR)
- GSSDP_LICENSE = LGPLv2+
+-LIBMBIM_VERSION = 1.12.4
++LIBMBIM_VERSION = 1.14.0
+ LIBMBIM_SITE = http://www.freedesktop.org/software/libmbim
+ LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
+ LIBMBIM_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
