@@ -1,82 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jul 2016 17:59:11 +0200
-Subject: [Buildroot] [git commit] package/pdbg: new package
-Message-ID: <20160726192858.7EDE48211F@busybox.osuosl.org>
+Date: Tue, 26 Jul 2016 21:30:21 +0200
+Subject: [Buildroot] [PATCH v3] package/pdbg: new package
+In-Reply-To: <1469518104-19678-1-git-send-email-joel@jms.id.au>
+References: <1469429593-28546-1-git-send-email-joel@jms.id.au>
+ <1469518104-19678-1-git-send-email-joel@jms.id.au>
+Message-ID: <20160726213021.0b7a7538@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=100058c3cec208df6afecd440852e98b479c57dc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-PowerPC FSI Debugger, for low level debugging of a Power8 CPU over FSI.
+On Tue, 26 Jul 2016 16:58:24 +0930, Joel Stanley wrote:
+> PowerPC FSI Debugger, for low level debugging of a Power8 CPU over FSI.
+> 
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> ---
+> v3:
+>  - do not restrict to ARM, as it builds on all CPU architectures
+>  - metion where you might want to run pdbg in the help text
+> 
+> v2:
+>  - Fix whitespace in pdbg.mk
+>   - Add URL to help text
+> 
+>  package/pdbg/Config.in | 10 ++++++++++
+>  package/pdbg/pdbg.mk   | 13 +++++++++++++
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-[Thomas:
- - add to package/Config.in
- - add hash file]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in      |  1 +
- package/pdbg/Config.in | 10 ++++++++++
- package/pdbg/pdbg.hash |  2 ++
- package/pdbg/pdbg.mk   | 13 +++++++++++++
- 4 files changed, 26 insertions(+)
+You forgot to add the package to package/Config.in, and to add a hash
+file. I've added both and applied. Thanks!
 
-diff --git a/package/Config.in b/package/Config.in
-index 8ceeb9e..ec45eaf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -426,6 +426,7 @@ endmenu
- 	source "package/owl-linux/Config.in"
- 	source "package/parted/Config.in"
- 	source "package/pciutils/Config.in"
-+	source "package/pdbg/Config.in"
- 	source "package/picocom/Config.in"
- 	source "package/pifmrds/Config.in"
- 	source "package/powertop/Config.in"
-diff --git a/package/pdbg/Config.in b/package/pdbg/Config.in
-new file mode 100644
-index 0000000..3e23c21
---- /dev/null
-+++ b/package/pdbg/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PDBG
-+	bool "pdbg"
-+	help
-+	  PowerPC FSI Debugger, for low level debugging of a IBM
-+	  Power8 CPU over FSI.
-+
-+	  pdbg runs on a BMC, which is generally an ARM-powered system
-+	  monitoring/controlling a host CPU.
-+
-+	  https://github.com/open-power/pdbg
-diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
-new file mode 100644
-index 0000000..16bf580
---- /dev/null
-+++ b/package/pdbg/pdbg.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 8edabb9ae98ce3b1892b768f2ee5e779a00476b63cdcc6f905e8464a0b7d96a3 pdbg-90a7370a11e727f1482dea6ff2bd6aec20c64805.tar.gz
-diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
-new file mode 100644
-index 0000000..9cc05cd
---- /dev/null
-+++ b/package/pdbg/pdbg.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# pdbg
-+#
-+################################################################################
-+
-+PDBG_VERSION = 90a7370a11e727f1482dea6ff2bd6aec20c64805
-+PDBG_SITE = $(call github,open-power,pdbg,$(PDBG_VERSION))
-+PDBG_LICENSE = Apache 2.0
-+PDBG_LICENSE_FILES = COPYING
-+PDBG_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
