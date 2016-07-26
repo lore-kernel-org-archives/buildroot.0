@@ -1,157 +1,103 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 26 Jul 2016 13:01:51 -0300
-Subject: [Buildroot] [PATCH v3] configs/warpboard: Generate an sdcard image
-Message-ID: <1469548911-23770-1-git-send-email-festevam@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 Jul 2016 18:11:51 +0200
+Subject: [Buildroot] [PATCH] package/qt5webkit: needs host-python
+In-Reply-To: <20160726095809.21008ed0@free-electrons.com>
+References: <1469486011-29173-1-git-send-email-yann.morin.1998@free.fr>
+ <20160726095809.21008ed0@free-electrons.com>
+Message-ID: <20160726161151.GA5925@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+Thomas, All,
 
-Generate an sdcard.img image to make it easier the deployment of a
-Buildroot image.
+On 2016-07-26 09:58 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 26 Jul 2016 00:33:31 +0200, Yann E. MORIN wrote:
+> > The Qt5Webkit build system hard-codes calls to 'python', but only really
+> > supports python2.
+> > 
+> > We fix that similarly as we did in nodejs, by adding a python->python2
+> > symlink early in the PATH when configuring/building Qt5Webkit, and
+> > adding host-python in the dependency list.
+> > 
+> > Fixes:
+> >     http://autobuild.buildroot.org/results/ea4/ea4dd00ee585f9f9ea1927b8b5fd9035e6733420/
+> >     http://autobuild.buildroot.org/results/323/323ba220fae70d94c81bab9a348be844e90ace91/
+> >     http://autobuild.buildroot.org/results/6c2/6c20c9e222f94e6b70b97b87e1393dd16da2718c/
+> > 
+> > Also slightly reorganise the dependency list, now that it no longer fits
+> > on a single line.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> I know the hack of creating a dummy "bin" directory, with a
+> python->python2 symlink is a trick already used by nodejs, but I don't
+> like it very much.
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
-Changes since v2:
-- Fix post-image.sh permission
-Changes since v1:
-- Adjust the prefix in the Subject
-- Adjust the README file to include the eMMC sdcard.img flashing procedure
-and the new files (rootfs.ext4 and sdcard.img)
+Neither do I, but see below...
 
- board/freescale/warpboard/README        | 14 +++++++----
- board/freescale/warpboard/genimage.cfg  | 41 +++++++++++++++++++++++++++++++++
- board/freescale/warpboard/post-image.sh | 16 +++++++++++++
- configs/warpboard_defconfig             | 10 ++++++++
- 4 files changed, 76 insertions(+), 5 deletions(-)
- create mode 100644 board/freescale/warpboard/genimage.cfg
- create mode 100755 board/freescale/warpboard/post-image.sh
+> Is "python" hardcoded is so many places in Qt5Webkit ?
 
-diff --git a/board/freescale/warpboard/README b/board/freescale/warpboard/README
-index 7e6bdc5..871d5cd 100644
---- a/board/freescale/warpboard/README
-+++ b/board/freescale/warpboard/README
-@@ -9,7 +9,9 @@ Build all components:
- 
- You will find in ./output/images/ the following files:
-   - imx6sl-warp.dtb
-+  - rootfs.ext4
-   - rootfs.tar
-+  - sdcard.img
-   - u-boot.imx
-   - zImage
- 
-@@ -42,14 +44,16 @@ Update uboot
- Update linux & rootfs
- =====================
- 
--Run the 'ums' command from the U-Boot prompt to mount the eMMC as mass
--storage and update zImage, device tree (imx6sl-warp.dtb) and rootfs
--file (rootfs.tar) :
-+Run the 'ums' command from the U-Boot prompt to mount the eMMC as USB mass
-+storage:
- 
- => ums 0 mmc 0
- 
--Put the zImage and DTB files in the warp-vfat partition and extract as
--root the rootfs.tar tarball in the warp-rootfs partition.
-+And then flash the sdcard.img into the eMMC:
-+
-+  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
-+
-+*** WARNING! This will destroy all the eMMC content. Use it with care! ***
- 
- Using bluetooth
- ================
-diff --git a/board/freescale/warpboard/genimage.cfg b/board/freescale/warpboard/genimage.cfg
-new file mode 100644
-index 0000000..a22aa2a
---- /dev/null
-+++ b/board/freescale/warpboard/genimage.cfg
-@@ -0,0 +1,41 @@
-+# Minimal SD card image for the Warp board
-+#
-+# We mimic the .sdcard Freescale's image format for i.MX6SL:
-+# * the microSD card must have 1 kB free space at the beginning,
-+# * U-Boot is dumped as is,
-+# * a FAT partition at offset 8 MB is containing zImage and dtbs,
-+# * a single root filesystem partition is required (Ext4 in this case).
-+#
-+
-+image boot.vfat {
-+  vfat {
-+    files = {
-+      "imx6sl-warp.dtb",
-+      "zImage"
-+    }
-+  }
-+  size = 16M
-+}
-+
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition u-boot {
-+    in-partition-table = "no"
-+    image = "u-boot.imx"
-+    offset = 1024
-+  }
-+
-+  partition boot {
-+    partition-type = 0xC
-+    bootable = "true"
-+    image = "boot.vfat"
-+    offset = 8M
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext4"
-+  }
-+}
-diff --git a/board/freescale/warpboard/post-image.sh b/board/freescale/warpboard/post-image.sh
-new file mode 100755
-index 0000000..8757355
---- /dev/null
-+++ b/board/freescale/warpboard/post-image.sh
-@@ -0,0 +1,16 @@
-+#!/usr/bin/env bash
-+
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage \
-+  --rootpath "${TARGET_DIR}" \
-+  --tmppath "${GENIMAGE_TMP}" \
-+  --inputpath "${BINARIES_DIR}" \
-+  --outputpath "${BINARIES_DIR}" \
-+  --config "${GENIMAGE_CFG}"
-+
-+exit $?
-diff --git a/configs/warpboard_defconfig b/configs/warpboard_defconfig
-index 8dfe52e..562dc33 100644
---- a/configs/warpboard_defconfig
-+++ b/configs/warpboard_defconfig
-@@ -37,3 +37,13 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
- # host utility
- BR2_PACKAGE_HOST_DFU_UTIL=y
- BR2_PACKAGE_HOST_IMX_USB_LOADER=y
-+
-+# Filesystem
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/warpboard/post-image.sh"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# required tools to create the eMMC image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+    $ grep -r -E '(^|[[:space:]])python([[:space:]]|$)' |grep -v ChangeLog |wc -l
+    153
+
+A lot of them are just doc or such, but there are still a lot of places
+that are indeed calls to the python interpreter:
+
+    Tools/gtk/jhbuildrc:#!/usr/bin/env python
+    Tools/gtk/common.py:#!/usr/bin/env python
+    Tools/gtk/generate-gtkdoc:#!/usr/bin/env python
+    Tools/gtk/generate-feature-defines-files:#!/usr/bin/env python
+    Tools/CygwinDownloader/cygwin-downloader.py:#!/usr/bin/env python
+    Tools/efl/jhbuildrc:#!/usr/bin/env python
+    Tools/efl/common.py:#!/usr/bin/env python
+    Tools/BuildSlaveSupport/build.webkit.org-config/committer_auth_unittest.py:#!/usr/bin/env python
+    Tools/BuildSlaveSupport/wait-for-SVN-server.py:#!/usr/bin/env python
+    Tools/jhbuild/jhbuild-wrapper:#!/usr/bin/env python
+    Tools/QueueStatusServer/app.yaml:runtime: python
+    Tools/Scripts/new-run-webkit-tests:#!/usr/bin/env python
+    Tools/Scripts/validate-committer-lists:#!/usr/bin/env python
+    Tools/Scripts/run-qtwebkit-tests:#!/usr/bin/env python
+    Tools/Scripts/lint-webkitpy:#!/usr/bin/env python
+    Tools/Scripts/generate-win32-export-forwards:#!/usr/bin/env python
+    Tools/Scripts/import-w3c-tests:#!/usr/bin/env python
+    Tools/Scripts/webkitpy/layout_tests/views/buildbot_results.py:#!/usr/bin/env python
+    Tools/Scripts/webkitpy/layout_tests/views/buildbot_results_unittest.py:#!/usr/bin/env python
+    [...]
+    Source/WebCore/DerivedSources.make:     python $(WebCore)/html/parser/create-html-entity-table -o HTMLEntityTable.cpp $(WebCore)/html/parser/HTMLEntityNames.in
+    Source/WebCore/DerivedSources.make:     python $(WebCore)/inspector/generate-inspector-protocol-version -o InspectorProtocolVersion.h $(WebCore)/inspector/Inspector.json
+    Source/WebCore/DerivedSources.make:     python $(WebCore)/inspector/CodeGeneratorInspector.py $(WebCore)/inspector/Inspector.json --output_h_dir . --output_cpp_dir .
+    Source/WebCore/html/parser/create-html-entity-table:#!/usr/bin/env python
+    Source/JavaScriptCore/DerivedSources.pri:retgen.commands = python $$retgen.script > ${QMAKE_FILE_OUT}
+    Source/JavaScriptCore/DerivedSources.pri:klgen.commands = python $$klgen.script ${QMAKE_FILE_NAME} > ${QMAKE_FILE_OUT}
+    Source/JavaScriptCore/DerivedSources.pri:    disassembler.commands = python $$disassembler.script ${QMAKE_FILE_NAME} --outputDir ${QMAKE_FUNC_FILE_OUT_PATH}
+    Source/JavaScriptCore/DerivedSources.make:      python $^ > $@
+    Source/JavaScriptCore/DerivedSources.make:      python $^ > $@
+    Source/JavaScriptCore/DerivedSources.make:      (PYTHONPATH=$(JavaScriptCore)/disassembler/udis86 python $(JavaScriptCore)/disassembler/udis86/itab.py $(JavaScriptCore)/disassembler/udis86/optable.xml || exit 1)
+    [...]
+
+So, I'm not gonna patch it either...
+
+> If not, what
+> about patching it instead, and submitting the patch upstream (though
+> I'm not sure qtwebkit is still maintained, since they moved to
+> qtwebengine I believe).
+
+Yes, upstream is not maintaining it anymore, but it's still being
+maintained by "the community", and they are now even compatible with
+Qt-5.7.
+
+See also the commit log of e8dbdbd (qt5webkit: restore package). ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
