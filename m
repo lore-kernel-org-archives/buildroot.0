@@ -1,35 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jul 2016 17:19:05 +0200
-Subject: [Buildroot] [PATCH] ipkg: needs MMU
-In-Reply-To: <20160726150854.GB3588@tarshish>
-References: <b8ef63602bd75ed7fe6b8d87d48e5d36680f3c91.1469505637.git.baruch@tkos.co.il>
- <20160726095929.63583d2e@free-electrons.com>
- <20160726100101.208d0299@free-electrons.com>
- <20160726111557.GY3588@tarshish>
- <20160726134801.1d2eb91b@free-electrons.com>
- <20160726121429.GA3588@tarshish>
- <20160726145248.5dc5a39a@free-electrons.com>
- <20160726150854.GB3588@tarshish>
-Message-ID: <20160726171905.486bd4bd@free-electrons.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 26 Jul 2016 17:34:59 +0200
+Subject: [Buildroot] [PATCH 1/1] gssdp: bump to version 0.14.16
+Message-ID: <1469547299-18573-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+ package/gssdp/gssdp.hash | 4 ++--
+ package/gssdp/gssdp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Tue, 26 Jul 2016 18:08:54 +0300, Baruch Siach wrote:
-
-> I verified that config.h macros are defined in libbb.h before posting the last 
-> patch, by using another defined macros. I repeated this test as you suggested, 
-> with HAVE_FORK and the current br-arm-full.config, just to be sure. The #error 
-> triggers as expected in both tests.
-
-Excellent, thanks!
-
-Thomas
+diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
+index fe7d981..485c03f 100644
+--- a/package/gssdp/gssdp.hash
++++ b/package/gssdp/gssdp.hash
+@@ -1,2 +1,2 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/0.14/gssdp-0.14.14.sha256sum:
+-sha256	685718755b5b8d24aaeadda44047e515443784712891fc53879ab9a4865b48d6	gssdp-0.14.14.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/0.14/gssdp-0.14.16.sha256sum:
++sha256	54520bfb230b9c8c938eba88d87df44e04749682c95fb8aa381d13441345c5b2	gssdp-0.14.16.tar.xz
+diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
+index 6ba1252..59f633f 100644
+--- a/package/gssdp/gssdp.mk
++++ b/package/gssdp/gssdp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GSSDP_VERSION_MAJOR = 0.14
+-GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).14
++GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).16
+ GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
+ GSSDP_SITE = http://ftp.gnome.org/pub/gnome/sources/gssdp/$(GSSDP_VERSION_MAJOR)
+ GSSDP_LICENSE = LGPLv2+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
