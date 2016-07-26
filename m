@@ -1,72 +1,105 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Jul 2016 18:29:26 +0200
-Subject: [Buildroot] [PATCH v3 3/6] docs/manual: Document the variable
- $(PKG)_DL_OPTS
-In-Reply-To: <1469521290-20446-4-git-send-email-romain.perier@free-electrons.com>
-References: <1469521290-20446-1-git-send-email-romain.perier@free-electrons.com>
- <1469521290-20446-4-git-send-email-romain.perier@free-electrons.com>
-Message-ID: <20160726162926.GD5925@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 26 Jul 2016 18:40:09 +0200
+Subject: [Buildroot] [PATCH 1/1] gupnp-dlna: new package
+Message-ID: <1469551209-28213-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+GUPnP DLNA is a small utility library that aims to ease the
+DLNA-related tasks such as media profile guessing, transcoding
+to a given profile, etc.
 
-On 2016-07-26 10:21 +0200, Romain Perier spake thusly:
-> This adds a description of the optional variable $(PKG)_DL_OPTS. When it
-> is set, this option passes additional options to the downloader.
-> 
-> Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+http://www.gupnp.org/
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+ package/Config.in                  |  1 +
+ package/gupnp-dlna/Config.in       | 18 ++++++++++++++++++
+ package/gupnp-dlna/gupnp-dlna.hash |  2 ++
+ package/gupnp-dlna/gupnp-dlna.mk   | 26 ++++++++++++++++++++++++++
+ 4 files changed, 47 insertions(+)
+ create mode 100644 package/gupnp-dlna/Config.in
+ create mode 100644 package/gupnp-dlna/gupnp-dlna.hash
+ create mode 100644 package/gupnp-dlna/gupnp-dlna.mk
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> 
-> Changes in v3:
->  - Improve documentation
-> 
-> Changes in v2:
->  - Don't include the example in the snippet of code
->  - Replaced $(PKG)_DL_REFERER by $(PKG)_DL_OPTS
-> 
->  docs/manual/adding-packages-generic.txt | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-> index 8ed7fe8..ced5b30 100644
-> --- a/docs/manual/adding-packages-generic.txt
-> +++ b/docs/manual/adding-packages-generic.txt
-> @@ -250,6 +250,13 @@ information is (assuming the package name is +libfoo+) :
->      +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
->      +LIBFOO_SITE=$(TOPDIR)/../src/libfoo+
->  
-> +* +LIBFOO_DL_OPTS+ is a space-separated list of additional options to
-> +  pass to the downloader. Useful for retrieving documents with
-> +  server-side checking for user logins and passwords, or to use a proxy.
-> +  All download methods valid for +LIBFOO_SITE_METHOD+ are supported;
-> +  valid options depend on the download method (consult the man page
-> +  for the respective download utilities).
-> +
->  * +LIBFOO_EXTRA_DOWNLOADS+ is a space-separated list of additional
->    files that Buildroot should download. If an entry contains +://+
->    then Buildroot will assume it is a complete URL and will download
-> -- 
-> 2.8.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in b/package/Config.in
+index 3563870..ab9c42f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1162,6 +1162,7 @@ menu "Networking"
+ 	source "package/gssdp/Config.in"
+ 	source "package/gupnp/Config.in"
+ 	source "package/gupnp-av/Config.in"
++	source "package/gupnp-dlna/Config.in"
+ 	source "package/ibrcommon/Config.in"
+ 	source "package/ibrdtn/Config.in"
+ 	source "package/libcgi/Config.in"
+diff --git a/package/gupnp-dlna/Config.in b/package/gupnp-dlna/Config.in
+new file mode 100644
+index 0000000..f2a45b4
+--- /dev/null
++++ b/package/gupnp-dlna/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_GUPNP_DLNA
++	bool "gupnp-dlna"
++	depends on BR2_USE_WCHAR # glib2, gupnp
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, gupnp
++	depends on BR2_USE_MMU # glib2, gupnp
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_GUPNP
++	select BR2_PACKAGE_LIBXML2
++	help
++	  GUPnP DLNA is a small utility library that aims to ease the
++	  DLNA-related tasks such as media profile guessing, transcoding
++	  to a given profile, etc.
++
++	  http://www.gupnp.org/
++
++comment "gupnp-dlna needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gupnp-dlna/gupnp-dlna.hash b/package/gupnp-dlna/gupnp-dlna.hash
+new file mode 100644
+index 0000000..c28a06f
+--- /dev/null
++++ b/package/gupnp-dlna/gupnp-dlna.hash
+@@ -0,0 +1,2 @@
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-dlna/0.10/gupnp-dlna-0.10.5.sha256sum:
++sha256	123e368227c11d5c17fc1aa76cbdaffa345355eb51d172cd39fc74a5b468ff6a	gupnp-dlna-0.10.5.tar.xz
+diff --git a/package/gupnp-dlna/gupnp-dlna.mk b/package/gupnp-dlna/gupnp-dlna.mk
+new file mode 100644
+index 0000000..ac0e115
+--- /dev/null
++++ b/package/gupnp-dlna/gupnp-dlna.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# gupnp-dlna
++#
++################################################################################
++
++GUPNP_DLNA_VERSION_MAJOR = 0.10
++GUPNP_DLNA_VERSION = $(GUPNP_DLNA_VERSION_MAJOR).5
++GUPNP_DLNA_SOURCE = gupnp-dlna-$(GUPNP_DLNA_VERSION).tar.xz
++GUPNP_DLNA_SITE = \
++	http://ftp.gnome.org/pub/gnome/sources/gupnp-dlna/$(GUPNP_DLNA_VERSION_MAJOR)
++GUPNP_DLNA_LICENSE = LGPLv2+
++GUPNP_DLNA_LICENSE_FILES = COPYING
++GUPNP_DLNA_INSTALL_STAGING = YES
++GUPNP_DLNA_DEPENDENCIES = host-pkgconf libglib2 libxml2 gupnp
++
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
++GUPNP_DLNA_CONF_OPTS = --enable-legacy-gstreamer-metadata-backend
++GUPNP_DLNA_DEPENDENCIES += gstreamer gst-plugins-base
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
++GUPNP_DLNA_DEPENDENCIES += gstreamer1 gst1-plugins-base
++endif
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
