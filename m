@@ -1,54 +1,55 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 26 Jul 2016 14:08:20 +0300
-Subject: [Buildroot] [PATCH] ipkg: fix no MMU musl build
-Message-ID: <8aa4f13e1f931315ebfe037e16c7e5761c6f97eb.1469531300.git.baruch@tkos.co.il>
+Date: Tue, 26 Jul 2016 14:15:57 +0300
+Subject: [Buildroot] [PATCH] ipkg: needs MMU
+In-Reply-To: <20160726100101.208d0299@free-electrons.com>
+References: <b8ef63602bd75ed7fe6b8d87d48e5d36680f3c91.1469505637.git.baruch@tkos.co.il>
+ <20160726095929.63583d2e@free-electrons.com>
+ <20160726100101.208d0299@free-electrons.com>
+Message-ID: <20160726111557.GY3588@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Current code uses vfork() instead of fork() only when __UCLIBC__ is defined.
-This breaks musl MMU-less build. Add a patch making direct use of HAVE_FORK
-that configure defines when fork() is detected.
+Hi Thomas,
 
-Fixes:
-http://autobuild.buildroot.net/results/6cf/6cf75e08795d9ab194ce4e882c0f4858bad979c3/
-http://autobuild.buildroot.net/results/964/964d8f694bc7d05b35411eabfbadf40bbf6337ae/
-http://autobuild.buildroot.net/results/0f2/0f2cddf89af3ad4330556acd04ab6cb080370e24/
+On Tue, Jul 26, 2016 at 10:01:01AM +0200, Thomas Petazzoni wrote:
+> On Tue, 26 Jul 2016 09:59:29 +0200, Thomas Petazzoni wrote:
+> > I think this needs more investigation, because:
+> > 
+> > BR2_bfin=y
+> > BR2_TOOLCHAIN_EXTERNAL=y
+> > BR2_INIT_NONE=y
+> > # BR2_PACKAGE_BUSYBOX is not set
+> > BR2_PACKAGE_IPKG=y
+> > # BR2_TARGET_ROOTFS_TAR is not set
+> > 
+> > which is a noMMU configuration, is able to build ipkg just fine.
+> 
+> I was indeed a bit surprised to see this patch: we have been having
+> Blackfin configurations for a long time in the autobuilders, and we
+> never had to add a BR2_USE_MMU dependency on this package.
+> 
+> So I believe there's something a bit more subtle going on here.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/ipkg/0002-fix-musl-nommu.patch | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
- create mode 100644 package/ipkg/0002-fix-musl-nommu.patch
+Right. It's this code from libbb/libbb.h:
 
-diff --git a/package/ipkg/0002-fix-musl-nommu.patch b/package/ipkg/0002-fix-musl-nommu.patch
-new file mode 100644
-index 000000000000..4ef5474b98dc
---- /dev/null
-+++ b/package/ipkg/0002-fix-musl-nommu.patch
-@@ -0,0 +1,21 @@
-+libbb: fix no MMU build with musl libc
-+
-+musl libc does not define __UCLIBC__. Since configure detects the presence of
-+fork(), use HAVE_FORK directly.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: no active upstream
-+
-+diff -Nuar ipkg-0.99.163-orig/libbb/libbb.h ipkg-0.99.163/libbb/libbb.h
-+--- ipkg-0.99.163-orig/libbb/libbb.h	2006-02-06 10:13:02.000000000 +0200
-++++ ipkg-0.99.163/libbb/libbb.h	2016-07-26 13:50:09.296988855 +0300
-+@@ -341,7 +341,7 @@
-+ #define CONSOLE_DEV "/dev/console"
-+ 
-+ /* Cope with mmu-less systems somewhat gracefully */
-+-#if defined(__UCLIBC__) && !defined(__ARCH_HAS_MMU__)
-++#if !defined(HAVE_FORK)
-+ #define fork	vfork
-+ #endif
-+ 
+/* Cope with mmu-less systems somewhat gracefully */
+#if defined(__UCLIBC__) && !defined(__ARCH_HAS_MMU__)
+#define fork    vfork
+#endif
+
+This breaks musl that does not define __UCLIBC__. I posted an updated patch to 
+uses HAVE_FORK instead.
+
+Is there anyone actually using this package anyway? Even its homepage is not 
+accessible here (handhelds.org does not resolve).
+
+Thanks for reviewing,
+baruch
+
 -- 
-2.8.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
