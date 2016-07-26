@@ -1,48 +1,50 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 26 Jul 2016 16:47:43 +0200
-Subject: [Buildroot] [PATCH 3/3] modem-manager: bump to version 1.6.0
-In-Reply-To: <1469544463-19881-1-git-send-email-yegorslists@googlemail.com>
-References: <1469544463-19881-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1469544463-19881-3-git-send-email-yegorslists@googlemail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 26 Jul 2016 18:08:54 +0300
+Subject: [Buildroot] [PATCH] ipkg: needs MMU
+In-Reply-To: <20160726145248.5dc5a39a@free-electrons.com>
+References: <b8ef63602bd75ed7fe6b8d87d48e5d36680f3c91.1469505637.git.baruch@tkos.co.il>
+ <20160726095929.63583d2e@free-electrons.com>
+ <20160726100101.208d0299@free-electrons.com>
+ <20160726111557.GY3588@tarshish>
+ <20160726134801.1d2eb91b@free-electrons.com>
+ <20160726121429.GA3588@tarshish>
+ <20160726145248.5dc5a39a@free-electrons.com>
+Message-ID: <20160726150854.GB3588@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi Thomas,
 
-MUSL build was fixed in this release.
+On Tue, Jul 26, 2016 at 02:52:48PM +0200, Thomas Petazzoni wrote:
+> On Tue, 26 Jul 2016 15:14:29 +0300, Baruch Siach wrote:
+> > You are right of course, forgive my sloppiness. To be correct for uClibc 
+> > the code should test for __ARCH_USE_MMU__ instead of __ARCH_HAS_MMU__. But 
+> > testing HAVE_FORK is better, I thing, since it also covers other 
+> > hypothetical MMU-less C libraries.
+> 
+> Using HAVE_FORK indeed seems better. However, can you verify that it
+> actually works for MMU-capable platforms?
+> 
+> What worries me is that the code in libbb/ originally comes from
+> Busybox, which doesn't use autoconf. HAVE_FORK is a #define value
+> defined by ipkg's autoconf configure script, in config.h, and I'm not
+> sure if the libbb/ code includes config.h.
+> 
+> So, please make sure that HAVE_FORK is really taken into account when
+> building on MMU-capable platforms by adding some #error in the #if
+> defined(HAVE_FORK) test in the libbb code that you're changing.
 
-Fixes:
-http://autobuild.buildroot.net/results/fcc/fcce95bd13407535bee336e34288b55142ae0bb5
+I verified that config.h macros are defined in libbb.h before posting the last 
+patch, by using another defined macros. I repeated this test as you suggested, 
+with HAVE_FORK and the current br-arm-full.config, just to be sure. The #error 
+triggers as expected in both tests.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+baruch
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index 5299c84..9e83488 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  abe6cdd515a774bcba3afdcdb1e504569801e79282ccdf26099f33cbb8731ba2  ModemManager-1.4.14.tar.xz
-+sha256  a94f4657a8fa6835e2734fcc6edf20aa8c8d452f62299d7748541021c3eb2445  ModemManager-1.6.0.tar.xz
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 6d91afc..252292a 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MODEM_MANAGER_VERSION = 1.4.14
-+MODEM_MANAGER_VERSION = 1.6.0
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
 -- 
-2.1.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
