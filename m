@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jul 2016 21:30:52 +0200
-Subject: [Buildroot] [git commit] libmbim: bump to version 1.14.0
-Message-ID: <20160726193209.E762A82119@busybox.osuosl.org>
+Date: Tue, 26 Jul 2016 21:31:21 +0200
+Subject: [Buildroot] [git commit] gupnp: bump to version 0.20.18
+Message-ID: <20160726193210.1EBAB82119@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b100839e4ee01ce95fc5acd4bbad27285d6ba469
+commit: https://git.buildroot.net/buildroot/commit/?id=59221b24ec07ce926117ab794972bf45e22af057
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libmbim/libmbim.hash | 2 +-
- package/libmbim/libmbim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gupnp/gupnp.hash | 4 ++--
+ package/gupnp/gupnp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
-index 2c10b4f..21921c9 100644
---- a/package/libmbim/libmbim.hash
-+++ b/package/libmbim/libmbim.hash
+diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
+index 4208ecd..e0082ac 100644
+--- a/package/gupnp/gupnp.hash
++++ b/package/gupnp/gupnp.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256  7bd9af154e88ee1cccaf2fedd05e0f5cb82e3359ab6ad2a75cfec98bf57f973a  libmbim-1.12.4.tar.xz
-+sha256  ca8d52a95a18cbabae8f15f83f1572316e888b6504f946e6645d24405127ab5b  libmbim-1.14.0.tar.xz
-diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-index 746596e..0f757c0 100644
---- a/package/libmbim/libmbim.mk
-+++ b/package/libmbim/libmbim.mk
-@@ -4,7 +4,7 @@
- #
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/0.20/gupnp-0.20.16.sha256sum:
+-sha256	ff1119eff12529c46837e03c742f69dc4fae48d59097d79582d38a383b832602	gupnp-0.20.16.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/0.20/gupnp-0.20.18.sha256sum:
++sha256	c5e0e11061f8d0ff9c8dccc196f39c45a49c0153c9a72abf6290ab34d1cbb021	gupnp-0.20.18.tar.xz
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+index c3ec0a0..f7c32b5 100644
+--- a/package/gupnp/gupnp.mk
++++ b/package/gupnp/gupnp.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBMBIM_VERSION = 1.12.4
-+LIBMBIM_VERSION = 1.14.0
- LIBMBIM_SITE = http://www.freedesktop.org/software/libmbim
- LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
- LIBMBIM_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
+ GUPNP_VERSION_MAJOR = 0.20
+-GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).16
++GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).18
+ GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
+ GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
+ GUPNP_LICENSE = LGPLv2+
