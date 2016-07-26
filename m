@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jul 2016 09:59:29 +0200
+Date: Tue, 26 Jul 2016 10:01:01 +0200
 Subject: [Buildroot] [PATCH] ipkg: needs MMU
-In-Reply-To: <b8ef63602bd75ed7fe6b8d87d48e5d36680f3c91.1469505637.git.baruch@tkos.co.il>
+In-Reply-To: <20160726095929.63583d2e@free-electrons.com>
 References: <b8ef63602bd75ed7fe6b8d87d48e5d36680f3c91.1469505637.git.baruch@tkos.co.il>
-Message-ID: <20160726095929.63583d2e@free-electrons.com>
+ <20160726095929.63583d2e@free-electrons.com>
+Message-ID: <20160726100101.208d0299@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +13,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 26 Jul 2016 07:00:37 +0300, Baruch Siach wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/6cf/6cf75e08795d9ab194ce4e882c0f4858bad979c3/
-> http://autobuild.buildroot.net/results/964/964d8f694bc7d05b35411eabfbadf40bbf6337ae/
-> http://autobuild.buildroot.net/results/0f2/0f2cddf89af3ad4330556acd04ab6cb080370e24/
+Sorry, last e-mail sent mistakenly.
+
+On Tue, 26 Jul 2016 09:59:29 +0200, Thomas Petazzoni wrote:
+
+> I think this needs more investigation, because:
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/ipkg/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+> BR2_bfin=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_INIT_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_IPKG=y
+> # BR2_TARGET_ROOTFS_TAR is not set
 > 
-> diff --git a/package/ipkg/Config.in b/package/ipkg/Config.in
-> index 4b2078d9cd70..d93e1d17b3dd 100644
-> --- a/package/ipkg/Config.in
-> +++ b/package/ipkg/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_IPKG
->  	bool "ipkg"
-> +	depends on BR2_USE_MMU # fork()
+> which is a noMMU configuration, is able to build ipkg just fine.
 
-I think this needs more investigation, because:
+I was indeed a bit surprised to see this patch: we have been having
+Blackfin configurations for a long time in the autobuilders, and we
+never had to add a BR2_USE_MMU dependency on this package.
 
-BR2_bfin=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_INIT_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_IPKG=y
-# BR2_TARGET_ROOTFS_TAR is not set
+So I believe there's something a bit more subtle going on here.
 
-which is a noMMU configuration, is able to build ipkg just fine.
-
-
-
+Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
