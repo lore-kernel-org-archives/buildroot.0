@@ -1,34 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jul 2016 21:36:10 +0200
-Subject: [Buildroot] [PATCH] ipmiutil: bump to version 2.9.9
-In-Reply-To: <9edef8b029945e5a6f29ba4e1efb05ac5dcd1f19.1469528413.git.baruch@tkos.co.il>
-References: <9edef8b029945e5a6f29ba4e1efb05ac5dcd1f19.1469528413.git.baruch@tkos.co.il>
-Message-ID: <20160726213610.19061c36@free-electrons.com>
+From: Khem Raj <raj.khem@gmail.com>
+Date: Tue, 26 Jul 2016 13:05:33 -0700
+Subject: [Buildroot] [PATCH] ipkg: fix ARM MMU-less build
+In-Reply-To: <20160726211732.13c7836d@free-electrons.com>
+References: <5593192e371e7a40e09e9b0189f3bfb2432a0e67.1469536052.git.baruch@tkos.co.il>
+ <1785552C-C8C3-485A-92F2-11EBD2127B8E@gmail.com>
+ <20160726211732.13c7836d@free-electrons.com>
+Message-ID: <CAMKF1soYa2Gv+Ppkfv7=nXXuRV_h+ebcB9nyxUVUJe_RLcZoUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, Jul 26, 2016 at 12:17 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Tue, 26 Jul 2016 11:14:16 -0700, Khem Raj wrote:
+>> > On Jul 26, 2016, at 5:27 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+>> >
+>> > The code incorrectly tests for __ARCH_HAS_MMU__ which is true for the ARM
+>> > architecture, instead of __ARCH_USE_MMU__ which applies to this specific
+>> > build. Add a patch making direct use of HAVE_FORK that configure defines when
+>> > fork() is detected.
+>> >
+>> > Fixes:
+>> > http://autobuild.buildroot.net/results/6cf/6cf75e08795d9ab194ce4e882c0f4858bad979c3/
+>> > http://autobuild.buildroot.net/results/964/964d8f694bc7d05b35411eabfbadf40bbf6337ae/
+>> > http://autobuild.buildroot.net/results/0f2/0f2cddf89af3ad4330556acd04ab6cb080370e24/
+>> >
+>> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>> > ---
+>> > package/ipkg/0002-fix-arm-nommu.patch | 22 ++++++++++++++++++++++
+>>
+>>
+>> ipkg has been superceded by opkg. May be it should just be removed?
+>
+> Agreed. I'm hesitating between removing entirely, or marking as
+> deprecated.
 
-On Tue, 26 Jul 2016 13:20:13 +0300, Baruch Siach wrote:
-> Drop upstream patches, and update AUTORECONF comment accordingly.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  .../0002-lib-Makefile.am-fix-lanplus-disable.patch | 38 ------------------
->  ...003-configure.ac-fix-stack-protector-test.patch | 45 ----------------------
->  package/ipmiutil/ipmiutil.hash                     |  4 +-
->  package/ipmiutil/ipmiutil.mk                       |  4 +-
->  4 files changed, 5 insertions(+), 86 deletions(-)
->  delete mode 100644 package/ipmiutil/0002-lib-Makefile.am-fix-lanplus-disable.patch
->  delete mode 100644 package/ipmiutil/0003-configure.ac-fix-stack-protector-test.patch
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Just remove it, I don't think it is used anywhere these days.
