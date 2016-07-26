@@ -1,56 +1,45 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 26 Jul 2016 15:27:32 +0300
-Subject: [Buildroot] [PATCH] ipkg: fix ARM MMU-less build
-Message-ID: <5593192e371e7a40e09e9b0189f3bfb2432a0e67.1469536052.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Jul 2016 14:52:48 +0200
+Subject: [Buildroot] [PATCH] ipkg: needs MMU
+In-Reply-To: <20160726121429.GA3588@tarshish>
+References: <b8ef63602bd75ed7fe6b8d87d48e5d36680f3c91.1469505637.git.baruch@tkos.co.il>
+ <20160726095929.63583d2e@free-electrons.com>
+ <20160726100101.208d0299@free-electrons.com>
+ <20160726111557.GY3588@tarshish>
+ <20160726134801.1d2eb91b@free-electrons.com>
+ <20160726121429.GA3588@tarshish>
+Message-ID: <20160726145248.5dc5a39a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The code incorrectly tests for __ARCH_HAS_MMU__ which is true for the ARM
-architecture, instead of __ARCH_USE_MMU__ which applies to this specific
-build. Add a patch making direct use of HAVE_FORK that configure defines when
-fork() is detected.
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/6cf/6cf75e08795d9ab194ce4e882c0f4858bad979c3/
-http://autobuild.buildroot.net/results/964/964d8f694bc7d05b35411eabfbadf40bbf6337ae/
-http://autobuild.buildroot.net/results/0f2/0f2cddf89af3ad4330556acd04ab6cb080370e24/
+On Tue, 26 Jul 2016 15:14:29 +0300, Baruch Siach wrote:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/ipkg/0002-fix-arm-nommu.patch | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
- create mode 100644 package/ipkg/0002-fix-arm-nommu.patch
+> You are right of course, forgive my sloppiness. To be correct for uClibc the 
+> code should test for __ARCH_USE_MMU__ instead of __ARCH_HAS_MMU__. But testing 
+> HAVE_FORK is better, I thing, since it also covers other hypothetical MMU-less 
+> C libraries.
 
-diff --git a/package/ipkg/0002-fix-arm-nommu.patch b/package/ipkg/0002-fix-arm-nommu.patch
-new file mode 100644
-index 000000000000..42279a958cc1
---- /dev/null
-+++ b/package/ipkg/0002-fix-arm-nommu.patch
-@@ -0,0 +1,22 @@
-+libbb: fix ARM no MMU build
-+
-+uClibc-ng defines __ARCH_HAS_MMU__ for ARM because the architecture may
-+potentially have MMU. The code should test for __ARCH_USE_MMU__. But since
-+configure detects the presence of fork(), use HAVE_FORK directly.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: no active upstream
-+
-+diff -Nuar ipkg-0.99.163-orig/libbb/libbb.h ipkg-0.99.163/libbb/libbb.h
-+--- ipkg-0.99.163-orig/libbb/libbb.h	2006-02-06 10:13:02.000000000 +0200
-++++ ipkg-0.99.163/libbb/libbb.h	2016-07-26 13:50:09.296988855 +0300
-+@@ -341,7 +341,7 @@
-+ #define CONSOLE_DEV "/dev/console"
-+ 
-+ /* Cope with mmu-less systems somewhat gracefully */
-+-#if defined(__UCLIBC__) && !defined(__ARCH_HAS_MMU__)
-++#if !defined(HAVE_FORK)
-+ #define fork	vfork
-+ #endif
-+ 
+Using HAVE_FORK indeed seems better. However, can you verify that it
+actually works for MMU-capable platforms?
+
+What worries me is that the code in libbb/ originally comes from
+Busybox, which doesn't use autoconf. HAVE_FORK is a #define value
+defined by ipkg's autoconf configure script, in config.h, and I'm not
+sure if the libbb/ code includes config.h.
+
+So, please make sure that HAVE_FORK is really taken into account when
+building on MMU-capable platforms by adding some #error in the #if
+defined(HAVE_FORK) test in the libbb code that you're changing.
+
+Thanks!
+
+Thomas
 -- 
-2.8.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
