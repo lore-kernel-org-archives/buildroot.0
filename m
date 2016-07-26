@@ -1,8 +1,8 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 26 Jul 2016 16:01:34 -0300
-Subject: [Buildroot] [PATCH] configs: warpboard: Move to kernel version
+Date: Tue, 26 Jul 2016 16:08:48 -0300
+Subject: [Buildroot] [PATCH v2] configs: warpboard: Move to kernel version
 	4.4.15
-Message-ID: <1469559694-17562-1-git-send-email-festevam@gmail.com>
+Message-ID: <1469560128-25586-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,11 +25,14 @@ Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 This one applies against
 [PATCH v3] configs/warpboard: Generate an sdcard image
 
+Changes since v1:
+- Remove BR2_GLOBAL_PATCH_DIR as we no longer need any extra patches
+
  board/freescale/warpboard/linux.fragment           |   2 +
  .../warpboard/patches/linux/0001-hciuart-h4.patch  |  34 -------
  .../linux/0002-replace-uart2-by-uart5.patch        | 103 ---------------------
- configs/warpboard_defconfig                        |   9 +-
- 4 files changed, 7 insertions(+), 141 deletions(-)
+ configs/warpboard_defconfig                        |  12 +--
+ 4 files changed, 7 insertions(+), 144 deletions(-)
  create mode 100644 board/freescale/warpboard/linux.fragment
  delete mode 100644 board/freescale/warpboard/patches/linux/0001-hciuart-h4.patch
  delete mode 100644 board/freescale/warpboard/patches/linux/0002-replace-uart2-by-uart5.patch
@@ -192,13 +195,16 @@ index d742c24..0000000
 -1.9.1
 -
 diff --git a/configs/warpboard_defconfig b/configs/warpboard_defconfig
-index 562dc33..ee6c6cc 100644
+index 562dc33..5e6d27e 100644
 --- a/configs/warpboard_defconfig
 +++ b/configs/warpboard_defconfig
-@@ -5,8 +5,8 @@ BR2_cortex_a9=y
- # patches
- BR2_GLOBAL_PATCH_DIR="board/freescale/warpboard/patches"
+@@ -2,11 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
  
+-# patches
+-BR2_GLOBAL_PATCH_DIR="board/freescale/warpboard/patches"
+-
 -# Linux headers same as kernel, a 4.0 series
 -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
 +# Linux headers same as kernel, a 4.4 series
@@ -206,7 +212,7 @@ index 562dc33..ee6c6cc 100644
  
  # system
  BR2_TARGET_GENERIC_HOSTNAME="warpboard"
-@@ -17,9 +17,10 @@ BR2_ROOTFS_OVERLAY="board/freescale/warpboard/rootfs_overlay"
+@@ -17,9 +14,10 @@ BR2_ROOTFS_OVERLAY="board/freescale/warpboard/rootfs_overlay"
  
  # kernel
  BR2_LINUX_KERNEL=y
