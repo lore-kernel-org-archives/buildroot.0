@@ -1,67 +1,42 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Tue, 26 Jul 2016 16:58:24 +0930
-Subject: [Buildroot] [PATCH v3] package/pdbg: new package
-In-Reply-To: <1469429593-28546-1-git-send-email-joel@jms.id.au>
-References: <1469429593-28546-1-git-send-email-joel@jms.id.au>
-Message-ID: <1469518104-19678-1-git-send-email-joel@jms.id.au>
+From: Romain Perier <romain.perier@free-electrons.com>
+Date: Tue, 26 Jul 2016 09:30:43 +0200
+Subject: [Buildroot] [PATCH v2 3/6] docs/manual: Document the variable
+ $(PKG)_DL_OPTS
+In-Reply-To: <20160715160054.GE3692@free.fr>
+References: <1468315820-9341-1-git-send-email-romain.perier@free-electrons.com>
+ <1468315820-9341-4-git-send-email-romain.perier@free-electrons.com>
+ <20160715160054.GE3692@free.fr>
+Message-ID: <579711A3.6090808@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-PowerPC FSI Debugger, for low level debugging of a Power8 CPU over FSI.
+Hi all,
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
-v3:
- - do not restrict to ARM, as it builds on all CPU architectures
- - metion where you might want to run pdbg in the help text
+Le 15/07/2016 18:00, Yann E. MORIN a ?crit :
+>
+> With the last sentence, I'd also say something like:
+>
+>      All download methods valid for +LIBFOO_SITE_METHOD+ are supported;
+>      valid options depend on the download method (consult the man page
+>      for the respective download utilities).
+>
+> Regards,
+> Yann E. MORIN.
+>
+>>   * +LIBFOO_EXTRA_DOWNLOADS+ is a space-separated list of additional
+>>     files that Buildroot should download. If an entry contains +://+
+>>     then Buildroot will assume it is a complete URL and will download
+>> --
+>> 2.8.1
 
-v2:
- - Fix whitespace in pdbg.mk
-  - Add URL to help text
+Ack, I will fix this.
 
- package/pdbg/Config.in | 10 ++++++++++
- package/pdbg/pdbg.mk   | 13 +++++++++++++
- 2 files changed, 23 insertions(+)
- create mode 100644 package/pdbg/Config.in
- create mode 100644 package/pdbg/pdbg.mk
+Thanks!
 
-diff --git a/package/pdbg/Config.in b/package/pdbg/Config.in
-new file mode 100644
-index 000000000000..5a3bcda48ba8
---- /dev/null
-+++ b/package/pdbg/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PDBG
-+	bool "pdbg"
-+	help
-+	  PowerPC FSI Debugger, for low level debugging of a IBM Power8 CPU
-+	  over FSI.
-+
-+	  pdbg runs on a BMC, which is generally an ARM-powered system
-+	  monitoring/controlling a host CPU.
-+
-+	  https://github.com/open-power/pdbg
-diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
-new file mode 100644
-index 000000000000..9cc05cd728c0
---- /dev/null
-+++ b/package/pdbg/pdbg.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# pdbg
-+#
-+################################################################################
-+
-+PDBG_VERSION = 90a7370a11e727f1482dea6ff2bd6aec20c64805
-+PDBG_SITE = $(call github,open-power,pdbg,$(PDBG_VERSION))
-+PDBG_LICENSE = Apache 2.0
-+PDBG_LICENSE_FILES = COPYING
-+PDBG_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
 -- 
-2.8.1
+Romain Perier, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
