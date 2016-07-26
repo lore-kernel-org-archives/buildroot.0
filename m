@@ -1,77 +1,98 @@
 From: Joel Stanley <joel@jms.id.au>
-Date: Tue, 26 Jul 2016 11:43:53 +0930
-Subject: [Buildroot] [PATCH v2] package/pdbg: new package
-In-Reply-To: <20160726000944.3fd80fc1@free-electrons.com>
-References: <1469427392-25228-1-git-send-email-joel@jms.id.au>
- <1469429593-28546-1-git-send-email-joel@jms.id.au>
- <20160726000944.3fd80fc1@free-electrons.com>
-Message-ID: <CACPK8XcN=fCduHVVkALoRhr5t_=Y=gqPdjkpJvX2-uKE87O2Dw@mail.gmail.com>
+Date: Tue, 26 Jul 2016 11:57:17 +0930
+Subject: [Buildroot] [PATCH] package/pflash: new package
+In-Reply-To: <20160726000756.560aa52e@free-electrons.com>
+References: <1469426487-19558-1-git-send-email-joel@jms.id.au>
+ <20160726000756.560aa52e@free-electrons.com>
+Message-ID: <CACPK8XeOj5AyLk6iNZZ2-0ouc2O5W30YRfpZTLAQ=nPxEPZ1cw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On Tue, Jul 26, 2016 at 7:39 AM, Thomas Petazzoni
+On Tue, Jul 26, 2016 at 7:37 AM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Hello,
 >
-> On Mon, 25 Jul 2016 16:23:12 +0930, Joel Stanley wrote:
+> On Mon, 25 Jul 2016 15:31:27 +0930, Joel Stanley wrote:
 >
->> diff --git a/package/pdbg/Config.in b/package/pdbg/Config.in
+>> diff --git a/package/pflash/Config.in b/package/pflash/Config.in
 >> new file mode 100644
->> index 000000000000..cf37eb8aca41
+>> index 000000000000..315989724088
 >> --- /dev/null
->> +++ b/package/pdbg/Config.in
->> @@ -0,0 +1,8 @@
->> +config BR2_PACKAGE_PDBG
->> +     bool "pdbg"
->> +     depends on BR2_arm
+>> +++ b/package/pflash/Config.in
+>> @@ -0,0 +1,6 @@
+>> +config BR2_PACKAGE_PFLASH
+>> +     bool "pflash"
+>> +     depends on BR2_arm || BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64
 >
-> Anything that makes it ARM-specific?
+> Is there something that makes it inherently usable only on those
+> architectures?
 
-Upstream has only ever tested the code on ARM. It does build for x86
-(and power, and anything else I guess), but as you point out below it
-is only useful when run from a processor that is attached to a p8
-host.
-
-What's the general rule in this circumstance?
+Yeah, the 'libflash' library selects different backends depending on it's
 
 >
->> +     help
->> +       PowerPC FSI Debugger, for low level debugging of a PowerPC CPU
->> +       over FSI.
+>> diff --git a/package/pflash/pflash.mk b/package/pflash/pflash.mk
+>> new file mode 100644
+>> index 000000000000..ab19ad699866
+>> --- /dev/null
+>> +++ b/package/pflash/pflash.mk
+>> @@ -0,0 +1,32 @@
+>> +################################################################################
+>> +#
+>> +# pflash
+>> +#
+>> +################################################################################
+>> +
+>> +PFLASH_VERSION = skiboot-5.2.4
+>> +
+>> +PFLASH_SITE = $(call github,open-power,skiboot,$(PFLASH_VERSION))
 >
-> It would have been good to explain somewhere than pdbg runs on the BMC,
-> which is generally an ARM-powered system monitoring/controlling a
-> number of PowerPC CPUs. Otherwise, it feels odd to have a
-> PowerPC-related package available only on the ARM architecture.
+> So skiboot is a much much larger repository, with lots of other things,
+> and you're building just the external/pflash subdirectory of it.
+>
+> Are you sure we'll never want to have a package for other things in the
+> skiboot repository?
 
-Sure, I will add some more text.
+We might want to package other tools in the future.
+
+How should I change the packaging of pflash?
 
 >
->> +PDBG_VERSION = 90a7370a11e727f1482dea6ff2bd6aec20c64805
->> +PDBG_SITE = $(call github,open-power,pdbg,$(PDBG_VERSION))
->> +PDBG_LICENSE = Apache 2.0
->> +PDBG_LICENSE_FILES = COPYING
->> +PDBG_AUTORECONF = YES
+>> +PFLASH_INSTALL_STAGING = YES
 >
-> Side note (unrelated to Buildroot packaging): had a look at the code,
-> and this mapping of /dev/mem to then bing-bang some protocol on GPIOs
-> from userspace is really, really nasty :-/
+> You're not specifying any PFLASH_INSTALL_STAGING_CMDS, so this is
+> useless.
 
-Yep! You and I are the same page here. To date the tool has been used
-on a BIOS vendor's BMC firmware, running a very old kernel that lacks
-the proper linux APIs for access to hardware. It's not ideal.
+Thanks for clearing that up. I've fixed it in v2.
 
-I've been slowly upstreaming a from-scratch kernel port. Once we have
-that in place pdbg can add support for doing GPIO through the kernel.
+>
+>> +PFLASH_LICENSE = Apache 2.0
+>> +PFLASH_LICENSE_FILE = LICENCE
+>> +
+>> +PFLASH_MAKE_OPTS += CROSS_COMPILE="$(TARGET_CROSS)" \
+>> +                 PFLASH_VERSION=$(PFLASH_VERSION) \
+>> +                 DESTDIR=$(TARGET_DIR) \
+>
+> DESTDIR should only be passed at install time.
 
-In the future near future we will add FSI support in the kernel, and
-from there perhaps use the Coldfire processor inside the Aspeed SoC to
-offload the bitbanging. Lots of work to do, but we're getting there.
+Okay.
+
+>
+>> +                 -C $(@D)/external/pflash \
+>
+> Unneeded trailing \
+
+Okay.
+
+>
+> Also, we prefer the -C option and its argument to be part of the build
+> and install commands themselves.
+
+Even though we would be replicating them for every invocation of make?
+I think it's better placed in a variable so changes can be made in one
+place.
 
 Cheers,
 
