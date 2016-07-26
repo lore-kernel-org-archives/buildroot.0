@@ -1,80 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jul 2016 21:20:45 +0200
-Subject: [Buildroot] [PATCH] package/qt5webkit: needs host-python
-In-Reply-To: <20160726161151.GA5925@free.fr>
-References: <1469486011-29173-1-git-send-email-yann.morin.1998@free.fr>
- <20160726095809.21008ed0@free-electrons.com>
- <20160726161151.GA5925@free.fr>
-Message-ID: <20160726212045.29d5a07a@free-electrons.com>
+Date: Tue, 26 Jul 2016 17:59:11 +0200
+Subject: [Buildroot] [git commit] package/pdbg: new package
+Message-ID: <20160726192858.7EDE48211F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=100058c3cec208df6afecd440852e98b479c57dc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 26 Jul 2016 18:11:51 +0200, Yann E. MORIN wrote:
+PowerPC FSI Debugger, for low level debugging of a Power8 CPU over FSI.
 
-> Neither do I, but see below...
-> 
-> > Is "python" hardcoded is so many places in Qt5Webkit ?  
-> 
->     $ grep -r -E '(^|[[:space:]])python([[:space:]]|$)' |grep -v ChangeLog |wc -l
->     153
-> 
-> A lot of them are just doc or such, but there are still a lot of places
-> that are indeed calls to the python interpreter:
-> 
->     Tools/gtk/jhbuildrc:#!/usr/bin/env python
->     Tools/gtk/common.py:#!/usr/bin/env python
->     Tools/gtk/generate-gtkdoc:#!/usr/bin/env python
->     Tools/gtk/generate-feature-defines-files:#!/usr/bin/env python
->     Tools/CygwinDownloader/cygwin-downloader.py:#!/usr/bin/env python
->     Tools/efl/jhbuildrc:#!/usr/bin/env python
->     Tools/efl/common.py:#!/usr/bin/env python
->     Tools/BuildSlaveSupport/build.webkit.org-config/committer_auth_unittest.py:#!/usr/bin/env python
->     Tools/BuildSlaveSupport/wait-for-SVN-server.py:#!/usr/bin/env python
->     Tools/jhbuild/jhbuild-wrapper:#!/usr/bin/env python
->     Tools/QueueStatusServer/app.yaml:runtime: python
->     Tools/Scripts/new-run-webkit-tests:#!/usr/bin/env python
->     Tools/Scripts/validate-committer-lists:#!/usr/bin/env python
->     Tools/Scripts/run-qtwebkit-tests:#!/usr/bin/env python
->     Tools/Scripts/lint-webkitpy:#!/usr/bin/env python
->     Tools/Scripts/generate-win32-export-forwards:#!/usr/bin/env python
->     Tools/Scripts/import-w3c-tests:#!/usr/bin/env python
->     Tools/Scripts/webkitpy/layout_tests/views/buildbot_results.py:#!/usr/bin/env python
->     Tools/Scripts/webkitpy/layout_tests/views/buildbot_results_unittest.py:#!/usr/bin/env python
->     [...]
->     Source/WebCore/DerivedSources.make:     python $(WebCore)/html/parser/create-html-entity-table -o HTMLEntityTable.cpp $(WebCore)/html/parser/HTMLEntityNames.in
->     Source/WebCore/DerivedSources.make:     python $(WebCore)/inspector/generate-inspector-protocol-version -o InspectorProtocolVersion.h $(WebCore)/inspector/Inspector.json
->     Source/WebCore/DerivedSources.make:     python $(WebCore)/inspector/CodeGeneratorInspector.py $(WebCore)/inspector/Inspector.json --output_h_dir . --output_cpp_dir .
->     Source/WebCore/html/parser/create-html-entity-table:#!/usr/bin/env python
->     Source/JavaScriptCore/DerivedSources.pri:retgen.commands = python $$retgen.script > ${QMAKE_FILE_OUT}
->     Source/JavaScriptCore/DerivedSources.pri:klgen.commands = python $$klgen.script ${QMAKE_FILE_NAME} > ${QMAKE_FILE_OUT}
->     Source/JavaScriptCore/DerivedSources.pri:    disassembler.commands = python $$disassembler.script ${QMAKE_FILE_NAME} --outputDir ${QMAKE_FUNC_FILE_OUT_PATH}
->     Source/JavaScriptCore/DerivedSources.make:      python $^ > $@
->     Source/JavaScriptCore/DerivedSources.make:      python $^ > $@
->     Source/JavaScriptCore/DerivedSources.make:      (PYTHONPATH=$(JavaScriptCore)/disassembler/udis86 python $(JavaScriptCore)/disassembler/udis86/itab.py $(JavaScriptCore)/disassembler/udis86/optable.xml || exit 1)
->     [...]
-> 
-> So, I'm not gonna patch it either...
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+[Thomas:
+ - add to package/Config.in
+ - add hash file]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in      |  1 +
+ package/pdbg/Config.in | 10 ++++++++++
+ package/pdbg/pdbg.hash |  2 ++
+ package/pdbg/pdbg.mk   | 13 +++++++++++++
+ 4 files changed, 26 insertions(+)
 
-OK, makes sense!
-
-> Yes, upstream is not maintaining it anymore, but it's still being
-> maintained by "the community", and they are now even compatible with
-> Qt-5.7.
-> 
-> See also the commit log of e8dbdbd (qt5webkit: restore package). ;-)
-
-In this case, could you submit a bug report upstream to ask them to
-provide a way to configure the Python to use?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 8ceeb9e..ec45eaf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -426,6 +426,7 @@ endmenu
+ 	source "package/owl-linux/Config.in"
+ 	source "package/parted/Config.in"
+ 	source "package/pciutils/Config.in"
++	source "package/pdbg/Config.in"
+ 	source "package/picocom/Config.in"
+ 	source "package/pifmrds/Config.in"
+ 	source "package/powertop/Config.in"
+diff --git a/package/pdbg/Config.in b/package/pdbg/Config.in
+new file mode 100644
+index 0000000..3e23c21
+--- /dev/null
++++ b/package/pdbg/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PDBG
++	bool "pdbg"
++	help
++	  PowerPC FSI Debugger, for low level debugging of a IBM
++	  Power8 CPU over FSI.
++
++	  pdbg runs on a BMC, which is generally an ARM-powered system
++	  monitoring/controlling a host CPU.
++
++	  https://github.com/open-power/pdbg
+diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
+new file mode 100644
+index 0000000..16bf580
+--- /dev/null
++++ b/package/pdbg/pdbg.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 8edabb9ae98ce3b1892b768f2ee5e779a00476b63cdcc6f905e8464a0b7d96a3 pdbg-90a7370a11e727f1482dea6ff2bd6aec20c64805.tar.gz
+diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
+new file mode 100644
+index 0000000..9cc05cd
+--- /dev/null
++++ b/package/pdbg/pdbg.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# pdbg
++#
++################################################################################
++
++PDBG_VERSION = 90a7370a11e727f1482dea6ff2bd6aec20c64805
++PDBG_SITE = $(call github,open-power,pdbg,$(PDBG_VERSION))
++PDBG_LICENSE = Apache 2.0
++PDBG_LICENSE_FILES = COPYING
++PDBG_AUTORECONF = YES
++
++$(eval $(autotools-package))
