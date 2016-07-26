@@ -1,41 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jul 2016 10:01:01 +0200
-Subject: [Buildroot] [PATCH] ipkg: needs MMU
-In-Reply-To: <20160726095929.63583d2e@free-electrons.com>
-References: <b8ef63602bd75ed7fe6b8d87d48e5d36680f3c91.1469505637.git.baruch@tkos.co.il>
- <20160726095929.63583d2e@free-electrons.com>
-Message-ID: <20160726100101.208d0299@free-electrons.com>
+From: Romain Perier <romain.perier@free-electrons.com>
+Date: Tue, 26 Jul 2016 10:21:24 +0200
+Subject: [Buildroot] [PATCH v3 0/6] Add support for AMD Catalyst graphics
+	driver
+Message-ID: <1469521290-20446-1-git-send-email-romain.perier@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The AMD Catalyst Proprietary Linux Graphics Driver 15.9 supports GPUs
+AMD Radeon HD 5xxx and newer graphics. It requires at least glibc 2.2
+or 2.3 and is compatible up to Xorg 1.17. This serie adds the required
+changes to support this driver.
 
-Sorry, last e-mail sent mistakenly.
+The fglrx kernel module is compatible up to Linux kernel 4.4 LTS.
+All the graphical stack has been tested on a x86_64 system with an
+AMD-GT40N (w/ Radeon HD 6290 GPU).
 
-On Tue, 26 Jul 2016 09:59:29 +0200, Thomas Petazzoni wrote:
+Romain Perier (6):
+  support/download: Add support for the referer option to wget
+  pkg-download: Allow packages to pass an URL referer to the wget method
+  docs/manual: Document the variable $(PKG)_DL_REFERER
+  package/xserver_xorg-server: add version 1.17.4
+  qt: Add option for enabling the accessibility support
+  package/amd-catalyst-driver: Add AMD proprietary graphic stack support
 
-> I think this needs more investigation, because:
-> 
-> BR2_bfin=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_INIT_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_IPKG=y
-> # BR2_TARGET_ROOTFS_TAR is not set
-> 
-> which is a noMMU configuration, is able to build ipkg just fine.
+ docs/manual/adding-packages-generic.txt            |  75 +++++----
+ package/Config.in                                  |   1 +
+ .../0001-Add-support-for-Linux-4.0.patch           |  45 ++++++
+ .../0002-Add-support-for-Linux-4.1.patch           |  31 ++++
+ .../0003-Add-support-for-Linux-4.2.patch           | 121 ++++++++++++++
+ ...0004-Use-fpregs_active-instead-of-has_fpu.patch |  33 ++++
+ ...-Use-a-local-copy-of-copy_xregs_to_kernel.patch |  79 ++++++++++
+ .../0006-Add-support-for-Linux-4.4.patch           |  78 +++++++++
+ package/amd-catalyst-driver/20-fglrx.conf          |   4 +
+ package/amd-catalyst-driver/Config.in              |  89 +++++++++++
+ .../amd-catalyst-driver/amd-catalyst-driver.hash   |   2 +
+ package/amd-catalyst-driver/amd-catalyst-driver.mk | 175 +++++++++++++++++++++
+ package/amd-catalyst-driver/gl.pc                  |  12 ++
+ package/pkg-download.mk                            |   3 +-
+ package/qt/Config.in                               |   5 +
+ package/qt/qt.mk                                   |   7 +-
+ package/x11r7/xserver_xorg-server/Config.in        |  10 ++
+ .../xserver_xorg-server/xserver_xorg-server.hash   |   2 +
+ support/download/wget                              |  10 +-
+ 19 files changed, 744 insertions(+), 38 deletions(-)
+ create mode 100644 package/amd-catalyst-driver/0001-Add-support-for-Linux-4.0.patch
+ create mode 100644 package/amd-catalyst-driver/0002-Add-support-for-Linux-4.1.patch
+ create mode 100644 package/amd-catalyst-driver/0003-Add-support-for-Linux-4.2.patch
+ create mode 100644 package/amd-catalyst-driver/0004-Use-fpregs_active-instead-of-has_fpu.patch
+ create mode 100644 package/amd-catalyst-driver/0005-Use-a-local-copy-of-copy_xregs_to_kernel.patch
+ create mode 100644 package/amd-catalyst-driver/0006-Add-support-for-Linux-4.4.patch
+ create mode 100644 package/amd-catalyst-driver/20-fglrx.conf
+ create mode 100644 package/amd-catalyst-driver/Config.in
+ create mode 100644 package/amd-catalyst-driver/amd-catalyst-driver.hash
+ create mode 100644 package/amd-catalyst-driver/amd-catalyst-driver.mk
+ create mode 100644 package/amd-catalyst-driver/gl.pc
 
-I was indeed a bit surprised to see this patch: we have been having
-Blackfin configurations for a long time in the autobuilders, and we
-never had to add a BR2_USE_MMU dependency on this package.
-
-So I believe there's something a bit more subtle going on here.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.1
