@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jul 2016 09:32:43 +0200
-Subject: [Buildroot] [PATCH] package/pflash: new package
-In-Reply-To: <CACPK8XeOj5AyLk6iNZZ2-0ouc2O5W30YRfpZTLAQ=nPxEPZ1cw@mail.gmail.com>
-References: <1469426487-19558-1-git-send-email-joel@jms.id.au>
- <20160726000756.560aa52e@free-electrons.com>
- <CACPK8XeOj5AyLk6iNZZ2-0ouc2O5W30YRfpZTLAQ=nPxEPZ1cw@mail.gmail.com>
-Message-ID: <20160726093243.757a4842@free-electrons.com>
+Date: Tue, 26 Jul 2016 09:58:09 +0200
+Subject: [Buildroot] [PATCH] package/qt5webkit: needs host-python
+In-Reply-To: <1469486011-29173-1-git-send-email-yann.morin.1998@free.fr>
+References: <1469486011-29173-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160726095809.21008ed0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,52 +12,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 26 Jul 2016 11:57:17 +0930, Joel Stanley wrote:
+Cc'ing Qt5 folks: Peter Seiderer and Julien Corjon.
 
-> >> diff --git a/package/pflash/Config.in b/package/pflash/Config.in
-> >> new file mode 100644
-> >> index 000000000000..315989724088
-> >> --- /dev/null
-> >> +++ b/package/pflash/Config.in
-> >> @@ -0,0 +1,6 @@
-> >> +config BR2_PACKAGE_PFLASH
-> >> +     bool "pflash"
-> >> +     depends on BR2_arm || BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64  
-> >
-> > Is there something that makes it inherently usable only on those
-> > architectures?  
+On Tue, 26 Jul 2016 00:33:31 +0200, Yann E. MORIN wrote:
+> The Qt5Webkit build system hard-codes calls to 'python', but only really
+> supports python2.
 > 
-> Yeah, the 'libflash' library selects different backends depending on it's
-
-OK. But then it makes sense only for pflash itself, and not skitool as
-the whole I suppose?
-
-> > So skiboot is a much much larger repository, with lots of other things,
-> > and you're building just the external/pflash subdirectory of it.
-> >
-> > Are you sure we'll never want to have a package for other things in the
-> > skiboot repository?  
+> We fix that similarly as we did in nodejs, by adding a python->python2
+> symlink early in the PATH when configuring/building Qt5Webkit, and
+> adding host-python in the dependency list.
 > 
-> We might want to package other tools in the future.
+> Fixes:
+>     http://autobuild.buildroot.org/results/ea4/ea4dd00ee585f9f9ea1927b8b5fd9035e6733420/
+>     http://autobuild.buildroot.org/results/323/323ba220fae70d94c81bab9a348be844e90ace91/
+>     http://autobuild.buildroot.org/results/6c2/6c20c9e222f94e6b70b97b87e1393dd16da2718c/
 > 
-> How should I change the packaging of pflash?
-
-A top-level BR2_PACKAGE_SKITOOL option, with a package called skitool.
-And then a sub-option BR2_PACKAGE_SKITOOL_PFLASH, which enables the
-build/installation of pflash.
-
-BR2_PACKAGE_SKITOOL can "select" BR2_PACKAGE_SKITOOL_PFLASH to make
-sure the package at least installs one thing.
-
-> > Also, we prefer the -C option and its argument to be part of the build
-> > and install commands themselves.  
+> Also slightly reorganise the dependency list, now that it no longer fits
+> on a single line.
 > 
-> Even though we would be replicating them for every invocation of make?
-> I think it's better placed in a variable so changes can be made in one
-> place.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-We generally repeat the -C $(@D) in the different invocations, yes. Not
-sure it's ideal, but that's how we typically do it in most packages.
+I know the hack of creating a dummy "bin" directory, with a
+python->python2 symlink is a trick already used by nodejs, but I don't
+like it very much.
+
+Is "python" hardcoded is so many places in Qt5Webkit ? If not, what
+about patching it instead, and submitting the patch upstream (though
+I'm not sure qtwebkit is still maintained, since they moved to
+qtwebengine I believe).
+
+Peter, Julien?
+
+Thanks,
 
 Thomas
 -- 
