@@ -1,28 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jul 2016 21:32:53 +0200
-Subject: [Buildroot] [PATCH 1/1] gupnp: bump to version 0.20.18
-In-Reply-To: <1469547471-18725-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1469547471-18725-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20160726213253.42c5dba2@free-electrons.com>
+Date: Tue, 26 Jul 2016 21:34:02 +0200
+Subject: [Buildroot] [git commit] odroid-scripts: select fbset
+Message-ID: <20160726193408.376D481F4D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=aeadc84203cafa8d884295dc3206c6c517cb6764
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 26 Jul 2016 17:37:51 +0200, Fabrice Fontaine wrote:
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> ---
->  package/gupnp/gupnp.hash | 4 ++--
->  package/gupnp/gupnp.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+fbset is used by one of the init scripts, so we need it as a runtime
+dependency.
 
-Applied to master, thanks.
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/odroid-scripts/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/odroid-scripts/Config.in b/package/odroid-scripts/Config.in
+index 48544b6..c4e09ca 100644
+--- a/package/odroid-scripts/Config.in
++++ b/package/odroid-scripts/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_ODROID_SCRIPTS
+ 	bool "odroid-scripts"
+ 	depends on BR2_aarch64 || BR2_arm
++	select BR2_PACKAGE_FBSET # runtime
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # needed for fbset
+ 	help
+ 	  Install the scripts for the odroidc2 based systems.
+ 
