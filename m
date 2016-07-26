@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Jul 2016 18:26:08 +0200
-Subject: [Buildroot] [PATCH v3 1/6] support/download: Add support to
- pass options directly to downloaders
-In-Reply-To: <1469521290-20446-2-git-send-email-romain.perier@free-electrons.com>
+Date: Tue, 26 Jul 2016 18:28:59 +0200
+Subject: [Buildroot] [PATCH v3 2/6] pkg-download: Allow packages to pass
+ generic options to download methods
+In-Reply-To: <1469521290-20446-3-git-send-email-romain.perier@free-electrons.com>
 References: <1469521290-20446-1-git-send-email-romain.perier@free-electrons.com>
- <1469521290-20446-2-git-send-email-romain.perier@free-electrons.com>
-Message-ID: <20160726162608.GB5925@free.fr>
+ <1469521290-20446-3-git-send-email-romain.perier@free-electrons.com>
+Message-ID: <20160726162859.GC5925@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,44 +15,124 @@ To: buildroot@busybox.net
 Romain, All,
 
 On 2016-07-26 10:21 +0200, Romain Perier spake thusly:
-> This adds support to pass options to the underlying command that is used
-> by downloader. Useful for retrieving data with server-side checking for
-> user login or passwords, use a proxy or use specific options for cloning
-> a repository via git and hg.
-
-Almost good, see below...
-
+> Introduce a new package variable $(PKG)_DL_OPTS. When this variable
+> is defined, its value is passed to the downloader as options to
+> the underlying command. Packages can now retrieve archives from server
+> expecting logins and passwords, use referer url, proxy or specific
+> options for cloning a repository.
+> 
 > Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
-[--SNIP--]
-> diff --git a/support/download/git b/support/download/git
-> index 314b388..686c26f 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -25,6 +25,8 @@ repo="${2}"
->  cset="${3}"
->  basename="${4}"
->  
-> +shift 4 # Get rid of our options
-> +
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
->  _git() {
-> @@ -49,7 +51,7 @@ if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
->  fi
->  if [ ${git_done} -eq 0 ]; then
->      printf "Doing full clone\n"
-> -    _git clone ${verbose} --mirror "'${repo}'" "'${basename}'"
-> +    _git clone ${verbose} "${@}" --mirror "'${repo}'" "'${basename}'"
 
-As I already said in the previous review [0], you forgot the git clone
-just a few lines above, where we try with --depth 1.
+You forgot to add my Reviewed-by tag from the previous review:
+http://lists.busybox.net/pipermail/buildroot/2016-July/167658.html
 
-[0] http://lists.busybox.net/pipermail/buildroot/2016-July/167691.html
+Here it is again, just for you! ;-)
 
-Otherwise, looks good.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+> 
+> Changes in v2:
+>  - Replaced $(PKG)_DL_REFERER by $(PKG)_DL_OPTS
+>  - Add support for this options to all downloaders
+> 
+>  package/pkg-download.mk | 24 ++++++++++++++++--------
+>  1 file changed, 16 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index a0f694d..00fbe6c 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -80,7 +80,8 @@ define DOWNLOAD_GIT
+>  		-- \
+>  		$($(PKG)_SITE) \
+>  		$($(PKG)_DL_VERSION) \
+> -		$($(PKG)_BASE_NAME)
+> +		$($(PKG)_BASE_NAME) \
+> +		$($(PKG)_DL_OPTS)
+>  endef
+>  
+>  # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+> @@ -96,7 +97,8 @@ define DOWNLOAD_BZR
+>  		-- \
+>  		$($(PKG)_SITE) \
+>  		$($(PKG)_DL_VERSION) \
+> -		$($(PKG)_BASE_NAME)
+> +		$($(PKG)_BASE_NAME) \
+> +		$($(PKG)_DL_OPTS)
+>  endef
+>  
+>  define SOURCE_CHECK_BZR
+> @@ -111,7 +113,8 @@ define DOWNLOAD_CVS
+>  		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
+>  		$($(PKG)_DL_VERSION) \
+>  		$($(PKG)_RAWNAME) \
+> -		$($(PKG)_BASE_NAME)
+> +		$($(PKG)_BASE_NAME) \
+> +		$($(PKG)_DL_OPTS)
+>  endef
+>  
+>  # Not all CVS servers support ls/rls, use login to see if we can connect
+> @@ -126,7 +129,8 @@ define DOWNLOAD_SVN
+>  		-- \
+>  		$($(PKG)_SITE) \
+>  		$($(PKG)_DL_VERSION) \
+> -		$($(PKG)_BASE_NAME)
+> +		$($(PKG)_BASE_NAME) \
+> +		$($(PKG)_DL_OPTS)
+>  endef
+>  
+>  define SOURCE_CHECK_SVN
+> @@ -142,7 +146,8 @@ define DOWNLOAD_SCP
+>  		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+>  		$(QUIET) \
+>  		-- \
+> -		'$(call stripurischeme,$(call qstrip,$(1)))'
+> +		'$(call stripurischeme,$(call qstrip,$(1)))' \
+> +		$($(PKG)_DL_OPTS)
+>  endef
+>  
+>  define SOURCE_CHECK_SCP
+> @@ -156,7 +161,8 @@ define DOWNLOAD_HG
+>  		-- \
+>  		$($(PKG)_SITE) \
+>  		$($(PKG)_DL_VERSION) \
+> -		$($(PKG)_BASE_NAME)
+> +		$($(PKG)_BASE_NAME) \
+> +		$($(PKG)_DL_OPTS)
+>  endef
+>  
+>  # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+> @@ -171,7 +177,8 @@ define DOWNLOAD_WGET
+>  		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+>  		$(QUIET) \
+>  		-- \
+> -		'$(call qstrip,$(1))'
+> +		'$(call qstrip,$(1))' \
+> +		$($(PKG)_DL_OPTS)
+>  endef
+>  
+>  define SOURCE_CHECK_WGET
+> @@ -184,7 +191,8 @@ define DOWNLOAD_LOCALFILES
+>  		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
+>  		$(QUIET) \
+>  		-- \
+> -		$(call stripurischeme,$(call qstrip,$(1)))
+> +		$(call stripurischeme,$(call qstrip,$(1))) \
+> +		$($(PKG)_DL_OPTS)
+>  endef
+>  
+>  define SOURCE_CHECK_LOCALFILES
+> -- 
+> 2.8.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
