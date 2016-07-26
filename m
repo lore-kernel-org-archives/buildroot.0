@@ -1,83 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Jul 2016 00:33:31 +0200
-Subject: [Buildroot] [PATCH] package/qt5webkit: needs host-python
-Message-ID: <1469486011-29173-1-git-send-email-yann.morin.1998@free.fr>
+From: Joel Stanley <joel@jms.id.au>
+Date: Tue, 26 Jul 2016 11:43:53 +0930
+Subject: [Buildroot] [PATCH v2] package/pdbg: new package
+In-Reply-To: <20160726000944.3fd80fc1@free-electrons.com>
+References: <1469427392-25228-1-git-send-email-joel@jms.id.au>
+ <1469429593-28546-1-git-send-email-joel@jms.id.au>
+ <20160726000944.3fd80fc1@free-electrons.com>
+Message-ID: <CACPK8XcN=fCduHVVkALoRhr5t_=Y=gqPdjkpJvX2-uKE87O2Dw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Qt5Webkit build system hard-codes calls to 'python', but only really
-supports python2.
+Hi Thomas,
 
-We fix that similarly as we did in nodejs, by adding a python->python2
-symlink early in the PATH when configuring/building Qt5Webkit, and
-adding host-python in the dependency list.
+On Tue, Jul 26, 2016 at 7:39 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Mon, 25 Jul 2016 16:23:12 +0930, Joel Stanley wrote:
+>
+>> diff --git a/package/pdbg/Config.in b/package/pdbg/Config.in
+>> new file mode 100644
+>> index 000000000000..cf37eb8aca41
+>> --- /dev/null
+>> +++ b/package/pdbg/Config.in
+>> @@ -0,0 +1,8 @@
+>> +config BR2_PACKAGE_PDBG
+>> +     bool "pdbg"
+>> +     depends on BR2_arm
+>
+> Anything that makes it ARM-specific?
 
-Fixes:
-    http://autobuild.buildroot.org/results/ea4/ea4dd00ee585f9f9ea1927b8b5fd9035e6733420/
-    http://autobuild.buildroot.org/results/323/323ba220fae70d94c81bab9a348be844e90ace91/
-    http://autobuild.buildroot.org/results/6c2/6c20c9e222f94e6b70b97b87e1393dd16da2718c/
+Upstream has only ever tested the code on ARM. It does build for x86
+(and power, and anything else I guess), but as you point out below it
+is only useful when run from a processor that is attached to a p8
+host.
 
-Also slightly reorganise the dependency list, now that it no longer fits
-on a single line.
+What's the general rule in this circumstance?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/qt5/qt5webkit/qt5webkit.mk | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+>
+>> +     help
+>> +       PowerPC FSI Debugger, for low level debugging of a PowerPC CPU
+>> +       over FSI.
+>
+> It would have been good to explain somewhere than pdbg runs on the BMC,
+> which is generally an ARM-powered system monitoring/controlling a
+> number of PowerPC CPUs. Otherwise, it feels odd to have a
+> PowerPC-related package available only on the ARM architecture.
 
-diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
-index e6e8fe3..a47a235 100644
---- a/package/qt5/qt5webkit/qt5webkit.mk
-+++ b/package/qt5/qt5webkit/qt5webkit.mk
-@@ -8,7 +8,9 @@ QT5WEBKIT_VERSION = b889f460280ad98c89ede179bd3b9ce9cb02002b
- # Using GitHub since it supports downloading tarballs from random commits.
- # The http://code.qt.io/cgit/qt/qtwebkit.git/ repo doesn't allow to do so.
- QT5WEBKIT_SITE = $(call github,qtproject,qtwebkit,$(QT5WEBKIT_VERSION))
--QT5WEBKIT_DEPENDENCIES = qt5base sqlite host-ruby host-gperf host-bison host-flex
-+QT5WEBKIT_DEPENDENCIES = \
-+	host-bison host-flex host-gperf host-python host-ruby \
-+	qt5base sqlite
- QT5WEBKIT_INSTALL_STAGING = YES
- 
- QT5WEBKIT_LICENSE_FILES = Source/WebCore/LICENSE-LGPL-2 Source/WebCore/LICENSE-LGPL-2.1
-@@ -31,6 +33,16 @@ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
- QT5WEBKIT_DEPENDENCIES += qt5declarative
- endif
- 
-+# QtWebkit's build system uses python, but only supports python2. We work
-+# around this by forcing python2 early in the PATH, via a python->python2
-+# symlink.
-+QT5WEBKIT_ENV = PATH=$(@D)/bin:$(BR_PATH)
-+define QT5WEBKIT_PYTHON2_SYMLINK
-+	mkdir -p $(@D)/bin
-+	ln -sf $(HOST_DIR)/usr/bin/python2 $(@D)/bin/python
-+endef
-+QT5WEBKIT_PRE_CONFIGURE_HOOKS += QT5WEBKIT_PYTHON2_SYMLINK
-+
- # Since we get the source from git, generated header files are not included.
- # qmake detects that header file generation (using the syncqt tool) must be
- # done based on the existence of a .git directory (cfr. the git_build config
-@@ -39,15 +51,15 @@ endif
- # create an empty .git directory.
- define QT5WEBKIT_CONFIGURE_CMDS
- 	mkdir -p $(@D)/.git
--	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(HOST_DIR)/usr/bin/qmake)
- endef
- 
- define QT5WEBKIT_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(MAKE) -C $(@D)
- endef
- 
- define QT5WEBKIT_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(QT5WEBKIT_ENV) $(MAKE) -C $(@D) install
- 	$(QT5_LA_PRL_FILES_FIXUP)
- endef
- 
--- 
-2.7.4
+Sure, I will add some more text.
+
+>
+>> +PDBG_VERSION = 90a7370a11e727f1482dea6ff2bd6aec20c64805
+>> +PDBG_SITE = $(call github,open-power,pdbg,$(PDBG_VERSION))
+>> +PDBG_LICENSE = Apache 2.0
+>> +PDBG_LICENSE_FILES = COPYING
+>> +PDBG_AUTORECONF = YES
+>
+> Side note (unrelated to Buildroot packaging): had a look at the code,
+> and this mapping of /dev/mem to then bing-bang some protocol on GPIOs
+> from userspace is really, really nasty :-/
+
+Yep! You and I are the same page here. To date the tool has been used
+on a BIOS vendor's BMC firmware, running a very old kernel that lacks
+the proper linux APIs for access to hardware. It's not ideal.
+
+I've been slowly upstreaming a from-scratch kernel port. Once we have
+that in place pdbg can add support for doing GPIO through the kernel.
+
+In the future near future we will add FSI support in the kernel, and
+from there perhaps use the Coldfire processor inside the Aspeed SoC to
+offload the bitbanging. Lots of work to do, but we're getting there.
+
+Cheers,
+
+Joel
