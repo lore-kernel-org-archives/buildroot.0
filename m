@@ -1,60 +1,271 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 26 Jul 2016 15:14:29 +0300
-Subject: [Buildroot] [PATCH] ipkg: needs MMU
-In-Reply-To: <20160726134801.1d2eb91b@free-electrons.com>
-References: <b8ef63602bd75ed7fe6b8d87d48e5d36680f3c91.1469505637.git.baruch@tkos.co.il>
- <20160726095929.63583d2e@free-electrons.com>
- <20160726100101.208d0299@free-electrons.com>
- <20160726111557.GY3588@tarshish>
- <20160726134801.1d2eb91b@free-electrons.com>
-Message-ID: <20160726121429.GA3588@tarshish>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 26 Jul 2016 14:26:39 +0200
+Subject: [Buildroot] [PATCH 1/1] tinydtls: new package
+Message-ID: <1469535999-23385-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+tinydtls is a library for Datagram Transport Layer Security
+(DTLS) covering both the client and the server state machine.
+It is implemented in C and provides support for the mandatory
+cipher suites specified in CoAP.
 
-On Tue, Jul 26, 2016 at 01:48:01PM +0200, Thomas Petazzoni wrote:
-> On Tue, 26 Jul 2016 14:15:57 +0300, Baruch Siach wrote:
-> > Right. It's this code from libbb/libbb.h:
-> > 
-> > /* Cope with mmu-less systems somewhat gracefully */
-> > #if defined(__UCLIBC__) && !defined(__ARCH_HAS_MMU__)
-> > #define fork    vfork
-> > #endif
-> > 
-> > This breaks musl that does not define __UCLIBC__. I posted an updated patch to 
-> > uses HAVE_FORK instead.
-> 
-> We don't use musl on any noMMU platform today, so this certainly cannot
-> explain failures like:
-> 
->   http://autobuild.buildroot.net/results/6cf/6cf75e08795d9ab194ce4e882c0f4858bad979c3/
-> 
-> (which was the first one mentioned in your commit log), since this
-> failure happens with uClibc.
-> 
-> Looking at http://autobuild.buildroot.net/?reason=ipkg-0.99.163, I see
-> (looking only at the failures since the beginning of 2016) :
-> 
->  * Numerous failures on ARM noMMU (uClibc)
->  * Two failures on m68k noMMU (uClibc)
->  * An old failure on i686 due to download issue
-> 
-> i.e, none of the failures are caused by a musl-related build.
+https://sourceforge.net/projects/tinydtls
 
-You are right of course, forgive my sloppiness. To be correct for uClibc the 
-code should test for __ARCH_USE_MMU__ instead of __ARCH_HAS_MMU__. But testing 
-HAVE_FORK is better, I thing, since it also covers other hypothetical MMU-less 
-C libraries.
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+---
+ package/Config.in                                  |   1 +
+ ...te-Makefile.in-to-allow-cross-compilation.patch | 170 +++++++++++++++++++++
+ package/tinydtls/Config.in                         |  13 ++
+ package/tinydtls/tinydtls.hash                     |   2 +
+ package/tinydtls/tinydtls.mk                       |  18 +++
+ 5 files changed, 204 insertions(+)
+ create mode 100644 package/tinydtls/0001-Update-Makefile.in-to-allow-cross-compilation.patch
+ create mode 100644 package/tinydtls/Config.in
+ create mode 100644 package/tinydtls/tinydtls.hash
+ create mode 100644 package/tinydtls/tinydtls.mk
 
-I'll resend the patch with a correct description.
-
-baruch
-
+diff --git a/package/Config.in b/package/Config.in
+index 563c279..3563870 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -887,6 +887,7 @@ menu "Crypto"
+ 	source "package/nettle/Config.in"
+ 	source "package/openssl/Config.in"
+ 	source "package/polarssl/Config.in"
++	source "package/tinydtls/Config.in"
+ 	source "package/trousers/Config.in"
+ endmenu
+ 
+diff --git a/package/tinydtls/0001-Update-Makefile.in-to-allow-cross-compilation.patch b/package/tinydtls/0001-Update-Makefile.in-to-allow-cross-compilation.patch
+new file mode 100644
+index 0000000..5e91f2e
+--- /dev/null
++++ b/package/tinydtls/0001-Update-Makefile.in-to-allow-cross-compilation.patch
+@@ -0,0 +1,170 @@
++From a6f312dfb4497d5e72664c4772a8b122e25b81d8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fabrice.fontaine@orange.com>
++Date: Tue, 26 Jul 2016 09:09:53 +0200
++Subject: [PATCH] Update Makefile.in to allow cross-compilation
++
++Use CC, CPP and DESTDIR environment variables passed to configure in Makefile.in files
++Fix definition of LIBS and LDFLAGS (LDFLAGS was set to @LIBS@)
++
++Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
++---
++ Makefile.in       | 13 ++++++++-----
++ aes/Makefile.in   |  7 +++++--
++ doc/Makefile.in   |  4 ++--
++ ecc/Makefile.in   |  7 +++++--
++ sha2/Makefile.in  |  7 +++++--
++ tests/Makefile.in |  4 +++-
++ 6 files changed, 28 insertions(+), 14 deletions(-)
++
++diff --git a/Makefile.in b/Makefile.in
++index 38cc665..7dcd424 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -40,7 +40,9 @@ OBJECTS:= $(patsubst %.c, %.o, $(SOURCES)) $(SUB_OBJECTS)
++ HEADERS:=dtls.h hmac.h dtls_debug.h dtls_config.h uthash.h numeric.h crypto.h global.h ccm.h \
++  netq.h alert.h utlist.h prng.h peer.h state.h dtls_time.h session.h \
++  tinydtls.h
+++CC:=@CC@
++ CFLAGS:=-Wall -pedantic -std=c99 @CFLAGS@
+++CPP:=@CPP@
++ CPPFLAGS:=@CPPFLAGS@ -DDTLS_CHECK_CONTENTTYPE
++ SUBDIRS:=tests doc platform-specific sha2 aes ecc
++ DISTSUBDIRS:=$(SUBDIRS)
++@@ -48,7 +50,8 @@ DISTDIR=$(top_builddir)/$(package)
++ FILES:=Makefile.in configure configure.in dtls_config.h.in tinydtls.h.in \
++   Makefile.tinydtls $(SOURCES) $(HEADERS)
++ LIB:=libtinydtls.a
++-LDFLAGS:=@LIBS@
+++LDFLAGS:=@LDFLAGS@
+++LIBS:=@LIBS@
++ ARFLAGS:=cru
++ doc:=doc
++ 
++@@ -100,10 +103,10 @@ dist:	$(FILES) $(DISTSUBDIRS)
++ 	tar czf $(package).tar.gz $(DISTDIR)
++ 
++ install:	$(LIB) $(HEADERS) $(SUBDIRS)
++-	test -d $(libdir) || mkdir -p $(libdir)
++-	test -d $(includedir) || mkdir -p $(includedir)
++-	$(install) $(LIB) $(libdir)/
++-	$(install) $(HEADERS) $(includedir)/
+++	test -d $(DESTDIR)$(libdir) || mkdir -p $(DESTDIR)$(libdir)
+++	test -d $(DESTDIR)$(includedir) || mkdir -p $(DESTDIR)$(includedir)
+++	$(install) $(LIB) $(DESTDIR)$(libdir)/
+++	$(install) $(HEADERS) $(DESTDIR)$(includedir)/
++ 	for dir in $(SUBDIRS); do \
++ 		$(MAKE) -C $$dir install="$(install)" includedir=$(includedir) install; \
++ 	done
++diff --git a/aes/Makefile.in b/aes/Makefile.in
++index 7c9f6ef..9ff7799 100644
++--- a/aes/Makefile.in
+++++ b/aes/Makefile.in
++@@ -28,8 +28,11 @@ top_srcdir:= @top_srcdir@
++ SOURCES:= rijndael.c
++ HEADERS:= rijndael.h
++ OBJECTS:= $(patsubst %.c, %.o, $(SOURCES))
+++CPP=@CPP@
++ CPPFLAGS=@CPPFLAGS@
+++CC=@CC@
++ CFLAGS=-Wall -std=c99 -pedantic @CFLAGS@
+++LDFLAGS=@LDFLAGS@
++ LDLIBS=@LIBS@
++ FILES:=Makefile.in $(SOURCES) $(HEADERS) 
++ DISTDIR=$(top_builddir)/@PACKAGE_TARNAME at -@PACKAGE_VERSION@
++@@ -60,8 +63,8 @@ dist:	$(FILES)
++ 	cp -p $(FILES) $(DISTDIR)/aes
++ 
++ install:	$(HEADERS)
++-	test -d $(includedir)/aes || mkdir -p $(includedir)/aes
++-	$(install) $(HEADERS) $(includedir)/aes
+++	test -d $(DESTDIR)$(includedir)/aes || mkdir -p $(DESTDIR)$(includedir)/aes
+++	$(install) $(HEADERS) $(DESTDIR)$(includedir)/aes
++ 
++ .gitignore:
++ 	echo "core\n*~\n*.[oa]\n*.gz\n*.cap\n$(PROGRAM)\n$(DISTDIR)\n.gitignore" >$@
++diff --git a/doc/Makefile.in b/doc/Makefile.in
++index a07101e..5ab0a35 100644
++--- a/doc/Makefile.in
+++++ b/doc/Makefile.in
++@@ -32,5 +32,5 @@ dist:	doc
++ 	cp -r $(FILES) $(DISTDIR)/doc
++ 
++ install:	$(doc) html
++-	test -d $(htmldir) || mkdir -p $(htmldir)
++-	cp -r html/* $(htmldir)
+++	test -d $(DESTDIR)$(htmldir) || mkdir -p $(DESTDIR)$(htmldir)
+++	cp -r html/* $(DESTDIR)$(htmldir)
++diff --git a/ecc/Makefile.in b/ecc/Makefile.in
++index 2ba17a1..2086d4f 100644
++--- a/ecc/Makefile.in
+++++ b/ecc/Makefile.in
++@@ -36,8 +36,11 @@ include Makefile.contiki
++ else
++ ECC_OBJECTS:= $(patsubst %.c, %.o, $(ECC_SOURCES)) ecc_test.o
++ PROGRAMS:= testecc testfield
+++CPP=@CPP@
++ CPPFLAGS=@CPPFLAGS@
+++CC=@CC@
++ CFLAGS=-Wall -std=c99 -pedantic @CFLAGS@ -DTEST_INCLUDE
+++LDFLAGS=@LDFLAGS@
++ LDLIBS=@LIBS@
++ 
++ .PHONY: all dirs clean install distclean .gitignore doc
++@@ -74,8 +77,8 @@ dist:	$(FILES)
++ 	cp -p $(FILES) $(DISTDIR)/ecc
++ 
++ install:	$(HEADERS)
++-	test -d $(includedir)/ecc || mkdir -p $(includedir)/ecc
++-	$(install) $(HEADERS) $(includedir)/ecc
+++	test -d $(DESTDIR)$(includedir)/ecc || mkdir -p $(DESTDIR)$(includedir)/ecc
+++	$(install) $(ECC_HEADERS) $(DESTDIR)$(includedir)/ecc
++ 
++ .gitignore:
++ 	echo "core\n*~\n*.[oa]\n*.gz\n*.cap\n$(PROGRAM)\n$(DISTDIR)\n.gitignore" >$@
++diff --git a/sha2/Makefile.in b/sha2/Makefile.in
++index 9f19314..69f8793 100644
++--- a/sha2/Makefile.in
+++++ b/sha2/Makefile.in
++@@ -28,8 +28,11 @@ top_srcdir:= @top_srcdir@
++ SOURCES:= sha2.c
++ HEADERS:=sha2.h
++ OBJECTS:= $(patsubst %.c, %.o, $(SOURCES))
+++CPP=@CPP@
++ CPPFLAGS=@CPPFLAGS@ -I$(top_srcdir)
+++CC=@CC@
++ CFLAGS=-Wall -std=c99 -pedantic @CFLAGS@
+++LDFLAGS=@LDFLAGS@
++ LDLIBS=@LIBS@
++ FILES:=Makefile.in $(SOURCES) $(HEADERS) README sha2prog.c sha2speed.c sha2test.pl 
++ DISTDIR=$(top_builddir)/@PACKAGE_TARNAME at -@PACKAGE_VERSION@
++@@ -62,8 +65,8 @@ dist:	$(FILES)
++ 	cp -pr testvectors $(DISTDIR)/sha2/testvectors
++ 
++ install:	$(HEADERS)
++-	test -d $(includedir)/sha2 || mkdir -p $(includedir)/sha2
++-	$(install) $(HEADERS) $(includedir)/sha2
+++	test -d $(DESTDIR)$(includedir)/sha2 || mkdir -p $(DESTDIR)$(includedir)/sha2
+++	$(install) $(HEADERS) $(DESTDIR)$(includedir)/sha2
++ 
++ .gitignore:
++ 	echo "core\n*~\n*.[oa]\n*.gz\n*.cap\n$(PROGRAM)\n$(DISTDIR)\n.gitignore" >$@
++diff --git a/tests/Makefile.in b/tests/Makefile.in
++index a8a2ed0..b45f440 100644
++--- a/tests/Makefile.in
+++++ b/tests/Makefile.in
++@@ -32,9 +32,11 @@ SOURCES:= dtls-server.c ccm-test.c prf-test.c \
++ OBJECTS:= $(patsubst %.c, %.o, $(SOURCES))
++ PROGRAMS:= $(patsubst %.c, %, $(SOURCES))
++ HEADERS:=
+++CC:=@CC@
++ CFLAGS:=-Wall @CFLAGS@ 
+++CPP:=@CPP@
++ CPPFLAGS:=-I$(top_srcdir) @CPPFLAGS@
++-LDFLAGS:=-L$(top_builddir) 
+++LDFLAGS:=-L$(top_builddir) @LDFLAGS@ 
++ LDLIBS:=-ltinydtls @LIBS@
++ DISTDIR=$(top_builddir)/@PACKAGE_TARNAME at -@PACKAGE_VERSION@
++ FILES:=Makefile.in $(SOURCES) ccm-testdata.c #cbc_aes128-testdata.c
++-- 
++2.7.4
++
+diff --git a/package/tinydtls/Config.in b/package/tinydtls/Config.in
+new file mode 100644
+index 0000000..df9c4b5
+--- /dev/null
++++ b/package/tinydtls/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_TINYDTLS
++	bool "tinydtls"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  tinydtls is a library for Datagram Transport Layer Security
++	  (DTLS) covering both the client and the server state machine.
++	  It is implemented in C and provides support for the mandatory
++	  cipher suites specified in CoAP.
++
++	  https://sourceforge.net/projects/tinydtls
++
++comment "tinydtls needs a toolchain w/ threads"
++        depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/tinydtls/tinydtls.hash b/package/tinydtls/tinydtls.hash
+new file mode 100644
+index 0000000..909c8d1
+--- /dev/null
++++ b/package/tinydtls/tinydtls.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256	ccf6d8fbae03fb2e0ba32878ed8e57d8b4f73538b1064df90a3e764da5fac010	tinydtls-0.8.2.tar.gz
+diff --git a/package/tinydtls/tinydtls.mk b/package/tinydtls/tinydtls.mk
+new file mode 100644
+index 0000000..c4dc35d
+--- /dev/null
++++ b/package/tinydtls/tinydtls.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# tinydtls
++#
++################################################################################
++
++TINYDTLS_RELEASE = r5
++TINYDTLS_VERSION = 0.8.2
++TINYDTLS_SOURCE = tinydtls-$(TINYDTLS_VERSION).tar.gz
++TINYDTLS_SITE = \
++	http://downloads.sourceforge.net/project/tinydtls/$(TINYDTLS_RELEASE)
++TINYDTLS_LICENSE = MIT
++
++TINYDTLS_INSTALL_STAGING = YES
++
++TINYDTLS_STRIP_COMPONENTS = 2
++
++$(eval $(autotools-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.7.4
