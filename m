@@ -1,12 +1,9 @@
 From: Khem Raj <raj.khem@gmail.com>
-Date: Tue, 26 Jul 2016 11:10:35 -0700
-Subject: [Buildroot] [PATCH] ipkg: needs MMU
-In-Reply-To: <20160726121429.GA3588@tarshish>
-References: <b8ef63602bd75ed7fe6b8d87d48e5d36680f3c91.1469505637.git.baruch@tkos.co.il>
- <20160726095929.63583d2e@free-electrons.com>
- <20160726100101.208d0299@free-electrons.com> <20160726111557.GY3588@tarshish>
- <20160726134801.1d2eb91b@free-electrons.com> <20160726121429.GA3588@tarshish>
-Message-ID: <118D5128-4156-4FAC-B1CA-CCBA30F82BD1@gmail.com>
+Date: Tue, 26 Jul 2016 11:14:16 -0700
+Subject: [Buildroot] [PATCH] ipkg: fix ARM MMU-less build
+In-Reply-To: <5593192e371e7a40e09e9b0189f3bfb2432a0e67.1469536052.git.baruch@tkos.co.il>
+References: <5593192e371e7a40e09e9b0189f3bfb2432a0e67.1469536052.git.baruch@tkos.co.il>
+Message-ID: <1785552C-C8C3-485A-92F2-11EBD2127B8E@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,63 +11,60 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-> On Jul 26, 2016, at 5:14 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> On Jul 26, 2016, at 5:27 AM, Baruch Siach <baruch@tkos.co.il> wrote:
 > 
-> Hi Thomas,
+> The code incorrectly tests for __ARCH_HAS_MMU__ which is true for the ARM
+> architecture, instead of __ARCH_USE_MMU__ which applies to this specific
+> build. Add a patch making direct use of HAVE_FORK that configure defines when
+> fork() is detected.
 > 
-> On Tue, Jul 26, 2016 at 01:48:01PM +0200, Thomas Petazzoni wrote:
->> On Tue, 26 Jul 2016 14:15:57 +0300, Baruch Siach wrote:
->>> Right. It's this code from libbb/libbb.h:
->>> 
->>> /* Cope with mmu-less systems somewhat gracefully */
->>> #if defined(__UCLIBC__) && !defined(__ARCH_HAS_MMU__)
->>> #define fork    vfork
->>> #endif
->>> 
->>> This breaks musl that does not define __UCLIBC__. I posted an updated patch to
->>> uses HAVE_FORK instead.
->> 
->> We don't use musl on any noMMU platform today,
+> Fixes:
+> http://autobuild.buildroot.net/results/6cf/6cf75e08795d9ab194ce4e882c0f4858bad979c3/
+> http://autobuild.buildroot.net/results/964/964d8f694bc7d05b35411eabfbadf40bbf6337ae/
+> http://autobuild.buildroot.net/results/0f2/0f2cddf89af3ad4330556acd04ab6cb080370e24/
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> package/ipkg/0002-fix-arm-nommu.patch | 22 ++++++++++++++++++++++
 
-SH2 fdpic is available in musl, so in theory you can start :)
 
->> so this certainly cannot
->> explain failures like:
->> 
->>  http://autobuild.buildroot.net/results/6cf/6cf75e08795d9ab194ce4e882c0f4858bad979c3/
->> 
->> (which was the first one mentioned in your commit log), since this
->> failure happens with uClibc.
->> 
->> Looking at http://autobuild.buildroot.net/?reason=ipkg-0.99.163, I see
->> (looking only at the failures since the beginning of 2016) :
->> 
->> * Numerous failures on ARM noMMU (uClibc)
->> * Two failures on m68k noMMU (uClibc)
->> * An old failure on i686 due to download issue
->> 
->> i.e, none of the failures are caused by a musl-related build.
-> 
-> You are right of course, forgive my sloppiness. To be correct for uClibc the
-> code should test for __ARCH_USE_MMU__ instead of __ARCH_HAS_MMU__. But testing
-> HAVE_FORK is better, I thing, since it also covers other hypothetical MMU-less
-> C libraries.
+ipkg has been superceded by opkg. May be it should just be removed?
 
-ARCH_USE_MMU seems to be sufficient unless there is any other kind of memory
-management system that can redefine fork behavior.
 
-is fork the only difference when it comes to nommu, I guess not. So why create an
-extra check just for fork.
-
+> 1 file changed, 22 insertions(+)
+> create mode 100644 package/ipkg/0002-fix-arm-nommu.patch
 > 
-> I'll resend the patch with a correct description.
-> 
-> baruch
-> 
+> diff --git a/package/ipkg/0002-fix-arm-nommu.patch b/package/ipkg/0002-fix-arm-nommu.patch
+> new file mode 100644
+> index 000000000000..42279a958cc1
+> --- /dev/null
+> +++ b/package/ipkg/0002-fix-arm-nommu.patch
+> @@ -0,0 +1,22 @@
+> +libbb: fix ARM no MMU build
+> +
+> +uClibc-ng defines __ARCH_HAS_MMU__ for ARM because the architecture may
+> +potentially have MMU. The code should test for __ARCH_USE_MMU__. But since
+> +configure detects the presence of fork(), use HAVE_FORK directly.
+> +
+> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> +---
+> +Patch status: no active upstream
+> +
+> +diff -Nuar ipkg-0.99.163-orig/libbb/libbb.h ipkg-0.99.163/libbb/libbb.h
+> +--- ipkg-0.99.163-orig/libbb/libbb.h	2006-02-06 10:13:02.000000000 +0200
+> ++++ ipkg-0.99.163/libbb/libbb.h	2016-07-26 13:50:09.296988855 +0300
+> +@@ -341,7 +341,7 @@
+> + #define CONSOLE_DEV "/dev/console"
+> +
+> + /* Cope with mmu-less systems somewhat gracefully */
+> +-#if defined(__UCLIBC__) && !defined(__ARCH_HAS_MMU__)
+> ++#if !defined(HAVE_FORK)
+> + #define fork	vfork
+> + #endif
+> +
 > --
->     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> 2.8.1
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
@@ -82,4 +76,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 204 bytes
 Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160726/f77e1d15/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160726/426ad574/attachment.asc>
