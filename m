@@ -1,42 +1,47 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Tue, 26 Jul 2016 13:05:33 -0700
-Subject: [Buildroot] [PATCH] ipkg: fix ARM MMU-less build
-In-Reply-To: <20160726211732.13c7836d@free-electrons.com>
-References: <5593192e371e7a40e09e9b0189f3bfb2432a0e67.1469536052.git.baruch@tkos.co.il>
- <1785552C-C8C3-485A-92F2-11EBD2127B8E@gmail.com>
- <20160726211732.13c7836d@free-electrons.com>
-Message-ID: <CAMKF1soYa2Gv+Ppkfv7=nXXuRV_h+ebcB9nyxUVUJe_RLcZoUg@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 26 Jul 2016 15:20:36 -0500
+Subject: [Buildroot] [PATCH] fmc and fmlib: bump version to fsl-sdk-v2.0
+Message-ID: <1469564436-5079-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 26, 2016 at 12:17 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Tue, 26 Jul 2016 11:14:16 -0700, Khem Raj wrote:
->> > On Jul 26, 2016, at 5:27 AM, Baruch Siach <baruch@tkos.co.il> wrote:
->> >
->> > The code incorrectly tests for __ARCH_HAS_MMU__ which is true for the ARM
->> > architecture, instead of __ARCH_USE_MMU__ which applies to this specific
->> > build. Add a patch making direct use of HAVE_FORK that configure defines when
->> > fork() is detected.
->> >
->> > Fixes:
->> > http://autobuild.buildroot.net/results/6cf/6cf75e08795d9ab194ce4e882c0f4858bad979c3/
->> > http://autobuild.buildroot.net/results/964/964d8f694bc7d05b35411eabfbadf40bbf6337ae/
->> > http://autobuild.buildroot.net/results/0f2/0f2cddf89af3ad4330556acd04ab6cb080370e24/
->> >
->> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> > ---
->> > package/ipkg/0002-fix-arm-nommu.patch | 22 ++++++++++++++++++++++
->>
->>
->> ipkg has been superceded by opkg. May be it should just be removed?
->
-> Agreed. I'm hesitating between removing entirely, or marking as
-> deprecated.
+From: Ronak Desai <ronak.desai@rockwellcollins.com>
 
-Just remove it, I don't think it is used anywhere these days.
+Signed-off-by: Ronak Desai <ronak.desai@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ package/fmc/fmc.mk     | 2 +-
+ package/fmlib/fmlib.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
+index 2bd7a98..2a95fec 100644
+--- a/package/fmc/fmc.mk
++++ b/package/fmc/fmc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FMC_VERSION = fsl-sdk-v1.8
++FMC_VERSION = fsl-sdk-v2.0
+ FMC_SITE = git://git.freescale.com/ppc/sdk/fmc.git
+ FMC_LICENSE = MIT
+ FMC_LICENSE_FILES = COPYING
+diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
+index 405ee14..42cdc27 100644
+--- a/package/fmlib/fmlib.mk
++++ b/package/fmlib/fmlib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FMLIB_VERSION = fsl-sdk-v1.8
++FMLIB_VERSION = fsl-sdk-v2.0
+ FMLIB_SITE = git://git.freescale.com/ppc/sdk/fmlib.git
+ FMLIB_LICENSE = BSD-3c, GPLv2+
+ FMLIB_LICENSE_FILES = COPYING
+-- 
+1.9.1
