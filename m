@@ -1,49 +1,58 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 27 Jul 2016 16:32:18 -0500
-Subject: [Buildroot] [PATCH] squashfs: update site to git.kernel.org
-Message-ID: <1469655138-65197-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Jul 2016 23:32:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/transmission: Fix compilation
+ when using system libminiupnpc with libutp disabled
+In-Reply-To: <20160717154436.GI3614@free.fr>
+References: <1467868386-32591-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160712164247.GB3680@free.fr> <20160717154436.GI3614@free.fr>
+Message-ID: <20160727233258.244d4c8b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Atul Singh <atul.singh.mandla@rockwellcollins.com>
+Hello,
 
-squashfs-tools development has been moved to git.kernel.org from
-Sourceforge.
+On Sun, 17 Jul 2016 17:44:36 +0200, Yann E. MORIN wrote:
 
-Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
----
- package/squashfs/squashfs.hash | 4 ++--
- package/squashfs/squashfs.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+> So it means that headers from the internal libutp will always be used,
+> even if an external one is found. This is probably not very good...
+> 
+> Instead, I think the fix is probably something like:
+> 
+>     --- configure.ac(revision 14736)
+>     +++ configure.a c)(working copy)
+>     @@ -358,6 +358,10 @@
+>          else
+>            AC_MSG_ERROR("Unable to build uTP support -- C++ compiler not found")
+>          fi
+>     +else
+>     +    # For the system libminiupnpc with UTC disabled,
+>     +    # point to our bundled UTP headers
+>     +    LIBUTP_CFLAGS="-I\$(top_srcdir)/third-party/"
+>      fi
+>      AC_SUBST(LIBUTP_CFLAGS)
+>      AC_SUBST(LIBUTP_LIBS)
+>     @@ -457,7 +461,7 @@
+>          LIBUPNP_LIBS_QT="\$\${TRANSMISSION_TOP}/third-party/miniupnp/libminiupnp.a"
+>      else
+>          AC_DEFINE([SYSTEM_MINIUPNP])
+>     -    LIBUPNP_CFLAGS="" 
+>     +    LIBUPNP_CFLAGS="${LIBUTP_CFLAGS}"
+>          LIBUPNP_LIBS="-lminiupnpc"
+>          LIBUPNP_LIBS_QT="-lminiupnpc"
+>      fi
+> 
+> Can you test and respin if OK, please?  Thanks! :-)
 
-diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
-index e308089..eb456be 100644
---- a/package/squashfs/squashfs.hash
-+++ b/package/squashfs/squashfs.hash
-@@ -1,2 +1,2 @@
--# Locally computed:
--sha256  0d605512437b1eb800b4736791559295ee5f60177e102e4d4ccd0ee241a5f3f6  squashfs4.3.tar.gz
-+# Locally computed
-+sha256	e807202ab4dcfeea214df49d3a728b9a85644a7e7262fc6fcd875a0def99d4ed	squashfs-9c1db6d13a51a2e009f0027ef336ce03624eac0d.tar.gz
-diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-index cdeb9c8..9c8841a 100644
---- a/package/squashfs/squashfs.mk
-+++ b/package/squashfs/squashfs.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--SQUASHFS_VERSION = 4.3
--SQUASHFS_SOURCE = squashfs$(SQUASHFS_VERSION).tar.gz
--SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
-+SQUASHFS_VERSION = 9c1db6d13a51a2e009f0027ef336ce03624eac0d
-+SQUASHFS_SITE = git://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git
- SQUASHFS_LICENSE = GPLv2+
- SQUASHFS_LICENSE_FILES = COPYING
- SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1
+Bernd, I'll mark your patch as Changes Requested in patchwork. Could
+you respin a new version that takes into account Yann's comment?
+
+Thanks!
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
