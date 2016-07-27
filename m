@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Jul 2016 15:04:19 +0200
-Subject: [Buildroot] [PATCH] configs: warpboard: Move to kernel version
-	4.4.15
-In-Reply-To: <1469559694-17562-1-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Tue, 26 Jul 2016 16:01:34 -0300")
-References: <1469559694-17562-1-git-send-email-festevam@gmail.com>
-Message-ID: <87mvl3xmek.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Jul 2016 15:04:49 +0200
+Subject: [Buildroot] [PATCH v2] configs: warpboard: Move to kernel
+	version 4.4.15
+In-Reply-To: <1469560128-25586-1-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Tue, 26 Jul 2016 16:08:48 -0300")
+References: <1469560128-25586-1-git-send-email-festevam@gmail.com>
+Message-ID: <87invrxmdq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,7 +29,10 @@ To: buildroot@busybox.net
  > This one applies against
  > [PATCH v3] configs/warpboard: Generate an sdcard image
 
-Committed, thanks.
+ > Changes since v1:
+ > - Remove BR2_GLOBAL_PATCH_DIR as we no longer need any extra patches
+
+Sorry, this is the version I committed - Thanks.
 
 -- 
 Bye, Peter Korsgaard
