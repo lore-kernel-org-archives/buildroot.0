@@ -1,66 +1,40 @@
-From: Romain Perier <romain.perier@free-electrons.com>
-Date: Wed, 27 Jul 2016 10:15:59 +0200
-Subject: [Buildroot] [PATCH v3 6/6] package/amd-catalyst-driver: Add AMD
- proprietary graphic stack support
-In-Reply-To: <20160726203918.GE5925@free.fr>
-References: <1469521290-20446-1-git-send-email-romain.perier@free-electrons.com>
- <1469521290-20446-7-git-send-email-romain.perier@free-electrons.com>
- <20160726203918.GE5925@free.fr>
-Message-ID: <57986DBF.5040608@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 27 Jul 2016 08:32:13 +0000
+Subject: [Buildroot] Access to Buildroot git via https
+In-Reply-To: <20160718104900.77748f2a@free-electrons.com>
+References: <1468831359.3068.19.camel@synopsys.com>
+ <20160718104900.77748f2a@free-electrons.com>
+Message-ID: <1469608243.6389.5.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-Le 26/07/2016 22:39, Yann E. MORIN a ?crit :
->> +	help
->> +	  Installs the OpenCL binary blobs and the ICD profile
->> +	  for GPGPU computing.
->> +
->> +config BR2_PACKAGE_AMD_CATALYST_DRIVER_MODULE_LICENSE_GPL
->> +	bool "fglrx module export GPL license"
->> +	help
->> +	  If enabled, you accept that the driver will be patched locally
->> +	  in order to export itself as a GPL module to the Linux kernel.
->> +	  This is required as the module uses some GPL-compatible
->> +	  symbols. Without this fix, the module won't build properly
->> +	  because the Linux kernel build system does not allow to link a
->> +	  non GPL module, if this one tries to use GPL-only symbols. It
->> +	  is worth mentioning that from a legal point of view, you are
->> +	  most likely not allowed to redistribute such a kernel module,
->> +	  in a pre-built form. The author and the buildroot project
->> +	  disclaim any responsibility in case these terms are not
->> +	  respected.
->
-> OK, so this one is definitely a NAK from me. This is definitely not
-> acceptable. We can not go like that and just change the licensing
-> information: this is legally questionable that we even provide such an
-> option, even with the legal blurb you wrote, which is by far not
-> explicit enough either, but I won't comment on it because I argue that
-> this option should jsut go away with the code it protects.
->
-> Instead I suggest the following:
->
->      config BR2_PACKAGE_AMD_CATALYST_DRIVER_MODULE
->          bool "fglrx kernel module"
->          depends on BR2_KERNEL_LINUX
->          depends on whatever is needed
->          help
->            The kernel driver will build properly, but fail to work at
->            runtime because it uses Linux kernel symbols exposed only to
->            GPL-licensed modules.
+On Mon, 2016-07-18 at 10:49 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 18 Jul 2016 08:44:00 +0000, Alexey Brodkin wrote:
+> 
+> > 
+> > I'm wondering if there's a way to access Buildroot main git repo via HTTPS?
+> > Here (https://git.busybox.net/buildroot/) it is mentioned only git protocol URL:
+> > git://git.busybox.net/buildroot which doesn't work behind some corporate firewalls
+> > (and I'm tired asking IT guys to open git port for each particular server IP).
+> > 
+> > IMHO HTTPS option would be very convenient especially keeping in mind very few
+> > people have rights to commit.
+> 
+> It would indeed be useful. But in the mean time, you can already get
+> Buildroot from https://, by using the Github mirror at
+> https://github.com/buildroot/buildroot/. The Github mirror is updated
+> every 10 minutes.
 
+I just noticed GitHub repo was not updated in 10 days.
+Is there a problem with it?
 
-The problem is that without this local fix, the module *does not* build. 
-Because the link phase does not pass. This is why I proposed something 
-like that. So, either you merge a package containing a module which 
-won't build or you ask the user to patch manually his kernel...
+The last commit on GitHub is "directfb: depends on NPTL threading".
 
-Romain,
--- 
-Romain Perier, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-Alexey	
