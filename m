@@ -1,32 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jul 2016 21:26:12 +0200
-Subject: [Buildroot] [PATCH] ipkg: fix ARM MMU-less build
-In-Reply-To: <5593192e371e7a40e09e9b0189f3bfb2432a0e67.1469536052.git.baruch@tkos.co.il>
-References: <5593192e371e7a40e09e9b0189f3bfb2432a0e67.1469536052.git.baruch@tkos.co.il>
-Message-ID: <20160727212612.6e55d337@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Jul 2016 21:26:39 +0200
+Subject: [Buildroot] [git commit] configs: nitrogen*: bump u-boot version to
+	v2016.03
+Message-ID: <20160727192743.3106180789@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a8e42c636936c3bc67ad9f7bb8dd77d47aaf23a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 26 Jul 2016 15:27:32 +0300, Baruch Siach wrote:
-> The code incorrectly tests for __ARCH_HAS_MMU__ which is true for the ARM
-> architecture, instead of __ARCH_USE_MMU__ which applies to this specific
-> build. Add a patch making direct use of HAVE_FORK that configure defines when
-> fork() is detected.
+Using the latest commit of our 2016.03 U-Boot branch:
+https://github.com/boundarydevices/u-boot-imx6/tree/boundary-v2016.03
 
-Your commit log and patch descriptor seems to imply it's ARM related,
-but it's not. m68k is equally affected. So I've changed the commit log
-and the patch description, and applied (even if ipkg has been marked
-deprecated).
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/nitrogen6sx_defconfig | 4 ++--
+ configs/nitrogen6x_defconfig  | 4 ++--
+ configs/nitrogen7_defconfig   | 3 ++-
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index 883f2e1..d776566 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -22,8 +22,8 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="nitrogen6sx"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-# Last version of branch boundary-v2015.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/a4070a8/u-boot-a4070a8.tar.gz"
++# Last version of branch boundary-v2016.03
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/ed95621f.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 532223d..5b2b56a 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -22,8 +22,8 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-# Last version of branch boundary-v2015.07
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/a4070a8/u-boot-a4070a8.tar.gz"
++# Last version of branch boundary-v2016.03
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/ed95621f.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index a144f48..a01f533 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -23,7 +23,8 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="nitrogen7"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/b2e1315/u-boot-b2e1315.tar.gz"
++# Last version of branch boundary-v2016.03
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/ed95621f.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
