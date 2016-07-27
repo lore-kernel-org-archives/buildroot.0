@@ -1,36 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jul 2016 09:52:59 +0200
-Subject: [Buildroot] [PATCH] fmc and fmlib: bump version to fsl-sdk-v2.0
-In-Reply-To: <1469564436-5079-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1469564436-5079-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20160727095259.38202964@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Jul 2016 09:53:25 +0200
+Subject: [Buildroot] [PATCH] ipkg: fix ARM MMU-less build
+In-Reply-To: <20160726211732.13c7836d@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 26 Jul 2016 21:17:32 +0200")
+References: <5593192e371e7a40e09e9b0189f3bfb2432a0e67.1469536052.git.baruch@tkos.co.il>
+ <1785552C-C8C3-485A-92F2-11EBD2127B8E@gmail.com>
+ <20160726211732.13c7836d@free-electrons.com>
+Message-ID: <874m7bzfd6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, 26 Jul 2016 15:20:36 -0500, Matt Weber wrote:
-> From: Ronak Desai <ronak.desai@rockwellcollins.com>
-> 
-> Signed-off-by: Ronak Desai <ronak.desai@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Hi,
 
-Thanks for this patch. However, unless the two package bumps are
-inter-related (i.e they cannot be made independently from each other),
-we prefer to have one patch for each bump.
+ >> ipkg has been superceded by opkg. May be it should just be removed?
 
-Also, while you're at it, could you add a hash file to these packages?
-The Buildroot method for generating tarballs from Git repositories now
-guarantees that the tarballs are reproducible, so we can add hash files
-as well.
+ > Agreed. I'm hesitating between removing entirely, or marking as
+ > deprecated.
 
-Thanks,
+I've marked it as deprecated.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
