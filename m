@@ -1,69 +1,39 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 27 Jul 2016 15:27:07 +0200
-Subject: [Buildroot] [PATCH 2/2] configs: nitrogen*: bump u-boot version to
-	v2016.03
-In-Reply-To: <1469626027-28568-1-git-send-email-gary.bisson@boundarydevices.com>
-References: <1469626027-28568-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1469626027-28568-3-git-send-email-gary.bisson@boundarydevices.com>
+Date: Wed, 27 Jul 2016 15:27:05 +0200
+Subject: [Buildroot] [PATCH 0/2] configs: update Boundary Devices platforms
+Message-ID: <1469626027-28568-1-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using the latest commit of our 2016.03 U-Boot branch:
-https://github.com/boundarydevices/u-boot-imx6/tree/boundary-v2016.03
+Hi all,
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- configs/nitrogen6sx_defconfig | 4 ++--
- configs/nitrogen6x_defconfig  | 4 ++--
- configs/nitrogen7_defconfig   | 3 ++-
- 3 files changed, 6 insertions(+), 5 deletions(-)
+This series udpates both the kernel and U-Boot revisions for all
+our platforms:
+- kernel is now 4.1.15
+- U-Boot is now v2016.03
 
-diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index 883f2e1..d776566 100644
---- a/configs/nitrogen6sx_defconfig
-+++ b/configs/nitrogen6sx_defconfig
-@@ -22,8 +22,8 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="nitrogen6sx"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--# Last version of branch boundary-v2015.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/a4070a8/u-boot-a4070a8.tar.gz"
-+# Last version of branch boundary-v2016.03
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/ed95621f.tar.gz"
- 
- # kernel
- BR2_LINUX_KERNEL=y
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 532223d..5b2b56a 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -22,8 +22,8 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--# Last version of branch boundary-v2015.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/a4070a8/u-boot-a4070a8.tar.gz"
-+# Last version of branch boundary-v2016.03
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/ed95621f.tar.gz"
- 
- # kernel
- BR2_LINUX_KERNEL=y
-diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-index a144f48..a01f533 100644
---- a/configs/nitrogen7_defconfig
-+++ b/configs/nitrogen7_defconfig
-@@ -23,7 +23,8 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="nitrogen7"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/b2e1315/u-boot-b2e1315.tar.gz"
-+# Last version of branch boundary-v2016.03
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/ed95621f.tar.gz"
- 
- # kernel
- BR2_LINUX_KERNEL=y
+Note that I've had to switch Github archive adress for some reason.
+Using the old "tarball" address failed on the latest revision, now
+using the same URL as when you click on "Download" on the Github
+page.
+
+I know most configurations are cloning the full repo but I still
+find downloading the archive way faster.
+
+Regards,
+Gary
+
+Gary Bisson (2):
+  configs: nitrogen*: bump kernel version to 4.1.15_1.0.0_ga
+  configs: nitrogen*: bump u-boot version to v2016.03
+
+ configs/nitrogen6sx_defconfig | 12 ++++++------
+ configs/nitrogen6x_defconfig  | 12 ++++++------
+ configs/nitrogen7_defconfig   | 11 ++++++-----
+ 3 files changed, 18 insertions(+), 17 deletions(-)
+
 -- 
 2.8.1
