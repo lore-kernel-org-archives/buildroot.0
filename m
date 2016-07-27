@@ -1,28 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Jul 2016 09:53:25 +0200
-Subject: [Buildroot] [PATCH] ipkg: fix ARM MMU-less build
-In-Reply-To: <20160726211732.13c7836d@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 26 Jul 2016 21:17:32 +0200")
-References: <5593192e371e7a40e09e9b0189f3bfb2432a0e67.1469536052.git.baruch@tkos.co.il>
- <1785552C-C8C3-485A-92F2-11EBD2127B8E@gmail.com>
- <20160726211732.13c7836d@free-electrons.com>
-Message-ID: <874m7bzfd6.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Jul 2016 09:34:14 +0200
+Subject: [Buildroot] [git commit] ipkg: mark as deprecated
+Message-ID: <20160727080044.67839802A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=389c2cf06de82c45f44cc9a9df05a324d78fdd4c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+ipkg dates back to the early 2000s when Compaq started the handhelds.org
+project, it hasn't seen development since 2006, got forked as opkg a decade
+ago and is starting to cause autobuilder issues, so mark it as deprecated.
 
- >> ipkg has been superceded by opkg. May be it should just be removed?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ipkg/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Agreed. I'm hesitating between removing entirely, or marking as
- > deprecated.
-
-I've marked it as deprecated.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ipkg/Config.in b/package/ipkg/Config.in
+index 4b2078d..a987bd6 100644
+--- a/package/ipkg/Config.in
++++ b/package/ipkg/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_IPKG
+ 	bool "ipkg"
++	depends on BR2_DEPRECATED_SINCE_2016_08
+ 	help
+ 	  The Itsy Package Installer from handhelds.org
+ 
