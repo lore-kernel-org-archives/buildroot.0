@@ -1,55 +1,93 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 27 Jul 2016 22:20:07 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-07-24
-In-Reply-To: <62c75f63-8ca7-088e-e72c-a17c305b8d61@gmail.com>
-References: <20160725063031.0E8BC103A35@stock.ovh.net>
- <62c75f63-8ca7-088e-e72c-a17c305b8d61@gmail.com>
-Message-ID: <f69c47bb-074c-179a-1d62-65a646f0aea6@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Jul 2016 22:21:09 +0200
+Subject: [Buildroot] [PATCH 1/1] gupnp-dlna: new package
+In-Reply-To: <1469551209-28213-1-git-send-email-fabrice.fontaine@orange.com>
+References: <1469551209-28213-1-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <20160727222109.24c808ed@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+Hello,
 
-Le 25/07/2016 ? 23:50, Romain Naour a ?crit :
-> Hi Gustavoz,
+On Tue, 26 Jul 2016 18:40:09 +0200, Fabrice Fontaine wrote:
+> GUPnP DLNA is a small utility library that aims to ease the
+> DLNA-related tasks such as media profile guessing, transcoding
+> to a given profile, etc.
 > 
-> Le 25/07/2016 ? 08:30, Thomas Petazzoni a ?crit :
->> Build statistics for 2016-07-24
->> ===============================
->>
->>         success : 231
->>        failures : 108
->>        timeouts : 2  
->>           TOTAL : 341
->>
->> Classification of failures by reason
->> ====================================
->>
->>                host-efl-1.17.2 | 1 
+> http://www.gupnp.org/
 > 
->>
->> Detail of failures
->> ===================
->>
->>       mipsel |                host-efl-1.17.2 | NOK | http://autobuild.buildroot.net/results/4add2478a9c5c0402dfb90f1b6e94752a4b426b5/
-> 
-> I didn't forget this issue, but I have no clue how to fix it.
-> 
-> Feel free to submit an issue to https://phab.enlightenment.org :)
+> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 
-Can you try with efl 1.18.0-beta1 ?
+Thanks, it looks pretty good, I only have a few comments below.
 
-https://github.com/RomainNaour/buildroot/tree/efl-1.18.0-beta1
+> diff --git a/package/gupnp-dlna/Config.in b/package/gupnp-dlna/Config.in
+> new file mode 100644
+> index 0000000..f2a45b4
+> --- /dev/null
+> +++ b/package/gupnp-dlna/Config.in
+> @@ -0,0 +1,18 @@
+> +config BR2_PACKAGE_GUPNP_DLNA
+> +	bool "gupnp-dlna"
+> +	depends on BR2_USE_WCHAR # glib2, gupnp
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, gupnp
+> +	depends on BR2_USE_MMU # glib2, gupnp
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_GUPNP
 
-Best regards,
-Romain
+I couldn't spot in the configure.ac file where the gupnp dependency is
+needed.
 
+> +GUPNP_DLNA_VERSION_MAJOR = 0.10
+> +GUPNP_DLNA_VERSION = $(GUPNP_DLNA_VERSION_MAJOR).5
+> +GUPNP_DLNA_SOURCE = gupnp-dlna-$(GUPNP_DLNA_VERSION).tar.xz
+> +GUPNP_DLNA_SITE = \
+> +	http://ftp.gnome.org/pub/gnome/sources/gupnp-dlna/$(GUPNP_DLNA_VERSION_MAJOR)
+> +GUPNP_DLNA_LICENSE = LGPLv2+
 
-> 
-> Best regards,
-> Romain
-> 
+The COPYING file contains the text of the LGPLv2.1, but the source file
+contains LGPLv2+. So let's stick with LGPLv2+, but it would be good to
+have a comment.
+
+> +GUPNP_DLNA_LICENSE_FILES = COPYING
+> +GUPNP_DLNA_INSTALL_STAGING = YES
+> +GUPNP_DLNA_DEPENDENCIES = host-pkgconf libglib2 libxml2 gupnp
+
+Again, I can see the host-pkgconf, libglib2 and libxml2 dependencies in
+the configure.ac file, but not the gupnp one.
+
+> +
+> +ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
+> +GUPNP_DLNA_CONF_OPTS = --enable-legacy-gstreamer-metadata-backend
+
+Use +=
+
+> +GUPNP_DLNA_DEPENDENCIES += gstreamer gst-plugins-base
+
+Please add:
+
+else
+
+GUPNP_DLNA_CONF_OPTS += --disable-legacy-gstreamer-metadata-backend
+
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
+
+GUPNP_DLNA_CONF_OPTS += --enable-gstreamer-metadata-backend
+
+> +GUPNP_DLNA_DEPENDENCIES += gstreamer1 gst1-plugins-base
+
+else
+
+GUPNP_DLNA_CONF_OPTS += --disable-gstreamer-metadata-backend
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
