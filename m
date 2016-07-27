@@ -1,46 +1,61 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 27 Jul 2016 18:38:01 -0300
-Subject: [Buildroot] [PATCH v2]  linux-headers: bump 3.14.x and 4.{4,
-	6}.x series
-Message-ID: <1469655481-27707-1-git-send-email-festevam@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Jul 2016 23:40:55 +0200
+Subject: [Buildroot] [PATCH v11 2/2] docker-engine: new package
+In-Reply-To: <1469394628-19412-2-git-send-email-christian@paral.in>
+References: <1469394628-19412-1-git-send-email-christian@paral.in>
+ <1469394628-19412-2-git-send-email-christian@paral.in>
+Message-ID: <20160727234055.2dad417f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+Hello,
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
-Changes since v1:
-- Also bump 4.4 and 3.14
+On Sun, 24 Jul 2016 14:10:28 -0700, Christian Stewart wrote:
+> Docker is a platform to build, ship, and run applications in portable
+> containers.
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
 
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I've applied after removing the LIBRARY_PATH variable, as you suggested.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2ad9ada..089d424 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -239,15 +239,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.73"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.74"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.18.37"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.28"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
--	default "4.4.15"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.16"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
--	default "4.6.4"		if BR2_KERNEL_HEADERS_4_6
-+	default "4.6.5"		if BR2_KERNEL_HEADERS_4_6
- 	default "4.7"		if BR2_KERNEL_HEADERS_4_7
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+However, there is still one thing I'm not happy with: dockerd is linked
+statically against libbtrfs. It links dynamically against
+libdevmapper.so, because there is no libdevmapper.a installed. However,
+since libbtrfs is available in STAGING_DIR as both a shared library
+*and* a static library, the Go build logic seems to prefer the static
+library. This is definitely *not* what we want in the context of
+Buildroot.
+
+See:
+
+$ arm-linux-gnueabihf-readelf -d output/target/usr/bin/dockerd | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libdevmapper.so.1.02]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+$ grep DOCKER_ENGINE .config
+BR2_PACKAGE_DOCKER_ENGINE=y
+BR2_PACKAGE_DOCKER_ENGINE_DAEMON=y
+# BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL is not set
+BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS=y
+BR2_PACKAGE_DOCKER_ENGINE_DRIVER_DEVICEMAPPER=y
+BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS=y
+$ ls -l output/staging/usr/lib/libbtrfs.*
+-rwxr-xr-x 1 thomas thomas 49938 juil. 27 23:26 output/staging/usr/lib/libbtrfs.a
+lrwxrwxrwx 1 thomas thomas    15 juil. 27 23:26 output/staging/usr/lib/libbtrfs.so -> libbtrfs.so.0.1
+lrwxrwxrwx 1 thomas thomas    15 juil. 27 23:26 output/staging/usr/lib/libbtrfs.so.0 -> libbtrfs.so.0.1
+-rwxr-xr-x 1 thomas thomas 44012 juil. 27 23:26 output/staging/usr/lib/libbtrfs.so.0.1
+$ ls -l output/staging/usr/lib/libdevmapper.*
+lrwxrwxrwx 1 thomas thomas     20 juil. 27 23:32 output/staging/usr/lib/libdevmapper.so -> libdevmapper.so.1.02
+-rwxr-xr-x 1 thomas thomas 454192 juil. 27 23:32 output/staging/usr/lib/libdevmapper.so.1.02
+
+Could you investigate this?
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
