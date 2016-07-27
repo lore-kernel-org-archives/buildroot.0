@@ -1,58 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jul 2016 23:32:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/transmission: Fix compilation
- when using system libminiupnpc with libutp disabled
-In-Reply-To: <20160717154436.GI3614@free.fr>
-References: <1467868386-32591-1-git-send-email-bernd.kuhls@t-online.de>
- <20160712164247.GB3680@free.fr> <20160717154436.GI3614@free.fr>
-Message-ID: <20160727233258.244d4c8b@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Jul 2016 23:37:56 +0200
+Subject: [Buildroot] [PATCH 00/12 v8] Introduce libudev (branch
+	yem/libudev-4)
+In-Reply-To: <20160718175241.GA3738@free.fr> (Yann E. MORIN's message of "Mon, 
+ 18 Jul 2016 19:52:41 +0200")
+References: <cover.1468274498.git.yann.morin.1998@free.fr>
+ <20160716154736.19dd42fb@free-electrons.com>
+ <20160718175241.GA3738@free.fr>
+Message-ID: <87twfawymj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Sun, 17 Jul 2016 17:44:36 +0200, Yann E. MORIN wrote:
+Hi Yann,
 
-> So it means that headers from the internal libutp will always be used,
-> even if an external one is found. This is probably not very good...
-> 
-> Instead, I think the fix is probably something like:
-> 
->     --- configure.ac(revision 14736)
->     +++ configure.a c)(working copy)
->     @@ -358,6 +358,10 @@
->          else
->            AC_MSG_ERROR("Unable to build uTP support -- C++ compiler not found")
->          fi
->     +else
->     +    # For the system libminiupnpc with UTC disabled,
->     +    # point to our bundled UTP headers
->     +    LIBUTP_CFLAGS="-I\$(top_srcdir)/third-party/"
->      fi
->      AC_SUBST(LIBUTP_CFLAGS)
->      AC_SUBST(LIBUTP_LIBS)
->     @@ -457,7 +461,7 @@
->          LIBUPNP_LIBS_QT="\$\${TRANSMISSION_TOP}/third-party/miniupnp/libminiupnp.a"
->      else
->          AC_DEFINE([SYSTEM_MINIUPNP])
->     -    LIBUPNP_CFLAGS="" 
->     +    LIBUPNP_CFLAGS="${LIBUTP_CFLAGS}"
->          LIBUPNP_LIBS="-lminiupnpc"
->          LIBUPNP_LIBS_QT="-lminiupnpc"
->      fi
-> 
-> Can you test and respin if OK, please?  Thanks! :-)
+ >> So I'm not sure if it's really worth the effort. After all, installing
+ >> only libudev without eudev is not really supported upstream (we have to
+ >> trick by building only some subdirectories).
+ >> 
+ >> I'm not entirely decided yet, so I'm waiting for arguments. But I'm
+ >> hesitating between merging this, or asking people who really care about
+ >> this to simply remove the eudev daemon in a post-build script.
 
-Bernd, I'll mark your patch as Changes Requested in patchwork. Could
-you respin a new version that takes into account Yann's comment?
+ > But then you would not have libudev if you use mdev or a static /dev.
 
-Thanks!
+Is that a common use case? I wouldn't expect anybody to use static /dev
+any more, and if you are using mdev then that is presumably for running
+scripts on hotplug events? If so, why not just use the udev daemon for
+this?
 
-Thomas
+I do understand this could be useful for using libudev with devtmpfs
+/dev, but wouldn't a simple post-build script to rm S10udev + udevd get
+us 90% of the way without any extra complexity?
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
