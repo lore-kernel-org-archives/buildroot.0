@@ -1,28 +1,103 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 27 Jul 2016 13:10:52 +0000
-Subject: [Buildroot] [Bug 8986] qt5imageformats fails to build on AArch64
-In-Reply-To: <bug-8986-163@https.bugs.busybox.net/>
-References: <bug-8986-163@https.bugs.busybox.net/>
-Message-ID: <bug-8986-163-KZkWk1wQ29@https.bugs.busybox.net/>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed, 27 Jul 2016 15:27:06 +0200
+Subject: [Buildroot] [PATCH 1/2] configs: nitrogen*: bump kernel version to
+	4.1.15_1.0.0_ga
+In-Reply-To: <1469626027-28568-1-git-send-email-gary.bisson@boundarydevices.com>
+References: <1469626027-28568-1-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1469626027-28568-2-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8986
+Using the latest commit of our 4.1.15 kernel branch:
+https://github.com/boundarydevices/linux-imx6/commits/boundary-imx_4.1.15_1.0.0_ga
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+ configs/nitrogen6sx_defconfig | 8 ++++----
+ configs/nitrogen6x_defconfig  | 8 ++++----
+ configs/nitrogen7_defconfig   | 8 ++++----
+ 3 files changed, 12 insertions(+), 12 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
-
---- Comment #4 from Peter Korsgaard <jacmet@uclibc.org> ---
-Fixed by Peter in git, thanks:
-https://git.buildroot.net/buildroot/commit/?id=c18d403a8df7a3dbe3aaffeb20f214ecd4d0bc3b
-
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index 9d25317..883f2e1 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -14,8 +14,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+-# Linux headers same as kernel, a 3.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
++# Linux headers same as kernel, a 4.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # bootloader
+ BR2_TARGET_UBOOT=y
+@@ -28,8 +28,8 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-# Last version of branch boundary-imx_3.14.52_1.1.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/0d92195d/linux-imx6-0d92195d.tar.gz"
++# Last version of branch boundary-imx_4.1.15_1.0.0_ga
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8a73de91.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 866b1f8..532223d 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -14,8 +14,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+-# Linux headers same as kernel, a 3.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
++# Linux headers same as kernel, a 4.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # bootloader
+ BR2_TARGET_UBOOT=y
+@@ -28,8 +28,8 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-# Last version of branch boundary-imx_3.14.52_1.1.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/0d92195d/linux-imx6-0d92195d.tar.gz"
++# Last version of branch boundary-imx_4.1.15_1.0.0_ga
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8a73de91.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index 9d54d78..a144f48 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -15,8 +15,8 @@ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+-# Linux headers same as kernel, a 3.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
++# Linux headers same as kernel, a 4.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # bootloader
+ BR2_TARGET_UBOOT=y
+@@ -28,8 +28,8 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-# Last version of branch boundary-imx_3.14.52_1.1.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/0d92195d/linux-imx6-0d92195d.tar.gz"
++# Last version of branch boundary-imx_4.1.15_1.0.0_ga
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/8a73de91.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.8.1
