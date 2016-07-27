@@ -1,51 +1,53 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 27 Jul 2016 15:53:33 +0200
-Subject: [Buildroot] [PATCH 4/5] imx-parser: add missing configure options
-In-Reply-To: <1469627614-29709-1-git-send-email-gary.bisson@boundarydevices.com>
-References: <1469627614-29709-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1469627614-29709-5-git-send-email-gary.bisson@boundarydevices.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 27 Jul 2016 09:50:32 -0500
+Subject: [Buildroot] [PATCH v2] asciidoc: use absolute path for resources
+Message-ID: <1469631032-12210-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable hard float support when the configuration contains:
-BR2_ARM_EABIHF=y
+From: Atul Singh <atul.singh.mandla@rockwellcollins.com>
 
-See Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/blob/krogoth/recipes-multimedia/imx-parser/imx-parser.inc
+One of the "features" of a2x is that the '-r|--resource' flag imports
+resources relative to the [SOURCE_FILE], not the CWD. The current
+implementation tries to import resources from the destination dir $(@D),
+which works fine for out-of-tree builds because $(@D) is an absolute
+path, however in-tree builds treat $(@D) as a relative path, which breaks
+because a2x treats $(@D) relative to SOURCE_FILE.
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Use the make command $(abspath names...) to convert the dest dir to an
+absolute path before passing it as a resource.
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+Signed-off-by: Atul Singh Mandla <atul.singh.mandla@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+
 ---
-
-Thanks to those options:
-- libraries are copied from release/lib/yocto/hw instead
-  of release/lib/yocto/sw.
-
-Regards,
-Gary
-
+v1 -> v2
+[Yann
+ - Removed extra spaces before the $$(foreach and --resource
+ - Updated commit message to be $(@D) vs $(D)
 ---
- package/freescale-imx/imx-parser/imx-parser.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/doc-asciidoc.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/freescale-imx/imx-parser/imx-parser.mk b/package/freescale-imx/imx-parser/imx-parser.mk
-index 75fe6cc..75364ae 100644
---- a/package/freescale-imx/imx-parser/imx-parser.mk
-+++ b/package/freescale-imx/imx-parser/imx-parser.mk
-@@ -13,6 +13,12 @@ IMX_PARSER_LICENSE = NXP Semiconductor Software License Agreement
- IMX_PARSER_LICENSE_FILES = EULA COPYING
- IMX_PARSER_REDISTRIBUTE = NO
- 
-+ifeq ($(BR2_ARM_EABIHF),y)
-+IMX_PARSER_CONF_OPTS += --enable-fhw
-+else
-+IMX_PARSER_CONF_OPTS += --enable-fsw
-+endif
-+
- define IMX_PARSER_EXTRACT_CMDS
- 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_PARSER_SOURCE))
- endef
+diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
+index 6ab5ad2..c5ff2ae 100644
+--- a/package/doc-asciidoc.mk
++++ b/package/doc-asciidoc.mk
+@@ -117,7 +117,8 @@ $$(O)/docs/$(1)/$(1).$(6): $$($(2)_SOURCES) \
+ 	$$(Q)$$(call MESSAGE,"Generating $(7) $(1)...")
+ 	$$(Q)mkdir -p $$(@D)
+ 	$$(Q)a2x $(8) -f $(4) -d book -L \
+-		$$(foreach r,$$($(2)_RESOURCES),-r $$(r)) -r $$(@D) \
++		 $$(foreach r,$$($(2)_RESOURCES) $$(@D), \
++			 --resource="$$(abspath $$(r))") \
+ 		$$($(2)_$(4)_A2X_OPTS) \
+ 		--asciidoc-opts="$$($(2)_$(4)_ASCIIDOC_OPTS)" \
+ 		$$(BUILD_DIR)/docs/$(1)/$(1).txt
 -- 
-2.8.1
+1.9.1
