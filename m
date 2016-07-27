@@ -1,89 +1,57 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Wed, 27 Jul 2016 21:41:19 +0200
-Subject: [Buildroot] [BUILDROOT] package to check hdmi screen
-In-Reply-To: <9ebc1b33-4290-44eb-4401-0a707451d417@imgtec.com>
-References: <CALtfCQbD7Y6TDjDTWrGTJQ6OF4+DeGZUPhwXs5d_9vsVqareMA@mail.gmail.com>
- <9ebc1b33-4290-44eb-4401-0a707451d417@imgtec.com>
-Message-ID: <CALtfCQb7XPwmkFQYyqkuquekMS=+Vd+UvvH49sckJaB-Pjy4fg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Jul 2016 21:42:07 +0200
+Subject: [Buildroot] [PATCH] configs/qemu: bump to latest version
+In-Reply-To: <1469483222-9091-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1469483222-9091-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160727214207.3477576e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you very much Vicent,
+Hello,
 
-fbv worked perfectly.
+On Mon, 25 Jul 2016 18:47:02 -0300, Gustavo Zacarias wrote:
+> Also bump the pc samples since they're tied to the (base) qemu config.
+> 
+> Results table:
+> 
+> Defconfig               Kernel  Qemu            Network Status
+> --------------------------------------------------------------
+> aarch64_virt            4.7     2.6.0           YES     OK (3)
+> arm_versatile           4.7     2.5.0           YES     OK
+> arm_vexpress            4.7     2.5.0           YES     OK
+> m68k_mcf5208            4.7     2.5.0           YES     OK
+> m68k_q800               4.7     q800-v2.4.0     NO (2)  OK
+> microblazebe            4.7     2.5.0           YES     OK
+> microblazeel            4.7     2.5.0           YES     OK
+> mips32r2el_malta        4.7     2.5.0           YES     OK
+> mips32r2_malta          4.7     2.5.0           YES     OK
+> mips32r6el_malta        4.7     2.6.0           YES     OK (3)
+> mips32r6_malta          4.7     2.6.0           YES     OK (3)
+> mips64el_malta          4.7     2.5.0           YES     OK
+> mips64_malta            4.7     2.5.0           YES     OK
+> mips64r6el_malta        4.7     2.6.0           YES     OK (3)
+> mips64r6_malta          4.7     2.6.0           YES     OK (3)
+> ppc_g3beige             4.7     2.5.0           YES     OK
+> ppc_mpc8544ds           4.7     2.5.0           YES     OK
+> ppc_virtex_ml507        4.7     2.5.0           NO      OK
+> ppc64_pseries           4.7     2.5.0           YES     OK
+> sh4                     4.7     2.5.0           YES     OK
+> sh4eb                   4.7     2.5.0           NO (1)  OK
+> sparc_ss10              4.7     2.5.0           YES     OK
+> sparc64_sun4u           4.7     2.5.0           YES     OK
+> sparc_sun4u             4.7     2.5.0           YES     OK
+> x86                     4.7     2.5.0           YES     OK
+> x86_64                  4.7     2.5.0           YES     OK
+> xtensa_lx60             4.7     2.6.0           YES     OK
+> xtensa_lx60_nommu       4.7     2.6.0           YES     OK
 
-Best regards.
+Applied to master, thanks.
 
-Oscar Gomez Fuente.
-
-On 27 July 2016 at 18:14, Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-wrote:
-
-> Hola ?scar :-)
->
-> indeed, we don't have the fbi package. fbi is a framebuffer image
-> viewer, so maybe you can do the same with the fbv package which is
-> included in Buildroot:
->
-> ##################################################
-> BR2_PACKAGE_FBV:
-> fbv is a very simple graphic file viewer for the framebuffer console,
-> capable of displaying GIF, JPEG, PNG and BMP files using libungif,
-> libjpeg and libpng.
->
-> http://freshmeat.net/projects/fbv/
->
-> Symbol: BR2_PACKAGE_FBV [=n]
-> Type  : boolean
-> Prompt: fbv
-> Location:
-> -> Target packages
-> -> Graphic libraries and applications (graphic/text)
-> Defined at package/fbv/Config.in:1
-> ##################################################
->
-> Regards,
->
-> Vincent.
->
-> On 27/07/16 16:56, Oscar Gomez Fuente wrote:
-> > Hi everyone,
-> >
-> > I would like to check my hdmi screen. I'm thinking in show an image on
-> > my hdmi screen.
-> >
-> > Making a searching on internet I found this command to show an image in
-> > the hdmi screen:
-> >
-> > # fbi -T 2 -d /dev/fb1 -noverbose -a name_image.png
-> >
-> > But I can't see the package fbi in buildroot.
-> >
-> > Does anyone know any other similar package for this purpose?
-> >
-> > Best regards.
-> >
-> >
-> > photo ?scar G?mez Fuente
-> > Electronic Engineer & Degree in Physical Sciences
-> > Mobile: 659.28.97.90 <tel:659.28.97.90>
-> > Email: oscargomezf at gmail.com <mailto:oscargomezf@gmail.com>
-> > Website: www.oscargomezf.com <http://www.oscargomezf.com/>
-> > <http://facebook.com/oscargomezf> <http://plus.google.com/oscargomezf> <
-> http://us.linkedin.com/in/oscargomezf> <http://twitter.com/oscargomezf_com
-> >
-> >
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160727/a4f7ea2f/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
