@@ -1,47 +1,49 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 27 Jul 2016 21:31:46 +0000
-Subject: [Buildroot] Access to Buildroot git via https
-In-Reply-To: <87y44mx0qa.fsf@dell.be.48ers.dk>
-References: <1468831359.3068.19.camel@synopsys.com>
- <20160718104900.77748f2a@free-electrons.com>
- <1469608243.6389.5.camel@synopsys.com>
- <20160727222522.12c9ce82@free-electrons.com>
- <87y44mx0qa.fsf@dell.be.48ers.dk>
-Message-ID: <1469655016.3002.2.camel@synopsys.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 27 Jul 2016 16:32:18 -0500
+Subject: [Buildroot] [PATCH] squashfs: update site to git.kernel.org
+Message-ID: <1469655138-65197-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, Thomas,
+From: Atul Singh <atul.singh.mandla@rockwellcollins.com>
 
-On Wed, 2016-07-27 at 22:52 +0200, Peter Korsgaard wrote:
-> > 
-> > > 
-> > > > 
-> > > > > 
-> > > > > > 
-> > > > > > "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
-> ?> Hello,
-> ?> On Wed, 27 Jul 2016 08:32:13 +0000, Alexey Brodkin wrote:
-> 
-> ?>> I just noticed GitHub repo was not updated in 10 days.
-> ?>> Is there a problem with it?
-> 
-> ?> My mistake. Some time ago, someone (Romain?) reported that the new tags
-> ?> were not pushed to the Github repository. So I changed the "git push"
-> ?> in my script to "git push --tags". Except that this only seems to push
-> ?> the tags, not the commits themselves when there are new commits but no
-> ?> new tags.
-> 
-> ?> So I'm now doing a "git push" *and* a "git push --tags". This should
-> ?> hopefully fix the problem.
-> 
-> I *think* you can use git push --all.
+squashfs-tools development has been moved to git.kernel.org from
+Sourceforge.
 
-At least now GitHub tree matches?https://git.busybox.net/buildroot/.
-Thanks a lot for a prompt fix!
+Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ package/squashfs/squashfs.hash | 4 ++--
+ package/squashfs/squashfs.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
--Alexey
+diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
+index e308089..eb456be 100644
+--- a/package/squashfs/squashfs.hash
++++ b/package/squashfs/squashfs.hash
+@@ -1,2 +1,2 @@
+-# Locally computed:
+-sha256  0d605512437b1eb800b4736791559295ee5f60177e102e4d4ccd0ee241a5f3f6  squashfs4.3.tar.gz
++# Locally computed
++sha256	e807202ab4dcfeea214df49d3a728b9a85644a7e7262fc6fcd875a0def99d4ed	squashfs-9c1db6d13a51a2e009f0027ef336ce03624eac0d.tar.gz
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index cdeb9c8..9c8841a 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-SQUASHFS_VERSION = 4.3
+-SQUASHFS_SOURCE = squashfs$(SQUASHFS_VERSION).tar.gz
+-SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
++SQUASHFS_VERSION = 9c1db6d13a51a2e009f0027ef336ce03624eac0d
++SQUASHFS_SITE = git://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git
+ SQUASHFS_LICENSE = GPLv2+
+ SQUASHFS_LICENSE_FILES = COPYING
+ SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1
+-- 
+1.9.1
