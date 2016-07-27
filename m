@@ -1,38 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jul 2016 23:38:04 +0200
-Subject: [Buildroot] [PATCH v11 1/2] package/btrfs-progs: install to
- staging directory
-In-Reply-To: <1469394628-19412-1-git-send-email-christian@paral.in>
-References: <1469394628-19412-1-git-send-email-christian@paral.in>
-Message-ID: <20160727233804.241fee0e@free-electrons.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 27 Jul 2016 18:38:01 -0300
+Subject: [Buildroot] [PATCH v2]  linux-headers: bump 3.14.x and 4.{4,
+	6}.x series
+Message-ID: <1469655481-27707-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Fabio Estevam <fabio.estevam@nxp.com>
 
-On Sun, 24 Jul 2016 14:10:27 -0700, Christian Stewart wrote:
-> Other packages when building against btrfs-progs require headers in the
-> staging directory under /usr/include/btrfs. This patch enables
-> installing btrfs-progs to the staging directory to enable other packages
-> to build against the btrfs-progs headers.
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/btrfs-progs/btrfs-progs.mk | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+---
+Changes since v1:
+- Also bump 4.4 and 3.14
 
-I've applied after fixing the BR2_STATIC_LIBS=y case, by:
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- 1/ Adding a BTRFS_PROGS_INSTALL_STAGING_OPTS variable
-
- 2/ Adding a patch that installs the static lib and the headers during
-    "make install-static".
-
-Thomas
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2ad9ada..089d424 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -239,15 +239,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.73"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.74"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.18.37"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.28"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.15"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.16"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+-	default "4.6.4"		if BR2_KERNEL_HEADERS_4_6
++	default "4.6.5"		if BR2_KERNEL_HEADERS_4_6
+ 	default "4.7"		if BR2_KERNEL_HEADERS_4_7
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
