@@ -1,47 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Jul 2016 21:26:39 +0200
-Subject: [Buildroot] [git commit] asciidoc: use absolute path for resources
-Message-ID: <20160727192743.1FFCB80789@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Jul 2016 21:29:07 +0200
+Subject: [Buildroot] [git commit] libarchive: add selection of bsdcat
+Message-ID: <20160727193107.2030D81E50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d4a1a78d11f823336b74835ec6b02c1505502b6
+commit: https://git.buildroot.net/buildroot/commit/?id=7ff00b2ad3cd05ba74422e53b1a2d8fb92a18614
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-One of the "features" of a2x is that the '-r|--resource' flag imports
-resources relative to the [SOURCE_FILE], not the CWD. The current
-implementation tries to import resources from the destination dir $(@D),
-which works fine for out-of-tree builds because $(@D) is an absolute
-path, however in-tree builds treat $(@D) as a relative path, which breaks
-because a2x treats $(@D) relative to SOURCE_FILE.
+libarchive builds three commandline utilities: bsdtar, bsdcpio, and
+bsdcat. This change adds control over the third utility to the list of
+configuration options.
 
-Use the make command $(abspath names...) to convert the dest dir to an
-absolute path before passing it as a resource.
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-Signed-off-by: Atul Singh Mandla <atul.singh.mandla@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/doc-asciidoc.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/libarchive/Config.in     |  6 ++++++
+ package/libarchive/libarchive.mk | 11 +++++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/package/doc-asciidoc.mk b/package/doc-asciidoc.mk
-index 6ab5ad2..4f765b8 100644
---- a/package/doc-asciidoc.mk
-+++ b/package/doc-asciidoc.mk
-@@ -117,7 +117,8 @@ $$(O)/docs/$(1)/$(1).$(6): $$($(2)_SOURCES) \
- 	$$(Q)$$(call MESSAGE,"Generating $(7) $(1)...")
- 	$$(Q)mkdir -p $$(@D)
- 	$$(Q)a2x $(8) -f $(4) -d book -L \
--		$$(foreach r,$$($(2)_RESOURCES),-r $$(r)) -r $$(@D) \
-+		$$(foreach r,$$($(2)_RESOURCES) $$(@D), \
-+			--resource="$$(abspath $$(r))") \
- 		$$($(2)_$(4)_A2X_OPTS) \
- 		--asciidoc-opts="$$($(2)_$(4)_ASCIIDOC_OPTS)" \
- 		$$(BUILD_DIR)/docs/$(1)/$(1).txt
+diff --git a/package/libarchive/Config.in b/package/libarchive/Config.in
+index 81b5936..fd429ac 100644
+--- a/package/libarchive/Config.in
++++ b/package/libarchive/Config.in
+@@ -24,4 +24,10 @@ config BR2_PACKAGE_LIBARCHIVE_BSDCPIO
+ 	  The 'bsdcpio' program is a different interface to
+ 	  essentially the same functionality as 'bsdtar'.
+ 
++config BR2_PACKAGE_LIBARCHIVE_BSDCAT
++	bool "bsdcat"
++	help
++	  The 'bsdcat' program is a simple replacement tool
++	  for zcat, bzcat, xzcat, and such.
++
+ endif
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 30a2318..bcf92f9 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -30,6 +30,16 @@ else
+ LIBARCHIVE_CONF_OPTS += --disable-bsdcpio
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDCAT),y)
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBARCHIVE_CONF_OPTS += --enable-bsdcat=static
++else
++LIBARCHIVE_CONF_OPTS += --enable-bsdcat=shared
++endif
++else
++LIBARCHIVE_CONF_OPTS += --disable-bsdcat
++endif
++
+ ifeq ($(BR2_PACKAGE_ACL),y)
+ LIBARCHIVE_DEPENDENCIES += acl
+ else
+@@ -105,6 +115,7 @@ HOST_LIBARCHIVE_DEPENDENCIES = host-zlib
+ HOST_LIBARCHIVE_CONF_OPTS = \
+ 	--disable-bsdtar \
+ 	--disable-bsdcpio \
++	--disable-bsdcat \
+ 	--disable-acl \
+ 	--disable-xattr \
+ 	--without-bz2lib \
