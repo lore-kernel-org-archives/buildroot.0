@@ -1,39 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Jul 2016 21:21:42 +0200
-Subject: [Buildroot] [PATCH v3] asciidoc: use absolute path for resources
-In-Reply-To: <1469642568-26660-1-git-send-email-matthew.weber@rockwellcollins.com>
- (Matt Weber's message of "Wed, 27 Jul 2016 13:02:48 -0500")
-References: <1469642568-26660-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <877fc6yji1.fsf@dell.be.48ers.dk>
+Date: Wed, 27 Jul 2016 21:24:09 +0200
+Subject: [Buildroot] [PATCH 0/2] configs: update Boundary Devices
+	platforms
+In-Reply-To: <1469626027-28568-1-git-send-email-gary.bisson@boundarydevices.com>
+ (Gary Bisson's message of "Wed, 27 Jul 2016 15:27:05 +0200")
+References: <1469626027-28568-1-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <8737muyjdy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+>>>>> "Gary" == Gary Bisson <gary.bisson@boundarydevices.com> writes:
 
- > From: Atul Singh <atul.singh.mandla@rockwellcollins.com>
- > One of the "features" of a2x is that the '-r|--resource' flag imports
- > resources relative to the [SOURCE_FILE], not the CWD. The current
- > implementation tries to import resources from the destination dir $(@D),
- > which works fine for out-of-tree builds because $(@D) is an absolute
- > path, however in-tree builds treat $(@D) as a relative path, which breaks
- > because a2x treats $(@D) relative to SOURCE_FILE.
+ > Hi all,
+ > This series udpates both the kernel and U-Boot revisions for all
+ > our platforms:
+ > - kernel is now 4.1.15
+ > - U-Boot is now v2016.03
 
- > Use the make command $(abspath names...) to convert the dest dir to an
- > absolute path before passing it as a resource.
+ > Note that I've had to switch Github archive adress for some reason.
+ > Using the old "tarball" address failed on the latest revision, now
+ > using the same URL as when you click on "Download" on the Github
+ > page.
 
- > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > I know most configurations are cloning the full repo but I still
+ > find downloading the archive way faster.
 
- > Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
- > Signed-off-by: Atul Singh Mandla <atul.singh.mandla@rockwellcollins.com>
- > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-
-Committed, thanks.
-
-Like Yann, I also cannot reproduce any errors without it. How do you
-trigger it?
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
