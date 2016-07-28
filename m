@@ -1,94 +1,90 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Thu, 28 Jul 2016 17:44:58 -0400
-Subject: [Buildroot] [PATCH v2 1/1] libpqxx: new package
-Message-ID: <20160728214458.13464-1-james.knight@rockwellcollins.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 29 Jul 2016 00:00:30 +0200
+Subject: [Buildroot] [PATCH 1/2] package/Makefile.in should grab
+ HOST_DIR headers using -isystem instead of -I.
+In-Reply-To: <20160725195227.21112-1-draeman@bbn.com>
+References: <20160725195227.21112-1-draeman@bbn.com>
+Message-ID: <20160728220029.GI5862@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
----
-Changes v1 -> v2:
-  - Only show package/comment when postgresql is enabled (suggested from
-     comments by Thomas Petazzoni).
-  - Explicitly set BSD-3c license (instead of just BSD; pointed out by
-     Thomas Petazzoni).
-  - Removed LIBPQXX_SOURCE as it matches default (pointed out by Thomas
-     Petazzoni).
----
- package/Config.in            |  1 +
- package/libpqxx/Config.in    | 13 +++++++++++++
- package/libpqxx/libpqxx.hash |  4 ++++
- package/libpqxx/libpqxx.mk   | 16 ++++++++++++++++
- 4 files changed, 34 insertions(+)
- create mode 100644 package/libpqxx/Config.in
- create mode 100644 package/libpqxx/libpqxx.hash
- create mode 100644 package/libpqxx/libpqxx.mk
+David, All,
 
-diff --git a/package/Config.in b/package/Config.in
-index 0eaeb1b..4b3630c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -898,6 +898,7 @@ menu "Database"
- 	source "package/gdbm/Config.in"
- 	source "package/kompexsqlite/Config.in"
- 	source "package/leveldb/Config.in"
-+	source "package/libpqxx/Config.in"
- 	source "package/mongodb/Config.in"
- 	source "package/mysql/Config.in"
- 	source "package/postgresql/Config.in"
-diff --git a/package/libpqxx/Config.in b/package/libpqxx/Config.in
-new file mode 100644
-index 0000000..a1f5cb5
---- /dev/null
-+++ b/package/libpqxx/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LIBPQXX
-+	bool "libpqxx"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_POSTGRESQL
-+	help
-+	  libpqxx is the official C++ client API for ?PostgreSQL, the
-+	  enterprise-strength open-source relational database.
-+
-+	  http://pqxx.org/development/libpqxx/
-+
-+comment "libpqxx needs toolchain w/ C++ support"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_POSTGRESQL
-diff --git a/package/libpqxx/libpqxx.hash b/package/libpqxx/libpqxx.hash
-new file mode 100644
-index 0000000..65c50c6
---- /dev/null
-+++ b/package/libpqxx/libpqxx.hash
-@@ -0,0 +1,4 @@
-+# From: http://pqxx.org/download/software/libpqxx/libpqxx-4.0.1.tar.gz.md5sum
-+md5	6ea888b9ba85dd7cef1b182dc5f223a2  libpqxx-4.0.1.tar.gz
-+# Locally computed after verifying md5sum:
-+sha256	097ceda2797761ce517faa5bee186c883df1c407cb2aada613a16773afeedc38  libpqxx-4.0.1.tar.gz
-diff --git a/package/libpqxx/libpqxx.mk b/package/libpqxx/libpqxx.mk
-new file mode 100644
-index 0000000..0587190
---- /dev/null
-+++ b/package/libpqxx/libpqxx.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# libpqxx
-+#
-+################################################################################
-+
-+LIBPQXX_VERSION = 4.0.1
-+LIBPQXX_SITE = http://pqxx.org/download/software/libpqxx
-+LIBPQXX_INSTALL_STAGING = YES
-+LIBPQXX_DEPENDENCIES = postgresql
-+LIBPQXX_LICENSE = BSD-3c
-+LIBPQXX_LICENSE_FILES = COPYING
-+
-+LIBPQXX_CONF_ENV += ac_cv_path_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
-+
-+$(eval $(autotools-package))
+On 2016-07-25 15:52 -0400, David Raeman spake thusly:
+> HOST_CFLAGS includes a search path for HOST_DIR/usr/include using -I.  When
+> HOST_CFLAGS is used by a package, these flags are passed to the compiler ahead
+> of flags passed by the package's internal make system.  If a package has a
+> header file with the same name as a header file in HOST_DIR, this causes the
+> toolchain to prefer the file from the system include directory because its -I
+> appears first on the command line.  I believe conflicts should prefer the file
+> provided by the package.  This can be accomplished by using -isystem, which is
+> more appropriate then -I for system-level include paths.
+
+This breaks building the host-python:
+
+    Python build finished, but the necessary bits to build these modules were not found:
+    _bsddb             _curses            _curses_panel
+    _sqlite3           _ssl               _tkinter
+    bsddb185           bz2                dbm
+    dl                 gdbm               imageop
+    readline           sunaudiodev        zlib
+    To find the necessary bits, look in setup.py in detect_modules() for the module's name.
+
+which in turn makes host-python-setuptoolss fail to build as well:
+
+    http://autobuild.buildroot.org/?reason=host-python-setuptools-18.7.1
+    http://autobuild.buildroot.org/results/caf/cafe38622a592ac2df96306dfd9b2c9c0450e4f0/build-end.log
+
+But the failure is really due to Python not finding the jost-zlib that
+is installed.
+
+Could you have a look at this please?
+
+Regards,
+Yann E. MORIN.
+
+> Real-world example: I need libfdt present in my HOST_DIR to install a patched
+> version of QEMU.  Meanwhile, the u-boot package provides its own copy of
+> libfdt.h that is modified from upstream.  If I have libfdt installed into
+> HOST_DIR, then host-uboot-tools fails to build because it grabs the libfdt.h
+> from the HOST_DIR area instead of using the patched version from its own
+> source tree.  This patch corrects this issue.
+> 
+> This assumes the -isystem flag is supported by the host compiler.
+> 
+> Signed-off-by: David Raeman <draeman@bbn.com>
+> ---
+>  package/Makefile.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index afd5d3a..b0ef706 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -222,7 +222,7 @@ UNZIP := $(shell which unzip || type -p unzip) -q
+>  
+>  APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(QUIET),-s)
+>  
+> -HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
+> +HOST_CPPFLAGS  = -isystem $(HOST_DIR)/usr/include
+>  HOST_CFLAGS   ?= -O2
+>  HOST_CFLAGS   += $(HOST_CPPFLAGS)
+>  HOST_CXXFLAGS += $(HOST_CFLAGS)
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.8.4.windows.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
