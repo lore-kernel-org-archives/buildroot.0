@@ -1,41 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jul 2016 22:00:21 +0200
-Subject: [Buildroot] [git commit] nano: bump version to 2.6.2
-Message-ID: <20160728201546.7C7627FDA3@busybox.osuosl.org>
+Date: Thu, 28 Jul 2016 21:52:05 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.14.x and 4.{4,
+	6}.x series
+Message-ID: <20160728201546.6AE6A7FDA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4edac6ed7b1ec3e6d7126777bb00497d8b184348
+commit: https://git.buildroot.net/buildroot/commit/?id=d2a14b53154f59b69ff1fdf796e53376307450ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index a07a969..40a6942 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 45721fa6d6128068895ad71a6967ff7398d11b064b3f888e5073c97a2b6e9a81  nano-2.6.1.tar.xz
-+sha256 22f79cc635458e0c0d110d211576f1edc03b112a62d73b914826a46547a6ac27  nano-2.6.2.tar.xz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index f01745d..7800b58 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NANO_VERSION_MAJOR = 2.6
--NANO_VERSION = $(NANO_VERSION_MAJOR).1
-+NANO_VERSION = $(NANO_VERSION_MAJOR).2
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPLv3+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2ad9ada..089d424 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -239,15 +239,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.73"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.74"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.18.37"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.28"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.15"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.16"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
+-	default "4.6.4"		if BR2_KERNEL_HEADERS_4_6
++	default "4.6.5"		if BR2_KERNEL_HEADERS_4_6
+ 	default "4.7"		if BR2_KERNEL_HEADERS_4_7
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
