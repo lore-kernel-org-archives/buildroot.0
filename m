@@ -1,88 +1,107 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Thu, 28 Jul 2016 17:20:31 -0400
-Subject: [Buildroot] [PATCH 1/1] libpqxx: new package
-Message-ID: <20160728212031.14768-1-james.knight@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Jul 2016 23:25:25 +0200
+Subject: [Buildroot] [PATCH] wavemon: new package
+In-Reply-To: <20160728205407.17745-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Thu, 28 Jul 2016 22:54:07 +0200")
+References: <20160728205407.17745-1-joerg.krause@embedded.rocks>
+Message-ID: <87fuqttpyy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
----
- package/Config.in            |  1 +
- package/libpqxx/Config.in    | 14 ++++++++++++++
- package/libpqxx/libpqxx.hash |  4 ++++
- package/libpqxx/libpqxx.mk   | 17 +++++++++++++++++
- 4 files changed, 36 insertions(+)
- create mode 100644 package/libpqxx/Config.in
- create mode 100644 package/libpqxx/libpqxx.hash
- create mode 100644 package/libpqxx/libpqxx.mk
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-diff --git a/package/Config.in b/package/Config.in
-index 0f0c376..fb8c5ba 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -898,6 +898,7 @@ menu "Database"
- 	source "package/gdbm/Config.in"
- 	source "package/kompexsqlite/Config.in"
- 	source "package/leveldb/Config.in"
-+	source "package/libpqxx/Config.in"
- 	source "package/mongodb/Config.in"
- 	source "package/mysql/Config.in"
- 	source "package/postgresql/Config.in"
-diff --git a/package/libpqxx/Config.in b/package/libpqxx/Config.in
-new file mode 100644
-index 0000000..a4fd4a1
---- /dev/null
-+++ b/package/libpqxx/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_LIBPQXX
-+	bool "libpqxx"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_POSTGRESQL
-+	help
-+	  libpqxx is the official C++ client API for ?PostgreSQL, the
-+	  enterprise-strength open-source relational database.
-+
-+	  http://pqxx.org/development/libpqxx/
-+
-+comment "libpqxx needs postgresql and toolchain w/ C++ support"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_PACKAGE_POSTGRESQL
-+	depends on !BR2_STATIC_LIBS # postgresql depends on static
-diff --git a/package/libpqxx/libpqxx.hash b/package/libpqxx/libpqxx.hash
-new file mode 100644
-index 0000000..65c50c6
---- /dev/null
-+++ b/package/libpqxx/libpqxx.hash
-@@ -0,0 +1,4 @@
-+# From: http://pqxx.org/download/software/libpqxx/libpqxx-4.0.1.tar.gz.md5sum
-+md5	6ea888b9ba85dd7cef1b182dc5f223a2  libpqxx-4.0.1.tar.gz
-+# Locally computed after verifying md5sum:
-+sha256	097ceda2797761ce517faa5bee186c883df1c407cb2aada613a16773afeedc38  libpqxx-4.0.1.tar.gz
-diff --git a/package/libpqxx/libpqxx.mk b/package/libpqxx/libpqxx.mk
-new file mode 100644
-index 0000000..be81654
---- /dev/null
-+++ b/package/libpqxx/libpqxx.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# libpqxx
-+#
-+################################################################################
-+
-+LIBPQXX_VERSION = 4.0.1
-+LIBPQXX_SITE = http://pqxx.org/download/software/libpqxx
-+LIBPQXX_SOURCE = libpqxx-$(LIBPQXX_VERSION).tar.gz
-+LIBPQXX_INSTALL_STAGING = YES
-+LIBPQXX_DEPENDENCIES = postgresql
-+LIBPQXX_LICENSE = BSD
-+LIBPQXX_LICENSE_FILES = COPYING
-+
-+LIBPQXX_CONF_ENV += ac_cv_path_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
-+
-+$(eval $(autotools-package))
+ > wavemon is an ncurse-based wireless device monitoring application allowing to
+ > watch signal and noise levels, packet statistics, device configuration and
+ > network parameters of wireless network hardware.
+
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ > ---
+ >  package/Config.in            |  1 +
+ >  package/wavemon/Config.in    | 18 ++++++++++++++++++
+ >  package/wavemon/wavemon.hash |  3 +++
+ >  package/wavemon/wavemon.mk   | 18 ++++++++++++++++++
+ >  4 files changed, 40 insertions(+)
+ >  create mode 100644 package/wavemon/Config.in
+ >  create mode 100644 package/wavemon/wavemon.hash
+ >  create mode 100644 package/wavemon/wavemon.mk
+
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 0f0c376..f0180cc 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -1594,6 +1594,7 @@ endif
+ >  	source "package/vpnc/Config.in"
+ >  	source "package/vsftpd/Config.in"
+ >  	source "package/vtun/Config.in"
+ > +	source "package/wavemon/Config.in"
+ >  	source "package/wget/Config.in"
+ >  	source "package/whois/Config.in"
+ >  	source "package/wireless-regdb/Config.in"
+ > diff --git a/package/wavemon/Config.in b/package/wavemon/Config.in
+ > new file mode 100644
+ > index 0000000..b0f2f34
+ > --- /dev/null
+ > +++ b/package/wavemon/Config.in
+ > @@ -0,0 +1,18 @@
+ > +config BR2_PACKAGE_WAVEMON
+ > +	bool "wavemon"
+ > +	depends on BR2_TOOLCHAIN_HAS_THREADS
+ > +	select BR2_PACKAGE_NCURSES
+ > +	select BR2_PACKAGE_LIBNL
+ > +	help
+ > +	  wavemon is a wireless device monitoring application that allows you
+ > +	  to watch signal and noise levels, packet statistics, device
+ > +	  configuration and network parameters of your wireless network
+ > +	  hardware.
+ > +
+ > +	  Note that you need a Linux Kernel configuration with wireless
+ > +	  extensions or with wireless extensions compatibility enabled.
+ > +
+ > +	  https://github.com/uoaerg/wavemon
+ > +
+ > +comment "wavemon needs a toolchain w/ threads"
+ > +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ > diff --git a/package/wavemon/wavemon.hash b/package/wavemon/wavemon.hash
+ > new file mode 100644
+ > index 0000000..e35f6ac
+ > --- /dev/null
+ > +++ b/package/wavemon/wavemon.hash
+ > @@ -0,0 +1,3 @@
+ > +# Locally calculated
+ > +sha256  81ee1f06f8349fee62e98ec5b53dff5b76c4d8fcb439f20cca806255239e3a2a  wavemon-v0.8.0.tar.gz
+ > +sha256  681b86ef1469df8f7091040258dd01169bea2a7df294185c35bc867725deab2f  01e987a032b81af7bbeba1c439759d750dc1f398.patch
+ > diff --git a/package/wavemon/wavemon.mk b/package/wavemon/wavemon.mk
+ > new file mode 100644
+ > index 0000000..07aeb1d
+ > --- /dev/null
+ > +++ b/package/wavemon/wavemon.mk
+ > @@ -0,0 +1,18 @@
+ > +################################################################################
+ > +#
+ > +# wavemon
+ > +#
+ > +################################################################################
+ > +
+ > +WAVEMON_VERSION = v0.8.0
+ > +WAVEMON_SITE = $(call github,uoaerg,wavemon,$(WAVEMON_VERSION))
+ > +WAVEMON_LICENSE = GPLv3+
+ > +WAVEMON_LICENSE_FILES = COPYING
+ > +WAVEMON_DEPENDENCIES = libnl ncurses
+
+It uses pkg-config to find libnl, so host-pkgconf should also be in dependencies.
+> +
+ > +# Fix musl build issue
+ > +WAVEMON_PATCH = https://github.com/uoaerg/wavemon/commit/01e987a032b81af7bbeba1c439759d750dc1f398.patch
+ > +
+
+I've added a comment explaining that this is caused by a handwritten
+Makefile.in (instead of using automake).
+
+Committed with that fixed, thanks.
+
 -- 
-2.8.4.windows.1
+Bye, Peter Korsgaard
