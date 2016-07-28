@@ -1,59 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 28 Jul 2016 22:22:21 +0200
-Subject: [Buildroot] [PATCH v3] kmsxx: new package
-In-Reply-To: <20160728221714.79a45576@free-electrons.com>
-References: <20160728193825.9199-1-maxime.ripard@free-electrons.com>
- <20160728194927.GD5862@free.fr>
- <20160728221714.79a45576@free-electrons.com>
-Message-ID: <20160728202221.GG5862@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Jul 2016 22:28:11 +0200
+Subject: [Buildroot] [PATCH 00/12 v8] Introduce libudev (branch
+	yem/libudev-4)
+In-Reply-To: <XnsA653E00AA3B69ID313208userindividu@bernd-kuhls.de> (Bernd
+ Kuhls's message of "Thu, 28 Jul 2016 22:01:27 +0200")
+References: <cover.1468274498.git.yann.morin.1998@free.fr>
+ <20160716154736.19dd42fb@free-electrons.com>
+ <20160718175241.GA3738@free.fr> <87twfawymj.fsf@dell.be.48ers.dk>
+ <XnsA653E00AA3B69ID313208userindividu@bernd-kuhls.de>
+Message-ID: <87shuttsmc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On 2016-07-28 22:17 +0200, Thomas Petazzoni spake thusly:
-> On Thu, 28 Jul 2016 21:49:27 +0200, Yann E. MORIN wrote:
-> > > +	depends on BR2_INSTALL_LIBSTDCPP
-> > > +	depends on BR2_TOOLCHAIN_HAS_THREADS # libpthread-stubs  
-> > 
-> > The comment "# libpthread-stubs" seems to imply that the dependency on
-> > C++ is ihnerited from libpthread-stubs, but it is neither selected not
-> > depended on; it is also not in the build dependency. Is it an oversight?
-> > 
-> > However, given the name of the package, I guess it needs C++ for itself.
-> > So, whether libpthread-stubs is needed or not, you should drop the
-> > comment altogether: C++ *is* needed by kms++.
-> 
-> There is no comment on the C++ dependency, so I'm not sure what you
-> mean here.
+Hi,
 
-Grr... I read in diagonal, and in my eyes, the comment was on the
-BR2_INSTALL_LIBSTDCPP line... :-/
+ >> > But then you would not have libudev if you use mdev or a static /dev.
+ >> 
+ >> Is that a common use case? I wouldn't expect anybody to use static /dev
+ >> any more
 
-> The BR2_TOOLCHAIN_HAS_THREADS dependency is inherited from libdrm,
-> which itself inherits it from libpthread-stubs. So the way we typically
-> do it is:
-> 
-> 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm -> libpthread-stubs
-> 
-> Or just:
-> 
-> 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
+ > the fli4l (http://www.fli4l.de/en/home/news/) distro uses buildroot to build 
+ > its binaries and has BR2_ROOTFS_DEVICE_CREATION_STATIC=y
 
-Indeed.
+ > in both the development branch
 
-Sorry for the noise.
+ > https://ssl.nettworks.org/repo/browse/fli4l/branches/4.0/trunk/src/packages/s
+ > rc/src/fbr/buildroot/.config-x86?hb=true#to309
 
-Regards,
-Yann E. MORIN.
+ > and the stable branch
+
+ > https://ssl.nettworks.org/repo/browse/fli4l/branches/3.10/trunk/src/packages/
+ > src/src/fbr/buildroot/.config-x86?hb=true#to255
+
+Ok, but why? Devtmpfs has been available in the kernel since ~2.6.32 or
+so.
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
