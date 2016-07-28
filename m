@@ -1,31 +1,94 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Jul 2016 23:35:47 +0200
-Subject: [Buildroot] [PATCH v2] iperf: fix "speed" display in CSV report
-In-Reply-To: <037EF233-5A06-45DC-A231-55ED9B186CD9@gmail.com>
-References: <1469725165-18180-1-git-send-email-matthew.weber@rockwellcollins.com>
- <037EF233-5A06-45DC-A231-55ED9B186CD9@gmail.com>
-Message-ID: <20160728233547.68a4656d@free-electrons.com>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Thu, 28 Jul 2016 17:44:58 -0400
+Subject: [Buildroot] [PATCH v2 1/1] libpqxx: new package
+Message-ID: <20160728214458.13464-1-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+---
+Changes v1 -> v2:
+  - Only show package/comment when postgresql is enabled (suggested from
+     comments by Thomas Petazzoni).
+  - Explicitly set BSD-3c license (instead of just BSD; pointed out by
+     Thomas Petazzoni).
+  - Removed LIBPQXX_SOURCE as it matches default (pointed out by Thomas
+     Petazzoni).
+---
+ package/Config.in            |  1 +
+ package/libpqxx/Config.in    | 13 +++++++++++++
+ package/libpqxx/libpqxx.hash |  4 ++++
+ package/libpqxx/libpqxx.mk   | 16 ++++++++++++++++
+ 4 files changed, 34 insertions(+)
+ create mode 100644 package/libpqxx/Config.in
+ create mode 100644 package/libpqxx/libpqxx.hash
+ create mode 100644 package/libpqxx/libpqxx.mk
 
-On Thu, 28 Jul 2016 10:46:44 -0700, Khem Raj wrote:
-
-> c99 says if you are printing uint64_t then its portable to use PRIu64 e.g.
-> 
-> uint64_t a_int64
-> printf("%" PRId64 "\n?, a_int64);
-
-Indeed. Matt, could you rework your patch accordingly?
-
-Thanks!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 0eaeb1b..4b3630c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -898,6 +898,7 @@ menu "Database"
+ 	source "package/gdbm/Config.in"
+ 	source "package/kompexsqlite/Config.in"
+ 	source "package/leveldb/Config.in"
++	source "package/libpqxx/Config.in"
+ 	source "package/mongodb/Config.in"
+ 	source "package/mysql/Config.in"
+ 	source "package/postgresql/Config.in"
+diff --git a/package/libpqxx/Config.in b/package/libpqxx/Config.in
+new file mode 100644
+index 0000000..a1f5cb5
+--- /dev/null
++++ b/package/libpqxx/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBPQXX
++	bool "libpqxx"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_POSTGRESQL
++	help
++	  libpqxx is the official C++ client API for ?PostgreSQL, the
++	  enterprise-strength open-source relational database.
++
++	  http://pqxx.org/development/libpqxx/
++
++comment "libpqxx needs toolchain w/ C++ support"
++	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_POSTGRESQL
+diff --git a/package/libpqxx/libpqxx.hash b/package/libpqxx/libpqxx.hash
+new file mode 100644
+index 0000000..65c50c6
+--- /dev/null
++++ b/package/libpqxx/libpqxx.hash
+@@ -0,0 +1,4 @@
++# From: http://pqxx.org/download/software/libpqxx/libpqxx-4.0.1.tar.gz.md5sum
++md5	6ea888b9ba85dd7cef1b182dc5f223a2  libpqxx-4.0.1.tar.gz
++# Locally computed after verifying md5sum:
++sha256	097ceda2797761ce517faa5bee186c883df1c407cb2aada613a16773afeedc38  libpqxx-4.0.1.tar.gz
+diff --git a/package/libpqxx/libpqxx.mk b/package/libpqxx/libpqxx.mk
+new file mode 100644
+index 0000000..0587190
+--- /dev/null
++++ b/package/libpqxx/libpqxx.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# libpqxx
++#
++################################################################################
++
++LIBPQXX_VERSION = 4.0.1
++LIBPQXX_SITE = http://pqxx.org/download/software/libpqxx
++LIBPQXX_INSTALL_STAGING = YES
++LIBPQXX_DEPENDENCIES = postgresql
++LIBPQXX_LICENSE = BSD-3c
++LIBPQXX_LICENSE_FILES = COPYING
++
++LIBPQXX_CONF_ENV += ac_cv_path_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.4.windows.1
