@@ -1,26 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jul 2016 22:01:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-intel:
-	bump version
-In-Reply-To: <1469729121-557-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Thu, 28 Jul 2016 20:05:21 +0200")
-References: <1469729121-557-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87a8h1v8em.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 28 Jul 2016 22:01:27 +0200
+Subject: [Buildroot] [PATCH 00/12 v8] Introduce libudev (branch
+	yem/libudev-4)
+References: <cover.1468274498.git.yann.morin.1998@free.fr>
+ <20160716154736.19dd42fb@free-electrons.com> <20160718175241.GA3738@free.fr>
+ <87twfawymj.fsf@dell.be.48ers.dk>
+Message-ID: <XnsA653E00AA3B69ID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Hi Peter,
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- > The last bump in buildroot dates back Dec 2015, still no new release
- > upstream but this version finally works for on my system after bumping
- > from 2.99.911 ;)
+[posted and mailed]
 
-Committed, thanks.
+Peter Korsgaard <peter@korsgaard.com> wrote in 
+news:87twfawymj.fsf at dell.be.48ers.dk:
 
--- 
-Bye, Peter Korsgaard
+>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> 
+writes:
+> 
+> > But then you would not have libudev if you use mdev or a static /dev.
+> 
+> Is that a common use case? I wouldn't expect anybody to use static /dev
+> any more
+
+the fli4l (http://www.fli4l.de/en/home/news/) distro uses buildroot to build 
+its binaries and has BR2_ROOTFS_DEVICE_CREATION_STATIC=y
+
+in both the development branch
+
+https://ssl.nettworks.org/repo/browse/fli4l/branches/4.0/trunk/src/packages/s
+rc/src/fbr/buildroot/.config-x86?hb=true#to309
+
+and the stable branch
+
+https://ssl.nettworks.org/repo/browse/fli4l/branches/3.10/trunk/src/packages/
+src/src/fbr/buildroot/.config-x86?hb=true#to255
+
+Regards, Bernd
