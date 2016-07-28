@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Jul 2016 23:32:56 +0200
-Subject: [Buildroot] [PATCH 1/1] libpqxx: new package
-In-Reply-To: <20160728212031.14768-1-james.knight@rockwellcollins.com>
-References: <20160728212031.14768-1-james.knight@rockwellcollins.com>
-Message-ID: <20160728233256.4b5aacdf@free-electrons.com>
+Date: Thu, 28 Jul 2016 23:34:06 +0200
+Subject: [Buildroot] [PATCH v3] kmsxx: new package
+In-Reply-To: <20160728193825.9199-1-maxime.ripard@free-electrons.com>
+References: <20160728193825.9199-1-maxime.ripard@free-electrons.com>
+Message-ID: <20160728233406.30c9f31d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,52 +12,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 28 Jul 2016 17:20:31 -0400, James Knight wrote:
+On Thu, 28 Jul 2016 21:38:25 +0200, Maxime Ripard wrote:
+> KMS++ is a suite of library and test tools to interact with KMS drivers in
+> the linux kernel.
+> 
+> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 
-> diff --git a/package/libpqxx/Config.in b/package/libpqxx/Config.in
-> new file mode 100644
-> index 0000000..a4fd4a1
-> --- /dev/null
-> +++ b/package/libpqxx/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_LIBPQXX
-> +	bool "libpqxx"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_PACKAGE_POSTGRESQL
-> +	help
-> +	  libpqxx is the official C++ client API for ?PostgreSQL, the
-> +	  enterprise-strength open-source relational database.
-> +
-> +	  http://pqxx.org/development/libpqxx/
-> +
-> +comment "libpqxx needs postgresql and toolchain w/ C++ support"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> +	depends on !BR2_PACKAGE_POSTGRESQL
-> +	depends on !BR2_STATIC_LIBS # postgresql depends on static
+I've applied, after doing numerous updates:
 
-I would make this comment only visible if postgresql is enabled, i.e:
+    [Thomas:
+     - rename prompt to kms++, suggested by Yann E. Morin
+     - fixup the thread dependency comment
+     - remove the mention of the python wrapper in the Config.in help
+       text, since they are not installed
+     - fix the Config.in comment to mention the C++ and gcc >= 4.8
+       dependencies
+     - use = instead of += when appropriate
+     - use a loop to install the test programs
+     - use a loop to install the libraries
+     - add installation to staging as well, both the libraries and header
+       files
+     - add missing dependency on host-pkgconf
+     - add hash file.]
 
-comment "libpqxx needs postgresql and toolchain w/ C++ support"
-	depends on !BR2_INSTALL_LIBSTDCPP
-	depends on BR2_PACKAGE_POSTGRESQL
+Also, it would be nice to tell upstream that CMake can not only build
+stuff, but also install stuff. It is a bit silly to be using a
+well-known build system, but not use it to provide proper install
+targets.
 
-Indeed, to me it seems obvious for the user that if he wants a C++
-client API for postgresql, then postgresql should be enabled first.
-Otherwise, this package should be "select"-ing postgresql.
-
-> +LIBPQXX_VERSION = 4.0.1
-> +LIBPQXX_SITE = http://pqxx.org/download/software/libpqxx
-> +LIBPQXX_SOURCE = libpqxx-$(LIBPQXX_VERSION).tar.gz
-
-Not needed, this is the default.
-
-> +LIBPQXX_INSTALL_STAGING = YES
-> +LIBPQXX_DEPENDENCIES = postgresql
-> +LIBPQXX_LICENSE = BSD
-
-Please be more specific about the license: BSD-2c, BSD-3c, etc.
-
-Thanks!
+Thanks a lot!
 
 Thomas
 -- 
