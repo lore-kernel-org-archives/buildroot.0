@@ -1,97 +1,144 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jul 2016 23:26:15 +0200
-Subject: [Buildroot] [git commit] wavemon: new package
-Message-ID: <20160728212750.310EC82234@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Jul 2016 23:28:02 +0200
+Subject: [Buildroot] [git commit] kmsxx: new package
+Message-ID: <20160728212806.C6B018225E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45ffc2caf87e8877495110d1fd01feed22ded019
+commit: https://git.buildroot.net/buildroot/commit/?id=93811a2b8a5efa43754e26a4a44f463cdbd9f1b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-wavemon is an ncurse-based wireless device monitoring application allowing to
-watch signal and noise levels, packet statistics, device configuration and
-network parameters of wireless network hardware.
+KMS++ is a suite of library and test tools to interact with KMS drivers in
+the linux kernel.
 
-[Peter: needs host-pkgconf, explain CC override]
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+[Thomas:
+ - rename prompt to kms++, suggested by Yann E. Morin
+ - fixup the thread dependency comment
+ - remove the mention of the python wrapper in the Config.in help
+   text, since they are not installed
+ - fix the Config.in comment to mention the C++ and gcc >= 4.8
+   dependencies
+ - use = instead of += when appropriate
+ - use a loop to install the test programs
+ - use a loop to install the libraries
+ - add installation to staging as well, both the libraries and header
+   files
+ - add missing dependency on host-pkgconf
+ - add hash file.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in            |  1 +
- package/wavemon/Config.in    | 18 ++++++++++++++++++
- package/wavemon/wavemon.hash |  3 +++
- package/wavemon/wavemon.mk   | 19 +++++++++++++++++++
- 4 files changed, 41 insertions(+)
+ package/Config.in        |  1 +
+ package/kmsxx/Config.in  | 25 +++++++++++++++++++++++++
+ package/kmsxx/kmsxx.hash |  2 ++
+ package/kmsxx/kmsxx.mk   | 48 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 76 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 0f0c376..f0180cc 100644
+index f0180cc..0eaeb1b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1594,6 +1594,7 @@ endif
- 	source "package/vpnc/Config.in"
- 	source "package/vsftpd/Config.in"
- 	source "package/vtun/Config.in"
-+	source "package/wavemon/Config.in"
- 	source "package/wget/Config.in"
- 	source "package/whois/Config.in"
- 	source "package/wireless-regdb/Config.in"
-diff --git a/package/wavemon/Config.in b/package/wavemon/Config.in
+@@ -941,6 +941,7 @@ menu "Graphics"
+ 	source "package/imlib2/Config.in"
+ 	source "package/jasper/Config.in"
+ 	source "package/jpeg/Config.in"
++	source "package/kmsxx/Config.in"
+ 	source "package/lcms2/Config.in"
+ 	source "package/lesstif/Config.in"
+ 	source "package/libart/Config.in"
+diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
 new file mode 100644
-index 0000000..b0f2f34
+index 0000000..a2143a9
 --- /dev/null
-+++ b/package/wavemon/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_WAVEMON
-+	bool "wavemon"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_LIBNL
++++ b/package/kmsxx/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_KMSXX
++	bool "kms++"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
++	select BR2_PACKAGE_LIBDRM
 +	help
-+	  wavemon is a wireless device monitoring application that allows you
-+	  to watch signal and noise levels, packet statistics, device
-+	  configuration and network parameters of your wireless network
-+	  hardware.
++	  libkms++ is a C++11 library for kernel mode setting.
 +
-+	  Note that you need a Linux Kernel configuration with wireless
-+	  extensions or with wireless extensions compatibility enabled.
++	  Also included are simple test tools for KMS.
 +
-+	  https://github.com/uoaerg/wavemon
++	  https://github.com/tomba/kmsxx
 +
-+comment "wavemon needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/wavemon/wavemon.hash b/package/wavemon/wavemon.hash
++if BR2_PACKAGE_KMSXX
++
++config BR2_PACKAGE_KMSXX_INSTALL_TESTS
++	bool "Install test programs"
++	help
++	  This option allows to install the kmsxx test programs.
++
++endif
++
++comment "kms++ needs a toolchain w/ threads, C++, gcc >= 4.8"
++        depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/kmsxx/kmsxx.hash b/package/kmsxx/kmsxx.hash
 new file mode 100644
-index 0000000..e35f6ac
+index 0000000..4615a65
 --- /dev/null
-+++ b/package/wavemon/wavemon.hash
-@@ -0,0 +1,3 @@
++++ b/package/kmsxx/kmsxx.hash
+@@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256  81ee1f06f8349fee62e98ec5b53dff5b76c4d8fcb439f20cca806255239e3a2a  wavemon-v0.8.0.tar.gz
-+sha256  681b86ef1469df8f7091040258dd01169bea2a7df294185c35bc867725deab2f  01e987a032b81af7bbeba1c439759d750dc1f398.patch
-diff --git a/package/wavemon/wavemon.mk b/package/wavemon/wavemon.mk
++sha256 62bd9e8c9686e5624ebeba27234cae956eeec7830a742563f051ee4a2fe522c7  kmsxx-a706f157b86e90696808025db01de99646d51a77.tar.gz
+diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
 new file mode 100644
-index 0000000..746d45f
+index 0000000..d49ec8f
 --- /dev/null
-+++ b/package/wavemon/wavemon.mk
-@@ -0,0 +1,19 @@
++++ b/package/kmsxx/kmsxx.mk
+@@ -0,0 +1,48 @@
 +################################################################################
 +#
-+# wavemon
++# kmsxx
 +#
 +################################################################################
 +
-+WAVEMON_VERSION = v0.8.0
-+WAVEMON_SITE = $(call github,uoaerg,wavemon,$(WAVEMON_VERSION))
-+WAVEMON_LICENSE = GPLv3+
-+WAVEMON_LICENSE_FILES = COPYING
-+WAVEMON_DEPENDENCIES = host-pkgconf libnl ncurses
++KMSXX_VERSION = a706f157b86e90696808025db01de99646d51a77
++KMSXX_SITE = $(call github,tomba,kmsxx,$(KMSXX_VERSION))
++KMSXX_LICENSE = MPLv2.0
++KMSXX_LICENSE_FILES = LICENSE
++KMSXX_INSTALL_STAGING = YES
++KMSXX_DEPENDENCIES = libdrm host-pkgconf
++KMSXX_CONF_OPTS = -DKMSXX_ENABLE_PYTHON=OFF
 +
-+# Fix musl build issue
-+WAVEMON_PATCH = https://github.com/uoaerg/wavemon/commit/01e987a032b81af7bbeba1c439759d750dc1f398.patch
++ifeq ($(BR2_PACKAGE_KMSXX_INSTALL_TESTS),y)
++KMSXX_TESTS = \
++	fbtestpat kmsblank kmscapture \
++	kmsprint kmsview testpat wbcap \
++	wbm2m
 +
-+# Handwritten Makefile.in, automake isn't used
-+WAVEMON_MAKE_OPTS = CC="$(TARGET_CC)"
++define KMSXX_INSTALL_TARGET_TESTS
++	$(foreach t,$(KMSXX_TESTS),\
++		$(INSTALL) -D -m 0755 $(@D)/bin/$(t) \
++			$(TARGET_DIR)/usr/bin/$(t)
++	)
++endef
++endif
 +
-+$(eval $(autotools-package))
++KMSXX_LIBS = kms++ kms++util
++
++define KMSXX_INSTALL_TARGET_CMDS
++	$(foreach l,$(KMSXX_LIBS),\
++		$(INSTALL) -D -m 0755 $(@D)/lib/lib$(l).so \
++			$(TARGET_DIR)/usr/lib/lib$(l).so
++	)
++	$(KMSXX_INSTALL_TARGET_TESTS)
++endef
++
++define KMSXX_INSTALL_STAGING_CMDS
++	$(foreach l,$(KMSXX_LIBS),\
++		$(INSTALL) -D -m 0755 $(@D)/lib/lib$(l).so \
++			$(STAGING_DIR)/usr/lib/lib$(l).so ; \
++		mkdir -p $(STAGING_DIR)/usr/include/$(l) ; \
++		cp -dpfr $(@D)/$(l)/inc/$(l)/* $(STAGING_DIR)/usr/include/$(l)/
++	)
++endef
++
++$(eval $(cmake-package))
