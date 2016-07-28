@@ -1,27 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jul 2016 22:03:44 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix backward incompatibility on git
-	downloader for git older than 1.8.4
-In-Reply-To: <1469695222-1749-1-git-send-email-eocanha@igalia.com> ("Enrique
- =?utf-8?Q?Oca=C3=B1a_Gonz=C3=A1lez=22's?= message of "Thu, 28 Jul 2016
- 10:40:22 +0200")
-References: <1469695222-1749-1-git-send-email-eocanha@igalia.com>
-Message-ID: <8760rpv8bj.fsf@dell.be.48ers.dk>
+Date: Thu, 28 Jul 2016 22:15:21 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain-external: update ARMeb musl
+	dependency
+In-Reply-To: <1469713154-10898-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 28 Jul 2016 15:39:13 +0200")
+References: <1469713154-10898-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <871t2dv7s6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Enrique" == Enrique Oca?a Gonz?lez <eocanha@igalia.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > The "--no-patch" option used by the git downloader appeared on git
- > 1.8.4. Systems with older git versions show an error and fall back to
- > the wget downloader, which isn't suitable for all the cases.
+ > ARM big-endian is different from ARMv4/5/6 and ARMv7. Big-endian on
+ > ARMv4/5/6 is BE-32 while big-endian on ARMv7 is BE-8, which are not
+ > compatible.
 
- > Signed-off-by: Enrique Oca?a Gonz?lez <eocanha@igalia.com>
+ > Therefore, the musl big endian toolchain that is built for ARMv4
+ > cannot work for ARMv7, it can only work for ARMv4/5/6.
 
-Committed after rewording the commit message slightly, thanks.
+ > This commit updates the musl toolchain dependency accordingly.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
