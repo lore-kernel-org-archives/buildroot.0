@@ -1,41 +1,40 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 28 Jul 2016 11:38:39 +0100
-Subject: [Buildroot] [PATCH 2/2] tcl: bump version to 8.6.6
-In-Reply-To: <1469702319-59412-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1469702319-59412-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1469702319-59412-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 28 Jul 2016 06:47:24 -0500
+Subject: [Buildroot] [PATCH] support/download: support git older then
+	1.8.x
+In-Reply-To: <CANQCQpbXyAYztS5MkDU_nYdC6Tta9MYVLijqGuB2k_B3YpBp8Q@mail.gmail.com>
+References: <1469653038-64643-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20160727214755.GB5657@free.fr> <2615681.Zak49NFKdj@lenny>
+ <CANQCQpbXyAYztS5MkDU_nYdC6Tta9MYVLijqGuB2k_B3YpBp8Q@mail.gmail.com>
+Message-ID: <CANQCQpZ7xEbZ5bAVeRw_OV43P2=4qH4fTZT7fk8kzEZnooQaKg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/tcl/tcl.hash | 2 +-
- package/tcl/tcl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Jul 28, 2016 3:49 AM, "Enrique Oca?a Gonz?lez" <eocanha@igalia.com>
+wrote:
+>
+> El mi?rcoles, 27 de julio de 2016 23:47:55 (CEST) Yann E. MORIN escribi?:
+>
+> > Enrique, if you agree that your SoB-line is warranted, we can go the
+> > fast route: just reply to the original mail with your own SoB-line, and
+> > all will be good in the best of the worlds! ;-)
+>
+> I tried to send the patch to the list yesterday (before Matt's
+submission) but
+> the email got bounced because I wasn't subscribed to the list. I've
+subscribed
+> today and resent the patch which got originally bounced.
 
-diff --git a/package/tcl/tcl.hash b/package/tcl/tcl.hash
-index dd64637..b344d26 100644
---- a/package/tcl/tcl.hash
-+++ b/package/tcl/tcl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 ce26d5b9c7504fc25d2f10ef0b82b14cf117315445b5afa9e673ed331830fb53 tcl8.6.5-src.tar.gz
-+sha256 a265409781e4b3edcc4ef822533071b34c3dc6790b893963809b9fe221befe07  tcl8.6.6-src.tar.gz
-diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index a2ac8e6..ffef9cf 100644
---- a/package/tcl/tcl.mk
-+++ b/package/tcl/tcl.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- TCL_VERSION_MAJOR = 8.6
--TCL_VERSION = $(TCL_VERSION_MAJOR).5
-+TCL_VERSION = $(TCL_VERSION_MAJOR).6
- TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
- TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
- TCL_LICENSE = tcl license
--- 
-2.7.3
+Sounds Good, I'll mark mine as rejected and review yours.
+
+>
+> Cheers.
+>
+> --
+> Enrique Oca?a Gonz?lez
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160728/a8f80d96/attachment.html>
