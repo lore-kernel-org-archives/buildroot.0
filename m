@@ -1,41 +1,79 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 28 Jul 2016 18:18:30 -0500
-Subject: [Buildroot] [PATCH v2] iperf: fix "speed" display in CSV report
-In-Reply-To: <20160728233547.68a4656d@free-electrons.com>
-References: <1469725165-18180-1-git-send-email-matthew.weber@rockwellcollins.com>
- <037EF233-5A06-45DC-A231-55ED9B186CD9@gmail.com>
- <20160728233547.68a4656d@free-electrons.com>
-Message-ID: <CANQCQpY8X9NzLRQOTtoJEJzHbMM0m856azXJWk18qm2kVVZtDQ@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 28 Jul 2016 18:43:47 -0500
+Subject: [Buildroot] [PATCH v3] iperf: fix "speed" display in csv report
+Message-ID: <1469749427-59937-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Some parameters displayed in the CSV reports are declared
+as uint64_t, but the printf format doesn't reflect this.
 
-On Thu, Jul 28, 2016 at 4:35 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Thu, 28 Jul 2016 10:46:44 -0700, Khem Raj wrote:
->
->> c99 says if you are printing uint64_t then its portable to use PRIu64 e.g.
->>
->> uint64_t a_int64
->> printf("%" PRId64 "\n?, a_int64);
->
-> Indeed. Matt, could you rework your patch accordingly?
->
+Submitted bug: https://sourceforge.net/p/iperf/bugs/66/
 
-Sure.
+Signed-off-by: Matt Poduska <matt.poduska@rockwellcollins.com>
+Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
 
+v1 -> v2
+[Matt W
+ - Fixed Atul's signed off line
+
+v2 -> v3
+[Khem
+ - Use c99 standard PRIu64
+---
+ .../0001-fix-speed-display-in-csv-report.patch     | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/iperf/0001-fix-speed-display-in-csv-report.patch
+
+diff --git a/package/iperf/0001-fix-speed-display-in-csv-report.patch b/package/iperf/0001-fix-speed-display-in-csv-report.patch
+new file mode 100644
+index 0000000..ea5ae99
+--- /dev/null
++++ b/package/iperf/0001-fix-speed-display-in-csv-report.patch
+@@ -0,0 +1,39 @@
++From b419a07ad1682b502c922330d31de118862254ad Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Thu, 28 Jul 2016 18:35:25 -0500
++Subject: [PATCH] iperf: fix "speed" display in CSV report
++
++Some parameters displayed in the CSV reports are declared
++as uint64_t, but the printf format doesn't reflect this.
++
++Submitted bug: https://sourceforge.net/p/iperf/bugs/66/
++
++Signed-off-by: Matt Poduska <matt.poduska@rockwellcollins.com>
++Signed-off-by: Atul Singh <atul.singh.mandla@gmail.com>
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ src/Locale.c | 5 ++---
++ 1 file changed, 2 insertions(+), 3 deletions(-)
++
++diff --git a/src/Locale.c b/src/Locale.c
++index 9f81bb4..dbcd4d4 100644
++--- a/src/Locale.c
+++++ b/src/Locale.c
++@@ -260,12 +260,11 @@ const char reportCSV_bw_format[] =
++ const char reportCSV_bw_jitter_loss_format[] =
++ "%s,%s,%d,%.1f-%.1f,%I64d,%I64d,%.3f,%d,%d,%.3f,%d\n";
++ #else
++-#include "inttypes.h"
++ const char reportCSV_bw_format[] =
++-"%s,%s,%d,%.1f-%.1f,%" PRId64 ",%" PRId64 "\n";
+++"%s,%s,%d,%.1f-%.1f,%d,%d\n";
++ 
++ const char reportCSV_bw_jitter_loss_format[] =
++-"%s,%s,%d,%.1f-%.1f,%" PRId64 ",%" PRId64 ",%.3f,%d,%d,%.3f,%d\n";
+++"%s,%s,%d,%.1f-%.1f,%d,%d,%.3f,%d,%d,%.3f,%d\n";
++ #endif //WIN32
++ #endif //HAVE_QUAD_SUPPORT
++ /* -------------------------------------------------------------------
++-- 
++1.9.1
++
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+1.9.1
