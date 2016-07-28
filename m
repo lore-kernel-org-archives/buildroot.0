@@ -1,96 +1,34 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 28 Jul 2016 22:54:07 +0200
-Subject: [Buildroot] [PATCH] wavemon: new package
-Message-ID: <20160728205407.17745-1-joerg.krause@embedded.rocks>
+From: daggs <daggs@gmx.com>
+Date: Thu, 28 Jul 2016 22:56:23 +0200
+Subject: [Buildroot] bug in xserver compilation?
+Message-ID: <trinity-5c752dae-1ff7-4dbc-8baa-935b9342af4a-1469739383586@3capp-mailcom-bs07>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-wavemon is an ncurse-based wireless device monitoring application allowing to
-watch signal and noise levels, packet statistics, device configuration and
-network parameters of wireless network hardware.
+Greetings,
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/Config.in            |  1 +
- package/wavemon/Config.in    | 18 ++++++++++++++++++
- package/wavemon/wavemon.hash |  3 +++
- package/wavemon/wavemon.mk   | 18 ++++++++++++++++++
- 4 files changed, 40 insertions(+)
- create mode 100644 package/wavemon/Config.in
- create mode 100644 package/wavemon/wavemon.hash
- create mode 100644 package/wavemon/wavemon.mk
+I'm trying to add a new ddx driver to buildroot from aarch64 and I've encountered a strange issue.
+so I've decided to try and reproduce it with are more stable env, Iv'e ran make pc_x86_64_bios_defconfig, then entered menuconfig.
+in it I've enable c++ support, modular xserver and finally the intel xf86 video.
+I've hit make and waited, when buildroot got to xserver. it failed with the following error more than once:
+/home/dagg/workspace/buildroots/buildroot-master3/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/include/xf86drm.h:40:17: fatal error: drm.h: No such file or directory
+ #include <drm.h>
 
-diff --git a/package/Config.in b/package/Config.in
-index 0f0c376..f0180cc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1594,6 +1594,7 @@ endif
- 	source "package/vpnc/Config.in"
- 	source "package/vsftpd/Config.in"
- 	source "package/vtun/Config.in"
-+	source "package/wavemon/Config.in"
- 	source "package/wget/Config.in"
- 	source "package/whois/Config.in"
- 	source "package/wireless-regdb/Config.in"
-diff --git a/package/wavemon/Config.in b/package/wavemon/Config.in
-new file mode 100644
-index 0000000..b0f2f34
---- /dev/null
-+++ b/package/wavemon/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_WAVEMON
-+	bool "wavemon"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_LIBNL
-+	help
-+	  wavemon is a wireless device monitoring application that allows you
-+	  to watch signal and noise levels, packet statistics, device
-+	  configuration and network parameters of your wireless network
-+	  hardware.
-+
-+	  Note that you need a Linux Kernel configuration with wireless
-+	  extensions or with wireless extensions compatibility enabled.
-+
-+	  https://github.com/uoaerg/wavemon
-+
-+comment "wavemon needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/wavemon/wavemon.hash b/package/wavemon/wavemon.hash
-new file mode 100644
-index 0000000..e35f6ac
---- /dev/null
-+++ b/package/wavemon/wavemon.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  81ee1f06f8349fee62e98ec5b53dff5b76c4d8fcb439f20cca806255239e3a2a  wavemon-v0.8.0.tar.gz
-+sha256  681b86ef1469df8f7091040258dd01169bea2a7df294185c35bc867725deab2f  01e987a032b81af7bbeba1c439759d750dc1f398.patch
-diff --git a/package/wavemon/wavemon.mk b/package/wavemon/wavemon.mk
-new file mode 100644
-index 0000000..07aeb1d
---- /dev/null
-+++ b/package/wavemon/wavemon.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# wavemon
-+#
-+################################################################################
-+
-+WAVEMON_VERSION = v0.8.0
-+WAVEMON_SITE = $(call github,uoaerg,wavemon,$(WAVEMON_VERSION))
-+WAVEMON_LICENSE = GPLv3+
-+WAVEMON_LICENSE_FILES = COPYING
-+WAVEMON_DEPENDENCIES = libnl ncurses
-+
-+# Fix musl build issue
-+WAVEMON_PATCH = https://github.com/uoaerg/wavemon/commit/01e987a032b81af7bbeba1c439759d750dc1f398.patch
-+
-+WAVEMON_MAKE_OPTS = CC="$(TARGET_CC)"
-+
-+$(eval $(autotools-package))
--- 
-2.9.0
+I've ran a sanity check on the output dir:
+dagg at NCC-5001-D ~/workspace/buildroots/buildroot-master3 $ find output/ -name drm.h
+output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/include/drm/drm.h
+output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/include/libdrm/drm.h
+output/build/libdrm-2.4.70/include/drm/drm.h
+output/build/linux-headers-4.6.3/usr/include/drm/drm.h
+output/build/linux-headers-4.6.3/drivers/gpu/drm/tegra/drm.h
+output/build/linux-headers-4.6.3/include/uapi/drm/drm.h
+output/target/usr/include/libdrm/drm.h
+
+I think this is a bug, am I wrong?
+
+the actual config I've used can be found at http://bpaste.net/show/45998ef4aed6
+
+Dagg.
