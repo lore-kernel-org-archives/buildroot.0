@@ -1,41 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jul 2016 22:00:52 +0200
-Subject: [Buildroot] [git commit] tcl: bump version to 8.6.6
-Message-ID: <20160728201546.8E18F7FDA3@busybox.osuosl.org>
+Date: Thu, 28 Jul 2016 22:02:13 +0200
+Subject: [Buildroot] [git commit] support/download/git: Fix compatibility
+	issue with git older than 1.8.4
+Message-ID: <20160728201546.9FC817FDA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c338bd70094f78681ba13e2895f46450a218fc37
+commit: https://git.buildroot.net/buildroot/commit/?id=1e39f0873393189278d92ac3589a329f42c8311c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+The "--no-patch" option used by the git downloader appeared on git
+1.8.4. Systems with older git versions show an error and fall back to
+the wget downloader, which isn't suitable for all the cases.
+
+Signed-off-by: Enrique Oca??a Gonz??lez <eocanha@igalia.com>
+Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tcl/tcl.hash | 2 +-
- package/tcl/tcl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/download/git | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tcl/tcl.hash b/package/tcl/tcl.hash
-index dd64637..b344d26 100644
---- a/package/tcl/tcl.hash
-+++ b/package/tcl/tcl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 ce26d5b9c7504fc25d2f10ef0b82b14cf117315445b5afa9e673ed331830fb53 tcl8.6.5-src.tar.gz
-+sha256 a265409781e4b3edcc4ef822533071b34c3dc6790b893963809b9fe221befe07  tcl8.6.6-src.tar.gz
-diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index a2ac8e6..ffef9cf 100644
---- a/package/tcl/tcl.mk
-+++ b/package/tcl/tcl.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/support/download/git b/support/download/git
+index 663006b..416cd1b 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -76,7 +76,7 @@ _git checkout -q "'${cset}'"
  
- TCL_VERSION_MAJOR = 8.6
--TCL_VERSION = $(TCL_VERSION_MAJOR).5
-+TCL_VERSION = $(TCL_VERSION_MAJOR).6
- TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
- TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
- TCL_LICENSE = tcl license
+ # Get date of commit to generate a reproducible archive.
+ # %cD is RFC2822, so it's fully qualified, with TZ and all.
+-date="$( _git show --no-patch --pretty=format:%cD )"
++date="$( _git log -1 --pretty=format:%cD )"
+ 
+ # There might be submodules, so fetch them.
+ if [ ${recurse} -eq 1 ]; then
