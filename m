@@ -1,317 +1,121 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 28 Jul 2016 09:14:07 +0200
-Subject: [Buildroot] [PATCH v2] tinydtls: new package
-Message-ID: <1469690047-26251-1-git-send-email-fabrice.fontaine@orange.com>
+Date: Thu, 28 Jul 2016 09:15:28 +0200
+Subject: [Buildroot] [PATCH v2] gupnp-dlna: new package
+Message-ID: <1469690128-26375-1-git-send-email-fabrice.fontaine@orange.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tinydtls is a library for Datagram Transport Layer Security
-(DTLS) covering both the client and the server state machine.
-It is implemented in C and provides support for the mandatory
-cipher suites specified in CoAP.
+GUPnP DLNA is a small utility library that aims to ease the
+DLNA-related tasks such as media profile guessing, transcoding
+to a given profile, etc.
 
-https://sourceforge.net/projects/tinydtls
+http://www.gupnp.org/
 
 Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
 ---
 Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Add a patch to fix build of tests subdirectory which depends on the
-   tinydtls library
- - Remove definition of TINYDTLS_SOURCE as this is the default value
- - Put TINYDTLS_SITE on a single line even if it is slightly overflows
-   the normal length
- - Rename TINYDLTS_RELEASE in TINYDLTS_REL so it's shorter
- - Use tinydlts.h as the TINYDTLS_LICENSE_FILES
+ - Remove unneeded dependency on gupnp
+ - Add a comment on LICENSE (COPYING contains LGPLv2.1 but source files
+   contain LGPLv2+)
+ - Use += instead of = to set GUPNP_DLNA_CONF_OPTS
+ - Disable explicity legacy gstreamer through
+   --disable-legacy-gstreamer-metadata-backend if
+   BR2_PACKAGE_GST_PLUGINS_BASE is not set
+ - Enable or disable explicity gstreamer through
+   --xxx-gstreamer-metadata-backend depending on the value of
+   BR2_PACKAGE_GST1_PLUGINS_BASE
 
- package/Config.in                                  |   1 +
- ...te-Makefile.in-to-allow-cross-compilation.patch | 170 +++++++++++++++++++++
- .../0002-Fix-compilation-of-tests-directory.patch  |  31 ++++
- package/tinydtls/Config.in                         |  13 ++
- package/tinydtls/tinydtls.hash                     |   2 +
- package/tinydtls/tinydtls.mk                       |  17 +++
- 6 files changed, 234 insertions(+)
- create mode 100644 package/tinydtls/0001-Update-Makefile.in-to-allow-cross-compilation.patch
- create mode 100644 package/tinydtls/0002-Fix-compilation-of-tests-directory.patch
- create mode 100644 package/tinydtls/Config.in
- create mode 100644 package/tinydtls/tinydtls.hash
- create mode 100644 package/tinydtls/tinydtls.mk
+ package/Config.in                  |  1 +
+ package/gupnp-dlna/Config.in       | 17 +++++++++++++++++
+ package/gupnp-dlna/gupnp-dlna.hash |  2 ++
+ package/gupnp-dlna/gupnp-dlna.mk   | 32 ++++++++++++++++++++++++++++++++
+ 4 files changed, 52 insertions(+)
+ create mode 100644 package/gupnp-dlna/Config.in
+ create mode 100644 package/gupnp-dlna/gupnp-dlna.hash
+ create mode 100644 package/gupnp-dlna/gupnp-dlna.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 563c279..3563870 100644
+index 3563870..ab9c42f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -887,6 +887,7 @@ menu "Crypto"
- 	source "package/nettle/Config.in"
- 	source "package/openssl/Config.in"
- 	source "package/polarssl/Config.in"
-+	source "package/tinydtls/Config.in"
- 	source "package/trousers/Config.in"
- endmenu
- 
-diff --git a/package/tinydtls/0001-Update-Makefile.in-to-allow-cross-compilation.patch b/package/tinydtls/0001-Update-Makefile.in-to-allow-cross-compilation.patch
+@@ -1162,6 +1162,7 @@ menu "Networking"
+ 	source "package/gssdp/Config.in"
+ 	source "package/gupnp/Config.in"
+ 	source "package/gupnp-av/Config.in"
++	source "package/gupnp-dlna/Config.in"
+ 	source "package/ibrcommon/Config.in"
+ 	source "package/ibrdtn/Config.in"
+ 	source "package/libcgi/Config.in"
+diff --git a/package/gupnp-dlna/Config.in b/package/gupnp-dlna/Config.in
 new file mode 100644
-index 0000000..5e91f2e
+index 0000000..a0ecdb3
 --- /dev/null
-+++ b/package/tinydtls/0001-Update-Makefile.in-to-allow-cross-compilation.patch
-@@ -0,0 +1,170 @@
-+From a6f312dfb4497d5e72664c4772a8b122e25b81d8 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+Date: Tue, 26 Jul 2016 09:09:53 +0200
-+Subject: [PATCH] Update Makefile.in to allow cross-compilation
-+
-+Use CC, CPP and DESTDIR environment variables passed to configure in Makefile.in files
-+Fix definition of LIBS and LDFLAGS (LDFLAGS was set to @LIBS@)
-+
-+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+---
-+ Makefile.in       | 13 ++++++++-----
-+ aes/Makefile.in   |  7 +++++--
-+ doc/Makefile.in   |  4 ++--
-+ ecc/Makefile.in   |  7 +++++--
-+ sha2/Makefile.in  |  7 +++++--
-+ tests/Makefile.in |  4 +++-
-+ 6 files changed, 28 insertions(+), 14 deletions(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index 38cc665..7dcd424 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -40,7 +40,9 @@ OBJECTS:= $(patsubst %.c, %.o, $(SOURCES)) $(SUB_OBJECTS)
-+ HEADERS:=dtls.h hmac.h dtls_debug.h dtls_config.h uthash.h numeric.h crypto.h global.h ccm.h \
-+  netq.h alert.h utlist.h prng.h peer.h state.h dtls_time.h session.h \
-+  tinydtls.h
-++CC:=@CC@
-+ CFLAGS:=-Wall -pedantic -std=c99 @CFLAGS@
-++CPP:=@CPP@
-+ CPPFLAGS:=@CPPFLAGS@ -DDTLS_CHECK_CONTENTTYPE
-+ SUBDIRS:=tests doc platform-specific sha2 aes ecc
-+ DISTSUBDIRS:=$(SUBDIRS)
-+@@ -48,7 +50,8 @@ DISTDIR=$(top_builddir)/$(package)
-+ FILES:=Makefile.in configure configure.in dtls_config.h.in tinydtls.h.in \
-+   Makefile.tinydtls $(SOURCES) $(HEADERS)
-+ LIB:=libtinydtls.a
-+-LDFLAGS:=@LIBS@
-++LDFLAGS:=@LDFLAGS@
-++LIBS:=@LIBS@
-+ ARFLAGS:=cru
-+ doc:=doc
-+ 
-+@@ -100,10 +103,10 @@ dist:	$(FILES) $(DISTSUBDIRS)
-+ 	tar czf $(package).tar.gz $(DISTDIR)
-+ 
-+ install:	$(LIB) $(HEADERS) $(SUBDIRS)
-+-	test -d $(libdir) || mkdir -p $(libdir)
-+-	test -d $(includedir) || mkdir -p $(includedir)
-+-	$(install) $(LIB) $(libdir)/
-+-	$(install) $(HEADERS) $(includedir)/
-++	test -d $(DESTDIR)$(libdir) || mkdir -p $(DESTDIR)$(libdir)
-++	test -d $(DESTDIR)$(includedir) || mkdir -p $(DESTDIR)$(includedir)
-++	$(install) $(LIB) $(DESTDIR)$(libdir)/
-++	$(install) $(HEADERS) $(DESTDIR)$(includedir)/
-+ 	for dir in $(SUBDIRS); do \
-+ 		$(MAKE) -C $$dir install="$(install)" includedir=$(includedir) install; \
-+ 	done
-+diff --git a/aes/Makefile.in b/aes/Makefile.in
-+index 7c9f6ef..9ff7799 100644
-+--- a/aes/Makefile.in
-++++ b/aes/Makefile.in
-+@@ -28,8 +28,11 @@ top_srcdir:= @top_srcdir@
-+ SOURCES:= rijndael.c
-+ HEADERS:= rijndael.h
-+ OBJECTS:= $(patsubst %.c, %.o, $(SOURCES))
-++CPP=@CPP@
-+ CPPFLAGS=@CPPFLAGS@
-++CC=@CC@
-+ CFLAGS=-Wall -std=c99 -pedantic @CFLAGS@
-++LDFLAGS=@LDFLAGS@
-+ LDLIBS=@LIBS@
-+ FILES:=Makefile.in $(SOURCES) $(HEADERS) 
-+ DISTDIR=$(top_builddir)/@PACKAGE_TARNAME at -@PACKAGE_VERSION@
-+@@ -60,8 +63,8 @@ dist:	$(FILES)
-+ 	cp -p $(FILES) $(DISTDIR)/aes
-+ 
-+ install:	$(HEADERS)
-+-	test -d $(includedir)/aes || mkdir -p $(includedir)/aes
-+-	$(install) $(HEADERS) $(includedir)/aes
-++	test -d $(DESTDIR)$(includedir)/aes || mkdir -p $(DESTDIR)$(includedir)/aes
-++	$(install) $(HEADERS) $(DESTDIR)$(includedir)/aes
-+ 
-+ .gitignore:
-+ 	echo "core\n*~\n*.[oa]\n*.gz\n*.cap\n$(PROGRAM)\n$(DISTDIR)\n.gitignore" >$@
-+diff --git a/doc/Makefile.in b/doc/Makefile.in
-+index a07101e..5ab0a35 100644
-+--- a/doc/Makefile.in
-++++ b/doc/Makefile.in
-+@@ -32,5 +32,5 @@ dist:	doc
-+ 	cp -r $(FILES) $(DISTDIR)/doc
-+ 
-+ install:	$(doc) html
-+-	test -d $(htmldir) || mkdir -p $(htmldir)
-+-	cp -r html/* $(htmldir)
-++	test -d $(DESTDIR)$(htmldir) || mkdir -p $(DESTDIR)$(htmldir)
-++	cp -r html/* $(DESTDIR)$(htmldir)
-+diff --git a/ecc/Makefile.in b/ecc/Makefile.in
-+index 2ba17a1..2086d4f 100644
-+--- a/ecc/Makefile.in
-++++ b/ecc/Makefile.in
-+@@ -36,8 +36,11 @@ include Makefile.contiki
-+ else
-+ ECC_OBJECTS:= $(patsubst %.c, %.o, $(ECC_SOURCES)) ecc_test.o
-+ PROGRAMS:= testecc testfield
-++CPP=@CPP@
-+ CPPFLAGS=@CPPFLAGS@
-++CC=@CC@
-+ CFLAGS=-Wall -std=c99 -pedantic @CFLAGS@ -DTEST_INCLUDE
-++LDFLAGS=@LDFLAGS@
-+ LDLIBS=@LIBS@
-+ 
-+ .PHONY: all dirs clean install distclean .gitignore doc
-+@@ -74,8 +77,8 @@ dist:	$(FILES)
-+ 	cp -p $(FILES) $(DISTDIR)/ecc
-+ 
-+ install:	$(HEADERS)
-+-	test -d $(includedir)/ecc || mkdir -p $(includedir)/ecc
-+-	$(install) $(HEADERS) $(includedir)/ecc
-++	test -d $(DESTDIR)$(includedir)/ecc || mkdir -p $(DESTDIR)$(includedir)/ecc
-++	$(install) $(ECC_HEADERS) $(DESTDIR)$(includedir)/ecc
-+ 
-+ .gitignore:
-+ 	echo "core\n*~\n*.[oa]\n*.gz\n*.cap\n$(PROGRAM)\n$(DISTDIR)\n.gitignore" >$@
-+diff --git a/sha2/Makefile.in b/sha2/Makefile.in
-+index 9f19314..69f8793 100644
-+--- a/sha2/Makefile.in
-++++ b/sha2/Makefile.in
-+@@ -28,8 +28,11 @@ top_srcdir:= @top_srcdir@
-+ SOURCES:= sha2.c
-+ HEADERS:=sha2.h
-+ OBJECTS:= $(patsubst %.c, %.o, $(SOURCES))
-++CPP=@CPP@
-+ CPPFLAGS=@CPPFLAGS@ -I$(top_srcdir)
-++CC=@CC@
-+ CFLAGS=-Wall -std=c99 -pedantic @CFLAGS@
-++LDFLAGS=@LDFLAGS@
-+ LDLIBS=@LIBS@
-+ FILES:=Makefile.in $(SOURCES) $(HEADERS) README sha2prog.c sha2speed.c sha2test.pl 
-+ DISTDIR=$(top_builddir)/@PACKAGE_TARNAME at -@PACKAGE_VERSION@
-+@@ -62,8 +65,8 @@ dist:	$(FILES)
-+ 	cp -pr testvectors $(DISTDIR)/sha2/testvectors
-+ 
-+ install:	$(HEADERS)
-+-	test -d $(includedir)/sha2 || mkdir -p $(includedir)/sha2
-+-	$(install) $(HEADERS) $(includedir)/sha2
-++	test -d $(DESTDIR)$(includedir)/sha2 || mkdir -p $(DESTDIR)$(includedir)/sha2
-++	$(install) $(HEADERS) $(DESTDIR)$(includedir)/sha2
-+ 
-+ .gitignore:
-+ 	echo "core\n*~\n*.[oa]\n*.gz\n*.cap\n$(PROGRAM)\n$(DISTDIR)\n.gitignore" >$@
-+diff --git a/tests/Makefile.in b/tests/Makefile.in
-+index a8a2ed0..b45f440 100644
-+--- a/tests/Makefile.in
-++++ b/tests/Makefile.in
-+@@ -32,9 +32,11 @@ SOURCES:= dtls-server.c ccm-test.c prf-test.c \
-+ OBJECTS:= $(patsubst %.c, %.o, $(SOURCES))
-+ PROGRAMS:= $(patsubst %.c, %, $(SOURCES))
-+ HEADERS:=
-++CC:=@CC@
-+ CFLAGS:=-Wall @CFLAGS@ 
-++CPP:=@CPP@
-+ CPPFLAGS:=-I$(top_srcdir) @CPPFLAGS@
-+-LDFLAGS:=-L$(top_builddir) 
-++LDFLAGS:=-L$(top_builddir) @LDFLAGS@ 
-+ LDLIBS:=-ltinydtls @LIBS@
-+ DISTDIR=$(top_builddir)/@PACKAGE_TARNAME at -@PACKAGE_VERSION@
-+ FILES:=Makefile.in $(SOURCES) ccm-testdata.c #cbc_aes128-testdata.c
-+-- 
-+2.7.4
-+
-diff --git a/package/tinydtls/0002-Fix-compilation-of-tests-directory.patch b/package/tinydtls/0002-Fix-compilation-of-tests-directory.patch
-new file mode 100644
-index 0000000..8f575fd
---- /dev/null
-+++ b/package/tinydtls/0002-Fix-compilation-of-tests-directory.patch
-@@ -0,0 +1,31 @@
-+From c629a108f5d03cd365c0ba71143ad507f6cd97f0 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+Date: Thu, 28 Jul 2016 08:36:06 +0200
-+Subject: [PATCH 2/2] Fix compilation of tests directory
-+
-+binaries in tests subdirectory depends on libtinydtls so add $(LIB) dependency
-+for dirs target in Makefile.in
-+
-+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+---
-+ Makefile.in | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index 7dcd424..c493705 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -68,8 +68,8 @@ check:
-+ 	echo top_builddir: $(top_builddir)
-+ 	$(MAKE) -C tests check
-+ 
-+-dirs:	$(SUBDIRS)
-+-	for dir in $^; do \
-++dirs:	$(LIB) $(SUBDIRS)
-++	for dir in $(SUBDIRS); do \
-+ 		$(MAKE) -C $$dir ; \
-+ 	done
-+ 
-+-- 
-+2.7.4
-+
-diff --git a/package/tinydtls/Config.in b/package/tinydtls/Config.in
-new file mode 100644
-index 0000000..df9c4b5
---- /dev/null
-+++ b/package/tinydtls/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_TINYDTLS
-+	bool "tinydtls"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  tinydtls is a library for Datagram Transport Layer Security
-+	  (DTLS) covering both the client and the server state machine.
-+	  It is implemented in C and provides support for the mandatory
-+	  cipher suites specified in CoAP.
-+
-+	  https://sourceforge.net/projects/tinydtls
-+
-+comment "tinydtls needs a toolchain w/ threads"
-+        depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/tinydtls/tinydtls.hash b/package/tinydtls/tinydtls.hash
-new file mode 100644
-index 0000000..909c8d1
---- /dev/null
-+++ b/package/tinydtls/tinydtls.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	ccf6d8fbae03fb2e0ba32878ed8e57d8b4f73538b1064df90a3e764da5fac010	tinydtls-0.8.2.tar.gz
-diff --git a/package/tinydtls/tinydtls.mk b/package/tinydtls/tinydtls.mk
-new file mode 100644
-index 0000000..114305a
---- /dev/null
-+++ b/package/tinydtls/tinydtls.mk
++++ b/package/gupnp-dlna/Config.in
 @@ -0,0 +1,17 @@
++config BR2_PACKAGE_GUPNP_DLNA
++	bool "gupnp-dlna"
++	depends on BR2_USE_WCHAR # glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBXML2
++	help
++	  GUPnP DLNA is a small utility library that aims to ease the
++	  DLNA-related tasks such as media profile guessing, transcoding
++	  to a given profile, etc.
++
++	  http://www.gupnp.org/
++
++comment "gupnp-dlna needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gupnp-dlna/gupnp-dlna.hash b/package/gupnp-dlna/gupnp-dlna.hash
+new file mode 100644
+index 0000000..c28a06f
+--- /dev/null
++++ b/package/gupnp-dlna/gupnp-dlna.hash
+@@ -0,0 +1,2 @@
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-dlna/0.10/gupnp-dlna-0.10.5.sha256sum:
++sha256	123e368227c11d5c17fc1aa76cbdaffa345355eb51d172cd39fc74a5b468ff6a	gupnp-dlna-0.10.5.tar.xz
+diff --git a/package/gupnp-dlna/gupnp-dlna.mk b/package/gupnp-dlna/gupnp-dlna.mk
+new file mode 100644
+index 0000000..ed43d38
+--- /dev/null
++++ b/package/gupnp-dlna/gupnp-dlna.mk
+@@ -0,0 +1,32 @@
 +################################################################################
 +#
-+# tinydtls
++# gupnp-dlna
 +#
 +################################################################################
 +
-+TINYDTLS_REL = r5
-+TINYDTLS_VERSION = 0.8.2
-+TINYDTLS_SITE = http://downloads.sourceforge.net/project/tinydtls/$(TINYDTLS_REL)
-+TINYDTLS_LICENSE = MIT
-+TINYDTLS_LICENSE_FILES = tinydtls.h
++GUPNP_DLNA_VERSION_MAJOR = 0.10
++GUPNP_DLNA_VERSION = $(GUPNP_DLNA_VERSION_MAJOR).5
++GUPNP_DLNA_SOURCE = gupnp-dlna-$(GUPNP_DLNA_VERSION).tar.xz
++GUPNP_DLNA_SITE = \
++	http://ftp.gnome.org/pub/gnome/sources/gupnp-dlna/$(GUPNP_DLNA_VERSION_MAJOR)
++# COPYING contains LGPLv2.1 but all source files contain LPGLv2+
++GUPNP_DLNA_LICENSE = LGPLv2+
++GUPNP_DLNA_LICENSE_FILES = COPYING
++GUPNP_DLNA_INSTALL_STAGING = YES
++GUPNP_DLNA_DEPENDENCIES = host-pkgconf libglib2 libxml2
 +
-+TINYDTLS_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
++GUPNP_DLNA_CONF_OPTS += --enable-legacy-gstreamer-metadata-backend
++GUPNP_DLNA_DEPENDENCIES += gstreamer gst-plugins-base
++#else
++GUPNP_DLNA_CONF_OPTS += --disable-legacy-gstreamer-metadata-backend
++endif
 +
-+TINYDTLS_STRIP_COMPONENTS = 2
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
++GUPNP_DLNA_CONF_OPTS += --enable-gstreamer-metadata-backend
++GUPNP_DLNA_DEPENDENCIES += gstreamer1 gst1-plugins-base
++#else
++GUPNP_DLNA_CONF_OPTS += --disable-gstreamer-metadata-backend
++endif
 +
 +$(eval $(autotools-package))
 -- 
