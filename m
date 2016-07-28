@@ -1,58 +1,40 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 28 Jul 2016 08:13:28 -0500
-Subject: [Buildroot] [PATCH v2] squashfs: update site to git.kernel.org
-Message-ID: <1469711608-322-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Jul 2016 15:39:13 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain-external: update ARMeb musl
+	dependency
+Message-ID: <1469713154-10898-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Atul Singh <atul.singh.mandla@rockwellcollins.com>
+ARM big-endian is different from ARMv4/5/6 and ARMv7. Big-endian on
+ARMv4/5/6 is BE-32 while big-endian on ARMv7 is BE-8, which are not
+compatible.
 
-squashfs-tools development has been moved to git.kernel.org from
-Sourceforge.
+Therefore, the musl big endian toolchain that is built for ARMv4
+cannot work for ARMv7, it can only work for ARMv4/5/6.
 
-The hash was selected to fix a threading issue observed when
-creating images on a build machine with at least 64 cores.
-(Fixes random corrupted images that would fail to boot)
+This commit updates the musl toolchain dependency accordingly.
 
-Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
+ toolchain/toolchain-external/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v1 -> v2
-[Thomas P
- - Updated commit description with hash selection reason
----
- package/squashfs/squashfs.hash | 4 ++--
- package/squashfs/squashfs.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
-index e308089..eb456be 100644
---- a/package/squashfs/squashfs.hash
-+++ b/package/squashfs/squashfs.hash
-@@ -1,2 +1,2 @@
--# Locally computed:
--sha256  0d605512437b1eb800b4736791559295ee5f60177e102e4d4ccd0ee241a5f3f6  squashfs4.3.tar.gz
-+# Locally computed
-+sha256	e807202ab4dcfeea214df49d3a728b9a85644a7e7262fc6fcd875a0def99d4ed	squashfs-9c1db6d13a51a2e009f0027ef336ce03624eac0d.tar.gz
-diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-index cdeb9c8..9c8841a 100644
---- a/package/squashfs/squashfs.mk
-+++ b/package/squashfs/squashfs.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--SQUASHFS_VERSION = 4.3
--SQUASHFS_SOURCE = squashfs$(SQUASHFS_VERSION).tar.gz
--SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
-+SQUASHFS_VERSION = 9c1db6d13a51a2e009f0027ef336ce03624eac0d
-+SQUASHFS_SITE = git://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git
- SQUASHFS_LICENSE = GPLv2+
- SQUASHFS_LICENSE_FILES = COPYING
- SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 5edde24..ee07ddb 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -588,7 +588,7 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
+ 	bool "Musl 1.1.12 toolchain"
+ 	depends on (BR2_arm && BR2_ARM_EABI) || \
+ 		(BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4) || \
+-		(BR2_armeb && BR2_ARM_EABI) || BR2_i386 || \
++		(BR2_armeb && BR2_ARM_EABI && !BR2_ARM_CPU_ARMV7A) || BR2_i386 || \
+ 		(BR2_mips && !BR2_SOFT_FLOAT) || \
+ 		BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || \
+ 		BR2_sh4 || BR2_sh4eb || \
 -- 
-1.9.1
+2.7.4
