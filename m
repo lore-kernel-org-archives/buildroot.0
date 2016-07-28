@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Jul 2016 23:34:06 +0200
-Subject: [Buildroot] [PATCH v3] kmsxx: new package
-In-Reply-To: <20160728193825.9199-1-maxime.ripard@free-electrons.com>
-References: <20160728193825.9199-1-maxime.ripard@free-electrons.com>
-Message-ID: <20160728233406.30c9f31d@free-electrons.com>
+Date: Thu, 28 Jul 2016 23:35:47 +0200
+Subject: [Buildroot] [PATCH v2] iperf: fix "speed" display in CSV report
+In-Reply-To: <037EF233-5A06-45DC-A231-55ED9B186CD9@gmail.com>
+References: <1469725165-18180-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <037EF233-5A06-45DC-A231-55ED9B186CD9@gmail.com>
+Message-ID: <20160728233547.68a4656d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 28 Jul 2016 21:38:25 +0200, Maxime Ripard wrote:
-> KMS++ is a suite of library and test tools to interact with KMS drivers in
-> the linux kernel.
+On Thu, 28 Jul 2016 10:46:44 -0700, Khem Raj wrote:
+
+> c99 says if you are printing uint64_t then its portable to use PRIu64 e.g.
 > 
-> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+> uint64_t a_int64
+> printf("%" PRId64 "\n?, a_int64);
 
-I've applied, after doing numerous updates:
+Indeed. Matt, could you rework your patch accordingly?
 
-    [Thomas:
-     - rename prompt to kms++, suggested by Yann E. Morin
-     - fixup the thread dependency comment
-     - remove the mention of the python wrapper in the Config.in help
-       text, since they are not installed
-     - fix the Config.in comment to mention the C++ and gcc >= 4.8
-       dependencies
-     - use = instead of += when appropriate
-     - use a loop to install the test programs
-     - use a loop to install the libraries
-     - add installation to staging as well, both the libraries and header
-       files
-     - add missing dependency on host-pkgconf
-     - add hash file.]
-
-Also, it would be nice to tell upstream that CMake can not only build
-stuff, but also install stuff. It is a bit silly to be using a
-well-known build system, but not use it to provide proper install
-targets.
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
