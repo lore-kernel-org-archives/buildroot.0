@@ -1,50 +1,52 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 28 Jul 2016 12:10:03 -0500
-Subject: [Buildroot] [PATCH 1/2] toolchain-external: update ARMeb musl
-	dependency
-In-Reply-To: <1469713154-10898-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1469713154-10898-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CANQCQpYZgEsPir0+-ubPuD3+kz1mDfDLDO9-7-Akf-2O9hxMGg@mail.gmail.com>
+Date: Thu, 28 Jul 2016 12:40:51 -0500
+Subject: [Buildroot] [PATCH 1/7] zynq_zed: bump Linux to xilinx-v2016.2
+In-Reply-To: <1468834703-27518-2-git-send-email-yamada.masahiro@socionext.com>
+References: <1468834703-27518-1-git-send-email-yamada.masahiro@socionext.com>
+ <1468834703-27518-2-git-send-email-yamada.masahiro@socionext.com>
+Message-ID: <CANQCQpYjNRQq5tNdMxEttiP9qyC4N6L94H9-T80EZYP-42Edyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 28, 2016 at 8:39 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> ARM big-endian is different from ARMv4/5/6 and ARMv7. Big-endian on
-> ARMv4/5/6 is BE-32 while big-endian on ARMv7 is BE-8, which are not
-> compatible.
+On Mon, Jul 18, 2016 at 4:38 AM, Masahiro Yamada
+<yamada.masahiro@socionext.com> wrote:
+> This is the latest release tag in the Xilinx repository, based on
+> Linux v4.4 in the mainline.
 >
-> Therefore, the musl big endian toolchain that is built for ARMv4
-> cannot work for ARMv7, it can only work for ARMv4/5/6.
->
-> This commit updates the musl toolchain dependency accordingly.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 > ---
->  toolchain/toolchain-external/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 5edde24..ee07ddb 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -588,7 +588,7 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
->         bool "Musl 1.1.12 toolchain"
->         depends on (BR2_arm && BR2_ARM_EABI) || \
->                 (BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4) || \
-> -               (BR2_armeb && BR2_ARM_EABI) || BR2_i386 || \
-> +               (BR2_armeb && BR2_ARM_EABI && !BR2_ARM_CPU_ARMV7A) || BR2_i386 || \
+>  configs/zynq_zed_defconfig | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
+> index d3cfa70..98b010e 100644
+> --- a/configs/zynq_zed_defconfig
+> +++ b/configs/zynq_zed_defconfig
+> @@ -1,13 +1,12 @@
+>  BR2_arm=y
+>  BR2_cortex_a9=y
+>  BR2_ARM_ENABLE_NEON=y
+> -# Linux headers same as kernel, a 3.18 series
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+>  BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2016.2"
 
 Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
->                 (BR2_mips && !BR2_SOFT_FLOAT) || \
->                 BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || \
->                 BR2_sh4 || BR2_sh4eb || \
+>  BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+>  BR2_LINUX_KERNEL_UIMAGE=y
+>  BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
 > --
-> 2.7.4
+> 1.9.1
 >
 > _______________________________________________
 > buildroot mailing list
