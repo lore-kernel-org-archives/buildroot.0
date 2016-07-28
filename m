@@ -1,42 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jul 2016 22:00:41 +0200
-Subject: [Buildroot] [git commit] wireshark: bump version to 2.0.5
-Message-ID: <20160728201546.865527FDA3@busybox.osuosl.org>
+Date: Thu, 28 Jul 2016 22:15:03 +0200
+Subject: [Buildroot] [git commit] toolchain-external: musl toolchain on ARM
+	is for MMU-systems only
+Message-ID: <20160728201546.B0672819DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=becf3831d7d918baba10630e01a4de07f0e1d7a9
+commit: https://git.buildroot.net/buildroot/commit/?id=e9f6ef8204831e67f695500b5d494286a5987b5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Now that we have introduced the support for ARM no-MMU in Buildroot,
+we need to update the dependencies of the musl external toolchain. It
+supports only MMU-capable ARM cores, so it must depend on BR2_USE_MMU,
+at least for the ARM platforms.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ toolchain/toolchain-external/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index abe961b..fe4070b 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,2 +1,2 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.0.4.txt
--sha256	9ea9c82da9942194ebc8fc5c951a02e6d179afa7472cb6d96ca76154510de1a5	wireshark-2.0.4.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.0.5.txt
-+sha256 0ce0241330828973f5b4efee422a3760cab8ce0b41e7721c4b9fd185be1bb10b  wireshark-2.0.5.tar.bz2
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 55f931b..35f0138 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index ee07ddb..f54fbee 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -586,10 +586,10 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
  
--WIRESHARK_VERSION = 2.0.4
-+WIRESHARK_VERSION = 2.0.5
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
+ 	bool "Musl 1.1.12 toolchain"
+-	depends on (BR2_arm && BR2_ARM_EABI) || \
+-		(BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4) || \
+-		(BR2_armeb && BR2_ARM_EABI && !BR2_ARM_CPU_ARMV7A) || BR2_i386 || \
+-		(BR2_mips && !BR2_SOFT_FLOAT) || \
++	depends on (BR2_arm && BR2_ARM_EABI && BR2_USE_MMU) || \
++		(BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4 && BR2_USE_MMU) || \
++		(BR2_armeb && BR2_ARM_EABI && !BR2_ARM_CPU_ARMV7A && BR2_USE_MMU) || \
++		BR2_i386 || (BR2_mips && !BR2_SOFT_FLOAT) || \
+ 		BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || \
+ 		BR2_sh4 || BR2_sh4eb || \
+ 		BR2_x86_64
