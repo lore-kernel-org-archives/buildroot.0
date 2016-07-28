@@ -1,43 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jul 2016 21:52:05 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.14.x and 4.{4,
-	6}.x series
-Message-ID: <20160728201546.6AE6A7FDA3@busybox.osuosl.org>
+Date: Thu, 28 Jul 2016 22:00:52 +0200
+Subject: [Buildroot] [git commit] tcl: bump version to 8.6.6
+Message-ID: <20160728201546.8E18F7FDA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2a14b53154f59b69ff1fdf796e53376307450ba
+commit: https://git.buildroot.net/buildroot/commit/?id=c338bd70094f78681ba13e2895f46450a218fc37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/tcl/tcl.hash | 2 +-
+ package/tcl/tcl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2ad9ada..089d424 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -239,15 +239,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.112"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.73"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.74"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.18.37"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.28"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
--	default "4.4.15"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.16"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.5.7"		if BR2_KERNEL_HEADERS_4_5
--	default "4.6.4"		if BR2_KERNEL_HEADERS_4_6
-+	default "4.6.5"		if BR2_KERNEL_HEADERS_4_6
- 	default "4.7"		if BR2_KERNEL_HEADERS_4_7
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/tcl/tcl.hash b/package/tcl/tcl.hash
+index dd64637..b344d26 100644
+--- a/package/tcl/tcl.hash
++++ b/package/tcl/tcl.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 ce26d5b9c7504fc25d2f10ef0b82b14cf117315445b5afa9e673ed331830fb53 tcl8.6.5-src.tar.gz
++sha256 a265409781e4b3edcc4ef822533071b34c3dc6790b893963809b9fe221befe07  tcl8.6.6-src.tar.gz
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index a2ac8e6..ffef9cf 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ TCL_VERSION_MAJOR = 8.6
+-TCL_VERSION = $(TCL_VERSION_MAJOR).5
++TCL_VERSION = $(TCL_VERSION_MAJOR).6
+ TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
+ TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
+ TCL_LICENSE = tcl license
