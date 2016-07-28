@@ -1,45 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jul 2016 22:28:11 +0200
-Subject: [Buildroot] [PATCH 00/12 v8] Introduce libudev (branch
-	yem/libudev-4)
-In-Reply-To: <XnsA653E00AA3B69ID313208userindividu@bernd-kuhls.de> (Bernd
- Kuhls's message of "Thu, 28 Jul 2016 22:01:27 +0200")
-References: <cover.1468274498.git.yann.morin.1998@free.fr>
- <20160716154736.19dd42fb@free-electrons.com>
- <20160718175241.GA3738@free.fr> <87twfawymj.fsf@dell.be.48ers.dk>
- <XnsA653E00AA3B69ID313208userindividu@bernd-kuhls.de>
-Message-ID: <87shuttsmc.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 28 Jul 2016 22:54:07 +0200
+Subject: [Buildroot] [PATCH] wavemon: new package
+Message-ID: <20160728205407.17745-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+wavemon is an ncurse-based wireless device monitoring application allowing to
+watch signal and noise levels, packet statistics, device configuration and
+network parameters of wireless network hardware.
 
-Hi,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/Config.in            |  1 +
+ package/wavemon/Config.in    | 18 ++++++++++++++++++
+ package/wavemon/wavemon.hash |  3 +++
+ package/wavemon/wavemon.mk   | 18 ++++++++++++++++++
+ 4 files changed, 40 insertions(+)
+ create mode 100644 package/wavemon/Config.in
+ create mode 100644 package/wavemon/wavemon.hash
+ create mode 100644 package/wavemon/wavemon.mk
 
- >> > But then you would not have libudev if you use mdev or a static /dev.
- >> 
- >> Is that a common use case? I wouldn't expect anybody to use static /dev
- >> any more
-
- > the fli4l (http://www.fli4l.de/en/home/news/) distro uses buildroot to build 
- > its binaries and has BR2_ROOTFS_DEVICE_CREATION_STATIC=y
-
- > in both the development branch
-
- > https://ssl.nettworks.org/repo/browse/fli4l/branches/4.0/trunk/src/packages/s
- > rc/src/fbr/buildroot/.config-x86?hb=true#to309
-
- > and the stable branch
-
- > https://ssl.nettworks.org/repo/browse/fli4l/branches/3.10/trunk/src/packages/
- > src/src/fbr/buildroot/.config-x86?hb=true#to255
-
-Ok, but why? Devtmpfs has been available in the kernel since ~2.6.32 or
-so.
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 0f0c376..f0180cc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1594,6 +1594,7 @@ endif
+ 	source "package/vpnc/Config.in"
+ 	source "package/vsftpd/Config.in"
+ 	source "package/vtun/Config.in"
++	source "package/wavemon/Config.in"
+ 	source "package/wget/Config.in"
+ 	source "package/whois/Config.in"
+ 	source "package/wireless-regdb/Config.in"
+diff --git a/package/wavemon/Config.in b/package/wavemon/Config.in
+new file mode 100644
+index 0000000..b0f2f34
+--- /dev/null
++++ b/package/wavemon/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_WAVEMON
++	bool "wavemon"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_LIBNL
++	help
++	  wavemon is a wireless device monitoring application that allows you
++	  to watch signal and noise levels, packet statistics, device
++	  configuration and network parameters of your wireless network
++	  hardware.
++
++	  Note that you need a Linux Kernel configuration with wireless
++	  extensions or with wireless extensions compatibility enabled.
++
++	  https://github.com/uoaerg/wavemon
++
++comment "wavemon needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/wavemon/wavemon.hash b/package/wavemon/wavemon.hash
+new file mode 100644
+index 0000000..e35f6ac
+--- /dev/null
++++ b/package/wavemon/wavemon.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  81ee1f06f8349fee62e98ec5b53dff5b76c4d8fcb439f20cca806255239e3a2a  wavemon-v0.8.0.tar.gz
++sha256  681b86ef1469df8f7091040258dd01169bea2a7df294185c35bc867725deab2f  01e987a032b81af7bbeba1c439759d750dc1f398.patch
+diff --git a/package/wavemon/wavemon.mk b/package/wavemon/wavemon.mk
+new file mode 100644
+index 0000000..07aeb1d
+--- /dev/null
++++ b/package/wavemon/wavemon.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# wavemon
++#
++################################################################################
++
++WAVEMON_VERSION = v0.8.0
++WAVEMON_SITE = $(call github,uoaerg,wavemon,$(WAVEMON_VERSION))
++WAVEMON_LICENSE = GPLv3+
++WAVEMON_LICENSE_FILES = COPYING
++WAVEMON_DEPENDENCIES = libnl ncurses
++
++# Fix musl build issue
++WAVEMON_PATCH = https://github.com/uoaerg/wavemon/commit/01e987a032b81af7bbeba1c439759d750dc1f398.patch
++
++WAVEMON_MAKE_OPTS = CC="$(TARGET_CC)"
++
++$(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.9.0
