@@ -1,87 +1,285 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 28 Jul 2016 10:58:59 -0500
-Subject: [Buildroot] [PATCH] iperf: fix "speed" display in CSV report
-In-Reply-To: <1469721391-14716-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1469721391-14716-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <CANQCQpamszDpNKCJ807+uStKq7RnEy_5VLSzcX55G0r8EpvL2A@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 28 Jul 2016 18:12:58 +0200
+Subject: [Buildroot] [PATCH v3 6/6] package/amd-catalyst-driver: Add AMD
+ proprietary graphic stack support
+In-Reply-To: <20160727093523.34b01c10@free-electrons.com>
+References: <1469521290-20446-1-git-send-email-romain.perier@free-electrons.com>
+ <1469521290-20446-7-git-send-email-romain.perier@free-electrons.com>
+ <20160726203918.GE5925@free.fr>
+ <20160727093523.34b01c10@free-electrons.com>
+Message-ID: <20160728161258.GA5862@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ignore this patch, patch author used incorrect email address which I
-didn't catch and I have to resubmit.
+Thomas, Romain, All,
 
-On Thu, Jul 28, 2016 at 10:56 AM, Matt Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> From: Atul Singh <atul.singh.mandla@gmail.com>
->
-> Some parameters displayed in the CSV reports are declared
-> as uint64_t, but the printf format doesn't reflect this.
->
-> Submitted bug: https://sourceforge.net/p/iperf/bugs/66/
->
-> Signed-off-by: Atul Singh <atul.singh.mandla@gmail.com>
-> Signed-off-by: Matt Poduska <matt.poduska@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
->  .../0001-fix-speed-display-in-csv-report.patch     | 34 ++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
->  create mode 100644 package/iperf/0001-fix-speed-display-in-csv-report.patch
->
-> diff --git a/package/iperf/0001-fix-speed-display-in-csv-report.patch b/package/iperf/0001-fix-speed-display-in-csv-report.patch
-> new file mode 100644
-> index 0000000..12acf62
-> --- /dev/null
-> +++ b/package/iperf/0001-fix-speed-display-in-csv-report.patch
-> @@ -0,0 +1,34 @@
-> +From 36c098a4fec0fdcb7c3df4909322f88b07bd6b01 Mon Sep 17 00:00:00 2001
-> +From: Atul Singh <atul.singh.mandla@gmail.com>
-> +Date: Wed, 27 Jul 2016 07:36:34 -0500
-> +Subject: [PATCH] iperf: Fix "speed" display in CSV report
-> +
-> +Some parameters displayed in the CSV reports are declared
-> +as uint64_t, but the printf format doesn't reflect this.
-> +
-> +Bugtracker: https://sourceforge.net/p/iperf/bugs/66/
-> +
-> +---
-> + src/Locale.c | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/src/Locale.c b/src/Locale.c
-> +index b5d42b1..d80a77a 100644
-> +--- a/src/Locale.c
-> ++++ b/src/Locale.c
-> +@@ -261,10 +261,10 @@ const char reportCSV_bw_jitter_loss_format[] =
-> + "%s,%s,%d,%.1f-%.1f,%I64d,%I64d,%.3f,%d,%d,%.3f,%d\n";
-> + #else
-> + const char reportCSV_bw_format[] =
-> +-"%s,%s,%d,%.1f-%.1f,%d,%d\n";
-> ++"%s,%s,%d,%.1f-%.1f,%lld,%lld\n";
-> +
-> + const char reportCSV_bw_jitter_loss_format[] =
-> +-"%s,%s,%d,%.1f-%.1f,%d,%d,%.3f,%d,%d,%.3f,%d\n";
-> ++"%s,%s,%d,%.1f-%.1f,%lld,%lld,%.3f,%d,%d,%.3f,%d\n";
-> + #endif //WIN32
-> + #endif //HAVE_QUAD_SUPPORT
-> + /* -------------------------------------------------------------------
-> +--
-> +1.9.1
-> +
-> --
-> 1.9.1
->
+On 2016-07-27 09:35 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 26 Jul 2016 22:39:18 +0200, Yann E. MORIN wrote:
+> 
+> > > +config BR2_PACKAGE_AMD_CATALYST_DRIVER
+> > > +	bool "amd-catalyst-driver"  
+> > 
+> > Ues, I know we have nvidia-driver. But we also have
+> > nvidia-tegra23-binaries and rpi-userland. So maybe we can just call it
+> > "amd-catalyst". Thoughts?
+> 
+> Indeed. It also makes all the variable names a bit shorter everywhere
+> in the package, which would be nice.
+> 
+> > > +	depends on BR2_i386 || BR2_x86_64
+> > > +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> > > +	help
+> > > +	  The binary-only driver blob for AMD cards.
+> > > +	  This driver supports AMD Radeon HD 5xxx and newer graphics
+> > > +	  cards.
+> > > +
+> > > +	  http://www.amd.com/
+> > > +
+> > > +if BR2_PACKAGE_AMD_CATALYST_DRIVER
+> > > +
+> > > +comment "amd-catalyst-driver needs a modular Xorg <= 1.17"
+> > > +	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR || !BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
+> > > +
+> > > +config BR2_PACKAGE_AMD_CATALYST_DRIVER_XORG
+> > > +	bool "X.org drivers"
+> > > +	default y  
+> > 
+> > What good is this package if the Xorg drivers are disabled?
+> > 
+> > Note that in the NVidia driver, they are optional, becasue they can be
+> > used to do just CUDA (GPGPU computing). For the AMD CAtalyst, I did not
+> > see that this was possible.
+> > 
+> > Then, all the "depends on" and "select" done below should be moved to
+> > the main symbol.
+> > 
+> > Unless there is the equivalent to CUDA here...
+> 
+> OpenCL support is independent from the X.org support, i.e you can
+> enable BR2_PACKAGE_AMD_CATALYST_DRIVER_OPENCL without X.org support. So
+> it's pretty much exactly like the NVidia driver: GPGPU support is
+> independent from graphics support.
 
+OK, makes sense.
 
+> > > +config BR2_PACKAGE_AMD_CATALYST_DRIVER_CCCLE
+> > > +	bool "Catalyst Control Center"
+> > > +	depends on BR2_USE_MMU && BR2_PACKAGE_QT && BR2_PACKAGE_QT_X11  
+> > 
+> > I think it is better not to mix architectural dependencies and package
+> > dependencies. And anyway, the MMU dependency is useless, since the
+> > driver depends on i386 || x86_64, that both have an MMU.
+> > 
+> > Besides, you can safely select BR2_PACKAGE_QT_X11, since you know Xorh
+> > is enabled because you have BR2_PACKAGE_XORG7 above.
+> > 
+> >     depends on BR2_PACKAGE_QT
+> >     select BR2_PACKAGE_QT_X11
+> 
+> BR2_PACKAGE_QT_X11 is in a choice, so it cannot be selected. That's the
+> very reason why a "depends on" is used.
+
+Damn, I missed that it was in a choice. Indeed, select is what we must
+use here.
+
+> > > +config BR2_PACKAGE_AMD_CATALYST_DRIVER_MODULE
+> > > +	bool  
+> > 
+> > Why this blind symbol, when there is only one that selects it?
+> 
+> Both BR2_PACKAGE_AMD_CATALYST_DRIVER_XORG and
+> BR2_PACKAGE_AMD_CATALYST_DRIVER_OPENCL are selecting it.
+
+Yes, I missed it about the Xorg driver.
+
+However, I still wonder why it is a blind option. For example, in
+nvidia-driver, we have these prompts:
+
+    [*] nvidia-driver
+    [*]   X.org drivers
+    [*]     Install private libraries
+    [*]   CUDA support
+    [*]     OpenCL support
+    [*]     CUDA MPS server and control
+    [*]   nvidia kernel module
+
+So, it is possible to not build the kernel driver, if a kernel is built
+outside of Buildroot.
+
+I would like we have the same possibility for amd-catalyst.
+
+> > Speaking of which... Maybe this patch should have been split in at least
+> > two changes:
+> > 
+> >   - one patch to add support for the userland stuff,
+> > 
+> >   - one patch to add support for biulding the kernel module.
+> 
+> I disagree, there is really no point for such a split. Both are part of
+> the same package, and both are needed for the thing to do anything
+> useful.
+
+What if the kernel is built outside of Buildroot? We can't build the
+kernel module in that case, but we still want to be able to build the
+userland. So, the split *does* make sense.
+
+Unless of course the buildsystem of this package is so fscked-up that it
+is not possible to build one but not the other. But it does not seem to
+be the case, as Romain is using the kernel-module infra to build the
+kernel module.
+
+And anyway, if that were the case, then this would be missing a
+dependency on BR2_KERNEL_LINUX.
+
+> > > +config BR2_PACKAGE_AMD_CATALYST_DRIVER_OPENCL
+> > > +	bool "OpenCL support"
+> > > +	select BR2_PACKAGE_AMD_CATALYST_DRIVER_MODULE  
+> > 
+> > And this symbol would depend on BR2_PACKAGE_AMD_CATALYST_DRIVER_MODULE
+> > once it has a prompt, instead of selecting it.
+> 
+> Why? This is really pointless. Why would
+> BR2_PACKAGE_AMD_CATALYST_DRIVER_MODULE need to have a prompt? The
+> kernel module is needed either when OpenGL/X.org support is enabled or
+> when OpenCL support is enabled. So we simply implicitly select it.
+
+Again, what about a kernel built outside of Buildroot?
+
+> However, what is true is that a dependency on BR2_LINUX_KERNEL is
+> missing from this package, for the features that require building the
+> kernel module.
+
+Yep. But really, I stand that we should be able to build only the
+userland stuff, if at least because those do not have the licensing
+issue the kernel module has.
+
+> > > +config BR2_PACKAGE_AMD_CATALYST_DRIVER_MODULE_LICENSE_GPL
+> > > +	bool "fglrx module export GPL license"
+> > > +	help
+> > > +	  If enabled, you accept that the driver will be patched locally
+> > > +	  in order to export itself as a GPL module to the Linux kernel.
+> > > +	  This is required as the module uses some GPL-compatible
+> > > +	  symbols. Without this fix, the module won't build properly
+> > > +	  because the Linux kernel build system does not allow to link a
+> > > +	  non GPL module, if this one tries to use GPL-only symbols. It
+> > > +	  is worth mentioning that from a legal point of view, you are
+> > > +	  most likely not allowed to redistribute such a kernel module,
+> > > +	  in a pre-built form. The author and the buildroot project
+> > > +	  disclaim any responsibility in case these terms are not
+> > > +	  respected.  
+> > 
+> > OK, so this one is definitely a NAK from me. This is definitely not
+> > acceptable. We can not go like that and just change the licensing
+> > information: this is legally questionable that we even provide such an
+> > option, even with the legal blurb you wrote, which is by far not
+> > explicit enough either, but I won't comment on it because I argue that
+> > this option should jsut go away with the code it protects.
+> > 
+> > Instead I suggest the following:
+> > 
+> >     config BR2_PACKAGE_AMD_CATALYST_DRIVER_MODULE
+> >         bool "fglrx kernel module"
+> >         depends on BR2_KERNEL_LINUX
+> >         depends on whatever is needed
+> >         help
+> >           The kernel driver will build properly, but fail to work at
+> >           runtime because it uses Linux kernel symbols exposed only to
+> >           GPL-licensed modules.
+> > 
+> >     config BR2_PACKAGE_AMD_CATALYST_DRIVER_OPENCL
+> >         bool "OpenCL support"
+> >         depends on BR2_PACKAGE_AMD_CATALYST_DRIVER_MODULE
+> >         depends on whatever is needed
+> >         help
+> >           Blabla OpenCL
+> > 
+> > Note: the blurb about BR2_PACKAGE_AMD_CATALYST_DRIVER_MODULE was suggested
+> > by Thomas while fdiscussing the issue with him on IRC.
+> > 
+> > We should *not* even hint at what should be done to overcome this. This
+> > is not a technical issue, so there is no technical fix.
+> 
+> I agree with this, it's probably the best trade-off. I discussed it
+> with Romain prior to the submission of his patches, and we hesitated a
+> bit between various options. I think Yann's suggestion is good, and
+> people who need the kernel driver to actually work can take the
+> responsibility on their side to do whatever is needed.
+> 
+> However, I'm still unsure I want to see the kernel module option having
+> a prompt. But that's more an implementation detail: the Config.in help
+> text that Yann suggested to add can also just as well be added to the
+> top-level option, and the "module" option kept prompt-less.
+
+"Kernel built outside of Buildroot". ;-)"
+
+> > > +define AMD_CATALYST_DRIVER_INSTALL_OPENCL
+> > > +	$(foreach f,$(AMD_CATALYST_DRIVER_OPENCL_FILES), \
+> > > +		$(INSTALL) -D -m 0755 $(AMD_CATALYST_DRIVER_ARCH_DIR)/$(f) $(TARGET_DIR)/$(f)
+> > > +	)  
+> > 
+> > Although I personally prefer the way you did, we usually close the
+> > foreach on the last code line, not on its own line. You have many of
+> > them, below, don;t forget to fix those as well.
+> 
+> I agree that's the way we typically do it, but in fact I'm not sure
+> it's the best way. If you keep the closing parenthesis on the last
+> line, you must add $(sep).
+> 
+> Having the closing parenthesis like Romain did:
+> 
+>  1/ Avoids the need of $(sep)
+> 
+>  2/ Make the all thing clearer and easier to read
+> 
+> So just like you prefer the way Romain did it, I also prefer, so I'd
+> like to keep it as Romain did, and maybe migrate other parts of
+> Buildroot to use this in the future.
+
+Perfectly fine with me.
+
+> > OK, I may have missed quite a few things.
+> > 
+> > Would it be possible that you split this patch in a few patches;
+> > 
+> >   - basic package that just installs the userland stuff (Xorg drivers),
+> 
+> This basic package doesn't make much sense, as the userland stuff is
+> not functioning with the kernel driver.
+
+Err... No, I won't state it again! ;-)
+
+> >   - add the command-line tools
+> >   - then the CCCLE GUI,
+> >   - the kernel module,
+> >   - finally, add OpenCV.
+
+SO I still think the split makes sense (at least semantically; it may be
+a single patch if the build is easier to do, of course).
+
+> However, I agree that there could be a first patch adding just
+> Xorg+kernel, and follow-up patches for command-line tools, CCCLE and
+> OpenCV.
+
+ACK.
+
+Regards,
+Yann E. MORIN.
+
+> Thanks,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
