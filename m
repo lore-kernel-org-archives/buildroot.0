@@ -1,142 +1,153 @@
-From: Brandon Maier <brandon.maier@rockwellcollins.com>
-Date: Thu, 28 Jul 2016 14:44:21 -0500
-Subject: [Buildroot] [PATCH v3] asciidoc: use absolute path for resources
-In-Reply-To: <20160728192937.GB5862@free.fr>
-References: <1469642568-26660-1-git-send-email-matthew.weber@rockwellcollins.com>
- <877fc6yji1.fsf@dell.be.48ers.dk>
- <CANQCQpaa6-Mv9arRxE0ijmzQUVCFga0=jpoPUspQinnXERi7kQ@mail.gmail.com>
- <20160728192937.GB5862@free.fr>
-Message-ID: <CA+fik51fmFkxqNyD=20Pg7RBmv0ot5eHhPw4-ueHuGwkB=2HaQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 28 Jul 2016 21:49:27 +0200
+Subject: [Buildroot] [PATCH v3] kmsxx: new package
+In-Reply-To: <20160728193825.9199-1-maxime.ripard@free-electrons.com>
+References: <20160728193825.9199-1-maxime.ripard@free-electrons.com>
+Message-ID: <20160728194927.GD5862@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The bug crops up when generating the chunked/split-HTML manual. Try the
-"manual" target instead of "manual-html".
+Maxime, All,
 
-On Thu, Jul 28, 2016 at 2:29 PM, Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+On 2016-07-28 21:38 +0200, Maxime Ripard spake thusly:
+> KMS++ is a suite of library and test tools to interact with KMS drivers in
+> the linux kernel.
+> 
+> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+> 
+> ---
+[--SNIP--]
+> diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
+> new file mode 100644
+> index 000000000000..db3c74b45310
+> --- /dev/null
+> +++ b/package/kmsxx/Config.in
+> @@ -0,0 +1,26 @@
+> +config BR2_PACKAGE_KMSXX
+> +	bool "kmsxx"
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libpthread-stubs
 
-> Matthew, All,
->
-> On 2016-07-28 08:04 -0500, Matthew Weber spake thusly:
-> > On Wed, Jul 27, 2016 at 2:21 PM, Peter Korsgaard <peter@korsgaard.com>
-> wrote:
-> > >>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
-> > >  > From: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-> > >  > One of the "features" of a2x is that the '-r|--resource' flag
-> imports
-> > >  > resources relative to the [SOURCE_FILE], not the CWD. The current
-> > >  > implementation tries to import resources from the destination dir
-> $(@D),
-> > >  > which works fine for out-of-tree builds because $(@D) is an absolute
-> > >  > path, however in-tree builds treat $(@D) as a relative path, which
-> breaks
-> > >  > because a2x treats $(@D) relative to SOURCE_FILE.
-> [--SNIP--]
-> > > Like Yann, I also cannot reproduce any errors without it. How do you
-> > > trigger it?
-> > You can see the issue by running "make V=1 manual". Normally you'll
-> > see the following
-> >
-> > ...
-> > >>>   Generating split HTML manual...
-> > mkdir -p output/docs/manual
-> > a2x  --xsltproc-opts "--stringparam toc.section.depth 1" -f chunked -d
-> > book -L -r
-> /home/foobar/projects/asciidoc-upstream/buildroot-main/docs/images
-> > -r output/docs/manual  --destination-dir="output/docs/manual"
-> > --asciidoc-opts=""
-> >
-> /home/foobar/projects/asciidoc-upstream/buildroot-main/output/build/docs/manual/manual.txt
-> >
-> > The issue is with the flag "-r output/docs/manual" which uses a
-> > relative path. However only generated files are stored there, which
-> > isn't a problem with the current Buildroot as it doesn't use any. The
-> > issue appears when you use generated files like a graphviz element
-> > because the generated graph is stored in that directory.
-> >
-> > You can recreate the bug by applying this patch
-> >
-> > From: Brandon Maier <brandon.maier@rockwellcollins.com>
-> > Date: Wed, 27 Jul 2016 17:05:43 -0500
-> > Subject: [PATCH] Example graph to show asciidoc bug
-> >
-> > Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-> > ---
-> >  docs/manual/introduction.txt | 17 +++++++++++++++++
-> >  1 file changed, 17 insertions(+)
-> >
-> > diff --git a/docs/manual/introduction.txt b/docs/manual/introduction.txt
-> > index 476aa81..2297efd 100644
-> > --- a/docs/manual/introduction.txt
-> > +++ b/docs/manual/introduction.txt
-> > @@ -24,3 +24,20 @@ comes with default configurations for several
-> > boards available
-> >  off-the-shelf. Besides this, a number of third-party projects are based
-> on,
-> >  or develop their BSP footnote:[BSP: Board Support Package] or
-> >  SDK footnote:[SDK: Software Development Kit] on top of Buildroot.
-> > +
-> > +["graphviz", "sample2.png"]
-> > +---------------------------------------------------------------------
-> > +digraph automata_0 {
-> > +  size ="8.5, 11";
-> > +  node [shape = circle];
-> > +  0 [ style = filled, color=lightgrey ];
-> > +  2 [ shape = doublecircle ];
-> > +  0 -> 2 [ label = "a " ];
-> > +  0 -> 1 [ label = "other " ];
-> > +  1 -> 2 [ label = "a " ];
-> > +  1 -> 1 [ label = "other " ];
-> > +  2 -> 2 [ label = "a " ];
-> > +  2 -> 1 [ label = "other " ];
-> > +  "Machine: a" [ shape = plaintext ];
-> > +}
-> > +---------------------------------------------------------------------
->
-> Thanks for this example. However, the generated manual does include the
-> graph of that state machine.
->
->     $ git checkout 9d4a1a7^  # 9d4a1a7 is your commit
->     $ make manual-html
->     [--SNIP--]
->     $ ls -l output/docs/manual/sample2.png docs/manual/sample2.png
->     ls: cannot access 'docs/manual/sample2.png': No such file or directory
->     -rw-r--r-- 1 ymorin ymorin 17K Jul 28 21:25
-> output/docs/manual/sample2.png
->     $ mkdir ../O
->     $ make O=$(cd ../O; pwd) manual-html
->     [--SNIP--]
->     $ ls -l ../O/docs/manual/sample2.png docs/manual/sample2.png
->     ls: cannot access 'docs/manual/sample2.png': No such file or directory
->     -rw-r--r-- 1 ymorin ymorin 16512 Jul 28 21:26
-> ../O/docs/manual/sample2.png
->
-> Both in-tree and out-of-tree manuals have the state machine, and the
-> graph *is* generated in the output dir, not the source dir.
->
-> Did I miss something?
->
-> Regards,
-> Yann E. MORIN.
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
-> is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160728/0c8523f1/attachment.html>
+The comment "# libpthread-stubs" seems to imply that the dependency on
+C++ is ihnerited from libpthread-stubs, but it is neither selected not
+depended on; it is also not in the build dependency. Is it an oversight?
+
+However, given the name of the package, I guess it needs C++ for itself.
+So, whether libpthread-stubs is needed or not, you should drop the
+comment altogether: C++ *is* needed by kms++.
+
+> +	select BR2_PACKAGE_LIBDRM
+> +	help
+> +	  libkms++ is a C++11 library for kernel mode setting.
+> +
+> +	  Also included are simple test tools for KMS and python wrapper for
+> +	  libkms++.
+
+Drop the comment about the Python bindings, since we don't support them
+(you dropped them sinc e v2 of the patch).
+
+> +	  https://github.com/tomba/kmsxx
+> +
+> +if BR2_PACKAGE_KMSXX
+> +
+> +config BR2_PACKAGE_KMSXX_INSTALL_TESTS
+> +	bool "Install test programs"
+> +	help
+> +	  This option allows to install the kmsxx test programs.
+> +
+> +endif
+
+Usually, when there is a single option to a package, we do not use an
+if-block, but just make that option depend on the package. But I'm fine
+with an if-block (I prefer it; it's just not what we usually do).
+
+> +comment "kmsxx needs a toolchain w/ threads"
+> +        depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +
+> diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
+> new file mode 100644
+> index 000000000000..6eaa85452dfb
+> --- /dev/null
+> +++ b/package/kmsxx/kmsxx.mk
+> @@ -0,0 +1,45 @@
+> +################################################################################
+> +#
+> +# kmsxx
+> +#
+> +################################################################################
+> +
+> +KMSXX_VERSION = a706f157b86e90696808025db01de99646d51a77
+> +KMSXX_SITE = $(call github,tomba,kmsxx,$(KMSXX_VERSION))
+> +KMSXX_LICENSE = MPLv2.0
+> +KMSXX_LICENSE_FILES = LICENSE
+> +
+> +KMSXX_DEPENDENCIES += libdrm
+> +KMSXX_CONF_OPTS += -DKMSXX_ENABLE_PYTHON=OFF
+> +
+> +ifeq ($(BR2_PACKAGE_KMSXX_INSTALL_TESTS),y)
+> +define KMSXX_INSTALL_TARGET_TESTS
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/fbtestpat \
+> +		$(TARGET_DIR)/usr/bin/fbtestpat
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/kmsblank \
+> +		$(TARGET_DIR)/usr/bin/kmsblank
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/kmscapture \
+> +		$(TARGET_DIR)/usr/bin/kmscapture
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/kmsprint \
+> +		$(TARGET_DIR)/usr/bin/kmsprint
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/kmsview \
+> +		$(TARGET_DIR)/usr/bin/kmsview
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/testpat \
+> +		$(TARGET_DIR)/usr/bin/testpat
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/wbcap \
+> +		$(TARGET_DIR)/usr/bin/wbcap
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/wbm2m \
+> +		$(TARGET_DIR)/usr/bin/wbm2m
+
+    KMSXX_TESTS = fbtestpat kmsblank kmscapture ...
+    define KMSXX_INSTALL_TARGET_TESTS
+        $(foreach t,$(KMSXX_TESTS),\
+            $(INSTALL) -D -m 0755 $(@D)/bin/$(t) $(TARGET_DIR/usr/bin/$(t))
+         )
+    endef
+
+> +endef
+> +endif
+> +
+> +define KMSXX_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/lib/libkms++.so \
+> +		$(TARGET_DIR)/usr/lib/libkms++.so
+> +	$(INSTALL) -D -m 0755 $(@D)/lib/libkms++util.so \
+> +		$(TARGET_DIR)/usr/lib/libkms++util.so
+> +
+
+No empty line above.
+
+> +	$(KMSXX_INSTALL_TARGET_TESTS)
+> +endef
+
+Since it installs libraries, maybe it should be installed in staging as
+well?
+
+Regards,
+Yann E. MORIN.
+
+> +$(eval $(cmake-package))
+> -- 
+> 2.9.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
