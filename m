@@ -1,100 +1,156 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Thu, 28 Jul 2016 10:46:44 -0700
-Subject: [Buildroot] [PATCH v2] iperf: fix "speed" display in CSV report
-In-Reply-To: <1469725165-18180-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1469725165-18180-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <037EF233-5A06-45DC-A231-55ED9B186CD9@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 28 Jul 2016 12:47:39 -0500
+Subject: [Buildroot] [PATCH 6/7] zynq_zc706: bump U-Boot to
+	xilinx-v2016.2
+In-Reply-To: <1468834703-27518-7-git-send-email-yamada.masahiro@socionext.com>
+References: <1468834703-27518-1-git-send-email-yamada.masahiro@socionext.com>
+ <1468834703-27518-7-git-send-email-yamada.masahiro@socionext.com>
+Message-ID: <CANQCQpaM__7tuCvn7=tm3xkxv7aG4Yi_to-YVD5QP0HN+R-7xQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+All,
 
-> On Jul 28, 2016, at 9:59 AM, Matt Weber <matthew.weber@rockwellcollins.com> wrote:
-> 
-> From: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-> 
-> Some parameters displayed in the CSV reports are declared
-> as uint64_t, but the printf format doesn't reflect this.
-> 
-> Submitted bug: https://sourceforge.net/p/iperf/bugs/66/
-> 
-> Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-> Signed-off-by: Matt Poduska <matt.poduska@rockwellcollins.com>
+On Mon, Jul 18, 2016 at 4:38 AM, Masahiro Yamada
+<yamada.masahiro@socionext.com> wrote:
+> This is the latest release tag in the Xilinx repository, based on
+> U-Boot v2016.01 in the mainline.  It includes proper ps7_init_gpl.c/h
+> in it, so builds working SPL without any manual intervention.
+>
+> BR2_TARGET_UBOOT_BOARD_NAME should be changed to zynq_zc706 since
+> U-Boot now has separate defconfig files for ZC702 and ZC706 boards.
+>
+> BR2_TARGET_UBOOT_SPL_NAME should be changed to spl/boot.bin since
+> the Zynq image support for the mkimage tool was upstreamed and it
+> now generates boot.bin under spl/ directory.
+>
+> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 > ---
-> 
-> v1 -> v2
-> [Matt W
-> - Fixed Atul's signed off line
-> 
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
-> .../0001-fix-speed-display-in-csv-report.patch     | 36 ++++++++++++++++++++++
-> 1 file changed, 36 insertions(+)
-> create mode 100644 package/iperf/0001-fix-speed-display-in-csv-report.patch
-> 
-> diff --git a/package/iperf/0001-fix-speed-display-in-csv-report.patch b/package/iperf/0001-fix-speed-display-in-csv-report.patch
-> new file mode 100644
-> index 0000000..27d89bf
-> --- /dev/null
-> +++ b/package/iperf/0001-fix-speed-display-in-csv-report.patch
-> @@ -0,0 +1,36 @@
-> +From 36c098a4fec0fdcb7c3df4909322f88b07bd6b01 Mon Sep 17 00:00:00 2001
-> +From: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-> +Date: Wed, 27 Jul 2016 07:36:34 -0500
-> +Subject: [PATCH] iperf: Fix "speed" display in CSV report
-> +
-> +Some parameters displayed in the CSV reports are declared
-> +as uint64_t, but the printf format doesn't reflect this.
-> +
-> +Bugtracker: https://sourceforge.net/p/iperf/bugs/66/
-> +
-> +Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-> +
-> +---
-> + src/Locale.c | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/src/Locale.c b/src/Locale.c
-> +index b5d42b1..d80a77a 100644
-> +--- a/src/Locale.c
-> ++++ b/src/Locale.c
-> +@@ -261,10 +261,10 @@ const char reportCSV_bw_jitter_loss_format[] =
-> + "%s,%s,%d,%.1f-%.1f,%I64d,%I64d,%.3f,%d,%d,%.3f,%d\n";
-> + #else
-> + const char reportCSV_bw_format[] =
-> +-"%s,%s,%d,%.1f-%.1f,%d,%d\n";
-> ++"%s,%s,%d,%.1f-%.1f,%lld,%lld\n?;
+>
+>  board/xilinx/zc706/readme.txt | 69 +++++++++++++------------------------------
+>  configs/zynq_zc706_defconfig  |  7 +++--
+>  2 files changed, 25 insertions(+), 51 deletions(-)
+>
+> diff --git a/board/xilinx/zc706/readme.txt b/board/xilinx/zc706/readme.txt
+> index b180dea..5034658 100644
+> --- a/board/xilinx/zc706/readme.txt
+> +++ b/board/xilinx/zc706/readme.txt
+> @@ -6,51 +6,24 @@ ZC706 information including schematics, reference designs, and manuals
+>  are available from
+>  http://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html.
+>
+> -uboot.bin  -- U-Boot SPL w/ Xilinx boot.bin wrapper
+> ----------------------------------------------------
+> -
+> -Due to licensing issues, the files ps7_init.c/h are not distributed
+> -with the U-Boot source code.  These files are required to make a
+> -boot.bin file.
+> -
+> -If you already have the Xilinx tools installed, the following sequence
+> -will unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
+> -
+> -make zynq_zc706_defconfig
+> -make uboot-patch
+> -cp ${XILINX_SDK_LIB}/hwplatform_templates/ZC706_hw_platform/ps7_init.{c,h} \
+> -   output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
+> -
+> -Where ${XILINX_SDK_LIB} is ${XILINX}/SDK/${VERSION}/data/embeddedsw/lib.
+> -
+> -After copying these files into the U-Boot source tree, you can
+> -continue the build with:
 
-c99 says if you are printing uint64_t then its portable to use PRIu64 e.g.
+Isn't this good information to still generally include somewhere in
+the notes for any of the Zynq boards as if they build a custom bit
+file there would be updated handoff files needing copied in.
 
-uint64_t a_int64
-printf("%" PRId64 "\n?, a_int64);
-
-
+> -
+> -make
+> -
+> -*Notice*
+> -While the build will successfully complete without the ps7_init.*
+> -files, the uboot.bin file generated by this configuration will not
+> -function properly on the ZC706. Therefore, it is imperative that the
+> -ps7_init.* files be copied into the U-Boot source tree any time the
+> -clean, or uboot-dirclean targets are executed.
+> -
+> -Resulting system
+> -----------------
+> -
+> -A FAT32 partition should be created at the beggining of the SD Card
+> -and the following files should be installed:
+> -
+> -- boot.bin
+> -- devicetree.dtb
+> -- uImage
+> -- uramdisk.image.gz
+> -- u-boot.img
+> -
+> -All needed files can be taken from <output>/images/
+> -
+> -cp <output>/images/boot.bin /media/sdcard/
+> -cp <output>/images/uImage /media/sdcard/
+> -cp <output>/images/u-boot.img /media/sdcard/
+> -cp <output>/images/zynq-zc706.dtb /media/sdcard/devicetree.dtb
+> -cp <output>/images/rootfs.cpio.uboot /media/sdcard/uramdisk.image.gz
+> +Steps to create a working system for ZC706 board:
 > +
-> + const char reportCSV_bw_jitter_loss_format[] =
-> +-"%s,%s,%d,%.1f-%.1f,%d,%d,%.3f,%d,%d,%.3f,%d\n";
-> ++"%s,%s,%d,%.1f-%.1f,%lld,%lld,%.3f,%d,%d,%.3f,%d\n";
-> + #endif //WIN32
-> + #endif //HAVE_QUAD_SUPPORT
-> + /* -------------------------------------------------------------------
-> +--
-> +1.9.1
+> +1) make zynq_zc706_defconfig
+> +2) make
+> +3) All needed files will be available in the output/images directory.
+> +   Create a FAT32 partition at the beginning of your SD Card and copy files:
+> +     - boot.bin
+> +     - u-boot.img
+> +     - uImage
+> +     - uramdisk.image.gz (should be renamed from rootfs.cpio.uboot)
+> +     - devicetree.dtb (should be renamed from zynq-zc706.dtb)
+> +   into your SD card
+> +4) boot your ZC706 board
 > +
+> +You can alter the booting procedure by creating a file uEnv.txt
+> +in the root of the SD card. It is a plain text file in format
+> +<key>=<value> one per line:
+> +
+> +kernel_image=myimage
+> +modeboot=myboot
+> +myboot=...
+> diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
+> index 746abcb..4ac2fe8 100644
+> --- a/configs/zynq_zc706_defconfig
+> +++ b/configs/zynq_zc706_defconfig
+> @@ -17,10 +17,11 @@ BR2_TARGET_ROOTFS_CPIO=y
+>  BR2_TARGET_ROOTFS_CPIO_GZIP=y
+>  BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
+>  BR2_TARGET_UBOOT=y
+> -BR2_TARGET_UBOOT_BOARDNAME="zynq_zc70x"
+> +BR2_TARGET_UBOOT_BOARDNAME="zynq_zc706"
+>  BR2_TARGET_UBOOT_CUSTOM_GIT=y
+>  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2014.1"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2016.2"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+>  BR2_TARGET_UBOOT_FORMAT_IMG=y
+>  BR2_TARGET_UBOOT_SPL=y
+> -BR2_TARGET_UBOOT_SPL_NAME="boot.bin"
+> +BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
 > --
 > 1.9.1
-> 
+>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 204 bytes
-Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160728/1240c424/attachment.asc>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+
+-- 
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
