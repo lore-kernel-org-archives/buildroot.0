@@ -1,40 +1,54 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 28 Jul 2016 06:47:24 -0500
-Subject: [Buildroot] [PATCH] support/download: support git older then
-	1.8.x
-In-Reply-To: <CANQCQpbXyAYztS5MkDU_nYdC6Tta9MYVLijqGuB2k_B3YpBp8Q@mail.gmail.com>
-References: <1469653038-64643-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20160727214755.GB5657@free.fr> <2615681.Zak49NFKdj@lenny>
- <CANQCQpbXyAYztS5MkDU_nYdC6Tta9MYVLijqGuB2k_B3YpBp8Q@mail.gmail.com>
-Message-ID: <CANQCQpZ7xEbZ5bAVeRw_OV43P2=4qH4fTZT7fk8kzEZnooQaKg@mail.gmail.com>
+Date: Thu, 28 Jul 2016 06:54:55 -0500
+Subject: [Buildroot] [PATCH 1/1] Fix backward incompatibility on git
+ downloader for git older than 1.8.4
+In-Reply-To: <CANQCQpZrwMF63UaRJzCw6+zXqa5uEO-735UJDDEi4gkgWZRKMg@mail.gmail.com>
+References: <1469695222-1749-1-git-send-email-eocanha@igalia.com>
+ <CANQCQpZrwMF63UaRJzCw6+zXqa5uEO-735UJDDEi4gkgWZRKMg@mail.gmail.com>
+Message-ID: <CANQCQpb+ZUXhwoKYhDvNk2e=RALSiE94M7AaEOkgf6rLs6+q+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Jul 28, 2016 3:49 AM, "Enrique Oca?a Gonz?lez" <eocanha@igalia.com>
+Enrique,
+
+On Jul 28, 2016 3:40 AM, "Enrique Oca?a Gonz?lez" <eocanha@igalia.com>
 wrote:
 >
-> El mi?rcoles, 27 de julio de 2016 23:47:55 (CEST) Yann E. MORIN escribi?:
+> The "--no-patch" option used by the git downloader appeared on git
+> 1.8.4. Systems with older git versions show an error and fall back to
+> the wget downloader, which isn't suitable for all the cases.
 >
-> > Enrique, if you agree that your SoB-line is warranted, we can go the
-> > fast route: just reply to the original mail with your own SoB-line, and
-> > all will be good in the best of the worlds! ;-)
+> Signed-off-by: Enrique Oca?a Gonz?lez <eocanha@igalia.com>
+> ---
+>  support/download/git | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> I tried to send the patch to the list yesterday (before Matt's
-submission) but
-> the email got bounced because I wasn't subscribed to the list. I've
-subscribed
-> today and resent the patch which got originally bounced.
+> diff --git a/support/download/git b/support/download/git
+> index 663006b..416cd1b 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -76,7 +76,7 @@ _git checkout -q "'${cset}'"
+>
+>  # Get date of commit to generate a reproducible archive.
+>  # %cD is RFC2822, so it's fully qualified, with TZ and all.
+> -date="$( _git show --no-patch --pretty=format:%cD )"
+> +date="$( _git log -1 --pretty=format:%cD )"
 
-Sounds Good, I'll mark mine as rejected and review yours.
+Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
 >
-> Cheers.
->
+>  # There might be submodules, so fetch them.
+>  if [ ${recurse} -eq 1 ]; then
 > --
-> Enrique Oca?a Gonz?lez
+> 1.8.3.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160728/a8f80d96/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160728/d71fa898/attachment.html>
