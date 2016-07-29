@@ -1,37 +1,97 @@
-From: David Raeman <draeman@bbn.com>
-Date: Fri, 29 Jul 2016 15:35:19 -0400
-Subject: [Buildroot] [PATCH 1/2] package/Makefile.in should grab
-	HOST_DIR headers using -isystem instead of -I.
-In-Reply-To: <CAMKF1spxedbMXzPnDU41nEFZdJ1qfc4Y0UqeQwxDaNmR4cmZHg@mail.gmail.com>
-References: <20160725195227.21112-1-draeman@bbn.com>
- <20160728220029.GI5862@free.fr>
- <48B4EC85-773A-4F99-96D4-59577018BAB3@gmail.com>
- <20160729093218.36d66c86@free-electrons.com>
- <CAMKF1sp5YvKanMM_AjPsZqmNOXrJAWsELpEcch+7Wec3MfhVzA@mail.gmail.com>
- <20160729112327.5af5618a@free-electrons.com>
- <CAMKF1spxedbMXzPnDU41nEFZdJ1qfc4Y0UqeQwxDaNmR4cmZHg@mail.gmail.com>
-Message-ID: <004001d1e9d0$5773c7d0$065b5770$@bbn.com>
+From: Jordan Yelloz <jordan@yelloz.me>
+Date: Fri, 29 Jul 2016 13:28:52 -0700
+Subject: [Buildroot] [PATCH 3/4] swupdate: improved help text for Lua
+ support
+In-Reply-To: <1469808876.3805.4.camel@embedded.rocks>
+References: <20160724232739.14132-1-jordan@yelloz.me>
+ <20160724232739.14132-4-jordan@yelloz.me>
+ <20160725093253.089ea2a8@free-electrons.com>
+ <5f0bb3f1-3f91-0bf0-8677-790dad5e92fe@yelloz.me>
+ <1469808876.3805.4.camel@embedded.rocks>
+Message-ID: <5100c888-4d02-93f9-606f-2ecc57af969f@yelloz.me>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 07/29/2016 09:14 AM, J?rg Krause wrote:
+> On Mo, 2016-07-25 at 09:36 -0700, Jordan Yelloz wrote:
+> 
+> On 07/25/2016 12:32 AM, Thomas Petazzoni wrote:
+> 
+> 
+> Hello,
+> 
+> On Sun, 24 Jul 2016 16:27:38 -0700, Jordan Yelloz wrote:
+> 
+> 
+> 
+> -	  * Select BR2_PACKAGE_LUA if you want to have Lua
+> support.
+> +	  * Select BR2_PACKAGE_LUA or BR2_PACKAGE_LUAJIT if you
+> want to have Lua
+> +	    support.
+> +	    CONFIG_HANDLER_IN_LUA is not supported in LuaJIT or
+> Lua 5.1.
+> +	    swupdate must be manually configured with
+> CONFIG_LUAVERSION="jit-5.1"
+> +	    to link against luajit.
+> 
+> 
+> What does this last sentence means?
+> 
+> Thomas
+> 
+> 
+> 
+> Regarding CONFIG_LUAVERSION, this is trying to explain how to
+> successfully configure swupdate to build against LuaJIT. If you just
+> choose LuaJIT, it will not be successful automatically due to some
+> minor
+> limitations in the swupdate build system.
+> 
+> swupdate has some build rules that are not that good (it uses
+> pkg-config for some parts of the build but uses a secondary list of
+> library names to actually link the final executable against) and when
+> adding the Lua library to the list of libraries to link, it relies on
+> concatenating "lua" with $(CONFIG_LUAVERSION).
+> 
+> Basically, the only way to get swupdate to link against libluajit-
+> 5.1.so
+> is to ensure CONFIG_LUAVERSION="jit-5.1" is in your swupdate KConfig
+> file. To me, the easiest/safest way of handling that is to expect the
+> user to configure swupdate manually with that value.
+> 
+> 
+> I like the idea of using swupdate with LuaJIT!
+> 
+> How about setting LUAVERSION if LuaJIT is selected? Like adding this somewhere:
+> 
+> $(call KCONFIG_SET_OPT,CONFIG_LUAVERSION,"jit-5.1")
+> 
 
-On Fri, Jul 29, 2016 at 11:09 AM, Khem Raj <raj.khem@gmail.com> wrote:
-> with specifying your own -isystem you will be introducing the issue too see
-> this thread for more
-> https://lists.fedoraproject.org/archives/list/devel at lists.fedoraproject.org/t
-> hread/Q5SWCUUMWQ4EMS7CU2CBOZHV3WZYOOTT/
+Hi,
 
-Yes, I see what you mean.  GCC-6 is now using #include_next in its C++ standard library header files to help the C++ STL header files properly find their own special copy of stdlib.h.  The behavior of #include_next will change depending on the order of the directories in the include search path.  Based on these tickets, it looks like a problem is introduced if you use -isystem to specify a directory that gcc would already have considered as part of its default system include directories.  Doing so causes that particular directory to be moved up earlier in the search order, so the internal use of #include_next ends up failing because it is relying on the "known" order of the default system include directories.  Note that this is not a problem with the -I flag, because gcc will ignore the -I flag if the provided directory is in the default search path.  It's only -isystem that might rearrange the order of default directories.
+I do prefer this approach. I have made some changes to my patch to
+conditionally add KCONFIG_SET_OPT. However, in order to get it working
+we will also need to set CONFIG_LUA=y since CONFIG_LUAVERSION depends on
+CONFIG_LUA=y.
+If everybody approves of automatically enabling some
+Lua support in swupdate when lua is enabled in buildroot, we can do
+that. And if we do that, we might as well do the same when PUC Lua is
+enabled in buildroot.
+Otherwise, we will soon have to add some more options to the swupdate
+buildroot kconfig and there might be some confusing overlap between the
+kconfig of buildroot and that of swupdate.
+Something to consider when adding complexity to this is that the current
+swupdate defconfig distributed with buildroot has very few features
+enabled (no MTD, no shell scripts, no u-boot environment patching). I
+would imagine that anyone who uses swupdate with buildroot for anything
+serious would keep their own custom defconfig for their project. If
+that's the case then it might be best to continue to do as little as
+possible and just get out of the way of the user and leave it to them to
+properly configure Lua support in swupdate.
 
-Here is another ticket in the GCC tracker for this issue, marked WONTFIX: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70129.  The recommendation is to not use -isystem for directories that gcc already includes in the default search path.
-
-It's not clear to me that the specific use of -isystem introduced in this patch would violate this assertion.  Are there configurations for buildroot where "$(HOST_DIR)/usr/include" can resolve to a default include directory as listed in https://gcc.gnu.org/onlinedocs/cpp/Search-Path.html ?  It's not possible for my particular use, but I don't know all the uses of buildroot well enough to make that statement in the blanket general case.
-
-However, I still very much appreciate the overall point you make - that use of the flag can cause subtle and unintended consequences.  If the maintainers choose to back the patch out, I can find another way to resolve my original issue by submitting a patch to u-boot to ensure it prefers its modified copy of libfdt.h instead of the possibly-installed system copy.  I still believe the use of -isystem here is correct in a strict technical sense, because "$(HOST_DIR)/usr/include" is truly a system include directory at a non-standard location.  But I understand that some packages incorrectly assume that -I is the only way to add include paths and don't anticipate the use of -isystem.  Case in point, the Python package I just submitted a patch for.
-
-Cheers,
-David
+--
+Jordan
