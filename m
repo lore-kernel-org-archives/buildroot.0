@@ -1,28 +1,39 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 29 Jul 2016 23:59:23 +0200
-Subject: [Buildroot] [git commit] qt5imageformats: fix AArch64 compile
-In-Reply-To: <1B400993-7C1D-4BFE-A50F-B8F409D5C310@gmail.com>
-References: <20160727130658.364B87FEF0@busybox.osuosl.org>
- <1B400993-7C1D-4BFE-A50F-B8F409D5C310@gmail.com>
-Message-ID: <20160729235923.4cb31119@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 29 Jul 2016 23:04:51 +0000
+Subject: [Buildroot] [Bug 9111] New: glibc 2.23: libmvec.so not copied
+Message-ID: <bug-9111-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Khem,
+https://bugs.busybox.net/show_bug.cgi?id=9111
 
-On Wed, 27 Jul 2016 11:14:04 -0700, Khem Raj <raj.khem@gmail.com> wrote:
+            Bug ID: 9111
+           Summary: glibc 2.23: libmvec.so not copied
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: eljedi at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> > +
-> > +-equals(QT_ARCH, arm) {
-> > ++equals(QT_ARCH, arm)|equals(QT_ARCH, arm64) {
-> 
-> not aarch64 ?
-> 
+Created attachment 6561
+  --> https://bugs.busybox.net/attachment.cgi?id=6561&action=edit
+Patch enable glibc installer to copy libmvec.so
 
-I think not, the Qt internal arch identifier is arm64, but aarch64 is used for the toolchain triplet...
+Current github version of buildroot does not copy libmvec.so from glibc 2.23 to
+target directory.
 
-Regards,
-Peter
+I'm attaching a simple patch to fix it
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
