@@ -1,97 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 29 Jul 2016 12:26:47 +0300
-Subject: [Buildroot] [PATCH] iperf: bump to version 2.0.9
-Message-ID: <0fe5e4e62f4093b8d30fd1155d8832cd2482a57e.1469784407.git.baruch@tkos.co.il>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 29 Jul 2016 10:52:20 +0100
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.162
+Message-ID: <1469785940-17532-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-iperf2 is a fork of the original unmaintained iperf project, that continues
-the development of the iperf 2.x series. Update homepage link, and download
-location.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/iperf/0001-add-missing-header.patch | 28 ++++++++++++++++++++++++++++
- package/iperf/Config.in                     |  2 +-
- package/iperf/iperf.hash                    |  4 +++-
- package/iperf/iperf.mk                      |  4 ++--
- 4 files changed, 34 insertions(+), 4 deletions(-)
- create mode 100644 package/iperf/0001-add-missing-header.patch
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iperf/0001-add-missing-header.patch b/package/iperf/0001-add-missing-header.patch
-new file mode 100644
-index 000000000000..112738ea25ed
---- /dev/null
-+++ b/package/iperf/0001-add-missing-header.patch
-@@ -0,0 +1,28 @@
-+util.h: add missing stdbool header
-+
-+C requires the stdbool.h header for the 'bool' type.
-+
-+Fixes the following build failure under uClibc-ng C library:
-+
-+.../arm-linux-gcc -DHAVE_CONFIG_H -I. -I..  -I../include -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c delay.c
-+In file included from delay.c:55:0:
-+../include/util.h:73:1: error: unknown type name ?bool?
-+ bool setsock_blocking(int fd, bool blocking);
-+ ^
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Patch status: sent to iperf2 maintainer
-+
-+diff -Nuar iperf-2.0.9.orig/include/util.h iperf-2.0.9/include/util.h
-+--- iperf-2.0.9.orig/include/util.h	2016-06-06 21:48:21.000000000 +0300
-++++ iperf-2.0.9/include/util.h	2016-07-29 11:27:23.028224148 +0300
-+@@ -57,6 +57,8 @@
-+     #include "config.h"
-+ #endif
-+ 
-++#include <stdbool.h>
-++
-+ #ifdef __cplusplus
-+ extern "C" {
-+ #endif
-diff --git a/package/iperf/Config.in b/package/iperf/Config.in
-index 86dd3e97c98c..21a2df8ace89 100644
---- a/package/iperf/Config.in
-+++ b/package/iperf/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_IPERF
- 	  Internet Protocol bandwidth measuring tool for measuring
- 	  TCP/UDP performance.
- 
--	  http://dast.nlanr.net/projects/iperf/
-+	  https://sourceforge.net/projects/iperf2/
- 
- comment "iperf needs a toolchain w/ C++"
- 	depends on BR2_USE_MMU
-diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
-index 8d93b723d044..3dd491a2c0ee 100644
---- a/package/iperf/iperf.hash
-+++ b/package/iperf/iperf.hash
-@@ -1,2 +1,4 @@
-+# From https://sourceforge.net/projects/iperf2/files/
-+sha1	9e215f6af8edd97f947f2b0207ff5487845d83d4	iperf-2.0.9.tar.gz
- # Locally computed:
--sha256  636b4eff0431cea80667ea85a67ce4c68698760a9837e1e9d13096d20362265b  iperf-2.0.5.tar.gz
-+sha256  a5350777b191e910334d3a107b5e5219b72ffa393da4186da1e0a4552aeeded6  iperf-2.0.9.tar.gz
-diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
-index 8496b95d83cc..f769238e4fc8 100644
---- a/package/iperf/iperf.mk
-+++ b/package/iperf/iperf.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 4cce78c..65945a1 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 7717d9f3b5bfb57dc240bc18673c66bc308de95c32f02090bc36b7d5264c2bfdadf234b0fcadc24b6099cf9f9c1d10be521200567b1e9744e71c252dc57dbf46  LVM2.2.02.161.tgz
++sha512 9544bb7706488ac128d477af7294bcfd7b7e47cb0b1d604ea52c4545d6c3a5a71311945994dd1114cb1ce086d2006a35ef1d8b0fdd3082dfe5cc468cb0168057  LVM2.2.02.162.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index fed8273..8a51120 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPERF_VERSION = 2.0.5
--IPERF_SITE = http://downloads.sourceforge.net/project/iperf
-+IPERF_VERSION = 2.0.9
-+IPERF_SITE = https://sourceforge.net/projects/iperf2/files
- IPERF_LICENSE = MIT-like
- IPERF_LICENSE_FILES = COPYING
- 
+-LVM2_VERSION = 2.02.161
++LVM2_VERSION = 2.02.162
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
 -- 
-2.8.1
+2.7.3
