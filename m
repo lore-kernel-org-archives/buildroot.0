@@ -1,41 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Jul 2016 11:23:27 +0200
-Subject: [Buildroot] [PATCH 1/2] package/Makefile.in should grab
- HOST_DIR headers using -isystem instead of -I.
-In-Reply-To: <CAMKF1sp5YvKanMM_AjPsZqmNOXrJAWsELpEcch+7Wec3MfhVzA@mail.gmail.com>
-References: <20160725195227.21112-1-draeman@bbn.com>
- <20160728220029.GI5862@free.fr>
- <48B4EC85-773A-4F99-96D4-59577018BAB3@gmail.com>
- <20160729093218.36d66c86@free-electrons.com>
- <CAMKF1sp5YvKanMM_AjPsZqmNOXrJAWsELpEcch+7Wec3MfhVzA@mail.gmail.com>
-Message-ID: <20160729112327.5af5618a@free-electrons.com>
+From: Sokolowski, Hubert <hubert.sokolowski@intel.com>
+Date: Fri, 29 Jul 2016 09:27:02 +0000
+Subject: [Buildroot] lshw version bump
+Message-ID: <C039B2B452EFF24BA495644ED973419137DA1A4C@IRSMSX107.ger.corp.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear All,
 
-On Fri, 29 Jul 2016 01:16:24 -0700, Khem Raj wrote:
+We were wondering if you are planning to bump a version of lshw?
+We discovered that version B.02.17 (which was released in 2013) 
+ can cause segmentation fault and crash on recent hardware.
+Version B.02.18 was released this year and contains several bug fixes.
+Please apply the patch that is attached if it is acceptable for you.
 
-> > Can you give some more details? Did you look at the original commit log
-> > for this change? It pointed out some real problems when using -I, which
-> > in theory should be resolved by using -isystem.  
-> 
-> see
-> http://cgit.openembedded.org/cgit.cgi/openembedded-core/commit/?id=0a6e162c47017ecf51b466218fb549e0e199f4c4
-> 
-> If packages use include_next they will have problems.
-
-Right, but like your patch shows, problems occur when packages are
-broken, so they should "simply" be fixed.
-
-I don't really see another option than using -isystem in fact. What do
-you suggest?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best Regards,
+Hubert Sokolowski
+Intel
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-lshw-bump-version-to-B.02.18.patch
+Type: application/octet-stream
+Size: 3529 bytes
+Desc: 0001-lshw-bump-version-to-B.02.18.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160729/ad390e07/attachment.obj>
