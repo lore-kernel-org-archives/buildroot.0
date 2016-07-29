@@ -1,107 +1,61 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Thu, 28 Jul 2016 17:15:16 -0700
-Subject: [Buildroot] [PATCH v4] iperf: fix "speed" display in csv report
-In-Reply-To: <1469750949-64127-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1469750949-64127-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <29C3A859-14A0-4507-A116-D270E6A0BAC9@gmail.com>
+From: David Raeman <draeman@bbn.com>
+Date: Fri, 29 Jul 2016 00:18:33 -0400
+Subject: [Buildroot] [PATCH 1/1] host-python: Find headers provided by
+	-isystem flag in CPPFLAGS
+In-Reply-To: <20160728220029.GI5862@free.fr>
+References: <20160728220029.GI5862@free.fr>
+Message-ID: <20160729041833.27902-1-draeman@bbn.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The Python setup.py logic will enable and disable modules for compilation
+based on which libraries it believes are available.  The logic in this
+script parses certain arguments out of CPPFLAGS to determine search
+directories, and then it checks for existence of various system libaries
+and headers within those search directories.
 
-> On Jul 28, 2016, at 5:09 PM, Matt Weber <matthew.weber@rockwellcollins.com> wrote:
-> 
-> Some parameters displayed in the CSV reports are declared
-> as uint64_t, but the printf format doesn't reflect this.
-> 
-> Submitted bug: https://sourceforge.net/p/iperf/bugs/66/
-> 
-> Signed-off-by: Matt Poduska <matt.poduska@rockwellcollins.com>
-> Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
-> 
-> v1 -> v2
-> [Matt W
-> - Fixed Atul's signed off line
-> 
-> v2 -> v3
-> [Khem
-> - Use c99 standard PRIu64
-> 
-> v3 -> v4
-> [Khem
-> - Fix bad patch, was reversed
+This patch will allow the logic to consider include directories that
+are specified using the -isystem flag.  The default logic only considers
+include directories specified using the -I flag.
 
-Looks good now
+Signed-off-by: David Raeman <draeman@bbn.com>
+---
+ package/python/116-search-isystem-inc.patch | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 package/python/116-search-isystem-inc.patch
 
-Reviewed-by: Khem Raj <raj.khem@gmail.com>
-
-
-> ---
-> .../0001-fix-speed-display-in-csv-report.patch     | 39 ++++++++++++++++++++++
-> 1 file changed, 39 insertions(+)
-> create mode 100644 package/iperf/0001-fix-speed-display-in-csv-report.patch
-> 
-> diff --git a/package/iperf/0001-fix-speed-display-in-csv-report.patch b/package/iperf/0001-fix-speed-display-in-csv-report.patch
-> new file mode 100644
-> index 0000000..b06c709
-> --- /dev/null
-> +++ b/package/iperf/0001-fix-speed-display-in-csv-report.patch
-> @@ -0,0 +1,39 @@
-> +From f035e70b72d4285dcdbd393e680777a927cb9da4 Mon Sep 17 00:00:00 2001
-> +From: Matt Weber <matthew.weber@rockwellcollins.com>
-> +Date: Thu, 28 Jul 2016 19:04:01 -0500
-> +Subject: [PATCH] perf: fix "speed" display in csv report
-> +
-> +Some parameters displayed in the CSV reports are declared
-> +as uint64_t, but the printf format doesn't reflect this.
-> +
-> +Submitted bug: https://sourceforge.net/p/iperf/bugs/66/
-> +
-> +Signed-off-by: Matt Poduska <matt.poduska@rockwellcollins.com>
-> +Signed-off-by: Atul Singh <atul.singh.mandla@gmail.com>
-> +Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> +---
-> + src/Locale.c | 5 +++--
-> + 1 file changed, 3 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/src/Locale.c b/src/Locale.c
-> +index b5d42b1..7b924fa 100644
-> +--- a/src/Locale.c
-> ++++ b/src/Locale.c
-> +@@ -260,11 +260,12 @@ const char reportCSV_bw_format[] =
-> + const char reportCSV_bw_jitter_loss_format[] =
-> + "%s,%s,%d,%.1f-%.1f,%I64d,%I64d,%.3f,%d,%d,%.3f,%d\n";
-> + #else
-> ++#include "inttypes.h"
-> + const char reportCSV_bw_format[] =
-> +-"%s,%s,%d,%.1f-%.1f,%d,%d\n";
-> ++"%s,%s,%d,%.1f-%.1f,%" PRId64 ",%" PRId64 "\n";
-> +
-> + const char reportCSV_bw_jitter_loss_format[] =
-> +-"%s,%s,%d,%.1f-%.1f,%d,%d,%.3f,%d,%d,%.3f,%d\n";
-> ++"%s,%s,%d,%.1f-%.1f,%" PRId64 ",%" PRId64 ",%.3f,%d,%d,%.3f,%d\n";
-> + #endif //WIN32
-> + #endif //HAVE_QUAD_SUPPORT
-> + /* -------------------------------------------------------------------
-> +--
-> +1.9.1
-> +
-> --
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 204 bytes
-Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160728/5e776aa7/attachment.asc>
+diff --git a/package/python/116-search-isystem-inc.patch b/package/python/116-search-isystem-inc.patch
+new file mode 100644
+index 0000000..af0c788
+--- /dev/null
++++ b/package/python/116-search-isystem-inc.patch
+@@ -0,0 +1,24 @@
++Allow Python to find system header files in locations specified with
++flag -isystem in addition to the default behavior of searching -I.
++
++These directories are not used for complication, but are used to
++perform existence-checks for library header files so that Python
++can determine which modules should be built for the system.
++
++Signed-off-by: David Raeman <draeman@bbn.com>
++
++Index: b/setup.py
++===================================================================
++--- a/setup.py	2016-07-28 23:46:37.574969153 -0400
+++++ b/setup.py	2016-07-29 00:01:02.928906258 -0400
++@@ -478,6 +478,10 @@
++                 ('CPPFLAGS', '-I', self.compiler.include_dirs)):
++             env_val = sysconfig.get_config_var(env_var)
++             if env_val:
+++                # For the purpose of finding search directories, treat the
+++                # -isystem flag as if it were a -I flag.
+++                env_val = re.sub(r'(?i)(^|\s+)-isystem\s*', ' -I', env_val)
+++
++                 # To prevent optparse from raising an exception about any
++                 # options in env_val that it doesn't know about we strip out
++                 # all double dashes and any dashes followed by a character
+-- 
+2.9.2
