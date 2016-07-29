@@ -1,47 +1,45 @@
 From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 29 Jul 2016 18:20:34 +0200
-Subject: [Buildroot] [PATCH 4/4] swupdate: added a warning for
- LuaJIT/Lua 5.1
-In-Reply-To: <20160724232739.14132-5-jordan@yelloz.me>
-References: <20160724232739.14132-1-jordan@yelloz.me>
- <20160724232739.14132-5-jordan@yelloz.me>
-Message-ID: <1469809234.3805.10.camel@embedded.rocks>
+Date: Fri, 29 Jul 2016 18:23:13 +0200
+Subject: [Buildroot] [PATCH] warpboard: linux.fragment: Do not use
+ CONFIG_BRCMFMAC as built-in
+In-Reply-To: <1469799930-20206-1-git-send-email-fabio.estevam@nxp.com>
+References: <1469799930-20206-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <1469809393.3805.12.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On So, 2016-07-24 at 16:27 -0700, Jordan Yelloz wrote:
-> Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
-> ---
-> ?package/swupdate/Config.in | 6 ++++++
-> ?1 file changed, 6 insertions(+)
+Hi Fabio,
+
+On Fr, 2016-07-29 at 10:45 -0300, Fabio Estevam wrote:
+> Selecting the driver CONFIG_BRCMFMAC as built-in causes some probe
+> issues
+> as we cannot guarantee that the brcmfmac driver will be probed after
+> the
+> rootfs has been mounted. The brcmfmac driver retrieves the firmware
+> and
+> nvram file from the rootfs, so the rootfs should be mounted first.
 > 
-> diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-> index 85dde4eb0bc5..046903de87f5 100644
-> --- a/package/swupdate/Config.in
-> +++ b/package/swupdate/Config.in
-> @@ -55,6 +55,12 @@ config BR2_PACKAGE_SWUPDATE_INSTALL_WEBSITE
-> ?	??This is necessary if you want to run swupdate with the
-> embedded
-> ?	??webserver and do not provide an own website to be
-> installed to
-> ?	??/var/www/swupdate.
-> +
-> +if BR2_PACKAGE_LUA_5_1 || BR2_PACKAGE_LUAJIT
-> +comment "swupdate cannot use CONFIG_HANDLER_IN_LUA with Lua API <
-> 5.2."
-> +comment "Lua parsers and pre/post-install hooks should still
-> work.????"
-> +endif
-> +
+> To avoid such issues let the CONFIG_BRCMFMAC be built as module,
+> which is
+> the original option in imx_v6_v7_defconfig.
+> 
+> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+> ---
+> ?board/freescale/warpboard/linux.fragment | 1 -
+> ?1 file changed, 1 deletion(-)
+> 
+> diff --git a/board/freescale/warpboard/linux.fragment
+> b/board/freescale/warpboard/linux.fragment
+> index 736b9cd..892d0cb 100644
+> --- a/board/freescale/warpboard/linux.fragment
+> +++ b/board/freescale/warpboard/linux.fragment
+> @@ -1,2 +1 @@
+> ?CONFIG_CFG80211_WEXT=y
+> -CONFIG_BRCMFMAC=y
 
-I would prefer to put this as a note in the help text.
+Shouldn't this be "CONFIG_BRCMFMAC=m"?
 
-Do you know where this restriction comes from? Why does the Lua
-handlers does not work? Did you tell upstream about the issue? AFAIK
-swupate should work with Lua 5.1 - 5.3, but I did not checked.
-
-Best regards
-J?rg Krause
+J?rg
