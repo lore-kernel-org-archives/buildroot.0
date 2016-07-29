@@ -1,221 +1,95 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 29 Jul 2016 16:28:37 +0200
-Subject: [Buildroot] [PATCH 1/1] minissdpd: new package
-Message-ID: <1469802517-17937-1-git-send-email-fabrice.fontaine@orange.com>
+From: Hubert Sokolowski <hubert.sokolowski@intel.com>
+Date: Fri, 29 Jul 2016 18:54:59 +0200
+Subject: [Buildroot] [PATCH 1/1] lshw: bump version to B.02.18
+Message-ID: <1469811299-17096-1-git-send-email-hubert.sokolowski@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-SSDP managing daemon.
-Designed to work with miniupnpc, miniupnpd, minidlna, etc.
+Version B.02.17 was found to be unstable on recent HW.
+Obsolete patches are removed for the following reasons:
+- 0001-add-LIBS.patch does not apply and needs to be
+  recreated if still needed, the patch was created in 2012
+  and since then it was not upstreamed to lshw repo.
+- patches from git.alpinelinux.org are no longer available
+  on the server.
+- the last patch from github.com is included in that version.
+This patch was tested with kernel 4.4.16.
 
-http://miniupnp.free.fr/
-
-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Hubert Sokolowski <hubert.sokolowski@intel.com>
 ---
- package/Config.in                                  |  1 +
- .../0001-Set-_GNU_SOURCE-in-asyncsendto.c.patch    | 32 +++++++++++++++
- package/minissdpd/Config.in                        |  8 ++++
- package/minissdpd/S50minissdpd                     | 47 ++++++++++++++++++++++
- package/minissdpd/minissdpd.hash                   |  2 +
- package/minissdpd/minissdpd.mk                     | 38 +++++++++++++++++
- package/minissdpd/minissdpd.service                | 12 ++++++
- 7 files changed, 140 insertions(+)
- create mode 100644 package/minissdpd/0001-Set-_GNU_SOURCE-in-asyncsendto.c.patch
- create mode 100644 package/minissdpd/Config.in
- create mode 100644 package/minissdpd/S50minissdpd
- create mode 100644 package/minissdpd/minissdpd.hash
- create mode 100644 package/minissdpd/minissdpd.mk
- create mode 100644 package/minissdpd/minissdpd.service
+ package/lshw/0001-add-LIBS.patch | 30 ------------------------------
+ package/lshw/lshw.hash           |  5 +----
+ package/lshw/lshw.mk             |  6 +-----
+ 3 files changed, 2 insertions(+), 39 deletions(-)
+ delete mode 100644 package/lshw/0001-add-LIBS.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index ee7ba39..616df66 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1495,6 +1495,7 @@ menu "Networking applications"
- 	source "package/memcached/Config.in"
- 	source "package/mii-diag/Config.in"
- 	source "package/minidlna/Config.in"
-+	source "package/minissdpd/Config.in"
- 	source "package/mjpg-streamer/Config.in"
- 	source "package/modem-manager/Config.in"
- 	source "package/mongrel2/Config.in"
-diff --git a/package/minissdpd/0001-Set-_GNU_SOURCE-in-asyncsendto.c.patch b/package/minissdpd/0001-Set-_GNU_SOURCE-in-asyncsendto.c.patch
-new file mode 100644
-index 0000000..35854c5
---- /dev/null
-+++ b/package/minissdpd/0001-Set-_GNU_SOURCE-in-asyncsendto.c.patch
-@@ -0,0 +1,32 @@
-+From 8ea177d974259c91f7e520d4b5b2abf07a1bbce2 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+Date: Fri, 29 Jul 2016 13:32:09 +0200
-+Subject: [PATCH 1/1] Set _GNU_SOURCE in asyncsendto.c
-+
-+Add #define on _GNU_SOURCE at the very beginning of asyncsendto.c file
-+as this file uses in6_pktinfo which is protected by __USE_GNU in
-+libc/inet/netinet/in.h. Currently, this flag is set by the Makefile in
-+CFLAGS however CFLAGS could be overwritten by the build system.
-+
-+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+---
-+ minissdpd/asyncsendto.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/asyncsendto.c b/minissdpd/asyncsendto.c
-+index bd21e93..3e5eba3 100644
-+--- a/asyncsendto.c
-++++ b/asyncsendto.c
-+@@ -5,6 +5,9 @@
-+  * This software is subject to the conditions detailed
-+  * in the LICENCE file provided within the distribution */
-+ 
-++// for struct in6_pktinfo
-++#define _GNU_SOURCE
-++
-+ #include <sys/types.h>
-+ #include <sys/socket.h>
-+ #include <sys/time.h>
-+-- 
-+2.7.4
-+
-diff --git a/package/minissdpd/Config.in b/package/minissdpd/Config.in
-new file mode 100644
-index 0000000..b5a73f0
---- /dev/null
-+++ b/package/minissdpd/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_MINISSDPD
-+	bool "minissdpd"
-+	select BR2_PACKAGE_LIBNFNETLINK
-+	help
-+	  SSDP managing daemon.
-+	  Designed to work with miniupnpc, miniupnpd, minidlna, etc.
-+
-+	  http://miniupnp.free.fr/
-diff --git a/package/minissdpd/S50minissdpd b/package/minissdpd/S50minissdpd
-new file mode 100644
-index 0000000..76b6ae3
---- /dev/null
-+++ b/package/minissdpd/S50minissdpd
-@@ -0,0 +1,47 @@
-+#!/bin/sh
-+
-+NAME=minissdpd
-+PIDFILE=/var/run/$NAME.pid
-+DAEMON=/usr/sbin/$NAME
-+CFGFILE=/etc/default/$NAME
-+
-+IF=eth0
-+
-+# Read configuration variable file if it is present
-+if [ -f $CFGFILE ]; then
-+        . $CFGFILE
-+fi
-+
-+DAEMON_ARGS="-i $IF"
-+
-+start() {
-+	printf "Starting $NAME: "
-+	start-stop-daemon -S -q -m -b -p $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+stop() {
-+	printf "Stopping $NAME: "
-+	start-stop-daemon -K -q -p $PIDFILE
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+  start)
-+	start
-+	;;
-+  stop)
-+	stop
-+	;;
-+  restart|reload)
-+	restart
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/minissdpd/minissdpd.hash b/package/minissdpd/minissdpd.hash
-new file mode 100644
-index 0000000..8d670f3
---- /dev/null
-+++ b/package/minissdpd/minissdpd.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	dfd637b185731e1acb412a86faa9718eb93c04ca08280541a6d22d14d1fb890f	minissdpd-1.5.tar.gz
-diff --git a/package/minissdpd/minissdpd.mk b/package/minissdpd/minissdpd.mk
-new file mode 100644
-index 0000000..eddef0f
---- /dev/null
-+++ b/package/minissdpd/minissdpd.mk
-@@ -0,0 +1,38 @@
-+################################################################################
-+#
-+# minissdpd
-+#
-+################################################################################
-+
-+MINISSDPD_VERSION = 1.5
-+MINISSDPD_SITE = http://miniupnp.free.fr/files
-+MINISSDPD_LICENSE = BSD-3c
-+MINISSDPD_LICENSE_FILES = LICENSE
-+MINISSDPD_DEPENDENCIES = libnfnetlink
-+
-+define MINISSDPD_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define MINISSDPD_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		PREFIX=$(TARGET_DIR) install
-+endef
-+
-+# Use dedicated init scripts for systemV and systemd instead of using
-+# minissdpd.init.d.script as it is not compatible with buildroot init system
-+define MINISSDPD_INSTALL_INIT_SYSV
-+	$(RM) $(TARGET_DIR)/etc/init.d/minissdpd
-+	$(INSTALL) -D -m 0755 package/minissdpd/S50minissdpd \
-+		$(TARGET_DIR)/etc/init.d/S50minissdpd
-+endef
-+
-+define MINISSDPD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/minissdpd/minissdpd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/minissdpd.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/minissdpd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/minissdpd.service
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/minissdpd/minissdpd.service b/package/minissdpd/minissdpd.service
-new file mode 100644
-index 0000000..4a520f5
---- /dev/null
-+++ b/package/minissdpd/minissdpd.service
-@@ -0,0 +1,12 @@
-+[Unit]
-+Description=SSDP managing daemon
-+After=network.target
-+
-+[Service]
-+Environment="IF=eth0"
-+EnvironmentFile=/etc/default/minissdpd
-+ExecStart=/usr/sbin/minissdpd -i $IF
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
+diff --git a/package/lshw/0001-add-LIBS.patch b/package/lshw/0001-add-LIBS.patch
+deleted file mode 100644
+index 70b2a5b..0000000
+--- a/package/lshw/0001-add-LIBS.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-We need to be able to pass extra LIBS when our toolchain lacks NLS support,
+-this way we can build libintl and link to it.
+-A good example is uClibc with locale support disabled.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura lshw-B.02.16.orig/src/gui/Makefile lshw-B.02.16/src/gui/Makefile
+---- lshw-B.02.16.orig/src/gui/Makefile	2012-05-28 12:32:49.303885759 -0300
+-+++ lshw-B.02.16/src/gui/Makefile	2012-05-28 12:33:33.850206001 -0300
+-@@ -11,7 +11,7 @@
+- CXXFLAGS=-g -Wall $(INCLUDES) $(DEFINES) $(RPM_OPT_FLAGS)
+- CFLAGS=$(CXXFLAGS) $(DEFINES)
+- GTKLIBS=$(shell pkg-config gtk+-2.0 gmodule-2.0 --libs)
+--LIBS=-L../core -llshw -lresolv -lsqlite3 $(GTKLIBS)
+-+LIBS+=-L../core -llshw -lresolv -lsqlite3 $(GTKLIBS)
+- LDFLAGS=
+- ifneq ($(shell $(LD) --help 2| grep -- --as-needed), )
+- 	LDFLAGS+= -Wl,--as-needed
+-diff -Nura lshw-B.02.16.orig/src/Makefile lshw-B.02.16/src/Makefile
+---- lshw-B.02.16.orig/src/Makefile	2012-05-28 12:32:49.292885680 -0300
+-+++ lshw-B.02.16/src/Makefile	2012-05-28 12:33:24.530139060 -0300
+-@@ -30,7 +30,7 @@
+- 	LDFLAGS+= -Wl,--as-needed
+- endif
+- LDSTATIC=-static
+--LIBS=-llshw -lresolv
+-+LIBS+=-llshw -lresolv
+- ifeq ($(SQLITE), 1)
+- 	LIBS+= $(shell pkg-config --libs sqlite3)
+- endif
+diff --git a/package/lshw/lshw.hash b/package/lshw/lshw.hash
+index 8dfc7d3..0694229 100644
+--- a/package/lshw/lshw.hash
++++ b/package/lshw/lshw.hash
+@@ -1,5 +1,2 @@
+ # Locally calculated
+-sha256	eb9cc053fa0f1e78685cb695596e73931bfb55d2377e3bc3b8b94aff4c5a489c	lshw-B.02.17.tar.gz
+-sha256	2e5a3d63da8475db17fd90969bcb1930cf19d2b8da7be41edeea5c2a53878382	no-private-uint.patch
+-sha256	c8365f7ac8fc7a751c78d89ab446111bb1a235bc977a1b21e1b826c2e62361d1	basename-limits-long-bits.patch
+-sha256	9eba284061574e02a6b162ab20dff07c48693e00f781220ee974ba5c90d1cca9	988f5449791ebf869ab9fa7520463dab4eae3404.patch
++sha256	ae22ef11c934364be4fd2a0a1a7aadf4495a0251ec6979da280d342a89ca3c2f	lshw-B.02.18.tar.gz
+diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
+index e8e67e2..9227584 100644
+--- a/package/lshw/lshw.mk
++++ b/package/lshw/lshw.mk
+@@ -4,12 +4,8 @@
+ #
+ ################################################################################
+ 
+-LSHW_VERSION = B.02.17
++LSHW_VERSION = B.02.18
+ LSHW_SITE = http://ezix.org/software/files
+-LSHW_PATCH = \
+-	http://git.alpinelinux.org/cgit/aports/plain/testing/lshw/basename-limits-long-bits.patch \
+-	http://git.alpinelinux.org/cgit/aports/plain/testing/lshw/no-private-uint.patch \
+-	https://github.com/lyonel/lshw/commit/988f5449791ebf869ab9fa7520463dab4eae3404.patch
+ LSHW_LICENSE = GPLv2
+ LSHW_LICENSE_FILES = COPYING
+ 
 -- 
-2.7.4
+2.5.0
