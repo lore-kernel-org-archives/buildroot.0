@@ -1,24 +1,28 @@
-From: anders at acorn.pw <anders@acorn.pw>
-Date: Fri, 29 Jul 2016 16:58:43 -0500
-Subject: [Buildroot] Best way to have /var on a separate fs?
-Message-ID: <64AD5204-D274-4F91-B15D-F3E5F90B5B32@acorn.pw>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 29 Jul 2016 23:59:23 +0200
+Subject: [Buildroot] [git commit] qt5imageformats: fix AArch64 compile
+In-Reply-To: <1B400993-7C1D-4BFE-A50F-B8F409D5C310@gmail.com>
+References: <20160727130658.364B87FEF0@busybox.osuosl.org>
+ <1B400993-7C1D-4BFE-A50F-B8F409D5C310@gmail.com>
+Message-ID: <20160729235923.4cb31119@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everyone,
+Hello Khem,
 
-Many thanks for this great project.
+On Wed, 27 Jul 2016 11:14:04 -0700, Khem Raj <raj.khem@gmail.com> wrote:
 
-I'm new to buildroot and working on a build for x86 (PC). My root fs is a readonly squashfs, but I need /var to be writable, so I'm thinking of putting it on a separate partition.
+> > +
+> > +-equals(QT_ARCH, arm) {
+> > ++equals(QT_ARCH, arm)|equals(QT_ARCH, arm64) {
+> 
+> not aarch64 ?
+> 
 
-My best idea for how to do this is via a post-build script that first makes an image of the contents of ./output/target/var and then removes everything from there so that /var ends up empty in the rootfs image.
+I think not, the Qt internal arch identifier is arm64, but aarch64 is used for the toolchain triplet...
 
-But since having /usr, /var, /tmp, etc in their own partitions is a very common setup I thought I'd ask whether there's already some other "best practice" for doing this in the buildroot world.
-
-Any advice is appreciated!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160729/b763321f/attachment.html>
+Regards,
+Peter
