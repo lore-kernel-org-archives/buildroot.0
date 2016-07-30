@@ -1,44 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jul 2016 18:14:50 +0200
-Subject: [Buildroot] [PATCH 6/7] zynq_zc706: bump U-Boot to
- xilinx-v2016.2
-In-Reply-To: <CANQCQpaM__7tuCvn7=tm3xkxv7aG4Yi_to-YVD5QP0HN+R-7xQ@mail.gmail.com>
-References: <1468834703-27518-1-git-send-email-yamada.masahiro@socionext.com>
- <1468834703-27518-7-git-send-email-yamada.masahiro@socionext.com>
- <CANQCQpaM__7tuCvn7=tm3xkxv7aG4Yi_to-YVD5QP0HN+R-7xQ@mail.gmail.com>
-Message-ID: <20160730181450.04333637@free-electrons.com>
+Date: Sat, 30 Jul 2016 18:13:19 +0200
+Subject: [Buildroot] [git commit] zynq_microzed: bump Linux to xilinx-v2016.2
+Message-ID: <20160730161615.8D6948032C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=06b59f5f80de775c80fd7bb7006d20d82b594cf2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 28 Jul 2016 12:47:39 -0500, Matthew Weber wrote:
+This is the latest release tag in the Xilinx repository, based on
+Linux v4.4 in the mainline.
 
-> > -If you already have the Xilinx tools installed, the following sequence
-> > -will unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
-> > -
-> > -make zynq_zc706_defconfig
-> > -make uboot-patch
-> > -cp ${XILINX_SDK_LIB}/hwplatform_templates/ZC706_hw_platform/ps7_init.{c,h} \
-> > -   output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
-> > -
-> > -Where ${XILINX_SDK_LIB} is ${XILINX}/SDK/${VERSION}/data/embeddedsw/lib.
-> > -
-> > -After copying these files into the U-Boot source tree, you can
-> > -continue the build with:  
-> 
-> Isn't this good information to still generally include somewhere in
-> the notes for any of the Zynq boards as if they build a custom bit
-> file there would be updated handoff files needing copied in.
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/zynq_microzed_defconfig | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-These manual steps are no longer needed with the new U-Boot version, so
-removing those details makes sense.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
+index 06d0d7f..7b44af6 100644
+--- a/configs/zynq_microzed_defconfig
++++ b/configs/zynq_microzed_defconfig
+@@ -1,13 +1,12 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+-# Linux headers same as kernel, a 3.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/Xilinx/linux-xlnx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2016.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
