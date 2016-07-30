@@ -1,38 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jul 2016 14:41:02 +0200
-Subject: [Buildroot] [PATCH v4] iperf: fix "speed" display in csv report
-In-Reply-To: <1469750949-64127-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1469750949-64127-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20160730144102.47f40b69@free-electrons.com>
+Date: Sat, 30 Jul 2016 14:39:20 +0200
+Subject: [Buildroot] [git commit] iperf: fix "speed" display in csv report
+Message-ID: <20160730132402.707638188A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=04bf807173d388e48eb98e2e42d32e77ab940447
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 28 Jul 2016 19:09:09 -0500, Matt Weber wrote:
-> Some parameters displayed in the CSV reports are declared
-> as uint64_t, but the printf format doesn't reflect this.
-> 
-> Submitted bug: https://sourceforge.net/p/iperf/bugs/66/
-> 
-> Signed-off-by: Matt Poduska <matt.poduska@rockwellcollins.com>
-> Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
+Some parameters displayed in the CSV reports are declared
+as uint64_t, but the printf format doesn't reflect this.
 
-Applied to master, thanks. Could you send the patch to the upstream
-project at https://sourceforge.net/projects/iperf2/. Note: this is a
-different upstream than the one you submitted the patch. The one to
-which you submitted the patch seems to no longer be active. iperf2 is
-active, and has made a release in June 2016.
+Submitted bug: https://sourceforge.net/p/iperf/bugs/66/
 
-Thanks,
+Signed-off-by: Matt Poduska <matt.poduska@rockwellcollins.com>
+Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Khem Raj <raj.khem@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0002-fix-speed-display-in-csv-report.patch     | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/iperf/0002-fix-speed-display-in-csv-report.patch b/package/iperf/0002-fix-speed-display-in-csv-report.patch
+new file mode 100644
+index 0000000..b06c709
+--- /dev/null
++++ b/package/iperf/0002-fix-speed-display-in-csv-report.patch
+@@ -0,0 +1,39 @@
++From f035e70b72d4285dcdbd393e680777a927cb9da4 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Thu, 28 Jul 2016 19:04:01 -0500
++Subject: [PATCH] perf: fix "speed" display in csv report
++
++Some parameters displayed in the CSV reports are declared
++as uint64_t, but the printf format doesn't reflect this.
++
++Submitted bug: https://sourceforge.net/p/iperf/bugs/66/
++
++Signed-off-by: Matt Poduska <matt.poduska@rockwellcollins.com>
++Signed-off-by: Atul Singh <atul.singh.mandla@gmail.com>
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ src/Locale.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/src/Locale.c b/src/Locale.c
++index b5d42b1..7b924fa 100644
++--- a/src/Locale.c
+++++ b/src/Locale.c
++@@ -260,11 +260,12 @@ const char reportCSV_bw_format[] =
++ const char reportCSV_bw_jitter_loss_format[] =
++ "%s,%s,%d,%.1f-%.1f,%I64d,%I64d,%.3f,%d,%d,%.3f,%d\n";
++ #else
+++#include "inttypes.h"
++ const char reportCSV_bw_format[] =
++-"%s,%s,%d,%.1f-%.1f,%d,%d\n";
+++"%s,%s,%d,%.1f-%.1f,%" PRId64 ",%" PRId64 "\n";
++ 
++ const char reportCSV_bw_jitter_loss_format[] =
++-"%s,%s,%d,%.1f-%.1f,%d,%d,%.3f,%d,%d,%.3f,%d\n";
+++"%s,%s,%d,%.1f-%.1f,%" PRId64 ",%" PRId64 ",%.3f,%d,%d,%.3f,%d\n";
++ #endif //WIN32
++ #endif //HAVE_QUAD_SUPPORT
++ /* -------------------------------------------------------------------
++-- 
++1.9.1
++
