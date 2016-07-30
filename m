@@ -1,94 +1,164 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jul 2016 18:14:20 +0200
-Subject: [Buildroot] [git commit] zynq_zc706: bump U-Boot to xilinx-v2016.2
-Message-ID: <20160730161615.AB43981744@busybox.osuosl.org>
+Date: Sat, 30 Jul 2016 18:15:26 +0200
+Subject: [Buildroot] [git commit] zynq: unify readme.txt for all Zynq boards
+Message-ID: <20160730161615.B3E8081D7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9cd72cdbfe307e58d749baa7d7d98272e381722
+commit: https://git.buildroot.net/buildroot/commit/?id=47b6b382b38ff107387c375c979a0c26a581c76f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is the latest release tag in the Xilinx repository, based on
-U-Boot v2016.01 in the mainline.  It includes proper ps7_init_gpl.c/h
-in it, so builds working SPL without any manual intervention.
-
-BR2_TARGET_UBOOT_BOARD_NAME should be changed to zynq_zc706 since
-U-Boot now has separate defconfig files for ZC702 and ZC706 boards.
-
-BR2_TARGET_UBOOT_SPL_NAME should be changed to spl/boot.bin since
-the Zynq image support for the mkimage tool was upstreamed and it
-now generates boot.bin under spl/ directory.
+The readme.txt for the three boards are almost the same, so merge
+them into board/zynq/readme.txt.
 
 Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/xilinx/zc706/readme.txt | 69 +++++++++++++------------------------------
- configs/zynq_zc706_defconfig  |  7 +++--
- 2 files changed, 25 insertions(+), 51 deletions(-)
+ board/avnet/microzed/readme.txt | 33 --------------------------
+ board/avnet/zedboard/readme.txt | 28 ----------------------
+ board/xilinx/zc706/readme.txt   | 29 -----------------------
+ board/zynq/readme.txt           | 52 +++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 52 insertions(+), 90 deletions(-)
 
+diff --git a/board/avnet/microzed/readme.txt b/board/avnet/microzed/readme.txt
+deleted file mode 100644
+index 927e97a..0000000
+--- a/board/avnet/microzed/readme.txt
++++ /dev/null
+@@ -1,33 +0,0 @@
+-This is the buildroot board support for the Avnet Microzed. The Microzed is
+-a development board based on the Xilinx Zynq-7000 based All-Programmable
+-System-On-Chip.
+-
+-Microzed information including schematics, reference designs, and manuals are
+-available from http://www.zedboard.org .
+-
+-Steps to create a working system for Microzed:
+-
+-1) make zynq_microzed_defconfig
+-2) make
+-2) make
+-3) All needed files will be available in the output/images directory.
+-   Create a FAT32 partition at the beginning of your SD Card and copy files:
+-     - boot.bin
+-     - u-boot.img
+-     - uImage
+-     - uramdisk.image.gz (should be renamed from rootfs.cpio.uboot)
+-     - devicetree.dtb (should be renamed from zynq-zed.dtb)
+-   into your SD card
+-4) boot your Microzed
+-
+-Note th at the DTB (zynq-zed.dtb) is the same as the one used for the
+-Zedboard, and that this is the recommended solution, see
+-https://forums.xilinx.com/t5/Embedded-Linux/Microzed-default-device-tree-dts/td-p/432856.
+-
+-You can alter the booting procedure by creating a file uEnv.txt
+-in the root of the SD card. It is a plain text file in format
+-<key>=<value> one per line:
+-
+-kernel_image=myimage
+-modeboot=myboot
+-myboot=...
+diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
+deleted file mode 100644
+index b2c30a3..0000000
+--- a/board/avnet/zedboard/readme.txt
++++ /dev/null
+@@ -1,28 +0,0 @@
+-This is the buildroot board support for the Avnet Zedboard. The Zedboard is
+-a development board based on the Xilinx Zynq-7000 based All-Programmable
+-System-On-Chip.
+-
+-Zedboard information including schematics, reference designs, and manuals are
+-available from http://www.zedboard.org .
+-
+-Steps to create a working system for Zedboard:
+-
+-1) make zynq_zed_defconfig
+-2) make
+-3) All needed files will be available in the output/images directory.
+-   Create a FAT32 partition at the beginning of your SD Card and copy files:
+-     - boot.bin
+-     - u-boot.img
+-     - uImage
+-     - uramdisk.image.gz (should be renamed from rootfs.cpio.uboot)
+-     - devicetree.dtb (should be renamed from zynq-zed.dtb)
+-   into your SD card
+-4) boot your Zedboard
+-
+-You can alter the booting procedure by creating a file uEnv.txt
+-in the root of the SD card. It is a plain text file in format
+-<key>=<value> one per line:
+-
+-kernel_image=myimage
+-modeboot=myboot
+-myboot=...
 diff --git a/board/xilinx/zc706/readme.txt b/board/xilinx/zc706/readme.txt
-index b180dea..5034658 100644
+deleted file mode 100644
+index 5034658..0000000
 --- a/board/xilinx/zc706/readme.txt
-+++ b/board/xilinx/zc706/readme.txt
-@@ -6,51 +6,24 @@ ZC706 information including schematics, reference designs, and manuals
- are available from
- http://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html.
- 
--uboot.bin  -- U-Boot SPL w/ Xilinx boot.bin wrapper
-----------------------------------------------------
++++ /dev/null
+@@ -1,29 +0,0 @@
+-This is the Buildroot board support for the Xilinx ZC706. The ZC706 is
+-a development board based on the Xilinx Zynq-7000 based
+-All-Programmable System-On-Chip.
 -
--Due to licensing issues, the files ps7_init.c/h are not distributed
--with the U-Boot source code.  These files are required to make a
--boot.bin file.
+-ZC706 information including schematics, reference designs, and manuals
+-are available from
+-http://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html.
 -
--If you already have the Xilinx tools installed, the following sequence
--will unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
+-Steps to create a working system for ZC706 board:
 -
--make zynq_zc706_defconfig
--make uboot-patch
--cp ${XILINX_SDK_LIB}/hwplatform_templates/ZC706_hw_platform/ps7_init.{c,h} \
--   output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
+-1) make zynq_zc706_defconfig
+-2) make
+-3) All needed files will be available in the output/images directory.
+-   Create a FAT32 partition at the beginning of your SD Card and copy files:
+-     - boot.bin
+-     - u-boot.img
+-     - uImage
+-     - uramdisk.image.gz (should be renamed from rootfs.cpio.uboot)
+-     - devicetree.dtb (should be renamed from zynq-zc706.dtb)
+-   into your SD card
+-4) boot your ZC706 board
 -
--Where ${XILINX_SDK_LIB} is ${XILINX}/SDK/${VERSION}/data/embeddedsw/lib.
+-You can alter the booting procedure by creating a file uEnv.txt
+-in the root of the SD card. It is a plain text file in format
+-<key>=<value> one per line:
 -
--After copying these files into the U-Boot source tree, you can
--continue the build with:
--
--make
--
--*Notice*
--While the build will successfully complete without the ps7_init.*
--files, the uboot.bin file generated by this configuration will not
--function properly on the ZC706. Therefore, it is imperative that the
--ps7_init.* files be copied into the U-Boot source tree any time the
--clean, or uboot-dirclean targets are executed.
--
--Resulting system
------------------
--
--A FAT32 partition should be created at the beggining of the SD Card
--and the following files should be installed:
--
--- boot.bin
--- devicetree.dtb
--- uImage
--- uramdisk.image.gz
--- u-boot.img
--
--All needed files can be taken from <output>/images/
--
--cp <output>/images/boot.bin /media/sdcard/
--cp <output>/images/uImage /media/sdcard/
--cp <output>/images/u-boot.img /media/sdcard/
--cp <output>/images/zynq-zc706.dtb /media/sdcard/devicetree.dtb
--cp <output>/images/rootfs.cpio.uboot /media/sdcard/uramdisk.image.gz
-+Steps to create a working system for ZC706 board:
+-kernel_image=myimage
+-modeboot=myboot
+-myboot=...
+diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
+new file mode 100644
+index 0000000..73f8bf3
+--- /dev/null
++++ b/board/zynq/readme.txt
+@@ -0,0 +1,52 @@
++This is the Buildroot support for Zynq boards.  Zynq boards are available from
++Xilinx and some third party vendors, but the build procedure is very similar.
 +
-+1) make zynq_zc706_defconfig
++Currently, three boards are natively supported by Buildroot:
++ - Xilinx ZC706 board (zynq_zc706_defconfig)
++ - Avnet ZedBoard (zynq_zed_defconfig)
++ - Avnet MicroZed (zynq_microzed_defconfig)
++
++The following build procedure focuses on them, but you can adjust it to your
++board even if it is not listed above.  Major Zynq-based boards are supported by
++U-Boot, and their Device Trees are merged in Linux Kernel.  If your board is the
++case, booting the kernel is a piece of cake.  All you need to do is to change:
++ - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
++ - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARDNAME)
++
++Steps to create a working system for a Zynq board:
++
++1) Configuration (do one of the followings)
++    make zynq_zc706_defconfig     (ZC706)
++    make zynq_zed_defconfig       (Zedboard)
++    make zynq_microzed_defconfig  (MicroZed)
 +2) make
 +3) All needed files will be available in the output/images directory.
 +   Create a FAT32 partition at the beginning of your SD Card and copy files:
@@ -96,9 +166,9 @@ index b180dea..5034658 100644
 +     - u-boot.img
 +     - uImage
 +     - uramdisk.image.gz (should be renamed from rootfs.cpio.uboot)
-+     - devicetree.dtb (should be renamed from zynq-zc706.dtb)
++     - devicetree.dtb (should be renamed from zynq-***.dtb)
 +   into your SD card
-+4) boot your ZC706 board
++4) boot your board
 +
 +You can alter the booting procedure by creating a file uEnv.txt
 +in the root of the SD card. It is a plain text file in format
@@ -107,22 +177,16 @@ index b180dea..5034658 100644
 +kernel_image=myimage
 +modeboot=myboot
 +myboot=...
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index 746abcb..4ac2fe8 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -17,10 +17,11 @@ BR2_TARGET_ROOTFS_CPIO=y
- BR2_TARGET_ROOTFS_CPIO_GZIP=y
- BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="zynq_zc70x"
-+BR2_TARGET_UBOOT_BOARDNAME="zynq_zc706"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2014.1"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2016.2"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="boot.bin"
-+BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
++
++Note:
++The DTB for MicroZed is the same as the one for the Zedboard (zynq-zed.dtb),
++and this is the recommended solution, see
++https://forums.xilinx.com/t5/Embedded-Linux/Microzed-default-device-tree-dts/td-p/432856.
++
++References:
++ - ZC706 information including schematics, reference designs, and manuals are
++   available from
++   http://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html.
++
++ - Zedboard/Microzed information including schematics, reference designs, and
++   manuals are available from http://www.zedboard.org .
