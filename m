@@ -1,65 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jul 2016 15:56:58 +0200
-Subject: [Buildroot] [PATCH 1/2] gtksourceview: new package
-In-Reply-To: <1469778689-31893-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1469778689-31893-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20160730155658.1e563afd@free-electrons.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sat, 30 Jul 2016 09:00:39 -0500
+Subject: [Buildroot] [PATCH v4] iperf: fix "speed" display in csv report
+In-Reply-To: <20160730144102.47f40b69@free-electrons.com>
+References: <1469750949-64127-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20160730144102.47f40b69@free-electrons.com>
+Message-ID: <CANQCQpatbauDkX+CmrvZ58+NR3zqZzWi2RmxsXLBsSZVxVa9yw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Fri, 29 Jul 2016 09:51:28 +0200, Fabrice Fontaine wrote:
+On Jul 30, 2016 7:41 AM, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
+>
+> Hello,
+>
+> On Thu, 28 Jul 2016 19:09:09 -0500, Matt Weber wrote:
+> > Some parameters displayed in the CSV reports are declared
+> > as uint64_t, but the printf format doesn't reflect this.
+> >
+> > Submitted bug: https://sourceforge.net/p/iperf/bugs/66/
+> >
+> > Signed-off-by: Matt Poduska <matt.poduska@rockwellcollins.com>
+> > Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
+> > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> > ---
+>
+> Applied to master, thanks. Could you send the patch to the upstream
+> project at https://sourceforge.net/projects/iperf2/. Note: this is a
+> different upstream than the one you submitted the patch. The one to
+> which you submitted the patch seems to no longer be active. iperf2 is
+> active, and has made a release in June 2016.
 
-> diff --git a/package/Config.in b/package/Config.in
-> index ab9c42f..cf1d54e 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -133,6 +133,7 @@ menu "Development tools"
->  	source "package/git/Config.in"
->  	source "package/gperf/Config.in"
->  	source "package/grep/Config.in"
-> +	source "package/gtksourceview/Config.in"
+Will do, thank you for the note!
 
-It really isn't a "Development tools", it's a library, so I've put it
-under Libraries -> Graphics.
-
-> diff --git a/package/gtksourceview/Config.in b/package/gtksourceview/Config.in
-> new file mode 100644
-> index 0000000..be7536b
-> --- /dev/null
-> +++ b/package/gtksourceview/Config.in
-> @@ -0,0 +1,32 @@
-> +config BR2_PACKAGE_GTKSOURCEVIEW
-> +	bool "gtksourceview"
-> +	depends on BR2_USE_WCHAR # glib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-> +	depends on BR2_USE_MMU # glib2
-> +	depends on BR2_INSTALL_LIBSTDCPP # libgtk3
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk3
-> +	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL || \
-> +		BR2_PACKAGE_HAS_LIBGL # libgtk3
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	select BR2_PACKAGE_LIBXML2
-> +	select BR2_PACKAGE_LIBGTK3
-
-It's really complicated to duplicate all the gtk3 depends on. So
-instead, I've used "depends on BR2_PACKAGE_LIBGTK3". It's pretty
-obvious for the user that gtksourceview needs gtk anyway.
-
-This allows to get rid of the complicated Config.in comments as well.
-
-> +GTKSOURCEVIEW_LICENSE = LGPLv2+
-
-License is LGPLv2.1+.
-
-I've fixed those minor issues, and applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160730/c921de01/attachment.html>
