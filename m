@@ -1,10 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jul 2016 12:17:27 +0200
-Subject: [Buildroot] [PATCH] warpboard: linux.fragment: Do not use
- CONFIG_BRCMFMAC as built-in
-In-Reply-To: <1469799930-20206-1-git-send-email-fabio.estevam@nxp.com>
-References: <1469799930-20206-1-git-send-email-fabio.estevam@nxp.com>
-Message-ID: <20160730121727.2e05cb7e@free-electrons.com>
+Date: Sat, 30 Jul 2016 13:56:51 +0200
+Subject: [Buildroot] Location of the Buildroot Developers Meeting
+Message-ID: <20160730135651.37c8620d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +10,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 29 Jul 2016 10:45:30 -0300, Fabio Estevam wrote:
-> Selecting the driver CONFIG_BRCMFMAC as built-in causes some probe issues
-> as we cannot guarantee that the brcmfmac driver will be probed after the
-> rootfs has been mounted. The brcmfmac driver retrieves the firmware and
-> nvram file from the rootfs, so the rootfs should be mounted first.
-> 
-> To avoid such issues let the CONFIG_BRCMFMAC be built as module, which is
-> the original option in imx_v6_v7_defconfig.
-> 
-> Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-> ---
->  board/freescale/warpboard/linux.fragment | 1 -
->  1 file changed, 1 deletion(-)
+We are now able to announce the exact location of the next Buildroot
+Developers Meeting, which will take place in Berlin, right after the
+Embedded Linux Conference Europe.
 
-Applied to master, thanks.
+The folks of In-Berlin have offered to host our event for free, so the
+meeting will take place at their location, located Lehrter Str. 53,
+10557 Berlin (see https://goo.gl/maps/Jwew1qviTSC2).
+
+Interested participants are invited to register at
+http://elinux.org/Buildroot:DeveloperDaysELCE2016 (or alternatively
+contact me if they don't have an eLinux.org Wiki account).
+
+It is also worth mentioning that the schedule of the Embedded Linux
+Conference Europe has now been published
+(https://events.linuxfoundation.org/events/embedded-linux-conference-europe/program/schedule),
+which should hopefully help you to convince your boss to send you to
+this conference.
+
+Best regards,
 
 Thomas
 -- 
