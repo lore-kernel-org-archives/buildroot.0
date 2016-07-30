@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jul 2016 12:14:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libopenh264: bump version to
- 1.5.0
-In-Reply-To: <1469869822-19130-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1469869822-19130-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160730121414.13591484@free-electrons.com>
+Date: Sat, 30 Jul 2016 12:17:06 +0200
+Subject: [Buildroot] [git commit] warpboard: linux.fragment: Do not use
+	CONFIG_BRCMFMAC as built-in
+Message-ID: <20160730101717.6A41C7F91D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=525c50ecb30cb2508c860ee86549d81349c28fa4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 30 Jul 2016 11:10:22 +0200, Bernd Kuhls wrote:
-> Bumping to 1.6.0 is not possible atm because ffmpeg fails to compile
-> with it. Patches to solve the problem were committed to ffmpeg master:
-> 
-> http://git.videolan.org/?p=ffmpeg.git;a=commit;h=293676c476733e81d7b596736add6cd510eb6960
-> http://git.videolan.org/?p=ffmpeg.git;a=commit;h=c5d326f551b0312ff581bf1df35b21d956e01523
-> 
-> Backporting fails so let's just wait for the next ffmpeg bump to bump
-> libopenh264 as well.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libopenh264/libopenh264.hash | 2 +-
->  package/libopenh264/libopenh264.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Selecting the driver CONFIG_BRCMFMAC as built-in causes some probe issues
+as we cannot guarantee that the brcmfmac driver will be probed after the
+rootfs has been mounted. The brcmfmac driver retrieves the firmware and
+nvram file from the rootfs, so the rootfs should be mounted first.
 
-Applied to master, thanks.
+To avoid such issues let the CONFIG_BRCMFMAC be built as module, which is
+the original option in imx_v6_v7_defconfig.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/freescale/warpboard/linux.fragment | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/board/freescale/warpboard/linux.fragment b/board/freescale/warpboard/linux.fragment
+index 736b9cd..892d0cb 100644
+--- a/board/freescale/warpboard/linux.fragment
++++ b/board/freescale/warpboard/linux.fragment
+@@ -1,2 +1 @@
+ CONFIG_CFG80211_WEXT=y
+-CONFIG_BRCMFMAC=y
