@@ -1,50 +1,122 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sat, 30 Jul 2016 09:00:39 -0500
-Subject: [Buildroot] [PATCH v4] iperf: fix "speed" display in csv report
-In-Reply-To: <20160730144102.47f40b69@free-electrons.com>
-References: <1469750949-64127-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20160730144102.47f40b69@free-electrons.com>
-Message-ID: <CANQCQpatbauDkX+CmrvZ58+NR3zqZzWi2RmxsXLBsSZVxVa9yw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 30 Jul 2016 16:12:36 +0200
+Subject: [Buildroot] [git commit] gupnp-tools: new package
+Message-ID: <20160730143334.C548D81E16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=6008f02fc82c3cfcb4bb6e8e6e99e5dd7396b500
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Jul 30, 2016 7:41 AM, "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> wrote:
->
-> Hello,
->
-> On Thu, 28 Jul 2016 19:09:09 -0500, Matt Weber wrote:
-> > Some parameters displayed in the CSV reports are declared
-> > as uint64_t, but the printf format doesn't reflect this.
-> >
-> > Submitted bug: https://sourceforge.net/p/iperf/bugs/66/
-> >
-> > Signed-off-by: Matt Poduska <matt.poduska@rockwellcollins.com>
-> > Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-> > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> > ---
->
-> Applied to master, thanks. Could you send the patch to the upstream
-> project at https://sourceforge.net/projects/iperf2/. Note: this is a
-> different upstream than the one you submitted the patch. The one to
-> which you submitted the patch seems to no longer be active. iperf2 is
-> active, and has made a release in June 2016.
+GUPnP Tools are free replacements of Intel UPnP tools that use
+GUPnP. They provides client and server side tools which enable
+one to easily test and debug one's UPnP devices and control
+points.
 
-Will do, thank you for the note!
+http://www.gupnp.org/
 
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160730/c921de01/attachment.html>
+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+[Thomas:
+ - use "depends on BR2_PACKAGE_LIBGTK3" instead of a select, and
+   simplify the Config.in comments consequently.
+ - move from "Development tools" to "Networking applications"
+ - license is GPLv2+, not LGPLv2+.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                    |  1 +
+ package/gupnp-tools/Config.in        | 21 +++++++++++++++++++++
+ package/gupnp-tools/gupnp-tools.hash |  2 ++
+ package/gupnp-tools/gupnp-tools.mk   | 35 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 59 insertions(+)
+
+diff --git a/package/Config.in b/package/Config.in
+index 875d755..00f3ffb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1453,6 +1453,7 @@ menu "Networking applications"
+ 	source "package/fmc/Config.in"
+ 	source "package/fping/Config.in"
+ 	source "package/freeswitch/Config.in"
++	source "package/gupnp-tools/Config.in"
+ 	source "package/gesftpserver/Config.in"
+ 	source "package/gutenprint/Config.in"
+ 	source "package/hans/Config.in"
+diff --git a/package/gupnp-tools/Config.in b/package/gupnp-tools/Config.in
+new file mode 100644
+index 0000000..f9e645a
+--- /dev/null
++++ b/package/gupnp-tools/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_GUPNP_TOOLS
++	bool "gupnp-tools"
++	# gssdp, gupnp, libsoup all select on libglib2, so they have
++	# the same dependencies as libgtk3, which we depend on. So for
++	# the same of simplicity, we don't replicate all those
++	# (complex) dependencies.
++	select BR2_PACKAGE_GSSDP
++	select BR2_PACKAGE_GUPNP
++	select BR2_PACKAGE_LIBSOUP
++	select BR2_PACKAGE_LIBXML2
++	depends on BR2_PACKAGE_LIBGTK3
++	help
++	  GUPnP Tools are free replacements of Intel UPnP tools that
++	  use GUPnP. They provides client and server side tools which
++	  enable one to easily test and debug one's UPnP devices and
++	  control points.
++
++	  http://www.gupnp.org/
++
++comment "gupnp-tools needs libgtk3"
++	depends on !BR2_PACKAGE_LIBGTK3
+diff --git a/package/gupnp-tools/gupnp-tools.hash b/package/gupnp-tools/gupnp-tools.hash
+new file mode 100644
+index 0000000..0d37a87
+--- /dev/null
++++ b/package/gupnp-tools/gupnp-tools.hash
+@@ -0,0 +1,2 @@
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/0.8/gupnp-tools-0.8.12.sha256sum:
++sha256	658de96953608c4b1f47578ae563a7066d1f1983565daf22ad52b7b328ef97b1	gupnp-tools-0.8.12.tar.xz
+diff --git a/package/gupnp-tools/gupnp-tools.mk b/package/gupnp-tools/gupnp-tools.mk
+new file mode 100644
+index 0000000..75920db
+--- /dev/null
++++ b/package/gupnp-tools/gupnp-tools.mk
+@@ -0,0 +1,35 @@
++################################################################################
++#
++# gupnp-tools
++#
++################################################################################
++
++GUPNP_TOOLS_VERSION_MAJOR = 0.8
++GUPNP_TOOLS_VERSION = $(GUPNP_TOOLS_VERSION_MAJOR).12
++GUPNP_TOOLS_SOURCE = gupnp-tools-$(GUPNP_TOOLS_VERSION).tar.xz
++GUPNP_TOOLS_SITE = \
++	http://ftp.gnome.org/pub/gnome/sources/gupnp-tools/$(GUPNP_TOOLS_VERSION_MAJOR)
++GUPNP_TOOLS_LICENSE = GPLv2+
++GUPNP_TOOLS_LICENSE_FILES = COPYING
++GUPNP_TOOLS_INSTALL_STAGING = YES
++GUPNP_TOOLS_DEPENDENCIES = \
++	host-pkgconf \
++	libglib2 \
++	libxml2 \
++	gssdp \
++	gupnp \
++	libsoup \
++	libgtk3
++
++ifeq ($(BR2_PACKAGE_GUPNP_AV),y)
++GUPNP_TOOLS_CONF_OPTS += --with-av
++GUPNP_TOOLS_DEPENDENCIES += gupnp-av
++else
++GUPNP_TOOLS_CONF_OPTS += --without-av
++endif
++
++ifeq ($(BR2_PACKAGE_GTKSOURCEVIEW),y)
++GUPNP_TOOLS_DEPENDENCIES += gtksourceview
++endif
++
++$(eval $(autotools-package))
