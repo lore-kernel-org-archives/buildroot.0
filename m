@@ -1,81 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jul 2016 18:13:01 +0200
-Subject: [Buildroot] [git commit] zynq_zed: bump U-Boot to xilinx-v2016.2
-Message-ID: <20160730161615.83F248032C@busybox.osuosl.org>
+Date: Sat, 30 Jul 2016 18:13:43 +0200
+Subject: [Buildroot] [git commit] zynq_microzed: bump U-Boot to
+	xilinx-v2016.2
+Message-ID: <20160730161615.9639581D7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6dd5a33c485c63f68a209a23f3eb837d967e547e
+commit: https://git.buildroot.net/buildroot/commit/?id=6b669b61a84f6f249491de571582eb73f4b52441
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This is the latest release tag in the Xilinx repository, based on
-U-Boot v2016.01 in the mainline.
-
-Commit 46d6a561be41 ("zedboard: Generate BOOT.BIN automatically")
-switched from the Xilinx GitHub repository to the U-Boot mainline,
-but this commit gets it back to the Xilinx GitHub repository for the
-following reasons:
-
- - This defconfig still relies on the Xilinx's local repository for
-   the kernel.  The vendor does the best test for the combination of
-   U-Boot and the kernel with the same release tag (xilinx-v2016.2
-   in this case).
-
- - At the time of commit 46d6a561be41, the u-boot-xlnx still needed
-   manual copy of ps7_init(_gpl).c/h in order to build a working SPL
-   image.  So, the mainline U-Boot had advantage in that point of
-   time.  However, the improvement in the mainline U-Boot was merged
-   into the u-boot-xlnx at the xilinx-v2015.3 release.  Now, the
-   mainline and the u-boot-xlnx are even in this point of view.
-
- - The mainline U-Boot defaults to boot FIT, so something must be
-   done; either patch environments around with a local patch to
-   switch to uImage booting (current solution), or build an FIT
-   with a post build script (chromebook snow does this).  On the
-   other hand, the Xilinx repository defaults to uImage booting,
-   so it is straightforward, and needs no addition care.
-
-This commit does:
-
- - Switch to the Xilinx custom git repository, and stick to the
-   xilinx-v2016.2 tag.
-
- - Delete the local patch board/avnet/zedboard/uboot/0001...
-   since the Xilinx custom repository can boot uImage by default.
-
- - Enable BR2_TARGET_UBOOT_FORMAT_IMG instead of ..._FORMAT_DTB_IMG
-   since all the Zynq boards in U-Boot enable CONFIG_OF_EMBED.
-
- - Replace BR2_TARGET_UBOOT_ZYNQ_IMAGE with BR2_TARGET_UBOOT_SPL_NAME
-   since U-Boot can natively generate the Zynq boot image now. The
-   Zynq image support for mkimage tool was upstreamed at v2016.01
-   (so xilinx-v2016.1 as well), so no additional tool is needed
-   any more.
-
- - Update readme.txt
+U-Boot v2016.01 in the mainline.  To sync with the Zedboard updates,
+switch over to the Xilinx GitHub repository.
 
 Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/avnet/zedboard/readme.txt                    | 52 ++++------------------
- ...eate-zedboard-specific-U-Boot-environment.patch | 45 -------------------
- configs/zynq_zed_defconfig                         | 10 ++---
- 3 files changed, 13 insertions(+), 94 deletions(-)
+ board/avnet/microzed/readme.txt                    | 53 ++++------------------
+ ...eate-microzed-specific-U-Boot-environment.patch | 41 -----------------
+ configs/zynq_microzed_defconfig                    | 10 ++--
+ 3 files changed, 14 insertions(+), 90 deletions(-)
 
-diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
-index 01ef97c..b2c30a3 100644
---- a/board/avnet/zedboard/readme.txt
-+++ b/board/avnet/zedboard/readme.txt
-@@ -9,52 +9,16 @@ Steps to create a working system for Zedboard:
+diff --git a/board/avnet/microzed/readme.txt b/board/avnet/microzed/readme.txt
+index d0fc5ee..927e97a 100644
+--- a/board/avnet/microzed/readme.txt
++++ b/board/avnet/microzed/readme.txt
+@@ -9,56 +9,21 @@ Steps to create a working system for Microzed:
  
- 1) make zynq_zed_defconfig
+ 1) make zynq_microzed_defconfig
  2) make
 -3) copy files BOOT.BIN, u-boot-dtb.img, rootfs.cpio.uboot,
 -	uImage, zynq-zed.dtb into your SD card
++2) make
 +3) All needed files will be available in the output/images directory.
 +   Create a FAT32 partition at the beginning of your SD Card and copy files:
 +     - boot.bin
@@ -84,22 +44,23 @@ index 01ef97c..b2c30a3 100644
 +     - uramdisk.image.gz (should be renamed from rootfs.cpio.uboot)
 +     - devicetree.dtb (should be renamed from zynq-zed.dtb)
 +   into your SD card
- 4) boot your Zedboard
+ 4) boot your Microzed
  
 -The expected output:
 -
-- U-Boot SPL 2015.07 (Jul 22 2015 - 12:01:55)
+- U-Boot SPL 2015.07 (Sep 15 2015 - 16:10:56)
 - mmc boot
 - reading system.dtb
 - spl_load_image_fat_os: error reading image system.dtb, err - -1
 - reading u-boot-dtb.img
 - reading u-boot-dtb.img
 -
-- U-Boot 2015.07 (Jul 22 2015 - 12:01:55 +0200)
 -
-- Model: Zynq ZED Board
+- U-Boot 2015.07 (Sep 15 2015 - 16:10:56 +0200)
+-
+- Model: Zynq MicroZED Board
 - I2C:   ready
-- DRAM:  ECC disabled 512 MiB
+- DRAM:  ECC disabled 1 GiB
 - MMC:   zynq_sdhci: 0
 - Using default environment
 - ...
@@ -119,47 +80,48 @@ index 01ef97c..b2c30a3 100644
 -	/rootfs-cpio.uboot
 -	/u-boot-dtb.img
 -
--
 -All needed files can be taken from output/images/
 -
 -BOOT.BIN, uImage and u-boot-dtb.img are direct copies of the same files
--available on output/images/
+-available on output/images/.
 -
+ Note th at the DTB (zynq-zed.dtb) is the same as the one used for the
+ Zedboard, and that this is the recommended solution, see
+ https://forums.xilinx.com/t5/Embedded-Linux/Microzed-default-device-tree-dts/td-p/432856.
+ 
 -There is a patch attached that redefines the U-Boot's environment
 -to work with Buildroot out-of-the-box.
 -
  You can alter the booting procedure by creating a file uEnv.txt
  in the root of the SD card. It is a plain text file in format
  <key>=<value> one per line:
-diff --git a/board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch b/board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch
+diff --git a/board/avnet/microzed/uboot/0001-zynq-Create-microzed-specific-U-Boot-environment.patch b/board/avnet/microzed/uboot/0001-zynq-Create-microzed-specific-U-Boot-environment.patch
 deleted file mode 100644
-index b7f8297..0000000
---- a/board/avnet/zedboard/uboot/0001-zynq-Create-zedboard-specific-U-Boot-environment.patch
+index b9d0c38..0000000
+--- a/board/avnet/microzed/uboot/0001-zynq-Create-microzed-specific-U-Boot-environment.patch
 +++ /dev/null
-@@ -1,45 +0,0 @@
+@@ -1,41 +0,0 @@
 -From a4c0058967a551385da5e16d2787d9f704cab225 Mon Sep 17 00:00:00 2001
 -From: Jan Viktorin <viktorin@rehivetech.com>
 -Date: Thu, 18 Jun 2015 16:26:02 +0200
--Subject: [PATCH 2/2] zynq: Create zedboard-specific U-Boot environment
+-Subject: [PATCH] zynq: Create microzed-specific U-Boot environment
 -
-----
-- include/configs/zynq_zed.h | 25 +++++++++++++++++++++++++
-- 1 file changed, 25 insertions(+)
+-This is a copy of the patch supplied for Zedboard.
 -
--diff --git a/include/configs/zynq_zed.h b/include/configs/zynq_zed.h
--index 946de95..2400a88 100644
----- a/include/configs/zynq_zed.h
--+++ b/include/configs/zynq_zed.h
--@@ -24,0 +24,0 @@
+-Signed-off-by: Davide Viti <d.viti@infosolution.it>
 -
+---- a/include/configs/zynq_microzed.h	2015-07-14 19:32:21.000000000 +0200
+-+++ b/include/configs/zynq_microzed.h	2015-09-02 12:19:35.728503472 +0200
+-@@ -22,4 +22,29 @@
+- 
 - #include <configs/zynq-common.h>
--
+- 
 -+#undef CONFIG_EXTRA_ENV_SETTINGS
 -+#define CONFIG_EXTRA_ENV_SETTINGS \
 -+	"envload=mmc info && if fatload mmc 0 0x1000 uEnv.txt;"\
 -+	" then echo Importing uEnv.txt; env import -t 0x1000"  \
 -+	" $filesize; fi;\0"                                    \
--+	"bootcmd=run envload; run $modeboot\0"                 \
+-+	"bootcmd=run $modeboot\0"                              \
 -+	"modeboot=sdboot\0"                                    \
 -+	"baudrate=115200\0"                                    \
 -+	"bootenv=uEnv.txt\0"                                   \
@@ -167,7 +129,8 @@ index b7f8297..0000000
 -+	"kernel_image=uImage\0"                                \
 -+	"ramdisk_image=rootfs.cpio.uboot\0"                    \
 -+	"fpga_image=system.bit\0"                              \
--+	"sdboot=echo Booting from SD...; run fpgaboot;"        \
+-+	"sdboot=echo Booting from SD...;"                      \
+-+	" run envload; run fpgaboot;"                          \
 -+	" fatload mmc 0 0x1000000 ${kernel_image}"             \
 -+	" && fatload mmc 0 0x3000000 ${ramdisk_image}"         \
 -+	" && fatload mmc 0 0x2000000 ${devicetree_image}"      \
@@ -178,21 +141,18 @@ index b7f8297..0000000
 -+	" else echo FPGA image ${fpga_image} was not found,"   \
 -+	" skipping...; fi;\0"
 -+
-- #endif /* __CONFIG_ZYNQ_ZED_H */
----
--2.4.3
--
-diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
-index 98b010e..84859bb 100644
---- a/configs/zynq_zed_defconfig
-+++ b/configs/zynq_zed_defconfig
+- #endif /* __CONFIG_ZYNQ_MICROZED_H */
+diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
+index 7b44af6..fa25857 100644
+--- a/configs/zynq_microzed_defconfig
++++ b/configs/zynq_microzed_defconfig
 @@ -17,10 +17,10 @@ BR2_TARGET_ROOTFS_CPIO_GZIP=y
  BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
  BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="zynq_zed"
+ BR2_TARGET_UBOOT_BOARDNAME="zynq_microzed"
 -BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
--BR2_TARGET_UBOOT_PATCH="$(TOPDIR)/board/avnet/zedboard/uboot"
+-BR2_TARGET_UBOOT_PATCH="$(TOPDIR)/board/avnet/microzed/uboot"
 +BR2_TARGET_UBOOT_CUSTOM_GIT=y
 +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
 +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2016.2"
