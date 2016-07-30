@@ -1,39 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 30 Jul 2016 09:16:33 +0000
-Subject: [Buildroot] [Bug 9111] glibc 2.23: libmvec.so not copied
-In-Reply-To: <bug-9111-163@https.bugs.busybox.net/>
-References: <bug-9111-163@https.bugs.busybox.net/>
-Message-ID: <bug-9111-163-kQH7EITsI4@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 30 Jul 2016 10:39:50 +0200
+Subject: [Buildroot] [git commit] squashfs: update site to git.kernel.org
+Message-ID: <20160730100500.5275F8043F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9111
+commit: https://git.buildroot.net/buildroot/commit/?id=668363e0faa5e2005c21826296592bc47395258c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+squashfs-tools development has been moved to git.kernel.org from
+Sourceforge.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
+The hash was selected to fix a threading issue observed when
+creating images on a build machine with at least 64 cores.
+(Fixes random corrupted images that would fail to boot)
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Hello,
+Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+[Thomas: use https:// instead of git://.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/squashfs/squashfs.hash | 4 ++--
+ package/squashfs/squashfs.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-It is my understanding that libmvec is only available for x86_64 (at
-least for now, seeing that glibc only has code for it on x86_64), so we
-can't copy it unconditionally.
-
-Care to send a patch to the list, please? See the manual:
-    https://buildroot.org/downloads/manual/manual.html#submitting-patches
-
-Also, it would be nice to handle the external toolchains, too. Would you
-look at it?
-
-Regards,
-Yann E. MORIN.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
+index e308089..eb456be 100644
+--- a/package/squashfs/squashfs.hash
++++ b/package/squashfs/squashfs.hash
+@@ -1,2 +1,2 @@
+-# Locally computed:
+-sha256  0d605512437b1eb800b4736791559295ee5f60177e102e4d4ccd0ee241a5f3f6  squashfs4.3.tar.gz
++# Locally computed
++sha256	e807202ab4dcfeea214df49d3a728b9a85644a7e7262fc6fcd875a0def99d4ed	squashfs-9c1db6d13a51a2e009f0027ef336ce03624eac0d.tar.gz
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index cdeb9c8..1a5f1ea 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-SQUASHFS_VERSION = 4.3
+-SQUASHFS_SOURCE = squashfs$(SQUASHFS_VERSION).tar.gz
+-SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
++SQUASHFS_VERSION = 9c1db6d13a51a2e009f0027ef336ce03624eac0d
++SQUASHFS_SITE = https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git
++SQUASHFS_SITE_METHOD = git
+ SQUASHFS_LICENSE = GPLv2+
+ SQUASHFS_LICENSE_FILES = COPYING
+ SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=1
