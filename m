@@ -1,37 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jul 2016 13:56:51 +0200
-Subject: [Buildroot] Location of the Buildroot Developers Meeting
-Message-ID: <20160730135651.37c8620d@free-electrons.com>
+Date: Sat, 30 Jul 2016 14:01:01 +0200
+Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.162
+Message-ID: <20160730120116.F07D88180E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fc755aed9229d38056e4996cefd149c234b21c3f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We are now able to announce the exact location of the next Buildroot
-Developers Meeting, which will take place in Berlin, right after the
-Embedded Linux Conference Europe.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-The folks of In-Berlin have offered to host our event for free, so the
-meeting will take place at their location, located Lehrter Str. 53,
-10557 Berlin (see https://goo.gl/maps/Jwew1qviTSC2).
-
-Interested participants are invited to register at
-http://elinux.org/Buildroot:DeveloperDaysELCE2016 (or alternatively
-contact me if they don't have an eLinux.org Wiki account).
-
-It is also worth mentioning that the schedule of the Embedded Linux
-Conference Europe has now been published
-(https://events.linuxfoundation.org/events/embedded-linux-conference-europe/program/schedule),
-which should hopefully help you to convince your boss to send you to
-this conference.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 4cce78c..65945a1 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 7717d9f3b5bfb57dc240bc18673c66bc308de95c32f02090bc36b7d5264c2bfdadf234b0fcadc24b6099cf9f9c1d10be521200567b1e9744e71c252dc57dbf46  LVM2.2.02.161.tgz
++sha512 9544bb7706488ac128d477af7294bcfd7b7e47cb0b1d604ea52c4545d6c3a5a71311945994dd1114cb1ce086d2006a35ef1d8b0fdd3082dfe5cc468cb0168057  LVM2.2.02.162.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index fed8273..8a51120 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.161
++LVM2_VERSION = 2.02.162
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
