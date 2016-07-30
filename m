@@ -1,56 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jul 2016 16:43:01 +0200
-Subject: [Buildroot] [PATCH 1/1] tinycbor: new package
-In-Reply-To: <1469435859-25918-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1469435859-25918-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20160730164301.329de917@free-electrons.com>
+From: David Raeman <draeman@bbn.com>
+Date: Sat, 30 Jul 2016 10:57:34 -0400
+Subject: [Buildroot] [PATCH 1/2] package/Makefile.in should grab
+	HOST_DIR headers using -isystem instead of -I.
+In-Reply-To: <20160729211546.GA5857@free.fr>
+References: <20160725195227.21112-1-draeman@bbn.com>
+ <20160728220029.GI5862@free.fr>
+ <48B4EC85-773A-4F99-96D4-59577018BAB3@gmail.com>
+ <20160729093218.36d66c86@free-electrons.com>
+ <CAMKF1sp5YvKanMM_AjPsZqmNOXrJAWsELpEcch+7Wec3MfhVzA@mail.gmail.com>
+ <20160729112327.5af5618a@free-electrons.com>
+ <CAMKF1spxedbMXzPnDU41nEFZdJ1qfc4Y0UqeQwxDaNmR4cmZHg@mail.gmail.com>
+ <004001d1e9d0$5773c7d0$065b5770$@bbn.com> <20160729211546.GA5857@free.fr>
+Message-ID: <005f01d1ea72$b4b24b90$1e16e2b0$@bbn.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Yann, All,
 
-On Mon, 25 Jul 2016 10:37:39 +0200, Fabrice Fontaine wrote:
-> Concise Binary Object Representation (CBOR) Library
-> 
-> Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> ---
->  package/Config.in              |  1 +
->  package/tinycbor/Config.in     | 20 ++++++++++++++++++++
->  package/tinycbor/tinycbor.hash |  2 ++
->  package/tinycbor/tinycbor.mk   | 38 ++++++++++++++++++++++++++++++++++++++
->  4 files changed, 61 insertions(+)
->  create mode 100644 package/tinycbor/Config.in
->  create mode 100644 package/tinycbor/tinycbor.hash
->  create mode 100644 package/tinycbor/tinycbor.mk
+On Fri, Jul 29, 2016 at 5:16 PM, Yann E. MORIN wrote:
+> U-Boot or Qemu? I thought you needed that for your custom Qemu
 
-This package is causing two types of build failures:
+The problem was revealed when I added a br2-external package for 
+custom Qemu, but I traced the root issue to be with u-boot and how it
+is impacted by the include directory added by HOST_CPPFLAGS.
 
- * On Blackfin only:
+The custom Qemu required me to install libfdt into the host area -
+nothing wrong with doing that.  But having libfdt installed in
+HOST_DIR causes u-boot to fail, because u-boot was finding libfdt.h 
+in HOST_DIR/usr/include prior to searching its own directory for its
+local modified copy of that same filename.
 
-   http://autobuild.buildroot.net/?reason=tinycbor-v0.3.1&arch=bfin
+> And thus we should revert that patch. Will you send a patch to do the revert,
+> please?
 
-   The Blackfin external toolchain uses gcc 4.3, which is pretty old.
-   The error occurs on unnamed unions, maybe there's a problem with
-   that. But
-   https://gcc.gnu.org/onlinedocs/gcc-4.3.2/gcc/Unnamed-Fields.html
-   seems to indicate it was already supported in gcc 4.3. More
-   investigation is needed.
+Yes I will.  I believe the patch to revert should also back out patch 
+2/2 that installed libfdt to HOST_DIR as a part of host-dtc.  As 
+mentioned above, if you keep that change and only revert the change to
+HOST_CPPFLAGS, then u-boot to fail unless something else is done.  Do
+you agree I should revert both changes with this new patch, to ensure
+there is no leftover breakage?
 
- * On other architectures, a problem occurs when
-   output/target/usr/lib/libtinycbor.a is created as a directory, for
-   some reason:
+> So, I think the best solution would be for U-Boot^WQemu to rename their
+> header.
 
-   http://autobuild.buildroot.net/results/760/7605c301f460398c2435f6b73d6d07c7d1022e8c/build-end.log
+Given the various considerations, I agree this is the lowest-risk
+solution.  Keeping in mind that any other package with a local header
+file in conflict with a HOST_DIR header file can experience this same
+problem.  The root issue is that usage of CPPFLAGS causes packages
+to search HOST_DIR/usr/include before they search their local source
+directories.
 
-Could you look into those issues?
+I may be a bit of time before I can submit a new patch to rename the
+header file within u-boot.
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Cheers,
+David
