@@ -1,75 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jul 2016 18:09:37 +0200
-Subject: [Buildroot] [PATCH 1/1] minissdpd: new package
-In-Reply-To: <1469802517-17937-1-git-send-email-fabrice.fontaine@orange.com>
-References: <1469802517-17937-1-git-send-email-fabrice.fontaine@orange.com>
-Message-ID: <20160730180937.50a478ac@free-electrons.com>
+Date: Sat, 30 Jul 2016 18:10:18 +0200
+Subject: [Buildroot] [git commit] Revert "package/Makefile.in should grab
+	HOST_DIR headers using -isystem instead of -I."
+Message-ID: <20160730161041.C8179807AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=255b6f80d395ef048f46cfcf75dba690c56af657
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 29 Jul 2016 16:28:37 +0200, Fabrice Fontaine wrote:
+This reverts commit 6f8162cf8c1abef7e0a4771fe0d6b26a28f5c2b6. This is
+causing too many problems that are not easy to solve.
 
-> diff --git a/package/minissdpd/0001-Set-_GNU_SOURCE-in-asyncsendto.c.patch b/package/minissdpd/0001-Set-_GNU_SOURCE-in-asyncsendto.c.patch
-> new file mode 100644
-> index 0000000..35854c5
-> --- /dev/null
-> +++ b/package/minissdpd/0001-Set-_GNU_SOURCE-in-asyncsendto.c.patch
-> @@ -0,0 +1,32 @@
-> +From 8ea177d974259c91f7e520d4b5b2abf07a1bbce2 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fabrice.fontaine@orange.com>
-> +Date: Fri, 29 Jul 2016 13:32:09 +0200
-> +Subject: [PATCH 1/1] Set _GNU_SOURCE in asyncsendto.c
-> +
-> +Add #define on _GNU_SOURCE at the very beginning of asyncsendto.c file
-> +as this file uses in6_pktinfo which is protected by __USE_GNU in
-> +libc/inet/netinet/in.h. Currently, this flag is set by the Makefile in
-> +CFLAGS however CFLAGS could be overwritten by the build system.
-> +
-> +Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Having a patch for this is a bit overkill IMO, so I've replaced that by
-passing:
-
-	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
-
-in the .mk file.
-
-> +config BR2_PACKAGE_MINISSDPD
-> +	bool "minissdpd"
-> +	select BR2_PACKAGE_LIBNFNETLINK
-
-Missing "depends on BR2_USE_MMU", since fork() is used.
-
-> +NAME=minissdpd
-> +PIDFILE=/var/run/$NAME.pid
-> +DAEMON=/usr/sbin/$NAME
-> +CFGFILE=/etc/default/$NAME
-> +
-> +IF=eth0
-
-IF is not really a good variable name IMO, too close to the "if"
-keyword. I renamed it to IFACE.
-
-> +define MINISSDPD_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-
-Passing TARGET_CONFIGURE_OPTS at install time wasn't needed.
-
-> +Environment="IF=eth0"
-
-I've also changed IF to IFACE here.
-
-Applied with those changes.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Makefile.in b/package/Makefile.in
+index b0ef706..afd5d3a 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -222,7 +222,7 @@ UNZIP := $(shell which unzip || type -p unzip) -q
+ 
+ APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(QUIET),-s)
+ 
+-HOST_CPPFLAGS  = -isystem $(HOST_DIR)/usr/include
++HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
+ HOST_CFLAGS   ?= -O2
+ HOST_CFLAGS   += $(HOST_CPPFLAGS)
+ HOST_CXXFLAGS += $(HOST_CFLAGS)
