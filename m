@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jul 2016 15:52:53 +0200
-Subject: [Buildroot] bug in xserver compilation?
-In-Reply-To: <trinity-da9783ca-4f43-4b57-be77-0d1d9462a02a-1469802318313@3capp-mailcom-bs06>
-References: <trinity-5c752dae-1ff7-4dbc-8baa-935b9342af4a-1469739383586@3capp-mailcom-bs07>
- <20160728233003.4ce258a7@free-electrons.com>
- <trinity-da9783ca-4f43-4b57-be77-0d1d9462a02a-1469802318313@3capp-mailcom-bs06>
-Message-ID: <20160730155253.51aa8880@free-electrons.com>
+Date: Sat, 30 Jul 2016 15:56:58 +0200
+Subject: [Buildroot] [PATCH 1/2] gtksourceview: new package
+In-Reply-To: <1469778689-31893-1-git-send-email-fabrice.fontaine@orange.com>
+References: <1469778689-31893-1-git-send-email-fabrice.fontaine@orange.com>
+Message-ID: <20160730155658.1e563afd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +12,51 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 29 Jul 2016 16:25:18 +0200, daggs wrote:
+On Fri, 29 Jul 2016 09:51:28 +0200, Fabrice Fontaine wrote:
 
-> > This is a known issue. Bernd posted a patch to fix it "[PATCH 1/2]
-> > package/x11r7/xserver_xorg-server: add libdrm-specific cflags" but I
-> > wasn't happy with it. You can see my reply from this Monday in the
-> > mailing list archives.
-> 
-> thanks for info., is this a version related regression?
+> diff --git a/package/Config.in b/package/Config.in
+> index ab9c42f..cf1d54e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -133,6 +133,7 @@ menu "Development tools"
+>  	source "package/git/Config.in"
+>  	source "package/gperf/Config.in"
+>  	source "package/grep/Config.in"
+> +	source "package/gtksourceview/Config.in"
 
-I have no idea. I believe the problem has existed for a while, but I'm
-not sure.
+It really isn't a "Development tools", it's a library, so I've put it
+under Libraries -> Graphics.
 
-A proper patch is welcome, though :)
+> diff --git a/package/gtksourceview/Config.in b/package/gtksourceview/Config.in
+> new file mode 100644
+> index 0000000..be7536b
+> --- /dev/null
+> +++ b/package/gtksourceview/Config.in
+> @@ -0,0 +1,32 @@
+> +config BR2_PACKAGE_GTKSOURCEVIEW
+> +	bool "gtksourceview"
+> +	depends on BR2_USE_WCHAR # glib2
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+> +	depends on BR2_USE_MMU # glib2
+> +	depends on BR2_INSTALL_LIBSTDCPP # libgtk3
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk3
+> +	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL || \
+> +		BR2_PACKAGE_HAS_LIBGL # libgtk3
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_LIBXML2
+> +	select BR2_PACKAGE_LIBGTK3
+
+It's really complicated to duplicate all the gtk3 depends on. So
+instead, I've used "depends on BR2_PACKAGE_LIBGTK3". It's pretty
+obvious for the user that gtksourceview needs gtk anyway.
+
+This allows to get rid of the complicated Config.in comments as well.
+
+> +GTKSOURCEVIEW_LICENSE = LGPLv2+
+
+License is LGPLv2.1+.
+
+I've fixed those minor issues, and applied. Thanks!
 
 Thomas
 -- 
