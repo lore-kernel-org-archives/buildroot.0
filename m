@@ -1,61 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Jul 2016 10:09:08 +0200
-Subject: [Buildroot] [PATCH] iperf: bump to version 2.0.9
-In-Reply-To: <20160731043853.GA3620@tarshish>
-References: <0fe5e4e62f4093b8d30fd1155d8832cd2482a57e.1469784407.git.baruch@tkos.co.il>
- <20160730143139.10ffbed2@free-electrons.com>
- <20160731043853.GA3620@tarshish>
-Message-ID: <20160731100908.1fdf64d6@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 31 Jul 2016 10:24:19 +0200
+Subject: [Buildroot] [PATCH] assimp: fix m68k uclinux compile
+Message-ID: <20160731082419.GA16577@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+For very big functions sep-data must be disabled.
+See http://mailman.uclinux.org/pipermail/uclinux-dev/2006-January/036346.html
 
-On Sun, 31 Jul 2016 07:38:53 +0300, Baruch Siach wrote:
+Fixes:
+http://autobuild.buildroot.net/results/63898c00929b4546279bda52148b218f847714ed/
+http://autobuild.buildroot.net/results/bb7a107d1ca6e8713e6ccffe6c61c43b777fb962/
 
-> >     [Thomas:
-> >      - change the download location to use downloads.sourceforge.net  
-> 
-> What is the advantage of downloads.sourceforge.net? Many packages still use 
-> just sourceforge.net:
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/assimp/assimp.mk |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Consistency amongst all packages? There are 181 packages that use
-downloads.sourceforge.net...
-
-> 
-> $ git grep _SITE[^\.]*sourceforge -- package/ |wc -l
-> 20
-
-... which is a lot more than 20 packages.
-
-> >      - turn the patch into a Git-formatted one, since upstream uses Git as
-> >        its version control system  
-> 
-> Where have you found a link to that repo? Only after googling for "iperf2 git" 
-> I found an indication to its existence in https://github.com/daynix/iperf2.
-
-From https://sourceforge.net/projects/iperf2/, click on "Code".
-
-(Yes the SourceForge UI is terrible).
-
-> >      - as noticed by Khem Raj, a C99 compiler is needed for the bool type,
-> >        so added AC_PROG_CC_C99 to configure.ac, and consequently added
-> >        IPERF_AUTORECONF = YES.
-> >      - removed two <pkg>_CONF_ENV variables related to the bool type, they
-> >        were added by an older commit
-> >        e13ac0ec8788092c6508636da94fe0198c18dffd back when we had a
-> >        config.cache shared between packages (which is no longer the case
-> >        today)]
-> > 
-> > If you could submit the updated patch upstream, it would be good.  
-
-Well, I was hoping you would do it :-)
-
-Thomas
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index fd556e5..7cc1ee4 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
+@@ -11,6 +11,11 @@ ASSIMP_LICENSE_FILES = LICENSE
+ ASSIMP_DEPENDENCIES = zlib
+ ASSIMP_INSTALL_STAGING = YES
+ 
+-ASSIMP_CONF_OPTS += -DASSIMP_BUILD_TESTS=OFF
++# disable sep-data because of very big functions
++ifeq ($(BR2_m68k),y)
++ASSIMP_CXXFLAGS = $(filter-out -msep-data,$(TARGET_CXXFLAGS))
++endif
++
++ASSIMP_CONF_OPTS += -DASSIMP_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="$(ASSIMP_CXXFLAGS)"
+ 
+ $(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
