@@ -1,57 +1,103 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 31 Jul 2016 10:28:50 +0200
-Subject: [Buildroot] [PATCH] ncurses: fix wide-char enabled compilation for
-	noMMU targets
-Message-ID: <20160731082850.GA30195@waldemar-brodkorb.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 Jul 2016 10:31:45 +0200
+Subject: [Buildroot] [PATCH] triggerhappy: unbreak build against 4.7+ kernel
+	headers
+Message-ID: <1469953905-32195-1-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For noMMU targets -D_XOPEN_SOURCE_EXTENDED must be explicitely
-passed to the preprocessor to allow cchar_t usage.
-
 Fixes:
-http://autobuild.buildroot.net/results/5bb34ff490c70eea5e4fb497e5228ca1319fffdc/
-http://autobuild.buildroot.net/results/8ba1410ed3ffb4954ccc4b7c3996d1839d677bef/
-http://autobuild.buildroot.net/results/26ee52ad549b7ef75c9ce4b2eae94f9312cea775/
+http://autobuild.buildroot.org/results/3d0/3d07de291ec64a16d03e10f0cf1faeb19d546412/
+http://autobuild.buildroot.org/results/b03/b03500e7d85786c6eee8f0adc38801340129aa14/
+http://autobuild.buildroot.org/results/dd0/dd05caf0db318a9287d239cc6fa5470ccdc2ce7c/
+http://autobuild.buildroot.org/results/76b/76bb000d041bd0828d15aa04138e222a4773ce94/
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Triggerhappy used the wrong constants for array sizes, causing a compilation
+error about out of array bounds initializers with the SW_PEN_INSERTED switch
+event added in 4.7. Fix it by using the correct constants (<foo>_CNT) instead.
+
+Patch submitted upstream: https://github.com/wertarbyte/triggerhappy/pull/12
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncurses/Config.in  |    2 --
- package/ncurses/ncurses.mk |    4 ++++
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ ...h-use-correct-array-sizes-to-fix-building.patch | 66 ++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+ create mode 100644 package/triggerhappy/0001-eventtable.h-use-correct-array-sizes-to-fix-building.patch
 
-diff --git a/package/ncurses/Config.in b/package/ncurses/Config.in
-index 44713f9..8c8acde 100644
---- a/package/ncurses/Config.in
-+++ b/package/ncurses/Config.in
-@@ -13,8 +13,6 @@ if BR2_PACKAGE_NCURSES
- config BR2_PACKAGE_NCURSES_WCHAR
- 	bool "enable wide char support"
- 	depends on BR2_USE_WCHAR
--	# Build broken @ curses.priv.h with bad declarations
--	depends on !(BR2_bfin && BR2_BINFMT_FLAT)
- 	help
- 	  Enable wide char & UTF-8 support in ncurses libraries
- 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index bef57c5..412f548 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -57,8 +57,12 @@ NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += form
- 
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
- NCURSES_CONF_OPTS += --enable-widec
-+# for noMMU we need to set it explicitely, fixes cchar_t problem
-+NCURSES_CPPFLAGS += -D_XOPEN_SOURCE_EXTENDED
- NCURSES_LIB_SUFFIX = w
- 
-+NCURSES_CONF_ENV += CPPFLAGS="$(NCURSES_CPPFLAGS)"
+diff --git a/package/triggerhappy/0001-eventtable.h-use-correct-array-sizes-to-fix-building.patch b/package/triggerhappy/0001-eventtable.h-use-correct-array-sizes-to-fix-building.patch
+new file mode 100644
+index 0000000..80f2640
+--- /dev/null
++++ b/package/triggerhappy/0001-eventtable.h-use-correct-array-sizes-to-fix-building.patch
+@@ -0,0 +1,66 @@
++From d3cfa80631a7e314fee9b2e0822e403fcf2a5c5c Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Sun, 31 Jul 2016 10:28:43 +0200
++Subject: [PATCH] eventtable.h: use correct array sizes to fix building against
++ 4.7+ headers
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
- define NCURSES_LINK_LIBS_STATIC
- 	for lib in $(NCURSES_LIBS-y:%=lib%); do \
- 		ln -sf $${lib}$(NCURSES_LIB_SUFFIX).a \
++During the 4.7 development cycle, commit 9a9b6aa6a8 (Input: add
++SW_PEN_INSERTED define) got added, which has the same numerical value as
++SW_MAX:
++
+++#define SW_PEN_INSERTED                0x0f  /* set = pen inserted */
+++#define SW_MAX                 0x0f
++
++This breaks the build as the SW_NAME array is sized using the SW_MAX macro:
++
++In file included from eventtable.h:21:0,
++                 from eventnames.c:11:
++evtable_SW.inc:17:1: error: array index in initializer exceeds array bounds
++ EV_MAP(SW_PEN_INSERTED),
++ ^
++evtable_SW.inc:17:1: error: (near initialization for ?SW_NAME?)
++
++The arrays should be sized using the <foo>_CNT (which is MAX+1) macros
++instead of <foo>_MAX.  These got added during the 2.6.24 development cycle,
++so it should be safe to do so unconditially:
++
++commit 7b19ada2ed3c1eccb9fe94d74b05e1428224663d
++Author: Jiri Slaby <jirislaby@gmail.com>
++Date:   Thu Oct 18 23:40:32 2007 -0700
++
++    get rid of input BIT* duplicate defines
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ eventtable.h | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/eventtable.h b/eventtable.h
++index 349d9d7..7cd99aa 100644
++--- a/eventtable.h
+++++ b/eventtable.h
++@@ -8,15 +8,15 @@
++ 
++ #define EV_MAP( N ) [ N ] = #N
++ 
++-static const char *EV_NAME[EV_MAX] = {
+++static const char *EV_NAME[EV_CNT] = {
++ #include "evtable_EV.inc"
++ };
++ 
++-static const char *KEY_NAME[KEY_MAX] = {
+++static const char *KEY_NAME[KEY_CNT] = {
++ #include "evtable_KEY.inc"
++ #include "evtable_BTN.inc"
++ };
++ 
++-static const char *SW_NAME[SW_MAX] = {
+++static const char *SW_NAME[SW_CNT] = {
++ #include "evtable_SW.inc"
++ };
++-- 
++2.8.1
++
 -- 
-1.7.10.4
+2.8.1
