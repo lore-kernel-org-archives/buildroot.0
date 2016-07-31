@@ -1,104 +1,99 @@
 From: Masahiro Yamada <yamada.masahiro@socionext.com>
-Date: Sun, 31 Jul 2016 14:43:10 +0900
-Subject: [Buildroot] [PATCH 1/2] zynq: enable
-	BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+Date: Sun, 31 Jul 2016 14:43:11 +0900
+Subject: [Buildroot] [PATCH 2/2] zynq: document how to use custom ps7_init
+	files
 In-Reply-To: <1469943791-4805-1-git-send-email-yamada.masahiro@socionext.com>
 References: <1469943791-4805-1-git-send-email-yamada.masahiro@socionext.com>
-Message-ID: <1469943791-4805-2-git-send-email-yamada.masahiro@socionext.com>
+Message-ID: <1469943791-4805-3-git-send-email-yamada.masahiro@socionext.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The recent U-Boot adopts Kconfig for its configuration system.
+Since U-Boot supported SPL for Zynq boards at v2014.04 release, it
+became much easier to build a system.  At that time, however, users
+still needed to manually copy ps7_init.c/h to the U-Boot source tree
+to generate a working SPL image because ps7_init.c/h output from
+Xilinx tools are not compatible with GPL.
+
+Later, the license problem was solved when Xilinx tools became able
+to output the GPL-compatible variants (ps7_init_gpl.c/h) as well.
+U-Boot v2015.07 or later includes ps7_init_gpl.c/h for major Zynq
+boards so that users can build a boot image straight away.
+
+Now Buildroot supports 3 boards (Zedboard, MicroZed, ZC706) without
+any manual intervention.  This is a good thing itself, but commit
+b9cd72cdbfe3 ("zynq_zc706: bump U-Boot to xilinx-v2016.2") entirely
+dropped the information about custom ps7_init files.
+
+This commit provides up-to-date guidance for how to customize the
+ps7_init files.
 
 Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 ---
 
- board/zynq/readme.txt           | 4 ++--
- configs/zynq_microzed_defconfig | 3 ++-
- configs/zynq_zc706_defconfig    | 5 +++--
- configs/zynq_zed_defconfig      | 3 ++-
- 4 files changed, 9 insertions(+), 6 deletions(-)
+ board/zynq/readme.txt | 44 +++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 37 insertions(+), 7 deletions(-)
 
 diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
-index 73f8bf3..51e28b6 100644
+index 51e28b6..debb163 100644
 --- a/board/zynq/readme.txt
 +++ b/board/zynq/readme.txt
-@@ -11,11 +11,11 @@ board even if it is not listed above.  Major Zynq-based boards are supported by
- U-Boot, and their Device Trees are merged in Linux Kernel.  If your board is the
- case, booting the kernel is a piece of cake.  All you need to do is to change:
-  - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
-- - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARDNAME)
-+ - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_KCONFIG)
+@@ -6,13 +6,6 @@ Currently, three boards are natively supported by Buildroot:
+  - Avnet ZedBoard (zynq_zed_defconfig)
+  - Avnet MicroZed (zynq_microzed_defconfig)
  
+-The following build procedure focuses on them, but you can adjust it to your
+-board even if it is not listed above.  Major Zynq-based boards are supported by
+-U-Boot, and their Device Trees are merged in Linux Kernel.  If your board is the
+-case, booting the kernel is a piece of cake.  All you need to do is to change:
+- - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
+- - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_KCONFIG)
+-
  Steps to create a working system for a Zynq board:
  
--1) Configuration (do one of the followings)
-+1) Configuration (do one of the following)
-     make zynq_zc706_defconfig     (ZC706)
-     make zynq_zed_defconfig       (Zedboard)
-     make zynq_microzed_defconfig  (MicroZed)
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index fa25857..5efc0d4 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -16,10 +16,11 @@ BR2_TARGET_ROOTFS_CPIO=y
- BR2_TARGET_ROOTFS_CPIO_GZIP=y
- BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="zynq_microzed"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2016.2"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_microzed"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index 4ac2fe8..578f042 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -1,7 +1,7 @@
- BR2_arm=y
- BR2_cortex_a9=y
--BR2_ARM_ENABLE_VFP=y
- BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
- BR2_LINUX_KERNEL=y
-@@ -17,10 +17,11 @@ BR2_TARGET_ROOTFS_CPIO=y
- BR2_TARGET_ROOTFS_CPIO_GZIP=y
- BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="zynq_zc706"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2016.2"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zc706"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
-diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
-index 84859bb..7ce3365 100644
---- a/configs/zynq_zed_defconfig
-+++ b/configs/zynq_zed_defconfig
-@@ -16,10 +16,11 @@ BR2_TARGET_ROOTFS_CPIO=y
- BR2_TARGET_ROOTFS_CPIO_GZIP=y
- BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="zynq_zed"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2016.2"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zed"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
+ 1) Configuration (do one of the following)
+@@ -50,3 +43,40 @@ References:
+ 
+  - Zedboard/Microzed information including schematics, reference designs, and
+    manuals are available from http://www.zedboard.org .
++
++Support for other boards:
++
++You may want to build a system for other boards (for ex. Digilent Zybo board).
++U-Boot supports major Zynq-based boards, and their Device Trees are mostly
++merged in Linux Kernel.  If your board is the case, booting the kernel is a
++piece of cake.  All you need to do is to tweak:
++ - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
++ - U-Boot board defconfig (BR2_TARGET_UBOOT_BOARD_DEFCONFIG)
++
++Custom ps7_init_gpl.c/h support:
++
++To generate a working boot.bin image, ps7_init_gpl.c/h are required in the
++U-Boot source tree.  Those files are output from the Xilinx tools, but for
++convenience, U-Boot includes the default ps7_init_gpl.c/h of popular boards.
++See board/xilinx/zynq/ directory of U-Boot for natively supported ps7_init
++files.  If the ps7_init files for your board are not found in U-Boot, you need
++to add them by yourself.  (You can still override the existing ones if you want
++to customize them for your purpose.)
++
++1) Start with a defconfig supported by Buildroot (for ex. Zedboard)
++    make zynq_zed_defconfig
++
++2) make uboot-menuconfig
++    Visit the following menu and enable CONFIG_ZYNQ_CUSTOM_INIT.
++
++    ARM architecture  --->
++       [*] Use custom ps7_init provided by Xilinx tool
++
++3) Copy ps7_init_gpl.c/h generated by the Xilinx tools into
++   output/build/uboot-xilinx-v2016.2/board/xilinx/zynq/custom_hw_platform/
++
++4) make
++
++*Notice*
++While the build will successfully complete with/without the ps7_init_gpl.*
++files, the boot.bin generated without ones will not be functional at all.
 -- 
 1.9.1
