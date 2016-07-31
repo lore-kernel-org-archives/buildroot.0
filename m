@@ -1,32 +1,30 @@
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Sun, 31 Jul 2016 15:56:09 +0200
-Subject: [Buildroot] [PATCH] i2c-tools: depend on BUSYBOX_SHOW_OTHERS
-Message-ID: <1469973369-5445-1-git-send-email-bgolaszewski@baylibre.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 31 Jul 2016 18:02:47 +0200
+Subject: [Buildroot] [PATCH 1/1] Config.in: fix typo
+Message-ID: <1469980967-7267-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As of version 1.25.0 busybox by default includes a nearly complete
-implementation of i2c-tools. Hide the upstream version unless the
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS option is selected.
-
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/i2c-tools/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/i2c-tools/Config.in b/package/i2c-tools/Config.in
-index e83dbd6..b82c7dc 100644
---- a/package/i2c-tools/Config.in
-+++ b/package/i2c-tools/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_I2C_TOOLS
- 	bool "i2c-tools"
-+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/Config.in b/Config.in
+index 7bb2a01..741a7ce 100644
+--- a/Config.in
++++ b/Config.in
+@@ -652,7 +652,7 @@ config BR2_STATIC_LIBS
+ 	bool "static only"
  	help
- 	  Heterogeneous set of I2C tools for Linux
- 
+ 	  Build and use only static libraries. No shared libraries will
+-	  be instaled on the target. This potentially increases your
++	  be installed on the target. This potentially increases your
+ 	  code size and should only be used if you know what you are
+ 	  doing. Note that some packages may not be available when this
+ 	  option is enabled, due to their need for dynamic library
 -- 
-2.7.4
+2.8.1
