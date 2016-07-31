@@ -1,55 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 31 Jul 2016 12:08:02 +0200
-Subject: [Buildroot] [PATCH] support/download: make the git wrapper more
-	robust
-Message-ID: <1469959682-5519-1-git-send-email-yann.morin.1998@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 31 Jul 2016 12:17:16 +0200
+Subject: [Buildroot] [PATCH] libdvdnav: fix nios2 cross-compile
+Message-ID: <20160731101716.GA3788@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, there are two failure paths in the wrapper:
+The host is misdetected as OS/2.
 
-  - if the tar fails, then the error is ignored because it is on the
-    left-hand-side of a pipe;
+Fixes:
+http://autobuild.buildroot.net/results/d5b30d6b5463928ded1a1c1f1f5345a726f6ffaf/
+http://autobuild.buildroot.net/results/917041c7165093f44a5d3b4a5ba56a3d1b59e456/
+http://autobuild.buildroot.net/results/dcfc53b6fc25210cf70a1abf0e24b85f0d971101/
+http://autobuild.buildroot.net/results/79109d06183efa17f6f68c1ea78cbd9927c5c46e/
 
-  - if the find fails, then the error is ignored because it is a
-    process substitution.
-
-While the former could be fixed with "set -o pipefail", the latter can
-not be fixed thusly and we must use an intemediate file for it.
-
-So, fix both issues by using intermediate files, both to generate the
-list of files to include in the archive, and generate the archive in a
-temporary tarball.
-
-Fixes the following build issue, where the find is failing for whatever
-unknown reason:
-    http://autobuild.buildroot.net/results/20f/20fd76d2256eee81837f7e9bbaefbe79d7645ae9/
-
-And this one, where the process substitution failed, also for an unknown
-reason:
-    http://autobuild.buildroot.org/results/018/018971ea9227b386fe25d3c264c7e80b843a9f68/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- support/download/git | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+I am not sure where to report this upstream. Any hints?
+---
+ package/libdvdnav/0001-do-not-match-nios2-as-os2.patch | 16 ++++++++++++++++
+ package/libdvdnav/libdvdnav.mk                         |  2 ++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 package/libdvdnav/0001-do-not-match-nios2-as-os2.patch
 
-diff --git a/support/download/git b/support/download/git
-index 416cd1b..8aa284a 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -90,6 +90,7 @@ rm -rf .git
- popd >/dev/null
+diff --git a/package/libdvdnav/0001-do-not-match-nios2-as-os2.patch b/package/libdvdnav/0001-do-not-match-nios2-as-os2.patch
+new file mode 100644
+index 0000000..27030bb
+--- /dev/null
++++ b/package/libdvdnav/0001-do-not-match-nios2-as-os2.patch
+@@ -0,0 +1,16 @@
++Fix misdetection while nios2 cross-compile
++
++Signed-off-bye: Waldemar Brodkorb <wbx@openadk.org>
++ 
++diff -Nur libdvdnav-5.0.3.orig/configure.ac libdvdnav-5.0.3/configure.ac
++--- libdvdnav-5.0.3.orig/configure.ac	2015-01-27 16:57:43.000000000 +0100
+++++ libdvdnav-5.0.3/configure.ac	2016-07-31 11:48:09.312947473 +0200
++@@ -73,7 +73,7 @@
++   [*mingw32* | *cygwin*], [AC_CHECK_FUNCS(gettimeofday)])
++ 
++ AS_CASE([$host],
++-  [*os2*], [LDFLAGS="$LDFLAGS -no-undefined"])
+++  [*-os2*], [LDFLAGS="$LDFLAGS -no-undefined"])
++ 
++ dnl ---------------------------------------------
++ dnl threads
+diff --git a/package/libdvdnav/libdvdnav.mk b/package/libdvdnav/libdvdnav.mk
+index ff5ae09..b53f0c8 100644
+--- a/package/libdvdnav/libdvdnav.mk
++++ b/package/libdvdnav/libdvdnav.mk
+@@ -11,5 +11,7 @@ LIBDVDNAV_INSTALL_STAGING = YES
+ LIBDVDNAV_DEPENDENCIES = libdvdread host-pkgconf
+ LIBDVDNAV_LICENSE = GPLv2+
+ LIBDVDNAV_LICENSE_FILES = COPYING
++# 0001-do-not-match-nios2-as-os2.patch
++LIBDVDNAV_AUTORECONF = YES
  
- # Generate the archive, sort with the C locale so that it is reproducible
-+find "${basename}" -not -type d |LC_ALL=C sort >"${basename}.list"
- tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" \
--         -T <(find "${basename}" -not -type d |LC_ALL=C sort) \
--|gzip -n >"${output}"
-+         -T "${basename}.list" >"${output}.tar"
-+gzip -n <"${output}.tar" >"${output}"
+ $(eval $(autotools-package))
 -- 
-2.7.4
+2.1.4
