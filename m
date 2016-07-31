@@ -1,40 +1,34 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 31 Jul 2016 20:48:00 +0200
-Subject: [Buildroot] [PATCH v2] openssl: fix m68k uclinux compile
-Message-ID: <20160731184800.GA6199@waldemar-brodkorb.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 31 Jul 2016 21:56:47 +0300
+Subject: [Buildroot] Analysis of build results for 2016-07-29
+In-Reply-To: <20160730232322.4eca1a53@free-electrons.com>
+References: <20160730063032.3A6FE10161A@stock.ovh.net>
+ <20160730232322.4eca1a53@free-electrons.com>
+Message-ID: <20160731185647.GL3620@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The GCC manual suggest when getting:
-relocation truncated to fit: R_68K_GOT16O foobar
-to use -mxgot.
+Hi Thomas,
 
-Fixes:
-http://autobuild.buildroot.net/results/455fd0f274bfa4bbd786bcd6740ecf960e47c1bd/
+On Sat, Jul 30, 2016 at 11:23:22PM +0200, Thomas Petazzoni wrote: 
+> >      powerpc |                    strace-4.12 | NOK | http://autobuild.buildroot.net/results/252a04855f0e92efb2770d887d9ce6cb63bc6461/
+> >       xtensa |                    strace-4.12 | NOK | http://autobuild.buildroot.net/results/2e8f7052cb3f4ca6a7ebcf506ea5a6cf04ffc736/
+> 
+> btrfs.c:68:8: error: redefinition of 'struct btrfs_ioctl_defrag_range_args'
+>  struct btrfs_ioctl_defrag_range_args {
+> 
+> Baruch, you are the last one who bumped strace, could you have a look?
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/openssl/openssl.mk |    5 +++++
- 1 file changed, 5 insertions(+)
+A missing comma in configure.ac breaks the build when using kernel v4.7+ 
+headers. A bump to version 4.13 (http://patchwork.ozlabs.org/patch/654388/) 
+fixes this issue.
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index e34868e..b926fe3 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -19,6 +19,11 @@ OPENSSL_PATCH = \
- 	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d \
- 	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2a-parallel-symlinking.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- 
-+# relocation truncated to fit: R_68K_GOT16O
-+ifeq ($(BR2_m68k_cf),y)
-+OPENSSL_CFLAGS += -mxgot
-+endif
-+
- ifeq ($(BR2_USE_MMU),)
- OPENSSL_CFLAGS += -DHAVE_FORK=0
- endif
+baruch
+
 -- 
-1.7.10.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
