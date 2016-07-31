@@ -1,100 +1,86 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 31 Jul 2016 13:57:10 +0200
-Subject: [Buildroot] [PATCH] uclibc: add missing defines for m68k/microblaze
-Message-ID: <20160731115709.GA9180@waldemar-brodkorb.de>
+Date: Sun, 31 Jul 2016 14:05:45 +0200
+Subject: [Buildroot] [PATCH] iozone: depends on toolchain with NPTL support
+Message-ID: <20160731120545.GA18680@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-POLLRDHUP supported since Linux 2.6.17.
-http://man7.org/linux/man-pages/man2/poll.2.html
+The existent patch is not enough, as pthread_barrier_wait is used, which
+isn't implemented in uClibc-ng Linuxthreads.
+Remove the patch.
 
 Fixes:
-http://autobuild.buildroot.net/results/0f5ed287f1756fbec710454e9c694202c3206dbe/
+http://autobuild.buildroot.net/results/e5bbb80c81f4f170cf48d375e016e87a296ff754/
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- ...issing-Linux-extension-headers-for-poll.h.patch | 71 ++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100644 package/uclibc/0002-include-missing-Linux-extension-headers-for-poll.h.patch
+ package/iozone/0002-no-nptl-support.patch | 37 -------------------------------
+ package/iozone/Config.in                  |  5 ++++-
+ 2 files changed, 4 insertions(+), 38 deletions(-)
+ delete mode 100644 package/iozone/0002-no-nptl-support.patch
 
-diff --git a/package/uclibc/0002-include-missing-Linux-extension-headers-for-poll.h.patch b/package/uclibc/0002-include-missing-Linux-extension-headers-for-poll.h.patch
-new file mode 100644
-index 0000000..f28cd80
---- /dev/null
-+++ b/package/uclibc/0002-include-missing-Linux-extension-headers-for-poll.h.patch
-@@ -0,0 +1,71 @@
-+From 7a575d98449780a95fc4004b179a2ea0dcd0f468 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+Date: Sun, 31 Jul 2016 13:22:00 +0200
-+Subject: [PATCH] include missing Linux extension headers for poll.h
+diff --git a/package/iozone/0002-no-nptl-support.patch b/package/iozone/0002-no-nptl-support.patch
+deleted file mode 100644
+index 493f52c..0000000
+--- a/package/iozone/0002-no-nptl-support.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-Dummy pthread_setaffinity_np() when not available
+-
+-On uClibc configurations that do not use the NPTL thread
+-implementation, pthread_setaffinity_np() is not available. This patch
+-defines a dummy (empty) implementation of this function for such
+-cases.
+-
+-The only few architectures that do not provide the NPTL thread
+-implementation are very likely to be non-SMP architectures, and
+-therefore, setting the affinity of the thread is not doing anything
+-useful, so having an empty stub for pthread_setaffinity_np() is not a
+-problem.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/src/current/iozone.c
+-===================================================================
+---- a/src/current/iozone.c
+-+++ b/src/current/iozone.c
+-@@ -306,6 +306,17 @@
+- #endif
+- #endif
+- 
+-+#if defined (__linux__)
+-+#include <features.h>
+-+#if defined (__UCLIBC__) && !defined (__UCLIBC_HAS_THREADS_NATIVE__)
+-+static int pthread_setaffinity_np(pthread_t thread, size_t cpusetsize,
+-+				  const cpu_set_t *cpuset)
+-+{
+-+	return 0;
+-+}
+-+#endif
+-+#endif
+-+
+- #if ((defined(solaris) && defined(__LP64__)) || defined(__s390x__))
+- /* If we are building for 64-bit Solaris, all functions that return pointers
+-  * must be declared before they are used; otherwise the compiler will assume
+diff --git a/package/iozone/Config.in b/package/iozone/Config.in
+index 8cf50b1..052a958 100644
+--- a/package/iozone/Config.in
++++ b/package/iozone/Config.in
+@@ -1,9 +1,12 @@
+ config BR2_PACKAGE_IOZONE
+ 	bool "iozone"
+ 	depends on BR2_USE_MMU # fork()
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	help
+ 	  IOzone is a filesystem benchmark tool.
+ 	  The benchmark generates and measures a variety of file operations
+ 
+ 	  http://www.iozone.org/
 +
-+This was found by Buildroot autobuilders for m68k.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+---
-+ libc/sysdeps/linux/c6x/bits/poll.h        | 7 +++++++
-+ libc/sysdeps/linux/m68k/bits/poll.h       | 7 +++++++
-+ libc/sysdeps/linux/microblaze/bits/poll.h | 7 +++++++
-+ 3 files changed, 21 insertions(+)
-+
-+diff --git a/libc/sysdeps/linux/c6x/bits/poll.h b/libc/sysdeps/linux/c6x/bits/poll.h
-+index 1d845eb..4c984cc 100644
-+--- a/libc/sysdeps/linux/c6x/bits/poll.h
-++++ b/libc/sysdeps/linux/c6x/bits/poll.h
-+@@ -34,6 +34,13 @@
-+ # define POLLWRBAND	0x100		/* Priority data may be written.  */
-+ #endif
-+ 
-++#ifdef __USE_GNU
-++/* These are extensions for Linux.  */
-++# define POLLMSG	0x400
-++# define POLLREMOVE	0x1000
-++# define POLLRDHUP	0x2000
-++#endif
-++
-+ /* Event types always implicitly polled for.  These bits need not be set in
-+    `events', but they will appear in `revents' to indicate the status of
-+    the file descriptor.  */
-+diff --git a/libc/sysdeps/linux/m68k/bits/poll.h b/libc/sysdeps/linux/m68k/bits/poll.h
-+index 1d845eb..4c984cc 100644
-+--- a/libc/sysdeps/linux/m68k/bits/poll.h
-++++ b/libc/sysdeps/linux/m68k/bits/poll.h
-+@@ -34,6 +34,13 @@
-+ # define POLLWRBAND	0x100		/* Priority data may be written.  */
-+ #endif
-+ 
-++#ifdef __USE_GNU
-++/* These are extensions for Linux.  */
-++# define POLLMSG	0x400
-++# define POLLREMOVE	0x1000
-++# define POLLRDHUP	0x2000
-++#endif
-++
-+ /* Event types always implicitly polled for.  These bits need not be set in
-+    `events', but they will appear in `revents' to indicate the status of
-+    the file descriptor.  */
-+diff --git a/libc/sysdeps/linux/microblaze/bits/poll.h b/libc/sysdeps/linux/microblaze/bits/poll.h
-+index 9b284c8..27c3219 100644
-+--- a/libc/sysdeps/linux/microblaze/bits/poll.h
-++++ b/libc/sysdeps/linux/microblaze/bits/poll.h
-+@@ -34,6 +34,13 @@
-+ # define POLLWRBAND	0x0200		/* Priority data may be written.  */
-+ #endif
-+ 
-++#ifdef __USE_GNU
-++/* These are extensions for Linux.  */
-++# define POLLMSG	0x400
-++# define POLLREMOVE	0x1000
-++# define POLLRDHUP	0x2000
-++#endif
-++
-+ /* Event types always implicitly polled for.  These bits need not be set in
-+    `events', but they will appear in `revents' to indicate the status of
-+    the file descriptor.  */
-+-- 
-+2.7.4 (Apple Git-66)
-+
++comment "iozone needs a toolchain w/ NPTL"
++        depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 -- 
 2.1.4
