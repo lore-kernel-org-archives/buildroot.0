@@ -1,115 +1,100 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 31 Jul 2016 13:27:51 +0200
-Subject: [Buildroot] [PATCH] gdb: fix sim support for ARM
-Message-ID: <20160731112751.GA26681@waldemar-brodkorb.de>
+Date: Sun, 31 Jul 2016 13:57:10 +0200
+Subject: [Buildroot] [PATCH] uclibc: add missing defines for m68k/microblaze
+Message-ID: <20160731115709.GA9180@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It seems the old fix breaks compilation for other
-architectures then bfin.
-Fixes:
-http://autobuild.buildroot.net/results/3b82c44ee853fab0e0c63881f0705bb659412917/
-http://autobuild.buildroot.net/results/dafbb93ab38a4285ce42436219d552cceb14828b/
+POLLRDHUP supported since Linux 2.6.17.
+http://man7.org/linux/man-pages/man2/poll.2.html
 
+Fixes:
+http://autobuild.buildroot.net/results/0f5ed287f1756fbec710454e9c694202c3206dbe/
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
+ ...issing-Linux-extension-headers-for-poll.h.patch | 71 ++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 package/uclibc/0002-include-missing-Linux-extension-headers-for-poll.h.patch
 
-@Thomas Petazzoni: Can you check if it still works on your old
-Debian system with gcc 4.4 on the host. Thanks.
-
----
- package/gdb/7.10.1/0005-fix-sim-compile.patch |   16 ----------------
- package/gdb/7.10.1/0006-fix-sim-compile.patch |   22 ++++++++++++++++++++++
- package/gdb/7.11.1/0001-fix-sim-compile.patch |   18 ++++++++++++------
- 3 files changed, 34 insertions(+), 22 deletions(-)
- delete mode 100644 package/gdb/7.10.1/0005-fix-sim-compile.patch
- create mode 100644 package/gdb/7.10.1/0006-fix-sim-compile.patch
-
-diff --git a/package/gdb/7.10.1/0005-fix-sim-compile.patch b/package/gdb/7.10.1/0005-fix-sim-compile.patch
-deleted file mode 100644
-index c886363..0000000
---- a/package/gdb/7.10.1/0005-fix-sim-compile.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--Fix compile on older systems with gcc 4.4.x.
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--
--diff -Nur gdb-7.10.1.orig//sim/common/sim-base.h gdb-7.10.1/sim/common/sim-base.h
----- gdb-7.10.1.orig//sim/common/sim-base.h	2015-05-13 13:03:56.000000000 -0500
--+++ gdb-7.10.1/sim/common/sim-base.h	2016-07-08 07:44:17.000000000 -0500
--@@ -72,8 +72,6 @@
-- #define INVALID_INSTRUCTION_ADDRESS ((address_word)0 - 1)
-- #endif
-- 
---/* TODO: Probably should just delete SIM_CPU.  */
---typedef struct _sim_cpu SIM_CPU;
-- typedef struct _sim_cpu sim_cpu;
-- 
-- #include "sim-module.h"
-diff --git a/package/gdb/7.10.1/0006-fix-sim-compile.patch b/package/gdb/7.10.1/0006-fix-sim-compile.patch
+diff --git a/package/uclibc/0002-include-missing-Linux-extension-headers-for-poll.h.patch b/package/uclibc/0002-include-missing-Linux-extension-headers-for-poll.h.patch
 new file mode 100644
-index 0000000..4d365b9
+index 0000000..f28cd80
 --- /dev/null
-+++ b/package/gdb/7.10.1/0006-fix-sim-compile.patch
-@@ -0,0 +1,22 @@
-+Fix compile on older systems with gcc 4.4.x.
++++ b/package/uclibc/0002-include-missing-Linux-extension-headers-for-poll.h.patch
+@@ -0,0 +1,71 @@
++From 7a575d98449780a95fc4004b179a2ea0dcd0f468 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@uclibc-ng.org>
++Date: Sun, 31 Jul 2016 13:22:00 +0200
++Subject: [PATCH] include missing Linux extension headers for poll.h
 +
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++This was found by Buildroot autobuilders for m68k.
 +
-+diff -Nur gdb-7.10.1.orig/sim/common/sim-base.h gdb-7.10.1/sim/common/sim-base.h
-+--- gdb-7.10.1.orig/sim/common/sim-base.h	2015-05-13 20:03:56.000000000 +0200
-++++ gdb-7.10.1/sim/common/sim-base.h	2016-07-31 12:37:36.103814690 +0200
-+@@ -72,8 +72,13 @@
-+ #define INVALID_INSTRUCTION_ADDRESS ((address_word)0 - 1)
++Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
++---
++ libc/sysdeps/linux/c6x/bits/poll.h        | 7 +++++++
++ libc/sysdeps/linux/m68k/bits/poll.h       | 7 +++++++
++ libc/sysdeps/linux/microblaze/bits/poll.h | 7 +++++++
++ 3 files changed, 21 insertions(+)
++
++diff --git a/libc/sysdeps/linux/c6x/bits/poll.h b/libc/sysdeps/linux/c6x/bits/poll.h
++index 1d845eb..4c984cc 100644
++--- a/libc/sysdeps/linux/c6x/bits/poll.h
+++++ b/libc/sysdeps/linux/c6x/bits/poll.h
++@@ -34,6 +34,13 @@
++ # define POLLWRBAND	0x100		/* Priority data may be written.  */
 + #endif
 + 
-+-/* TODO: Probably should just delete SIM_CPU.  */
-++/* GCC 4.4 and older should not define this.  */
-++#define GCC_VERSION (__GNUC__ * 10000 \
-++                               + __GNUC_MINOR__ * 100 \
-++                               + __GNUC_PATCHLEVEL__)
-++#if __GCC_VERSION > 40400
-+ typedef struct _sim_cpu SIM_CPU;
+++#ifdef __USE_GNU
+++/* These are extensions for Linux.  */
+++# define POLLMSG	0x400
+++# define POLLREMOVE	0x1000
+++# define POLLRDHUP	0x2000
 ++#endif
-+ typedef struct _sim_cpu sim_cpu;
+++
++ /* Event types always implicitly polled for.  These bits need not be set in
++    `events', but they will appear in `revents' to indicate the status of
++    the file descriptor.  */
++diff --git a/libc/sysdeps/linux/m68k/bits/poll.h b/libc/sysdeps/linux/m68k/bits/poll.h
++index 1d845eb..4c984cc 100644
++--- a/libc/sysdeps/linux/m68k/bits/poll.h
+++++ b/libc/sysdeps/linux/m68k/bits/poll.h
++@@ -34,6 +34,13 @@
++ # define POLLWRBAND	0x100		/* Priority data may be written.  */
++ #endif
 + 
-+ #include "sim-module.h"
-diff --git a/package/gdb/7.11.1/0001-fix-sim-compile.patch b/package/gdb/7.11.1/0001-fix-sim-compile.patch
-index ecb0514..4d365b9 100644
---- a/package/gdb/7.11.1/0001-fix-sim-compile.patch
-+++ b/package/gdb/7.11.1/0001-fix-sim-compile.patch
-@@ -1,16 +1,22 @@
--Fix compile on older systems with gcc 4.4.x
-+Fix compile on older systems with gcc 4.4.x.
- 
- Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
- 
--diff -Nur gdb-7.11.1.orig//sim/common/sim-base.h gdb-7.11.1/sim/common/sim-base.h
----- gdb-7.11.1.orig//sim/common/sim-base.h	2016-02-09 21:19:39.000000000 -0600
--+++ gdb-7.11.1/sim/common/sim-base.h	2016-07-08 08:02:09.000000000 -0500
--@@ -72,8 +72,6 @@
-+diff -Nur gdb-7.10.1.orig/sim/common/sim-base.h gdb-7.10.1/sim/common/sim-base.h
-+--- gdb-7.10.1.orig/sim/common/sim-base.h	2015-05-13 20:03:56.000000000 +0200
-++++ gdb-7.10.1/sim/common/sim-base.h	2016-07-31 12:37:36.103814690 +0200
-+@@ -72,8 +72,13 @@
-  #define INVALID_INSTRUCTION_ADDRESS ((address_word)0 - 1)
-  #endif
-  
- -/* TODO: Probably should just delete SIM_CPU.  */
---typedef struct _sim_cpu SIM_CPU;
-++/* GCC 4.4 and older should not define this.  */
-++#define GCC_VERSION (__GNUC__ * 10000 \
-++                               + __GNUC_MINOR__ * 100 \
-++                               + __GNUC_PATCHLEVEL__)
-++#if __GCC_VERSION > 40400
-+ typedef struct _sim_cpu SIM_CPU;
+++#ifdef __USE_GNU
+++/* These are extensions for Linux.  */
+++# define POLLMSG	0x400
+++# define POLLREMOVE	0x1000
+++# define POLLRDHUP	0x2000
 ++#endif
-  typedef struct _sim_cpu sim_cpu;
-  
-  #include "sim-module.h"
+++
++ /* Event types always implicitly polled for.  These bits need not be set in
++    `events', but they will appear in `revents' to indicate the status of
++    the file descriptor.  */
++diff --git a/libc/sysdeps/linux/microblaze/bits/poll.h b/libc/sysdeps/linux/microblaze/bits/poll.h
++index 9b284c8..27c3219 100644
++--- a/libc/sysdeps/linux/microblaze/bits/poll.h
+++++ b/libc/sysdeps/linux/microblaze/bits/poll.h
++@@ -34,6 +34,13 @@
++ # define POLLWRBAND	0x0200		/* Priority data may be written.  */
++ #endif
++ 
+++#ifdef __USE_GNU
+++/* These are extensions for Linux.  */
+++# define POLLMSG	0x400
+++# define POLLREMOVE	0x1000
+++# define POLLRDHUP	0x2000
+++#endif
+++
++ /* Event types always implicitly polled for.  These bits need not be set in
++    `events', but they will appear in `revents' to indicate the status of
++    the file descriptor.  */
++-- 
++2.7.4 (Apple Git-66)
++
 -- 
-1.7.10.4
+2.1.4
