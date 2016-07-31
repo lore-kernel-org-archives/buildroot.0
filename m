@@ -1,89 +1,47 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Sun, 31 Jul 2016 14:45:50 +0200
-Subject: [Buildroot] [PATCH 1/1] shapelib: new package
-Message-ID: <1469969150-3029-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sun, 31 Jul 2016 14:47:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openswan: not available on musl
+In-Reply-To: <1469958682-6087-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1469958682-6087-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1469969267.9042.2.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
----
- package/Config.in              |  1 +
- package/shapelib/Config.in     |  8 ++++++++
- package/shapelib/shapelib.hash |  3 +++
- package/shapelib/shapelib.mk   | 25 +++++++++++++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/shapelib/Config.in
- create mode 100644 package/shapelib/shapelib.hash
- create mode 100644 package/shapelib/shapelib.mk
+On So, 2016-07-31 at 11:51 +0200, Bernd Kuhls wrote:
+> After fixing the usual sys/cdefs.h and _P stuff the build still fails
+> because Openswan makes use of GLOB_ functions
+> 
+> /home/bernd/buildroot/br4/output/build/openswan-
+> 2.6.48/lib/libipsecconf/parser.l:200:29: error: ?GLOB_BRACE?
+> undeclared (first use in this function)
+> ??????globresult = glob(try, GLOB_BRACE, NULL, &globbuf);
+> ?????????????????????????????^
+> /home/bernd/buildroot/br4/output/build/openswan-
+> 2.6.48/lib/libipsecconf/parser.l:200:29: note: each undeclared
+> identifier is reported only once for each function it appears in
+> /home/bernd/buildroot/br4/output/build/openswan-
+> 2.6.48/lib/libipsecconf/parser.l:207:41: error: ?GLOB_NOMAGIC?
+> undeclared (first use in this function)
+> ???????globresult = glob(try, GLOB_BRACE|GLOB_NOMAGIC, NULL,
+> &globbuf);
+> 
+> https://github.com/xelerance/Openswan/blob/master/lib/libipsecconf/pa
+> rser.l#L200
+> https://github.com/xelerance/Openswan/blob/master/lib/libipsecconf/pa
+> rser.l#L207
+> [...]
+> ?????????????????????????????????????????^
+> which musl does not support:
+> http://www.openwall.com/lists/musl/2013/09/16/1
+> 
 
-diff --git a/package/Config.in b/package/Config.in
-index 645fa29..6186da1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1333,6 +1333,7 @@ endif
- 	source "package/protobuf-c/Config.in"
- 	source "package/qhull/Config.in"
- 	source "package/qlibc/Config.in"
-+	source "package/shapelib/Config.in"
- 	source "package/sphinxbase/Config.in"
- 	source "package/startup-notification/Config.in"
- 	source "package/tinycbor/Config.in"
-diff --git a/package/shapelib/Config.in b/package/shapelib/Config.in
-new file mode 100644
-index 0000000..a34a94d
---- /dev/null
-+++ b/package/shapelib/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_SHAPELIB
-+	bool "shapelib"
-+	help
-+	  The Shapefile C Library provides the ability to write simple C programs
-+	  for reading, writing and updating (to a limited extent) ESRI Shapefiles,
-+	  and the associated attribute file (.dbf).
-+
-+	  http://shapelib.maptools.org/
-diff --git a/package/shapelib/shapelib.hash b/package/shapelib/shapelib.hash
-new file mode 100644
-index 0000000..6c8a86f
---- /dev/null
-+++ b/package/shapelib/shapelib.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 23d474016158ab5077db2f599527631706ba5c0dc7c4178a6a1d685bb014f68f  shapelib-1.3.0.tar.gz
-+
-diff --git a/package/shapelib/shapelib.mk b/package/shapelib/shapelib.mk
-new file mode 100644
-index 0000000..5c928cb
---- /dev/null
-+++ b/package/shapelib/shapelib.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# shapelib
-+#
-+################################################################################
-+
-+SHAPELIB_VERSION = 1.3.0
-+SHAPELIB_SITE = http://download.osgeo.org/shapelib
-+SHAPELIB_LICENSE = LGPL
-+SHAPELIB_LICENSE_FILES = LICENSE.LGPL
-+SHAPELIB_INSTALL_STAGING = YES
-+
-+define SHAPELIB_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+endef
-+
-+define SHAPELIB_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) PREFIX=$(STAGING_DIR)/usr/ lib_install
-+endef
-+
-+define SHAPELIB_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) PREFIX=$(TARGET_DIR)/usr/ bin_install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.7.4
+Maybe we can add libglob [1] as a package and add it as a musl
+dependencies like we do it with netbsd-queue?
+
+[1]?https://github.com/voidlinux/libglob
+
+Best regards
+J?rg Krause
