@@ -1,39 +1,43 @@
-From: Guillaume William Bres <guillaume.bressaix@gmail.com>
-Date: Sun, 31 Jul 2016 16:39:40 -0600
-Subject: [Buildroot] "no hash found" error for host-gcc-initial-4.9.3
-	package verification
-Message-ID: <CAJe0E3e22wsz_+x9ztXOS7aZaMPuP4L0PXRoavpwCRJy9VJCww@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 Jul 2016 23:36:15 +0200
+Subject: [Buildroot] [git commit] warpboard: README: Improve instructions
+	about using wifi
+Message-ID: <20160801082747.B696B81F71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=cc8472fb8ab08ed24d03f42cac62a209d87f30a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I want one of my coworkers to build a custom linux image using some default
-buildroot stuff. The system builds fine on my machine but it fails on his:
+Provide a more complete set of instructions on how to get Wifi
+working on the warpboard.
 
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/freescale/warpboard/README | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-   - Buildroot downloads host-gcc-initial-4.9.3,
-   - tries a file verification with either md5sum or sha-sum: error: "ho
-   hash found"
-   - Buildroot downloads host-gcc initial-4.9.3 from a mirror
-   - same problem.
-
-
-Where does this problem come from? His machine does have md5sum and all
-sha-x-sum tools installed, I was able to build the system on mine in the
-meantime without any problems.
-
-File verifications should give an error message but not actually cause the
-build to stop right?
-
-
-Guillaume William Bres-Saix
-Software engineer - NIST
-325 Broadway, Boulder, CO 80305
-<guillaume.bressaix@gmail.com>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160731/df7007db/attachment.html>
+diff --git a/board/freescale/warpboard/README b/board/freescale/warpboard/README
+index 871d5cd..d900c6d 100644
+--- a/board/freescale/warpboard/README
++++ b/board/freescale/warpboard/README
+@@ -66,4 +66,14 @@ $ hciconfig hci0 up
+ Using Wifi
+ ==========
+ 
+-$ ifconfig wlan0 up
++Enable the wireless_utils and wpa_suplicant packages, and then run:
++
++# modprobe brcmfmac
++# iwconfig wlan0 essid ACCESSPOINTNAME
++# wpa_passphrase ACCESSPOINTNAME > /etc/wpa.conf
++(enter the wifi password and press enter)
++# wpa_supplicant -Dwext -iwlan0 -c /etc/wpa.conf &
++# udhcpc -i wlan0
++# ping buildroot.org
++
++Enjoy!
