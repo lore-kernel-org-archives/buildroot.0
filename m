@@ -1,48 +1,32 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 31 Jul 2016 15:27:48 +0200
-Subject: [Buildroot] [PATCH] openssl: fix compile for coldfire
-Message-ID: <20160731132748.GA19712@waldemar-brodkorb.de>
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date: Sun, 31 Jul 2016 15:56:09 +0200
+Subject: [Buildroot] [PATCH] i2c-tools: depend on BUSYBOX_SHOW_OTHERS
+Message-ID: <1469973369-5445-1-git-send-email-bgolaszewski@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For very big functions sep-data must be disabled.
-See http://mailman.uclinux.org/pipermail/uclinux-dev/2006-January/036346.html
+As of version 1.25.0 busybox by default includes a nearly complete
+implementation of i2c-tools. Hide the upstream version unless the
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS option is selected.
 
-Fixes:
-http://autobuild.buildroot.net/results/455fd0f274bfa4bbd786bcd6740ecf960e47c1bd/
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- package/openssl/openssl.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/i2c-tools/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index e34868e..a15fa3c 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -12,13 +12,19 @@ OPENSSL_INSTALL_STAGING = YES
- OPENSSL_DEPENDENCIES = zlib
- HOST_OPENSSL_DEPENDENCIES = host-zlib
- OPENSSL_TARGET_ARCH = generic32
--OPENSSL_CFLAGS = $(TARGET_CFLAGS)
- OPENSSL_PATCH = \
- 	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2d-parallel-build.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d \
- 	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d \
- 	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d \
- 	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2a-parallel-symlinking.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/i2c-tools/Config.in b/package/i2c-tools/Config.in
+index e83dbd6..b82c7dc 100644
+--- a/package/i2c-tools/Config.in
++++ b/package/i2c-tools/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_I2C_TOOLS
+ 	bool "i2c-tools"
++	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	help
+ 	  Heterogeneous set of I2C tools for Linux
  
-+# disable sep-data because of very big functions
-+ifeq ($(BR2_m68k),y)
-+OPENSSL_CFLAGS = $(filter-out -msep-data,$(TARGET_CFLAGS))
-+else
-+OPENSSL_CFLAGS = $(TARGET_CFLAGS)
-+endif
-+
- ifeq ($(BR2_USE_MMU),)
- OPENSSL_CFLAGS += -DHAVE_FORK=0
- endif
 -- 
-2.1.4
+2.7.4
