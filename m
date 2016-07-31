@@ -1,8 +1,7 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 31 Jul 2016 10:27:19 +0200
-Subject: [Buildroot] [PATCH] gnupg: disable assembly optimization for
-	coldfire
-Message-ID: <20160731082718.GA14169@waldemar-brodkorb.de>
+Date: Sun, 31 Jul 2016 10:28:03 +0200
+Subject: [Buildroot] [PATCH] libgcrypt: disable assembly for coldfire
+Message-ID: <20160731082803.GA23895@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
-http://autobuild.buildroot.net/results/d25425cff055a14b9285cefb0775bc138eb2f914/
+http://autobuild.buildroot.org/results/374/374158bb0a0e6a16af5d0b909cd05ec52812aaa3/
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/gnupg/gnupg.mk |    5 +++++
+ package/libgcrypt/libgcrypt.mk |    5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
-index 8893a1c..54f4d97 100644
---- a/package/gnupg/gnupg.mk
-+++ b/package/gnupg/gnupg.mk
-@@ -13,6 +13,11 @@ GNUPG_DEPENDENCIES = zlib ncurses $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- GNUPG_CONF_ENV = ac_cv_sys_symbol_underscore=no
- GNUPG_CONF_OPTS = --disable-rpath --enable-minimal --disable-regex
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 5eb54a4..5ee488d 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -18,6 +18,11 @@ LIBGCRYPT_CONF_ENV = \
+ LIBGCRYPT_CONF_OPTS = \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
  
-+# gnupg doesn't support assembly for coldfire
++# Libgcrypt doesn't support assembly for coldfire
 +ifeq ($(BR2_m68k_cf),y)
-+GNUPG_CONF_OPTS += --disable-asm
++LIBGCRYPT_CONF_OPTS += --disable-asm
 +endif
 +
- ifeq ($(BR2_PACKAGE_BZIP2),y)
- GNUPG_CONF_OPTS += --enable-bzip2
- GNUPG_DEPENDENCIES += bzip2
+ # Code doesn't build in thumb mode
+ ifeq ($(BR2_arm),y)
+ LIBGCRYPT_CONF_ENV += CFLAGS="$(patsubst -mthumb,,$(TARGET_CFLAGS))"
 -- 
 1.7.10.4
