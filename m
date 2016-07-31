@@ -1,39 +1,59 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jul 2016 11:17:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.6.0
-Message-ID: <1469956660-31806-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 31 Jul 2016 11:51:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openswan: not available on musl
+Message-ID: <1469958682-6087-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+After fixing the usual sys/cdefs.h and _P stuff the build still fails
+because Openswan makes use of GLOB_ functions
+
+/home/bernd/buildroot/br4/output/build/openswan-2.6.48/lib/libipsecconf/parser.l:200:29: error: ?GLOB_BRACE? undeclared (first use in this function)
+      globresult = glob(try, GLOB_BRACE, NULL, &globbuf);
+                             ^
+/home/bernd/buildroot/br4/output/build/openswan-2.6.48/lib/libipsecconf/parser.l:200:29: note: each undeclared identifier is reported only once for each function it appears in
+/home/bernd/buildroot/br4/output/build/openswan-2.6.48/lib/libipsecconf/parser.l:207:41: error: ?GLOB_NOMAGIC? undeclared (first use in this function)
+       globresult = glob(try, GLOB_BRACE|GLOB_NOMAGIC, NULL, &globbuf);
+
+https://github.com/xelerance/Openswan/blob/master/lib/libipsecconf/parser.l#L200
+https://github.com/xelerance/Openswan/blob/master/lib/libipsecconf/parser.l#L207
+[...]
+                                         ^
+which musl does not support:
+http://www.openwall.com/lists/musl/2013/09/16/1
+
+Fixes
+http://autobuild.buildroot.net/results/70d/70da34c1528b51e92e9e60788f83733d70b33353/
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libvpx/libvpx.hash | 2 +-
- package/libvpx/libvpx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openswan/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
-index 44cd994..fc4a751 100644
---- a/package/libvpx/libvpx.hash
-+++ b/package/libvpx/libvpx.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  f582d9b2d60a592a4a3d8c32965ca2d2167e9ade38c6c30bac8801ff66a118e4  libvpx-1.4.0.tar.bz2
-+sha256  d0afbb5eb1ecae68f8d578abace160a97e2e8a230e3028cf4db115d59a695aad  libvpx-1.6.0.tar.bz2
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index 066b037..4ad5522 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/openswan/Config.in b/package/openswan/Config.in
+index 0370143..ba5d53d 100644
+--- a/package/openswan/Config.in
++++ b/package/openswan/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPENSWAN
+ 	bool "openswan"
+ 	depends on BR2_USE_MMU # iproute2
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # iproute2
++	depends on !BR2_TOOLCHAIN_USES_MUSL # GLOB_BRACE
+ 	select BR2_PACKAGE_GMP
+ 	select BR2_PACKAGE_IPROUTE2
+ 	help
+@@ -9,6 +10,7 @@ config BR2_PACKAGE_OPENSWAN
  
--LIBVPX_VERSION = 1.4.0
-+LIBVPX_VERSION = 1.6.0
- LIBVPX_SOURCE = libvpx-$(LIBVPX_VERSION).tar.bz2
- LIBVPX_SITE = http://storage.googleapis.com/downloads.webmproject.org/releases/webm
- LIBVPX_LICENSE = BSD-3c
+ 	  http://www.openswan.org
+ 
+-comment "openswan needs a toolchain w/ headers >= 3.0"
++comment "openswan needs a uClibc or glibc toolchain toolchain w/ headers >= 3.0"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || \
++		BR2_TOOLCHAIN_USES_MUSL
 -- 
 2.8.1
