@@ -1,43 +1,48 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 31 Jul 2016 14:54:50 +0200
-Subject: [Buildroot] [PATCH] wavemon: depends on a toolchain with NPTL
-Message-ID: <20160731125449.GA13036@waldemar-brodkorb.de>
+Date: Sun, 31 Jul 2016 15:27:48 +0200
+Subject: [Buildroot] [PATCH] openssl: fix compile for coldfire
+Message-ID: <20160731132748.GA19712@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The software uses pthread_mutexattr_setrobust which isn't
-available in uClibc-ng Linuxthreads support.
+For very big functions sep-data must be disabled.
+See http://mailman.uclinux.org/pipermail/uclinux-dev/2006-January/036346.html
 
 Fixes:
-http://autobuild.buildroot.net/results/d81b199c74cb4251f0b0eb975f66cb5016eb464c/
+http://autobuild.buildroot.net/results/455fd0f274bfa4bbd786bcd6740ecf960e47c1bd/
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/wavemon/Config.in |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/openssl/openssl.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/wavemon/Config.in b/package/wavemon/Config.in
-index b0f2f34..e073dee 100644
---- a/package/wavemon/Config.in
-+++ b/package/wavemon/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_WAVEMON
- 	bool "wavemon"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_LIBNL
- 	help
-@@ -14,5 +14,5 @@ config BR2_PACKAGE_WAVEMON
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index e34868e..a15fa3c 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -12,13 +12,19 @@ OPENSSL_INSTALL_STAGING = YES
+ OPENSSL_DEPENDENCIES = zlib
+ HOST_OPENSSL_DEPENDENCIES = host-zlib
+ OPENSSL_TARGET_ARCH = generic32
+-OPENSSL_CFLAGS = $(TARGET_CFLAGS)
+ OPENSSL_PATCH = \
+ 	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2d-parallel-build.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d \
+ 	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d \
+ 	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d \
+ 	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2a-parallel-symlinking.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
  
- 	  https://github.com/uoaerg/wavemon
- 
--comment "wavemon needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "wavemon needs a toolchain w/ NPTL"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++# disable sep-data because of very big functions
++ifeq ($(BR2_m68k),y)
++OPENSSL_CFLAGS = $(filter-out -msep-data,$(TARGET_CFLAGS))
++else
++OPENSSL_CFLAGS = $(TARGET_CFLAGS)
++endif
++
+ ifeq ($(BR2_USE_MMU),)
+ OPENSSL_CFLAGS += -DHAVE_FORK=0
+ endif
 -- 
-1.7.10.4
+2.1.4
