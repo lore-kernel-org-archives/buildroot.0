@@ -1,36 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jul 2016 09:44:33 +0200
-Subject: [Buildroot] Analysis of build results for 2016-07-29
-In-Reply-To: <20160730232322.4eca1a53@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 30 Jul 2016 23:23:22 +0200")
-References: <20160730063032.3A6FE10161A@stock.ovh.net>
- <20160730232322.4eca1a53@free-electrons.com>
-Message-ID: <87twf6s13y.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 31 Jul 2016 09:46:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/inotify-tools: Fix compilation with
+	gcc6
+Message-ID: <1469951201-1866-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Fixes
+http://autobuild.buildroot.net/results/abc/abcaf70523863a4cd096a1b063be2e742355849f/
 
-Hi,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/inotify-tools/0001-gcc6.patch | 49 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/inotify-tools/0001-gcc6.patch
 
- >> microblazeel | triggerhappy-7e5abc69f21567... | NOK | http://autobuild.buildroot.net/results/4dbb88b8d0fd83f3a44d0daff6a7fffebd235317/
- >> xtensa | triggerhappy-7e5abc69f21567... | NOK | http://autobuild.buildroot.net/results/86b6577acffdb27cbb4015fd00e9295df7de9409/
- >> arm | triggerhappy-7e5abc69f21567... | NOK | http://autobuild.buildroot.net/results/06e1e3ee4ff9e2b883fd2ad45c0a3229b1212fae/
- >> powerpc | triggerhappy-7e5abc69f21567... | NOK | http://autobuild.buildroot.net/results/9855efe0ce46ce62bd488a96a185cd0cd2479734/
- >> microblazeel | triggerhappy-7e5abc69f21567... | NOK | http://autobuild.buildroot.net/results/96748cbceef475afc2a22a2a87dfdddfbf620f9a/
-
- > evtable_SW.inc:17:1: error: array index in initializer exceeds array bounds
- >  EV_MAP(SW_PEN_INSERTED),
- >  ^
-
- > Peter, you contributed this package, so your turn to look into this :-)
-
-It got broken with 4.7 kernel headers as it uses the wrong array size
-macros. I'll send a fix.
-
+diff --git a/package/inotify-tools/0001-gcc6.patch b/package/inotify-tools/0001-gcc6.patch
+new file mode 100644
+index 0000000..aae622e
+--- /dev/null
++++ b/package/inotify-tools/0001-gcc6.patch
+@@ -0,0 +1,49 @@
++From 5fe3ba82134d8b85adc69cf1d6c5742b4bde20b4 Mon Sep 17 00:00:00 2001
++From: James Knight <james.d.knight@live.com>
++Date: Thu, 16 Jun 2016 00:00:57 -0400
++Subject: [PATCH] correct code alignment
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The following replaces the indented section of code from spaces to tabs.
++No functional changes. Aside from consistency, this resolves a GCC 6
++build issue with the flag `-Werror=misleading-indentation` enabled:
++
++    inotifywait.c: In function ?output_event_csv?:
++    inotifywait.c:126:5: error: this ?if? clause does not guard...
++                                [-Werror=misleading-indentation]
++         if (filename != NULL)
++         ^~
++    inotifywait.c:129:2: note: ...this statement, but the latter is
++                               misleadingly indented as if it is guarded
++                               by the ?if?
++      printf("%s,", csv_escape( inotifytools_event_to_str( event->mask )
++                                                                    ) );
++      ^~~~~~
++
++Signed-off-by: James Knight <james.d.knight@live.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(downloaded from upstream pull request
++ https://github.com/rvoicilas/inotify-tools/pull/65)
++---
++ src/inotifywait.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/inotifywait.c b/src/inotifywait.c
++index c5ce5e3..404a85b 100644
++--- a/src/inotifywait.c
+++++ b/src/inotifywait.c
++@@ -122,9 +122,9 @@ void validate_format( char * fmt ) {
++ 
++ 
++ void output_event_csv( struct inotify_event * event ) {
++-    char *filename = csv_escape(inotifytools_filename_from_wd(event->wd));
++-    if (filename != NULL)
++-        printf("%s,", filename);
+++	char *filename = csv_escape(inotifytools_filename_from_wd(event->wd));
+++	if (filename != NULL)
+++		printf("%s,", filename);
++ 
++ 	printf("%s,", csv_escape( inotifytools_event_to_str( event->mask ) ) );
++ 	if ( event->len > 0 )
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.8.1
