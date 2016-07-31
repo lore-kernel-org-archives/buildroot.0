@@ -1,42 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jul 2016 23:36:50 +0200
-Subject: [Buildroot] [PATCH] warpboard: README: Improve instructions
-	about using wifi
-In-Reply-To: <1469903793-5987-1-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Sat, 30 Jul 2016 15:36:33 -0300")
-References: <1469903793-5987-1-git-send-email-festevam@gmail.com>
-Message-ID: <87k2g1pk0d.fsf@dell.be.48ers.dk>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 31 Jul 2016 23:41:26 +0200
+Subject: [Buildroot] [PATCH] uclibc: disable PIE for microblaze
+Message-ID: <20160731214126.GA18543@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+PIE is not supported at the moment for uClibc-ng/microblaze.
+Fixes:
+http://autobuild.buildroot.net/results/a5848753eb0e2b0ddf55e226c45b85fd3a1c84f3/
 
- > From: Fabio Estevam <fabio.estevam@nxp.com>
- > Provide a more complete set of instructions on how to get Wifi
- > working on the warpboard.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ toolchain/Config.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
- > ---
- >  board/freescale/warpboard/README | 12 +++++++++++-
- >  1 file changed, 11 insertions(+), 1 deletion(-)
-
- > diff --git a/board/freescale/warpboard/README b/board/freescale/warpboard/README
- > index 871d5cd..d900c6d 100644
- > --- a/board/freescale/warpboard/README
- > +++ b/board/freescale/warpboard/README
- > @@ -66,4 +66,14 @@ $ hciconfig hci0 up
- >  Using Wifi
- >  ==========
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 5752380..464e1d9 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -19,7 +19,7 @@ config BR2_TOOLCHAIN_USES_GLIBC
  
- > -$ ifconfig wlan0 up
- > +Enable the wireless_utils and wpa_suplicant packages, and then run:
-
-Perhaps we should enable these in the defconfig then?
-
-Committed, thanks.
-
+ config BR2_TOOLCHAIN_USES_UCLIBC
+ 	bool
+-	select BR2_TOOLCHAIN_SUPPORTS_PIE if !BR2_arc && !BR2_m68k && !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_SUPPORTS_PIE if !BR2_arc && !BR2_m68k && !BR2_microblaze && !BR2_STATIC_LIBS
+ 
+ config BR2_TOOLCHAIN_USES_MUSL
+ 	bool
 -- 
-Bye, Peter Korsgaard
+1.7.10.4
