@@ -1,63 +1,77 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 31 Jul 2016 12:17:16 +0200
-Subject: [Buildroot] [PATCH] libdvdnav: fix nios2 cross-compile
-Message-ID: <20160731101716.GA3788@waldemar-brodkorb.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 31 Jul 2016 12:35:05 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/transmission: Fix compilation
+	when using system libminiupnpc with libutp disabled
+Message-ID: <1469961305-25334-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The host is misdetected as OS/2.
+Fixes
+http://autobuild.buildroot.net/results/63a/63a3caac7e1e7b5ab268d9be3cd77617df619659/
 
-Fixes:
-http://autobuild.buildroot.net/results/d5b30d6b5463928ded1a1c1f1f5345a726f6ffaf/
-http://autobuild.buildroot.net/results/917041c7165093f44a5d3b4a5ba56a3d1b59e456/
-http://autobuild.buildroot.net/results/dcfc53b6fc25210cf70a1abf0e24b85f0d971101/
-http://autobuild.buildroot.net/results/79109d06183efa17f6f68c1ea78cbd9927c5c46e/
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-I am not sure where to report this upstream. Any hints?
----
- package/libdvdnav/0001-do-not-match-nios2-as-os2.patch | 16 ++++++++++++++++
- package/libdvdnav/libdvdnav.mk                         |  2 ++
- 2 files changed, 18 insertions(+)
- create mode 100644 package/libdvdnav/0001-do-not-match-nios2-as-os2.patch
+v2: updated patch (Yann)
 
-diff --git a/package/libdvdnav/0001-do-not-match-nios2-as-os2.patch b/package/libdvdnav/0001-do-not-match-nios2-as-os2.patch
+ package/transmission/0004-fix-utp-include.patch | 47 +++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/transmission/0004-fix-utp-include.patch
+
+diff --git a/package/transmission/0004-fix-utp-include.patch b/package/transmission/0004-fix-utp-include.patch
 new file mode 100644
-index 0000000..27030bb
+index 0000000..3613024
 --- /dev/null
-+++ b/package/libdvdnav/0001-do-not-match-nios2-as-os2.patch
-@@ -0,0 +1,16 @@
-+Fix misdetection while nios2 cross-compile
++++ b/package/transmission/0004-fix-utp-include.patch
+@@ -0,0 +1,47 @@
++Fix compilation when using system libminiupnpc with libutp disabled
 +
-+Signed-off-bye: Waldemar Brodkorb <wbx@openadk.org>
-+ 
-+diff -Nur libdvdnav-5.0.3.orig/configure.ac libdvdnav-5.0.3/configure.ac
-+--- libdvdnav-5.0.3.orig/configure.ac	2015-01-27 16:57:43.000000000 +0100
-++++ libdvdnav-5.0.3/configure.ac	2016-07-31 11:48:09.312947473 +0200
-+@@ -73,7 +73,7 @@
-+   [*mingw32* | *cygwin*], [AC_CHECK_FUNCS(gettimeofday)])
-+ 
-+ AS_CASE([$host],
-+-  [*os2*], [LDFLAGS="$LDFLAGS -no-undefined"])
-++  [*-os2*], [LDFLAGS="$LDFLAGS -no-undefined"])
-+ 
-+ dnl ---------------------------------------------
-+ dnl threads
-diff --git a/package/libdvdnav/libdvdnav.mk b/package/libdvdnav/libdvdnav.mk
-index ff5ae09..b53f0c8 100644
---- a/package/libdvdnav/libdvdnav.mk
-+++ b/package/libdvdnav/libdvdnav.mk
-@@ -11,5 +11,7 @@ LIBDVDNAV_INSTALL_STAGING = YES
- LIBDVDNAV_DEPENDENCIES = libdvdread host-pkgconf
- LIBDVDNAV_LICENSE = GPLv2+
- LIBDVDNAV_LICENSE_FILES = COPYING
-+# 0001-do-not-match-nios2-as-os2.patch
-+LIBDVDNAV_AUTORECONF = YES
- 
- $(eval $(autotools-package))
++If transmission uses its own copy of libminiupnpc in third-party/ then
++the configure script adds that path to CFLAGS:
++https://trac.transmissionbt.com/browser/trunk/configure.ac#L455
++
++This patch is also added if transmission uses its own copy of libutp:
++https://trac.transmissionbt.com/browser/trunk/configure.ac#L349
++
++But if a system-provided libminiupnpc is used and utp-support is
++disabled using --disable-utp the result is a build error, detected by
++buildroot autobuilders:
++http://autobuild.buildroot.net/results/b79/b79e51140cb0320554a58ce59dcb33f53cd9211a/build-end.log
++
++net.c:40:24: fatal error: libutp/utp.h: No such file or directory
++
++Patch proposed by Yann E. MORIN:
++http://lists.busybox.net/pipermail/buildroot/2016-July/167896.html
++
++Patch sent upstream: https://trac.transmissionbt.com/ticket/9554
++(awaiting moderation at the time of writing)
++
++Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
++
++diff -uNr transmission-2.92.org/configure.ac transmission-2.92/configure.ac
++--- transmission-2.92.org/configure.ac	2016-03-06 21:23:45.336198393 +0100
+++++ transmission-2.92/configure.ac	2016-07-31 12:13:40.921660078 +0200
++@@ -358,6 +358,10 @@
++     else
++       AC_MSG_ERROR("Unable to build uTP support -- C++ compiler not found")
++     fi
+++else
+++    # For the system libminiupnpc with UTC disabled,
+++    # point to our bundled UTP headers
+++    LIBUTP_CFLAGS="-I\$(top_srcdir)/third-party/"
++ fi
++ AC_SUBST(LIBUTP_CFLAGS)
++ AC_SUBST(LIBUTP_LIBS)
++@@ -457,7 +461,7 @@
++     LIBUPNP_LIBS_QT="\$\${TRANSMISSION_TOP}/third-party/miniupnp/libminiupnp.a"
++ else
++     AC_DEFINE([SYSTEM_MINIUPNP])
++-    LIBUPNP_CFLAGS="" 
+++    LIBUPNP_CFLAGS="${LIBUTP_CFLAGS}"
++     LIBUPNP_LIBS="-lminiupnpc"
++     LIBUPNP_LIBS_QT="-lminiupnpc"
++ fi
 -- 
-2.1.4
+2.8.1
