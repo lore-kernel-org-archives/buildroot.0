@@ -1,103 +1,101 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jul 2016 23:23:56 +0200
-Subject: [Buildroot] [git commit] uclibc: add missing defines for
-	m68k/microblaze
-Message-ID: <20160731212414.1562881E75@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 31 Jul 2016 23:25:54 +0200
+Subject: [Buildroot] Analysis of build results for 2016-07-29
+In-Reply-To: <20160730232322.4eca1a53@free-electrons.com>
+References: <20160730063032.3A6FE10161A@stock.ovh.net>
+ <20160730232322.4eca1a53@free-electrons.com>
+Message-ID: <20160731212554.GA5611@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48f8ed2baecc6aecb407d0266767c94438fb1d2b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-POLLRDHUP supported since Linux 2.6.17.
-http://man7.org/linux/man-pages/man2/poll.2.html
+On 2016-07-30 23:23 +0200, Thomas Petazzoni spake thusly:
+[--SNIP--]
+> >     mips64el | dtv-scan-tables-0c92e5e5d35... | NOK | http://autobuild.buildroot.net/results/2aef6e3f7e6b4f403e3b978229f9d92e8df685cb/
+> >         i686 | dtv-scan-tables-0c92e5e5d35... | NOK | http://autobuild.buildroot.net/results/facc228a501e5ffc898078103eaf0c9f4dc70bfe/
+> >      powerpc | dtv-scan-tables-0c92e5e5d35... | NOK | http://autobuild.buildroot.net/results/20fd76d2256eee81837f7e9bbaefbe79d7645ae9/
+> >      powerpc | dtv-scan-tables-0c92e5e5d35... | NOK | http://autobuild.buildroot.net/results/6c39e827c58e1969b26eefd74a64c7e3d20026a3/
+> Corrupted tarball. Yann, can we enable hash checking for Git-fetched packages?
 
-Fixes:
-http://autobuild.buildroot.net/results/0f5ed287f1756fbec710454e9c694202c3206dbe/
+Yes, we should.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...issing-Linux-extension-headers-for-poll.h.patch | 71 ++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+> >     mips64el | edid-decode-681153145d5e05e... | NOK | http://autobuild.buildroot.net/results/0f7e5495aec809754b496173a316b8eb19ba302e/
+> Weird corrupted tarball issue that occurs only on Yann's machine.
 
-diff --git a/package/uclibc/0002-include-missing-Linux-extension-headers-for-poll.h.patch b/package/uclibc/0002-include-missing-Linux-extension-headers-for-poll.h.patch
-new file mode 100644
-index 0000000..f28cd80
---- /dev/null
-+++ b/package/uclibc/0002-include-missing-Linux-extension-headers-for-poll.h.patch
-@@ -0,0 +1,71 @@
-+From 7a575d98449780a95fc4004b179a2ea0dcd0f468 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+Date: Sun, 31 Jul 2016 13:22:00 +0200
-+Subject: [PATCH] include missing Linux extension headers for poll.h
-+
-+This was found by Buildroot autobuilders for m68k.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+---
-+ libc/sysdeps/linux/c6x/bits/poll.h        | 7 +++++++
-+ libc/sysdeps/linux/m68k/bits/poll.h       | 7 +++++++
-+ libc/sysdeps/linux/microblaze/bits/poll.h | 7 +++++++
-+ 3 files changed, 21 insertions(+)
-+
-+diff --git a/libc/sysdeps/linux/c6x/bits/poll.h b/libc/sysdeps/linux/c6x/bits/poll.h
-+index 1d845eb..4c984cc 100644
-+--- a/libc/sysdeps/linux/c6x/bits/poll.h
-++++ b/libc/sysdeps/linux/c6x/bits/poll.h
-+@@ -34,6 +34,13 @@
-+ # define POLLWRBAND	0x100		/* Priority data may be written.  */
-+ #endif
-+ 
-++#ifdef __USE_GNU
-++/* These are extensions for Linux.  */
-++# define POLLMSG	0x400
-++# define POLLREMOVE	0x1000
-++# define POLLRDHUP	0x2000
-++#endif
-++
-+ /* Event types always implicitly polled for.  These bits need not be set in
-+    `events', but they will appear in `revents' to indicate the status of
-+    the file descriptor.  */
-+diff --git a/libc/sysdeps/linux/m68k/bits/poll.h b/libc/sysdeps/linux/m68k/bits/poll.h
-+index 1d845eb..4c984cc 100644
-+--- a/libc/sysdeps/linux/m68k/bits/poll.h
-++++ b/libc/sysdeps/linux/m68k/bits/poll.h
-+@@ -34,6 +34,13 @@
-+ # define POLLWRBAND	0x100		/* Priority data may be written.  */
-+ #endif
-+ 
-++#ifdef __USE_GNU
-++/* These are extensions for Linux.  */
-++# define POLLMSG	0x400
-++# define POLLREMOVE	0x1000
-++# define POLLRDHUP	0x2000
-++#endif
-++
-+ /* Event types always implicitly polled for.  These bits need not be set in
-+    `events', but they will appear in `revents' to indicate the status of
-+    the file descriptor.  */
-+diff --git a/libc/sysdeps/linux/microblaze/bits/poll.h b/libc/sysdeps/linux/microblaze/bits/poll.h
-+index 9b284c8..27c3219 100644
-+--- a/libc/sysdeps/linux/microblaze/bits/poll.h
-++++ b/libc/sysdeps/linux/microblaze/bits/poll.h
-+@@ -34,6 +34,13 @@
-+ # define POLLWRBAND	0x0200		/* Priority data may be written.  */
-+ #endif
-+ 
-++#ifdef __USE_GNU
-++/* These are extensions for Linux.  */
-++# define POLLMSG	0x400
-++# define POLLREMOVE	0x1000
-++# define POLLRDHUP	0x2000
-++#endif
-++
-+ /* Event types always implicitly polled for.  These bits need not be set in
-+    `events', but they will appear in `revents' to indicate the status of
-+    the file descriptor.  */
-+-- 
-+2.7.4 (Apple Git-66)
-+
+I have removed all locally cache targballs to get rid of the broken
+ones, and restarted my autobuilder instance.
+
+Alas, the corruption occured again soon after. :-/
+
+I have now stopped my instance until further investigation...
+
+all issues happen when using the git protocol; our git wrapper seem to
+be having issues of some kind when creating the tarball: all issues
+happen when running tar.
+
+For a bit of background, here's how we generate the archives in the git
+wrapper:
+
+    tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" \
+             -T <(find "${basename}" -not -type d |LC_ALL=C sort) \
+    |gzip -n >"${output}"
+
+In most of the failrues, tar complains that it can't stat /dev/fd/63,
+which is the fd of the process substitution for the find command:
+
+    http://autobuild.buildroot.net/results/2ae/2aef6e3f7e6b4f403e3b978229f9d92e8df685cb/build-end.log
+    [--SNIP--]
+    tar: /dev/fd/63: Cannot stat: No such file or directory
+    tar: Error is not recoverable: exiting now
+    sort: write failed: standard output: Broken pipe
+    sort: write error
+
+In one of the failures, the find command complains that each files it
+finds does not exist:
+
+    http://autobuild.buildroot.net/results/20f/20fd76d2256eee81837f7e9bbaefbe79d7645ae9/build-end.log
+    [--SNIP--]
+    find: `dtv-scan-tables-0c92e5e5d3590da60acb4bcc92c19f041dc7e481/Makefile': No such file or directory
+    find: `dtv-scan-tables-0c92e5e5d3590da60acb4bcc92c19f041dc7e481/.gitignore': No such file or directory
+    find: `dtv-scan-tables-0c92e5e5d3590da60acb4bcc92c19f041dc7e481/COPYING.LGPL': No such file or directory
+    sort: write failed: standard output: Broken pipe
+    sort: write error
+
+So, I'll look at making the wrapper more robust. We want to catch all
+failures, but:
+
+  - we pipe the output of tar into gzip, we can't catch any failure of
+    tar,
+
+  - we use process substitution, we can't catch the failure of the find
+    command.
+
+I've already sent a patch: https://patchwork.ozlabs.org/patch/654339/
+but I'll withdraw it, as it is not complete: we still pipe the output of
+find, so we'd still miss failures from find.
+
+Ultimately, I'd like to understand what is so special about my machine
+that those failures only occur on it, and on no other autobuilder...
+That is proving really tricky: I have had a loop iterate over
+linux-zigbee to try and reproduce the issue, but after 2275 iterations
+of the loop, still no failure... :-/
+
+Probably hardware issues, but I have no clue what kind: HDD? CPU? mem?
+What does not help is the fact that the machine is 'somewhere', that I
+can't reach it, so no easy way to run memtest86. smartctl does not
+provide much either. I'll try to run some cpuburn soon...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
