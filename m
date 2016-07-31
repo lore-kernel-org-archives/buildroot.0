@@ -1,59 +1,55 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jul 2016 11:51:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openswan: not available on musl
-Message-ID: <1469958682-6087-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 31 Jul 2016 12:08:02 +0200
+Subject: [Buildroot] [PATCH] support/download: make the git wrapper more
+	robust
+Message-ID: <1469959682-5519-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After fixing the usual sys/cdefs.h and _P stuff the build still fails
-because Openswan makes use of GLOB_ functions
+Currently, there are two failure paths in the wrapper:
 
-/home/bernd/buildroot/br4/output/build/openswan-2.6.48/lib/libipsecconf/parser.l:200:29: error: ?GLOB_BRACE? undeclared (first use in this function)
-      globresult = glob(try, GLOB_BRACE, NULL, &globbuf);
-                             ^
-/home/bernd/buildroot/br4/output/build/openswan-2.6.48/lib/libipsecconf/parser.l:200:29: note: each undeclared identifier is reported only once for each function it appears in
-/home/bernd/buildroot/br4/output/build/openswan-2.6.48/lib/libipsecconf/parser.l:207:41: error: ?GLOB_NOMAGIC? undeclared (first use in this function)
-       globresult = glob(try, GLOB_BRACE|GLOB_NOMAGIC, NULL, &globbuf);
+  - if the tar fails, then the error is ignored because it is on the
+    left-hand-side of a pipe;
 
-https://github.com/xelerance/Openswan/blob/master/lib/libipsecconf/parser.l#L200
-https://github.com/xelerance/Openswan/blob/master/lib/libipsecconf/parser.l#L207
-[...]
-                                         ^
-which musl does not support:
-http://www.openwall.com/lists/musl/2013/09/16/1
+  - if the find fails, then the error is ignored because it is a
+    process substitution.
 
-Fixes
-http://autobuild.buildroot.net/results/70d/70da34c1528b51e92e9e60788f83733d70b33353/
+While the former could be fixed with "set -o pipefail", the latter can
+not be fixed thusly and we must use an intemediate file for it.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+So, fix both issues by using intermediate files, both to generate the
+list of files to include in the archive, and generate the archive in a
+temporary tarball.
+
+Fixes the following build issue, where the find is failing for whatever
+unknown reason:
+    http://autobuild.buildroot.net/results/20f/20fd76d2256eee81837f7e9bbaefbe79d7645ae9/
+
+And this one, where the process substitution failed, also for an unknown
+reason:
+    http://autobuild.buildroot.org/results/018/018971ea9227b386fe25d3c264c7e80b843a9f68/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/openswan/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ support/download/git | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/openswan/Config.in b/package/openswan/Config.in
-index 0370143..ba5d53d 100644
---- a/package/openswan/Config.in
-+++ b/package/openswan/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPENSWAN
- 	bool "openswan"
- 	depends on BR2_USE_MMU # iproute2
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # iproute2
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # GLOB_BRACE
- 	select BR2_PACKAGE_GMP
- 	select BR2_PACKAGE_IPROUTE2
- 	help
-@@ -9,6 +10,7 @@ config BR2_PACKAGE_OPENSWAN
+diff --git a/support/download/git b/support/download/git
+index 416cd1b..8aa284a 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -90,6 +90,7 @@ rm -rf .git
+ popd >/dev/null
  
- 	  http://www.openswan.org
- 
--comment "openswan needs a toolchain w/ headers >= 3.0"
-+comment "openswan needs a uClibc or glibc toolchain toolchain w/ headers >= 3.0"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || \
-+		BR2_TOOLCHAIN_USES_MUSL
+ # Generate the archive, sort with the C locale so that it is reproducible
++find "${basename}" -not -type d |LC_ALL=C sort >"${basename}.list"
+ tar cf - --numeric-owner --owner=0 --group=0 --mtime="${date}" \
+-         -T <(find "${basename}" -not -type d |LC_ALL=C sort) \
+-|gzip -n >"${output}"
++         -T "${basename}.list" >"${output}.tar"
++gzip -n <"${output}.tar" >"${output}"
 -- 
-2.8.1
+2.7.4
