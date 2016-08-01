@@ -1,121 +1,218 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Mon, 01 Aug 2016 22:29:07 +0200
-Subject: [Buildroot] [PATCH/RFC 1/1] package/libglob: new package
-In-Reply-To: <1469982560-13681-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1469982560-13681-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1470083347.4303.12.camel@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Aug 2016 22:24:15 +0200
+Subject: [Buildroot] [git commit] lighttpd: security bump version to 1.4.41
+Message-ID: <20160801203814.23F17807A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=846fd3d0d8e54db42b2768b596cad15be5459877
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On So, 2016-07-31 at 18:29 +0200, Bernd Kuhls wrote:
-> Needed for packages which need GLOB_BRACE & GLOB_NOMAGIC. These
-> defines
-> are not provided by musl toolchains.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Security fixes and fixes for bugs introduced in 1.4.40.
 
-sorry, I didn't noticed you already submitted a patch to add libglob. I
-submitted a similar patch, too:?http://lists.busybox.net/pipermail/buil
-droot/2016-August/168908.html.
+Drop 0002-autobuild-clock_gettime-lrt-with-glibc-2.17.patch, which is now
+upstream.
 
-Thanks to Thomas for pointing that out.
+Due to the patch removal, autoreconf is no longer needed.
 
-> ---
-> This patch is aimed at fixing the compilation of Openswan with musl,
-> but
-> the Openswan package needs many more patches so I am sending this
-> package
-> to be picked-up by other users trying to fix Openswan.
-> 
-> ?package/Config.in????????????|??1 +
-> ?package/libglob/Config.in????|??3 +++
-> ?package/libglob/libglob.hash |??2 ++
-> ?package/libglob/libglob.mk???| 27 +++++++++++++++++++++++++++
-> ?4 files changed, 33 insertions(+)
-> ?create mode 100644 package/libglob/Config.in
-> ?create mode 100644 package/libglob/libglob.hash
-> ?create mode 100644 package/libglob/libglob.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 645fa29..54e9368 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1291,6 +1291,7 @@ menu "Other"
-> ?	source "package/libffi/Config.in"
-> ?	source "package/libgee/Config.in"
-> ?	source "package/libglib2/Config.in"
-> +	source "package/libglob/Config.in"
-> ?	source "package/libical/Config.in"
-> ?	source "package/liblinear/Config.in"
-> ?	source "package/libnspr/Config.in"
-> diff --git a/package/libglob/Config.in b/package/libglob/Config.in
-> new file mode 100644
-> index 0000000..37ee520
-> --- /dev/null
-> +++ b/package/libglob/Config.in
-> @@ -0,0 +1,3 @@
-> +config BR2_PACKAGE_LIBGLOB
-> +	bool
-> +	default y if BR2_TOOLCHAIN_USES_MUSL
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Thomas: remove autoreconf, no longer needed.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...tobuild-clock_gettime-lrt-with-glibc-2.17.patch | 155 ---------------------
+ package/lighttpd/lighttpd.hash                     |   2 +-
+ package/lighttpd/lighttpd.mk                       |   4 +-
+ 3 files changed, 2 insertions(+), 159 deletions(-)
 
-So you make it non-selectable for the user. Probably it's okay, as
-there is no need for this package besides allowing packages needing the
-glob implementation to be build with musl.
-
-> diff --git a/package/libglob/libglob.hash
-> b/package/libglob/libglob.hash
-> new file mode 100644
-> index 0000000..591d20a
-> --- /dev/null
-> +++ b/package/libglob/libglob.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256
-> 4f1b204dad065689941c64828a92441fb316c9c7539b39525fa728125da65e22??lib
-> glob-1.0.tar.gz
-> diff --git a/package/libglob/libglob.mk b/package/libglob/libglob.mk
-> new file mode 100644
-> index 0000000..eeca67a
-> --- /dev/null
-> +++ b/package/libglob/libglob.mk
-> @@ -0,0 +1,27 @@
-> +####################################################################
-> ############
-> +#
-> +# libglob
-> +#
-> +####################################################################
-> ############
-> +
-> +LIBGLOB_VERSION = 1.0
-> +LIBGLOB_SITE = $(call github,voidlinux,libglob,$(LIBGLOB_VERSION))
-> +LIBGLOB_LICENSE = BSD-3c
-> +LIBGLOB_LICENSE_FILES = LICENSE
-> +
-> +LIBGLOB_ADD_TOOLCHAIN_DEPENDENCY = NO
-> +LIBGLOB_INSTALL_STAGING = YES
-> +
-> +define LIBGLOB_BUILD_CMDS
-> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
-> +endef
-> +
-> +define LIBGLOB_INSTALL_STAGING_CMDS
-> +	$(MAKE) PREFIX=/usr DESTDIR=$(STAGING_DIR) -C $(@D) install
-> +endef
-> +
-> +define LIBGLOB_INSTALL_TARGET_CMDS
-> +	$(MAKE) PREFIX=/usr DESTDIR=$(TARGET_DIR) -C $(@D) install
-> +endef
-
-This installs both, the shared and the static files.
-
-> +
-> +$(eval $(generic-package))
-
-Best regards
-J?rg Krause
+diff --git a/package/lighttpd/0002-autobuild-clock_gettime-lrt-with-glibc-2.17.patch b/package/lighttpd/0002-autobuild-clock_gettime-lrt-with-glibc-2.17.patch
+deleted file mode 100644
+index 90821b7..0000000
+--- a/package/lighttpd/0002-autobuild-clock_gettime-lrt-with-glibc-2.17.patch
++++ /dev/null
+@@ -1,155 +0,0 @@
+-From 4d920466f7a8163adb3de2862b48c53b24a9a915 Mon Sep 17 00:00:00 2001
+-From: Glenn Strauss <gstrauss@gluelogic.com>
+-Date: Mon, 18 Jul 2016 14:24:39 -0400
+-Subject: [PATCH] [autobuild] clock_gettime() -lrt with glibc < 2.17
+-
+-clock_gettime() needs -lrt with glibc < 2.17,
+-and possibly other platforms
+-
+-On systems without clock_gettime (-cough- Mac OSX -cough-),
+-use gettimeofday() (deprecated in POSIX.1-2008) which is slightly
+-lower precision, but reasonably fast in execution.  References:
+-http://stackoverflow.com/questions/5167269/clock-gettime-alternative-in-mac-os-x
+-http://stackoverflow.com/questions/11680461/monotonic-clock-on-osx
+-https://discussions.apple.com/thread/6023936?tstart=0
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- configure.ac        |  5 ++++-
+- src/connections.c   |  4 ++--
+- src/log.c           | 20 ++++++++++++++++++++
+- src/log.h           |  3 +++
+- src/mod_accesslog.c | 12 ++++++++----
+- 5 files changed, 37 insertions(+), 7 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index ffe6a17..1d172a1 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -286,6 +286,9 @@ AC_SEARCH_LIBS(hstrerror,resolv)
+- dnl On Haiku accept() and friends are in libnetwork
+- AC_SEARCH_LIBS(accept,network)
+- 
+-+dnl clock_gettime() needs -lrt with glibc < 2.17, and possibly other platforms
+-+AC_SEARCH_LIBS([clock_gettime],[rt])
+-+
+- save_LIBS=$LIBS
+- AC_SEARCH_LIBS(dlopen,dl,[
+-   AC_CHECK_HEADERS([dlfcn.h],[
+-@@ -699,7 +702,7 @@ AC_CHECK_FUNCS([dup2 getcwd inet_ntoa inet_ntop inet_pton issetugid memset mmap
+- 		  gethostbyname poll epoll_ctl getrlimit chroot \
+- 		  getuid select signal pathconf madvise posix_fadvise posix_madvise \
+- 		  writev sigaction sendfile64 send_file kqueue port_create localtime_r gmtime_r \
+--		  memset_s explicit_bzero])
+-+		  memset_s explicit_bzero clock_gettime])
+- 
+- AC_MSG_CHECKING(if weak symbols are supported)
+- AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+-diff --git a/src/connections.c b/src/connections.c
+-index e73a667..507838c 100644
+---- a/src/connections.c
+-+++ b/src/connections.c
+-@@ -692,7 +692,7 @@ static int connection_handle_read_state(server *srv, connection *con)  {
+- 	if (con->request_count > 1 && is_request_start) {
+- 		con->request_start = srv->cur_ts;
+- 		if (con->conf.high_precision_timestamps)
+--			clock_gettime(CLOCK_REALTIME, &con->request_start_hp);
+-+			log_clock_gettime_realtime(&con->request_start_hp);
+- 	}
+- 
+- 		/* if there is a \r\n\r\n in the chunkqueue
+-@@ -1000,7 +1000,7 @@ int connection_state_machine(server *srv, connection *con) {
+- 			con->request_start = srv->cur_ts;
+- 			con->read_idle_ts = srv->cur_ts;
+- 			if (con->conf.high_precision_timestamps)
+--				clock_gettime(CLOCK_REALTIME, &con->request_start_hp);
+-+				log_clock_gettime_realtime(&con->request_start_hp);
+- 
+- 			con->request_count++;
+- 			con->loops_per_request = 0;
+-diff --git a/src/log.c b/src/log.c
+-index b10bebe..21a2916 100644
+---- a/src/log.c
+-+++ b/src/log.c
+-@@ -28,6 +28,26 @@
+- # define O_LARGEFILE 0
+- #endif
+- 
+-+#ifndef HAVE_CLOCK_GETTIME
+-+#ifdef HAVE_SYS_TIME_H
+-+# include <sys/time.h>  /* gettimeofday() */
+-+#endif
+-+#endif
+-+
+-+int log_clock_gettime_realtime (struct timespec *ts) {
+-+      #ifdef HAVE_CLOCK_GETTIME
+-+	return clock_gettime(CLOCK_REALTIME, ts);
+-+      #else
+-+	/* Mac OSX does not provide clock_gettime()
+-+	 * e.g. defined(__APPLE__) && defined(__MACH__) */
+-+	struct timeval tv;
+-+	gettimeofday(&tv, NULL);
+-+	ts->tv_sec  = tv.tv_sec;
+-+	ts->tv_nsec = tv.tv_usec * 1000;
+-+	return 0;
+-+      #endif
+-+}
+-+
+- /* retry write on EINTR or when not all data was written */
+- ssize_t write_all(int fd, const void* buf, size_t count) {
+- 	ssize_t written = 0;
+-diff --git a/src/log.h b/src/log.h
+-index 0570f0b..32ce8d4 100644
+---- a/src/log.h
+-+++ b/src/log.h
+-@@ -4,6 +4,9 @@
+- 
+- #include "server.h"
+- 
+-+struct timespec; /* declaration */
+-+int log_clock_gettime_realtime (struct timespec *ts);
+-+
+- ssize_t write_all(int fd, const void* buf, size_t count);
+- 
+- /* Close fd and _try_ to get a /dev/null for it instead.
+-diff --git a/src/mod_accesslog.c b/src/mod_accesslog.c
+-index 5e82ef5..fba1cb4 100644
+---- a/src/mod_accesslog.c
+-+++ b/src/mod_accesslog.c
+-@@ -765,7 +765,7 @@ REQUESTDONE_FUNC(log_access_write) {
+- 						off_t t; /*(expected to be 64-bit since large file support enabled)*/
+- 						long ns;
+- 						if (!(f->opt & FORMAT_FLAG_TIME_BEGIN)) {
+--							if (0 == ts.tv_sec) clock_gettime(CLOCK_REALTIME, &ts);
+-+							if (0 == ts.tv_sec) log_clock_gettime_realtime(&ts);
+- 							t = (off_t)ts.tv_sec;
+- 							ns = ts.tv_nsec;
+- 						} else {
+-@@ -787,7 +787,7 @@ REQUESTDONE_FUNC(log_access_write) {
+- 						long ns;
+- 						char *ptr;
+- 						if (!(f->opt & FORMAT_FLAG_TIME_BEGIN)) {
+--							if (0 == ts.tv_sec) clock_gettime(CLOCK_REALTIME, &ts);
+-+							if (0 == ts.tv_sec) log_clock_gettime_realtime(&ts);
+- 							ns = ts.tv_nsec;
+- 						} else {
+- 							ns = con->request_start_hp.tv_nsec;
+-@@ -880,9 +880,13 @@ REQUESTDONE_FUNC(log_access_write) {
+- 				} else {
+- 					const struct timespec * const bs = &con->request_start_hp;
+- 					off_t tdiff; /*(expected to be 64-bit since large file support enabled)*/
+--					if (0 == ts.tv_sec) clock_gettime(CLOCK_REALTIME, &ts);
+-+					if (0 == ts.tv_sec) log_clock_gettime_realtime(&ts);
+- 					tdiff = (off_t)(ts.tv_sec - bs->tv_sec)*1000000000 + (ts.tv_nsec - bs->tv_nsec);
+--					if (f->opt & FORMAT_FLAG_TIME_MSEC) {
+-+					if (tdiff <= 0) {
+-+						/* sanity check for time moving backwards
+-+						 * (daylight savings adjustment or leap seconds or ?) */
+-+						tdiff  = -1;
+-+					} else if (f->opt & FORMAT_FLAG_TIME_MSEC) {
+- 						tdiff +=  999999; /* ceil */
+- 						tdiff /= 1000000;
+- 					} else if (f->opt & FORMAT_FLAG_TIME_USEC) {
+--- 
+-2.7.3
+-
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 19e175b..1ed0095 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,2 +1,2 @@
+ # From http://www.lighttpd.net/
+-sha256	80450dfcf7604d6c516a00a0ce750937074ef844bbdee3b3f23384187b9d4f8d	lighttpd-1.4.40.tar.xz
++sha256	4bcc383ef6d6dc7b284f68882d71a178e2986c83c4e85eeb3c8f3b882e346b6c	lighttpd-1.4.41.tar.xz
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index b6784b8..37ab939 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,14 +5,12 @@
+ ################################################################################
+ 
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).40
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).41
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3c
+ LIGHTTPD_LICENSE_FILES = COPYING
+ LIGHTTPD_DEPENDENCIES = host-pkgconf
+-# For 0002-autobuild-clock_gettime-lrt-with-glibc-2.17.patch
+-LIGHTTPD_AUTORECONF = YES
+ LIGHTTPD_CONF_OPTS = \
+ 	--libdir=/usr/lib/lighttpd \
+ 	--libexecdir=/usr/lib
