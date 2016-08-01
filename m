@@ -1,49 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Aug 2016 22:08:16 +0200
-Subject: [Buildroot] [git commit] package/xenomai: introduce a
-	BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS option
-Message-ID: <20160801200926.8EC8F81F4D@busybox.osuosl.org>
+Date: Mon, 1 Aug 2016 22:09:17 +0200
+Subject: [Buildroot] [git commit] package/xenomai: disable for musl
+	toolchains
+Message-ID: <20160801200926.A9F4E81F4D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad3dcf0050787061f8a6cf5b07760811a4404daa
+commit: https://git.buildroot.net/buildroot/commit/?id=b845a1541f4c40e028a7351ca183ea3c6db56246
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Introduce BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS to hold the
-architectures than can build and use Xenomai on the target.
+After fixing the <bits/local_lim.h> issue by using <limits.h>, the
+build still fail with udefined __WORDSIZE.
+
+Adding <sys/user.h> to define __WORDSIZE reveal that xenomai use
+<error.h> which is not provided by musl.
+
+The discussion on the musl mailing list [1] about glibc error reporting
+functions concluded to not add this support in the C library.
+
+For now, disable Xenomai user space support for musl toolchains since
+it require several patches to build correctly and needs to remove each
+glibc error reporting functions.
+
+Users interested in musl support for Xenomai can work with upstream to
+fix these issues and revert this patch.
+
+[1] http://www.openwall.com/lists/musl/2014/06/29/8
+
+Fixes:
+http://autobuild.buildroot.net/results/e36/e36a21c1df33bdd3fbc61d516a3e8f7c5f7c41af
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xenomai/Config.in | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ package/xenomai/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index d4c8a89..a4a2795 100644
+index 3de7bde..32c5124 100644
 --- a/package/xenomai/Config.in
 +++ b/package/xenomai/Config.in
-@@ -1,13 +1,17 @@
+@@ -4,14 +4,16 @@ config BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
+ 	depends on BR2_i386 || BR2_x86_64 || (BR2_arm && !BR2_ARM_CPU_ARMV7M) || \
+ 		BR2_bfin || BR2_powerpc || BR2_sh4
+ 
 -comment "xenomai needs a toolchain w/ threads"
 -	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+config BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
-+	bool
-+	default y
- 	depends on BR2_i386 || BR2_x86_64 || BR2_arm || \
- 		   BR2_bfin || BR2_powerpc || BR2_sh4
++comment "xenomai needs an glibc or uClibc toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
  
-+comment "xenomai needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
-+
  config BR2_PACKAGE_XENOMAI
  	bool "Xenomai Userspace"
-+	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
  	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_i386 || BR2_x86_64 || BR2_arm || \
--		BR2_bfin || BR2_powerpc || BR2_sh4
++	# uses <error.h>, __WORDSIZE and bits/local_lim.h
++	depends on !BR2_TOOLCHAIN_USES_MUSL
  	help
  	  Real-Time Framework for Linux
  	  http://www.xenomai.org
