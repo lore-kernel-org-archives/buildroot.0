@@ -1,44 +1,76 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Aug 2016 23:39:19 +0200
-Subject: [Buildroot] [PATCH] i2c-tools: depend on BUSYBOX_SHOW_OTHERS
-In-Reply-To: <20160801232427.14d92770@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 1 Aug 2016 23:24:27 +0200")
-References: <1469973369-5445-1-git-send-email-bgolaszewski@baylibre.com>
- <20160801232427.14d92770@free-electrons.com>
-Message-ID: <87h9b4np88.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 1 Aug 2016 23:59:09 +0200
+Subject: [Buildroot] [PATCH 1/2] package/Makefile.in should grab
+ HOST_DIR headers using -isystem instead of -I.
+In-Reply-To: <20160725195227.21112-1-draeman@bbn.com>
+References: <20160725195227.21112-1-draeman@bbn.com>
+Message-ID: <20160801215909.GA5990@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+David, All,
 
- > Hello,
- > On Sun, 31 Jul 2016 15:56:09 +0200, Bartosz Golaszewski wrote:
- >> As of version 1.25.0 busybox by default includes a nearly complete
- >> implementation of i2c-tools. Hide the upstream version unless the
- >> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS option is selected.
- >> 
- >> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
- >> ---
- >> package/i2c-tools/Config.in | 1 +
- >> 1 file changed, 1 insertion(+)
+On 2016-07-25 15:52 -0400, David Raeman spake thusly:
+> HOST_CFLAGS includes a search path for HOST_DIR/usr/include using -I.  When
+> HOST_CFLAGS is used by a package, these flags are passed to the compiler ahead
+> of flags passed by the package's internal make system.  If a package has a
+> header file with the same name as a header file in HOST_DIR, this causes the
+> toolchain to prefer the file from the system include directory because its -I
+> appears first on the command line.  I believe conflicts should prefer the file
+> provided by the package.  This can be accomplished by using -isystem, which is
+> more appropriate then -I for system-level include paths.
+[--SNIP--]
 
- > Applied to master, thanks. However, I noticed that the Busybox symlinks
- > are installed in usr/sbin, while the full-blown i2c-tools binaries are
- > installed in usr/bin. Perhaps we should install the i2c-tools binaries
- > in usr/sbin, to follow what Busybox does, and have i2c-tools add
- > busybox to its DEPENDENCIES when busybox is enabled, so that it
- > overwrites the Busybox symlinks?
+In fact, this does not work, and the patch was reverted (for background).
 
- > Peter?
+What we need is that gcc follows the following sequence when looking for
+headers:
 
-Yes, I think that would be a good idea. E.G. Debian also install them
-into usr/sbin:
+ 1- search paths specified with -I by the package
 
-https://packages.debian.org/stretch/amd64/i2c-tools/filelist
+ 2- search our $(HOST_DIR)/usr/include
+
+ 3- search the host system /usr/include
+
+However, I can't find anything in the gcc manpage that allows to add the
+search path we need in (2).
+
+All I can see is -idirafter, to add search paths after all other
+non-system and system paths.
+
+So, probably the following would not be very far from what we'd have to
+do:
+
+    -nostdinc -idirafter $(HOST_DIR)/usr/include -idirafter /usr/include
+
+This tells gcc to not look at the system include path, so it is left
+with only the paths specified by the package, and then as a fallback,
+out $(HOST_DIR)/usr/include, and then as a last resort, the host-system
+/usr/include dirs, since the last two are -idirafter:
+
+    -idirafter dir
+        Search dir for header files, but do it after all directories
+        specified with -I and the standard system directories have
+        been exhausted. dir is  treated as a system include directory.
+
+Thoughts?
+
+David, would you care to see if:
+
+ 1- it fixes your own problem?
+
+ 2- it fixes the python issues we've had with -isystem?
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
