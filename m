@@ -1,42 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Aug 2016 22:09:05 +0200
-Subject: [Buildroot] [git commit] package/xenomai: disable for cortex-M cpus
-Message-ID: <20160801200926.9B71F8211B@busybox.osuosl.org>
+Date: Mon, 1 Aug 2016 22:09:42 +0200
+Subject: [Buildroot] [PATCH 1/3] package/xenomai: introduce a
+ BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS option
+In-Reply-To: <1470069021-24233-1-git-send-email-romain.naour@gmail.com>
+References: <1470069021-24233-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160801220942.1a0dc484@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c946f1a909b8b450a9b0f904d0cf62933b1f99a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Following include/asm-arm/features.h, Xenomai doesn't support cortex-M
-cpus.
+On Mon,  1 Aug 2016 18:30:19 +0200, Romain Naour wrote:
+> Introduce BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS to hold the
+> architectures than can build and use Xenomai on the target.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  package/xenomai/Config.in | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
 
-error "Could not find current ARM architecture"
+Series applied, thanks!
 
-Fixes:
-http://autobuild.buildroot.net/results/06a/06a52b2c2c23df595f58feb6b95437fc65a86d31
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xenomai/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index a4a2795..3de7bde 100644
---- a/package/xenomai/Config.in
-+++ b/package/xenomai/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_XENOMAI_ARCH_SUPPORTS
- 	bool
- 	default y
--	depends on BR2_i386 || BR2_x86_64 || BR2_arm || \
--		   BR2_bfin || BR2_powerpc || BR2_sh4
-+	depends on BR2_i386 || BR2_x86_64 || (BR2_arm && !BR2_ARM_CPU_ARMV7M) || \
-+		BR2_bfin || BR2_powerpc || BR2_sh4
- 
- comment "xenomai needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
