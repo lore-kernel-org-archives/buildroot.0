@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Aug 2016 22:38:35 +0200
-Subject: [Buildroot] [git commit] package/luv: bump to version 1.9.1-0
-Message-ID: <20160801203856.96D67802A5@busybox.osuosl.org>
+Date: Mon, 1 Aug 2016 22:38:38 +0200
+Subject: [Buildroot] [git commit] package/luvi: bump to version 2.7.5
+Message-ID: <20160801203856.A30CD802A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fd932eeb6fbbf966c53680d9a7c5f9108bde185
+commit: https://git.buildroot.net/buildroot/commit/?id=7d5dea41384c09fa4de146036c799db524cbc785
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/luv/luv.hash | 2 +-
- package/luv/luv.mk   | 2 +-
+ package/luvi/luvi.hash | 2 +-
+ package/luvi/luvi.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luv/luv.hash b/package/luv/luv.hash
-index 8c5bbe3..140fe96 100644
---- a/package/luv/luv.hash
-+++ b/package/luv/luv.hash
+diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
+index 313aef6..99fd69e 100644
+--- a/package/luvi/luvi.hash
++++ b/package/luvi/luvi.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256  6d49b899671236d9452c0bb95ea4a0c28aac13a959b9e87347241bc974ddd40b  luv-1.9.0-3.tar.gz
-+sha256  2eab80360f8ab6793612bb59d067a56664ac9a5a14988e0a09a53d0bff20c131  luv-1.9.1-0.tar.gz
-diff --git a/package/luv/luv.mk b/package/luv/luv.mk
-index 58686ee..43cecf5 100644
---- a/package/luv/luv.mk
-+++ b/package/luv/luv.mk
+-sha256  74d52e99174af46aebcf30e26bf5783df8fa3117f54792391bfef4d9c79c4e60  luvi-src-v2.7.2.tar.gz
++sha256  b36a3b96ec5852398338bc38567c5bb589783487c65130e1d702ff98fac3a6b7  luvi-src-v2.7.5.tar.gz
+diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+index 7506a8b..ade63f5 100644
+--- a/package/luvi/luvi.mk
++++ b/package/luvi/luvi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUV_VERSION = 1.9.0-3
-+LUV_VERSION = 1.9.1-0
- LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
- LUV_LICENSE = Apache-2.0
- LUV_LICENSE_FILES = LICENSE.txt
+-LUVI_VERSION = v2.7.2
++LUVI_VERSION = v2.7.5
+ LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
+ LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
+ LUVI_LICENSE = Apache-2.0
