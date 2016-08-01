@@ -1,87 +1,46 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon,  1 Aug 2016 14:17:28 -0300
-Subject: [Buildroot] [PATCH] post-image: Drop unneeded exit statement
-Message-ID: <1470071848-27587-1-git-send-email-festevam@gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 01 Aug 2016 20:24:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openswan: not available on musl
+In-Reply-To: <20160731230102.070d5413@free-electrons.com>
+References: <1469958682-6087-1-git-send-email-bernd.kuhls@t-online.de>
+ <1469969267.9042.2.camel@embedded.rocks> <20160731160517.GJ3620@tarshish>
+ <20160731230102.070d5413@free-electrons.com>
+Message-ID: <1470075858.4303.2.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+On So, 2016-07-31 at 23:01 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sun, 31 Jul 2016 19:05:17 +0300, Baruch Siach wrote:
+> 
+> > 
+> > netbsd-queue is a header only package, so it adds nothing to
+> > packages that?
+> > don't use it. libglob adds libglob.so that is only useful for few
+> > packages. We?
+> > can do something similar to way we handle gettext by adding
+> > 
+> > ? select BR2_PACKAGE_LIBGLOB if BR2_TOOLCHAIN_USES_MUSL
+> > 
+> > for each such package.
+> 
+> Agreed.
 
-There is no need for the 'exit' statement in the post-image scripts,
-so just remove it.
+Ok. I will submit a patch for adding libglob. In fellow-up patches we
+could add this dependency.
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- board/freescale/imx25pdk/post-image.sh    | 2 --
- board/freescale/imx51evk/post-image.sh    | 2 --
- board/freescale/imx53loco/post-image.sh   | 2 --
- board/freescale/imx6ulevk/post-image.sh   | 2 --
- board/freescale/imx7dsdb/post-image.sh    | 2 --
- board/technexion/imx6ulpico/post-image.sh | 2 --
- 6 files changed, 12 deletions(-)
+> BTW, the other day I was wondering if we shouldn't add another dummy
+> package for musl that adds the <sys/cdefs.h> header. It's supposedly
+> an
+> internal glibc header but *lots* of packages use the __BEGIN_DECLS /
+> __END_DECLS definitions, and it's really annoying to fix them all,
+> for
+> not a huge benefit.
 
-diff --git a/board/freescale/imx25pdk/post-image.sh b/board/freescale/imx25pdk/post-image.sh
-index 8757355..b4ac460 100755
---- a/board/freescale/imx25pdk/post-image.sh
-+++ b/board/freescale/imx25pdk/post-image.sh
-@@ -12,5 +12,3 @@ genimage \
-   --inputpath "${BINARIES_DIR}" \
-   --outputpath "${BINARIES_DIR}" \
-   --config "${GENIMAGE_CFG}"
--
--exit $?
-diff --git a/board/freescale/imx51evk/post-image.sh b/board/freescale/imx51evk/post-image.sh
-index 8757355..b4ac460 100755
---- a/board/freescale/imx51evk/post-image.sh
-+++ b/board/freescale/imx51evk/post-image.sh
-@@ -12,5 +12,3 @@ genimage \
-   --inputpath "${BINARIES_DIR}" \
-   --outputpath "${BINARIES_DIR}" \
-   --config "${GENIMAGE_CFG}"
--
--exit $?
-diff --git a/board/freescale/imx53loco/post-image.sh b/board/freescale/imx53loco/post-image.sh
-index 8757355..b4ac460 100755
---- a/board/freescale/imx53loco/post-image.sh
-+++ b/board/freescale/imx53loco/post-image.sh
-@@ -12,5 +12,3 @@ genimage \
-   --inputpath "${BINARIES_DIR}" \
-   --outputpath "${BINARIES_DIR}" \
-   --config "${GENIMAGE_CFG}"
--
--exit $?
-diff --git a/board/freescale/imx6ulevk/post-image.sh b/board/freescale/imx6ulevk/post-image.sh
-index 8757355..b4ac460 100755
---- a/board/freescale/imx6ulevk/post-image.sh
-+++ b/board/freescale/imx6ulevk/post-image.sh
-@@ -12,5 +12,3 @@ genimage \
-   --inputpath "${BINARIES_DIR}" \
-   --outputpath "${BINARIES_DIR}" \
-   --config "${GENIMAGE_CFG}"
--
--exit $?
-diff --git a/board/freescale/imx7dsdb/post-image.sh b/board/freescale/imx7dsdb/post-image.sh
-index 8757355..b4ac460 100755
---- a/board/freescale/imx7dsdb/post-image.sh
-+++ b/board/freescale/imx7dsdb/post-image.sh
-@@ -12,5 +12,3 @@ genimage \
-   --inputpath "${BINARIES_DIR}" \
-   --outputpath "${BINARIES_DIR}" \
-   --config "${GENIMAGE_CFG}"
--
--exit $?
-diff --git a/board/technexion/imx6ulpico/post-image.sh b/board/technexion/imx6ulpico/post-image.sh
-index 8757355..b4ac460 100755
---- a/board/technexion/imx6ulpico/post-image.sh
-+++ b/board/technexion/imx6ulpico/post-image.sh
-@@ -12,5 +12,3 @@ genimage \
-   --inputpath "${BINARIES_DIR}" \
-   --outputpath "${BINARIES_DIR}" \
-   --config "${GENIMAGE_CFG}"
--
--exit $?
--- 
-1.9.1
+Yes, this could be done too to ease building with musl.
+
+J?rg
