@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Aug 2016 09:19:02 +0200
-Subject: [Buildroot] Analysis of build results for 2016-07-29
-In-Reply-To: <CACcFhEWvcokFB0WFsVpv6PaB-5QBnDNvhgSPFGmk43=zq8D6=A@mail.gmail.com>
-References: <20160730063032.3A6FE10161A@stock.ovh.net>
- <20160730232322.4eca1a53@free-electrons.com>
- <CACcFhEWvcokFB0WFsVpv6PaB-5QBnDNvhgSPFGmk43=zq8D6=A@mail.gmail.com>
-Message-ID: <20160802091902.32b28212@free-electrons.com>
+Date: Tue, 2 Aug 2016 09:20:16 +0200
+Subject: [Buildroot] [PATCH v2] toolchain: Bump ARC tools to
+ arc-2016.09-eng007 and PIE fix
+In-Reply-To: <1470114240.5444.0.camel@synopsys.com>
+References: <1470054635-30426-1-git-send-email-vzakhar@synopsys.com>
+ <20160801230036.264c1e96@free-electrons.com>
+ <1470114240.5444.0.camel@synopsys.com>
+Message-ID: <20160802092016.4a9537b9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +15,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 1 Aug 2016 21:23:59 -0400, Olivier Singla wrote:
+On Tue, 2 Aug 2016 05:05:35 +0000, Alexey Brodkin wrote:
 
-> Would-you mind to add this patch to the directory package/shellinabox?
-> This should do it, this is actually a patch which was posted on the
-> shellinabox forum.
-> I did a few build successfully (x86-64: uClibc and glibc - arm: glibc).
+> Thanks for doing that.
+> Care to rebuild pre-built BR tools for ARC?
 
-Thanks! Could you submit this as a proper patch for Buildroot?
+-rc1 is going to be released in a few days, and my plan is to wait for
+-rc1 to rebuild all the toolchains.
 
-Thanks a lot!
+Would this be OK?
+
+Thanks,
 
 Thomas
 -- 
