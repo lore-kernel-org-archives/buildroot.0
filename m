@@ -1,35 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Aug 2016 13:08:59 +0200
-Subject: [Buildroot] [git commit] i2c-tools: install binaries to /usr/sbin
-Message-ID: <20160802110954.EC8A28027A@busybox.osuosl.org>
+From: David Raeman <draeman@bbn.com>
+Date: Tue, 2 Aug 2016 08:21:04 -0400
+Subject: [Buildroot] [PATCH 1/2] package/Makefile.in should grab
+	HOST_DIR headers using -isystem instead of -I.
+In-Reply-To: <20160801215909.GA5990@free.fr>
+References: <20160725195227.21112-1-draeman@bbn.com>
+ <20160801215909.GA5990@free.fr>
+Message-ID: <008001d1ecb8$577afab0$0670f010$@bbn.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=484fd99092560a077761327653c25df4b868befd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Yann, All,
 
-Upstream i2c-tools executables are installed to /usr/sbin by default.
-Make buildroot match this behavior.
+On Mon, Aug 1, 2016 at 5:59 PM, Yann E. MORIN wrote:
+>  2- it fixes the python issues we've had with -isystem?
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/i2c-tools/i2c-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I see that you already backed away from this idea, but I thought I'd
+still chime in on the python question.  You may have missed my email
+about what is causing the python issue - please see:
+http://lists.busybox.net/pipermail/buildroot/2016-July/168710.html.
 
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 38f84a3..e16b940 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -53,7 +53,7 @@ endef
- define I2C_TOOLS_INSTALL_TARGET_CMDS
- 	for i in i2cdump i2cget i2cset i2cdetect; \
- 	do \
--		$(INSTALL) -m 755 -D $(@D)/tools/$$i $(TARGET_DIR)/usr/bin/$$i; \
-+		$(INSTALL) -m 755 -D $(@D)/tools/$$i $(TARGET_DIR)/usr/sbin/$$i; \
- 	done
- 	$(I2C_TOOLS_INSTALL_PYSMBUS)
- endef
+In a nutshell, the python setup.py script is peeking in the CPPFLAGS
+environment variable and is extracting any uses of the -I flag.  Then
+it's checking whether system libraries are installed in any of those
+locations, to know which modules can be enabled by the build.
+
+So using any flag to specify include directories other than -I will
+not work without patching the python setup.py script.
+
+Cheers,
+David
