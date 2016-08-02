@@ -1,34 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Aug 2016 22:35:36 +0200
-Subject: [Buildroot] [PATCH] ncurses: install PuTTY terminfo files
-In-Reply-To: <1470151527-36242-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1470151527-36242-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20160802223536.7995830f@free-electrons.com>
+Date: Tue, 2 Aug 2016 22:35:47 +0200
+Subject: [Buildroot] [git commit] readline: add project URL
+Message-ID: <20160802203556.19D0D820F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f1df4bd353d217530cc639ce58b3c5232d6933bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  2 Aug 2016 10:25:27 -0500, Matt Weber wrote:
-> From: David Glessner <david.glessner@rockwellcollins.com>
-> 
-> Signed-off-by: David Glessner <david.glessner@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/ncurses/ncurses.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/readline/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Applied to master, thanks. Since this long list of terminfo files
-installation was a bit silly, I've sent a follow-up patch on the list
-to improve this. Feel free to review/test this patch.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/readline/Config.in b/package/readline/Config.in
+index fbebf18..1cb0672 100644
+--- a/package/readline/Config.in
++++ b/package/readline/Config.in
+@@ -5,3 +5,5 @@ config BR2_PACKAGE_READLINE
+ 	  The GNU Readline library provides a set of functions for use
+ 	  by applications that allow users to edit command lines
+ 	  as they are typed in.
++
++	  https://cnswww.cns.cwru.edu/php/chet/readline/rltop.html
