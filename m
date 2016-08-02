@@ -1,119 +1,44 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 2 Aug 2016 16:05:42 -0500
-Subject: [Buildroot] [PATCH 2/2] ncurses: use foreach make loops instead
- of shell for loops
-In-Reply-To: <1470170076-28901-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1470170076-28901-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1470170076-28901-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CANQCQpZgxxcC0gSWL8KYNXRmGOpzh9LkZmyfwPL1-QOx8+2MiQ@mail.gmail.com>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Tue,  2 Aug 2016 17:38:03 -0400
+Subject: [Buildroot] [PATCH v2] initscripts: add newline to network stop
+	message
+Message-ID: <20160802213803.27953-1-vivien.didelot@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+The output of "/etc/init.d/S40network stop" was lacking a newline due to
+the usage of printf. Fix it by echoing the status.
 
-On Tue, Aug 2, 2016 at 3:34 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> The main benefit of using make foreach loops is that they will abort
-> if one of the iteration of the loop fails. The current for loops will
-> continue, and only report a failure if the last iteration was a
-> failure, but will silently ignore other errors.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/ncurses/ncurses.mk | 38 ++++++++++++++++++--------------------
->  1 file changed, 18 insertions(+), 20 deletions(-)
->
-> diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-> index 0ae8835..614b6ce 100644
-> --- a/package/ncurses/ncurses.mk
-> +++ b/package/ncurses/ncurses.mk
-> @@ -74,28 +74,26 @@ NCURSES_CONF_OPTS += --enable-widec
->  NCURSES_LIB_SUFFIX = w
->
->  define NCURSES_LINK_LIBS_STATIC
-> -       for lib in $(NCURSES_LIBS-y:%=lib%); do \
-> -               ln -sf $${lib}$(NCURSES_LIB_SUFFIX).a \
-> -                       $(1)/usr/lib/$${lib}.a; \
-> -       done
-> +       $(foreach lib,$(NCURSES_LIBS-y:%=lib%), \
-> +               ln -sf $(lib)$(NCURSES_LIB_SUFFIX).a $(1)/usr/lib/$(lib).a
-> +       )
->         ln -sf libncurses$(NCURSES_LIB_SUFFIX).a \
->                 $(1)/usr/lib/libcurses.a
->  endef
->
->  define NCURSES_LINK_LIBS_SHARED
-> -       for lib in $(NCURSES_LIBS-y:%=lib%); do \
-> -               ln -sf $${lib}$(NCURSES_LIB_SUFFIX).so \
-> -                       $(1)/usr/lib/$${lib}.so; \
-> -       done
-> +       $(foreach lib,$(NCURSES_LIBS-y:%=lib%), \
-> +               ln -sf $(lib)$(NCURSES_LIB_SUFFIX).so $(1)/usr/lib/$(lib).so
-> +       )
->         ln -sf libncurses$(NCURSES_LIB_SUFFIX).so \
->                 $(1)/usr/lib/libcurses.so
->  endef
->
->  define NCURSES_LINK_PC
-> -       for pc in $(NCURSES_LIBS-y); do \
-> -               ln -sf $${pc}$(NCURSES_LIB_SUFFIX).pc \
-> -                       $(1)/usr/lib/pkgconfig/$${pc}.pc; \
-> -       done
-> +       $(foreach pc,$(NCURSES_LIBS-y), \
-> +               ln -sf $(pc)$(NCURSES_LIB_SUFFIX).pc \
-> +                       $(1)/usr/lib/pkgconfig/$(pc).pc
-> +       )
->  endef
->
->  NCURSES_LINK_TARGET_LIBS = \
-> @@ -135,19 +133,19 @@ endef
->
->  ifneq ($(BR2_STATIC_LIBS),y)
->  define NCURSES_INSTALL_TARGET_LIBS
-> -       for lib in $(NCURSES_LIBS-y:%=lib%); do \
-> -               cp -dpf $(NCURSES_DIR)/lib/$${lib}$(NCURSES_LIB_SUFFIX).so* \
-> -                       $(TARGET_DIR)/usr/lib/; \
-> -       done
-> +       $(foreach lib,$(NCURSES_LIBS-y:%=lib%), \
-> +               cp -dpf $(NCURSES_DIR)/lib/$(lib)$(NCURSES_LIB_SUFFIX).so* \
-> +                       $(TARGET_DIR)/usr/lib/
-> +       )
->  endef
->  endif
->
->  ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
->  define NCURSES_INSTALL_TARGET_PROGS
-> -       for x in $(NCURSES_PROGS); do \
-> -               $(INSTALL) -m 0755 $(NCURSES_DIR)/progs/$$x \
-> -                       $(TARGET_DIR)/usr/bin/$$x; \
-> -       done
-> +       $(foreach prog,$(NCURSES_PROGS), \
-> +               $(INSTALL) -m 0755 $(NCURSES_DIR)/progs/$(prog) \
-> +                       $(TARGET_DIR)/usr/bin/$(prog)
-> +       )
->         ln -sf tset $(TARGET_DIR)/usr/bin/reset
->  endef
->  endif
-> --
-> 2.7.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+v1 -> v2: echo OK/FAIL instead of s/printf/echo/.
 
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+---
+ package/initscripts/init.d/S40network | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-
+diff --git a/package/initscripts/init.d/S40network b/package/initscripts/init.d/S40network
+index 7b11d8b..642c501 100755
+--- a/package/initscripts/init.d/S40network
++++ b/package/initscripts/init.d/S40network
+@@ -8,12 +8,14 @@ mkdir -p /run/network
+ 
+ case "$1" in
+   start)
+- 	echo "Starting network..."
++	printf "Starting network: "
+ 	/sbin/ifup -a
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+   stop)
+-	printf "Stopping network..."
++	printf "Stopping network: "
+ 	/sbin/ifdown -a
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+   restart|reload)
+ 	"$0" stop
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+2.9.2
