@@ -1,94 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  2 Aug 2016 22:34:35 +0200
-Subject: [Buildroot] [PATCH 1/2] ncurses: factorize terminfo files
-	installation
-Message-ID: <1470170076-28901-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 2 Aug 2016 22:15:41 +0200
+Subject: [Buildroot] [git commit] ncurses: install PuTTY terminfo files
+Message-ID: <20160802203454.13CFB820F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This long list of commands to copy the terminfo files from staging to
-target is really silly and can be factorized using a
-NCURSES_TERMINFO_FILES variable, which is then iterated through.
+commit: https://git.buildroot.net/buildroot/commit/?id=2ae057d0a8b43556bbc5e2e021c519f5d32e4e22
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: David Glessner <david.glessner@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ncurses/ncurses.mk | 47 ++++++++++++++++++++++------------------------
- 1 file changed, 22 insertions(+), 25 deletions(-)
+ package/ncurses/ncurses.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 55e5c81..0ae8835 100644
+index bef57c5..55e5c81 100644
 --- a/package/ncurses/ncurses.mk
 +++ b/package/ncurses/ncurses.mk
-@@ -55,6 +55,20 @@ NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += menu
- NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += panel
- NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += form
- 
-+NCURSES_TERMINFO_FILES = \
-+	a/ansi \
-+	p/putty \
-+	p/putty-vt100 \
-+	s/screen \
-+	v/vt100 \
-+	v/vt100-putty \
-+	v/vt102 \
-+	v/vt200 \
-+	v/vt220 \
-+	x/xterm \
-+	x/xterm-color \
-+	x/xterm-xfree86 \
-+
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
- NCURSES_CONF_OPTS += --enable-widec
- NCURSES_LIB_SUFFIX = w
-@@ -95,11 +109,10 @@ NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC,$(STAGING_DIR))
- 
+@@ -96,6 +96,7 @@ NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC,$(STAGING_DIR))
  NCURSES_CONF_OPTS += --enable-ext-colors
  NCURSES_ABI_VERSION = 6
--define NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty-256color $(TARGET_DIR)/usr/share/terminfo/p
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm+256color $(TARGET_DIR)/usr/share/terminfo/x
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-256color $(TARGET_DIR)/usr/share/terminfo/x
--endef
-+NCURSES_TERMINFO_FILES += \
-+	p/putty-256color \
-+	x/xterm+256color \
-+	x/xterm-256color
- 
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_PC
-@@ -145,26 +158,10 @@ define NCURSES_INSTALL_TARGET_CMDS
- 	$(NCURSES_LINK_TARGET_LIBS)
- 	$(NCURSES_INSTALL_TARGET_PROGS)
- 	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
--	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-color $(TARGET_DIR)/usr/share/terminfo/x
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-xfree86 $(TARGET_DIR)/usr/share/terminfo/x
--	mkdir -p $(TARGET_DIR)/usr/share/terminfo/v
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100 $(TARGET_DIR)/usr/share/terminfo/v
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100-putty $(TARGET_DIR)/usr/share/terminfo/v
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt102 $(TARGET_DIR)/usr/share/terminfo/v
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt200 $(TARGET_DIR)/usr/share/terminfo/v
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt220 $(TARGET_DIR)/usr/share/terminfo/v
--	mkdir -p $(TARGET_DIR)/usr/share/terminfo/a
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/a/ansi $(TARGET_DIR)/usr/share/terminfo/a
--	mkdir -p $(TARGET_DIR)/usr/share/terminfo/l
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
--	mkdir -p $(TARGET_DIR)/usr/share/terminfo/p
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty $(TARGET_DIR)/usr/share/terminfo/p
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty-vt100 $(TARGET_DIR)/usr/share/terminfo/p
--	mkdir -p $(TARGET_DIR)/usr/share/terminfo/s
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/s/screen $(TARGET_DIR)/usr/share/terminfo/s
+ define NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO
++	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty-256color $(TARGET_DIR)/usr/share/terminfo/p
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm+256color $(TARGET_DIR)/usr/share/terminfo/x
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-256color $(TARGET_DIR)/usr/share/terminfo/x
+ endef
+@@ -148,9 +149,9 @@ define NCURSES_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-color $(TARGET_DIR)/usr/share/terminfo/x
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-xfree86 $(TARGET_DIR)/usr/share/terminfo/x
 -	$(NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO)
-+	$(foreach terminfo,$(NCURSES_TERMINFO_FILES),\
-+		$(INSTALL) -D -m 0644 $(STAGING_DIR)/usr/share/terminfo/$(terminfo) \
-+			$(TARGET_DIR)/usr/share/terminfo/$(terminfo)
-+	)
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/v
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100 $(TARGET_DIR)/usr/share/terminfo/v
++	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100-putty $(TARGET_DIR)/usr/share/terminfo/v
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt102 $(TARGET_DIR)/usr/share/terminfo/v
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt200 $(TARGET_DIR)/usr/share/terminfo/v
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt220 $(TARGET_DIR)/usr/share/terminfo/v
+@@ -158,8 +159,12 @@ define NCURSES_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/a/ansi $(TARGET_DIR)/usr/share/terminfo/a
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/l
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
++	mkdir -p $(TARGET_DIR)/usr/share/terminfo/p
++	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty $(TARGET_DIR)/usr/share/terminfo/p
++	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty-vt100 $(TARGET_DIR)/usr/share/terminfo/p
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/s
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/s/screen $(TARGET_DIR)/usr/share/terminfo/s
++	$(NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO)
  endef # NCURSES_INSTALL_TARGET_CMDS
  
  #
--- 
-2.7.4
