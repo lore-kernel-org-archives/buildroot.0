@@ -1,52 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Aug 2016 22:49:01 +0200
-Subject: [Buildroot] [git commit] package/boost: context module needs ARM
-	instructions on ARM
-Message-ID: <20160802205027.88E5F800CE@busybox.osuosl.org>
+Date: Tue, 2 Aug 2016 22:51:24 +0200
+Subject: [Buildroot] [PATCH] package/boost: disable for cortex-M cpus
+In-Reply-To: <1470157264-9693-1-git-send-email-romain.naour@gmail.com>
+References: <1470157264-9693-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160802225124.14148e58@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=778ab4da4f9e9bf52c719cb6f17cf7df5693bf01
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The boost-context module contains ARM assembly code, which uses ARM
-instructions. Therefore, on Thumb-2 only platforms (such as Cortex-M),
-the following build error occurs:
+On Tue,  2 Aug 2016 19:01:04 +0200, Romain Naour wrote:
+> Triggers compiler error:
+> libs/context/src/asm/make_arm_aapcs_elf_gas.S: Assembler messages:
+> libs/context/src/asm/make_arm_aapcs_elf_gas.S:33: Error: unshifted register required -- `bic a1,a1,#15'
 
-libs/context/src/asm/make_arm_aapcs_elf_gas.S: Assembler messages:
-libs/context/src/asm/make_arm_aapcs_elf_gas.S:33: Error: unshifted register required -- `bic a1,a1,#15'
-libs/context/src/asm/make_arm_aapcs_elf_gas.S:42: Error: immediate value out of range
+This is ARM assembly, which indeed doesn't build on Thumb-2 only
+platforms.
 
-To avoid this error, we make the boost-context module depend on
-BR2_ARM_CPU_HAS_ARM.
+> +	depends on ((BR2_arm || BR2_armeb) && !BR2_ARM_CPU_ARMV7M) || \
 
-Fixes:
+So I believe BR2_ARM_CPU_HAS_ARM is more correct
+than !BR2_ARM_CPU_ARMV7M even though both have currently exactly the
+same meaning.
 
-  http://autobuild.buildroot.net/results/8f6770b59a343b9f710e9363b43227ee9f026660
+Thanks!
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-[Thomas: use BR2_ARM_CPU_HAS_ARM instead of a dependency on
-!BR2_ARM_CPU_ARMV7M.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/boost/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 3a27ae2..403bbf3 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -65,8 +65,8 @@ config BR2_PACKAGE_BOOST_CONTAINER
- # supported, but it doesn't build.
- config BR2_PACKAGE_BOOST_CONTEXT
- 	bool "boost-context"
--	depends on (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel \
--			|| BR2_powerpc || BR2_x86_64)
-+	depends on ((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-+		BR2_i386 || BR2_mips || BR2_mipsel || BR2_powerpc || BR2_x86_64
- 
- config BR2_PACKAGE_BOOST_COROUTINE
- 	bool "boost-coroutine"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
