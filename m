@@ -1,33 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 02 Aug 2016 19:15:18 +0200
-Subject: [Buildroot] [PATCH/RFC 1/1] package/libglob: new package
-References: <1469982560-13681-1-git-send-email-bernd.kuhls@t-online.de>
- <1470083347.4303.12.camel@embedded.rocks>
-Message-ID: <62177dxtet.ln2@ID-313208.user.individual.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue,  2 Aug 2016 19:25:55 +0200
+Subject: [Buildroot] [RFC] toolchain: libatomic needs NTPL threads support
+Message-ID: <1470158755-11455-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg,
+Cairo package fail to build when BR2_TOOLCHAIN_HAS_LIBATOMIC is set and
+BR2_TOOLCHAIN_HAS_THREADS_NPTL is not set:
+m68k-buildroot-uclinux-uclibc/bin/ld.real: cannot find -latomic
 
-Am Mon, 01 Aug 2016 22:29:07 +0200 schrieb J?rg Krause:
+Fixes:
+[arm]
+http://autobuild.buildroot.net/results/3d8dc45e41a043d2c2c26bfb26c3617499fbe671
+[m68k]
+http://autobuild.buildroot.net/results/318e01406e3e92eb589ee5b2231c671a4dbb6da4
 
-> Hi,
-> 
-> On So, 2016-07-31 at 18:29 +0200, Bernd Kuhls wrote:
->> Needed for packages which need GLOB_BRACE & GLOB_NOMAGIC. These
->> defines
->> are not provided by musl toolchains.
->> 
->> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> 
-> sorry, I didn't noticed you already submitted a patch to add libglob. I
-> submitted a similar patch, too:?http://lists.busybox.net/pipermail/buil
-> droot/2016-August/168908.html.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-common.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-yes, but your patch is better because it takes the static-only scenario
-into account. Therefore I closed my patch in patchworks.
-
-Regards, Bernd
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 5611b5b..42fee61 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -407,7 +407,7 @@ config BR2_TOOLCHAIN_HAS_SYNC_8
+ config BR2_TOOLCHAIN_HAS_LIBATOMIC
+ 	bool
+ 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && \
+-		BR2_TOOLCHAIN_HAS_THREADS
++		BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 
+ # __atomic intrinsics are available:
+ # - with gcc 4.8, either through built-ins or libatomic, on all
+-- 
+2.5.5
