@@ -1,41 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Aug 2016 13:07:51 +0200
-Subject: [Buildroot] [git commit] tcpdump: bump version to 4.8.0
-Message-ID: <20160802110954.D569C819A0@busybox.osuosl.org>
+Date: Tue, 2 Aug 2016 13:08:59 +0200
+Subject: [Buildroot] [git commit] i2c-tools: install binaries to /usr/sbin
+Message-ID: <20160802110954.EC8A28027A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae0411654e05f87939e20dbb2ffbe83ae03b4fee
+commit: https://git.buildroot.net/buildroot/commit/?id=484fd99092560a077761327653c25df4b868befd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Upstream i2c-tools executables are installed to /usr/sbin by default.
+Make buildroot match this behavior.
+
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tcpdump/tcpdump.hash | 2 +-
- package/tcpdump/tcpdump.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/i2c-tools/i2c-tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
-index 5943347..997cd42 100644
---- a/package/tcpdump/tcpdump.hash
-+++ b/package/tcpdump/tcpdump.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	6be520269a89036f99c0b2126713a60965953eab921002b07608ccfc0c47d9af	tcpdump-4.7.4.tar.gz
-+sha256 177385d9d17d1d99ba6aa3ea63a8400a5f4c54db62b83ac6d4da56944bee623b  tcpdump-4.8.0.tar.gz
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index 14b3503..559b816 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TCPDUMP_VERSION = 4.7.4
-+TCPDUMP_VERSION = 4.8.0
- TCPDUMP_SITE = http://www.tcpdump.org/release
- TCPDUMP_LICENSE = BSD-3c
- TCPDUMP_LICENSE_FILES = LICENSE
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index 38f84a3..e16b940 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -53,7 +53,7 @@ endef
+ define I2C_TOOLS_INSTALL_TARGET_CMDS
+ 	for i in i2cdump i2cget i2cset i2cdetect; \
+ 	do \
+-		$(INSTALL) -m 755 -D $(@D)/tools/$$i $(TARGET_DIR)/usr/bin/$$i; \
++		$(INSTALL) -m 755 -D $(@D)/tools/$$i $(TARGET_DIR)/usr/sbin/$$i; \
+ 	done
+ 	$(I2C_TOOLS_INSTALL_PYSMBUS)
+ endef
