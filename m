@@ -1,34 +1,95 @@
-From: David Raeman <draeman@bbn.com>
-Date: Tue, 2 Aug 2016 08:21:04 -0400
-Subject: [Buildroot] [PATCH 1/2] package/Makefile.in should grab
-	HOST_DIR headers using -isystem instead of -I.
-In-Reply-To: <20160801215909.GA5990@free.fr>
-References: <20160725195227.21112-1-draeman@bbn.com>
- <20160801215909.GA5990@free.fr>
-Message-ID: <008001d1ecb8$577afab0$0670f010$@bbn.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue,  2 Aug 2016 09:41:54 -0500
+Subject: [Buildroot] [PATCH] libseccomp: bump version to 2.3.1
+Message-ID: <1470148914-12757-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+From: Judd Meinders <judd.meinders@rockwellcollins.com>
 
-On Mon, Aug 1, 2016 at 5:59 PM, Yann E. MORIN wrote:
->  2- it fixes the python issues we've had with -isystem?
+Bump libseccomp version to 2.3.1 to enable power architectures.
 
-I see that you already backed away from this idea, but I thought I'd
-still chime in on the python question.  You may have missed my email
-about what is causing the python issue - please see:
-http://lists.busybox.net/pipermail/buildroot/2016-July/168710.html.
+Signed-off-by: Judd Meinders <judd.meinders@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ package/libseccomp/0002-musl.patch | 28 ----------------------------
+ package/libseccomp/Config.in       |  3 ++-
+ package/libseccomp/libseccomp.hash |  2 +-
+ package/libseccomp/libseccomp.mk   |  2 +-
+ 4 files changed, 4 insertions(+), 31 deletions(-)
+ delete mode 100644 package/libseccomp/0002-musl.patch
 
-In a nutshell, the python setup.py script is peeking in the CPPFLAGS
-environment variable and is extracting any uses of the -I flag.  Then
-it's checking whether system libraries are installed in any of those
-locations, to know which modules can be enabled by the build.
-
-So using any flag to specify include directories other than -I will
-not work without patching the python setup.py script.
-
-Cheers,
-David
+diff --git a/package/libseccomp/0002-musl.patch b/package/libseccomp/0002-musl.patch
+deleted file mode 100644
+index 9858d76..0000000
+--- a/package/libseccomp/0002-musl.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From eb5382287cd25235e760b5da4939510b11bbf2a1 Mon Sep 17 00:00:00 2001
+-From: Kylie McClain <somasis@exherbo.org>
+-Date: Fri, 1 Jan 2016 13:12:59 -0500
+-Subject: [PATCH] system.h: Remove conflicting kernel header include
+-
+-This fixes building on musl libc, since musl does not include kernel
+-headers. I've tested this as working on both glibc and musl.
+-
+-Signed-off-by: Kylie McClain <somasis@exherbo.org>
+-[Bernd: downloaded from upstream PR:
+- https://github.com/seccomp/libseccomp/pull/23]
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/system.h | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/src/system.h b/src/system.h
+-index 4660679..e84b0a0 100644
+---- a/src/system.h
+-+++ b/src/system.h
+-@@ -23,7 +23,6 @@
+- #define _SYSTEM_H
+- 
+- #include <linux/filter.h>
+--#include <linux/prctl.h>
+- 
+- #include "configure.h"
+- 
+diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
+index 4c34c54..ddfe9f0 100644
+--- a/package/libseccomp/Config.in
++++ b/package/libseccomp/Config.in
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_LIBSECCOMP
+ 	bool "libseccomp"
+ 	depends on BR2_aarch64 || BR2_mips || BR2_mipsel || BR2_mips64 || \
+-		BR2_mips64el || BR2_i386 || BR2_x86_64
++		BR2_mips64el || BR2_i386 || BR2_x86_64 || BR2_powerpc64 || \
++		BR2_powerpc
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ 	help
+ 	  High level interface to the Linux Kernel's seccomp filter
+diff --git a/package/libseccomp/libseccomp.hash b/package/libseccomp/libseccomp.hash
+index b0e145f..ef390ff 100644
+--- a/package/libseccomp/libseccomp.hash
++++ b/package/libseccomp/libseccomp.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 fee0a6671f160481dcd07760ea0df8b6d954bdd8b4ab20a423ac9ade5e4feced  libseccomp-v2.2.3.tar.gz
++sha256 09864282ae579c34bd5ef75ef3487200adfecaa51f5cffc7c7ad1ed2f89f5d6c libseccomp-v2.3.1.tar.gz
+diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+index 69559f7..03fc6cf 100644
+--- a/package/libseccomp/libseccomp.mk
++++ b/package/libseccomp/libseccomp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSECCOMP_VERSION = v2.2.3
++LIBSECCOMP_VERSION = v2.3.1
+ LIBSECCOMP_SITE = $(call github,seccomp,libseccomp,$(LIBSECCOMP_VERSION))
+ LIBSECCOMP_LICENSE = LGPLv2.1
+ LIBSECCOMP_LICENSE_FILES = LICENSE
+-- 
+1.9.1
