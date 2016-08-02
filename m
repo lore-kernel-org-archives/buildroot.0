@@ -1,38 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Aug 2016 21:42:46 +0200
-Subject: [Buildroot] [PATCH] package/openpowerlink: bump to v2.4.1
-In-Reply-To: <1470150826-1175-1-git-send-email-romain.naour@gmail.com>
-References: <1470150826-1175-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160802214246.6b66b0fb@free-electrons.com>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Tue,  2 Aug 2016 15:50:40 -0400
+Subject: [Buildroot] [PATCH] initscripts: add newline to network stop message
+Message-ID: <20160802195040.7210-1-vivien.didelot@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The output of "/etc/init.d/S40network stop" was lacking a newline due to
+the usage of printf. Fix it by using echo instead.
 
-On Tue,  2 Aug 2016 17:13:46 +0200, Romain Naour wrote:
-> Remove upstream patches.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  ...-veth-avoid-kernel-header-issue-with-musl.patch | 90 ----------------------
->  ...-Disable-Werror-date-time-for-kernel-3.14.patch | 35 ---------
->  ...6-PCIe-Fix-name-of-sched_priority-element.patch | 52 -------------
->  ...apps-include-stdarg.h-in-eventlogstring.h.patch | 61 ---------------
->  package/openpowerlink/openpowerlink.hash           |  8 +-
->  package/openpowerlink/openpowerlink.mk             |  2 +-
->  6 files changed, 5 insertions(+), 243 deletions(-)
->  delete mode 100644 package/openpowerlink/0004-veth-avoid-kernel-header-issue-with-musl.patch
->  delete mode 100644 package/openpowerlink/0005-PCIe-Driver-Disable-Werror-date-time-for-kernel-3.14.patch
->  delete mode 100644 package/openpowerlink/0006-PCIe-Fix-name-of-sched_priority-element.patch
->  delete mode 100644 package/openpowerlink/0007-apps-include-stdarg.h-in-eventlogstring.h.patch
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+---
+ package/initscripts/init.d/S40network | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/initscripts/init.d/S40network b/package/initscripts/init.d/S40network
+index 7b11d8b..213f5b5 100755
+--- a/package/initscripts/init.d/S40network
++++ b/package/initscripts/init.d/S40network
+@@ -12,7 +12,7 @@ case "$1" in
+ 	/sbin/ifup -a
+ 	;;
+   stop)
+-	printf "Stopping network..."
++	echo "Stopping network..."
+ 	/sbin/ifdown -a
+ 	;;
+   restart|reload)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.9.2
