@@ -1,35 +1,39 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 2 Aug 2016 08:15:49 +0000
-Subject: [Buildroot] [PATCH v2] toolchain: Bump ARC tools to
- arc-2016.09-eng007 and PIE fix
-In-Reply-To: <20160802092016.4a9537b9@free-electrons.com>
-References: <1470054635-30426-1-git-send-email-vzakhar@synopsys.com>
- <20160801230036.264c1e96@free-electrons.com>
- <1470114240.5444.0.camel@synopsys.com>
- <20160802092016.4a9537b9@free-electrons.com>
-Message-ID: <1470125653.5444.4.camel@synopsys.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 2 Aug 2016 10:16:39 +0100
+Subject: [Buildroot] [PATCH] tcpdump: bump version to 4.8.0
+Message-ID: <1470129399-36967-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/tcpdump/tcpdump.hash | 2 +-
+ package/tcpdump/tcpdump.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, 2016-08-02 at 09:20 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 2 Aug 2016 05:05:35 +0000, Alexey Brodkin wrote:
-> 
-> > 
-> > Thanks for doing that.
-> > Care to rebuild pre-built BR tools for ARC?
-> 
-> -rc1 is going to be released in a few days, and my plan is to wait for
-> -rc1 to rebuild all the toolchains.
-> 
-> Would this be OK?
-
-Sounds like a good plan!
-
--Alexey
+diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
+index 5943347..997cd42 100644
+--- a/package/tcpdump/tcpdump.hash
++++ b/package/tcpdump/tcpdump.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	6be520269a89036f99c0b2126713a60965953eab921002b07608ccfc0c47d9af	tcpdump-4.7.4.tar.gz
++sha256 177385d9d17d1d99ba6aa3ea63a8400a5f4c54db62b83ac6d4da56944bee623b  tcpdump-4.8.0.tar.gz
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index 14b3503..559b816 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TCPDUMP_VERSION = 4.7.4
++TCPDUMP_VERSION = 4.8.0
+ TCPDUMP_SITE = http://www.tcpdump.org/release
+ TCPDUMP_LICENSE = BSD-3c
+ TCPDUMP_LICENSE_FILES = LICENSE
+-- 
+2.7.3
