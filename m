@@ -1,35 +1,40 @@
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Tue,  2 Aug 2016 12:27:36 +0200
-Subject: [Buildroot] [PATCH 2/2] i2c-tools: install binaries to /usr/sbin
-In-Reply-To: <1470133656-13954-1-git-send-email-bgolaszewski@baylibre.com>
-References: <1470133656-13954-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <1470133656-13954-2-git-send-email-bgolaszewski@baylibre.com>
+Date: Tue, 2 Aug 2016 12:28:35 +0200
+Subject: [Buildroot] [PATCH] i2c-tools: depend on BUSYBOX_SHOW_OTHERS
+In-Reply-To: <20160801232427.14d92770@free-electrons.com>
+References: <1469973369-5445-1-git-send-email-bgolaszewski@baylibre.com>
+ <20160801232427.14d92770@free-electrons.com>
+Message-ID: <CAMpxmJXo6VWH8YWhE8h5qC1LZ3hkj=79ui4_ukeykGKZK5b2rA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream i2c-tools executables are installed to /usr/sbin by default.
-Make buildroot match this behavior.
+2016-08-01 23:24 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Sun, 31 Jul 2016 15:56:09 +0200, Bartosz Golaszewski wrote:
+>> As of version 1.25.0 busybox by default includes a nearly complete
+>> implementation of i2c-tools. Hide the upstream version unless the
+>> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS option is selected.
+>>
+>> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+>> ---
+>>  package/i2c-tools/Config.in | 1 +
+>>  1 file changed, 1 insertion(+)
+>
+> Applied to master, thanks. However, I noticed that the Busybox symlinks
+> are installed in usr/sbin, while the full-blown i2c-tools binaries are
+> installed in usr/bin. Perhaps we should install the i2c-tools binaries
+> in usr/sbin, to follow what Busybox does, and have i2c-tools add
+> busybox to its DEPENDENCIES when busybox is enabled, so that it
+> overwrites the Busybox symlinks?
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- package/i2c-tools/i2c-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Thomas,
 
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 38f84a3..e16b940 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -53,7 +53,7 @@ endef
- define I2C_TOOLS_INSTALL_TARGET_CMDS
- 	for i in i2cdump i2cget i2cset i2cdetect; \
- 	do \
--		$(INSTALL) -m 755 -D $(@D)/tools/$$i $(TARGET_DIR)/usr/bin/$$i; \
-+		$(INSTALL) -m 755 -D $(@D)/tools/$$i $(TARGET_DIR)/usr/sbin/$$i; \
- 	done
- 	$(I2C_TOOLS_INSTALL_PYSMBUS)
- endef
--- 
-2.7.4
+thanks for the suggestion. I sent two follow-up patches.
+
+Best regards,
+Bartosz Golaszewski
