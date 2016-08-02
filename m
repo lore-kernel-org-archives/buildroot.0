@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Aug 2016 22:14:38 +0200
-Subject: [Buildroot] [PATCH] lldpd: add sysv init script
-In-Reply-To: <20160802162411.19412-1-vivien.didelot@savoirfairelinux.com>
-References: <20160802162411.19412-1-vivien.didelot@savoirfairelinux.com>
-Message-ID: <20160802221438.4711f2c2@free-electrons.com>
+Date: Tue, 2 Aug 2016 22:15:01 +0200
+Subject: [Buildroot] [PATCH] lldpd: bump version to 0.9.4
+In-Reply-To: <20160802162517.19853-1-vivien.didelot@savoirfairelinux.com>
+References: <20160802162517.19853-1-vivien.didelot@savoirfairelinux.com>
+Message-ID: <20160802221501.290472f9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  2 Aug 2016 12:24:11 -0400, Vivien Didelot wrote:
+On Tue,  2 Aug 2016 12:25:17 -0400, Vivien Didelot wrote:
 
-> +case $1 in
-> +  start)
-> +    printf "Starting lldpd..."
-> +    start-stop-daemon -S -q -p /var/run/lldpd.pid --exec /usr/sbin/lldpd
+> -LLDPD_VERSION = 0.7.19
+> +LLDPD_VERSION = 0.9.4
+>  LLDPD_SITE = http://media.luffy.cx/files/lldpd
+>  LLDPD_DEPENDENCIES = host-pkgconf libevent
+>  LLDPD_LICENSE = ISC
+>  LLDPD_LICENSE_FILES = README.md
+> +LLDPD_AUTORECONF = YES
 
-We normally do:
-
-	printf "Starting foo: "
-	...
-	[ $? -eq 0 ] && echo "OK" || echo "FAIL"
-
-so I've changed this and applied. Thanks!
+I've added a comment above this line to explain why we autoreconf, and
+then I've applied. Thanks!
 
 Thomas
 -- 
