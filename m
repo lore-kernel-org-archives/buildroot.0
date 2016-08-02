@@ -1,35 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Aug 2016 09:41:12 +0200
-Subject: [Buildroot] How to login automatically without typing root in
- buildroot x86 64 QEMU?
-In-Reply-To: <CAFXrp_e2sDqZGZKM_B2rgBuh_1oXWhJgW6wgMzfBWsGQ_hnV7g@mail.gmail.com>
-References: <CAFXrp_e2sDqZGZKM_B2rgBuh_1oXWhJgW6wgMzfBWsGQ_hnV7g@mail.gmail.com>
-Message-ID: <20160802094112.072e3382@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 2 Aug 2016 08:15:49 +0000
+Subject: [Buildroot] [PATCH v2] toolchain: Bump ARC tools to
+ arc-2016.09-eng007 and PIE fix
+In-Reply-To: <20160802092016.4a9537b9@free-electrons.com>
+References: <1470054635-30426-1-git-send-email-vzakhar@synopsys.com>
+ <20160801230036.264c1e96@free-electrons.com>
+ <1470114240.5444.0.camel@synopsys.com>
+ <20160802092016.4a9537b9@free-electrons.com>
+Message-ID: <1470125653.5444.4.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Tue, 2 Aug 2016 07:24:24 +0100, Ciro Santilli wrote:
+On Tue, 2016-08-02 at 09:20 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 2 Aug 2016 05:05:35 +0000, Alexey Brodkin wrote:
+> 
+> > 
+> > Thanks for doing that.
+> > Care to rebuild pre-built BR tools for ARC?
+> 
+> -rc1 is going to be released in a few days, and my plan is to wait for
+> -rc1 to rebuild all the toolchains.
+> 
+> Would this be OK?
 
-> How to configure buildroot to skip that and login directly?
+Sounds like a good plan!
 
-Override the default /etc/inittab, and start a shell process directly
-rather than a getty process. I.e, replace:
-
-console::respawn:/sbin/getty -n -L  console 0 vt100 # GENERIC_SERIAL
-
-by:
-
-console::respawn:/bin/sh
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-Alexey
