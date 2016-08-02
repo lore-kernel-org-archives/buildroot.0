@@ -1,35 +1,118 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Aug 2016 22:51:24 +0200
-Subject: [Buildroot] [PATCH] package/boost: disable for cortex-M cpus
-In-Reply-To: <1470157264-9693-1-git-send-email-romain.naour@gmail.com>
-References: <1470157264-9693-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160802225124.14148e58@free-electrons.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 2 Aug 2016 16:04:36 -0500
+Subject: [Buildroot] [PATCH 1/2] ncurses: factorize terminfo files
+	installation
+In-Reply-To: <1470170076-28901-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1470170076-28901-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CANQCQpaBzvaWMPTH07HzV56GErDusicZqSmvPX-S8V3n0Awizw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Tue,  2 Aug 2016 19:01:04 +0200, Romain Naour wrote:
-> Triggers compiler error:
-> libs/context/src/asm/make_arm_aapcs_elf_gas.S: Assembler messages:
-> libs/context/src/asm/make_arm_aapcs_elf_gas.S:33: Error: unshifted register required -- `bic a1,a1,#15'
+On Tue, Aug 2, 2016 at 3:34 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> This long list of commands to copy the terminfo files from staging to
+> target is really silly and can be factorized using a
+> NCURSES_TERMINFO_FILES variable, which is then iterated through.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/ncurses/ncurses.mk | 47 ++++++++++++++++++++++------------------------
+>  1 file changed, 22 insertions(+), 25 deletions(-)
+>
+> diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+> index 55e5c81..0ae8835 100644
+> --- a/package/ncurses/ncurses.mk
+> +++ b/package/ncurses/ncurses.mk
+> @@ -55,6 +55,20 @@ NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += menu
+>  NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += panel
+>  NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += form
+>
+> +NCURSES_TERMINFO_FILES = \
+> +       a/ansi \
+> +       p/putty \
+> +       p/putty-vt100 \
+> +       s/screen \
+> +       v/vt100 \
+> +       v/vt100-putty \
+> +       v/vt102 \
+> +       v/vt200 \
+> +       v/vt220 \
+> +       x/xterm \
+> +       x/xterm-color \
+> +       x/xterm-xfree86 \
+> +
+>  ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+>  NCURSES_CONF_OPTS += --enable-widec
+>  NCURSES_LIB_SUFFIX = w
+> @@ -95,11 +109,10 @@ NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC,$(STAGING_DIR))
+>
+>  NCURSES_CONF_OPTS += --enable-ext-colors
+>  NCURSES_ABI_VERSION = 6
+> -define NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty-256color $(TARGET_DIR)/usr/share/terminfo/p
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm+256color $(TARGET_DIR)/usr/share/terminfo/x
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-256color $(TARGET_DIR)/usr/share/terminfo/x
+> -endef
+> +NCURSES_TERMINFO_FILES += \
+> +       p/putty-256color \
+> +       x/xterm+256color \
+> +       x/xterm-256color
+>
+>  NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
+>  NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_PC
+> @@ -145,26 +158,10 @@ define NCURSES_INSTALL_TARGET_CMDS
+>         $(NCURSES_LINK_TARGET_LIBS)
+>         $(NCURSES_INSTALL_TARGET_PROGS)
+>         ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
+> -       mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-color $(TARGET_DIR)/usr/share/terminfo/x
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-xfree86 $(TARGET_DIR)/usr/share/terminfo/x
+> -       mkdir -p $(TARGET_DIR)/usr/share/terminfo/v
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100 $(TARGET_DIR)/usr/share/terminfo/v
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100-putty $(TARGET_DIR)/usr/share/terminfo/v
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt102 $(TARGET_DIR)/usr/share/terminfo/v
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt200 $(TARGET_DIR)/usr/share/terminfo/v
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt220 $(TARGET_DIR)/usr/share/terminfo/v
+> -       mkdir -p $(TARGET_DIR)/usr/share/terminfo/a
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/a/ansi $(TARGET_DIR)/usr/share/terminfo/a
+> -       mkdir -p $(TARGET_DIR)/usr/share/terminfo/l
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
+> -       mkdir -p $(TARGET_DIR)/usr/share/terminfo/p
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty $(TARGET_DIR)/usr/share/terminfo/p
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty-vt100 $(TARGET_DIR)/usr/share/terminfo/p
+> -       mkdir -p $(TARGET_DIR)/usr/share/terminfo/s
+> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/s/screen $(TARGET_DIR)/usr/share/terminfo/s
+> -       $(NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO)
+> +       $(foreach terminfo,$(NCURSES_TERMINFO_FILES),\
+> +               $(INSTALL) -D -m 0644 $(STAGING_DIR)/usr/share/terminfo/$(terminfo) \
+> +                       $(TARGET_DIR)/usr/share/terminfo/$(terminfo)
+> +       )
+>  endef # NCURSES_INSTALL_TARGET_CMDS
+>
+>  #
+> --
+> 2.7.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-This is ARM assembly, which indeed doesn't build on Thumb-2 only
-platforms.
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
-> +	depends on ((BR2_arm || BR2_armeb) && !BR2_ARM_CPU_ARMV7M) || \
 
-So I believe BR2_ARM_CPU_HAS_ARM is more correct
-than !BR2_ARM_CPU_ARMV7M even though both have currently exactly the
-same meaning.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
