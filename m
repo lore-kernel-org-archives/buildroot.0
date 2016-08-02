@@ -1,65 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Aug 2016 23:33:46 +0200
-Subject: [Buildroot] [git commit] toolchain: libatomic is not built on
-	"uclinux" platforms
-Message-ID: <20160802214109.91A5F81999@busybox.osuosl.org>
+Date: Tue, 2 Aug 2016 23:45:21 +0200
+Subject: [Buildroot] [RFC] toolchain: libatomic needs NTPL threads
+ support
+In-Reply-To: <1470158755-11455-1-git-send-email-romain.naour@gmail.com>
+References: <1470158755-11455-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160802234521.5a77967c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3d1fb26dcadd8c570e2c415ce05398ecc810b32
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The cairo package fails to build on some architectures:
-BR2_TOOLCHAIN_HAS_LIBATOMIC is enabled, but libatomic is in fact not
-available.
+On Tue,  2 Aug 2016 19:25:55 +0200, Romain Naour wrote:
 
-This happens because the gcc logic in libatomic/configure.tgt does not
-recognize "uclinux" as a valid OS part of the target tuple, and
-therefore it does not build libatomic.
+>  	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && \
+> -		BR2_TOOLCHAIN_HAS_THREADS
+> +		BR2_TOOLCHAIN_HAS_THREADS_NPTL
 
-The "uclinux" part of the tuple is used by Buildroot when
-BR2_BINFMT_FLAT=y, so we make BR2_TOOLCHAIN_HAS_LIBATOMIC enabled only
-if !BR2_BINFMT_FLAT.
+So, I had a closer look. The crux of the matter is in
+libatomic/configure.tgt. There you can see that if a platform uses the
+"linux" OS part of the target tuple, libatomic will be generated.
+However, if "uclinux" is used, libatomic will not be generated.
 
-It is worth mentioning that support for the uclinux tuple could most
-likely very easily be added to gcc: it could rely on the generic
-"posix" implementation of libatomic, which uses pthread locks,
-available on all architectures where thread support is available.
+So it's not about having NPTL or not, it's about using BR2_BINFMT_FLAT
+or not.
 
-Fixes:
+Example: the Microblaze architecture does not support NPTL, but
+libatomic is generated:
 
- [arm]  http://autobuild.buildroot.net/results/3d8dc45e41a043d2c2c26bfb26c3617499fbe671
- [m68k] http://autobuild.buildroot.net/results/318e01406e3e92eb589ee5b2231c671a4dbb6da4
+br-microblaze-full-2016.05-1162-g94c7298-build.log:checking for libatomic support... yes
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[Thomas: adjust dependency after analysis of the gcc code.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-common.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+However, on ARM Cortex-M4, and m68k noMMU, we see:
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 5611b5b..ff667c0 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -403,11 +403,14 @@ config BR2_TOOLCHAIN_HAS_SYNC_8
- 	default y if BR2_TOOLCHAIN_X86_HAS_SYNC_8
- 
- # libatomic is available since gcc 4.8, when thread support is
--# enabled.
-+# enabled. Also, libatomic doesn't recognize "uclinux" as a valid OS
-+# part of the tuple, and is therefore not build on uclinux targets,
-+# which is why BR2_BINFMT_FLAT configurations are excluded.
- config BR2_TOOLCHAIN_HAS_LIBATOMIC
- 	bool
- 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && \
--		BR2_TOOLCHAIN_HAS_THREADS
-+		BR2_TOOLCHAIN_HAS_THREADS && \
-+		!BR2_BINFMT_FLAT
- 
- # __atomic intrinsics are available:
- # - with gcc 4.8, either through built-ins or libatomic, on all
+br-arm-cortex-m4-full-2016.05-1162-g94c7298-build.log:checking for libatomic support... no
+br-m68k-5208-full-2016.05-1162-g94c7298-build.log:checking for libatomic support... no
+
+Note that it's also not about noMMU vs. MMU, because a noMMU platform
+can use FDPIC, in which case the OS part of the tuple would be "linux".
+
+I've therefore updated your patch with this, and applied.
+
+However, it is worth mentioning that changing the gcc code would be
+pretty simple: it's about adding *-uclinux-* in
+libatomic/configure.tgt. Indeed, libatomic provides a generic posix
+implementation, which simply relies on pthread mutex locks to emulate
+atomicity. This works on all platforms, as long as thread support is
+available, including BR2_BINFMT_FLAT platforms.
+
+People interested in testing this are encouraged to submit patches :-)
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
