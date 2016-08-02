@@ -1,40 +1,33 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue,  2 Aug 2016 19:01:04 +0200
-Subject: [Buildroot] [PATCH] package/boost: disable for cortex-M cpus
-Message-ID: <1470157264-9693-1-git-send-email-romain.naour@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 02 Aug 2016 19:15:18 +0200
+Subject: [Buildroot] [PATCH/RFC 1/1] package/libglob: new package
+References: <1469982560-13681-1-git-send-email-bernd.kuhls@t-online.de>
+ <1470083347.4303.12.camel@embedded.rocks>
+Message-ID: <62177dxtet.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Triggers compiler error:
-libs/context/src/asm/make_arm_aapcs_elf_gas.S: Assembler messages:
-libs/context/src/asm/make_arm_aapcs_elf_gas.S:33: Error: unshifted register required -- `bic a1,a1,#15'
-libs/context/src/asm/make_arm_aapcs_elf_gas.S:42: Error: immediate value out of range
+Hi J?rg,
 
-Fixes:
-http://autobuild.buildroot.net/results/8f6/8f6770b59a343b9f710e9363b43227ee9f026660
+Am Mon, 01 Aug 2016 22:29:07 +0200 schrieb J?rg Krause:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/boost/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Hi,
+> 
+> On So, 2016-07-31 at 18:29 +0200, Bernd Kuhls wrote:
+>> Needed for packages which need GLOB_BRACE & GLOB_NOMAGIC. These
+>> defines
+>> are not provided by musl toolchains.
+>> 
+>> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> 
+> sorry, I didn't noticed you already submitted a patch to add libglob. I
+> submitted a similar patch, too:?http://lists.busybox.net/pipermail/buil
+> droot/2016-August/168908.html.
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 3a27ae2..f411e96 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -65,8 +65,8 @@ config BR2_PACKAGE_BOOST_CONTAINER
- # supported, but it doesn't build.
- config BR2_PACKAGE_BOOST_CONTEXT
- 	bool "boost-context"
--	depends on (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel \
--			|| BR2_powerpc || BR2_x86_64)
-+	depends on ((BR2_arm || BR2_armeb) && !BR2_ARM_CPU_ARMV7M) || \
-+		BR2_i386 || BR2_mips || BR2_mipsel || BR2_powerpc || BR2_x86_64
- 
- config BR2_PACKAGE_BOOST_COROUTINE
- 	bool "boost-coroutine"
--- 
-2.5.5
+yes, but your patch is better because it takes the static-only scenario
+into account. Therefore I closed my patch in patchworks.
+
+Regards, Bernd
