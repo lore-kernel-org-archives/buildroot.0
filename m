@@ -1,10 +1,11 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 2 Aug 2016 16:04:36 -0500
-Subject: [Buildroot] [PATCH 1/2] ncurses: factorize terminfo files
-	installation
-In-Reply-To: <1470170076-28901-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 2 Aug 2016 16:05:42 -0500
+Subject: [Buildroot] [PATCH 2/2] ncurses: use foreach make loops instead
+ of shell for loops
+In-Reply-To: <1470170076-28901-2-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1470170076-28901-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CANQCQpaBzvaWMPTH07HzV56GErDusicZqSmvPX-S8V3n0Awizw@mail.gmail.com>
+ <1470170076-28901-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CANQCQpZgxxcC0gSWL8KYNXRmGOpzh9LkZmyfwPL1-QOx8+2MiQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,87 +16,87 @@ Thomas,
 
 On Tue, Aug 2, 2016 at 3:34 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> This long list of commands to copy the terminfo files from staging to
-> target is really silly and can be factorized using a
-> NCURSES_TERMINFO_FILES variable, which is then iterated through.
+> The main benefit of using make foreach loops is that they will abort
+> if one of the iteration of the loop fails. The current for loops will
+> continue, and only report a failure if the last iteration was a
+> failure, but will silently ignore other errors.
 >
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/ncurses/ncurses.mk | 47 ++++++++++++++++++++++------------------------
->  1 file changed, 22 insertions(+), 25 deletions(-)
+>  package/ncurses/ncurses.mk | 38 ++++++++++++++++++--------------------
+>  1 file changed, 18 insertions(+), 20 deletions(-)
 >
 > diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-> index 55e5c81..0ae8835 100644
+> index 0ae8835..614b6ce 100644
 > --- a/package/ncurses/ncurses.mk
 > +++ b/package/ncurses/ncurses.mk
-> @@ -55,6 +55,20 @@ NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += menu
->  NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += panel
->  NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += form
->
-> +NCURSES_TERMINFO_FILES = \
-> +       a/ansi \
-> +       p/putty \
-> +       p/putty-vt100 \
-> +       s/screen \
-> +       v/vt100 \
-> +       v/vt100-putty \
-> +       v/vt102 \
-> +       v/vt200 \
-> +       v/vt220 \
-> +       x/xterm \
-> +       x/xterm-color \
-> +       x/xterm-xfree86 \
-> +
->  ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
->  NCURSES_CONF_OPTS += --enable-widec
+> @@ -74,28 +74,26 @@ NCURSES_CONF_OPTS += --enable-widec
 >  NCURSES_LIB_SUFFIX = w
-> @@ -95,11 +109,10 @@ NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC,$(STAGING_DIR))
 >
->  NCURSES_CONF_OPTS += --enable-ext-colors
->  NCURSES_ABI_VERSION = 6
-> -define NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty-256color $(TARGET_DIR)/usr/share/terminfo/p
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm+256color $(TARGET_DIR)/usr/share/terminfo/x
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-256color $(TARGET_DIR)/usr/share/terminfo/x
-> -endef
-> +NCURSES_TERMINFO_FILES += \
-> +       p/putty-256color \
-> +       x/xterm+256color \
-> +       x/xterm-256color
->
->  NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
->  NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_PC
-> @@ -145,26 +158,10 @@ define NCURSES_INSTALL_TARGET_CMDS
->         $(NCURSES_LINK_TARGET_LIBS)
->         $(NCURSES_INSTALL_TARGET_PROGS)
->         ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
-> -       mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-color $(TARGET_DIR)/usr/share/terminfo/x
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-xfree86 $(TARGET_DIR)/usr/share/terminfo/x
-> -       mkdir -p $(TARGET_DIR)/usr/share/terminfo/v
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100 $(TARGET_DIR)/usr/share/terminfo/v
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100-putty $(TARGET_DIR)/usr/share/terminfo/v
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt102 $(TARGET_DIR)/usr/share/terminfo/v
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt200 $(TARGET_DIR)/usr/share/terminfo/v
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt220 $(TARGET_DIR)/usr/share/terminfo/v
-> -       mkdir -p $(TARGET_DIR)/usr/share/terminfo/a
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/a/ansi $(TARGET_DIR)/usr/share/terminfo/a
-> -       mkdir -p $(TARGET_DIR)/usr/share/terminfo/l
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
-> -       mkdir -p $(TARGET_DIR)/usr/share/terminfo/p
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty $(TARGET_DIR)/usr/share/terminfo/p
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty-vt100 $(TARGET_DIR)/usr/share/terminfo/p
-> -       mkdir -p $(TARGET_DIR)/usr/share/terminfo/s
-> -       cp -dpf $(STAGING_DIR)/usr/share/terminfo/s/screen $(TARGET_DIR)/usr/share/terminfo/s
-> -       $(NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO)
-> +       $(foreach terminfo,$(NCURSES_TERMINFO_FILES),\
-> +               $(INSTALL) -D -m 0644 $(STAGING_DIR)/usr/share/terminfo/$(terminfo) \
-> +                       $(TARGET_DIR)/usr/share/terminfo/$(terminfo)
+>  define NCURSES_LINK_LIBS_STATIC
+> -       for lib in $(NCURSES_LIBS-y:%=lib%); do \
+> -               ln -sf $${lib}$(NCURSES_LIB_SUFFIX).a \
+> -                       $(1)/usr/lib/$${lib}.a; \
+> -       done
+> +       $(foreach lib,$(NCURSES_LIBS-y:%=lib%), \
+> +               ln -sf $(lib)$(NCURSES_LIB_SUFFIX).a $(1)/usr/lib/$(lib).a
 > +       )
->  endef # NCURSES_INSTALL_TARGET_CMDS
+>         ln -sf libncurses$(NCURSES_LIB_SUFFIX).a \
+>                 $(1)/usr/lib/libcurses.a
+>  endef
 >
->  #
+>  define NCURSES_LINK_LIBS_SHARED
+> -       for lib in $(NCURSES_LIBS-y:%=lib%); do \
+> -               ln -sf $${lib}$(NCURSES_LIB_SUFFIX).so \
+> -                       $(1)/usr/lib/$${lib}.so; \
+> -       done
+> +       $(foreach lib,$(NCURSES_LIBS-y:%=lib%), \
+> +               ln -sf $(lib)$(NCURSES_LIB_SUFFIX).so $(1)/usr/lib/$(lib).so
+> +       )
+>         ln -sf libncurses$(NCURSES_LIB_SUFFIX).so \
+>                 $(1)/usr/lib/libcurses.so
+>  endef
+>
+>  define NCURSES_LINK_PC
+> -       for pc in $(NCURSES_LIBS-y); do \
+> -               ln -sf $${pc}$(NCURSES_LIB_SUFFIX).pc \
+> -                       $(1)/usr/lib/pkgconfig/$${pc}.pc; \
+> -       done
+> +       $(foreach pc,$(NCURSES_LIBS-y), \
+> +               ln -sf $(pc)$(NCURSES_LIB_SUFFIX).pc \
+> +                       $(1)/usr/lib/pkgconfig/$(pc).pc
+> +       )
+>  endef
+>
+>  NCURSES_LINK_TARGET_LIBS = \
+> @@ -135,19 +133,19 @@ endef
+>
+>  ifneq ($(BR2_STATIC_LIBS),y)
+>  define NCURSES_INSTALL_TARGET_LIBS
+> -       for lib in $(NCURSES_LIBS-y:%=lib%); do \
+> -               cp -dpf $(NCURSES_DIR)/lib/$${lib}$(NCURSES_LIB_SUFFIX).so* \
+> -                       $(TARGET_DIR)/usr/lib/; \
+> -       done
+> +       $(foreach lib,$(NCURSES_LIBS-y:%=lib%), \
+> +               cp -dpf $(NCURSES_DIR)/lib/$(lib)$(NCURSES_LIB_SUFFIX).so* \
+> +                       $(TARGET_DIR)/usr/lib/
+> +       )
+>  endef
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_NCURSES_TARGET_PROGS),y)
+>  define NCURSES_INSTALL_TARGET_PROGS
+> -       for x in $(NCURSES_PROGS); do \
+> -               $(INSTALL) -m 0755 $(NCURSES_DIR)/progs/$$x \
+> -                       $(TARGET_DIR)/usr/bin/$$x; \
+> -       done
+> +       $(foreach prog,$(NCURSES_PROGS), \
+> +               $(INSTALL) -m 0755 $(NCURSES_DIR)/progs/$(prog) \
+> +                       $(TARGET_DIR)/usr/bin/$(prog)
+> +       )
+>         ln -sf tset $(TARGET_DIR)/usr/bin/reset
+>  endef
+>  endif
 > --
 > 2.7.4
 >
