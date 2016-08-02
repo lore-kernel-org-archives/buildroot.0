@@ -1,56 +1,64 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue,  2 Aug 2016 10:25:27 -0500
-Subject: [Buildroot] [PATCH] ncurses: install PuTTY terminfo files
-Message-ID: <1470151527-36242-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Tue,  2 Aug 2016 12:24:11 -0400
+Subject: [Buildroot] [PATCH] lldpd: add sysv init script
+Message-ID: <20160802162411.19412-1-vivien.didelot@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: David Glessner <david.glessner@rockwellcollins.com>
+Add a simple sysv init script to start the lldpd daemon at boot.
 
-Signed-off-by: David Glessner <david.glessner@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 ---
- package/ncurses/ncurses.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/lldpd/S60lldpd | 23 +++++++++++++++++++++++
+ package/lldpd/lldpd.mk |  5 +++++
+ 2 files changed, 28 insertions(+)
+ create mode 100644 package/lldpd/S60lldpd
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index bef57c5..55e5c81 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -96,6 +96,7 @@ NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC,$(STAGING_DIR))
- NCURSES_CONF_OPTS += --enable-ext-colors
- NCURSES_ABI_VERSION = 6
- define NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO
-+	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty-256color $(TARGET_DIR)/usr/share/terminfo/p
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm+256color $(TARGET_DIR)/usr/share/terminfo/x
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-256color $(TARGET_DIR)/usr/share/terminfo/x
- endef
-@@ -148,9 +149,9 @@ define NCURSES_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-color $(TARGET_DIR)/usr/share/terminfo/x
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-xfree86 $(TARGET_DIR)/usr/share/terminfo/x
--	$(NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO)
- 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/v
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100 $(TARGET_DIR)/usr/share/terminfo/v
-+	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100-putty $(TARGET_DIR)/usr/share/terminfo/v
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt102 $(TARGET_DIR)/usr/share/terminfo/v
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt200 $(TARGET_DIR)/usr/share/terminfo/v
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt220 $(TARGET_DIR)/usr/share/terminfo/v
-@@ -158,8 +159,12 @@ define NCURSES_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/a/ansi $(TARGET_DIR)/usr/share/terminfo/a
- 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/l
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
-+	mkdir -p $(TARGET_DIR)/usr/share/terminfo/p
-+	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty $(TARGET_DIR)/usr/share/terminfo/p
-+	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty-vt100 $(TARGET_DIR)/usr/share/terminfo/p
- 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/s
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/s/screen $(TARGET_DIR)/usr/share/terminfo/s
-+	$(NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO)
- endef # NCURSES_INSTALL_TARGET_CMDS
+diff --git a/package/lldpd/S60lldpd b/package/lldpd/S60lldpd
+new file mode 100644
+index 0000000..0fe41fd
+--- /dev/null
++++ b/package/lldpd/S60lldpd
+@@ -0,0 +1,23 @@
++#!/bin/sh
++#
++# Controls lldpd.
++#
++
++case $1 in
++  start)
++    printf "Starting lldpd..."
++    start-stop-daemon -S -q -p /var/run/lldpd.pid --exec /usr/sbin/lldpd
++    ;;
++  stop)
++    printf "Stopping lldpd..."
++    start-stop-daemon -K -q -p /var/run/lldpd.pid 
++    ;;
++  restart)
++    $0 stop
++    $0 start
++    ;;
++  *)
++    echo "Usage: $0 {start|stop|restart}"
++    exit 1
++    ;;
++esac
+diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
+index 416967b..6c7bf80 100644
+--- a/package/lldpd/lldpd.mk
++++ b/package/lldpd/lldpd.mk
+@@ -35,4 +35,9 @@ LLDPD_CONF_OPTS = \
+ 	$(if $(BR2_PACKAGE_LLDPD_DOT3),--enable-dot3,--disable-dot3) \
+ 	$(if $(BR2_PACKAGE_LLDPD_CUSTOM_TLV),--enable-custom,--disable-custom)
  
- #
++define LLDPD_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/lldpd/S60lldpd \
++		$(TARGET_DIR)/etc/init.d/S60lldpd
++endef
++
+ $(eval $(autotools-package))
 -- 
-1.9.1
+2.9.2
