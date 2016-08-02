@@ -1,60 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Aug 2016 23:45:21 +0200
-Subject: [Buildroot] [RFC] toolchain: libatomic needs NTPL threads
- support
-In-Reply-To: <1470158755-11455-1-git-send-email-romain.naour@gmail.com>
-References: <1470158755-11455-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160802234521.5a77967c@free-electrons.com>
+Date: Tue, 2 Aug 2016 23:52:56 +0200
+Subject: [Buildroot] [git commit] initscripts: show status in S40network
+Message-ID: <20160802215313.D267680E3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e8c18f2d19f59d313a56c6bb1c1826d70263b4b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  2 Aug 2016 19:25:55 +0200, Romain Naour wrote:
+The output of "/etc/init.d/S40network start/stop" was lacking a
+newline due to the usage of printf. Fix it by echoing the status, like
+we do in other init scripts.
 
->  	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && \
-> -		BR2_TOOLCHAIN_HAS_THREADS
-> +		BR2_TOOLCHAIN_HAS_THREADS_NPTL
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/initscripts/init.d/S40network | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-So, I had a closer look. The crux of the matter is in
-libatomic/configure.tgt. There you can see that if a platform uses the
-"linux" OS part of the target tuple, libatomic will be generated.
-However, if "uclinux" is used, libatomic will not be generated.
-
-So it's not about having NPTL or not, it's about using BR2_BINFMT_FLAT
-or not.
-
-Example: the Microblaze architecture does not support NPTL, but
-libatomic is generated:
-
-br-microblaze-full-2016.05-1162-g94c7298-build.log:checking for libatomic support... yes
-
-However, on ARM Cortex-M4, and m68k noMMU, we see:
-
-br-arm-cortex-m4-full-2016.05-1162-g94c7298-build.log:checking for libatomic support... no
-br-m68k-5208-full-2016.05-1162-g94c7298-build.log:checking for libatomic support... no
-
-Note that it's also not about noMMU vs. MMU, because a noMMU platform
-can use FDPIC, in which case the OS part of the tuple would be "linux".
-
-I've therefore updated your patch with this, and applied.
-
-However, it is worth mentioning that changing the gcc code would be
-pretty simple: it's about adding *-uclinux-* in
-libatomic/configure.tgt. Indeed, libatomic provides a generic posix
-implementation, which simply relies on pthread mutex locks to emulate
-atomicity. This works on all platforms, as long as thread support is
-available, including BR2_BINFMT_FLAT platforms.
-
-People interested in testing this are encouraged to submit patches :-)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/initscripts/init.d/S40network b/package/initscripts/init.d/S40network
+index 7b11d8b..642c501 100755
+--- a/package/initscripts/init.d/S40network
++++ b/package/initscripts/init.d/S40network
+@@ -8,12 +8,14 @@ mkdir -p /run/network
+ 
+ case "$1" in
+   start)
+- 	echo "Starting network..."
++	printf "Starting network: "
+ 	/sbin/ifup -a
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+   stop)
+-	printf "Stopping network..."
++	printf "Stopping network: "
+ 	/sbin/ifdown -a
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	;;
+   restart|reload)
+ 	"$0" stop
