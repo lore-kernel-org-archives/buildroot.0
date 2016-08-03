@@ -1,61 +1,49 @@
-From: Atilla Filiz <atilla.filiz@gmail.com>
-Date: Wed, 3 Aug 2016 14:26:21 +0200
-Subject: [Buildroot] host-autoconf fails to build, no m4
-Message-ID: <CACTZKX4SyndFg8SpZRPz9kJ8guNrVnJL_fjkQt5r9r+5Lqm4Og@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 3 Aug 2016 14:29:25 +0200
+Subject: [Buildroot] [PATCH 1/1] gst1-plugins-bad: hls: allow user to
+ select crypto backend
+In-Reply-To: <1470226767-21018-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1470226767-21018-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <20160803142925.3af9c6b7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I was trying to build some host packages, which depend on automake and
-autoconf, which in turn fail to build.
+Hello,
 
->>> host-autoconf 2.69 Building
-PATH="/home/atilla/hek/buildroot/output/host/bin:/home/atilla/hek/buildroot/output/host/sbin:/home/atilla/hek/buildroot/output/host/usr/bin:/home/atilla/hek/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
-PKG_CONFIG="/home/atilla/hek/buildroot/output/host/usr/bin/pkg-config"
-PKG_CONFIG_SYSROOT_DIR="/"
-PKG_CONFIG_LIBDIR="/home/atilla/hek/buildroot/output/host/usr/lib/pkgconfig"
-/usr/bin/make -j9  -C
-/home/atilla/hek/buildroot/output/build/host-autoconf-2.69/
-make[1]: Entering directory
-'/home/atilla/hek/buildroot/output/build/host-autoconf-2.69'
-/usr/bin/make  all-recursive
-make[2]: Entering directory
-'/home/atilla/hek/buildroot/output/build/host-autoconf-2.69'
-Making all in bin
-make[3]: Entering directory
-'/home/atilla/hek/buildroot/output/build/host-autoconf-2.69/bin'
-autom4te_perllibdir='..'/lib AUTOM4TE_CFG='../lib/autom4te.cfg'
-../bin/autom4te -B '..'/lib -B '..'/lib         --language M4sh --cache ''
---melt ./autoconf.as -o autoconf.in
-autom4te: need GNU m4 1.4 or later:
-/home/atilla/hek/buildroot/output/host/usr/bin/m4
-Makefile:641: recipe for target 'autoconf.in' failed
-make[3]: *** [autoconf.in] Error 1
-make[3]: Leaving directory
-'/home/atilla/hek/buildroot/output/build/host-autoconf-2.69/bin'
-Makefile:357: recipe for target 'all-recursive' failed
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-'/home/atilla/hek/buildroot/output/build/host-autoconf-2.69'
-Makefile:292: recipe for target 'all' failed
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-'/home/atilla/hek/buildroot/output/build/host-autoconf-2.69'
-package/pkg-generic.mk:195: recipe for target
-'/home/atilla/hek/buildroot/output/build/host-autoconf-2.69/.stamp_built'
-failed
-make: ***
-[/home/atilla/hek/buildroot/output/build/host-autoconf-2.69/.stamp_built]
-Error 2
+On Wed, 3 Aug 2016 17:49:27 +0530, Rahul Bedarkar wrote:
 
+> +if BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS
+> +
+> +choice
+> +	prompt "choose HLS cryptographic backend"
+> +	default BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS_BACKEND_NETTLE
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS_BACKEND_LIBGCRYPT
+> +	bool "libgcrypt"
+> +	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
+> +	select BR2_PACKAGE_LIBGCRYPT
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS_BACKEND_NETTLE
+> +	bool "nettle"
+> +	select BR2_PACKAGE_NETTLE
+> +
+> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS_BACKEND_OPENSSL
+> +	bool "openssl"
+> +	select BR2_PACKAGE_OPENSSL
+> +
+> +endchoice
 
-/home/atilla/hek/buildroot/output/host/usr/bin/m4 simply doesn't exist and
-apparently the package m4 has been deprecated.
+I'm not sure I want to see a choice for this. Could we instead have
+the .mk file automatically selected the backend according to which
+crypto package(s) are available?
 
+Thanks,
+
+Thomas
 -- 
-Atilla Filiz
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160803/b6ea87a5/attachment.html>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
