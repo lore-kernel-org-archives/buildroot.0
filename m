@@ -1,32 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 03 Aug 2016 21:18:21 +0200
-Subject: [Buildroot] [PATCH 3/3] system: move locale purging options to
-	the "System configuration" menu
-In-Reply-To: <1470176380-11851-3-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 3 Aug 2016 00:19:40 +0200")
-References: <1470176380-11851-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1470176380-11851-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87y44dk6f6.fsf@dell.be.48ers.dk>
+Date: Wed, 3 Aug 2016 21:17:01 +0200
+Subject: [Buildroot] [git commit] toolchain: purge locales by default
+Message-ID: <20160803192302.B68FE81F11@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=284cb4fb2e663aee7ef7939e2e3eb328a6663fe2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The options to purge locales and to generate locale data are currently
- > located in the toolchain menu. However, these options are not really
- > related to the toolchain per-se, they are more system-level
- > configuration options, much like the timezone selection option we
- > already have in the "System configuration" menu.
+Our current default is to keep all locales installed in
+/usr/share/locale/. However, in practice, those locales take up a
+significant amount of space, and most users do not need
+locales. Therefore, it makes more sense to default to purging locales,
+in order to keep only a few useful ones rather than keeping them all.
 
- > Therefore, it makes more sense to have the locale-related options in
- > the "System configuration" menu as well.
+It helps in providing a small filesystem size by default, and still
+allows advanced users who really need locales to tune their
+configuration.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+As an example, a very basic system with just util-linux enabled (not
+even Busybox) weights 11 MB, including 6.4 MB of locales. With this new
+default, the generated system is only 4.2 MB.
 
-Committed, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/toolchain-common.in | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index ff667c0..dae34ab 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -44,6 +44,7 @@ config BR2_TOOLCHAIN_SUPPORTS_PIE
+ 
+ config BR2_ENABLE_LOCALE_PURGE
+ 	bool "Purge unwanted locales"
++	default y
+ 	help
+ 	  Explicitly specify what locales to install on target. If N
+ 	  then all locales supported by packages are installed.
