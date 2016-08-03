@@ -1,97 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Aug 2016 22:52:24 +0200
-Subject: [Buildroot] [git commit] ncurses: factorize terminfo files
-	installation
-Message-ID: <20160803205324.76B9C81972@busybox.osuosl.org>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed,  3 Aug 2016 23:23:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: bump to version 7.0.2-6
+Message-ID: <1470259407-3383-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33ba5188351ece027455e460f6cba4245af49f3a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This long list of commands to copy the terminfo files from staging to
-target is really silly and can be factorized using a
-NCURSES_TERMINFO_FILES variable, which is then iterated through.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/ncurses/ncurses.mk | 47 ++++++++++++++++++++++------------------------
- 1 file changed, 22 insertions(+), 25 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 55e5c81..0ae8835 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -55,6 +55,20 @@ NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += menu
- NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += panel
- NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += form
- 
-+NCURSES_TERMINFO_FILES = \
-+	a/ansi \
-+	p/putty \
-+	p/putty-vt100 \
-+	s/screen \
-+	v/vt100 \
-+	v/vt100-putty \
-+	v/vt102 \
-+	v/vt200 \
-+	v/vt220 \
-+	x/xterm \
-+	x/xterm-color \
-+	x/xterm-xfree86 \
-+
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
- NCURSES_CONF_OPTS += --enable-widec
- NCURSES_LIB_SUFFIX = w
-@@ -95,11 +109,10 @@ NCURSES_LINK_STAGING_PC = $(call NCURSES_LINK_PC,$(STAGING_DIR))
- 
- NCURSES_CONF_OPTS += --enable-ext-colors
- NCURSES_ABI_VERSION = 6
--define NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty-256color $(TARGET_DIR)/usr/share/terminfo/p
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm+256color $(TARGET_DIR)/usr/share/terminfo/x
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-256color $(TARGET_DIR)/usr/share/terminfo/x
--endef
-+NCURSES_TERMINFO_FILES += \
-+	p/putty-256color \
-+	x/xterm+256color \
-+	x/xterm-256color
- 
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_PC
-@@ -145,26 +158,10 @@ define NCURSES_INSTALL_TARGET_CMDS
- 	$(NCURSES_LINK_TARGET_LIBS)
- 	$(NCURSES_INSTALL_TARGET_PROGS)
- 	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
--	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm $(TARGET_DIR)/usr/share/terminfo/x
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-color $(TARGET_DIR)/usr/share/terminfo/x
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-xfree86 $(TARGET_DIR)/usr/share/terminfo/x
--	mkdir -p $(TARGET_DIR)/usr/share/terminfo/v
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100 $(TARGET_DIR)/usr/share/terminfo/v
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100-putty $(TARGET_DIR)/usr/share/terminfo/v
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt102 $(TARGET_DIR)/usr/share/terminfo/v
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt200 $(TARGET_DIR)/usr/share/terminfo/v
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt220 $(TARGET_DIR)/usr/share/terminfo/v
--	mkdir -p $(TARGET_DIR)/usr/share/terminfo/a
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/a/ansi $(TARGET_DIR)/usr/share/terminfo/a
--	mkdir -p $(TARGET_DIR)/usr/share/terminfo/l
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
--	mkdir -p $(TARGET_DIR)/usr/share/terminfo/p
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty $(TARGET_DIR)/usr/share/terminfo/p
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty-vt100 $(TARGET_DIR)/usr/share/terminfo/p
--	mkdir -p $(TARGET_DIR)/usr/share/terminfo/s
--	cp -dpf $(STAGING_DIR)/usr/share/terminfo/s/screen $(TARGET_DIR)/usr/share/terminfo/s
--	$(NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO)
-+	$(foreach terminfo,$(NCURSES_TERMINFO_FILES),\
-+		$(INSTALL) -D -m 0644 $(STAGING_DIR)/usr/share/terminfo/$(terminfo) \
-+			$(TARGET_DIR)/usr/share/terminfo/$(terminfo)
-+	)
- endef # NCURSES_INSTALL_TARGET_CMDS
- 
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 1665112..71cfeda 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From http://www.imagemagick.org/download/releases/digest.rdf
+-sha256 44b5c7cb930c85c0dc0da258fb2721b0c34bf9005a0778253fc4cd9e0deca508  ImageMagick-7.0.2-5.tar.xz
++sha256 1e173314ddcf1508f9f4c20ddd650883e089dea6acbedd8f2c54d02109104cf9 ImageMagick-7.0.2-6.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index ece3e36..2d2fe76 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
  #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.0.2-5
++IMAGEMAGICK_VERSION = 7.0.2-6
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
+-- 
+1.9.1
