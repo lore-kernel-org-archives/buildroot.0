@@ -1,44 +1,134 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Aug 2016 14:36:42 +0200
-Subject: [Buildroot] host-autoconf fails to build, no m4
-In-Reply-To: <CACTZKX4SyndFg8SpZRPz9kJ8guNrVnJL_fjkQt5r9r+5Lqm4Og@mail.gmail.com>
-References: <CACTZKX4SyndFg8SpZRPz9kJ8guNrVnJL_fjkQt5r9r+5Lqm4Og@mail.gmail.com>
-Message-ID: <20160803143642.49b264a4@free-electrons.com>
+From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
+Date: Wed,  3 Aug 2016 15:47:12 +0300
+Subject: [Buildroot] [PATCH] config: update synopsys defconfigs
+Message-ID: <1470228432-31937-1-git-send-email-vzakhar@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+With this commit we update ARC defconfigs with the following:
 
-On Wed, 3 Aug 2016 14:26:21 +0200, Atilla Filiz wrote:
-> I was trying to build some host packages, which depend on automake and
-> autoconf, which in turn fail to build.
+  - "snps_axs101_defconfig" and "snps_axs103_defconfig":
+     - bump linux kernel version to 4.7
+     - set up host linux headers to 4.7
+     - bump u-boot version to 2016.07
 
-Which version of Buildroot are you using?
+  - "snps_hs38_smp_vdk_defconfig":
+     - bump linux kernel version to 4.7
+     - set up host linux headers to 4.7
 
-> /home/atilla/hek/buildroot/output/host/usr/bin/m4 simply doesn't exist and
+Also we delete "snps_hs38_vdk_defconfig" as we doesn't support
+uni-processor HS38 configuration for vdk any longer.
 
-This is not possible:
+Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+---
+ configs/snps_axs101_defconfig       |  8 ++++----
+ configs/snps_axs103_defconfig       |  8 ++++----
+ configs/snps_hs38_smp_vdk_defconfig |  6 +++---
+ configs/snps_hs38_vdk_defconfig     | 19 -------------------
+ 4 files changed, 11 insertions(+), 30 deletions(-)
+ delete mode 100644 configs/snps_hs38_vdk_defconfig
 
-HOST_AUTOCONF_DEPENDENCIES = host-m4 host-libtool
-
-so host-autoconf depends on host-m4, so host-m4 *must* have been built
-prior to host-autoconf.
-
-> apparently the package m4 has been deprecated.
-
-The *target* variant of m4, yes. The host variant is still there and
-available.
-
-Could you pastebin your Buildroot .config file, as well as the *entire*
-build output of "make clean all" ?
-
-Thanks!
-
-Thomas
+diff --git a/configs/snps_axs101_defconfig b/configs/snps_axs101_defconfig
+index 08def3e..f7bcf4d 100644
+--- a/configs/snps_axs101_defconfig
++++ b/configs/snps_axs101_defconfig
+@@ -8,18 +8,18 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+ 
+-# Linux headers same as kernel, a 4.2 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
++# Linux headers same as kernel, a 4.7 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs101"
+ 
+ # Bootloader
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="axs101"
+diff --git a/configs/snps_axs103_defconfig b/configs/snps_axs103_defconfig
+index d997508..840db74 100644
+--- a/configs/snps_axs103_defconfig
++++ b/configs/snps_axs103_defconfig
+@@ -9,18 +9,18 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+ 
+-# Linux headers same as kernel, a 4.2 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
++# Linux headers same as kernel, a 4.7 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
+ 
+ # Bootloader
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="axs103"
+diff --git a/configs/snps_hs38_smp_vdk_defconfig b/configs/snps_hs38_smp_vdk_defconfig
+index 9236a13..32922f8 100644
+--- a/configs/snps_hs38_smp_vdk_defconfig
++++ b/configs/snps_hs38_smp_vdk_defconfig
+@@ -8,12 +8,12 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to the HS38 VDK Software Development Platform"
+ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+ BR2_TARGET_ROOTFS_EXT2=y
+ 
+-# Linux headers same as kernel, a 4.2 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
++# Linux headers same as kernel, a 4.7 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="vdk_hs38_smp"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/snps_hs38_vdk_defconfig b/configs/snps_hs38_vdk_defconfig
+deleted file mode 100644
+index de91df0..0000000
+--- a/configs/snps_hs38_vdk_defconfig
++++ /dev/null
+@@ -1,19 +0,0 @@
+-# Architecture
+-BR2_arcle=y
+-BR2_archs38=y
+-
+-# System
+-BR2_TARGET_GENERIC_HOSTNAME="hs38_vdk"
+-BR2_TARGET_GENERIC_ISSUE="Welcome to the HS38 VDK Software Development Platform"
+-BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+-BR2_TARGET_ROOTFS_EXT2=y
+-
+-# Linux headers same as kernel, a 4.2 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2"
+-BR2_LINUX_KERNEL_DEFCONFIG="vdk_hs38"
+-BR2_LINUX_KERNEL_VMLINUX=y
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.5
