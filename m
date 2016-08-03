@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Aug 2016 22:07:01 +0200
-Subject: [Buildroot] [git commit] imx-parser: add missing configure options
-Message-ID: <20160803200947.8250381E77@busybox.osuosl.org>
+Date: Wed, 3 Aug 2016 22:06:36 +0200
+Subject: [Buildroot] [git commit] imx-parser: add install hooks to fix
+	libraries path
+Message-ID: <20160803200947.7829F81E77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae753a6403265a466b05fcc5bb125d97c5d573ec
+commit: https://git.buildroot.net/buildroot/commit/?id=317bcd4c902e466a0ad2c3236f0267ad3d864dac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Enable hard float support when the configuration contains:
-BR2_ARM_EABIHF=y
+By default, all the libraries are installed under /usr/lib/imx-mm
+which causes problems at runtime.
 
-See Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/blob/krogoth/recipes-multimedia/imx-parser/imx-parser.inc
-
+[Peter: drop -mindepth/-maxdepth, add comment explaining why this is done]
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/imx-parser/imx-parser.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/freescale-imx/imx-parser/imx-parser.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/package/freescale-imx/imx-parser/imx-parser.mk b/package/freescale-imx/imx-parser/imx-parser.mk
-index 7dd1402..e579789 100644
+index a207d6e..7dd1402 100644
 --- a/package/freescale-imx/imx-parser/imx-parser.mk
 +++ b/package/freescale-imx/imx-parser/imx-parser.mk
-@@ -13,6 +13,12 @@ IMX_PARSER_LICENSE = NXP Semiconductor Software License Agreement
- IMX_PARSER_LICENSE_FILES = EULA COPYING
- IMX_PARSER_REDISTRIBUTE = NO
+@@ -20,4 +20,13 @@ endef
+ # The Makefile installs several versions of the libraries, but we only
+ # need one of them, depending on the platform.
  
-+ifeq ($(BR2_ARM_EABIHF),y)
-+IMX_PARSER_CONF_OPTS += --enable-fhw
-+else
-+IMX_PARSER_CONF_OPTS += --enable-fsw
-+endif
++# Upstream installs libraries into usr/lib/imx-mm, but the dynamic
++# loader only looks in usr/lib, so move the libraries there
++define IMX_PARSER_FIXUP_TARGET_PATH
++	find $(TARGET_DIR)/usr/lib/imx-mm -not -type d \
++		-exec mv {} $(TARGET_DIR)/usr/lib \;
++	rm -rf $(TARGET_DIR)/usr/lib/imx-mm
++endef
++IMX_PARSER_POST_INSTALL_TARGET_HOOKS += IMX_PARSER_FIXUP_TARGET_PATH
 +
- define IMX_PARSER_EXTRACT_CMDS
- 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_PARSER_SOURCE))
- endef
+ $(eval $(autotools-package))
