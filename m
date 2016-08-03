@@ -1,7 +1,9 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 3 Aug 2016 11:56:50 +0100
-Subject: [Buildroot] [PATCH 1/3] alsa-lib: bump version to 1.1.2
-Message-ID: <1470221812-32709-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Wed, 3 Aug 2016 11:56:52 +0100
+Subject: [Buildroot] [PATCH 3/3] libcurl: bump version to 7.50.1
+In-Reply-To: <1470221812-32709-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1470221812-32709-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1470221812-32709-3-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/alsa-lib/alsa-lib.hash | 2 +-
- package/alsa-lib/alsa-lib.mk   | 2 +-
+ package/libcurl/libcurl.hash | 2 +-
+ package/libcurl/libcurl.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
-index 49be643..47542e5 100644
---- a/package/alsa-lib/alsa-lib.hash
-+++ b/package/alsa-lib/alsa-lib.hash
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 9e7f7ac..ff0026d 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	8ac76c3144ed2ed49da7622ab65ac5415205913ccbedde877972383cbc234269	alsa-lib-1.1.1.tar.bz2
-+sha256 d38dacd9892b06b8bff04923c380b38fb2e379ee5538935ff37e45b395d861d6  alsa-lib-1.1.2.tar.bz2
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index f1958de..a86d6bb 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
+ # Locally calculated after checking pgp signature
+-sha256 608dfe2db77f48db792c387e7791aca55a25f0b42385707ad927164199ecfa9a  curl-7.50.0.tar.bz2
++sha256 3c12c5f54ccaa1d40abc65d672107dcc75d3e1fcb38c267484334280096e5156  curl-7.50.1.tar.bz2
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index f899e2e..4a018b8 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ALSA_LIB_VERSION = 1.1.1
-+ALSA_LIB_VERSION = 1.1.2
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
- ALSA_LIB_LICENSE = LGPLv2.1+ (library), GPLv2+ (aserver)
+-LIBCURL_VERSION = 7.50.0
++LIBCURL_VERSION = 7.50.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = http://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 -- 
 2.7.3
