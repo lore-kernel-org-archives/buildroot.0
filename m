@@ -1,60 +1,70 @@
-From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-Date: Wed, 3 Aug 2016 19:17:06 +0530
-Subject: [Buildroot] [PATCH 1/1] gst1-plugins-bad: hls: allow user to
- select crypto backend
-In-Reply-To: <20160803142925.3af9c6b7@free-electrons.com>
-References: <1470226767-21018-1-git-send-email-rahul.bedarkar@imgtec.com>
- <20160803142925.3af9c6b7@free-electrons.com>
-Message-ID: <57A1F5DA.9020507@imgtec.com>
+From: Zhaozhou Meng <mengzhaozhou@gmail.com>
+Date: Wed, 3 Aug 2016 17:42:55 +0200
+Subject: [Buildroot] the problem with Xorg, QT5 and imx vivant dirver
+In-Reply-To: <CAAMH-yvnsS7vq=XS_E0iLaRV-XZi2aQkHSKujn5FuZ5kK5=dug@mail.gmail.com>
+References: <CAMWiJUu_C8sJ+gaQdxQjAUS5wk_HEwzOdtEp4komzqOeB5XCBA@mail.gmail.com>
+ <20160802213044.264e63f8@free-electrons.com>
+ <CAMWiJUs2371W5JZGnDuAozTCKUHKQtoU+V1hrb1rHKsh=nG6DA@mail.gmail.com>
+ <20160803115341.21a3018b@free-electrons.com>
+ <CAAMH-yvnsS7vq=XS_E0iLaRV-XZi2aQkHSKujn5FuZ5kK5=dug@mail.gmail.com>
+Message-ID: <CAMWiJUtJa4ppP3gdneeCYwtuxx4ba2w02MTjjWC7cmiUZgdGMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thanks for the infomations that help me a lot.
 
-On Wednesday 03 August 2016 05:59 PM, Thomas Petazzoni wrote:
-> Hello,
->
-> On Wed, 3 Aug 2016 17:49:27 +0530, Rahul Bedarkar wrote:
->
->> +if BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS
->> +
->> +choice
->> +	prompt "choose HLS cryptographic backend"
->> +	default BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS_BACKEND_NETTLE
->> +
->> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS_BACKEND_LIBGCRYPT
->> +	bool "libgcrypt"
->> +	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
->> +	select BR2_PACKAGE_LIBGCRYPT
->> +
->> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS_BACKEND_NETTLE
->> +	bool "nettle"
->> +	select BR2_PACKAGE_NETTLE
->> +
->> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS_BACKEND_OPENSSL
->> +	bool "openssl"
->> +	select BR2_PACKAGE_OPENSSL
->> +
->> +endchoice
->
-> I'm not sure I want to see a choice for this. Could we instead have
-> the .mk file automatically selected the backend according to which
-> crypto package(s) are available?
+Not really for using the QT eglfs under X11.
+I know it will override the X11 if I do that, the elgfs is setted
+fullscreen display, beside that, is there other reason that I wouldn't be
+able to use it ?
 
-HLS plugin only supports above three crypto backends. If user hasn't 
-specified which backend to use then build system tries find nettle or 
-libgcrypt or openssl in order. If none of the backend is available then 
-HLS plugin gets disabled internally.
-
-Automatically selecting the backend based on which crypto packages are 
-available, will work only if atleast one of supported crypto packages 
-are selected already. If none of the supported packages are available, 
-then we may need to add dependency on one of those crypto packages in 
-.mk without selecting them in Config.in. That looks like broken dependency ?
 
 Regards,
+Zhaozhou
 
-Rahul
+2016-08-03 14:57 GMT+02:00 Gary Bisson <gary.bisson@boundarydevices.com>:
+
+> Hi all,
+>
+> On Wed, Aug 3, 2016 at 11:53 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > <snip>
+> >> But I changed the option to this:
+> >> Xorg X Window Sytem -> X11R7 Drivers -> x86-video-imx-viv (with Mesa3D
+> >> selected automatic)
+> >> Freescale imx libraries -> imx-gpu-viv -> output option -> X11
+> >> QT5 -> OpenGL API -> OpenGL ES 2.0 +
+> >> QT5 -> Xorg XCB support
+> >> QT5-> eglfs support
+> >>
+> >> With this option, I have the problem with QT Widget during the building.
+> >>
+> >> I attache the config file and the infomations about build.
+> >
+> > I'll fire up a build and see what happens. Gary, do you have an idea?
+>
+> Yes I confirm it is not working. It has been reported by Antoine
+> T?nart in the past, see this thread:
+> http://lists.busybox.net/pipermail/buildroot/2016-March/154974.html
+>
+> At the end of the thread, two solutions were offered, none has been chosen
+> yet.
+>
+> But as a summary, even if fixing the eglfs build can be done, at
+> runtime you wouldn't be able to use it while X11 is running. Is this
+> really what you want to do?
+>
+> In Yocto, my understanding is that they force the '-no-eglfs'
+> configuration when X11 is enabled:
+>
+> https://github.com/Freescale/meta-fsl-arm/blob/master/qt5-layer/recipes-qt/qt5/qtbase_%25.bbappend#L12
+>
+> Regards,
+> Gary
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160803/b7edc1d6/attachment.html>
