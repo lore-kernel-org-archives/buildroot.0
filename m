@@ -1,33 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 03 Aug 2016 10:10:57 +0200
-Subject: [Buildroot] [PATCH] tcpdump: bump version to 4.8.0
-In-Reply-To: <20160803054419.GB22524@waldemar-brodkorb.de> (Waldemar
- Brodkorb's message of "Wed, 3 Aug 2016 07:44:20 +0200")
-References: <1470129399-36967-1-git-send-email-Vincent.Riera@imgtec.com>
- <87invjmnsc.fsf@dell.be.48ers.dk>
- <20160803054419.GB22524@waldemar-brodkorb.de>
-Message-ID: <871t26mfvy.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 3 Aug 2016 10:18:15 +0200
+Subject: [Buildroot] How to login automatically without typing root in
+ buildroot x86 64 QEMU?
+In-Reply-To: <CAFXrp_cSim7KTWQNGPgOLtaym1REtQfpR4THLrX8hMmZwQ-wpA@mail.gmail.com>
+References: <CAFXrp_e2sDqZGZKM_B2rgBuh_1oXWhJgW6wgMzfBWsGQ_hnV7g@mail.gmail.com>
+ <20160802094112.072e3382@free-electrons.com>
+ <CAFXrp_cSim7KTWQNGPgOLtaym1REtQfpR4THLrX8hMmZwQ-wpA@mail.gmail.com>
+Message-ID: <20160803101815.43ad8074@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+Hello,
 
- > Hi,
- > Peter Korsgaard wrote,
+On Wed, 3 Aug 2016 08:52:48 +0100, Ciro Santilli wrote:
 
- >> >>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
- >> 
- >> > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- >> 
- >> Committed, thanks.
+> Is editing `package/busybox/inittab` the best way to do it?
 
- > Shouldn't libpcap updated, too?
+No.
 
-Yes, that would probably be good. Vincente, will you send a patch?
+> Or is there a more specific `.config` option? I know about
+> BR2_ROOTFS_OVERLAY.
 
+Yes, use an overlay to install your custom version of inittab. Or
+alternatively, a post-build script to tweak the inittab at the end of
+the build.
+
+Best regards,
+
+Thomas
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
