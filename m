@@ -1,39 +1,44 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Wed, 3 Aug 2016 22:39:31 -0400
-Subject: [Buildroot] Raspberry Pi OpenGL/Qt5 10x slower than Raspbian
-Message-ID: <CA+-urNTrCwfx4YYZ0S37wyB9ehquKLqacKaOzL6_7yCkt+Q29g@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 4 Aug 2016 03:59:38 +0000
+Subject: [Buildroot] Access to Buildroot git via https
+In-Reply-To: <87vazhiqh8.fsf@dell.be.48ers.dk>
+References: <1468831359.3068.19.camel@synopsys.com>
+ <20160719062852.GA3656@free.fr>
+ <20160719091308.5aea4608@free-electrons.com>
+ <1468919638.5489.0.camel@synopsys.com> <87vazhiqh8.fsf@dell.be.48ers.dk>
+Message-ID: <1470283082.3848.2.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm trying to debug a 10x slow down with a simple Qt5 app that draws
-rectangles and a couple lines of text on the screen. I'm comparing the
-performance between a fresh install of Raspbian and the master branch
-of Buildroot (but I also saw this with an older BR release). I've
-narrowed the performance difference down to the rectangle and text
-drawing calls. Nothing else is running. On the Buildroot side, I'm
-using the raspberrypi_defconfig with only the following additions and
-my test app:
+Hi Peter,
 
-+BR2_PACKAGE_QT5=y
-+BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-+BR2_PACKAGE_QT5BASE_GUI=y
-+BR2_PACKAGE_QT5BASE_WIDGETS=y
-+BR2_PACKAGE_QT5BASE_EGLFS=y
-+BR2_PACKAGE_RPI_USERLAND=y
+On Wed, 2016-08-03 at 21:48 +0200, Peter Korsgaard wrote:
+> > 
+> > > 
+> > > > 
+> > > > > 
+> > > > > > 
+> > > > > > "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+> 
+> Hi,
+> 
+> ?>> > I just tried this:
+> ?>> >?
+> ?>> > ????$ git clone https://git.busybox.net/buildroot/
+> ?>> > ????Cloning into 'buildroot'...
+> ?>> > ????[...]
+> ?>> Then it is sad that the https:// address is not mentioned in
+> ?>> https://git.buildroot.org/buildroot/ under the "Clone:" section.
+> 
+> ?> That's exactly what I meant - why don't we add that URL there?
+> 
+> I've taken a look at the cgit documentation and added it now, thanks.
 
-I haven't modified any of the config files in the boot partition.
-Changing the config.txt to match the Raspbian version didn't affect
-performance. I also verified that my test app is using eglfs. The
-performance degradation is the same on both a Raspberry Pi Zero and
-Model B.
+That's rally?awesome!
 
-This slowdown seems so big that it feels like I'm forgetting some
-important piece of configuration, but I can't figure it out.
+Thanks for doing that.
 
-Has anyone else run into this or has any ideas on things to try?
-
-Thanks,
-Frank
+-Alexey
