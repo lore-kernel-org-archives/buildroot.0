@@ -1,96 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  4 Aug 2016 11:04:46 +0200
-Subject: [Buildroot] [PATCH] eudev: add patch to fix getrandom() system call
-	on ARM64
-Message-ID: <1470301486-1223-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 4 Aug 2016 11:54:19 +0200
+Subject: [Buildroot] the problem with Xorg, QT5 and imx vivant dirver
+In-Reply-To: <CAMWiJUtJa4ppP3gdneeCYwtuxx4ba2w02MTjjWC7cmiUZgdGMw@mail.gmail.com>
+References: <CAMWiJUu_C8sJ+gaQdxQjAUS5wk_HEwzOdtEp4komzqOeB5XCBA@mail.gmail.com>
+ <20160802213044.264e63f8@free-electrons.com>
+ <CAMWiJUs2371W5JZGnDuAozTCKUHKQtoU+V1hrb1rHKsh=nG6DA@mail.gmail.com>
+ <20160803115341.21a3018b@free-electrons.com>
+ <CAAMH-yvnsS7vq=XS_E0iLaRV-XZi2aQkHSKujn5FuZ5kK5=dug@mail.gmail.com>
+ <CAMWiJUtJa4ppP3gdneeCYwtuxx4ba2w02MTjjWC7cmiUZgdGMw@mail.gmail.com>
+Message-ID: <CAAMH-ysPacctbWpfsCLBbNm4EsJ4zOd2swtRmRbLRa-o4Hkg2Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the kernel headers in the toolchain don't provide __NR_getrandom,
-eudev has a predefined set of values. However, the provided value for
-ARM64 is incorrect, and causes a runtime problem on this architecture
-when old kernel headers (not providing __NR_getrandom) are used.
+Hi,
 
-This commit adds a patch to eudev to fix this issue.
+On Wed, Aug 3, 2016 at 5:42 PM, Zhaozhou Meng <mengzhaozhou@gmail.com> wrote:
+> Thanks for the infomations that help me a lot.
+>
+> Not really for using the QT eglfs under X11.
+> I know it will override the X11 if I do that, the elgfs is setted fullscreen
+> display, beside that, is there other reason that I wouldn't be able to use
+> it ?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...missing.h-fix-getrandom-system-call-numbe.patch | 64 ++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 package/eudev/0002-src-shared-missing.h-fix-getrandom-system-call-numbe.patch
+Please read the EGLFS definition from Qt documentation:
+http://doc.qt.io/qt-5/embedded-linux.html
 
-diff --git a/package/eudev/0002-src-shared-missing.h-fix-getrandom-system-call-numbe.patch b/package/eudev/0002-src-shared-missing.h-fix-getrandom-system-call-numbe.patch
-new file mode 100644
-index 0000000..5637933
---- /dev/null
-+++ b/package/eudev/0002-src-shared-missing.h-fix-getrandom-system-call-numbe.patch
-@@ -0,0 +1,64 @@
-+From f80fe0e68686060e861338cf7b3b32e0637b3e0b Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Thu, 4 Aug 2016 10:13:09 +0200
-+Subject: [PATCH] src/shared/missing.h: fix getrandom system call number on
-+ ARM64
-+
-+The getrandom() system call number is indeed 384 on ARM, but it is not
-+the same on ARM64. ARM64 uses the asm-generic headers, including for
-+system call numbers, so the getrandom() system call number on ARM64 is
-+278. This fixes runtime issues of eudev on ARM64, such as:
-+
-+Populating /dev using udev: [    6.186817] udevd[1204]: starting version 3.1.5
-+[    6.191662] udevd[1204]: syscall 384
-+[    6.195217] Code: aa0503e4 aa0603e5 aa0703e6 d4000001 (b13ffc1f)
-+[    6.201291] CPU: 4 PID: 1204 Comm: udevd Not tainted 4.7.0+ #1
-+[    6.207079] Hardware name: ARM Juno development board (r2) (DT)
-+[    6.212954] task: ffff800976421900 task.stack: ffff800975610000
-+[    6.218825] PC is at 0xffff97f12234
-+[    6.222281] LR is at 0x41b15c
-+[    6.225214] pc : [<0000ffff97f12234>] lr : [<000000000041b15c>] pstate: 80000000
-+[    6.232544] sp : 0000ffffcf9b3870
-+[    6.235828] x29: 0000ffffcf9b3870 x28: 0000000000428218
-+[    6.241110] x27: 0000000000000000 x26: 000000000042a7e3
-+[    6.246395] x25: 0000ffffcf9b39c8 x24: 0000000000428000
-+[    6.251670] x23: 0000000000449000 x22: 0000000000449678
-+[    6.256946] x21: 0000000000000010 x20: 0000000000449000
-+[    6.262233] x19: 0000000000449678 x18: 0000000000000000
-+[    6.267507] x17: 0000ffff97f12210 x16: 0000000000449440
-+[    6.272779] x15: 0000ffff97e4f730 x14: 0000ffff98050cb8
-+[    6.278060] x13: 000000000000033c x12: 00000000000004b4
-+[    6.283331] x11: 0000000000000000 x10: 0101010101010101
-+[    6.288604] x9 : 0000000000001010 x8 : 0000000000000180
-+[    6.293882] x7 : ffffffffffffffff x6 : ffffffffffffffff
-+[    6.299154] x5 : 00000000271e36c0 x4 : 0007061c00190d07
-+[    6.304426] x3 : 00000000271e36d0 x2 : 0000000000000001
-+[    6.309705] x1 : 0000000000000010 x0 : 0000000000449678
-+[    6.314976]
-+[    6.398734] sky2 0000:08:00.0 enp8s0: renamed from eth0
-+
-+Reported-by: Kevin Hilman <khilman@baylibre.com>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ src/shared/missing.h | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/shared/missing.h b/src/shared/missing.h
-+index 9031119..5ad5997 100644
-+--- a/src/shared/missing.h
-++++ b/src/shared/missing.h
-+@@ -47,8 +47,10 @@
-+ #    define __NR_getrandom 318
-+ #  elif defined(__i386__)
-+ #    define __NR_getrandom 355
-+-#  elif defined(__arm__) || defined(__aarch64__)
-++#  elif defined(__arm__)
-+ #    define __NR_getrandom 384
-++#  elif defined(__aarch64__)
-++#    define __NR_getrandom 278
-+ #  elif defined(__ia64__)
-+ #    define __NR_getrandom 1339
-+ #  elif defined(__m68k__)
-+-- 
-+2.7.4
-+
--- 
-2.7.4
+"EGLFS is a platform plugin for running Qt5 applications on top of EGL
+and OpenGL ES 2.0 without an actual windowing system (like X11 or
+Wayland)."
+
+The reason is that the windowing system such as X11 leverages the
+available GPU/graphics libraries (in this case the Vivante GPU3D) so
+EGLFS cannot access it at the same time.
+
+Regards,
+Gary
