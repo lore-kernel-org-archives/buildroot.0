@@ -1,47 +1,42 @@
-From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
-Date: Thu, 4 Aug 2016 15:39:01 +0530
-Subject: [Buildroot] [PATCH 1/1] gst1-plugins-bad: hls: allow user to
- select crypto backend
-In-Reply-To: <87mvkth9qg.fsf@dell.be.48ers.dk>
-References: <1470226767-21018-1-git-send-email-rahul.bedarkar@imgtec.com>
- <20160803142925.3af9c6b7@free-electrons.com> <57A1F5DA.9020507@imgtec.com>
- <87mvkth9qg.fsf@dell.be.48ers.dk>
-Message-ID: <57A3143D.4080404@imgtec.com>
+From: Alexander Dahl <post@lespocky.de>
+Date: Thu,  4 Aug 2016 12:47:42 +0200
+Subject: [Buildroot] [PATCH] ncdu: bump version from 1.9 to 1.11
+Message-ID: <1470307662-1879-1-git-send-email-post@lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Peter,
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+---
+ package/ncdu/ncdu.hash | 6 +++---
+ package/ncdu/ncdu.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Thursday 04 August 2016 02:05 AM, Peter Korsgaard wrote:
->
-> Yes, but we can do something like (untested):
->
-> config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS
->          bool "hls"
->          select BR2_PACKAGE_NETTLE if !(BR2_PACKAGE_GNUTLS || BR2_PACKAGE_OPENSSL)
->          help
->            Fragmented streaming plugins
->
-> and then in the .mk:
->
-> ifeq ($(BR2_PACKAGE_NETTLE),y)
-> GST1_PLUGINS_BAD_DEPENDENCIES += nettle
-> GST1_PLUGINS_BAD_CONF_OPTS += --with-hls-crypto=nettle
-> else ifeq ($(BR2_PACKAGE_GNUTLS),y)
-> GST1_PLUGINS_BAD_DEPENDENCIES += libgcrypt
-> GST1_PLUGINS_BAD_CONF_OPTS += --with-hls-crypto=libgcrypt \
-> 	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
-> else
-> GST1_PLUGINS_BAD_DEPENDENCIES += openssl
-> GST1_PLUGINS_BAD_CONF_OPTS += --with-hls-crypto=openssl
-> endif
->
-
-Thanks for suggestion. I've sent new patch.
-
-Regards,
-
-Rahul
+diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
+index 7985c99..4bdda40 100644
+--- a/package/ncdu/ncdu.hash
++++ b/package/ncdu/ncdu.hash
+@@ -1,3 +1,3 @@
+-# From http://dev.yorhel.nl/download/ncdu-1.9.tar.gz.{md5,sha1}
+-md5	93258079db897d28bb8890e2db89b1fb	ncdu-1.9.tar.gz
+-sha1	27cb5464b192db8ffdf0a894fe51d29985348eb0	ncdu-1.9.tar.gz
++# From http://dev.yorhel.nl/download/ncdu-1.11.tar.gz.{md5,sha1}
++md5   9e44240a5356b029f05f0e70a63c4d12          ncdu-1.11.tar.gz
++sha1  8f22d713e6d2b28e1f501eee2bd1e03b55550c8d  ncdu-1.11.tar.gz
+diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+index 0351970..bccbb8d 100644
+--- a/package/ncdu/ncdu.mk
++++ b/package/ncdu/ncdu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NCDU_VERSION = 1.9
++NCDU_VERSION = 1.11
+ NCDU_SITE = http://dev.yorhel.nl/download
+ 
+ NCDU_DEPENDENCIES = ncurses
+-- 
+2.1.4
