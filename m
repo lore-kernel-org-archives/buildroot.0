@@ -1,64 +1,119 @@
 From: Petri Gynther <pgynther@google.com>
-Date: Thu,  4 Aug 2016 15:29:59 -0700
-Subject: [Buildroot] [PATCH 2/3] gcc: configs: rename
-	BR2_EXTRA_GCC_CONFIG_OPTIONS
+Date: Thu,  4 Aug 2016 15:30:00 -0700
+Subject: [Buildroot] [PATCH 3/3] uclibc: configs: rename BR2_PTHREAD_DEBUG
 In-Reply-To: <1470349800-27521-1-git-send-email-pgynther@google.com>
 References: <1470349800-27521-1-git-send-email-pgynther@google.com>
-Message-ID: <1470349800-27521-2-git-send-email-pgynther@google.com>
+Message-ID: <1470349800-27521-3-git-send-email-pgynther@google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rename BR2_EXTRA_GCC_CONFIG_OPTIONS to BR2_GCC_EXTRA_CONFIG_OPTIONS
-to be consistent with BR2_GCC_* and BR2_BINUTILS_EXTRA_CONFIG_OPTIONS.
+Rename BR2_PTHREAD_DEBUG to BR2_PTHREADS_DEBUG to be consistent
+with BR2_PTHREADS_* config item naming.
 
 Signed-off-by: Petri Gynther <pgynther@google.com>
 ---
- package/gcc/Config.in.host             | 2 +-
- package/gcc/gcc-final/gcc-final.mk     | 2 +-
- package/gcc/gcc-initial/gcc-initial.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 2 +-
+ configs/atmel_sama5d3_xplained_dev_defconfig     | 2 +-
+ configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 2 +-
+ configs/atmel_sama5d4_xplained_dev_defconfig     | 2 +-
+ configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 2 +-
+ package/uclibc/Config.in                         | 2 +-
+ package/uclibc/uclibc.mk                         | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 2b54959..a2946bc 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -109,7 +109,7 @@ config BR2_GCC_VERSION
- 	default "6.1.0" if BR2_GCC_VERSION_6_X
- 	default "arc-2016.09-eng007" if BR2_GCC_VERSION_4_8_ARC
+diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+index d7f4717..aa52bd0 100644
+--- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+@@ -10,7 +10,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ # Needed for gdb
+-BR2_PTHREAD_DEBUG=y
++BR2_PTHREADS_DEBUG=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
  
--config BR2_EXTRA_GCC_CONFIG_OPTIONS
-+config BR2_GCC_EXTRA_CONFIG_OPTIONS
- 	string "Additional gcc options"
- 	default ""
- 	help
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 284d34c..0c0ab35 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -90,7 +90,7 @@ endif
- # End with user-provided options, so that they can override previously
- # defined options.
- HOST_GCC_FINAL_CONF_OPTS += \
--	$(call qstrip,$(BR2_EXTRA_GCC_CONFIG_OPTIONS))
-+	$(call qstrip,$(BR2_GCC_EXTRA_CONFIG_OPTIONS))
+diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
+index d51a141..220c941 100644
+--- a/configs/atmel_sama5d3_xplained_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_dev_defconfig
+@@ -9,7 +9,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ # Needed for gdb
+-BR2_PTHREAD_DEBUG=y
++BR2_PTHREADS_DEBUG=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
  
- HOST_GCC_FINAL_CONF_ENV = \
- 	$(HOST_GCC_COMMON_CONF_ENV)
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 1e58d8b..0fba9fb 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -47,7 +47,7 @@ HOST_GCC_INITIAL_CONF_OPTS = \
- 	--with-newlib \
- 	--disable-largefile \
- 	--disable-nls \
--	$(call qstrip,$(BR2_EXTRA_GCC_CONFIG_OPTIONS))
-+	$(call qstrip,$(BR2_GCC_EXTRA_CONFIG_OPTIONS))
+diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+index c45c2ce..e360cfb 100644
+--- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+@@ -9,7 +9,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ # Needed for gdb
+-BR2_PTHREAD_DEBUG=y
++BR2_PTHREADS_DEBUG=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
  
- HOST_GCC_INITIAL_CONF_ENV = \
- 	$(HOST_GCC_COMMON_CONF_ENV)
+diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
+index 7dadeca..cad4eb1 100644
+--- a/configs/atmel_sama5d4_xplained_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_dev_defconfig
+@@ -10,7 +10,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ # Needed for gdb
+-BR2_PTHREAD_DEBUG=y
++BR2_PTHREADS_DEBUG=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+index 9e11efa..1738a9a 100644
+--- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+@@ -10,7 +10,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ # Needed for gdb
+-BR2_PTHREAD_DEBUG=y
++BR2_PTHREADS_DEBUG=y
+ # Needed for some packages
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 6c16ed4..e459f44 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -69,7 +69,7 @@ choice
+ 		depends on !BR2_m68k && !BR2_microblaze
+ endchoice
+ 
+-config BR2_PTHREAD_DEBUG
++config BR2_PTHREADS_DEBUG
+ 	bool "Thread library debugging"
+ 	depends on BR2_PTHREADS || BR2_PTHREADS_NATIVE
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 124bd59..6fd0768 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -353,7 +353,7 @@ endif
+ # Thread debug
+ #
+ 
+-ifeq ($(BR2_PTHREAD_DEBUG),y)
++ifeq ($(BR2_PTHREADS_DEBUG),y)
+ UCLIBC_THREAD_DEBUG_CONFIG = $(call KCONFIG_ENABLE_OPT,PTHREADS_DEBUG_SUPPORT,$(@D)/.config)
+ else
+ UCLIBC_THREAD_DEBUG_CONFIG = $(call KCONFIG_DISABLE_OPT,PTHREADS_DEBUG_SUPPORT,$(@D)/.config)
 -- 
 2.8.0.rc3.226.g39d4020
