@@ -1,78 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Aug 2016 22:44:30 +0200
-Subject: [Buildroot] [PATCH 1/1] Patch to support latest buildroot
- environment
-In-Reply-To: <1470275232-11620-1-git-send-email-olivier.singla@gmail.com>
-References: <1470275232-11620-1-git-send-email-olivier.singla@gmail.com>
-Message-ID: <20160804224430.61b3c0db@free-electrons.com>
+Date: Thu, 4 Aug 2016 22:44:49 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.18.x and 4.1.x series
+Message-ID: <20160804204458.B3CAB82257@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3b2e656b5f388fa3f2235484038d4c410ad121c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  3 Aug 2016 21:47:12 -0400, Olivier Singla wrote:
-> From: Olivier <olivier.singla@gmail.com>
+Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-This should have been:
-
-From: Olivier Singla <olivier.singla@gmail.com>
-
-Indeed your From: line must match the Signed-off-by line.
-
-Also, the commit title, "Patch to support latest buildroot environment"
-is completely wrong. The patch has absolutely *nothing* to do with
-supporting the latest Buildroot environment. It is about making
-shellinabox to build with the musl C library. So the title should have
-been something like:
-
-	shellinabox: fix build with the musl C library
-
-> ++#ifndef TTYDEF_IFLAG
-> ++#include <sys/ttydefaults.h>
-> ++#endif
-
-The #ifndef test is completely unneeded. TTYDEF_* are available from
-<sys/ttydefaults.h>, so it should just be included.
-
-> + #ifdef HAVE_UTMPX_H
-> +-#include <utmpx.h>
-> ++//#include <utmpx.h>
-> ++#undef HAVE_UTMPX_H
-> + #endif
-
-That's a complete hack and not the proper solution. The reason of the
-build failure is that musl does "#define utmp utmpx" which causes some
-symbol clash in launcher.c.
-
-I have reported this problem to the musl developers:
-http://www.openwall.com/lists/musl/2016/08/04/8. And in the mean time,
-I've just added a change to shellinabox.mk to pass an autoconf variable
-that makes the configure script believe that <utmpx.h> is not available
-when the toolchain uses the musl C library.
-
-In the end, I did three patches:
-
- 1/ To turn the existing shellinabox patch to a Git formatted patch.
-
-    https://git.buildroot.org/buildroot/commit/?id=99ed68487a83380cf00ba5c602746ada3f995bf7
-
- 2/ One to add the patch fixing the missing <sys/ttydefaults.h> include
-    and add the hack for <utmpx.h>
-
-    https://git.buildroot.org/buildroot/commit/?id=35ccd358b304413229fc2e32f1318426cbb23a20
-
- 3/ One to disable shellinabox for BR2_STATIC_LIBS builds, since it
-    uses <dlfcn.h>. This was also causing some other build failures.
-
-    https://git.buildroot.org/buildroot/commit/?id=1cad81f0fed3934449a28c35316684393d702a74
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 089d424..ae5cc5d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -240,10 +240,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.74"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.18.37"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.38"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.28"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.29"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+ 	default "4.4.16"	if BR2_KERNEL_HEADERS_4_4
