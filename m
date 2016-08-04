@@ -1,97 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Aug 2016 22:46:04 +0200
-Subject: [Buildroot] [git commit] eudev: add patch to fix getrandom() system
-	call on ARM64
-Message-ID: <20160804204623.0DB6881F55@busybox.osuosl.org>
+Date: Thu, 4 Aug 2016 22:46:40 +0200
+Subject: [Buildroot] [PATCH] gcc: bump 4.9 series to 4.9.4
+In-Reply-To: <1470260904-27174-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1470260904-27174-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160804224640.40b42991@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8632170db8dddf735c5e1c80f6c8d48f75423c63
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-When the kernel headers in the toolchain don't provide __NR_getrandom,
-eudev has a predefined set of values. However, the provided value for
-ARM64 is incorrect, and causes a runtime problem on this architecture
-when old kernel headers (not providing __NR_getrandom) are used.
+On Wed,  3 Aug 2016 23:48:24 +0200, Thomas Petazzoni wrote:
+> Two patches are removed, as they have been upstreamed:
+> 
+>  - 130-fix_build_with_gcc-6.patch (svn commit 233721, Git commit
+>    8c3fa311caa86f61b4e28d1563d1110b44340fb2)
+> 
+>  - 920-libgcc-remove-unistd-header.patch (svn commit 226092, Git commit
+>    e940d7953f06af11d09229a29ecbcc1ba25b378d)
+> 
+> All other patches have simply been refreshed, with no manual edit
+> needed.
+> 
+> A build+runtime test has been done with an ARM, Cortex-A8, EABIhf, musl
+> configuration, booted under Qemu.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-This commit adds a patch to eudev to fix this issue.
+Applied to master, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Kevin Hilman <khilman@baylibre.com>
----
- ...missing.h-fix-getrandom-system-call-numbe.patch | 64 ++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
-
-diff --git a/package/eudev/0002-src-shared-missing.h-fix-getrandom-system-call-numbe.patch b/package/eudev/0002-src-shared-missing.h-fix-getrandom-system-call-numbe.patch
-new file mode 100644
-index 0000000..5637933
---- /dev/null
-+++ b/package/eudev/0002-src-shared-missing.h-fix-getrandom-system-call-numbe.patch
-@@ -0,0 +1,64 @@
-+From f80fe0e68686060e861338cf7b3b32e0637b3e0b Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Thu, 4 Aug 2016 10:13:09 +0200
-+Subject: [PATCH] src/shared/missing.h: fix getrandom system call number on
-+ ARM64
-+
-+The getrandom() system call number is indeed 384 on ARM, but it is not
-+the same on ARM64. ARM64 uses the asm-generic headers, including for
-+system call numbers, so the getrandom() system call number on ARM64 is
-+278. This fixes runtime issues of eudev on ARM64, such as:
-+
-+Populating /dev using udev: [    6.186817] udevd[1204]: starting version 3.1.5
-+[    6.191662] udevd[1204]: syscall 384
-+[    6.195217] Code: aa0503e4 aa0603e5 aa0703e6 d4000001 (b13ffc1f)
-+[    6.201291] CPU: 4 PID: 1204 Comm: udevd Not tainted 4.7.0+ #1
-+[    6.207079] Hardware name: ARM Juno development board (r2) (DT)
-+[    6.212954] task: ffff800976421900 task.stack: ffff800975610000
-+[    6.218825] PC is at 0xffff97f12234
-+[    6.222281] LR is at 0x41b15c
-+[    6.225214] pc : [<0000ffff97f12234>] lr : [<000000000041b15c>] pstate: 80000000
-+[    6.232544] sp : 0000ffffcf9b3870
-+[    6.235828] x29: 0000ffffcf9b3870 x28: 0000000000428218
-+[    6.241110] x27: 0000000000000000 x26: 000000000042a7e3
-+[    6.246395] x25: 0000ffffcf9b39c8 x24: 0000000000428000
-+[    6.251670] x23: 0000000000449000 x22: 0000000000449678
-+[    6.256946] x21: 0000000000000010 x20: 0000000000449000
-+[    6.262233] x19: 0000000000449678 x18: 0000000000000000
-+[    6.267507] x17: 0000ffff97f12210 x16: 0000000000449440
-+[    6.272779] x15: 0000ffff97e4f730 x14: 0000ffff98050cb8
-+[    6.278060] x13: 000000000000033c x12: 00000000000004b4
-+[    6.283331] x11: 0000000000000000 x10: 0101010101010101
-+[    6.288604] x9 : 0000000000001010 x8 : 0000000000000180
-+[    6.293882] x7 : ffffffffffffffff x6 : ffffffffffffffff
-+[    6.299154] x5 : 00000000271e36c0 x4 : 0007061c00190d07
-+[    6.304426] x3 : 00000000271e36d0 x2 : 0000000000000001
-+[    6.309705] x1 : 0000000000000010 x0 : 0000000000449678
-+[    6.314976]
-+[    6.398734] sky2 0000:08:00.0 enp8s0: renamed from eth0
-+
-+Reported-by: Kevin Hilman <khilman@baylibre.com>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ src/shared/missing.h | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/shared/missing.h b/src/shared/missing.h
-+index 9031119..5ad5997 100644
-+--- a/src/shared/missing.h
-++++ b/src/shared/missing.h
-+@@ -47,8 +47,10 @@
-+ #    define __NR_getrandom 318
-+ #  elif defined(__i386__)
-+ #    define __NR_getrandom 355
-+-#  elif defined(__arm__) || defined(__aarch64__)
-++#  elif defined(__arm__)
-+ #    define __NR_getrandom 384
-++#  elif defined(__aarch64__)
-++#    define __NR_getrandom 278
-+ #  elif defined(__ia64__)
-+ #    define __NR_getrandom 1339
-+ #  elif defined(__m68k__)
-+-- 
-+2.7.4
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
