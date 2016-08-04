@@ -1,27 +1,72 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 04 Aug 2016 10:05:26 +0000
-Subject: [Buildroot] [Bug 9121] gst1-imx for i.MX6 compile failed,
- cannot find PXP, IPU and other errors
-In-Reply-To: <bug-9121-163@https.bugs.busybox.net/>
-References: <bug-9121-163@https.bugs.busybox.net/>
-Message-ID: <bug-9121-163-yKPeEfjdsu@https.bugs.busybox.net/>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Thu, 4 Aug 2016 15:36:43 +0530
+Subject: [Buildroot] [PATCH 1/1] gst1-plugins-bad: hls: fix broken dependency
+Message-ID: <1470305203-1738-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9121
+HLS plugin can be built with nettle or libgcrypt or openssl
+cryptographic backend. But current dependency on gnutls is incorrect.
+It has been working so far because gnutls depends on nettle.
 
---- Comment #10 from Gary Bisson <gary.bisson@boundarydevices.com> ---
-(In reply to Gary Bisson from comment #7)
+gst-plugins-bad's build system for HLS allows user to choose which
+cryptographic backend to use. If that is not specified, it internally
+checks for nettle or libgcrypt or openssl in order. If none of the
+cryptographic backend is available, HLS plugin gets disabled internally.
 
-nyma, from buildroot IRC channel, also tried to reproduce the issue without
-success. See his answer from Aug 4th:
-13:52 < nyma> gbisson: No more luck on my autobuilder: it builds fine too.
+Select cryptographic backend according to which cryptographic packages
+are available. If both libgcrypt or openssl are not available, choose
+nettle by default.
 
-Do you have another (clean) machine or even a VM you can try this on?
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in           |  2 +-
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 14 +++++++++++++-
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 0f9fb15..2f288ca 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -530,7 +530,7 @@ comment "gl needs the gst1-plugins-bad opengl library"
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS
+ 	bool "hls"
+-	select BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_NETTLE if !(BR2_PACKAGE_LIBGCRYPT || BR2_PACKAGE_OPENSSL)
+ 	help
+ 	  Fragmented streaming plugins
+ 
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 8f739ec..3ffdd10 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -650,7 +650,19 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-hls
+-GST1_PLUGINS_BAD_DEPENDENCIES += gnutls
++
++ifeq ($(BR2_PACKAGE_NETTLE),y)
++GST1_PLUGINS_BAD_DEPENDENCIES += nettle
++GST1_PLUGINS_BAD_CONF_OPTS += --with-hls-crypto=nettle
++else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
++GST1_PLUGINS_BAD_DEPENDENCIES += libgcrypt
++GST1_PLUGINS_BAD_CONF_OPTS += --with-hls-crypto=libgcrypt \
++	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
++else
++GST1_PLUGINS_BAD_DEPENDENCIES += openssl
++GST1_PLUGINS_BAD_CONF_OPTS += --with-hls-crypto=openssl
++endif
++
+ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-hls
+ endif
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.6.2
