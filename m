@@ -1,59 +1,39 @@
-From: Olivier Singla <olivier.singla@gmail.com>
-Date: Wed,  3 Aug 2016 21:47:12 -0400
-Subject: [Buildroot] [PATCH 1/1] Patch to support latest buildroot
-	environment
-Message-ID: <1470275232-11620-1-git-send-email-olivier.singla@gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 3 Aug 2016 22:39:31 -0400
+Subject: [Buildroot] Raspberry Pi OpenGL/Qt5 10x slower than Raspbian
+Message-ID: <CA+-urNTrCwfx4YYZ0S37wyB9ehquKLqacKaOzL6_7yCkt+Q29g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Olivier <olivier.singla@gmail.com>
+I'm trying to debug a 10x slow down with a simple Qt5 app that draws
+rectangles and a couple lines of text on the screen. I'm comparing the
+performance between a fresh install of Raspbian and the master branch
+of Buildroot (but I also saw this with an older BR release). I've
+narrowed the performance difference down to the rectangle and text
+drawing calls. Nothing else is running. On the Buildroot side, I'm
+using the raspberrypi_defconfig with only the following additions and
+my test app:
 
-Fixes:
- - launcher.c: added include to <sys/ttydefaults.h> to avoid missing definitions
- - launcher.c: do not include utmpx.h (since ptsname_r is already defined in stdlib.h)
++BR2_PACKAGE_QT5=y
++BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
++BR2_PACKAGE_QT5BASE_GUI=y
++BR2_PACKAGE_QT5BASE_WIDGETS=y
++BR2_PACKAGE_QT5BASE_EGLFS=y
++BR2_PACKAGE_RPI_USERLAND=y
 
-Signed-off-by: Olivier Singla <olivier.singla@gmail.com>
----
- .../0002-launcher.c-fix-ttydef-utmpx.patch         | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/shellinabox/0002-launcher.c-fix-ttydef-utmpx.patch
+I haven't modified any of the config files in the boot partition.
+Changing the config.txt to match the Raspbian version didn't affect
+performance. I also verified that my test app is using eglfs. The
+performance degradation is the same on both a Raspberry Pi Zero and
+Model B.
 
-diff --git a/package/shellinabox/0002-launcher.c-fix-ttydef-utmpx.patch b/package/shellinabox/0002-launcher.c-fix-ttydef-utmpx.patch
-new file mode 100644
-index 0000000..54cb699
---- /dev/null
-+++ b/package/shellinabox/0002-launcher.c-fix-ttydef-utmpx.patch
-@@ -0,0 +1,28 @@
-+launcher.c: added include to <sys/ttydefaults.h> to avoid missing definitions
-+launcher.c: do not include utmpx.h (since ptsname_r is already defined in stdlib.h)
-+
-+Signed-off-by:  "Olivier Singla" <olivier.singla@gmail.com>
-+
-+--- shellinabox-v2.19/shellinabox/launcher.c.orig	2016-08-01 18:43:01.628002777 -0400
-++++ shellinabox-v2.19/shellinabox/launcher.c	2016-08-01 18:45:14.943444066 -0400
-+@@ -81,6 +81,10 @@
-+ #include <sys/uio.h>
-+ #endif
-+ 
-++#ifndef TTYDEF_IFLAG
-++#include <sys/ttydefaults.h>
-++#endif
-++
-+ #ifdef HAVE_UTIL_H
-+ #include <util.h>
-+ #endif
-+@@ -90,7 +94,8 @@
-+ #endif
-+ 
-+ #ifdef HAVE_UTMPX_H
-+-#include <utmpx.h>
-++//#include <utmpx.h>
-++#undef HAVE_UTMPX_H
-+ #endif
-+ 
-+ #if defined(HAVE_SECURITY_PAM_APPL_H)
--- 
-2.5.5
+This slowdown seems so big that it feels like I'm forgetting some
+important piece of configuration, but I can't figure it out.
+
+Has anyone else run into this or has any ideas on things to try?
+
+Thanks,
+Frank
