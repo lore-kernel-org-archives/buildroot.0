@@ -1,40 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Aug 2016 16:38:44 +0200
-Subject: [Buildroot] [PATCH] eudev: add patch to fix getrandom() system
- call on ARM64
-In-Reply-To: <7h7fbwk3l2.fsf@baylibre.com>
-References: <1470301486-1223-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <7h7fbwk3l2.fsf@baylibre.com>
-Message-ID: <20160804163844.68287f49@free-electrons.com>
+Date: Thu, 4 Aug 2016 18:19:18 +0200
+Subject: [Buildroot] [git commit] Revert "dtc: install libfdt library and
+	headers for host variant"
+Message-ID: <20160804162111.DC1B382139@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8a69fa777940be73d5224cb2b8c702bef5ba8074
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 04 Aug 2016 07:31:53 -0700, Kevin Hilman wrote:
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
-> > When the kernel headers in the toolchain don't provide __NR_getrandom,
-> > eudev has a predefined set of values. However, the provided value for
-> > ARM64 is incorrect, and causes a runtime problem on this architecture
-> > when old kernel headers (not providing __NR_getrandom) are used.
-> >
-> > This commit adds a patch to eudev to fix this issue.
-> >
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>  
-> 
-> Thanks for the patch, I tested it and the syscall splat goes away.
-> 
-> Tested-by: Kevin Hilman <khilman@baylibre.com>
+This reverts commit 5ca9b7cf66941a66cff736aadaf8a31afe55f964. Installing
+dtc headers in $(HOST_DIR) causes some build failures of
+host-uboot-tools due to a conflicting libfdt.h header.
 
-Thanks. FWIW, the patch has been submitted upstream:
-https://github.com/gentoo/eudev/pull/134.
+The possible solution to solve this problem, based on -isystem, has been
+reverted has it was causing too many issues that we didn't want to solve
+so close to cutting 2016.08-rc1.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Since the headers of libfdt for the host are currently not needed for
+any package in the Buildroot tree, it is easier and safer to just revert
+this patch.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/9fba77f4080bf6bc26e341f3f383cdba26c0e14f/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dtc/dtc.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index febd592..8fdcdbe 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -51,9 +51,7 @@ define HOST_DTC_BUILD_CMDS
+ endef
+ 
+ define HOST_DTC_INSTALL_CMDS
+-	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install-bin install-lib \
+-		install-includes
+-
++	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR)/usr install-bin
+ endef
+ 
+ $(eval $(generic-package))
