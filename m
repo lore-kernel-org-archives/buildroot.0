@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Aug 2016 18:28:25 +0200
-Subject: [Buildroot] Raspberry Pi OpenGL/Qt5 10x slower than Raspbian
-In-Reply-To: <CA+-urNQqnUdBvsMERgNxnAKWSGpiUNekvuSZADvyw7_HpYO41A@mail.gmail.com>
-References: <CA+-urNTrCwfx4YYZ0S37wyB9ehquKLqacKaOzL6_7yCkt+Q29g@mail.gmail.com>
- <20160804091707.6755bb66@free-electrons.com>
- <CA+-urNQqnUdBvsMERgNxnAKWSGpiUNekvuSZADvyw7_HpYO41A@mail.gmail.com>
-Message-ID: <20160804182825.4c9ff4ff@free-electrons.com>
+Date: Thu, 4 Aug 2016 18:33:35 +0200
+Subject: [Buildroot] [RFC 0/2] script to find package licenses
+In-Reply-To: <1470320164-8241-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1470320164-8241-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <20160804183335.0947f9a9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,45 +12,50 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 4 Aug 2016 08:35:24 -0400, Frank Hunleth wrote:
+On Thu, 4 Aug 2016 19:46:02 +0530, Rahul Bedarkar wrote:
 
-> > Change -Os by -O2 in the Buildroot configuration, by using
-> > BR2_OPTIMIZE_2. I even believe we should stop using BR2_OPTIMIZE_S by
-> > default, and switch to BR2_OPTIMIZE_2 instead.  
+> Legal information is a kind of thing that we can't automate completely.
+> But we want it to be correct when new package is added or version bumps.
 > 
-> Done, but no luck for this particular issue. I have another piece of
-> code that differs in performance from Debian by 5% and is more CPU
-> bound. I'll try it on that too.
-
-Gaah.
-
-> > Also, are you sure it's really using OpenGL with the Buildroot build?  
+> This patch set attempts to add a script to find license information from
+> package source files to verify or correct legal info for buildroot packages.
 > 
-> On the Buildroot build, I've tried running the Qt application with
-> "-platform eglfs", but that seemed to be the default already. I'm not
-> sure how to check deeper than that.
-
-I guess if eglfs support has been built and you're able to use, it
-means that it's using the GPU.
-
-> > Under Raspbian, are you also running the eglfs build of Qt, or is it
-> > with X.org? I'm not sure Debian has an eglfs capable build of Qt5.  
+> Legal information may get outdated with version bumps or even may not get
+> correct in first place if source package does not provide any license files.
+> In such cases, we need to look into file header to get that information.
+> But it could be very difficult if there are number of source files.
 > 
-> You're right. On Raspbian, I'm running with X.org. I am naively
-> assuming that Qt5 w/ eglfs isn't 10x slower than Qt5 w/ X.org. I
-> really hope that's not the case.
+> find-licenses script scans package source files for known licenses to
+> find under which license package is released. It aggregates license
+> information for all source files found in a package.
+> 
+> For finding license, we rely on file's license header. Generally
+> most of packages use standard license headers which helps us to detect
+> license of packages.
+> 
+> Currently it supports notable licenses. But we can later add other
+> licenses based on regx.
+> 
+> Script outputs licenses found on standard output file-wise, directory-
+> wise and final aggregation of all licenses found. It also lists files
+> which don't have license header. Directory-wise license listing will be
+> useful when different components are licensed under different license.
+> 
+> Since final license list is just aggregation of licenses found for all
+> source files, we can not surely say if package is dual or
+> multi-licensed or different components are licensed under different
+> license. That's why we can't use final license list directly in our
+> package .mk file, but it at least helps us to find or verify license
+> information quickly.
 
-I also hope, but using X.org on one side and doing eglfs on the other
-side is really a very different configuration. I would also assume that
-there should not be a 10x difference between Qt5/X.org vs Qt5/eglfs,
-but I have never tested, so I don't know.
+Thanks for this proposal. However, there are already some tools that do
+the same thing I believe. I'm thinking especially at the tools used by
+the Fossology project (https://www.fossology.org/). It is surely more
+complicated to install and use that your Python script, but it is also
+a lot more complete, and even more importantly: maintained by other
+people.
 
-Which toolchain are you using ? Are you building everything optimized
-for ARMv6 (assuming you're using Rpi1) ?
-
-But a 10x difference really feels like acceleration is not used at all.
-You can also check the CPU consumption while running your Qt app to see
-what it looks like.
+Best regards,
 
 Thomas
 -- 
