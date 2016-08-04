@@ -1,36 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Aug 2016 22:51:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvpx: Fix compilation when
- __uClinux__ is defined
-In-Reply-To: <1469954504-31016-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1469954504-31016-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160804225141.360b6f4b@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu,  4 Aug 2016 22:51:49 +0200
+Subject: [Buildroot] [PATCH] package/libdvdread: needs host-pkgconf
+Message-ID: <1470343909-5420-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Add host-pkgconf to the dependencies since pkg-config is used to find
+libdvdcss.
 
-On Sun, 31 Jul 2016 10:41:44 +0200, Bernd Kuhls wrote:
-> The buildroot toolchains do not contain lddk.h
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/ae7/ae7ba1d5979ebe39aace628fa8ff2c8f08a70a98/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...mem-vpx_mem.h-Fix-compilation-with-uClibc.patch | 27 ++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100644 package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
+Fixes:
+http://autobuild.buildroot.net/results/e5f/e5fffdd51bdd6962149a836af1e7a6bbc6bae20c
 
-Applied to master after tweaking the commit log and the patch
-description. Please send the patch upstream after taking Khem's comment
-into account.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/libdvdread/libdvdread.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
+index c92eca5..adf79d8 100644
+--- a/package/libdvdread/libdvdread.mk
++++ b/package/libdvdread/libdvdread.mk
+@@ -11,6 +11,6 @@ LIBDVDREAD_INSTALL_STAGING = YES
+ LIBDVDREAD_LICENSE = GPLv2+
+ LIBDVDREAD_LICENSE_FILES = COPYING
+ LIBDVDREAD_CONF_OPTS = --with-libdvdcss
+-LIBDVDREAD_DEPENDENCIES = libdvdcss
++LIBDVDREAD_DEPENDENCIES = libdvdcss host-pkgconf
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.5
