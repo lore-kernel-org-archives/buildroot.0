@@ -1,71 +1,113 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 4 Aug 2016 19:09:25 +0200
-Subject: [Buildroot] [PATCH] package/lshw: fix musl build
-In-Reply-To: <20160804183732.7319a9c8@free-electrons.com>
-References: <1470327886-29273-1-git-send-email-romain.naour@gmail.com>
- <20160804183732.7319a9c8@free-electrons.com>
-Message-ID: <e2ca8dfa-5826-a478-7cec-c53a2da44df5@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 4 Aug 2016 19:09:45 +0200
+Subject: [Buildroot] [git commit] kmsxx: new package
+In-Reply-To: <20160728212806.C6B018225E@busybox.osuosl.org>
+References: <20160728212806.C6B018225E@busybox.osuosl.org>
+Message-ID: <20160804170945.GA5875@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thomas, Maxime, All,
 
-Le 04/08/2016 ? 18:37, Thomas Petazzoni a ?crit :
-> Hello,
+On 2016-07-28 23:28 +0200, Thomas Petazzoni spake thusly:
+> commit: https://git.buildroot.net/buildroot/commit/?id=93811a2b8a5efa43754e26a4a44f463cdbd9f1b4
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> On Thu,  4 Aug 2016 18:24:46 +0200, Romain Naour wrote:
+> KMS++ is a suite of library and test tools to interact with KMS drivers in
+> the linux kernel.
 > 
->> +diff --git a/src/core/dasd.cc b/src/core/dasd.cc
->> +index 626b8a8..18d19c3 100644
->> +--- a/src/core/dasd.cc
->> ++++ b/src/core/dasd.cc
->> +@@ -4,6 +4,7 @@
->> + #include <glob.h>
->> + #include <string.h>
->> + #include <fcntl.h>
->> ++#include <libgen.h>
-> 
-> Is this related?
+> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+> [Thomas:
+>  - rename prompt to kms++, suggested by Yann E. Morin
+>  - fixup the thread dependency comment
+>  - remove the mention of the python wrapper in the Config.in help
+>    text, since they are not installed
+>  - fix the Config.in comment to mention the C++ and gcc >= 4.8
+>    dependencies
+>  - use = instead of += when appropriate
+>  - use a loop to install the test programs
+>  - use a loop to install the libraries
+>  - add installation to staging as well, both the libraries and header
+>    files
+>  - add missing dependency on host-pkgconf
+>  - add hash file.]
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[--SNIP--]
+> diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
+> new file mode 100644
+> index 0000000..d49ec8f
+> --- /dev/null
+> +++ b/package/kmsxx/kmsxx.mk
+> @@ -0,0 +1,48 @@
+> +################################################################################
+> +#
+> +# kmsxx
+> +#
+> +################################################################################
+> +
+> +KMSXX_VERSION = a706f157b86e90696808025db01de99646d51a77
+> +KMSXX_SITE = $(call github,tomba,kmsxx,$(KMSXX_VERSION))
+> +KMSXX_LICENSE = MPLv2.0
+> +KMSXX_LICENSE_FILES = LICENSE
+> +KMSXX_INSTALL_STAGING = YES
+> +KMSXX_DEPENDENCIES = libdrm host-pkgconf
+> +KMSXX_CONF_OPTS = -DKMSXX_ENABLE_PYTHON=OFF
+> +
+> +ifeq ($(BR2_PACKAGE_KMSXX_INSTALL_TESTS),y)
+> +KMSXX_TESTS = \
+> +	fbtestpat kmsblank kmscapture \
+> +	kmsprint kmsview testpat wbcap \
+> +	wbm2m
+> +
+> +define KMSXX_INSTALL_TARGET_TESTS
+> +	$(foreach t,$(KMSXX_TESTS),\
+> +		$(INSTALL) -D -m 0755 $(@D)/bin/$(t) \
+> +			$(TARGET_DIR)/usr/bin/$(t)
+> +	)
+> +endef
+> +endif
+> +
+> +KMSXX_LIBS = kms++ kms++util
+> +
+> +define KMSXX_INSTALL_TARGET_CMDS
+> +	$(foreach l,$(KMSXX_LIBS),\
+> +		$(INSTALL) -D -m 0755 $(@D)/lib/lib$(l).so \
+> +			$(TARGET_DIR)/usr/lib/lib$(l).so
+> +	)
+> +	$(KMSXX_INSTALL_TARGET_TESTS)
+> +endef
+> +
+> +define KMSXX_INSTALL_STAGING_CMDS
+> +	$(foreach l,$(KMSXX_LIBS),\
+> +		$(INSTALL) -D -m 0755 $(@D)/lib/lib$(l).so \
+> +			$(STAGING_DIR)/usr/lib/lib$(l).so ; \
+> +		mkdir -p $(STAGING_DIR)/usr/include/$(l) ; \
+> +		cp -dpfr $(@D)/$(l)/inc/$(l)/* $(STAGING_DIR)/usr/include/$(l)/
 
-Yes it is.
+This foreach fails to fail when the first command fails to install the
+library:
 
-Upstream seems to use the POSIX variant of basename which require libgen.h
+    http://autobuild.buildroot.org/results/82c/82cfb7451f933b222abe30b5d35d23e409a4af79/build-end.log
 
-https://github.com/lyonel/lshw/commit/cd690bff1516b40fecd5ec4a7f6619e5bffc3cf0
+Regards,
+Yann E. MORIN.
 
-> 
->> + #include <unistd.h>
->> + #include <inttypes.h>
->> + #include <sys/ioctl.h>
->> +@@ -42,7 +43,7 @@ bool scan_dasd(hwNode & n)
->> +   {
->> +     for(dev_num=0;dev_num<devices.gl_pathc;dev_num++)
->> +     {
->> +-      dev_name = basename(devices.gl_pathv[dev_num]);
->> ++      dev_name = basename(const_cast<char *>(devices.gl_pathv[dev_num]));
-> 
-> I'm not super familiar with C++ stuff, but why is this problem musl
-> specific? The basename() function is "char *basename(char *)"
-> regardless of the C library being used. What makes it error out with
-> musl and not with other C libraries?
+> +	)
+> +endef
+> +
+> +$(eval $(cmake-package))
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Actually, I get an error on basename from sysfs.cc
-
-sysfs.cc: In function ?std::string sysfs_getbustype(const string&)?:
-sysfs.cc:103:41: error: invalid conversion from ?const char*? to ?char*?
-[-fpermissive]
-       "/devices/" + basename(path.c_str());
-
-The cast in dasd is not necessary.
-
-Best regards,
-Romain
-
-> 
-> Thanks,
-> 
-> Thomas
-> 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
