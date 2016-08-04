@@ -1,35 +1,40 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu,  4 Aug 2016 22:51:49 +0200
-Subject: [Buildroot] [PATCH] package/libdvdread: needs host-pkgconf
-Message-ID: <1470343909-5420-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 Aug 2016 22:53:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvpx: Fix compilation when
+ __uClinux__ is defined
+In-Reply-To: <D26F367F-EE90-4A2D-8603-7EBE04E9E2BD@gmail.com>
+References: <1469954504-31016-1-git-send-email-bernd.kuhls@t-online.de>
+ <D26F367F-EE90-4A2D-8603-7EBE04E9E2BD@gmail.com>
+Message-ID: <20160804225318.34de32a3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add host-pkgconf to the dependencies since pkg-config is used to find
-libdvdcss.
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/e5f/e5fffdd51bdd6962149a836af1e7a6bbc6bae20c
+On Wed, 3 Aug 2016 23:53:57 -0700, Khem Raj wrote:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/libdvdread/libdvdread.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> better to use
+> 
+> if defined(__uClinux__) && defined(CHIP_DM642)
 
-diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
-index c92eca5..adf79d8 100644
---- a/package/libdvdread/libdvdread.mk
-+++ b/package/libdvdread/libdvdread.mk
-@@ -11,6 +11,6 @@ LIBDVDREAD_INSTALL_STAGING = YES
- LIBDVDREAD_LICENSE = GPLv2+
- LIBDVDREAD_LICENSE_FILES = COPYING
- LIBDVDREAD_CONF_OPTS = --with-libdvdcss
--LIBDVDREAD_DEPENDENCIES = libdvdcss
-+LIBDVDREAD_DEPENDENCIES = libdvdcss host-pkgconf
- 
- $(eval $(autotools-package))
+Possibly, but where would lddk.h come from? I don't see it in the
+uClibc-ng sources, and I don't see it in the kernel either. So I don't
+quite see this header could end up in a toolchain.
+
+> may be if someone is using BR for ti_c6x
+
+A platform for which we don't have support today.
+
+I'm all for making proper upstreamable patches, but in this specific
+case, I'm not even sure where lddk.h is supposed to come from.
+
+Best regards,
+
+Thomas
 -- 
-2.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
