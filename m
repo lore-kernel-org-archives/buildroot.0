@@ -1,36 +1,76 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu,  4 Aug 2016 16:19:26 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
-Message-ID: <1470338366-13962-1-git-send-email-festevam@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 4 Aug 2016 22:34:35 +0200
+Subject: [Buildroot] [PATCH] package/lshw: fix musl build
+In-Reply-To: <20160804200947.64225ece@free-electrons.com>
+References: <1470327886-29273-1-git-send-email-romain.naour@gmail.com>
+ <20160804183732.7319a9c8@free-electrons.com>
+ <e2ca8dfa-5826-a478-7cec-c53a2da44df5@gmail.com>
+ <20160804200947.64225ece@free-electrons.com>
+Message-ID: <424edffc-502e-c9f5-d5cb-b951b0c62832@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
+Hi Thomas,
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Le 04/08/2016 ? 20:09, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> On Thu, 4 Aug 2016 19:09:25 +0200, Romain Naour wrote:
+> 
+>> Actually, I get an error on basename from sysfs.cc
+>>
+>> sysfs.cc: In function ?std::string sysfs_getbustype(const string&)?:
+>> sysfs.cc:103:41: error: invalid conversion from ?const char*? to ?char*?
+>> [-fpermissive]
+>>        "/devices/" + basename(path.c_str());
+>>
+>> The cast in dasd is not necessary.
+> 
+> Are you sure it's musl related, and not gcc version related? A
+> -fpermissive error typically indicates that the compiler has become
+> stricter than it used to be.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 089d424..ae5cc5d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -240,10 +240,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.102"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.62"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.74"	if BR2_KERNEL_HEADERS_3_14
--	default "3.18.37"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.38"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.28"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.29"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
- 	default "4.4.16"	if BR2_KERNEL_HEADERS_4_4
--- 
-1.9.1
+It seems related to musl. lshw build fine with a toolchain with gcc 5.
+
+I'm not a glibc expert but it seems that glibc accept a char * or const char *
+as filename argument, see string.h from glibc:
+
+#  ifdef __CORRECT_ISO_CPP_STRING_H_PROTO
+extern "C++" char *basename (char *__filename)
+     __THROW __asm ("basename") __nonnull ((1));
+extern "C++" const char *basename (const char *__filename)
+     __THROW __asm ("basename") __nonnull ((1));
+#  else
+extern char *basename (const char *__filename) __THROW __nonnull ((1));
+#  endif
+# endif
+
+The musl version doesn't support the const char * prototype.
+
+Also, the lshw code expect the GNU version of basename(). But this version is
+not available from string.h when C++ is used.
+
+See string.h from musl:
+#ifndef __cplusplus
+char *basename();
+#endif
+
+That's the issue reported by autobuilders, so the only way is to use the POSIX
+basename() if we want to use lshw with musl.
+
+Upstream fixed a similar issue in src/core/pci.cc using the POSIX basename() [1]
+and a cast from const char * to char * to avoid invalid conversion.
+
+Thought ?
+
+Best regards,
+Romain
+
+[1] https://github.com/lyonel/lshw/commit/cd690bff1516b40fecd5ec4a7f6619e5bffc3cf0
+
+> 
+> Thomas
+> 
