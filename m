@@ -1,134 +1,43 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu,  4 Aug 2016 18:24:46 +0200
-Subject: [Buildroot] [PATCH] package/lshw: fix musl build
-Message-ID: <1470327886-29273-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 Aug 2016 18:21:53 +0200
+Subject: [Buildroot] [git commit] package/mono: bump to version 4.4.2.11
+Message-ID: <20160804162454.4D5108222F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The upstream commit adding musl support was not enough to build lshw
-with musl.
+commit: https://git.buildroot.net/buildroot/commit/?id=1f15ab814d190c9dac6eac82a4c5481bd750375f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-dasd.cc: In function 'bool scan_dasd(hwNode&)':
-dasd.cc:45:52: error: 'basename' was not declared in this scope
-       dev_name = basename(devices.gl_pathv[dev_num]);
+This patch bumps mono to version 4.4.2.11
 
-Use the same fix.
-
-Upstream status: pending
-https://github.com/lyonel/lshw/pull/17
-
-Fixes:
-http://autobuild.buildroot.net/results/aa1/aa1c20866fda025167b0d220b316c7d85a1b9663
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lshw/0002-dasd-sysfs-fix-musl-build.patch | 95 +++++++++++++++++++++++
- 1 file changed, 95 insertions(+)
- create mode 100644 package/lshw/0002-dasd-sysfs-fix-musl-build.patch
+ package/mono/mono.hash | 2 +-
+ package/mono/mono.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lshw/0002-dasd-sysfs-fix-musl-build.patch b/package/lshw/0002-dasd-sysfs-fix-musl-build.patch
-new file mode 100644
-index 0000000..c35d83b
---- /dev/null
-+++ b/package/lshw/0002-dasd-sysfs-fix-musl-build.patch
-@@ -0,0 +1,95 @@
-+From 8245b8812ee7729927a7755e9c1f69f089182fac Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Thu, 4 Aug 2016 17:58:04 +0200
-+Subject: [PATCH] dasd,sysfs: fix musl build
-+
-+The commit cd690bff1516b40fecd5ec4a7f6619e5bffc3cf0 adding musl support
-+was not enough to build lshw with musl.
-+
-+dasd.cc: In function 'bool scan_dasd(hwNode&)':
-+dasd.cc:45:52: error: 'basename' was not declared in this scope
-+       dev_name = basename(devices.gl_pathv[dev_num]);
-+
-+Use the same fix.
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/aa1/aa1c20866fda025167b0d220b316c7d85a1b9663
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/core/dasd.cc  | 3 ++-
-+ src/core/sysfs.cc | 9 +++++----
-+ 2 files changed, 7 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/core/dasd.cc b/src/core/dasd.cc
-+index 626b8a8..18d19c3 100644
-+--- a/src/core/dasd.cc
-++++ b/src/core/dasd.cc
-+@@ -4,6 +4,7 @@
-+ #include <glob.h>
-+ #include <string.h>
-+ #include <fcntl.h>
-++#include <libgen.h>
-+ #include <unistd.h>
-+ #include <inttypes.h>
-+ #include <sys/ioctl.h>
-+@@ -42,7 +43,7 @@ bool scan_dasd(hwNode & n)
-+   {
-+     for(dev_num=0;dev_num<devices.gl_pathc;dev_num++)
-+     {
-+-      dev_name = basename(devices.gl_pathv[dev_num]);
-++      dev_name = basename(const_cast<char *>(devices.gl_pathv[dev_num]));
-+       for (std::vector<std::string>::iterator it = sysfs_attribs.begin(); it != sysfs_attribs.end(); ++it)
-+       {
-+         std::string attrib_fname = std::string(SYSFS_PREFIX) + dev_name + "/device/" + *it;
-+diff --git a/src/core/sysfs.cc b/src/core/sysfs.cc
-+index acc9d00..ad55d11 100644
-+--- a/src/core/sysfs.cc
-++++ b/src/core/sysfs.cc
-+@@ -8,6 +8,7 @@
-+ #include "sysfs.h"
-+ #include "osutils.h"
-+ #include <limits.h>
-++#include <libgen.h>
-+ #include <unistd.h>
-+ #include <stdlib.h>
-+ #include <stdio.h>
-+@@ -99,7 +100,7 @@ static string sysfs_getbustype(const string & path)
-+   {
-+     devname =
-+       string(fs.path + "/bus/") + string(namelist[i]->d_name) +
-+-      "/devices/" + basename(path.c_str());
-++      "/devices/" + basename(const_cast<char *>(path.c_str()));
-+ 
-+     if (samefile(devname, path))
-+       return string(namelist[i]->d_name);
-+@@ -139,7 +140,7 @@ static string sysfstobusinfo(const string & path)
-+ 
-+   if (bustype == "virtio")
-+   {
-+-    string name = basename(path.c_str());
-++    string name = basename(const_cast<char *>(path.c_str()));
-+     if (name.compare(0, 6, "virtio") == 0)
-+       return "virtio@" + name.substr(6);
-+     else
-+@@ -207,7 +208,7 @@ string entry::driver() const
-+   string driverlink = This->devpath + "/driver";
-+   if (!exists(driverlink))
-+     return "";
-+-  return basename(readlink(driverlink).c_str());
-++  return basename(const_cast<char *>(readlink(driverlink).c_str()));
-+ }
-+ 
-+ 
-+@@ -288,7 +289,7 @@ string entry::name_in_class(const string & classname) const
-+ 
-+ string entry::name() const
-+ {
-+-  return basename(This->devpath.c_str());
-++  return basename(const_cast<char *>(This->devpath.c_str()));
-+ }
-+ 
-+ 
-+-- 
-+2.5.5
-+
--- 
-2.5.5
+diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+index ea358d5..c275e15 100644
+--- a/package/mono/mono.hash
++++ b/package/mono/mono.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 165e7686b5cbb1ab671b4cb2069207999c3d70044002190b6ec84bb1fdf62b4a  mono-4.4.1.0.tar.bz2
++sha256 900c2cc25ee55adeec04e1ae889316efc127c82cc0c392f928421f19f8f5b633  mono-4.4.2.11.tar.bz2
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index f2d36ff..3d0b9bc 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONO_VERSION = 4.4.1.0
++MONO_VERSION = 4.4.2.11
+ MONO_SITE = http://download.mono-project.com/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
+ MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
