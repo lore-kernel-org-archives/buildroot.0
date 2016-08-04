@@ -1,10 +1,10 @@
 From: Khem Raj <raj.khem@gmail.com>
-Date: Wed, 3 Aug 2016 23:28:41 -0700
-Subject: [Buildroot] [PATCH 1/1] minissdpd: new package
-In-Reply-To: <20160730180937.50a478ac@free-electrons.com>
-References: <1469802517-17937-1-git-send-email-fabrice.fontaine@orange.com>
- <20160730180937.50a478ac@free-electrons.com>
-Message-ID: <532E6649-DBBE-4B38-A91C-BE603A169A5F@gmail.com>
+Date: Wed, 3 Aug 2016 23:47:51 -0700
+Subject: [Buildroot] [PATCH] ncurses: fix wide-char enabled compilation
+	for noMMU targets
+In-Reply-To: <20160731082850.GA30195@waldemar-brodkorb.de>
+References: <20160731082850.GA30195@waldemar-brodkorb.de>
+Message-ID: <7227BE30-A6E5-4184-ABFC-E15915CFEB07@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,76 +12,58 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-> On Jul 30, 2016, at 9:09 AM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> On Jul 31, 2016, at 1:28 AM, Waldemar Brodkorb <wbx@openadk.org> wrote:
 > 
-> Hello,
+> For noMMU targets -D_XOPEN_SOURCE_EXTENDED must be explicitely
+> passed to the preprocessor to allow cchar_t usage.
 > 
-> On Fri, 29 Jul 2016 16:28:37 +0200, Fabrice Fontaine wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/5bb34ff490c70eea5e4fb497e5228ca1319fffdc/
+> http://autobuild.buildroot.net/results/8ba1410ed3ffb4954ccc4b7c3996d1839d677bef/
+> http://autobuild.buildroot.net/results/26ee52ad549b7ef75c9ce4b2eae94f9312cea775/
 > 
->> diff --git a/package/minissdpd/0001-Set-_GNU_SOURCE-in-asyncsendto.c.patch b/package/minissdpd/0001-Set-_GNU_SOURCE-in-asyncsendto.c.patch
->> new file mode 100644
->> index 0000000..35854c5
->> --- /dev/null
->> +++ b/package/minissdpd/0001-Set-_GNU_SOURCE-in-asyncsendto.c.patch
->> @@ -0,0 +1,32 @@
->> +From 8ea177d974259c91f7e520d4b5b2abf07a1bbce2 Mon Sep 17 00:00:00 2001
->> +From: Fabrice Fontaine <fabrice.fontaine@orange.com>
->> +Date: Fri, 29 Jul 2016 13:32:09 +0200
->> +Subject: [PATCH 1/1] Set _GNU_SOURCE in asyncsendto.c
->> +
->> +Add #define on _GNU_SOURCE at the very beginning of asyncsendto.c file
->> +as this file uses in6_pktinfo which is protected by __USE_GNU in
->> +libc/inet/netinet/in.h. Currently, this flag is set by the Makefile in
->> +CFLAGS however CFLAGS could be overwritten by the build system.
->> +
->> +Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+> package/ncurses/Config.in  |    2 --
+> package/ncurses/ncurses.mk |    4 ++++
+> 2 files changed, 4 insertions(+), 2 deletions(-)
 > 
-> Having a patch for this is a bit overkill IMO, so I've replaced that by
-> passing:
+> diff --git a/package/ncurses/Config.in b/package/ncurses/Config.in
+> index 44713f9..8c8acde 100644
+> --- a/package/ncurses/Config.in
+> +++ b/package/ncurses/Config.in
+> @@ -13,8 +13,6 @@ if BR2_PACKAGE_NCURSES
+> config BR2_PACKAGE_NCURSES_WCHAR
+> 	bool "enable wide char support"
+> 	depends on BR2_USE_WCHAR
+> -	# Build broken @ curses.priv.h with bad declarations
+> -	depends on !(BR2_bfin && BR2_BINFMT_FLAT)
+> 	help
+> 	  Enable wide char & UTF-8 support in ncurses libraries
 > 
-> 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE?
+> diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+> index bef57c5..412f548 100644
+> --- a/package/ncurses/ncurses.mk
+> +++ b/package/ncurses/ncurses.mk
+> @@ -57,8 +57,12 @@ NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += form
+> 
+> ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+> NCURSES_CONF_OPTS += --enable-widec
+> +# for noMMU we need to set it explicitely, fixes cchar_t problem
+> +NCURSES_CPPFLAGS += -D_XOPEN_SOURCE_EXTENDED
 
-This is broader brush, unless this define is only passed for asyncsendto.c alone its not
-equivalent and I think the original patch is more appropriate or even better if
-the Makefile can pass -D_GNU_SOURCE just for this one file.
+May be you need to define NCURSES_WIDECHAR=1 instead
 
+> NCURSES_LIB_SUFFIX = w
 > 
-> in the .mk file.
-> 
->> +config BR2_PACKAGE_MINISSDPD
->> +	bool "minissdpd"
->> +	select BR2_PACKAGE_LIBNFNETLINK
-> 
-> Missing "depends on BR2_USE_MMU", since fork() is used.
-> 
->> +NAME=minissdpd
->> +PIDFILE=/var/run/$NAME.pid
->> +DAEMON=/usr/sbin/$NAME
->> +CFGFILE=/etc/default/$NAME
->> +
->> +IF=eth0
-> 
-> IF is not really a good variable name IMO, too close to the "if"
-> keyword. I renamed it to IFACE.
-> 
->> +define MINISSDPD_INSTALL_TARGET_CMDS
->> +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-> 
-> Passing TARGET_CONFIGURE_OPTS at install time wasn't needed.
-> 
->> +Environment="IF=eth0"
-> 
-> I've also changed IF to IFACE here.
-> 
-> Applied with those changes.
-> 
-> Thanks!
-> 
-> Thomas
+> +NCURSES_CONF_ENV += CPPFLAGS="$(NCURSES_CPPFLAGS)"
+> +
+> define NCURSES_LINK_LIBS_STATIC
+> 	for lib in $(NCURSES_LIBS-y:%=lib%); do \
+> 		ln -sf $${lib}$(NCURSES_LIB_SUFFIX).a \
 > --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+> 1.7.10.4
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
@@ -93,4 +75,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 204 bytes
 Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160803/9e7f8d48/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160803/f5361583/attachment.asc>
