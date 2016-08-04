@@ -1,51 +1,36 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Thu,  4 Aug 2016 23:58:05 +0200
-Subject: [Buildroot] [PATCH v2] package/oprofile: disable for m68k
-Message-ID: <1470347885-13186-1-git-send-email-romain.naour@gmail.com>
+Date: Fri,  5 Aug 2016 00:10:26 +0200
+Subject: [Buildroot] [PATCH] package/libuio: select gettext when
+	BR2_NEEDS_GETTEXT_IF_LOCALE is set
+Message-ID: <1470348626-15329-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As for Xtensa [1] and Microblaze [2], disable m68k due to the lack of
-memory barrier operations.
+gettext is added to libuio dependency when BR2_NEEDS_GETTEXT_IF_LOCALE
+is set without selecting it at Kconfig level.
 
 Fixes:
-http://autobuild.buildroot.net/results/1cc/1cc761d8a5715d0a2c6eaacfde7e44b225da1b36
-
-[1] c45979c732cb610ad5d54e23dd7d4d49e519d45b
-[2] b71bdd68562f82db9d5515de1ca4a33789c05cb9
+http://autobuild.buildroot.net/results/321/321688e16596086d1dad6f489d35edbb7fe7a955
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
-v2: fix the comment dependency.
----
- package/oprofile/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/libuio/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
-index 9014d9f..4f491cb 100644
---- a/package/oprofile/Config.in
-+++ b/package/oprofile/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_OPROFILE
- 	depends on !BR2_nios2 # binutils
- 	depends on BR2_USE_WCHAR # binutils
- 	# no memory barrier functions
--	depends on !BR2_xtensa && !BR2_microblaze
-+	depends on !BR2_xtensa && !BR2_microblaze && !BR2_m68k
- 	# libpfm4 is needed on PowerPC, and requires thread support
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_powerpc
+diff --git a/package/libuio/Config.in b/package/libuio/Config.in
+index 97be1e3..a96df54 100644
+--- a/package/libuio/Config.in
++++ b/package/libuio/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBUIO
+ 	bool "libuio"
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
-@@ -29,7 +29,8 @@ config BR2_PACKAGE_OPROFILE
- 
- comment "oprofile needs a toolchain w/ C++, wchar"
- 	depends on BR2_USE_MMU
--	depends on !BR2_nios2 && !BR2_xtensa && !BR2_microblaze
-+	depends on !BR2_nios2 && !BR2_xtensa && !BR2_microblaze && \
-+		!BR2_m68k
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
- 
- comment "oprofile needs a toolchain w/ NPTL on PPC"
+ 	  libuio is a light-weight C programming library to handle UIO
+ 	  (Userspace I/O) device discovery and binding task.
 -- 
 2.5.5
