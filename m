@@ -1,73 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Aug 2016 22:37:44 +0200
-Subject: [Buildroot] [git commit] shellinabox: convert patch to a Git
-	formatted one
-Message-ID: <20160804203840.1E444804C4@busybox.osuosl.org>
+Date: Thu, 4 Aug 2016 22:38:14 +0200
+Subject: [Buildroot] [git commit] shellinabox: fix build on musl
+Message-ID: <20160804203840.2B52B7FB9C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99ed68487a83380cf00ba5c602746ada3f995bf7
+commit: https://git.buildroot.net/buildroot/commit/?id=35ccd358b304413229fc2e32f1318426cbb23a20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This commit fixes the build of shellinabox with the musl C library,
+which requires two changes:
+
+ - A patch to include <sys/ttydefaults.h>, which is needed to get the
+   definitions of TTYDEF_*
+
+ - A hack to workaround what seems to be a problem in musl itself (musl
+   does #define utmp utmpx, which causes some symbol conflicts down the
+   road). Since anyway the utmpx implementation is just a set of stubs
+   in musl, we simply make shellinabox believe that <utmpx.h> is not
+   available by passing the appropriate variable. The musl issue has
+   been reported at http://www.openwall.com/lists/musl/2016/08/04/8.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/1847cab964957da3c9bf4911a5ad3602b3c82431/
+
+Signed-off-by: Olivier Singla <olivier.singla@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...kefile-disable-always-building-statically.patch | 26 ++++++++++++++++++++++
- .../shellinabox/0001-Makefile.am-fix-static.patch  | 15 -------------
- 2 files changed, 26 insertions(+), 15 deletions(-)
+ ...0002-launcher.c-include-sys-ttydefaults.h.patch | 27 ++++++++++++++++++++++
+ package/shellinabox/shellinabox.mk                 |  6 +++++
+ 2 files changed, 33 insertions(+)
 
-diff --git a/package/shellinabox/0001-Makefile-disable-always-building-statically.patch b/package/shellinabox/0001-Makefile-disable-always-building-statically.patch
+diff --git a/package/shellinabox/0002-launcher.c-include-sys-ttydefaults.h.patch b/package/shellinabox/0002-launcher.c-include-sys-ttydefaults.h.patch
 new file mode 100644
-index 0000000..2f2097e
+index 0000000..caa5456
 --- /dev/null
-+++ b/package/shellinabox/0001-Makefile-disable-always-building-statically.patch
-@@ -0,0 +1,26 @@
-+From c060e6f06a81ffa400266a6d0bfc58511265a16f Mon Sep 17 00:00:00 2001
++++ b/package/shellinabox/0002-launcher.c-include-sys-ttydefaults.h.patch
+@@ -0,0 +1,27 @@
++From c8d9df500b1ca83ad6da9b6055549adaba6ee0d3 Mon Sep 17 00:00:00 2001
 +From: Olivier Singla <olivier.singla@gmail.com>
-+Date: Thu, 4 Aug 2016 21:23:41 +0200
-+Subject: [PATCH] Makefile: disable always building statically
++Date: Thu, 4 Aug 2016 22:05:08 +0200
++Subject: [PATCH] launcher.c: include <sys/ttydefaults.h>
++
++This include is needed to get the definition of TTYDEF_*.
 +
 +Signed-off-by: Olivier Singla <olivier.singla@gmail.com>
 +---
-+ Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ shellinabox/launcher.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index 7b8e7ab..5c4c71e 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -126,7 +126,7 @@ BUILT_SOURCES        = shellinabox/beep.h                                     \
-+ 
-+ shellinaboxd_LDADD   = liblogging.la                                          \
-+                        libhttp.la
-+-shellinaboxd_LDFLAGS = -static
-++shellinaboxd_LDFLAGS =
-+ ## Added this for compatibility with older versions of autoconf/automake
-+ docdir               = ${datadir}/doc/${PACKAGE}
++diff --git a/shellinabox/launcher.c b/shellinabox/launcher.c
++index 2bac171..c8ba6cb 100644
++--- a/shellinabox/launcher.c
+++++ b/shellinabox/launcher.c
++@@ -66,6 +66,7 @@
++ #include <sys/types.h>
++ #include <sys/wait.h>
++ #include <sys/utsname.h>
+++#include <sys/ttydefaults.h>
++ #include <termios.h>
++ #include <unistd.h>
 + 
 +-- 
 +2.7.4
 +
-diff --git a/package/shellinabox/0001-Makefile.am-fix-static.patch b/package/shellinabox/0001-Makefile.am-fix-static.patch
-deleted file mode 100644
-index 0fadde0..0000000
---- a/package/shellinabox/0001-Makefile.am-fix-static.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--Makefile: disable always building statically.
--
--Signed-off-by:  "Olivier Singla" <olivier.singla@gmail.com>
--
----- shellinabox-2.19/Makefile.am.orig	2016-07-03 20:46:42.655784211 -0400
--+++ shellinabox-2.19/Makefile.am	2016-07-03 20:46:50.582801842 -0400
--@@ -126,7 +126,7 @@
-- 
-- shellinaboxd_LDADD   = liblogging.la                                          \
--                        libhttp.la
---shellinaboxd_LDFLAGS = -static
--+shellinaboxd_LDFLAGS =
-- ## Added this for compatibility with older versions of autoconf/automake
-- docdir               = ${datadir}/doc/${PACKAGE}
-- 
+diff --git a/package/shellinabox/shellinabox.mk b/package/shellinabox/shellinabox.mk
+index e4e0b06..1173ef7 100644
+--- a/package/shellinabox/shellinabox.mk
++++ b/package/shellinabox/shellinabox.mk
+@@ -20,4 +20,10 @@ SHELLINABOX_CONF_OPTS = \
+ 	--disable-runtime-loading \
+ 	--enable-ssl
+ 
++# musl's implementation of utmpx is a dummy one, and some aspects of
++# it cause build failures in shellinabox
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++SHELLINABOX_CONF_ENV += ac_cv_header_utmpx_h=no
++endif
++
+ $(eval $(autotools-package))
