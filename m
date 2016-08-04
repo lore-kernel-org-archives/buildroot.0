@@ -1,7 +1,7 @@
 From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Thu, 4 Aug 2016 13:52:50 +0200
-Subject: [Buildroot] imx6 platform var-som-solo
-Message-ID: <CALtfCQZz4Pc9mhwr=7t37oyty-KWCPRackStkV67H6rSeu+1Gw@mail.gmail.com>
+Date: Thu, 4 Aug 2016 14:04:42 +0200
+Subject: [Buildroot] Problem compiling Xorg with buildroot
+Message-ID: <CALtfCQadUrgN48ZeLoK1_1uSET91==xaGUVdV5Lv+iurUifRag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,26 @@ To: buildroot@busybox.net
 
 Hi everyone,
 
-I'm trying to make a buildroot system with imx6 platform in the
-var-som-solo development kit. I'm using the stable version of
-buildroot buildroot-2016.05.
+I've just compiled a buildroot for raspberrypi 2B with Qt5 and Xorg server.
 
-The problem I have, It's when I'm trying to compile QT5. I
-can't select eglfs:
+I realised that after compile Xorg server it appears a new directory in
+home buildroot folder:
 
-----------------------------------------
-> Target packages > Graphic libraries and applications (graphic/text) > Qt5
->
+../output/target/home/oscargomez/GIT/buildroot-2016.02/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/xorg
 
-...
- [*]       X.org XCB support
- *** eglfs backend available if OpenGL and EGL are enabled ***
- <------
-(eglfs)   Default graphical platform
-...
-----------------------------------------
+And this folder contains the following files:
 
-I made something similar with the raspberry pi 2B and I didn't have any
-problem. I can't find how to select OpenGL and EGL to free the option to
-select eglfs.
+-rw-r--r-- 1 oscargomez oscargomez 3585 ago  4 13:31 evdev-properties.h
+-rw-r--r-- 1 oscargomez oscargomez 4868 ago  4 13:31 joystick-properties.h
+-rw-r--r-- 1 oscargomez oscargomez 6415 ago  4 13:31 libinput-properties.h
+-rw-r--r-- 1 oscargomez oscargomez 5918 ago  4 13:32 synaptics-properties.h
+-rw-r--r-- 1 oscargomez oscargomez 1489 ago  4 13:31 xf86-mouse-properties.h
 
-Can anyone how to do this?
+As you know oscargomez is my host user, so I don't understand what's happen.
+
+Does anyone know what happens?
 
 Oscar Gomez Fuente.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160804/a32638e8/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160804/7565408e/attachment.html>
