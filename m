@@ -1,10 +1,10 @@
 From: Khem Raj <raj.khem@gmail.com>
-Date: Wed, 3 Aug 2016 23:47:51 -0700
-Subject: [Buildroot] [PATCH] ncurses: fix wide-char enabled compilation
-	for noMMU targets
-In-Reply-To: <20160731082850.GA30195@waldemar-brodkorb.de>
-References: <20160731082850.GA30195@waldemar-brodkorb.de>
-Message-ID: <7227BE30-A6E5-4184-ABFC-E15915CFEB07@gmail.com>
+Date: Wed, 3 Aug 2016 23:53:57 -0700
+Subject: [Buildroot] [PATCH 1/1] package/libvpx: Fix compilation when
+	__uClinux__ is defined
+In-Reply-To: <1469954504-31016-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1469954504-31016-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <D26F367F-EE90-4A2D-8603-7EBE04E9E2BD@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,57 +12,62 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-> On Jul 31, 2016, at 1:28 AM, Waldemar Brodkorb <wbx@openadk.org> wrote:
+> On Jul 31, 2016, at 1:41 AM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 > 
-> For noMMU targets -D_XOPEN_SOURCE_EXTENDED must be explicitely
-> passed to the preprocessor to allow cchar_t usage.
+> The buildroot toolchains do not contain lddk.h
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/5bb34ff490c70eea5e4fb497e5228ca1319fffdc/
-> http://autobuild.buildroot.net/results/8ba1410ed3ffb4954ccc4b7c3996d1839d677bef/
-> http://autobuild.buildroot.net/results/26ee52ad549b7ef75c9ce4b2eae94f9312cea775/
+> Fixes
+> http://autobuild.buildroot.net/results/ae7/ae7ba1d5979ebe39aace628fa8ff2c8f08a70a98/
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> package/ncurses/Config.in  |    2 --
-> package/ncurses/ncurses.mk |    4 ++++
-> 2 files changed, 4 insertions(+), 2 deletions(-)
+> ...mem-vpx_mem.h-Fix-compilation-with-uClibc.patch | 27 ++++++++++++++++++++++
+> 1 file changed, 27 insertions(+)
+> create mode 100644 package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
 > 
-> diff --git a/package/ncurses/Config.in b/package/ncurses/Config.in
-> index 44713f9..8c8acde 100644
-> --- a/package/ncurses/Config.in
-> +++ b/package/ncurses/Config.in
-> @@ -13,8 +13,6 @@ if BR2_PACKAGE_NCURSES
-> config BR2_PACKAGE_NCURSES_WCHAR
-> 	bool "enable wide char support"
-> 	depends on BR2_USE_WCHAR
-> -	# Build broken @ curses.priv.h with bad declarations
-> -	depends on !(BR2_bfin && BR2_BINFMT_FLAT)
-> 	help
-> 	  Enable wide char & UTF-8 support in ncurses libraries
-> 
-> diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-> index bef57c5..412f548 100644
-> --- a/package/ncurses/ncurses.mk
-> +++ b/package/ncurses/ncurses.mk
-> @@ -57,8 +57,12 @@ NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += form
-> 
-> ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
-> NCURSES_CONF_OPTS += --enable-widec
-> +# for noMMU we need to set it explicitely, fixes cchar_t problem
-> +NCURSES_CPPFLAGS += -D_XOPEN_SOURCE_EXTENDED
-
-May be you need to define NCURSES_WIDECHAR=1 instead
-
-> NCURSES_LIB_SUFFIX = w
-> 
-> +NCURSES_CONF_ENV += CPPFLAGS="$(NCURSES_CPPFLAGS)"
+> diff --git a/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch b/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
+> new file mode 100644
+> index 0000000..76b6fcf
+> --- /dev/null
+> +++ b/package/libvpx/0001-vpx_mem-vpx_mem.h-Fix-compilation-with-uClibc.patch
+> @@ -0,0 +1,27 @@
+> +From 90845a3a263e0f37b9c756c0b01377b9d1a225c9 Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Date: Sun, 31 Jul 2016 10:37:05 +0200
+> +Subject: [PATCH 1/1] vpx_mem/vpx_mem.h: Fix compilation with uClibc
 > +
-> define NCURSES_LINK_LIBS_STATIC
-> 	for lib in $(NCURSES_LIBS-y:%=lib%); do \
-> 		ln -sf $${lib}$(NCURSES_LIB_SUFFIX).a \
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + vpx_mem/vpx_mem.h | 3 ---
+> + 1 file changed, 3 deletions(-)
+> +
+> +diff --git a/vpx_mem/vpx_mem.h b/vpx_mem/vpx_mem.h
+> +index c14f288..82df745 100644
+> +--- a/vpx_mem/vpx_mem.h
+> ++++ b/vpx_mem/vpx_mem.h
+> +@@ -12,9 +12,6 @@
+> + #define VPX_MEM_VPX_MEM_H_
+> +
+> + #include "vpx_config.h"
+> +-#if defined(__uClinux__)
+> +-# include <lddk.h>
+> +-#endif
+
+better to use
+
+if defined(__uClinux__) && defined(CHIP_DM642)
+
+may be if someone is using BR for ti_c6x
+
+
+> +
+> + #include <stdlib.h>
+> + #include <stddef.h>
+> +--
+> +2.8.1
+> +
 > --
-> 1.7.10.4
+> 2.8.1
 > 
 > _______________________________________________
 > buildroot mailing list
@@ -75,4 +80,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 204 bytes
 Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160803/f5361583/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160803/56168dc2/attachment.asc>
