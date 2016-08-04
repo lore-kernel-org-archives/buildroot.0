@@ -1,9 +1,10 @@
 From: Khem Raj <raj.khem@gmail.com>
-Date: Thu, 4 Aug 2016 00:28:18 -0700
-Subject: [Buildroot] [PATCH v2] openssl: fix m68k uclinux compile
-In-Reply-To: <20160731184800.GA6199@waldemar-brodkorb.de>
-References: <20160731184800.GA6199@waldemar-brodkorb.de>
-Message-ID: <6E5D5C0C-97E0-4CDA-8183-77737E5F4BA2@gmail.com>
+Date: Thu, 4 Aug 2016 00:55:09 -0700
+Subject: [Buildroot] [PATCH 1/1] Patch to support latest buildroot
+	environment
+In-Reply-To: <1470275232-11620-1-git-send-email-olivier.singla@gmail.com>
+References: <1470275232-11620-1-git-send-email-olivier.singla@gmail.com>
+Message-ID: <AE013D6D-2631-4011-A114-70A59CAD8461@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,41 +12,62 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-> On Jul 31, 2016, at 11:48 AM, Waldemar Brodkorb <wbx@openadk.org> wrote:
+> On Aug 3, 2016, at 6:47 PM, Olivier Singla <olivier.singla@gmail.com> wrote:
 > 
-> The GCC manual suggest when getting:
-> relocation truncated to fit: R_68K_GOT16O foobar
-> to use -mxgot.
+> From: Olivier <olivier.singla@gmail.com>
 > 
 > Fixes:
-> http://autobuild.buildroot.net/results/455fd0f274bfa4bbd786bcd6740ecf960e47c1bd/
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> package/openssl/openssl.mk |    5 +++++
-> 1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-> index e34868e..b926fe3 100644
-> --- a/package/openssl/openssl.mk
-> +++ b/package/openssl/openssl.mk
-> @@ -19,6 +19,11 @@ OPENSSL_PATCH = \
-> 	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d \
-> 	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2a-parallel-symlinking.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-> 
-> +# relocation truncated to fit: R_68K_GOT16O
-> +ifeq ($(BR2_m68k_cf),y)
-> +OPENSSL_CFLAGS += -mxgot
-> +endif
+> - launcher.c: added include to <sys/ttydefaults.h> to avoid missing definitions
+> - launcher.c: do not include utmpx.h (since ptsname_r is already defined in stdlib.h)
 
-perhaps -fPIC could be used here instead ?
+I hope -D_GNU_SOURCE is passed in CFLAGS for relevant source file as well.
+
+> 
+> Signed-off-by: Olivier Singla <olivier.singla@gmail.com>
+> ---
+> .../0002-launcher.c-fix-ttydef-utmpx.patch         | 28 ++++++++++++++++++++++
+> 1 file changed, 28 insertions(+)
+> create mode 100644 package/shellinabox/0002-launcher.c-fix-ttydef-utmpx.patch
+> 
+> diff --git a/package/shellinabox/0002-launcher.c-fix-ttydef-utmpx.patch b/package/shellinabox/0002-launcher.c-fix-ttydef-utmpx.patch
+> new file mode 100644
+> index 0000000..54cb699
+> --- /dev/null
+> +++ b/package/shellinabox/0002-launcher.c-fix-ttydef-utmpx.patch
+> @@ -0,0 +1,28 @@
+> +launcher.c: added include to <sys/ttydefaults.h> to avoid missing definitions
+> +launcher.c: do not include utmpx.h (since ptsname_r is already defined in stdlib.h)
+> +
+> +Signed-off-by:  "Olivier Singla" <olivier.singla@gmail.com>
+> +
+> +--- shellinabox-v2.19/shellinabox/launcher.c.orig	2016-08-01 18:43:01.628002777 -0400
+> ++++ shellinabox-v2.19/shellinabox/launcher.c	2016-08-01 18:45:14.943444066 -0400
+> +@@ -81,6 +81,10 @@
+> + #include <sys/uio.h>
+> + #endif
+> +
+> ++#ifndef TTYDEF_IFLAG
+> ++#include <sys/ttydefaults.h>
+> ++#endif
+> ++
+> + #ifdef HAVE_UTIL_H
+> + #include <util.h>
+> + #endif
+> +@@ -90,7 +94,8 @@
+> + #endif
+> +
+> + #ifdef HAVE_UTMPX_H
+> +-#include <utmpx.h>
+> ++//#include <utmpx.h>
+> ++#undef HAVE_UTMPX_H
+> + #endif
+
+should the whole block be removed instead ?
 
 > +
-> ifeq ($(BR2_USE_MMU),)
-> OPENSSL_CFLAGS += -DHAVE_FORK=0
-> endif
+> + #if defined(HAVE_SECURITY_PAM_APPL_H)
 > --
-> 1.7.10.4
+> 2.5.5
 > 
 > _______________________________________________
 > buildroot mailing list
@@ -58,4 +80,4 @@ Name: signature.asc
 Type: application/pgp-signature
 Size: 204 bytes
 Desc: Message signed with OpenPGP using GPGMail
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160804/b122d82f/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160804/d9fff13e/attachment.asc>
