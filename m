@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Aug 2016 14:12:15 +0200
-Subject: [Buildroot] Problem compiling Xorg with buildroot
-In-Reply-To: <CALtfCQadUrgN48ZeLoK1_1uSET91==xaGUVdV5Lv+iurUifRag@mail.gmail.com>
-References: <CALtfCQadUrgN48ZeLoK1_1uSET91==xaGUVdV5Lv+iurUifRag@mail.gmail.com>
-Message-ID: <20160804141215.46739f85@free-electrons.com>
+Date: Thu, 4 Aug 2016 14:14:05 +0200
+Subject: [Buildroot] imx6 platform var-som-solo
+In-Reply-To: <CALtfCQZz4Pc9mhwr=7t37oyty-KWCPRackStkV67H6rSeu+1Gw@mail.gmail.com>
+References: <CALtfCQZz4Pc9mhwr=7t37oyty-KWCPRackStkV67H6rSeu+1Gw@mail.gmail.com>
+Message-ID: <20160804141405.70e0e848@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 4 Aug 2016 14:04:42 +0200, Oscar Gomez Fuente wrote:
+On Thu, 4 Aug 2016 13:52:50 +0200, Oscar Gomez Fuente wrote:
 
-> I've just compiled a buildroot for raspberrypi 2B with Qt5 and Xorg server.
-> 
-> I realised that after compile Xorg server it appears a new directory in
-> home buildroot folder:
-> 
-> ../output/target/home/oscargomez/GIT/buildroot-2016.02/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include/xorg
-> 
-> And this folder contains the following files:
-> 
-> -rw-r--r-- 1 oscargomez oscargomez 3585 ago  4 13:31 evdev-properties.h
-> -rw-r--r-- 1 oscargomez oscargomez 4868 ago  4 13:31 joystick-properties.h
-> -rw-r--r-- 1 oscargomez oscargomez 6415 ago  4 13:31 libinput-properties.h
-> -rw-r--r-- 1 oscargomez oscargomez 5918 ago  4 13:32 synaptics-properties.h
-> -rw-r--r-- 1 oscargomez oscargomez 1489 ago  4 13:31 xf86-mouse-properties.h
-> 
-> As you know oscargomez is my host user, so I don't understand what's happen.
-> 
-> Does anyone know what happens?
+> I made something similar with the raspberry pi 2B and I didn't have any
+> problem. I can't find how to select OpenGL and EGL to free the option to
+> select eglfs.
 
-We have a bug tracker entry for this issue already:
-https://bugs.busybox.net/show_bug.cgi?id=8696.
-
-Yann proposed a solution in March, and then in April I asked for more
-details, but I don't think I got the requested details.
-
-We indeed still need to fix this issue.
-
-Best regards,
+Enable the imx-gpu-viv package, which provides the OpenGL ES and EGL
+implementation for i.MX6.
 
 Thomas
 -- 
