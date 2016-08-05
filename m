@@ -1,38 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Aug 2016 21:05:41 +0200
-Subject: [Buildroot] [PATCH] package/oprofile: introduce a
- BR2_PACKAGE_OPROFILE_ARCH_SUPPORTS
-In-Reply-To: <1470397592-8459-1-git-send-email-romain.naour@gmail.com>
-References: <1470397592-8459-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160805210541.0008534d@free-electrons.com>
+Date: Fri, 5 Aug 2016 21:05:56 +0200
+Subject: [Buildroot] [git commit] xfsprogs: bump version to 4.7.0
+Message-ID: <20160805190559.570AD82260@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bdc5dea65f845cc95b2f4fc86c57328113ece28d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  5 Aug 2016 13:46:32 +0200, Romain Naour wrote:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/xfsprogs/xfsprogs.hash | 4 ++--
+ package/xfsprogs/xfsprogs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> +config BR2_PACKAGE_OPROFILE_ARCH_SUPPORTS
-> +	bool
-> +	default y
-> +	depends on BR2_arceb || BR2_arcle || BR2_arm || BR2_armeb || \
-> +		BR2_aarch64 || BR2_aarch64_be || BR2_i386 || BR2_mips || \
-> +		BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_powerpc || \
-> +		BR2_powerpc64 || BR2_powerpc64le || BR2_sh4 || BR2_sh64 || \
-
-Adding BR2_sh64 is a bit useless, as this architecture is deprecated in
-Buildroot. And I'm not sure it's actually supported by oprofile.
-
-I've also changed BR2_sh4 to BR2_sh, in order to cover all SuperH
-variants, which oprofile seem to support.
-
-Applied with those changes. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
+index d250283..1f338b0 100644
+--- a/package/xfsprogs/xfsprogs.hash
++++ b/package/xfsprogs/xfsprogs.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature:
+-#   ftp://oss.sgi.com/projects/xfs/cmd_tars/xfsprogs-4.5.0.tar.gz.sig
+-sha256 e49beb314984efbd0d758abb5c6137db3bb60a88e59e1e94c00defb536cf89f8  xfsprogs-4.5.0.tar.gz
++#   ftp://oss.sgi.com/projects/xfs/cmd_tars/xfsprogs-4.7.0.tar.gz.sig
++sha256 88580bb3e6847c3edef436703a4fae403fc19b20739db4c31166ee4b256178d7  xfsprogs-4.7.0.tar.gz
+diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+index fb72054..b0875d1 100644
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XFSPROGS_VERSION = 4.5.0
++XFSPROGS_VERSION = 4.7.0
+ XFSPROGS_SITE = ftp://oss.sgi.com/projects/xfs/cmd_tars
+ 
+ XFSPROGS_DEPENDENCIES = util-linux
