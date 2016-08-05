@@ -1,13 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Aug 2016 09:32:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvpx: Fix compilation when
- __uClinux__ is defined
-In-Reply-To: <fee7b830-1e54-5735-082e-05d3b0bc5a87@gmail.com>
-References: <1469954504-31016-1-git-send-email-bernd.kuhls@t-online.de>
- <D26F367F-EE90-4A2D-8603-7EBE04E9E2BD@gmail.com>
- <20160804225318.34de32a3@free-electrons.com>
- <fee7b830-1e54-5735-082e-05d3b0bc5a87@gmail.com>
-Message-ID: <20160805093229.63547f22@free-electrons.com>
+Date: Fri, 5 Aug 2016 09:35:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi: Update upstream patch to
+ support libcurl >= 7.5.1
+In-Reply-To: <dc1e7bf2-8eff-cab0-db47-8bf0568e4d91@gmail.com>
+References: <1470343668-28172-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160804231621.4da74f35@free-electrons.com>
+ <dc1e7bf2-8eff-cab0-db47-8bf0568e4d91@gmail.com>
+Message-ID: <20160805093519.2e0d4184@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,23 +15,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 4 Aug 2016 21:05:10 -0700, Khem Raj wrote:
+On Thu, 4 Aug 2016 19:46:40 -0700, Khem Raj wrote:
 
-> For life of me I can not find out, so most probably, its some SOC devkit
-> so its fine to ignore this.
+> > On Thu,  4 Aug 2016 22:47:48 +0200, Bernd Kuhls wrote:  
+> >> An updated patch was committed to Kodi after Curl added a fix to address
+> >> the original problem:
+> >> https://github.com/curl/curl/commit/d6604524ad24daf4581efbe0020da058d2b3af84  
+> > 
+> > Is this commit part of a curl release? If so, is this curl release the
+> > one we use in Buildroot?  
+> 
+> it will be in next version of curl.
 
-I also Google'd for this header, and can't seem to find it anywhere, so
-it really seems like some very BSP-specific thingy that was added, and
-there's no reason to keep carrying I believe.
+OK.
 
-I just checked, this include has been here in the Git repository since
-the initial code base import, so there's no way to know more precisely
-why it was added.
+> > 
+> > IOW, I don't understand if the below patch for Kodi requires a newer
+> > version of curl than the one we have in Buildroot today.  
+> 
+> no it does not require it. but of BR is using curl 7.50.0 then it
+> should be bumped to 7.50.1, since this issue is affecting many other
+> packages too.
 
-Bernd, could you submit the patch removing this header file to the
-upstream project?
+We are already using 7.50.1.
 
-Thanks!
+Thanks for the infos!
 
 Thomas
 -- 
