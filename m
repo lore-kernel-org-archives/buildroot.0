@@ -1,32 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Aug 2016 09:41:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi: Update upstream patch to
- support libcurl >= 7.5.1
-In-Reply-To: <1470343668-28172-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1470343668-28172-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160805094137.68589638@free-electrons.com>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Fri, 5 Aug 2016 13:12:49 +0530
+Subject: [Buildroot] [RFC 0/2] script to find package licenses
+In-Reply-To: <20160804183335.0947f9a9@free-electrons.com>
+References: <1470320164-8241-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <20160804183335.0947f9a9@free-electrons.com>
+Message-ID: <57A44379.9010208@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Thu,  4 Aug 2016 22:47:48 +0200, Bernd Kuhls wrote:
-> An updated patch was committed to Kodi after Curl added a fix to address
-> the original problem:
-> https://github.com/curl/curl/commit/d6604524ad24daf4581efbe0020da058d2b3af84
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...10-curl-support-version-7.5.0-and-upwards.patch | 56 ++++++++--------------
->  1 file changed, 20 insertions(+), 36 deletions(-)
+On Thursday 04 August 2016 10:03 PM, Thomas Petazzoni wrote:
+> Hello,
+>
+> Thanks for this proposal. However, there are already some tools that do
+> the same thing I believe. I'm thinking especially at the tools used by
+> the Fossology project (https://www.fossology.org/). It is surely more
+> complicated to install and use that your Python script, but it is also
+> a lot more complete, and even more importantly: maintained by other
+> people.
+>
 
-Applied to master, thanks.
+Intention of script is to help us to verify or correct legal info that 
+we add in .mk file. This could be a handy tool that can be used by 
+anyone when we do version bump or add new package. The complex tools 
+that are available are generally used by upstream package providers for 
+Open Source Compliance which provide lot more information than just file 
+license. And integrating such tools in Buildroot might be difficult. But 
+in Buildroot where we just need license of a package, script could be 
+useful as a starting point.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+
+Rahul
