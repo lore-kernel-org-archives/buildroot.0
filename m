@@ -1,119 +1,72 @@
-From: Petri Gynther <pgynther@google.com>
-Date: Thu,  4 Aug 2016 15:30:00 -0700
-Subject: [Buildroot] [PATCH 3/3] uclibc: configs: rename BR2_PTHREAD_DEBUG
-In-Reply-To: <1470349800-27521-1-git-send-email-pgynther@google.com>
-References: <1470349800-27521-1-git-send-email-pgynther@google.com>
-Message-ID: <1470349800-27521-3-git-send-email-pgynther@google.com>
+From: Khem Raj <raj.khem@gmail.com>
+Date: Thu, 4 Aug 2016 19:03:28 -0700
+Subject: [Buildroot] [RFC 0/2] script to find package licenses
+In-Reply-To: <20160804183335.0947f9a9@free-electrons.com>
+References: <1470320164-8241-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <20160804183335.0947f9a9@free-electrons.com>
+Message-ID: <c09463a6-b0e8-7745-674f-3a90e340a819@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rename BR2_PTHREAD_DEBUG to BR2_PTHREADS_DEBUG to be consistent
-with BR2_PTHREADS_* config item naming.
 
-Signed-off-by: Petri Gynther <pgynther@google.com>
----
- configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 2 +-
- configs/atmel_sama5d3_xplained_dev_defconfig     | 2 +-
- configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 2 +-
- configs/atmel_sama5d4_xplained_dev_defconfig     | 2 +-
- configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 2 +-
- package/uclibc/Config.in                         | 2 +-
- package/uclibc/uclibc.mk                         | 2 +-
- 7 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-index d7f4717..aa52bd0 100644
---- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
-@@ -10,7 +10,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- # Needed for gdb
--BR2_PTHREAD_DEBUG=y
-+BR2_PTHREADS_DEBUG=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
-diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
-index d51a141..220c941 100644
---- a/configs/atmel_sama5d3_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_dev_defconfig
-@@ -9,7 +9,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- # Needed for gdb
--BR2_PTHREAD_DEBUG=y
-+BR2_PTHREADS_DEBUG=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
-diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-index c45c2ce..e360cfb 100644
---- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-@@ -9,7 +9,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- # Needed for gdb
--BR2_PTHREAD_DEBUG=y
-+BR2_PTHREADS_DEBUG=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
-diff --git a/configs/atmel_sama5d4_xplained_dev_defconfig b/configs/atmel_sama5d4_xplained_dev_defconfig
-index 7dadeca..cad4eb1 100644
---- a/configs/atmel_sama5d4_xplained_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_dev_defconfig
-@@ -10,7 +10,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- # Needed for gdb
--BR2_PTHREAD_DEBUG=y
-+BR2_PTHREADS_DEBUG=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
-diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-index 9e11efa..1738a9a 100644
---- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-@@ -10,7 +10,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- # Needed for gdb
--BR2_PTHREAD_DEBUG=y
-+BR2_PTHREADS_DEBUG=y
- # Needed for some packages
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 6c16ed4..e459f44 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -69,7 +69,7 @@ choice
- 		depends on !BR2_m68k && !BR2_microblaze
- endchoice
- 
--config BR2_PTHREAD_DEBUG
-+config BR2_PTHREADS_DEBUG
- 	bool "Thread library debugging"
- 	depends on BR2_PTHREADS || BR2_PTHREADS_NATIVE
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 124bd59..6fd0768 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -353,7 +353,7 @@ endif
- # Thread debug
- #
- 
--ifeq ($(BR2_PTHREAD_DEBUG),y)
-+ifeq ($(BR2_PTHREADS_DEBUG),y)
- UCLIBC_THREAD_DEBUG_CONFIG = $(call KCONFIG_ENABLE_OPT,PTHREADS_DEBUG_SUPPORT,$(@D)/.config)
- else
- UCLIBC_THREAD_DEBUG_CONFIG = $(call KCONFIG_DISABLE_OPT,PTHREADS_DEBUG_SUPPORT,$(@D)/.config)
--- 
-2.8.0.rc3.226.g39d4020
+On 8/4/16 9:33 AM, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu, 4 Aug 2016 19:46:02 +0530, Rahul Bedarkar wrote:
+> 
+>> Legal information is a kind of thing that we can't automate completely.
+>> But we want it to be correct when new package is added or version bumps.
+>>
+>> This patch set attempts to add a script to find license information from
+>> package source files to verify or correct legal info for buildroot packages.
+>>
+>> Legal information may get outdated with version bumps or even may not get
+>> correct in first place if source package does not provide any license files.
+>> In such cases, we need to look into file header to get that information.
+>> But it could be very difficult if there are number of source files.
+>>
+>> find-licenses script scans package source files for known licenses to
+>> find under which license package is released. It aggregates license
+>> information for all source files found in a package.
+>>
+>> For finding license, we rely on file's license header. Generally
+>> most of packages use standard license headers which helps us to detect
+>> license of packages.
+>>
+>> Currently it supports notable licenses. But we can later add other
+>> licenses based on regx.
+>>
+>> Script outputs licenses found on standard output file-wise, directory-
+>> wise and final aggregation of all licenses found. It also lists files
+>> which don't have license header. Directory-wise license listing will be
+>> useful when different components are licensed under different license.
+>>
+>> Since final license list is just aggregation of licenses found for all
+>> source files, we can not surely say if package is dual or
+>> multi-licensed or different components are licensed under different
+>> license. That's why we can't use final license list directly in our
+>> package .mk file, but it at least helps us to find or verify license
+>> information quickly.
+> 
+> Thanks for this proposal. However, there are already some tools that do
+> the same thing I believe. I'm thinking especially at the tools used by
+> the Fossology project (https://www.fossology.org/). It is surely more
+> complicated to install and use that your Python script, but it is also
+> a lot more complete, and even more importantly: maintained by other
+> people.
+
+And SPDX. Something like this
+
+https://spdx.org/tools/community/fossologyspdx
+
+would be quite apt.
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
