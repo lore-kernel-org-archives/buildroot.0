@@ -1,42 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Aug 2016 09:14:24 +0200
-Subject: [Buildroot] [git commit] package/sdl_image: remove trailing \ from
-	the last item of {, HOST_}SDL_IMAGE_CONF_OPTS
-Message-ID: <20160805071803.6A47A8182C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 5 Aug 2016 09:32:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvpx: Fix compilation when
+ __uClinux__ is defined
+In-Reply-To: <fee7b830-1e54-5735-082e-05d3b0bc5a87@gmail.com>
+References: <1469954504-31016-1-git-send-email-bernd.kuhls@t-online.de>
+ <D26F367F-EE90-4A2D-8603-7EBE04E9E2BD@gmail.com>
+ <20160804225318.34de32a3@free-electrons.com>
+ <fee7b830-1e54-5735-082e-05d3b0bc5a87@gmail.com>
+Message-ID: <20160805093229.63547f22@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c794ee67852c1815238ce0040708c0de286f338
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sdl_image/sdl_image.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Thu, 4 Aug 2016 21:05:10 -0700, Khem Raj wrote:
 
-diff --git a/package/sdl_image/sdl_image.mk b/package/sdl_image/sdl_image.mk
-index b46fc64..f88aa0e 100644
---- a/package/sdl_image/sdl_image.mk
-+++ b/package/sdl_image/sdl_image.mk
-@@ -28,7 +28,7 @@ SDL_IMAGE_CONF_OPTS = \
- 	--enable-webp=$(if $(BR2_PACKAGE_SDL_IMAGE_WEBP),yes,no) \
- 	--enable-xcf=$(if $(BR2_PACKAGE_SDL_IMAGE_XCF),yes,no) \
- 	--enable-xpm=$(if $(BR2_PACKAGE_SDL_IMAGE_XPM),yes,no) \
--	--enable-xv=$(if $(BR2_PACKAGE_SDL_IMAGE_XV),yes,no) \
-+	--enable-xv=$(if $(BR2_PACKAGE_SDL_IMAGE_XV),yes,no)
- 
- SDL_IMAGE_DEPENDENCIES = sdl \
- 	$(if $(BR2_PACKAGE_SDL_IMAGE_JPEG),jpeg) \
-@@ -43,7 +43,7 @@ HOST_SDL_IMAGE_CONF_OPTS = \
- 	--disable-static \
- 	--disable-jpg-shared \
- 	--disable-png-shared \
--	--disable-tif-shared \
-+	--disable-tif-shared
- 
- HOST_SDL_IMAGE_DEPENDENCIES = host-libjpeg host-libpng host-sdl
- 
+> For life of me I can not find out, so most probably, its some SOC devkit
+> so its fine to ignore this.
+
+I also Google'd for this header, and can't seem to find it anywhere, so
+it really seems like some very BSP-specific thingy that was added, and
+there's no reason to keep carrying I believe.
+
+I just checked, this include has been here in the Git repository since
+the initial code base import, so there's no way to know more precisely
+why it was added.
+
+Bernd, could you submit the patch removing this header file to the
+upstream project?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
