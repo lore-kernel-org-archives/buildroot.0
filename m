@@ -1,65 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Aug 2016 22:43:42 +0200
-Subject: [Buildroot] [RFC][PATCH] bfin: fix two issues with internal
- toolchain
-In-Reply-To: <20160805195247.GA11252@waldemar-brodkorb.de>
-References: <20160805195247.GA11252@waldemar-brodkorb.de>
-Message-ID: <20160805224342.1972c673@free-electrons.com>
+Date: Fri,  5 Aug 2016 22:52:36 +0200
+Subject: [Buildroot] [PATCH] netplug: add two patches to fix musl build
+	issues
+Message-ID: <1470430356-29349-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit adds two patches to netplug that are needed for this package
+to build with musl:
 
-On Fri, 5 Aug 2016 21:52:47 +0200, Waldemar Brodkorb wrote:
+ - One patch to add a missing header inclusion
+ - One patch to fix a conflicting prototype on __assert_fail().
 
-> And libgcc_s.so.1 provides it:
-> ./output/host/usr/bin/bfin-buildroot-linux-uclibc-nm
-> ./output/host/usr/bfin-buildroot-linux-uclibc/sysroot/lib/libgcc_s.so.1|grep
-> _Unwind_GetRegionStart                         
-> 00005d0c t __Unwind_GetRegionStart
+Fixes:
 
-We are currently discussing it on IRC, but I believe the problem is
-that "t" indicates that the symbol is not visible. It should be a "T".
+  http://autobuild.buildroot.net/results/c2a5dfedba46cc8eb3d0c5c43f1f76fe0bb1805f/
 
-> diff --git a/package/gcc/6.1.0/892-fix-dwarf-fdpic.patch b/package/gcc/6.1.0/892-fix-dwarf-fdpic.patch
-> new file mode 100644
-> index 0000000..315b406
-> --- /dev/null
-> +++ b/package/gcc/6.1.0/892-fix-dwarf-fdpic.patch
-> @@ -0,0 +1,37 @@
-> +Fix DWARF compilation for FDPIC targets
-> +
-> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> +
-> +diff -Nur gcc-6.1.0.orig/libgcc/unwind-dw2-fde-dip.c gcc-6.1.0/libgcc/unwind-dw2-fde-dip.c
-> +--- gcc-6.1.0.orig/libgcc/unwind-dw2-fde-dip.c	2016-01-04 15:30:50.000000000 +0100
-> ++++ gcc-6.1.0/libgcc/unwind-dw2-fde-dip.c	2016-08-05 02:17:40.424195128 +0200
-> +@@ -124,7 +124,11 @@
-> + {
-> +   _Unwind_Ptr pc_low;
-> +   _Unwind_Ptr pc_high;
-> ++#if defined __FRV_FDPIC__ || defined __BFIN_FDPIC__
-> ++  struct elf32_fdpic_loadaddr load_base;
-> ++#else
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../netplug/0002-add-missing-time-include.patch    | 20 +++++++++
+ package/netplug/0003-remove-assert-fail.patch      | 51 ++++++++++++++++++++++
+ 2 files changed, 71 insertions(+)
+ create mode 100644 package/netplug/0002-add-missing-time-include.patch
+ create mode 100644 package/netplug/0003-remove-assert-fail.patch
 
-I'm surprised by this part of the patch, since you are changing the
-behavior for __FRV_FDPIC__ as well. It wasn't working before?
-
-In all other chunks you simply add __BFIN_FDPIC__ as behaving the same
-as __FRV_FDPIC__ but you're not doing the same here. Is this expected?
-
-> ++#if defined __FRV_FDPIC__ || defined __BFIN_FDPIC__
-
-Obvious question: is there a symbol that says "I'm using FDPIC" and
-which would make such conditions simpler?
-
-Thanks,
-
-Thomas
+diff --git a/package/netplug/0002-add-missing-time-include.patch b/package/netplug/0002-add-missing-time-include.patch
+new file mode 100644
+index 0000000..f204c92
+--- /dev/null
++++ b/package/netplug/0002-add-missing-time-include.patch
+@@ -0,0 +1,20 @@
++Add missing <time.h> include
++
++netplug.h uses time_t, so it must include <time.h>. This fixes a build
++issue with the musl C library.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/netplug.h
++===================================================================
++--- a/netplug.h
+++++ b/netplug.h
++@@ -20,7 +20,7 @@
++ #ifndef __netplug_h
++ #define __netplug_h
++ 
++-
+++#include <time.h>
++ #include <asm/types.h>
++ #include <sys/socket.h>
++ #include <linux/netlink.h>
+diff --git a/package/netplug/0003-remove-assert-fail.patch b/package/netplug/0003-remove-assert-fail.patch
+new file mode 100644
+index 0000000..635c462
+--- /dev/null
++++ b/package/netplug/0003-remove-assert-fail.patch
+@@ -0,0 +1,51 @@
++Remove __assert_fail()
++
++The netplug code uses the assert() macro in various places. In glibc
++internally, assert() uses a function called __assert_fail() to print a
++message and abort. Relying on internal glibc details, netplug
++re-defines __assert_fail() in the hope that it will get called instead
++of glibc internal version.
++
++This attempt:
++
++ * Doesn't work with uClibc, which doesn't use any __assert_fail()
++   function at all. It doesn't fail to build, but it is entirely
++   useless.
++
++ * Fails to build with musl, which also defines __assert_fail(), but
++   with a different prototype.
++
++We simply remove the __assert_fail() implementation, so that the C
++library implementation of assert() just does its normal work. The only
++functionality lost is that the message is displayed on the standard
++output rather than in netplug's logs (and this was only working with
++glibc anyway).
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/lib.c
++===================================================================
++--- a/lib.c
+++++ b/lib.c
++@@ -199,21 +199,6 @@
++     return x;
++ }
++ 
++-
++-void
++-__assert_fail(const char *assertion, const char *file,
++-              unsigned int line, const char *function)
++-{
++-    do_log(LOG_CRIT, "%s:%u: %s%sAssertion `%s' failed",
++-           file, line,
++-           function ? function : "",
++-           function ? ": " : "",
++-           assertion);
++-
++-    abort();
++-}
++-
++-
++ /*
++  * Local variables:
++  * c-file-style: "stroustrup"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.4
