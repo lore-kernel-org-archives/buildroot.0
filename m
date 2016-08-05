@@ -1,13 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Aug 2016 12:21:53 +0200
-Subject: [Buildroot] [PATCH] iperf: bump to version 2.0.9
-In-Reply-To: <20160731082541.GC3620@tarshish>
-References: <0fe5e4e62f4093b8d30fd1155d8832cd2482a57e.1469784407.git.baruch@tkos.co.il>
- <20160730143139.10ffbed2@free-electrons.com>
- <20160731043853.GA3620@tarshish>
- <20160731100908.1fdf64d6@free-electrons.com>
- <20160731082541.GC3620@tarshish>
-Message-ID: <20160805122153.6c4a4593@free-electrons.com>
+Date: Fri, 5 Aug 2016 12:28:11 +0200
+Subject: [Buildroot] [PATCH v3 6/6] package/amd-catalyst-driver: Add AMD
+ proprietary graphic stack support
+In-Reply-To: <20160728161258.GA5862@free.fr>
+References: <1469521290-20446-1-git-send-email-romain.perier@free-electrons.com>
+ <1469521290-20446-7-git-send-email-romain.perier@free-electrons.com>
+ <20160726203918.GE5925@free.fr>
+ <20160727093523.34b01c10@free-electrons.com>
+ <20160728161258.GA5862@free.fr>
+Message-ID: <20160805122811.45883223@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,21 +17,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 31 Jul 2016 11:25:41 +0300, Baruch Siach wrote:
+On Thu, 28 Jul 2016 18:12:58 +0200, Yann E. MORIN wrote:
 
-> > > Where have you found a link to that repo? Only after googling for "iperf2 git" 
-> > > I found an indication to its existence in https://github.com/daynix/iperf2.  
-> > 
-> > From https://sourceforge.net/projects/iperf2/, click on "Code".  
-> 
-> That's the first thing I tried. Looking there again all I see is an old Svn 
-> repo (last update is r8 from 2014-09-14). What am I missing?
+> What if the kernel is built outside of Buildroot? We can't build the
+> kernel module in that case, but we still want to be able to build the
+> userland. So, the split *does* make sense.
 
-Then we don't have the same Internet I'm afraid. Here the "Code" tab
-points to https://sourceforge.net/p/iperf2/code/ci/master/tree/ which
-is a Git repository with the latest commit on July 2, 2016.
+Yes, it does, you are completely right. Romain is reworking the patch
+series to take this aspect into account. I originally asked him to make
+the kernel module option a blind one, but I forgot about the use case
+of "I build my kernel outside of Buildroot", which is a perfectly valid
+use case.
 
-Best regards,
+Thanks for your feedback!
 
 Thomas
 -- 
