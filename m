@@ -1,232 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 5 Aug 2016 17:54:40 +0200
-Subject: [Buildroot] [PATCH v4 1/7] support/download: Add support to
- pass options directly to downloaders
-In-Reply-To: <1470408840-1509-2-git-send-email-romain.perier@free-electrons.com>
-References: <1470408840-1509-1-git-send-email-romain.perier@free-electrons.com>
- <1470408840-1509-2-git-send-email-romain.perier@free-electrons.com>
-Message-ID: <20160805155440.GA6074@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri,  5 Aug 2016 18:35:41 +0200
+Subject: [Buildroot] [PATCH] uclibc: proper thread default on m68k and
+	Microblaze
+Message-ID: <1470414941-29826-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Traditionally, Buildroot has a default of enabling thread
+support. However, with the current construct of the thread choice in the
+uclibc package, the m68k and microblaze architecture end up with no
+thread support as the default.
 
-On 2016-08-05 16:53 +0200, Romain Perier spake thusly:
-> This adds support to pass options to the underlying command that is used
-> by downloader. Useful for retrieving data with server-side checking for
-> user login or passwords, use a proxy or use specific options for cloning
-> a repository via git and hg.
-> 
-> Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+In order to avoid having to explicit a more complicated "default" value
+for the choice, we take a simple approach:
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ - The "none" choice is moved at the end of the list, so that it is not
+   selected as the default unless there is really no other thread
+   implementation available.
 
-Regards,
-Yann E. MORIN.
+ - We make NPTL the default thread implementation.
 
-> ---
-> 
-> Changes in v4:
->  - Rebased onto master
->  - Pass "${@}" to "git clone --depth 1" too.
-> 
-> Changes in v3:
->  - Don't use the variable ${dl_opts} to catch extra arguments
->  - We prefer to use shift and "${@}", it does not introduce
->    empty string when there are no extra parameters.
-> 
-> Changes in v2:
->  - Replaced the variable $(PKG)_DL_REFERER by $(PKG)_DL_OPTS
->  - Add modification to all downloaders
-> 
->  support/download/bzr  | 4 +++-
->  support/download/cp   | 4 +++-
->  support/download/cvs  | 4 +++-
->  support/download/git  | 6 ++++--
->  support/download/hg   | 4 +++-
->  support/download/scp  | 4 +++-
->  support/download/svn  | 4 +++-
->  support/download/wget | 4 +++-
->  8 files changed, 25 insertions(+), 9 deletions(-)
-> 
-> diff --git a/support/download/bzr b/support/download/bzr
-> index e18b01f..75b7b41 100755
-> --- a/support/download/bzr
-> +++ b/support/download/bzr
-> @@ -26,6 +26,8 @@ repo="${2}"
->  rev="${3}"
->  basename="${4}"
->  
-> +shift 4 # Get rid of our options
-> +
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
->  _bzr() {
-> @@ -49,5 +51,5 @@ if [ ${bzr_version} -ge ${bzr_min_version} ]; then
->  fi
->  
->  _bzr export ${verbose} --root="'${basename}/'" --format=tgz \
-> -    ${timestamp_opt} - "'${repo}'" -r "'${rev}'" \
-> +    ${timestamp_opt} - "${@}" "'${repo}'" -r "'${rev}'" \
->      >"${output}"
-> diff --git a/support/download/cp b/support/download/cp
-> index 09ce3d1..0ee1f3b 100755
-> --- a/support/download/cp
-> +++ b/support/download/cp
-> @@ -28,10 +28,12 @@ shift $((OPTIND-1))
->  output="${1}"
->  source="${2}"
->  
-> +shift 2 # Get rid of our options
-> +
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
->  _localfiles() {
->      eval ${LOCALFILES} "${@}"
->  }
->  
-> -_localfiles ${verbose} "'${source}'" "'${output}'"
-> +_localfiles ${verbose} "${@}""'${source}'" "'${output}'"
-> diff --git a/support/download/cvs b/support/download/cvs
-> index 7980389..50050ab 100755
-> --- a/support/download/cvs
-> +++ b/support/download/cvs
-> @@ -26,6 +26,8 @@ rev="${3}"
->  rawname="${4}"
->  basename="${5}"
->  
-> +shift 5 # Get rid of our options
-> +
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
->  _cvs() {
-> @@ -48,6 +50,6 @@ fi
->  
->  export TZ=UTC
->  _cvs ${verbose} -z3 -d"'${repo}'" \
-> -     co -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
-> +     co "${@}" -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
->  
->  tar czf "${output}" "${basename}"
-> diff --git a/support/download/git b/support/download/git
-> index 416cd1b..281db61 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -30,6 +30,8 @@ repo="${2}"
->  cset="${3}"
->  basename="${4}"
->  
-> +shift 4 # Get rid of our options
-> +
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
->  _git() {
-> @@ -46,7 +48,7 @@ _git() {
->  git_done=0
->  if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
->      printf "Doing shallow clone\n"
-> -    if _git clone ${verbose} --depth 1 -b "'${cset}'" "'${repo}'" "'${basename}'"; then
-> +    if _git clone ${verbose} "${@}" --depth 1 -b "'${cset}'" "'${repo}'" "'${basename}'"; then
->          git_done=1
->      else
->          printf "Shallow clone failed, falling back to doing a full clone\n"
-> @@ -54,7 +56,7 @@ if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
->  fi
->  if [ ${git_done} -eq 0 ]; then
->      printf "Doing full clone\n"
-> -    _git clone ${verbose} "'${repo}'" "'${basename}'"
-> +    _git clone ${verbose} "${@}" "'${repo}'" "'${basename}'"
->  fi
->  
->  pushd "${basename}" >/dev/null
-> diff --git a/support/download/hg b/support/download/hg
-> index 25cb4e9..3af0169 100755
-> --- a/support/download/hg
-> +++ b/support/download/hg
-> @@ -25,13 +25,15 @@ repo="${2}"
->  cset="${3}"
->  basename="${4}"
->  
-> +shift 4 # Get rid of our options
-> +
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
->  _hg() {
->      eval ${HG} "${@}"
->  }
->  
-> -_hg clone ${verbose} --noupdate "'${repo}'" "'${basename}'"
-> +_hg clone ${verbose} "${@}" --noupdate "'${repo}'" "'${basename}'"
->  
->  _hg archive ${verbose} --repository "'${basename}'" --type tgz \
->              --prefix "'${basename}'" --rev "'${cset}'" \
-> diff --git a/support/download/scp b/support/download/scp
-> index 95cf502..825fd41 100755
-> --- a/support/download/scp
-> +++ b/support/download/scp
-> @@ -23,10 +23,12 @@ shift $((OPTIND-1))
->  output="${1}"
->  url="${2}"
->  
-> +shift 2 # Get rid of our options
-> +
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
->  _scp() {
->      eval ${SCP} "${@}"
->  }
->  
-> -_scp ${verbose} "'${url}'" "'${output}'"
-> +_scp ${verbose} "${@}" "'${url}'" "'${output}'"
-> diff --git a/support/download/svn b/support/download/svn
-> index 4dcdd06..77abf3d 100755
-> --- a/support/download/svn
-> +++ b/support/download/svn
-> @@ -25,12 +25,14 @@ repo="${2}"
->  rev="${3}"
->  basename="${4}"
->  
-> +shift 4 # Get rid of our options
-> +
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
->  _svn() {
->      eval ${SVN} "${@}"
->  }
->  
-> -_svn export ${verbose} "'${repo}@${rev}'" "'${basename}'"
-> +_svn export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
->  
->  tar czf "${output}" "${basename}"
-> diff --git a/support/download/wget b/support/download/wget
-> index 0fc7ffa..768de90 100755
-> --- a/support/download/wget
-> +++ b/support/download/wget
-> @@ -23,10 +23,12 @@ shift $((OPTIND-1))
->  output="${1}"
->  url="${2}"
->  
-> +shift 2 # Get rid of our options
-> +
->  # Caller needs to single-quote its arguments to prevent them from
->  # being expanded a second time (in case there are spaces in them)
->  _wget() {
->      eval ${WGET} "${@}"
->  }
->  
-> -_wget ${verbose} -O "'${output}'" "'${url}'"
-> +_wget ${verbose} "${@}" -O "'${output}'" "'${url}'"
-> -- 
-> 2.8.1
-> 
+ - On architectures where NPTL is not available, the NPTL option will
+   not be available, so Kconfig will automatically fallback to
+   linuxthreads.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uclibc/Config.in | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 7c99195..b7714d4 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -47,15 +47,13 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
+ 
+ choice
+ 	prompt "Thread library implementation"
++	# Use NPTL when available. If not available, kconfig will
++	# automatically fall back to linuxthreads.
+ 	default BR2_PTHREADS_NATIVE
+-	default BR2_PTHREADS if !BR2_USE_MMU
+ 	help
+ 	  Use this option to select the thread library implementation
+ 	  that should be used in your toolchain.
+ 
+-	config BR2_PTHREADS_NONE
+-		bool "none"
+-
+ 	config BR2_PTHREADS
+ 		bool "linuxthreads"
+ 		select BR2_TOOLCHAIN_HAS_THREADS
+@@ -67,6 +65,10 @@ choice
+ 		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 		depends on BR2_USE_MMU
+ 		depends on !BR2_m68k && !BR2_microblaze
++
++	config BR2_PTHREADS_NONE
++		bool "none"
++
+ endchoice
+ 
+ config BR2_PTHREAD_DEBUG
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
