@@ -1,74 +1,59 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri,  5 Aug 2016 13:46:32 +0200
-Subject: [Buildroot] [PATCH] package/oprofile: introduce a
-	BR2_PACKAGE_OPROFILE_ARCH_SUPPORTS
-Message-ID: <1470397592-8459-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 5 Aug 2016 14:01:15 +0200
+Subject: [Buildroot] [PATCH] config: add Synopsys nSIM and nSIM OSCI
+	platforms
+In-Reply-To: <1470394586-6091-1-git-send-email-vzakhar@synopsys.com>
+References: <1470394586-6091-1-git-send-email-vzakhar@synopsys.com>
+Message-ID: <20160805140115.071073db@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-operf_utils.h defines rmb() for a limited number of architectures, so
-add this list to BR2_PACKAGE_OPROFILE_ARCH_SUPPORTS to disable any new
-or unsupported architectures.
+Hello,
 
-Doing so, this disable oprofile for m68k which lack of memory barrier
-operations.
+On Fri,  5 Aug 2016 13:56:26 +0300, Vlad Zakharov wrote:
+> nSIM and nSIM OSCI are 2 simulation platforms from Synopsys
+> that could emulate both ARCompact and ARCv2 CPUs.
+> 
+> Note for ARCv2 we provide both UP (uni-processor) and SMP
+> (multi-processor) configs.
+> 
+> So-called "standalone" nSIM and it's free flavor Free nSIM
+> have only 1 peripheral - serial port. Still they are
+> (especially free version) very useful for regression testing
+> and debugging of Linux kernel.
+> 
+> nSIM OSCI emulates more functional boards having not only serial port
+> but as well:
+>  * LCD screen
+>   * PS/2 keyboard
+>    * Ethernet controller (which communicates with the host)
+> 
+> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
 
-Remove nios2 dependency since it's not supported by oprofile even if
-binutils could be build for nios2.
+Thanks for this contribution. It would be useful to add a readme.txt
+file that explains how to start the result of the Buildroot build with
+those simulation platforms, especially the one that is freely available.
 
-Fixes:
-http://autobuild.buildroot.net/results/1cc/1cc761d8a5715d0a2c6eaacfde7e44b225da1b36
+> ---
+>  configs/snps_nsim_700_defconfig          | 18 ++++++++++++++++++
+>  configs/snps_nsim_hs38_defconfig         | 19 +++++++++++++++++++
+>  configs/snps_nsim_hs38_smp_defconfig     | 19 +++++++++++++++++++
+>  configs/snps_nsimosci_700_defconfig      | 19 +++++++++++++++++++
+>  configs/snps_nsimosci_hs38_defconfig     | 20 ++++++++++++++++++++
+>  configs/snps_nsimosci_hs38_smp_defconfig | 20 ++++++++++++++++++++
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-Actually binutils 2.25 build fine for nios2 target, it was disabled by
-5c4b60c7e0d74f92ae7c06c7bd8f732a12e70ca6 when binutils 2.22 was used by
-default. So it could be enabled in a follow up patch.
----
- package/oprofile/Config.in | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+Do we really need all those combinations? I do understand the 700 vs.
+HS38 difference, but couldn't the rest be handled with just different
+DTBs ? It seems annoying to have both one kernel defconfig for each of
+those, and then one Buildroot configuration for each of those as well.
 
-diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
-index 9014d9f..4cef30b 100644
---- a/package/oprofile/Config.in
-+++ b/package/oprofile/Config.in
-@@ -1,3 +1,13 @@
-+# no memory barrier functions for m68k, microblaze, nios2 and xtensa
-+config BR2_PACKAGE_OPROFILE_ARCH_SUPPORTS
-+	bool
-+	default y
-+	depends on BR2_arceb || BR2_arcle || BR2_arm || BR2_armeb || \
-+		BR2_aarch64 || BR2_aarch64_be || BR2_i386 || BR2_mips || \
-+		BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_powerpc || \
-+		BR2_powerpc64 || BR2_powerpc64le || BR2_sh4 || BR2_sh64 || \
-+		BR2_sparc || BR2_sparc64 || BR2_x86_64
-+
- config BR2_PACKAGE_OPROFILE
- 	bool "oprofile"
- 	depends on BR2_USE_MMU # fork()
-@@ -5,10 +15,8 @@ config BR2_PACKAGE_OPROFILE
- 	select BR2_PACKAGE_BINUTILS
- 	select BR2_PACKAGE_LIBPFM4 if BR2_powerpc
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_nios2 # binutils
- 	depends on BR2_USE_WCHAR # binutils
--	# no memory barrier functions
--	depends on !BR2_xtensa && !BR2_microblaze
-+	depends on BR2_PACKAGE_OPROFILE_ARCH_SUPPORTS
- 	# libpfm4 is needed on PowerPC, and requires thread support
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_powerpc
- 	help
-@@ -29,7 +37,7 @@ config BR2_PACKAGE_OPROFILE
- 
- comment "oprofile needs a toolchain w/ C++, wchar"
- 	depends on BR2_USE_MMU
--	depends on !BR2_nios2 && !BR2_xtensa && !BR2_microblaze
-+	depends on BR2_PACKAGE_OPROFILE_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
- 
- comment "oprofile needs a toolchain w/ NPTL on PPC"
+Thanks,
+
+Thomas
 -- 
-2.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
