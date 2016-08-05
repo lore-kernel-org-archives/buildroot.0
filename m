@@ -1,69 +1,53 @@
 From: Romain Perier <romain.perier@free-electrons.com>
-Date: Fri,  5 Aug 2016 16:53:53 +0200
-Subject: [Buildroot] [PATCH v4 0/7] Add support for AMD Catalyst graphics
-	driver
-Message-ID: <1470408840-1509-1-git-send-email-romain.perier@free-electrons.com>
+Date: Fri,  5 Aug 2016 16:53:56 +0200
+Subject: [Buildroot] [PATCH v4 3/7] docs/manual: Document the variable
+	$(PKG)_DL_OPTS
+In-Reply-To: <1470408840-1509-1-git-send-email-romain.perier@free-electrons.com>
+References: <1470408840-1509-1-git-send-email-romain.perier@free-electrons.com>
+Message-ID: <1470408840-1509-4-git-send-email-romain.perier@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The AMD Catalyst Proprietary Linux Graphics Driver 15.9 supports GPUs
-AMD Radeon HD 5xxx and newer graphics. It requires at least glibc 2.2
-or 2.3 and is compatible up to Xorg 1.17. This serie adds the required
-changes to support this driver.
+This adds a description of the optional variable $(PKG)_DL_OPTS. When it
+is set, this option passes additional options to the downloader.
 
-The fglrx kernel module is compatible up to Linux kernel 4.4 LTS.
-All the graphical stack has been tested on a x86_64 system with an
-AMD-GT40N (w/ Radeon HD 6290 GPU).
+Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
 
-Romain Perier (7):
-  support/download: Add support to pass options directly to downloaders
-  pkg-download: Allow packages to pass generic options to download
-    methods
-  docs/manual: Document the variable $(PKG)_DL_OPTS
-  package/amd-catalyst: Add AMD proprietary graphic stack support
-  package/amd-catalyst: Add AMD cmdline tools
-  package/amd-catalyst: Add support AMD CCCLE
-  package/amd-catalyst: Add support for OpenCL
+Changes in v4:
+ - Add Reviewed-by tag
 
- docs/manual/adding-packages-generic.txt            |   7 +
- package/Config.in                                  |   1 +
- .../0001-Add-support-for-Linux-4.0.patch           |  45 ++++++
- .../0002-Add-support-for-Linux-4.1.patch           |  31 ++++
- .../0003-Add-support-for-Linux-4.2.patch           | 121 +++++++++++++++
- ...0004-Use-fpregs_active-instead-of-has_fpu.patch |  33 ++++
- ...-Use-a-local-copy-of-copy_xregs_to_kernel.patch |  79 ++++++++++
- .../0006-Add-support-for-Linux-4.4.patch           |  78 ++++++++++
- package/amd-catalyst/0007-remove-gpl-symbols.patch |  54 +++++++
- package/amd-catalyst/20-fglrx.conf                 |   4 +
- package/amd-catalyst/Config.in                     |  73 +++++++++
- package/amd-catalyst/amd-catalyst.hash             |   2 +
- package/amd-catalyst/amd-catalyst.mk               | 168 +++++++++++++++++++++
- package/amd-catalyst/gl.pc                         |  12 ++
- package/pkg-download.mk                            |  24 ++-
- support/download/bzr                               |   4 +-
- support/download/cp                                |   4 +-
- support/download/cvs                               |   4 +-
- support/download/git                               |   6 +-
- support/download/hg                                |   4 +-
- support/download/scp                               |   4 +-
- support/download/svn                               |   4 +-
- support/download/wget                              |   4 +-
- 23 files changed, 749 insertions(+), 17 deletions(-)
- create mode 100644 package/amd-catalyst/0001-Add-support-for-Linux-4.0.patch
- create mode 100644 package/amd-catalyst/0002-Add-support-for-Linux-4.1.patch
- create mode 100644 package/amd-catalyst/0003-Add-support-for-Linux-4.2.patch
- create mode 100644 package/amd-catalyst/0004-Use-fpregs_active-instead-of-has_fpu.patch
- create mode 100644 package/amd-catalyst/0005-Use-a-local-copy-of-copy_xregs_to_kernel.patch
- create mode 100644 package/amd-catalyst/0006-Add-support-for-Linux-4.4.patch
- create mode 100644 package/amd-catalyst/0007-remove-gpl-symbols.patch
- create mode 100644 package/amd-catalyst/20-fglrx.conf
- create mode 100644 package/amd-catalyst/Config.in
- create mode 100644 package/amd-catalyst/amd-catalyst.hash
- create mode 100644 package/amd-catalyst/amd-catalyst.mk
- create mode 100644 package/amd-catalyst/gl.pc
+Changes in v3:
+ - Improve documentation
 
+Changes in v2:
+ - Don't include the example in the snippet of code
+ - Replaced $(PKG)_DL_REFERER by $(PKG)_DL_OPTS
+
+ docs/manual/adding-packages-generic.txt | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index ef895ec..51408e8 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -250,6 +250,13 @@ information is (assuming the package name is +libfoo+) :
+     +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
+     +LIBFOO_SITE=$(TOPDIR)/../src/libfoo+
+ 
++* +LIBFOO_DL_OPTS+ is a space-separated list of additional options to
++  pass to the downloader. Useful for retrieving documents with
++  server-side checking for user logins and passwords, or to use a proxy.
++  All download methods valid for +LIBFOO_SITE_METHOD+ are supported;
++  valid options depend on the download method (consult the man page
++  for the respective download utilities).
++
+ * +LIBFOO_EXTRA_DOWNLOADS+ is a space-separated list of additional
+   files that Buildroot should download. If an entry contains +://+
+   then Buildroot will assume it is a complete URL and will download
 -- 
 2.8.1
