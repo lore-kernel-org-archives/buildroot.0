@@ -1,76 +1,80 @@
 From: Romain Perier <romain.perier@free-electrons.com>
-Date: Fri,  5 Aug 2016 16:53:58 +0200
-Subject: [Buildroot] [PATCH v4 5/7] package/amd-catalyst: Add AMD cmdline
-	tools
+Date: Fri,  5 Aug 2016 16:54:00 +0200
+Subject: [Buildroot] [PATCH v4 7/7] package/amd-catalyst: Add support for
+	OpenCL
 In-Reply-To: <1470408840-1509-1-git-send-email-romain.perier@free-electrons.com>
 References: <1470408840-1509-1-git-send-email-romain.perier@free-electrons.com>
-Message-ID: <1470408840-1509-6-git-send-email-romain.perier@free-electrons.com>
+Message-ID: <1470408840-1509-8-git-send-email-romain.perier@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The AMD Catalyst driver includes some cmdline tools for displaying
-specific infos about the GL stack or to test 3D, like fglxinfo
-or fgl_gears. This commit adds support to install such tools.
+The AMD Catalyst Linux driver includes OpenCL libraries for GPGPU
+computing. This commits adds support to install the binary blobs and ICD
+profiles.
 
 Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
 ---
- package/amd-catalyst/Config.in       |  5 +++++
- package/amd-catalyst/amd-catalyst.mk | 20 ++++++++++++++++++++
- 2 files changed, 25 insertions(+)
+ package/amd-catalyst/Config.in       |  6 ++++++
+ package/amd-catalyst/amd-catalyst.mk | 24 ++++++++++++++++++++++++
+ 2 files changed, 30 insertions(+)
 
 diff --git a/package/amd-catalyst/Config.in b/package/amd-catalyst/Config.in
-index c3c531c..0099e91 100644
+index 99676d3..856ff9b 100644
 --- a/package/amd-catalyst/Config.in
 +++ b/package/amd-catalyst/Config.in
-@@ -38,6 +38,11 @@ if BR2_PACKAGE_AMD_CATALYST_XORG
- config BR2_PACKAGE_PROVIDES_LIBGL
- 	default "amd-catalyst"
+@@ -64,4 +64,10 @@ config BR2_PACKAGE_AMD_CATALYST_MODULE
+ 	help
+ 	  Builds and install the fglrx kernel module
  
-+config BR2_PACKAGE_AMD_CATALYST_CMDLINE_TOOLS
-+	bool "command-line configuration tools and utilities"
++config BR2_PACKAGE_AMD_CATALYST_OPENCL
++	bool "OpenCL support"
 +	help
-+	  Build the amd command line tools
++	  Installs the OpenCL binary blobs and the ICD profile
++	  for GPGPU computing.
 +
- endif
- 
- config BR2_PACKAGE_AMD_CATALYST_MODULE
+ endif # BR2_PACKAGE_AMD_CATALYST
 diff --git a/package/amd-catalyst/amd-catalyst.mk b/package/amd-catalyst/amd-catalyst.mk
-index cda8e75..5e1b90b 100644
+index ee3c2d6..64746bf 100644
 --- a/package/amd-catalyst/amd-catalyst.mk
 +++ b/package/amd-catalyst/amd-catalyst.mk
-@@ -103,12 +103,32 @@ endef
- 
+@@ -39,6 +39,29 @@ endef
+ $(eval $(kernel-module))
  endif
  
-+ifeq ($(BR2_PACKAGE_AMD_CATALYST_CMDLINE_TOOLS), y)
-+AMD_CATALYST_CMDLINE_TOOLS_FILES = \
-+	atiode \
-+	atiodcli \
-+	fgl_glxgears \
-+	aticonfig \
-+	amd-console-helper \
-+	fglrxinfo
++ifeq ($(BR2_PACKAGE_AMD_CATALYST_OPENCL),y)
 +
-+define  AMD_CATALYST_INSTALL_CMDLINE_TOOLS
-+	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/sbin/atieventsd \
-+		$(TARGET_DIR)/usr/sbin
-+	$(foreach f,$(AMD_CATALYST_CMDLINE_TOOLS_FILES), \
-+		$(INSTALL) -D -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/X11R6/bin/$(f) \
-+			$(TARGET_DIR)/usr/bin/$(f)
++AMD_CATALYST_OCL_SUFFIX = $(if $(BR2_x86_64),64,32)
++AMD_CATALYST_OPENCL_FILES = \
++	usr/lib$(AMD_CATALYST_LIB_SUFFIX)/libOpenCL.so.1 \
++	usr/lib$(AMD_CATALYST_LIB_SUFFIX)/libaticalcl.so \
++	usr/lib$(AMD_CATALYST_LIB_SUFFIX)/libamdocl$(AMD_CATALYST_OCL_SUFFIX).so \
++	usr/lib$(AMD_CATALYST_LIB_SUFFIX)/libamdocl12cl$(AMD_CATALYST_OCL_SUFFIX).so
++
++define AMD_CATALYST_INSTALL_OPENCL
++	$(foreach f,$(AMD_CATALYST_OPENCL_FILES), \
++		$(INSTALL) -D -m 0755 $(AMD_CATALYST_ARCH_DIR)/$(f) $(TARGET_DIR)/$(f)
 +	)
++	ln -sf libOpenCL.so.1 \
++		$(TARGET_DIR)/usr/lib/libOpenCL.so
++	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/bin/clinfo \
++		$(TARGET_DIR)/usr/bin
++	$(INSTALL) -D -m 0644 $(AMD_CATALYST_ARCH_DIR)/etc/OpenCL/vendors/amdocl$(AMD_CATALYST_OCL_SUFFIX).icd \
++		$(TARGET_DIR)/etc/OpenCL/vendors/amdocl$(AMD_CATALYST_OCL_SUFFIX).icd
 +endef
++
 +endif
 +
- define AMD_CATALYST_INSTALL_STAGING_CMDS
- 	$(call AMD_CATALYST_INSTALL_STAGING_XORG)
- endef
+ ifeq ($(BR2_PACKAGE_AMD_CATALYST_XORG), y)
  
- define AMD_CATALYST_INSTALL_TARGET_CMDS
+ AMD_CATALYST_DEPENDENCIES += mesa3d-headers
+@@ -139,6 +162,7 @@ define AMD_CATALYST_INSTALL_TARGET_CMDS
  	$(call AMD_CATALYST_INSTALL_XORG)
-+	$(call AMD_CATALYST_INSTALL_CMDLINE_TOOLS)
+ 	$(call AMD_CATALYST_INSTALL_CMDLINE_TOOLS)
+ 	$(call AMD_CATALYST_INSTALL_CCCLE)
++	$(call AMD_CATALYST_INSTALL_OPENCL)
  endef
  
  $(eval $(generic-package))
