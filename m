@@ -1,39 +1,41 @@
-From: daggs <daggs@gmx.com>
-Date: Fri, 5 Aug 2016 10:27:41 +0200
-Subject: [Buildroot] dri2.h needed but missing
-In-Reply-To: <c2de2fca-60c3-5965-1036-a0a99d75c551@gmail.com>
-References: <trinity-c313bacc-e685-4046-81aa-0a8a97915dc9-1470338357069@3capp-mailcom-bs11>
- <4b622cd4-fa9d-1b6b-9d33-7c7397800ce1@gmail.com>
- <trinity-5e2193c5-6d63-4682-8d45-8ca0f0bedfb4-1470374955326@3capp-mailcom-bs14>,
- <c2de2fca-60c3-5965-1036-a0a99d75c551@gmail.com>
-Message-ID: <trinity-2551650e-b51a-4597-bec0-d52c10400a4c-1470385661906@3capp-mailcom-bs04>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 5 Aug 2016 09:57:48 +0100
+Subject: [Buildroot] [PATCH] xfsprogs: bump version to 4.7.0
+Message-ID: <1470387468-63192-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/xfsprogs/xfsprogs.hash | 4 ++--
+ package/xfsprogs/xfsprogs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> > Greetings,
-> > 
-> >> On 8/4/16 12:19 PM, daggs wrote:
-> >>> Greetings,
-> >>>
-> >>> I need the file mentioned above for a package I want to add, I cannot seem to find it under xorg's installed headers, any idea why and how I can add it?
-> >>>
-> >>
-> >> you need to depend on xserver-xorg
-> >>
-> > 
-> > I did that of course, xorg-server is installed, that header however isn't.
-> > 
-> 
-> Did you also enable the dri2 bits ? e.g.
-> BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR and BR2_PACKAGE_XPROTO_DRI2PROTO
-> 
-BR2_PACKAGE_XPROTO_DRI2PROTO was missing.
-
-thanks,
-
-Dagg.
+diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
+index d250283..1f338b0 100644
+--- a/package/xfsprogs/xfsprogs.hash
++++ b/package/xfsprogs/xfsprogs.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature:
+-#   ftp://oss.sgi.com/projects/xfs/cmd_tars/xfsprogs-4.5.0.tar.gz.sig
+-sha256 e49beb314984efbd0d758abb5c6137db3bb60a88e59e1e94c00defb536cf89f8  xfsprogs-4.5.0.tar.gz
++#   ftp://oss.sgi.com/projects/xfs/cmd_tars/xfsprogs-4.7.0.tar.gz.sig
++sha256 88580bb3e6847c3edef436703a4fae403fc19b20739db4c31166ee4b256178d7  xfsprogs-4.7.0.tar.gz
+diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+index fb72054..b0875d1 100644
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XFSPROGS_VERSION = 4.5.0
++XFSPROGS_VERSION = 4.7.0
+ XFSPROGS_SITE = ftp://oss.sgi.com/projects/xfs/cmd_tars
+ 
+ XFSPROGS_DEPENDENCIES = util-linux
+-- 
+2.7.3
