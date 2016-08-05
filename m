@@ -1,75 +1,151 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 5 Aug 2016 12:24:54 +0000
-Subject: [Buildroot] [PATCH] config: add Synopsys nSIM and nSIM OSCI
-	platforms
-In-Reply-To: <20160805140115.071073db@free-electrons.com>
-References: <1470394586-6091-1-git-send-email-vzakhar@synopsys.com>
- <20160805140115.071073db@free-electrons.com>
-Message-ID: <1470399797.3430.75.camel@synopsys.com>
+From: =?UTF-8?B?QmVub8OudA==?= Allard <benoit.allard@greenbone.net>
+Date: Fri, 5 Aug 2016 14:07:21 +0200
+Subject: [Buildroot] [git commit] ncurses: factorize terminfo files
+ installation
+In-Reply-To: <20160803205324.76B9C81972@busybox.osuosl.org>
+References: <20160803205324.76B9C81972@busybox.osuosl.org>
+Message-ID: <20160805140721.59c6d8ae@armant.core.local.os.greenbone.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Peter, Thomas,
 
-On Fri, 2016-08-05 at 14:01 +0200, Thomas Petazzoni wrote:
-> Hello,
+It looks like this commit introduces a regression on our side, the
+"linux" terminfo is not installed anymore (see inlined comment).
+
+Do you want me to provide a patch, or is that 'small enough' that you
+can take care of it ?
+
+Regards,
+Ben.
+
+
+On Wed, 3 Aug 2016 22:52:24 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
+
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=33ba5188351ece027455e460f6cba4245af49f3a
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> On Fri,??5 Aug 2016 13:56:26 +0300, Vlad Zakharov wrote:
-> > 
-> > nSIM and nSIM OSCI are 2 simulation platforms from Synopsys
-> > that could emulate both ARCompact and ARCv2 CPUs.
-> > 
-> > Note for ARCv2 we provide both UP (uni-processor) and SMP
-> > (multi-processor) configs.
-> > 
-> > So-called "standalone" nSIM and it's free flavor Free nSIM
-> > have only 1 peripheral - serial port. Still they are
-> > (especially free version) very useful for regression testing
-> > and debugging of Linux kernel.
-> > 
-> > nSIM OSCI emulates more functional boards having not only serial port
-> > but as well:
-> > ?* LCD screen
-> > ? * PS/2 keyboard
-> > ???* Ethernet controller (which communicates with the host)
-> > 
-> > Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+> This long list of commands to copy the terminfo files from staging to
+> target is really silly and can be factorized using a
+> NCURSES_TERMINFO_FILES variable, which is then iterated through.
 > 
-> Thanks for this contribution. It would be useful to add a readme.txt
-> file that explains how to start the result of the Buildroot build with
-> those simulation platforms, especially the one that is freely available.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/ncurses/ncurses.mk | 47
+> ++++++++++++++++++++++------------------------ 1 file changed, 22
+> insertions(+), 25 deletions(-)
 > 
-> > 
-> > ---
-> > ?configs/snps_nsim_700_defconfig??????????| 18 ++++++++++++++++++
-> > ?configs/snps_nsim_hs38_defconfig?????????| 19 +++++++++++++++++++
-> > ?configs/snps_nsim_hs38_smp_defconfig?????| 19 +++++++++++++++++++
-> > ?configs/snps_nsimosci_700_defconfig??????| 19 +++++++++++++++++++
-> > ?configs/snps_nsimosci_hs38_defconfig?????| 20 ++++++++++++++++++++
-> > ?configs/snps_nsimosci_hs38_smp_defconfig | 20 ++++++++++++++++++++
-> 
-> Do we really need all those combinations? I do understand the 700 vs.
-> HS38 difference, but couldn't the rest be handled with just different
-> DTBs ? It seems annoying to have both one kernel defconfig for each of
-> those, and then one Buildroot configuration for each of those as well.
+> diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+> index 55e5c81..0ae8835 100644
+> --- a/package/ncurses/ncurses.mk
+> +++ b/package/ncurses/ncurses.mk
+> @@ -55,6 +55,20 @@ NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) +=
+> menu NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += panel
+>  NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_FORM) += form
+>  
+> +NCURSES_TERMINFO_FILES = \
+> +	a/ansi \
 
-Unfortunately it's not only different .dtb.
-On ARC for SMP we need to modify kernel configuration as well.
+l/linux is missing here.
 
-I hope some day we'll be able to run the same one kernel binary on any
-flavor of ARCv2 CPU (be it UP or SMP) but now we cannot.
+> +	p/putty \
+> +	p/putty-vt100 \
+> +	s/screen \
+> +	v/vt100 \
+> +	v/vt100-putty \
+> +	v/vt102 \
+> +	v/vt200 \
+> +	v/vt220 \
+> +	x/xterm \
+> +	x/xterm-color \
+> +	x/xterm-xfree86 \
+> +
+>  ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+>  NCURSES_CONF_OPTS += --enable-widec
+>  NCURSES_LIB_SUFFIX = w
+> @@ -95,11 +109,10 @@ NCURSES_LINK_STAGING_PC = $(call
+> NCURSES_LINK_PC,$(STAGING_DIR)) 
+>  NCURSES_CONF_OPTS += --enable-ext-colors
+>  NCURSES_ABI_VERSION = 6
+> -define NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty-256color
+> $(TARGET_DIR)/usr/share/terminfo/p
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm+256color
+> $(TARGET_DIR)/usr/share/terminfo/x
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-256color
+> $(TARGET_DIR)/usr/share/terminfo/x -endef
+> +NCURSES_TERMINFO_FILES += \
+> +	p/putty-256color \
+> +	x/xterm+256color \
+> +	x/xterm-256color
+>  
+>  NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
+>  NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_PC
+> @@ -145,26 +158,10 @@ define NCURSES_INSTALL_TARGET_CMDS
+>  	$(NCURSES_LINK_TARGET_LIBS)
+>  	$(NCURSES_INSTALL_TARGET_PROGS)
+>  	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
+> -	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm
+> $(TARGET_DIR)/usr/share/terminfo/x
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-color
+> $(TARGET_DIR)/usr/share/terminfo/x
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/x/xterm-xfree86
+> $(TARGET_DIR)/usr/share/terminfo/x
+> -	mkdir -p $(TARGET_DIR)/usr/share/terminfo/v
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100
+> $(TARGET_DIR)/usr/share/terminfo/v
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt100-putty
+> $(TARGET_DIR)/usr/share/terminfo/v
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt102
+> $(TARGET_DIR)/usr/share/terminfo/v
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt200
+> $(TARGET_DIR)/usr/share/terminfo/v
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/v/vt220
+> $(TARGET_DIR)/usr/share/terminfo/v
+> -	mkdir -p $(TARGET_DIR)/usr/share/terminfo/a
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/a/ansi
+> $(TARGET_DIR)/usr/share/terminfo/a
 
-We still have way too many differences between UP and SMP.
-If you just git grep?CONFIG_SMP in arch/arc you'l see some of those.
+l/linux was installed here:
 
-In general I agree so many configs in BR look weird and what's worse requires
-much more work on maintenance. So we may try to select more useful configs but
-for me it's hard to make this decision because from one point of view in case of
-ARCv2 we're more interested in SMP configs (that's one of the main differences compared
-to older ARCompact CPUs) but in simulation SMP setups work significantly slower
-and IMHO UP versions are much more usable if SMP itself is not a requirement.
+> -	mkdir -p $(TARGET_DIR)/usr/share/terminfo/l
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux
+> $(TARGET_DIR)/usr/share/terminfo/l
+> -	mkdir -p $(TARGET_DIR)/usr/share/terminfo/p
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty
+> $(TARGET_DIR)/usr/share/terminfo/p
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/p/putty-vt100
+> $(TARGET_DIR)/usr/share/terminfo/p
+> -	mkdir -p $(TARGET_DIR)/usr/share/terminfo/s
+> -	cp -dpf $(STAGING_DIR)/usr/share/terminfo/s/screen
+> $(TARGET_DIR)/usr/share/terminfo/s
+> -	$(NCURSES_INSTALL_TARGET_256_COLORS_TERMINFO)
+> +	$(foreach terminfo,$(NCURSES_TERMINFO_FILES),\
+> +		$(INSTALL) -D -m 0644
+> $(STAGING_DIR)/usr/share/terminfo/$(terminfo) \
+> +			$(TARGET_DIR)/usr/share/terminfo/$(terminfo)
+> +	)
+>  endef # NCURSES_INSTALL_TARGET_CMDS
+>  
+>  #
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
--Alexey
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 473 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160805/cbbad5af/attachment.asc>
