@@ -1,48 +1,83 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 5 Aug 2016 09:59:27 +0100
-Subject: [Buildroot] [PATCH] glibc: add version 2.24
-Message-ID: <1470387567-64171-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Fri, 5 Aug 2016 11:12:49 +0200
+Subject: [Buildroot] imx6 platform var-som-solo
+In-Reply-To: <20160804141405.70e0e848@free-electrons.com>
+References: <CALtfCQZz4Pc9mhwr=7t37oyty-KWCPRackStkV67H6rSeu+1Gw@mail.gmail.com>
+ <20160804141405.70e0e848@free-electrons.com>
+Message-ID: <CALtfCQZKkumEfrgO8nVJXVtYmwdd=5WS-mY+j-mYDBhhTNyfUQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/glibc/Config.in  | 6 ++++++
- package/glibc/glibc.hash | 1 +
- 2 files changed, 7 insertions(+)
+Hi,
 
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index f86822d..a9a6cc7 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -22,6 +22,11 @@ config BR2_GLIBC_VERSION_2_23
- 	# No support for pthread barriers on < v9 ISA
- 	depends on !BR2_sparc
- 
-+config BR2_GLIBC_VERSION_2_24
-+	bool "2.24"
-+	# No support for pthread barriers on < v9 ISA
-+	depends on !BR2_sparc
-+
- endchoice
- 
- endif
-@@ -30,3 +35,4 @@ config BR2_GLIBC_VERSION_STRING
- 	string
- 	default "2.22" if BR2_GLIBC_VERSION_2_22
- 	default "2.23" if BR2_GLIBC_VERSION_2_23
-+	default "2.24" if BR2_GLIBC_VERSION_2_24
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 052f281..3c5c612 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,3 +1,4 @@
- # Locally calculated after checking pgp signature (glibc)
- sha256	eb731406903befef1d8f878a46be75ef862b9056ab0cde1626d08a7a05328948	glibc-2.22.tar.xz
- sha256	94efeb00e4603c8546209cefb3e1a50a5315c86fa9b078b6fad758e187ce13e9	glibc-2.23.tar.xz
-+sha256	99d4a3e8efd144d71488e478f62587578c0f4e1fa0b4eed47ee3d4975ebeb5d3	glibc-2.23.tar.xz
--- 
-2.7.3
+To select imx-gpu-viv I need glibc toolchain with armhf enabled. I already
+have selected glibc but for enable armhf I have to change my Target
+options. I had to enable:
+
+> Target options >
+ [*] Enable VFP extension support
+
+And then it appeared the option EABIhf in Target ABI:
+
+> Target options >
+Target ABI (EABIhf)  --->
+
+And the I selected:
+
+> Target options >
+Floating point strategy (VFPv3)  --->
+
+But then I've got an error to compile qt5:
+
+----------------------
+qt5base 5.6.1-1 Building
+...
+                 from eglconvenience/qeglpbuffer_p.h:50,
+                 from eglconvenience/qeglpbuffer.cpp:35:
+../../include/QtCore/../../src/corelib/kernel/qvariant.h:334:24: warning:
+?const char* typeToName(int)? declared ?static? but never defined
+[-Wunused-function]
+     static const char *typeToName(int typeId);
+                        ^
+make[4]: *** [.obj/qeglpbuffer.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+make[3]: *** [sub-platformsupport-make_first] Error 2
+make[2]: *** [sub-src-make_first] Error 2
+make[1]: ***
+[/home/oscargomez/GIT/imx6-variscite/buildroot-2016.05/output/build/qt5base-5.6.1-1/.stamp_built]
+Error 2
+make: *** [_all] Error 2
+----------------------
+
+Any suggestion?
+
+Best regards.
+
+Oscar Gomez Fuente
+
+On 4 August 2016 at 14:14, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Hello,
+>
+> On Thu, 4 Aug 2016 13:52:50 +0200, Oscar Gomez Fuente wrote:
+>
+> > I made something similar with the raspberry pi 2B and I didn't have any
+> > problem. I can't find how to select OpenGL and EGL to free the option to
+> > select eglfs.
+>
+> Enable the imx-gpu-viv package, which provides the OpenGL ES and EGL
+> implementation for i.MX6.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160805/422eedc0/attachment.html>
