@@ -1,38 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Aug 2016 09:16:45 +0200
-Subject: [Buildroot] [git commit] libgcrypt: disable assembly for coldfire
-Message-ID: <20160805071803.85F32818DF@busybox.osuosl.org>
+Date: Fri, 5 Aug 2016 09:17:33 +0200
+Subject: [Buildroot] [git commit] gnupg: disable assembly optimization for
+	coldfire
+Message-ID: <20160805071803.9A17D818DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e60f2d7735040a1dd83a9477f328d763ac987625
+commit: https://git.buildroot.net/buildroot/commit/?id=63c5a63acac345cad3bbd53edb007042e5fc2a5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-http://autobuild.buildroot.org/results/374/374158bb0a0e6a16af5d0b909cd05ec52812aaa3/
+http://autobuild.buildroot.net/results/d25425cff055a14b9285cefb0775bc138eb2f914/
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgcrypt/libgcrypt.mk | 5 +++++
+ package/gnupg/gnupg.mk | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 5eb54a4..5ee488d 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -18,6 +18,11 @@ LIBGCRYPT_CONF_ENV = \
- LIBGCRYPT_CONF_OPTS = \
- 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index 8893a1c..54f4d97 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -13,6 +13,11 @@ GNUPG_DEPENDENCIES = zlib ncurses $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ GNUPG_CONF_ENV = ac_cv_sys_symbol_underscore=no
+ GNUPG_CONF_OPTS = --disable-rpath --enable-minimal --disable-regex
  
-+# Libgcrypt doesn't support assembly for coldfire
++# gnupg doesn't support assembly for coldfire
 +ifeq ($(BR2_m68k_cf),y)
-+LIBGCRYPT_CONF_OPTS += --disable-asm
++GNUPG_CONF_OPTS += --disable-asm
 +endif
 +
- # Code doesn't build in thumb mode
- ifeq ($(BR2_arm),y)
- LIBGCRYPT_CONF_ENV += CFLAGS="$(patsubst -mthumb,,$(TARGET_CFLAGS))"
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ GNUPG_CONF_OPTS += --enable-bzip2
+ GNUPG_DEPENDENCIES += bzip2
