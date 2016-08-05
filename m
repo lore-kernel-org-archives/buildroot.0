@@ -1,43 +1,57 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Thu, 4 Aug 2016 19:46:40 -0700
-Subject: [Buildroot] [PATCH 1/1] package/kodi: Update upstream patch to
- support libcurl >= 7.5.1
-In-Reply-To: <20160804231621.4da74f35@free-electrons.com>
-References: <1470343668-28172-1-git-send-email-bernd.kuhls@t-online.de>
- <20160804231621.4da74f35@free-electrons.com>
-Message-ID: <dc1e7bf2-8eff-cab0-db47-8bf0568e4d91@gmail.com>
+From: Ben Boeckel <mathstuf@gmail.com>
+Date: Thu, 4 Aug 2016 23:17:16 -0400
+Subject: [Buildroot] [PATCH v2 1/1] taskd: support linking against
+ static gnutls and uuid
+In-Reply-To: <CAHXCMMLNt6bBoyxMTRLZaFx2CYU1xpqtR9=DWY0D_Q=eveVtCg@mail.gmail.com>
+References: <20160617020836.9765-1-mathstuf@gmail.com>
+ <20160622021946.30144-1-mathstuf@gmail.com>
+ <CAHXCMMLNt6bBoyxMTRLZaFx2CYU1xpqtR9=DWY0D_Q=eveVtCg@mail.gmail.com>
+Message-ID: <20160805031716.GA18292@bronto-burt.dev.benboeckel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+[ So it seems that my original message never made it to the list; not
+  sure why. Resending. ]
 
+On Sun, Jul 03, 2016 at 18:51:18 +0200, Samuel Martin wrote:
+> I would have done 2 distinct patches, one for pthread since it may be
+> not-static-build specific (though it could be triggered more easily on
+> static-build), and a second one fixing the missing dependencies for
+> gnutls and uuid in case of static-build.
 
-On 8/4/16 2:16 PM, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu,  4 Aug 2016 22:47:48 +0200, Bernd Kuhls wrote:
->> An updated patch was committed to Kodi after Curl added a fix to address
->> the original problem:
->> https://github.com/curl/curl/commit/d6604524ad24daf4581efbe0020da058d2b3af84
-> 
-> Is this commit part of a curl release? If so, is this curl release the
-> one we use in Buildroot?
+See below.
 
-it will be in next version of curl.
-> 
-> IOW, I don't understand if the below patch for Kodi requires a newer
-> version of curl than the one we have in Buildroot today.
+> > +-  set (TASKD_LIBRARIES    ${TASKD_LIBRARIES}    ${GNUTLS_LIBRARIES})
+> > ++  set (TASKD_LIBRARIES    ${TASKD_LIBRARIES}    ${PC_GNUTLS_STATIC_LIBRARIES})
+> This fortunately works because FindGnuTLS.cmake provided by CMake use
+> pkg_check_modules on non-windows platform to find GNU-TLS [1], but
+> this is a bit... hackish.
 
-no it does not require it. but of BR is using curl 7.50.0 then it
-should be bumped to 7.50.1, since this issue is affecting many other
-packages too.
+Acknowledged :) .
 
-> 
-> Could you clarify?
-> 
-> Thanks,
-> 
-> Thomas
-> 
+> A cleaner way would be to explicitly (re-)call pkg_check_modules in
+> this if-block.
+
+I need to fix FindGnuTLS upstream (on my list, but not high on it :/ ).
+There's further problems that even with the pkg_check_modules call, it
+still won't be fully correct due to full paths in the --libs output:
+
+    https://gitlab.kitware.com/cmake/cmake/issues/16154
+
+FindGnuTLS then needs to tell whether the found library is static or not
+and set GNUTLS_LIBRARIES using the right variable.
+
+I also have a task here to write a proper FindUUID for taskd (and I
+suppose the rest of their suite) to use.
+
+> [2] https://github.com/taskwarrior/taskd/blob/s1.1.0/CMakeLists.txt#L62
+> [3] https://github.com/taskwarrior/taskd/blob/s1.1.0/src/Thread.h#L31
+
+This code has changed in 1.2.0 and is actually gone. I think the threads
+missing might actually be fallout from gnutls' use of a full pthread
+path from pkg-config (which CMake misses due to the issue linked above).
+
+--Ben
