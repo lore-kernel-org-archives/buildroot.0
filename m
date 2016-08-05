@@ -1,10 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Aug 2016 14:01:15 +0200
-Subject: [Buildroot] [PATCH] config: add Synopsys nSIM and nSIM OSCI
-	platforms
-In-Reply-To: <1470394586-6091-1-git-send-email-vzakhar@synopsys.com>
-References: <1470394586-6091-1-git-send-email-vzakhar@synopsys.com>
-Message-ID: <20160805140115.071073db@free-electrons.com>
+Date: Fri, 5 Aug 2016 14:02:09 +0200
+Subject: [Buildroot] [PATCH] iperf: bump to version 2.0.9
+In-Reply-To: <20160805112415.GU3620@tarshish>
+References: <0fe5e4e62f4093b8d30fd1155d8832cd2482a57e.1469784407.git.baruch@tkos.co.il>
+ <20160730143139.10ffbed2@free-electrons.com>
+ <20160731043853.GA3620@tarshish>
+ <20160731100908.1fdf64d6@free-electrons.com>
+ <20160731082541.GC3620@tarshish>
+ <20160805122153.6c4a4593@free-electrons.com>
+ <20160805112415.GU3620@tarshish>
+Message-ID: <20160805140209.7f1e2175@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +18,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  5 Aug 2016 13:56:26 +0300, Vlad Zakharov wrote:
-> nSIM and nSIM OSCI are 2 simulation platforms from Synopsys
-> that could emulate both ARCompact and ARCv2 CPUs.
-> 
-> Note for ARCv2 we provide both UP (uni-processor) and SMP
-> (multi-processor) configs.
-> 
-> So-called "standalone" nSIM and it's free flavor Free nSIM
-> have only 1 peripheral - serial port. Still they are
-> (especially free version) very useful for regression testing
-> and debugging of Linux kernel.
-> 
-> nSIM OSCI emulates more functional boards having not only serial port
-> but as well:
->  * LCD screen
->   * PS/2 keyboard
->    * Ethernet controller (which communicates with the host)
-> 
-> Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
+On Fri, 5 Aug 2016 14:24:15 +0300, Baruch Siach wrote:
 
-Thanks for this contribution. It would be useful to add a readme.txt
-file that explains how to start the result of the Buildroot build with
-those simulation platforms, especially the one that is freely available.
+> > Then we don't have the same Internet I'm afraid. Here the "Code" tab
+> > points to https://sourceforge.net/p/iperf2/code/ci/master/tree/ which
+> > is a Git repository with the latest commit on July 2, 2016.  
+> 
+> Now I see it. There are TWO "Code" links at 
+> https://sourceforge.net/projects/iperf2/. The left one (between "Wiki" and 
+> "Tickets") points to the current git repo, while the right one (right most) 
+> points to the old Svn repo. I'm just used to look for the "Code" link at the 
+> right on SF project's summary pages.
 
-> ---
->  configs/snps_nsim_700_defconfig          | 18 ++++++++++++++++++
->  configs/snps_nsim_hs38_defconfig         | 19 +++++++++++++++++++
->  configs/snps_nsim_hs38_smp_defconfig     | 19 +++++++++++++++++++
->  configs/snps_nsimosci_700_defconfig      | 19 +++++++++++++++++++
->  configs/snps_nsimosci_hs38_defconfig     | 20 ++++++++++++++++++++
->  configs/snps_nsimosci_hs38_smp_defconfig | 20 ++++++++++++++++++++
-
-Do we really need all those combinations? I do understand the 700 vs.
-HS38 difference, but couldn't the rest be handled with just different
-DTBs ? It seems annoying to have both one kernel defconfig for each of
-those, and then one Buildroot configuration for each of those as well.
-
-Thanks,
+Aaah, I see your "Code" link now. There are indeed two "Code" tabs.
+This SourceForge thing is really terrible.
 
 Thomas
 -- 
