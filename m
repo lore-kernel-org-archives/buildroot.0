@@ -1,197 +1,46 @@
-From: Vlad Zakharov <Vladislav.Zakharov@synopsys.com>
-Date: Fri,  5 Aug 2016 13:56:26 +0300
-Subject: [Buildroot] [PATCH] config: add Synopsys nSIM and nSIM OSCI
-	platforms
-Message-ID: <1470394586-6091-1-git-send-email-vzakhar@synopsys.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 5 Aug 2016 14:24:15 +0300
+Subject: [Buildroot] [PATCH] iperf: bump to version 2.0.9
+In-Reply-To: <20160805122153.6c4a4593@free-electrons.com>
+References: <0fe5e4e62f4093b8d30fd1155d8832cd2482a57e.1469784407.git.baruch@tkos.co.il>
+ <20160730143139.10ffbed2@free-electrons.com>
+ <20160731043853.GA3620@tarshish>
+ <20160731100908.1fdf64d6@free-electrons.com>
+ <20160731082541.GC3620@tarshish>
+ <20160805122153.6c4a4593@free-electrons.com>
+Message-ID: <20160805112415.GU3620@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-nSIM and nSIM OSCI are 2 simulation platforms from Synopsys
-that could emulate both ARCompact and ARCv2 CPUs.
+Hi Thomas,
 
-Note for ARCv2 we provide both UP (uni-processor) and SMP
-(multi-processor) configs.
+On Fri, Aug 05, 2016 at 12:21:53PM +0200, Thomas Petazzoni wrote:
+> On Sun, 31 Jul 2016 11:25:41 +0300, Baruch Siach wrote: 
+> > > > Where have you found a link to that repo? Only after googling for "iperf2 git" 
+> > > > I found an indication to its existence in https://github.com/daynix/iperf2.  
+> > > 
+> > > From https://sourceforge.net/projects/iperf2/, click on "Code".  
+> > 
+> > That's the first thing I tried. Looking there again all I see is an old Svn 
+> > repo (last update is r8 from 2014-09-14). What am I missing?
+> 
+> Then we don't have the same Internet I'm afraid. Here the "Code" tab
+> points to https://sourceforge.net/p/iperf2/code/ci/master/tree/ which
+> is a Git repository with the latest commit on July 2, 2016.
 
-So-called "standalone" nSIM and it's free flavor Free nSIM
-have only 1 peripheral - serial port. Still they are
-(especially free version) very useful for regression testing
-and debugging of Linux kernel.
+Now I see it. There are TWO "Code" links at 
+https://sourceforge.net/projects/iperf2/. The left one (between "Wiki" and 
+"Tickets") points to the current git repo, while the right one (right most) 
+points to the old Svn repo. I'm just used to look for the "Code" link at the 
+right on SF project's summary pages.
 
-nSIM OSCI emulates more functional boards having not only serial port
-but as well:
- * LCD screen
-  * PS/2 keyboard
-   * Ethernet controller (which communicates with the host)
+Thanks,
+baruch
 
-Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
----
- configs/snps_nsim_700_defconfig          | 18 ++++++++++++++++++
- configs/snps_nsim_hs38_defconfig         | 19 +++++++++++++++++++
- configs/snps_nsim_hs38_smp_defconfig     | 19 +++++++++++++++++++
- configs/snps_nsimosci_700_defconfig      | 19 +++++++++++++++++++
- configs/snps_nsimosci_hs38_defconfig     | 20 ++++++++++++++++++++
- configs/snps_nsimosci_hs38_smp_defconfig | 20 ++++++++++++++++++++
- 6 files changed, 115 insertions(+)
- create mode 100644 configs/snps_nsim_700_defconfig
- create mode 100644 configs/snps_nsim_hs38_defconfig
- create mode 100644 configs/snps_nsim_hs38_smp_defconfig
- create mode 100644 configs/snps_nsimosci_700_defconfig
- create mode 100644 configs/snps_nsimosci_hs38_defconfig
- create mode 100644 configs/snps_nsimosci_hs38_smp_defconfig
-
-diff --git a/configs/snps_nsim_700_defconfig b/configs/snps_nsim_700_defconfig
-new file mode 100644
-index 0000000..3486d9a
---- /dev/null
-+++ b/configs/snps_nsim_700_defconfig
-@@ -0,0 +1,18 @@
-+# Architecture
-+BR2_arcle=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="nsim"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to the ARC nSIM"
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+
-+# Linux headers same as kernel, a 4.7 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
-+BR2_LINUX_KERNEL_DEFCONFIG="nsim_700"
-+BR2_LINUX_KERNEL_VMLINUX=y
-+
-diff --git a/configs/snps_nsim_hs38_defconfig b/configs/snps_nsim_hs38_defconfig
-new file mode 100644
-index 0000000..435b2ac
---- /dev/null
-+++ b/configs/snps_nsim_hs38_defconfig
-@@ -0,0 +1,19 @@
-+# Architecture
-+BR2_arcle=y
-+BR2_archs38=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="nsim"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to the ARC nSIM"
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+
-+# Linux headers same as kernel, a 4.7 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
-+BR2_LINUX_KERNEL_DEFCONFIG="nsim_hs"
-+BR2_LINUX_KERNEL_VMLINUX=y
-+
-diff --git a/configs/snps_nsim_hs38_smp_defconfig b/configs/snps_nsim_hs38_smp_defconfig
-new file mode 100644
-index 0000000..b61b81c
---- /dev/null
-+++ b/configs/snps_nsim_hs38_smp_defconfig
-@@ -0,0 +1,19 @@
-+# Architecture
-+BR2_arcle=y
-+BR2_archs38=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="nsim"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to the ARC nSIM"
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+
-+# Linux headers same as kernel, a 4.7 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
-+BR2_LINUX_KERNEL_DEFCONFIG="nsim_hs_smp"
-+BR2_LINUX_KERNEL_VMLINUX=y
-+
-diff --git a/configs/snps_nsimosci_700_defconfig b/configs/snps_nsimosci_700_defconfig
-new file mode 100644
-index 0000000..7cdedc3
---- /dev/null
-+++ b/configs/snps_nsimosci_700_defconfig
-@@ -0,0 +1,19 @@
-+# Architecture
-+BR2_arcle=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="nsimosci"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to the ARC nSIM OSCI"
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
-+
-+# Linux headers same as kernel, a 4.7 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
-+BR2_LINUX_KERNEL_DEFCONFIG="nsimosci"
-+BR2_LINUX_KERNEL_VMLINUX=y
-+
-diff --git a/configs/snps_nsimosci_hs38_defconfig b/configs/snps_nsimosci_hs38_defconfig
-new file mode 100644
-index 0000000..5ebece2
---- /dev/null
-+++ b/configs/snps_nsimosci_hs38_defconfig
-@@ -0,0 +1,20 @@
-+# Architecture
-+BR2_arcle=y
-+BR2_archs38=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="nsimosci"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to the ARC nSIM OSCI"
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
-+
-+# Linux headers same as kernel, a 4.7 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
-+BR2_LINUX_KERNEL_DEFCONFIG="nsimosci_hs"
-+BR2_LINUX_KERNEL_VMLINUX=y
-+
-diff --git a/configs/snps_nsimosci_hs38_smp_defconfig b/configs/snps_nsimosci_hs38_smp_defconfig
-new file mode 100644
-index 0000000..3edaf4d
---- /dev/null
-+++ b/configs/snps_nsimosci_hs38_smp_defconfig
-@@ -0,0 +1,20 @@
-+# Architecture
-+BR2_arcle=y
-+BR2_archs38=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="nsimosci"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to the ARC nSIM OSCI"
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
-+
-+# Linux headers same as kernel, a 4.7 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_7=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.7"
-+BR2_LINUX_KERNEL_DEFCONFIG="nsimosci_hs_smp"
-+BR2_LINUX_KERNEL_VMLINUX=y
-+
 -- 
-2.5.5
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
