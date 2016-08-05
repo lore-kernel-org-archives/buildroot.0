@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Aug 2016 21:28:55 +0200
-Subject: [Buildroot] [PATCH] binutils: fix bfin problem
-In-Reply-To: <20160805192237.GE22524@waldemar-brodkorb.de>
-References: <20160731082620.GA28355@waldemar-brodkorb.de>
- <20160805211742.2ec2426c@free-electrons.com>
- <20160805192237.GE22524@waldemar-brodkorb.de>
-Message-ID: <20160805212855.2ad5b435@free-electrons.com>
+Date: Fri, 5 Aug 2016 21:30:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/inotify-tools: Fix compilation
+ with gcc6
+In-Reply-To: <1469951201-1866-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1469951201-1866-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160805213022.07280e71@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 5 Aug 2016 21:22:37 +0200, Waldemar Brodkorb wrote:
+On Sun, 31 Jul 2016 09:46:41 +0200, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/abc/abcaf70523863a4cd096a1b063be2e742355849f/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/inotify-tools/0001-gcc6.patch | 49 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 package/inotify-tools/0001-gcc6.patch
 
-> I am subscribed to binutils/gcc mailinglists and managed to already
-> get some simple bugfixes added. But the times to get fixes in, might
-> take some time. 
-
-I am not worried at all if things take time. Even if it takes 6 or 12
-months, that's fine.
-
-What worries me if it *never* gets fixed, because nobody works on it.
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
