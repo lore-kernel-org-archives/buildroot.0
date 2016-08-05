@@ -1,119 +1,213 @@
 From: Romain Perier <romain.perier@free-electrons.com>
-Date: Fri,  5 Aug 2016 16:53:55 +0200
-Subject: [Buildroot] [PATCH v4 2/7] pkg-download: Allow packages to pass
-	generic options to download methods
+Date: Fri,  5 Aug 2016 16:53:54 +0200
+Subject: [Buildroot] [PATCH v4 1/7] support/download: Add support to pass
+	options directly to downloaders
 In-Reply-To: <1470408840-1509-1-git-send-email-romain.perier@free-electrons.com>
 References: <1470408840-1509-1-git-send-email-romain.perier@free-electrons.com>
-Message-ID: <1470408840-1509-3-git-send-email-romain.perier@free-electrons.com>
+Message-ID: <1470408840-1509-2-git-send-email-romain.perier@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce a new package variable $(PKG)_DL_OPTS. When this variable
-is defined, its value is passed to the downloader as options to
-the underlying command. Packages can now retrieve archives from server
-expecting logins and passwords, use referer url, proxy or specific
-options for cloning a repository.
+This adds support to pass options to the underlying command that is used
+by downloader. Useful for retrieving data with server-side checking for
+user login or passwords, use a proxy or use specific options for cloning
+a repository via git and hg.
 
 Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
 
 Changes in v4:
- - Add missing Reviewed-by tag
+ - Rebased onto master
+ - Pass "${@}" to "git clone --depth 1" too.
+
+Changes in v3:
+ - Don't use the variable ${dl_opts} to catch extra arguments
+ - We prefer to use shift and "${@}", it does not introduce
+   empty string when there are no extra parameters.
 
 Changes in v2:
- - Replaced $(PKG)_DL_REFERER by $(PKG)_DL_OPTS
- - Add support for this options to all downloaders
+ - Replaced the variable $(PKG)_DL_REFERER by $(PKG)_DL_OPTS
+ - Add modification to all downloaders
 
- package/pkg-download.mk | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+ support/download/bzr  | 4 +++-
+ support/download/cp   | 4 +++-
+ support/download/cvs  | 4 +++-
+ support/download/git  | 6 ++++--
+ support/download/hg   | 4 +++-
+ support/download/scp  | 4 +++-
+ support/download/svn  | 4 +++-
+ support/download/wget | 4 +++-
+ 8 files changed, 25 insertions(+), 9 deletions(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 315203f..3b6561b 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -81,7 +81,8 @@ define DOWNLOAD_GIT
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
+diff --git a/support/download/bzr b/support/download/bzr
+index e18b01f..75b7b41 100755
+--- a/support/download/bzr
++++ b/support/download/bzr
+@@ -26,6 +26,8 @@ repo="${2}"
+ rev="${3}"
+ basename="${4}"
  
- # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
-@@ -97,7 +98,8 @@ define DOWNLOAD_BZR
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
++shift 4 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _bzr() {
+@@ -49,5 +51,5 @@ if [ ${bzr_version} -ge ${bzr_min_version} ]; then
+ fi
  
- define SOURCE_CHECK_BZR
-@@ -112,7 +114,8 @@ define DOWNLOAD_CVS
- 		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
- 		$($(PKG)_DL_VERSION) \
- 		$($(PKG)_RAWNAME) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
+ _bzr export ${verbose} --root="'${basename}/'" --format=tgz \
+-    ${timestamp_opt} - "'${repo}'" -r "'${rev}'" \
++    ${timestamp_opt} - "${@}" "'${repo}'" -r "'${rev}'" \
+     >"${output}"
+diff --git a/support/download/cp b/support/download/cp
+index 09ce3d1..0ee1f3b 100755
+--- a/support/download/cp
++++ b/support/download/cp
+@@ -28,10 +28,12 @@ shift $((OPTIND-1))
+ output="${1}"
+ source="${2}"
  
- # Not all CVS servers support ls/rls, use login to see if we can connect
-@@ -127,7 +130,8 @@ define DOWNLOAD_SVN
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
++shift 2 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _localfiles() {
+     eval ${LOCALFILES} "${@}"
+ }
  
- define SOURCE_CHECK_SVN
-@@ -143,7 +147,8 @@ define DOWNLOAD_SCP
- 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
--		'$(call stripurischeme,$(call qstrip,$(1)))'
-+		'$(call stripurischeme,$(call qstrip,$(1)))' \
-+		$($(PKG)_DL_OPTS)
- endef
+-_localfiles ${verbose} "'${source}'" "'${output}'"
++_localfiles ${verbose} "${@}""'${source}'" "'${output}'"
+diff --git a/support/download/cvs b/support/download/cvs
+index 7980389..50050ab 100755
+--- a/support/download/cvs
++++ b/support/download/cvs
+@@ -26,6 +26,8 @@ rev="${3}"
+ rawname="${4}"
+ basename="${5}"
  
- define SOURCE_CHECK_SCP
-@@ -157,7 +162,8 @@ define DOWNLOAD_HG
- 		-- \
- 		$($(PKG)_SITE) \
- 		$($(PKG)_DL_VERSION) \
--		$($(PKG)_BASE_NAME)
-+		$($(PKG)_BASE_NAME) \
-+		$($(PKG)_DL_OPTS)
- endef
++shift 5 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _cvs() {
+@@ -48,6 +50,6 @@ fi
  
- # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
-@@ -172,7 +178,8 @@ define DOWNLOAD_WGET
- 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
--		'$(call qstrip,$(1))'
-+		'$(call qstrip,$(1))' \
-+		$($(PKG)_DL_OPTS)
- endef
+ export TZ=UTC
+ _cvs ${verbose} -z3 -d"'${repo}'" \
+-     co -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
++     co "${@}" -d "'${basename}'" ${select} "'${rev}'" -P "'${rawname}'"
  
- define SOURCE_CHECK_WGET
-@@ -185,7 +192,8 @@ define DOWNLOAD_LOCALFILES
- 		-H $(PKGDIR)/$($(PKG)_RAWNAME).hash \
- 		$(QUIET) \
- 		-- \
--		$(call stripurischeme,$(call qstrip,$(1)))
-+		$(call stripurischeme,$(call qstrip,$(1))) \
-+		$($(PKG)_DL_OPTS)
- endef
+ tar czf "${output}" "${basename}"
+diff --git a/support/download/git b/support/download/git
+index 416cd1b..281db61 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -30,6 +30,8 @@ repo="${2}"
+ cset="${3}"
+ basename="${4}"
  
- define SOURCE_CHECK_LOCALFILES
++shift 4 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _git() {
+@@ -46,7 +48,7 @@ _git() {
+ git_done=0
+ if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
+     printf "Doing shallow clone\n"
+-    if _git clone ${verbose} --depth 1 -b "'${cset}'" "'${repo}'" "'${basename}'"; then
++    if _git clone ${verbose} "${@}" --depth 1 -b "'${cset}'" "'${repo}'" "'${basename}'"; then
+         git_done=1
+     else
+         printf "Shallow clone failed, falling back to doing a full clone\n"
+@@ -54,7 +56,7 @@ if [ -n "$(_git ls-remote "'${repo}'" "'${cset}'" 2>&1)" ]; then
+ fi
+ if [ ${git_done} -eq 0 ]; then
+     printf "Doing full clone\n"
+-    _git clone ${verbose} "'${repo}'" "'${basename}'"
++    _git clone ${verbose} "${@}" "'${repo}'" "'${basename}'"
+ fi
+ 
+ pushd "${basename}" >/dev/null
+diff --git a/support/download/hg b/support/download/hg
+index 25cb4e9..3af0169 100755
+--- a/support/download/hg
++++ b/support/download/hg
+@@ -25,13 +25,15 @@ repo="${2}"
+ cset="${3}"
+ basename="${4}"
+ 
++shift 4 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _hg() {
+     eval ${HG} "${@}"
+ }
+ 
+-_hg clone ${verbose} --noupdate "'${repo}'" "'${basename}'"
++_hg clone ${verbose} "${@}" --noupdate "'${repo}'" "'${basename}'"
+ 
+ _hg archive ${verbose} --repository "'${basename}'" --type tgz \
+             --prefix "'${basename}'" --rev "'${cset}'" \
+diff --git a/support/download/scp b/support/download/scp
+index 95cf502..825fd41 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -23,10 +23,12 @@ shift $((OPTIND-1))
+ output="${1}"
+ url="${2}"
+ 
++shift 2 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _scp() {
+     eval ${SCP} "${@}"
+ }
+ 
+-_scp ${verbose} "'${url}'" "'${output}'"
++_scp ${verbose} "${@}" "'${url}'" "'${output}'"
+diff --git a/support/download/svn b/support/download/svn
+index 4dcdd06..77abf3d 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -25,12 +25,14 @@ repo="${2}"
+ rev="${3}"
+ basename="${4}"
+ 
++shift 4 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _svn() {
+     eval ${SVN} "${@}"
+ }
+ 
+-_svn export ${verbose} "'${repo}@${rev}'" "'${basename}'"
++_svn export ${verbose} "${@}" "'${repo}@${rev}'" "'${basename}'"
+ 
+ tar czf "${output}" "${basename}"
+diff --git a/support/download/wget b/support/download/wget
+index 0fc7ffa..768de90 100755
+--- a/support/download/wget
++++ b/support/download/wget
+@@ -23,10 +23,12 @@ shift $((OPTIND-1))
+ output="${1}"
+ url="${2}"
+ 
++shift 2 # Get rid of our options
++
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _wget() {
+     eval ${WGET} "${@}"
+ }
+ 
+-_wget ${verbose} -O "'${output}'" "'${url}'"
++_wget ${verbose} "${@}" -O "'${output}'" "'${url}'"
 -- 
 2.8.1
