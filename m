@@ -1,36 +1,27 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Fri, 5 Aug 2016 00:00:13 -0700
-Subject: [Buildroot] dri2.h needed but missing
-In-Reply-To: <trinity-5e2193c5-6d63-4682-8d45-8ca0f0bedfb4-1470374955326@3capp-mailcom-bs14>
-References: <trinity-c313bacc-e685-4046-81aa-0a8a97915dc9-1470338357069@3capp-mailcom-bs11>
- <4b622cd4-fa9d-1b6b-9d33-7c7397800ce1@gmail.com>
- <trinity-5e2193c5-6d63-4682-8d45-8ca0f0bedfb4-1470374955326@3capp-mailcom-bs14>
-Message-ID: <c2de2fca-60c3-5965-1036-a0a99d75c551@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 05 Aug 2016 09:14:07 +0200
+Subject: [Buildroot] [PATCH] package/libdvdread: needs host-pkgconf
+In-Reply-To: <1470343909-5420-1-git-send-email-romain.naour@gmail.com> (Romain
+ Naour's message of "Thu, 4 Aug 2016 22:51:49 +0200")
+References: <1470343909-5420-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <87twezelhc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
+ > Add host-pkgconf to the dependencies since pkg-config is used to find
+ > libdvdcss.
 
-On 8/4/16 10:29 PM, daggs wrote:
-> Greetings,
-> 
->> On 8/4/16 12:19 PM, daggs wrote:
->>> Greetings,
->>>
->>> I need the file mentioned above for a package I want to add, I cannot seem to find it under xorg's installed headers, any idea why and how I can add it?
->>>
->>
->> you need to depend on xserver-xorg
->>
-> 
-> I did that of course, xorg-server is installed, that header however isn't.
-> 
+ > Fixes:
+ > http://autobuild.buildroot.net/results/e5f/e5fffdd51bdd6962149a836af1e7a6bbc6bae20c
 
-Did you also enable the dri2 bits ? e.g.
-BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR and BR2_PACKAGE_XPROTO_DRI2PROTO
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-> Dagg.
-> 
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
