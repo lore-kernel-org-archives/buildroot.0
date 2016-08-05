@@ -1,83 +1,45 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Fri, 5 Aug 2016 11:12:49 +0200
-Subject: [Buildroot] imx6 platform var-som-solo
-In-Reply-To: <20160804141405.70e0e848@free-electrons.com>
-References: <CALtfCQZz4Pc9mhwr=7t37oyty-KWCPRackStkV67H6rSeu+1Gw@mail.gmail.com>
- <20160804141405.70e0e848@free-electrons.com>
-Message-ID: <CALtfCQZKkumEfrgO8nVJXVtYmwdd=5WS-mY+j-mYDBhhTNyfUQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  5 Aug 2016 12:44:36 +0300
+Subject: [Buildroot] [PATCH] libsepol: fix static build
+Message-ID: <0df01bb703825aef5dc941f57729e5061b593941.1470390276.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Commit a3ebe45dcb3e (libsepol: bump to version 2.5, 2016-06-26) didn't refresh
+correctly the patch adding static build support. Do this now.
 
-To select imx-gpu-viv I need glibc toolchain with armhf enabled. I already
-have selected glibc but for enable armhf I have to change my Target
-options. I had to enable:
+Fixes:
+http://autobuild.buildroot.net/results/14b/14bbb7c9c59e7f68f3ae7ad63e075e27a0da2b1e/
+http://autobuild.buildroot.net/results/97f/97f61d5e46a7f479e8de5dd19d49f7a3d84cc86e/
+http://autobuild.buildroot.net/results/920/920e1ddac6bf93707a187e64a4ef7d95aff09e6c/
 
-> Target options >
- [*] Enable VFP extension support
+Cc: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libsepol/0001-support-static-only.patch | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-And then it appeared the option EABIhf in Target ABI:
-
-> Target options >
-Target ABI (EABIhf)  --->
-
-And the I selected:
-
-> Target options >
-Floating point strategy (VFPv3)  --->
-
-But then I've got an error to compile qt5:
-
-----------------------
-qt5base 5.6.1-1 Building
-...
-                 from eglconvenience/qeglpbuffer_p.h:50,
-                 from eglconvenience/qeglpbuffer.cpp:35:
-../../include/QtCore/../../src/corelib/kernel/qvariant.h:334:24: warning:
-?const char* typeToName(int)? declared ?static? but never defined
-[-Wunused-function]
-     static const char *typeToName(int typeId);
-                        ^
-make[4]: *** [.obj/qeglpbuffer.o] Error 1
-make[4]: *** Waiting for unfinished jobs....
-make[3]: *** [sub-platformsupport-make_first] Error 2
-make[2]: *** [sub-src-make_first] Error 2
-make[1]: ***
-[/home/oscargomez/GIT/imx6-variscite/buildroot-2016.05/output/build/qt5base-5.6.1-1/.stamp_built]
-Error 2
-make: *** [_all] Error 2
-----------------------
-
-Any suggestion?
-
-Best regards.
-
-Oscar Gomez Fuente
-
-On 4 August 2016 at 14:14, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Hello,
->
-> On Thu, 4 Aug 2016 13:52:50 +0200, Oscar Gomez Fuente wrote:
->
-> > I made something similar with the raspberry pi 2B and I didn't have any
-> > problem. I can't find how to select OpenGL and EGL to free the option to
-> > select eglfs.
->
-> Enable the imx-gpu-viv package, which provides the OpenGL ES and EGL
-> implementation for i.MX6.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160805/422eedc0/attachment.html>
+diff --git a/package/libsepol/0001-support-static-only.patch b/package/libsepol/0001-support-static-only.patch
+index 3e9a84f8222a..3e6d555e96e5 100644
+--- a/package/libsepol/0001-support-static-only.patch
++++ b/package/libsepol/0001-support-static-only.patch
+@@ -30,8 +30,12 @@ index db6c2ba..0006285 100644
+  
+ 
+  $(LIBA):  $(OBJS)
+-@@ -70,7 +74,11 @@ install: all
+- 	install -m 755 $(LIBSO) $(SHLIBDIR)
++@@ -66,11 +70,13 @@
++ install: all
++ 	test -d $(LIBDIR) || install -m 755 -d $(LIBDIR)
++ 	install -m 644 $(LIBA) $(LIBDIR)
++-	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
++-	install -m 755 $(LIBSO) $(SHLIBDIR)
+  	test -d $(LIBDIR)/pkgconfig || install -m 755 -d $(LIBDIR)/pkgconfig
+  	install -m 644 $(LIBPC) $(LIBDIR)/pkgconfig
+ +ifeq ($(STATIC),)
+-- 
+2.8.1
