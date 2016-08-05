@@ -1,114 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  5 Aug 2016 22:52:36 +0200
-Subject: [Buildroot] [PATCH] netplug: add two patches to fix musl build
-	issues
-Message-ID: <1470430356-29349-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Khem Raj <raj.khem@gmail.com>
+Date: Fri, 5 Aug 2016 13:58:12 -0700
+Subject: [Buildroot] [PATCH] glibc: add version 2.24
+In-Reply-To: <20160805185348.4c0ff1fd@free-electrons.com>
+References: <1470387567-64171-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20160805185348.4c0ff1fd@free-electrons.com>
+Message-ID: <2039F480-7B29-4B59-8F02-62125387E3F6@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds two patches to netplug that are needed for this package
-to build with musl:
 
- - One patch to add a missing header inclusion
- - One patch to fix a conflicting prototype on __assert_fail().
+> On Aug 5, 2016, at 9:53 AM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> 
+> Hello,
+> 
+> On Fri, 5 Aug 2016 09:59:27 +0100, Vicente Olivert Riera wrote:
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> ---
+>> package/glibc/Config.in  | 6 ++++++
+>> package/glibc/glibc.hash | 1 +
+>> 2 files changed, 7 insertions(+)
+>> 
+>> diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+>> index f86822d..a9a6cc7 100644
+>> --- a/package/glibc/Config.in
+>> +++ b/package/glibc/Config.in
+>> @@ -22,6 +22,11 @@ config BR2_GLIBC_VERSION_2_23
+>> 	# No support for pthread barriers on < v9 ISA
+>> 	depends on !BR2_sparc
+>> 
+>> +config BR2_GLIBC_VERSION_2_24
+>> +	bool "2.24"
+>> +	# No support for pthread barriers on < v9 ISA
+>> +	depends on !BR2_sparc
+> 
+> One thing important I notice in the release announcement of 2.24 is:
+> 
+> * The minimum Linux kernel version that this version of the GNU C Library
+>  can be used with is 3.2, except on i[4567]86 and x86_64, where Linux
+>  kernel version 2.6.32 or later suffices (on architectures that already
+>  required kernel versions more recent than 3.2, those requirements remain
+>  unchanged).  Linux 3.2 or later kernel headers are required on all
+>  architectures.
+> 
+> It is not written completely clearly: they first say that on
+> x86/x86-64, 2.6.32 is sufficient, but they conclude that 3.2 is the
+> minimum version on all architectures. It would be good to clarify this
+> aspect.
+> 
+> Regardless of this detail, this means we will have to encode this
+> dependency somehow. Indeed, we still have people using kernels older
+> than 3.2 I believe on various platforms.
 
-Fixes:
+thats right. perhaps --enable-kernel=3.2.0 conditional on version being
+2.24 in glibc mk file would put in a runtime check where apps would fail
+to run on older kernels. If you want to detect it at build time then you
+need to insert a mechanism to parse the kernel version of the build and
+then compare that against kernel version used with --enable-kernel,
 
-  http://autobuild.buildroot.net/results/c2a5dfedba46cc8eb3d0c5c43f1f76fe0bb1805f/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../netplug/0002-add-missing-time-include.patch    | 20 +++++++++
- package/netplug/0003-remove-assert-fail.patch      | 51 ++++++++++++++++++++++
- 2 files changed, 71 insertions(+)
- create mode 100644 package/netplug/0002-add-missing-time-include.patch
- create mode 100644 package/netplug/0003-remove-assert-fail.patch
-
-diff --git a/package/netplug/0002-add-missing-time-include.patch b/package/netplug/0002-add-missing-time-include.patch
-new file mode 100644
-index 0000000..f204c92
---- /dev/null
-+++ b/package/netplug/0002-add-missing-time-include.patch
-@@ -0,0 +1,20 @@
-+Add missing <time.h> include
-+
-+netplug.h uses time_t, so it must include <time.h>. This fixes a build
-+issue with the musl C library.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/netplug.h
-+===================================================================
-+--- a/netplug.h
-++++ b/netplug.h
-+@@ -20,7 +20,7 @@
-+ #ifndef __netplug_h
-+ #define __netplug_h
-+ 
-+-
-++#include <time.h>
-+ #include <asm/types.h>
-+ #include <sys/socket.h>
-+ #include <linux/netlink.h>
-diff --git a/package/netplug/0003-remove-assert-fail.patch b/package/netplug/0003-remove-assert-fail.patch
-new file mode 100644
-index 0000000..635c462
---- /dev/null
-+++ b/package/netplug/0003-remove-assert-fail.patch
-@@ -0,0 +1,51 @@
-+Remove __assert_fail()
-+
-+The netplug code uses the assert() macro in various places. In glibc
-+internally, assert() uses a function called __assert_fail() to print a
-+message and abort. Relying on internal glibc details, netplug
-+re-defines __assert_fail() in the hope that it will get called instead
-+of glibc internal version.
-+
-+This attempt:
-+
-+ * Doesn't work with uClibc, which doesn't use any __assert_fail()
-+   function at all. It doesn't fail to build, but it is entirely
-+   useless.
-+
-+ * Fails to build with musl, which also defines __assert_fail(), but
-+   with a different prototype.
-+
-+We simply remove the __assert_fail() implementation, so that the C
-+library implementation of assert() just does its normal work. The only
-+functionality lost is that the message is displayed on the standard
-+output rather than in netplug's logs (and this was only working with
-+glibc anyway).
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/lib.c
-+===================================================================
-+--- a/lib.c
-++++ b/lib.c
-+@@ -199,21 +199,6 @@
-+     return x;
-+ }
-+ 
-+-
-+-void
-+-__assert_fail(const char *assertion, const char *file,
-+-              unsigned int line, const char *function)
-+-{
-+-    do_log(LOG_CRIT, "%s:%u: %s%sAssertion `%s' failed",
-+-           file, line,
-+-           function ? function : "",
-+-           function ? ": " : "",
-+-           assertion);
-+-
-+-    abort();
-+-}
-+-
-+-
-+ /*
-+  * Local variables:
-+  * c-file-style: "stroustrup"
--- 
-2.7.4
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 204 bytes
+Desc: Message signed with OpenPGP using GPGMail
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160805/b94541fe/attachment.asc>
