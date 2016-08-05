@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 Aug 2016 00:28:29 +0200
-Subject: [Buildroot] [PATCH v4 6/7] package/amd-catalyst: Add support
-	AMD CCCLE
-In-Reply-To: <1470408840-1509-7-git-send-email-romain.perier@free-electrons.com>
+Date: Sat, 6 Aug 2016 00:32:36 +0200
+Subject: [Buildroot] [PATCH v4 5/7] package/amd-catalyst: Add AMD
+	cmdline tools
+In-Reply-To: <1470408840-1509-6-git-send-email-romain.perier@free-electrons.com>
 References: <1470408840-1509-1-git-send-email-romain.perier@free-electrons.com>
- <1470408840-1509-7-git-send-email-romain.perier@free-electrons.com>
-Message-ID: <20160805222829.GD6074@free.fr>
+ <1470408840-1509-6-git-send-email-romain.perier@free-electrons.com>
+Message-ID: <20160805223236.GE6074@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,95 +15,77 @@ To: buildroot@busybox.net
 Romain, All,
 
 On 2016-08-05 16:53 +0200, Romain Perier spake thusly:
-> The AMD Catalyst Linux driver includes a graphical controler center for AMD
-> graphics accelerators, called Catalyst Controler Center. This commits
-> adds support to install this tool by adding a separated prompt.
+> The AMD Catalyst driver includes some cmdline tools for displaying
+> specific infos about the GL stack or to test 3D, like fglxinfo
+> or fgl_gears. This commit adds support to install such tools.
 > 
 > Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
 > ---
->  package/amd-catalyst/Config.in       | 13 +++++++++++++
->  package/amd-catalyst/amd-catalyst.mk | 10 ++++++++++
->  2 files changed, 23 insertions(+)
+>  package/amd-catalyst/Config.in       |  5 +++++
+>  package/amd-catalyst/amd-catalyst.mk | 20 ++++++++++++++++++++
+>  2 files changed, 25 insertions(+)
 > 
 > diff --git a/package/amd-catalyst/Config.in b/package/amd-catalyst/Config.in
-> index 0099e91..99676d3 100644
+> index c3c531c..0099e91 100644
 > --- a/package/amd-catalyst/Config.in
 > +++ b/package/amd-catalyst/Config.in
-> @@ -43,6 +43,19 @@ config BR2_PACKAGE_AMD_CATALYST_CMDLINE_TOOLS
->  	help
->  	  Build the amd command line tools
+> @@ -38,6 +38,11 @@ if BR2_PACKAGE_AMD_CATALYST_XORG
+>  config BR2_PACKAGE_PROVIDES_LIBGL
+>  	default "amd-catalyst"
 >  
-> +comment "Catalyst Control Center needs Qt4 with X11 and PNG support"
-> +	depends on !BR2_PACKAGE_QT || !BR2_PACKAGE_QT_X11 || BR2_PACKAGE_QT_NOPNG
-> +
-> +config BR2_PACKAGE_AMD_CATALYST_CCCLE
-> +	bool "Catalyst Control Center"
-> +	depends on BR2_USE_MMU && BR2_PACKAGE_QT && BR2_PACKAGE_QT_X11
-
-Please, do not mix architecture-related dependencies (MMU) with package
-dependencies. Besides, you forgot to depend on !QT_NO_PNG:
-
-    depends on BR2_USE_MMU
-    depends on BR2_PACKAGE_QT
-    depends on BR2_PACKAGE_QT_X11
-    depends on !BR2_PACKAGE_QT_NOPNG
-
-However, for the MMU stuff, I wonder if it is really needed, as the
-whole stuff depends on glibc, which is MMU-only anyway.
-
-> +	select BR2_PACKAGE_PROCPS_NG # runtime
-> +	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-
-I prefer when dependencies are logically ordered. Here, we need
-BB_SHOW_OTHERS becasue we want to selec procps-ng, so:
-
-    select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps-ng
-    select BR2_PACKAGE_PROCPS_NG # runtime
-
-(Technically, there is *no* difference; it's just easier to follow for
-us mere humans. ;-) )
-
-(Oh, did you add the MMU dependency because of procps-ng? Not needed,
-since glibc is MMU-only.)
-
-Except for those minor nits, that looks good! :-)
-
-Regards,
-Yann E. MORIN.
-
-> +	select BR2_PACKAGE_QT_GUI_MODULE
-> +	select BR2_PACKAGE_QT_ACCESSIBILITY
+> +config BR2_PACKAGE_AMD_CATALYST_CMDLINE_TOOLS
+> +	bool "command-line configuration tools and utilities"
 > +	help
-> +	  Installs the Catalyst Control Center, a Qt graphical tool to
-> +	  control AMD graphics accelerators.
+> +	  Build the amd command line tools
+> +
 >  endif
 >  
 >  config BR2_PACKAGE_AMD_CATALYST_MODULE
 > diff --git a/package/amd-catalyst/amd-catalyst.mk b/package/amd-catalyst/amd-catalyst.mk
-> index 5e1b90b..ee3c2d6 100644
+> index cda8e75..5e1b90b 100644
 > --- a/package/amd-catalyst/amd-catalyst.mk
 > +++ b/package/amd-catalyst/amd-catalyst.mk
-> @@ -122,6 +122,15 @@ define  AMD_CATALYST_INSTALL_CMDLINE_TOOLS
->  endef
+> @@ -103,12 +103,32 @@ endef
+>  
 >  endif
 >  
-> +ifeq ($(BR2_PACKAGE_AMD_CATALYST_CCCLE), y)
-> +define AMD_CATALYST_INSTALL_CCCLE
-> +	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/X11R6/bin/amdcccle \
-> +		$(TARGET_DIR)/usr/bin/amdcccle
-> +	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/sbin/amdnotifyui \
-> +		$(TARGET_DIR)/usr/sbin/amdnotifyui
+> +ifeq ($(BR2_PACKAGE_AMD_CATALYST_CMDLINE_TOOLS), y)
+> +AMD_CATALYST_CMDLINE_TOOLS_FILES = \
+> +	atiode \
+> +	atiodcli \
+> +	fgl_glxgears \
+> +	aticonfig \
+> +	amd-console-helper \
+> +	fglrxinfo
+> +
+> +define  AMD_CATALYST_INSTALL_CMDLINE_TOOLS
+> +	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/sbin/atieventsd \
+
+Ah, here you are using AMD_CATALYST_ARCH_DIR directly, so forget about
+my comment in the previous patch: you need it as-is.
+
+Still maybe you could have an option to refer to that long path, like:
+
+    AMD_CATALYST_ARCH_LIB_DIR = $(AMD_CATALYST_ARCH_DIR)/usr/X11R6/lib$(AMD_CATALYST_LIB_SUFFIX)
+
+Regards,
+Yann E. MORIN.
+
+> +		$(TARGET_DIR)/usr/sbin
+> +	$(foreach f,$(AMD_CATALYST_CMDLINE_TOOLS_FILES), \
+> +		$(INSTALL) -D -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/X11R6/bin/$(f) \
+> +			$(TARGET_DIR)/usr/bin/$(f)
+> +	)
 > +endef
 > +endif
 > +
 >  define AMD_CATALYST_INSTALL_STAGING_CMDS
 >  	$(call AMD_CATALYST_INSTALL_STAGING_XORG)
 >  endef
-> @@ -129,6 +138,7 @@ endef
+>  
 >  define AMD_CATALYST_INSTALL_TARGET_CMDS
 >  	$(call AMD_CATALYST_INSTALL_XORG)
->  	$(call AMD_CATALYST_INSTALL_CMDLINE_TOOLS)
-> +	$(call AMD_CATALYST_INSTALL_CCCLE)
+> +	$(call AMD_CATALYST_INSTALL_CMDLINE_TOOLS)
 >  endef
 >  
 >  $(eval $(generic-package))
