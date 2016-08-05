@@ -1,69 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  5 Aug 2016 18:35:41 +0200
-Subject: [Buildroot] [PATCH] uclibc: proper thread default on m68k and
-	Microblaze
-Message-ID: <1470414941-29826-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 5 Aug 2016 18:53:48 +0200
+Subject: [Buildroot] [PATCH] glibc: add version 2.24
+In-Reply-To: <1470387567-64171-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1470387567-64171-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160805185348.4c0ff1fd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Traditionally, Buildroot has a default of enabling thread
-support. However, with the current construct of the thread choice in the
-uclibc package, the m68k and microblaze architecture end up with no
-thread support as the default.
+Hello,
 
-In order to avoid having to explicit a more complicated "default" value
-for the choice, we take a simple approach:
+On Fri, 5 Aug 2016 09:59:27 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/glibc/Config.in  | 6 ++++++
+>  package/glibc/glibc.hash | 1 +
+>  2 files changed, 7 insertions(+)
+> 
+> diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+> index f86822d..a9a6cc7 100644
+> --- a/package/glibc/Config.in
+> +++ b/package/glibc/Config.in
+> @@ -22,6 +22,11 @@ config BR2_GLIBC_VERSION_2_23
+>  	# No support for pthread barriers on < v9 ISA
+>  	depends on !BR2_sparc
+>  
+> +config BR2_GLIBC_VERSION_2_24
+> +	bool "2.24"
+> +	# No support for pthread barriers on < v9 ISA
+> +	depends on !BR2_sparc
 
- - The "none" choice is moved at the end of the list, so that it is not
-   selected as the default unless there is really no other thread
-   implementation available.
+One thing important I notice in the release announcement of 2.24 is:
 
- - We make NPTL the default thread implementation.
+* The minimum Linux kernel version that this version of the GNU C Library
+  can be used with is 3.2, except on i[4567]86 and x86_64, where Linux
+  kernel version 2.6.32 or later suffices (on architectures that already
+  required kernel versions more recent than 3.2, those requirements remain
+  unchanged).  Linux 3.2 or later kernel headers are required on all
+  architectures.
 
- - On architectures where NPTL is not available, the NPTL option will
-   not be available, so Kconfig will automatically fallback to
-   linuxthreads.
+It is not written completely clearly: they first say that on
+x86/x86-64, 2.6.32 is sufficient, but they conclude that 3.2 is the
+minimum version on all architectures. It would be good to clarify this
+aspect.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/uclibc/Config.in | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+Regardless of this detail, this means we will have to encode this
+dependency somehow. Indeed, we still have people using kernels older
+than 3.2 I believe on various platforms.
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 7c99195..b7714d4 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -47,15 +47,13 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
- 
- choice
- 	prompt "Thread library implementation"
-+	# Use NPTL when available. If not available, kconfig will
-+	# automatically fall back to linuxthreads.
- 	default BR2_PTHREADS_NATIVE
--	default BR2_PTHREADS if !BR2_USE_MMU
- 	help
- 	  Use this option to select the thread library implementation
- 	  that should be used in your toolchain.
- 
--	config BR2_PTHREADS_NONE
--		bool "none"
--
- 	config BR2_PTHREADS
- 		bool "linuxthreads"
- 		select BR2_TOOLCHAIN_HAS_THREADS
-@@ -67,6 +65,10 @@ choice
- 		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 		depends on BR2_USE_MMU
- 		depends on !BR2_m68k && !BR2_microblaze
-+
-+	config BR2_PTHREADS_NONE
-+		bool "none"
-+
- endchoice
- 
- config BR2_PTHREAD_DEBUG
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
