@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Aug 2016 09:46:08 +0200
-Subject: [Buildroot] [PATCH 2/3] gcc: configs: rename
- BR2_EXTRA_GCC_CONFIG_OPTIONS
-In-Reply-To: <1470349800-27521-2-git-send-email-pgynther@google.com>
-References: <1470349800-27521-1-git-send-email-pgynther@google.com>
- <1470349800-27521-2-git-send-email-pgynther@google.com>
-Message-ID: <20160805094608.137bfee1@free-electrons.com>
+Date: Fri, 5 Aug 2016 09:53:53 +0200
+Subject: [Buildroot] [RFC 0/2] script to find package licenses
+In-Reply-To: <57A44379.9010208@imgtec.com>
+References: <1470320164-8241-1-git-send-email-rahul.bedarkar@imgtec.com>
+ <20160804183335.0947f9a9@free-electrons.com>
+ <57A44379.9010208@imgtec.com>
+Message-ID: <20160805095353.68bf1fd9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  4 Aug 2016 15:29:59 -0700, Petri Gynther wrote:
-> Rename BR2_EXTRA_GCC_CONFIG_OPTIONS to BR2_GCC_EXTRA_CONFIG_OPTIONS
-> to be consistent with BR2_GCC_* and BR2_BINUTILS_EXTRA_CONFIG_OPTIONS.
-> 
-> Signed-off-by: Petri Gynther <pgynther@google.com>
+On Fri, 5 Aug 2016 13:12:49 +0530, Rahul Bedarkar wrote:
 
-Thanks for your contributions!
+> Intention of script is to help us to verify or correct legal info that 
+> we add in .mk file. This could be a handy tool that can be used by 
+> anyone when we do version bump or add new package. The complex tools 
+> that are available are generally used by upstream package providers for 
+> Open Source Compliance which provide lot more information than just file 
+> license. And integrating such tools in Buildroot might be difficult. But 
+> in Buildroot where we just need license of a package, script could be 
+> useful as a starting point.
 
-However, for patch 2/3 and 3/3, which merely rename existing config
-options "for the sake of consistency", it means that they break all
-existing configurations.
+I'm sorry, but I still don't see why we should merge a script that we
+would have to maintain, while there are some existing, actively
+developed and more powerful tools doing the same work.
 
-Even though I do like consistency, we generally try to avoid such
-renames "just for the beauty of it" in order to not break the existing
-configurations that our users have.
+Moreover, I believe that the cases that can be detected automatically
+by a script (such as a clear GPL, LGPL, BSD or MIT license) are clearly
+not the ones for which it is difficult to write the <pkg>_LICENSE
+string.
 
-Or at the very least, handling in Config.in.legacy should be added for
-the previous option name, so that users are notified that there is an
-issue when they upgrade Buildroot.
+The ones for which it is difficult are the ones that a script will
+never handle as it can't recognize any pattern.
 
 Thomas
 -- 
