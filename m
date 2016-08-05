@@ -1,82 +1,128 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 6 Aug 2016 00:40:48 +0200
-Subject: [Buildroot] [RFC][PATCH] bfin: fix two issues with internal
- toolchain
-In-Reply-To: <20160805224342.1972c673@free-electrons.com>
-References: <20160805195247.GA11252@waldemar-brodkorb.de>
- <20160805224342.1972c673@free-electrons.com>
-Message-ID: <20160805224048.GH22524@waldemar-brodkorb.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 6 Aug 2016 00:47:05 +0200
+Subject: [Buildroot] [PATCH v4 7/7] package/amd-catalyst: Add support
+	for OpenCL
+In-Reply-To: <1470408840-1509-8-git-send-email-romain.perier@free-electrons.com>
+References: <1470408840-1509-1-git-send-email-romain.perier@free-electrons.com>
+ <1470408840-1509-8-git-send-email-romain.perier@free-electrons.com>
+Message-ID: <20160805224705.GF6074@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Romain, All,
 
-> Hello,
+On 2016-08-05 16:54 +0200, Romain Perier spake thusly:
+> The AMD Catalyst Linux driver includes OpenCL libraries for GPGPU
+> computing. This commits adds support to install the binary blobs and ICD
+> profiles.
 > 
-> On Fri, 5 Aug 2016 21:52:47 +0200, Waldemar Brodkorb wrote:
+> Signed-off-by: Romain Perier <romain.perier@free-electrons.com>
+> ---
+>  package/amd-catalyst/Config.in       |  6 ++++++
+>  package/amd-catalyst/amd-catalyst.mk | 24 ++++++++++++++++++++++++
+>  2 files changed, 30 insertions(+)
 > 
-> > And libgcc_s.so.1 provides it:
-> > ./output/host/usr/bin/bfin-buildroot-linux-uclibc-nm
-> > ./output/host/usr/bfin-buildroot-linux-uclibc/sysroot/lib/libgcc_s.so.1|grep
-> > _Unwind_GetRegionStart                         
-> > 00005d0c t __Unwind_GetRegionStart
+> diff --git a/package/amd-catalyst/Config.in b/package/amd-catalyst/Config.in
+> index 99676d3..856ff9b 100644
+> --- a/package/amd-catalyst/Config.in
+> +++ b/package/amd-catalyst/Config.in
+> @@ -64,4 +64,10 @@ config BR2_PACKAGE_AMD_CATALYST_MODULE
+>  	help
+>  	  Builds and install the fglrx kernel module
+>  
+> +config BR2_PACKAGE_AMD_CATALYST_OPENCL
+> +	bool "OpenCL support"
+> +	help
+> +	  Installs the OpenCL binary blobs and the ICD profile
+> +	  for GPGPU computing.
+> +
+>  endif # BR2_PACKAGE_AMD_CATALYST
+> diff --git a/package/amd-catalyst/amd-catalyst.mk b/package/amd-catalyst/amd-catalyst.mk
+> index ee3c2d6..64746bf 100644
+> --- a/package/amd-catalyst/amd-catalyst.mk
+> +++ b/package/amd-catalyst/amd-catalyst.mk
+> @@ -39,6 +39,29 @@ endef
+>  $(eval $(kernel-module))
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_AMD_CATALYST_OPENCL),y)
+> +
+> +AMD_CATALYST_OCL_SUFFIX = $(if $(BR2_x86_64),64,32)
+> +AMD_CATALYST_OPENCL_FILES = \
+> +	usr/lib$(AMD_CATALYST_LIB_SUFFIX)/libOpenCL.so.1 \
+> +	usr/lib$(AMD_CATALYST_LIB_SUFFIX)/libaticalcl.so \
+> +	usr/lib$(AMD_CATALYST_LIB_SUFFIX)/libamdocl$(AMD_CATALYST_OCL_SUFFIX).so \
+> +	usr/lib$(AMD_CATALYST_LIB_SUFFIX)/libamdocl12cl$(AMD_CATALYST_OCL_SUFFIX).so
+
+So this means we're going to install files in /usr/lib32/ or /usr/lib64/
+in the target. Although we do have those symlinks, I'm not a fan of it.
+
+Why not:
+
+    AMD_CATALYST_OPENCL_FILES = \
+        libOpenCL.so.1 \
+        libaticalcl.so etc...
+
+and then...
+
+> +define AMD_CATALYST_INSTALL_OPENCL
+> +	$(foreach f,$(AMD_CATALYST_OPENCL_FILES), \
+> +		$(INSTALL) -D -m 0755 $(AMD_CATALYST_ARCH_DIR)/$(f) $(TARGET_DIR)/$(f)
+
+... have this:
+
+    $(INSTALL) -D -m 0755 \
+        $(AMD_CATALYST_ARCH_DIR)/usr/lib$(AMD_CATALYST_LIB_SUFFIX)/$(f) \
+        $(TARGET_DIR)/usr/lib/$(f)
+
+which seems cleaner to me.
+
+> +	)
+> +	ln -sf libOpenCL.so.1 \
+> +		$(TARGET_DIR)/usr/lib/libOpenCL.so
+> +	$(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/bin/clinfo \
+> +		$(TARGET_DIR)/usr/bin
+
+When you install individual files, ensure the destination is a file:
+
+    $(INSTALL) -m 0755 $(AMD_CATALYST_ARCH_DIR)/usr/bin/clinfo \
+        $(TARGET_DIR)/usr/bin/clinfo
+
+otherwise, if /usr/bin does not exist, it will made to be a file, with
+the content of clinfo. Granted, this is highly improbable in your case,
+if not impossible, but that's what we are doing everywhere else.
+
+Regards,
+Yann E. MORIN.
+
+> +	$(INSTALL) -D -m 0644 $(AMD_CATALYST_ARCH_DIR)/etc/OpenCL/vendors/amdocl$(AMD_CATALYST_OCL_SUFFIX).icd \
+> +		$(TARGET_DIR)/etc/OpenCL/vendors/amdocl$(AMD_CATALYST_OCL_SUFFIX).icd
+> +endef
+> +
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_AMD_CATALYST_XORG), y)
+>  
+>  AMD_CATALYST_DEPENDENCIES += mesa3d-headers
+> @@ -139,6 +162,7 @@ define AMD_CATALYST_INSTALL_TARGET_CMDS
+>  	$(call AMD_CATALYST_INSTALL_XORG)
+>  	$(call AMD_CATALYST_INSTALL_CMDLINE_TOOLS)
+>  	$(call AMD_CATALYST_INSTALL_CCCLE)
+> +	$(call AMD_CATALYST_INSTALL_OPENCL)
+>  endef
+>  
+>  $(eval $(generic-package))
+> -- 
+> 2.8.1
 > 
-> We are currently discussing it on IRC, but I believe the problem is
-> that "t" indicates that the symbol is not visible. It should be a "T".
 
-You are right, this seems to be the problem. You nailed it down!
-It seems ELF has two different concepts for symbol visibility:
-https://www.technovelty.org/code/why-symbol-visibility-is-good.html
-
-The symbols in the libgcc_s.so.1 generated by internal toolchain are
-bind "LOCAL", so not visible for linking the c++ application.
-The Unwind* symbols in libgcc_s.so.1 from the external toolchain are
-bind "GLOBAL".
-
-Next thing is to find the reason for it.
- 
-> > diff --git a/package/gcc/6.1.0/892-fix-dwarf-fdpic.patch b/package/gcc/6.1.0/892-fix-dwarf-fdpic.patch
-> > new file mode 100644
-> > index 0000000..315b406
-> > --- /dev/null
-> > +++ b/package/gcc/6.1.0/892-fix-dwarf-fdpic.patch
-> > @@ -0,0 +1,37 @@
-> > +Fix DWARF compilation for FDPIC targets
-> > +
-> > +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> > +
-> > +diff -Nur gcc-6.1.0.orig/libgcc/unwind-dw2-fde-dip.c gcc-6.1.0/libgcc/unwind-dw2-fde-dip.c
-> > +--- gcc-6.1.0.orig/libgcc/unwind-dw2-fde-dip.c	2016-01-04 15:30:50.000000000 +0100
-> > ++++ gcc-6.1.0/libgcc/unwind-dw2-fde-dip.c	2016-08-05 02:17:40.424195128 +0200
-> > +@@ -124,7 +124,11 @@
-> > + {
-> > +   _Unwind_Ptr pc_low;
-> > +   _Unwind_Ptr pc_high;
-> > ++#if defined __FRV_FDPIC__ || defined __BFIN_FDPIC__
-> > ++  struct elf32_fdpic_loadaddr load_base;
-> > ++#else
-> 
-> I'm surprised by this part of the patch, since you are changing the
-> behavior for __FRV_FDPIC__ as well. It wasn't working before?
-
-No, DWARF compiling for FR-V architecture is broken/bitrotted as
-well. So this patch will be what I am suggesting upstream.
- 
-> In all other chunks you simply add __BFIN_FDPIC__ as behaving the same
-> as __FRV_FDPIC__ but you're not doing the same here. Is this expected?
-> 
-> > ++#if defined __FRV_FDPIC__ || defined __BFIN_FDPIC__
-> 
-> Obvious question: is there a symbol that says "I'm using FDPIC" and
-> which would make such conditions simpler?
-
-There is a symbol __FDPIC__ for Bfin and FR-V, but it is exposed
-_after_ the full gcc is build and can not be used while
-bootstrapping the toolchain. I tried it.
-
-best regards
- Waldemar
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
