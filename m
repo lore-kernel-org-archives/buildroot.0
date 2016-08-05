@@ -1,9 +1,11 @@
 From: Khem Raj <raj.khem@gmail.com>
-Date: Thu, 4 Aug 2016 19:15:12 -0700
-Subject: [Buildroot] dri2.h needed but missing
-In-Reply-To: <trinity-c313bacc-e685-4046-81aa-0a8a97915dc9-1470338357069@3capp-mailcom-bs11>
-References: <trinity-c313bacc-e685-4046-81aa-0a8a97915dc9-1470338357069@3capp-mailcom-bs11>
-Message-ID: <4b622cd4-fa9d-1b6b-9d33-7c7397800ce1@gmail.com>
+Date: Thu, 4 Aug 2016 19:46:40 -0700
+Subject: [Buildroot] [PATCH 1/1] package/kodi: Update upstream patch to
+ support libcurl >= 7.5.1
+In-Reply-To: <20160804231621.4da74f35@free-electrons.com>
+References: <1470343668-28172-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160804231621.4da74f35@free-electrons.com>
+Message-ID: <dc1e7bf2-8eff-cab0-db47-8bf0568e4d91@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +14,30 @@ To: buildroot@busybox.net
 
 
 
-On 8/4/16 12:19 PM, daggs wrote:
-> Greetings,
+On 8/4/16 2:16 PM, Thomas Petazzoni wrote:
+> Hello,
 > 
-> I need the file mentioned above for a package I want to add, I cannot seem to find it under xorg's installed headers, any idea why and how I can add it?
->
+> On Thu,  4 Aug 2016 22:47:48 +0200, Bernd Kuhls wrote:
+>> An updated patch was committed to Kodi after Curl added a fix to address
+>> the original problem:
+>> https://github.com/curl/curl/commit/d6604524ad24daf4581efbe0020da058d2b3af84
+> 
+> Is this commit part of a curl release? If so, is this curl release the
+> one we use in Buildroot?
 
-you need to depend on xserver-xorg
+it will be in next version of curl.
+> 
+> IOW, I don't understand if the below patch for Kodi requires a newer
+> version of curl than the one we have in Buildroot today.
 
+no it does not require it. but of BR is using curl 7.50.0 then it
+should be bumped to 7.50.1, since this issue is affecting many other
+packages too.
+
+> 
+> Could you clarify?
+> 
 > Thanks,
 > 
-> Dagg.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Thomas
 > 
