@@ -1,35 +1,45 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri,  5 Aug 2016 00:53:24 -0300
-Subject: [Buildroot] [PATCH] imx6ulpico: linux.fragment: Disable CONFIG_SMP
-Message-ID: <1470369204-1675-1-git-send-email-festevam@gmail.com>
+From: Khem Raj <raj.khem@gmail.com>
+Date: Thu, 4 Aug 2016 21:05:10 -0700
+Subject: [Buildroot] [PATCH 1/1] package/libvpx: Fix compilation when
+ __uClinux__ is defined
+In-Reply-To: <20160804225318.34de32a3@free-electrons.com>
+References: <1469954504-31016-1-git-send-email-bernd.kuhls@t-online.de>
+ <D26F367F-EE90-4A2D-8603-7EBE04E9E2BD@gmail.com>
+ <20160804225318.34de32a3@free-electrons.com>
+Message-ID: <fee7b830-1e54-5735-082e-05d3b0bc5a87@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <fabio.estevam@nxp.com>
 
-imx6ul has currently an issue on kernel 4.7 that causes a stall when running
-the "reboot" command.
 
-This issue has been reported in the linux-arm-kernel mailing list, but we
-don't have a proper fix at the moment.
+On 8/4/16 1:53 PM, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 3 Aug 2016 23:53:57 -0700, Khem Raj wrote:
+> 
+>> better to use
+>>
+>> if defined(__uClinux__) && defined(CHIP_DM642)
+> 
+> Possibly, but where would lddk.h come from? I don't see it in the
+> uClibc-ng sources, and I don't see it in the kernel either. So I don't
+> quite see this header could end up in a toolchain.
+> 
+>> may be if someone is using BR for ti_c6x
+> 
+> A platform for which we don't have support today.
+> 
+> I'm all for making proper upstreamable patches, but in this specific
+> case, I'm not even sure where lddk.h is supposed to come from.
+> 
 
-This problem is not seen when SMP is disabled, so let's disable it for now
-until a proper fix becomes available.
+For life of me I can not find out, so most probably, its some SOC devkit
+so its fine to ignore this.
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- board/technexion/imx6ulpico/linux.fragment | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/board/technexion/imx6ulpico/linux.fragment b/board/technexion/imx6ulpico/linux.fragment
-index 892d0cb..88e323e 100644
---- a/board/technexion/imx6ulpico/linux.fragment
-+++ b/board/technexion/imx6ulpico/linux.fragment
-@@ -1 +1,2 @@
- CONFIG_CFG80211_WEXT=y
-+CONFIG_SMP=n
--- 
-2.7.4
+> Best regards,
+> 
+> Thomas
+> 
