@@ -1,10 +1,17 @@
 From: Khem Raj <raj.khem@gmail.com>
-Date: Thu, 4 Aug 2016 21:25:26 -0700
-Subject: [Buildroot] [PATCH] package/lshw: fix musl build
-In-Reply-To: <20160804183732.7319a9c8@free-electrons.com>
-References: <1470327886-29273-1-git-send-email-romain.naour@gmail.com>
- <20160804183732.7319a9c8@free-electrons.com>
-Message-ID: <70811547-4ef0-d4cc-5074-3786f51f406e@gmail.com>
+Date: Thu, 4 Aug 2016 21:30:40 -0700
+Subject: [Buildroot] [PATCH 1/2] package/Makefile.in should grab
+ HOST_DIR headers using -isystem instead of -I.
+In-Reply-To: <004001d1e9d0$5773c7d0$065b5770$@bbn.com>
+References: <20160725195227.21112-1-draeman@bbn.com>
+ <20160728220029.GI5862@free.fr>
+ <48B4EC85-773A-4F99-96D4-59577018BAB3@gmail.com>
+ <20160729093218.36d66c86@free-electrons.com>
+ <CAMKF1sp5YvKanMM_AjPsZqmNOXrJAWsELpEcch+7Wec3MfhVzA@mail.gmail.com>
+ <20160729112327.5af5618a@free-electrons.com>
+ <CAMKF1spxedbMXzPnDU41nEFZdJ1qfc4Y0UqeQwxDaNmR4cmZHg@mail.gmail.com>
+ <004001d1e9d0$5773c7d0$065b5770$@bbn.com>
+Message-ID: <9865f909-91ac-29b7-635c-c45c6f82fb71@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +20,28 @@ To: buildroot@busybox.net
 
 
 
-On 8/4/16 9:37 AM, Thomas Petazzoni wrote:
+On 7/29/16 12:35 PM, David Raeman wrote:
 > Hello,
 > 
-> On Thu,  4 Aug 2016 18:24:46 +0200, Romain Naour wrote:
+> On Fri, Jul 29, 2016 at 11:09 AM, Khem Raj <raj.khem@gmail.com> wrote:
+>> with specifying your own -isystem you will be introducing the issue too see
+>> this thread for more
+>> https://lists.fedoraproject.org/archives/list/devel at lists.fedoraproject.org/t
+>> hread/Q5SWCUUMWQ4EMS7CU2CBOZHV3WZYOOTT/
 > 
->> +diff --git a/src/core/dasd.cc b/src/core/dasd.cc
->> +index 626b8a8..18d19c3 100644
->> +--- a/src/core/dasd.cc
->> ++++ b/src/core/dasd.cc
->> +@@ -4,6 +4,7 @@
->> + #include <glob.h>
->> + #include <string.h>
->> + #include <fcntl.h>
->> ++#include <libgen.h>
+> Yes, I see what you mean.  GCC-6 is now using #include_next in its C++ standard library header files to help the C++ STL header files properly find their own special copy of stdlib.h.  The behavior of #include_next will change depending on the order of the directories in the include search path.  Based on these tickets, it looks like a problem is introduced if you use -isystem to specify a directory that gcc would already have considered as part of its default system include directories.  Doing so causes that particular directory to be moved up earlier in the search order, so the internal use of #include_next ends up failing because it is relying on the "known" order of the default system include directories.  Note that this is not a problem with the -I flag, because gcc will ignore the -I flag if the provided directory is in the default search path.  It's only -isystem that might rearrange the order of default directories.
 > 
-> Is this related?
+> Here is another ticket in the GCC tracker for this issue, marked WONTFIX: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=70129.  The recommendation is to not use -isystem for directories that gcc already includes in the default search path.
+> 
+> It's not clear to me that the specific use of -isystem introduced in this patch would violate this assertion.  Are there configurations for buildroot where "$(HOST_DIR)/usr/include" can resolve to a default include directory as listed in https://gcc.gnu.org/onlinedocs/cpp/Search-Path.html ?  It's not possible for my particular use, but I don't know all the uses of buildroot well enough to make that statement in the blanket general case.
 
-if we want to use POSIX compliant version of basename() then we need to
-include this yes.
+it will. Since now it will become a system path and will interfere with
+gccs search order for include_next
 
 > 
->> + #include <unistd.h>
->> + #include <inttypes.h>
->> + #include <sys/ioctl.h>
->> +@@ -42,7 +43,7 @@ bool scan_dasd(hwNode & n)
->> +   {
->> +     for(dev_num=0;dev_num<devices.gl_pathc;dev_num++)
->> +     {
->> +-      dev_name = basename(devices.gl_pathv[dev_num]);
->> ++      dev_name = basename(const_cast<char *>(devices.gl_pathv[dev_num]));
+> However, I still very much appreciate the overall point you make - that use of the flag can cause subtle and unintended consequences.  If the maintainers choose to back the patch out, I can find another way to resolve my original issue by submitting a patch to u-boot to ensure it prefers its modified copy of libfdt.h instead of the possibly-installed system copy.  I still believe the use of -isystem here is correct in a strict technical sense, because "$(HOST_DIR)/usr/include" is truly a system include directory at a non-standard location.  But I understand that some packages incorrectly assume that -I is the only way to add include paths and don't anticipate the use of -isystem.  Case in point, the Python package I just submitted a patch for.
 > 
-> I'm not super familiar with C++ stuff, but why is this problem musl
-> specific? The basename() function is "char *basename(char *)"
-> regardless of the C library being used. What makes it error out with
-> musl and not with other C libraries?
-
-glibc and uclibc implement the GNU version of basename() API which does
-not modify the argument ( const char*) and when including string.h and
-not libgen.h we are saying we want gnu version. musl does not implement
-the gnu extention, it only has POSIX version. Hence you see the issue
-just on musl.
-
-So the patch makes it compile for all libcs. however, it should be
-tested on glibc/uclibc since there were bugs in the posix implementation
-of basename()  see
-
-http://man7.org/linux/man-pages/man3/basename.3.html
-
-if it cant be tested then make the posix version use only for musl
-which I would not recommend, but its an option
-
+> Cheers,
+> David
 > 
-> Thanks,
-> 
-> Thomas
 > 
