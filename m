@@ -1,45 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Aug 2016 21:11:28 +0200
-Subject: [Buildroot] [PATCH 1/1] gst1-plugins-bad: hls: fix broken
- dependency
-In-Reply-To: <1470305203-1738-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1470305203-1738-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20160805211128.0b02eda7@free-electrons.com>
+Date: Fri, 5 Aug 2016 21:14:21 +0200
+Subject: [Buildroot] [git commit] transmission: fix build when using system
+	libminiupnpc with libutp disabled
+Message-ID: <20160805191431.889C68225C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1f3946ecc00786fdb4ab2666ff9054d084b7f2a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 4 Aug 2016 15:36:43 +0530, Rahul Bedarkar wrote:
-> HLS plugin can be built with nettle or libgcrypt or openssl
-> cryptographic backend. But current dependency on gnutls is incorrect.
-> It has been working so far because gnutls depends on nettle.
-> 
-> gst-plugins-bad's build system for HLS allows user to choose which
-> cryptographic backend to use. If that is not specified, it internally
-> checks for nettle or libgcrypt or openssl in order. If none of the
-> cryptographic backend is available, HLS plugin gets disabled internally.
-> 
-> Select cryptographic backend according to which cryptographic packages
-> are available. If both libgcrypt or openssl are not available, choose
-> nettle by default.
-> 
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-> ---
->  package/gstreamer1/gst1-plugins-bad/Config.in           |  2 +-
->  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 14 +++++++++++++-
->  2 files changed, 14 insertions(+), 2 deletions(-)
+Fixes:
 
-Applied to master, thanks.
+  http://autobuild.buildroot.net/results/63a3caac7e1e7b5ab268d9be3cd77617df619659/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/transmission/0004-fix-utp-include.patch | 46 +++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/package/transmission/0004-fix-utp-include.patch b/package/transmission/0004-fix-utp-include.patch
+new file mode 100644
+index 0000000..db8b5ab
+--- /dev/null
++++ b/package/transmission/0004-fix-utp-include.patch
+@@ -0,0 +1,46 @@
++Fix compilation when using system libminiupnpc with libutp disabled
++
++If transmission uses its own copy of libminiupnpc in third-party/ then
++the configure script adds that path to CFLAGS:
++https://trac.transmissionbt.com/browser/trunk/configure.ac#L455
++
++This path is also added if transmission uses its own copy of libutp:
++https://trac.transmissionbt.com/browser/trunk/configure.ac#L349
++
++But if a system-provided libminiupnpc is used and utp-support is
++disabled using --disable-utp the result is a build error, detected by
++buildroot autobuilders:
++http://autobuild.buildroot.net/results/b79/b79e51140cb0320554a58ce59dcb33f53cd9211a/build-end.log
++
++net.c:40:24: fatal error: libutp/utp.h: No such file or directory
++
++Patch proposed by Yann E. MORIN:
++http://lists.busybox.net/pipermail/buildroot/2016-July/167896.html
++
++Patch sent upstream: https://trac.transmissionbt.com/ticket/6163
++
++Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
++
++diff -uNr transmission-2.92.org/configure.ac transmission-2.92/configure.ac
++--- transmission-2.92.org/configure.ac	2016-03-06 21:23:45.336198393 +0100
+++++ transmission-2.92/configure.ac	2016-07-31 12:13:40.921660078 +0200
++@@ -358,6 +358,10 @@
++     else
++       AC_MSG_ERROR("Unable to build uTP support -- C++ compiler not found")
++     fi
+++else
+++    # For the system libminiupnpc with UTC disabled,
+++    # point to our bundled UTP headers
+++    LIBUTP_CFLAGS="-I\$(top_srcdir)/third-party/"
++ fi
++ AC_SUBST(LIBUTP_CFLAGS)
++ AC_SUBST(LIBUTP_LIBS)
++@@ -457,7 +461,7 @@
++     LIBUPNP_LIBS_QT="\$\${TRANSMISSION_TOP}/third-party/miniupnp/libminiupnp.a"
++ else
++     AC_DEFINE([SYSTEM_MINIUPNP])
++-    LIBUPNP_CFLAGS="" 
+++    LIBUPNP_CFLAGS="${LIBUTP_CFLAGS}"
++     LIBUPNP_LIBS="-lminiupnpc"
++     LIBUPNP_LIBS_QT="-lminiupnpc"
++ fi
