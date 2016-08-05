@@ -1,45 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri,  5 Aug 2016 12:44:36 +0300
-Subject: [Buildroot] [PATCH] libsepol: fix static build
-Message-ID: <0df01bb703825aef5dc941f57729e5061b593941.1470390276.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 5 Aug 2016 12:21:53 +0200
+Subject: [Buildroot] [PATCH] iperf: bump to version 2.0.9
+In-Reply-To: <20160731082541.GC3620@tarshish>
+References: <0fe5e4e62f4093b8d30fd1155d8832cd2482a57e.1469784407.git.baruch@tkos.co.il>
+ <20160730143139.10ffbed2@free-electrons.com>
+ <20160731043853.GA3620@tarshish>
+ <20160731100908.1fdf64d6@free-electrons.com>
+ <20160731082541.GC3620@tarshish>
+Message-ID: <20160805122153.6c4a4593@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit a3ebe45dcb3e (libsepol: bump to version 2.5, 2016-06-26) didn't refresh
-correctly the patch adding static build support. Do this now.
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/14b/14bbb7c9c59e7f68f3ae7ad63e075e27a0da2b1e/
-http://autobuild.buildroot.net/results/97f/97f61d5e46a7f479e8de5dd19d49f7a3d84cc86e/
-http://autobuild.buildroot.net/results/920/920e1ddac6bf93707a187e64a4ef7d95aff09e6c/
+On Sun, 31 Jul 2016 11:25:41 +0300, Baruch Siach wrote:
 
-Cc: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libsepol/0001-support-static-only.patch | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+> > > Where have you found a link to that repo? Only after googling for "iperf2 git" 
+> > > I found an indication to its existence in https://github.com/daynix/iperf2.  
+> > 
+> > From https://sourceforge.net/projects/iperf2/, click on "Code".  
+> 
+> That's the first thing I tried. Looking there again all I see is an old Svn 
+> repo (last update is r8 from 2014-09-14). What am I missing?
 
-diff --git a/package/libsepol/0001-support-static-only.patch b/package/libsepol/0001-support-static-only.patch
-index 3e9a84f8222a..3e6d555e96e5 100644
---- a/package/libsepol/0001-support-static-only.patch
-+++ b/package/libsepol/0001-support-static-only.patch
-@@ -30,8 +30,12 @@ index db6c2ba..0006285 100644
-  
- 
-  $(LIBA):  $(OBJS)
--@@ -70,7 +74,11 @@ install: all
-- 	install -m 755 $(LIBSO) $(SHLIBDIR)
-+@@ -66,11 +70,13 @@
-+ install: all
-+ 	test -d $(LIBDIR) || install -m 755 -d $(LIBDIR)
-+ 	install -m 644 $(LIBA) $(LIBDIR)
-+-	test -d $(SHLIBDIR) || install -m 755 -d $(SHLIBDIR)
-+-	install -m 755 $(LIBSO) $(SHLIBDIR)
-  	test -d $(LIBDIR)/pkgconfig || install -m 755 -d $(LIBDIR)/pkgconfig
-  	install -m 644 $(LIBPC) $(LIBDIR)/pkgconfig
- +ifeq ($(STATIC),)
+Then we don't have the same Internet I'm afraid. Here the "Code" tab
+points to https://sourceforge.net/p/iperf2/code/ci/master/tree/ which
+is a Git repository with the latest commit on July 2, 2016.
+
+Best regards,
+
+Thomas
 -- 
-2.8.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
