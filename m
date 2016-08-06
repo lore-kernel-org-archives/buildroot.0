@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Aug 2016 21:36:21 +0200
-Subject: [Buildroot] Buildroot 2016.08-rc1 released
-In-Reply-To: <87h9ay9oyt.fsf@dell.be.48ers.dk>
-References: <87lh0a9qcr.fsf@dell.be.48ers.dk>
- <20160806120842.1574e227@free-electrons.com>
- <87h9ay9oyt.fsf@dell.be.48ers.dk>
-Message-ID: <20160806213621.7183038a@free-electrons.com>
+Date: Sat, 6 Aug 2016 21:55:40 +0200
+Subject: [Buildroot] [PATCH] package/enlightenment: fix build issue
+ without libuuid
+In-Reply-To: <1470425509-26718-1-git-send-email-romain.naour@gmail.com>
+References: <1470425509-26718-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160806215540.38dff27b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,26 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 06 Aug 2016 12:22:18 +0200, Peter Korsgaard wrote:
-
->  > Are you sure? According to http://autobuild.buildroot.net/stats/, there
->  > are still 90 packages without hashes. Moreover, the hashes are
->  > currently not checked for packages not sourced from http/ftp.  
+On Fri,  5 Aug 2016 21:31:49 +0200, Romain Naour wrote:
+> Since enlightenment 0.20 uuid.h is always included in e_pixmap.c but
+> libuuid is checked at configure time only when wayland support is
+> enabled.
 > 
-> A quick check of package/ seemed to show that the only ones missing were
-> people with custom _SITE_METHOD, but I didn't check the other dirs.
+> Include uuid.h must guarded by HAVE_WAYLAND.
+> 
+> Fixes:
+>   CC       src/bin/src_bin_enlightenment-e_pixmap.o
+> src/bin/e_pixmap.c:16:18: fatal error: uuid.h: No such file or directory
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  ...uid.h-only-when-Wayland-support-is-enable.patch | 39 ++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 package/enlightenment/0001-E-include-uuid.h-only-when-Wayland-support-is-enable.patch
 
-Hum, quick example: the slirp package doesn't have a custom
-_SITE_METHOD, it's just using Git. And it doesn't have a hash file.
-Same psplash, and many other packages.
-
-> So for the packages where we currently can check hashes, we are now
-> doing it. I might clarify the description for the final release mail.
-
-This is not completely correct: thanks to Yann's work, the tarballs we
-produce locally when fetching from Git are reproducible. So technically
-speaking, all packages fetched from Git could and should now have a
-hash file.
+Applied to master, thanks.
 
 Thomas
 -- 
