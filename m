@@ -1,146 +1,42 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 6 Aug 2016 18:15:49 +0200
-Subject: [Buildroot] [PATCH 16/16 v3] docs/manual: document multi
- br2-external
-In-Reply-To: <8eca23fffd802ef089aab2300b9041455076e771.1468750623.git.yann.morin.1998@free.fr>
-References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <8eca23fffd802ef089aab2300b9041455076e771.1468750623.git.yann.morin.1998@free.fr>
-Message-ID: <0094c43d-e305-6d6a-6ebd-d45b36e53987@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 6 Aug 2016 21:36:21 +0200
+Subject: [Buildroot] Buildroot 2016.08-rc1 released
+In-Reply-To: <87h9ay9oyt.fsf@dell.be.48ers.dk>
+References: <87lh0a9qcr.fsf@dell.be.48ers.dk>
+ <20160806120842.1574e227@free-electrons.com>
+ <87h9ay9oyt.fsf@dell.be.48ers.dk>
+Message-ID: <20160806213621.7183038a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello,
 
-Le 17/07/2016 ? 12:34, Yann E. MORIN a ?crit :
+On Sat, 06 Aug 2016 12:22:18 +0200, Peter Korsgaard wrote:
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  docs/manual/customize-outside-br.txt | 62 ++++++++++++++++++++++++------------
->  1 file changed, 41 insertions(+), 21 deletions(-)
+>  > Are you sure? According to http://autobuild.buildroot.net/stats/, there
+>  > are still 90 packages without hashes. Moreover, the hashes are
+>  > currently not checked for packages not sourced from http/ftp.  
 > 
-> diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-> index 839d1b1..ed4a949 100644
-> --- a/docs/manual/customize-outside-br.txt
-> +++ b/docs/manual/customize-outside-br.txt
-> @@ -17,19 +17,18 @@ place project-specific customizations in two locations:
->     having them nicely integrated in the build logic. This section
->     explains how to use +BR2_EXTERNAL+.
->  
-> -+BR2_EXTERNAL+ is an environment variable that can be used to point to
-> -a directory that contains Buildroot customizations. It can be passed
-> -to any Buildroot +make+ invocation. It is automatically saved in the
-> -hidden +.br-external+ file in the output directory. Thanks to this,
-> -there is no need to pass +BR2_EXTERNAL+ at every +make+ invocation. It
-> -can however be changed at any time by passing a new value, and can be
-> ++BR2_EXTERNAL+ is an environment variable that can be set to contain the
-> +paths to one or more directories that contains Buildroot customizations.
-> +It can be passed to any Buildroot +make+ invocation. It is automatically
-> +saved in the hidden +.br-external+ file in the output directory. Thanks
-> +to this, there is no need to pass +BR2_EXTERNAL+ at every +make+ invocation.
-> +It can however be changed at any time by passing a new value, and can be
->  removed by passing an empty value.
->  
->  .Note
-> -The +BR2_EXTERNAL+ path can be either an absolute or a relative path,
-> -but if it's passed as a relative path, it is important to note that it
-> -is interpreted relative to the main Buildroot source directory, *not*
-> -to the Buildroot output directory.
-> +Paths in +BR2_EXTERNAL+ can be either absolute or relative paths, but it
-> +is important to note that relative paths are interpreted relative to the
-> +main Buildroot source directory, *not* to the Buildroot output directory.
->  
->  Some examples:
->  
-> @@ -51,6 +50,12 @@ We can switch to another external definitions directory at any time:
->  buildroot/ $ make BR2_EXTERNAL=/where/we/have/barfoo xconfig
->  -----
->  
-> +We can also use multiple +BR2_EXTERNAL+ locations:
-> +
-> +----
-> +buildroot/ $ make BR2_EXTERNAL="/path/to/foobar /where/we/have/barfoo" menuconfig
-> +----
-> +
->  Or disable the usage of external definitions:
->  
->  -----
-> @@ -60,13 +65,23 @@ buildroot/ $ make BR2_EXTERNAL= xconfig
->  A +BR2_EXTERNAL+ tree must contain at least those three files:
->  
->  +external.id+::
-> -   That file should contain the ID for the +BR2_EXTERNAL+ tree.
-> +   That file should contain the ID for that +BR2_EXTERNAL+ tree.
->     That ID is used to construct the +BR2_EXTERNAL_$(ID)+ variable,
->     available in +Config.in+ and +external.mk+ (see below), so that ID
->     must be a valid make and Kconfig variable. Buildroot sets
->     +BR2_EXTERNAL_$(ID)+ to the path of the +BR2_EXTERNAL+ tree.
->     The format for this file is a single line with the ID.
->  +
-> +.Note:
-> +Since it is possible to use multiple +BR2_EXTERNAL+ trees at once, this
-> +  ID is used by Buildroot to generate variables for each of those trees.
-> +  That ID is used to identify your +BR2_EXTERNAL+ tree, so try to come up
-> +  with an ID that really describes your +BR2_EXTERNAL+ tree, in order for
-> +  it to be relatively unique, so that it does not clash with another ID
-> +  from another +BR2_EXTERNAL+ tree, especially if you are planning on
-> +  somehow sharing your +BR2_EXTERNAL+ tree with third parties or using
-> +  +BR2_EXTERNAL+ trees from third parties.
-> ++
->  Examples of an +external.mk+ file that declares the ID +FOO+:
->  +
->  ----
-> @@ -102,22 +117,22 @@ Using +BR2_EXTERNAL+ then allows three different things:
->     +$(BR2_EXTERNAL_BAR_42)/board/<boardname>/kernel.config+ (to specify
->     the location of the kernel configuration file).
->  
-> - * One can store package recipes (i.e. +Config.in+ and
-> -   +<packagename>.mk+), or even custom configuration options and make
-> -   logic. Buildroot automatically includes +$(BR2_EXTERNAL)/Config.in+ to
-> -   make it appear in the top-level configuration menu, and includes
-> -   +$(BR2_EXTERNAL)/external.mk+ with the rest of the makefile logic.
-> + * One can store package recipes (i.e. +Config.in+ and +<packagename>.mk+),
-> +   or even custom configuration options and make logic. Buildroot
-> +   automatically includes the +Config.in+ from each paths in +BR2_EXTERNAL+
-> +   to make it appear in a sub-menu labelled _User-provided options_ at the
-> +   root of the main configuration menu, and includes the +external.mk+ from
-> +   each paths in +BR2_EXTERNAL+ with the rest of the makefile logic.
->  +
->  The main usage of this is to store package recipes. The recommended
-> -   way to do this is to write a +$(BR2_EXTERNAL)/Config.in+ file that
-> -   looks like:
-> +   way to do this is to write +Config.in+ files that look like:
->  +
->  ------
->  source "$BR2_EXTERNAL_BAR_42/package/package1/Config.in"
->  source "$BR2_EXTERNAL_BAR_42/package/package2/Config.in"
->  ------
->  +
-> -Then, have a +$(BR2_EXTERNAL)/external.mk+ file that looks like:
-> +Then, write +/external.mk+ files that look like:
->  +
->  ------
->  include $(sort $(wildcard $(BR2_EXTERNAL_BAR_42)/package/*/*.mk))
-> @@ -130,7 +145,12 @@ And then in +$(BR2_EXTERNAL_FOO_42)/package/package1+ and
->     called <boardname> and adapt the above paths accordingly.
->  
->   * One can store Buildroot defconfigs in the +configs+ subdirectory of
-> -   +$(BR2_EXTERNAL)+. Buildroot will automatically show them in the
-> +   a +BR2_EXTERNAL+ tree. Buildroot will automatically show them in the
->     output of +make list-defconfigs+ and allow them to be loaded with the
->     normal +make <name>_defconfig+ command. They will be visible under the
-> -   +User-provided configs+' label in the 'make list-defconfigs' output.
-> +   +User-provided configs+ label in the 'make list-defconfigs' output.
-> ++
-> +.Note
-> +If a defconfig file is present in more than one +BR2_EXTERNAL+ location,
-> +   then the last one is used. It is also possible to override a defconfig
-> +   bundled in Buildroot.
-> 
+> A quick check of package/ seemed to show that the only ones missing were
+> people with custom _SITE_METHOD, but I didn't check the other dirs.
+
+Hum, quick example: the slirp package doesn't have a custom
+_SITE_METHOD, it's just using Git. And it doesn't have a hash file.
+Same psplash, and many other packages.
+
+> So for the packages where we currently can check hashes, we are now
+> doing it. I might clarify the description for the final release mail.
+
+This is not completely correct: thanks to Yann's work, the tarballs we
+produce locally when fetching from Git are reproducible. So technically
+speaking, all packages fetched from Git could and should now have a
+hash file.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
