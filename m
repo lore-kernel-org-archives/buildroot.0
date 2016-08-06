@@ -1,53 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 06 Aug 2016 22:17:28 +0200
-Subject: [Buildroot] Buildroot 2016.08-rc1 released
-In-Reply-To: <20160806213621.7183038a@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 6 Aug 2016 21:36:21 +0200")
-References: <87lh0a9qcr.fsf@dell.be.48ers.dk>
- <20160806120842.1574e227@free-electrons.com>
- <87h9ay9oyt.fsf@dell.be.48ers.dk>
- <20160806213621.7183038a@free-electrons.com>
-Message-ID: <87mvkp8xev.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  6 Aug 2016 23:01:23 +0200
+Subject: [Buildroot] [PATCH] package/hidapi: depends on NPTL threads
+Message-ID: <1470517283-4301-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+hidapi use NPTL threads functions like pthread_barrier_wait() and
+pthread_barrier_destroy(). So the dependency on threads support
+doesn't come from libusb package but by hidapi itself.
 
- > Hello,
- > On Sat, 06 Aug 2016 12:22:18 +0200, Peter Korsgaard wrote:
+Fixes:
+[microblaze]
+http://autobuild.buildroot.net/results/f7e/f7e778562aa1a65ba46f3b2f705d13ace8870805
+[m68k]
+http://autobuild.buildroot.net/results/2ec/2ecd240ccb15de76017942a8960faac6b3f973b4
 
- >> > Are you sure? According to http://autobuild.buildroot.net/stats/, there
- >> > are still 90 packages without hashes. Moreover, the hashes are
- >> > currently not checked for packages not sourced from http/ftp.  
- >> 
- >> A quick check of package/ seemed to show that the only ones missing were
- >> people with custom _SITE_METHOD, but I didn't check the other dirs.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/hidapi/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- > Hum, quick example: the slirp package doesn't have a custom
- > _SITE_METHOD, it's just using Git. And it doesn't have a hash file.
- > Same psplash, and many other packages.
-
-Yes, I meant packages not using the wget download method, E.G. packages
-with implicit git/hg/svn/.. SITE_METHOD from geturischeme and packages
-explicitly setting SITE_METHOD.
-
- >> So for the packages where we currently can check hashes, we are now
- >> doing it. I might clarify the description for the final release mail.
-
- > This is not completely correct: thanks to Yann's work, the tarballs we
- > produce locally when fetching from Git are reproducible. So technically
- > speaking, all packages fetched from Git could and should now have a
- > hash file.
-
-True, but we haven't started doing that yet (and the git hashes
-basically do the same thing). I do think it makes sense to add explicit
-hash files in the future, but we have to be careful if we ever change
-the way we create tarballs in the future (like our recent change for
-submodules support).
-
+diff --git a/package/hidapi/Config.in b/package/hidapi/Config.in
+index 5119aac..f6a31ba 100644
+--- a/package/hidapi/Config.in
++++ b/package/hidapi/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_HIDAPI
+ 	bool "hidapi"
+ 	depends on BR2_PACKAGE_HAS_UDEV
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBGUDEV
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+@@ -12,5 +12,5 @@ config BR2_PACKAGE_HIDAPI
+ 
+ 	  http://www.signal11.us/oss/hidapi/
+ 
+-comment "hidapi needs udev /dev management and a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_HAS_UDEV
++comment "hidapi needs udev /dev management and a toolchain w/ NPTL threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_PACKAGE_HAS_UDEV
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.5.5
