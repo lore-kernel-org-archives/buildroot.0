@@ -1,35 +1,136 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 06 Aug 2016 09:38:34 +0000
-Subject: [Buildroot] [Bug 9136] make graph-size fails with "ValueError: too
- many values to unpack"
-In-Reply-To: <bug-9136-163@https.bugs.busybox.net/>
-References: <bug-9136-163@https.bugs.busybox.net/>
-Message-ID: <bug-9136-163-tWHyz4kx3G@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 6 Aug 2016 11:39:54 +0200
+Subject: [Buildroot] [git commit] Update for 2016.08-rc1
+Message-ID: <20160806094019.64E24817A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=9136
+commit: https://git.buildroot.net/buildroot/commit/?id=19040c9fb29b3a636b87adf2b1373cffb3dd554e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                    |  2 +-
+ Makefile                   |  2 +-
+ docs/website/download.html | 22 +++++++++++-----------
+ docs/website/news.html     | 24 ++++++++++++++++++++++++
+ 4 files changed, 37 insertions(+), 13 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
-
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Matthias,
-
-Thanks for spotting the issue.
-Patch looks good; can you submit it to the list, as
-explained in the manual, please?
-    https://buildroot.org/downloads/manual/manual.html#submitting-patches
-
-Regards,
-Yann E. MORIN.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/CHANGES b/CHANGES
+index 4d85f0e..544d6ad 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,4 +1,4 @@
+-2016.08, Not yet released:
++2016.08-rc1, Released August 6th, 2016
+ 
+ 	Fixes all over the tree and new features.
+ 
+diff --git a/Makefile b/Makefile
+index 027f21c..6a1c9e1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -46,7 +46,7 @@ else # umask
+ all:
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2016.08-git
++export BR2_VERSION := 2016.08-rc1
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 5900da0..647e8ef 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -41,41 +41,41 @@
+ 	  <p><a href="/downloads/buildroot-2016.05.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-<!--
+-      <h3 style="text-align: center;">Latest release candidate: <b>2016.05-rc3</b></h3>
++
++      <h3 style="text-align: center;">Latest release candidate: <b>2016.08-rc1</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2016.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2016.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2016.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2016.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2016.05-rc3.tar.gz">buildroot-2016.05-rc3.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2016.05-rc3.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2016.08-rc1.tar.gz">buildroot-2016.08-rc1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2016.08-rc1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2016.05-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2016.08-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2016.05-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2016.08-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2016.05-rc3.tar.bz2">buildroot-2016.05-rc3.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2016.05-rc3.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2016.08-rc1.tar.bz2">buildroot-2016.08-rc1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2016.08-rc1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+--->
++
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index bfc1a39..d33b3c9 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,30 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2016.08-rc1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>10 May 2016</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>We have a new release candidate! Lots of
++	  changes all over the tree, see
++	  the <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2016.08-rc1">CHANGES</a>
++	  file for details.
++	</p>
++
++	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2016.08-rc1.tar.bz2">2016.08-rc1
++	    release candidate</a>, and report any
++	  problems found to the
++	  <a href="support.html">mailing list</a> or
++	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
