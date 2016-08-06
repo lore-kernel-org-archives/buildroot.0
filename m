@@ -1,48 +1,65 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  6 Aug 2016 23:01:23 +0200
-Subject: [Buildroot] [PATCH] package/hidapi: depends on NPTL threads
-Message-ID: <1470517283-4301-1-git-send-email-romain.naour@gmail.com>
+Date: Sat,  6 Aug 2016 23:46:37 +0200
+Subject: [Buildroot] [RFC] package/bdwgc: fix pthread detection on uclinux
+	platforms
+Message-ID: <1470519997-8445-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hidapi use NPTL threads functions like pthread_barrier_wait() and
-pthread_barrier_destroy(). So the dependency on threads support
-doesn't come from libusb package but by hidapi itself.
+bdwgc does not recognize "uclinux" as a valid OS part of the target
+tuple which is used by some arm cortex-M toolchains.
 
 Fixes:
-[microblaze]
-http://autobuild.buildroot.net/results/f7e/f7e778562aa1a65ba46f3b2f705d13ace8870805
-[m68k]
-http://autobuild.buildroot.net/results/2ec/2ecd240ccb15de76017942a8960faac6b3f973b4
+http://autobuild.buildroot.net/results/94f/94fbc1e5afe183e5b071d1e869b2d780025389e2
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/hidapi/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Warning: build tested only.
+---
+ .../0004-configure-match-uclinux-pattern.patch     | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/bdwgc/0004-configure-match-uclinux-pattern.patch
 
-diff --git a/package/hidapi/Config.in b/package/hidapi/Config.in
-index 5119aac..f6a31ba 100644
---- a/package/hidapi/Config.in
-+++ b/package/hidapi/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_HIDAPI
- 	bool "hidapi"
- 	depends on BR2_PACKAGE_HAS_UDEV
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBGUDEV
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-@@ -12,5 +12,5 @@ config BR2_PACKAGE_HIDAPI
- 
- 	  http://www.signal11.us/oss/hidapi/
- 
--comment "hidapi needs udev /dev management and a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_HAS_UDEV
-+comment "hidapi needs udev /dev management and a toolchain w/ NPTL threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/bdwgc/0004-configure-match-uclinux-pattern.patch b/package/bdwgc/0004-configure-match-uclinux-pattern.patch
+new file mode 100644
+index 0000000..78bad1c
+--- /dev/null
++++ b/package/bdwgc/0004-configure-match-uclinux-pattern.patch
+@@ -0,0 +1,32 @@
++From f8ecc7fb09adf34a23d324f373e667c81311fc1c Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sat, 6 Aug 2016 23:24:35 +0200
++Subject: [PATCH] configure: match uclinux pattern
++
++bdwgc does not recognize "uclinux" as a valid OS part of the target
++tuple which is used by some arm cortex-M toolchains.
++
++Fixes:
++http://autobuild.buildroot.net/results/94f/94fbc1e5afe183e5b071d1e869b2d780025389e2
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index b1ce2b2..a69d101 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -186,7 +186,7 @@ case "$THREADS" in
++         AC_DEFINE(THREAD_LOCAL_ALLOC)
++         AC_MSG_WARN("Explicit GC_INIT() calls may be required.");
++         ;;
++-     *-*-linux*)
+++     *-*-*linux*)
++         AC_DEFINE(GC_LINUX_THREADS)
++         AC_DEFINE(_REENTRANT)
++         ;;
++-- 
++2.5.5
++
 -- 
 2.5.5
