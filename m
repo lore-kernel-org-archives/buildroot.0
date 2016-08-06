@@ -1,33 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Aug 2016 23:59:09 +0200
-Subject: [Buildroot] [PATCH v2] openblas: P5600 and I6400 cores only
- available for Codescape toolchains
-In-Reply-To: <20160719122741.6a0ac299@free-electrons.com>
-References: <1468843539-29696-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160719122741.6a0ac299@free-electrons.com>
-Message-ID: <20160806235909.2fc28fee@free-electrons.com>
+Date: Sat, 6 Aug 2016 23:59:38 +0200
+Subject: [Buildroot] [git commit] package/hidapi: depends on NPTL threads
+Message-ID: <20160806220034.D7FA9819B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=023bba7797132713c9e656cd45846596a2b16bf5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 19 Jul 2016 12:27:41 +0200, Thomas Petazzoni wrote:
+hidapi use NPTL threads functions like pthread_barrier_wait() and
+pthread_barrier_destroy(). So the dependency on threads support
+doesn't come from libusb package but by hidapi itself.
 
-> If MSA-specific assembly code used in OpenBLAS, or are they just
-> passing -mmsa to tell the compiler to emit MSA code if possible?
+Fixes:
+[microblaze]
+http://autobuild.buildroot.net/results/f7e/f7e778562aa1a65ba46f3b2f705d13ace8870805
+[m68k]
+http://autobuild.buildroot.net/results/2ec/2ecd240ccb15de76017942a8960faac6b3f973b4
 
-Answer: MSA-specific code is used, so it cannot build at all if -mmsa
-is not passed.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/hidapi/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-So I've applied Vicente's patch.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/hidapi/Config.in b/package/hidapi/Config.in
+index 5119aac..f6a31ba 100644
+--- a/package/hidapi/Config.in
++++ b/package/hidapi/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_HIDAPI
+ 	bool "hidapi"
+ 	depends on BR2_PACKAGE_HAS_UDEV
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBGUDEV
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+@@ -12,5 +12,5 @@ config BR2_PACKAGE_HIDAPI
+ 
+ 	  http://www.signal11.us/oss/hidapi/
+ 
+-comment "hidapi needs udev /dev management and a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_HAS_UDEV
++comment "hidapi needs udev /dev management and a toolchain w/ NPTL threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_PACKAGE_HAS_UDEV
