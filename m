@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 6 Aug 2016 17:16:20 +0200
-Subject: [Buildroot] [PATCH 05/16 v3] core: move rule to create basic
- directories
-In-Reply-To: <35c825b427c5e89497aafde9b787986eeeac1ad7.1468750623.git.yann.morin.1998@free.fr>
+Date: Sat, 6 Aug 2016 17:18:40 +0200
+Subject: [Buildroot] [PATCH 06/16 v3] core: introduce a generated
+ kconfig snippet
+In-Reply-To: <e4930f24c2ca2291b55d122df292702136feb91e.1468750623.git.yann.morin.1998@free.fr>
 References: <cover.1468750623.git.yann.morin.1998@free.fr>
- <35c825b427c5e89497aafde9b787986eeeac1ad7.1468750623.git.yann.morin.1998@free.fr>
-Message-ID: <11c12539-f62e-0e2b-c6e3-b6bb2e9a1c12@gmail.com>
+ <e4930f24c2ca2291b55d122df292702136feb91e.1468750623.git.yann.morin.1998@free.fr>
+Message-ID: <814d44c4-fa29-7a61-942a-767f3b23d2a5@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,14 +15,12 @@ To: buildroot@busybox.net
 Hi Yann,
 
 Le 17/07/2016 ? 12:34, Yann E. MORIN a ?crit :
-> Some of those directories will be needed even during configuration, like
-> BUILD_DIR, where we'll store the generated kconfig snippet.
+> Add the infrastructure for adding generated kconfig snippet in the
+> menuconfig.
 > 
-> So, move the rule to create them outside the HAVE_CONFIG block.
+> For now, the kconfig snippet is generated empty, the recipe for filling
+> it in will be introduced in sub-sequent patches.
 
-You mean BR2_HAVE_DOT_CONFIG here, right ?
-
-With that fixed:
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
 Best regards,
@@ -32,44 +30,80 @@ Romain
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Peter Korsgaard <jacmet@uclibc.org>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Samuel Martin <s.martin49@gmail.com>
 > ---
->  Makefile | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
+>  Config.in             | 6 ++++++
+>  Makefile              | 7 ++++++-
+>  docs/manual/manual.mk | 3 +++
+>  3 files changed, 15 insertions(+), 1 deletion(-)
 > 
+> diff --git a/Config.in b/Config.in
+> index 7bb2a01..7f533ce 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -18,6 +18,10 @@ config BR2_EXTERNAL
+>  	string
+>  	option env="BR2_EXTERNAL"
+>  
+> +config BR2_BUILD_DIR
+> +	string
+> +	option env="BUILD_DIR"
+> +
+>  # Hidden config symbols for packages to check system gcc version
+>  config BR2_HOST_GCC_VERSION
+>  	string
+> @@ -763,3 +767,5 @@ menu "User-provided options"
+>  source "$BR2_EXTERNAL/Config.in"
+>  
+>  endmenu
+> +
+> +source "$BR2_BUILD_DIR/.br2-external.in"
 > diff --git a/Makefile b/Makefile
-> index 6f947f3..d4dc1c5 100644
+> index d4dc1c5..39a1507 100644
 > --- a/Makefile
 > +++ b/Makefile
-> @@ -200,6 +200,15 @@ LEGAL_LICENSES_TXT_HOST = $(LEGAL_INFO_DIR)/host-licenses.txt
->  LEGAL_WARNINGS = $(LEGAL_INFO_DIR)/.warnings
->  LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
+> @@ -760,7 +760,7 @@ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+>  HOSTCFLAGS = $(CFLAGS_FOR_BUILD)
+>  export HOSTCFLAGS
 >  
-> +################################################################################
-> +#
-> +# staging and target directories do NOT list these as
-> +# dependencies anywhere else
-> +#
-> +################################################################################
-> +$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
-> +	@mkdir -p $@
+> -prepare-kconfig: outputmakefile
+> +prepare-kconfig: outputmakefile $(BUILD_DIR)/.br2-external.in
+>  
+>  $(BUILD_DIR)/buildroot-config/%onf:
+>  	mkdir -p $(@D)/lxdialog
+> @@ -779,6 +779,7 @@ COMMON_CONFIG_ENV = \
+>  	BR2_CONFIG=$(BR2_CONFIG) \
+>  	BR2_EXTERNAL=$(BR2_EXTERNAL) \
+>  	HOST_GCC_VERSION="$(HOSTCC_VERSION)" \
+> +	BUILD_DIR=$(BUILD_DIR) \
+>  	SKIP_LEGACY=
+>  
+>  xconfig: $(BUILD_DIR)/buildroot-config/qconf prepare-kconfig
+> @@ -879,6 +880,10 @@ ifeq ($(NEED_WRAPPER),y)
+>  	$(Q)$(TOPDIR)/support/scripts/mkmakefile $(TOPDIR) $(O)
+>  endif
+>  
+> +.PHONY: $(BUILD_DIR)/.br2-external.in
+> +$(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
+> +	@touch $@
 > +
->  BR2_CONFIG = $(CONFIG_DIR)/.config
+>  # printvars prints all the variables currently defined in our
+>  # Makefiles. Alternatively, if a non-empty VARS variable is passed,
+>  # only the variables matching the make pattern passed in VARS are
+> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+> index caf080a..b26f912 100644
+> --- a/docs/manual/manual.mk
+> +++ b/docs/manual/manual.mk
+> @@ -7,6 +7,9 @@
+>  MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
+>  MANUAL_RESOURCES = $(TOPDIR)/docs/images
 >  
->  # Pull in the user's configuration file
-> @@ -496,15 +505,6 @@ world: target-post-image
->  	legal-info legal-info-prepare legal-info-clean printvars help \
->  	list-defconfigs target-finalize target-post-image source-check
->  
-> -################################################################################
-> -#
-> -# staging and target directories do NOT list these as
-> -# dependencies anywhere else
-> -#
-> -################################################################################
-> -$(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR_TARGET) $(REDIST_SOURCES_DIR_HOST):
-> -	@mkdir -p $@
-> -
->  # Populating the staging with the base directories is handled by the skeleton package
->  $(STAGING_DIR):
->  	@mkdir -p $(STAGING_DIR)
+> +# Ensure the kconfig snippet is generated (for MANUAL_GEN_LISTS, below):
+> +MANUAL_DEPENDENCIES += prepare-kconfig
+> +
+>  # Our manual needs to generate lists
+>  define MANUAL_GEN_LISTS
+>  	$(Q)$(call MESSAGE,"Updating the manual lists...")
 > 
