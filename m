@@ -1,43 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Aug 2016 12:08:42 +0200
-Subject: [Buildroot] Buildroot 2016.08-rc1 released
-In-Reply-To: <87lh0a9qcr.fsf@dell.be.48ers.dk>
-References: <87lh0a9qcr.fsf@dell.be.48ers.dk>
-Message-ID: <20160806120842.1574e227@free-electrons.com>
+Date: Sat, 6 Aug 2016 12:12:05 +0200
+Subject: [Buildroot] [git commit] package/inotify-tools: Fix compilation
+	with gcc6
+Message-ID: <20160806101213.E2A9E81D87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=aba34d92f400ae8cd33f55315d230f64b5c8d07c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 06 Aug 2016 11:52:20 +0200, Peter Korsgaard wrote:
+Fixes
+http://autobuild.buildroot.net/results/abc/abcaf70523863a4cd096a1b063be2e742355849f/
 
-> Buildroot 2016.08-rc1 is released - Go download it at:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/inotify-tools/0001-gcc6.patch | 49 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-Thanks for doing this release!
-
->  - Hash files for integritry validation have been added for all
->    packages.
-
-Are you sure? According to http://autobuild.buildroot.net/stats/, there
-are still 90 packages without hashes. Moreover, the hashes are
-currently not checked for packages not sourced from http/ftp.
-
-Another very important thing which I believe should be mentioned in the
-final release e-mail is the fact that the dependencies of host packages
-are no longer derived from the dependencies of the corresponding target
-package. This might very well cause issues for users having their own
-packages.
-
-Last but not least, could you announce the Buildroot Developers meeting
-in the final release e-mail?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/inotify-tools/0001-gcc6.patch b/package/inotify-tools/0001-gcc6.patch
+new file mode 100644
+index 0000000..aae622e
+--- /dev/null
++++ b/package/inotify-tools/0001-gcc6.patch
+@@ -0,0 +1,49 @@
++From 5fe3ba82134d8b85adc69cf1d6c5742b4bde20b4 Mon Sep 17 00:00:00 2001
++From: James Knight <james.d.knight@live.com>
++Date: Thu, 16 Jun 2016 00:00:57 -0400
++Subject: [PATCH] correct code alignment
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++The following replaces the indented section of code from spaces to tabs.
++No functional changes. Aside from consistency, this resolves a GCC 6
++build issue with the flag `-Werror=misleading-indentation` enabled:
++
++    inotifywait.c: In function ???output_event_csv???:
++    inotifywait.c:126:5: error: this ???if??? clause does not guard...
++                                [-Werror=misleading-indentation]
++         if (filename != NULL)
++         ^~
++    inotifywait.c:129:2: note: ...this statement, but the latter is
++                               misleadingly indented as if it is guarded
++                               by the ???if???
++      printf("%s,", csv_escape( inotifytools_event_to_str( event->mask )
++                                                                    ) );
++      ^~~~~~
++
++Signed-off-by: James Knight <james.d.knight@live.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++(downloaded from upstream pull request
++ https://github.com/rvoicilas/inotify-tools/pull/65)
++---
++ src/inotifywait.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/inotifywait.c b/src/inotifywait.c
++index c5ce5e3..404a85b 100644
++--- a/src/inotifywait.c
+++++ b/src/inotifywait.c
++@@ -122,9 +122,9 @@ void validate_format( char * fmt ) {
++ 
++ 
++ void output_event_csv( struct inotify_event * event ) {
++-    char *filename = csv_escape(inotifytools_filename_from_wd(event->wd));
++-    if (filename != NULL)
++-        printf("%s,", filename);
+++	char *filename = csv_escape(inotifytools_filename_from_wd(event->wd));
+++	if (filename != NULL)
+++		printf("%s,", filename);
++ 
++ 	printf("%s,", csv_escape( inotifytools_event_to_str( event->mask ) ) );
++ 	if ( event->len > 0 )
