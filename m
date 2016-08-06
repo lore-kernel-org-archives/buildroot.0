@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Aug 2016 21:55:40 +0200
-Subject: [Buildroot] [PATCH] package/enlightenment: fix build issue
- without libuuid
-In-Reply-To: <1470425509-26718-1-git-send-email-romain.naour@gmail.com>
-References: <1470425509-26718-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160806215540.38dff27b@free-electrons.com>
+Date: Sat, 6 Aug 2016 21:55:46 +0200
+Subject: [Buildroot] [PATCH] package/lttng-libust: fix build with musl
+In-Reply-To: <1470487458-29015-1-git-send-email-yann.morin.1998@free.fr>
+References: <1470487458-29015-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160806215546.0ac9c5aa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  5 Aug 2016 21:31:49 +0200, Romain Naour wrote:
-> Since enlightenment 0.20 uuid.h is always included in e_pixmap.c but
-> libuuid is checked at configure time only when wayland support is
-> enabled.
-> 
-> Include uuid.h must guarded by HAVE_WAYLAND.
+On Sat,  6 Aug 2016 14:44:18 +0200, Yann E. MORIN wrote:
+> Backport two patches from upstream to fix build with musl.
 > 
 > Fixes:
->   CC       src/bin/src_bin_enlightenment-e_pixmap.o
-> src/bin/e_pixmap.c:16:18: fatal error: uuid.h: No such file or directory
+>     http://autobuild.buildroot.org/results/dcb/dcb6c3aadf6f955016cf3c3f9b917cbec6d29342/
+>     http://autobuild.buildroot.org/results/deb/deb80eea5ceae3e7f8e0549596dce2fb6a1e7596/
+>     http://autobuild.buildroot.org/results/91e/91e64477864825c39911e3f3d0a2459f2987c209/
+>     [...and a lot more...]
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Philippe Proulx <eeppeliteloop@gmail.com>
+> Cc: Samuel Martin <s.martin49@gmail.com>
 > ---
->  ...uid.h-only-when-Wayland-support-is-enable.patch | 39 ++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/enlightenment/0001-E-include-uuid.h-only-when-Wayland-support-is-enable.patch
+>  package/lttng-libust/lttng-libust.hash | 4 ++++
+>  package/lttng-libust/lttng-libust.mk   | 4 ++++
+>  2 files changed, 8 insertions(+)
 
 Applied to master, thanks.
 
