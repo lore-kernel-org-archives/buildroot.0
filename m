@@ -1,56 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Aug 2016 21:53:58 +0200
-Subject: [Buildroot] [git commit] package/lttng-libust: fix build with musl
-Message-ID: <20160806195629.AEEDA7FB86@busybox.osuosl.org>
+Date: Sat, 6 Aug 2016 21:56:16 +0200
+Subject: [Buildroot] [git commit] libpjsip: fix m68k uclinux compile
+Message-ID: <20160806195629.BDFF37FB86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1dbd48ddc6e01e3a38e97d95af8bd96b5528fb1
+commit: https://git.buildroot.net/buildroot/commit/?id=1e11e8b3c3ddf028d3ea14af4bd6ab6bbcde84ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Backport two patches from upstream to fix build with musl.
+The GCC manual suggest when getting:
+relocation truncated to fit: R_68K_GOT16O foobar
+to use -mxgot.
 
 Fixes:
-    http://autobuild.buildroot.org/results/dcb/dcb6c3aadf6f955016cf3c3f9b917cbec6d29342/
-    http://autobuild.buildroot.org/results/deb/deb80eea5ceae3e7f8e0549596dce2fb6a1e7596/
-    http://autobuild.buildroot.org/results/91e/91e64477864825c39911e3f3d0a2459f2987c209/
-    [...and a lot more...]
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Philippe Proulx <eeppeliteloop@gmail.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
+  http://autobuild.buildroot.org/results/e8cdfaf8e2da29a855b5bc09774f3aadee087737/
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lttng-libust/lttng-libust.hash | 4 ++++
- package/lttng-libust/lttng-libust.mk   | 4 ++++
- 2 files changed, 8 insertions(+)
+ package/libpjsip/libpjsip.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
-index 57c7e00..1494acf 100644
---- a/package/lttng-libust/lttng-libust.hash
-+++ b/package/lttng-libust/lttng-libust.hash
-@@ -1,2 +1,6 @@
- # http://www.lttng.org/files/lttng-ust/lttng-ust-2.7.1.tar.bz2.sha1
- sha1  597ebecb885debb58c263de57f30b1096d4eefc6  lttng-ust-2.7.1.tar.bz2
-+
-+# Locally computed
-+sha1  2e79c98e458b2e052930fb81441e6ca8377a2ed7 787364e8bac9a146f9d65c763633c2b75eb76463.patch
-+sha1  cf77ec415111f77573be7917d9b62d8e49dc6304 30307a67b48641875b122d8f832bbfb454e95d92.patch
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index 4a65057..61ffed4 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -10,6 +10,10 @@ LTTNG_LIBUST_SOURCE = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
- LTTNG_LIBUST_LICENSE = LGPLv2.1, MIT (system headers), GPLv2 (liblttng-ust-ctl/ustctl.c used by lttng-sessiond)
- LTTNG_LIBUST_LICENSE_FILES = COPYING
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index ebb5897..2b5e18f 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -13,9 +13,16 @@ LIBPJSIP_LICENSE_FILES = COPYING
+ LIBPJSIP_INSTALL_STAGING = YES
+ LIBPJSIP_MAKE = $(MAKE1)
  
-+LTTNG_LIBUST_PATCH = \
-+	https://github.com/lttng/lttng-ust/commit/787364e8bac9a146f9d65c763633c2b75eb76463.patch \
-+	https://github.com/lttng/lttng-ust/commit/30307a67b48641875b122d8f832bbfb454e95d92.patch
++LIBPJSIP_CFLAGS = $(TARGET_CFLAGS) -DPJ_HAS_IPV6=1
 +
- LTTNG_LIBUST_INSTALL_STAGING = YES
- LTTNG_LIBUST_DEPENDENCIES = liburcu util-linux
++# relocation truncated to fit: R_68K_GOT16O
++ifeq ($(BR2_m68k_cf),y)
++LIBPJSIP_CFLAGS += -mxgot
++endif
++
+ LIBPJSIP_CONF_ENV = \
+ 	LD="$(TARGET_CC)" \
+-	CFLAGS="$(TARGET_CFLAGS) -DPJ_HAS_IPV6=1"
++	CFLAGS="$(LIBPJSIP_CFLAGS)"
  
+ LIBPJSIP_CONF_OPTS = \
+ 	--disable-sound \
