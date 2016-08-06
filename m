@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Aug 2016 23:58:17 +0200
-Subject: [Buildroot] [PATCH] package/hidapi: depends on NPTL threads
-In-Reply-To: <1470517283-4301-1-git-send-email-romain.naour@gmail.com>
-References: <1470517283-4301-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160806235817.4c402ef7@free-electrons.com>
+Date: Sat, 6 Aug 2016 23:58:44 +0200
+Subject: [Buildroot] [PATCH v2] openblas: P5600 and I6400 cores only
+ available for Codescape toolchains
+In-Reply-To: <1468843539-29696-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1468843539-29696-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160806235844.45a24ba2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  6 Aug 2016 23:01:23 +0200, Romain Naour wrote:
-
+On Mon, 18 Jul 2016 13:05:39 +0100, Vicente Olivert Riera wrote:
+> These two MIPS cores are built with MSA support (-mmsa) which is
+> currently in GCC trunk. The only toolchains that support it right now
+> are Codescape MTI and Codescape IMG from Imagination Technologies.
+> 
 > Fixes:
-> [microblaze]
-> http://autobuild.buildroot.net/results/f7e/f7e778562aa1a65ba46f3b2f705d13ace8870805
-> [m68k]
-> http://autobuild.buildroot.net/results/2ec/2ecd240ccb15de76017942a8960faac6b3f973b4
+>   http://autobuild.buildroot.net/results/af5/af5e9f10287aaf9b9be6228ad7d12b2d926f8051/
+>   http://autobuild.buildroot.net/results/b20/b201e4072b0b634d5ac86781aee24c698f88d689/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+> Changes v1 -> v2:
+>  - Amend commit log: s/Imagiation/Imagination/
 
-Those two toolchains are broken: their configuration pretends that
-thread support is available, but in fact it is not. This is due to
-https://patchwork.ozlabs.org/patch/656252/.
-
-That being said, I indeed don't see an implementation of
-pthread_barrier_destroy() in the linuxthreads implementation of uClibc.
+Applied to master, thanks.
 
 Thomas
 -- 
