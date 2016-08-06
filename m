@@ -1,9 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  6 Aug 2016 09:41:59 +0200
-Subject: [Buildroot] [PATCH 2/2] package/vdr-plugin-vnsiserver: new package
-In-Reply-To: <1470469319-11791-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1470469319-11791-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1470469319-11791-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  6 Aug 2016 09:41:58 +0200
+Subject: [Buildroot] [PATCH 1/2] package/vdr: new package
+Message-ID: <1470469319-11791-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,78 +10,250 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                                  |  1 +
- package/vdr-plugin-vnsiserver/Config.in            |  9 ++++++++
- .../vdr-plugin-vnsiserver.hash                     |  2 ++
- .../vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk | 25 ++++++++++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/vdr-plugin-vnsiserver/Config.in
- create mode 100644 package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash
- create mode 100644 package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
+ package/Config.in                 |  1 +
+ package/vdr/0001-getloadavg.patch | 55 +++++++++++++++++++++++++++++++
+ package/vdr/0002-libjpeg.patch    | 40 +++++++++++++++++++++++
+ package/vdr/Config.in             | 25 ++++++++++++++
+ package/vdr/vdr.hash              |  4 +++
+ package/vdr/vdr.mk                | 68 +++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 193 insertions(+)
+ create mode 100644 package/vdr/0001-getloadavg.patch
+ create mode 100644 package/vdr/0002-libjpeg.patch
+ create mode 100644 package/vdr/Config.in
+ create mode 100644 package/vdr/vdr.hash
+ create mode 100644 package/vdr/vdr.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index a8b9d10..f3ac078 100644
+index 645fa29..a8b9d10 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1598,6 +1598,7 @@ endif
+@@ -1597,6 +1597,7 @@ endif
+ 	source "package/ushare/Config.in"
  	source "package/ussp-push/Config.in"
  	source "package/vde2/Config.in"
- 	source "package/vdr/Config.in"
-+	source "package/vdr-plugin-vnsiserver/Config.in"
++	source "package/vdr/Config.in"
  	source "package/vnstat/Config.in"
  	source "package/vpnc/Config.in"
  	source "package/vsftpd/Config.in"
-diff --git a/package/vdr-plugin-vnsiserver/Config.in b/package/vdr-plugin-vnsiserver/Config.in
+diff --git a/package/vdr/0001-getloadavg.patch b/package/vdr/0001-getloadavg.patch
 new file mode 100644
-index 0000000..0a0ab8d
+index 0000000..3937c83
 --- /dev/null
-+++ b/package/vdr-plugin-vnsiserver/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_VDR_PLUGIN_VNSISERVER
-+	bool "vdr-plugin-vnsiserver"
-+	depends on BR2_PACKAGE_VDR
-+	help
-+	  VDR plugin to handle KODI clients.
-+	  The vdr-plugin-vnsiserver is able to handle serveral KODI
-+	  clients connecting via the VNSI addon.
++++ b/package/vdr/0001-getloadavg.patch
+@@ -0,0 +1,55 @@
++Fix compilation with uClibc
 +
-+	  https://github.com/FernetMenta/vdr-plugin-vnsiserver
-diff --git a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash
++Ported from
++https://github.com/stschake/buildroot-grasshopper/blob/master/package/torsmo/torsmo-0.18-uclibc-getloadavg.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uwNr vdr-2.3.1.org/skinlcars.c vdr-2.3.1/skinlcars.c
++--- vdr-2.3.1.org/skinlcars.c	2015-09-01 12:07:07.000000000 +0200
+++++ vdr-2.3.1/skinlcars.c	2016-07-31 21:00:11.000000000 +0200
++@@ -1099,6 +1099,44 @@
++      }
++ }
++ 
+++/* uclibc and dietlibc do not have this junk -ReneR */
+++#if defined (__UCLIBC__) || defined (__dietlibc__)
+++static int getloadavg (double loadavg[], int nelem)
+++{
+++  int fd;
+++
+++  fd = open ("/proc/loadavg", O_RDONLY);
+++  if (fd < 0)
+++    return -1;
+++  else
+++    {
+++      char buf[65], *p;
+++      ssize_t nread;
+++      int i;
+++
+++      nread = read (fd, buf, sizeof buf - 1);
+++      close (fd);
+++      if (nread <= 0)
+++	return -1;
+++      buf[nread - 1] = '\0';
+++
+++      if (nelem > 3)
+++	nelem = 3;
+++      p = buf;
+++      for (i = 0; i < nelem; ++i)
+++	{
+++	  char *endp;
+++	  loadavg[i] = strtod (p, &endp);
+++	  if (endp == p)
+++	    return -1;
+++	  p = endp;
+++	}
+++
+++      return i;
+++    }
+++}
+++#endif
+++
++ void cSkinLCARSDisplayMenu::DrawLoad(void)
++ {
++   if (yb04) {
+diff --git a/package/vdr/0002-libjpeg.patch b/package/vdr/0002-libjpeg.patch
 new file mode 100644
-index 0000000..cf403f5
+index 0000000..dbd1f12
 --- /dev/null
-+++ b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 fd00fb6d833cad6a32a0d8259bb125abdf1716680650ba24b34bca2201745877  vdr-plugin-vnsiserver-v1.5.0.tar.gz
-diff --git a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
++++ b/package/vdr/0002-libjpeg.patch
+@@ -0,0 +1,40 @@
++Fix compilation with libjpeg
++
++Patch inspired by upstream board:
++http://www.vdr-portal.de/board16-video-disk-recorder/board4-vdr-installation/p1189959-vdr-2-05-mit-libjpeg-9a-kommt-nicht-aus/#post1189959
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr vdr-2.3.1.org/tools.c vdr-2.3.1/tools.c
++--- vdr-2.3.1.org/tools.c	2015-09-10 15:17:55.000000000 +0200
+++++ vdr-2.3.1/tools.c	2016-08-01 06:37:44.000000000 +0200
++@@ -1254,15 +1254,15 @@
++         }
++      else {
++         esyslog("ERROR: out of memory");
++-        return false;
+++        return FALSE;
++         }
++      if (jcd->mem) {
++         cinfo->dest->next_output_byte = jcd->mem + Used;
++         cinfo->dest->free_in_buffer = jcd->size - Used;
++-        return true;
+++        return TRUE;
++         }
++      }
++-  return false;
+++  return FALSE;
++ }
++ 
++ static void JpegCompressTermDestination(j_compress_ptr cinfo)
++@@ -1307,8 +1307,8 @@
++   cinfo.in_color_space = JCS_RGB;
++ 
++   jpeg_set_defaults(&cinfo);
++-  jpeg_set_quality(&cinfo, Quality, true);
++-  jpeg_start_compress(&cinfo, true);
+++  jpeg_set_quality(&cinfo, Quality, TRUE);
+++  jpeg_start_compress(&cinfo, TRUE);
++ 
++   int rs = Width * 3;
++   JSAMPROW rp[Height];
+diff --git a/package/vdr/Config.in b/package/vdr/Config.in
 new file mode 100644
-index 0000000..aaa0859
+index 0000000..ec1fec0
 --- /dev/null
-+++ b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
++++ b/package/vdr/Config.in
 @@ -0,0 +1,25 @@
++config BR2_PACKAGE_VDR
++	bool "vdr"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on !BR2_TOOLCHAIN_USES_MUSL # _nl_msg_cat_cntr
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
++	select BR2_PACKAGE_FONTCONFIG
++	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBCAP
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++	help
++	  This project describes how to build your own digital satellite
++	  receiver and Video Disk Recorder.
++
++	  http://www.tvdr.de
++
++comment "vdr needs a glibc or uClibc toolchain w/ C++, dynamic library, NPTL, wchar"
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
++		BR2_TOOLCHAIN_USES_MUSL || !BR2_USE_WCHAR
+diff --git a/package/vdr/vdr.hash b/package/vdr/vdr.hash
+new file mode 100644
+index 0000000..f076e58
+--- /dev/null
++++ b/package/vdr/vdr.hash
+@@ -0,0 +1,4 @@
++# From https://www.linuxtv.org/pipermail/vdr/2015-September/028872.html
++md5 391c2ed60e2f7d24563fe3ed5854bc4f  vdr-2.3.1.tar.bz2
++# Locally computed
++sha256 456d3f0ceb699b92ebeaf9ff4c0c68979724d10b01a89d5250133e6f4c262fa7  vdr-2.3.1.tar.bz2
+diff --git a/package/vdr/vdr.mk b/package/vdr/vdr.mk
+new file mode 100644
+index 0000000..862e20f
+--- /dev/null
++++ b/package/vdr/vdr.mk
+@@ -0,0 +1,68 @@
 +################################################################################
 +#
-+# vdr-plugin-vnsiserver
++# vdr
 +#
 +################################################################################
 +
-+VDR_PLUGIN_VNSISERVER_VERSION = v1.5.0
-+VDR_PLUGIN_VNSISERVER_SITE = $(call github,FernetMenta,vdr-plugin-vnsiserver,$(VDR_PLUGIN_VNSISERVER_VERSION))
-+VDR_PLUGIN_VNSISERVER_LICENSE = GPLv2+
-+VDR_PLUGIN_VNSISERVER_LICENSE_FILES = COPYING
-+VDR_PLUGIN_VNSISERVER_DEPENDENCIES = vdr
++VDR_VERSION = 2.3.1
++VDR_SOURCE = vdr-$(VDR_VERSION).tar.bz2
++VDR_SITE = ftp://ftp.tvdr.de/vdr/Developer
++VDR_LICENSE = GPLv2+
++VDR_LICENSE_FILES = COPYING
++VDR_INSTALL_STAGING = YES
++VDR_DEPENDENCIES = \
++	freetype \
++	fontconfig \
++	jpeg \
++	libcap
 +
-+VDR_PLUGIN_VNSISERVER_CXXFLAGS = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11 -fPIC"
++VDR_INCLUDE_DIRS = -I$(STAGING_DIR)/usr/include/freetype2
++VDR_MAKE_FLAGS = \
++	NO_KBD=yes \
++	PLUGINLIBDIR=/usr/lib/vdr \
++	PREFIX=/usr \
++	VIDEODIR=/var/lib/vdr
 +
-+define VDR_PLUGIN_VNSISERVER_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		$(VDR_PLUGIN_VNSISERVER_CXXFLAGS)
++ifeq ($(BR2_NEEDS_GETTEXT),y)
++VDR_DEPENDENCIES += gettext
++VDR_LDFLAGS = -lintl
++endif
++
++ifeq ($(BR2_PACKAGE_LIBFRIBIDI),y)
++VDR_DEPENDENCIES += libfribidi
++VDR_INCLUDE_DIRS += -I$(STAGING_DIR)/usr/include/fribidi
++VDR_LDFLAGS += -lfribidi
++VDR_MAKE_FLAGS += BIDI=1
++endif
++
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++VDR_DEPENDENCIES += libiconv
++VDR_LDFLAGS += -liconv
++endif
++
++VDR_MAKE_ENV = \
++	INCLUDES="$(VDR_INCLUDE_DIRS)" \
++	LDFLAGS="$(VDR_LDFLAGS)" \
++	$(VDR_MAKE_FLAGS)
++
++define VDR_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(VDR_MAKE_ENV) \
++		vdr vdr.pc
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(VDR_MAKE_ENV) \
++		include-dir
 +endef
 +
-+define VDR_PLUGIN_VNSISERVER_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		install DESTDIR=$(TARGET_DIR) LIBDIR=/usr/lib/vdr
++define VDR_INSTALL_STAGING_CMDS
++	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(VDR_MAKE_ENV) \
++		DESTDIR=$(STAGING_DIR) \
++		install-dirs install-bin install-conf install-includes \
++		install-pc
++endef
++
++define VDR_INSTALL_TARGET_CMDS
++	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(VDR_MAKE_ENV) \
++		DESTDIR=$(TARGET_DIR) \
++		install-dirs install-bin install-conf
 +endef
 +
 +$(eval $(generic-package))
