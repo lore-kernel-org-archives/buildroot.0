@@ -1,261 +1,117 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  6 Aug 2016 09:41:58 +0200
-Subject: [Buildroot] [PATCH 1/2] package/vdr: new package
-Message-ID: <1470469319-11791-1-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 6 Aug 2016 11:24:52 +0200
+Subject: [Buildroot] [git commit] CHANGES: update with recent changes
+Message-ID: <20160806092514.B579F80809@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/Config.in                 |  1 +
- package/vdr/0001-getloadavg.patch | 55 +++++++++++++++++++++++++++++++
- package/vdr/0002-libjpeg.patch    | 40 +++++++++++++++++++++++
- package/vdr/Config.in             | 25 ++++++++++++++
- package/vdr/vdr.hash              |  4 +++
- package/vdr/vdr.mk                | 68 +++++++++++++++++++++++++++++++++++++++
- 6 files changed, 193 insertions(+)
- create mode 100644 package/vdr/0001-getloadavg.patch
- create mode 100644 package/vdr/0002-libjpeg.patch
- create mode 100644 package/vdr/Config.in
- create mode 100644 package/vdr/vdr.hash
- create mode 100644 package/vdr/vdr.mk
+commit: https://git.buildroot.net/buildroot/commit/?id=960cc977006ba84442c9fa447e1fbf1c4512a743
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/Config.in b/package/Config.in
-index 645fa29..a8b9d10 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1597,6 +1597,7 @@ endif
- 	source "package/ushare/Config.in"
- 	source "package/ussp-push/Config.in"
- 	source "package/vde2/Config.in"
-+	source "package/vdr/Config.in"
- 	source "package/vnstat/Config.in"
- 	source "package/vpnc/Config.in"
- 	source "package/vsftpd/Config.in"
-diff --git a/package/vdr/0001-getloadavg.patch b/package/vdr/0001-getloadavg.patch
-new file mode 100644
-index 0000000..3937c83
---- /dev/null
-+++ b/package/vdr/0001-getloadavg.patch
-@@ -0,0 +1,55 @@
-+Fix compilation with uClibc
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES | 91 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
+
+diff --git a/CHANGES b/CHANGES
+index 193b4df..4d85f0e 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,94 @@
++2016.08, Not yet released:
 +
-+Ported from
-+https://github.com/stschake/buildroot-grasshopper/blob/master/package/torsmo/torsmo-0.18-uclibc-getloadavg.patch
++	Fixes all over the tree and new features.
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++	Toolchain: Fortran support added. eglibc support removed, musl
++	support no longer experimental. Blackfin and Microblaze
++	support for internal uClibc-ng toolchain, m68k/coldfire
++	improvements. The check for unsafe (build host) directories
++	access (/usr/include and /usr/lib) is now enabled by default.
++	Unused locales are now purged by default to save space (and
++	the default list of locales shrunk). The option to control
++	this has now moved from the toolchain menu to system
++	configuration.
 +
-+diff -uwNr vdr-2.3.1.org/skinlcars.c vdr-2.3.1/skinlcars.c
-+--- vdr-2.3.1.org/skinlcars.c	2015-09-01 12:07:07.000000000 +0200
-++++ vdr-2.3.1/skinlcars.c	2016-07-31 21:00:11.000000000 +0200
-+@@ -1099,6 +1099,44 @@
-+      }
-+ }
-+ 
-++/* uclibc and dietlibc do not have this junk -ReneR */
-++#if defined (__UCLIBC__) || defined (__dietlibc__)
-++static int getloadavg (double loadavg[], int nelem)
-++{
-++  int fd;
-++
-++  fd = open ("/proc/loadavg", O_RDONLY);
-++  if (fd < 0)
-++    return -1;
-++  else
-++    {
-++      char buf[65], *p;
-++      ssize_t nread;
-++      int i;
-++
-++      nread = read (fd, buf, sizeof buf - 1);
-++      close (fd);
-++      if (nread <= 0)
-++	return -1;
-++      buf[nread - 1] = '\0';
-++
-++      if (nelem > 3)
-++	nelem = 3;
-++      p = buf;
-++      for (i = 0; i < nelem; ++i)
-++	{
-++	  char *endp;
-++	  loadavg[i] = strtod (p, &endp);
-++	  if (endp == p)
-++	    return -1;
-++	  p = endp;
-++	}
-++
-++      return i;
-++    }
-++}
-++#endif
-++
-+ void cSkinLCARSDisplayMenu::DrawLoad(void)
-+ {
-+   if (yb04) {
-diff --git a/package/vdr/0002-libjpeg.patch b/package/vdr/0002-libjpeg.patch
-new file mode 100644
-index 0000000..dbd1f12
---- /dev/null
-+++ b/package/vdr/0002-libjpeg.patch
-@@ -0,0 +1,40 @@
-+Fix compilation with libjpeg
++	Legal info improvements: sources are now hardlinked instead of
++	copied if possible to save space. Patches and extra downloads
++	are also saved.
 +
-+Patch inspired by upstream board:
-+http://www.vdr-portal.de/board16-video-disk-recorder/board4-vdr-installation/p1189959-vdr-2-05-mit-libjpeg-9a-kommt-nicht-aus/#post1189959
++	An experimental configuration knob (BR2_REPRODUCIBLE) has been
++	added to make the builds more reproducible (E.G. less
++	differences in the binary output between builds of the same
++	configuration). This is still work in progress.
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++	An option to execute a custom script inside the fakeroot
++	environment used to the generate the filesystem (E.G. to tweak
++	permissions or similar) has been added.
 +
-+diff -uNr vdr-2.3.1.org/tools.c vdr-2.3.1/tools.c
-+--- vdr-2.3.1.org/tools.c	2015-09-10 15:17:55.000000000 +0200
-++++ vdr-2.3.1/tools.c	2016-08-01 06:37:44.000000000 +0200
-+@@ -1254,15 +1254,15 @@
-+         }
-+      else {
-+         esyslog("ERROR: out of memory");
-+-        return false;
-++        return FALSE;
-+         }
-+      if (jcd->mem) {
-+         cinfo->dest->next_output_byte = jcd->mem + Used;
-+         cinfo->dest->free_in_buffer = jcd->size - Used;
-+-        return true;
-++        return TRUE;
-+         }
-+      }
-+-  return false;
-++  return FALSE;
-+ }
-+ 
-+ static void JpegCompressTermDestination(j_compress_ptr cinfo)
-+@@ -1307,8 +1307,8 @@
-+   cinfo.in_color_space = JCS_RGB;
-+ 
-+   jpeg_set_defaults(&cinfo);
-+-  jpeg_set_quality(&cinfo, Quality, true);
-+-  jpeg_start_compress(&cinfo, true);
-++  jpeg_set_quality(&cinfo, Quality, TRUE);
-++  jpeg_start_compress(&cinfo, TRUE);
-+ 
-+   int rs = Width * 3;
-+   JSAMPROW rp[Height];
-diff --git a/package/vdr/Config.in b/package/vdr/Config.in
-new file mode 100644
-index 0000000..ec1fec0
---- /dev/null
-+++ b/package/vdr/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_PACKAGE_VDR
-+	bool "vdr"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # _nl_msg_cat_cntr
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-+	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBCAP
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	help
-+	  This project describes how to build your own digital satellite
-+	  receiver and Video Disk Recorder.
++	Git support now supports git submodules if
++	<pkg>_GIT_SUBMODULES is enabled.
 +
-+	  http://www.tvdr.de
++	Hash files for integritry validation have been added for all
++	packages.
 +
-+comment "vdr needs a glibc or uClibc toolchain w/ C++, dynamic library, NPTL, wchar"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
-+		BR2_TOOLCHAIN_USES_MUSL || !BR2_USE_WCHAR
-diff --git a/package/vdr/vdr.hash b/package/vdr/vdr.hash
-new file mode 100644
-index 0000000..f076e58
---- /dev/null
-+++ b/package/vdr/vdr.hash
-@@ -0,0 +1,4 @@
-+# From https://www.linuxtv.org/pipermail/vdr/2015-September/028872.html
-+md5 391c2ed60e2f7d24563fe3ed5854bc4f  vdr-2.3.1.tar.bz2
-+# Locally computed
-+sha256 456d3f0ceb699b92ebeaf9ff4c0c68979724d10b01a89d5250133e6f4c262fa7  vdr-2.3.1.tar.bz2
-diff --git a/package/vdr/vdr.mk b/package/vdr/vdr.mk
-new file mode 100644
-index 0000000..862e20f
---- /dev/null
-+++ b/package/vdr/vdr.mk
-@@ -0,0 +1,68 @@
-+################################################################################
-+#
-+# vdr
-+#
-+################################################################################
++	Scanpypi utility to help creating packages from the Python
++	package index (pypi) has been added.
 +
-+VDR_VERSION = 2.3.1
-+VDR_SOURCE = vdr-$(VDR_VERSION).tar.bz2
-+VDR_SITE = ftp://ftp.tvdr.de/vdr/Developer
-+VDR_LICENSE = GPLv2+
-+VDR_LICENSE_FILES = COPYING
-+VDR_INSTALL_STAGING = YES
-+VDR_DEPENDENCIES = \
-+	freetype \
-+	fontconfig \
-+	jpeg \
-+	libcap
++	The makedevs utility now has support for adding file
++	capabilities using extended attributes.
 +
-+VDR_INCLUDE_DIRS = -I$(STAGING_DIR)/usr/include/freetype2
-+VDR_MAKE_FLAGS = \
-+	NO_KBD=yes \
-+	PLUGINLIBDIR=/usr/lib/vdr \
-+	PREFIX=/usr \
-+	VIDEODIR=/var/lib/vdr
++	New defconfigs: Arcturus uCP1020, Atmel sama5d{2,3,4} xplained
++	development configs, Blackfin GDB simulator, Linksprite
++	pcDuino, Minnow Board Max graphical demo, NXP i.MX25 PDK,
++	i.MX51 EVK, i.MX6UL Pico, i.MX7 sabresd, QEMU MIPS32r6{,el} and
++	MIPS64r6{,el} malta, Roseapple Pi, Samsung Snow chromebook,
++	Toradex Apalis i.MX6 COM, TS-4800, x86-64 PC BIOS and EFI
++	demos. A number of defconfigs have been updated and extended
++	to generate SD card images. Synopsys HS38 VDK defconfig removed.
 +
-+ifeq ($(BR2_NEEDS_GETTEXT),y)
-+VDR_DEPENDENCIES += gettext
-+VDR_LDFLAGS = -lintl
-+endif
++	New packages: 4th, acpica, acpitool, alljoyn, alljoyn-base,
++	alljoyn-tcl, alljoyn-tcl-base, argparse, babeld, batman-adv,
++	circus, dante, docker-containerd, docker-engine, domoticz,
++	efibootmgr, efivar, ficl, fwup, gsettings-desktop-schemas,
++	gtksourceview, gupnp-dlna, gupnp-tools, igd2-for-linux,
++	jemalloc, kmsxx, lapack, lft, libaacs, libamcodec, libbdplus,
++	libcoap, libdvdcss, libebur128, libfastjson, libminiupnpc,
++	libnatpmp, libpqxx, libuio, libvdpau, log4cpp, minissdpd,
++	mxsldr, nginx-nasxi, nginx-upload, ninja, nodm, odroid-mali,
++	odroid-scripts, omxplayer, openblas, openmpi, openzwave,
++	p7zip, pdbg, python-argh, python-dataproperty,
++	python-dateutil, python-dialog3, python-dicttoxml,
++	python-dominate, python-engineio, python-flask-jsonrpc,
++	python-flask-login, python-humanize, python-pathtools,
++	python-pathvalidate, python-pillow, python-prompt-toolkit,
++	python-pytablewriter, python-pytz, python-scapy3k,
++	python-sdnotify, python-socketio, python-tomako,
++	python-ubjson, python-u-msgpack, python-watchdog,
++	python-wcwidth, python-xlrd, python-xlsxwriter,
++	python-xlutils, python-xlwt, rs485conf, runc, sdl2_gfx,
++	sdl2_image, sdl2_ttf, shellinabox, sphinxbase, stella,
++	supertuxkart, systemd-bootchart, tekui, terminology, tinycbor,
++	tinydtls, ti-sgx-demos, ti-sgx-km, ti-sgx-um, tunctl, wavemon,
++	wiringpi, xen
 +
-+ifeq ($(BR2_PACKAGE_LIBFRIBIDI),y)
-+VDR_DEPENDENCIES += libfribidi
-+VDR_INCLUDE_DIRS += -I$(STAGING_DIR)/usr/include/fribidi
-+VDR_LDFLAGS += -lfribidi
-+VDR_MAKE_FLAGS += BIDI=1
-+endif
++	Deprecated packages: ipkg, sstrip
 +
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+VDR_DEPENDENCIES += libiconv
-+VDR_LDFLAGS += -liconv
-+endif
++	Removed packages: sunxi-mali-prop
 +
-+VDR_MAKE_ENV = \
-+	INCLUDES="$(VDR_INCLUDE_DIRS)" \
-+	LDFLAGS="$(VDR_LDFLAGS)" \
-+	$(VDR_MAKE_FLAGS)
++	Issues resolved (http://bugs.buildroot.org):
 +
-+define VDR_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(VDR_MAKE_ENV) \
-+		vdr vdr.pc
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(VDR_MAKE_ENV) \
-+		include-dir
-+endef
++	#8931: segment fault when compile argp-help.c using aarch64-bu...
++	#8966: eglfs error. buildroot don't compile the library libeglfs.so
++	#8971: build for beaglebone fails
++	#8986: qt5imageformats fails to build on AArch64
++	#8991: grub2 fails to compile
++	#9001: Nodejs option not available
++	#9006: gcc with c++ support v4 and v5 fail to compile on fedora 24
++	#9016: arceb-buildroot-linux-uclibc ld uses incorrect default format
++	#9066: 8139TOO - faulty behaviour
++	#9086: Syntax Error (missing ")" in boot/uboot/uboot.mk on line 203)
++	#9091: U-Boot fails to boot with large ramdisk
 +
-+define VDR_INSTALL_STAGING_CMDS
-+	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(VDR_MAKE_ENV) \
-+		DESTDIR=$(STAGING_DIR) \
-+		install-dirs install-bin install-conf install-includes \
-+		install-pc
-+endef
-+
-+define VDR_INSTALL_TARGET_CMDS
-+	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) $(VDR_MAKE_ENV) \
-+		DESTDIR=$(TARGET_DIR) \
-+		install-dirs install-bin install-conf
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.8.1
+ 2016.05, Released May 31st, 2016
+ 
+ 	Minor fixes.
