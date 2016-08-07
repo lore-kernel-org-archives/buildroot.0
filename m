@@ -1,36 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Aug 2016 22:58:14 +0200
-Subject: [Buildroot] [git commit] blktrace: add missing dependency on
-	Config.in comment
-Message-ID: <20160807205907.139DE81E40@busybox.osuosl.org>
+Date: Sun, 7 Aug 2016 22:58:18 +0200
+Subject: [Buildroot] [git commit] blktrace: disable on PowerPC
+Message-ID: <20160807205907.1E3D881E40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a92cde90bd0d139cde4aa24ae0731cb803420099
+commit: https://git.buildroot.net/buildroot/commit/?id=0d8158fc619ce849b531d07b27da4ba9748d4ea4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The BR2_PACKAGE_BLKTRACE option "depends on
-BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS", but this architecture dependency was
-not replicated in the Config.in comment. This commit fixes this
-inconsistency.
+This package has been failing to build on PowerPC since March 2016, with
+nobody taking care of the problem, so let's disable this package on
+PowerPC for the time being. PowerPC is the only architecture on which
+blktrace fails to build currently.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/5a673c692aeb957cd8beb2c2c10ce5fd882ba4b5/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/blktrace/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/blktrace/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/package/blktrace/Config.in b/package/blktrace/Config.in
-index 958f004..c17de80 100644
+index c17de80..1b8212d 100644
 --- a/package/blktrace/Config.in
 +++ b/package/blktrace/Config.in
-@@ -12,4 +12,5 @@ config BR2_PACKAGE_BLKTRACE
- 	  http://git.kernel.dk/?p=blktrace.git;a=summary
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_BLKTRACE
+ 	# Uses posix_spawn()
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
++	# issue: hidden symbol `_rest32gpr_30_x` is referenced by DSO
++	depends on !BR2_powerpc
+ 	select BR2_PACKAGE_LIBAIO
+ 	help
+ 	  blktrace is a block layer IO tracing mechanism which provides
+@@ -13,4 +15,5 @@ config BR2_PACKAGE_BLKTRACE
  
  comment "blktrace needs a glibc or musl toolchain"
-+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
++	depends on !BR2_powerpc
  	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
