@@ -1,33 +1,32 @@
-From: Dagg Stompler <daggs@gmx.com>
-Date: Sun,  7 Aug 2016 21:10:53 +0300
-Subject: [Buildroot] [PATCH] odroid: enable console display.
-Message-ID: <20160807181053.9857-1-daggs@gmx.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Aug 2016 21:41:52 +0200
+Subject: [Buildroot] [PATCH] procps-ng: fix BR2_STATIC_LIBS=y build
+In-Reply-To: <29A57947-77D1-4AF2-9327-D2B27C7C5EF7@gmail.com>
+References: <1470561551-22910-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <29A57947-77D1-4AF2-9327-D2B27C7C5EF7@gmail.com>
+Message-ID: <20160807214152.2b388080@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-the below change will redirect the output to screen and not only to
-serial.
+Hello,
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
----
- board/hardkernel/odroidc2/boot.ini | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, 7 Aug 2016 07:31:43 -0700, Khem Raj wrote:
 
-diff --git a/board/hardkernel/odroidc2/boot.ini b/board/hardkernel/odroidc2/boot.ini
-index 4f17fec..203a42a 100644
---- a/board/hardkernel/odroidc2/boot.ini
-+++ b/board/hardkernel/odroidc2/boot.ini
-@@ -13,7 +13,7 @@ setenv m_bpp "32"
- setenv hpd "true"
- 
- # Default Console Device Setting
--setenv condev "console=ttyS0,115200n8"	# Serial Console
-+setenv condev "console=ttyS0,115200n8 console=tty0"   # on both
- 
- # Meson Timer
- # 1 - Meson Timer
+> > + #include <ctype.h>
+> > ++#if ENABLE_LIBSELINUX  
+> 
+> Should this check be numa | selinux
+
+Nope: in this file there is only one use of dlopen(), and it's related
+to SELinux.
+
+Thanks,
+
+Thomas
 -- 
-2.9.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
