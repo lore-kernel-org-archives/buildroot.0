@@ -1,31 +1,53 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 07 Aug 2016 17:34:56 +0200
-Subject: [Buildroot] [PATCH 1/1]
- package/x11r7/xserver_xorg-server:	needs dri/dri2/dri3 for libdrm support
-References: <1469968714-27285-1-git-send-email-bernd.kuhls@t-online.de>
- <87a8gxqzbs.fsf@dell.be.48ers.dk>
-Message-ID: <021k7dx4qi.ln2@ID-313208.user.individual.net>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 7 Aug 2016 17:48:46 +0200
+Subject: [Buildroot] Analysis of build results for 2016-08-05
+In-Reply-To: <20160807112654.7b520594@free-electrons.com>
+References: <20160806063028.356101023A1@stock.ovh.net>
+ <20160807112654.7b520594@free-electrons.com>
+Message-ID: <CAHXCMM+xOgCuMNHMSqj4tOP2jMGP7OPOLD1_x0_8HCgXb_h21g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Thomas, Ben, all,
 
-Am Sun, 31 Jul 2016 23:20:39 +0200 schrieb Peter Korsgaard:
+On Sun, Aug 7, 2016 at 11:26 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> Here is the usual analysis of build failures. Waldemar, Alexey, Vlad,
+> Gustavo, Frank, Gwenhael, Angelo, Fran?ois, Romain, Bernd, can you have
+> a look below? Thanks!
+>
+>>          arm |                    cmake-3.5.2 | NOK | http://autobuild.buildroot.net/results/f7e92678e91a6cb15ccf32d4a7d75b39f49d6000/
+>
+> fatal error: stdlib.h: No such file or directory
+>
+> Samuel, could you have a look ?
+Sure.
+I'm able to reproduce it.
 
->>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+It seems to be another error due to "-isystem
+$(STAGING_DIR)/usr/include" passed to g++ [1].
 
->  > +config BR2_PACKAGE_XSERVER_XORG_SERVER_NEEDS_LIBDRM
->  > +	bool
->  > +	select BR2_PACKAGE_LIBDRM
-> 
-> Why the extra redirection with this symbol instead of just directly
-> using LIBDRM?
+AFAICS, this is done by CMake when generating the flags.make files.
+Note that removing it from the CXX_INCLUDES variables in all generated
+flags.make prevent from triggering this error.
 
-because libdrm can be enabled without one of the driproto packages
-being enabled at the same time, X.org xserver needs both to provide
-dri support.
+It is not clear to me whether it is a gcc-6.x bug or a CMake one.
+According to fedora developers, this is not a gcc-6 bug [2].
+Ben, do you have any idea?
 
-Regards, Bernd
+Ben, I have not opened any ticket yet, nor checked if a similar one is
+already opened. Do you need more details?
+
+Regards,
+
+
+[1] http://code.bulix.org/6osftm-104973
+[2] https://lists.fedoraproject.org/archives/list/devel at lists.fedoraproject.org/thread/Q5SWCUUMWQ4EMS7CU2CBOZHV3WZYOOTT/
+
+-- 
+Samuel
