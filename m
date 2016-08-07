@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Aug 2016 22:59:55 +0200
-Subject: [Buildroot] [PATCH 1/2] blktrace: add missing dependency on
- Config.in comment
-In-Reply-To: <1470521474-16710-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1470521474-16710-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160807225955.0711c406@free-electrons.com>
+Date: Sun, 7 Aug 2016 23:00:03 +0200
+Subject: [Buildroot] [PATCH] libcofi: disable for static-only builds
+In-Reply-To: <1470558003-19548-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1470558003-19548-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160807230003.37eecd49@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  7 Aug 2016 00:11:13 +0200, Thomas Petazzoni wrote:
-> The BR2_PACKAGE_BLKTRACE option "depends on
-> BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS", but this architecture dependency was
-> not replicated in the Config.in comment. This commit fixes this
-> inconsistency.
+On Sun,  7 Aug 2016 10:20:03 +0200, Thomas Petazzoni wrote:
+> The libcofi package unconditionally builds a shared library, so we need
+> to make it unavailable on BR2_STATIC_LIBS=y configurations.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/329c09bf123cd5b6dbcfff6251ba7a2c7cce50b8/
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/blktrace/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  package/libcofi/Config.in | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-Both applied.
+Applied to master, thanks.
 
 Thomas
 -- 
