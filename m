@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Aug 2016 22:15:52 +0200
-Subject: [Buildroot] [PATCH] uclibc: proper thread default on m68k and
- Microblaze
-In-Reply-To: <1470414941-29826-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1470414941-29826-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160807201552.GG5855@free.fr>
+Date: Sun, 7 Aug 2016 22:17:41 +0200
+Subject: [Buildroot] [PATCH 1/2] iproute2: fix no-thread build
+In-Reply-To: <1470416880-16148-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1470416880-16148-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160807201741.GH5855@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,72 +12,60 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2016-08-05 18:35 +0200, Thomas Petazzoni spake thusly:
-> Traditionally, Buildroot has a default of enabling thread
-> support. However, with the current construct of the thread choice in the
-> uclibc package, the m68k and microblaze architecture end up with no
-> thread support as the default.
+On 2016-08-05 19:07 +0200, Thomas Petazzoni spake thusly:
+> iproute2 believes that it needs to link with libpthread for its arpd
+> binary, because "some db implementations require thread". Therefore, our
+> iproute2.mk explicitly disables the build of arpd when thread support is
+> not available.
 > 
-> In order to avoid having to explicit a more complicated "default" value
-> for the choice, we take a simple approach:
+> However, the sed expression it uses no longer works. The Makefile used
+> to look like:
 > 
->  - The "none" choice is moved at the end of the list, so that it is not
->    selected as the default unless there is really no other thread
->    implementation available.
+> TARGETS = foo baz baz arpd foobar
 > 
->  - We make NPTL the default thread implementation.
+> so replacing " arpd " with a space was working fine. However, the
+> Makefile got changed in iproute2 to:
 > 
->  - On architectures where NPTL is not available, the NPTL option will
->    not be available, so Kconfig will automatically fallback to
->    linuxthreads.
+> ifeq (... berkeleydb available ...)
+>      TARGETS += arpd
+> endif
+> 
+> i.e, with no space at the end of the line. This made our sed expression
+> ineffective, causing build issues with no-thread configurations since
+> arpd was no longer disabled.
+> 
+> To address this, instead of sed-ing the Makefile, we overwrite the
+> berkeleydb detection of iproute2, by writing to the "Config" file, like
+> we're doing for other aspects of the package.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/03a37a2372a4c2e438a073e015c49d9e554b86b7/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-And to make things even more simple, why not move NPTL first, then LT,
-then none, and remove the default?
-
-Thus, when NPTL is avbailable, it is used; if not, LT is used; if not,
-then none is used.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/uclibc/Config.in | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+>  package/iproute2/iproute2.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index 7c99195..b7714d4 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -47,15 +47,13 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
+> diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+> index 91d5033..edc17ad 100644
+> --- a/package/iproute2/iproute2.mk
+> +++ b/package/iproute2/iproute2.mk
+> @@ -42,7 +42,7 @@ ifeq ($(BR2_PACKAGE_BERKELEYDB_COMPAT185)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+>  IPROUTE2_DEPENDENCIES += berkeleydb
+>  else
+>  define IPROUTE2_DISABLE_ARPD
+> -	$(SED) "/^TARGETS=/s: arpd : :" $(IPROUTE2_DIR)/misc/Makefile
+> +	echo "HAVE_BERKELEY_DB:=n" >> $(IPROUTE2_DIR)/Config
+>  endef
+>  endif
 >  
->  choice
->  	prompt "Thread library implementation"
-> +	# Use NPTL when available. If not available, kconfig will
-> +	# automatically fall back to linuxthreads.
->  	default BR2_PTHREADS_NATIVE
-> -	default BR2_PTHREADS if !BR2_USE_MMU
->  	help
->  	  Use this option to select the thread library implementation
->  	  that should be used in your toolchain.
->  
-> -	config BR2_PTHREADS_NONE
-> -		bool "none"
-> -
->  	config BR2_PTHREADS
->  		bool "linuxthreads"
->  		select BR2_TOOLCHAIN_HAS_THREADS
-> @@ -67,6 +65,10 @@ choice
->  		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  		depends on BR2_USE_MMU
->  		depends on !BR2_m68k && !BR2_microblaze
-> +
-> +	config BR2_PTHREADS_NONE
-> +		bool "none"
-> +
->  endchoice
->  
->  config BR2_PTHREAD_DEBUG
 > -- 
 > 2.7.4
 > 
