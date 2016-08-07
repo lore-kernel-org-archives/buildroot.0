@@ -1,68 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Aug 2016 22:58:32 +0200
-Subject: [Buildroot] [git commit] libunwind: fix architecture dependencies
-Message-ID: <20160807205907.3693281E40@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Aug 2016 22:59:23 +0200
+Subject: [Buildroot] [PATCH 0/3] Fix our defconfigs (branch
+ yem/fix-defconfigs)
+In-Reply-To: <20160807225419.443e606c@free-electrons.com>
+References: <cover.1470602446.git.yann.morin.1998@free.fr>
+ <20160807225419.443e606c@free-electrons.com>
+Message-ID: <20160807205923.GJ5855@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68d399fbddc5da909863971814856d7e00e7649a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Due to a misplaced parenthesis, the libunwind dependency were
-incorrect. Indeed, they were of the form:
+On 2016-08-07 22:54 +0200, Thomas Petazzoni spake thusly:
+> On Sun,  7 Aug 2016 22:44:33 +0200, Yann E. MORIN wrote:
+> >       defconfigs/kb9202: fix headers version
+> >       defconfigs/snps_axs_10*: uboot needs dtc
+> >       pcakage/uclibc: fix build on thumb2-only arm cpus
+> All three applied. If not already done, please make sure to report on
+> the uclibc mailing list the thumb2 problem.
 
- default y if LIBC_TYPE && (arm dependency) || (list of other architectures)
+Sure, I was about to do so...
 
-Which meant that that the LIBC_TYPE dependency was not taken into
-account for the "other architectures". This commit changes that to:
+> BTW, now that I re-read your commit log, it's wrong: the SAMA5 are not
+> at all Thumb2 only CPUs. They are regular Cortex-A5 CPUs, i.e they
+> support both Thumb-2 and ARM.
 
- default y if LIBC_TYPE && ((arm dependency) || list of other architectures)
+Right, what I meant to say was that it is fixing our thumb2 defconfigs.
 
-Without this fix, libunwind can be selected for example on
-PowerPC/uClibc configurations, while only PowerPC/glibc should be
-allowed. This fixes:
+Regards,
+Yann E. MORIN.
 
-  http://autobuild.buildroot.net/results/96c53ff240dcd68fcc9e3d32c4026c9886edcbe7/
-
-Similarly, it also fixes cases where SuperH/uClibc was allowed, while
-only SuperH/glibc should be allowed. This fixes:
-
-  http://autobuild.buildroot.net/results/95a6cca21aea9914ba8bb3f571760fc054c53ecd/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libunwind/Config.in | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
-index a70d9e8..04ab5a5 100644
---- a/package/libunwind/Config.in
-+++ b/package/libunwind/Config.in
-@@ -10,16 +10,16 @@
- config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_TOOLCHAIN_USES_GLIBC && \
--		((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
--		(BR2_mips || BR2_mipsel || BR2_mips64 || \
-+		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-+		 BR2_mips || BR2_mipsel || BR2_mips64 || \
- 		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64)
- 	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
--		((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
--		(BR2_i386 || BR2_mips || BR2_mipsel || \
-+		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-+		 BR2_i386 || BR2_mips || BR2_mipsel || \
- 		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
- 	default y if BR2_TOOLCHAIN_USES_MUSL && \
--		((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
--		(BR2_i386 || BR2_x86_64)
-+		(((BR2_arm || BR2_armeb) && BR2_ARM_CPU_HAS_ARM) || \
-+		 BR2_i386 || BR2_x86_64)
- 
- config BR2_PACKAGE_LIBUNWIND
- 	bool "libunwind"
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
