@@ -1,36 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Aug 2016 22:50:09 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-savage:
-	disable DRI support when not available
-Message-ID: <20160807205016.CD76A818BD@busybox.osuosl.org>
+Date: Sun, 7 Aug 2016 22:51:54 +0200
+Subject: [Buildroot] [PATCH 1/1]
+ package/x11r7/xdriver_xf86-video-savage: disable DRI support when not
+ available
+In-Reply-To: <1470583546-7332-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1470583546-7332-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160807225154.7b1a9dcf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c38103f2fe793ea5257d3f5b8413ece7a5c60538
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes
-http://autobuild.buildroot.net/results/ecd/ecdb6977d282c276cbdf1f3dd0ccfaddff1d1ac5/
+On Sun,  7 Aug 2016 17:25:46 +0200, Bernd Kuhls wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+> +ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+> +XDRIVER_XF86_VIDEO_SAVAGE_CONF_OPTS = --disable-dri
+> +endif
 
-diff --git a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-index dc5644a..95bca7e 100644
---- a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-+++ b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-@@ -12,4 +12,8 @@ XDRIVER_XF86_VIDEO_SAVAGE_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_SAVAGE_AUTORECONF = YES
- XDRIVER_XF86_VIDEO_SAVAGE_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xproto
- 
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
-+XDRIVER_XF86_VIDEO_SAVAGE_CONF_OPTS = --disable-dri
-+endif
-+
- $(eval $(autotools-package))
+I've applied because we're doing the same condition in other X.org
+video drivers. But I'm not happy at all with this condition. Indeed the
+build failure is that DRI support is not provided by the X.org server
+(for example, the DRIInfoPtr type that is missing and causes the
+error), is provided by the X.org server.
+
+So I really believe this whole DRI stuff needs to be reworked.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
